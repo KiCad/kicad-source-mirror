@@ -1,0 +1,32 @@
+# File:		makefile for eeschema, mingw
+
+
+TARGET=eeschema
+
+WXDIR = $(WXWIN)
+include ../libs.win
+
+
+all: $(TARGET).exe
+
+include makefile.include
+
+
+$(TARGET).exe: $(OBJECTS) $(TARGET)_resources.o $(EDALIBS)
+	$(CXX) $(ALL_LDFLAGS) -o $(TARGET).exe $(OBJECTS)\
+			$(TARGET)_resources.o $(EDALIBS) $(SYSWXLIB)
+			
+install:
+	cp -v $(TARGET).exe $(KICAD_BIN)
+
+
+$(TARGET)_resources.o:  $(TARGET).rc
+	$(RESCOMP) $(RCINPUTSWITCH) $(TARGET).rc $(RCOUTPUTSWITCH) $(TARGET)_resources.o $(RESFLAGS)
+	
+clean :
+	-$(RM) *.o
+	-$(RM) *.rsc
+	-$(RM) *.res
+	-$(RM) *.exe
+	-$(RM) *.bak
+

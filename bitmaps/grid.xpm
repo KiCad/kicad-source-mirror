@@ -1,0 +1,30 @@
+/* XPM bitmap */
+#ifndef XPMMAIN
+extern char *grid_xpm[];
+
+#else
+char * grid_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 15 2 1",
+"X c None",
+"o c Black",
+
+/* pixels */
+"XXXXXXXXXXXXXXXX",
+"oXXXoXXXoXXXoXXX",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX",
+"oXXXoXXXoXXXoXXX",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX",
+"oXXXoXXXoXXXoXXX",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX",
+"oXXXoXXXoXXXoXXX",
+"XXXXXXXXXXXXXXXX"
+};
+#endif
+

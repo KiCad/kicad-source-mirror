@@ -1,0 +1,31 @@
+/* XPM bitmap */
+#ifndef XPMMAIN
+extern char *show_dcodenumber_xpm[];
+
+#else
+char * show_dcodenumber_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 15 3 1",
+"- c Red",
+"X c None",
+": c Blue",
+
+/* pixels */
+"XXXXXX----XXXXXX",
+"XXXX--XXXX--XXXX",
+"XXX-XXXXXXXX-XXX",
+"XX-XXXXXXXXXX-XX",
+"X-XX:::::XXXXX-X",
+"X-XX:XXXX:XXXX-X",
+"-XXX:XXXXX:XXXX-",
+"-XXX:XXXXX:XXXX-",
+"-XXX:XXXXX:XXXX-",
+"X-XX:XXXX:XXXX-X",
+"X-XX:::::XXXXX-X",
+"XX-XXXXXXXXXX-XX",
+"XXX-XXXXXXXX-XXX",
+"XXXX--XXXX--XXXX",
+"XXXXXX----XXXXXX"
+};
+#endif
+

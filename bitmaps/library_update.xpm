@@ -1,0 +1,31 @@
+/* XPM */
+#ifndef XPMMAIN
+extern char * library_update_xpm[];
+
+#else
+char * library_update_xpm[] = {
+"16 15 6 1",
+"X c Black",
+". c None",
+"o c Black",
+"= c Gray",
+"+ c Green",
+"' c Gray",
+"........XXXXXX..",
+"....ooooX=====X.",
+"........X======X",
+"........X=======",
+"......XXXXXX===X",
+"..ooooX+++++X=X.",
+"......X++++++X..",
+"......X+++++++Xo",
+"....XXXXXX+++X..",
+"ooooX'''''X+X...",
+"....X''''''X....",
+"....X'''''''Xooo",
+"....X''''''X....",
+"ooooX'''''X.....",
+"....XXXXXX......"
+};
+#endif
+

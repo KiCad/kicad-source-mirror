@@ -1,0 +1,29 @@
+/* XPM */
+#ifndef XPMMAIN
+extern char * module_xpm[];
+
+#else
+char * module_xpm[] = {
+"16 15 4 1",
+"X c Red",
+". c None",
+"o c Blue",
+"c c Gray",
+"....XXX..XXX....",
+".cooX..XX..Xooc.",
+".cooX......Xooc.",
+"....X......X....",
+".cooX......Xooc.",
+".cooX......Xooc.",
+"....X......X....",
+".cooX......Xooc.",
+".cooX......Xooc.",
+"....X......X....",
+".cooX......Xooc.",
+".cooX......Xooc.",
+"....X......X....",
+".cooX......Xooc.",
+"....XXXXXXXX...."
+};
+#endif
+

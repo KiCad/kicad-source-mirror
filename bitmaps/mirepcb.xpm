@@ -1,0 +1,30 @@
+/* XPM bitmap */
+#ifndef XPMMAIN
+extern char *mirepcb_xpm[];
+
+#else
+char *mirepcb_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 15 3 1",
+"- c Blue",
+". c Red",
+"X c None",
+/* pixels */
+"XXXXXXX-XXXXXXXX",
+"XXXXXXX-XXXXXXXX",
+"XXXXXX...XXXXXXX",
+"XXXXX.X-X.XXXXXX",
+"XXXX.XX-XX.XXXXX",
+"XXXX.XX-XX.XXXXX",
+"XXX.XXX-XXX.XXXX",
+"---.-------.----",
+"XXX.XXX-XXX.XXXX",
+"XXXX.XX-XX.XXXXX",
+"XXXX.XX-XX.XXXXX",
+"XXXXX.X-X.XXXXXX",
+"XXXXXX...XXXXXXX",
+"XXXXXXX-XXXXXXXX",
+"XXXXXXX-XXXXXXXX",
+};
+#endif
+

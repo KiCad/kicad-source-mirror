@@ -1,0 +1,31 @@
+/* XPM bitmap */
+#ifndef XPMMAIN
+extern char *sheetset_xpm[];
+
+#else
+char *sheetset_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 15 4 1",
+"  c None",
+". c Black",
+"= c Blue",
+"X c Gray100",
+/* pixels */
+" ............   ",
+" .XXX=XXXXX..   ",
+" .XX===XXXX.X.  ",
+" .XXX=XXXXX.... ",
+" .XXX=XXXXXXXX. ",
+" .X=X=XXXXXX=X. ",
+" .============. ",
+" .X=X=XXXXXX=X. ",
+" .XXX=XXXXXXXX. ",
+" .XXX=XXXXXXXX. ",
+" .XXX=XXXXXXXX. ",
+" .XXX=XX.....X. ",
+" .XX===X.....X. ",
+" .XXX=XXXXXXXX. ",
+" .............. "
+};
+#endif
+

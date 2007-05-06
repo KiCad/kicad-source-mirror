@@ -1,0 +1,29 @@
+/* XPM bitmap */
+#ifndef XPMMAIN
+extern char * zoom_xpm[];
+
+#else
+char * zoom_xpm[] = {
+"16 16 3 1",
+"   c None",
+".	c #00A000",
+"X	c #A0C0A0",
+"    ....        ",
+"  ..XXXX..      ",
+" .XXXXXXXX.     ",
+" .XXXXXXXX.     ",
+".XXXXXXXXXX.    ",
+".XXXXXXXXXX.    ",
+".XXXXXXXXXX.    ",
+".XXXXXXXXXX.    ",
+" .XXXXXXXX.     ",
+" .XXXXXXXX.     ",
+"  ..XXXX...     ",
+"    .... ...    ",
+"          ...   ",
+"           ...  ",
+"            ... ",
+"             .. "
+};
+#endif
+

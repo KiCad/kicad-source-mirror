@@ -1,0 +1,29 @@
+/* XPM */
+#ifndef XPMMAIN
+extern char * show_mod_edge_xpm[];
+
+#else
+char * show_mod_edge_xpm[] = {
+"16 15 4 1",
+"X c Red",
+". c None",
+"o c Blue",
+"c c Gray",
+"..XXXXX..XXXXX..",
+"coX....XX....Xoc",
+"coX.XXX..XXX.Xoc",
+"..X.X..XX..X.X..",
+"coX.X......X.Xoc",
+"coX.X......X.Xoc",
+"..X.X......X.X..",
+"coX.X......X.Xoc",
+"coX.X......X.Xoc",
+"..X.X......X.X..",
+"coX.X......X.Xoc",
+"coX.X......X.oc.",
+"..X.XXXXXXXX.X..",
+"coX..........Xoc",
+"..XXXXXXXXXXXX.."
+};
+#endif
+

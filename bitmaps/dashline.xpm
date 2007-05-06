@@ -1,0 +1,31 @@
+/* XPM */
+#ifndef XPMMAIN
+extern char *dashedline_xpm[];
+
+#else
+char *dashedline_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 2 1",
+"- c Red",
+"  c None",
+
+/* pixels */
+" ---            ",
+" --             ",
+" - -            ",
+"    -           ",
+"     -          ",
+"      -         ",
+"       -        ",
+"        -       ",
+"       -        ",
+"      -         ",
+"     -          ",
+"    -           ",
+"      --        ",
+"         --     ",
+"            --  ",
+"               -"
+};
+#endif
+

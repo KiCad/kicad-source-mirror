@@ -1,0 +1,31 @@
+/* XPM */
+#ifndef XPMMAIN
+extern char *undo_xpm[];
+
+#else
+char *undo_xpm[] = {
+/* width height num_colors chars_per_pixel */
+"16 16 4 1",
+/* colors */
+"  c None",
+"X c #0000E0",
+"a c #808080",
+". c #404040",
+/* pixels */
+"                ",
+"                ",
+"                ",
+"                ",
+"      ..XXXXa   ",
+"..X ..XX....Xa  ",
+"..XX X..  ...XX ",
+"..XXX      ..XX ",
+"..XXXX     ..XX ",
+"..XXXXX    ..XX ",
+".......   ..XXa ",
+"        ..aXXX  ",
+"                ",
+"                ",
+"                ",
+"                "};
+#endif

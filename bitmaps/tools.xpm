@@ -1,0 +1,31 @@
+/* XPM bitmap */
+#ifndef XPMMAIN
+extern char *tools_xpm[];
+
+#else
+char *tools_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 15 3 1",
+"- c Blue",
+"X c Gray100",
+" c None",
+
+/* pixels */
+"XXXXXXX  XXXXXXX",
+"XXXXXXX  XXXXXXX",
+"X-----X  XXXXXXX",
+"X-----X  X-----X",
+"XXXXXXX  X-----X",
+"XXXXXXX  XXXXXXX",
+"X-----X  XXXXXXX",
+"X-----X  XXXXXXX",
+"XXXXXXX  XXXXXXX",
+"XXXXXXX  X-----X",
+"XXXXXXX  X-----X",
+"X-----X  XXXXXXX",
+"X-----X  XXXXXXX",
+"XXXXXXX  X-----X",
+"XXXXXXX  XXXXXXX"
+};
+#endif
+

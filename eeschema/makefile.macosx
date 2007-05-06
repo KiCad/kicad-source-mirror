@@ -1,0 +1,50 @@
+## Makefile for eeschema
+CC = gcc
+LD = g++
+
+FINAL = 1
+
+
+LDFLAGS =
+
+include ../libs.macosx
+
+TARGET = eeschema
+
+
+CPPFLAGS = -Wall -O2 `wx-config --cxxflags`
+
+
+all: $(TARGET) netlist_form_pads-pcb
+
+include makefile.include
+
+CPPFLAGS += $(EXTRACPPFLAGS)
+EDACPPFLAGS = $(CPPFLAGS)
+
+$(TARGET): $(OBJECTS) $(TARGET).r makefile.macosx makefile.include $(EXTRALIBS) ../libs.macosx
+	$(LD) $(OBJECTS) $(LDFLAGS)  $(LIBS) -o $(TARGET)
+	$(RESCOMP) -o $(TARGET) Carbon.r $(TARGET).r
+	$(SETFILE) -a C $(TARGET)
+
+
+netlist_form_pads-pcb: plugins/netlist_form_pads-pcb.cpp
+	gcc -Wall plugins/netlist_form_pads-pcb.cpp -o netlist_form_pads-pcb
+	
+
+install:
+	cp $(TARGET) $(KICAD_BIN)
+	cp netlist_form_pads-pcb $(KICAD_BIN)
+
+
+clean:
+	rm -f *.o; rm -f *~; rm core; rm *.bak
+	rm -f $(TARGET)
+
+
+
+
+
+
+
+

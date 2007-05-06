@@ -1,0 +1,32 @@
+/* XPM */
+#ifndef XPMMAIN
+extern char *ratsnest_xpm[];
+
+#else
+char *ratsnest_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 3 1",
+"- c White",
+"o c Red",
+"X c None",
+
+/* pixels */
+"XoXXXXXXXXXXXX-o",
+"XX-XXXXXXXXXX-XX",
+"XXX-XXXXXXXo-XXX",
+"XXXX-XXXXXo-oXXX",
+"XXXXX-XXXXXo-XXX",
+"XXXXXX-XXXXXX-XX",
+"XXXXXXX-oXXXX-XX",
+"XXXXXXXoooXXXX-o",
+"XXXXXXX-oXXXXXo-",
+"XXXXXX-XXXXXXXXo",
+"XXXXX-XXXXXXXXXX",
+"XXXX-oXXXXXXXXXX",
+"XXXXooo-XXXXXXXX",
+"XXXX-oXXX--XXXXX",
+"XXX-XXXXXXXX--XX",
+"XX-XXXXXXXXXXXX-"
+};
+#endif
+

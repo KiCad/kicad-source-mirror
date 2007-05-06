@@ -1,0 +1,20 @@
+/* XPM */
+static char *error_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"11 11 2 1",
+"- c Black",
+"X c Red",
+
+/* pixels */
+"XXXXXXXXXXXX",
+"X----------X",
+"X---------XX",
+"X--XXXXXXXXX",
+"X--XXXXXXXXX",
+"X------XXXXX",
+"X--XXXXXXXXX",
+"X--XXXXXXXXX",
+"X---------XX",
+"X----------X",
+"XXXXXXXXXXXX"
+};

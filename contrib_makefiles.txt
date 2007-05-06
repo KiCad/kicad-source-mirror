@@ -1,0 +1,309 @@
+libs.dynamic
+
+CC = `wx-config --cc`
+# Note: at least on Debian using gcc gives a smaller binary than using:
+# `wx-config --ld`
+LD = gcc
+
+SRCSUFF = .cpp
+OBJSUFF = .o
+FINAL = 1
+
+WXPATH = `wx-config --prefix`/lib
+PREFIX_WX_LIBS = `wx-config --basename`
+SUFFIX_WX_LIBGL = _gl-$(LIBVERSION)
+
+LIBSTDC = -lstdc++
+LIBVERSION=`wx-config --release`
+WXSYSLIB= `wx-config --libs`
+
+# attention à l'ordre des libairies
+LIBS = -L/usr/local/lib -L/usr/X11R6/lib\
+	$(EXTRALIBS) $(WXSYSLIB)\
+	$(LIBSTDC)
+
+LIBS3D = -l$(PREFIX_WX_LIBS)$(SUFFIX_WX_LIBGL) -lGL -lGLU
+
+# Sub-projects
+KICAD_SUBDIRS = common 3d-viewer eeschema pcbnew cvpcb kicad gerbview wxhtml
+# How to invoke make
+MAKE := $(MAKE) -f makefile.gtk
+# File with the libraries definitions
+LIBSDEF = libs.dynamic
+# Prefix, can be from command line
+ifneq ($(strip $(prefix)),)
+  IPREFIX=$(prefix)
+else
+  IPREFIX=/usr/local/kicad/linux
+endif
+# Install tool, can be from command line
+ifeq ($(INSTALL),)
+  INSTALL=install
+endif
+# C Flags, can be from command line
+ifeq ($(CFLAGS),)
+  CFLAGS=-Wall -O2
+  #CFLAGS=-Wall -Werror -g3
+endif
+CFLAGS:=$(CFLAGS) `wx-config --cxxflags`
+# Linker flags (strip)
+LDFLAGS = -s
+export
+
+.PHONY: $(KICAD_SUBDIRS)
+
+all: $(KICAD_SUBDIRS)
+
+common:
+	cd $@ ; $(MAKE)
+
+3d-viewer:
+	cd $@ ; $(MAKE)
+
+eeschema:
+	cd $@ ; $(MAKE)
+
+pcbnew:
+	cd $@ ; $(MAKE)
+
+cvpcb:
+	cd $@ ; $(MAKE)
+
+kicad:
+	cd $@ ; $(MAKE)
+
+gerbview:
+	cd $@ ; $(MAKE)
+
+wxhtml:
+	cd $@ ; $(MAKE)
+
+install:
+	@for d in $(KICAD_SUBDIRS); do (cd $$d && $(MAKE) install); done
+
+clean:
+	@for d in $(KICAD_SUBDIRS); do (cd $$d && $(MAKE) clean); done
+
+3d-viewer/makefile.gtk
+## Makefile for 3d-viewer.a ( wxGTK - LINUX )
+
+# Compiler flags.
+CPPFLAGS =  $(CFLAGS) -DPCBNEW  -I../pcbnew -I ../include -I../common
+
+include ../$(LIBSDEF)
+
+TARGET = 3d-viewer
+
+all: $(TARGET).a
+
+include makefile.include
+
+$(TARGET).a: $(OBJECTS3D) makefile.gtk makefile.include
+	rm -f $@
+	ar -rv $@ $(OBJECTS3D)
+	ranlib $@
+
+clean:
+	-rm *.o *.a *~ .*~ core *.bak *.exe *.obj 2> /dev/null
+
+# No install target
+
+## Makefile for common.a
+
+# Compiler flags.
+CPPFLAGS = $(CFLAGS) -I./ -I../include
+EDACPPFLAGS = $(CPPFLAGS)
+
+all: common.a
+
+include makefile.include
+
+CPPFLAGS += $(EXTRACPPFLAGS)
+EDACPPFLAGS = $(CPPFLAGS)
+
+
+common.a: $(OBJECTS) makefile.gtk makefile.include
+	rm -f $@
+	ar -rv $@ $(OBJECTS)
+	ranlib $@
+
+
+clean:
+	-rm *.o *.a *~ .*~ core *.bak *.exe *.obj 2> /dev/null
+
+# No install target
+
+# File:		makefile
+
+# Compiler flags.
+CPPFLAGS = $(CFLAGS)
+EDACPPFLAGS = $(CPPFLAGS)
+
+include ../$(LIBSDEF)
+
+
+TARGET = cvpcb
+
+all: $(TARGET)
+
+include makefile.include
+
+CPPFLAGS += $(EXTRACPPFLAGS)
+EDACPPFLAGS = $(CPPFLAGS)
+
+
+$(TARGET):	$(OBJECTS) makefile.gtk makefile.include $(EXTRALIBS) ../$(LIBSDEF) $(LIBVIEWER3D)
+	$(LD) $(OBJECTS) $(LDFLAGS)  $(LIBS)  $(LIBVIEWER3D)  $(LIBS3D) -o $(TARGET)
+
+install:
+	$(INSTALL) -d -m 0755 $(IPREFIX)
+	$(INSTALL) -m 0755 $(TARGET) $(IPREFIX)
+
+clean:
+	-rm *.o *.a *~ .*~ core *.bak *.exe *.obj $(TARGET) 2> /dev/null
+
+## Makefile for eeschema
+
+include ../$(LIBSDEF)
+
+TARGET = eeschema
+
+CPPFLAGS = $(CFLAGS)
+
+all: $(TARGET)
+
+include makefile.include
+
+CPPFLAGS += $(EXTRACPPFLAGS)
+EDACPPFLAGS = $(CPPFLAGS)
+
+$(TARGET):  $(OBJECTS) makefile.gtk makefile.include $(EXTRALIBS) ../$(LIBSDEF)
+	$(LD) $(OBJECTS) $(LDFLAGS)  $(LIBS) -o $(TARGET)
+
+install:
+	$(INSTALL) -d -m 0755 $(IPREFIX)
+	$(INSTALL) -m 0755 $(TARGET) $(IPREFIX)
+
+clean:
+	-rm *.o *.a *~ .*~ core *.bak *.exe *.obj $(TARGET) 2> /dev/null
+
+
+## Makefile for GERBVIEW et wxGTK
+
+# Compiler flags.
+CPPFLAGS = $(CFLAGS)
+
+EXTRALIBS = ../common/common.a
+include ../$(LIBSDEF)
+
+
+TARGET = gerbview
+
+all: $(TARGET)
+
+include makefile.include
+
+CPPFLAGS += $(EXTRACPPFLAGS)
+EDACPPFLAGS = $(CPPFLAGS)
+
+
+$(TARGET):  $(OBJECTS) makefile.gtk makefile.include $(EXTRALIBS) ../$(LIBSDEF)
+		$(LD) $(LDFLAGS) $(OBJECTS) $(LIBS) -o $(TARGET)
+
+install:
+	$(INSTALL) -d -m 0755 $(IPREFIX)
+	$(INSTALL) -m 0755 $(TARGET) $(IPREFIX)
+
+clean:
+	-rm *.o *.a *~ .*~ core *.bak *.exe *.obj $(TARGET) 2> /dev/null
+
+# File:		makefile for kicad, wxGTK
+
+# Compiler flags.
+CPPFLAGS = $(CFLAGS)
+
+include ../$(LIBSDEF)
+
+TARGET = kicad
+
+all: $(TARGET)
+
+include makefile.include
+
+CPPFLAGS += $(EXTRACPPFLAGS)
+EDACPPFLAGS = $(CPPFLAGS)
+
+
+$(TARGET):	$(OBJECTS) makefile.gtk $(EXTRALIBS) ../$(LIBSDEF)
+	$(LD) $(OBJECTS) $(LDFLAGS)  $(LIBS) -o $(TARGET)
+
+install:
+	$(INSTALL) -d -m 0755 $(IPREFIX)
+	$(INSTALL) -m 0755 $(TARGET) $(IPREFIX)
+
+clean:
+	-rm *.o *.a *~ .*~ core *.bak *.exe *.obj $(TARGET) 2> /dev/null
+
+## Makefile for PCBNEW et wxGTK
+
+# Compiler flags.
+CPPFLAGS = $(CFLAGS)
+
+include ../$(LIBSDEF)
+
+TARGET = pcbnew
+
+all: $(TARGET)
+
+include makefile.include
+
+CPPFLAGS += $(EXTRACPPFLAGS)
+EDACPPFLAGS = $(CPPFLAGS)
+
+$(TARGET):  $(OBJECTS) makefile.gtk  makefile.include $(LIBVIEWER3D) $(EXTRALIBS) ../$(LIBSDEF)
+		$(LD) $(LDFLAGS) $(OBJECTS) $(LIBS) $(LIBVIEWER3D) $(LIBS3D)\
+		-o $(TARGET)
+
+install:
+	$(INSTALL) -d -m 0755 $(IPREFIX)
+	$(INSTALL) -m 0755 $(TARGET) $(IPREFIX)
+
+clean:
+	-rm *.o *.a *~ .*~ core *.bak *.exe *.obj $(TARGET) 2> /dev/null
+
+########################################################################
+########################################################################
+
+# Compiler flags.
+CPPFLAGS =  $(CFLAGS) -I./ -I../include -I../common
+
+EXTRALIBS =
+
+include ../$(LIBSDEF)
+
+TARGET = wxhtml
+
+OBJDIR =
+OBJSUFF = o
+
+.SUFFIXES:	.cpp .h .o .cc
+.cpp.o :
+	$(CC)  -c $< -o $(<:.cpp=.o) $(CPPFLAGS)
+
+
+DEPEND =
+
+
+OBJECTS = $(TARGET).o helpfrm.o
+
+
+$(TARGET): $(OBJECTS) makefile.gtk ../common/common.a ../$(LIBSDEF)
+	$(LD) $(OBJECTS) $(LDFLAGS)  $(LIBS) -o $(TARGET)
+
+install:
+	$(INSTALL) -d -m 0755 $(IPREFIX)
+	$(INSTALL) -m 0755 $(TARGET) $(IPREFIX)
+
+clean:
+	-rm *.o *.a *~ .*~ core *.bak *.exe *.obj $(TARGET) 2> /dev/null
+

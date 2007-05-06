@@ -1,0 +1,79 @@
+
+#Configuration for build kicad
+KICAD_BIN = /usr/local/kicad/linux
+
+
+SRCSUFF = .cpp
+OBJSUFF = .o
+FINAL = 1
+
+
+# You must comment or uncomment this line for dynamic or static link
+# dynamic link is less difficult than static link
+# choose it if you have problems (libs not found, or unresolved references) ), or if kicad is running only on YOUR system.
+KICAD_STATIC_LINK = 1
+
+# path and version definition for wxWidgets and mesa libs
+MESALIBSPATH = /usr/local/lib
+WXPATH = `wx-config --prefix`/lib
+PREFIX_WX_LIBS = lib`wx-config --basename`
+SUFFIX_WX_LIBSTD = `wx-config --utility=`
+SUFFIX_WX_LIBGL = _gl-$(LIBVERSION).a
+
+# Use static link for libstdc++.a (sometimes also libsupc++.a)
+# locate libstdc++.a and copy it in kicad_dev/syslibs
+ifdef KICAD_STATIC_LINK
+#define path for a copy of libstdc++.a or/and libsupc++.a:
+LIBSTDC = ../syslibs/libstdc++.a
+else
+# Or Use static link for libsupc++ or libstdc++ (more easy!!)
+LIBSTDC = -lstdc++
+endif
+
+LIBVERSION=`wx-config --release`
+
+# use link static for wxWidgets
+ifdef KICAD_STATIC_LINK
+LIBS3D = $(WXPATH)/$(PREFIX_WX_LIBS)$(SUFFIX_WX_LIBGL)\
+	 $(MESALIBSPATH)/libGL.a $(MESALIBSPATH)/libGLU.a
+
+WXSYSLIB= $(WXPATH)/$(PREFIX_WX_LIBS)-$(LIBVERSION).a \
+	$(WXPATH)/libwxpng-$(LIBVERSION).a\
+	$(WXPATH)/libwxjpeg-$(LIBVERSION).a\
+	$(WXPATH)/libwxzlib-$(LIBVERSION).a\
+        /usr/X11R6/lib/libXinerama.a \
+        /usr/X11R6/lib/libXxf86vm.a \
+		-lgtk-x11-2.0 -lgdk-x11-2.0 \
+        -latk-1.0 -lgdk_pixbuf-2.0 -lm -lpangoxft-1.0 -lpangox-1.0 -lgthread-2.0\
+        -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -ldl\
+        -lglib-2.0 -lpangoft2-1.0 -lSM\
+        -L/usr/lib
+
+
+WXSYSLIB_WITH_GL= $(WXPATH)/$(PREFIX_WX_LIBS)-$(LIBVERSION).a \
+	$(WXPATH)/libwxpng-$(LIBVERSION).a\
+	$(WXPATH)/libwxjpeg-$(LIBVERSION).a\
+	$(WXPATH)/libwxzlib-$(LIBVERSION).a\
+	$(LIBS3D)\
+       /usr/X11R6/lib/libXinerama.a \
+        /usr/X11R6/lib/libXxf86vm.a \
+		-lgtk-x11-2.0 -lgdk-x11-2.0 \
+        -latk-1.0 -lgdk_pixbuf-2.0 -lm -lpangoxft-1.0 -lpangox-1.0 -lgthread-2.0\
+        -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -ldl\
+        -lglib-2.0 -lpangoft2-1.0 -lSM\
+       -L/usr/lib
+else
+#or use "standard command" for wxWidgets
+WXSYSLIB= `wx-config --libs std`
+WXSYSLIB_WITH_GL= `wx-config --libs std,gl`
+endif
+
+
+# attention à l'ordre des libairies
+LIBS = -L/usr/local/lib -L/usr/X11R6/lib\
+	$(EXTRALIBS) $(WXSYSLIB)\
+	$(LIBSTDC)
+
+LIBS_WITH_GL = -L/usr/local/lib -L/usr/X11R6/lib\
+	$(EXTRALIBS) $(WXSYSLIB_WITH_GL)\
+	$(LIBSTDC)

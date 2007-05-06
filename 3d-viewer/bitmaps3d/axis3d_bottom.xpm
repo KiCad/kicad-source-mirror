@@ -1,0 +1,27 @@
+/* XPM bitmap */
+#ifndef XPM_3D_MAIN
+extern char * axis3d_bottom_xpm[];
+
+#else
+char * axis3d_bottom_xpm[] = {
+"16 15 3 1",
+"   c None",
+".	c Blue",
+"x	c Red",
+"    .           ",
+"   ...          ",
+"    .           ",
+"    .           ",
+"    .           ",
+"    .           ",
+"    .         . ",
+"    ............",
+"   .          . ",
+"   .    x       ",
+"  .    xxx      ",
+"  .   xxxxx     ",
+" ..     x       ",
+" .      x       ",
+"        x       "
+};
+#endif

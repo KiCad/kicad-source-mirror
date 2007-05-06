@@ -1,0 +1,287 @@
+EXTRALIBS = ../common/common.a
+EXTRACPPFLAGS= -DPCBNEW -I./ -Ibitmaps -I../include -I../share -I../pcbnew -I../3d-viewer
+
+#COMMON = pcbnew.h struct.h class_pad.h class_module.h class_text_mod.h \
+#		class_edge_mod.h class_equipot.h
+
+LIBVIEWER3D = ../3d-viewer/3d-viewer.a
+
+OBJECTS=	$(TARGET).o classpcb.o\
+		lay2plot.o\
+		modedit_undo_redo.o\
+		block_module_editor.o\
+		onrightclick.o\
+		modedit_onclick.o\
+		via_edit.o\
+		wxprint.o \
+		cursors.o\
+		menubarpcb.o \
+		menubarmodedit.o \
+		tool_onrightclick.o\
+		edit.o \
+		setpage.o \
+		tool_pcb.o \
+		pcbframe.o \
+		class_track.o \
+		class_mire.o\
+		class_cotation.o\
+		class_pad.o \
+		class_equipot.o \
+		class_module.o \
+		class_edge_mod.o \
+		class_text_mod.o\
+		class_pcb_text.o\
+		class_board.o\
+		drawframe.o\
+		drawpanel.o\
+		track.o \
+		set_color.o \
+		set_grid.o \
+		pcbcfg.o \
+		netlist.o \
+		affiche.o \
+		pcbpiste.o \
+		tracepcb.o \
+		tracemod.o \
+		trpiste.o \
+		surbrill.o \
+		pcbtexte.o \
+		locate.o \
+		modules.o \
+		loadcmp.o \
+		zoom.o\
+		dialog_setup_libs.o \
+		dialog_general_options.o \
+		muwave_command.o \
+		initpcb.o\
+		editrack.o \
+		editrack-part2.o \
+		deltrack.o edit_track_width.o \
+		editmod.o\
+		editpads.o \
+		move-drag_pads.o\
+		globaleditpad.o \
+		editedge.o\
+		edtxtmod.o \
+		dialog_edit_mod_text.o\
+		ratsnest.o drc.o \
+		block.o\
+		clean.o \
+		pcbplot.o\
+		plothpgl.o\
+		plot_rtn.o\
+		plotgerb.o\
+		librairi.o edgemod.o\
+		connect.o muonde.o  attribut.o\
+		gendrill.o\
+		sel_layer.o \
+		cotation.o\
+		automove.o\
+		tr_modif.o \
+		autorout.o solve.o\
+		work.o queue.o \
+		board.o dist.o graphpcb.o \
+		zones.o undelete.o \
+		move_copy_track.o ioascii.o struct.o \
+		mirepcb.o xchgmod.o\
+		plotps.o\
+		dragsegm.o\
+		autoplac.o\
+		files.o\
+		infospgm.o\
+		router.o\
+		controle.o\
+		tool_modedit.o\
+		moduleframe.o\
+		find.o\
+		basepcbframe.o\
+		modeditoptions.o\
+		gen_modules_placefile.o\
+		modedit.o\
+		export_gencad.o\
+		hotkeys.o
+
+setpage.o: ../share/setpage.cpp
+	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+
+drawpanel.o: ../share/drawpanel.cpp
+	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+
+drawframe.o: ../share/drawframe.cpp
+	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+
+menubarpcb.o: menubarpcb.cpp $(COMMON)
+
+dialog_general_options.o: dialog_general_options.cpp dialog_track_options.cpp dialog_display_options.cpp\
+		dialog_graphic_items_options.cpp $(COMMON)
+
+menubarmodedit.o: menubarmodedit.cpp $(COMMON)
+
+controle.o: controle.cpp $(COMMON)
+
+cursors.o: cursors.cpp $(COMMON)
+
+tool_onrightclick.o: tool_onrightclick.cpp $(COMMON)
+
+files.o: files.cpp $(COMMON)
+
+export_gencad.o: export_gencad.cpp $(COMMON)
+
+wxprint.o: ../share/wxprint.cpp ../share/dialog_print.cpp ../share/dialog_print.h $(COMMON)
+	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+
+lay2plot.o: lay2plot.cpp $(COMMON)
+
+classpcb.o: classpcb.cpp $(COMMON)
+
+class_track.o: class_track.cpp class_track.h $(COMMON)
+
+class_mire.o: class_mire.cpp class_mire.h $(COMMON)
+
+class_cotation.o: class_cotation.cpp class_cotation.h $(COMMON)
+
+class_pad.o: class_pad.cpp $(COMMON)
+
+class_equipot.o: class_equipot.cpp $(COMMON)
+
+class_module.o: class_module.cpp $(COMMON)
+
+class_edge_mod.o: class_edge_mod.cpp $(COMMON)
+
+class_text_mod.o: class_text_mod.cpp $(COMMON)
+
+class_pcb_text.o: class_pcb_text.cpp class_pcb_text.h $(COMMON)
+
+pcbnew.o: pcbnew.cpp pcbnew.h pcbplot.h drag.h $(COMMON) \
+				autorout.h ../include/eda_dde.h
+
+pcbcfg.o: pcbcfg.cpp $(COMMON) pcbcfg.h pcbplot.h
+
+netlist.o: netlist.cpp dialog_netlist.cpp dialog_netlist.h $(COMMON)
+
+gen_modules_placefile.o: gen_modules_placefile.cpp $(COMMON)
+
+xchgmod.o: xchgmod.cpp $(COMMON)
+
+pcbpiste.o: pcbpiste.cpp $(COMMON)
+
+tracepcb.o: tracepcb.cpp $(COMMON)
+
+tracemod.o: tracemod.cpp ../include/grfonte.h $(COMMON)
+
+trpiste.o: trpiste.cpp $(COMMON)
+
+surbrill.o: surbrill.cpp $(COMMON)
+
+pcbtexte.o: pcbtexte.cpp $(COMMON)
+
+locate.o: locate.cpp $(COMMON)
+
+modules.o: modules.cpp drag.h $(COMMON)
+
+autoplac.o: autoplac.cpp autorout.h $(COMMON)
+
+automove.o: automove.cpp autorout.h $(COMMON)
+
+loadcmp.o: loadcmp.cpp $(COMMON)
+
+zoom.o: ../share/zoom.cpp $(COMMON)
+	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+
+infospgm.o: ../share/infospgm.cpp $(COMMON)
+	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+
+affiche.o: affiche.cpp $(COMMON)
+
+tr_modif.o: tr_modif.cpp $(COMMON)
+
+dialog_setup_libs.o: dialog_setup_libs.cpp $(COMMON)
+
+initpcb.o: initpcb.cpp dialog_initpcb.cpp dialog_initpcb.h $(COMMON)
+
+editrack.o: editrack.cpp $(COMMON)
+
+attribut.o: attribut.cpp $(COMMON)
+
+deltrack.o: deltrack.cpp $(COMMON)
+
+track.o: track.cpp $(COMMON)
+
+edit_track_width.o: edit_track_width.cpp $(COMMON)
+
+editmod.o: editmod.cpp dialog_edit_module.cpp dialog_edit_module.h $(COMMON)
+
+editpads.o: editpads.cpp dialog_pad_edit.cpp dialog_pad_edit.h $(COMMON)
+
+move-drag_pads.o: move-drag_pads.cpp drag.h $(COMMON)
+
+editedge.o: editedge.cpp $(COMMON)
+
+cotation.o: cotation.cpp $(COMMON)
+
+edtxtmod.o: edtxtmod.cpp $(COMMON)
+
+dialog_edit_mod_text.o: dialog_edit_mod_text.cpp dialog_edit_mod_text.h $(COMMON)
+
+ratsnest.o: ratsnest.cpp $(COMMON)
+
+connect.o: connect.cpp $(COMMON)
+
+drc.o: drc.cpp dialog_drc.cpp dialog_drc.h autorout.h $(COMMON)
+
+block.o: block.cpp $(COMMON)
+
+clean.o: clean.cpp $(COMMON)
+
+pcbplot.o: pcbplot.cpp pcbplot.h $(COMMON)
+
+plothpgl.o: plothpgl.cpp $(COMMON)
+
+plotgerb.o: plotgerb.cpp pcbplot.h plotgerb.h $(COMMON)
+
+plotps.o: plotps.cpp pcbplot.h $(COMMON)
+
+readgerb.o: readgerb.cpp pcbplot.h $(COMMON)
+
+plot_rtn.o: plot_rtn.cpp pcbplot.h $(COMMON)
+
+gendrill.o: gendrill.cpp pcbplot.h $(COMMON)
+
+librairi.o: librairi.cpp $(COMMON)
+
+edgemod.o: edgemod.cpp $(COMMON)
+
+muonde.o: muonde.cpp drag.h gen_self.h $(COMMON)
+
+autorout.o: autorout.cpp cell.h autorout.h $(COMMON)
+
+solve.o: solve.cpp cell.h autorout.h $(COMMON)
+
+work.o: work.cpp cell.h autorout.h $(COMMON)
+
+queue.o: queue.cpp cell.h autorout.h $(COMMON)
+
+board.o: board.cpp cell.h autorout.h $(COMMON)
+
+dist.o: dist.cpp cell.h autorout.h $(COMMON)
+
+graphpcb.o: graphpcb.cpp cell.h autorout.h $(COMMON)
+
+zones.o: zones.cpp cell.h $(COMMON)
+
+undelete.o: undelete.cpp $(COMMON)
+
+move_copy_track.o: move_copy_track.cpp $(COMMON)
+
+ioascii.o: ioascii.cpp $(COMMON)
+
+struct.o: struct.cpp $(COMMON)
+
+coordbox.o: coordbox.cpp $(COMMON)
+
+mirepcb.o: mirepcb.cpp $(COMMON)
+
+dragsegm.o: dragsegm.cpp drag.h $(COMMON)
+
+router.o: router.cpp $(COMMON)
+

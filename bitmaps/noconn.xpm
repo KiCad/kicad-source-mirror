@@ -1,0 +1,29 @@
+/*  XPM bitmap */
+#ifndef XPMMAIN
+extern char *noconn_button[];
+
+#else
+char *noconn_button[] = {
+/* columns rows colors chars-per-pixel */
+"16 15 2 1",
+"  c None",
+"- c Blue",
+/* pixels */
+"                ",
+"                ",
+"  -         -   ",
+"   -       -    ",
+"    -     -     ",
+"     -   -      ",
+"      - -       ",
+"       -        ",
+"      - -       ",
+"     -   -      ",
+"    -     -     ",
+"   -       -    ",
+"  -         -   ",
+"                ",
+"                "
+};
+#endif
+

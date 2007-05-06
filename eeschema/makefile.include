@@ -1,0 +1,187 @@
+# File:		makefile.include
+
+FINAL = 1
+
+EESCHEMA_FLAGS= -DEESCHEMA
+EXTRACPPFLAGS=$(KICAD_FLAGS) $(EESCHEMA_FLAGS) -I./ -Ibitmaps -I../include -I../eeschema
+EXTRALIBS = ../common/common.a
+
+# DEPEND = program.h general.h
+
+OBJECTS = eeschema.o\
+		schedit.o\
+		load_one_schematic_file.o\
+		libedit_undo_redo.o\
+		schematic_undo_redo.o\
+		dialog_create_component.o\
+		libedit_onrightclick.o\
+		libedit_onleftclick.o\
+		dangling_ends.o\
+		setpage.o\
+		cmpclass.o\
+		class_hierarchy_sheet.o\
+		class_text-label.o\
+		component_class.o\
+		libclass.o\
+		dialog_options.o\
+		tool_lib.o\
+		tool_sch.o\
+		tool_viewlib.o\
+		drawframe.o\
+		schframe.o\
+		viewlib_frame.o\
+		drawpanel.o\
+		wxprint.o\
+		lib_export.o \
+		busentry.o \
+		bus-wire-junction.o \
+		eelibs1.o eelibs2.o \
+		eeload.o\
+		block.o\
+		block_libedit.o\
+		eeredraw.o\
+		dialog_eeschema_config.o\
+		eestring.o eelayer.o \
+		priorque.o eeconfig.o \
+		affiche.o \
+		zoom.o \
+		getpart.o\
+		netlist.o\
+		netlist_control.o\
+		edit_label.o\
+		edit_component_in_schematic.o\
+		locate.o \
+		save_schemas.o sheet.o \
+		viewlibs.o \
+		libedit.o \
+		libframe.o \
+		symbedit.o \
+		pinedit.o \
+		libfield.o \
+		edit_component_in_lib.o \
+		menubar.o \
+		savelib.o symbtext.o \
+		symbdraw.o \
+		hierarch.o files-io.o \
+		annotate.o plothpgl.o \
+		plot.o libalias.o \
+		plotps.o netform.o \
+		delsheet.o \
+		infospgm.o \
+		delete.o dialog_build_BOM.o \
+		erc.o\
+		dialog_erc.o\
+		selpart.o \
+		libarch.o \
+		cleanup.o\
+		sheetlab.o \
+		class_screen.o \
+		database.o\
+		onrightclick.o \
+		onleftclick.o \
+		find.o \
+		controle.o\
+		hotkeys.o\
+		svg_print.o
+
+eeschema.o: eeschema.cpp program.h general.h $(DEPEND)
+
+edit_component_in_lib.o: edit_component_in_lib.cpp\
+	dialog_edit_component_in_lib.cpp dialog_edit_component_in_lib.h $(DEPEND)
+
+edit_component_in_schematic.o: edit_component_in_schematic.cpp\
+	dialog_edit_component_in_schematic.cpp dialog_edit_component_in_schematic.h $(DEPEND)
+
+edit_label.o: edit_label.cpp dialog_edit_label.cpp dialog_edit_label.h $(DEPEND)
+
+dialog_create_component.o: dialog_create_component.cpp dialog_create_component.h $(DEPEND)
+
+busentry.o: busentry.cpp $(DEPEND)
+
+symbdraw.o: symbdraw.cpp dialog_cmp_graphic_properties.cpp\
+	dialog_cmp_graphic_properties.h $(DEPEND)
+
+component_class.o: component_class.cpp component_class.h
+
+menubar.o: menubar.cpp $(DEPEND)
+
+find.o:find.cpp dialog_find.cpp dialog_find.h $(DEPEND)
+
+eeconfig.o: eeconfig.cpp eeconfig.h $(DEPEND)
+
+annotate.o: annotate.cpp annotate_dialog.cpp annotate_dialog.h $(DEPEND) netlist.h
+
+netlist.o: netlist.cpp $(DEPEND) netlist.h
+
+netlist_control.o: netlist_control.cpp $(DEPEND) netlist.h
+
+netform.o: netform.cpp $(DEPEND) netlist.h
+
+erc.o: erc.cpp dialog_erc.h $(DEPEND) netlist.h
+
+dialog_erc.o: dialog_erc.cpp dialog_erc.h $(DEPEND)
+
+setpage.o: ../share/setpage.cpp $(DEPEND)
+	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+
+svg_print.o: ../share/svg_print.cpp ../share/svg_print.h $(DEPEND)
+	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+
+zoom.o: ../share/zoom.cpp $(DEPEND)
+	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+
+treeprj.o: ../share/treeprj.cpp $(DEPEND)
+	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+
+drawpanel.o: ../share/drawpanel.cpp  $(DEPEND)
+	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+
+mdiframe.o: ../share/mdiframe.cpp $(DEPEND)
+	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+
+buildmnu.o: ../share/buildmnu.cpp $(DEPEND)
+	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+
+pinedit.o: pinedit.cpp pinedit-dialog.cpp pinedit-dialog.h $(DEPEND)
+
+tool_lib.o: tool_lib.cpp $(DEPEND)
+
+controle.o: controle.cpp $(DEPEND) ../include/eda_dde.h
+
+wxprint.o: ../share/wxprint.cpp  ../share/dialog_print.cpp ../share/dialog_print.h $(DEPEND)
+	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+
+bus-wire-junction.o: bus-wire-junction.cpp $(DEPEND)
+
+drawframe.o: ../share/drawframe.cpp
+	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+
+eelibs1.o: eelibs1.cpp $(DEPEND)
+
+eelibs2.o: eelibs2.cpp $(DEPEND)
+
+eeload.o: eeload.cpp $(DEPEND)
+
+block.o: block.cpp $(DEPEND)
+
+block_libedit.o: block_libedit.cpp $(DEPEND)
+
+onrightclick.o: onrightclick.cpp $(DEPEND)
+
+libedit_undo_redo.o: libedit_undo_redo.cpp $(DEPEND)
+
+libedit_onrightclick.o: libedit_onrightclick.cpp $(DEPEND)
+
+libedit_onleftclick.o: libedit_onleftclick.cpp $(DEPEND)
+
+onleftclick.o: onleftclick.cpp $(DEPEND)
+
+eeredraw.o: eeredraw.cpp $(DEPEND)
+
+dialog_eeschema_config.o: dialog_eeschema_config.cpp dialog_eeschema_config.h $(DEPEND)
+
+libedit.o: libedit.cpp $(DEPEND)
+
+infospgm.o: ../share/infospgm.cpp $(DEPEND)
+	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+

@@ -1,0 +1,39 @@
+/* XPM */
+#ifndef XPMMAIN
+extern char * delete_body_xpm[];
+
+#else
+char * delete_body_xpm[] =
+{
+"16 15 13 1",
+"X c Black",
+"% c #000080",
+"W c #008000",
+") c #008080",
+"> c #00FF00",
+"( c #800000",
+": c #800080",
+"- c #808080",
+". c None",
+"? c #FF0000",
+"U c #FF00FF",
+"$ c #FFFF00",
+"o c White",
+
+"............Xoo$",
+"...........Xoo$$",
+"..........Xoo$$%",
+".........X>Xo$%-",
+"........X>$>X%--",
+".......X>$>WWX-X",
+"......?UX>WW%)X.",
+".o...?UoUXW%)X..",
+".oo.?UoU?UX)X...",
+"ooo.U?o?UU)X....",
+"oooo?U?UU:(.....",
+"oooo-?UU:(......",
+"ooooo-(((.......",
+".oooooo.........",
+"..o..o.........."
+};
+#endif

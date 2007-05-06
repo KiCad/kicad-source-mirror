@@ -1,0 +1,161 @@
+/*****************************/
+/***** English version *******/
+/*****************************/
+
+Kicad binaries exists for Linux and Windows (XP, 2000)
+Files (schematic, boards, libraries) created on both systems are totally compatibles.
+
+Used language:
+Doc files are in french, but kicad user interface is internationalized:
+User interface is in English for most countries.
+User interface is in French **only** if you run kicad from a french version of Linux or Windows.
+It is easy to add a new translation with poedit.
+Kicad can use this translation without any change.
+(poedit is used to create the french translation).
+See http://poedit.sourceforge.net.
+Contact me for more details.
+
+Installation form archives:
+(both have binary file for Linux and Windows XP and 2000 (not Window 98) )
+kicad.zip
+or
+kicad.tgz
+
+Untar or unzip kicad
+this create the kicad tree in the current directory.
+
+**Under Windows:
+Goto C:\ or D:\ (or other prefered directory).
+Examples are for an install on C:\.
+Unzip kicad.zip
+You must have created c:\kicad.
+Windows executables are in c:\kicad\winexe.
+The main program is kicad.exe and from it you can run other programs
+(schematic, pcb, utilities: cvpcb, gerbview and other) )
+I suggest you create a shortcut to c:\kicad\winexe\kicad.exe
+
+
+** Under Linux:
+You do must have libc.so.6 (do not work with libc.so.5)
+You must be "root".
+goto /usr/local
+Untar kicad.tgz : tar zxvf kicad.tgz (ou unzip kicad.zip)
+(It is possible to unzip kicad.zip: unzip kicad.zip,
+and goto /usr/local/kicad/linux and run chmod 755 *)
+The main program is /usr/local/kicad/linux/kicad
+If you use KDE, users can copy the shortcut /usr/local/kicad/linux/kicad.desktop
+in <user home directory>/Desktop and use it to run kicad.
+
+3D modeler wings3D:
+(Usefull only if you plan to create 3D shapes for Printed board modules)
+Archive and doc files (Linux and windows ) are in ../kicad/wing3d
+goto www.wings3d.org to have more details.
+Pcbnew use the exported files in wrml (.wrl) format from wings3d (not the native .wings format).
+
+Documentation:
+Currenty only in french.
+"On line" in html format.
+source files (200 sheets) are in OpenOffice (www.openoffice.org) format.
+Can be read, printed and/or modified with OpenOffice.
+See files in kicad/help/doc_src/*
+
+Kicad tree:
+kicad/winexe: windows (XP et 2000 compatible) binaries.
+kicad/linux: linux  binaries (Mandrake 9.2 and 10.0 tested,
+	probably work fine for distributions who have an recent libc)
+kicad/library: libraries for schematic
+kicad/library/doc: documentation files for schematic components (.pdf)
+	(readable from schematic if you have acrobat ou Xpdf)
+kicad/modules: module libraries for printed boards.
+	files *.mod are the libraries,
+	and files *.brd are printed board you can see with pcbnew
+	files *.brd show the existing modules (and 3D shapes) in libraries. 
+kicad/modules/packages3d: many 3D shapes (.wrl et .wings format) for existing modules
+
+kicad/demos: Usefull...
+kicad/internat: dictionnaires des langues (actuellement anglais->francais) pour les menus
+kicad/help: On line help (in french)
+kicad/help/doc_src: Documentation (in french) (source doc, 200 sheets) under OpenOffice.
+
+Warning:
+Do not change the kicad tree, or the location of binary files,
+or kicad will **not** be able to found other kicad files (configuration, libraries...)
+
+
+/*******************************/
+/***** version Francaise *******/
+/*******************************/
+
+Les executable kicad existent pour Linux et Windows (XP, 2000)
+Les fichiers crees (Schematique, circuits imprimes, librairies) sous ces 2 systemes sont
+totalement compatibles.
+
+Installation a partir des archives
+(toutes les 2 contiennent **tous** les executables):
+kicad.zip
+ou
+kicad.tgz (s'il est disponible)
+
+Le decompactage cree le repertoire kicad (et ses sous repertoires) a partir
+du repertoire courant.
+
+**Sous Windows:
+se placer dans C:\ (ou D:\ ou tout disque et repertoire de son choix)
+On supposera ici que l'on s'est placé dans c:\
+Decompacter kicad.zip
+Créer un raccourci vers c:\kicad\winexe\kicad.exe
+On pourra alors lancer le gestionnaire de projets kicad.exe
+
+Sous Linux
+On se placera de préférence en /usr/local
+Il faudra sans doute aussi etre "root"
+Decompacter kicad.tgz ou kicad.zip
+  - kicad.tgz: faire tar zxvf <chemin de kicad.tgz>/kicad.tgz
+  - kicad.zip (unzip <chemin de kicad.tgz>/kicad.zip). Il faudra alors dans ce
+    cas rendre executable kicad, cvpcb, eeschema, gerbview et pcbnew:
+	se placer dans /usr/local/kicad/linux et faire la commande chmod 755 nom_fichier
+	pour ces 5 fichiers.
+On lancera kicad par /usr/local/kicad/linux/kicad
+Sous KDE on pourra copier /usr/local/kicad/linux/kicad.desktop sur le bureau
+de KDE comme raccourci.
+
+Installation du modeleur 3D wings3D pour créer les formes 3D des modules du PCB:
+Il est fourni dans ..kicad/wings3d pour Windows et Linux.
+Se reporter au site du créateur pour tous détails (www.wings3d.org)
+Se reporter aussi a la doc de pcbnew pour la génération des fichiers 3d
+
+Documentation:
+L'impression de la documentation (environ 200 pages) peut se faire
+sous OpenOffice (www.openoffice.org) (magnifique logiciel libre de traitement de texte).
+
+Principaux repertoires de Kicad:
+kicad/winexe: executables sous windows (teste sous XP et 2000)
+kicad/linux: executables sous linux (testes sous Mandrake 9.2 et 10.0)
+kicad/library: fichiers libraires de composants schematiques
+kicad/library/doc: fichiers documentation des composants schematiques (.pdf)
+	(accessibles directement de la schematique si l'on a installé acrobat ou Xpdf)
+kicad/modules: fichiers de composants (modules) pour le circuit imprimé
+kicad/modules/packages3d: fichiers de formes 3D des modules
+
+kicad/demos: C'est toujours utile...
+kicad/internat: dictionnaires des langues (actuellement anglais->francais) pour les menus
+kicad/help: fichiers d'aides en ligne
+kicad/help/doc_src: fichiers d'aides (doc source, 200 pages) sous OpenOffice,
+	a lire avant de se plaindre.
+
+
+Complements:
+-En cas de difficulté:
+Un problème peut surgir pour kicad lors de la recherche des fichiers utiles
+comme fichiers de config, librairies, dictionnaire anglais->français, docs...
+Sous Windows:
+	La recherche se fait là ou sont lus les executables.
+	Il ne faut donc pas recopier les executables ailleurs que là ou ils sont.
+	Toutefois, si cela ne marche pas, kicad cherche le repertoire c:\kicad
+Sous linux:
+	La recherche se fait sur /usr/local/kicad (installation conseillée),
+	ou dans le chemin des executables si /usr/local/kicad n'est pas trouvé.
+
+Uniquement en cas d'installation non standard (et en cas de difficulté),
+definir la variable d'environnement KICAD = <chemin de kicad>
+ex: KICAD=/usr/local/cao/kicad

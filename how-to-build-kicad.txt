@@ -1,0 +1,125 @@
+How to build kicad:
+
+kicad do not use configure (not yet...)
+it is compiled with make.
+
+kicad needs wxWidgets (the multi platform G.U.I.)
+
+unzip sources in a working directory.
+This will create the directory "kicad-dev".
+
+First you must install wxWidgets (see www.wxWidgets.org)
+See mybuild_wxWidgets_linux.txt and mybuild_wxWidgets_windows.txt
+(in kicad-dev ) which are scripts running configure for both systems.
+
+Linux compilation:
+You must have:
+wxWidgets ( I suggest you install wxWidgets in /usr/local).
+(you can copy mybuild_wxWidgets_linux.txt in wxWidgets directory an run
+sh mybuild_wxWidgets_linux.txt
+and make and make install)
+
+Mesa: pcbnew and cvpcv need openGL or mesa.
+(you must install mesa devel if libGL et libGLU are not found).
+GTK 2 (install development libraries).
+
+Because old version of Mesa has problem under a recent linux distrib (mandarke 10.1),
+I am using Mesa version 6.2.1, statically compiled, installed in /usr/local
+Mesa installation:
+Get MesaLib-6.2.1.tar.gz from http://www.mesa3d.org/
+in /usr/local : tar zxvf MesaLib-6.2.1.tar.gz
+in /usr/local/Mesa-6.2.1 :
+make linux-x86-static
+make install ( libGL.a et libGLU.a are copied in /usr/local/lib, and header in /usr/local/include)
+
+kicad compilation:
+in kicad-dev:
+ Have a look to libs.linux (you can edit this file if you have problems)
+ Currently libs.linux uses wxWidgets 2.7.1 build with script "mybuild_wxWidgets_linux.txt"
+ run make -f makefile.gtk
+
+Windows compilation:
+
+kicad is build with mingw and msys.
+Currently libs.linux uses wxWidgets 2.8.1 build with script "mybuild_wxWidgets_windows.txt"
+
+install mingw  and msys ( see mingw.org )
+(opengl libs are included in mingw or windows)
+
+Under msys:
+	(Warning: make.exe utility is sometime renamed mingw32-make.exe in install process
+	of msys.)
+
+Build wxWidgets (currently version 2.8.1)
+	you can copy mybuild_wxWidgets_windows.txt in wxWidgets directory an run
+	./mybuild_wxWidgets_windows.txt and make
+
+	In include/wx/msw/setup.h, check (and edit if needed) the defines :
+	#define wxUSE_GLCANVAS       1
+	#define WXWIN_COMPATIBILITY_2_4 0
+	#define wxUSE_MOUSEWHEEL  1 // Include mouse wheel support
+	#define wxUSE_HOTKEY 0      // Hotkey support (currently Windows only)
+
+
+Exit msys.
+Set environment variable WXWIN ( something as wxwin=/d/wxWidgets-2.8.1
+for a wxWidget installed in d:\wxWidgets-2.8.1)
+
+Have a look to libs.win (Currently this file handle wxWidgets 2.8.1)
+
+Under msys:
+	in kicad-dev:
+	run make -f makefile.g95
+
+*************************************************************************************
+Patch wxWidgets
+*************************************************************************************
+*************************************************************************************
+wxGTK version:
+*************************************************************************************
+Patch for printing wide traces that were showing missing rounded end caps:
+wxGTK-2.8.1/src/generic/dcpsg.cpp
+line 1634
+	PsPrint( "%%EndProlog\n" );
+
+must be
+	PsPrint( "%%EndProlog\n" );
+    PsPrint("%%BeginSetup\n");
+    PsPrint( "1 setlinecap\n" );
+    PsPrint("%%EndSetup\n");
+
+
+patch for Arcs drawings (NOT NEEDED for wxWidgets 2.7.1, needed for versions prior to 2.7.1)
+wxGTK-2.x.y/src/gtk/dcclient.cpp
+in function WindowDC::DoDrawArc
+line 572 for wxWidgets 2.7.0-1:
+        if (m_pen.GetStyle() != wxTRANSPARENT)
+        {
+            gdk_draw_arc( m_window, m_penGC, FALSE, xxc-r, yyc-r, 2*r,2*r, alpha1, alpha2 );
+
+			gdk_draw_line( m_window, m_penGC, xx1, yy1, xxc, yyc );
+			gdk_draw_line( m_window, m_penGC, xxc, yyc, xx2, yy2 );
+        }
+must be
+        if (m_pen.GetStyle() != wxTRANSPARENT)
+        {
+            gdk_draw_arc( m_window, m_penGC, FALSE, xxc-r, yyc-r, 2*r,2*r, alpha1, alpha2 );
+
+			if (m_brush.GetStyle() != wxTRANSPARENT)
+			{
+				gdk_draw_line( m_window, m_penGC, xx1, yy1, xxc, yyc );
+				gdk_draw_line( m_window, m_penGC, xxc, yyc, xx2, yy2 );
+			}
+        }
+
+
+*************************************************************************************
+wxMSW version: for wxWMSW 2.8.1 only
+*************************************************************************************
+
+wxMSW.2.8.1/src/msw/menu.cpp
+line 410
+    if ( !pItem->IsOwnerDrawn()  )
+must be
+    if ( !pItem->IsOwnerDrawn() && !pItem->IsSeparator() )
+

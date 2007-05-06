@@ -1,0 +1,21 @@
+# File:		makefile for eeschema, mingw
+
+#used only to define (KICAD_BIN) :
+include ../../libs.macosx
+
+
+all: netlist_form_pads-pcb
+			
+netlist_form_pads-pcb: netlist_form_pads-pcb.cpp
+	g++ -D__UNIX__ -Wall netlist_form_pads-pcb.cpp -o netlist_form_pads-pcb
+	
+install:
+	cp -v all $(KICAD_BIN)/plugins/
+
+clean :
+	rm -f *.o
+	rm -f *.rsc
+	rm -f *.res
+	rm -f *.exe
+	rm -f *.bak
+

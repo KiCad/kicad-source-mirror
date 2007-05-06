@@ -1,0 +1,34 @@
+/* XPM */
+#ifndef XPMMAIN
+extern char *find_xpm[];
+
+#else
+char *find_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 15 6 1",
+
+"E c #404040",
+". c None",
+"I c #808080",
+"L c #FFFF00",
+"M c #0000FF",
+"P c White",
+
+"................",
+"....EE....EE....",
+"....EE....EE....",
+"....EE....EE....",
+"...EEEE..EEEE...",
+"..EPMMEEEEPMME..",
+"..EPMMEIIEPMME..",
+"..EMMEE..EEMME...",
+"..EPME....EPME..",
+"..EPME....EPME..",
+"..EPME....EPME..",
+".EPEEEE..EPEEEE.",
+".EPEEEE..EPEEEE.",
+".EEEEEE..EEEEEE.",
+"................"
+};
+#endif
+

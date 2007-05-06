@@ -1,0 +1,40 @@
+/* XPM */
+#ifndef XPMMAIN
+extern char * auto_delete_track_xpm[];
+
+#else
+char * auto_delete_track_xpm[] =
+{
+"16 15 14 1",
+"X c Black",
+"% c #000080",
+"W c #008000",
+") c #008080",
+"> c #00FF00",
+"( c #800000",
+": c #800080",
+"- c #808080",
+". c None",
+"? c #FF0000",
+"U c #FF00FF",
+"$ c #FFFF00",
+"o c White",
+"z c Red",
+
+"zz..........Xoo$",
+"zz.........Xoo$$",
+"zz........Xoo$$%",
+".zz......X>Xo$%-",
+"..zz....X>$>X%--",
+"...zz..X>$>WWX-X",
+"....zz?UX>WW%)X.",
+".o...?UoUXW%)X..",
+".oo.?UoU?UX)X...",
+"ooo.U?o?UU)X....",
+"oooo?U?UU:(.....",
+"oooo-?UU:(......",
+"ooooo-(((zz.....",
+".oooooo....zz...",
+"..o..o.......zz."
+};
+#endif

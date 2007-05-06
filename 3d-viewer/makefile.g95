@@ -1,0 +1,24 @@
+WXDIR = $(WXWIN)
+
+TARGET=3d-viewer
+DLLSUFF=.dll
+
+include ../libs.win
+
+DLLGEN=dllwrap --export-all --output-def $(TARGET).def --implib lib$(TARGET).a --driver-name c++
+
+all: $(TARGET).a
+
+include makefile.include
+
+
+$(TARGET).a: $(OBJECTS3D)
+	ar ruv $@ $(OBJECTS3D)
+	ranlib $@
+
+
+clean :
+	rm -f *.o
+	rm -f *.bak
+	rm -f $(TARGET).a
+

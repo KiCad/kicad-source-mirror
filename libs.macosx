@@ -1,0 +1,13 @@
+#Configuration for build kicad
+KICAD_BIN = /usr/local/kicad/macosx
+
+RESCOMP = /Developer/Tools/Rez -d __DARWIN__ -t APPL -d __WXMAC__ -i .
+SETFILE = /Developer/Tools/SetFile
+
+SRCSUFF = .cpp
+OBJSUFF = .o
+FINAL = 1
+
+LIBS =	../common/common.a `wx-config --libs`
+LIBS3D = ../common/common.a `wx-config --libs std,gl`
+

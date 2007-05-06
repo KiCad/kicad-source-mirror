@@ -1,0 +1,28 @@
+/* XPM */
+#ifndef XPMMAIN
+extern char *show_3d_xpm[];
+
+#else
+char *show_3d_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 15 3 1",
+"J c #FF0000",
+"x c #0000FF",
+". c none",
+"................",
+"..JJJJ...JJ.....",
+".JJJJJJ..JJJJ...",
+".JJ..JJ..JJ.JJ..",
+".....JJ..JJ..JJ.",
+"..JJJJ...JJ...JJ",
+"..JJJJJ..JJ...JJ",
+".....JJ..JJ...JJ",
+".JJ..JJ..JJ..JJJ",
+".JJJJJJ..JJJJJJ.",
+"..JJJJ....JJJJ.x",
+"..........xxxxxx",
+".....xxxxxx.....",
+"xxxxxx..........",
+"x..............."
+};
+#endif

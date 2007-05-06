@@ -1,0 +1,35 @@
+/* XPM */
+#ifndef XPMMAIN
+extern char *tree_nosel_xpm[];
+
+#else
+char *tree_nosel_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 15 6 1",
+"  c Gray0",
+"X c #7b7b7b",
+"O c Red",
+"# c White",
+"+ c Yellow",
+"@ c None",
+
+/* pixels */
+"@@@@@@@@@@@@@@@@",
+"@@@@@@@@@@@@@@@@",
+"@@@@@@@@@@@@@@@@",
+"@@@@X    X@@@@@@",
+"@@@  OOOO  @@@@@",
+"@@X +#OOOO X@@@@",
+"@@ O#+OOOOO @@@@",
+"@@ OOOOOOOO @@@@",
+"@@ OOOOOO+O X@@@",
+"@@ OOOOO++O X@@@",
+"@@X OOO++O XX@@@",
+"@@@  OOOO  XXX@@",
+"@@@@X    XXXX@@@",
+"@@@@@@@XXXXXX@@@",
+"@@@@@@@@@@X@@@@@"
+};
+
+#endif
+

@@ -1,0 +1,28 @@
+EXTRALIBS =
+EXTRACPPFLAGS= -I./ -I../include -I../common -I../pcbnew
+
+OBJECTS3D =	3d_frame.o 3d_read_mesh.o 3d_canvas.o trackball.o 3d_aux.o\
+		3d_draw.o 3d_toolbar.o 3d_class.o
+
+
+OBJECTS= ../common/trigo.o
+
+AUXLIBS= -mthreads -o $(TARGET)$(DLLSUFF)\
+	$(WXLIB_BASE) $(LIBS3D)\
+	-lrpcrt4 -loleaut32 -lole32 -luuid -lwinspool -lwinmm\
+	-lshell32 -lcomctl32 -lcomdlg32 -lctl3d32 -ladvapi32 -lwsock32 -lgdi32   
+
+3d_class.o: 3d_class.cpp 3d_struct.h 3d_viewer.h
+
+3d_read_mesh.o: 3d_read_mesh.cpp 3d_struct.h 3d_viewer.h
+
+3d_frame.o: 3d_frame.cpp 3d_viewer.h
+
+3d_canvas.o: 3d_canvas.cpp 3d_viewer.h
+
+3d_aux.o: 3d_aux.cpp 3d_viewer.h
+
+3d_draw.o: 3d_draw.cpp 3d_viewer.h 3d_struct.h
+
+3d_toolbar.o: 3d_toolbar.cpp 3d_viewer.h
+

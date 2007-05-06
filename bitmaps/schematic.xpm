@@ -1,0 +1,35 @@
+/* XPM bitmap */
+#ifndef XPMMAIN
+extern char * schematic_xpm[];
+
+#else
+char *schematic_xpm[] = {
+
+/* columns rows colors chars-per-pixel */
+"16 15 6 1",
+"  c None",
+". c Black",
+"X c Gray100",
+"o c Blue",
+"- c Green",
+"! c Red",
+
+/* pixels */
+"..............  ",
+".XXXXXXXXXXXX.. ",
+".XXXXXXXXXXXX...",
+".XXoooooXXXXXXX.",
+".oooXXXXoXXXXXX.",
+".XXoXXXXo--XXXX.",
+".oooXXXXoX-XXXX.",
+".XXoooooXX-XXXX.",
+".XXXXXXXXX-XXXX.",
+".XX--------XXXX.",
+".XX-XXXXXXXXXXX.",
+".XX-XX!XXX!XXXX.",
+".XX--!X!X!X!X!-.",
+".XXXXXXX!XXX!XX.",
+"................"
+};
+#endif
+

@@ -1,0 +1,30 @@
+/* XPM bitmap */
+#ifndef XPMMAIN
+extern char * zoom_center_xpm[];
+
+#else
+char * zoom_center_xpm[] = {
+"16 16 4 1",
+"   c None",
+".	c Black",
+"c	c Red",
+"X	c Gray100",
+"    ....        ",
+"  ..XXXX..      ",
+" .XXXXXXXX.     ",
+" .XXccccXX.     ",
+".XXccccccXX.    ",
+".XXccccccXX.    ",
+".XXccccccXX.    ",
+".XXccccccXX.    ",
+" .XXccccXX.     ",
+" .XXXXXXXX.     ",
+"  ..XXXX...     ",
+"    .... ...    ",
+"          ...   ",
+"           ...  ",
+"            ... ",
+"             .. "
+};
+#endif
+

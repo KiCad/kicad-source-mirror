@@ -1,0 +1,31 @@
+# File:		makefile for eeschema, mingw
+
+#used only to define (KICAD_BIN) :
+include ../../libs.linux
+
+# Use static link for libsupc++ (locate libstdc++.a and copy it in kicad_dev/syslibs)
+ifdef KICAD_STATIC_LINK
+#define path for a copy of libstdc++.a or/and libsupc++.a:
+LIBSTDC = ../../syslibs/libstdc++.a
+else
+# Or Use static link for libsupc++ or libstdc++
+LIBSTDC = -lstdc++
+endif
+
+
+all: netlist_form_pads-pcb
+
+netlist_form_pads-pcb: netlist_form_pads-pcb.cpp makefile.gtk
+	gcc -D__UNIX__  -Wall netlist_form_pads-pcb.cpp -o netlist_form_pads-pcb $(LIBSTDC)
+
+install:
+	cp -v netlist_form_pads-pcb $(KICAD_BIN)/plugins/
+
+clean :
+	rm -f netlist_form_pads-pcb
+	rm -f *.o
+	rm -f *.rsc
+	rm -f *.res
+	rm -f *.exe
+	rm -f *.bak
+

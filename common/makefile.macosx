@@ -1,0 +1,26 @@
+## Makefile for common.a
+CC = gcc
+
+# Compiler flags.
+CPPFLAGS =  -Wall -O2 -I./ -I../include `wx-config --cflags`
+
+EDACPPFLAGS = $(CPPFLAGS)
+
+all: common.a
+
+include makefile.include
+
+CPPFLAGS += $(EXTRACPPFLAGS)
+EDACPPFLAGS = $(CPPFLAGS)
+
+
+common.a: $(OBJECTS) makefile.macosx makefile.include
+	rm -f $@
+	ar -rv $@ $(OBJECTS)
+	ranlib $@
+
+
+clean:
+	rm -f *.o; rm -f *~; rm core; rm *.bak; rm *.obj
+	rm -f common.a
+

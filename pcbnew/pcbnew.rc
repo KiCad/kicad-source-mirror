@@ -1,0 +1,4 @@
+a_icon_pcbnew ICON "icon_pcbnew.ico"
+icon_w3d ICON "icon_w3d.ico"
+icon_modedit ICON "icon_modedit.ico"
+#include "wx/msw/wx.rc"

@@ -1,0 +1,42 @@
+## Makefile for GERBVIEW et wxGTK
+CC = gcc
+LD = g++
+
+# Compiler flags.
+CPPFLAGS =  -Wall -O2 `wx-config --cxxflags`
+
+LDFLAGS =
+
+EXTRALIBS = ../common/common.a
+include ../libs.macosx
+
+
+TARGET = gerbview
+
+all: $(TARGET)
+
+include makefile.include
+
+CPPFLAGS += $(EXTRACPPFLAGS)
+EDACPPFLAGS = $(CPPFLAGS)
+
+
+$(TARGET): $(OBJECTS) $(TARGET).r makefile.macosx makefile.include $(EXTRALIBS) ../libs.macosx
+		$(LD) $(LDFLAGS) $(OBJECTS) $(LIBS) -o $(TARGET)
+	$(RESCOMP) -o $(TARGET) Carbon.r $(TARGET).r
+	$(SETFILE) -a C $(TARGET)
+
+
+install:
+	cp $(TARGET) $(KICAD_BIN)
+
+
+clean:
+	rm -f *.o
+	rm -f *.exe
+	rm -f *.res
+	rm -f *.map
+	rm -f $(TARGET)
+
+
+

@@ -1,0 +1,41 @@
+/* XPM */
+#ifndef XPMMAIN
+extern char *transistor_xpm[];
+
+#else
+char * transistor_xpm[] =
+{
+"16 15 16 1",
+" 	c none",
+".	c #050305",
+"X	c Gray15",
+"o	c #5a5146",
+"O	c #191a19",
+"+	c #8e8d8c",
+"@	c #eaeaea",
+"#	c #dcdddc",
+"$	c #66625f",
+"%	c #5c442c",
+"&	c #49372c",
+"*	c #b2b4b2",
+"=	c #fb7904",
+"-	c #97500c",
+";	c #c5c6c5",
+":	c #4a2b10",
+"      ....   .  ",
+"   ..XXooXOO..  ",
+"  .O+     @+O.  ",
+" .X#$%&#    *.. ",
+".O# o=-;   $$;O.",
+"O+  o=-; *&;  +O",
+"X#  o=-*$$@   #X",
+"O   o=-X;      O",
+"X   o=-o+  #@  O",
+"O@  o=-;+$*:+ @O",
+"O*  o=-; +:=% *O",
+".X@ o=-; o&-:;X.",
+" .o $-:;   ;%O. ",
+"  OX*#@    ;X.  ",
+"   .OX$++$XO..  "
+};
+#endif

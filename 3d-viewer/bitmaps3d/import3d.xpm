@@ -1,0 +1,48 @@
+/* XPM bitmap */
+#ifndef XPM_3D_MAIN
+extern char *import3d_xpm[];
+
+#else
+char *import3d_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 15 3 1",
+"- c Black",
+"X c None",
+"o c Green",
+
+/* pixels */
+"XXXXXXXXXXXXXXXX",
+"----------------",
+"-oooooooooooooo-",
+"X-oooooooooooo-X",
+"X-oooooooooooo-X",
+"XX-oooooooooo-XX",
+"XX-oooooooooo-XX",
+"----oooooooo----",
+"X-oooooooooooo-X",
+"XX-oooooooooo-XX",
+"XXX-oooooooo-XXX",
+"XXXX-oooooo-XXXX",
+"XXXXX-oooo-XXXXX",
+"XXXXXX-oo-XXXXXX",
+"XXXXXXX--XXXXXXX"
+
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX"
+
+};
+#endif
+

@@ -1,0 +1,40 @@
+# File:		makefile
+
+# Compiler flags.
+CC = gcc
+LD = gcc
+
+FINAL = 1
+
+# Compiler flags.
+
+CPPFLAGS = -Wall -O2 `wx-config --cxxflags`
+
+LDFLAGS =  -s
+
+EDACPPFLAGS = $(CPPFLAGS)
+
+include ../libs.linux
+
+
+TARGET = cvpcb
+
+all: $(TARGET)
+
+include makefile.include
+
+CPPFLAGS += $(EXTRACPPFLAGS)
+EDACPPFLAGS = $(CPPFLAGS)
+
+
+$(TARGET):	$(OBJECTS) makefile.gtk makefile.include $(EXTRALIBS) ../libs.linux $(LIBVIEWER3D)
+	$(LD) $(OBJECTS) $(LDFLAGS)  $(LIBVIEWER3D)  $(LIBS_WITH_GL) -o $(TARGET)
+
+
+install:
+	cp -f $(TARGET) $(KICAD_BIN)
+
+clean:
+		rm *.o
+		rm $(TARGET)
+

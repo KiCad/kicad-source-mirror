@@ -1,0 +1,30 @@
+/* XPM */
+#ifndef XPMMAIN
+extern char *select_grid_xpm[];
+
+#else
+char *select_grid_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 5 1",
+" 	c #ffffff",
+".	c none",
+"X	c #04827c",
+"o	c #048284",
+"O	c #04867c",
+" .. .. .. .. .. ",
+"................",
+"................",
+" .. .. .. .. .. ",
+"................",
+"................",
+" .X.oX .. oX.o. ",
+"..oXXo....XXXX..",
+"..XoX......oXo..",
+" .oXoXooXooXoX. ",
+"..XXo......oXo..",
+"..oOXX....XXOX..",
+" .o.oo .. oo.o. ",
+"................",
+"................",
+" .. .. .. .. .. "};
+#endif

@@ -1,0 +1,31 @@
+# Makefile for gerbview, Windows
+
+WXDIR = $(WXWIN)
+include ../libs.win
+
+TARGET=gerbview
+
+all: $(TARGET).exe
+
+include makefile.include
+
+$(TARGET).exe: $(OBJECTS) $(TARGET)_resources.o $(EDALIB)
+	$(CXX) $(ALL_LDFLAGS) -o $(TARGET).exe $(OBJECTS)\
+		$(TARGET)_resources.o $(EDALIBS) $(SYSWXLIB)
+
+install:
+	cp $(TARGET).exe $(KICAD_BIN)
+
+
+$(TARGET)_resources.o:  $(TARGET).rc
+	$(RESCOMP) $(RCINPUTSWITCH) $(TARGET).rc $(RCOUTPUTSWITCH) $(TARGET)_resources.o $(RESFLAGS)
+
+
+clean :
+	rm -f *.o
+	rm -f core
+	rm -f *.rsc
+	rm -f *.res
+	rm -f *.bak
+	rm -f *.exe
+

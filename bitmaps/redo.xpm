@@ -1,0 +1,31 @@
+/* XPM */
+#ifndef XPMMAIN
+extern char *redo_xpm[];
+
+#else
+char *redo_xpm[] = {
+/* width height num_colors chars_per_pixel */
+"16 16 4 1",
+/* colors */
+"  c None",
+"X c #0000E0",
+"a c #808080",
+". c #404040",
+/* pixels */
+"                ",
+"                ",
+"                ",
+"                ",
+"   aXXXX..      ",
+"  aX....XX.. X..",
+" XX     ..X XX..",
+" XX      ..XXX..",
+" XX     ..XXXX..",
+" XX    ..XXXXX..",
+" .aXX  .........",
+"  .XXXa         ",
+"                ",
+"                ",
+"                ",
+"                "};
+#endif

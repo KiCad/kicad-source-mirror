@@ -1,0 +1,39 @@
+## Makefile for PCBNEW et wxGTK
+CC = gcc
+LD = g++
+
+# Compiler flags.
+
+CPPFLAGS =  -Wall -O2 `wx-config --cxxflags`
+
+LDFLAGS =
+
+include ../libs.macosx
+
+TARGET = pcbnew
+
+all: $(TARGET)
+
+include makefile.include
+
+CPPFLAGS += $(EXTRACPPFLAGS)
+EDACPPFLAGS = $(CPPFLAGS)
+
+
+
+$(TARGET): $(OBJECTS) $(TARGET).r makefile.macosx  makefile.include $(LIBVIEWER3D) $(EXTRALIBS) ../libs.macosx
+		$(LD) $(LDFLAGS) $(OBJECTS) $(LIBVIEWER3D) $(LIBS3D) -o $(TARGET)
+	$(RESCOMP) -o $(TARGET) Carbon.r $(TARGET).r
+	$(SETFILE) -a C $(TARGET)
+
+install:
+	cp $(TARGET) $(KICAD_BIN)
+
+
+clean:
+	rm -f *.o
+	rm -f *.map
+	rm -f $(TARGET)
+
+
+

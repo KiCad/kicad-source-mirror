@@ -1,0 +1,24 @@
+/* XPM */
+char * module_filtered_list_xpm[] = {
+"16 15 5 1",
+"X c #808080",
+"  c None",
+"o c #808000",
+"c c Gray",
+"D c Red",
+"    XXX  XXX    ",
+" cooX  XX  Xooc ",
+" cooX      Xooc ",
+"    XDDDDDDX    ",
+" cooX      Xooc ",
+" cooXDDDDD Xooc ",
+"    X      X    ",
+" cooXDDDD  Xooc ",
+" cooX      Xooc ",
+"    XDDD   X    ",
+" cooX      Xooc ",
+" cooXDD    Xooc ",
+"    X      X    ",
+" cooXD     Xooc ",
+"    XXXXXXXX    "
+};

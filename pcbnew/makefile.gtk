@@ -1,0 +1,39 @@
+## Makefile for PCBNEW et wxGTK
+CC = gcc
+LD = gcc
+
+# Compiler flags.
+
+CPPFLAGS = -Wall -O2 `wx-config --cxxflags`
+
+LDFLAGS = -s
+
+include ../libs.linux
+
+TARGET = pcbnew
+
+all: $(TARGET)
+
+include makefile.include
+
+CPPFLAGS += $(EXTRACPPFLAGS)
+EDACPPFLAGS = $(CPPFLAGS)
+
+
+
+$(TARGET): $(OBJECTS) makefile.gtk  makefile.include $(LIBVIEWER3D) $(EXTRALIBS) ../libs.linux
+		$(LD) $(LDFLAGS) $(OBJECTS) $(LIBVIEWER3D) $(LIBS_WITH_GL)\
+		-o $(TARGET)
+		
+		
+install:
+		cp $(TARGET) $(KICAD_BIN)
+
+
+clean:
+	rm -f *.o
+	rm -f *.map
+	rm -f $(TARGET)
+
+
+

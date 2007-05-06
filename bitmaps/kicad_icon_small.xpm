@@ -1,0 +1,42 @@
+/* XPM */
+#ifndef XPMMAIN
+extern char * kicad_icon_small_xpm[];
+
+#else
+char * kicad_icon_small_xpm[] = {
+"16 16 16 1",
+" 	c none",
+".	c #634931",
+"X	c #c49c7b",
+"o	c #e6d0bd",
+"O	c #c5b9af",
+"+	c #8a6c5c",
+"@	c #e9bb91",
+"#	c #f49640",
+"$	c #bc7334",
+"%	c #8b8086",
+"&	c #716c94",
+"*	c #472b14",
+"=	c #827fc6",
+"-	c #aaa9f3",
+";	c #a57f60",
+":	c #a29ca7",
+
+"                ",
+"  .$@o%@@.X#.   ",
+" XX##XOo@OXX%&  ",
+"*$.###%=&-X#oO  ",
+"*+;#%=----&$oO  ",
+" O==-------& O  ",
+" :&=&=---===O%  ",
+" :&==--===::@o@O",
+" :&=====:O&+ooOo",
+" O%+==:O&%%%O:  ",
+" :X#$&&%;+o% O  ",
+"*$$###;X;:##oO  ",
+"*+$###XXX XXoO  ",
+" %+##X%o@+XX..  ",
+"  .#Xo%@O.X#.   ",
+"  .Xoo+@@.X#.   "
+};
+#endif

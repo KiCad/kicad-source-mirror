@@ -1,0 +1,87 @@
+EXTRACPPFLAGS= -I$(SYSINCLUDE) -I./ -Ibitmaps -I../include
+
+COMMON = ../include/colors.h
+
+
+
+OBJECTS= \
+		confirm.o \
+		base_struct.o\
+		copy_to_clipboard.o\
+		basicframe.o\
+		common_plot_functions.o\
+		common_plotPS_functions.o\
+		common_plotHPGL_functions.o\
+		drawtxt.o \
+		wxwineda.o \
+		string.o \
+		gr_basic.o\
+		gestfich.o\
+		trigo.o\
+		selcolor.o\
+		bitmaps.o\
+		common.o\
+		eda_doc.o\
+		toolbars.o\
+		displlst.o \
+		edaappl.o\
+		block_commande.o\
+		msgpanel.o\
+		projet_config.o\
+		get_component_dialog.o\
+		eda_dde.o\
+		worksheet.o\
+		base_screen.o\
+		dcsvg.o
+
+gr_basic.o: gr_basic.cpp ../include/gr_basic.h $(DEPEND)
+
+confirm.o: confirm.cpp $(COMMON)
+
+worksheet.o: worksheet.cpp ../include/worksheet.h $(COMMON)
+
+selcolor.o: selcolor.cpp ../include/colors.h $(COMMON)
+
+get_component_dialog.o: get_component_dialog.cpp $(COMMON)
+
+common_plotPS_functions.o: common_plotPS_functions.cpp ../include/plot_common.h $(COMMON)
+
+common_plotHPGL_functions.o: common_plotPS_functions.cpp ../include/plot_common.h $(COMMON)
+
+drawtxt.o: drawtxt.cpp ../include/grfonte.h $(COMMON)
+
+svg_print.o: svg_print.cpp $(COMMON)
+
+gr_basic.o: gr_basic.cpp ../include/gr_basic.h $(COMMON) ../include/plot_common.h
+
+dcsvg.o: dcsvg.cpp $(COMMON) ../include/dcsvg.h
+
+projet_config.o: projet_config.cpp $(COMMON)
+
+base_struct.o: base_struct.cpp $(COMMON)
+
+eda_doc.o: eda_doc.cpp $(COMMON)
+
+common.o: common.cpp $(COMMON)
+
+gestfich.o: gestfich.cpp $(COMMON)
+
+toolbars.o: toolbars.cpp $(COMMON)
+
+msgpanel.o: msgpanel.cpp $(COMMON)
+
+block_commande.o: block_commande.cpp $(COMMON)
+
+string.o: string.cpp
+
+trigo.o: trigo.cpp ../include/trigo.h
+
+bitmaps.o: bitmaps.cpp ../include/bitmaps.h
+
+edaappl.o: edaappl.cpp $(COMMON) ../include/worksheet.h\
+	../include/common.h ../include/gr_basic.h\
+	../include/build_version.h
+
+eda_dde.o: eda_dde.cpp $(COMMON) ../include/eda_dde.h
+
+displlst.o: displlst.cpp $(COMMON)

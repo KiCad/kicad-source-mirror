@@ -1,0 +1,58 @@
+# File:		winmake.env
+#binaries path:
+KICAD_BIN = /f/kicad/winexe
+
+
+
+# Target			 WXMAKINGDLL	   WXUSINGDLL	  WXBUILDDLL
+# wxWin DLL				 1					0			   1
+# wxWin STATIC			 0					  0				 0
+# App use wxWin DLL		 0					  1				 0
+# DLL use wxWin DLL		 0					  1				 1
+# DLL use wxWin STATIC	 0					0			   1
+#
+
+#Define the wxWidget path (if not found in environment variables):
+ifndef WXWIN
+WXWIN=/f/wxMSW-2.8.1
+endif
+LIBVERSION = 2.8
+
+
+#comment this for static wxWidgets link
+#WXUSINGDLL = 1
+
+FINAL = 1
+
+ALL_CPPFLAGS = `$(WXWIN)/wx-config --cppflags`
+
+EDACPPFLAGS = $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $(EXTRACPPFLAGS)
+
+EDALIBS = $(EXTRALIBS)
+
+SYSWXLIB = `$(WXWIN)/wx-config --libs gl`\
+	-lwxpng-$(LIBVERSION) -lwxjpeg-$(LIBVERSION) -lwxzlib-$(LIBVERSION)
+
+.cpp.o:
+	gcc -c -Wall $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $(EXTRACPPFLAGS) -o $@ $*.cpp
+
+
+# Settings for Cyginw/Mingw32
+# Some versions of windres cannot cope with the --preprocessor
+# option. Uncomment the RCPREPROCESSOR line below if yours can.
+ifndef WINE
+RESCOMP=$(CROSS)windres $(_USE_TEMP_FILE_IF_SUPPORTED)
+else
+RESCOMP=wrc
+endif
+RCINPUTSWITCH=-i
+RCOUTPUTSWITCH=-o
+RCINCSWITCH=--include-dir
+RCDEFSWITCH=--define
+# Note that this can cause windres to fail (Win95/98 problem?)
+# but commenting out RCPREPROCESSOR then does the trick.
+#RCPREPROCESSOR=--preprocessor "$(CXX) -c -E -xc-header -DRC_INVOKED"
+
+# Don't make this too long (e.g. by adding contrib/include/wx) because it will
+# truncate the command line
+RESFLAGS=$(RCPREPROCESSOR) $(RCINCSWITCH) $(WXDIR)/include $(RCEXTRAINC) $(RCDEFSWITCH) __WIN32__ $(RCDEFSWITCH) __WIN95__ $(RCDEFSWITCH) __GNUWIN32__

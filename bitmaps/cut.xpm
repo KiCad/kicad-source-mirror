@@ -1,0 +1,30 @@
+/* XPM bitmap*/
+#ifndef XPMMAIN
+extern char *cut_button[];
+
+#else
+char *cut_button[] = {
+/* columns rows colors chars-per-pixel */
+"16 15 3 1",
+"  c None",
+". c Black",
+"X c #000080",
+/* pixels */
+"                ",
+"     .   .      ",
+"     .   .      ",
+"     .   .      ",
+"     .. ..      ",
+"      . .       ",
+"      ...       ",
+"       .        ",
+"      X.X       ",
+"      X XXX     ",
+"    XXX X  X    ",
+"   X  X X  X    ",
+"   X  X X  X    ",
+"   X  X  XX     ",
+"    XX          "
+};
+#endif
+

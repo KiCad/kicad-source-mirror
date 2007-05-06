@@ -1,0 +1,47 @@
+## Makefile for eeschema
+CC = gcc
+#LD = c++ pour utiliser libstdc++ dynamique
+LD = gcc
+
+FINAL = 1
+
+
+LDFLAGS =  -s
+
+include ../libs.linux
+
+TARGET = eeschema
+
+
+CPPFLAGS = -Wall -O2 `wx-config --cxxflags`
+
+
+all: $(TARGET)
+
+include makefile.include
+
+CPPFLAGS += $(EXTRACPPFLAGS)
+EDACPPFLAGS = $(CPPFLAGS)
+
+$(TARGET):  $(OBJECTS) makefile.gtk makefile.include $(EXTRALIBS) ../libs.linux
+	$(LD) $(OBJECTS) $(LDFLAGS)  $(LIBS) -o $(TARGET)
+
+netlist_form_pads-pcb: plugins/netlist_form_pads-pcb.cpp makefile.gtk
+	gcc -D__UNIX__ -Wall plugins/netlist_form_pads-pcb.cpp $(LIBSTDC) -o netlist_form_pads-pcb
+
+
+install:
+	cp $(TARGET) $(KICAD_BIN)
+
+
+clean:
+	rm -f *.o; rm -f *~; rm core; rm *.bak
+	rm -f $(TARGET)
+
+
+
+
+
+
+
+

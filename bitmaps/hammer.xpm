@@ -1,0 +1,29 @@
+/* XPM */
+#ifndef XPMMAIN
+extern char * hammer_xpm[];
+
+#else
+char * hammer_xpm[] = {
+"16 15 6 1",
+" 	c none",
+".	c #444244",
+"X	c #848284",
+"o	c #542e04",
+"O	c #c4c2c4",
+"+	c #94723c",
+"         .X     ",
+"         oXX    ",
+"          o.X   ",
+"           o.X  ",
+"         OX o.X ",
+"        OX+  oo ",
+"       OX+      ",
+"      OX+       ",
+"     OX+        ",
+"    OX+         ",
+"   OX+          ",
+"  OX+           ",
+" OX+            ",
+" X+             ",
+"                "};
+#endif

@@ -1,0 +1,30 @@
+/* XPM */
+#ifndef XPMMAIN
+extern char *preference_xpm[];
+
+#else
+char * preference_xpm[] = {
+"16 15 7 1",
+" 	c None",
+".	c #808000",
+"X	c #c0c0c0",
+"o	c #808080",
+"O	c Black",
+"+	c #008080",
+"@	c Blue",
+"     ....       ",
+"   ..XXoo..     ",
+"  .XXoo..O.O    ",
+"  .Xoo.X XOO    ",
+" .Xo..  XXO     ",
+" .X.O XX +O     ",
+" .o.OX  XXXO    ",
+" .o..OXXXXOO    ",
+"  .o. XXXXO     ",
+"   .OXXXXXO     ",
+"    O OOOO      ",
+"   ++XXO        ",
+"  +++@@@@       ",
+" ++++++@@@      ",
+" OOOOOOOOOO     "};
+#endif

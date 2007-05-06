@@ -1,0 +1,43 @@
+# File:		makefile for kicad, wxGTK
+
+# Compiler flags.
+CC = gcc
+LD = gcc
+
+FINAL = 1
+
+# Compiler flags.
+CPPFLAGS =  -Wall -O2 `wx-config --cxxflags`
+LDFLAGS =  -s
+
+include ../libs.linux
+
+TARGET = kicad
+
+all: $(TARGET)
+
+include makefile.include
+
+CPPFLAGS += $(EXTRACPPFLAGS)
+EDACPPFLAGS = $(CPPFLAGS)
+
+
+$(TARGET): $(OBJECTS) makefile.gtk $(EXTRALIBS) ../libs.linux
+	$(LD) $(OBJECTS) $(LDFLAGS)  $(LIBS) -o $(TARGET)
+
+install:
+	cp -f  $(TARGET) $(KICAD_BIN)
+
+clean:
+	rm -f *.o;
+	rm -f *~;
+	rm -f core;
+	rm -f *.bak
+	rm -f $(TARGET)
+
+
+
+
+
+
+

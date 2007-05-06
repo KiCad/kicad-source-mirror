@@ -1,0 +1,15 @@
+WXDIR = $(WXWIN)
+
+all: common.a
+
+include makefile.include
+include ../libs.win
+
+common.a: $(OBJECTS) ../libs.win makefile.include
+	ar ruv $@ $(OBJECTS)
+	ranlib $@
+
+clean:
+	rm -f *.bak
+	rm -f *.o
+	rm -f common.a

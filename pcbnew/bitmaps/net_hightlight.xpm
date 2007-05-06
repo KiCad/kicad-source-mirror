@@ -1,0 +1,26 @@
+/* XPM bitmap */
+char *net_hightlight_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 3 1",
+"- c #008000",
+". c #00FF00",
+"X c None",
+/* pixels */
+"XXXXXXXXXXXXXXXX",
+"XXXXXX-XXXXXXXXX",
+"XXXXXX-XXXXXXXXX",
+"XXXXXX-XXXXXXXXX",
+"XXXXXX-XXXXXXXXX",
+"XXXXX...XXXXXXXX",
+"XXXX.....XXXXXXX",
+"----.....------X",
+"XXXX.....XXXXXXX",
+"XXXXX...XXXXXXXX",
+"XXXXXX-XXXXXXXXX",
+"XXXXXX-XXXXXXXXX",
+"XXXXXX-XXXXXXXXX",
+"XXXXXX-XXXXXXXXX",
+"XXXXXX-XXXXXXXXX",
+"XXXXXXXXXXXXXXXX"
+};
+

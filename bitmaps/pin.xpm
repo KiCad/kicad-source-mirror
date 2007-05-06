@@ -1,0 +1,32 @@
+/* XPM bitmap */
+#ifndef XPMMAIN
+extern char *pin_xpm[];
+
+#else
+char *pin_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 15 4 1",
+"- c Black",
+"o c Red",
+": c Blue",
+"X c None",
+
+/* pixels */
+"XXXXXXXoXoooXXXX",
+"XXXXXXXooXXXoXXX",
+"XXXXXXXooXXXoXXX",
+"XXXXXXXoXoooXXXX",
+"XXXXXXXoXXXXXXXX",
+"X--XXXXoXXXXXXXX",
+"-XX-XXXXXXXXXXXX",
+"-XXX-----------X",
+"-XX-XXXXXXXXXXXX",
+"X--XXXXX:XXXXXXX",
+"XXXXXXX::XXXXXXX",
+"XXXXXX:X:XXXXXXX",
+"XXXXXXXX:XXXXXXX",
+"XXXXXXXX:XXXXXXX",
+"XXXXXXX:::XXXXXX"
+};
+#endif
+

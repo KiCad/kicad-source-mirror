@@ -1,0 +1,45 @@
+/* XPM */
+#ifndef XPMMAIN
+extern char * icon_w3d_xpm[];
+
+#else
+char * icon_w3d_xpm[] =
+{
+"32 32 3 1",
+"J c #FF0000",
+"M c #0000FF",
+". c #FFFFFF",
+"................................",
+"................................",
+"................................",
+"................................",
+"................................",
+".....JJJJJ.......JJ.............",
+"....JJJJJJJJ....JJJJJ...........",
+"...JJJJJJJJJ....JJJJJJJJ........",
+"...JJJ...JJJJ...JJJ.JJJJJ.......",
+"..........JJJ...JJJ...JJJJJ.....",
+"..........JJJ...JJJ.....JJJJ....",
+"........JJJJJ...JJJ......JJJJ...",
+".....JJJJJJJ....JJJ.......JJJ...",
+".....JJJJJJ.....JJJ........JJJ..",
+".....JJJJJJJ....JJJ........JJJ..",
+"........JJJJJ...JJJ........JJJ..",
+".........JJJJ...JJJ........JJJ..",
+"..........JJJ...JJJ........JJJ..",
+"..........JJJ...JJJ.......JJJJ..",
+"..JJJ.....JJJ...JJJ.......JJJ...",
+"..JJJ....JJJJ...JJJ.....JJJJJ...",
+"..JJJJJJJJJJ....JJJJJJJJJJJJ....",
+"...JJJJJJJJ.....JJJJJJJJJJJ.....",
+".....JJJJJ.........JJJJJJ.......",
+"..........................MMMMMM",
+"....................MMMMMMMMMMMM",
+"..............MMMMMMMMMMMMMMMMMM",
+"........MMMMMMMMMMMMMMMMMMM.....",
+"MMMMMMMMMMMMMMMMMMMMM...........",
+"MMMMMMMMMMMMMMM.................",
+"MMMMMMMMM.......................",
+"M..............................."
+};
+#endif

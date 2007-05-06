@@ -1,0 +1,38 @@
+/* XPM bitmap */
+#ifndef XPMMAIN
+extern char * libview_xpm[];
+
+#else
+char *libview_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 15 10 1",
+"Q c Black",
+". c None",
+"X c Black",
+"u c #808080",
+"O c Cyan",
+"- c Blue",
+"o c Black",
+"= c Cyan",
+"+ c Yellow",
+"' c Red",
+
+/* pixels */
+"........XXXXXX..",
+"....ooooX=====X.",
+"........X======X",
+"........X=======",
+"......XXX======X",
+"..ooooX+QQQQX=X.",
+"......XQu++uQ...",
+"......QuOO+uuQ..",
+"....XXQXOXXu.Q..",
+"ooooX'Quu''uXQ..",
+"....X'Qu''OuuQ..",
+"....X''Qu''uQuoo",
+"....X'''QQQQuQQ.",
+"ooooX'''''X..QQQ",
+"....XXXXXX....QQ"
+};
+#endif
+

@@ -1,0 +1,38 @@
+/* XPM */
+#ifndef XPMMAIN
+extern char *palette_xpm[];
+
+#else
+char * palette_xpm[] = {
+"16 15 14 1",
+" 	c #c0c0c0",
+".	c #808080",
+"X	c Gray100",
+"o	c Yellow",
+"O	c Blue",
+"+	c Red",
+"@	c Cyan",
+"#	c #800000",
+"$	c #000080",
+"%	c Green",
+"&	c #008000",
+"*	c #808000",
+"=	c Magenta",
+"-	c #800080",
+"    .....       ",
+"   .XoXoX.    O ",
+"  .Xo+++Xo.  @O ",
+"  .oX##++X. @O$ ",
+" .oXoXo#oXo.O$$ ",
+" .X%&&XoXoX*#.  ",
+" .o&&&oXoX*##.  ",
+" .X&XoXoX*##Xo. ",
+" .oXoOoX*##XoX. ",
+"  .o$$Oo * oXo. ",
+"  .X$$$Xo=-XoX. ",
+"  ..X$oX=---Xo. ",
+"    .oXo---Xo.  ",
+"   *#.oXXoXo..  ",
+"  *#  ......    "}
+#endif
+;
