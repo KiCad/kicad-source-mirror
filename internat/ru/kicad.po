@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: перевод KiCad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-05-06 23:03+0300\n"
+"PO-Revision-Date: 2007-05-12 23:14+0300\n"
 "Last-Translator: Igor Plyatov <plyatov@mail.ru>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -22,12 +22,12 @@ msgstr "Библиотека: <%s> не найдена"
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/autosel.cpp:107
 #, c-format
 msgid "%d equivalences"
-msgstr ""
+msgstr "%d эквивалентов"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/autosel.cpp:163
 #, c-format
 msgid "Component %s: Footprint %s not found in libraries"
-msgstr ""
+msgstr "Компонент %s: Посадочное место %s не найдено в библиотеках"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/options.cpp:138
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/dialog_build_BOM.cpp:262
@@ -95,7 +95,7 @@ msgstr "Тексты:"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/cvframe.cpp:168
 msgid "Netlist and Cmp list modified, Save before exit ?"
-msgstr ""
+msgstr "NetList и список Cmp изменены. Сохранить перед выходом?"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/cvframe.cpp:169
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/schframe.cpp:177
@@ -106,7 +106,7 @@ msgstr "Подтверждение"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/cvframe.cpp:186
 msgid "Problem when saving files, Exit anyway"
-msgstr ""
+msgstr "Проблема при сохранении файлов. Выходим в любом случае."
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/cvframe.cpp:306
 msgid "Delete selections"
@@ -140,7 +140,7 @@ msgstr "Выбор &Font"
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/cvframe.cpp:404
 #: /home/buzzer/Projects/Programming/kicad-20070115/share/drawframe.cpp:133
 msgid "Choose font type and size for dialogs, infos and status box"
-msgstr ""
+msgstr "Выбрать тип и размер шрифта для диалогов, сведений и статусного блока"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/genorcad.cpp:134
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/writenetlistpcbnew.cpp:168
@@ -169,7 +169,7 @@ msgstr "Библиотека:"
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/listboxes.cpp:310
 #, c-format
 msgid "Footprints: %d"
-msgstr ""
+msgstr "Посадочных мест: %d"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/listboxes.cpp:412
 #, c-format
@@ -273,11 +273,11 @@ msgstr "Affichage/impression de la documentation sur les modules (footprint.pdf)
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/tool_cvpcb.cpp:75
 msgid "Display the filtered footprint list for the current component"
-msgstr ""
+msgstr "Показать отфильтрованный список посадочных мест для текущего компонента"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/tool_cvpcb.cpp:79
 msgid "Display the full footprint list (without filtering)"
-msgstr ""
+msgstr "Показать полный список посадочных мест (без фильтрации)"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/tool_cvpcb.cpp:112
 #, fuzzy
@@ -412,7 +412,7 @@ msgstr " fichier non trouvé"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/viewlnet.cpp:87
 msgid "Format Netlist: ViewLogic net&pkg"
-msgstr ""
+msgstr "Формат NetList: ViewLogic net&pkg"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/viewlnet.cpp:205
 #, c-format
@@ -762,7 +762,7 @@ msgstr "Ouvrir Editeur de modules"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/buildmnu.cpp:148
 msgid "Select your prefered editor for file browsing"
-msgstr ""
+msgstr "Выбор предпочтительного редактора для просмотра файлов"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/buildmnu.cpp:155
 #, fuzzy
@@ -781,7 +781,7 @@ msgstr "Gpdf -- программа просмотра PDF для GNOME"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/buildmnu.cpp:162
 msgid "Use the default (system) PDF viewer used to browse datasheets"
-msgstr ""
+msgstr "Использовать системный просмотрщик PDF для datasheet-ов"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/buildmnu.cpp:169
 #, fuzzy
@@ -790,7 +790,7 @@ msgstr "Gpdf -- программа просмотра PDF для GNOME"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/buildmnu.cpp:169
 msgid "Use your favourite PDF viewer used to browse datasheets"
-msgstr ""
+msgstr "Использовать ваш любимый просмотрщик PDF для datasheet-ов"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/buildmnu.cpp:177
 #, fuzzy
@@ -799,7 +799,7 @@ msgstr "Gpdf -- программа просмотра PDF для GNOME"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/buildmnu.cpp:177
 msgid "Select your favourite PDF viewer used to browse datasheets"
-msgstr ""
+msgstr "Выбрать ваш любимый просмотрщик PDF для datasheet-ов"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/buildmnu.cpp:181
 #, fuzzy
@@ -952,7 +952,7 @@ msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/preferences.cpp:45
 msgid "You must choose a PDF wiever before use this option"
-msgstr ""
+msgstr "Вы должны выбрать просмотрщик PDF до использования этой опции"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/preferences.cpp:57
 #, fuzzy
@@ -1001,12 +1001,12 @@ msgstr "Info erreur d'init impression"
 #: /home/buzzer/Projects/Programming/kicad-20070115/share/wxprint.cpp:168
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/pcbplot.cpp:218
 msgid "Set X scale adjust for exact scale plotting"
-msgstr ""
+msgstr "Установить подстройку масштаба по X для точной печати"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/share/wxprint.cpp:169
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/pcbplot.cpp:220
 msgid "Set Y scale adjust for exact scale plotting"
-msgstr ""
+msgstr "Установить подстройку масштаба по Y для точной печати"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/share/wxprint.cpp:331
 #, fuzzy
@@ -1175,19 +1175,19 @@ msgstr "Société:"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/share/setpage.cpp:278
 msgid "Comment1:"
-msgstr ""
+msgstr "Комментарий1:"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/share/setpage.cpp:286
 msgid "Comment2:"
-msgstr ""
+msgstr "Комментарий2:"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/share/setpage.cpp:294
 msgid "Comment3:"
-msgstr ""
+msgstr "Комментарий3:"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/share/setpage.cpp:302
 msgid "Comment4:"
-msgstr ""
+msgstr "Комментарий4:"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/share/setpage.cpp:322
 #: /home/buzzer/Projects/Programming/kicad-20070115/share/setpage.cpp:324
@@ -2080,7 +2080,7 @@ msgstr "Redimensionne feuille"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/onrightclick.cpp:501
 msgid "Cleanup PinSheets"
-msgstr ""
+msgstr "Подчистка PinSheets"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/onrightclick.cpp:502
 #, fuzzy
@@ -2114,7 +2114,7 @@ msgstr "Annuler Bloc"
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/onrightclick.cpp:534
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/libedit_onrightclick.cpp:249
 msgid "Win. Zoom (Midd butt drag mouse)"
-msgstr ""
+msgstr "Масштабирование окна (протягиванием средней кнопкой мыши)"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/onrightclick.cpp:536
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/libedit_onrightclick.cpp:253
@@ -2140,16 +2140,16 @@ msgstr "Sauve Bloc"
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/onrightclick.cpp:189
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/modedit_onclick.cpp:217
 msgid "Copy Block (shift + drag mouse)"
-msgstr ""
+msgstr "Скопировать блок (SHIFT+протягивание мышью)"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/onrightclick.cpp:546
 msgid "Drag Block (ctrl + drag mouse)"
-msgstr ""
+msgstr "Перенести блок (CTRL+протягивание мышью)"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/onrightclick.cpp:548
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/libedit_onrightclick.cpp:262
 msgid "Del. Block (shift+ctrl + drag mouse)"
-msgstr ""
+msgstr "Удалить блок (SHIFT+CTRL+протягивание мышью)"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/onrightclick.cpp:549
 #, fuzzy
@@ -2355,7 +2355,7 @@ msgstr " non trouvé"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/annotate.cpp:170
 msgid "Previous Annotation will be deleted. Continue ?"
-msgstr ""
+msgstr "Предыдущее аннотирование будет удалено. Продолжить?"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/annotate.cpp:618
 #, fuzzy, c-format
@@ -7253,9 +7253,8 @@ msgstr "Effacer Limite de Zone"
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/onrightclick.cpp:439
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/onrightclick.cpp:452
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/onrightclick.cpp:511
-#, fuzzy
 msgid "Select Working Layer"
-msgstr "Sélection de la couche de travail"
+msgstr "Выбор рабочего слоя"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/onrightclick.cpp:437
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/onrightclick.cpp:508
@@ -10866,34 +10865,28 @@ msgid "Move zones"
 msgstr "Addition de Zones"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:1030
-#, fuzzy
 msgid "Move draw layers"
-msgstr "Перемещение слоев и выделенных областей"
+msgstr "Перемещение слоев"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:1122
-#, fuzzy
 msgid "Copy Block"
-msgstr "Copie Bloc"
+msgstr "Копировать блок"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:1132
-#, fuzzy
 msgid "Module copy"
-msgstr "Copie Doc"
+msgstr "Копировать посадочное место"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:1168
-#, fuzzy
 msgid "Track copy"
-msgstr "Copie Doc"
+msgstr "Копировать дорожку"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:1191
-#, fuzzy
 msgid "Zone copy"
-msgstr "Copie Doc"
+msgstr "Копировать зону"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:1213
-#, fuzzy
 msgid "Draw layers copy"
-msgstr "Копировать Тип Прорисовки"
+msgstr "Нарисовать копию слоев"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/export_gencad.cpp:66
 msgid "GenCAD file:"
@@ -11218,9 +11211,8 @@ msgid "DCodes id."
 msgstr "DCodes id."
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/zones.h:53
-#, fuzzy
 msgid "Fill Zones Options"
-msgstr "Настройки зон заливки"
+msgstr "Настройка зон заливки"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/essai.h:43
 msgid "essai"
