@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: перевод KiCad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-05-12 23:14+0300\n"
+"PO-Revision-Date: 2007-05-15 21:35+0300\n"
 "Last-Translator: Igor Plyatov <plyatov@mail.ru>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -3314,7 +3314,7 @@ msgstr "Librairie %s non trouvée"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/eelibs1.cpp:108
 msgid "Start loading schematic libs"
-msgstr ""
+msgstr "Начало загрузки схемных библиотек"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/eelibs1.cpp:264
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/eelibs1.cpp:271
@@ -3490,7 +3490,7 @@ msgstr "Filtre Piste"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/edit_component_in_lib.cpp:260
 msgid "Footprints"
-msgstr ""
+msgstr "Посадочные места"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/edit_component_in_lib.cpp:353
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/dialog_create_component.cpp:180
@@ -3873,7 +3873,7 @@ msgstr "Décalage:"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/dialog_create_component.cpp:311
 msgid "You must provide a name for this component"
-msgstr ""
+msgstr "Вы должны указать имя этому компоненту"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/tool_viewlib.cpp:52
 #, fuzzy
@@ -3956,6 +3956,8 @@ msgid ""
 "Note: this new library will be available only if it is loaded by eeschema\n"
 "Modify eeschema config if you want use it"
 msgstr ""
+"Заметка: эта новая библиотека будет доступна только если она загружена в eeschema\n"
+".Измените настройки eeschema если вы хотите использовать ее."
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/lib_export.cpp:139
 #, fuzzy
@@ -10704,165 +10706,135 @@ msgid "File is Not a library"
 msgstr "Le fichier n'est pas une librairie eeschema"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/loadcmp.cpp:274
-#, fuzzy, c-format
+#, c-format
 msgid "Module <%s> not found"
-msgstr "Module <%s> non trouvé"
+msgstr "Посадочное место <%s> не найдено"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/loadcmp.cpp:339
-#, fuzzy
 msgid "Library: "
-msgstr "Librairie "
+msgstr "Библиотека:"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/loadcmp.cpp:398
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/loadcmp.cpp:531
-#, fuzzy, c-format
+#, c-format
 msgid "Modules (%d items)"
-msgstr "Effacements d'éléments"
+msgstr "Посадочные места (%d штук)"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/set_grid.cpp:150
-#, fuzzy
 msgid "Grid Size Units"
-msgstr "Dim Grille utilisteur"
+msgstr "Единицы измерения сетки "
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/set_grid.cpp:156
-#, fuzzy
 msgid "User Grid Size X"
-msgstr "Grille perso dim X"
+msgstr "Пользовательский размер сетки X"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/set_grid.cpp:162
-#, fuzzy
 msgid "User Grid Size Y"
-msgstr "Grille perso dim Y"
+msgstr "Пользовательский размер сетки Y"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/deltrack.cpp:147
-#, fuzzy
 msgid "Delete NET ?"
-msgstr "Effacer Net"
+msgstr "Удалить цепь ?"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:128
-#, fuzzy
 msgid "Include Modules"
-msgstr "Inclure Modules"
+msgstr "Включая посадочные места"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:132
-#, fuzzy
 msgid "Include tracks"
-msgstr "Inclure Pistes"
+msgstr "Включая дорожки"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:136
-#, fuzzy
 msgid "Include zones"
-msgstr "Inclure zones"
+msgstr "Включая зоны"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:141
-#, fuzzy
 msgid "Include Text on copper layers"
-msgstr "Inclure Texte sur couches cuivre"
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:145
-#, fuzzy
 msgid "Include drawings"
-msgstr "Inclure tracés"
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:149
-#, fuzzy
 msgid "Include egde layer"
-msgstr "Inclure couche Edge"
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:423
-#, fuzzy
 msgid "Delete Block"
-msgstr "Effacer Bloc"
+msgstr "Удалить блок"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:433
-#, fuzzy
 msgid "Delete Footprints"
-msgstr "Effacements d'éléments"
+msgstr "Удалить посадочные места"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:452
-#, fuzzy
 msgid "Delete tracks"
-msgstr "Effacer Pistes"
+msgstr "Удалить дорожки"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:469
-#, fuzzy
 msgid "Delete draw layers"
-msgstr "Effacer toutes les couches"
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:524
-#, fuzzy
 msgid "Delete zones"
-msgstr "Effacer Zones"
+msgstr "Удалить зоны"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:555
-#, fuzzy
 msgid "Rotate Block"
-msgstr "Rotation Bloc"
+msgstr "Повернуть блок"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:569
-#, fuzzy
 msgid "Footprint rotation"
-msgstr "Rot de la forme"
+msgstr "Поворот посадочного места"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:600
-#, fuzzy
 msgid "Track rotation"
-msgstr "Rot de la forme"
+msgstr "Поворот дорожки"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:621
-#, fuzzy
 msgid "Zone rotation"
-msgstr "Rot de la forme"
+msgstr "Поворот зоны"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:640
-#, fuzzy
 msgid "Draw layers rotation"
-msgstr "Очистить Поворот|Alt R"
+msgstr "Чертить повернутые слои"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:746
-#, fuzzy
 msgid "Block mirroring"
-msgstr "Annuler Bloc"
+msgstr "Зеркалирование блока"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:759
-#, fuzzy
 msgid "Footprint mirroring"
-msgstr "Documentation des modules"
+msgstr "Зеркалирование посадочного места"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:789
-#, fuzzy
 msgid "Track mirroring"
-msgstr "Piste %.1f"
+msgstr "Зеркалирование дорожки"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:815
-#, fuzzy
 msgid "Zone mirroring"
-msgstr "Editer Zone"
+msgstr "Зеркалирование зоны"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:835
-#, fuzzy
 msgid "Draw layers mirroring"
-msgstr "Effacer toutes les couches"
+msgstr "Чертить слои зеркально"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:950
-#, fuzzy
 msgid "Move Block"
-msgstr "Déplacer Bloc"
+msgstr "Двигать блок"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:960
-#, fuzzy
 msgid "Move footprints"
-msgstr "Déplace Module  (M)"
+msgstr "Двигать посадочные места"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:990
-#, fuzzy
 msgid "Move tracks"
-msgstr "Addition de pistes"
+msgstr "Двигать дорожки"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:1011
-#, fuzzy
 msgid "Move zones"
-msgstr "Addition de Zones"
+msgstr "Двигать зоны"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/block.cpp:1030
 msgid "Move draw layers"
