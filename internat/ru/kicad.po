@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: перевод KiCad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-05-15 21:35+0300\n"
+"PO-Revision-Date: 2007-05-26 22:37+0300\n"
 "Last-Translator: Igor Plyatov <plyatov@mail.ru>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -57,13 +57,12 @@ msgstr "Сохранить настройки"
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/options.cpp:153
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/dialog_display_options.cpp:148
 msgid "&Pad Fill"
-msgstr "Заливка &Pad"
+msgstr "Заливка ножки &P"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/options.cpp:159
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/dialog_display_options.cpp:141
-#, fuzzy
 msgid "Pad &Num"
-msgstr "Pad &Num"
+msgstr "Номер ножки &N"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/options.cpp:163
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/dialog_display_options.cpp:155
@@ -135,7 +134,7 @@ msgstr "Шрифт для статусной строки"
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/cvframe.cpp:403
 #: /home/buzzer/Projects/Programming/kicad-20070115/share/drawframe.cpp:132
 msgid "&Font selection"
-msgstr "Выбор &Font"
+msgstr "Выбор шрифта &F"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/cvframe.cpp:404
 #: /home/buzzer/Projects/Programming/kicad-20070115/share/drawframe.cpp:133
@@ -153,12 +152,10 @@ msgstr "%s %s вывод %s : Разные цепи"
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/affiche.cpp:76
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/affiche.cpp:266
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/class_pad.cpp:697
-#, fuzzy
 msgid "Module"
-msgstr "Module"
+msgstr "Модуль"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/setvisu.cpp:40
-#, fuzzy
 msgid "Footprint: "
 msgstr "Посадочное место:"
 
@@ -230,9 +227,8 @@ msgid "Open Netlist"
 msgstr "Открыть Netlist"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/tool_cvpcb.cpp:38
-#, fuzzy
 msgid "Save Nelist and Cmp list"
-msgstr "Сохранить Netlist и Cmp list"
+msgstr "Сохранить NetList и Cmp list"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/tool_cvpcb.cpp:42
 msgid "Configuration"
@@ -247,29 +243,24 @@ msgid "Automatic Association"
 msgstr "Авто-связывание"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/tool_cvpcb.cpp:53
-#, fuzzy
 msgid "Select previous free component"
-msgstr "Selection composant libre précédent "
+msgstr "Выбрать предыдущий свободный компонент"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/tool_cvpcb.cpp:56
-#, fuzzy
 msgid "Select next free component"
-msgstr "Selection composant libre suivant"
+msgstr "Выбрать следующий свободный компонент"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/tool_cvpcb.cpp:60
-#, fuzzy
 msgid "Delete all associations"
-msgstr "Effacement des associations existantes"
+msgstr "Удалить все ассоциации"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/tool_cvpcb.cpp:64
-#, fuzzy
 msgid "Create stuff file (component/module list)"
-msgstr "Creation fichier de correspondance (composant/module)"
+msgstr "Создать перечень (список компонентов/модулей)"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/tool_cvpcb.cpp:68
-#, fuzzy
 msgid "Display/print component documentation (footprint.pdf)"
-msgstr "Affichage/impression de la documentation sur les modules (footprint.pdf)"
+msgstr "Показать/напечатать документацию компонента (footprint.pdf)"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/tool_cvpcb.cpp:75
 msgid "Display the filtered footprint list for the current component"
@@ -280,19 +271,16 @@ msgid "Display the full footprint list (without filtering)"
 msgstr "Показать полный список посадочных мест (без фильтрации)"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/tool_cvpcb.cpp:112
-#, fuzzy
 msgid "&Load Netlist File"
-msgstr "&Charger Fichiers Netliste:"
+msgstr "Загрузить файл NetList &L"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/tool_cvpcb.cpp:113
-#, fuzzy
 msgid "Load a Netlist"
-msgstr "Lire Netliste"
+msgstr "Загрузить NetList"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/tool_cvpcb.cpp:119
-#, fuzzy
 msgid "&Save Netlist"
-msgstr "&Sauver Netliste"
+msgstr "Сохранить NetList &S"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/tool_cvpcb.cpp:120
 #, fuzzy
@@ -344,7 +332,7 @@ msgstr "Sauver les options en répertoire de travail"
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/menubarpcb.cpp:286
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/menubarmodedit.cpp:78
 msgid "&Help"
-msgstr "&Help"
+msgstr "Помощь &H"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/cvpcb/tool_cvpcb.cpp:159
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/buildmnu.cpp:192
@@ -687,7 +675,7 @@ msgstr "Модуль %s не найден"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/buildmnu.cpp:94
 msgid "&Open Project Descr"
-msgstr "&Open проект"
+msgstr "Открыть проект &O"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/buildmnu.cpp:95
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/buildmnu.cpp:250
@@ -696,7 +684,7 @@ msgstr "Выбрать существующий проект"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/buildmnu.cpp:100
 msgid "&New Project Descr"
-msgstr "&New проект"
+msgstr "Новый проект &N"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/buildmnu.cpp:101
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/buildmnu.cpp:245
@@ -705,7 +693,7 @@ msgstr "Создать новый проект"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/buildmnu.cpp:106
 msgid "&Save Project Descr"
-msgstr "&Save проект"
+msgstr "Сохранить проект &S"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/buildmnu.cpp:107
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/buildmnu.cpp:255
@@ -809,7 +797,7 @@ msgstr "Visualisateur de librairies"
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/buildmnu.cpp:192
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/menubar.cpp:146
 msgid "Kicad &Help"
-msgstr "KiCad &Help"
+msgstr "Помощь по KiCad &H"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/buildmnu.cpp:197
 #, fuzzy
@@ -818,7 +806,7 @@ msgstr "&Sur Kicad"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/buildmnu.cpp:202
 msgid "&Projects"
-msgstr "&Projects"
+msgstr "Проекты &P"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/kicad/buildmnu.cpp:203
 #, fuzzy
@@ -4357,7 +4345,7 @@ msgstr "Sélection:"
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/genliste.cpp:149
 #: /home/buzzer/Projects/Programming/kicad-20070115/3d-viewer/3d_toolbar.cpp:112
 msgid "&Exit"
-msgstr "&Exit"
+msgstr "Выход &E"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/eeschema/genliste.cpp:172
 #, fuzzy
@@ -9609,7 +9597,7 @@ msgstr "Permutation de couches"
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/menubarpcb.cpp:264
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/menubarmodedit.cpp:60
 msgid "Pcbnew &Help"
-msgstr "Pcbnew &Help"
+msgstr "Помощь по Pcbnew &H"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/menubarpcb.cpp:268
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/menubarmodedit.cpp:64
@@ -10556,69 +10544,56 @@ msgid "Enable/disable print/plot module field texts on Silkscreen layers"
 msgstr "Active/désactive le tracé des textes des champs des modules sur couches de sérigraphie"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/pcbplot.cpp:288
-#, fuzzy
 msgid "Force Print Invisible Texts"
-msgstr "Force tracé textes invisibles"
+msgstr "Принудительно печатать скрытый текст"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/pcbplot.cpp:291
-#, fuzzy
 msgid "Force print/plot module invisible texts on Silkscreen layers"
-msgstr "Force le tracé des textes invisibles sur couches de sérigraphie"
+msgstr "Принудительно печатать/чертить скрытый текст на слое шелкографии"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/pcbplot.cpp:295
-#, fuzzy
 msgid "No Drill mark"
-msgstr "Pas de marque"
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/pcbplot.cpp:295
-#, fuzzy
 msgid "Small mark"
-msgstr "Petite marque"
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/pcbplot.cpp:295
-#, fuzzy
 msgid "Real Drill"
-msgstr "Perçage réel"
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/pcbplot.cpp:297
-#, fuzzy
 msgid "Pads Drill Opt"
-msgstr "Options perçage"
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/pcbplot.cpp:303
-#, fuzzy
 msgid "Auto scale"
-msgstr "Ech. auto"
+msgstr "Авто масштаб"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/pcbplot.cpp:303
-#, fuzzy
 msgid "Scale 1"
-msgstr "Echelle 1"
+msgstr "Масштаб 1.0"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/pcbplot.cpp:303
-#, fuzzy
 msgid "Scale 1.5"
-msgstr "Echelle 1,5"
+msgstr "Масштаб 1,5"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/pcbplot.cpp:305
-#, fuzzy
 msgid "Scale Opt"
-msgstr "Echelle"
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/pcbplot.cpp:311
-#, fuzzy
 msgid "Plot mode"
-msgstr "Mode de Tracé"
+msgstr "Режим черчения"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/pcbplot.cpp:318
-#, fuzzy
 msgid "Plot Mirror"
-msgstr "Tracé Miroir"
+msgstr "Чертить зеркально"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/pcbplot.cpp:323
-#, fuzzy
 msgid "Vias on Mask"
-msgstr "Vias sur masque"
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/pcbplot.cpp:326
 msgid "Print/plot vias on mask layers. They are in this case not protected"
@@ -10630,9 +10605,8 @@ msgid "Org = Centre"
 msgstr "Org = Centre"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/pcbplot.cpp:332
-#, fuzzy
 msgid "Draw origin ( 0,0 )in on sheet center"
-msgstr "Origine des tracés au centre de la feuille"
+msgstr "Установить точку отсчета ( 0,0 ) в центр листа"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/cotation.cpp:88
 #, fuzzy
@@ -10645,65 +10619,54 @@ msgid "Timestamp"
 msgstr "Timestamp"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/dialog_netlist.cpp:136
-#, fuzzy
 msgid "Module Selection:"
-msgstr "Sélection module"
+msgstr "Выбор модуля:"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/dialog_netlist.cpp:140
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/dialog_netlist.cpp:147
-#, fuzzy
 msgid "Keep"
-msgstr "Garder"
+msgstr "Оставить"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/dialog_netlist.cpp:143
-#, fuzzy
 msgid "Bad Tracks Deletion:"
-msgstr "Supp. pistes err.:"
+msgstr "Удаление плохих дорожек:"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/dialog_netlist.cpp:148
-#, fuzzy
 msgid "Change"
-msgstr "Changer"
+msgstr "Изменить"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/dialog_netlist.cpp:150
-#, fuzzy
 msgid "Exchange Module:"
-msgstr "Echange module:"
+msgstr "Сменить модуль:"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/dialog_netlist.cpp:153
-#, fuzzy
 msgid "Display Warnings"
-msgstr "Affiche warnings"
+msgstr "Показать предупреждения"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/dialog_netlist.cpp:166
-#, fuzzy
 msgid "Read"
-msgstr "Lire"
+msgstr "Прочитать"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/dialog_netlist.cpp:170
-#, fuzzy
 msgid "Module Test"
-msgstr "Test Modules"
+msgstr "Тест модуля"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/dialog_netlist.cpp:174
-#, fuzzy
 msgid "Compile"
-msgstr "Compile"
+msgstr "Компилировать"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/loadcmp.cpp:94
-#, fuzzy
 msgid "Module name:"
-msgstr "%s:%d не содержит имени модуля."
+msgstr "Имя модуля:"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/loadcmp.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid "Scan Lib: %s"
-msgstr "Examen Lib: %s"
+msgstr "Сканировать библиотеку: %s"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/loadcmp.cpp:215
-#, fuzzy
 msgid "File is Not a library"
-msgstr "Le fichier n'est pas une librairie eeschema"
+msgstr "Файл - не библиотека"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/pcbnew/loadcmp.cpp:274
 #, c-format
@@ -10950,7 +10913,7 @@ msgstr "Повернуть Z <-"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/3d-viewer/3d_toolbar.cpp:107
 msgid "&File"
-msgstr "&File"
+msgstr "Файл &F"
 
 #: /home/buzzer/Projects/Programming/kicad-20070115/3d-viewer/3d_toolbar.cpp:109
 msgid "Create Image (png format)"
