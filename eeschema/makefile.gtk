@@ -27,10 +27,10 @@ $(TARGET):  $(OBJECTS) makefile.gtk makefile.include $(EXTRALIBS) ../libs.linux
 	$(LD) $(OBJECTS) $(LDFLAGS)  $(LIBS) -o $(TARGET)
 
 netlist_form_pads-pcb: plugins/netlist_form_pads-pcb.cpp makefile.gtk
-	gcc -D__UNIX__ -Wall plugins/netlist_form_pads-pcb.cpp $(LIBSTDC) -o netlist_form_pads-pcb
+	gcc $(CXXFLAGS) -D__UNIX__ -Wall plugins/netlist_form_pads-pcb.cpp $(LIBSTDC) -o netlist_form_pads-pcb
 
 
-install:
+install: $(TARGET)
 	cp $(TARGET) $(KICAD_BIN)
 
 

@@ -43,7 +43,13 @@ bool BlockActive = (m_CurrentScreen->BlockLocate.m_Command !=  BLOCK_IDLE);
 		DrawEntry = LocatePin(m_CurrentScreen->m_Curseur, CurrentLibEntry, CurrentUnit, CurrentConvert);
 		if ( DrawEntry == NULL )
 		{
-			DrawEntry = CurrentDrawItem = LocateDrawItem(GetScreen(), CurrentLibEntry,CurrentUnit,
+			DrawEntry = CurrentDrawItem = LocateDrawItem(GetScreen(), 
+					GetScreen()->m_MousePosition,CurrentLibEntry,CurrentUnit,
+					CurrentConvert,LOCATE_ALL_DRAW_ITEM);
+		}
+		if ( DrawEntry == NULL )
+		{
+			DrawEntry = CurrentDrawItem = LocateDrawItem(GetScreen(), GetScreen()->m_Curseur, CurrentLibEntry,CurrentUnit,
 					CurrentConvert,LOCATE_ALL_DRAW_ITEM);
 		}
 		if ( DrawEntry == NULL )

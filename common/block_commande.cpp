@@ -112,10 +112,10 @@ void DrawBlockStruct::Draw(WinEDA_DrawPanel * panel, wxDC * DC)
 	int h = GetHeight()/panel->GetZoom();
 	if (  w == 0 || h == 0 )
 		GRLine(&panel->m_ClipBox, DC, GetX(), GetY(),
-				GetRight(), GetBottom(), m_Color);
+				GetRight(), GetBottom(), 0, m_Color);
 	else
 		GRRect(&panel->m_ClipBox, DC,  GetX(), GetY(),
-				GetRight(), GetBottom(), m_Color);
+				GetRight(), GetBottom(), 0, m_Color);
 }
 
 /*************************************************************************/

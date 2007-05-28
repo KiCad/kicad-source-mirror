@@ -394,7 +394,7 @@ wxString buf;
 	buf = newname;
 	buf.Replace( wxT(" "), wxT("_"));
 
-	if ( newsize >= 0 ) CurrentPin->m_SizeName = newsize;
+	if ( newsize >= 0 ) CurrentPin->m_PinNameSize = newsize;
 
 	CurrentPin->m_PinName = buf;
 
@@ -406,7 +406,7 @@ wxString buf;
 	{
 		if (Pin->m_StructType != COMPONENT_PIN_DRAW_TYPE ) continue;
 		if( (Pin->m_Flags & IS_LINKED) == 0 ) continue;
-		if (newsize >= 0 ) Pin->m_SizeName = newsize;
+		if (newsize >= 0 ) Pin->m_PinNameSize = newsize;
 		Pin->m_PinName = buf;
 	}
 }
@@ -432,7 +432,7 @@ wxString buf;
 
 	CurrentPin->m_PinNum = 0;
 
-	if ( newsize >= 0) CurrentPin->m_SizeNum = newsize;
+	if ( newsize >= 0) CurrentPin->m_PinNumSize = newsize;
 	CurrentPin->SetPinNumFromString(buf);
 	m_Parent->GetScreen()->SetModify();
 
@@ -442,7 +442,7 @@ wxString buf;
 		if (Pin->m_StructType != COMPONENT_PIN_DRAW_TYPE ) continue;
 		if( (Pin->m_Flags & IS_LINKED) == 0 ) continue;
 		if( Pin->m_Unit != CurrentPin->m_Unit ) continue;
-		if ( newsize >= 0) Pin->m_SizeNum = newsize;
+		if ( newsize >= 0) Pin->m_PinNumSize = newsize;
 		if ( newnum ) Pin->m_PinNum = CurrentPin->m_PinNum;
 	}
 }
@@ -520,8 +520,8 @@ LibDrawPin * CurrentPin = (LibDrawPin *) CurrentDrawItem;
 	CurrentPin->m_Orient = LastPinOrient;
 	CurrentPin->m_PinType = LastPinType;
 	CurrentPin->m_PinShape = LastPinShape;
-	CurrentPin->m_SizeName = LastPinNameSize;
-	CurrentPin->m_SizeNum = LastPinNumSize;
+	CurrentPin->m_PinNameSize = LastPinNameSize;
+	CurrentPin->m_PinNumSize = LastPinNumSize;
 	if ( LastPinCommonConvert ) CurrentPin->m_Convert = 0;
 	else CurrentPin->m_Convert = CurrentConvert;
 	if ( LastPinCommonUnit ) CurrentPin->m_Unit = 0;
@@ -762,11 +762,11 @@ bool selected = (MasterPin->m_Selected & IS_SELECTED) != 0;
 		switch ( id )
 			{
 			case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNUMSIZE_ITEM:
-				Pin->m_SizeNum = MasterPin->m_SizeNum;
+				Pin->m_PinNumSize = MasterPin->m_PinNumSize;
 				break;
 
 			case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNAMESIZE_ITEM:
-				Pin->m_SizeName = MasterPin->m_SizeName;
+				Pin->m_PinNameSize = MasterPin->m_PinNameSize;
 				break;
 
 			case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINSIZE_ITEM:

@@ -19,7 +19,7 @@ extern wxPoint LastPenPosition;
 extern wxPoint PlotOffset;
 extern FILE * PlotOutputFile;
 extern double XScale, YScale;
-extern int PenWidth;
+extern int g_DefaultPenWidth, g_CurrentPenWidth;
 extern int PlotOrientOptions, etat_plume;
 
 //Variables locales
@@ -38,8 +38,9 @@ void InitPlotParametresHPGL(wxPoint offset, double xscale, double yscale, int or
 	PlotOffset = offset;
 	XScale = xscale;
 	YScale = yscale;
-	PenWidth = 6;			/* epaisseur du trait standard en 1/1000 pouce */
+	g_DefaultPenWidth = 6;			/* epaisseur du trait standard en 1/1000 pouce */
 	PlotOrientOptions = orient;
+	g_CurrentPenWidth = -1;
 }
 
 
@@ -61,7 +62,7 @@ char Line[256];
 bool CloseFileHPGL(FILE * plot_file)
 /**********************************/
 {
-	fputs("PU;PA;SP0;\n",PlotOutputFile) ; fclose(PlotOutputFile) ;
+	fputs("PU;PA;SP0;\n",plot_file);
 	fclose(plot_file);
 	return TRUE;
 }
@@ -88,7 +89,7 @@ char Line[256];
 
 
 /********************************************************************/
-void PlotArcHPGL(wxPoint centre, int StAngle, int EndAngle, int rayon)
+void PlotArcHPGL(wxPoint centre, int StAngle, int EndAngle, int rayon, int width)
 /********************************************************************/
 /* trace d'un arc de cercle:
 	centre = coord du centre
@@ -132,7 +133,7 @@ float angle;			/* angle de l'arc*/
 
 
 /*****************************************************/
-void PlotPolyHPGL( int nb, int * coord, int fill)
+void PlotPolyHPGL( int nb, int * coord, int fill, int width)
 /*****************************************************/
 /* Trace un polygone (ferme si rempli) en format HPGL
 	coord = tableau des coord des sommets

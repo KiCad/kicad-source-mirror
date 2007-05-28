@@ -31,6 +31,7 @@
  */
 
 ////@begin forward declarations
+class wxBoxSizer;
 class wxSpinCtrl;
 ////@end forward declarations
 
@@ -40,11 +41,6 @@ class wxSpinCtrl;
 
 ////@begin control identifiers
 #define ID_DIALOG 10000
-#define SYMBOL_WINEDA_SETOPTIONSFRAME_STYLE wxDEFAULT_DIALOG_STYLE|wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxSTAY_ON_TOP|wxCLOSE_BOX
-#define SYMBOL_WINEDA_SETOPTIONSFRAME_TITLE _("General Options")
-#define SYMBOL_WINEDA_SETOPTIONSFRAME_IDNAME ID_DIALOG
-#define SYMBOL_WINEDA_SETOPTIONSFRAME_SIZE wxSize(400, 300)
-#define SYMBOL_WINEDA_SETOPTIONSFRAME_POSITION wxDefaultPosition
 #define ID_CHECKBOX1 10001
 #define ID_RADIOBOX 10003
 #define ID_RADIOBOX1 10004
@@ -55,6 +51,11 @@ class wxSpinCtrl;
 #define ID_TEXTCTRL 10008
 #define ID_TEXTCTRL1 10009
 #define ID_SPINCTRL 10010
+#define SYMBOL_WINEDA_SETOPTIONSFRAME_STYLE wxDEFAULT_DIALOG_STYLE|wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxSTAY_ON_TOP|wxCLOSE_BOX
+#define SYMBOL_WINEDA_SETOPTIONSFRAME_TITLE _("General Options")
+#define SYMBOL_WINEDA_SETOPTIONSFRAME_IDNAME ID_DIALOG
+#define SYMBOL_WINEDA_SETOPTIONSFRAME_SIZE wxSize(400, 300)
+#define SYMBOL_WINEDA_SETOPTIONSFRAME_POSITION wxDefaultPosition
 ////@end control identifiers
 
 /*!
@@ -112,11 +113,13 @@ public:
 	WinEDA_DrawFrame * m_Parent;
     
 ////@begin WinEDA_SetOptionsFrame member variables
+    wxStaticBoxSizer* m_DrawOptionsSizer;
     wxCheckBox* m_ShowGridOpt;
     wxRadioBox* m_SelGridSize;
     wxRadioBox* m_SelShowPins;
     wxCheckBox* m_AutoPANOpt;
     wxRadioBox* m_Selunits;
+    wxBoxSizer* m_LabelSizeCtrlSizer;
     wxRadioBox* m_SelDirWires;
     wxRadioBox* m_Show_Page_Limits;
     wxStaticText* m_DeltaStepXTitle;
@@ -126,6 +129,9 @@ public:
     wxStaticText* m_DeltaIncTitle;
     wxSpinCtrl* m_DeltaLabelCtrl;
 ////@end WinEDA_SetOptionsFrame member variables
+
+	WinEDA_ValueCtrl * m_DefaultDrawLineWidthCtrl;
+	WinEDA_ValueCtrl * m_DefaultLabelSizeCtrl;
 };
 
 #endif

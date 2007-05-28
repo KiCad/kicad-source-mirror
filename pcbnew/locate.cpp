@@ -17,16 +17,15 @@
 int ux0 , uy0 ,dx, dy, spot_cX, spot_cY;	/* Variables utilisees pour
 							 la localisation des segments */
 /* fonctions locales */
-EDA_BaseStruct * Locate_MirePcb( EDA_BaseStruct * PtStruct, int typeloc);
+EDA_BaseStruct * Locate_MirePcb( EDA_BaseStruct * PtStruct, int LayerSearch, int typeloc);
 /**/
 
 /* Macro de calcul de la coord de pointage selon le curseur
 (ON/OFF grille) choisi
-A REVOIR
 */
 #define SET_REF_POS(ref_pos)  if(typeloc == CURSEUR_ON_GRILLE) \
 		{ ref_pos = ActiveScreen->m_Curseur;} \
-	else { ref_pos = ActiveScreen->m_Curseur; }
+	else { ref_pos = ActiveScreen->m_MousePosition; }
 
 
 
@@ -76,12 +75,12 @@ wxString buf;
 
 
 
-/*********************************************************/
-EDA_BaseStruct * WinEDA_BasePcbFrame::Locate( int typeloc )
-/*********************************************************/
-/* Fonction de localisation generale
-	Affiche les caract de la stucture localisée et retourne un pointeur
-	sur celle-ci
+/*******************************************************************************/
+EDA_BaseStruct * WinEDA_BasePcbFrame::Locate( int typeloc, int LayerSearch )
+/*******************************************************************************/
+/* General locate function
+	Display infos relatives to the item found
+	return a pointer to this item ( or NULL )
 */
 {
 TEXTE_PCB * pt_texte_pcb;
@@ -92,72 +91,90 @@ D_PAD* pt_pad;
 int masque_layer;
 EDA_BaseStruct * item;
 
-	pt_texte_pcb = Locate_Texte_Pcb(m_Pcb->m_Drawings, typeloc);
-	if(pt_texte_pcb ) // texte type PCB localise
-		{
+	pt_texte_pcb = Locate_Texte_Pcb(m_Pcb->m_Drawings, LayerSearch, typeloc);
+	if(pt_texte_pcb ) // a PCB text is found
+	{
 		Affiche_Infos_PCB_Texte(this, pt_texte_pcb);
 		return pt_texte_pcb;
-		}
+	}
 
-	if ( (DrawSegm = Locate_Segment_Pcb(m_Pcb, typeloc)) != NULL)
-		{
+	if ( (DrawSegm = Locate_Segment_Pcb(m_Pcb, LayerSearch, typeloc)) != NULL)
+	{
 		Affiche_Infos_DrawSegment(this, DrawSegm);
 		return DrawSegm;
-		}
+	}
 
-	if ( (item = Locate_Cotation(m_Pcb, typeloc)) != NULL) return item;
+	if ( (item = Locate_Cotation(m_Pcb, LayerSearch, typeloc)) != NULL) return item;
 
-	if ( (item = Locate_MirePcb(m_Pcb->m_Drawings, typeloc)) != NULL) return item;
+	if ( (item = Locate_MirePcb(m_Pcb->m_Drawings, LayerSearch, typeloc)) != NULL) return item;
 
-	/* Localistion des pistes et vias, avec priorite aux vias */
-	masque_layer = g_TabOneLayerMask[GetScreen()->m_Active_Layer];
-	Track = Locate_Pistes( m_Pcb->m_Track, NO_TST_LAYER,typeloc );
+	/* Search for tracks and vias, with via priority */
+	if ( LayerSearch == -1 ) masque_layer = ALL_LAYERS;
+	else masque_layer = g_TabOneLayerMask[LayerSearch];
+	Track = Locate_Pistes( m_Pcb->m_Track, masque_layer,typeloc );
 	if ( Track != NULL )
-		{
-		TrackLocate = Track ;	/* Reperage d'une piste ou via */
-		/* recherche de 1 via eventuelle */
+	{
+		TrackLocate = Track ;	/* a track or a via is found*/
+		/* Search for a via */
 		while((TrackLocate = Locate_Pistes(TrackLocate,
 							masque_layer,typeloc)) != NULL )
-			{
+		{
 			Track = TrackLocate;
 			if(TrackLocate->m_StructType == TYPEVIA) break ;
 			TrackLocate = (TRACK*) TrackLocate->Pnext;
-			}
+		}
 		Affiche_Infos_Piste(this, Track) ;
 		return Track;
-		}
+	}
 
 
-	/* Localisation des Pads */
+	/* Search for Pads */
 	if( (pt_pad = Locate_Any_Pad(m_Pcb, typeloc)) != NULL )
-		{
-		pt_pad->Display_Infos(this); return pt_pad;
-		}
-
-	/* Localisation d'un texte sur modules */
-	module = NULL;
 	{
-	TEXTE_MODULE * pt_texte;
-	pt_texte = LocateTexteModule(m_Pcb, &module, typeloc);
-	if( pt_texte != NULL )
+		pt_pad->Display_Infos(this); return pt_pad;
+	}
+
+	/* Search for a footprint text */
+	if ( (LayerSearch == LAYER_CUIVRE_N) ||  (LayerSearch == CMP_N ))
+	{	// Search texts for footprints on copper or component layer only
+		for (module = m_Pcb->m_Modules; module != NULL; module = (MODULE*)module->Pnext)  
 		{
-		Affiche_Infos_E_Texte(this,  module, pt_texte);
-		return pt_texte;
+		TEXTE_MODULE * pt_texte;
+			if ( module->m_Layer != LayerSearch) continue;
+			pt_texte = LocateTexteModule(m_Pcb, &module, typeloc);
+			if( pt_texte != NULL )
+			{
+				Affiche_Infos_E_Texte(this,  module, pt_texte);
+				return pt_texte;
+			}
+		}
+	}
+	else	// Search footprint texts on all layers
+	{
+		module = NULL;
+		{
+		TEXTE_MODULE * pt_texte;
+			pt_texte = LocateTexteModule(m_Pcb, &module, typeloc);
+			if( pt_texte != NULL )
+			{
+				Affiche_Infos_E_Texte(this,  module, pt_texte);
+				return pt_texte;
+			}
 		}
 	}
 
-	/* Recherche d'un module */
+	/* Search for a footprint */
 	if ( (module = Locate_Prefered_Module(m_Pcb, typeloc)) != NULL)
-		{
+	{
 		module->Display_Infos(this);
 		return module;
-		}
+	}
 
 	if( (TrackLocate = Locate_Zone((TRACK*)m_Pcb->m_Zone,
 					GetScreen()->m_Active_Layer,typeloc)) != NULL )
-		{
+	{
 		Affiche_Infos_Piste(this, TrackLocate) ; return TrackLocate;
-		}
+	}
 
 	MsgPanel->EraseMsgBox();
 	return NULL;
@@ -165,7 +182,7 @@ EDA_BaseStruct * item;
 
 
 /*******************************************************************/
-TRACK * Locate_Via(BOARD * Pcb, const wxPoint & pos, int layer = -1)
+TRACK * Locate_Via(BOARD * Pcb, const wxPoint & pos, int layer)
 /*******************************************************************/
 
 /* Localise une via au point pX,pY
@@ -310,13 +327,12 @@ int StAngle, EndAngle, MouseAngle; /* pour localisation d'arcs,
 }
 
 
-/*********************************************************/
-EDA_BaseStruct * Locate_Cotation(BOARD * Pcb, int typeloc)
-/*********************************************************/
-/* Localise un element de cotation, en priorite sur la couche active,
-	et a defaut sur les autres couches
-	retourne un pointeur sur l'element localise
-	sinon returne NULL
+/*************************************************************************/
+EDA_BaseStruct * Locate_Cotation(BOARD * Pcb, int LayerSearch, int typeloc)
+/*************************************************************************/
+/* Serach for a cotation item , on LayerSearch,
+	(if LayerSearch == -1 , no yaere restriction )
+	return a pointer to the located item, or NULL
 */
 {
 EDA_BaseStruct * PtStruct;
@@ -329,17 +345,18 @@ int ux0, uy0;
 
 	PtStruct = Pcb->m_Drawings;
 	for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
-		{
+	{
 		if( PtStruct->m_StructType != TYPECOTATION ) continue;
 		Cotation = (COTATION*) PtStruct;
-		if( Cotation->m_Layer != ((PCB_SCREEN *)ActiveScreen)->m_Active_Layer ){};
+		if( (Cotation->m_Layer != LayerSearch) && (LayerSearch != -1) )
+			continue;
 
 		/* Localisation du texte ? */
 		pt_txt = Cotation->m_Text;
 		if( pt_txt )
-			{
-			if( pt_txt->Locate(wxPoint(spot_cX, spot_cY)) ) return(PtStruct);
-			}
+		{
+			if( pt_txt->Locate(ref_pos) ) return(PtStruct);
+		}
 
 		/* Localisation des SEGMENTS ?) */
 		ux0 = Cotation->Barre_ox ; uy0 = Cotation->Barre_oy;
@@ -397,14 +414,14 @@ int ux0, uy0;
 
 		/* detection : */
 		if( distance( Cotation->m_Width/2 )) return( PtStruct );
-		}
+	}
 
 	return(NULL);
 }
 
-/*********************************************************/
-DRAWSEGMENT * Locate_Segment_Pcb(BOARD * Pcb, int typeloc)
-/*********************************************************/
+/*************************************************************************/
+DRAWSEGMENT * Locate_Segment_Pcb(BOARD * Pcb, int LayerSearch, int typeloc)
+/*************************************************************************/
 /* Localisation de segments de contour du type drawing
 	Retourne:
 		Pointeur sur DEBUT du segment localise
@@ -421,9 +438,11 @@ PCB_SCREEN *screen = (PCB_SCREEN *)ActiveScreen;
 
 	PtStruct = Pcb->m_Drawings;
 	for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
-		{
+	{
 		if( PtStruct->m_StructType != TYPEDRAWSEGMENT ) continue;
 		pts = ( DRAWSEGMENT * ) PtStruct;
+		if ( (pts->m_Layer != LayerSearch) && (LayerSearch != -1) )
+			continue;
 		ux0 = pts->m_Start.x ; uy0 = pts->m_Start.y;
 		/* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
 		dx = pts->m_End.x - ux0 ; dy = pts->m_End.y - uy0 ;
@@ -431,46 +450,46 @@ PCB_SCREEN *screen = (PCB_SCREEN *)ActiveScreen;
 
 		/* detection : */
 		if( (pts->m_Shape == S_CIRCLE) || (pts->m_Shape == S_ARC) )
-			{
+		{
 			int rayon, dist, StAngle, EndAngle, MouseAngle;
 			rayon = (int) hypot((double)(dx),(double)(dy) );
 			dist = (int) hypot((double)(spot_cX),(double)(spot_cY) );
 			if( abs(rayon-dist) <= (pts->m_Width/2) )
-				{
+			{
 				if(pts->m_Shape == S_CIRCLE)
-					{
+				{
 					if(pts->m_Layer == screen->m_Active_Layer)
 						return( pts ) ;
 					else if ( ! locate_segm ) locate_segm = pts;
-					}
+				}
 				/* pour un arc, controle complementaire */
 				MouseAngle = (int) ArcTangente(spot_cY, spot_cX);
 				StAngle = (int) ArcTangente(dy, dx);
 				EndAngle = StAngle + pts->m_Angle;
 
 				if( EndAngle > 3600 )
-					{
+				{
 					StAngle -= 3600; EndAngle -= 3600;
-					}
+				}
 				if( (MouseAngle >= StAngle) && (MouseAngle <= EndAngle) )
-					{
+				{
 					if(pts->m_Layer == screen->m_Active_Layer)
 						return( pts ) ;
 					else if ( ! locate_segm ) locate_segm = pts;
-					}
-				}
-			}
-
-		else
-			{
-			if( distance( pts->m_Width /2 ) )
-				{
-				if(pts->m_Layer == screen->m_Active_Layer)
-					return( pts ) ;
-				else if ( ! locate_segm ) locate_segm = pts;
 				}
 			}
 		}
+
+		else
+		{
+			if( distance( pts->m_Width /2 ) )
+			{
+				if(pts->m_Layer == screen->m_Active_Layer)
+					return( pts ) ;
+				else if ( ! locate_segm ) locate_segm = pts;
+			}
+		}
+	}
 	return(locate_segm) ;
 }
 
@@ -695,41 +714,41 @@ wxPoint ref_pos;
 
 	module = * PtModule;
 	if( module == NULL )
-		{
+	{
 		module = Pcb->m_Modules;
-		}
+	}
 
 	for( ; module != NULL; module = (MODULE*)module->Pnext )
-		{
+	{
 		 pt_txt_mod = module->m_Reference;
 		/* la souris est-elle dans le rectangle autour du texte*/
 		if( pt_txt_mod->Locate(ref_pos) )
-			{
+		{
 			if( PtModule) *PtModule = module;
 			return(pt_txt_mod);
-			}
+		}
 		pt_txt_mod = module->m_Value;
 		/* la souris est-elle dans le rectangle autour du texte*/
 		if( pt_txt_mod->Locate(ref_pos) )
-			{
+		{
 			if( PtModule) *PtModule = module;
 			return(pt_txt_mod);
-			}
+		}
 
 		PtStruct = module->m_Drawings;
 		for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
-			{
+		{
 			if( PtStruct->m_StructType != TYPETEXTEMODULE ) continue;
 			pt_txt_mod = (TEXTE_MODULE*) PtStruct;
 			/* la souris est-elle dans le rectangle autour du texte*/
 			if( pt_txt_mod->Locate(ref_pos) )
-				{
+			{
 				if( PtModule) *PtModule = module;
 				return(pt_txt_mod);
-				}
 			}
-		if( *PtModule != NULL ) break; /* Recherche limitee a 1 seul module */
 		}
+		if( *PtModule != NULL ) break; /* Recherche limitee a 1 seul module */
+	}
 	return(NULL) ;
 }
 
@@ -740,8 +759,8 @@ TRACK * Locate_Piste_Connectee( TRACK * PtRefSegm, TRACK * pt_base,
 /**************************************************************/
 /* recherche le segment connecte au segment pointe par
 	PtRefSegm:
-	si int = START, le point de debut du segment est utilise
-	si int = END, le point de fin du segment est utilise
+	si int extr = START, le point de debut du segment est utilise
+	si int extr = END, le point de fin du segment est utilise
 	La recherche ne se fait que sur les EXTREMITES des segments
 
 	La recherche se fait de l'adresse :
@@ -753,17 +772,12 @@ TRACK * Locate_Piste_Connectee( TRACK * PtRefSegm, TRACK * pt_base,
 */
 {
 TRACK * PtSegmB, * PtSegmN;
-int x, y , Reflayer;
+int Reflayer;
+wxPoint pos_ref;
 int ii;
 
-	if ( extr == START)
-		{
-		x = PtRefSegm->m_Start.x; y = PtRefSegm->m_Start.y;
-		}
-	else
-		{
-		x = PtRefSegm->m_End.x; y = PtRefSegm->m_End.y;
-		}
+	if ( extr == START) pos_ref = PtRefSegm->m_Start;
+	else pos_ref = PtRefSegm->m_End;
 
 	Reflayer = PtRefSegm->ReturnMaskLayer();
 
@@ -777,12 +791,12 @@ int ii;
 			{
 			if( PtSegmN->GetState(BUSY|DELETED) ) goto suite;
 			if (PtSegmN == PtRefSegm) goto suite;
-			if( (x == PtSegmN->m_Start.x ) && (y == PtSegmN->m_Start.y) )
+			if( pos_ref == PtSegmN->m_Start )
 				{	/* Test des couches */
 				if(Reflayer & PtSegmN->ReturnMaskLayer() )return(PtSegmN);
 				}
 
-			if( (x == PtSegmN->m_End.x ) && (y == PtSegmN->m_End.y) )
+			if( pos_ref == PtSegmN->m_End )
 				{	/* Test des couches */
 				if(Reflayer & PtSegmN->ReturnMaskLayer() )return(PtSegmN);
 				}
@@ -795,12 +809,12 @@ int ii;
 			{
 			if(PtSegmB->GetState(BUSY|DELETED) ) goto suite1;
 			if (PtSegmB == PtRefSegm) goto suite1;
-			if( (x == PtSegmB->m_Start.x ) && (y == PtSegmB->m_Start.y) )
+			if( pos_ref == PtSegmB->m_Start )
 				{	/* Test des couches */
 				if(Reflayer & PtSegmB->ReturnMaskLayer() )return(PtSegmB);
 				}
 
-			if( (x == PtSegmB->m_End.x ) && (y == PtSegmB->m_End.y) )
+			if( pos_ref == PtSegmB->m_End )
 				{	/* Test des couches */
 				if(Reflayer & PtSegmB->ReturnMaskLayer() )return(PtSegmB);
 				}
@@ -825,12 +839,12 @@ int ii;
 			continue;
 			}
 
-		if( (x == PtSegmN->m_Start.x ) && (y == PtSegmN->m_Start.y) )
+		if( pos_ref == PtSegmN->m_Start )
 			{	/* Test des couches */
 			if(Reflayer & PtSegmN->ReturnMaskLayer() )return(PtSegmN);
 			}
 
-		if( (x == PtSegmN->m_End.x ) && (y == PtSegmN->m_End.y) )
+		if( pos_ref == PtSegmN->m_End )
 			{	/* Test des couches */
 			if(Reflayer & PtSegmN->ReturnMaskLayer() )return(PtSegmN);
 			}
@@ -951,9 +965,9 @@ int l_segm ;					/* demi-largeur de la piste */
 
 
 
-/*******************************************************************/
-TEXTE_PCB * Locate_Texte_Pcb(EDA_BaseStruct * PtStruct, int typeloc)
-/*******************************************************************/
+/************************************************************************************/
+TEXTE_PCB * Locate_Texte_Pcb(EDA_BaseStruct * PtStruct, int LayerSearch, int typeloc)
+/************************************************************************************/
 /* localisation des inscriptions sur le Pcb:
 	entree : EDA_BaseStruct pointeur sur le debut de la zone de recherche
 	retour : pointeur sur la description du texte localise
@@ -963,19 +977,23 @@ wxPoint ref;
 
 	SET_REF_POS(ref);
 	for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
-		{
+	{
 		if( PtStruct->m_StructType != TYPETEXTE ) continue;
 		TEXTE_PCB * pt_txt_pcb = (TEXTE_PCB *) PtStruct;
-		if( pt_txt_pcb->Locate(ref) ) return pt_txt_pcb;
+		if( pt_txt_pcb->Locate(ref) )
+		{
+			if ( pt_txt_pcb->m_Layer == LayerSearch )
+				return pt_txt_pcb;
 		}
+	}
 	return(NULL) ;
 }
 
 
 
-	/*****************************/
-	/* int distance(int seuil) */
-	/*****************************/
+/*****************************/
+int distance(int seuil)
+/*****************************/
 
 /*
  Calcul de la distance du curseur souris a un segment de droite :
@@ -993,8 +1011,6 @@ wxPoint ref;
 		segment 45
 		segment quelconque
 */
-
-int distance(int seuil)
 {
 int  cXrot, cYrot ,		/* coord du point (souris) dans le repere tourne */
 	 segX, segY;		/* coord extremite segment tj >= 0 */
@@ -1220,9 +1236,10 @@ TRACK * PtSegm;
 
 
 /***********************************************************************/
-EDA_BaseStruct * Locate_MirePcb( EDA_BaseStruct * PtStruct, int typeloc)
+EDA_BaseStruct * Locate_MirePcb( EDA_BaseStruct * PtStruct, int LayerSearch,
+		int typeloc)
 /***********************************************************************/
-/* Routine d'initialisation du deplacement d'une mire
+/* Serach for a photo target
 */
 {
 wxPoint ref_pos;	/* coord du point de localisation */
@@ -1234,10 +1251,14 @@ int dX, dY, rayon;
 
 	for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext)
 	{
+		MIREPCB* item;
 		if( PtStruct->m_StructType != TYPEMIRE ) continue;
-		dX = ref_pos.x - ((MIREPCB*) PtStruct)->m_Pos.x;
-		dY = ref_pos.y - ((MIREPCB*) PtStruct)->m_Pos.y;
-		rayon = ((MIREPCB*) PtStruct)->m_Size / 2;
+		item = (MIREPCB*) PtStruct;
+		if( LayerSearch != -1 && item->m_Layer != LayerSearch ) continue;
+		
+		dX = ref_pos.x - item->m_Pos.x;
+		dY = ref_pos.y - item->m_Pos.y;
+		rayon = item->m_Size / 2;
 		if( (abs(dX) <= rayon ) && ( abs(dY) <= rayon ) )
 			break; 	/* Mire Localisee */
 	}

@@ -13,9 +13,9 @@
 /* Must be defined in main applications: */
 extern wxString g_Main_Title;
 
-/*********************************************************************/
-void WinEDA_DrawFrame::TraceWorkSheet(wxDC * DC, BASE_SCREEN * screen)
-/*********************************************************************/
+/*************************************************************************************/
+void WinEDA_DrawFrame::TraceWorkSheet(wxDC * DC, BASE_SCREEN * screen, int line_width)
+/*************************************************************************************/
 /* Draw the sheet references
 */
 {
@@ -32,6 +32,7 @@ wxSize size(SIZETEXT*scale,SIZETEXT*scale);
 wxSize size_ref(SIZETEXT_REF*scale,SIZETEXT_REF*scale);
 wxString msg;
 int UpperLimit = VARIABLE_BLOCK_START_POSITION;
+int width = line_width;
 	
 	Color = RED;
 	if(Sheet == NULL)
@@ -46,7 +47,7 @@ int UpperLimit = VARIABLE_BLOCK_START_POSITION;
 	{
 		GRSetDrawMode(DC, GR_COPY);
 		GRRect(&DrawPanel->m_ClipBox, DC, 0, 0,
-			Sheet->m_Size.x * scale, Sheet->m_Size.y * scale,
+			Sheet->m_Size.x * scale, Sheet->m_Size.y * scale, width,
 			g_DrawBgColor == WHITE ? LIGHTGRAY : DARKDARKGRAY );
 	}
 	
@@ -60,7 +61,7 @@ int UpperLimit = VARIABLE_BLOCK_START_POSITION;
 	for ( ii = 0; ii < 2 ; ii++ )
 		{
 		GRRect(&DrawPanel->m_ClipBox, DC, refx * scale, refy * scale,
-			xg * scale, yg * scale, Color);
+			xg * scale, yg * scale, width, Color);
 
 		refx += GRID_REF_W; refy += GRID_REF_W;
 		xg -= GRID_REF_W; yg -= GRID_REF_W;
@@ -80,23 +81,23 @@ int UpperLimit = VARIABLE_BLOCK_START_POSITION;
 		if( ii < xg - PAS_REF/2 )
 			{
 			GRLine(&DrawPanel->m_ClipBox, DC, ii * scale, refy * scale,
-					ii * scale, (refy + GRID_REF_W) * scale, Color);
+					ii * scale, (refy + GRID_REF_W) * scale, width, Color);
 			}
 		DrawGraphicText(DrawPanel, DC,
 						wxPoint( (ii - gxpas/2) * scale, (refy + GRID_REF_W/2) * scale),
 						Color,
 						Line, TEXT_ORIENT_HORIZ, size_ref,
-						GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER);
+						GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, width);
 		if( ii < xg - PAS_REF/2 )
 			{
 			GRLine(&DrawPanel->m_ClipBox, DC,ii * scale, yg * scale,
-					ii * scale, (yg - GRID_REF_W) * scale, Color);
+					ii * scale, (yg - GRID_REF_W) * scale, width, Color);
 			}
 		DrawGraphicText(DrawPanel, DC,
 					wxPoint( (ii - gxpas/2) * scale, (yg - GRID_REF_W/2) * scale),
 					Color,
 					Line, TEXT_ORIENT_HORIZ, size_ref,
-					GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER);
+					GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, width);
 		}
 
 	/* Trace des reperes selon l'axe Y */
@@ -110,23 +111,23 @@ int UpperLimit = VARIABLE_BLOCK_START_POSITION;
 		if( ii < yg - PAS_REF/2 )
 		{
 			GRLine(&DrawPanel->m_ClipBox, DC, refx * scale, ii * scale,
-					(refx + GRID_REF_W) * scale, ii * scale, Color);
+					(refx + GRID_REF_W) * scale, ii * scale, width, Color);
 		}
 		DrawGraphicText(DrawPanel, DC,
 					wxPoint((refx + GRID_REF_W/2) * scale, (ii - gypas/2) * scale),
 					Color,
 					Line, TEXT_ORIENT_HORIZ, size_ref,
-					GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER);
+					GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, width);
 		if( ii < yg - PAS_REF/2 )
 		{
 			GRLine(&DrawPanel->m_ClipBox, DC, xg * scale, ii * scale,
-						(xg - GRID_REF_W) * scale, ii * scale, Color);
+						(xg - GRID_REF_W) * scale, ii * scale, width, Color);
 		}
 		DrawGraphicText(DrawPanel, DC,
 					wxPoint((xg - GRID_REF_W/2) * scale, (ii - gxpas/2) * scale),
 					Color,
 					Line, TEXT_ORIENT_HORIZ, size_ref,
-					GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER);
+					GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, width);
 	}
 
 
@@ -147,7 +148,7 @@ int UpperLimit = VARIABLE_BLOCK_START_POSITION;
 				msg += screen->m_Date;
 				DrawGraphicText(DrawPanel, DC, pos, Color,
 					msg, TEXT_ORIENT_HORIZ, size,
-					GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+					GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width);
 				break;
 
 			case WS_REV:
@@ -155,7 +156,7 @@ int UpperLimit = VARIABLE_BLOCK_START_POSITION;
 				msg += screen->m_Revision;
 				DrawGraphicText(DrawPanel, DC, pos, Color,
 					msg, TEXT_ORIENT_HORIZ, size,
-					GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+					GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width);
 				break;
 
 			case WS_LICENCE:
@@ -164,7 +165,7 @@ int UpperLimit = VARIABLE_BLOCK_START_POSITION;
 				msg += wxT(" ") + GetBuildVersion();
 				DrawGraphicText(DrawPanel, DC, pos, Color,
 					msg, TEXT_ORIENT_HORIZ, size,
-					GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+					GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width);
 				break;
 
 			case WS_SIZESHEET:
@@ -172,7 +173,7 @@ int UpperLimit = VARIABLE_BLOCK_START_POSITION;
 				msg += Sheet->m_Name;
 				DrawGraphicText(DrawPanel, DC, pos, Color,
 					msg, TEXT_ORIENT_HORIZ, size,
-					GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+					GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width);
 				break;
 
 
@@ -182,7 +183,7 @@ int UpperLimit = VARIABLE_BLOCK_START_POSITION;
 									screen->m_NumberOfSheet;
 				DrawGraphicText(DrawPanel, DC, pos, Color,
 					msg, TEXT_ORIENT_HORIZ, size,
-					GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+					GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width);
 				break;
 
 			case WS_COMPANY_NAME:
@@ -192,7 +193,7 @@ int UpperLimit = VARIABLE_BLOCK_START_POSITION;
 				{
 					DrawGraphicText(DrawPanel, DC, pos, Color,
 						msg, TEXT_ORIENT_HORIZ, size,
-						GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+						GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width);
 					UpperLimit = MAX(UpperLimit, WsItem->m_Posy+SIZETEXT);
 				}
 				break;
@@ -202,7 +203,7 @@ int UpperLimit = VARIABLE_BLOCK_START_POSITION;
 				msg += screen->m_Title;
 				DrawGraphicText(DrawPanel, DC, pos, Color,
 						msg, TEXT_ORIENT_HORIZ, size,
-						GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+						GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width);
 				break;
 
 			case WS_COMMENT1:
@@ -212,7 +213,7 @@ int UpperLimit = VARIABLE_BLOCK_START_POSITION;
 				{
 					DrawGraphicText(DrawPanel, DC, pos, Color,
 						msg, TEXT_ORIENT_HORIZ, size,
-						GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+						GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width);
 					UpperLimit = MAX(UpperLimit, WsItem->m_Posy+SIZETEXT);
 				}
 				break;
@@ -224,7 +225,7 @@ int UpperLimit = VARIABLE_BLOCK_START_POSITION;
 				{
 					DrawGraphicText(DrawPanel, DC, pos, Color,
 						msg, TEXT_ORIENT_HORIZ, size,
-						GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+						GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width);
 					UpperLimit = MAX(UpperLimit, WsItem->m_Posy+SIZETEXT);
 				}
 				break;
@@ -236,7 +237,7 @@ int UpperLimit = VARIABLE_BLOCK_START_POSITION;
 				{
 					DrawGraphicText(DrawPanel, DC, pos, Color,
 						msg, TEXT_ORIENT_HORIZ, size,
-						GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+						GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width);
 					UpperLimit = MAX(UpperLimit, WsItem->m_Posy+SIZETEXT);
 				}
 				break;
@@ -248,7 +249,7 @@ int UpperLimit = VARIABLE_BLOCK_START_POSITION;
 				{
 					DrawGraphicText(DrawPanel, DC, pos, Color,
 						msg, TEXT_ORIENT_HORIZ, size,
-						GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+						GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width);
 					UpperLimit = MAX(UpperLimit, WsItem->m_Posy+SIZETEXT);
 				}
 				break;
@@ -266,7 +267,7 @@ int UpperLimit = VARIABLE_BLOCK_START_POSITION;
 				yg = Sheet->m_Size.y -
 						GRID_REF_W - Sheet->m_BottomMargin - WsItem->m_Endy;
 				GRLine(&DrawPanel->m_ClipBox, DC, pos.x, pos.y,
-						xg * scale, yg * scale, Color);
+						xg * scale, yg * scale, width, Color);
 				break;
 
 		}

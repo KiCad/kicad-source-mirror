@@ -233,7 +233,7 @@ wxString msg;
 		segm_fY = m_Pcb->m_BoundaryBox.m_Pos.y + (g_GridRoutingSize * row_target);
 
 		/* Affiche Liaison */
-		GRLine(&DrawPanel->m_ClipBox, DC, segm_oX, segm_oY, segm_fX, segm_fY, WHITE | GR_XOR);
+		GRLine(&DrawPanel->m_ClipBox, DC, segm_oX, segm_oY, segm_fX, segm_fY, 0, WHITE | GR_XOR);
 		pt_cur_ch->pad_start->Draw(DrawPanel, DC, wxPoint(0,0), GR_OR | GR_SURBRILL);
 		pt_cur_ch->pad_end->Draw(DrawPanel, DC, wxPoint(0,0), GR_OR|GR_SURBRILL);
 
@@ -474,7 +474,7 @@ wxString msg;
 			{
 			/* Efface Liaison */
 			GRSetDrawMode(DC, GR_XOR);
-			GRLine(&pcbframe->DrawPanel->m_ClipBox, DC, segm_oX, segm_oY, segm_fX, segm_fY, WHITE);
+			GRLine(&pcbframe->DrawPanel->m_ClipBox, DC, segm_oX, segm_oY, segm_fX, segm_fY, 0, WHITE);
 
 			/* Generation de la trace */
 			if( Retrace(pcbframe, DC, row_source, col_source,

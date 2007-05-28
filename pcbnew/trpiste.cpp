@@ -143,7 +143,8 @@ int rayon;
 			break;
 
 		default:
-			if( mode == FILAIRE) GRLine(&panel->m_ClipBox, DC, ux0, uy0, dx, dy, color) ;
+			if( mode == FILAIRE)
+				GRLine(&panel->m_ClipBox, DC, ux0, uy0, dx, dy, 0, color) ;
 			else if( mode == SKETCH)
 				{
 				GRCSegm(&panel->m_ClipBox, DC, ux0, uy0, dx, dy,

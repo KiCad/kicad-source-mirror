@@ -26,6 +26,8 @@
 #include "Editor.xpm"
 #include "New_Project.xpm"
 #include "Open_Project.xpm"
+#include "../bitmaps/icon_python.xpm"
+#include "../bitmaps/reload.xpm"
 
 #include "id.h"
 
@@ -60,6 +62,7 @@ BEGIN_EVENT_TABLE(WinEDA_MainFrame, WinEDA_BasicFrame)
 	EVT_MENU(ID_SELECT_PREFERED_PDF_BROWSER_NAME, WinEDA_MainFrame::Process_Preferences)
 	EVT_MENU(ID_SAVE_AND_ZIP_FILES, WinEDA_MainFrame::Process_Files)
 	EVT_MENU(ID_READ_ZIP_ARCHIVE, WinEDA_MainFrame::Process_Files)
+	EVT_MENU(ID_PROJECT_TREE_REFRESH, WinEDA_MainFrame::OnRefresh)
 
 	EVT_MENU(ID_PREFERENCES_FONT_INFOSCREEN, WinEDA_MainFrame::Process_Preferences)
 
@@ -74,6 +77,10 @@ BEGIN_EVENT_TABLE(WinEDA_MainFrame, WinEDA_BasicFrame)
 	EVT_BUTTON(ID_TO_CVPCB, WinEDA_MainFrame::Process_Fct)
 	EVT_BUTTON(ID_TO_EESCHEMA, WinEDA_MainFrame::Process_Fct)
 	EVT_BUTTON(ID_TO_GERBVIEW, WinEDA_MainFrame::Process_Fct)
+
+#ifdef KICAD_PYTHON
+	EVT_BUTTON(ID_RUN_PYTHON, WinEDA_MainFrame::Process_Fct)
+#endif
 
 END_EVENT_TABLE()
 
@@ -260,6 +267,12 @@ void WinEDA_MainFrame::RecreateBaseHToolbar(void)
 					-1, -1, (wxObject *) NULL,
 					_("Archive all project files"));
 
+	m_HToolBar->AddSeparator();
+	m_HToolBar->AddTool(ID_PROJECT_TREE_REFRESH, BITMAP(reload_xpm),
+					wxNullBitmap, FALSE,
+					-1, -1, (wxObject *) NULL,
+					_("Refresh project tree"));
+
 
 	// after adding the buttons to the toolbar, must call Realize() to reflect
 	// the changes
@@ -270,40 +283,41 @@ void WinEDA_MainFrame::RecreateBaseHToolbar(void)
 void WinEDA_MainFrame::CreateCommandToolbar(void)
 /*************************************************/
 {
-#define SEPAR 20
-int sizex, sizey,width;
-wxBitmapButton * Butt;
-wxPoint pos;
+wxBitmapButton * btn;
 
 	// delete and recreate the toolbar
 	if( m_VToolBar ) return;
+	btn = new wxBitmapButton( this, ID_TO_EESCHEMA, BITMAP(icon_eeschema_xpm) );
+	btn->SetToolTip(_("EeSchema (Schematic editor)"));
+	AddFastLaunch( btn );
 
-	m_CommandWin->GetClientSize(&sizex, &sizey);
-	width = 300;
+	btn = new wxBitmapButton( this,ID_TO_CVPCB, BITMAP(icon_cvpcb_xpm) );
+	btn->SetToolTip(_("Cvpcb (Componants to modules)"));
+	AddFastLaunch( btn );
+
+	btn = new wxBitmapButton( this, ID_TO_PCB, BITMAP(a_icon_pcbnew_xpm) );
+	btn->SetToolTip(_("Pcbnew ( board editor )"));
+	AddFastLaunch( btn );
+
+	btn = new wxBitmapButton( this, ID_TO_GERBVIEW, BITMAP(icon_gerbview_xpm) );
+	btn->SetToolTip(_("GerbView ( Gerber viewer )"));
+	AddFastLaunch( btn );
+
 
 	// Set up toolbar
-	width = 32;
-	pos.x = 20; pos.y = 20;
 
-	Butt = new wxBitmapButton(m_CommandWin, ID_TO_EESCHEMA,
-				BITMAP(icon_eeschema_xpm), pos );
-	Butt->SetToolTip(_("EeSchema (Schematic editor)"));
-
-	pos.x += width + SEPAR;
-	Butt = new wxBitmapButton(m_CommandWin,ID_TO_CVPCB,
-				BITMAP(icon_cvpcb_xpm), pos );
-	Butt->SetToolTip(_("Cvpcb (Componants to modules)"));
-
-	pos.x += width + SEPAR;
-	Butt = new wxBitmapButton(m_CommandWin, ID_TO_PCB,
-				BITMAP(a_icon_pcbnew_xpm), pos );
-	Butt->SetToolTip(_("Pcbnew ( board editor )"));
-
-	pos.x += width + SEPAR;
-	Butt = new wxBitmapButton(m_CommandWin, ID_TO_GERBVIEW,
-				BITMAP(icon_gerbview_xpm), pos );
-	Butt->SetToolTip(_("GerbView ( Gerber viewer )"));
-
+	#ifdef KICAD_PYTHON
+	btn = new wxBitmapButton( this, ID_RUN_PYTHON, BITMAP(icon_python_xpm) );
+	btn->SetToolTip(_("Run Python Script"));
+	AddFastLaunch( btn );
+	#endif
 }
 
+void WinEDA_MainFrame::AddFastLaunch( wxButton * button, int sep )
+{
+	static wxPoint pos (20, 20);
+	button->Reparent( m_CommandWin );
+	button->Move( pos );
+	pos.x += button->GetSize().GetWidth() + sep;
+}
 

@@ -11,11 +11,10 @@ include makefile.include
 
 
 $(TARGET).exe: $(OBJECTS) $(TARGET)_resources.o $(EDALIBS)
-	$(CXX) $(ALL_LDFLAGS)\
-		-o $(TARGET).exe $(OBJECTS)\
+	$(CXX) $(ALL_LDFLAGS) -o $(TARGET).exe $(OBJECTS)\
 		$(TARGET)_resources.o $(EDALIBS) $(SYSWXLIB)
 
-install:
+install:$(TARGET).exe 
 	cp -f  $(TARGET).exe $(KICAD_BIN)
 
 

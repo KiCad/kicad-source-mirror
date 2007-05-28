@@ -26,6 +26,8 @@ BEGIN_EVENT_TABLE(WinEDAListBox, wxDialog)
 	EVT_BUTTON(ID_LISTBOX_CANCEL, WinEDAListBox::Cancel)
 	EVT_LISTBOX(ID_LISTBOX_LIST, WinEDAListBox::ClickOnList)
 	EVT_LISTBOX_DCLICK(ID_LISTBOX_LIST, WinEDAListBox::D_ClickOnList)
+	EVT_CHAR(WinEDAListBox::OnKeyEvent)
+	EVT_CHAR_HOOK(WinEDAListBox::OnKeyEvent)
 	EVT_CLOSE( WinEDAListBox::OnClose )
 END_EVENT_TABLE()
 
@@ -39,7 +41,7 @@ END_EVENT_TABLE()
 	movefct = fonction de création de commentaires a afficher
 */
 
-WinEDAListBox::WinEDAListBox( wxWindow * parent, const wxString & title,
+WinEDAListBox::WinEDAListBox( WinEDA_DrawFrame * parent, const wxString & title,
 						const wxChar ** itemlist,
 						const wxString & reftext,
 						void(* movefct)(wxString & Text),
@@ -186,12 +188,12 @@ void WinEDAListBox::ClickOnList(wxCommandEvent& event)
 wxString text;
 
 	if (m_MoveFct)
-		{
+	{
 		m_WinMsg->Clear();
 		text =  m_List->GetStringSelection();
 		m_MoveFct(text);
 		m_WinMsg->WriteText(text.GetData());
-		}
+	}
 }
 
 /*******************************************************/
@@ -258,4 +260,11 @@ const wxString ** BufList;
 	free(BufList);
 }
 
+
+/****************************************************/
+void WinEDAListBox::OnKeyEvent(wxKeyEvent& event)
+/****************************************************/
+{
+	event.Skip();
+}
 

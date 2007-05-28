@@ -1,7 +1,7 @@
 
-	//////////////////////
-	// Name: eda_dde.cc	//
-	//////////////////////
+	///////////////////////
+	// Name: eda_dde.cpp //
+	///////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include <wx/wxprec.h>
@@ -21,13 +21,16 @@
 #include "id.h"
 
 #include "common.h"
+#include "macros.h"
 
 #define ID_CONN "CAO_COM"
 
 wxString HOSTNAME(wxT("localhost"));
 
 /* variables locales */
-#define IPC_BUF_SIZE 4000
+
+// buffers for read and write data in socket connections
+#define IPC_BUF_SIZE 4096
 char client_ipc_buffer[IPC_BUF_SIZE];
 char server_ipc_buffer[IPC_BUF_SIZE];
 
@@ -77,22 +80,24 @@ size_t len;
 wxSocketBase *sock = evt.GetSocket();
 
   switch (evt.GetSocketEvent())
-     {
+	{
      case wxSOCKET_INPUT:
-       sock->Read(server_ipc_buffer,1);
-       len = sock->Read(server_ipc_buffer+1,IPC_BUF_SIZE-2).LastCount();
-       server_ipc_buffer[len+1] = 0;
-       if(RemoteFct ) RemoteFct(server_ipc_buffer);
-       break;
+		sock->Read(server_ipc_buffer,1);
+		if( sock->LastCount() == 0 ) break;	// No data: Occurs on open connection
+		sock->Read(server_ipc_buffer+1,IPC_BUF_SIZE-2);
+		len = 1 + sock->LastCount();
+		server_ipc_buffer[len] = 0;
+		if(RemoteFct ) RemoteFct(server_ipc_buffer);
+		break;
 
-     case wxSOCKET_LOST:
+	case wxSOCKET_LOST:
        return;
        break;
 
-     default:
+	default:
        wxPrintf( wxT("WinEDA_DrawFrame::OnSockRequest() error: Invalid event !"));
        break;
-     }
+	}
 }
 
 /**************************************************************/
@@ -120,12 +125,12 @@ wxSocketServer *server = (wxSocketServer *) evt.GetSocket();
 /********************************************/
 bool SendCommand( int service, char * cmdline)
 /********************************************/
-/* Fonction utilisee par un client pour envoyer une information a un serveur.
-	- Etablit une connection Socket Client
-    - envoie le contenu du buffer cmdline
-    - ferme la connexion
+/* Used by a client to sent (by a socket connection) a data to a server.
+	- Open a Socket Client connection
+    - Send the buffer cmdline
+    - Close the socket connection
 
-    service contient le numéro de service en ascii.
+    service is the service number for the TC/IP connection
 */
 {
 wxSocketClient * sock_client;

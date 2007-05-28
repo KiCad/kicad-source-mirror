@@ -1,5 +1,8 @@
 	/*************************************************/
-	/*	Routines d'edition de symboles de composants */
+	/* Functions to Load  from file and save to file */
+	/* the graphic shapes  used to draw a component  */
+	/* When using the import/export symbol options	 */
+	/* files are the *.sym files 					 */
 	/*************************************************/
 
 	/* fichier symbedit.cpp */
@@ -27,10 +30,8 @@ static bool CompareSymbols(LibEDA_BaseStruct *DEntryRef,
 /***************************************************/
 void WinEDA_LibeditFrame::LoadOneSymbol(wxDC * DC)
 /***************************************************/
-/* Cette routine lit un fichier type librairie symbole et
-ajoute au symbole courant les elements de trace du nouveau symbole graphique
-	Si il n'y a pas de symbole courant, le nouveau symbole devient le
-	symbole courant
+/* Read a component shape file and add data (graphic items) to the current
+	component.
 */
 {
 int NumOfParts;
@@ -64,7 +65,7 @@ wxString msg;
 	if ( FullFileName.IsEmpty() ) return;
 
 
-	/* Chargement de 1 symbole */
+	/* Load data */
 	ImportFile = wxFopen(FullFileName, wxT("rt"));
 	if (ImportFile == NULL)
 	{
@@ -87,7 +88,7 @@ wxString msg;
 	if(LibEntry == NULL )
 		DisplayError(this, _("Symbol File is void"), 20);
 
-	else /* Ajout des elements graphiques */
+	else /* add data to the current symbol */
 	{
 		DrawEntry = LibEntry->m_Drawings;
 		while(DrawEntry)
@@ -121,10 +122,9 @@ wxString msg;
 /********************************************/
 void WinEDA_LibeditFrame::SaveOneSymbol(void)
 /********************************************/
-/* Routine de sauvegarde du symbole courant edite
-	Le format est identique aux librairies standards
-	Les pins invisibles et les elements
-    non relativ a la forme courante ne sont pas sauves
+/* Save in file the current symbol
+	file format is like the standard libraries, but there is only one symbol
+	Invisible pins are not saved
 */
 {
 EDA_LibComponentStruct *LibEntry = CurrentLibEntry;
@@ -254,9 +254,9 @@ FILE * ExportFile;
 /*****************************************************************/
 void SuppressDuplicateDrawItem(EDA_LibComponentStruct * LibEntry)
 /*****************************************************************/
-/* Routine de suppression des elements de trace dupliques, situation
-frequente lorsque l'on charge des symboles predessines plusieurs fois
-pour definir un composant
+/* Delete redundant graphic items.
+	Useful after loading asymbole from a file symbol, because some graphic items
+	can be duplicated.
 */
 {
 LibEDA_BaseStruct *DEntryRef, *DEntryCompare;
@@ -291,9 +291,9 @@ wxDC * DC = NULL;
 static bool CompareSymbols(LibEDA_BaseStruct *DEntryRef,
 							LibEDA_BaseStruct *DEntryCompare)
 	/********************************************************************/
-/* Routine de comparaison de 2 DrawEntryStruct.
-	retourne FALSE si differentes
-			TRUE si egales
+/* Compare 2 graphic items (arc, lines ...).
+	return FALSE si different
+			TRUE si they are identical, and therefore redundant
 */
 {
 int ii;
@@ -332,8 +332,7 @@ int * ptref, *ptcomp;
 			#undef CMPSTRUCT
 			#define REFSTRUCT ((LibDrawText *) DEntryRef)
 			#define CMPSTRUCT ((LibDrawText *) DEntryCompare)
-			if( REFSTRUCT->m_Pos.x != CMPSTRUCT->m_Pos.x) return(FALSE);
-			if( REFSTRUCT->m_Pos.y != CMPSTRUCT->m_Pos.y) return(FALSE);
+			if( REFSTRUCT->m_Pos != CMPSTRUCT->m_Pos) return(FALSE);
 			if( REFSTRUCT->m_Size != CMPSTRUCT->m_Size) return(FALSE);
 			if( REFSTRUCT->m_Text != CMPSTRUCT->m_Text )
 				return(FALSE);
@@ -344,10 +343,8 @@ int * ptref, *ptcomp;
 			#undef CMPSTRUCT
 			#define REFSTRUCT ((LibDrawSquare *) DEntryRef)
 			#define CMPSTRUCT ((LibDrawSquare *) DEntryCompare)
-			if( REFSTRUCT->m_Start.x != CMPSTRUCT->m_Start.x) return(FALSE);
-			if( REFSTRUCT->m_Start.y != CMPSTRUCT->m_Start.y) return(FALSE);
-			if( REFSTRUCT->m_End.x != CMPSTRUCT->m_End.x) return(FALSE);
-			if( REFSTRUCT->m_End.y != CMPSTRUCT->m_End.y) return(FALSE);
+			if( REFSTRUCT->m_Pos != CMPSTRUCT->m_Pos) return(FALSE);
+			if( REFSTRUCT->m_End != CMPSTRUCT->m_End) return(FALSE);
 			break;
 
 		case COMPONENT_PIN_DRAW_TYPE:
@@ -355,8 +352,7 @@ int * ptref, *ptcomp;
 			#undef CMPSTRUCT
 			#define REFSTRUCT ((LibDrawPin *) DEntryRef)
 			#define CMPSTRUCT ((LibDrawPin *) DEntryCompare)
-			if( REFSTRUCT->m_Pos.x != CMPSTRUCT->m_Pos.x) return(FALSE);
-			if( REFSTRUCT->m_Pos.y != CMPSTRUCT->m_Pos.y) return(FALSE);
+			if( REFSTRUCT->m_Pos != CMPSTRUCT->m_Pos) return(FALSE);
 			break;
 
 		case COMPONENT_POLYLINE_DRAW_TYPE:
@@ -415,10 +411,10 @@ LibEDA_BaseStruct * DrawEntry;
 				#define STRUCT ((LibDrawArc *) DrawEntry)
 				STRUCT->m_Pos.x += dx;
 				STRUCT->m_Pos.y += dy;
-				STRUCT->m_Start.x += dx;
-				STRUCT->m_Start.y += dy;
-				STRUCT->m_End.x += dx;
-				STRUCT->m_End.y += dy;
+				STRUCT->m_ArcStart.x += dx;
+				STRUCT->m_ArcStart.y += dy;
+				STRUCT->m_ArcEnd.x += dx;
+				STRUCT->m_ArcEnd.y += dy;
 				break;
 
 			case COMPONENT_CIRCLE_DRAW_TYPE:
@@ -438,8 +434,8 @@ LibEDA_BaseStruct * DrawEntry;
 			case COMPONENT_RECT_DRAW_TYPE:
 				#undef STRUCT
 				#define STRUCT ((LibDrawSquare *) DrawEntry)
-				STRUCT->m_Start.x += dx;
-				STRUCT->m_Start.y += dy;
+				STRUCT->m_Pos.x += dx;
+				STRUCT->m_Pos.y += dy;
 				STRUCT->m_End.x += dx;
 				STRUCT->m_End.y += dy;
 				break;
@@ -464,7 +460,7 @@ LibEDA_BaseStruct * DrawEntry;
 			}
 		DrawEntry = DrawEntry->Next();
 		}
-	/* Reaffichage du symbole */
+	/* Redraw the symbol */
 	m_CurrentScreen->m_Curseur.x = m_CurrentScreen->m_Curseur.y = 0;
 	Recadre_Trace(TRUE);
 	m_CurrentScreen->SetRefreshReq();

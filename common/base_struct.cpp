@@ -302,7 +302,7 @@ int width;
 			m_TextDrawings[2] + offset.y + m_Pos.y,
 			m_TextDrawings[3] + offset.x + m_Pos.x,
 			m_TextDrawings[4] + offset.y + m_Pos.y,
-			color);
+			width, color);
 		}
 
 	else
@@ -317,9 +317,9 @@ int width;
 			int cY = m_Pos.y - offset.y;
 			/* trace ancre du texte */
 			GRLine(&panel->m_ClipBox, DC, cX - anchor_size, cY,
-				cX + anchor_size, cY, anchor_color);
+				cX + anchor_size, cY, 0, anchor_color);
 			GRLine(&panel->m_ClipBox, DC, cX, cY - anchor_size ,
-				cX, cY + anchor_size , anchor_color);
+				cX, cY + anchor_size , 0, anchor_color);
 			}
 		jj = 5; ii = jj+1;
 		while (ii < m_TextDrawingsSize)
@@ -352,7 +352,7 @@ int width;
 					}
 				}
 			else
-				GRPoly(&panel->m_ClipBox, DC, nbpoints, coord, 0, color, color);
+				GRPoly(&panel->m_ClipBox, DC, nbpoints, coord, 0, 0, color, color);
 
 			}
 		 }

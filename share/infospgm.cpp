@@ -7,6 +7,10 @@
 #include "gr_basic.h"
 #include "common.h"
 
+#ifdef KICAD_PYTHON
+#include  <pyhandler.h>
+#endif
+
 // Import:
 extern wxString g_Main_Title;
 
@@ -47,6 +51,13 @@ wxString Msg = MsgInfos;
 #else
 	Msg << wxT(" - Ansi version");
 #endif
+	
+#ifdef KICAD_PYTHON
+	Msg << wxT("\n");
+	Msg << wxT( "python : " );
+	Msg << wxString::FromAscii( PyHandler::GetInstance()->GetVersion() );
+#endif
+
 	Msg << wxT("\n\n") << _("Author:");
 	Msg << wxT("JP CHARRAS\n\n") << _("Based on wxWidgets ");
 	Msg << wxMAJOR_VERSION << wxT(".") <<
@@ -56,7 +67,7 @@ wxString Msg = MsgInfos;
 	Msg << _("\n\nGPL License");
 	Msg << _("\n\nWeb sites:\n");
 	Msg << wxT("http://iut-tice.ujf-grenoble.fr/kicad/\n");
-	Msg << wxT("http://www.lis.inpg.fr/realise_au_lis/kicad/");
+	Msg << wxT("http://www.gipsa-lab.inpg.fr/realise_au_lis/kicad/");
 
 	wxMessageBox(Msg, wxEmptyString, wxICON_INFORMATION, frame);
 }

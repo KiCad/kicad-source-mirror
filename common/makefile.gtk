@@ -8,9 +8,11 @@ EDACPPFLAGS = $(CPPFLAGS)
 
 all: common.a
 
+include ../libs.linux
+
 include makefile.include
 
-CPPFLAGS += $(EXTRACPPFLAGS)
+CPPFLAGS += $(EXTRACPPFLAGS) -fno-strict-aliasing
 EDACPPFLAGS = $(CPPFLAGS)
 
 
@@ -19,6 +21,7 @@ common.a: $(OBJECTS) makefile.gtk makefile.include
 	ar -rv $@ $(OBJECTS)
 	ranlib $@
 
+install:common.a
 
 clean:
 	rm -f *.o; rm -f *~; rm core; rm *.bak; rm *.obj

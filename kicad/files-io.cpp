@@ -242,7 +242,8 @@ wxFileName zip_name(filename);
 
 wxChar * Ext_to_arch[] = {    /* Liste des extensions des fichiers à sauver */
 	wxT("*.sch"), wxT("*.lib"), wxT("*.cmp"), wxT("*.brd"),
-	wxT("*.net"), wxT("*.pro"), wxT("*.pho"),
+	wxT("*.net"), wxT("*.pro"), wxT("*.pho"), wxT("*.py"),
+	wxT("*.pdf"), wxT("*.txt"),
 	NULL};
 int ii = 0;
 wxString zip_cmd = wxT("-O ") + zip_file_fullname;

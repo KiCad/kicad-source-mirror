@@ -64,7 +64,7 @@ void BASE_SCREEN::InitDatas(void)
 		case CVPCB_DISPLAY_FRAME:
 		case MODULE_EDITOR_FRAME:
 		case PCB_FRAME:
-			m_CurrentSheet = &g_Sheet_A3;
+			m_CurrentSheet = &g_Sheet_A4;
 			break;
 
 		case GERBER_FRAME:
@@ -98,7 +98,22 @@ void BASE_SCREEN::InitDatas(void)
 	m_FlagSave = 1;					// indique sauvegarde auto faite
 }
 
-	
+
+/******************************************************************/
+wxPoint BASE_SCREEN::CursorRealPosition(const wxPoint & ScreenPos)
+/******************************************************************/
+{
+wxPoint curpos;
+
+	curpos.x = ScreenPos.x * GetZoom();
+	curpos.y = ScreenPos.y * GetZoom();
+
+	curpos.x += m_DrawOrg.x;
+	curpos.y += m_DrawOrg.y;
+
+	return curpos;
+}
+
 /***************************************/
 int BASE_SCREEN::GetInternalUnits(void)
 /***************************************/

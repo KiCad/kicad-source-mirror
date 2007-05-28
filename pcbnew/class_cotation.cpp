@@ -293,58 +293,29 @@ int zoom = panel->GetScreen()->GetZoom();
 	switch( typeaff )
 	{
 		case FILAIRE:
-			GRLine(&panel->m_ClipBox, DC,
-					Barre_ox - ox, Barre_oy - oy,
-					Barre_fx - ox, Barre_fy- oy, gcolor);
-			GRLine(&panel->m_ClipBox, DC,
-					TraitG_ox - ox, TraitG_oy - oy,
-					TraitG_fx - ox, TraitG_fy- oy, gcolor);
-			GRLine(&panel->m_ClipBox, DC,
-					TraitD_ox - ox, TraitD_oy - oy,
-					TraitD_fx - ox, TraitD_fy- oy, gcolor);
-			GRLine(&panel->m_ClipBox, DC,
-					FlecheD1_ox - ox, FlecheD1_oy - oy,
-					FlecheD1_fx - ox, FlecheD1_fy- oy, gcolor);
-			GRLine(&panel->m_ClipBox, DC,
-					FlecheD2_ox - ox, FlecheD2_oy - oy,
-					FlecheD2_fx - ox, FlecheD2_fy- oy, gcolor);
-			GRLine(&panel->m_ClipBox, DC,
-					FlecheG1_ox - ox, FlecheG1_oy - oy,
-					FlecheG1_fx - ox, FlecheG1_fy- oy, gcolor);
-			GRLine(&panel->m_ClipBox, DC,
-					FlecheG2_ox - ox, FlecheG2_oy - oy,
-					FlecheG2_fx - ox, FlecheG2_fy- oy, gcolor);
-			break;
-
+			width = 0;
 		case FILLED:
-			GRFillCSegm(&panel->m_ClipBox, DC,
+			GRLine(&panel->m_ClipBox, DC,
 					Barre_ox - ox, Barre_oy - oy,
-					Barre_fx - ox, Barre_fy- oy,
-					width, gcolor);
-			GRFillCSegm(&panel->m_ClipBox, DC,
+					Barre_fx - ox, Barre_fy- oy, width, gcolor);
+			GRLine(&panel->m_ClipBox, DC,
 					TraitG_ox - ox, TraitG_oy - oy,
-					TraitG_fx - ox, TraitG_fy- oy,
-					width, gcolor);
-			GRFillCSegm(&panel->m_ClipBox, DC,
+					TraitG_fx - ox, TraitG_fy- oy, width, gcolor);
+			GRLine(&panel->m_ClipBox, DC,
 					TraitD_ox - ox, TraitD_oy - oy,
-					TraitD_fx - ox, TraitD_fy- oy,
-					width, gcolor);
-			GRFillCSegm(&panel->m_ClipBox, DC,
+					TraitD_fx - ox, TraitD_fy- oy, width, gcolor);
+			GRLine(&panel->m_ClipBox, DC,
 					FlecheD1_ox - ox, FlecheD1_oy - oy,
-					FlecheD1_fx - ox, FlecheD1_fy- oy,
-					width, gcolor);
-			GRFillCSegm(&panel->m_ClipBox, DC,
+					FlecheD1_fx - ox, FlecheD1_fy- oy, width, gcolor);
+			GRLine(&panel->m_ClipBox, DC,
 					FlecheD2_ox - ox, FlecheD2_oy - oy,
-					FlecheD2_fx - ox, FlecheD2_fy- oy,
-					width, gcolor);
-			GRFillCSegm(&panel->m_ClipBox, DC,
+					FlecheD2_fx - ox, FlecheD2_fy- oy, width, gcolor);
+			GRLine(&panel->m_ClipBox, DC,
 					FlecheG1_ox - ox, FlecheG1_oy - oy,
-					FlecheG1_fx - ox, FlecheG1_fy- oy,
-					width, gcolor);
-			GRFillCSegm(&panel->m_ClipBox, DC,
+					FlecheG1_fx - ox, FlecheG1_fy- oy, width, gcolor);
+			GRLine(&panel->m_ClipBox, DC,
 					FlecheG2_ox - ox, FlecheG2_oy - oy,
-					FlecheG2_fx - ox, FlecheG2_fy- oy,
-					width, gcolor);
+					FlecheG2_fx - ox, FlecheG2_fy- oy, width, gcolor);
 			break;
 
 		case SKETCH:

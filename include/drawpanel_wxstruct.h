@@ -168,6 +168,7 @@ public:
 	wxPoint m_DrawOrg;				/* offsets pour tracer le circuit sur l'ecran */
 	wxPoint m_Curseur;				/* Screen cursor coordinate (on grid) in user units. */
 	wxPoint m_MousePosition;		/* Mouse cursor coordinate (off grid) in user units. */
+	wxPoint m_MousePositionInPixels;	/* Mouse cursor coordinate (off grid) in pixels. */
 	wxPoint m_O_Curseur;			/* Relative Screen cursor coordinate (on grid) in user units.
 									(coordinates from last reset position)*/
 	wxPoint m_ScrollbarPos;			// Position effective des Curseurs de scroll
@@ -228,6 +229,8 @@ public:
 	void InitDatas(void);		/* Inits completes des variables */
 	wxSize ReturnPageSize(void);
 	int GetInternalUnits(void);
+
+	wxPoint CursorRealPosition(const wxPoint & ScreenPos);
 
 	/* general Undo/Redo command control */
 	virtual void ClearUndoRedoList(void);

@@ -62,16 +62,19 @@ static double s_ScaleList[] =
 
 //#define DEFAULT_ORIENTATION_PAPER wxPORTRAIT
 #define DEFAULT_ORIENTATION_PAPER wxLANDSCAPE
+#ifdef EESCHEMA
 #define WIDTH_MAX_VALUE 100
-#define WIDTH_MIN_VALUE 10
+#else
+#define WIDTH_MAX_VALUE 1000
+#endif
+#define WIDTH_MIN_VALUE 1
 
 // static print data and page setup data, to remember settings during the session
 static wxPrintData * g_PrintData;
 
-/* exportees dans eeconfig.h */
-int PenMinWidth = 20;	/* dim mini (en 1/100 mmm) pour les traits imprimes */
-
 // Variables locales
+static int s_PrintPenMinWidth = 6;	/* Minimum pen width (in internal units) for printing */
+
 static int s_PrintMaskLayer;
 static int s_OptionPrintPage = 0;
 static int s_Print_Black_and_White = TRUE;
@@ -164,7 +167,6 @@ void WinEDA_PrintFrame::SetOthersDatas(void)
 	m_Print_Mirror->Enable(false);
 #endif
 
-	m_ButtPenWidth->SetRange(WIDTH_MIN_VALUE,WIDTH_MAX_VALUE);
 	m_FineAdjustXscaleOpt->SetToolTip(_("Set X scale adjust for exact scale plotting"));
 	m_FineAdjustYscaleOpt->SetToolTip(_("Set Y scale adjust for exact scale plotting"));
 	if ( s_Print_Black_and_White ) m_ColorOption->SetSelection(1);
@@ -249,16 +251,24 @@ void  WinEDA_PrintFrame::OnClosePrintDialog(void)
 /* called when WinEDA_PrintFrame is closed
 */
 {
+	wxConfig * Config = m_Parent->m_Parent->m_EDA_Config;
+	if ( Config )
+	{
+		Config->Write(wxT("PrintPenWidth"), s_PrintPenMinWidth);
+	}
+
 	if ( m_FineAdjustXscaleOpt )
 		m_FineAdjustXscaleOpt->GetValue().ToDouble(&m_XScaleAdjust);
 	if ( m_FineAdjustYscaleOpt )
 		m_FineAdjustYscaleOpt->GetValue().ToDouble(&m_YScaleAdjust);
+	SetPenWidth();
+
 #ifdef PCBNEW
-	if ( m_Parent->m_Parent->m_EDA_Config )
+	if ( Config )
 	{
-		m_Parent->m_Parent->m_EDA_Config->Write(wxT("PrintXFineScaleAdj"), m_XScaleAdjust);
-		m_Parent->m_Parent->m_EDA_Config->Write(wxT("PrintYFineScaleAdj"), m_YScaleAdjust);
-		m_Parent->m_Parent->m_EDA_Config->Write(wxT("PrintScale"), s_Scale_Select);
+		Config->Write(wxT("PrintXFineScaleAdj"), m_XScaleAdjust);
+		Config->Write(wxT("PrintYFineScaleAdj"), m_YScaleAdjust);
+		Config->Write(wxT("PrintScale"), s_Scale_Select);
 	}
 #endif
 	EndModal(0);
@@ -295,22 +305,23 @@ void WinEDA_PrintFrame::SetScale(wxCommandEvent& event)
 #endif
 }
 
-/*********************************************************/
-void WinEDA_PrintFrame::SetPenWidth(wxSpinEvent& event)
-/*********************************************************/
+/****************************************/
+void WinEDA_PrintFrame::SetPenWidth(void)
+/****************************************/
+/* Get the new pen width value, and verify min et max value
+	NOTE: s_PrintPenMinWidth is in internal units
+*/
 {
-	PenMinWidth = m_ButtPenWidth->GetValue();
-	if ( PenMinWidth > WIDTH_MAX_VALUE )
+	s_PrintPenMinWidth = m_DialogPenWidth->GetValue();
+	if ( s_PrintPenMinWidth > WIDTH_MAX_VALUE )
 	{
-		PenMinWidth = WIDTH_MAX_VALUE;
-		wxBell();
+		s_PrintPenMinWidth = WIDTH_MAX_VALUE;
 	}
-	if ( PenMinWidth < WIDTH_MIN_VALUE )
+	if ( s_PrintPenMinWidth < WIDTH_MIN_VALUE )
 	{
-		PenMinWidth = WIDTH_MIN_VALUE;
-		wxBell();
+		s_PrintPenMinWidth = WIDTH_MIN_VALUE;
 	}
-	m_ButtPenWidth->SetValue(PenMinWidth);
+	m_DialogPenWidth->SetValue(s_PrintPenMinWidth);
 }
 
 
@@ -343,10 +354,8 @@ wxPoint WPos;
 int x, y;
 bool print_ref = TRUE;
 
-wxSpinEvent spinevent;
-
 	SetScale(event);
-	SetPenWidth(spinevent);
+	SetPenWidth();
 
 	if ( m_PagesOption )
 		s_OptionPrintPage = m_PagesOption->GetSelection();
@@ -404,8 +413,7 @@ bool print_ref = TRUE;
 	if ( s_OptionPrintPage ) SetLayerMaskFromListSelection();
 #endif
 
-wxSpinEvent spinevent;
-	SetPenWidth(spinevent);
+	SetPenWidth();
 
 	wxPrintDialogData printDialogData( * g_PrintData);
 
@@ -664,13 +672,17 @@ double accurate_Xscale, accurate_Yscale;
 
 #ifdef EESCHEMA
 	/* set Pen min width */
-float ftmp;
-	// PenMinWidth est donné en 1/100 mm, a convertir en pixels
-	ftmp = (float)PenMinWidth / 100;	// ftmp est en mm
-	ftmp *= (float)PlotAreaSize.x / PageSize_in_mm.x;	/* ftmp est en pixels */
-	SetPenMinWidth((int)ftmp);
+double ftmp, xdcscale, ydcscale;
+	// s_PrintPenMinWidth is in internal units ( 1/1000 inch), and must be converted in pixels
+	ftmp = (float)s_PrintPenMinWidth * 25.4 / EESCHEMA_INTERNAL_UNIT;	// ftmp est en mm
+	ftmp *= (float)PlotAreaSize.x / PageSize_in_mm.x;	/* ftmp is in  pixels */
+	/* because the pen size will be scaled by the dc scale, we modify the size
+	in order to keep the requested value */
+	dc->GetUserScale(&xdcscale, &ydcscale);
+	ftmp /= xdcscale;
+	SetPenMinWidth((int)round(ftmp));
 #else
-	SetPenMinWidth(1);
+	SetPenMinWidth(1);	// min width = 1 pixel
 #endif
 
 WinEDA_DrawPanel * panel = m_Parent->DrawPanel;
@@ -686,7 +698,7 @@ EDA_Rect tmp = panel->m_ClipBox;
 #endif
 #ifdef PCBNEW
 	if ( m_Print_Sheet_Ref )
-		m_Parent->TraceWorkSheet( dc, ActiveScreen);
+		m_Parent->TraceWorkSheet( dc, ActiveScreen, 0);
 
 
 	if ( userscale == 1.0 )	// Draw the Sheet refs at optimum scale, and board at 1.0 scale

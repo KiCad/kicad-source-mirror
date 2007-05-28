@@ -15,7 +15,7 @@ $(TARGET).exe: $(OBJECTS) $(TARGET)_resources.o\
 	$(CXX) $(ALL_LDFLAGS) -o $(TARGET).exe\
 		$(OBJECTS) $(LIBVIEWER3D) $(TARGET)_resources.o $(EDALIBS) $(SYSWXLIB)
 		
-install:
+install: $(TARGET).exe
 	cp $(TARGET).exe $(KICAD_BIN)
 
 

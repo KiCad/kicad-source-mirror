@@ -86,7 +86,7 @@ int ii;
 		m_FieldSize[ii] = m_Cmp->m_Field[ii].m_Size.x;
 		m_FieldFlags[ii] =
 			(m_Cmp->m_Field[ii].m_Attributs & TEXT_NO_VISIBLE) ? 0 : 1;
-		m_FieldOrient[ii] = m_Cmp->m_Field[ii].m_Orient;
+		m_FieldOrient[ii] = m_Cmp->m_Field[ii].m_Orient == TEXT_ORIENT_VERT ? 1 : 0;
 
 		if ( m_Cmp->m_Field[ii].m_Text.IsEmpty() ) continue;
 		// These values have meaning only if this field is not void:
@@ -372,7 +372,7 @@ wxString newname;
 			m_Cmp->m_Field[ii].m_Attributs &= ~TEXT_NO_VISIBLE;
 		else
 			m_Cmp->m_Field[ii].m_Attributs |= TEXT_NO_VISIBLE;
-		m_Cmp->m_Field[ii].m_Orient = m_FieldOrient[ii] ? 1 : 0;
+		m_Cmp->m_Field[ii].m_Orient = m_FieldOrient[ii] ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ;
 		m_Cmp->m_Field[ii].m_Pos = m_FieldPosition[ii];
 		m_Cmp->m_Field[ii].m_Pos.x += cmp_pos.x;
 		m_Cmp->m_Field[ii].m_Pos.y += cmp_pos.y;

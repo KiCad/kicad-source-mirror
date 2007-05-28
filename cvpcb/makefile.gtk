@@ -31,7 +31,7 @@ $(TARGET):	$(OBJECTS) makefile.gtk makefile.include $(EXTRALIBS) ../libs.linux $
 	$(LD) $(OBJECTS) $(LDFLAGS)  $(LIBVIEWER3D)  $(LIBS_WITH_GL) -o $(TARGET)
 
 
-install:
+install: $(TARGET)
 	cp -f $(TARGET) $(KICAD_BIN)
 
 clean:

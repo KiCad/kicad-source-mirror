@@ -60,10 +60,6 @@ void DrawLibEntry(WinEDA_DrawPanel * panel, wxDC * DC,
 							int Multi, int convert,
 							int DrawMode, int Color = -1);
 
-void DrawPinSymbol(WinEDA_DrawPanel * panel, wxDC * DC,
-							int posX, int posY, int len, int orient, int SymbolType,
-							int DrawMode, int Color = -1);
-
 void DrawLibraryDrawStruct(WinEDA_DrawPanel * panel, wxDC * DC,
 							EDA_LibComponentStruct *LibEntry, int PartX, int PartY,
 						  LibEDA_BaseStruct *DrawItem, int Multi,
@@ -167,8 +163,8 @@ EDA_BaseStruct * PickStruct(const wxPoint & refpos,
 
 
 
-LibEDA_BaseStruct * LocateDrawItem(SCH_SCREEN * Screen,
-		EDA_LibComponentStruct* LibEntry, int Unit, int Convert, int masque);
+LibEDA_BaseStruct * LocateDrawItem(SCH_SCREEN * Screen, const wxPoint & refpoint,
+		EDA_LibComponentStruct * LibEntry, int Unit, int Convert, int masque);
 
 DrawSheetLabelStruct * LocateSheetLabel(DrawSheetStruct *Sheet, const wxPoint & pos);
 LibDrawPin * LocateAnyPin(EDA_BaseStruct *DrawList, const wxPoint & RefPos,
@@ -226,9 +222,6 @@ int CountCmpNumber(void);
 /* EESTRING.CPP */
 /***************/
 
-void PutTextInfo(WinEDA_DrawPanel * panel, wxDC * DC, int Orient, const wxPoint & PosX,
-							const wxSize& size,
-							const wxString & Str, int DrawMode, int color);
 
 /***************/
 /* EECONFIG.CPP */
@@ -315,8 +308,11 @@ int CheckAnnotate(WinEDA_SchematicFrame * frame, bool OneSheetOnly);
 /************/
 /* PLOT.CPP */
 /************/
-void PlotArc(wxPoint centre, int StAngle, int EndAngle, int rayon);
-void PlotCercle(wxPoint centre, int diametre );
+void SetCurrentLineWidth( int width);
+
+void PlotArc(wxPoint centre, int StAngle, int EndAngle, int rayon, int width = -1);
+void PlotCercle(wxPoint centre, int diametre, int width = -1);
+void PlotPoly( int nb, int * coord, int fill, int width = -1);
 
 void PlotNoConnectStruct(DrawNoConnectStruct * Struct);
 void PlotLibPart( EDA_SchComponentStruct *DrawLibItem );
@@ -339,7 +335,7 @@ bool ClearProjectDrawList(SCH_SCREEN * FirstWindow, bool confirm_deletion);
 /* DELETE.CPP */
 /*************/
 
-void LocateAndDeleteItem(WinEDA_SchematicFrame * frame, wxDC * DC);
+bool LocateAndDeleteItem(WinEDA_SchematicFrame * frame, wxDC * DC);
 void EraseStruct(EDA_BaseStruct *DrawStruct, SCH_SCREEN * Window);
 void DeleteAllMarkers(int type);
 						/* Effacement des marqueurs du type "type" */

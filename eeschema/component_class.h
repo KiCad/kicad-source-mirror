@@ -81,7 +81,7 @@ public:
 	int m_FlagControlMulti;
 	int m_Convert;				/* Gestion des mutiples representations (ex: conversion De Morgan) */
 	int m_Transform[2][2];		/* The rotation/mirror transformation matrix. */
-	bool * m_PinIsDangling;	// liste des indicateurs de pin non connectee
+	bool * m_PinIsDangling;		// liste des indicateurs de pin non connectee
 
 public:
 	EDA_SchComponentStruct(const wxPoint & pos = wxPoint(0,0));

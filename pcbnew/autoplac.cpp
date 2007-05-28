@@ -832,7 +832,8 @@ int ox, oy, fx, fy, dx , dy;
 
 			if ( AutoPlaceShowAll )
 				{
-				GRLine(&DrawPanel->m_ClipBox, DC, ox, oy, fx, fy, g_DesignSettings.m_RatsnestColor|GR_XOR) ;
+				GRLine(&DrawPanel->m_ClipBox, DC, ox, oy, fx, fy,
+						0, g_DesignSettings.m_RatsnestColor|GR_XOR) ;
 				}
 
 			/* Evaluation du cout du chevelu: */

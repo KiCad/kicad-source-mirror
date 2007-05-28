@@ -112,7 +112,7 @@ wxClientDC dc(m_Parent->DrawPanel);
 bool WinEDA_BasePcbFrame::Clear_Pcb(wxDC * DC, bool query)
 /*********************************************************/
 /* Realise les init des pointeurs et variables
-	Si Item == NULL, il n'y aura pas de confirmation
+	Si query == FALSE, il n'y aura pas de confirmation
 */
 {
 

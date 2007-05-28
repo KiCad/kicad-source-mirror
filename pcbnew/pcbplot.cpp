@@ -566,7 +566,7 @@ wxString ext;
 		}
 	}
 
-	Close(true);
+//	Close(true);
 }
 
 

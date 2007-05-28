@@ -24,7 +24,6 @@
 
 ////@begin includes
 #include "wx/valgen.h"
-#include "wx/spinctrl.h"
 ////@end includes
 
 /*!
@@ -32,7 +31,7 @@
  */
 
 ////@begin forward declarations
-class wxSpinCtrl;
+class wxBoxSizer;
 ////@end forward declarations
 
 /*!
@@ -41,7 +40,6 @@ class wxSpinCtrl;
 
 ////@begin control identifiers
 #define ID_DIALOG 10000
-#define ID_SPINCTRL 10003
 #define ID_RADIOBOX_SETPRINTMODE 10007
 #define ID_CHECKBOX 10004
 #define ID_RADIOBOX1 10008
@@ -93,9 +91,6 @@ public:
     /// wxEVT_CLOSE_WINDOW event handler for ID_DIALOG
     void OnCloseWindow( wxCloseEvent& event );
 
-    /// wxEVT_COMMAND_SPINCTRL_UPDATED event handler for ID_SPINCTRL
-    void OnSpinctrlUpdated( wxSpinEvent& event );
-
     /// wxEVT_COMMAND_RADIOBOX_SELECTED event handler for ID_RADIOBOX_SETPRINTMODE
     void OnRadioboxSetprintmodeSelected( wxCommandEvent& event );
 
@@ -121,11 +116,10 @@ public:
 
 	void PrintSVGDoc(wxCommandEvent& event);
 	bool DrawPage(const wxString & FullFileName);
-	void SetPenWidth(wxSpinEvent& event);
 	wxString ReturnFullFileName(void);
 
 ////@begin WinEDA_PrintSVGFrame member variables
-    wxSpinCtrl* m_ButtPenWidth;
+    wxBoxSizer* m_DialogPenWidthSizer;
     wxRadioBox* m_ModeColorOption;
     wxCheckBox* m_Print_Sheet_Ref;
     wxRadioBox* m_PagesOption;
@@ -134,6 +128,8 @@ public:
 ////@end WinEDA_PrintSVGFrame member variables
 
 	WinEDA_DrawFrame * m_Parent;
+	WinEDA_ValueCtrl * m_DialogPenWidth;
+	void SetPenWidth();
 	int m_PrintMaskLayer;
 	int m_ImageXSize_mm;
 };

@@ -13,11 +13,12 @@ include ../libs.macosx
 
 TARGET = gerbview
 
-all: $(TARGET)
+all: $(TARGET) $(TARGET).app
 
 include makefile.include
 
 CPPFLAGS += $(EXTRACPPFLAGS)
+CPPFLAGS += -arch i386 -arch ppc
 EDACPPFLAGS = $(CPPFLAGS)
 
 
@@ -25,6 +26,22 @@ $(TARGET): $(OBJECTS) $(TARGET).r makefile.macosx makefile.include $(EXTRALIBS) 
 		$(LD) $(LDFLAGS) $(OBJECTS) $(LIBS) -o $(TARGET)
 	$(RESCOMP) -o $(TARGET) Carbon.r $(TARGET).r
 	$(SETFILE) -a C $(TARGET)
+
+$(TARGET).app: $(OBJS)
+	rm -Rf $(TARGET).app
+	mkdir -p $(TARGET).app
+	mkdir -p $(TARGET).app/Contents
+	mkdir -p $(TARGET).app/Contents/MacOS
+	mkdir -p $(TARGET).app/Contents/Frameworks
+	mkdir -p $(TARGET).app/Contents/Resources
+	sed -e "s/IDENTIFIER/`echo . | sed -e ’s,\.\./,,g’ | sed -e ’s,/,.,g’`/" -e "s/EXECUTABLE/$(TARGET)/" \
+		-e "s/VERSION/$(MKMK_WX_VERSION)/" $(HOME)/wxMac-$(MKMK_WX_VERSION)/src/mac/carbon/wxmac.icns \
+	>$(TARGET).app/Contents/Resources/wxmac.icns
+	sed -e "s/IDENTIFIER/`echo . | sed -e ’s,\.\./,,g’ | sed -e ’s,/,.,g’`/" -e "s/EXECUTABLE/$(TARGET)/"\
+		-e "s/VERSION/$(MKMK_WX_VERSION)/" $(HOME)/wxMac-$(MKMK_WX_VERSION)/src/mac/carbon/Info.plist.in \
+	>$(TARGET).app/Contents/Info.plist
+	echo -n "APPL????" >$(TARGET).app/Contents/PkgInfo
+	ln -f $(TARGET) $(TARGET).app/Contents/MacOS/$(TARGET)
 
 
 install:

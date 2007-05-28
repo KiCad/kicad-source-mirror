@@ -94,18 +94,18 @@ wxPoint Cursor = GetScreen()->m_Curseur;
 		int dx = m_ClipBox.GetWidth() * GetZoom();
 		int dy = m_ClipBox.GetHeight() * GetZoom();
 		GRLine(&m_ClipBox, DC, Cursor.x - dx, Cursor.y,
-							Cursor.x + dx, Cursor.y, color); // axe Y
+							Cursor.x + dx, Cursor.y, 0, color); // axe Y
 		GRLine(&m_ClipBox, DC, Cursor.x, Cursor.y - dx,
-				Cursor.x, Cursor.y + dy, color);  // axe X
+				Cursor.x, Cursor.y + dy, 0, color);  // axe X
 		}
 
 	else
 		{
 		int len = CURSOR_SIZE * GetZoom();
 		GRLine(&m_ClipBox, DC, Cursor.x - len, Cursor.y,
-				Cursor.x + len, Cursor.y, color);
+				Cursor.x + len, Cursor.y, 0, color);
 		GRLine(&m_ClipBox, DC, Cursor.x, Cursor.y - len,
-				Cursor.x, Cursor.y + len, color);
+				Cursor.x, Cursor.y + len, 0, color);
 		}
 }
 
@@ -161,8 +161,6 @@ wxSize WinEDA_DrawPanel::GetGrid(void)
 void WinEDA_DrawPanel::PrepareGraphicContext(wxDC * DC)
 /******************************************************/
 {
-	DC->SetPen(*DrawPen);
-	DC->SetBrush(*DrawBrush);
 	GRResetPenAndBrush(DC);
 	DC->SetBackgroundMode(wxTRANSPARENT);
 #ifdef WX_ZOOM
@@ -208,11 +206,7 @@ wxPoint WinEDA_DrawPanel::CursorRealPosition(const wxPoint & ScreenPos)
 {
 wxPoint curpos;
 
-	curpos.x = ScreenPos.x * GetZoom();
-	curpos.y = ScreenPos.y * GetZoom();
-
-	curpos.x += GetScreen()->m_DrawOrg.x;
-	curpos.y += GetScreen()->m_DrawOrg.y;
+	curpos = GetScreen()->CursorRealPosition(ScreenPos);
 
 	return curpos;
 }
@@ -377,6 +371,7 @@ void WinEDA_DrawPanel::OnSize(wxSizeEvent & event)
 /*************************************************/
 {
 	SetBoundaryBox();
+	event.Skip();
 }
 
 /******************************************/
@@ -587,11 +582,11 @@ double pasx, pasy;
 	{
 		/* Trace de l'axe vertical */
 		GRDashedLine(&m_ClipBox, DC, 0, -screen->ReturnPageSize().y,
-				0, screen->ReturnPageSize().y, Color );
+				0, screen->ReturnPageSize().y, 0, Color );
 
 		/* Trace de l'axe horizontal */
 		GRDashedLine(&m_ClipBox, DC, -screen->ReturnPageSize().x, 0,
-				screen->ReturnPageSize().x, 0, Color );
+				screen->ReturnPageSize().x, 0, 0, Color );
 	}
 
 	/* trace des axes auxiliaires */
@@ -618,13 +613,13 @@ BASE_SCREEN * screen = GetScreen();
 	GRDashedLine(&m_ClipBox, DC,
 			m_Parent->m_Auxiliary_Axis_Position.x, -screen->ReturnPageSize().y,
 			m_Parent->m_Auxiliary_Axis_Position.x, screen->ReturnPageSize().y,
-			Color );
+			0, Color );
 
 	/* Trace de l'axe horizontal */
 	GRDashedLine(&m_ClipBox, DC,
 			-screen->ReturnPageSize().x, m_Parent->m_Auxiliary_Axis_Position.y,
 			screen->ReturnPageSize().x, m_Parent->m_Auxiliary_Axis_Position.y,
-			Color );
+			0, Color );
 }
 
 /*******************************************************/
@@ -729,7 +724,10 @@ static WinEDA_DrawPanel * LastPanel;
 
 	localrealbutt |= localbutt;		/* compensation defaut wxGTK */
 
-	screen->m_MousePosition = CalcAbsolutePosition(wxPoint(event.GetX(), event.GetY()));
+	/* Compute absolute m_MousePosition in pixel units: */
+	screen->m_MousePositionInPixels = CalcAbsolutePosition(wxPoint(event.GetX(), event.GetY()));
+	/* Compute absolute m_MousePosition in user units: */
+	screen->m_MousePosition = CursorRealPosition(screen->m_MousePositionInPixels);
 
 wxClientDC DC(this);
 int kbstat = 0;
@@ -747,10 +745,10 @@ int kbstat = 0;
 
 	// Appel des fonctions liées au Double Click ou au Click
 	if( localbutt == (int)(GR_M_LEFT_DOWN|GR_M_DCLICK) )
-		m_Parent->OnLeftDClick(&DC, screen->m_MousePosition);
+		m_Parent->OnLeftDClick(&DC, screen->m_MousePositionInPixels);
 
 	else if ( event.LeftDown() )
-		m_Parent->OnLeftClick(&DC, screen->m_MousePosition);
+		m_Parent->OnLeftClick(&DC, screen->m_MousePositionInPixels);
 
 	if( event.ButtonUp(2) && (screen->BlockLocate.m_State == STATE_NO_BLOCK) )
 	{	// The middle button has been relached, with no block command:
@@ -761,7 +759,7 @@ int kbstat = 0;
 
 	/* Appel de la fonction generale de gestion des mouvements souris
 	et commandes clavier */
-	m_Parent->GeneralControle(&DC, screen->m_MousePosition);
+	m_Parent->GeneralControle(&DC, screen->m_MousePositionInPixels);
 
 
 	/*******************************/
@@ -926,7 +924,7 @@ BASE_SCREEN * Screen = GetScreen();
 		else m_Parent->SetToolID(0, m_PanelCursor = m_PanelDefaultCursor = wxCURSOR_ARROW, wxEmptyString);
 	}
 
-	m_Parent->GeneralControle(&DC, Screen->m_MousePosition);
+	m_Parent->GeneralControle(&DC, Screen->m_MousePositionInPixels);
 }
 
 

@@ -49,6 +49,8 @@ int LineNum = 0;
 		return -1;
 	}
 
+	// Switch the locale to standard C (needed to print floating point numbers like 1.3)
+	setlocale(LC_NUMERIC, "C");
 	while ( GetLine(file, line, &LineNum, 512) )
 	{
 		text = strtok(line, " \t\n\r");
@@ -68,6 +70,7 @@ int LineNum = 0;
 	}
 
 	fclose (file);
+	setlocale(LC_NUMERIC, "");      // revert to the current  locale
 	return 0;
 }
 
@@ -130,44 +133,44 @@ S3D_Material * material = NULL;
 			if ( stricmp (text, "diffuseColor") == 0 )
 			{
 				text = strtok(NULL," \t\n\r");
-				material->m_DiffuseColor.x = atof(from_point(text));
+				material->m_DiffuseColor.x = atof(text);
 				text = strtok(NULL," \t\n\r");
-				material->m_DiffuseColor.y = atof(from_point(text));
+				material->m_DiffuseColor.y = atof(text);
 				text = strtok(NULL," \t\n\r");
-				material->m_DiffuseColor.z = atof(from_point(text));
+				material->m_DiffuseColor.z = atof(text);
 			}
 			else if ( stricmp (text, "emissiveColor") == 0 )
 			{
 				text = strtok(NULL," \t\n\r");
-				material->m_EmissiveColor.x = atof(from_point(text));
+				material->m_EmissiveColor.x = atof(text);
 				text = strtok(NULL," \t\n\r");
-				material->m_EmissiveColor.y = atof(from_point(text));
+				material->m_EmissiveColor.y = atof(text);
 				text = strtok(NULL," \t\n\r");
-				material->m_EmissiveColor.z = atof(from_point(text));
+				material->m_EmissiveColor.z = atof(text);
 			}
 			else if ( strnicmp (text, "specularColor", 13 ) == 0 )
 			{
 				text = strtok(NULL," \t\n\r");
-				material->m_SpecularColor.x = atof(from_point(text));
+				material->m_SpecularColor.x = atof(text);
 				text = strtok(NULL," \t\n\r");
-				material->m_SpecularColor.y = atof(from_point(text));
+				material->m_SpecularColor.y = atof(text);
 				text = strtok(NULL," \t\n\r");
-				material->m_SpecularColor.z = atof(from_point(text));
+				material->m_SpecularColor.z = atof(text);
 			}
 			else if ( strnicmp (text, "ambientIntensity", 16 ) == 0 )
 			{
 				text = strtok(NULL," \t\n\r");
-				material->m_AmbientIntensity = atof(from_point(text));
+				material->m_AmbientIntensity = atof(text);
 			}
 			else if ( strnicmp (text, "transparency", 12 ) == 0 )
 			{
 				text = strtok(NULL," \t\n\r");
-				material->m_Transparency = atof(from_point(text));
+				material->m_Transparency = atof(text);
 			}
 			else if ( strnicmp (text, "shininess", 9 ) == 0 )
 			{
 				text = strtok(NULL," \t\n\r");
-				material->m_Shininess = atof(from_point(text));
+				material->m_Shininess = atof(text);
 			}
 		}
 	}
@@ -323,7 +326,7 @@ char string_num[512];
 				case ',':
 					jj = 0;
 					if ( ! StartData || !HasData) break;
-					data_list[ii] = atof(from_point(string_num));
+					data_list[ii] = atof(string_num);
 					string_num[jj] = 0;
 					ii++;
 					if ( ii >= nn )
@@ -463,7 +466,7 @@ int * index = NULL;
 				while ( text )
 				{
 					if ( *text == ']') break;
-					jj = atoi(from_point(text));
+					jj = atoi(text);
 					if ( jj < 0 )
 					{
 					S3D_Vertex * curr_coord = coords;

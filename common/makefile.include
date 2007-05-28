@@ -1,4 +1,4 @@
-EXTRACPPFLAGS= -I$(SYSINCLUDE) -I./ -Ibitmaps -I../include
+EXTRACPPFLAGS += -I$(SYSINCLUDE) -I./ -Ibitmaps -I../include
 
 COMMON = ../include/colors.h
 
@@ -33,6 +33,11 @@ OBJECTS= \
 		worksheet.o\
 		base_screen.o\
 		dcsvg.o
+
+ifdef KICAD_PYTHON
+OBJECTS += pyhandler.o
+pyhandler.o: pyhandler.cpp $(COMMON) ../include/pyhandler.h
+endif
 
 gr_basic.o: gr_basic.cpp ../include/gr_basic.h $(DEPEND)
 

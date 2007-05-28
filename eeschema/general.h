@@ -172,13 +172,20 @@ eda_global struct EESchemaVariables g_EESchemaVar;
 eda_global int g_PrintFillMask;	/* pour les options "FILL",
 							l'option reelle est m_Fill & ~PrintFillMask */
 
-/* Variables eda_globales pour Libview */
+/* Variables globales pour Libview */
 eda_global wxString g_CurrentViewLibraryName;			/* nom de la librairie en cours d'examen */
 eda_global wxString g_CurrentViewComponentName;		/* nom du le composant en cours d'examen */
 eda_global int g_ViewConvert;						/* Vue normal / convert */
 eda_global int g_ViewUnit;						/* unité a afficher (A, B ..) */
 
-/* Variables eda_globales pour LibEdit */
+/* Variables globales pour Schematic Edit */
+eda_global int g_DefaultTextLabelSize
+#ifdef MAIN
+= DEFAULT_SIZE_TEXT
+#endif
+;
+
+/* Variables globales pour LibEdit */
 eda_global int g_LastTextSize
 #ifdef MAIN
 = DEFAULT_SIZE_TEXT
@@ -263,4 +270,10 @@ eda_global bool g_EditPinByPinIsOn	/* bool: TRUE si edition des pins pin a pin a
 #endif
 ;
 
+eda_global int g_LibSymbolDefaultLineWidth;	/* default line width  (in EESCHEMA units) used when creating a new graphic item in libedit : 0 = default */
+eda_global int g_DrawMinimunLineWidth;		/* Minimum line (in EESCHEMA units) width used to draw items on screen; 0 = single pixel line width */
+eda_global int g_PlotPSMinimunLineWidth;	/* Minimum line (in EESCHEMA units) width used to Plot items , postscript format */
 
+/* Config keys */
+#define MINI_DRAW_LINE_WIDTH_KEY wxT("MinimunDrawLineWidth")
+#define MINI_PLOTPS_LINE_WIDTH_KEY wxT("MinimunPlotPSLineWidth")

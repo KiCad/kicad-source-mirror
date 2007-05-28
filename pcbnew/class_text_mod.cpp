@@ -221,10 +221,10 @@ MODULE * Module = (MODULE *) m_Parent;
 		int anchor_size = 2*zoom;
 		GRLine(&panel->m_ClipBox, DC,
 				pos.x - anchor_size, pos.y,
-				pos.x + anchor_size, pos.y, g_AnchorColor);
+				pos.x + anchor_size, pos.y, 0, g_AnchorColor);
 		GRLine(&panel->m_ClipBox, DC,
 				pos.x, pos.y - anchor_size,
-				pos.x, pos.y + anchor_size, g_AnchorColor);
+				pos.x, pos.y + anchor_size, 0, g_AnchorColor);
 	}
 
 	color = g_DesignSettings.m_LayerColor[Module->m_Layer];

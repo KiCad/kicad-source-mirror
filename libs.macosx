@@ -4,10 +4,25 @@ KICAD_BIN = /usr/local/kicad/macosx
 RESCOMP = /Developer/Tools/Rez -d __DARWIN__ -t APPL -d __WXMAC__ -i .
 SETFILE = /Developer/Tools/SetFile
 
+MKMK_WX_VERSION=`wx-config --version`
+
 SRCSUFF = .cpp
 OBJSUFF = .o
 FINAL = 1
 
-LIBS =	../common/common.a `wx-config --libs`
-LIBS3D = ../common/common.a `wx-config --libs std,gl`
+# You must comment or uncomment this line to disable/enable python support
+#KICAD_PYTHON = 1
+
+
+ 
+ifdef KICAD_PYTHON
+PYLIBS= -L/usr/lib
+PYLIBS+= -L /usr/include/python
+PYLIBS+= -lpython2.4
+PYLIBS+= -lboost_python
+EXTRACPPFLAGS+=-I /usr/include/python2.4 -DKICAD_PYTHON -fno-strict-aliasing -ggdb
+endif
+
+LIBS =	../common/common.a `wx-config --libs` $(PYLIBS)
+LIBS3D = ../common/common.a `wx-config --libs std,gl` $(PYLIBS)
 

@@ -49,6 +49,7 @@ BEGIN_EVENT_TABLE(WinEDA_GerberFrame, wxFrame)
 	EVT_MENU(ID_MENU_SAVE_BOARD, WinEDA_GerberFrame::Files_io)
 	EVT_MENU(ID_MENU_SAVE_BOARD_AS, WinEDA_GerberFrame::Files_io)
 	EVT_MENU(ID_GEN_PLOT, WinEDA_GerberFrame::ToPlotter)
+	EVT_MENU(ID_GERBVIEW_EXPORT_TO_PCBNEW, WinEDA_GerberFrame::ExportDataInPcbnewFormat)
 
 	EVT_MENU_RANGE(ID_LOAD_FILE_1,ID_LOAD_FILE_10,
 		WinEDA_GerberFrame::Files_io)
@@ -66,12 +67,13 @@ BEGIN_EVENT_TABLE(WinEDA_GerberFrame, wxFrame)
 
 	// menu Postprocess
 	EVT_MENU(ID_GERBVIEW_SHOW_LIST_DCODES, WinEDA_GerberFrame::Process_Special_Functions)
-
-	// menu Miscellaneous
-	EVT_MENU(ID_PCB_GLOBAL_DELETE, WinEDA_GerberFrame::Process_Special_Functions)
+	EVT_MENU(ID_GERBVIEW_POPUP_DELETE_DCODE_ITEMS, WinEDA_GerberFrame::Process_Special_Functions)
 	EVT_MENU(ID_GERBVIEW_SHOW_SOURCE,
 			WinEDA_GerberFrame::Process_Special_Functions )
 
+
+	// menu Miscellaneous
+	EVT_MENU(ID_PCB_GLOBAL_DELETE, WinEDA_GerberFrame::Process_Special_Functions)
 	// Menu Help
 	EVT_MENU(ID_GENERAL_HELP, WinEDA_DrawFrame::GetKicadHelp)
 	EVT_MENU(ID_KICAD_ABOUT, WinEDA_DrawFrame::GetKicadAbout)
@@ -100,6 +102,10 @@ BEGIN_EVENT_TABLE(WinEDA_GerberFrame, wxFrame)
 	// Annulation de commande en cours
 	EVT_MENU_RANGE(ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
 			WinEDA_PcbFrame::Process_Special_Functions )
+
+	// Pop up menu
+	EVT_MENU(ID_GERBVIEW_POPUP_DELETE_DCODE_ITEMS,
+			WinEDA_GerberFrame::Process_Special_Functions )
 
 	// Option toolbar
 	EVT_TOOL_RANGE(ID_TB_OPTIONS_START,ID_TB_OPTIONS_END,
@@ -185,150 +191,6 @@ PCB_SCREEN * screen;
 
 	SaveSettings();
 	Destroy();
-}
-
-
-/***********************************************/
-void WinEDA_GerberFrame::ReCreateMenuBar(void)
-/***********************************************/
-/* Cree ou reinitialise le menu du haut d'ecran
-*/
-{
-int ii;
-wxMenuBar * menuBar = GetMenuBar();
-
-	if( menuBar == NULL )
-		{
-		menuBar = new wxMenuBar();
-
-		m_FilesMenu = new wxMenu;
-		m_FilesMenu->Append(ID_MENU_LOAD_FILE,
-					 _("Clear and Load gerber file"),
-					 _("Clear all layers and Load new gerber file"),
-					 FALSE);
-
-		m_FilesMenu->Append(ID_MENU_APPEND_FILE,
-					 _("Load gerber file"),
-					 _("Load new gerber file on currrent layer"),
-					 FALSE);
-
-		m_FilesMenu->Append(ID_MENU_INC_LAYER_AND_APPEND_FILE,
-					 _("Inc Layer and load gerber file"),
-					 _("Increment layer number, and Load gerber file"),
-					 FALSE);
-
-		m_FilesMenu->Append(ID_GERBVIEW_LOAD_DCODE_FILE,
-					 _("Load DCodes"),
-					 _("Load D-Codes File"),
-					 FALSE);
-
-		m_FilesMenu->Append(ID_GERBVIEW_LOAD_DRILL_FILE,
-					 _("Load Drill"),
-					 _("Load Drill File (EXCELLON Format)"),
-					 FALSE);
-
-		m_FilesMenu->Append(ID_MENU_NEW_BOARD,
-					 _("&New"),
-					 _("Clear all layers"),
-					 FALSE);
-
-		m_FilesMenu->AppendSeparator();
-		m_FilesMenu->Append(ID_MENU_SAVE_BOARD,
-					 _("&Save layers"),
-					 _("Save current layers (GERBER format)"),
-					 FALSE);
-
-		m_FilesMenu->Append(ID_MENU_SAVE_BOARD_AS,
-					 _("Save layers as.."),
-					 _("Save current layers as.."),
-					 FALSE);
-
-		m_FilesMenu->AppendSeparator();
-
-		m_FilesMenu->Append(ID_GEN_PRINT, _("P&rint"), _("Print on current printer"));
-		m_FilesMenu->Append(ID_GEN_PLOT,
-			_("Plot"),  _("Plotting in various formats") );
-
-		m_FilesMenu->AppendSeparator();
-		m_FilesMenu->Append(ID_EXIT,_("E&xit"), _("Quit Gerbview") );
-
-		// Creation des selections des anciens fichiers
-		m_FilesMenu->AppendSeparator();
-		for ( int ii = 0; ii < 10; ii++ )
-			{
-			if ( GetLastProject(ii).IsEmpty() ) break;
-			m_FilesMenu->Append(ID_LOAD_FILE_1 + ii, GetLastProject(ii) );
-			}
-
-		// Configuration:
-		wxMenu * configmenu = new wxMenu;
-		configmenu->Append(ID_CONFIG_REQ, _("&Files and Dir"),
-			_("Setting Files extension, Directories and others..."));
-		configmenu->Append(ID_COLORS_SETUP, _("&Colors"),
-			_("Select Colors and Display for layers"));
-		configmenu->Append(ID_OPTIONS_SETUP, _("&Options"),
-			_(" Select general options"));
-
-		configmenu->Append(ID_PCB_LOOK_SETUP, _("Display"),
-			_(" Select how items are displayed"));
-
-		// Font selection and setup
-		AddFontSelectionMenu(configmenu);
-
-		m_Parent->SetLanguageList(configmenu);
-
-		configmenu->AppendSeparator();
-		configmenu->Append(ID_CONFIG_SAVE, _("&Save Gerbview Setup"),
-				_("Save options in current directory"));
-
-		// Menu drill ( generation fichiers percage)
-/*	wxMenu *drill_menu = new wxMenu;
-	postprocess_menu->Append(ID_PCB_GEN_DRILL_FILE, "Create &Drill file",
-					"Gen Drill (EXCELLON] file and/or Drill sheet");
-*/
-	// Menu d'outils divers
-		wxMenu *miscellaneous_menu = new wxMenu;
-		miscellaneous_menu->Append(ID_GERBVIEW_SHOW_LIST_DCODES, _("&List DCodes"),
-				_("List and Edit DCodes") );
-		miscellaneous_menu->Append(ID_GERBVIEW_SHOW_SOURCE,_("&Show source"),
-				_("Show source file for the current layer") );
-		miscellaneous_menu->AppendSeparator();
-		miscellaneous_menu->Append(ID_PCB_GLOBAL_DELETE, _("&Delete Layer"),
-				_("Delete current layer") );
-
-		// Menu Help:
-		wxMenu *helpMenu = new wxMenu;
-		helpMenu->Append(ID_GENERAL_HELP, _("&Help"), _("On line doc") );
-		helpMenu->Append(ID_KICAD_ABOUT, _("&About"), _("Gerbview Infos") );
-
-		menuBar->Append(m_FilesMenu, _("&Files"));
-		menuBar->Append(configmenu, _("&Preferences"));
-		menuBar->Append(miscellaneous_menu, _("&Miscellaneous"));
-//		menuBar->Append(drill_menu, _("&Drill"));
-		menuBar->Append(helpMenu, _("&Help"));
-
-		// Associate the menu bar with the frame
-		SetMenuBar(menuBar);
-		}
-
-	else		// simple mise a jour de la liste des fichiers anciens
-		{
-		wxMenuItem * item;
-		int max_file = m_Parent->m_LastProjectMaxCount;
-		for ( ii = max_file-1; ii >=0 ; ii-- )
-			{
-			if( m_FilesMenu->FindItem(ID_LOAD_FILE_1 + ii) )
-				{
-				item = m_FilesMenu->Remove(ID_LOAD_FILE_1 + ii);
-				if ( item ) delete item;
-				}
-			}
-		for ( ii = 0; ii < max_file; ii++ )
-			{
-			if ( GetLastProject(ii).IsEmpty() ) break;
-			m_FilesMenu->Append(ID_LOAD_FILE_1 + ii, GetLastProject(ii) );
-			}
-		}
 }
 
 /*******************************************/

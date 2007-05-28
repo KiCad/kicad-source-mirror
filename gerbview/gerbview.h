@@ -20,8 +20,7 @@ typedef enum {
 	FORMAT_GERBER,
 	FORMAT_POST
 	} PlotFormat;
-
-
+	
 //eda_global wxString g_Plot_FileName;
 eda_global wxString g_PhotoFilenameExt;
 eda_global wxString g_DrillFilenameExt;
@@ -124,6 +123,7 @@ public:
 	int m_Iterpolation;		// Linear, 90 arc, Circ.
 	bool m_ImageNegative;	// TRUE = Negative image
 	int m_Current_Tool;		// Current Tool (Dcode) number selected
+	int m_Last_Pen_Command;		// Current or last pen state (0..9, set by Dn option with n <10
 	int m_CommandState;		// donne l'etat de l'analyse des commandes gerber
 	wxPoint m_CurrentPos;	// current specified coord for plot
 	wxPoint m_PreviousPos;	// old current specified coord for plot

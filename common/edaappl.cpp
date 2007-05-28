@@ -8,6 +8,10 @@
 #define EDA_BASE
 #define COMMON_GLOBL
 
+#ifdef KICAD_PYTHON
+#include <pyhandler.h>
+#endif
+
 #include "fctsys.h"
 #include <wx/image.h>
 #include "wx/html/htmlwin.h"
@@ -95,8 +99,6 @@ WinEDA_App::~WinEDA_App(void)
 	delete g_ItalicFont;
 	delete g_FixedFont;
 	delete g_MsgFont;
-	delete DrawPen;
-	delete DrawBrush;
 	if ( m_Checker ) delete m_Checker;
 	delete m_Locale;
 }
@@ -130,10 +132,6 @@ wxString EnvLang;
 	m_EDA_Config = new wxConfig(name);
 	m_EDA_CommonConfig = new wxConfig(wxT("kicad_common"));
 	
-	/* Creation des outils de trace */
-	DrawPen = new wxPen( wxT("GREEN"), 1, wxSOLID);
-	DrawBrush = new wxBrush(wxT("BLACK"), wxTRANSPARENT);
-
 	/* Creation des fontes utiles */
 	g_StdFontPointSize = FONT_DEFAULT_SIZE;
 	g_MsgFontPointSize = FONT_DEFAULT_SIZE;
@@ -166,6 +164,9 @@ bool succes = SetLanguage(TRUE);
 	if ( atof("0,1") ) g_FloatSeparator = ','; // Nombres flottants = 0,1
 	else  g_FloatSeparator = '.';
 
+#ifdef KICAD_PYTHON
+	PyHandler::GetInstance()->SetAppName( name );
+#endif
 }
 
 
@@ -589,4 +590,13 @@ wxMenuItem * item;
 	return m_Language_Menu;
 }
 
+
+int WinEDA_App::OnRun(void)
+/* Run init scripts */
+{
+	#ifdef KICAD_PYTHON
+	PyHandler::GetInstance()->RunScripts();
+	#endif
+	return wxApp::OnRun();
+}
 

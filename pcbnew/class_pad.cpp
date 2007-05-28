@@ -311,12 +311,12 @@ wxPoint shape_pos;
 		{
 		case CIRCLE :
 			if ( fillpad)
-				GRFilledCircle(&panel->m_ClipBox, DC, xc, yc, dx, color, color);
-			else GRCircle(&panel->m_ClipBox, DC, xc, yc, dx, color);
+				GRFilledCircle(&panel->m_ClipBox, DC, xc, yc, dx, 0, color, color);
+			else GRCircle(&panel->m_ClipBox, DC, xc, yc, dx, 0, color);
 
 			if(DisplayIsol)
 				{
-				GRCircle(&panel->m_ClipBox, DC,  xc, yc, dx + g_DesignSettings.m_TrackClearence, color );
+				GRCircle(&panel->m_ClipBox, DC,  xc, yc, dx + g_DesignSettings.m_TrackClearence, 0, color );
 				}
 			break;
 
@@ -431,8 +431,8 @@ wxPoint shape_pos;
 		switch ( m_DrillShape )
 		{
 			case CIRCLE:
-				if( (hole/zoom) > 1 )	/* C.a.d si le diametre est suffisant */
-					GRFilledCircle(&panel->m_ClipBox, DC, cx0, cy0, hole, color, color);
+				if( (hole/zoom) > 1 )	/* draw hole if its size is enought */
+					GRFilledCircle(&panel->m_ClipBox, DC, cx0, cy0, hole, 0, color, color);
 				break;
 				
 			case OVALE:
@@ -469,11 +469,11 @@ wxPoint shape_pos;
 		int nc_color = BLUE;
 		if(m_Masque_Layer & CMP_LAYER)	/* Trace forme \ */
 			GRLine(&panel->m_ClipBox, DC, cx0 - dx0, cy0 - dx0,
-				cx0 + dx0, cy0 + dx0, nc_color );
+				cx0 + dx0, cy0 + dx0, 0, nc_color );
 
 		if(m_Masque_Layer & CUIVRE_LAYER)	 /* Trace forme / */
 			GRLine(&panel->m_ClipBox, DC, cx0 + dx0, cy0 - dx0,
-				cx0 - dx0, cy0 + dx0, nc_color );
+				cx0 - dx0, cy0 + dx0, 0, nc_color );
 		}
 	/* Trace de la reference */
 	if( ! frame->m_DisplayPadNum) return;
@@ -509,7 +509,7 @@ $EndPAD
 {
 char Line[1024], BufLine[1024], BufCar[256];
 char * PtLine;
-int nn, ll, dx, dy, drill_shape;
+int nn, ll, dx, dy;
 
 	while( GetLine(File, Line, LineNum ) != NULL )
 		{
@@ -558,14 +558,14 @@ int nn, ll, dx, dy, drill_shape;
 				break;
 
 			case 'D':
-				drill_shape = 0;
-				nn = sscanf(PtLine,"%d %d %d %c %d %d", &m_Drill.x,
-					&m_Offset.x, &m_Offset.y, &drill_shape, &dx, &dy );
+				BufCar[0] = 0;
+				nn = sscanf(PtLine,"%d %d %d %s %d %d", &m_Drill.x,
+					&m_Offset.x, &m_Offset.y, BufCar, &dx, &dy );
 				m_Drill.y = m_Drill.x;
 				m_DrillShape = CIRCLE;
 				if (nn >= 6 )	// Drill shape = OVAL ?
 				{
-					if (drill_shape == 'O' )
+					if (BufCar[0] == 'O' )
 					{
 						m_Drill.x = dx; m_Drill.y = dy;
 						m_DrillShape = OVALE;

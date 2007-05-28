@@ -247,7 +247,10 @@ unsigned ii;
 			if( Name.CmpNoCase(ComponentName) == 0 )  /* composant localise */
 			{
 				NewModule = new MODULE(m_Pcb);
+				// Switch the locale to standard C (needed to print floating point numbers like 1.3)
+				setlocale(LC_NUMERIC, "C");
 				NewModule->ReadDescr(lib_module, &LineNum);
+				setlocale(LC_NUMERIC, "");      // revert to the current  locale
 				if( Module == NULL )	/* 1er Module */
 				{
 					m_Pcb->m_Modules = NewModule;
@@ -279,7 +282,7 @@ unsigned ii;
 
 /***************************************************************/
 wxString WinEDA_BasePcbFrame::Select_1_Module_From_List(
-				wxWindow * active_window,
+				WinEDA_DrawFrame * active_window,
 				const wxString & Library,
 				const wxString & Mask, const wxString & KeyWord)
 /***************************************************************/

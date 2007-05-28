@@ -556,8 +556,11 @@ int x0, y0, x1, y1, w;
 		RotatePoint(&x1,&y1, centre.x, centre.y, orient);
 
 		fprintf(dest,"0 setlinewidth 0 setlinecap 0 setlinejoin\n");
+		ForcePenReinit(); 	// Force init line width for PlotFilledSegmentPS
 		PlotFilledSegmentPS(wxPoint(x0, y0), wxPoint(x1, y1), w);
-		fprintf(dest,"%d setlinewidth 1 setlinecap 1 setlinejoin\n", g_PlotLine_Width);
+		ForcePenReinit(); 
+		SetCurrentLineWidthPS(0);	// Force init line width to default
+		fprintf(dest,"1 setlinecap 1 setlinejoin\n");
 		}
 
 	else {
@@ -691,7 +694,7 @@ int l_pen;			/* diam spot (plume) */
 		polygone[ii].x += centre.x;	polygone[ii].y += centre.y;
 		}
 
-	fprintf(dest,"%d setlinewidth\n", l_pen) ;
+	SetCurrentLineWidthPS( l_pen);
 
 	UserToDeviceCoordinate(polygone[0]);
 	fprintf(dest,"newpath %d %d moveto\n", polygone[0].x, polygone[0].y);

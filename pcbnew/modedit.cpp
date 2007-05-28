@@ -29,10 +29,10 @@ MODULE * Module = m_Pcb->m_Modules;
 
 	DrawStruct = Locate_Edge_Module(Module, CURSEUR_OFF_GRILLE);
 	if ( DrawStruct )
-		{
+	{
 		Affiche_Infos_Segment_Module(this, Module,(EDGE_MODULE*) DrawStruct);
-		}
-	else DrawStruct = Locate( CURSEUR_OFF_GRILLE );
+	}
+	else DrawStruct = Locate( CURSEUR_OFF_GRILLE, -1);
 
 	return DrawStruct;
 }

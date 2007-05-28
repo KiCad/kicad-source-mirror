@@ -55,10 +55,24 @@ void Move_Plume( wxPoint pos, int plume )
 		}
 }
 
+void SetCurrentLineWidth( int width)
+{
+	switch ( g_PlotFormat )
+	{
+		case PLOT_FORMAT_HPGL:
+			break;
 
-/***************************************************************/
-void PlotArc(wxPoint centre, int StAngle, int EndAngle, int rayon)
-/***************************************************************/
+		case PLOT_FORMAT_POST:
+		case PLOT_FORMAT_POST_A4:
+			SetCurrentLineWidthPS(width);
+			break;
+	}
+}
+
+
+/*******************************************************************************/
+void PlotArc(wxPoint centre, int StAngle, int EndAngle, int rayon, int width)
+/*******************************************************************************/
 /* trace d'un arc de cercle:
 	x, y = coord du centre
 	StAngle, EndAngle = angle de debut et fin
@@ -68,33 +82,33 @@ void PlotArc(wxPoint centre, int StAngle, int EndAngle, int rayon)
 	switch ( g_PlotFormat )
 		{
 		case PLOT_FORMAT_HPGL:
-			PlotArcHPGL(centre, StAngle, EndAngle, rayon);
+			PlotArcHPGL(centre, StAngle, EndAngle, rayon, width);
 			break;
 		case PLOT_FORMAT_POST:
-			PlotArcPS(centre, StAngle, EndAngle, rayon);
+			PlotArcPS(centre, StAngle, EndAngle, rayon, width);
 			break;
 		}
 }
 
-/**************************************************/
-void PlotCercle( wxPoint pos,int diametre )
-/**************************************************/
+/*******************************************************/
+void PlotCercle( wxPoint pos,int diametre, int width )
+/*******************************************************/
 {
 	switch ( g_PlotFormat )
-		{
+	{
 		case PLOT_FORMAT_HPGL:
-			PlotCircle_HPGL( pos, diametre);
+			PlotCircle_HPGL( pos, diametre, width);
 			break;
 
 		case PLOT_FORMAT_POST:
-			PlotCircle_PS(pos, diametre);
+			PlotCircle_PS(pos, diametre, width);
 			break;
-		}
+	}
 }
 
-/****************************************************/
-static void PlotPoly( int nb, int * coord, int fill)
-/****************************************************/
+/******************************************************************/
+void PlotPoly( int nb, int * coord, int fill, int width)
+/******************************************************************/
 /* Trace un polygone ferme
 	coord = tableau des coord des sommets
 	nb = nombre de coord ( 1 coord = 2 elements: X et Y du tableau )
@@ -106,11 +120,11 @@ static void PlotPoly( int nb, int * coord, int fill)
 	switch ( g_PlotFormat )
 		{
 		case PLOT_FORMAT_HPGL:
-			PlotPolyHPGL( nb, coord,  fill);
+			PlotPolyHPGL( nb, coord,  fill, width);
 			break;
 
 		case PLOT_FORMAT_POST:
-			PlotPolyPS( nb, coord,  fill);
+			PlotPolyPS( nb, coord,  fill, width);
 			break;
 		}
 }
@@ -128,6 +142,7 @@ int pX, pY;
 
 	pX = Struct->m_Pos.x; pY = Struct->m_Pos.y;
 
+	SetCurrentLineWidth(-1);
 	Move_Plume(wxPoint(pX - DELTA, pY - DELTA), 'U');
 	Move_Plume(wxPoint(pX + DELTA, pY + DELTA), 'D');
 	Move_Plume(wxPoint(pX + DELTA, pY - DELTA), 'U');
@@ -164,6 +179,7 @@ wxPoint pos;
 		Plume('U');
 		if ( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
 			SetColorMapPS ( ReturnLayerColor(LAYER_DEVICE) );
+
 		switch (DEntry->m_StructType)
 		{
 			case COMPONENT_ARC_DRAW_TYPE:
@@ -175,7 +191,7 @@ wxPoint pos;
 				pos.y = PartY + TransMat[1][0] * Arc->m_Pos.x +
 							  TransMat[1][1] * Arc->m_Pos.y;
 				MapAngles(&t1, &t2, TransMat);
-				PlotArc(pos, t1, t2, Arc->m_Rayon);
+				PlotArc(pos, t1, t2, Arc->m_Rayon, Arc->m_Width);
 			}
 				break;
 
@@ -186,7 +202,7 @@ wxPoint pos;
 								 TransMat[0][1] * Circle->m_Pos.y;
 				pos.y = PartY + TransMat[1][0] * Circle->m_Pos.x +
 								 TransMat[1][1] * Circle->m_Pos.y;
-				PlotCercle(pos, Circle->m_Rayon * 2);
+				PlotCercle(pos, Circle->m_Rayon * 2, Circle->m_Width);
 			}
 				break;
 
@@ -200,6 +216,7 @@ wxPoint pos;
 						  + TransMat[0][1] * Text->m_Pos.y;
 				pos.y = PartY + TransMat[1][0] * Text->m_Pos.x
 						  + TransMat[1][1] * Text->m_Pos.y;
+				SetCurrentLineWidth(-1);
 				PlotGraphicText(g_PlotFormat, pos , CharColor,
 							Text->m_Text,
 							t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
@@ -211,15 +228,16 @@ wxPoint pos;
 			case COMPONENT_RECT_DRAW_TYPE:
 			{
 				LibDrawSquare * Square = (LibDrawSquare *) DEntry;
-				x1 = PartX + TransMat[0][0] * Square->m_Start.x
-						  + TransMat[0][1] * Square->m_Start.y;
-				y1 = PartY + TransMat[1][0] * Square->m_Start.x
-						  + TransMat[1][1] * Square->m_Start.y;
+				x1 = PartX + TransMat[0][0] * Square->m_Pos.x
+						  + TransMat[0][1] * Square->m_Pos.y;
+				y1 = PartY + TransMat[1][0] * Square->m_Pos.x
+						  + TransMat[1][1] * Square->m_Pos.y;
 				x2 = PartX + TransMat[0][0] * Square->m_End.x
 						  + TransMat[0][1] * Square->m_End.y;
 				y2 = PartY + TransMat[1][0] * Square->m_End.x
 						 + TransMat[1][1] * Square->m_End.y;
 
+				SetCurrentLineWidth(Square->m_Width);
 				Move_Plume(wxPoint(x1, y1), 'U');
 				Move_Plume(wxPoint(x1, y2), 'D');
 				Move_Plume(wxPoint(x2, y2), 'D');
@@ -246,6 +264,7 @@ wxPoint pos;
 						  + TransMat[1][1] * Pin->m_Pos.y;
 
 				/* Dessin de la pin et du symbole special associe */
+				SetCurrentLineWidth(-1);
 				PlotPinSymbol(x2, y2, Pin->m_PinLen, orient, Pin->m_PinShape);
 				wxPoint pinpos(x2, y2);
 				Pin->PlotPinTexts(pinpos, orient,
@@ -267,7 +286,7 @@ wxPoint pos;
 							 TransMat[1][0] * polyline->PolyList[ii * 2] +
 							 TransMat[1][1] * polyline->PolyList[ii * 2 + 1];
 				}
-				PlotPoly(ii, Poly, polyline->m_Fill);
+				PlotPoly(ii, Poly, polyline->m_Fill, polyline->m_Width);
 				MyFree(Poly);
 			}
 				break;
@@ -356,6 +375,8 @@ int orient, color = -1;
 			vjustify = - vjustify;
 	}
 
+	SetCurrentLineWidth(-1);
+
 	if( !IsMulti || (FieldNumber != REFERENCE) )
 	{
 		PlotGraphicText( g_PlotFormat, wxPoint(px, py), color, Field->m_Text,
@@ -390,6 +411,8 @@ int color;
 	if ( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
 		SetColorMapPS ( color );
 
+	SetCurrentLineWidth(-1);
+
 	MapX1 = MapY1 = 0; x1 = posX; y1 = posY;
 	switch ( orient )
 		{
@@ -411,7 +434,7 @@ int color;
 		{
 		PlotCercle( wxPoint(MapX1 * INVERT_PIN_RADIUS + x1,
 					MapY1 * INVERT_PIN_RADIUS + y1),
-					INVERT_PIN_RADIUS * 2 );
+					INVERT_PIN_RADIUS * 2);
 
 		Move_Plume( wxPoint(MapX1 * INVERT_PIN_RADIUS * 2 + x1,
 						MapY1 * INVERT_PIN_RADIUS * 2 + y1), 'U' );
@@ -514,6 +537,8 @@ int HalfSize;
 
 	if(Size.x == 0 ) Size = wxSize(DEFAULT_SIZE_TEXT, DEFAULT_SIZE_TEXT);
 
+	SetCurrentLineWidth(-1);
+
 	switch(Orient)
 		{
 		case 0:		/* Orientation horiz normale */
@@ -587,7 +612,7 @@ static void PlotSheetLabelStruct(DrawSheetLabelStruct *Struct)
 {
 int side, txtcolor = -1;
 int posx , tposx, posy, size, size2;
-int coord[12];
+int coord[16];
 
 	if ( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
 		txtcolor = ReturnLayerColor(Struct->m_Layer);
@@ -617,7 +642,8 @@ int coord[12];
 			coord[6] = posx + size; coord[7] = posy;
 			coord[8] = posx + size2; coord[9] = posy + size2;
 			coord[10] = posx ; coord[11] = posy + size2;
-			PlotPoly(6, coord, FILL);
+			coord[12] = posx; coord[13] = posy;
+			PlotPoly(7, coord, NOFILL);
 			break;
 
 		case 1:		/* output <| */
@@ -625,7 +651,8 @@ int coord[12];
 			coord[4] = posx + size; coord[5] = posy - size2;
 			coord[6] = posx + size; coord[7] = posy + size2;
 			coord[8] = posx + size2; coord[9] = posy + size2;
-			PlotPoly(5, coord, FILL);
+			coord[10] = posx; coord[11] = posy;
+			PlotPoly(6, coord, NOFILL);
 			break;
 
 		case 2:		/* bidi <> */
@@ -633,7 +660,8 @@ int coord[12];
 			coord[2] = posx + size2; coord[3] = posy - size2;
 			coord[4] = posx + size; coord[5] = posy;
 			coord[6] = posx + size2; coord[7] = posy +size2;
-			PlotPoly(4, coord, FILL);
+			coord[8] = posx; coord[9] = posy;
+			PlotPoly(5, coord, NOFILL);
 			break;
 
 		default:	 /* unsp []*/
@@ -641,7 +669,8 @@ int coord[12];
 			coord[4] = posx + size; coord[5] = posy - size2;
 			coord[6] = posx + size; coord[7] = posy + size2;
 			coord[8] = posx ; coord[9] = posy + size2;
-			PlotPoly(5, coord, NOFILL);
+			coord[10] = posx; coord[11] = posy;
+			PlotPoly(6, coord, NOFILL);
 			break;
 	}
 }
@@ -659,6 +688,9 @@ wxPoint pos;
 
 	if ( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
 		SetColorMapPS ( ReturnLayerColor(Struct->m_Layer) );
+
+	SetCurrentLineWidth(-1);
+
 	Move_Plume(Struct->m_Pos, 'U');
 	pos = Struct->m_Pos; pos.x += Struct->m_Size.x;
 	Move_Plume(pos,'D');

@@ -122,8 +122,9 @@ wxString path = wxPathOnly(FullFileName);
 
 	ActiveScreen = GetScreen();
 	if( filename == wxEmptyString)
-		{
+	{
 		wxString mask = wxT("*") + g_PhotoFilenameExt;
+		mask += wxT(";*.gbr;*.lgr;*.ger");
 		filename = EDA_FileSelector(_("GERBER PLOT files:"),
 					path,					/* Chemin par defaut */
 					wxEmptyString,					 	/* nom fichier par defaut */
@@ -134,7 +135,7 @@ wxString path = wxPathOnly(FullFileName);
 					FALSE
 					);
 		if ( filename == wxEmptyString ) return FALSE;
-		}
+	}
 
 	GetScreen()->m_FileName = filename;
 	wxSetWorkingDirectory(path);

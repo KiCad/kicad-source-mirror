@@ -36,7 +36,8 @@ sous le courseur souris
 {
 bool PopupOn = m_CurrentScreen->m_CurrentItem  &&
 			m_CurrentScreen->m_CurrentItem->m_Flags;
-
+bool RefreshToolBar = FALSE;	// We must refresh tool bar when the undo/redo tool state is modified
+	
 	if ( hotkey == 0 ) return;
 
 	switch (hotkey)
@@ -44,7 +45,7 @@ bool PopupOn = m_CurrentScreen->m_CurrentItem  &&
 		case WXK_DELETE:
 		case WXK_NUMPAD_DELETE:
 			if ( PopupOn ) break;
-			LocateAndDeleteItem(this, DC);
+			RefreshToolBar = LocateAndDeleteItem(this, DC);
 			m_CurrentScreen->SetModify();
 			m_CurrentScreen->m_CurrentItem = NULL;
 			TestDanglingEnds(m_CurrentScreen->EEDrawList, DC);
@@ -69,6 +70,12 @@ bool PopupOn = m_CurrentScreen->m_CurrentItem  &&
 			switch (DrawStruct->m_StructType)
 			{
 				case DRAW_LIB_ITEM_STRUCT_TYPE:
+					if ( DrawStruct->m_Flags == 0 )
+					{
+						SaveCopyInUndoList(DrawStruct, IS_CHANGED);
+						RefreshToolBar = TRUE;
+					}
+						
 					CmpRotationMiroir(
 						(EDA_SchComponentStruct *) DrawStruct, DC, CMP_ROTATE_COUNTERCLOCKWISE );
 					break;
@@ -76,6 +83,11 @@ bool PopupOn = m_CurrentScreen->m_CurrentItem  &&
 				case DRAW_TEXT_STRUCT_TYPE:
 				case DRAW_LABEL_STRUCT_TYPE:
 				case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
+					if ( DrawStruct->m_Flags == 0 )
+					{
+						SaveCopyInUndoList(DrawStruct, IS_CHANGED);
+						RefreshToolBar = TRUE;
+					}
 						ChangeTextOrient( (DrawTextStruct*)DrawStruct, DC);
 						break;
 			}
@@ -87,6 +99,11 @@ bool PopupOn = m_CurrentScreen->m_CurrentItem  &&
 				DrawStruct = LocateSmallestComponent( GetScreen() );
 			if ( DrawStruct )
 			{
+				if ( DrawStruct->m_Flags == 0 )
+				{
+					SaveCopyInUndoList(DrawStruct, IS_CHANGED);
+					RefreshToolBar = TRUE;
+				}
 				CmpRotationMiroir(
 					(EDA_SchComponentStruct *) DrawStruct, DC, CMP_MIROIR_Y );
 			}
@@ -98,6 +115,11 @@ bool PopupOn = m_CurrentScreen->m_CurrentItem  &&
 				DrawStruct = LocateSmallestComponent( GetScreen() );
 			if ( DrawStruct )
 			{
+				if ( DrawStruct->m_Flags == 0 )
+				{
+					SaveCopyInUndoList(DrawStruct, IS_CHANGED);
+					RefreshToolBar = TRUE;
+				}
 				CmpRotationMiroir(
 					(EDA_SchComponentStruct *) DrawStruct, DC, CMP_MIROIR_X );
 			}
@@ -109,6 +131,11 @@ bool PopupOn = m_CurrentScreen->m_CurrentItem  &&
 				DrawStruct = LocateSmallestComponent( GetScreen() );
 			if ( DrawStruct )
 			{
+				if ( DrawStruct->m_Flags == 0 )
+				{
+					SaveCopyInUndoList(DrawStruct, IS_CHANGED);
+					RefreshToolBar = TRUE;
+				}
 				CmpRotationMiroir(
 					(EDA_SchComponentStruct *) DrawStruct, DC, CMP_NORMAL );
 				TestDanglingEnds(m_CurrentScreen->EEDrawList, DC);
@@ -127,4 +154,6 @@ bool PopupOn = m_CurrentScreen->m_CurrentItem  &&
 			}
 			break;
 	}
+	
+	if ( RefreshToolBar ) SetToolbars();
 }

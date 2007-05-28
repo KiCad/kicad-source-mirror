@@ -59,7 +59,6 @@ wxSize minsize;
 	m_MenuBar = NULL;		// menu du haut d'ecran
 	m_ID_current_state = 0;
 	m_HTOOL_current_state = 0;
-	m_FrameIsActive = FALSE;
 	m_Draw_Axis = FALSE;			// TRUE pour avoir les axes dessines
 	m_Draw_Grid = FALSE;			// TRUE pour avoir la axes dessinee
 	m_Draw_Sheet_Ref = FALSE;		// TRUE pour avoir le cartouche dessiné

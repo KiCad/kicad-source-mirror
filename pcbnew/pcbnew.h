@@ -210,7 +210,6 @@ eda_global int Texte_Module_Type;
 	/* pistes , vias , pads*/
 	/***********************/
 
-#define NO_TST_LAYER -1	/* parametre de Locate_Pistes(): suppression tst layer */
 #define L_MIN_DESSIN 1	/* seuil de largeur des pistes pour trace autre que filaire */
 
 // Current designe settings:

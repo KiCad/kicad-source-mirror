@@ -48,10 +48,18 @@ enum pseudokeys {
 #define GERBVIEW_EXE wxT("gerbview.exe")
 
 #else
+#ifndef __WXMAC__
 #define CVPCB_EXE wxT("cvpcb")
 #define PCBNEW_EXE wxT("pcbnew")
 #define EESCHEMA_EXE wxT("eeschema")
 #define GERBVIEW_EXE wxT("gerbview")
+#endif
+#ifdef __WXMAC__
+#define CVPCB_EXE wxT("cvpcb.app")
+#define PCBNEW_EXE wxT("pcbnew.app")
+#define EESCHEMA_EXE wxT("eeschema.app")
+#define GERBVIEW_EXE wxT("gerbview.app")
+#endif
 #endif
 
 
@@ -389,6 +397,8 @@ int Get_Message(const wxString & titre, wxString & buffer, wxWindow * frame) ;
 /************************/
 
 wxString GetEditorName(void);	// Return the prefered editor name
+void OpenPDF( const wxString & file );
+void OpenFile( const wxString & file );
 
 
 bool EDA_DirectorySelector(const wxString & Title,		/* Titre de la fenetre */
@@ -516,13 +526,8 @@ bool WildCompareString(const wxString & pattern, const wxString & string_to_tst,
 			retourne TRUE si match FALSE si differences */
 
 char * to_point(char * Text);
-	/* convertit les , en . dans une chaine. utilisé pour compenser un defaut de la fct printf sous linux-mandrake
-	qui genere les flottants avec une virgule au lieu du point */
-
-char * from_point(char * Text);
-	/* convertit les . en , dans une chaine. utilisé pour compenser
-	la francisation imbecile de la fct scanf sous linux-mandrake ou mingw
-	qui lit les flottants avec une virgule au lieu du point */
+	/* convertit les , en . dans une chaine. utilisé pour compenser la fct printf
+	qui genere les flottants avec une virgule au lieu du point en mode international */
 
 /****************/
 /* infospgm.cpp */

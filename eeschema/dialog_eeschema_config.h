@@ -38,11 +38,6 @@
 
 ////@begin control identifiers
 #define ID_DIALOG 10000
-#define SYMBOL_KICONFIGEESCHEMAFRAME_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX
-#define SYMBOL_KICONFIGEESCHEMAFRAME_TITLE _("Dialog")
-#define SYMBOL_KICONFIGEESCHEMAFRAME_IDNAME ID_DIALOG
-#define SYMBOL_KICONFIGEESCHEMAFRAME_SIZE wxSize(400, 300)
-#define SYMBOL_KICONFIGEESCHEMAFRAME_POSITION wxDefaultPosition
 #define SAVE_CFG 10001
 #define FORMAT_NETLIST 10006
 #define DEL_LIB 10002
@@ -50,6 +45,12 @@
 #define INSERT_LIB 10004
 #define ID_LIST_LIBS 10005
 #define ID_TEXTCTRL 10007
+#define ID_LIB_PATH_SEL 10008
+#define SYMBOL_KICONFIGEESCHEMAFRAME_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX
+#define SYMBOL_KICONFIGEESCHEMAFRAME_TITLE _("Dialog")
+#define SYMBOL_KICONFIGEESCHEMAFRAME_IDNAME ID_DIALOG
+#define SYMBOL_KICONFIGEESCHEMAFRAME_SIZE wxSize(400, 300)
+#define SYMBOL_KICONFIGEESCHEMAFRAME_POSITION wxDefaultPosition
 ////@end control identifiers
 
 /*!
@@ -99,6 +100,9 @@ public:
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for INSERT_LIB
     void OnInsertLibClick( wxCommandEvent& event );
+
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_LIB_PATH_SEL
+    void OnLibPathSelClick( wxCommandEvent& event );
 
 ////@end KiConfigEeschemaFrame event handler declarations
 

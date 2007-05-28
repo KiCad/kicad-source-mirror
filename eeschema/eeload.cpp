@@ -19,12 +19,13 @@ static void LoadSubHierarchy(WinEDA_SchematicFrame * frame, EDA_BaseStruct *Draw
 
 /* Variables locales */
 
+
 /************************************************************************************/
 int WinEDA_SchematicFrame::LoadOneEEProject(const wxString & FileName, bool IsNew)
 /************************************************************************************/
 /*
-	Routine de chargement d'un projet ( schema principal "Root" et ses
-	sous schemas ( hierarchie )
+	Load an entire project ( shcematic root file and its subhierarchies, the configuration and the libs
+	which are not already loaded)
 */
 {
 SCH_SCREEN *screen;

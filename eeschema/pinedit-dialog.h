@@ -50,11 +50,6 @@ class wxSpinCtrl;
 
 ////@begin control identifiers
 #define ID_DIALOG 10000
-#define SYMBOL_WINEDA_PINPROPERTIESFRAME_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX
-#define SYMBOL_WINEDA_PINPROPERTIESFRAME_TITLE _("Pin properties")
-#define SYMBOL_WINEDA_PINPROPERTIESFRAME_IDNAME ID_DIALOG
-#define SYMBOL_WINEDA_PINPROPERTIESFRAME_SIZE wxSize(400, 300)
-#define SYMBOL_WINEDA_PINPROPERTIESFRAME_POSITION wxDefaultPosition
 #define ID_TEXTCTRL 10001
 #define ID_TEXTCTRL1 10002
 #define ID_SPINCTRL 10003
@@ -66,6 +61,11 @@ class wxSpinCtrl;
 #define ID_RADIOBOX 10009
 #define ID_RADIOBOX1 10012
 #define ID_RADIOBOX2 10013
+#define SYMBOL_WINEDA_PINPROPERTIESFRAME_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX
+#define SYMBOL_WINEDA_PINPROPERTIESFRAME_TITLE _("Pin properties")
+#define SYMBOL_WINEDA_PINPROPERTIESFRAME_IDNAME ID_DIALOG
+#define SYMBOL_WINEDA_PINPROPERTIESFRAME_SIZE wxSize(400, 300)
+#define SYMBOL_WINEDA_PINPROPERTIESFRAME_POSITION wxDefaultPosition
 ////@end control identifiers
 
 /*!
@@ -98,11 +98,11 @@ public:
 
 ////@begin WinEDA_PinPropertiesFrame event handler declarations
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
-    void OnOkClick( wxCommandEvent& event );
-
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
     void OnCancelClick( wxCommandEvent& event );
+
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
+    void OnOkClick( wxCommandEvent& event );
 
 ////@end WinEDA_PinPropertiesFrame event handler declarations
 

@@ -20,7 +20,6 @@
 
 ////@begin includes
 #include "wx/valgen.h"
-#include "wx/spinctrl.h"
 ////@end includes
 
 /*!
@@ -29,7 +28,6 @@
 
 ////@begin forward declarations
 class wxBoxSizer;
-class wxSpinCtrl;
 ////@end forward declarations
 
 /*!
@@ -41,7 +39,6 @@ class wxSpinCtrl;
 #define ID_SET_PRINT_SCALE 10004
 #define ID_TEXTCTRL 10009
 #define ID_TEXTCTRL1 10010
-#define ID_PEN_WIDTH 10005
 #define ID_PRINT_REF 10006
 #define ID_CHECK_PRINT_MIROR 10011
 #define ID_SET_BW 10007
@@ -90,9 +87,6 @@ public:
     /// wxEVT_COMMAND_RADIOBOX_SELECTED event handler for ID_SET_PRINT_SCALE
     void OnSetPrintScaleSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_SPINCTRL_UPDATED event handler for ID_PEN_WIDTH
-    void OnPenWidthUpdated( wxSpinEvent& event );
-
     /// wxEVT_COMMAND_RADIOBOX_SELECTED event handler for ID_SET_BW
     void OnSetBwSelected( wxCommandEvent& event );
 
@@ -126,12 +120,12 @@ public:
 	void OnPrintSetup(wxCommandEvent& event);
 	void OnPrintPreview(wxCommandEvent& event);
 	void EDA_PrintPage(wxCommandEvent& event);
-	void SetPenWidth(wxSpinEvent& event);
 	void SetColorOrBlack(wxCommandEvent& event);
 	void SetScale(wxCommandEvent& event);
 	int SetLayerMaskFromListSelection(void);
 	wxString BuildPrintTitle(void);
 	void SetOthersDatas(void);
+	void SetPenWidth(void);
 
 
 ////@begin WinEDA_PrintFrame member variables
@@ -142,7 +136,7 @@ public:
     wxTextCtrl* m_FineAdjustXscaleOpt;
     wxStaticText* m_FineAdjustYscaleTitle;
     wxTextCtrl* m_FineAdjustYscaleOpt;
-    wxSpinCtrl* m_ButtPenWidth;
+    wxBoxSizer* m_DialogPenWidthSizer;
     wxCheckBox* m_Print_Sheet_Ref;
     wxCheckBox* m_Print_Mirror;
     wxRadioBox* m_ColorOption;
@@ -152,6 +146,7 @@ public:
 
 	WinEDA_DrawFrame * m_Parent;
     wxRadioBox* m_PagesOption;
+	WinEDA_ValueCtrl * m_DialogPenWidth;
 	wxCheckBox * m_BoxSelecLayer[32];
 	double m_XScaleAdjust, m_YScaleAdjust;
 };

@@ -63,6 +63,7 @@ public:
 	WinEDA_App(void);
 	~WinEDA_App(void);
 	bool OnInit(void);
+	int OnRun(void);
 
 	bool SetBinDir(void);
 	void InitEDA_Appl(const wxString & name);

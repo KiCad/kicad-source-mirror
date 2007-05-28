@@ -100,6 +100,7 @@ LibDrawField *Field = (LibDrawField *)CurrentDrawItem;
 			break;
 		}
 
+int LineWidth = MAX(Field->m_Width, g_DrawMinimunLineWidth);
 	if( Field->m_Attributs & TEXT_NO_VISIBLE ) color = DARKGRAY;
 	if( erase )
 		DrawGraphicText(panel, DC,
@@ -107,7 +108,7 @@ LibDrawField *Field = (LibDrawField *)CurrentDrawItem;
 				color, Field->m_Text,
 				Field->m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
 				Field->m_Size,
-				Field->m_HJustify, Field->m_VJustify);
+				Field->m_HJustify, Field->m_VJustify, LineWidth);
 
 
 	LastTextPosition.x = panel->GetScreen()->m_Curseur.x;
@@ -120,7 +121,7 @@ LibDrawField *Field = (LibDrawField *)CurrentDrawItem;
 			color, Field->m_Text,
 			Field->m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
 			Field->m_Size,
-			Field->m_HJustify, Field->m_VJustify);
+			Field->m_HJustify, Field->m_VJustify, LineWidth);
 }
 
 /*******************************************************************/
@@ -131,10 +132,8 @@ int color;
 
 	if(Field == NULL ) return;
 
-	GRSetDrawMode(DC, GR_DEFAULT_DRAWMODE);
-
 	switch (Field->m_FieldId)
-		{
+	{
 		case REFERENCE:
 			color = ReturnLayerColor(LAYER_REFERENCEPART);
 			break;
@@ -146,18 +145,25 @@ int color;
 		default:
 			color = ReturnLayerColor(LAYER_FIELDS);
 			break;
-		}
+	}
 
-	if( Field->m_Attributs & TEXT_NO_VISIBLE ) color = DARKGRAY;
+	Field->m_Flags = 0;
+
+
+	if( (Field->m_Attributs & TEXT_NO_VISIBLE) != 0 ) color = DARKGRAY;
 	Field->m_Pos.x = GetScreen()->m_Curseur.x;
 	Field->m_Pos.y = - GetScreen()->m_Curseur.y;
+int LineWidth = MAX(Field->m_Width, g_DrawMinimunLineWidth);
+	DrawPanel->CursorOff(DC);
+
+	GRSetDrawMode(DC, GR_DEFAULT_DRAWMODE);
 	DrawGraphicText(DrawPanel, DC, wxPoint(Field->m_Pos.x, - Field->m_Pos.y),
 					color, Field->m_Text,
 					Field->m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
 					Field->m_Size,
-					Field->m_HJustify, Field->m_VJustify);
+					Field->m_HJustify, Field->m_VJustify, LineWidth);
 
-	Field->m_Flags = 0;
+	DrawPanel->CursorOn(DC);
 
 	m_CurrentScreen->SetModify();
 	DrawPanel->ManageCurseur = NULL;
@@ -200,11 +206,12 @@ wxString title = wxT("Text:");
 	Text.Replace( wxT(" ") , wxT("_") );
 
 	GRSetDrawMode(DC, g_XorMode);
+int LineWidth = MAX(Field->m_Width, g_DrawMinimunLineWidth);
 	DrawGraphicText(DrawPanel, DC, wxPoint(Field->m_Pos.x, - Field->m_Pos.y),
 					color, Field->m_Text,
 					Field->m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
 					Field->m_Size,
-					Field->m_HJustify, Field->m_VJustify);
+					Field->m_HJustify, Field->m_VJustify, LineWidth);
 
 	if( ! Text.IsEmpty() )
 	{
@@ -219,7 +226,7 @@ wxString title = wxT("Text:");
 					color, Field->m_Text,
 					Field->m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
 					Field->m_Size,
-					Field->m_HJustify, Field->m_VJustify);
+					Field->m_HJustify, Field->m_VJustify, LineWidth);
 
 	m_CurrentScreen->SetModify();
 
@@ -254,14 +261,17 @@ int color;
 			break;
 		}
 
-	if( Field->m_Attributs & TEXT_NO_VISIBLE  ) color = DARKGRAY;
+	if( (Field->m_Attributs & TEXT_NO_VISIBLE) != 0  ) color = DARKGRAY;
+
+	DrawPanel->CursorOff(DC);
 
 	GRSetDrawMode(DC, g_XorMode);
+int LineWidth = MAX(Field->m_Width, g_DrawMinimunLineWidth);
 	DrawGraphicText(DrawPanel, DC, wxPoint(Field->m_Pos.x, - Field->m_Pos.y),
 					color, Field->m_Text,
 					Field->m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
 					Field->m_Size,
-					Field->m_HJustify, Field->m_VJustify);
+					Field->m_HJustify, Field->m_VJustify, LineWidth);
 
 	if( Field->m_Orient) Field->m_Orient = 0;
 	else Field->m_Orient = 1;
@@ -272,7 +282,8 @@ int color;
 					color, Field->m_Text,
 					Field->m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
 					Field->m_Size,
-					Field->m_HJustify, Field->m_VJustify);
+					Field->m_HJustify, Field->m_VJustify, LineWidth);
+	DrawPanel->CursorOn(DC);
 }
 
 

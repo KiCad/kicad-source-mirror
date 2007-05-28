@@ -43,7 +43,7 @@ void DRAG_SEGM::SetInitialValues(void)
 /*******************************************************************/
 void Dessine_Segments_Dragges(WinEDA_DrawPanel * panel, wxDC * DC)
 /*******************************************************************/
-/* trace les segments dragges en mode EDIT  */
+/* Redraw the list of segments starting in g_DragSegmentList, while moving a footprint */
 {
 D_PAD* pt_pad;
 TRACK * Track;
@@ -53,7 +53,7 @@ DRAG_SEGM * pt_drag;
 
 	pt_drag = g_DragSegmentList;
 	for( ; pt_drag; pt_drag = pt_drag->Pnext)
-		{
+	{
 		int px, py;
 
 		Track = pt_drag->m_Segm;
@@ -62,20 +62,20 @@ DRAG_SEGM * pt_drag;
 
 		pt_pad = pt_drag->m_Pad_Start;
 		if( pt_pad)
-			{
+		{
 			px = pt_pad->m_Pos.x - g_Offset_Module.x;
 			py = pt_pad->m_Pos.y - g_Offset_Module.y;
 			Track->m_Start.x = px; Track->m_Start.y = py;
-			}
+		}
 		pt_pad = pt_drag->m_Pad_End;
 		if( pt_pad)
-			{
+		{
 			px = pt_pad->m_Pos.x - g_Offset_Module.x;
 			py = pt_pad->m_Pos.y - g_Offset_Module.y;
 			Track->m_End.x = px; Track->m_End.y = py;
-			}
-		Track->Draw(panel, DC, GR_XOR);
 		}
+		Track->Draw(panel, DC, GR_XOR);
+	}
 }
 
 
@@ -111,40 +111,52 @@ void Build_1_Pad_SegmentsToDrag(WinEDA_DrawPanel * panel, wxDC * DC, D_PAD * PtP
 TRACK * Track;
 DRAG_SEGM * pt_drag;
 int net_code = PtPad->m_NetCode;
-int pX, pY, MasqueLayer;
+int MasqueLayer;
+wxPoint pos;
 BOARD * pcb = ((WinEDA_BasePcbFrame*)(panel->m_Parent))->m_Pcb;
 
 	Track = pcb->m_Track->GetStartNetCode(net_code);
 
-	pX = PtPad->m_Pos.x; pY = PtPad->m_Pos.y;
+	pos = PtPad->m_Pos;
 	MasqueLayer = PtPad->m_Masque_Layer;
 	for( ; Track != NULL; Track = (TRACK*)Track->Pnext )
 	{
 		if( Track->m_NetCode != net_code ) break;	/* hors zone */
 		if( (MasqueLayer & Track->ReturnMaskLayer()) == 0 ) continue; /* couches differentes */
-		if( (pX == Track->m_Start.x) && (pY == Track->m_Start.y) )
+		if( pos == Track->m_Start )
 		{
-			pt_drag  = new DRAG_SEGM(Track);
-			pt_drag->Pnext = g_DragSegmentList;
-			g_DragSegmentList = pt_drag;
-			pt_drag->m_Pad_Start = PtPad;
-			Track->Draw(panel, DC, GR_XOR);
-			Track->SetState(EDIT,ON);
-			Track->Draw(panel, DC, GR_XOR);
+			AddSegmentToDragList(panel, DC, STARTPOINT, Track);
+			g_DragSegmentList->m_Pad_Start = PtPad;
 		}
-		if( (pX == Track->m_End.x) && (pY == Track->m_End.y) )
+		if( pos == Track->m_End )
 		{
-			pt_drag  = new DRAG_SEGM(Track);
-			pt_drag->Pnext = g_DragSegmentList;
-			g_DragSegmentList = pt_drag;
-			pt_drag->m_Pad_End = PtPad;
-			Track->Draw(panel, DC, GR_XOR);
-			Track->SetState(EDIT,ON);
-			Track->Draw(panel, DC, GR_XOR);
+			AddSegmentToDragList(panel, DC, ENDPOINT, Track);
+			g_DragSegmentList->m_Pad_End = PtPad;
 		}
 	}
 }
 
+/******************************************************************/
+void AddSegmentToDragList(WinEDA_DrawPanel * panel, wxDC * DC,
+	int flag, TRACK * Track)
+/******************************************************************/
+/* Add the segment"Track" to the drag list, and erase it from screen
+	flag = STARTPOINT (if the point to drag is the start point of Track) or ENDPOINT
+*/
+{
+DRAG_SEGM * pt_drag;
+
+	pt_drag  = new DRAG_SEGM(Track);
+	pt_drag->Pnext = g_DragSegmentList;
+	g_DragSegmentList = pt_drag;
+	if ( (flag & STARTPOINT) ) pt_drag->m_Flag |= 1;
+	if ( (flag & ENDPOINT) ) pt_drag->m_Flag |= 2;
+	Track->Draw(panel, DC, GR_XOR);
+	Track->SetState(EDIT,ON);
+	if ( (flag & STARTPOINT) ) Track->m_Flags |= STARTPOINT;
+	if ( (flag & ENDPOINT) ) Track->m_Flags |= ENDPOINT; 
+	Track->Draw(panel, DC, GR_XOR);
+}
 
 /**********************************************************************************/
 void Collect_TrackSegmentsToDrag(WinEDA_DrawPanel * panel, wxDC * DC,
@@ -155,39 +167,22 @@ void Collect_TrackSegmentsToDrag(WinEDA_DrawPanel * panel, wxDC * DC,
 */
 {
 TRACK * Track;
-DRAG_SEGM * pt_drag;
-int pX, pY;
 BOARD * pcb = ((WinEDA_BasePcbFrame*)(panel->m_Parent))->m_Pcb;
 
 	Track = pcb->m_Track->GetStartNetCode(net_code);
 
-	pX = point.x; pY = point.y;
 	for( ; Track != NULL; Track = (TRACK*)Track->Pnext )
 	{
 		if( Track->m_NetCode != net_code ) break;	/* hors zone */
 		if( (MasqueLayer & Track->ReturnMaskLayer()) == 0 ) continue; /* couches differentes */
 		if ( Track->m_Flags & IS_DRAGGED) continue;		// already in list
-		if( (pX == Track->m_Start.x) && (pY == Track->m_Start.y) )
+		if( Track->m_Start == point )
 		{
-			pt_drag  = new DRAG_SEGM(Track);
-			pt_drag->Pnext = g_DragSegmentList;
-			g_DragSegmentList = pt_drag;
-			pt_drag->m_Flag |= 1;
-			Track->Draw(panel, DC, GR_XOR);
-			Track->SetState(EDIT,ON);
-			Track->m_Flags |= STARTPOINT;
-			Track->Draw(panel, DC, GR_XOR);
+			AddSegmentToDragList(panel, DC, STARTPOINT, Track);
 		}
-		if( (pX == Track->m_End.x) && (pY == Track->m_End.y) )
+		if( Track->m_End == point )
 		{
-			pt_drag  = new DRAG_SEGM(Track);
-			pt_drag->Pnext = g_DragSegmentList;
-			g_DragSegmentList = pt_drag;
-			pt_drag->m_Flag |= 2;
-			Track->m_Flags |= ENDPOINT;
-			Track->Draw(panel, DC, GR_XOR);
-			Track->SetState(EDIT,ON);
-			Track->Draw(panel, DC, GR_XOR);
+			AddSegmentToDragList(panel, DC, ENDPOINT, Track);
 		}
 	}
 }

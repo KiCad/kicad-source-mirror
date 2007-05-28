@@ -39,6 +39,12 @@ wxMenuBar * menuBar = GetMenuBar();
 	    item->SetBitmap(open_xpm);
 		m_FilesMenu->Append(item);
 
+		item = new wxMenuItem(m_FilesMenu, ID_LOAD_ONE_SHEET,
+						_("&Reload the current sheet"),
+						_("Load or reload a schematic file from file into the current sheet") );
+	    item->SetBitmap(import_xpm);
+		m_FilesMenu->Append(item);
+
 		m_FilesMenu->AppendSeparator();
 		item = new wxMenuItem(m_FilesMenu,ID_SAVE_PROJECT,
 					 _("&Save Schematic Project"),

@@ -17,6 +17,63 @@ static void Pad_Surbrillance(WinEDA_DrawPanel * panel, wxDC * DC, MODULE * Modul
 /* variables locales : */
 static int draw_mode ;
 
+
+/*********************************************************/
+void WinEDA_PcbFrame::Liste_Equipot(wxCommandEvent & event)
+/*********************************************************/
+/* Display a filtered list of equipot names
+	if an equipot is selected the corresponding tracks and pads are highlighted
+*/
+{
+EQUIPOT * Equipot ;
+wxString msg;
+WinEDA_TextFrame * List;
+int ii, jj;
+
+	msg = wxT("*");
+	Get_Message(_("Filter for net names:"),msg, this);
+	if ( msg.IsEmpty() ) return;
+
+	List = new WinEDA_TextFrame(this, _("List Nets") );
+
+	Equipot = (EQUIPOT*) m_Pcb->m_Equipots;
+	for ( ; Equipot != NULL; Equipot = (EQUIPOT*)Equipot->Pnext )
+	{
+		wxString Line;
+		/* calcul adr relative du nom de la pastille reference de la piste */
+		if( ! WildCompareString(msg, Equipot->m_Netname, FALSE ) ) continue ;
+
+		Line.Printf( wxT("net_code = %3.3d  [%.16s] "),Equipot->m_NetCode,
+											Equipot->m_Netname.GetData());
+		List->Append(Line);
+	}
+	ii = List->ShowModal(); List->Destroy();
+	if (ii < 0) return;
+
+	/* Recherche du numero de net rellement selectionné */
+	Equipot = (EQUIPOT*) m_Pcb->m_Equipots;
+	for ( jj = 0; Equipot != NULL; Equipot = (EQUIPOT*)Equipot->Pnext )
+	{
+		/* calcul adr relative du nom de la pastille reference de la piste */
+		if( ! WildCompareString(msg, Equipot->m_Netname, FALSE) ) continue ;
+		if ( ii == jj )
+		{
+			ii = Equipot->m_NetCode;
+			break;
+		}
+		jj++;
+	}
+
+
+wxClientDC dc(DrawPanel);
+	DrawPanel->PrepareGraphicContext(&dc);
+
+	if(g_HightLigt_Status) Hight_Light(&dc);
+	g_HightLigth_NetCode = ii;
+	Hight_Light(&dc);
+}
+
+
 /**************************************************/
 int WinEDA_PcbFrame::Select_High_Light(wxDC * DC)
 /**************************************************/
@@ -66,29 +123,26 @@ void WinEDA_PcbFrame::Hight_Light(wxDC * DC)
 /****************************************************************/
 void WinEDA_PcbFrame::DrawHightLight(wxDC * DC, int NetCode)
 /****************************************************************/
-/* Met ou supprime la surbrillance d'un net de nom NetName
+/* Turn On or OFF the HightLight for trcak and pads with the netcode "NetCode'
 */
 {
 TRACK * pts ;
 MODULE * Module;
-PCB_SCREEN * OldScreen = (PCB_SCREEN *) ActiveScreen;
 
 	if(g_HightLigt_Status ) draw_mode = GR_SURBRILL | GR_OR;
 	else draw_mode = GR_AND | GR_SURBRILL;
 
 	Module = m_Pcb->m_Modules;
 
-	/* Surbrillance des Pastilles : */
-
+	/* Redraw pads */
 	for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
 	{
 		Pad_Surbrillance(DrawPanel, DC, Module, NetCode) ;
 	}
 
-	/* Surbrillance des pistes : */
+	/* Redraw track and vias: */
 	for ( pts = m_Pcb->m_Track; pts != NULL; pts = (TRACK*) pts->Pnext)
 	{
-		/* est ce que la piste fait partie du net ? : */
 		if( pts->m_NetCode == NetCode )
 		{
 			pts->Draw(DrawPanel, DC, draw_mode);

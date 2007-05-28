@@ -534,7 +534,7 @@ int curr_layer = ((PCB_SCREEN*)panel->GetScreen())->m_Active_Layer;
 	if ( (l_piste/zoom) < L_MIN_DESSIN)
 		{
 		GRLine(&panel->m_ClipBox, DC, m_Start.x, m_Start.y,
-					m_End.x, m_End.y, color);
+					m_End.x, m_End.y, 0, color);
 		return;
 		}
 

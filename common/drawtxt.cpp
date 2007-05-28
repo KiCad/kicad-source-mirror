@@ -170,7 +170,7 @@ bool sketch_mode = FALSE;
 		dx += cX; dy = cY;
 		RotatePoint(&ux0, &uy0, cX, cY, orient);
 		RotatePoint(&dx, &dy, cX, cY, orient);
-		GRLine(&panel->m_ClipBox, DC, ux0, uy0, dx, dy, gcolor);
+		GRLine(&panel->m_ClipBox, DC, ux0, uy0, dx, dy, width, gcolor);
 
 		return;
 	}
@@ -210,7 +210,7 @@ return;
 						if(ii && (plume == 'D' ) )
 							{
 							if ( width <= 1 )
-								GRPoly(&panel->m_ClipBox, DC, ii /2, coord, 0,
+								GRPoly(&panel->m_ClipBox, DC, ii /2, coord, 0, 0,
 									gcolor, gcolor);
 							else if ( sketch_mode )
 							{
@@ -222,8 +222,8 @@ return;
 							}
 								
 							else
-								GRPolyLines(&panel->m_ClipBox, DC, ii /2, coord,
-									gcolor, gcolor, width);
+								GRPoly(&panel->m_ClipBox, DC, ii /2, coord, 0,
+									width, gcolor, gcolor);
 							}
 						plume = f_cod; ii = 0;
 						break;

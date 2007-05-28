@@ -159,6 +159,10 @@ wxPoint defaultpos(-1,-1);
 			LoadOneEEProject( wxEmptyString, FALSE);
 			break;
 
+		case ID_LOAD_ONE_SHEET:
+			LoadOneSheet(GetScreen(), wxEmptyString);
+			break;
+
 		case ID_LOAD_FILE_1:
 		case ID_LOAD_FILE_2:
 		case ID_LOAD_FILE_3:
@@ -520,6 +524,8 @@ wxPoint defaultpos(-1,-1);
 					option = CMP_NORMAL; break;
 			}
 			DrawPanel->MouseToCursorSchema();
+			if ( m_CurrentScreen->m_CurrentItem->m_Flags == 0 )
+				SaveCopyInUndoList(m_CurrentScreen->m_CurrentItem, IS_CHANGED);
 			CmpRotationMiroir(
 				(EDA_SchComponentStruct *) m_CurrentScreen->m_CurrentItem,
 				&dc, option );

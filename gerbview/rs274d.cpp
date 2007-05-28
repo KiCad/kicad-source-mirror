@@ -616,7 +616,7 @@ int shape = 1, dcode = 0;
 D_CODE * pt_Tool = NULL;
 wxString msg;
 
-	if(D_commande >= FIRST_DCODE )
+	if(D_commande >= FIRST_DCODE )	// This is a "Set tool" command
 	{
 		if (D_commande > (MAX_TOOLS-1)) D_commande = MAX_TOOLS-1;
 		m_Current_Tool = D_commande;
@@ -625,7 +625,12 @@ wxString msg;
 		return TRUE;
 	}
 
-	if ( m_PolygonFillMode )	// Enter a plygon description:
+	else // D_commande = 0..9:	this is a pen command (usualy D1, D2 or D3)
+	{
+		m_Last_Pen_Command = D_commande;
+	}
+
+	if ( m_PolygonFillMode )	// Enter a polygon description:
 	{
 		switch ( D_commande )
 		{

@@ -22,7 +22,7 @@ static void Plot_Module(WinEDA_DrawPanel * panel, wxDC * DC, MODULE * Module,
 /****************************/
 int GetLayerNumber(void)
 /****************************/
-/* retourne le nombre de couches a tracer
+/* Return the number of layers which can be printed
 */
 {
 int ii = 29;
@@ -34,7 +34,10 @@ return ii;
 /**********************************************************************************/
 void WinEDA_DrawPanel::PrintPage(wxDC *DC, bool Print_Sheet_Ref, int printmasklayer)
 /**********************************************************************************/
-/* routine de trace du pcb, avec selection des couches */
+/* Used to print the board.
+	Draw the board, but only layers allowed by printmasklayer
+	( printmasklayer is a 32 bits mask: bit n = 1 -> layer n is printed)
+*/
 {
 MODULE * Module;
 EDA_BaseStruct * PtStruct;
@@ -60,7 +63,7 @@ BOARD * Pcb = frame->m_Pcb;
 
 	printmasklayer |= EDGE_LAYER;
 
-	/* Trace des elements particuliers de Drawings Pcb */
+	/* Draw the pcb graphic items (texts, ...) */
 	PtStruct = Pcb->m_Drawings;
 	for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
 		{
@@ -98,7 +101,7 @@ BOARD * Pcb = frame->m_Pcb;
 			}
 		}
 
-	/* trace des pistes */
+	/* Draw the tracks */
 	pt_piste = Pcb->m_Track;
 	for ( ; pt_piste != NULL ; pt_piste = (TRACK*) pt_piste->Pnext )
 		{
@@ -109,42 +112,43 @@ BOARD * Pcb = frame->m_Pcb;
 			int color = g_DesignSettings.m_ViaColor[pt_piste->m_Shape];
 			GRSetDrawMode(DC, drawmode);
 			GRFilledCircle(&m_ClipBox, DC, pt_piste->m_Start.x, pt_piste->m_Start.y,
-					rayon, color, color) ;
+					rayon, 0, color, color) ;
 			}
 		else pt_piste->Draw(this, DC, drawmode);
 		}
 
 	pt_piste = Pcb->m_Zone;
 	for ( ; pt_piste != NULL ; pt_piste = (TRACK*) pt_piste->Pnext )
-		{
+	{
 		if( (printmasklayer & pt_piste->ReturnMaskLayer() ) == 0 ) continue ;
 		pt_piste->Draw(this, DC, drawmode);
-		}
+	}
 
-	// Trace des modules en dernier, pour imprimer en blanc le trou des pastilles
+	// Draw footprints, this is done at last in order to print the pad holes in while
+	// after the tracks
 	Module = (MODULE*) Pcb->m_Modules;
 	for ( ; Module != NULL; Module = (MODULE *) Module->Pnext )
-		{
+	{
 		Plot_Module(this, DC, Module, drawmode, printmasklayer);
-		}
+	}
 
-	/* trace des trous des vias*/
+	/* draw the via holes */
 	pt_piste = Pcb->m_Track;
 	int rayon = g_DesignSettings.m_ViaDrill / 2;
 	int color = WHITE;
 	for ( ; pt_piste != NULL ; pt_piste = (TRACK*) pt_piste->Pnext )
-		{
+	{
 		if( (printmasklayer & pt_piste->ReturnMaskLayer() ) == 0 ) continue;
 		if ( pt_piste->m_StructType == TYPEVIA ) /* VIA rencontree */
-			{
+		{
 			GRSetDrawMode(DC, drawmode);
 			GRFilledCircle(&m_ClipBox, DC, pt_piste->m_Start.x, pt_piste->m_Start.y,
-					rayon, color, color) ;
-			}
+					rayon, 0, color, color) ;
 		}
+	}
 
 	if ( Print_Sheet_Ref )
-		m_Parent->TraceWorkSheet( DC, ActiveScreen);
+		m_Parent->TraceWorkSheet( DC, ActiveScreen, 0);
 
 	DisplayOpt = save_opt;
 	frame->m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
@@ -163,7 +167,7 @@ EDA_BaseStruct * PtStruct;
 TEXTE_MODULE * TextMod;
 int mlayer;
 
-	/* trace des pastilles */
+	/* Draw pads */
 	pt_pad = Module->m_Pads;
 	for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
 	{
@@ -171,7 +175,7 @@ int mlayer;
 		pt_pad->Draw(panel, DC, wxPoint(0,0), draw_mode);
 	}
 
-	/* impression des graphismes */
+	/* draw footprint graphic shapes */
 	PtStruct = Module->m_Drawings;
 	mlayer = g_TabOneLayerMask[Module->m_Layer];
 	if( Module->m_Layer == CUIVRE_N) mlayer = SILKSCREEN_LAYER_CU;

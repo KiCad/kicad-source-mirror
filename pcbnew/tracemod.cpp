@@ -64,26 +64,3 @@ WinEDA_BasePcbFrame * frame;
 	frame->m_DisplayPadFill = tmp;
 }
 
-
-/***********************************************************************/
-void Affiche_1_Segment(WinEDA_DrawPanel * panel, wxDC * DC,
-						int ux0, int uy0, int dx, int dy,
-						int width, int mode, int color)
-/***********************************************************************/
-/* Trace un segment origine ux0,uy0, fin en dx, dy,
-	largeur l_piste, mode FILL ou SKETCH, en couleur color
-	Les coord sont en 1/10000 pouce
-*/
-{
-int zoom = panel->GetZoom();
-
-	if( (width/zoom) < L_MIN_DESSIN )
-		GRLine(&panel->m_ClipBox, DC, ux0, uy0, dx, dy, color) ;
-
-	else
-		if( mode == SKETCH)
-			GRCSegm(&panel->m_ClipBox, DC, ux0, uy0, dx, dy, width, color) ;
-
-		else GRFillCSegm(&panel->m_ClipBox, DC, ux0, uy0, dx, dy, width, color) ;
-}
-

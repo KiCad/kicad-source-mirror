@@ -6,6 +6,10 @@
 #pragma implementation
 #endif
 
+#ifdef KICAD_PYTHON
+#include <pyhandler.h>
+#endif
+
 #include "fctsys.h"
 
 #include "common.h"
@@ -16,7 +20,6 @@
 #include "id.h"
 
 #include "kicad.h"
-
 
 	/****************/
 	/* Constructeur */
@@ -105,6 +108,10 @@ wxString line;
 	msg = wxGetCwd();
 	line.Printf( _("Ready\nWorking dir: %s\n"), msg.GetData());
 	PrintMsg(line);
+
+	#ifdef KICAD_PYTHON
+	PyHandler::GetInstance()->DeclareEvent(wxT("kicad::LoadProject"));
+	#endif
 }
 
 	/***************/
@@ -318,6 +325,23 @@ wxString FullFileName = m_PrjFileName;
 		}
 			break;
 
+#ifdef KICAD_PYTHON
+		case ID_RUN_PYTHON:
+		{
+			wxString script = EDA_FileSelector( _("Execute Python Script:"),
+												wxEmptyString,		  		/* Chemin par defaut */
+												wxEmptyString,				/* nom fichier par defaut */
+												wxT( ".py" ),			    /* extension par defaut */
+												wxT("*.py"), /* Masque d'affichage */
+												this,
+												wxFD_OPEN,
+												FALSE
+												);
+			if ( script.IsEmpty() ) break;
+			PyHandler::GetInstance()->RunScript( script );
+		}
+			break;
+#endif
 		case ID_BROWSE_AN_SELECT_FILE:
 			{
 			wxString mask(wxT("*")), extension;
@@ -349,4 +373,23 @@ wxString FullFileName = m_PrjFileName;
 			break;
 	}
 }
+
+
+/********************************************************/
+void WinEDA_MainFrame::OnRefresh(wxCommandEvent & event )
+/********************************************************/
+{
+	m_LeftWin->ReCreateTreePrj();
+}
+
+/*********************************/
+void WinEDA_MainFrame::ClearMsg()
+/*********************************/
+{
+	m_DialogWin->Clear();
+}
+
+#ifdef KICAD_PYTHON
+void WinEDA_MainFrame::OnRefreshPy() { m_LeftWin->ReCreateTreePrj(); }
+#endif
 

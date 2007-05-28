@@ -16,7 +16,7 @@ extern wxPoint LastPenPosition;
 extern wxPoint PlotOffset;
 extern FILE * PlotOutputFile;
 extern double XScale, YScale;
-extern int PenWidth;
+extern int g_DefaultPenWidth, g_CurrentPenWidth;
 extern int PlotOrientOptions, etat_plume;
 
 // Locales
@@ -36,6 +36,7 @@ void InitPlotParametresPS(wxPoint offset, Ki_PageDescr * sheet,
 	SheetPS = sheet;
 	XScale = xscale;
 	YScale = yscale;
+	g_CurrentPenWidth = -1;
 }
 
 /*************************************************************************************/
@@ -44,7 +45,23 @@ void SetDefaultLineWidthPS( int width)
 /* Set the default line width (in 1/1000 inch) for the current plotting
 */
 {
-	PenWidth = width;			/* epaisseur du trait standard en 1/1000 pouce */
+	g_DefaultPenWidth = width;			/* epaisseur du trait standard en 1/1000 pouce */
+	g_CurrentPenWidth = -1;
+}
+
+/***************************************/
+void SetCurrentLineWidthPS( int width)
+/***************************************/
+/* Set the Current line width (in 1/1000 inch) for the next plot
+*/
+{
+int pen_width; 
+
+	if ( width > 0 ) pen_width = width;
+	else pen_width = g_DefaultPenWidth;
+	if ( pen_width != g_CurrentPenWidth )
+		fprintf(PlotOutputFile,"%d setlinewidth\n", (int)(XScale * pen_width));
+	g_CurrentPenWidth = pen_width;
 }
 
 /******************************/
@@ -77,7 +94,7 @@ void PlotFilledSegmentPS(wxPoint start , wxPoint end, int width)
 	UserToDeviceCoordinate(start);
 	UserToDeviceCoordinate(end);
 
-	fprintf(PlotOutputFile,"%d setlinewidth\n", (int)(XScale * width));
+	SetCurrentLineWidthPS(width);
 	fprintf(PlotOutputFile,"%d %d %d %d line\n", start.x, start.y, end.x, end.y);
 }
 
@@ -94,21 +111,16 @@ char Line[256];
 
 	if(rayon < 0 ) rayon = 0 ;
 
-	if ( width > 0 )
-	{
-		sprintf(Line,"%d setlinewidth\n", (int)( width * XScale) ) ;
-		fputs(Line,PlotOutputFile);
-	}
-
+	SetCurrentLineWidthPS(width);
 	sprintf(Line,"newpath %d %d %d 0 360 arc stroke\n", pos.x, pos.y, rayon);
 	fputs(Line,PlotOutputFile) ;
 }
 
 
 
-/********************************************************************/
-void PlotArcPS(wxPoint centre, int StAngle, int EndAngle, int rayon)
-/********************************************************************/
+/**************************************************************************************/
+void PlotArcPS(wxPoint centre, int StAngle, int EndAngle, int rayon, int width)
+/**************************************************************************************/
 /* Plot an arc:
 	StAngle, EndAngle = start and end arc in 0.1 degree
 */
@@ -117,6 +129,7 @@ char Line[256];
 
 	if(rayon <= 0 ) return ;
 
+	SetCurrentLineWidthPS(width);
 	/* Calcul des coord du point de depart : */
 	UserToDeviceCoordinate(centre);
 
@@ -132,29 +145,11 @@ char Line[256];
 
 }
 
-/*****************************************************************************/
-void PlotArcPS(wxPoint centre, int StAngle, int EndAngle, int rayon, int width)
-/*****************************************************************************/
-/* trace d'un arc de cercle:
-	x, y = coord du centre
-	StAngle, EndAngle = angle de debut et fin
-	rayon = rayon de l'arc
-	w = epaisseur de l'arc
-*/
-{
-char Line[256];
-
-	if(rayon <= 0 ) return ;
-
-	sprintf(Line,"%d setlinewidth\n", (int) (width * XScale) );
-	fputs(Line, PlotOutputFile);
-	PlotArcPS( centre, StAngle, EndAngle, rayon);
-}
 
 
-/***************************************************/
-void PlotPolyPS( int nb_segm, int * coord, int fill)
-/***************************************************/
+/****************************************************************/
+void PlotPolyPS( int nb_segm, int * coord, int fill, int width)
+/*****************************************************************/
 /* Trace un polygone ( ferme si rempli ) en format POSTSCRIPT
 	coord = tableau des coord des sommets
 	nb_segm = nombre de coord ( 1 coord = 2 elements: X et Y du tableau )
@@ -165,6 +160,8 @@ int ii;
 wxPoint pos;
 
 	if( nb_segm <= 1 ) return;
+
+	SetCurrentLineWidthPS(width);
 
 	pos.x = coord[0]; pos.y = coord[1];
 	UserToDeviceCoordinate(pos);
@@ -275,7 +272,7 @@ time_t time1970 = time(NULL);
 	fputs(Line,PlotOutputFile);
 
 	// Set default line width:
-	fprintf(PlotOutputFile,"%d setlinewidth\n", PenWidth ); //PenWidth in user units
+	fprintf(PlotOutputFile,"%d setlinewidth\n", g_DefaultPenWidth ); //g_DefaultPenWidth in user units
 }
 
 

@@ -44,37 +44,40 @@ int id = event.GetId();
 }
 
 
-/**********************************************************************************/
-bool WinEDA_SchematicFrame::LoadOneSheet(SCH_SCREEN * screen, const wxString & FullFileName)
-/**********************************************************************************/
+/******************************************************************************************/
+bool WinEDA_SchematicFrame::LoadOneSheet(SCH_SCREEN * screen, const wxString & filename)
+/******************************************************************************************/
 {
+wxString FullFileName = filename;
+	
 	if( screen->EEDrawList != NULL )
 	{
 		if( !IsOK(this, _("Clear SubHierarchy ?") ) ) return FALSE;
-		ClearProjectDrawList(screen, TRUE);
 	}
 
-	if( FullFileName.IsEmpty())
+	if( FullFileName.IsEmpty() )
 	{
-		wxString filename, mask;
+		wxString mask;
 		mask = wxT("*") + g_SchExtBuffer;
-		filename = EDA_FileSelector( _("Schematic files:"),
-					wxEmptyString,		  				/* Chemin par defaut */
-					screen->m_FileName,		/* nom fichier par defaut */
+		FullFileName = EDA_FileSelector( _("Schematic files:"),
+					wxEmptyString,		  	/* default path */
+					screen->m_FileName,		/* default filename */
 					g_SchExtBuffer,		  	/* extension par defaut */
 					mask,					/* Masque d'affichage */
 					this,
 					wxFD_OPEN,
 					FALSE
 					);
-		if ( filename.IsEmpty() ) return FALSE;
-		else screen->m_FileName = filename;
+		if ( FullFileName.IsEmpty() ) return FALSE;
 	}
 
-	else screen->m_FileName = FullFileName;
+	ClearProjectDrawList(screen, TRUE);
 
-	LoadOneEEFile(screen, screen->m_FileName);
-	screen->SetRefreshReq();
+	screen->m_FileName = FullFileName;
+	LoadOneEEFile(screen, FullFileName);
+	screen->SetModify();
+
+	if ( GetScreen() == screen ) Refresh(TRUE);
 	return TRUE;
 }
 

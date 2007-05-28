@@ -273,6 +273,11 @@ wxClientDC dc(DrawPanel);
 			HandleBlockEnd(&dc);
 			break;
 
+		case ID_GERBVIEW_POPUP_DELETE_DCODE_ITEMS:
+			if ( gerber_layer )
+				Delete_DCode_Items(&dc, gerber_layer->m_Selected_Tool, GetScreen()->m_Active_Layer);
+			break;
+
 		default:
 			wxMessageBox( wxT("WinEDA_GerberFrame::Process_Special_Functions error"));
 			break;

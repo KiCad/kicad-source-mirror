@@ -26,6 +26,7 @@ static void Exit_Module(WinEDA_DrawPanel * Panel, wxDC *DC) ;
 static int ModuleInitOrient;	// Lors des moves, val init de l'orient (pour annulation)
 static int ModuleInitLayer;		// Lors des moves, val init de la couche (pour annulation)
 
+
 /*************************************************************************/
 void Show_Pads_On_Off(WinEDA_DrawPanel * panel, wxDC * DC, MODULE * module)
 /**************************************************************************/
@@ -61,6 +62,28 @@ WinEDA_BasePcbFrame * frame = (WinEDA_BasePcbFrame *)panel->m_Parent;
 	frame->trace_ratsnest_module(DC);
 }
 
+/***************************************************/
+MODULE * WinEDA_BasePcbFrame::GetModuleByName(void)
+/***************************************************/
+/* Get a module name from user and return a pointer to the corresponding module
+*/
+{
+wxString modulename;
+MODULE * module = NULL;
+	
+	Get_Message(_("Footprint name:"), modulename, this);
+	if ( ! modulename.IsEmpty() )
+	{
+		module = m_Pcb->m_Modules;
+		while (module )
+		{
+			if ( module->m_Reference->m_Text.CmpNoCase(modulename) == 0 ) break;
+			module = module->Next();
+		}
+	}
+	return module;
+
+}
 
 /**********************************************************************/
 void WinEDA_PcbFrame::StartMove_Module(MODULE * module, wxDC * DC)

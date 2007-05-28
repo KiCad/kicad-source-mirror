@@ -1,2 +1,2 @@
 rm *.cache
-./configure --enable-unicode=yes --enable-shared=no --enable-monolithic --with-msw --disable-compat24 --with-opengl  --with-odbc
+./configure --enable-unicode=yes --enable-shared=no --enable-monolithic --with-msw --with-opengl

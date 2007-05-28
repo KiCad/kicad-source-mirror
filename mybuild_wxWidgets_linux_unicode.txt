@@ -1,2 +1,2 @@
 rm *.cache
-./configure --enable-monolithic --enable-unicode=yes --enable-shared=no --with-opengl --disable-compat24 --with-libpng=builtin --with-libjpeg=builtin --with-libtiff=builtin --with-zlib=builtin --with-regex=builtin
+./configure --enable-monolithic --enable-unicode=yes --enable-shared=no --with-opengl --with-libpng=builtin --with-libjpeg=builtin --with-libtiff=builtin --with-zlib=builtin --with-regex=builtin

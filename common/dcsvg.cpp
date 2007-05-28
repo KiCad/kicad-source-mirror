@@ -137,9 +137,6 @@ void wxSVGFileDC::Init (wxString f, int Width, int Height, float dpi)
 
 		s.Printf ( wxT("<svg\n") );
         write(s);
-//		s.Printf ( wxT("  xmlns:svg=\"http://www.w3.org/2000/svg\"\n") );
-//
-        write(s);
 		s.Printf ( wxT("  xmlns=\"http://www.w3.org/2000/svg\"\n") );
 		write(s);
  		s.Printf ( wxT("  version=\"1.1\"\n") );

@@ -44,7 +44,7 @@ DISPLAY_OPTIONS save_opt;
 	((WinEDA_GerberFrame*)m_Parent)->Trace_Gerber(DC, GR_COPY);
 
 	if ( Print_Sheet_Ref )
-		m_Parent->TraceWorkSheet(DC, GetScreen());
+		m_Parent->TraceWorkSheet(DC, GetScreen(), 0);
 
 	DisplayOpt = save_opt;
 }
@@ -66,7 +66,7 @@ PCB_SCREEN * screen = GetScreen();
 	DrawPanel->DrawBackGround(DC);
 
 	Trace_Gerber(DC, GR_OR);
-	TraceWorkSheet(DC, screen);
+	TraceWorkSheet(DC, screen, 0);
 	Affiche_Status_Box();
 
 	if( DrawPanel->ManageCurseur )

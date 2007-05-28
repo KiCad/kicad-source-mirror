@@ -87,7 +87,4 @@ StructColors ColorRefs[NBCOLOR]	=
 #endif /* ifdef MAIN */
 
 
-COMMON_GLOBL wxPen * DrawPen;
-COMMON_GLOBL wxBrush * DrawBrush;
-
 #endif /* ifndef _COLORS_H */

@@ -374,6 +374,9 @@ int itmp;
 		case ID_POPUP_PCB_SELECT_VIASIZE7:
 		case ID_POPUP_PCB_SELECT_VIASIZE8:
 		case ID_POPUP_PCB_MOVE_TRACK_NODE:
+		case ID_POPUP_PCB_DRAG_TRACK_SEGMENT_KEEP_SLOPE:
+		case ID_POPUP_PCB_DRAG_TRACK_SEGMENT:
+		case ID_POPUP_PCB_MOVE_TRACK_SEGMENT:
 		case ID_POPUP_PCB_PLACE_MOVED_TRACK_NODE:
 		case ID_POPUP_PCB_BREAK_TRACK:
 		case ID_POPUP_PCB_EDIT_NET:
@@ -735,6 +738,15 @@ int itmp;
 			StartMove_Module( (MODULE*)CURRENT_ITEM, &dc);
 			break;
 
+		case ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST:	/* get module by name and move it */
+			CURRENT_ITEM = GetModuleByName();
+			if ( CURRENT_ITEM )
+			{
+				DrawPanel->MouseToCursorSchema();
+				StartMove_Module( (MODULE*)CURRENT_ITEM, &dc);
+			}
+			break;
+
 		case ID_POPUP_PCB_DELETE_MODULE:
 			DrawPanel->MouseToCursorSchema();
 			// If the current Item is a pad, text module ...: Get the parent
@@ -1037,10 +1049,23 @@ int itmp;
 			Via_Edit_Control(&dc, id, (SEGVIA *) GetScreen()->m_CurrentItem);
 			break;
 		
+		case ID_POPUP_PCB_MOVE_TRACK_SEGMENT:
+			DrawPanel->MouseToCursorSchema();
+			Start_MoveOneNodeOrSegment((TRACK *) GetScreen()->m_CurrentItem,
+					&dc, id);
+			break;
+
+		case ID_POPUP_PCB_DRAG_TRACK_SEGMENT:
 		case ID_POPUP_PCB_MOVE_TRACK_NODE:
 			DrawPanel->MouseToCursorSchema();
-			Start_MoveOneTrackSegment((TRACK *) GetScreen()->m_CurrentItem,
-					&dc, TRUE);
+			Start_MoveOneNodeOrSegment((TRACK *) GetScreen()->m_CurrentItem,
+					&dc, id);
+			break;
+
+        case ID_POPUP_PCB_DRAG_TRACK_SEGMENT_KEEP_SLOPE:
+			DrawPanel->MouseToCursorSchema();
+            Start_DragTrackSegmentAndKeepSlope((TRACK *) GetScreen()->m_CurrentItem,
+					&dc);
 			break;
 
 		case ID_POPUP_PCB_BREAK_TRACK:

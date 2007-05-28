@@ -17,6 +17,26 @@
 /* Variables locales */
 
 
+/****************************************************************************************/
+void WinEDA_GerberFrame::Delete_DCode_Items(wxDC * DC, int dcode_value, int layer_number)
+/****************************************************************************************/
+{
+	if ( dcode_value < FIRST_DCODE ) // No tool selected
+		return;
+BOARD * Pcb = m_Pcb;	
+TRACK * track = Pcb->m_Track, * next_track;
+	for ( ; track != NULL ; track = next_track )
+	{
+		next_track = track->Next();
+		if ( dcode_value != track->m_NetCode ) continue;
+		if ( layer_number >= 0 && layer_number != track->m_Layer ) continue;
+		Delete_Segment(DC, track);
+	}
+	GetScreen()->m_CurrentItem = NULL;
+
+}
+
+
 /*****************************************************************/
 TRACK * WinEDA_GerberFrame::Delete_Segment(wxDC * DC, TRACK *Track)
 /*****************************************************************/

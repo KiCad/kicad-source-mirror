@@ -292,6 +292,7 @@ int w = BUTT_SIZE_X, h = BUTT_SIZE_Y;
 
 		iconDC.SetBrush(Brush);
 		iconDC.DrawRectangle(0,0, w, h);
+		Button->SetBitmapLabel(ButtBitmap);
 		SetDisplayOnOff(event);
 		m_Parent->GetScreen()->SetRefreshReq();
 		}

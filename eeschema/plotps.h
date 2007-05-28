@@ -31,6 +31,7 @@
  */
 
 ////@begin forward declarations
+class wxBoxSizer;
 ////@end forward declarations
 
 /*!
@@ -39,17 +40,17 @@
 
 ////@begin control identifiers
 #define ID_DIALOG 10000
+#define ID_RADIOBOX1 10002
+#define ID_RADIOBOX 10001
+#define ID_CHECKBOX 10005
+#define ID_PLOT_PS_CURRENT_EXECUTE 10003
+#define ID_PLOT_PS_ALL_EXECUTE 10004
+#define ID_TEXTCTRL 10006
 #define SYMBOL_WINEDA_PLOTPSFRAME_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxSTAY_ON_TOP|wxCLOSE_BOX
 #define SYMBOL_WINEDA_PLOTPSFRAME_TITLE _("EESchema Plot PS")
 #define SYMBOL_WINEDA_PLOTPSFRAME_IDNAME ID_DIALOG
 #define SYMBOL_WINEDA_PLOTPSFRAME_SIZE wxSize(400, 300)
 #define SYMBOL_WINEDA_PLOTPSFRAME_POSITION wxDefaultPosition
-#define ID_RADIOBOX1 10002
-#define ID_RADIOBOX 10001
-#define ID_PLOT_PS_CURRENT_EXECUTE 10003
-#define ID_PLOT_PS_ALL_EXECUTE 10004
-#define ID_CHECKBOX 10005
-#define ID_TEXTCTRL 10006
 ////@end control identifiers
 
 /*!
@@ -114,8 +115,10 @@ public:
     wxRadioBox* m_SizeOption;
     wxRadioBox* m_PlotPSColorOption;
     wxCheckBox* m_Plot_Sheet_Ref;
+    wxBoxSizer* m_DefaultLineSizeCtrlSizer;
     wxTextCtrl* m_MsgBox;
 ////@end WinEDA_PlotPSFrame member variables
+	WinEDA_ValueCtrl * m_DefaultLineSizeCtrl;
 };
 
 #endif

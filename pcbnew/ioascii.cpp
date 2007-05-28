@@ -372,7 +372,6 @@ char Line[1024], *data;
 			wxString msg;
 			if ( data )
 			{
-				from_point(data);
 				msg = CONV_FROM_UTF8(data);
 				msg.ToDouble(&g_UserGrid.x);
 			}
@@ -380,7 +379,6 @@ char Line[1024], *data;
 			data = strtok(NULL," =\n\r");
 			if ( data )
 			{
-				from_point(data);
 				msg = CONV_FROM_UTF8(data);
 				msg.ToDouble(&g_UserGrid.y);
 			}
@@ -508,7 +506,6 @@ int ii, jj;
 
 	fprintf(File,"$SETUP\n");
 	sprintf(text, "InternalUnit %f INCH\n", 1.0/PCB_INTERNAL_UNIT);
-	to_point(text);
 	fprintf(File, text);
 	
 	if ( frame->GetScreen()->m_UserGridIsON ) ii = jj = -1;
@@ -523,7 +520,6 @@ int ii, jj;
 	sprintf(text, "UserGridSize %lf %lf %s\n",
 			frame->GetScreen()->m_UserGrid.x, frame->GetScreen()->m_UserGrid.y,
 		 ( g_UserGrid_Unit == 0 )? "INCH" : "mm");
-	to_point(text);
 	fprintf(File, text);
 	
 	fprintf(File, "ZoneGridSize %d\n", g_GridRoutingSize);
@@ -742,6 +738,9 @@ MODULE * LastModule = NULL, * Module;
 EQUIPOT * LastEquipot = NULL, * Equipot;
 
 	wxBusyCursor dummy;
+
+	// Switch the locale to standard C (needed to print floating point numbers like 1.3)
+	setlocale(LC_NUMERIC, "C");
 
 	NbDraw = NbTrack = NbZone = NbMod = NbNets = -1;
 	m_Pcb->m_NbNets = 0;
@@ -973,12 +972,13 @@ EQUIPOT * LastEquipot = NULL, * Equipot;
 			}
 		}
 
+	setlocale(LC_NUMERIC, "");      // revert to the current  locale
+
 	Affiche_Message(wxEmptyString);
 
 #ifdef PCBNEW
 	Compile_Ratsnest(DC, TRUE);
 #endif
-	// Size est donnee en 1/1000 "
 	return(1);
 }
 
@@ -1009,7 +1009,8 @@ MODULE * Module;
 	PtStruct = (EDA_BaseStruct *) m_Pcb->m_Modules;
 	NbModules = 0;
 	for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext) NbModules++;
-
+	// Switch the locale to standard C (needed to print floating point numbers like 1.3)
+	setlocale(LC_NUMERIC, "C");
 	/* Ecriture de l'entete PCB : */
 	fprintf(File,"PCBNEW-BOARD Version %d date %s\n\n",g_CurrentVersionPCB,
 									DateAndTime(Line) );
@@ -1106,6 +1107,7 @@ MODULE * Module;
 	fprintf(File,"$EndZONE\n");
 	fprintf(File,"$EndBOARD\n");
 
+	setlocale(LC_NUMERIC, "");      // revert to the current  locale
 	wxEndBusyCursor();
 
 	Affiche_Message(wxEmptyString);

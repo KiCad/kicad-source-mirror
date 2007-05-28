@@ -43,11 +43,11 @@ int anchor_size = dim_ancre * zoom;
 		GRLine(&panel->m_ClipBox, DC,
 				m_Pos.x - offset.x - anchor_size, m_Pos.y - offset.y,
 				m_Pos.x -offset.x + anchor_size,m_Pos.y - offset.y,
-				g_AnchorColor);
+				0, g_AnchorColor);
 		GRLine(&panel->m_ClipBox, DC,
 				m_Pos.x - offset.x, m_Pos.y - offset.y - anchor_size ,
 				m_Pos.x - offset.x, m_Pos.y - offset.y + anchor_size ,
-				g_AnchorColor);
+				0, g_AnchorColor);
 		}
 }
 
@@ -544,21 +544,21 @@ Struct3D_Master * Struct3D = m_3D_Drawings;
 				}
 
 			case 'S':	// Scale
-				sscanf( from_point(text),"%lf %lf %lf\n",
+				sscanf( text,"%lf %lf %lf\n",
 					&Struct3D->m_MatScale.x,
 					&Struct3D->m_MatScale.y,
 					&Struct3D->m_MatScale.z);
 			break;
 
 			case 'O':	// Offset
-				sscanf( from_point(text),"%lf %lf %lf\n",
+				sscanf( text,"%lf %lf %lf\n",
 					&Struct3D->m_MatPosition.x,
 					&Struct3D->m_MatPosition.y,
 					&Struct3D->m_MatPosition.z);
 				break;
 
 			case 'R':	// Rotation
-				sscanf( from_point(text),"%lf %lf %lf\n",
+				sscanf( text,"%lf %lf %lf\n",
 					&Struct3D->m_MatRotation.x,
 					&Struct3D->m_MatRotation.y,
 					&Struct3D->m_MatRotation.z);

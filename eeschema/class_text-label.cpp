@@ -43,6 +43,7 @@ DrawTextStruct * newitem = new DrawTextStruct(m_Pos, m_Text);
 	newitem->m_Shape = m_Shape;
 	newitem->m_Orient = m_Orient;
 	newitem->m_Size = m_Size;
+	newitem->m_Width = m_Width;
 	newitem->m_HJustify = m_HJustify;
 	newitem->m_VJustify = m_VJustify;
 	newitem->m_IsDangling = m_IsDangling ;
@@ -58,6 +59,7 @@ void DrawTextStruct::SwapData(DrawTextStruct * copyitem)
 	EXCHG(m_Text, copyitem->m_Text);
 	EXCHG(m_Pos, copyitem->m_Pos);
 	EXCHG(m_Size, copyitem->m_Size);
+	EXCHG(m_Width, copyitem->m_Width);
 	EXCHG(m_Shape, copyitem->m_Shape);
 	EXCHG(m_Orient, copyitem->m_Orient);
 	EXCHG(m_StructType, copyitem->m_StructType);
@@ -134,16 +136,16 @@ void DrawTextStruct::Draw(WinEDA_DrawPanel * panel,wxDC * DC, const wxPoint & of
 	}
 }
 
-/***************************************************************/
+/*******************************************************************************************/
 void DrawTextStruct::DrawAsText(WinEDA_DrawPanel * panel,wxDC * DC, const wxPoint & offset,
 		int DrawMode, int Color)
-/***************************************************************/
-/* Les textes type label ou notes peuvent avoir 4 directions, mais
-	sont tj cadres par rapport a la 1ere lettre du texte
+/*******************************************************************************************/
+/* Texts type Label or Comment (text on layer "NOTE") have 4 directions, and the Text origin is the first letter
 */
 {
 int color;
-
+int width = MAX(m_Width, g_DrawMinimunLineWidth);
+		
 	if( Color >= 0 ) color = Color;
 	else color = ReturnLayerColor(m_Layer);
 	GRSetDrawMode(DC, DrawMode);
@@ -155,28 +157,28 @@ int color;
 						wxPoint(m_Pos.x + offset.x, m_Pos.y - TXTMARGE + offset.y),
 						color,
 						m_Text, m_Orient*900, m_Size,
-						GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM);
+						GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM, width);
 			break;
 
 		case 1:		/* Orientation vert UP */
 			DrawGraphicText(panel, DC,
 						wxPoint(m_Pos.x - TXTMARGE + offset.x, m_Pos.y + offset.y), color,
 						m_Text, m_Orient*900, m_Size,
-						GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_BOTTOM);
+						GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_BOTTOM, width);
 			break;
 
 		case 2:		/* Orientation horiz inverse */
 			DrawGraphicText(panel, DC,
 						wxPoint(m_Pos.x + offset.x, m_Pos.y + TXTMARGE + offset.y), color,
 						m_Text, m_Orient*900, m_Size,
-						GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_TOP);
+						GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_TOP, width);
 			break;
 
 		case 3:		/* Orientation vert BOTTOM */
 			DrawGraphicText(panel, DC,
 						wxPoint(m_Pos.x + TXTMARGE + offset.y, m_Pos.y + offset.y), color,
 						m_Text, m_Orient*900, m_Size,
-						GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP);
+						GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, width);
 			break;
 		}
 	if ( m_IsDangling )
@@ -195,14 +197,14 @@ void DrawTextStruct::DrawAsLabel(WinEDA_DrawPanel * panel,wxDC * DC, const wxPoi
 void DrawTextStruct::DrawAsGlobalLabel(WinEDA_DrawPanel * panel, wxDC * DC, const wxPoint& offset,
 		int DrawMode, int Color)
 /*****************************************************************************/
-/* Les textes type Global label peuvent avoir 4 directions, mais
-	sont tj cadres par rapport au symbole graphique (icone)
+/* Texts type Global Label  have 4 directions, and the Text origin is the graphic icon
 */
 {
 int * Template;
 int Poly[12];
 int ii, jj, imax, color, HalfSize;
 wxSize Size = m_Size;
+int width = MAX(m_Width, g_DrawMinimunLineWidth);
 
 	if( Color >= 0 ) color = Color;
 	else color = ReturnLayerColor(m_Layer);
@@ -217,28 +219,28 @@ wxSize Size = m_Size;
 			DrawGraphicText(panel, DC,
 						wxPoint(m_Pos.x - ii + offset.x, m_Pos.y + offset.y), color,
 						m_Text, TEXT_ORIENT_HORIZ, Size,
-						GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER);
+						GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER, width);
 			break;
 
 		case 1:		/* Orientation vert UP */
 			DrawGraphicText(panel, DC,
 						wxPoint(m_Pos.x + offset.x, m_Pos.y + ii + offset.y), color,
 						m_Text, TEXT_ORIENT_VERT, Size,
-						GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP);
+						GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP, width);
 			break;
 
 		case 2:		/* Orientation horiz inverse */
 			DrawGraphicText(panel, DC,
 						wxPoint(m_Pos.x + ii + offset.x, m_Pos.y + offset.y), color,
 						m_Text, TEXT_ORIENT_HORIZ, Size,
-						GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+						GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width);
 			break;
 
 		case 3:		/* Orientation vert BOTTOM */
 			DrawGraphicText(panel, DC,
 						wxPoint(m_Pos.x + offset.x, m_Pos.y - ii + offset.y), color,
 						m_Text, TEXT_ORIENT_VERT, Size,
-						GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM);
+						GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM, width);
 			break;
 		}
 
@@ -254,8 +256,8 @@ wxSize Size = m_Size;
 		jj++; Template++;
 		}
 
-//	GRPoly(&panel->m_ClipBox, DC, imax,Poly,1, color, color );	/* Polygne Rempli */
-	GRPoly(&panel->m_ClipBox, DC, imax,Poly,0, color, color );	/* Polygne Non Rempli */
+//	GRPoly(&panel->m_ClipBox, DC, imax,Poly,1, width, color, color );	/* Polygne Rempli */
+	GRPoly(&panel->m_ClipBox, DC, imax,Poly,0, width, color, color );	/* Polygne Non Rempli */
 
 	if ( m_IsDangling )
 		DrawDanglingSymbol(panel, DC, m_Pos + offset, color);

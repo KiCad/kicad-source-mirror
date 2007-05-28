@@ -13,7 +13,7 @@ $(TARGET).exe: $(OBJECTS) $(TARGET)_resources.o $(EDALIB)
 	$(CXX) $(ALL_LDFLAGS) -o $(TARGET).exe $(OBJECTS)\
 		$(TARGET)_resources.o $(EDALIBS) $(SYSWXLIB)
 
-install:
+install: $(TARGET).exe
 	cp $(TARGET).exe $(KICAD_BIN)
 
 

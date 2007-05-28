@@ -7,11 +7,25 @@ SRCSUFF = .cpp
 OBJSUFF = .o
 FINAL = 1
 
+# You must comment or uncomment this line to disable/enable python support
+#KICAD_PYTHON = 1
+
 
 # You must comment or uncomment this line for dynamic or static link
 # dynamic link is less difficult than static link
 # choose it if you have problems (libs not found, or unresolved references) ), or if kicad is running only on YOUR system.
+ifndef KICAD_PYTHON
 KICAD_STATIC_LINK = 1
+endif
+
+ifdef KICAD_PYTHON
+PYTHON_VERSION=2.3
+PYLIBS= -L/usr/lib
+PYLIBS+= -L /usr/include/python
+PYLIBS+= -lpython$(PYTHON_VERSION)
+PYLIBS+= -lboost_python
+EXTRACPPFLAGS+=-I /usr/include/python$(PYTHON_VERSION) -DKICAD_PYTHON -fno-strict-aliasing
+endif
 
 # path and version definition for wxWidgets and mesa libs
 MESALIBSPATH = /usr/local/lib
@@ -30,7 +44,9 @@ else
 LIBSTDC = -lstdc++
 endif
 
+
 LIBVERSION=`wx-config --release`
+LIBREGEX=$(WXPATH)/libwxregexu-$(LIBVERSION).a
 
 # use link static for wxWidgets
 ifdef KICAD_STATIC_LINK
@@ -41,13 +57,13 @@ WXSYSLIB= $(WXPATH)/$(PREFIX_WX_LIBS)-$(LIBVERSION).a \
 	$(WXPATH)/libwxpng-$(LIBVERSION).a\
 	$(WXPATH)/libwxjpeg-$(LIBVERSION).a\
 	$(WXPATH)/libwxzlib-$(LIBVERSION).a\
+	$(LIBREGEX)\
         /usr/X11R6/lib/libXinerama.a \
-        /usr/X11R6/lib/libXxf86vm.a \
 		-lgtk-x11-2.0 -lgdk-x11-2.0 \
         -latk-1.0 -lgdk_pixbuf-2.0 -lm -lpangoxft-1.0 -lpangox-1.0 -lgthread-2.0\
         -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -ldl\
         -lglib-2.0 -lpangoft2-1.0 -lSM\
-        -L/usr/lib
+        -L/usr/lib $(PYLIBS)
 
 
 WXSYSLIB_WITH_GL= $(WXPATH)/$(PREFIX_WX_LIBS)-$(LIBVERSION).a \
@@ -61,7 +77,7 @@ WXSYSLIB_WITH_GL= $(WXPATH)/$(PREFIX_WX_LIBS)-$(LIBVERSION).a \
         -latk-1.0 -lgdk_pixbuf-2.0 -lm -lpangoxft-1.0 -lpangox-1.0 -lgthread-2.0\
         -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -ldl\
         -lglib-2.0 -lpangoft2-1.0 -lSM\
-       -L/usr/lib
+       -L/usr/lib $(PYLIBS)
 else
 #or use "standard command" for wxWidgets
 WXSYSLIB= `wx-config --libs std`
@@ -72,8 +88,8 @@ endif
 # attention à l'ordre des libairies
 LIBS = -L/usr/local/lib -L/usr/X11R6/lib\
 	$(EXTRALIBS) $(WXSYSLIB)\
-	$(LIBSTDC)
+	$(LIBSTDC) $(PYLIBS)
 
 LIBS_WITH_GL = -L/usr/local/lib -L/usr/X11R6/lib\
 	$(EXTRALIBS) $(WXSYSLIB_WITH_GL)\
-	$(LIBSTDC)
+	$(LIBSTDC) $(PYLIBS)

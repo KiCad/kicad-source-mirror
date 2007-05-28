@@ -3,7 +3,7 @@
 FINAL = 1
 
 EESCHEMA_FLAGS= -DEESCHEMA
-EXTRACPPFLAGS=$(KICAD_FLAGS) $(EESCHEMA_FLAGS) -I./ -Ibitmaps -I../include -I../eeschema
+EXTRACPPFLAGS += $(KICAD_FLAGS) $(EESCHEMA_FLAGS)  -fno-strict-aliasing -I./ -Ibitmaps -I../include -I../eeschema
 EXTRALIBS = ../common/common.a
 
 # DEPEND = program.h general.h
@@ -35,7 +35,8 @@ OBJECTS = eeschema.o\
 		lib_export.o \
 		busentry.o \
 		bus-wire-junction.o \
-		eelibs1.o eelibs2.o \
+		eelibs_read_libraryfiles.o \
+		eelibs_draw_components.o \
 		eeload.o\
 		block.o\
 		block_libedit.o\
@@ -156,9 +157,9 @@ bus-wire-junction.o: bus-wire-junction.cpp $(DEPEND)
 drawframe.o: ../share/drawframe.cpp
 	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
-eelibs1.o: eelibs1.cpp $(DEPEND)
+eelibs_read_libraryfiles.o: eelibs_read_libraryfiles.cpp $(DEPEND)
 
-eelibs2.o: eelibs2.cpp $(DEPEND)
+eelibs_draw_components.o: eelibs_draw_components.cpp $(DEPEND)
 
 eeload.o: eeload.cpp $(DEPEND)
 

@@ -16,22 +16,6 @@
 extern void Move_Plume( wxPoint pos, int plume ); // see plot.cpp
 
 
-/*****************************************************************************/
-void PutTextInfo(WinEDA_DrawPanel * panel, wxDC * DC,
-					int Orient, const wxPoint& Pos, const wxSize& Size,
-					const wxString & Str, int DrawMode, int color)
-/*****************************************************************************/
-/* Put out a string, always centered to the given position, with given
-	orientation, taking into account current zoom factor.
-*/
-{
-
-	GRSetDrawMode(DC, DrawMode);
-	DrawGraphicText(panel, DC, Pos, color, Str, Orient, Size,
-						GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER);
-
-}
-
 /*****************************************************************************
 Put out pin number and pin text info, given the pin line coordinates.
 The line must be vertical or horizontal.
@@ -53,8 +37,9 @@ int PinTextBarPos[256];
 int PinTextBarCount;
 int NameColor, NumColor;
 int PinTxtLen;
-wxSize PinNameSize(m_SizeName,m_SizeName);
-wxSize PinNumSize(m_SizeNum,m_SizeNum);
+wxSize PinNameSize(m_PinNameSize,m_PinNameSize);
+wxSize PinNumSize(m_PinNumSize,m_PinNumSize);
+int LineWidth =  g_DrawMinimunLineWidth;
 
 	GRSetDrawMode(DC, DrawMode);
 
@@ -112,7 +97,7 @@ wxSize PinNumSize(m_SizeNum,m_SizeNum);
 					DrawGraphicText(panel, DC, wxPoint(x, y1), NameColor, PinText,
 							TEXT_ORIENT_HORIZ,
 							PinNameSize,
-							GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+							GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, LineWidth);
 
 					for ( ii = 0; ii < PinTextBarCount; )
 					{
@@ -122,7 +107,7 @@ wxSize PinNumSize(m_SizeNum,m_SizeNum);
 						dx = PinTextBarPos[ii++]; // Get the line pos
 						GRMoveRel(dx, 0);
 						len = PinTextBarPos[ii++] - dx; // Get the line length
-						GRLineRel(&panel->m_ClipBox, DC, len, 0, NameColor);
+						GRLineRel(&panel->m_ClipBox, DC, len, 0, LineWidth, NameColor);
 					}
 				}
 				else	// Orient == PIN_LEFT
@@ -131,7 +116,7 @@ wxSize PinNumSize(m_SizeNum,m_SizeNum);
 					DrawGraphicText(panel, DC, wxPoint(x, y1) , NameColor, PinText,
 							TEXT_ORIENT_HORIZ,
 							PinNameSize,
-							GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER);
+							GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER, LineWidth);
 
 					for ( ii = 0; ii < PinTextBarCount; )
 					{
@@ -141,7 +126,7 @@ wxSize PinNumSize(m_SizeNum,m_SizeNum);
 						dx = PinTextBarPos[ii++]; // Get the line pos
 						GRMoveRel(dx - PinTxtLen, 0);
 						len = PinTextBarPos[ii++] - dx; // Get the line length
-						GRLineRel(&panel->m_ClipBox, DC, len, 0, NameColor);
+						GRLineRel(&panel->m_ClipBox, DC, len, 0, LineWidth, NameColor);
 					}
 				}
 			}
@@ -151,7 +136,7 @@ wxSize PinNumSize(m_SizeNum,m_SizeNum);
 				DrawGraphicText(panel, DC,
 						wxPoint((x1 + pin_pos.x) / 2, y1 - TXTMARGE), NumColor, StringPinNum,
 						TEXT_ORIENT_HORIZ, PinNumSize,
-						GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM);
+						GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM, LineWidth);
 			}
 		}
 
@@ -165,7 +150,7 @@ wxSize PinNumSize(m_SizeNum,m_SizeNum);
 
 					DrawGraphicText(panel, DC, wxPoint(x1, y), NameColor, PinText,
 							TEXT_ORIENT_VERT, PinNameSize,
-							GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP);
+							GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP, LineWidth);
 
 					for ( ii = 0; ii < PinTextBarCount; )
 					{
@@ -175,7 +160,7 @@ wxSize PinNumSize(m_SizeNum,m_SizeNum);
 						dx = PinTextBarPos[ii++]; // Get the line pos
 						GRMoveRel(0, PinTxtLen - dx);
 						len = PinTextBarPos[ii++] - dx; // Get the line length
-						GRLineRel(&panel->m_ClipBox, DC, 0, -len, NameColor);
+						GRLineRel(&panel->m_ClipBox, DC, 0, -len, LineWidth, NameColor);
 					}
 				}
 
@@ -185,7 +170,7 @@ wxSize PinNumSize(m_SizeNum,m_SizeNum);
 
 					DrawGraphicText(panel, DC, wxPoint(x1, y), NameColor, PinText,
 							TEXT_ORIENT_VERT, PinNameSize,
-							GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM);
+							GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM, LineWidth);
 
 					for ( ii = 0; ii < PinTextBarCount; )
 					{
@@ -195,7 +180,7 @@ wxSize PinNumSize(m_SizeNum,m_SizeNum);
 						dx = PinTextBarPos[ii++]; // Get the line pos
 						GRMoveRel(0, - dx);
 						len = PinTextBarPos[ii++] - dx; // Get the line length
-						GRLineRel(&panel->m_ClipBox, DC, 0, -len, NameColor);
+						GRLineRel(&panel->m_ClipBox, DC, 0, -len, LineWidth, NameColor);
 					}
 				}
 			}
@@ -205,7 +190,7 @@ wxSize PinNumSize(m_SizeNum,m_SizeNum);
 				DrawGraphicText(panel, DC,
 						wxPoint(x1  - TXTMARGE, (y1 + pin_pos.y) / 2) , NumColor, StringPinNum,
 						TEXT_ORIENT_VERT, PinNumSize,
-						GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER);
+						GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER, LineWidth);
 			}
 		}
 	}
@@ -221,7 +206,7 @@ wxSize PinNumSize(m_SizeNum,m_SizeNum);
 				DrawGraphicText(panel, DC, wxPoint(x , y1 - TXTMARGE),
 							NameColor, PinText,
 							TEXT_ORIENT_HORIZ, PinNameSize,
-							GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM);
+							GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM, LineWidth);
 
 				for ( ii = 0; ii < PinTextBarCount; )
 				{
@@ -230,7 +215,7 @@ wxSize PinNumSize(m_SizeNum,m_SizeNum);
 					dx = PinTextBarPos[ii++]; // Get the line pos
 					GRMoveRel(dx, 0);
 					len = PinTextBarPos[ii++] - dx; // Get the line length
-					GRLineRel(&panel->m_ClipBox, DC, len, 0, NameColor);
+					GRLineRel(&panel->m_ClipBox, DC, len, 0, LineWidth, NameColor);
 				}
 			}
 			if(DrawPinNum)
@@ -239,7 +224,7 @@ wxSize PinNumSize(m_SizeNum,m_SizeNum);
 				DrawGraphicText(panel, DC, wxPoint(x, y1 + TXTMARGE),
 							NumColor, StringPinNum,
 							TEXT_ORIENT_HORIZ, PinNumSize,
-							GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP);
+							GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP, LineWidth);
 			}
 		}
 		else	 /* Its a vertical line. */
@@ -250,7 +235,7 @@ wxSize PinNumSize(m_SizeNum,m_SizeNum);
 				DrawGraphicText(panel, DC, wxPoint(x1 - TXTMARGE , y ),
 							NameColor, PinText,
 							TEXT_ORIENT_VERT, PinNameSize,
-							GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER);
+							GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER, LineWidth);
 
 				for ( ii = 0; ii < PinTextBarCount; )
 				{
@@ -259,7 +244,7 @@ wxSize PinNumSize(m_SizeNum,m_SizeNum);
 					dx = PinTextBarPos[ii++]; // Get the line pos
 					GRMoveRel(0, PinTxtLen - dx);
 					len = PinTextBarPos[ii++] - dx; // Get the line length
-					GRLineRel(&panel->m_ClipBox, DC, 0, - len, NameColor);
+					GRLineRel(&panel->m_ClipBox, DC, 0, - len, LineWidth, NameColor);
 				}
 			}
 
@@ -268,7 +253,7 @@ wxSize PinNumSize(m_SizeNum,m_SizeNum);
 				DrawGraphicText(panel, DC, wxPoint(x1 + TXTMARGE , (y1 + pin_pos.y) / 2),
 							NumColor, StringPinNum,
 							TEXT_ORIENT_VERT, PinNumSize,
-							GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+							GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, LineWidth);
 			}
 		}
 	}
@@ -294,8 +279,8 @@ int PinTextBarPos[256];
 int PinTextBarCount;
 int NameColor, NumColor;
 int PinTxtLen = 0;
-wxSize PinNameSize = wxSize(m_SizeName,m_SizeName);
-wxSize PinNumSize = wxSize(m_SizeNum,m_SizeNum);
+wxSize PinNameSize = wxSize(m_PinNameSize,m_PinNameSize);
+wxSize PinNumSize = wxSize(m_PinNumSize,m_PinNumSize);
 bool plot_color = (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt;
 	
 	/* Get the num and name colors */

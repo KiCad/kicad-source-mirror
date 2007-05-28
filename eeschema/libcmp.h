@@ -142,7 +142,7 @@ public:
 	LibraryStruct * m_Pnext;		/* Point on next lib in chain. */
 	int m_Modified;					/* flag indicateur d'edition */
 	int m_Size;						// Size in bytes (for statistics)
-	long m_TimeStamp;				// Signature temporelle
+	unsigned long m_TimeStamp;				// Signature temporelle
 	int m_Flags;					// variable used in some functions
 	bool m_IsLibCache;				// False for the "standard" libraries,
 									// True for the library cache
@@ -167,10 +167,12 @@ public:
 class LibEDA_BaseStruct : public EDA_BaseStruct
 {
 public:
-	int m_Unit;					/* Unit identification (for multi part per parkage)
+	int m_Unit;				/* Unit identification (for multi part per parkage)
 								0 if the item is common to all units */
-	int m_Convert;				/* Shape identification (for parts which have a convert shape)
+	int m_Convert;			/* Shape identification (for parts which have a convert shape)
 									0 if the item is common to all shapes */
+	wxPoint m_Pos;			/* Position or centre (Arc and Circle) or start point (segments) */
+	int m_Width;			/* Width of draw lines */
 
 public:
 	LibEDA_BaseStruct * Next(void) {return (LibEDA_BaseStruct *) Pnext;}
@@ -179,20 +181,20 @@ public:
 	void Display_Infos_DrawEntry(WinEDA_DrawFrame * frame);
 };
 
+
 class LibDrawPin : public LibEDA_BaseStruct
 {
 public:
-	wxPoint m_Pos;			/* Pin position */
-	short m_PinLen;				/* Pin lenght */
-	short m_Orient;			/* Pin orientation (Up, Down, Left, Right) */
-	short m_PinShape;			/* Bitwise ORed: Pin shape (see enum DrawPinShape) */
-	char m_PinType;			/* Electrical pin properties */
-	char m_Attributs;		/* bit 0 != 0: pin invisible */
-	long m_PinNum;			/* Pin number: 4 Ascii code like
-							"12" or "anod" or "G6" 
+	int m_PinLen;		/* Pin lenght */
+	int m_Orient;		/* Pin orientation (Up, Down, Left, Right) */
+	int m_PinShape;		/* Bitwise ORed: Pin shape (see enum DrawPinShape) */
+	int m_PinType;			/* Electrical pin properties */
+	int m_Attributs;		/* bit 0 != 0: pin invisible */
+	long m_PinNum;			/* Pin number: 4 Ascii code like "12" or "anod" or "G6" 
 							"12" is really "12\0\0"*/
 	wxString m_PinName;
-	short m_SizeNum, m_SizeName;	/* Pin num and Pin name sizes */
+	int m_PinNumSize, m_PinNameSize;	/* Pin num and Pin name sizes */
+//	short m_PinNumWidth, m_PinNameWidth;	/* (Unused) Pin num and Pin name text width */
 
 public:
 	LibDrawPin(void);
@@ -204,6 +206,9 @@ public:
 	int ReturnPinDrawOrient(int TransMat[2][2]);
 	void ReturnPinStringNum(wxString & buffer);
 	void SetPinNumFromString(wxString & buffer);
+	void DrawPinSymbol(WinEDA_DrawPanel * panel, wxDC * DC, const wxPoint & pin_pos, int orient,
+							int DrawMode, int Color = -1);
+
 	void DrawPinTexts(WinEDA_DrawPanel * panel, wxDC * DC,
 				wxPoint & pin_pos, int orient,
 				int TextInside, bool DrawPinNum, bool DrawPinName,
@@ -216,12 +221,10 @@ public:
 class LibDrawArc : public LibEDA_BaseStruct
 {
 public:
-	wxPoint m_Pos;			/* Position du point de reference (Centre)*/
 	int m_Rayon;
-	int m_Width;
 	int m_Fill;
 	int t1, t2;				/* position des 2 extremites de l'arc en 0,1 degres */
-	wxPoint m_Start, m_End;	/* position des 2 extremites de l'arc en coord reelles*/
+	wxPoint m_ArcStart, m_ArcEnd;	/* position des 2 extremites de l'arc en coord reelles*/
 
 public:
 	LibDrawArc(void);
@@ -233,9 +236,7 @@ public:
 class LibDrawCircle : public LibEDA_BaseStruct
 {
 public:
-	wxPoint m_Pos;			/* Position du point de reference */
 	int m_Rayon;
-	int m_Width;
 	int m_Fill;
 
 public:
@@ -248,7 +249,6 @@ public:
 class LibDrawText : public LibEDA_BaseStruct
 {
 public:
-	wxPoint m_Pos;			/* Position du point de reference */
 	int m_Horiz;
 	wxSize m_Size;
 	int m_Type;
@@ -264,9 +264,7 @@ public:
 class LibDrawSquare : public LibEDA_BaseStruct
 {
 public:
-	wxPoint m_Start;
 	wxPoint m_End;
-	int m_Width;
 	int m_Fill;
 
 public:
@@ -279,9 +277,7 @@ public:
 class LibDrawSegment : public LibEDA_BaseStruct
 {
 public:
-	wxPoint m_Start;
 	wxPoint m_End;
-	int m_Width;
 
 public:
 	LibDrawSegment(void);
@@ -294,7 +290,6 @@ class LibDrawPolyline : public LibEDA_BaseStruct
 {
 public:
 	int n, *PolyList;
-	int m_Width;
 	int m_Fill;
 
 public:

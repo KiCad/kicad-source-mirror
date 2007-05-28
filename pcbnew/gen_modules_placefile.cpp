@@ -97,6 +97,9 @@ FILE * LayerCu = NULL, *LayerCmp = NULL;
 			}
 		}
 
+	// Switch the locale to standard C (needed to print floating point numbers like 1.3)
+	setlocale(LC_NUMERIC, "C");
+
 	/* Affichage du bilan : */
 	MsgPanel->EraseMsgBox();
 	Affiche_1_Parametre(this,0,_("Component side place file:"),NameLayerCmp,BLUE);
@@ -173,8 +176,6 @@ FILE * LayerCu = NULL, *LayerCmp = NULL;
 			(float) module_pos.x * conv_unit,
 			(float) module_pos.y * conv_unit,
 			(float) Liste[ii].m_Module->m_Orient / 10);
-		// compensation bug francisation printf (float x.y généré x,y)
-		to_point(text);
 
 		if (Liste[ii].m_Module->m_Layer == CMP_N)
 		{
@@ -198,6 +199,7 @@ FILE * LayerCu = NULL, *LayerCmp = NULL;
 		fclose(LayerCu);
 	}
 	MyFree(Liste);
+	setlocale(LC_NUMERIC, "");      // revert to the current  locale
 
 	msg = wxT("Cmp File: ") + NameLayerCmp;
 	if( GenCu ) msg += wxT("\nCu File: ") + NameLayerCu;
@@ -238,6 +240,9 @@ wxPoint module_pos;
 		DisplayError(this, msg); return ;
 		}
 
+	// Switch the locale to standard C (needed to print floating point numbers like 1.3)
+	setlocale(LC_NUMERIC, "C");
+
 	/* Generation entete du fichier 'commentaires) */
 	sprintf(Line,"## Module report - date %s\n", DateAndTime(Buff) );
 	fputs(Line,rptfile);
@@ -257,13 +262,11 @@ wxPoint module_pos;
 	sprintf(Line,"upper_left_corner %9.6f %9.6f\n",
 			(float) m_Pcb->m_BoundaryBox.GetX() * conv_unit,
 			(float) m_Pcb->m_BoundaryBox.GetY() * conv_unit);
-	to_point(Line);
 	fputs(Line, rptfile);
 		
 	sprintf(Line,"lower_right_corner %9.6f %9.6f\n",
 			(float) (m_Pcb->m_BoundaryBox.GetRight() ) * conv_unit,
 			(float) (m_Pcb->m_BoundaryBox.GetBottom() ) * conv_unit);
-	to_point(Line);
 	fputs(Line, rptfile);
 		
 	fputs("$EndBOARD\n\n", rptfile); 
@@ -295,11 +298,9 @@ wxPoint module_pos;
 		sprintf( Line, "position %9.6f %9.6f\n",
 			(float) module_pos.x * conv_unit,
 			(float) module_pos.y * conv_unit);
-		to_point(Line);
 		fputs(Line, rptfile);
 
 		sprintf( Line, "orientation  %.2f\n", (float) Module->m_Orient / 10);
-		to_point(Line);
 		if (Module->m_Layer == CMP_N) strcat(Line,"layer component\n");
 		else if (Module->m_Layer == CUIVRE_N) strcat(Line,"layer copper\n");
 		else  strcat(Line,"layer other\n");
@@ -313,27 +314,25 @@ wxPoint module_pos;
 		sprintf( Line, "position %9.6f %9.6f\n",
 			(float) pad->m_Pos0.x * conv_unit,
 			(float) pad->m_Pos0.y * conv_unit);
-		to_point(Line);
 		fputs(Line, rptfile);
+
 		sprintf( Line, "size %9.6f %9.6f\n",
 			(float) pad->m_Size.x * conv_unit,
 			(float) pad->m_Size.y * conv_unit);
-		to_point(Line);
 		fputs(Line, rptfile);
 		sprintf( Line, "drill %9.6f\n", (float) pad->m_Drill.x * conv_unit);
-		to_point(Line);
 		fputs(Line, rptfile);
 		sprintf( Line, "shape_offset %9.6f %9.6f\n",
 			(float) pad->m_Offset.x * conv_unit,
 			(float) pad->m_Offset.y * conv_unit);
-		to_point(Line);
 		fputs(Line, rptfile);
+
 		sprintf( Line, "orientation  %.2f\n", (float) (pad->m_Orient - Module->m_Orient) / 10);
-		to_point(Line);
 		fputs(Line, rptfile);
 char *shape_name[6] = {"??? ","Circ","Rect","Oval","trap","spec"} ;
 		sprintf( Line, "Shape  %s\n", shape_name[pad->m_PadShape]);
 		fputs(Line, rptfile);
+
 		int layer = 0;
 		if(pad->m_Masque_Layer & CUIVRE_LAYER) layer = 1;
 		if(pad->m_Masque_Layer & CMP_LAYER) layer |= 2;
@@ -349,15 +348,16 @@ char *layer_name[4] = {"??? ","copper","component","all"} ;
 	/* Write board Edges */
 EDA_BaseStruct * PtStruct;
 	for ( PtStruct = m_Pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Pnext)
-		{
+	{
 		if( PtStruct->m_StructType != TYPEDRAWSEGMENT ) continue;
 		if( ((DRAWSEGMENT *) PtStruct)->m_Layer != EDGE_N ) continue;
 		WriteDrawSegmentPcb( (DRAWSEGMENT *) PtStruct, rptfile);
-		}
+	}
 	
 	/* Generation fin du fichier */
 	fputs("$EndDESCRIPTION\n", rptfile); 
 	fclose(rptfile);
+	setlocale(LC_NUMERIC, "");      // revert to the current  locale
 }
 
 
@@ -392,11 +392,8 @@ char Line[1024];
 			rayon = hypot(dx-ux0,dy-uy0);
 			sprintf(Line,"$CIRCLE \n"); fputs(Line, rptfile);
 			sprintf( Line, "centre %.6lf %.6lf\n", ux0, uy0);
-			to_point(Line); fputs(Line, rptfile);
 			sprintf( Line, "radius %.6lf\n", rayon);
-			to_point(Line); fputs(Line, rptfile);
 			sprintf( Line, "width %.6lf\n", width);
-			to_point(Line); fputs(Line, rptfile);
 			sprintf(Line,"$EndCIRCLE \n");
 			fputs(Line, rptfile);
 			break;
@@ -408,13 +405,9 @@ char Line[1024];
 			RotatePoint(&endx, &endy, PtDrawSegment->m_Start.x, PtDrawSegment->m_Start.y,PtDrawSegment->m_Angle); 
 			sprintf(Line,"$ARC \n"); fputs(Line, rptfile);
 			sprintf( Line, "centre %.6lf %.6lf\n", ux0, uy0);
-			to_point(Line); fputs(Line, rptfile);
 			sprintf( Line, "start %.6lf %.6lf\n", endx * conv_unit, endy * conv_unit);
-			to_point(Line); fputs(Line, rptfile);
 			sprintf( Line, "end %.6lf %.6lf\n", dx, dy);
-			to_point(Line); fputs(Line, rptfile);
 			sprintf( Line, "width %.6lf\n", width);
-			to_point(Line); fputs(Line, rptfile);
 			sprintf(Line,"$EndARC \n");
 			fputs(Line, rptfile);
 			}
@@ -424,11 +417,8 @@ char Line[1024];
 			sprintf(Line,"$LINE \n");
 			fputs(Line, rptfile);
 			sprintf( Line, "start %.6lf %.6lf\n", ux0, uy0);
-			to_point(Line); fputs(Line, rptfile);
 			sprintf( Line, "end %.6lf %.6lf\n", dx, dy);
-			to_point(Line); fputs(Line, rptfile);
 			sprintf( Line, "width %.6lf\n", width);
-			to_point(Line); fputs(Line, rptfile);
 			sprintf(Line,"$EndLINE \n");
 			fputs(Line, rptfile);
 			break;

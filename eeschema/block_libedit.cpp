@@ -88,13 +88,13 @@ bool ItemIsInOtherPart, ItemIsInOtherConvert;
 		{
 			case COMPONENT_ARC_DRAW_TYPE:
 			{
-				pos = ((LibDrawArc*)item)->m_Start; pos.y = -pos.y;
+				pos = ((LibDrawArc*)item)->m_ArcStart; pos.y = -pos.y;
 				if ( Rect.Inside(pos) )
 				{
 					item->m_Selected = IS_SELECTED;
 					ItemsCount++;
 				}
-				pos = ((LibDrawArc*)item)->m_End; pos.y = -pos.y;
+				pos = ((LibDrawArc*)item)->m_ArcEnd; pos.y = -pos.y;
 				if ( Rect.Inside(pos) )
 				{
 					item->m_Selected = IS_SELECTED;
@@ -113,7 +113,7 @@ bool ItemIsInOtherPart, ItemIsInOtherConvert;
 				break;
 
 			case COMPONENT_RECT_DRAW_TYPE:
-				pos = ((LibDrawSquare*)item)->m_Start; pos.y = -pos.y;
+				pos = ((LibDrawSquare*)item)->m_Pos; pos.y = -pos.y;
 				if ( Rect.Inside(pos) )
 				{
 					item->m_Selected = IS_SELECTED;
@@ -529,10 +529,10 @@ LibEDA_BaseStruct * item;
 			{
 				((LibDrawArc*)item)->m_Pos.x += offset.x;
 				((LibDrawArc*)item)->m_Pos.y += offset.y;
-				((LibDrawArc*)item)->m_Start.x += offset.x;
-				((LibDrawArc*)item)->m_Start.y += offset.y;
-				((LibDrawArc*)item)->m_End.x += offset.x;
-				((LibDrawArc*)item)->m_End.y += offset.y;
+				((LibDrawArc*)item)->m_ArcStart.x += offset.x;
+				((LibDrawArc*)item)->m_ArcStart.y += offset.y;
+				((LibDrawArc*)item)->m_ArcEnd.x += offset.x;
+				((LibDrawArc*)item)->m_ArcEnd.y += offset.y;
 				break;
 			}
 
@@ -542,8 +542,8 @@ LibEDA_BaseStruct * item;
 				break;
 
 			case COMPONENT_RECT_DRAW_TYPE:
-				((LibDrawSquare*)item)->m_Start.x += offset.x;
-				((LibDrawSquare*)item)->m_Start.y += offset.y;
+				((LibDrawSquare*)item)->m_Pos.x += offset.x;
+				((LibDrawSquare*)item)->m_Pos.y += offset.y;
 				((LibDrawSquare*)item)->m_End.x += offset.x;
 				((LibDrawSquare*)item)->m_End.y += offset.y;
 				break;
@@ -632,9 +632,9 @@ LibEDA_BaseStruct * item;
 			case COMPONENT_ARC_DRAW_TYPE:
 			{
 				SETMIRROR(((LibDrawArc*)item)->m_Pos.x);
-				SETMIRROR(((LibDrawArc*)item)->m_Start.x);
-				SETMIRROR(((LibDrawArc*)item)->m_End.x);
-				EXCHG(((LibDrawArc*)item)->m_Start,((LibDrawArc*)item)->m_End);
+				SETMIRROR(((LibDrawArc*)item)->m_ArcStart.x);
+				SETMIRROR(((LibDrawArc*)item)->m_ArcEnd.x);
+				EXCHG(((LibDrawArc*)item)->m_ArcStart,((LibDrawArc*)item)->m_ArcEnd);
 				break;
 			}
 
@@ -643,7 +643,7 @@ LibEDA_BaseStruct * item;
 				break;
 
 			case COMPONENT_RECT_DRAW_TYPE:
-				SETMIRROR(((LibDrawSquare*)item)->m_Start.x);
+				SETMIRROR(((LibDrawSquare*)item)->m_Pos.x);
 				SETMIRROR(((LibDrawSquare*)item)->m_End.x);
 				break;
 

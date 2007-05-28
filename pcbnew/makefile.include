@@ -1,5 +1,5 @@
 EXTRALIBS = ../common/common.a
-EXTRACPPFLAGS= -DPCBNEW -I./ -Ibitmaps -I../include -I../share -I../pcbnew -I../3d-viewer
+EXTRACPPFLAGS += -DPCBNEW  -fno-strict-aliasing -I./ -Ibitmaps -I../include -I../share -I../pcbnew -I../3d-viewer
 
 #COMMON = pcbnew.h struct.h class_pad.h class_module.h class_text_mod.h \
 #		class_edge_mod.h class_equipot.h
@@ -40,7 +40,7 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		pcbcfg.o \
 		netlist.o \
 		affiche.o \
-		pcbpiste.o \
+		swap_layers.o \
 		tracepcb.o \
 		tracemod.o \
 		trpiste.o \
@@ -82,7 +82,9 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		work.o queue.o \
 		board.o dist.o graphpcb.o \
 		zones.o undelete.o \
-		move_copy_track.o ioascii.o struct.o \
+		copy_track.o\
+		move_or_drag_track.o\
+		ioascii.o struct.o \
 		mirepcb.o xchgmod.o\
 		plotps.o\
 		dragsegm.o\
@@ -163,7 +165,7 @@ gen_modules_placefile.o: gen_modules_placefile.cpp $(COMMON)
 
 xchgmod.o: xchgmod.cpp $(COMMON)
 
-pcbpiste.o: pcbpiste.cpp $(COMMON)
+swap_layers.o: swap_layers.cpp $(COMMON)
 
 tracepcb.o: tracepcb.cpp $(COMMON)
 
@@ -271,7 +273,9 @@ zones.o: zones.cpp cell.h $(COMMON)
 
 undelete.o: undelete.cpp $(COMMON)
 
-move_copy_track.o: move_copy_track.cpp $(COMMON)
+move_or_drag_track.o: move_or_drag_track.cpp $(COMMON)
+
+copy_track.o: copy_track.cpp $(COMMON)
 
 ioascii.o: ioascii.cpp $(COMMON)
 

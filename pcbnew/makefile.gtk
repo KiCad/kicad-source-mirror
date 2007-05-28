@@ -26,7 +26,7 @@ $(TARGET): $(OBJECTS) makefile.gtk  makefile.include $(LIBVIEWER3D) $(EXTRALIBS)
 		-o $(TARGET)
 		
 		
-install:
+install: $(TARGET)
 		cp $(TARGET) $(KICAD_BIN)
 
 

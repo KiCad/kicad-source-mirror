@@ -25,6 +25,9 @@
 #include "Delete_Line.xpm"
 #include "Delete_Track.xpm"
 #include "Move_Module.xpm"
+#include "Move_Track_Segment.xpm"
+#include "Drag_Track_Segment.xpm"
+#include "Drag_Segment_WithSlope.xpm"
 #include "Drag_Module.xpm"
 #include "Edit_Module.xpm"
 #include "Rotate_Module+.xpm"
@@ -47,6 +50,7 @@
 #include "Width_Net.xpm"
 #include "Width_Track_Via.xpm"
 #include "Select_Layer_Pair.xpm"
+#include "Footprint_Text.xpm"
 
 #include "Flag.xpm"
 
@@ -55,32 +59,16 @@
 /* local functions */
 static void CreatePopupMenuForTracks(TRACK * Track, wxPoint CursorPosition,
 			wxMenu * PopMenu);
+static void CreatePopUpMenuForFootprints(MODULE * Footprint, wxMenu * menu, bool full_menu);
+static void CreatePopUpMenuForFpTexts(TEXTE_MODULE * FpText, wxMenu * menu);
+static void CreatePopUpMenuForPads(D_PAD * Pad, wxMenu * menu);
+static void CreatePopUpMenuForTexts(TEXTE_PCB * Text, wxMenu * menu);
+static void CreatePopUpBlockMenu(wxMenu * menu);
+
 
 
 /*****/
 
-/*********************************************************************/
-static void AppendModuleOnRightClickMenu(wxMenu * menu, bool full_menu)
-/*********************************************************************/
-/* Create the wxMenuitem list for module editing
-*/
-{
-	if ( full_menu )
-	{
-		ADD_MENUITEM(menu, ID_POPUP_PCB_MOVE_MODULE_REQUEST,
-			_("Move Module  (M)"), Move_Module_xpm)
-		ADD_MENUITEM(menu, ID_POPUP_PCB_DRAG_MODULE_REQUEST,
-			_("Drag Module  (G)"), Drag_Module_xpm);
-	}
-	ADD_MENUITEM(menu, ID_POPUP_PCB_ROTATE_MODULE_CLOCKWISE,
-		_("Rotate Module +  (R)"), rotate_module_pos_xpm);
-	ADD_MENUITEM(menu, ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE,
-		_("Rotate Module -"), rotate_module_neg_xpm);
-	ADD_MENUITEM(menu, ID_POPUP_PCB_CHANGE_SIDE_MODULE,
-		_("Invert Module  (S)"), invert_module_xpm);
-	ADD_MENUITEM(menu, ID_POPUP_PCB_EDIT_MODULE,
-		_("Edit Module"), Edit_Module_xpm);
-}
 
 /********************************************/
 static wxMenu * Append_Track_Width_List(void)
@@ -129,7 +117,7 @@ double value;
 /****************************************************************************/
 void WinEDA_PcbFrame::OnRightClick(const wxPoint& MousePos, wxMenu * PopMenu)
 /****************************************************************************/
-/* Prepare le menu PullUp affiché par un click sur le bouton droit
+/* Prepare le menu PopUp affiché par un click sur le bouton droit
 de la souris.
    Ce menu est ensuite complété par la liste des commandes de ZOOM
 */
@@ -177,23 +165,7 @@ wxClientDC dc(DrawPanel);
 		if ( (DrawStruct && DrawStruct->m_Flags) || BlockActive )
 		{
 			if ( BlockActive )
-			{
-				ADD_MENUITEM(PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
-					_("Cancel Block"), cancel_xpm );
-				ADD_MENUITEM(PopMenu, ID_POPUP_ZOOM_BLOCK,
-					_("Zoom Block (Midd butt drag)"), zoom_selected_xpm );
-				PopMenu->AppendSeparator();
-				ADD_MENUITEM(PopMenu, ID_POPUP_PLACE_BLOCK,
-					_("Place Block"), apply_xpm );
-				ADD_MENUITEM(PopMenu, ID_POPUP_COPY_BLOCK,
-					_("Copy Block (shift + drag mouse)"), copyblock_xpm );
-				ADD_MENUITEM(PopMenu, ID_POPUP_INVERT_BLOCK,
-					_("Flip Block (alt + drag mouse)"), invert_module_xpm );
-				ADD_MENUITEM(PopMenu, ID_POPUP_ROTATE_BLOCK,
-					_("Rotate Block (ctrl + drag mouse)"), rotate_pos_xpm );
-				ADD_MENUITEM(PopMenu, ID_POPUP_DELETE_BLOCK,
-					_("Delete Block (shift+ctrl + drag mouse)"), delete_xpm );
-			}
+				CreatePopUpBlockMenu(PopMenu);
 			else
 			{
 				ADD_MENUITEM(PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
@@ -203,18 +175,27 @@ wxClientDC dc(DrawPanel);
 		}
 	}
 
-	if ( BlockActive ) goto out;
+	if ( BlockActive )
+	{
+		DrawPanel->CursorOn(&dc); return;
+	}
 
 	m_CurrentScreen->m_CurrentItem = DrawStruct;
-
+	
+	if ( DrawStruct ) flags = DrawStruct->m_Flags;
+	else flags = 0;
+	if( !flags )
+	{
+		ADD_MENUITEM(PopMenu, ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST,
+			_("Footprint Get and Move (F)"), Move_Module_xpm);
+	}
 	if ( DrawStruct )
 	{
-		flags = DrawStruct->m_Flags;
 		switch ( DrawStruct->m_StructType )
 		{
 		case TYPEMODULE:
-			if( !flags ) AppendModuleOnRightClickMenu(PopMenu, TRUE);
-			else AppendModuleOnRightClickMenu(PopMenu, FALSE);
+			if( !flags ) CreatePopUpMenuForFootprints((MODULE *) DrawStruct, PopMenu, TRUE);
+			else CreatePopUpMenuForFootprints((MODULE *) DrawStruct, PopMenu, FALSE);
 
 			if (m_HTOOL_current_state == ID_TOOLBARH_PCB_AUTOPLACE)
 			{
@@ -233,13 +214,6 @@ wxClientDC dc(DrawPanel);
 				if( !flags )
 					PopMenu->Append( ID_POPUP_PCB_AUTOROUTE_MODULE, _("Autoroute"));
 			}
-
-			if( !flags )
-			{
-				PopMenu->AppendSeparator();
-				ADD_MENUITEM(PopMenu, ID_POPUP_PCB_DELETE_MODULE,
-					_("Delete Module"), Delete_Module_xpm);
-			}
 			break;
 
 		case TYPEPAD:
@@ -248,19 +222,11 @@ wxClientDC dc(DrawPanel);
 			MODULE * Module = (MODULE *) DrawStruct->m_Parent;
 				if (Module)
 				{
-					AppendModuleOnRightClickMenu(PopMenu, TRUE);
+					CreatePopUpMenuForFootprints(Module, PopMenu, TRUE);
 					PopMenu->AppendSeparator();
 				}
-				ADD_MENUITEM(PopMenu, ID_POPUP_PCB_MOVE_PAD_REQUEST,
-					_("Move Pad"), move_pad_xpm);
-				ADD_MENUITEM(PopMenu, ID_POPUP_PCB_DRAG_PAD_REQUEST,
-					_("Drag Pad"), drag_pad_xpm);
 			}
-			ADD_MENUITEM(PopMenu, ID_POPUP_PCB_EDIT_PAD, _("Edit Pad"), options_pad_xpm);
-			ADD_MENUITEM(PopMenu, ID_POPUP_PCB_IMPORT_PAD_SETTINGS, 
-					_("New Pad Settings"), options_new_pad_xpm);
-			ADD_MENUITEM(PopMenu, ID_POPUP_PCB_EXPORT_PAD_SETTINGS,
-				_("Export Pad Settings"), Export_Options_Pad_xpm);
+			CreatePopUpMenuForPads( (D_PAD *)DrawStruct, PopMenu);
 			if (m_HTOOL_current_state == ID_TOOLBARH_PCB_AUTOROUTE)
 			{
 				if( !flags )
@@ -268,15 +234,6 @@ wxClientDC dc(DrawPanel);
 					PopMenu->Append( ID_POPUP_PCB_AUTOROUTE_PAD, _("Autoroute Pad"));
 					PopMenu->Append( ID_POPUP_PCB_AUTOROUTE_NET, _("Autoroute Net"));
 				}
-			}
-
-			if( !flags )
-			{
-				ADD_MENUITEM(PopMenu, ID_POPUP_PCB_DELETE_PAD,
-					_("delete Pad"), Delete_Pad_xpm);
-				PopMenu->AppendSeparator();
-				ADD_MENUITEM(PopMenu, ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS,
-					_("Global Pad Settings"), global_options_pad_xpm);
 			}
 			break;
 
@@ -286,19 +243,11 @@ wxClientDC dc(DrawPanel);
 			MODULE * Module = (MODULE *) DrawStruct->m_Parent;
 				if (Module)
 				{
-					AppendModuleOnRightClickMenu(PopMenu, TRUE);
+					CreatePopUpMenuForFootprints(Module, PopMenu, TRUE);
 					PopMenu->AppendSeparator();
 				}
-				ADD_MENUITEM(PopMenu, ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST,
-					_("Move Text Mod."), Move_Field_xpm);
 			}
-			ADD_MENUITEM(PopMenu, ID_POPUP_PCB_ROTATE_TEXTMODULE,
-				_("Rotate Text Mod."), Rotate_Field_xpm);
-			ADD_MENUITEM(PopMenu, ID_POPUP_PCB_EDIT_TEXTMODULE,
-				_("Edit Text Mod."), edit_text_xpm);
-			if ( ((TEXTE_MODULE*)DrawStruct)->m_Type == TEXT_is_DIVERS)
-				ADD_MENUITEM(PopMenu, ID_POPUP_PCB_DELETE_TEXTMODULE,
-					_("Delete Text Mod."), delete_xpm);
+			CreatePopUpMenuForFpTexts( (TEXTE_MODULE *) DrawStruct, PopMenu);
 			break;
 
 		case TYPEDRAWSEGMENT:
@@ -327,17 +276,7 @@ wxClientDC dc(DrawPanel);
 			break;
 
 		case TYPETEXTE:
-			if( !flags )
-			{
-				ADD_MENUITEM(PopMenu, ID_POPUP_PCB_MOVE_TEXTEPCB_REQUEST,
-							_("Move Text"), move_text_xpm);
-			}
-			ADD_MENUITEM(PopMenu, ID_POPUP_PCB_ROTATE_TEXTEPCB,
-				_("Rotate Text"), rotate_pos_xpm);
-			ADD_MENUITEM(PopMenu, ID_POPUP_PCB_EDIT_TEXTEPCB,
-				_("Edit Text"), edit_text_xpm);
-			ADD_MENUITEM(PopMenu, ID_POPUP_PCB_DELETE_TEXTEPCB,
-				_("Delete Text"), delete_text_xpm);
+			CreatePopUpMenuForTexts( (TEXTE_PCB *) DrawStruct, PopMenu);
 			break;
 
 		case TYPETRACK:
@@ -387,14 +326,14 @@ wxClientDC dc(DrawPanel);
 		case TYPEPCB:
 		case PCB_EQUIPOT_STRUCT_TYPE:
 			msg.Printf(
-				wxT("WinEDA_PcbFrame::OnRightClick Error: illegal DrawType %d"),
+				wxT("WinEDA_PcbFrame::OnRightClick() Error: illegal DrawType %d"),
 				DrawStruct->m_StructType);
 			DisplayError(this, msg );
 			break;
 
 		default:
 			msg.Printf(
-				wxT("WinEDA_PcbFrame::OnRightClick Error: unknown DrawType %d"),
+				wxT("WinEDA_PcbFrame::OnRightClick() Error: unknown DrawType %d"),
 				DrawStruct->m_StructType);
 			DisplayError(this, msg );
 			break;
@@ -513,8 +452,32 @@ wxClientDC dc(DrawPanel);
 			break;
 
 		}
-  out:
+
 	DrawPanel->CursorOn(&dc);
+}
+
+
+/****************************************/
+void CreatePopUpBlockMenu(wxMenu * menu)
+/****************************************/
+/* Create Pop sub menu for block commands
+*/
+{
+	ADD_MENUITEM(menu, ID_POPUP_CANCEL_CURRENT_COMMAND,
+		_("Cancel Block"), cancel_xpm );
+	ADD_MENUITEM(menu, ID_POPUP_ZOOM_BLOCK,
+		_("Zoom Block (Midd butt drag)"), zoom_selected_xpm );
+	menu->AppendSeparator();
+	ADD_MENUITEM(menu, ID_POPUP_PLACE_BLOCK,
+		_("Place Block"), apply_xpm );
+	ADD_MENUITEM(menu, ID_POPUP_COPY_BLOCK,
+		_("Copy Block (shift + drag mouse)"), copyblock_xpm );
+	ADD_MENUITEM(menu, ID_POPUP_INVERT_BLOCK,
+		_("Flip Block (alt + drag mouse)"), invert_module_xpm );
+	ADD_MENUITEM(menu, ID_POPUP_ROTATE_BLOCK,
+		_("Rotate Block (ctrl + drag mouse)"), rotate_pos_xpm );
+	ADD_MENUITEM(menu, ID_POPUP_DELETE_BLOCK,
+		_("Delete Block (shift+ctrl + drag mouse)"), delete_xpm );
 }
 
 
@@ -558,6 +521,14 @@ int flags = Track->m_Flags;
 			}
 			else
 			{
+				ADD_MENUITEM(PopMenu, ID_POPUP_PCB_DRAG_TRACK_SEGMENT_KEEP_SLOPE,
+						_("Drag Segments, keep slope"), drag_segment_withslope_xpm);
+				ADD_MENUITEM(PopMenu, ID_POPUP_PCB_DRAG_TRACK_SEGMENT,
+						_("Drag Segment"), drag_track_segment_xpm);
+#if 0
+				ADD_MENUITEM(PopMenu, ID_POPUP_PCB_MOVE_TRACK_SEGMENT,
+						_("Move Segment"), move_track_segment_xpm);
+#endif
 				ADD_MENUITEM(PopMenu, ID_POPUP_PCB_BREAK_TRACK,
 						_("Break Track"), Break_Line_xpm);
 			}
@@ -630,3 +601,159 @@ int flags = Track->m_Flags;
 		track_mnu->Append(ID_POPUP_PCB_LOCK_OFF_NET, _("Net Locked: No"));
 	}
 }
+
+/*********************************************************************************/
+void CreatePopUpMenuForFootprints(MODULE * Module, wxMenu * menu, bool full_menu)
+/*********************************************************************************/
+/* Create the wxMenuitem list for footprint editing
+*/
+{
+wxMenu * sub_menu_footprint;
+wxString msg;
+int flags = Module->m_Flags;
+	
+	msg = _("Footprint");
+	msg << wxT(" ") << Module->m_Reference->m_Text;
+
+	sub_menu_footprint = new wxMenu;
+	ADD_MENUITEM_WITH_SUBMENU(menu, sub_menu_footprint, -1, msg, module_xpm)
+	if ( full_menu )
+	{
+		ADD_MENUITEM(sub_menu_footprint, ID_POPUP_PCB_MOVE_MODULE_REQUEST,
+			_("Move (M)"), Move_Module_xpm)
+		ADD_MENUITEM(sub_menu_footprint, ID_POPUP_PCB_DRAG_MODULE_REQUEST,
+			_("Drag (G)"), Drag_Module_xpm);
+	}
+	ADD_MENUITEM(sub_menu_footprint, ID_POPUP_PCB_ROTATE_MODULE_CLOCKWISE,
+		_("Rotate  + (R)"), rotate_module_pos_xpm);
+	ADD_MENUITEM(sub_menu_footprint, ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE,
+		_("Rotate -"), rotate_module_neg_xpm);
+	ADD_MENUITEM(sub_menu_footprint, ID_POPUP_PCB_CHANGE_SIDE_MODULE,
+		_("Flip (S)"), invert_module_xpm);
+	ADD_MENUITEM(sub_menu_footprint, ID_POPUP_PCB_EDIT_MODULE,
+		_("Edit"), Edit_Module_xpm);
+
+	if( !flags )
+	{
+		sub_menu_footprint->AppendSeparator();
+		ADD_MENUITEM(sub_menu_footprint, ID_POPUP_PCB_DELETE_MODULE,
+			_("Delete Module"), Delete_Module_xpm);
+	}
+}
+
+
+/********************************************************************/
+void CreatePopUpMenuForFpTexts(TEXTE_MODULE * FpText, wxMenu * menu)
+/********************************************************************/
+/* Create the wxMenuitem list for editing texts on footprints
+*/
+{
+wxMenu * sub_menu_Fp_text;
+wxString msg;
+int flags = FpText->m_Flags;
+	
+	switch ( FpText->m_Type )
+	{
+		case TEXT_is_REFERENCE:
+			msg = _("Footprint ref");
+			break;
+
+		case TEXT_is_VALUE:
+			msg = _("Footprint value");
+			break;
+
+		default:
+			msg = _("Footprint text");
+		break;
+	}
+	msg << wxT(" ") << FpText->m_Text;
+
+	sub_menu_Fp_text = new wxMenu;
+	ADD_MENUITEM_WITH_SUBMENU(menu, sub_menu_Fp_text, -1, msg, footprint_text_xpm)
+
+	if( !flags )
+		ADD_MENUITEM(sub_menu_Fp_text, ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST,
+			_("Move"), Move_Field_xpm);
+
+	ADD_MENUITEM(sub_menu_Fp_text, ID_POPUP_PCB_ROTATE_TEXTMODULE,
+		_("Rotate"), Rotate_Field_xpm);
+	ADD_MENUITEM(sub_menu_Fp_text, ID_POPUP_PCB_EDIT_TEXTMODULE,
+		_("Edit"), edit_text_xpm);
+	if ( FpText->m_Type == TEXT_is_DIVERS)
+		ADD_MENUITEM(sub_menu_Fp_text, ID_POPUP_PCB_DELETE_TEXTMODULE,
+			_("Delete"), delete_xpm);
+}
+
+
+/***************************************************************/
+void CreatePopUpMenuForPads( D_PAD * Pad, wxMenu * menu)
+/***************************************************************/
+/* Create pop menu for pads */
+{
+wxMenu * sub_menu_Pad;
+wxString msg;
+int flags = Pad->m_Flags;
+	
+	msg = _("Pad");
+	msg << wxT(" ") << Pad->ReturnStringPadName();
+
+	sub_menu_Pad = new wxMenu;
+	ADD_MENUITEM_WITH_SUBMENU(menu, sub_menu_Pad, -1, msg, pad_xpm)
+	if( !flags )
+	{
+		ADD_MENUITEM(sub_menu_Pad, ID_POPUP_PCB_MOVE_PAD_REQUEST,
+			_("Move"), move_pad_xpm);
+		ADD_MENUITEM(sub_menu_Pad, ID_POPUP_PCB_DRAG_PAD_REQUEST,
+			_("Drag"), drag_pad_xpm);
+	}
+	ADD_MENUITEM(sub_menu_Pad, ID_POPUP_PCB_EDIT_PAD, _("Edit Pad"), options_pad_xpm);
+	sub_menu_Pad->AppendSeparator();
+	ADD_MENUITEM(sub_menu_Pad, ID_POPUP_PCB_IMPORT_PAD_SETTINGS, 
+			_("New Pad Settings"), options_new_pad_xpm);
+	ADD_MENUITEM(sub_menu_Pad, ID_POPUP_PCB_EXPORT_PAD_SETTINGS,
+		_("Export Pad Settings"), Export_Options_Pad_xpm);
+
+	if( !flags )
+	{
+		ADD_MENUITEM(sub_menu_Pad, ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS,
+			_("Global Pad Settings"), global_options_pad_xpm);
+		sub_menu_Pad->AppendSeparator();
+		ADD_MENUITEM(sub_menu_Pad, ID_POPUP_PCB_DELETE_PAD,
+			_("delete"), Delete_Pad_xpm);
+	}
+}
+
+
+/*************************************************************/
+void CreatePopUpMenuForTexts(TEXTE_PCB * Text, wxMenu * menu)
+/*************************************************************/
+/* Create pop menu for pcb texts */
+{
+wxMenu * sub_menu_Text;
+wxString msg;
+int flags = Text->m_Flags;
+	
+	msg = _("Pcb Text");msg << wxT(" ");
+	if ( Text->m_Text.Len() < 8 )
+		msg << Text->m_Text;
+	else
+		msg += Text->m_Text.Left(5) + wxT("..");
+
+	sub_menu_Text = new wxMenu;
+	ADD_MENUITEM_WITH_SUBMENU(menu, sub_menu_Text, -1, msg, add_text_xpm)
+
+	if( !flags )
+	{
+		ADD_MENUITEM(sub_menu_Text, ID_POPUP_PCB_MOVE_TEXTEPCB_REQUEST,
+					_("Move"), move_text_xpm);
+	}
+	ADD_MENUITEM(sub_menu_Text, ID_POPUP_PCB_ROTATE_TEXTEPCB,
+		_("Rotate"), rotate_pos_xpm);
+	ADD_MENUITEM(sub_menu_Text, ID_POPUP_PCB_EDIT_TEXTEPCB,
+		_("Edit"), edit_text_xpm);
+
+	sub_menu_Text->AppendSeparator();
+	ADD_MENUITEM(sub_menu_Text, ID_POPUP_PCB_DELETE_TEXTEPCB,
+		_("Delete"), delete_text_xpm);
+}
+

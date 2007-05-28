@@ -141,6 +141,10 @@ wxString msg;
 	else if( m_Convert == 2 ) msg = _("yes");
 	else msg = wxT("?");
 	Affiche_1_Parametre(frame, 16, _("Convert"), msg, BROWN);
+
+	if ( m_Width ) valeur_param(m_Width, msg);
+	else msg = _("default");
+	Affiche_1_Parametre(frame, 24, _("Width"), msg, BLUE);
 }
 
 

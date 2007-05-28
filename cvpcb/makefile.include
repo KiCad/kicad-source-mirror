@@ -1,7 +1,7 @@
 # makefile pour cvpcb (mingw)
 OBJSUFF = o
 
-EXTRACPPFLAGS = -DCVPCB -I./ -I../cvpcb -I../include -Ibitmaps -I../pcbnew -I../3d-viewer
+EXTRACPPFLAGS += -DCVPCB -fno-strict-aliasing -I./ -I../cvpcb -I../include -Ibitmaps -I../pcbnew -I../3d-viewer
 EXTRALIBS = ../common/common.a
 
 LIBVIEWER3D = ../3d-viewer/3d-viewer.a

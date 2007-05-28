@@ -166,6 +166,7 @@ wxBusyCursor show_wait;
 		{
 			switch( *text )
 			{
+				case ' ':
 				case '\r':
 				case '\n':
 					text ++;
@@ -186,7 +187,7 @@ wxBusyCursor show_wait;
 					gerber_layer->Execute_G_Command(text, G_commande);
 					break ;
 
-				case 'D':	/* Ligne type Dxx : Selection d'un outil */
+				case 'D':	/* Ligne type Dxx : Selection d'un outil ou commande si xx = 0..9*/
 					D_commande = gerber_layer->ReturnDCodeNumber(text);
 						gerber_layer->Execute_DCODE_Command(this, DC,
 													text, D_commande);
@@ -195,6 +196,11 @@ wxBusyCursor show_wait;
 				case 'X':
 				case 'Y':	/* Commande de deplacement ou de Trace */
 					pos = gerber_layer->ReadXYCoord(text);
+					if ( *text == '*' ) // command like X12550Y19250*
+					{
+						gerber_layer->Execute_DCODE_Command(this, DC, text,
+							gerber_layer->m_Last_Pen_Command);
+					}
 					break;
 
 				case 'I':

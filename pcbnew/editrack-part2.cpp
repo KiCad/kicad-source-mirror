@@ -304,6 +304,7 @@ MODULE * Module = NULL;
 									pt_chevelu->pad_start->m_Pos.y,
 									pt_chevelu->pad_end->m_Pos.x,
 									pt_chevelu->pad_end->m_Pos.y,
+									0,
 									g_DesignSettings.m_RatsnestColor);
 				}
 			}
@@ -336,6 +337,7 @@ MODULE * Module = NULL;
 									pt_chevelu->pad_start->m_Pos.y,
 									pt_chevelu->pad_end->m_Pos.x,
 									pt_chevelu->pad_end->m_Pos.y,
+									0,
 									g_DesignSettings.m_RatsnestColor);
 						}
 					}

@@ -1,10 +1,11 @@
 EXTRALIBS = ../common/common.a
-EXTRACPPFLAGS= -DKICAD -I./ -Ibitmaps -I../include -I../kicad -I../share
+EXTRACPPFLAGS += -DKICAD -fno-strict-aliasing -I./ -Ibitmaps -I../include -I../kicad -I../share
 
 DEPEND =
 
 OBJECTS = kicad.o\
-		treeprj.o\
+		treeprj_frame.o\
+		treeprj_datas.o\
 		buildmnu.o\
 		infospgm.o\
 		mdiframe.o\
@@ -15,7 +16,9 @@ OBJECTS = kicad.o\
 
 $(TARGET).o: $(TARGET).cpp $(DEPEND) $(TARGET).h
 
-treeprj.o: treeprj.cpp $(DEPEND) kicad.h
+treeprj_frame.o: treeprj_frame.cpp $(DEPEND) kicad.h
+
+treeprj_datas.o: treeprj_datas.cpp $(DEPEND) kicad.h
 
 prjconfig.o: prjconfig.cpp $(DEPEND) prjconfig.h
 

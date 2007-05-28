@@ -82,15 +82,15 @@ static bool show_err;
 			if ( (l_piste/zoom) < L_MIN_DESSIN)
 				{
 				GRCircle(&panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
-					rayon , color) ;
+					rayon , 0, color) ;
 				}
 
 			if( fillopt == SKETCH)
 				{
 				GRCircle(&panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
-						rayon-l_piste, color);
+						rayon-l_piste, 0, color);
 				GRCircle(&panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
-						rayon+l_piste, color);
+						rayon+l_piste, 0, color);
 				}
 			else
 				{
@@ -105,7 +105,7 @@ static bool show_err;
 				{
 				GRArc1(&panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
 						track->m_End.x, track->m_End.y,
-						track->m_Param, track->m_Sous_Netcode, color);
+						track->m_Param, track->m_Sous_Netcode, 0, color);
 				}
 			else
 				{
@@ -122,18 +122,18 @@ static bool show_err;
 			if ( (rayon/zoom) < L_MIN_DESSIN)
 				{
 				GRCircle(&panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
-					rayon , color) ;
+					rayon , 0, color) ;
 				}
 
 			else if( fillopt == SKETCH )
 				{
 				GRCircle(&panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
-									rayon, color);
+									rayon, 0, color);
 				}
 			else
 				{
 				GRFilledCircle(&panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
-						rayon, color, color);
+						rayon, 0, color, color);
 				}
 			break;
 
@@ -143,7 +143,7 @@ static bool show_err;
 			if ( (l_piste/zoom) < L_MIN_DESSIN)
 				{
 				GRLine(&panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
-						 track->m_End.x, track->m_End.y, color);
+						 track->m_End.x, track->m_End.y, 0, color);
 				}
 			else if( fillopt == SKETCH )
 				{
@@ -152,7 +152,7 @@ static bool show_err;
 						track->m_Start.y - l_piste,
 						track->m_End.x + l_piste,
 						track->m_End.y + l_piste,
-						color) ;
+						0, color) ;
 				}
 			else
 				{
@@ -161,7 +161,7 @@ static bool show_err;
 						track->m_Start.y - l_piste,
 						track->m_End.x + l_piste,
 						track->m_End.y + l_piste,
-						color, color) ;
+						0, color, color) ;
 				}
 			break;
 
@@ -171,7 +171,7 @@ static bool show_err;
 			if ( (l_piste/zoom) < L_MIN_DESSIN)
 				{
 				GRLine(&panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
-					 track->m_End.x, track->m_End.y, color);
+					 track->m_End.x, track->m_End.y, 0, color);
 				break;
 				}
 
@@ -242,12 +242,12 @@ int rayon;
 			rayon = (int)hypot((double)(dx-ux0),(double)(dy-uy0) );
 			if ( mode == FILAIRE)
 				{
-				GRCircle(&panel->m_ClipBox, DC, ux0, uy0, rayon, color) ;
+				GRCircle(&panel->m_ClipBox, DC, ux0, uy0, rayon, 0, color) ;
 				}
 			else if( mode == SKETCH)
 				{
-				GRCircle(&panel->m_ClipBox, DC, ux0, uy0, rayon-l_piste, color);
-				GRCircle(&panel->m_ClipBox, DC, ux0, uy0, rayon+l_piste, color);
+				GRCircle(&panel->m_ClipBox, DC, ux0, uy0, rayon-l_piste, 0, color);
+				GRCircle(&panel->m_ClipBox, DC, ux0, uy0, rayon+l_piste, 0, color);
 				}
 			else
 				{
@@ -262,12 +262,12 @@ int rayon;
 			StAngle = (int) ArcTangente(dy-uy0, dx-ux0);
 			EndAngle = StAngle + PtDrawSegment->m_Angle;
 			if ( mode == FILAIRE)
-				GRArc(&panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle, rayon, color);
+				GRArc(&panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle, rayon, 0, color);
 			else if( mode == SKETCH)
 				{
-				GRArc(&panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
+				GRArc(&panel->m_ClipBox, DC, ux0, uy0, 0, StAngle, EndAngle,
 					rayon - l_piste, color);
-				GRArc(&panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
+				GRArc(&panel->m_ClipBox, DC, ux0, uy0, 0, StAngle, EndAngle,
 					rayon + l_piste, color);
 				}
 			else
@@ -281,7 +281,7 @@ int rayon;
 
 		default:
 			if( mode == FILAIRE)
-				GRLine(&panel->m_ClipBox, DC, ux0, uy0, dx, dy, color) ;
+				GRLine(&panel->m_ClipBox, DC, ux0, uy0, dx, dy, 0, color) ;
 			else if( mode == SKETCH)
 				{
 				GRCSegm(&panel->m_ClipBox, DC, ux0, uy0, dx, dy,

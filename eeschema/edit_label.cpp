@@ -21,8 +21,8 @@ static void ExitMoveTexte(WinEDA_DrawPanel * panel, wxDC *DC);
 static wxPoint ItemInitialPosition;
 static int OldOrient;
 static wxSize OldSize;
-static int ShapeGLabel = (int) NET_INPUT;
-static int TextLabelSize = DEFAULT_SIZE_TEXT;
+static int s_DefaultShapeGLabel = (int) NET_INPUT;
+static int s_DefaultOrientGLabel = 0;
 
 	/************************************/
 	/* class WinEDA_LabelPropertiesFrame */
@@ -54,6 +54,10 @@ int value;
 	if ( m_TextShape ) m_CurrentText->m_Shape = m_TextShape->GetSelection();
 
 	m_Parent->GetScreen()->SetModify();
+
+	/* Make the text size as new default size if it is a new text */
+	if ( (m_CurrentText->m_Flags & IS_NEW) != 0 )
+		g_DefaultTextLabelSize = m_CurrentText->m_Size.x;
 
 	Close(TRUE);
 }
@@ -106,7 +110,8 @@ void WinEDA_SchematicFrame::StartMoveTexte(DrawTextStruct * TextStruct, wxDC *DC
 void WinEDA_SchematicFrame::EditSchematicText(DrawTextStruct * TextStruct,
 			wxDC * DC)
 /*************************************************************************/
-/* Changement du texte (Label.. ) pointe par la souris
+/* Edit the properties of the text (Label, Gloab label, graphic text).. )
+	pointed by "TextStruct"
 */
 {
 	if(TextStruct == NULL)  return;
@@ -137,6 +142,7 @@ void WinEDA_SchematicFrame::ChangeTextOrient(DrawTextStruct * TextStruct, wxDC *
 		SaveCopyInUndoList(TextStruct, IS_CHANGED);
 
 	/* Effacement du texte en cours */
+	DrawPanel->CursorOff(DC);
 	RedrawOneStruct(DrawPanel, DC, TextStruct, g_XorMode);
 
 	/* Rotation du texte */
@@ -156,6 +162,7 @@ void WinEDA_SchematicFrame::ChangeTextOrient(DrawTextStruct * TextStruct, wxDC *
 
 	/* Reaffichage */
 	RedrawOneStruct(DrawPanel, DC, TextStruct, g_XorMode);
+	DrawPanel->CursorOn(DC);
 }
 
 /*************************************************************************/
@@ -172,20 +179,21 @@ DrawTextStruct * NewText =  NULL;
 		{
 		case LAYER_NOTES:
 			NewText = new DrawTextStruct(m_CurrentScreen->m_Curseur);
-			NewText->m_Size.x = NewText->m_Size.y = TextLabelSize;
+			NewText->m_Size.x = NewText->m_Size.y = g_DefaultTextLabelSize;
 			break;
 
 		case LAYER_LOCLABEL:
 			{
 			NewText = new DrawLabelStruct(m_CurrentScreen->m_Curseur);
-			NewText->m_Size.x = NewText->m_Size.y = TextLabelSize;
+			NewText->m_Size.x = NewText->m_Size.y = g_DefaultTextLabelSize;
 			}
 			break;
 
 		case LAYER_GLOBLABEL:
 			NewText = new DrawGlobalLabelStruct(m_CurrentScreen->m_Curseur);
-			NewText->m_Size.x = NewText->m_Size.y = TextLabelSize;
-			((DrawGlobalLabelStruct*)NewText)->m_Shape = ShapeGLabel;
+			NewText->m_Size.x = NewText->m_Size.y = g_DefaultTextLabelSize;
+			((DrawGlobalLabelStruct*)NewText)->m_Shape = s_DefaultShapeGLabel;
+			((DrawGlobalLabelStruct*)NewText)->m_Orient = s_DefaultOrientGLabel;
 			break;
 
 		default:
@@ -195,12 +203,19 @@ DrawTextStruct * NewText =  NULL;
 
 	NewText->m_Flags = IS_NEW | IS_MOVED;
 
+	RedrawOneStruct(DrawPanel, DC, NewText, g_XorMode);
 	EditSchematicText(NewText, DC);
 
 	if ( NewText->m_Text.IsEmpty() )
 	{
 		delete NewText;
 		return NULL;
+	}
+
+	if ( type == LAYER_GLOBLABEL )
+	{
+		s_DefaultShapeGLabel = ((DrawGlobalLabelStruct*)NewText)->m_Shape;
+		s_DefaultOrientGLabel = ((DrawGlobalLabelStruct*)NewText)->m_Orient;
 	}
 
 	RedrawOneStruct(DrawPanel, DC, NewText, GR_DEFAULT_DRAWMODE);

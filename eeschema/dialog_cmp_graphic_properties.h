@@ -27,6 +27,7 @@
  */
 
 ////@begin forward declarations
+class wxBoxSizer;
 ////@end forward declarations
 
 /*!
@@ -35,14 +36,14 @@
 
 ////@begin control identifiers
 #define ID_DIALOG 10000
+#define ID_CHECKBOX 10001
+#define ID_CHECKBOX1 10002
+#define ID_RADIOBOX 10003
 #define SYMBOL_WINEDA_BODYGRAPHICS_PROPERTIESFRAME_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX
 #define SYMBOL_WINEDA_BODYGRAPHICS_PROPERTIESFRAME_TITLE _("Graphic shape properties")
 #define SYMBOL_WINEDA_BODYGRAPHICS_PROPERTIESFRAME_IDNAME ID_DIALOG
 #define SYMBOL_WINEDA_BODYGRAPHICS_PROPERTIESFRAME_SIZE wxSize(400, 300)
 #define SYMBOL_WINEDA_BODYGRAPHICS_PROPERTIESFRAME_POSITION wxDefaultPosition
-#define ID_CHECKBOX 10001
-#define ID_CHECKBOX1 10002
-#define ID_RADIOBOX 10003
 ////@end control identifiers
 
 /*!
@@ -103,9 +104,11 @@ public:
 ////@begin WinEDA_bodygraphics_PropertiesFrame member variables
     wxCheckBox* m_CommonUnit;
     wxCheckBox* m_CommonConvert;
+    wxBoxSizer* m_ShapeWidthBoxSizer;
     wxRadioBox* m_Filled;
 ////@end WinEDA_bodygraphics_PropertiesFrame member variables
 	WinEDA_LibeditFrame * m_Parent;
+	WinEDA_ValueCtrl * m_GraphicShapeWidthCtrl;
 };
 
 #endif

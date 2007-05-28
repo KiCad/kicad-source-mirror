@@ -5,6 +5,7 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
+#include "wx/mimetype.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -276,6 +277,8 @@ wxString defaultpath = Path;
 	defaultpath.Replace(wxT("/"), STRING_DIR_SEP);
 	if ( defaultpath.IsEmpty() ) defaultpath = wxGetCwd();
 
+    wxSetWorkingDirectory( defaultpath );
+
 	fullfilename = wxFileSelector( wxString(Title),
 					defaultpath,
 					defaultname,
@@ -415,12 +418,24 @@ wxString FullFileName;
 /***********************************************************************************/
 int ExecuteFile(wxWindow * frame, const wxString & ExecFile, const wxString & param)
 /***********************************************************************************/
-/* appelle le logiciel ExecFile, avec les parametres filename
+/* Call the executable file "ExecFile", with params "param"
 */
 {
 wxString FullFileName;
 
+
+#ifdef __WXMAC__
+	// Mac part
+	wxGetEnv("HOME", &FullFileName);
+	FullFileName += wxString("/bin/") + newExecFile;
+	if (! wxFileExists(FullFileName) )
+	{
+		FullFileName = FindKicadFile(ExecFile);
+	}
+
+#else
 	FullFileName = FindKicadFile(ExecFile);
+#endif
 
 	if ( wxFileExists(FullFileName) )
 	{
@@ -428,7 +443,6 @@ wxString FullFileName;
 		wxExecute(FullFileName);
 		return 0;
 	}
-
 
 	wxString msg;
 	msg.Printf( wxT("Command file <%s> not found"), FullFileName.GetData() );
@@ -568,4 +582,72 @@ wxString GetEditorName(void)
 		EDA_Appl->m_EDA_CommonConfig->Write( wxT("Editor"), g_EditorName);
 	}
 	return g_EditorName;
+}
+
+void OpenPDF( const wxString & file )
+{
+	wxString command;
+	wxString filename = file;
+	wxString type;
+
+	EDA_Appl->ReadPdfBrowserInfos();
+	if ( !EDA_Appl->m_PdfBrowserIsDefault )
+	{
+		AddDelimiterString(filename);
+		command = EDA_Appl->m_PdfBrowser + filename;
+	}
+	else
+	{
+		bool success = false;
+		wxFileType * filetype = NULL;
+
+		wxFileType::MessageParameters params(filename, type);
+		filetype = wxTheMimeTypesManager->GetFileTypeFromExtension(wxT(".pdf"));
+		if (filetype ) success = filetype->GetOpenCommand( &command, params);
+		delete filetype;
+
+		if (!success)
+		{
+			AddDelimiterString(filename);
+			command.Empty();
+			wxString tries[] =
+			{
+				wxT("/usr/bin/evince"),
+				wxT("/usr/bin/xpdf"),
+				wxT("/usr/bin/konqueror"),
+				wxT("/usr/bin/gpdf"),
+				wxT(""),
+			};
+			for ( int i = 0;; i++ )
+			{
+				if (tries[i].IsEmpty()) break;
+				if (wxFileExists(tries[i]))
+				{
+					command = tries[i] + wxT(" ") + filename;
+				}
+			}
+		}
+	}
+
+	if (!command.IsEmpty()) wxExecute(command);
+}
+
+
+void OpenFile( const wxString & file )
+{
+	wxString command;
+	wxString filename = file;
+
+	wxFileName CurrentFileName(filename);
+	wxString ext, type;
+	ext = CurrentFileName.GetExt();
+	wxFileType * filetype = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
+
+	bool success = false;
+
+	wxFileType::MessageParameters params(filename, type);
+	if (filetype) success = filetype->GetOpenCommand( &command, params);
+	delete filetype;
+
+	if (success && !command.IsEmpty()) wxExecute(command);
 }

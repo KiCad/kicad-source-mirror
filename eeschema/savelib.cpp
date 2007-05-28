@@ -41,7 +41,7 @@ int x2 = t2; if(x2 > 1800) x2 -= 3600;
 			m_Rayon, x1, x2,
 			m_Unit,m_Convert,
 			m_Width, fill_tab[m_Fill],
-			m_Start.x, m_Start.y, m_End.x, m_End.y);
+			m_ArcStart.x, m_ArcStart.y, m_ArcEnd.x, m_ArcEnd.y);
     return FALSE;
 }
 
@@ -79,7 +79,7 @@ bool LibDrawSquare::WriteDescr( FILE * ExportFile )
 /***************************************************/
 {
 	fprintf(ExportFile,"S %d %d %d %d %d %d %d %c\n",
-                m_Start.x, m_Start.y, m_End.x, m_End.y,
+                m_Pos.x, m_Pos.y, m_End.x, m_End.y,
 				m_Unit,m_Convert,
 				m_Width, fill_tab[m_Fill]);
     return FALSE;
@@ -118,7 +118,7 @@ wxString StringPinNum;
 					CONV_TO_UTF8(StringPinNum),
 					m_Pos.x, m_Pos.y,
 					(int)m_PinLen, (int)m_Orient,
-					m_SizeNum, m_SizeName,
+					m_PinNumSize, m_PinNameSize,
 					m_Unit,m_Convert, Etype);
 
 	if( (m_PinShape) || (m_Attributs & PINNOTDRAW) )

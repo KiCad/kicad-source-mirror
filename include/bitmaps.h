@@ -6,6 +6,11 @@
 	#include "../bitmaps/cancel_tool.xpm"
 	#include "../bitmaps/Apply.xpm"
 
+	#include "../bitmaps/icon_txt.xpm"
+	#include "../bitmaps/new_txt.xpm"
+	#include "../bitmaps/directory.xpm"
+	#include "../bitmaps/icon_python_small.xpm"
+
 	#include "../bitmaps/Fonts.xpm"
 
 	#include "../bitmaps/save.xpm"
@@ -144,6 +149,7 @@
 	#include "../bitmaps/icon_pcbnew.xpm"
 	#include "../bitmaps/icon_modedit.xpm"
 	#include "../bitmaps/Info.xpm"
+	#include "../bitmaps/icon_python.xpm"
 	#include "../bitmaps/mirepcb.xpm"
 	#include "../bitmaps/icon_3d.xpm"
 	#include "../bitmaps/drc_off.xpm"

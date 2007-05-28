@@ -74,7 +74,7 @@ public:
 	EDA_BaseStruct *m_Son;		/* Linked list: Link (son struct) */
 	EDA_BaseStruct *m_Image;	/* Link to an image copy for undelete or abort command */
 	int m_Flags;				// flags for editions and other
-	long m_TimeStamp;			// Time stamp used for logical links
+	unsigned long m_TimeStamp;			// Time stamp used for logical links
 	int m_Selected;				/* Used by block commands, and selective editing */
 
 private:

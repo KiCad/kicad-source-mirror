@@ -5,6 +5,9 @@
 	/****************************/
 	/* Description du cartouche */
 	/****************************/
+
+/* Values are in 1/1000 inch */
+
 #define GRID_REF_W 70	/* hauteur de la bande de reference grille */
 #define SIZETEXT 60		/* Dimension des textes du cartouche */
 #define SIZETEXT_REF 50	/* Dimension des lettres du marquage des reperes */

@@ -1,5 +1,10 @@
 /* declarations prototype */
 
+/***************************/
+/* select_layers_to_pcb.cpp*/
+/***************************/
+int * InstallDialogLayerPairChoice(WinEDA_GerberFrame * parent);
+
 /****************/
 /* undelete.cpp */
 /****************/

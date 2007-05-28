@@ -63,9 +63,6 @@ void Trace_Pads_Only(WinEDA_DrawPanel * panel, wxDC * DC, MODULE * Module, int o
 	Les pads affiches doivent apparaitre sur les couches donnees par
 	MasqueLayer */
 
-void Affiche_1_Segment(WinEDA_DrawPanel * panel, wxDC * DC, int ux0, int uy0, int dx, int dy,
-						int width, int mode, int color);
-
 /****************/
 /* LOCATE.CPP : */
 /****************/
@@ -76,7 +73,7 @@ MODULE * ReturnModule(BOARD * Pcb, const wxString & name);
 D_PAD * ReturnPad(MODULE * Module, const wxString & name);
 	/* Recherche d'un pad par son nom, pour le module Module */
 
-TRACK * Locate_Via(BOARD * Pcb, const wxPoint & pos, int layer);
+TRACK * Locate_Via(BOARD * Pcb, const wxPoint & pos, int layer = -1);
 
 TRACK * Fast_Locate_Via(TRACK *start_adr, TRACK* end_adr,
 			const wxPoint & pos, int masquelayer);
@@ -183,9 +180,9 @@ TRACK * Locate_Pistes(TRACK * start_adresse, int typeloc);
 	/* routine de localisation du segment de piste pointe par la souris
 		La recherche commence a l'adresse start_adresse */
 
-DRAWSEGMENT * Locate_Segment_Pcb(BOARD * Pcb, int typeloc) ;
+DRAWSEGMENT * Locate_Segment_Pcb(BOARD * Pcb, int LayerSearch , int typeloc) ;
 
-TEXTE_PCB * Locate_Texte_Pcb(EDA_BaseStruct * PtStruct, int typeloc);
+TEXTE_PCB * Locate_Texte_Pcb(EDA_BaseStruct * PtStruct, int LayerSearch , int typeloc);
 	/* localisation des inscriptions sur le Pcb:
 		la recherche se fait a partir de l'adresse pr_texte */
 
@@ -231,7 +228,7 @@ TRACK * Locate_Zone(TRACK * start_adresse, const wxPoint & ref_pos,int layer);
 	La recherche commence a l'adresse start_adresse
 	*/
 
-EDA_BaseStruct * Locate_Cotation(BOARD * Pcb, int typeloc);
+EDA_BaseStruct * Locate_Cotation(BOARD * Pcb, int LayerSearch, int typeloc);
 	/* Localise un element de cotation, en priorite sur la couche active,
 		et a defaut sur les autres couches
 		 retourne un pointeur sur l'element (TRACK ou TEXTE_PCB) localise

@@ -1,5 +1,5 @@
 EXTRALIBS = ../common/common.a
-EXTRACPPFLAGS= -DGERBVIEW -DPCBNEW -I./ -I../gerbview -I../include\
+EXTRACPPFLAGS= -DGERBVIEW -DPCBNEW -fno-strict-aliasing -I./ -I../gerbview -I../include\
 	-I../share -I../pcbnew -I../3d-viewer
 
 #COMMON = pcbnew.h struct.h
@@ -7,6 +7,8 @@ EXTRACPPFLAGS= -DGERBVIEW -DPCBNEW -I./ -I../gerbview -I../include\
 OBJECTS= \
 		$(TARGET).o\
 		classpcb.o\
+		select_layers_to_pcb.o\
+		sel_layer.o\
 		lay2plot.o\
 		wxprint.o \
 		edit.o \
@@ -42,7 +44,8 @@ OBJECTS= \
 		files.o\
 		block.o\
 		controle.o\
-		basepcbframe.o
+		basepcbframe.o\
+		export_to_pcbnew.o
 
 setpage.o: ../share/setpage.cpp
 	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
@@ -60,6 +63,9 @@ set_color.o: set_color.cpp set_color.h $(COMMON)
 files.o: files.cpp $(COMMON)
 
 cursors.o: ../pcbnew/cursors.cpp $(COMMON)
+	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+sel_layer.o: ../pcbnew/sel_layer.cpp $(COMMON)
 	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 wxprint.o: ../share/wxprint.cpp  ../share/dialog_print.cpp ../share/dialog_print.h $(COMMON)

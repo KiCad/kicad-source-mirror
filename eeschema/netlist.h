@@ -90,7 +90,7 @@ public:
 	bool m_PartsLocked;			// For multi part components: True if the part cannot be changed
 	int m_Unit;					/* Numero de part */
 	int m_Sheet;				/* Numero de hierarchie */
-	int m_TimeStamp;			/* Signature temporelle */
+	unsigned long m_TimeStamp;			/* Signature temporelle */
 	int m_IsNew;				/* != 0 pour composants non annotes */
 	char m_TextValue[32];		/* Valeur */
 	char m_TextRef[32];			/* Reference ( hors numero ) */

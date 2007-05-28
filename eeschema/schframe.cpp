@@ -132,7 +132,12 @@ WinEDA_SchematicFrame::	WinEDA_SchematicFrame(wxWindow * father, WinEDA_App *par
 
 	m_CurrentScreen = ScreenSch;
 	g_ItemToRepeat = NULL;
+	/* Get config */
 	GetSettings();
+	g_DrawMinimunLineWidth = m_Parent->m_EDA_Config->Read(MINI_DRAW_LINE_WIDTH_KEY, (long)0);
+	g_PlotPSMinimunLineWidth = m_Parent->m_EDA_Config->Read(MINI_PLOTPS_LINE_WIDTH_KEY, (long) 4);
+
+	/****/
 	SetSize(m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y);
 	if ( DrawPanel ) DrawPanel->m_Block_Enable = TRUE;
 	ReCreateMenuBar();
@@ -209,6 +214,9 @@ SCH_SCREEN * screen;
 	m_CurrentScreen = ActiveScreen = ScreenSch;
 
 	SaveSettings();
+
+	m_Parent->m_EDA_Config->Write(MINI_DRAW_LINE_WIDTH_KEY, (long)g_DrawMinimunLineWidth);
+	m_Parent->m_EDA_Config->Write(MINI_PLOTPS_LINE_WIDTH_KEY, (long) g_PlotPSMinimunLineWidth);
 
 	Destroy();
 }

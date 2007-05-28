@@ -249,7 +249,20 @@ wxString FileName, msg;
 
 	ChangeFileNameExt( FileName,g_SchExtBuffer );
 	
-	m_CurrentSheet->m_FileName = FileName;
+	if ( m_CurrentSheet->m_FileName != FileName )
+	{
+		m_CurrentSheet->m_FileName = FileName;
+		
+		if ( wxFileExists(FileName) )	/* do we reload the data from the existing file */
+		{
+			msg.Printf( _("A file named %s exists, load it ?"), FileName.GetData());
+			if( IsOK (this,msg) )
+			{
+				m_Parent->LoadOneSheet(m_CurrentSheet, FileName);
+			}
+		}
+	}
+
 	msg = m_FileNameSize->GetValue();
 	m_CurrentSheet->m_FileNameSize =
 			ReturnValueFromString(g_UnitMetric,
@@ -271,17 +284,14 @@ wxString FileName, msg;
 /*************************************************************************/
 bool WinEDA_SchematicFrame::EditSheet(DrawSheetStruct * Sheet, wxDC * DC)
 /*************************************************************************/
-/* Routine de modification des textes (Name et FileName) de la Sheet */
+/* Routine to edit the SheetName and the FileName for the sheet "Sheet" */
 {
-BASE_SCREEN * ScreenSheet = NULL;
 WinEDA_SheetPropertiesFrame * frame;
 bool edit = TRUE;
 
 	if ( Sheet == NULL ) return FALSE;
 
-	ScreenSheet = Sheet;
-
-	/* Demande du nouveau texte */
+	/* Get the new texts */
 	RedrawOneStruct(DrawPanel, DC, Sheet, g_XorMode);
 
     DrawPanel->m_IgnoreMouseEvents = TRUE;
@@ -290,16 +300,6 @@ bool edit = TRUE;
     DrawPanel->MouseToCursorSchema();
     DrawPanel->m_IgnoreMouseEvents = FALSE;
 	
-	if ( edit )
-	{
-		/* Correction du nom fichier dans la structure SCREEN correspondante */
-		if( ScreenSheet )
-		{
-			ScreenSheet->m_FileName = Sheet->m_FileName;
-		}
-		GetScreen()->SetModify();
-	}
-
 	RedrawOneStruct(DrawPanel, DC, Sheet, GR_DEFAULT_DRAWMODE);
 	return edit;
 }

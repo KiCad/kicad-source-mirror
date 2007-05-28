@@ -88,6 +88,7 @@ enum id_drill {
 	ID_CLOSE_DRILL,
 	ID_SEL_DRILL_UNITS,
 	ID_SEL_DRILL_SHEET,
+	ID_SEL_DRILL_REPORT,
     ID_SEL_ZEROS_FMT,
     ID_SEL_PRECISION
 };
@@ -96,7 +97,8 @@ class WinEDA_DrillFrame: public wxDialog
 {
 
 	WinEDA_PcbFrame * m_Parent;
-	wxRadioBox * m_Choice_Drill_Plan;
+	wxRadioBox * m_Choice_Drill_Map;
+	wxRadioBox * m_Choice_Drill_Report;
 	wxRadioBox * m_Choice_Unit;
 	wxRadioBox * m_Choice_Drill_Offset;
 	WinEDA_EnterText * m_EnterFileNameDrill;
@@ -121,6 +123,7 @@ private:
 	void UpdatePrecisionOptions(wxCommandEvent& event);
 	void UpdateConfig(void);
 	int Plot_Drill_PcbMap( FORET * buffer, int format);
+	void GenDrillReport(const wxString & FullFileName);
 	int Gen_Liste_Forets( FORET * buffer,bool print_header);
 	int Gen_Drill_File_EXCELLON( FORET * buffer);
 	void Gen_Line_EXCELLON(char *line, float x, float y);
@@ -208,13 +211,21 @@ wxString choice_drill_offset_msg[] =
 	LeftBoxSizer->Add(m_Choice_Drill_Offset, 0, wxGROW|wxALL, 5);
 
     /* second column */
-wxString choice_drill_plan_msg[] =
-	{_("none"), _("drill sheet (HPGL)"), _("drill sheet (Postscript)")};
-	m_Choice_Drill_Plan = new wxRadioBox(this, ID_SEL_DRILL_SHEET,
+wxString choice_drill_map_msg[] =
+	{_("None"), _("drill sheet (HPGL)"), _("drill sheet (Postscript)")};
+	m_Choice_Drill_Map = new wxRadioBox(this, ID_SEL_DRILL_SHEET,
 						_("Drill Sheet:"),
 						wxDefaultPosition,wxSize(-1,-1),
-						3,choice_drill_plan_msg,1,wxRA_SPECIFY_COLS);
-	MiddleBoxSizer->Add(m_Choice_Drill_Plan, 0, wxGROW|wxALL, 5);
+						3,choice_drill_map_msg,1,wxRA_SPECIFY_COLS);
+	MiddleBoxSizer->Add(m_Choice_Drill_Map, 0, wxGROW|wxALL, 5);
+
+wxString choice_drill_report_msg[] =
+	{_("None"), _("Drill report") };
+	m_Choice_Drill_Report = new wxRadioBox(this, ID_SEL_DRILL_REPORT,
+						_("Drill Report:"),
+						wxDefaultPosition,wxSize(-1,-1),
+						2,choice_drill_report_msg,1,wxRA_SPECIFY_COLS);
+	MiddleBoxSizer->Add(m_Choice_Drill_Report, 0, wxGROW|wxALL, 5);
 
 	m_ViaDrillCtrl = new WinEDA_ValueCtrl(this, _("Via Drill"),
 			g_DesignSettings.m_ViaDrill, g_UnitMetric, MiddleBoxSizer,
@@ -244,10 +255,10 @@ wxString choice_drill_plan_msg[] =
 	Button->SetForegroundColour(*wxBLUE);
 	RightBoxSizer->Add(Button, 0, wxGROW|wxALL, 5);
 	
-	Centre();
-
 	GetSizer()->Fit(this);
     GetSizer()->SetSizeHints(this);
+
+	Centre();
 }
 
 
@@ -389,7 +400,7 @@ wxString msg;
 		Fin_Drill();
 	}
 
-	switch ( m_Choice_Drill_Plan->GetSelection() )
+	switch ( m_Choice_Drill_Map->GetSelection() )
 	{
 		case 0: break;
 		case 1:
@@ -400,6 +411,12 @@ wxString msg;
 			break;
 	}
 
+	if ( m_Choice_Drill_Report->GetSelection() > 0 )
+	{
+		FullFileName << wxT(".rpt");
+		GenDrillReport(FullFileName);
+	}
+	
 	EndModal(0);
 }
 
@@ -1370,4 +1387,61 @@ void PlotOvalDrillSymbol(const wxPoint & position,const wxSize & size,int orient
 			trace_1_pastille_OVALE_POST(position, size, orient, FILAIRE);
 		break;
 	}
+}
+
+/********************************************************************/
+void WinEDA_DrillFrame::GenDrillReport(const wxString & FullFileName)
+/********************************************************************/
+/*
+Create a list od drill values and drill count
+*/
+{
+wxString FileName, Mask(wxT("*")), Ext(wxT(".*"));
+int ii;
+char line[1024];
+FORET * foret;
+	
+	FileName = FullFileName;
+	FileName = EDA_FileSelector(_("Drill Map file"),
+					wxEmptyString,					/* Chemin par defaut */
+					FullFileName,		/* nom fichier par defaut */
+					Ext,				/* extension par defaut */
+					Mask,				/* Masque d'affichage */
+					this,
+					wxFD_SAVE,
+					TRUE
+					);
+	if ( FileName.IsEmpty()) return;
+
+	dest = wxFopen(FileName, wxT("w") );
+	if (dest == 0)
+	{
+		wxString msg = _("Unable to create file ") + FileName;
+		DisplayError(this, msg);
+		return ;
+	}
+	
+	sprintf(line,"Drill report\n\n" );
+	fputs(line, dest);
+
+	for(ii = 0, foret = (FORET*)adr_lowmem ; ii < DrillToolsCount; ii++, foret++)
+	{
+		int ncount;
+		ncount = foret->m_TotalCount - foret->m_OvalCount;
+		if ( ncount )
+			sprintf(line,"%2.2fmm  %2.3f\" (%d holes)\n",
+					float(foret->m_Diameter) * 0.00254,
+					float(foret->m_Diameter) * 0.0001,
+					ncount );
+		if ( foret->m_OvalCount )
+		{
+			sprintf(line,"%2.2fmm  %2.3f\" (%d oblongs)\n",
+					float(foret->m_Diameter) * 0.00254,
+					float(foret->m_Diameter) * 0.0001,
+					foret->m_OvalCount );
+		}
+
+		fputs(line, dest);
+	}
+
 }

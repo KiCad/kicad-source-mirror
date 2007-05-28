@@ -18,12 +18,23 @@ wxPoint LastPenPosition;
 wxPoint PlotOffset;
 FILE * PlotOutputFile;
 double XScale, YScale;
-int PenWidth;
+int g_DefaultPenWidth;
+int g_CurrentPenWidth = -1;
 int PlotOrientOptions, etat_plume;
 
 
 // Locales
 static Ki_PageDescr * SheetPS;
+
+/*************************/
+void ForcePenReinit(void)
+/*************************/
+/* set the flag g_CurrentPenWidth to -1 in order to force a pen width redefinition
+	for the next draw command
+*/
+{
+	g_CurrentPenWidth = -1;
+}
 
 /**********************************************/
 void SetPlotScale(double xscale, double yscale)
@@ -56,7 +67,8 @@ void InitPlotParametresGERBER(wxPoint offset, double xscale, double yscale)
 	SheetPS = NULL;
 	XScale = xscale;
 	YScale = yscale;
-	PenWidth = 120;			/* epaisseur du trait standard en 1/1000 pouce */
+	g_DefaultPenWidth = 120;			/* epaisseur du trait standard en 1/1000 pouce */
+	g_CurrentPenWidth = -1;
 }
 
 
@@ -74,7 +86,8 @@ wxSize PageSize;
 wxPoint pos, ref;
 int color;
 Ki_WorkSheetData * WsItem;
-int conv_unit = screen->GetInternalUnits()/1000;
+int conv_unit = screen->GetInternalUnits()/1000;	/* Scale to convert dimension in 1/1000 in into internal units
+				(1/1000 inc for EESchema, 1/10000 for pcbnew */
 wxString msg;
 wxSize text_size;
 void (*FctPlume)(wxPoint pos, int state);
@@ -124,10 +137,10 @@ int UpperLimit = VARIABLE_BLOCK_START_POSITION;
 	text_size.x = WSTEXTSIZE  * conv_unit;
 	text_size.y = WSTEXTSIZE  * conv_unit;
 
-	ref.x = Sheet->m_LeftMargin * conv_unit;
-	ref.y = Sheet->m_TopMargin * conv_unit;		/* Upper left corner */
-	xg = (PageSize.x - Sheet->m_RightMargin) * conv_unit;
-	yg = (PageSize.y - Sheet->m_BottomMargin) * conv_unit;	/* lower right corner */
+	ref.x = Sheet->m_LeftMargin;
+	ref.y = Sheet->m_TopMargin;			/* Upper left corner in 1/1000 inch */
+	xg = (PageSize.x - Sheet->m_RightMargin);
+	yg = (PageSize.y - Sheet->m_BottomMargin);	/* lower right corner in 1/1000 inch */
 
 	/* Trace des reperes selon l'axe X */
 	ipas = (xg - ref.x) / PAS_REF;

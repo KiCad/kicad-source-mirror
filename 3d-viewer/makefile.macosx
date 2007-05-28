@@ -5,6 +5,7 @@ CC = gcc
 
 CPPFLAGS =  -Wall -O2 -DPCBNEW  -I../pcbnew -I ../include -I../common\
 	  `wx-config --cxxflags`
+CPPFLAGS += -arch i386 -arch ppc
 
 
 include ../libs.macosx

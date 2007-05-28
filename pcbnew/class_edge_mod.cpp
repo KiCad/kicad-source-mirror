@@ -73,21 +73,23 @@ void EDGE_MODULE:: Copy(EDGE_MODULE * source)		// copy structure
 }
 
 
+/********************************/
 void EDGE_MODULE::UnLink( void )
+/********************************/
 {
 	/* Modification du chainage arriere */
 	if( Pback )
-		{
+	{
 		if( Pback->m_StructType != TYPEMODULE)
-			{
+		{
 			Pback->Pnext = Pnext;
-			}
+		}
 
 		else /* Le chainage arriere pointe sur la structure "Pere" */
-			{
+		{
 			((MODULE*) Pback)->m_Drawings = Pnext;
-			}
 		}
+	}
 
 	/* Modification du chainage avant */
 	if( Pnext) Pnext->Pback = Pback;
@@ -105,14 +107,14 @@ MODULE * Module = (MODULE*) m_Parent;
 	m_End = m_End0;
 
 	if ( Module )
-		{
+	{
 		RotatePoint( &m_Start.x, &m_Start.y, Module->m_Orient);
 		RotatePoint( &m_End.x, &m_End.y, Module->m_Orient);
 		m_Start.x += Module->m_Pos.x;
 		m_Start.y += Module->m_Pos.y;
 		m_End.x += Module->m_Pos.x;
 		m_End.y += Module->m_Pos.y;
-		}
+	}
 }
 
 
@@ -159,17 +161,22 @@ MODULE * Module = NULL;
 	GRSetDrawMode(DC, draw_mode);
 	typeaff = frame->m_DisplayModEdge;
 	if( m_Layer <= CMP_N )
+	{
 		typeaff = frame->m_DisplayPcbTrackFill;
+		if ( ! typeaff ) typeaff = SKETCH;
+	}
 	if( (m_Width /zoom) < L_MIN_DESSIN ) typeaff = FILAIRE;
 
 	switch (type_trace )
 	{
 		case S_SEGMENT:
 			if( typeaff == FILAIRE)
-				GRLine(&panel->m_ClipBox, DC,  ux0, uy0, dx, dy, color);
-			else Affiche_1_Segment(panel, DC, ux0,uy0,dx,dy,m_Width,
-									typeaff,color);
-			break ;
+				GRLine(&panel->m_ClipBox, DC,  ux0, uy0, dx, dy, 0, color);
+			else if( typeaff == FILLED)
+				GRLine(&panel->m_ClipBox, DC,  ux0, uy0, dx, dy, m_Width, color) ;
+			else	// SKETCH Mode
+				GRCSegm(&panel->m_ClipBox, DC, ux0, uy0, dx, dy, m_Width, color) ;
+				break ;
 
 		case S_CIRCLE:
 			rayon = (int)hypot((double)(dx-ux0),(double)(dy-uy0) );
@@ -183,7 +190,7 @@ MODULE * Module = NULL;
 				{
 					GRCircle(&panel->m_ClipBox, DC, ux0, uy0, rayon, m_Width, color);
 				}
-				else
+				else	// SKETCH Mode
 				{
 					GRCircle(&panel->m_ClipBox, DC, ux0, uy0, rayon + (m_Width/2), color) ;
 					GRCircle(&panel->m_ClipBox, DC, ux0, uy0, rayon - (m_Width/2), color) ;
@@ -205,7 +212,7 @@ MODULE * Module = NULL;
 					GRArc(&panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle, rayon,
 								m_Width, color);
 				}
-			else
+			else	// SKETCH Mode
 			{
 				GRArc(&panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
 						rayon + (m_Width/2), color) ;
@@ -236,7 +243,7 @@ MODULE * Module = NULL;
 				*ptr = x; ptr++; *ptr = y; ptr++;
 			}
 			GRPoly(&panel->m_ClipBox, DC, m_PolyCount, ptr_base,
-				TRUE, color, color);
+				TRUE, m_Width, color, color);
 			free ( ptr_base);
 			break;
 		}

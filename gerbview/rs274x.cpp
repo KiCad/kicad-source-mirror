@@ -14,6 +14,7 @@
 					((x) == '-') || ((x) == '+') || ((x) == '.') || ((x) == ','))
 
 #define CODE(x,y) ((x<<8) + (y))
+
 enum rs274x_parameters
 {
 	FORMAT_STATEMENT_COMMAND = CODE('F','S'),
@@ -74,15 +75,18 @@ static int ReadInt(char * &text)
 /********************************/
 {
 int nb = 0;
+	
+	while ( text && *text == ' ' ) text++; // Skip blanks before number
+
 	while ( text && *text)
-		{
+	{
 		if ( (*text >= '0') && (*text <='9') )
-			{
+		{
 			nb *= 10; nb += *text & 0x0F;
 			text++;
-			}
-		else break;
 		}
+		else break;
+	}
 	return nb;
 }
 
@@ -95,6 +99,7 @@ double nb = 0.0;
 char buf[256], * ptchar;
 
 	ptchar = buf;
+	while ( text && *text == ' ' ) text++; // Skip blanks before number
 	while ( text && *text)
 		{
 		if ( IsNumber(*text) )
@@ -188,6 +193,9 @@ double conv_scale = m_GerbMetric ? PCB_INTERNAL_UNIT/25.4 : PCB_INTERNAL_UNIT;
 			{
 				switch ( *text )
 				{
+					case ' ':
+						text++;
+						break;
 					case'L':	// No Leading 0
 						m_NoTrailingZeros = FALSE;
 						text ++;
@@ -279,7 +287,7 @@ double conv_scale = m_GerbMetric ? PCB_INTERNAL_UNIT/25.4 : PCB_INTERNAL_UNIT;
 		case ROTATE:
 			msg.Printf(_("Command <%c%c> ignored by Gerbview"),
 				(command>>8) & 0xFF, command & 0xFF);
-			wxMessageBox(msg);
+			if ( g_DebugLevel > 0 )wxMessageBox(msg);
 			break;
 
 		case IMAGE_NAME:
@@ -347,6 +355,7 @@ double conv_scale = m_GerbMetric ? PCB_INTERNAL_UNIT/25.4 : PCB_INTERNAL_UNIT;
 				{
 					case 'C':		// Circle
 						dcode->m_Shape = GERB_CIRCLE;
+						while ( * text == ' ' ) text++;
 						if ( * text == 'X' )
 						{
 							text++;
@@ -354,6 +363,7 @@ double conv_scale = m_GerbMetric ? PCB_INTERNAL_UNIT/25.4 : PCB_INTERNAL_UNIT;
 								(int) round(ReadDouble(text) * conv_scale);
 							dcode->m_DrillShape = 1;
 						}
+						while ( * text == ' ' ) text++;
 						if ( * text == 'X' )
 						{
 							text++;
@@ -367,12 +377,14 @@ double conv_scale = m_GerbMetric ? PCB_INTERNAL_UNIT/25.4 : PCB_INTERNAL_UNIT;
 					case 'O':		// ovale
 					case 'R':		// rect
 						dcode->m_Shape = (ctmp == 'O') ? GERB_OVALE : GERB_RECT;
+						while ( * text == ' ' ) text++;
 						if ( * text == 'X' )
 						{
 							text++;
 							dcode->m_Size.y =
 								(int) round(ReadDouble(text) * conv_scale);
 						}
+						while ( * text == ' ' ) text++;
 						if ( * text == 'X' )
 						{
 							text++;
@@ -380,6 +392,7 @@ double conv_scale = m_GerbMetric ? PCB_INTERNAL_UNIT/25.4 : PCB_INTERNAL_UNIT;
 								(int) round(ReadDouble(text) * conv_scale);
 							dcode->m_DrillShape = 1;
 						}
+						while ( * text == ' ' ) text++;
 						if ( * text == 'Y' )
 						{
 							text++;
@@ -444,7 +457,7 @@ int macro_type = 0;
 		text ++;
 	}
 
-wxMessageBox(macro_name, wxT("macro name"));
+	if ( g_DebugLevel > 0 ) wxMessageBox(macro_name, wxT("macro name"));
 	text = buff;
 	fgets(buff,255,gerber_file);
 

@@ -139,10 +139,7 @@ int zoom;
 	switch( typeaff )
 	{
 		case FILAIRE:
-			GRCircle(&panel->m_ClipBox, DC, ox, oy, rayon, gcolor) ;
-			break;
-
-		default:
+			width = 0;
 		case FILLED:
 			GRCircle(&panel->m_ClipBox, DC, ox, oy, rayon, width, gcolor);
 			break;
@@ -168,19 +165,11 @@ int zoom;
 	switch( typeaff )
 	{
 		case FILAIRE:
-			GRLine(&panel->m_ClipBox, DC, ox - dx1, oy - dy1,
-					 ox + dx1, oy + dy1, gcolor);
-			GRLine(&panel->m_ClipBox, DC, ox - dx2, oy - dy2,
-					 ox + dx2, oy + dy2, gcolor);
-			break;
-
 		case FILLED:
-			GRFillCSegm(&panel->m_ClipBox, DC, ox - dx1, oy - dy1,
-						ox + dx1, oy + dy1,
-						width, gcolor);
-			GRFillCSegm(&panel->m_ClipBox, DC, ox - dx2, oy - dy2,
-						ox + dx2, oy + dy2,
-						width, gcolor);
+			GRLine(&panel->m_ClipBox, DC, ox - dx1, oy - dy1,
+					 ox + dx1, oy + dy1, width, gcolor);
+			GRLine(&panel->m_ClipBox, DC, ox - dx2, oy - dy2,
+					 ox + dx2, oy + dy2, width, gcolor);
 			break;
 
 		case SKETCH:

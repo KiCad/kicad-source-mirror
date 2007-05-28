@@ -2,8 +2,9 @@ WXDIR = $(WXWIN)
 
 all: common.a
 
-include makefile.include
 include ../libs.win
+
+include makefile.include
 
 common.a: $(OBJECTS) ../libs.win makefile.include
 	ar ruv $@ $(OBJECTS)

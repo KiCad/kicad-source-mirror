@@ -26,11 +26,10 @@ static int distance(int seuil);
 
 /* Macro de calcul de la coord de pointage selon le curseur
 (ON/OFF grille) choisi
-A REVOIR
 */
 #define SET_REF_POS(ref)  if(typeloc == CURSEUR_ON_GRILLE) \
 		{ ref = ActiveScreen->m_Curseur;} \
-	else { ref = ActiveScreen->m_Curseur; }
+	else { ref = ActiveScreen->m_MousePosition; }
 
 
 
@@ -50,7 +49,7 @@ int layer;
 
 	/* Localistion des pistes et vias, avec priorite aux vias */
 	layer = GetScreen()->m_Active_Layer;
-	Track = Locate_Pistes( m_Pcb->m_Track, NO_TST_LAYER,typeloc );
+	Track = Locate_Pistes( m_Pcb->m_Track, -1, typeloc );
 	if ( Track != NULL )
 		{
 		TrackLocate = Track ;	/* Reperage d'une piste ou via */

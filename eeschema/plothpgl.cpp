@@ -498,12 +498,12 @@ int margin;
 
 	g_PlotFormat = PLOT_FORMAT_HPGL;
 
-	screen = ActiveScreen;
-	if ( Select_PlotAll == TRUE )
-	{
-		screen = ScreenSch;
-	}
-	while( screen )
+	/* Build the screen list */
+	EDA_ScreenList ScreenList(NULL);
+
+	if ( Select_PlotAll == TRUE ) screen = screen = ScreenList.GetFirst();
+	else screen = ActiveScreen;
+	for ( ; screen != NULL; screen = ScreenList.GetNext() )
 	{
 		ReturnSheetDims(screen, SheetSize, SheetOffset);
 		/* Calcul des echelles de conversion */
@@ -531,7 +531,7 @@ int margin;
 		InitPlotParametresHPGL(PlotOffset, g_PlotScaleX, g_PlotScaleY);
 		Plot_1_Page_HPGL(PlotFileName,screen);
 		screen = (BASE_SCREEN*)screen->Pnext;
-		if ( Select_PlotAll == FALSE ) screen = NULL;
+		if ( Select_PlotAll == FALSE ) break;
 	}
 
 	m_MsgBox->AppendText(_("** Plot End **\n"));

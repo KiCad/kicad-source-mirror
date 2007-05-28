@@ -30,7 +30,7 @@ EDA_BaseStruct * WinEDA_SchematicFrame::
 /**************************************************************/
 
 /* Routine de localisation et d'affichage des caract (si utile )
-	de l'element pointe par la souris
+	de l'element pointe par la souris ou par le curseur pcb
 	- marqueur
 	- noconnect
 	- jonction
@@ -44,100 +44,58 @@ EDA_BaseStruct * WinEDA_SchematicFrame::
 */
 {
 EDA_BaseStruct *DrawStruct;
-LibDrawPin * Pin;
-EDA_SchComponentStruct * LibItem;
-wxString Text;
-char Line[1024];
 wxString msg;
-int ii;
+wxPoint mouse_position = GetScreen()->m_MousePosition;
+LibDrawPin * Pin = NULL;
+EDA_SchComponentStruct * LibItem = NULL;
+char Line[1024];
 
-	DrawStruct = PickStruct(GetScreen()->m_Curseur, GetScreen()->EEDrawList, MARKERITEM);
-	if( DrawStruct )
-		{
-		DrawMarkerStruct * Marker = (DrawMarkerStruct *) DrawStruct;
-		ii = Marker->m_Type;
-		Text = Marker->GetComment();
-		if(Text.IsEmpty() ) Text = wxT("NoComment");
-		msg = NameMarqueurType[ii]; msg << wxT(" << ") << Text;
-		Affiche_Message(msg);
-		return(DrawStruct);
-		}
-
-	DrawStruct = PickStruct(GetScreen()->m_Curseur, GetScreen()->EEDrawList,
-			NOCONNECTITEM);
-	if( DrawStruct )
-		{
-		Affiche_Message(wxEmptyString);
-		return(DrawStruct);
-		}
-
-	DrawStruct = PickStruct(GetScreen()->m_Curseur, GetScreen()->EEDrawList,
-			JUNCTIONITEM);
-	if( DrawStruct )
-		{
-		Affiche_Message(wxEmptyString);
-		return(DrawStruct);
-		}
-
-	DrawStruct = PickStruct(GetScreen()->m_Curseur, GetScreen()->EEDrawList,
-			WIREITEM|BUSITEM|RACCORDITEM);
-	if( DrawStruct )	// Recherche d'une pin eventelle
+	DrawStruct = SchematicGeneralLocateAndDisplay(mouse_position, IncludePin);
+	if(! DrawStruct && ( mouse_position != GetScreen()->m_Curseur) )
 	{
-		Pin = LocateAnyPin(m_CurrentScreen->EEDrawList,m_CurrentScreen->m_Curseur, &LibItem);
-		if( Pin )
-		{
-			Pin->Display_Infos(this);
-			if ( LibItem )
-				Affiche_1_Parametre( this, 1,
-						LibItem->m_Field[REFERENCE].m_Text,
-						LibItem->m_Field[VALUE].m_Text,
-						CYAN);
-	
-				/* envoi id pin a pcbnew */
-			if(Pin->m_PinNum)
-			{
-				char pinnum[20];
-				pinnum[0] = Pin->m_PinNum & 255;
-				pinnum[1] = (Pin->m_PinNum >> 8 ) & 255;
-				pinnum[2] = (Pin->m_PinNum >> 16 ) & 255;
-				pinnum[3] = (Pin->m_PinNum >> 24 ) & 255;
-				pinnum[4] = 0;
-				sprintf(Line,"$PIN: %s $PART: %s", pinnum,
-							CONV_TO_UTF8(LibItem->m_Field[REFERENCE].m_Text));
-				SendCommand(MSG_TO_PCB, Line);
-			}
-		}
-		else  Affiche_Message(wxEmptyString);
-		return(DrawStruct);
+		DrawStruct = SchematicGeneralLocateAndDisplay(GetScreen()->m_Curseur, IncludePin);
 	}
+	if ( ! DrawStruct ) return NULL;
 
-	// Cross probing: Send a command to pcbnew via a socket link, service 4242
-	// Cross probing:1- look for a component, and send a locate footprint command to pcbnew
-	DrawStruct = PickStruct(GetScreen()->m_Curseur, GetScreen()->EEDrawList,
-			FIELDCMPITEM);
-	if( DrawStruct )
-		{
-		PartTextStruct * Field = (PartTextStruct *) DrawStruct;
-		LibItem = (EDA_SchComponentStruct * )Field->m_Parent;
-		LibItem->Display_Infos(this);
-
-		sprintf(Line,"$PART: %s", CONV_TO_UTF8(LibItem->m_Field[REFERENCE].m_Text) );
-		SendCommand(MSG_TO_PCB, Line);
-
-		return(DrawStruct);
-		}
-
-	/* search for a pin */
-	Pin = LocateAnyPin(m_CurrentScreen->EEDrawList,m_CurrentScreen->m_Curseur, &LibItem);
-	if( Pin )
+	/* Cross probing to pcbnew if a pin or a component is found */
+	switch (DrawStruct->m_StructType )
 	{
+		case COMPONENT_FIELD_DRAW_TYPE:
+		{
+			PartTextStruct * Field = (PartTextStruct *) DrawStruct;
+			LibItem = (EDA_SchComponentStruct * )Field->m_Parent;
+			sprintf(Line,"$PART: %s", CONV_TO_UTF8(LibItem->m_Field[REFERENCE].m_Text));
+			SendCommand(MSG_TO_PCB, Line);
+		}
+			break;
+
+		case DRAW_LIB_ITEM_STRUCT_TYPE:
+			Pin = LocateAnyPin(m_CurrentScreen->EEDrawList, GetScreen()->m_Curseur, &LibItem);
+			if ( Pin ) break;	// Priority is probing a pin first
+			LibItem = (EDA_SchComponentStruct *) DrawStruct;
+			sprintf(Line,"$PART: %s", CONV_TO_UTF8(LibItem->m_Field[REFERENCE].m_Text) );
+			SendCommand(MSG_TO_PCB, Line);
+			break;
+
+		default:
+			Pin = LocateAnyPin(m_CurrentScreen->EEDrawList, GetScreen()->m_Curseur, &LibItem);
+			break;
+		
+		case COMPONENT_PIN_DRAW_TYPE:
+			Pin = (LibDrawPin*) DrawStruct;
+			break;
+	}
+	
+	if ( Pin )
+	{
+		/* Force display pin infos (the previous display could be a component info) */
 		Pin->Display_Infos(this);
 		if ( LibItem )
 			Affiche_1_Parametre( this, 1,
 					LibItem->m_Field[REFERENCE].m_Text,
 					LibItem->m_Field[VALUE].m_Text,
 					CYAN);
-
+	
 		// Cross probing:2 - pin found, and send a locate pin command to pcbnew (hightlight net)
 		if(Pin->m_PinNum)
 		{
@@ -147,26 +105,119 @@ int ii;
 						CONV_TO_UTF8(LibItem->m_Field[REFERENCE].m_Text));
 			SendCommand(MSG_TO_PCB, Line);
 		}
+	}
+	return DrawStruct;
+}
 
+
+/************************************************************************************/
+EDA_BaseStruct * WinEDA_SchematicFrame::
+		SchematicGeneralLocateAndDisplay(const wxPoint & refpoint, bool IncludePin)
+/************************************************************************************/
+
+/* Find the schematic item at position "refpoint"
+	the priority order is:
+	- marker
+	- noconnect
+	- junction
+	- wire/bus/entry
+	- label
+	- pin
+	- component
+	return:
+		an EDA_BaseStruct pointer on the item
+		a Null pointer if no item found
+
+	For some items, caracteristics are displayed on the screen.
+*/
+{
+EDA_BaseStruct *DrawStruct;
+LibDrawPin * Pin;
+EDA_SchComponentStruct * LibItem;
+wxString Text;
+wxString msg;
+int ii;
+
+	DrawStruct = PickStruct(refpoint, GetScreen()->EEDrawList, MARKERITEM);
+	if( DrawStruct )
+	{
+		DrawMarkerStruct * Marker = (DrawMarkerStruct *) DrawStruct;
+		ii = Marker->m_Type;
+		Text = Marker->GetComment();
+		if(Text.IsEmpty() ) Text = wxT("NoComment");
+		msg = NameMarqueurType[ii]; msg << wxT(" << ") << Text;
+		Affiche_Message(msg);
+		return(DrawStruct);
+	}
+
+	DrawStruct = PickStruct(refpoint, GetScreen()->EEDrawList,
+			NOCONNECTITEM);
+	if( DrawStruct )
+	{
+		MsgPanel->EraseMsgBox();
+		return(DrawStruct);
+	}
+
+	DrawStruct = PickStruct(refpoint, GetScreen()->EEDrawList,
+			JUNCTIONITEM);
+	if( DrawStruct )
+	{
+		MsgPanel->EraseMsgBox();
+		return(DrawStruct);
+	}
+
+	DrawStruct = PickStruct(refpoint, GetScreen()->EEDrawList,
+			WIREITEM|BUSITEM|RACCORDITEM);
+	if( DrawStruct )	// Search for a pin
+	{
+		Pin = LocateAnyPin(m_CurrentScreen->EEDrawList,refpoint, &LibItem);
+		if( Pin )
+		{
+			Pin->Display_Infos(this);
+			if ( LibItem )
+				Affiche_1_Parametre( this, 1,
+						LibItem->m_Field[REFERENCE].m_Text,
+						LibItem->m_Field[VALUE].m_Text,
+						CYAN);
+	
+		}
+		else  MsgPanel->EraseMsgBox();
+		return(DrawStruct);
+	}
+
+	DrawStruct = PickStruct(refpoint, GetScreen()->EEDrawList, FIELDCMPITEM);
+	if( DrawStruct )
+	{
+		PartTextStruct * Field = (PartTextStruct *) DrawStruct;
+		LibItem = (EDA_SchComponentStruct * )Field->m_Parent;
+		LibItem->Display_Infos(this);
+
+		return(DrawStruct);
+	}
+
+	/* search for a pin */
+	Pin = LocateAnyPin(m_CurrentScreen->EEDrawList, refpoint, &LibItem);
+	if( Pin )
+	{
+		Pin->Display_Infos(this);
+		if ( LibItem )
+			Affiche_1_Parametre( this, 1,
+					LibItem->m_Field[REFERENCE].m_Text,
+					LibItem->m_Field[VALUE].m_Text,
+					CYAN);
 		if ( IncludePin == TRUE ) return(LibItem);
 	}
 
-	DrawStruct = PickStruct(GetScreen()->m_Curseur, GetScreen()->EEDrawList,
-			LIBITEM);
+	DrawStruct = PickStruct(refpoint, GetScreen()->EEDrawList, LIBITEM);
 	if( DrawStruct )
 	{
 		DrawStruct = LocateSmallestComponent( GetScreen() );
 		LibItem = (EDA_SchComponentStruct *) DrawStruct;
 		LibItem->Display_Infos(this);
-
-		sprintf(Line,"$PART: %s",
-			CONV_TO_UTF8(LibItem->m_Field[REFERENCE].m_Text));
-		SendCommand(MSG_TO_PCB, Line);
-
 		return(DrawStruct);
 	}
 
-	DrawStruct = PickStruct(GetScreen()->m_Curseur, GetScreen()->EEDrawList,
+	DrawStruct = PickStruct(refpoint, GetScreen()->EEDrawList,
 			SHEETITEM);
 	if( DrawStruct )
 	{
@@ -175,7 +226,7 @@ int ii;
 	}
 
 	// Recherche des autres elements
-	DrawStruct = PickStruct(GetScreen()->m_Curseur, GetScreen()->EEDrawList,
+	DrawStruct = PickStruct(refpoint, GetScreen()->EEDrawList,
 			SEARCHALL);
 	if( DrawStruct )
 	{
@@ -188,9 +239,9 @@ int ii;
 
 
 
-/**************************************************************/
-void WinEDA_DrawFrame::GeneralControle(wxDC *DC, wxPoint Mouse)
-/**************************************************************/
+/***********************************************************************/
+void WinEDA_DrawFrame::GeneralControle(wxDC *DC, wxPoint MousePositionInPixels)
+/***********************************************************************/
 {
 wxSize delta;
 int zoom = m_CurrentScreen->GetZoom();
@@ -199,7 +250,7 @@ int hotkey = 0;
 	
 	ActiveScreen = (SCH_SCREEN *) m_CurrentScreen;
 	
-	curpos = DrawPanel->CursorRealPosition(Mouse);
+	curpos = m_CurrentScreen->m_MousePosition;
 	oldpos = m_CurrentScreen->m_Curseur;
 
 	delta.x = m_CurrentScreen->GetGrid().x / zoom;
@@ -252,26 +303,26 @@ int hotkey = 0;
 
 		case WXK_NUMPAD8  :	/* Deplacement curseur vers le haut */
 		case WXK_UP	:
-			Mouse.y -= delta.y;
-			DrawPanel->MouseTo(Mouse);
+			MousePositionInPixels.y -= delta.y;
+			DrawPanel->MouseTo(MousePositionInPixels);
 			break ;
 
 		case WXK_NUMPAD2:	/* Deplacement curseur vers le bas */
 		case WXK_DOWN:
-			Mouse.y += delta.y;
-			DrawPanel->MouseTo(Mouse);
+			MousePositionInPixels.y += delta.y;
+			DrawPanel->MouseTo(MousePositionInPixels);
 			break ;
 
 		case WXK_NUMPAD4:	/* Deplacement curseur vers la gauche */
 		case WXK_LEFT :
-			Mouse.x -= delta.x;
-			DrawPanel->MouseTo(Mouse);
+			MousePositionInPixels.x -= delta.x;
+			DrawPanel->MouseTo(MousePositionInPixels);
 			break ;
 
 		case WXK_NUMPAD6:  /* Deplacement curseur vers la droite */
 		case WXK_RIGHT:
-			Mouse.x += delta.x;
-			DrawPanel->MouseTo(Mouse);
+			MousePositionInPixels.x += delta.x;
+			DrawPanel->MouseTo(MousePositionInPixels);
 			break;
 
 		case WXK_INSERT:

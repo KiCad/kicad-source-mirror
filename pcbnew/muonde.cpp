@@ -436,11 +436,10 @@ double * ptbuf;
 	bufsize = 100;
 	ptbuf = PolyEdges = (double*) MyZMalloc( bufsize * 2 * sizeof(double));
 	
+	setlocale(LC_NUMERIC, "C");
 	int LineNum = 0;
 	while( GetLine(File, Line, &LineNum , sizeof(Line) -1) != NULL )
 	{
-		from_point(Line);
-		
 		param1 = strtok(Line," =\n\r");
 		param2 = strtok(NULL," \t\n\r");
 		
@@ -454,7 +453,6 @@ double * ptbuf;
 		{
 			while( GetLine(File, Line, &LineNum , sizeof(Line) -1) != NULL )
 			{
-				from_point(Line);
 				param1 = strtok(Line," \t\n\r");
 				param2 = strtok(NULL," \t\n\r");
 				if ( strnicmp(param1, "$ENDCOORD", 8) == 0) break;
@@ -488,6 +486,7 @@ double * ptbuf;
 		PolyEdges = NULL;
 	}
 	fclose( File);
+	setlocale(LC_NUMERIC, "");      // revert to the current  locale
 	
 	ShapeScaleX *= unitconv;
 	ShapeScaleY *= unitconv;

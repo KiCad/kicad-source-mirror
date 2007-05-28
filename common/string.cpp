@@ -302,22 +302,6 @@ char * line = Text;
 	return line;
 }
 
-/****************************/
-char * from_point(char * Text)
-/****************************/
-/* convertit les . en , dans une chaine. utilisé pour compenser
-l'internalisation imbecile de la fct scanf
-qui lit les flottants avec une virgule au lieu du point
-*/
-{
-char * line = Text;
-	if ( Text == NULL ) return NULL;
-
-	for ( ; *Text != 0; Text++ )
-		if (*Text == '.') *Text = g_FloatSeparator;
-
-	return line;
-}
 
 /********************************/
 char * strupper(char * Text)

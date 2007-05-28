@@ -254,11 +254,10 @@ DrawPickedStruct * PickedItem, *PickedList = NULL;
 
 
 /*****************************************************************/
-void LocateAndDeleteItem(WinEDA_SchematicFrame * frame, wxDC * DC)
+bool LocateAndDeleteItem(WinEDA_SchematicFrame * frame, wxDC * DC)
 /*****************************************************************/
-
-/* Routine d'effacement d'un element de schema ( et placement en "undelete" )
-	si plusieurs elements sont superposes: ordre de priorite:
+/* Locate and delete the item found under the mouse cousor
+	If more than one item found: the priority order is:
 	1 : MARQUEUR
 	2 : JUNCTION
 	2 : NOCONNECT
@@ -267,11 +266,13 @@ void LocateAndDeleteItem(WinEDA_SchematicFrame * frame, wxDC * DC)
 	5 : TEXT
 	6 : COMPOSANT
 	7 : SHEET
-*/
 
+	return TRUE if an item was deleted
+*/
 {
 EDA_BaseStruct * DelStruct;
 SCH_SCREEN * screen = frame->GetScreen();
+bool item_deleted = FALSE;
 	
 	DelStruct = PickStruct(screen->m_Curseur,
 			screen->EEDrawList, MARKERITEM);
@@ -298,7 +299,10 @@ SCH_SCREEN * screen = frame->GetScreen();
 		DeleteStruct(frame->DrawPanel, DC, DelStruct);
 		frame->TestDanglingEnds(frame->m_CurrentScreen->EEDrawList, DC);
 		frame->GetScreen()->SetModify();
+		item_deleted = TRUE;
 	}
+	
+	return item_deleted;
 }
 
 

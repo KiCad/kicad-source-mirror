@@ -54,7 +54,7 @@ wxDC * DC = Cmd->DC;
 	if( NewTrack )
 		{
 		/* Effacement du trace en cours */
-		DisplayOpt.DisplayPcbTrackFill = SKETCH ;
+		DisplayOpt.DisplayPcbTrackFill = FALSE ;
 		Trace_Une_Piste(DC, NewTrack,NbPtNewTrack,GR_XOR);
 		DisplayOpt.DisplayPcbTrackFill = Track_fill_copy ;
 
@@ -266,7 +266,7 @@ wxDC * DC = Cmd->DC;
 
 	else	/* Erreur DRC: Annulation commande */
 		{
-		DisplayOpt.DisplayPcbTrackFill = SKETCH ;
+		DisplayOpt.DisplayPcbTrackFill = FALSE ;
 		Trace_Une_Piste(DC, NewTrack,NbPtNewTrack,GR_XOR);
 		DisplayOpt.DisplayPcbTrackFill = Track_fill_copy ;
 
@@ -313,13 +313,13 @@ TRACK * ptsegm;
 	/* efface ancienne position si elle a ete deja dessinee */
 	if( (flag == CURSEUR_MOVED ) && (FlagState == COPY_ROUTE ) )
 		{
-		DisplayOpt.DisplayPcbTrackFill = SKETCH ;
+		DisplayOpt.DisplayPcbTrackFill = FALSE ;
 		Trace_Une_Piste(DC, NewTrack,NbPtNewTrack,GR_XOR) ;
 		}
 
 	if( FlagState == MOVE_ROUTE )
 		{
-		if( flag == CURSEUR_MOVED) DisplayOpt.DisplayPcbTrackFill = SKETCH ;
+		if( flag == CURSEUR_MOVED) DisplayOpt.DisplayPcbTrackFill = FALSE ;
 		Trace_Une_Piste(DC, NewTrack,NbPtNewTrack,GR_XOR) ;
 		}
 
@@ -336,7 +336,7 @@ TRACK * ptsegm;
 		}
 
 	/* dessin de la nouvelle piste */
-	DisplayOpt.DisplayPcbTrackFill = SKETCH ;
+	DisplayOpt.DisplayPcbTrackFill = FALSE ;
 	Trace_Une_Piste(DC, NewTrack,NbPtNewTrack,GR_XOR) ;
 	DisplayOpt.DisplayPcbTrackFill = Track_fill_copy ;
 }
@@ -392,7 +392,7 @@ wxDC * DC = Cmd->DC;
 			startY = ActiveScreen->Curseur_Y;
 			Place_Dupl_Route_Item.State = WAIT;
 			ActiveDrawPanel->ManageCurseur = Show_Move_Piste;
-			DisplayOpt.DisplayPcbTrackFill = SKETCH ;
+			DisplayOpt.DisplayPcbTrackFill = FALSE ;
 			Trace_Une_Piste(DC, NewTrack,NbPtNewTrack,GR_XOR) ;
 			DisplayOpt.DisplayPcbTrackFill = Track_fill_copy ;
 			PosInitX = NewTrack->m_Start.x; PosInitY = NewTrack->m_Start.y;

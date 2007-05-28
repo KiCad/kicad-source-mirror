@@ -2,7 +2,8 @@
 CC = gcc
 
 # Compiler flags.
-CPPFLAGS =  -Wall -O2 -I./ -I../include `wx-config --cflags`
+CPPFLAGS =  -Wall -O2 -I./ -I../include `wx-config --cxxflags`
+CPPFLAGS += -arch i386 -arch ppc
 
 EDACPPFLAGS = $(CPPFLAGS)
 

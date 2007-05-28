@@ -65,7 +65,6 @@ int layer;
 	WinEDA_SelLayerFrame * frame =
 			new WinEDA_SelLayerFrame(this, default_layer,min_layer, max_layer);
 	layer = frame->ShowModal(); frame->Destroy();
-	DrawPanel->MouseToCursorSchema();
 	return layer;
 }
 

@@ -545,17 +545,14 @@ D_PAD * pt_pad, * pt_old_pad;
 }
 
 
-	/*****************************************/
-	/* static void Sel_NewMod_By_Liste(void) */
-	/*****************************************/
-
-/*affiche la liste des modules en librairie et selectione 1 nom */
-
+/***************************************************************************/
 void WinEDA_ExchangeModuleFrame::Sel_NewMod_By_Liste(wxCommandEvent& event)
+/***************************************************************************/
+/*affiche la liste des modules en librairie et selectione 1 nom */
 {
 wxString newname;
 
-	newname = m_Parent->Select_1_Module_From_List(this, wxEmptyString, wxEmptyString, wxEmptyString);
+	newname = m_Parent->Select_1_Module_From_List( m_Parent, wxEmptyString, wxEmptyString, wxEmptyString);
 	if ( newname != wxEmptyString )
 		m_NewModule->SetValue(newname);
 }

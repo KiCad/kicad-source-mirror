@@ -29,7 +29,7 @@ wxSize minsize;
 	SetFont(*g_StdFont);
 	m_MenuBar = NULL;		// menu du haut d'ecran
 	m_HToolBar = NULL;
-	m_FrameIsActive = FALSE;
+	m_FrameIsActive = TRUE;
 	m_MsgFrameHeight = MSG_PANEL_DEFAULT_HEIGHT;
 
 	minsize.x = 470;

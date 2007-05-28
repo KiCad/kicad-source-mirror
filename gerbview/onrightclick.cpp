@@ -61,14 +61,17 @@ bool BlockActive = (m_CurrentScreen->BlockLocate.m_Command !=  BLOCK_IDLE);
 
 	if ( BlockActive ) return;
 
+	PopMenu->Append(ID_GERBVIEW_POPUP_DELETE_DCODE_ITEMS, _("Delete Dcode items"));
+
 	if ( DrawStruct == NULL ) return;
 
 	GetScreen()->m_CurrentItem = DrawStruct;
 
 	switch ( DrawStruct->m_StructType )
-		{
+	{
 
 		case TYPETRACK:
+//			PopMenu->AppendSeparator();
 //			PopMenu->Append(ID_POPUP_PCB_EDIT_TRACK, _("Edit"));
 //			PopMenu->Append(ID_POPUP_PCB_DELETE_TRACKSEG, _("Delete"));
 			break;
@@ -76,11 +79,11 @@ bool BlockActive = (m_CurrentScreen->BlockLocate.m_Command !=  BLOCK_IDLE);
 
 		default:
 			msg.Printf(
-				wxT("WinEDA_GerberFrame::OnRightClick Error: iilegal or unknown DrawType %d"),
+				wxT("WinEDA_GerberFrame::OnRightClick Error: illegal or unknown DrawType %d"),
 				DrawStruct->m_StructType);
 			DisplayError(this, msg );
 			break;
-		}
+	}
 	PopMenu->AppendSeparator();
 }
 

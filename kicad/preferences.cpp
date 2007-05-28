@@ -19,6 +19,35 @@
 
 #include <wx/fontdlg.h>
 
+static bool ChoosePdfBrowser(WinEDA_MainFrame * parent_frame)
+/* routine to choose the prefered Pdf browser
+*/
+{
+wxString mask(wxT("*"));
+#ifdef __WINDOWS__
+mask += wxT(".exe");
+#endif
+
+	EDA_Appl->ReadPdfBrowserInfos();
+	wxString FullFileName = EDA_Appl->m_PdfBrowser;
+	FullFileName = EDA_FileSelector( _("Prefered Pdf Browser:"),
+			wxPathOnly(FullFileName),	/* Default path */
+			FullFileName,			/* default filename */
+			wxEmptyString,			/* default filename extension */
+			mask,					/* filter for filename list */
+			parent_frame,					/* parent frame */
+			wxFD_OPEN,					/* wxFD_SAVE, wxFD_OPEN ..*/
+			TRUE					/* true = keep the current path */
+			);
+	if ( ! FullFileName.IsEmpty() && (EDA_Appl->m_PdfBrowser != FullFileName) )
+	{
+		EDA_Appl->m_PdfBrowser = FullFileName;
+		EDA_Appl->WritePdfBrowserInfos();
+		return TRUE;
+	}
+	return FALSE;
+}
+
 /****************************************************************/
 void WinEDA_MainFrame::Process_Preferences(wxCommandEvent& event)
 /*****************************************************************/
@@ -42,32 +71,26 @@ mask += wxT(".exe");
 		case ID_SELECT_PREFERED_PDF_BROWSER:
 			if ( EDA_Appl->m_PdfBrowser.IsEmpty() )
 			{
-				DisplayError(this, _("You must choose a PDF wiever before use this option"));
-				break;
+				DisplayError(this, _("You must choose a PDF viewer before use this option"));
+				ChoosePdfBrowser(this);
 			}
-			EDA_Appl->m_PdfBrowserIsDefault = FALSE;
-			GetMenuBar()->Check(ID_SELECT_DEFAULT_PDF_BROWSER, EDA_Appl->m_PdfBrowserIsDefault);
-			GetMenuBar()->Check(ID_SELECT_PREFERED_PDF_BROWSER, !EDA_Appl->m_PdfBrowserIsDefault);
+			if ( EDA_Appl->m_PdfBrowser.IsEmpty() )
+			{
+				EDA_Appl->m_PdfBrowserIsDefault = TRUE;
+				GetMenuBar()->Check(ID_SELECT_DEFAULT_PDF_BROWSER, TRUE);
+				GetMenuBar()->Check(ID_SELECT_PREFERED_PDF_BROWSER, FALSE);
+			}
+			else
+			{
+				EDA_Appl->m_PdfBrowserIsDefault = FALSE;
+				GetMenuBar()->Check(ID_SELECT_DEFAULT_PDF_BROWSER, FALSE);
+				GetMenuBar()->Check(ID_SELECT_PREFERED_PDF_BROWSER, TRUE);
+			}
 			EDA_Appl->WritePdfBrowserInfos();
 			break;
 
 		case ID_SELECT_PREFERED_PDF_BROWSER_NAME:
-			EDA_Appl->ReadPdfBrowserInfos();
-			FullFileName = EDA_Appl->m_PdfBrowser;
-			FullFileName = EDA_FileSelector( _("Prefered Pdf Browser:"),
-					wxPathOnly(FullFileName),	/* Default path */
-					FullFileName,			/* default filename */
-					wxEmptyString,			/* default filename extension */
-					mask,					/* filter for filename list */
-					this,					/* parent frame */
-					wxFD_OPEN,					/* wxFD_SAVE, wxFD_OPEN ..*/
-					TRUE					/* true = keep the current path */
-					);
-			if ( ! FullFileName.IsEmpty() && (EDA_Appl->m_PdfBrowser != FullFileName) )
-			{
-				EDA_Appl->m_PdfBrowser = FullFileName;
-				EDA_Appl->WritePdfBrowserInfos();
-			}
+			ChoosePdfBrowser(this);
 			break;
 
 		case ID_SELECT_PREFERED_EDITOR:

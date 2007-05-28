@@ -47,7 +47,7 @@ static bool Zone_45_Only = FALSE;
 static bool Zone_Exclude_Pads = TRUE;
 static bool Zone_Genere_Freins_Thermiques = TRUE;
 
-static int TimeStamp;			/* signature temporelle pour la zone generee */
+static unsigned long s_TimeStamp;			/* signature temporelle pour la zone generee */
 
 /*!
  * WinEDA_ZoneFrame type definition
@@ -328,7 +328,7 @@ void WinEDA_PcbFrame::Edit_Zone_Width(wxDC * DC, SEGZONE * Zone)
 */
 {
 SEGZONE * pt_segm, * NextS ;
-int TimeStamp;
+unsigned long TimeStamp;
 bool modify = FALSE;
 double f_new_width;
 int w_tmp;
@@ -376,7 +376,7 @@ void WinEDA_PcbFrame::Delete_Zone(wxDC * DC, SEGZONE * Zone)
 */
 {
 SEGZONE * pt_segm, * NextS ;
-int TimeStamp;
+unsigned long TimeStamp;
 int nb_segm = 0;
 bool modify = FALSE;
 
@@ -757,7 +757,7 @@ wxString msg;
 		Trace_DrawSegmentPcb(DrawPanel, DC, PtLim, GR_XOR);
 	}
 
-	TimeStamp = time( NULL );
+	s_TimeStamp = time( NULL );
 
 	/* Calcul du pas de routage fixe a 5 mils et plus */
 	E_scale = g_GridRoutingSize / 50 ; if (g_GridRoutingSize < 1 ) g_GridRoutingSize = 1 ;
@@ -975,7 +975,7 @@ wxString msg;
 					pt_track->m_Width = g_GridRoutingSize;
 					pt_track->m_Start.x = ux0; pt_track->m_Start.y = uy0;
 					pt_track->m_End.x = ux1; pt_track->m_End.y = uy1;
-					pt_track->m_TimeStamp = TimeStamp;
+					pt_track->m_TimeStamp = s_TimeStamp;
 					pt_track->Insert(frame->m_Pcb, NULL);
 					pt_track->Draw(frame->DrawPanel, DC, GR_OR);
 					nbsegm++;
@@ -1010,7 +1010,7 @@ wxString msg;
 					pt_track->m_NetCode = net_code;
 					pt_track->m_Start.x = ux0; pt_track->m_Start.y = uy0;
 					pt_track->m_End.x = ux1; pt_track->m_End.y = uy1;
-					pt_track->m_TimeStamp = TimeStamp;
+					pt_track->m_TimeStamp = s_TimeStamp;
 					pt_track->Insert(frame->m_Pcb, NULL);
 					pt_track->Draw(frame->DrawPanel, DC, GR_OR);
 					nbsegm++;
@@ -1175,7 +1175,7 @@ int sommet[4][2];
 wxString msg;
 
 	if( frame->m_Pcb->m_Zone == NULL ) return FALSE;	/* pas de zone */
-	if( frame->m_Pcb->m_Zone->m_TimeStamp != TimeStamp ) /* c'est une autre zone */
+	if( frame->m_Pcb->m_Zone->m_TimeStamp != s_TimeStamp ) /* c'est une autre zone */
 		return FALSE;
 
 	/* Calcul du nombre de pads a traiter et affichage */
@@ -1239,7 +1239,7 @@ wxString msg;
 			pt_track->m_Start.x = cX; pt_track->m_Start.y = cY;
 			pt_track->m_End.x = cX + sommet[jj][0];
 			pt_track->m_End.y = cY + sommet[jj][1];
-			pt_track->m_TimeStamp = TimeStamp;
+			pt_track->m_TimeStamp = s_TimeStamp;
 
 			/* tst si trace possible */
 			if( Drc(frame, DC, pt_track,frame->m_Pcb->m_Track,0) == BAD_DRC )
@@ -1249,7 +1249,7 @@ wxString msg;
 
 			/* on doit pouvoir se connecter sur la zone */
 			loctrack = Locate_Zone(frame->m_Pcb->m_Zone,pt_track->m_End, layer);
-			if( (loctrack == NULL) || (loctrack->m_TimeStamp != TimeStamp) )
+			if( (loctrack == NULL) || (loctrack->m_TimeStamp != s_TimeStamp) )
 				{
 				delete pt_track; continue;
 				}

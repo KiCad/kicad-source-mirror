@@ -98,7 +98,7 @@ char Line[1024], * text, * data;
 	/* class LibCmpEntry */
 	/*********************/
 /* Basic class for librarty oomponent description
-	Nor directly used
+	Not directly used
 	Used to create the 2 derived classes :
 		- EDA_LibCmpAliasStruct
 		- EDA_LibComponentStruct
@@ -125,10 +125,12 @@ LibCmpEntry::~LibCmpEntry(void)
 	/* class EDA_LibCmpAliasStruct */
 	/*******************************/
 
-/* Decrit un alias d'un composant standard en librairie
-	Un alias est identique au composant standard
-	Dans un alias on ne redefinit que le nom et la documentation associée.
-	Le gain de place en memoire est important
+/* Class to define an alias of a component
+	An alias uses the component defintion (graphic, pins...)
+	but has its own name and documentation.
+	Therefore, when the component is modified, alias of this component are modified.
+	This is a simple method to create components with differs very few
+	(like 74LS00, 74HC00 ... and many op amps )
 */
 
 EDA_LibCmpAliasStruct:: EDA_LibCmpAliasStruct( const wxChar * CmpName,
@@ -230,14 +232,14 @@ EDA_Rect BoundaryBox;
 				// Arc is reduced to a line from m_Start to m_End.
 				// TO DO better.
 				LibDrawArc * Arc = (LibDrawArc *) DrawEntry;
-				x1 = Arc->m_Start.x;
-				y1 = Arc->m_Start.y;
+				x1 = Arc->m_ArcStart.x;
+				y1 = Arc->m_ArcStart.y;
 				xmin = MIN(xmin, x1);
 				ymin = MIN(ymin, y1);
 				xmax = MAX(xmax, x1);
 				ymax = MAX(ymax, y1);
-				x1 = Arc->m_End.x;
-				y1 = Arc->m_End.y;
+				x1 = Arc->m_ArcEnd.x;
+				y1 = Arc->m_ArcEnd.y;
 				xmin = MIN(xmin, x1);
 				ymin = MIN(ymin, y1);
 				xmax = MAX(xmax, x1);
@@ -262,13 +264,13 @@ EDA_Rect BoundaryBox;
 			case COMPONENT_RECT_DRAW_TYPE:
 			{
 				LibDrawSquare * Square = (LibDrawSquare *) DrawEntry;
-				xmin = MIN(xmin, Square->m_Start.x);
+				xmin = MIN(xmin, Square->m_Pos.x);
 				xmin = MIN(xmin, Square->m_End.x);
-				xmax = MAX(xmax, Square->m_Start.x);
+				xmax = MAX(xmax, Square->m_Pos.x);
 				xmax = MAX(xmax, Square->m_End.x);
-				ymin = MIN(ymin, Square->m_Start.y);
+				ymin = MIN(ymin, Square->m_Pos.y);
 				ymin = MIN(ymin, Square->m_End.y);
-				ymax = MAX(ymax, Square->m_Start.y);
+				ymax = MAX(ymax, Square->m_Pos.y);
 				ymax = MAX(ymax, Square->m_End.y);
 			}
 				break;
@@ -351,12 +353,13 @@ LibDrawField::LibDrawField(int idfield) : LibEDA_BaseStruct(COMPONENT_FIELD_DRAW
 	if ( m_FieldId >= NUMBER_OF_FIELDS ) m_FieldId = NUMBER_OF_FIELDS - 1;
 	m_Size.x = m_Size.y = DEFAULT_SIZE_TEXT;
 	m_Orient = 0;					/* Orientation */
-	m_Attributs = 0;				/* Attributs = Non visible ... */
+	m_Attributs = 0;				/* Attributs = unvisible ... */
+	m_Width = 0;
 	m_HJustify = GR_TEXT_HJUSTIFY_CENTER;
-	m_VJustify = GR_TEXT_VJUSTIFY_CENTER;	/* Justifications Horiz et Vert du texte */
+	m_VJustify = GR_TEXT_VJUSTIFY_CENTER;	/* Horizontal and vertical text justification */
 }
 
-LibDrawField::~LibDrawField(void)		// Destructor
+LibDrawField::~LibDrawField(void)
 {
 }
 
@@ -374,6 +377,7 @@ void LibDrawField::Copy(LibDrawField * Target)
 {
 	Target->m_Pos = m_Pos;
 	Target->m_Size = m_Size;
+	Target->m_Width = m_Width;
 	Target->m_Orient = m_Orient;
 	Target->m_Attributs = m_Attributs;
 	Target->m_Text = m_Text;
@@ -390,6 +394,7 @@ LibEDA_BaseStruct::LibEDA_BaseStruct(int struct_type):
 					0 if the item is common to all units */
 	m_Convert = 0;	/* Shape identification (for parts which have a convert shape)
 					0 if the item is common to all shapes */
+	m_Width = 0;	/* Default value to draw lines or arc ... */
 }
 
 /***************************************************************/
@@ -402,8 +407,10 @@ LibDrawPin::LibDrawPin(void) : LibEDA_BaseStruct(COMPONENT_PIN_DRAW_TYPE)
 	m_PinType = PIN_UNSPECIFIED;	/* electrical type of pin */
 	m_Attributs = 0;			 /* bit 0 != 0: pin invisible */
 	m_PinNum = 0;				/*pin number ( i.e. 4 codes Ascii ) */
-	m_SizeNum = 50;
-	m_SizeName = 50;			/* Default size for pin name and num */
+	m_PinNumSize = 50;
+	m_PinNameSize = 50;			/* Default size for pin name and num */
+	m_Width = 0;
+//	m_PinNumWidth = m_PinNameWidth = 0;	// Unused
 }
 
 
@@ -509,11 +516,12 @@ LibDrawPin * newpin = new LibDrawPin();
 	newpin->m_PinType = m_PinType;
 	newpin->m_Attributs = m_Attributs;
 	newpin->m_PinNum = m_PinNum;
-	newpin->m_SizeNum = m_SizeNum;
-	newpin->m_SizeName = m_SizeName;
+	newpin->m_PinNumSize = m_PinNumSize;
+	newpin->m_PinNameSize = m_PinNameSize;
 	newpin->m_Unit = m_Unit;
 	newpin->m_Convert = m_Convert;
 	newpin->m_Flags = m_Flags;
+	newpin->m_Width = m_Width;
 
 	newpin->m_PinName = m_PinName;
 
@@ -538,8 +546,8 @@ LibDrawArc * LibDrawArc::GenCopy(void)
 LibDrawArc * newitem = new LibDrawArc();
 
 	newitem->m_Pos = m_Pos;
-	newitem->m_Start = m_Start;
-	newitem->m_End = m_End;
+	newitem->m_ArcStart = m_ArcStart;
+	newitem->m_ArcEnd = m_ArcEnd;
 	newitem->m_Rayon = m_Rayon;
 	newitem->t1 = t1;
 	newitem->t2 = t2;
@@ -557,7 +565,6 @@ LibDrawCircle::LibDrawCircle(void) : LibEDA_BaseStruct(COMPONENT_CIRCLE_DRAW_TYP
 /**********************************************************************/
 {
 	m_Rayon = 0;
-	m_Width = 0;
 	m_Fill = NO_FILL;
 }
 
@@ -585,6 +592,7 @@ LibDrawText::LibDrawText(void) : LibEDA_BaseStruct(COMPONENT_GRAPHIC_TEXT_DRAW_T
 	m_Horiz = TEXT_ORIENT_HORIZ;
 	m_Size = wxSize(50,50);
 	m_Type = 0;
+	m_Width = 0;
 }
 
 /***************************************/
@@ -601,6 +609,7 @@ LibDrawText * newitem = new LibDrawText();
 	newitem->m_Convert = m_Convert;
 	newitem->m_Flags = m_Flags;
 	newitem->m_Text = m_Text;
+	newitem->m_Width = m_Width;
 	return newitem;
 }
 
@@ -616,7 +625,7 @@ LibDrawSquare * LibDrawSquare::GenCopy(void)
 {
 LibDrawSquare * newitem = new LibDrawSquare();
 
-	newitem->m_Start = m_Start;
+	newitem->m_Pos = m_Pos;
 	newitem->m_End = m_End;
 	newitem->m_Width = m_Width;
 	newitem->m_Unit = m_Unit;
@@ -635,7 +644,7 @@ LibDrawSegment * LibDrawSegment::GenCopy(void)
 {
 LibDrawSegment * newitem = new LibDrawSegment();
 
-	newitem->m_Start = m_Start;
+	newitem->m_Pos = m_Pos;
 	newitem->m_End = m_End;
 	newitem->m_Width = m_Width;
 	newitem->m_Unit = m_Unit;
@@ -667,6 +676,7 @@ int size;
 		newitem->PolyList = (int*)MyMalloc(size);
 		memcpy(newitem->PolyList, PolyList, size);
 	}
+	newitem->m_Pos = m_Pos;
 	newitem->m_Width = m_Width;
 	newitem->m_Unit = m_Unit;
 	newitem->m_Convert = m_Convert;

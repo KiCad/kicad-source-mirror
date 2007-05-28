@@ -714,7 +714,7 @@ int w = BUTT_SIZE_X, h = BUTT_SIZE_Y;
 	if ( color < 0) return;
 
 	for ( ii = 0; laytool_list[ii] != NULL; ii++ )
-		{
+	{
 		if( laytool_list[ii]->m_Id != id) continue;
 		if( laytool_list[ii]->m_Color == NULL) continue;
 
@@ -740,10 +740,11 @@ int w = BUTT_SIZE_X, h = BUTT_SIZE_Y;
 
 		iconDC.SetBrush(Brush);
 		iconDC.DrawRectangle(0,0, w, h);
+		Button->SetBitmapLabel(ButtBitmap);
 		Button->Refresh();
 		SetDisplayOnOff(event);
 		m_Parent->m_CurrentScreen->SetRefreshReq();
-		}
+	}
 	Refresh(FALSE);
 }
 

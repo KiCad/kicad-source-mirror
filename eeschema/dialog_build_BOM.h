@@ -39,16 +39,12 @@
 
 ////@begin control identifiers
 #define ID_DIALOG 10000
-#define SYMBOL_WINEDA_BUILD_BOM_FRAME_STYLE wxDEFAULT_DIALOG_STYLE|wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxSTAY_ON_TOP|wxCLOSE_BOX
-#define SYMBOL_WINEDA_BUILD_BOM_FRAME_TITLE _("List of Material")
-#define SYMBOL_WINEDA_BUILD_BOM_FRAME_IDNAME ID_DIALOG
-#define SYMBOL_WINEDA_BUILD_BOM_FRAME_SIZE wxSize(400, 300)
-#define SYMBOL_WINEDA_BUILD_BOM_FRAME_POSITION wxDefaultPosition
 #define ID_CHECKBOX 10001
 #define ID_CHECKBOX2 10004
 #define ID_CHECKBOX1 10003
 #define ID_CHECKBOX3 10005
 #define ID_CHECKBOX4 10006
+#define ID_RADIOBOX1 10009
 #define ID_CHECKBOX_FIELD1 10007
 #define ID_CHECKBOX_FIELD2 10008
 #define ID_CHECKBOX_FIELD4 10010
@@ -57,6 +53,11 @@
 #define ID_CHECKBOX_FIELD7 10013
 #define ID_CHECKBOX_FIELD8 10014
 #define ID_CHECKBOX5 10002
+#define SYMBOL_WINEDA_BUILD_BOM_FRAME_STYLE wxDEFAULT_DIALOG_STYLE|wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxSTAY_ON_TOP|wxCLOSE_BOX
+#define SYMBOL_WINEDA_BUILD_BOM_FRAME_TITLE _("List of Material")
+#define SYMBOL_WINEDA_BUILD_BOM_FRAME_IDNAME ID_DIALOG
+#define SYMBOL_WINEDA_BUILD_BOM_FRAME_SIZE wxSize(400, 300)
+#define SYMBOL_WINEDA_BUILD_BOM_FRAME_POSITION wxDefaultPosition
 ////@end control identifiers
 
 /*!
@@ -119,9 +120,10 @@ public:
     wxIcon GetIconResource( const wxString& name );
 ////@end WinEDA_Build_BOM_Frame member function declarations
 	void GenereListeOfItems(const wxString & FullFileName);
-	int PrintListeCmpByRef( FILE * f, EDA_BaseStruct ** List, int NbItems );
+	void CreateExportList(const wxString & FullFileName);
+	int PrintListeCmpByRef( FILE * f, EDA_BaseStruct ** List, int NbItems, bool CompactForm = FALSE );
 	int PrintListeCmpByVal( FILE *f, EDA_BaseStruct **List, int NbItems);
-	void PrintFieldData(FILE * f, EDA_SchComponentStruct * DrawLibItem);
+	void PrintFieldData(FILE * f, EDA_SchComponentStruct * DrawLibItem, bool CompactForm = FALSE);
 
 
     /// Should we show tooltips?
@@ -133,6 +135,7 @@ public:
     wxCheckBox* m_ListCmpbyValItems;
     wxCheckBox* m_GenListLabelsbyVal;
     wxCheckBox* m_GenListLabelsbySheet;
+    wxRadioBox* m_OutputFormCtrl;
     wxStaticBoxSizer* m_FieldsToAppendListSizer;
     wxCheckBox* m_AddField1;
     wxCheckBox* m_AddField2;

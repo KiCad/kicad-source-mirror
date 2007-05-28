@@ -4,7 +4,7 @@ CC = gcc
 # Compiler flags.
 
 CPPFLAGS =  -Wall -O2 -DPCBNEW  -I../pcbnew -I ../include -I../common\
-	  `wx-config --cxxflags`
+	  `wx-config --cxxflags` -fno-strict-aliasing
 
 
 include ../libs.linux
@@ -23,6 +23,7 @@ $(TARGET).a: $(OBJECTS3D) makefile.gtk makefile.include
 	ar -rv $@ $(OBJECTS3D)
 	ranlib $@
 
+install:$(TARGET).a
 
 clean:
 	rm -f *.o

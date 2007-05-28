@@ -289,7 +289,7 @@ wxString TextNameLibMod;
 wxString TextValeur;
 wxString TextCmpName;
 wxString NameLibCmp;
-long TimeStamp = -1;
+unsigned long TimeStamp = 0;
 int Error = 0;
 char Line[1024];
 bool Found;
@@ -307,8 +307,8 @@ bool Found;
 	else TextValeur = CONV_FROM_UTF8(text);
 
 	if( Error > 0 ) return( NULL );
-
-	TextTimeStamp.ToLong( &TimeStamp, 16);
+		
+	TextTimeStamp.ToULong( &TimeStamp, 16);
 
 	/* Tst si composant deja charge */
 	Module = (MODULE*) m_Parent->m_Pcb->m_Modules;

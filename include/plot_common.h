@@ -33,18 +33,21 @@ void UserToDeviceCoordinate(wxPoint & pos );
 	/* modifie les coord pos.x et pos.y pour le trace selon l'orientation, l'echelle, les offsets de trace */
 void UserToDeviceSize(wxSize & size );
 	/* modifie les dimension size.x et size.y pour le trace selon l'echelle */
+void ForcePenReinit(void);
+	/* set the flag g_CurrentPenWidth to -1 in order to force a pen width redefinition
+	for the next draw command */
 
 
 /*******************************/
 /* common_plotPS_functions.cpp */
 /*******************************/
+void SetCurrentLineWidthPS( int width);
 void InitPlotParametresPS( wxPoint offset, Ki_PageDescr * sheet, double xscale, double yscale, int orient = 0);
 void SetDefaultLineWidthPS( int width);
 void PlotCircle_PS(wxPoint pos, int diametre, int width = -1);
-void PlotArcPS(wxPoint centre, int StAngle, int EndAngle, int rayon);
-void PlotArcPS(wxPoint centre, int StAngle, int EndAngle, int rayon, int width);
+void PlotArcPS(wxPoint centre, int StAngle, int EndAngle, int rayon, int width = -1);
 	/* Plot an arc: StAngle, EndAngle = start and end arc in 0.1 degree */
-void PlotPolyPS( int nb_segm, int * coord, int fill);
+void PlotPolyPS( int nb_segm, int * coord, int fill, int width = -1);
 void PlotFilledSegmentPS(wxPoint start , wxPoint end, int width);
 void LineTo_PS(wxPoint pos, int plume);
 void PrintHeaderPS(FILE * file, const wxString & Creator, const wxString & FileName, int BBox[4]);
@@ -60,8 +63,8 @@ void InitPlotParametresHPGL(wxPoint offset, double xscale, double yscale, int or
 bool PrintHeaderHPGL(FILE * plot_file, int pen_speed, int pen_num);
 bool CloseFileHPGL(FILE * plot_file);
 void PlotCircle_HPGL(wxPoint centre, int diameter, int width = -1);
-void PlotArcHPGL(wxPoint centre, int StAngle, int EndAngle, int rayon);
-void PlotPolyHPGL( int nb, int * coord, int fill);
+void PlotArcHPGL(wxPoint centre, int StAngle, int EndAngle, int rayon, int width = -1);
+void PlotPolyHPGL( int nb, int * coord, int fill, int width = -1);
 void Move_Plume_HPGL( wxPoint pos, int plume );
 void Plume_HPGL( int plume );
 
