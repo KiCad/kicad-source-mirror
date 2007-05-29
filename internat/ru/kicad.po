@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: перевод KiCad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-05-29 23:28+0300\n"
+"PO-Revision-Date: 2007-05-29 23:36+0300\n"
 "Last-Translator: Igor Plyatov <plyatov@mail.ru>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -897,7 +897,6 @@ msgstr "Файл <%s> - не библиотека модуля"
 #: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/cfg.cpp:71
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/cfg.cpp:99
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eeconfig.cpp:142
-#: /home/buzzer/Projects/Programming/kicad-svn/kicad/prjconfig.cpp:57
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbcfg.cpp:151
 msgid "Save config file"
 msgstr "Сохранить файл конфигурации"
@@ -2276,18 +2275,21 @@ msgid "Show Lines Sketch"
 msgstr "Показать контур линий"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:429
+#, fuzzy
 msgid "Show dcode number"
-msgstr ""
+msgstr "Afficher le n° de DCode"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/affiche.cpp:28
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/affiche.cpp:31
+#, fuzzy
 msgid "COTATION"
-msgstr ""
+msgstr "COTATION"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/affiche.cpp:31
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/affiche.cpp:34
+#, fuzzy
 msgid "PCB Text"
-msgstr ""
+msgstr "Texte Pcb"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/affiche.cpp:34
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/cotation.cpp:137
@@ -2364,8 +2366,9 @@ msgid "Tool"
 msgstr "Инструмент"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/affiche.cpp:94
+#, fuzzy
 msgid "D CODE"
-msgstr ""
+msgstr " (Код %s)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/affiche.cpp:96
 msgid "D type"
@@ -2497,8 +2500,9 @@ msgid "Lines:"
 msgstr "Линии:"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/options.cpp:317
+#, fuzzy
 msgid "Spots:"
-msgstr ""
+msgstr "Spots:"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/options.cpp:323
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbplot.cpp:310
@@ -6798,6 +6802,10 @@ msgstr ""
 "\n"
 "Projet: "
 
+#: /home/buzzer/Projects/Programming/kicad-svn/kicad/prjconfig.cpp:57
+msgid "Save project file"
+msgstr "Сохранить файла проекта"
+
 #: /home/buzzer/Projects/Programming/kicad-svn/kicad/buildmnu.cpp:101
 msgid "&Open Project Descr"
 msgstr "Открыть проект &O"
@@ -11060,40 +11068,48 @@ msgid "Copper layer"
 msgstr "Медный слой"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_pad_edit.cpp:237
+#, fuzzy
 msgid "Comp layer"
-msgstr ""
+msgstr "Effacer Couche"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_pad_edit.cpp:243
+#, fuzzy
 msgid "Adhesive Cmp"
-msgstr ""
+msgstr "Cmp ext: "
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_pad_edit.cpp:247
+#, fuzzy
 msgid "Adhesive Copper"
-msgstr ""
+msgstr "Couches Cuivre."
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_pad_edit.cpp:251
+#, fuzzy
 msgid "Solder paste Cmp"
-msgstr ""
+msgstr "Texte Module Cmp"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_pad_edit.cpp:255
 msgid "Solder paste Copper"
 msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_pad_edit.cpp:259
+#, fuzzy
 msgid "Silkscreen Cmp"
-msgstr ""
+msgstr "Cmp ext: "
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_pad_edit.cpp:263
+#, fuzzy
 msgid "Silkscreen Copper"
-msgstr ""
+msgstr "Couches Cuivre."
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_pad_edit.cpp:267
+#, fuzzy
 msgid "Solder mask Cmp"
-msgstr ""
+msgstr "Texte Module Cmp"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_pad_edit.cpp:271
+#, fuzzy
 msgid "Solder mask Copper"
-msgstr ""
+msgstr "Vias sur masque"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_pad_edit.cpp:275
 msgid "E.C.O.1 layer"
@@ -11120,24 +11136,29 @@ msgid "Tech Layers"
 msgstr "Технические слои."
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/set_color.cpp:322
+#, fuzzy
 msgid "Ratsnest"
-msgstr ""
+msgstr "Chevelu"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/set_color.cpp:330
+#, fuzzy
 msgid "Pad Cu"
-msgstr ""
+msgstr "Pad Cu"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/set_color.cpp:338
+#, fuzzy
 msgid "Pad Cmp"
-msgstr ""
+msgstr "Pad Cmp"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/set_color.cpp:346
+#, fuzzy
 msgid "Text Module Cu"
-msgstr ""
+msgstr "Texte Module Cu"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/set_color.cpp:354
+#, fuzzy
 msgid "Text Module Cmp"
-msgstr ""
+msgstr "Texte Module Cmp"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/set_color.cpp:362
 msgid "Text Module invisible"
@@ -11148,16 +11169,19 @@ msgid "Anchors"
 msgstr "Привязки"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/set_color.cpp:396
+#, fuzzy
 msgid "Show Noconnect"
-msgstr ""
+msgstr "Montrer Non Conn"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/set_color.cpp:405
+#, fuzzy
 msgid "Show Modules Cmp"
-msgstr ""
+msgstr "Afficher Modules Cmp"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/set_color.cpp:414
+#, fuzzy
 msgid "Show Modules Cu"
-msgstr ""
+msgstr "Afficher Modules Cu"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/set_color.cpp:569
 msgid "Colors:"
@@ -11225,8 +11249,9 @@ msgid "Change module %s (%s)  "
 msgstr "Изменить модуль %s (%s)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/xchgmod.cpp:584
+#, fuzzy
 msgid "Cmp files:"
-msgstr ""
+msgstr "Fichiers C.I.:"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/move_or_drag_track.cpp:640
 msgid "Unable to drag this segment: too many segments connected"
