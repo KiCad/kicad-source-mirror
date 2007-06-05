@@ -177,7 +177,11 @@ void TreePrjItemData::Move( TreePrjItemData * dest )
 	if ( destName == GetFileName() ) return; // Same place ??
 
 	// Move the file on the disk:
+#if ( (wxMAJOR_VERSION < 2) || ((wxMAJOR_VERSION == 2)&& (wxMINOR_VERSION < 7)) )
+	if ( !wxRenameFile( GetFileName(), destName ) )
+#else
 	if ( !wxRenameFile( GetFileName(), destName, false ) )
+#endif
 	{
 		wxMessageDialog( m_Parent, _( "Unable to move file ... "), _( "Permission error ?" ), wxICON_ERROR | wxOK );
 		return;
@@ -244,7 +248,11 @@ bool TreePrjItemData::Rename( const wxString & name, bool check )
 		if ( wxID_YES != dialog.ShowModal() ) return false;
 	}
 
+#if ( (wxMAJOR_VERSION < 2) || ((wxMAJOR_VERSION == 2)&& (wxMINOR_VERSION < 7)) )
+	if (! wxRenameFile( m_FileName, newFile ) )
+#else
 	if (! wxRenameFile( m_FileName, newFile, false ) )
+#endif
 	{
 		wxMessageDialog( m_Parent, _( "Unable to rename file ... "), _( "Permission error ?" ), wxICON_ERROR | wxOK );
 		return false;

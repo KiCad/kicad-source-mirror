@@ -51,7 +51,6 @@
 #define wxFD_OVERWRITE_PROMPT wxOVERWRITE_PROMPT
 #define WXK_PAGEUP WXK_PRIOR
 #define WXK_PAGEDOWN WXK_NEXT
-#define wxRenameFile(a, b, c) wxRenameFile(a, b)
 #endif
 
 #ifdef __UNIX__
