@@ -35,7 +35,10 @@ install: $(TARGET)
 
 
 clean:
-	rm -f *.o; rm -f *~; rm core; rm *.bak
+	rm -f *.o
+	rm -f *~
+	rm -f core
+	rm -f *.bak
 	rm -f $(TARGET)
 
 

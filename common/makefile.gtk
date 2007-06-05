@@ -24,7 +24,11 @@ common.a: $(OBJECTS) makefile.gtk makefile.include
 install:common.a
 
 clean:
-	rm -f *.o; rm -f *~; rm core; rm *.bak; rm *.obj
+	rm -f *.o
+	rm -f *~
+	rm -f core
+	rm -f *.bak
+	rm -f *.obj
 	rm -f common.a
 
 

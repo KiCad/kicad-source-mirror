@@ -35,6 +35,6 @@ install: $(TARGET)
 	cp -f $(TARGET) $(KICAD_BIN)
 
 clean:
-		rm *.o
-		rm $(TARGET)
+		rm -f *.o
+		rm -f $(TARGET)
 
