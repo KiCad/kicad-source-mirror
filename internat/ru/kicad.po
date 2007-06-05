@@ -1,30 +1,32 @@
+# translation of kicad.po to russian
+# Igor Plyatov <plyatov@mail.ru>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: перевод KiCad\n"
+"Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-05-29 23:36+0300\n"
+"PO-Revision-Date: 2007-06-05 23:32+0300\n"
 "Last-Translator: Igor Plyatov <plyatov@mail.ru>\n"
-"Language-Team: \n"
+"Language-Team: russian\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Russian\n"
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: .\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-SearchPath-0: /home/buzzer/Projects/Programming/kicad-svn\n"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/get_component_dialog.cpp:98
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/symbtext.cpp:140
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/librairi.cpp:445
-#, fuzzy
 msgid "Name:"
-msgstr "Nom:"
+msgstr "Имя:"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/get_component_dialog.cpp:105
-#, fuzzy
 msgid "History list:"
-msgstr "История команд"
+msgstr "Список истории:"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/get_component_dialog.cpp:112
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/select_layers_to_pcb.cpp:131
@@ -39,9 +41,8 @@ msgid "OK"
 msgstr "OK"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/get_component_dialog.cpp:117
-#, fuzzy
 msgid "Search KeyWord"
-msgstr "неизвестное ключевое слово \"%s\""
+msgstr "Поиск ключевого слова"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/get_component_dialog.cpp:121
 #: /home/buzzer/Projects/Programming/kicad-svn/common/displlst.cpp:106
@@ -73,19 +74,16 @@ msgstr "неизвестное ключевое слово \"%s\""
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbpiste.cpp:87
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/mirepcb.cpp:106
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/swap_layers.cpp:86
-#, fuzzy
 msgid "Cancel"
-msgstr "Annuler"
+msgstr "Отмена"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/get_component_dialog.cpp:125
-#, fuzzy
 msgid "List All"
-msgstr "Liste tous"
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/get_component_dialog.cpp:133
-#, fuzzy
 msgid "By Lib Browser"
-msgstr "Опции просмотра помощи"
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/wxwineda.cpp:91
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/sheet.cpp:166
@@ -96,15 +94,13 @@ msgstr "Опции просмотра помощи"
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/muonde.cpp:358
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/cotation.cpp:129
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/mirepcb.cpp:111
-#, fuzzy
 msgid "Size"
-msgstr "Taille "
+msgstr "Размер"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/wxwineda.cpp:169
 #: /home/buzzer/Projects/Programming/kicad-svn/common/wxwineda.cpp:178
-#, fuzzy
 msgid "Pos "
-msgstr "Pos "
+msgstr "Поз"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/wxwineda.cpp:171
 #, fuzzy
@@ -128,163 +124,132 @@ msgstr " (\"):"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:48
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/muonde.cpp:167
-#, fuzzy
 msgid " (mm):"
-msgstr " (mm):"
+msgstr " (мм):"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:239
-#, fuzzy
 msgid "Copper   "
-msgstr "Cuivre   "
+msgstr "Медь   "
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:239
-#, fuzzy
 msgid "Inner L1 "
-msgstr "Interne 1"
+msgstr "Внутренний L1"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:239
-#, fuzzy
 msgid "Inner L2 "
-msgstr "Interne 2"
+msgstr "Внутренний L2"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:239
-#, fuzzy
 msgid "Inner L3 "
-msgstr "Interne 3"
+msgstr "Внутренний L3"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:240
-#, fuzzy
 msgid "Inner L4 "
-msgstr "Interne 4"
+msgstr "Внутренний L4"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:240
-#, fuzzy
 msgid "Inner L5 "
-msgstr "Interne 5"
+msgstr "Внутренний L5"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:240
-#, fuzzy
 msgid "Inner L6 "
-msgstr "Interne 6"
+msgstr "Внутренний L6"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:240
-#, fuzzy
 msgid "Inner L7 "
-msgstr "Interne 7"
+msgstr "Внутренний L7 "
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:241
-#, fuzzy
 msgid "Inner L8 "
-msgstr "Interne 8"
+msgstr "Внутренний L8"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:241
-#, fuzzy
 msgid "Inner L9 "
-msgstr "Interne 9"
+msgstr "Внутренний L9"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:241
-#, fuzzy
 msgid "Inner L10"
-msgstr "Interne 10"
+msgstr "Внутренний L10"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:241
-#, fuzzy
 msgid "Inner L11"
-msgstr "Interne 11"
+msgstr "Внутренний L11"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:242
-#, fuzzy
 msgid "Inner L12"
-msgstr "Interne 12"
+msgstr "Внутренний L12"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:242
-#, fuzzy
 msgid "Inner L13"
-msgstr "Interne 13"
+msgstr "Внутренний L13"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:242
-#, fuzzy
 msgid "Inner L14"
-msgstr "Interne 14"
+msgstr "Внутренний L14"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:242
-#, fuzzy
 msgid "Component"
-msgstr "Composant"
+msgstr "Компонент"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:243
-#, fuzzy
 msgid "Adhes Cop"
-msgstr "Adhes Cu "
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:243
-#, fuzzy
 msgid "Adhes Cmp"
-msgstr "Adhe  Cmp"
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:243
-#, fuzzy
 msgid "SoldP Cop"
-msgstr "SoldP Cu "
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:243
-#, fuzzy
 msgid "SoldP Cmp"
-msgstr "SoldP Cmp"
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:244
-#, fuzzy
 msgid "SilkS Cop"
-msgstr "Sérigr Cu "
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:244
-#, fuzzy
 msgid "SilkS Cmp"
-msgstr "Sérigr Cmp"
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:244
-#, fuzzy
 msgid "Mask Copp"
-msgstr "Masque Cu "
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:244
-#, fuzzy
 msgid "Mask Cmp "
-msgstr "Masque Cmp"
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:245
-#, fuzzy
 msgid "Drawings "
-msgstr "Drawings "
+msgstr "Чертежи"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:245
-#, fuzzy
 msgid "Comments "
-msgstr "Comments "
+msgstr "Комментарии"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:245
-#, fuzzy
 msgid "Eco1     "
-msgstr "Eco1     "
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:245
-#, fuzzy
 msgid "Eco2     "
-msgstr "Eco2     "
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:246
-#, fuzzy
 msgid "Edges Pcb"
-msgstr "Contour Pcb"
+msgstr "Контур платы"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/common.cpp:246
-#, fuzzy
 msgid "---      "
-msgstr "---      "
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/gestfich.cpp:563
 msgid "No default editor found, you must choose it"
-msgstr ""
+msgstr "Редактор по умолчанию не найден. Вы должны выбрать его"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/gestfich.cpp:568
 #: /home/buzzer/Projects/Programming/kicad-svn/kicad/preferences.cpp:97
