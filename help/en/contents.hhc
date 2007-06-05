@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<!-- Sitemap 1.0 -->
+</HEAD><BODY>
+<OBJECT type="text/site properties">
+	<param name="ImageType" value="Folder">
+</OBJECT>
+<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Kicad">
+			<param name="Local" value="kicad/kicad.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Eeschema">
+			<param name="Local" value="eeschema/eeschema.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Pcbnew">
+			<param name="Local" value="pcbnew/pcbnew.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Cvpcb">
+			<param name="Local" value="cvpcb/cvpcb-en.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Gerbview">
+			<param name="Local" value="gerbview/gerbview.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Kicad file formats">
+			<param name="Local" value="file_formats/file_formats.html">
+			</OBJECT>
+</UL>
+</BODY></HTML>

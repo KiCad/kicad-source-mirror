@@ -1,0 +1,563 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE>Cvpcb</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 2.0  (Win32)">
+	<META NAME="AUTHOR" CONTENT="IUT">
+	<META NAME="CREATED" CONTENT="19960127;12470000">
+	<META NAME="CHANGEDBY" CONTENT="jean-pierre Charras">
+	<META NAME="CHANGED" CONTENT="20060321;13230715">
+	<META NAME="SDFOOTNOTE" CONTENT=";;;;P">
+	<META NAME="SDENDNOTE" CONTENT="ARABIC">
+</HEAD>
+<BODY LANG="fr-FR" TEXT="#000000" DIR="LTR">
+<DIV TYPE=HEADER>
+	<DL>
+		<DT><FONT FACE="Arial"><FONT SIZE=3><I>Cvpcb</I></FONT></FONT><DT>
+		<BR>
+		<DT><BR>
+	</DL>
+</DIV>
+<DIV ID="Table des mati&egrave;res1" DIR="LTR">
+	<DIV ID="Table des mati&egrave;res1_Head" DIR="LTR">
+		<P><FONT FACE="Albany"><FONT SIZE=5><B>Contenido:</B></FONT></FONT></P>
+	</DIV>
+	<DL>
+		<DT><FONT FACE="Arial"><FONT SIZE=3><A HREF="#1.Objetivo|outline">1
+		- Objetivo</A></FONT></FONT><DT>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#2.Caracter&iacute;sticas generales|outline">2
+		- Caracter&iacute;sticas generales</A></FONT></FONT><DT>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#2.1.Caracter&iacute;sticas|outline">2.1
+		- Caracter&iacute;sticas</A></FONT></FONT><DT>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#2.2.Formato de la Netlist de entrada|outline">2.2
+		- Formato de la Netlist de entrada</A></FONT></FONT><DT>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#2.3.Netlist de salida|outline">2.3
+		- Netlist de salida</A></FONT></FONT><DT>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#3.Abrir Cvpcb|outline">3
+		- Abrir Cvpcb</A></FONT></FONT><DT>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#4.Comandos de CVPCB.|outline">4
+		- Comandos de CVPCB.</A></FONT></FONT><DT>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#4.1.Pantalla principal|outline">4.1
+		- Pantalla principal</A></FONT></FONT><DT>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#4.2.Barra de herramientas de la pantalla principal|outline">4.2
+		- Barra de herramientas de la pantalla principal</A></FONT></FONT><DT>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#4.3.Configuraci&oacute;n de CVPCB|outline">4.3
+		- Configuraci&oacute;n de CVPCB</A></FONT></FONT><DD>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#4.3.1.Pantalla general|outline">4.3.1
+		- Pantalla general</A></FONT></FONT><DD>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#4.3.2.Formato de Netlist|outline">4.3.2
+		- Formato de Netlist</A></FONT></FONT><DD>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#4.3.3.Selecci&oacute;n de las bibliotecas de m&oacute;dulos|outline">4.3.3
+		- Selecci&oacute;n de las bibliotecas de m&oacute;dulos</A></FONT></FONT><DD>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#4.3.4.Selecci&oacute;n de los ficheros de equivalencia|outline">4.3.4
+		- Selecci&oacute;n de los ficheros de equivalencia</A></FONT></FONT><DT>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#4.4.Selecci&oacute;n de los directorios y extensiones por defecto|outline">4.4
+		- Selecci&oacute;n de los directorios y extensiones por defecto</A></FONT></FONT><DT>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#4.5.Visualizaci&oacute;n del m&oacute;dulo actual|outline">4.5
+		- Visualizaci&oacute;n del m&oacute;dulo actual</A></FONT></FONT><DD>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#4.5.1.Visualizado|outline">4.5.1
+		- Visualizado</A></FONT></FONT><DD>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#4.5.2.Comandos de teclado|outline">4.5.2
+		- Comandos de teclado</A></FONT></FONT><DD>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#4.5.3.Men&uacute; emergente|outline">4.5.3
+		- Men&uacute; emergente</A></FONT></FONT><DD>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#4.5.4.Barra de herramientas|outline">4.5.4
+		- Barra de herramientas</A></FONT></FONT><DD>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#4.5.5. Visualizaci&oacute;n 3D|outline">4.5.5
+		-  Visualizaci&oacute;n 3D</A></FONT></FONT><DT>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#5.Asociaci&oacute;n componentes m&oacute;dulos.|outline">5
+		- Asociaci&oacute;n componentes m&oacute;dulos.</A></FONT></FONT><DT>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#5.1.Norma|outline">5.1 -
+		Norma</A></FONT></FONT><DT>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#5.2.Asociaci&oacute;n|outline">5.2
+		- Asociaci&oacute;n</A></FONT></FONT><DT>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#5.3.Modificaci&oacute;n de una asociaci&oacute;n ya existente|outline">5.3
+		- Modificaci&oacute;n de una asociaci&oacute;n ya existente</A></FONT></FONT><DT>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#6.Ficheros de equivalencia|outline">6
+		- Ficheros de equivalencia</A></FONT></FONT><DT>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#6.1.Objetivo|outline">6.1
+		- Objetivo</A></FONT></FONT><DT>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#6.2.Formato|outline">6.2
+		- Formato</A></FONT></FONT><DT>
+		<FONT FACE="Arial"><FONT SIZE=3><A HREF="#7.Fichero de retro-anotaci&oacute;n|outline">7
+		- Fichero de retro-anotaci&oacute;n</A></FONT></FONT></DL>
+</DIV>
+<DL>
+	<DT><BR>
+	<DD><H1 ALIGN=JUSTIFY><A NAME="1.Objetivo|outline"></A><FONT COLOR="#800000"><FONT FACE="Arial"><FONT SIZE=4>1 - Objetivo</FONT></FONT></FONT></H1>
+	<DT><FONT FACE="Arial"><FONT SIZE=3><B>CVPCB</B> permite completar
+	un fichero <I>Netlist </I>generado por una aplicaci&oacute;n de
+	edici&oacute;n de esquemas electr&oacute;nicos, escribiendo para
+	cada <B><I>componente</I></B> de la <I>Netlist, </I>el nombre del
+	<B><I>m&oacute;dulo</I></B> que lo representa en una placa de
+	circuito impreso.</FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>En efecto, en general una <I>Netlist</I>
+	no incluye indicaciones sobre ese <B><I>m&oacute;dulo </I></B>(es
+	decir, la huella f&iacute;sica del componente) que la aplicaci&oacute;n
+	de circuito impreso (<B>PCBNEW</B>) deber&aacute; colocar en el
+	dise&ntilde;o general de la placa que se realice.</FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>Esta asociaci&oacute;n entre el
+	componente y su m&oacute;dulo correspondiente se hace de manera
+	interactiva, o / y en modo autom&aacute;tico, si se dispone de
+	ficheros de equivalencia, que uno puede crear por s&iacute; mismo, y
+	que son de hecho tablas de correspondencia entre el componente y su
+	m&oacute;dulo.</FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>La lista de los m&oacute;dulos
+	disponibles para la aplicaci&oacute;n de circuito impreso est&aacute;
+	contenida en una o varias <I>bibliotecas de MODULOS</I></FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>Este enfoque interactivo es mucho
+	m&aacute;s simple que colocar directamente en el esquema esta
+	indicaci&oacute;n de asociaci&oacute;n, puesto que <B>CVPCB</B>,
+	adem&aacute;s de sus posibilidades de asociaci&oacute;n autom&aacute;tica,
+	permite ver la lista de los m&oacute;dulos disponibles y mostrarlos
+	en la pantalla.</FONT></FONT><DD><H1 ALIGN=JUSTIFY>
+	<A NAME="2.Caracter&iacute;sticas generales|outline"></A><FONT COLOR="#800000"><FONT FACE="Arial"><FONT SIZE=4>2 - Caracter&iacute;sticas
+	generales</FONT></FONT></FONT></H1>
+	<DL>
+		<DD><H2 ALIGN=JUSTIFY><A NAME="2.1.Caracter&iacute;sticas|outline"></A>
+		<FONT COLOR="#008000"><FONT FACE="Arial"><FONT SIZE=3>2.1 - Caracter&iacute;sticas</FONT></FONT></FONT></H2>
+	</DL>
+	<DT><FONT FACE="Arial"><FONT SIZE=3>Asociaci&oacute;n interactiva de
+	componentes y m&oacute;dulos o asociaci&oacute;n autom&aacute;tica
+	por medio de ficheros de equivalencia.</FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>Generaci&oacute;n (si necesaria) de
+	ficheros de retorno de esta asociaci&oacute;n hacia el esquem&aacute;tico.</FONT></FONT><DL>
+		<DD><H2 ALIGN=JUSTIFY>
+		<A NAME="2.2.Formato de la Netlist de entrada|outline"></A><FONT COLOR="#008000"><FONT FACE="Arial"><FONT SIZE=3>2.2 - Formato
+		de la <I>Netlist</I> de entrada</FONT></FONT></FONT></H2>
+	</DL>
+</DL>
+<UL>
+	<LI><FONT FACE="Arial"><FONT SIZE=3><B>EESchema </B>(sin referencia
+	a los m&oacute;dulos).</FONT></FONT><LI>
+	<FONT FACE="Arial"><FONT SIZE=3><B>VIEW LOGIC</B> WIRELIST.</FONT></FONT><LI>
+	<FONT FACE="Arial"><FONT SIZE=3><B>VIEW LOGIC</B> NETLIST
+	*(.NET+.PKG)</FONT></FONT></UL>
+<DL>
+	<DL>
+		<DD><H2 ALIGN=JUSTIFY><A NAME="2.3.Netlist de salida|outline"></A><FONT COLOR="#008000"><FONT FACE="Arial"><FONT SIZE=3>2.3 - <I>Netlist</I>
+		de salida</FONT></FONT></FONT></H2>
+	</DL>
+	<DT><FONT FACE="Arial"><FONT SIZE=3>Son generados dos ficheros:</FONT></FONT></DL>
+<UL>
+	<LI><P ALIGN=LEFT>
+	<FONT FACE="Arial"><FONT SIZE=3>El fichero<B> Netlist</B> completo
+	(con referencia a los m&oacute;dulos)</FONT></FONT><LI><P ALIGN=LEFT>
+	<FONT FACE="Arial"><FONT SIZE=3>Un fichero auxiliar de asociaci&oacute;n
+	de componentes (<B>.CMP</B>).</FONT></FONT></UL>
+<DL>
+	<DD><H1 ALIGN=JUSTIFY><A NAME="3.Abrir Cvpcb|outline"></A><FONT COLOR="#800000"><FONT FACE="Arial"><FONT SIZE=4><B>3 - Abrir
+	Cvpcb</B></FONT></FONT></FONT></H1>
+	<DT><FONT FACE="Arial"><FONT SIZE=3>Se abre mediante <B>cvpcb</B>
+	(el fichero ser&aacute; entonces seleccionado dentro de CVPCB
+	mediante un men&uacute; de acceso a los diferentes ficheros) o
+	mediante <B>cvpcb &lt;<I>nombrefichero</I>&gt; </B>(siendo
+	<I>nombrefichero</I> el nombre del fichero netliste a tratar,
+	generado por la aplicaci&oacute;n de esquem&aacute;ticos EESchema).</FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>El nombre del fichero puede
+	introducirse con o sin extensi&oacute;n.</FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>Si necesarias, las extensiones ser&aacute;n
+	completadas por las definidas por la configuraci&oacute;n de <B>cvpcb</B>.</FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>Los dos ficheros generados tendr&aacute;n
+	el mismo nombre (con una extensi&oacute;n diferente).</FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>La extensi&oacute;n est&aacute;ndar
+	del fichero de entrada es <B>.net.</B></FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>La extensi&oacute;n est&aacute;ndar
+	del fichero <I>netlist</I> generado es <B>.net,</B> y reemplazar&aacute;
+	lel antiguo .net.</FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>La extensi&oacute;n est&aacute;ndar
+	del fichero de asignaci&oacute;n de componentes a m&oacute;dulos
+	correspondientes (generada igualmente por <B>CVPCB</B>) es <B>.cmp</B>.</FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>Estas extensiones est&aacute;ndar
+	pueden modificarse cambiando la configuraci&oacute;n de <B>CVPCB</B>.</FONT></FONT><DD><H1 ALIGN=JUSTIFY>
+	<A NAME="4.Comandos de CVPCB.|outline"></A><FONT COLOR="#800000"><FONT FACE="Arial"><FONT SIZE=4>4 - Comandos
+	de CVPCB.</FONT></FONT></FONT></H1>
+	<DL>
+		<DD><H2 ALIGN=JUSTIFY><A NAME="4.1.Pantalla principal|outline"></A><FONT COLOR="#008000"><FONT FACE="Arial"><FONT SIZE=3>4.1 - Pantalla
+		principal</FONT></FONT></FONT></H2>
+	</DL>
+</DL>
+<P ALIGN=CENTER><IMG SRC="cvpcb-es_html_m214299f.png" NAME="Imagen2" ALIGN=LEFT WIDTH=491 HEIGHT=300 BORDER=0><BR CLEAR=LEFT><BR>
+<DL>
+	<DT><BR>
+	<DT><FONT FACE="Arial"><FONT SIZE=3>La ventana <B><I>Componentes </I></B>,a
+	la izquierda, muestra la lista de los componentes que aparecen en la
+	Netlist le&iacute;da.</FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>La ventana <B><I>M&oacute;dulos , </I></B>a
+	la derecha, muestra la lista de los m&oacute;dulos contenidos en las
+	bibliotecas le&iacute;das.</FONT></FONT><DT><P>
+	<FONT FACE="Arial"><FONT SIZE=3>La ventana <B><I>Componentes</I></B>
+	puede estar vac&iacute;a si no se ha cargado ning&uacute;n fichero,
+	y la ventana <B><I>M&oacute;dulos</I></B> puede tambi&eacute;n estar
+	vac&iacute;a si no se ha encontrado ninguna biblioteca.</FONT></FONT><DL>
+		<DD><H2 ALIGN=JUSTIFY>
+		<A NAME="4.2.Barra de herramientas de la pantalla principal|outline"></A>
+		<FONT COLOR="#008000"><FONT FACE="Arial"><FONT SIZE=3>4.2 - Barra
+		de herramientas de la pantalla principal</FONT></FONT></FONT></H2>
+	</DL>
+	<DD><P ALIGN=LEFT><IMG SRC="cvpcb-es_html_1ed7ac6f.png" NAME="Imagen1" ALIGN=BOTTOM WIDTH=287 HEIGHT=28 BORDER=0><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>Los diferentes comandos son:</FONT></FONT><DD>
+	<IMG SRC="cvpcb-es_html_m1d2ff954.png" NAME="Image33" ALIGN=MIDDLE WIDTH=22 HEIGHT=22 BORDER=0><FONT FACE="Arial"><FONT SIZE=3>	Seleccionar
+	fichero <I>Netlist</I>.</FONT></FONT><DD>
+	<IMG SRC="cvpcb-es_html_5810ed21.png" NAME="Graphic8" ALIGN=MIDDLE WIDTH=23 HEIGHT=22 BORDER=0><FONT FACE="Arial"><FONT SIZE=3>	Crear
+	fichero .<B>CMP</B> (lista de asociaciones) y del fichero .<B>NET</B>,
+	<I>Netlist</I> modificada y completa.</FONT></FONT><DD>
+	<IMG SRC="cvpcb-es_html_m25ec8043.png" NAME="Graphic9" ALIGN=MIDDLE WIDTH=20 HEIGHT=21 BORDER=0><FONT FACE="Arial"><FONT SIZE=3>	Abrir
+	men&uacute; de configuraci&oacute;n de CVPCB.</FONT></FONT><DD>
+	<IMG SRC="cvpcb-es_html_m3721a797.png" NAME="Image34" ALIGN=MIDDLE WIDTH=23 HEIGHT=21 BORDER=0><FONT FACE="Arial"><FONT SIZE=3>	Mostrar
+	m&oacute;dulo actual (es decir, cuyo nombre est&aacute; resaltado en
+	la ventana M&oacute;dulos).</FONT></FONT><DD><P ALIGN=LEFT>
+	<IMG SRC="cvpcb-es_html_m1253cc2c.png" NAME="Graphic7" WIDTH=22 HEIGHT=21 BORDER=0><FONT FACE="Arial"><FONT SIZE=3>	Asociaciar
+	autom&aacute;ticamente componentes/m&oacute;dulos a partir de
+	ficheros de equivalencia.<BR>La utilizaci&oacute;n de este comando
+	supone que se dispone evidentemente de estos ficheros.</FONT></FONT><DD><P ALIGN=LEFT>
+	<IMG SRC="cvpcb-es_html_445df7ae.gif" NAME="Graphic11" ALIGN=MIDDLE WIDTH=22 HEIGHT=22 BORDER=0><FONT FACE="Arial"><FONT SIZE=3>	Mostrar
+	sucesivamente componentes hacia el principio de la lista hasta el
+	primer componente no asignado a un m&oacute;dulo.</FONT></FONT><DD><P ALIGN=LEFT>
+	<IMG SRC="cvpcb-es_html_m446f2400.gif" NAME="Graphic12" ALIGN=MIDDLE WIDTH=24 HEIGHT=23 BORDER=0><FONT FACE="Arial"><FONT SIZE=3>	Mostrar
+	sucesivamente componentes hacia el final de la lista hasta el primer
+	componente no asignado a un m&oacute;dulo.</FONT></FONT><DD><P ALIGN=LEFT>
+	<IMG SRC="cvpcb-es_html_m35847702.png" NAME="Image35" ALIGN=MIDDLE WIDTH=21 HEIGHT=21 BORDER=0><FONT FACE="Arial"><FONT SIZE=3>	Borrar
+	todas las asignaciones efectuadas</FONT></FONT><DD><P ALIGN=LEFT>
+	<IMG SRC="cvpcb-es_html_676c5f75.png" NAME="Image36" ALIGN=MIDDLE WIDTH=22 HEIGHT=21 BORDER=0><FONT FACE="Arial"><FONT SIZE=3>	Generar
+	fichero de retro-anotaci&oacute;n de los m&oacute;dulos.</FONT></FONT><DD><P ALIGN=LEFT>
+	<IMG SRC="cvpcb-es_html_4604a6d9.png" NAME="Image6" ALIGN=BOTTOM WIDTH=22 HEIGHT=20 BORDER=0><FONT FACE="Arial"><FONT SIZE=3>	Acceder
+	a la documentaci&oacute;n de los m&oacute;dulos.</FONT></FONT><DT>
+	<BR>
+	<DL>
+		<DD><H2 ALIGN=JUSTIFY><A NAME="4.3.Configuraci&oacute;n de CVPCB|outline"></A>
+		<FONT COLOR="#008000"><FONT FACE="Arial"><FONT SIZE=3>4.3 - Configuraci&oacute;n
+		de CVPCB</FONT></FONT></FONT></H2>
+		<DL>
+			<DL>
+				<DD><H3><A NAME="4.3.1.Pantalla general|outline"></A><FONT COLOR="#000080"><FONT FACE="Arial"><FONT SIZE=3>4.3.1 - Pantalla
+				general</FONT></FONT></FONT></H3>
+			</DL>
+		</DL>
+	</DL>
+	<DT><FONT FACE="Arial"><FONT SIZE=3>Al abrir el men&uacute; de
+	configuraci&oacute;n se muestra la siguiente pantalla:</FONT></FONT></DL>
+<P ALIGN=CENTER>
+<IMG SRC="cvpcb-es_html_m11acf4e8.png" NAME="Imagen3" ALIGN=LEFT WIDTH=576 HEIGHT=429 BORDER=0><BR CLEAR=LEFT><BR>
+<DL>
+	<DL>
+		<DL>
+			<DL>
+				<DD><H3><A NAME="4.3.2.Formato de Netlist|outline"></A><FONT COLOR="#000080"><FONT FACE="Arial"><FONT SIZE=3>4.3.2 - Formato
+				de Netlist</FONT></FONT></FONT></H3>
+			</DL>
+		</DL>
+	</DL>
+	<DT><FONT FACE="Arial"><FONT SIZE=3>Las opciones son:</FONT></FONT><DT>
+	<FONT COLOR="#800000"><FONT FACE="Arial"><FONT SIZE=3><I><B>PcbNew:</B></I></FONT></FONT></FONT><DD>
+	<FONT FACE="Arial"><FONT SIZE=3>Completa el fichero <I>netlist</I>
+	generado por EESchema y genera tambi&eacute;n el fichero .cmp.</FONT></FONT><DT>
+	<FONT COLOR="#800000"><FONT FACE="Arial"><FONT SIZE=3><I><B>ViewLogic
+	Wirelist:</B></I></FONT></FONT></FONT><DD>
+	<FONT FACE="Arial"><FONT SIZE=3>Acepta el formato Viewlogic tipo
+	&lsquo;Wirelist' (extensi&oacute;n wir) y genera un fichero <I>netlist</I>
+	en formato PcbNew (y el fichero .cmp)</FONT></FONT><DT>
+	<FONT COLOR="#800000"><FONT FACE="Arial"><FONT SIZE=3><I><B>ViewLogic
+	Net &amp; Pkg:</B></I></FONT></FONT></FONT><DD>
+	<FONT FACE="Arial"><FONT SIZE=3>Acepta el formato Viewlogic tipo
+	<I>netlist</I> (.net) asociado al fichero de componentes (.pkg) y
+	genera un fichero <I>netlist </I>en formato PcbNew (y el fichero
+	.cmp).</FONT></FONT><DT>
+	<BR>
+	<DL>
+		<DL>
+			<DL>
+				<DD><H3><A NAME="4.3.3.Selecci&oacute;n de las bibliotecas de m&oacute;dulos|outline"></A>
+				<FONT COLOR="#000080"><FONT FACE="Arial"><FONT SIZE=3>4.3.3 - Selecci&oacute;n
+				de las bibliotecas de m&oacute;dulos</FONT></FONT></FONT></H3>
+			</DL>
+		</DL>
+	</DL>
+</DL>
+<P ALIGN=CENTER><IMG SRC="cvpcb-es_html_712a8f63.gif" NAME="Imagen4" ALIGN=LEFT WIDTH=202 HEIGHT=264 BORDER=0><BR CLEAR=LEFT><BR>
+<DL>
+	<DT><FONT FACE="Arial"><FONT SIZE=3>Seleccionar con el rat&oacute;n
+	un nombre de fichero.</FONT></FONT></DL>
+<UL>
+	<LI>
+	<FONT FACE="Arial"><FONT SIZE=3><B>Borrar</B> borra este nombre de
+	la lista.</FONT></FONT><LI>
+	<FONT FACE="Arial"><FONT SIZE=3><B>A&ntilde;adir</B> a&ntilde;ade un
+	nuevo nombre a la lista, <B>despu&eacute;s</B> del nombre
+	seleccionado</FONT></FONT><LI>
+	<FONT FACE="Arial"><FONT SIZE=3><B>Insertar</B> a&ntilde;ade un
+	nuevo nombre a la lista, <B>antes</B> del nombre seleccionado</FONT></FONT></UL>
+<DL>
+	<DL>
+		<DL>
+			<DL>
+				<DD><H3><A NAME="4.3.4.Selecci&oacute;n de los ficheros de equivalencia|outline"></A>
+				<FONT COLOR="#000080"><FONT FACE="Arial"><FONT SIZE=3>4.3.4 - Selecci&oacute;n
+				de los ficheros de equivalencia</FONT></FONT></FONT></H3>
+			</DL>
+		</DL>
+	</DL>
+</DL>
+<P ALIGN=CENTER><IMG SRC="cvpcb-es_html_5e042dbf.gif" NAME="Imagen5" ALIGN=LEFT WIDTH=204 HEIGHT=266 BORDER=0><BR CLEAR=LEFT><BR>
+<DL>
+	<DT><P><FONT FACE="Arial"><FONT SIZE=3>Seleccionar con el rat&oacute;n
+	un nombre de fichero..</FONT></FONT></DL>
+<UL>
+	<LI>
+	<FONT FACE="Arial"><FONT SIZE=3><B>Borrar</B> borra este nombre de
+	la lista.</FONT></FONT><LI>
+	<FONT FACE="Arial"><FONT SIZE=3><B>A&ntilde;adir</B> a&ntilde;ade un
+	nuevo nombre a la lista, <B>despu&eacute;s</B> del nombre
+	seleccionado</FONT></FONT><LI>
+	<FONT FACE="Arial"><FONT SIZE=3><B>Insertar</B> a&ntilde;ade un
+	nuevo nombre a la lista, <B>antes</B> del nombre seleccionado</FONT></FONT></UL>
+<DL>
+	<DT><BR>
+	<DL>
+		<DD><H2 ALIGN=JUSTIFY><A NAME="4.4.Selecci&oacute;n de los directorios y extensiones por defecto|outline"></A>
+		<FONT COLOR="#008000"><FONT FACE="Arial"><FONT SIZE=3>4.4 - Selecci&oacute;n
+		de los directorios y extensiones por defecto</FONT></FONT></FONT></H2>
+	</DL>
+</DL>
+<P ALIGN=CENTER><BR>
+<DL>
+	<DT><IMG SRC="cvpcb-es_html_1de2e523.gif" NAME="Imagen6" ALIGN=LEFT WIDTH=425 HEIGHT=134 BORDER=0><BR CLEAR=LEFT><BR>
+	<DT><FONT FACE="Arial"><FONT SIZE=3><B>Dir Bibli</B>: es el
+	directorio de b&uacute;squeda por defecto de los ficheros de m&oacute;dulos
+	(<B>.mod</B>) y de los ficheros de equivalencia (<B>.equ)</B>.</FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>Si este campo se deja vac&iacute;o,
+	el directorio por defecto utilizado ser&aacute;  <B><I>kicad/modules</I></B>.</FONT></FONT><DT>
+	<BR>
+	<DL>
+		<DD><H2 ALIGN=JUSTIFY><A NAME="4.5.Visualizaci&oacute;n del m&oacute;dulo actual|outline"></A>
+		<FONT COLOR="#008000"><FONT FACE="Arial"><FONT SIZE=3>4.5 - Visualizaci&oacute;n
+		del m&oacute;dulo actual</FONT></FONT></FONT></H2>
+	</DL>
+	<DT><FONT FACE="Arial"><FONT SIZE=3>El comando <B>Mostrar elemento
+	seleccionado</B> permite mostrar el m&oacute;dulo actual, es decir,
+	el que aparece resaltado en la l&iacute;nea central de la ventana
+	<I>M&oacute;dulos</I>.</FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>Se pueden mostrar los diferentes
+	m&oacute;dulos haciendo click en el m&oacute;dulo deseado (en la
+	lista de m&oacute;dulos), mientras se muestra esta ventana</FONT></FONT></DL>
+<P ALIGN=CENTER>
+<IMG SRC="cvpcb-es_html_m660c105b.png" NAME="Imagen7" ALIGN=LEFT WIDTH=484 HEIGHT=386 BORDER=0><BR CLEAR=LEFT><BR>
+<DL>
+	<DL>
+		<DL>
+			<DL>
+				<DD><H3><A NAME="4.5.1.Visualizado|outline"></A><FONT COLOR="#000080"><FONT FACE="Arial"><FONT SIZE=3>4.5.1 - Visualizado</FONT></FONT></FONT></H3>
+			</DL>
+		</DL>
+	</DL>
+	<DT><FONT FACE="Arial"><FONT SIZE=3>En la perte inferior de la
+	ventana se muestran las coordenadas del cursor:</FONT></FONT><DD>
+	<FONT FACE="Arial"><FONT SIZE=3>coordenadas absolutas (X nnnn Y
+	nnnn) y coordenadas relativas (dx nnnn dy nnnn)</FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>Las coordenadas relativas son
+	puestas a 0 mediante la barra espaciadora.</FONT></FONT><DL>
+		<DL>
+			<DL>
+				<DD><H3>
+				<A NAME="4.5.2.Comandos de teclado|outline"></A><FONT COLOR="#000080"><FONT FACE="Arial"><FONT SIZE=3>4.5.2 - Comandos
+				de teclado</FONT></FONT></FONT></H3>
+			</DL>
+		</DL>
+	</DL>
+	<DD>
+	<TABLE WIDTH=554 BORDER=1 CELLPADDING=4 CELLSPACING=0>
+		<COL WIDTH=174>
+		<COL WIDTH=362>
+		<TR VALIGN=TOP>
+			<TD WIDTH=174>
+				<P ALIGN=LEFT><FONT FACE="Arial"><FONT SIZE=3><B>F1</B></FONT></FONT></TD>
+			<TD WIDTH=362>
+				<P><FONT FACE="Arial"><FONT SIZE=3>Aumento.(Zoom +)</FONT></FONT></TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=174>
+				<P ALIGN=LEFT><FONT FACE="Arial"><FONT SIZE=3><B>F2</B></FONT></FONT></TD>
+			<TD WIDTH=362>
+				<P><FONT FACE="Arial"><FONT SIZE=3>Reducci&oacute;n.(Zoom -)</FONT></FONT></TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=174>
+				<P ALIGN=LEFT><FONT FACE="Arial"><FONT SIZE=3><B>F3</B></FONT></FONT></TD>
+			<TD WIDTH=362>
+				<P><FONT FACE="Arial"><FONT SIZE=3>Refresco de pantalla.</FONT></FONT></TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=174>
+				<P ALIGN=LEFT><FONT FACE="Arial"><FONT SIZE=3><B>F4</B></FONT></FONT></TD>
+			<TD WIDTH=362>
+				<P><FONT FACE="Arial"><FONT SIZE=3>Centrado entorno al cursor.</FONT></FONT></TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=174>
+				<P ALIGN=LEFT><FONT FACE="Arial"><FONT SIZE=3>&lt;barra
+				<B>espaciadora</B>&gt; :</FONT></FONT></TD>
+			<TD WIDTH=362>
+				<P><FONT FACE="Arial"><FONT SIZE=3>Puesta a cero de las
+				coordenadas relativas.</FONT></FONT></TD>
+		</TR>
+	</TABLE>
+	<DD><BR>
+	<DL>
+		<DL>
+			<DL>
+				<DD><H3><A NAME="4.5.3.Men&uacute; emergente|outline"></A><FONT COLOR="#000080"><FONT FACE="Arial"><FONT SIZE=3>4.5.3 - Men&uacute;
+				emergente</FONT></FONT></FONT></H3>
+			</DL>
+		</DL>
+	</DL>
+</DL>
+<P ALIGN=CENTER><IMG SRC="cvpcb-es_html_77adc12a.png" NAME="Imagen8" ALIGN=LEFT WIDTH=129 HEIGHT=185 BORDER=0><BR CLEAR=LEFT><BR>
+<DL>
+	<DT><P><FONT FACE="Arial"><FONT SIZE=3>Mostrado por el rat&oacute;n
+	al hacer click con el bot&oacute;n derecho:</FONT></FONT><DD><P ALIGN=LEFT>
+	<FONT FACE="Arial"><FONT SIZE=3><B><FONT COLOR="#800000">Zoom...</FONT></B>	Selecci&oacute;n
+	directa del zoom.</FONT></FONT><DD><P ALIGN=LEFT>
+	<FONT FACE="Arial"><FONT SIZE=3><B><FONT COLOR="#800000">Rejilla...</FONT></B>	Seleccionar
+	directa de la rejilla.</FONT></FONT><DL>
+		<DL>
+			<DL>
+				<DD><H3>
+				<A NAME="4.5.4.Barra de herramientas|outline"></A><FONT COLOR="#000080"><FONT FACE="Arial"><FONT SIZE=3>4.5.4 - Barra
+				de herramientas</FONT></FONT></FONT></H3>
+			</DL>
+		</DL>
+	</DL>
+</DL>
+<P ALIGN=CENTER><IMG SRC="cvpcb-es_html_m56c39fcf.png" NAME="Image1" ALIGN=BOTTOM WIDTH=156 HEIGHT=22 BORDER=0><P>
+<BR>
+<TABLE WIDTH=100% BORDER=1 CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=47*>
+	<COL WIDTH=209*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TD WIDTH=18%>
+				<P><IMG SRC="cvpcb-es_html_m1e94d17.png" NAME="Image2" ALIGN=BOTTOM WIDTH=19 HEIGHT=20 BORDER=0></TD>
+			<TD WIDTH=82%>
+				<P ALIGN=CENTER><FONT FACE="Arial"><FONT SIZE=3>Acceso a las
+				opciones de visualizaci&oacute;n</FONT></FONT></TD>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=18%>
+				<P><IMG SRC="cvpcb-es_html_m336f54e7.png" NAME="Image3" ALIGN=BOTTOM WIDTH=90 HEIGHT=20 BORDER=0></TD>
+			<TD WIDTH=82%>
+				<P ALIGN=CENTER><FONT FACE="Arial"><FONT SIZE=3>Comandos de Zoom</FONT></FONT></TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=18%>
+				<P><IMG SRC="cvpcb-es_html_m632ae088.png" NAME="Image4" ALIGN=BOTTOM WIDTH=20 HEIGHT=20 BORDER=0></TD>
+			<TD WIDTH=82%>
+				<P ALIGN=CENTER><FONT FACE="Arial"><FONT SIZE=3>Visualizaci&oacute;n
+				en 3D</FONT></FONT></TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<DL>
+	<DL>
+		<DL>
+			<DL>
+				<DD><H3><A NAME="4.5.5. Visualizaci&oacute;n 3D|outline"></A><FONT COLOR="#000080"><FONT FACE="Arial"><FONT SIZE=3>4.5.5 - 
+				Visualizaci&oacute;n 3D</FONT></FONT></FONT></H3>
+			</DL>
+		</DL>
+	</DL>
+	<DD><P ALIGN=LEFT><IMG SRC="cvpcb-es_html_163859f5.png" NAME="Image5" ALIGN=BOTTOM WIDTH=329 HEIGHT=226 BORDER=0><DD><P ALIGN=LEFT>
+	<BR>
+	<DD><P ALIGN=LEFT><BR>
+	<DD><H1 ALIGN=JUSTIFY><A NAME="_Ref411866944"></A><A NAME="5.Asociaci&oacute;n componentes m&oacute;dulos.|outline"></A>
+	<FONT COLOR="#800000"><FONT FACE="Arial"><FONT SIZE=4>5 - Asociaci&oacute;n
+	componentes m&oacute;dulos.</FONT></FONT></FONT></H1>
+	<DL>
+		<DD><H2 ALIGN=JUSTIFY><A NAME="5.1.Norma|outline"></A><FONT COLOR="#008000"><FONT FACE="Arial"><FONT SIZE=3>5.1 - Norma</FONT></FONT></FONT></H2>
+	</DL>
+	<DT><FONT FACE="Arial"><FONT SIZE=3>Dentro de la ventana de m&oacute;dulos
+	hay que hacer doble click en el nombre del <B>m&oacute;dulo</B>
+	deseado (El nombre se muestra <B>resaltado)</B>, para asociarlo con
+	el <B>componente</B> cuyo nombre est&aacute; <B>resaltado en la
+	l&iacute;nea central</B> de la de la ventana Componentes.</FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>La lista de componentes puede
+	tambi&eacute;n avanzar:</FONT></FONT></DL>
+<UL>
+	<LI><P ALIGN=LEFT>
+	<FONT FACE="Arial"><FONT SIZE=3>Autom&aacute;ticamente despu&eacute;s
+	de una asociaci&oacute;n.</FONT></FONT><LI><P ALIGN=LEFT>
+	<FONT FACE="Arial"><FONT SIZE=3>Voluntariamente mediante la orden de
+	avance.</FONT></FONT></UL>
+<DL>
+	<DL>
+		<DD><H2 ALIGN=JUSTIFY><A NAME="5.2.Asociaci&oacute;n|outline"></A><FONT COLOR="#008000"><FONT FACE="Arial"><FONT SIZE=3>5.2 - Asociaci&oacute;n</FONT></FONT></FONT></H2>
+	</DL>
+	<DT><FONT FACE="Arial"><FONT SIZE=3>Hacer doble click con el <B>bot&oacute;n
+	izquierdo del rat&oacute;n</B> en el <B>m&oacute;dulo</B> deseado.</FONT></FONT><DL>
+		<DD><H2 ALIGN=JUSTIFY>
+		<A NAME="5.3.Modificaci&oacute;n de una asociaci&oacute;n ya existente|outline"></A>
+		<FONT COLOR="#008000"><FONT FACE="Arial"><FONT SIZE=3>5.3 - Modificaci&oacute;n
+		de una asociaci&oacute;n ya existente</FONT></FONT></FONT></H2>
+	</DL>
+	<DT><FONT FACE="Arial"><FONT SIZE=3>Se hace como para una asociaci&oacute;n
+	nueva:</FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>Hacer doble click con el <B>bot&oacute;n
+	izquierdo del rat&oacute;n</B> en el nuevo <B>m&oacute;dulo</B>
+	deseado.</FONT></FONT><DD><H1 ALIGN=JUSTIFY>
+	<A NAME="_Ref411864883"></A><A NAME="6.Ficheros de equivalencia|outline"></A>
+	<FONT COLOR="#800000"><FONT FACE="Arial"><FONT SIZE=4>6 - Ficheros
+	de equivalencia</FONT></FONT></FONT></H1>
+	<DL>
+		<DD><H2 ALIGN=JUSTIFY><A NAME="6.1.Objetivo|outline"></A><FONT COLOR="#008000"><FONT FACE="Arial"><FONT SIZE=3>6.1 - Objetivo</FONT></FONT></FONT></H2>
+	</DL>
+	<DT><FONT FACE="Arial"><FONT SIZE=3>Estos ficheros permiten la
+	asociaci&oacute;n autom&aacute;tica.</FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>Dan el nombre del m&oacute;dulo
+	adecuado en funci&oacute;n del nombre (valor) del componente.</FONT></FONT><DL>
+		<DD><H2 ALIGN=JUSTIFY>
+		<A NAME="6.2.Formato|outline"></A><FONT COLOR="#008000"><FONT FACE="Arial"><FONT SIZE=3>6.2 - Formato</FONT></FONT></FONT></H2>
+	</DL>
+	<DT><FONT FACE="Arial"><FONT SIZE=3>Est&aacute; constituido por una
+	l&iacute;nea por componente.</FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>Cada l&iacute;nea tiene la
+	estructura siguiente:</FONT></FONT><DD>
+	<FONT FACE="Arial"><FONT SIZE=3><B>'nombre componente'      'nombre
+	m&oacute;dulo'</B></FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>Cada nombre va entre comillas
+	simples ' , y los dos nombres van separados por uno o varios
+	espacios.</FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3><I>Ejemplo:</I></FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>Si el componente U3 es el circuito
+	14011 y su m&oacute;dulo es 14DIP300, la l&iacute;nea es:</FONT></FONT><DL>
+		<DD>
+		<FONT FACE="Arial"><FONT SIZE=3>'14011'  '14DIP300'</FONT></FONT></DL>
+	<DD><H1 ALIGN=JUSTIFY>
+	<A NAME="_Ref411864840"></A><A NAME="7.Fichero de retro-anotaci&oacute;n|outline"></A>
+	<FONT COLOR="#800000"><FONT FACE="Arial"><FONT SIZE=4>7 - Fichero de
+	retro-anotaci&oacute;n</FONT></FONT></FONT></H1>
+	<DT><FONT FACE="Arial"><FONT SIZE=3>Tal fichero puede ser utilizado
+	para retro-anotaci&oacute;n de un esquema pero no es &uacute;til
+	para PCBNEW.</FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>Est&aacute;.constituido por una
+	l&iacute;nea por componente, dando el nombre del m&oacute;dulo en
+	funci&oacute;n de su referencia.</FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3><B>Ejemplo :</B></FONT></FONT><DT>
+	<FONT FACE="Arial"><FONT SIZE=3>Si el componente U3 es el circuito
+	14011 y su m&oacute;dulo es 14DIP300, la l&iacute;nea generada es:</FONT></FONT><DL>
+		<DD>
+		<FONT FACE="Arial"><FONT SIZE=3>comp &quot;U3&quot;  =  module
+		&quot;14DIP300&quot;</FONT></FONT></DL>
+</DL>
+<P>
+<FONT FACE="Arial"><FONT SIZE=3>El fichero creado tiene por nombre el
+nombre del fichero analizado por CVPCB, por extensi&oacute;n<I> <B>.stf</B></I>,
+y se coloca en el mismo directorio que el de la <I>netlist</I>
+generada.</FONT></FONT>
+<DIV TYPE=FOOTER><P ALIGN=CENTER>
+	<IMG SRC="cvpcb-es_html_m56ca91e1.gif" NAME="Cadre1" ALT="Cadre1" ALIGN=RIGHT WIDTH=25 HEIGHT=2><FONT COLOR="#0000ff"><FONT FACE="Arial"><FONT SIZE=3>P&aacute;g
+	 7 - <SDFIELD TYPE=PAGE SUBTYPE=RANDOM FORMAT=PAGE>8</SDFIELD></FONT></FONT></FONT><BR CLEAR=RIGHT>
+</DIV>
+</BODY>
+</HTML>

@@ -1,0 +1,79 @@
+EESchema-DOCLIB  Version 2.0  17/1/2007-13:54:53
+#
+$CMP 24C16
+D I2C Serial EEPROM
+K EEPROM Serial
+$ENDCMP
+#
+$CMP 74LS125
+D Quad buffer 3 State out
+K TTL buffer 3State
+$ENDCMP
+#
+$CMP 7805
+D Linear Regulator +5V
+K POWER REGUL
+F regulator/lm78*.*
+$ENDCMP
+#
+$CMP C
+D Condensateur non polarise
+$ENDCMP
+#
+$CMP CONN_2
+D Symbole general de connecteur
+K CONN
+$ENDCMP
+#
+$CMP CP
+D Condensateur polarise
+$ENDCMP
+#
+$CMP DB9
+K CONN
+$ENDCMP
+#
+$CMP DIODE
+D Diode simple
+K DEV DIODE
+$ENDCMP
+#
+$CMP DIODESCH
+D Diode schottky
+K DEV DIODE
+$ENDCMP
+#
+$CMP LT1372
+D Set up/step down switching regulator
+F regulator/lt1372-1377.pdf
+$ENDCMP
+#
+$CMP NPN
+F transistors/bipolar/*.*
+$ENDCMP
+#
+$CMP PIC12C508A
+D 8-Bit CMOS Microcontroller
+K 12C508
+$ENDCMP
+#
+$CMP PIC16F54
+D 18 pins -  FLASH-Based 8-Bit CMOS Microcontroller
+K 16F54
+$ENDCMP
+#
+$CMP PNP
+F transistors/bipolar/*.*
+$ENDCMP
+#
+$CMP POT
+D Potentionmetre
+K R
+$ENDCMP
+#
+$CMP R
+D Resistance
+K R DEV
+$ENDCMP
+#
+#End Doc Library

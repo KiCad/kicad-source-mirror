@@ -1,0 +1,87 @@
+PCBNEW-LibDoc----V1  23/5/2007-12:47:45
+#
+$MODULE PIN_ARRAY_2X2
+Li PIN_ARRAY_2X2
+Cd Double rangee de contacts 2 x 2 pins
+Kw CONN
+$EndMODULE
+#
+$MODULE pin_array_4x2
+Li pin_array_4x2
+Cd Double rangee de contacts 2 x 4 pins
+Kw CONN
+$EndMODULE
+#
+$MODULE pin_array_6x2
+Li pin_array_6x2
+Cd Double rangee de contacts 2 x 6 pins
+Kw CONN
+$EndMODULE
+#
+$MODULE pin_array_12x2
+Li pin_array_12x2
+Cd Double rangee de contacts 2 x 12 pins
+Kw CONN
+$EndMODULE
+#
+$MODULE pin_array_8x2
+Li pin_array_8x2
+Cd Double rangee de contacts 2 x 8 pins
+Kw CONN
+$EndMODULE
+#
+$MODULE PIN_ARRAY_5x2
+Li PIN_ARRAY_5x2
+Cd Double rangee de contacts 2 x 5 pins
+Kw CONN
+$EndMODULE
+#
+$MODULE PIN_ARRAY-6X1
+Li PIN_ARRAY-6X1
+Cd Connecteur 6 pins
+Kw CONN DEV
+$EndMODULE
+#
+$MODULE pin_array_3x2
+Li pin_array_3x2
+Cd Double rangee de contacts 2 x 4 pins
+Kw CONN
+$EndMODULE
+#
+$MODULE PIN_ARRAY_20X2
+Li PIN_ARRAY_20X2
+Cd Double rangee de contacts 2 x 12 pins
+Kw CONN
+$EndMODULE
+#
+$MODULE pin_array_13x2
+Li pin_array_13x2
+Cd Double rangee de contacts 2 x 12 pins
+Kw CONN
+$EndMODULE
+#
+$MODULE PIN_ARRAY_2X1
+Li PIN_ARRAY_2X1
+Cd Connecteurs 2 pins
+Kw CONN DEV
+$EndMODULE
+#
+$MODULE PIN_ARRAY_3X1
+Li PIN_ARRAY_3X1
+Cd Connecteur 3 pins
+Kw CONN DEV
+$EndMODULE
+#
+$MODULE PIN_ARRAY_5x1
+Li PIN_ARRAY_5x1
+Cd Double rangee de contacts 2 x 5 pins
+Kw CONN
+$EndMODULE
+#
+$MODULE PIN_ARRAY_30X2
+Li PIN_ARRAY_30X2
+Cd Double rangee de contacts 2 x 12 pins
+Kw CONN
+$EndMODULE
+#
+$EndLIBDOC

@@ -1,0 +1,18 @@
+EESchema-DOCLIB  Version 2.0  14/11/2002-8:46:8
+#
+$CMP EL7242C
+D Translateur TTL->VMOS. Double driver VMOS
+$ENDCMP
+#
+$CMP IR2110
+D VMOS Driver
+K VMOS
+F ir/ir2110.pdf
+$ENDCMP
+#
+$CMP MAX232
+D Driver de Ligne RS232
+K RS232
+$ENDCMP
+#
+#End Doc Library

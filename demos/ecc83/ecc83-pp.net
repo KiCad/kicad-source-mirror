@@ -1,0 +1,130 @@
+# EESchema Netlist Version 1.1 created  11/12/2006-20:12:40
+(
+ ( 456A8ACC $noname  P4 CONN_2 {Lib=CONN_2}
+  (    1 N-000002 )
+  (    2 N-000003 )
+ )
+ ( 454A08DD $noname  U1 ECC83 {Lib=ECC83_2}
+  (    1 N-000005 )
+  (    2 N-000007 )
+  (    3 N-000006 )
+  (    4 N-000002 )
+  (    5 N-000002 )
+  (    6 N-000008 )
+  (    7 N-000005 )
+  (    8 N-000009 )
+  (    9 N-000003 )
+ )
+ ( 4549F4BE $noname  C1 10uF {Lib=C}
+  (    1 N-000008 )
+  (    2 GND )
+ )
+ ( 4549F4A5 $noname  P3 POWER {Lib=CONN_2}
+  (    1 N-000008 )
+  (    2 GND )
+ )
+ ( 4549F46C $noname  P2 OUT {Lib=CONN_2}
+  (    1 N-000004 )
+  (    2 GND )
+ )
+ ( 4549F464 $noname  P1 IN {Lib=CONN_2}
+  (    1 GND )
+  (    2 N-000007 )
+ )
+ ( 4549F3BE $noname  C2 680nF {Lib=C}
+  (    1 N-000004 )
+  (    2 N-000009 )
+ )
+ ( 4549F3AD $noname  R3 100K {Lib=R}
+  (    1 N-000004 )
+  (    2 GND )
+ )
+ ( 4549F3A2 $noname  R4 47K {Lib=R}
+  (    1 N-000007 )
+  (    2 GND )
+ )
+ ( 4549F39D $noname  R2 1.5K {Lib=R}
+  (    1 N-000006 )
+  (    2 GND )
+ )
+ ( 4549F38A $noname  R1 1.5K {Lib=R}
+  (    1 N-000005 )
+  (    2 N-000009 )
+ )
+)
+*
+{ Allowed footprints by component:
+$component C1
+ C?
+ SM*
+$endlist
+$component C2
+ C?
+ SM*
+$endlist
+$component R3
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R4
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R2
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R1
+ R?
+ SM0603
+ SM0805
+$endlist
+$endfootprintlist
+}
+{ Pin List by Nets
+Net 1 "GND"
+ R2 2
+ R4 2
+ R3 2
+ P1 1
+ P2 2
+ P3 2
+ C1 2
+Net 2 ""
+ U1 5
+ U1 4
+ P4 1
+Net 3 ""
+ U1 9
+ P4 2
+Net 4 ""
+ P2 1
+ C2 1
+ R3 1
+Net 5 ""
+ U1 1
+ U1 1
+ R1 1
+ U1 7
+Net 6 ""
+ U1 3
+ R2 1
+ U1 3
+Net 7 ""
+ U1 2
+ U1 2
+ R4 1
+ P1 2
+Net 8 ""
+ P3 1
+ U1 6
+ C1 1
+Net 9 ""
+ C2 2
+ U1 8
+ R1 2
+}
+#End

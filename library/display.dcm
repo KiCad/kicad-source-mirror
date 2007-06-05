@@ -1,0 +1,68 @@
+EESchema-DOCLIB  Version 2.0  Date: 15/3/2007-13:32:41
+#
+$CMP DA04-11
+D 2 x 7 Segments common A.
+K 7 SEGMENTS
+F Display/display-DA04-11GWA.pdf
+$ENDCMP
+#
+$CMP DC04-11
+D 2 x 7 Segments common K.
+K 7 SEGMENTS
+F Display/display-DC04-11GWA.pdf
+$ENDCMP
+#
+$CMP DOT-BAR
+D BAR GRAPH unit
+K BAR DOT
+F Display/HDSP-48xx.pdf
+$ENDCMP
+#
+$CMP DOT-BAR2
+D BAR GRAPH Block
+K BAR DOT
+F Display/HDSP-48xx.pdf
+$ENDCMP
+#
+$CMP ELD-426x
+D DUAL 7 Segments ELD-426 series.
+K 7 SEGMENTS
+$ENDCMP
+#
+$CMP HDSP-7xxx-A
+D Afficheur 7 seg. HDSP-7xxx type A
+K 7 Segments
+F Display/HDSP-7xxx.pdf
+$ENDCMP
+#
+$CMP HDSP-7xxx-B
+D Afficheur 7 seg. HDSP-7xxx type B
+K 7 Segments
+F Display/HDSP-7xxx.pdf
+$ENDCMP
+#
+$CMP HDSP-7xxx-C
+D Afficheur 7 seg. HDSP-7xxx type C
+K 7 Segments
+F Display/HDSP-7xxx.pdf
+$ENDCMP
+#
+$CMP HDSP-7xxx-D
+D Afficheur 7 seg. HDSP-7xxx type D
+K 7 Segments
+F Display/HDSP-7xxx.pdf
+$ENDCMP
+#
+$CMP LTS-6960HR
+D DISPLAY 7 SEGMENTS common A.
+K 7 SEGMENTS
+F Display/LTC-6960HR.pdf
+$ENDCMP
+#
+$CMP LTS-6980HR
+D DISPLAY 7 SEGMENTS common K
+K 7 SEGMENTS
+F Display/LTC-6980HR.pdf
+$ENDCMP
+#
+#End Doc Library

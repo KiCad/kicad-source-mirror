@@ -1,0 +1,224 @@
+EESchema-DOCLIB  Version 2.0  Date: 22/5/2007-14:58:26
+#
+$CMP 7805
+D Linear Regulator +5V
+K POWER REGUL
+F regulator/lm78*.*
+$ENDCMP
+#
+$CMP 7805MS
+D Regulator +5V CMS
+K POWER REGUL
+F regulator/lm78lxx.pdf
+$ENDCMP
+#
+$CMP 78L05
+D Linear Regulator +5V
+K POWER REGUL
+F regulator/lm78*.*
+$ENDCMP
+#
+$CMP 7905
+D Linear Regulator -5V
+K POWER REGUL
+F regulator/lm79*.pdf
+$ENDCMP
+#
+$CMP 79L05
+D Linear Regulator -5V
+K POWER REGUL
+F regulator/lm79*.pdf
+$ENDCMP
+#
+$CMP ADP1108
+D Switching Regulator
+K POWER
+F linear-tec/lt1108.pdf
+$ENDCMP
+#
+$CMP BQ2003
+D Controleur de chargeur de batteries
+F regulator\bq2003.pdf
+$ENDCMP
+#
+$CMP LM317
+D Linear Regulator (adjustable)
+K POWER REGUL
+F regulator/lm117.pdf
+$ENDCMP
+#
+$CMP LM3578
+D Switching Regulator (adjustable)
+K POWER REGUL
+F regulator\lm1578a.pdf
+$ENDCMP
+#
+$CMP LM723
+D Linear Regulator (adjustable)
+K POWER REGUL
+$ENDCMP
+#
+$CMP LM7805
+D Linear Regulator +5V
+K POWER REGUL
+F regulator/lm78*.*
+$ENDCMP
+#
+$CMP LM7812
+D Linear Regulator +12V
+K POWER REGUL
+F regulator/lm78*.*
+$ENDCMP
+#
+$CMP LM7905
+D Linear Regulator -5V
+K POWER REGUL
+F regulator/lm79*.pdf
+$ENDCMP
+#
+$CMP LM7912
+D Linear Regulator -12V
+K POWER REGUL
+F regulator/lm79*.pdf
+$ENDCMP
+#
+$CMP LP2985LV
+D MICROPOWER 150mA Regulator 
+K REGUL POWER  SOT23-5
+F regulator/LP2985.pdf
+$ENDCMP
+#
+$CMP LP3963
+D LowDrop Linear Regulator (QPACK 5 pins)
+K REGUL POWER
+F regulator/lp3963.pdf
+$ENDCMP
+#
+$CMP LP3966
+D LowDrop Linear Regulator (QPACK 5 pins)
+K REGUL POWER
+F regulator/lp3963.pdf
+$ENDCMP
+#
+$CMP LT1108
+D Switching Regulator
+$ENDCMP
+#
+$CMP LT1129_QPACK
+D LowDrop Linear Regulator (QPACK 5 pins)
+K REGUL POWER
+F linear-tec/lt1129.pdf
+$ENDCMP
+#
+$CMP LT1129_SO8
+D LowDrop Linear Regulator (8 pins SOJ)
+K REGUL POWER
+F linear-tec/lt1129.pdf
+$ENDCMP
+#
+$CMP LT1175_QP
+D REGULATOR (Negative voltage)
+F linear-tec/lt1175.pdf
+$ENDCMP
+#
+$CMP LT1175CN8
+D REGULATOR (Negative voltage)
+F linear-tec/lt1175.pdf
+$ENDCMP
+#
+$CMP LT1372
+D Set up/step down switching regulator
+F regulator/lt1372-1377.pdf
+$ENDCMP
+#
+$CMP LT1373
+D Set up/step down switching regulator
+F regulator/lt1373.pdf
+$ENDCMP
+#
+$CMP LT1585CM
+D Linear Regulator (adjustable)
+K POWER REGUL
+$ENDCMP
+#
+$CMP LT3430
+D Hight Voltage Step-down switching regulator (synchronous)  3 A
+K REGUL POWER
+F linear-tec/lt3430f.pdf
+$ENDCMP
+#
+$CMP LT3472
+D DC/DC converter for CCD bias
+F regulator/lt3472.pdf
+$ENDCMP
+#
+$CMP LT_1129_QP
+D LowDrop Linear Regulator (QPACK 5 pins)
+K REGUL POWER
+F linear-tec/lt1129.pdf
+$ENDCMP
+#
+$CMP LTC1307
+D Switching Regulator (Single cell micropower)
+K POWER
+$ENDCMP
+#
+$CMP LTC1624
+D Switching Regulator Controller
+K POWER
+F linear-tec\ltc1624.pdf
+$ENDCMP
+#
+$CMP LTC1878
+D Synchronous Step-Down Regulator
+K REGUL POWER
+F linear-tec/ltc1878.pdf
+$ENDCMP
+#
+$CMP LTC1878EMS8
+D Synchronous Step-Down Regulator
+K REGUL POWER
+F linear-tec/ltc1878.pdf
+$ENDCMP
+#
+$CMP MAX1647
+D Battery Charger
+F maxim\MAX1647-MAX1648.pdf
+$ENDCMP
+#
+$CMP MAX1648
+D Battery Charger
+F maxim\MAX1647-MAX1648.pdf
+$ENDCMP
+#
+$CMP MAX874
+D Voltage reference
+F maxim\MAX872-MAX874.pdf
+$ENDCMP
+#
+$CMP MC34063
+D 1.5A step up/down/inverting switching regulator
+F regulator/mc34063.pdf
+$ENDCMP
+#
+$CMP MIC2177
+D Step-down switching regulator (synchronous)  2.5 A
+K REGUL POWER
+F micrel/mic2177.pdf
+$ENDCMP
+#
+$CMP PT6100
+D REG.ADJ.1A
+$ENDCMP
+#
+$CMP TL497
+D 500 mA step up/step down switching regulator
+F texas/tl497a.pdf
+$ENDCMP
+#
+$CMP TL497A
+D 500 mA step up/step down switching regulator
+F texas/tl497a.pdf
+$ENDCMP
+#
+#End Doc Library

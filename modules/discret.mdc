@@ -1,0 +1,428 @@
+PCBNEW-LibDoc----V1  23/5/2007-14:21:34
+#
+$MODULE LCD4
+Li LCD4
+Cd Afficheur LCD 4 digits
+Kw LCD
+$EndMODULE
+#
+$MODULE LM16255
+Li LM16255
+Cd Afficher LCD LM16255 2 lignes de 16 car.
+Kw LCD
+$EndMODULE
+#
+$MODULE CVAR3X2
+Li CVAR3X2
+Cd Condensateur ajustable
+Kw C DEV
+$EndMODULE
+#
+$MODULE CV3-30PF
+Li CV3-30PF
+Cd Condensateur ajustable miniature
+Kw C DEV
+$EndMODULE
+#
+$MODULE KSA
+Li KSA
+Cd Bouton poussoir KSA
+Kw SWITCH DEV
+$EndMODULE
+#
+$MODULE SELF1418
+Li SELF1418
+Cd Self Ferrite 14 - 18
+Kw SELF
+$EndMODULE
+#
+$MODULE SELF1408
+Li SELF1408
+Cd Self Ferrite 14 - 08
+Kw SELF
+$EndMODULE
+#
+$MODULE swdip3
+Li swdip3
+Cd Switch Dil 3 elements
+Kw SWITCH DEV
+$EndMODULE
+#
+$MODULE SWDIP4
+Li SWDIP4
+Cd Switch Dil 4 elements
+Kw SWITCH DEV
+$EndMODULE
+#
+$MODULE SWDIP8
+Li SWDIP8
+Cd Switch Dil 8 elements
+Kw SWITCH DEV
+$EndMODULE
+#
+$MODULE OSC_DIP8
+Li OSC_DIP8
+Cd Oscillateur - taille DIP8
+$EndMODULE
+#
+$MODULE CP5
+Li CP5
+Cd Condensateur polarise
+Kw CP
+$EndMODULE
+#
+$MODULE CP6
+Li CP6
+Cd Condensateur polarise
+Kw CP
+$EndMODULE
+#
+$MODULE CP8
+Li CP8
+Cd Condensateur polarise
+Kw CP
+$EndMODULE
+#
+$MODULE CP12
+Li CP12
+Cd Condensateur polarise
+Kw CP
+$EndMODULE
+#
+$MODULE CP18
+Li CP18
+Cd Condensateur polarise
+Kw CP
+$EndMODULE
+#
+$MODULE CP20
+Li CP20
+Cd Condenstateur polarise
+Kw CP
+$EndMODULE
+#
+$MODULE CP16
+Li CP16
+Cd Condensateur polarise
+Kw CP
+$EndMODULE
+#
+$MODULE CP14
+Li CP14
+Cd Condensateur polarise
+Kw CP
+$EndMODULE
+#
+$MODULE D3
+Li D3
+Cd Diode 3 pas
+Kw DIODE DEV
+$EndMODULE
+#
+$MODULE D4
+Li D4
+Cd Diode 4 pas
+Kw DIODE DEV
+$EndMODULE
+#
+$MODULE D5
+Li D5
+Cd Diode 5 pas
+Kw DIODE DEV
+$EndMODULE
+#
+$MODULE D6
+Li D6
+Cd Diode 6 pas
+Kw DIODE
+$EndMODULE
+#
+$MODULE R3
+Li R3
+Cd Resitance 3 pas
+Kw R
+$EndMODULE
+#
+$MODULE R4
+Li R4
+Cd Resitance 4 pas
+Kw R
+$EndMODULE
+#
+$MODULE R5
+Li R5
+Cd Resistance 5 pas
+Kw R
+$EndMODULE
+#
+$MODULE R6
+Li R6
+Cd Resistance 6 pas
+Kw R
+$EndMODULE
+#
+$MODULE R7
+Li R7
+Cd Resitance 7 pas
+Kw R
+$EndMODULE
+#
+$MODULE C2
+Li C2
+Cd Condensateur = 2 pas
+Kw C
+$EndMODULE
+#
+$MODULE C1
+Li C1
+Cd Condensateur e = 1 pas
+Kw C
+$EndMODULE
+#
+$MODULE TO18CBE
+Li TO18CBE
+Cd Transistor TO18
+Kw TO18
+$EndMODULE
+#
+$MODULE TO18EBC
+Li TO18EBC
+Cd Transistor TO18
+Kw TO18
+$EndMODULE
+#
+$MODULE TO18GSD
+Li TO18GSD
+Cd Transistor TO18
+Kw TO18
+$EndMODULE
+#
+$MODULE C1-1
+Li C1-1
+Cd Condensateur e = 1 ou 2 pas
+Kw C
+$EndMODULE
+#
+$MODULE R1
+Li R1
+Cd Resistance verticale
+Kw R
+$EndMODULE
+#
+$MODULE HC-33UV
+Li HC-33UV
+Cd Quartz boitier HC-33U Vertical
+Kw QUARTZ DEV
+$EndMODULE
+#
+$MODULE HC-33UH
+Li HC-33UH
+Cd Quartz boitier HC-33U Horizontal
+Kw QUARTZ DEV
+$EndMODULE
+#
+$MODULE HC-18UH
+Li HC-18UH
+Cd Quartz boitier HC-18 horizontal
+Kw QUARTZ DEV
+$EndMODULE
+#
+$MODULE CP36V
+Li CP36V
+Cd Condensateur polarise vertical
+Kw CP
+$EndMODULE
+#
+$MODULE C1V5
+Li C1V5
+Cd Condensateur e = 1 pas
+Kw C
+$EndMODULE
+#
+$MODULE LM79XX
+Li LM79XX
+Cd Regulateur TO220 serie LM79xx
+Kw TR TO220
+$EndMODULE
+#
+$MODULE LM78XX
+Li LM78XX
+Cd Regulateur TO220 serie LM78xx
+Kw TR TO220
+$EndMODULE
+#
+$MODULE TO220
+Li TO220
+Cd Transistor TO 220
+Kw TR TO220 DEV
+$EndMODULE
+#
+$MODULE LEDV
+Li LEDV
+Cd Led verticale diam 6mm
+Kw LED DEV
+$EndMODULE
+#
+$MODULE r_pack8
+Li r_pack8
+Cd 8 R pack
+Kw R
+$EndMODULE
+#
+$MODULE r_pack9
+Li r_pack9
+Cd Connecteur 10 pins
+Kw CONN DEV
+$EndMODULE
+#
+$MODULE LM78LXX
+Li LM78LXX
+Cd Regulateur TO92 serie LM78Lxx
+Kw TR TO92
+$EndMODULE
+#
+$MODULE LM2931
+Li LM2931
+Cd Regulateur TO92 type lm2931
+Kw TR TO92
+$EndMODULE
+#
+$MODULE LM79LXX
+Li LM79LXX
+Cd Regulateur TO92 serie LM79Lxx
+Kw TR TO92
+$EndMODULE
+#
+$MODULE VP0808
+Li VP0808
+Cd Transistor TO92 brochage type VP0808
+Kw TR TO92
+$EndMODULE
+#
+$MODULE CP10
+Li CP10
+Cd Condensateur polarise
+Kw CP
+$EndMODULE
+#
+$MODULE TO3
+Li TO3
+Cd Transistor TO3
+Kw TR TO3
+$EndMODULE
+#
+$MODULE RV2X4
+Li RV2X4
+Cd Resistance variable / Potentiometre
+Kw R
+$EndMODULE
+#
+$MODULE SW_PUSH
+Li SW_PUSH
+Cd Bouton poussoir
+Kw SWITCH DEV
+$EndMODULE
+#
+$MODULE RV2
+Li RV2
+Cd Resistance variable / potentiometre
+Kw R
+$EndMODULE
+#
+$MODULE CP4
+Li CP4
+Cd Condensateur polarise
+Kw CP
+$EndMODULE
+#
+$MODULE FUSE5-20
+Li FUSE5-20
+Cd Support fusible 5 x 20
+Kw DEV
+$EndMODULE
+#
+$MODULE CPR10X16
+Li CPR10X16
+Cd Condensateur polarise couche
+Kw CP
+$EndMODULE
+#
+$MODULE SUBCLICK
+Li SUBCLICK
+Cd Connecteur Subclick
+Kw CONN DEV
+$EndMODULE
+#
+$MODULE C2V10
+Li C2V10
+Cd Condensateur polarise
+Kw CP
+$EndMODULE
+#
+$MODULE HC-18UV
+Li HC-18UV
+Cd Quartz boitier HC-18U vertical
+Kw QUARTZ DEV
+$EndMODULE
+#
+$MODULE TO220_VERT
+Li TO220_VERT
+Cd Regulateur TO220 serie LM78xx
+Kw TR TO220
+$EndMODULE
+#
+$MODULE INDUCTOR_V
+Li INDUCTOR_V
+Cd Inductor (vertical)
+Kw INDUCTOR
+$EndMODULE
+#
+$MODULE TO92
+Li TO92
+Cd Transistor TO92 brochage type BC237
+Kw TR TO92
+$EndMODULE
+#
+$MODULE TO92-INVERT
+Li TO92-INVERT
+Cd Transistor TO92 brochage type BC237
+Kw TR TO92
+$EndMODULE
+#
+$MODULE TO92GSD
+Li TO92GSD
+Cd Transistor TO92 brochage type BC237
+Kw TR TO92
+$EndMODULE
+#
+$MODULE TO92DGS
+Li TO92DGS
+Cd Transistor TO92 brochage type BC237
+Kw TR TO92
+$EndMODULE
+#
+$MODULE TO220GDS
+Li TO220GDS
+Cd Transistor VMOS Irf530, TO220
+Kw TR TO220 DEV
+$EndMODULE
+#
+$MODULE TO39EBC
+Li TO39EBC
+Cd Transistor TO38
+Kw TO38
+$EndMODULE
+#
+$MODULE SW_SPDT
+Li SW_SPDT
+Cd Switch inverseur
+Kw SWITCH DEV
+$EndMODULE
+#
+$MODULE C2V8
+Li C2V8
+Cd Condensateur polarise
+Kw CP
+$EndMODULE
+#
+$EndLIBDOC

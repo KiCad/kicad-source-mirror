@@ -1,0 +1,979 @@
+**************************************************************
+Update 25 may 2007
+pcbnew:
+	bug: problem with 3D shapes. 
+
+Gerbview:
+	Better (but crude...) support to export gerber files to pcbnew.
+
+
+**************************************************************
+Update 11 may 2007
+	build with wxWidgets-2.8.4
+	Include update 16 feb 2007 for linux and window
+
+
+eeschema:
+	bugs:
+		fixed crash in HPGL plot (linix)
+	New bom list format which can be imported in a spreadsheet
+
+kicad
+	Enhanced functions
+	For developpers: first support to Python scripts
+	(must be rebuild. Also have a look to kicad/help/en/docs_src/python_binding/python.odt)
+
+pcbnew:
+	bugs:
+		fixed incorrect plot for oblong or square pads in PS plot
+		fixed crash in HPGL plot (linux)
+	added:
+		track segment drag
+		Better locate function
+	
+Gerbview:
+	better compatibility with some gerber formats
+	First (and crude...) support to export gerber files to pcbnew.
+
+**************************************************************
+Update 16 feb 2007
+All:
+	problem solved in autoinstall package fo XP (help files and others filse not found)
+
+eeschema:
+	minor bug fixes.
+	Locate function modified: items are located:
+		- first under the mouse cursor (off grid)
+		- if nothing found : under the schematic cursor (on grid)
+		Off grid items (like small texts) can be reach more easily.
+	Better look for drawings (cmponents, wires ...):
+		the thickness of graphic lines ,arc ... can be set in component editor,
+		The default thickness of other lines (wires, labels..) can be set in preference
+		(this is noticeable at hight level zooms)
+	
+**************************************************************
+Update 15 jan 2007
+	build with wxWidgets-2.8.1
+
+eeschema:
+	minor bug fixes.
+	
+Pcbnew
+	New print mirror option, in print layers.
+
+**************************************************************
+Update 03 jan 2007 (Release Candidate 2):
+	build with wxWidgets-2.8.0-rc3
+	(I have problems with wxWidgets 2.8.0 with unicode build)
+
+Pcbnew
+	Small enhancement in 3D view (see the demo ecc83)
+
+eeschema:
+	bug fix in netlist generation, and SVG plot format.
+	Now power symbols are automatically annotated.
+	
+
+**************************************************************
+Update 8 dec 2006 (Release Candidate 1):
+Due to big changes in eeschema code, this is a Release Candidate only
+All:
+	build with wxWidgets 2.8.0-RC3
+	some updated docs
+
+Pcbnew
+	in gerber plot, the auxiliary axis can be used as plot origin.
+
+All:
+	Panning by mouse wheel :
+		shift + mouse wheel = panning up and down
+		ctr + mouse wheel = panning left and right
+
+eeschema:
+	some small bugs fixed
+	After placing a new component, type "Insert key" to duplicate it.
+	Full undo/redo (10 levels)
+	footprint filtering for cvpcb (look at the C, R or CP components in device.lib for example).
+
+	
+cvpcb:
+	When a footprint filter list is set for a component (in LibEdit),
+	cvpcb shows the allowed footprints only for the current component.
+	(look at the C, R or CP components in device.lib for example).
+
+**************************************************************
+Update 28 aug 2006 :
+All:
+	build with wxWidgets 2.7.0
+	some updated docs
+	
+Compiling sources:
+	fixed for some files error: "undefined reference to 'vtable for..."
+	
+Eeschema:
+	Added: block mirror command (in popup menu, when a block move is active)
+	Enhanced SVG plot
+	Bom list: fields can be added in printed list
+
+Pcbnew
+	in gerber plot, max D CODE value is now not limited
+	(previously max D CODE value was 99, and 89 tools only were availables,
+	because values 0..9 cannot be used for tools)
+	Added: handling oblong pad holes (tested only with the Excellon viewer GC-prevue)
+
+**************************************************************
+Update 26 jun 2006 :
+
+Documentation:
+	portuguese_bresilian documentation updated.
+	first russian translation can be found in help/ru/docs_src (*.sxw)
+
+All:
+	Korean GUI translation.
+	sources modified for gcc 4.1 compatibility
+
+Eeschema:
+	- User Field names (field1 to field 8) are now editables.
+	- Doc filename for components can be an internet url:
+		if the Doc filename is starting by "http:", "ftp:" or "www.",
+		the internet default browser is launched
+	
+Cvpcb, Pcbnew:
+	-For the 3D view, the background colour can be set.
+	This is better to print 3D view, with a white background
+
+Pcbnew:
+	- The Pad Edit dialog has now a pad position edition.
+	- In Plot Postscript: option to plot negative boards.
+	This is usefull mainly for printing (in this case, a white background is probably preferable)
+	- When the "Delete items" tool is ON, the cursor is allowed to move off grid
+
+**************************************************************
+Update 24 apr 2006 :
+All:
+	Some minor bugs fixed (reported from 28 mar 2006 version).
+
+kicad:
+	add a favourite PDF browser choice
+	
+Eeschema:
+	many small but pleasing enhancements (less artifacts when moving objects)
+	
+Pcbnew:
+	Add a "magnetic pad" feature in track creation: when the cursor enters a pad, it is
+	automatically centered on pad center (whatever the grid selection).
+
+**************************************************************
+Update 28 mar 2006 :
+All:
+	compiled with wxWidgets 2.6.3 stable.
+	Some minor bugs fixed (reported from 21 mar 2006 version).
+
+	
+**************************************************************
+Update 21 mar 2006 (R.C.2):
+All:
+	Some  bugs (reported from 07 mar 2006 version) fixed.
+	Spanish doc updated
+	
+**************************************************************
+Update 21 mar 2006 (Release candidate):
+All:
+	Some  bugs (reported from 07 mar 2006 version) fixed.
+	Spanish doc updated
+	
+**************************************************************
+Update 07 mar 2006 :
+All:
+	Many minor (but annoying) bugs fixed.
+	Cosmetic enhancement:
+		All the dialog boxes have a better look, and fit to font size.
+		(some are redesigned with dialogblocks)
+
+Pcbnew:
+	enhanced track creation (thanks to a contributor: Rok Markovic)
+	Added: block commands (move copy, rotate, mirror) in footprint editor.
+	English and french doc updated
+		(I had forgotten the documentation for copper zone creation)
+eeschema
+	enhanced wire/bus/line creation
+	Added IEEE ttl and cmos libraries. (thanks to Christian Gajda)
+	
+**************************************************************
+Update 19 jan 2006 :
+Pcbnew:
+	bug fix: pcb texts are lost when saving PCBs. 
+
+
+**************************************************************
+Update 18 jan 2006 :
+all:
+	G.U.I hungarian translation added.
+	some minor enhancements.
+	some minor bugs fixed;
+
+
+**************************************************************
+Update 16 jan 2006 :
+pcbnew :
+	Fix a bug (kicad-2006-01-13) :
+		Grid can be uninitialised at the first time pcbnew is launched.
+		(Fortunatly, works fine after the first grid iselection)
+
+Eeschema:
+	Enhanced dialog for component creation.
+
+
+**************************************************************
+Update 13 jan 2006 : Mainly a bug fix.
+
+Bug fixes:
+kicad:
+	spaces in filenames problem when launching eeschema or pcbnew.
+
+all:
+	Under Linux: ComboBox (Selection box) bug fix (wxWidgets 2.6.2 bug):
+		Sel layer, Sel track width, sel Via size, and other selections
+		in eeschema using Comboboxes now work fine.
+	Some others bugs fix.
+
+eeschema:
+	problems to locate component texts (hard to edit).
+	Some minor enhancements.
+
+pcbnew:
+	delete pad bug fixed
+	Severe bug in block copy fixed.
+	Enhancements:
+	Some minor enhancements.
+	global rastnest behaviour changed after a module edition:
+		global rastnest is computed after each edition (was lost in previous releases)
+
+
+
+**************************************************************
+Update 06 jan 2006
+pcbnew:
+eeschema
+	Cosmetic enhancement: smaller title block
+	Bug fix in save board (some pcb texts were lost)
+
+
+eeschema
+	Bug fix: eeschema freezes when a component is being loaded by the library viewer,
+	and the user closes the library viewer by the standard close icon.
+
+**************************************************************
+Update 03 jan 2006 (some changes already in Update 22 dec 2005):
+Kicad:
+	fix problem to create new project under some linux distributions (mandriva and others)
+	Thanks to contributors.
+All:
+	Compiled in Unicode mode (A BIG change in kicad sources).
+	Option to choose fonts for dialog boxes and status line.
+	Some bugs fixed.
+	Slovenian GUI translation added.
+
+
+pcbnew:
+	Footprint editor: add full undo/redo command (10 levels)
+	Drill dialog enhancement (more options). Like earlier versions, drill offset
+	can be done by using Auxiliary axis.
+	Doc: chapter 8 updated (topic "creating zones" added), french version only
+	Printing changed (because the scale 1 was not **exactly** the scale 1.000):
+	there are 2 "scale 1" options:
+		- an "approximative scale 1" (usefull for creating user documents)
+		  The real scale (0.98 to 0.95) depend on printer, margins, the page size and the paper size ...
+		- and an "exact scale 1" (which do not keep exactly the board position in page)
+
+
+eeschema
+	get component function enhancement
+	PADS-PCB netlist export should now work.
+
+
+**************************************************************
+Update 22 dec 2005: BUGGY, DO NOT USE (Bad netlist generation in eeschema)
+Replaced by the Update 03 jan 2006
+
+**************************************************************
+Update 27 oct 2005 :
+Distribution:
+Due to the large size of the archives, I have released kicad in 2 separate files:
+kicad.zip (or.tgz) (all files but schematic component docs :kicad/library/doc/*.pdf)
+doc_components.zip (or .tgz) (kicad/library/doc/*.pdf)
+Full install (see install.txt):
+install kicad.zip (or .tgz).
+install doc_components.zip (or.tgz) in kicad/library
+Update:
+Usually, only kicad.zip is needed.
+
+
+All:
+	Build with wxWidgets-2.6.2 (Windows) and wxWidgets-2.6.1 (Linux)
+	Italian GUI translation added
+	Code cleaning (perhaps some bugs added...).
+	Some minor bugs fixed
+	Fixed :
+		Bug in save configuration (the first library in list was lost).
+		Dialog box list selection (components, libraries) could be off-screen, therefore unreachable.
+
+Eeschema:
+	miscellanous enhancements.
+	Change: The 20 mils grid selection is changed to 25 mils grid selection.
+		This is more convenient because the 50 mils standard working grid cannot be reached
+		on a 20 mils grid
+	Added: very usefull block operations in Library Editor:
+		Zoom (Drag mouse, middle button on)
+		move (Drag mouse, left button on) or select items (choose from pop up menu)
+		copy (Drag mouse, left button + shift key on)
+		mirror (Drag mouse, left button + Control key on)
+		delete (Drag mouse, left button + shiht key + control key on)
+		Select (accessible by block popup menu): select items (pins) for selective global editing
+
+	Some others enhancements.
+
+	Added in Library editor only: True undo-redo command
+
+	Added:
+		- New hot key: F5 = Find next
+		- Now, pin names can be partially overlined:
+			Only letters between ~ are overlined.
+			for a string like READ/WRITE, if you want have WRITE overlined
+			enter the string READ/~WRITE~
+	Component copy (popup menu)
+
+	Bug Fix:
+	- Bug in Place Power tool.
+	- bug : user page size lost when load a sheet using a user page size
+
+Pcbnew:
+	Vias can now have a specified drill value
+	fixed bugs:
+		- Module not found when module name has spaces.
+		- pcbnew can crashes in autoplace command
+		- pcbnew now saves module option "locked".
+		- Plot: cotas are now correctly plotted
+
+
+**************************************************************
+Update 29 aug 2005:
+note:
+	* Archive .tgz do not contains anymore Windows binaries.
+	* Archive .zip contains Win32 and linux binaries.
+
+All:
+- Statically recompiled with wxMSW 2.6.0 (problems with wxMSW 2.6.1)
+- Update help files and dictionary files
+- Change dictionary file names :
+	kicad/internat/xx/internat.* are now kicad/internat/xx/kicad.*
+	*** Please,  UPDATE your Help Files ***
+
+- Cosmetic enhancements
+- Better font sizes for status line and status panel
+- Bug in block command ( when mouse movement was from bottom right to to left ) fixed.
+
+
+Pcbnew, eeschema:
+- Mouse Middle button simple click (without moving mouse) = zoom center
+
+New and powerfull component selection dialog box.
+In this new eeschema dialog box, components can be selected from the library browser.
+
+Pcbnew:
+Add access to Create Drill File in Plot Dialog.
+Minor bug in gerber output (bad text orientation, for mirrored texts)
+
+eeschema
+Bug in annotation (for multi parts per package components, sometimes could create duplicate references) fixed
+Other minor bugs fixed
+Added:
+Option to lock the part selection for the multi parts per package components.
+This is *very* usefull for components which have more than one part per package,
+	when parts are different and cannot be automatically selected
+
+Add external netlist generators (pads-pcb as an example)
+
+Automatic insertion of junction when a connection is created
+Add delete node and delete connection in pop up menu
+
+**************************************************************
+Update 25 jul 2005:
+All:
+- Cosmetic enhancements: new (and beautifull) icons (thanks to Iñigo Zuluaga)
+for toolbars and all popup menus.
+- Mouse Middle button double click = zoom center
+
+- translations and doc updated (English translation of kicad doc finished).
+	*** TO DO *** : Update screen shots with new icons.
+
+Windows:
+Recompiled with wxMSW 2.5.5 (small refresh problems with wxMSW 2.6.0 and wxMSW 2.6.1)
+
+Pcbnew:
+- Accepts modified .wrl format used by Wings3D since Wings3G_0.98.29
+
+eeschema:
+- Mouse Left button Double click on a sheet = enter sheet
+
+
+**************************************************************
+Update 4 jul 2005:
+Pcbnew: Left vertical toolbar problem due to code cleaning (only for version 1 jul 2005) solved
+
+
+**************************************************************
+Update 1 jul 2005:
+
+All:
+- Linux: Compiled with an older version of Libc,
+	for RedHat 9 (and others distrib) compatibility.
+- translations and doc updated (English translation of pcbnew doc finished).
+- Deutch translation started.
+- Cosmetic enhancements.
+
+
+**************************************************************
+Update 24 june 2005:
+- archive kicad-2005-06-14.tgz broken: bad dll files for windows (linux OK)
+	(archive kicad-2005-06-14.zip works fine).
+
+All:
+- translations and doc updated.
+
+
+
+
+**************************************************************
+Update 14 june 2005:
+All:
+- Linux only: compiled with new stable version 2.6.1 of wxWidgets.
+	(problem with wxMSW 2.6.1)
+- translations and doc updated.
+
+Pcbnew:
+Added:
+Drag via or node (Popup menu, right clic on via or track end)
+Cut (or break) track: (Popup menu)create an intermediate point on a track
+Enhanced Printing Dialog :
+ - Layer selection for printing
+ - Print selected layers on One page, or one page per layer
+
+**************************************************************
+Update 26 may 2005:
+Eeschema:
+Previous update (24 may 2005) broken: Eschema will crash after 10 delete commands
+
+Please, update eeshema or eeschema.exe
+
+**************************************************************
+Update 24 may 2005:
+
+Documentation updated
+Enhanced G.U.I. translations.
+
+Eeschema:
+Libraries: microcontroller.lib added
+Some changes in block save and block paste:
+- block paste copy the last saved block.
+	Previously,  block paste copied the last saved or deleted block
+- Now, saved block is not deleted when load a project.
+	This simplify block copy between projects.
+
+Pcbnew (recent problem with 2.6.0 wxWidget version):
+Under Linux:
+Libedit toolbar: listboxes for alias or part selection now are correctly displayed
+
+Gerbview (recent problem with 2.6.0 wxWidget version):
+Under Linux:
+Toolbar: layer and Dcode listboxes now are correctly displayed
+
+**************************************************************
+Update 11 may 2005:
+Eeschema:
+library "memory.lib": correct 27C0x0 components.
+
+Pcbnew:
+Small changes.
+
+Documentation
+Spanish version updated
+
+**************************************************************
+Update 2 may 2005:
+English translation of Eeschema documentation finished.
+
+Cvpcb
+Internal code changed: under LINUX: component and footprint lists are now displayed quickly.
+
+**************************************************************
+Update 25 apr 2005:
+Spanish kicad translation finished!!
+
+All:
+- Some minor bugs fixed
+- compiled with new stable version 2.6.0 of wxWidgets.
+
+Spanish users:
+GUI interface is now displayed in spanish.
+
+Cvpcb:
+English documentation finished.
+Other languages: documentation updated.
+
+eeschema:
+Block copy: automatic clear annotation of new components
+in popup menu (click on wire) added:
+	break wire
+	delete node
+	delete connection (delete wires between 2 nodes)
+
+Pcbnew/cvpcb (3D viewer):
+3D image of board or footprint is now exported in png or jpeg format (see File menu),
+and can be copied on Clipboard (Windows)
+
+Pcbnew:
+Added missing command file/archive footprints, for creating libraries from
+the current board.
+
+
+**************************************************************
+Update 29 mar 2005:
+kicad:
+Small bug fixed (when opening kicad,
+do not start with last open projet in 22 mars 2005 release)
+
+**************************************************************
+Update 22 mar 2005:
+
+All:
+Bug fix release.
+
+Pcbnew
+Bug in move pad (depending on pad orient) fixed.
+
+
+**************************************************************
+Update 11 mar 2005:
+
+Pcbnew:
+Bugs fixed
+
+Eeschema
+libstdc++.so.5 dependency removed (Linux only)
+
+
+**************************************************************
+Update 09 mar 2005:
+Eeschema:
+Plot postscript in color added
+
+
+**************************************************************
+Update 02 mar 2005:
+
+All:
+Compiled with wxWidgets 2.5.4
+
+Gerbview:
+some bugs fixed.
+New block commands: move, erase, copy
+
+Pcbnew:
+Now, read local configuration (.pro file) OK.
+(previously, pcbnew was reading only template/kicad.pro)
+
+
+**************************************************************
+Update 17 feb 2005:
+EEschema:
+Small bug fixed: incorrect arc move in libedit (component editor)
+Bug fixed: crash when deleting a label while moving it
+
+Pcbnew:
+Added: fine scale tuning for plot and print outputs
+
+Pcbnew, eeschema:
+Doc update
+
+cvpcb, kicad
+portuguese brazilian translation added
+(thanks to Eduardo Giani Tavares )
+
+**************************************************************
+Update 08 feb 2005:
+All:
+Code cleaning (some new bugs).
+Kicad tree (kicad/help) changed (for english and spanish translations)
+On line help is in kicad/help/xx (xx = fr, en or es)
+French doc is in kicad/help/fr
+French doc is also used in kicad/help/en and kicad/help/es,
+when english or spanish translation is not available.
+
+EEschema:
+Bug fixed: incorrect orientation for vertical graphic texts
+
+Pcbnew, cvpcb, kicad:
+On ligne SPANISH doc and printable doc (OpenOffice format) added in kicad/help/es
+(thanks to Pedro Martín del Valle)
+
+Pcbnew, eeschema:
+Enhanced plot and print output
+Under Linux, some minor problems are still not solved (plot is OK)
+
+Eeschema:
+** Block functions:
+	Save , drag (ctrl + drag),
+	delete (shift+ctrl + drag), duplicate(shift + drag))
+	** now accessible by pop up menu ** (mouse, right button).
+
+Pcbnew:
+** Block functions:
+	Added: Block Copy ( Alt + drag)
+
+	rotate (ctrl + drag), delete (shift+ctrl + drag),
+	flip(shift + drag), copy ( Alt + drag))
+	** now accessible by pop up menu ** (mouse, right button).
+
+
+
+**************************************************************
+Update 17 jan 2005:
+EEschema:
+Bug fixed: incorrect orientation saved for vertical texts in components
+(such as ref or value)
+
+
+**************************************************************
+Update 12 jan 2005:
+Some spelling corrections.
+Documentation:
+*** Added: kicad/help/pcbnew/footprints.pdf  **
+This is the printable drawing (scale 1) off all footprints in pcbnew libraries:
+12 pages (A4 size).
+Added: board_file_format (it explains the board file format used by pcbnew)
+
+Pcbnew:
+Added: direct access to kicad/help/pcbnew/footprints.pdf (popup menu when
+tool "get module" is active.
+Other minor enhancements
+
+Cvpcb:
+Added: direct access to kicad/help/pcbnew/footprints.pdf (New tool on toolbar)
+
+**************************************************************
+Update 23 dec 2004:
+Eeschema:
+Minor bug fixed (hotkey R (rotate) with no effect when place new component)
+
+**************************************************************
+Update 20 dec 2004:
+Pcbnew, Cvpcb: Compiled with Mesa 6.2.1
+
+Pcbnew, Eeschema:
+Some very minor problems fixed and some minor enhancements
+
+PcbNew:
+Drilling Map works.
+
+**************************************************************
+Update 08 dec 2004:
+Under Mandrake Linux 10.1 : 3D display OK (now, I am using Mesa 6.2)
+
+All:
+Change the Inches/mm toggle button (left toolbar) : Now 2 buttons (Select inches and Selec mm)
+
+**************************************************************
+Update 03 dec 2004:
+- Recompilation to avoid some libraries dependances (like libstdc++.so.6)
+
+Warning:
+- problems under Mandrake Linux 10.1 : 3D display hang or crash pcbnew. (seems not a kicad problem)
+
+**************************************************************
+Update 01 dec 2004:
+Pcbnew:
+Bug with crossprobing (eeschema->pcbnew) (due to code reorganisation).
+This bug can crash pcbnew if a power symbol was clicked in eeschema (via crossprobing).
+Some other small bugs fixed.
+
+**************************************************************
+Update 19 nov 2004:
+All:
+Some recent bugs (due to code reorganisation)  fixed
+A very old small bug in block command fixed (I hope...)
+New: Auto pan in block command (Eeschema, Pcbnew)
+
+Eeschema:
+New option for components:
+In  edit command: flag "Power Component" added for components in power lib.
+(When this flag in ON, some dangerous edition (i.e. change value) are disabled.)
+
+Pcbnew
+Second change (not tested) in GenCAD export for solder side components (mirrored)
+
+**************************************************************
+Update 17 nov 2004:
+Eeschema:
+*** Serious BUG fixed when using hotkey "R"
+
+Pcbnew
+First change (not tested) in GenCAD export for solder side components (mirrored)
+
+**************************************************************
+mise a jour du 15 nov 2004:
+Pcbnew :
+- En lecture netliste, l'identification des modules par "time stamp" (signature temporelle)
+est maintenant operationnelle.
+On peut donc modifier l'annotation du schema et relire la netliste
+et reintégrer la nouvelle annotation sur le PCB en selectionnant l'option
+"Selection module / TimeStamp" avant lecture de la netliste.
+- Mise a jour documentation
+
+BUG: en export GenCAD (pour composants en vue miroir sur cote cuivre)
+
+BUG: in GenCAD export (for solder side components (mirrored) )
+
+**************************************************************
+mise a jour du 9 nov 2004:
+Cvpcb : correction defauts d'affichage des listes sous LINUX
+
+**************************************************************
+mise a jour du 8 nov 2004
+Eeschema, Pcbnew:
+Correction de (petites) bug et amélioration de l'outil de recherche
+(On peut rechercher maintenant les marqueurs DRC et ERC)
+
+**************************************************************
+mise a jour du 2 nov 2004:
+Tous:
+Recompilation avec wxWidgets v 2.5.3
+Nettoyage du code interne
+Quelques bugs supprimes (Probablement d'autres ajoutes).
+
+Eeschema:
+Amelioration sensible de la fonction de recherche
+(icone "recherche" de composants et textes):
+	-le motif de recherche accepte les caracteres joker (* et ?)
+	- on peut maitenant rechercher la presence d'un composant en librairies, meme non chargees.
+Introduction de commandes clavier directes d'edition de l'élément sous la souris:
+	(Les majuscules/minuscules sont indifferenciees)
+	touche SUPPR: Effacement (tout element)
+	touche R: Rotation (composant ou label)
+	touche X: Miroir X (composant)
+	touche Y: Miroir Y (composant)
+	touche N: Orient 0 (composant)
+	touche M: Start Move composant
+Amelioration en selection de composant (en cas d'ambiguité, c'est le plus petit
+qui est sélectionné.
+
+Pcbnew:
+Premiere mise en route de la gestion des Vias enterrées (Experimental).
+Fonction impression: les trous de vias et pads sont maintenant visibles
+Introduction de commandes clavier directes d'edition de l'élément sous la souris:
+	(Les majuscules/minuscules sont indifferenciees)
+	touche DELETE: Effacement (Module ou piste selon commande en cours)
+	touche V: Place via en cours de trace de piste ( et commutation entre couches actives)
+	touche R: Rotation module
+	touche S: Change couche module (Composant <-> Cuivre)
+	touche M: Start Move module
+	touche G: Start Drag module
+
+**************************************************************
+mise a jour du 11 oct 2004:
+Eeschema:
+- Modification de tracé des arcs (editeur de librairie):
+On controle maintenant l'orientation des arcs de 180 degres exactement
+en fonction de la position relative du point de depart et d'arrivee.
+(ex: si pour un arc horizontal le point de depart est a gauche et le point de depart est a droite,
+l'arc est vers le bas.
+mais si pour un arc horizontal le point de depart est a droite et le point de depart est a gauche,
+l'arc est vers le haut).
+Suppression probleme de traçage des arcs en format HPGL.
+Suppression probleme de traçage des textes du cartouche en format HPGL et PS.
+
+
+Tous:
+Bug tres mineur sur Affichage du curseur supprimé.
+
+**************************************************************
+mise a jour du 06 oct 2004:
+Eeschema:
+Suppression Bug (susceptible de provoquer un plantage sous certaines conditions)
+en fonction import d'un composant dans l'editeur de librairie
+Modification tracage des arcs de cercle (non finalisé).
+Possibilité de travail sur grille jusqu'a 1 mil (au lieu de 10 mils)
+
+Tous: Sous LINUX:
+Recompilation pour réduire la dépendance avec certaines librairies pas toujours
+présentes dans certaines installations.
+(Actuellement: compilé avec Mandrake LINUX 9.2)
+
+
+**************************************************************
+mise a jour du 15 sept 2004:
+Pcbnew:
+Correction cadrage du tracé en format POSTSCRIPT (formats > A4)
+et possibilité de forcage du tracé en feuille A4
+kicad:
+Premiere ébauche de sélection des fontes d'affichage.
+**************************************************************
+mise a jour du 12 aout 2004:
+EEschema:
+Correction bug de generation netliste format CADSTAR
+Amelioration de la generation du format GenCAD (pour testeurs automatiques)
+
+**************************************************************
+mise a jour du 12 aout 2004:
+EEschema:
+Correction bug de generation netliste format CADSTAR
+Kicad
+Correction defaut en creation de projet
+
+**************************************************************
+mise a jour du 05 aout 2004:
+EEschema:
+Ajout de creation de netlistes aux formats ORCADPCB2 et CADSTAR
+Pcbnew:
+Premiere ebauche d'export du PCB au format GenCAD (pour testeurs automatiques)
+
+**************************************************************
+mise a jour du 18 mai 2004:
+Eeschema, Pcbnew: quelques bugs supprimés
+Amérioration des messages d'aides du toolbar d'option (toolbar gauche).
+Pcbnew:
+Option d'affichage en mode "fort contraste" (toolbar d'option):
+seule la couche active est alors affichée normalement,
+les autres couches sont affiché en gris sombre (utile si plus de 2 couches)
+
+**************************************************************
+mise a jour du 18 mai 2004:
+fichier de configuration unifié ( commun a tous les logiciels )
+<projet>.pro contient toutes les options propres au projet
+les anciens fichiers de config .cnf ne sont plus utilisés.
+kicad/template contient le fichier common de config par défaut kicad.pro
+Sous Linux: passage à l'utilisation de GTK2
+
+**************************************************************
+mise a jour du 24 fevrier 2004:
+PCBNEW, EESCHEMA:
+Quelques bugs supprimés.
+- Ajout de la fonction AutoPAN:
+lors du tracé de fils et pistes,  de placement ou déplacement de composants
+il y a recadrage automatique lorsque le curseur sort du cadre de tracé.
+- Ajout d'un axe auxiliaire:
+Permet de définir l'origine (0,0) des coordonnées utilisées pour
+générer les fichiers de perçage et d'insertion automatique des composants
+
+**************************************************************
+mise a jour du 24 fevrier 2004:
+PCBNEW:
+Bug en placement automatiques supprimés.
+
+**************************************************************
+mise a jour du 17 fevrier 2004:
+EESCHEMA
+Ajout d'un outil de placement des alimentations (power)
+fait double emploi avec l'outil de placement des composants, mais acclélère le placement
+des symboles d'alimentation en ouvrant d'office la librairie correspondante (power.lib)
+Amélioration des outils de placement:
+les 2 derniers composants utilisés sont mémorisés pour une reselection rapide.
+
+**************************************************************
+mise a jour du 14 janvier 2004:
+PCBNEW:
+amélioration de la gestion de la grille:
+le pas de grille utilisateur est maintenant réglable en X et en Y et nest pas
+arrondi en unités internes (1/10000 pouce).
+l'unité dans laquelle les pas sont spécifiés est sélectionnable (mm ou inch),
+indépendemment de l'unité d'affichage;
+De ce fait le pas peut etre exact, et quelconque, aussi bien en mm qu'en pouces.
+Il n'y a plus d'erreur d'arrondi qui se cummulait comme avant.
+la précision du tracé reste constante ( 1/10000 pouce ou 2,5 microns).
+Ceci a été rendu nécessaire pour créer et gérer des composants au pas métrique,
+de plus en plus nombreux.
+
+**************************************************************
+mise a jour du 10 dec 2003:
+PCBNEW:
+mise a jour de wings3d (http://sourceforge.net/projects/wings/),
+comme modeleur des formes 3D
+Ajout de la possibilité d'associer plusieurs forme 3D pour un module:
+applications:
+transistor + radiateur
+support de circuit intégré + composant ...
+
+**************************************************************
+mise a jour du 19 nov 2003:
+PCBNEW:
+compléments en documentation sur la visualisation 3D.
+mise a jour de wings3d (http://sourceforge.net/projects/wings/),
+comme modeleur des formes 3D
+
+**************************************************************
+mise a jour du 5 nov 2003:
+PCBNEW:
+compléments en visualisation en 3 dimensions du circuit imprimé et de ses modules.
+compléments en librairies de modules: la plupart des formes 3D sont réalisées,
+et l'arborescence du répertoire des modules est des formes 3D est améliorée.
+mise a jour de wings3d (http://sourceforge.net/projects/wings/),
+comme modeleur des formes 3D
+
+**************************************************************
+mise a jour du 22 oct 2003:
+PCBNEW:
+compléments en visualisation en 3 dimensions du circuit imprimé (menu 3d Viewer),
+maintenant opérationnelle
+ajout de wings3d (www.wings3d.com) comme modeleur des formes 3D
+
+**************************************************************
+mise a jour du 08 oct 2003:
+PCBNEW:
+compléments en visualisation en 3 dimensions du circuit imprimé (menu 3d Viewer)
+doc complétée (mas non complète!)
+
+**************************************************************
+mise a jour du 24 sept 2003:
+PCBNEW:
+Premier essai de visualisation en 3 dimensions du circuit imprimé (menu 3d Viewer)
+Non encore documenté
+(commandes: F1,F2 = zoom, fleches Up Down Lef Right = déplacement, Drag de la souris = rotation dans l"espace)
+
+**************************************************************
+mise a jour du 7 juillet 2003:
+
+LIBRAIRIES:
+ajouts divers.
+
+EESCHEMA
+les extrémités de fils et les labels "en l'air" sont maintenant visualisés par un petit carré affiché sur le point non connecté.
+Cela facilite fortement la détection des fils ou labels mal ou non connectés.
+Cependant une extrémité de fil peut rester non connectée, sans que cela pose problème.
+C'est le cas de fils connectés par des labels.
+Mais les fils chevauchant des pins sans y etre connectés sont maintenant facilement détectables.
+
+************************************************************
+mise a jour du 14 mai 2003:
+
+LIBRAIRIES:
+ajouts divers.
+
+MODULES:
+Ajout de connecteurs et supports.
+
+
+PCBNEW:
+suppression de bug
+gestion des pastilles excentrées
+amélioration des tests ERC (isolation entre pastilles, non encore terminé)
+
+
+EESCHEMA
+Les champs peuvent etre maintenant justifiés :
+	a gauche, droite, haut, bas, ou centrés
+Ceci uniquement en librairie
+
+Amérioration des liens vers le simulateur GNUCAP (compatible spice)
+
+DIVERS
+mise a jour du simulateur GNUCAP (version 0.33) et de sa doc

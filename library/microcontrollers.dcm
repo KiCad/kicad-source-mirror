@@ -1,0 +1,103 @@
+EESchema-DOCLIB  Version 2.0  Date: 20/2/2007-08:13:48
+#
+$CMP ADUC816
+F analog-dev/ADuC816.pdf
+$ENDCMP
+#
+$CMP PIC12C508A
+D 8-Bit CMOS Microcontroller
+K 12C508
+$ENDCMP
+#
+$CMP PIC12C671
+D 8-Bit CMOS Microcontroller
+K 12C671
+$ENDCMP
+#
+$CMP PIC12C672
+D 8-Bit CMOS Microcontroller
+K 12C672
+$ENDCMP
+#
+$CMP PIC12F508
+D FLASH-Based 8-Bit CMOS Microcontroller
+K 12F508
+$ENDCMP
+#
+$CMP PIC12F509
+D FLASH-Based 8-Bit CMOS Microcontroller
+K 12F509
+$ENDCMP
+#
+$CMP PIC12F629
+D FLASH-Based 8-Bit CMOS Microcontroller
+K 12F629
+$ENDCMP
+#
+$CMP PIC12F635
+D FLASH-Based 8-Bit CMOS Microcontroller
+K 12F635
+$ENDCMP
+#
+$CMP PIC12F675
+D FLASH-Based 8-Bit CMOS Microcontroller
+K 12F675
+$ENDCMP
+#
+$CMP PIC12F683
+D FLASH-Based 8-Bit CMOS Microcontroller
+K 12F683
+$ENDCMP
+#
+$CMP PIC16C505
+D 14 pins -  8-Bit CMOS Microcontroller
+K 16C505
+$ENDCMP
+#
+$CMP PIC16F505
+D 14 pins -  FLASH-Based 8-Bit CMOS Microcontroller
+K 16F505
+$ENDCMP
+#
+$CMP PIC16F54
+D 18 pins -  FLASH-Based 8-Bit CMOS Microcontroller
+K 16F54
+$ENDCMP
+#
+$CMP PIC16F627
+D FLASH-Based 8-Bit CMOS Microcontroller
+K PIC
+F microchip/pic16f62x.pdf
+$ENDCMP
+#
+$CMP PIC16F628A
+D FLASH-Based 8-Bit CMOS Microcontroller
+K 16F628
+$ENDCMP
+#
+$CMP PIC16F648A
+D FLASH-Based 8-Bit CMOS Microcontroller
+K 16F648
+$ENDCMP
+#
+$CMP PIC16F716
+D 18 pins -  FLASH-Based 8-Bit CMOS Microcontroller
+K 16F716
+$ENDCMP
+#
+$CMP PIC16F818
+D 18 pins -  FLASH-Based 8-Bit CMOS Microcontroller
+K 16F818
+$ENDCMP
+#
+$CMP PIC16F819
+D 18 pins -  FLASH-Based 8-Bit CMOS Microcontroller
+K 16F819
+$ENDCMP
+#
+$CMP PIC18F452-/PT
+D FLASH-Based 8-Bit CMOS Microcontroller (TQFP package)
+K PIC
+$ENDCMP
+#
+#End Doc Library

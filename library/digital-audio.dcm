@@ -1,0 +1,26 @@
+EESchema-DOCLIB  Version 2.0  Date: 
+#
+$CMP CS5361
+D 2 channels Audio DAC 24 bits 114 dB
+K AUDIO ADC
+F digital-audio/cs5361.pdf
+$ENDCMP
+#
+$CMP CS8406
+D 192 KHz Digital audio interface transmitter (SOIC-28)
+K AUDIO
+F digital-audio/cs8406.pdf
+$ENDCMP
+#
+$CMP CS8414
+D 96KHz Digital Audio Receiver
+K AUDIO
+F digital-audio/cs8413-4.pdf
+$ENDCMP
+#
+$CMP CS8420_SOFT
+D Digital Audio Sample Rate Converter ( EAS in-out )
+F digital-audio/cs8420.pdf
+$ENDCMP
+#
+#End Doc Library

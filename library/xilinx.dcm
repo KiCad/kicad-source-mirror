@@ -1,0 +1,68 @@
+EESchema-DOCLIB  Version 2.0  Date: 21/1/2007-17:27:08
+#
+$CMP XC18V01SO20
+F xilinx/xc18v00proms.pdf
+$ENDCMP
+#
+$CMP XC2S100TQ144
+D spartan 2
+K FPGA
+F xilinx/spartan2e/spartan2e.pdf
+$ENDCMP
+#
+$CMP XC2S150PQ208
+K FPGA
+F xilinx/spartan2e/spartan2e.pdf
+$ENDCMP
+#
+$CMP XC2S200PQ208
+K FPGA
+F xilinx/spartan2e/spartan2e.pdf
+$ENDCMP
+#
+$CMP XC2S300PQ208
+F xilinx/spartan2e/spartan2e.pdf
+$ENDCMP
+#
+$CMP XC3S400PQ208
+F xilinx/spartan2e/spartan2e.pdf
+$ENDCMP
+#
+$CMP XC3S50-VQ100
+D spartan 2
+K FPGA
+F xilinx/spartan2e/spartan2e.pdf
+$ENDCMP
+#
+$CMP XC4003-VQ100
+F xilinx/xc400x-pinout.pdf
+$ENDCMP
+#
+$CMP XC95108PC84
+F xilinx/xc95108.pdf
+$ENDCMP
+#
+$CMP XC95108PQ100
+F xilinx/xc95108.pdf
+$ENDCMP
+#
+$CMP XC9536PC44
+F xilinx/xc9536.pdf
+$ENDCMP
+#
+$CMP XCR3064-VQ100
+D Xilinx CoolRunner
+F xilinx/xcr3064xl.pdf
+$ENDCMP
+#
+$CMP XCR3064-VQ44
+D Xilinx CoolRunner
+F xilinx/xcr3064xl.pdf
+$ENDCMP
+#
+$CMP XCR3128-VQ100
+D Xilinx CoolRunner
+F xilinx/xcr3128xl.pdf
+$ENDCMP
+#
+#End Doc Library

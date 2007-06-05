@@ -1,0 +1,11 @@
+EESchema-LIB Version 2.0  SYMBOL
+# SYMBOL smalland
+#
+DEF smalland U 14 10 Y Y 1 0 N
+F0 "U" 500 -350 60 H V
+F1 "smalland" 500 -550 60 H V
+DRAW
+A 98 0 70 882 -882 0 1 0
+P 4 0 1 0  100 70  0 70  0 -70  100 -70
+ENDDRAW
+ENDDEF

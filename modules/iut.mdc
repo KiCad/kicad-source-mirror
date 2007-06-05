@@ -1,0 +1,21 @@
+PCBNEW-LibDoc----V1  7/6/2002-11:40:28
+#
+$MODULE 2PIN_6mm
+Li 2PIN_6mm
+Cd module 2 pin (trou 6 mm)
+Kw DEV
+$EndMODULE
+#
+$MODULE 1PIN_6mm
+Li 1PIN_6mm
+Cd module 1 pin (ou trou mecanique de percage 6 mm)
+Kw DEV
+$EndMODULE
+#
+$MODULE 3PIN_6mm
+Li 3PIN_6mm
+Cd module 2 pin (trou 6 mm)
+Kw DEV
+$EndMODULE
+#
+$EndLIBDOC

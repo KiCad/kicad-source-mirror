@@ -1,0 +1,114 @@
+EESchema-DOCLIB  Version 2.0  Date: 17/5/2005-09:40:05
+#
+$CMP AD390JD
+D Quadruple Convertisseur D->A 12 bits
+K DAC CNA
+$ENDCMP
+#
+$CMP AD558
+D DA Converter
+K DAC CNA
+$ENDCMP
+#
+$CMP AD7224
+D DA converter
+K DAC CNA
+$ENDCMP
+#
+$CMP AD7225
+D DAC (4 outputs)
+K DAC CAN
+$ENDCMP
+#
+$CMP AD7226
+D DA Converter (4 outputs)
+K DAC CNA
+$ENDCMP
+#
+$CMP AD7228
+D DA Converter (8 outputs)
+K DAC CNA
+$ENDCMP
+#
+$CMP AD7533
+D DA Converter
+K DAC CNA
+F adc-dac/ad7533.pdf
+$ENDCMP
+#
+$CMP AD775
+D DA Converter 8 bits -20MHz
+K DAC CNA
+F adc-dac/ad775.pdf
+$ENDCMP
+#
+$CMP AD7819
+D Analog to Digital 8 bits converter
+K CAD
+F adc-dac/ad7819.pdf
+$ENDCMP
+#
+$CMP AD9280ARS
+D Video ADC  (32 Mhz)
+K ADC CAN VIDEO
+F analog-dev/ad9280.pdf
+$ENDCMP
+#
+$CMP AD9708AR
+D Video DAC (32 MHz)
+K DAC CNA VIDEO
+F analog-dev/ad9708.pdf
+$ENDCMP
+#
+$CMP ADC0800
+D Analog to Digital 8 bits converter
+K CAD
+F adc-dac/adc0800.pdf
+$ENDCMP
+#
+$CMP ADC08060
+D Fast ADC  (20 .. 60 Mhz)
+K ADC CAN VIDEO
+F adc-dac/adc08060.pdf
+$ENDCMP
+#
+$CMP ADC0832
+D 2 inputs AD Converter (serial output)
+K ADC CAN
+$ENDCMP
+#
+$CMP ADC1173
+D Fast ADC  (15 Mhz)
+K ADC CAN VIDEO
+F adc-dac/adc1173.pdf
+$ENDCMP
+#
+$CMP CA3300
+D Convertisseur A->D 6 bits rapide
+K ADC CAN
+$ENDCMP
+#
+$CMP DAC08
+D DA Converter 8 bits
+K DAC CNA
+$ENDCMP
+#
+$CMP LTC1406CGN
+D AD converter 8 bits 20MHz
+K ADC
+F adc-dac\ltc1406.pdf
+$ENDCMP
+#
+$CMP LTC1594CS
+D adc 12 bits - 4 channels (serial)
+K ADC
+F linear-tec/ltc1594-8.pdf
+$ENDCMP
+#
+$CMP TDA8702
+D Video DAC (32 MHz)
+K DAC CNA VIDEO
+F philips/tda8702.pdf
+$ENDCMP
+#
+#End Doc Library

@@ -1,0 +1,45 @@
+PCBNEW-LibDoc----V1  2/12/2005-09:36:01
+#
+$MODULE LTS-69xx
+Li LTS-69xx
+Cd Afficheur 7 segments
+Kw AFFICHEUR
+$EndMODULE
+#
+$MODULE AFF 2x7SEG - DIGIT 10mm
+Li AFF 2x7SEG - DIGIT 10mm
+Cd Afficheur 7 segments 10mm DIGIT
+Kw AFFICHEUR
+$EndMODULE
+#
+$MODULE HDSP-78xx
+Li HDSP-78xx
+Cd Afficheur 7 segments
+Kw AFFICHEUR
+$EndMODULE
+#
+$MODULE HDSP-48xx
+Li HDSP-48xx
+Cd Barre 10 points
+Kw BARGRAPH
+$EndMODULE
+#
+$MODULE Dx04
+Li Dx04
+Cd 7 segments display
+Kw DISPLAY
+$EndMODULE
+#
+$MODULE ELD-426x
+Li ELD-426x
+Cd 7 segments display
+Kw DISPLAY
+$EndMODULE
+#
+$MODULE MAN3640A
+Li MAN3640A
+Cd Module for the MAN3640 7 segm display
+Kw DIL
+$EndMODULE
+#
+$EndLIBDOC

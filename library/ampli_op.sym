@@ -1,0 +1,10 @@
+EESchema-LIB Version 2.0  SYMBOL
+# SYMBOL ampli_op
+#
+DEF ampli_op U 0 20 Y Y 1 0 N
+F0 "U" 50 200 60 H V
+F1 "ampli_op" 150 -200 50 H V
+DRAW
+P 4 0 1 0  -200 200  200 0  -200 -200  -200 200
+ENDDRAW
+ENDDEF

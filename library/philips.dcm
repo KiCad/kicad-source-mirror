@@ -1,0 +1,45 @@
+EESchema-DOCLIB  Version 2.0  Date: 30/4/2007-14:48:41
+#
+$CMP PCA82C251
+D CAN Transceiver
+K BUS CAN
+$ENDCMP
+#
+$CMP PCA9516
+D 5 channels I2C Hub
+K I2C
+F philips/pca9516.pdf
+$ENDCMP
+#
+$CMP PCD8584
+D Adaptateur pour Bus I2C
+K I2C
+$ENDCMP
+#
+$CMP PCF8563
+K I2C
+$ENDCMP
+#
+$CMP PCF8574
+D 8 BitsPort to I2C bus
+K I2C
+F philips/pcf8574.pdf
+$ENDCMP
+#
+$CMP PCF8591
+D ANALOG to DIGITAL Conv. I2C bus
+K I2C
+F philips/pcf8591.pdf
+$ENDCMP
+#
+$CMP TDA8501
+D Modulateur Pal/NTSC, entree RGB ou Y,Y-R,Y-B
+K video modulateur
+$ENDCMP
+#
+$CMP TDA8772
+D Triple convertisseur Video
+K Video CAD couleur
+$ENDCMP
+#
+#End Doc Library

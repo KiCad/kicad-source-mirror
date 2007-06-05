@@ -206,7 +206,7 @@ bool WinEDA_App::ReadProjectConfig(const wxString & local_config_filename,
 
 	return:
 		TRUE si lue.
-	Met a jour en plus:
+	Met a jour en plus:
 		EDA_Appl->m_CurrentOptionFileDateAndTime
 		EDA_Appl->m_CurrentOptionFile
 */
@@ -465,3 +465,4 @@ PARAM_CFG_LIBNAME_LIST::PARAM_CFG_LIBNAME_LIST(const wxChar * ident,
 {
 	m_Pt_param = ptparam;
 }
+

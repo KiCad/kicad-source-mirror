@@ -1,0 +1,15 @@
+#zeners:
+'12V' 'D3'
+'15V' 'D3'
+
+#diodes:
+'BAV21' 'D3'
+
+#Tranzorbs:
+'P6KE33A' 'D5'
+
+# transistors:
+'BC237' 'TO92'
+'BC307' 'TO92'
+'2N4401' 'TO92-INVERT'
+'2N4403' 'TO92-INVERT'

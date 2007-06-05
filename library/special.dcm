@@ -1,0 +1,228 @@
+EESchema-DOCLIB  Version 2.0  Date: 16/5/2007-12:50:15
+#
+$CMP AD725
+D RGB to PAL/NTSC encoder
+K VIDEO PAL NTSC
+$ENDCMP
+#
+$CMP ADUC816
+F analog-dev/ADuC816.pdf
+$ENDCMP
+#
+$CMP AV9173
+D Pll Video
+F video/av9173.pdf
+$ENDCMP
+#
+$CMP DS1267
+D Digital potentiometer
+F digital-audio/DS1267.pdf
+$ENDCMP
+#
+$CMP DS1302
+D TimeKeeper DALLAS/MAXIM
+F maxim/DS1302.pdf
+$ENDCMP
+#
+$CMP DS1602
+D Low Power Counter/TimeKeeper  DALLAS
+$ENDCMP
+#
+$CMP DS1621
+D Digital thermometer and thermostat (I2C)
+F maxim/DS1621.pdf
+$ENDCMP
+#
+$CMP DS1804
+D Potentiometre electronique
+$ENDCMP
+#
+$CMP DS7830
+D Dual differentiel line driver
+F ns/DS7830.pdf
+$ENDCMP
+#
+$CMP EL7242C
+D Translateur TTL->VMOS. Double driver VMOS
+F elantec/el7242.pdf
+$ENDCMP
+#
+$CMP ICL7660
+D Voltage converter (pump)
+F intersil/icl7660.pdf
+$ENDCMP
+#
+$CMP IQXO/7X
+D FREQ.HCMOS.3V3
+$ENDCMP
+#
+$CMP IRF7404
+D P.MOSFET
+F SO8
+$ENDCMP
+#
+$CMP LM1881
+D Video Sync detector
+K VIDEO
+$ENDCMP
+#
+$CMP LTC1257
+D CDA Serial Input
+K CDA
+$ENDCMP
+#
+$CMP MAX202
+F maxim/max200-max213.pdf
+$ENDCMP
+#
+$CMP MAX232
+D Driver de Ligne RS232
+K RS232
+F maxim/MAX220-MAX249.pdf
+$ENDCMP
+#
+$CMP MAX2505
+D 45MHz to 70MHz, Integrated IF VCOs with Differential Output
+K VCO IF
+F maxim/MAX2605-MAX2609.pdf
+$ENDCMP
+#
+$CMP MAX2507
+D 150MHz to 300MHz, Integrated IF VCOs with Differential Output
+K VCO IF
+F maxim/MAX2605-MAX2609.pdf
+$ENDCMP
+#
+$CMP MAX2508
+D 300MHz to 500MHz, Integrated IF VCOs with Differential Output
+K VCO IF
+F maxim/MAX2605-MAX2609.pdf
+$ENDCMP
+#
+$CMP MAX2509
+D 500MHz to 650MHz, Integrated IF VCOs with Differential Output
+K VCO IF
+F maxim/MAX2605-MAX2609.pdf
+$ENDCMP
+#
+$CMP MAX2606
+D 70MHz to 150MHz, Integrated IF VCOs with Differential Output
+K VCO IF
+F maxim/MAX2605-MAX2609.pdf
+$ENDCMP
+#
+$CMP MAX3226
+D Driver de Ligne RS232 micropower
+K RS232
+F maxim/max3224-max3245.pdf
+$ENDCMP
+#
+$CMP MAX5436
+D Digital Potentiometer (SPI ctrl)
+K POT
+F maxim/MAX5436-MAX5439.pdf
+$ENDCMP
+#
+$CMP Max691
+F maxim/max690-max695.pdf
+$ENDCMP
+#
+$CMP MAX777
+D Switching Regulator (MAXIM)
+K POWER
+$ENDCMP
+#
+$CMP MC33064D
+D Undervoltage sensing circuit (S0-8 package)
+F onsemi/mc34064.pdf
+$ENDCMP
+#
+$CMP MC33064P
+D Undervoltage sensing circuit (TP-226AA package)
+F onsemi/mc34064.pdf
+$ENDCMP
+#
+$CMP MC34064D
+D Undervoltage sensing circuit (S0-8 package)
+F onsemi/mc34064.pdf
+$ENDCMP
+#
+$CMP MC34064P
+D Undervoltage sensing circuit (TP-226AA package)
+F onsemi/mc34064.pdf
+$ENDCMP
+#
+$CMP PAL16L8
+D Pal
+K PAL
+$ENDCMP
+#
+$CMP PAL20L8
+D Pal
+K PAL
+$ENDCMP
+#
+$CMP PCI9030-PQFP176
+D PCI bus interface (PLX Technologie)
+K PCI
+$ENDCMP
+#
+$CMP S5933_PQ160
+D Controlleur de bus PCI
+K PCI
+$ENDCMP
+#
+$CMP SA605D
+D High performance low power mixer FM IF system
+F philips/SA605.pdf
+$ENDCMP
+#
+$CMP SI9986
+D Buffered H Bridge (1 A)
+F siliconix/si9986.pdf
+$ENDCMP
+#
+$CMP TL7702
+D Supply Voltage Supervisor
+F texas/tl7702b.pdf
+$ENDCMP
+#
+$CMP TL7705
+D Supply Voltage Supervisor
+$ENDCMP
+#
+$CMP TMS320LF2406
+D DSP TEXAS 16 bits 100 pins
+K DSP
+$ENDCMP
+#
+$CMP U2270B
+D Reader/writer for transponders (TEMIC)
+F temic/u2770B.pdf
+$ENDCMP
+#
+$CMP X9118
+D Single Digital Potentiometer 1024 steps  (XICOR)
+K R POT
+F xicor/x9118.pdf
+$ENDCMP
+#
+$CMP X9250
+D Quad Digital Potentiometer  256 steps   (SPI control)
+K R POT
+F xicor/x9250.pdf
+$ENDCMP
+#
+$CMP X9258
+D Quad Digital Potentiometer  256 steps   (I2C control)
+K R POT
+F xicor/x9258.pdf
+$ENDCMP
+#
+$CMP X9258-PART
+D Quad Digital Potentiometer  256 steps   (I2C control) - set sections
+K R POT
+F xicor/x9258.pdf
+$ENDCMP
+#
+#End Doc Library

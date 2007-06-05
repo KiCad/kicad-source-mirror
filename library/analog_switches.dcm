@@ -1,0 +1,75 @@
+EESchema-DOCLIB  Version 2.0  Date: 16/6/2005-08:25:42
+#
+$CMP CPC1017N
+D opto mos
+K SWITCH OPTO
+F opto/cpc1017n.pdf
+$ENDCMP
+#
+$CMP DG308
+D Quad Analog Switches
+K SWITCH
+F analog_mux&switches/dg308.pdf
+$ENDCMP
+#
+$CMP DG309
+D Quad Analog Switches
+K SWITCH
+F analog_mux&switches/dg308.pdf
+$ENDCMP
+#
+$CMP DG417
+D Analog Switch ( 8pins)
+K SWITCH
+F analog_mux&switches/DG417-DG419.pdf
+$ENDCMP
+#
+$CMP DG418
+D Analog Switch ( 8pins)
+K SWITCH
+F analog_mux&switches/DG417-DG419.pdf
+$ENDCMP
+#
+$CMP DG419
+D Analog Switch ( 8pins)
+K SWITCH
+F analog_mux&switches/DG417-DG419.pdf
+$ENDCMP
+#
+$CMP DG441
+D Quad Analog Switches
+K SWITCH
+F intersil/dg441_2.pdf
+$ENDCMP
+#
+$CMP DG442
+D Quad Analog Switches
+K SWITCH
+F intersil/dg441_2.pdf
+$ENDCMP
+#
+$CMP DG9421
+D Analog Switch ( 6pins TSOP)
+K SWITCH
+F analog_mux&switches/dg9421-22.pdf
+$ENDCMP
+#
+$CMP LAA110
+D opto mos 2 controls, 2 switches, norm OFF
+K SWITCH OPTO
+F opto/laa110.pdf
+$ENDCMP
+#
+$CMP LBB110
+D opto mos 2 controls, 2 switches
+K SWITCH OPTO
+F opto/lbb110.pdf
+$ENDCMP
+#
+$CMP LCC110
+D opto mos 1 control, 2 switches A/B
+K SWITCH OPTO
+F opto/lcc110.pdf
+$ENDCMP
+#
+#End Doc Library

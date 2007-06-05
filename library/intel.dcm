@@ -1,0 +1,18 @@
+EESchema-DOCLIB  Version 2.0  Date: 2/3/2006-07:15:17
+#
+$CMP 16550
+D Dual ACIA
+K ACIA UPRO
+$ENDCMP
+#
+$CMP 82C54_PLCC
+D Timer (plcc pack.)
+K TIMER UPRO
+$ENDCMP
+#
+$CMP I386EX-PQFP
+D Intel I386EX Embedded microprocessor
+K MPRO
+$ENDCMP
+#
+#End Doc Library

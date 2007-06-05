@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0  Date: 26/5/2005-08:22:00
+#
+$CMP FX614
+D Bell 202 compatible modem
+K MODEM
+F contrib/fx614ds.pdf
+$ENDCMP
+#
+#End Doc Library

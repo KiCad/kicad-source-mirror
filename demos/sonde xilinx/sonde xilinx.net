@@ -1,0 +1,389 @@
+# EESchema Netlist Version 1.1 created  3/5/2007-08:10:32
+(
+ ( 3EBF81A7 $noname  C4 100pF {Lib=C}
+  (    1 N-000001 )
+  (    2 GND )
+ )
+ ( 3EBF819B $noname  R13 100 {Lib=R}
+  (    1 TMS-PROG_1 )
+  (    2 N-000001 )
+ )
+ ( 3EBF7DBD $noname  U1 74LS125 {Lib=74LS125}
+  (    1 N-000041 )
+  (    2 GND )
+  (    3 N-000026 )
+  (    4 N-000028 )
+  (    5 N-000040 )
+  (    6 N-000024 )
+  (    7 GND )
+  (    8 N-000023 )
+  (    9 N-000039 )
+  (   10 N-000028 )
+  (   11 N-000001 )
+  (   12 N-000003 )
+  (   13 N-000028 )
+  (   14 VCC )
+ )
+ ( 3ECDE5C8 $noname  J2 DB9MALE {Lib=DB9}
+  (    1 PWR(3,3-5V)_1 )
+  (    2 TD0-DONE/P_1 )
+  (    3 TDI-DIN_1 )
+  (    4 TCK-CCLK_1 )
+  (    5 TMS-PROG_1 )
+  (    6 GND )
+  (    7 GND )
+  (    8 GND )
+  (    9 GND )
+ )
+ ( 3EBF830C $noname  P1 CONN_6 {Lib=CONN_6}
+  (    1 PWR(3,3-5V)_1 )
+  (    2 GND )
+  (    3 TD0-DONE/P_1 )
+  (    4 TDI-DIN_1 )
+  (    5 TCK-CCLK_1 )
+  (    6 TMS-PROG_1 )
+ )
+ ( 3EBF82C6 $noname  C1 1uF {Lib=CP}
+  (    1 VCC )
+  (    2 GND )
+ )
+ ( 3EBF81A7 $noname  C5 100pF {Lib=C}
+  (    1 N-000023 )
+  (    2 GND )
+ )
+ ( 3EBF819B $noname  R12 100 {Lib=R}
+  (    1 TCK-CCLK_1 )
+  (    2 N-000023 )
+ )
+ ( 3EBF81A7 $noname  C2 100pF {Lib=C}
+  (    1 N-000024 )
+  (    2 GND )
+ )
+ ( 3EBF819B $noname  R11 100 {Lib=R}
+  (    1 TDI-DIN_1 )
+  (    2 N-000024 )
+ )
+ ( 3EBF81A7 $noname  C3 100pF {Lib=C}
+  (    1 N-000026 )
+  (    2 GND )
+ )
+ ( 3EBF819B $noname  R14 100 {Lib=R}
+  (    1 TD0-DONE/P_1 )
+  (    2 N-000026 )
+ )
+ ( 3EBF818E $noname  R5 1K {Lib=R}
+  (    1 VCC )
+  (    2 GND )
+ )
+ ( 3EBF8187 $noname  R2 5,1K {Lib=R}
+  (    1 VCC )
+  (    2 N-000026 )
+ )
+ ( 3EBF8176 $noname  D2 BAT46 {Lib=DIODESCH}
+  (    1 PWR(3,3-5V)_1 )
+  (    2 VCC )
+ )
+ ( 3EBF815E $noname  D1 BAT46 {Lib=DIODESCH}
+  (    1 VCC )
+  (    2 N-000025 )
+ )
+ ( 3EBF7EEC $noname  U2 74LS125 {Lib=74LS125}
+  (    1 GND )
+  (    2 N-000026 )
+  (    3 N-000042 )
+  (    4 GND )
+  (    5 GND )
+  (    6  ? )
+  (    7 GND )
+  (    8  ? )
+  (    9 GND )
+  (   10 GND )
+  (   11  ? )
+  (   12 GND )
+  (   13 GND )
+  (   14 VCC )
+ )
+ ( 3EBF7D33 $noname  R9 100 {Lib=R}
+  (    1 N-000003 )
+  (    2 TMS/PROG(D2)_1 )
+ )
+ ( 3EBF7D31 $noname  R10 100 {Lib=R}
+  (    1 N-000039 )
+  (    2 CLK(D1)_1 )
+ )
+ ( 3EBF7D33 $noname  R8 100 {Lib=R}
+  (    1 N-000028 )
+  (    2 CTRL(D3)_1 )
+ )
+ ( 3EBF7D31 $noname  R7 100 {Lib=R}
+  (    1 N-000040 )
+  (    2 TDI/DIN(D0)_1 )
+ )
+ ( 3EBF7D26 $noname  R6 100 {Lib=R}
+  (    1 N-000041 )
+  (    2 TD0/PROG(D4)_1 )
+ )
+ ( 3EBF7D22 $noname  R4 47 {Lib=R}
+  (    1 N-000042 )
+  (    2 DONE(/SELECT)_1 )
+ )
+ ( 3EBF7D16 $noname  R1 100 {Lib=R}
+  (    1 N-000025 )
+  (    2 VCC_SENSE(/ERROR)_1 )
+ )
+ ( 3EBF7D04 $noname  J1 DB25MALE {Lib=DB25}
+  (    1  ? )
+  (    2 TDI/DIN(D0)_1 )
+  (    3 CLK(D1)_1 )
+  (    4 TMS/PROG(D2)_1 )
+  (    5 CTRL(D3)_1 )
+  (    6 TD0/PROG(D4)_1 )
+  (    7  ? )
+  (    8 N-000027 )
+  (    9  ? )
+  (   10  ? )
+  (   11 N-000027 )
+  (   12 N-000027 )
+  (   13 DONE(/SELECT)_1 )
+  (   14  ? )
+  (   15 VCC_SENSE(/ERROR)_1 )
+  (   16  ? )
+  (   17  ? )
+  (   18  ? )
+  (   19  ? )
+  (   20 GND )
+  (   21  ? )
+  (   22  ? )
+  (   23  ? )
+  (   24  ? )
+  (   25 GND )
+ )
+)
+*
+{ Allowed footprints by component:
+$component C4
+ C?
+ SM*
+$endlist
+$component R13
+ R?
+ SM0603
+ SM0805
+$endlist
+$component J2
+ DB9*
+$endlist
+$component C1
+ CP*
+ SM*
+$endlist
+$component C5
+ C?
+ SM*
+$endlist
+$component R12
+ R?
+ SM0603
+ SM0805
+$endlist
+$component C2
+ C?
+ SM*
+$endlist
+$component R11
+ R?
+ SM0603
+ SM0805
+$endlist
+$component C3
+ C?
+ SM*
+$endlist
+$component R14
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R5
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R2
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R9
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R10
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R8
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R7
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R6
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R4
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R1
+ R?
+ SM0603
+ SM0805
+$endlist
+$component J1
+ DB25*
+$endlist
+$endfootprintlist
+}
+{ Pin List by Nets
+Net 1 ""
+ U1 11
+ C4 1
+ R13 2
+Net 2 "GND"
+ C4 2
+ U2 10
+ J1 25
+ C5 2
+ U1 7
+ J2 6
+ J2 7
+ J1 20
+ J2 8
+ J2 9
+ U2 5
+ U2 7
+ U2 12
+ U2 4
+ U2 7
+ R5 2
+ U2 13
+ C3 2
+ U1 7
+ C1 2
+ U2 1
+ U2 7
+ P1 2
+ U1 7
+ U1 7
+ U1 2
+ U2 7
+ U2 9
+ C2 2
+Net 3 ""
+ U1 12
+ R9 1
+Net 4 "VCC"
+ U2 14
+ U1 14
+ C1 1
+ U1 14
+ R5 1
+ R2 1
+ D2 2
+ U2 14
+ U2 14
+ U1 14
+ U2 14
+ U1 14
+ D1 1
+Net 18 "PWR(3,3-5V)_1"
+ D2 1
+ P1 1
+ J2 1
+Net 19 "TMS-PROG_1"
+ J2 5
+ R13 1
+ P1 6
+Net 20 "TCK-CCLK_1"
+ P1 5
+ J2 4
+ R12 1
+Net 21 "TDI-DIN_1"
+ J2 3
+ R11 1
+ P1 4
+Net 22 "TD0-DONE/P_1"
+ J2 2
+ P1 3
+ R14 1
+Net 23 ""
+ U1 8
+ R12 2
+ C5 1
+Net 24 ""
+ C2 1
+ R11 2
+ U1 6
+Net 25 ""
+ R1 1
+ D1 2
+Net 26 ""
+ R14 2
+ C3 1
+ U2 2
+ U1 3
+ R2 2
+Net 27 ""
+ J1 12
+ J1 8
+ J1 11
+Net 28 ""
+ U1 13
+ U1 4
+ U1 10
+ R8 1
+Net 29 "VCC_SENSE(/ERROR)_1"
+ J1 15
+ R1 2
+Net 30 "TDI/DIN(D0)_1"
+ R7 2
+ J1 2
+Net 31 "CLK(D1)_1"
+ J1 3
+ R10 2
+Net 32 "CTRL(D3)_1"
+ R8 2
+ J1 5
+Net 33 "TD0/PROG(D4)_1"
+ R6 2
+ J1 6
+Net 34 "TMS/PROG(D2)_1"
+ J1 4
+ R9 2
+Net 35 "DONE(/SELECT)_1"
+ R4 2
+ J1 13
+Net 39 ""
+ U1 9
+ R10 1
+Net 40 ""
+ R7 1
+ U1 5
+Net 41 ""
+ U1 1
+ R6 1
+Net 42 ""
+ R4 1
+ U2 3
+}
+#End

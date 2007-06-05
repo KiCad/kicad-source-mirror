@@ -1,0 +1,63 @@
+EESchema-DOCLIB  Version 2.0  20/1/1998-10:21:11
+#
+$CMP BT106
+D Convertisseur Video D->A 8 bits
+K video CDA
+$ENDCMP
+#
+$CMP BT208
+D CAD 8 bits video
+K video CAD
+$ENDCMP
+#
+$CMP BT251
+D CAD 8 bits video + multiplexer 4 inputs
+K Video CAD
+$ENDCMP
+#
+$CMP BT253
+D Triple CAD 8 bits video RVB  + multiplexer 2 inputs RVB+Sync
+K CAD Video RVB RGB
+$ENDCMP
+#
+$CMP BT254
+D Triple CAD 8 bits video RVB  + multiplexer 2 inputs RVB+Sync
+K CAD Video RVB RGB
+$ENDCMP
+#
+$CMP BT281
+D Matrix converter RGB
+K Video RGB RVB
+$ENDCMP
+#
+$CMP BT471
+D CDA 6/8 Bits + palette RGB
+K Video CDA
+$ENDCMP
+#
+$CMP BT473
+D Triple CDA video 8 bits RGB
+K video CDA RVB RGB
+$ENDCMP
+#
+$CMP BT478
+D CDA 6/8 Bits + palette RGB
+K Video CDA
+$ENDCMP
+#
+$CMP BT812
+D CAD Video PAL/NTSC Y/C  4 inputs
+K CAD PAL NTSC video
+$ENDCMP
+#
+$CMP BT855
+D Triple CDA PAL/NTSC Y/C
+K video CDA PAL NTSC
+$ENDCMP
+#
+$CMP BT858
+D Triple CDA PAL/NTSC Y/C
+K video CDA PAL NTSC
+$ENDCMP
+#
+#End Doc Library

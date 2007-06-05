@@ -1,0 +1,178 @@
+Cmp-Mod V01 Genere par Cvpcb 06-dec le 31/12/2005-17:06:34
+
+BeginCmp
+TimeStamp = 3EBF82C6;
+Reference = C1;
+ValeurCmp = 1uF;
+IdModule  = CP5;
+EndCmp
+
+BeginCmp
+TimeStamp = 3EBF81A7;
+Reference = C2;
+ValeurCmp = 100pF;
+IdModule  = C2;
+EndCmp
+
+BeginCmp
+TimeStamp = 3EBF81A7;
+Reference = C3;
+ValeurCmp = 100pF;
+IdModule  = C2;
+EndCmp
+
+BeginCmp
+TimeStamp = 3EBF81A7;
+Reference = C4;
+ValeurCmp = 100pF;
+IdModule  = C2;
+EndCmp
+
+BeginCmp
+TimeStamp = 3EBF81A7;
+Reference = C5;
+ValeurCmp = 100pF;
+IdModule  = C2;
+EndCmp
+
+BeginCmp
+TimeStamp = 3EBF815E;
+Reference = D1;
+ValeurCmp = BAT46;
+IdModule  = D3;
+EndCmp
+
+BeginCmp
+TimeStamp = 3EBF8176;
+Reference = D2;
+ValeurCmp = BAT46;
+IdModule  = D3;
+EndCmp
+
+BeginCmp
+TimeStamp = 3EBF7D04;
+Reference = J1;
+ValeurCmp = DB25;
+IdModule  = DB25M_CI;
+EndCmp
+
+BeginCmp
+TimeStamp = 3ECDE5C8;
+Reference = J2;
+ValeurCmp = DB9MALE;
+IdModule  = DB9M_CI_INVERT;
+EndCmp
+
+BeginCmp
+TimeStamp = 3EBF830C;
+Reference = P1;
+ValeurCmp = CONN_6;
+IdModule  = bornier6;
+EndCmp
+
+BeginCmp
+TimeStamp = 3EBF7D16;
+Reference = R1;
+ValeurCmp = 100;
+IdModule  = R4;
+EndCmp
+
+BeginCmp
+TimeStamp = 3EBF8187;
+Reference = R2;
+ValeurCmp = 5,1K;
+IdModule  = R4;
+EndCmp
+
+BeginCmp
+TimeStamp = 3EBF7D22;
+Reference = R4;
+ValeurCmp = 47;
+IdModule  = R4;
+EndCmp
+
+BeginCmp
+TimeStamp = 3EBF818E;
+Reference = R5;
+ValeurCmp = 1K;
+IdModule  = R4;
+EndCmp
+
+BeginCmp
+TimeStamp = 3EBF7D26;
+Reference = R6;
+ValeurCmp = 100;
+IdModule  = R4;
+EndCmp
+
+BeginCmp
+TimeStamp = 3EBF7D31;
+Reference = R7;
+ValeurCmp = 100;
+IdModule  = R4;
+EndCmp
+
+BeginCmp
+TimeStamp = 3EBF7D33;
+Reference = R8;
+ValeurCmp = 100;
+IdModule  = R4;
+EndCmp
+
+BeginCmp
+TimeStamp = 3EBF7D33;
+Reference = R9;
+ValeurCmp = 100;
+IdModule  = R4;
+EndCmp
+
+BeginCmp
+TimeStamp = 3EBF7D31;
+Reference = R10;
+ValeurCmp = 100;
+IdModule  = R4;
+EndCmp
+
+BeginCmp
+TimeStamp = 3EBF819B;
+Reference = R11;
+ValeurCmp = 100;
+IdModule  = R4;
+EndCmp
+
+BeginCmp
+TimeStamp = 3EBF819B;
+Reference = R12;
+ValeurCmp = 100;
+IdModule  = R4;
+EndCmp
+
+BeginCmp
+TimeStamp = 3EBF819B;
+Reference = R13;
+ValeurCmp = 100;
+IdModule  = R4;
+EndCmp
+
+BeginCmp
+TimeStamp = 3EBF819B;
+Reference = R14;
+ValeurCmp = 100;
+IdModule  = R4;
+EndCmp
+
+BeginCmp
+TimeStamp = 3EBF7DBD;
+Reference = U1;
+ValeurCmp = 74LS125;
+IdModule  = 14DIP-ELL300;
+EndCmp
+
+BeginCmp
+TimeStamp = 3EBF7EEC;
+Reference = U2;
+ValeurCmp = 74LS125;
+IdModule  = 14DIP-ELL300;
+EndCmp
+
+EndListe
