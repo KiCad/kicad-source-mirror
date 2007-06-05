@@ -48,8 +48,10 @@
 #if ( (wxMAJOR_VERSION < 2) || ((wxMAJOR_VERSION == 2)&& (wxMINOR_VERSION < 7)) )
 #define wxFD_OPEN wxOPEN
 #define wxFD_SAVE wxSAVE
+#define wxFD_OVERWRITE_PROMPT wxOVERWRITE_PROMPT
 #define WXK_PAGEUP WXK_PRIOR
 #define WXK_PAGEDOWN WXK_NEXT
+#define wxRenameFile(a, b, c) wxRenameFile(a, b)
 #endif
 
 #ifdef __UNIX__
