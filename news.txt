@@ -1,4 +1,11 @@
 **************************************************************
+Update 5 June 2007
+pcbnew:
+	fixed 3d-display image export (blank box in image)
+build:
+	fixed makefile clean targets so they don't fail if already clean
+	fixed wx2.6 compatibility
+**************************************************************
 Update 25 may 2007
 pcbnew:
 	bug: problem with 3D shapes. 
