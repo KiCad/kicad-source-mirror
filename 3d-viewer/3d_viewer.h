@@ -92,7 +92,7 @@ public:
 	void TakeScreenshot(wxCommandEvent & event);
 	void SetView3D(int keycode);
 	void DisplayStatus(void);
-	void Redraw(void);
+	void Redraw(bool finish = false);
 	GLuint DisplayCubeforTest(void);
 
 	void OnEnterWindow( wxMouseEvent& event );

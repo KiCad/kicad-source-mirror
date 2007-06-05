@@ -39,7 +39,7 @@ static void Draw3D_FilledSegmentWithHole(double startx, double starty,
 
 
 /**********************************/
-void Pcb3D_GLCanvas::Redraw( void )
+void Pcb3D_GLCanvas::Redraw( bool finish )
 /**********************************/
 {
     SetCurrent();
@@ -67,6 +67,7 @@ void Pcb3D_GLCanvas::Redraw( void )
 	}
 
 	glFlush();
+	if (finish) glFinish();
 	SwapBuffers();
  }
 

@@ -601,7 +601,7 @@ bool fmt_is_jpeg = FALSE;
 		if ( FullFileName.IsEmpty() ) return;
 	}
 	
-	wxYield();	// Requested to allow tne window redraw after closing the dialog box
+	Redraw(true);
 	wxSize image_size = GetClientSize();
 	wxClientDC dc(this);
 	wxBitmap bitmap(image_size.x, image_size.y );
