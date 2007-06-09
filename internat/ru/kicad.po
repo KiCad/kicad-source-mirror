@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-06-05 23:32+0300\n"
+"PO-Revision-Date: 2007-06-09 15:09+0300\n"
 "Last-Translator: Igor Plyatov <plyatov@mail.ru>\n"
 "Language-Team: russian\n"
 "MIME-Version: 1.0\n"
@@ -520,17 +520,17 @@ msgstr "  non trouvé"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/eda_doc.cpp:185
 msgid " Cannot find the PDF viewer (xpdf, gpdf or konqueror) in /usr/bin/"
-msgstr ""
+msgstr "Программа для просмотра PDF (xpdf, gpdf или konqueror) не найдена в /usr/bin/"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/eda_doc.cpp:193
 #, c-format
 msgid "Unknown MIME type for Doc File [%s] (%s)"
-msgstr ""
+msgstr "Неизвестный MIME тип для Doc файла [%s] (%s)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/eda_doc.cpp:213
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find Pdf viewer %s"
-msgstr "Фабрика просмотра PDF среды Гном"
+msgstr "Программа просмотра PDF %s не найдена"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/selcolor.cpp:65
 #: /home/buzzer/Projects/Programming/kicad-svn/share/selcolor.cpp:93
@@ -1063,7 +1063,7 @@ msgstr "Показать полный список посадочных мест
 
 #: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:112
 msgid "&Load Netlist File"
-msgstr "Загрузить файл NetList &L"
+msgstr "Загрузить список цепей (&L)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:113
 msgid "Load a Netlist"
@@ -1071,12 +1071,11 @@ msgstr "Загрузить NetList"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:119
 msgid "&Save Netlist"
-msgstr "Сохранить NetList &S"
+msgstr "Сохранить NetList (&S)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:120
-#, fuzzy
 msgid "Save New Netlist and Cmp file"
-msgstr "Sauver netliste et cmp liste"
+msgstr "Сохранить файл списка цепей и компонентов"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:125
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:91
@@ -1084,7 +1083,7 @@ msgstr "Sauver netliste et cmp liste"
 #: /home/buzzer/Projects/Programming/kicad-svn/kicad/buildmnu.cpp:131
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:131
 msgid "E&xit"
-msgstr "Выход &X"
+msgstr "Выход (&X)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:125
 #, fuzzy
@@ -1104,14 +1103,12 @@ msgid "Setting Libraries, Directories and others..."
 msgstr "Sélectionner les librairies et répertoires"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:151
-#, fuzzy
 msgid "&Save config"
-msgstr "&Sauver config"
+msgstr "Сохранить настройки (&S)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:152
-#, fuzzy
 msgid "Save configuration in current dir"
-msgstr "Sauver les options en répertoire de travail"
+msgstr "Сохранить конфигурацию в текущей папке"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:158
 #: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:169
@@ -1122,7 +1119,7 @@ msgstr "Sauver les options en répertoire de travail"
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarmodedit.cpp:78
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:286
 msgid "&Help"
-msgstr "Помощь &H"
+msgstr "Помощь (&H)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:159
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:139
@@ -1149,9 +1146,8 @@ msgstr "Informations diverses"
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:142
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:162
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:280
-#, fuzzy
 msgid "&Files"
-msgstr "&Fichiers"
+msgstr "Файл (&F)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:168
 #: /home/buzzer/Projects/Programming/kicad-svn/3d-viewer/3d_toolbar.cpp:115
@@ -1159,9 +1155,8 @@ msgstr "&Fichiers"
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:163
 #: /home/buzzer/Projects/Programming/kicad-svn/kicad/buildmnu.cpp:211
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:281
-#, fuzzy
 msgid "&Preferences"
-msgstr "&Préférences"
+msgstr "Настройки (&P)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/genequiv.cpp:42
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/export_to_pcbnew.cpp:53
@@ -1183,7 +1178,7 @@ msgstr "Impossible de créer "
 
 #: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/cvframe.cpp:168
 msgid "Netlist and Cmp list modified, Save before exit ?"
-msgstr "NetList и список Cmp изменены. Сохранить перед выходом?"
+msgstr "Списки цепей и Cmp изменены. Сохранить перед выходом?"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/cvframe.cpp:186
 msgid "Problem when saving files, Exit anyway"
@@ -1344,9 +1339,8 @@ msgstr "Ajuster Zéro"
 #: /home/buzzer/Projects/Programming/kicad-svn/share/dialog_print.cpp:167
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/netlist_control.cpp:94
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:311
-#, fuzzy
 msgid "Options:"
-msgstr "Опции:"
+msgstr "Параметры:"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/share/dialog_print.cpp:178
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/affiche.cpp:36
@@ -1380,9 +1374,8 @@ msgid "Single Page"
 msgstr "Feuille A"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/share/dialog_print.cpp:213
-#, fuzzy
 msgid "Print S&etup"
-msgstr "Options impression"
+msgstr "Настройка печати (&E)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/share/dialog_print.cpp:217
 #, fuzzy
@@ -1827,7 +1820,7 @@ msgstr "Annuler Bloc"
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/modedit_onclick.cpp:212
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/onrightclick.cpp:469
 msgid "Zoom Block (Midd butt drag)"
-msgstr ""
+msgstr "Масштаб блока (протягивание средней кнопкой)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/onrightclick.cpp:53
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/libedit_onrightclick.cpp:259
@@ -1840,11 +1833,11 @@ msgstr "Annuler Bloc"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/onrightclick.cpp:54
 msgid "Copy Block (shift mouse)"
-msgstr ""
+msgstr "Копировать блок (SHIFT + мышь)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/onrightclick.cpp:55
 msgid "Delete Block (ctrl + drag mouse)"
-msgstr ""
+msgstr "Удалить блок (CTRL + протягивание мышью)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/onrightclick.cpp:64
 #, fuzzy
@@ -1871,7 +1864,7 @@ msgstr "Effacer anciennes couches et charger une nouvelle couche"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:36
 msgid "Clear all layers and Load new gerber file"
-msgstr ""
+msgstr "Очистить все слои и загрузить новый GERBER файл"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:40
 #, fuzzy
@@ -1880,11 +1873,11 @@ msgstr "Ext. Fichiers Gerber"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:41
 msgid "Load new gerber file on currrent layer"
-msgstr ""
+msgstr "Загрузить новый GERBER файл в текущий слой"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:45
 msgid "Inc Layer and load gerber file"
-msgstr ""
+msgstr "Увеличить номер слоя и загрузить GERBER файл"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:46
 #, fuzzy
@@ -2006,14 +1999,12 @@ msgstr "Selection couleurs et affichage des couches"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:107
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:132
-#, fuzzy
 msgid "&Options"
-msgstr "&Options"
+msgstr "Параметры (&O)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:108
-#, fuzzy
 msgid " Select general options"
-msgstr " Sélection options générales"
+msgstr "Выбор общих параметров"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:110
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/options.cpp:182
@@ -2033,16 +2024,14 @@ msgid " Select how items are displayed"
 msgstr "Sélectionner comment les éléments sont a afficher"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:119
-#, fuzzy
 msgid "&Save Gerbview Setup"
-msgstr "&Sauver Gerbview Options"
+msgstr "Сохранить настройки Gerbview (&S)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:120
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:176
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:212
-#, fuzzy
 msgid "Save options in current directory"
-msgstr "Sauver les options en répertoire de travail"
+msgstr "Сохранить параметры в текущей папке"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:129
 #, fuzzy
@@ -2425,7 +2414,7 @@ msgstr "формат: 2.3"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/options.cpp:206
 msgid "format 3.4"
-msgstr "формат 3.4"
+msgstr "формат: 3.4"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/options.cpp:207
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/netlist_control.cpp:98
@@ -2820,34 +2809,28 @@ msgid "Clear SubHierarchy ?"
 msgstr "Effacer la sous hiérarchie?"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eeconfig.cpp:67
-#, fuzzy
 msgid "not found"
-msgstr " non trouvé"
+msgstr "не найдено"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/libedit_onrightclick.cpp:103
-#, fuzzy
 msgid "Move Arc"
-msgstr "Déplacer arc"
+msgstr "Двигать Дугу"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/libedit_onrightclick.cpp:106
-#, fuzzy
 msgid "Arc Options"
-msgstr "Options"
+msgstr "Параметры Дуги"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/libedit_onrightclick.cpp:110
-#, fuzzy
 msgid "Arc Delete"
-msgstr "Efface arc"
+msgstr "Удалить Дугу"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/libedit_onrightclick.cpp:118
-#, fuzzy
 msgid "Move Circle"
-msgstr "Déplace cercle"
+msgstr "Двигать Окружность"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/libedit_onrightclick.cpp:121
-#, fuzzy
 msgid "Circle Options"
-msgstr "Options"
+msgstr "Параметры Окружности"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/libedit_onrightclick.cpp:125
 #, fuzzy
@@ -2860,9 +2843,8 @@ msgid "Move Rect"
 msgstr "Déplace Rect"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/libedit_onrightclick.cpp:136
-#, fuzzy
 msgid "Rect Options"
-msgstr "Options"
+msgstr "Параметры Прямоугольника"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/libedit_onrightclick.cpp:140
 #, fuzzy
@@ -2901,9 +2883,8 @@ msgid "Line End"
 msgstr "Fin ligne"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/libedit_onrightclick.cpp:173
-#, fuzzy
 msgid "Line Options"
-msgstr "Options"
+msgstr "Параметры Линии"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/libedit_onrightclick.cpp:177
 #, fuzzy
@@ -3000,7 +2981,7 @@ msgstr "Скопировать блок (SHIFT+протягивание мышь
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/libedit_onrightclick.cpp:266
 msgid "Mirror Block (ctrl + drag mouse)"
-msgstr ""
+msgstr "Зеркалировать блок (CTRL + протягивание мышью)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/libedit_onrightclick.cpp:268
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:548
@@ -3275,9 +3256,8 @@ msgid "Find components and texts"
 msgstr "Recherche de composants et textes"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:121
-#, fuzzy
 msgid "Netlist generation"
-msgstr "Génération de la netliste"
+msgstr "Генерация списка цепей"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:124
 #, fuzzy
@@ -3290,9 +3270,8 @@ msgid "Schematic Electric Rules Check"
 msgstr "Controle des regles électriques"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:130
-#, fuzzy
 msgid "Bill of material and/or Crossreferences"
-msgstr "Liste des composants et références croisées"
+msgstr "Биль материалов и/или перекрестные ссылки"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:155
 #, fuzzy
@@ -3402,9 +3381,8 @@ msgid "Size:"
 msgstr "Размер:"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/symbtext.cpp:155
-#, fuzzy
 msgid " Text Options : "
-msgstr "Options du texte:"
+msgstr "Параметры текста:"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/symbtext.cpp:159
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_cmp_graphic_properties.cpp:155
@@ -3599,9 +3577,8 @@ msgid "Delta Step Y"
 msgstr "Incrément"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_options.cpp:208
-#, fuzzy
 msgid "Draw Options:"
-msgstr "Options d'affichage"
+msgstr "Параметры Черчения"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_options.cpp:217
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/options.cpp:130
@@ -3692,49 +3669,41 @@ msgstr "Tout"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_options.cpp:259
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/options.cpp:196
-#, fuzzy
 msgid "Wires - Bus orient"
-msgstr "Fil -Bus Orient"
+msgstr "Ориентация шин, проводников"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_options.cpp:267
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/options.cpp:204
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_display_options.cpp:275
-#, fuzzy
 msgid "Show page limits"
-msgstr "Показывать %1 сообщений на странице"
+msgstr "Показывать границы страницы"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_options.cpp:284
-#, fuzzy
 msgid "Auto increment params"
-msgstr "Приращение для страницы подгонки"
+msgstr "Параметры авто-приращения"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_options.cpp:300
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/options.cpp:216
-#, fuzzy
 msgid "Delta Label:"
-msgstr "Incrément Label:"
+msgstr "Дельта метки:"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_options.cpp:308
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/plotps.cpp:226
-#, fuzzy
 msgid "Default Line Width"
-msgstr "неверная ширина строки: %s"
+msgstr "Исходная ширина линии"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_options.cpp:311
-#, fuzzy
 msgid "Default Label Size"
-msgstr "Исходный размер страницы"
+msgstr "Исходный размер метки"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:195
-#, fuzzy
 msgid "List items : "
-msgstr "Sélection:"
+msgstr "Перечень элементов:"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:199
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/genliste.cpp:126
-#, fuzzy
 msgid "Components by Reference"
-msgstr "Composants par référence"
+msgstr "Компоненты по обозначению"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:203
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/genliste.cpp:132
@@ -3767,7 +3736,7 @@ msgstr "Появляется как список"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:221
 msgid "Print as text for spreadsheet import"
-msgstr ""
+msgstr "Печатать как текст для импорта в эл. таблицу"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:222
 #, fuzzy
@@ -4001,7 +3970,7 @@ msgstr "Défaut"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/sheet.cpp:157
 msgid "Sheetname:"
-msgstr ""
+msgstr "Имя листа:"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/sheet.cpp:245
 #, fuzzy
@@ -4015,7 +3984,7 @@ msgstr "Файл существует, но не может быть перез�
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/sheet.cpp:518
 msgid "Ok to cleanup this sheet"
-msgstr ""
+msgstr "Ok для очистки этого листа"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/libedit.cpp:38
 #, fuzzy
@@ -4269,7 +4238,7 @@ msgstr "Occupé une autre pin, Continuer ?"
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/pinedit.cpp:874
 #, c-format
 msgid "Duplicate Pin %4.4s (Pin %s loc %d, %d, and Pin %s loc %d, %d)"
-msgstr ""
+msgstr "Копировать Вывод %4.4s (Вывод %s коорд %d, %d, и Вывод %s коорд %d, %d)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/pinedit.cpp:879
 #, fuzzy, c-format
@@ -4426,25 +4395,20 @@ msgstr "Pas de champ a éditer"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:477
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/editpart.cpp:518
-#, fuzzy
 msgid ""
 "Part is a POWER, value cannot be modified!\n"
 "You must create a new power"
-msgstr ""
-"Composant type ALIMENTATION!\n"
-"valeur non modifiable, Vous devez créer un nouveau composant alimentation "
+msgstr " "
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:518
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/editpart.cpp:554
-#, fuzzy
 msgid "Reference needed !, No change"
-msgstr "Référence NECESSAIRE: changement refusé"
+msgstr "Требуется обозначение! Не изменено"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:522
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/editpart.cpp:558
-#, fuzzy
 msgid "Value needed !, No change"
-msgstr "Valeur NECESSAIRE: changement refusé"
+msgstr "Требуется значение! Не изменено"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:682
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:288
@@ -4452,9 +4416,8 @@ msgstr "Valeur NECESSAIRE: changement refusé"
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/editpart.cpp:703
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelayer.cpp:99
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_netlist.cpp:133
-#, fuzzy
 msgid "Reference"
-msgstr "Référence"
+msgstr "Ссылка"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:716
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:287
@@ -4463,9 +4426,8 @@ msgstr "Référence"
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelayer.cpp:105
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/affiche.cpp:69
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/affiche.cpp:268
-#, fuzzy
 msgid "Value"
-msgstr "Valeur"
+msgstr "Значение"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_set_status.cpp:136
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_eeschema_config.cpp:169
@@ -4491,16 +4453,14 @@ msgstr "Прочее"
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_set_status.cpp:148
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_eeschema_config.cpp:232
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eestatus.cpp:150
-#, fuzzy
 msgid "Cmp file Ext: "
-msgstr "Ext fichier Cmp: "
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_set_status.cpp:151
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_eeschema_config.cpp:236
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eestatus.cpp:154
-#, fuzzy
 msgid "Net file Ext: "
-msgstr "Ext fichier Netliste: "
+msgstr ""
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_set_status.cpp:154
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_eeschema_config.cpp:240
@@ -4890,7 +4850,7 @@ msgstr "Forme Pin de hiérarchie:"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/sheetlab.cpp:374
 msgid "No New Global Label found"
-msgstr ""
+msgstr "Новая глобальная метка не найдена"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/component_class.cpp:49
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/affiche.cpp:35
@@ -5088,7 +5048,7 @@ msgstr "Exporter le dessin en cours"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_lib.cpp:116
 msgid "Save current loaded library on disk (file update)"
-msgstr ""
+msgstr "Сохранить на диск текущую загруженную библиотеку (обновление файла)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_lib.cpp:119
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:47
@@ -5114,7 +5074,7 @@ msgstr "Sélectionner le composant a éditer"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_lib.cpp:133
 msgid "Save current part into current loaded library (in memory)"
-msgstr ""
+msgstr "Сохранить текущий компонент в текущей загруженной библиотеке (в память)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_lib.cpp:136
 #, fuzzy
@@ -5244,7 +5204,7 @@ msgstr "Bidi"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:158
 msgid "TriState"
-msgstr ""
+msgstr "ТриСостояния"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:159
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/pinedit-dialog.cpp:335
@@ -5398,9 +5358,8 @@ msgid "Parts per package"
 msgstr "Установить пакет cdrdao."
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_create_component.cpp:243
-#, fuzzy
 msgid "Draw options"
-msgstr "Options d'affichage"
+msgstr "Параметры черчения"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_create_component.cpp:311
 msgid "You must provide a name for this component"
@@ -5453,9 +5412,8 @@ msgid "Library browser"
 msgstr "Visualisateur de librairies"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/plotps.cpp:178
-#, fuzzy
 msgid "Plot Options:"
-msgstr "Options pistes"
+msgstr "Параметры печати:"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/plotps.cpp:183
 #, fuzzy
@@ -5583,9 +5541,8 @@ msgid "Use Net Numbers"
 msgstr "Utiliser numéro de net"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/netlist_control.cpp:257
-#, fuzzy
 msgid "Netlist Options:"
-msgstr "Options de netliste:"
+msgstr "Параметры списка цепей:"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/netlist_control.cpp:264
 #, fuzzy
@@ -5617,6 +5574,8 @@ msgid ""
 "Now, you must choose a title for this netlist control page\n"
 "and close the dialog box"
 msgstr ""
+"Сейчас, вы должны выбрать заголовок для этой страницы списка цепей\n"
+"и закрыть диалоговое окно"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/netlist_control.cpp:433
 #, fuzzy
@@ -5847,9 +5806,8 @@ msgid "Setting colors ..."
 msgstr "Choisir les couleurs d'affichage"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:140
-#, fuzzy
 msgid "&Save Eeschema Setup"
-msgstr "&Sauver Eeschema Options"
+msgstr "Сохранить настройки Eeschema (&S)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:141
 #, fuzzy
@@ -6661,9 +6619,8 @@ msgid "Prefered Pdf Browser:"
 msgstr "Опции просмотра помощи"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/kicad/preferences.cpp:74
-#, fuzzy
 msgid "You must choose a PDF viewer before use this option"
-msgstr "Вы должны выбрать просмотрщик PDF до использования этой опции"
+msgstr "Вы должны выбрать программу просмотра PDF до использования этой опции"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/kicad/files-io.cpp:67
 msgid "Create Project files:"
@@ -7542,7 +7499,7 @@ msgstr "Forme 3D:"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:727
 msgid "Reference or Value cannot be deleted"
-msgstr ""
+msgstr "Обозначение или значение не могут быть удалены"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:731
 #, fuzzy, c-format
@@ -9426,7 +9383,7 @@ msgstr "Options générales"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:160
 msgid "Select general options for pcbnew"
-msgstr ""
+msgstr "Выбор общих параметров для pcbnew"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:164
 #, fuzzy
