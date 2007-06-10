@@ -70,11 +70,11 @@ void WinEDA_ModuleEditFrame::ReCreateHToolbar(void)
 	m_HToolBar->AddSeparator();
 	m_HToolBar->AddTool(ID_MODEDIT_LOAD_MODULE_FROM_BOARD, wxEmptyString,
 					BITMAP(load_module_board_xpm),
-					_("Load module from current BOARD"));
+					_("Load module from current board"));
 
 	m_HToolBar->AddTool(ID_MODEDIT_SAVE_MODULE_IN_BOARD, wxEmptyString,
 					BITMAP(repl_module_board_xpm),
-					_("Replace module in current BOARD"));
+					_("Update module in current board"));
 
 	m_HToolBar->AddSeparator();
 	m_HToolBar->AddTool(ID_LIBEDIT_IMPORT_PART,  wxEmptyString,
