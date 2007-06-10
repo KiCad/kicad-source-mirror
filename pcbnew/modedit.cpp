@@ -317,14 +317,18 @@ wxClientDC dc(DrawPanel);
 			if ( m_Pcb->m_Modules ) m_Pcb->m_Modules->m_Flags = 0;
 			//if either m_Reference or m_Value are gone, reinstate them - 
 			//otherwise it becomes hard to see what you are working with in the layout!
-			TEXTE_MODULE* ref = m_Pcb->m_Modules->m_Reference;
-			TEXTE_MODULE* val = m_Pcb->m_Modules->m_Value;
-			ref->m_NoShow = 0;
-			val->m_NoShow = 0;
-			ref->m_Type = 0; 
-			val->m_Type = 1; 
-			if(ref->m_Text.Length() == 0) ref->m_Text = L"Ref**"; 
-			if(val->m_Text.Length() == 0) val->m_Text = L"Val**"; 			
+			if(m_Pcb && m_Pcb->m_Modules){
+				TEXTE_MODULE* ref = m_Pcb->m_Modules->m_Reference;
+				TEXTE_MODULE* val = m_Pcb->m_Modules->m_Value;
+				if(val & ref){
+					ref->m_NoShow = 0;
+					val->m_NoShow = 0;
+					ref->m_Type = 0; 
+					val->m_Type = 1; 
+					if(ref->m_Text.Length() == 0) ref->m_Text = L"Ref**"; 
+					if(val->m_Text.Length() == 0) val->m_Text = L"Val**"; 	
+				}
+			}				
 			GetScreen()->ClrModify();
 			Zoom_Automatique(TRUE);
 			if ( m_Draw3DFrame )
