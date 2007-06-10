@@ -320,7 +320,7 @@ wxClientDC dc(DrawPanel);
 			if(m_Pcb && m_Pcb->m_Modules){
 				TEXTE_MODULE* ref = m_Pcb->m_Modules->m_Reference;
 				TEXTE_MODULE* val = m_Pcb->m_Modules->m_Value;
-				if(val & ref){
+				if(val && ref){
 					ref->m_NoShow = 0;
 					val->m_NoShow = 0;
 					ref->m_Type = 0; 
