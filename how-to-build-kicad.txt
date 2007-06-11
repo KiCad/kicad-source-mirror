@@ -9,15 +9,12 @@ unzip sources in a working directory.
 This will create the directory "kicad-dev".
 
 First you must install wxWidgets (see www.wxWidgets.org)
-See mybuild_wxWidgets_linux.txt and mybuild_wxWidgets_windows.txt
-(in kicad-dev ) which are scripts running configure for both systems.
+See below for suggested configure command.
 
 Linux compilation:
 You must have:
 wxWidgets ( I suggest you install wxWidgets in /usr/local).
-(you can copy mybuild_wxWidgets_linux.txt in wxWidgets directory an run
-sh mybuild_wxWidgets_linux.txt
-and make and make install)
+(see below for suggested configure command, then make and make install)
 
 Mesa: pcbnew and cvpcv need openGL or mesa.
 (you must install mesa devel if libGL et libGLU are not found).
@@ -35,13 +32,13 @@ make install ( libGL.a et libGLU.a are copied in /usr/local/lib, and header in /
 kicad compilation:
 in kicad-dev:
  Have a look to libs.linux (you can edit this file if you have problems)
- Currently libs.linux uses wxWidgets 2.7.1 build with script "mybuild_wxWidgets_linux.txt"
+ Currently libs.linux uses wxWidgets 2.7.1 build (see below for suggested configure command)
  run make -f makefile.gtk
 
 Windows compilation:
 
 kicad is build with mingw and msys.
-Currently libs.linux uses wxWidgets 2.8.1 build with script "mybuild_wxWidgets_windows.txt"
+Currently libs.linux uses wxWidgets 2.8.1 (see below for suggested configure command)
 
 install mingw  and msys ( see mingw.org )
 (opengl libs are included in mingw or windows)
@@ -51,8 +48,7 @@ Under msys:
 	of msys.)
 
 Build wxWidgets (currently version 2.8.1)
-	you can copy mybuild_wxWidgets_windows.txt in wxWidgets directory an run
-	./mybuild_wxWidgets_windows.txt and make
+	See below for suggested configure command, then make
 
 	In include/wx/msw/setup.h, check (and edit if needed) the defines :
 	#define wxUSE_GLCANVAS       1
@@ -70,6 +66,33 @@ Have a look to libs.win (Currently this file handle wxWidgets 2.8.1)
 Under msys:
 	in kicad-dev:
 	run make -f makefile.g95
+
+*************************************************************************************
+Building wxWidgets:
+*************************************************************************************
+linux:
+ rm *.cache
+ ./configure --enable-monolithic --enable-unicode=no --enable-shared=no --with-opengl --with-libpng=builtin --with-libjpeg=builtin --with-libtiff=builtin --with-zlib=builtin --with-regex=builtin
+
+linux-unicode:
+ rm *.cache
+ ./configure --enable-monolithic --enable-unicode=yes --enable-shared=no --with-opengl --with-libpng=builtin --with-libjpeg=builtin --with-libtiff=builtin --with-zlib=builtin --with-regex=builtin
+
+osX:
+ rm *.cache
+ ./configure --enable-unicode=yes --enable-shared=no --enable-monolithic --with-opengl --disable-universal --disable-compat24
+
+osX-unicode:
+ rm *.cache
+ ./configure --enable-unicode=yes --enable-shared=no --enable-monolithic --with-opengl --enable-universal_binary
+
+windows:
+ rm *.cache
+ ./configure --enable-unicode=no --enable-shared=no --enable-monolithic --with-msw --with-opengl  --with-odbc
+
+windows-unicode:
+ rm *.cache
+ ./configure --enable-unicode=yes --enable-shared=no --enable-monolithic --with-msw --with-opengl
 
 *************************************************************************************
 Patch wxWidgets
