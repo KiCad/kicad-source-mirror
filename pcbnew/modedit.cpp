@@ -168,7 +168,9 @@ wxClientDC dc(DrawPanel);
 					MODULE* newmod = new MODULE(mainpcb); 
 					newmod->Copy(presmod); //this will copy the padstack layers etc
 					newmod->m_Parent = mainpcb; //modify after the copy above
-					newmod->m_Layer = mod->m_Layer; 
+					if(mod->m_Layer != CMP_N){//just changing m_Layer is insufficient. 
+						Change_Side_Module(newmod, &dc); 
+					}
 					newmod->m_Pos = mod->m_Pos; 
 					newmod->m_Orient =0; //otherwise the pads will be rotated with respect to the module. 
 					//copy data into the pads...

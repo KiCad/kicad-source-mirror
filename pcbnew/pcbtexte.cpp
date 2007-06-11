@@ -147,6 +147,7 @@ wxButton * Button;
 		m_SelLayerBox->Append(ReturnPcbLayerName(ii));
 		}
 	m_SelLayerBox->SetSelection( TextPCB->m_Layer );
+	
 
 wxString orient_msg[4] = { wxT("0"), wxT("90"), wxT("180"), wxT("-90") };
 	m_Orient = new wxRadioBox(this, -1, _("Orientation"),

@@ -27,7 +27,6 @@ TRACK * WinEDA_PcbFrame::Delete_Segment(wxDC * DC, TRACK *Track)
 */
 {
 int current_net_code;
-
 	if ( Track == NULL ) return NULL;
 
 	if(Track->m_Flags & IS_NEW)  // Trace en cours, on peut effacer le dernier segment

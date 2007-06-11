@@ -271,14 +271,16 @@ void WinEDA_PcbGeneralOptionsFrame::CreateControls()
         _("Inches"),
         _("millimeters")
     };
-    m_BoxUnits = new wxRadioBox( itemDialog1, ID_RADIOBOX1, _("Units"), wxDefaultPosition, wxDefaultSize, 2, m_BoxUnitsStrings, 1, wxRA_SPECIFY_COLS );
+    m_BoxUnits = new wxRadioBox( itemDialog1, ID_RADIOBOX1, _("Units"), wxDefaultPosition, 
+								 	wxDefaultSize, 2, m_BoxUnitsStrings, 1,wxRA_SPECIFY_COLS );
     itemBoxSizer3->Add(m_BoxUnits, 0, wxALIGN_LEFT|wxALL, 5);
 
     wxString m_CursorShapeStrings[] = {
         _("Small"),
         _("Big")
     };
-    m_CursorShape = new wxRadioBox( itemDialog1, ID_RADIOBOX2, _("Cursor"), wxDefaultPosition, wxDefaultSize, 2, m_CursorShapeStrings, 1, wxRA_SPECIFY_COLS );
+    m_CursorShape = new wxRadioBox( itemDialog1, ID_RADIOBOX2, _("Cursor"), wxDefaultPosition, wxDefaultSize, 2,
+						m_CursorShapeStrings, 1, wxRA_SPECIFY_COLS );
     itemBoxSizer3->Add(m_CursorShape, 0, wxALIGN_LEFT|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer7 = new wxBoxSizer(wxVERTICAL);

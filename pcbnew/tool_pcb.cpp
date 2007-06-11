@@ -425,7 +425,7 @@ long current_mask_layer;
 		parent->AddControl(m_SelLayerBox);
 	}
 
-    // Test si reconstruction de la liste nécessaire
+    // Test si reconstruction de la liste nï¿½cessaire
     current_mask_layer = 0;
 	int Masque_Layer = g_TabAllCopperLayerMask[g_DesignSettings.m_CopperLayerCount-1];
 	Masque_Layer |= ALL_NO_CU_LAYERS;
@@ -444,11 +444,12 @@ long current_mask_layer;
 		{
 		    if ( (g_TabOneLayerMask[ii] & Masque_Layer) )
 			{
-           	    m_SelLayerBox->Append(ReturnPcbLayerName(ii));
+           	    m_SelLayerBox->Append(ReturnPcbLayerName(ii,false,true));
            	    m_SelLayerBox->SetClientData(jj, (void*)ii);
       		    jj++;
 			}
 		}
+		m_SelLayerBox->SetToolTip(_("+/- to switch")); 
 	}
 
     // Activation de l'affichage sur la bonne couche

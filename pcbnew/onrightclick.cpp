@@ -1,5 +1,5 @@
 /********************************************************************************/
-/* onrightclick.cpp: fonctions de l'edition du PCB appelées par le bouton droit */
+/* onrightclick.cpp: fonctions de l'edition du PCB appelï¿½es par le bouton droit */
 /********************************************************************************/
 
 #include "fctsys.h"
@@ -117,9 +117,9 @@ double value;
 /****************************************************************************/
 void WinEDA_PcbFrame::OnRightClick(const wxPoint& MousePos, wxMenu * PopMenu)
 /****************************************************************************/
-/* Prepare le menu PopUp affiché par un click sur le bouton droit
+/* Prepare le menu PopUp affichï¿½ par un click sur le bouton droit
 de la souris.
-   Ce menu est ensuite complété par la liste des commandes de ZOOM
+   Ce menu est ensuite complï¿½tï¿½ par la liste des commandes de ZOOM
 */
 {
 EDA_BaseStruct *DrawStruct = m_CurrentScreen->m_CurrentItem;
@@ -545,7 +545,7 @@ int flags = Track->m_Flags;
 	else // Edition in progress
 	{
 		if( flags & IS_NEW )
-			ADD_MENUITEM(PopMenu, ID_POPUP_PCB_END_TRACK, _("End Track"), apply_xpm);
+			ADD_MENUITEM(PopMenu, ID_POPUP_PCB_END_TRACK, _("End Track (end)"), apply_xpm);
 		PopMenu->Append(ID_POPUP_PCB_PLACE_VIA, _("Place Via (V)"));
 	}
 	
@@ -574,11 +574,11 @@ int flags = Track->m_Flags;
 	ADD_MENUITEM_WITH_SUBMENU( PopMenu, track_mnu,
 			ID_POPUP_PCB_DELETE_TRACK_MNU, _("Delete"), delete_xpm);
 	ADD_MENUITEM(track_mnu, ID_POPUP_PCB_DELETE_TRACKSEG,
-			_("Delete Segment"), Delete_Line_xpm);
+			_("Delete Segment (backspace)"), Delete_Line_xpm);
 	if( !flags )
 	{
 		ADD_MENUITEM(track_mnu, ID_POPUP_PCB_DELETE_TRACK,
-				_("Delete Track"), Delete_Track_xpm);
+				_("Delete Track (delete)"), Delete_Track_xpm);
 		ADD_MENUITEM(track_mnu, ID_POPUP_PCB_DELETE_TRACKNET,
 				_("Delete Net"), Delete_Net_xpm);
 	}

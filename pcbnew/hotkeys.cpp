@@ -46,7 +46,32 @@ MODULE* module = NULL;
 		case WXK_NUMPAD_DELETE:
 			OnHotkeyDeleteItem(DC, DrawStruct);
 			break;
-
+		case WXK_BACK:{
+			if( m_ID_current_state == ID_TRACK_BUTT && 
+						 GetScreen()->m_Active_Layer <= CMP_N ){
+				bool ItemFree = (GetScreen()->m_CurrentItem == NULL ) || 
+						(GetScreen()->m_CurrentItem->m_Flags == 0);
+				if ( ItemFree ){
+					//no track is currently being edited - select a segment and remove it.
+					DrawStruct = PcbGeneralLocateAndDisplay();
+					if ( DrawStruct )
+						Delete_Segment(DC, (TRACK*)DrawStruct);
+					GetScreen()->SetModify();
+				}
+				else if ( GetScreen()->m_CurrentItem->m_StructType == TYPETRACK  )
+				{
+					//then an element is being edited - remove the last segment.
+					GetScreen()->m_CurrentItem =
+							Delete_Segment(DC, (TRACK*)GetScreen()->m_CurrentItem);
+					GetScreen()->SetModify();
+				}
+			}
+			break; 
+		}
+		case WXK_END:
+			DrawPanel->MouseToCursorSchema();
+			End_Route( (TRACK *) (GetScreen()->m_CurrentItem), DC);
+			break;
 		case 'v':	// Rotation
 		case 'V':
 			if ( m_ID_current_state != ID_TRACK_BUTT ) return;

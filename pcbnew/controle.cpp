@@ -179,24 +179,14 @@ int CurrentTime = time(NULL);
 			break ;
 		case WXK_NUMPAD0 :
 		case WXK_PAGEUP :
-			if ( GetScreen()->m_Active_Layer != CMP_N )
-			{
-				GetScreen()->m_Active_Layer = CMP_N;
-				if ( DisplayOpt.ContrastModeDisplay )
-					GetScreen()->SetRefreshReq();
-			}
+			SwitchLayer(DC, CMP_N); 
 			break ;
 
 		case WXK_NUMPAD9 :
 		case WXK_PAGEDOWN :
-			if ( GetScreen()->m_Active_Layer != CUIVRE_N )
-			{
-				GetScreen()->m_Active_Layer = CUIVRE_N;
-				if ( DisplayOpt.ContrastModeDisplay )
-					GetScreen()->SetRefreshReq();
-			}
+			SwitchLayer(DC, CUIVRE_N); 
 			break ;
-
+			
 		case 'F' | GR_KB_CTRL :
 		case 'f' | GR_KB_CTRL:
 			DisplayOpt.DisplayPcbTrackFill ^= 1; DisplayOpt.DisplayPcbTrackFill &= 1 ;
@@ -252,9 +242,22 @@ int CurrentTime = time(NULL);
 			oldpos = curpos = GetScreen()->m_Curseur;
 			break;
 
-		case WXK_F5 :	/* unused */
+		case WXK_F5 :
+			SwitchLayer(DC, LAYER_N_2); 
 			break;
-
+		
+		case WXK_F6 :
+			SwitchLayer(DC, LAYER_N_3); 
+			break;
+			
+		case WXK_F7 :
+			SwitchLayer(DC, LAYER_N_4); 
+			break;
+			
+		case WXK_F8 :
+			SwitchLayer(DC, LAYER_N_5); 
+			break;
+			
 		case WXK_NUMPAD8  :	/* Deplacement curseur vers le haut */
 		case WXK_UP	:
 			Mouse.y -= delta.y;
@@ -352,5 +355,25 @@ int CurrentTime = time(NULL);
 		OnHotKey(DC, hotkey, NULL);
 	}
 }
-
+/****************************************************************/
+void WinEDA_BasePcbFrame::SwitchLayer(wxDC *DC, int layer)
+/*****************************************************************/
+{
+	//overridden in WinEDA_PcbFrame;
+	int preslayer = GetScreen()->m_Active_Layer; 
+	//if there is only one layer, don't switch. 
+	if ( m_Pcb->m_BoardSettings->m_CopperLayerCount <= 1)
+		return; 
+	//otherwise, must be at least 2 layers..see if it is possible.
+	if(layer != LAYER_CUIVRE_N || layer != LAYER_CMP_N || 
+		  layer >= m_Pcb->m_BoardSettings->m_CopperLayerCount-1)
+		return; 
+	if(preslayer == layer)
+		return; 
+	
+	GetScreen()->m_Active_Layer = layer; 
+	
+	if ( DisplayOpt.ContrastModeDisplay )
+		GetScreen()->SetRefreshReq();
+}
 

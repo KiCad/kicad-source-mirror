@@ -1,12 +1,16 @@
 ## Makefile for PCBNEW et wxGTK
 CC = gcc
 LD = gcc
+# DEBUG = 1
 
 # Compiler flags.
-
+ifdef DEBUG
+CPPFLAGS = -Wall -g `wx-config --cxxflags`
+LDFLAGS = -g
+else
 CPPFLAGS = -Wall -O2 `wx-config --cxxflags`
-
-LDFLAGS = -s
+LDFLAGS = -s -v
+endif
 
 include ../libs.linux
 

@@ -23,8 +23,8 @@ static void Process_Move_Item(WinEDA_PcbFrame * frame,
 /********************************************************************/
 void WinEDA_PcbFrame::OnLeftClick(wxDC * DC, const wxPoint& MousePos)
 /********************************************************************/
-/* Traite les commandes declenchée par le bouton gauche de la souris,
-	quand un outil est deja selectionné
+/* Traite les commandes declenchï¿½e par le bouton gauche de la souris,
+	quand un outil est deja selectionnï¿½
 */
 {
 EDA_BaseStruct * DrawStruct = CURRENT_ITEM;
@@ -316,7 +316,7 @@ int itmp;
 
 	pos.y += 20;
 
-	switch ( id )	// Arret eventuel de la commande de déplacement en cours
+	switch ( id )	// Arret eventuel de la commande de dï¿½placement en cours
 		{
 		case wxID_CUT:
 		case wxID_COPY:
@@ -421,7 +421,7 @@ int itmp;
 			else SetCursor(DrawPanel->m_PanelCursor = DrawPanel->m_PanelDefaultCursor);
 			break;
 
-		default:	// Arret de la commande de déplacement en cours
+		default:	// Arret de la commande de dï¿½placement en cours
 			if( DrawPanel->ManageCurseur &&
 				DrawPanel->ForceCloseManageCurseur )
 				{
@@ -650,12 +650,14 @@ int itmp;
 
 
 		case ID_POPUP_PCB_DELETE_TRACKSEG:
+			if ( CURRENT_ITEM == NULL) break;
 			DrawPanel->MouseToCursorSchema();
 			GetScreen()->m_CurrentItem = Delete_Segment(&dc, (TRACK*)CURRENT_ITEM);
 			GetScreen()->SetModify();
 			break;
 
 		case ID_POPUP_PCB_DELETE_TRACK:
+			if ( CURRENT_ITEM == NULL) break;
 			DrawPanel->MouseToCursorSchema();
 			Delete_Track(&dc, (TRACK*)CURRENT_ITEM);
 			GetScreen()->m_CurrentItem = NULL;
@@ -1159,8 +1161,8 @@ static void Process_Move_Item(WinEDA_PcbFrame * frame,
 /********************************************************************************/
 void WinEDA_PcbFrame::OnLeftDClick(wxDC * DC, const wxPoint& MousePos)
 /********************************************************************************/
-/* Appelé sur un double click:
-	pour un élément editable (textes, composant):
+/* Appelï¿½ sur un double click:
+	pour un ï¿½lï¿½ment editable (textes, composant):
 		appel de l'editeur correspondant.
 	pour une connexion en cours:
 		termine la connexion
@@ -1183,7 +1185,7 @@ wxClientDC dc(DrawPanel);
 			if ( (DrawStruct == NULL) || (DrawStruct->m_Flags != 0) )
 				break;
 
-			// Element localisé
+			// Element localisï¿½
 			GetScreen()->m_CurrentItem = DrawStruct;
 			switch ( DrawStruct->m_StructType )
 				{
@@ -1333,4 +1335,39 @@ void WinEDA_PcbFrame::RemoveStruct(EDA_BaseStruct * Item, wxDC * DC)
 			}
 			break;
 		}
+}
+
+/****************************************************************/
+void WinEDA_PcbFrame::SwitchLayer(wxDC *DC, int layer)
+/*****************************************************************/
+{
+	int preslayer = GetScreen()->m_Active_Layer; 
+	//if there is only one layer, don't switch. 
+	if ( m_Pcb->m_BoardSettings->m_CopperLayerCount <= 1)
+		return; 
+	//otherwise, must be at least 2 layers..see if it is possible.
+	if(layer == LAYER_CUIVRE_N || layer == LAYER_CMP_N || 
+		  layer < m_Pcb->m_BoardSettings->m_CopperLayerCount-1){
+	
+		if(preslayer == layer)
+			return; 
+		EDA_BaseStruct* current = GetScreen()->m_CurrentItem;
+		//see if we are drawing a segment; if so, add a via?
+		if ( m_ID_current_state == ID_TRACK_BUTT && current != NULL)
+		{
+			if(current->m_StructType == TYPETRACK && (current->m_Flags & IS_NEW)){
+				//want to set the routing layers so that it switches properly - 
+				//see the implementation of Other_Layer_Route - the working 
+				//layer is used to 'start' the via and set the layer masks appropriately. 
+				GetScreen()->m_Route_Layer_TOP = preslayer; 
+				GetScreen()->m_Route_Layer_BOTTOM = layer; 
+				GetScreen()->m_Active_Layer = preslayer; 
+				Other_Layer_Route( (TRACK *) GetScreen()->m_CurrentItem, DC);
+			}
+		}else{
+			GetScreen()->m_Active_Layer = layer; 
+		}
+		if ( DisplayOpt.ContrastModeDisplay )
+			GetScreen()->SetRefreshReq();
+	}
 }

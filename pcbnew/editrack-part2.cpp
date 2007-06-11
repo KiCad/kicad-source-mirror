@@ -192,8 +192,10 @@ int itmp;
 	Via->m_NetCode = g_HightLigth_NetCode ;
 	Via->m_Start = Via->m_End = g_CurrentTrackSegment->m_End;
 
-	Via->m_Layer = GetScreen()->m_Active_Layer;	// Provisoirement
+	Via->m_Layer = GetScreen()->m_Active_Layer;	
+	// Provisoirement. indicate the first layer (?)
 
+	//swap the layers.
 	if( GetScreen()->m_Active_Layer != GetScreen()->m_Route_Layer_TOP)
 			GetScreen()->m_Active_Layer = GetScreen()->m_Route_Layer_TOP ;
 	else	GetScreen()->m_Active_Layer = GetScreen()->m_Route_Layer_BOTTOM ;
@@ -202,7 +204,7 @@ int itmp;
 	{
 		Via->m_Layer |= GetScreen()->m_Active_Layer << 4;
 	}
-	else if ( (Via->m_Shape & 15) == VIA_BORGNE )
+	else if ( (Via->m_Shape & 15) == VIA_BORGNE ) //blind via
 	{	// A revoir! ( la via devrait deboucher sur 1 cote )
 		Via->m_Layer |= GetScreen()->m_Active_Layer << 4;
 	}

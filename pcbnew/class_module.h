@@ -32,7 +32,7 @@ enum Mod_Attribut		/* Attributs d'un module */
 /* flags for autoplace and autoroute (.m_ModuleStatus member) */
 #define MODULE_is_LOCKED 0x01	/* module LOCKED: no autoplace allowed */
 #define MODULE_is_PLACED 0x02	/* In autoplace: module automatically placed */
-#define MODULE_to_PLACE 0x04	/* In autoplace: module waiting fot autoplace */
+#define MODULE_to_PLACE 0x04	/* In autoplace: module waiting for autoplace */
 
 class MODULE: public EDA_BaseStruct
 {
