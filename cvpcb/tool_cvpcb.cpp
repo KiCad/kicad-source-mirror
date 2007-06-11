@@ -159,7 +159,7 @@ wxMenuBar * menuBar = GetMenuBar();
                         _("On line doc"));
 	    item->SetBitmap(help_xpm);
 		helpMenu->Append(item);
-		item = new wxMenuItem(helpMenu , ID_CVPCB_DISPLAY_LICENCE, _("Cvpcb &About"),
+		item = new wxMenuItem(helpMenu , ID_CVPCB_DISPLAY_LICENCE, _("&About"),
                         _("Kicad Infos"));
 	    item->SetBitmap(info_xpm);
 		helpMenu->Append(item);

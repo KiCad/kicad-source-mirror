@@ -61,7 +61,7 @@ wxMenuItem * item;
 	    item->SetBitmap(help_xpm);
 		helpMenu->Append(item);
 
-		item = new wxMenuItem(helpMenu , ID_KICAD_ABOUT, _("Pcbnew &About"), _("Pcbnew Infos"));
+		item = new wxMenuItem(helpMenu , ID_KICAD_ABOUT, _("&About"), _("Pcbnew Infos"));
 	    item->SetBitmap(info_xpm);
 		helpMenu->Append(item);
 

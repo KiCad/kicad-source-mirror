@@ -154,7 +154,7 @@ wxMenuBar * menuBar = GetMenuBar();
 		helpMenu->Append(item);
 
 		item = new wxMenuItem(helpMenu , ID_KICAD_ABOUT,
-				_("Eeschema &About"), _("Eeschema Infos"));
+				_("&About"), _("Eeschema Infos"));
 	    item->SetBitmap(info_xpm);
 		helpMenu->Append(item);
 
