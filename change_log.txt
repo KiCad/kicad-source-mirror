@@ -1,0 +1,34 @@
+Change Log for Kicad
+Started 2007-June-11
+
+Please add newer entries at the top, list the date and your name with 
+email address.
+
+
+
+
+
+2007-June-11 UPDATE   Dick Hollenbeck <dickelbeck@yahoo.com>
+================================================================================
++ Started this change log file.
+
+
+2007-June-5 UPDATE    Richard A Burton <raburton69@yahoo.com>
+================================================================================
++ pcbnew:
+	fixed 3d-display image export (blank box in image)
++ build:
+	fixed makefile clean targets so they don't fail if already clean
+	fixed wx2.6 compatibility
+
+
+2007-May-25 RELEASE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++ pcbnew:
+	bug: problem with 3D shapes. 
++ Gerbview:
+	Better (but crude...) support to export gerber files to pcbnew.
+
+================================================================================
+End Of File
+
