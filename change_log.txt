@@ -6,6 +6,13 @@ email address.
 
 
 
+2007-June-11 UPDATE   Richard A Burton <richardaburton@gmail.com>
+================================================================================
++ build:
+	removed several 2 line scripts for configuring wx builds and put them in
+	  how-to-build-kicad.txt
+	improved KICAD_STATIC_LINK handling so it can be overridden on the command
+	  line e.g. "make -f makefile.gtk KICAD_STATIC_LINK=0"
 
 
 2007-June-11 UPDATE   Dick Hollenbeck <dickelbeck@yahoo.com>
@@ -13,7 +20,7 @@ email address.
 + Started this change log file.
 
 
-2007-June-5 UPDATE    Richard A Burton <raburton69@yahoo.com>
+2007-June-5 UPDATE    Richard A Burton <richardaburton@gmail.com>
 ================================================================================
 + pcbnew:
 	fixed 3d-display image export (blank box in image)
