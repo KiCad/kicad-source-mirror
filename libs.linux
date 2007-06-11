@@ -11,9 +11,9 @@ FINAL = 1
 #KICAD_PYTHON = 1
 
 
-# You must comment or uncomment this line for dynamic or static link
-# dynamic link is less difficult than static link
-# choose it if you have problems (libs not found, or unresolved references) ), or if kicad is running only on YOUR system.
+# You must comment this line for dynamic link (or build with "make -f makefile.gtk KICAD_STATIC_LINK=0")
+# dynamic link is less difficult than static link choose it if you have problems (libs not found, or
+# unresolved references), or if kicad is running only on YOUR system.
 ifndef KICAD_PYTHON
 KICAD_STATIC_LINK = 1
 endif
@@ -36,7 +36,7 @@ SUFFIX_WX_LIBGL = _gl-$(LIBVERSION).a
 
 # Use static link for libstdc++.a (sometimes also libsupc++.a)
 # locate libstdc++.a and copy it in kicad_dev/syslibs
-ifdef KICAD_STATIC_LINK
+ifeq ($(KICAD_STATIC_LINK), 1)
 #define path for a copy of libstdc++.a or/and libsupc++.a:
 LIBSTDC = ../syslibs/libstdc++.a
 else
@@ -49,7 +49,7 @@ LIBVERSION=`wx-config --release`
 LIBREGEX=$(WXPATH)/libwxregexu-$(LIBVERSION).a
 
 # use link static for wxWidgets
-ifdef KICAD_STATIC_LINK
+ifeq ($(KICAD_STATIC_LINK), 1)
 LIBS3D = $(WXPATH)/$(PREFIX_WX_LIBS)$(SUFFIX_WX_LIBGL)\
 	 $(MESALIBSPATH)/libGL.a $(MESALIBSPATH)/libGLU.a
 

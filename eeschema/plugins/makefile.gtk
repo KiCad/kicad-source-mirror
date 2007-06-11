@@ -4,7 +4,7 @@
 include ../../libs.linux
 
 # Use static link for libsupc++ (locate libstdc++.a and copy it in kicad_dev/syslibs)
-ifdef KICAD_STATIC_LINK
+ifeq ($(KICAD_STATIC_LINK), 1)
 #define path for a copy of libstdc++.a or/and libsupc++.a:
 LIBSTDC = ../../syslibs/libstdc++.a
 else
