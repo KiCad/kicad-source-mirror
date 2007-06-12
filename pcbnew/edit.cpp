@@ -1364,9 +1364,9 @@ void WinEDA_PcbFrame::SwitchLayer(wxDC *DC, int layer)
 				GetScreen()->m_Active_Layer = preslayer; 
 				Other_Layer_Route( (TRACK *) GetScreen()->m_CurrentItem, DC);
 			}
-		}else{
-			GetScreen()->m_Active_Layer = layer; 
 		}
+		GetScreen()->m_Active_Layer = layer; 
+	
 		if ( DisplayOpt.ContrastModeDisplay )
 			GetScreen()->SetRefreshReq();
 	}
