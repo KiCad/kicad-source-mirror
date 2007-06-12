@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-06-07 21:26+0100\n"
+"PO-Revision-Date: 2007-06-12 12:39+0100\n"
 "Last-Translator: Mateusz Skowroński <skowri@gmail.com>\n"
 "Language-Team: Mateusz Skowroński <skowri@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -3170,7 +3170,7 @@ msgstr "&Rysuj BIEŻĄCY"
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/plotps.cpp:203
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/plothpgl.cpp:270
 msgid "Plot A&LL"
-msgstr "Rysuj &WSZYTKO"
+msgstr "Rysuj &WSZYSTKO"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/plotps.cpp:214
 msgid "Messages :"
@@ -7345,13 +7345,11 @@ msgstr "Domyślny otwór przelotki"
 msgid "Alternate Via Drill"
 msgstr "Alternatywny otwór przelotki"
 
-# sprawdzic
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/dialog_track_options.cpp:146
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbnew.h:266
 msgid "Blind Via"
 msgstr "Przelotka ślepa"
 
-# sprawdzic
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/dialog_track_options.cpp:147
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbnew.h:267
 msgid "Buried Via"
@@ -7384,7 +7382,7 @@ msgid ""
 "You have selected VIA Blind or VIA Buried\n"
 "WARNING: this feature is EXPERIMENTAL!!! Accept ?"
 msgstr ""
-"Wybrałeś przelotkę ślepą lub zakopaną\n"
+"Wybrałeś przelotkę ślepą lub zagrzebaną\n"
 "UWAGA: ta funkcja jest EKSPERYMENTALNA!!! Zaakceptować?"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/tool_pcb.cpp:83
