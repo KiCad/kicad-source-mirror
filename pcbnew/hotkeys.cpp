@@ -46,7 +46,7 @@ MODULE* module = NULL;
 		case WXK_NUMPAD_DELETE:
 			OnHotkeyDeleteItem(DC, DrawStruct);
 			break;
-		case WXK_BACK:{
+		case WXK_BACK:{ 
 			if( m_ID_current_state == ID_TRACK_BUTT && 
 						 GetScreen()->m_Active_Layer <= CMP_N ){
 				bool ItemFree = (GetScreen()->m_CurrentItem == NULL ) || 
@@ -54,7 +54,9 @@ MODULE* module = NULL;
 				if ( ItemFree ){
 					//no track is currently being edited - select a segment and remove it.
 					DrawStruct = PcbGeneralLocateAndDisplay();
-					if ( DrawStruct )
+					//don't let backspace delete modules!!
+					if ( DrawStruct && (DrawStruct->m_StructType == TYPETRACK
+										|| DrawStruct->m_StructType == TYPEVIA))
 						Delete_Segment(DC, (TRACK*)DrawStruct);
 					GetScreen()->SetModify();
 				}
@@ -217,6 +219,7 @@ bool ItemFree = (GetScreen()->m_CurrentItem == NULL )  ||
 			{
 			MODULE * module = Locate_Prefered_Module(m_Pcb, CURSEUR_ON_GRILLE);
 				if ( module == NULL ) return FALSE;
+				if( ! IsOK(this, _("Delete module?")) ) return FALSE;
 				RemoveStruct(module, DC);
 			}
 			else return FALSE;
