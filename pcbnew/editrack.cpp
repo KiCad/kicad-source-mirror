@@ -662,7 +662,7 @@ TRACK * firsttrack = track;
 TRACK * oldtrack;
 int nn = 0;
 EDA_BaseStruct * LockPoint;
-
+	if(track == 0) return NULL; 
 	LockPoint = track->start;
 	while ( track != NULL )
 	{
