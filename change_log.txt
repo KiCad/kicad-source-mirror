@@ -4,6 +4,23 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-June-13 RELEASE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++All:
+	merging my development with svn version
+
++ pcbnew:
+	bug fix (problem in postscript generation due to the internationalization
+		of floating point number notation )
+	added tool to select layer pair and monitor active layer
+	
++ eeschema
+	bug fix:
+		crash libedit when loading certain components (linux only)
+		incomplete generation of erc file list
+	
+
+
 2007-June-13 UPDATE   Richard A Burton <richardaburton@gmail.com>
 ================================================================================
 + build:

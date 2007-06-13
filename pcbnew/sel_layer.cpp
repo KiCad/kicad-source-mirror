@@ -187,6 +187,7 @@ void WinEDA_BasePcbFrame::SelectLayerPair(void)
 			new WinEDA_SelLayerPairFrame(this);
 	frame->ShowModal(); frame->Destroy();
 	DrawPanel->MouseToCursorSchema();
+	SetToolbars();
 }
 
 

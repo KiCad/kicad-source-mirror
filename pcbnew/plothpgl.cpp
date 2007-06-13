@@ -67,6 +67,8 @@ bool Center = FALSE;
 		return ;
 	}
 
+	setlocale(LC_NUMERIC, "C");
+
 	Affiche_1_Parametre(this, 0,_("File"),FullFileName,CYAN) ;
 
 	PrintHeaderHPGL(dest, g_HPGL_Pen_Speed,g_HPGL_Pen_Num);
@@ -168,6 +170,8 @@ bool Center = FALSE;
 		}
 	/* fin */
 	CloseFileHPGL(dest) ;
+	setlocale(LC_NUMERIC, "");
+
 }
 
 

@@ -233,7 +233,7 @@ drc.o: drc.cpp dialog_drc.cpp dialog_drc.h autorout.h $(COMMON)
 
 block.o: block.cpp $(COMMON)
 
-clean.o: clean.cpp $(COMMON)
+clean.o: clean.cpp cleaningoptions_dialog.cpp cleaningoptions_dialog.h $(COMMON)
 
 pcbplot.o: pcbplot.cpp pcbplot.h $(COMMON)
 

@@ -17,7 +17,7 @@
 static void Exit_Editrack(WinEDA_DrawPanel * panel, wxDC *DC);
 void ShowNewTrackWhenMovingCursor(WinEDA_DrawPanel * panel,
 				wxDC * DC, bool erase);
-static int Met_Coude_a_45(WinEDA_BasePcbFrame * frame, wxDC * DC,
+static int Add_45_degrees_Segment(WinEDA_BasePcbFrame * frame, wxDC * DC,
 						TRACK * ptfinsegment);
 static void ComputeBreakPoint( TRACK * track, int n );
 static TRACK * DeleteNullTrackSegments(BOARD * pcb, TRACK * track, int * segmcount);
@@ -188,7 +188,7 @@ wxPoint pos = GetScreen()->m_Curseur;
 
 			if( g_Raccord_45_Auto )
 			{
-				if( Met_Coude_a_45(this, DC, g_CurrentTrackSegment) != 0 )
+				if( Add_45_degrees_Segment(this, DC, g_CurrentTrackSegment) != 0 )
 					g_TrackSegmentCount++;
 			}
 			Track = g_CurrentTrackSegment->Copy();
@@ -221,7 +221,7 @@ wxPoint pos = GetScreen()->m_Curseur;
 
 
 /**************************************************************************/
-int Met_Coude_a_45(WinEDA_BasePcbFrame * frame, wxDC * DC, TRACK * pt_segm)
+int Add_45_degrees_Segment(WinEDA_BasePcbFrame * frame, wxDC * DC, TRACK * pt_segm)
 /***************************************************************************/
 /* rectifie un virage a 90 et le modifie par 2 coudes a 45
 	n'opere que sur des segments horizontaux ou verticaux.
@@ -476,6 +476,15 @@ PCB_SCREEN * screen = (PCB_SCREEN *) panel->GetScreen();
 	/* dessin de la nouvelle piste : mise a jour du point d'arrivee */
 	g_CurrentTrackSegment->m_Layer = screen->m_Active_Layer;
 	g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentTrackWidth;
+	if ( g_TwoSegmentTrackBuild )
+	{
+		TRACK * previous_track = (TRACK *)g_CurrentTrackSegment->Pback;
+		if ( previous_track && (previous_track->m_StructType == TYPETRACK) )
+		{
+			previous_track->m_Layer = screen->m_Active_Layer;
+			previous_track->m_Width = g_DesignSettings.m_CurrentTrackWidth;
+		}
+	}
 
 	if (Track_45_Only)
 	{

@@ -101,17 +101,14 @@ char buf[256], * ptchar;
 	ptchar = buf;
 	while ( text && *text == ' ' ) text++; // Skip blanks before number
 	while ( text && *text)
-		{
+	{
 		if ( IsNumber(*text) )
-			{
+		{
 			* ptchar = * text;
-
-			if ( * ptchar =='.' || *ptchar == ',' ) * ptchar = g_FloatSeparator;
-
 			text++; ptchar ++;
-			}
-		else break;
 		}
+		else break;
+	}
 	*ptchar = 0;
 
 	nb = atof(buf);

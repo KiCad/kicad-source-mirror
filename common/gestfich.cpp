@@ -39,6 +39,7 @@ static wxString s_HelpPathList[] = {
 	wxT("d:/kicad/help/"),
 #else
 	wxT("/usr/local/kicad/help/"),
+	wxT("/usr/share/doc/kicad/help"),
 	wxT("/usr/share/doc/kicad/"),
 #endif
 	wxT("end_list")	// End of list symbol, do not change

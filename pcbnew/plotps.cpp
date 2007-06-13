@@ -48,6 +48,8 @@ int PlotMarge_in_mils = 0;
 		DisplayError(this, msg); return ;
 	}
 
+	setlocale(LC_NUMERIC, "C");
+
 	Affiche_1_Parametre(this, 0,_("File"),FullFileName,CYAN) ;
 
 	if( g_PlotScaleOpt != 1 ) Center = TRUE;	// Echelle != 1 donc trace centree du PCB
@@ -201,6 +203,7 @@ int PlotMarge_in_mils = 0;
 	}
 	/* fin */
 	CloseFilePS(dest) ;
+	setlocale(LC_NUMERIC, "");
 }
 
 

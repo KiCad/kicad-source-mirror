@@ -528,8 +528,10 @@ int margin;
 			PlotFileName = MakeFileName(dirbuf, ShortFileName, wxT(".plt"));
 		else PlotFileName = MakeFileName(dirbuf, g_DefaultSchematicFileName, wxT(".plt"));
 
+		setlocale(LC_NUMERIC, "C");
 		InitPlotParametresHPGL(PlotOffset, g_PlotScaleX, g_PlotScaleY);
 		Plot_1_Page_HPGL(PlotFileName,screen);
+		setlocale(LC_NUMERIC, "");
 		screen = (BASE_SCREEN*)screen->Pnext;
 		if ( Select_PlotAll == FALSE ) break;
 	}

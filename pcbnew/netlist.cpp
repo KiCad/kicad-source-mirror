@@ -869,9 +869,16 @@ wxPoint OldPos = m_Parent->m_CurrentScreen->m_Curseur;
 	{
 		if( (ii == 0) || ( ref->m_LibName != cmp->m_LibName) )
 		{	/* Nouveau Module a charger */
-			Module = m_Parent->Get_Librairie_Module(this, wxEmptyString, cmp->m_LibName, TRUE );
+			Module = m_Parent->Get_Librairie_Module(this, wxEmptyString, cmp->m_LibName, FALSE );
 			ref = cmp;
-			if ( Module == NULL ) continue;
+			if ( Module == NULL )
+			{
+				wxString msg;
+				msg.Printf(_("Component [%s]: footprint <%s> not found"),
+						cmp->m_CmpName.GetData(), cmp->m_LibName.GetData());
+				DisplayError(this, msg);
+				continue;
+			}
 			m_Parent->Place_Module(Module, DC);
 			/* mise a jour des reperes ( nom et ref "Time Stamp")
 				si module charge */

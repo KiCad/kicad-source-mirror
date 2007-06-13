@@ -69,7 +69,6 @@ char text[1024];
 
 	fprintf(File,"$SETUP\n");
 	sprintf(text, "InternalUnit %f INCH\n", 1.0/PCB_INTERNAL_UNIT);
-	to_point(text);
 	fprintf(File, text);
 	
 	Pcb->m_BoardSettings->m_CopperLayerCount = g_DesignSettings.m_CopperLayerCount;

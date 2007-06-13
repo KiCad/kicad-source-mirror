@@ -233,12 +233,14 @@ int ii;
 	/* Update the part selection box */
 	int jj = 1;
 	if( CurrentLibEntry ) jj = CurrentLibEntry->m_UnitCount;
-	for ( ii = 0; ii < jj ; ii ++ )
-	{
-		wxString msg;
-		msg.Printf(_("Part %c"), 'A' + ii);
-		m_SelpartBox->Append(msg);
-	}
+	if ( jj > 1 )
+		for ( ii = 0; ii < jj ; ii ++ )
+		{
+			wxString msg;
+			msg.Printf(_("Part %c"), 'A' + ii);
+			m_SelpartBox->Append(msg);
+		}
+	else m_SelpartBox->Append( wxEmptyString );
 	m_SelpartBox->SetSelection( ( CurrentUnit > 0 ) ? CurrentUnit-1 : 0);
 		
 	if( CurrentLibEntry)

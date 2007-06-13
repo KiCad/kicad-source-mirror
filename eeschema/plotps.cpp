@@ -391,6 +391,7 @@ wxPoint StartPos, EndPos;
 		return ;
 	}
 
+	setlocale(LC_NUMERIC, "C");
 	Line.Printf(_("Plot: %s\n"), FileName.GetData()) ;
 	m_MsgBox->AppendText(Line);
 
@@ -507,6 +508,7 @@ wxPoint StartPos, EndPos;
 
 	/* fin */
 	CloseFilePS(PlotOutput);
+	setlocale(LC_NUMERIC, "");
 
 	m_MsgBox->AppendText( wxT("Ok\n"));
 }

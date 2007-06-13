@@ -117,14 +117,20 @@ bool success = FALSE;
 	fullfilename.Replace(WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP);
 #endif
 
+	wxString mask(wxT("*")), extension;
+#ifdef __WINDOWS__
+	mask += wxT(".*");
+	extension = wxT(".*");
+#endif
+
 	if ( wxIsWild(fullfilename) )
 	{
 		fullfilename =
 			EDA_FileSelector(_("Doc Files"),	/* Titre de la fenetre */
 					wxPathOnly(fullfilename),		/* Chemin par defaut */
 					fullfilename,				/* nom fichier par defaut */
-					wxEmptyString,				/* extension par defaut */
-					wxEmptyString,				/* Masque d'affichage */
+					extension,				/* extension par defaut */
+					mask,						/* Masque d'affichage */
 					frame,					/* parent frame */
 					wxFD_OPEN,					/* wxSAVE, wxFD_OPEN ..*/
 					TRUE,	/* true = ne change pas le repertoire courant */

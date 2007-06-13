@@ -174,7 +174,7 @@ void InstallNetlistFrame(WinEDA_SchematicFrame *parent, wxPoint & pos)
 }
 
 #define H_SIZE 370
-#define V_SIZE 260
+#define V_SIZE 300
 
 /*************************************************************************************/
 WinEDA_NetlistFrame::WinEDA_NetlistFrame(WinEDA_SchematicFrame *parent, wxPoint& framepos):

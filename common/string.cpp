@@ -289,7 +289,7 @@ void ChangeSpaces(char * Text, int NewChar)
 char * to_point(char * Text)
 /**************************/
 /* convertit les , en . dans une chaine. utilisé pour compenser
-l'internalisation imbecile de la fct printf
+l'internalisationde la fct printf
 qui genere les flottants avec une virgule au lieu du point
 */
 {
@@ -297,7 +297,9 @@ char * line = Text;
 
 	if ( Text == NULL ) return NULL;
 	for ( ; *Text != 0; Text++ )
-		if (*Text == g_FloatSeparator) *Text = '.';
+	{
+		if (*Text == ',') *Text = '.';
+	}
 
 	return line;
 }

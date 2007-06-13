@@ -869,6 +869,10 @@ int itmp;
 			DrawPanel->MouseToCursorSchema();
 			break;
 
+		case  ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR:
+			SelectLayerPair();
+			break;
+
 		case ID_POPUP_PCB_SELECT_NO_CU_LAYER:
 			itmp = SelectLayer(GetScreen()->m_Active_Layer, CMP_N+1, -1);
 			if ( itmp >= 0 ) GetScreen()->m_Active_Layer = itmp;

@@ -479,6 +479,7 @@ public:
 	// Gestion des layers:
 	int SelectLayer(int default_layer, int min_layer, int max_layer);
 	void SelectLayerPair(void);
+	void SwitchLayer(wxDC *DC, int layer);
 
 	// divers
 	void AddHistory(int value, DrawStructureType type);	// Add value in data list history
@@ -528,6 +529,7 @@ public:
 	void ReCreateOptToolbar(void);
 	void ReCreateMenuBar(void);
     WinEDAChoiceBox * ReCreateLayerBox( WinEDA_Toolbar * parent);
+	void PrepareLayerIndicator(void);
 	void OnLeftClick(wxDC * DC, const wxPoint& MousePos);
 	void OnLeftDClick(wxDC * DC, const wxPoint& MousePos);
 	void OnRightClick(const wxPoint& MousePos, wxMenu * PopMenu);
@@ -627,6 +629,7 @@ public:
 	void Start_MoveOneNodeOrSegment(TRACK * track, wxDC * DC, int command);
 	bool PlaceDraggedTrackSegment(TRACK * Track, wxDC * DC);
 	void Start_DragTrackSegmentAndKeepSlope(TRACK * track, wxDC * DC);
+	void SwitchLayer(wxDC *DC, int layer);
 
 	// Edition des zones
 	EDGE_ZONE * Del_SegmEdgeZone(wxDC * DC, EDGE_ZONE * edge_zone);

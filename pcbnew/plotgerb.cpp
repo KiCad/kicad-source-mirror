@@ -66,11 +66,6 @@ int tracevia = 1;
 		g_PlotOffset = m_Auxiliary_Axis_Position;
 	}
 	
-	InitPlotParametresGERBER(g_PlotOffset, scale_x, scale_y);
-
-	/*	Clear the memory used for handle the D_CODE (aperture) list	 */
-	Init_ApertureList();
-	
 	dest = wxFopen(FullFileName, wxT("wt"));
 	if (dest == NULL)
 	{
@@ -78,6 +73,13 @@ int tracevia = 1;
 		DisplayError(this, msg); return ;
 	}
 
+	setlocale(LC_NUMERIC, "C");
+
+	InitPlotParametresGERBER(g_PlotOffset, scale_x, scale_y);
+
+	/*	Clear the memory used for handle the D_CODE (aperture) list	 */
+	Init_ApertureList();
+	
 	Affiche_1_Parametre(this, 0, _("File"),FullFileName,CYAN) ;
 
 	Init_Trace_GERBER(this, dest) ;
@@ -124,6 +126,7 @@ int tracevia = 1;
 		}
 
 	Fin_Trace_GERBER(this, dest) ;
+	setlocale(LC_NUMERIC, "");
 }
 
 

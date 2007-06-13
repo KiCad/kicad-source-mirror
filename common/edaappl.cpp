@@ -77,9 +77,6 @@ WinEDA_App::WinEDA_App(void)
 	m_Locale = NULL;
 
 	m_PdfBrowserIsDefault = TRUE;
-
-	/* Init de variables globales d'interet general: */
-	g_FloatSeparator = '.';		// Nombres flottants = 0.1 par exemple
 }
 
 	/*****************************/
@@ -160,9 +157,6 @@ bool succes = SetLanguage(TRUE);
 	if ( ! succes )
 		{
 		}
-
-	if ( atof("0,1") ) g_FloatSeparator = ','; // Nombres flottants = 0,1
-	else  g_FloatSeparator = '.';
 
 #ifdef KICAD_PYTHON
 	PyHandler::GetInstance()->SetAppName( name );
@@ -379,9 +373,6 @@ wxString dic_path;
 		m_Locale->AddCatalog(DictionaryName);
 	SetLanguageList(NULL);
 
-
-	if ( atof("0,1") ) g_FloatSeparator = ','; // Nombres flottants = 0,1
-	else  g_FloatSeparator = '.';
 
 	return m_Locale->IsOk();
 }

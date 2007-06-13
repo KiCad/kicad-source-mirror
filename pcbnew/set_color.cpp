@@ -729,7 +729,6 @@ int w = BUTT_SIZE_X, h = BUTT_SIZE_Y;
 		iconDC.SelectObject( ButtBitmap );
 		int buttcolor = *laytool_list[ii]->m_Color;
 		wxBrush Brush;
-		iconDC.SelectObject( ButtBitmap );
 		iconDC.SetPen(*wxBLACK_PEN);
 		Brush.SetColour(
 						ColorRefs[buttcolor].m_Red,

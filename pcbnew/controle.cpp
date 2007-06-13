@@ -134,7 +134,13 @@ int CurrentTime = time(NULL);
 	{
 		wxString tmpFileName = GetScreen()->m_FileName;
 		wxString filename = g_SaveFileName + PcbExtBuffer;
+		bool flgmodify = GetScreen()->IsModify();
 		((WinEDA_PcbFrame*)this)->SavePcbFile(filename);
+		if( flgmodify )	// Set the flags m_Modify cleared by SavePcbFile()
+		{
+			GetScreen()->SetModify();
+			GetScreen()->SetSave();// Set the flags m_FlagSave cleared by SetModify()
+		}
 		GetScreen()->m_FileName = tmpFileName;
 		SetTitle(GetScreen()->m_FileName);
 	}
@@ -355,19 +361,19 @@ int CurrentTime = time(NULL);
 		OnHotKey(DC, hotkey, NULL);
 	}
 }
+
 /****************************************************************/
 void WinEDA_BasePcbFrame::SwitchLayer(wxDC *DC, int layer)
 /*****************************************************************/
 {
-	//overridden in WinEDA_PcbFrame;
+	//Note: overridden in WinEDA_PcbFrame;
 	int preslayer = GetScreen()->m_Active_Layer; 
 	//if there is only one layer, don't switch. 
 	if ( m_Pcb->m_BoardSettings->m_CopperLayerCount <= 1)
-		return; 
-	//otherwise, must be at least 2 layers..see if it is possible.
-	if(layer != LAYER_CUIVRE_N || layer != LAYER_CMP_N || 
-		  layer >= m_Pcb->m_BoardSettings->m_CopperLayerCount-1)
-		return; 
+		layer = LAYER_CUIVRE_N;	// Of course we select the copper layer
+	//otherwise, we select the requested layer only if it is possible
+	if( layer != LAYER_CMP_N && layer >= m_Pcb->m_BoardSettings->m_CopperLayerCount-1 )
+		return;
 	if(preslayer == layer)
 		return; 
 	

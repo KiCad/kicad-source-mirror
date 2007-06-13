@@ -161,8 +161,7 @@ void InstallErcFrame(WinEDA_SchematicFrame *parent, wxPoint & pos)
 /*********************************************/
 void WinEDA_ErcFrame::ReBuildMatrixPanel(void)
 /*********************************************/
-/* construit ou reconstruit le panel d'affichage de la matrice de
-controle ERC
+/* Build or rebuild the panel showing the ERC matrix
 */
 {
 int ii, jj, event_id, text_height;
@@ -666,10 +665,9 @@ int ref_elect_type, jj, erc = OK, local_minconn;
 /********************************************************/
 static bool WriteDiagnosticERC(const wxString & FullFileName)
 /*********************************************************/
-/* Genere le fichier des diagnostics
+/* Create the Diagnostic file (<xxx>.erc file)
 */
 {
-SCH_SCREEN * Window;
 EDA_BaseStruct * DrawStruct;
 DrawMarkerStruct * Marker;
 char Line[256];
@@ -683,22 +681,22 @@ wxString msg;
 	msg = _("ERC control");
 	fprintf( OutErc, "%s (%s)\n", CONV_TO_UTF8(msg), Line);
 
-	for( Window = ScreenSch; Window != NULL; Window = (SCH_SCREEN*)Window->Pnext )
-		{
-		Sheet = (DrawSheetStruct *) Window->m_Parent;
-
+	EDA_ScreenList ScreenList(NULL);
+	for ( SCH_SCREEN * Screen = ScreenList.GetFirst(); Screen != NULL; Screen = ScreenList.GetNext() )
+	{
+		Sheet = (DrawSheetStruct*) Screen;
 		msg.Printf( _("\n***** Sheet %d (%s)\n"),
-							Window->m_SheetNumber,
-							Sheet ? Sheet->m_SheetName.GetData() : _("Root"));
+							Sheet->m_SheetNumber,
+							Screen == ScreenSch ? _("Root") : Sheet->m_SheetName.GetData());
 		fprintf( OutErc, "%s", CONV_TO_UTF8(msg));
 
-		DrawStruct = Window->EEDrawList;
+		DrawStruct = Screen->EEDrawList;
 		for ( ; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext)
-			{
+		{
 			if(DrawStruct->m_StructType != DRAW_MARKER_STRUCT_TYPE )
 				continue;
-			/* Marqueur trouve */
 
+			/* Marqueur trouve */
 			Marker = (DrawMarkerStruct * ) DrawStruct;
 			if( Marker->m_Type != MARQ_ERC ) continue;
 			/* Write diag marqueur */
@@ -707,8 +705,8 @@ wxString msg;
 								 (float)Marker->m_Pos.x / 1000,
 								 (float)Marker->m_Pos.y / 1000);
 			fprintf( OutErc, "%s", CONV_TO_UTF8(msg));
-			}
 		}
+	}
 	msg.Printf( _("\n >> Errors ERC: %d\n"), g_EESchemaVar.NbErrorErc);
 	fprintf( OutErc, "%s", CONV_TO_UTF8(msg));
 	fclose ( OutErc );

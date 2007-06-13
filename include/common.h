@@ -273,7 +273,6 @@ COMMON_GLOBL wxString g_UserLibDirBuffer;	// Chemin des librairies de module don
 
 /* variables globales generales */
 
-COMMON_GLOBL int g_FloatSeparator;	// = '.' ou = ',' selon locale pour l'ecriture des nombres flotttant
 COMMON_GLOBL int g_DebugLevel;		// 0= Pas de debug */
 COMMON_GLOBL int g_MouseOldButtons;
 COMMON_GLOBL int g_KeyPressed;
@@ -352,7 +351,7 @@ class WinEDA_DrawPanel;
 
 
 /* COMMON.CPP */
-wxString ReturnPcbLayerName(int layer_number, bool is_filename = FALSE);
+wxString ReturnPcbLayerName(int layer_number, bool is_filename = FALSE,  bool is_gui = FALSE);
 /* Return the name of the layer number "layer_number".
 	if "is_filename" == TRUE,  the name can be used for a file name
 	(not internatinalized, no space)*/

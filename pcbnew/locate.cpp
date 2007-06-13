@@ -135,8 +135,11 @@ EDA_BaseStruct * item;
 	}
 
 	/* Search for a footprint text */
+	// First search: locate texts for footprints on copper or component layer
+	// Priority to the active layer (component or copper.
+	// this is useful for small smd components when 2 texts overlap but are not on the same layer
 	if ( (LayerSearch == LAYER_CUIVRE_N) ||  (LayerSearch == CMP_N ))
-	{	// Search texts for footprints on copper or component layer only
+	{
 		for (module = m_Pcb->m_Modules; module != NULL; module = (MODULE*)module->Pnext)  
 		{
 		TEXTE_MODULE * pt_texte;
@@ -149,17 +152,16 @@ EDA_BaseStruct * item;
 			}
 		}
 	}
-	else	// Search footprint texts on all layers
+
+	// Now Search footprint texts on all layers
+	module = NULL;
 	{
-		module = NULL;
+	TEXTE_MODULE * pt_texte;
+		pt_texte = LocateTexteModule(m_Pcb, &module, typeloc);
+		if( pt_texte != NULL )
 		{
-		TEXTE_MODULE * pt_texte;
-			pt_texte = LocateTexteModule(m_Pcb, &module, typeloc);
-			if( pt_texte != NULL )
-			{
-				Affiche_Infos_E_Texte(this,  module, pt_texte);
-				return pt_texte;
-			}
+			Affiche_Infos_E_Texte(this,  module, pt_texte);
+			return pt_texte;
 		}
 	}
 
@@ -170,6 +172,7 @@ EDA_BaseStruct * item;
 		return module;
 	}
 
+	/* Search for zones */
 	if( (TrackLocate = Locate_Zone((TRACK*)m_Pcb->m_Zone,
 					GetScreen()->m_Active_Layer,typeloc)) != NULL )
 	{
