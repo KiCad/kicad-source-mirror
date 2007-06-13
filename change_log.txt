@@ -4,6 +4,11 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-June-13 UPDATE   Richard A Burton <richardaburton@gmail.com>
+================================================================================
++ build:
+	dynamic linking by default, use make -f makefile.gtk KICAD_STATIC_LINK=1
+	  or uncomment the bit in libs.linux for static
 
 
 2007-June-11 UPDATE   Richard A Burton <richardaburton@gmail.com>

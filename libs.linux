@@ -10,13 +10,12 @@ FINAL = 1
 # You must comment or uncomment this line to disable/enable python support
 #KICAD_PYTHON = 1
 
-
-# You must comment this line for dynamic link (or build with "make -f makefile.gtk KICAD_STATIC_LINK=0")
-# dynamic link is less difficult than static link choose it if you have problems (libs not found, or
-# unresolved references), or if kicad is running only on YOUR system.
-ifndef KICAD_PYTHON
-KICAD_STATIC_LINK = 1
-endif
+# You must uncomment these lines for static link (or build with "make -f makefile.gtk KICAD_STATIC_LINK=1")
+# dynamic link is less difficult than static link and is what you would normally want
+# to use if kicad is running only on your system or one with same level of libraries.
+#ifndef KICAD_PYTHON
+#KICAD_STATIC_LINK = 1
+#endif
 
 ifdef KICAD_PYTHON
 PYTHON_VERSION=2.3
