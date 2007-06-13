@@ -1,6 +1,7 @@
 
 #Configuration for build kicad
-KICAD_BIN = /usr/local/kicad/linux
+KICAD_BIN = /usr/local/kicad
+KICAD_PLUGINS = $(KICAD_BIN)/plugins
 
 
 SRCSUFF = .cpp
