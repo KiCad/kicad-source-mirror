@@ -196,12 +196,12 @@ wxMenuBar * menuBar = GetMenuBar() ;
 		// Menu Help:
 		wxMenu *helpMenu = new wxMenu;
 		item = new wxMenuItem(helpMenu , ID_GENERAL_HELP,
-				_("Kicad &Help"), _("On line doc"));
+				_("&Contents"), _("Open the kicad manual"));
 	    item->SetBitmap(help_xpm);
 		helpMenu->Append(item);
 
 		item = new wxMenuItem(helpMenu , ID_KICAD_ABOUT,
-				_("&About"), _("Kicad Infos"));
+				_("&About"), _("About this application"));
 	    item->SetBitmap(info_xpm);
 		helpMenu->Append(item);
 

@@ -136,8 +136,8 @@ wxMenuBar * menuBar = GetMenuBar();
 
 		// Menu Help:
 		wxMenu *helpMenu = new wxMenu;
-		helpMenu->Append(ID_GENERAL_HELP, _("&Help"), _("On line doc") );
-		helpMenu->Append(ID_KICAD_ABOUT, _("&About"), _("Gerbview Infos") );
+		helpMenu->Append(ID_GENERAL_HELP, _("&Contents"), _("Open the gerbview manual") );
+		helpMenu->Append(ID_KICAD_ABOUT, _("&About"), _("About this application") );
 
 		menuBar->Append(m_FilesMenu, _("&Files"));
 		menuBar->Append(configmenu, _("&Preferences"));

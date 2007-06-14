@@ -155,12 +155,12 @@ wxMenuBar * menuBar = GetMenuBar();
 
 		// Menu Help:
 		wxMenu *helpMenu = new wxMenu;
-		item = new wxMenuItem(helpMenu , ID_CVPCB_DISPLAY_HELP, _("&Help"),
-                        _("On line doc"));
+		item = new wxMenuItem(helpMenu , ID_CVPCB_DISPLAY_HELP, _("&Contents"),
+                        _("Open the cvpcb manual"));
 	    item->SetBitmap(help_xpm);
 		helpMenu->Append(item);
 		item = new wxMenuItem(helpMenu , ID_CVPCB_DISPLAY_LICENCE, _("&About"),
-                        _("Kicad Infos"));
+                        _("About this application"));
 	    item->SetBitmap(info_xpm);
 		helpMenu->Append(item);
 

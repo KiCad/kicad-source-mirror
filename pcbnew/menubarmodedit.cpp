@@ -57,11 +57,11 @@ wxMenuItem * item;
 		// Menu Help: //
 		////////////////
 		wxMenu *helpMenu = new wxMenu;
-		item = new wxMenuItem(helpMenu , ID_GENERAL_HELP, _("Pcbnew &Help"), _("On line doc"));
+		item = new wxMenuItem(helpMenu , ID_GENERAL_HELP, _("&Contents"), _("Open the pcbnew manual"));
 	    item->SetBitmap(help_xpm);
 		helpMenu->Append(item);
 
-		item = new wxMenuItem(helpMenu , ID_KICAD_ABOUT, _("&About"), _("Pcbnew Infos"));
+		item = new wxMenuItem(helpMenu , ID_KICAD_ABOUT, _("&About"), _("About this application"));
 	    item->SetBitmap(info_xpm);
 		helpMenu->Append(item);
 
