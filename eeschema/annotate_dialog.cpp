@@ -129,6 +129,13 @@ void WinEDA_AnnotateFrame::CreateControls()
     m_AnnotNewCmpCtrl = new wxRadioBox( itemDialog1, ID_RADIOBOX1, _("select items:"), wxDefaultPosition, wxDefaultSize, 2, m_AnnotNewCmpCtrlStrings, 1, wxRA_SPECIFY_COLS );
     itemBoxSizer3->Add(m_AnnotNewCmpCtrl, 0, wxALIGN_LEFT|wxALL, 5);
 
+    wxString m_AnnotSortCmpCtrlStrings[] = {
+        _("by position"),
+        _("by value")
+    };
+    m_AnnotSortCmpCtrl = new wxRadioBox( itemDialog1, ID_RADIOBOX2, _("sorting:"), wxDefaultPosition, wxDefaultSize, 2, m_AnnotSortCmpCtrlStrings, 1, wxRA_SPECIFY_COLS );
+    itemBoxSizer3->Add(m_AnnotSortCmpCtrl, 0, wxALIGN_LEFT|wxALL, 5);
+
     wxBoxSizer* itemBoxSizer6 = new wxBoxSizer(wxVERTICAL);
     itemBoxSizer2->Add(itemBoxSizer6, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 

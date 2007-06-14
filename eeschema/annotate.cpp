@@ -22,6 +22,7 @@ static int ExistUnit(CmpListStruct *Objet, int Unit,
 
 /* Variable locales */
 static bool AnnotProject = TRUE;
+static bool SortByPosition = TRUE;
 
 
 /**************************************/
@@ -88,6 +89,7 @@ CmpListStruct * BaseListeCmp;
 	wxBusyCursor dummy;
 
 	AnnotProject = (m_AnnotProjetCtrl->GetSelection() == 0) ? TRUE : FALSE;
+	SortByPosition = (m_AnnotSortCmpCtrl->GetSelection() == 0) ? TRUE : FALSE;
 
 	/* If it is an annotation for all the components, reset previous annotation: */
 	if( m_AnnotNewCmpCtrl->GetSelection() == 0 ) DeleteAnnotation(event);
@@ -245,6 +247,7 @@ EDA_LibComponentStruct *Entry;
 				BaseListeCmp[NbrCmp].m_PartsLocked = Entry->m_UnitSelectionLocked;
 				BaseListeCmp[NbrCmp].m_Sheet = NumSheet;
 				BaseListeCmp[NbrCmp].m_IsNew = FALSE;
+				BaseListeCmp[NbrCmp].m_Pos = DrawLibItem->m_Pos;
 				BaseListeCmp[NbrCmp].m_TimeStamp = DrawLibItem->m_TimeStamp;
 				if( DrawLibItem->m_Field[REFERENCE].m_Text.IsEmpty() )
 					DrawLibItem->m_Field[REFERENCE].m_Text = wxT("DefRef?");
@@ -294,12 +297,19 @@ int AnnotTriComposant(CmpListStruct *Objet1, CmpListStruct *Objet2)
 int ii;
 
 	ii = strnicmp( Objet1->m_TextRef, Objet2->m_TextRef, 32 );
+	if ( SortByPosition == TRUE ) {
+    	    if ( ii == 0 ) ii = Objet1->m_Sheet - Objet2->m_Sheet;
+	    if ( ii == 0 ) ii = Objet1->m_Unit - Objet2->m_Unit;
+	    if ( ii == 0 ) ii = Objet1->m_Pos.x - Objet2->m_Pos.x;
+	    if ( ii == 0 ) ii = Objet1->m_Pos.y - Objet2->m_Pos.y;
+	} else {
+	    if ( ii == 0 ) ii = strnicmp( Objet1->m_TextValue, Objet2->m_TextValue, 32 );
+	    if ( ii == 0 ) ii = Objet1->m_Unit - Objet2->m_Unit;
+	    if ( ii == 0 ) ii = Objet1->m_Sheet - Objet2->m_Sheet;
+	}
 
-	if ( ii == 0 ) ii = strnicmp( Objet1->m_TextValue, Objet2->m_TextValue, 32 );
-	if ( ii == 0 ) ii = Objet1->m_Unit - Objet2->m_Unit;
-	if ( ii == 0 ) ii = Objet1->m_Sheet - Objet2->m_Sheet;
 	if ( ii == 0 ) ii = Objet1->m_TimeStamp - Objet2->m_TimeStamp;
-
+				
 	return(ii);
 }
 

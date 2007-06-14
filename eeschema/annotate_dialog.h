@@ -47,12 +47,13 @@
 #define SYMBOL_WINEDA_ANNOTATEFRAME_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX
 #define SYMBOL_WINEDA_ANNOTATEFRAME_TITLE _("EESchema Annotation")
 #define SYMBOL_WINEDA_ANNOTATEFRAME_IDNAME ID_DIALOG
-#define SYMBOL_WINEDA_ANNOTATEFRAME_SIZE wxSize(400, 300)
+#define SYMBOL_WINEDA_ANNOTATEFRAME_SIZE wxSize(400, 500)
 #define SYMBOL_WINEDA_ANNOTATEFRAME_POSITION wxDefaultPosition
 #define ID_RADIOBOX 10001
 #define ID_RADIOBOX1 10002
-#define ID_ANNOTATE_CMP 10003
-#define ID_DEANNOTATE_CMP 10004
+#define ID_RADIOBOX2 10003
+#define ID_ANNOTATE_CMP 10004
+#define ID_DEANNOTATE_CMP 10005
 ////@end control identifiers
 
 /*!
@@ -111,6 +112,7 @@ public:
 ////@begin WinEDA_AnnotateFrame member variables
     wxRadioBox* m_AnnotProjetCtrl;
     wxRadioBox* m_AnnotNewCmpCtrl;
+    wxRadioBox* m_AnnotSortCmpCtrl;    
 ////@end WinEDA_AnnotateFrame member variables
 
 	WinEDA_SchematicFrame * m_Parent;

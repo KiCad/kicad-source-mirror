@@ -96,6 +96,7 @@ public:
 	char m_TextRef[32];			/* Reference ( hors numero ) */
 	int m_NumRef;				/* Numero de reference */
 	int m_Flag;					/* flag pour calculs internes */
+	wxPoint m_Pos;			/* position components */ 
 };
 
 
