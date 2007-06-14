@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-06-13 00:37+0300\n"
+"PO-Revision-Date: 2007-06-14 21:49+0300\n"
 "Last-Translator: Igor Plyatov <plyatov@mail.ru>\n"
 "Language-Team: russian\n"
 "MIME-Version: 1.0\n"
@@ -33,7 +33,7 @@ msgstr "Список истории:"
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/optionsframe.cpp:151
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/options.cpp:110
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/sel_layer.cpp:118
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/sel_layer.cpp:244
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/sel_layer.cpp:245
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbpiste.cpp:93
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/swap_layers.cpp:92
 msgid "OK"
@@ -61,7 +61,7 @@ msgstr "Поиск ключевого слова"
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:132
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbtexte.cpp:118
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/sel_layer.cpp:123
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/sel_layer.cpp:249
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/sel_layer.cpp:250
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/muonde.cpp:345
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/modedit_onclick.cpp:195
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/modedit_onclick.cpp:228
@@ -258,11 +258,11 @@ msgstr "Контур платы"
 msgid "---      "
 msgstr "---      "
 
-#: /home/buzzer/Projects/Programming/kicad-svn/common/gestfich.cpp:563
+#: /home/buzzer/Projects/Programming/kicad-svn/common/gestfich.cpp:564
 msgid "No default editor found, you must choose it"
 msgstr "Редактор по умолчанию не найден. Вы должны выбрать его"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/common/gestfich.cpp:568
+#: /home/buzzer/Projects/Programming/kicad-svn/common/gestfich.cpp:569
 #: /home/buzzer/Projects/Programming/kicad-svn/kicad/preferences.cpp:97
 msgid "Prefered Editor:"
 msgstr "Предпочтительный редактор:"
@@ -283,51 +283,51 @@ msgstr "Предпочтительный редактор:"
 msgid "Ok"
 msgstr "Ok"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:464
+#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:455
 msgid "Default"
 msgstr "По умолчанию"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:474
+#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:465
 msgid "French"
 msgstr "Французский"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:479
+#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:470
 msgid "Spanish"
 msgstr "Испанский"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:484
+#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:475
 msgid "Portuguese"
 msgstr "Португальский"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:490
+#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:481
 msgid "Italian"
 msgstr "Итальянский"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:495
+#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:486
 msgid "German"
 msgstr "Немецкий"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:500
+#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:491
 msgid "Slovenian"
 msgstr "Словенский"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:505
+#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:496
 msgid "Hungarian"
 msgstr "Венгерский"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:510
+#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:501
 msgid "Polish"
 msgstr "Польский"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:515
+#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:506
 msgid "Russian"
 msgstr "Русский"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:520
+#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:511
 msgid "Korean"
 msgstr "Корейский"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:586
+#: /home/buzzer/Projects/Programming/kicad-svn/common/edaappl.cpp:577
 msgid "Language"
 msgstr "Язык"
 
@@ -469,19 +469,19 @@ msgstr "Создать файл"
 msgid " error"
 msgstr " ошибка"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/common/eda_doc.cpp:123
+#: /home/buzzer/Projects/Programming/kicad-svn/common/eda_doc.cpp:129
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/libedpart.cpp:1114
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/edit_component_in_lib.cpp:1026
 msgid "Doc Files"
 msgstr "Doc файлы"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/common/eda_doc.cpp:138
+#: /home/buzzer/Projects/Programming/kicad-svn/common/eda_doc.cpp:144
 msgid "Doc File "
 msgstr "Doc файл"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/common/eda_doc.cpp:138
+#: /home/buzzer/Projects/Programming/kicad-svn/common/eda_doc.cpp:144
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/dcode.cpp:260
-#: /home/buzzer/Projects/Programming/kicad-svn/gerbview/readgerb.cpp:142
+#: /home/buzzer/Projects/Programming/kicad-svn/gerbview/readgerb.cpp:141
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/libedit.cpp:113
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/find.cpp:423
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/files.cpp:56
@@ -489,16 +489,16 @@ msgstr "Doc файл"
 msgid " not found"
 msgstr "  не найдено"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/common/eda_doc.cpp:185
+#: /home/buzzer/Projects/Programming/kicad-svn/common/eda_doc.cpp:191
 msgid " Cannot find the PDF viewer (xpdf, gpdf or konqueror) in /usr/bin/"
 msgstr "Программа для просмотра PDF (xpdf, gpdf или konqueror) не найдена в /usr/bin/"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/common/eda_doc.cpp:193
+#: /home/buzzer/Projects/Programming/kicad-svn/common/eda_doc.cpp:199
 #, c-format
 msgid "Unknown MIME type for Doc File [%s] (%s)"
 msgstr "Неизвестный MIME тип для Doc файла [%s] (%s)"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/common/eda_doc.cpp:213
+#: /home/buzzer/Projects/Programming/kicad-svn/common/eda_doc.cpp:219
 #, c-format
 msgid "Cannot find Pdf viewer %s"
 msgstr "Программа просмотра PDF %s не найдена"
@@ -509,23 +509,24 @@ msgid "Colors"
 msgstr "Цвета"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/confirm.cpp:79
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:566
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:565
 msgid "Warning"
 msgstr "Внимание"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/confirm.cpp:82
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:569
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:568
 msgid "Error"
 msgstr "Ошибка"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/confirm.cpp:97
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/win_eda_cleaningoptionsframe.cpp:172
 msgid "Infos:"
 msgstr "Информация:"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/common/confirm.cpp:109
 #: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/cvframe.cpp:169
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/schframe.cpp:182
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:253
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:254
 msgid "Confirmation"
 msgstr "Подтверждение"
 
@@ -656,7 +657,7 @@ msgstr "Считать настройки"
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_edit_component_in_schematic.cpp:243
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_cmp_graphic_properties.cpp:178
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/pinedit-dialog.cpp:308
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:363
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:365
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_graphic_items_options.cpp:261
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_edit_mod_text.cpp:213
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_initpcb.cpp:161
@@ -770,7 +771,7 @@ msgstr "Параметры отображения"
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_viewlib.cpp:70
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_lib.cpp:170
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:106
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:110
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:231
 msgid "zoom + (F1)"
 msgstr "Масштаб + (F1)"
 
@@ -781,7 +782,7 @@ msgstr "Масштаб + (F1)"
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_viewlib.cpp:74
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_lib.cpp:174
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:109
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:111
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:232
 msgid "zoom - (F2)"
 msgstr "Масштаб - (F2)"
 
@@ -792,7 +793,7 @@ msgstr "Масштаб - (F2)"
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_viewlib.cpp:78
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_lib.cpp:178
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:112
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:112
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:233
 msgid "redraw (F3)"
 msgstr "обновить (F3)"
 
@@ -1067,25 +1068,17 @@ msgid "Save configuration in current dir"
 msgstr "Сохранить конфигурацию в текущей папке"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:158
-#: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:169
-#: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:139
-#: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:146
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:164
-#: /home/buzzer/Projects/Programming/kicad-svn/kicad/buildmnu.cpp:212
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarmodedit.cpp:78
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:286
-msgid "&Help"
-msgstr "Помощь (&H)"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:159
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:139
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:152
 #: /home/buzzer/Projects/Programming/kicad-svn/kicad/buildmnu.cpp:199
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarmodedit.cpp:60
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:264
-#, fuzzy
-msgid "On line doc"
-msgstr "Documentation en ligne"
+msgid "&Contents"
+msgstr "&Содержание"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:159
+msgid "Open the cvpcb manual"
+msgstr "Открыть руководство cvpcb"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:162
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:140
@@ -1094,13 +1087,16 @@ msgstr "Documentation en ligne"
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarmodedit.cpp:64
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:268
 msgid "&About"
-msgstr "О программе (&A)"
+msgstr "&О программе"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:163
+#: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:140
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:157
 #: /home/buzzer/Projects/Programming/kicad-svn/kicad/buildmnu.cpp:204
-#, fuzzy
-msgid "Kicad Infos"
-msgstr "Informations diverses"
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarmodedit.cpp:64
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:268
+msgid "About this application"
+msgstr "Об этой программе"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:167
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:142
@@ -1118,9 +1114,18 @@ msgstr "Файл (&F)"
 msgid "&Preferences"
 msgstr "Настройки (&P)"
 
+#: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:169
+#: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:146
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:164
+#: /home/buzzer/Projects/Programming/kicad-svn/kicad/buildmnu.cpp:212
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarmodedit.cpp:78
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:286
+msgid "&Help"
+msgstr "&Справка"
+
 #: /home/buzzer/Projects/Programming/kicad-svn/cvpcb/genequiv.cpp:42
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/export_to_pcbnew.cpp:53
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/plothpgl.cpp:558
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/plothpgl.cpp:560
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/plotps.cpp:388
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/files.cpp:300
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/gen_modules_placefile.cpp:82
@@ -1297,13 +1302,13 @@ msgstr "Ajuster Zéro"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/share/dialog_print.cpp:167
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/netlist_control.cpp:94
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:311
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:313
 msgid "Options:"
 msgstr "Параметры:"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/share/dialog_print.cpp:178
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/affiche.cpp:36
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbtexte.cpp:176
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbtexte.cpp:177
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/modedit_onclick.cpp:246
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/cotation.cpp:118
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/affiche.cpp:40
@@ -1426,7 +1431,7 @@ msgstr "Sélection du Zoom"
 #: /home/buzzer/Projects/Programming/kicad-svn/share/zoom.cpp:353
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/plotps.cpp:168
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:268
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:373
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:497
 #, fuzzy
 msgid "Auto"
 msgstr "Auto"
@@ -1529,7 +1534,7 @@ msgstr "Feuille A4"
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_create_component.cpp:200
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_cmp_graphic_properties.cpp:182
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/pinedit-dialog.cpp:304
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:367
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:369
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_graphic_items_options.cpp:265
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_edit_mod_text.cpp:217
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_initpcb.cpp:164
@@ -1659,7 +1664,7 @@ msgstr "Копировать 3D картинку в буфер обмена"
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:113
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_lib.cpp:182
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:115
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:114
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:235
 #, fuzzy
 msgid "auto zoom"
 msgstr "Zoom automatique"
@@ -1720,7 +1725,7 @@ msgid "GERBER PLOT files:"
 msgstr "Fichiers tracé GERBER:"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/files.cpp:175
-#: /home/buzzer/Projects/Programming/kicad-svn/gerbview/readgerb.cpp:250
+#: /home/buzzer/Projects/Programming/kicad-svn/gerbview/readgerb.cpp:252
 #, fuzzy
 msgid "D CODES files:"
 msgstr "fichiers D CODES:"
@@ -1802,7 +1807,7 @@ msgid "Delete Dcode items"
 msgstr "Effacements des éléments convertis"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/dcode.cpp:260
-#: /home/buzzer/Projects/Programming/kicad-svn/gerbview/readgerb.cpp:142
+#: /home/buzzer/Projects/Programming/kicad-svn/gerbview/readgerb.cpp:141
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eeconfig.cpp:67
 #: /home/buzzer/Projects/Programming/kicad-svn/kicad/files-io.cpp:124
 #, fuzzy
@@ -1965,7 +1970,7 @@ msgstr "Выбор общих параметров"
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/options.cpp:182
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/affiche.cpp:85
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:265
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbtexte.cpp:177
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbtexte.cpp:178
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_edit_mod_text.cpp:232
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/cotation.cpp:119
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/affiche.cpp:84
@@ -2017,10 +2022,9 @@ msgstr "&Effacer couche"
 msgid "Delete current layer"
 msgstr "&Effacer couche active"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:140
-#, fuzzy
-msgid "Gerbview Infos"
-msgstr "Informations sur Gerbview"
+#: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:139
+msgid "Open the gerbview manual"
+msgstr "Открыть руководство gerbview"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:144
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:283
@@ -2045,34 +2049,34 @@ msgstr "Sauver photo"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:215
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:61
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:88
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:209
 #, fuzzy
 msgid "page settings (size, texts)"
 msgstr "Ajustage de la feuille de dessin (dimensions, textes)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:226
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:77
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:95
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:216
 #, fuzzy
 msgid "Cut selected item"
 msgstr "Suppression des éléments sélectionnés"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:231
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:80
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:98
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:219
 #, fuzzy
 msgid "Copy selected item"
 msgstr "Copie des éléments sélectionnés"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:237
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:83
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:100
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:221
 #, fuzzy
 msgid "Paste"
 msgstr "Copie des éléments sauvegardés"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:244
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:103
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:224
 #, fuzzy
 msgid "Undelete"
 msgstr "Annulation du dernier effacement"
@@ -2114,7 +2118,7 @@ msgid "Add Lines"
 msgstr "Addition de lignes"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:352
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:268
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:392
 msgid "Add Mires"
 msgstr "Добавить миры"
 
@@ -2123,7 +2127,7 @@ msgstr "Добавить миры"
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/libframe.cpp:487
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/edit.cpp:552
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:165
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:259
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:383
 msgid "Add Text"
 msgstr "Добавить текст"
 
@@ -2131,41 +2135,41 @@ msgstr "Добавить текст"
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:225
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_lib.cpp:92
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:175
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:273
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:397
 msgid "Delete items"
 msgstr "Удалить элементы"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:387
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:246
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:196
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:154
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:278
 msgid "Display Grid OFF"
 msgstr "Выкл. отображение сетки"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:393
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:200
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:156
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:280
 msgid "Display Polar Coord ON"
 msgstr "Показать полярные координаты"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:397
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:250
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:204
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:158
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:282
 msgid "Units = Inch"
 msgstr "Единицы: дюймы"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:401
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:254
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:208
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:160
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:284
 msgid "Units = mm"
 msgstr "Единицы: мм"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:407
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:258
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:214
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:162
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:286
 msgid "Change Cursor Shape"
 msgstr "Сменить форму курсора"
 
@@ -2343,17 +2347,17 @@ msgid "Units"
 msgstr "Единицы"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/options.cpp:199
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:278
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:279
 msgid "Small"
 msgstr "Малый"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/options.cpp:199
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:279
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:280
 msgid "Big"
 msgstr "Большой"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/options.cpp:200
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:281
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:282
 msgid "Cursor"
 msgstr "Курсор"
 
@@ -2430,12 +2434,12 @@ msgstr "Monter DCodes"
 msgid "Layer modified,  Continue ?"
 msgstr "Couche modifiée,  Continuer ?"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/gerbview/rs274x.cpp:288
+#: /home/buzzer/Projects/Programming/kicad-svn/gerbview/rs274x.cpp:285
 #, fuzzy, c-format
 msgid "Command <%c%c> ignored by Gerbview"
 msgstr "Выполнить программу путём ввода командной строки"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/gerbview/rs274x.cpp:319
+#: /home/buzzer/Projects/Programming/kicad-svn/gerbview/rs274x.cpp:316
 #, fuzzy
 msgid "Too many include files!!"
 msgstr "Trop de fichiers inclus!!"
@@ -3053,62 +3057,62 @@ msgstr "&Tout tracer"
 msgid "&Accept Offset"
 msgstr "&Accepter Offset"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/plothpgl.cpp:537
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/plothpgl.cpp:539
 #, fuzzy
 msgid "** Plot End **\n"
 msgstr "** Fin de Tracé **\n"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/plothpgl.cpp:562
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/plothpgl.cpp:564
 #, fuzzy
 msgid "Plot  "
 msgstr "Trace  "
 
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:285
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:284
 #, fuzzy
 msgid "Annotation Required!"
 msgstr "Numérotation requise!"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:379
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:378
 #, fuzzy
 msgid "ERC file:"
 msgstr "Fichier ERC:"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:520
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:519
 #, fuzzy, c-format
 msgid "Warning GLabel %s not connected to SheetLabel"
 msgstr "Warning GLabel %s non connecté a SheetLabel"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:523
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:522
 #, fuzzy, c-format
 msgid "Warning SheetLabel %s not connected to GLabel"
 msgstr "Warning SheetLabel %s non connecté a GLabel"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:536
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:535
 #, fuzzy, c-format
 msgid "Warning Pin %s Unconnected"
 msgstr "Warning Pin %s Non connectée"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:545
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:544
 #, fuzzy, c-format
 msgid "Warning Pin %s not driven (Net %d)"
 msgstr "Warning Pin %s non pilotée (Net %d)"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:555
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:554
 #, fuzzy
 msgid "Warning More than 1 Pin connected to UnConnect symbol"
 msgstr "Warning: plus que 1 Pin connectée a un symbole de non connexion"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:575
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:574
 #, fuzzy, c-format
 msgid "%s: Pin %s connected to Pin %s (net %d)"
 msgstr "%s: Pin %s connectée a Pin %s (net %d)"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:683
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:681
 #, fuzzy
 msgid "ERC control"
 msgstr "Controle ERCl (%s)\n"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:690
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:688
 #, fuzzy, c-format
 msgid ""
 "\n"
@@ -3117,7 +3121,7 @@ msgstr ""
 "\n"
 "***** feuille %d (%s)\n"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:692
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:690
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:951
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/genliste.cpp:616
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/hierarch.cpp:134
@@ -3125,12 +3129,12 @@ msgstr ""
 msgid "Root"
 msgstr "Racine"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:705
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:703
 #, c-format
 msgid "ERC: %s (X= %2.3f inches, Y= %2.3f inches\n"
 msgstr "ERC: %s (X= %2.3f дюймов, Y= %2.3f дюймов\n"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:712
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/erc.cpp:710
 #, fuzzy, c-format
 msgid ""
 "\n"
@@ -3199,7 +3203,7 @@ msgid "Run Pcbnew"
 msgstr "Appel de Pcbnew (Editeur de Circuits Imprimés)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:117
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:117
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:238
 #, fuzzy
 msgid "Find components and texts"
 msgstr "Recherche de composants et textes"
@@ -3298,7 +3302,7 @@ msgstr "Addition de pins de hierarchie dans les symboles de hierarchie"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:216
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:153
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:247
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:371
 #, fuzzy
 msgid "Add graphic line or polygon"
 msgstr "Addition de lignes ou polygones graphiques"
@@ -3346,6 +3350,145 @@ msgstr "Commun aux Unités"
 #, fuzzy
 msgid "Common to convert"
 msgstr "Commun a converti"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:37
+#, fuzzy
+msgid "&Load Schematic Project"
+msgstr "&Charger Projet schématique"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:38
+#, fuzzy
+msgid "Load a schematic project (Schematic, libraries...)"
+msgstr "Charger un projet schématique complet (schemas, librairies...)"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:43
+#, fuzzy
+msgid "&Reload the current sheet"
+msgstr "Sauver &Feuille active"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:44
+msgid "Load or reload a schematic file from file into the current sheet"
+msgstr "Загрузить или перезагрузить схему из файла на текущую страницу"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:50
+#, fuzzy
+msgid "&Save Schematic Project"
+msgstr "&Sauver le Projet schématique"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:51
+#, fuzzy
+msgid "Save all"
+msgstr "Tout sauver"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:57
+#, fuzzy
+msgid "Save &Current sheet"
+msgstr "Sauver &Feuille active"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:58
+#, fuzzy
+msgid "Save current sheet only"
+msgstr "Sauver la feuille active uniquement"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:63
+#, fuzzy
+msgid "Save Current sheet &as.."
+msgstr "Sauver la feuille &active sous.."
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:64
+#, fuzzy
+msgid "Save current sheet as.."
+msgstr "Sauver la feuille active sous un autre nom"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:76
+#, fuzzy
+msgid "Plot Postscript"
+msgstr "Tracé Postscript"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:76
+#, fuzzy
+msgid "Plotting in Postscript format"
+msgstr "Générer un tracé en format Postscript"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:81
+#, fuzzy
+msgid "Plot HPGL"
+msgstr "Tracé HPGL"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:81
+#, fuzzy
+msgid "Plotting in HPGL format"
+msgstr "Générer un tracé en format HPGL"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:86
+#, fuzzy
+msgid "Plot SVG"
+msgstr "изображение формата SVG"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:86
+#, fuzzy
+msgid "Plotting in SVG format"
+msgstr "Générer un tracé en format Postscript"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:93
+#, fuzzy
+msgid "Plot to Clipboard"
+msgstr " Копировать в буфер "
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:93
+#, fuzzy
+msgid "Export drawings to clipboard"
+msgstr "Не удалось закрыть clipboard."
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:100
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:92
+#, fuzzy
+msgid "&Plot"
+msgstr "&Tracer"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:100
+#, fuzzy
+msgid "Plot Hplg, Postscript, SVG"
+msgstr "Tracer en format HPGL,  POSTSCRIPT ou GERBER"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:103
+#, fuzzy
+msgid "Quit Eeschema"
+msgstr "Quitter Eeschema"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:121
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:149
+msgid "&Libs and Dir"
+msgstr "Библиотеки и папки (&L)"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:128
+#, fuzzy
+msgid "Setting colors ..."
+msgstr "Choisir les couleurs d'affichage"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:140
+msgid "&Save Eeschema Setup"
+msgstr "Сохранить настройки Eeschema (&S)"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:141
+#, fuzzy
+msgid "Save options in <project>.pro"
+msgstr "Sauver les options en <projet>.pro"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:144
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:180
+msgid "&Read Setup"
+msgstr "Загрузить настройки (&R)"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:145
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:181
+#, fuzzy
+msgid "Read options from a selected config file"
+msgstr "Lire options d'un fichier de configuration choisi"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:152
+msgid "Open the eeschema manual"
+msgstr "Открыть руководство eeschema"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/annotate_dialog.cpp:119
 #, fuzzy
@@ -3556,7 +3699,7 @@ msgstr "Специальный (1 mil)"
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/editpart.cpp:312
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:245
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:287
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbtexte.cpp:176
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbtexte.cpp:177
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/muonde.cpp:353
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/cotation.cpp:118
 msgid "Normal"
@@ -3569,7 +3712,7 @@ msgstr "Показать все"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_options.cpp:239
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/options.cpp:124
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:340
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:342
 msgid "Auto PAN"
 msgstr "Автопанорамирование"
 
@@ -3864,7 +4007,7 @@ msgstr ""
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_erc.cpp:192
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_erc.cpp:196
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_edit_component_in_schematic.cpp:172
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:345
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:402
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_pad_edit.cpp:187
 #, fuzzy
 msgid "0"
@@ -4052,7 +4195,7 @@ msgid "Add Bus"
 msgstr "Addition de Bus"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/schedit.cpp:293
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/modedit.cpp:273
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/modedit.cpp:373
 #, fuzzy
 msgid "Add Drawing"
 msgstr "Déplace Tracé"
@@ -4109,8 +4252,8 @@ msgstr "Power In"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/schedit.cpp:443
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/libframe.cpp:554
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/edit.cpp:718
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/modedit.cpp:291
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/edit.cpp:720
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/modedit.cpp:391
 #, fuzzy
 msgid "Delete item"
 msgstr "Effacements d'éléments"
@@ -4262,7 +4405,7 @@ msgid "Export to schematic"
 msgstr "Экспортировать в .anyone"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_viewlib.cpp:131
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_lib.cpp:239
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/tool_lib.cpp:240
 #, fuzzy, c-format
 msgid "Part %c"
 msgstr "Composant %c"
@@ -5359,7 +5502,7 @@ msgstr "Impr. couleur"
 msgid "Messages :"
 msgstr "Messages :"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/plotps.cpp:394
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/plotps.cpp:395
 #, fuzzy, c-format
 msgid "Plot: %s\n"
 msgstr "Trace: %s\n"
@@ -5542,61 +5685,17 @@ msgstr "Ok pour effacer la LISTE des Alias"
 msgid "New FootprintFilter:"
 msgstr "Nouveau Circuit Imprimé"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs1.cpp:66
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs_read_libraryfiles.cpp:66
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/loadcmp.cpp:201
-#, fuzzy, c-format
-msgid "Library <%s> not found"
-msgstr "Librairie %s non trouvée"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs1.cpp:108
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs_read_libraryfiles.cpp:108
-msgid "Start loading schematic libs"
-msgstr "Начало загрузки схемных библиотек"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs1.cpp:264
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs1.cpp:271
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs_read_libraryfiles.cpp:264
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs_read_libraryfiles.cpp:271
-#, fuzzy
-msgid "File <"
-msgstr "Fichier <"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs1.cpp:264
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs_read_libraryfiles.cpp:264
-#, fuzzy
-msgid "> is empty!"
-msgstr "Пуст"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs1.cpp:271
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs_read_libraryfiles.cpp:271
-#, fuzzy
-msgid "> is NOT EESCHEMA library!"
-msgstr "Fichier %s n'est pas une librairie eeschema"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs1.cpp:289
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs_read_libraryfiles.cpp:289
-#, fuzzy
-msgid "Library <"
-msgstr "Librairie <"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs1.cpp:289
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs_read_libraryfiles.cpp:289
-#, fuzzy
-msgid "> header read error"
-msgstr "> erreur lecture entête"
-
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/schframe.cpp:181
 msgid "Schematic modified, Save before exit ?"
 msgstr "Схема изменена. Сохранить при выходе? "
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/schframe.cpp:260
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:360
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:361
 msgid "Grid not show"
 msgstr "Не показывать сетку"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/schframe.cpp:260
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:360
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:361
 msgid "Show Grid"
 msgstr "Показать сетку"
 
@@ -5614,151 +5713,6 @@ msgstr "Tracer traits de direction  quelconque"
 #, fuzzy
 msgid "Draw lines H, V or 45 deg only"
 msgstr "Tracer traits H, V ou 45 deg seulement"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:37
-#, fuzzy
-msgid "&Load Schematic Project"
-msgstr "&Charger Projet schématique"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:38
-#, fuzzy
-msgid "Load a schematic project (Schematic, libraries...)"
-msgstr "Charger un projet schématique complet (schemas, librairies...)"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:43
-#, fuzzy
-msgid "&Reload the current sheet"
-msgstr "Sauver &Feuille active"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:44
-msgid "Load or reload a schematic file from file into the current sheet"
-msgstr "Загрузить или перезагрузить схему из файла на текущую страницу"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:50
-#, fuzzy
-msgid "&Save Schematic Project"
-msgstr "&Sauver le Projet schématique"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:51
-#, fuzzy
-msgid "Save all"
-msgstr "Tout sauver"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:57
-#, fuzzy
-msgid "Save &Current sheet"
-msgstr "Sauver &Feuille active"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:58
-#, fuzzy
-msgid "Save current sheet only"
-msgstr "Sauver la feuille active uniquement"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:63
-#, fuzzy
-msgid "Save Current sheet &as.."
-msgstr "Sauver la feuille &active sous.."
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:64
-#, fuzzy
-msgid "Save current sheet as.."
-msgstr "Sauver la feuille active sous un autre nom"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:76
-#, fuzzy
-msgid "Plot Postscript"
-msgstr "Tracé Postscript"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:76
-#, fuzzy
-msgid "Plotting in Postscript format"
-msgstr "Générer un tracé en format Postscript"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:81
-#, fuzzy
-msgid "Plot HPGL"
-msgstr "Tracé HPGL"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:81
-#, fuzzy
-msgid "Plotting in HPGL format"
-msgstr "Générer un tracé en format HPGL"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:86
-#, fuzzy
-msgid "Plot SVG"
-msgstr "изображение формата SVG"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:86
-#, fuzzy
-msgid "Plotting in SVG format"
-msgstr "Générer un tracé en format Postscript"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:93
-#, fuzzy
-msgid "Plot to Clipboard"
-msgstr " Копировать в буфер "
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:93
-#, fuzzy
-msgid "Export drawings to clipboard"
-msgstr "Не удалось закрыть clipboard."
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:100
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:92
-#, fuzzy
-msgid "&Plot"
-msgstr "&Tracer"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:100
-#, fuzzy
-msgid "Plot Hplg, Postscript, SVG"
-msgstr "Tracer en format HPGL,  POSTSCRIPT ou GERBER"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:103
-#, fuzzy
-msgid "Quit Eeschema"
-msgstr "Quitter Eeschema"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:121
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:149
-msgid "&Libs and Dir"
-msgstr "Библиотеки и папки (&L)"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:128
-#, fuzzy
-msgid "Setting colors ..."
-msgstr "Choisir les couleurs d'affichage"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:140
-msgid "&Save Eeschema Setup"
-msgstr "Сохранить настройки Eeschema (&S)"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:141
-#, fuzzy
-msgid "Save options in <project>.pro"
-msgstr "Sauver les options en <projet>.pro"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:144
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:180
-msgid "&Read Setup"
-msgstr "Загрузить настройки (&R)"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:145
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:181
-#, fuzzy
-msgid "Read options from a selected config file"
-msgstr "Lire options d'un fichier de configuration choisi"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:152
-#: /home/buzzer/Projects/Programming/kicad-svn/kicad/buildmnu.cpp:199
-msgid "Kicad &Help"
-msgstr "Помощь по KiCad &H"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/menubar.cpp:157
-#, fuzzy
-msgid "Eeschema Infos"
-msgstr "Eeschema Infos"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/database.cpp:70
 #, fuzzy
@@ -6532,6 +6486,42 @@ msgstr "Emetteur ouv."
 msgid "Electrical Type:"
 msgstr "Type électrique:"
 
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs_read_libraryfiles.cpp:66
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/loadcmp.cpp:201
+#, fuzzy, c-format
+msgid "Library <%s> not found"
+msgstr "Librairie %s non trouvée"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs_read_libraryfiles.cpp:108
+msgid "Start loading schematic libs"
+msgstr "Начало загрузки схемных библиотек"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs_read_libraryfiles.cpp:264
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs_read_libraryfiles.cpp:271
+#, fuzzy
+msgid "File <"
+msgstr "Fichier <"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs_read_libraryfiles.cpp:264
+#, fuzzy
+msgid "> is empty!"
+msgstr "Пуст"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs_read_libraryfiles.cpp:271
+#, fuzzy
+msgid "> is NOT EESCHEMA library!"
+msgstr "Fichier %s n'est pas une librairie eeschema"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs_read_libraryfiles.cpp:289
+#, fuzzy
+msgid "Library <"
+msgstr "Librairie <"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/eelibs_read_libraryfiles.cpp:289
+#, fuzzy
+msgid "> header read error"
+msgstr "> erreur lecture entête"
+
 #: /home/buzzer/Projects/Programming/kicad-svn/kicad/preferences.cpp:33
 #, fuzzy
 msgid "Prefered Pdf Browser:"
@@ -6753,6 +6743,10 @@ msgstr "Выбрать ваш любимый просмотрщик PDF для d
 #: /home/buzzer/Projects/Programming/kicad-svn/kicad/buildmnu.cpp:188
 msgid "Pdf Browser"
 msgstr "PDF просмотрщик"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/kicad/buildmnu.cpp:199
+msgid "Open the kicad manual"
+msgstr "Открыть руководство kicad"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/kicad/buildmnu.cpp:209
 msgid "&Projects"
@@ -7116,79 +7110,79 @@ msgstr "Цикл"
 msgid "Ok to abort ?"
 msgstr "Ok pour arrêter ?"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:287
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:289
 msgid "Number of Layers:"
 msgstr "Кол-во слоев:"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:294
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:296
 #, fuzzy
 msgid "Max Links:"
 msgstr "Liens max:"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:301
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:303
 msgid "Auto Save (minuts):"
 msgstr "Авто-сохр. (мин):"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:315
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:317
 #, fuzzy
 msgid "Drc ON"
 msgstr "Drc ACTIVE"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:320
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:322
 #, fuzzy
 msgid "Show Ratsnest"
 msgstr "Monter le chevelu général"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:324
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:326
 #, fuzzy
 msgid "Show Mod Ratsnest"
 msgstr "Monter le chevelu du module"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:328
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:330
 #, fuzzy
 msgid "Tracks Auto Del"
 msgstr "Pistes auto efface"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:332
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:334
 #, fuzzy
 msgid "Track 45 Only"
 msgstr "Pistes 45 seulement"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:336
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:338
 #, fuzzy
 msgid "Segments 45 Only"
 msgstr "Segments 45 seulement"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:345
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:347
 #, fuzzy
 msgid "Double Segm Track"
 msgstr "Piste verrouillée: Oui"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:351
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:353
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_display_options.cpp:202
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_display_options.cpp:208
 #, fuzzy
 msgid "Never"
 msgstr "никогда"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:352
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:354
 #, fuzzy
 msgid "When creating tracks"
 msgstr "Pistes auto efface"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:353
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:355
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_display_options.cpp:200
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_display_options.cpp:210
 #, fuzzy
 msgid "Always"
 msgstr "Всегда"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:355
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:357
 #, fuzzy
 msgid "Magnetic Pads"
 msgstr "Inclure Pads"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:357
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_general_options.cpp:359
 msgid "control the capture of the pcb cursor when the mouse cursor enters a pad area"
 msgstr "Настройка притяжения курсора при попадании мыши в область ножки "
 
@@ -7223,7 +7217,7 @@ msgid "Add Tracks"
 msgstr "Addition de pistes"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/edit.cpp:529
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:242
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:366
 #, fuzzy
 msgid "Add Zones"
 msgstr "Addition de Zones"
@@ -7254,15 +7248,13 @@ msgid "Add Modules"
 msgstr "Addition de Modules"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/edit.cpp:560
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:264
-#, fuzzy
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:388
 msgid "Add Cotation"
-msgstr "Addition de Cotations"
+msgstr "Добавить размер"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/edit.cpp:568
-#, fuzzy
 msgid "Net Highlight"
-msgstr "Surbrillance des équipotentielles"
+msgstr "Подсветка цепи"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/edit.cpp:572
 #, fuzzy
@@ -7270,51 +7262,42 @@ msgid "Local Ratsnest"
 msgstr "Monter le chevelu général"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:43
-#, fuzzy
 msgid "Module properties"
-msgstr "Propriétés du Module"
+msgstr "Свойства модуля"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:102
-#, fuzzy
 msgid "Properties"
-msgstr "Propriétés"
+msgstr "Свойства"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:106
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:115
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:146
-#, fuzzy
 msgid "3D settings"
-msgstr "3D Caract"
+msgstr "Настройки 3D"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:187
-#, fuzzy
 msgid "Change module(s)"
-msgstr "Change module(s)"
+msgstr "Изменить модуль(и)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:191
-#, fuzzy
 msgid "Goto Module Editor"
-msgstr "Ouvrir Editeur de modules"
+msgstr "Переход в редактор модулей"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:203
-#, fuzzy
 msgid "Keywords"
-msgstr "Mots Cles"
+msgstr "Ключевые слова"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:210
-#, fuzzy
 msgid "Fields:"
-msgstr "Champs:"
+msgstr "Поля:"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:220
-#, fuzzy
 msgid "Add Field"
-msgstr "Ajouter Champ"
+msgstr "Добавить поле"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:230
-#, fuzzy
 msgid "Delete Field"
-msgstr "Effacer Champ"
+msgstr "Удалить поле"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:237
 #, fuzzy
@@ -7510,11 +7493,11 @@ msgstr "Fichiers Librairies"
 msgid "Library exists! No Change"
 msgstr "Librairie existante! Pas de changement"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/plothpgl.cpp:70
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/plothpgl.cpp:72
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/gendrill.cpp:388
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/gendrill.cpp:939
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/plotps.cpp:51
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/plotgerb.cpp:81
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/plotps.cpp:53
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/plotgerb.cpp:83
 #, fuzzy
 msgid "File"
 msgstr "Fichier"
@@ -7868,7 +7851,7 @@ msgstr "Propriétés des textes PCB"
 msgid "Position"
 msgstr "Position"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbtexte.cpp:152
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbtexte.cpp:153
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_edit_mod_text.cpp:225
 #, fuzzy
 msgid "Orientation"
@@ -7879,17 +7862,17 @@ msgstr "Orientation"
 msgid "Select Layer:"
 msgstr "Selection couche:"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/sel_layer.cpp:195
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/sel_layer.cpp:196
 #, fuzzy
 msgid "Select Layer Pair:"
 msgstr "Selection paire de couches"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/sel_layer.cpp:229
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/sel_layer.cpp:230
 #, fuzzy
 msgid "Top Layer"
 msgstr "Couche Sup."
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/sel_layer.cpp:236
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/sel_layer.cpp:237
 #, fuzzy
 msgid "Bottom Layer"
 msgstr "Couche Inf."
@@ -8012,49 +7995,68 @@ msgstr "Unités = mm"
 msgid "Gap (inch):"
 msgstr "Unités = pouce"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:99
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:156
 #, fuzzy
 msgid "Delete unconnected tracks:"
 msgstr "Pistes auto efface"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:116
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:173
 #, fuzzy
 msgid "ViaDef"
 msgstr "ViaDef"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:261
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:318
 #, fuzzy
 msgid "Clean Null Segments"
 msgstr "Segments 45 seulement"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:343
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:400
 #, fuzzy
 msgid "Merging Segments:"
 msgstr "Число сегментов:"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:345
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:402
 #, fuzzy
 msgid "Merge"
 msgstr "Cлияние"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:358
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:415
 #, fuzzy
 msgid "Merge: "
 msgstr "Cлияние"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:551
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:607
 #, fuzzy
 msgid "DRC Control:"
 msgstr "Controle ERC"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:555
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:611
 msgid "NetCtr"
 msgstr ""
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:774
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:819
+#, fuzzy
+msgid "Centre"
+msgstr "Centrer"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:819
+#, fuzzy
+msgid "0 "
+msgstr "0"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:830
 #, fuzzy
 msgid "Pads: "
 msgstr "Pads"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:833
+msgid "Max"
+msgstr ""
+
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/clean.cpp:835
+#, fuzzy
+msgid "Segm"
+msgstr "Seg"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_graphic_items_options.cpp:192
 #, fuzzy
@@ -8149,12 +8151,12 @@ msgstr "Charger un module a partir d'une librairie"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:73
 #, fuzzy
-msgid "Load module from current BOARD"
+msgid "Load module from current board"
 msgstr "Charger module a partir du C.I."
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:77
 #, fuzzy
-msgid "Replace module in current BOARD"
+msgid "Update module in current board"
 msgstr "Remplacer module dans le C.I."
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:82
@@ -8178,7 +8180,7 @@ msgid "Print Module"
 msgstr "Imprimer Module"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:120
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/modedit.cpp:263
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/modedit.cpp:363
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarmodedit.cpp:45
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:205
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/globaleditpad.cpp:96
@@ -8197,25 +8199,25 @@ msgid "Add Pads"
 msgstr "Addition de \"pins\""
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:157
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:251
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:375
 #, fuzzy
 msgid "Add graphic circle"
 msgstr "Addition de graphiques (Cercle)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:161
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:255
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:379
 #, fuzzy
 msgid "Add graphic arc"
 msgstr "Addition de graphiques (Arc de Cercle)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:170
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/modedit.cpp:277
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/modedit.cpp:377
 #, fuzzy
 msgid "Place anchor"
 msgstr "Place Ancre"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:222
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:183
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:307
 #, fuzzy
 msgid "Show Pads Sketch"
 msgstr "Afficher pastilles en contour"
@@ -8246,7 +8248,7 @@ msgid "Grid %.3f"
 msgstr "Piste %.3f"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:294
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:403
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:527
 #, fuzzy
 msgid "User Grid"
 msgstr "Grille perso"
@@ -8722,7 +8724,7 @@ msgstr "Fin de fichier inattendue lors de l'analyse des ressources."
 msgid "GenCAD file:"
 msgstr "Файл GenCAD:"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/modedit.cpp:260
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/modedit.cpp:360
 #, fuzzy
 msgid "Add Pad"
 msgstr "Déplace Pad"
@@ -9003,14 +9005,8 @@ msgstr "Ajuster Grille utilisateur"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarmodedit.cpp:60
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:264
-msgid "Pcbnew &Help"
-msgstr "Помощь по Pcbnew &H"
-
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarmodedit.cpp:64
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:268
-#, fuzzy
-msgid "Pcbnew Infos"
-msgstr "Informations diverses"
+msgid "Open the pcbnew manual"
+msgstr "Открыть руководство pcbnew"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarmodedit.cpp:72
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:276
@@ -9215,7 +9211,7 @@ msgid "Save current board as.."
 msgstr "Sauver le Circuit Imprimé courant sous.."
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:93
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:107
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:228
 #, fuzzy
 msgid "Plot (Hplg, Postscript, or Gerber format)"
 msgstr "Tracer en format HPGL,  POSTSCRIPT ou GERBER"
@@ -9705,7 +9701,7 @@ msgstr "Форматирование ноды %s...\n"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/onrightclick.cpp:548
 #, fuzzy
-msgid "End Track"
+msgid "End Track (end)"
 msgstr "Terminer Pistes"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/onrightclick.cpp:549
@@ -9750,12 +9746,12 @@ msgstr "Editer TOUTES Pistes (pas les vias)"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/onrightclick.cpp:577
 #, fuzzy
-msgid "Delete Segment"
+msgid "Delete Segment (backspace)"
 msgstr "Effacer Segment"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/onrightclick.cpp:581
 #, fuzzy
-msgid "Delete Track"
+msgid "Delete Track (delete)"
 msgstr "Effacer Piste"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/onrightclick.cpp:583
@@ -10068,14 +10064,14 @@ msgstr "Change Perçage"
 msgid "Change Orient"
 msgstr "Orient pad:"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/plotps.cpp:333
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/plotps.cpp:336
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/affiche.cpp:311
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/affiche.cpp:372
 #, fuzzy
 msgid "Vias"
 msgstr "Vias"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/plotps.cpp:356
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/plotps.cpp:359
 #, fuzzy
 msgid "Tracks"
 msgstr "Pistes"
@@ -10155,6 +10151,11 @@ msgstr "Fichier <%s> non trouvé, Netliste utilisée pour selection modules en l
 msgid "Netlist Selection:"
 msgstr "Sélection de la netliste"
 
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:877
+#, fuzzy, c-format
+msgid "Component [%s]: footprint <%s> not found"
+msgstr "Компонент %s: Посадочное место %s не найдено в библиотеках"
+
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/editmod.cpp:137
 #, fuzzy
 msgid "Text is REFERENCE!"
@@ -10200,121 +10201,121 @@ msgstr "Editeur de Module: module modifié!  Continuer ?"
 msgid "Pcbnew is already running, Continue?"
 msgstr "Pcbnew est est cours d'exécution. Continuer ?"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/plotgerb.cpp:77
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/plotgerb.cpp:72
 #, fuzzy
 msgid "unable to create file "
 msgstr "Impossible de créer  fichier "
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/plotgerb.cpp:752
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/plotgerb.cpp:755
 #, fuzzy, c-format
 msgid "unable to reopen file <%s>"
 msgstr "Ne peut pas réouvrir fichier <%s>"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:252
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:253
 #, fuzzy
 msgid "Board modified, Save before exit ?"
 msgstr " Файл был изменен, сохранить при выходе? "
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:345
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:346
 #, fuzzy
-msgid "DCR Off (Disable !!!), Currently: DRC is active"
+msgid "DRC Off (Disable !!!), Currently: DRC is active"
 msgstr "DRC off (désactivée !!!), actuellement DRC active"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:345
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:346
 #, fuzzy
-msgid "DRC On (Currently: DRC is DISABLE !!!)"
+msgid "DRC On (Currently: DRC is inactive !!!)"
 msgstr "DRC On (Actuellement, DRC désactivée !!!)"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:355
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:356
 #, fuzzy
 msgid "Polar Coords not show"
 msgstr "Coord Polaires non affichées"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:355
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:356
 #, fuzzy
 msgid "Display Polar Coords"
 msgstr "Affichage coord Polaires"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:368
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:369
 #, fuzzy
 msgid "General ratsnest not show"
 msgstr "Chevelu général non affiché"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:368
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:369
 #, fuzzy
 msgid "Show General ratsnest"
 msgstr "Afficher le chevelu général"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:373
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:374
 #, fuzzy
 msgid "Module ratsnest not show"
 msgstr "Ne pas montrer le chevelu du module pendant déplacement"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:373
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:374
 #, fuzzy
 msgid "Show Module ratsnest"
 msgstr "Montrer le chevelu du module"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:378
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:379
 #, fuzzy
 msgid "Disable Auto Delete old Track"
 msgstr "Ne pas Autoriser l'effacement automatique des pistes"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:378
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:379
 #, fuzzy
 msgid "Enable Auto Delete old Track"
 msgstr "Autoriser l'effacement automatique des pistes"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:383
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:384
 #, fuzzy
 msgid "Do not Show Zones"
 msgstr "Ne pas monter Zones"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:383
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:178
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:384
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:302
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/set_color.cpp:387
 #, fuzzy
 msgid "Show Zones"
 msgstr "Monter Zones"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:388
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:389
 #, fuzzy
 msgid "Show Pads Sketch mode"
 msgstr "Afficher pastilles en contour"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:388
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:389
 #, fuzzy
 msgid "Show pads filled mode"
 msgstr "Afficher pastilles en mode plein"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:393
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:394
 #, fuzzy
 msgid "Show Tracks Sketch mode"
 msgstr "Afficher pistes en contour"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:393
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:394
 #, fuzzy
 msgid "Show Tracks filled mode"
 msgstr "Afficher pistes en mode plein"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:398
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:399
 #, fuzzy
 msgid "Normal Contrast Mode Display"
 msgstr "Mode d'affichage Contraste normal"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:398
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:191
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:399
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:315
 #, fuzzy
 msgid "Hight Contrast Mode Display"
 msgstr "Mode d'affichage Haut Contraste"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:409
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:410
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/affiche.cpp:136
 #, fuzzy
 msgid "Track"
 msgstr "Piste"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:432
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:433
 #, fuzzy
 msgid "Via"
 msgstr "Via %.1f"
@@ -10514,7 +10515,12 @@ msgstr "Pas de Net (non connecté)"
 msgid "Net Code"
 msgstr "Net Code"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/deltrack.cpp:147
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/hotkeys.cpp:222
+#, fuzzy
+msgid "Delete module?"
+msgstr "Effacement des Modules"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/deltrack.cpp:146
 msgid "Delete NET ?"
 msgstr "Удалить цепь ?"
 
@@ -10654,131 +10660,141 @@ msgstr "Пользовательский размер сетки X"
 msgid "User Grid Size Y"
 msgstr "Пользовательский размер сетки Y"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:83
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:204
 #, fuzzy
 msgid "New Board"
 msgstr "Nouveau Circuit Imprimé"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:84
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:205
 #, fuzzy
 msgid "Open existing Board"
 msgstr "Ouvrir C.I. existant"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:85
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:206
 #, fuzzy
 msgid "Save Board"
 msgstr "Sauver Circuit Imprimé"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:92
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:213
 #, fuzzy
 msgid "Open Module Editor"
 msgstr "Ouvrir Editeur de modules"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:106
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:227
 #, fuzzy
 msgid "Print Board"
 msgstr "Imprimer C.I."
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:120
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:241
 #, fuzzy
 msgid "Read Netlist"
 msgstr "Lire Netliste"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:121
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:242
 #, fuzzy
 msgid "Pcb Design Rules Check"
 msgstr "Controle des règles de conception"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:128
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:248
+msgid ""
+"Show active layer selections\n"
+"and select layer pair for route and place via"
+msgstr ""
+
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:252
 #, fuzzy
 msgid "Mode Module: Manual and Automatic Move or Place for modules"
 msgstr "Mode Module: Déplacements ou Placement Manuel ou Automatique des modules"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:130
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:254
 #, fuzzy
 msgid "Mode Track and Autorouting"
 msgstr "Mode Pistes and Autoroutage"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:152
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:276
 #, fuzzy
 msgid "Drc OFF"
 msgstr "Drc DESACTIVEE"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:167
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:291
 #, fuzzy
 msgid "Show General Ratsnest"
 msgstr "Monter le chevelu général"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:170
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:294
 #, fuzzy
 msgid "Show Module Ratsnest when moving"
 msgstr "Monter le chevelu du module pendant déplacement"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:174
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:298
 #, fuzzy
 msgid "Enable Auto Del Track"
 msgstr "Autoriser l'effacement automatique des pistes"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:187
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:311
 #, fuzzy
 msgid "Show Tracks Sketch"
 msgstr "Afficher pistes en contour"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:199
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:323
 msgid ""
 "Display auxiliary vertical toolbar (tools for micro wave applications)\n"
 " This is a very experimental feature (under development)"
 msgstr ""
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:225
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:349
 msgid "Net highlight"
 msgstr "Подсветка цепи"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:229
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:353
 msgid "Display local ratsnest (pad or module)"
 msgstr "Показать локальные связи ()"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:234
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:358
 msgid "Add modules"
 msgstr "Добавить модули"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:238
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:362
 msgid "Add Tracks an vias"
 msgstr "Добавить дорожки и переходные отверстия"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:278
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:402
 msgid "Offset adjust for drill and place files"
 msgstr ""
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:301
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:425
 msgid "Create line of specified length for microwave applications"
 msgstr ""
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:307
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:431
 msgid "Create gap of specified length for microwave applications"
 msgstr ""
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:315
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:439
 msgid "Create stub of specified length for microwave applications"
 msgstr ""
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:321
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:445
 msgid "Create stub (arc) of specified length for microwave applications"
 msgstr ""
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:327
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:451
 msgid "Create a polynomial shape for microwave applications"
 msgstr ""
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:377
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:501
 msgid "Zoom "
 msgstr "Масштаб "
 
-#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:390
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:514
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/set_color.cpp:378
 #: /home/buzzer/Projects/Programming/kicad-svn/gerbview/set_color.h:246
 msgid "Grid"
 msgstr "Сетка"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:576
+msgid "+/- to switch"
+msgstr "+/- для переключения"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/pcbpiste.cpp:62
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/swap_layers.cpp:60
@@ -10790,7 +10806,7 @@ msgstr "Обменять слои:"
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/swap_layers.cpp:76
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/swap_layers.cpp:129
 msgid "No Change"
-msgstr ""
+msgstr "Нет изменений"
 
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/editedge.cpp:158
 msgid "Copper layer global delete not allowed!"
@@ -11058,6 +11074,51 @@ msgstr ""
 msgid "Unable to drag this segment: two colinear segments"
 msgstr ""
 
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/win_eda_cleaningoptionsframe.cpp:138
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/win_eda_cleaningoptionsframe.cpp:162
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/cleaningoptions_dialog.cpp:146
+#, fuzzy
+msgid "Static"
+msgstr "Stat"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/win_eda_cleaningoptionsframe.cpp:142
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/cleaningoptions_dialog.cpp:150
+#, fuzzy
+msgid "Delete redundant vias"
+msgstr "Effacements d'éléments"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/win_eda_cleaningoptionsframe.cpp:146
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/cleaningoptions_dialog.cpp:154
+#, fuzzy
+msgid "Merge segments"
+msgstr "Число сегментов:"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/win_eda_cleaningoptionsframe.cpp:150
+#, fuzzy
+msgid "Delete 0 lenght segments"
+msgstr "Effacer Segment"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/win_eda_cleaningoptionsframe.cpp:154
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/cleaningoptions_dialog.cpp:158
+#, fuzzy
+msgid "Delete unconnected tracks"
+msgstr "Pistes auto efface"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/win_eda_cleaningoptionsframe.cpp:158
+#, fuzzy
+msgid "Connect to Pads"
+msgstr "Connect"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/win_eda_cleaningoptionsframe.cpp:166
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/cleaningoptions_dialog.cpp:169
+#, fuzzy
+msgid "Clean pcb"
+msgstr "Isolation"
+
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/cleaningoptions_dialog.cpp:162
+msgid "Connect stubs to Pads"
+msgstr ""
+
 #: /home/buzzer/Projects/Programming/kicad-svn/common/svg_print.h:45
 #: /home/buzzer/Projects/Programming/kicad-svn/share/svg_print.h:50
 msgid "Create SVG file"
@@ -11234,10 +11295,6 @@ msgstr "Графические свойства текста"
 msgid "EESchema Plot PS"
 msgstr "EESchema печать PS"
 
-#: /home/buzzer/Projects/Programming/kicad-svn/eeschema/xx.h:42
-msgid "xx"
-msgstr "xx"
-
 #: /home/buzzer/Projects/Programming/kicad-svn/eeschema/dialog_create_component.h:45
 msgid "Component Creation"
 msgstr "Создание компонента"
@@ -11332,4 +11389,10 @@ msgstr "Размеры дорожек и переходных отверстий
 #: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/dialog_netlist.h:40
 msgid "Netlist: "
 msgstr "Netlist: "
+
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/win_eda_cleaningoptionsframe.h:50
+#: /home/buzzer/Projects/Programming/kicad-svn/pcbnew/cleaningoptions_dialog.h:48
+#, fuzzy
+msgid "Cleaning options"
+msgstr "Параметры Окружности"
 
