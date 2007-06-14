@@ -52,25 +52,25 @@ void WinEDA3D_DrawFrame::ReCreateHToolbar(void)
 					_("auto zoom"));
 
 	m_HToolBar->AddSeparator();
-	m_HToolBar->AddTool(ID_ROTATE3D_X_POS, wxEmptyString, BITMAP(rotate_pos_X_xpm),
-					_("Rotate X ->") );
-
 	m_HToolBar->AddTool(ID_ROTATE3D_X_NEG, wxEmptyString, BITMAP(rotate_neg_X_xpm),
 					_("Rotate X <-") );
 
+	m_HToolBar->AddTool(ID_ROTATE3D_X_POS, wxEmptyString, BITMAP(rotate_pos_X_xpm),
+					_("Rotate X ->") );
+
 	m_HToolBar->AddSeparator();
-	m_HToolBar->AddTool(ID_ROTATE3D_Y_POS, wxEmptyString, BITMAP(rotate_pos_Y_xpm),
-					_("Rotate Y ->") );
 	m_HToolBar->AddTool(ID_ROTATE3D_Y_NEG, wxEmptyString, BITMAP(rotate_neg_Y_xpm),
 					_("Rotate Y <-") );
 
+	m_HToolBar->AddTool(ID_ROTATE3D_Y_POS, wxEmptyString, BITMAP(rotate_pos_Y_xpm),
+					_("Rotate Y ->") );
 
 	m_HToolBar->AddSeparator();
-	m_HToolBar->AddTool(ID_ROTATE3D_Z_POS, wxEmptyString, BITMAP(rotate_pos_Z_xpm),
-					_("Rotate Z ->") );
-
 	m_HToolBar->AddTool(ID_ROTATE3D_Z_NEG, wxEmptyString, BITMAP(rotate_neg_Z_xpm),
 					_("Rotate Z <-") );
+
+	m_HToolBar->AddTool(ID_ROTATE3D_Z_POS, wxEmptyString, BITMAP(rotate_pos_Z_xpm),
+					_("Rotate Z ->") );
 
 	m_HToolBar->AddSeparator();
 	m_HToolBar->AddTool(ID_MOVE3D_LEFT, wxEmptyString, BITMAP(left_xpm),

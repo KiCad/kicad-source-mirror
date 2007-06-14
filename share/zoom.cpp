@@ -343,8 +343,8 @@ grid_list_struct grid_list_schematic[] =
 
 
 	ADD_MENUITEM(MasterMenu, ID_POPUP_ZOOM_CENTER, _("Center"), zoom_center_xpm);
-	ADD_MENUITEM(MasterMenu, ID_POPUP_ZOOM_PLUS,  _("Zoom +"), zoom_out_xpm);
-	ADD_MENUITEM(MasterMenu, ID_POPUP_ZOOM_MOINS, _("Zoom -"), zoom_in_xpm);
+	ADD_MENUITEM(MasterMenu, ID_POPUP_ZOOM_PLUS,  _("Zoom +"), zoom_in_xpm);
+	ADD_MENUITEM(MasterMenu, ID_POPUP_ZOOM_MOINS, _("Zoom -"), zoom_out_xpm);
 
 wxMenu * zoom_choice = new wxMenu;
 	ADD_MENUITEM_WITH_SUBMENU(MasterMenu, zoom_choice,
@@ -439,7 +439,3 @@ int id = event.GetId();
 			break;
 		}
 }
-
-
-
-
