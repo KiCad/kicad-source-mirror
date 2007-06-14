@@ -23,16 +23,29 @@
 
 /* Routines locales : */
 #if 0
-static void raccord_track_a_centre(WinEDA_PcbFrame * frame);
+static void ConnectDanglingEndToPad(WinEDA_PcbFrame * frame);
 static void Gen_Raccord_Track(WinEDA_PcbFrame * frame, wxDC * DC);
 #endif
 static int clean_segments(WinEDA_PcbFrame * frame, wxDC * DC);
 static void suppression_piste_non_connectee(WinEDA_PcbFrame * frame, wxDC * DC);
 static TRACK * AlignSegment(BOARD * Pcb, TRACK * pt_ref, TRACK * pt_segm, int extremite);
+static void Clean_Pcb_Items(WinEDA_PcbFrame * frame, wxDC * DC );
 
 /* Variables locales : */
-static int a_color;	/* couleur du message */
+static bool a_color;	/* couleur du message */
+static bool s_CleanVias = true;
+static bool s_MergeSegments = true;
+static bool s_DeleteUnconnectedSegm = true;
+static bool s_ConnectToPads = false;
 
+#include "cleaningoptions_dialog.cpp"
+
+#define CONN2PAD_ENBL
+
+#ifdef CONN2PAD_ENBL
+static void ConnectDanglingEndToPad(WinEDA_PcbFrame * frame, wxDC * DC);
+static void Gen_Raccord_Track(WinEDA_PcbFrame * frame, wxDC * DC);
+#endif
 
 /*****************************************/
 void WinEDA_PcbFrame::Clean_Pcb(wxDC * DC)
@@ -41,37 +54,81 @@ void WinEDA_PcbFrame::Clean_Pcb(wxDC * DC)
 	Suppression des points inutiles
 		- via sur pad
 		- points de couche et coord identiques
-		- points align‚s (supp du pt milieu)
+		- points alignes (supp du pt milieu)
 */
 {
-	MsgPanel->EraseMsgBox();
-	m_Pcb->GetNumSegmTrack();	/* Met a jour le compte */
-	/* construction de la liste des coordonnées des pastilles */
-	m_Pcb->m_Status_Pcb = 0;
-	build_liste_pads();
-	recalcule_pad_net_code();
+	s_ConnectToPads = false;
+	WinEDA_CleaningOptionsFrame * frame = new WinEDA_CleaningOptionsFrame( this, DC );
+	frame->ShowModal(); frame->Destroy();
+	DrawPanel->Refresh(true);
 
-#if 0
-	if( Raccords_Auto) /* Creation de points de connexion */
+}
+
+/************************************************************/
+void Clean_Pcb_Items(WinEDA_PcbFrame * frame, wxDC * DC )
+/************************************************************/
+{
+	frame->MsgPanel->EraseMsgBox();
+	frame->m_Pcb->GetNumSegmTrack();	/* Met a jour le compte */
+	/* construction de la liste des coordonnées des pastilles */
+	frame->m_Pcb->m_Status_Pcb = 0;
+	frame->build_liste_pads();
+	frame->recalcule_pad_net_code();
+
+	if ( s_CleanVias ) /* delete redundant vias */
+	{
+		TRACK *track, *next_track;
+		for( track = frame->m_Pcb->m_Track; track != NULL; track = track->Next())
 		{
+			if( track->m_Shape != VIA_NORMALE ) continue;
+			/* Search and delete others vias at same location */
+			TRACK * alt_track = track->Next();
+			for( ; alt_track != NULL; alt_track = next_track )
+			{
+				next_track = alt_track->Next();
+				if( alt_track->m_Shape != VIA_NORMALE ) continue;
+				if ( alt_track->m_Start != track->m_Start ) continue;
+				/* delete via */
+				alt_track->UnLink();
+				delete alt_track;
+			}
+		}
+		/* Delete Via on pads at same location */
+		for( track = frame->m_Pcb->m_Track; track != NULL; track = next_track)
+		{
+			next_track = track->Next();
+			if( track->m_Shape != VIA_NORMALE ) continue;
+			D_PAD * pad = Fast_Locate_Pad_Connecte(frame->m_Pcb, track->m_Start, ALL_CU_LAYERS);
+			if (pad && (pad->m_Masque_Layer&EXTERNAL_LAYERS) == EXTERNAL_LAYERS)	// redundant Via 
+			{
+				/* delete via */
+				track->UnLink();
+				delete track;
+			}
+		}
+	}
+
+#ifdef CONN2PAD_ENBL
+	if( s_ConnectToPads ) /* Creation de points de connexion */
+	{
 		/* Raccordement des extremites de piste au centre des pastilles : */
-		raccord_track_a_centre(this);
+		ConnectDanglingEndToPad(frame, DC);
 
 		/* Creation de points de raccordements aux intersections de pistes */
-		Gen_Raccord_Track(this);
-		}
+//		Gen_Raccord_Track(frame, DC);
+	}
 #endif
 
 	/* suppression des segments de longueur nulle et des points intermediaires
 	 alignes */
-	clean_segments(this, DC);
+	if ( s_MergeSegments ) clean_segments(frame, DC);
 
 	/* suppression des pistes non connectees ( c.a.d dont 1 extremite est en l'air) */
-	suppression_piste_non_connectee(this, DC);
+	if ( s_DeleteUnconnectedSegm ) suppression_piste_non_connectee(frame, DC);
 
-	Compile_Ratsnest(DC, AFFICHE);
+	frame->Compile_Ratsnest(DC, AFFICHE);
 
-	m_CurrentScreen->SetModify();
+	frame->m_CurrentScreen->SetModify();
 }
 
 
@@ -527,15 +584,14 @@ int flag = 0;
 }
 
 
-	/**********************************************/
-	/* Netliste Controle: Controle des connexions */
-	/**********************************************/
+/***************************************************************************/
+int Netliste_Controle_piste(WinEDA_PcbFrame * frame, wxDC * DC, int affiche)
+/***************************************************************************/
 /*
 	verification des connexions.
 	Supprime les segments mal connectes, c.a.d. interconnectant des segments
 	de net_code differents
 */
-int Netliste_Controle_piste(WinEDA_PcbFrame * frame, wxDC * DC, int affiche)
 {
 TRACK  * PtSegm, * pt_aux;
 EDA_BaseStruct * NextS;
@@ -634,7 +690,7 @@ wxString msg;
 }
 
 
-#if 0
+#ifdef CONN2PAD_ENBL
 
 /***************************************************************/
 static void Gen_Raccord_Track(WinEDA_PcbFrame * frame, wxDC * DC)
@@ -661,20 +717,20 @@ wxString msg;
 
 	oldpercent = -1; ii = 0;
 	for( PtSegm = frame->m_Pcb->m_Track; PtSegm != NULL; PtSegm = (TRACK*) NextS)
-		{
+	{
 		NextS = PtSegm->Pnext;
 		/* affichage activite */
 		ii++;
 		percent = (100 * ii)/ frame->m_Pcb->m_NbSegmTrack;
 		if( percent != oldpercent)
-			{
+		{
 			frame->DisplayActivity(percent, wxT("Tracks: ") );
 			oldpercent = percent;
 			msg.Printf( wxT("%d"),frame->m_Pcb->m_NbSegmTrack );
 			Affiche_1_Parametre(frame,POS_AFF_MAX, wxT("Max"),msg,GREEN);
 			msg.Printf( wxT("%d"), ii);
 			Affiche_1_Parametre(frame,POS_AFF_NUMSEGM, wxT("Segm"),msg,CYAN);
-			}
+		}
 
 		if( frame->DrawPanel->m_AbortRequest ) return;
 
@@ -682,7 +738,7 @@ wxString msg;
 
 		/* examen du point de depart du segment de reference */
 		for(pt_aux = frame->m_Pcb->m_Track; ; pt_aux = (TRACK*) pt_aux->Pnext)
-			{
+		{
 			if (pt_aux == NULL) break;
 			pt_aux = Locate_Pistes(pt_aux, PtSegm->m_Start, masquelayer);
 			if (pt_aux == NULL) break;
@@ -706,11 +762,11 @@ wxString msg;
 			NewTrack->m_Start = PtSegm->m_Start;
 			Trace_Une_Piste(frame->DrawPanel, DC, pt_aux, 2, GR_OR);
 			pt_aux = NewTrack;
-			}
+		}
 
 		/* examen du point de fin du segment de reference */
 		for(pt_aux = frame->m_Pcb->m_Track; pt_aux != NULL; pt_aux = (TRACK*) pt_aux->Pnext)
-			{
+		{
 			pt_aux = Locate_Pistes(pt_aux, PtSegm->m_End, masquelayer);
 			if(pt_aux == NULL) break;
 			if(pt_aux == PtSegm) continue;
@@ -734,13 +790,13 @@ wxString msg;
 			NewTrack->m_Start.x = PtSegm->m_End.x; NewTrack->m_Start.y = PtSegm->m_End.y;
 			Trace_Une_Piste(frame->DrawPanel, DC, pt_aux,2,GR_OR);
 			pt_aux = NewTrack;
-			}
 		}
+	}
 }
 
-/*****************************************************/
-void raccord_track_a_centre(WinEDA_PcbFrame * frame)
-/****************************************************/
+/***************************************************************/
+void ConnectDanglingEndToPad(WinEDA_PcbFrame * frame, wxDC * DC)
+/**************************************************************/
 /*
  rajoute eventuellement un segment a une extremite de piste connectee
  a un pad si cette extremite n'est pas exactement connectee au centre
@@ -760,7 +816,7 @@ wxString msg;
 
 	frame->DrawPanel->m_AbortRequest = FALSE;
 
-	Affiche_1_Parametre(frame, POS_AFF_VAR, wxT("Centre"), wxT("0 "),a_color);
+	Affiche_1_Parametre(frame, POS_AFF_VAR, _("Centre"), _("0 "),a_color);
 
 	ii = 0;
 	for(PtSegm = frame->m_Pcb->m_Track; PtSegm != NULL; PtSegm = (TRACK*)NextS)
@@ -774,9 +830,9 @@ wxString msg;
 			frame->DisplayActivity(percent, _("Pads: "));
 			oldpercent = percent;
 			msg.Printf( wxT("%d"), frame->m_Pcb->m_NbSegmTrack );
-			Affiche_1_Parametre(frame, POS_AFF_MAX, wxT("Max"),msg,GREEN);
+			Affiche_1_Parametre(frame, POS_AFF_MAX, _("Max"),msg,GREEN);
 			msg.Printf( wxT("%d"), ii);
-			Affiche_1_Parametre(frame, POS_AFF_NUMSEGM, wxT("Segm"),msg,CYAN);
+			Affiche_1_Parametre(frame, POS_AFF_NUMSEGM, _("Segm"),msg,CYAN);
 
 			if( frame->DrawPanel->m_AbortRequest ) return;
 			}
@@ -784,19 +840,18 @@ wxString msg;
 		ptr_pad = Locate_Pad_Connecte(frame->m_Pcb, PtSegm,START);
 		if( ptr_pad != NULL )
 			{	/* Test si point piste non deja connecte a un autre segment */
-			if( (PtSegm->m_Start.x != ptr_pad->m_Pos.x) ||
-				(PtSegm->m_Start.y != ptr_pad->m_Pos.y) )
+			if( PtSegm->m_Start != ptr_pad->m_Pos )
 				{
 				if(Locate_Piste_Connectee(PtSegm,frame->m_Pcb->m_Track,
 											NULL, START) == NULL)
 					{
 					TRACK * NewTrack = PtSegm->Copy();
 					NewTrack->Insert(frame->m_Pcb, PtSegm);
-					NewTrack->m_End.x = ptr_pad->m_Pos.x;
-					NewTrack->m_End.y = ptr_pad->m_Pos.y;
+					NewTrack->m_End = ptr_pad->m_Pos;
 					NewTrack->start = PtSegm;
 					NewTrack->end = ptr_pad;
 					nb_new_piste++;
+					NewTrack->Draw(frame->DrawPanel, DC, GR_OR);
 
 					Affiche_1_Parametre(frame,POS_AFF_VAR,wxEmptyString,msg,a_color);
 					}
