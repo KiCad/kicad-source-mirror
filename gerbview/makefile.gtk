@@ -1,13 +1,10 @@
 ## Makefile for GERBVIEW et wxGTK
-CC = gcc
-LD = gcc
 
-# Compiler flags.
-CPPFLAGS =  -Wall -O2 `wx-config --cxxflags`
-
-LDFLAGS = -s
 
 include ../libs.linux
+
+# Additional compiler flags.
+CPPFLAGS +=
 
 
 TARGET = gerbview
@@ -34,5 +31,4 @@ clean:
 	rm -f *.map
 	rm -f $(TARGET)
 
-
-
+    

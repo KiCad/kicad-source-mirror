@@ -1,21 +1,14 @@
 # File:		makefile
 
-# Compiler flags.
-CC = gcc
-LD = gcc
-
 FINAL = 1
 
-# Compiler flags.
-
-CPPFLAGS = -Wall -O2 `wx-config --cxxflags`
-
-LDFLAGS =  -s
-
-EDACPPFLAGS = $(CPPFLAGS)
 
 include ../libs.linux
 
+# Compiler flags.
+CPPFLAGS +=
+
+EDACPPFLAGS = $(CPPFLAGS)
 
 TARGET = cvpcb
 

@@ -3,10 +3,30 @@
 KICAD_BIN = /usr/local/kicad
 KICAD_PLUGINS = $(KICAD_BIN)/plugins
 
+# http://www.gnu.org/software/autoconf/manual/make/Catalogue-of-Rules.html#Catalogue-of-Rules
+CXX = g++
+LD  = g++
+
 
 SRCSUFF = .cpp
 OBJSUFF = .o
 FINAL = 1
+
+
+# turn on debugging for all executables, only tested without KICAD_PYTHON
+DEBUG = 1
+
+
+# common CPPFLAGS to all components, further CPPFLAGS customization in 
+# directory specific makefile.gtk files.
+ifdef DEBUG
+CPPFLAGS = -Wall -g `wx-config --debug --cxxflags` -fno-strict-aliasing
+LDFLAGS = -g #-v
+else
+CPPFLAGS = -Wall -O2 `wx-config --cxxflags` -fno-strict-aliasing
+LDFLAGS = -s #-v
+endif
+
 
 # You must comment or uncomment this line to disable/enable python support
 #KICAD_PYTHON = 1
@@ -19,7 +39,7 @@ FINAL = 1
 #endif
 
 ifdef KICAD_PYTHON
-PYTHON_VERSION=2.3
+PYTHON_VERSION=2.5
 PYLIBS= -L/usr/lib
 PYLIBS+= -L /usr/include/python
 PYLIBS+= -lpython$(PYTHON_VERSION)
@@ -79,9 +99,17 @@ WXSYSLIB_WITH_GL= $(WXPATH)/$(PREFIX_WX_LIBS)-$(LIBVERSION).a \
         -lglib-2.0 -lpangoft2-1.0 -lSM\
        -L/usr/lib $(PYLIBS)
 else
-#or use "standard command" for wxWidgets
+
+ifdef DEBUG
+# debug wxWidgets
+WXSYSLIB= `wx-config --debug --libs std`
+WXSYSLIB_WITH_GL= `wx-config --debug --libs std,gl`
+else
+# or use "standard command" for wxWidgets
 WXSYSLIB= `wx-config --libs std`
 WXSYSLIB_WITH_GL= `wx-config --libs std,gl`
+endif
+
 endif
 
 

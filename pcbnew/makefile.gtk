@@ -1,18 +1,11 @@
 ## Makefile for PCBNEW et wxGTK
-CC = gcc
-LD = gcc
-#DEBUG = 1
 
-# Compiler flags.
-ifdef DEBUG
-CPPFLAGS = -Wall -g `wx-config --cxxflags`
-LDFLAGS = -g
-else
-CPPFLAGS = -Wall -O2 `wx-config --cxxflags`
-LDFLAGS = -s 
-endif
 
 include ../libs.linux
+
+# Additional compiler flags
+CPPFLAGS +=
+
 
 TARGET = pcbnew
 
@@ -22,7 +15,6 @@ include makefile.include
 
 CPPFLAGS += $(EXTRACPPFLAGS)
 EDACPPFLAGS = $(CPPFLAGS)
-
 
 
 $(TARGET): $(OBJECTS) makefile.gtk  makefile.include $(LIBVIEWER3D) $(EXTRALIBS) ../libs.linux

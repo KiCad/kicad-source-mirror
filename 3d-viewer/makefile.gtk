@@ -1,13 +1,9 @@
 ## Makefile for 3d-viewer.a ( wxGTK - LINUX )
-CC = gcc
-
-# Compiler flags.
-
-CPPFLAGS =  -Wall -O2 -DPCBNEW  -I../pcbnew -I ../include -I../common\
-	  `wx-config --cxxflags` -fno-strict-aliasing
-
 
 include ../libs.linux
+
+# Compiler flags.
+CPPFLAGS += -DPCBNEW -I../pcbnew -I ../include -I../common
 
 TARGET = 3d-viewer
 

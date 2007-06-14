@@ -1,19 +1,14 @@
 ## Makefile for eeschema
-CC = gcc
-#LD = c++ pour utiliser libstdc++ dynamique
-LD = gcc
 
-FINAL = 1
-
-
-LDFLAGS =  -s
 
 include ../libs.linux
 
+
+# Additional compiler flags
+CPPFLAGS +=
+
 TARGET = eeschema
 
-
-CPPFLAGS = -Wall -O2 `wx-config --cxxflags`
 
 
 all: $(TARGET)

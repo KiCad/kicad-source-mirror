@@ -1,14 +1,15 @@
 ## Makefile for common.a
 CC = gcc
 
+
+include ../libs.linux
+
 # Compiler flags.
-CPPFLAGS =  -Wall -O2 -I./ -I../include `wx-config --cflags`
+CPPFLAGS +=  -I./ -I../include
 
 EDACPPFLAGS = $(CPPFLAGS)
 
 all: common.a
-
-include ../libs.linux
 
 include makefile.include
 
