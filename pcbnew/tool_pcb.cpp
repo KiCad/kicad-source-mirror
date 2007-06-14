@@ -160,10 +160,19 @@ wxMemoryDC iconDC;
 	in order to delete the MemoryDC safely without deleting the bitmap */
 	iconDC.SelectObject( wxNullBitmap );
 	
-	if ( ! m_HToolBar ) return;
-	{
+	if (m_HToolBar) {
+#if wxCHECK_VERSION(2,8,3)
 		m_HToolBar->SetToolNormalBitmap(ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, *LayerPairBitmap);
+#else
+		int pos = m_HToolBar->GetToolPos(ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR);
+		m_HToolBar->DeleteTool(ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR);
+		m_HToolBar->InsertTool(pos, ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, *LayerPairBitmap,
+			wxNullBitmap, false, NULL,
+			_("Show active layer selections\nand select layer pair for route and place via"));
+		m_HToolBar->Realize();
+#endif
 	}
+
 }
 
 
