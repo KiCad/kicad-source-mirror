@@ -19,7 +19,7 @@ DEBUG = 1
 
 # common CPPFLAGS to all components, further CPPFLAGS customization in 
 # directory specific makefile.gtk files.
-ifdef DEBUG
+ifeq ($(DEBUG), 1)
 CPPFLAGS = -Wall -g `wx-config --debug --cxxflags` -fno-strict-aliasing
 LDFLAGS = -g #-v
 else
@@ -100,7 +100,7 @@ WXSYSLIB_WITH_GL= $(WXPATH)/$(PREFIX_WX_LIBS)-$(LIBVERSION).a \
        -L/usr/lib $(PYLIBS)
 else
 
-ifdef DEBUG
+ifeq ($(DEBUG), 1)
 # debug wxWidgets
 WXSYSLIB= `wx-config --debug --libs std`
 WXSYSLIB_WITH_GL= `wx-config --debug --libs std,gl`
