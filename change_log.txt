@@ -4,6 +4,22 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+
+2007-June-15 UPDATE   Dick Hollenbeck <dickelbeck@yahoo.com>
+================================================================================
++ pcbnew
+    **  only modules on the present layer are subject to individual module
+        moves, rotations, or layer swaps, with the 'M', 'G', 'R' or 'S' hotkeys.
+    **  only unlocked modules are subject to the individual module moves,
+        rotations, or layer swaps, with the 'M', 'G', 'R' or 'S' hotkeys.
+    **  implemented the 'L' hotkey to quickly lock or unlock a module,
+        just by hovering over it and hitting the 'L' or 'l' key. The lock is
+        toggled.
+    **  Enhanced locate.cpp's Locate_Prefered_Module(BOARD * Pcb, int typeloc)
+        significantly, it now has a widely ranging behavior based on the 
+        typeloc argument.
+    
+
 2007-June-14 UPDATE Igor Plyatov <plyatov@mail.ru>
 ================================================================================
 + eeschema
