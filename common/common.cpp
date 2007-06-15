@@ -259,35 +259,21 @@ wxString layer_name_list_for_filename[] = {
 	};
 	if ( layer_number >= 31 ) layer_number = 31;
 
-#if 0	// Use it (#if 1) to return layer_name internationalized, without space
-	if ( is_filename )
-	{
-		int ll = layer_name_list[layer_number].Length();
-		int ii;
-		for ( ii = 0; ii < ll; ii++ )
-		{
-			char cc = layer_name_list[layer_number].GetChar(ii);
-			if ( cc != ' ' )
-				layer_name += cc;
-		}
-	}
-#else
 	if ( is_filename ) layer_name = layer_name_list_for_filename[layer_number];
-#endif
 	else layer_name = layer_name_list[layer_number];
 	
 	if( is_gui ){
 		wxString hotkey_list[] = {
 			wxT("(PgDn)"), wxT("(F5)"), wxT("(F6)"), wxT("(F7)"), 
-			wxT("(F8)"), wxT(" "), wxT(" "), wxT(" "), 
+			wxT("(F8)"), wxT("(F9)"), wxT("(F10)"), wxT(" "), 
 			wxT(" "), wxT(" "), wxT(" "), wxT(" "), 
-			wxT(" "), wxT(" "), wxT(" "), wxT("(PgUp)"), 
+			wxT(" "), wxT(" "), wxT(" "), wxT(" (PgUp)"), 
 			wxT(" "), wxT(" "), wxT(" "), wxT(" "),
 			wxT(" "), wxT(" "), wxT(" "), wxT(" "), 
 			wxT(" "), wxT(" "), wxT(" "), wxT(" "), 
 			wxT(" "), wxT(" "), wxT(" "), wxT(" ")
 		};
-		layer_name += hotkey_list[layer_number]; 
+		layer_name += wxT(" ") + hotkey_list[layer_number]; 
 	}
 	
 	return layer_name;

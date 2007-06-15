@@ -74,7 +74,7 @@ MODULE* module = NULL;
 			DrawPanel->MouseToCursorSchema();
 			End_Route( (TRACK *) (GetScreen()->m_CurrentItem), DC);
 			break;
-		case 'v':	// Rotation
+		case 'v':	// Switch to alternate layer and Place a via if a track is in progress
 		case 'V':
 			if ( m_ID_current_state != ID_TRACK_BUTT ) return;
 			if ( ItemFree )

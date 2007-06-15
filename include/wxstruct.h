@@ -479,7 +479,7 @@ public:
 	// Gestion des layers:
 	int SelectLayer(int default_layer, int min_layer, int max_layer);
 	void SelectLayerPair(void);
-	void SwitchLayer(wxDC *DC, int layer);
+	virtual void SwitchLayer(wxDC *DC, int layer);
 
 	// divers
 	void AddHistory(int value, DrawStructureType type);	// Add value in data list history

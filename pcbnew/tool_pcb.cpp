@@ -46,6 +46,7 @@
 #include "general_ratsnet.xpm"
 #include "add_cotation.xpm"
 
+#define SEL_LAYER_HELP _("Show active layer selections\nand select layer pair for route and place via")
 
 /* Data to build the layer pair indicator button */
 static wxBitmap * LayerPairBitmap = NULL;
@@ -167,8 +168,7 @@ wxMemoryDC iconDC;
 		int pos = m_HToolBar->GetToolPos(ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR);
 		m_HToolBar->DeleteTool(ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR);
 		m_HToolBar->InsertTool(pos, ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, *LayerPairBitmap,
-			wxNullBitmap, false, NULL,
-			_("Show active layer selections\nand select layer pair for route and place via"));
+			wxNullBitmap, false, NULL, SEL_LAYER_HELP);
 		m_HToolBar->Realize();
 #endif
 	}
@@ -254,7 +254,7 @@ int ii;
     ReCreateLayerBox(m_HToolBar);
 	PrepareLayerIndicator();	// Initialise the bitmap with current active layer colors for the next tool
 	m_HToolBar->AddTool(ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, wxEmptyString, * LayerPairBitmap,
-			_("Show active layer selections\nand select layer pair for route and place via"));
+			SEL_LAYER_HELP);
 
 	m_HToolBar->AddSeparator();
 	m_HToolBar->AddTool(ID_TOOLBARH_PCB_AUTOPLACE, wxEmptyString, BITMAP(mode_module_xpm),

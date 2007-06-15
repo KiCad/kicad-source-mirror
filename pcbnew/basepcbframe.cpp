@@ -122,3 +122,26 @@ void WinEDA_BasePcbFrame::GetComponentFromRedoList(void)
 {
 }
 
+
+/****************************************************************/
+void WinEDA_BasePcbFrame::SwitchLayer(wxDC *DC, int layer)
+/*****************************************************************/
+{
+	//Note: virtual, overridden in WinEDA_PcbFrame;
+	int preslayer = GetScreen()->m_Active_Layer; 
+	//if there is only one layer, don't switch. 
+	if ( m_Pcb->m_BoardSettings->m_CopperLayerCount <= 1)
+		layer = LAYER_CUIVRE_N;	// Of course we select the copper layer
+	//otherwise, we select the requested layer only if it is possible
+	if( layer != LAYER_CMP_N && layer >= m_Pcb->m_BoardSettings->m_CopperLayerCount-1 )
+		return;
+	if(preslayer == layer)
+		return; 
+	
+	GetScreen()->m_Active_Layer = layer; 
+	
+	if ( DisplayOpt.ContrastModeDisplay )
+		GetScreen()->SetRefreshReq();
+}
+
+

@@ -264,6 +264,14 @@ int CurrentTime = time(NULL);
 			SwitchLayer(DC, LAYER_N_5); 
 			break;
 			
+		case WXK_F9 :
+			SwitchLayer(DC, LAYER_N_6); 
+			break;
+			
+		case WXK_F10 :
+			SwitchLayer(DC, LAYER_N_7); 
+			break;
+			
 		case WXK_NUMPAD8  :	/* Deplacement curseur vers le haut */
 		case WXK_UP	:
 			Mouse.y -= delta.y;
@@ -361,25 +369,3 @@ int CurrentTime = time(NULL);
 		OnHotKey(DC, hotkey, NULL);
 	}
 }
-
-/****************************************************************/
-void WinEDA_BasePcbFrame::SwitchLayer(wxDC *DC, int layer)
-/*****************************************************************/
-{
-	//Note: overridden in WinEDA_PcbFrame;
-	int preslayer = GetScreen()->m_Active_Layer; 
-	//if there is only one layer, don't switch. 
-	if ( m_Pcb->m_BoardSettings->m_CopperLayerCount <= 1)
-		layer = LAYER_CUIVRE_N;	// Of course we select the copper layer
-	//otherwise, we select the requested layer only if it is possible
-	if( layer != LAYER_CMP_N && layer >= m_Pcb->m_BoardSettings->m_CopperLayerCount-1 )
-		return;
-	if(preslayer == layer)
-		return; 
-	
-	GetScreen()->m_Active_Layer = layer; 
-	
-	if ( DisplayOpt.ContrastModeDisplay )
-		GetScreen()->SetRefreshReq();
-}
-
