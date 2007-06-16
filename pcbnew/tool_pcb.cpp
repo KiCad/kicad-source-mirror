@@ -166,10 +166,12 @@ wxMemoryDC iconDC;
 		m_HToolBar->SetToolNormalBitmap(ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, *LayerPairBitmap);
 #else
 		int pos = m_HToolBar->GetToolPos(ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR);
-		m_HToolBar->DeleteTool(ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR);
-		m_HToolBar->InsertTool(pos, ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, *LayerPairBitmap,
-			wxNullBitmap, false, NULL, SEL_LAYER_HELP);
-		m_HToolBar->Realize();
+		if (pos != wxNOT_FOUND) {
+			m_HToolBar->DeleteTool(ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR);
+			m_HToolBar->InsertTool(pos, ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, *LayerPairBitmap,
+				wxNullBitmap, false, NULL, SEL_LAYER_HELP);
+			m_HToolBar->Realize();
+		}
 #endif
 	}
 
