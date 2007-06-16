@@ -38,9 +38,11 @@ static wxString s_HelpPathList[] = {
 	wxT("c:/kicad/help/"),
 	wxT("d:/kicad/help/"),
 #else
+	wxT("/usr/share/doc/kicad/"),
+	wxT("/usr/local/share/doc/kicad/"),
+	wxT("/usr/local/kicad/share/doc/kicad/"),
 	wxT("/usr/local/kicad/help/"),
 	wxT("/usr/share/doc/kicad/help"),
-	wxT("/usr/share/doc/kicad/"),
 #endif
 	wxT("end_list")	// End of list symbol, do not change
 };
@@ -51,8 +53,10 @@ static wxString s_KicadDataPathList[] = {
 	wxT("c:/kicad/"),
 	wxT("d:/kicad/"),
 #else
-	wxT("/usr/local/kicad/"),
 	wxT("/usr/share/kicad/"),
+	wxT("/usr/local/share/kicad/"),
+	wxT("/usr/local/kicad/share/kicad/"),
+	wxT("/usr/local/kicad/"),
 #endif
 	wxT("end_list")	// End of list symbol, do not change
 };
@@ -63,9 +67,10 @@ static wxString s_KicadBinaryPathList[] = {
 	wxT("c:/kicad/winexe/"),
 	wxT("d:/kicad/winexe/"),
 #else
-	wxT("/usr/local/kicad/linux/"),
-	wxT("/usr/local/bin/"),
 	wxT("/usr/bin/"),
+	wxT("/usr/local/bin/"),
+	wxT("/usr/local/kicad/bin/"),
+	wxT("/usr/local/kicad/linux/"),
 #endif
 	wxT("end_list")	// End of list symbol, do not change
 };

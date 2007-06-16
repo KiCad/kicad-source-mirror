@@ -1,7 +1,23 @@
+#
+# Configuration for kicad build & install
+#
 
-#Configuration for build kicad
-KICAD_BIN = /usr/local/kicad
-KICAD_PLUGINS = $(KICAD_BIN)/plugins
+# Locations for install targets. All can be overriden on the make command.
+# Normally you'd only expect to override the PREFIX if you want to install to
+# a non standard install dir (or a temp location for packaging).
+# For packaging you can override and install anywhere, but to run from a
+# non-standard location edit common/gestfich.ccp so it knows where to
+# load help/data/etc. files from.
+# Current supported PREFIXes are /usr, /usr/local & /usr/local/kicad
+PREFIX = /usr
+KICAD_BIN = $(PREFIX)/bin
+KICAD_PLUGINS = $(PREFIX)/lib/kicad/plugins
+KICAD_DOCS=$(PREFIX)/share/doc/kicad
+KICAD_DATA=$(PREFIX)/share/kicad
+KICAD_MODULES=$(KICAD_DATA)/modules
+KICAD_LIBRARY=$(KICAD_DATA)/library
+KICAD_INTERNAT=$(KICAD_DATA)/internat
+KICAD_TEMPLATE=$(KICAD_DATA)/template
 
 # http://www.gnu.org/software/autoconf/manual/make/Catalogue-of-Rules.html#Catalogue-of-Rules
 CXX = g++
