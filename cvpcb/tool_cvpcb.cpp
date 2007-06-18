@@ -164,7 +164,7 @@ wxMenuBar * menuBar = GetMenuBar();
 	    item->SetBitmap(info_xpm);
 		helpMenu->Append(item);
 
-		menuBar->Append(m_FilesMenu, _("&Files"));
+		menuBar->Append(m_FilesMenu, _("&File"));
 		menuBar->Append(configmenu, _("&Preferences"));
 		menuBar->Append(helpMenu, _("&Help"));
 		}

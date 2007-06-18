@@ -163,15 +163,15 @@ void KiConfigCvpcbFrame::CreateControls()
     wxBoxSizer* itemBoxSizer13 = new wxBoxSizer(wxHORIZONTAL);
     itemBoxSizer12->Add(itemBoxSizer13, 0, wxALIGN_CENTER_HORIZONTAL, 5);
 
-    wxButton* itemButton14 = new wxButton( itemDialog1, DEL_LIB, _("Del"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton* itemButton14 = new wxButton( itemDialog1, DEL_LIB, _("Delete"), wxDefaultPosition, wxDefaultSize, 0 );
     itemButton14->SetForegroundColour(wxColour(191, 0, 0));
     itemBoxSizer13->Add(itemButton14, 0, wxGROW|wxLEFT|wxTOP|wxBOTTOM, 5);
 
-    wxButton* itemButton15 = new wxButton( itemDialog1, ADD_LIB, _("Add"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton* itemButton15 = new wxButton( itemDialog1, ADD_LIB, _("Add below"), wxDefaultPosition, wxDefaultSize, 0 );
     itemButton15->SetForegroundColour(wxColour(0, 128, 0));
     itemBoxSizer13->Add(itemButton15, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5);
 
-    wxButton* itemButton16 = new wxButton( itemDialog1, INSERT_LIB, _("Ins"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton* itemButton16 = new wxButton( itemDialog1, INSERT_LIB, _("Add above"), wxDefaultPosition, wxDefaultSize, 0 );
     itemButton16->SetForegroundColour(wxColour(0, 0, 255));
     itemBoxSizer13->Add(itemButton16, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP|wxBOTTOM, 5);
 
@@ -195,15 +195,15 @@ void KiConfigCvpcbFrame::CreateControls()
     wxBoxSizer* itemBoxSizer22 = new wxBoxSizer(wxHORIZONTAL);
     itemBoxSizer21->Add(itemBoxSizer22, 0, wxALIGN_CENTER_HORIZONTAL, 5);
 
-    wxButton* itemButton23 = new wxButton( itemDialog1, DEL_EQU, _("Del"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton* itemButton23 = new wxButton( itemDialog1, DEL_EQU, _("Delete"), wxDefaultPosition, wxDefaultSize, 0 );
     itemButton23->SetForegroundColour(wxColour(196, 0, 0));
     itemBoxSizer22->Add(itemButton23, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxBOTTOM, 5);
 
-    wxButton* itemButton24 = new wxButton( itemDialog1, ADD_EQU, _("Add"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton* itemButton24 = new wxButton( itemDialog1, ADD_EQU, _("Add below"), wxDefaultPosition, wxDefaultSize, 0 );
     itemButton24->SetForegroundColour(wxColour(0, 128, 0));
     itemBoxSizer22->Add(itemButton24, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5);
 
-    wxButton* itemButton25 = new wxButton( itemDialog1, INSERT_EQU, _("Ins"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton* itemButton25 = new wxButton( itemDialog1, INSERT_EQU, _("Add above"), wxDefaultPosition, wxDefaultSize, 0 );
     itemButton25->SetForegroundColour(wxColour(0, 0, 255));
     itemBoxSizer22->Add(itemButton25, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP|wxBOTTOM, 5);
 

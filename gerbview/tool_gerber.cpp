@@ -139,7 +139,7 @@ wxMenuBar * menuBar = GetMenuBar();
 		helpMenu->Append(ID_GENERAL_HELP, _("&Contents"), _("Open the gerbview manual") );
 		helpMenu->Append(ID_KICAD_ABOUT, _("&About"), _("About this application") );
 
-		menuBar->Append(m_FilesMenu, _("&Files"));
+		menuBar->Append(m_FilesMenu, _("&File"));
 		menuBar->Append(configmenu, _("&Preferences"));
 		menuBar->Append(miscellaneous_menu, _("&Miscellaneous"));
 //		menuBar->Append(drill_menu, _("&Drill"));

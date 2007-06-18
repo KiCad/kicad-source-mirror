@@ -687,7 +687,7 @@ bool error = FALSE;
 
 	if ( ! InitialiseDragParameters() )
 	{
-		DisplayError( this, _("Unable to drag this segment: two colinear segments") );
+		DisplayError( this, _("Unable to drag this segment: two collinear segments") );
 		DrawPanel->ManageCurseur = NULL;
 		Abort_MoveTrack(DrawPanel, DC);
 		return;

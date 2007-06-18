@@ -159,7 +159,7 @@ wxMenuBar * menuBar = GetMenuBar();
 		helpMenu->Append(item);
 
 
-		menuBar->Append(m_FilesMenu, _("&Files") );
+		menuBar->Append(m_FilesMenu, _("&File") );
 		menuBar->Append(configmenu, _("&Preferences") );
 		menuBar->Append(helpMenu, _("&Help") );
 

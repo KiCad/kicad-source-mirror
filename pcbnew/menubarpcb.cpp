@@ -277,7 +277,7 @@ wxMenuBar * menuBar = GetMenuBar();
 	    item->SetBitmap(show_3d_xpm);
 		Display3DMenu->Append(item);
 
-		menuBar->Append(m_FilesMenu, _("&Files"));
+		menuBar->Append(m_FilesMenu, _("&File"));
 		menuBar->Append(configmenu, _("&Preferences"));
 		menuBar->Append(sizes_menu, _("&Dimensions"));
 		menuBar->Append(miscellaneous_menu, _("&Miscellaneous"));
