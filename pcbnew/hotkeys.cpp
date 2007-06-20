@@ -144,8 +144,8 @@ sous le courseur souris
         if( module )
         {
             GetScreen()->m_CurrentItem = module;
-            module->Display_Infos(this);
             module->SetLocked( !module->IsLocked() );
+            module->Display_Infos(this);
         }
         break;
         
