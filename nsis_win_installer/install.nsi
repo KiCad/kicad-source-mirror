@@ -17,7 +17,7 @@
 
 ; General Product Description Definitions
 !define PRODUCT_NAME "KiCad"
-!define PRODUCT_VERSION "2006.09.17"
+!define PRODUCT_VERSION "2007.05.25"
 !define PRODUCT_WEB_SITE "http://www.lis.inpg.fr/realise_au_lis/kicad/"
 !define COMPANY_NAME ""
 !define TRADE_MARKS ""
@@ -74,9 +74,11 @@ ShowUnInstDetails hide
 ; - This must be after all page macros have been inserted
 !insertmacro MUI_LANGUAGE "English" ;first language is the default language
 !insertmacro MUI_LANGUAGE "French"
+!insertmacro MUI_LANGUAGE "Polish"
 
 !include "English.nsh"
 !include "French.nsh"
+!include "Polish.nsh"
 
 ; MUI end ------
 
