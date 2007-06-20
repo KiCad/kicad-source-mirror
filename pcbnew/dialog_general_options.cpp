@@ -210,8 +210,6 @@ wxString timevalue;
 
 bool WinEDA_PcbGeneralOptionsFrame::Create( wxWindow* parent, wxWindowID id, const wxString& caption, const wxPoint& pos, const wxSize& size, long style )
 {
-	SetFont(*g_DialogFont);
-    
 ////@begin WinEDA_PcbGeneralOptionsFrame member initialisation
     m_PolarDisplay = NULL;
     m_BoxUnits = NULL;

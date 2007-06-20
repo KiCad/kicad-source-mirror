@@ -139,8 +139,8 @@ int StartCount;
 		if( FindMarker ) msg = _("Marker not found");
 		else msg.Printf( _("<%s> Not Found"), s_OldStringFound.GetData());
 		DisplayError(this,msg, 10);
+        EndModal(0);
 	}
-	EndModal(0);
 }
 
 
