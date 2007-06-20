@@ -1,8 +1,8 @@
-	/***************************************************/
-	/* PCBNEW - Gestion des Recherches (fonction Find) */
-	/***************************************************/
+    /***************************************************/
+    /* PCBNEW - Gestion des Recherches (fonction Find) */
+    /***************************************************/
 
-	/*	 Fichier find.cpp 	*/
+    /*   Fichier find.cpp   */
 
 /*
  Affichage et modifications des parametres de travail de PcbNew
@@ -33,8 +33,8 @@ static int s_ItemCount, s_MarkerCount;
 void WinEDA_PcbFrame::InstallFindFrame(const wxPoint & pos, wxDC * DC)
 /*********************************************************************/
 {
-	WinEDA_PcbFindFrame * frame = new WinEDA_PcbFindFrame(this, DC, pos);
-	frame->ShowModal(); frame->Destroy();
+    WinEDA_PcbFindFrame * frame = new WinEDA_PcbFindFrame(this, DC, pos);
+    frame->ShowModal(); frame->Destroy();
 }
 
 
@@ -50,97 +50,97 @@ bool succes = FALSE;
 bool FindMarker = FALSE;
 MODULE * Module;
 int StartCount;
-	
-	switch ( event.GetId() )
-	{
-		case ID_FIND_ITEM:
-			s_ItemCount = 0;
-			break;
-		
-		case ID_FIND_MARKER: s_MarkerCount = 0;
-		case ID_FIND_NEXT_MARKER:
-			FindMarker = TRUE;
-			break;
-	}
+    
+    switch ( event.GetId() )
+    {
+        case ID_FIND_ITEM:
+            s_ItemCount = 0;
+            break;
+        
+        case ID_FIND_MARKER: s_MarkerCount = 0;
+        case ID_FIND_NEXT_MARKER:
+            FindMarker = TRUE;
+            break;
+    }
 
-	s_OldStringFound = m_NewText->GetValue();
+    s_OldStringFound = m_NewText->GetValue();
 
-	m_Parent->DrawPanel->GetViewStart(&screen->m_StartVisu.x, &screen->m_StartVisu.y);
-	StartCount = 0;
-	
-	if( FindMarker )
-	{
-	MARQUEUR * Marker = (MARQUEUR *) m_Parent->m_Pcb->m_Drawings; 
-		for( ; Marker != NULL; Marker = (MARQUEUR *)Marker->Pnext)
-		{
-			if( Marker->m_StructType != TYPEMARQUEUR ) continue;
-			StartCount++;
-			if ( StartCount > s_MarkerCount )
-			{
-				succes = TRUE;
-				locate_pos = Marker->m_Pos;
-				s_MarkerCount++;
-				break;
-			}
-		}
-	}
-	
-	else for ( Module = m_Parent->m_Pcb->m_Modules; Module != NULL; Module = (MODULE*)Module->Pnext)
-	{
-		if( WildCompareString( s_OldStringFound, Module->m_Reference->m_Text.GetData(), FALSE ) )
-		{
-			StartCount++;
-			if ( StartCount > s_ItemCount )
-			{
-				succes = TRUE;
-				locate_pos = Module->m_Pos;
-				s_ItemCount++;
-				break;
-			}
-		}
-		if( WildCompareString( s_OldStringFound, Module->m_Value->m_Text.GetData(), FALSE ) )
-		{
-			StartCount++;
-			if ( StartCount > s_ItemCount )
-			{
-				succes = TRUE;
-				locate_pos = Module->m_Pos;
-				s_ItemCount++;
-				break;
-			}
-		}
-	}
-	
-	if ( succes )
-	{	/* Il y a peut-etre necessite de recadrer le dessin: */		
-		if( ! m_Parent->DrawPanel->IsPointOnDisplay(locate_pos) )
-		{
-			screen->m_Curseur = locate_pos;
-			m_Parent->Recadre_Trace(TRUE);
-		}
-		else
-		{	// Positionnement du curseur sur l'item
-			m_Parent->DrawPanel->CursorOff(m_DC);
-			screen->m_Curseur = locate_pos;
-			GRMouseWarp(m_Parent->DrawPanel, screen->m_Curseur );
-			m_Parent->DrawPanel->MouseToCursorSchema();
-			m_Parent->DrawPanel->CursorOn(m_DC);
-		}
+    m_Parent->DrawPanel->GetViewStart(&screen->m_StartVisu.x, &screen->m_StartVisu.y);
+    StartCount = 0;
+    
+    if( FindMarker )
+    {
+    MARQUEUR * Marker = (MARQUEUR *) m_Parent->m_Pcb->m_Drawings; 
+        for( ; Marker != NULL; Marker = (MARQUEUR *)Marker->Pnext)
+        {
+            if( Marker->m_StructType != TYPEMARQUEUR ) continue;
+            StartCount++;
+            if ( StartCount > s_MarkerCount )
+            {
+                succes = TRUE;
+                locate_pos = Marker->m_Pos;
+                s_MarkerCount++;
+                break;
+            }
+        }
+    }
+    
+    else for ( Module = m_Parent->m_Pcb->m_Modules; Module != NULL; Module = (MODULE*)Module->Pnext)
+    {
+        if( WildCompareString( s_OldStringFound, Module->m_Reference->m_Text.GetData(), FALSE ) )
+        {
+            StartCount++;
+            if ( StartCount > s_ItemCount )
+            {
+                succes = TRUE;
+                locate_pos = Module->m_Pos;
+                s_ItemCount++;
+                break;
+            }
+        }
+        if( WildCompareString( s_OldStringFound, Module->m_Value->m_Text.GetData(), FALSE ) )
+        {
+            StartCount++;
+            if ( StartCount > s_ItemCount )
+            {
+                succes = TRUE;
+                locate_pos = Module->m_Pos;
+                s_ItemCount++;
+                break;
+            }
+        }
+    }
+    
+    if ( succes )
+    {   /* Il y a peut-etre necessite de recadrer le dessin: */     
+        if( ! m_Parent->DrawPanel->IsPointOnDisplay(locate_pos) )
+        {
+            screen->m_Curseur = locate_pos;
+            m_Parent->Recadre_Trace(TRUE);
+        }
+        else
+        {   // Positionnement du curseur sur l'item
+            m_Parent->DrawPanel->CursorOff(m_DC);
+            screen->m_Curseur = locate_pos;
+            GRMouseWarp(m_Parent->DrawPanel, screen->m_Curseur );
+            m_Parent->DrawPanel->MouseToCursorSchema();
+            m_Parent->DrawPanel->CursorOn(m_DC);
+        }
 
-		if( FindMarker ) msg = _("Marker found");
-		else msg.Printf( _("<%s> Found"), s_OldStringFound.GetData() );
-		m_Parent->Affiche_Message(msg);
-		EndModal(1);
-	}
+        if( FindMarker ) msg = _("Marker found");
+        else msg.Printf( _("<%s> Found"), s_OldStringFound.GetData() );
+        m_Parent->Affiche_Message(msg);
+        EndModal(1);
+    }
 
-	else
-	{
-		m_Parent->Affiche_Message(wxEmptyString);
-		if( FindMarker ) msg = _("Marker not found");
-		else msg.Printf( _("<%s> Not Found"), s_OldStringFound.GetData());
-		DisplayError(this,msg, 10);
+    else
+    {
+        m_Parent->Affiche_Message(wxEmptyString);
+        if( FindMarker ) msg = _("Marker not found");
+        else msg.Printf( _("<%s> Not Found"), s_OldStringFound.GetData());
+        DisplayError(this,msg, 10);
         EndModal(0);
-	}
+    }
 }
 
 
@@ -180,15 +180,15 @@ WinEDA_PcbFindFrame::WinEDA_PcbFindFrame( )
 }
 
 WinEDA_PcbFindFrame::WinEDA_PcbFindFrame( WinEDA_BasePcbFrame *parent, wxDC * DC,
-			 const wxPoint& pos, 
-			wxWindowID id, const wxString& caption, const wxSize& size, long style )
+             const wxPoint& pos, 
+            wxWindowID id, const wxString& caption, const wxSize& size, long style )
 {
-	m_Parent = parent;
-	m_DC = DC;
+    m_Parent = parent;
+    m_DC = DC;
 
-   Create(parent, id, caption, pos, size, style);
+    Create(parent, id, caption, pos, size, style);
 
-	m_NewText->SetFocus();
+    m_NewText->SetFocus();
 }
 
 /*!
@@ -219,7 +219,7 @@ bool WinEDA_PcbFindFrame::Create( wxWindow* parent, wxWindowID id, const wxStrin
 
 void WinEDA_PcbFindFrame::CreateControls()
 {    
-	SetFont(*g_DialogFont);
+    SetFont(*g_DialogFont);
 
 ////@begin WinEDA_PcbFindFrame content construction
     // Generated by DialogBlocks, 04/03/2006 14:04:20 (unregistered)
@@ -304,7 +304,7 @@ wxIcon WinEDA_PcbFindFrame::GetIconResource( const wxString& name )
 
 void WinEDA_PcbFindFrame::OnFindItemClick( wxCommandEvent& event )
 {
-	FindItem(event);
+    FindItem(event);
 }
 
 /*!
@@ -313,7 +313,7 @@ void WinEDA_PcbFindFrame::OnFindItemClick( wxCommandEvent& event )
 
 void WinEDA_PcbFindFrame::OnFindNextItemClick( wxCommandEvent& event )
 {
-	FindItem(event);
+    FindItem(event);
 }
 
 /*!
@@ -322,7 +322,7 @@ void WinEDA_PcbFindFrame::OnFindNextItemClick( wxCommandEvent& event )
 
 void WinEDA_PcbFindFrame::OnFindMarkerClick( wxCommandEvent& event )
 {
-	FindItem(event);
+    FindItem(event);
 }
 
 /*!
@@ -331,7 +331,7 @@ void WinEDA_PcbFindFrame::OnFindMarkerClick( wxCommandEvent& event )
 
 void WinEDA_PcbFindFrame::OnFindNextMarkerClick( wxCommandEvent& event )
 {
-	FindItem(event);
+    FindItem(event);
 }
 
 

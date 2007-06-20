@@ -51,97 +51,98 @@ le toolbar d'options
 int id = event.GetId();
 wxClientDC dc(DrawPanel);
 
-	DrawPanel->CursorOff(&dc);
-	DrawPanel->PrepareGraphicContext(&dc);
-	switch ( id )
-		{
-		case ID_TB_OPTIONS_DRC_OFF:
-			Drc_On = m_OptionsToolBar->GetToolState(id) ? FALSE : TRUE;
-			break;
+    DrawPanel->CursorOff(&dc);
+    DrawPanel->PrepareGraphicContext(&dc);
 
-		case ID_TB_OPTIONS_SHOW_GRID:
-			m_Draw_Grid = g_ShowGrid = m_OptionsToolBar->GetToolState(id);
-			DrawPanel->ReDraw(&dc, TRUE);
-			break;
+    switch ( id )
+    {
+    case ID_TB_OPTIONS_DRC_OFF:
+        Drc_On = m_OptionsToolBar->GetToolState(id) ? FALSE : TRUE;
+        break;
 
-		case ID_TB_OPTIONS_SHOW_RATSNEST:
-			g_Show_Ratsnest = m_OptionsToolBar->GetToolState(id);
-			Ratsnest_On_Off(&dc);
-			break;
+    case ID_TB_OPTIONS_SHOW_GRID:
+        m_Draw_Grid = g_ShowGrid = m_OptionsToolBar->GetToolState(id);
+        DrawPanel->ReDraw(&dc, TRUE);
+        break;
 
-		case ID_TB_OPTIONS_SHOW_MODULE_RATSNEST:
-			g_Show_Module_Ratsnest = m_OptionsToolBar->GetToolState(id);
-			break;
+    case ID_TB_OPTIONS_SHOW_RATSNEST:
+        g_Show_Ratsnest = m_OptionsToolBar->GetToolState(id);
+        Ratsnest_On_Off(&dc);
+        break;
 
-		case ID_TB_OPTIONS_SELECT_UNIT_MM:
-			g_UnitMetric = MILLIMETRE;
-		case ID_TB_OPTIONS_SELECT_UNIT_INCH:
-			if ( id == ID_TB_OPTIONS_SELECT_UNIT_INCH )
-				g_UnitMetric = INCHES;
-			m_SelTrackWidthBox_Changed = TRUE;
-			Affiche_Status_Box();	 /* Reaffichage des coord curseur */
-			ReCreateAuxiliaryToolbar();
-			DisplayUnitsMsg();
-			break;
+    case ID_TB_OPTIONS_SHOW_MODULE_RATSNEST:
+        g_Show_Module_Ratsnest = m_OptionsToolBar->GetToolState(id);
+        break;
 
-		case ID_TB_OPTIONS_SHOW_POLAR_COORD:
-			Affiche_Message(wxEmptyString);
-			DisplayOpt.DisplayPolarCood = m_OptionsToolBar->GetToolState(id);
-			Affiche_Status_Box();	 /* Reaffichage des coord curseur */
-			break;
+    case ID_TB_OPTIONS_SELECT_UNIT_MM:
+        g_UnitMetric = MILLIMETRE;
+    case ID_TB_OPTIONS_SELECT_UNIT_INCH:
+        if ( id == ID_TB_OPTIONS_SELECT_UNIT_INCH )
+            g_UnitMetric = INCHES;
+        m_SelTrackWidthBox_Changed = TRUE;
+        Affiche_Status_Box();    /* Reaffichage des coord curseur */
+        ReCreateAuxiliaryToolbar();
+        DisplayUnitsMsg();
+        break;
 
-		case ID_TB_OPTIONS_SELECT_CURSOR:
-			g_CursorShape = m_OptionsToolBar->GetToolState(id);
-			break;
+    case ID_TB_OPTIONS_SHOW_POLAR_COORD:
+        Affiche_Message(wxEmptyString);
+        DisplayOpt.DisplayPolarCood = m_OptionsToolBar->GetToolState(id);
+        Affiche_Status_Box();    /* Reaffichage des coord curseur */
+        break;
 
-		case ID_TB_OPTIONS_AUTO_DEL_TRACK:
-			g_AutoDeleteOldTrack = m_OptionsToolBar->GetToolState(id);
-			break;
+    case ID_TB_OPTIONS_SELECT_CURSOR:
+        g_CursorShape = m_OptionsToolBar->GetToolState(id);
+        break;
 
-		case ID_TB_OPTIONS_SHOW_ZONES:
-			DisplayOpt.DisplayZones = m_OptionsToolBar->GetToolState(id);
-			DrawPanel->ReDraw(&dc, TRUE);
-			break;
+    case ID_TB_OPTIONS_AUTO_DEL_TRACK:
+        g_AutoDeleteOldTrack = m_OptionsToolBar->GetToolState(id);
+        break;
 
-		case ID_TB_OPTIONS_SHOW_PADS_SKETCH:
-			m_DisplayPadFill = DisplayOpt.DisplayPadFill =
-				 ! m_OptionsToolBar->GetToolState(id);
-			DrawPanel->ReDraw(&dc, TRUE);
-			break;
+    case ID_TB_OPTIONS_SHOW_ZONES:
+        DisplayOpt.DisplayZones = m_OptionsToolBar->GetToolState(id);
+        DrawPanel->ReDraw(&dc, TRUE);
+        break;
 
-		case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
-			m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill =
-				! m_OptionsToolBar->GetToolState(id);
-			DrawPanel->ReDraw(&dc, TRUE);
-			break;
+    case ID_TB_OPTIONS_SHOW_PADS_SKETCH:
+        m_DisplayPadFill = DisplayOpt.DisplayPadFill =
+             ! m_OptionsToolBar->GetToolState(id);
+        DrawPanel->ReDraw(&dc, TRUE);
+        break;
 
-		case ID_TB_OPTIONS_SHOW_HIGHT_CONTRAST_MODE:
-			DisplayOpt.ContrastModeDisplay =
-				m_OptionsToolBar->GetToolState(id);
-			DrawPanel->ReDraw(&dc, TRUE);
-			break;
+    case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
+        m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill =
+            ! m_OptionsToolBar->GetToolState(id);
+        DrawPanel->ReDraw(&dc, TRUE);
+        break;
 
-		case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1:
-			if ( m_OptionsToolBar->GetToolState(id) ) // show aux V toolbar (Microwave tool)
-				ReCreateAuxVToolbar();
-			else
-			{
-				delete m_AuxVToolBar;
-				m_AuxVToolBar = NULL;
-			}
-			{
-			wxSizeEvent SizeEv(GetSize());
-			OnSize(SizeEv);
-			}
-			break;
+    case ID_TB_OPTIONS_SHOW_HIGHT_CONTRAST_MODE:
+        DisplayOpt.ContrastModeDisplay =
+            m_OptionsToolBar->GetToolState(id);
+        DrawPanel->ReDraw(&dc, TRUE);
+        break;
 
-		default:
-			DisplayError(this, wxT("WinEDA_PcbFrame::OnSelectOptionToolbar error"));
-			break;
-		}
+    case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1:
+        if ( m_OptionsToolBar->GetToolState(id) ) // show aux V toolbar (Microwave tool)
+            ReCreateAuxVToolbar();
+        else
+        {
+            delete m_AuxVToolBar;
+            m_AuxVToolBar = NULL;
+        }
+        {
+        wxSizeEvent SizeEv(GetSize());
+        OnSize(SizeEv);
+        }
+        break;
 
-	SetToolbars();
-	DrawPanel->CursorOn(&dc);
+    default:
+        DisplayError(this, wxT("WinEDA_PcbFrame::OnSelectOptionToolbar error"));
+        break;
+    }
+
+    SetToolbars();
+    DrawPanel->CursorOn(&dc);
 }
 
 
@@ -177,30 +178,30 @@ WinEDA_PcbGeneralOptionsFrame::WinEDA_PcbGeneralOptionsFrame( )
 WinEDA_PcbGeneralOptionsFrame::WinEDA_PcbGeneralOptionsFrame( WinEDA_PcbFrame* parent, wxDC * DC,
     wxWindowID id, const wxString& caption, const wxPoint& pos, const wxSize& size, long style )
 {
-	m_Parent = parent;
-	m_DC = DC;
+    m_Parent = parent;
+    m_DC = DC;
 
     Create(parent, id, caption, pos, size, style);
-	
-	/* Set display options */
-	m_PolarDisplay->SetSelection(DisplayOpt.DisplayPolarCood ? 1 : 0);
-	m_BoxUnits->SetSelection( g_UnitMetric ? 1 : 0);
-	m_CursorShape->SetSelection( g_CursorShape ? 1 : 0);
-	
+    
+    /* Set display options */
+    m_PolarDisplay->SetSelection(DisplayOpt.DisplayPolarCood ? 1 : 0);
+    m_BoxUnits->SetSelection( g_UnitMetric ? 1 : 0);
+    m_CursorShape->SetSelection( g_CursorShape ? 1 : 0);
+    
 wxString timevalue;
-	timevalue << g_TimeOut / 60;
-	m_SaveTime->SetValue(timevalue);
-	m_LayerNumber->SetValue(g_DesignSettings.m_CopperLayerCount);
-	m_MaxShowLinks->SetValue(g_MaxLinksShowed);
+    timevalue << g_TimeOut / 60;
+    m_SaveTime->SetValue(timevalue);
+    m_LayerNumber->SetValue(g_DesignSettings.m_CopperLayerCount);
+    m_MaxShowLinks->SetValue(g_MaxLinksShowed);
 
-	m_DrcOn->SetValue(Drc_On );
-	m_ShowModuleRatsnest->SetValue(g_Show_Module_Ratsnest);
-	m_ShowGlobalRatsnest->SetValue(g_Show_Ratsnest);
-	m_TrackAutodel->SetValue(g_AutoDeleteOldTrack);
-	m_Track_45_Only_Ctrl->SetValue(Track_45_Only);
-	m_Segments_45_Only_Ctrl->SetValue(Segments_45_Only);
-	m_AutoPANOpt->SetValue(m_Parent->DrawPanel-> m_AutoPAN_Enable);
-	m_Segments_45_Only_Ctrl->SetValue(Segments_45_Only);
+    m_DrcOn->SetValue(Drc_On );
+    m_ShowModuleRatsnest->SetValue(g_Show_Module_Ratsnest);
+    m_ShowGlobalRatsnest->SetValue(g_Show_Ratsnest);
+    m_TrackAutodel->SetValue(g_AutoDeleteOldTrack);
+    m_Track_45_Only_Ctrl->SetValue(Track_45_Only);
+    m_Segments_45_Only_Ctrl->SetValue(Segments_45_Only);
+    m_AutoPANOpt->SetValue(m_Parent->DrawPanel-> m_AutoPAN_Enable);
+    m_Segments_45_Only_Ctrl->SetValue(Segments_45_Only);
     m_Track_DoubleSegm_Ctrl->SetValue(g_TwoSegmentTrackBuild);
 }
 
@@ -237,7 +238,7 @@ bool WinEDA_PcbGeneralOptionsFrame::Create( wxWindow* parent, wxWindowID id, con
     GetSizer()->SetSizeHints(this);
     Centre();
 ////@end WinEDA_PcbGeneralOptionsFrame creation
-	SetFont(*g_DialogFont);
+    SetFont(*g_DialogFont);
     return true;
 }
 
@@ -270,7 +271,7 @@ void WinEDA_PcbGeneralOptionsFrame::CreateControls()
         _("millimeters")
     };
     m_BoxUnits = new wxRadioBox( itemDialog1, ID_RADIOBOX1, _("Units"), wxDefaultPosition, 
-								 	wxDefaultSize, 2, m_BoxUnitsStrings, 1,wxRA_SPECIFY_COLS );
+                                    wxDefaultSize, 2, m_BoxUnitsStrings, 1,wxRA_SPECIFY_COLS );
     itemBoxSizer3->Add(m_BoxUnits, 0, wxALIGN_LEFT|wxALL, 5);
 
     wxString m_CursorShapeStrings[] = {
@@ -278,7 +279,7 @@ void WinEDA_PcbGeneralOptionsFrame::CreateControls()
         _("Big")
     };
     m_CursorShape = new wxRadioBox( itemDialog1, ID_RADIOBOX2, _("Cursor"), wxDefaultPosition, wxDefaultSize, 2,
-						m_CursorShapeStrings, 1, wxRA_SPECIFY_COLS );
+                        m_CursorShapeStrings, 1, wxRA_SPECIFY_COLS );
     itemBoxSizer3->Add(m_CursorShape, 0, wxALIGN_LEFT|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer7 = new wxBoxSizer(wxVERTICAL);
@@ -425,7 +426,7 @@ void WinEDA_PcbGeneralOptionsFrame::OnCancelClick( wxCommandEvent& event )
 
 void WinEDA_PcbGeneralOptionsFrame::OnOkClick( wxCommandEvent& event )
 {
-	AcceptPcbOptions(event);
+    AcceptPcbOptions(event);
 ////@begin wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK in WinEDA_PcbGeneralOptionsFrame.
     // Before editing this code, remove the block markers.
     event.Skip();
@@ -440,41 +441,41 @@ void WinEDA_PcbGeneralOptionsFrame::AcceptPcbOptions(wxCommandEvent& event)
 {
 int ii;
 
-	DisplayOpt.DisplayPolarCood =
-		(m_PolarDisplay->GetSelection() == 0) ? FALSE : TRUE;
-	ii = g_UnitMetric;
-	g_UnitMetric = (m_BoxUnits->GetSelection() == 0)  ? 0 : 1;
-	if ( ii != g_UnitMetric ) m_Parent->ReCreateAuxiliaryToolbar();
+    DisplayOpt.DisplayPolarCood =
+        (m_PolarDisplay->GetSelection() == 0) ? FALSE : TRUE;
+    ii = g_UnitMetric;
+    g_UnitMetric = (m_BoxUnits->GetSelection() == 0)  ? 0 : 1;
+    if ( ii != g_UnitMetric ) m_Parent->ReCreateAuxiliaryToolbar();
 
-	g_CursorShape = m_CursorShape->GetSelection();
-	g_TimeOut = 60 * m_SaveTime->GetValue();
+    g_CursorShape = m_CursorShape->GetSelection();
+    g_TimeOut = 60 * m_SaveTime->GetValue();
 
-	/* Mise a jour de la combobox d'affichage de la couche active */
- 	g_DesignSettings.m_CopperLayerCount = m_LayerNumber->GetValue();
+    /* Mise a jour de la combobox d'affichage de la couche active */
+    g_DesignSettings.m_CopperLayerCount = m_LayerNumber->GetValue();
     m_Parent->ReCreateLayerBox(NULL);
 
-	g_MaxLinksShowed = m_MaxShowLinks->GetValue();
-	Drc_On = m_DrcOn->GetValue();
-	if ( g_Show_Ratsnest != m_ShowGlobalRatsnest->GetValue() )
-	{
-		g_Show_Ratsnest = m_ShowGlobalRatsnest->GetValue();
-		m_Parent->Ratsnest_On_Off(m_DC);
-	}
-	g_Show_Module_Ratsnest = m_ShowModuleRatsnest->GetValue();
-	g_AutoDeleteOldTrack = m_TrackAutodel->GetValue();
-	Segments_45_Only = m_Segments_45_Only_Ctrl->GetValue();
- 	Track_45_Only = m_Track_45_Only_Ctrl->GetValue();
-	m_Parent->DrawPanel->m_AutoPAN_Enable = m_AutoPANOpt->GetValue();
+    g_MaxLinksShowed = m_MaxShowLinks->GetValue();
+    Drc_On = m_DrcOn->GetValue();
+    if ( g_Show_Ratsnest != m_ShowGlobalRatsnest->GetValue() )
+    {
+        g_Show_Ratsnest = m_ShowGlobalRatsnest->GetValue();
+        m_Parent->Ratsnest_On_Off(m_DC);
+    }
+    g_Show_Module_Ratsnest = m_ShowModuleRatsnest->GetValue();
+    g_AutoDeleteOldTrack = m_TrackAutodel->GetValue();
+    Segments_45_Only = m_Segments_45_Only_Ctrl->GetValue();
+    Track_45_Only = m_Track_45_Only_Ctrl->GetValue();
+    m_Parent->DrawPanel->m_AutoPAN_Enable = m_AutoPANOpt->GetValue();
     g_TwoSegmentTrackBuild = m_Track_DoubleSegm_Ctrl->GetValue();
 
-	EndModal(1);
+    EndModal(1);
 }
 
 
 enum id_optpcb
 {
-	ID_ACCEPT_OPT = 1000,
-	ID_CANCEL_OPT
+    ID_ACCEPT_OPT = 1000,
+    ID_CANCEL_OPT
 };
 
 #include "dialog_track_options.cpp"
@@ -483,44 +484,44 @@ enum id_optpcb
 
 /*****************************************************************/
 void WinEDA_PcbFrame::InstallPcbOptionsFrame(const wxPoint & pos,
-			wxDC * DC, int id)
+            wxDC * DC, int id)
 /*****************************************************************/
 {
 
-	switch ( id )
-		{
-		case ID_PCB_TRACK_SIZE_SETUP:
-			{
-			WinEDA_PcbTracksDialog * OptionsFrame =
-				new WinEDA_PcbTracksDialog(this);
-			OptionsFrame->ShowModal(); OptionsFrame->Destroy();
-			}
-			break;
+    switch ( id )
+    {
+    case ID_PCB_TRACK_SIZE_SETUP:
+        {
+        WinEDA_PcbTracksDialog * OptionsFrame =
+            new WinEDA_PcbTracksDialog(this);
+        OptionsFrame->ShowModal(); OptionsFrame->Destroy();
+        }
+        break;
 
-		case ID_PCB_DRAWINGS_WIDTHS_SETUP:
-			{
-			WinEDA_GraphicItemsOptionsDialog * OptionsFrame =
-				new WinEDA_GraphicItemsOptionsDialog(this);
-			OptionsFrame->ShowModal(); OptionsFrame->Destroy();
-			}
-			break;
+    case ID_PCB_DRAWINGS_WIDTHS_SETUP:
+        {
+        WinEDA_GraphicItemsOptionsDialog * OptionsFrame =
+            new WinEDA_GraphicItemsOptionsDialog(this);
+        OptionsFrame->ShowModal(); OptionsFrame->Destroy();
+        }
+        break;
 
-		case ID_PCB_LOOK_SETUP:
-			{
-			WinEDA_DisplayOptionsDialog * OptionsFrame =
-				new WinEDA_DisplayOptionsDialog(this);
-			OptionsFrame->ShowModal(); OptionsFrame->Destroy();
-			}
-			break;
+    case ID_PCB_LOOK_SETUP:
+        {
+        WinEDA_DisplayOptionsDialog * OptionsFrame =
+            new WinEDA_DisplayOptionsDialog(this);
+        OptionsFrame->ShowModal(); OptionsFrame->Destroy();
+        }
+        break;
 
-		case ID_OPTIONS_SETUP:
-			{
-			WinEDA_PcbGeneralOptionsFrame * OptionsFrame =
-				new WinEDA_PcbGeneralOptionsFrame(this, DC);
-			OptionsFrame->ShowModal(); OptionsFrame->Destroy();
-			}
-			break;
-		}
+    case ID_OPTIONS_SETUP:
+        {
+        WinEDA_PcbGeneralOptionsFrame * OptionsFrame =
+            new WinEDA_PcbGeneralOptionsFrame(this, DC);
+        OptionsFrame->ShowModal(); OptionsFrame->Destroy();
+        }
+        break;
+    }
 }
 
 
@@ -529,8 +530,6 @@ void WinEDA_ModuleEditFrame::InstallOptionsFrame(const wxPoint & pos)
 /*******************************************************************/
 {
 WinEDA_GraphicItemsOptionsDialog OptionsFrame (this);
-	OptionsFrame.ShowModal();
+    OptionsFrame.ShowModal();
 }
-
-
 
