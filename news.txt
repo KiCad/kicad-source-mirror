@@ -1,6 +1,20 @@
 **************************************************************
 Update 25 may 2007
 pcbnew:
+	bug fix (problem in postscript generation due to the internationalization
+		of floating point number notation )
+	added tool to select layer pair and monitor active layer
+	some other enhancements
+	
+ eeschema
+	bug fix:
+		crash libedit when loading certain components (linux only)
+		incomplete generation of erc file list
+
+
+**************************************************************
+Update 25 may 2007
+pcbnew:
 	bug: problem with 3D shapes. 
 
 Gerbview:

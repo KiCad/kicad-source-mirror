@@ -181,7 +181,7 @@ wxString msg;
     PropRightSizer = new wxBoxSizer(wxVERTICAL);
     m_PanelPropertiesBoxSizer->Add(PropRightSizer, 0, wxGROW|wxALL, 5);
 
-	if ( FullOptions )	// Edition du module su le C.I.
+	if ( FullOptions )	// Module is on a board
 	{
 		Button = new wxButton(m_PanelProperties, ID_MODULE_PROPERTIES_EXCHANGE,
 						_("Change module(s)"));
@@ -192,7 +192,7 @@ wxString msg;
 		Button->SetForegroundColour(wxColor(0,128,80) );
 		PropRightSizer->Add(Button, 0, wxGROW|wxALL, 5);
 	}
-	else		// Edition du module en librairie
+	else		// Module is edited in libedit
 	{
 		StaticText = new wxStaticText( m_PanelProperties, wxID_STATIC, _("Doc"), wxDefaultPosition, wxDefaultSize, 0 );
 		PropLeftSizer->Add(StaticText, 0, wxGROW|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
@@ -234,7 +234,7 @@ wxString msg;
 
 	if ( FullOptions )
 	{
-		wxString layer_list[2] = { _("Componant"), _("Copper") };
+		wxString layer_list[2] = { _("Component"), _("Copper") };
 		m_LayerCtrl = new wxRadioBox( m_PanelProperties, -1, _("Layer"), wxDefaultPosition,
 				wxSize(-1,-1), 2, layer_list, 1);
 		m_LayerCtrl->SetSelection( (m_CurrentModule->m_Layer == CUIVRE_N) ? 1 : 0);
@@ -287,6 +287,11 @@ wxString msg;
 wxString attribut_list[3] = { _("Normal"), _("Normal+Insert"), _("Virtual") };
 	m_AttributsCtrl = new wxRadioBox( m_PanelProperties, -1, _("Attributs"), wxDefaultPosition,
 				wxSize(-1,-1), 3, attribut_list, 1);
+	m_AttributsCtrl->SetItemToolTip(0, _("Use this attribute for most non smd components"));
+	m_AttributsCtrl->SetItemToolTip(1,
+		_("Use this attribute for smd components.\nOnly components with this option are put in the footprint position list file"));
+	m_AttributsCtrl->SetItemToolTip(2,
+		_("Use this attribute for \"virtual\" components drawn on board (like a old ISA PC bus connector)"));
 	PropRightSizer->Add(m_AttributsCtrl, 0, wxGROW|wxALL, 5);
 
 	switch (m_CurrentModule->m_Attributs & 255)
@@ -309,11 +314,13 @@ wxString attribut_list[3] = { _("Normal"), _("Normal+Insert"), _("Virtual") };
 		}
 
 
-wxString autoplace_list[2] = { _("Free"), _("Locked")};
-	m_AutoPlaceCtrl = new wxRadioBox( m_PanelProperties, -1, _("Auto Place"), wxDefaultPosition,
-				wxSize(-1,-1), 2, autoplace_list, 1);
+wxString properties_list[2] = { _("Free"), _("Locked")};
+	m_AutoPlaceCtrl = new wxRadioBox( m_PanelProperties, -1, _("Move and Auto Place"), wxDefaultPosition,
+				wxSize(-1,-1), 2, properties_list, 1);
 	m_AutoPlaceCtrl->SetSelection(
 		(m_CurrentModule->m_ModuleStatus & MODULE_is_LOCKED) ? 1 : 0);
+	m_AutoPlaceCtrl->SetItemToolTip(0, _("Enable hotkey move commands and Auto Placement"));
+	m_AutoPlaceCtrl->SetItemToolTip(1, _("Disable hotkey move commands and Auto Placement"));
 	PropRightSizer->Add(m_AutoPlaceCtrl, 0, wxGROW|wxALL, 5);
 
 	StaticText = new wxStaticText(m_PanelProperties, -1, _("Rot 90"));
