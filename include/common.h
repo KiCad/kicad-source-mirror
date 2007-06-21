@@ -12,7 +12,7 @@
 #define COMMON_GLOBL extern
 #endif
 
-/* Numero de ports TCP/IP utilisés par KICAD */
+/* Numero de ports TCP/IP utilisï¿½s par KICAD */
 #define KICAD_PCB_PORT_SERVICE_NUMBER 4242
 
 
@@ -208,7 +208,7 @@ private:
 };
 
 
-/* Gestion des feuilles de tracé:
+/* Gestion des feuilles de tracï¿½:
 */
 class Ki_PageDescr
 {
@@ -257,7 +257,7 @@ extern Ki_PageDescr g_Sheet_user ;
 #endif
 
 
-COMMON_GLOBL int g_LastKey;			/* code de la derniere touche actionnéé */
+COMMON_GLOBL int g_LastKey;			/* code de la derniere touche actionnï¿½ï¿½ */
 COMMON_GLOBL wxString g_ProductName
 #ifdef EDA_BASE
 = wxT("KiCad E.D.A.  ")
@@ -500,32 +500,32 @@ wxString DateAndTime(void);
 
 int StrLenNumCmp(const wxChar *str1,const wxChar *str2, int NbMax);
 	/*
-	routine (compatible qsort() ) de comparaision pour classement alphab‚tique
-	Analogue a strncmp() mais les nombres sont compar‚s selon leur valeur num‚rique
+	routine (compatible qsort() ) de comparaision pour classement alphabï¿½tique
+	Analogue a strncmp() mais les nombres sont comparï¿½s selon leur valeur numï¿½rique
 	et non pas par leur code ascii */
 
 int StrNumICmp(const wxChar *str1,const wxChar *str2);
-	/* routine (compatible qsort() ) de comparaison pour classement alphab‚tique,
+	/* routine (compatible qsort() ) de comparaison pour classement alphabï¿½tique,
 	avec lower case == upper case.
-	Analogue a stricmp() mais les nombres sont compar‚s selon leur valeur num‚rique
+	Analogue a stricmp() mais les nombres sont comparï¿½s selon leur valeur numï¿½rique
 	et non pas par leur code ascii */
 
 int StrLenNumICmp(const wxChar *str1,const wxChar *str2, int NbMax);
-	/* routine (compatible qsort() ) de comparaison pour classement alphab‚tique,
+	/* routine (compatible qsort() ) de comparaison pour classement alphabï¿½tique,
 	avec lower case == upper case.
-	Analogue a stricmp() mais les nombres sont compar‚s selon leur valeur num‚rique
+	Analogue a stricmp() mais les nombres sont comparï¿½s selon leur valeur numï¿½rique
 	et non pas par leur code ascii */
 
 bool WildCompareString(const wxString & pattern, const wxString & string_to_tst,
 			bool case_sensitive = TRUE);
 			/* compare 2 noms de composants, selon regles usuelles
-			  ( Jokers * , ? , autoris‚s).
+			  ( Jokers * , ? , autorisï¿½s).
 			la chaine de reference est "pattern"
 			si case_sensitive == TRUE (default), comparaison exacte
 			retourne TRUE si match FALSE si differences */
 
 char * to_point(char * Text);
-	/* convertit les , en . dans une chaine. utilisé pour compenser la fct printf
+	/* convertit les , en . dans une chaine. utilisï¿½ pour compenser la fct printf
 	qui genere les flottants avec une virgule au lieu du point en mode international */
 
 /****************/
@@ -598,8 +598,8 @@ int KeyWordOk(const wxString & KeyList, const wxString & Database );
 	cles donnes dans KeyList ( KeyList = suite de mots cles
 	separes par des espaces
 	Retourne:
-		0 si aucun mot cle trouvé
-		1 si mot cle trouvé
+		0 si aucun mot cle trouvï¿½
+		1 si mot cle trouvï¿½
 */
 bool GetAssociatedDocument(wxFrame * frame, const wxString & LibPath,
 							const wxString & DocName);

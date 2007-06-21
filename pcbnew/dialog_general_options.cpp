@@ -137,7 +137,7 @@ wxClientDC dc(DrawPanel);
         break;
 
     default:
-        DisplayError(this, wxT("WinEDA_PcbFrame::OnSelectOptionToolbar error"));
+        DisplayError(this, wxT("WinEDA_PcbFrame::OnSelectOptionToolbar error \n (event not handled!)"));
         break;
     }
 

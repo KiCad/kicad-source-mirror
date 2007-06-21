@@ -4,6 +4,14 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-June-21 UPDATE Tim Hanson <tim@hardcarve.com>
+================================================================================
++ pcbnew
+	1. added button to 'update' as well as 'insert' modules into main PCB 
+		from within the module editor.  Made them functional, of course. 
+	2. added control-o, control-s & control-f to pcbnew, 
+		though I'm not perfectly happy with the implementation -- wxwidgets puts
+		the control-characters in alphabetical order!
 
 2007-June-21 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================

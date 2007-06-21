@@ -2,7 +2,7 @@
 		/* Routines generales de gestion des commandes usuelles */
 		/********************************************************/
 
-	/* fichier controle.cpp */
+/* fichier controle.cpp */
 /*
  Routines d'affichage grille, Boite de coordonnees, Curseurs, marqueurs ...
 */

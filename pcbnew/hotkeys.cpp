@@ -79,7 +79,16 @@ sous le courseur souris
         DrawPanel->MouseToCursorSchema();
         End_Route( (TRACK *) (GetScreen()->m_CurrentItem), DC);
         break;
-
+		
+	case (int('f') + GR_KB_CTRL) :
+	case (int('F') + GR_KB_CTRL) :
+	case 1030:{ // f = letter 6 in the alphabet + 1024 = 1030
+			wxCommandEvent evt; 
+			evt.SetId(ID_FIND_ITEMS); 
+			Process_Special_Functions(evt); 
+		}
+		break; 
+	
     case 'v':   // Switch to alternate layer and Place a via if a track is in progress
     case 'V':
         if ( m_ID_current_state != ID_TRACK_BUTT ) return;
@@ -97,6 +106,18 @@ sous le courseur souris
             GetScreen()->SetRefreshReq();
         break;
 
+	case 'o':
+	case 'O':	
+	case (int('o') + GR_KB_CTRL) :
+	case (int('O') + GR_KB_CTRL) :
+	case 1039: //o is the 15th letter in the alphabet + 1024 = 1039
+		if( hotkey & GR_KB_CTRL ){
+			//try not to duplicate save, load code etc.
+			wxCommandEvent evt; 
+			evt.SetId(ID_LOAD_FILE); 
+			Files_io(evt); 
+		}
+		break; 
     case 'r':   // Rotation
     case 'R':
         if ( ItemFree )
@@ -119,22 +140,32 @@ sous le courseur souris
 
     case 's':   // move to other side
     case 'S':
-        if ( ItemFree )
-            module = Locate_Prefered_Module(m_Pcb, 
-                CURSEUR_ON_GRILLE | IGNORE_LOCKED | MATCH_LAYER );
-        else if (GetScreen()->m_CurrentItem->m_StructType == TYPEMODULE)
-        {
-            module = (MODULE*)GetScreen()->m_CurrentItem;
-            // @todo: might need to add a layer check in if() below
-            if( module->IsLocked() )
-                module = 0; // do not move it.
-        }
-        if ( module )
-        {
-            GetScreen()->m_CurrentItem = module;
-            module->Display_Infos(this);
-            Change_Side_Module(module, DC);
-        }
+	case (int('s') + GR_KB_CTRL) :
+	case (int('S') + GR_KB_CTRL) :
+	case 1043: //as before, 19th letter..
+		if(  hotkey & GR_KB_CTRL ){
+			//try not to duplicate save, load code etc.
+			wxCommandEvent evt; 
+			evt.SetId(ID_SAVE_BOARD); 
+			Files_io(evt); 
+		}else{
+			if ( ItemFree )
+				module = Locate_Prefered_Module(m_Pcb, 
+					CURSEUR_ON_GRILLE | IGNORE_LOCKED | MATCH_LAYER );
+			else if (GetScreen()->m_CurrentItem->m_StructType == TYPEMODULE)
+			{
+				module = (MODULE*)GetScreen()->m_CurrentItem;
+				// @todo: might need to add a layer check in if() below
+				if( module->IsLocked() )
+					module = 0; // do not move it.
+			}
+			if ( module )
+			{
+				GetScreen()->m_CurrentItem = module;
+				module->Display_Infos(this);
+				Change_Side_Module(module, DC);
+			}
+		}
         break;
         
     case 'L':   // toggle module "MODULE_is_LOCKED" status:

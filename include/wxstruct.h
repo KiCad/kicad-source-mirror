@@ -63,7 +63,7 @@ class WinEDAChoiceBox;
 #define WinEDA_Menu wxMenu
 #define WinEDA_MenuItem wxMenuItem
 
-// Utilisées mais non definies ici :
+// Utilisï¿½es mais non definies ici :
 class LibraryStruct;
 class EDA_LibComponentStruct;
 class LibEDA_BaseStruct;
@@ -195,7 +195,7 @@ public:
 	WinEDA_Toolbar * m_VToolBar;	// Vertical (right side) Toolbar
 	WinEDA_Toolbar * m_AuxVToolBar;	// Auxiliary Vertical (right side) Toolbar
 	WinEDA_Toolbar * m_OptionsToolBar;	// Options Toolbar (left side)
-	WinEDA_Toolbar * m_AuxiliaryToolBar;	// Toolbar auxiliaire (utilisé dans pcbnew)
+	WinEDA_Toolbar * m_AuxiliaryToolBar;	// Toolbar auxiliaire (utilisï¿½ dans pcbnew)
 
 	WinEDAChoiceBox * m_SelGridBox;		// Dialog box to choose the grid size
 	WinEDAChoiceBox * m_SelZoomBox;		// Dialog box to choose the Zoom value
@@ -212,9 +212,9 @@ public:
 	int m_UnitType;					// Internal Unit type (0 = inch)
 	bool m_Draw_Axis;			// TRUE pour avoir les axes dessines
 	bool m_Draw_Grid;			// TRUE pour avoir la grille dessinee
-	bool m_Draw_Sheet_Ref;		// TRUE pour avoir le cartouche dessiné
+	bool m_Draw_Sheet_Ref;		// TRUE pour avoir le cartouche dessinï¿½
 
-	bool m_Print_Sheet_Ref;		// TRUE pour avoir le cartouche imprimé
+	bool m_Print_Sheet_Ref;		// TRUE pour avoir le cartouche imprimï¿½
 	bool m_Draw_Auxiliary_Axis;	// TRUE pour avoir les axes auxiliaires dessines
 	wxPoint m_Auxiliary_Axis_Position;	/* origine de l'axe auxiliaire (app:
 								dans la generation les fichiers de positionnement
@@ -809,7 +809,7 @@ public:
 
 /*********************************************************/
 /* class WinEDA_ModuleEditFrame: public WinEDA_DrawFrame */
-/* Class de la fenetre d'édition des modules pour PCB    */
+/* Class de la fenetre d'ï¿½dition des modules pour PCB    */
 /*********************************************************/
 
 class WinEDA_ModuleEditFrame: public WinEDA_BasePcbFrame
@@ -890,7 +890,7 @@ public:
 	/* class WinEDA_SchematicFrame */
 	/*******************************/
 
-/* enum utilisé dans RotationMiroir() */
+/* enum utilisï¿½ dans RotationMiroir() */
 enum fl_rot_cmp
 {
 	CMP_NORMAL,		// orientation normale (O, pas de miroir)
@@ -1318,7 +1318,7 @@ public:
 
 
 /*****************************************************************/
-/* Classe pour afficher et editer une coordonnée en INCHES ou MM */
+/* Classe pour afficher et editer une coordonnï¿½e en INCHES ou MM */
 /*****************************************************************/
 class WinEDA_PositionCtrl
 {
@@ -1346,7 +1346,7 @@ public:
 };
 
 /*****************************************************************/
-/* Classe pour afficher et editer une coordonnée en INCHES ou MM */
+/* Classe pour afficher et editer une coordonnï¿½e en INCHES ou MM */
 /*****************************************************************/
 class WinEDA_SizeCtrl: public WinEDA_PositionCtrl
 {

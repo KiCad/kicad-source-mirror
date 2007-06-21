@@ -22,7 +22,8 @@
 #include "New_FootPrint.xpm"
 #include "module_options.xpm"
 #include "Load_Module_Board.xpm"
-#include "Repl_Module_Board.xpm"
+#include "Insert_Module_Board.xpm"
+#include "Update_Module_Board.xpm"
 
 #ifdef __UNIX__
 #define LISTBOX_WIDTH 120
@@ -72,9 +73,13 @@ void WinEDA_ModuleEditFrame::ReCreateHToolbar(void)
 					BITMAP(load_module_board_xpm),
 					_("Load module from current board"));
 
-	m_HToolBar->AddTool(ID_MODEDIT_SAVE_MODULE_IN_BOARD, wxEmptyString,
-					BITMAP(repl_module_board_xpm),
+	m_HToolBar->AddTool(ID_MODEDIT_UPDATE_MODULE_IN_BOARD, wxEmptyString,
+					BITMAP(update_module_board_xpm),
 					_("Update module in current board"));
+	
+	m_HToolBar->AddTool(ID_MODEDIT_INSERT_MODULE_IN_BOARD, wxEmptyString,
+						BITMAP(insert_module_board_xpm),
+						_("Insert module into current board"));
 
 	m_HToolBar->AddSeparator();
 	m_HToolBar->AddTool(ID_LIBEDIT_IMPORT_PART,  wxEmptyString,

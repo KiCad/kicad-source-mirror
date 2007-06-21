@@ -149,8 +149,8 @@ wxClientDC dc(DrawPanel);
 			if ( m_Draw3DFrame )
 				m_Draw3DFrame->NewDisplay();
 			break;
-		case ID_MODEDIT_SAVE_MODULE_IN_BOARD:{
-			// seems that this should update modules in the current board, 
+		case ID_MODEDIT_UPDATE_MODULE_IN_BOARD:{
+			// update modules in the current board,
 			// not just add it to the board with total disregard for the 
 			// netlist...?
 			WinEDA_PcbFrame * pcbframe = m_Parent->m_PcbFrame;
@@ -234,7 +234,7 @@ wxClientDC dc(DrawPanel);
 			mainpcb->m_Status_Pcb = 0;
 		}
 		break; 
-		/*case ID_MODEDIT_SAVE_MODULE_IN_BOARD:
+		case ID_MODEDIT_INSERT_MODULE_IN_BOARD:
 			{
 			WinEDA_PcbFrame * pcbframe = m_Parent->m_PcbFrame;
 			BOARD * mainpcb = pcbframe->m_Pcb;
@@ -249,6 +249,8 @@ wxClientDC dc(DrawPanel);
 			// Recherche de l'ancien module correspondant
 			//(qui a pu changer ou disparaitre a la suite d'�ditions)
 			//locate the corresponding former unit, which may have a different revision. 
+			// I've taken this out, as it is superceded by 'update' above. 
+			/*
 			if ( module_in_edit->m_Link )
 				{
 				oldmodule = mainpcb->m_Modules;
@@ -258,7 +260,7 @@ wxClientDC dc(DrawPanel);
 						break;
 					}
 				}
-
+			*/
 				// Placement du module dans la liste des modules du PCB.
 			newmodule->Pnext = mainpcb->m_Modules;
 			mainpcb->m_Modules = newmodule;
@@ -282,7 +284,7 @@ wxClientDC dc(DrawPanel);
 			pcbframe->GetScreen()->m_CurrentItem = NULL;
 			mainpcb->m_Status_Pcb = 0;
 			}
-			break;*/
+			break;
 
 		case ID_LIBEDIT_IMPORT_PART:
 			GetScreen()->ClearUndoRedoList();

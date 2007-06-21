@@ -246,7 +246,7 @@ int ii;
 	m_HToolBar->AddTool(ID_ZOOM_PAGE_BUTT, wxEmptyString, BITMAP(zoom_optimal_xpm), _("auto zoom"));
 
 	m_HToolBar->AddSeparator();
-	m_HToolBar->AddTool(ID_FIND_ITEMS, wxEmptyString, BITMAP(find_xpm), _("Find components and texts"));
+	m_HToolBar->AddTool(ID_FIND_ITEMS, wxEmptyString, BITMAP(find_xpm), _("Find components and texts (Ctrl-F)"));
 
 	m_HToolBar->AddSeparator();
 	m_HToolBar->AddTool(ID_GET_NETLIST, wxEmptyString, BITMAP(netlist_xpm), _("Read Netlist"));

@@ -38,7 +38,7 @@ wxMenuBar * menuBar = GetMenuBar();
 		//////////////////
 		m_FilesMenu = new wxMenu;
 		wxMenuItem *item = new wxMenuItem(m_FilesMenu, ID_MENU_LOAD_FILE,
-					 _("Load Board"),
+					 _("Load Board    Ctrl-O"),
 					_("Delete old Board and Load new Board"));
 	    item->SetBitmap(open_xpm);
 		m_FilesMenu->Append(item);
@@ -70,7 +70,7 @@ wxMenuBar * menuBar = GetMenuBar();
 		// Add save menu
 		m_FilesMenu->AppendSeparator();
 		item = new wxMenuItem(m_FilesMenu, ID_MENU_SAVE_BOARD,
-					 _("&Save board"),
+					 _("&Save board    Ctrl-S"),
 					 _("Save current board") );
 	    item->SetBitmap(save_xpm);
 		m_FilesMenu->Append(item);

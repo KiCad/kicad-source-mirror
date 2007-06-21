@@ -44,7 +44,8 @@ BEGIN_EVENT_TABLE(WinEDA_ModuleEditFrame, wxFrame)
 	EVT_TOOL(ID_MODEDIT_CHECK, WinEDA_ModuleEditFrame::Process_Special_Functions)
 	EVT_TOOL(ID_MODEDIT_PAD_SETTINGS, WinEDA_ModuleEditFrame::Process_Special_Functions)
 	EVT_TOOL(ID_MODEDIT_LOAD_MODULE_FROM_BOARD, WinEDA_ModuleEditFrame::Process_Special_Functions)
-	EVT_TOOL(ID_MODEDIT_SAVE_MODULE_IN_BOARD, WinEDA_ModuleEditFrame::Process_Special_Functions)
+	EVT_TOOL(ID_MODEDIT_INSERT_MODULE_IN_BOARD, WinEDA_ModuleEditFrame::Process_Special_Functions)
+	EVT_TOOL(ID_MODEDIT_UPDATE_MODULE_IN_BOARD, WinEDA_ModuleEditFrame::Process_Special_Functions)
 	EVT_TOOL(ID_MODEDIT_EDIT_MODULE_PROPERTIES, WinEDA_ModuleEditFrame::Process_Special_Functions)
 	EVT_TOOL(ID_MODEDIT_UNDO, WinEDA_ModuleEditFrame::Process_Special_Functions)
 	EVT_TOOL(ID_MODEDIT_REDO, WinEDA_ModuleEditFrame::Process_Special_Functions)
@@ -93,7 +94,7 @@ BEGIN_EVENT_TABLE(WinEDA_ModuleEditFrame, wxFrame)
 	// Menu 3D Frame
 	EVT_MENU(ID_MENU_PCB_SHOW_3D_FRAME, WinEDA_ModuleEditFrame::Show3D_Frame)
 
-	// PopUp Menu Zoom traités dans drawpanel.cpp
+	// PopUp Menu Zoom traitï¿½s dans drawpanel.cpp
 
 END_EVENT_TABLE()
 
@@ -111,7 +112,7 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame(wxWindow * father, WinEDA_App *pa
 	m_FrameName = wxT("ModEditFrame");
 	m_Draw_Axis = TRUE;			// TRUE pour avoir les axes dessines
 	m_Draw_Grid = TRUE;			// TRUE pour avoir la axes dessinee
-	m_Draw_Sheet_Ref = FALSE;	// TRUE pour avoir le cartouche dessiné
+	m_Draw_Sheet_Ref = FALSE;	// TRUE pour avoir le cartouche dessinï¿½
 	m_ZoomMaxValue = 1024;
 	// Give an icon
 	SetIcon(wxICON(icon_modedit));
@@ -208,7 +209,8 @@ bool active, islib = TRUE;
 	m_HToolBar->EnableTool(ID_LIBEDIT_EXPORT_PART,active);
 	m_HToolBar->EnableTool(ID_LIBEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,active);
 	m_HToolBar->EnableTool(ID_MODEDIT_SAVE_LIBMODULE,active && islib);
-	m_HToolBar->EnableTool(ID_MODEDIT_SAVE_MODULE_IN_BOARD,active);
+	m_HToolBar->EnableTool(ID_MODEDIT_INSERT_MODULE_IN_BOARD,active);
+	m_HToolBar->EnableTool(ID_MODEDIT_UPDATE_MODULE_IN_BOARD,active);
 	if ( GetScreen() )
 	{
 		m_HToolBar->EnableTool(ID_MODEDIT_UNDO,GetScreen()->m_UndoList && active);

@@ -1,5 +1,5 @@
 /* XPM */
-static char * repl_module_board_xpm[] = {
+static char * update_module_board_xpm[] = {
 "16 16 81 1",
 " 	c None",
 ".	c #000000",
