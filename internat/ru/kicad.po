@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-06-18 18:05+0300\n"
+"PO-Revision-Date: 2007-06-19 15:06+0300\n"
 "Last-Translator: \n"
 "Language-Team: russian\n"
 "MIME-Version: 1.0\n"
@@ -19,9 +19,8 @@ msgstr ""
 "X-Poedit-SearchPath-0: /home/plyatov/Projects/Programming/kicad-svn\n"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/kicad/preferences.cpp:33
-#, fuzzy
 msgid "Prefered Pdf Browser:"
-msgstr "Опции просмотра помощи"
+msgstr "Предпочтительная программа просмотра PDF:"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/kicad/preferences.cpp:74
 msgid "You must choose a PDF viewer before use this option"
@@ -4067,29 +4066,24 @@ msgstr "Начало загрузки схемных библиотек"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelibs_read_libraryfiles.cpp:264
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelibs_read_libraryfiles.cpp:271
-#, fuzzy
 msgid "File <"
-msgstr "Fichier <"
+msgstr "Файл <"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelibs_read_libraryfiles.cpp:264
-#, fuzzy
 msgid "> is empty!"
-msgstr "Пуст"
+msgstr "> пуст!"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelibs_read_libraryfiles.cpp:271
-#, fuzzy
 msgid "> is NOT EESCHEMA library!"
-msgstr "Fichier %s n'est pas une librairie eeschema"
+msgstr "> не библиотека eeschema!"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelibs_read_libraryfiles.cpp:289
-#, fuzzy
 msgid "Library <"
-msgstr "Librairie <"
+msgstr "Библиотека <"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelibs_read_libraryfiles.cpp:289
-#, fuzzy
 msgid "> header read error"
-msgstr "> erreur lecture entête"
+msgstr "> - ошибка чтения заголовка"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/options.cpp:124
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_options.cpp:239
@@ -4709,7 +4703,6 @@ msgstr "из"
 #: /home/plyatov/Projects/Programming/kicad-svn/cvpcb/dialog_display_options.cpp:145
 #: /home/plyatov/Projects/Programming/kicad-svn/cvpcb/options.cpp:148
 #: /home/plyatov/Projects/Programming/kicad-svn/cvpcb/dialog_cvpcb_config.cpp:127
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/reglage.cpp:110
 msgid "Save Cfg"
 msgstr "Сохранить настройки"
 
@@ -7252,7 +7245,7 @@ msgid "Show None"
 msgstr "Rien Afficher"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/set_color.cpp:688
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/reglage.cpp:114
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/reglage.cpp:115
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.cpp:237
 msgid "Exit"
 msgstr "Выход"
@@ -10624,17 +10617,17 @@ msgstr "Удалить блок (CTRL + протягивание мышью)"
 msgid "Delete Dcode items"
 msgstr "Effacements des éléments convertis"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/reglage.cpp:121
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/reglage.cpp:122
 #, fuzzy
 msgid "Drill File Ext:"
 msgstr "Ext. Fichier de percage"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/reglage.cpp:125
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/reglage.cpp:126
 #, fuzzy
 msgid "Gerber File Ext:"
 msgstr "Ext. Fichiers Gerber"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/reglage.cpp:129
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/reglage.cpp:130
 #, fuzzy
 msgid "DCode File Ext:"
 msgstr "Ext. Fichiers DCodes"
@@ -10774,7 +10767,7 @@ msgstr "Charger DCodes"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:51
 #, fuzzy
-msgid "Load D-Codes File"
+msgid "Load DCodes File"
 msgstr "Charger Fichier de DCodes"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:55
@@ -10848,8 +10841,9 @@ msgid " Select how items are displayed"
 msgstr "Выбор отображения элементов"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:119
+#, fuzzy
 msgid "&Save Gerbview Setup"
-msgstr "Сохранить настройки Gerbview (&S)"
+msgstr "Сохранить настройки (&S)"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:129
 msgid "&List DCodes"
@@ -10905,24 +10899,20 @@ msgid "Layer "
 msgstr "Слой"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:300
-#, fuzzy
 msgid "No tool"
-msgstr "Ps d'outil"
+msgstr "Нет инструмента"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:304
-#, fuzzy
 msgid "Tool "
-msgstr "_Инструменты"
+msgstr "Инструмент "
 
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:340
-#, fuzzy
 msgid "Add Flashes"
-msgstr "Addition de Flash"
+msgstr ""
 
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:346
-#, fuzzy
 msgid "Add Lines"
-msgstr "Addition de lignes"
+msgstr "Добавить линии"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:415
 msgid "Show Spots Sketch"
@@ -10933,32 +10923,28 @@ msgid "Show Lines Sketch"
 msgstr "Показать контур линий"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:429
-#, fuzzy
-msgid "Show dcode number"
-msgstr "Afficher le n° de DCode"
+msgid "Show DCode number"
+msgstr "Отображать номера DCode"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/gerbview.cpp:39
-msgid "Gerbview is already running, Continue?"
-msgstr "Gerbview уже запущен. Продолжить?"
+msgid "GerbView is already running. Continue?"
+msgstr "GerbView уже запущен. Продолжить?"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/dcode.cpp:438
 msgid "List D-Codes"
 msgstr "Список D-кодов:"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/export_to_pcbnew.cpp:31
-#, fuzzy
 msgid "Board file name:"
-msgstr " Введите имя файла: "
+msgstr "Имя файла платы: "
 
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/export_to_pcbnew.cpp:47
-#, fuzzy
 msgid "Ok to change the existing file ?"
-msgstr "Fichier %s existant, OK pour remplacer ?"
+msgstr "Изменить существующий файл?"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/gerberframe.cpp:175
-#, fuzzy
 msgid "Layer modified,  Continue ?"
-msgstr "Couche modifiée,  Continuer ?"
+msgstr "Слой изменен. Продолжить?"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/edit.cpp:234
 msgid "No layer selected"
@@ -10969,9 +10955,8 @@ msgid "Tool"
 msgstr "Инструмент"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/affiche.cpp:94
-#, fuzzy
 msgid "D CODE"
-msgstr " (Код %s)"
+msgstr ""
 
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/affiche.cpp:96
 msgid "D type"
@@ -11061,9 +11046,8 @@ msgstr "Найти"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/win_eda_cleaningoptionsframe.h:50
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/cleaningoptions_dialog.h:48
-#, fuzzy
 msgid "Cleaning options"
-msgstr "Параметры Окружности"
+msgstr "Параметры очистки"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/zones.h:53
 msgid "Fill Zones Options"

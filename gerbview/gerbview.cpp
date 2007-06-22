@@ -18,7 +18,7 @@
 #include "protos.h"
 
 
-wxString g_Main_Title = wxT("GERBVIEW");
+wxString g_Main_Title = wxT("GerbView");
 
 IMPLEMENT_APP(WinEDA_App)
 
@@ -36,7 +36,7 @@ wxString FFileName;
 	GetSettings();
     if ( m_Checker && m_Checker->IsAnotherRunning() )
     {
-        if ( ! IsOK(NULL, _("Gerbview is already running, Continue?") ) )
+        if ( ! IsOK(NULL, _("GerbView is already running. Continue?") ) )
 			return false;
     }
 

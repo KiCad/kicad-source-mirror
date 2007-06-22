@@ -48,7 +48,7 @@ wxMenuBar * menuBar = GetMenuBar();
 
 		m_FilesMenu->Append(ID_GERBVIEW_LOAD_DCODE_FILE,
 					 _("Load DCodes"),
-					 _("Load D-Codes File"),
+					 _("Load DCodes File"),
 					 FALSE);
 #if 0
 		m_FilesMenu->Append(ID_GERBVIEW_LOAD_DRILL_FILE,
@@ -116,8 +116,8 @@ wxMenuBar * menuBar = GetMenuBar();
 		m_Parent->SetLanguageList(configmenu);
 
 		configmenu->AppendSeparator();
-		configmenu->Append(ID_CONFIG_SAVE, _("&Save Gerbview Setup"),
-				_("Save options in current directory"));
+		configmenu->Append(ID_CONFIG_SAVE, _("&Save Setup"),
+				_("Save application preferences"));
 
 		// Menu drill ( generation fichiers percage)
 /*	wxMenu *drill_menu = new wxMenu;
@@ -255,32 +255,32 @@ int ii;
 					wxNullBitmap,
 					FALSE,
 					-1, -1, (wxObject *) NULL,
-					_("zoom + (F1)"));
+					_("Zoom + (F1)"));
 
 	m_HToolBar->AddTool(ID_ZOOM_MOINS_BUTT, BITMAP(zoom_out_xpm),
 					wxNullBitmap,
 					FALSE,
 					-1, -1, (wxObject *) NULL,
-					_("zoom - (F2)"));
+					_("Zoom - (F2)"));
 
 	m_HToolBar->AddTool(ID_ZOOM_REDRAW_BUTT, BITMAP(repaint_xpm),
 					wxNullBitmap,
 					FALSE,
 					-1, -1, (wxObject *) NULL,
-					_("redraw (F3)"));
+					_("Redraw (F3)"));
 
 	m_HToolBar->AddTool(ID_ZOOM_PAGE_BUTT, BITMAP(zoom_optimal_xpm),
 					wxNullBitmap,
 					FALSE,
 					-1, -1, (wxObject *) NULL,
-					_("auto zoom"));
+					_("Auto zoom"));
 
 	m_HToolBar->AddSeparator();
 	m_HToolBar->AddTool(ID_FIND_ITEMS, BITMAP(find_xpm),
 					wxNullBitmap,
 					FALSE,
 					-1, -1, (wxObject *) NULL,
-					_("Find D Codes"));
+					_("Find DCodes"));
 
 wxArrayString choices;
 	m_HToolBar->AddSeparator();
@@ -426,7 +426,7 @@ void WinEDA_GerberFrame::ReCreateOptToolbar(void)
 					wxNullBitmap,
 					TRUE,
 					-1, -1, (wxObject *) NULL,
-					_("Show dcode number"));
+					_("Show DCode number"));
 
 	m_OptionsToolBar->Realize();
 
