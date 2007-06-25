@@ -34,14 +34,11 @@ BEGIN_EVENT_TABLE(Panel3D_Ctrl, wxPanel)
 END_EVENT_TABLE()
 
 
-#define H_SIZE 430
-#define V_SIZE 530
 /**************************************************************************************/
 WinEDA_ModulePropertiesFrame::WinEDA_ModulePropertiesFrame(WinEDA_BasePcbFrame *parent,
 				MODULE * Module,wxDC * DC,
 				const wxPoint & framepos):
-		wxDialog(parent, -1, _("Module properties"), framepos,
-					wxSize(H_SIZE, V_SIZE), DIALOG_STYLE)
+		wxDialog(parent, -1, _("Module properties"), framepos, wxDefaultSize, DIALOG_STYLE)
 /**************************************************************************************/
 {
 wxString number;
@@ -77,20 +74,15 @@ void WinEDA_ModulePropertiesFrame::CreateControls(void)
 {    
 wxPoint pos;
 wxButton * Button;
-wxSize usize;
 bool FullOptions = FALSE;
 
 	if ( m_Parent->m_Ident == PCB_FRAME ) FullOptions = TRUE;
 
-	usize = GetClientSize();
-
     m_GeneralBoxSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(m_GeneralBoxSizer);
 
-	m_NoteBook = new wxNotebook(this, ID_NOTEBOOK,
-   		wxDefaultPosition,wxSize(usize.x,usize.y - 34) );
+	m_NoteBook = new wxNotebook(this, ID_NOTEBOOK);
 	m_NoteBook->SetFont(*g_DialogFont);
-
     m_GeneralBoxSizer->Add(m_NoteBook, 0, wxGROW|wxALL, 5);
 
 	// Add panels

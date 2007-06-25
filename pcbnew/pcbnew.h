@@ -17,6 +17,7 @@
 est le curseur sur grille ou le curseur a deplacement fin hors grille */
 #define CURSEUR_ON_GRILLE   (0<<0)  
 #define CURSEUR_OFF_GRILLE  (1<<0)
+
 #define IGNORE_LOCKED       (1<<1)  ///< if module is locked, do not select for single module operation  
 #define MATCH_LAYER         (1<<2)  ///< if module not on current layer, do not select 
 #define VISIBLE_ONLY        (1<<3)  ///< if module not on a visible layer, do not select

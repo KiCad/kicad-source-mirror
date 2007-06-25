@@ -40,163 +40,129 @@ sous le courseur souris
 
     MODULE* module = NULL;
 
+	hotkey = toupper(hotkey);
     switch (hotkey)
     {
-    case WXK_DELETE:
-    case WXK_NUMPAD_DELETE:
-        OnHotkeyDeleteItem(DC, DrawStruct);
-        break;
+		case WXK_DELETE:
+		case WXK_NUMPAD_DELETE:
+			OnHotkeyDeleteItem(DC, DrawStruct);
+			break;
 
-    case WXK_BACK:
-    { 
-        if( m_ID_current_state == ID_TRACK_BUTT && 
-                     GetScreen()->m_Active_Layer <= CMP_N )
-        {
-            bool ItemFree = (GetScreen()->m_CurrentItem == NULL ) || 
-                    (GetScreen()->m_CurrentItem->m_Flags == 0);
-            if ( ItemFree )
-            {
-                //no track is currently being edited - select a segment and remove it.
-                DrawStruct = PcbGeneralLocateAndDisplay();
-                //don't let backspace delete modules!!
-                if ( DrawStruct && (DrawStruct->m_StructType == TYPETRACK
-                                    || DrawStruct->m_StructType == TYPEVIA))
-                    Delete_Segment(DC, (TRACK*)DrawStruct);
-                GetScreen()->SetModify();
-            }
-            else if ( GetScreen()->m_CurrentItem->m_StructType == TYPETRACK  )
-            {
-                //then an element is being edited - remove the last segment.
-                GetScreen()->m_CurrentItem =
-                        Delete_Segment(DC, (TRACK*)GetScreen()->m_CurrentItem);
-                GetScreen()->SetModify();
-            }
-        }
-        break; 
-    }
-    
-    case WXK_END:
-        DrawPanel->MouseToCursorSchema();
-        End_Route( (TRACK *) (GetScreen()->m_CurrentItem), DC);
-        break;
+		case WXK_BACK:
+		{ 
+			if( m_ID_current_state == ID_TRACK_BUTT && 
+						 GetScreen()->m_Active_Layer <= CMP_N )
+			{
+				bool ItemFree = (GetScreen()->m_CurrentItem == NULL ) || 
+						(GetScreen()->m_CurrentItem->m_Flags == 0);
+				if ( ItemFree )
+				{
+					//no track is currently being edited - select a segment and remove it.
+					DrawStruct = PcbGeneralLocateAndDisplay();
+					//don't let backspace delete modules!!
+					if ( DrawStruct && (DrawStruct->m_StructType == TYPETRACK
+										|| DrawStruct->m_StructType == TYPEVIA))
+						Delete_Segment(DC, (TRACK*)DrawStruct);
+					GetScreen()->SetModify();
+				}
+				else if ( GetScreen()->m_CurrentItem->m_StructType == TYPETRACK  )
+				{
+					//then an element is being edited - remove the last segment.
+					GetScreen()->m_CurrentItem =
+							Delete_Segment(DC, (TRACK*)GetScreen()->m_CurrentItem);
+					GetScreen()->SetModify();
+				}
+			}
+			break; 
+		}
 		
-	case (int('f') + GR_KB_CTRL) :
-	case (int('F') + GR_KB_CTRL) :
-	case 1030:{ // f = letter 6 in the alphabet + 1024 = 1030
-			wxCommandEvent evt; 
-			evt.SetId(ID_FIND_ITEMS); 
-			Process_Special_Functions(evt); 
-		}
-		break; 
-	
-    case 'v':   // Switch to alternate layer and Place a via if a track is in progress
-    case 'V':
-        if ( m_ID_current_state != ID_TRACK_BUTT ) return;
-        if ( ItemFree )
-        {
-            Other_Layer_Route( NULL, DC);
-            break;
-        }
-        if ( GetScreen()->m_CurrentItem->m_StructType != TYPETRACK )
-            return;
-        if ( (GetScreen()->m_CurrentItem->m_Flags & IS_NEW) == 0 )
-            return;
-        Other_Layer_Route( (TRACK *) GetScreen()->m_CurrentItem, DC);
-        if ( DisplayOpt.ContrastModeDisplay )
-            GetScreen()->SetRefreshReq();
-        break;
+		case WXK_END:
+			DrawPanel->MouseToCursorSchema();
+			End_Route( (TRACK *) (GetScreen()->m_CurrentItem), DC);
+			break;
 
-	case 'o':
-	case 'O':	
-	case (int('o') + GR_KB_CTRL) :
-	case (int('O') + GR_KB_CTRL) :
-	case 1039: //o is the 15th letter in the alphabet + 1024 = 1039
-		if( hotkey & GR_KB_CTRL ){
-			//try not to duplicate save, load code etc.
-			wxCommandEvent evt; 
-			evt.SetId(ID_LOAD_FILE); 
-			Files_io(evt); 
-		}
-		break; 
-    case 'r':   // Rotation
-    case 'R':
-        if ( ItemFree )
-            module = Locate_Prefered_Module(m_Pcb, 
-                CURSEUR_ON_GRILLE | IGNORE_LOCKED | MATCH_LAYER );
-        else if (GetScreen()->m_CurrentItem->m_StructType == TYPEMODULE)
-        {
-            module = (MODULE*)GetScreen()->m_CurrentItem;
-            // @todo: might need to add a layer check in if() below
-            if( module->IsLocked() )
-                module = 0; // do not move it.
-        }
-        if ( module )
-        {
-            GetScreen()->m_CurrentItem = module;
-            module->Display_Infos(this);
-            Rotate_Module(DC, module, 900, TRUE);
-        }
-        break;
-
-    case 's':   // move to other side
-    case 'S':
-	case (int('s') + GR_KB_CTRL) :
-	case (int('S') + GR_KB_CTRL) :
-	case 1043: //as before, 19th letter..
-		if(  hotkey & GR_KB_CTRL ){
-			//try not to duplicate save, load code etc.
-			wxCommandEvent evt; 
-			evt.SetId(ID_SAVE_BOARD); 
-			Files_io(evt); 
-		}else{
+		case 'V':   // Switch to alternate layer and Place a via if a track is in progress
+			if ( m_ID_current_state != ID_TRACK_BUTT ) return;
 			if ( ItemFree )
+			{
+				Other_Layer_Route( NULL, DC);
+				break;
+			}
+			if ( GetScreen()->m_CurrentItem->m_StructType != TYPETRACK )
+				return;
+			if ( (GetScreen()->m_CurrentItem->m_Flags & IS_NEW) == 0 )
+				return;
+			Other_Layer_Route( (TRACK *) GetScreen()->m_CurrentItem, DC);
+			if ( DisplayOpt.ContrastModeDisplay )
+				GetScreen()->SetRefreshReq();
+			break;
+
+		// Footprint edition:
+		case 'L':   // toggle module "MODULE_is_LOCKED" status:
+			// get any module, locked or not locked and toggle its locked status
+			if ( ItemFree )
+				module = Locate_Prefered_Module( m_Pcb, CURSEUR_ON_GRILLE | MATCH_LAYER );
+			else if (GetScreen()->m_CurrentItem->m_StructType == TYPEMODULE)
+				module = (MODULE*)GetScreen()->m_CurrentItem;
+			if( module )
+			{
+				GetScreen()->m_CurrentItem = module;
+				module->SetLocked( !module->IsLocked() );
+				module->Display_Infos(this);
+			}
+			break;
+	 
+		case 'G':   // Start move (and drag) module
+		case 'M':   // Start move module
+			if ( PopupOn ) break;
+		case 'R':	// Rotation
+		case 'S':   // move to other side
+			if ( ItemFree )
+			{
 				module = Locate_Prefered_Module(m_Pcb, 
 					CURSEUR_ON_GRILLE | IGNORE_LOCKED | MATCH_LAYER );
+				if ( module == NULL ) // no footprint found
+				{
+					module = Locate_Prefered_Module(m_Pcb, CURSEUR_ON_GRILLE );
+					if ( module ) // a footprint is found, but locked or on an other layer
+					{
+						if ( module->IsLocked() ) DisplayInfo(this, _("Footprint found, but locked") );
+						else  DisplayInfo(this, _("Footprint found, but not on this layer") );
+						module = NULL;
+					}
+				}
+				
+			}
 			else if (GetScreen()->m_CurrentItem->m_StructType == TYPEMODULE)
 			{
 				module = (MODULE*)GetScreen()->m_CurrentItem;
 				// @todo: might need to add a layer check in if() below
-				if( module->IsLocked() )
-					module = 0; // do not move it.
+				if ( (GetScreen()->m_CurrentItem->m_Flags == 0) &&
+						module->IsLocked() )
+					module = NULL; // do not move, rotate ... it.
 			}
-			if ( module )
-			{
-				GetScreen()->m_CurrentItem = module;
-				module->Display_Infos(this);
-				Change_Side_Module(module, DC);
-			}
-		}
-        break;
-        
-    case 'L':   // toggle module "MODULE_is_LOCKED" status:
-    case 'l':
-        // get any module, locked or not locked and toggle its locked status
-        module = Locate_Prefered_Module( m_Pcb, CURSEUR_ON_GRILLE | MATCH_LAYER );
-        if( module )
-        {
-            GetScreen()->m_CurrentItem = module;
-            module->SetLocked( !module->IsLocked() );
-            module->Display_Infos(this);
-        }
-        break;
-        
-    case 'g':
-    case 'G':   // Start move (and drag) module
-        g_Drag_Pistes_On = TRUE;
-        // fall through
+			if ( module == NULL) break;
 
-    case 'm':
-    case 'M':   // Start move module
-        if ( PopupOn ) break;
-        module = Locate_Prefered_Module( m_Pcb, 
-            CURSEUR_ON_GRILLE | IGNORE_LOCKED | MATCH_LAYER );
-        if( module )
-        {
-            GetScreen()->m_CurrentItem = module;
-            module->Display_Infos(this);
-            StartMove_Module( module, DC);
-        }
-        break;
+			GetScreen()->m_CurrentItem = module;
+			switch (hotkey)
+			{
+				case 'R':   // Rotation
+					Rotate_Module(DC, module, 900, TRUE);
+					break;
+
+				case 'S':   // move to other side
+					Change_Side_Module(module, DC);
+					break;
+					
+				case 'G':   // Start move (and drag) module
+					g_Drag_Pistes_On = TRUE;
+					// fall through
+				case 'M':   // Start move module
+					StartMove_Module( module, DC);
+					break;
+			}
+		module->Display_Infos(this);
+		break;
     }
 }
 

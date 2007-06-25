@@ -13,10 +13,11 @@ email address.
 		though I'm not perfectly happy with the implementation -- wxwidgets puts
 		the control-characters in alphabetical order!
 
-2007-June-21 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+2007-June-25 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew
-	minor enhancement in Edit footprint dialog (some help tool tips).
+	minor enhancement in Edit footprint dialog (more help tool tips).
+	better hotkey.cpp (code cleaning and info messages)
 
 
 

@@ -1,5 +1,5 @@
 **************************************************************
-Update 25 may 2007
+Update 25 jun 2007
 pcbnew:
 	bug fix (problem in postscript generation due to the internationalization
 		of floating point number notation )

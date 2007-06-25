@@ -1,4 +1,4 @@
-Since the 2007-05-25 version, Kicad (which used unicode strings) can run under W98,
+Since the 2007-05-25 version, Kicad (which uses unicode strings) can run under W98,
 if the library unicows.dll is found by kicad.
 
 If you want to use kicad you must download unicows.dll,

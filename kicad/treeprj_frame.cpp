@@ -85,24 +85,6 @@ WinEDA_PrjFrame::WinEDA_PrjFrame(WinEDA_MainFrame * parent,
         item->SetBitmap( directory_xpm );
         menu->Append( item );
 
-#if 0
-        item = new wxMenuItem(menu, ID_PROJECT_NEWSCH, _("New &Schematic"), _("Create a New Schematic File") );
-        item->SetBitmap( new_sch_xpm );
-        menu->Append( item );
-
-        item = new wxMenuItem(menu, ID_PROJECT_NEWBRD, _("New &PCB"), _("Create a New PCB File") );
-        item->SetBitmap( new_pcb_xpm );
-        menu->Append( item );
-
-        item = new wxMenuItem(menu, ID_PROJECT_NEWGERBER, _("New &Gerber File"), _("Create a New Gerber File") );
-        item->SetBitmap( new_gerb_xpm );
-        menu->Append( item );
-
-        item = new wxMenuItem(menu, ID_PROJECT_NEWNET, _("New &Netlist"), _("Create a New Netlist") );
-        item->SetBitmap( new_cvpcb_xpm );
-        menu->Append( item );
-#endif
-
 #ifdef KICAD_PYTHON
         item = new wxMenuItem(menu, ID_PROJECT_NEWPY, _("New P&ython Script"), _("Create a New Python Script") );
         item->SetBitmap( new_python_xpm );

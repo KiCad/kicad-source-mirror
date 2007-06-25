@@ -27,7 +27,7 @@ int ii;
 wxMenuBar * menuBar = GetMenuBar();
 
 	if( menuBar == NULL )
-		{
+	{
 		menuBar = new wxMenuBar();
 
 		m_FilesMenu = new wxMenu;
@@ -48,7 +48,7 @@ wxMenuBar * menuBar = GetMenuBar();
 
 		m_FilesMenu->Append(ID_GERBVIEW_LOAD_DCODE_FILE,
 					 _("Load DCodes"),
-					 _("Load DCodes File"),
+					 _("Load D-Codes File"),
 					 FALSE);
 #if 0
 		m_FilesMenu->Append(ID_GERBVIEW_LOAD_DRILL_FILE,
@@ -100,15 +100,15 @@ wxMenuBar * menuBar = GetMenuBar();
 
 		// Configuration:
 		wxMenu * configmenu = new wxMenu;
-		configmenu->Append(ID_CONFIG_REQ, _("&Files and Dir"),
-			_("Setting Files extension, Directories and others..."));
-		configmenu->Append(ID_COLORS_SETUP, _("&Colors"),
-			_("Select Colors and Display for layers"));
-		configmenu->Append(ID_OPTIONS_SETUP, _("&Options"),
-			_(" Select general options"));
+		ADD_MENUITEM_WITH_HELP(configmenu, ID_CONFIG_REQ, _("&File ext"),
+			_("Setting Files extension"), config_xpm );
+		ADD_MENUITEM_WITH_HELP(configmenu, ID_COLORS_SETUP, _("&Colors"),
+			_("Select Colors and Display for layers"), palette_xpm);
+		ADD_MENUITEM_WITH_HELP(configmenu, ID_OPTIONS_SETUP, _("&Options"),
+			_(" Select general options"), preference_xpm);
 
-		configmenu->Append(ID_PCB_LOOK_SETUP, _("Display"),
-			_(" Select how items are displayed"));
+		ADD_MENUITEM_WITH_HELP(configmenu, ID_PCB_LOOK_SETUP, _("Display"),
+			_(" Select how items are displayed"), display_options_xpm);
 
 		// Font selection and setup
 		AddFontSelectionMenu(configmenu);
@@ -116,8 +116,8 @@ wxMenuBar * menuBar = GetMenuBar();
 		m_Parent->SetLanguageList(configmenu);
 
 		configmenu->AppendSeparator();
-		configmenu->Append(ID_CONFIG_SAVE, _("&Save Setup"),
-				_("Save application preferences"));
+		ADD_MENUITEM_WITH_HELP(configmenu, ID_CONFIG_SAVE, _("&Save Gerbview Setup"),
+				_("Save application preferences"), save_setup_xpm);
 
 		// Menu drill ( generation fichiers percage)
 /*	wxMenu *drill_menu = new wxMenu;
@@ -126,18 +126,20 @@ wxMenuBar * menuBar = GetMenuBar();
 */
 	// Menu d'outils divers
 		wxMenu *miscellaneous_menu = new wxMenu;
-		miscellaneous_menu->Append(ID_GERBVIEW_SHOW_LIST_DCODES, _("&List DCodes"),
-				_("List and Edit DCodes") );
-		miscellaneous_menu->Append(ID_GERBVIEW_SHOW_SOURCE,_("&Show source"),
-				_("Show source file for the current layer") );
+		ADD_MENUITEM_WITH_HELP(miscellaneous_menu, ID_GERBVIEW_SHOW_LIST_DCODES, _("&List DCodes"),
+				_("List and Edit DCodes"), show_dcodenumber_xpm );
+		ADD_MENUITEM_WITH_HELP(miscellaneous_menu, ID_GERBVIEW_SHOW_SOURCE,_("&Show source"),
+				_("Show source file for the current layer"), tools_xpm );
 		miscellaneous_menu->AppendSeparator();
-		miscellaneous_menu->Append(ID_PCB_GLOBAL_DELETE, _("&Delete Layer"),
-				_("Delete current layer") );
+		ADD_MENUITEM_WITH_HELP(miscellaneous_menu, ID_PCB_GLOBAL_DELETE, _("&Delete Layer"),
+				_("Delete current layer"), general_deletions_xpm );
 
 		// Menu Help:
 		wxMenu *helpMenu = new wxMenu;
-		helpMenu->Append(ID_GENERAL_HELP, _("&Contents"), _("Open the gerbview manual") );
-		helpMenu->Append(ID_KICAD_ABOUT, _("&About"), _("About this application") );
+		ADD_MENUITEM_WITH_HELP(helpMenu, ID_GENERAL_HELP, _("&Contents"),
+			_("Open the gerbview manual"), help_xpm );
+		ADD_MENUITEM_WITH_HELP(helpMenu, ID_KICAD_ABOUT, _("&About"),
+			_("About this application"), info_xpm );
 
 		menuBar->Append(m_FilesMenu, _("&File"));
 		menuBar->Append(configmenu, _("&Preferences"));
@@ -147,7 +149,7 @@ wxMenuBar * menuBar = GetMenuBar();
 
 		// Associate the menu bar with the frame
 		SetMenuBar(menuBar);
-		}
+	}
 
 	else		// simple mise a jour de la liste des fichiers anciens
 		{
@@ -255,32 +257,32 @@ int ii;
 					wxNullBitmap,
 					FALSE,
 					-1, -1, (wxObject *) NULL,
-					_("Zoom + (F1)"));
+					_("zoom + (F1)"));
 
 	m_HToolBar->AddTool(ID_ZOOM_MOINS_BUTT, BITMAP(zoom_out_xpm),
 					wxNullBitmap,
 					FALSE,
 					-1, -1, (wxObject *) NULL,
-					_("Zoom - (F2)"));
+					_("zoom - (F2)"));
 
 	m_HToolBar->AddTool(ID_ZOOM_REDRAW_BUTT, BITMAP(repaint_xpm),
 					wxNullBitmap,
 					FALSE,
 					-1, -1, (wxObject *) NULL,
-					_("Redraw (F3)"));
+					_("redraw (F3)"));
 
 	m_HToolBar->AddTool(ID_ZOOM_PAGE_BUTT, BITMAP(zoom_optimal_xpm),
 					wxNullBitmap,
 					FALSE,
 					-1, -1, (wxObject *) NULL,
-					_("Auto zoom"));
+					_("auto zoom"));
 
 	m_HToolBar->AddSeparator();
 	m_HToolBar->AddTool(ID_FIND_ITEMS, BITMAP(find_xpm),
 					wxNullBitmap,
 					FALSE,
 					-1, -1, (wxObject *) NULL,
-					_("Find DCodes"));
+					_("Find D Codes"));
 
 wxArrayString choices;
 	m_HToolBar->AddSeparator();
@@ -426,7 +428,7 @@ void WinEDA_GerberFrame::ReCreateOptToolbar(void)
 					wxNullBitmap,
 					TRUE,
 					-1, -1, (wxObject *) NULL,
-					_("Show DCode number"));
+					_("Show dcode number"));
 
 	m_OptionsToolBar->Realize();
 

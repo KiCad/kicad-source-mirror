@@ -51,6 +51,10 @@
 /* Data to build the layer pair indicator button */
 static wxBitmap * LayerPairBitmap = NULL;
 static char s_BitmapLayerIcon[16][16] = {
+	// 0 = draw pixel with active layer color
+	// 1 = draw pixel with top layer color (top/bottom layer used in autoroute and place via)
+	// 2 = draw pixel with bottom layer color
+	// 3 = draw pixel with via color
 	{0,0,0,0,0,0,0,3,3,3,1,1,1,1,0,0},
 	{0,0,0,0,0,0,3,3,3,3,3,1,1,0,0,0},
 	{0,0,0,0,0,3,3,0,1,1,3,3,0,0,0,0},
@@ -116,7 +120,7 @@ bool change = false;
 		LayerPairBitmap = new wxBitmap(16, 16);
 	}
 
-	/* Draw the icon, witj colors according to the active layer and layer pairs for
+	/* Draw the icon, with colors according to the active layer and layer pairs for
 	via command (change layer) */
 wxMemoryDC iconDC;
 	iconDC.SelectObject( *LayerPairBitmap );

@@ -51,6 +51,11 @@
 		l_item = new wxMenuItem(menu, id, text);\
 		l_item->SetBitmap(icon); menu->Append(l_item);}
 
+#define ADD_MENUITEM_WITH_HELP(menu, id, text, help, icon) {\
+		wxMenuItem * l_item;\
+		l_item = new wxMenuItem(menu, id, text, help);\
+		l_item->SetBitmap(icon); menu->Append(l_item);}
+
 #ifdef __WINDOWS__
 #define ADD_MENUITEM_WITH_SUBMENU(menu, submenu, id, text, icon) {\
 		wxMenuItem * l_item;\
