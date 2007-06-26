@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-06-24 17:50+0100\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2007-06-26 09:46+0100\n"
+"Last-Translator: jp charras <jean-pierre.charras@inpg.fr>\n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
@@ -1289,239 +1289,6 @@ msgstr "Max"
 msgid "Segm"
 msgstr "Segm"
 
-#: pcbnew/tool_modedit.cpp:47
-#: eeschema/tool_lib.cpp:119
-msgid "Select working library"
-msgstr "Sélection de la librairie de travail"
-
-#: pcbnew/tool_modedit.cpp:50
-msgid "Save Module in working library"
-msgstr "Sauver Module en librairie de travail"
-
-#: pcbnew/tool_modedit.cpp:54
-msgid "Create new library and save current module"
-msgstr "Créer une nouvelle librairie et y sauver le composant"
-
-#: pcbnew/tool_modedit.cpp:59
-#: eeschema/tool_lib.cpp:122
-msgid "Delete part in current library"
-msgstr "Supprimer composant en librairie de travail"
-
-#: pcbnew/tool_modedit.cpp:64
-#: pcbnew/xchgmod.cpp:142
-msgid "New Module"
-msgstr "Nouveau Module"
-
-#: pcbnew/tool_modedit.cpp:68
-msgid "Load module from lib"
-msgstr "Charger un module a partir d'une librairie"
-
-#: pcbnew/tool_modedit.cpp:73
-msgid "Load module from current board"
-msgstr "Charger module a partir du C.I."
-
-#: pcbnew/tool_modedit.cpp:77
-msgid "Update module in current board"
-msgstr "Remplacer module dans le C.I."
-
-#: pcbnew/tool_modedit.cpp:82
-msgid "import module"
-msgstr "Importer Module"
-
-#: pcbnew/tool_modedit.cpp:86
-msgid "export module"
-msgstr "Exporter Module"
-
-#: pcbnew/tool_modedit.cpp:91
-#: eeschema/tool_sch.cpp:87
-#: eeschema/tool_lib.cpp:147
-msgid "Undo last edition"
-msgstr "Defait dernière édition"
-
-#: pcbnew/tool_modedit.cpp:93
-#: eeschema/tool_sch.cpp:89
-#: eeschema/tool_lib.cpp:149
-msgid "Redo the last undo command"
-msgstr "Refait la dernière commande defaite"
-
-#: pcbnew/tool_modedit.cpp:98
-msgid "Module Properties"
-msgstr "Propriétés du Module"
-
-#: pcbnew/tool_modedit.cpp:102
-msgid "Print Module"
-msgstr "Imprimer Module"
-
-#: pcbnew/tool_modedit.cpp:106
-#: pcbnew/tool_pcb.cpp:246
-#: eeschema/tool_sch.cpp:104
-#: eeschema/tool_lib.cpp:170
-#: eeschema/tool_viewlib.cpp:70
-#: cvpcb/displayframe.cpp:118
-#: gerbview/tool_gerber.cpp:260
-#: 3d-viewer/3d_toolbar.cpp:43
-msgid "zoom + (F1)"
-msgstr "zoom + (F1)"
-
-#: pcbnew/tool_modedit.cpp:109
-#: pcbnew/tool_pcb.cpp:247
-#: eeschema/tool_sch.cpp:107
-#: eeschema/tool_lib.cpp:174
-#: eeschema/tool_viewlib.cpp:74
-#: cvpcb/displayframe.cpp:121
-#: gerbview/tool_gerber.cpp:266
-#: 3d-viewer/3d_toolbar.cpp:46
-msgid "zoom - (F2)"
-msgstr "zoom - (F2)"
-
-#: pcbnew/tool_modedit.cpp:112
-#: pcbnew/tool_pcb.cpp:248
-#: eeschema/tool_sch.cpp:110
-#: eeschema/tool_lib.cpp:178
-#: eeschema/tool_viewlib.cpp:78
-#: cvpcb/displayframe.cpp:124
-#: gerbview/tool_gerber.cpp:272
-#: 3d-viewer/3d_toolbar.cpp:49
-msgid "redraw (F3)"
-msgstr "Redessin (F3)"
-
-#: pcbnew/tool_modedit.cpp:115
-#: pcbnew/tool_pcb.cpp:250
-#: eeschema/tool_sch.cpp:113
-#: eeschema/tool_lib.cpp:182
-#: gerbview/tool_gerber.cpp:278
-#: 3d-viewer/3d_toolbar.cpp:52
-msgid "auto zoom"
-msgstr "Zoom automatique"
-
-#: pcbnew/tool_modedit.cpp:120
-#: pcbnew/modedit.cpp:363
-#: pcbnew/globaleditpad.cpp:96
-#: pcbnew/menubarmodedit.cpp:45
-#: pcbnew/menubarpcb.cpp:205
-msgid "Pad Settings"
-msgstr "Caract pads"
-
-#: pcbnew/tool_modedit.cpp:124
-msgid "Module Check"
-msgstr "Test module"
-
-#: pcbnew/tool_modedit.cpp:148
-msgid "Add Pads"
-msgstr "Addition de \"pins\""
-
-#: pcbnew/tool_modedit.cpp:153
-#: pcbnew/tool_pcb.cpp:386
-#: eeschema/tool_sch.cpp:216
-msgid "Add graphic line or polygon"
-msgstr "Addition de lignes ou polygones graphiques"
-
-#: pcbnew/tool_modedit.cpp:157
-#: pcbnew/tool_pcb.cpp:390
-msgid "Add graphic circle"
-msgstr "Addition de graphiques (Cercle)"
-
-#: pcbnew/tool_modedit.cpp:161
-#: pcbnew/tool_pcb.cpp:394
-msgid "Add graphic arc"
-msgstr "Addition de graphiques (Arc de Cercle)"
-
-#: pcbnew/tool_modedit.cpp:165
-#: pcbnew/edit.cpp:552
-#: pcbnew/tool_pcb.cpp:398
-#: eeschema/schedit.cpp:309
-#: eeschema/libframe.cpp:487
-#: gerbview/tool_gerber.cpp:361
-msgid "Add Text"
-msgstr "Ajout de Texte"
-
-#: pcbnew/tool_modedit.cpp:170
-#: pcbnew/modedit.cpp:377
-msgid "Place anchor"
-msgstr "Place Ancre"
-
-#: pcbnew/tool_modedit.cpp:175
-#: pcbnew/tool_pcb.cpp:412
-#: eeschema/tool_sch.cpp:225
-#: eeschema/tool_lib.cpp:92
-#: gerbview/tool_gerber.cpp:369
-msgid "Delete items"
-msgstr "Suppression d'éléments"
-
-#: pcbnew/tool_modedit.cpp:196
-#: pcbnew/tool_pcb.cpp:293
-#: eeschema/tool_sch.cpp:246
-#: gerbview/tool_gerber.cpp:389
-msgid "Display Grid OFF"
-msgstr "Suppression de l'affichage de la grille"
-
-#: pcbnew/tool_modedit.cpp:200
-#: pcbnew/tool_pcb.cpp:295
-#: gerbview/tool_gerber.cpp:395
-msgid "Display Polar Coord ON"
-msgstr "Activer affichage coord Polaires"
-
-#: pcbnew/tool_modedit.cpp:204
-#: pcbnew/tool_pcb.cpp:297
-#: eeschema/tool_sch.cpp:250
-#: gerbview/tool_gerber.cpp:399
-msgid "Units = Inch"
-msgstr "Unités = pouce"
-
-#: pcbnew/tool_modedit.cpp:208
-#: pcbnew/tool_pcb.cpp:299
-#: eeschema/tool_sch.cpp:254
-#: gerbview/tool_gerber.cpp:403
-msgid "Units = mm"
-msgstr "Unités = mm"
-
-#: pcbnew/tool_modedit.cpp:214
-#: pcbnew/tool_pcb.cpp:301
-#: eeschema/tool_sch.cpp:258
-#: gerbview/tool_gerber.cpp:409
-msgid "Change Cursor Shape"
-msgstr "Sélection de la forme du curseur"
-
-#: pcbnew/tool_modedit.cpp:222
-#: pcbnew/tool_pcb.cpp:322
-msgid "Show Pads Sketch"
-msgstr "Afficher pastilles en contour"
-
-#: pcbnew/tool_modedit.cpp:229
-msgid "Show Texts Sketch"
-msgstr "Afficher textes en contour"
-
-#: pcbnew/tool_modedit.cpp:236
-msgid "Show Edges Sketch"
-msgstr "Afficher Modules en contour"
-
-#: pcbnew/tool_modedit.cpp:268
-#: pcbnew/tool_pcb.cpp:512
-#: eeschema/plotps.cpp:168
-#: share/zoom.cpp:353
-msgid "Auto"
-msgstr "Auto"
-
-#: pcbnew/tool_modedit.cpp:272
-#, c-format
-msgid "Zoom %d"
-msgstr "Zoom %d"
-
-#: pcbnew/tool_modedit.cpp:289
-#, c-format
-msgid "Grid %.1f"
-msgstr "Grille %.1f"
-
-#: pcbnew/tool_modedit.cpp:291
-#, c-format
-msgid "Grid %.3f"
-msgstr "Grille %.3f"
-
-#: pcbnew/tool_modedit.cpp:294
-#: pcbnew/tool_pcb.cpp:542
-msgid "User Grid"
-msgstr "Grille perso"
-
 #: pcbnew/via_edit.cpp:51
 msgid "Incorrect value for Via drill. No via drill change"
 msgstr "Valeur incorrecte pour perçage.Pas de changement pour la via"
@@ -1969,22 +1736,6 @@ msgstr "Erreur: Fin de fichier inattendue !"
 msgid "GenCAD file:"
 msgstr "Fichier GenCAD:"
 
-#: pcbnew/modedit.cpp:360
-msgid "Add Pad"
-msgstr "Ajouter Pastilles"
-
-#: pcbnew/modedit.cpp:373
-#: eeschema/schedit.cpp:293
-msgid "Add Drawing"
-msgstr "Ajout d'éléments graphiques"
-
-#: pcbnew/modedit.cpp:391
-#: pcbnew/edit.cpp:720
-#: eeschema/schedit.cpp:443
-#: eeschema/libframe.cpp:554
-msgid "Delete item"
-msgstr "Suppression d'éléments"
-
 #: pcbnew/modedit_onclick.cpp:199
 #: pcbnew/onrightclick.cpp:158
 #: eeschema/libedit_onrightclick.cpp:73
@@ -2429,12 +2180,12 @@ msgid "Via %.3f"
 msgstr "Via %.3f"
 
 #: pcbnew/onrightclick.cpp:190
-msgid "Footprint Get and Move (F)"
-msgstr "Sel. et dépl. module (F)"
+msgid "Get and Move Footprint"
+msgstr "Sel et Dépl.t module"
 
 #: pcbnew/onrightclick.cpp:203
-msgid "Fix Module"
-msgstr "Fixe Module"
+msgid "Lock Module"
+msgstr "Verrouiller Modules"
 
 #: pcbnew/onrightclick.cpp:205
 msgid "Free Module"
@@ -2950,6 +2701,14 @@ msgstr "Cpoie des couches dessin"
 msgid "Pads Global Edit"
 msgstr "Pads: Edition globale"
 
+#: pcbnew/globaleditpad.cpp:96
+#: pcbnew/menubarmodedit.cpp:45
+#: pcbnew/tool_modedit.cpp:125
+#: pcbnew/modedit.cpp:365
+#: pcbnew/menubarpcb.cpp:205
+msgid "Pad Settings"
+msgstr "Caract pads"
+
 #: pcbnew/globaleditpad.cpp:101
 msgid "Change Module"
 msgstr "Change module"
@@ -3036,10 +2795,6 @@ msgstr "Effacement des Modules?"
 #: gerbview/initpcb.cpp:181
 msgid "Delete Pcb Texts"
 msgstr "Effacer Textes Pcb"
-
-#: pcbnew/moduleframe.cpp:175
-msgid "Module Editor: module modified!, Continue ?"
-msgstr "Editeur de Module: module modifié!  Continuer ?"
 
 #: pcbnew/pcbnew.cpp:42
 msgid "Pcbnew is already running, Continue?"
@@ -3581,6 +3336,11 @@ msgstr "Module courant"
 msgid "Current Value"
 msgstr "Valeur courante"
 
+#: pcbnew/xchgmod.cpp:142
+#: pcbnew/tool_modedit.cpp:65
+msgid "New Module"
+msgstr "Nouveau Module"
+
 #: pcbnew/xchgmod.cpp:208
 #, c-format
 msgid "file %s not found"
@@ -3613,26 +3373,6 @@ msgstr "Change module %s (%s)  "
 #: pcbnew/xchgmod.cpp:584
 msgid "Cmp files:"
 msgstr "Fichiers Cmp: "
-
-#: pcbnew/controle.cpp:47
-#, c-format
-msgid "Locate module %s %s"
-msgstr "Module localisé %s %s"
-
-#: pcbnew/controle.cpp:88
-#, c-format
-msgid "module %s not found"
-msgstr "module %s non trouvé"
-
-#: pcbnew/controle.cpp:90
-#, c-format
-msgid "Pin %s (module %s) not found"
-msgstr "Pin %s (module %s) non trouvée"
-
-#: pcbnew/controle.cpp:92
-#, c-format
-msgid "Locate Pin %s (module %s)"
-msgstr "Pin localisée %s (module %s)"
 
 #: pcbnew/edit.cpp:154
 msgid "Graphic not autorized on Copper layers"
@@ -3671,6 +3411,15 @@ msgstr "Ajuster Zéro"
 msgid "Add Graphic"
 msgstr "Addition éléments graphiques"
 
+#: pcbnew/edit.cpp:552
+#: pcbnew/tool_modedit.cpp:170
+#: pcbnew/tool_pcb.cpp:398
+#: eeschema/schedit.cpp:309
+#: eeschema/libframe.cpp:487
+#: gerbview/tool_gerber.cpp:361
+msgid "Add Text"
+msgstr "Ajout de Texte"
+
 #: pcbnew/edit.cpp:556
 msgid "Add Modules"
 msgstr "Addition de Modules"
@@ -3687,6 +3436,13 @@ msgstr "Surbrillance des équipotentielles"
 #: pcbnew/edit.cpp:572
 msgid "Local Ratsnest"
 msgstr "Monter le chevelu général"
+
+#: pcbnew/edit.cpp:720
+#: pcbnew/modedit.cpp:393
+#: eeschema/schedit.cpp:443
+#: eeschema/libframe.cpp:554
+msgid "Delete item"
+msgstr "Suppression d'éléments"
 
 #: pcbnew/netlist.cpp:95
 #, c-format
@@ -4095,9 +3851,389 @@ msgstr "Impossible de drag ce segment: trop de segments connectés"
 msgid "Unable to drag this segment: two collinear segments"
 msgstr "Impossible de drag ce segment: 2 segments alignés"
 
+#: pcbnew/find.cpp:130
+msgid "Marker found"
+msgstr "Marqueur trouvé"
+
+#: pcbnew/find.cpp:131
+#, c-format
+msgid "<%s> Found"
+msgstr "<%s> trouvé"
+
+#: pcbnew/find.cpp:139
+msgid "Marker not found"
+msgstr "Marqueur non trouvé"
+
+#: pcbnew/find.cpp:140
+#, c-format
+msgid "<%s> Not Found"
+msgstr "<%s> Non trouvé"
+
+#: pcbnew/find.cpp:232
+#: eeschema/dialog_find.cpp:107
+msgid "Item to find:"
+msgstr "Elément a chercher:"
+
+#: pcbnew/find.cpp:244
+msgid "Find Item"
+msgstr "Chercher Item"
+
+#: pcbnew/find.cpp:249
+msgid "Find Next Item"
+msgstr "Chercher Item Suivant"
+
+#: pcbnew/find.cpp:256
+msgid "Find Marker"
+msgstr "Chercher Marqueur"
+
+#: pcbnew/find.cpp:260
+msgid "Find Next Marker"
+msgstr "Marqueur Suivant"
+
+#: pcbnew/dialog_general_options.cpp:263
+#: gerbview/options.cpp:181
+msgid "No Display"
+msgstr "Pas d'affichage"
+
+#: pcbnew/dialog_general_options.cpp:266
+#: gerbview/options.cpp:183
+msgid "Display Polar Coord"
+msgstr "Affichage coord Polaires"
+
+#: pcbnew/dialog_general_options.cpp:273
+#: eeschema/optionsframe.cpp:135
+#: eeschema/dialog_options.cpp:248
+#: eeschema/options.cpp:187
+#: gerbview/options.cpp:193
+msgid "Units"
+msgstr "Unités"
+
+#: pcbnew/dialog_general_options.cpp:278
+#: gerbview/options.cpp:199
+msgid "Small"
+msgstr "Petit"
+
+#: pcbnew/dialog_general_options.cpp:279
+#: gerbview/options.cpp:199
+msgid "Big"
+msgstr "Grand"
+
+#: pcbnew/dialog_general_options.cpp:281
+#: gerbview/options.cpp:200
+msgid "Cursor"
+msgstr "Curseur"
+
+#: pcbnew/dialog_general_options.cpp:288
+msgid "Number of Layers:"
+msgstr "Nombre de Couches:"
+
+#: pcbnew/dialog_general_options.cpp:295
+msgid "Max Links:"
+msgstr "Liens max:"
+
+#: pcbnew/dialog_general_options.cpp:302
+msgid "Auto Save (minuts):"
+msgstr "Sauveg. Auto (min)"
+
+#: pcbnew/dialog_general_options.cpp:312
+#: eeschema/netlist_control.cpp:94
+#: share/dialog_print.cpp:167
+msgid "Options:"
+msgstr "Options :"
+
+#: pcbnew/dialog_general_options.cpp:316
+msgid "Drc ON"
+msgstr "Drc ACTIVE"
+
+#: pcbnew/dialog_general_options.cpp:321
+msgid "Show Ratsnest"
+msgstr "Monter le chevelu général"
+
+#: pcbnew/dialog_general_options.cpp:325
+msgid "Show Mod Ratsnest"
+msgstr "Monter le chevelu du module"
+
+#: pcbnew/dialog_general_options.cpp:329
+msgid "Tracks Auto Del"
+msgstr "Auto Supp. Pistes"
+
+#: pcbnew/dialog_general_options.cpp:333
+msgid "Track 45 Only"
+msgstr "Pistes 45 seulement"
+
+#: pcbnew/dialog_general_options.cpp:337
+msgid "Segments 45 Only"
+msgstr "Segments 45 seulement"
+
+#: pcbnew/dialog_general_options.cpp:341
+#: eeschema/dialog_options.cpp:239
+#: eeschema/options.cpp:124
+msgid "Auto PAN"
+msgstr "Auto PAN"
+
+#: pcbnew/dialog_general_options.cpp:346
+msgid "Double Segm Track"
+msgstr "2 segments pour piste"
+
+#: pcbnew/dialog_general_options.cpp:353
+msgid "When creating tracks"
+msgstr "En creation de pistes"
+
+#: pcbnew/dialog_general_options.cpp:356
+msgid "Magnetic Pads"
+msgstr " Pads magnétiques"
+
+#: pcbnew/dialog_general_options.cpp:358
+msgid "control the capture of the pcb cursor when the mouse cursor enters a pad area"
+msgstr "Controle la capture du curseur pcb quand le curseuir souris est sur le pad"
+
+#: pcbnew/tool_modedit.cpp:48
+#: eeschema/tool_lib.cpp:119
+msgid "Select working library"
+msgstr "Sélection de la librairie de travail"
+
+#: pcbnew/tool_modedit.cpp:51
+msgid "Save Module in working library"
+msgstr "Sauver Module en librairie de travail"
+
+#: pcbnew/tool_modedit.cpp:55
+msgid "Create new library and save current module"
+msgstr "Créer une nouvelle librairie et y sauver le composant"
+
+#: pcbnew/tool_modedit.cpp:60
+#: eeschema/tool_lib.cpp:122
+msgid "Delete part in current library"
+msgstr "Supprimer composant en librairie de travail"
+
+#: pcbnew/tool_modedit.cpp:69
+msgid "Load module from lib"
+msgstr "Charger un module a partir d'une librairie"
+
+#: pcbnew/tool_modedit.cpp:74
+msgid "Load module from current board"
+msgstr "Charger module a partir du C.I."
+
+#: pcbnew/tool_modedit.cpp:78
+msgid "Update module in current board"
+msgstr "Remplacer module dans le C.I."
+
+#: pcbnew/tool_modedit.cpp:82
+msgid "Insert module into current board"
+msgstr "Placer module dans le C.I."
+
+#: pcbnew/tool_modedit.cpp:87
+msgid "import module"
+msgstr "Importer Module"
+
+#: pcbnew/tool_modedit.cpp:91
+msgid "export module"
+msgstr "Exporter Module"
+
+#: pcbnew/tool_modedit.cpp:96
+#: eeschema/tool_sch.cpp:87
+#: eeschema/tool_lib.cpp:147
+msgid "Undo last edition"
+msgstr "Defait dernière édition"
+
+#: pcbnew/tool_modedit.cpp:98
+#: eeschema/tool_sch.cpp:89
+#: eeschema/tool_lib.cpp:149
+msgid "Redo the last undo command"
+msgstr "Refait la dernière commande defaite"
+
+#: pcbnew/tool_modedit.cpp:103
+msgid "Module Properties"
+msgstr "Propriétés du Module"
+
+#: pcbnew/tool_modedit.cpp:107
+msgid "Print Module"
+msgstr "Imprimer Module"
+
+#: pcbnew/tool_modedit.cpp:111
+#: pcbnew/tool_pcb.cpp:246
+#: eeschema/tool_sch.cpp:104
+#: eeschema/tool_lib.cpp:170
+#: eeschema/tool_viewlib.cpp:70
+#: cvpcb/displayframe.cpp:118
+#: gerbview/tool_gerber.cpp:260
+#: 3d-viewer/3d_toolbar.cpp:43
+msgid "zoom + (F1)"
+msgstr "zoom + (F1)"
+
+#: pcbnew/tool_modedit.cpp:114
+#: pcbnew/tool_pcb.cpp:247
+#: eeschema/tool_sch.cpp:107
+#: eeschema/tool_lib.cpp:174
+#: eeschema/tool_viewlib.cpp:74
+#: cvpcb/displayframe.cpp:121
+#: gerbview/tool_gerber.cpp:266
+#: 3d-viewer/3d_toolbar.cpp:46
+msgid "zoom - (F2)"
+msgstr "zoom - (F2)"
+
+#: pcbnew/tool_modedit.cpp:117
+#: pcbnew/tool_pcb.cpp:248
+#: eeschema/tool_sch.cpp:110
+#: eeschema/tool_lib.cpp:178
+#: eeschema/tool_viewlib.cpp:78
+#: cvpcb/displayframe.cpp:124
+#: gerbview/tool_gerber.cpp:272
+#: 3d-viewer/3d_toolbar.cpp:49
+msgid "redraw (F3)"
+msgstr "Redessin (F3)"
+
+#: pcbnew/tool_modedit.cpp:120
+#: pcbnew/tool_pcb.cpp:250
+#: eeschema/tool_sch.cpp:113
+#: eeschema/tool_lib.cpp:182
+#: gerbview/tool_gerber.cpp:278
+#: 3d-viewer/3d_toolbar.cpp:52
+msgid "auto zoom"
+msgstr "Zoom automatique"
+
+#: pcbnew/tool_modedit.cpp:129
+msgid "Module Check"
+msgstr "Test module"
+
+#: pcbnew/tool_modedit.cpp:153
+msgid "Add Pads"
+msgstr "Addition de \"pins\""
+
+#: pcbnew/tool_modedit.cpp:158
+#: pcbnew/tool_pcb.cpp:386
+#: eeschema/tool_sch.cpp:216
+msgid "Add graphic line or polygon"
+msgstr "Addition de lignes ou polygones graphiques"
+
+#: pcbnew/tool_modedit.cpp:162
+#: pcbnew/tool_pcb.cpp:390
+msgid "Add graphic circle"
+msgstr "Addition de graphiques (Cercle)"
+
+#: pcbnew/tool_modedit.cpp:166
+#: pcbnew/tool_pcb.cpp:394
+msgid "Add graphic arc"
+msgstr "Addition de graphiques (Arc de Cercle)"
+
+#: pcbnew/tool_modedit.cpp:175
+#: pcbnew/modedit.cpp:379
+msgid "Place anchor"
+msgstr "Place Ancre"
+
+#: pcbnew/tool_modedit.cpp:180
+#: pcbnew/tool_pcb.cpp:412
+#: eeschema/tool_sch.cpp:225
+#: eeschema/tool_lib.cpp:92
+#: gerbview/tool_gerber.cpp:369
+msgid "Delete items"
+msgstr "Suppression d'éléments"
+
+#: pcbnew/tool_modedit.cpp:201
+#: pcbnew/tool_pcb.cpp:293
+#: eeschema/tool_sch.cpp:246
+#: gerbview/tool_gerber.cpp:389
+msgid "Display Grid OFF"
+msgstr "Suppression de l'affichage de la grille"
+
+#: pcbnew/tool_modedit.cpp:205
+#: pcbnew/tool_pcb.cpp:295
+#: gerbview/tool_gerber.cpp:395
+msgid "Display Polar Coord ON"
+msgstr "Activer affichage coord Polaires"
+
+#: pcbnew/tool_modedit.cpp:209
+#: pcbnew/tool_pcb.cpp:297
+#: eeschema/tool_sch.cpp:250
+#: gerbview/tool_gerber.cpp:399
+msgid "Units = Inch"
+msgstr "Unités = pouce"
+
+#: pcbnew/tool_modedit.cpp:213
+#: pcbnew/tool_pcb.cpp:299
+#: eeschema/tool_sch.cpp:254
+#: gerbview/tool_gerber.cpp:403
+msgid "Units = mm"
+msgstr "Unités = mm"
+
+#: pcbnew/tool_modedit.cpp:219
+#: pcbnew/tool_pcb.cpp:301
+#: eeschema/tool_sch.cpp:258
+#: gerbview/tool_gerber.cpp:409
+msgid "Change Cursor Shape"
+msgstr "Sélection de la forme du curseur"
+
+#: pcbnew/tool_modedit.cpp:227
+#: pcbnew/tool_pcb.cpp:322
+msgid "Show Pads Sketch"
+msgstr "Afficher pastilles en contour"
+
+#: pcbnew/tool_modedit.cpp:234
+msgid "Show Texts Sketch"
+msgstr "Afficher textes en contour"
+
+#: pcbnew/tool_modedit.cpp:241
+msgid "Show Edges Sketch"
+msgstr "Afficher Modules en contour"
+
+#: pcbnew/tool_modedit.cpp:273
+#: pcbnew/tool_pcb.cpp:512
+#: eeschema/plotps.cpp:168
+#: share/zoom.cpp:353
+msgid "Auto"
+msgstr "Auto"
+
+#: pcbnew/tool_modedit.cpp:277
+#, c-format
+msgid "Zoom %d"
+msgstr "Zoom %d"
+
+#: pcbnew/tool_modedit.cpp:294
+#, c-format
+msgid "Grid %.1f"
+msgstr "Grille %.1f"
+
+#: pcbnew/tool_modedit.cpp:296
+#, c-format
+msgid "Grid %.3f"
+msgstr "Grille %.3f"
+
+#: pcbnew/tool_modedit.cpp:299
+#: pcbnew/tool_pcb.cpp:542
+msgid "User Grid"
+msgstr "Grille perso"
+
+#: pcbnew/modedit.cpp:362
+msgid "Add Pad"
+msgstr "Ajouter Pastilles"
+
+#: pcbnew/modedit.cpp:375
+#: eeschema/schedit.cpp:293
+msgid "Add Drawing"
+msgstr "Ajout d'éléments graphiques"
+
+#: pcbnew/controle.cpp:47
+#, c-format
+msgid "Locate module %s %s"
+msgstr "Module localisé %s %s"
+
+#: pcbnew/controle.cpp:88
+#, c-format
+msgid "module %s not found"
+msgstr "module %s non trouvé"
+
+#: pcbnew/controle.cpp:90
+#, c-format
+msgid "Pin %s (module %s) not found"
+msgstr "Pin %s (module %s) non trouvée"
+
+#: pcbnew/controle.cpp:92
+#, c-format
+msgid "Locate Pin %s (module %s)"
+msgstr "Pin localisée %s (module %s)"
+
 #: pcbnew/menubarpcb.cpp:41
-msgid "Load Board"
-msgstr "Charger Circuit Imprimé"
+msgid "Load Board    Ctrl-O"
+msgstr "Charger Circuit Imprimé (Ctrl O)"
 
 #: pcbnew/menubarpcb.cpp:42
 msgid "Delete old Board and Load new Board"
@@ -4136,8 +4272,8 @@ msgid "Clear old board and get old version of board"
 msgstr "Effacer C.I. actuel et reprendre ancienne version"
 
 #: pcbnew/menubarpcb.cpp:73
-msgid "&Save board"
-msgstr "Sauver Circuit Imprimé"
+msgid "&Save board    Ctrl-S"
+msgstr "Sauver Circuit Imprimé (Ctrl S)"
 
 #: pcbnew/menubarpcb.cpp:74
 msgid "Save current board"
@@ -4277,7 +4413,6 @@ msgstr "&Sauver Pcbnew Options"
 
 #: pcbnew/menubarpcb.cpp:176
 #: pcbnew/menubarpcb.cpp:212
-#: gerbview/tool_gerber.cpp:120
 msgid "Save options in current directory"
 msgstr "Sauver les options en répertoire de travail"
 
@@ -4386,6 +4521,18 @@ msgstr "&Divers"
 msgid "P&ostprocess"
 msgstr "P&ostprocesseurs"
 
+#: pcbnew/moduleframe.cpp:176
+msgid "Module Editor: module modified!, Continue ?"
+msgstr "Editeur de Module: module modifié!  Continuer ?"
+
+#: pcbnew/hotkeys.cpp:127
+msgid "Footprint found, but locked"
+msgstr "Module trouvé, mais verrouillé"
+
+#: pcbnew/hotkeys.cpp:248
+msgid "Delete module?"
+msgstr "Effacer Module?"
+
 #: pcbnew/tool_pcb.cpp:49
 msgid ""
 "Show active layer selections\n"
@@ -4444,9 +4591,8 @@ msgid "Print Board"
 msgstr "Imprimer C.I."
 
 #: pcbnew/tool_pcb.cpp:253
-#: eeschema/tool_sch.cpp:117
-msgid "Find components and texts"
-msgstr "Recherche de composants et textes"
+msgid "Find components and texts (Ctrl-F)"
+msgstr "Recherche de composants et textes (Ctrl F)"
 
 #: pcbnew/tool_pcb.cpp:256
 msgid "Read Netlist"
@@ -4544,154 +4690,6 @@ msgstr "Zoom "
 #: pcbnew/tool_pcb.cpp:591
 msgid "+/- to switch"
 msgstr "+/- pour commuter"
-
-#: pcbnew/dialog_general_options.cpp:263
-#: gerbview/options.cpp:181
-msgid "No Display"
-msgstr "Pas d'affichage"
-
-#: pcbnew/dialog_general_options.cpp:266
-#: gerbview/options.cpp:183
-msgid "Display Polar Coord"
-msgstr "Affichage coord Polaires"
-
-#: pcbnew/dialog_general_options.cpp:273
-#: eeschema/optionsframe.cpp:135
-#: eeschema/dialog_options.cpp:248
-#: eeschema/options.cpp:187
-#: gerbview/options.cpp:193
-msgid "Units"
-msgstr "Unités"
-
-#: pcbnew/dialog_general_options.cpp:278
-#: gerbview/options.cpp:199
-msgid "Small"
-msgstr "Petit"
-
-#: pcbnew/dialog_general_options.cpp:279
-#: gerbview/options.cpp:199
-msgid "Big"
-msgstr "Grand"
-
-#: pcbnew/dialog_general_options.cpp:281
-#: gerbview/options.cpp:200
-msgid "Cursor"
-msgstr "Curseur"
-
-#: pcbnew/dialog_general_options.cpp:288
-msgid "Number of Layers:"
-msgstr "Nombre de Couches:"
-
-#: pcbnew/dialog_general_options.cpp:295
-msgid "Max Links:"
-msgstr "Liens max:"
-
-#: pcbnew/dialog_general_options.cpp:302
-msgid "Auto Save (minuts):"
-msgstr "Sauveg. Auto (min)"
-
-#: pcbnew/dialog_general_options.cpp:312
-#: eeschema/netlist_control.cpp:94
-#: share/dialog_print.cpp:167
-msgid "Options:"
-msgstr "Options :"
-
-#: pcbnew/dialog_general_options.cpp:316
-msgid "Drc ON"
-msgstr "Drc ACTIVE"
-
-#: pcbnew/dialog_general_options.cpp:321
-msgid "Show Ratsnest"
-msgstr "Monter le chevelu général"
-
-#: pcbnew/dialog_general_options.cpp:325
-msgid "Show Mod Ratsnest"
-msgstr "Monter le chevelu du module"
-
-#: pcbnew/dialog_general_options.cpp:329
-msgid "Tracks Auto Del"
-msgstr "Auto Supp. Pistes"
-
-#: pcbnew/dialog_general_options.cpp:333
-msgid "Track 45 Only"
-msgstr "Pistes 45 seulement"
-
-#: pcbnew/dialog_general_options.cpp:337
-msgid "Segments 45 Only"
-msgstr "Segments 45 seulement"
-
-#: pcbnew/dialog_general_options.cpp:341
-#: eeschema/dialog_options.cpp:239
-#: eeschema/options.cpp:124
-msgid "Auto PAN"
-msgstr "Auto PAN"
-
-#: pcbnew/dialog_general_options.cpp:346
-msgid "Double Segm Track"
-msgstr "2 segments pour piste"
-
-#: pcbnew/dialog_general_options.cpp:353
-msgid "When creating tracks"
-msgstr "En creation de pistes"
-
-#: pcbnew/dialog_general_options.cpp:356
-msgid "Magnetic Pads"
-msgstr " Pads magnétiques"
-
-#: pcbnew/dialog_general_options.cpp:358
-msgid "control the capture of the pcb cursor when the mouse cursor enters a pad area"
-msgstr "Controle la capture du curseur pcb quand le curseuir souris est sur le pad"
-
-#: pcbnew/find.cpp:130
-msgid "Marker found"
-msgstr "Marqueur trouvé"
-
-#: pcbnew/find.cpp:131
-#, c-format
-msgid "<%s> Found"
-msgstr "<%s> trouvé"
-
-#: pcbnew/find.cpp:139
-msgid "Marker not found"
-msgstr "Marqueur non trouvé"
-
-#: pcbnew/find.cpp:140
-#, c-format
-msgid "<%s> Not Found"
-msgstr "<%s> Non trouvé"
-
-#: pcbnew/find.cpp:232
-#: eeschema/dialog_find.cpp:107
-msgid "Item to find:"
-msgstr "Elément a chercher:"
-
-#: pcbnew/find.cpp:244
-msgid "Find Item"
-msgstr "Chercher Item"
-
-#: pcbnew/find.cpp:249
-msgid "Find Next Item"
-msgstr "Chercher Item Suivant"
-
-#: pcbnew/find.cpp:256
-msgid "Find Marker"
-msgstr "Chercher Marqueur"
-
-#: pcbnew/find.cpp:260
-msgid "Find Next Marker"
-msgstr "Marqueur Suivant"
-
-#: pcbnew/hotkeys.cpp:129
-msgid "Footprint found, but locked"
-msgstr "Module trouvé, mais verrouillé"
-
-#: pcbnew/hotkeys.cpp:130
-msgid "Footprint found, but not on this layer"
-msgstr "\"Module trouvé, mais pas sur cette couche"
-
-#: pcbnew/hotkeys.cpp:251
-msgid "Delete module?"
-msgstr "Effacer Module?"
 
 #: eeschema/save_schemas.cpp:71
 #: eeschema/files-io.cpp:62
@@ -5196,6 +5194,10 @@ msgstr "Appel de CvPcb (Gestion des associations composants/module)"
 #: eeschema/tool_sch.cpp:100
 msgid "Run Pcbnew"
 msgstr "Appel de Pcbnew (Editeur de Circuits Imprimés)"
+
+#: eeschema/tool_sch.cpp:117
+msgid "Find components and texts"
+msgstr "Recherche de composants et textes"
 
 #: eeschema/tool_sch.cpp:121
 msgid "Netlist generation"
@@ -8716,10 +8718,6 @@ msgstr "Ext. Fichiers Gerber"
 msgid "DCode File Ext:"
 msgstr "Ext. Fichiers DCodes"
 
-#: gerbview/gerbview.cpp:39
-msgid "Gerbview is already running, Continue?"
-msgstr "Gerbview est est cours d'exécution. Continuer ?"
-
 #: gerbview/dcode.cpp:438
 msgid "List D-Codes"
 msgstr "Liste D-Codes"
@@ -8855,6 +8853,10 @@ msgstr "Commande <%c%c> ignorée par Gerbview"
 msgid "Too many include files!!"
 msgstr "Trop de fichiers inclus!!"
 
+#: gerbview/gerbview.cpp:39
+msgid "GerbView is already running. Continue?"
+msgstr "Gerbview est est cours d'exécution. Continuer ?"
+
 #: gerbview/tool_gerber.cpp:35
 msgid "Clear and Load gerber file"
 msgstr "Effacer et charger fichier Gerber"
@@ -8958,6 +8960,10 @@ msgstr "Sélectionner comment les éléments sont a afficher"
 #: gerbview/tool_gerber.cpp:119
 msgid "&Save Gerbview Setup"
 msgstr "&Sauver Gerbview Options"
+
+#: gerbview/tool_gerber.cpp:120
+msgid "Save application preferences"
+msgstr "Sauver préférences"
 
 #: gerbview/tool_gerber.cpp:129
 msgid "&List DCodes"

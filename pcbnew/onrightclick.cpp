@@ -117,9 +117,9 @@ double value;
 /****************************************************************************/
 void WinEDA_PcbFrame::OnRightClick(const wxPoint& MousePos, wxMenu * PopMenu)
 /****************************************************************************/
-/* Prepare le menu PopUp affich� par un click sur le bouton droit
+/* Create the PopUp menu (click on right mouse button)
 de la souris.
-   Ce menu est ensuite compl�t� par la liste des commandes de ZOOM
+   The ZOOM menu is added to this menu
 */
 {
 EDA_BaseStruct *DrawStruct = m_CurrentScreen->m_CurrentItem;
@@ -137,14 +137,14 @@ wxClientDC dc(DrawPanel);
 	{
 		if (m_HTOOL_current_state == ID_TOOLBARH_PCB_AUTOPLACE)
 		{
-			DrawStruct = Locate_Prefered_Module(m_Pcb, CURSEUR_OFF_GRILLE);
+			DrawStruct = Locate_Prefered_Module(m_Pcb, CURSEUR_OFF_GRILLE | VISIBLE_ONLY);
 			if ( DrawStruct ) ((MODULE*)DrawStruct)->Display_Infos(this);
 			else DrawStruct = PcbGeneralLocateAndDisplay();
 		}
 		else DrawStruct = PcbGeneralLocateAndDisplay();
 	}
 
-	// Si commande en cours: affichage fin de commande
+	// If command in progress: Put the Cancel command (if needed) and End command
 	if ( m_ID_current_state )
 	{
 		if ( DrawStruct && DrawStruct->m_Flags )
@@ -187,7 +187,7 @@ wxClientDC dc(DrawPanel);
 	if( !flags )
 	{
 		ADD_MENUITEM(PopMenu, ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST,
-			_("Footprint Get and Move (F)"), Move_Module_xpm);
+			_("Get and Move Footprint"), Move_Module_xpm);
 	}
 	if ( DrawStruct )
 	{
@@ -200,7 +200,7 @@ wxClientDC dc(DrawPanel);
 			if (m_HTOOL_current_state == ID_TOOLBARH_PCB_AUTOPLACE)
 			{
 				PopMenu->AppendSeparator();
-				ADD_MENUITEM(PopMenu, ID_POPUP_PCB_AUTOPLACE_FIXE_MODULE, _("Fix Module"),
+				ADD_MENUITEM(PopMenu, ID_POPUP_PCB_AUTOPLACE_FIXE_MODULE, _("Lock Module"),
 					Locked_xpm);
 				ADD_MENUITEM(PopMenu, ID_POPUP_PCB_AUTOPLACE_FREE_MODULE, _("Free Module"),
 					Unlocked_xpm);

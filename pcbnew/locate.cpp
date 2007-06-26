@@ -163,7 +163,7 @@ EDA_BaseStruct * item;
         {
         TEXTE_MODULE * pt_texte;
             if ( module->m_Layer != LayerSearch) continue;
-            pt_texte = LocateTexteModule(m_Pcb, &module, typeloc);
+            pt_texte = LocateTexteModule(m_Pcb, &module, typeloc | VISIBLE_ONLY);
             if( pt_texte != NULL )
             {
                 Affiche_Infos_E_Texte(this,  module, pt_texte);
@@ -176,7 +176,7 @@ EDA_BaseStruct * item;
     module = NULL;
     {
     TEXTE_MODULE * pt_texte;
-        pt_texte = LocateTexteModule(m_Pcb, &module, typeloc);
+        pt_texte = LocateTexteModule(m_Pcb, &module, typeloc | VISIBLE_ONLY);
         if( pt_texte != NULL )
         {
             Affiche_Infos_E_Texte(this,  module, pt_texte);
@@ -185,7 +185,7 @@ EDA_BaseStruct * item;
     }
 
     /* Search for a footprint */
-    if ( (module = Locate_Prefered_Module(m_Pcb, typeloc)) != NULL)
+    if ( (module = Locate_Prefered_Module(m_Pcb, typeloc | VISIBLE_ONLY)) != NULL)
     {
         module->Display_Infos(this);
         return module;
@@ -738,6 +738,8 @@ TEXTE_MODULE * LocateTexteModule(BOARD * Pcb, MODULE ** PtModule, int typeloc)
     retourne
     - pointeur sur le texte localise ( ou NULL )
     - si Ptmodule != NULL: pointeur sur module module ( non modifie sinon )
+
+	if typeloc bas the flag VISIBLE_ONLY set, only footprints which are "visible" are considered
 */
 {
 EDA_BaseStruct * PtStruct;
@@ -755,6 +757,13 @@ wxPoint ref_pos;
 
     for( ; module != NULL; module = (MODULE*)module->Pnext )
     {
+		if ( (typeloc & VISIBLE_ONLY) )
+		{
+			int layer = module->m_Layer;
+			if( layer==ADHESIVE_N_CU || layer==SILKSCREEN_N_CU ) layer = CUIVRE_N;
+			else if( layer==ADHESIVE_N_CMP || layer==SILKSCREEN_N_CMP ) layer = CMP_N;
+			if ( ! IsModuleLayerVisible( layer ) ) continue;
+		}
          pt_txt_mod = module->m_Reference;
         /* la souris est-elle dans le rectangle autour du texte*/
         if( pt_txt_mod->Locate(ref_pos) )

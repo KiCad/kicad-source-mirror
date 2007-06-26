@@ -38,9 +38,12 @@ sous le courseur souris
 
     if ( hotkey == 0 ) return;
 
+	  // code Ctrl A = 1, Ctr B = 2 ..., remapped, (more easy to understand in switch)
+	if ( hotkey & GR_KB_CTRL ) hotkey += 'A' - 1;
+
     MODULE* module = NULL;
 
-	hotkey = toupper(hotkey);
+	if ( hotkey <= 0xFF) hotkey = toupper(hotkey);
     switch (hotkey)
     {
 		case WXK_DELETE:
@@ -49,7 +52,6 @@ sous le courseur souris
 			break;
 
 		case WXK_BACK:
-		{ 
 			if( m_ID_current_state == ID_TRACK_BUTT && 
 						 GetScreen()->m_Active_Layer <= CMP_N )
 			{
@@ -74,13 +76,38 @@ sous le courseur souris
 				}
 			}
 			break; 
-		}
 		
 		case WXK_END:
 			DrawPanel->MouseToCursorSchema();
 			End_Route( (TRACK *) (GetScreen()->m_CurrentItem), DC);
 			break;
 
+		case 'F' + GR_KB_CTRL :
+			{
+				wxCommandEvent evt;
+				evt.SetId(ID_FIND_ITEMS);
+				Process_Special_Functions(evt);
+			}
+				break;
+
+		case (int('O') + GR_KB_CTRL) :
+			{
+				//try not to duplicate save, load code etc.
+				wxCommandEvent evt;
+				evt.SetId(ID_LOAD_FILE);
+				Files_io(evt);
+			}
+			break;
+
+		case 'S' + GR_KB_CTRL:
+			{
+		 		//try not to duplicate save, load code etc.
+		 		wxCommandEvent evt;
+		 		evt.SetId(ID_SAVE_BOARD);
+				Files_io(evt);
+			}
+			break;
+			
 		case 'V':   // Switch to alternate layer and Place a via if a track is in progress
 			if ( m_ID_current_state != ID_TRACK_BUTT ) return;
 			if ( ItemFree )
@@ -101,7 +128,7 @@ sous le courseur souris
 		case 'L':   // toggle module "MODULE_is_LOCKED" status:
 			// get any module, locked or not locked and toggle its locked status
 			if ( ItemFree )
-				module = Locate_Prefered_Module( m_Pcb, CURSEUR_ON_GRILLE | MATCH_LAYER );
+				module = Locate_Prefered_Module( m_Pcb, CURSEUR_OFF_GRILLE | VISIBLE_ONLY );
 			else if (GetScreen()->m_CurrentItem->m_StructType == TYPEMODULE)
 				module = (MODULE*)GetScreen()->m_CurrentItem;
 			if( module )
@@ -120,14 +147,13 @@ sous le courseur souris
 			if ( ItemFree )
 			{
 				module = Locate_Prefered_Module(m_Pcb, 
-					CURSEUR_ON_GRILLE | IGNORE_LOCKED | MATCH_LAYER );
+					CURSEUR_OFF_GRILLE | IGNORE_LOCKED | VISIBLE_ONLY /*MATCH_LAYER */ );
 				if ( module == NULL ) // no footprint found
 				{
-					module = Locate_Prefered_Module(m_Pcb, CURSEUR_ON_GRILLE );
+					module = Locate_Prefered_Module(m_Pcb, CURSEUR_OFF_GRILLE );
 					if ( module ) // a footprint is found, but locked or on an other layer
 					{
 						if ( module->IsLocked() ) DisplayInfo(this, _("Footprint found, but locked") );
-						else  DisplayInfo(this, _("Footprint found, but not on this layer") );
 						module = NULL;
 					}
 				}

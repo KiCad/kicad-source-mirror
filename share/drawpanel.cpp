@@ -900,11 +900,9 @@ bool escape = FALSE;
 			break;
 		}
 
-
 	if( event.ControlDown() ) localkey |= GR_KB_CTRL;
 	if( event.AltDown() ) localkey |= GR_KB_ALT;
 	if( event.ShiftDown() && (key > 256) ) localkey |= GR_KB_SHIFT;
-
 
 wxClientDC DC(this);
 BASE_SCREEN * Screen = GetScreen();
@@ -925,6 +923,10 @@ BASE_SCREEN * Screen = GetScreen();
 	}
 
 	m_Parent->GeneralControle(&DC, Screen->m_MousePositionInPixels);
+
+#if 0	
+	event.Skip();	// Allow menu shortcut processing
+#endif
 }
 
 
