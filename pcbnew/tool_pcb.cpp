@@ -240,7 +240,7 @@ int ii;
 
 	m_HToolBar->AddSeparator();
 	m_HToolBar->AddTool(ID_GEN_PRINT, wxEmptyString, BITMAP(print_button), _("Print Board"));
-	m_HToolBar->AddTool(ID_GEN_PLOT, wxEmptyString, BITMAP(plot_xpm), _("Plot (Hplg, Postscript, or Gerber format)"));
+	m_HToolBar->AddTool(ID_GEN_PLOT, wxEmptyString, BITMAP(plot_xpm), _("Plot (HPGL, PostScript, or GERBER format)"));
 
 	m_HToolBar->AddSeparator();
 	m_HToolBar->AddTool(ID_ZOOM_PLUS_BUTT, wxEmptyString, BITMAP(zoom_in_xpm), _("zoom + (F1)"));

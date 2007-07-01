@@ -125,7 +125,7 @@ wxString path = wxPathOnly(FullFileName);
 	{
 		wxString mask = wxT("*") + g_PhotoFilenameExt;
 		mask += wxT(";*.gbr;*.lgr;*.ger");
-		filename = EDA_FileSelector(_("GERBER PLOT files:"),
+		filename = EDA_FileSelector(_("Gerber files:"),
 					path,					/* Chemin par defaut */
 					wxEmptyString,					 	/* nom fichier par defaut */
 					g_PhotoFilenameExt,			/* extension par defaut */

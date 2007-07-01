@@ -90,7 +90,7 @@ wxMenuBar * menuBar = GetMenuBar();
 
 		// Add plot menu
 		item = new wxMenuItem(m_FilesMenu, ID_GEN_PLOT, _("&Plot"),
-					_("Plot (Hplg, Postscript, or Gerber format)"));
+					_("Plot (HPGL, PostScript, or GERBER format)"));
 	    item->SetBitmap(plot_xpm);
 		m_FilesMenu->Append(item);
 

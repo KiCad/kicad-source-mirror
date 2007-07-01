@@ -73,7 +73,7 @@ wxMenuBar * menuBar = GetMenuBar();
 
 		wxMenu *choice_plot_fmt = new wxMenu;
 		item = new wxMenuItem(choice_plot_fmt, ID_GEN_PLOT_PS,
-			_("Plot Postscript"), _("Plotting in Postscript format") );
+			_("Plot PostScript"), _("Plotting in PostScript format") );
 	    item->SetBitmap(plot_PS_xpm);
 		choice_plot_fmt->Append(item);
 
@@ -97,7 +97,7 @@ wxMenuBar * menuBar = GetMenuBar();
 
 		m_FilesMenu->AppendSeparator();
 		ADD_MENUITEM_WITH_HELP_AND_SUBMENU(m_FilesMenu, choice_plot_fmt,
-			ID_GEN_PLOT, _("&Plot"),  _("Plot Hplg, Postscript, SVG"), plot_xpm);
+			ID_GEN_PLOT, _("&Plot"),  _("Plot HPGL, PostScript, SVG"), plot_xpm);
 
 		m_FilesMenu->AppendSeparator();
 		item = new wxMenuItem(m_FilesMenu, ID_EXIT, _("E&xit"), _("Quit Eeschema") );

@@ -32,18 +32,18 @@ wxMenuBar * menuBar = GetMenuBar();
 
 		m_FilesMenu = new wxMenu;
 		m_FilesMenu->Append(ID_MENU_LOAD_FILE,
-					 _("Clear and Load gerber file"),
-					 _("Clear all layers and Load new gerber file"),
+					 _("Clear and Load Gerber file"),
+					 _("Clear all layers and Load new Gerber file"),
 					 FALSE);
 
 		m_FilesMenu->Append(ID_MENU_APPEND_FILE,
-					 _("Load gerber file"),
-					 _("Load new gerber file on currrent layer"),
+					 _("Load Gerber file"),
+					 _("Load new Gerber file on currrent layer"),
 					 FALSE);
 
 		m_FilesMenu->Append(ID_MENU_INC_LAYER_AND_APPEND_FILE,
-					 _("Inc Layer and load gerber file"),
-					 _("Increment layer number, and Load gerber file"),
+					 _("Inc Layer and load Gerber file"),
+					 _("Increment layer number, and Load Gerber file"),
 					 FALSE);
 
 		m_FilesMenu->Append(ID_GERBVIEW_LOAD_DCODE_FILE,
@@ -116,7 +116,7 @@ wxMenuBar * menuBar = GetMenuBar();
 		m_Parent->SetLanguageList(configmenu);
 
 		configmenu->AppendSeparator();
-		ADD_MENUITEM_WITH_HELP(configmenu, ID_CONFIG_SAVE, _("&Save Gerbview Setup"),
+		ADD_MENUITEM_WITH_HELP(configmenu, ID_CONFIG_SAVE, _("&Save Setup"),
 				_("Save application preferences"), save_setup_xpm);
 
 		// Menu drill ( generation fichiers percage)

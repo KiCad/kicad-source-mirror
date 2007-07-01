@@ -231,7 +231,7 @@ wxBusyCursor show_wait;
 
 	if ( error )
 	{
-		msg.Printf( _("%d errors while reading gerber file [%s]"),
+		msg.Printf( _("%d errors while reading Gerber file [%s]"),
 					error, GERBER_FullFileName.GetData());
 		DisplayError(this, msg);
 	}

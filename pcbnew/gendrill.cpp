@@ -204,7 +204,7 @@ wxString ps;
 wxString choice_drill_offset_msg[] =
 	{_("absolute"), _("auxiliary axis")};
 	m_Choice_Drill_Offset = new wxRadioBox(this, ID_SEL_DRILL_SHEET,
-						_("Drill Origine:"),
+						_("Drill Origin:"),
 						wxDefaultPosition,wxSize(-1,-1),
 						2,choice_drill_offset_msg,1,wxRA_SPECIFY_COLS);
 	if ( DrillOriginIsAuxAxis ) m_Choice_Drill_Offset->SetSelection(1);
@@ -212,7 +212,7 @@ wxString choice_drill_offset_msg[] =
 
     /* second column */
 wxString choice_drill_map_msg[] =
-	{_("None"), _("drill sheet (HPGL)"), _("drill sheet (Postscript)")};
+	{_("None"), _("drill sheet (HPGL)"), _("drill sheet (PostScript)")};
 	m_Choice_Drill_Map = new wxRadioBox(this, ID_SEL_DRILL_SHEET,
 						_("Drill Sheet:"),
 						wxDefaultPosition,wxSize(-1,-1),
@@ -234,7 +234,7 @@ wxString choice_drill_report_msg[] =
 	m_PenNum = new WinEDA_ValueCtrl(this, _("Pen Number"),
 			g_HPGL_Pen_Num, 2, MiddleBoxSizer, 1);
 
-	m_PenSpeed = new WinEDA_ValueCtrl(this, _("Speed(cm/s)"),
+	m_PenSpeed = new WinEDA_ValueCtrl(this, _("Speed (cm/s)"),
 			g_HPGL_Pen_Speed, CENTIMETRE, MiddleBoxSizer, 1);
 
     m_Check_Mirror = new wxCheckBox(this, -1, _("mirror y axis"));
