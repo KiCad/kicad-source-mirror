@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-06-26 09:46+0100\n"
-"Last-Translator: jp charras <jean-pierre.charras@inpg.fr>\n"
+"PO-Revision-Date: 2007-07-01 21:10+0100\n"
+"Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
@@ -4525,11 +4525,11 @@ msgstr "P&ostprocesseurs"
 msgid "Module Editor: module modified!, Continue ?"
 msgstr "Editeur de Module: module modifié!  Continuer ?"
 
-#: pcbnew/hotkeys.cpp:127
+#: pcbnew/hotkeys.cpp:156
 msgid "Footprint found, but locked"
 msgstr "Module trouvé, mais verrouillé"
 
-#: pcbnew/hotkeys.cpp:248
+#: pcbnew/hotkeys.cpp:277
 msgid "Delete module?"
 msgstr "Effacer Module?"
 
@@ -4717,13 +4717,13 @@ msgid "Componant properties"
 msgstr "Propriétés du composant"
 
 #: eeschema/fieldedi.cpp:223
-#: eeschema/dialog_build_BOM.cpp:274
 #: eeschema/dialog_erc.cpp:237
 #: eeschema/dialog_edit_component_in_lib.cpp:166
 #: eeschema/dialog_create_component.cpp:176
 #: eeschema/libedpart.cpp:241
 #: eeschema/dialog_edit_component_in_schematic.cpp:204
 #: eeschema/editpart.cpp:204
+#: eeschema/dialog_build_BOM.cpp:327
 #: cvpcb/options.cpp:138
 #: cvpcb/dialog_display_options.h:43
 msgid "Options"
@@ -5631,196 +5631,6 @@ msgstr "Incrément Label:"
 msgid "Default Label Size"
 msgstr "Taille Label par défaut:"
 
-#: eeschema/dialog_build_BOM.cpp:195
-msgid "List items : "
-msgstr "Liste éléments:"
-
-#: eeschema/dialog_build_BOM.cpp:199
-#: eeschema/genliste.cpp:126
-msgid "Components by Reference"
-msgstr "Composants par référence"
-
-#: eeschema/dialog_build_BOM.cpp:203
-#: eeschema/genliste.cpp:132
-msgid "Sub Components (i.e U2A, U2B..)"
-msgstr "Sous Composants (i.e U2A, U2B..)"
-
-#: eeschema/dialog_build_BOM.cpp:207
-#: eeschema/genliste.cpp:129
-msgid "Components by Value"
-msgstr "Composants par valeur"
-
-#: eeschema/dialog_build_BOM.cpp:211
-#: eeschema/genliste.cpp:135
-msgid "Hierachy Pins by name"
-msgstr "Pins de hierarchie par nom"
-
-#: eeschema/dialog_build_BOM.cpp:215
-#: eeschema/genliste.cpp:138
-msgid "Hierachy Pins by Sheets"
-msgstr "Pins de hiérarchie par feuilles"
-
-#: eeschema/dialog_build_BOM.cpp:220
-msgid "Print as list"
-msgstr "Imprimer comme liste"
-
-#: eeschema/dialog_build_BOM.cpp:221
-msgid "Print as text for spreadsheet import"
-msgstr "Générer comme text pour importation dans un tableur"
-
-#: eeschema/dialog_build_BOM.cpp:222
-msgid "Ouput:"
-msgstr "Sortie:"
-
-#: eeschema/dialog_build_BOM.cpp:226
-msgid "Fields to Add"
-msgstr "Champ à ajouterr"
-
-#: eeschema/dialog_build_BOM.cpp:230
-msgid "Add Field 1"
-msgstr "Ajouter Champ 1"
-
-#: eeschema/dialog_build_BOM.cpp:234
-msgid "Add Field 2"
-msgstr "Ajouter Champ 2"
-
-#: eeschema/dialog_build_BOM.cpp:238
-msgid "Add Field 3"
-msgstr "Ajouter Champ 3"
-
-#: eeschema/dialog_build_BOM.cpp:242
-msgid "Add Field 4"
-msgstr "Ajouter Champ 4"
-
-#: eeschema/dialog_build_BOM.cpp:246
-msgid "Add Field 5"
-msgstr "Ajouter Champ 5"
-
-#: eeschema/dialog_build_BOM.cpp:250
-msgid "Add Field 6"
-msgstr "Ajouter Champ 6"
-
-#: eeschema/dialog_build_BOM.cpp:254
-msgid "Add Field 7"
-msgstr "Ajouter Champ 7"
-
-#: eeschema/dialog_build_BOM.cpp:258
-msgid "Add Field 8"
-msgstr "Ajouter Champ 8"
-
-#: eeschema/dialog_build_BOM.cpp:265
-#: eeschema/genliste.cpp:144
-msgid "&Create List"
-msgstr "&Créer Liste"
-
-#: eeschema/dialog_build_BOM.cpp:270
-#: eeschema/dialog_erc.cpp:218
-msgid "&Quit"
-msgstr "&Quitter"
-
-#: eeschema/dialog_build_BOM.cpp:278
-msgid "Launch list browser"
-msgstr "Lancer le visualisateur de liste"
-
-#: eeschema/dialog_build_BOM.cpp:383
-msgid "Bill of material:"
-msgstr "Liste du materiel:"
-
-#: eeschema/dialog_build_BOM.cpp:427
-#: eeschema/dialog_build_BOM.cpp:479
-#: eeschema/genliste.cpp:214
-msgid "Failed to open file "
-msgstr "Erreur ouverture "
-
-#: eeschema/dialog_build_BOM.cpp:543
-#, c-format
-msgid ""
-"\n"
-"#Glob labels ( order = Sheet Number ) count = %d\n"
-msgstr ""
-"\n"
-"#Glob labels ( ordre = Numéro de feuiller ) nombre = %d\n"
-
-#: eeschema/dialog_build_BOM.cpp:553
-#, c-format
-msgid ""
-"\n"
-"#Glob labels ( order = Alphab. ) count = %d\n"
-"\n"
-msgstr ""
-"\n"
-"#Glob labels ( ordre = Alphab. ) nombre = %d\n"
-
-#: eeschema/dialog_build_BOM.cpp:560
-#: eeschema/genliste.cpp:294
-msgid ""
-"\n"
-"#End List\n"
-msgstr ""
-"\n"
-"#End List\n"
-
-#: eeschema/dialog_build_BOM.cpp:909
-#: eeschema/component_class.cpp:53
-msgid "Field"
-msgstr "Champ"
-
-#: eeschema/dialog_build_BOM.cpp:916
-#: eeschema/genliste.cpp:584
-msgid ""
-"\n"
-"#Cmp ( order = Reference )"
-msgstr ""
-"\n"
-"#Cmp ( ordre = Reference )"
-
-#: eeschema/dialog_build_BOM.cpp:917
-#: eeschema/dialog_build_BOM.cpp:983
-#: eeschema/genliste.cpp:585
-#: eeschema/genliste.cpp:640
-msgid " (with SubCmp)"
-msgstr "avec sub-composants"
-
-#: eeschema/dialog_build_BOM.cpp:951
-#: eeschema/genliste.cpp:616
-#: eeschema/hierarch.cpp:134
-#: eeschema/erc.cpp:690
-msgid "Root"
-msgstr "Racine"
-
-#: eeschema/dialog_build_BOM.cpp:965
-#: eeschema/dialog_build_BOM.cpp:1017
-#: eeschema/genliste.cpp:623
-#: eeschema/genliste.cpp:672
-msgid "#End Cmp\n"
-msgstr "#End Cmp\n"
-
-#: eeschema/dialog_build_BOM.cpp:982
-#: eeschema/genliste.cpp:639
-msgid ""
-"\n"
-"#Cmp ( order = Value )"
-msgstr ""
-"\n"
-"#Cmp ( ordre = Valeur )"
-
-#: eeschema/dialog_build_BOM.cpp:1042
-#: eeschema/genliste.cpp:697
-#, c-format
-msgid "> %-28.28s Global        (Sheet %.2d) pos: %3.3f, %3.3f\n"
-msgstr "> %-28.28s Global        (feuille %.2d) pos: %3.3f, %3.3f\n"
-
-#: eeschema/dialog_build_BOM.cpp:1058
-#: eeschema/genliste.cpp:713
-#, c-format
-msgid "> %-28.28s Sheet %-7.7s (Sheet %.2d) pos: %3.3f, %3.3f\n"
-msgstr "> %-28.28s Sheet %-7.7s (feuille %.2d) pos: %3.3f, %3.3f\n"
-
-#: eeschema/dialog_build_BOM.cpp:1071
-#: eeschema/genliste.cpp:726
-msgid "#End labels\n"
-msgstr "#End labels\n"
-
 #: eeschema/netlist_control.cpp:98
 #: eeschema/netlist_control.cpp:252
 #: gerbview/options.cpp:207
@@ -5923,6 +5733,11 @@ msgstr "&Test Erc"
 #: eeschema/dialog_erc.cpp:215
 msgid "&Del Markers"
 msgstr "&Supprimer Marqueurs"
+
+#: eeschema/dialog_erc.cpp:218
+#: eeschema/dialog_build_BOM.cpp:323
+msgid "&Quit"
+msgstr "&Quitter"
 
 #: eeschema/dialog_erc.cpp:222
 msgid "erc"
@@ -6152,13 +5967,43 @@ msgid "  Normal"
 msgstr "  Normal"
 
 #: eeschema/genliste.cpp:101
-#: eeschema/dialog_build_BOM.h:57
+#: eeschema/dialog_build_BOM.h:58
 msgid "List of Material"
 msgstr "Liste du Matériel"
 
 #: eeschema/genliste.cpp:123
 msgid " List items : "
 msgstr " Liste éléments: "
+
+#: eeschema/genliste.cpp:126
+#: eeschema/dialog_build_BOM.cpp:244
+msgid "Components by Reference"
+msgstr "Composants par référence"
+
+#: eeschema/genliste.cpp:129
+#: eeschema/dialog_build_BOM.cpp:252
+msgid "Components by Value"
+msgstr "Composants par valeur"
+
+#: eeschema/genliste.cpp:132
+#: eeschema/dialog_build_BOM.cpp:248
+msgid "Sub Components (i.e U2A, U2B..)"
+msgstr "Sous Composants (i.e U2A, U2B..)"
+
+#: eeschema/genliste.cpp:135
+#: eeschema/dialog_build_BOM.cpp:256
+msgid "Hierachy Pins by name"
+msgstr "Pins de hierarchie par nom"
+
+#: eeschema/genliste.cpp:138
+#: eeschema/dialog_build_BOM.cpp:260
+msgid "Hierachy Pins by Sheets"
+msgstr "Pins de hiérarchie par feuilles"
+
+#: eeschema/genliste.cpp:144
+#: eeschema/dialog_build_BOM.cpp:318
+msgid "&Create List"
+msgstr "&Créer Liste"
 
 #: eeschema/genliste.cpp:149
 #: 3d-viewer/3d_toolbar.cpp:112
@@ -6168,6 +6013,12 @@ msgstr "&Quitter"
 #: eeschema/genliste.cpp:172
 msgid "List of material:"
 msgstr "Liste du Matériel:"
+
+#: eeschema/genliste.cpp:214
+#: eeschema/dialog_build_BOM.cpp:476
+#: eeschema/dialog_build_BOM.cpp:528
+msgid "Failed to open file "
+msgstr "Erreur ouverture "
 
 #: eeschema/genliste.cpp:277
 msgid ""
@@ -6184,6 +6035,71 @@ msgid ""
 msgstr ""
 "\n"
 "#Glob labels ( ordre = Alphab. )\n"
+
+#: eeschema/genliste.cpp:294
+#: eeschema/dialog_build_BOM.cpp:609
+msgid ""
+"\n"
+"#End List\n"
+msgstr ""
+"\n"
+"#End List\n"
+
+#: eeschema/genliste.cpp:584
+#: eeschema/dialog_build_BOM.cpp:969
+msgid ""
+"\n"
+"#Cmp ( order = Reference )"
+msgstr ""
+"\n"
+"#Cmp ( ordre = Reference )"
+
+#: eeschema/genliste.cpp:585
+#: eeschema/genliste.cpp:640
+#: eeschema/dialog_build_BOM.cpp:970
+#: eeschema/dialog_build_BOM.cpp:1036
+msgid " (with SubCmp)"
+msgstr "avec sub-composants"
+
+#: eeschema/genliste.cpp:616
+#: eeschema/hierarch.cpp:134
+#: eeschema/erc.cpp:690
+#: eeschema/dialog_build_BOM.cpp:1004
+msgid "Root"
+msgstr "Racine"
+
+#: eeschema/genliste.cpp:623
+#: eeschema/genliste.cpp:672
+#: eeschema/dialog_build_BOM.cpp:1018
+#: eeschema/dialog_build_BOM.cpp:1070
+msgid "#End Cmp\n"
+msgstr "#End Cmp\n"
+
+#: eeschema/genliste.cpp:639
+#: eeschema/dialog_build_BOM.cpp:1035
+msgid ""
+"\n"
+"#Cmp ( order = Value )"
+msgstr ""
+"\n"
+"#Cmp ( ordre = Valeur )"
+
+#: eeschema/genliste.cpp:697
+#: eeschema/dialog_build_BOM.cpp:1095
+#, c-format
+msgid "> %-28.28s Global        (Sheet %.2d) pos: %3.3f, %3.3f\n"
+msgstr "> %-28.28s Global        (feuille %.2d) pos: %3.3f, %3.3f\n"
+
+#: eeschema/genliste.cpp:713
+#: eeschema/dialog_build_BOM.cpp:1111
+#, c-format
+msgid "> %-28.28s Sheet %-7.7s (Sheet %.2d) pos: %3.3f, %3.3f\n"
+msgstr "> %-28.28s Sheet %-7.7s (feuille %.2d) pos: %3.3f, %3.3f\n"
+
+#: eeschema/genliste.cpp:726
+#: eeschema/dialog_build_BOM.cpp:1124
+msgid "#End labels\n"
+msgstr "#End labels\n"
 
 #: eeschema/eeschema.cpp:56
 msgid "Eeschema is already running, Continue?"
@@ -6593,6 +6509,11 @@ msgstr "Ref"
 msgid "Sheet"
 msgstr "Feuille"
 
+#: eeschema/component_class.cpp:53
+#: eeschema/dialog_build_BOM.cpp:962
+msgid "Field"
+msgstr "Champ"
+
 #: eeschema/sheetlab.cpp:77
 msgid "PinSheet Properties:"
 msgstr "Propriétés des Pins de Hierarchie"
@@ -6994,6 +6915,7 @@ msgstr "Chemin par défaut des librairies"
 
 #: eeschema/netlist.cpp:96
 #: eeschema/netlist.cpp:129
+#: eeschema/dialog_build_BOM.cpp:265
 msgid "List"
 msgstr "Liste"
 
@@ -7927,6 +7849,97 @@ msgid ""
 msgstr ""
 "\n"
 " >> Erreurs ERC: %d\n"
+
+#: eeschema/dialog_build_BOM.cpp:240
+msgid "List items : "
+msgstr "Liste éléments:"
+
+#: eeschema/dialog_build_BOM.cpp:266
+msgid "Text for spreadsheet import"
+msgstr "Texte pour import dans tableur:"
+
+#: eeschema/dialog_build_BOM.cpp:267
+msgid "Output format:"
+msgstr "Format de sortie"
+
+#: eeschema/dialog_build_BOM.cpp:272
+msgid "Tab"
+msgstr "Tab"
+
+#: eeschema/dialog_build_BOM.cpp:273
+msgid ";"
+msgstr ";"
+
+#: eeschema/dialog_build_BOM.cpp:274
+msgid ","
+msgstr ","
+
+#: eeschema/dialog_build_BOM.cpp:275
+msgid "Field separator for spreadsheet import:"
+msgstr "Separateur de champ pour import dans tableu:"
+
+#: eeschema/dialog_build_BOM.cpp:279
+msgid "Fields to Add"
+msgstr "Champ à ajouterr"
+
+#: eeschema/dialog_build_BOM.cpp:283
+msgid "Add Field 1"
+msgstr "Ajouter Champ 1"
+
+#: eeschema/dialog_build_BOM.cpp:287
+msgid "Add Field 2"
+msgstr "Ajouter Champ 2"
+
+#: eeschema/dialog_build_BOM.cpp:291
+msgid "Add Field 3"
+msgstr "Ajouter Champ 3"
+
+#: eeschema/dialog_build_BOM.cpp:295
+msgid "Add Field 4"
+msgstr "Ajouter Champ 4"
+
+#: eeschema/dialog_build_BOM.cpp:299
+msgid "Add Field 5"
+msgstr "Ajouter Champ 5"
+
+#: eeschema/dialog_build_BOM.cpp:303
+msgid "Add Field 6"
+msgstr "Ajouter Champ 6"
+
+#: eeschema/dialog_build_BOM.cpp:307
+msgid "Add Field 7"
+msgstr "Ajouter Champ 7"
+
+#: eeschema/dialog_build_BOM.cpp:311
+msgid "Add Field 8"
+msgstr "Ajouter Champ 8"
+
+#: eeschema/dialog_build_BOM.cpp:331
+msgid "Launch list browser"
+msgstr "Lancer le visualisateur de liste"
+
+#: eeschema/dialog_build_BOM.cpp:432
+msgid "Bill of material:"
+msgstr "Liste du materiel:"
+
+#: eeschema/dialog_build_BOM.cpp:592
+#, c-format
+msgid ""
+"\n"
+"#Glob labels ( order = Sheet Number ) count = %d\n"
+msgstr ""
+"\n"
+"#Glob labels ( ordre = Numéro de feuiller ) nombre = %d\n"
+
+#: eeschema/dialog_build_BOM.cpp:602
+#, c-format
+msgid ""
+"\n"
+"#Glob labels ( order = Alphab. ) count = %d\n"
+"\n"
+msgstr ""
+"\n"
+"#Glob labels ( ordre = Alphab. ) nombre = %d\n"
 
 #: cvpcb/dialog_display_options.cpp:141
 #: cvpcb/options.cpp:159

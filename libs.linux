@@ -9,6 +9,10 @@
 # non-standard location edit common/gestfich.ccp so it knows where to
 # load help/data/etc. files from.
 # Current supported PREFIXes are /usr, /usr/local & /usr/local/kicad
+
+STD_INSTALL = 1
+
+ifeq ($(STD_INSTALL), 1)
 PREFIX = /usr
 KICAD_BIN = $(PREFIX)/bin
 KICAD_PLUGINS = $(PREFIX)/lib/kicad/plugins
@@ -18,6 +22,19 @@ KICAD_MODULES=$(KICAD_DATA)/modules
 KICAD_LIBRARY=$(KICAD_DATA)/library
 KICAD_INTERNAT=$(KICAD_DATA)/internat
 KICAD_TEMPLATE=$(KICAD_DATA)/template
+
+# used by myself (JP Charras) to build a staticcaly linked distribution intalled in /usr/local (with STD_INSTALL = 0)
+else
+PREFIX = /usr/local/linux
+KICAD_BIN = $(PREFIX)/bin
+KICAD_PLUGINS = $(PREFIX)/linux/plugins
+KICAD_DOCS=$(PREFIX)/help
+KICAD_DATA=$(PREFIX)
+KICAD_MODULES=$(KICAD_DATA)/modules
+KICAD_LIBRARY=$(KICAD_DATA)/library
+KICAD_INTERNAT=$(KICAD_DATA)/internat
+KICAD_TEMPLATE=$(KICAD_DATA)/template
+endif
 
 # http://www.gnu.org/software/autoconf/manual/make/Catalogue-of-Rules.html#Catalogue-of-Rules
 CXX = g++

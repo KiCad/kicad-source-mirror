@@ -44,7 +44,9 @@
 #define ID_CHECKBOX1 10003
 #define ID_CHECKBOX3 10005
 #define ID_CHECKBOX4 10006
-#define ID_RADIOBOX1 10009
+#define ID_RADIOBOX_SELECT_FORMAT 10009
+#define ID_RADIOBOX_SEPARATOR 10015
+#define ID_CHECKBOX6 10016
 #define ID_CHECKBOX_FIELD1 10007
 #define ID_CHECKBOX_FIELD2 10008
 #define ID_CHECKBOX_FIELD4 10010
@@ -52,7 +54,6 @@
 #define ID_CHECKBOX_FIELD6 10012
 #define ID_CHECKBOX_FIELD7 10013
 #define ID_CHECKBOX_FIELD8 10014
-#define ID_CHECKBOX5 10002
 #define SYMBOL_WINEDA_BUILD_BOM_FRAME_STYLE wxDEFAULT_DIALOG_STYLE|wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxSTAY_ON_TOP|wxCLOSE_BOX
 #define SYMBOL_WINEDA_BUILD_BOM_FRAME_TITLE _("List of Material")
 #define SYMBOL_WINEDA_BUILD_BOM_FRAME_IDNAME ID_DIALOG
@@ -101,6 +102,9 @@ public:
     /// wxEVT_CLOSE_WINDOW event handler for ID_DIALOG
     void OnCloseWindow( wxCloseEvent& event );
 
+    /// wxEVT_COMMAND_RADIOBOX_SELECTED event handler for ID_RADIOBOX_SELECT_FORMAT
+    void OnRadioboxSelectFormatSelected( wxCommandEvent& event );
+
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
     void OnOkClick( wxCommandEvent& event );
 
@@ -124,6 +128,7 @@ public:
 	int PrintListeCmpByRef( FILE * f, EDA_BaseStruct ** List, int NbItems, bool CompactForm = FALSE );
 	int PrintListeCmpByVal( FILE *f, EDA_BaseStruct **List, int NbItems);
 	void PrintFieldData(FILE * f, EDA_SchComponentStruct * DrawLibItem, bool CompactForm = FALSE);
+	void SavePreferences(void);
 
 
     /// Should we show tooltips?
@@ -136,6 +141,8 @@ public:
     wxCheckBox* m_GenListLabelsbyVal;
     wxCheckBox* m_GenListLabelsbySheet;
     wxRadioBox* m_OutputFormCtrl;
+    wxRadioBox* m_OutputSeparatorCtrl;
+    wxCheckBox* m_GetListBrowser;
     wxStaticBoxSizer* m_FieldsToAppendListSizer;
     wxCheckBox* m_AddField1;
     wxCheckBox* m_AddField2;
@@ -145,7 +152,6 @@ public:
     wxCheckBox* m_AddField6;
     wxCheckBox* m_AddField7;
     wxCheckBox* m_AddField8;
-    wxCheckBox* m_GetListBrowser;
 ////@end WinEDA_Build_BOM_Frame member variables
 
 	WinEDA_DrawFrame * m_Parent;
