@@ -279,11 +279,13 @@ wxString msg;
 wxString attribut_list[3] = { _("Normal"), _("Normal+Insert"), _("Virtual") };
 	m_AttributsCtrl = new wxRadioBox( m_PanelProperties, -1, _("Attributs"), wxDefaultPosition,
 				wxSize(-1,-1), 3, attribut_list, 1);
+#if wxCHECK_VERSION(2,8,0)
 	m_AttributsCtrl->SetItemToolTip(0, _("Use this attribute for most non smd components"));
 	m_AttributsCtrl->SetItemToolTip(1,
 		_("Use this attribute for smd components.\nOnly components with this option are put in the footprint position list file"));
 	m_AttributsCtrl->SetItemToolTip(2,
 		_("Use this attribute for \"virtual\" components drawn on board (like a old ISA PC bus connector)"));
+#endif
 	PropRightSizer->Add(m_AttributsCtrl, 0, wxGROW|wxALL, 5);
 
 	switch (m_CurrentModule->m_Attributs & 255)
@@ -311,8 +313,10 @@ wxString properties_list[2] = { _("Free"), _("Locked")};
 				wxSize(-1,-1), 2, properties_list, 1);
 	m_AutoPlaceCtrl->SetSelection(
 		(m_CurrentModule->m_ModuleStatus & MODULE_is_LOCKED) ? 1 : 0);
+#if wxCHECK_VERSION(2,8,0)
 	m_AutoPlaceCtrl->SetItemToolTip(0, _("Enable hotkey move commands and Auto Placement"));
 	m_AutoPlaceCtrl->SetItemToolTip(1, _("Disable hotkey move commands and Auto Placement"));
+#endif
 	PropRightSizer->Add(m_AutoPlaceCtrl, 0, wxGROW|wxALL, 5);
 
 	StaticText = new wxStaticText(m_PanelProperties, -1, _("Rot 90"));

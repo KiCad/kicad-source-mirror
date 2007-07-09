@@ -14,7 +14,7 @@ STD_INSTALL = 1
 
 ifeq ($(STD_INSTALL), 1)
 PREFIX = /usr
-KICAD_BIN = $(PREFIX)/linux
+KICAD_BIN = $(PREFIX)/bin
 KICAD_PLUGINS = $(PREFIX)/lib/kicad/plugins
 KICAD_DOCS=$(PREFIX)/share/doc/kicad
 KICAD_DATA=$(PREFIX)/share/kicad
