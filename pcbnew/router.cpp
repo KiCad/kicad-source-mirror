@@ -17,12 +17,6 @@
 
 #define PSCALE 1
 
-/* routines externes */
-int ReadListeSegmentDescr(wxDC * DC, FILE * File,
-									TRACK * PtSegm,DrawStructureType ItemType,
-									int * LineNum, int NumSegm);
-
-
 /* routines internes */
 static void Out_Pads(BOARD * Pcb, FILE * outfile);
 static int GenEdges(BOARD * Pcb, FILE * outfile);
@@ -513,8 +507,14 @@ void WinEDA_PcbFrame::ReadAutoroutedTracks(wxDC * DC)
 {
 char Line[1024];
 wxString FullFileName, msg;
-int LineNum = 0, nbtracks, NbTrack = 0;
+int LineNum = 0, NbTrack = 0, NetCode = 0;
 FILE * File;
+TRACK * NewTrack;
+SEGVIA * NewVia;
+int track_count, track_layer, image, track_width;
+int via_layer1, via_layer2, via_size;
+wxPoint track_start, track_end;
+int max_layer = m_Pcb->m_BoardSettings->m_CopperLayerCount;
 
 	/* Calcule du nom du fichier intermediaire de communication */
 	FullFileName = m_CurrentScreen->m_FileName;
@@ -532,37 +532,85 @@ FILE * File;
 		 Affiche_Message(msg);
 		}
 
-	nbtracks = 0;
+	setlocale(LC_NUMERIC, "C");
+
+	track_width = g_DesignSettings.m_CurrentTrackWidth;
+	via_size = g_DesignSettings.m_CurrentViaSize;
 	while( GetLine(File, Line, &LineNum ) != NULL )
-	  {
-		 if(strnicmp(Line,"$EndPCB",6) == 0) break;
+	{
+	char ident = Line[0];
+		switch ( ident )
+		{
+		case 'j':	// Header, not used
+			break;
 
-		 if(strnicmp(Line,"$TRACK",6) == 0)
-		   {
-		TRACK * StartTrack = m_Pcb->m_Track;
-
-		for( ;StartTrack != NULL; StartTrack = (TRACK*)StartTrack->Pnext)
-		  {
-			  if( StartTrack->Pnext == NULL ) break;
-		  }
-
-		nbtracks = ReadListeSegmentDescr(DC, File, StartTrack, TYPETRACK,
-								&LineNum, NbTrack);
-		m_Pcb->m_NbSegmTrack += nbtracks;
-		break;
-		   }
-	  }
+		case 'R':	// Net record
+			sscanf(Line+2, "%d", & NetCode);
+			break;
+		
+		case 'V':	// via record: fmt = V symbol pos_x pos_y layer1 layer2
+			sscanf(Line+2, "%d %d %d %d %d", & image,
+				& track_start.x, & track_start.y, & via_layer1, &via_layer2);
+			via_layer1--; via_layer2--;
+			if ( via_layer1 == max_layer-1 ) via_layer1 = CMP_N;
+			if ( via_layer2 == max_layer-1 ) via_layer2 = CMP_N;
+			NewVia = new SEGVIA(m_Pcb);
+			NewVia->m_Start = NewVia->m_End = track_start;
+			NewVia->m_Width = via_size;
+			NewVia->m_Layer = via_layer1 + (via_layer2<<4);
+			if ( NewVia->m_Layer == 0x0F || NewVia->m_Layer == 0xF0)
+				NewVia->m_Shape = VIA_NORMALE;
+			else NewVia->m_Shape = VIA_ENTERREE;
+			NewVia->Insert(m_Pcb, NULL);
+			NbTrack++;
+			break;
+		
+		case 'T':	// Track list start: fmt = T image layer t_count
+			sscanf(Line+2, "%d %d %d", & image, & track_layer, & track_count);
+			track_layer--;
+			if ( track_layer == max_layer-1 ) track_layer = CMP_N;
+			// Read corners: fmt = C x_pos y_pos
+			for ( int ii = 0; ii < track_count; ii++ )
+			{
+				if( GetLine(File, Line, &LineNum ) != NULL )
+				{
+					if ( Line[0] != 'C' ) break;
+					if ( ii == 0 )
+						sscanf(Line+2, "%d %d", & track_start.x, & track_start.y);
+					else
+					{
+						sscanf(Line+2, "%d %d", & track_end.x, & track_end.y);
+						NewTrack = new TRACK(m_Pcb);
+						NewTrack->m_Width = track_width;
+						NewTrack->m_Layer = track_layer;
+						NewTrack->m_Start = track_start;
+						NewTrack->m_End = track_end;
+						track_start = track_end;
+						NewTrack->Insert(m_Pcb, NULL);
+						NbTrack++;
+					}
+				}
+				else break;
+			}
+			break;
+		
+		default:
+			break;
+		}
+	}
 
 	fclose(File);
 
-	if( nbtracks == 0 ) DisplayError(this, wxT("Warning: No tracks"), 10);
+	setlocale(LC_NUMERIC, "");
+
+	if( NbTrack == 0 ) DisplayError(this, wxT("Warning: No tracks"), 10);
 	else
-	  {
-	  m_Pcb->m_Status_Pcb = 0;
-	  m_CurrentScreen->SetModify();
-	  }
+	{
+		m_Pcb->m_Status_Pcb = 0;
+		m_CurrentScreen->SetModify();
+	}
 
 	Compile_Ratsnest(DC, TRUE);
-	if( nbtracks ) m_CurrentScreen->SetRefreshReq();
+	if( NbTrack ) m_CurrentScreen->SetRefreshReq();
 }
 

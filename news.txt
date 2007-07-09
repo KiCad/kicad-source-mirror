@@ -1,5 +1,12 @@
 **************************************************************
 Update 02 jul 2007
+All:
+	Window version only:
+	problem solved in autoinstall package fo XP (help files and others filse not found)
+	This problem was already solved, but changes were lost in last release.
+
+**************************************************************
+Update 02 jul 2007
 pcbnew:
 	bug fix (problem in postscript generation due to the internationalization
 		of floating point number notation )

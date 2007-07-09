@@ -14,7 +14,7 @@ STD_INSTALL = 1
 
 ifeq ($(STD_INSTALL), 1)
 PREFIX = /usr
-KICAD_BIN = $(PREFIX)/bin
+KICAD_BIN = $(PREFIX)/linux
 KICAD_PLUGINS = $(PREFIX)/lib/kicad/plugins
 KICAD_DOCS=$(PREFIX)/share/doc/kicad
 KICAD_DATA=$(PREFIX)/share/kicad
@@ -23,8 +23,8 @@ KICAD_LIBRARY=$(KICAD_DATA)/library
 KICAD_INTERNAT=$(KICAD_DATA)/internat
 KICAD_TEMPLATE=$(KICAD_DATA)/template
 
-# used by myself (JP Charras) to build a staticcaly linked distribution intalled in /usr/local (with STD_INSTALL = 0)
 else
+# used by myself (JP Charras) to build a statically linked distribution intalled in /usr/local (with STD_INSTALL = 0)
 PREFIX = /usr/local/linux
 KICAD_BIN = $(PREFIX)/bin
 KICAD_PLUGINS = $(PREFIX)/linux/plugins
@@ -38,7 +38,6 @@ endif
 
 # http://www.gnu.org/software/autoconf/manual/make/Catalogue-of-Rules.html#Catalogue-of-Rules
 CXX = g++
-LD  = g++
 
 
 SRCSUFF = .cpp
@@ -46,8 +45,8 @@ OBJSUFF = .o
 FINAL = 1
 
 
-# turn on debugging for all executables, only tested without KICAD_PYTHON
-DEBUG = 1
+# turn on/OFF debugging for all executables, only tested without KICAD_PYTHON
+DEBUG = 0
 
 
 # common CPPFLAGS to all components, further CPPFLAGS customization in 
@@ -67,9 +66,17 @@ endif
 # You must uncomment these lines for static link (or build with "make -f makefile.gtk KICAD_STATIC_LINK=1")
 # dynamic link is less difficult than static link and is what you would normally want
 # to use if kicad is running only on your system or one with same level of libraries.
-#ifndef KICAD_PYTHON
-#KICAD_STATIC_LINK = 1
-#endif
+ifndef KICAD_PYTHON
+ifeq ($(STD_INSTALL), 0)
+KICAD_STATIC_LINK = 1
+endif
+endif
+
+ifeq ($(KICAD_STATIC_LINK), 1)
+LD  = gcc
+else
+LD  = g++
+endif
 
 ifdef KICAD_PYTHON
 PYTHON_VERSION=2.5

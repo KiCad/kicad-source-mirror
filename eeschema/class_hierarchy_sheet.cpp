@@ -162,7 +162,7 @@ int LineWidth = g_DrawMinimunLineWidth;
 	GRRect(&panel->m_ClipBox, DC, pos.x, pos.y,
 				 pos.x + m_Size.x, pos.y + m_Size.y, LineWidth, color);
 
-	/* Trace des textes : SheetName */
+	/* Draw text : SheetName */
 	if( Color > 0 ) txtcolor = Color;
 	else txtcolor = ReturnLayerColor(LAYER_SHEETNAME);
 
@@ -172,7 +172,7 @@ int LineWidth = g_DrawMinimunLineWidth;
 				Text, TEXT_ORIENT_HORIZ, wxSize(m_SheetNameSize,m_SheetNameSize),
 				GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM, LineWidth);
 
-	/* Trace des textes : FileName */
+	/* Draw text : FileName */
 	if( Color >= 0 ) txtcolor = Color;
 	else txtcolor = ReturnLayerColor(LAYER_SHEETFILENAME);
 	Text = wxT("File: ") + m_FileName;
@@ -183,7 +183,7 @@ int LineWidth = g_DrawMinimunLineWidth;
 				GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, LineWidth);
 
 
-	/* Trace des textes : SheetLabel */
+	/* Draw text : SheetLabel */
 	SheetLabelStruct = m_Label;
 	while( SheetLabelStruct != NULL )
 	{
@@ -193,7 +193,7 @@ int LineWidth = g_DrawMinimunLineWidth;
 }
 
 
-/************************/
+	/************************/
 	/* DrawSheetLabelStruct */
 	/************************/
 

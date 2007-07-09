@@ -37,6 +37,7 @@ static wxString s_HelpPathList[] = {
 #ifdef __WINDOWS__
 	wxT("c:/kicad/help/"),
 	wxT("d:/kicad/help/"),
+	wxT("c:/Program Files/kicad/help/"),
 #else
 	wxT("/usr/share/doc/kicad/"),
 	wxT("/usr/local/share/doc/kicad/"),
@@ -52,6 +53,7 @@ static wxString s_KicadDataPathList[] = {
 #ifdef __WINDOWS__
 	wxT("c:/kicad/"),
 	wxT("d:/kicad/"),
+	wxT("c:/Program Files/kicad/"),
 #else
 	wxT("/usr/share/kicad/"),
 	wxT("/usr/local/share/kicad/"),
@@ -332,7 +334,11 @@ bool PathFound = FALSE;
 	FullPath += wxT("/help/");
 	LocaleString = EDA_Appl->m_Locale->GetCanonicalName();
 
-	if ( FullPath.Contains( wxT("kicad")) )
+	wxString path_tmp = FullPath;
+#ifdef __WINDOWS__
+	path_tmp.MakeLower();
+#endif
+	if ( path_tmp.Contains( wxT("kicad")) )
 	{
 		if ( wxDirExists(FullPath) ) PathFound = TRUE;
 	}
@@ -520,8 +526,14 @@ wxString data_path;
 	else 	// Chemin cherche par le chemin des executables
 	{		// le chemin est bindir../
 		wxString tmp = EDA_Appl->m_BinDir;
+#ifdef __WINDOWS__
+		tmp.MakeLower();
+#endif
 		if ( tmp.Contains( wxT("kicad") ) )
 		{
+#ifdef __WINDOWS__
+			tmp = EDA_Appl->m_BinDir;
+#endif
 			if ( tmp.Last() == '/' ) tmp.RemoveLast();
 			data_path = tmp.BeforeLast('/'); // id cd ../
 			data_path += UNIX_STRING_DIR_SEP;

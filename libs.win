@@ -1,4 +1,4 @@
-# File:		winmake.env
+# File:		libs.win
 #binaries path:
 KICAD_BIN = /f/kicad/winexe
 
@@ -12,6 +12,7 @@ KICAD_BIN = /f/kicad/winexe
 # DLL use wxWin STATIC	 0					0			   1
 #
 
+#comment this for static wxWidgets link
 #WXUSINGDLL = 1
 
 #Define the wxWidget path (if not found in environment variables):
@@ -20,9 +21,6 @@ WXWIN=/f/wxMSW-2.8.4
 endif
 LIBVERSION = 2.8
 
-
-#comment this for static wxWidgets link
-#WXUSINGDLL = 1
 
 # You must comment or uncomment this line to disable/enable python support
 #KICAD_PYTHON = 1
