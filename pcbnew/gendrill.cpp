@@ -1393,7 +1393,7 @@ void PlotOvalDrillSymbol(const wxPoint & position,const wxSize & size,int orient
 void WinEDA_DrillFrame::GenDrillReport(const wxString & FullFileName)
 /********************************************************************/
 /*
-Create a list od drill values and drill count
+Create a list of drill values and drill count
 */
 {
 wxString FileName, Mask(wxT("*")), Ext(wxT(".*"));
@@ -1443,5 +1443,7 @@ FORET * foret;
 
 		fputs(line, dest);
 	}
+	
+	fclose(dest);
 
 }
