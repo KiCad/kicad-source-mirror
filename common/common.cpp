@@ -241,7 +241,7 @@ wxString layer_name_list[] = {
 	_("Inner L8 "), _("Inner L9 "), _("Inner L10"), _("Inner L11"),
 	_("Inner L12"), _("Inner L13"), _("Inner L14"), _("Component"),
 	_("Adhes Cop"), _("Adhes Cmp"), _("SoldP Cop"), _("SoldP Cmp"),
-	_("SilkS Cop"), _("SilkS Cmp"), _("Mask Copp"), _("Mask Cmp "),
+	_("SilkS Cop"), _("SilkS Cmp"), _("Mask Cop "), _("Mask Cmp "),
 	_("Drawings "), _("Comments "), _("Eco1     "), _("Eco2     "),
 	_("Edges Pcb"), _("---      "), _("---      "), _("---      ")
 	};
@@ -253,9 +253,9 @@ wxString layer_name_list_for_filename[] = {
 	wxT("InnerL8"), wxT("InnerL9"), wxT("InnerL10"), wxT("InnerL11"),
 	wxT("InnerL12"), wxT("InnerL13"), wxT("InnerL14"), wxT("Component"),
 	wxT("AdhesCop"), wxT("AdhesCmp"), wxT("SoldPCop"), wxT("SoldPCmp"),
-	wxT("SilkSCop"), wxT("SilkSCmp"), wxT("MaskCopp"), wxT("MaskCmp"),
+	wxT("SilkSCop"), wxT("SilkSCmp"), wxT("MaskCop"), wxT("MaskCmp"),
 	wxT("Drawings"), wxT("Comments"), wxT("Eco1"), wxT("Eco2"),
-	wxT("Edges Pcb"), wxT("---"), wxT("---"), wxT("---")
+	wxT("EdgesPcb"), wxT("---"), wxT("---"), wxT("---")
 	};
 	if ( layer_number >= 31 ) layer_number = 31;
 
