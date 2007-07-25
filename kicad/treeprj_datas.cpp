@@ -23,10 +23,6 @@
 #include "bitmaps/icon_gerbview_small.xpm"
 #include "bitmaps/icon_cvpcb_small.xpm"
 #include "bitmaps/unknown.xpm"
-//#include "bitmaps/new_gerb.xpm"
-//#include "bitmaps/new_pcb.xpm"
-//#include "bitmaps/new_sch.xpm"
-//#include "bitmaps/new_cvpcb.xpm"
 
 #include "id.h"
 

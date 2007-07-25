@@ -29,10 +29,10 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist(void)
 int i , j , k ,l ;
 char * LibName;
 char Line[1024];
-char label[80] ;		/* buffer des references composants */
-char ref_schema[80] ;	/* buffer de la ref schematique */
-char val[80] ;		 /* buffer des valeurs/ref.lib */
-char postval[80] ;	/* buffer de la valeur de fin de ligne (vraie valeur) */
+char component_reference[80] ;		/* buffer des references composants */
+char ref_schema[80] ;				/* buffer de la ref schematique */
+char footprint_name[80] ;			/* buffer des ref.lib */
+char component_value[80] ;			/* buffer des valeurs  */
 char *ptchar ;		/* pointeur de service */
 STORECMP * Cmp;
 
@@ -111,9 +111,9 @@ STORECMP * Cmp;
 		while ( Line[i] == ' ') i++ ; /* i pointe la valeur du composant */
 		LibName = Line + i;
 
-		memset(label, 0, sizeof(label));
-		memset(val, 0, sizeof(val) ) ;
-		memset(postval, 0, sizeof(postval) ) ;
+		memset(component_reference, 0, sizeof(component_reference));
+		memset(footprint_name, 0, sizeof(footprint_name) ) ;
+		memset(component_value, 0, sizeof(component_value) ) ;
 		memset(alim, 0, sizeof(alim) ) ;
 
 		/* lecture valeur du composant */
@@ -131,8 +131,9 @@ STORECMP * Cmp;
 
 		for (j = 0 ; i < k ;  i++)
 		{
-			 if ( Line[i] == SEPARATEUR ) break ;
-			 if ( j < 8 ) val[j++] = Line[i] ;
+			if ( Line[i] == SEPARATEUR ) break ;
+			if ( j < (int)(sizeof(footprint_name)-1) )
+				footprint_name[j++] = Line[i] ;
 		}
 
 		if ( (Line[++i] == '(') && (Line[k-1] == ')' ) )
@@ -147,21 +148,20 @@ STORECMP * Cmp;
 		while(Line[i] == ' ') i++ ; /* recherche debut reference */
 
 		/* debut reference trouv‚ */
-		for ( k = 0 ; k < 8 ; i++ , k++ )
+		for ( k = 0 ; k < (int)(sizeof(component_reference)-1) ; i++ , k++ )
 		{
 			if ( Line[i] <= ' ' ) break ;
-			label[k] = Line[i] ;
+			component_reference[k] = Line[i] ;
 		}
 
-		/* recherche vraie valeur du composant */
-		while(Line[i] != ' ') i++ ; /* elimination fin reference */
-		while(Line[i] == ' ') i++ ; /* recherche debut vraie valeur */
+		/* recherche valeur du composant */
+		while(Line[i] == ' ') i++ ; /* recherche debut valeur */
 
-		/* debut vraie valeur trouv‚e */
-		for ( k = 0 ; k < 16 ; i++ , k++ )
+		/* debut vraie valeur trouvee */
+		for ( k = 0 ; k < (int)(sizeof(component_value)-1) ; i++ , k++ )
 		{
 			if ( Line[i] <= ' ' ) break ;
-			postval[k] = Line[i] ;
+			component_value[k] = Line[i] ;
 		}
 
 
@@ -169,8 +169,8 @@ STORECMP * Cmp;
 		Cmp = new STORECMP();
 		Cmp->Pnext = g_BaseListeCmp;
 		g_BaseListeCmp = Cmp;
-		Cmp->m_Reference = CONV_FROM_UTF8(label);
-		Cmp->m_Valeur = CONV_FROM_UTF8(postval) ;
+		Cmp->m_Reference = CONV_FROM_UTF8(component_reference);
+		Cmp->m_Valeur = CONV_FROM_UTF8(component_value) ;
 
 		if(  g_FlagEESchema )	/* Copie du nom module: */
 		{

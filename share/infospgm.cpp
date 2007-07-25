@@ -16,23 +16,23 @@ extern wxString g_Main_Title;
 
 wxString MsgInfos(
 #ifdef GERBVIEW
-wxT("** GERBVIEW  (jul 2001 .. 2006) **")
+wxT("** GERBVIEW  (jul 2001 .. 2007) **")
 #else
 #ifdef PCBNEW
-wxT("** PCBNEW  (sept 1992 .. 2006) **")
+wxT("** PCBNEW  (sept 1992 .. 2007) **")
 #endif
 #endif
 
 #ifdef CVPCB
-wxT("** CVPCB  (sept 1992 .. 2006) **")
+wxT("** CVPCB  (sept 1992 .. 2007) **")
 #endif
 
 #ifdef KICAD
-wxT("** KICAD (jul 2000 .. 2006) **")
+wxT("** KICAD (jul 2000 .. 2007) **")
 #endif
 
 #ifdef EESCHEMA
-wxT("** EESCHEMA  (sept 1994 .. 2006) **")
+wxT("** EESCHEMA  (sept 1994 .. 2007) **")
 #endif
 );
 

@@ -16,7 +16,7 @@
 /* Routines Locales */
 
 /* Variables locales */
-D_PAD* pt_pad_selecte;	/* pointeur sur le pad selecte pour edition */
+static D_PAD* s_CurrentSelectedPad;	/* pointeur sur le pad selecte pour edition */
 static wxPoint Pad_OldPos;
 
 
@@ -29,7 +29,7 @@ static void Exit_Move_Pad(WinEDA_DrawPanel * Panel, wxDC * DC)
 	Remise en etat des conditions initiales avant move si move en cours
 */
 {
-D_PAD * pad = pt_pad_selecte;
+D_PAD * pad = s_CurrentSelectedPad;
 
 	Panel->ManageCurseur = NULL;
 	Panel->ForceCloseManageCurseur = NULL;
@@ -55,7 +55,7 @@ D_PAD * pad = pt_pad_selecte;
 	}
 
 	EraseDragListe();
-	pt_pad_selecte = NULL;
+	s_CurrentSelectedPad = NULL;
 	g_Drag_Pistes_On = FALSE;
 }
 
@@ -68,7 +68,7 @@ static void Show_Pad_Move(WinEDA_DrawPanel * panel, wxDC * DC, bool erase)
 TRACK * Track;
 DRAG_SEGM * pt_drag;
 BASE_SCREEN * screen = panel->GetScreen();
-D_PAD * pad = pt_pad_selecte;
+D_PAD * pad = s_CurrentSelectedPad;
 
 	if ( erase ) pad->Draw(panel, DC, wxPoint(0,0), GR_XOR);
 	pad->m_Pos = screen->m_Curseur;
@@ -238,7 +238,7 @@ int rX, rY;
 /*********************************************************/
 void WinEDA_BasePcbFrame::DeletePad(D_PAD* Pad, wxDC * DC)
 /*********************************************************/
-/* Routine de suppression d'une pastille sur le module selectionne */
+/* Function to delete the pad "pad" */
 {
 MODULE * Module;
 wxString line;
@@ -268,27 +268,26 @@ wxString line;
 /*************************************************************/
 void WinEDA_BasePcbFrame::StartMovePad(D_PAD * Pad, wxDC * DC)
 /*************************************************************/
-/* Routine de deplacement d'une pastille */
+/* Function to initialise the "move pad" command */
 {
 MODULE * Module;
 
-	/* localisation d'une pastille ? */
 	if(Pad == NULL ) return;
 
 	Module = (MODULE*) Pad->m_Parent;
 
-	pt_pad_selecte = Pad ;
+	s_CurrentSelectedPad = Pad ;
 	Pad_OldPos = Pad->m_Pos;
 	Pad->Display_Infos(this);
 	DrawPanel->ManageCurseur = Show_Pad_Move;
 	DrawPanel->ForceCloseManageCurseur = Exit_Move_Pad;
 
-	/* Affichage du pad en SKETCH */
+	/* Draw the pad  (SKETCH mode) */
 	Pad->Draw(DrawPanel, DC, wxPoint(0,0),GR_XOR);
 	Pad->m_Flags |= IS_MOVED;
 	Pad->Draw(DrawPanel, DC, wxPoint(0,0),GR_XOR);
 
-	/* Construction de la liste des segments a "dragger" */
+	/* Build the list of track segments to drag */
 	Build_1_Pad_SegmentsToDrag(DrawPanel, DC, Pad);
 }
 
@@ -318,7 +317,7 @@ MODULE * Module;
 	dX = Pad->m_Pos.x - Pad_OldPos.x;
 	dY = Pad->m_Pos.y - Pad_OldPos.y;
 	RotatePoint(&dX, &dY, - Module->m_Orient );
-	Pad->m_Pos0.x += dX; pt_pad_selecte->m_Pos0.y += dY;
+	Pad->m_Pos0.x += dX; s_CurrentSelectedPad->m_Pos0.y += dY;
 
 	Pad->m_Flags = 0;
 
@@ -330,11 +329,11 @@ MODULE * Module;
 	/* Tracage des segments dragges */
 	pt_drag = g_DragSegmentList;
 	for( ; pt_drag; pt_drag = pt_drag->Pnext)
-		{
+	{
 		Track = pt_drag->m_Segm;
 		Track->SetState(EDIT,OFF);
 		Track->Draw(DrawPanel, DC, GR_OR);
-		}
+	}
 	EraseDragListe();
 
 	GetScreen()->SetModify();

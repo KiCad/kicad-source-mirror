@@ -209,8 +209,35 @@ bool active, islib = TRUE;
 	m_HToolBar->EnableTool(ID_LIBEDIT_EXPORT_PART,active);
 	m_HToolBar->EnableTool(ID_LIBEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,active);
 	m_HToolBar->EnableTool(ID_MODEDIT_SAVE_LIBMODULE,active && islib);
-	m_HToolBar->EnableTool(ID_MODEDIT_INSERT_MODULE_IN_BOARD,active);
-	m_HToolBar->EnableTool(ID_MODEDIT_UPDATE_MODULE_IN_BOARD,active);
+	MODULE * module_in_edit = m_Pcb->m_Modules;
+	if ( module_in_edit && module_in_edit->m_Link )	// this is not a new module ...
+	{
+		WinEDA_PcbFrame * pcbframe = m_Parent->m_PcbFrame;
+		BOARD * mainpcb = pcbframe->m_Pcb;
+		MODULE * source_module = mainpcb->m_Modules;
+		// search if the source module was not deleted:
+		for(  ; source_module != NULL ; source_module = (MODULE *) source_module->Pnext )
+		{
+			if( module_in_edit->m_Link == source_module->m_TimeStamp )
+				break;
+		}
+		if ( source_module )
+		{
+			m_HToolBar->EnableTool(ID_MODEDIT_INSERT_MODULE_IN_BOARD, false);
+			m_HToolBar->EnableTool(ID_MODEDIT_UPDATE_MODULE_IN_BOARD, true);
+		}
+		else	// The source was deleted, therefore we can insert but not update the module
+		{
+			m_HToolBar->EnableTool(ID_MODEDIT_INSERT_MODULE_IN_BOARD, true);
+			m_HToolBar->EnableTool(ID_MODEDIT_UPDATE_MODULE_IN_BOARD, false);
+		}
+	}
+	else
+	{
+		m_HToolBar->EnableTool(ID_MODEDIT_INSERT_MODULE_IN_BOARD,active);
+		m_HToolBar->EnableTool(ID_MODEDIT_UPDATE_MODULE_IN_BOARD, false);
+	}
+
 	if ( GetScreen() )
 	{
 		m_HToolBar->EnableTool(ID_MODEDIT_UNDO,GetScreen()->m_UndoList && active);

@@ -149,143 +149,77 @@ wxClientDC dc(DrawPanel);
 			if ( m_Draw3DFrame )
 				m_Draw3DFrame->NewDisplay();
 			break;
-		case ID_MODEDIT_UPDATE_MODULE_IN_BOARD:{
-			// update modules in the current board,
-			// not just add it to the board with total disregard for the 
-			// netlist...?
-			WinEDA_PcbFrame * pcbframe = m_Parent->m_PcbFrame;
-			BOARD * mainpcb = pcbframe->m_Pcb;
-			MODULE * presmod = m_Pcb->m_Modules; //the module being edited. 
-			//i guess we need to search through the modules here.. they are in a linked list.
-			//replace based on m_libref?
-			MODULE* mod = mainpcb->m_Modules;
-			do{
-				//need to be careful in this doubly linked-list to maintain order & link
-				// also have to maintain netname on all the pads according to m_NumPadName.
-				if(mod->m_LibRef == presmod->m_LibRef){//have to be careful with this test of similarity?
-					wprintf(L"replace: mod->m_LibRef = %S @ %d %d orient: %d\n", mod->m_LibRef.c_str(), 
-						   mod->m_Pos.x, mod->m_Pos.y, mod->m_Orient); 
-					MODULE* newmod = new MODULE(mainpcb); 
-					newmod->Copy(presmod); //this will copy the padstack layers etc
-					newmod->m_Parent = mainpcb; //modify after the copy above
-					if(mod->m_Layer != CMP_N){//just changing m_Layer is insufficient. 
-						Change_Side_Module(newmod, &dc); 
-					}
-					newmod->m_Pos = mod->m_Pos; 
-					newmod->m_Orient =0; //otherwise the pads will be rotated with respect to the module. 
-					//copy data into the pads...
-					
-					D_PAD* newpad = newmod->m_Pads; 
-					for(; newpad != NULL; newpad = (D_PAD*)newpad->Pnext){
-						D_PAD* pad = mod->m_Pads; 
-						for(; pad != NULL; pad = (D_PAD*)pad->Pnext){
-							if(pad->m_NumPadName == newpad->m_NumPadName){
-								wprintf(L"  pad->NumPadName %d @ %d %d :new %d %d, orient: %d\n", pad->m_NumPadName, 
-										pad->m_Pos.x, pad->m_Pos.y, newpad->m_Pos.x, newpad->m_Pos.y, pad->m_Orient); 
-								wprintf(L"  pad->m_Netname %S\n", pad->m_Netname.c_str()); 
-								newpad->m_Netname = pad->m_Netname; 
-								newpad->m_NetCode = pad->m_NetCode; 
-								newpad->m_logical_connexion = pad->m_logical_connexion; 
-								newpad->m_physical_connexion = pad->m_physical_connexion; 
-								newpad->m_Pos.x += newmod->m_Pos.x; //the pad positions are apparently in global coordinates.
-								newpad->m_Pos.y += newmod->m_Pos.y; 
-								newpad->m_Orient = pad->m_Orient; 
-							}
-						}
-					}
-					
-					//not sure what to do about m_Drawings..assume they are ok?
-					//copy only the text in m_Ref and m_Val; 
-					//leave the size and position as in the module in edit. 
-					newmod->m_Reference->m_Text = mod->m_Reference->m_Text; 
-					newmod->m_Value->m_Text = mod->m_Value->m_Text; 
-					wprintf(L"replace: mod->m_Reference = %S\n", newmod->m_Reference->m_Text.c_str()); 
-					wprintf(L"replace: mod->m_Value = %S\n", newmod->m_Value->m_Text.c_str()); 
-					newmod->m_Attributs = mod->m_Attributs; 
-					newmod->m_Orient = mod->m_Orient; 
-					newmod->flag = mod->flag; 
-					newmod->m_Flags = 0; //inherited from EDA_BaseStruct.
-					newmod->m_ModuleStatus = mod->m_ModuleStatus; 
-					//redo the boundary boxes
-					newmod->Set_Rectangle_Encadrement(); 
-					newmod->SetRectangleExinscrit(); 
-					newmod->m_CntRot90 = mod->m_CntRot90; 
-					newmod->m_CntRot180 = mod->m_CntRot180; 
-					newmod->m_Surface = mod->m_Surface; 
-					pcbframe->Rotate_Module(NULL, newmod, mod->m_Orient, false);
-					//now, need to replace 'mod' in the linked list with 'newmod'. 
-					//this does not seem to be working correctly.. 
-					MODULE* oldmod = mod; 
-					mod = (MODULE*)mod->Pnext; 
-					oldmod->UnLink(); 
-					delete oldmod; 
-					//insert the new one. 
-					newmod->Pnext = mainpcb->m_Modules;
-					mainpcb->m_Modules->Pback = newmod; // check this!
-					mainpcb->m_Modules = newmod;
-					newmod->Pback = mainpcb;
-					wprintf(L"-----\n"); 
-				}else{
-					mod = (MODULE*)mod->Pnext; 
-				}
-			}while(mod != NULL); 
-			GetScreen()->ClrModify();
-			pcbframe->GetScreen()->m_CurrentItem = NULL;
-			mainpcb->m_Status_Pcb = 0;
-		}
-		break; 
+
 		case ID_MODEDIT_INSERT_MODULE_IN_BOARD:
-			{
+		case ID_MODEDIT_UPDATE_MODULE_IN_BOARD:{
+			// update module in the current board,
+			// not just add it to the board with total disregard for the netlist...
 			WinEDA_PcbFrame * pcbframe = m_Parent->m_PcbFrame;
 			BOARD * mainpcb = pcbframe->m_Pcb;
-			MODULE * oldmodule = NULL;
+			MODULE * source_module = NULL;
 			MODULE * module_in_edit = m_Pcb->m_Modules;
-			// creation du nouveau module sur le PCB en cours
-			// create a new unit on the PCB, of course.
+			// Search the old module (source) if exists
+			// Because this source could be deleted when editing the main board...
+			if ( module_in_edit->m_Link )	// this is not a new module ...
+			{
+				source_module = mainpcb->m_Modules;
+				for(  ; source_module != NULL ; source_module = (MODULE *) source_module->Pnext )
+				{
+					if( module_in_edit->m_Link == source_module->m_TimeStamp )
+						break;
+				}
+			}
+			if ( (source_module == NULL) && id == (ID_MODEDIT_UPDATE_MODULE_IN_BOARD) )	// source not found
+			{
+				wxString msg;
+				msg.Printf( _("Unable to find the footprint source on the main board") );
+				msg << _("\nCannot update the footprint");
+				DisplayError(this, msg);
+				break;
+			}
+
+			if ( (source_module != NULL) && id == (ID_MODEDIT_INSERT_MODULE_IN_BOARD) )	// source not found
+			{
+				wxString msg;
+				msg.Printf( _("A footprint source was found on the main board") );
+				msg << _("\nCannot insert this footprint");
+				DisplayError(this, msg);
+				break;
+			}
+			// Create the "new" module
 			MODULE * newmodule = new MODULE(mainpcb);
 			newmodule->Copy(module_in_edit);
-			newmodule->m_Parent = mainpcb;  // modifie par la copie 
+            newmodule->m_Parent = mainpcb;  // modifie par la copie
 			newmodule->m_Link = 0;
-			// Recherche de l'ancien module correspondant
-			//(qui a pu changer ou disparaitre a la suite d'�ditions)
-			//locate the corresponding former unit, which may have a different revision. 
-			// I've taken this out, as it is superceded by 'update' above. 
-			/*
-			if ( module_in_edit->m_Link )
-				{
-				oldmodule = mainpcb->m_Modules;
-				for(  ; oldmodule != NULL ; oldmodule = (MODULE *) oldmodule->Pnext )
-					{
-					if( module_in_edit->m_Link == oldmodule->m_TimeStamp )
-						break;
-					}
-				}
-			*/
-				// Placement du module dans la liste des modules du PCB.
+			// Put the footprint in the main pcb linked list.
 			newmodule->Pnext = mainpcb->m_Modules;
 			mainpcb->m_Modules = newmodule;
 			newmodule->Pback = mainpcb;
 			if ( newmodule->Pnext ) newmodule->Pnext->Pback = newmodule;
 
-			if ( oldmodule )
-				{
-				newmodule = pcbframe->Exchange_Module(this,
-					oldmodule, newmodule);
+			if ( source_module )	// this is an update command
+			{
+				// The new module replace the old module (pos, orient, ref, value and connexions are kept)
+				// and the source_module (old module) is deleted
+				newmodule = pcbframe->Exchange_Module(this, source_module, newmodule);
 				newmodule->m_TimeStamp = module_in_edit->m_Link;
-				}
-			else
-				{
+			}
+			else	// This is an insert command
+			{
+				wxPoint cursor_pos = pcbframe->GetScreen()->m_Curseur;
+				pcbframe->GetScreen()->m_Curseur = wxPoint(0,0);
 				pcbframe->Place_Module(newmodule, NULL);
+				pcbframe->GetScreen()->m_Curseur = cursor_pos;
 				newmodule->m_TimeStamp = GetTimeStamp();
-				}
+			}
 
 			newmodule->m_Flags = 0;
 			GetScreen()->ClrModify();
 			pcbframe->GetScreen()->m_CurrentItem = NULL;
 			mainpcb->m_Status_Pcb = 0;
-			}
-			break;
-
+		}
+		break;
+		
 		case ID_LIBEDIT_IMPORT_PART:
 			GetScreen()->ClearUndoRedoList();
 			GetScreen()->m_CurrentItem = NULL;

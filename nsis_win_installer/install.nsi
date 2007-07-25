@@ -17,7 +17,7 @@
 
 ; General Product Description Definitions
 !define PRODUCT_NAME "KiCad"
-!define PRODUCT_VERSION "2007.05.25"
+!define PRODUCT_VERSION "2007.07.09"
 !define PRODUCT_WEB_SITE "http://www.lis.inpg.fr/realise_au_lis/kicad/"
 !define COMPANY_NAME ""
 !define TRADE_MARKS ""

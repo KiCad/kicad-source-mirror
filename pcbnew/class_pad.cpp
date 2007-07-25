@@ -78,7 +78,7 @@ void D_PAD::ComputeRayon(void)
 }
 
 /*********************************************/
-const wxPoint D_PAD::ReturnShapePos(void) const
+const wxPoint D_PAD::ReturnShapePos(void)
 /*********************************************/
 // retourne la position de la forme (pastilles excentrees)
 {

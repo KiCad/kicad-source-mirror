@@ -1,7 +1,6 @@
-		/*******************************/
-		/* Edition des pistes			*/
-		/* Routines DRC					*/
-		/*******************************/
+		/****************************/
+		/* DRC control				*/
+		/****************************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -28,7 +27,7 @@ static int segm_long;		// longueur du segment de reference
 static int xcliplo,ycliplo,xcliphi,ycliphi ;	/* coord de la surface de securite du segment a comparer */
 
 /* Routines Locales */
-static int Pad_to_Pad_Isol(const D_PAD * pad_ref, const D_PAD * pad, const int dist_min);
+static int Pad_to_Pad_Isol(D_PAD * pad_ref, D_PAD * pad, const int dist_min);
 static bool TestPadDrc(WinEDA_BasePcbFrame *frame, wxDC * DC, D_PAD * pad_ref,
 		LISTE_PAD * start_buffer, LISTE_PAD * end_buffer, int max_size, bool show_err);
 static int distance_a_pad(const D_PAD* pad_to_test, int seg_width, int isol);
@@ -37,7 +36,7 @@ static int Tst_Ligne(int x1,int y1,int x2,int y2);
 static void Affiche_Erreur_DRC(WinEDA_DrawPanel * panel, wxDC * DC, BOARD * Pcb,
 					TRACK * pt_ref, void * pt_item, int errnumber);
 static void Affiche_Erreur_DRC(WinEDA_DrawPanel * panel, wxDC * DC,
-			BOARD * Pcb, const D_PAD * pad1, const D_PAD * pad2);
+			BOARD * Pcb, D_PAD * pad1, D_PAD * pad2);
 
 
 
@@ -51,9 +50,9 @@ void WinEDA_DrcFrame::ListUnconnectedPads(wxCommandEvent & event)
 /***************************************************************/
 {
 	if( (m_Parent->m_Pcb->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
-		{
+	{
 		m_Parent->Compile_Ratsnest( m_DC, TRUE);
-		}
+	}
 	if( m_Parent->m_Pcb->m_Ratsnest == NULL ) return;
 
 CHEVELU* Ratsnest = m_Parent->m_Pcb->m_Ratsnest;
@@ -62,23 +61,34 @@ WinEDA_DrawPanel * panel = m_Parent->DrawPanel;
 int ii;
 wxString msg;
 float convert = 0.0001;
-int unconnect = 0;
-	for( ii = m_Parent->m_Pcb->GetNumRatsnests() ;ii > 0; Ratsnest++, ii--)
-		{
-		if( (Ratsnest->status & CH_ACTIF) == 0) continue;
-		unconnect++;
-		Ratsnest->pad_start->Draw(panel, m_DC, wxPoint(0,0),draw_mode);
-		Ratsnest->pad_end->Draw(panel, m_DC, wxPoint(0,0),draw_mode);
-		msg.Printf(_("Unconnected:\nPad @ %.4f,%.4f and\nPad @ %.4f,%.4f\n"),
-			Ratsnest->pad_start->m_Pos.x * convert, Ratsnest->pad_start->m_Pos.y * convert,
-			Ratsnest->pad_end->m_Pos.x * convert, Ratsnest->pad_end->m_Pos.y * convert);
-		m_logWindow->AppendText(msg);
-		}
 
-	if ( unconnect ) msg.Printf(_("Active routes: %d\n"), unconnect);
-	else msg = _("OK! (No unconnect)\n");
+	m_logWindow->AppendText(_("Look for active routes\n"));
+	m_UnconnectedCount = 0;
+	for( ii = m_Parent->m_Pcb->GetNumRatsnests() ;ii > 0; Ratsnest++, ii--)
+	{
+		if( (Ratsnest->status & CH_ACTIF) == 0) continue;
+		m_UnconnectedCount++;
+		if ( m_UnconnectedCount == 1 ) m_logWindow->AppendText(_("Unconnected found:\n") );
+		D_PAD * pad = Ratsnest->pad_start;
+		pad->Draw(panel, m_DC, wxPoint(0,0),draw_mode);
+		wxString pad_name = pad->ReturnStringPadName();
+		wxString module_name = ((MODULE*)(pad->m_Parent))->m_Reference->m_Text;
+		msg.Printf(_("%d > Pad %s (%s) @ %.4f,%.4f and "), m_UnconnectedCount,
+			pad_name.GetData(), module_name.GetData(), pad->m_Pos.x * convert, pad->m_Pos.y * convert);
+		m_logWindow->AppendText(msg);
+
+		pad = Ratsnest->pad_end;
+		pad->Draw(panel, m_DC, wxPoint(0,0),draw_mode);
+		pad_name = pad->ReturnStringPadName();
+		module_name = ((MODULE*)(pad->m_Parent))->m_Reference->m_Text;
+		msg.Printf(_("Pad %s (%s) @ %.4f,%.4f\n"),
+			pad_name.GetData(), module_name.GetData(), pad->m_Pos.x * convert, pad->m_Pos.y * convert);
+		m_logWindow->AppendText(msg);
+	}
+
+	if ( m_UnconnectedCount ) msg.Printf(_("Active routes: %d\n"), m_UnconnectedCount);
+	else msg = _("OK! (No active routes)\n");
 	m_logWindow->AppendText(msg);
-	m_logWindow->AppendText(_("End tst"));
 }
 
 
@@ -94,10 +104,14 @@ wxString msg;
 		m_logWindow->Clear();
 		g_DesignSettings.m_TrackClearence =
 			ReturnValueFromTextCtrl(*m_SetClearance, m_Parent->m_InternalUnits);
+		/* Test DRC errors (clearance errors, bad connections .. */
 		errors = m_Parent->Test_DRC(m_DC);
+		/* Serach for active routes (unconnected pads) */
+		ListUnconnectedPads(event);
 		if ( errors )
 			msg.Printf(_("** End Drc: %d errors **\n"),errors);
-		else msg = _("** End Drc: No Error **\n");
+		else if ( m_UnconnectedCount == 0 )
+			msg = _("** End Drc: No Error **\n");
 		m_logWindow->AppendText(msg);
 	}
 	else wxBell();
@@ -655,7 +669,7 @@ LISTE_PAD * pad_list = start_buffer;
 }
 
 /**************************************************************************************/
-static int Pad_to_Pad_Isol(const D_PAD * pad_ref, const D_PAD * pad, const int dist_min)
+static int Pad_to_Pad_Isol(D_PAD * pad_ref, D_PAD * pad, const int dist_min)
 /***************************************************************************************/
 /* Return OK_DRC si distance entre pad_ref et pas >= dist_min
 et BAD_DRC sinon */
@@ -922,45 +936,49 @@ static void Affiche_Erreur_DRC(WinEDA_DrawPanel * panel, wxDC * DC, BOARD * Pcb,
 	number = numero d'identification
 */
 {
-int ercx, ercy;
-D_PAD * pt_pad;
+wxPoint erc_pos;
+D_PAD * pad;
 TRACK * pt_segm;
 wxString msg;
 
 	if( ((EDA_BaseStruct*)pt_item)->m_StructType == TYPEPAD )
-		{
-		pt_pad = (D_PAD*) pt_item;
-		ercx = pt_pad->m_Pos.x; ercy = pt_pad->m_Pos.y;
-		msg.Printf(_("%d Err type %d sur PAD @ %d,%d\n"),
-				NumberOfErrors, errnumber, ercx,ercy);
-		}
+	{
+		pad = (D_PAD*) pt_item;
+		erc_pos = pad->m_Pos; 
+		wxString pad_name = pad->ReturnStringPadName();
+		wxString module_name = ((MODULE*)(pad->m_Parent))->m_Reference->m_Text;
+		msg.Printf(_("%d Drc Err %d  PAD %s (%s) @ %d,%d\n"),
+				NumberOfErrors, errnumber,
+				pad_name.GetData(), module_name.GetData(),
+				erc_pos.x, erc_pos.y);
+	}
 	else	/* erreur sur segment de piste */
-		{
+	{
 		pt_segm = (TRACK *) pt_item;
-		ercx = pt_segm->m_Start.x; ercy = pt_segm->m_Start.y;
+		erc_pos = pt_segm->m_Start;
 		if(pt_segm->m_StructType == TYPEVIA)
-			{
+		{
 			msg.Printf(_("%d Err type %d: sur VIA @ %d,%d\n"),
-					NumberOfErrors, errnumber,ercx,ercy);
-			}
-		else
-			{
-			int ercfx = pt_segm->m_End.x, ercfy = pt_segm->m_End.y;
-			if(hypot( (double)(ercfx - pt_ref->m_End.x),(double)(ercfy - pt_ref->m_End.y) )
-			  < hypot( (double)(ercx - pt_ref->m_End.x),(double)(ercy - pt_ref->m_End.y) ) )
-				{
-				EXCHG(ercfx, ercx); EXCHG(ercfy, ercy);
-				}
-			msg.Printf(_("%d Err type %d: sur SEGMENT @ %d,%d\n"),
-					NumberOfErrors, errnumber,ercx,ercy);
-			}
+					NumberOfErrors, errnumber,erc_pos.x,erc_pos.y);
 		}
+		else
+		{
+			wxPoint erc_pos_f = pt_segm->m_End;
+			if(hypot( (double)(erc_pos_f.x - pt_ref->m_End.x),(double)(erc_pos_f.y - pt_ref->m_End.y) )
+			  < hypot( (double)(erc_pos.x - pt_ref->m_End.x),(double)(erc_pos.y - pt_ref->m_End.y) ) )
+			{
+				EXCHG(erc_pos_f.x, erc_pos.x); EXCHG(erc_pos_f.y, erc_pos.y);
+			}
+			msg.Printf(_("%d Err type %d: sur SEGMENT @ %d,%d\n"),
+					NumberOfErrors, errnumber,erc_pos.x,erc_pos.y);
+		}
+	}
 
 	if ( DrcFrame ) DrcFrame->m_logWindow->AppendText(msg);
 	else panel->m_Parent->Affiche_Message(msg);
 
 	if(current_marqueur == NULL) current_marqueur = new MARQUEUR(Pcb);
-	current_marqueur->m_Pos = wxPoint(ercx, ercy);
+	current_marqueur->m_Pos = wxPoint(erc_pos.x, erc_pos.y);
 	current_marqueur->m_Color = WHITE;
 	current_marqueur->m_Diag = msg;
 	current_marqueur->Draw(panel, DC, GR_OR);
@@ -969,7 +987,7 @@ wxString msg;
 
 /******************************************************************************/
 static void Affiche_Erreur_DRC(WinEDA_DrawPanel * panel, wxDC * DC, BOARD * Pcb,
-					const D_PAD * pad1, const D_PAD * pad2)
+					D_PAD * pad1, D_PAD * pad2)
 /******************************************************************************/
 
 /* affiche les erreurs de DRC :
@@ -979,18 +997,21 @@ static void Affiche_Erreur_DRC(WinEDA_DrawPanel * panel, wxDC * DC, BOARD * Pcb,
 	number = numero d'identification
 */
 {
-int ercx, ercy;
 wxString msg;
 
-	ercx = pad1->m_Pos.x; ercy = pad1->m_Pos.y;
-	msg.Printf( _("%d Err pad to pad (PAD @ %d,%d and PAD @ %d,%d\n"),
-			NumberOfErrors, ercx,ercy,
-			pad2->m_Pos.x, pad2->m_Pos.y);
+	wxString pad_name1 = pad1->ReturnStringPadName();
+	wxString module_name1 = ((MODULE*)(pad1->m_Parent))->m_Reference->m_Text;
+	wxString pad_name2 = pad2->ReturnStringPadName();
+	wxString module_name2 = ((MODULE*)(pad2->m_Parent))->m_Reference->m_Text;
+
+	msg.Printf( _("%d Drc Err: PAD %s (%s) @ %d,%d and PAD %s (%s) @ %d,%d\n"),
+			NumberOfErrors, pad_name1.GetData(), module_name1.GetData(), pad1->m_Pos.x,pad1->m_Pos.y,
+			pad_name2.GetData(), module_name2.GetData(), pad2->m_Pos.x, pad2->m_Pos.y);
 	if ( DrcFrame ) DrcFrame->m_logWindow->AppendText(msg);
 	else panel->m_Parent->Affiche_Message(msg);
 
 	if(current_marqueur == NULL) current_marqueur = new MARQUEUR(Pcb);
-	current_marqueur->m_Pos = wxPoint(ercx, ercy);
+	current_marqueur->m_Pos = pad1->m_Pos;
 	current_marqueur->m_Color = WHITE;
 	current_marqueur->m_Diag = msg;
 	current_marqueur->Draw(panel, DC, GR_OR);

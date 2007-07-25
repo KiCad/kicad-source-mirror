@@ -76,7 +76,7 @@ public:
 	wxString ReturnStringPadName(void);		// Return pad name as string in a wxString
 	void ReturnStringPadName(wxString & text);	// Return pad name as string in a buffer
 	void ComputeRayon(void);			// met a jour m_Rayon, rayon du cercle exinscrit
-	const wxPoint ReturnShapePos(void) const;	// retourne la position
+	const wxPoint ReturnShapePos(void);	// retourne la position
 								// de la forme (pastilles excentrees)
 	void Display_Infos(WinEDA_BasePcbFrame * frame);
 };

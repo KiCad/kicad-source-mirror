@@ -20,7 +20,9 @@
 #include "wx/dir.h"
 
 #include "bitmaps.h"
+#ifdef KICAD_PYTHON
 #include "bitmaps/new_python.xpm"
+#endif
 
 #include "id.h"
 
@@ -68,7 +70,7 @@ WinEDA_PrjFrame::WinEDA_PrjFrame(WinEDA_MainFrame * parent,
 
 	item = new wxMenuItem(menu, ID_PROJECT_TXTEDIT,
 						 _("&Edit in a text editor"),
-						 _("Edit the Python Script in a Text Editor") );
+						 _("&Open the file in a Text Editor") );
 	item->SetBitmap( icon_txt_xpm );
 	menu->Append( item );
 
@@ -110,6 +112,14 @@ WinEDA_PrjFrame::WinEDA_PrjFrame(WinEDA_MainFrame * parent,
                              , TREE_DIRECTORY != i ? _("Rename the File") : _("&Rename the Directory") );
 		item->SetBitmap( right_xpm );
 		menu->Append( item );
+		if ( TREE_DIRECTORY != i )
+		{
+			item = new wxMenuItem(menu, ID_PROJECT_TXTEDIT
+								 ,  _("&Edit in a text editor")
+								 , _("Open the file in a Text Editor"));
+			item->SetBitmap( icon_txt_xpm );
+			menu->Append( item );
+		}
 		item = new wxMenuItem(menu, ID_PROJECT_DELETE
                              , TREE_DIRECTORY != i ? _("&Delete File") : _("&Delete Directory")
                              , TREE_DIRECTORY != i ? _("Delete the File") : _("&Delete the Directory and its content") );
@@ -132,12 +142,8 @@ BEGIN_EVENT_TABLE(WinEDA_PrjFrame, wxSashLayoutWindow)
 	EVT_MENU(ID_PROJECT_TXTEDIT, WinEDA_PrjFrame::OnTxtEdit)
 	EVT_MENU(ID_PROJECT_NEWFILE, WinEDA_PrjFrame::OnNewFile)
 	EVT_MENU(ID_PROJECT_NEWDIR, WinEDA_PrjFrame::OnNewDirectory)
-	EVT_MENU(ID_PROJECT_NEWSCH, WinEDA_PrjFrame::OnNewSchFile)
-	EVT_MENU(ID_PROJECT_NEWBRD, WinEDA_PrjFrame::OnNewBrdFile)
 	EVT_MENU(ID_PROJECT_NEWPY, WinEDA_PrjFrame::OnNewPyFile)
-	EVT_MENU(ID_PROJECT_NEWGERBER, WinEDA_PrjFrame::OnNewGerberFile)
 	EVT_MENU(ID_PROJECT_NEWTXT, WinEDA_PrjFrame::OnNewTxtFile)
-	EVT_MENU(ID_PROJECT_NEWNET, WinEDA_PrjFrame::OnNewNetFile)
 	EVT_MENU(ID_PROJECT_DELETE, WinEDA_PrjFrame::OnDeleteFile)
 	EVT_MENU(ID_PROJECT_RENAME, WinEDA_PrjFrame::OnRenameFile)
 
@@ -312,12 +318,8 @@ wxMenu * WinEDA_PrjFrame::GetContextMenu( int type )
 
 void WinEDA_PrjFrame::OnNewDirectory(wxCommandEvent & event)  { NewFile( TREE_DIRECTORY ); }
 void WinEDA_PrjFrame::OnNewFile(wxCommandEvent & event)       { NewFile( TREE_UNKNOWN ); }
-void WinEDA_PrjFrame::OnNewSchFile(wxCommandEvent & event)    { NewFile( TREE_SCHEMA ); }
-void WinEDA_PrjFrame::OnNewBrdFile(wxCommandEvent & event)    { NewFile( TREE_PCB ); }
 void WinEDA_PrjFrame::OnNewPyFile(wxCommandEvent & event)     { NewFile( TREE_PY ); }
-void WinEDA_PrjFrame::OnNewGerberFile(wxCommandEvent & event) { NewFile( TREE_GERBER ); }
 void WinEDA_PrjFrame::OnNewTxtFile(wxCommandEvent & event)    { NewFile( TREE_TXT ); }
-void WinEDA_PrjFrame::OnNewNetFile(wxCommandEvent & event)    { NewFile( TREE_NET ); }
 
 /******************************************************************/
 void WinEDA_PrjFrame::NewFile( enum TreeFileType  type )
@@ -393,30 +395,48 @@ void WinEDA_PrjFrame::NewFile( const wxString & name,
 wxString WinEDA_PrjFrame::GetFileExt( enum TreeFileType type )
 /******************************************************************/
 {
-wxString extensions[] =
-{
-	wxT( "" ),				// 0 is not used
-    wxT( ".pro" ),          // TREE_PROJECT
-    g_SchExtBuffer,         // TREE_SCHEMA
-    g_BoardExtBuffer,       // TREE_PCB
-    wxT( ".py" ),           // TREE_PY
-    g_GerberExtBuffer,      // TREE_GERBER
-    wxT( ".pdf" ),          // TREE_PDF
-    wxT( ".txt" ),          // TREE_TXT
-	wxT( ".net" ),			// TREE_NET
-	wxT( "" ),				// TREE_UNKNOWN
-    wxT( "" ),              // TREE_DIRECTORY
+wxString ext;
+	
+	switch ( type )
+	{
+		case 0 :
+			break;				// 0 is not used
+		case TREE_PROJECT:
+			ext = wxT( ".pro" );
+			break;
+    	case TREE_SCHEMA:
+			ext = g_SchExtBuffer;
+			break;
+		case TREE_PCB:
+			ext = g_BoardExtBuffer;
+			break;
+		case TREE_PY:
+			ext = wxT( ".py" );
+			break;
+		case TREE_GERBER:
+			ext = g_GerberExtBuffer;
+			break;
+		case TREE_PDF:
+			ext = wxT( ".pdf" );
+			break;
+		case TREE_TXT:
+			ext = wxT( ".txt" );
+			break;
+		case TREE_NET:
+			ext = wxT( ".net" );
+			break;
+		default:
+			break;
 	};
 
-	if ( type < TREE_MAX ) return extensions[type];
-	return wxEmptyString;
+	return ext;
 }
 
 /**************************************************************************/
 void WinEDA_PrjFrame::AddFile( const wxString & name, wxTreeItemId & root )
 /**************************************************************************/
 /* add filename "name" to the tree
-	if name is adirectory, add the sub directory file names
+	if name is a directory, add the sub directory file names
 */
 {
 wxTreeItemId cellule;

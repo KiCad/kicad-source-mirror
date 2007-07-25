@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-07-09 11:49+0100\n"
-"Last-Translator: jp charras <jean-pierre.charras@inpg.fr>\n"
+"PO-Revision-Date: 2007-07-25 10:24+0100\n"
+"Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
@@ -66,7 +66,6 @@ msgstr "Fichiers C.I.:"
 #: pcbnew/files.cpp:181
 #: pcbnew/librairi.cpp:62
 #: cvpcb/readschematicnetlist.cpp:51
-#: cvpcb/rdorcad.cpp:53
 #: cvpcb/rdpcad.cpp:45
 #, c-format
 msgid "File <%s> not found"
@@ -141,256 +140,6 @@ msgstr "Itération"
 msgid "Ok to abort ?"
 msgstr "Ok pour arrêter ?"
 
-#: pcbnew/dialog_edit_module.cpp:41
-msgid "Module properties"
-msgstr "Propriétés du Module"
-
-#: pcbnew/dialog_edit_module.cpp:94
-msgid "Properties"
-msgstr "Propriétés"
-
-#: pcbnew/dialog_edit_module.cpp:98
-#: pcbnew/dialog_edit_module.cpp:107
-#: pcbnew/dialog_edit_module.cpp:138
-msgid "3D settings"
-msgstr "3D Caract"
-
-#: pcbnew/dialog_edit_module.cpp:119
-#: pcbnew/pcbtexte.cpp:113
-#: pcbnew/muonde.cpp:341
-#: pcbnew/block.cpp:117
-#: pcbnew/cotation.cpp:109
-#: pcbnew/zones.cpp:873
-#: pcbnew/mirepcb.cpp:102
-#: eeschema/fieldedi.cpp:208
-#: eeschema/sheetlab.cpp:99
-#: eeschema/libedpart.cpp:230
-#: eeschema/editpart.cpp:193
-#: common/displlst.cpp:102
-msgid "Ok"
-msgstr "Ok"
-
-#: pcbnew/dialog_edit_module.cpp:124
-#: pcbnew/pcbtexte.cpp:118
-#: pcbnew/muonde.cpp:345
-#: pcbnew/modedit_onclick.cpp:195
-#: pcbnew/modedit_onclick.cpp:228
-#: pcbnew/onrightclick.cpp:153
-#: pcbnew/onrightclick.cpp:172
-#: pcbnew/block.cpp:122
-#: pcbnew/globaleditpad.cpp:111
-#: pcbnew/cotation.cpp:114
-#: pcbnew/swap_layers.cpp:86
-#: pcbnew/pcbpiste.cpp:87
-#: pcbnew/mirepcb.cpp:106
-#: pcbnew/sel_layer.cpp:123
-#: pcbnew/sel_layer.cpp:250
-#: eeschema/libedit_onrightclick.cpp:68
-#: eeschema/libedit_onrightclick.cpp:83
-#: eeschema/optionsframe.cpp:155
-#: eeschema/onrightclick.cpp:111
-#: eeschema/onrightclick.cpp:125
-#: eeschema/sheetlab.cpp:104
-#: eeschema/options.cpp:114
-#: eeschema/libedpart.cpp:219
-#: gerbview/onrightclick.cpp:39
-#: gerbview/onrightclick.cpp:57
-#: gerbview/options.cpp:175
-#: gerbview/options.cpp:305
-#: gerbview/select_layers_to_pcb.cpp:127
-#: common/get_component_dialog.cpp:121
-#: common/displlst.cpp:106
-msgid "Cancel"
-msgstr "Annuler"
-
-#: pcbnew/dialog_edit_module.cpp:179
-msgid "Change module(s)"
-msgstr "Change module(s)"
-
-#: pcbnew/dialog_edit_module.cpp:183
-msgid "Goto Module Editor"
-msgstr "Ouvrir Editeur de modules"
-
-#: pcbnew/dialog_edit_module.cpp:189
-#: eeschema/fieldedi.cpp:283
-#: eeschema/onrightclick.cpp:315
-#: eeschema/dialog_edit_component_in_lib.cpp:203
-#: eeschema/libedpart.cpp:246
-msgid "Doc"
-msgstr "Doc"
-
-#: pcbnew/dialog_edit_module.cpp:195
-msgid "Keywords"
-msgstr "Mots Cles"
-
-#: pcbnew/dialog_edit_module.cpp:202
-msgid "Fields:"
-msgstr "Champs:"
-
-#: pcbnew/dialog_edit_module.cpp:212
-msgid "Add Field"
-msgstr "Ajouter Champ"
-
-#: pcbnew/dialog_edit_module.cpp:217
-#: eeschema/onrightclick.cpp:253
-msgid "Edit Field"
-msgstr "Editer Champ"
-
-#: pcbnew/dialog_edit_module.cpp:222
-msgid "Delete Field"
-msgstr "Supprimer Champ"
-
-#: pcbnew/dialog_edit_module.cpp:229
-#: common/common.cpp:242
-msgid "Component"
-msgstr "Composant"
-
-#: pcbnew/dialog_edit_module.cpp:229
-msgid "Copper"
-msgstr "Cuivre"
-
-#: pcbnew/dialog_edit_module.cpp:230
-#: pcbnew/class_pad.cpp:769
-#: pcbnew/affiche.cpp:36
-#: pcbnew/affiche.cpp:91
-#: pcbnew/affiche.cpp:95
-#: pcbnew/affiche.cpp:195
-#: pcbnew/affiche.cpp:244
-#: pcbnew/class_module.cpp:1040
-#: pcbnew/sel_layer.cpp:109
-#: gerbview/affiche.cpp:102
-msgid "Layer"
-msgstr "Couche"
-
-#: pcbnew/dialog_edit_module.cpp:237
-#: pcbnew/dialog_edit_module.cpp:279
-#: pcbnew/pcbtexte.cpp:177
-#: pcbnew/muonde.cpp:353
-#: pcbnew/cotation.cpp:118
-#: eeschema/dialog_options.cpp:229
-#: eeschema/options.cpp:177
-#: eeschema/dialog_edit_component_in_schematic.cpp:182
-#: eeschema/editpart.cpp:312
-msgid "Normal"
-msgstr "Normal"
-
-#: pcbnew/dialog_edit_module.cpp:237
-#: pcbnew/dialog_pad_edit.cpp:191
-msgid "User"
-msgstr "User"
-
-#: pcbnew/dialog_edit_module.cpp:238
-#: pcbnew/class_pad.cpp:810
-#: pcbnew/affiche.cpp:47
-#: pcbnew/affiche.cpp:103
-#: pcbnew/class_module.cpp:1057
-#: eeschema/affiche.cpp:101
-#: gerbview/affiche.cpp:43
-msgid "Orient"
-msgstr "Orient"
-
-#: pcbnew/dialog_edit_module.cpp:270
-msgid "Orient (0.1 deg)"
-msgstr "Orient (0.1 deg)"
-
-#: pcbnew/dialog_edit_module.cpp:279
-msgid "Normal+Insert"
-msgstr "Normal+Insert"
-
-#: pcbnew/dialog_edit_module.cpp:279
-msgid "Virtual"
-msgstr "Virtuel"
-
-#: pcbnew/dialog_edit_module.cpp:280
-msgid "Attributs"
-msgstr "Attributs"
-
-#: pcbnew/dialog_edit_module.cpp:282
-msgid "Use this attribute for most non smd components"
-msgstr "Utiliser cet attribut pour la plupart des composants"
-
-#: pcbnew/dialog_edit_module.cpp:284
-msgid ""
-"Use this attribute for smd components.\n"
-"Only components with this option are put in the footprint position list file"
-msgstr ""
-"Uiliser cet attribut pour les composants CMS.\n"
-"Seuls les composantsavec cette option sont mis dans le fichier de position des composants"
-
-#: pcbnew/dialog_edit_module.cpp:286
-msgid "Use this attribute for \"virtual\" components drawn on board (like a old ISA PC bus connector)"
-msgstr "Uiliser cet attribut pour les composants \"virtuels\" directement dessinés sur le PCB (tel que les vieux connecteurs ISA de PC)"
-
-#: pcbnew/dialog_edit_module.cpp:309
-msgid "Free"
-msgstr "Libre"
-
-#: pcbnew/dialog_edit_module.cpp:309
-msgid "Locked"
-msgstr "Verrouillé"
-
-#: pcbnew/dialog_edit_module.cpp:310
-msgid "Move and Auto Place"
-msgstr "Move et Placement Automatique"
-
-#: pcbnew/dialog_edit_module.cpp:314
-msgid "Enable hotkey move commands and Auto Placement"
-msgstr "Autoriser les commandes clavier de déplacement et l'auto placement"
-
-#: pcbnew/dialog_edit_module.cpp:315
-msgid "Disable hotkey move commands and Auto Placement"
-msgstr "Interdire les commandes clavier de déplacement et l'auto placement"
-
-#: pcbnew/dialog_edit_module.cpp:318
-msgid "Rot 90"
-msgstr "Rot 90"
-
-#: pcbnew/dialog_edit_module.cpp:325
-msgid "Rot 180"
-msgstr "Rot 180"
-
-#: pcbnew/dialog_edit_module.cpp:355
-msgid "3D Shape Name"
-msgstr "3D forme"
-
-#: pcbnew/dialog_edit_module.cpp:371
-#: eeschema/dialog_eeschema_config.cpp:227
-msgid "Browse"
-msgstr "Examiner"
-
-#: pcbnew/dialog_edit_module.cpp:375
-msgid "Add 3D Shape"
-msgstr "Ajout Forme 3D"
-
-#: pcbnew/dialog_edit_module.cpp:381
-msgid "Remove 3D Shape"
-msgstr "Suppr. Forme 3D:"
-
-#: pcbnew/dialog_edit_module.cpp:387
-msgid "Shape Scale:"
-msgstr "Echelle de la forme:"
-
-#: pcbnew/dialog_edit_module.cpp:393
-msgid "Shape Offset:"
-msgstr "Offset forme:"
-
-#: pcbnew/dialog_edit_module.cpp:400
-msgid "Shape Rotation:"
-msgstr "Rot de la forme"
-
-#: pcbnew/dialog_edit_module.cpp:437
-msgid "3D Shape:"
-msgstr "Forme 3D:"
-
-#: pcbnew/dialog_edit_module.cpp:726
-msgid "Reference or Value cannot be deleted"
-msgstr "Référence ou Valeur ne peut etre effacée"
-
-#: pcbnew/dialog_edit_module.cpp:730
-#, c-format
-msgid "Delete [%s]"
-msgstr "Supprimer [%s]"
-
 #: pcbnew/loadcmp.cpp:94
 msgid "Module name:"
 msgstr "Nom module:"
@@ -461,7 +210,6 @@ msgstr "De "
 #: eeschema/dialog_eeschema_config.cpp:161
 #: eeschema/eestatus.cpp:116
 #: cvpcb/dialog_display_options.cpp:145
-#: cvpcb/options.cpp:148
 #: cvpcb/dialog_cvpcb_config.cpp:127
 #: gerbview/reglage.cpp:110
 msgid "Save Cfg"
@@ -966,6 +714,54 @@ msgstr "Nb Modules"
 msgid "TextPCB properties"
 msgstr "Propriétés des textes PCB"
 
+#: pcbnew/pcbtexte.cpp:113
+#: pcbnew/muonde.cpp:341
+#: pcbnew/block.cpp:117
+#: pcbnew/cotation.cpp:109
+#: pcbnew/zones.cpp:873
+#: pcbnew/mirepcb.cpp:102
+#: pcbnew/dialog_edit_module.cpp:119
+#: eeschema/fieldedi.cpp:208
+#: eeschema/sheetlab.cpp:99
+#: eeschema/libedpart.cpp:230
+#: eeschema/editpart.cpp:193
+#: common/displlst.cpp:102
+msgid "Ok"
+msgstr "Ok"
+
+#: pcbnew/pcbtexte.cpp:118
+#: pcbnew/muonde.cpp:345
+#: pcbnew/modedit_onclick.cpp:195
+#: pcbnew/modedit_onclick.cpp:228
+#: pcbnew/onrightclick.cpp:153
+#: pcbnew/onrightclick.cpp:172
+#: pcbnew/block.cpp:122
+#: pcbnew/globaleditpad.cpp:111
+#: pcbnew/cotation.cpp:114
+#: pcbnew/swap_layers.cpp:86
+#: pcbnew/pcbpiste.cpp:87
+#: pcbnew/mirepcb.cpp:106
+#: pcbnew/dialog_edit_module.cpp:124
+#: pcbnew/sel_layer.cpp:123
+#: pcbnew/sel_layer.cpp:250
+#: eeschema/libedit_onrightclick.cpp:68
+#: eeschema/libedit_onrightclick.cpp:83
+#: eeschema/optionsframe.cpp:155
+#: eeschema/onrightclick.cpp:111
+#: eeschema/onrightclick.cpp:125
+#: eeschema/sheetlab.cpp:104
+#: eeschema/options.cpp:114
+#: eeschema/libedpart.cpp:219
+#: gerbview/onrightclick.cpp:39
+#: gerbview/onrightclick.cpp:57
+#: gerbview/options.cpp:175
+#: gerbview/options.cpp:305
+#: gerbview/select_layers_to_pcb.cpp:127
+#: common/get_component_dialog.cpp:121
+#: common/displlst.cpp:106
+msgid "Cancel"
+msgstr "Annuler"
+
 #: pcbnew/pcbtexte.cpp:122
 #: pcbnew/dialog_edit_mod_text.cpp:314
 #: eeschema/sheetlab.cpp:108
@@ -1009,6 +805,18 @@ msgstr "Position"
 #: pcbnew/dialog_edit_mod_text.cpp:225
 msgid "Orientation"
 msgstr "Orientation"
+
+#: pcbnew/pcbtexte.cpp:177
+#: pcbnew/muonde.cpp:353
+#: pcbnew/cotation.cpp:118
+#: pcbnew/dialog_edit_module.cpp:237
+#: pcbnew/dialog_edit_module.cpp:279
+#: eeschema/dialog_options.cpp:229
+#: eeschema/options.cpp:177
+#: eeschema/dialog_edit_component_in_schematic.cpp:182
+#: eeschema/editpart.cpp:312
+msgid "Normal"
+msgstr "Normal"
 
 #: pcbnew/pcbtexte.cpp:177
 #: pcbnew/modedit_onclick.cpp:246
@@ -1794,75 +1602,78 @@ msgstr "Inclure pistes autoroutées"
 msgid "Include Locked Tracks"
 msgstr "Inclure pistes verrouillées"
 
-#: pcbnew/drc.cpp:72
-#, c-format
-msgid ""
-"Unconnected:\n"
-"Pad @ %.4f,%.4f and\n"
-"Pad @ %.4f,%.4f\n"
-msgstr ""
-"Non connecté:\n"
-"Pad @ %.4f,%.4f et\n"
-"Pad @ %.4f,%.4f\n"
+#: pcbnew/drc.cpp:65
+msgid "Look for active routes\n"
+msgstr "Recherche des chevelus actifs\n"
 
-#: pcbnew/drc.cpp:78
+#: pcbnew/drc.cpp:71
+msgid "Unconnected found:\n"
+msgstr "Non connecté trouvé:\n"
+
+#: pcbnew/drc.cpp:76
+#, c-format
+msgid "%d > Pad %s (%s) @ %.4f,%.4f and "
+msgstr "%d > Pad %s (%s) @ %.4f,%.4f et "
+
+#: pcbnew/drc.cpp:84
+#, c-format
+msgid "Pad %s (%s) @ %.4f,%.4f\n"
+msgstr "Pad %s (%s) @ %.4f,%.4f\n"
+
+#: pcbnew/drc.cpp:89
 #, c-format
 msgid "Active routes: %d\n"
 msgstr "Active routes: %d\n"
 
-#: pcbnew/drc.cpp:79
-msgid "OK! (No unconnect)\n"
-msgstr "OK! (Pas de non connecté)\n"
+#: pcbnew/drc.cpp:90
+msgid "OK! (No active routes)\n"
+msgstr "OK! (Pas de chevelu actif)\n"
 
-#: pcbnew/drc.cpp:81
-msgid "End tst"
-msgstr "Fin tst"
-
-#: pcbnew/drc.cpp:99
+#: pcbnew/drc.cpp:112
 #, c-format
 msgid "** End Drc: %d errors **\n"
 msgstr "** FinDrc: %d erreurs **\n"
 
-#: pcbnew/drc.cpp:100
+#: pcbnew/drc.cpp:114
 msgid "** End Drc: No Error **\n"
 msgstr "** Fin Drc: Aucune Erreur **\n"
 
-#: pcbnew/drc.cpp:215
+#: pcbnew/drc.cpp:229
 msgid "SegmNb"
 msgstr "SegmNb"
 
-#: pcbnew/drc.cpp:216
+#: pcbnew/drc.cpp:230
 msgid "Track Err"
 msgstr "Err Pistes"
 
-#: pcbnew/drc.cpp:219
+#: pcbnew/drc.cpp:233
 msgid "Tst Tracks\n"
 msgstr "Tst Pistes\n"
 
-#: pcbnew/drc.cpp:238
+#: pcbnew/drc.cpp:252
 #: eeschema/eelayer.cpp:141
 msgid "Netname"
 msgstr "NetName"
 
-#: pcbnew/drc.cpp:934
+#: pcbnew/drc.cpp:950
 #, c-format
-msgid "%d Err type %d sur PAD @ %d,%d\n"
-msgstr "%d Err type %d sur PAD @ %d,%d\n"
+msgid "%d Drc Err %d  PAD %s (%s) @ %d,%d\n"
+msgstr "%d Err Drc %d  PAD %s (%s) @ %d,%d\n"
 
-#: pcbnew/drc.cpp:943
+#: pcbnew/drc.cpp:961
 #, c-format
 msgid "%d Err type %d: sur VIA @ %d,%d\n"
 msgstr "%d Err type %d: sur VIA @ %d,%d\n"
 
-#: pcbnew/drc.cpp:954
+#: pcbnew/drc.cpp:972
 #, c-format
 msgid "%d Err type %d: sur SEGMENT @ %d,%d\n"
 msgstr "%d Err type %d: sur SEGMENT @ %d,%d\n"
 
-#: pcbnew/drc.cpp:986
+#: pcbnew/drc.cpp:1007
 #, c-format
-msgid "%d Err pad to pad (PAD @ %d,%d and PAD @ %d,%d\n"
-msgstr "%d Err pad to pad (PAD @ %d,%d and PAD @ %d,%d\n"
+msgid "%d Drc Err: PAD %s (%s) @ %d,%d and PAD %s (%s) @ %d,%d\n"
+msgstr "%d Err Drc: PAD %s (%s) @ %d,%d et PAD %s (%s) @ %d,%d\n"
 
 #: pcbnew/editrack-part2.cpp:31
 #, c-format
@@ -2066,6 +1877,19 @@ msgstr "RefP"
 msgid "Net"
 msgstr "Net"
 
+#: pcbnew/class_pad.cpp:769
+#: pcbnew/affiche.cpp:36
+#: pcbnew/affiche.cpp:91
+#: pcbnew/affiche.cpp:95
+#: pcbnew/affiche.cpp:195
+#: pcbnew/affiche.cpp:244
+#: pcbnew/class_module.cpp:1040
+#: pcbnew/dialog_edit_module.cpp:230
+#: pcbnew/sel_layer.cpp:109
+#: gerbview/affiche.cpp:102
+msgid "Layer"
+msgstr "Couche"
+
 #: pcbnew/class_pad.cpp:781
 #: pcbnew/affiche.cpp:53
 #: pcbnew/affiche.cpp:109
@@ -2091,6 +1915,16 @@ msgstr "Perçage"
 #: pcbnew/class_pad.cpp:799
 msgid "Drill X / Y"
 msgstr "Perçage X/Y"
+
+#: pcbnew/class_pad.cpp:810
+#: pcbnew/affiche.cpp:47
+#: pcbnew/affiche.cpp:103
+#: pcbnew/class_module.cpp:1057
+#: pcbnew/dialog_edit_module.cpp:238
+#: eeschema/affiche.cpp:101
+#: gerbview/affiche.cpp:43
+msgid "Orient"
+msgstr "Orient"
 
 #: pcbnew/class_pad.cpp:814
 msgid "X Pos"
@@ -3360,6 +3194,11 @@ msgstr "-90"
 msgid "180"
 msgstr "180"
 
+#: pcbnew/dialog_pad_edit.cpp:191
+#: pcbnew/dialog_edit_module.cpp:237
+msgid "User"
+msgstr "User"
+
 #: pcbnew/dialog_pad_edit.cpp:193
 msgid "Pad Orient:"
 msgstr "Orient pad:"
@@ -4058,6 +3897,168 @@ msgstr "&3D Visu"
 msgid "&Help"
 msgstr "&Aide"
 
+#: pcbnew/dialog_edit_module.cpp:41
+msgid "Module properties"
+msgstr "Propriétés du Module"
+
+#: pcbnew/dialog_edit_module.cpp:94
+msgid "Properties"
+msgstr "Propriétés"
+
+#: pcbnew/dialog_edit_module.cpp:98
+#: pcbnew/dialog_edit_module.cpp:107
+#: pcbnew/dialog_edit_module.cpp:138
+msgid "3D settings"
+msgstr "3D Caract"
+
+#: pcbnew/dialog_edit_module.cpp:179
+msgid "Change module(s)"
+msgstr "Change module(s)"
+
+#: pcbnew/dialog_edit_module.cpp:183
+msgid "Goto Module Editor"
+msgstr "Ouvrir Editeur de modules"
+
+#: pcbnew/dialog_edit_module.cpp:189
+#: eeschema/fieldedi.cpp:283
+#: eeschema/onrightclick.cpp:315
+#: eeschema/dialog_edit_component_in_lib.cpp:203
+#: eeschema/libedpart.cpp:246
+msgid "Doc"
+msgstr "Doc"
+
+#: pcbnew/dialog_edit_module.cpp:195
+msgid "Keywords"
+msgstr "Mots Cles"
+
+#: pcbnew/dialog_edit_module.cpp:202
+msgid "Fields:"
+msgstr "Champs:"
+
+#: pcbnew/dialog_edit_module.cpp:212
+msgid "Add Field"
+msgstr "Ajouter Champ"
+
+#: pcbnew/dialog_edit_module.cpp:217
+#: eeschema/onrightclick.cpp:253
+msgid "Edit Field"
+msgstr "Editer Champ"
+
+#: pcbnew/dialog_edit_module.cpp:222
+msgid "Delete Field"
+msgstr "Supprimer Champ"
+
+#: pcbnew/dialog_edit_module.cpp:229
+#: common/common.cpp:242
+msgid "Component"
+msgstr "Composant"
+
+#: pcbnew/dialog_edit_module.cpp:229
+msgid "Copper"
+msgstr "Cuivre"
+
+#: pcbnew/dialog_edit_module.cpp:270
+msgid "Orient (0.1 deg)"
+msgstr "Orient (0.1 deg)"
+
+#: pcbnew/dialog_edit_module.cpp:279
+msgid "Normal+Insert"
+msgstr "Normal+Insert"
+
+#: pcbnew/dialog_edit_module.cpp:279
+msgid "Virtual"
+msgstr "Virtuel"
+
+#: pcbnew/dialog_edit_module.cpp:280
+msgid "Attributs"
+msgstr "Attributs"
+
+#: pcbnew/dialog_edit_module.cpp:283
+msgid "Use this attribute for most non smd components"
+msgstr "Utiliser cet attribut pour la plupart des composants"
+
+#: pcbnew/dialog_edit_module.cpp:285
+msgid ""
+"Use this attribute for smd components.\n"
+"Only components with this option are put in the footprint position list file"
+msgstr ""
+"Uiliser cet attribut pour les composants CMS.\n"
+"Seuls les composantsavec cette option sont mis dans le fichier de position des composants"
+
+#: pcbnew/dialog_edit_module.cpp:287
+msgid "Use this attribute for \"virtual\" components drawn on board (like a old ISA PC bus connector)"
+msgstr "Uiliser cet attribut pour les composants \"virtuels\" directement dessinés sur le PCB (tel que les vieux connecteurs ISA de PC)"
+
+#: pcbnew/dialog_edit_module.cpp:311
+msgid "Free"
+msgstr "Libre"
+
+#: pcbnew/dialog_edit_module.cpp:311
+msgid "Locked"
+msgstr "Verrouillé"
+
+#: pcbnew/dialog_edit_module.cpp:312
+msgid "Move and Auto Place"
+msgstr "Move et Placement Automatique"
+
+#: pcbnew/dialog_edit_module.cpp:317
+msgid "Enable hotkey move commands and Auto Placement"
+msgstr "Autoriser les commandes clavier de déplacement et l'auto placement"
+
+#: pcbnew/dialog_edit_module.cpp:318
+msgid "Disable hotkey move commands and Auto Placement"
+msgstr "Interdire les commandes clavier de déplacement et l'auto placement"
+
+#: pcbnew/dialog_edit_module.cpp:322
+msgid "Rot 90"
+msgstr "Rot 90"
+
+#: pcbnew/dialog_edit_module.cpp:329
+msgid "Rot 180"
+msgstr "Rot 180"
+
+#: pcbnew/dialog_edit_module.cpp:359
+msgid "3D Shape Name"
+msgstr "3D forme"
+
+#: pcbnew/dialog_edit_module.cpp:375
+#: eeschema/dialog_eeschema_config.cpp:227
+msgid "Browse"
+msgstr "Examiner"
+
+#: pcbnew/dialog_edit_module.cpp:379
+msgid "Add 3D Shape"
+msgstr "Ajout Forme 3D"
+
+#: pcbnew/dialog_edit_module.cpp:385
+msgid "Remove 3D Shape"
+msgstr "Suppr. Forme 3D:"
+
+#: pcbnew/dialog_edit_module.cpp:391
+msgid "Shape Scale:"
+msgstr "Echelle de la forme:"
+
+#: pcbnew/dialog_edit_module.cpp:397
+msgid "Shape Offset:"
+msgstr "Offset forme:"
+
+#: pcbnew/dialog_edit_module.cpp:404
+msgid "Shape Rotation:"
+msgstr "Rot de la forme"
+
+#: pcbnew/dialog_edit_module.cpp:441
+msgid "3D Shape:"
+msgstr "Forme 3D:"
+
+#: pcbnew/dialog_edit_module.cpp:730
+msgid "Reference or Value cannot be deleted"
+msgstr "Référence ou Valeur ne peut etre effacée"
+
+#: pcbnew/dialog_edit_module.cpp:734
+#, c-format
+msgid "Delete [%s]"
+msgstr "Supprimer [%s]"
+
 #: pcbnew/edit.cpp:154
 msgid "Graphic not autorized on Copper layers"
 msgstr "Graphique non autorisé sur couches cuivre"
@@ -4725,7 +4726,6 @@ msgstr "Propriétés du composant"
 #: eeschema/dialog_edit_component_in_schematic.cpp:204
 #: eeschema/editpart.cpp:204
 #: eeschema/dialog_build_BOM.cpp:279
-#: cvpcb/options.cpp:138
 #: cvpcb/dialog_display_options.h:43
 msgid "Options"
 msgstr "Options"
@@ -7943,58 +7943,48 @@ msgid "&Del Annotate"
 msgstr "&Dénumérotation"
 
 #: cvpcb/dialog_display_options.cpp:141
-#: cvpcb/options.cpp:159
 msgid "Pad &Num"
 msgstr "Pad &Num"
 
 #: cvpcb/dialog_display_options.cpp:148
-#: cvpcb/options.cpp:153
 msgid "&Pad Fill"
 msgstr "&Pad plein"
 
 #: cvpcb/dialog_display_options.cpp:155
 #: cvpcb/dialog_display_options.cpp:163
-#: cvpcb/options.cpp:163
 msgid "&Filaire"
 msgstr "&Filaire"
 
 #: cvpcb/dialog_display_options.cpp:156
 #: cvpcb/dialog_display_options.cpp:164
-#: cvpcb/options.cpp:163
 msgid "&Filled"
 msgstr "&Plein"
 
 #: cvpcb/dialog_display_options.cpp:157
 #: cvpcb/dialog_display_options.cpp:165
-#: cvpcb/options.cpp:163
 msgid "&Sketch"
 msgstr "&Contour"
 
 #: cvpcb/dialog_display_options.cpp:159
-#: cvpcb/options.cpp:165
 msgid "Edges:"
 msgstr "Contours:"
 
 #: cvpcb/dialog_display_options.cpp:167
-#: cvpcb/options.cpp:173
 msgid "Texts:"
 msgstr "Textes:"
 
 #: cvpcb/readschematicnetlist.cpp:71
 #: cvpcb/viewlogi.cpp:72
-#: cvpcb/rdorcad.cpp:73
 #: cvpcb/rdpcad.cpp:56
 #, c-format
 msgid "Unknown file format <%s>"
 msgstr " Format fichier inconnu <%s>"
 
 #: cvpcb/readschematicnetlist.cpp:76
-#: cvpcb/rdorcad.cpp:78
 msgid "Netlist Format: EESchema"
 msgstr " Formats NetListe: EESchema"
 
 #: cvpcb/readschematicnetlist.cpp:126
-#: cvpcb/rdorcad.cpp:122
 #, c-format
 msgid "Netlist error: %s"
 msgstr "Erreur Netliste: %s"
@@ -8427,112 +8417,117 @@ msgstr "Executer le Script Python:"
 msgid "Load file:"
 msgstr "Charger Fichiers:"
 
-#: kicad/treeprj_frame.cpp:63
+#: kicad/treeprj_frame.cpp:65
 msgid "&Run"
 msgstr "Exécute&r"
 
-#: kicad/treeprj_frame.cpp:64
+#: kicad/treeprj_frame.cpp:66
 msgid "Run the Python Script"
 msgstr "Exécuter le Script Python"
 
-#: kicad/treeprj_frame.cpp:70
+#: kicad/treeprj_frame.cpp:72
+#: kicad/treeprj_frame.cpp:118
 msgid "&Edit in a text editor"
 msgstr "Editer avec un éditeur de Texte"
 
-#: kicad/treeprj_frame.cpp:71
-msgid "Edit the Python Script in a Text Editor"
-msgstr "Editer le script python"
+#: kicad/treeprj_frame.cpp:73
+msgid "&Open the file in a Text Editor"
+msgstr "&Ouvrir le fichier avec un  Editeur de texte"
 
-#: kicad/treeprj_frame.cpp:84
+#: kicad/treeprj_frame.cpp:86
 msgid "New D&irectory"
 msgstr "&Nouveau Répertoire"
 
-#: kicad/treeprj_frame.cpp:84
+#: kicad/treeprj_frame.cpp:86
 msgid "Create a New Directory"
 msgstr "Créer un nouveau Répertoire"
 
-#: kicad/treeprj_frame.cpp:89
+#: kicad/treeprj_frame.cpp:91
 msgid "New P&ython Script"
 msgstr "Nouveau Script P&ython"
 
-#: kicad/treeprj_frame.cpp:89
+#: kicad/treeprj_frame.cpp:91
 msgid "Create a New Python Script"
 msgstr "Créer un nouveau script Python"
 
-#: kicad/treeprj_frame.cpp:94
+#: kicad/treeprj_frame.cpp:96
 msgid "New &Text File"
 msgstr "Nouveau  Fichier &Texte"
 
-#: kicad/treeprj_frame.cpp:94
+#: kicad/treeprj_frame.cpp:96
 msgid "Create a New Txt File"
 msgstr "Créer un nouveau Fichier texte"
 
-#: kicad/treeprj_frame.cpp:98
+#: kicad/treeprj_frame.cpp:100
 msgid "New &File"
 msgstr "Nouveau &Fichier"
 
-#: kicad/treeprj_frame.cpp:98
+#: kicad/treeprj_frame.cpp:100
 msgid "Create a New File"
 msgstr "Créer un nouveau Fichier"
 
-#: kicad/treeprj_frame.cpp:109
+#: kicad/treeprj_frame.cpp:111
 msgid "&Rename File"
 msgstr "&Renommer Fichier"
 
-#: kicad/treeprj_frame.cpp:109
+#: kicad/treeprj_frame.cpp:111
 msgid "&Rename Directory"
 msgstr "&Renommer Répertoire"
 
-#: kicad/treeprj_frame.cpp:110
+#: kicad/treeprj_frame.cpp:112
 msgid "Rename the File"
 msgstr "Renommer le Fichier"
 
-#: kicad/treeprj_frame.cpp:110
+#: kicad/treeprj_frame.cpp:112
 msgid "&Rename the Directory"
 msgstr "&Renommer le Répertoire"
 
-#: kicad/treeprj_frame.cpp:114
+#: kicad/treeprj_frame.cpp:119
+msgid "Open the file in a Text Editor"
+msgstr "Ouvrir le fichier avec un  Editeur de texte"
+
+#: kicad/treeprj_frame.cpp:124
 msgid "&Delete File"
 msgstr "&Supprimer Fichier"
 
-#: kicad/treeprj_frame.cpp:114
+#: kicad/treeprj_frame.cpp:124
 msgid "&Delete Directory"
 msgstr "&Supprimer le Répertoire"
 
-#: kicad/treeprj_frame.cpp:115
+#: kicad/treeprj_frame.cpp:125
 msgid "Delete the File"
 msgstr "Supprimer le fichier"
 
-#: kicad/treeprj_frame.cpp:115
+#: kicad/treeprj_frame.cpp:125
 msgid "&Delete the Directory and its content"
 msgstr "Effacer le Répertoire et son contenu"
 
-#: kicad/treeprj_frame.cpp:342
+#: kicad/treeprj_frame.cpp:344
 msgid "Create New File:"
 msgstr "Créer  un nouveau Fichier"
 
-#: kicad/treeprj_frame.cpp:342
+#: kicad/treeprj_frame.cpp:344
 msgid "Create New Directory"
 msgstr "Créer un nouveau Répertoire"
 
-#: kicad/treeprj_frame.cpp:344
+#: kicad/treeprj_frame.cpp:346
 msgid "noname"
 msgstr "noname"
 
-#: kicad/treeprj_frame.cpp:643
+#: kicad/treeprj_frame.cpp:663
 msgid "Change File Name: "
 msgstr "ChangerNom Fichier: "
 
-#: kicad/treeprj_datas.cpp:186
+#: kicad/treeprj_datas.cpp:182
 msgid "Unable to move file ... "
 msgstr "Impossible de déplacer le fichier "
 
-#: kicad/treeprj_datas.cpp:186
-#: kicad/treeprj_datas.cpp:257
+#: kicad/treeprj_datas.cpp:182
+#: kicad/treeprj_datas.cpp:253
 msgid "Permission error ?"
 msgstr ""
 
-#: kicad/treeprj_datas.cpp:244
+#: kicad/treeprj_datas.cpp:240
 msgid ""
 "Changing file extension will change file type.\n"
 " Do you want to continue ?"
@@ -8540,19 +8535,19 @@ msgstr ""
 "Changer l'extension changera le type de fichier.\n"
 "Voulez vous continuer ?"
 
-#: kicad/treeprj_datas.cpp:245
+#: kicad/treeprj_datas.cpp:241
 msgid "Rename File"
 msgstr "Renommer Fichier"
 
-#: kicad/treeprj_datas.cpp:257
+#: kicad/treeprj_datas.cpp:253
 msgid "Unable to rename file ... "
 msgstr "Impossible de renommer le fichier... "
 
-#: kicad/treeprj_datas.cpp:275
+#: kicad/treeprj_datas.cpp:271
 msgid "Do you really want to delete "
 msgstr "Voulez vous réellemant effacer"
 
-#: kicad/treeprj_datas.cpp:275
+#: kicad/treeprj_datas.cpp:271
 msgid "Delete File"
 msgstr "Supprimer Fichier"
 
@@ -9077,126 +9072,6 @@ msgstr "X"
 msgid "Y"
 msgstr "Y"
 
-#: common/common.cpp:44
-msgid " (\"):"
-msgstr " (\"):"
-
-#: common/common.cpp:239
-msgid "Copper   "
-msgstr "Cuivre   "
-
-#: common/common.cpp:239
-msgid "Inner L1 "
-msgstr "Interne 1"
-
-#: common/common.cpp:239
-msgid "Inner L2 "
-msgstr "Interne 2"
-
-#: common/common.cpp:239
-msgid "Inner L3 "
-msgstr "Interne 3"
-
-#: common/common.cpp:240
-msgid "Inner L4 "
-msgstr "Interne 4"
-
-#: common/common.cpp:240
-msgid "Inner L5 "
-msgstr "Interne 5"
-
-#: common/common.cpp:240
-msgid "Inner L6 "
-msgstr "Interne 6"
-
-#: common/common.cpp:240
-msgid "Inner L7 "
-msgstr "Interne 7"
-
-#: common/common.cpp:241
-msgid "Inner L8 "
-msgstr "Interne 8"
-
-#: common/common.cpp:241
-msgid "Inner L9 "
-msgstr "Interne 9"
-
-#: common/common.cpp:241
-msgid "Inner L10"
-msgstr "Interne 10"
-
-#: common/common.cpp:241
-msgid "Inner L11"
-msgstr "Interne 11"
-
-#: common/common.cpp:242
-msgid "Inner L12"
-msgstr "Interne 12"
-
-#: common/common.cpp:242
-msgid "Inner L13"
-msgstr "Interne 13"
-
-#: common/common.cpp:242
-msgid "Inner L14"
-msgstr "Interne 14"
-
-#: common/common.cpp:243
-msgid "Adhes Cop"
-msgstr "Adhes Cu "
-
-#: common/common.cpp:243
-msgid "Adhes Cmp"
-msgstr "Adhe  Cmp"
-
-#: common/common.cpp:243
-msgid "SoldP Cop"
-msgstr "SoldP Cu "
-
-#: common/common.cpp:243
-msgid "SoldP Cmp"
-msgstr "SoldP Cmp"
-
-#: common/common.cpp:244
-msgid "SilkS Cop"
-msgstr "Sérigr Cu "
-
-#: common/common.cpp:244
-msgid "SilkS Cmp"
-msgstr "Sérigr Cmp"
-
-#: common/common.cpp:244
-msgid "Mask Copp"
-msgstr "Masque Cu "
-
-#: common/common.cpp:244
-msgid "Mask Cmp "
-msgstr "Masque Cmp"
-
-#: common/common.cpp:245
-msgid "Drawings "
-msgstr "Drawings "
-
-#: common/common.cpp:245
-msgid "Comments "
-msgstr "Comments "
-
-#: common/common.cpp:245
-msgid "Eco1     "
-msgstr "Eco1     "
-
-#: common/common.cpp:245
-msgid "Eco2     "
-msgstr "Eco2     "
-
-#: common/common.cpp:246
-msgid "Edges Pcb"
-msgstr "Contour Pcb"
-
-#: common/common.cpp:246
-msgid "---      "
-msgstr "---      "
-
 #: common/basicframe.cpp:217
 #, c-format
 msgid "Help file %s not found"
@@ -9364,6 +9239,126 @@ msgstr "Langage"
 #: common/gestfich.cpp:581
 msgid "No default editor found, you must choose it"
 msgstr "Pas d'éditeur par défaut trouvé, vous devez en choisir un"
+
+#: common/common.cpp:44
+msgid " (\"):"
+msgstr " (\"):"
+
+#: common/common.cpp:239
+msgid "Copper   "
+msgstr "Cuivre   "
+
+#: common/common.cpp:239
+msgid "Inner L1 "
+msgstr "Interne 1"
+
+#: common/common.cpp:239
+msgid "Inner L2 "
+msgstr "Interne 2"
+
+#: common/common.cpp:239
+msgid "Inner L3 "
+msgstr "Interne 3"
+
+#: common/common.cpp:240
+msgid "Inner L4 "
+msgstr "Interne 4"
+
+#: common/common.cpp:240
+msgid "Inner L5 "
+msgstr "Interne 5"
+
+#: common/common.cpp:240
+msgid "Inner L6 "
+msgstr "Interne 6"
+
+#: common/common.cpp:240
+msgid "Inner L7 "
+msgstr "Interne 7"
+
+#: common/common.cpp:241
+msgid "Inner L8 "
+msgstr "Interne 8"
+
+#: common/common.cpp:241
+msgid "Inner L9 "
+msgstr "Interne 9"
+
+#: common/common.cpp:241
+msgid "Inner L10"
+msgstr "Interne 10"
+
+#: common/common.cpp:241
+msgid "Inner L11"
+msgstr "Interne 11"
+
+#: common/common.cpp:242
+msgid "Inner L12"
+msgstr "Interne 12"
+
+#: common/common.cpp:242
+msgid "Inner L13"
+msgstr "Interne 13"
+
+#: common/common.cpp:242
+msgid "Inner L14"
+msgstr "Interne 14"
+
+#: common/common.cpp:243
+msgid "Adhes Cop"
+msgstr "Adhes Cu "
+
+#: common/common.cpp:243
+msgid "Adhes Cmp"
+msgstr "Adhe  Cmp"
+
+#: common/common.cpp:243
+msgid "SoldP Cop"
+msgstr "SoldP Cu "
+
+#: common/common.cpp:243
+msgid "SoldP Cmp"
+msgstr "SoldP Cmp"
+
+#: common/common.cpp:244
+msgid "SilkS Cop"
+msgstr "Sérigr Cu "
+
+#: common/common.cpp:244
+msgid "SilkS Cmp"
+msgstr "Sérigr Cmp"
+
+#: common/common.cpp:244
+msgid "Mask Cop "
+msgstr "Masque Cu "
+
+#: common/common.cpp:244
+msgid "Mask Cmp "
+msgstr "Masque Cmp"
+
+#: common/common.cpp:245
+msgid "Drawings "
+msgstr "Drawings "
+
+#: common/common.cpp:245
+msgid "Comments "
+msgstr "Comments "
+
+#: common/common.cpp:245
+msgid "Eco1     "
+msgstr "Eco1     "
+
+#: common/common.cpp:245
+msgid "Eco2     "
+msgstr "Eco2     "
+
+#: common/common.cpp:246
+msgid "Edges Pcb"
+msgstr "Contour Pcb"
+
+#: common/common.cpp:246
+msgid "---      "
+msgstr "---      "
 
 #: 3d-viewer/3d_canvas.cpp:290
 #: share/zoom.cpp:346

@@ -4,6 +4,16 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Jul-25 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+	** Some minor enhancements
++ pcbnew
+	In Drc diags, better (more explicit) messages
+	Change (and simplify) code in  'update' as well as 'insert' modules into main PCB from within the module editor,
+	because it had a bug (crashes when there was no footprint in pcb)
+	
+
+
 2007-June-21 UPDATE Tim Hanson <tim@hardcarve.com>
 ================================================================================
 + pcbnew

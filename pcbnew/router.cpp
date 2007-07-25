@@ -568,7 +568,8 @@ int max_layer = m_Pcb->m_BoardSettings->m_CopperLayerCount;
 		case 'T':	// Track list start: fmt = T image layer t_count
 			sscanf(Line+2, "%d %d %d", & image, & track_layer, & track_count);
 			track_layer--;
-			if ( track_layer == max_layer-1 ) track_layer = CMP_N;
+			if ( (track_layer != CUIVRE_N) && (track_layer == max_layer-1) )
+				track_layer = CMP_N;
 			// Read corners: fmt = C x_pos y_pos
 			for ( int ii = 0; ii < track_count; ii++ )
 			{

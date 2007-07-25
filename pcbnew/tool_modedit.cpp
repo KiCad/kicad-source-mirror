@@ -26,9 +26,9 @@
 #include "Update_Module_Board.xpm"
 
 #ifdef __UNIX__
-#define LISTBOX_WIDTH 120
+#define LISTBOX_WIDTH 140
 #else
-#define LISTBOX_WIDTH 100
+#define LISTBOX_WIDTH 120
 #endif
 
 /***************************************************/

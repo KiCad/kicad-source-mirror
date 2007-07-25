@@ -125,6 +125,7 @@ public:
 ////@end WinEDA_DrcFrame member variables
 	WinEDA_PcbFrame * m_Parent;
 	wxDC * m_DC;
+	int m_UnconnectedCount;
 };
 
 #endif
