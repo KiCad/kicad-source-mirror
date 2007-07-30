@@ -16,6 +16,12 @@
 class WinEDA_DrcFrame;
 WinEDA_DrcFrame * DrcFrame;
 
+/* saving drc options */
+bool s_Pad2PadTestOpt = true;
+bool s_UnconnectedTestOpt = true;
+bool s_ZonesTestOpt = false;
+
+
 int NumberOfErrors;
 static MARQUEUR * current_marqueur;	/* Pour gestion des marqueurs sur pcb */
 
@@ -28,10 +34,10 @@ static int xcliplo,ycliplo,xcliphi,ycliphi ;	/* coord de la surface de securite 
 
 /* Routines Locales */
 static int Pad_to_Pad_Isol(D_PAD * pad_ref, D_PAD * pad, const int dist_min);
-static bool TestPadDrc(WinEDA_BasePcbFrame *frame, wxDC * DC, D_PAD * pad_ref,
+static bool Test_Pad_to_Pads_Drc(WinEDA_BasePcbFrame *frame, wxDC * DC, D_PAD * pad_ref,
 		LISTE_PAD * start_buffer, LISTE_PAD * end_buffer, int max_size, bool show_err);
-static int distance_a_pad(const D_PAD* pad_to_test, int seg_width, int isol);
-static int distance_a_rond(int cx, int cy, int rayon, int longueur);
+static int TestClearanceSegmToPad(const D_PAD* pad_to_test, int seg_width, int isol);
+static int TestMarginToCircle(int cx, int cy, int rayon, int longueur);
 static int Tst_Ligne(int x1,int y1,int x2,int y2);
 static void Affiche_Erreur_DRC(WinEDA_DrawPanel * panel, wxDC * DC, BOARD * Pcb,
 					TRACK * pt_ref, void * pt_item, int errnumber);
@@ -100,14 +106,18 @@ int errors;
 wxString msg;
 	if ( ! DrcInProgress )
 	{
+		s_Pad2PadTestOpt = m_Pad2PadTestCtrl->IsChecked();
+		s_UnconnectedTestOpt = m_UnconnectedTestCtrl->IsChecked();
+		s_ZonesTestOpt = m_ZonesTestCtrl->IsChecked();
 		AbortDrc = FALSE;
 		m_logWindow->Clear();
 		g_DesignSettings.m_TrackClearence =
 			ReturnValueFromTextCtrl(*m_SetClearance, m_Parent->m_InternalUnits);
 		/* Test DRC errors (clearance errors, bad connections .. */
-		errors = m_Parent->Test_DRC(m_DC);
-		/* Serach for active routes (unconnected pads) */
-		ListUnconnectedPads(event);
+		errors = m_Parent->Test_DRC(m_DC, m_Pad2PadTestCtrl->IsChecked(), m_ZonesTestCtrl->IsChecked());
+		/* Search for active routes (unconnected pads) */
+		if ( m_UnconnectedTestCtrl->IsChecked() ) ListUnconnectedPads(event);
+		else m_UnconnectedCount = 0;
 		if ( errors )
 			msg.Printf(_("** End Drc: %d errors **\n"),errors);
 		else if ( m_UnconnectedCount == 0 )
@@ -122,10 +132,10 @@ void WinEDA_DrcFrame::DelDRCMarkers(wxCommandEvent & event)
 /*********************************************************/
 {
 	if ( ! DrcInProgress )
-		{
-		m_Parent->Erase_Marqueurs(m_DC, FALSE);
+	{
+		m_Parent->Erase_Marqueurs();
 		m_Parent->DrawPanel->ReDraw(m_DC,TRUE);
-		}
+	}
 	else wxBell();
 }
 
@@ -145,27 +155,29 @@ void WinEDA_PcbFrame::Install_Test_DRC_Frame(wxDC * DC)
 }
 
 
-/***************************************/
-int WinEDA_PcbFrame::Test_DRC(wxDC * DC)
-/***************************************/
+/************************************************************************/
+int WinEDA_PcbFrame::Test_DRC(wxDC * DC, bool TestPad2Pad, bool TestZone)
+/************************************************************************/
 /* Test des isolements : teste les isolements des pistes et place un
 	marqueur sur les divers segments en defaut
 	Principe:
 		Appelle la routine drc() pour chaque segment de piste existant
 */
 {
-int ii, old_net;
+int ii, jj, old_net;
 int flag_err_Drc;
 TRACK * pt_segm;
 D_PAD * pad;
 MARQUEUR * Marqueur;
-EDA_BaseStruct * PtStruct, *PtNext;
+EDA_BaseStruct * PtStruct;
 wxString Line;
 #define PRINT_NB_PAD_POS 42
 #define PRINT_PAD_ERR_POS 48
 #define PRINT_TST_POS 20
 #define PRINT_NB_SEGM_POS 26
 #define PRINT_TRACK_ERR_POS 32
+#define PRINT_NB_ZONESEGM_POS 60
+#define PRINT_ZONE_ERR_POS 70
 
 	DrcInProgress = TRUE;
     NumberOfErrors = 0;
@@ -176,82 +188,86 @@ wxString Line;
 	m_CurrentScreen->SetRefreshReq();
 
 	/* Effacement des anciens marqueurs */
-	PtStruct = (EDA_BaseStruct*) m_Pcb->m_Drawings;
-	for( ; PtStruct != NULL; PtStruct = PtNext)
-	{
-		PtNext = PtStruct->Pnext;
-		if(PtStruct->m_StructType == TYPEMARQUEUR ) DeleteStructure(PtStruct);
-	}
+	Erase_Marqueurs();
 
-	/* Test DRC des pads entre eux */
-	Line.Printf( wxT("%d"),m_Pcb->m_NbPads) ;
-	Affiche_1_Parametre(this, PRINT_NB_PAD_POS, wxT("NbPad"),Line,RED) ;
-	Affiche_1_Parametre(this, PRINT_PAD_ERR_POS, wxT("Pad Err"), wxT("0"), LIGHTRED);
-	Line = wxT("Tst Pad to Pad\n");
-	if ( DrcFrame ) DrcFrame->m_logWindow->AppendText(Line);
-	LISTE_PAD * pad_list_start = CreateSortedPadListByXCoord(m_Pcb);
-	LISTE_PAD * pad_list_limit = &pad_list_start[m_Pcb->m_NbPads];
-	int max_size = 0;
-	LISTE_PAD * pad_list;
-	/* Compute the max size of the pads ( used to stop the test) */
-	for ( pad_list = pad_list_start; pad_list < pad_list_limit; pad_list++)
+	if ( TestPad2Pad )	/* Test DRC des pads entre eux */
 	{
-		pad = * pad_list;
-		if ( pad->m_Rayon > max_size ) max_size = pad->m_Rayon;
-	}
-	/* Test the pads */
-	for ( pad_list = pad_list_start; pad_list < pad_list_limit; pad_list++)
-	{
-		pad = * pad_list;
-		if ( TestPadDrc(this, DC, pad, pad_list, pad_list_limit, max_size, TRUE) == BAD_DRC )
+		Line.Printf( wxT("%d"),m_Pcb->m_NbPads) ;
+		Affiche_1_Parametre(this, PRINT_NB_PAD_POS, wxT("NbPad"),Line,RED) ;
+		Affiche_1_Parametre(this, PRINT_PAD_ERR_POS, wxT("Pad Err"), wxT("0"), LIGHTRED);
+		if ( DrcFrame ) DrcFrame->m_logWindow->AppendText(_("Tst Pad to Pad\n"));
+		LISTE_PAD * pad_list_start = CreateSortedPadListByXCoord(m_Pcb);
+		LISTE_PAD * pad_list_limit = &pad_list_start[m_Pcb->m_NbPads];
+		int max_size = 0;
+		LISTE_PAD * pad_list;
+		/* Compute the max size of the pads ( used to stop the test) */
+		for ( pad_list = pad_list_start; pad_list < pad_list_limit; pad_list++)
 		{
-			Marqueur = current_marqueur;
-			current_marqueur = NULL;
-			if( Marqueur == NULL )
-			{
-				DisplayError(this, wxT("Test_Drc(): internal err"));
-				return NumberOfErrors;
-			}
-			Line.Printf( wxT("%d"),NumberOfErrors) ;
-			Affiche_1_Parametre(this, PRINT_PAD_ERR_POS,wxEmptyString,Line, LIGHTRED);
-			Marqueur->Pnext = m_Pcb->m_Drawings;
-			Marqueur->Pback = m_Pcb;
-
-			PtStruct = m_Pcb->m_Drawings;
-			if(PtStruct) PtStruct->Pback = Marqueur;
-			m_Pcb->m_Drawings = Marqueur;
+			pad = * pad_list;
+			if ( pad->m_Rayon > max_size ) max_size = pad->m_Rayon;
 		}
+		/* Test the pads */
+		for ( pad_list = pad_list_start; pad_list < pad_list_limit; pad_list++)
+		{
+			pad = * pad_list;
+			if ( Test_Pad_to_Pads_Drc(this, DC, pad, pad_list, pad_list_limit, max_size, TRUE) == BAD_DRC )
+			{
+				Marqueur = current_marqueur;
+				current_marqueur = NULL;
+				if( Marqueur == NULL )
+				{
+					DisplayError(this, wxT("Test_Drc(): internal err"));
+					return NumberOfErrors;
+				}
+				Line.Printf( wxT("%d"),NumberOfErrors) ;
+				Affiche_1_Parametre(this, PRINT_PAD_ERR_POS,wxEmptyString,Line, LIGHTRED);
+				Marqueur->Pnext = m_Pcb->m_Drawings;
+				Marqueur->Pback = m_Pcb;
+
+				PtStruct = m_Pcb->m_Drawings;
+				if(PtStruct) PtStruct->Pback = Marqueur;
+				m_Pcb->m_Drawings = Marqueur;
+			}
+		}
+		free(pad_list_start);
 	}
-	free(pad_list_start);
 	
-	/* Test des segments de piste */
+	/* Test track segments */
 	Line.Printf( wxT("%d"),m_Pcb->m_NbSegmTrack) ;
 	Affiche_1_Parametre(this, PRINT_NB_SEGM_POS,_("SegmNb"),Line,RED) ;
 	Affiche_1_Parametre(this, PRINT_TRACK_ERR_POS,_("Track Err"), wxT("0"), LIGHTRED);
-	pt_segm = (TRACK*)m_Pcb->m_Track;
+	pt_segm = m_Pcb->m_Track;
 
 	if ( DrcFrame ) DrcFrame->m_logWindow->AppendText( _("Tst Tracks\n") );
-	for( ii = 0, old_net = -1;  pt_segm != NULL; pt_segm = (TRACK*)pt_segm->Pnext, ii++)
+	for( ii = 0, old_net = -1, jj = 0;  pt_segm != NULL; pt_segm = (TRACK*)pt_segm->Pnext, ii++, jj--)
 	{
-		wxYield();
-		if(AbortDrc)
-		{
-			AbortDrc = FALSE; break;
-		}
 		if( pt_segm->Pnext == NULL) break;
-		g_HightLigth_NetCode = pt_segm->m_NetCode;
-		flag_err_Drc = Drc(this, DC, pt_segm,(TRACK*)pt_segm->Pnext, 1);
-		Line.Printf( wxT("%d"),ii);
-		Affiche_1_Parametre(this, PRINT_TST_POS, wxT("Test"),Line,CYAN) ;
+		if ( jj == 0 )
+		{
+			jj = 10;
+			wxYield();
+			if(AbortDrc)
+			{
+				AbortDrc = FALSE; break;
+			}
+			/* Print stats */
+			Line.Printf( wxT("%d"),ii);
+			Affiche_1_Parametre(this, PRINT_TST_POS, wxT("Test"),Line,CYAN) ;
+		}
+
 		if ( old_net != pt_segm->m_NetCode)
 		{
 			wxString msg;
+			jj = 1;
 			EQUIPOT * equipot = GetEquipot(m_Pcb, pt_segm->m_NetCode);
 			if ( equipot ) msg =  equipot->m_Netname + wxT("        ");
 			else msg = wxT("<noname>");
 			Affiche_1_Parametre(this, 0,_("Netname"),msg, YELLOW);
 			old_net = pt_segm->m_NetCode;
 		}
+
+		g_HightLigth_NetCode = pt_segm->m_NetCode;
+		flag_err_Drc = Drc(this, DC, pt_segm,(TRACK*)pt_segm->Pnext, 1);
 		if(flag_err_Drc == BAD_DRC)
 		{
 			Marqueur = current_marqueur;
@@ -272,10 +288,101 @@ wxString Line;
 			pt_segm->Draw(DrawPanel, DC, RED^LIGHTRED );
 			Line.Printf( wxT("%d"),NumberOfErrors);
 			Affiche_1_Parametre(this, PRINT_TRACK_ERR_POS,wxEmptyString,Line, LIGHTRED);
-			Line.Printf( wxT("%d"),m_Pcb->m_NbSegmTrack);
-			Affiche_1_Parametre(this, PRINT_NB_SEGM_POS,wxEmptyString,Line,RED) ;
 		}
 	}
+
+	/* Test zone segments segments */
+	if ( TestZone )
+	{
+		m_Pcb->m_NbSegmZone = 0;
+		for( pt_segm = (TRACK*)m_Pcb->m_Zone;  pt_segm != NULL; pt_segm = (TRACK*)pt_segm->Pnext)
+			m_Pcb->m_NbSegmZone++;
+		Line.Printf( wxT("%d"),m_Pcb->m_NbSegmZone) ;
+		Affiche_1_Parametre(this, PRINT_NB_ZONESEGM_POS,_("SegmNb"),Line,RED) ;
+		Affiche_1_Parametre(this, PRINT_ZONE_ERR_POS,_("Zone Err"), wxT("0"), LIGHTRED);
+
+		if ( DrcFrame ) DrcFrame->m_logWindow->AppendText( _("Tst Zones\n") );
+			
+		pt_segm = (TRACK*)m_Pcb->m_Zone;
+		for( ii = 0, old_net = -1, jj = 0;  pt_segm != NULL; pt_segm = (TRACK*)pt_segm->Pnext, ii++, jj--)
+		{
+			if( pt_segm->Pnext == NULL) break;
+			if ( jj == 0 )
+			{
+				jj = 100;
+				wxYield();
+				if(AbortDrc)
+				{
+					AbortDrc = FALSE; break;
+				}
+				/* Print stats */
+				Line.Printf( wxT("%d"),ii);
+				Affiche_1_Parametre(this, PRINT_TST_POS, wxT("Test"),Line,CYAN) ;
+			}
+
+			if ( old_net != pt_segm->m_NetCode)
+			{
+				jj = 1;
+				wxString msg;
+				EQUIPOT * equipot = GetEquipot(m_Pcb, pt_segm->m_NetCode);
+				if ( equipot ) msg =  equipot->m_Netname + wxT("        ");
+				else msg = wxT("<noname>");
+				Affiche_1_Parametre(this, 0,_("Netname"),msg, YELLOW);
+				old_net = pt_segm->m_NetCode;
+			}
+			g_HightLigth_NetCode = pt_segm->m_NetCode;
+			/* Test drc with other zone segments, and pads */
+			flag_err_Drc = Drc(this, DC, pt_segm,(TRACK*)pt_segm->Pnext, 1);
+			if(flag_err_Drc == BAD_DRC)
+			{
+				Marqueur = current_marqueur;
+				current_marqueur = NULL;
+				if( Marqueur == NULL )
+				{
+					DisplayError(this, wxT("Test_Drc(): internal err"));
+					return NumberOfErrors;
+				}
+				Marqueur->Pnext = m_Pcb->m_Drawings;
+				Marqueur->Pback = m_Pcb;
+
+				PtStruct = m_Pcb->m_Drawings;
+				if(PtStruct) PtStruct->Pback = Marqueur;
+				m_Pcb->m_Drawings = Marqueur;
+
+				GRSetDrawMode(DC, GR_OR);
+				pt_segm->Draw(DrawPanel, DC, RED^LIGHTRED );
+				Line.Printf( wxT("%d"),NumberOfErrors);
+				Affiche_1_Parametre(this, PRINT_ZONE_ERR_POS, wxEmptyString, Line, LIGHTRED);
+			}
+			
+			/* Test drc with track segments */
+			int tmp =  m_Pcb->m_NbPads; m_Pcb->m_NbPads = 0;	// Pads already tested: disable pad test
+			flag_err_Drc = Drc(this, DC, pt_segm, m_Pcb->m_Track, 1);
+			m_Pcb->m_NbPads = tmp;
+			if(flag_err_Drc == BAD_DRC)
+			{
+				Marqueur = current_marqueur;
+				current_marqueur = NULL;
+				if( Marqueur == NULL )
+				{
+					DisplayError(this, wxT("Test_Drc(): internal err"));
+					return NumberOfErrors;
+				}
+				Marqueur->Pnext = m_Pcb->m_Drawings;
+				Marqueur->Pback = m_Pcb;
+
+				PtStruct = m_Pcb->m_Drawings;
+				if(PtStruct) PtStruct->Pback = Marqueur;
+				m_Pcb->m_Drawings = Marqueur;
+
+				GRSetDrawMode(DC, GR_OR);
+				pt_segm->Draw(DrawPanel, DC, RED^LIGHTRED );
+				Line.Printf( wxT("%d"),NumberOfErrors);
+				Affiche_1_Parametre(this, PRINT_ZONE_ERR_POS, wxEmptyString, Line, LIGHTRED);
+			}
+		}
+	}
+
 
 	AbortDrc = FALSE;
 	DrcInProgress = FALSE;
@@ -328,7 +435,7 @@ wxPoint shape_pos;
 	segm_long = dx;
 
 	/******************************************/
-	/* Phase 1 : test DRC avec les pastilles :*/
+	/* Phase 1 : test DRC track to pads :*/
 	/******************************************/
 
 	/* calcul de la distance min aux pads : */
@@ -342,7 +449,7 @@ wxPoint shape_pos;
 		face sur CI double face */
 		if( (pt_pad->m_Masque_Layer & MaskLayer ) == 0 )
 		{
-			/* We must test the pad hole. In order to use the function "distance_a_pad",
+			/* We must test the pad hole. In order to use the function "TestClearanceSegmToPad",
 			a pseudo pad is used, with a shape and a size like the hole */
 			if ( pt_pad->m_Drill.x == 0 ) continue;
 			D_PAD pseudo_pad((MODULE*)NULL);
@@ -353,7 +460,7 @@ wxPoint shape_pos;
 			pseudo_pad.ComputeRayon();
 			spot_cX = pseudo_pad.m_Pos.x - org_X;
 			spot_cY = pseudo_pad.m_Pos.y - org_Y;
-			if( distance_a_pad(&pseudo_pad, w_dist, g_DesignSettings.m_TrackClearence) != OK_DRC )
+			if( TestClearanceSegmToPad(&pseudo_pad, w_dist, g_DesignSettings.m_TrackClearence) != OK_DRC )
 			{
 				NumberOfErrors++;
 				if( show_err )
@@ -373,7 +480,7 @@ wxPoint shape_pos;
         shape_pos = pt_pad->ReturnShapePos();
 		spot_cX = shape_pos.x - org_X;
 		spot_cY = shape_pos.y - org_Y;
-		if( distance_a_pad(pt_pad, w_dist, g_DesignSettings.m_TrackClearence) == OK_DRC ) continue ;
+		if( TestClearanceSegmToPad(pt_pad, w_dist, g_DesignSettings.m_TrackClearence) == OK_DRC ) continue ;
 
 		/* extremite sur pad ou defaut d'isolation trouve */
 		else
@@ -435,7 +542,7 @@ wxPoint shape_pos;
 				RotatePoint(&dx, &dy, angle);
 				RotatePoint(&x0, &y0, angle);
 
-				if( distance_a_rond(x0, y0, w_dist, dx) == BAD_DRC )
+				if( TestMarginToCircle(x0, y0, w_dist, dx) == BAD_DRC )
 					{
 					NumberOfErrors++;
 					if(show_err)
@@ -455,7 +562,7 @@ wxPoint shape_pos;
 
 		if ( pttrack->m_StructType == TYPEVIA )
 			{
-			if( distance_a_rond(x0, y0,w_dist,segm_long) == OK_DRC) continue;
+			if( TestMarginToCircle(x0, y0,w_dist,segm_long) == OK_DRC) continue;
 			NumberOfErrors++;
 			if(show_err)
 				Affiche_Erreur_DRC(frame->DrawPanel, DC, frame->m_Pcb, pt_segment,pttrack,21);
@@ -482,7 +589,7 @@ wxPoint shape_pos;
 						Affiche_Erreur_DRC(frame->DrawPanel, DC, frame->m_Pcb, pt_segment,pttrack,2);
 					return(BAD_DRC) ;
 					}
-				if( distance_a_rond(x0, y0, w_dist,segm_long) == BAD_DRC)
+				if( TestMarginToCircle(x0, y0, w_dist,segm_long) == BAD_DRC)
 					{
 					NumberOfErrors++;
 					if(show_err)
@@ -500,7 +607,7 @@ wxPoint shape_pos;
 						Affiche_Erreur_DRC(frame->DrawPanel, DC, frame->m_Pcb, pt_segment,pttrack,3);
 					return(BAD_DRC) ;
 					}
-				if( distance_a_rond(xf, yf, w_dist,segm_long) == BAD_DRC)
+				if( TestMarginToCircle(xf, yf, w_dist,segm_long) == BAD_DRC)
 					{
 					NumberOfErrors++;
 					if(show_err)
@@ -534,14 +641,14 @@ wxPoint shape_pos;
 
 			/* ici l'erreur est due a une extremite pres d'une extremite du segm
 				de reference */
-			if(distance_a_rond(x0,y0,w_dist,segm_long) == BAD_DRC)
+			if(TestMarginToCircle(x0,y0,w_dist,segm_long) == BAD_DRC)
 				{
 				NumberOfErrors++;
 				if(show_err)
 					Affiche_Erreur_DRC(frame->DrawPanel, DC, frame->m_Pcb, pt_segment,pttrack,7);
 				return(BAD_DRC) ;
 				}
-			if(distance_a_rond(xf,yf,w_dist,segm_long) == BAD_DRC)
+			if(TestMarginToCircle(xf,yf,w_dist,segm_long) == BAD_DRC)
 				{
 				NumberOfErrors++;
 				if(show_err)
@@ -596,14 +703,14 @@ wxPoint shape_pos;
 
 					RotatePoint(&rx0,&ry0, angle);
 					RotatePoint(&rxf,&ryf, angle);
-					if(distance_a_rond(rx0,ry0,w_dist,dx) == BAD_DRC)
+					if(TestMarginToCircle(rx0,ry0,w_dist,dx) == BAD_DRC)
 						{
 						NumberOfErrors++;
 						if(show_err)
 							Affiche_Erreur_DRC(frame->DrawPanel, DC, frame->m_Pcb, pt_segment,pttrack,10);
 						return(BAD_DRC) ;
 						}
-					if(distance_a_rond(rxf,ryf,w_dist,dx) == BAD_DRC)
+					if(TestMarginToCircle(rxf,ryf,w_dist,dx) == BAD_DRC)
 						{
 						NumberOfErrors++;
 						if(show_err)
@@ -618,7 +725,7 @@ wxPoint shape_pos;
 }
 
 /*****************************************************************************/
-static bool TestPadDrc(WinEDA_BasePcbFrame *frame, wxDC * DC, D_PAD * pad_ref,
+static bool Test_Pad_to_Pads_Drc(WinEDA_BasePcbFrame *frame, wxDC * DC, D_PAD * pad_ref,
 		LISTE_PAD * start_buffer, LISTE_PAD * end_buffer, int max_size, bool show_err)
 /*****************************************************************************/
 /* Teste l'isolation de pad_ref avec les autres pads.
@@ -652,9 +759,8 @@ LISTE_PAD * pad_list = start_buffer;
 
 		/* pas de pb si les pads sont du meme module et
 		 de la meme reference ( pads multiples )  */
-        if ( (pad->m_Parent == pad_ref->m_Parent) &&
-			 (strncmp(pad->m_Padname, pad_ref->m_Padname, 4 ) == 0) )
-			 continue;
+        if ( (pad->m_Parent == pad_ref->m_Parent) && (pad->m_NumPadName == pad_ref->m_NumPadName) )
+			continue;
 
 		if( Pad_to_Pad_Isol(pad_ref, pad, g_DesignSettings.m_TrackClearence) == OK_DRC ) continue ;
 		else	/* defaut d'isolation trouve */
@@ -671,18 +777,22 @@ LISTE_PAD * pad_list = start_buffer;
 /**************************************************************************************/
 static int Pad_to_Pad_Isol(D_PAD * pad_ref, D_PAD * pad, const int dist_min)
 /***************************************************************************************/
-/* Return OK_DRC si distance entre pad_ref et pas >= dist_min
-et BAD_DRC sinon */
+/* Return OK_DRC si clearance between pad_ref and pad is >= dist_min
+	or BAD_DRC if not */
 {
 wxPoint rel_pos;
 int dist, diag;
 wxPoint shape_pos;
-
+int pad_angle;
+	
     rel_pos = pad->ReturnShapePos();
     shape_pos = pad_ref->ReturnShapePos();
+	// rel_pos is pad position relative to the pad_ref position
  	rel_pos.x -= shape_pos.x;
  	rel_pos.y -= shape_pos.y;
  	dist = (int) hypot( (double) rel_pos.x, (double) rel_pos.y);
+
+	diag = OK_DRC;
 
    	/* tst rapide: si les cercles exinscrits sont distants de dist_min au moins,
     il n'y a pas de risque: */
@@ -691,7 +801,14 @@ wxPoint shape_pos;
 
 	/* Ici les pads sont proches et les cercles exinxcrits sont trop proches
 	Selon les formes relatives il peut y avoir ou non erreur */
+	
+	bool swap_pads = false;
 	if ( (pad_ref->m_PadShape != CIRCLE) && (pad->m_PadShape == CIRCLE) )
+		swap_pads = true;
+	else if ( (pad_ref->m_PadShape != OVALE) && (pad->m_PadShape == OVALE) )
+		swap_pads = true;
+	
+	if ( swap_pads )
 	{
 		EXCHG (pad_ref, pad);
 		rel_pos.x = - rel_pos.x;
@@ -700,30 +817,82 @@ wxPoint shape_pos;
 	
 	switch (pad_ref->m_PadShape)
 	{
-		case CIRCLE:	// pad_ref est assimile a un segment de longeur nulle
+		case CIRCLE:	// pad_ref is like a track segment with a null lenght
 			segm_long = 0;
 			segm_angle = 0;
 			finx = finy = 0;
 			spot_cX = rel_pos.x;
 			spot_cY = rel_pos.y;
-			diag = distance_a_pad(pad, pad_ref->m_Rayon, dist_min );
+			diag = TestClearanceSegmToPad(pad, pad_ref->m_Rayon, dist_min );
 			break;
 
 		case RECT:
-		case OVALE :
+			RotatePoint(&rel_pos.x, &rel_pos.y, pad_ref->m_Orient);
+			pad_angle = pad_ref->m_Orient + pad->m_Orient;	// pad_angle = pad orient relative to the pad_ref orient
+			NORMALIZE_ANGLE_POS(pad_angle);
+			if ( pad->m_PadShape == RECT )
+			{
+				wxSize size = pad->m_Size;
+				if ( (pad_angle == 0) || (pad_angle == 900) || (pad_angle == 1800) || (pad_angle == 2700))
+				{
+					if ( (pad_angle == 900) || (pad_angle == 2700) )
+					{
+						EXCHG(size.x, size.y );
+					}
+					// Test DRC:
+					diag = BAD_DRC;
+					rel_pos.x = ABS(rel_pos.x); rel_pos.y = ABS(rel_pos.y);
+					if ( (rel_pos.x - ((size.x + pad_ref->m_Size.x)/2) ) >= dist_min )
+						diag = OK_DRC;
+					if ( (rel_pos.y - ((size.y + pad_ref->m_Size.y)/2) ) >= dist_min )
+						diag = OK_DRC;
+				}
+				
+				else // Any other orient
+				{	/* TODO : any orient ... */
+				}
+			}
+			break;
+
+		case OVALE:	/* an oval pad is like a track segment */
+		{
+			/* Create and test a track segment with same dimensions */
+			int segm_width;
+			segm_angle = pad_ref->m_Orient;		// Segment orient.
+			if ( pad_ref->m_Size.y < pad_ref->m_Size.x )	/* We suppose the pad is an horizontal oval */
+			{
+				segm_width = pad_ref->m_Size.y;
+				segm_long = pad_ref->m_Size.x - pad_ref->m_Size.y;
+			}
+			else	// it was a vertical oval, change to a rotated horizontal one
+			{
+				segm_width = pad_ref->m_Size.x;
+				segm_long = pad_ref->m_Size.y - pad_ref->m_Size.x;
+				segm_angle += 900;
+			}
+			/* the start point must be 0,0 and currently rel_pos is relative the center of pad coordinate */
+			int sx = - segm_long /2, sy = 0;	// Start point coordinate of the horizontal equivalent segment
+			RotatePoint(&sx, &sy, segm_angle);	// True start point coordinate of the equivalent segment
+			spot_cX = rel_pos.x + sx;
+			spot_cY = rel_pos.y + sy;		// pad position / segment origin
+			finx = - sx;
+			finy = - sy;		// end of segment coordinate
+			diag = TestClearanceSegmToPad(pad, segm_width/2, dist_min);
+			break;
+		}
+
 		default:
 			/* TODO...*/
-			diag = OK_DRC;
 			break;
 	}
 	return diag;
 }
 
 /***************************************************************************/
-static int distance_a_pad(const D_PAD* pad_to_test, int w_segm, int dist_min)
+static int TestClearanceSegmToPad(const D_PAD* pad_to_test, int w_segm, int dist_min)
 /****************************************************************************/
 /*
- Routine adaptee de la "distance()" (LOCATE.CC)
+ Routine adaptee de la "distance()" (LOCATE.CPP)
  teste la distance du pad au segment de droite en cours
 
 	retourne:
@@ -757,7 +926,7 @@ int deltay;
 		/* calcul des coord centre du pad dans le repere axe X confondu
 			avec le segment en tst */
 		RotatePoint(&spot_cX, &spot_cY, segm_angle);
-		return (distance_a_rond(spot_cX, spot_cY, seuil+p_dimx, segm_long));
+		return (TestMarginToCircle(spot_cX, spot_cY, seuil+p_dimx, segm_long));
 		}
 	else
 		{
@@ -805,14 +974,14 @@ int deltay;
 				y0 = spot_cY + deltay;
 				RotatePoint(&x0,&y0, spot_cX, spot_cY, orient);
 				RotatePoint(&x0,&y0, segm_angle);
-				bflag = distance_a_rond(x0,y0,p_dimx + seuil, segm_long);
+				bflag = TestMarginToCircle(x0,y0,p_dimx + seuil, segm_long);
 				if( bflag == BAD_DRC) return(BAD_DRC);
 
 				x0 = spot_cX; /* x0,y0 = centre du cercle inferieur du pad ovale */
 				y0 = spot_cY - deltay;
 				RotatePoint(&x0,&y0, spot_cX, spot_cY, orient);
 				RotatePoint(&x0,&y0, segm_angle);
-				bflag = distance_a_rond(x0,y0,p_dimx + seuil, segm_long);
+				bflag = TestMarginToCircle(x0,y0,p_dimx + seuil, segm_long);
 				if( bflag == BAD_DRC) return(BAD_DRC);
 				break;
 
@@ -847,7 +1016,7 @@ int deltay;
 				y0 = spot_cY - p_dimy;
 				RotatePoint(&x0,&y0, spot_cX, spot_cY, orient);
 				RotatePoint(&x0,&y0, segm_angle);
-				bflag = distance_a_rond(x0, y0, seuil, segm_long);
+				bflag = TestMarginToCircle(x0, y0, seuil, segm_long);
 				if( bflag == BAD_DRC)
 					{
 					return(BAD_DRC);
@@ -858,7 +1027,7 @@ int deltay;
 				y0 = spot_cY - p_dimy;
 				RotatePoint(&x0,&y0, spot_cX, spot_cY, orient);
 				RotatePoint(&x0,&y0, segm_angle);
-				bflag = distance_a_rond(x0, y0, seuil, segm_long);
+				bflag = TestMarginToCircle(x0, y0, seuil, segm_long);
 				if( bflag == BAD_DRC)
 					{
 					return(BAD_DRC);
@@ -869,7 +1038,7 @@ int deltay;
 				y0 = spot_cY + p_dimy;
 				RotatePoint(&x0,&y0, spot_cX, spot_cY, orient);
 				RotatePoint(&x0,&y0, segm_angle);
-				bflag = distance_a_rond(x0, y0, seuil, segm_long);
+				bflag = TestMarginToCircle(x0, y0, seuil, segm_long);
 				if( bflag == BAD_DRC)
 					{
 					return(BAD_DRC);
@@ -880,7 +1049,7 @@ int deltay;
 				y0 = spot_cY + p_dimy;
 				RotatePoint(&x0,&y0, spot_cX, spot_cY, orient);
 				RotatePoint(&x0,&y0, segm_angle);
-				bflag = distance_a_rond(x0, y0, seuil, segm_long);
+				bflag = TestMarginToCircle(x0, y0, seuil, segm_long);
 				if( bflag == BAD_DRC)
 					{
 					return(BAD_DRC);
@@ -894,10 +1063,10 @@ int deltay;
 }
 
 /*******************************************************************/
-static int distance_a_rond(int cx, int cy, int rayon, int longueur )
+static int TestMarginToCircle(int cx, int cy, int rayon, int longueur )
 /*******************************************************************/
 /*
- Routine analogue a distance_a_pad.
+ Routine analogue a TestClearanceSegmToPad.
  Calcul de la distance d'un cercle (via ronde, extremite de piste)
 	 au segment de droite en cours de controle (segment de reference dans
 	 son repere )

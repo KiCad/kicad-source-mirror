@@ -565,7 +565,7 @@ public:
 	MODULE * ListAndSelectModuleName(void);
 	void Liste_Equipot(wxCommandEvent & event);
 	void Swap_Layers(wxCommandEvent & event);
-	int Test_DRC(wxDC * DC);
+	int Test_DRC(wxDC * DC, bool TestPad2Pad, bool TestZone);
 	void Install_Test_DRC_Frame(wxDC * DC);
 	void Trace_Pcb(wxDC * DC, int mode);
 	void Trace_PcbEdges(wxDC * DC, int mode_color);
@@ -595,7 +595,7 @@ public:
 	void Erase_Pistes(wxDC * DC, int masque_type, bool query);
 	void Erase_Modules(wxDC * DC, bool query);
 	void Erase_Textes_Pcb(wxDC * DC, bool query);
-	void Erase_Marqueurs(wxDC * DC, bool query);
+	void Erase_Marqueurs(void);
 	void UnDeleteItem(wxDC * DC);
 	void RemoveStruct(EDA_BaseStruct * Item, wxDC * DC);
 	void Via_Edit_Control(wxDC * DC, int command_type, SEGVIA * via);

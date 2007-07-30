@@ -477,15 +477,16 @@ wxPoint shape_pos;
 		}
 	/* Trace de la reference */
 	if( ! frame->m_DisplayPadNum) return;
-	dx = min(m_Size.x, m_Size.y);	/* dx = taille du texte */
-	if( (dx / zoom) > 12 )	/* Si taille suffisante pour 2 lettres */
+	dx = min(m_Size.x, m_Size.y);	/* dx = text size */
+	if( (dx / zoom) > 12 )	/* size must be enought to draw 2 chars */
 	{
 		wxString buffer;
 		ReturnStringPadName(buffer);
 		dy = buffer.Len();
-		if ( dy < 2 ) dy = 2;	/* alignement sur textes a 2 lettres */
-		dx = (dx * 9 ) / (dy * 13 );	/* le texte est ajuste pour
-									tenir entierement dans la pastille */
+		/* Draw text with an angle between -90 deg and + 90 deg */
+		NORMALIZE_ANGLE_90(angle);
+		if ( dy < 2 ) dy = 2;	/* text min size is 2 char */
+		dx = (dx * 9 ) / (dy * 13 );	/* Text size ajusted to pad size */
 		DrawGraphicText(panel, DC, wxPoint(ux0, uy0),
 				WHITE, buffer, angle, wxSize(dx, dx),
 				GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER);

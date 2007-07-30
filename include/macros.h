@@ -41,6 +41,10 @@
 #define	NEGATE_AND_NORMALIZE_ANGLE_POS(Angle) \
 	{ Angle = - Angle; while (Angle < 0) Angle += 3600; while (Angle >= 3600) Angle -= 3600; }
 
+/* Normalize angle to be in the -90.0 .. 90.0 range */
+#define	NORMALIZE_ANGLE_90(Angle)	{ while (Angle < -900) Angle += 1800; \
+				  while (Angle > 900) Angle -= 1800; }
+
 
 /* exchange 2 donnees */
 #define EXCHG(a,b) { typeof(a) __temp__ = (a); (a) = (b); (b) = __temp__; }

@@ -90,7 +90,7 @@ wxClientDC dc(m_Parent->DrawPanel);
 
 		if ( m_DelMarkers->GetValue() )
 			{
-			m_Parent->Erase_Marqueurs(&dc, FALSE);
+			m_Parent->Erase_Marqueurs();
 			redraw = TRUE;
 			}
 
@@ -335,18 +335,18 @@ EDA_BaseStruct * PtStruct, *PtNext;
 }
 
 
-/************************************************************/
-void WinEDA_PcbFrame::Erase_Marqueurs(wxDC * DC, bool query)
-/************************************************************/
+/*******************************************/
+void WinEDA_PcbFrame::Erase_Marqueurs(void)
+/*******************************************/
 {
 EDA_BaseStruct * PtStruct, *PtNext;
 
 	PtStruct = m_Pcb->m_Drawings;
 	for( ; PtStruct != NULL; PtStruct = PtNext)
-		{
+	{
 		PtNext = PtStruct->Pnext;
 		if(PtStruct->m_StructType == TYPEMARQUEUR ) DeleteStructure(PtStruct);
-		}
+	}
 
 	GetScreen()->SetModify();
 }

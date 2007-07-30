@@ -25,7 +25,7 @@ class D_PAD: public EDA_BaseStruct
 public:
 	union	 {
 	unsigned long m_NumPadName;
-	char m_Padname[4] ;			/* nom (numero) de la pastille (assimilatble a un long)*/
+	char m_Padname[4] ;			/* nom (numero) de la pastille (assimilable a un long)*/
 	};
 	wxString m_Netname;			/* Net Name */
 	int m_Masque_Layer;			// (Bit a Bit :1= cuivre, 15= cmp,

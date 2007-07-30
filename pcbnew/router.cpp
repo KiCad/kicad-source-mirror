@@ -70,6 +70,7 @@ int net_number;
 	Compile_Ratsnest(DC, TRUE);
 
 	m_Pcb->ComputeBoundaryBox();
+	g_GridRoutingSize = GetScreen()->GetGrid().x;
 
 	// Sortie de la dimension hors tout du pcb (dimensions + marge + g_GridRoutingSize)
 #define B_MARGE 1000       // en 1/10000 inch

@@ -23,6 +23,7 @@
  */
 
 ////@begin includes
+#include "wx/valgen.h"
 ////@end includes
 
 /*!
@@ -39,17 +40,20 @@ class wxBoxSizer;
 
 ////@begin control identifiers
 #define ID_DIALOG 10000
-#define SYMBOL_WINEDA_DRCFRAME_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX
-#define SYMBOL_WINEDA_DRCFRAME_TITLE _("DRC Control")
-#define SYMBOL_WINEDA_DRCFRAME_IDNAME ID_DIALOG
-#define SYMBOL_WINEDA_DRCFRAME_SIZE wxSize(400, 300)
-#define SYMBOL_WINEDA_DRCFRAME_POSITION wxDefaultPosition
 #define ID_TEXTCTRL1 10002
+#define ID_CHECKBOX_PAD2PAD 10009
+#define ID_CHECKBOX 10008
+#define ID_CHECKBOX_TEST_ZONES 10007
 #define ID_DRC_RUN 10003
 #define ID_STOP_CONTROL_DRC 10004
 #define ID_ERASE_DRC_MARKERS 10005
 #define ID_LIST_UNCONNECTED_PADS 10006
 #define ID_TEXTCTRL 10001
+#define SYMBOL_WINEDA_DRCFRAME_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX
+#define SYMBOL_WINEDA_DRCFRAME_TITLE _("DRC Control")
+#define SYMBOL_WINEDA_DRCFRAME_IDNAME ID_DIALOG
+#define SYMBOL_WINEDA_DRCFRAME_SIZE wxSize(400, 300)
+#define SYMBOL_WINEDA_DRCFRAME_POSITION wxDefaultPosition
 ////@end control identifiers
 
 /*!
@@ -82,6 +86,9 @@ public:
     void CreateControls();
 
 ////@begin WinEDA_DrcFrame event handler declarations
+
+    /// wxEVT_CLOSE_WINDOW event handler for ID_DIALOG
+    void OnCloseWindow( wxCloseEvent& event );
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_DRC_RUN
     void OnDrcRunClick( wxCommandEvent& event );
@@ -121,6 +128,9 @@ public:
     wxBoxSizer* m_CommandSizer;
     wxStaticText* m_ClearenceTitle;
     wxTextCtrl* m_SetClearance;
+    wxCheckBox* m_Pad2PadTestCtrl;
+    wxCheckBox* m_UnconnectedTestCtrl;
+    wxCheckBox* m_ZonesTestCtrl;
     wxTextCtrl* m_logWindow;
 ////@end WinEDA_DrcFrame member variables
 	WinEDA_PcbFrame * m_Parent;

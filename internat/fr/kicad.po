@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-07-25 10:24+0100\n"
+"PO-Revision-Date: 2007-07-30 14:17+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -1493,7 +1493,7 @@ msgid "Compile"
 msgstr "Compile"
 
 #: pcbnew/dialog_netlist.cpp:178
-#: pcbnew/dialog_drc.cpp:164
+#: pcbnew/dialog_drc.cpp:193
 #: pcbnew/gendrill.cpp:254
 #: eeschema/plotps.cpp:207
 #: eeschema/netlist_control.cpp:124
@@ -1602,75 +1602,89 @@ msgstr "Inclure pistes autoroutées"
 msgid "Include Locked Tracks"
 msgstr "Inclure pistes verrouillées"
 
-#: pcbnew/drc.cpp:65
+#: pcbnew/drc.cpp:71
 msgid "Look for active routes\n"
 msgstr "Recherche des chevelus actifs\n"
 
-#: pcbnew/drc.cpp:71
+#: pcbnew/drc.cpp:77
 msgid "Unconnected found:\n"
 msgstr "Non connecté trouvé:\n"
 
-#: pcbnew/drc.cpp:76
+#: pcbnew/drc.cpp:82
 #, c-format
 msgid "%d > Pad %s (%s) @ %.4f,%.4f and "
 msgstr "%d > Pad %s (%s) @ %.4f,%.4f et "
 
-#: pcbnew/drc.cpp:84
+#: pcbnew/drc.cpp:90
 #, c-format
 msgid "Pad %s (%s) @ %.4f,%.4f\n"
 msgstr "Pad %s (%s) @ %.4f,%.4f\n"
 
-#: pcbnew/drc.cpp:89
+#: pcbnew/drc.cpp:95
 #, c-format
 msgid "Active routes: %d\n"
 msgstr "Active routes: %d\n"
 
-#: pcbnew/drc.cpp:90
+#: pcbnew/drc.cpp:96
 msgid "OK! (No active routes)\n"
 msgstr "OK! (Pas de chevelu actif)\n"
 
-#: pcbnew/drc.cpp:112
+#: pcbnew/drc.cpp:122
 #, c-format
 msgid "** End Drc: %d errors **\n"
 msgstr "** FinDrc: %d erreurs **\n"
 
-#: pcbnew/drc.cpp:114
+#: pcbnew/drc.cpp:124
 msgid "** End Drc: No Error **\n"
 msgstr "** Fin Drc: Aucune Erreur **\n"
 
-#: pcbnew/drc.cpp:229
+#: pcbnew/drc.cpp:198
+msgid "Tst Pad to Pad\n"
+msgstr "Tst Pad to Pad\n"
+
+#: pcbnew/drc.cpp:237
+#: pcbnew/drc.cpp:301
 msgid "SegmNb"
 msgstr "SegmNb"
 
-#: pcbnew/drc.cpp:230
+#: pcbnew/drc.cpp:238
 msgid "Track Err"
 msgstr "Err Pistes"
 
-#: pcbnew/drc.cpp:233
+#: pcbnew/drc.cpp:241
 msgid "Tst Tracks\n"
 msgstr "Tst Pistes\n"
 
-#: pcbnew/drc.cpp:252
+#: pcbnew/drc.cpp:265
+#: pcbnew/drc.cpp:330
 #: eeschema/eelayer.cpp:141
 msgid "Netname"
 msgstr "NetName"
 
-#: pcbnew/drc.cpp:950
+#: pcbnew/drc.cpp:302
+msgid "Zone Err"
+msgstr "Err. Zone"
+
+#: pcbnew/drc.cpp:304
+msgid "Tst Zones\n"
+msgstr "Test Zones\n"
+
+#: pcbnew/drc.cpp:1119
 #, c-format
 msgid "%d Drc Err %d  PAD %s (%s) @ %d,%d\n"
 msgstr "%d Err Drc %d  PAD %s (%s) @ %d,%d\n"
 
-#: pcbnew/drc.cpp:961
+#: pcbnew/drc.cpp:1130
 #, c-format
 msgid "%d Err type %d: sur VIA @ %d,%d\n"
 msgstr "%d Err type %d: sur VIA @ %d,%d\n"
 
-#: pcbnew/drc.cpp:972
+#: pcbnew/drc.cpp:1141
 #, c-format
 msgid "%d Err type %d: sur SEGMENT @ %d,%d\n"
 msgstr "%d Err type %d: sur SEGMENT @ %d,%d\n"
 
-#: pcbnew/drc.cpp:1007
+#: pcbnew/drc.cpp:1176
 #, c-format
 msgid "%d Drc Err: PAD %s (%s) @ %d,%d and PAD %s (%s) @ %d,%d\n"
 msgstr "%d Err Drc: PAD %s (%s) @ %d,%d et PAD %s (%s) @ %d,%d\n"
@@ -1857,11 +1871,11 @@ msgstr "Effacement contour"
 msgid "Set Width"
 msgstr "Ajuste Epaiss"
 
-#: pcbnew/class_pad.cpp:629
+#: pcbnew/class_pad.cpp:630
 msgid "Unknown Pad shape"
 msgstr "Forme pad inconnue"
 
-#: pcbnew/class_pad.cpp:697
+#: pcbnew/class_pad.cpp:698
 #: pcbnew/affiche.cpp:76
 #: pcbnew/affiche.cpp:266
 #: pcbnew/class_module.cpp:1060
@@ -1869,15 +1883,15 @@ msgstr "Forme pad inconnue"
 msgid "Module"
 msgstr "Module"
 
-#: pcbnew/class_pad.cpp:700
+#: pcbnew/class_pad.cpp:701
 msgid "RefP"
 msgstr "RefP"
 
-#: pcbnew/class_pad.cpp:703
+#: pcbnew/class_pad.cpp:704
 msgid "Net"
 msgstr "Net"
 
-#: pcbnew/class_pad.cpp:769
+#: pcbnew/class_pad.cpp:770
 #: pcbnew/affiche.cpp:36
 #: pcbnew/affiche.cpp:91
 #: pcbnew/affiche.cpp:95
@@ -1890,21 +1904,21 @@ msgstr "Net"
 msgid "Layer"
 msgstr "Couche"
 
-#: pcbnew/class_pad.cpp:781
+#: pcbnew/class_pad.cpp:782
 #: pcbnew/affiche.cpp:53
 #: pcbnew/affiche.cpp:109
 #: gerbview/affiche.cpp:49
 msgid "H Size"
 msgstr "Taille H"
 
-#: pcbnew/class_pad.cpp:785
+#: pcbnew/class_pad.cpp:786
 #: pcbnew/affiche.cpp:56
 #: pcbnew/affiche.cpp:112
 #: gerbview/affiche.cpp:52
 msgid "V Size"
 msgstr "Taille V"
 
-#: pcbnew/class_pad.cpp:791
+#: pcbnew/class_pad.cpp:792
 #: pcbnew/affiche.cpp:208
 #: pcbnew/affiche.cpp:210
 #: pcbnew/gendrill.cpp:398
@@ -1912,11 +1926,11 @@ msgstr "Taille V"
 msgid "Drill"
 msgstr "Perçage"
 
-#: pcbnew/class_pad.cpp:799
+#: pcbnew/class_pad.cpp:800
 msgid "Drill X / Y"
 msgstr "Perçage X/Y"
 
-#: pcbnew/class_pad.cpp:810
+#: pcbnew/class_pad.cpp:811
 #: pcbnew/affiche.cpp:47
 #: pcbnew/affiche.cpp:103
 #: pcbnew/class_module.cpp:1057
@@ -1926,11 +1940,11 @@ msgstr "Perçage X/Y"
 msgid "Orient"
 msgstr "Orient"
 
-#: pcbnew/class_pad.cpp:814
+#: pcbnew/class_pad.cpp:815
 msgid "X Pos"
 msgstr "X Pos"
 
-#: pcbnew/class_pad.cpp:818
+#: pcbnew/class_pad.cpp:819
 msgid "Y pos"
 msgstr "Y pos"
 
@@ -2002,7 +2016,7 @@ msgid "Track Width"
 msgstr "Epais. Piste"
 
 #: pcbnew/dialog_track_options.cpp:164
-#: pcbnew/dialog_drc.cpp:133
+#: pcbnew/dialog_drc.cpp:141
 msgid "Clearance"
 msgstr "Isolation"
 
@@ -2538,23 +2552,53 @@ msgstr "Effacer"
 msgid "Pcb Text"
 msgstr "Texte Pcb"
 
-#: pcbnew/dialog_drc.cpp:145
+#: pcbnew/dialog_drc.cpp:137
+#: eeschema/fieldedi.cpp:223
+#: eeschema/dialog_erc.cpp:237
+#: eeschema/dialog_edit_component_in_lib.cpp:166
+#: eeschema/dialog_create_component.cpp:176
+#: eeschema/libedpart.cpp:241
+#: eeschema/dialog_edit_component_in_schematic.cpp:204
+#: eeschema/editpart.cpp:204
+#: eeschema/dialog_build_BOM.cpp:279
+#: cvpcb/dialog_display_options.h:43
+msgid "Options"
+msgstr "Options"
+
+#: pcbnew/dialog_drc.cpp:149
+msgid "Test Drc:"
+msgstr "Test Drc:"
+
+#: pcbnew/dialog_drc.cpp:153
+msgid "Include pad to pad test"
+msgstr "Inclure test pad à pad"
+
+#: pcbnew/dialog_drc.cpp:157
+msgid "Include unconnected"
+msgstr "Inclure non connexions"
+
+#: pcbnew/dialog_drc.cpp:161
+#: pcbnew/block.cpp:136
+msgid "Include zones"
+msgstr "Inclure zones"
+
+#: pcbnew/dialog_drc.cpp:174
 msgid "Test Drc"
 msgstr "Test Drc"
 
-#: pcbnew/dialog_drc.cpp:149
+#: pcbnew/dialog_drc.cpp:178
 msgid "Stop Drc"
 msgstr "Stop Drc"
 
-#: pcbnew/dialog_drc.cpp:156
+#: pcbnew/dialog_drc.cpp:185
 msgid "Del Markers"
 msgstr "Supprimer Marqueurs"
 
-#: pcbnew/dialog_drc.cpp:160
+#: pcbnew/dialog_drc.cpp:189
 msgid "List Unconn"
 msgstr "Liste Non Conn."
 
-#: pcbnew/dialog_drc.cpp:167
+#: pcbnew/dialog_drc.cpp:196
 #: common/svg_print.cpp:232
 #: share/svg_print.cpp:232
 msgid "Messages:"
@@ -2567,10 +2611,6 @@ msgstr "Inclure Modules"
 #: pcbnew/block.cpp:132
 msgid "Include tracks"
 msgstr "Inclure Pistes"
-
-#: pcbnew/block.cpp:136
-msgid "Include zones"
-msgstr "Inclure zones"
 
 #: pcbnew/block.cpp:141
 msgid "Include Text on copper layers"
@@ -2692,7 +2732,7 @@ msgstr "Pads: Edition globale"
 #: pcbnew/menubarpcb.cpp:205
 #: pcbnew/menubarmodedit.cpp:45
 #: pcbnew/tool_modedit.cpp:125
-#: pcbnew/modedit.cpp:365
+#: pcbnew/modedit.cpp:299
 msgid "Pad Settings"
 msgstr "Caract pads"
 
@@ -2804,11 +2844,11 @@ msgstr "Impossible de créer le fichier temporaire "
 msgid "Create temporary file "
 msgstr "Creation fichier temporaire "
 
-#: pcbnew/router.cpp:525
+#: pcbnew/router.cpp:526
 msgid "Unable to find data file "
 msgstr "Impossible de trouver le fichier de données "
 
-#: pcbnew/router.cpp:531
+#: pcbnew/router.cpp:532
 msgid "Reading autorouter data file "
 msgstr "Lecture fichier données de l'autorouteur"
 
@@ -4104,7 +4144,7 @@ msgid "Local Ratsnest"
 msgstr "Monter le chevelu général"
 
 #: pcbnew/edit.cpp:720
-#: pcbnew/modedit.cpp:393
+#: pcbnew/modedit.cpp:327
 #: eeschema/schedit.cpp:443
 #: eeschema/libframe.cpp:554
 msgid "Delete item"
@@ -4625,7 +4665,7 @@ msgid "Add Pads"
 msgstr "Addition de \"pins\""
 
 #: pcbnew/tool_modedit.cpp:175
-#: pcbnew/modedit.cpp:379
+#: pcbnew/modedit.cpp:313
 msgid "Place anchor"
 msgstr "Place Ancre"
 
@@ -4652,11 +4692,35 @@ msgstr "Grille %.1f"
 msgid "Grid %.3f"
 msgstr "Grille %.3f"
 
-#: pcbnew/modedit.cpp:362
+#: pcbnew/modedit.cpp:175
+msgid "Unable to find the footprint source on the main board"
+msgstr "Impossible de trouver le module source sur le PCB principal"
+
+#: pcbnew/modedit.cpp:176
+msgid ""
+"\n"
+"Cannot update the footprint"
+msgstr ""
+"\n"
+"Ne peut mettre à jour le module"
+
+#: pcbnew/modedit.cpp:184
+msgid "A footprint source was found on the main board"
+msgstr "Un module source a été trouvé sur le PCB principal"
+
+#: pcbnew/modedit.cpp:185
+msgid ""
+"\n"
+"Cannot insert this footprint"
+msgstr ""
+"\n"
+"Ne peut insérer cd module"
+
+#: pcbnew/modedit.cpp:296
 msgid "Add Pad"
 msgstr "Ajouter Pastilles"
 
-#: pcbnew/modedit.cpp:375
+#: pcbnew/modedit.cpp:309
 #: eeschema/schedit.cpp:293
 msgid "Add Drawing"
 msgstr "Ajout d'éléments graphiques"
@@ -4717,18 +4781,6 @@ msgstr "Erreur sur écriture sur fichier."
 #: eeschema/fieldedi.cpp:143
 msgid "Componant properties"
 msgstr "Propriétés du composant"
-
-#: eeschema/fieldedi.cpp:223
-#: eeschema/dialog_erc.cpp:237
-#: eeschema/dialog_edit_component_in_lib.cpp:166
-#: eeschema/dialog_create_component.cpp:176
-#: eeschema/libedpart.cpp:241
-#: eeschema/dialog_edit_component_in_schematic.cpp:204
-#: eeschema/editpart.cpp:204
-#: eeschema/dialog_build_BOM.cpp:279
-#: cvpcb/dialog_display_options.h:43
-msgid "Options"
-msgstr "Options"
 
 #: eeschema/fieldedi.cpp:226
 msgid " General : "
@@ -9753,10 +9805,6 @@ msgstr "Nbr segm = %d, Longueur = "
 msgid "Find"
 msgstr "Trouver"
 
-#: pcbnew/dialog_drc.h:43
-msgid "DRC Control"
-msgstr "Controle ERC"
-
 #: pcbnew/dialog_pad_edit.h:43
 msgid "Pad properties"
 msgstr "Propriétés des Pads"
@@ -9780,6 +9828,10 @@ msgstr "Netliste: "
 #: eeschema/dialog_options.h:55
 msgid "General Options"
 msgstr "Options générales"
+
+#: pcbnew/dialog_drc.h:53
+msgid "DRC Control"
+msgstr "Controle ERC"
 
 #: pcbnew/win_eda_cleaningoptionsframe.h:50
 #: pcbnew/cleaningoptions_dialog.h:48
