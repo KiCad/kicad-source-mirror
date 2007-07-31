@@ -123,7 +123,7 @@ private:
 	void UpdatePrecisionOptions(wxCommandEvent& event);
 	void UpdateConfig(void);
 	int Plot_Drill_PcbMap( FORET * buffer, int format);
-	void GenDrillReport(const wxString & FullFileName);
+	void GenDrillReport(void);
 	int Gen_Liste_Forets( FORET * buffer,bool print_header);
 	int Gen_Drill_File_EXCELLON( FORET * buffer);
 	void Gen_Line_EXCELLON(char *line, float x, float y);
@@ -293,7 +293,7 @@ void WinEDA_DrillFrame::SetParams(void)
 /*****************************************************************/
 void WinEDA_PcbFrame::InstallDrillFrame(wxCommandEvent& event)
 /*****************************************************************/
-/* Thi function display and delete the dialog frame for drill tools
+/* This function displays and deletes the dialog frame for drill tools
 */
 {
 wxConfig * Config = m_Parent->m_EDA_Config;
@@ -348,8 +348,8 @@ void  WinEDA_DrillFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void WinEDA_DrillFrame::GenDrillFiles(wxCommandEvent& event)
 /*************************************************************/
 {
+wxString FullFileName, Mask(wxT("*")), Ext(wxT(".drl"));
 int ii;
-wxString FullFileName;
 wxString msg;
 
 	UpdateConfig();	/* set params and Save drill options */
@@ -362,13 +362,14 @@ wxString msg;
 
 	/* Init nom fichier */
 	FullFileName = m_Parent->m_CurrentScreen->m_FileName;
-	ChangeFileNameExt(FullFileName, wxT(".drl") );
+	ChangeFileNameExt(FullFileName, Ext);
+	Mask += Ext;
 
 	FullFileName = EDA_FileSelector(_("Drill file"),
-					wxEmptyString,				/* Chemin par defaut */
-					FullFileName,				/* nom fichier par defaut */
-					wxT(".drl"),				/* extension par defaut */
-					wxT("*.drl"),				/* Masque d'affichage */
+					wxEmptyString,		/* Chemin par defaut */
+					FullFileName,		/* nom fichier par defaut */
+					Ext,				/* extension par defaut */
+					Mask,				/* Masque d'affichage */
 					this,
 					wxFD_SAVE,
 					TRUE
@@ -412,11 +413,8 @@ wxString msg;
 	}
 
 	if ( m_Choice_Drill_Report->GetSelection() > 0 )
-	{
-		FullFileName << wxT(".rpt");
-		GenDrillReport(FullFileName);
-	}
-	
+		GenDrillReport();
+
 	EndModal(0);
 }
 
@@ -869,11 +867,11 @@ wxString msg;
 
 	/* Init file name */
 	FullFileName = m_Parent->m_CurrentScreen->m_FileName;
-	ChangeFileNameExt(FullFileName,Ext) ;
+	ChangeFileNameExt(FullFileName, Ext);
 	Mask += Ext;
 
 	FullFileName = EDA_FileSelector(_("Drill Map file"),
-					wxEmptyString,					/* Chemin par defaut */
+					wxEmptyString,		/* Chemin par defaut */
 					FullFileName,		/* nom fichier par defaut */
 					Ext,				/* extension par defaut */
 					Mask,				/* Masque d'affichage */
@@ -1104,32 +1102,68 @@ wxString msg;
 		switch( format )
 		{
 			case PLOT_FORMAT_HPGL:
-				sprintf(line,"PU %d, %d; LB%2.2fmm / %2.3f\" (%d holes)",
-						x + (int)(intervalle * CharScale * fTextScale),
-						y - (int)(CharSize / 2 * CharScale * fTextScale),
-						float(foret->m_Diameter) * 0.00254,
-						float(foret->m_Diameter) * 0.0001,
-						foret->m_TotalCount );
-				fputs(line,dest);
-				if ( foret->m_OvalCount )
-				{
-					sprintf(line," (with %d oblongs)", foret->m_OvalCount );
-					fputs(line,dest);
-				}					
+				// List the diameter of each drill in the selected Drill Unit,
+				// and then its diameter in the other Drill Unit.
+				if ( Unit_Drill_is_Inch )
+					sprintf( line, "PU %d, %d; LB%2.3f\" / %2.2fmm ",
+							x + (int)(intervalle * CharScale * fTextScale),
+							y - (int)(CharSize / 2 * CharScale * fTextScale),
+							float(foret->m_Diameter) * 0.0001,
+							float(foret->m_Diameter) * 0.00254 );
+				else
+					sprintf( line, "PU %d, %d; LB%2.2fmm / %2.3f\" ",
+							x + (int)(intervalle * CharScale * fTextScale),
+							y - (int)(CharSize / 2 * CharScale * fTextScale),
+							float(foret->m_Diameter) * 0.00254,
+							float(foret->m_Diameter) * 0.0001 );
+				fputs( line, dest );
+				// Now list how many holes and ovals are associated with each drill.
+				if ( ( foret->m_TotalCount == 1 ) && ( foret->m_OvalCount == 0 ) )
+					sprintf( line, "(1 hole)\n" );
+				else if ( foret->m_TotalCount == 1 ) // && ( foret->m_OvalCount == 1 )
+					sprintf( line, "(1 hole) (with 1 oblong)\n" );
+				else if ( foret->m_OvalCount == 0 )
+					sprintf( line, "(%d holes)\n",
+							foret->m_TotalCount );
+				else if ( foret->m_OvalCount == 1 )
+					sprintf( line, "(%d holes) (with 1 oblong)\n",
+							foret->m_TotalCount );
+				else //  if ( foret->m_OvalCount > 1 )
+					sprintf( line, "(%d holes) (with %d oblongs)\n",
+							foret->m_TotalCount,
+							foret->m_OvalCount );
+				fputs( line, dest );
 				fputs("\03;\n",dest);
 				break;
 
 			case PLOT_FORMAT_POST:
-				sprintf(line,"%2.2fmm / %2.3f\" (%d holes)",
-						float(foret->m_Diameter) * 0.00254,
-						float(foret->m_Diameter) * 0.0001,
-						foret->m_TotalCount );
+				// List the diameter of each drill in the selected Drill Unit,
+				// and then its diameter in the other Drill Unit.
+				if ( Unit_Drill_is_Inch )
+					sprintf( line, "%2.3f\" / %2.2fmm ",
+							float(foret->m_Diameter) * 0.0001,
+							float(foret->m_Diameter) * 0.00254 );
+				else
+					sprintf( line, "%2.2fmm / %2.3f\" ",
+							float(foret->m_Diameter) * 0.00254,
+							float(foret->m_Diameter) * 0.0001 );
 				msg = CONV_FROM_UTF8(line);
-				if ( foret->m_OvalCount )
-				{
-					sprintf(line," (with %d oblongs)", foret->m_OvalCount );
-					msg += CONV_FROM_UTF8(line);
-				}					
+				// Now list how many holes and ovals are associated with each drill.
+				if ( ( foret->m_TotalCount == 1 ) && ( foret->m_OvalCount == 0 ) )
+					sprintf( line, "(1 hole)" );
+				else if ( foret->m_TotalCount == 1 ) // && ( foret->m_OvalCount == 1 )
+					sprintf( line, "(1 hole) (with 1 oblong)" );
+				else if ( foret->m_OvalCount == 0 )
+					sprintf( line, "(%d holes)",
+							foret->m_TotalCount );
+				else if ( foret->m_OvalCount == 1 )
+					sprintf( line, "(%d holes) (with 1 oblong)",
+							foret->m_TotalCount );
+				else // if ( foret->m_OvalCount > 1 )
+					sprintf( line, "(%d holes) (with %d oblongs)",
+							foret->m_TotalCount,
+							foret->m_OvalCount );
+				msg += CONV_FROM_UTF8(line);
 				Plot_1_texte(format, msg, 0, TextWidth,
 						x, y,
 						(int) (CharSize * CharScale),
@@ -1382,29 +1416,34 @@ void PlotOvalDrillSymbol(const wxPoint & position,const wxSize & size,int orient
 	{
 		case PLOT_FORMAT_HPGL:
 			trace_1_pastille_OVALE_HPGL(position, size, orient, FILAIRE);
-		break;
+			break;
+
 		case PLOT_FORMAT_POST:
 			trace_1_pastille_OVALE_POST(position, size, orient, FILAIRE);
-		break;
+			break;
 	}
 }
 
-/********************************************************************/
-void WinEDA_DrillFrame::GenDrillReport(const wxString & FullFileName)
-/********************************************************************/
+/*******************************************/
+void WinEDA_DrillFrame::GenDrillReport(void)
+/*******************************************/
 /*
 Create a list of drill values and drill count
 */
 {
-wxString FileName, Mask(wxT("*")), Ext(wxT(".*"));
-int ii;
+wxString FileName, Mask(wxT("*")), Ext(wxT(".rpt"));
+int ii, TotalHoleCount;
 char line[1024];
 FORET * foret;
+wxString msg;
 	
-	FileName = FullFileName;
-	FileName = EDA_FileSelector(_("Drill Map file"),
-					wxEmptyString,					/* Chemin par defaut */
-					FullFileName,		/* nom fichier par defaut */
+	FileName = m_Parent->m_CurrentScreen->m_FileName;
+	ChangeFileNameExt(FileName, wxT("-drl") + Ext);
+	Mask += Ext;
+
+	FileName = EDA_FileSelector(_("Drill Report file"),
+					wxEmptyString,		/* Chemin par defaut */
+					FileName,			/* nom fichier par defaut */
 					Ext,				/* extension par defaut */
 					Mask,				/* Masque d'affichage */
 					this,
@@ -1416,34 +1455,70 @@ FORET * foret;
 	dest = wxFopen(FileName, wxT("w") );
 	if (dest == 0)
 	{
-		wxString msg = _("Unable to create file ") + FileName;
+		msg = _("Unable to create file ") + FileName;
 		DisplayError(this, msg);
 		return ;
 	}
-	
-	sprintf(line,"Drill report\n\n" );
-	fputs(line, dest);
 
-	for(ii = 0, foret = (FORET*)adr_lowmem ; ii < DrillToolsCount; ii++, foret++)
+	m_Parent->MsgPanel->EraseMsgBox();
+	Affiche_1_Parametre( m_Parent, 0, _("File"), FileName, BLUE );
+
+	/* Determine the list of the different drill diameters. */
+	ii = Gen_Liste_Forets( (FORET *) adr_lowmem, FALSE );
+	msg.Printf( wxT("%d"), ii );
+	Affiche_1_Parametre( m_Parent, 30, _("Tools"), msg, BROWN );
+
+	fprintf(dest, "Drill report for %s\n", CONV_TO_UTF8(m_Parent->m_CurrentScreen->m_FileName) );
+
+	fprintf(dest, "Created on %s\n", DateAndTime(line));
+
+	// List which Drill Unit option had been selected for the associated drill file.
+	if ( Unit_Drill_is_Inch )
+		fputs("Selected Drill Unit: Imperial (\")\n\n", dest);
+	else
+		fputs("Selected Drill Unit: Metric (mm)\n\n", dest);
+
+	TotalHoleCount = 0;
+
+	for ( ii = 0, foret = (FORET*)adr_lowmem ; ii < DrillToolsCount; ii++, foret++ )
 	{
-		int ncount;
-		ncount = foret->m_TotalCount - foret->m_OvalCount;
-		if ( ncount )
-			sprintf(line,"%2.2fmm  %2.3f\" (%d holes)\n",
-					float(foret->m_Diameter) * 0.00254,
+		// List the tool number assigned to each drill,
+		// then its diameter in the selected Drill Unit,
+		// and then its diameter in the other Drill Unit.
+		if ( Unit_Drill_is_Inch )
+			sprintf( line, "T%d  %2.3f\"  %2.2fmm  ",
+					ii + 1,
 					float(foret->m_Diameter) * 0.0001,
-					ncount );
-		if ( foret->m_OvalCount )
-		{
-			sprintf(line,"%2.2fmm  %2.3f\" (%d oblongs)\n",
+					float(foret->m_Diameter) * 0.00254 );
+		else
+			sprintf( line, "T%d  %2.2fmm  %2.3f\"  ",
+					ii + 1,
 					float(foret->m_Diameter) * 0.00254,
-					float(foret->m_Diameter) * 0.0001,
+					float(foret->m_Diameter) * 0.0001 );
+		fputs( line, dest );
+
+		// Now list how many holes and ovals are associated with each drill.
+		if ( ( foret->m_TotalCount == 1 ) && ( foret->m_OvalCount == 0 ) )
+			sprintf( line, "(1 hole)\n" );
+		else if ( foret->m_TotalCount == 1 ) // && ( foret->m_OvalCount == 1 )
+			sprintf( line, "(1 hole)  (with 1 oblong)\n" );
+		else if ( foret->m_OvalCount == 0 )
+			sprintf( line, "(%d holes)\n",
+					foret->m_TotalCount );
+		else if ( foret->m_OvalCount == 1 )
+			sprintf( line, "(%d holes)  (with 1 oblong)\n",
+					foret->m_TotalCount );
+		else //  if ( foret->m_OvalCount > 1 )
+			sprintf( line, "(%d holes)  (with %d oblongs)\n",
+					foret->m_TotalCount,
 					foret->m_OvalCount );
-		}
+		fputs( line, dest );
 
-		fputs(line, dest);
+		TotalHoleCount += foret->m_TotalCount;
 	}
-	
-	fclose(dest);
 
+	msg.Printf( wxT("%d"), TotalHoleCount );
+	Affiche_1_Parametre( m_Parent, 45, _("Drill"), msg, GREEN );
+
+	fclose(dest);
 }
