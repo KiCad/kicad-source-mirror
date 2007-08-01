@@ -882,7 +882,7 @@ void WinEDA_DrawPanel::OnKeyEvent(wxKeyEvent& event)
 long key, localkey;
 bool escape = FALSE;
 
-	key = localkey = event.m_keyCode;
+	key = localkey = event.GetKeyCode();
 
 	switch( localkey )
 		{
