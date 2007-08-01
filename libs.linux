@@ -52,10 +52,12 @@ DEBUG = 0
 # common CPPFLAGS to all components, further CPPFLAGS customization in 
 # directory specific makefile.gtk files.
 ifeq ($(DEBUG), 1)
-CPPFLAGS = -Wall -g `wx-config --debug --cxxflags` -fno-strict-aliasing
+WXXFLAGS := $(shell wx-config --debug --cxxflags) 
+CPPFLAGS = -Wall -g ${WXXFLAGS} -fno-strict-aliasing
 LDFLAGS = -g #-v
 else
-CPPFLAGS = -Wall -O2 `wx-config --cxxflags` -fno-strict-aliasing
+WXXFLAGS := $(shell wx-config --cxxflags) 
+CPPFLAGS = -Wall -O2 ${WXXFLAGS} -fno-strict-aliasing
 LDFLAGS = -s #-v
 endif
 
