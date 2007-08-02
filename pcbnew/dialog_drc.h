@@ -44,10 +44,13 @@ class wxBoxSizer;
 #define ID_CHECKBOX_PAD2PAD 10009
 #define ID_CHECKBOX 10008
 #define ID_CHECKBOX_TEST_ZONES 10007
+#define ID_CHECKBOX_CREATE_FILE 10012
 #define ID_DRC_RUN 10003
 #define ID_STOP_CONTROL_DRC 10004
 #define ID_ERASE_DRC_MARKERS 10005
 #define ID_LIST_UNCONNECTED_PADS 10006
+#define ID_BUTTON_BROWSE_RPT_FILE 10011
+#define ID_TEXTCTRL_GET_RPT_FILENAME 10010
 #define ID_TEXTCTRL 10001
 #define SYMBOL_WINEDA_DRCFRAME_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX
 #define SYMBOL_WINEDA_DRCFRAME_TITLE _("DRC Control")
@@ -105,6 +108,9 @@ public:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CLOSE
     void OnCloseClick( wxCommandEvent& event );
 
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_BROWSE_RPT_FILE
+    void OnButtonBrowseRptFileClick( wxCommandEvent& event );
+
 ////@end WinEDA_DrcFrame event handler declarations
 
 ////@begin WinEDA_DrcFrame member function declarations
@@ -131,6 +137,8 @@ public:
     wxCheckBox* m_Pad2PadTestCtrl;
     wxCheckBox* m_UnconnectedTestCtrl;
     wxCheckBox* m_ZonesTestCtrl;
+    wxCheckBox* m_CreateRptCtrl;
+    wxTextCtrl* m_RptFilenameCtrl;
     wxTextCtrl* m_logWindow;
 ////@end WinEDA_DrcFrame member variables
 	WinEDA_PcbFrame * m_Parent;

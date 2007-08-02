@@ -17,15 +17,17 @@ class WinEDA_DrcFrame;
 WinEDA_DrcFrame * DrcFrame;
 
 /* saving drc options */
-bool s_Pad2PadTestOpt = true;
-bool s_UnconnectedTestOpt = true;
-bool s_ZonesTestOpt = false;
+static bool s_Pad2PadTestOpt = true;
+static bool s_UnconnectedTestOpt = true;
+static bool s_ZonesTestOpt = false;
+static bool s_CreateRptFileOpt = false;
+static FILE * s_RptFile = NULL;
+static wxString s_RptFilename;
 
-
-int NumberOfErrors;
+static int ErrorsDRC_Count;
 static MARQUEUR * current_marqueur;	/* Pour gestion des marqueurs sur pcb */
 
-bool AbortDrc, DrcInProgress = FALSE;
+static bool AbortDrc, DrcInProgress = FALSE;
 static int spot_cX, spot_cY; /* position d'elements a tester */
 static int finx, finy;		// coord relatives de l'extremite du segm de reference
 static int segm_angle;		// angle d'inclinaison du segment de reference en 0,1 degre
@@ -68,7 +70,10 @@ int ii;
 wxString msg;
 float convert = 0.0001;
 
-	m_logWindow->AppendText(_("Look for active routes\n"));
+	msg = _("Look for active routes\n");
+	m_logWindow->AppendText(msg);
+	if ( s_RptFile ) fprintf(s_RptFile, "%s", CONV_TO_UTF8(msg) );
+
 	m_UnconnectedCount = 0;
 	for( ii = m_Parent->m_Pcb->GetNumRatsnests() ;ii > 0; Ratsnest++, ii--)
 	{
@@ -82,6 +87,7 @@ float convert = 0.0001;
 		msg.Printf(_("%d > Pad %s (%s) @ %.4f,%.4f and "), m_UnconnectedCount,
 			pad_name.GetData(), module_name.GetData(), pad->m_Pos.x * convert, pad->m_Pos.y * convert);
 		m_logWindow->AppendText(msg);
+		if ( s_RptFile ) fprintf(s_RptFile, "%s", CONV_TO_UTF8(msg) );
 
 		pad = Ratsnest->pad_end;
 		pad->Draw(panel, m_DC, wxPoint(0,0),draw_mode);
@@ -90,11 +96,13 @@ float convert = 0.0001;
 		msg.Printf(_("Pad %s (%s) @ %.4f,%.4f\n"),
 			pad_name.GetData(), module_name.GetData(), pad->m_Pos.x * convert, pad->m_Pos.y * convert);
 		m_logWindow->AppendText(msg);
+		if ( s_RptFile ) fprintf(s_RptFile, "%s", CONV_TO_UTF8(msg) );
 	}
 
 	if ( m_UnconnectedCount ) msg.Printf(_("Active routes: %d\n"), m_UnconnectedCount);
 	else msg = _("OK! (No active routes)\n");
 	m_logWindow->AppendText(msg);
+	if ( s_RptFile ) fprintf(s_RptFile, "%s", CONV_TO_UTF8(msg) );
 }
 
 
@@ -104,8 +112,24 @@ void WinEDA_DrcFrame::TestDrc(wxCommandEvent & event)
 {
 int errors;
 wxString msg;
+	
 	if ( ! DrcInProgress )
 	{
+		if ( m_CreateRptCtrl->IsChecked() )	// Create a file rpt
+		{
+			s_RptFilename = m_RptFilenameCtrl->GetValue();
+			if ( s_RptFilename.IsEmpty() ) OnButtonBrowseRptFileClick( event );
+			if ( ! s_RptFilename.IsEmpty() ) s_RptFile = wxFopen(s_RptFilename, wxT("w"));
+			else s_RptFile = NULL;
+		}
+		
+		if ( s_RptFile )
+		{
+			fprintf(s_RptFile, "Drc report for %s\n", CONV_TO_UTF8(m_Parent->m_CurrentScreen->m_FileName) );
+			char line[256];
+			fprintf(s_RptFile, "Created on %s\n", DateAndTime(line));
+		}
+
 		s_Pad2PadTestOpt = m_Pad2PadTestCtrl->IsChecked();
 		s_UnconnectedTestOpt = m_UnconnectedTestCtrl->IsChecked();
 		s_ZonesTestOpt = m_ZonesTestCtrl->IsChecked();
@@ -123,6 +147,17 @@ wxString msg;
 		else if ( m_UnconnectedCount == 0 )
 			msg = _("** End Drc: No Error **\n");
 		m_logWindow->AppendText(msg);
+		
+		if ( s_RptFile ) fprintf(s_RptFile, "%s", CONV_TO_UTF8(msg) );
+		
+		if ( s_RptFile )
+		{
+			msg.Printf( _("Report file <%s> created\n"), s_RptFilename.GetData());
+			m_logWindow->AppendText(msg);
+			fclose(s_RptFile);
+			s_RptFile = NULL;
+		}
+
 	}
 	else wxBell();
 }
@@ -180,7 +215,7 @@ wxString Line;
 #define PRINT_ZONE_ERR_POS 70
 
 	DrcInProgress = TRUE;
-    NumberOfErrors = 0;
+    ErrorsDRC_Count = 0;
 	Compile_Ratsnest(DC, TRUE);
 
 	MsgPanel->EraseMsgBox();
@@ -217,9 +252,9 @@ wxString Line;
 				if( Marqueur == NULL )
 				{
 					DisplayError(this, wxT("Test_Drc(): internal err"));
-					return NumberOfErrors;
+					return ErrorsDRC_Count;
 				}
-				Line.Printf( wxT("%d"),NumberOfErrors) ;
+				Line.Printf( wxT("%d"),ErrorsDRC_Count) ;
 				Affiche_1_Parametre(this, PRINT_PAD_ERR_POS,wxEmptyString,Line, LIGHTRED);
 				Marqueur->Pnext = m_Pcb->m_Drawings;
 				Marqueur->Pback = m_Pcb;
@@ -275,7 +310,7 @@ wxString Line;
 			if( Marqueur == NULL )
 				{
 				DisplayError(this, wxT("Test_Drc(): internal err"));
-				return NumberOfErrors;
+				return ErrorsDRC_Count;
 				}
 			Marqueur->Pnext = m_Pcb->m_Drawings;
 			Marqueur->Pback = m_Pcb;
@@ -286,7 +321,7 @@ wxString Line;
 
 			GRSetDrawMode(DC, GR_OR);
 			pt_segm->Draw(DrawPanel, DC, RED^LIGHTRED );
-			Line.Printf( wxT("%d"),NumberOfErrors);
+			Line.Printf( wxT("%d"),ErrorsDRC_Count);
 			Affiche_1_Parametre(this, PRINT_TRACK_ERR_POS,wxEmptyString,Line, LIGHTRED);
 		}
 	}
@@ -340,7 +375,7 @@ wxString Line;
 				if( Marqueur == NULL )
 				{
 					DisplayError(this, wxT("Test_Drc(): internal err"));
-					return NumberOfErrors;
+					return ErrorsDRC_Count;
 				}
 				Marqueur->Pnext = m_Pcb->m_Drawings;
 				Marqueur->Pback = m_Pcb;
@@ -351,7 +386,7 @@ wxString Line;
 
 				GRSetDrawMode(DC, GR_OR);
 				pt_segm->Draw(DrawPanel, DC, RED^LIGHTRED );
-				Line.Printf( wxT("%d"),NumberOfErrors);
+				Line.Printf( wxT("%d"),ErrorsDRC_Count);
 				Affiche_1_Parametre(this, PRINT_ZONE_ERR_POS, wxEmptyString, Line, LIGHTRED);
 			}
 			
@@ -366,7 +401,7 @@ wxString Line;
 				if( Marqueur == NULL )
 				{
 					DisplayError(this, wxT("Test_Drc(): internal err"));
-					return NumberOfErrors;
+					return ErrorsDRC_Count;
 				}
 				Marqueur->Pnext = m_Pcb->m_Drawings;
 				Marqueur->Pback = m_Pcb;
@@ -377,7 +412,7 @@ wxString Line;
 
 				GRSetDrawMode(DC, GR_OR);
 				pt_segm->Draw(DrawPanel, DC, RED^LIGHTRED );
-				Line.Printf( wxT("%d"),NumberOfErrors);
+				Line.Printf( wxT("%d"),ErrorsDRC_Count);
 				Affiche_1_Parametre(this, PRINT_ZONE_ERR_POS, wxEmptyString, Line, LIGHTRED);
 			}
 		}
@@ -386,7 +421,7 @@ wxString Line;
 
 	AbortDrc = FALSE;
 	DrcInProgress = FALSE;
-	return NumberOfErrors;
+	return ErrorsDRC_Count;
 }
 
 
@@ -462,7 +497,7 @@ wxPoint shape_pos;
 			spot_cY = pseudo_pad.m_Pos.y - org_Y;
 			if( TestClearanceSegmToPad(&pseudo_pad, w_dist, g_DesignSettings.m_TrackClearence) != OK_DRC )
 			{
-				NumberOfErrors++;
+				ErrorsDRC_Count++;
 				if( show_err )
 					Affiche_Erreur_DRC(frame->DrawPanel, DC,
 							frame->m_Pcb, pt_segment,pt_pad,0);
@@ -485,7 +520,7 @@ wxPoint shape_pos;
 		/* extremite sur pad ou defaut d'isolation trouve */
 		else
 		{
-			NumberOfErrors++;
+			ErrorsDRC_Count++;
  			if( show_err )
 				Affiche_Erreur_DRC(frame->DrawPanel, DC,
 						frame->m_Pcb, pt_segment,pt_pad,1);
@@ -527,7 +562,7 @@ wxPoint shape_pos;
 				{
 				if( (int)hypot((float)x0,(float)y0) < w_dist )
 					{
-					NumberOfErrors++;
+					ErrorsDRC_Count++;
 					if( show_err)
 						Affiche_Erreur_DRC(frame->DrawPanel, DC, frame->m_Pcb, pt_segment,pttrack,21);
 					return(BAD_DRC) ;
@@ -544,7 +579,7 @@ wxPoint shape_pos;
 
 				if( TestMarginToCircle(x0, y0, w_dist, dx) == BAD_DRC )
 					{
-					NumberOfErrors++;
+					ErrorsDRC_Count++;
 					if(show_err)
 						Affiche_Erreur_DRC(frame->DrawPanel, DC, frame->m_Pcb, pt_segment,pttrack,20);
 					return(BAD_DRC) ;
@@ -563,7 +598,7 @@ wxPoint shape_pos;
 		if ( pttrack->m_StructType == TYPEVIA )
 			{
 			if( TestMarginToCircle(x0, y0,w_dist,segm_long) == OK_DRC) continue;
-			NumberOfErrors++;
+			ErrorsDRC_Count++;
 			if(show_err)
 				Affiche_Erreur_DRC(frame->DrawPanel, DC, frame->m_Pcb, pt_segment,pttrack,21);
 			return(BAD_DRC) ;
@@ -584,14 +619,14 @@ wxPoint shape_pos;
 				/* test fin tenant compte des formes arrondies des extremites */
 				if ( x0 >= 0 && x0 <= segm_long )
 					{
-					NumberOfErrors++;
+					ErrorsDRC_Count++;
 					if ( show_err )
 						Affiche_Erreur_DRC(frame->DrawPanel, DC, frame->m_Pcb, pt_segment,pttrack,2);
 					return(BAD_DRC) ;
 					}
 				if( TestMarginToCircle(x0, y0, w_dist,segm_long) == BAD_DRC)
 					{
-					NumberOfErrors++;
+					ErrorsDRC_Count++;
 					if(show_err)
 						Affiche_Erreur_DRC(frame->DrawPanel, DC, frame->m_Pcb, pt_segment,pttrack,2);
 					return(BAD_DRC) ;
@@ -602,14 +637,14 @@ wxPoint shape_pos;
 				/* test fin tenant compte des formes arrondies des extremites */
 				if ( xf >= 0 && xf <= segm_long )
 					{
-					NumberOfErrors++;
+					ErrorsDRC_Count++;
 					if(show_err)
 						Affiche_Erreur_DRC(frame->DrawPanel, DC, frame->m_Pcb, pt_segment,pttrack,3);
 					return(BAD_DRC) ;
 					}
 				if( TestMarginToCircle(xf, yf, w_dist,segm_long) == BAD_DRC)
 					{
-					NumberOfErrors++;
+					ErrorsDRC_Count++;
 					if(show_err)
 						Affiche_Erreur_DRC(frame->DrawPanel, DC, frame->m_Pcb, pt_segment,pttrack,3);
 					return(BAD_DRC) ;
@@ -618,7 +653,7 @@ wxPoint shape_pos;
 
 			if ( x0 <=0 && xf >= 0 )
 				{
-				NumberOfErrors++;
+				ErrorsDRC_Count++;
 				if(show_err)
 					Affiche_Erreur_DRC(frame->DrawPanel, DC, frame->m_Pcb, pt_segment,pttrack,4);
 				return(BAD_DRC) ;
@@ -633,7 +668,7 @@ wxPoint shape_pos;
 			if( y0 > yf ) EXCHG(y0, yf);
 			if( (y0 < 0) && (yf > 0) )
 				{
-				NumberOfErrors++;
+				ErrorsDRC_Count++;
 				if( show_err)
 					Affiche_Erreur_DRC(frame->DrawPanel, DC, frame->m_Pcb, pt_segment,pttrack,6);
 				return(BAD_DRC);
@@ -643,14 +678,14 @@ wxPoint shape_pos;
 				de reference */
 			if(TestMarginToCircle(x0,y0,w_dist,segm_long) == BAD_DRC)
 				{
-				NumberOfErrors++;
+				ErrorsDRC_Count++;
 				if(show_err)
 					Affiche_Erreur_DRC(frame->DrawPanel, DC, frame->m_Pcb, pt_segment,pttrack,7);
 				return(BAD_DRC) ;
 				}
 			if(TestMarginToCircle(xf,yf,w_dist,segm_long) == BAD_DRC)
 				{
-				NumberOfErrors++;
+				ErrorsDRC_Count++;
 				if(show_err)
 					Affiche_Erreur_DRC(frame->DrawPanel, DC, frame->m_Pcb, pt_segment,pttrack,8);
 				return(BAD_DRC) ;
@@ -677,7 +712,7 @@ wxPoint shape_pos;
 
 				if(bflag == BAD_DRC)
 					{
-					NumberOfErrors++;
+					ErrorsDRC_Count++;
 					if(show_err)
 						Affiche_Erreur_DRC(frame->DrawPanel, DC, frame->m_Pcb, pt_segment,pttrack,9);
 					return(BAD_DRC) ;
@@ -705,14 +740,14 @@ wxPoint shape_pos;
 					RotatePoint(&rxf,&ryf, angle);
 					if(TestMarginToCircle(rx0,ry0,w_dist,dx) == BAD_DRC)
 						{
-						NumberOfErrors++;
+						ErrorsDRC_Count++;
 						if(show_err)
 							Affiche_Erreur_DRC(frame->DrawPanel, DC, frame->m_Pcb, pt_segment,pttrack,10);
 						return(BAD_DRC) ;
 						}
 					if(TestMarginToCircle(rxf,ryf,w_dist,dx) == BAD_DRC)
 						{
-						NumberOfErrors++;
+						ErrorsDRC_Count++;
 						if(show_err)
 							Affiche_Erreur_DRC(frame->DrawPanel, DC, frame->m_Pcb, pt_segment,pttrack,11);
 						return(BAD_DRC) ;
@@ -765,7 +800,7 @@ LISTE_PAD * pad_list = start_buffer;
 		if( Pad_to_Pad_Isol(pad_ref, pad, g_DesignSettings.m_TrackClearence) == OK_DRC ) continue ;
 		else	/* defaut d'isolation trouve */
 		{
-			NumberOfErrors++;
+			ErrorsDRC_Count++;
  			if( show_err )
 				Affiche_Erreur_DRC(frame->DrawPanel, DC, frame->m_Pcb, pad_ref, pad);
 			return(BAD_DRC);
@@ -1106,29 +1141,46 @@ static void Affiche_Erreur_DRC(WinEDA_DrawPanel * panel, wxDC * DC, BOARD * Pcb,
 */
 {
 wxPoint erc_pos;
-D_PAD * pad;
 TRACK * pt_segm;
 wxString msg;
+wxString tracktype, netname1, netname2;
+EQUIPOT * equipot = GetEquipot(Pcb, pt_ref->m_NetCode);
+	if ( equipot ) netname1 = equipot->m_Netname;
+	else netname1 = wxT("<noname>");
+	netname2 = wxT("<noname>");
+
+	tracktype = wxT("Track");
+	if ( pt_ref->m_StructType == TYPEVIA )	tracktype = wxT("Via");
+	if ( pt_ref->m_StructType == TYPEZONE )	tracktype = wxT("Zone");
+
 
 	if( ((EDA_BaseStruct*)pt_item)->m_StructType == TYPEPAD )
 	{
-		pad = (D_PAD*) pt_item;
+		D_PAD * pad = (D_PAD*) pt_item;
+		equipot = GetEquipot(Pcb, pad->m_NetCode);
+		if ( equipot ) netname2 =  equipot->m_Netname;
 		erc_pos = pad->m_Pos; 
 		wxString pad_name = pad->ReturnStringPadName();
 		wxString module_name = ((MODULE*)(pad->m_Parent))->m_Reference->m_Text;
-		msg.Printf(_("%d Drc Err %d  PAD %s (%s) @ %d,%d\n"),
-				NumberOfErrors, errnumber,
+		msg.Printf(_("%d Drc Err %d %s (net %s)and PAD %s (%s) net %s @ %d,%d\n"),
+				ErrorsDRC_Count, errnumber, tracktype.GetData(),
+				netname1.GetData(),
 				pad_name.GetData(), module_name.GetData(),
+				netname2.GetData(),
 				erc_pos.x, erc_pos.y);
 	}
 	else	/* erreur sur segment de piste */
 	{
 		pt_segm = (TRACK *) pt_item;
+		equipot = GetEquipot(Pcb, pt_segm->m_NetCode);
+		if ( equipot ) netname2 =  equipot->m_Netname;
 		erc_pos = pt_segm->m_Start;
 		if(pt_segm->m_StructType == TYPEVIA)
 		{
-			msg.Printf(_("%d Err type %d: sur VIA @ %d,%d\n"),
-					NumberOfErrors, errnumber,erc_pos.x,erc_pos.y);
+			msg.Printf(_("%d Err type %d: %s (net %s) and VIA (net %s) @ %d,%d\n"),
+					ErrorsDRC_Count, errnumber, tracktype.GetData(),
+					netname1.GetData(), netname2.GetData(),
+					erc_pos.x,erc_pos.y);
 		}
 		else
 		{
@@ -1138,13 +1190,16 @@ wxString msg;
 			{
 				EXCHG(erc_pos_f.x, erc_pos.x); EXCHG(erc_pos_f.y, erc_pos.y);
 			}
-			msg.Printf(_("%d Err type %d: sur SEGMENT @ %d,%d\n"),
-					NumberOfErrors, errnumber,erc_pos.x,erc_pos.y);
+			msg.Printf(_("%d Err type %d: %s (net %s) and track (net %s) @ %d,%d\n"),
+					ErrorsDRC_Count, errnumber, tracktype.GetData(),
+					netname1.GetData(), netname2.GetData(),
+					erc_pos.x,erc_pos.y);
 		}
 	}
 
 	if ( DrcFrame ) DrcFrame->m_logWindow->AppendText(msg);
 	else panel->m_Parent->Affiche_Message(msg);
+	if ( s_RptFile ) fprintf(s_RptFile, "%s", CONV_TO_UTF8(msg) );
 
 	if(current_marqueur == NULL) current_marqueur = new MARQUEUR(Pcb);
 	current_marqueur->m_Pos = wxPoint(erc_pos.x, erc_pos.y);
@@ -1172,12 +1227,22 @@ wxString msg;
 	wxString module_name1 = ((MODULE*)(pad1->m_Parent))->m_Reference->m_Text;
 	wxString pad_name2 = pad2->ReturnStringPadName();
 	wxString module_name2 = ((MODULE*)(pad2->m_Parent))->m_Reference->m_Text;
+	wxString netname1, netname2;
+	EQUIPOT * equipot = GetEquipot(Pcb, pad1->m_NetCode);
+	if ( equipot ) netname1 =  equipot->m_Netname;
+	else netname1 = wxT("<noname>");
+	equipot = GetEquipot(Pcb, pad2->m_NetCode);
+	if ( equipot ) netname2 =  equipot->m_Netname;
+	else netname2 = wxT("<noname>");
 
-	msg.Printf( _("%d Drc Err: PAD %s (%s) @ %d,%d and PAD %s (%s) @ %d,%d\n"),
-			NumberOfErrors, pad_name1.GetData(), module_name1.GetData(), pad1->m_Pos.x,pad1->m_Pos.y,
-			pad_name2.GetData(), module_name2.GetData(), pad2->m_Pos.x, pad2->m_Pos.y);
+	msg.Printf( _("%d Drc Err: PAD %s (%s) net %s @ %d,%d and PAD %s (%s) net %s @ %d,%d\n"),
+			ErrorsDRC_Count, pad_name1.GetData(), module_name1.GetData(),
+			netname1.GetData(), pad1->m_Pos.x,pad1->m_Pos.y,
+			pad_name2.GetData(), module_name2.GetData(),
+			netname2.GetData(), pad2->m_Pos.x, pad2->m_Pos.y);
 	if ( DrcFrame ) DrcFrame->m_logWindow->AppendText(msg);
 	else panel->m_Parent->Affiche_Message(msg);
+	if ( s_RptFile ) fprintf(s_RptFile, "%s", CONV_TO_UTF8(msg) );
 
 	if(current_marqueur == NULL) current_marqueur = new MARQUEUR(Pcb);
 	current_marqueur->m_Pos = pad1->m_Pos;
