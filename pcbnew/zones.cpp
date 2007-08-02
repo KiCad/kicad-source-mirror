@@ -202,7 +202,7 @@ wxString title = _("Zone clearance value:") + ReturnUnitSymbol(g_UnitMetric);
 	if ( Zone_45_Only ) m_OrientEdgesOpt->SetSelection(1);
 
 int GridList[4] = { 50,100,250,500}, selection = 0;
-	for ( int ii = 0; ii < m_GridCtrl->GetCount(); ii++ )
+	for ( unsigned ii = 0; ii < m_GridCtrl->GetCount(); ii++ )
 	{
 		wxString msg = ReturnStringFromValue(g_UnitMetric, GridList[ii], m_Parent->m_InternalUnits);
 		m_GridCtrl->SetString(ii,msg);
@@ -857,7 +857,7 @@ wxString msg;
 			if( (cell & CELL_is_ZONE) )
 			{
 				if ( (cell & CELL_is_FRIEND) == 0)
-					AndCell(ii,jj,BOTTOM, ~(CELL_is_FRIEND|CELL_is_ZONE) );
+					AndCell(ii,jj,BOTTOM, (BoardCell) ~(CELL_is_FRIEND|CELL_is_ZONE) );
 			}
 		}
 	}

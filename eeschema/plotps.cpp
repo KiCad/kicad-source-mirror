@@ -329,7 +329,7 @@ wxPoint plot_offset;
 	/* Build the screen list */
 	EDA_ScreenList ScreenList(NULL);
 
-	if ( AllPages == TRUE ) screen = screen = ScreenList.GetFirst();
+	if ( AllPages == TRUE ) screen = ScreenList.GetFirst();
 	else screen = ActiveScreen;
 	for ( ; screen != NULL; screen = ScreenList.GetNext() )
 	{

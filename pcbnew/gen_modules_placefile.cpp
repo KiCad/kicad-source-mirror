@@ -342,7 +342,7 @@ char *layer_name[4] = {"??? ","copper","component","all"} ;
 		fprintf( rptfile,"$EndPAD\n");
 		}
 		
-		fprintf( rptfile,"$EndMODULE  %s\n\n", Module->m_Reference->m_Text.GetData());
+		fprintf( rptfile,"$EndMODULE  %s\n\n", (const char*) Module->m_Reference->m_Text.GetData() );
 	}
 
 	/* Write board Edges */

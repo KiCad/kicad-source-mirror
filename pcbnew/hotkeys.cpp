@@ -147,7 +147,11 @@ sous le courseur souris
 			if ( ItemFree )
 			{
 				module = Locate_Prefered_Module(m_Pcb, 
-					CURSEUR_OFF_GRILLE | IGNORE_LOCKED | VISIBLE_ONLY /*MATCH_LAYER */ );
+					CURSEUR_OFF_GRILLE | IGNORE_LOCKED | VISIBLE_ONLY
+#if defined(USE_MATCH_LAYER)                    
+                    | MATCH_LAYER
+#endif                    
+                    );
 				if ( module == NULL ) // no footprint found
 				{
 					module = Locate_Prefered_Module(m_Pcb, CURSEUR_OFF_GRILLE );

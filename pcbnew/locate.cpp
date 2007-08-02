@@ -117,19 +117,25 @@ EDA_BaseStruct * item;
         return pt_texte_pcb;
     }
 
-    if ( (DrawSegm = Locate_Segment_Pcb(m_Pcb, LayerSearch, typeloc)) != NULL)
+    DrawSegm = Locate_Segment_Pcb(m_Pcb, LayerSearch, typeloc);
+    if( DrawSegm != NULL )
     {
         Affiche_Infos_DrawSegment(this, DrawSegm);
         return DrawSegm;
     }
 
-    if ( (item = Locate_Cotation(m_Pcb, LayerSearch, typeloc)) != NULL) return item;
+    item = Locate_Cotation(m_Pcb, LayerSearch, typeloc);
+    if( item != NULL )
+        return item;
 
-    if ( (item = Locate_MirePcb(m_Pcb->m_Drawings, LayerSearch, typeloc)) != NULL) return item;
+    item = Locate_MirePcb(m_Pcb->m_Drawings, LayerSearch, typeloc);
+    if( item != NULL )
+        return item;
 
     /* Search for tracks and vias, with via priority */
     if ( LayerSearch == -1 ) masque_layer = ALL_LAYERS;
     else masque_layer = g_TabOneLayerMask[LayerSearch];
+    
     Track = Locate_Pistes( m_Pcb->m_Track, masque_layer,typeloc );
     if ( Track != NULL )
     {
@@ -146,7 +152,6 @@ EDA_BaseStruct * item;
         return Track;
     }
 
-
     /* Search for Pads */
     if( (pt_pad = Locate_Any_Pad(m_Pcb, typeloc)) != NULL )
     {
@@ -157,13 +162,16 @@ EDA_BaseStruct * item;
     // First search: locate texts for footprints on copper or component layer
     // Priority to the active layer (component or copper.
     // this is useful for small smd components when 2 texts overlap but are not on the same layer
-    if ( (LayerSearch == LAYER_CUIVRE_N) ||  (LayerSearch == CMP_N ))
+    if( LayerSearch == LAYER_CUIVRE_N   ||   LayerSearch == CMP_N )
     {
-        for (module = m_Pcb->m_Modules; module != NULL; module = (MODULE*)module->Pnext)  
+        for( module = m_Pcb->m_Modules; module != NULL; module = (MODULE*)module->Pnext )  
         {
-        TEXTE_MODULE * pt_texte;
-            if ( module->m_Layer != LayerSearch) continue;
-            pt_texte = LocateTexteModule(m_Pcb, &module, typeloc | VISIBLE_ONLY);
+            TEXTE_MODULE * pt_texte;
+            
+            if( module->m_Layer != LayerSearch ) 
+                continue;
+            
+            pt_texte = LocateTexteModule( m_Pcb, &module, typeloc | VISIBLE_ONLY );
             if( pt_texte != NULL )
             {
                 Affiche_Infos_E_Texte(this,  module, pt_texte);
@@ -175,8 +183,8 @@ EDA_BaseStruct * item;
     // Now Search footprint texts on all layers
     module = NULL;
     {
-    TEXTE_MODULE * pt_texte;
-        pt_texte = LocateTexteModule(m_Pcb, &module, typeloc | VISIBLE_ONLY);
+        TEXTE_MODULE * pt_texte;
+        pt_texte = LocateTexteModule(m_Pcb, &module, typeloc | VISIBLE_ONLY );
         if( pt_texte != NULL )
         {
             Affiche_Infos_E_Texte(this,  module, pt_texte);
@@ -185,7 +193,8 @@ EDA_BaseStruct * item;
     }
 
     /* Search for a footprint */
-    if ( (module = Locate_Prefered_Module(m_Pcb, typeloc | VISIBLE_ONLY)) != NULL)
+    module = Locate_Prefered_Module( m_Pcb, typeloc | VISIBLE_ONLY );
+    if( module != NULL )
     {
         module->Display_Infos(this);
         return module;
@@ -195,7 +204,8 @@ EDA_BaseStruct * item;
     if( (TrackLocate = Locate_Zone((TRACK*)m_Pcb->m_Zone,
                     GetScreen()->m_Active_Layer,typeloc)) != NULL )
     {
-        Affiche_Infos_Piste(this, TrackLocate) ; return TrackLocate;
+        Affiche_Infos_Piste(this, TrackLocate); 
+        return TrackLocate;
     }
 
     MsgPanel->EraseMsgBox();
@@ -757,21 +767,35 @@ wxPoint ref_pos;
 
     for( ; module != NULL; module = (MODULE*)module->Pnext )
     {
-		if ( (typeloc & VISIBLE_ONLY) )
+        int layer = module->m_Layer;
+        if( layer==ADHESIVE_N_CU || layer==SILKSCREEN_N_CU ) 
+            layer = CUIVRE_N;
+        else if( layer==ADHESIVE_N_CMP || layer==SILKSCREEN_N_CMP ) 
+            layer = CMP_N;
+
+        if( typeloc & VISIBLE_ONLY )
 		{
-			int layer = module->m_Layer;
-			if( layer==ADHESIVE_N_CU || layer==SILKSCREEN_N_CU ) layer = CUIVRE_N;
-			else if( layer==ADHESIVE_N_CMP || layer==SILKSCREEN_N_CMP ) layer = CMP_N;
-			if ( ! IsModuleLayerVisible( layer ) ) continue;
+			if( !IsModuleLayerVisible( layer ) ) 
+                continue;
 		}
-         pt_txt_mod = module->m_Reference;
+
+        if( typeloc & MATCH_LAYER )
+        {
+            if( ((PCB_SCREEN*)ActiveScreen)->m_Active_Layer != layer )
+                continue;
+        }
+        
+        pt_txt_mod = module->m_Reference;
+        
         /* la souris est-elle dans le rectangle autour du texte*/
         if( pt_txt_mod->Locate(ref_pos) )
         {
             if( PtModule) *PtModule = module;
             return(pt_txt_mod);
         }
+        
         pt_txt_mod = module->m_Value;
+        
         /* la souris est-elle dans le rectangle autour du texte*/
         if( pt_txt_mod->Locate(ref_pos) )
         {

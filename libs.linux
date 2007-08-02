@@ -62,6 +62,12 @@ LDFLAGS = -s #-v
 endif
 
 
+# a command line define which affects pcbnew only, causing it to match current layer 
+ifdef USE_MATCH_LAYER
+CPPFLAGS += -DUSE_MATCH_LAYER
+endif
+
+
 # You must comment or uncomment this line to disable/enable python support
 #KICAD_PYTHON = 1
 

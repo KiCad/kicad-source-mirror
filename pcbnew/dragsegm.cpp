@@ -109,7 +109,6 @@ void Build_1_Pad_SegmentsToDrag(WinEDA_DrawPanel * panel, wxDC * DC, D_PAD * PtP
 */
 {
 TRACK * Track;
-DRAG_SEGM * pt_drag;
 int net_code = PtPad->m_NetCode;
 int MasqueLayer;
 wxPoint pos;

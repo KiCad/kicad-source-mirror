@@ -22,10 +22,6 @@
 #define POS_AFF_NUMSEGM 70
 
 /* Routines locales : */
-#if 0
-static void ConnectDanglingEndToPad(WinEDA_PcbFrame * frame);
-static void Gen_Raccord_Track(WinEDA_PcbFrame * frame, wxDC * DC);
-#endif
 static int clean_segments(WinEDA_PcbFrame * frame, wxDC * DC);
 static void suppression_piste_non_connectee(WinEDA_PcbFrame * frame, wxDC * DC);
 static TRACK * AlignSegment(BOARD * Pcb, TRACK * pt_ref, TRACK * pt_segm, int extremite);

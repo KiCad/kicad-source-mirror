@@ -20,7 +20,7 @@
 /* fonctions importees */
 
 /* Fonctions locales */
-static void Exit_Muonde(WinEDA_DrawFrame * frame, wxDC *DC);
+//static void Exit_Muonde(WinEDA_DrawFrame * frame, wxDC *DC);
 
 /* Variables locales : */
 #define COEFF_COUNT 6
@@ -87,7 +87,7 @@ wxString Line;
 }
 
 
-
+#if 0
 /**********************************************************/
 static void Exit_Muonde(WinEDA_DrawFrame * frame, wxDC *DC )
 /**********************************************************/
@@ -111,6 +111,7 @@ MODULE * Module = (MODULE*) frame->m_CurrentScreen->m_CurrentItem;
 	frame->DrawPanel->ForceCloseManageCurseur = NULL;
 	frame->m_CurrentScreen->m_CurrentItem = NULL;
 }
+#endif
 
 
 /***************************************************************************/

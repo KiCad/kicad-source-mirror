@@ -60,7 +60,7 @@ public:
     wxSize m_Ext;           // marges de "garde": utilise en placement auto.
     float m_Surface;        // surface du rectangle d'encadrement
 
-    long m_Link;            // variable temporaire ( pour editions, ...)
+    unsigned long m_Link;   // variable temporaire ( pour editions, ...)
     long m_LastEdit_Time;   // Date de la derniere modification du module (gestion de librairies)
 
     wxString m_Doc;         // Texte de description du module

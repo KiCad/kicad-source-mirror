@@ -501,7 +501,7 @@ int margin;
 	/* Build the screen list */
 	EDA_ScreenList ScreenList(NULL);
 
-	if ( Select_PlotAll == TRUE ) screen = screen = ScreenList.GetFirst();
+	if ( Select_PlotAll == TRUE ) screen = ScreenList.GetFirst();
 	else screen = ActiveScreen;
 	for ( ; screen != NULL; screen = ScreenList.GetNext() )
 	{

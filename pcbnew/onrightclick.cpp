@@ -25,7 +25,7 @@
 #include "Delete_Line.xpm"
 #include "Delete_Track.xpm"
 #include "Move_Module.xpm"
-#include "Move_Track_Segment.xpm"
+//#include "Move_Track_Segment.xpm"
 #include "Drag_Track_Segment.xpm"
 #include "Drag_Segment_WithSlope.xpm"
 #include "Drag_Module.xpm"

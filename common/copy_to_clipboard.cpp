@@ -25,8 +25,8 @@
 
 extern BASE_SCREEN * ActiveScreen;
 
-static bool s_PlotBlackAndWhite = FALSE;
-static bool Print_Sheet_Ref = TRUE;
+static const bool s_PlotBlackAndWhite = FALSE;
+static const bool Print_Sheet_Ref = TRUE;
 
 static bool DrawPage(WinEDA_DrawPanel * panel);
 
