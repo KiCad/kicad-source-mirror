@@ -28,7 +28,7 @@ wxT("** CVPCB  (sept 1992 .. 2007) **")
 #endif
 
 #ifdef KICAD
-wxT("** KICAD (jul 2000 .. 2007) **")
+wxT("** KICAD  (jul 2000 .. 2007) **")
 #endif
 
 #ifdef EESCHEMA
@@ -51,7 +51,7 @@ wxString Msg = MsgInfos;
 #else
 	Msg << wxT(" - Ansi version");
 #endif
-	
+
 #ifdef KICAD_PYTHON
 	Msg << wxT("\n");
 	Msg << wxT( "python : " );
@@ -59,7 +59,7 @@ wxString Msg = MsgInfos;
 #endif
 
 	Msg << wxT("\n\n") << _("Author:");
-	Msg << wxT("JP CHARRAS\n\n") << _("Based on wxWidgets ");
+	Msg << wxT(" JP CHARRAS\n\n") << _("Based on wxWidgets ");
 	Msg << wxMAJOR_VERSION << wxT(".") <<
 		wxMINOR_VERSION << wxT(".") << wxRELEASE_NUMBER;
 	if ( wxSUBRELEASE_NUMBER )

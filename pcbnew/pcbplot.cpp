@@ -139,7 +139,7 @@ int ii;
 	wxBoxSizer * LayersBoxSizer = new wxBoxSizer(wxHORIZONTAL);
 	LeftBoxSizer->Add(LayersBoxSizer, 0, wxGROW|wxALL, 5);
 
-wxString fmtmsg[4] = { wxT("HPGL"), wxT("GERBER"), wxT("Postscript"), wxT("Postscript A4") };
+wxString fmtmsg[4] = { wxT("HPGL"), wxT("Gerber"), wxT("Postscript"), wxT("Postscript A4") };
 	m_PlotFormatOpt = new wxRadioBox(this, ID_SEL_PLOT_FORMAT,
 			_("Plot Format"), wxDefaultPosition, wxSize(-1,-1),
 			4, fmtmsg, 1, wxRA_SPECIFY_COLS);
@@ -147,13 +147,23 @@ wxString fmtmsg[4] = { wxT("HPGL"), wxT("GERBER"), wxT("Postscript"), wxT("Posts
 	switch ( m_PlotFormat )
 	{
 		case PLOT_FORMAT_HPGL:
-			m_PlotFormatOpt->SetSelection(0); break;
-		case PLOT_FORMAT_POST:
-			m_PlotFormatOpt->SetSelection(2); break;
+			m_PlotFormatOpt->SetSelection(0);
+			break;
+
 		case PLOT_FORMAT_GERBER:
-			m_PlotFormatOpt->SetSelection(1); break;
-		case PLOT_FORMAT_POST_A4:
-			m_PlotFormatOpt->SetSelection(3); break;
+			m_PlotFormatOpt->SetSelection(1);
+			break;
+
+		default: // ( PLOT_FORMAT_POST or PLOT_FORMAT_POST_A4 )
+			// As m_PlotFormat is never set to a value of PLOT_FORMAT_POST_A4,
+			// use the value of g_ForcePlotPS_On_A4 to determine whether the
+			// "Postscript" or "Postscipt A4" radiobutton had been selected
+			// previously (and thus which button should be reselected now).
+			if ( g_ForcePlotPS_On_A4 )
+				m_PlotFormatOpt->SetSelection(3);
+			else
+				m_PlotFormatOpt->SetSelection(2);
+			break;
 	}
 
 	/* Creation des menus d'option du format GERBER */
@@ -179,9 +189,9 @@ wxString fmtmsg[4] = { wxT("HPGL"), wxT("GERBER"), wxT("Postscript"), wxT("Posts
 
 	/* Create the right column commands */
 wxString choice_plot_offset_msg[] =
-	{_("absolute"), _("auxiliary axis")};
+	{_("Absolute"), _("Auxiliary axis")};
 	m_Choice_Plot_Offset = new wxRadioBox(this, ID_SEL_PLOT_OFFSET_OPTION,
-						_("plot Origine:"),
+						_("Plot Origin"),
 						wxDefaultPosition,wxSize(-1,-1),
 						2,choice_plot_offset_msg,1,wxRA_SPECIFY_COLS);
 	if ( s_PlotOriginIsAuxAxis ) m_Choice_Plot_Offset->SetSelection(1);
@@ -278,7 +288,7 @@ wxString choice_plot_offset_msg[] =
 	LeftBoxSizer->Add(m_Plot_Text_Ref, 0, wxGROW|wxALL, 1);
 
 	m_Plot_Text_Div = new wxCheckBox(this, ID_PRINT_MODULE_TEXTS,
-			_("Print other module texts") );
+			_("Print other Module texts") );
 	m_Plot_Text_Div->SetValue(Sel_Texte_Divers);
 	m_Plot_Text_Div->SetToolTip(
 		_("Enable/disable print/plot module field texts on Silkscreen layers") );
@@ -308,7 +318,7 @@ wxString scalemsg[5] =
 	MidLeftBoxSizer->Add(m_Scale_Opt, 0, wxGROW|wxALL, 5);
 
 wxString list_opt3[3] = {_("Line"), _("Filled"), _("Sketch") };
-	m_PlotModeOpt = new wxRadioBox(this, ID_PLOT_MODE_OPT, _("Plot mode"),
+	m_PlotModeOpt = new wxRadioBox(this, ID_PLOT_MODE_OPT, _("Plot Mode"),
 				wxDefaultPosition, wxDefaultSize,
 				3, list_opt3, 1);
 	m_PlotModeOpt->SetSelection(Plot_Mode);
@@ -329,7 +339,7 @@ wxString list_opt3[3] = {_("Line"), _("Filled"), _("Sketch") };
 	m_HPGL_PlotCenter_Opt = new wxCheckBox(this, ID_PLOT_CENTRE_OPT,
 						_("Org = Centre"));
 	m_HPGL_PlotCenter_Opt->SetValue(HPGL_Org_Centre);
-	m_HPGL_PlotCenter_Opt->SetToolTip(_("Draw origin ( 0,0 )in on sheet center") );
+	m_HPGL_PlotCenter_Opt->SetToolTip(_("Draw origin ( 0,0 ) in sheet center") );
 	MidLeftBoxSizer->Add(m_HPGL_PlotCenter_Opt, 0, wxGROW|wxALL, 5);
 	// Mise a jour des activations des menus:
 wxCommandEvent event;
@@ -547,7 +557,7 @@ wxString ext;
 		{
 			s_SelectedLayers |= mask;
 			/* Calcul du nom du fichier */
-			FullFileName =  BaseFileName +ReturnPcbLayerName(layer_to_plot, true) + ext;
+			FullFileName =  BaseFileName + ReturnPcbLayerName(layer_to_plot, true) + ext;
 			switch ( m_PlotFormat)
 			{
 				case PLOT_FORMAT_POST:
