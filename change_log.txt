@@ -4,6 +4,22 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+
+
+2007-Aug-04 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ pcbnew
+	Read-ability formatting, I am playing with a C++ beautifier called uncrustify.
+    Fixed a bug in "display local ratsnest pad or module": if you had a small
+        module and the mouse clicked its reference text, the ratnest for 
+        the associated module would not show.  The work around was to add
+        support to Show_1_Ratsnest() so it could take a TYPETEXTEMODULE as
+        the result of the hit-testing.  But I think a longer term better
+        solution will be to create a specific search function for this kind
+        of hit-testing, one which could disregard text and look only for
+        pads and modules.
+
+
 2007-aug-02 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew
