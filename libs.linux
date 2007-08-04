@@ -53,8 +53,8 @@ DEBUG = 0
 # directory specific makefile.gtk files.
 ifeq ($(DEBUG), 1)
 WXXFLAGS := $(shell wx-config --debug --cxxflags) 
-CPPFLAGS = -Wall -g ${WXXFLAGS} -fno-strict-aliasing
-LDFLAGS = -g #-v
+CPPFLAGS = -Wall -g3 -ggdb3 ${WXXFLAGS} -fno-strict-aliasing
+LDFLAGS = -g3 -ggdb3 #-v
 else
 WXXFLAGS := $(shell wx-config --cxxflags) 
 CPPFLAGS = -Wall -O2 ${WXXFLAGS} -fno-strict-aliasing
@@ -109,7 +109,7 @@ ifeq ($(KICAD_STATIC_LINK), 1)
 LIBSTDC = ../syslibs/libstdc++.a
 else
 # Or Use static link for libsupc++ or libstdc++ (more easy!!)
-LIBSTDC = -lstdc++
+LIBSTDC = #-lstdc++ is implied when using g++ to link
 endif
 
 
