@@ -6,10 +6,18 @@ email address.
 
 
 
+2007-Aug-05 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ pcbnew & common
+    Changed the function name of Locate( const wxPoint& ref_pos ) to bool HitTest(..)
+    in both class_text_mod and base_struct.
+    More beautification and commenting.
+
+
 2007-Aug-04 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew
-	Read-ability formatting, I am playing with a C++ beautifier called uncrustify.
+	Read-ability formatting, I am playing with a C++ beautifier called "uncrustify".
         I had to patch it and spent 2 days getting it configured.  Patch not 
         sent upstream yet.
     Fixed a bug in "display local ratsnest pad or module": if you had a small

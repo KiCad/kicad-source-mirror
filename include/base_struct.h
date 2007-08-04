@@ -179,8 +179,14 @@ public:
                   const wxPoint& offset, int color,
                   int draw_mode, int display_mode = FILAIRE, int anchor_color = -1 );
 
-    /* locate functions */
-    int     Locate( const wxPoint& posref );
+    /**
+     * Function HitTest
+     * tests if the given wxPoint is within the bounds of this object.
+     * @param posref A wxPoint to test
+     * @return bool - true if a hit, else false
+     */
+    bool    HitTest( const wxPoint& posref );
+    
     int     Len_Size( void ); // Return the text lenght in internal units
 };
 

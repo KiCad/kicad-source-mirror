@@ -34,6 +34,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
 {
     bool PopupOn = GetScreen()->m_CurrentItem
                    && GetScreen()->m_CurrentItem->m_Flags;
+                   
     bool ItemFree = (GetScreen()->m_CurrentItem == 0 )
                     || (GetScreen()->m_CurrentItem->m_Flags == 0);
 
@@ -63,10 +64,10 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
                             || (GetScreen()->m_CurrentItem->m_Flags == 0);
             if( ItemFree )
             {
-                //no track is currently being edited - select a segment and remove it.
+                // no track is currently being edited - select a segment and remove it.
                 DrawStruct = PcbGeneralLocateAndDisplay();
 
-                //don't let backspace delete modules!!
+                // don't let backspace delete modules!!
                 if( DrawStruct && (DrawStruct->m_StructType == TYPETRACK
                                    || DrawStruct->m_StructType == TYPEVIA) )
                     Delete_Segment( DC, (TRACK*) DrawStruct );
@@ -74,7 +75,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
             }
             else if( GetScreen()->m_CurrentItem->m_StructType == TYPETRACK  )
             {
-                //then an element is being edited - remove the last segment.
+                // then an element is being edited - remove the last segment.
                 GetScreen()->m_CurrentItem =
                     Delete_Segment( DC, (TRACK*) GetScreen()->m_CurrentItem );
                 GetScreen()->SetModify();
@@ -97,7 +98,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case 'O' + GR_KB_CTRL:
     {
-        //try not to duplicate save, load code etc.
+        // try not to duplicate save, load code etc.
         wxCommandEvent evt;
         evt.SetId( ID_LOAD_FILE );
         Files_io( evt );
@@ -106,7 +107,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case 'S' + GR_KB_CTRL:
     {
-        //try not to duplicate save, load code etc.
+        // try not to duplicate save, load code etc.
         wxCommandEvent evt;
         evt.SetId( ID_SAVE_BOARD );
         Files_io( evt );
@@ -163,10 +164,18 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
             if( module == NULL )      // no footprint found
             {
                 module = Locate_Prefered_Module( m_Pcb, CURSEUR_OFF_GRILLE );
-                if( module )      // a footprint is found, but locked or on an other layer
+                if( module )      
                 {
+                    // a footprint is found, but locked or on an other layer
                     if( module->IsLocked() )
-                        DisplayInfo( this, _( "Footprint found, but locked" ) );
+                    {
+                        wxString msg;
+                        
+                        msg.Printf( _("Footprint %s found, but locked"),
+                            module->m_Reference->m_Text.GetData() );
+                        
+                        DisplayInfo( this, msg );
+                    }
                     module = NULL;
                 }
             }

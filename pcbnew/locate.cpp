@@ -426,7 +426,7 @@ EDA_BaseStruct* Locate_Cotation( BOARD* Pcb, int LayerSearch, int typeloc )
         pt_txt = Cotation->m_Text;
         if( pt_txt )
         {
-            if( pt_txt->Locate( ref_pos ) )
+            if( pt_txt->HitTest( ref_pos ) )
                 return PtStruct;
         }
 
@@ -857,7 +857,7 @@ TEXTE_MODULE* LocateTexteModule( BOARD* Pcb, MODULE** PtModule, int typeloc )
 
         // hit-test the reference text
         pt_txt_mod = module->m_Reference;
-        if( pt_txt_mod->Locate( ref_pos ) )
+        if( pt_txt_mod->HitTest( ref_pos ) )
         {
             if( PtModule )
                 *PtModule = module;
@@ -866,7 +866,7 @@ TEXTE_MODULE* LocateTexteModule( BOARD* Pcb, MODULE** PtModule, int typeloc )
 
         // hit-test the value text
         pt_txt_mod = module->m_Value;
-        if( pt_txt_mod->Locate( ref_pos ) )
+        if( pt_txt_mod->HitTest( ref_pos ) )
         {
             if( PtModule )
                 *PtModule = module;
@@ -881,7 +881,7 @@ TEXTE_MODULE* LocateTexteModule( BOARD* Pcb, MODULE** PtModule, int typeloc )
                 continue;
             
             pt_txt_mod = (TEXTE_MODULE*) PtStruct;
-            if( pt_txt_mod->Locate( ref_pos ) )
+            if( pt_txt_mod->HitTest( ref_pos ) )
             {
                 if( PtModule )
                     *PtModule = module;
@@ -1151,7 +1151,7 @@ TEXTE_PCB* Locate_Texte_Pcb( EDA_BaseStruct* PtStruct, int LayerSearch, int type
         if( PtStruct->m_StructType != TYPETEXTE )
             continue;
         TEXTE_PCB* pt_txt_pcb = (TEXTE_PCB*) PtStruct;
-        if( pt_txt_pcb->Locate( ref ) )
+        if( pt_txt_pcb->HitTest( ref ) )
         {
             if( pt_txt_pcb->m_Layer == LayerSearch )
                 return pt_txt_pcb;
