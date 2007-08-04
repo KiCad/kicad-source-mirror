@@ -138,7 +138,8 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     // Save the board after the time out :
     int CurrentTime = time( NULL );
     if( !GetScreen()->IsModify() || GetScreen()->IsSave() )
-    {       /* If no change, reset the time out */
+    {   
+        /* If no change, reset the time out */
         g_SaveTime = CurrentTime;
     }
 
@@ -147,7 +148,9 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         wxString tmpFileName = GetScreen()->m_FileName;
         wxString filename    = g_SaveFileName + PcbExtBuffer;
         bool     flgmodify   = GetScreen()->IsModify();
+
         ( (WinEDA_PcbFrame*) this )->SavePcbFile( filename );
+
         if( flgmodify ) // Set the flags m_Modify cleared by SavePcbFile()
         {
             GetScreen()->SetModify();
@@ -326,8 +329,8 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     GetScreen()->m_Curseur = curpos;
 
     /* Put cursor on grid or a pad centre if requested
-     *  But if the tool DELETE is active the cursor is left off grid
-     *  this is better to reach items to delete off grid
+     * But if the tool DELETE is active the cursor is left off grid
+     * this is better to reach items to delete off grid
      */
     D_PAD* pad;
     bool   keep_on_grid = TRUE;
