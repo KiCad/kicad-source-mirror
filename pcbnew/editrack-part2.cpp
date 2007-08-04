@@ -300,87 +300,87 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
     if( g_Show_Ratsnest )
         return;                     // Deja Affich�
 
-    if( !item )
-        return;
-    
     if( (m_Pcb->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
     {
         Compile_Ratsnest( DC, TRUE );
     }
 
-    if( item->m_StructType == TYPEPAD )
+    if( item )
     {
-        pt_pad = (D_PAD*) item;
-        Module = (MODULE*) pt_pad->m_Parent;
-    }
-
-    if( pt_pad ) /* Affichage du chevelu du net correspondant */
-    {
-        pt_pad->Display_Infos( this );
-        pt_chevelu = (CHEVELU*) m_Pcb->m_Ratsnest;
-        for( ii = m_Pcb->GetNumRatsnests(); ii > 0; pt_chevelu++, ii-- )
+        if( item->m_StructType == TYPEPAD )
         {
-            if( pt_chevelu->m_NetCode == pt_pad->m_NetCode )
+            pt_pad = (D_PAD*) item;
+            Module = (MODULE*) pt_pad->m_Parent;
+        }
+    
+        if( pt_pad ) /* Affichage du chevelu du net correspondant */
+        {
+            pt_pad->Display_Infos( this );
+            pt_chevelu = (CHEVELU*) m_Pcb->m_Ratsnest;
+            for( ii = m_Pcb->GetNumRatsnests(); ii > 0; pt_chevelu++, ii-- )
             {
-                if( (pt_chevelu->status & CH_VISIBLE) != 0 )
-                    continue;
-                pt_chevelu->status |= CH_VISIBLE;
-                if( (pt_chevelu->status & CH_ACTIF) == 0 )
-                    continue;
-
-                GRSetDrawMode( DC, GR_XOR );
-                GRLine( &DrawPanel->m_ClipBox, DC, pt_chevelu->pad_start->m_Pos.x,
-                        pt_chevelu->pad_start->m_Pos.y,
-                        pt_chevelu->pad_end->m_Pos.x,
-                        pt_chevelu->pad_end->m_Pos.y,
-                        0,
-                        g_DesignSettings.m_RatsnestColor );
-            }
-        }
-    }
-    else
-    {
-        if( item->m_StructType == TYPETEXTEMODULE )
-        {
-            Module = (MODULE*) item->m_Parent;
-        }
-        
-        else if( item->m_StructType == TYPEMODULE )
-        {
-            Module = (MODULE*) item;
-        }
-
-        if( Module )
-        {
-            Module->Display_Infos( this );
-            pt_pad = Module->m_Pads;
-            for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
-            {
-                pt_chevelu = (CHEVELU*) m_Pcb->m_Ratsnest;
-                for( ii = m_Pcb->GetNumRatsnests(); ii > 0; pt_chevelu++, ii-- )
+                if( pt_chevelu->m_NetCode == pt_pad->m_NetCode )
                 {
-                    if( (pt_chevelu->pad_start == pt_pad)
-                       || (pt_chevelu->pad_end == pt_pad) )
-                    {
-                        if( pt_chevelu->status & CH_VISIBLE )
-                            continue;
-
-                        pt_chevelu->status |= CH_VISIBLE;
-                        if( (pt_chevelu->status & CH_ACTIF) == 0 )
-                            continue;
-
-                        GRSetDrawMode( DC, GR_XOR );
-                        GRLine( &DrawPanel->m_ClipBox, DC, pt_chevelu->pad_start->m_Pos.x,
-                                pt_chevelu->pad_start->m_Pos.y,
-                                pt_chevelu->pad_end->m_Pos.x,
-                                pt_chevelu->pad_end->m_Pos.y,
-                                0,
-                                g_DesignSettings.m_RatsnestColor );
-                    }
+                    if( (pt_chevelu->status & CH_VISIBLE) != 0 )
+                        continue;
+                    pt_chevelu->status |= CH_VISIBLE;
+                    if( (pt_chevelu->status & CH_ACTIF) == 0 )
+                        continue;
+    
+                    GRSetDrawMode( DC, GR_XOR );
+                    GRLine( &DrawPanel->m_ClipBox, DC, pt_chevelu->pad_start->m_Pos.x,
+                            pt_chevelu->pad_start->m_Pos.y,
+                            pt_chevelu->pad_end->m_Pos.x,
+                            pt_chevelu->pad_end->m_Pos.y,
+                            0,
+                            g_DesignSettings.m_RatsnestColor );
                 }
             }
-
-            pt_pad = NULL;
+        }
+        else
+        {
+            if( item->m_StructType == TYPETEXTEMODULE )
+            {
+                Module = (MODULE*) item->m_Parent;
+            }
+            
+            else if( item->m_StructType == TYPEMODULE )
+            {
+                Module = (MODULE*) item;
+            }
+    
+            if( Module )
+            {
+                Module->Display_Infos( this );
+                pt_pad = Module->m_Pads;
+                for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
+                {
+                    pt_chevelu = (CHEVELU*) m_Pcb->m_Ratsnest;
+                    for( ii = m_Pcb->GetNumRatsnests(); ii > 0; pt_chevelu++, ii-- )
+                    {
+                        if( (pt_chevelu->pad_start == pt_pad)
+                           || (pt_chevelu->pad_end == pt_pad) )
+                        {
+                            if( pt_chevelu->status & CH_VISIBLE )
+                                continue;
+    
+                            pt_chevelu->status |= CH_VISIBLE;
+                            if( (pt_chevelu->status & CH_ACTIF) == 0 )
+                                continue;
+    
+                            GRSetDrawMode( DC, GR_XOR );
+                            GRLine( &DrawPanel->m_ClipBox, DC, pt_chevelu->pad_start->m_Pos.x,
+                                    pt_chevelu->pad_start->m_Pos.y,
+                                    pt_chevelu->pad_end->m_Pos.x,
+                                    pt_chevelu->pad_end->m_Pos.y,
+                                    0,
+                                    g_DesignSettings.m_RatsnestColor );
+                        }
+                    }
+                }
+    
+                pt_pad = NULL;
+            }
         }
     }
 

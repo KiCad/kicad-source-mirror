@@ -126,8 +126,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
     case ID_PCB_SHOW_1_RATSNEST_BUTT:
         DrawStruct = PcbGeneralLocateAndDisplay();
-        if( DrawStruct )
-            Show_1_Ratsnest( DrawStruct, DC );
+        Show_1_Ratsnest( DrawStruct, DC );
         break;
 
     case ID_PCB_MIRE_BUTT:
