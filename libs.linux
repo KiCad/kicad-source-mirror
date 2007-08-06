@@ -53,7 +53,7 @@ DEBUG = 0
 # directory specific makefile.gtk files.
 ifeq ($(DEBUG), 1)
 WXXFLAGS := $(shell wx-config --debug --cxxflags) 
-CPPFLAGS = -Wall -g3 -ggdb3 ${WXXFLAGS} -fno-strict-aliasing
+CPPFLAGS = -Wall -g3 -ggdb3 ${WXXFLAGS} -fno-strict-aliasing -DDEBUG
 LDFLAGS = -g3 -ggdb3 #-v
 else
 WXXFLAGS := $(shell wx-config --cxxflags) 
