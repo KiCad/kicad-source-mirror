@@ -224,10 +224,46 @@ void EDA_BaseStruct::Show( int nestLevel, std::ostream& os )
 std::ostream& EDA_BaseStruct::NestedSpace( int nestLevel, std::ostream& os )
 {
     for( int i=0; i<nestLevel; ++i )
-        os << ' ';      // number of spaces here controls indent per nest level
+        os << "  ";      // number of spaces here controls indent per nest level
     return os;
 }
 
+
+// see base_struct.h
+SEARCH_RESULT EDA_BaseStruct::IterateForward( EDA_BaseStruct* listStart, 
+    INSPECTOR* inspector, void* testData, const KICAD_T scanTypes[] )
+{
+    EDA_BaseStruct* p = listStart;
+    for( ; p; p = p->Pnext )
+    {
+        if( SEARCH_QUIT == p->Traverse( inspector, testData, scanTypes ) )
+            return SEARCH_QUIT;
+    }
+
+    return SEARCH_CONTINUE;
+}
+
+
+// see base_struct.h
+SEARCH_RESULT EDA_BaseStruct::Traverse( INSPECTOR* inspector, void* testData, 
+        const KICAD_T scanTypes[] )
+{
+    KICAD_T     stype;
+    
+    for( const KICAD_T* p = scanTypes;  (stype=*p) != EOT;   ++p )
+    {
+        // If caller wants to inspect my type
+        if( stype == m_StructType )
+        {
+            if( SEARCH_QUIT == inspector->Inspect( this, testData ) )
+                return SEARCH_QUIT;
+
+            break;
+        }
+    }
+
+    return SEARCH_CONTINUE;    
+}
 #endif
 
 

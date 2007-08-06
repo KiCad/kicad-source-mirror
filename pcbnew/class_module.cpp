@@ -208,7 +208,9 @@ void MODULE::Copy( MODULE* Module )
 
     /* Copy des elements complementaires Drawings 3D */
     m_3D_Drawings->Copy( Module->m_3D_Drawings );
+    
     Struct3D_Master* Struct3D, * NewStruct3D, * CurrStruct3D;
+    
     Struct3D     = (Struct3D_Master*) Module->m_3D_Drawings->Pnext;
     CurrStruct3D = m_3D_Drawings;
     for( ; Struct3D != NULL; Struct3D = (Struct3D_Master*) Struct3D->Pnext )
@@ -370,6 +372,7 @@ int MODULE::WriteDescr( FILE* File )
         StringStat[0] = 'F';
     else
         StringStat[0] = '~';
+    
     if( m_ModuleStatus & MODULE_is_PLACED )
         StringStat[1] = 'P';
     else
@@ -649,9 +652,9 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
                 Read_3D_Descr( File, LineNum );
         }
 
-
         if( strlen( Line ) < 4 )
             continue;
+
         PtLine = Line + 3;
 
         /* Pointe 1er code utile de la ligne */
@@ -811,13 +814,16 @@ void MODULE::SetPosition( const wxPoint& newpos )
     int deltaY = newpos.y - m_Pos.y;
 
     /* deplacement de l'ancre */
-    m_Pos.x += deltaX; m_Pos.y += deltaY;
+    m_Pos.x += deltaX; 
+    m_Pos.y += deltaY;
 
     /* deplacement de la reference */
-    m_Reference->m_Pos.x += deltaX; m_Reference->m_Pos.y += deltaY;
+    m_Reference->m_Pos.x += deltaX; 
+    m_Reference->m_Pos.y += deltaY;
 
     /* deplacement de la Valeur */
-    m_Value->m_Pos.x += deltaX; m_Value->m_Pos.y += deltaY;
+    m_Value->m_Pos.x += deltaX; 
+    m_Value->m_Pos.y += deltaY;
 
     /* deplacement des pastilles */
     D_PAD*          pad = m_Pads;
@@ -1153,22 +1159,70 @@ void MODULE::Show( int nestLevel, std::ostream& os )
     // for now, make it look like XML, expand on this later.
     
     NestedSpace( nestLevel, os ) << '<' << ReturnClassName().mb_str() <<
-        " ref=\""      <<  m_Reference->m_Text.mb_str() << 
+//        " ref=\""     <<  m_Reference->m_Text.mb_str() << 
+//        "\" value=\"" <<  m_Value->m_Text.mb_str() << '"' << 
+        ">\n";
 
-        "\" value=\"" <<  m_Value->m_Text.mb_str() << 
-        "\">\n";
+    EDA_BaseStruct* p;
+        
+    p = m_Reference;
+    for( ; p; p = p->Pnext )
+        p->Show( nestLevel+1, os );
 
-    EDA_BaseStruct* p = m_Drawings;
+    p = m_Value;
     for( ; p; p = p->Pnext )
         p->Show( nestLevel+1, os );
     
-    EDA_BaseStruct* kid = m_Son;
-    for( ; kid;  kid = kid->Pnext )
+    p = m_Drawings;
+    for( ; p; p = p->Pnext )
+        p->Show( nestLevel+1, os );
+
+    p = m_Son;
+    for( ; p;  p = p->Pnext )
     {
-        kid->Show( nestLevel+1, os );
+        p->Show( nestLevel+1, os );
     }
     
     NestedSpace( nestLevel, os ) << "</" << ReturnClassName().mb_str() << ">\n";
+}
+
+
+// see class_module.h     
+SEARCH_RESULT MODULE::Traverse( INSPECTOR* inspector, void* testData, 
+    const KICAD_T scanTypes[] )
+{
+    KICAD_T     stype;
+    
+    for( const KICAD_T* p = scanTypes;  (stype=*p) != EOT;   ++p )
+    {
+        // If caller wants to inspect my type
+        if( stype == m_StructType )
+        {
+            if( SEARCH_QUIT == inspector->Inspect( this, testData ) )
+                return SEARCH_QUIT;
+        }
+        else if( stype == TYPEEDGEMODULE )
+        {
+            // iterate over m_Drawings
+            if( SEARCH_QUIT == IterateForward( m_Drawings, inspector, 
+                                    testData, scanTypes ) )
+                return SEARCH_QUIT;
+        }
+        else if( stype == TYPETEXTEMODULE )
+        {
+            // iterate over m_Reference
+            if( SEARCH_QUIT == IterateForward( m_Reference, inspector, 
+                                    testData, scanTypes ) )
+                return SEARCH_QUIT;
+                
+            // iterate over m_Value
+            if( SEARCH_QUIT == IterateForward( m_Value, inspector, 
+                                    testData, scanTypes ) )
+                return SEARCH_QUIT;
+        }
+    }
+
+    return SEARCH_CONTINUE;    
 }
 
 #endif

@@ -286,4 +286,62 @@ void BOARD::Show( int nestLevel, std::ostream& os )
     
     NestedSpace( nestLevel, os ) << "</" << ReturnClassName().mb_str() << ">\n";
 }
+
+
+
+class ModuleOrPad : public INSPECTOR
+{
+public:
+
+    EDA_BaseStruct*     found;
+
+    ModuleOrPad() :
+        found(0)
+    {
+    }
+
+    SEARCH_RESULT Inspect( EDA_BaseStruct* testItem, void* testData )
+    {
+        const wxPoint*  refPos = (const wxPoint*) testData;
+
+        if( testItem->m_StructType == TYPEMODULE )
+        {
+            /* not finished
+            if( testItem->HitTest( &refPos ) )
+            {
+                found = testItem;
+                return SEARCH_QUIT;
+            }
+            */
+        }
+            
+        else if( testItem->m_StructType == TYPEPAD )
+        {
+            /* not finished
+            if( testItem->HitTest( &refPos ) )
+            {
+                found = testItem;
+                return SEARCH_QUIT;
+            }
+            */
+        }
+        
+        return SEARCH_CONTINUE;
+    }
+};
+
+    
+// see pcbstruct.h     
+EDA_BaseStruct* BOARD::FindModuleOrPad( const wxPoint& refPos )
+{
+    ModuleOrPad inspector;
+
+    static const KICAD_T scanTypes[] = { TYPEMODULE, TYPEPAD, EOT };
+    
+    if( SEARCH_QUIT == IterateForward( m_Modules, &inspector, (void*) &refPos, scanTypes ) )
+        return inspector.found;
+
+    return NULL;
+}
+
 #endif

@@ -13,6 +13,9 @@
 
 /* Id for class identification, at run time */
 enum DrawStructureType {
+
+    EOT = 0,                // search types array terminator (End Of Types)
+    
     TYPE_NOT_INIT = 0,
     TYPEPCB,
 
@@ -68,6 +71,49 @@ enum DrawStructureType {
     // End value
     MAX_STRUCT_TYPE_ID
 };
+
+
+#if defined(DEBUG)      // new searching technique incubator 
+enum SEARCH_RESULT {
+    SEARCH_QUIT,
+    SEARCH_CONTINUE
+};    
+
+typedef DrawStructureType   KICAD_T;    // shorter name
+
+class EDA_BaseStruct;
+
+
+/**
+ * Class INSPECTOR
+ * is an abstract class that is used to inspect and possibly collect the 
+ * (search) results of Iterating over a list or tree of KICAD_T objects.
+ * Extend from this class and implment the Inspect function and provide for
+ * a way for the extension to collect the results of the search/scan data and
+ * provide them to the caller.
+ */
+class INSPECTOR
+{
+public:
+    virtual ~INSPECTOR() {}
+
+    /**
+     * Function Inspect
+     * is the function type that can be passed to the Iterate function,
+     * used primarily for searching, but not exclusively.
+     * @param testData is arbitrary data needed by the inspector to determine
+     *   if the EDA_BaseStruct under test meets its match criteria.
+     * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
+     *   else SCAN_CONTINUE;
+     */ 
+    SEARCH_RESULT virtual Inspect( EDA_BaseStruct* testItem, 
+        void* testData ) = 0;
+    
+    // derived classes add more functions for collecting and subsequent 
+    // retrieval here.
+};
+
+#endif
 
 
 /********************************************************************/
@@ -138,6 +184,7 @@ public:
      * @param os The ostream& to output to.
      */
     virtual void Show( int nestLevel, std::ostream& os );
+
     
     /** 
      * Function NestedSpace
@@ -147,6 +194,60 @@ public:
      * @return std::ostream& - for continuation.
      **/
     static std::ostream& NestedSpace( int nestLevel, std::ostream& os );
+
+    
+    /**
+     * Function IterateForward
+     * walks through the object tree calling the testFunc on each object 
+     * type requested in structTypes.
+     *
+     * @param listStart The first in a list of EDA_BaseStructs to iterate over. 
+     * @param inspector Is an INSPECTOR to call on each object that is of one of 
+     *  the requested itemTypes.
+     * @param testData Is an aid to testFunc, and should be sufficient to 
+     *  allow it to fully determine if an item meets the match criteria, but it
+     *  may also be used to collect output.
+     * @param scanTypes Is a char array of KICAD_T that is EOT 
+     *  terminated, and provides both the order and interest level of of
+     *  the types of objects to be iterated over.
+     * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
+     *   else SCAN_CONTINUE;
+     */
+    static SEARCH_RESULT IterateForward( EDA_BaseStruct* listStart, 
+        INSPECTOR* inspector, void* testData, const KICAD_T scanTypes[] );
+
+    
+    /**
+     * Function Traverse
+     * should be re-implemented for each derrived class in order to handle
+     * all the types given by its member data.  Implementations should call
+     * inspector->Inspect() on types in scanTypes[], and may use IterateForward()
+     * to do so on lists of such data.
+     * @param inspector An INSPECTOR instance to use in the inspection.
+     * @param testData Arbitrary data used by the inspector.
+     * @param scanTypes Which KICAD_T types are of interest and the order 
+     *  is significant too, terminated by EOT.
+     * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
+     *   else SCAN_CONTINUE;
+     */
+    virtual SEARCH_RESULT Traverse( INSPECTOR* inspector, void* testData, 
+        const KICAD_T scanTypes[] );
+
+    
+    /**
+     * Function ListHas
+     * scans the given array and detects if the given type t is present.
+     * @param list An array of KICAD_T, terminated with EOT.
+     * @param t A KICAD_T to check for.
+     * @return bool - true if present, else false.
+     */
+    static bool ListHas( const KICAD_T list[], KICAD_T t )
+    {
+        for( const KICAD_T* p = list;  *p != EOT;  ++p )
+            if( *p == t )
+                return true;
+        return false;
+    }
 #endif
 
 };

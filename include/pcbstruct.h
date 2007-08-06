@@ -242,6 +242,16 @@ public:
      * @param os The ostream& to output to.
      */
     virtual void Show( int nestLevel, std::ostream& os );
+
+    
+    /**
+     * Function FindModuleOrPad
+     * searches for either a module or a pad, giving precedence to pads.
+     * @param refPos The wxPoint to hit-test.
+     * @return EDA_BaseStruct* - if a direct hit, else NULL.
+     */
+    EDA_BaseStruct* FindModuleOrPad( const wxPoint& refPos );
+    
 #endif
 };
 

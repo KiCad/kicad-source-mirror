@@ -935,6 +935,7 @@ TRACK* Locate_Piste_Connectee( TRACK* PtRefSegm, TRACK* pt_base,
     {
         if( (PtSegmN == NULL) && (PtSegmB == NULL) )
             break;
+
         if( PtSegmN )
         {
             if( PtSegmN->GetState( BUSY | DELETED ) )
@@ -1054,6 +1055,7 @@ TRACK* Locate_Pistes( TRACK* start_adresse, const wxPoint& ref_pos, int MasqueLa
             continue;
         if( (g_DesignSettings.m_LayerColor[Track->m_Layer] & ITEM_NOT_SHOW) )
             continue;
+
         /* calcul des coordonnees du segment teste */
         l_piste = Track->m_Width >> 1;                  /* l_piste = demi largeur piste */
         ux0 = Track->m_Start.x; uy0 = Track->m_Start.y; /* coord de depart */
@@ -1074,7 +1076,8 @@ TRACK* Locate_Pistes( TRACK* start_adresse, const wxPoint& ref_pos, int MasqueLa
 
         if( MasqueLayer != -1 )
             if( (g_TabOneLayerMask[Track->m_Layer] & MasqueLayer) == 0 )
-                continue;/* Segments sur couches differentes */
+                continue;   /* Segments sur couches differentes */
+
         if( distance( l_piste ) )
             return Track;
     }
@@ -1100,7 +1103,6 @@ TRACK* Locate_Pistes( TRACK* start_adresse, const wxPoint& ref_pos, int MasqueLa
  * 
  *  La recherche commence a l'adresse start_adresse
  */
-
 TRACK* Locate_Zone( TRACK* start_adresse, int layer, int typeloc )
 {
     wxPoint ref_pos = RefPos( typeloc );
@@ -1287,6 +1289,7 @@ int distance( int seuil )
 
         angle = (int) ( atan2( (float) segY, (float) segX ) * 1800 / M_PI);
         cXrot = pointX; cYrot = pointY;
+
         RotatePoint( &cXrot, &cYrot, angle );   /* Rotation du point a tester */
         RotatePoint( &segX, &segY, angle );     /* Rotation du segment */
 
