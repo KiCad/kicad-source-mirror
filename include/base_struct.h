@@ -6,6 +6,11 @@
 #define BASE_STRUCT_H
 
 
+#if defined(DEBUG)
+#include <iostream>         // needed for Show()
+#endif
+
+
 /* Id for class identification, at run time */
 enum DrawStructureType {
     TYPE_NOT_INIT = 0,
@@ -123,7 +128,29 @@ public:
                           const wxPoint&    offset,
                           int               draw_mode,
                           int               Color = -1 );
+    
+#if defined(DEBUG)
+    /**
+     * Function Show
+     * is used to output the object tree, currently for debugging only.
+     * @param nestLevel An aid to prettier tree indenting, and is the level 
+     *          of nesting of this object within the overall tree.
+     * @param os The ostream& to output to.
+     */
+    virtual void Show( int nestLevel, std::ostream& os );
+    
+    /** 
+     * Function NestedSpace
+     * outputs nested space for pretty indenting.
+     * @param nestLevel The nest count
+     * @param os The ostream&, where to output
+     * @return std::ostream& - for continuation.
+     **/
+    static std::ostream& NestedSpace( int nestLevel, std::ostream& os );
+#endif
+
 };
+
 
 // Text justify:
 // Values -1,0,1 are used in computations, do not change them

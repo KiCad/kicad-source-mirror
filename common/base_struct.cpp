@@ -18,8 +18,7 @@
 
 
 // DrawStructureType names for error messages only:
-static wxString DrawStructureTypeName[MAX_STRUCT_TYPE_ID + 1]
-= {
+static wxString DrawStructureTypeName[MAX_STRUCT_TYPE_ID + 1] = {
     wxT( "Not init" ),
 
     wxT( "Pcb" ),
@@ -168,9 +167,8 @@ void EDA_BaseStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
  */
 {
 }
-
-
 #endif
+
 
 /*********************************************/
 wxString EDA_BaseStruct::ReturnClassName( void )
@@ -189,6 +187,48 @@ wxString EDA_BaseStruct::ReturnClassName( void )
 
     return classname;
 }
+
+
+
+#if defined(DEBUG)
+
+/**
+ * Function Show
+ * is used to output the object tree, currently for debugging only.
+ * @param nestLevel An aid to prettier tree indenting, and is the level 
+ *          of nesting of this object within the overall tree.
+ * @param os The ostream& to output to.
+ */
+void EDA_BaseStruct::Show( int nestLevel, std::ostream& os )
+{
+    // for now, make it look like XML:
+    NestedSpace( nestLevel, os ) << '<' << ReturnClassName().mb_str() << ">\n";
+
+    EDA_BaseStruct* kid = m_Son;
+    for( ; kid;  kid = kid->Pnext )
+    {
+        kid->Show( nestLevel+1, os );
+    }
+    
+    NestedSpace( nestLevel, os ) << "</" << ReturnClassName().mb_str() << ">\n";
+}
+
+    
+/** 
+ * Function NestedSpace
+ * outputs nested space for pretty indenting.
+ * @param nestLevel The nest count
+ * @param os The ostream&, where to output
+ * @return std::ostream& - for continuation.
+ **/
+std::ostream& EDA_BaseStruct::NestedSpace( int nestLevel, std::ostream& os )
+{
+    for( int i=0; i<nestLevel; ++i )
+        os << ' ';      // number of spaces here controls indent per nest level
+    return os;
+}
+
+#endif
 
 
 /**********************************************************************************************/
@@ -721,3 +761,4 @@ void DrawPickedStruct::DeleteWrapperList( void )
         delete wrapp_struct;
     }
 }
+

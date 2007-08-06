@@ -176,14 +176,15 @@ public:
     EDA_BoardDesignSettings( void );
 };
 
+
 // Values for m_DisplayViaMode member:
 enum DisplayViaMode {
     VIA_HOLE_NOT_SHOW = 0,
     VIA_SPECIAL_HOLE_SHOW,
     ALL_VIA_HOLE_SHOW,
     OPT_VIA_HOLE_END
-
 };
+
 
 class BOARD : public EDA_BaseStruct
 {
@@ -212,8 +213,8 @@ public:
     CHEVELU*        m_Ratsnest;                 // pointeur liste des chevelus
     CHEVELU*        m_LocalRatsnest;            // pointeur liste des chevelus d'un module
 
-    EDGE_ZONE*      m_CurrentLimitZone;/* pointeur sur la liste des segments
-                                        *  de delimitation de la zone en cours de trace */
+    EDGE_ZONE*      m_CurrentLimitZone;         /* pointeur sur la liste des segments
+                                                 * de delimitation de la zone en cours de trace */
 
     BOARD( EDA_BaseStruct* StructFather, WinEDA_BasePcbFrame* frame );
     ~BOARD( void );
@@ -230,6 +231,18 @@ public:
 
     // Calcul du rectangle d'encadrement:
     bool    ComputeBoundaryBox( void );
+    
+    
+#if defined(DEBUG)
+    /**
+     * Function Show
+     * is used to output the object tree, currently for debugging only.
+     * @param nestLevel An aid to prettier tree indenting, and is the level 
+     *          of nesting of this object within the overall tree.
+     * @param os The ostream& to output to.
+     */
+    virtual void Show( int nestLevel, std::ostream& os );
+#endif
 };
 
 
