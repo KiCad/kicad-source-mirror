@@ -1188,7 +1188,7 @@ void MODULE::Show( int nestLevel, std::ostream& os )
 
 
 // see class_module.h     
-SEARCH_RESULT MODULE::Traverse( INSPECTOR* inspector, void* testData, 
+SEARCH_RESULT MODULE::Traverse( INSPECTOR* inspector, const void* testData, 
     const KICAD_T scanTypes[] )
 {
     KICAD_T     stype;

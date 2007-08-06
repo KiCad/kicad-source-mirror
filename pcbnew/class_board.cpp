@@ -300,7 +300,7 @@ public:
     {
     }
 
-    SEARCH_RESULT Inspect( EDA_BaseStruct* testItem, void* testData )
+    SEARCH_RESULT Inspect( EDA_BaseStruct* testItem, const void* testData )
     {
         const wxPoint*  refPos = (const wxPoint*) testData;
 
@@ -336,9 +336,9 @@ EDA_BaseStruct* BOARD::FindModuleOrPad( const wxPoint& refPos )
 {
     ModuleOrPad inspector;
 
-    static const KICAD_T scanTypes[] = { TYPEMODULE, TYPEPAD, EOT };
+    static const KICAD_T scanTypes[] = { TYPEPAD, TYPEMODULE, EOT };
     
-    if( SEARCH_QUIT == IterateForward( m_Modules, &inspector, (void*) &refPos, scanTypes ) )
+    if( SEARCH_QUIT == IterateForward( m_Modules, &inspector, &refPos, scanTypes ) )
         return inspector.found;
 
     return NULL;

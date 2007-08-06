@@ -157,7 +157,7 @@ public:
      * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
      *   else SCAN_CONTINUE;
      */
-    virtual SEARCH_RESULT Traverse( INSPECTOR* inspector, void* testData, 
+    virtual SEARCH_RESULT Traverse( INSPECTOR* inspector, const void* testData, 
         const KICAD_T scanTypes[] );
     
 #endif

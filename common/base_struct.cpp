@@ -231,7 +231,7 @@ std::ostream& EDA_BaseStruct::NestedSpace( int nestLevel, std::ostream& os )
 
 // see base_struct.h
 SEARCH_RESULT EDA_BaseStruct::IterateForward( EDA_BaseStruct* listStart, 
-    INSPECTOR* inspector, void* testData, const KICAD_T scanTypes[] )
+    INSPECTOR* inspector, const void* testData, const KICAD_T scanTypes[] )
 {
     EDA_BaseStruct* p = listStart;
     for( ; p; p = p->Pnext )
@@ -245,7 +245,7 @@ SEARCH_RESULT EDA_BaseStruct::IterateForward( EDA_BaseStruct* listStart,
 
 
 // see base_struct.h
-SEARCH_RESULT EDA_BaseStruct::Traverse( INSPECTOR* inspector, void* testData, 
+SEARCH_RESULT EDA_BaseStruct::Traverse( INSPECTOR* inspector, const void* testData, 
         const KICAD_T scanTypes[] )
 {
     KICAD_T     stype;
