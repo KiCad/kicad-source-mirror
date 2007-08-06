@@ -9,9 +9,11 @@ email address.
 2007-Aug-05 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew & common
-    Changed the function name of Locate( const wxPoint& ref_pos ) to bool HitTest(..)
+  * Added some conditional DEBUG code for showing the pcb object tree in 
+    simple XML format.   See class EDA_BaseStruct's new Show() function.
+  * Changed the function name of Locate( const wxPoint& ref_pos ) to bool HitTest(..)
     in both class_text_mod and base_struct.
-    More beautification and commenting.
+  * More beautification and commenting.
 
 
 2007-Aug-04 UPDATE   Dick Hollenbeck <dick@softplc.com>
