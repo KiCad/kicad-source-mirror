@@ -675,14 +675,17 @@ D_PAD* Locate_Pads( MODULE* module, const wxPoint& ref_pos, int masque_layer )
     for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
     {
         shape_pos = pt_pad->ReturnShapePos();
-        ux0 = shape_pos.x; uy0 = shape_pos.y; /* pos x,y du centre du pad */
 
-        deltaX = ref_pos.x - ux0; deltaY = ref_pos.y - uy0;
+        ux0 = shape_pos.x; 
+        uy0 = shape_pos.y; /* pos x,y du centre du pad */
+
+        deltaX = ref_pos.x - ux0; 
+        deltaY = ref_pos.y - uy0;
 
         /* Test rapide: le point a tester doit etre a l'interieur du cercle
          *  exinscrit ... */
         if( (abs( deltaX ) > pt_pad->m_Rayon )
-           || (abs( deltaY ) > pt_pad->m_Rayon) )
+         || (abs( deltaY ) > pt_pad->m_Rayon) )
             continue;
 
         /* ... et sur la bonne couche */

@@ -446,7 +446,7 @@ int EDGE_MODULE::ReadDescr( char* Line, FILE* File,
 void EDGE_MODULE::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML:
-    NestedSpace( nestLevel, os ) << '<' << ReturnClassName().mb_str() << "/>\n";
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << "/>\n";
 }
 
 #endif

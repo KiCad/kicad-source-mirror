@@ -58,9 +58,18 @@ public:
      * @return bool - true if a hit, else false
      */
     bool    HitTest( const wxPoint& posref );
-
     
 #if defined(DEBUG)
+    /**
+     * Function GetClass
+     * returns the class name.
+     * @return wxString
+     */
+    virtual wxString GetClass() const
+    {
+        return wxT( "MTEXT" );
+    }
+
     /**
      * Function Show
      * is used to output the object tree, currently for debugging only.

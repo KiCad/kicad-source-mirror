@@ -257,6 +257,7 @@ bool BOARD::ComputeBoundaryBox( void )
 
 
 #if defined(DEBUG)
+
 /**
  * Function Show
  * is used to output the object tree, currently for debugging only.
@@ -267,7 +268,7 @@ bool BOARD::ComputeBoundaryBox( void )
 void BOARD::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML:
-    NestedSpace( nestLevel, os ) << '<' << ReturnClassName().mb_str() << ">\n";
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
 
     // specialization of the output:
     EDA_BaseStruct* p = m_Modules;
@@ -284,9 +285,8 @@ void BOARD::Show( int nestLevel, std::ostream& os )
         kid->Show( nestLevel+1, os );
     }
     
-    NestedSpace( nestLevel, os ) << "</" << ReturnClassName().mb_str() << ">\n";
+    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
-
 
 
 class ModuleOrPad : public INSPECTOR

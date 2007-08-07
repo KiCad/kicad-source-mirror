@@ -74,7 +74,7 @@ public:
     /* supprime du chainage la structure Struct */
     void            UnLink( void );
 
-    /* Readind and writing data on files */
+    /* Reading and writing data on files */
     int             ReadDescr( FILE* File, int* LineNum = NULL );
     int             WriteDescr( FILE* File );
 
@@ -83,7 +83,7 @@ public:
     void            Draw3D( Pcb3D_GLCanvas* glcanvas );
 
     // autres
-    void            SetPadName( const wxString& name );     // Change pade name
+    void            SetPadName( const wxString& name );     // Change pad name
     wxString        ReturnStringPadName( void );            // Return pad name as string in a wxString
     void            ReturnStringPadName( wxString& text );  // Return pad name as string in a buffer
     void            ComputeRayon( void );                   // met a jour m_Rayon, rayon du cercle exinscrit
@@ -91,6 +91,28 @@ public:
 
     // de la forme (pastilles excentrees)
     void            Display_Infos( WinEDA_BasePcbFrame* frame );
+
+#if defined(DEBUG)
+    /**
+     * Function GetClass
+     * returns the class name.
+     * @return wxString
+     */
+    virtual wxString GetClass() const
+    {
+        return wxT( "PAD" );
+    }
+
+    /**
+     * Function Show
+     * is used to output the object tree, currently for debugging only.
+     * @param nestLevel An aid to prettier tree indenting, and is the level 
+     *          of nesting of this object within the overall tree.
+     * @param os The ostream& to output to.
+     */
+    virtual void Show( int nestLevel, std::ostream& os );
+#endif
+    
 };
 
 typedef class D_PAD * LISTE_PAD;

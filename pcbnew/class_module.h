@@ -27,8 +27,8 @@ enum Mod_Attribut       /* Attributs d'un module */
                          *  fichiers de placement automatique (principalement modules CMS */
     MOD_VIRTUAL = 2     /* Module virtuel constitue par un dessin sur circuit
                          *  (connecteur, trou de percage..) */
-
 };
+
 
 /* flags for autoplace and autoroute (.m_ModuleStatus member) */
 #define MODULE_is_LOCKED    0x01    /* module LOCKED: no autoplace allowed */
@@ -55,7 +55,8 @@ public:
     EDA_Rect         m_RealBoundaryBox; /* position/taille du module (coord relles) */
     int              m_PadNum;          // Nombre total de pads
     int              m_AltPadNum;       // en placement auto Nombre de pads actifs pour
-                                  // les calculs
+                                        // les calculs
+                                        
     int              m_CntRot90;        // Placement auto: cout ( 0..10 ) de la rotation 90 degre
     int              m_CntRot180;       // Placement auto: cout ( 0..10 ) de la rotation 180 degre
     wxSize           m_Ext;             // marges de "garde": utilise en placement auto.
@@ -77,11 +78,10 @@ public:
     MODULE* Next( void ) { return (MODULE*) Pnext; }
 
     void    Set_Rectangle_Encadrement( void );/* mise a jour du rect d'encadrement
-                                           *  en coord locales (orient 0 et origine = pos  module) */
+                                               *  en coord locales (orient 0 et origine = pos  module) */
 
     void    SetRectangleExinscrit( void );/* mise a jour du rect d'encadrement
-                                        *   et de la surface en coord reelles */
-
+                                           *   et de la surface en coord reelles */
 
     // deplacements
     void    SetPosition( const wxPoint& newpos );
@@ -134,6 +134,18 @@ public:
     void    Display_Infos( WinEDA_BasePcbFrame* frame );
 
 #if defined(DEBUG)
+
+    /**
+     * Function GetClass
+     * returns the class name.
+     * @return wxString
+     */
+    virtual wxString GetClass() const
+    {
+        return wxT( "MODULE" );
+    }
+
+    
     /**
      * Function Show
      * is used to output the object tree, currently for debugging only.
@@ -145,8 +157,8 @@ public:
 
     
     /**
-     * Function Traverse
-     * should be re-implemented for each derrived class in order to handle
+     * Function Visit
+     * should be re-implemented for each derived class in order to handle
      * all the types given by its member data.  Implementations should call
      * inspector->Inspect() on types in scanTypes[], and may use IterateForward()
      * to do so on lists of such data.
@@ -157,7 +169,7 @@ public:
      * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
      *   else SCAN_CONTINUE;
      */
-    virtual SEARCH_RESULT Traverse( INSPECTOR* inspector, const void* testData, 
+    virtual SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData, 
         const KICAD_T scanTypes[] );
     
 #endif

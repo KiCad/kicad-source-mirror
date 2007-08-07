@@ -25,6 +25,28 @@ public:
 	// File Operations:
 	int ReadTextePcbDescr(FILE * File, int * LineNum);
 	int WriteTextePcbDescr(FILE * File);
+
+#if defined(DEBUG)
+    /**
+     * Function GetClass
+     * returns the class name.
+     * @return wxString
+     */
+    virtual wxString GetClass() const
+    {
+        return wxT("PTEXT");
+    }
+
+    /**
+     * Function Show
+     * is used to output the object tree, currently for debugging only.
+     * @param nestLevel An aid to prettier tree indenting, and is the level 
+     *          of nesting of this object within the overall tree.
+     * @param os The ostream& to output to.
+     */
+    virtual void Show( int nestLevel, std::ostream& os );
+#endif
+    
 };
 
 #endif 	// #define CLASS_PCB_TEXT_H

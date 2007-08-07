@@ -1158,7 +1158,7 @@ void MODULE::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML, expand on this later.
     
-    NestedSpace( nestLevel, os ) << '<' << ReturnClassName().mb_str() <<
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
 //        " ref=\""     <<  m_Reference->m_Text.mb_str() << 
 //        "\" value=\"" <<  m_Value->m_Text.mb_str() << '"' << 
         ">\n";
@@ -1172,23 +1172,27 @@ void MODULE::Show( int nestLevel, std::ostream& os )
     p = m_Value;
     for( ; p; p = p->Pnext )
         p->Show( nestLevel+1, os );
+
+    p = m_Pads;
+    for( ; p; p = p->Pnext )
+        p->Show( nestLevel+1, os );
     
     p = m_Drawings;
     for( ; p; p = p->Pnext )
         p->Show( nestLevel+1, os );
-
+    
     p = m_Son;
     for( ; p;  p = p->Pnext )
     {
         p->Show( nestLevel+1, os );
     }
     
-    NestedSpace( nestLevel, os ) << "</" << ReturnClassName().mb_str() << ">\n";
+    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
 
 
 // see class_module.h     
-SEARCH_RESULT MODULE::Traverse( INSPECTOR* inspector, const void* testData, 
+SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData, 
     const KICAD_T scanTypes[] )
 {
     KICAD_T     stype;
@@ -1201,13 +1205,6 @@ SEARCH_RESULT MODULE::Traverse( INSPECTOR* inspector, const void* testData,
             if( SEARCH_QUIT == inspector->Inspect( this, testData ) )
                 return SEARCH_QUIT;
         }
-        else if( stype == TYPEEDGEMODULE )
-        {
-            // iterate over m_Drawings
-            if( SEARCH_QUIT == IterateForward( m_Drawings, inspector, 
-                                    testData, scanTypes ) )
-                return SEARCH_QUIT;
-        }
         else if( stype == TYPETEXTEMODULE )
         {
             // iterate over m_Reference
@@ -1217,6 +1214,19 @@ SEARCH_RESULT MODULE::Traverse( INSPECTOR* inspector, const void* testData,
                 
             // iterate over m_Value
             if( SEARCH_QUIT == IterateForward( m_Value, inspector, 
+                                    testData, scanTypes ) )
+                return SEARCH_QUIT;
+        }
+        else if( stype == TYPEPAD )
+        {
+            if( SEARCH_QUIT == IterateForward( m_Pads, inspector,
+                                    testData, scanTypes ) )
+                return SEARCH_QUIT;
+        }
+        else if( stype == TYPEEDGEMODULE )
+        {
+            // iterate over m_Drawings
+            if( SEARCH_QUIT == IterateForward( m_Drawings, inspector, 
                                     testData, scanTypes ) )
                 return SEARCH_QUIT;
         }

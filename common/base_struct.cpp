@@ -171,7 +171,7 @@ void EDA_BaseStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
 
 
 /*********************************************/
-wxString EDA_BaseStruct::ReturnClassName( void )
+wxString EDA_BaseStruct::ReturnClassName() const
 /*********************************************/
 
 /* Used at run time for diags: return the class name of the item,
@@ -202,7 +202,7 @@ wxString EDA_BaseStruct::ReturnClassName( void )
 void EDA_BaseStruct::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML:
-    NestedSpace( nestLevel, os ) << '<' << ReturnClassName().mb_str() << ">\n";
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
 
     EDA_BaseStruct* kid = m_Son;
     for( ; kid;  kid = kid->Pnext )
@@ -210,7 +210,7 @@ void EDA_BaseStruct::Show( int nestLevel, std::ostream& os )
         kid->Show( nestLevel+1, os );
     }
     
-    NestedSpace( nestLevel, os ) << "</" << ReturnClassName().mb_str() << ">\n";
+    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
 
     
@@ -236,7 +236,7 @@ SEARCH_RESULT EDA_BaseStruct::IterateForward( EDA_BaseStruct* listStart,
     EDA_BaseStruct* p = listStart;
     for( ; p; p = p->Pnext )
     {
-        if( SEARCH_QUIT == p->Traverse( inspector, testData, scanTypes ) )
+        if( SEARCH_QUIT == p->Visit( inspector, testData, scanTypes ) )
             return SEARCH_QUIT;
     }
 
@@ -245,7 +245,7 @@ SEARCH_RESULT EDA_BaseStruct::IterateForward( EDA_BaseStruct* listStart,
 
 
 // see base_struct.h
-SEARCH_RESULT EDA_BaseStruct::Traverse( INSPECTOR* inspector, const void* testData, 
+SEARCH_RESULT EDA_BaseStruct::Visit( INSPECTOR* inspector, const void* testData, 
         const KICAD_T scanTypes[] )
 {
     KICAD_T     stype;

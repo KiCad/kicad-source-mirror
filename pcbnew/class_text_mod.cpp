@@ -307,10 +307,10 @@ void TEXTE_MODULE::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML, expand on this later.
     
-    NestedSpace( nestLevel, os ) << '<' << ReturnClassName().mb_str() << ">\n";
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
 
     NestedSpace( nestLevel+1, os ) << m_Text.mb_str() << '\n';
     
-    NestedSpace( nestLevel, os ) << "</" << ReturnClassName().mb_str() << ">\n";
+    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
 #endif

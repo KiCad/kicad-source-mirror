@@ -164,7 +164,7 @@ public:
         m_Status = new_status;
     }
 
-    wxString        ReturnClassName( void );
+    wxString        ReturnClassName() const;
 
     /* addition d'une nouvelle struct a la liste chain� */
     void            AddToChain( EDA_BaseStruct* laststruct );
@@ -179,6 +179,23 @@ public:
                           int               Color = -1 );
     
 #if defined(DEBUG)
+
+    /**
+     * Function GetClass
+     * returns the class name.
+     * @return wxString
+     */
+    virtual wxString GetClass() const
+    {
+        // ReturnClassName() is too hard to maintain, coordinating the array 
+        // with the enum.  It would be nice to migrate to virtual GetClass()
+        // away from ReturnClassName().   Over time, derived classes should
+        // simply return a wxString from their virtual GetClass() function.
+        // Some classes do that now.
+        return ReturnClassName();
+    }
+
+    
     /**
      * Function Show
      * is used to output the object tree, currently for debugging only.
@@ -221,7 +238,7 @@ public:
 
     
     /**
-     * Function Traverse
+     * Function Visit
      * should be re-implemented for each derived class in order to handle
      * all the types given by its member data.  Implementations should call
      * inspector->Inspect() on types in scanTypes[], and may use IterateForward()
@@ -231,9 +248,9 @@ public:
      * @param scanTypes Which KICAD_T types are of interest and the order 
      *  is significant too, terminated by EOT.
      * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
-     *   else SCAN_CONTINUE;
+     *  else SCAN_CONTINUE, and determined by the inspector.
      */
-    virtual SEARCH_RESULT Traverse( INSPECTOR* inspector, const void* testData, 
+    virtual SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData, 
         const KICAD_T scanTypes[] );
 
     

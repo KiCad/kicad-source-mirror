@@ -44,6 +44,17 @@ public:
     
 #if defined(DEBUG)
     /**
+     * Function GetClass
+     * returns the class name.
+     * @return wxString
+     */
+    virtual wxString GetClass() const
+    {
+        return wxT( "POLYLINE" );
+        // return wxT( "EDGE" );  ?
+    }
+
+    /**
      * Function Show
      * is used to output the object tree, currently for debugging only.
      * @param nestLevel An aid to prettier tree indenting, and is the level 
