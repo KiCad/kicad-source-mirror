@@ -236,7 +236,7 @@ void DrawSheetLabelStruct::Draw(WinEDA_DrawPanel * panel,wxDC * DC, const wxPoin
 int side, txtcolor;
 int posx , tposx, posy, size2;
 wxSize size;
-int NbSegm, coord[12];
+int NbSegm, coord[20];
 int LineWidth = g_DrawMinimunLineWidth;
 
 	if( Color >= 0 ) txtcolor = Color;

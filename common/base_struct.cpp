@@ -390,7 +390,7 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
  *  offset = Offset de trace (usuellement (0,0)
  *  color = couleur du texte
  *  draw_mode = GR_OR, GR_XOR.., -1 si mode courant.
- *  display_mose = FILAIRE, FILLED ou SKETCH
+ *  display_mode = FILAIRE, FILLED ou SKETCH
  *  anchor_color = couleur de l'ancre ( -1 si pas d'ancre ).
  */
 {

@@ -428,12 +428,12 @@ int masque_layer;
 
 	/* Effacement des modules */
 	if ( Block_Include_Modules )
-		{
+	{
 		MODULE * module;
 		Affiche_Message( _("Delete Footprints") ) ;
 		module = m_Pcb->m_Modules;
 		for ( ; module != NULL; module = (MODULE*) NextS)
-			{
+		{
 			NextS = module->Pnext;
 			if( IsModuleInBox(GetScreen()->BlockLocate, module) == NULL ) continue;
 			/* le module est ici bon a etre efface */
@@ -441,8 +441,8 @@ int masque_layer;
 			module->Draw(DrawPanel, DC, wxPoint(0,0),GR_XOR) ;
 			DeleteStructure(module);
 			m_Pcb->m_Status_Pcb = 0 ;
-			}
 		}
+	}
 
 	/* Effacement des Pistes */
 	if( Block_Include_Tracks )
@@ -535,6 +535,7 @@ int masque_layer;
 
 	/* Rafraichissement de l'ecran : */
 	RedrawActiveWindow(DC, TRUE);
+	if ( g_Show_Ratsnest ) Compile_Ratsnest( DC, TRUE );
 }
 
 
@@ -565,12 +566,13 @@ int Nx, Ny, centerX, centerY;		/* centre de rotation de l'ensemble des elements 
 
 	/* Rotation des modules */
 	if ( Block_Include_Modules )
-		{
+	{
 		Affiche_Message( _("Footprint rotation") );
+		bool Show_Ratsnest_tmp = g_Show_Ratsnest; g_Show_Ratsnest = false;
 		int Angle_Rot_Module = 900;
 		module = m_Pcb->m_Modules;
 		for ( ; module != NULL; module = (MODULE*) module->Pnext)
-			{
+		{
 			if( IsModuleInBox(GetScreen()->BlockLocate, module) == NULL ) continue;
 			/* le module est ici bon a etre modifie */
 			m_Pcb->m_Status_Pcb = 0 ;
@@ -587,10 +589,11 @@ int Nx, Ny, centerX, centerY;		/* centre de rotation de l'ensemble des elements 
 			/* Rotation du module autour de son ancre */
 			Rotate_Module(DC, module, Angle_Rot_Module, TRUE);
 
-			}
+		}
 		/* regeneration des valeurs originelles */
 		GetScreen()->m_Curseur = oldpos;
-		}
+		g_Show_Ratsnest = Show_Ratsnest_tmp;
+	}
 
 	/* Deplacement des Segments de piste */
 	if(Block_Include_Tracks )
@@ -722,6 +725,7 @@ int Nx, Ny, centerX, centerY;		/* centre de rotation de l'ensemble des elements 
 			}
 		}
 	RedrawActiveWindow(DC, TRUE) ;
+	if ( g_Show_Ratsnest ) Compile_Ratsnest( DC, TRUE );
 }
 
 
@@ -755,11 +759,12 @@ int Ny, centerY;	/* position de l'axe d'inversion de l'ensemble des elements */
 
 	/* Inversion des modules */
 	if ( Block_Include_Modules )
-		{
+	{
+		bool Show_Ratsnest_tmp = g_Show_Ratsnest; g_Show_Ratsnest = false;
 		Affiche_Message( _("Footprint mirroring") );
 		module = m_Pcb->m_Modules;
 		for ( ; module != NULL; module = (MODULE*) module->Pnext)
-			{
+		{
 			if( IsModuleInBox(GetScreen()->BlockLocate, module) == NULL ) continue;
 			/* le module est ici bon a etre efface */
 			m_Pcb->m_Status_Pcb = 0 ;
@@ -778,8 +783,9 @@ int Ny, centerY;	/* position de l'axe d'inversion de l'ensemble des elements */
 
 			/* regeneration des valeurs originelles */
 			GetScreen()->m_Curseur = memo;
-			}
 		}
+		g_Show_Ratsnest = Show_Ratsnest_tmp;
+	}
 
 	/* Deplacement des Segments de piste */
 	if(Block_Include_Tracks )
@@ -927,6 +933,7 @@ int Ny, centerY;	/* position de l'axe d'inversion de l'ensemble des elements */
 			}
 		}
 	RedrawActiveWindow(DC, TRUE) ;
+	if ( g_Show_Ratsnest ) Compile_Ratsnest( DC, TRUE );
 }
 
 
@@ -935,7 +942,7 @@ int Ny, centerY;	/* position de l'axe d'inversion de l'ensemble des elements */
 void WinEDA_BasePcbFrame::Block_Move(wxDC * DC)
 /************************************************/
 /*
-	routine de deplacement des elements du block deja selectionne
+	Function to move items withing the selected block
 */
 {
 MODULE * module;
@@ -956,13 +963,14 @@ wxPoint oldpos;
 
 	/* Deplacement des modules */
 	if ( Block_Include_Modules )
-		{
+	{
+		bool Show_Ratsnest_tmp = g_Show_Ratsnest; g_Show_Ratsnest = false;
 		Affiche_Message( _("Move footprints") );
 		module = m_Pcb->m_Modules;
 		oldpos = GetScreen()->m_Curseur;
 
 		for ( ; module != NULL; module = (MODULE*) module->Pnext)
-			{
+		{
 			if( IsModuleInBox(GetScreen()->BlockLocate, module) == NULL ) continue;
 			/* le module est ici bon a etre deplace */
 			m_Pcb->m_Status_Pcb = 0 ;
@@ -974,9 +982,10 @@ wxPoint oldpos;
 			GetScreen()->m_Curseur.x = module->m_Pos.x + GetScreen()->BlockLocate.m_MoveVector.x;
 			GetScreen()->m_Curseur.y = module->m_Pos.y + GetScreen()->BlockLocate.m_MoveVector.y;
 			Place_Module(module, DC);
-			}
-		GetScreen()->m_Curseur = oldpos;
 		}
+		GetScreen()->m_Curseur = oldpos;
+		g_Show_Ratsnest = Show_Ratsnest_tmp;
+	}
 
 	/* calcul du vecteur de deplacement pour les deplacements suivants */
 	deltaX = GetScreen()->BlockLocate.m_MoveVector.x ;
@@ -984,24 +993,24 @@ wxPoint oldpos;
 
 	/* Deplacement des Segments de piste */
 	if(Block_Include_Tracks )
-		{
+	{
 		TRACK * track;
 
 		Affiche_Message( _("Move tracks") );
 		track = m_Pcb->m_Track;
 		while( track )
-			{
+		{
 			if( IsSegmentInBox(GetScreen()->BlockLocate, track ) )
-				{	/* la piste est ici bonne a etre deplacee */
+			{	/* la piste est ici bonne a etre deplacee */
 				m_Pcb->m_Status_Pcb = 0 ;
 				track->Draw(DrawPanel, DC, GR_XOR) ; // effacement
 				track->m_Start.x += deltaX ; track->m_Start.y += deltaY ;
 				track->m_End.x += deltaX ; track->m_End.y += deltaY ;
 				track->Draw(DrawPanel, DC, GR_OR) ; // reaffichage
-				}
-			track = (TRACK*) track->Pnext;
 			}
+			track = (TRACK*) track->Pnext;
 		}
+	}
 
 	/* Deplacement des Segments de Zone */
 	if( Block_Include_Zones )
@@ -1100,6 +1109,7 @@ wxPoint oldpos;
 			}
 		}
 	DrawPanel->Refresh(TRUE);;
+	if ( g_Show_Ratsnest ) Compile_Ratsnest( DC, TRUE );
 }
 
 
@@ -1129,6 +1139,7 @@ wxPoint oldpos;
 	/* Module copy */
 	if ( Block_Include_Modules )
 	{
+		bool Show_Ratsnest_tmp = g_Show_Ratsnest; g_Show_Ratsnest = false;
 		Affiche_Message( _("Module copy") );
 		module = m_Pcb->m_Modules;
 		oldpos = GetScreen()->m_Curseur;
@@ -1154,6 +1165,7 @@ wxPoint oldpos;
 			Place_Module(new_module, DC);
 		}
 		GetScreen()->m_Curseur = oldpos;
+		g_Show_Ratsnest = Show_Ratsnest_tmp;
 	}
 
 	/* calcul du vecteur de deplacement pour les deplacements suivants */

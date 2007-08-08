@@ -309,7 +309,7 @@ typedef enum {
 #define SKETCH   2
 
 
-#define DEFAULT_SIZE_TEXT 60        /* Hauteur (en 1/000" par defaut des textes */
+#define DEFAULT_SIZE_TEXT 60        /* default text height (in mils or  1/1000") */
 
 /* classe de gestion des textes (labels, textes composants ..)
  *  (Non utilisee seule) */

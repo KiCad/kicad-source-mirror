@@ -43,35 +43,35 @@ D_PAD * pt_pad;
 
 	if( old_val == new_val) return(0) ;
 
-	if(old_val < new_val) EXCHG(old_val,new_val) ;
+	if( (old_val > 0) && (old_val < new_val) ) EXCHG(old_val,new_val) ;
 
 	pt_conn = pt_start_conn;
 	for ( ; pt_conn != NULL; pt_conn= (TRACK*) pt_conn->Pnext)
-		{
+	{
 		if( pt_conn->m_Sous_Netcode != old_val)
-			{
+		{
 			if(pt_conn == pt_end_conn) break;
 			continue;
-			}
+		}
 
 		nb_change++;
 		pt_conn->m_Sous_Netcode = new_val ;
 
 		if( pt_conn->start && ( pt_conn->start->m_StructType == TYPEPAD) )
-			{
+		{
 			pt_pad = (D_PAD*)(pt_conn->start);
 			if(pt_pad->m_physical_connexion == old_val)
 				pt_pad->m_physical_connexion = pt_conn->m_Sous_Netcode;
-			}
+		}
 
 		if( pt_conn->end &&	(pt_conn->end->m_StructType == TYPEPAD) )
-			{
+		{
 			pt_pad = (D_PAD*)(pt_conn->end);
 			if(pt_pad->m_physical_connexion == old_val)
 				pt_pad->m_physical_connexion = pt_conn->m_Sous_Netcode;
-			}
-		if(pt_conn == pt_end_conn) break;
 		}
+		if(pt_conn == pt_end_conn) break;
+	}
 	return(nb_change);
 }
 
@@ -551,7 +551,7 @@ char new_passe_request = 1, flag;
 LISTE_PAD * pt_mem;
 EDA_BaseStruct * PtStruct;
 int masque_layer;
-
+wxString msg;
 
 	if( m_Pcb->m_NbPads == 0 ) return;
 	a_color = CYAN;
@@ -573,10 +573,10 @@ int masque_layer;
 	/* Raz des flags particuliers des segments de piste */
 	pt_piste = m_Pcb->m_Track;
 	for ( ; pt_piste != NULL; pt_piste = (TRACK*) pt_piste->Pnext)
-		{
+	{
 		pt_piste->SetState(BUSY|EDIT|BEGIN_ONPAD|END_ONPAD, OFF);
 		pt_piste->m_NetCode = 0;
-		}
+	}
 
 	pt_piste = m_Pcb->m_Track;
 	for ( ; pt_piste != NULL; pt_piste = (TRACK*) pt_piste->Pnext)
@@ -615,59 +615,84 @@ int masque_layer;
 	if(affiche)
 		Affiche_1_Parametre(this, POS_AFF_CHREF,wxEmptyString, wxT("Conn Segm"), a_color);
 
-	for ( pt_piste = m_Pcb->m_Track; pt_piste != NULL; pt_piste = (TRACK*) pt_piste->Pnext)
-		{
+	for ( pt_piste = m_Pcb->m_Track; pt_piste != NULL; pt_piste = pt_piste->Next())
+	{
 		if ( pt_piste->start == NULL )
-			{
-			pt_piste->start = Locate_Piste_Connectee(pt_piste,
-									m_Pcb->m_Track,NULL,START);
-			}
+		{
+			pt_piste->start = Locate_Piste_Connectee(pt_piste, m_Pcb->m_Track,NULL,START);
+		}
 
 		if ( pt_piste->end == NULL )
-			{
-			pt_piste->end = Locate_Piste_Connectee(pt_piste,
-									m_Pcb->m_Track,NULL,END);
-			}
+		{
+			pt_piste->end = Locate_Piste_Connectee(pt_piste, m_Pcb->m_Track,NULL,END);
 		}
+	}
 
 	////////////////////////////////
 	// Reattribution des net_code //
 	////////////////////////////////
 
 	a_color = YELLOW;
-	if(affiche)
-		Affiche_1_Parametre(this, POS_AFF_CHREF,wxEmptyString, wxT("Net->Segm"),a_color);
 
 	while(new_passe_request)
-		{
+	{
+		bool reset_flag = FALSE;
 		new_passe_request = 0;
+		if(affiche)
+		{
+			msg.Printf( wxT("Net->Segm pass %d  "), new_passe_request+1);
+			Affiche_1_Parametre(this, POS_AFF_CHREF,wxEmptyString, msg, a_color);
+		}
 
-		for ( pt_piste = m_Pcb->m_Track; pt_piste != NULL;
-					 pt_piste = (TRACK*) pt_piste->Pnext)
+		/* look for vias which could be connect many tracks */
+		for ( TRACK * via = m_Pcb->m_Track; via != NULL; via = via->Next() )
+		{
+			if ( via->m_StructType != TYPEVIA ) continue;
+			if ( via->m_NetCode > 0 ) continue;	// Netcode already known
+			// Lock for a connection to a track with a known netcode
+			pt_next = m_Pcb->m_Track;
+			while ( (pt_next = Locate_Piste_Connectee(via, pt_next, NULL,START)) != NULL )
 			{
+				if (pt_next->m_NetCode )
+				{
+					via->m_NetCode = pt_next->m_NetCode;
+					break;
+				}
+				pt_next->SetState(BUSY, ON);
+				reset_flag = TRUE;
+			}
+		}
+
+		if ( reset_flag ) for ( pt_piste = m_Pcb->m_Track; pt_piste != NULL; pt_piste = pt_piste->Next())
+			{
+				pt_piste->SetState(BUSY, OFF);
+			}
+
+		for ( pt_piste = m_Pcb->m_Track; pt_piste != NULL; pt_piste = pt_piste->Next())
+		{
 			/* Traitement du point de debut */
 			PtStruct = (EDA_BaseStruct*)pt_piste->start;
 			if( PtStruct && (PtStruct->m_StructType != TYPEPAD) )
-				{	 // start sur piste
+			{	 // Begin on an other track segment
 				pt_next = (TRACK*)PtStruct;
 				if(pt_piste->m_NetCode)
-					{
+				{
 					if(pt_next->m_NetCode == 0)
-						{
+					{
 						new_passe_request = 1;
 						pt_next->m_NetCode = pt_piste->m_NetCode;
-						}
-					}
-
-				else
-					{
-					if(pt_next->m_NetCode != 0)
-						{
-						pt_piste->m_NetCode = pt_next->m_NetCode;
-						new_passe_request = 1;
-						}
 					}
 				}
+
+				else
+				{
+					if(pt_next->m_NetCode != 0)
+					{
+						pt_piste->m_NetCode = pt_next->m_NetCode;
+						new_passe_request = 1;
+					}
+				}
+			}
 
 			/* Localisation du point de fin */
 			PtStruct = pt_piste->end;
@@ -694,9 +719,8 @@ int masque_layer;
 			}
 		}
 
-	if( affiche ) Affiche_1_Parametre(this, -1,wxEmptyString, wxT("Reorder "),a_color);
-
 	/* Reclassemment des pistes par numero de net: */
+	if( affiche ) Affiche_1_Parametre(this, -1,wxEmptyString, wxT("Reorder "),a_color);
 	RebuildTrackChain(m_Pcb);
 
 	if( affiche ) Affiche_1_Parametre(this, -1,wxEmptyString, wxT("         "),a_color);
