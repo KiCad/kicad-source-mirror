@@ -163,7 +163,10 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     zoom = screen->GetZoom();
 
     type_trace = m_Shape;
-    ux0 = m_Start.x - offset.x; uy0 = m_Start.y - offset.y;
+    
+    ux0 = m_Start.x - offset.x; 
+    uy0 = m_Start.y - offset.y;
+    
     dx  = m_End.x - offset.x;
     dy  = m_End.y - offset.y;
 
@@ -445,8 +448,29 @@ int EDGE_MODULE::ReadDescr( char* Line, FILE* File,
  */
 void EDGE_MODULE::Show( int nestLevel, std::ostream& os )
 {
+    const char* cp = "???";
+    
+    switch( m_Shape )
+    {
+    case S_SEGMENT:     cp = "line";        break;
+    case S_RECT:        cp = "rect";        break;
+    case S_ARC:         cp = "arc";         break;
+    case S_CIRCLE:      cp = "circle";      break;
+    case S_ARC_RECT:    cp = "arc_rect";    break;
+    case S_SPOT_OVALE:  cp = "spot_oval";   break;
+    case S_SPOT_CIRCLE: cp = "spot_circle"; break;
+    case S_SPOT_RECT:   cp = "spot_rect";   break;
+    case S_POLYGON:     cp = "polygon";     break;
+    }
+    
     // for now, make it look like XML:
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << "/>\n";
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << 
+        " type=\"" << cp << "\">\n";
+    
+    NestedSpace( nestLevel+1, os ) << "<start" << m_Start0 << "/>\n";
+    NestedSpace( nestLevel+1, os ) << "<end" << m_End0 << "/>\n";
+    
+    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
 
 #endif

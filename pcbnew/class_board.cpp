@@ -289,58 +289,75 @@ void BOARD::Show( int nestLevel, std::ostream& os )
 }
 
 
-class ModuleOrPad : public INSPECTOR
+// see pcbstruct.h     
+EDA_BaseStruct* BOARD::FindPadOrModule( const wxPoint& refPos, int layer, int typeloc )
 {
-public:
-
-    EDA_BaseStruct*     found;
-
-    ModuleOrPad() :
-        found(0)
+    class PadOrModule : public INSPECTOR
     {
-    }
-
-    SEARCH_RESULT Inspect( EDA_BaseStruct* testItem, const void* testData )
-    {
-        const wxPoint*  refPos = (const wxPoint*) testData;
-
-        if( testItem->m_StructType == TYPEMODULE )
+    public:
+        EDA_BaseStruct*     found;
+        int                 layer;
+        int                 typeloc;
+    
+        PadOrModule( int alayer, int atypeloc ) :
+            found(0),
+            layer(alayer),
+            typeloc(atypeloc) {}
+    
+        SEARCH_RESULT Inspect( EDA_BaseStruct* testItem, const void* testData )
         {
-            /* not finished
-            if( testItem->HitTest( &refPos ) )
+            const wxPoint*  refPos = (const wxPoint*) testData;
+    
+            if( testItem->m_StructType == TYPEMODULE )
             {
-                found = testItem;
-                return SEARCH_QUIT;
+                int mlayer = ((MODULE*)testItem)->m_Layer;
+                
+                if( typeloc & MATCH_LAYER )
+                {
+                    if( layer != mlayer )
+                        return SEARCH_CONTINUE;
+                }
+
+                if( typeloc & VISIBLE_ONLY )
+                {
+                    if( !IsModuleLayerVisible(mlayer) )
+                        return SEARCH_CONTINUE;
+                }
+                
+                if( testItem->HitTest( *refPos ) )
+                {
+                    found = testItem;
+                    return SEARCH_QUIT;
+                }
             }
-            */
-        }
+            else if( testItem->m_StructType == TYPEPAD )
+            {
+                if( testItem->HitTest( *refPos ) )
+                {
+                    found = testItem;
+                    return SEARCH_QUIT;
+                }
+            }
+            else { int debug=1; /* this should not happen, because of scanTypes */ }
             
-        else if( testItem->m_StructType == TYPEPAD )
-        {
-            /* not finished
-            if( testItem->HitTest( &refPos ) )
-            {
-                found = testItem;
-                return SEARCH_QUIT;
-            }
-            */
+            return SEARCH_CONTINUE;
         }
         
-        return SEARCH_CONTINUE;
-    }
-};
-
+    };
     
-// see pcbstruct.h     
-EDA_BaseStruct* BOARD::FindModuleOrPad( const wxPoint& refPos )
-{
-    ModuleOrPad inspector;
+    PadOrModule inspector1( layer, MATCH_LAYER );
+    PadOrModule inspector2( layer, VISIBLE_ONLY );
 
     static const KICAD_T scanTypes[] = { TYPEPAD, TYPEMODULE, EOT };
-    
-    if( SEARCH_QUIT == IterateForward( m_Modules, &inspector, &refPos, scanTypes ) )
-        return inspector.found;
 
+    // search the current layer first    
+    if( SEARCH_QUIT == IterateForward( m_Modules, &inspector1, &refPos, scanTypes ) )
+        return inspector1.found;
+
+    // if not found, set layer to don't care and search again
+    if( SEARCH_QUIT == IterateForward( m_Modules, &inspector2, &refPos, scanTypes ) )
+        return inspector2.found;
+    
     return NULL;
 }
 

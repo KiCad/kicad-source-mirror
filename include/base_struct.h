@@ -8,6 +8,8 @@
 
 #if defined(DEBUG)
 #include <iostream>         // needed for Show()
+extern std::ostream& operator<<( std::ostream& out, wxSize& size );
+extern std::ostream& operator<<( std::ostream& out, wxPoint& pt );
 #endif
 
 
@@ -177,6 +179,18 @@ public:
                           const wxPoint&    offset,
                           int               draw_mode,
                           int               Color = -1 );
+
+    /**
+     * Function HitTest
+     * tests if the given wxPoint is within the bounds of this object.
+     * @param refPos A wxPoint to test
+     * @return bool - true if a hit, else false
+     */
+    virtual bool    HitTest( const wxPoint& refPos )
+    {
+        return false;   // derived classes should override this function
+    }
+
     
 #if defined(DEBUG)
 
@@ -330,10 +344,10 @@ public:
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.
-     * @param posref A wxPoint to test
+     * @param ref_pos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool    HitTest( const wxPoint& posref );
+    bool    HitTest( const wxPoint& ref_pos );
     
     int     Len_Size( void ); // Return the text lenght in internal units
 };
@@ -381,9 +395,11 @@ public:
 };
 
 
-/* class to handle component boundary box.
- *  This class is similar to wxRect, but some wxRect functions are very curious,
- *  so I prefer this suitable class
+/**
+ * Class EDA_Rect
+ * handles the component boundary box.
+ * This class is similar to wxRect, but some wxRect functions are very curious,
+ * so I prefer this suitable class
  */
 class EDA_Rect
 {

@@ -14,7 +14,7 @@
 #define U_PCB (PCB_INTERNAL_UNIT / EESCHEMA_INTERNAL_UNIT)
 
 /* valeur de flag indicant si le pointeur de reference pour une localisation
- *  est le curseur sur grille ou le curseur a deplacement fin hors grille */
+ * est le curseur sur grille ou le curseur a deplacement fin hors grille */
 #define CURSEUR_ON_GRILLE   (0 << 0)
 #define CURSEUR_OFF_GRILLE  (1 << 0)
 
@@ -57,7 +57,7 @@
 
 eda_global wxArrayString g_LibName_List;    // library list to load
 
-eda_global wxSize        g_GridList[]
+eda_global wxSize g_GridList[]
 #ifdef MAIN
 = {
     wxSize( 1000, 1000 ), wxSize( 500, 500 ), wxSize( 250, 250 ), wxSize( 200, 200 ),
@@ -71,7 +71,7 @@ eda_global wxSize        g_GridList[]
 ;
 
 #define UNDELETE_STACK_SIZE 10
-eda_global EDA_BaseStruct* g_UnDeleteStack[UNDELETE_STACK_SIZE]; //Liste des elements supprimes
+eda_global EDA_BaseStruct* g_UnDeleteStack[UNDELETE_STACK_SIZE]; // Liste des elements supprimes
 eda_global int             g_UnDeleteStackPtr;
 
 eda_global bool            g_ShowGrid
@@ -145,6 +145,26 @@ eda_global bool g_ShowIsolDuringCreateTrack; /* .State controle l'affichage
 /**************************************************************/
 
 eda_global DISPLAY_OPTIONS DisplayOpt;
+
+/**
+ * Function IsModuleLayerVisible
+ * expects either of the two layers on which a module can reside, and returns
+ * whether that layer is visible.
+ * @param layer One of the two allowed layers for modules: CMP_N or CUIVRE_N
+ * @return bool - true if the layer is visible, else false.
+ */
+bool inline IsModuleLayerVisible( int layer ) 
+{
+    if( layer==CMP_N )
+        return DisplayOpt.Show_Modules_Cmp;
+
+    else if( layer==CUIVRE_N )
+        return DisplayOpt.Show_Modules_Cu;
+
+    else
+        return true;
+}
+
 
 eda_global bool            Track_45_Only;   /* Flag pour limiter l'inclinaison
                                              *  pistes a 45 degres seulement */

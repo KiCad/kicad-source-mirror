@@ -125,7 +125,14 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         break;
 
     case ID_PCB_SHOW_1_RATSNEST_BUTT:
+#if defined(DEBUG)
+        DrawStruct = m_Pcb->FindPadOrModule( 
+                            GetScreen()->RefPos(true), 
+                            GetScreen()->m_Active_Layer, 
+                            VISIBLE_ONLY ); 
+#else
         DrawStruct = PcbGeneralLocateAndDisplay();
+#endif        
         Show_1_Ratsnest( DrawStruct, DC );
         break;
 
@@ -454,11 +461,12 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_OPEN_MODULE_EDITOR:
         if( m_Parent->m_ModuleEditFrame == NULL )
         {
-            m_Parent->m_ModuleEditFrame = new WinEDA_ModuleEditFrame( this,
-                                                                     m_Parent, _( "Module Editor" ),
-                                                                     wxPoint( -1,
-                                                                              -1 ),
-                                                                     wxSize( 600, 400 ) );
+            m_Parent->m_ModuleEditFrame = 
+                new WinEDA_ModuleEditFrame( this,
+                                             m_Parent, _( "Module Editor" ),
+                                             wxPoint( -1,
+                                                      -1 ),
+                                             wxSize( 600, 400 ) );
             m_Parent->m_ModuleEditFrame->Show( TRUE );
             m_Parent->m_ModuleEditFrame->Zoom_Automatique( TRUE );
         }
@@ -601,8 +609,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_END_LINE:
         DrawPanel->MouseToCursorSchema();
-
-//			EndSegment(&dc);
+        //	EndSegment(&dc);
         break;
 
     case ID_POPUP_PCB_EDIT_TRACK:

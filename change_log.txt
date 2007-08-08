@@ -5,6 +5,18 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2007-Aug-07 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ pcbnew & common
+  * More searching work.  Made HitTest() virtual.  Factored out a HitTest() 
+    function for both class_module and class_pad from existing code.  
+  * Embellished the Show() function for several of the classes.  Could be the
+    basis of a possible future XML export, but with the native format being
+    ascii already, this is of questionable value as an export.
+  * Discovered a long time existing bug in class_module hit-testing. 
+    Still need to understand it. It could just be an improperly formatted module.
+
+
 2007-Aug-06 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew & common

@@ -87,11 +87,16 @@ const wxPoint D_PAD::ReturnShapePos( void )
 {
     if( (m_Offset.x == 0) && (m_Offset.y == 0) )
         return m_Pos;
+    
     wxPoint shape_pos;
     int     dX, dY;
+    
     dX = m_Offset.x; dY = m_Offset.y;
+    
     RotatePoint( &dX, &dY, m_Orient );
-    shape_pos.x = m_Pos.x + dX; shape_pos.y = m_Pos.y + dY;
+    
+    shape_pos.x = m_Pos.x + dX; 
+    shape_pos.y = m_Pos.y + dY;
 
     return shape_pos;
 }
@@ -507,6 +512,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
     }
 
     GRSetDrawMode( DC, draw_mode );
+    
     /* Trace du symbole "No connect" ( / ou \ ou croix en X) si necessaire : */
     if( m_Netname.IsEmpty() && DisplayOpt.DisplayPadNoConn )
     {
@@ -520,20 +526,26 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
             GRLine( &panel->m_ClipBox, DC, cx0 + dx0, cy0 - dx0,
                     cx0 - dx0, cy0 + dx0, 0, nc_color );
     }
+    
     /* Trace de la reference */
     if( !frame->m_DisplayPadNum )
         return;
+    
     dx = min( m_Size.x, m_Size.y );     /* dx = text size */
     if( (dx / zoom) > 12 )              /* size must be enought to draw 2 chars */
     {
         wxString buffer;
+        
         ReturnStringPadName( buffer );
         dy = buffer.Len();
+        
         /* Draw text with an angle between -90 deg and + 90 deg */
         NORMALIZE_ANGLE_90( angle );
         if( dy < 2 )
             dy = 2;                     /* text min size is 2 char */
+        
         dx = (dx * 9 ) / (dy * 13 );    /* Text size ajusted to pad size */
+        
         DrawGraphicText( panel, DC, wxPoint( ux0, uy0 ),
                          WHITE, buffer, angle, wxSize( dx, dx ),
                          GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER );
@@ -579,6 +591,7 @@ int D_PAD::ReadDescr( FILE* File, int* LineNum )
 
             if( *PtLine )
                 PtLine++;
+
             memset( m_Padname, 0, sizeof(m_Padname) );
             while( (*PtLine != '"') && *PtLine )
             {
@@ -629,6 +642,7 @@ int D_PAD::ReadDescr( FILE* File, int* LineNum )
                          &m_Offset.x, &m_Offset.y, BufCar, &dx, &dy );
             m_Drill.y    = m_Drill.x;
             m_DrillShape = CIRCLE;
+
             if( nn >= 6 )       // Drill shape = OVAL ?
             {
                 if( BufCar[0] == 'O' )
@@ -943,6 +957,54 @@ void D_PAD::Display_Infos( WinEDA_BasePcbFrame* frame )
     pos += 6;
     Affiche_1_Parametre( frame, pos, _( "Y pos" ), Line, BLUE );
 }
+
+
+/**
+ * Function HitTest
+ * tests if the given wxPoint is within the bounds of this object.
+ * @param ref_pos A wxPoint to test
+ * @return bool - true if a hit, else false
+ */
+bool D_PAD::HitTest( const wxPoint& ref_pos )
+{
+    int     deltaX, deltaY;
+    int     dx, dy;
+    double  dist;
+
+    wxPoint shape_pos = ReturnShapePos();
+
+    deltaX = ref_pos.x - shape_pos.x; 
+    deltaY = ref_pos.y - shape_pos.y;
+
+    /* Test rapide: le point a tester doit etre a l'interieur du cercle exinscrit ... */
+    if( (abs( deltaX ) > m_Rayon )
+     || (abs( deltaY ) > m_Rayon) )
+        return false;
+
+    /* calcul des demi dim  dx et dy */
+    dx = m_Size.x >> 1; // dx also is the radius for rounded pads
+    dy = m_Size.y >> 1;
+
+    /* localisation ? */
+    switch( m_PadShape & 0x7F )
+    {
+    case CIRCLE:
+        dist = hypot( deltaX, deltaY );
+        if( (int) ( round( dist ) ) <= dx )
+            return true;
+        break;
+
+    default:
+        /* calcul des coord du point test  dans le repere du Pad */
+        RotatePoint( &deltaX, &deltaY, -m_Orient );
+        if( (abs( deltaX ) <= dx ) && (abs( deltaY ) <= dy) )
+            return true;
+        break;
+    }
+    
+    return false;
+}
+
 
 #if defined(DEBUG)
 /**

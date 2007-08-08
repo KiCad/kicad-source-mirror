@@ -1146,6 +1146,29 @@ void MODULE::Display_Infos( WinEDA_BasePcbFrame* frame )
 }
 
 
+/**
+ * Function HitTest
+ * tests if the given wxPoint is within the bounds of this object.
+ * @param refPos A wxPoint to test
+ * @return bool - true if a hit, else false
+ */
+bool MODULE::HitTest( const wxPoint& refPos )
+{
+    /* Calcul des coord souris dans le repere module */
+    int spot_cX = refPos.x - m_Pos.x;
+    int spot_cY = refPos.y - m_Pos.y;
+    
+    RotatePoint( &spot_cX, &spot_cY, -m_Orient );
+
+    /* la souris est-elle dans ce rectangle : */
+    if( m_BoundaryBox.Inside( spot_cX, spot_cY ) )
+        return true;
+    
+    return false;
+}
+
+
+
 #if defined(DEBUG)
 /**
  * Function Show
@@ -1157,29 +1180,29 @@ void MODULE::Display_Infos( WinEDA_BasePcbFrame* frame )
 void MODULE::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML, expand on this later.
-    
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-//        " ref=\""     <<  m_Reference->m_Text.mb_str() << 
-//        "\" value=\"" <<  m_Value->m_Text.mb_str() << '"' << 
+        " ref=\"" << m_Reference->m_Text.mb_str() << '"' << 
+        " value=\"" << m_Value->m_Text.mb_str()     << '"' <<
         ">\n";
-
-    EDA_BaseStruct* p;
         
-    p = m_Reference;
-    for( ; p; p = p->Pnext )
-        p->Show( nestLevel+1, os );
+    NestedSpace( nestLevel+1, os ) <<  
+        "<boundingBox" << m_BoundaryBox.m_Pos << m_BoundaryBox.m_Size << "/>\n";
 
-    p = m_Value;
-    for( ; p; p = p->Pnext )
-        p->Show( nestLevel+1, os );
+    NestedSpace( nestLevel+1, os ) << "<orientation tenths=\"" << m_Orient << "\"/>\n";   
+        
+    EDA_BaseStruct* p;
 
+    NestedSpace( nestLevel+1, os ) << "<pads>\n";
     p = m_Pads;
     for( ; p; p = p->Pnext )
-        p->Show( nestLevel+1, os );
+        p->Show( nestLevel+2, os );
+    NestedSpace( nestLevel+1, os ) << "</pads>\n";
     
+    NestedSpace( nestLevel+1, os ) << "<drawings>\n";
     p = m_Drawings;
     for( ; p; p = p->Pnext )
-        p->Show( nestLevel+1, os );
+        p->Show( nestLevel+2, os );
+    NestedSpace( nestLevel+1, os ) << "</drawings>\n";
     
     p = m_Son;
     for( ; p;  p = p->Pnext )
@@ -1207,13 +1230,14 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
         }
         else if( stype == TYPETEXTEMODULE )
         {
-            // iterate over m_Reference
-            if( SEARCH_QUIT == IterateForward( m_Reference, inspector, 
-                                    testData, scanTypes ) )
+            if( SEARCH_QUIT == inspector->Inspect( m_Reference, testData ) ) 
                 return SEARCH_QUIT;
                 
-            // iterate over m_Value
-            if( SEARCH_QUIT == IterateForward( m_Value, inspector, 
+            if( SEARCH_QUIT == inspector->Inspect( m_Value, testData ) ) 
+                return SEARCH_QUIT;
+
+            // m_Drawings can hold TYPETEXTMODULE also?
+            if( SEARCH_QUIT == IterateForward( m_Drawings, inspector, 
                                     testData, scanTypes ) )
                 return SEARCH_QUIT;
         }

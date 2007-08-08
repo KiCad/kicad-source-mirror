@@ -133,6 +133,16 @@ public:
     /* miscellaneous */
     void    Display_Infos( WinEDA_BasePcbFrame* frame );
 
+    
+    /**
+     * Function HitTest
+     * tests if the given wxPoint is within the bounds of this object.
+     * @param refPos A wxPoint to test
+     * @return bool - true if a hit, else false
+     */
+    bool    HitTest( const wxPoint& refPos );
+
+    
 #if defined(DEBUG)
 
     /**

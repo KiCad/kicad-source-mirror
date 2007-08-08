@@ -174,16 +174,17 @@ public:
     wxPoint         m_Curseur;                  /* Screen cursor coordinate (on grid) in user units. */
     wxPoint         m_MousePosition;            /* Mouse cursor coordinate (off grid) in user units. */
     wxPoint         m_MousePositionInPixels;    /* Mouse cursor coordinate (off grid) in pixels. */
-    wxPoint         m_O_Curseur;    /* Relative Screen cursor coordinate (on grid) in user units.
-                                     *  (coordinates from last reset position)*/
+    wxPoint         m_O_Curseur;                /* Relative Screen cursor coordinate (on grid) in user units.
+                                                 * (coordinates from last reset position)*/
     wxPoint         m_ScrollbarPos;             // Position effective des Curseurs de scroll
-    wxSize          m_ScrollbarNumber;/* Valeur effective des Nombres de Scrool
-                                       *  c.a.d taille en unites de scroll de la surface totale affichable */
+    wxSize          m_ScrollbarNumber;          /* Valeur effective des Nombres de Scrool
+                                                 * c.a.d taille en unites de scroll de la surface totale affichable */
     wxPoint         m_StartVisu;                // Coord absolues du 1er pixel visualis�a l'ecran (en nombre de pixels)
-    wxSize          m_SizeVisu;     /* taille en pixels de l'ecran (fenetre de visu
-                                     *  Utile pour recadrer les affichages lors de la
-                                     *  navigation dans la hierarchie */
-    bool            m_Center;                   // TRUE: coord algebriques, FALSE: coord >= 0
+    
+    wxSize          m_SizeVisu;         /* taille en pixels de l'ecran (fenetre de visu
+                                         * Utile pour recadrer les affichages lors de la
+                                         * navigation dans la hierarchie */
+    bool            m_Center;           // TRUE: coord algebriques, FALSE: coord >= 0
     bool            m_FirstRedraw;
 
     /* Gestion des editions */
@@ -273,9 +274,22 @@ public:
     void    SetFirstGrid( void );               /* ajuste la grille au mini*/
     void    SetLastGrid( void );                /* ajuste la grille au max */
 
+    
+    /**
+     * Function RefPos
+     * returns the reference position, coming from either the mouse position or the
+     * the cursor position.
+     * @param useMouse If true, return mouse posistion, else cursor's.
+     * @return wxPoint - The reference point, either the mouse position or 
+     *   the cursor position.
+     */
+    wxPoint RefPos( bool useMouse )
+    {
+        return useMouse ? m_MousePosition : m_Curseur;
+    }
+    
 
 #if defined (DEBUG)
-
     /**
      * Function GetClass
      * returns the class name.
@@ -285,7 +299,6 @@ public:
     {
         return wxT( "BASE_SCREEN" );
     }
-
 #endif
 };
 

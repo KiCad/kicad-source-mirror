@@ -66,16 +66,15 @@
 #define ECO1_LAYER              0x04000000
 #define ECO2_LAYER              0x08000000
 #define EDGE_LAYER              0x10000000
-#define intS_LAYER              0xE0000000      /* 4 bits MSB = autres flags */
+//      extra bits              0xE0000000
 /* masques generaux : */
 #define ALL_LAYERS              0x1FFFFFFF
 #define ALL_NO_CU_LAYERS        0x1FFF0000
 #define ALL_CU_LAYERS           0x0000FFFF
 #define INTERNAL_LAYERS         0x00007FFE      /* Bits layers internes */
 #define EXTERNAL_LAYERS         0x00008001
-/* Flags pour les couches cuivres */
-#define LAYER_is_PLAN           0x80000000
 
+/* Flags pour les couches cuivres */
 /* numero des couches particulieres */
 #define LAYER_CUIVRE_N        0
 #define CUIVRE_N              0
@@ -96,6 +95,7 @@
 #define LAYER_CMP_N           15
 #define CMP_N                 15
 #define NB_COPPER_LAYERS      (CMP_N + 1)
+
 #define FIRST_NO_COPPER_LAYER 16
 #define ADHESIVE_N_CU         16
 #define ADHESIVE_N_CMP        17
@@ -112,6 +112,7 @@
 #define EDGE_N                28
 #define LAST_NO_COPPER_LAYER  28
 #define NB_LAYERS             (EDGE_N + 1)
+
 #define LAYER_COUNT           32
 
 /* Forme des segments (pistes, contours ..) ( parametre .shape ) */
@@ -257,12 +258,13 @@ public:
 
     
     /**
-     * Function FindModuleOrPad
-     * searches for either a module or a pad, giving precedence to pads.
+     * Function FindPadOrModule
+     * searches for either a pad or module, giving precedence to pads.
      * @param refPos The wxPoint to hit-test.
+     * @param typeloc 
      * @return EDA_BaseStruct* - if a direct hit, else NULL.
      */
-    EDA_BaseStruct* FindModuleOrPad( const wxPoint& refPos );
+    EDA_BaseStruct* FindPadOrModule( const wxPoint& refPos, int layer, int typeloc );
     
 #endif
 };
@@ -375,9 +377,10 @@ public:
     int  DisplayModText;
     bool DisplayPcbTrackFill;   /* FALSE = sketch , TRUE = filled */
     bool DisplayTrackIsol;
+    
     int  m_DisplayViaMode;      /* 0 do not show via hole,
-                                 *  1 show via hole for non default value
-                                 *  2 show all via hole */
+                                 * 1 show via hole for non default value
+                                 * 2 show all via hole */
 
     bool DisplayPolarCood;
     bool DisplayZones;

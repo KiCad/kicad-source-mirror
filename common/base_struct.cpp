@@ -191,6 +191,20 @@ wxString EDA_BaseStruct::ReturnClassName() const
 
 
 #if defined(DEBUG)
+// A function that should have been in wxWidgets
+std::ostream& operator<<( std::ostream& out, wxSize& size )
+{
+    out << " width=\"" << size.GetWidth() << "\" height=\"" << size.GetHeight() << "\"";
+    return out;
+}
+
+// A function that should have been in wxWidgets
+std::ostream& operator<<( std::ostream& out, wxPoint& pt )
+{
+    out << " x=\"" << pt.x << "\" y=\"" << pt.y << "\"";
+    return out;
+}
+
 
 /**
  * Function Show

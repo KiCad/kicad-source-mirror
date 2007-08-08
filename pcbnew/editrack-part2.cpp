@@ -341,7 +341,8 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
         {
             if( item->m_StructType == TYPETEXTEMODULE )
             {
-                Module = (MODULE*) item->m_Parent;
+                if( item->m_Parent && (item->m_Parent->m_StructType  == TYPEMODULE) )
+                    Module = (MODULE*) item->m_Parent;
             }
             
             else if( item->m_StructType == TYPEMODULE )

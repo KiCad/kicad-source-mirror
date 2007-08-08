@@ -29,11 +29,11 @@ public:
         char          m_Padname[4]; /* nom (numero) de la pastille (assimilable a un long)*/
     };
     
-    wxString m_Netname;         /* Net Name */
+    wxString m_Netname;             /* Net Name */
     
-    int      m_Masque_Layer;    // (Bit a Bit :1= cuivre, 15= cmp,
-                                // 2..14 = interne
-                                // 16 .. 31 = couches non cuivre
+    int      m_Masque_Layer;        // (Bit a Bit :1= cuivre, 15= cmp,
+                                    // 2..14 = interne
+                                    // 16 .. 31 = couches non cuivre
                                 
     int      m_PadShape;            // forme CERCLE, RECT, OVALE, TRAPEZE ou libre
     int      m_DrillShape;          // forme CERCLE, OVAL
@@ -91,7 +91,15 @@ public:
 
     // de la forme (pastilles excentrees)
     void            Display_Infos( WinEDA_BasePcbFrame* frame );
-
+    
+    /**
+     * Function HitTest
+     * tests if the given wxPoint is within the bounds of this object.
+     * @param refPos A wxPoint to test
+     * @return bool - true if a hit, else false
+     */
+    bool            HitTest( const wxPoint& refPos );
+    
 #if defined(DEBUG)
     /**
      * Function GetClass

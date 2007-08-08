@@ -32,30 +32,7 @@ EDA_BaseStruct* Locate_MirePcb( EDA_BaseStruct* PtStruct, int LayerSearch, int t
  */
 wxPoint inline RefPos( int typeloc )
 {
-    if( typeloc & CURSEUR_OFF_GRILLE )
-        return ActiveScreen->m_MousePosition;
-    else
-        return ActiveScreen->m_Curseur;
-}
- 
-
-/**
- * Function IsModuleLayerVisible
- * expects either of the two layers on which a module can reside, and returns
- * whether that layer is visible.
- * @param layer One of the two allowed layers for modules: CMP_N or CUIVRE_N
- * @return bool - true if the layer is visible, else false.
- */
-bool inline IsModuleLayerVisible( int layer ) 
-{
-    if( layer==CMP_N )
-        return DisplayOpt.Show_Modules_Cmp;
-
-    else if( layer==CUIVRE_N )
-        return DisplayOpt.Show_Modules_Cu;
-
-    else
-        return true;
+    return ActiveScreen->RefPos( (typeloc & CURSEUR_OFF_GRILLE) != 0 );
 }
 
 
@@ -344,6 +321,7 @@ EDGE_MODULE* Locate_Edge_Module( MODULE* module, int typeloc )
     {
         if( PtStruct->m_StructType != TYPEEDGEMODULE )
             continue;
+
         edge_mod   = (EDGE_MODULE*) PtStruct;
         type_trace = edge_mod->m_Shape;
         ux0 = edge_mod->m_Start.x; uy0 = edge_mod->m_Start.y;
@@ -418,6 +396,7 @@ EDA_BaseStruct* Locate_Cotation( BOARD* Pcb, int LayerSearch, int typeloc )
     {
         if( PtStruct->m_StructType != TYPECOTATION )
             continue;
+        
         Cotation = (COTATION*) PtStruct;
         if( (Cotation->m_Layer != LayerSearch) && (LayerSearch != -1) )
             continue;
@@ -426,7 +405,10 @@ EDA_BaseStruct* Locate_Cotation( BOARD* Pcb, int LayerSearch, int typeloc )
         pt_txt = Cotation->m_Text;
         if( pt_txt )
         {
-            if( pt_txt->HitTest( ref_pos ) )
+            // because HitTest() is present in both base classes of TEXTE_PCB
+            // use a dis-ambiguating cast to tell compiler which HitTest()
+            // to call.
+            if( static_cast<EDA_TextStruct*>(pt_txt)->HitTest( ref_pos ) )
                 return PtStruct;
         }
 
@@ -666,52 +648,23 @@ D_PAD* Locate_Pads( MODULE* module, int masque_layer, int typeloc )
 
 D_PAD* Locate_Pads( MODULE* module, const wxPoint& ref_pos, int masque_layer )
 {
-    D_PAD*  pt_pad;
-    int     deltaX, deltaY;
-    wxPoint shape_pos;
-    double  dist;
-
-    pt_pad = module->m_Pads;
+    D_PAD*  pt_pad = module->m_Pads;
     for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
     {
-        shape_pos = pt_pad->ReturnShapePos();
+        /*
+        wxPoint shape_pos = ReturnShapePos();
 
+        why the global ux0?
         ux0 = shape_pos.x; 
-        uy0 = shape_pos.y; /* pos x,y du centre du pad */
-
-        deltaX = ref_pos.x - ux0; 
-        deltaY = ref_pos.y - uy0;
-
-        /* Test rapide: le point a tester doit etre a l'interieur du cercle
-         *  exinscrit ... */
-        if( (abs( deltaX ) > pt_pad->m_Rayon )
-         || (abs( deltaY ) > pt_pad->m_Rayon) )
-            continue;
+        uy0 = shape_pos.y;      // pos x,y du centre du pad
+        */
 
         /* ... et sur la bonne couche */
         if( (pt_pad->m_Masque_Layer & masque_layer) == 0 )
             continue;
 
-        /* calcul des demi dim  dx et dy */
-        dx = pt_pad->m_Size.x >> 1; // dx also is the radius for rounded pads
-        dy = pt_pad->m_Size.y >> 1;
-
-        /* localisation ? */
-        switch( pt_pad->m_PadShape & 0x7F )
-        {
-        case CIRCLE:
-            dist = hypot( deltaX, deltaY );
-            if( (int) ( round( dist ) ) <= dx )
-                return pt_pad;
-            break;
-
-        default:
-            /* calcul des coord du point test  dans le repere du Pad */
-            RotatePoint( &deltaX, &deltaY, -pt_pad->m_Orient );
-            if( (abs( deltaX ) <= dx ) && (abs( deltaY ) <= dy) )
-                return pt_pad;
-            break;
-        }
+        if( pt_pad->HitTest( ref_pos ) )
+            return pt_pad;
     }
 
     return NULL;
@@ -743,17 +696,8 @@ MODULE* Locate_Prefered_Module( BOARD* Pcb, int typeloc )
     pt_module = Pcb->m_Modules;
     for(  ;  pt_module;  pt_module = (MODULE*) pt_module->Pnext )
     {
-        /* calcul des dimensions du cadre :*/
-        lx = pt_module->m_BoundaryBox.GetWidth();
-        ly = pt_module->m_BoundaryBox.GetHeight();
-
-        /* Calcul des coord souris dans le repere module */
-        spot_cX = ref_pos.x - pt_module->m_Pos.x;
-        spot_cY = ref_pos.y - pt_module->m_Pos.y;
-        RotatePoint( &spot_cX, &spot_cY, -pt_module->m_Orient );
-
-        /* la souris est-elle dans ce rectangle : */
-        if( !pt_module->m_BoundaryBox.Inside( spot_cX, spot_cY ) )
+        // is the ref point within the module's bounds?
+        if( !pt_module->HitTest( ref_pos ) )
             continue;
 
         // if caller wants to ignore locked modules, and this one is locked, skip it.
@@ -773,13 +717,18 @@ MODULE* Locate_Prefered_Module( BOARD* Pcb, int typeloc )
 
         else if( layer==ADHESIVE_N_CMP || layer==SILKSCREEN_N_CMP )
             layer = CMP_N;
-
+        
+        /* calcul des dimensions du cadre :*/
+        lx = pt_module->m_BoundaryBox.GetWidth();
+        ly = pt_module->m_BoundaryBox.GetHeight();
+        
         if( ( (PCB_SCREEN*) ActiveScreen )->m_Active_Layer == layer )
         {
             if( min( lx, ly ) <= min_dim )
             {
                 /* meilleure empreinte localisee sur couche active */
-                module = pt_module; min_dim = min( lx, ly );
+                module  = pt_module; 
+                min_dim = min( lx, ly );
             }
         }
         else if( !(typeloc & MATCH_LAYER)
@@ -1155,11 +1104,18 @@ TEXTE_PCB* Locate_Texte_Pcb( EDA_BaseStruct* PtStruct, int LayerSearch, int type
     {
         if( PtStruct->m_StructType != TYPETEXTE )
             continue;
+        
         TEXTE_PCB* pt_txt_pcb = (TEXTE_PCB*) PtStruct;
-        if( pt_txt_pcb->HitTest( ref ) )
+        
+        if( pt_txt_pcb->m_Layer == LayerSearch )
         {
-            if( pt_txt_pcb->m_Layer == LayerSearch )
+            // because HitTest() is present in both base classes of TEXTE_PCB
+            // use a dis-ambiguating cast to tell compiler which HitTest()
+            // to call.
+            if( static_cast<EDA_TextStruct*>(pt_txt_pcb)->HitTest( ref ) )
+            {
                 return pt_txt_pcb;
+            }
         }
     }
 

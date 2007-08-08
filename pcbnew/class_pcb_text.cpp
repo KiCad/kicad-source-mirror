@@ -162,11 +162,10 @@ void TEXTE_PCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 void TEXTE_PCB::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML:
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
-
-    NestedSpace( nestLevel+1, os ) << m_Text.mb_str() << '\n';
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
+        " string=\"" << m_Text.mb_str() << "\"/>\n"; 
     
-    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
+//    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
 
 #endif
