@@ -7,7 +7,7 @@
 #define TRIGO_H
 
 
-/* Prototype des fonctions de TRIGO.CC */
+/* Prototype des fonctions de trigo.cpp */
 void RotatePoint(int *pX, int *pY, int angle);
 void RotatePoint(int *pX, int *pY, int cx, int cy, int angle);
 void RotatePoint(wxPoint *point, const wxPoint & centre, int angle);
@@ -19,6 +19,7 @@ int ArcTangente(int dy, int dx);
 			  Analogue a atan2 ( mais plus rapide pour les caculs si
 			  l'angle est souvent 0, -1800, ou +- 900  */
 
+bool DistanceTest( int seuil, int dx, int dy, int spot_cX, int spot_cY );
 
 
 

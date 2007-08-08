@@ -235,7 +235,6 @@ public:
     
     
 #if defined(DEBUG)
-
     /**
      * Function GetClass
      * returns the class name.
@@ -264,7 +263,7 @@ public:
      * @param typeloc 
      * @return EDA_BaseStruct* - if a direct hit, else NULL.
      */
-    EDA_BaseStruct* FindPadOrModule( const wxPoint& refPos, int layer, int typeloc );
+    EDA_BaseStruct* FindPadOrModule( const wxPoint& refPos, int layer );
     
 #endif
 };
@@ -322,6 +321,27 @@ public:
     void    UnLink( void );
 
     void    Copy( DRAWSEGMENT* source );
+
+    /**
+     * Function HitTest
+     * tests if the given wxPoint is within the bounds of this object.
+     * @param ref_pos A wxPoint to test
+     * @return bool - true if a hit, else false
+     */
+    bool    HitTest( const wxPoint& ref_pos );
+    
+#if defined(DEBUG)
+    /**
+     * Function GetClass
+     * returns the class name.
+     * @return wxString
+     */
+    wxString GetClass() const
+    {
+        return wxT("pgraphic");
+    }
+#endif    
+    
 };
 
 

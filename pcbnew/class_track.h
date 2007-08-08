@@ -10,84 +10,135 @@
 /* Type des Vias (shape)*/
 
 /* Forme des Vias ( parametre .shape ) */
-#define VIA_NORMALE 3		/* type via : traversante (throught via) */
-#define VIA_ENTERREE 2		/* type via : enterree ou aveugle (blind via) */
-#define VIA_BORGNE 1		/* type via : borgne ou demi-traversante (buried via) */
-#define VIA_NOT_DEFINED 0		/* reserved */
-#define SQUARE_VIA 0x80000000		/* Flag pour forme carree */
+#define VIA_NORMALE     3           /* type via : traversante (throught via) */
+#define VIA_ENTERREE    2           /* type via : enterree ou aveugle (blind via) */
+#define VIA_BORGNE      1           /* type via : borgne ou demi-traversante (buried via) */
+#define VIA_NOT_DEFINED 0           /* reserved */
+#define SQUARE_VIA      0x80000000  /* Flag pour forme carree */
 
 
 /***/
 
-class TRACK: public EDA_BaseLineStruct
+class TRACK : public EDA_BaseLineStruct
 {
 public:
-	int m_Shape;					// vias: shape and type, Track = shape..
-	int m_Drill;					// for vias: via drill (- 1 for default value)
-	EDA_BaseStruct * start,* end;	// pointers on a connected item (pad or track)
-	int m_NetCode;					// Net number
-	int m_Sous_Netcode;				/* In rastnest routines : for the current net,
-										block number (number common to the current connected items found) */
-									// chain = 0 indique une connexion non encore traitee
-	int m_Param;					// Auxiliary variable ( used in some computations )
+    int             m_Shape;        // vias: shape and type, Track = shape..
+    int             m_Drill;        // for vias: via drill (- 1 for default value)
+    EDA_BaseStruct* start, * end;   // pointers on a connected item (pad or track)
+    int             m_NetCode;      // Net number
+    int             m_Sous_Netcode; /* In rastnest routines : for the current net,
+                                     *  block number (number common to the current connected items found) */
+
+    // chain = 0 indique une connexion non encore traitee
+    int             m_Param;        // Auxiliary variable ( used in some computations )
 
 public:
-	TRACK(EDA_BaseStruct * StructFather, DrawStructureType idtype = TYPETRACK);
-	TRACK(const TRACK & track);
+    TRACK( EDA_BaseStruct* StructFather, DrawStructureType idtype = TYPETRACK );
+    TRACK( const TRACK& track );
 
-	TRACK * Next(void);	// Retourne le chainage avant
-	TRACK * Back(void)	// Retourne le chainage avant
-	{
-		return (TRACK*) Pback;
-	}
+    TRACK* Next( void );    // Retourne le chainage avant
 
-	/* supprime du chainage la structure Struct */
-	void UnLink( void );
+    TRACK* Back( void )     // Retourne le chainage avant
+    {
+        return (TRACK*) Pback;
+    }
 
-	// Read/write data
-	bool WriteTrackDescr(FILE * File);
 
-	/* Ajoute un element a la liste */
-	void Insert(BOARD * Pcb, EDA_BaseStruct * InsertPoint);
+    /* supprime du chainage la structure Struct */
+    void    UnLink( void );
 
-	/* Recherche du meilleur point d'insertion */
-	TRACK * GetBestInsertPoint( BOARD * Pcb);
+    // Read/write data
+    bool    WriteTrackDescr( FILE* File );
 
-	/* Copie d'un Element d'une chaine de n elements */
-	TRACK * Copy( int NbSegm = 1 );
+    /* Ajoute un element a la liste */
+    void    Insert( BOARD* Pcb, EDA_BaseStruct* InsertPoint );
 
-	/* Recherche du debut du net
-		( les elements sont classes par net_code croissant ) */
-	TRACK * GetStartNetCode(int NetCode );
-	/* Recherche de la fin du net */
-	TRACK * GetEndNetCode(int NetCode);
+    /* Recherche du meilleur point d'insertion */
+    TRACK*  GetBestInsertPoint( BOARD* Pcb );
 
-	/* Display on screen: */
-	void Draw(WinEDA_DrawPanel * panel, wxDC * DC, int draw_mode);
+    /* Copie d'un Element d'une chaine de n elements */
+    TRACK*  Copy( int NbSegm = 1 );
 
-	/* divers */
-	int Shape(void) { return m_Shape & 0xFF; }
+    /* Recherche du debut du net
+     *  ( les elements sont classes par net_code croissant ) */
+    TRACK*  GetStartNetCode( int NetCode );
 
-	int ReturnMaskLayer(void);
-	int IsPointOnEnds(const wxPoint & point, int min_dist = 0);
-	bool IsNull(void);	// return TRUE if segment lenght = 0
+    /* Recherche de la fin du net */
+    TRACK*  GetEndNetCode( int NetCode );
+
+    /* Display on screen: */
+    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode );
+
+    /* divers */
+    int Shape( void ) { return m_Shape & 0xFF; }
+
+    int     ReturnMaskLayer( void );
+    int     IsPointOnEnds( const wxPoint& point, int min_dist = 0 );
+    bool    IsNull( void ); // return TRUE if segment lenght = 0
+
+    /**
+     * Function HitTest
+     * tests if the given wxPoint is within the bounds of this object.
+     * @param refPos A wxPoint to test
+     * @return bool - true if a hit, else false
+     */
+    bool    HitTest( const wxPoint& refPos );
+
+#if defined(DEBUG)
+    /**
+     * Function GetClass
+     * returns the class name.
+     * @return wxString
+     */
+    wxString GetClass() const
+    {
+        return wxT("TRACK");
+    }
+    
+#endif
+    
 };
 
-class SEGZONE: public TRACK
+class SEGZONE : public TRACK
 {
 public:
-	SEGZONE(EDA_BaseStruct * StructFather);
+    SEGZONE( EDA_BaseStruct* StructFather );
+    
+#if defined(DEBUG)
+    /**
+     * Function GetClass
+     * returns the class name.
+     * @return wxString
+     */
+    wxString GetClass() const
+    {
+        return wxT("ZONE");
+    }
+#endif
+    
 };
 
-class SEGVIA: public TRACK
+class SEGVIA : public TRACK
 {
 public:
-	SEGVIA(EDA_BaseStruct * StructFather);
-	bool IsViaOnLayer(int layer);
-	void SetLayerPair(int top_layer, int bottom_layer);
-	void ReturnLayerPair(int * top_layer, int * bottom_layer);
+    SEGVIA( EDA_BaseStruct* StructFather );
+    bool    IsViaOnLayer( int layer );
+    void    SetLayerPair( int top_layer, int bottom_layer );
+    void    ReturnLayerPair( int* top_layer, int* bottom_layer );
+    
+#if defined(DEBUG)
+    /**
+     * Function GetClass
+     * returns the class name.
+     * @return wxString
+     */
+    wxString GetClass() const
+    {
+        return wxT("VIA");
+    }
+#endif
+    
 };
-
 
 
 #endif /* CLASS_TRACK_H */

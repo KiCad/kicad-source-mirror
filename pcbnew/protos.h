@@ -198,24 +198,6 @@ D_PAD * Fast_Locate_Pad_Connecte(BOARD * Pcb, const wxPoint & ref_pos, int layer
 			 (bonne position ET bonne couche). */
 
 
-int distance(int seuil);
-	/*
-	 Calcul de la distance du curseur souris a un segment de droite :
-	 ( piste, edge, contour module ..
-	retourne:
-		0 si distance > seuil
-		1 si distance <= seuil
-	Variables utilisees ( externes doivent etre initialisees avant appel , et
-	sont ramenees au repere centre sur l'origine du segment)
-		dx, dy = coord de l'extremite segment.
-		spot_cX,spot_cY = coord du curseur souris
-	la recherche se fait selon 4 cas:
-		segment horizontal
-		segment vertical
-		segment 45
-		segment quelconque
-	*/
-
 TRACK * Locate_Zone(TRACK * start_adresse,int layer, int typeloc);
 TRACK * Locate_Zone(TRACK * start_adresse, const wxPoint & ref_pos,int layer);
 	/*

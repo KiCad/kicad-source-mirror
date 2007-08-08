@@ -122,5 +122,5 @@ public:
 	WinEDA_PcbFrame * m_Parent;
 };
 
-#endif
-    // _ZONES_H_
+#endif      // _ZONES_H_
+

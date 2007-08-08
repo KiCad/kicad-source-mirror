@@ -128,8 +128,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 #if defined(DEBUG)
         DrawStruct = m_Pcb->FindPadOrModule( 
                             GetScreen()->RefPos(true), 
-                            GetScreen()->m_Active_Layer, 
-                            VISIBLE_ONLY ); 
+                            GetScreen()->m_Active_Layer );
 #else
         DrawStruct = PcbGeneralLocateAndDisplay();
 #endif        

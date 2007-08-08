@@ -144,7 +144,6 @@ public:
 
     
 #if defined(DEBUG)
-
     /**
      * Function GetClass
      * returns the class name.

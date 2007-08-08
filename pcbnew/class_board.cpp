@@ -290,75 +290,64 @@ void BOARD::Show( int nestLevel, std::ostream& os )
 
 
 // see pcbstruct.h     
-EDA_BaseStruct* BOARD::FindPadOrModule( const wxPoint& refPos, int layer, int typeloc )
+EDA_BaseStruct* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
 {
     class PadOrModule : public INSPECTOR
     {
     public:
         EDA_BaseStruct*     found;
         int                 layer;
-        int                 typeloc;
     
-        PadOrModule( int alayer, int atypeloc ) :
-            found(0),
-            layer(alayer),
-            typeloc(atypeloc) {}
+        PadOrModule( int alayer ) :
+            found(0),                   // found is NULL
+            layer(alayer)
+        {
+        }
     
         SEARCH_RESULT Inspect( EDA_BaseStruct* testItem, const void* testData )
         {
-            const wxPoint*  refPos = (const wxPoint*) testData;
+            const wxPoint& refPos =  *(const wxPoint*) testData;
     
-            if( testItem->m_StructType == TYPEMODULE )
+            if( testItem->m_StructType == TYPEPAD )
             {
-                int mlayer = ((MODULE*)testItem)->m_Layer;
-                
-                if( typeloc & MATCH_LAYER )
-                {
-                    if( layer != mlayer )
-                        return SEARCH_CONTINUE;
-                }
-
-                if( typeloc & VISIBLE_ONLY )
-                {
-                    if( !IsModuleLayerVisible(mlayer) )
-                        return SEARCH_CONTINUE;
-                }
-                
-                if( testItem->HitTest( *refPos ) )
+                if( testItem->HitTest( refPos ) )
                 {
                     found = testItem;
                     return SEARCH_QUIT;
                 }
             }
-            else if( testItem->m_StructType == TYPEPAD )
-            {
-                if( testItem->HitTest( *refPos ) )
-                {
-                    found = testItem;
-                    return SEARCH_QUIT;
-                }
-            }
-            else { int debug=1; /* this should not happen, because of scanTypes */ }
             
+            else if( testItem->m_StructType == TYPEMODULE )
+            {
+                int mlayer = ((MODULE*)testItem)->m_Layer; 
+
+                // consider only visible modules
+                if( IsModuleLayerVisible( mlayer ) )
+                {
+                    if( testItem->HitTest( refPos ) )
+                    {
+                        // save regardless of layer test, but only quit if 
+                        // layer matches, otherwise use this item if no future
+                        // layer match.
+                        found = testItem;
+                        
+                        if( layer == mlayer )
+                            return SEARCH_QUIT;
+                    }
+                }
+            }
             return SEARCH_CONTINUE;
         }
-        
     };
     
-    PadOrModule inspector1( layer, MATCH_LAYER );
-    PadOrModule inspector2( layer, VISIBLE_ONLY );
+    PadOrModule inspector( layer );
 
+    // search only for PADs first, then MODULES, and preferably a layer match
     static const KICAD_T scanTypes[] = { TYPEPAD, TYPEMODULE, EOT };
 
-    // search the current layer first    
-    if( SEARCH_QUIT == IterateForward( m_Modules, &inspector1, &refPos, scanTypes ) )
-        return inspector1.found;
-
-    // if not found, set layer to don't care and search again
-    if( SEARCH_QUIT == IterateForward( m_Modules, &inspector2, &refPos, scanTypes ) )
-        return inspector2.found;
+    IterateForward( m_Modules, &inspector, &refPos, scanTypes );
     
-    return NULL;
+    return inspector.found;
 }
 
 #endif

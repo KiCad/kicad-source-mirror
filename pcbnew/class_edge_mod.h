@@ -41,6 +41,14 @@ public:
     void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                   int draw_mode );
     void    Draw3D( Pcb3D_GLCanvas* glcanvas );
+
+    /**
+     * Function HitTest
+     * tests if the given wxPoint is within the bounds of this object.
+     * @param refPos A wxPoint to test
+     * @return bool - true if a hit, else false
+     */
+    bool    HitTest( const wxPoint& refPos );
     
 #if defined(DEBUG)
     /**
@@ -50,7 +58,7 @@ public:
      */
     virtual wxString GetClass() const
     {
-        return wxT( "GRAPHIC" );
+        return wxT( "MGRAPHIC" );
         // return wxT( "EDGE" );  ?
     }
 

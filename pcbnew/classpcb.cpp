@@ -16,6 +16,7 @@
 #endif
 
 #include "protos.h"
+#include "trigo.h"
 
 
 /**************************************************************/
@@ -163,6 +164,61 @@ bool DRAWSEGMENT::ReadDrawSegmentDescr( FILE* File, int* LineNum )
 
     return FALSE;
 }
+
+
+/**
+ * Function HitTest
+ * tests if the given wxPoint is within the bounds of this object.
+ * @param ref_pos A wxPoint to test
+ * @return bool - true if a hit, else false
+ */
+bool DRAWSEGMENT::HitTest( const wxPoint& ref_pos )
+{
+    int ux0 = m_Start.x; 
+    int uy0 = m_Start.y;
+    
+    /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
+    int dx = m_End.x - ux0; 
+    int dy = m_End.y - uy0;
+    
+    int spot_cX = ref_pos.x - ux0; 
+    int spot_cY = ref_pos.y - uy0;
+
+    if( m_Shape==S_CIRCLE || m_Shape==S_ARC )
+    {
+        int rayon, dist, stAngle, endAngle, mouseAngle;
+
+        rayon = (int) hypot( (double) (dx), (double) (dy) );
+        dist  = (int) hypot( (double) (spot_cX), (double) (spot_cY) );
+        
+        if( abs( rayon - dist ) <= (m_Width / 2) )
+        {
+            if( m_Shape == S_CIRCLE )
+                return true;
+            
+            /* pour un arc, controle complementaire */
+            mouseAngle = (int) ArcTangente( spot_cY, spot_cX );
+            stAngle    = (int) ArcTangente( dy, dx );
+            endAngle   = stAngle + m_Angle;
+
+            if( endAngle > 3600 )
+            {
+                stAngle  -= 3600; 
+                endAngle -= 3600;
+            }
+            
+            if( mouseAngle >= stAngle  &&  mouseAngle <= endAngle )
+                return true;
+        }
+    }
+    else
+    {
+        if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
+            return true;
+    }
+    return false;
+}
+
 
 
 /*******************/

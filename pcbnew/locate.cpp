@@ -13,10 +13,7 @@
 
 #include "protos.h"
 
-
-/* variables locales */
-int ux0, uy0, dx, dy, spot_cX, spot_cY;     /* Variables utilisees pour
-                                             *  la localisation des segments */
+                                             
 /* fonctions locales */
 EDA_BaseStruct* Locate_MirePcb( EDA_BaseStruct* PtStruct, int LayerSearch, int typeloc );
 
@@ -302,72 +299,21 @@ EDGE_MODULE* Locate_Edge_Module( MODULE* module, int typeloc )
  *      NULL si rien trouve
  */
 {
-    EDGE_MODULE*    edge_mod;
-    EDA_BaseStruct* PtStruct;
-    int             uxf, uyf, type_trace;
-    int             rayon, dist;
-    wxPoint         ref_pos;        /* coord du point de localisation */
-
-    /* pour localisation d'arcs, angle du point de debut, de fin et du point de reference */
-    int             StAngle, EndAngle, MouseAngle;
-
     if( !module )
         return NULL;
 
-    ref_pos = RefPos( typeloc );
+    /* coord du point de localisation */
+    wxPoint  ref_pos = RefPos( typeloc );
 
-    PtStruct = module->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    EDA_BaseStruct* PtStruct = module->m_Drawings;
+    for( ; PtStruct != NULL;  PtStruct = PtStruct->Pnext )
     {
         if( PtStruct->m_StructType != TYPEEDGEMODULE )
             continue;
 
-        edge_mod   = (EDGE_MODULE*) PtStruct;
-        type_trace = edge_mod->m_Shape;
-        ux0 = edge_mod->m_Start.x; uy0 = edge_mod->m_Start.y;
-        uxf = edge_mod->m_End.x; uyf = edge_mod->m_End.y;
-
-        switch( type_trace )
-        {
-        case S_SEGMENT:
-            /* recalcul des coordonnees avec ux0,uy0 = origine des coord. */
-            spot_cX = ref_pos.x - ux0; spot_cY = ref_pos.y - uy0;
-            dx = uxf - ux0; dy = uyf - uy0;
-            /* detection : */
-            if( distance( edge_mod->m_Width / 2 ) )
-                return edge_mod;
-            break;
-
-        case S_CIRCLE:
-            rayon = (int) hypot( (double) (uxf - ux0), (double) (uyf - uy0) );
-            dist  = (int) hypot( (double) (ref_pos.x - ux0), (double) (ref_pos.y - uy0) );
-
-            if( abs( rayon - dist ) <= edge_mod->m_Width )
-                return edge_mod;
-            break;
-
-        case S_ARC:
-            rayon = (int) hypot( (double) (uxf - ux0), (double) (uyf - uy0) );
-            dist  = (int) hypot( (double) (ref_pos.x - ux0), (double) (ref_pos.y - uy0) );
-
-            if( abs( rayon - dist ) > edge_mod->m_Width )
-                break;
-
-            /* pour un arc, controle complementaire */
-            MouseAngle = (int) ArcTangente( ref_pos.y - uy0, ref_pos.x - ux0 );
-            StAngle    = (int) ArcTangente( uyf - uy0, uxf - ux0 );
-            EndAngle   = StAngle + edge_mod->m_Angle;
-
-            if( EndAngle > 3600 )
-            {
-                StAngle -= 3600; EndAngle -= 3600;
-            }
-
-            if( (MouseAngle >= StAngle) && (MouseAngle <= EndAngle) )
-                return edge_mod;
-
-            break;
-        }
+        // calls virtual EDGE_MODULE::HitTest() 
+        if( PtStruct->HitTest( ref_pos ) )
+            return (EDGE_MODULE*) PtStruct;
     }
 
     return NULL;
@@ -383,105 +329,17 @@ EDA_BaseStruct* Locate_Cotation( BOARD* Pcb, int LayerSearch, int typeloc )
  *  return a pointer to the located item, or NULL
  */
 {
-    EDA_BaseStruct* PtStruct;
-    COTATION*       Cotation;
-    TEXTE_PCB*      pt_txt;
-    wxPoint         ref_pos;
-    int             ux0, uy0;
+    wxPoint  ref_pos = RefPos( typeloc );
 
-    ref_pos = RefPos( typeloc );
-
-    PtStruct = Pcb->m_Drawings;
+    EDA_BaseStruct* PtStruct = Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
         if( PtStruct->m_StructType != TYPECOTATION )
             continue;
-        
-        Cotation = (COTATION*) PtStruct;
-        if( (Cotation->m_Layer != LayerSearch) && (LayerSearch != -1) )
-            continue;
 
-        /* Localisation du texte ? */
-        pt_txt = Cotation->m_Text;
-        if( pt_txt )
-        {
-            // because HitTest() is present in both base classes of TEXTE_PCB
-            // use a dis-ambiguating cast to tell compiler which HitTest()
-            // to call.
-            if( static_cast<EDA_TextStruct*>(pt_txt)->HitTest( ref_pos ) )
-                return PtStruct;
-        }
-
-        /* Localisation des SEGMENTS ?) */
-        ux0 = Cotation->Barre_ox; uy0 = Cotation->Barre_oy;
-        
-        /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
-        dx      = Cotation->Barre_fx - ux0; dy = Cotation->Barre_fy - uy0;
-        spot_cX = ref_pos.x - ux0; spot_cY = ref_pos.y - uy0;
-
-        /* detection : */
-        if( distance( Cotation->m_Width / 2 ) )
-            return PtStruct;
-
-        ux0 = Cotation->TraitG_ox; uy0 = Cotation->TraitG_oy;
-        
-        /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
-        dx      = Cotation->TraitG_fx - ux0; dy = Cotation->TraitG_fy - uy0;
-        spot_cX = ref_pos.x - ux0; spot_cY = ref_pos.y - uy0;
-
-        /* detection : */
-        if( distance( Cotation->m_Width / 2 ) )
-            return PtStruct;
-
-        ux0 = Cotation->TraitD_ox; uy0 = Cotation->TraitD_oy;
-        
-        /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
-        dx      = Cotation->TraitD_fx - ux0; dy = Cotation->TraitD_fy - uy0;
-        spot_cX = ref_pos.x - ux0; spot_cY = ref_pos.y - uy0;
-
-        /* detection : */
-        if( distance( Cotation->m_Width / 2 ) )
-            return PtStruct;
-
-        ux0 = Cotation->FlecheD1_ox; uy0 = Cotation->FlecheD1_oy;
-        
-        /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
-        dx      = Cotation->FlecheD1_fx - ux0; dy = Cotation->FlecheD1_fy - uy0;
-        spot_cX = ref_pos.x - ux0; spot_cY = ref_pos.y - uy0;
-
-        /* detection : */
-        if( distance( Cotation->m_Width / 2 ) )
-            return PtStruct;
-
-        ux0 = Cotation->FlecheD2_ox; uy0 = Cotation->FlecheD2_oy;
-        
-        /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
-        dx      = Cotation->FlecheD2_fx - ux0; dy = Cotation->FlecheD2_fy - uy0;
-        spot_cX = ref_pos.x - ux0; spot_cY = ref_pos.y - uy0;
-
-        /* detection : */
-        if( distance( Cotation->m_Width / 2 ) )
-            return PtStruct;
-
-        ux0 = Cotation->FlecheG1_ox; uy0 = Cotation->FlecheG1_oy;
-        
-        /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
-        dx      = Cotation->FlecheG1_fx - ux0; dy = Cotation->FlecheG1_fy - uy0;
-        spot_cX = ref_pos.x - ux0; spot_cY = ref_pos.y - uy0;
-
-        /* detection : */
-        if( distance( Cotation->m_Width / 2 ) )
-            return PtStruct;
-
-        ux0 = Cotation->FlecheG2_ox; uy0 = Cotation->FlecheG2_oy;
-        
-        /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
-        dx      = Cotation->FlecheG2_fx - ux0; dy = Cotation->FlecheG2_fy - uy0;
-        spot_cX = ref_pos.x - ux0; spot_cY = ref_pos.y - uy0;
-
-        /* detection : */
-        if( distance( Cotation->m_Width / 2 ) )
-            return PtStruct;
+        // calls virtual COTATION::HitTest() 
+        if( PtStruct->HitTest( ref_pos ) )
+            return (COTATION*) PtStruct;
     }
 
     return NULL;
@@ -499,73 +357,32 @@ DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int LayerSearch, int typeloc )
  *  Le segment sur la couche active est détecté en priorite
  */
 {
-    EDA_BaseStruct* PtStruct;
-    DRAWSEGMENT*    pts, * locate_segm = NULL;
-    wxPoint         ref_pos;
+
+    DRAWSEGMENT*    locate_segm = NULL;
     PCB_SCREEN*     screen = (PCB_SCREEN*) ActiveScreen;
+   
+    wxPoint         ref_pos = RefPos( typeloc );
 
-    ref_pos = RefPos( typeloc );
-
-    PtStruct = Pcb->m_Drawings;
+    EDA_BaseStruct* PtStruct = Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
         if( PtStruct->m_StructType != TYPEDRAWSEGMENT )
             continue;
-        pts = (DRAWSEGMENT*) PtStruct;
+        
+        DRAWSEGMENT*  pts = (DRAWSEGMENT*) PtStruct;
+        
         if( (pts->m_Layer != LayerSearch) && (LayerSearch != -1) )
             continue;
-        
-        ux0 = pts->m_Start.x; uy0 = pts->m_Start.y;
-        
-        /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
-        dx      = pts->m_End.x - ux0; dy = pts->m_End.y - uy0;
-        spot_cX = ref_pos.x - ux0; spot_cY = ref_pos.y - uy0;
 
-        /* detection : */
-        if( (pts->m_Shape == S_CIRCLE) || (pts->m_Shape == S_ARC) )
+        if( pts->HitTest( ref_pos ) )
         {
-            int rayon, dist, StAngle, EndAngle, MouseAngle;
+            // return this hit if layer matches, else remember in 
+            // case no layer match is found.
+            if( pts->m_Layer == screen->m_Active_Layer )
+                return pts;
 
-            rayon = (int) hypot( (double) (dx), (double) (dy) );
-            dist  = (int) hypot( (double) (spot_cX), (double) (spot_cY) );
-            
-            if( abs( rayon - dist ) <= (pts->m_Width / 2) )
-            {
-                if( pts->m_Shape == S_CIRCLE )
-                {
-                    if( pts->m_Layer == screen->m_Active_Layer )
-                        return pts;
-                    else if( !locate_segm )
-                        locate_segm = pts;
-                }
-
-                /* pour un arc, controle complementaire */
-                MouseAngle = (int) ArcTangente( spot_cY, spot_cX );
-                StAngle    = (int) ArcTangente( dy, dx );
-                EndAngle   = StAngle + pts->m_Angle;
-
-                if( EndAngle > 3600 )
-                {
-                    StAngle -= 3600; EndAngle -= 3600;
-                }
-                if( (MouseAngle >= StAngle) && (MouseAngle <= EndAngle) )
-                {
-                    if( pts->m_Layer == screen->m_Active_Layer )
-                        return pts;
-                    else if( !locate_segm )
-                        locate_segm = pts;
-                }
-            }
-        }
-        else
-        {
-            if( distance( pts->m_Width / 2 ) )
-            {
-                if( pts->m_Layer == screen->m_Active_Layer )
-                    return pts;
-                else if( !locate_segm )
-                    locate_segm = pts;
-            }
+            else if( !locate_segm )
+                locate_segm = pts;
         }
     }
 
@@ -651,14 +468,6 @@ D_PAD* Locate_Pads( MODULE* module, const wxPoint& ref_pos, int masque_layer )
     D_PAD*  pt_pad = module->m_Pads;
     for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
     {
-        /*
-        wxPoint shape_pos = ReturnShapePos();
-
-        why the global ux0?
-        ux0 = shape_pos.x; 
-        uy0 = shape_pos.y;      // pos x,y du centre du pad
-        */
-
         /* ... et sur la bonne couche */
         if( (pt_pad->m_Masque_Layer & masque_layer) == 0 )
             continue;
@@ -704,8 +513,6 @@ MODULE* Locate_Prefered_Module( BOARD* Pcb, int typeloc )
         if( (typeloc & IGNORE_LOCKED) && pt_module->IsLocked() )
             continue;
 
-        /* Localisation: test des dimensions minimales, choix du meilleur candidat */
-
         /* calcul de priorite: la priorite est donnee a la couche
          *  d'appartenance du module et a la couche cuivre si le module
          *  est sur couche serigr,adhesive cuivre, a la couche cmp si le module
@@ -718,6 +525,8 @@ MODULE* Locate_Prefered_Module( BOARD* Pcb, int typeloc )
         else if( layer==ADHESIVE_N_CMP || layer==SILKSCREEN_N_CMP )
             layer = CMP_N;
         
+        /* Localisation: test des dimensions minimales, choix du meilleur candidat */
+
         /* calcul des dimensions du cadre :*/
         lx = pt_module->m_BoundaryBox.GetWidth();
         ly = pt_module->m_BoundaryBox.GetHeight();
@@ -998,42 +807,30 @@ TRACK* Locate_Pistes( TRACK* start_adresse, int MasqueLayer, int typeloc )
 
 TRACK* Locate_Pistes( TRACK* start_adresse, const wxPoint& ref_pos, int MasqueLayer )
 {
-    TRACK* Track;               /* pointeur sur les pistes */
-    int    l_piste;             /* demi-largeur de la piste */
-
-    for( Track = start_adresse; Track != NULL; Track = (TRACK*) Track->Pnext )
+    for( TRACK* Track = start_adresse;   Track;  Track = (TRACK*) Track->Pnext )
     {
         if( Track->GetState( BUSY | DELETED ) )
             continue;
+        
         if( (g_DesignSettings.m_LayerColor[Track->m_Layer] & ITEM_NOT_SHOW) )
             continue;
 
-        /* calcul des coordonnees du segment teste */
-        l_piste = Track->m_Width >> 1;                  /* l_piste = demi largeur piste */
-        ux0 = Track->m_Start.x; uy0 = Track->m_Start.y; /* coord de depart */
-        dx  = Track->m_End.x; dy = Track->m_End.y;      /* coord d'arrivee */
-
-        /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
-        dx     -= ux0; dy -= uy0;
-        spot_cX = ref_pos.x - ux0; spot_cY = ref_pos.y - uy0;
-
         if( Track->m_StructType == TYPEVIA ) /* VIA rencontree */
         {
-            if( (abs( spot_cX ) <= l_piste ) && (abs( spot_cY ) <=l_piste) )
-            {
+            if( Track->HitTest( ref_pos ) )
                 return Track;
-            }
-            continue;
         }
-
-        if( MasqueLayer != -1 )
-            if( (g_TabOneLayerMask[Track->m_Layer] & MasqueLayer) == 0 )
-                continue;   /* Segments sur couches differentes */
-
-        if( distance( l_piste ) )
-            return Track;
+        else
+        {
+            if( MasqueLayer != -1 )
+                if( (g_TabOneLayerMask[Track->m_Layer] & MasqueLayer) == 0 )
+                    continue;   /* Segments sur couches differentes */
+                
+            if( Track->HitTest( ref_pos ) )
+                return Track;
+        }
     }
-
+    
     return NULL;
 }
 
@@ -1065,23 +862,12 @@ TRACK* Locate_Zone( TRACK* start_adresse, int layer, int typeloc )
 
 TRACK* Locate_Zone( TRACK* start_adresse, const wxPoint& ref_pos, int layer )
 {
-    TRACK* Zone;                /* pointeur sur les pistes */
-    int    l_segm;              /* demi-largeur de la piste */
-
-    for( Zone = start_adresse; Zone != NULL; Zone = (TRACK*) Zone->Pnext )
+    for( TRACK* Zone = start_adresse;  Zone;   Zone = (TRACK*) Zone->Pnext )
     {
-        /* calcul des coordonnees du segment teste */
-        l_segm = Zone->m_Width >> 1;                        /* l_piste = demi largeur piste */
-        ux0    = Zone->m_Start.x; uy0 = Zone->m_Start.y;    /* coord de depart */
-        dx = Zone->m_End.x; dy = Zone->m_End.y;             /* coord d'arrivee */
-
-        /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
-        dx     -= ux0; dy -= uy0;
-        spot_cX = ref_pos.x - ux0; spot_cY = ref_pos.y - uy0;
-
         if( (layer != -1) && (Zone->m_Layer != layer) )
             continue;
-        if( distance( l_segm ) )
+        
+        if( Zone->HitTest( ref_pos ) )
             return Zone;
     }
 
@@ -1122,159 +908,6 @@ TEXTE_PCB* Locate_Texte_Pcb( EDA_BaseStruct* PtStruct, int LayerSearch, int type
     return NULL;
 }
 
-
-/*****************************/
-int distance( int seuil )
-/*****************************/
-
-/*
- *  Calcul de la distance du curseur souris a un segment de droite :
- *  ( piste, edge, contour module ..
- *  retourne:
- *      0 si distance > seuil
- *      1 si distance <= seuil
- *  Variables utilisees ( doivent etre initialisees avant appel , et
- *  sont ramenees au repere centre sur l'origine du segment)
- *      dx, dy = coord de l'extremite segment.
- *      spot_cX,spot_cY = coord du curseur souris
- *  la recherche se fait selon 4 cas:
- *      segment horizontal
- *      segment vertical
- *      segment 45
- *      segment quelconque
- */
-{
-    int cXrot, cYrot,   /* coord du point (souris) dans le repere tourne */
-        segX, segY;     /* coord extremite segment tj >= 0 */
-    int pointX, pointY; /* coord point a tester dans repere modifie dans lequel
-                         * segX et segY sont >=0 */
-
-    segX = dx; segY = dy; pointX = spot_cX; pointY = spot_cY;
-
-    /*Recalcul coord pour que le segment soit dans 1er quadrant (coord >= 0)*/
-    if( segX < 0 )   /* mise en >0 par symetrie par rapport a l'axe Y */
-    {
-        segX = -segX; pointX = -pointX;
-    }
-    if( segY < 0 )   /* mise en > 0 par symetrie par rapport a l'axe X */
-    {
-        segY = -segY; pointY = -pointY;
-    }
-
-
-    if( segY == 0 ) /* piste Horizontale */
-    {
-        if( abs( pointY ) <= seuil )
-        {
-            if( (pointX >= 0) && (pointX <= segX) )
-                return 1;
-            /* Etude des extremites : cercle de rayon seuil */
-            if( (pointX < 0) && (pointX >= -seuil) )
-            {
-                if( ( (pointX * pointX) + (pointY * pointY) ) <= (seuil * seuil) )
-                    return 1;
-            }
-            if( (pointX > segX) && ( pointX <= (segX + seuil) ) )
-            {
-                if( ( ( (pointX - segX) * (pointX - segX) ) + (pointY * pointY) ) <=
-                   (seuil * seuil) )
-                    return 1;
-            }
-        }
-    }
-    else if( segX == 0 ) /* piste verticale */
-    {
-        if( abs( pointX ) <= seuil )
-        {
-            if( (pointY >= 0 ) && (pointY <= segY) )
-                return 1;
-            if( (pointY < 0) && (pointY >= -seuil) )
-            {
-                if( ( (pointY * pointY) + (pointX * pointX) ) <= (seuil * seuil) )
-                    return 1;
-            }
-            if( (pointY > segY) && ( pointY <= (segY + seuil) ) )
-            {
-                if( ( ( (pointY - segY) * (pointY - segY) ) + (pointX * pointX) ) <=
-                   (seuil * seuil) )
-                    return 1;
-            }
-        }
-    }
-    else if( segX == segY )    /* piste a 45 degre */
-    {
-        /* on fait tourner les axes de 45 degre. la souris a alors les
-         *  coord : x1 = x*cos45 + y*sin45
-         *      y1 = y*cos45 - x*sin45
-         *  et le segment de piste est alors horizontal.
-         *  recalcul des coord de la souris ( sin45 = cos45 = .707 = 7/10
-         *  remarque : sin ou cos45 = .707, et lors du recalcul des coord
-         *  dx45 et dy45, lec coeff .707 est neglige, dx et dy sont en fait .707 fois
-         *  trop grands. (c.a.d trop petits)
-         *  spot_cX,Y doit etre * par .707 * .707 = 0.5 */
-
-        cXrot = (pointX + pointY) >> 1;
-        cYrot = (pointY - pointX) >> 1;
-
-        /* recalcul des coord de l'extremite du segment , qui sera vertical
-         *  suite a l'orientation des axes sur l'ecran : dx45 = pointX (ou pointY)
-         *  et est en fait 1,414 plus grand , et dy45 = 0 */
-
-        // seuil doit etre * .707 pour tenir compte du coeff de reduction sur dx,dy
-        seuil *= 7; seuil /= 10;
-        if( abs( cYrot ) <= seuil ) /* ok sur axe vertical) */
-        {
-            if( (cXrot >= 0) && (cXrot <= segX) )
-                return 1;
-
-            /* Etude des extremites : cercle de rayon seuil */
-            if( (cXrot < 0) && (cXrot >= -seuil) )
-            {
-                if( ( (cXrot * cXrot) + (cYrot * cYrot) ) <= (seuil * seuil) )
-                    return 1;
-            }
-            if( (cXrot > segX) && ( cXrot <= (segX + seuil) ) )
-            {
-                if( ( ( (cXrot - segX) * (cXrot - segX) ) + (cYrot * cYrot) ) <= (seuil * seuil) )
-                    return 1;
-            }
-        }
-    }
-    else    /* orientation quelconque */
-    {
-        /* On fait un changement d'axe (rotation) de facon a ce que le segment
-         * de piste soit horizontal dans le nouveau repere */
-        int angle;
-
-        angle = (int) ( atan2( (float) segY, (float) segX ) * 1800 / M_PI);
-        cXrot = pointX; cYrot = pointY;
-
-        RotatePoint( &cXrot, &cYrot, angle );   /* Rotation du point a tester */
-        RotatePoint( &segX, &segY, angle );     /* Rotation du segment */
-
-        /* la piste est Horizontale , par suite des modifs de coordonnes
-         * et d'axe, donc segX = longueur du segment */
-
-        if( abs( cYrot ) <= seuil ) /* ok sur axe vertical) */
-        {
-            if( (cXrot >= 0) && (cXrot <= segX) )
-                return 1;
-
-            /* Etude des extremites : cercle de rayon seuil */
-            if( (cXrot < 0) && (cXrot >= -seuil) )
-            {
-                if( ( (cXrot * cXrot) + (cYrot * cYrot) ) <= (seuil * seuil) )
-                    return 1;
-            }
-            if( (cXrot > segX) && ( cXrot <= (segX + seuil) ) )
-            {
-                if( ( ( (cXrot - segX) * (cXrot - segX) ) + (cYrot * cYrot) ) <= (seuil * seuil) )
-                    return 1;
-            }
-        }
-    }
-    return 0;
-}
 
 
 /*******************************************************************************/
@@ -1396,11 +1029,10 @@ EDA_BaseStruct* Locate_MirePcb( EDA_BaseStruct* PtStruct, int LayerSearch,
                                 int typeloc )
 /***********************************************************************/
 
-/* Serach for a photo target
+/* Search for a photo target
  */
 {
     wxPoint ref_pos;/* coord du point de localisation */
-    int     dX, dY, rayon;
 
     if( PtStruct == NULL )
         return NULL;
@@ -1417,13 +1049,10 @@ EDA_BaseStruct* Locate_MirePcb( EDA_BaseStruct* PtStruct, int LayerSearch,
         if( LayerSearch != -1 && item->m_Layer != LayerSearch )
             continue;
 
-        dX    = ref_pos.x - item->m_Pos.x;
-        dY    = ref_pos.y - item->m_Pos.y;
-        rayon = item->m_Size / 2;
-
-        if( (abs( dX ) <= rayon ) && ( abs( dY ) <= rayon ) )
-            break;  /* Mire Localisee */
+        if( item->HitTest( ref_pos ) )
+            break;
     }
 
     return PtStruct;
 }
+

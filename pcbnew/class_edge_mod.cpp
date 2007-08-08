@@ -438,6 +438,73 @@ int EDGE_MODULE::ReadDescr( char* Line, FILE* File,
 }
 
 
+/**
+ * Function HitTest
+ * tests if the given wxPoint is within the bounds of this object.
+ * @param refPos A wxPoint to test
+ * @return bool - true if a hit, else false
+ */
+bool EDGE_MODULE::HitTest( const wxPoint& ref_pos )
+{
+    int             uxf, uyf;
+    int             rayon, dist;
+    int             dx, dy, spot_cX, spot_cY;    
+    int             ux0, uy0;
+
+    ux0 = m_Start.x; 
+    uy0 = m_Start.y;
+    
+    uxf = m_End.x; 
+    uyf = m_End.y;
+
+    switch( m_Shape )
+    {
+    case S_SEGMENT:
+        /* recalcul des coordonnees avec ux0,uy0 = origine des coord. */
+        spot_cX = ref_pos.x - ux0; 
+        spot_cY = ref_pos.y - uy0;
+        
+        dx = uxf - ux0; 
+        dy = uyf - uy0;
+        if( DistanceTest( m_Width/2, dx, dy, spot_cX, spot_cY ) )
+            return true;
+        break;
+
+    case S_CIRCLE:
+        rayon = (int) hypot( (double) (uxf - ux0), (double) (uyf - uy0) );
+        dist  = (int) hypot( (double) (ref_pos.x - ux0), (double) (ref_pos.y - uy0) );
+        if( abs( rayon - dist ) <= m_Width )
+            return true;
+        break;
+
+    case S_ARC:
+        rayon = (int) hypot( (double) (uxf - ux0), (double) (uyf - uy0) );
+        dist  = (int) hypot( (double) (ref_pos.x - ux0), (double) (ref_pos.y - uy0) );
+
+        if( abs( rayon - dist ) > m_Width )
+            break;
+
+        /* pour un arc, controle complementaire */
+        int mouseAngle = (int) ArcTangente( ref_pos.y - uy0, ref_pos.x - ux0 );
+        int stAngle    = (int) ArcTangente( uyf - uy0, uxf - ux0 );
+        int endAngle   = stAngle + m_Angle;
+
+        if( endAngle > 3600 )
+        {
+            stAngle  -= 3600; 
+            endAngle -= 3600;
+        }
+
+        if( (mouseAngle >= stAngle) && (mouseAngle <= endAngle) )
+            return true;
+
+        break;
+    }
+
+    return false;       // an unknown m_Shape also returns false    
+}
+
+
 #if defined(DEBUG)
 /**
  * Function Show
