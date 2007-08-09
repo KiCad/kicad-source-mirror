@@ -15,6 +15,7 @@ email address.
   * Implemented HitTest() for class_cotation, class_mire, and a few other classes
     by factoring out existing code from locate.cpp.  locate.cpp should operate
     exactly the same as before.
+  * Improved or implemented the Show() function for several classes.
   * Detected that the suspected class_module hit-testing bug was not real, 
     i.e. no bug found.
   
