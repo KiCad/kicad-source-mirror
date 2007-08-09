@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-08-02 10:01+0100\n"
+"PO-Revision-Date: 2007-08-08 11:30+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -36,73 +36,80 @@ msgstr "Editer TOUTES Vias"
 msgid "Edit All Track Sizes"
 msgstr "Editer TOUTES Pistes"
 
-#: pcbnew/files.cpp:56
-msgid "Recovery file "
-msgstr "Fichier de secours "
+#: pcbnew/edit.cpp:165
+msgid "Graphic not autorized on Copper layers"
+msgstr "Graphique non autorisé sur couches cuivre"
 
-#: pcbnew/files.cpp:56
-#: pcbnew/librairi.cpp:190
-#: eeschema/libedit.cpp:113
-#: eeschema/find.cpp:423
-#: gerbview/dcode.cpp:260
-#: gerbview/readgerb.cpp:141
-#: common/eda_doc.cpp:144
-msgid " not found"
-msgstr "  non trouvé"
+#: pcbnew/edit.cpp:189
+msgid "Tracks on Copper layers only "
+msgstr "Pistes sur couches cuivre seulement"
 
-#: pcbnew/files.cpp:62
-msgid "Ok to load Recovery file "
-msgstr "Ok pour charger le fichier de secours"
+#: pcbnew/edit.cpp:267
+msgid "Cotation not autorized on Copper layers"
+msgstr "Cotation non autorisée sur couches cuivre"
 
-#: pcbnew/files.cpp:141
-msgid "Board Modified: Continue ?"
-msgstr "Circuit imprimé modifié,  Continuer ?"
+#: pcbnew/edit.cpp:466
+#: pcbnew/editmod.cpp:43
+msgid "Module Editor"
+msgstr "Ouvrir Editeur de modules"
 
-#: pcbnew/files.cpp:159
-#: pcbnew/files.cpp:251
-msgid "Board files:"
-msgstr "Fichiers C.I.:"
+#: pcbnew/edit.cpp:546
+msgid "Add Tracks"
+msgstr "Addition de pistes"
 
-#: pcbnew/files.cpp:181
-#: pcbnew/librairi.cpp:62
-#: cvpcb/readschematicnetlist.cpp:51
-#: cvpcb/rdpcad.cpp:45
-#, c-format
-msgid "File <%s> not found"
-msgstr " fichier %s non trouvé"
+#: pcbnew/edit.cpp:555
+#: pcbnew/tool_pcb.cpp:420
+msgid "Add Zones"
+msgstr "Addition de Zones"
 
-#: pcbnew/files.cpp:285
-msgid "Warning: unable to create bakfile "
-msgstr "Attention: Impossible de créer fichier backup "
+#: pcbnew/edit.cpp:557
+msgid "Warning: Display Zone is OFF!!!"
+msgstr "Attention: Affichage zones désactivé !!!"
 
-#: pcbnew/files.cpp:300
-#: pcbnew/librairi.cpp:240
-#: pcbnew/librairi.cpp:377
-#: pcbnew/librairi.cpp:518
-#: pcbnew/librairi.cpp:712
-#: pcbnew/export_gencad.cpp:79
-#: pcbnew/gen_modules_placefile.cpp:82
-#: pcbnew/gen_modules_placefile.cpp:93
-#: pcbnew/gen_modules_placefile.cpp:239
-#: pcbnew/plothpgl.cpp:65
-#: eeschema/plotps.cpp:388
-#: eeschema/plothpgl.cpp:560
-#: cvpcb/genequiv.cpp:42
-#: gerbview/export_to_pcbnew.cpp:53
-msgid "Unable to create "
-msgstr "Impossible de créer "
+#: pcbnew/edit.cpp:564
+msgid "Add Mire"
+msgstr "Ajouter Mires de superposition"
 
-#: pcbnew/files.cpp:318
-msgid "Backup file: "
-msgstr "Fichier backup: "
+#: pcbnew/edit.cpp:568
+msgid "Adjust Zero"
+msgstr "Ajuster Zéro"
 
-#: pcbnew/files.cpp:322
-msgid "Write Board file: "
-msgstr "Ecriture fichier CI: "
+#: pcbnew/edit.cpp:574
+msgid "Add Graphic"
+msgstr "Addition éléments graphiques"
 
-#: pcbnew/files.cpp:323
-msgid "Failed to create "
-msgstr "Impossible de créer  fichier "
+#: pcbnew/edit.cpp:578
+#: pcbnew/tool_pcb.cpp:437
+#: pcbnew/tool_modedit.cpp:170
+#: eeschema/schedit.cpp:309
+#: eeschema/libframe.cpp:487
+#: gerbview/tool_gerber.cpp:361
+msgid "Add Text"
+msgstr "Ajout de Texte"
+
+#: pcbnew/edit.cpp:582
+msgid "Add Modules"
+msgstr "Addition de Modules"
+
+#: pcbnew/edit.cpp:586
+#: pcbnew/tool_pcb.cpp:442
+msgid "Add Cotation"
+msgstr "Addition de Cotations"
+
+#: pcbnew/edit.cpp:594
+msgid "Net Highlight"
+msgstr "Surbrillance des équipotentielles"
+
+#: pcbnew/edit.cpp:598
+msgid "Local Ratsnest"
+msgstr "Monter le chevelu général"
+
+#: pcbnew/edit.cpp:755
+#: pcbnew/modedit.cpp:327
+#: eeschema/schedit.cpp:443
+#: eeschema/libframe.cpp:554
+msgid "Delete item"
+msgstr "Suppression d'éléments"
 
 #: pcbnew/edit_track_width.cpp:85
 msgid "Change track width (entire NET) ?"
@@ -301,164 +308,21 @@ msgstr "Fichiers Librairies"
 msgid "Library exists! No Change"
 msgstr "Librairie existante! Pas de changement"
 
-#: pcbnew/muonde.cpp:142
-msgid "Gap"
-msgstr "Gap"
-
-#: pcbnew/muonde.cpp:147
-msgid "Stub"
-msgstr "Stub"
-
-#: pcbnew/muonde.cpp:153
-msgid "Arc Stub"
-msgstr "Arc Stub"
-
-#: pcbnew/muonde.cpp:168
-#: common/common.cpp:48
-msgid " (mm):"
-msgstr " (mm):"
-
-#: pcbnew/muonde.cpp:175
-msgid " (inch):"
-msgstr " (pouce):"
-
-#: pcbnew/muonde.cpp:182
-#: pcbnew/muonde.cpp:195
-#: pcbnew/gen_self.h:226
-msgid "Incorrect number, abort"
-msgstr "Nombre incorrect, arret"
-
-#: pcbnew/muonde.cpp:191
-msgid "Angle (0.1deg):"
-msgstr "Angle (0.1deg):"
-
-#: pcbnew/muonde.cpp:325
-msgid "Complex shape"
-msgstr "Formr complexe"
-
-#: pcbnew/muonde.cpp:342
-#: pcbnew/pcbtexte.cpp:113
-#: pcbnew/zones.cpp:873
-#: pcbnew/block.cpp:117
-#: pcbnew/cotation.cpp:109
-#: pcbnew/mirepcb.cpp:102
-#: pcbnew/dialog_edit_module.cpp:119
-#: eeschema/fieldedi.cpp:208
-#: eeschema/sheetlab.cpp:99
-#: eeschema/libedpart.cpp:230
-#: eeschema/editpart.cpp:193
-#: common/displlst.cpp:102
-msgid "Ok"
-msgstr "Ok"
-
-#: pcbnew/muonde.cpp:346
-#: pcbnew/pcbtexte.cpp:118
-#: pcbnew/modedit_onclick.cpp:195
-#: pcbnew/modedit_onclick.cpp:228
-#: pcbnew/block.cpp:122
-#: pcbnew/globaleditpad.cpp:111
-#: pcbnew/cotation.cpp:114
-#: pcbnew/swap_layers.cpp:86
-#: pcbnew/pcbpiste.cpp:87
-#: pcbnew/mirepcb.cpp:106
-#: pcbnew/dialog_edit_module.cpp:124
-#: pcbnew/onrightclick.cpp:153
-#: pcbnew/onrightclick.cpp:172
-#: pcbnew/sel_layer.cpp:123
-#: pcbnew/sel_layer.cpp:250
-#: eeschema/libedit_onrightclick.cpp:68
-#: eeschema/libedit_onrightclick.cpp:83
-#: eeschema/optionsframe.cpp:155
-#: eeschema/onrightclick.cpp:111
-#: eeschema/onrightclick.cpp:125
-#: eeschema/sheetlab.cpp:104
-#: eeschema/options.cpp:114
-#: eeschema/libedpart.cpp:219
-#: gerbview/onrightclick.cpp:39
-#: gerbview/onrightclick.cpp:57
-#: gerbview/options.cpp:175
-#: gerbview/options.cpp:305
-#: gerbview/select_layers_to_pcb.cpp:127
-#: common/get_component_dialog.cpp:121
-#: common/displlst.cpp:106
-msgid "Cancel"
-msgstr "Annuler"
-
-#: pcbnew/muonde.cpp:350
-msgid "Read Shape Descr File"
-msgstr "Lire fichier de description de forme"
-
-#: pcbnew/muonde.cpp:354
-#: pcbnew/pcbtexte.cpp:177
-#: pcbnew/cotation.cpp:118
-#: pcbnew/dialog_edit_module.cpp:237
-#: pcbnew/dialog_edit_module.cpp:279
-#: eeschema/dialog_options.cpp:229
-#: eeschema/options.cpp:177
-#: eeschema/dialog_edit_component_in_schematic.cpp:182
-#: eeschema/editpart.cpp:312
-msgid "Normal"
-msgstr "Normal"
-
-#: pcbnew/muonde.cpp:354
-msgid "Symmetrical"
-msgstr "Symétrique"
-
-#: pcbnew/muonde.cpp:354
-msgid "mirrored"
-msgstr "Miroir"
-
-#: pcbnew/muonde.cpp:355
-msgid "ShapeOption"
-msgstr "Option Forme"
-
-#: pcbnew/muonde.cpp:359
-#: pcbnew/pcbtexte.cpp:128
-#: pcbnew/cotation.cpp:129
-#: pcbnew/mirepcb.cpp:111
-#: eeschema/sheet.cpp:166
-#: eeschema/sheet.cpp:172
-#: eeschema/pinedit-dialog.cpp:273
-#: eeschema/pinedit-dialog.cpp:279
-#: common/wxwineda.cpp:91
-msgid "Size"
-msgstr "Taille "
-
-#: pcbnew/muonde.cpp:417
-msgid "Read descr shape file"
-msgstr "Lire fichier de description de forme"
-
-#: pcbnew/muonde.cpp:432
-msgid "File not found"
-msgstr "fichier non trouvé"
-
-#: pcbnew/muonde.cpp:530
-msgid "Shape has a null size!"
-msgstr "La forme a une taille nulle"
-
-#: pcbnew/muonde.cpp:535
-msgid "Shape has no points!"
-msgstr "La forme n'a pas de points"
-
-#: pcbnew/muonde.cpp:652
-msgid "No pad for this module"
-msgstr "Pas de pad dans ce module"
-
-#: pcbnew/muonde.cpp:657
-msgid "Only one pad for this module"
-msgstr "Seulement un pad dans ce module"
-
-#: pcbnew/muonde.cpp:671
-msgid "Gap (mm):"
-msgstr "Gap (mm):"
-
-#: pcbnew/muonde.cpp:677
-msgid "Gap (inch):"
-msgstr "Gap (inch):"
+#: pcbnew/ioascii.cpp:184
+msgid "Error: Unexpected end of file !"
+msgstr "Erreur: Fin de fichier inattendue !"
 
 #: pcbnew/librairi.cpp:47
 msgid "Import Module:"
 msgstr "Importer Module:"
+
+#: pcbnew/librairi.cpp:62
+#: pcbnew/files.cpp:184
+#: cvpcb/readschematicnetlist.cpp:51
+#: cvpcb/rdpcad.cpp:45
+#, c-format
+msgid "File <%s> not found"
+msgstr " fichier %s non trouvé"
 
 #: pcbnew/librairi.cpp:71
 msgid "Not a module file"
@@ -498,6 +362,16 @@ msgstr "Ok pour effacer module %sein librairie %s"
 msgid "Library "
 msgstr "Librairie "
 
+#: pcbnew/librairi.cpp:190
+#: pcbnew/files.cpp:57
+#: eeschema/libedit.cpp:113
+#: eeschema/find.cpp:423
+#: gerbview/dcode.cpp:260
+#: gerbview/readgerb.cpp:141
+#: common/eda_doc.cpp:144
+msgid " not found"
+msgstr "  non trouvé"
+
 #: pcbnew/librairi.cpp:201
 msgid "Not a Library file"
 msgstr "N'est pas un fichier Librairie"
@@ -506,6 +380,23 @@ msgstr "N'est pas un fichier Librairie"
 #, c-format
 msgid "Module [%s] not found"
 msgstr "Module [%s] non trouvé"
+
+#: pcbnew/librairi.cpp:240
+#: pcbnew/librairi.cpp:377
+#: pcbnew/librairi.cpp:518
+#: pcbnew/librairi.cpp:712
+#: pcbnew/export_gencad.cpp:79
+#: pcbnew/files.cpp:311
+#: pcbnew/gen_modules_placefile.cpp:82
+#: pcbnew/gen_modules_placefile.cpp:93
+#: pcbnew/gen_modules_placefile.cpp:239
+#: pcbnew/plothpgl.cpp:65
+#: eeschema/plotps.cpp:388
+#: eeschema/plothpgl.cpp:560
+#: cvpcb/genequiv.cpp:42
+#: gerbview/export_to_pcbnew.cpp:53
+msgid "Unable to create "
+msgstr "Impossible de créer "
 
 #: pcbnew/librairi.cpp:316
 #, c-format
@@ -600,254 +491,160 @@ msgstr "Ajout de stub (arc)"
 msgid "Add Polynomial Shape"
 msgstr "Ajout Forme polynomiale"
 
-#: pcbnew/pcbplot.cpp:114
-#: pcbnew/pcbplot.cpp:193
-#: gerbview/tool_gerber.cpp:88
-msgid "Plot"
-msgstr "Tracer"
+#: pcbnew/muonde.cpp:149
+msgid "Gap"
+msgstr "Gap"
 
-#: pcbnew/pcbplot.cpp:144
-msgid "Plot Format"
-msgstr "Format de tracé"
+#: pcbnew/muonde.cpp:154
+msgid "Stub"
+msgstr "Stub"
 
-#: pcbnew/pcbplot.cpp:160
-msgid "Spot min"
-msgstr "Spot min"
+#: pcbnew/muonde.cpp:160
+msgid "Arc Stub"
+msgstr "Arc Stub"
 
-#: pcbnew/pcbplot.cpp:164
-msgid "Pen Size"
-msgstr "Diam plume"
+#: pcbnew/muonde.cpp:175
+#: common/common.cpp:48
+msgid " (mm):"
+msgstr " (mm):"
 
-#: pcbnew/pcbplot.cpp:168
-msgid "Pen Speed (cm/s)"
-msgstr "Vitesse plume (cm/s)"
+#: pcbnew/muonde.cpp:182
+msgid " (inch):"
+msgstr " (pouce):"
 
-#: pcbnew/pcbplot.cpp:170
-msgid "Set pen speed in cm/s"
-msgstr "Ajuster Vitesse plume en centimetres par seconde"
+#: pcbnew/muonde.cpp:189
+#: pcbnew/muonde.cpp:202
+#: pcbnew/gen_self.h:226
+msgid "Incorrect number, abort"
+msgstr "Nombre incorrect, arret"
 
-#: pcbnew/pcbplot.cpp:172
-msgid "Pen Ovr"
-msgstr "Recouvrement"
+#: pcbnew/muonde.cpp:198
+msgid "Angle (0.1deg):"
+msgstr "Angle (0.1deg):"
 
-#: pcbnew/pcbplot.cpp:174
-msgid "Set plot overlay for filling"
-msgstr "Ajuste recouvrement des tracés pour les remplissages"
+#: pcbnew/muonde.cpp:333
+msgid "Complex shape"
+msgstr "Formr complexe"
 
-#: pcbnew/pcbplot.cpp:176
-msgid "Lines Width"
-msgstr "Epaiss. lignes"
+#: pcbnew/muonde.cpp:351
+#: pcbnew/pcbtexte.cpp:113
+#: pcbnew/zones.cpp:873
+#: pcbnew/block.cpp:117
+#: pcbnew/cotation.cpp:109
+#: pcbnew/mirepcb.cpp:102
+#: pcbnew/dialog_edit_module.cpp:119
+#: eeschema/fieldedi.cpp:208
+#: eeschema/sheetlab.cpp:99
+#: eeschema/libedpart.cpp:230
+#: eeschema/editpart.cpp:193
+#: common/displlst.cpp:102
+msgid "Ok"
+msgstr "Ok"
 
-#: pcbnew/pcbplot.cpp:178
-msgid "Set width for lines in Line plot mode"
-msgstr "Ajuster l'épaisseur des traits en Mode tracé filaire"
+#: pcbnew/muonde.cpp:355
+#: pcbnew/pcbtexte.cpp:118
+#: pcbnew/modedit_onclick.cpp:195
+#: pcbnew/modedit_onclick.cpp:228
+#: pcbnew/block.cpp:122
+#: pcbnew/globaleditpad.cpp:111
+#: pcbnew/cotation.cpp:114
+#: pcbnew/swap_layers.cpp:86
+#: pcbnew/pcbpiste.cpp:87
+#: pcbnew/mirepcb.cpp:106
+#: pcbnew/dialog_edit_module.cpp:124
+#: pcbnew/onrightclick.cpp:153
+#: pcbnew/onrightclick.cpp:172
+#: pcbnew/sel_layer.cpp:123
+#: pcbnew/sel_layer.cpp:250
+#: eeschema/libedit_onrightclick.cpp:68
+#: eeschema/libedit_onrightclick.cpp:83
+#: eeschema/optionsframe.cpp:155
+#: eeschema/onrightclick.cpp:111
+#: eeschema/onrightclick.cpp:125
+#: eeschema/sheetlab.cpp:104
+#: eeschema/options.cpp:114
+#: eeschema/libedpart.cpp:219
+#: gerbview/onrightclick.cpp:39
+#: gerbview/onrightclick.cpp:57
+#: gerbview/options.cpp:175
+#: gerbview/options.cpp:305
+#: gerbview/select_layers_to_pcb.cpp:127
+#: common/get_component_dialog.cpp:121
+#: common/displlst.cpp:106
+msgid "Cancel"
+msgstr "Annuler"
 
-#: pcbnew/pcbplot.cpp:182
-#: pcbnew/gendrill.cpp:205
-msgid "absolute"
-msgstr "Absolu"
+#: pcbnew/muonde.cpp:359
+msgid "Read Shape Descr File"
+msgstr "Lire fichier de description de forme"
 
-#: pcbnew/pcbplot.cpp:182
-#: pcbnew/gendrill.cpp:205
-msgid "auxiliary axis"
-msgstr "Axe Auxiliaire"
+#: pcbnew/muonde.cpp:363
+#: pcbnew/pcbtexte.cpp:177
+#: pcbnew/cotation.cpp:118
+#: pcbnew/dialog_edit_module.cpp:237
+#: pcbnew/dialog_edit_module.cpp:279
+#: eeschema/dialog_options.cpp:229
+#: eeschema/options.cpp:177
+#: eeschema/dialog_edit_component_in_schematic.cpp:182
+#: eeschema/editpart.cpp:312
+msgid "Normal"
+msgstr "Normal"
 
-#: pcbnew/pcbplot.cpp:184
-msgid "plot Origine:"
-msgstr "Origine des coord de tracé"
+#: pcbnew/muonde.cpp:363
+msgid "Symmetrical"
+msgstr "Symétrique"
 
-#: pcbnew/pcbplot.cpp:197
-#: pcbnew/xchgmod.cpp:128
-#: eeschema/fieldedi.cpp:198
-#: eeschema/editpart.cpp:171
-#: share/zoom.cpp:413
-msgid "Close"
-msgstr "Fermer"
+#: pcbnew/muonde.cpp:363
+msgid "mirrored"
+msgstr "Miroir"
 
-#: pcbnew/pcbplot.cpp:201
-msgid "Save options"
-msgstr "Sauver options"
+#: pcbnew/muonde.cpp:365
+msgid "ShapeOption"
+msgstr "Option Forme"
 
-#: pcbnew/pcbplot.cpp:205
-msgid "Create Drill File"
-msgstr "Créer Fichier de percage"
+#: pcbnew/muonde.cpp:370
+#: pcbnew/pcbtexte.cpp:128
+#: pcbnew/cotation.cpp:129
+#: pcbnew/mirepcb.cpp:111
+#: eeschema/sheet.cpp:166
+#: eeschema/sheet.cpp:172
+#: eeschema/pinedit-dialog.cpp:273
+#: eeschema/pinedit-dialog.cpp:279
+#: common/wxwineda.cpp:91
+msgid "Size"
+msgstr "Taille "
 
-#: pcbnew/pcbplot.cpp:217
-#: share/dialog_print.cpp:150
-msgid "X Scale Adjust"
-msgstr "Ajustage Echelle X"
+#: pcbnew/muonde.cpp:432
+msgid "Read descr shape file"
+msgstr "Lire fichier de description de forme"
 
-#: pcbnew/pcbplot.cpp:218
-#: share/wxprint.cpp:170
-msgid "Set X scale adjust for exact scale plotting"
-msgstr "Ajuster échelle X pour traçage à l'échelle exacte"
+#: pcbnew/muonde.cpp:448
+msgid "File not found"
+msgstr "fichier non trouvé"
 
-#: pcbnew/pcbplot.cpp:219
-#: share/dialog_print.cpp:156
-msgid "Y Scale Adjust"
-msgstr "Ajustage Echelle Y"
+#: pcbnew/muonde.cpp:552
+msgid "Shape has a null size!"
+msgstr "La forme a une taille nulle"
 
-#: pcbnew/pcbplot.cpp:220
-#: share/wxprint.cpp:171
-msgid "Set Y scale adjust for exact scale plotting"
-msgstr "Ajuster échelle Y pour traçage à l'échelle exacte"
+#: pcbnew/muonde.cpp:557
+msgid "Shape has no points!"
+msgstr "La forme n'a pas de points"
 
-#: pcbnew/pcbplot.cpp:222
-msgid "Plot Negative"
-msgstr "Tracé en Negatif"
+#: pcbnew/muonde.cpp:683
+msgid "No pad for this module"
+msgstr "Pas de pad dans ce module"
 
-#: pcbnew/pcbplot.cpp:247
-#: eeschema/plotps.cpp:190
-#: common/svg_print.cpp:197
-#: share/svg_print.cpp:200
-#: share/dialog_print.cpp:174
-msgid "Print Sheet Ref"
-msgstr "Imprimer cartouche"
+#: pcbnew/muonde.cpp:688
+msgid "Only one pad for this module"
+msgstr "Seulement un pad dans ce module"
 
-#: pcbnew/pcbplot.cpp:255
-msgid "Print Pads on Silkscreen"
-msgstr "Pads sur Sérigraphie"
+#: pcbnew/muonde.cpp:702
+msgid "Gap (mm):"
+msgstr "Gap (mm):"
 
-#: pcbnew/pcbplot.cpp:258
-msgid "Enable/disable print/plot pads on Silkscreen layers"
-msgstr "Active/désactive tracé des pastilles sur les couches de sérigraphie"
-
-#: pcbnew/pcbplot.cpp:262
-msgid "Always Print Pads"
-msgstr "Toujour tracer pads"
-
-#: pcbnew/pcbplot.cpp:264
-msgid "Force print/plot pads on ALL layers"
-msgstr "Force le tracé des pastilles sur TOUTES les couches"
-
-#: pcbnew/pcbplot.cpp:268
-msgid "Print Module Value"
-msgstr "Imprimer Valeur Module"
-
-#: pcbnew/pcbplot.cpp:271
-msgid "Enable/disable print/plot module value on Silkscreen layers"
-msgstr "Active/désactive le tracé des textes valeurs des modules sur couches de sérigraphie"
-
-#: pcbnew/pcbplot.cpp:274
-msgid "Print Module Reference"
-msgstr "Imprimer Référence Module"
-
-#: pcbnew/pcbplot.cpp:277
-msgid "Enable/disable print/plot module reference on Silkscreen layers"
-msgstr "Active/désactive le tracé des textes référence des modules sur couches de sérigraphie"
-
-#: pcbnew/pcbplot.cpp:281
-msgid "Print other module texts"
-msgstr "Imprimer autres textes  module"
-
-#: pcbnew/pcbplot.cpp:284
-msgid "Enable/disable print/plot module field texts on Silkscreen layers"
-msgstr "Active/désactive le tracé des textes des champs des modules sur couches de sérigraphie"
-
-#: pcbnew/pcbplot.cpp:288
-msgid "Force Print Invisible Texts"
-msgstr "Force tracé textes invisibles"
-
-#: pcbnew/pcbplot.cpp:291
-msgid "Force print/plot module invisible texts on Silkscreen layers"
-msgstr "Force le tracé des textes invisibles sur couches de sérigraphie"
-
-#: pcbnew/pcbplot.cpp:295
-msgid "No Drill mark"
-msgstr "Pas de marque"
-
-#: pcbnew/pcbplot.cpp:295
-msgid "Small mark"
-msgstr "Petite marque"
-
-#: pcbnew/pcbplot.cpp:295
-msgid "Real Drill"
-msgstr "Perçage réel"
-
-#: pcbnew/pcbplot.cpp:297
-msgid "Pads Drill Opt"
-msgstr "Options perçage"
-
-#: pcbnew/pcbplot.cpp:303
-msgid "Auto scale"
-msgstr "Ech. auto"
-
-#: pcbnew/pcbplot.cpp:303
-msgid "Scale 1"
-msgstr "Echelle 1"
-
-#: pcbnew/pcbplot.cpp:303
-msgid "Scale 1.5"
-msgstr "Echelle 1,5"
-
-#: pcbnew/pcbplot.cpp:303
-#: share/dialog_print.cpp:142
-msgid "Scale 2"
-msgstr "Echelle 2"
-
-#: pcbnew/pcbplot.cpp:303
-#: share/dialog_print.cpp:143
-msgid "Scale 3"
-msgstr "Echelle 3"
-
-#: pcbnew/pcbplot.cpp:305
-msgid "Scale Opt"
-msgstr "Echelle"
-
-#: pcbnew/pcbplot.cpp:310
-#: pcbnew/dialog_display_options.cpp:223
-#: pcbnew/dialog_display_options.cpp:231
-#: pcbnew/dialog_display_options.cpp:264
-#: gerbview/options.cpp:323
-msgid "Line"
-msgstr "Ligne"
-
-#: pcbnew/pcbplot.cpp:310
-#: pcbnew/dialog_display_options.cpp:194
-#: pcbnew/dialog_display_options.cpp:224
-#: pcbnew/dialog_display_options.cpp:232
-#: pcbnew/dialog_display_options.cpp:243
-#: pcbnew/dialog_display_options.cpp:265
-#: eeschema/dialog_cmp_graphic_properties.cpp:168
-#: gerbview/options.cpp:310
-#: gerbview/options.cpp:323
-msgid "Filled"
-msgstr "Plein"
-
-#: pcbnew/pcbplot.cpp:310
-#: pcbnew/dialog_display_options.cpp:193
-#: pcbnew/dialog_display_options.cpp:225
-#: pcbnew/dialog_display_options.cpp:233
-#: pcbnew/dialog_display_options.cpp:242
-#: pcbnew/dialog_display_options.cpp:266
-#: gerbview/options.cpp:310
-#: gerbview/options.cpp:323
-msgid "Sketch"
-msgstr "Contour"
-
-#: pcbnew/pcbplot.cpp:311
-msgid "Plot mode"
-msgstr "Mode de Tracé"
-
-#: pcbnew/pcbplot.cpp:318
-msgid "Plot Mirror"
-msgstr "Tracé Miroir"
-
-#: pcbnew/pcbplot.cpp:323
-msgid "Vias on Mask"
-msgstr "Vias sur masque"
-
-#: pcbnew/pcbplot.cpp:326
-msgid "Print/plot vias on mask layers. They are in this case not protected"
-msgstr "Trace vias sur vernis épargne. Elles seront non protégées"
-
-#: pcbnew/pcbplot.cpp:330
-msgid "Org = Centre"
-msgstr "Org = Centre"
-
-#: pcbnew/pcbplot.cpp:332
-msgid "Draw origin ( 0,0 )in on sheet center"
-msgstr "Origine des tracés au centre de la feuille"
+#: pcbnew/muonde.cpp:708
+msgid "Gap (inch):"
+msgstr "Gap (inch):"
 
 #: pcbnew/clean.cpp:152
 msgid "Delete unconnected tracks:"
@@ -974,6 +771,14 @@ msgstr "3:3"
 msgid "Precision"
 msgstr "Précision"
 
+#: pcbnew/gendrill.cpp:205
+msgid "absolute"
+msgstr "Absolu"
+
+#: pcbnew/gendrill.cpp:205
+msgid "auxiliary axis"
+msgstr "Axe Auxiliaire"
+
 #: pcbnew/gendrill.cpp:207
 msgid "Drill Origin:"
 msgstr "Origine des coord de percage:"
@@ -1032,7 +837,7 @@ msgstr "&Exécuter"
 
 #: pcbnew/gendrill.cpp:254
 #: pcbnew/dialog_netlist.cpp:178
-#: pcbnew/dialog_drc.cpp:199
+#: pcbnew/dialog_drc.cpp:201
 #: eeschema/plotps.cpp:207
 #: eeschema/netlist_control.cpp:124
 #: eeschema/netlist_control.cpp:275
@@ -1074,7 +879,7 @@ msgstr "Outils"
 #: pcbnew/gendrill.cpp:399
 #: pcbnew/gendrill.cpp:1008
 #: pcbnew/gendrill.cpp:1521
-#: pcbnew/class_pad.cpp:792
+#: pcbnew/class_pad.cpp:931
 #: pcbnew/affiche.cpp:208
 #: pcbnew/affiche.cpp:210
 msgid "Drill"
@@ -1098,8 +903,13 @@ msgstr ""
 "Le tracé utilise des cercles pour quelques valeurs "
 
 #: pcbnew/gendrill.cpp:1444
+#: pcbnew/dialog_drc.cpp:347
 msgid "Drill Report file"
 msgstr "Fichier rapport de perçage:"
+
+#: pcbnew/pcbnew.cpp:42
+msgid "Pcbnew is already running, Continue?"
+msgstr "Pcbnew est est cours d'exécution. Continuer ?"
 
 #: pcbnew/pcbtexte.cpp:90
 msgid "TextPCB properties"
@@ -1178,13 +988,302 @@ msgstr "Pas de memoire pour autoroutage"
 msgid "Place Cells"
 msgstr "Place Cells"
 
-#: pcbnew/hotkeys.cpp:160
-msgid "Footprint found, but locked"
-msgstr "Module trouvé, mais verrouillé"
+#: pcbnew/tool_pcb.cpp:50
+msgid ""
+"Show active layer selections\n"
+"and select layer pair for route and place via"
+msgstr ""
+"Affiche selections couche active\n"
+"et selection paire de couches pour routage and placement via"
 
-#: pcbnew/hotkeys.cpp:281
-msgid "Delete module?"
-msgstr "Effacer Module?"
+#: pcbnew/tool_pcb.cpp:236
+msgid "New Board"
+msgstr "Nouveau Circuit Imprimé"
+
+#: pcbnew/tool_pcb.cpp:238
+msgid "Open existing Board"
+msgstr "Ouvrir C.I. existant"
+
+#: pcbnew/tool_pcb.cpp:239
+msgid "Save Board"
+msgstr "Sauver Circuit Imprimé"
+
+#: pcbnew/tool_pcb.cpp:243
+#: eeschema/tool_sch.cpp:61
+#: gerbview/tool_gerber.cpp:217
+msgid "page settings (size, texts)"
+msgstr "Ajustage de la feuille de dessin (dimensions, textes)"
+
+#: pcbnew/tool_pcb.cpp:247
+msgid "Open Module Editor"
+msgstr "Ouvrir Editeur de modules"
+
+#: pcbnew/tool_pcb.cpp:250
+#: eeschema/tool_sch.cpp:77
+#: gerbview/tool_gerber.cpp:228
+msgid "Cut selected item"
+msgstr "Suppression des éléments sélectionnés"
+
+#: pcbnew/tool_pcb.cpp:254
+#: eeschema/tool_sch.cpp:80
+#: gerbview/tool_gerber.cpp:233
+msgid "Copy selected item"
+msgstr "Copie des éléments sélectionnés"
+
+#: pcbnew/tool_pcb.cpp:256
+#: eeschema/tool_sch.cpp:83
+#: gerbview/tool_gerber.cpp:239
+msgid "Paste"
+msgstr "Copie des éléments sauvegardés"
+
+#: pcbnew/tool_pcb.cpp:259
+#: gerbview/tool_gerber.cpp:246
+msgid "Undelete"
+msgstr "Annulation du dernier effacement"
+
+#: pcbnew/tool_pcb.cpp:262
+msgid "Print Board"
+msgstr "Imprimer C.I."
+
+#: pcbnew/tool_pcb.cpp:264
+#: pcbnew/menubarpcb.cpp:93
+msgid "Plot (HPGL, PostScript, or GERBER format)"
+msgstr "Tracer en format HPGL,  POSTSCRIPT ou GERBER"
+
+#: pcbnew/tool_pcb.cpp:268
+#: pcbnew/tool_modedit.cpp:111
+#: eeschema/tool_sch.cpp:104
+#: eeschema/tool_lib.cpp:170
+#: eeschema/tool_viewlib.cpp:70
+#: cvpcb/displayframe.cpp:118
+#: gerbview/tool_gerber.cpp:260
+#: 3d-viewer/3d_toolbar.cpp:43
+msgid "zoom + (F1)"
+msgstr "zoom + (F1)"
+
+#: pcbnew/tool_pcb.cpp:270
+#: pcbnew/tool_modedit.cpp:114
+#: eeschema/tool_sch.cpp:107
+#: eeschema/tool_lib.cpp:174
+#: eeschema/tool_viewlib.cpp:74
+#: cvpcb/displayframe.cpp:121
+#: gerbview/tool_gerber.cpp:266
+#: 3d-viewer/3d_toolbar.cpp:46
+msgid "zoom - (F2)"
+msgstr "zoom - (F2)"
+
+#: pcbnew/tool_pcb.cpp:272
+#: pcbnew/tool_modedit.cpp:117
+#: eeschema/tool_sch.cpp:110
+#: eeschema/tool_lib.cpp:178
+#: eeschema/tool_viewlib.cpp:78
+#: cvpcb/displayframe.cpp:124
+#: gerbview/tool_gerber.cpp:272
+#: 3d-viewer/3d_toolbar.cpp:49
+msgid "redraw (F3)"
+msgstr "Redessin (F3)"
+
+#: pcbnew/tool_pcb.cpp:275
+#: pcbnew/tool_modedit.cpp:120
+#: eeschema/tool_sch.cpp:113
+#: eeschema/tool_lib.cpp:182
+#: gerbview/tool_gerber.cpp:278
+#: 3d-viewer/3d_toolbar.cpp:52
+msgid "auto zoom"
+msgstr "Zoom automatique"
+
+#: pcbnew/tool_pcb.cpp:279
+msgid "Find components and texts (Ctrl-F)"
+msgstr "Recherche de composants et textes (Ctrl F)"
+
+#: pcbnew/tool_pcb.cpp:283
+msgid "Read Netlist"
+msgstr "Lire Netliste"
+
+#: pcbnew/tool_pcb.cpp:285
+msgid "Pcb Design Rules Check"
+msgstr "Controle des règles de conception"
+
+#: pcbnew/tool_pcb.cpp:296
+msgid "Mode Module: Manual and Automatic Move or Place for modules"
+msgstr "Mode Module: Déplacements ou Placement Manuel ou Automatique des modules"
+
+#: pcbnew/tool_pcb.cpp:299
+msgid "Mode Track and Autorouting"
+msgstr "Mode Pistes and Autoroutage"
+
+#: pcbnew/tool_pcb.cpp:323
+msgid "Drc OFF"
+msgstr "Drc DESACTIVEE"
+
+#: pcbnew/tool_pcb.cpp:325
+#: pcbnew/tool_modedit.cpp:201
+#: eeschema/tool_sch.cpp:246
+#: gerbview/tool_gerber.cpp:389
+msgid "Display Grid OFF"
+msgstr "Suppression de l'affichage de la grille"
+
+#: pcbnew/tool_pcb.cpp:328
+#: pcbnew/tool_modedit.cpp:205
+#: gerbview/tool_gerber.cpp:395
+msgid "Display Polar Coord ON"
+msgstr "Activer affichage coord Polaires"
+
+#: pcbnew/tool_pcb.cpp:330
+#: pcbnew/tool_modedit.cpp:209
+#: eeschema/tool_sch.cpp:250
+#: gerbview/tool_gerber.cpp:399
+msgid "Units = Inch"
+msgstr "Unités = pouce"
+
+#: pcbnew/tool_pcb.cpp:332
+#: pcbnew/tool_modedit.cpp:213
+#: eeschema/tool_sch.cpp:254
+#: gerbview/tool_gerber.cpp:403
+msgid "Units = mm"
+msgstr "Unités = mm"
+
+#: pcbnew/tool_pcb.cpp:335
+#: pcbnew/tool_modedit.cpp:219
+#: eeschema/tool_sch.cpp:258
+#: gerbview/tool_gerber.cpp:409
+msgid "Change Cursor Shape"
+msgstr "Sélection de la forme du curseur"
+
+#: pcbnew/tool_pcb.cpp:340
+msgid "Show General Ratsnest"
+msgstr "Monter le chevelu général"
+
+#: pcbnew/tool_pcb.cpp:343
+msgid "Show Module Ratsnest when moving"
+msgstr "Monter le chevelu du module pendant déplacement"
+
+#: pcbnew/tool_pcb.cpp:348
+msgid "Enable Auto Del Track"
+msgstr "Autoriser l'effacement automatique des pistes"
+
+#: pcbnew/tool_pcb.cpp:352
+#: pcbnew/pcbframe.cpp:384
+#: pcbnew/set_color.cpp:387
+msgid "Show Zones"
+msgstr "Monter Zones"
+
+#: pcbnew/tool_pcb.cpp:357
+#: pcbnew/tool_modedit.cpp:227
+msgid "Show Pads Sketch"
+msgstr "Afficher pastilles en contour"
+
+#: pcbnew/tool_pcb.cpp:361
+msgid "Show Tracks Sketch"
+msgstr "Afficher pistes en contour"
+
+#: pcbnew/tool_pcb.cpp:365
+#: pcbnew/pcbframe.cpp:399
+msgid "Hight Contrast Mode Display"
+msgstr "Mode d'affichage Haut Contraste"
+
+#: pcbnew/tool_pcb.cpp:374
+msgid ""
+"Display auxiliary vertical toolbar (tools for micro wave applications)\n"
+" This is a very experimental feature (under development)"
+msgstr ""
+"Affiche toolbar vertical auxiliaire (outils pour applications micro-ondes)\n"
+"C'est un outil expérimental (en cours de développement)"
+
+#: pcbnew/tool_pcb.cpp:403
+msgid "Net highlight"
+msgstr "Surbrillance des équipotentielles"
+
+#: pcbnew/tool_pcb.cpp:407
+msgid "Display local ratsnest (pad or module)"
+msgstr "Afficher le chevelu local (pastilles ou modules)"
+
+#: pcbnew/tool_pcb.cpp:412
+msgid "Add modules"
+msgstr "Addition de Modules"
+
+#: pcbnew/tool_pcb.cpp:416
+msgid "Add Tracks an vias"
+msgstr "Ajouter pistes et vias"
+
+#: pcbnew/tool_pcb.cpp:425
+#: pcbnew/tool_modedit.cpp:158
+#: eeschema/tool_sch.cpp:216
+msgid "Add graphic line or polygon"
+msgstr "Addition de lignes ou polygones graphiques"
+
+#: pcbnew/tool_pcb.cpp:429
+#: pcbnew/tool_modedit.cpp:162
+msgid "Add graphic circle"
+msgstr "Addition de graphiques (Cercle)"
+
+#: pcbnew/tool_pcb.cpp:433
+#: pcbnew/tool_modedit.cpp:166
+msgid "Add graphic arc"
+msgstr "Addition de graphiques (Arc de Cercle)"
+
+#: pcbnew/tool_pcb.cpp:446
+#: gerbview/tool_gerber.cpp:354
+msgid "Add Mires"
+msgstr "Addition de Mires de superposition"
+
+#: pcbnew/tool_pcb.cpp:451
+#: pcbnew/tool_modedit.cpp:180
+#: eeschema/tool_sch.cpp:225
+#: eeschema/tool_lib.cpp:92
+#: gerbview/tool_gerber.cpp:369
+msgid "Delete items"
+msgstr "Suppression d'éléments"
+
+#: pcbnew/tool_pcb.cpp:456
+msgid "Offset adjust for drill and place files"
+msgstr "Ajuste offset pour fichier de perçage et placement"
+
+#: pcbnew/tool_pcb.cpp:481
+msgid "Create line of specified length for microwave applications"
+msgstr "Creation de lignes de longueur spécifiée (pour applications micro-ondes)"
+
+#: pcbnew/tool_pcb.cpp:487
+msgid "Create gap of specified length for microwave applications"
+msgstr "Creation de gaps de longueur spécifiée (pour applications micro-ondes)"
+
+#: pcbnew/tool_pcb.cpp:495
+msgid "Create stub of specified length for microwave applications"
+msgstr "Creation de stub de longueur spécifiée (pour applications micro-ondes)"
+
+#: pcbnew/tool_pcb.cpp:501
+msgid "Create stub (arc) of specified length for microwave applications"
+msgstr "Creation de stub (arc) de longueur spécifiée (pour applications micro-ondes)"
+
+#: pcbnew/tool_pcb.cpp:508
+msgid "Create a polynomial shape for microwave applications"
+msgstr "Creation de formes polynomiales (pour applications micro-ondes)"
+
+#: pcbnew/tool_pcb.cpp:558
+#: pcbnew/tool_modedit.cpp:273
+#: eeschema/plotps.cpp:168
+#: share/zoom.cpp:353
+msgid "Auto"
+msgstr "Auto"
+
+#: pcbnew/tool_pcb.cpp:562
+msgid "Zoom "
+msgstr "Zoom "
+
+#: pcbnew/tool_pcb.cpp:576
+#: pcbnew/set_color.cpp:378
+#: gerbview/set_color.h:246
+msgid "Grid"
+msgstr "Grille"
+
+#: pcbnew/tool_pcb.cpp:592
+#: pcbnew/tool_modedit.cpp:299
+msgid "User Grid"
+msgstr "Grille perso"
+
+#: pcbnew/tool_pcb.cpp:645
+msgid "+/- to switch"
+msgstr "+/- pour commuter"
 
 #: pcbnew/dialog_graphic_items_options.cpp:192
 msgid "Graphics:"
@@ -1372,321 +1471,14 @@ msgstr "Valeur incorrecte pour perçage.Pas de changement pour la via"
 msgid "Delete Pad (module %s %s) "
 msgstr "Effacer Pad (module %s %s) "
 
-#: pcbnew/tool_pcb.cpp:49
-msgid ""
-"Show active layer selections\n"
-"and select layer pair for route and place via"
-msgstr ""
-"Affiche selections couche active\n"
-"et selection paire de couches pour routage and placement via"
+#: pcbnew/editrack-part2.cpp:32
+#, c-format
+msgid "Track Width: %s   Vias Size : %s"
+msgstr "Larg. piste: %s  Diam Vias : %s"
 
-#: pcbnew/tool_pcb.cpp:219
-msgid "New Board"
-msgstr "Nouveau Circuit Imprimé"
-
-#: pcbnew/tool_pcb.cpp:220
-msgid "Open existing Board"
-msgstr "Ouvrir C.I. existant"
-
-#: pcbnew/tool_pcb.cpp:221
-msgid "Save Board"
-msgstr "Sauver Circuit Imprimé"
-
-#: pcbnew/tool_pcb.cpp:224
-#: eeschema/tool_sch.cpp:61
-#: gerbview/tool_gerber.cpp:217
-msgid "page settings (size, texts)"
-msgstr "Ajustage de la feuille de dessin (dimensions, textes)"
-
-#: pcbnew/tool_pcb.cpp:228
-msgid "Open Module Editor"
-msgstr "Ouvrir Editeur de modules"
-
-#: pcbnew/tool_pcb.cpp:231
-#: eeschema/tool_sch.cpp:77
-#: gerbview/tool_gerber.cpp:228
-msgid "Cut selected item"
-msgstr "Suppression des éléments sélectionnés"
-
-#: pcbnew/tool_pcb.cpp:234
-#: eeschema/tool_sch.cpp:80
-#: gerbview/tool_gerber.cpp:233
-msgid "Copy selected item"
-msgstr "Copie des éléments sélectionnés"
-
-#: pcbnew/tool_pcb.cpp:236
-#: eeschema/tool_sch.cpp:83
-#: gerbview/tool_gerber.cpp:239
-msgid "Paste"
-msgstr "Copie des éléments sauvegardés"
-
-#: pcbnew/tool_pcb.cpp:239
-#: gerbview/tool_gerber.cpp:246
-msgid "Undelete"
-msgstr "Annulation du dernier effacement"
-
-#: pcbnew/tool_pcb.cpp:242
-msgid "Print Board"
-msgstr "Imprimer C.I."
-
-#: pcbnew/tool_pcb.cpp:243
-#: pcbnew/menubarpcb.cpp:93
-msgid "Plot (HPGL, PostScript, or GERBER format)"
-msgstr "Tracer en format HPGL,  POSTSCRIPT ou GERBER"
-
-#: pcbnew/tool_pcb.cpp:246
-#: pcbnew/tool_modedit.cpp:111
-#: eeschema/tool_sch.cpp:104
-#: eeschema/tool_lib.cpp:170
-#: eeschema/tool_viewlib.cpp:70
-#: cvpcb/displayframe.cpp:118
-#: gerbview/tool_gerber.cpp:260
-#: 3d-viewer/3d_toolbar.cpp:43
-msgid "zoom + (F1)"
-msgstr "zoom + (F1)"
-
-#: pcbnew/tool_pcb.cpp:247
-#: pcbnew/tool_modedit.cpp:114
-#: eeschema/tool_sch.cpp:107
-#: eeschema/tool_lib.cpp:174
-#: eeschema/tool_viewlib.cpp:74
-#: cvpcb/displayframe.cpp:121
-#: gerbview/tool_gerber.cpp:266
-#: 3d-viewer/3d_toolbar.cpp:46
-msgid "zoom - (F2)"
-msgstr "zoom - (F2)"
-
-#: pcbnew/tool_pcb.cpp:248
-#: pcbnew/tool_modedit.cpp:117
-#: eeschema/tool_sch.cpp:110
-#: eeschema/tool_lib.cpp:178
-#: eeschema/tool_viewlib.cpp:78
-#: cvpcb/displayframe.cpp:124
-#: gerbview/tool_gerber.cpp:272
-#: 3d-viewer/3d_toolbar.cpp:49
-msgid "redraw (F3)"
-msgstr "Redessin (F3)"
-
-#: pcbnew/tool_pcb.cpp:250
-#: pcbnew/tool_modedit.cpp:120
-#: eeschema/tool_sch.cpp:113
-#: eeschema/tool_lib.cpp:182
-#: gerbview/tool_gerber.cpp:278
-#: 3d-viewer/3d_toolbar.cpp:52
-msgid "auto zoom"
-msgstr "Zoom automatique"
-
-#: pcbnew/tool_pcb.cpp:253
-msgid "Find components and texts (Ctrl-F)"
-msgstr "Recherche de composants et textes (Ctrl F)"
-
-#: pcbnew/tool_pcb.cpp:256
-msgid "Read Netlist"
-msgstr "Lire Netliste"
-
-#: pcbnew/tool_pcb.cpp:257
-msgid "Pcb Design Rules Check"
-msgstr "Controle des règles de conception"
-
-#: pcbnew/tool_pcb.cpp:267
-msgid "Mode Module: Manual and Automatic Move or Place for modules"
-msgstr "Mode Module: Déplacements ou Placement Manuel ou Automatique des modules"
-
-#: pcbnew/tool_pcb.cpp:269
-msgid "Mode Track and Autorouting"
-msgstr "Mode Pistes and Autoroutage"
-
-#: pcbnew/tool_pcb.cpp:291
-msgid "Drc OFF"
-msgstr "Drc DESACTIVEE"
-
-#: pcbnew/tool_pcb.cpp:293
-#: pcbnew/tool_modedit.cpp:201
-#: eeschema/tool_sch.cpp:246
-#: gerbview/tool_gerber.cpp:389
-msgid "Display Grid OFF"
-msgstr "Suppression de l'affichage de la grille"
-
-#: pcbnew/tool_pcb.cpp:295
-#: pcbnew/tool_modedit.cpp:205
-#: gerbview/tool_gerber.cpp:395
-msgid "Display Polar Coord ON"
-msgstr "Activer affichage coord Polaires"
-
-#: pcbnew/tool_pcb.cpp:297
-#: pcbnew/tool_modedit.cpp:209
-#: eeschema/tool_sch.cpp:250
-#: gerbview/tool_gerber.cpp:399
-msgid "Units = Inch"
-msgstr "Unités = pouce"
-
-#: pcbnew/tool_pcb.cpp:299
-#: pcbnew/tool_modedit.cpp:213
-#: eeschema/tool_sch.cpp:254
-#: gerbview/tool_gerber.cpp:403
-msgid "Units = mm"
-msgstr "Unités = mm"
-
-#: pcbnew/tool_pcb.cpp:301
-#: pcbnew/tool_modedit.cpp:219
-#: eeschema/tool_sch.cpp:258
-#: gerbview/tool_gerber.cpp:409
-msgid "Change Cursor Shape"
-msgstr "Sélection de la forme du curseur"
-
-#: pcbnew/tool_pcb.cpp:306
-msgid "Show General Ratsnest"
-msgstr "Monter le chevelu général"
-
-#: pcbnew/tool_pcb.cpp:309
-msgid "Show Module Ratsnest when moving"
-msgstr "Monter le chevelu du module pendant déplacement"
-
-#: pcbnew/tool_pcb.cpp:313
-msgid "Enable Auto Del Track"
-msgstr "Autoriser l'effacement automatique des pistes"
-
-#: pcbnew/tool_pcb.cpp:317
-#: pcbnew/pcbframe.cpp:384
-#: pcbnew/set_color.cpp:387
-msgid "Show Zones"
-msgstr "Monter Zones"
-
-#: pcbnew/tool_pcb.cpp:322
-#: pcbnew/tool_modedit.cpp:227
-msgid "Show Pads Sketch"
-msgstr "Afficher pastilles en contour"
-
-#: pcbnew/tool_pcb.cpp:326
-msgid "Show Tracks Sketch"
-msgstr "Afficher pistes en contour"
-
-#: pcbnew/tool_pcb.cpp:330
-#: pcbnew/pcbframe.cpp:399
-msgid "Hight Contrast Mode Display"
-msgstr "Mode d'affichage Haut Contraste"
-
-#: pcbnew/tool_pcb.cpp:338
-msgid ""
-"Display auxiliary vertical toolbar (tools for micro wave applications)\n"
-" This is a very experimental feature (under development)"
-msgstr ""
-"Affiche toolbar vertical auxiliaire (outils pour applications micro-ondes)\n"
-"C'est un outil expérimental (en cours de développement)"
-
-#: pcbnew/tool_pcb.cpp:364
-msgid "Net highlight"
-msgstr "Surbrillance des équipotentielles"
-
-#: pcbnew/tool_pcb.cpp:368
-msgid "Display local ratsnest (pad or module)"
-msgstr "Afficher le chevelu local (pastilles ou modules)"
-
-#: pcbnew/tool_pcb.cpp:373
-msgid "Add modules"
-msgstr "Addition de Modules"
-
-#: pcbnew/tool_pcb.cpp:377
-msgid "Add Tracks an vias"
-msgstr "Ajouter pistes et vias"
-
-#: pcbnew/tool_pcb.cpp:381
-#: pcbnew/edit.cpp:529
-msgid "Add Zones"
-msgstr "Addition de Zones"
-
-#: pcbnew/tool_pcb.cpp:386
-#: pcbnew/tool_modedit.cpp:158
-#: eeschema/tool_sch.cpp:216
-msgid "Add graphic line or polygon"
-msgstr "Addition de lignes ou polygones graphiques"
-
-#: pcbnew/tool_pcb.cpp:390
-#: pcbnew/tool_modedit.cpp:162
-msgid "Add graphic circle"
-msgstr "Addition de graphiques (Cercle)"
-
-#: pcbnew/tool_pcb.cpp:394
-#: pcbnew/tool_modedit.cpp:166
-msgid "Add graphic arc"
-msgstr "Addition de graphiques (Arc de Cercle)"
-
-#: pcbnew/tool_pcb.cpp:398
-#: pcbnew/edit.cpp:552
-#: pcbnew/tool_modedit.cpp:170
-#: eeschema/schedit.cpp:309
-#: eeschema/libframe.cpp:487
-#: gerbview/tool_gerber.cpp:361
-msgid "Add Text"
-msgstr "Ajout de Texte"
-
-#: pcbnew/tool_pcb.cpp:403
-#: pcbnew/edit.cpp:560
-msgid "Add Cotation"
-msgstr "Addition de Cotations"
-
-#: pcbnew/tool_pcb.cpp:407
-#: gerbview/tool_gerber.cpp:354
-msgid "Add Mires"
-msgstr "Addition de Mires de superposition"
-
-#: pcbnew/tool_pcb.cpp:412
-#: pcbnew/tool_modedit.cpp:180
-#: eeschema/tool_sch.cpp:225
-#: eeschema/tool_lib.cpp:92
-#: gerbview/tool_gerber.cpp:369
-msgid "Delete items"
-msgstr "Suppression d'éléments"
-
-#: pcbnew/tool_pcb.cpp:417
-msgid "Offset adjust for drill and place files"
-msgstr "Ajuste offset pour fichier de perçage et placement"
-
-#: pcbnew/tool_pcb.cpp:440
-msgid "Create line of specified length for microwave applications"
-msgstr "Creation de lignes de longueur spécifiée (pour applications micro-ondes)"
-
-#: pcbnew/tool_pcb.cpp:446
-msgid "Create gap of specified length for microwave applications"
-msgstr "Creation de gaps de longueur spécifiée (pour applications micro-ondes)"
-
-#: pcbnew/tool_pcb.cpp:454
-msgid "Create stub of specified length for microwave applications"
-msgstr "Creation de stub de longueur spécifiée (pour applications micro-ondes)"
-
-#: pcbnew/tool_pcb.cpp:460
-msgid "Create stub (arc) of specified length for microwave applications"
-msgstr "Creation de stub (arc) de longueur spécifiée (pour applications micro-ondes)"
-
-#: pcbnew/tool_pcb.cpp:466
-msgid "Create a polynomial shape for microwave applications"
-msgstr "Creation de formes polynomiales (pour applications micro-ondes)"
-
-#: pcbnew/tool_pcb.cpp:512
-#: pcbnew/tool_modedit.cpp:273
-#: eeschema/plotps.cpp:168
-#: share/zoom.cpp:353
-msgid "Auto"
-msgstr "Auto"
-
-#: pcbnew/tool_pcb.cpp:516
-msgid "Zoom "
-msgstr "Zoom "
-
-#: pcbnew/tool_pcb.cpp:529
-#: pcbnew/set_color.cpp:378
-#: gerbview/set_color.h:246
-msgid "Grid"
-msgstr "Grille"
-
-#: pcbnew/tool_pcb.cpp:542
-#: pcbnew/tool_modedit.cpp:299
-msgid "User Grid"
-msgstr "Grille perso"
-
-#: pcbnew/tool_pcb.cpp:591
-msgid "+/- to switch"
-msgstr "+/- pour commuter"
+#: pcbnew/editrack-part2.cpp:135
+msgid "Drc error, cancelled"
+msgstr "Erreur DRC, annulation"
 
 #: pcbnew/dialog_netlist.cpp:133
 #: eeschema/edit_component_in_schematic.cpp:682
@@ -1853,105 +1645,186 @@ msgstr "Inclure pistes autoroutées"
 msgid "Include Locked Tracks"
 msgstr "Inclure pistes verrouillées"
 
-#: pcbnew/drc.cpp:71
+#: pcbnew/drc.cpp:73
 msgid "Look for active routes\n"
 msgstr "Recherche des chevelus actifs\n"
 
-#: pcbnew/drc.cpp:77
+#: pcbnew/drc.cpp:82
 msgid "Unconnected found:\n"
 msgstr "Non connecté trouvé:\n"
 
-#: pcbnew/drc.cpp:82
+#: pcbnew/drc.cpp:87
 #, c-format
 msgid "%d > Pad %s (%s) @ %.4f,%.4f and "
 msgstr "%d > Pad %s (%s) @ %.4f,%.4f et "
 
-#: pcbnew/drc.cpp:90
+#: pcbnew/drc.cpp:96
 #, c-format
 msgid "Pad %s (%s) @ %.4f,%.4f\n"
 msgstr "Pad %s (%s) @ %.4f,%.4f\n"
 
-#: pcbnew/drc.cpp:95
+#: pcbnew/drc.cpp:102
 #, c-format
 msgid "Active routes: %d\n"
 msgstr "Active routes: %d\n"
 
-#: pcbnew/drc.cpp:96
+#: pcbnew/drc.cpp:103
 msgid "OK! (No active routes)\n"
 msgstr "OK! (Pas de chevelu actif)\n"
 
-#: pcbnew/drc.cpp:122
+#: pcbnew/drc.cpp:146
 #, c-format
 msgid "** End Drc: %d errors **\n"
 msgstr "** FinDrc: %d erreurs **\n"
 
-#: pcbnew/drc.cpp:124
+#: pcbnew/drc.cpp:148
 msgid "** End Drc: No Error **\n"
 msgstr "** Fin Drc: Aucune Erreur **\n"
 
-#: pcbnew/drc.cpp:198
+#: pcbnew/drc.cpp:155
+#, c-format
+msgid "Report file <%s> created\n"
+msgstr "Fichier rapport <%s> créé\n"
+
+#: pcbnew/drc.cpp:233
 msgid "Tst Pad to Pad\n"
 msgstr "Tst Pad to Pad\n"
 
-#: pcbnew/drc.cpp:237
-#: pcbnew/drc.cpp:301
+#: pcbnew/drc.cpp:272
+#: pcbnew/drc.cpp:336
 msgid "SegmNb"
 msgstr "SegmNb"
 
-#: pcbnew/drc.cpp:238
+#: pcbnew/drc.cpp:273
 msgid "Track Err"
 msgstr "Err Pistes"
 
-#: pcbnew/drc.cpp:241
+#: pcbnew/drc.cpp:276
 msgid "Tst Tracks\n"
 msgstr "Tst Pistes\n"
 
-#: pcbnew/drc.cpp:265
-#: pcbnew/drc.cpp:330
+#: pcbnew/drc.cpp:300
+#: pcbnew/drc.cpp:365
 #: eeschema/eelayer.cpp:141
 msgid "Netname"
 msgstr "NetName"
 
-#: pcbnew/drc.cpp:302
+#: pcbnew/drc.cpp:337
 msgid "Zone Err"
 msgstr "Err. Zone"
 
-#: pcbnew/drc.cpp:304
+#: pcbnew/drc.cpp:339
 msgid "Tst Zones\n"
 msgstr "Test Zones\n"
 
-#: pcbnew/drc.cpp:1130
+#: pcbnew/drc.cpp:1165
 #, c-format
 msgid "%d Drc Err %d %s (net %s)and PAD %s (%s) net %s @ %d,%d\n"
 msgstr "%d Err Drc %d %s (net %s) et PAD %s (%s) net %s @ %d,%d\n"
 
-#: pcbnew/drc.cpp:1145
+#: pcbnew/drc.cpp:1180
 #, c-format
 msgid "%d Err type %d: %s (net %s) and VIA (net %s) @ %d,%d\n"
 msgstr "%d Err type %d: %s (net %s) et VIA (net %s) @ %d,%d\n"
 
-#: pcbnew/drc.cpp:1158
+#: pcbnew/drc.cpp:1193
 #, c-format
 msgid "%d Err type %d: %s (net %s) and track (net %s) @ %d,%d\n"
 msgstr "%d Err type %d: %s (net %s) et piste (net %s) @ %d,%d\n"
 
-#: pcbnew/drc.cpp:1202
+#: pcbnew/drc.cpp:1238
 #, c-format
 msgid "%d Drc Err: PAD %s (%s) net %s @ %d,%d and PAD %s (%s) net %s @ %d,%d\n"
 msgstr "%d Err Drc: PAD %s (%s) net %s @ %d,%d et PAD %s (%s) net %s @ %d,%d\n"
 
-#: pcbnew/editrack-part2.cpp:31
+#: pcbnew/controle.cpp:50
 #, c-format
-msgid "Track Width: %s   Vias Size : %s"
-msgstr "Larg. piste: %s  Diam Vias : %s"
+msgid "Locate module %s %s"
+msgstr "Module localisé %s %s"
 
-#: pcbnew/editrack-part2.cpp:127
-msgid "Drc error, cancelled"
-msgstr "Erreur DRC, annulation"
+#: pcbnew/controle.cpp:98
+#, c-format
+msgid "module %s not found"
+msgstr "module %s non trouvé"
 
-#: pcbnew/ioascii.cpp:168
-msgid "Error: Unexpected end of file !"
-msgstr "Erreur: Fin de fichier inattendue !"
+#: pcbnew/controle.cpp:100
+#, c-format
+msgid "Pin %s (module %s) not found"
+msgstr "Pin %s (module %s) non trouvée"
+
+#: pcbnew/controle.cpp:102
+#, c-format
+msgid "Locate Pin %s (module %s)"
+msgstr "Pin localisée %s (module %s)"
+
+#: pcbnew/class_pad.cpp:729
+msgid "Unknown Pad shape"
+msgstr "Forme pad inconnue"
+
+#: pcbnew/class_pad.cpp:815
+#: pcbnew/affiche.cpp:76
+#: pcbnew/affiche.cpp:266
+#: pcbnew/class_module.cpp:1136
+#: cvpcb/setvisu.cpp:29
+msgid "Module"
+msgstr "Module"
+
+#: pcbnew/class_pad.cpp:818
+msgid "RefP"
+msgstr "RefP"
+
+#: pcbnew/class_pad.cpp:821
+msgid "Net"
+msgstr "Net"
+
+#: pcbnew/class_pad.cpp:904
+#: pcbnew/affiche.cpp:36
+#: pcbnew/affiche.cpp:91
+#: pcbnew/affiche.cpp:95
+#: pcbnew/affiche.cpp:195
+#: pcbnew/affiche.cpp:244
+#: pcbnew/dialog_edit_module.cpp:230
+#: pcbnew/class_module.cpp:1110
+#: pcbnew/sel_layer.cpp:109
+#: gerbview/affiche.cpp:102
+msgid "Layer"
+msgstr "Couche"
+
+#: pcbnew/class_pad.cpp:921
+#: pcbnew/affiche.cpp:53
+#: pcbnew/affiche.cpp:109
+#: gerbview/affiche.cpp:49
+msgid "H Size"
+msgstr "Taille H"
+
+#: pcbnew/class_pad.cpp:925
+#: pcbnew/affiche.cpp:56
+#: pcbnew/affiche.cpp:112
+#: gerbview/affiche.cpp:52
+msgid "V Size"
+msgstr "Taille V"
+
+#: pcbnew/class_pad.cpp:939
+msgid "Drill X / Y"
+msgstr "Perçage X/Y"
+
+#: pcbnew/class_pad.cpp:950
+#: pcbnew/affiche.cpp:47
+#: pcbnew/affiche.cpp:103
+#: pcbnew/dialog_edit_module.cpp:238
+#: pcbnew/class_module.cpp:1133
+#: eeschema/affiche.cpp:101
+#: gerbview/affiche.cpp:43
+msgid "Orient"
+msgstr "Orient"
+
+#: pcbnew/class_pad.cpp:954
+msgid "X Pos"
+msgstr "X Pos"
+
+#: pcbnew/class_pad.cpp:958
+msgid "Y pos"
+msgstr "Y pos"
 
 #: pcbnew/export_gencad.cpp:66
 msgid "GenCAD file:"
@@ -2122,75 +1995,6 @@ msgstr "Effacement contour"
 msgid "Set Width"
 msgstr "Ajuste Epaiss"
 
-#: pcbnew/class_pad.cpp:630
-msgid "Unknown Pad shape"
-msgstr "Forme pad inconnue"
-
-#: pcbnew/class_pad.cpp:698
-#: pcbnew/affiche.cpp:76
-#: pcbnew/affiche.cpp:266
-#: pcbnew/class_module.cpp:1060
-#: cvpcb/setvisu.cpp:29
-msgid "Module"
-msgstr "Module"
-
-#: pcbnew/class_pad.cpp:701
-msgid "RefP"
-msgstr "RefP"
-
-#: pcbnew/class_pad.cpp:704
-msgid "Net"
-msgstr "Net"
-
-#: pcbnew/class_pad.cpp:770
-#: pcbnew/affiche.cpp:36
-#: pcbnew/affiche.cpp:91
-#: pcbnew/affiche.cpp:95
-#: pcbnew/affiche.cpp:195
-#: pcbnew/affiche.cpp:244
-#: pcbnew/class_module.cpp:1040
-#: pcbnew/dialog_edit_module.cpp:230
-#: pcbnew/sel_layer.cpp:109
-#: gerbview/affiche.cpp:102
-msgid "Layer"
-msgstr "Couche"
-
-#: pcbnew/class_pad.cpp:782
-#: pcbnew/affiche.cpp:53
-#: pcbnew/affiche.cpp:109
-#: gerbview/affiche.cpp:49
-msgid "H Size"
-msgstr "Taille H"
-
-#: pcbnew/class_pad.cpp:786
-#: pcbnew/affiche.cpp:56
-#: pcbnew/affiche.cpp:112
-#: gerbview/affiche.cpp:52
-msgid "V Size"
-msgstr "Taille V"
-
-#: pcbnew/class_pad.cpp:800
-msgid "Drill X / Y"
-msgstr "Perçage X/Y"
-
-#: pcbnew/class_pad.cpp:811
-#: pcbnew/affiche.cpp:47
-#: pcbnew/affiche.cpp:103
-#: pcbnew/class_module.cpp:1057
-#: pcbnew/dialog_edit_module.cpp:238
-#: eeschema/affiche.cpp:101
-#: gerbview/affiche.cpp:43
-msgid "Orient"
-msgstr "Orient"
-
-#: pcbnew/class_pad.cpp:815
-msgid "X Pos"
-msgstr "X Pos"
-
-#: pcbnew/class_pad.cpp:819
-msgid "Y pos"
-msgstr "Y pos"
-
 #: pcbnew/editpads.cpp:74
 msgid "Pad Position"
 msgstr "Position Pad"
@@ -2236,17 +2040,17 @@ msgid "Alternate Via Drill"
 msgstr "Perçage vias alternatif"
 
 #: pcbnew/dialog_track_options.cpp:146
-#: pcbnew/pcbnew.h:271
+#: pcbnew/pcbnew.h:296
 msgid "Blind Via"
 msgstr "Via borgne"
 
 #: pcbnew/dialog_track_options.cpp:147
-#: pcbnew/pcbnew.h:272
+#: pcbnew/pcbnew.h:297
 msgid "Buried Via"
 msgstr "Via enterrée"
 
 #: pcbnew/dialog_track_options.cpp:148
-#: pcbnew/pcbnew.h:273
+#: pcbnew/pcbnew.h:298
 msgid "Standard Via"
 msgstr "Via Standard"
 
@@ -2259,7 +2063,7 @@ msgid "Track Width"
 msgstr "Epais. Piste"
 
 #: pcbnew/dialog_track_options.cpp:164
-#: pcbnew/dialog_drc.cpp:143
+#: pcbnew/dialog_drc.cpp:145
 msgid "Clearance"
 msgstr "Isolation"
 
@@ -2288,6 +2092,29 @@ msgstr "Liste équipots"
 #: pcbnew/dialog_display_options.cpp:188
 msgid "Tracks and vias"
 msgstr "Pistes et vias"
+
+#: pcbnew/dialog_display_options.cpp:193
+#: pcbnew/dialog_display_options.cpp:225
+#: pcbnew/dialog_display_options.cpp:233
+#: pcbnew/dialog_display_options.cpp:242
+#: pcbnew/dialog_display_options.cpp:266
+#: pcbnew/pcbplot.cpp:320
+#: gerbview/options.cpp:310
+#: gerbview/options.cpp:323
+msgid "Sketch"
+msgstr "Contour"
+
+#: pcbnew/dialog_display_options.cpp:194
+#: pcbnew/dialog_display_options.cpp:224
+#: pcbnew/dialog_display_options.cpp:232
+#: pcbnew/dialog_display_options.cpp:243
+#: pcbnew/dialog_display_options.cpp:265
+#: pcbnew/pcbplot.cpp:320
+#: eeschema/dialog_cmp_graphic_properties.cpp:168
+#: gerbview/options.cpp:310
+#: gerbview/options.cpp:323
+msgid "Filled"
+msgstr "Plein"
 
 #: pcbnew/dialog_display_options.cpp:196
 msgid "Tracks:"
@@ -2324,6 +2151,14 @@ msgstr "Montrer trous pour vias"
 #: pcbnew/dialog_display_options.cpp:215
 msgid "Modules"
 msgstr "Modules"
+
+#: pcbnew/dialog_display_options.cpp:223
+#: pcbnew/dialog_display_options.cpp:231
+#: pcbnew/dialog_display_options.cpp:264
+#: pcbnew/pcbplot.cpp:320
+#: gerbview/options.cpp:323
+msgid "Line"
+msgstr "Ligne"
 
 #: pcbnew/dialog_display_options.cpp:227
 msgid "Module Texts"
@@ -2403,7 +2238,7 @@ msgstr "Supprimer Module"
 msgid "Value "
 msgstr "Valeur "
 
-#: pcbnew/dialog_drc.cpp:139
+#: pcbnew/dialog_drc.cpp:141
 #: eeschema/fieldedi.cpp:223
 #: eeschema/dialog_erc.cpp:237
 #: eeschema/dialog_edit_component_in_lib.cpp:166
@@ -2416,54 +2251,54 @@ msgstr "Valeur "
 msgid "Options"
 msgstr "Options"
 
-#: pcbnew/dialog_drc.cpp:151
+#: pcbnew/dialog_drc.cpp:153
 msgid "Test Drc:"
 msgstr "Test Drc:"
 
-#: pcbnew/dialog_drc.cpp:155
+#: pcbnew/dialog_drc.cpp:157
 msgid "Include pad to pad test"
 msgstr "Inclure test pad à pad"
 
-#: pcbnew/dialog_drc.cpp:159
+#: pcbnew/dialog_drc.cpp:161
 msgid "Include unconnected"
 msgstr "Inclure non connexions"
 
-#: pcbnew/dialog_drc.cpp:163
+#: pcbnew/dialog_drc.cpp:165
 #: pcbnew/block.cpp:136
 msgid "Include zones"
 msgstr "Inclure zones"
 
-#: pcbnew/dialog_drc.cpp:167
+#: pcbnew/dialog_drc.cpp:169
 msgid "Create Report file"
 msgstr "Créer fichier rapport "
 
-#: pcbnew/dialog_drc.cpp:180
+#: pcbnew/dialog_drc.cpp:182
 msgid "Test Drc"
 msgstr "Test Drc"
 
-#: pcbnew/dialog_drc.cpp:184
+#: pcbnew/dialog_drc.cpp:186
 msgid "Stop Drc"
 msgstr "Stop Drc"
 
-#: pcbnew/dialog_drc.cpp:191
+#: pcbnew/dialog_drc.cpp:193
 msgid "Del Markers"
 msgstr "Supprimer Marqueurs"
 
-#: pcbnew/dialog_drc.cpp:195
+#: pcbnew/dialog_drc.cpp:197
 msgid "List Unconn"
 msgstr "Liste Non Conn."
 
-#: pcbnew/dialog_drc.cpp:202
+#: pcbnew/dialog_drc.cpp:204
 msgid "Report File"
 msgstr "Fichier rapport"
 
-#: pcbnew/dialog_drc.cpp:206
+#: pcbnew/dialog_drc.cpp:208
 #: pcbnew/dialog_edit_module.cpp:375
 #: eeschema/dialog_eeschema_config.cpp:227
 msgid "Browse"
 msgstr "Examiner"
 
-#: pcbnew/dialog_drc.cpp:213
+#: pcbnew/dialog_drc.cpp:215
 #: common/svg_print.cpp:232
 #: share/svg_print.cpp:232
 msgid "Messages:"
@@ -2509,83 +2344,83 @@ msgstr "Suppression couches sessin"
 msgid "Delete zones"
 msgstr "SuppressionZones"
 
-#: pcbnew/block.cpp:555
+#: pcbnew/block.cpp:556
 msgid "Rotate Block"
 msgstr "Rotation Bloc"
 
-#: pcbnew/block.cpp:569
+#: pcbnew/block.cpp:570
 msgid "Footprint rotation"
 msgstr "Rotation modules"
 
-#: pcbnew/block.cpp:600
+#: pcbnew/block.cpp:603
 msgid "Track rotation"
 msgstr "Rotation pistes"
 
-#: pcbnew/block.cpp:621
+#: pcbnew/block.cpp:624
 msgid "Zone rotation"
 msgstr "Rotation Zones"
 
-#: pcbnew/block.cpp:640
+#: pcbnew/block.cpp:643
 msgid "Draw layers rotation"
 msgstr "Rotation couches dessin"
 
-#: pcbnew/block.cpp:746
+#: pcbnew/block.cpp:750
 msgid "Block mirroring"
 msgstr "Bloc Miroir"
 
-#: pcbnew/block.cpp:759
+#: pcbnew/block.cpp:764
 msgid "Footprint mirroring"
 msgstr "Miroir modules"
 
-#: pcbnew/block.cpp:789
+#: pcbnew/block.cpp:795
 msgid "Track mirroring"
 msgstr "Miroir Pistes"
 
-#: pcbnew/block.cpp:815
+#: pcbnew/block.cpp:821
 msgid "Zone mirroring"
 msgstr "Miroir zone"
 
-#: pcbnew/block.cpp:835
+#: pcbnew/block.cpp:841
 msgid "Draw layers mirroring"
 msgstr "Draw layers mirroring"
 
-#: pcbnew/block.cpp:950
+#: pcbnew/block.cpp:957
 msgid "Move Block"
 msgstr "Déplacer Bloc"
 
-#: pcbnew/block.cpp:960
+#: pcbnew/block.cpp:968
 msgid "Move footprints"
 msgstr "Déplacement modules"
 
-#: pcbnew/block.cpp:990
+#: pcbnew/block.cpp:999
 msgid "Move tracks"
 msgstr "Déplacement pistes"
 
-#: pcbnew/block.cpp:1011
+#: pcbnew/block.cpp:1020
 msgid "Move zones"
 msgstr "Déplacement zones"
 
-#: pcbnew/block.cpp:1030
+#: pcbnew/block.cpp:1039
 msgid "Move draw layers"
 msgstr "Déplacement couches dessin"
 
-#: pcbnew/block.cpp:1122
+#: pcbnew/block.cpp:1132
 msgid "Copy Block"
 msgstr "Copie Bloc"
 
-#: pcbnew/block.cpp:1132
+#: pcbnew/block.cpp:1143
 msgid "Module copy"
 msgstr "Copie Modules"
 
-#: pcbnew/block.cpp:1168
+#: pcbnew/block.cpp:1180
 msgid "Track copy"
 msgstr "Copie Piste"
 
-#: pcbnew/block.cpp:1191
+#: pcbnew/block.cpp:1203
 msgid "Zone copy"
 msgstr "Copie Zone"
 
-#: pcbnew/block.cpp:1213
+#: pcbnew/block.cpp:1225
 msgid "Draw layers copy"
 msgstr "Cpoie des couches dessin"
 
@@ -2645,11 +2480,6 @@ msgstr "Change Perçage"
 msgid "Change Orient"
 msgstr "Change Orientation"
 
-#: pcbnew/editmod.cpp:43
-#: pcbnew/edit.cpp:444
-msgid "Module Editor"
-msgstr "Ouvrir Editeur de modules"
-
 #: pcbnew/editmod.cpp:137
 msgid "Text is REFERENCE!"
 msgstr "Le texte est la REFERENCE!"
@@ -2688,9 +2518,14 @@ msgstr "Effacement des Modules?"
 msgid "Delete Pcb Texts"
 msgstr "Effacer Textes Pcb"
 
-#: pcbnew/pcbnew.cpp:42
-msgid "Pcbnew is already running, Continue?"
-msgstr "Pcbnew est est cours d'exécution. Continuer ?"
+#: pcbnew/hotkeys.cpp:174
+#, c-format
+msgid "Footprint %s found, but locked"
+msgstr "Module %s trouvé, mais verrouillé"
+
+#: pcbnew/hotkeys.cpp:314
+msgid "Delete module?"
+msgstr "Effacer Module?"
 
 #: pcbnew/cotation.cpp:88
 msgid "Cotation properties"
@@ -2784,7 +2619,7 @@ msgid "Standard"
 msgstr "Standard"
 
 #: pcbnew/affiche.cpp:182
-#: pcbnew/class_module.cpp:1053
+#: pcbnew/class_module.cpp:1129
 msgid "Stat"
 msgstr "Stat"
 
@@ -2805,7 +2640,7 @@ msgid "Seg"
 msgstr "Seg"
 
 #: pcbnew/affiche.cpp:271
-#: pcbnew/class_module.cpp:1036
+#: pcbnew/class_module.cpp:1106
 msgid "TimeStamp"
 msgstr "TimeStamp"
 
@@ -2819,7 +2654,7 @@ msgstr "Couche Seg."
 
 #: pcbnew/affiche.cpp:302
 #: pcbnew/affiche.cpp:362
-#: pcbnew/class_module.cpp:1047
+#: pcbnew/class_module.cpp:1121
 msgid "Pads"
 msgstr "Pads"
 
@@ -2953,22 +2788,6 @@ msgstr "Segment en cours d'édition"
 #: pcbnew/editedge.cpp:168
 msgid "Delete Layer "
 msgstr "Effacer Couche"
-
-#: pcbnew/class_module.cpp:1030
-msgid "Last Change"
-msgstr "Last Change"
-
-#: pcbnew/class_module.cpp:1063
-msgid "3D-Shape"
-msgstr "Forme 3D"
-
-#: pcbnew/class_module.cpp:1067
-msgid "Doc:  "
-msgstr "Doc: "
-
-#: pcbnew/class_module.cpp:1068
-msgid "KeyW: "
-msgstr "KeyW: "
 
 #: pcbnew/mirepcb.cpp:81
 msgid "Mire properties"
@@ -3143,6 +2962,14 @@ msgstr "Change tous"
 msgid "Browse Libs modules"
 msgstr "Liste modules"
 
+#: pcbnew/xchgmod.cpp:128
+#: pcbnew/pcbplot.cpp:207
+#: eeschema/fieldedi.cpp:198
+#: eeschema/editpart.cpp:171
+#: share/zoom.cpp:413
+msgid "Close"
+msgstr "Fermer"
+
 #: pcbnew/xchgmod.cpp:132
 msgid "Current Module"
 msgstr "Module courant"
@@ -3188,6 +3015,247 @@ msgstr "Change module %s (%s)  "
 #: pcbnew/xchgmod.cpp:584
 msgid "Cmp files:"
 msgstr "Fichiers Cmp: "
+
+#: pcbnew/files.cpp:57
+msgid "Recovery file "
+msgstr "Fichier de secours "
+
+#: pcbnew/files.cpp:63
+msgid "Ok to load Recovery file "
+msgstr "Ok pour charger le fichier de secours"
+
+#: pcbnew/files.cpp:143
+msgid "Board Modified: Continue ?"
+msgstr "Circuit imprimé modifié,  Continuer ?"
+
+#: pcbnew/files.cpp:161
+#: pcbnew/files.cpp:261
+msgid "Board files:"
+msgstr "Fichiers C.I.:"
+
+#: pcbnew/files.cpp:297
+msgid "Warning: unable to create bakfile "
+msgstr "Attention: Impossible de créer fichier backup "
+
+#: pcbnew/files.cpp:329
+msgid "Backup file: "
+msgstr "Fichier backup: "
+
+#: pcbnew/files.cpp:334
+msgid "Write Board file: "
+msgstr "Ecriture fichier CI: "
+
+#: pcbnew/files.cpp:336
+msgid "Failed to create "
+msgstr "Impossible de créer  fichier "
+
+#: pcbnew/pcbplot.cpp:114
+#: pcbnew/pcbplot.cpp:203
+#: gerbview/tool_gerber.cpp:88
+msgid "Plot"
+msgstr "Tracer"
+
+#: pcbnew/pcbplot.cpp:144
+msgid "Plot Format"
+msgstr "Format de tracé"
+
+#: pcbnew/pcbplot.cpp:170
+msgid "Spot min"
+msgstr "Spot min"
+
+#: pcbnew/pcbplot.cpp:174
+msgid "Pen Size"
+msgstr "Diam plume"
+
+#: pcbnew/pcbplot.cpp:178
+msgid "Pen Speed (cm/s)"
+msgstr "Vitesse plume (cm/s)"
+
+#: pcbnew/pcbplot.cpp:180
+msgid "Set pen speed in cm/s"
+msgstr "Ajuster Vitesse plume en centimetres par seconde"
+
+#: pcbnew/pcbplot.cpp:182
+msgid "Pen Ovr"
+msgstr "Recouvrement"
+
+#: pcbnew/pcbplot.cpp:184
+msgid "Set plot overlay for filling"
+msgstr "Ajuste recouvrement des tracés pour les remplissages"
+
+#: pcbnew/pcbplot.cpp:186
+msgid "Lines Width"
+msgstr "Epaiss. lignes"
+
+#: pcbnew/pcbplot.cpp:188
+msgid "Set width for lines in Line plot mode"
+msgstr "Ajuster l'épaisseur des traits en Mode tracé filaire"
+
+#: pcbnew/pcbplot.cpp:192
+msgid "Absolute"
+msgstr "Absolu"
+
+#: pcbnew/pcbplot.cpp:192
+msgid "Auxiliary axis"
+msgstr "Axe Auxiliaire"
+
+#: pcbnew/pcbplot.cpp:194
+msgid "Plot Origin"
+msgstr "Origine des coord de tracé"
+
+#: pcbnew/pcbplot.cpp:211
+msgid "Save options"
+msgstr "Sauver options"
+
+#: pcbnew/pcbplot.cpp:215
+msgid "Create Drill File"
+msgstr "Créer Fichier de percage"
+
+#: pcbnew/pcbplot.cpp:227
+#: share/dialog_print.cpp:150
+msgid "X Scale Adjust"
+msgstr "Ajustage Echelle X"
+
+#: pcbnew/pcbplot.cpp:228
+#: share/wxprint.cpp:170
+msgid "Set X scale adjust for exact scale plotting"
+msgstr "Ajuster échelle X pour traçage à l'échelle exacte"
+
+#: pcbnew/pcbplot.cpp:229
+#: share/dialog_print.cpp:156
+msgid "Y Scale Adjust"
+msgstr "Ajustage Echelle Y"
+
+#: pcbnew/pcbplot.cpp:230
+#: share/wxprint.cpp:171
+msgid "Set Y scale adjust for exact scale plotting"
+msgstr "Ajuster échelle Y pour traçage à l'échelle exacte"
+
+#: pcbnew/pcbplot.cpp:232
+msgid "Plot Negative"
+msgstr "Tracé en Negatif"
+
+#: pcbnew/pcbplot.cpp:257
+#: eeschema/plotps.cpp:190
+#: common/svg_print.cpp:197
+#: share/svg_print.cpp:200
+#: share/dialog_print.cpp:174
+msgid "Print Sheet Ref"
+msgstr "Imprimer cartouche"
+
+#: pcbnew/pcbplot.cpp:265
+msgid "Print Pads on Silkscreen"
+msgstr "Pads sur Sérigraphie"
+
+#: pcbnew/pcbplot.cpp:268
+msgid "Enable/disable print/plot pads on Silkscreen layers"
+msgstr "Active/désactive tracé des pastilles sur les couches de sérigraphie"
+
+#: pcbnew/pcbplot.cpp:272
+msgid "Always Print Pads"
+msgstr "Toujour tracer pads"
+
+#: pcbnew/pcbplot.cpp:274
+msgid "Force print/plot pads on ALL layers"
+msgstr "Force le tracé des pastilles sur TOUTES les couches"
+
+#: pcbnew/pcbplot.cpp:278
+msgid "Print Module Value"
+msgstr "Imprimer Valeur Module"
+
+#: pcbnew/pcbplot.cpp:281
+msgid "Enable/disable print/plot module value on Silkscreen layers"
+msgstr "Active/désactive le tracé des textes valeurs des modules sur couches de sérigraphie"
+
+#: pcbnew/pcbplot.cpp:284
+msgid "Print Module Reference"
+msgstr "Imprimer Référence Module"
+
+#: pcbnew/pcbplot.cpp:287
+msgid "Enable/disable print/plot module reference on Silkscreen layers"
+msgstr "Active/désactive le tracé des textes référence des modules sur couches de sérigraphie"
+
+#: pcbnew/pcbplot.cpp:291
+msgid "Print other Module texts"
+msgstr "Imprimer autres textes  module"
+
+#: pcbnew/pcbplot.cpp:294
+msgid "Enable/disable print/plot module field texts on Silkscreen layers"
+msgstr "Active/désactive le tracé des textes des champs des modules sur couches de sérigraphie"
+
+#: pcbnew/pcbplot.cpp:298
+msgid "Force Print Invisible Texts"
+msgstr "Force tracé textes invisibles"
+
+#: pcbnew/pcbplot.cpp:301
+msgid "Force print/plot module invisible texts on Silkscreen layers"
+msgstr "Force le tracé des textes invisibles sur couches de sérigraphie"
+
+#: pcbnew/pcbplot.cpp:305
+msgid "No Drill mark"
+msgstr "Pas de marque"
+
+#: pcbnew/pcbplot.cpp:305
+msgid "Small mark"
+msgstr "Petite marque"
+
+#: pcbnew/pcbplot.cpp:305
+msgid "Real Drill"
+msgstr "Perçage réel"
+
+#: pcbnew/pcbplot.cpp:307
+msgid "Pads Drill Opt"
+msgstr "Options perçage"
+
+#: pcbnew/pcbplot.cpp:313
+msgid "Auto scale"
+msgstr "Ech. auto"
+
+#: pcbnew/pcbplot.cpp:313
+msgid "Scale 1"
+msgstr "Echelle 1"
+
+#: pcbnew/pcbplot.cpp:313
+msgid "Scale 1.5"
+msgstr "Echelle 1,5"
+
+#: pcbnew/pcbplot.cpp:313
+#: share/dialog_print.cpp:142
+msgid "Scale 2"
+msgstr "Echelle 2"
+
+#: pcbnew/pcbplot.cpp:313
+#: share/dialog_print.cpp:143
+msgid "Scale 3"
+msgstr "Echelle 3"
+
+#: pcbnew/pcbplot.cpp:315
+msgid "Scale Opt"
+msgstr "Echelle"
+
+#: pcbnew/pcbplot.cpp:321
+msgid "Plot Mode"
+msgstr "Mode de Tracé"
+
+#: pcbnew/pcbplot.cpp:328
+msgid "Plot Mirror"
+msgstr "Tracé Miroir"
+
+#: pcbnew/pcbplot.cpp:333
+msgid "Vias on Mask"
+msgstr "Vias sur masque"
+
+#: pcbnew/pcbplot.cpp:336
+msgid "Print/plot vias on mask layers. They are in this case not protected"
+msgstr "Trace vias sur vernis épargne. Elles seront non protégées"
+
+#: pcbnew/pcbplot.cpp:340
+msgid "Org = Centre"
+msgstr "Org = Centre"
+
+#: pcbnew/pcbplot.cpp:342
+msgid "Draw origin ( 0,0 ) in sheet center"
+msgstr "Origine des tracés au centre de la feuille"
 
 #: pcbnew/menubarpcb.cpp:41
 msgid "Load Board    Ctrl-O"
@@ -4122,56 +4190,21 @@ msgstr "Effacer"
 msgid "Pcb Text"
 msgstr "Texte Pcb"
 
-#: pcbnew/edit.cpp:154
-msgid "Graphic not autorized on Copper layers"
-msgstr "Graphique non autorisé sur couches cuivre"
+#: pcbnew/class_module.cpp:1100
+msgid "Last Change"
+msgstr "Last Change"
 
-#: pcbnew/edit.cpp:177
-msgid "Tracks on Copper layers only "
-msgstr "Pistes sur couches cuivre seulement"
+#: pcbnew/class_module.cpp:1139
+msgid "3D-Shape"
+msgstr "Forme 3D"
 
-#: pcbnew/edit.cpp:250
-msgid "Cotation not autorized on Copper layers"
-msgstr "Cotation non autorisée sur couches cuivre"
+#: pcbnew/class_module.cpp:1143
+msgid "Doc:  "
+msgstr "Doc: "
 
-#: pcbnew/edit.cpp:520
-msgid "Add Tracks"
-msgstr "Addition de pistes"
-
-#: pcbnew/edit.cpp:531
-msgid "Warning: Display Zone is OFF!!!"
-msgstr "Attention: Affichage zones désactivé !!!"
-
-#: pcbnew/edit.cpp:538
-msgid "Add Mire"
-msgstr "Ajouter Mires de superposition"
-
-#: pcbnew/edit.cpp:542
-msgid "Adjust Zero"
-msgstr "Ajuster Zéro"
-
-#: pcbnew/edit.cpp:548
-msgid "Add Graphic"
-msgstr "Addition éléments graphiques"
-
-#: pcbnew/edit.cpp:556
-msgid "Add Modules"
-msgstr "Addition de Modules"
-
-#: pcbnew/edit.cpp:568
-msgid "Net Highlight"
-msgstr "Surbrillance des équipotentielles"
-
-#: pcbnew/edit.cpp:572
-msgid "Local Ratsnest"
-msgstr "Monter le chevelu général"
-
-#: pcbnew/edit.cpp:720
-#: pcbnew/modedit.cpp:327
-#: eeschema/schedit.cpp:443
-#: eeschema/libframe.cpp:554
-msgid "Delete item"
-msgstr "Suppression d'éléments"
+#: pcbnew/class_module.cpp:1144
+msgid "KeyW: "
+msgstr "KeyW: "
 
 #: pcbnew/netlist.cpp:95
 #, c-format
@@ -4747,26 +4780,6 @@ msgstr "Ajouter Pastilles"
 #: eeschema/schedit.cpp:293
 msgid "Add Drawing"
 msgstr "Ajout d'éléments graphiques"
-
-#: pcbnew/controle.cpp:47
-#, c-format
-msgid "Locate module %s %s"
-msgstr "Module localisé %s %s"
-
-#: pcbnew/controle.cpp:88
-#, c-format
-msgid "module %s not found"
-msgstr "module %s non trouvé"
-
-#: pcbnew/controle.cpp:90
-#, c-format
-msgid "Pin %s (module %s) not found"
-msgstr "Pin %s (module %s) non trouvée"
-
-#: pcbnew/controle.cpp:92
-#, c-format
-msgid "Locate Pin %s (module %s)"
-msgstr "Pin localisée %s (module %s)"
 
 #: pcbnew/moduleframe.cpp:176
 msgid "Module Editor: module modified!, Continue ?"
@@ -9075,7 +9088,7 @@ msgstr "Imprimer photo"
 
 #: gerbview/tool_gerber.cpp:285
 msgid "Find D Codes"
-msgstr "Trouver DCodes"
+msgstr "Chercher DCodes"
 
 #: gerbview/tool_gerber.cpp:302
 msgid "No tool"
@@ -9626,38 +9639,6 @@ msgstr "Pre&visualisation"
 msgid "&Print"
 msgstr "Imp&rimer"
 
-#: share/infospgm.cpp:46
-msgid "Build Version:"
-msgstr "Build Version:"
-
-#: share/infospgm.cpp:61
-msgid "Author:"
-msgstr "Autheur:"
-
-#: share/infospgm.cpp:62
-msgid "Based on wxWidgets "
-msgstr "Based on wxWidgets "
-
-#: share/infospgm.cpp:67
-msgid ""
-"\n"
-"\n"
-"GPL License"
-msgstr ""
-"\n"
-"\n"
-"GPL Licence"
-
-#: share/infospgm.cpp:68
-msgid ""
-"\n"
-"\n"
-"Web sites:\n"
-msgstr ""
-"\n"
-"\n"
-"Sites Web:\n"
-
 #: share/setpage.cpp:198
 msgid "Size A4"
 msgstr "Format A4 "
@@ -9783,6 +9764,38 @@ msgstr "Redessin"
 msgid "Grid Select"
 msgstr "Sélection Grille"
 
+#: share/infospgm.cpp:46
+msgid "Build Version:"
+msgstr "Build Version:"
+
+#: share/infospgm.cpp:61
+msgid "Author:"
+msgstr "Autheur:"
+
+#: share/infospgm.cpp:62
+msgid "Based on wxWidgets "
+msgstr "Based on wxWidgets "
+
+#: share/infospgm.cpp:67
+msgid ""
+"\n"
+"\n"
+"GPL License"
+msgstr ""
+"\n"
+"\n"
+"GPL Licence"
+
+#: share/infospgm.cpp:68
+msgid ""
+"\n"
+"\n"
+"Web sites:\n"
+msgstr ""
+"\n"
+"\n"
+"Sites Web:\n"
+
 #: pcbnew/zones.h:53
 msgid "Fill Zones Options"
 msgstr "Options de remplissage de Zone"
@@ -9818,7 +9831,7 @@ msgstr "Nbr segm = %d, Longueur = "
 
 #: pcbnew/find.h:38
 msgid "Find"
-msgstr "Trouver"
+msgstr "Chercher"
 
 #: pcbnew/dialog_pad_edit.h:43
 msgid "Pad properties"
