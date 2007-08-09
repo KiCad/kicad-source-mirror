@@ -301,7 +301,8 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
     }
     else
     {
-        old_name = wxEmptyString; saveok = FALSE;
+        old_name = wxEmptyString; 
+        saveok   = FALSE;
     }
 
     /* Sauvegarde de l'ancien fichier */
@@ -317,7 +318,10 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
     {
         GetScreen()->m_FileName = FullFileName;
         SetTitle( GetScreen()->m_FileName );
+        
+        
         SavePcbFormatAscii( dest );
+        
         fclose( dest );
     }
 

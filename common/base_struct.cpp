@@ -189,17 +189,54 @@ wxString EDA_BaseStruct::ReturnClassName() const
 }
 
 
+// see base_struct.h
+SEARCH_RESULT EDA_BaseStruct::IterateForward( EDA_BaseStruct* listStart, 
+    INSPECTOR* inspector, const void* testData, const KICAD_T scanTypes[] )
+{
+    EDA_BaseStruct* p = listStart;
+    for( ; p; p = p->Pnext )
+    {
+        if( SEARCH_QUIT == p->Visit( inspector, testData, scanTypes ) )
+            return SEARCH_QUIT;
+    }
+
+    return SEARCH_CONTINUE;
+}
+
+
+// see base_struct.h
+// many classes inherit this method, be careful:
+SEARCH_RESULT EDA_BaseStruct::Visit( INSPECTOR* inspector, const void* testData, 
+        const KICAD_T scanTypes[] )
+{
+    KICAD_T     stype;
+    
+    for( const KICAD_T* p = scanTypes;  (stype=*p) != EOT;   ++p )
+    {
+        // If caller wants to inspect my type
+        if( stype == m_StructType )
+        {
+            if( SEARCH_QUIT == inspector->Inspect( this, testData ) )
+                return SEARCH_QUIT;
+
+            break;
+        }
+    }
+
+    return SEARCH_CONTINUE;    
+}
+
 
 #if defined(DEBUG)
 // A function that should have been in wxWidgets
-std::ostream& operator<<( std::ostream& out, wxSize& size )
+std::ostream& operator<<( std::ostream& out, const wxSize& size )
 {
     out << " width=\"" << size.GetWidth() << "\" height=\"" << size.GetHeight() << "\"";
     return out;
 }
 
 // A function that should have been in wxWidgets
-std::ostream& operator<<( std::ostream& out, wxPoint& pt )
+std::ostream& operator<<( std::ostream& out, const wxPoint& pt )
 {
     out << " x=\"" << pt.x << "\" y=\"" << pt.y << "\"";
     return out;
@@ -242,43 +279,6 @@ std::ostream& EDA_BaseStruct::NestedSpace( int nestLevel, std::ostream& os )
     return os;
 }
 
-
-// see base_struct.h
-SEARCH_RESULT EDA_BaseStruct::IterateForward( EDA_BaseStruct* listStart, 
-    INSPECTOR* inspector, const void* testData, const KICAD_T scanTypes[] )
-{
-    EDA_BaseStruct* p = listStart;
-    for( ; p; p = p->Pnext )
-    {
-        if( SEARCH_QUIT == p->Visit( inspector, testData, scanTypes ) )
-            return SEARCH_QUIT;
-    }
-
-    return SEARCH_CONTINUE;
-}
-
-
-// see base_struct.h
-// many classes inherit this method, be careful:
-SEARCH_RESULT EDA_BaseStruct::Visit( INSPECTOR* inspector, const void* testData, 
-        const KICAD_T scanTypes[] )
-{
-    KICAD_T     stype;
-    
-    for( const KICAD_T* p = scanTypes;  (stype=*p) != EOT;   ++p )
-    {
-        // If caller wants to inspect my type
-        if( stype == m_StructType )
-        {
-            if( SEARCH_QUIT == inspector->Inspect( this, testData ) )
-                return SEARCH_QUIT;
-
-            break;
-        }
-    }
-
-    return SEARCH_CONTINUE;    
-}
 #endif
 
 

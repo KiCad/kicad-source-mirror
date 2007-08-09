@@ -256,66 +256,71 @@ bool BOARD::ComputeBoundaryBox( void )
 }
 
 
-#if defined(DEBUG)
-
-/**
- * Function Show
- * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level 
- *          of nesting of this object within the overall tree.
- * @param os The ostream& to output to.
- */
-void BOARD::Show( int nestLevel, std::ostream& os )
+// virtual, see pcbstruct.h     
+SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData, 
+    const KICAD_T scanTypes[] )
 {
-    EDA_BaseStruct* p;
+    KICAD_T         stype;
+    SEARCH_RESULT   result = SEARCH_CONTINUE;
+    const KICAD_T*  p = scanTypes;
     
-    // for now, make it look like XML:
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
-
-    // specialization of the output:
-    NestedSpace( nestLevel+1, os ) << "<modules>\n";
-    p = m_Modules;
-    for( ; p; p = p->Pnext )
-        p->Show( nestLevel+2, os );
-    NestedSpace( nestLevel+1, os ) << "</modules>\n";
-
-    NestedSpace( nestLevel+1, os ) << "<pdrawings>\n";
-    p = m_Drawings;
-    for( ; p; p = p->Pnext )
-        p->Show( nestLevel+2, os );
-    NestedSpace( nestLevel+1, os ) << "</pdrawings>\n";
-    
-    NestedSpace( nestLevel+1, os ) << "<nets>\n";
-    p = m_Equipots;
-    for( ; p; p = p->Pnext )
-        p->Show( nestLevel+2, os );
-    NestedSpace( nestLevel+1, os ) << "</nets>\n";
-
-    NestedSpace( nestLevel+1, os ) << "<tracks>\n";
-    p = m_Track;    
-    for( ; p; p = p->Pnext )
-        p->Show( nestLevel+2, os );
-    NestedSpace( nestLevel+1, os ) << "</tracks>\n";
-
-    NestedSpace( nestLevel+1, os ) << "<zones>\n";
-    p = m_Zone;    
-    for( ; p; p = p->Pnext )
-        p->Show( nestLevel+2, os );
-    NestedSpace( nestLevel+1, os ) << "</zones>\n";
-
-    NestedSpace( nestLevel+1, os ) << "<edgezones>\n";
-    p = m_CurrentLimitZone;
-    for( ; p; p = p->Pnext )
-        p->Show( nestLevel+2, os );
-    NestedSpace( nestLevel+1, os ) << "</edgezones>\n";
-    
-    p = m_Son;
-    for( ; p;  p = p->Pnext )
+    while( (stype = *p++) != EOT )
     {
-        p->Show( nestLevel+1, os );
+        switch( stype )
+        {
+        case TYPEPCB:
+            result = inspector->Inspect( this, testData );  // inspect me
+            break;
+
+        /*  Instances of the requested KICAD_T live in a list, either one
+            that I manage, or that my modules manage.  If it's a type managed
+            by class MODULE, then simply pass it on to each module's 
+            MODULE::Visit() function by way of the 
+            IterateForward( m_Modules, ... ) call.
+        */ 
+            
+        case TYPEMODULE:
+        case TYPEPAD:
+        case TYPETEXTEMODULE:
+        case TYPEEDGEMODULE:
+            // this calls MODULE::Visit() on each module.
+            result = IterateForward( m_Modules, inspector, testData, scanTypes );
+            break;
+
+        case TYPEDRAWSEGMENT:
+        case TYPETEXTE:
+        case TYPEMARQUEUR:
+        case TYPECOTATION:
+        case TYPEMIRE:
+            result = IterateForward( m_Drawings, inspector, testData, scanTypes );
+            break;
+            
+        case TYPEVIA:
+        case TYPETRACK:
+            result = IterateForward( m_Track, inspector, testData, scanTypes );
+            break;            
+            
+        case PCB_EQUIPOT_STRUCT_TYPE:
+            result = IterateForward( m_Equipots, inspector, testData, scanTypes );
+            break;            
+
+        case TYPEZONE:
+            result = IterateForward( m_Zone, inspector, testData, scanTypes );
+            break;
+            
+        case TYPEEDGEZONE:
+            result = IterateForward( m_CurrentLimitZone, inspector, testData, scanTypes );
+            break;            
+            
+        default:
+            break;
+        }
+        
+        if( result == SEARCH_QUIT )
+            break;
     }
-    
-    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
+
+    return result;    
 }
 
 
@@ -379,6 +384,69 @@ EDA_BaseStruct* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
     IterateForward( m_Modules, &inspector, &refPos, scanTypes );
     
     return inspector.found;
+}
+
+
+#if defined(DEBUG)
+
+/**
+ * Function Show
+ * is used to output the object tree, currently for debugging only.
+ * @param nestLevel An aid to prettier tree indenting, and is the level 
+ *          of nesting of this object within the overall tree.
+ * @param os The ostream& to output to.
+ */
+void BOARD::Show( int nestLevel, std::ostream& os )
+{
+    EDA_BaseStruct* p;
+    
+    // for now, make it look like XML:
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
+
+    // specialization of the output:
+    NestedSpace( nestLevel+1, os ) << "<modules>\n";
+    p = m_Modules;
+    for( ; p; p = p->Pnext )
+        p->Show( nestLevel+2, os );
+    NestedSpace( nestLevel+1, os ) << "</modules>\n";
+
+    NestedSpace( nestLevel+1, os ) << "<pdrawings>\n";
+    p = m_Drawings;
+    for( ; p; p = p->Pnext )
+        p->Show( nestLevel+2, os );
+    NestedSpace( nestLevel+1, os ) << "</pdrawings>\n";
+    
+    NestedSpace( nestLevel+1, os ) << "<nets>\n";
+    p = m_Equipots;
+    for( ; p; p = p->Pnext )
+        p->Show( nestLevel+2, os );
+    NestedSpace( nestLevel+1, os ) << "</nets>\n";
+
+    NestedSpace( nestLevel+1, os ) << "<tracks>\n";
+    p = m_Track;    
+    for( ; p; p = p->Pnext )
+        p->Show( nestLevel+2, os );
+    NestedSpace( nestLevel+1, os ) << "</tracks>\n";
+
+    NestedSpace( nestLevel+1, os ) << "<zones>\n";
+    p = m_Zone;    
+    for( ; p; p = p->Pnext )
+        p->Show( nestLevel+2, os );
+    NestedSpace( nestLevel+1, os ) << "</zones>\n";
+
+    NestedSpace( nestLevel+1, os ) << "<edgezones>\n";
+    p = m_CurrentLimitZone;
+    for( ; p; p = p->Pnext )
+        p->Show( nestLevel+2, os );
+    NestedSpace( nestLevel+1, os ) << "</edgezones>\n";
+    
+    p = m_Son;
+    for( ; p;  p = p->Pnext )
+    {
+        p->Show( nestLevel+1, os );
+    }
+    
+    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
 
 #endif

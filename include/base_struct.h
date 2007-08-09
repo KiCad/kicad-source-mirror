@@ -8,8 +8,8 @@
 
 #if defined(DEBUG)
 #include <iostream>         // needed for Show()
-extern std::ostream& operator<<( std::ostream& out, wxSize& size );
-extern std::ostream& operator<<( std::ostream& out, wxPoint& pt );
+extern std::ostream& operator<<( std::ostream& out, const wxSize& size );
+extern std::ostream& operator<<( std::ostream& out, const wxPoint& pt );
 #endif
 
 
@@ -75,7 +75,6 @@ enum DrawStructureType {
 };
 
 
-#if defined(DEBUG)      // new searching technique incubator 
 enum SEARCH_RESULT {
     SEARCH_QUIT,
     SEARCH_CONTINUE
@@ -117,8 +116,6 @@ public:
     // derived classes add more functions for collecting and subsequent 
     // retrieval here.
 };
-
-#endif
 
 
 /********************************************************************/
@@ -191,6 +188,44 @@ public:
         return false;   // derived classes should override this function
     }
 
+
+    /**
+     * Function IterateForward
+     * walks through the object tree calling the testFunc on each object 
+     * type requested in scanTypes.
+     *
+     * @param listStart The first in a list of EDA_BaseStructs to iterate over. 
+     * @param inspector Is an INSPECTOR to call on each object that is one of 
+     *  the requested scanTypes.
+     * @param testData Is an aid to testFunc, and should be sufficient to 
+     *  allow it to fully determine if an item meets the match criteria, but it
+     *  may also be used to collect output.
+     * @param scanTypes A KICAD_T array that is EOT 
+     *  terminated, and provides both the order and interest level of of
+     *  the types of objects to be iterated over.
+     * @return SEARCH_RESULT - SEARCH_QUIT if the called INSPECTOR returned 
+     *  SEARCH_QUIT, else SCAN_CONTINUE;
+     */
+    static SEARCH_RESULT IterateForward( EDA_BaseStruct* listStart, 
+        INSPECTOR* inspector, const void* testData, const KICAD_T scanTypes[] );
+
+    
+    /**
+     * Function Visit
+     * may be re-implemented for each derived class in order to handle
+     * all the types given by its member data.  Implementations should call
+     * inspector->Inspect() on types in scanTypes[], and may use IterateForward()
+     * to do so on lists of such data.
+     * @param inspector An INSPECTOR instance to use in the inspection.
+     * @param testData Arbitrary data used by the inspector.
+     * @param scanTypes Which KICAD_T types are of interest and the order 
+     *  is significant too, terminated by EOT.
+     * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
+     *  else SCAN_CONTINUE, and determined by the inspector.
+     */
+    virtual SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData, 
+        const KICAD_T scanTypes[] );
+
     
 #if defined(DEBUG)
 
@@ -228,44 +263,6 @@ public:
      * @return std::ostream& - for continuation.
      **/
     static std::ostream& NestedSpace( int nestLevel, std::ostream& os );
-
-    
-    /**
-     * Function IterateForward
-     * walks through the object tree calling the testFunc on each object 
-     * type requested in scanTypes.
-     *
-     * @param listStart The first in a list of EDA_BaseStructs to iterate over. 
-     * @param inspector Is an INSPECTOR to call on each object that is one of 
-     *  the requested scanTypes.
-     * @param testData Is an aid to testFunc, and should be sufficient to 
-     *  allow it to fully determine if an item meets the match criteria, but it
-     *  may also be used to collect output.
-     * @param scanTypes A KICAD_T array that is EOT 
-     *  terminated, and provides both the order and interest level of of
-     *  the types of objects to be iterated over.
-     * @return SEARCH_RESULT - SEARCH_QUIT if the called INSPECTOR returned 
-     *  SEARCH_QUIT, else SCAN_CONTINUE;
-     */
-    static SEARCH_RESULT IterateForward( EDA_BaseStruct* listStart, 
-        INSPECTOR* inspector, const void* testData, const KICAD_T scanTypes[] );
-
-    
-    /**
-     * Function Visit
-     * should be re-implemented for each derived class in order to handle
-     * all the types given by its member data.  Implementations should call
-     * inspector->Inspect() on types in scanTypes[], and may use IterateForward()
-     * to do so on lists of such data.
-     * @param inspector An INSPECTOR instance to use in the inspection.
-     * @param testData Arbitrary data used by the inspector.
-     * @param scanTypes Which KICAD_T types are of interest and the order 
-     *  is significant too, terminated by EOT.
-     * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
-     *  else SCAN_CONTINUE, and determined by the inspector.
-     */
-    virtual SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData, 
-        const KICAD_T scanTypes[] );
 
     
     /**

@@ -232,6 +232,35 @@ public:
 
     // Calcul du rectangle d'encadrement:
     bool    ComputeBoundaryBox( void );
+
+    
+    /**
+     * Function Visit
+     * may be re-implemented for each derived class in order to handle
+     * all the types given by its member data.  Implementations should call
+     * inspector->Inspect() on types in scanTypes[], and may use IterateForward()
+     * to do so on lists of such data.
+     * @param inspector An INSPECTOR instance to use in the inspection.
+     * @param testData Arbitrary data used by the inspector.
+     * @param scanTypes Which KICAD_T types are of interest and the order 
+     *  is significant too, terminated by EOT.
+     * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
+     *  else SCAN_CONTINUE, and determined by the inspector.
+     */
+    SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData, 
+        const KICAD_T scanTypes[] );
+
+
+    /**
+     * Function FindPadOrModule
+     * searches for either a pad or module, giving precedence to pads.
+     * Any Pad or Module on the desired layer that HitTest()s true will be
+     * returned, otherwise any visible Pad or Module on any other layer.
+     * The provided layer must be visible.
+     * @param refPos The wxPoint to hit-test.
+     * @return EDA_BaseStruct* - if a direct hit, else NULL.
+     */
+    EDA_BaseStruct* FindPadOrModule( const wxPoint& refPos, int layer );
     
     
 #if defined(DEBUG)
@@ -240,12 +269,11 @@ public:
      * returns the class name.
      * @return wxString
      */
-    virtual wxString GetClass() const
+    wxString GetClass() const
     {
         return wxT( "BOARD" );
     }
 
-    
     /**
      * Function Show
      * is used to output the object tree, currently for debugging only.
@@ -253,18 +281,8 @@ public:
      *          of nesting of this object within the overall tree.
      * @param os The ostream& to output to.
      */
-    virtual void Show( int nestLevel, std::ostream& os );
+    void Show( int nestLevel, std::ostream& os );
 
-    
-    /**
-     * Function FindPadOrModule
-     * searches for either a pad or module, giving precedence to pads.
-     * @param refPos The wxPoint to hit-test.
-     * @param typeloc 
-     * @return EDA_BaseStruct* - if a direct hit, else NULL.
-     */
-    EDA_BaseStruct* FindPadOrModule( const wxPoint& refPos, int layer );
-    
 #endif
 };
 

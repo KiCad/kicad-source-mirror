@@ -829,7 +829,8 @@ void MODULE::SetPosition( const wxPoint& newpos )
     D_PAD*          pad = m_Pads;
     for( ; pad != NULL; pad = (D_PAD*) pad->Pnext )
     {
-        pad->m_Pos.x += deltaX; pad->m_Pos.y += deltaY;
+        pad->m_Pos.x += deltaX; 
+        pad->m_Pos.y += deltaY;
     }
 
     /* deplacement des dessins de l'empreinte : */
@@ -848,7 +849,8 @@ void MODULE::SetPosition( const wxPoint& newpos )
         case TYPETEXTEMODULE:
         {
             TEXTE_MODULE* pt_texte = (TEXTE_MODULE*) PtStruct;
-            pt_texte->m_Pos.x += deltaX; pt_texte->m_Pos.y += deltaY;
+            pt_texte->m_Pos.x += deltaX; 
+            pt_texte->m_Pos.y += deltaY;
             break;
         }
 
@@ -1168,6 +1170,54 @@ bool MODULE::HitTest( const wxPoint& refPos )
 }
 
 
+// see class_module.h     
+SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData, 
+    const KICAD_T scanTypes[] )
+{
+    KICAD_T         stype;
+    SEARCH_RESULT   result = SEARCH_CONTINUE;
+    const KICAD_T*  p = scanTypes;
+
+    while( (stype = *p++) != EOT )
+    {
+        switch( stype )
+        {
+        case TYPEMODULE:
+            result = inspector->Inspect( this, testData );  // inspect me
+            break;
+            
+        case TYPEPAD:
+            result = IterateForward( m_Pads, inspector, testData, scanTypes );
+            break;
+            
+        case TYPETEXTEMODULE:
+            result = inspector->Inspect( m_Reference, testData );
+            if( result == SEARCH_QUIT )
+                break;
+                
+            result = inspector->Inspect( m_Value, testData );
+            if( result == SEARCH_QUIT )
+                break;
+
+            // m_Drawings can hold TYPETEXTMODULE also?
+            result = IterateForward( m_Drawings, inspector, testData, scanTypes );
+            break;
+            
+        case TYPEEDGEMODULE:
+            result = IterateForward( m_Drawings, inspector, testData, scanTypes );
+            break;
+                
+        default:
+            break;
+        }
+        
+        if( result == SEARCH_QUIT )
+            break;
+    }
+
+    return result;    
+}
+
 
 #if defined(DEBUG)
 /**
@@ -1211,52 +1261,6 @@ void MODULE::Show( int nestLevel, std::ostream& os )
     }
     
     NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
-}
-
-
-// see class_module.h     
-SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData, 
-    const KICAD_T scanTypes[] )
-{
-    KICAD_T     stype;
-    
-    for( const KICAD_T* p = scanTypes;  (stype=*p) != EOT;   ++p )
-    {
-        // If caller wants to inspect my type
-        if( stype == m_StructType )
-        {
-            if( SEARCH_QUIT == inspector->Inspect( this, testData ) )
-                return SEARCH_QUIT;
-        }
-        else if( stype == TYPEPAD )
-        {
-            if( SEARCH_QUIT == IterateForward( m_Pads, inspector,
-                                    testData, scanTypes ) )
-                return SEARCH_QUIT;
-        }
-        else if( stype == TYPETEXTEMODULE )
-        {
-            if( SEARCH_QUIT == inspector->Inspect( m_Reference, testData ) ) 
-                return SEARCH_QUIT;
-                
-            if( SEARCH_QUIT == inspector->Inspect( m_Value, testData ) ) 
-                return SEARCH_QUIT;
-
-            // m_Drawings can hold TYPETEXTMODULE also?
-            if( SEARCH_QUIT == IterateForward( m_Drawings, inspector, 
-                                    testData, scanTypes ) )
-                return SEARCH_QUIT;
-        }
-        else if( stype == TYPEEDGEMODULE )
-        {
-            // iterate over m_Drawings
-            if( SEARCH_QUIT == IterateForward( m_Drawings, inspector, 
-                                    testData, scanTypes ) )
-                return SEARCH_QUIT;
-        }
-    }
-
-    return SEARCH_CONTINUE;    
 }
 
 #endif

@@ -1082,8 +1082,11 @@ int WinEDA_PcbFrame::SavePcbFormatAscii( FILE* File )
     /* Ecriture des donnes utiles du pcb */
 
     Equipot = m_Pcb->m_Equipots;
-    Pas = 100.0; if( m_Pcb->m_NbNets )
+    
+    Pas = 100.0; 
+    if( m_Pcb->m_NbNets )
         Pas /= m_Pcb->m_NbNets;
+    
     for( ii = 0; Equipot != NULL; ii++, Equipot = (EQUIPOT*) Equipot->Pnext )
     {
         Equipot->WriteEquipotDescr( File );

@@ -143,6 +143,23 @@ public:
     bool    HitTest( const wxPoint& refPos );
 
     
+    /**
+     * Function Visit
+     * should be re-implemented for each derived class in order to handle
+     * all the types given by its member data.  Implementations should call
+     * inspector->Inspect() on types in scanTypes[], and may use IterateForward()
+     * to do so on lists of such data.
+     * @param inspector An INSPECTOR instance to use in the inspection.
+     * @param testData Arbitrary data used by the inspector.
+     * @param scanTypes Which KICAD_T types are of interest and the order 
+     *  is significant too, terminated by EOT.
+     * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
+     *   else SCAN_CONTINUE;
+     */
+    SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData, 
+        const KICAD_T scanTypes[] );
+    
+    
 #if defined(DEBUG)
     /**
      * Function GetClass
@@ -164,23 +181,6 @@ public:
      */
     virtual void Show( int nestLevel, std::ostream& os );
 
-    
-    /**
-     * Function Visit
-     * should be re-implemented for each derived class in order to handle
-     * all the types given by its member data.  Implementations should call
-     * inspector->Inspect() on types in scanTypes[], and may use IterateForward()
-     * to do so on lists of such data.
-     * @param inspector An INSPECTOR instance to use in the inspection.
-     * @param testData Arbitrary data used by the inspector.
-     * @param scanTypes Which KICAD_T types are of interest and the order 
-     *  is significant too, terminated by EOT.
-     * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
-     *   else SCAN_CONTINUE;
-     */
-    virtual SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData, 
-        const KICAD_T scanTypes[] );
-    
 #endif
     
 };

@@ -896,7 +896,7 @@ TEXTE_PCB* Locate_Texte_Pcb( EDA_BaseStruct* PtStruct, int LayerSearch, int type
         if( pt_txt_pcb->m_Layer == LayerSearch )
         {
             // because HitTest() is present in both base classes of TEXTE_PCB
-            // use a dis-ambiguating cast to tell compiler which HitTest()
+            // use a clarifying cast to tell compiler which HitTest()
             // to call.
             if( static_cast<EDA_TextStruct*>(pt_txt_pcb)->HitTest( ref ) )
             {
