@@ -259,6 +259,7 @@ SEARCH_RESULT EDA_BaseStruct::IterateForward( EDA_BaseStruct* listStart,
 
 
 // see base_struct.h
+// many classes inherit this method, be careful:
 SEARCH_RESULT EDA_BaseStruct::Visit( INSPECTOR* inspector, const void* testData, 
         const KICAD_T scanTypes[] )
 {

@@ -33,6 +33,7 @@ TRACK::TRACK( EDA_BaseStruct* StructFather, DrawStructureType idtype ) :
 }
 
 
+
 SEGZONE::SEGZONE( EDA_BaseStruct* StructFather ) :
     TRACK( StructFather, TYPEZONE )
 {
@@ -459,9 +460,8 @@ TRACK* TRACK:: Copy( int NbSegm  )
 bool TRACK::WriteTrackDescr( FILE* File )
 /********************************************/
 {
-    int type;
-
-    type = 0;
+    int type = 0;
+    
     if( m_StructType == TYPEVIA )
         type = 1;
 
@@ -474,6 +474,7 @@ bool TRACK::WriteTrackDescr( FILE* File )
     fprintf( File, "De %d %d %d %lX %X\n",
             m_Layer, type, m_NetCode,
             m_TimeStamp, ReturnStatus() );
+    
     return TRUE;
 }
 
@@ -673,4 +674,30 @@ bool TRACK::HitTest( const wxPoint& ref_pos )
     
     return false;    
 }
+
+
+#if defined(DEBUG)
+/**
+ * Function Show
+ * is used to output the object tree, currently for debugging only.
+ * @param nestLevel An aid to prettier tree indenting, and is the level 
+ *          of nesting of this object within the overall tree.
+ * @param os The ostream& to output to.
+ */
+void TRACK::Show( int nestLevel, std::ostream& os )
+{
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
+        " shape=\""     << m_Shape      << '"' <<
+        " layer=\""     << m_Layer      << '"' <<
+        " width=\""     << m_Width      << '"' <<
+        " drill=\""     << m_Drill      << '"' <<
+        " netcode=\""   << m_NetCode    << "\">" <<
+        "<start"        << m_Start      << "/>" <<
+        "<end"          << m_End        << "/>";
+        
+    os << "</" << GetClass().Lower().mb_str() << ">\n"; 
+}
+
+#endif
+
 

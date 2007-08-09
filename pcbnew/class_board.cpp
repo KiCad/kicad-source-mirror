@@ -267,22 +267,52 @@ bool BOARD::ComputeBoundaryBox( void )
  */
 void BOARD::Show( int nestLevel, std::ostream& os )
 {
+    EDA_BaseStruct* p;
+    
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
 
     // specialization of the output:
-    EDA_BaseStruct* p = m_Modules;
+    NestedSpace( nestLevel+1, os ) << "<modules>\n";
+    p = m_Modules;
     for( ; p; p = p->Pnext )
-        p->Show( nestLevel+1, os );
+        p->Show( nestLevel+2, os );
+    NestedSpace( nestLevel+1, os ) << "</modules>\n";
 
+    NestedSpace( nestLevel+1, os ) << "<pdrawings>\n";
     p = m_Drawings;
     for( ; p; p = p->Pnext )
-        p->Show( nestLevel+1, os );
+        p->Show( nestLevel+2, os );
+    NestedSpace( nestLevel+1, os ) << "</pdrawings>\n";
     
-    EDA_BaseStruct* kid = m_Son;
-    for( ; kid;  kid = kid->Pnext )
+    NestedSpace( nestLevel+1, os ) << "<nets>\n";
+    p = m_Equipots;
+    for( ; p; p = p->Pnext )
+        p->Show( nestLevel+2, os );
+    NestedSpace( nestLevel+1, os ) << "</nets>\n";
+
+    NestedSpace( nestLevel+1, os ) << "<tracks>\n";
+    p = m_Track;    
+    for( ; p; p = p->Pnext )
+        p->Show( nestLevel+2, os );
+    NestedSpace( nestLevel+1, os ) << "</tracks>\n";
+
+    NestedSpace( nestLevel+1, os ) << "<zones>\n";
+    p = m_Zone;    
+    for( ; p; p = p->Pnext )
+        p->Show( nestLevel+2, os );
+    NestedSpace( nestLevel+1, os ) << "</zones>\n";
+
+    NestedSpace( nestLevel+1, os ) << "<edgezones>\n";
+    p = m_CurrentLimitZone;
+    for( ; p; p = p->Pnext )
+        p->Show( nestLevel+2, os );
+    NestedSpace( nestLevel+1, os ) << "</edgezones>\n";
+    
+    p = m_Son;
+    for( ; p;  p = p->Pnext )
     {
-        kid->Show( nestLevel+1, os );
+        p->Show( nestLevel+1, os );
     }
     
     NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
@@ -299,10 +329,8 @@ EDA_BaseStruct* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
         int                 layer;
     
         PadOrModule( int alayer ) :
-            found(0),                   // found is NULL
-            layer(alayer)
-        {
-        }
+            found(0), layer(alayer)
+        {}
     
         SEARCH_RESULT Inspect( EDA_BaseStruct* testItem, const void* testData )
         {
@@ -326,13 +354,16 @@ EDA_BaseStruct* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
                 {
                     if( testItem->HitTest( refPos ) )
                     {
-                        // save regardless of layer test, but only quit if 
-                        // layer matches, otherwise use this item if no future
-                        // layer match.
-                        found = testItem;
-                        
                         if( layer == mlayer )
+                        {
+                            found = testItem;
                             return SEARCH_QUIT;
+                        }
+                        
+                        // layer mismatch, save in case we don't find a
+                        // future layer match hit.
+                        if( !found )
+                            found = testItem;
                     }
                 }
             }

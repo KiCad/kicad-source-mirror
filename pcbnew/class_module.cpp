@@ -1192,17 +1192,17 @@ void MODULE::Show( int nestLevel, std::ostream& os )
         
     EDA_BaseStruct* p;
 
-    NestedSpace( nestLevel+1, os ) << "<pads>\n";
+    NestedSpace( nestLevel+1, os ) << "<mpads>\n";
     p = m_Pads;
     for( ; p; p = p->Pnext )
         p->Show( nestLevel+2, os );
-    NestedSpace( nestLevel+1, os ) << "</pads>\n";
+    NestedSpace( nestLevel+1, os ) << "</mpads>\n";
     
-    NestedSpace( nestLevel+1, os ) << "<drawings>\n";
+    NestedSpace( nestLevel+1, os ) << "<mdrawings>\n";
     p = m_Drawings;
     for( ; p; p = p->Pnext )
         p->Show( nestLevel+2, os );
-    NestedSpace( nestLevel+1, os ) << "</drawings>\n";
+    NestedSpace( nestLevel+1, os ) << "</mdrawings>\n";
     
     p = m_Son;
     for( ; p;  p = p->Pnext )
@@ -1228,6 +1228,12 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
             if( SEARCH_QUIT == inspector->Inspect( this, testData ) )
                 return SEARCH_QUIT;
         }
+        else if( stype == TYPEPAD )
+        {
+            if( SEARCH_QUIT == IterateForward( m_Pads, inspector,
+                                    testData, scanTypes ) )
+                return SEARCH_QUIT;
+        }
         else if( stype == TYPETEXTEMODULE )
         {
             if( SEARCH_QUIT == inspector->Inspect( m_Reference, testData ) ) 
@@ -1238,12 +1244,6 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
 
             // m_Drawings can hold TYPETEXTMODULE also?
             if( SEARCH_QUIT == IterateForward( m_Drawings, inspector, 
-                                    testData, scanTypes ) )
-                return SEARCH_QUIT;
-        }
-        else if( stype == TYPEPAD )
-        {
-            if( SEARCH_QUIT == IterateForward( m_Pads, inspector,
                                     testData, scanTypes ) )
                 return SEARCH_QUIT;
         }

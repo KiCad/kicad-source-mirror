@@ -146,3 +146,20 @@ int EQUIPOT:: WriteEquipotDescr( FILE* File )
     fprintf( File, "$EndEQUIPOT\n" );
     return 1;
 }
+
+#if defined(DEBUG)
+/**
+ * Function Show
+ * is used to output the object tree, currently for debugging only.
+ * @param nestLevel An aid to prettier tree indenting, and is the level 
+ *          of nesting of this object within the overall tree.
+ * @param os The ostream& to output to.
+ */
+void EQUIPOT::Show( int nestLevel, std::ostream& os )
+{
+    // for now, make it look like XML:
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << 
+       " name=\"" <<  m_Netname.mb_str() << '"' <<
+       " netcode=\"" << m_NetCode << "\"/>\n";
+}
+#endif

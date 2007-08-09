@@ -515,7 +515,7 @@ bool EDGE_MODULE::HitTest( const wxPoint& ref_pos )
  */
 void EDGE_MODULE::Show( int nestLevel, std::ostream& os )
 {
-    const char* cp = "???";
+    const char* cp;
     
     switch( m_Shape )
     {
@@ -528,16 +528,17 @@ void EDGE_MODULE::Show( int nestLevel, std::ostream& os )
     case S_SPOT_CIRCLE: cp = "spot_circle"; break;
     case S_SPOT_RECT:   cp = "spot_rect";   break;
     case S_POLYGON:     cp = "polygon";     break;
+    default:            cp = "??EDGE??";    break;
     }
     
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << 
-        " type=\"" << cp << "\">\n";
+        " type=\"" << cp << "\">";
     
-    NestedSpace( nestLevel+1, os ) << "<start" << m_Start0 << "/>\n";
-    NestedSpace( nestLevel+1, os ) << "<end" << m_End0 << "/>\n";
-    
-    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
+    os << " <start" << m_Start0 << "/>";
+    os << " <end" << m_End0 << "/>";
+ 
+    os << " </" << GetClass().Lower().mb_str() << ">\n";
 }
 
 #endif

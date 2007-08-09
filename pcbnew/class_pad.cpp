@@ -1019,16 +1019,13 @@ void D_PAD::Show( int nestLevel, std::ostream& os )
     char padname[5] = { m_Padname[0], m_Padname[1], m_Padname[2], m_Padname[3], 0 };
     
     char layerMask[16];
-    
-    sprintf( layerMask, "%08X", m_Masque_Layer );
+    sprintf( layerMask, "0x%08X", m_Masque_Layer );
     
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
         " num=\""   << padname << '"' <<
         " net=\""   << m_Netname.mb_str() << '"' << 
-        " layerMask=\"" << layerMask << '"' <<
-        " pos=\"("  << m_Pos.x << ',' << m_Pos.y << ")\"" << 
-        "/>\n";
+        " layerMask=\"" << layerMask << '"' << m_Pos << "/>\n";
     
 //    NestedSpace( nestLevel+1, os ) << m_Text.mb_str() << '\n';
     
