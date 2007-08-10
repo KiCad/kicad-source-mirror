@@ -297,10 +297,6 @@ int hotkey = 0;
 			m_CurrentScreen->m_O_Curseur = m_CurrentScreen->m_Curseur;
 			break;
 
-		case '\t':    // Switch to drag mode, when block moving
-			((WinEDA_SchematicFrame*)this)->HandleBlockEndByPopUp(BLOCK_DRAG, DC);
-			break;
-
 		case WXK_NUMPAD8  :	/* Deplacement curseur vers le haut */
 		case WXK_UP	:
 			MousePositionInPixels.y -= delta.y;
@@ -325,33 +321,6 @@ int hotkey = 0;
 			DrawPanel->MouseTo(MousePositionInPixels);
 			break;
 
-		case WXK_INSERT:
-		case WXK_NUMPAD0:
-			if ( m_Ident == SCHEMATIC_FRAME )
-			{
-				if ( g_ItemToRepeat && (g_ItemToRepeat->m_Flags == 0)  )
-				{
-					((WinEDA_SchematicFrame*)this)->RepeatDrawItem(DC);
-				}
-				else wxBell();
-				break;
-			}
-			if ( m_Ident == LIBEDITOR_FRAME )
-			{
-				if ( LibItemToRepeat && (LibItemToRepeat->m_Flags == 0) &&
-					 (LibItemToRepeat->m_StructType == COMPONENT_PIN_DRAW_TYPE) )
-				{
-					((WinEDA_LibeditFrame*)this)->RepeatPinItem(DC,
-								(LibDrawPin*) LibItemToRepeat);
-				}
-				else wxBell();
-				break;
-			}
-
-		case 0:
-		case WXK_DECIMAL:
-			break;
-		
 		default: hotkey = g_KeyPressed;
 			break;
 			
@@ -367,8 +336,7 @@ int hotkey = 0;
 		RedrawActiveWindow(DC, TRUE);
 	}
 
-	if ( (oldpos.x != m_CurrentScreen->m_Curseur.x) ||
-		 (oldpos.y != m_CurrentScreen->m_Curseur.y) )
+	if ( oldpos != m_CurrentScreen->m_Curseur )
 	{
 		curpos = m_CurrentScreen->m_Curseur;
 		m_CurrentScreen->m_Curseur = oldpos;

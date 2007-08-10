@@ -10,6 +10,7 @@
 /* Prototype des fonctions de trigo.cpp */
 void RotatePoint(int *pX, int *pY, int angle);
 void RotatePoint(int *pX, int *pY, int cx, int cy, int angle);
+void RotatePoint(wxPoint* point, int angle );
 void RotatePoint(wxPoint *point, const wxPoint & centre, int angle);
 void RotatePoint(double *pX, double *pY, int angle);
 void RotatePoint(double *pX, double *pY, double cx, double cy, int angle);
@@ -20,37 +21,6 @@ int ArcTangente(int dy, int dx);
 			  l'angle est souvent 0, -1800, ou +- 900  */
 
 bool DistanceTest( int seuil, int dx, int dy, int spot_cX, int spot_cY );
-
-
-
-	/*************************************************/
-	/* Table lookup de 1/COS(X) en fonction de tg(X) */
-	/*************************************************/
-eda_global float invcostab[17]
-#if defined MAIN
-	= { 1.0, 1/0.998, 1/0.9923, 1/0.9829, 1/0.97014, 1/0.9545,
-		1/0.93633, 1/0.91615, 1/0.8944, 1/0.8715, 1/0.848, 1/0.82404,
-		1/0.8, 1/0.7761, 1/0.75257, 1/0.7295, 1/0.707 }
-#endif
-;
-	/***************************************************/
-	/* Table lookup de 256*COS(X) en fonction de tg(X) */
-	/***************************************************/
-eda_global long costab[17]
-#if defined MAIN
-	= { 256, 255, 253, 251, 248, 244, 240, 234, 229,
-		223, 217, 211, 205, 198, 192, 187, 181 }
-#endif
-;
-	/***************************************************/
-	/* Table lookup de 256*SIN(X) en fonction de tg(X) */
-	/***************************************************/
-eda_global long sintab[17]
-#if defined MAIN
-	= { 0, 16, 32, 47, 62, 76, 90, 103, 114,
-		125, 136, 145, 154, 161, 168, 175, 181 }
-#endif
-;
 
 
 	/*******************/

@@ -1120,9 +1120,8 @@ public:
     int     BestZoom( void ); // Retourne le meilleur zoom
     void    SetToolbars( void );
     void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
-
     SCH_SCREEN* GetScreen( void ) { return (SCH_SCREEN*) m_CurrentScreen; }
-
+    void    OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
 
 private:
 

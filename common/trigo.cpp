@@ -5,15 +5,14 @@
 /* Fichier TRIGO.CPP */
 
 #include "fctsys.h"
-#define global extern
 #include "trigo.h"
 
 
 
 
-/*****************************/
+/************************************************************************/
 bool DistanceTest( int seuil, int dx, int dy, int spot_cX, int spot_cY )
-/*****************************/
+/************************************************************************/
 
 /*
  *  Calcul de la distance du curseur souris a un segment de droite :
@@ -291,6 +290,27 @@ void RotatePoint( int* pX, int* pY, int cx, int cy, int angle )
 }
 
 
+/********************************************/
+void RotatePoint( wxPoint* point, int angle )
+/********************************************/
+
+/*
+ *  Fonction surchargee!
+ *  calcule les nouvelles coord du point point,
+ *  pour une rotation d'angle angle ( en 1/10 degre)
+ */
+{
+    int ox, oy;
+
+    ox = point->x; 
+    oy = point->y;
+    
+    RotatePoint( &ox, &oy, angle );
+    point->x = ox;
+    point->y = oy;
+}
+
+
 /*****************************************************************/
 void RotatePoint( wxPoint* point, const wxPoint& centre, int angle )
 /*****************************************************************/
@@ -310,6 +330,7 @@ void RotatePoint( wxPoint* point, const wxPoint& centre, int angle )
     point->x = ox + centre.x;
     point->y = oy + centre.y;
 }
+
 
 
 /*************************************************************************/
