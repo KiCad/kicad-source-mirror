@@ -16,6 +16,7 @@
                                              
 /* fonctions locales */
 EDA_BaseStruct* Locate_MirePcb( EDA_BaseStruct* PtStruct, int LayerSearch, int typeloc );
+D_PAD* Locate_Any_Pad( BOARD* Pcb, const wxPoint& ref_pos, bool OnlyCurrentLayer );
 
 
 /**
@@ -390,10 +391,10 @@ DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int LayerSearch, int typeloc )
 }
 
 
-/*************************************************/
-/*      D_PAD * Locate_Any_Pad(int typeloc, bool OnlyCurrentLayer)  */
-/* D_PAD* Locate_Any_Pad(int ref_pos, bool OnlyCurrentLayer) */
-/*************************************************/
+/*************************************************
+ * D_PAD * Locate_Any_Pad(int typeloc, bool OnlyCurrentLayer)
+ * D_PAD* Locate_Any_Pad(int ref_pos, bool OnlyCurrentLayer)
+ *************************************************/
 
 /*
  *  localisation de la pastille pointee par la coordonnee ref_pos.x,,ref_pos.y, ou

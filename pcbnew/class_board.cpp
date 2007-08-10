@@ -332,9 +332,10 @@ EDA_BaseStruct* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
     public:
         EDA_BaseStruct*     found;
         int                 layer;
+        int                 layer_mask;
     
         PadOrModule( int alayer ) :
-            found(0), layer(alayer)
+            found(0), layer(alayer), layer_mask( g_TabOneLayerMask[alayer] )
         {}
     
         SEARCH_RESULT Inspect( EDA_BaseStruct* testItem, const void* testData )
@@ -343,23 +344,33 @@ EDA_BaseStruct* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
     
             if( testItem->m_StructType == TYPEPAD )
             {
-                if( testItem->HitTest( refPos ) )
+                D_PAD*  pad = (D_PAD*) testItem;
+                if( pad->HitTest( refPos ) )
                 {
-                    found = testItem;
-                    return SEARCH_QUIT;
+                    if( layer_mask & pad->m_Masque_Layer ) 
+                    {
+                        found = testItem;
+                        return SEARCH_QUIT;
+                    }
+                    else if( !found )
+                    {
+                        MODULE* parent = (MODULE*) pad->m_Parent;
+                        if( IsModuleLayerVisible( parent->m_Layer ) )
+                            found = testItem;
+                    }
                 }
             }
             
             else if( testItem->m_StructType == TYPEMODULE )
             {
-                int mlayer = ((MODULE*)testItem)->m_Layer; 
+                MODULE* module = (MODULE*) testItem;
 
                 // consider only visible modules
-                if( IsModuleLayerVisible( mlayer ) )
+                if( IsModuleLayerVisible( module->m_Layer ) )
                 {
-                    if( testItem->HitTest( refPos ) )
+                    if( module->HitTest( refPos ) )
                     {
-                        if( layer == mlayer )
+                        if( layer == module->m_Layer )
                         {
                             found = testItem;
                             return SEARCH_QUIT;

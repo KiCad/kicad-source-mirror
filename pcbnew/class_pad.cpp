@@ -27,11 +27,13 @@
 
 D_PAD::D_PAD( MODULE* parent ) : EDA_BaseStruct( parent, TYPEPAD )
 {
-    m_NumPadName   = 0;
-    m_Masque_Layer = CUIVRE_LAYER;
-    m_NetCode    = 0;           /* Numero de net pour comparaisons rapides */
-    m_DrillShape = CIRCLE;      // Drill shape = circle
+    m_NumPadName    = 0;
+    m_Masque_Layer  = CUIVRE_LAYER;
+    m_NetCode       = 0;           /* Numero de net pour comparaisons rapides */
+    m_DrillShape    = CIRCLE;      // Drill shape = circle
+    
     m_Size.x = m_Size.y = 500;
+    
     if( m_Parent && (m_Parent->m_StructType  == TYPEMODULE) )
     {
         m_Pos = ( (MODULE*) m_Parent )->m_Pos;
@@ -91,7 +93,8 @@ const wxPoint D_PAD::ReturnShapePos( void )
     wxPoint shape_pos;
     int     dX, dY;
     
-    dX = m_Offset.x; dY = m_Offset.y;
+    dX = m_Offset.x; 
+    dY = m_Offset.y;
     
     RotatePoint( &dX, &dY, m_Orient );
     
@@ -458,11 +461,12 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
 
             GRClosedPoly( &panel->m_ClipBox, DC, 4, (int*) coord, 0, color, color );
         }
+    }
         break;
+        
 
     default:
         break;
-    }
     }
 
     /* Draw the pad hole */

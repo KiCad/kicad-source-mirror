@@ -336,9 +336,11 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     bool   keep_on_grid = TRUE;
     if( m_ID_current_state == ID_PCB_DELETE_ITEM_BUTT )
         keep_on_grid = FALSE;
+    
     /* Cursor is left off grid if no block in progress and no moving object */
     if( GetScreen()->BlockLocate.m_State != STATE_NO_BLOCK )
         keep_on_grid = TRUE;
+    
     EDA_BaseStruct* DrawStruct = GetScreen()->m_CurrentItem;
     if( DrawStruct && DrawStruct->m_Flags )
         keep_on_grid = TRUE;

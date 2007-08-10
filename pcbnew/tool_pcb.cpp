@@ -51,7 +51,7 @@
 
 /* Data to build the layer pair indicator button */
 static wxBitmap* LayerPairBitmap = NULL;
-static char      s_BitmapLayerIcon[16][16] = {
+static const char s_BitmapLayerIcon[16][16] = {
     // 0 = draw pixel with active layer color
     // 1 = draw pixel with top layer color (top/bottom layer used in autoroute and place via)
     // 2 = draw pixel with bottom layer color

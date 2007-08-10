@@ -35,7 +35,8 @@ void WinEDA_PcbFrame::InstallFindFrame( const wxPoint& pos, wxDC* DC )
 {
     WinEDA_PcbFindFrame* frame = new WinEDA_PcbFindFrame( this, DC, pos );
 
-    frame->ShowModal(); frame->Destroy();
+    frame->ShowModal(); 
+    frame->Destroy();
 }
 
 
