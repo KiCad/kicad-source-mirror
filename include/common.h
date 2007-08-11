@@ -18,14 +18,10 @@
 
 /* Etat des touches speciales du clavier */
 
-#define GR_KB_RIGHTSHIFT	0x0100				/* Keybd states: right shift key depressed */
-#define GR_KB_LEFTSHIFT		0x0200				/* left shift key depressed */
-#define GR_KB_CTRL			0x0400				/* CTRL depressed */
-#define GR_KB_ALT			0x0800				/* ALT depressed */
-#define GR_KB_SCROLLOCK		0x1000				/* SCROLL LOCK active */
-#define GR_KB_NUMLOCK		0x2000				/* NUM LOCK active */
-#define GR_KB_CAPSLOCK		0x4000				/* CAPS LOCK active */
-#define GR_KB_INSERT		0x8000				/* INSERT state active */
+#define GR_KB_RIGHTSHIFT	0x10000000				/* Keybd states: right shift key depressed */
+#define GR_KB_LEFTSHIFT		0x20000000				/* left shift key depressed */
+#define GR_KB_CTRL			0x40000000				/* CTRL depressed */
+#define GR_KB_ALT			0x80000000				/* ALT depressed */
 #define GR_KB_SHIFT			(GR_KB_LEFTSHIFT | GR_KB_RIGHTSHIFT)
 #define GR_KB_SHIFTCTRL		(GR_KB_SHIFT | GR_KB_CTRL)
 #define MOUSE_MIDDLE		0x10000				/* flag indiquant bouton central souris */

@@ -17,6 +17,7 @@
 
 enum hotkey_id_commnand {
 	HK_NOT_FOUND = 0,
+	HK_RESET_LOCAL_COORD,
 	HK_HELP,
 	HK_ZOOM_IN,
 	HK_ZOOM_OUT,
@@ -68,6 +69,7 @@ static Ki_HotkeyInfo HkMoveComponent(wxT("Move Component"), HK_MOVE_COMPONENT, '
 static Ki_HotkeyInfo HkMove2Drag(wxT("Switch move block to drag block"), HK_MOVEBLOCK_TO_DRAGBLOCK, '\t');
 static Ki_HotkeyInfo HkInsert(wxT("Repeat Last Item"), HK_REPEAT_LAST, WXK_INSERT);
 static Ki_HotkeyInfo HkDelete(wxT("Delete Item"), HK_DELETE, WXK_DELETE);
+static Ki_HotkeyInfo HkResetLocalCoord(wxT("Reset local coord."), HK_RESET_LOCAL_COORD, ' ');
 static Ki_HotkeyInfo HkNextSearch(wxT("Next Search"), HK_NEXT_SEARCH, WXK_F5);
 static Ki_HotkeyInfo HkZoomCenter(wxT("Zoom Center"), HK_ZOOM_CENTER, WXK_F4);
 static Ki_HotkeyInfo HkZoomRedraw(wxT("Zoom Redraw"), HK_ZOOM_REDRAW, WXK_F3);
@@ -79,7 +81,8 @@ static Ki_HotkeyInfo HkHelp(wxT("Help: this message"), HK_HELP, '?');
 static Ki_HotkeyInfo *s_Schematic_Hotkey_List[] = {
 	&HkHelp,
 	&HkZoomIn, &HkZoomOut, &HkZoomRedraw, &HkZoomCenter,
-	&HkNextSearch, &HkDelete, &HkInsert, &HkMove2Drag,
+	&HkNextSearch, &HkResetLocalCoord,
+	&HkDelete, &HkInsert, &HkMove2Drag,
 	&HkMoveComponent, &HkAddComponent,
 	&HkRotateComponent, &HkMirrorXComponent, &HkMirrorYComponent, & HkOrientNormalComponent,
 	&HkBeginWire,
@@ -95,6 +98,7 @@ static Ki_HotkeyInfo *s_LibEdit_Hotkey_List[] =
 {
 	&HkHelp,
 	&HkZoomIn, &HkZoomOut, &HkZoomRedraw, &HkZoomCenter,
+	&HkResetLocalCoord,
 	&HkInsertPin,
 	NULL
 };
@@ -138,6 +142,10 @@ wxString keyname, modifier, fullkeyname;
 			keyname.Printf(wxT("F%d"), keycode - WXK_F1 + 1);
 			break;
 			
+		case ' ':
+			keyname = wxT("space");
+			break;
+
 		case '\t':
 			keyname = wxT("Tab");
 			break;
@@ -174,7 +182,7 @@ wxString keyname;
 		if ( hk_decr->m_InfoMsg.IsEmpty() ) break;
 		msg += _("key ");
 		keyname = ReturnKeyNameFromKeyCode(hk_decr->m_KeyCode);
-		msg += keyname + wxT(": ") + hk_decr->m_InfoMsg + wxT("\n");
+		msg += keyname + wxT(":    ") + hk_decr->m_InfoMsg + wxT("\n");
 	}
 	DisplayInfo(frame, msg);
 }
@@ -234,6 +242,7 @@ wxPoint MousePos = m_CurrentScreen->m_MousePosition;
 		case HK_ZOOM_OUT:
 		case HK_ZOOM_REDRAW:
 		case HK_ZOOM_CENTER:
+		case HK_RESET_LOCAL_COORD:
 			break;
 
 		case HK_MOVEBLOCK_TO_DRAGBLOCK:    // Switch to drag mode, when block moving
@@ -419,6 +428,7 @@ wxPoint MousePos = m_CurrentScreen->m_MousePosition;
 		case HK_ZOOM_OUT:
 		case HK_ZOOM_REDRAW:
 		case HK_ZOOM_CENTER:
+		case HK_RESET_LOCAL_COORD:
 			break;
 
 		case HK_REPEAT_LAST:
