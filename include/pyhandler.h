@@ -1,103 +1,115 @@
-	/****************************/
-	/*		  pyhandler.h		*/
-	/****************************/
+/****************************/
+/*		  pyhandler.h		*/
+/****************************/
 
 #ifndef PYHANDLER_H
 #define PYHANDLER_H
 
 #include <wx/string.h>
+
+#include <Python.h>
 #include <wx/wxPython/wxPython.h>
 #include <vector>
 
 /* Use the boost library : */
 #include <boost/python.hpp>
 
-#include <Python.h>
-
 
 class PyHandler
 {
-
     typedef void (*initfunc_t )();
 
-	private:
-		static PyHandler * m_instance;
-        bool m_ModulesLoaded;
-        int m_current;
-		PyThreadState* m_mainTState;
+private:
+    static PyHandler*   m_instance;
+    bool                m_ModulesLoaded;
+    int                 m_current;
+    PyThreadState*      m_mainTState;
 
-	protected:
-		PyHandler();
+protected:
+    PyHandler();
 
-		wxString m_appName;
- 		void RunBaseScripts( const wxString & base );
- 
-        // Modules
-        struct ModuleRecord
+    wxString m_appName;
+    void RunBaseScripts( const wxString& base );
+
+    // Modules
+    struct ModuleRecord
+    {
+        wxString                  name;
+        std::vector< initfunc_t > registry;
+
+        ModuleRecord( const wxString &modName ) : 
+            name( modName ) 
         {
-            wxString name;
-            std::vector< initfunc_t > registry;
+        }
 
-            ModuleRecord( const wxString & modName ) : name(modName) {}
-        };
-        std::vector< ModuleRecord > m_ModuleRegistry;
-        void DoInitModules();
+    };
+    
+    std::vector< ModuleRecord > m_ModuleRegistry;
+    
+    void DoInitModules();
 
-        // Events
-        struct Event
+    // Events
+    struct Event
+    {
+        wxString                             key;
+        std::vector< boost::python::object > functors;
+
+        Event( const wxString &strKey ) : 
+            key( strKey ) 
         {
-            wxString key;
-            std::vector< boost::python::object > functors;
+        }
+    };
+    
+    std::vector< Event > m_EventRegistry;
 
-            Event( const wxString & strKey ) : key( strKey ) {}
-        };
-        std::vector< Event > m_EventRegistry;
+public:
 
-	public:
- 		// Singletton handling:
-		static PyHandler * GetInstance();
+    // Singletton handling:
+    static PyHandler*               GetInstance();
 
-		~PyHandler();
+    ~PyHandler();
 
-		// Scope params/handling:
- 		void SetAppName( const wxString & name );
+    // Scope params/handling:
+    void                            SetAppName( const wxString& name );
 
-		void AddToModule( const wxString & name, initfunc_t initfunc );
-        int GetModuleIndex( const wxString & name ) const;
+    void                            AddToModule( const wxString& name, initfunc_t initfunc );
+    int                             GetModuleIndex( const wxString& name ) const;
 
-		// Script and direct call
-		void RunScripts();
-		bool RunScript( const wxString & name );
-        bool RunSimpleString( const wxString & code );
+    // Script and direct call
+    void                            RunScripts();
+    bool                            RunScript( const wxString& name );
+    bool                            RunSimpleString( const wxString& code );
 
- 		// Common Informations
-		const char * GetVersion();
+    // Common Informations
+    const char*                     GetVersion();
 
-		void InitNextModule();
+    void                            InitNextModule();
 
-        // Event triggering
+    // Event triggering
 
-        // - C++ interface
-        void DeclareEvent( const wxString & key );
-        void TriggerEvent( const wxString & key );
-        void TriggerEvent( const wxString & key, const boost::python::object & param );
-        int GetEventIndex( const wxString & key );
+    // - C++ interface
+    void                            DeclareEvent( const wxString& key );
+    void                            TriggerEvent( const wxString& key );
+    void                            TriggerEvent( const wxString& key,
+                                                  const boost::python::object& param );
+    int                             GetEventIndex( const wxString& key );
 
-        // - Py Interface
-        void RegisterCallback  ( const wxString & key, const boost::python::object & obj );
-        void UnRegisterCallback( const wxString & key, const boost::python::object & obj );
+    // - Py Interface
+    void                            RegisterCallback( const wxString& key,
+                                                      const boost::python::object& obj );
+    void                            UnRegisterCallback( const wxString& key,
+                                                        const boost::python::object& obj );
 
-        // Object conversions
+    // Object conversions
 
-        // - Py -> C++
-        static wxString MakeStr( const boost::python::object & objStr );
+    // - Py -> C++
+    static wxString                 MakeStr( const boost::python::object& objStr );
 
-        // - C++ -> Py
-        static boost::python::object Convert( const wxString & wxStr );
+    // - C++ -> Py
+    static boost::python::object    Convert( const wxString& wxStr );
 };
 
 
-#define KICAD_PY_BIND_MODULE( mod ) PyHandler::GetInstance()->AddModule( init#mod )
+#define KICAD_PY_BIND_MODULE( mod ) PyHandler::GetInstance()->AddModule( init # mod )
 
-#endif	//PYHANDLER_H
-
+#endif  //PYHANDLER_H
