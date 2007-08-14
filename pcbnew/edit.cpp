@@ -326,7 +326,9 @@ void WinEDA_PcbFrame::SendMessageToEESCHEMA( EDA_BaseStruct* objectToSync )
     if( objectToSync->m_StructType == TYPEMODULE )
         module = (MODULE*) objectToSync;
     else if( objectToSync->m_StructType == TYPEPAD )
-        module = (MODULE*)((D_PAD*)objectToSync)->m_Parent;
+        module = (MODULE*) objectToSync->m_Parent;
+    else if( objectToSync->m_StructType == TYPETEXTEMODULE )
+        module = (MODULE*) objectToSync->m_Parent;
 
     // ask only for the reference for now, maybe pins later.            
     if( module )
