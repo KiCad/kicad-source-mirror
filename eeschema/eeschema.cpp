@@ -20,10 +20,10 @@
 #include "netlist.h"
 #include "worksheet.h"
 #include "trigo.h"
-
 #include "protos.h"
-
 #include "bitmaps.h"
+#include "eda_dde.h"
+
 
 /* Routines locales */
 static void CreateScreens(void);
@@ -72,6 +72,13 @@ wxString FFileName;
 	SetTopWindow(SchematicFrame);
 	SchematicFrame->Show(TRUE);
 
+    if( CreateServer( SchematicFrame, KICAD_SCH_PORT_SERVICE_NUMBER ) )
+    {
+        // RemoteCommand is in controle.cpp and is called when PCBNEW
+        // sends EESCHEMA a command
+        SetupServerFunction( RemoteCommand );
+    }
+   
 	SchematicFrame->Zoom_Automatique(TRUE);
 
 	/* Load file specified in the command line. */

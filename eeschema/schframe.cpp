@@ -26,6 +26,9 @@
 BEGIN_EVENT_TABLE(WinEDA_SchematicFrame, wxFrame)
 	COMMON_EVENTS_DRAWFRAME
 
+	EVT_SOCKET(ID_EDA_SOCKET_EVENT_SERV, WinEDA_DrawFrame::OnSockRequestServer)
+	EVT_SOCKET(ID_EDA_SOCKET_EVENT, WinEDA_DrawFrame::OnSockRequest)
+
 	EVT_CLOSE(WinEDA_SchematicFrame::OnCloseWindow)
 	EVT_SIZE(WinEDA_SchematicFrame::OnSize)
 

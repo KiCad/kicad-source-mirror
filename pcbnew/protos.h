@@ -394,7 +394,7 @@ TRACK * CreateLockPoint(int *pX, int *pY, TRACK * ptsegm, TRACK * refsegm);
 /****************/
 /* CONTROLE.CPP */
 /****************/
-void RemoteCommand(char * cmdline);
+void RemoteCommand( const char* cmdline );
 
 /*************/
 /* STRUCT.CPP */

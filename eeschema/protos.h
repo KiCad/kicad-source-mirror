@@ -456,4 +456,8 @@ void InstallFindFrame(WinEDA_SchematicFrame *parent, wxPoint &pos);
 /***************/
 void DisplayOptionFrame(WinEDA_DrawFrame * parent, const wxPoint & framepos);
 
+/****************/
+/* CONTROLE.CPP */
+/****************/
+void RemoteCommand( const char* cmdline );
 

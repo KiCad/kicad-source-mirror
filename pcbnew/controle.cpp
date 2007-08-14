@@ -22,53 +22,57 @@
 /* Variables Locales */
 
 /**********************************/
-void RemoteCommand( char* cmdline )
+void RemoteCommand( const char* cmdline )
 /**********************************/
 
 /* Read a remote command send by eeschema via a socket,
  *  port KICAD_PCB_PORT_SERVICE_NUMBER (currently 4242)
  */
 {
-    char             Line[1024];
+    char             line[1024];
     wxString         msg;
     char*            idcmd, * text;
     WinEDA_PcbFrame* frame = EDA_Appl->m_PcbFrame;
 
-    strncpy( Line, cmdline, sizeof(Line) - 1 );
-    msg = CONV_FROM_UTF8( Line );
+    strncpy( line, cmdline, sizeof(line) - 1 );
+    msg = CONV_FROM_UTF8( line );
 
-    idcmd = strtok( Line, " \n\r" );
+    idcmd = strtok( line, " \n\r" );
     text  = strtok( NULL, " \n\r" );
     if( (idcmd == NULL) || (text == NULL) )
         return;
 
     if( strcmp( idcmd, "$PART:" ) == 0 )
     {
-        MODULE* Module;
         msg    = CONV_FROM_UTF8( text );
-        Module = ReturnModule( frame->m_Pcb, msg );
+        
+        MODULE* module = ReturnModule( frame->m_Pcb, msg );
+        
         msg.Printf( _( "Locate module %s %s" ), msg.GetData(),
-                   Module ? wxT( "Ok" ) : wxT( "not found" ) );
+                   module ? wxT( "Ok" ) : wxT( "not found" ) );
+        
         frame->Affiche_Message( msg );
-        if( Module )
+        if( module )
         {
             wxClientDC dc( frame->DrawPanel );
 
             frame->DrawPanel->PrepareGraphicContext( &dc );
             frame->DrawPanel->CursorOff( &dc );
-            frame->GetScreen()->m_Curseur = Module->m_Pos;
+            frame->GetScreen()->m_Curseur = module->m_Pos;
             frame->DrawPanel->CursorOn( &dc );
         }
     }
 
     if( idcmd && strcmp( idcmd, "$PIN:" ) == 0 )
     {
-        wxString PinName, ModName;
-        MODULE*  Module;
-        D_PAD*   Pad     = NULL;
+        wxString pinName, modName;
+        MODULE*  module;
+        D_PAD*   pad = NULL;
         int      netcode = -1;
-        PinName = CONV_FROM_UTF8( text );
-        text    = strtok( NULL, " \n\r" );
+        
+        pinName = CONV_FROM_UTF8( text );
+        
+        text = strtok( NULL, " \n\r" );
         if( text && strcmp( text, "$PART:" ) == 0 )
             text = strtok( NULL, "\n\r" );
 
@@ -76,30 +80,34 @@ void RemoteCommand( char* cmdline )
 
         frame->DrawPanel->PrepareGraphicContext( &dc );
 
-        ModName = CONV_FROM_UTF8( text );
-        Module  = ReturnModule( frame->m_Pcb, ModName );
-        if( Module )
-            Pad = ReturnPad( Module, PinName );
-        if( Pad )
-            netcode = Pad->m_NetCode;
+        modName = CONV_FROM_UTF8( text );
+        module  = ReturnModule( frame->m_Pcb, modName );
+        if( module )
+            pad = ReturnPad( module, pinName );
+        
+        if( pad )
+            netcode = pad->m_NetCode;
+        
         if( netcode > 0 )
         {
             /* effacement surbrillance ancienne */
             if( g_HightLigt_Status )
                 frame->Hight_Light( &dc );
+            
             g_HightLigth_NetCode = netcode;
             frame->Hight_Light( &dc );
+            
             frame->DrawPanel->CursorOff( &dc );
-            frame->GetScreen()->m_Curseur = Pad->m_Pos;
+            frame->GetScreen()->m_Curseur = pad->m_Pos;
             frame->DrawPanel->CursorOn( &dc );
         }
 
-        if( Module == NULL )
+        if( module == NULL )
             msg.Printf( _( "module %s not found" ), text );
-        else if( Pad == NULL )
-            msg.Printf( _( "Pin %s (module %s) not found" ), PinName.GetData(), ModName.GetData() );
+        else if( pad == NULL )
+            msg.Printf( _( "Pin %s (module %s) not found" ), pinName.GetData(), modName.GetData() );
         else
-            msg.Printf( _( "Locate Pin %s (module %s)" ), PinName.GetData(), ModName.GetData() );
+            msg.Printf( _( "Locate Pin %s (module %s)" ), pinName.GetData(), modName.GetData() );
         frame->Affiche_Message( msg );
     }
 }

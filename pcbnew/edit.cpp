@@ -11,8 +11,9 @@
 #include "autorout.h"
 
 #include "id.h"
-
 #include "protos.h"
+#include "eda_dde.h"
+
 
 #define CURRENT_ITEM (GetScreen()->m_CurrentItem)
 
@@ -94,6 +95,8 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         else
         {
             DrawStruct = PcbGeneralLocateAndDisplay();
+            if( DrawStruct )
+                SendMessageToEESCHEMA( DrawStruct );
         }
     }
 
@@ -128,6 +131,9 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         DrawStruct = m_Pcb->FindPadOrModule( GetScreen()->RefPos(true), 
                             GetScreen()->m_Active_Layer );
         Show_1_Ratsnest( DrawStruct, DC );
+        
+        if( DrawStruct )
+            SendMessageToEESCHEMA( DrawStruct );
         break;
 
     case ID_PCB_MIRE_BUTT:
@@ -309,6 +315,27 @@ out:
     DrawPanel->m_IgnoreMouseEvents = FALSE;
     DrawPanel->CursorOn( DC );
 }
+
+
+// see wxstruct.h
+void WinEDA_PcbFrame::SendMessageToEESCHEMA( EDA_BaseStruct* objectToSync )
+{
+    char    cmd[1024];
+    MODULE* module = NULL;
+    
+    if( objectToSync->m_StructType == TYPEMODULE )
+        module = (MODULE*) objectToSync;
+    else if( objectToSync->m_StructType == TYPEPAD )
+        module = (MODULE*)((D_PAD*)objectToSync)->m_Parent;
+
+    // ask only for the reference for now, maybe pins later.            
+    if( module )
+    {
+        sprintf( cmd, "$PART: %s", CONV_TO_UTF8(module->m_Reference->m_Text) );
+        SendCommand( MSG_TO_SCH, cmd );
+    }
+}
+
 
 
 /*********************************************************************/

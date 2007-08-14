@@ -2,6 +2,11 @@
 /* class_text_module.h : texts module description  */
 /***************************************************/
 
+
+#ifndef TEXT_MODULE_H
+#define TEXT_MODULE_H
+
+
 /* Description des Textes sur Modules : */
 #define TEXT_is_REFERENCE 0
 #define TEXT_is_VALUE     1
@@ -80,3 +85,6 @@ public:
     virtual void Show( int nestLevel, std::ostream& os );
 #endif
 };
+
+#endif // TEXT_MODULE_H
+

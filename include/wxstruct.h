@@ -700,6 +700,14 @@ public:
     // divers
     void                InstallFindFrame( const wxPoint& pos, wxDC* DC );
 
+    /**
+     * Function SendMessageToEESCHEMA
+     * sends a message to the schematic editor so that it may move its cursor
+     * to a part with the same reference as the objectToSync
+     * @param objectToSync The object whose reference is used to syncronize eeschema.
+     */
+    void                SendMessageToEESCHEMA( EDA_BaseStruct* objectToSync );
+
     /* Special micro_ondes */
     void                Edit_Gap( wxDC* DC, MODULE* Module );
     MODULE*             Create_MuWaveBasicShape( wxDC* DC, const wxString& name, int pad_count );
@@ -974,7 +982,17 @@ public:
     bool                    LoadOneSheet( SCH_SCREEN* screen, const wxString& FullFileName );
 
     // General search:
-    EDA_BaseStruct*         FindSchematicItem( const wxString& pattern, int SearchType );
+    /**
+     * Function FindSchematicItem
+     * finds a string in the schematic.
+     * @param pattern The text to search for, either in value, reference or elsewhere.
+     * @param SearchType:  0 => Search is made in current sheet
+     *                     1 => the whole hierarchy
+     *                     2 => or for the next item
+     * @param mouseWarp If true, then move the mouse cursor to the item.
+     */
+    EDA_BaseStruct*         FindSchematicItem( const wxString& pattern, int SearchType, bool mouseWarp=true );
+    
     EDA_BaseStruct*         FindMarker( int SearchType );
 
 private:
