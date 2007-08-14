@@ -5,10 +5,21 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+
+2007-Aug-14 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++ eeschema & pcbnew
+  * Added mouse click, TCP/IP socket based,  part synchronization in the reverse 
+    of how it was working, so a mouse click on a module in PCBNEW will take 
+    EESCHEMA to the part with the same reference.
+  * More beautification, working with developer of uncrustify.  Almost ready
+    to add the customized uncrustifiy configuration file to this project.
+
+
 2007-aug-11 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + eeschema
-	modify hotkeys.cpp code.
+    modify hotkeys.cpp code.
 
     
 2007-Aug-10 UPDATE   Dick Hollenbeck <dick@softplc.com>
@@ -22,7 +33,7 @@ email address.
 2007-aug-10 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + eeschema
-	better hotkeys.cpp code.
+    better hotkeys.cpp code.
 
 
 2007-Aug-09 UPDATE   Dick Hollenbeck <dick@softplc.com>
@@ -35,8 +46,8 @@ email address.
 2007-aug-09 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + eeschema
-	Some new hotkeys (see hotkeys.cpp).
-	Now, the key ? display the current existing hotkeys
+    Some new hotkeys (see hotkeys.cpp).
+    Now, the key ? display the current existing hotkeys
 
 
 2007-Aug-08 UPDATE   Dick Hollenbeck <dick@softplc.com>
@@ -57,14 +68,14 @@ email address.
 2007-aug-08 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + eeschema
-	bug in class_hierarchy_sheet.cpp.
+    bug in class_hierarchy_sheet.cpp.
 
 + pcbnew
-	small change in block commands:
-		rastnest was updated for each footprint, while moving footprints.
-		Now it is updated at the end of changes.
-	enhancements in block.cpp and connect.cpp
-	
+    small change in block commands:
+        rastnest was updated for each footprint, while moving footprints.
+        Now it is updated at the end of changes.
+    enhancements in block.cpp and connect.cpp
+    
 
 2007-Aug-07 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
@@ -98,7 +109,7 @@ email address.
 2007-Aug-04 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew
-	Read-ability formatting, I am playing with a C++ beautifier called "uncrustify".
+    Read-ability formatting, I am playing with a C++ beautifier called "uncrustify".
         I had to patch it and spent 2 days getting it configured.  Patch not 
         sent upstream yet.
     Fixed a bug in "display local ratsnest pad or module": if you had a small
@@ -114,53 +125,53 @@ email address.
 2007-aug-02 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew
-	Drc test now generates a DRC file report.
+    Drc test now generates a DRC file report.
 
 
 2007-Jul-31 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
 ================================================================================
 + pcbnew
-	Drill Map and Drill Report files now list the diameters of each drill in
-		the selected drill unit first, and then in the other drill unit.
-	Drill report files also now list the tool assigned to each drill, and
-		the correct hole count and oval count for each drill size; the
-		 file creation date and the selected drill unit are also listed.
-	
+    Drill Map and Drill Report files now list the diameters of each drill in
+    the selected drill unit first, and then in the other drill unit.
+    Drill report files also now list the tool assigned to each drill, and
+    the correct hole count and oval count for each drill size; the
+    file creation date and the selected drill unit are also listed.
+    
 
 2007-Jul-30 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew
-	Some file are added (missing .prj files)
-	Better Drc test:
-		Zones can be tested.
-		better pad to pad test.
-	
+    Some file are added (missing .prj files)
+    Better Drc test:
+        Zones can be tested.
+        better pad to pad test.
+    
 
 2007-Jul-25 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
-	** Some minor enhancements
+    ** Some minor enhancements
 + pcbnew
-	In Drc diags, better (more explicit) messages
-	Change (and simplify) code in  'update' as well as 'insert' modules into main PCB from within the module editor,
-	because it had a bug (crashes when there was no footprint in pcb)
-	
+    In Drc diags, better (more explicit) messages
+    Change (and simplify) code in  'update' as well as 'insert' modules into main PCB from within the module editor,
+    because it had a bug (crashes when there was no footprint in pcb)
+    
 
 
 2007-June-21 UPDATE Tim Hanson <tim@hardcarve.com>
 ================================================================================
 + pcbnew
-	1. added button to 'update' as well as 'insert' modules into main PCB 
-		from within the module editor.  Made them functional, of course. 
-	2. added control-o, control-s & control-f to pcbnew, 
-		though I'm not perfectly happy with the implementation -- wxwidgets puts
-		the control-characters in alphabetical order!
+    1. added button to 'update' as well as 'insert' modules into main PCB 
+        from within the module editor.  Made them functional, of course. 
+    2. added control-o, control-s & control-f to pcbnew, 
+        though I'm not perfectly happy with the implementation -- wxwidgets puts
+        the control-characters in alphabetical order!
 
+        
 2007-June-25 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew
-	minor enhancement in Edit footprint dialog (more help tool tips).
-	better hotkey.cpp (code cleaning and info messages)
-
+    minor enhancement in Edit footprint dialog (more help tool tips).
+    better hotkey.cpp (code cleaning and info messages)
 
 
 2007-June-19 UPDATE   Dick Hollenbeck <dickelbeck@yahoo.com>
@@ -174,10 +185,11 @@ email address.
 2007-June-16 UPDATE   Richard A Burton <richardaburton@gmail.com>
 ================================================================================
 + pcbnew
-	fix debug assert starting pcbnew with wx2.6
+    fix debug assert starting pcbnew with wx2.6
 + build
-	add install targets for resources and docs
+    add install targets for resources and docs
 
+    
 2007-June-15 UPDATE   Dick Hollenbeck <dickelbeck@yahoo.com>
 ================================================================================
 + pcbnew
@@ -196,39 +208,40 @@ email address.
 2007-June-14 UPDATE Igor Plyatov <plyatov@mail.ru>
 ================================================================================
 + eeschema
-    Added sorting by value or position in to the annotation window (Thanks for patch to Andrey Fedorushkov).
+    Added sorting by value or position in to the annotation window 
+    (Thanks for patch to Andrey Fedorushkov).
 
 2007-June-13 RELEASE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +All:
-	merging my development with svn version
+    merging my development with svn version
 
 + pcbnew:
-	bug fix (problem in postscript generation due to the internationalization
-		of floating point number notation )
-	added tool to select layer pair and monitor active layer
-	
+    bug fix (problem in postscript generation due to the internationalization
+    of floating point number notation )
+    added tool to select layer pair and monitor active layer
+    
 + eeschema
-	bug fix:
-		crash libedit when loading certain components (linux only)
-		incomplete generation of erc file list
-	
+    bug fix:
+        crash libedit when loading certain components (linux only)
+        incomplete generation of erc file list
+    
 
 
 2007-June-13 UPDATE   Richard A Burton <richardaburton@gmail.com>
 ================================================================================
 + build:
-	dynamic linking by default, use make -f makefile.gtk KICAD_STATIC_LINK=1
-	  or uncomment the bit in libs.linux for static
+    dynamic linking by default, use make -f makefile.gtk KICAD_STATIC_LINK=1
+    or uncomment the bit in libs.linux for static
 
 
 2007-June-11 UPDATE   Richard A Burton <richardaburton@gmail.com>
 ================================================================================
 + build:
-	removed several 2 line scripts for configuring wx builds and put them in
-	  how-to-build-kicad.txt
-	improved KICAD_STATIC_LINK handling so it can be overridden on the command
-	  line e.g. "make -f makefile.gtk KICAD_STATIC_LINK=0"
+    removed several 2 line scripts for configuring wx builds and put them in
+    how-to-build-kicad.txt
+    improved KICAD_STATIC_LINK handling so it can be overridden on the command
+    line e.g. "make -f makefile.gtk KICAD_STATIC_LINK=0"
 
 
 2007-June-11 UPDATE   Dick Hollenbeck <dickelbeck@yahoo.com>
@@ -239,18 +252,18 @@ email address.
 2007-June-5 UPDATE    Richard A Burton <richardaburton@gmail.com>
 ================================================================================
 + pcbnew:
-	fixed 3d-display image export (blank box in image)
+    fixed 3d-display image export (blank box in image)
 + build:
-	fixed makefile clean targets so they don't fail if already clean
-	fixed wx2.6 compatibility
+    fixed makefile clean targets so they don't fail if already clean
+    fixed wx2.6 compatibility
 
 
 2007-May-25 RELEASE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew:
-	bug: problem with 3D shapes. 
+    bug: problem with 3D shapes. 
 + Gerbview:
-	Better (but crude...) support to export gerber files to pcbnew.
+    Better (but crude...) support to export gerber files to pcbnew.
 
 ================================================================================
 End Of File
