@@ -42,6 +42,8 @@ void RemoteCommand( const char* cmdline )
     if( (idcmd == NULL) || (text == NULL) )
         return;
 
+    // @todo: this code does not reposition the window when the chosen part is scrolled off screen. 
+    
     if( strcmp( idcmd, "$PART:" ) == 0 )
     {
         msg    = CONV_FROM_UTF8( text );
