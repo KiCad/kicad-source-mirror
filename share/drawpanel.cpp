@@ -1,6 +1,7 @@
-	/******************************************************************/
-	/* drawpanel.cpp - fonctions des classes du type WinEDA_DrawPanel */
-	/******************************************************************/
+/******************************************************************/
+/* drawpanel.cpp - fonctions des classes du type WinEDA_DrawPanel */
+/******************************************************************/
+
 
 #ifdef __GNUG__
 #pragma implementation
@@ -12,13 +13,13 @@
 #include "macros.h"
 #include "id.h"
 
-/* defines locaux */
-#define CURSOR_SIZE 12	/* taille de la croix du curseur PCB */
+// defines locaux
+#define CURSOR_SIZE 12	         // taille de la croix du curseur PCB
 
-/* Variables locales */
+// Variables locales
 
-/* table des evenements captes par un WinEDA_DrawPanel */
-BEGIN_EVENT_TABLE(WinEDA_DrawPanel, EDA_DRAW_PANEL)
+// table des evenements captes par un WinEDA_DrawPanel
+BEGIN_EVENT_TABLE( WinEDA_DrawPanel, EDA_DRAW_PANEL )
 	EVT_LEAVE_WINDOW(WinEDA_DrawPanel::OnMouseLeaving)
 	EVT_MOUSE_EVENTS(WinEDA_DrawPanel::OnMouseEvent)
 	EVT_CHAR(WinEDA_DrawPanel::OnKeyEvent)
@@ -31,11 +32,7 @@ BEGIN_EVENT_TABLE(WinEDA_DrawPanel, EDA_DRAW_PANEL)
 
 	EVT_MENU_RANGE(	ID_POPUP_ZOOM_START_RANGE, ID_POPUP_ZOOM_END_RANGE,
 		WinEDA_DrawPanel::Process_Popup_Zoom)
-
 END_EVENT_TABLE()
-
-
-
 
 	/***********************************************************/
 	/* Fonctions de base de WinEDA_DrawPanel: l'ecran de trace */
@@ -73,6 +70,7 @@ WinEDA_DrawPanel::WinEDA_DrawPanel(WinEDA_DrawFrame *parent, int id,
 	m_CursorLevel = 0;
 }
 
+
 /*********************************************************************************/
 void WinEDA_DrawPanel::Trace_Curseur(wxDC * DC, int color)
 /*********************************************************************************/
@@ -109,6 +107,7 @@ wxPoint Cursor = GetScreen()->m_Curseur;
 		}
 }
 
+
 /*******************************************************************/
 void WinEDA_DrawPanel::CursorOff(wxDC * DC)
 /*******************************************************************/
@@ -119,6 +118,7 @@ void WinEDA_DrawPanel::CursorOff(wxDC * DC)
 	Trace_Curseur(DC);
 	--m_CursorLevel;
 }
+
 
 /*******************************************************************/
 void WinEDA_DrawPanel::CursorOn(wxDC * DC)
@@ -142,12 +142,14 @@ int WinEDA_DrawPanel::GetZoom(void)
 	return GetScreen()->GetZoom();
 }
 
+
 /***************************************/
 void WinEDA_DrawPanel::SetZoom(int zoom)
 /***************************************/
 {
 	GetScreen()->SetZoom(zoom);
 }
+
 
 /************************************/
 wxSize WinEDA_DrawPanel::GetGrid(void)
@@ -211,6 +213,7 @@ wxPoint curpos;
 	return curpos;
 }
 
+
 /********************************************************/
 bool WinEDA_DrawPanel::IsPointOnDisplay(wxPoint ref_pos)
 /********************************************************/
@@ -262,6 +265,7 @@ wxPoint curpos = GetScreen()->m_Curseur;
 	return curpos;
 }
 
+
 /*********************************************************/
 wxPoint WinEDA_DrawPanel::GetScreenCenterRealPosition(void)
 /*********************************************************/
@@ -291,6 +295,7 @@ void WinEDA_DrawPanel::MouseToCursorSchema(void)
 wxPoint Mouse = CursorScreenPosition();
 	MouseTo(Mouse);
 }
+
 
 /****************************************************/
 void WinEDA_DrawPanel::MouseTo(const wxPoint & Mouse)
@@ -467,15 +472,18 @@ wxPoint org;
 }
 
 /****************************************************/
-void WinEDA_DrawPanel::ReDraw(wxDC * DC, bool erasebg)
+void WinEDA_DrawPanel::ReDraw( wxDC* DC, bool erasebg )
 /****************************************************/
 {
-BASE_SCREEN * Screen = GetScreen();
+    BASE_SCREEN * Screen = GetScreen();
 
-	if ( Screen == NULL ) return;
+	if( Screen == NULL ) 
+        return;
 
-	if ( (g_DrawBgColor != WHITE) && (g_DrawBgColor != BLACK) ) g_DrawBgColor = BLACK;
-	if(g_DrawBgColor == WHITE)
+	if( (g_DrawBgColor != WHITE) && (g_DrawBgColor != BLACK) ) 
+        g_DrawBgColor = BLACK;
+    
+	if( g_DrawBgColor == WHITE )
 	{
 		g_XorMode = GR_NXOR;
 		g_GhostColor = BLACK;
@@ -487,25 +495,27 @@ BASE_SCREEN * Screen = GetScreen();
 	}
 
 #ifdef WX_ZOOM
-int zoom = GetZoom();
-double f_scale = 1.0/(double)zoom;
+    int zoom = GetZoom();
+    double f_scale = 1.0/(double)zoom;
 	DC->SetUserScale(f_scale, f_scale);
 #endif
 
-
-	if(erasebg) PrepareGraphicContext(DC);
-	DC->SetFont(* g_StdFont);
+	if(erasebg) 
+        PrepareGraphicContext(DC);
+    
+	DC->SetFont( *g_StdFont );
 		
-	SetBackgroundColour(wxColour(ColorRefs[g_DrawBgColor].m_Red,
+	SetBackgroundColour( wxColour(ColorRefs[g_DrawBgColor].m_Red,
 						ColorRefs[g_DrawBgColor].m_Green,
-						ColorRefs[g_DrawBgColor].m_Blue ));
+						ColorRefs[g_DrawBgColor].m_Blue ) );
 
-	GRResetPenAndBrush(DC);
+	GRResetPenAndBrush( DC );
 
-	DC->SetBackground(*wxBLACK_BRUSH );
-	DC->SetBackgroundMode(wxTRANSPARENT);
-	m_Parent->RedrawActiveWindow(DC, erasebg);
+	DC->SetBackground( *wxBLACK_BRUSH );
+	DC->SetBackgroundMode( wxTRANSPARENT );
+	m_Parent->RedrawActiveWindow( DC, erasebg );
 }
+
 
 /***********************************************/
 void WinEDA_DrawPanel::DrawBackGround(wxDC * DC)
@@ -622,6 +632,7 @@ BASE_SCREEN * screen = GetScreen();
 			0, Color );
 }
 
+
 /*******************************************************/
 void WinEDA_DrawPanel::OnRightClick(wxMouseEvent& event)
 /*******************************************************/
@@ -720,7 +731,6 @@ static WinEDA_DrawPanel * LastPanel;
 	if( event.ButtonDClick(1)) localbutt = GR_M_LEFT_DOWN|GR_M_DCLICK;
 	if( event.MiddleDown()) localbutt = GR_M_MIDDLE_DOWN;
 	if( event.ButtonDClick(2)) {};	// Unused
-
 
 	localrealbutt |= localbutt;		/* compensation defaut wxGTK */
 
@@ -919,7 +929,11 @@ BASE_SCREEN * Screen = GetScreen();
 			ForceCloseManageCurseur(this, &DC);
 			SetCursor(m_PanelCursor = m_PanelDefaultCursor);
 		}
-		else m_Parent->SetToolID(0, m_PanelCursor = m_PanelDefaultCursor = wxCURSOR_ARROW, wxEmptyString);
+		else 
+        {
+            m_PanelCursor = m_PanelDefaultCursor = wxCURSOR_ARROW;
+            m_Parent->SetToolID(0, m_PanelCursor, wxEmptyString);
+        }
 	}
 
 	m_Parent->GeneralControle(&DC, Screen->m_MousePositionInPixels);
@@ -928,6 +942,3 @@ BASE_SCREEN * Screen = GetScreen();
 	event.Skip();	// Allow menu shortcut processing
 #endif
 }
-
-
-
