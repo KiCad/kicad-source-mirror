@@ -14,7 +14,11 @@ email address.
     EESCHEMA to the part with the same reference.
   * More beautification, working with developer of uncrustify.  Almost ready
     to add the customized uncrustifiy configuration file to this project.
-
+  * Fixed a bug in pcbnew/tracepcb.cpp's WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
+    which was using a bool for the MaskLay variable, causing through hole pads
+    on modules on copper layer not to be shown when the copper components were
+    set to invisible.
+    
 
 2007-aug-11 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
