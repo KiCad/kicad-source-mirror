@@ -6,7 +6,7 @@ email address.
 
 
 
-2007-Aug-14 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+2007-Aug-14 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + eeschema & pcbnew
   * Added mouse click, TCP/IP socket based,  part synchronization in the reverse 
