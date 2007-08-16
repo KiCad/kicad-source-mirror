@@ -192,7 +192,19 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         if( module == NULL )
             break;
 
-        GetScreen()->m_CurrentItem = module;
+        /*  I'd like to make sending to EESCHEMA edge triggered, but the
+            simple mouse click on a module when the arrow icon is in play
+            does not set m_CurrentItem at this time, nor does a mouse click
+            when the local ratsnest icon is in play set m_CurrentItem, and these
+            actions also call SendMessageToEESCHEMA().
+        if( GetScreen()->m_CurrentItem != module )
+            */
+        {
+            // Send the module via socket to EESCHEMA's search facility.
+            SendMessageToEESCHEMA( module );
+            
+            GetScreen()->m_CurrentItem = module;
+        }
 
         switch( hotkey )
         {
@@ -215,6 +227,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         }
 
         module->Display_Infos( this );
+
         break;
     }
 }
