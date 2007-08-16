@@ -178,8 +178,8 @@ void InstallNetlistFrame(WinEDA_SchematicFrame *parent, wxPoint & pos)
 
 /*************************************************************************************/
 WinEDA_NetlistFrame::WinEDA_NetlistFrame(WinEDA_SchematicFrame *parent, wxPoint& framepos):
-		wxDialog(parent, -1, _("Netlist"), framepos, wxSize(H_SIZE, V_SIZE),
-				DIALOG_STYLE|wxRESIZE_BORDER)
+		wxDialog(parent, -1, _("Netlist"), framepos, wxSize(H_SIZE, V_SIZE), DIALOG_STYLE)
+//				DIALOG_STYLE|wxRESIZE_BORDER)
 /*************************************************************************************/
 /* Constructor for the netlist generation dialog box
 */

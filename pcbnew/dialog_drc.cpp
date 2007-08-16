@@ -344,7 +344,7 @@ wxString FileName, Mask(wxT("*")), Ext(wxT(".rpt"));
 	ChangeFileNameExt(FileName, wxT("-drc") + Ext);
 	Mask += Ext;
 
-	FileName = EDA_FileSelector(_("Drill Report file"),
+	FileName = EDA_FileSelector(_("DRC Report file"),
 					wxEmptyString,		/* Chemin par defaut */
 					FileName,			/* nom fichier par defaut */
 					Ext,				/* extension par defaut */
