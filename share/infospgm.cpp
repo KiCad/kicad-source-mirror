@@ -36,12 +36,14 @@ wxT("** EESCHEMA  (sept 1994 .. 2007) **")
 #endif
 );
 
-/* Routines Locales */
+// Routines Locales
 
 /*******************************************/
 void Print_Kicad_Infos(wxWindow * frame)
 /*******************************************/
 {
+wxString AboutCaption = wxT("About ");
+
 wxString Msg = MsgInfos;
 	Msg << wxT("\n\n") << _("Build Version:") << wxT("\n") ;
 
@@ -62,13 +64,15 @@ wxString Msg = MsgInfos;
 	Msg << wxT(" JP CHARRAS\n\n") << _("Based on wxWidgets ");
 	Msg << wxMAJOR_VERSION << wxT(".") <<
 		wxMINOR_VERSION << wxT(".") << wxRELEASE_NUMBER;
-	if ( wxSUBRELEASE_NUMBER )
+	if( wxSUBRELEASE_NUMBER )
 		Msg << wxT(".") << wxSUBRELEASE_NUMBER;
 	Msg << _("\n\nGPL License");
 	Msg << _("\n\nWeb sites:\n");
 	Msg << wxT("http://iut-tice.ujf-grenoble.fr/kicad/\n");
 	Msg << wxT("http://www.gipsa-lab.inpg.fr/realise_au_lis/kicad/");
 
-	wxMessageBox(Msg, wxEmptyString, wxICON_INFORMATION, frame);
+	AboutCaption << g_Main_Title << wxT(" ") << GetBuildVersion();
+
+	wxMessageBox(Msg, AboutCaption, wxICON_INFORMATION, frame);
 }
 
