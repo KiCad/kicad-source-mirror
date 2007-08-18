@@ -46,7 +46,7 @@ $(TARGET).app: $(OBJS)
 	ln -f $(TARGET) $(TARGET).app/Contents/MacOS/$(TARGET)
 
 netlist_form_pads-pcb: plugins/netlist_form_pads-pcb.cpp
-	gcc   $(CXXFLAGS) -Wall plugins/netlist_form_pads-pcb.cpp -o netlist_form_pads-pcb
+	g++   $(CXXFLAGS) -Wall plugins/netlist_form_pads-pcb.cpp -o netlist_form_pads-pcb
 	
 
 install: $(TARGET)
