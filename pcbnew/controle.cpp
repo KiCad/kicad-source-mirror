@@ -31,8 +31,10 @@ void RemoteCommand( const char* cmdline )
 {
     char             line[1024];
     wxString         msg;
-    char*            idcmd, * text;
+    char*            idcmd;
+    char*            text;
     WinEDA_PcbFrame* frame = EDA_Appl->m_PcbFrame;
+    MODULE*          module;
 
     strncpy( line, cmdline, sizeof(line) - 1 );
     msg = CONV_FROM_UTF8( line );
@@ -48,7 +50,7 @@ void RemoteCommand( const char* cmdline )
     {
         msg    = CONV_FROM_UTF8( text );
         
-        MODULE* module = ReturnModule( frame->m_Pcb, msg );
+        module = ReturnModule( frame->m_Pcb, msg );
         
         msg.Printf( _( "Locate module %s %s" ), msg.GetData(),
                    module ? wxT( "Ok" ) : wxT( "not found" ) );
@@ -68,7 +70,6 @@ void RemoteCommand( const char* cmdline )
     if( idcmd && strcmp( idcmd, "$PIN:" ) == 0 )
     {
         wxString pinName, modName;
-        MODULE*  module;
         D_PAD*   pad = NULL;
         int      netcode = -1;
         
@@ -112,6 +113,9 @@ void RemoteCommand( const char* cmdline )
             msg.Printf( _( "Locate Pin %s (module %s)" ), pinName.GetData(), modName.GetData() );
         frame->Affiche_Message( msg );
     }
+        
+    if( module )    // center the module on screen.
+        frame->Recadre_Trace( false );
 }
 
 

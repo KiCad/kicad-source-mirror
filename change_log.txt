@@ -20,7 +20,11 @@ email address.
     in PCBNEW when there is more than one click candidate at the same mouse
     or cursor coordinates.  COLLECTOR not committed yet.
   * More beautification.
-  
+  * The mouse click and part synchronization from EESCHEMA to PCBNEW would 
+    track fine but would not always position the PCBNEW part on screen.  Now
+    we center it unconditionally.  No change was made in the reverse direction
+    since that code uses the long established Find support.
+    
 
 2007-Aug-14 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
