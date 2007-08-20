@@ -351,7 +351,7 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     if( GetScreen()->BlockLocate.m_State != STATE_NO_BLOCK )
         keep_on_grid = TRUE;
     
-    EDA_BaseStruct* DrawStruct = GetScreen()->m_CurrentItem;
+    EDA_BaseStruct* DrawStruct = GetScreen()->GetCurItem();
     if( DrawStruct && DrawStruct->m_Flags )
         keep_on_grid = TRUE;
 

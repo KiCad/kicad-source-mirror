@@ -395,9 +395,9 @@ void WinEDA_DrawFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels 
 
     if( hotkey )
     {
-        if( m_CurrentScreen->m_CurrentItem
-            && m_CurrentScreen->m_CurrentItem->m_Flags )
-            OnHotKey( DC, hotkey, m_CurrentScreen->m_CurrentItem );
+        if( m_CurrentScreen->GetCurItem()
+            && m_CurrentScreen->GetCurItem()->m_Flags )
+            OnHotKey( DC, hotkey, m_CurrentScreen->GetCurItem() );
         else
             OnHotKey( DC, hotkey, NULL );
     }

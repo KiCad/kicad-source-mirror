@@ -95,7 +95,7 @@ static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
-    Panel->GetScreen()->m_CurrentItem = NULL;
+    Panel->GetScreen()->SetCurItem( NULL );
     Panel->m_Parent->EraseMsgBox();
 
     /* Annulation deplacement et Redessin des segments dragges */
@@ -191,22 +191,22 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( WinEDA_DrawPanel* panel,
  *  > s_MovingSegmentSlope slope = moving track segment slope
  *  > s_StartSegmentSlope slope = slope of the segment connected to the start point of the moving segment
  *  > s_EndSegmentSlope slope = slope of the segment connected to the end point of the moving segment
- * 
+ *
  *  moved segment function :
  *      yt=s_MovingSegmentSlope * x + s_MovingSegment_Yorg
- * 
+ *
  *  segment connected to moved segment's start:
  *      y1 = s_StartSegmentSlope * x + s_StartSegment_Yorg
- * 
+ *
  *  segment connected to moved segment's end:
  *      y2=s_EndSegmentSlope * x + s_EndSegment_Yorg
- * 
+ *
  *  first intersection point will be located at
  *      y1=yt ->
  *      xi1=(s_MovingSegment_Yorg-s_StartSegment_Yorg)/(s_StartSegmentSlope-s_MovingSegmentSlope)
  *      yi1=s_MovingSegmentSlope*xi1+s_MovingSegment_Yorg
  *      or yi1=s_StartSegmentSlope*xi1+s_MovingSegment_Yorg
- * 
+ *
  *  second intersection point
  *      y2=yt ->
  *      xi2=(s_MovingSegment_Yorg-s_StartSegment_Yorg)/(s_MovingSegmentSlope-s_MovingSegmentSlope)
@@ -218,7 +218,7 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( WinEDA_DrawPanel* panel,
  *  !!!!!    intersection point will be calculated using the
  *  !!!!!    segment intersecting it
  *  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- * 
+ *
  *  Slope parametres are computed once, because they can become undetermined when moving segments
  *  (i.e. when a segment lenght is 0) and we want keep them constant
  */
@@ -888,7 +888,7 @@ TRACK* CreateLockPoint( int* pX, int* pY, TRACK* ptsegm, TRACK* refsegm )
  *  Si ptsegm pointe sur une via:
  *      retourne la valeur exacte de pX et pY et ptsegm,
  *      mais ne cree pas de point supplementaire
- * 
+ *
  */
 {
     int    cX, cY;
@@ -926,7 +926,7 @@ TRACK* CreateLockPoint( int* pX, int* pY, TRACK* ptsegm, TRACK* refsegm )
 
     /* pour que le point soit sur le segment ptsegm: cY/cX = dy/dx */
     if( dx == 0 )
-        cX = 0;             /* segm horizontal */
+        cX = 0;/* segm horizontal */
     else
         cY = (cX * dy) / dx;
 

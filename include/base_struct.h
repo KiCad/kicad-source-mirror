@@ -5,6 +5,8 @@
 #ifndef BASE_STRUCT_H
 #define BASE_STRUCT_H
 
+#include <vector>
+
 
 #if defined(DEBUG)
 #include <iostream>         // needed for Show()
@@ -95,9 +97,54 @@ class EDA_BaseStruct;
  */
 class INSPECTOR
 {
+private:
+    /// A place to hold collected objects without taking ownership of their memory.
+    std::vector<EDA_BaseStruct*>    list;
+        
+    
 public:
-    virtual ~INSPECTOR() {}
+    virtual ~INSPECTOR()
+    {
+        // empty the list so that ~list() does not try and delete all
+        // the objects that it holds.  list is not the owner of such objects.
+        Empty();
+    }
 
+    
+    /**
+     * Function GetCount
+     * returns the number of objects in the list
+     */
+    int GetCount() const
+    {
+        return list.size();
+    }
+
+    
+    /**
+     * Function Empty
+     * sets the list to empty
+     */
+    void Empty()
+    {
+        list.clear();
+    }
+
+    
+    /**
+     * Function operator[]
+     * is used for read only access and returns the object at index ndx.
+     * @param ndx The index into the list.
+     * @return EDA_BaseStruct* - or something derived from it, or NULL.
+     */
+    EDA_BaseStruct* operator[]( int ndx ) const
+    {
+        if( (unsigned)ndx < (unsigned)GetCount() )
+            return list[ndx];
+        return NULL;
+    }
+
+    
     /**
      * Function Inspect
      * is the examining function within the INSPECTOR which is passed to the 
@@ -112,9 +159,6 @@ public:
      */ 
     SEARCH_RESULT virtual Inspect( EDA_BaseStruct* testItem, 
         const void* testData ) = 0;
-    
-    // derived classes add more functions for collecting and subsequent 
-    // retrieval here.
 };
 
 

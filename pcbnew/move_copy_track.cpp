@@ -93,7 +93,7 @@ static void Exit_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
-    Panel->GetScreen()->m_CurrentItem = NULL;
+    Panel->GetScreen()->SetCurItem( NULL );
     Panel->m_Parent->EraseMsgBox();
 
     /* Annulation deplacement et Redessin des segments dragges */
@@ -297,7 +297,7 @@ void WinEDA_PcbFrame::Place_Dupl_Route( Track* Track, wxDC* DC )
     old_net_code = NewTrack->net_code;
 
     /* Placement du flag BUSY de la piste originelle, qui ne doit
-    *   pas etre vue dans les recherches de raccordement suivantes */
+     *   pas etre vue dans les recherches de raccordement suivantes */
     ii = NbPtNewTrack; pt_track = NewTrack;
     for( ; ii > 0; ii--, pt_track = (TRACK*) pt_track->Pnext )
     {
@@ -613,7 +613,7 @@ TRACK* CreateLockPoint( int* pX, int* pY, TRACK* ptsegm, TRACK* refsegm )
  *  Si ptsegm pointe sur une via:
  *      retourne la valeur exacte de pX et pY et ptsegm,
  *      mais ne cree pas de point supplementaire
- * 
+ *
  */
 {
     int    cX, cY;
@@ -651,7 +651,7 @@ TRACK* CreateLockPoint( int* pX, int* pY, TRACK* ptsegm, TRACK* refsegm )
 
     /* pour que le point soit sur le segment ptsegm: cY/cX = dy/dx */
     if( dx == 0 )
-        cX = 0;             /* segm horizontal */
+        cX = 0;/* segm horizontal */
     else
         cY = (cX * dy) / dx;
 

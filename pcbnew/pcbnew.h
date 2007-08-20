@@ -331,7 +331,7 @@ eda_global PCB_SCREEN* ScreenModule;    /* Ecran de l'editeur de modules */
 /* Gestion du deplacement des modules et des pistes */
 /****************************************************/
 
-eda_global wxPoint  g_Offset_Module;/* Offset de trace du modul en depl */
+eda_global wxPoint  g_Offset_Module;    /* Offset de trace du modul en depl */
 
 /* Pad editing */
 eda_global wxString g_Current_PadName;  // Last used pad name (pad num)

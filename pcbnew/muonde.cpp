@@ -96,7 +96,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveBasicShape( wxDC* DC,
 static void Exit_Muonde( WinEDA_DrawFrame* frame, wxDC* DC )
 /**********************************************************/
 {
-    MODULE* Module = (MODULE*) frame->m_CurrentScreen->m_CurrentItem;
+    MODULE* Module = (MODULE*) frame->m_CurrentScreen->GetCurItem();
 
     if( Module )
     {
@@ -113,7 +113,7 @@ static void Exit_Muonde( WinEDA_DrawFrame* frame, wxDC* DC )
 
     frame->DrawPanel->ManageCurseur = NULL;
     frame->DrawPanel->ForceCloseManageCurseur = NULL;
-    frame->m_CurrentScreen->m_CurrentItem = NULL;
+    frame->m_CurrentScreen->SetCurItem( NULL );
 }
 
 

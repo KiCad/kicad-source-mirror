@@ -34,12 +34,12 @@ wxString msg;
 	switch ( mode )
 		{
 		case ROUTE_NET:
-			if ( GetScreen()->m_CurrentItem )
+			if ( GetScreen()->GetCurItem() )
 				{
-				switch ( GetScreen()->m_CurrentItem->m_StructType )
+				switch ( GetScreen()->GetCurItem()->m_StructType )
 					{
 					case TYPEPAD:
-						Pad = (D_PAD*) GetScreen()->m_CurrentItem;
+						Pad = (D_PAD*) GetScreen()->GetCurItem();
 						autoroute_net_code = Pad->m_NetCode;
 						break;
 
@@ -54,7 +54,7 @@ wxString msg;
 			break; 
 
 		case ROUTE_MODULE:
-			Module = (MODULE*) GetScreen()->m_CurrentItem;
+			Module = (MODULE*) GetScreen()->GetCurItem();
 			if( (Module == NULL) || (Module->m_StructType != TYPEMODULE) )
 			{
 				DisplayError(this, _("Module not selected") ); return;
@@ -62,7 +62,7 @@ wxString msg;
 			break;
  
 		case ROUTE_PAD:
-			Pad = (D_PAD*) GetScreen()->m_CurrentItem;
+			Pad = (D_PAD*) GetScreen()->GetCurItem();
 			if( (Pad == NULL)  || (Pad->m_StructType != TYPEPAD) )
 			{
 				DisplayError(this, _("Pad not selected") ); return;

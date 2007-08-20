@@ -100,7 +100,7 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
     if( module == NULL )
         return;
 
-    m_CurrentScreen->m_CurrentItem = module;
+    m_CurrentScreen->SetCurItem( module );
     m_Pcb->m_Status_Pcb &= ~CHEVELU_LOCAL_OK;
     module->m_Flags |= IS_MOVED;
     ModuleInitOrient = module->m_Orient;
@@ -143,7 +143,7 @@ void Exit_Module( WinEDA_DrawPanel* Panel, wxDC* DC )
     MODULE*              module;
     WinEDA_BasePcbFrame* pcbframe = (WinEDA_BasePcbFrame*) Panel->m_Parent;
 
-    module = (MODULE*) pcbframe->m_CurrentScreen->m_CurrentItem;
+    module = (MODULE*) pcbframe->m_CurrentScreen->GetCurItem();
     pcbframe->m_Pcb->m_Status_Pcb &= ~CHEVELU_LOCAL_OK;
 
     if( module )
@@ -199,7 +199,7 @@ void Exit_Module( WinEDA_DrawPanel* Panel, wxDC* DC )
     g_Drag_Pistes_On     = FALSE;
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
-    pcbframe->m_CurrentScreen->m_CurrentItem = NULL;
+    pcbframe->m_CurrentScreen->SetCurItem( NULL );
 }
 
 
@@ -238,7 +238,7 @@ void Montre_Position_Empreinte( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 /* redessin du contour de l'empreinte  lors des deplacements de la souris
  */
 {
-    MODULE* module = (MODULE*) panel->m_Parent->m_CurrentScreen->m_CurrentItem;
+    MODULE* module = (MODULE*) panel->m_Parent->m_CurrentScreen->GetCurItem();
 
     if(  module == NULL )
         return;
@@ -351,7 +351,7 @@ void WinEDA_BasePcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
         /* Effacement chevelu general si necessaire */
         if( DC && g_Show_Ratsnest )
             DrawGeneralRatsnest( DC );
-        
+
         /* Init des variables utilisees dans la routine Dessine_Drag_segment() */
         g_Offset_Module.x = 0;
         g_Offset_Module.y = 0;
@@ -384,7 +384,7 @@ void WinEDA_BasePcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
         pt_pad->m_Offset.y    = -pt_pad->m_Offset.y;
         pt_pad->m_DeltaSize.y = -pt_pad->m_DeltaSize.y;
         NEGATE_AND_NORMALIZE_ANGLE_POS( pt_pad->m_Orient );
-        
+
         /* change cote pour pastilles surfaciques */
         pt_pad->m_Masque_Layer = ChangeSideMaskLayer( pt_pad->m_Masque_Layer );
     }
@@ -399,15 +399,15 @@ void WinEDA_BasePcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
     NEGATE_AND_NORMALIZE_ANGLE_POS( pt_texte->m_Orient );
     pt_texte->m_Layer = Module->m_Layer;
     pt_texte->m_Layer = ChangeSideNumLayer( pt_texte->m_Layer );
-    
+
     if( Module->m_Layer == CUIVRE_N )
         pt_texte->m_Layer = SILKSCREEN_N_CU;
-    
+
     if( Module->m_Layer == CMP_N )
         pt_texte->m_Layer = SILKSCREEN_N_CMP;
-    
+
     if( (Module->m_Layer == SILKSCREEN_N_CU)
-     || (Module->m_Layer == ADHESIVE_N_CU) || (Module->m_Layer == CUIVRE_N) )
+       || (Module->m_Layer == ADHESIVE_N_CU) || (Module->m_Layer == CUIVRE_N) )
         pt_texte->m_Miroir = 0;
 
     /* Inversion miroir de la Valeur et mise en miroir : */
@@ -420,13 +420,13 @@ void WinEDA_BasePcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
     NEGATE_AND_NORMALIZE_ANGLE_POS( pt_texte->m_Orient );
     pt_texte->m_Layer = Module->m_Layer;
     pt_texte->m_Layer = ChangeSideNumLayer( pt_texte->m_Layer );
-    
+
     if( Module->m_Layer == CUIVRE_N )
         pt_texte->m_Layer = SILKSCREEN_N_CU;
-    
+
     if( Module->m_Layer == CMP_N )
         pt_texte->m_Layer = SILKSCREEN_N_CMP;
-    
+
     if( (Module->m_Layer == SILKSCREEN_N_CU)
        || (Module->m_Layer == ADHESIVE_N_CU) || (Module->m_Layer == CUIVRE_N) )
         pt_texte->m_Miroir = 0;
@@ -468,15 +468,15 @@ void WinEDA_BasePcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
 
             pt_texte->m_Layer = Module->m_Layer;
             pt_texte->m_Layer = ChangeSideNumLayer( pt_texte->m_Layer );
-            
+
             if( Module->m_Layer == CUIVRE_N )
                 pt_texte->m_Layer = SILKSCREEN_N_CU;
-            
+
             if( Module->m_Layer == CMP_N )
                 pt_texte->m_Layer = SILKSCREEN_N_CMP;
-            
+
             if( (Module->m_Layer == SILKSCREEN_N_CU)
-             || (Module->m_Layer == ADHESIVE_N_CU) || (Module->m_Layer == CUIVRE_N) )
+               || (Module->m_Layer == ADHESIVE_N_CU) || (Module->m_Layer == CUIVRE_N) )
                 pt_texte->m_Miroir = 0;
 
             break;

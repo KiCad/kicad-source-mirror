@@ -1,7 +1,7 @@
-		/*********************************************/
-		/* Edition des pistes: Routines d'effacement */
-		/* Effacement de segment, piste, net et zone */
-		/*********************************************/
+/*********************************************/
+/* Edition des pistes: Routines d'effacement */
+/* Effacement de segment, piste, net et zone */
+/*********************************************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -17,182 +17,192 @@
 
 
 /***************************************************************/
-TRACK * WinEDA_PcbFrame::Delete_Segment(wxDC * DC, TRACK *Track)
+TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
 /***************************************************************/
+
 /* Supprime 1 segment de piste.
-	2 Cas possibles:
-	Si On est en trace de nouvelle piste: Effacement du segment en
-		cours de trace
-	Sinon : Effacment du segment sous le curseur.
-*/
+ *  2 Cas possibles:
+ *  Si On est en trace de nouvelle piste: Effacement du segment en
+ *      cours de trace
+ *  Sinon : Effacment du segment sous le curseur.
+ */
 {
-int current_net_code;
-	if ( Track == NULL ) return NULL;
+    int current_net_code;
 
-	if(Track->m_Flags & IS_NEW)  // Trace en cours, on peut effacer le dernier segment
-	{
-		if(g_TrackSegmentCount > 0 )
-		{
-			int previous_layer = GetScreen()->m_Active_Layer;
-			// effacement de la piste en cours
-			ShowNewTrackWhenMovingCursor(DrawPanel, DC, FALSE);
+    if( Track == NULL )
+        return NULL;
 
-			// modification du trace
-			Track = g_CurrentTrackSegment;
-			g_CurrentTrackSegment = (TRACK*) g_CurrentTrackSegment->Pback;
-			delete Track;
-			g_TrackSegmentCount--;
+    if( Track->m_Flags & IS_NEW )  // Trace en cours, on peut effacer le dernier segment
+    {
+        if( g_TrackSegmentCount > 0 )
+        {
+            int previous_layer = GetScreen()->m_Active_Layer;
 
-			if ( g_TwoSegmentTrackBuild )
-			{	// g_CurrentTrackSegment->Pback must not be a via, or we want delete also the via
-				if ( (g_TrackSegmentCount >= 2) && 
-					 (g_CurrentTrackSegment->m_StructType != TYPEVIA) &&
-					 (g_CurrentTrackSegment->Pback->m_StructType == TYPEVIA) )
-				{
-					Track = g_CurrentTrackSegment;
-					g_CurrentTrackSegment = (TRACK*) g_CurrentTrackSegment->Pback;
-					delete Track;
-					g_TrackSegmentCount--;
-				}
-			}
-			
-			while( g_TrackSegmentCount && g_CurrentTrackSegment &&
-				(g_CurrentTrackSegment->m_StructType == TYPEVIA) )
-			{
-				Track = g_CurrentTrackSegment;
-				g_CurrentTrackSegment = (TRACK*) g_CurrentTrackSegment->Pback;
-				delete Track;
-				g_TrackSegmentCount--;
-				if (g_CurrentTrackSegment && (g_CurrentTrackSegment->m_StructType != TYPEVIA) )
-                	previous_layer = g_CurrentTrackSegment->m_Layer;
-			}
-			if( g_CurrentTrackSegment ) g_CurrentTrackSegment->Pnext = NULL;
+            // effacement de la piste en cours
+            ShowNewTrackWhenMovingCursor( DrawPanel, DC, FALSE );
 
-			// Rectification couche active qui a pu changer si une via
-			// a ete effacee
-			GetScreen()->m_Active_Layer = previous_layer;
+            // modification du trace
+            Track = g_CurrentTrackSegment;
+            g_CurrentTrackSegment = (TRACK*) g_CurrentTrackSegment->Pback;
+            delete Track;
+            g_TrackSegmentCount--;
 
-			Affiche_Status_Box();
-			if ( g_TwoSegmentTrackBuild )	// We must have 2 segments or more, or 0
-			{
-				if( ( g_TrackSegmentCount == 1 ) && 
-					(g_CurrentTrackSegment->m_StructType != TYPEVIA) )
-				{
-					delete g_CurrentTrackSegment;
-					g_TrackSegmentCount = 0;
-				}
-			}
-			if(g_TrackSegmentCount == 0 )
-			{
-				DrawPanel->ManageCurseur = NULL;
-				DrawPanel->ForceCloseManageCurseur = NULL;
-				if(g_HightLigt_Status) Hight_Light(DC);
-				g_CurrentTrackSegment = NULL;
-				g_FirstTrackSegment = NULL;
-				GetScreen()->m_CurrentItem = NULL;
-				return NULL;
-			}
-			else
-			{
-				if(DrawPanel->ManageCurseur)
-					DrawPanel->ManageCurseur(DrawPanel, DC, FALSE);
-				return g_CurrentTrackSegment;
-			}
-		}
-		return NULL;
-	} // Fin traitement si trace en cours
+            if( g_TwoSegmentTrackBuild )
+            {   // g_CurrentTrackSegment->Pback must not be a via, or we want delete also the via
+                if( (g_TrackSegmentCount >= 2)
+                   && (g_CurrentTrackSegment->m_StructType != TYPEVIA)
+                   && (g_CurrentTrackSegment->Pback->m_StructType == TYPEVIA) )
+                {
+                    Track = g_CurrentTrackSegment;
+                    g_CurrentTrackSegment = (TRACK*) g_CurrentTrackSegment->Pback;
+                    delete Track;
+                    g_TrackSegmentCount--;
+                }
+            }
+
+            while( g_TrackSegmentCount && g_CurrentTrackSegment
+                  && (g_CurrentTrackSegment->m_StructType == TYPEVIA) )
+            {
+                Track = g_CurrentTrackSegment;
+                g_CurrentTrackSegment = (TRACK*) g_CurrentTrackSegment->Pback;
+                delete Track;
+                g_TrackSegmentCount--;
+                if( g_CurrentTrackSegment && (g_CurrentTrackSegment->m_StructType != TYPEVIA) )
+                    previous_layer = g_CurrentTrackSegment->m_Layer;
+            }
+
+            if( g_CurrentTrackSegment )
+                g_CurrentTrackSegment->Pnext = NULL;
+
+            // Rectification couche active qui a pu changer si une via
+            // a ete effacee
+            GetScreen()->m_Active_Layer = previous_layer;
+
+            Affiche_Status_Box();
+            if( g_TwoSegmentTrackBuild )   // We must have 2 segments or more, or 0
+            {
+                if( ( g_TrackSegmentCount == 1 )
+                   && (g_CurrentTrackSegment->m_StructType != TYPEVIA) )
+                {
+                    delete g_CurrentTrackSegment;
+                    g_TrackSegmentCount = 0;
+                }
+            }
+            if( g_TrackSegmentCount == 0 )
+            {
+                DrawPanel->ManageCurseur = NULL;
+                DrawPanel->ForceCloseManageCurseur = NULL;
+                if( g_HightLigt_Status )
+                    Hight_Light( DC );
+                g_CurrentTrackSegment = NULL;
+                g_FirstTrackSegment   = NULL;
+                GetScreen()->SetCurItem( NULL );
+                return NULL;
+            }
+            else
+            {
+                if( DrawPanel->ManageCurseur )
+                    DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+                return g_CurrentTrackSegment;
+            }
+        }
+        return NULL;
+    } // Fin traitement si trace en cours
 
 
-	current_net_code = Track->m_NetCode;
-	Track->Draw(DrawPanel, DC, GR_XOR) ;
+    current_net_code = Track->m_NetCode;
+    Track->Draw( DrawPanel, DC, GR_XOR );
 
-	SaveItemEfface( Track, 1);
-	GetScreen()->SetModify();
+    SaveItemEfface( Track, 1 );
+    GetScreen()->SetModify();
 
-	test_1_net_connexion(DC, current_net_code);
-	Affiche_Infos_Status_Pcb(this);
-	return NULL;
+    test_1_net_connexion( DC, current_net_code );
+    Affiche_Infos_Status_Pcb( this );
+    return NULL;
 }
 
 
-
 /**********************************************************/
-void WinEDA_PcbFrame::Delete_Track(wxDC * DC, TRACK *Track)
+void WinEDA_PcbFrame::Delete_Track( wxDC* DC, TRACK* Track )
 /**********************************************************/
 {
-	if( Track != NULL )
-	{
-		int current_net_code = Track->m_NetCode;
-		Supprime_Une_Piste(DC, Track) ;
-		GetScreen()->SetModify();
-		test_1_net_connexion(DC, current_net_code);
-		Affiche_Infos_Status_Pcb(this);
-	}
+    if( Track != NULL )
+    {
+        int current_net_code = Track->m_NetCode;
+        Supprime_Une_Piste( DC, Track );
+        GetScreen()->SetModify();
+        test_1_net_connexion( DC, current_net_code );
+        Affiche_Infos_Status_Pcb( this );
+    }
 }
 
 
 /********************************************************/
-void WinEDA_PcbFrame::Delete_net(wxDC * DC, TRACK *Track)
+void WinEDA_PcbFrame::Delete_net( wxDC* DC, TRACK* Track )
 /********************************************************/
 {
-TRACK *pt_segm, * pt_start;
-int ii ;
-int net_code_delete;
+    TRACK* pt_segm, * pt_start;
+    int    ii;
+    int    net_code_delete;
 
-	pt_segm = Track;
+    pt_segm = Track;
 
-	if ( pt_segm == NULL ) return;
+    if( pt_segm == NULL )
+        return;
 
-	if ( IsOK(this, _("Delete NET ?") ) )
-	{
-		net_code_delete = pt_segm->m_NetCode;
-		/* Recherche du debut de la zone des pistes du net_code courant */
-		pt_start = m_Pcb->m_Track->GetStartNetCode(net_code_delete);
+    if( IsOK( this, _( "Delete NET ?" ) ) )
+    {
+        net_code_delete = pt_segm->m_NetCode;
+        /* Recherche du debut de la zone des pistes du net_code courant */
+        pt_start = m_Pcb->m_Track->GetStartNetCode( net_code_delete );
 
-		/* Decompte du nombre de segments de la sous-chaine */
-		pt_segm = pt_start;
-		for ( ii = 0 ; pt_segm != NULL; pt_segm = (TRACK*)pt_segm->Pnext )
-		{
-			if( pt_segm->m_NetCode != net_code_delete ) break;
-			ii++;
-		}
+        /* Decompte du nombre de segments de la sous-chaine */
+        pt_segm = pt_start;
+        for( ii = 0; pt_segm != NULL; pt_segm = (TRACK*) pt_segm->Pnext )
+        {
+            if( pt_segm->m_NetCode != net_code_delete )
+                break;
+            ii++;
+        }
 
-		Trace_Une_Piste(DrawPanel, DC, pt_start,ii,GR_XOR);
+        Trace_Une_Piste( DrawPanel, DC, pt_start, ii, GR_XOR );
 
-		SaveItemEfface( pt_start, ii);
-		GetScreen()->SetModify();
-		test_1_net_connexion(DC, net_code_delete);
-		Affiche_Infos_Status_Pcb(this);
-	}
+        SaveItemEfface( pt_start, ii );
+        GetScreen()->SetModify();
+        test_1_net_connexion( DC, net_code_delete );
+        Affiche_Infos_Status_Pcb( this );
+    }
 }
 
 
 /********************************************************************/
-void WinEDA_PcbFrame::Supprime_Une_Piste(wxDC * DC, TRACK* pt_segm)
+void WinEDA_PcbFrame::Supprime_Une_Piste( wxDC* DC, TRACK* pt_segm )
 /********************************************************************/
+
 /* Routine de suppression de 1 piste:
-	le segment pointe est supprime puis les segments adjacents
-	jusqu'a un pad ou un point de jonction de plus de 2 segments
-*/
+ *  le segment pointe est supprime puis les segments adjacents
+ *  jusqu'a un pad ou un point de jonction de plus de 2 segments
+ */
 {
-TRACK * pt_track, * Struct;
-int ii, nb_segm;
+    TRACK* pt_track, * Struct;
+    int    ii, nb_segm;
 
-	if (pt_segm == NULL ) return ;
+    if( pt_segm == NULL )
+        return;
 
-	pt_track = Marque_Une_Piste(this, DC, pt_segm,
-					 & nb_segm, GR_OR | GR_SURBRILL);
+    pt_track = Marque_Une_Piste( this, DC, pt_segm,
+                                 &nb_segm, GR_OR | GR_SURBRILL );
 
-	if(nb_segm) /* Il y a nb_segm segments de piste a effacer */
-	{
-		Trace_Une_Piste(DrawPanel, DC, pt_track,nb_segm,GR_XOR | GR_SURBRILL);
-		/* Effacement flag BUSY */
-		Struct = pt_track; ii = 0;
-		for ( ; ii < nb_segm; ii++, Struct = (TRACK*) Struct->Pnext )
-		{
-			Struct->SetState(BUSY,OFF);
-		}
-		SaveItemEfface( pt_track,  nb_segm);
-	}
+    if( nb_segm ) /* Il y a nb_segm segments de piste a effacer */
+    {
+        Trace_Une_Piste( DrawPanel, DC, pt_track, nb_segm, GR_XOR | GR_SURBRILL );
+        /* Effacement flag BUSY */
+        Struct = pt_track; ii = 0;
+        for( ; ii < nb_segm; ii++, Struct = (TRACK*) Struct->Pnext )
+        {
+            Struct->SetState( BUSY, OFF );
+        }
+
+        SaveItemEfface( pt_track, nb_segm );
+    }
 }
-

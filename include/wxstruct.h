@@ -11,6 +11,8 @@
 #define eda_global extern
 #endif
 
+#include <vector>
+
 #include <wx/socket.h>
 #include "wx/log.h"
 #include "wx/config.h"
@@ -352,7 +354,7 @@ public:
     virtual void    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
     virtual void    ReCreateMenuBar( void );
 
-    PCB_SCREEN* GetScreen( void ) { return (PCB_SCREEN*) m_CurrentScreen; }
+    PCB_SCREEN*     GetScreen( void ) { return (PCB_SCREEN*) m_CurrentScreen; }
     int             BestZoom( void ); // Retourne le meilleur zoom
 
     void            Show3D_Frame( wxCommandEvent& event );
@@ -502,6 +504,7 @@ public:
 /*****************************************************/
 class WinEDA_PcbFrame : public WinEDA_BasePcbFrame
 {
+    
 public:
     WinEDAChoiceBox* m_SelLayerBox;
     WinEDAChoiceBox* m_SelTrackWidthBox;
@@ -511,6 +514,13 @@ private:
     bool             m_SelTrackWidthBox_Changed;
     bool             m_SelViaSizeBox_Changed;
     wxMenu*          m_FilesMenu;
+
+#if defined(DEBUG)    
+    class  COLLECTOR;
+    COLLECTOR*       m_GeneralCollector;        ///< while arrow icon tool
+    COLLECTOR*       m_RatsModuleCollector;     ///< while find1rats icon tool
+#endif
+
 
 public:
     WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent, const wxString& title,

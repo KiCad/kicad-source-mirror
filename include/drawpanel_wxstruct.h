@@ -141,8 +141,8 @@ typedef enum {
 
 } CmdBlockType;
 
-class DrawBlockStruct : public EDA_BaseStruct
-    , public EDA_Rect
+
+class DrawBlockStruct : public EDA_BaseStruct, public EDA_Rect
 {
 public:
     BlockState      m_State;        /* Etat (enum BlockState) du block */
@@ -192,7 +192,6 @@ public:
     EDA_BaseStruct* m_UndoList;         /* Object list for the undo command (old data) */
     EDA_BaseStruct* m_RedoList;         /* Object list for the redo command (old data) */
     int             m_UndoRedoCountMax; /* undo/Redo command Max depth */
-    EDA_BaseStruct* m_CurrentItem;      /* Current selected object */
 
     /* block control */
     DrawBlockStruct BlockLocate;    /* Bock description for block commands */
@@ -213,9 +212,10 @@ public:
 
 private:
     /* indicateurs divers */
-    char m_FlagRefreshReq;      /* indique que l'ecran doit redessine */
-    char m_FlagModified;        // indique modif du PCB,utilise pour eviter une sortie sans sauvegarde
-    char m_FlagSave;            // indique sauvegarde auto faite
+    char            m_FlagRefreshReq;       /* indique que l'ecran doit redessine */
+    char            m_FlagModified;         // indique modif du PCB,utilise pour eviter une sortie sans sauvegarde
+    char            m_FlagSave;             // indique sauvegarde auto faite
+    EDA_BaseStruct* m_CurrentItem;          /* Current selected object */
 
     /* Valeurs du pas de grille et du zoom */
 public:
@@ -246,16 +246,28 @@ public:
     virtual EDA_BaseStruct* GetItemFromRedoList( void );
 
     /* Manipulation des flags */
-    void SetRefreshReq( void ) { m_FlagRefreshReq = 1; }
-    void ClrRefreshReq( void ) { m_FlagRefreshReq = 0; }
-    void SetModify( void ) { m_FlagModified = 1; m_FlagSave = 0; }
-    void ClrModify( void ) { m_FlagModified = 0; m_FlagSave = 1; }
-    void SetSave( void ) { m_FlagSave = 1; }
-    void ClrSave( void ) { m_FlagSave = 0; }
-    int IsModify( void ) { return m_FlagModified & 1;  }
-    int IsRefreshReq( void ) { return m_FlagRefreshReq & 1;  }
-    int IsSave( void ) { return m_FlagSave & 1;  }
+    void    SetRefreshReq( void ) { m_FlagRefreshReq = 1; }
+    void    ClrRefreshReq( void ) { m_FlagRefreshReq = 0; }
+    void    SetModify( void ) { m_FlagModified = 1; m_FlagSave = 0; }
+    void    ClrModify( void ) { m_FlagModified = 0; m_FlagSave = 1; }
+    void    SetSave( void ) { m_FlagSave = 1; }
+    void    ClrSave( void ) { m_FlagSave = 0; }
+    int     IsModify( void ) { return m_FlagModified & 1;  }
+    int     IsRefreshReq( void ) { return m_FlagRefreshReq & 1;  }
+    int     IsSave( void ) { return m_FlagSave & 1;  }
 
+    
+    /**
+     * Function SetCurItem
+     * sets the currently selected object, m_CurrentItem.  
+     * This intentionally not inlined so we can set breakpoints on the 
+     * activity easier in base_screen.cpp.
+     * @param current Any object derived from EDA_BaseStruct
+     */
+    void            SetCurItem( EDA_BaseStruct* current );
+    EDA_BaseStruct* GetCurItem();
+
+    
     /* fonctions relatives au zoom */
     int     GetZoom( void );                /* retourne le coeff de zoom */
     void    SetZoom( int coeff );           /* ajuste le coeff de zoom a coeff */
