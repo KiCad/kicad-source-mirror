@@ -288,7 +288,7 @@ void WinEDA_PcbFrame::StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC )
     old_pos = TextePcb->m_Pos;
     TextePcb->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
     TextePcb->m_Flags |= IS_MOVED;
-    Affiche_Infos_PCB_Texte( this, TextePcb );
+    TextePcb->Display_Infos( this );
     DrawPanel->ManageCurseur = Move_Texte_Pcb;
     DrawPanel->ForceCloseManageCurseur = Exit_Texte_Pcb;
     m_CurrentScreen->SetCurItem( TextePcb );
@@ -399,7 +399,7 @@ void WinEDA_PcbFrame::Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
 
     /* Redessin du Texte */
     TextePcb->Draw( DrawPanel, DC, wxPoint( 0, 0 ), drawmode );
-    Affiche_Infos_PCB_Texte( this, TextePcb );
+    TextePcb->Display_Infos( this );
 
     m_CurrentScreen->SetModify();
 }

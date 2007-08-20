@@ -147,7 +147,7 @@ void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
     }
 
     test_1_net_connexion( DC, pt_track->m_NetCode );
-    Affiche_Infos_Piste( this, pt_track );
+    pt_track->Display_Infos( this );
     GetScreen()->SetModify();
 }
 
@@ -255,7 +255,7 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
     }
 
     DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
-    Affiche_Infos_Piste( this, Via );
+    Via->Display_Infos( this );
 
     Affiche_Status_Box();
     SetToolbars();
@@ -276,7 +276,7 @@ void WinEDA_PcbFrame::Affiche_Status_Net( wxDC* DC )
 
     pt_segm = Locate_Pistes( m_Pcb->m_Track, masquelayer, CURSEUR_OFF_GRILLE );
     if( pt_segm == NULL )
-        Affiche_Infos_Status_Pcb( this );
+        m_Pcb->Display_Infos( this );
     else
         test_1_net_connexion( DC, pt_segm->m_NetCode );
 }

@@ -217,7 +217,7 @@ wxString msg;
 			}
 
 		Ncurrent++;
-		pt_equipot = GetEquipot(m_Pcb, current_net_code);
+		pt_equipot = m_Pcb->FindNet( current_net_code );
 		if( pt_equipot)
 			{
 			msg.Printf( wxT("[%8.8s]"),pt_equipot->m_Netname.GetData());

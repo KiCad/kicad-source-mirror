@@ -268,6 +268,35 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
+// see class_edge_mod.h     
+void EDGE_MODULE::Display_Infos( WinEDA_DrawFrame* frame )
+{
+    wxString bufcar;
+
+    MODULE* module = (MODULE*) m_Parent;
+    if( !module )
+        return;
+    
+    frame->MsgPanel->EraseMsgBox();
+
+    Affiche_1_Parametre( frame, 1, _( "Seg" ), wxEmptyString, DARKCYAN );
+
+    Affiche_1_Parametre( frame, 5, _( "Module" ), module->m_Reference->m_Text, DARKCYAN );
+    Affiche_1_Parametre( frame, 14, _( "Value" ), module->m_Value->m_Text, BLUE );
+    bufcar.Printf( wxT( "%8.8lX" ), module->m_TimeStamp );
+
+    Affiche_1_Parametre( frame, 24, _( "TimeStamp" ), bufcar, BROWN );
+
+    Affiche_1_Parametre( frame, 34, _( "Mod Layer" ), ReturnPcbLayerName( module->m_Layer ), RED );
+
+    Affiche_1_Parametre( frame, 44, _( "Seg Layer" ),
+                         ReturnPcbLayerName( module->m_Layer ), RED );
+
+    valeur_param( m_Width, bufcar );
+    Affiche_1_Parametre( frame, 54, _( "Width" ), bufcar, BLUE );
+}
+
+
 /*****************************************/
 int EDGE_MODULE::WriteDescr( FILE* File )
 /*****************************************/

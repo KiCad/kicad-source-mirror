@@ -89,8 +89,14 @@ public:
     void            ComputeRayon( void );                   // met a jour m_Rayon, rayon du cercle exinscrit
     const wxPoint   ReturnShapePos( void );                 // retourne la position
 
-    // de la forme (pastilles excentrees)
-    void            Display_Infos( WinEDA_BasePcbFrame* frame );
+    /**
+     * Function Display_Infos
+     * has knowledge about the frame and how and where to put status information
+     * about this object into the frame's message panel.
+     * Is virtual from EDA_BaseStruct.
+     * @param frame A WinEDA_BasePcbFrame in which to print status information.
+     */ 
+    void            Display_Infos( WinEDA_DrawFrame* frame );
     
     /**
      * Function HitTest

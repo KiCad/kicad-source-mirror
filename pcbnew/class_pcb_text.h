@@ -6,7 +6,7 @@
 
 #include "base_struct.h"
 
-class TEXTE_PCB: public EDA_BaseStruct, public EDA_TextStruct
+class TEXTE_PCB : public EDA_BaseStruct, public EDA_TextStruct
 {
 public:
 	TEXTE_PCB(EDA_BaseStruct * parent);
@@ -26,6 +26,17 @@ public:
 	int ReadTextePcbDescr(FILE * File, int * LineNum);
 	int WriteTextePcbDescr(FILE * File);
 
+    
+    /**
+     * Function Display_Infos
+     * has knowledge about the frame and how and where to put status information
+     * about this object into the frame's message panel.
+     * Is virtual from EDA_BaseStruct.
+     * @param frame A WinEDA_BasePcbFrame in which to print status information.
+     */ 
+    void    Display_Infos( WinEDA_DrawFrame* frame );
+    
+    
 #if defined(DEBUG)
     /**
      * Function GetClass

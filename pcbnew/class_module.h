@@ -130,7 +130,12 @@ public:
     void    DrawAncre( WinEDA_DrawPanel* panel, wxDC* DC,
                        const wxPoint& offset, int dim_ancre, int draw_mode );
 
-    /* miscellaneous */
+    /**
+     * Function Display_Infos
+     * has knowledge about the frame and how and where to put status information
+     * about this object into the frame's message panel.
+     * @param frame A WinEDA_BasePcbFrame in which to print status information.
+     */ 
     void    Display_Infos( WinEDA_BasePcbFrame* frame );
 
     

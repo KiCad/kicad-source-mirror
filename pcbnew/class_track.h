@@ -76,6 +76,17 @@ public:
     int     IsPointOnEnds( const wxPoint& point, int min_dist = 0 );
     bool    IsNull( void ); // return TRUE if segment lenght = 0
 
+    
+    /**
+     * Function Display_Infos
+     * has knowledge about the frame and how and where to put status information
+     * about this object into the frame's message panel.
+     * Is virtual from EDA_BaseStruct.
+     * @param frame A WinEDA_BasePcbFrame in which to print status information.
+     */ 
+    void    Display_Infos( WinEDA_DrawFrame* frame );
+
+    
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.

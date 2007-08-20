@@ -336,7 +336,7 @@ int WinEDA_PcbFrame::Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone )
         {
             wxString msg;
             jj = 1;
-            EQUIPOT* equipot = GetEquipot( m_Pcb, pt_segm->m_NetCode );
+            EQUIPOT* equipot = m_Pcb->FindNet( pt_segm->m_NetCode );
             if( equipot )
                 msg = equipot->m_Netname + wxT( "        " );
             else
@@ -409,7 +409,7 @@ int WinEDA_PcbFrame::Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone )
             {
                 jj = 1;
                 wxString msg;
-                EQUIPOT* equipot = GetEquipot( m_Pcb, pt_segm->m_NetCode );
+                EQUIPOT* equipot = m_Pcb->FindNet( pt_segm->m_NetCode );
                 if( equipot )
                     msg = equipot->m_Netname + wxT( "        " );
                 else
@@ -1296,7 +1296,7 @@ static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb,
     TRACK*   pt_segm;
     wxString msg;
     wxString tracktype, netname1, netname2;
-    EQUIPOT* equipot = GetEquipot( Pcb, pt_ref->m_NetCode );
+    EQUIPOT* equipot = Pcb->FindNet( pt_ref->m_NetCode );
 
     if( equipot )
         netname1 = equipot->m_Netname;
@@ -1314,7 +1314,7 @@ static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb,
     if( ( (EDA_BaseStruct*) pt_item )->m_StructType == TYPEPAD )
     {
         D_PAD* pad = (D_PAD*) pt_item;
-        equipot = GetEquipot( Pcb, pad->m_NetCode );
+        equipot = Pcb->FindNet( pad->m_NetCode );
         if( equipot )
             netname2 = equipot->m_Netname;
         erc_pos = pad->m_Pos;
@@ -1330,7 +1330,7 @@ static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb,
     else    /* erreur sur segment de piste */
     {
         pt_segm = (TRACK*) pt_item;
-        equipot = GetEquipot( Pcb, pt_segm->m_NetCode );
+        equipot = Pcb->FindNet( pt_segm->m_NetCode );
         if( equipot )
             netname2 = equipot->m_Netname;
         erc_pos = pt_segm->m_Start;
@@ -1393,13 +1393,13 @@ static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb,
     wxString pad_name2    = pad2->ReturnStringPadName();
     wxString module_name2 = ( (MODULE*) (pad2->m_Parent) )->m_Reference->m_Text;
     wxString netname1, netname2;
-    EQUIPOT* equipot = GetEquipot( Pcb, pad1->m_NetCode );
+    EQUIPOT* equipot = Pcb->FindNet( pad1->m_NetCode );
 
     if( equipot )
         netname1 = equipot->m_Netname;
     else
         netname1 = wxT( "<noname>" );
-    equipot = GetEquipot( Pcb, pad2->m_NetCode );
+    equipot = Pcb->FindNet( pad2->m_NetCode );
     if( equipot )
         netname2 = equipot->m_Netname;
     else

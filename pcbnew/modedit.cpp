@@ -31,7 +31,7 @@ EDA_BaseStruct* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( void )
     DrawStruct = Locate_Edge_Module( Module, CURSEUR_OFF_GRILLE );
     if( DrawStruct )
     {
-        Affiche_Infos_Segment_Module( this, Module, (EDGE_MODULE*) DrawStruct );
+        DrawStruct->Display_Infos( this );
     }
     else
         DrawStruct = Locate( CURSEUR_OFF_GRILLE, -1 );

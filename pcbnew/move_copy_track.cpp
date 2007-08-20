@@ -488,7 +488,7 @@ void WinEDA_PcbFrame::Place_Dupl_Route( Track* Track, wxDC* DC )
         }
     }
     NewTrack = NULL;
-    Affiche_Infos_Status_Pcb( Cmd );
+    m_Pcb->Display_Infos( Cmd );
     if( Etat_Surbrillance )
         Hight_Light( DC );
 }

@@ -34,7 +34,7 @@ void RemoteCommand( const char* cmdline )
     char*            idcmd;
     char*            text;
     WinEDA_PcbFrame* frame = EDA_Appl->m_PcbFrame;
-    MODULE*          module;
+    MODULE*          module = 0;
 
     strncpy( line, cmdline, sizeof(line) - 1 );
     msg = CONV_FROM_UTF8( line );

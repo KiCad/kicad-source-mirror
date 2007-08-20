@@ -643,6 +643,7 @@ void CreatePopUpMenuForFootprints( MODULE* Module, wxMenu* menu, bool full_menu 
     msg << wxT( " " ) << Module->m_Reference->m_Text;
 
     sub_menu_footprint = new wxMenu;
+    
     ADD_MENUITEM_WITH_SUBMENU( menu, sub_menu_footprint, -1, msg, module_xpm )
     if( full_menu )
     {

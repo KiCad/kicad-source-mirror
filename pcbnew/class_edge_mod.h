@@ -42,6 +42,17 @@ public:
                   int draw_mode );
     void    Draw3D( Pcb3D_GLCanvas* glcanvas );
 
+
+    /**
+     * Function Display_Infos
+     * has knowledge about the frame and how and where to put status information
+     * about this object into the frame's message panel.
+     * Is virtual from EDA_BaseStruct.
+     * @param frame A WinEDA_BasePcbFrame in which to print status information.
+     */ 
+    void            Display_Infos( WinEDA_DrawFrame* frame );
+    
+    
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.

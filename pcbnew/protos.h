@@ -18,14 +18,6 @@ LISTE_PAD* CreateSortedPadListByXCoord(BOARD * pcb);
 /**************/
 bool Read_Config(const wxString & project_name);
 
-/*********************/
-/* CLASS_EQUIPOT.CPP */
-/*********************/
-
-EQUIPOT * GetEquipot(BOARD * pcb, int netcode);
-		/* retourne un pointeur sur la structure EQUIPOT de numero netcode */
-
-
 /***************/
 /* TRACEPCB.CPP */
 /***************/
@@ -325,23 +317,6 @@ void Affiche_erreur(int nb_err) ;
 /*****************************************************************/
 /* AFFICHE.CPP: (Fonctions d'affichage de messages, parametres... */
 /*****************************************************************/
-void Affiche_Infos_Segment_Module(WinEDA_BasePcbFrame * frame, MODULE* pt_module,EDGE_MODULE* pt_edge);
-	/* Affiche en bas d'ecran les caract du Segment contour d'un module */
-
-void Affiche_Infos_Piste(WinEDA_BasePcbFrame * frame, TRACK* pt_piste) ;
-	/* Affiche les caract principales d'un segment de piste en bas d'ecran */
-
-void Affiche_Infos_E_Texte(WinEDA_BasePcbFrame * frame, MODULE * adr_empreinte,TEXTE_MODULE *pt_texte) ;
-	/* Affiche en bas d'ecran les caract du texte sur empreinte */
-void Affiche_Infos_PCB_Texte(WinEDA_BasePcbFrame * frame, TEXTE_PCB* pt_texte);
-	/* Affiche en bas d'ecran les caract du texte type PCB */
-
-void Affiche_Infos_Status_Pcb(WinEDA_BasePcbFrame * frame); /* Affiche l'etat du PCB:
-									 nb de pads, nets , connexions.. */
-
-void Affiche_Infos_DrawSegment(WinEDA_BasePcbFrame * frame, DRAWSEGMENT * DrawSegment);
-					/* Affiche les caract principales d'un segment type
-					drawing PCB en bas d'ecran */
 void Affiche_Infos_Equipot(int netcode, WinEDA_BasePcbFrame * frame);
 
 	/************/

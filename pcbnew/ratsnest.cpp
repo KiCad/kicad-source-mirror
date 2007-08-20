@@ -61,7 +61,8 @@ wxString msg;
 	// Reaffichage des chevelus actifs
 	if( g_Show_Ratsnest ) DrawGeneralRatsnest( DC, 0 );
 
-	if ( display_status_pcb ) Affiche_Infos_Status_Pcb(this);
+	if ( display_status_pcb ) 
+        m_Pcb->Display_Infos( this );
 }
 
 
@@ -376,7 +377,7 @@ EQUIPOT * equipot;
 		m_Pcb->m_NbLinks += nbpads;
 
 		/* fin de liste trouvee: calcul du chevelu du net "net_code" */
-		equipot = GetEquipot(m_Pcb, current_net_code);
+		equipot = m_Pcb->FindNet( current_net_code);
 		if(equipot == NULL)
 			DisplayError(this, wxT("Gen ratsnest err: NULL equipot") );
 		else
@@ -617,7 +618,7 @@ EQUIPOT * equipot;
 
 	for ( net_code = 1; ; net_code++)
 		{
-		equipot = GetEquipot(m_Pcb, net_code);
+		equipot = m_Pcb->FindNet( net_code );
 		if(equipot == NULL ) break;
 		if( ref_netcode && (net_code != ref_netcode) ) continue;
 

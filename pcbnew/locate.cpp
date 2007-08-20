@@ -92,35 +92,36 @@ EDA_BaseStruct* WinEDA_BasePcbFrame::Locate( int typeloc, int LayerSearch )
  * return a pointer to this item ( or NULL )
  */
 {
-    TEXTE_PCB*      pt_texte_pcb;
-    TRACK*          Track, * TrackLocate;
-    DRAWSEGMENT*    DrawSegm;
-    MODULE*         module;
-    D_PAD*          pt_pad;
     int             masque_layer;
     EDA_BaseStruct* item;
 
-    pt_texte_pcb = Locate_Texte_Pcb( m_Pcb->m_Drawings, LayerSearch, typeloc );
-    if( pt_texte_pcb ) // a PCB text is found
+    item = Locate_Texte_Pcb( m_Pcb->m_Drawings, LayerSearch, typeloc );
+    if( item ) 
     {
-        Affiche_Infos_PCB_Texte( this, pt_texte_pcb );
-        return pt_texte_pcb;
+        item->Display_Infos( this );
+        return item;
     }
 
-    DrawSegm = Locate_Segment_Pcb( m_Pcb, LayerSearch, typeloc );
-    if( DrawSegm != NULL )
+    item = Locate_Segment_Pcb( m_Pcb, LayerSearch, typeloc );
+    if( item )
     {
-        Affiche_Infos_DrawSegment( this, DrawSegm );
-        return DrawSegm;
+        item->Display_Infos( this );
+        return item;
     }
 
     item = Locate_Cotation( m_Pcb, LayerSearch, typeloc );
-    if( item != NULL )
+    if( item )
+    {
+        item->Display_Infos( this );
         return item;
+    }
 
     item = Locate_MirePcb( m_Pcb->m_Drawings, LayerSearch, typeloc );
     if( item != NULL )
+    {
+        item->Display_Infos( this );    // MIRES::Display_Infos() not implemented yet.
         return item;
+    }
 
     /* Search for tracks and vias, with via priority */
     if( LayerSearch == -1 )
@@ -128,10 +129,11 @@ EDA_BaseStruct* WinEDA_BasePcbFrame::Locate( int typeloc, int LayerSearch )
     else
         masque_layer = g_TabOneLayerMask[LayerSearch];
 
+    TRACK* Track;
     Track = Locate_Pistes( m_Pcb->m_Track, masque_layer, typeloc );
     if( Track != NULL )
     {
-        TrackLocate = Track;   /* a track or a via is found */
+        TRACK* TrackLocate = Track;   /* a track or a via is found */
         
         /* Search for a via */
         while( ( TrackLocate = Locate_Pistes( TrackLocate,
@@ -144,16 +146,18 @@ EDA_BaseStruct* WinEDA_BasePcbFrame::Locate( int typeloc, int LayerSearch )
             TrackLocate = (TRACK*) TrackLocate->Pnext;
         }
 
-        Affiche_Infos_Piste( this, Track );
+        Track->Display_Infos( this );
         return Track;
     }
 
-    /* Search for Pads */
-    if( ( pt_pad = Locate_Any_Pad( m_Pcb, typeloc ) ) != NULL )
+    item = Locate_Any_Pad( m_Pcb, typeloc );
+    if( item )
     {
-        pt_pad->Display_Infos( this ); return pt_pad;
+        item->Display_Infos( this ); 
+        return item;
     }
 
+    
     /* Search for a footprint text */
 
     // First search: locate texts for footprints on copper or component layer
@@ -162,48 +166,46 @@ EDA_BaseStruct* WinEDA_BasePcbFrame::Locate( int typeloc, int LayerSearch )
     // on the same layer
     if( LayerSearch == LAYER_CUIVRE_N   ||   LayerSearch == CMP_N )
     {
-        for( module = m_Pcb->m_Modules; module != NULL; module = (MODULE*) module->Pnext )
+        MODULE* module = m_Pcb->m_Modules;
+        for(   ;   module != NULL;  module = (MODULE*) module->Pnext )
         {
-            TEXTE_MODULE* pt_texte;
-
             if( module->m_Layer != LayerSearch )
                 continue;
 
-            pt_texte = LocateTexteModule( m_Pcb, &module, typeloc | VISIBLE_ONLY );
-            if( pt_texte != NULL )
+            item = LocateTexteModule( m_Pcb, &module, typeloc | VISIBLE_ONLY );
+            if( item )
             {
-                Affiche_Infos_E_Texte( this, module, pt_texte );
-                return pt_texte;
+                item->Display_Infos( this );
+                return item;
             }
         }
     }
 
     // Now Search footprint texts on all layers
+    MODULE* module;
     module = NULL;
+    item = LocateTexteModule( m_Pcb, &module, typeloc | VISIBLE_ONLY );
+    if( item )
     {
-        TEXTE_MODULE* pt_texte;
-        pt_texte = LocateTexteModule( m_Pcb, &module, typeloc | VISIBLE_ONLY );
-        if( pt_texte != NULL )
-        {
-            Affiche_Infos_E_Texte( this, module, pt_texte );
-            return pt_texte;
-        }
+        item->Display_Infos( this );
+        return item;
     }
 
     /* Search for a footprint */
-    module = Locate_Prefered_Module( m_Pcb, typeloc | VISIBLE_ONLY );
-    if( module != NULL )
+    item = Locate_Prefered_Module( m_Pcb, typeloc | VISIBLE_ONLY );
+    if( item )
     {
-        module->Display_Infos( this );
-        return module;
+        item->Display_Infos( this );
+        return item;
     }
 
     /* Search for zones */
-    if( ( TrackLocate = Locate_Zone( (TRACK*) m_Pcb->m_Zone,
-                                    GetScreen()->m_Active_Layer, typeloc ) ) != NULL )
+    item = Locate_Zone( (TRACK*) m_Pcb->m_Zone,
+                                    GetScreen()->m_Active_Layer, typeloc );
+    if( item )
     {
-        Affiche_Infos_Piste( this, TrackLocate );
-        return TrackLocate;
+        item->Display_Infos( this );
+        return item;
     }
 
     MsgPanel->EraseMsgBox();

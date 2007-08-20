@@ -153,7 +153,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
             g_FirstTrackSegment->end = g_CurrentTrackSegment;
             g_FirstTrackSegment->SetState( BEGIN_ONPAD | END_ONPAD, OFF );
         }
-        Affiche_Infos_Piste( this, g_CurrentTrackSegment );
+        g_CurrentTrackSegment->Display_Infos( this );
         GetScreen()->SetCurItem( g_CurrentTrackSegment );
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
         if( Drc_On && (Drc( this, DC, g_CurrentTrackSegment, m_Pcb->m_Track, 1 ) == BAD_DRC) )
@@ -216,7 +216,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
             /* Show the new position */
             ShowNewTrackWhenMovingCursor( DrawPanel, DC, FALSE );
         }
-        Affiche_Infos_Piste( this, g_CurrentTrackSegment );
+        g_CurrentTrackSegment->Display_Infos( this );
     }
 
     GetScreen()->SetCurItem( g_CurrentTrackSegment );
@@ -456,7 +456,7 @@ void WinEDA_PcbFrame::End_Route( TRACK* track, wxDC* DC )
         test_1_net_connexion( DC, g_FirstTrackSegment->m_NetCode );
 
         GetScreen()->SetModify();
-        Affiche_Infos_Status_Pcb( this );
+        m_Pcb->Display_Infos( this );
     }
     /* Finish the work, clear used variables */
     g_FirstTrackSegment = NULL;

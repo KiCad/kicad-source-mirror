@@ -235,6 +235,16 @@ public:
 
     
     /**
+     * Function Display_Infos
+     * has knowledge about the frame and how and where to put status information
+     * about this object into the frame's message panel.
+     * Is virtual from EDA_BaseStruct.
+     * @param frame A WinEDA_BasePcbFrame in which to print status information.
+     */ 
+    void            Display_Infos( WinEDA_DrawFrame* frame );
+    
+    
+    /**
      * Function Visit
      * may be re-implemented for each derived class in order to handle
      * all the types given by its member data.  Implementations should call
@@ -261,6 +271,15 @@ public:
      * @return EDA_BaseStruct* - if a direct hit, else NULL.
      */
     EDA_BaseStruct* FindPadOrModule( const wxPoint& refPos, int layer );
+    
+
+    /**
+     * Function FindNet
+     * searches for a net with the given netcode.
+     * @param anetcode The netcode to search for.
+     * @return EQUIPOT* - the net or NULL if not found.
+     */
+    EQUIPOT* FindNet( int anetcode );
     
     
 #if defined(DEBUG)
@@ -340,6 +359,17 @@ public:
 
     void    Copy( DRAWSEGMENT* source );
 
+
+    /**
+     * Function Display_Infos
+     * has knowledge about the frame and how and where to put status information
+     * about this object into the frame's message panel.
+     * Is virtual from EDA_BaseStruct.
+     * @param frame A WinEDA_BasePcbFrame in which to print status information.
+     */ 
+    void    Display_Infos( WinEDA_DrawFrame* frame );
+    
+    
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.

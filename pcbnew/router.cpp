@@ -179,7 +179,7 @@ int no_conn = Pcb->m_NbPads+1;	/* valeur incrementee pour indiquer
 			if ( nb_pads < 2 )
 			{
 				wxString Line;
-				EQUIPOT * equipot = GetEquipot(Pcb, netcode);
+				EQUIPOT * equipot = Pcb->FindNet( netcode );
 				Line.Printf( wxT("Warning: %d pad, net %s"),
             					nb_pads, equipot->m_Netname.GetData());
 				DisplayError(NULL, Line,20);

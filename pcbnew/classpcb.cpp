@@ -166,6 +166,43 @@ bool DRAWSEGMENT::ReadDrawSegmentDescr( FILE* File, int* LineNum )
 }
 
 
+// see pcbstruct.h
+void DRAWSEGMENT::Display_Infos( WinEDA_DrawFrame* frame )
+{
+    int      itype;
+    wxString msg;
+
+    frame->MsgPanel->EraseMsgBox();
+
+    itype = m_Type & 0x0F;
+
+    msg = wxT( "DRAWING" );
+
+    Affiche_1_Parametre( frame, 1, _( "Type" ), msg, DARKCYAN );
+
+    Affiche_1_Parametre( frame, 16, _( "Shape" ), wxEmptyString, RED );
+    
+    if( m_Shape == S_CIRCLE )
+        Affiche_1_Parametre( frame, -1, wxEmptyString, _( "Circle" ), RED );
+    
+    else if( m_Shape == S_ARC )
+    {
+        Affiche_1_Parametre( frame, -1, wxEmptyString, _( "  Arc  " ), RED );
+        msg.Printf( wxT( "%d" ), m_Angle );
+        Affiche_1_Parametre( frame, 32, wxT( " l.arc " ), msg, RED );
+    }
+    else
+        Affiche_1_Parametre( frame, -1, wxEmptyString, _( "Segment" ), RED );
+
+    Affiche_1_Parametre( frame, 48, _( "Layer" ), 
+             ReturnPcbLayerName( m_Layer ), BROWN );
+
+    /* Affiche Epaisseur */
+    valeur_param( (unsigned) m_Width, msg );
+    Affiche_1_Parametre( frame, 60, _( "Width" ), msg, DARKCYAN );
+}
+
+
 /**
  * Function HitTest
  * tests if the given wxPoint is within the bounds of this object.

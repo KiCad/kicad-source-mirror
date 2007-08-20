@@ -295,6 +295,70 @@ int TEXTE_MODULE::GetDrawRotation( void )
     return rotation;
 }
 
+
+// see class_text_mod.h 
+void TEXTE_MODULE::Display_Infos( WinEDA_DrawFrame* frame )  
+{
+    wxString msg, Line;
+    int      ii;
+    
+    MODULE* module = (MODULE*) m_Parent;
+    
+    if( !module )
+        return;
+
+    static const wxString text_type_msg[3] = { 
+        _( "Ref." ), _( "Value" ), _( "Text" ) };
+    
+    frame->MsgPanel->EraseMsgBox();
+
+    Line = module->m_Reference->m_Text;
+    Affiche_1_Parametre( frame, 1, _( "Module" ), Line, DARKCYAN );
+
+    Line = m_Text;
+    Affiche_1_Parametre( frame, 10, _( "Text" ), Line, YELLOW );
+
+    ii = m_Type; 
+    if( ii > 2 )
+        ii = 2;
+    
+    Affiche_1_Parametre( frame, 20, _( "Type" ), text_type_msg[ii], DARKGREEN );
+
+    Affiche_1_Parametre( frame, 25, _( "Display" ), wxEmptyString, DARKGREEN );
+    if( m_NoShow )
+        Affiche_1_Parametre( frame, -1, wxEmptyString, _( "No" ), DARKGREEN );
+    else
+        Affiche_1_Parametre( frame, -1, wxEmptyString, _( "Yes" ), DARKGREEN );
+
+    ii = m_Layer;
+    if( ii <= 28 )
+        Affiche_1_Parametre( frame, 28, _( "Layer" ), ReturnPcbLayerName( ii ), DARKGREEN );
+    else
+    {
+        msg.Printf( wxT( "%d" ), ii );
+        Affiche_1_Parametre( frame, 28, _( "Layer" ), msg, DARKGREEN );
+    }
+
+    msg = wxT( " Yes" );
+    if( m_Miroir & 1 )
+        msg = wxT( " No" );
+    
+    Affiche_1_Parametre( frame, 36, _( "Mirror" ), msg, DARKGREEN );
+
+    msg.Printf( wxT( "%.1f" ), (float) m_Orient / 10 );
+    Affiche_1_Parametre( frame, 42, _( "Orient" ), msg, DARKGREEN );
+
+    valeur_param( m_Width, msg );
+    Affiche_1_Parametre( frame, 48, _( "Width" ), msg, DARKGREEN );
+
+    valeur_param( m_Size.x, msg );
+    Affiche_1_Parametre( frame, 56, _( "H Size" ), msg, RED );
+
+    valeur_param( m_Size.y, msg );
+    Affiche_1_Parametre( frame, 64, _( "V Size" ), msg, RED );
+}
+
+
 #if defined(DEBUG)
 /**
  * Function Show

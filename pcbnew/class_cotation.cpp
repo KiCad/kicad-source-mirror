@@ -8,6 +8,8 @@
 #include "common.h"
 #include "pcbnew.h"
 #include "trigo.h"
+#include "wxstruct.h"
+
 
 COTATION::COTATION( EDA_BaseStruct* StructFather ) :
     EDA_BaseStruct( StructFather, TYPECOTATION )
@@ -359,6 +361,14 @@ void COTATION::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                  width, gcolor );
         break;
     }
+}
+
+
+// see class_cotation.h
+void COTATION::Display_Infos( WinEDA_DrawFrame* frame )
+{
+    // for now, display only the text within the COTATION using class TEXTE_PCB.
+    m_Text->Display_Infos( frame );
 }
 
 

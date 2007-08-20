@@ -548,7 +548,7 @@ void WinEDA_PcbFrame::CaptureNetName( wxDC* DC )
     }
     else
     {
-        Affiche_Infos_Piste( this, adrpiste );
+        adrpiste->Display_Infos( this );
         netcode = adrpiste->m_NetCode;
     }
 
@@ -901,7 +901,7 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
     /* Affichage du NetName */
     if( g_HightLigth_NetCode > 0 )
     {
-        pt_equipot = GetEquipot( m_Pcb, g_HightLigth_NetCode );
+        pt_equipot = m_Pcb->FindNet( g_HightLigth_NetCode );
         if( pt_equipot == NULL )
         {
             if( g_HightLigth_NetCode > 0 )

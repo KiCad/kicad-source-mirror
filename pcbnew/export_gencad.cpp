@@ -566,7 +566,7 @@ int nbitems, ii;
 		if ( old_netcode != track->m_NetCode )
 		{
 			old_netcode = track->m_NetCode;
-			EQUIPOT * equipot = GetEquipot( pcb, track->m_NetCode);
+			EQUIPOT * equipot = pcb->FindNet( track->m_NetCode);
 			wxString netname; 
 			if (equipot && (equipot->m_Netname != wxEmptyString) )
 				netname = equipot->m_Netname;

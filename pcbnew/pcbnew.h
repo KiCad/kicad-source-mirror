@@ -36,17 +36,6 @@
 #define ZOOM_CENTER -4
 #define ZOOM_REDRAW -5
 
-/* Bits Flags utilis� en �ition (membre .m_Flags de EDA_BaseStruct)*/
-#define IS_LINKED  1
-#define IN_EDIT    2
-#define IS_MOVED   4
-#define IS_NEW     8
-#define IS_RESIZED 0x10
-#define IS_DRAGGED 0x20
-#define STARTPOINT 0x100
-#define ENDPOINT   0x200
-#define SELECTED   0x400
-
 /* Definition des cas ou l'on force l'affichage en SKETCH (membre .flags) */
 #define FORCE_SKETCH (DRAG | EDIT )
 

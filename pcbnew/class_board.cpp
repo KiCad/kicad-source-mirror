@@ -256,6 +256,54 @@ bool BOARD::ComputeBoundaryBox( void )
 }
 
 
+// virtual, see pcbstruct.h
+void BOARD::Display_Infos( WinEDA_DrawFrame* frame )
+{
+/* Affiche l'etat du PCB : nb de pads, nets , connexions.. */
+#define POS_AFF_NBPADS      1
+#define POS_AFF_NBVIAS      8
+#define POS_AFF_NBNODES     16
+#define POS_AFF_NBLINKS     24
+#define POS_AFF_NBNETS      32
+#define POS_AFF_NBCONNECT   40
+#define POS_AFF_NBNOCONNECT 48
+
+    int             nb_vias = 0, ii;
+    EDA_BaseStruct* Struct;
+    wxString        txt;
+
+    frame->MsgPanel->EraseMsgBox();
+
+    txt.Printf( wxT( "%d" ), m_NbPads );
+    Affiche_1_Parametre( frame, POS_AFF_NBPADS, _( "Pads" ), txt, DARKGREEN );
+
+    for( ii = 0, Struct = m_Track; Struct != NULL; Struct = Struct->Pnext )
+    {
+        ii++;
+        if( Struct->m_StructType == TYPEVIA )
+            nb_vias++;
+    }
+
+    txt.Printf( wxT( "%d" ), nb_vias );
+    Affiche_1_Parametre( frame, POS_AFF_NBVIAS, _( "Vias" ), txt, DARKGREEN );
+
+    txt.Printf( wxT( "%d" ), GetNumNodes() );
+    Affiche_1_Parametre( frame, POS_AFF_NBNODES, _( "Nodes" ), txt, DARKCYAN );
+
+    txt.Printf( wxT( "%d" ), m_NbLinks );
+    Affiche_1_Parametre( frame, POS_AFF_NBLINKS, _( "Links" ), txt, DARKGREEN );
+
+    txt.Printf( wxT( "%d" ), m_NbNets );
+    Affiche_1_Parametre( frame, POS_AFF_NBNETS, _( "Nets" ), txt, RED );
+
+    txt.Printf( wxT( "%d" ), m_NbLinks - GetNumNoconnect() );
+    Affiche_1_Parametre( frame, POS_AFF_NBCONNECT, _( "Connect" ), txt, DARKGREEN );
+
+    txt.Printf( wxT( "%d" ), GetNumNoconnect() );
+    Affiche_1_Parametre( frame, POS_AFF_NBNOCONNECT, _( "NoConn" ), txt, BLUE );
+}
+
+
 // virtual, see pcbstruct.h     
 SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData, 
     const KICAD_T scanTypes[] )
@@ -395,6 +443,28 @@ EDA_BaseStruct* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
     IterateForward( m_Modules, &inspector, &refPos, scanTypes );
     
     return inspector.found;
+}
+
+
+/**
+ * Function FindNet
+ * searches for a net with the given netcode.
+ * @param anetcode The netcode to search for.
+ * @return EQUIPOT* - the net or NULL if not found.
+ */
+EQUIPOT* BOARD::FindNet( int anetcode )
+{
+    if( anetcode <= 0 )
+        return NULL;
+
+    EQUIPOT* net = (EQUIPOT*) m_Equipots;
+    while( net )
+    {
+        if( net->m_NetCode == anetcode )
+            break;
+        net = (EQUIPOT*) net->Pnext;
+    }
+    return net;
 }
 
 

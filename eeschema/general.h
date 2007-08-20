@@ -24,18 +24,6 @@
 
 #define HIGHLIGHT_COLOR WHITE
 
-/* Flags used in editing commnands (EDA_BaseStruct, .Flags )*/
-#define IS_CHANGED 1
-#define IS_LINKED 2
-#define IS_MOVED 4
-#define IS_NEW 8
-#define IS_DELETED 0x10
-#define IS_RESIZED 0x20
-#define IN_EDIT 0x40
-#define IS_WIRE_IMAGE 0x100
-#define STARTPOINT 0x200
-#define ENDPOINT 0x400
-#define SELECTED 0x800
 
 /* Used for EDA_BaseStruct, .m_Select member */
 #define IS_SELECTED 1

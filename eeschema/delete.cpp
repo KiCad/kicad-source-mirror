@@ -13,10 +13,6 @@
 
 #include "protos.h"
 
-#define SELECTEDNODE 1	/* flag indiquant que la structure a deja selectionnee */
-#define STRUCT_DELETED 2	/* Bit flag de Status pour structures effacee */
-#define CANDIDATE 4		/* flag indiquant que la structure est connectee */
-#define SKIP_STRUCT 8	/* flag indiquant que la structure ne doit pas etre traitee */
 
 /********************************************************************************/
 static int CountConnectedItems(WinEDA_SchematicFrame * frame,

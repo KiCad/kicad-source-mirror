@@ -13,6 +13,7 @@
 #endif
 
 #include "trigo.h"
+#include "protos.h"
 
 
 /**************************************/
@@ -628,6 +629,115 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
                  m_End.x, m_End.y,
                  m_Width + (g_DesignSettings.m_TrackClearence * 2), color );
     }
+}
+
+
+// see class_track.h
+void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
+{
+    wxString msg;
+    int      text_pos;
+
+    frame->MsgPanel->EraseMsgBox();
+
+    switch( m_StructType )
+    {
+    case TYPEVIA:
+        msg = g_ViaType_Name[m_Shape & 255];
+        break;
+
+    case TYPETRACK:
+        msg = _( "Track" );
+        break;
+
+    case TYPEZONE:
+        msg = _( "Zone" ); break;
+
+    default:
+        msg = wxT( "????" ); break;
+    }
+
+    text_pos = 1;
+    Affiche_1_Parametre( frame, text_pos, _( "Type" ), msg, DARKCYAN );
+
+    /* Affiche NetName pour les segments de piste type cuivre */
+    text_pos += 15;
+    if(  m_StructType == TYPETRACK 
+      || m_StructType == TYPEZONE
+      || m_StructType == TYPEVIA )
+    {
+        EQUIPOT* equipot = ((WinEDA_PcbFrame*)frame)->m_Pcb->FindNet( m_NetCode );
+        if( equipot )
+        {
+            msg = equipot->m_Netname;
+        }
+        else
+            msg = wxT( "<noname>" );
+        Affiche_1_Parametre( frame, text_pos, _( "NetName" ), msg, RED );
+
+        /* Affiche net code :*/
+        msg.Printf( wxT( "%d .%d" ), m_NetCode, m_Sous_Netcode );
+        text_pos += 18;
+        Affiche_1_Parametre( frame, text_pos, _( "NetCode" ), msg, RED );
+    }
+    else
+    {
+        Affiche_1_Parametre( frame, text_pos, _( "Segment" ), wxEmptyString, RED );
+        if( m_Shape == S_CIRCLE )
+            Affiche_1_Parametre( frame, -1, wxEmptyString, _( "Circle" ), RED );
+        else
+            Affiche_1_Parametre( frame, -1, wxEmptyString, _( "Standard" ), RED );
+    }
+
+    /* Affiche les flags Status piste */
+    msg = wxT( ". . " );
+    if( GetState( SEGM_FIXE ) )
+        msg[0] = 'F';
+    
+    if( GetState( SEGM_AR ) )
+        msg[2] = 'A';
+    
+    text_pos = 42;
+    Affiche_1_Parametre( frame, text_pos, _( "Stat" ), msg, MAGENTA );
+
+    /* Affiche Layer(s) */
+    if( m_StructType == TYPEVIA )
+    {
+        SEGVIA* Via = (SEGVIA*) this;
+        int     top_layer, bottom_layer;
+        
+        Via->ReturnLayerPair( &top_layer, &bottom_layer );
+        msg = ReturnPcbLayerName( top_layer, TRUE ) + wxT( "/" ) 
+                + ReturnPcbLayerName( bottom_layer, TRUE );
+    }
+    else
+        msg = ReturnPcbLayerName( m_Layer );
+
+    text_pos += 5;
+    Affiche_1_Parametre( frame, text_pos, _( "Layer" ), msg, BROWN );
+
+    /* Affiche Epaisseur */
+    valeur_param( (unsigned) m_Width, msg );
+    text_pos += 11;
+    
+    if( m_StructType == TYPEVIA )      // Display Diam and Drill values
+    {
+        Affiche_1_Parametre( frame, text_pos, _( "Diam" ), msg, DARKCYAN );
+
+        int drill_value = m_Drill >= 0  ?
+                          m_Drill : g_DesignSettings.m_ViaDrill;
+        valeur_param( (unsigned) drill_value, msg );
+        
+        text_pos += 8;
+        wxString title = _( "Drill" );
+        
+        if( g_DesignSettings.m_ViaDrill >= 0 )
+            title += wxT( "*" );
+        
+        Affiche_1_Parametre( frame, text_pos, _( "Drill" ), msg, RED );
+    }
+    else
+        Affiche_1_Parametre( frame, text_pos, _( "Width" ), msg, DARKCYAN );
 }
 
 

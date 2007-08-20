@@ -33,7 +33,7 @@ void WinEDA_PcbFrame::Start_Move_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC )
     Trace_DrawSegmentPcb( DrawPanel, DC, drawitem, GR_XOR );
     drawitem->m_Flags |= IS_MOVED;
     cursor_pos = cursor_pos0 = GetScreen()->m_Curseur;
-    Affiche_Infos_DrawSegment( this, drawitem );
+    drawitem->Display_Infos( this );
     DrawPanel->ManageCurseur = Move_Segment;
     DrawPanel->ForceCloseManageCurseur = Exit_EditEdge;
     GetScreen()->SetCurItem( drawitem );
@@ -145,7 +145,7 @@ void WinEDA_PcbFrame::Drawing_SetNewWidth( DRAWSEGMENT* DrawSegm, wxDC* DC )
 
     Trace_DrawSegmentPcb( DrawPanel, DC, DrawSegm, GR_OR );
 
-    Affiche_Infos_DrawSegment( this, DrawSegm );
+    DrawSegm->Display_Infos( this );
 
     GetScreen()->SetModify();
 }

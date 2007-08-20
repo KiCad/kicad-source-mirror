@@ -230,7 +230,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, wxDC* DC, boo
     /* liste des pads recalculee avec Affichage des messages d'erreur */
     build_liste_pads();
 
-    Affiche_Infos_Status_Pcb( this );
+    m_Pcb->Display_Infos( this );
 
     g_SaveTime = time( NULL );
 

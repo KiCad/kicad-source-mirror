@@ -786,7 +786,7 @@ int D_PAD::WriteDescr( FILE* File )
 
 
 /******************************************************/
-void D_PAD::Display_Infos( WinEDA_BasePcbFrame* frame )
+void D_PAD::Display_Infos( WinEDA_DrawFrame* frame )
 /******************************************************/
 /* Affiche en bas d'ecran les caract de la pastille demandee */
 {

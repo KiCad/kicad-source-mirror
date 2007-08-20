@@ -83,7 +83,7 @@ enum SEARCH_RESULT {
 typedef DrawStructureType   KICAD_T;    // shorter name
 
 class EDA_BaseStruct;
-
+class WinEDA_DrawFrame;
 
 /**
  * Class INSPECTOR
@@ -132,7 +132,26 @@ public:
     EDA_BaseStruct* m_Parent;           /* Linked list: Link (parent struct) */
     EDA_BaseStruct* m_Son;              /* Linked list: Link (son struct) */
     EDA_BaseStruct* m_Image;            /* Link to an image copy for undelete or abort command */
+
     int             m_Flags;            // flags for editions and other
+#define IS_CHANGED      (1<<0)    
+#define IS_LINKED       (1<<1)
+#define IN_EDIT         (1<<2)
+#define IS_MOVED        (1<<3)
+#define IS_NEW          (1<<4)
+#define IS_RESIZED      (1<<5)
+#define IS_DRAGGED      (1<<6)
+#define IS_DELETED      (1<<7)
+#define IS_WIRE_IMAGE   (1<<8)
+#define STARTPOINT      (1<<9)
+#define ENDPOINT        (1<<10)
+#define SELECTED        (1<<11)
+#define SELECTEDNODE    (1<<12)         ///< flag indiquant que la structure a deja selectionnee
+#define STRUCT_DELETED  (1<<13)         ///< Bit flag de Status pour structures effacee
+#define CANDIDATE       (1<<14)         ///< flag indiquant que la structure est connectee
+#define SKIP_STRUCT     (1<<15)         ///< flag indiquant que la structure ne doit pas etre traitee
+
+
     unsigned long   m_TimeStamp;        // Time stamp used for logical links
     int             m_Selected;         /* Used by block commands, and selective editing */
 
@@ -178,6 +197,19 @@ public:
                           int               draw_mode,
                           int               Color = -1 );
 
+    
+    /**
+     * Function Display_Infos
+     * has knowledge about the frame and how and where to put status information
+     * about this object into the frame's message panel.
+     * @param frame A WinEDA_DrawFrame in which to print status information.
+     */ 
+    virtual void    Display_Infos( WinEDA_DrawFrame* frame )
+    {
+        // derived classes may implement this 
+    }
+    
+    
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.

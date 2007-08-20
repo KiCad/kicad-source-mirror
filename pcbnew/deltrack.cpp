@@ -117,7 +117,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
     GetScreen()->SetModify();
 
     test_1_net_connexion( DC, current_net_code );
-    Affiche_Infos_Status_Pcb( this );
+    m_Pcb->Display_Infos( this );
     return NULL;
 }
 
@@ -132,7 +132,7 @@ void WinEDA_PcbFrame::Delete_Track( wxDC* DC, TRACK* Track )
         Supprime_Une_Piste( DC, Track );
         GetScreen()->SetModify();
         test_1_net_connexion( DC, current_net_code );
-        Affiche_Infos_Status_Pcb( this );
+        m_Pcb->Display_Infos( this );
     }
 }
 
@@ -170,7 +170,7 @@ void WinEDA_PcbFrame::Delete_net( wxDC* DC, TRACK* Track )
         SaveItemEfface( pt_start, ii );
         GetScreen()->SetModify();
         test_1_net_connexion( DC, net_code_delete );
-        Affiche_Infos_Status_Pcb( this );
+        m_Pcb->Display_Infos( this );
     }
 }
 

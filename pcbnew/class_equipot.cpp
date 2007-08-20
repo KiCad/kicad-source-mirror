@@ -67,31 +67,6 @@ void EQUIPOT::UnLink( void )
 }
 
 
-/*************************************************/
-EQUIPOT* GetEquipot( BOARD* pcb, int netcode )
-/**************************************************/
-
-/*
- *  retourne un pointeur sur la structure EQUIPOT de numero netcode
- */
-{
-    EQUIPOT* Equipot;
-
-    if( netcode <= 0 )
-        return NULL;
-
-    Equipot = (EQUIPOT*) pcb->m_Equipots;
-    while( Equipot )
-    {
-        if( Equipot->m_NetCode == netcode )
-            break;
-        Equipot = (EQUIPOT*) Equipot->Pnext;
-    }
-
-    return Equipot;
-}
-
-
 /*********************************************************/
 int EQUIPOT:: ReadEquipotDescr( FILE* File, int* LineNum )
 /*********************************************************/
