@@ -555,12 +555,6 @@ EDA_BaseStruct* BASE_SCREEN::GetItemFromRedoList( void )
 }
 
 
-
-EDA_BaseStruct* BASE_SCREEN::GetCurItem()
-{
-    return m_CurrentItem;
-}
-
 void BASE_SCREEN::SetCurItem( EDA_BaseStruct* aCurItem )
 {
     m_CurrentItem = aCurItem; 

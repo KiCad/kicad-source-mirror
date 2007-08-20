@@ -260,13 +260,12 @@ public:
     /**
      * Function SetCurItem
      * sets the currently selected object, m_CurrentItem.  
-     * This intentionally not inlined so we can set breakpoints on the 
+     * This is intentionally not inlined so we can set breakpoints on the 
      * activity easier in base_screen.cpp.
      * @param current Any object derived from EDA_BaseStruct
      */
     void            SetCurItem( EDA_BaseStruct* current );
-    EDA_BaseStruct* GetCurItem();
-
+    EDA_BaseStruct* GetCurItem() const {  return m_CurrentItem; }
     
     /* fonctions relatives au zoom */
     int     GetZoom( void );                /* retourne le coeff de zoom */
