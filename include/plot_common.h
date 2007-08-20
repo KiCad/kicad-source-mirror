@@ -19,23 +19,23 @@ typedef enum {
 	PLOT_FORMAT_POST_A4
 	} PlotFormat;
 
-#define  PLOT_MIROIR 1
+const int PLOT_MIROIR = 1;
 
 
 /*******************************/
 /* common_plot_functions.cpp */
 /*******************************/
-void SetPlotScale(double xscale, double yscale); /* Set the plot scale for the current plotting) */
-void SetPlotOffset(wxPoint offset); /* Set the plot offset for the current plotting) */
+void SetPlotScale(double xscale, double yscale); // Set the plot scale for the current plotting)
+void SetPlotOffset(wxPoint offset); // Set the plot offset for the current plotting)
 void InitPlotParametresGERBER(wxPoint offset, double xscale, double yscale);
 void PlotWorkSheet(int format_plot, BASE_SCREEN * screen);
 void UserToDeviceCoordinate(wxPoint & pos );
-	/* modifie les coord pos.x et pos.y pour le trace selon l'orientation, l'echelle, les offsets de trace */
+	// modifie les coord pos.x et pos.y pour le trace selon l'orientation, l'echelle, les offsets de trace
 void UserToDeviceSize(wxSize & size );
-	/* modifie les dimension size.x et size.y pour le trace selon l'echelle */
+	// modifie les dimension size.x et size.y pour le trace selon l'echelle
 void ForcePenReinit(void);
-	/* set the flag g_CurrentPenWidth to -1 in order to force a pen width redefinition
-	for the next draw command */
+	// set the flag g_CurrentPenWidth to -1 in order
+	// to force a pen width redefinition for the next draw command
 
 
 /*******************************/
@@ -46,14 +46,13 @@ void InitPlotParametresPS( wxPoint offset, Ki_PageDescr * sheet, double xscale, 
 void SetDefaultLineWidthPS( int width);
 void PlotCircle_PS(wxPoint pos, int diametre, int width = -1);
 void PlotArcPS(wxPoint centre, int StAngle, int EndAngle, int rayon, int width = -1);
-	/* Plot an arc: StAngle, EndAngle = start and end arc in 0.1 degree */
+	// Plot an arc: StAngle, EndAngle = start and end arc in 0.1 degree
 void PlotPolyPS( int nb_segm, int * coord, int fill, int width = -1);
 void PlotFilledSegmentPS(wxPoint start , wxPoint end, int width);
 void LineTo_PS(wxPoint pos, int plume);
-void PrintHeaderPS(FILE * file, const wxString & Creator, const wxString & FileName, int BBox[4]);
+void PrintHeaderPS(FILE * file, const wxString & Creator, const wxString & FileName, int PageCount, int BBox[4], int PaperOrientation);
 bool CloseFilePS(FILE * plot_file);
 void SetColorMapPS(int color);
-
 
 
 /*********************************/
@@ -69,5 +68,4 @@ void Move_Plume_HPGL( wxPoint pos, int plume );
 void Plume_HPGL( int plume );
 
 #endif	// PLOT_COMMON_H
-
 

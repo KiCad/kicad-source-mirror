@@ -36,9 +36,10 @@
 #include "plot_common.h"
 #include "protos.h"
 
+#include "wx/defs.h"
 
-/* coeff de conversion dim en 1 mil -> dim en unite PS: */
-#define SCALE_PS 0.001
+// coeff de conversion dim en 1 mil -> dim en unite PS:
+const double SCALE_PS = 0.001;
 
 extern void Move_Plume( wxPoint pos, int plume );
 extern void Plume( int plume );
@@ -399,7 +400,7 @@ wxPoint StartPos, EndPos;
 	SetDefaultLineWidthPS( g_PlotPSMinimunLineWidth);
 
 	/* Init : */
-	PrintHeaderPS(PlotOutput, wxT("EESchema-PS"), FileName, BBox);
+	PrintHeaderPS( PlotOutput, wxT("EESchema-PS"), FileName, 1, BBox, wxLANDSCAPE );
 	InitPlotParametresPS(plot_offset, sheet, 1.0, 1.0);
 
 	if ( m_Plot_Sheet_Ref->GetValue() )
@@ -512,5 +513,4 @@ wxPoint StartPos, EndPos;
 
 	m_MsgBox->AppendText( wxT("Ok\n"));
 }
-
 

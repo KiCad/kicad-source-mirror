@@ -15,6 +15,7 @@
 
 #include "protos.h"
 
+#include "wx/defs.h"
 
 /*
 	Generation du fichier de percage en format EXCELLON
@@ -89,8 +90,8 @@ enum id_drill {
 	ID_SEL_DRILL_UNITS,
 	ID_SEL_DRILL_SHEET,
 	ID_SEL_DRILL_REPORT,
-    ID_SEL_ZEROS_FMT,
-    ID_SEL_PRECISION
+	ID_SEL_ZEROS_FMT,
+	ID_SEL_PRECISION
 };
 
 class WinEDA_DrillFrame: public wxDialog
@@ -958,7 +959,7 @@ wxString msg;
 			InitPlotParametresPS(g_PlotOffset, SheetPS,
 				(double) 1.0 / PCB_INTERNAL_UNIT, (double) 1.0 / PCB_INTERNAL_UNIT);
 			SetDefaultLineWidthPS(10);	// Set line with to 10/1000 inch
-			PrintHeaderPS(dest, wxT("PCBNEW-PS"), FullFileName, BBox);
+			PrintHeaderPS(dest, wxT("PCBNEW-PS"), FullFileName, 1, BBox, wxLANDSCAPE);
 			InitPlotParametresPS(g_PlotOffset, SheetPS, scale_x, scale_y);
 			}
 			break;

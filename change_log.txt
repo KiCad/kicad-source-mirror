@@ -4,6 +4,13 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Aug-20 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
+================================================================================
++ eeschema & pcbnew
+    The comments provided within postscript files now fully comply with Adobe's
+    Document Structuring Convention.
+
+
 2007-aug-20 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + eeschema & pcbnew
