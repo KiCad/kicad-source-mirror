@@ -23,7 +23,8 @@ $(TARGET): $(OBJECTS) makefile.gtk  makefile.include $(LIBVIEWER3D) $(EXTRALIBS)
 		
 		
 install: $(TARGET)
-		cp $(TARGET) $(KICAD_BIN)
+	mkdir -p $(KICAD_BIN)
+	cp $(TARGET) $(KICAD_BIN)
 
 
 clean:

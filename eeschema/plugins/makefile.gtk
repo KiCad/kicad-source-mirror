@@ -18,10 +18,8 @@ all: netlist_form_pads-pcb
 netlist_form_pads-pcb: netlist_form_pads-pcb.cpp makefile.gtk
 	gcc -D__UNIX__  -Wall netlist_form_pads-pcb.cpp -o netlist_form_pads-pcb $(LIBSTDC)
 
-$(KICAD_PLUGINS):
+install: netlist_form_pads-pcb
 	mkdir -p $(KICAD_PLUGINS)
-
-install: $(KICAD_PLUGINS)
 	cp netlist_form_pads-pcb $(KICAD_PLUGINS)
 
 clean :

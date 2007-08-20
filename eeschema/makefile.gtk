@@ -26,6 +26,7 @@ netlist_form_pads-pcb: plugins/netlist_form_pads-pcb.cpp makefile.gtk
 
 
 install: $(TARGET)
+	mkdir -p $(KICAD_BIN)
 	cp $(TARGET) $(KICAD_BIN)
 
 

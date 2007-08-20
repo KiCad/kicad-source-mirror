@@ -18,10 +18,11 @@ EDACPPFLAGS = $(CPPFLAGS)
 
 
 $(TARGET): $(OBJECTS) makefile.gtk makefile.include $(EXTRALIBS) ../libs.linux
-		$(LD) $(LDFLAGS) $(OBJECTS) $(LIBS) -o $(TARGET)
+	$(LD) $(LDFLAGS) $(OBJECTS) $(LIBS) -o $(TARGET)
 		
 install: $(TARGET)
-		cp $(TARGET) $(KICAD_BIN)
+	mkdir -p $(KICAD_BIN)
+	cp -f $(TARGET) $(KICAD_BIN)
 
 
 clean:

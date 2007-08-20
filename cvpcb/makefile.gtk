@@ -25,6 +25,7 @@ $(TARGET):	$(OBJECTS) makefile.gtk makefile.include $(EXTRALIBS) ../libs.linux $
 
 
 install: $(TARGET)
+	mkdir -p $(KICAD_BIN)
 	cp -f $(TARGET) $(KICAD_BIN)
 
 clean:
