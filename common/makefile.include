@@ -12,6 +12,7 @@ OBJECTS= \
 		common_plot_functions.o\
 		common_plotPS_functions.o\
 		common_plotHPGL_functions.o\
+		hotkeys_basic.o\
 		drawtxt.o \
 		wxwineda.o \
 		string.o \
@@ -42,6 +43,8 @@ endif
 gr_basic.o: gr_basic.cpp ../include/gr_basic.h $(DEPEND)
 
 confirm.o: confirm.cpp $(COMMON)
+
+hotkeys_basic.o: hotkeys_basic.cpp ../include/hotkeys_basic.h $(COMMON)
 
 worksheet.o: worksheet.cpp ../include/worksheet.h $(COMMON)
 

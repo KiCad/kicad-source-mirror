@@ -91,14 +91,13 @@ void RemoteCommand( const char* cmdline )
         if( pad )
             netcode = pad->m_NetCode;
         
-        if( netcode > 0 )
+        if( netcode > 0 )    /* hightlighted the net selected net*/
         {
-            /* effacement surbrillance ancienne */
-            if( g_HightLigt_Status )
+            if( g_HightLigt_Status )	/* erase the old hightlighted net */
                 frame->Hight_Light( &dc );
             
             g_HightLigth_NetCode = netcode;
-            frame->Hight_Light( &dc );
+            frame->Hight_Light( &dc );	/* hightlighted the new one */
             
             frame->DrawPanel->CursorOff( &dc );
             frame->GetScreen()->m_Curseur = pad->m_Pos;
@@ -229,22 +228,6 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     case WXK_NUMPAD9:
     case WXK_PAGEDOWN:
         SwitchLayer( DC, CUIVRE_N );
-        break;
-
-    case 'F' | GR_KB_CTRL:
-    case 'f' | GR_KB_CTRL:
-        DisplayOpt.DisplayPcbTrackFill ^= 1; DisplayOpt.DisplayPcbTrackFill &= 1;
-        GetScreen()->SetRefreshReq();
-        break;
-
-    case ' ':     /* Mise a jour de l'origine des coord relatives */
-        GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
-        break;
-
-
-    case 'U' | GR_KB_CTRL:
-    case 'u' | GR_KB_CTRL:
-        g_UnitMetric = (g_UnitMetric == INCHES ) ? MILLIMETRE : INCHES;
         break;
 
     case EDA_PANNING_UP_KEY:
@@ -401,6 +384,11 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         }
     }
 
+    if( hotkey )
+    {
+        OnHotKey( DC, hotkey, NULL );
+    }
+
     if( GetScreen()->IsRefreshReq() )
     {
         RedrawActiveWindow( DC, TRUE );
@@ -408,9 +396,4 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
     SetToolbars();
     Affiche_Status_Box();    /* Affichage des coord curseur */
-
-    if( hotkey )
-    {
-        OnHotKey( DC, hotkey, NULL );
-    }
 }

@@ -158,7 +158,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, wxDC* DC, boo
     {
         msg = wxT( "*" ) + PcbExtBuffer;
         wxString FileName =
-            EDA_FileSelector( _( "Board files:" ),
+            EDA_FileSelector( _( "Load board files:" ),
                               wxEmptyString,            /* Chemin par defaut */
                               GetScreen()->m_FileName,  /* nom fichier par defaut */
                               PcbExtBuffer,             /* extension par defaut */
@@ -260,7 +260,7 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
     if( FileName == wxEmptyString )
     {
         msg = wxT( "*" ) + PcbExtBuffer;
-        FullFileName = EDA_FileSelector( _( "Board files:" ),
+        FullFileName = EDA_FileSelector( _( "Save board files:" ),
                                          wxEmptyString,             /* Chemin par defaut */
                                          GetScreen()->m_FileName,   /* nom fichier par defaut */
                                          PcbExtBuffer,              /* extension par defaut */

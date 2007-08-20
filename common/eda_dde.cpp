@@ -29,14 +29,12 @@ wxString HOSTNAME( wxT( "localhost" ) );
 
 // buffers for read and write data in socket connections
 #define IPC_BUF_SIZE 4096
-char      client_ipc_buffer[IPC_BUF_SIZE];
-char      server_ipc_buffer[IPC_BUF_SIZE];
+static char      client_ipc_buffer[IPC_BUF_SIZE];
+static char      server_ipc_buffer[IPC_BUF_SIZE];
 
-wxServer* server;
+static wxServer* server;
 
 void      (*RemoteFct)(const char* cmd);
-
-char      buffcar[1024];
 
 void SetupServerFunction( void (*remotefct)(const char* remotecmd) )
 {

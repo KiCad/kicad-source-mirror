@@ -4,6 +4,17 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-aug-20 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++ eeschema & pcbnew
+	modify hotkeys.cpp code (large modifications).
+	Added: common code in hotkeys_basic.cpp (in common) and hotkeys_basic.h (in include)
+	In the future, i hope hotkeys will be programmed by a config file
+
++ pcbnew
+	filename drc_dialog.prj changed to dialog_drc.prj
+		(according to the fulename dialog_drc.cpp and dialog_drc.h created by dialogblock from the .prj)
+
 
 2007-Aug-19 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================

@@ -3,8 +3,8 @@
 /****************************************************************/
 
 /*
- *  Search a text (text, value, reference) withing e composent or
- *  search a composant in libraries, a marker ...,
+ *  Search a text (text, value, reference) within a component or
+ *  search a component in libraries, a marker ...,
  *  in current sheet or whole the project
  */
 #include "fctsys.h"
@@ -40,7 +40,7 @@ void InstallFindFrame( WinEDA_SchematicFrame* parent, wxPoint& pos )
 void WinEDA_FindFrame::FindMarker( wxCommandEvent& event )
 /**************************************************************/
 
-/*  Search de markers in whole the hierarchy.
+/*  Search markers in whole hierarchy.
  *  Mouse cursor is put on the marker
  *  search the first marker, or next marker
  */
@@ -144,7 +144,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindMarker( int SearchType )
         curpos.x -= m_CurrentScreen->m_StartVisu.x;
         curpos.y -= m_CurrentScreen->m_StartVisu.y;
 
-        /* Il y a peut-etre necessite de recadrer le dessin: */
+		// reposition the window if the chosen marker is off screen. 
         if( (curpos.x <= 0) || (curpos.x >= size.x - 1)
            || (curpos.y <= 0) || (curpos.y >= size.y) || force_recadre )
         {
@@ -289,9 +289,9 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
                 break;
             }
 
-            if( NotFound == FALSE )         /* Element trouve */
+            if( NotFound == FALSE )         /* Item found ! */
             {
-                if( FirstScreen == NULL )   /* 1er element trouve */
+                if( FirstScreen == NULL )   /* First Item found */
                 {
                     FirstScreen = Screen; 
                     firstpos    = pos;
@@ -340,9 +340,9 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
             force_recadre   = TRUE;
         }
 
-        /* Si la struct localisee est du type DRAW_LIB_ITEM_STRUCT_TYPE,
-         *  Les coordonnes sont a recalculer en fonction de la matrice
-         *  d'orientation */
+        /* If the struct found is a DRAW_LIB_ITEM_STRUCT_TYPE type,
+         *  coordinates must be computed according to its orientation matrix
+         */
         if( Struct->m_StructType == DRAW_LIB_ITEM_STRUCT_TYPE )
         {
             EDA_SchComponentStruct* pSch =  (EDA_SchComponentStruct*) Struct;
