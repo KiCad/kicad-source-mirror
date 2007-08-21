@@ -227,6 +227,7 @@ int CountCmpNumber(void);
 /* EECONFIG.CPP */
 /***************/
 bool Read_Config( const wxString & CfgFileName, bool ForceRereadConfig );
+bool Read_Hotkey_Config( WinEDA_DrawFrame * frame, bool verbose );
 
 
 /**************/

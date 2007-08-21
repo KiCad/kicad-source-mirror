@@ -17,6 +17,7 @@ LISTE_PAD* CreateSortedPadListByXCoord(BOARD * pcb);
 /* PCBCFG.CPP */
 /**************/
 bool Read_Config(const wxString & project_name);
+bool Read_Hotkey_Config( WinEDA_DrawFrame * frame, bool verbose );
 
 /***************/
 /* TRACEPCB.CPP */
@@ -400,7 +401,6 @@ MODULE * ListAndSelectModuleName(COMMAND * Cmd);
 /***************/
 /* LAY2PLOT.CPP */
 /***************/
-int GetLayerNumber(void); /* retourne le nombre de couches a tracer */
 
 /*****************/
 /* SEL_COLOR.CPP */

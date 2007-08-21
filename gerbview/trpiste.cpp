@@ -16,12 +16,18 @@
 
 /* variables locales : */
 
-/********************************************************************************/
-void Trace_Pistes(WinEDA_DrawPanel * panel, wxDC * DC, BOARD * Pcb, int drawmode)
-/********************************************************************************/
-/* Routine de trace des pistes et zones */
+/***************************************************************************************************/
+void Draw_Track_Buffer(WinEDA_DrawPanel * panel, wxDC * DC, BOARD * Pcb, int draw_mode, int printmasklayer)
+/***************************************************************************************************/
+/* Function to draw the tracks (i.e Sports or lines) in gerbview
+	Polygons are not handled here (there are in Pcb->m_Zone)
+ * @param DC = device context to draw
+ * @param Pcb = Board to draw (only Pcb->m_Track is used)
+ * @param draw_mode = draw mode for the device context (GR_COPY, GR_OR, GR_XOR ..)
+ * @param printmasklayer = mask for allowed layer (=-1 to draw all layers)
+*/
 {
-TRACK * pt_piste;
+TRACK * Track;
 int layer = ((PCB_SCREEN*)panel->GetScreen())->m_Active_Layer;
 GERBER_Descr * gerber_layer	= g_GERBER_Descr_List[layer];
 int dcode_hightlight = 0;
@@ -29,13 +35,16 @@ int dcode_hightlight = 0;
 	if ( gerber_layer )
 		dcode_hightlight = gerber_layer->m_Selected_Tool;
 
-	pt_piste = Pcb->m_Track;
-	for ( ; pt_piste != NULL ; pt_piste = (TRACK*) pt_piste->Pnext )
+	Track = Pcb->m_Track;
+	for ( ; Track != NULL ; Track = (TRACK*) Track->Pnext )
 	{
-		if ( (dcode_hightlight == pt_piste->m_NetCode) &&
-			 (pt_piste->m_Layer == layer) )
-			Trace_Segment(panel, DC, pt_piste, drawmode | GR_SURBRILL);
-		else Trace_Segment(panel, DC, pt_piste, drawmode );
+		if ( printmasklayer != -1 )
+			if ( (Track->ReturnMaskLayer() & printmasklayer) == 0 ) continue;
+
+ 		if ( (dcode_hightlight == Track->m_NetCode) &&
+			 (Track->m_Layer == layer) )
+			Trace_Segment(panel, DC, Track, draw_mode | GR_SURBRILL);
+		else Trace_Segment(panel, DC, Track, draw_mode );
 	}
 }
 
@@ -45,7 +54,7 @@ void Trace_Segment(WinEDA_DrawPanel * panel, wxDC * DC, TRACK* track, int draw_m
 /***********************************************************************************/
 /* routine de trace de 1 segment de piste.
 Parametres :
-	pt_piste = adresse de la description de la piste en buflib
+	track = adresse de la description de la piste en buflib
 	draw_mode = mode ( GR_XOR, GR_OR..)
 */
 {

@@ -62,7 +62,7 @@ static Ki_HotkeyInfo HkTrackDisplayMode(wxT("Track Display Mode"), HK_SWITCH_TRA
 
 
 // List of hotkey descriptors for pcbnew
-static Ki_HotkeyInfo *s_board_edit_Hotkey_List[] = {
+Ki_HotkeyInfo *s_board_edit_Hotkey_List[] = {
 	&HkHelp,
 	&HkZoomIn, &HkZoomOut, &HkZoomRedraw, &HkZoomCenter,
 	&HkResetLocalCoord, &HkSwitchUnits, &HkTrackDisplayMode,
@@ -75,7 +75,7 @@ static Ki_HotkeyInfo *s_board_edit_Hotkey_List[] = {
 	NULL
 };
 
-static Ki_HotkeyInfo *s_module_edit_Hotkey_List[] = {
+Ki_HotkeyInfo *s_module_edit_Hotkey_List[] = {
 	&HkHelp,
 	&HkZoomIn, &HkZoomOut, &HkZoomRedraw, &HkZoomCenter,
 	&HkSwitchUnits, &HkResetLocalCoord,

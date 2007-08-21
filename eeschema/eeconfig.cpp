@@ -10,8 +10,12 @@
 #include "protos.h"
 #include "eeconfig.h"
 #include "worksheet.h"
+#include "hotkeys_basic.h"
 
 #include "id.h"
+
+extern Ki_HotkeyInfo *s_Schematic_Hotkey_List[];
+extern Ki_HotkeyInfo *s_LibEdit_Hotkey_List[];
 
 /* Variables locales */
 
@@ -22,7 +26,8 @@ void WinEDA_SchematicFrame::Process_Config(wxCommandEvent& event)
 {
 int id = event.GetId();
 wxPoint pos;
-
+wxString FullFileName;
+	
 	wxGetMousePosition(&pos.x, &pos.y);
 
 	pos.y += 5;
@@ -49,7 +54,7 @@ wxPoint pos;
 		case ID_CONFIG_READ:
 			{
 			wxString mask( wxT("*") ); mask += g_Prj_Config_Filename_ext;
-			wxString FullFileName = ScreenSch->m_FileName;
+			FullFileName = ScreenSch->m_FileName;
 			ChangeFileNameExt( FullFileName, g_Prj_Config_Filename_ext );
 			
 			FullFileName = EDA_FileSelector(_("Read config file"),
@@ -71,9 +76,42 @@ wxPoint pos;
 			}
 			break;
 
+		case ID_PREFERENCES_CREATE_CONFIG_HOTKEYS:
+			FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
+			FullFileName += wxT("eeschema");
+			FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
+			WriteHotkeyConfigFile(FullFileName, s_Schematic_Hotkey_List, true);
+			FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
+			FullFileName += wxT("libedit");
+			FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
+			WriteHotkeyConfigFile(FullFileName, s_LibEdit_Hotkey_List, true);
+			break;
+
+		case ID_PREFERENCES_READ_CONFIG_HOTKEYS:
+			Read_Hotkey_Config( this, true);
+			break;
+
 		default:
 			DisplayError(this, wxT("WinEDA_SchematicFrame::Process_Config internal error") );
 		}
+}
+
+
+/***************************************************************/
+bool Read_Hotkey_Config( WinEDA_DrawFrame * frame, bool verbose )
+/***************************************************************/
+/*
+ * Read the hotkey files config for eeschema and libedit
+*/
+{
+	wxString FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
+	FullFileName += wxT("eeschema");
+	FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
+	frame->ReadHotkeyConfigFile(FullFileName, s_Schematic_Hotkey_List, verbose);
+	FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
+	FullFileName += wxT("libedit");
+	FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
+	frame->ReadHotkeyConfigFile(FullFileName, s_LibEdit_Hotkey_List, verbose);
 }
 
 

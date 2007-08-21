@@ -19,18 +19,6 @@ static void Plot_Module(WinEDA_DrawPanel * panel, wxDC * DC, MODULE * Module,
 	int draw_mode, int masklayer);
 
 
-/****************************/
-int GetLayerNumber(void)
-/****************************/
-/* Return the number of layers which can be printed
-*/
-{
-int ii = 29;
-//TO REDO
-return ii;
-}
-
-
 /**********************************************************************************/
 void WinEDA_DrawPanel::PrintPage(wxDC *DC, bool Print_Sheet_Ref, int printmasklayer)
 /**********************************************************************************/

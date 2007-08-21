@@ -79,6 +79,7 @@ bool WinEDA_App::OnInit( void )
 
     SetTopWindow( m_PcbFrame );
     m_PcbFrame->Show( TRUE );
+	Read_Hotkey_Config(m_PcbFrame, false);
 
     if( CreateServer( m_PcbFrame, KICAD_PCB_PORT_SERVICE_NUMBER ) )
     {

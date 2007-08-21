@@ -27,10 +27,9 @@ wxString HOSTNAME( wxT( "localhost" ) );
 
 /* variables locales */
 
-// buffers for read and write data in socket connections
+// buffer for read and write data in socket connections
 #define IPC_BUF_SIZE 4096
 static char      client_ipc_buffer[IPC_BUF_SIZE];
-static char      server_ipc_buffer[IPC_BUF_SIZE];
 
 static wxServer* server;
 
@@ -80,15 +79,15 @@ void WinEDA_DrawFrame::OnSockRequest( wxSocketEvent& evt )
     switch( evt.GetSocketEvent() )
     {
     case wxSOCKET_INPUT:
-        sock->Read( server_ipc_buffer, 1 );
+        sock->Read( client_ipc_buffer, 1 );
         if( sock->LastCount() == 0 )
-            break;                          // No data: Occurs on open connection
+            break;                          // No data: Occurs on opening connection
         
-        sock->Read( server_ipc_buffer + 1, IPC_BUF_SIZE - 2 );
+        sock->Read( client_ipc_buffer + 1, IPC_BUF_SIZE - 2 );
         len = 1 + sock->LastCount();
-        server_ipc_buffer[len] = 0;
+        client_ipc_buffer[len] = 0;
         if( RemoteFct )
-            RemoteFct( server_ipc_buffer );
+            RemoteFct( client_ipc_buffer );
         break;
 
     case wxSOCKET_LOST:

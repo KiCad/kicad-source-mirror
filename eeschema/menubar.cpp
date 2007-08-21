@@ -146,6 +146,16 @@ wxMenuBar * menuBar = GetMenuBar();
 	    item->SetBitmap(read_setup_xpm);
 		configmenu->Append(item);
 
+		configmenu->AppendSeparator();
+		item = new wxMenuItem(configmenu, ID_PREFERENCES_CREATE_CONFIG_HOTKEYS, _("Create Eeschema &Hotkey config file"),
+			_("Create or Recreate the hotkey config file from current hotkey list") );
+	    item->SetBitmap(save_setup_xpm);
+		configmenu->Append(item);
+		item = new wxMenuItem(configmenu, ID_PREFERENCES_READ_CONFIG_HOTKEYS, _("Reread &Eeschema Hotkey config file"),
+			_("Reread the hotkey config file") );
+	    item->SetBitmap( reload_xpm);
+		configmenu->Append(item);
+
 		// Menu Help:
 		wxMenu *helpMenu = new wxMenu;
 		item = new wxMenuItem(helpMenu , ID_GENERAL_HELP,

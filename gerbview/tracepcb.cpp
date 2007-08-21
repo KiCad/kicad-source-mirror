@@ -44,7 +44,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     DisplayOpt.DisplayDrawItems    = FILLED;
     DisplayOpt.DisplayZones = 1;
 
-    ( (WinEDA_GerberFrame*) m_Parent )->Trace_Gerber( DC, GR_COPY );
+    ( (WinEDA_GerberFrame*) m_Parent )->Trace_Gerber( DC, GR_COPY, printmasklayer );
 
     if( Print_Sheet_Ref )
         m_Parent->TraceWorkSheet( DC, GetScreen(), 0 );
@@ -72,7 +72,7 @@ void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     DrawPanel->DrawBackGround( DC );
 
-    Trace_Gerber( DC, GR_OR );
+    Trace_Gerber( DC, GR_OR, -1 );
     TraceWorkSheet( DC, screen, 0 );
     Affiche_Status_Box();
 
@@ -83,16 +83,21 @@ void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 }
 
 
-/********************************************************/
-void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int mode )
-/********************************************************/
-/* Trace l'ensemble des elements du PCB sur l'ecran actif*/
+/***********************************************************************************/
+void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklayer )
+/***********************************************************************************/
+/* 
+* Trace l'ensemble des elements du PCB sur l'ecran actif
+* @param DC = device context to draw
+* @param draw_mode = draw mode for the device context (GR_COPY, GR_OR, GR_XOR ..)
+* @param printmasklayer = mask for allowed layer (=-1 to draw all layers)
+*/
 {
     if( !m_Pcb )
         return;
 
     // Draw tracks and flashes
-    Trace_Pistes( DrawPanel, DC, m_Pcb, mode );
+    Draw_Track_Buffer( DrawPanel, DC, m_Pcb, draw_mode, printmasklayer );
 
     // Draw filled polygons
     #define NBMAX 2000
@@ -104,6 +109,9 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int mode )
     track = m_Pcb->m_Zone;
     for( ; track != NULL; track = track->Next() )
     {
+		if ( printmasklayer != -1 )
+			if ( (track->ReturnMaskLayer() & printmasklayer) == 0 ) continue;
+
         if( track->m_NetCode == 0 )    // StartPoint
         {
             if( nbpoints )

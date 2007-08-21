@@ -84,7 +84,7 @@ enum Gerb_GCommand
 };
 
 
-#define MAX_TOOLS 512
+#define MAX_TOOLS 2048
 #define FIRST_DCODE 10
 
 enum Gerb_Analyse_Cmd

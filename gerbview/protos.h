@@ -23,7 +23,6 @@ void Plume(int state);
 /****************/
 /* lay2plot.cpp */
 
-int GetLayerNumber(void);
 void Print_PcbItems(BOARD * Pcb, wxDC *DC, int drawmode, int printmasklayer);
 
 /*****************/
@@ -116,7 +115,7 @@ void PlotArcPS(int x, int y, int StAngle, int EndAngle, int rayon, int width);
 /***************/
 /* trpiste.cpp */
 /***************/
-void Trace_Pistes(WinEDA_DrawPanel * panel, wxDC * DC, BOARD * Pcb, int drawmode);
+void Draw_Track_Buffer(WinEDA_DrawPanel * panel, wxDC * DC, BOARD * Pcb, int drawmode, int printmasklayer);
 void Trace_Segment(WinEDA_DrawPanel * panel, wxDC * DC, TRACK* pt_piste, int draw_mode);
 void Trace_DrawSegmentPcb(WinEDA_DrawPanel * panel, wxDC * DC,
 		DRAWSEGMENT * PtDrawSegment, int draw_mode);

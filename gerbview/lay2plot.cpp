@@ -13,18 +13,6 @@
 /* Variables locales : */
 
 /* Routines Locales */
-	/****************************/
-	/* int GetLayerNumber(void) */
-	/****************************/
-/* retourne le nombre de couches a tracer
-*/
-int GetLayerNumber(void)
-{
-int ii = 0;
-//TO REDO
-return ii;
-}
-
 
 /*******************************************************************************/
 void Print_PcbItems(BOARD * Pcb, wxDC *DC, int drawmode, int printmasklayer)

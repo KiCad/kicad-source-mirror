@@ -12,8 +12,12 @@
 #include "pcbcfg.h"
 #include "worksheet.h"
 #include "id.h"
+#include "hotkeys_basic.h"
 
 #include "protos.h"
+
+extern Ki_HotkeyInfo *s_board_edit_Hotkey_List[];
+extern Ki_HotkeyInfo *s_module_edit_Hotkey_List[];
 
 /* Routines Locales */
 
@@ -27,6 +31,7 @@ void WinEDA_PcbFrame::Process_Config(wxCommandEvent& event)
 int id = event.GetId();
 wxPoint pos;
 wxClientDC dc(DrawPanel);
+wxString FullFileName;
 
 	DrawPanel->PrepareGraphicContext(&dc);
 
@@ -40,10 +45,8 @@ wxClientDC dc(DrawPanel);
 			break;
 
 		case ID_CONFIG_REQ :		// Creation de la fenetre de configuration
-			{
 			InstallConfigFrame(pos);
 			break;
-			}
 
 		case ID_PCB_TRACK_SIZE_SETUP:
 		case ID_PCB_LOOK_SETUP:
@@ -61,8 +64,7 @@ wxClientDC dc(DrawPanel);
 			break;
 
 		case ID_CONFIG_READ:
-			{
-			wxString FullFileName = GetScreen()->m_FileName.AfterLast('/');
+			FullFileName = GetScreen()->m_FileName.AfterLast('/');
 			ChangeFileNameExt(FullFileName, g_Prj_Config_Filename_ext);
 			FullFileName = EDA_FileSelector(_("Read config file"),
 					wxPathOnly(GetScreen()->m_FileName),/* Chemin par defaut */
@@ -81,13 +83,46 @@ wxClientDC dc(DrawPanel);
 				DisplayError(this, msg); break;
 				}
 			Read_Config(FullFileName );
-			}
+			break;
+
+		case ID_PREFERENCES_CREATE_CONFIG_HOTKEYS:
+			FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
+			FullFileName += wxT("pcbnew");
+			FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
+			WriteHotkeyConfigFile(FullFileName, s_board_edit_Hotkey_List, true);
+			FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
+			FullFileName += wxT("module_edit");
+			FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
+			WriteHotkeyConfigFile(FullFileName, s_module_edit_Hotkey_List, true);
+			break;
+
+		case ID_PREFERENCES_READ_CONFIG_HOTKEYS:
+			Read_Hotkey_Config( this, true);
 			break;
 
 		default:
 			DisplayError(this, wxT("WinEDA_PcbFrame::Process_Config internal error"));
 		}
 }
+
+
+/***************************************************************/
+bool Read_Hotkey_Config( WinEDA_DrawFrame * frame, bool verbose )
+/***************************************************************/
+/*
+ * Read the hotkey files config for eeschema and libedit
+*/
+{
+	wxString FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
+	FullFileName += wxT("pcbnew");
+	FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
+	frame->ReadHotkeyConfigFile(FullFileName, s_board_edit_Hotkey_List, verbose);
+	FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
+	FullFileName += wxT("module_edit");
+	FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
+	frame->ReadHotkeyConfigFile(FullFileName, s_module_edit_Hotkey_List, verbose);
+}
+
 
 
 /**************************************************************************/

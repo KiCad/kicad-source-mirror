@@ -60,7 +60,7 @@ static Ki_HotkeyInfo HkZoomIn(wxT("Zoom In"), HK_ZOOM_IN, WXK_F1);
 static Ki_HotkeyInfo HkHelp(wxT("Help: this message"), HK_HELP, '?');
 
 // List of hotkey descriptors for schematic
-static Ki_HotkeyInfo *s_Schematic_Hotkey_List[] = {
+Ki_HotkeyInfo *s_Schematic_Hotkey_List[] = {
 	&HkHelp,
 	&HkZoomIn, &HkZoomOut, &HkZoomRedraw, &HkZoomCenter,
 	&HkNextSearch, &HkResetLocalCoord,
@@ -71,12 +71,11 @@ static Ki_HotkeyInfo *s_Schematic_Hotkey_List[] = {
 	NULL
 };
 
-
 // Library editor:
 static Ki_HotkeyInfo HkInsertPin(wxT("Repeat Pin"), HK_REPEAT_LAST, WXK_INSERT);
 
 // List of hotkey descriptors for libray editor
-static Ki_HotkeyInfo *s_LibEdit_Hotkey_List[] =
+Ki_HotkeyInfo *s_LibEdit_Hotkey_List[] =
 {
 	&HkHelp,
 	&HkZoomIn, &HkZoomOut, &HkZoomRedraw, &HkZoomCenter,
@@ -120,11 +119,14 @@ wxPoint MousePos = m_CurrentScreen->m_MousePosition;
 			DisplayHotkeyList(this, s_Schematic_Hotkey_List);
 			break;
 
+		case HK_RESET_LOCAL_COORD:     /* Reset the relative coord */
+			m_CurrentScreen->m_O_Curseur = m_CurrentScreen->m_Curseur;
+			break;
+
 		case HK_ZOOM_IN:
 		case HK_ZOOM_OUT:
 		case HK_ZOOM_REDRAW:
 		case HK_ZOOM_CENTER:
-		case HK_RESET_LOCAL_COORD:
 			break;
 
 		case HK_MOVEBLOCK_TO_DRAGBLOCK:    // Switch to drag mode, when block moving

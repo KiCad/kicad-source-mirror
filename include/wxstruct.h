@@ -65,7 +65,7 @@ class WinEDAChoiceBox;
 #define WinEDA_Menu     wxMenu
 #define WinEDA_MenuItem wxMenuItem
 
-// Utilis�es mais non definies ici :
+// Utilisees mais non definies ici :
 class LibraryStruct;
 class EDA_LibComponentStruct;
 class LibEDA_BaseStruct;
@@ -97,6 +97,7 @@ class EDGE_MODULE;
 class WinEDA3D_DrawFrame;
 class PARAM_CFG_BASE;
 class Ki_PageDescr;
+class Ki_HotkeyInfo;
 
 
 enum id_librarytype {
@@ -176,7 +177,9 @@ public:
     void            PrintMsg( const wxString& text );
     void            GetSettings( void );
     void            SaveSettings( void );
-    void            SetLanguage( wxCommandEvent& event );
+	int             WriteHotkeyConfigFile(const wxString & Filename, Ki_HotkeyInfo ** List, bool verbose);
+	int             ReadHotkeyConfigFile(const wxString & Filename, Ki_HotkeyInfo ** List, bool verbose);
+	void            SetLanguage( wxCommandEvent& event );
     void            ProcessFontPreferences( int id );
 
     wxString        GetLastProject( int rang );
@@ -802,7 +805,7 @@ public:
     void            Liste_D_Codes( wxDC* DC );
 
     /* Fonctions specifiques */
-    void            Trace_Gerber( wxDC* DC, int mode );
+    void            Trace_Gerber( wxDC* DC, int draw_mode, int printmasklayer );
 
     // Gestion des textes sur pcb
     void            Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );

@@ -333,10 +333,6 @@ void WinEDA_DrawFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels 
         curpos = m_CurrentScreen->m_Curseur;
         break;
 
-    case ' ':       // Remise a zero coord relatives
-        m_CurrentScreen->m_O_Curseur = m_CurrentScreen->m_Curseur;
-        break;
-
     case WXK_NUMPAD8:       /* Deplacement curseur vers le haut */
     case WXK_UP:
         MousePositionInPixels.y -= delta.y;
@@ -391,8 +387,6 @@ void WinEDA_DrawFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels 
         }
     }
 
-    Affiche_Status_Box();    /* Affichage des coord curseur */
-
     if( hotkey )
     {
         if( m_CurrentScreen->GetCurItem()
@@ -401,4 +395,7 @@ void WinEDA_DrawFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels 
         else
             OnHotKey( DC, hotkey, NULL );
     }
+
+    Affiche_Status_Box();    /* Affichage des coord curseur */
+
 }

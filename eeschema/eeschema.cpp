@@ -80,6 +80,7 @@ wxString FFileName;
     }
    
 	SchematicFrame->Zoom_Automatique(TRUE);
+	Read_Hotkey_Config(SchematicFrame, false);
 
 	/* Load file specified in the command line. */
 	if( ! FFileName.IsEmpty() )

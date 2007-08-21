@@ -8,6 +8,16 @@
 #ifndef  HOTKEYS_BASIC_H
 #define  HOTKEYS_BASIC_H
 
+#define DEFAULT_HOTKEY_FILENAME_EXT wxT(".key")
+
+/* define default path for config key file */
+#ifdef __WINDOWS__
+#define DEFAULT_HOTKEY_FILENAME_PATH EDA_Appl->m_BinDir + wxT("../template/")
+#else
+#define DEFAULT_HOTKEY_FILENAME_PATH wxGetHomeDir() + wxT("/")
+#endif
+
+
 /* Class to handle hotkey commnands. hotkeys have a default value
 This class allows (for the future..) the real key code changed by user(from a key code list file, TODO)
 */

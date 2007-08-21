@@ -5,6 +5,7 @@
 	#include "../bitmaps/Cancel.xpm"
 	#include "../bitmaps/cancel_tool.xpm"
 	#include "../bitmaps/Apply.xpm"
+	#include "../bitmaps/reload.xpm"
 
 	#include "../bitmaps/icon_txt.xpm"
 	#include "../bitmaps/new_txt.xpm"
