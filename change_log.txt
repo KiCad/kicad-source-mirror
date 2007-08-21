@@ -13,10 +13,10 @@ email address.
     comfortable with this change if m_Flags is not written to disk anywhere,
     and we need to give that some thought.  If m_Flags is a memory only usage
     and not saved to disk, then this change should be safe.  I could not find
-    any case where m_Flags was being saved do disk, but I could have missed one.
+    any case where m_Flags was being saved to disk, but I could have missed one.
     The reason for the change was to consolidate into one place the allowed values
-    so that as new flags are allowed there is no conflict.
-  * Moved most all the pcbnew/affiche.cpp functions to member functions of their
+    so that as new flags are allocated there is no conflict.
+  * Moved most all the pcbnew/affiche.cpp functions to virtual member functions of their
     respective classes with the name Display_Infos().
   * Moved GetEquipot() global function to BOARD::FindNet().
   These changes are working towards a concise locate.cpp module, on the way
