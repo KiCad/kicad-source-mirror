@@ -28,7 +28,7 @@ email address.
 ================================================================================
 + administrative
     Added copyright.h as a proposed copyright header for Mr. Charras's review.
-    Added uncrustify.cfg the configuration program for "uncrustify" C++ beautifier.
+    Added uncrustify.cfg, the configuration file for the "uncrustify" C++ beautifier.
 
 
 2007-Aug-20 UPDATE   Dick Hollenbeck <dick@softplc.com>

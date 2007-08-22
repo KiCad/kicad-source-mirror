@@ -197,14 +197,6 @@ public:
     }
 
 
-    ~ARROWCOLLECTOR()
-    {
-        // empty list2nd so that ~list2nd() does not try and delete all
-        // the objects that it holds, it is not the owner of such objects
-        // and this prevents a double free()ing.
-        Empty2nd();
-    }
-
     void Empty2nd()
     {
         list2nd.clear();
