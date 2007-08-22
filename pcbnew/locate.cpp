@@ -483,16 +483,18 @@ D_PAD* Locate_Pads( MODULE* module, const wxPoint& ref_pos, int masque_layer )
 }
 
 
-/********************************************************/
-MODULE* Locate_Prefered_Module( BOARD* Pcb, int typeloc )
-/********************************************************/
-
-/*
- *  localisation d'une empreinte par son rectangle d'encadrement
- *  Si plusieurs empreintes sont possibles, la priorite est:
- *      - sur la couche active
- *      - la plus petite
+/**
+ * Function Locate_Prefered_Module
+ * locates a footprint by its bounding rectangle.  If several footprints
+ * are possible, then the priority is: on the active layer, then smallest.
+ * The current mouse or cursor coordinates are grabbed from the active window
+ * to performe hit-testing.
+ *
+ * @param Pcb The BOARD to search within.
+ * @param typeloc Flag bits, tuning the search, see pcbnew.h
+ * @return MODULE* - the best module or NULL if none.
  */
+MODULE* Locate_Prefered_Module( BOARD* Pcb, int typeloc )
 {
     MODULE* pt_module;
     int     lx, ly;                         /* dimensions du rectangle d'encadrement du module */
@@ -898,10 +900,7 @@ TEXTE_PCB* Locate_Texte_Pcb( EDA_BaseStruct* PtStruct, int LayerSearch, int type
         
         if( pt_txt_pcb->m_Layer == LayerSearch )
         {
-            // because HitTest() is present in both base classes of TEXTE_PCB
-            // use a clarifying cast to tell compiler which HitTest()
-            // to call.
-            if( static_cast<EDA_TextStruct*>(pt_txt_pcb)->HitTest( ref ) )
+            if( pt_txt_pcb->HitTest( ref ) )
             {
                 return pt_txt_pcb;
             }

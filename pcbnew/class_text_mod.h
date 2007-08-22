@@ -16,7 +16,6 @@
 class TEXTE_MODULE : public EDA_BaseStruct
 {
 public:
-    int      m_Layer;       // layer number
     int      m_Width;
     wxPoint  m_Pos;         // Real coord
     wxPoint  m_Pos0;        // coord du debut du texte /ancre, orient 0

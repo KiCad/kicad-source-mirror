@@ -154,6 +154,7 @@ public:
 
     unsigned long   m_TimeStamp;        // Time stamp used for logical links
     int             m_Selected;         /* Used by block commands, and selective editing */
+    int             m_Layer;            ///< used by many derived classes, so make common
 
 private:
     int             m_Status;
@@ -347,7 +348,6 @@ class EDA_TextStruct
 {
 public:
     wxString m_Text;                    /* text! */
-    int      m_Layer;                   /* couche d'appartenance */
     wxPoint  m_Pos;                     /* XY position of anchor text. */
     wxSize   m_Size;                    /* XY size of text */
     int      m_Width;                   /* epaisseur du trait */
@@ -389,7 +389,6 @@ public:
 class EDA_BaseLineStruct : public EDA_BaseStruct
 {
 public:
-    int     m_Layer;            // Layer number
     int     m_Width;            // 0 = line, > 0 = tracks, bus ...
     wxPoint m_Start;            // Line start point
     wxPoint m_End;              // Line end point

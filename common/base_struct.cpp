@@ -106,6 +106,7 @@ void EDA_BaseStruct::InitVars( void )
     m_TimeStamp = 0;    // Time stamp used for logical links
     m_Status    = 0;
     m_Selected  = 0;    /* Used by block commands, and selective editing */
+    m_Layer     = 0;
 }
 
 
@@ -297,7 +298,6 @@ EDA_BaseLineStruct::EDA_BaseLineStruct( EDA_BaseStruct* StructFather, DrawStruct
 /*********************************************************/
 EDA_TextStruct::EDA_TextStruct( const wxString& text )
 {
-    m_Layer     = 0;
     m_Size.x    = m_Size.y = DEFAULT_SIZE_TEXT; /* XY size of font */
     m_Orient    = 0;                            /* Orient in 0.1 degrees */
     m_Attributs = 0;

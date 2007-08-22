@@ -141,7 +141,6 @@ public:
     int      m_FileNameSize;
     wxPoint  m_Pos;
     wxSize   m_Size;                    /* Position and Size of sheet symbol */
-    int      m_Layer;
     DrawSheetLabelStruct* m_Label;      /* Points de connection */
     int      m_NbLabel;                 /* Nombre de points de connexion */
 

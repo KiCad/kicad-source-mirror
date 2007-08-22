@@ -134,7 +134,7 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
     wxString        msg;
     int             flags = 0;
     bool            locate_track = FALSE;
-    bool            BlockActive  = (m_CurrentScreen->BlockLocate.m_Command !=  BLOCK_IDLE);
+    bool            BlockActive  = (m_CurrentScreen->BlockLocate.m_Command != BLOCK_IDLE);
     wxClientDC      dc( DrawPanel );
 
     DrawPanel->CursorOff( &dc );
@@ -202,6 +202,7 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
         ADD_MENUITEM( PopMenu, ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST,
                       _( "Get and Move Footprint" ), Move_Module_xpm );
     }
+    
     if( DrawStruct )
     {
         switch( DrawStruct->m_StructType )

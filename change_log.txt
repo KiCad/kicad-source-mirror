@@ -4,6 +4,19 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+
+2007-Aug-22 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ eeschema & pcbnew
+  * Fixed a filename case sensitivity problem that would show up on Linux
+    but probably not on Windows: bitmap/Reload.xpm needed uppercase R.
+  * Since so many classes introduced m_Layer, I moved m_Layer into 
+    EDA_BaseStruct so all classes can inherit it and that way we can test 
+    layer using a general, polymorphic test, i.e. don't have to cast a
+    EDA_BaseStruct* to a class specific pointer to test layer.  Could also have
+    used a virtual function but too many places use m_Layer directly.
+
+
 2007-aug-21 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + eeschema & pcbnew
@@ -15,6 +28,7 @@ email address.
 ================================================================================
 + administrative
     Added copyright.h as a proposed copyright header for Mr. Charras's review.
+    Added uncrustify.cfg the configuration program for "uncrustify" C++ beautifier.
 
 
 2007-Aug-20 UPDATE   Dick Hollenbeck <dick@softplc.com>

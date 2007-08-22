@@ -9,7 +9,6 @@
 class COTATION : public EDA_BaseStruct
 {
 public:
-    int        m_Layer;         // 0.. 32 ( NON bit a bit)
     int        m_Width;
     wxPoint    m_Pos;
     int        m_Shape;

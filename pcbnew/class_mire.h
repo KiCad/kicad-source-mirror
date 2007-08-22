@@ -10,7 +10,6 @@
 class MIREPCB : public EDA_BaseStruct
 {
 public:
-    int     m_Layer;            // 0.. 32 ( NON bit a bit)
     int     m_Width;
     wxPoint m_Pos;
     int     m_Shape;            // bit 0 : 0 = forme +, 1 = forme X

@@ -12,7 +12,7 @@
 #include "id.h"
 
 #if defined(DEBUG)
-#include <class_collector.h>
+#include "class_collector.h"
 #endif
 
 
@@ -69,8 +69,8 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, wxFrame )
     EVT_MENU( ID_CONFIG_REQ, WinEDA_PcbFrame::Process_Config )
     EVT_MENU( ID_COLORS_SETUP, WinEDA_PcbFrame::Process_Config )
     EVT_MENU( ID_OPTIONS_SETUP, WinEDA_PcbFrame::Process_Config )
-	EVT_MENU(ID_PREFERENCES_CREATE_CONFIG_HOTKEYS, WinEDA_PcbFrame::Process_Config)
-	EVT_MENU(ID_PREFERENCES_READ_CONFIG_HOTKEYS, WinEDA_PcbFrame::Process_Config)
+    	EVT_MENU( ID_PREFERENCES_CREATE_CONFIG_HOTKEYS, WinEDA_PcbFrame::Process_Config )
+    EVT_MENU( ID_PREFERENCES_READ_CONFIG_HOTKEYS, WinEDA_PcbFrame::Process_Config )
     EVT_MENU( ID_PCB_TRACK_SIZE_SETUP, WinEDA_PcbFrame::Process_Config )
     EVT_MENU( ID_PCB_DRAWINGS_WIDTHS_SETUP, WinEDA_PcbFrame::Process_Config )
     EVT_MENU( ID_PCB_PAD_SETUP, WinEDA_PcbFrame::Process_Config )
@@ -172,11 +172,77 @@ END_EVENT_TABLE()
 #if defined(DEBUG)
 class RAT1COLLECTOR : public COLLECTOR
 {
+    ;
 };
 
 
 class ARROWCOLLECTOR : public COLLECTOR
 {
+    const KICAD_T*  m_ScanTypes;
+
+    /**
+     * A place to hold collected objects which don't match precisely the search 
+     * criteria, but would be acceptable if nothing else is found. 
+     * "2nd" choice, which will be appended to the end of COLLECTOR's prime 
+     * "list" at the end of the search.
+     */
+    std::vector<EDA_BaseStruct*>    list2nd;
+    
+    
+public:
+    ARROWCOLLECTOR() :
+        COLLECTOR(0),
+        m_ScanTypes(0)
+    {
+    }
+
+
+    ~ARROWCOLLECTOR()
+    {
+        // empty list2nd so that ~list2nd() does not try and delete all
+        // the objects that it holds, it is not the owner of such objects
+        // and this prevents a double free()ing.
+        Empty2nd();
+    }
+
+    void Empty2nd()
+    {
+        list2nd.clear();
+    }
+    
+    
+    /**
+     * Function Inspect
+     * is the examining function within the INSPECTOR which is passed to the 
+     * Iterate function.  It is used primarily for searching, but not limited to
+     * that.  It can also collect or modify the scanned objects.
+     *
+     * @param testItem An EDA_BaseStruct to examine.
+     * @param testData is arbitrary data needed by the inspector to determine
+     *   if the EDA_BaseStruct under test meets its match criteria.
+     * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
+     *   else SCAN_CONTINUE;
+     */ 
+    SEARCH_RESULT Inspect( EDA_BaseStruct* testItem, const void* testData )
+    {
+        const wxPoint&  refPos = *(const wxPoint*) testData;
+        
+        switch( testItem->m_StructType )
+        {
+        case TYPEMODULE:
+            if( testItem->HitTest( refPos ) )
+                Append( testItem );
+            break;
+        }
+
+        return SEARCH_CONTINUE;
+    }
+    
+    
+    void SetScanTypes( const KICAD_T* scanTypes )
+    {
+        m_ScanTypes = scanTypes;
+    }
 };
 #endif
 

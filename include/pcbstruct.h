@@ -276,7 +276,7 @@ public:
     /**
      * Function FindNet
      * searches for a net with the given netcode.
-     * @param anetcode The netcode to search for.
+     * @param anetcode A netcode to search for.
      * @return EQUIPOT* - the net or NULL if not found.
      */
     EQUIPOT* FindNet( int anetcode );

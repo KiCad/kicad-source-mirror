@@ -27,7 +27,7 @@
 #include "New_Project.xpm"
 #include "Open_Project.xpm"
 #include "../bitmaps/icon_python.xpm"
-#include "../bitmaps/reload.xpm"
+#include "../bitmaps/Reload.xpm"
 
 #include "id.h"
 

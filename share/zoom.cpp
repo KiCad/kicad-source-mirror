@@ -329,7 +329,7 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
     int              ii;
     wxString         line;
 
-    grid_list_struct grid_list_pcb[] =
+    static const grid_list_struct grid_list_pcb[] =
     {
         { 1000, ID_POPUP_GRID_LEVEL_1000, wxT( " 100" )    },
         { 500,  ID_POPUP_GRID_LEVEL_500,  wxT( " 50" )     },
@@ -346,7 +346,7 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
         { 0,    ID_POPUP_GRID_USER,       _( "grid user" ) }
     };
 
-    grid_list_struct grid_list_schematic[] =
+    static const grid_list_struct grid_list_schematic[] =
     {
         { 50, ID_POPUP_GRID_LEVEL_50, wxT( " 50" )     },
         { 25, ID_POPUP_GRID_LEVEL_25, wxT( " 25" )     },

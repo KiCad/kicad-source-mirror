@@ -35,6 +35,18 @@ public:
      * @param frame A WinEDA_BasePcbFrame in which to print status information.
      */ 
     void    Display_Infos( WinEDA_DrawFrame* frame );
+
+
+    /**
+     * Function HitTest
+     * tests if the given wxPoint is within the bounds of this object.
+     * @param refPos A wxPoint to test
+     * @return bool - true if a hit, else false
+     */
+    bool    HitTest( const wxPoint& refPos )
+    {
+        return EDA_TextStruct::HitTest( refPos );
+    }
     
     
 #if defined(DEBUG)

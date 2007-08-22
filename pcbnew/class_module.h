@@ -38,7 +38,6 @@ enum Mod_Attribut       /* Attributs d'un module */
 class MODULE : public EDA_BaseStruct
 {
 public:
-    int              m_Layer;           // layer number
     wxPoint          m_Pos;             // Real coord on board
     D_PAD*           m_Pads;            /* Pad list (linked list) */
     EDA_BaseStruct*  m_Drawings;        /* Graphic items list (linked list) */
