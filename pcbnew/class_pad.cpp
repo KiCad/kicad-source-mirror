@@ -25,7 +25,8 @@
 /* classe D_PAD : constructeur */
 /*******************************/
 
-D_PAD::D_PAD( MODULE* parent ) : EDA_BaseStruct( parent, TYPEPAD )
+D_PAD::D_PAD( MODULE* parent ) : 
+    BOARD_ITEM( parent, TYPEPAD )
 {
     m_NumPadName    = 0;
     m_Masque_Layer  = CUIVRE_LAYER;
@@ -520,7 +521,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
     /* Trace du symbole "No connect" ( / ou \ ou croix en X) si necessaire : */
     if( m_Netname.IsEmpty() && DisplayOpt.DisplayPadNoConn )
     {
-        dx0 = min( dx0, dy0 );
+        dx0 = MIN( dx0, dy0 );
         int nc_color = BLUE;
         if( m_Masque_Layer & CMP_LAYER ) /* Trace forme \ */
             GRLine( &panel->m_ClipBox, DC, cx0 - dx0, cy0 - dx0,
@@ -535,7 +536,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
     if( !frame->m_DisplayPadNum )
         return;
     
-    dx = min( m_Size.x, m_Size.y );     /* dx = text size */
+    dx = MIN( m_Size.x, m_Size.y );     /* dx = text size */
     if( (dx / zoom) > 12 )              /* size must be enought to draw 2 chars */
     {
         wxString buffer;

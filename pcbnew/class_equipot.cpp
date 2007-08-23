@@ -22,8 +22,8 @@
 /*********************************************************/
 
 /* Constructeur de la classe EQUIPOT */
-EQUIPOT::EQUIPOT( EDA_BaseStruct* StructFather ) :
-    EDA_BaseStruct( StructFather, PCB_EQUIPOT_STRUCT_TYPE )
+EQUIPOT::EQUIPOT( BOARD_ITEM* StructFather ) :
+    BOARD_ITEM( StructFather, PCB_EQUIPOT_STRUCT_TYPE )
 {
     m_NetCode       = 0;
     m_NbNodes       = m_NbLink = m_NbNoconn = 0;
@@ -39,7 +39,7 @@ EQUIPOT::EQUIPOT( EDA_BaseStruct* StructFather ) :
 
 /* destructeut */
 
-EQUIPOT::~EQUIPOT( void )
+EQUIPOT::~EQUIPOT()
 {
 }
 

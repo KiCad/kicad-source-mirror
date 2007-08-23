@@ -186,7 +186,7 @@ void PlaceCells( BOARD* Pcb, int net_code, int flag )
     TRACK*          pt_segm;
     TEXTE_PCB*      PtText;
     DRAWSEGMENT*    DrawSegm;
-    EDA_BaseStruct* PtStruct;
+    BOARD_ITEM*     PtStruct;
     int             ux0 = 0, uy0 = 0, ux1, uy1, dx, dy;
     int             marge, via_marge;
     int             masque_layer;
@@ -211,19 +211,19 @@ void PlaceCells( BOARD* Pcb, int net_code, int flag )
     // Placement des elements de modules sur PCB //
     ///////////////////////////////////////////////
     PtStruct = Pcb->m_Modules;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
-        EDA_BaseStruct* PtModStruct = ( (MODULE*) PtStruct )->m_Drawings;
-        for( ; PtModStruct != NULL; PtModStruct = PtModStruct->Pnext )
+        BOARD_ITEM* PtModStruct = ( (MODULE*) PtStruct )->m_Drawings;
+        for( ; PtModStruct != NULL; PtModStruct = PtModStruct->Next() )
         {
             switch( PtModStruct->m_StructType )
             {
             case TYPEEDGEMODULE:
             {
                 TRACK* TmpSegm = new TRACK( NULL );
-                TmpSegm->m_Layer = ( (EDGE_MODULE*) PtModStruct )->m_Layer;
-                if( TmpSegm->m_Layer == EDGE_N )
-                    TmpSegm->m_Layer = -1;
+                TmpSegm->SetLayer( ( (EDGE_MODULE*) PtModStruct )->GetLayer() );
+                if( TmpSegm->GetLayer() == EDGE_N )
+                    TmpSegm->SetLayer( -1 );
 
                 TmpSegm->m_Start   = ( (EDGE_MODULE*) PtModStruct )->m_Start;
                 TmpSegm->m_End     = ( (EDGE_MODULE*) PtModStruct )->m_End;
@@ -249,7 +249,7 @@ void PlaceCells( BOARD* Pcb, int net_code, int flag )
     // Placement des contours et segments PCB //
     ////////////////////////////////////////////
     PtStruct = Pcb->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         switch( PtStruct->m_StructType )
         {
@@ -258,10 +258,10 @@ void PlaceCells( BOARD* Pcb, int net_code, int flag )
             int    type_cell = HOLE;
             TRACK* TmpSegm   = new TRACK( NULL );
             DrawSegm = (DRAWSEGMENT*) PtStruct;
-            TmpSegm->m_Layer = DrawSegm->m_Layer;
-            if( DrawSegm->m_Layer == EDGE_N )
+            TmpSegm->SetLayer( DrawSegm->GetLayer() );
+            if( DrawSegm->GetLayer() == EDGE_N )
             {
-                TmpSegm->m_Layer = -1;
+                TmpSegm->SetLayer( -1 );
                 type_cell |= CELL_is_EDGE;
             }
 
@@ -293,7 +293,7 @@ void PlaceCells( BOARD* Pcb, int net_code, int flag )
             ux1  = ux0 + dx; uy1 = uy0 + dy;
             ux0 -= dx; uy0 -= dy;
 
-            masque_layer = g_TabOneLayerMask[PtText->m_Layer];
+            masque_layer = g_TabOneLayerMask[PtText->GetLayer()];
 
             TraceFilledRectangle( Pcb, ux0 - marge, uy0 - marge, ux1 + marge, uy1 + marge,
                                   (int) (PtText->m_Orient),

@@ -108,7 +108,7 @@ void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
     for( ; ii > 0; ii--, pt_segm = (TRACK*) pt_segm->Pnext )
     {
         pt_segm->SetState( BUSY, OFF );
-        pt_segm->m_Param = pt_segm->m_Layer;    /* pour sauvegarde */
+        pt_segm->m_Param = pt_segm->GetLayer();    /* pour sauvegarde */
     }
 
     ii = 0; pt_segm = pt_track;
@@ -118,17 +118,17 @@ void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
             continue;
 
         /* inversion des couches */
-        if( pt_segm->m_Layer == l1 )
-            pt_segm->m_Layer = l2;
-        else if( pt_segm->m_Layer == l2 )
-            pt_segm->m_Layer = l1;
+        if( pt_segm->GetLayer() == l1 )
+            pt_segm->SetLayer( l2 );
+        else if( pt_segm->GetLayer() == l2 )
+            pt_segm->SetLayer( l1 );
 
         if( (Drc_On) && ( Drc( this, DC, pt_segm, m_Pcb->m_Track, 1 ) == BAD_DRC ) )
         {       /* Annulation du changement */
             ii = 0; pt_segm = pt_track;
             for( ; ii < nb_segm; ii++, pt_segm = (TRACK*) pt_segm->Pnext )
             {
-                pt_segm->m_Layer = pt_segm->m_Param;
+                pt_segm->SetLayer( pt_segm->m_Param );
             }
 
             Trace_Une_Piste( DrawPanel, DC, pt_track, nb_segm, GR_OR );
@@ -178,7 +178,7 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
     }
 
     /* Les vias ne doivent pas etre inutilement empilees: */
-    if( Locate_Via( m_Pcb, g_CurrentTrackSegment->m_End, g_CurrentTrackSegment->m_Layer ) )
+    if( Locate_Via( m_Pcb, g_CurrentTrackSegment->m_End, g_CurrentTrackSegment->GetLayer() ) )
         return;
     pt_segm = g_FirstTrackSegment;
     for( ii = 0; ii < g_TrackSegmentCount - 1; ii++, pt_segm = (TRACK*) pt_segm->Pnext )
@@ -206,7 +206,7 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
     Via->m_NetCode = g_HightLigth_NetCode;
     Via->m_Start   = Via->m_End = g_CurrentTrackSegment->m_End;
 
-    Via->m_Layer = GetScreen()->m_Active_Layer;
+    Via->SetLayer( GetScreen()->m_Active_Layer );
 
     // Provisoirement. indicate the first layer (?)
 
@@ -218,19 +218,19 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
 
     if( (Via->m_Shape & 15) == VIA_ENTERREE )
     {
-        Via->m_Layer |= GetScreen()->m_Active_Layer << 4;
+        Via->SetLayer( Via->GetLayer() | GetScreen()->m_Active_Layer << 4 );
     }
     else if( (Via->m_Shape & 15) == VIA_BORGNE )    //blind via
     {                                               // A revoir! ( la via devrait deboucher sur 1 cote )
-        Via->m_Layer |= GetScreen()->m_Active_Layer << 4;
+        Via->SetLayer( Via->GetLayer() |  GetScreen()->m_Active_Layer << 4 );
     }
     else
-        Via->m_Layer = 0x0F;
+        Via->SetLayer( 0x0F );
 
     if( Drc_On &&( Drc( this, DC, Via, m_Pcb->m_Track, 1 ) == BAD_DRC ) )
     { /* Via impossible a placer ici */
         delete Via;
-        GetScreen()->m_Active_Layer = g_CurrentTrackSegment->m_Layer;
+        GetScreen()->m_Active_Layer = g_CurrentTrackSegment->GetLayer();
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
         return;
     }
@@ -240,7 +240,7 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
     g_CurrentTrackSegment->Pnext = Via;
     g_TrackSegmentCount++;
     g_CurrentTrackSegment = new TRACK( *g_CurrentTrackSegment );
-    g_CurrentTrackSegment->m_Layer = GetScreen()->m_Active_Layer;
+    g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer );
     g_CurrentTrackSegment->m_Start = g_CurrentTrackSegment->m_End = Via->m_Start;
     g_TrackSegmentCount++;
     g_CurrentTrackSegment->Pback = Via;

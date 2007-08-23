@@ -169,7 +169,7 @@ EDA_BaseStruct* WinEDA_BasePcbFrame::Locate( int typeloc, int LayerSearch )
         MODULE* module = m_Pcb->m_Modules;
         for(   ;   module != NULL;  module = (MODULE*) module->Pnext )
         {
-            if( module->m_Layer != LayerSearch )
+            if( module->GetLayer() != LayerSearch )
                 continue;
 
             item = LocateTexteModule( m_Pcb, &module, typeloc | VISIBLE_ONLY );
@@ -266,7 +266,7 @@ D_PAD* Locate_Pad_Connecte( BOARD* Pcb, TRACK* ptr_piste, int extr )
     MODULE* module;
     wxPoint ref_pos;
 
-    masque_layer = g_TabOneLayerMask[ptr_piste->m_Layer];
+    masque_layer = g_TabOneLayerMask[ptr_piste->GetLayer()];
     if( extr == START )
     {
         ref_pos = ptr_piste->m_Start;
@@ -374,14 +374,14 @@ DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int LayerSearch, int typeloc )
         
         DRAWSEGMENT*  pts = (DRAWSEGMENT*) PtStruct;
         
-        if( (pts->m_Layer != LayerSearch) && (LayerSearch != -1) )
+        if( (pts->GetLayer() != LayerSearch) && (LayerSearch != -1) )
             continue;
 
         if( pts->HitTest( ref_pos ) )
         {
             // return this hit if layer matches, else remember in 
             // case no layer match is found.
-            if( pts->m_Layer == screen->m_Active_Layer )
+            if( pts->GetLayer() == screen->m_Active_Layer )
                 return pts;
 
             else if( !locate_segm )
@@ -394,8 +394,8 @@ DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int LayerSearch, int typeloc )
 
 
 /*************************************************
- * D_PAD * Locate_Any_Pad(int typeloc, bool OnlyCurrentLayer)
- * D_PAD* Locate_Any_Pad(int ref_pos, bool OnlyCurrentLayer)
+ * D_PAD * Locate_Any_Pad( BOARD* Pcb, int typeloc, bool OnlyCurrentLayer)
+ * D_PAD* Locate_Any_Pad( BOARD* Pcb, int ref_pos, bool OnlyCurrentLayer)
  *************************************************/
 
 /*
@@ -522,7 +522,7 @@ MODULE* Locate_Prefered_Module( BOARD* Pcb, int typeloc )
          *  d'appartenance du module et a la couche cuivre si le module
          *  est sur couche serigr,adhesive cuivre, a la couche cmp si le module
          *  est sur couche serigr,adhesive composant */
-        layer = pt_module->m_Layer;
+        layer = pt_module->GetLayer();
 
         if( layer==ADHESIVE_N_CU || layer==SILKSCREEN_N_CU )
             layer = CUIVRE_N;
@@ -538,21 +538,21 @@ MODULE* Locate_Prefered_Module( BOARD* Pcb, int typeloc )
         
         if( ( (PCB_SCREEN*) ActiveScreen )->m_Active_Layer == layer )
         {
-            if( min( lx, ly ) <= min_dim )
+            if( MIN( lx, ly ) <= min_dim )
             {
                 /* meilleure empreinte localisee sur couche active */
                 module  = pt_module; 
-                min_dim = min( lx, ly );
+                min_dim = MIN( lx, ly );
             }
         }
         else if( !(typeloc & MATCH_LAYER)
             && ( !(typeloc & VISIBLE_ONLY) || IsModuleLayerVisible( layer ) ) )
         {
-            if( min( lx, ly ) <= alt_min_dim )
+            if( MIN( lx, ly ) <= alt_min_dim )
             {
                 /* meilleure empreinte localisee sur autres couches */
                 Altmodule   = pt_module;
-                alt_min_dim = min( lx, ly );
+                alt_min_dim = MIN( lx, ly );
             }
         }
     }
@@ -603,7 +603,7 @@ TEXTE_MODULE* LocateTexteModule( BOARD* Pcb, MODULE** PtModule, int typeloc )
 
     for( ; module != NULL; module = (MODULE*) module->Pnext )
     {
-        int layer = module->m_Layer;
+        int layer = module->GetLayer();
         if( layer==ADHESIVE_N_CU || layer==SILKSCREEN_N_CU )
             layer = CUIVRE_N;
         else if( layer==ADHESIVE_N_CMP || layer==SILKSCREEN_N_CMP )
@@ -817,7 +817,7 @@ TRACK* Locate_Pistes( TRACK* start_adresse, const wxPoint& ref_pos, int MasqueLa
         if( Track->GetState( BUSY | DELETED ) )
             continue;
         
-        if( (g_DesignSettings.m_LayerColor[Track->m_Layer] & ITEM_NOT_SHOW) )
+        if( (g_DesignSettings.m_LayerColor[Track->GetLayer()] & ITEM_NOT_SHOW) )
             continue;
 
         if( Track->m_StructType == TYPEVIA ) /* VIA rencontree */
@@ -828,7 +828,7 @@ TRACK* Locate_Pistes( TRACK* start_adresse, const wxPoint& ref_pos, int MasqueLa
         else
         {
             if( MasqueLayer != -1 )
-                if( (g_TabOneLayerMask[Track->m_Layer] & MasqueLayer) == 0 )
+                if( (g_TabOneLayerMask[Track->GetLayer()] & MasqueLayer) == 0 )
                     continue;   /* Segments sur couches differentes */
                 
             if( Track->HitTest( ref_pos ) )
@@ -869,7 +869,7 @@ TRACK* Locate_Zone( TRACK* start_adresse, const wxPoint& ref_pos, int layer )
 {
     for( TRACK* Zone = start_adresse;  Zone;   Zone = (TRACK*) Zone->Pnext )
     {
-        if( (layer != -1) && (Zone->m_Layer != layer) )
+        if( (layer != -1) && (Zone->GetLayer() != layer) )
             continue;
         
         if( Zone->HitTest( ref_pos ) )
@@ -898,7 +898,7 @@ TEXTE_PCB* Locate_Texte_Pcb( EDA_BaseStruct* PtStruct, int LayerSearch, int type
         
         TEXTE_PCB* pt_txt_pcb = (TEXTE_PCB*) PtStruct;
         
-        if( pt_txt_pcb->m_Layer == LayerSearch )
+        if( pt_txt_pcb->GetLayer() == LayerSearch )
         {
             if( pt_txt_pcb->HitTest( ref ) )
             {
@@ -1048,7 +1048,7 @@ EDA_BaseStruct* Locate_MirePcb( EDA_BaseStruct* PtStruct, int LayerSearch,
             continue;
 
         item = (MIREPCB*) PtStruct;
-        if( LayerSearch != -1 && item->m_Layer != LayerSearch )
+        if( LayerSearch != -1 && item->GetLayer() != LayerSearch )
             continue;
 
         if( item->HitTest( ref_pos ) )

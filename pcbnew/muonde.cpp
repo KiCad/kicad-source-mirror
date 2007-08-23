@@ -243,7 +243,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent( wxDC* DC, int shape_type )
         Module->m_Drawings = edge;
         edge->Pback       = Module;
         edge->m_Shape     = S_POLYGON;
-        edge->m_Layer     = LAYER_CMP_N;
+        edge->SetLayer( LAYER_CMP_N );
         edge->m_PolyCount = ii + 3;
         edge->m_PolyList  = (int*) MyMalloc( edge->m_PolyCount * 2 * sizeof(int) );
         ptr = edge->m_PolyList;
@@ -574,7 +574,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWavePolygonShape( wxDC* DC )
     Module->m_Drawings = edge;
     edge->Pback   = Module;
     edge->m_Shape = S_POLYGON;
-    edge->m_Layer = LAYER_CMP_N;
+    edge->SetLayer( LAYER_CMP_N );
     npoints = PolyEdgesCount;
 
     switch( PolyShapeType )

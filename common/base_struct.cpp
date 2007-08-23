@@ -106,7 +106,6 @@ void EDA_BaseStruct::InitVars( void )
     m_TimeStamp = 0;    // Time stamp used for logical links
     m_Status    = 0;
     m_Selected  = 0;    /* Used by block commands, and selective editing */
-    m_Layer     = 0;
 }
 
 
@@ -281,6 +280,7 @@ std::ostream& EDA_BaseStruct::NestedSpace( int nestLevel, std::ostream& os )
 }
 
 #endif
+
 
 
 /**********************************************************************************************/

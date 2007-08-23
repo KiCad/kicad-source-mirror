@@ -9,15 +9,15 @@
 #include "pcbnew.h"
 
 
-MIREPCB::MIREPCB( EDA_BaseStruct* StructFather ) :
-    EDA_BaseStruct( StructFather, TYPEMIRE )
+MIREPCB::MIREPCB( BOARD_ITEM* StructFather ) :
+    BOARD_ITEM( StructFather, TYPEMIRE )
 {
     m_Shape = 0;
     m_Size  = 5000;
 }
 
 
-MIREPCB::~MIREPCB( void )
+MIREPCB::~MIREPCB()
 {
 }
 
@@ -39,7 +39,7 @@ void MIREPCB::UnLink( void )
         }
         else /* Le chainage arriere pointe sur la structure "Pere" */
         {
-            ( (BOARD*) Pback )->m_Drawings = Pnext;
+            ( (BOARD*) Pback )->m_Drawings = (BOARD_ITEM*) Pnext;
         }
     }
 

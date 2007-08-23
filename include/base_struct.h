@@ -110,7 +110,7 @@ public:
      *
      * @param testItem An EDA_BaseStruct to examine.
      * @param testData is arbitrary data needed by the inspector to determine
-     *   if the EDA_BaseStruct under test meets its match criteria.
+     *   if the BOARD_ITEM under test meets its match criteria.
      * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
      *   else SCAN_CONTINUE;
      */ 
@@ -154,7 +154,7 @@ public:
 
     unsigned long   m_TimeStamp;        // Time stamp used for logical links
     int             m_Selected;         /* Used by block commands, and selective editing */
-    int             m_Layer;            ///< used by many derived classes, so make common
+//    int             m_Layer;            ///< used by many derived classes, so make common
 
 private:
     int             m_Status;
@@ -298,21 +298,6 @@ public:
      **/
     static std::ostream& NestedSpace( int nestLevel, std::ostream& os );
 
-    
-    /**
-     * Function ListHas
-     * scans the given array and detects if the given type t is present.
-     * @param list An array of KICAD_T, terminated with EOT.
-     * @param t A KICAD_T to check for.
-     * @return bool - true if present, else false.
-     */
-    static bool ListHas( const KICAD_T list[], KICAD_T t )
-    {
-        for( const KICAD_T* p = list;  *p != EOT;  ++p )
-            if( *p == t )
-                return true;
-        return false;
-    }
 #endif
 
 };
@@ -383,12 +368,59 @@ public:
 };
 
 
-/* Basic class for build items like lines, which have 1 start point and 1 end point.
- *  Arc and circles can use this class.
+/**
+ * Class BOARD_ITEM
+ * is an abstract base class for any item which can be embedded within the BOARD
+ * container class, and therefore instances of derived classes should only be 
+ * found in PCBNEW or other programs that use class BOARD and its contents. 
+ * The corresponding class in EESCHEMA seems to be DrawPartStruct.
+ */
+class BOARD_ITEM : public EDA_BaseStruct
+{
+protected:
+    int     m_Layer;
+
+public:
+
+    BOARD_ITEM( BOARD_ITEM* StructFather, DrawStructureType idtype ) :
+        EDA_BaseStruct( StructFather, idtype ),
+        m_Layer(0)
+    {
+    }
+
+    BOARD_ITEM( const BOARD_ITEM& src ) :
+        EDA_BaseStruct( src.m_Parent, src.m_StructType ),
+        m_Layer( src.m_Layer )
+    {
+    }
+
+    BOARD_ITEM* Next()      { return (BOARD_ITEM*) Pnext; }
+
+    
+    /**
+     * Function GetLayer
+     * returns the layer this item is on.
+     */
+    int         GetLayer() const  { return m_Layer; }
+    
+    /**
+     * Function SetLayer
+     * sets the layer this item is on.
+     * @param aLayer The layer number.
+     */
+    void        SetLayer( int aLayer )  { m_Layer = aLayer; }
+    
+        
+};
+
+
+/* Base class for building items like lines, which have 1 start point and 1 end point.
+ * Arc and circles can use this class.
  */
 class EDA_BaseLineStruct : public EDA_BaseStruct
 {
 public:
+    int     m_Layer;            // Layer number
     int     m_Width;            // 0 = line, > 0 = tracks, bus ...
     wxPoint m_Start;            // Line start point
     wxPoint m_End;              // Line end point

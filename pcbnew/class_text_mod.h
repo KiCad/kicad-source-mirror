@@ -13,7 +13,7 @@
 #define TEXT_is_DIVERS    2
 
 
-class TEXTE_MODULE : public EDA_BaseStruct
+class TEXTE_MODULE : public BOARD_ITEM
 {
 public:
     int      m_Width;

@@ -116,7 +116,7 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
         {
             if( nbpoints )
             {
-                int Color = g_DesignSettings.m_LayerColor[track->m_Layer];
+                int Color = g_DesignSettings.m_LayerColor[track->GetLayer()];
                 GRClosedPoly( &DrawPanel->m_ClipBox, DC, nbpoints, coord,
                               1, Color, Color );
             }
@@ -141,7 +141,7 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
         }
         if( track->Next() == NULL )    // Last point
         {
-            int Color = g_DesignSettings.m_LayerColor[track->m_Layer];
+            int Color = g_DesignSettings.m_LayerColor[track->GetLayer()];
             GRClosedPoly( &DrawPanel->m_ClipBox, DC, nbpoints, coord,
                           1, Color, Color );
         }

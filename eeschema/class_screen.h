@@ -107,10 +107,10 @@ public:
 };
 
 
-class DrawSheetLabelStruct : public EDA_BaseStruct
-    , public EDA_TextStruct
+class DrawSheetLabelStruct : public EDA_BaseStruct, public EDA_TextStruct
 {
 public:
+    int  m_Layer;
     int  m_Edge, m_Shape;
     bool m_IsDangling;  // TRUE si non connecté
 
@@ -141,6 +141,7 @@ public:
     int      m_FileNameSize;
     wxPoint  m_Pos;
     wxSize   m_Size;                    /* Position and Size of sheet symbol */
+    int      m_Layer;
     DrawSheetLabelStruct* m_Label;      /* Points de connection */
     int      m_NbLabel;                 /* Nombre de points de connexion */
 

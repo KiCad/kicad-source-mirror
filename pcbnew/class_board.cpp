@@ -15,7 +15,7 @@
 
 /* Constructor */
 BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
-    EDA_BaseStruct( parent, TYPEPCB )
+    BOARD_ITEM( (BOARD_ITEM*) parent, TYPEPCB )
 {
     m_PcbFrame   = frame;
     m_Status_Pcb = 0;                   // Mot d'etat: Bit 1 = Chevelu calcule
@@ -24,7 +24,7 @@ BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
     m_NbPads  = 0;                      // nombre total de pads
     m_NbNodes = 0;                      // nombre de pads connectes
     m_NbLinks = 0;                      // nombre de chevelus (donc aussi nombre
-                                    // minimal de pistes a tracer
+                                        // minimal de pistes a tracer
     m_NbSegmTrack = 0;                  // nombre d'elements de type segments de piste
     m_NbSegmZone  = 0;                  // nombre d'elements de type segments de zone
     m_NbNoconnect = 0;                  // nombre de chevelus actifs
@@ -39,7 +39,7 @@ BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
     m_Ratsnest         = NULL;          // pointeur liste rats
     m_LocalRatsnest    = NULL;          // pointeur liste rats local
     m_CurrentLimitZone = NULL;          // pointeur liste des EDEGE_ZONES
-                                // de determination des contours de zone
+                                        // de determination des contours de zone
 }
 
 
@@ -160,22 +160,22 @@ bool BOARD::ComputeBoundaryBox( void )
             cx        = ptr->m_Start.x; cy = ptr->m_Start.y;
             rayon     = (int) hypot( (double) (ptr->m_End.x - cx), (double) (ptr->m_End.y - cy) );
             rayon    += d;
-            xmin      = min( xmin, cx - rayon );
-            ymin      = min( ymin, cy - rayon );
-            xmax      = max( xmax, cx + rayon );
-            ymax      = max( ymax, cy + rayon );
+            xmin      = MIN( xmin, cx - rayon );
+            ymin      = MIN( ymin, cy - rayon );
+            xmax      = MAX( xmax, cx + rayon );
+            ymax      = MAX( ymax, cy + rayon );
             Has_Items = TRUE;
         }
         else
         {
-            cx        = min( ptr->m_Start.x, ptr->m_End.x );
-            cy        = min( ptr->m_Start.y, ptr->m_End.y );
-            xmin      = min( xmin, cx - d );
-            ymin      = min( ymin, cy - d );
-            cx        = max( ptr->m_Start.x, ptr->m_End.x );
-            cy        = max( ptr->m_Start.y, ptr->m_End.y );
-            xmax      = max( xmax, cx + d );
-            ymax      = max( ymax, cy + d );
+            cx        = MIN( ptr->m_Start.x, ptr->m_End.x );
+            cy        = MIN( ptr->m_Start.y, ptr->m_End.y );
+            xmin      = MIN( xmin, cx - d );
+            ymin      = MIN( ymin, cy - d );
+            cx        = MAX( ptr->m_Start.x, ptr->m_End.x );
+            cy        = MAX( ptr->m_Start.y, ptr->m_End.y );
+            xmax      = MAX( xmax, cx + d );
+            ymax      = MAX( ymax, cy + d );
             Has_Items = TRUE;
         }
     }
@@ -185,19 +185,19 @@ bool BOARD::ComputeBoundaryBox( void )
     for( ; module != NULL; module = (MODULE*) module->Pnext )
     {
         Has_Items = TRUE;
-        xmin = min( xmin, ( module->m_Pos.x + module->m_BoundaryBox.GetX() ) );
-        ymin = min( ymin, ( module->m_Pos.y + module->m_BoundaryBox.GetY() ) );
-        xmax = max( xmax, module->m_Pos.x + module->m_BoundaryBox.GetRight() );
-        ymax = max( ymax, module->m_Pos.y + module->m_BoundaryBox.GetBottom() );
+        xmin = MIN( xmin, ( module->m_Pos.x + module->m_BoundaryBox.GetX() ) );
+        ymin = MIN( ymin, ( module->m_Pos.y + module->m_BoundaryBox.GetY() ) );
+        xmax = MAX( xmax, module->m_Pos.x + module->m_BoundaryBox.GetRight() );
+        ymax = MAX( ymax, module->m_Pos.y + module->m_BoundaryBox.GetBottom() );
 
         D_PAD* pt_pad = module->m_Pads;
         for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
         {
             d    = pt_pad->m_Rayon;
-            xmin = min( xmin, pt_pad->m_Pos.x - d );
-            ymin = min( ymin, pt_pad->m_Pos.y - d );
-            xmax = max( xmax, pt_pad->m_Pos.x + d );
-            ymax = max( ymax, pt_pad->m_Pos.y + d );
+            xmin = MIN( xmin, pt_pad->m_Pos.x - d );
+            ymin = MIN( ymin, pt_pad->m_Pos.y - d );
+            xmax = MAX( xmax, pt_pad->m_Pos.x + d );
+            ymax = MAX( ymax, pt_pad->m_Pos.y + d );
         }
     }
 
@@ -205,28 +205,28 @@ bool BOARD::ComputeBoundaryBox( void )
     for( Track = m_Track; Track != NULL; Track = (TRACK*) Track->Pnext )
     {
         d         = (Track->m_Width / 2) + 1;
-        cx        = min( Track->m_Start.x, Track->m_End.x );
-        cy        = min( Track->m_Start.y, Track->m_End.y );
-        xmin      = min( xmin, cx - d );
-        ymin      = min( ymin, cy - d );
-        cx        = max( Track->m_Start.x, Track->m_End.x );
-        cy        = max( Track->m_Start.y, Track->m_End.y );
-        xmax      = max( xmax, cx + d );
-        ymax      = max( ymax, cy + d );
+        cx        = MIN( Track->m_Start.x, Track->m_End.x );
+        cy        = MIN( Track->m_Start.y, Track->m_End.y );
+        xmin      = MIN( xmin, cx - d );
+        ymin      = MIN( ymin, cy - d );
+        cx        = MAX( Track->m_Start.x, Track->m_End.x );
+        cy        = MAX( Track->m_Start.y, Track->m_End.y );
+        xmax      = MAX( xmax, cx + d );
+        ymax      = MAX( ymax, cy + d );
         Has_Items = TRUE;
     }
 
     for( Track = m_Zone; Track != NULL; Track = (TRACK*) Track->Pnext )
     {
         d         = (Track->m_Width / 2) + 1;
-        cx        = min( Track->m_Start.x, Track->m_End.x );
-        cy        = min( Track->m_Start.y, Track->m_End.y );
-        xmin      = min( xmin, cx - d );
-        ymin      = min( ymin, cy - d );
-        cx        = max( Track->m_Start.x, Track->m_End.x );
-        cy        = max( Track->m_Start.y, Track->m_End.y );
-        xmax      = max( xmax, cx + d );
-        ymax      = max( ymax, cy + d );
+        cx        = MIN( Track->m_Start.x, Track->m_End.x );
+        cy        = MIN( Track->m_Start.y, Track->m_End.y );
+        xmin      = MIN( xmin, cx - d );
+        ymin      = MIN( ymin, cy - d );
+        cx        = MAX( Track->m_Start.x, Track->m_End.x );
+        cy        = MAX( Track->m_Start.y, Track->m_End.y );
+        xmax      = MAX( xmax, cx + d );
+        ymax      = MAX( ymax, cy + d );
         Has_Items = TRUE;
     }
 
@@ -378,7 +378,7 @@ EDA_BaseStruct* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
     class PadOrModule : public INSPECTOR
     {
     public:
-        EDA_BaseStruct*     found;
+        BOARD_ITEM*         found;
         int                 layer;
         int                 layer_mask;
     
@@ -388,46 +388,47 @@ EDA_BaseStruct* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
     
         SEARCH_RESULT Inspect( EDA_BaseStruct* testItem, const void* testData )
         {
-            const wxPoint& refPos =  *(const wxPoint*) testData;
+            BOARD_ITEM*     item   = (BOARD_ITEM*) testItem;
+            const wxPoint&  refPos = *(const wxPoint*) testData;
     
-            if( testItem->m_StructType == TYPEPAD )
+            if( item->m_StructType == TYPEPAD )
             {
-                D_PAD*  pad = (D_PAD*) testItem;
+                D_PAD*  pad = (D_PAD*) item;
                 if( pad->HitTest( refPos ) )
                 {
                     if( layer_mask & pad->m_Masque_Layer ) 
                     {
-                        found = testItem;
+                        found = item;
                         return SEARCH_QUIT;
                     }
                     else if( !found )
                     {
                         MODULE* parent = (MODULE*) pad->m_Parent;
-                        if( IsModuleLayerVisible( parent->m_Layer ) )
-                            found = testItem;
+                        if( IsModuleLayerVisible( parent->GetLayer() ) )
+                            found = item;
                     }
                 }
             }
             
-            else if( testItem->m_StructType == TYPEMODULE )
+            else if( item->m_StructType == TYPEMODULE )
             {
-                MODULE* module = (MODULE*) testItem;
+                MODULE* module = (MODULE*) item;
 
                 // consider only visible modules
-                if( IsModuleLayerVisible( module->m_Layer ) )
+                if( IsModuleLayerVisible( module->GetLayer() ) )
                 {
                     if( module->HitTest( refPos ) )
                     {
-                        if( layer == module->m_Layer )
+                        if( layer == module->GetLayer() )
                         {
-                            found = testItem;
+                            found = item;
                             return SEARCH_QUIT;
                         }
                         
                         // layer mismatch, save in case we don't find a
                         // future layer match hit.
                         if( !found )
-                            found = testItem;
+                            found = item;
                     }
                 }
             }

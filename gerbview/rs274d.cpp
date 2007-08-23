@@ -105,7 +105,7 @@ TRACK * track;
 	track = new TRACK(frame->m_Pcb);
 	track->Insert(frame->m_Pcb, NULL);
 
-	track->m_Layer = frame->GetScreen()->m_Active_Layer;
+	track->SetLayer( frame->GetScreen()->m_Active_Layer );
 	track->m_Width = diametre ;
 	track->m_Start = track->m_End = pos;
 	NEGATE(track->m_Start.y);
@@ -129,13 +129,13 @@ static void Append_1_Flash_GERBER(int Dcode_index,
 TRACK * track;
 int width, len;
 
-	width = min( size.x, size.y );
-	len = max( size.x, size.y ) - width;
+	width = MIN( size.x, size.y );
+	len = MAX( size.x, size.y ) - width;
 
 	track = new TRACK(frame->m_Pcb);
 	track->Insert(frame->m_Pcb, NULL);
 
-	track->m_Layer = frame->GetScreen()->m_Active_Layer;
+	track->SetLayer( frame->GetScreen()->m_Active_Layer );
 	track->m_Width = width;
 	track->m_Start = track->m_End = pos;
 	NEGATE(track->m_Start.y);
@@ -176,7 +176,7 @@ TRACK * track;
 	track = new TRACK( frame->m_Pcb );
 	track->Insert(frame->m_Pcb, NULL);
 
-	track->m_Layer = frame->GetScreen()->m_Active_Layer ;
+	track->SetLayer( frame->GetScreen()->m_Active_Layer );
 	track->m_Width = largeur ;
 	track->m_Start = startpoint;
 	NEGATE(track->m_Start.y);
@@ -213,7 +213,7 @@ wxPoint center, delta;
 	track->Insert(frame->m_Pcb, NULL);
 
 	track->m_Shape = S_ARC;
-	track->m_Layer = frame->GetScreen()->m_Active_Layer ;
+	track->SetLayer( frame->GetScreen()->m_Active_Layer );
 	track->m_Width = largeur ;
 
 	if ( multiquadrant )
@@ -555,7 +555,7 @@ bool GERBER_Descr::Execute_G_Command(char * &text, int G_commande)
 			if ( D_commande < FIRST_DCODE) return FALSE;
 			if (D_commande > (MAX_TOOLS-1)) D_commande = MAX_TOOLS-1;
 			m_Current_Tool = D_commande;
-			D_CODE * pt_Dcode = ReturnToolDescr(m_Layer, D_commande);
+			D_CODE * pt_Dcode = ReturnToolDescr( m_Layer, D_commande );
 			if ( pt_Dcode ) pt_Dcode->m_InUse = TRUE;
 			break;
 		}
@@ -643,7 +643,7 @@ wxString msg;
 				if ( last ) while (last->Pnext ) last = (SEGZONE*)last->Pnext;
 				edge_poly->Insert(frame->m_Pcb, last);
 
-				edge_poly->m_Layer = frame->GetScreen()->m_Active_Layer ;
+				edge_poly->SetLayer( frame->GetScreen()->m_Active_Layer );
 				edge_poly->m_Width = 1;
 				edge_poly->m_Start = m_PreviousPos;
 				NEGATE(edge_poly->m_Start.y);

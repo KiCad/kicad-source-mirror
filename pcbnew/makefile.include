@@ -101,7 +101,8 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		gen_modules_placefile.o\
 		modedit.o\
 		export_gencad.o\
-		hotkeys.o
+		hotkeys.o \
+        collectors.o
 
 setpage.o: ../share/setpage.cpp
 	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
@@ -289,3 +290,4 @@ dragsegm.o: dragsegm.cpp drag.h $(COMMON)
 
 router.o: router.cpp $(COMMON)
 
+collectors.o: collectors.cpp collectors.h $(COMMON)  

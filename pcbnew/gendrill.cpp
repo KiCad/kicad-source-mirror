@@ -915,7 +915,7 @@ wxString msg;
 			float Xscale = (float) (SheetSize.x - (marge*2)) / dX;
 			float Yscale = (float) (SheetSize.y * 0.6 - (marge*2)) / dY;
 
-			scale_x = scale_y = min(Xscale, Yscale);
+			scale_x = scale_y = MIN(Xscale, Yscale);
 
 			g_PlotOffset.x = - (SheetSize.x/2) +
 					(int)(BoardCentre.x * scale_x) + marge;

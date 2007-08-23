@@ -106,6 +106,7 @@ class DrawBusEntryStruct: public EDA_BaseStruct  /* Struct de descr 1 raccord
 									 a 45 degres de BUS ou WIRE */
 {
 public:
+    int m_Layer;
 	int m_Width;
 	wxPoint m_Pos;
 	wxSize m_Size;
@@ -121,6 +122,7 @@ public:
 class DrawPolylineStruct: public EDA_BaseStruct	/* Polyligne (serie de segments) */
 {
 public:
+    int m_Layer;
 	int m_Width;
 	int m_NumOfPoints;				/* Number of XY pairs in Points array. */
 	int *m_Points;					/* XY pairs that forms the polyline. */
@@ -135,6 +137,7 @@ public:
 class DrawJunctionStruct: public EDA_BaseStruct
 {
 public:
+    int m_Layer;
 	wxPoint m_Pos;					/* XY coordinates of connection. */
 
 public:
@@ -147,6 +150,7 @@ public:
 class DrawTextStruct: public EDA_BaseStruct, public EDA_TextStruct
 {
 public:
+    int m_Layer;
 	int m_Shape;
 	bool m_IsDangling;	// TRUE si non connecté
 
@@ -163,12 +167,14 @@ private:
 	void DrawAsGlobalLabel(WinEDA_DrawPanel * panel, wxDC * DC, const wxPoint & offset, int draw_mode, int Color);
 };
 
+
 class DrawLabelStruct: public DrawTextStruct
 {
 public:
 	DrawLabelStruct(const wxPoint & pos = wxPoint(0,0), const wxString & text = wxEmptyString);
 	~DrawLabelStruct(void) {}
 };
+
 
 class DrawGlobalLabelStruct: public DrawTextStruct
 {

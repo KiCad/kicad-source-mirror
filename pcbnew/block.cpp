@@ -430,7 +430,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
  *  routine d'effacement du block deja selectionne
  */
 {
-    EDA_BaseStruct* PtStruct, * NextS;
+    BOARD_ITEM*     PtStruct, * NextS;
     int             masque_layer;
 
     if( !InstallBlockCmdFrame( this, _( "Delete Block" ) ) )
@@ -448,7 +448,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
         module = m_Pcb->m_Modules;
         for( ; module != NULL; module = (MODULE*) NextS )
         {
-            NextS = module->Pnext;
+            NextS = module->Next();
             if( IsModuleInBox( GetScreen()->BlockLocate, module ) == NULL )
                 continue;
             /* le module est ici bon a etre efface */
@@ -467,9 +467,10 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
         Affiche_Message( _( "Delete tracks" ) );
         for( pt_segm = m_Pcb->m_Track; pt_segm != NULL; pt_segm = (TRACK*) NextS )
         {
-            NextS = pt_segm->Pnext;
+            NextS = pt_segm->Next();
             if( IsSegmentInBox( GetScreen()->BlockLocate, pt_segm ) )
-            {       /* la piste est ici bonne a etre efface */
+            {       
+                /* la piste est ici bonne a etre efface */
                 pt_segm->Draw( DrawPanel, DC, GR_XOR );
                 DeleteStructure( pt_segm );
             }
@@ -487,14 +488,14 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
     PtStruct = m_Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = NextS )
     {
-        NextS = PtStruct->Pnext;
+        NextS = PtStruct->Next();
 
         switch( PtStruct->m_StructType )
         {
         case TYPEDRAWSEGMENT:
                 #undef STRUCT
                 #define STRUCT ( (DRAWSEGMENT*) PtStruct )
-            if( (g_TabOneLayerMask[STRUCT->m_Layer] & masque_layer) == 0 )
+            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
             if( IsStructInBox( GetScreen()->BlockLocate, PtStruct ) == NULL )
                 break;
@@ -517,7 +518,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
         case TYPEMIRE:
                 #undef STRUCT
                 #define STRUCT ( (MIREPCB*) PtStruct )
-            if( (g_TabOneLayerMask[STRUCT->m_Layer] & masque_layer) == 0 )
+            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
             if( IsStructInBox( GetScreen()->BlockLocate, PtStruct ) == NULL )
                 break;
@@ -529,7 +530,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
         case TYPECOTATION:
                 #undef STRUCT
                 #define STRUCT ( (COTATION*) PtStruct )
-            if( (g_TabOneLayerMask[STRUCT->m_Layer] & masque_layer) == 0 )
+            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
             if( IsStructInBox( GetScreen()->BlockLocate, PtStruct ) == NULL )
                 break;
@@ -551,7 +552,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
         Affiche_Message( _( "Delete zones" ) );
         for( pt_segm = m_Pcb->m_Zone; pt_segm != NULL; pt_segm = (TRACK*) NextS )
         {
-            NextS = pt_segm->Pnext;
+            NextS = pt_segm->Next();
             if( IsSegmentInBox( GetScreen()->BlockLocate, pt_segm ) )
             {    /* la piste est ici bonne a etre efface */
                 pt_segm->Draw( DrawPanel, DC, GR_XOR );
@@ -682,7 +683,7 @@ void WinEDA_BasePcbFrame::Block_Rotate( wxDC* DC )
         case TYPEDRAWSEGMENT:
                 #undef STRUCT
                 #define STRUCT ( (DRAWSEGMENT*) PtStruct )
-            if( (g_TabOneLayerMask[STRUCT->m_Layer] & masque_layer) == 0 )
+            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
             if( IsStructInBox( GetScreen()->BlockLocate, PtStruct ) == NULL )
                 break;
@@ -715,7 +716,7 @@ void WinEDA_BasePcbFrame::Block_Rotate( wxDC* DC )
         case TYPEMIRE:
                 #undef STRUCT
                 #define STRUCT ( (MIREPCB*) PtStruct )
-            if( (g_TabOneLayerMask[STRUCT->m_Layer] & masque_layer) == 0 )
+            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
             if( IsStructInBox( GetScreen()->BlockLocate, PtStruct ) == NULL )
                 break;
@@ -728,7 +729,7 @@ void WinEDA_BasePcbFrame::Block_Rotate( wxDC* DC )
         case TYPECOTATION:
                 #undef STRUCT
                 #define STRUCT ( (COTATION*) PtStruct )
-            if( (g_TabOneLayerMask[STRUCT->m_Layer] & masque_layer) == 0 )
+            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
             if( IsStructInBox( GetScreen()->BlockLocate, PtStruct ) == NULL )
                 break;
@@ -852,7 +853,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
                 INVERT( track->m_End.y );
                 if( track->m_StructType != TYPEVIA )
                 {
-                    track->m_Layer = ChangeSideNumLayer( track->m_Layer );
+                    track->SetLayer( ChangeSideNumLayer( track->GetLayer() ) );
                 }
 
                 track->Draw( DrawPanel, DC, GR_OR ); // reaffichage
@@ -875,7 +876,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
                 track->Draw( DrawPanel, DC, GR_XOR );   // effacement
                 INVERT( track->m_Start.y );
                 INVERT( track->m_End.y );
-                track->m_Layer = ChangeSideNumLayer( track->m_Layer );
+                track->SetLayer( ChangeSideNumLayer( track->GetLayer() ) );
                 track->Draw( DrawPanel, DC, GR_OR ); // reaffichage
             }
             track = (TRACK*) track->Pnext;
@@ -897,7 +898,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
         case TYPEDRAWSEGMENT:
                 #undef STRUCT
                 #define STRUCT ( (DRAWSEGMENT*) PtStruct )
-            if( (g_TabOneLayerMask[STRUCT->m_Layer] & masque_layer) == 0 )
+            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
             if( IsStructInBox( GetScreen()->BlockLocate, PtStruct ) == NULL )
                 break;
@@ -909,7 +910,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
             }
             INVERT( STRUCT->m_Start.y );
             INVERT( STRUCT->m_End.y );
-            STRUCT->m_Layer = ChangeSideNumLayer( STRUCT->m_Layer );
+            STRUCT->SetLayer( ChangeSideNumLayer( STRUCT->GetLayer() ) );
             Trace_DrawSegmentPcb( DrawPanel, DC, (DRAWSEGMENT*) PtStruct, GR_OR );
             break;
 
@@ -925,11 +926,11 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
             /* Redessin du Texte */
             INVERT( STRUCT->m_Pos.y );
             INVERT_ANGLE( STRUCT->m_Orient );
-            if( (STRUCT->m_Layer == CUIVRE_N) || (STRUCT->m_Layer == CMP_N) )
+            if( (STRUCT->GetLayer() == CUIVRE_N) || (STRUCT->GetLayer() == CMP_N) )
             {
                 STRUCT->m_Miroir ^= 1;      /* inverse miroir */
             }
-            STRUCT->m_Layer = ChangeSideNumLayer( STRUCT->m_Layer );
+            STRUCT->SetLayer( ChangeSideNumLayer( STRUCT->GetLayer() ) );
             STRUCT->CreateDrawData();
             ( (TEXTE_PCB*) PtStruct )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
             break;
@@ -937,21 +938,21 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
         case TYPEMIRE:
                 #undef STRUCT
                 #define STRUCT ( (MIREPCB*) PtStruct )
-            if( (g_TabOneLayerMask[STRUCT->m_Layer] & masque_layer) == 0 )
+            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
             if( IsStructInBox( GetScreen()->BlockLocate, PtStruct ) == NULL )
                 break;
             /* l'element est ici bon a etre modifie */
             ( (MIREPCB*) PtStruct )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
             INVERT( STRUCT->m_Pos.y );
-            STRUCT->m_Layer = ChangeSideNumLayer( STRUCT->m_Layer );
+            STRUCT->SetLayer( ChangeSideNumLayer( STRUCT->GetLayer() ) );
             ( (MIREPCB*) PtStruct )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
             break;
 
         case TYPECOTATION:
                 #undef STRUCT
                 #define STRUCT ( (COTATION*) PtStruct )
-            if( (g_TabOneLayerMask[STRUCT->m_Layer] & masque_layer) == 0 )
+            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
             if( IsStructInBox( GetScreen()->BlockLocate, PtStruct ) == NULL )
                 break;
@@ -982,7 +983,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
             INVERT( STRUCT->FlecheD2_oy );
             INVERT( STRUCT->FlecheD2_fy );
 
-            STRUCT->m_Layer = ChangeSideNumLayer( STRUCT->m_Layer );
+            STRUCT->SetLayer( ChangeSideNumLayer( STRUCT->GetLayer() ) );
 
             ( (COTATION*) PtStruct )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
             break;
@@ -1111,7 +1112,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
         case TYPEDRAWSEGMENT:
                 #undef STRUCT
                 #define STRUCT ( (DRAWSEGMENT*) PtStruct )
-            if( (g_TabOneLayerMask[STRUCT->m_Layer] & masque_layer) == 0 )
+            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
             if( IsStructInBox( GetScreen()->BlockLocate, PtStruct ) == NULL )
                 break;
@@ -1139,7 +1140,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
         case TYPEMIRE:
                 #undef STRUCT
                 #define STRUCT ( (MIREPCB*) PtStruct )
-            if( (g_TabOneLayerMask[STRUCT->m_Layer] & masque_layer) == 0 )
+            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
             if( IsStructInBox( GetScreen()->BlockLocate, PtStruct ) == NULL )
                 break;
@@ -1152,7 +1153,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
         case TYPECOTATION:
                 #undef STRUCT
                 #define STRUCT ( (COTATION*) PtStruct )
-            if( (g_TabOneLayerMask[STRUCT->m_Layer] & masque_layer) == 0 )
+            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
             if( IsStructInBox( GetScreen()->BlockLocate, PtStruct ) == NULL )
                 break;
@@ -1315,7 +1316,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
         {
                 #undef STRUCT
                 #define STRUCT ( (DRAWSEGMENT*) PtStruct )
-            if( (g_TabOneLayerMask[STRUCT->m_Layer] & masque_layer) == 0 )
+            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
             if( IsStructInBox( GetScreen()->BlockLocate, PtStruct ) == NULL )
                 break;
@@ -1357,7 +1358,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
         {
                 #undef STRUCT
                 #define STRUCT ( (MIREPCB*) PtStruct )
-            if( (g_TabOneLayerMask[STRUCT->m_Layer] & masque_layer) == 0 )
+            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
             if( IsStructInBox( GetScreen()->BlockLocate, PtStruct ) == NULL )
                 break;
@@ -1377,7 +1378,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
         {
                 #undef STRUCT
                 #define STRUCT ( (COTATION*) PtStruct )
-            if( (g_TabOneLayerMask[STRUCT->m_Layer] & masque_layer) == 0 )
+            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
             if( IsStructInBox( GetScreen()->BlockLocate, PtStruct ) == NULL )
                 break;

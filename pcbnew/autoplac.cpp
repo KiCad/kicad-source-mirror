@@ -448,7 +448,7 @@ int WinEDA_PcbFrame::GenPlaceBoard( void )
     PtStruct = m_Pcb->m_Drawings;
     TRACK TmpSegm( NULL );
 
-    TmpSegm.m_Layer   = -1;
+    TmpSegm.SetLayer( -1 );
     TmpSegm.m_NetCode = -1;
     TmpSegm.m_Width   = g_GridRoutingSize / 2;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
@@ -459,7 +459,7 @@ int WinEDA_PcbFrame::GenPlaceBoard( void )
         {
         case TYPEDRAWSEGMENT:
             DrawSegm = (DRAWSEGMENT*) PtStruct;
-            if( DrawSegm->m_Layer != EDGE_N )
+            if( DrawSegm->GetLayer() != EDGE_N )
                 break;
 
             TmpSegm.m_Start = DrawSegm->m_Start;
@@ -536,9 +536,9 @@ void WinEDA_PcbFrame::GenModuleOnBoard( MODULE* Module )
         fy = m_Pcb->m_BoundaryBox.GetBottom();
 
     masque_layer = 0;
-    if( Module->m_Layer == CMP_N )
+    if( Module->GetLayer() == CMP_N )
         masque_layer = CMP_LAYER;
-    if( Module->m_Layer == CUIVRE_N )
+    if( Module->GetLayer() == CUIVRE_N )
         masque_layer = CUIVRE_LAYER;
 
     TraceFilledRectangle( m_Pcb, ox, oy, fx, fy, masque_layer,
@@ -615,7 +615,7 @@ int WinEDA_PcbFrame::RecherchePlacementModule( MODULE* Module, wxDC* DC )
     {
         D_PAD* Pad; int masque_otherlayer;
         masque_otherlayer = CUIVRE_LAYER;
-        if( Module->m_Layer == CUIVRE_N )
+        if( Module->GetLayer() == CUIVRE_N )
             masque_otherlayer = CMP_LAYER;
 
         for( Pad = Module->m_Pads; Pad != NULL; Pad = (D_PAD*) Pad->Pnext )
@@ -823,7 +823,7 @@ int TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide )
     int error, Penalite, marge, side, otherside;
 
     side = TOP; otherside = BOTTOM;
-    if( Module->m_Layer == CUIVRE_N )
+    if( Module->GetLayer() == CUIVRE_N )
     {
         side = BOTTOM; otherside = TOP;
     }
@@ -1064,7 +1064,7 @@ static void TracePenaliteRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int u
             if( trace & 2 )
             {
                 data = GetDist( row, col, TOP );
-                data = max( data, LocalPenalite );
+                data = MAX( data, LocalPenalite );
                 SetDist( row, col, TOP, data );
             }
         }
@@ -1193,7 +1193,7 @@ bool WinEDA_PcbFrame::SetBoardBoundaryBoxFromEdgesOnly( void )
 {
     int             rayon, cx, cy, d;
     int             xmax, ymax;
-    EDA_BaseStruct* PtStruct;
+    BOARD_ITEM*     PtStruct;
     DRAWSEGMENT*    ptr;
     bool            succes = FALSE;
 
@@ -1205,7 +1205,7 @@ bool WinEDA_PcbFrame::SetBoardBoundaryBoxFromEdgesOnly( void )
 
     /* Analyse des Contours PCB */
     PtStruct = m_Pcb->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         if( PtStruct->m_StructType != TYPEDRAWSEGMENT )
             continue;
@@ -1217,21 +1217,21 @@ bool WinEDA_PcbFrame::SetBoardBoundaryBoxFromEdgesOnly( void )
             cx     = ptr->m_Start.x; cy = ptr->m_Start.y;
             rayon  = (int) hypot( (double) (ptr->m_End.x - cx), (double) (ptr->m_End.y - cy) );
             rayon += d;
-            m_Pcb->m_BoundaryBox.m_Pos.x = min( m_Pcb->m_BoundaryBox.m_Pos.x, cx - rayon );
-            m_Pcb->m_BoundaryBox.m_Pos.y = min( m_Pcb->m_BoundaryBox.m_Pos.y, cy - rayon );
-            xmax = max( xmax, cx + rayon );
-            ymax = max( ymax, cy + rayon );
+            m_Pcb->m_BoundaryBox.m_Pos.x = MIN( m_Pcb->m_BoundaryBox.m_Pos.x, cx - rayon );
+            m_Pcb->m_BoundaryBox.m_Pos.y = MIN( m_Pcb->m_BoundaryBox.m_Pos.y, cy - rayon );
+            xmax = MAX( xmax, cx + rayon );
+            ymax = MAX( ymax, cy + rayon );
         }
         else
         {
-            cx = min( ptr->m_Start.x, ptr->m_End.x );
-            cy = min( ptr->m_Start.y, ptr->m_End.y );
-            m_Pcb->m_BoundaryBox.m_Pos.x = min( m_Pcb->m_BoundaryBox.m_Pos.x, cx - d );
-            m_Pcb->m_BoundaryBox.m_Pos.y = min( m_Pcb->m_BoundaryBox.m_Pos.y, cy - d );
-            cx   = max( ptr->m_Start.x, ptr->m_End.x );
-            cy   = max( ptr->m_Start.y, ptr->m_End.y );
-            xmax = max( xmax, cx + d );
-            ymax = max( ymax, cy + d );
+            cx = MIN( ptr->m_Start.x, ptr->m_End.x );
+            cy = MIN( ptr->m_Start.y, ptr->m_End.y );
+            m_Pcb->m_BoundaryBox.m_Pos.x = MIN( m_Pcb->m_BoundaryBox.m_Pos.x, cx - d );
+            m_Pcb->m_BoundaryBox.m_Pos.y = MIN( m_Pcb->m_BoundaryBox.m_Pos.y, cy - d );
+            cx   = MAX( ptr->m_Start.x, ptr->m_End.x );
+            cy   = MAX( ptr->m_Start.y, ptr->m_End.y );
+            xmax = MAX( xmax, cx + d );
+            ymax = MAX( ymax, cy + d );
         }
     }
 

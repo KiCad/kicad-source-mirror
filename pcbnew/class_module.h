@@ -35,12 +35,12 @@ enum Mod_Attribut       /* Attributs d'un module */
 #define MODULE_is_PLACED    0x02    /* In autoplace: module automatically placed */
 #define MODULE_to_PLACE     0x04    /* In autoplace: module waiting for autoplace */
 
-class MODULE : public EDA_BaseStruct
+class MODULE : public BOARD_ITEM
 {
 public:
     wxPoint          m_Pos;             // Real coord on board
     D_PAD*           m_Pads;            /* Pad list (linked list) */
-    EDA_BaseStruct*  m_Drawings;        /* Graphic items list (linked list) */
+    BOARD_ITEM*      m_Drawings;        /* Graphic items list (linked list) */
     Struct3D_Master* m_3D_Drawings;     /* Pointeur sur la liste des elements de trace 3D*/
     TEXTE_MODULE*    m_Reference;       // texte reference du composant (U34, R18..)
     TEXTE_MODULE*    m_Value;           // texte valeur du composant (74LS00, 22K..)
@@ -72,9 +72,9 @@ public:
     MODULE( MODULE* module );
     ~MODULE( void );
 
-    void    Copy( MODULE* Module ); // Copy structure
+    void    Copy( MODULE* Module );     // Copy structure
 
-    MODULE* Next( void ) { return (MODULE*) Pnext; }
+    MODULE* Next()  { return (MODULE*) Pnext; }
 
     void    Set_Rectangle_Encadrement( void );/* mise a jour du rect d'encadrement
                                                *  en coord locales (orient 0 et origine = pos  module) */

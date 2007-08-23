@@ -15,15 +15,15 @@
 /* class TEXTE_PCB */
 /*******************/
 
-TEXTE_PCB::TEXTE_PCB( EDA_BaseStruct* parent ) :
-    EDA_BaseStruct( parent, TYPETEXTE ),
+TEXTE_PCB::TEXTE_PCB( BOARD_ITEM* parent ) :
+    BOARD_ITEM( parent, TYPETEXTE ),
     EDA_TextStruct()
 {
 }
 
 
 /* Destructeur */
-TEXTE_PCB:: ~TEXTE_PCB( void )
+TEXTE_PCB:: ~TEXTE_PCB()
 {
 }
 
@@ -59,7 +59,7 @@ void TEXTE_PCB::UnLink( void )
         }
         else /* Le chainage arriere pointe sur la structure "Pere" */
         {
-            ( (BOARD*) Pback )->m_Drawings = Pnext;
+            ( (BOARD*) Pback )->m_Drawings = (BOARD_ITEM*) Pnext;
         }
     }
 

@@ -19,12 +19,19 @@
 
 /***/
 
-class TRACK : public EDA_BaseLineStruct
+class TRACK : public BOARD_ITEM
 {
 public:
+    int             m_Width;        // 0 = line, > 0 = tracks, bus ...
+    wxPoint         m_Start;        // Line start point
+    wxPoint         m_End;          // Line end point
+    
     int             m_Shape;        // vias: shape and type, Track = shape..
     int             m_Drill;        // for vias: via drill (- 1 for default value)
-    EDA_BaseStruct* start, * end;   // pointers on a connected item (pad or track)
+    
+    BOARD_ITEM*     start;          // pointers on a connected item (pad or track)
+    BOARD_ITEM*     end;            
+    
     int             m_NetCode;      // Net number
     int             m_Sous_Netcode; /* In rastnest routines : for the current net,
                                      *  block number (number common to the current connected items found) */
@@ -33,15 +40,12 @@ public:
     int             m_Param;        // Auxiliary variable ( used in some computations )
 
 public:
-    TRACK( EDA_BaseStruct* StructFather, DrawStructureType idtype = TYPETRACK );
+    TRACK( BOARD_ITEM* StructFather, DrawStructureType idtype = TYPETRACK );
     TRACK( const TRACK& track );
 
-    TRACK* Next( void );    // Retourne le chainage avant
+    TRACK* Next()   { return (TRACK*) Pnext; }
 
-    TRACK* Back( void )     // Retourne le chainage avant
-    {
-        return (TRACK*) Pback;
-    }
+    TRACK* Back()   { return (TRACK*) Pback; }
 
 
     /* supprime du chainage la structure Struct */
@@ -122,7 +126,7 @@ public:
 class SEGZONE : public TRACK
 {
 public:
-    SEGZONE( EDA_BaseStruct* StructFather );
+    SEGZONE( BOARD_ITEM* StructFather );
     
 #if defined(DEBUG)
     /**
@@ -141,7 +145,7 @@ public:
 class SEGVIA : public TRACK
 {
 public:
-    SEGVIA( EDA_BaseStruct* StructFather );
+    SEGVIA( BOARD_ITEM* StructFather );
     bool    IsViaOnLayer( int layer );
     void    SetLayerPair( int top_layer, int bottom_layer );
     void    ReturnLayerPair( int* top_layer, int* bottom_layer );

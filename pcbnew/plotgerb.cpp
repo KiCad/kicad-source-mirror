@@ -194,7 +194,7 @@ wxString msg;
 			switch( PtStruct->m_StructType )
 				 {
 				 case TYPEEDGEMODULE:
-					if( masque_layer & g_TabOneLayerMask[((EDGE_MODULE*)PtStruct)->m_Layer] )
+					if( masque_layer & g_TabOneLayerMask[((EDGE_MODULE*)PtStruct)->GetLayer()] )
 						Plot_1_EdgeModule(PLOT_FORMAT_GERBER, (EDGE_MODULE*) PtStruct);
 					break;
 
@@ -289,7 +289,7 @@ wxString msg;
 		wxPoint end;
 
 		if ( track->m_StructType == TYPEVIA ) continue ;
-		if( (g_TabOneLayerMask[track->m_Layer] & masque_layer) == 0 ) continue;
+		if( (g_TabOneLayerMask[track->GetLayer()] & masque_layer) == 0 ) continue;
 
 		size.x = size.y = track->m_Width;
 		pos = track->m_Start; end = track->m_End;
@@ -308,7 +308,7 @@ wxString msg;
 	{
 		wxPoint end;
 
-		if( (g_TabOneLayerMask[track->m_Layer] & masque_layer) == 0 ) continue;
+		if( (g_TabOneLayerMask[track->GetLayer()] & masque_layer) == 0 ) continue;
 
 		size.x = size.y = track->m_Width;
 		pos = track->m_Start; end = track->m_End;

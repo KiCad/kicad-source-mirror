@@ -7,7 +7,7 @@
 #include "base_struct.h"
 
 
-class MIREPCB : public EDA_BaseStruct
+class MIREPCB : public BOARD_ITEM
 {
 public:
     int     m_Width;
@@ -16,8 +16,8 @@ public:
     int     m_Size;
 
 public:
-    MIREPCB( EDA_BaseStruct* StructFather );
-    ~MIREPCB( void );
+    MIREPCB( BOARD_ITEM* StructFather );
+    ~MIREPCB();
 
     bool    WriteMirePcbDescr( FILE* File );
     bool    ReadMirePcbDescr( FILE* File, int* LineNum );

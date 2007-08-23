@@ -245,7 +245,7 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     Mself.m_Size.x = Mself.m_Size.y / 2;
 
     // Choix d'une Valeur de depart raisonnable pour le rayon des arcs de cercle
-    Mself.rayon = min( Mself.m_Width * 5, Mself.m_Size.x / 4 );
+    Mself.rayon = MIN( Mself.m_Width * 5, Mself.m_Size.x / 4 );
     /* Calcul des parametres */
 
     for( Mself.nbrin = 2; ; Mself.nbrin++ )
@@ -307,7 +307,7 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     PtSegm->m_End.x = Mself.m_Start.x;
     PtSegm->m_End.y = PtSegm->m_Start.y + Mself.delta;
     PtSegm->m_Width = Mself.m_Width;
-    PtSegm->m_Layer = Module->m_Layer;
+    PtSegm->SetLayer( Module->GetLayer() );
     PtSegm->m_Shape = S_SEGMENT;
 
     newedge = new EDGE_MODULE( Module );
@@ -432,7 +432,7 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     PtPad->m_Pos0.x = PtPad->m_Pos.x - Module->m_Pos.x;
     PtPad->m_Pos0.y = PtPad->m_Pos.y - Module->m_Pos.y;
     PtPad->m_Size.x = PtPad->m_Size.y = LastSegm->m_Width;
-    PtPad->m_Masque_Layer = g_TabOneLayerMask[LastSegm->m_Layer];
+    PtPad->m_Masque_Layer = g_TabOneLayerMask[LastSegm->GetLayer()];
     PtPad->m_Attribut = SMD;
     PtPad->m_PadShape = CIRCLE;
     PtPad->m_Rayon    = PtPad->m_Size.x / 2;

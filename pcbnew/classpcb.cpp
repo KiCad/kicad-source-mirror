@@ -35,7 +35,7 @@ void EDA_BaseStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
 /**********************/
 
 /* Classe EDGE_ZONE: constructeur */
-EDGE_ZONE::EDGE_ZONE( EDA_BaseStruct* parent ) :
+EDGE_ZONE::EDGE_ZONE( BOARD_ITEM* parent ) :
     DRAWSEGMENT( parent, TYPEEDGEZONE )
 {
 }
@@ -52,8 +52,8 @@ EDGE_ZONE:: ~EDGE_ZONE( void )
 /**********************/
 
 /* Classe DRAWSEGMENT: constructeur */
-DRAWSEGMENT::DRAWSEGMENT( EDA_BaseStruct* StructFather, DrawStructureType idtype ) :
-    EDA_BaseLineStruct( StructFather, idtype )
+DRAWSEGMENT::DRAWSEGMENT( BOARD_ITEM* StructFather, DrawStructureType idtype ) :
+    BOARD_ITEM( StructFather, idtype )
 {
     m_Flags = m_Shape = m_Type = m_Angle = 0;
 }
@@ -76,7 +76,7 @@ void DRAWSEGMENT::UnLink( void )
         }
         else /* Le chainage arriere pointe sur la structure "Pere" */
         {
-            ( (BOARD*) Pback )->m_Drawings = Pnext;
+            ( (BOARD*) Pback )->m_Drawings = (BOARD_ITEM*) Pnext;
         }
     }
 
@@ -262,8 +262,8 @@ bool DRAWSEGMENT::HitTest( const wxPoint& ref_pos )
 /* Classe MARQUEUR */
 /*******************/
 
-MARQUEUR::MARQUEUR( EDA_BaseStruct* StructFather ) :
-    EDA_BaseStruct( StructFather, TYPEMARQUEUR )
+MARQUEUR::MARQUEUR( BOARD_ITEM* StructFather ) :
+    BOARD_ITEM( StructFather, TYPEMARQUEUR )
 {
     m_Bitmap = NULL;
     m_Type   = 0;
@@ -291,7 +291,7 @@ void MARQUEUR::UnLink( void )
         }
         else /* Le chainage arriere pointe sur la structure "Pere" */
         {
-            ( (BOARD*) Pback )->m_Drawings = Pnext;
+            ( (BOARD*) Pback )->m_Drawings = (BOARD_ITEM*) Pnext;
         }
     }
 

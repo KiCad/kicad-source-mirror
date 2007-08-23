@@ -148,7 +148,7 @@ WinEDA_TextPCBPropertiesFrame::WinEDA_TextPCBPropertiesFrame( WinEDA_PcbFrame* p
         m_SelLayerBox->Append( ReturnPcbLayerName( ii ) );
     }
 
-    m_SelLayerBox->SetSelection( TextPCB->m_Layer );
+    m_SelLayerBox->SetSelection( TextPCB->GetLayer() );
 
 
     wxString orient_msg[4] = { wxT( "0" ), wxT( "90" ), wxT( "180" ), wxT( "-90" ) };
@@ -216,7 +216,7 @@ void WinEDA_TextPCBPropertiesFrame::TextPCBPropertiesAccept( wxCommandEvent& eve
     CurrentTextPCB->m_Width  = m_TxtWidthCtlr->GetValue();
     CurrentTextPCB->m_Miroir = (m_Mirror->GetSelection() == 0) ? 1 : 0;
     CurrentTextPCB->m_Orient = m_Orient->GetSelection() * 900;
-    CurrentTextPCB->m_Layer  = m_SelLayerBox->GetChoice();
+    CurrentTextPCB->SetLayer( m_SelLayerBox->GetChoice() );
     CurrentTextPCB->CreateDrawData();
     if( m_DC )     // Affichage nouveau texte
     {
@@ -349,13 +349,13 @@ TEXTE_PCB* WinEDA_PcbFrame::Create_Texte_Pcb( wxDC* DC )
     TextePcb->Pback = (EDA_BaseStruct*) m_Pcb;
     if( m_Pcb->m_Drawings )
         m_Pcb->m_Drawings->Pback = (EDA_BaseStruct*) TextePcb;
-    m_Pcb->m_Drawings = (EDA_BaseStruct*) TextePcb;
+    m_Pcb->m_Drawings = TextePcb;
 
     /* Mise a jour des caracteristiques */
     TextePcb->m_Flags  = IS_NEW;
-    TextePcb->m_Layer  = GetScreen()->m_Active_Layer;
+    TextePcb->SetLayer( GetScreen()->m_Active_Layer );
     TextePcb->m_Miroir = 1;
-    if( TextePcb->m_Layer == CUIVRE_N )
+    if( TextePcb->GetLayer() == CUIVRE_N )
         TextePcb->m_Miroir = 0;
 
     TextePcb->m_Size  = g_DesignSettings.m_PcbTextSize;

@@ -11,8 +11,8 @@
 #include "wxstruct.h"
 
 
-COTATION::COTATION( EDA_BaseStruct* StructFather ) :
-    EDA_BaseStruct( StructFather, TYPECOTATION )
+COTATION::COTATION( BOARD_ITEM* StructFather ) :
+    BOARD_ITEM( StructFather, TYPECOTATION )
 {
     m_Layer = DRAW_LAYER;
     m_Width = 50;
@@ -24,7 +24,7 @@ COTATION::COTATION( EDA_BaseStruct* StructFather ) :
 
 
 /* Effacement memoire de la structure */
-COTATION::~COTATION( void )
+COTATION::~COTATION()
 {
     delete m_Text;
 }
@@ -44,7 +44,7 @@ void COTATION::UnLink( void )
         }
         else /* Le chainage arriere pointe sur la structure "Pere" */
         {
-            ( (BOARD*) Pback )->m_Drawings = Pnext;
+            ( (BOARD*) Pback )->m_Drawings = (BOARD_ITEM*) Pnext;
         }
     }
 
@@ -68,7 +68,7 @@ void COTATION::Copy( COTATION* source )
 /*************************************/
 {
     m_Value     = source->m_Value;
-    m_Layer     = source->m_Layer;
+    SetLayer( source->GetLayer() );
     m_Width     = source->m_Width;
     m_Pos       = source->m_Pos;
     m_Shape     = source->m_Shape;
@@ -112,15 +112,18 @@ bool COTATION::ReadCotationDescr( FILE* File, int* LineNum )
 
         if( Line[0] == 'G' )
         {
-            sscanf( Line + 2, " %d %d %lX", &m_Shape, &m_Layer, &m_TimeStamp );
+            int layer;
+            
+            sscanf( Line + 2, " %d %d %lX", &m_Shape, &layer, &m_TimeStamp );
 
             /* Mise a jour des param .layer des sous structures */
-            if( m_Layer < FIRST_NO_COPPER_LAYER )
-                m_Layer = FIRST_NO_COPPER_LAYER;
-            if( m_Layer > LAST_NO_COPPER_LAYER )
-                m_Layer = LAST_NO_COPPER_LAYER;
+            if( layer < FIRST_NO_COPPER_LAYER )
+                layer = FIRST_NO_COPPER_LAYER;
+            if( layer > LAST_NO_COPPER_LAYER )
+                layer = LAST_NO_COPPER_LAYER;
 
-            m_Text->m_Layer = m_Layer;
+            SetLayer( layer );
+            m_Text->SetLayer( layer );
             continue;
         }
 

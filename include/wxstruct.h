@@ -11,8 +11,6 @@
 #define eda_global extern
 #endif
 
-#include <vector>
-
 #include <wx/socket.h>
 #include "wx/log.h"
 #include "wx/config.h"
@@ -98,6 +96,7 @@ class WinEDA3D_DrawFrame;
 class PARAM_CFG_BASE;
 class Ki_PageDescr;
 class Ki_HotkeyInfo;
+class ARROWCOLLECTOR;
 
 
 enum id_librarytype {
@@ -519,9 +518,7 @@ private:
     wxMenu*          m_FilesMenu;
 
 #if defined(DEBUG)    
-    class  COLLECTOR;
-    COLLECTOR*       m_GeneralCollector;        ///< while arrow icon tool
-    COLLECTOR*       m_RatsModuleCollector;     ///< while find1rats icon tool
+    ARROWCOLLECTOR*  m_ArrowCollector;          ///< while arrow icon tool
 #endif
 
 

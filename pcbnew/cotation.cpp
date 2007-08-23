@@ -147,7 +147,7 @@ WinEDA_CotationPropertiesFrame::WinEDA_CotationPropertiesFrame( WinEDA_PcbFrame*
         m_SelLayerBox->Append( ReturnPcbLayerName( ii ) );
     }
 
-    m_SelLayerBox->SetSelection( Cotation->m_Layer - (CMP_N + 1) );
+    m_SelLayerBox->SetSelection( Cotation->GetLayer() - (CMP_N + 1) );
 
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
@@ -180,8 +180,9 @@ void WinEDA_CotationPropertiesFrame::CotationPropertiesAccept( wxCommandEvent& e
     CurrentCotation->m_Text->m_Width = CurrentCotation->m_Width =
                                            m_TxtWidthCtrl->GetValue();
     CurrentCotation->m_Text->m_Miroir = (m_Mirror->GetSelection() == 0) ? 1 : 0;
-    CurrentCotation->m_Layer = CurrentCotation->m_Text->m_Layer =
-                                   m_SelLayerBox->GetChoice() + CMP_N + 1;
+    
+    CurrentCotation->SetLayer( m_SelLayerBox->GetChoice() + CMP_N + 1 ); 
+    CurrentCotation->m_Text->SetLayer( m_SelLayerBox->GetChoice() + CMP_N + 1 );
 
     CurrentCotation->m_Text->CreateDrawData();
 
@@ -236,7 +237,7 @@ COTATION* WinEDA_PcbFrame::Begin_Cotation( COTATION* Cotation, wxDC* DC )
         Cotation = new COTATION( m_Pcb );
         Cotation->m_Flags = IS_NEW;
 
-        Cotation->m_Layer = GetScreen()->m_Active_Layer;
+        Cotation->SetLayer( GetScreen()->m_Active_Layer );
         Cotation->m_Width = g_DesignSettings.m_DrawSegmentWidth;
         Cotation->m_Text->m_Width = Cotation->m_Width;
 
@@ -317,7 +318,7 @@ static void Montre_Position_New_Cotation( WinEDA_DrawPanel* panel, wxDC* DC, boo
         Cotation->Draw( panel, DC, wxPoint( 0, 0 ), GR_XOR );
     }
 
-    Cotation->m_Layer = screen->m_Active_Layer;
+    Cotation->SetLayer( screen->m_Active_Layer );
     if( status_cotation == 1 )
     {
         Cotation->TraitD_ox = pos.x;
@@ -399,7 +400,7 @@ static void Ajuste_Details_Cotation( COTATION* Cotation )
     wxString msg;
 
     /* Init des couches : */
-    Cotation->m_Text->m_Layer = Cotation->m_Layer;
+    Cotation->m_Text->SetLayer( Cotation->GetLayer() );
 
     /* calcul de la hauteur du texte + trait de cotation */
     ii = Cotation->m_Text->m_Size.y +

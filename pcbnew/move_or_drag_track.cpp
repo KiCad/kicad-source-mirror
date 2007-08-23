@@ -815,7 +815,7 @@ bool WinEDA_PcbFrame::PlaceDraggedTrackSegment( TRACK* Track, wxDC* DC )
 
         /* Test the connections modified by the move
          *  (only pad connection must be tested, track connection will be tested by test_1_net_connexion() ) */
-        int masque_layer = g_TabOneLayerMask[Track->m_Layer];
+        int masque_layer = g_TabOneLayerMask[Track->GetLayer()];
         Track->start = Fast_Locate_Pad_Connecte( m_Pcb, Track->m_Start, masque_layer );
         Track->end   = Fast_Locate_Pad_Connecte( m_Pcb, Track->m_End, masque_layer );
     }

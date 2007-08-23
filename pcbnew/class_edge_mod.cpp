@@ -29,7 +29,7 @@
 /******************************************/
 
 EDGE_MODULE::EDGE_MODULE( MODULE* parent ) : 
-    EDA_BaseLineStruct( parent, TYPEEDGEMODULE )
+    BOARD_ITEM( parent, TYPEEDGEMODULE )
 {
     m_Shape     = S_SEGMENT;
     m_Angle     = 0;
@@ -91,7 +91,7 @@ void EDGE_MODULE::UnLink( void )
         }
         else /* Le chainage arriere pointe sur la structure "Pere" */
         {
-            ( (MODULE*) Pback )->m_Drawings = Pnext;
+            ( (MODULE*) Pback )->m_Drawings = (BOARD_ITEM*) Pnext;
         }
     }
 
@@ -287,10 +287,10 @@ void EDGE_MODULE::Display_Infos( WinEDA_DrawFrame* frame )
 
     Affiche_1_Parametre( frame, 24, _( "TimeStamp" ), bufcar, BROWN );
 
-    Affiche_1_Parametre( frame, 34, _( "Mod Layer" ), ReturnPcbLayerName( module->m_Layer ), RED );
+    Affiche_1_Parametre( frame, 34, _( "Mod Layer" ), ReturnPcbLayerName( module->GetLayer() ), RED );
 
     Affiche_1_Parametre( frame, 44, _( "Seg Layer" ),
-                         ReturnPcbLayerName( module->m_Layer ), RED );
+                         ReturnPcbLayerName( module->GetLayer() ), RED );
 
     valeur_param( m_Width, bufcar );
     Affiche_1_Parametre( frame, 54, _( "Width" ), bufcar, BLUE );

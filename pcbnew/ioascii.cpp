@@ -154,7 +154,8 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( wxDC* DC, FILE* File,
                 &PtSegm->m_TimeStamp, &flags );
         if( type == 1 )
             PtSegm->m_StructType = TYPEVIA;
-        PtSegm->m_Layer   = layer;
+        
+        PtSegm->SetLayer( layer );
         PtSegm->m_NetCode = net_code; PtSegm->SetState( flags, ON );
 #ifdef PCBNEW
         PtSegm->Draw( DrawPanel, DC, GR_OR );
@@ -249,7 +250,7 @@ int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( wxDC* DC, FILE* File, int* LineNum
             screensize = DrawPanel->GetClientSize();
             ii = pcbsize.x / screensize.x;
             jj = pcbsize.y / screensize.y;
-            bestzoom = max( ii, jj );
+            bestzoom = MAX( ii, jj );
             screen->m_Curseur = m_Pcb->m_BoundaryBox.Centre();
 
             screen->SetZoom( bestzoom );
@@ -779,7 +780,7 @@ int WinEDA_PcbFrame::ReadPcbFile( wxDC* DC, FILE* File, bool Append )
     char            Line[1024];
     int             LineNum = 0;
     int             nbsegm, nbmod;
-    EDA_BaseStruct* LastStructPcb = NULL, * StructPcb;
+    BOARD_ITEM*     LastStructPcb = NULL, * StructPcb;
     MODULE*         LastModule    = NULL, * Module;
     EQUIPOT*        LastEquipot   = NULL, * Equipot;
 
@@ -803,7 +804,7 @@ int WinEDA_PcbFrame::ReadPcbFile( wxDC* DC, FILE* File, bool Append )
         }
 
         LastStructPcb = m_Pcb->m_Drawings;
-        for( ; LastStructPcb != NULL; LastStructPcb = LastStructPcb->Pnext )
+        for( ; LastStructPcb != NULL; LastStructPcb = LastStructPcb->Next() )
         {
             if( LastStructPcb->Pnext == NULL )
                 break;
@@ -901,7 +902,7 @@ int WinEDA_PcbFrame::ReadPcbFile( wxDC* DC, FILE* File, bool Append )
         if( strnicmp( Line, "$TEXTPCB", 8 ) == 0 )
         {
             TEXTE_PCB* pcbtxt = new TEXTE_PCB( m_Pcb );
-            StructPcb = (EDA_BaseStruct*) pcbtxt;
+            StructPcb = pcbtxt;
             pcbtxt->ReadTextePcbDescr( File, &LineNum );
             if( LastStructPcb == NULL )
             {

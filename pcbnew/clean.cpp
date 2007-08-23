@@ -379,7 +379,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
 
             if( PtSegm->m_StructType != pt_aux->m_StructType )
                 continue;
-            if( PtSegm->m_Layer != pt_aux->m_Layer )
+            if( PtSegm->GetLayer() != pt_aux->GetLayer() )
                 continue;
             if( PtSegm->m_NetCode != pt_aux->m_NetCode )
                 break;
@@ -587,7 +587,7 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
     {
         /* Ce ne doit pas etre sur un pad */
         if( Fast_Locate_Pad_Connecte( Pcb, pt_ref->m_Start,
-                                      g_TabOneLayerMask[pt_ref->m_Layer] ) )
+                                      g_TabOneLayerMask[pt_ref->GetLayer()] ) )
             return NULL;
 
         if( (pt_ref->m_Start.x == pt_segm->m_Start.x)
@@ -605,7 +605,7 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
     else    /* extremite == END */
     {
         /* Ce ne doit pas etre sur un pad */
-        if( Fast_Locate_Pad_Connecte( Pcb, pt_ref->m_End, g_TabOneLayerMask[pt_ref->m_Layer] ) )
+        if( Fast_Locate_Pad_Connecte( Pcb, pt_ref->m_End, g_TabOneLayerMask[pt_ref->GetLayer()] ) )
             return NULL;
 
         if( pt_ref->m_End == pt_segm->m_Start )

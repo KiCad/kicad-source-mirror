@@ -187,7 +187,7 @@ enum DisplayViaMode {
 };
 
 
-class BOARD : public EDA_BaseStruct
+class BOARD : public BOARD_ITEM
 {
 public:
     WinEDA_BasePcbFrame*    m_PcbFrame;         // Window de visualisation
@@ -204,7 +204,7 @@ public:
     int             m_NbSegmTrack;              // nombre d'elements de type segments de piste
     int             m_NbSegmZone;               // nombre d'elements de type segments de zone
 
-    EDA_BaseStruct* m_Drawings;                 // pointeur sur liste drawings
+    BOARD_ITEM*     m_Drawings;                 // pointeur sur liste drawings
     MODULE*         m_Modules;                  // pointeur sur liste zone modules
     EQUIPOT*        m_Equipots;                 // pointeur liste zone equipot
     TRACK*          m_Track;                    // pointeur relatif zone piste
@@ -339,15 +339,19 @@ public:
 /* Description des elements du PCB */
 /***********************************/
 
-class DRAWSEGMENT : public EDA_BaseLineStruct
+class DRAWSEGMENT : public BOARD_ITEM
 {
 public:
+    int     m_Width;            // 0 = line, > 0 = tracks, bus ...
+    wxPoint m_Start;            // Line start point
+    wxPoint m_End;              // Line end point
+    
     int m_Shape;                // forme: Segment , Cercle..
     int m_Type;                 // numero de sous type ( cotation.. )
     int m_Angle;                // pour les arcs: "longueur" de l'arc en 1/10 deg
 
 public:
-    DRAWSEGMENT( EDA_BaseStruct* StructFather, DrawStructureType idtype = TYPEDRAWSEGMENT );
+    DRAWSEGMENT( BOARD_ITEM* StructFather, DrawStructureType idtype = TYPEDRAWSEGMENT );
     ~DRAWSEGMENT( void );
 
     // Read/write data
@@ -405,7 +409,7 @@ public:
 class EDGE_ZONE : public DRAWSEGMENT
 {
 public:
-    EDGE_ZONE( EDA_BaseStruct* StructFather );
+    EDGE_ZONE( BOARD_ITEM* StructFather );
     EDGE_ZONE( const EDGE_ZONE& edgezone );
     ~EDGE_ZONE( void );
 };
@@ -415,7 +419,7 @@ public:
 /* Gestion des marqueurs sur le PCB */
 /************************************/
 
-class MARQUEUR : public EDA_BaseStruct
+class MARQUEUR : public BOARD_ITEM
 {
     /* Description d'un marqueur */
 public:
@@ -426,7 +430,7 @@ public:
     wxString m_Diag;                /* Associated text (comment) */
 
 public:
-    MARQUEUR( EDA_BaseStruct* StructFather );
+    MARQUEUR( BOARD_ITEM* StructFather );
     ~MARQUEUR( void );
     void    UnLink( void );
     void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int DrawMode );

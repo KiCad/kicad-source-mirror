@@ -20,7 +20,7 @@ class Pcb3D_GLCanvas;
 #define PAD_STACK   0x80    // bit 7 de .attrib  (flag)
 
 /* Definition type Structure d'un pad */
-class D_PAD : public EDA_BaseStruct
+class D_PAD : public BOARD_ITEM
 {
 public:
     union

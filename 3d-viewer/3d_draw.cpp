@@ -202,13 +202,14 @@ void Pcb3D_GLCanvas::Draw3D_Track(TRACK * track)
 /************************************************/
 {
 double zpos;
-int color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[track->m_Layer];
-int layer = track->m_Layer;
+int layer = track->GetLayer();
+int color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
 double ox, oy, fx, fy;
 double w;
 
 	if ( color & ITEM_NOT_SHOW ) return;
-	if ( track->m_Layer == CMP_N ) layer = g_Parm_3D_Visu.m_Layers -1;
+	if ( layer == CMP_N ) 
+        layer = g_Parm_3D_Visu.m_Layers -1;
 	zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
 
 	SetGLColor(color);
@@ -268,7 +269,7 @@ void Pcb3D_GLCanvas::Draw3D_DrawSegment(DRAWSEGMENT * segment)
 int layer;
 double x, y, xf, yf;
 double zpos, w;
-int color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[segment->m_Layer];
+int color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[segment->GetLayer()];
 
 	if ( color & ITEM_NOT_SHOW ) return;
 
@@ -279,7 +280,7 @@ int color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[segment->m_Layer];
 	xf = segment->m_End.x * g_Parm_3D_Visu.m_BoardScale;
 	yf = segment->m_End.y  * g_Parm_3D_Visu.m_BoardScale;
 
-	if ( segment->m_Layer == EDGE_N)
+	if ( segment->GetLayer() == EDGE_N)
 	{
 		for ( layer = 0; layer < g_Parm_3D_Visu.m_Layers; layer++ )
 		{
@@ -291,7 +292,7 @@ int color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[segment->m_Layer];
 
 	else
 	{
-		zpos = g_Parm_3D_Visu.m_LayerZcoord[segment->m_Layer];
+		zpos = g_Parm_3D_Visu.m_LayerZcoord[segment->GetLayer()];
 		Draw3D_FilledSegment( x, -y, xf, -yf, w, zpos);
 	}
 }

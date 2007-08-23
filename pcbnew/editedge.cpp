@@ -138,7 +138,7 @@ void WinEDA_PcbFrame::Drawing_SetNewWidth( DRAWSEGMENT* DrawSegm, wxDC* DC )
 
     Trace_DrawSegmentPcb( DrawPanel, DC, DrawSegm, GR_XOR );
 
-    if( DrawSegm->m_Layer == EDGE_N )
+    if( DrawSegm->GetLayer() == EDGE_N )
         DrawSegm->m_Width = g_DesignSettings.m_EdgeSegmentWidth;
     else
         DrawSegm->m_Width = g_DesignSettings.m_DrawSegmentWidth;
@@ -159,7 +159,7 @@ void WinEDA_PcbFrame::Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC 
     TEXTE_PCB*      pt_txt;
     EDA_BaseStruct* PtStruct, * PtNext;
     COTATION*       Cotation;
-    int             layer = Segment->m_Layer;
+    int             layer = Segment->GetLayer();
 
     if( layer <= CMP_N )
     {
@@ -187,7 +187,7 @@ void WinEDA_PcbFrame::Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC 
         {
         case TYPEDRAWSEGMENT:
             pt_segm = (DRAWSEGMENT*) PtStruct;
-            if( pt_segm->m_Layer == layer )
+            if( pt_segm->GetLayer() == layer )
             {
                 Trace_DrawSegmentPcb( DrawPanel, DC, pt_segm, GR_XOR );
                 DeleteStructure( PtStruct );
@@ -196,7 +196,7 @@ void WinEDA_PcbFrame::Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC 
 
         case TYPETEXTE:
             pt_txt = (TEXTE_PCB*) PtStruct;
-            if( pt_txt->m_Layer == layer )
+            if( pt_txt->GetLayer() == layer )
             {
                 pt_txt->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
                 DeleteStructure( PtStruct );
@@ -206,7 +206,7 @@ void WinEDA_PcbFrame::Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC 
 
         case TYPECOTATION:
             Cotation = (COTATION*) PtStruct;
-            if( Cotation->m_Layer == layer )
+            if( Cotation->GetLayer() == layer )
             {
                 Cotation->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
                 DeleteStructure( PtStruct );
@@ -276,7 +276,7 @@ DRAWSEGMENT* WinEDA_PcbFrame::Begin_DrawSegment( DRAWSEGMENT* Segment,
     {
         GetScreen()->SetCurItem( Segment = new DRAWSEGMENT( m_Pcb ) );
         Segment->m_Flags = IS_NEW;
-        Segment->m_Layer = GetScreen()->m_Active_Layer;
+        Segment->SetLayer( GetScreen()->m_Active_Layer );
         Segment->m_Width = s_large;
         Segment->m_Shape = shape;
         Segment->m_Angle = 900;
@@ -307,7 +307,7 @@ DRAWSEGMENT* WinEDA_PcbFrame::Begin_DrawSegment( DRAWSEGMENT* Segment,
                 GetScreen()->SetCurItem( Segment = new DRAWSEGMENT( m_Pcb ) );
 
                 Segment->m_Flags = IS_NEW;
-                Segment->m_Layer = DrawItem->m_Layer;
+                Segment->SetLayer( DrawItem->GetLayer() );
                 Segment->m_Width = s_large;
                 Segment->m_Shape = DrawItem->m_Shape;
                 Segment->m_Type  = DrawItem->m_Type;

@@ -683,7 +683,7 @@ EDGE_ZONE* WinEDA_PcbFrame::Begin_Zone( void )
         newedge->Pback   = oldedge;
         if( oldedge )
             oldedge->Pnext = newedge;
-        newedge->m_Layer = GetScreen()->m_Active_Layer;
+        newedge->SetLayer( GetScreen()->m_Active_Layer );
         newedge->m_Width = 2;      /* Largeur minimum tracable */
         newedge->m_Start = newedge->m_End = GetScreen()->m_Curseur;
 
@@ -702,7 +702,7 @@ EDGE_ZONE* WinEDA_PcbFrame::Begin_Zone( void )
             oldedge->Pnext   = newedge;
             newedge->m_Flags = IS_NEW | IS_MOVED;
             newedge->m_Start = newedge->m_End = oldedge->m_End;
-            newedge->m_Layer = GetScreen()->m_Active_Layer;
+            newedge->SetLayer( GetScreen()->m_Active_Layer );
             m_Pcb->m_CurrentLimitZone = newedge;
         }
     }
@@ -777,7 +777,7 @@ static void Show_Zone_Edge_While_MoveMouse( WinEDA_DrawPanel* panel, wxDC* DC, b
     edgezone = PtLim = pcbframe->m_Pcb->m_CurrentLimitZone;
     for( ; PtLim != NULL; PtLim = (EDGE_ZONE*) PtLim->Pback )
     {
-        PtLim->m_Layer = pcbframe->GetScreen()->m_Active_Layer;
+        PtLim->SetLayer( pcbframe->GetScreen()->m_Active_Layer );
     }
 
     /* dessin de la nouvelle piste : mise a jour du point d'arrivee */
@@ -849,7 +849,7 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
     for( ; PtLim != NULL; PtLim = (EDGE_ZONE*) PtLim->Pback )
     {
         Trace_DrawSegmentPcb( DrawPanel, DC, PtLim, GR_XOR );
-        PtLim->m_Layer = GetScreen()->m_Active_Layer;
+        PtLim->SetLayer( GetScreen()->m_Active_Layer );
         Trace_DrawSegmentPcb( DrawPanel, DC, PtLim, GR_XOR );
     }
 
@@ -922,7 +922,7 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
     {
         if( g_HightLigth_NetCode != pt_segm->m_NetCode )
             continue;
-        if( pt_segm->m_Layer != GetScreen()->m_Active_Layer )
+        if( pt_segm->GetLayer() != GetScreen()->m_Active_Layer )
             continue;
         if( pt_segm->m_StructType != TYPETRACK )
             continue;
@@ -1086,7 +1086,7 @@ static void Genere_Segments_Zone( WinEDA_PcbFrame* frame, wxDC* DC, int net_code
                 {
                     /* un segment avait debute de longueur > 0 */
                     pt_track = new SEGZONE( frame->m_Pcb );
-                    pt_track->m_Layer     = layer;
+                    pt_track->SetLayer( layer );
                     pt_track->m_NetCode   = net_code;
                     pt_track->m_Width     = g_GridRoutingSize;
                     pt_track->m_Start.x   = ux0; pt_track->m_Start.y = uy0;
@@ -1124,7 +1124,7 @@ static void Genere_Segments_Zone( WinEDA_PcbFrame* frame, wxDC* DC, int net_code
                 {
                     /* un segment avait debute de longueur > 0 */
                     pt_track = new SEGZONE( frame->m_Pcb );
-                    pt_track->m_Layer     = layer;
+                    pt_track->SetLayer( layer );
                     pt_track->m_Width     = g_GridRoutingSize;
                     pt_track->m_NetCode   = net_code;
                     pt_track->m_Start.x   = ux0; pt_track->m_Start.y = uy0;
@@ -1363,7 +1363,7 @@ static bool Genere_Pad_Connexion( WinEDA_PcbFrame* frame, wxDC* DC, int layer )
 
             pt_track = new SEGZONE( frame->m_Pcb );
 
-            pt_track->m_Layer   = layer;
+            pt_track->SetLayer( layer );
             pt_track->m_Width   = g_DesignSettings.m_CurrentTrackWidth;
             pt_track->m_NetCode = g_HightLigth_NetCode;
             pt_track->start       = pt_pad;

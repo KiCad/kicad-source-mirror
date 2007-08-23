@@ -200,11 +200,11 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Layer( EDGE_MODULE* Edge, wxDC* DC )
         {
             if( Edge->m_StructType != TYPEEDGEMODULE )
                 continue;
-            Edge->m_Layer = new_layer;
+            Edge->SetLayer( new_layer );
         }
     }
     else
-        Edge->m_Layer = new_layer;
+        Edge->SetLayer( new_layer );
 
     GetScreen()->SetModify();
     Module->Set_Rectangle_Encadrement();
@@ -336,11 +336,11 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
         if( Edge->m_Shape == S_ARC )
             Edge->m_Angle = ArcValue;
         Edge->m_Width = ModuleSegmentWidth;
-        Edge->m_Layer = Module->m_Layer;
-        if( Module->m_Layer == CMP_N )
-            Edge->m_Layer = SILKSCREEN_N_CMP;
-        if( Module->m_Layer == CUIVRE_N )
-            Edge->m_Layer = SILKSCREEN_N_CU;
+        Edge->SetLayer( Module->GetLayer() );
+        if( Module->GetLayer() == CMP_N )
+            Edge->SetLayer( SILKSCREEN_N_CMP );
+        if( Module->GetLayer() == CUIVRE_N )
+            Edge->SetLayer( SILKSCREEN_N_CU );
         /* Mise a jour du point de depart du segment ou de l'arc */
         Edge->m_Start = GetScreen()->m_Curseur;
         /* Mise a jour de la fin du segment , rectangle ou de l'arc*/

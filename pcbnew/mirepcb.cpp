@@ -218,7 +218,7 @@ MIREPCB* WinEDA_PcbFrame::Create_Mire( wxDC* DC )
         m_Pcb->m_Drawings->Pback = MirePcb;
     m_Pcb->m_Drawings = MirePcb;
 
-    MirePcb->m_Layer = EDGE_N;
+    MirePcb->SetLayer( EDGE_N );
     MirePcb->m_Width = g_DesignSettings.m_EdgeSegmentWidth;
     MirePcb->m_Size  = MireDefaultSize;
     MirePcb->m_Pos   = GetScreen()->m_Curseur;

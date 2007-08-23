@@ -6,7 +6,7 @@
 
 #include "base_struct.h"
 
-class COTATION : public EDA_BaseStruct
+class COTATION : public BOARD_ITEM
 {
 public:
     int        m_Width;
@@ -25,8 +25,8 @@ public:
     int        FlecheG2_ox, FlecheG2_oy, FlecheG2_fx, FlecheG2_fy;
 
 public:
-    COTATION( EDA_BaseStruct* StructFather );
-    ~COTATION( void );
+    COTATION( BOARD_ITEM* StructFather );
+    ~COTATION();
 
     bool    ReadCotationDescr( FILE* File, int* LineNum );
     bool    WriteCotationDescr( FILE* File );

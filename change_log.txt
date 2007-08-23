@@ -5,16 +5,36 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2007-Aug-23 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
+  @todo add constructor initializers for classes that were derived from
+   EDA_BaseLineStruct but are now not.  Its late, will do tomorrow.
+  @todo test yesterday's changes, it builds, may not run right yet.
+
+
 2007-Aug-22 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + eeschema & pcbnew
+  Things are still pretty transient, should be stable a day or two:
   * Fixed a filename case sensitivity problem that would show up on Linux
     but probably not on Windows: bitmap/Reload.xpm needed uppercase R.
-  * Since so many classes introduced m_Layer, I moved m_Layer into 
-    EDA_BaseStruct so all classes can inherit it and that way we can test 
-    layer using a general, polymorphic test, i.e. don't have to cast a
-    EDA_BaseStruct* to a class specific pointer to test layer.  Could also have
-    used a virtual function but too many places use m_Layer directly.
+  * Wedged a new class BOARD_ITEM underneath all PCB drawable classes, this is
+    a big change and may introduce a bug or two, but it is worth it for the
+    future, because we can introduce virtual functions there that do not impact
+    the entire project (since everything is derived from EDA_BaseStruct).
+    The corresponding class in EESCHEMA seems to be DrawPartStruct, so we had
+    nothing in PCBNEW like that.
+    BOARD_ITEM::GetLayer() and SetLayer() introduced, more functions to come.
+    Much of this work is geared towards making collectors.cpp's ARROWCOLLECTOR::Inspect()
+    very very simple, and that can be model for future work.
+  * Changed min() and max() macros to MIN() and MAX() because min() and max()
+    are actually reserved according to the C++ standard! (and their usage prevented
+    the use of #include <vector>).
+  * Added files class_collector.h, collectors.h, and collectors.cpp.  
+    File collectors.cpp is still unfinished.
+  * Started using a function and class comment style that will make sense to the
+    Doxygen source code documenter program.
+  * Beautified more un-beautified files.
 
 
 2007-aug-21 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>

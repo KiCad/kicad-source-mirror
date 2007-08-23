@@ -6,25 +6,25 @@
 
 #include "base_struct.h"
 
-class TEXTE_PCB : public EDA_BaseStruct, public EDA_TextStruct
+class TEXTE_PCB : public BOARD_ITEM, public EDA_TextStruct
 {
 public:
-	TEXTE_PCB(EDA_BaseStruct * parent);
-	TEXTE_PCB(TEXTE_PCB * textepcb);
-	~TEXTE_PCB(void);
+	TEXTE_PCB( BOARD_ITEM* parent );
+	TEXTE_PCB( TEXTE_PCB* textepcb );
+	~TEXTE_PCB();
 
 	/* supprime du chainage la structure Struct */
 	void UnLink( void );
 
 	/* duplicate structure */
-	void Copy(TEXTE_PCB * source);
+	void Copy( TEXTE_PCB* source );
 
-	void Draw(WinEDA_DrawPanel * panel, wxDC * DC,
-					const wxPoint & offset, int DrawMode);
+	void Draw( WinEDA_DrawPanel * panel, wxDC * DC,
+					const wxPoint & offset, int DrawMode );
 
 	// File Operations:
-	int ReadTextePcbDescr(FILE * File, int * LineNum);
-	int WriteTextePcbDescr(FILE * File);
+	int ReadTextePcbDescr( FILE* File, int* LineNum );
+	int WriteTextePcbDescr( FILE* File );
 
     
     /**

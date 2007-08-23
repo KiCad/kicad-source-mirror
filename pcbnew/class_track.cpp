@@ -22,8 +22,8 @@
 
 /* Constructeur des classes type pistes, vias et zones */
 
-TRACK::TRACK( EDA_BaseStruct* StructFather, DrawStructureType idtype ) :
-    EDA_BaseLineStruct( StructFather, idtype )
+TRACK::TRACK( BOARD_ITEM* StructFather, DrawStructureType idtype ) :
+    BOARD_ITEM( StructFather, idtype )
 {
     m_Shape        = S_SEGMENT;
     start          = end = NULL;
@@ -35,13 +35,13 @@ TRACK::TRACK( EDA_BaseStruct* StructFather, DrawStructureType idtype ) :
 
 
 
-SEGZONE::SEGZONE( EDA_BaseStruct* StructFather ) :
+SEGZONE::SEGZONE( BOARD_ITEM* StructFather ) :
     TRACK( StructFather, TYPEZONE )
 {
 }
 
 
-SEGVIA::SEGVIA( EDA_BaseStruct* StructFather ) :
+SEGVIA::SEGVIA( BOARD_ITEM* StructFather ) :
     TRACK( StructFather, TYPEVIA )
 {
 }
@@ -50,7 +50,7 @@ SEGVIA::SEGVIA( EDA_BaseStruct* StructFather ) :
 
 /* Copy constructor */
 TRACK::TRACK( const TRACK& Source ) :
-    EDA_BaseLineStruct( Source.m_Parent, (DrawStructureType)Source.m_StructType )
+    BOARD_ITEM( (const BOARD_ITEM&) Source )
 {
     m_StructType = Source.m_StructType;
     m_Shape     = Source.m_Shape;
@@ -232,14 +232,6 @@ void SEGVIA::ReturnLayerPair( int* top_layer, int* bottom_layer )
         *top_layer = t_layer;
     if( bottom_layer )
         *bottom_layer = b_layer;
-}
-
-
-/************************/
-TRACK* TRACK::Next( void )
-/************************/
-{
-    return (TRACK*) Pnext;
 }
 
 

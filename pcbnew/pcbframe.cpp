@@ -12,7 +12,7 @@
 #include "id.h"
 
 #if defined(DEBUG)
-#include "class_collector.h"
+#include "collectors.h"
 #endif
 
 
@@ -169,77 +169,6 @@ END_EVENT_TABLE()
 
 
 
-#if defined(DEBUG)
-class RAT1COLLECTOR : public COLLECTOR
-{
-    ;
-};
-
-
-class ARROWCOLLECTOR : public COLLECTOR
-{
-    const KICAD_T*  m_ScanTypes;
-
-    /**
-     * A place to hold collected objects which don't match precisely the search 
-     * criteria, but would be acceptable if nothing else is found. 
-     * "2nd" choice, which will be appended to the end of COLLECTOR's prime 
-     * "list" at the end of the search.
-     */
-    std::vector<EDA_BaseStruct*>    list2nd;
-    
-    
-public:
-    ARROWCOLLECTOR() :
-        COLLECTOR(0),
-        m_ScanTypes(0)
-    {
-    }
-
-
-    void Empty2nd()
-    {
-        list2nd.clear();
-    }
-    
-    
-    /**
-     * Function Inspect
-     * is the examining function within the INSPECTOR which is passed to the 
-     * Iterate function.  It is used primarily for searching, but not limited to
-     * that.  It can also collect or modify the scanned objects.
-     *
-     * @param testItem An EDA_BaseStruct to examine.
-     * @param testData is arbitrary data needed by the inspector to determine
-     *   if the EDA_BaseStruct under test meets its match criteria.
-     * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
-     *   else SCAN_CONTINUE;
-     */ 
-    SEARCH_RESULT Inspect( EDA_BaseStruct* testItem, const void* testData )
-    {
-        const wxPoint&  refPos = *(const wxPoint*) testData;
-        
-        switch( testItem->m_StructType )
-        {
-        case TYPEMODULE:
-            if( testItem->HitTest( refPos ) )
-                Append( testItem );
-            break;
-        }
-
-        return SEARCH_CONTINUE;
-    }
-    
-    
-    void SetScanTypes( const KICAD_T* scanTypes )
-    {
-        m_ScanTypes = scanTypes;
-    }
-};
-#endif
-
-
-
 ///////****************************///////////:
 
 /****************/
@@ -264,8 +193,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent,
     m_SelViaSizeBox_Changed    = FALSE;
     
 #if defined(DEBUG)    
-    m_GeneralCollector         = NULL;
-    m_RatsModuleCollector      = NULL;
+    m_ArrowCollector           = new ARROWCOLLECTOR();
 #endif    
 
     m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
@@ -313,6 +241,10 @@ WinEDA_PcbFrame::~WinEDA_PcbFrame( void )
 {
     m_Parent->m_PcbFrame = NULL;
     m_CurrentScreen = ScreenPcb;
+    
+#if defined(DEBUG)    
+    delete m_ArrowCollector;
+#endif    
 }
 
 

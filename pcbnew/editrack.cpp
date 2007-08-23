@@ -130,7 +130,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
         Hight_Light( DC );
 
         g_CurrentTrackSegment->m_Flags   = IS_NEW;
-        g_CurrentTrackSegment->m_Layer   = GetScreen()->m_Active_Layer;
+        g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer );
         g_CurrentTrackSegment->m_Width   = g_DesignSettings.m_CurrentTrackWidth;
         g_CurrentTrackSegment->m_Start   = pos;
         g_CurrentTrackSegment->m_End     = g_CurrentTrackSegment->m_Start;
@@ -211,7 +211,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
             g_CurrentTrackSegment->m_Flags = IS_NEW;
             g_TrackSegmentCount++;
             g_CurrentTrackSegment->m_Start = g_CurrentTrackSegment->m_End;
-            g_CurrentTrackSegment->m_Layer = GetScreen()->m_Active_Layer;
+            g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer );
             g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentTrackWidth;
             /* Show the new position */
             ShowNewTrackWhenMovingCursor( DrawPanel, DC, FALSE );
@@ -269,9 +269,9 @@ int Add_45_degrees_Segment( WinEDA_BasePcbFrame* frame, wxDC* DC, TRACK* pt_segm
     dy1 = pt_segm->m_End.y - pt_segm->m_Start.y;
 
     // les segments doivent etre de longueur suffisante:
-    if( max( abs( dx0 ), abs( dy0 ) ) < (pas_45 * 2) )
+    if( MAX( abs( dx0 ), abs( dy0 ) ) < (pas_45 * 2) )
         return 0;
-    if( max( abs( dx1 ), abs( dy1 ) ) < (pas_45 * 2) )
+    if( MAX( abs( dx1 ), abs( dy1 ) ) < (pas_45 * 2) )
         return 0;
 
     /* creation du nouveau segment, raccordant des 2 segm: */
@@ -502,14 +502,14 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
     }
 
     /* dessin de la nouvelle piste : mise a jour du point d'arrivee */
-    g_CurrentTrackSegment->m_Layer = screen->m_Active_Layer;
+    g_CurrentTrackSegment->SetLayer( screen->m_Active_Layer );
     g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentTrackWidth;
     if( g_TwoSegmentTrackBuild )
     {
         TRACK* previous_track = (TRACK*) g_CurrentTrackSegment->Pback;
         if( previous_track && (previous_track->m_StructType == TYPETRACK) )
         {
-            previous_track->m_Layer = screen->m_Active_Layer;
+            previous_track->SetLayer( screen->m_Active_Layer );
             previous_track->m_Width = g_DesignSettings.m_CurrentTrackWidth;
         }
     }
@@ -584,7 +584,7 @@ void Calcule_Coord_Extremite_45( int ox, int oy, int* fx, int* fy )
         break;
 
     case 45:
-        deltax = min( deltax, deltay ); deltay = deltax;
+        deltax = MIN( deltax, deltay ); deltay = deltax;
         /* recalcul des signes de deltax et deltay */
         if( (ActiveScreen->m_Curseur.x - ox) < 0 )
             deltax = -deltax;
@@ -666,7 +666,7 @@ void ComputeBreakPoint( TRACK* track, int SegmentCount )
         break;
 
     case 45:
-        iDx = min( iDx, iDy );
+        iDx = MIN( iDx, iDy );
         iDy = iDx;
         /* recalcul des signes de deltax et deltay */
         if( (ActiveScreen->m_Curseur.x - track->m_Start.x) < 0 )
@@ -707,7 +707,7 @@ TRACK* DeleteNullTrackSegments( BOARD* pcb, TRACK* track, int* segmcount )
     TRACK*          firsttrack = track;
     TRACK*          oldtrack;
     int             nn = 0;
-    EDA_BaseStruct* LockPoint;
+    BOARD_ITEM*     LockPoint;
 
     if( track == 0 )
         return NULL;

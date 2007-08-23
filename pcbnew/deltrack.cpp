@@ -68,7 +68,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
                 delete Track;
                 g_TrackSegmentCount--;
                 if( g_CurrentTrackSegment && (g_CurrentTrackSegment->m_StructType != TYPEVIA) )
-                    previous_layer = g_CurrentTrackSegment->m_Layer;
+                    previous_layer = g_CurrentTrackSegment->GetLayer();
             }
 
             if( g_CurrentTrackSegment )

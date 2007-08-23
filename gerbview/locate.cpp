@@ -102,7 +102,7 @@ DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int typeloc )
  *      NULL si rien trouve
  */
 {
-    EDA_BaseStruct* PtStruct;
+    BOARD_ITEM*     PtStruct;
     DRAWSEGMENT*    pts;
     wxPoint         ref;
     PCB_SCREEN*     screen = (PCB_SCREEN*) ActiveScreen;
@@ -110,7 +110,7 @@ DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int typeloc )
     SET_REF_POS( ref );
 
     PtStruct = Pcb->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         if( PtStruct->m_StructType != TYPEDRAWSEGMENT )
             continue;
@@ -121,7 +121,7 @@ DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int typeloc )
         spot_cX = ref.x - ux0; spot_cY = ref.y - uy0;
 
         /* detection : */
-        if( pts->m_Layer != screen->m_Active_Layer )
+        if( pts->GetLayer() != screen->m_Active_Layer )
             continue;
 
         if( (pts->m_Shape == S_CIRCLE) || (pts->m_Shape == S_ARC) )
@@ -208,7 +208,7 @@ TRACK* Locate_Pistes( TRACK* start_adresse, wxPoint ref, int Layer )
         }
 
         if( Layer >= 0 )
-            if( Track->m_Layer != Layer )
+            if( Track->GetLayer() != Layer )
                 continue;/* Segments sur couches differentes */
         if( distance( l_piste ) )
             return Track;
@@ -260,7 +260,7 @@ TRACK* Locate_Zone( TRACK* start_adresse, wxPoint ref, int layer )
         dx     -= ux0; dy -= uy0;
         spot_cX = ref.x - ux0; spot_cY = ref.y - uy0;
 
-        if( (layer != -1) && (Zone->m_Layer != layer) )
+        if( (layer != -1) && (Zone->GetLayer() != layer) )
             continue;
         if( distance( l_segm ) )
             return Zone;

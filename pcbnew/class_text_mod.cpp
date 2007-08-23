@@ -28,7 +28,7 @@
 
 /* Constructeur de TEXTE_MODULE */
 TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
-    EDA_BaseStruct( parent, TYPETEXTEMODULE )
+    BOARD_ITEM( parent, TYPETEXTEMODULE )
 {
     MODULE* Module = (MODULE*) m_Parent;
 
@@ -41,18 +41,27 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
     m_Orient = 0;                               /* en 1/10 degre */
     m_Miroir = 1;                               // Mode normal (pas de miroir)
     m_Unused = 0;
-    m_Layer  = SILKSCREEN_N_CMP;
+    
+    SetLayer( SILKSCREEN_N_CMP );
     if( Module && (Module->m_StructType == TYPEMODULE) )
     {
         m_Pos   = Module->m_Pos;
-        m_Layer = Module->m_Layer;
-        if( Module->m_Layer == CUIVRE_N )
-            m_Layer = SILKSCREEN_N_CU;
-        if( Module->m_Layer == CMP_N )
-            m_Layer = SILKSCREEN_N_CMP;
-        if( (Module->m_Layer == SILKSCREEN_N_CU)
-           || (Module->m_Layer == ADHESIVE_N_CU) || (Module->m_Layer == CUIVRE_N) )
+
+        int moduleLayer = Module->GetLayer();
+        
+        if( moduleLayer == CUIVRE_N )
+            SetLayer( SILKSCREEN_N_CU );
+        else if( moduleLayer == CMP_N )
+            SetLayer( SILKSCREEN_N_CMP );
+        else 
+            SetLayer( moduleLayer );
+        
+        if(  moduleLayer == SILKSCREEN_N_CU
+          || moduleLayer == ADHESIVE_N_CU
+          || moduleLayer == CUIVRE_N )
+        {
             m_Miroir = 0;
+        }
     }
 }
 
@@ -68,7 +77,7 @@ void TEXTE_MODULE::Copy( TEXTE_MODULE* source )      // copy structure
         return;
 
     m_Pos   = source->m_Pos;
-    m_Layer = source->m_Layer;
+    SetLayer( source->GetLayer() );
 
     m_Miroir = source->m_Miroir;        // vue normale / miroir
     m_NoShow = source->m_NoShow;        // 0: visible 1: invisible
@@ -97,7 +106,7 @@ void TEXTE_MODULE::UnLink( void )
         }
         else /* Le chainage arriere pointe sur la structure "Pere" */
         {
-            ( (MODULE*) Pback )->m_Drawings = Pnext;
+            ( (MODULE*) Pback )->m_Drawings = (BOARD_ITEM*) Pnext;
         }
     }
 
@@ -245,11 +254,12 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, wxPoint offset, int 
                 pos.x, pos.y + anchor_size, 0, g_AnchorColor );
     }
 
-    color = g_DesignSettings.m_LayerColor[Module->m_Layer];
+    color = g_DesignSettings.m_LayerColor[Module->GetLayer()];
 
-    if( Module && Module->m_Layer == CUIVRE_N )
+    if( Module && Module->GetLayer() == CUIVRE_N )
         color = g_ModuleTextCUColor;
-    if( Module && Module->m_Layer == CMP_N )
+    
+    else if( Module && Module->GetLayer() == CMP_N )
         color = g_ModuleTextCMPColor;
 
     if( (color & ITEM_NOT_SHOW) != 0 )

@@ -395,8 +395,8 @@ void CopyMarkedItems( MODULE* module, wxPoint offset )
 /* Copy marked items, at new position = old position + offset
  */
 {
-    EDA_BaseStruct* item;
-    EDA_BaseStruct* NewStruct;
+    BOARD_ITEM* item;
+    BOARD_ITEM* NewStruct;
 
     if( module == NULL )
         return;

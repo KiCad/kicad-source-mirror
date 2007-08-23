@@ -123,13 +123,13 @@ void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
 
         if( !DisplayOpt.Show_Modules_Cmp )
         {
-            if( Module->m_Layer == CMP_N )
+            if( Module->GetLayer() == CMP_N )
                 display = FALSE;
             MaskLay &= ~CMP_LAYER;
         }
         if( !DisplayOpt.Show_Modules_Cu )
         {
-            if( Module->m_Layer == CUIVRE_N )
+            if( Module->GetLayer() == CUIVRE_N )
                 display = FALSE;
             MaskLay &= ~CUIVRE_LAYER;
         }

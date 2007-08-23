@@ -5,7 +5,7 @@
 
 /* Representation des descriptions des equipotentielles */
 
-class EQUIPOT : public EDA_BaseStruct
+class EQUIPOT : public BOARD_ITEM
 {
 public:
     wxString   m_Netname;       // nom du net
@@ -22,8 +22,8 @@ public:
     CHEVELU*   m_RatsnestStart; // pointeur sur debut de liste ratsnests du net
     CHEVELU*   m_RatsnestEnd;   // pointeur sur fin de liste ratsnests du net
 
-    EQUIPOT( EDA_BaseStruct* StructFather );
-    ~EQUIPOT( void );
+    EQUIPOT( BOARD_ITEM* StructFather );
+    ~EQUIPOT();
 
     /* Effacement memoire de la structure */
     void    UnLink( void );

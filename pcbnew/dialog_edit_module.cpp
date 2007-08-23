@@ -236,7 +236,7 @@ void WinEDA_ModulePropertiesFrame::BuildPanelModuleProperties( bool FullOptions 
         wxString layer_list[2] = { _( "Component" ), _( "Copper" ) };
         m_LayerCtrl = new wxRadioBox( m_PanelProperties, -1, _( "Layer" ), wxDefaultPosition,
                                       wxSize( -1, -1 ), 2, layer_list, 1 );
-        m_LayerCtrl->SetSelection( (m_CurrentModule->m_Layer == CUIVRE_N) ? 1 : 0 );
+        m_LayerCtrl->SetSelection( (m_CurrentModule->GetLayer() == CUIVRE_N) ? 1 : 0 );
         PropLeftSizer->Add( m_LayerCtrl, 0, wxGROW | wxALL, 5 );
 
         bool     select = FALSE;
@@ -518,10 +518,10 @@ void WinEDA_ModulePropertiesFrame::ModulePropertiesAccept( wxCommandEvent& event
     {
         if( m_LayerCtrl->GetSelection() == 0 )     // layer req = COMPONENT
         {
-            if( m_CurrentModule->m_Layer == CUIVRE_N )
+            if( m_CurrentModule->GetLayer() == CUIVRE_N )
                 change_layer = TRUE;
         }
-        else if( m_CurrentModule->m_Layer == CMP_N )
+        else if( m_CurrentModule->GetLayer() == CMP_N )
             change_layer = TRUE;
     }
 

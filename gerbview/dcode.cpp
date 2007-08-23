@@ -340,7 +340,7 @@ D_CODE * pt_Dcode;	/* Pointeur sur le D code*/
 	track = m_Pcb->m_Track;
 	for ( ; track != NULL ; track = (TRACK*) track->Pnext )
 		{
-		pt_Dcode = ReturnToolDescr(track->m_Layer, track->m_NetCode);
+		pt_Dcode = ReturnToolDescr(track->GetLayer(), track->m_NetCode);
 		pt_Dcode->m_InUse = TRUE;
 
 		if (		// Line Item
@@ -359,8 +359,8 @@ D_CODE * pt_Dcode;	/* Pointeur sur le D code*/
 			int width, len;
 			wxSize size = pt_Dcode->m_Size;
 
-			width = min( size.x, size.y );
-			len = max( size.x, size.y ) - width;
+			width = MIN( size.x, size.y );
+			len = MAX( size.x, size.y ) - width;
 
 			track->m_Width = width;
 

@@ -7,9 +7,13 @@ class Pcb3D_GLCanvas;
 
 /* description des contours (empreintes ) et TYPES des CONTOURS : */
 
-class EDGE_MODULE : public EDA_BaseLineStruct
+class EDGE_MODULE : public BOARD_ITEM
 {
 public:
+    int     m_Width;        // 0 = line, > 0 = tracks, bus ...
+    wxPoint m_Start;        // Line start point
+    wxPoint m_End;          // Line end point
+    
     int     m_Shape;        // voir "enum Track_Shapes"
     wxPoint m_Start0;       // coord relatives a l'ancre du point de depart(Orient 0)
     wxPoint m_End0;         // coord relatives a l'ancre du point de fin (Orient 0)

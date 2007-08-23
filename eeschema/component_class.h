@@ -39,7 +39,8 @@ typedef enum
 class PartTextStruct:  public EDA_BaseStruct, public EDA_TextStruct
 {
 public:
-	int m_FieldId;
+    int      m_Layer;
+	int      m_FieldId;
 	wxString m_Name;	/* Field name (ref, value,pcb, sheet, filed 1..
 			and for fields 1 to 8 the name is editable */
 
@@ -54,6 +55,7 @@ public:
 	void SwapData(PartTextStruct * copyitem);
 };
 
+
 /* the class DrawPartStruct describes a basic virtual component
 	Not used directly:
 	used classes are EDA_SchComponentStruct (the "classic" schematic component
@@ -62,6 +64,7 @@ public:
 class DrawPartStruct: public EDA_BaseStruct
 {
 public:
+    int      m_Layer;
 	wxString m_ChipName;		/* Key to look for in the library, i.e. "74LS00". */
 	PartTextStruct m_Field[NUMBER_OF_FIELDS];
 	wxPoint m_Pos;				/* Exact position of part. */

@@ -58,7 +58,8 @@ void MODULE::DrawAncre( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset
 /*************************************************/
 
 /* Constructeur de la classe MODULE */
-MODULE::MODULE( BOARD* parent ) : EDA_BaseStruct( parent, TYPEMODULE )
+MODULE::MODULE( BOARD* parent ) : 
+    BOARD_ITEM( parent, TYPEMODULE )
 {
     m_Pads         = NULL;
     m_Drawings     = NULL;
@@ -168,9 +169,9 @@ void MODULE::Copy( MODULE* Module )
     }
 
     /* Copy des structures auxiliaires: Drawings */
-    EDA_BaseStruct*  OldStruct = (EDA_BaseStruct*) Module->m_Drawings;
-    EDA_BaseStruct*  NewStruct, * LastStruct = NULL;
-    for( ; OldStruct; OldStruct = OldStruct->Pnext )
+    BOARD_ITEM*  OldStruct = Module->m_Drawings;
+    BOARD_ITEM*  NewStruct, * LastStruct = NULL;
+    for( ; OldStruct; OldStruct = OldStruct->Next() )
     {
         NewStruct = NULL;
 
@@ -423,7 +424,7 @@ int MODULE::WriteDescr( FILE* File )
             m_Reference->m_Size.y, m_Reference->m_Size.x,
             m_Reference->m_Orient + m_Orient, m_Reference->m_Width,
             m_Reference->m_Miroir ? 'N' : 'M', m_Reference->m_NoShow ? 'I' : 'V',
-            m_Reference->m_Layer,
+            m_Reference->GetLayer(),
             CONV_TO_UTF8( m_Reference->m_Text ) );
     NbLigne++;
 
@@ -434,7 +435,7 @@ int MODULE::WriteDescr( FILE* File )
             m_Value->m_Size.y, m_Value->m_Size.x,
             m_Value->m_Orient + m_Orient, m_Value->m_Width,
             m_Value->m_Miroir ? 'N' : 'M', m_Value->m_NoShow ? 'I' : 'V',
-            m_Value->m_Layer,
+            m_Value->GetLayer(),
             CONV_TO_UTF8( m_Value->m_Text ) );
     NbLigne++;
 
@@ -453,7 +454,7 @@ int MODULE::WriteDescr( FILE* File )
                     PtText->m_Orient + m_Orient, PtText->m_Width,
                     PtText->m_Miroir ? 'N' : 'M',
                     PtText->m_NoShow ? 'I' : 'V',
-                    PtText->m_Layer, CONV_TO_UTF8( PtText->m_Text ) );
+                    PtText->GetLayer(), CONV_TO_UTF8( PtText->m_Text ) );
             NbLigne++;
             break;
 
@@ -720,22 +721,23 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
                 if( LastModStruct == NULL )
                 {
                     DrawText->Pback = this;
-                    m_Drawings = (EDA_BaseStruct*) DrawText;
+                    m_Drawings = DrawText;
                 }
                 else
                 {
                     DrawText->Pback      = LastModStruct;
                     LastModStruct->Pnext = DrawText;
                 }
-                LastModStruct = (EDA_BaseStruct*) DrawText;
+                LastModStruct = DrawText;
             }
 
+            int layer;
             sscanf( Line + 1, "%d %d %d %d %d %d %d %s %s %d",
                     &itmp1,
                     &DrawText->m_Pos0.x, &DrawText->m_Pos0.y,
                     &DrawText->m_Size.y, &DrawText->m_Size.x,
                     &DrawText->m_Orient, &DrawText->m_Width,
-                    BufCar1, BufCar2, &DrawText->m_Layer );
+                    BufCar1, BufCar2, &layer );
 
             DrawText->m_Type    = itmp1;
             DrawText->m_Orient -= m_Orient;     // m_Orient texte relative au module
@@ -748,11 +750,13 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
             else
                 DrawText->m_NoShow = 0;
 
-            if( m_Layer == CUIVRE_N )
-                DrawText->m_Layer = SILKSCREEN_N_CU;
-            if( m_Layer == CMP_N )
-                DrawText->m_Layer = SILKSCREEN_N_CMP;
+            if( layer == CUIVRE_N )
+                layer = SILKSCREEN_N_CU;
+            else if( layer == CMP_N )
+                layer = SILKSCREEN_N_CMP;
 
+            DrawText->SetLayer( layer );            
+            
             /* calcul de la position vraie */
             DrawText->SetDrawCoord();
             /* Lecture de la chaine "text" */
@@ -961,22 +965,22 @@ void MODULE::Set_Rectangle_Encadrement( void )
             uxf    = pt_edge_mod->m_End0.x; uyf = pt_edge_mod->m_End0.y;
             rayon  = (int) hypot( (double) (cx - uxf), (double) (cy - uyf) );
             rayon += width;
-            m_BoundaryBox.m_Pos.x = min( m_BoundaryBox.m_Pos.x, cx - rayon );
-            m_BoundaryBox.m_Pos.y = min( m_BoundaryBox.m_Pos.y, cy - rayon );
-            xmax = max( xmax, cx + rayon );
-            ymax = max( ymax, cy + rayon );
+            m_BoundaryBox.m_Pos.x = MIN( m_BoundaryBox.m_Pos.x, cx - rayon );
+            m_BoundaryBox.m_Pos.y = MIN( m_BoundaryBox.m_Pos.y, cy - rayon );
+            xmax = MAX( xmax, cx + rayon );
+            ymax = MAX( ymax, cy + rayon );
             break;
         }
 
         default:
-            m_BoundaryBox.m_Pos.x = min( m_BoundaryBox.m_Pos.x, pt_edge_mod->m_Start0.x - width );
-            m_BoundaryBox.m_Pos.x = min( m_BoundaryBox.m_Pos.x, pt_edge_mod->m_End0.x - width );
-            m_BoundaryBox.m_Pos.y = min( m_BoundaryBox.m_Pos.y, pt_edge_mod->m_Start0.y - width );
-            m_BoundaryBox.m_Pos.y = min( m_BoundaryBox.m_Pos.y, pt_edge_mod->m_End0.y - width );
-            xmax = max( xmax, pt_edge_mod->m_Start0.x + width );
-            xmax = max( xmax, pt_edge_mod->m_End0.x + width );
-            ymax = max( ymax, pt_edge_mod->m_Start0.y + width );
-            ymax = max( ymax, pt_edge_mod->m_End0.y + width );
+            m_BoundaryBox.m_Pos.x = MIN( m_BoundaryBox.m_Pos.x, pt_edge_mod->m_Start0.x - width );
+            m_BoundaryBox.m_Pos.x = MIN( m_BoundaryBox.m_Pos.x, pt_edge_mod->m_End0.x - width );
+            m_BoundaryBox.m_Pos.y = MIN( m_BoundaryBox.m_Pos.y, pt_edge_mod->m_Start0.y - width );
+            m_BoundaryBox.m_Pos.y = MIN( m_BoundaryBox.m_Pos.y, pt_edge_mod->m_End0.y - width );
+            xmax = MAX( xmax, pt_edge_mod->m_Start0.x + width );
+            xmax = MAX( xmax, pt_edge_mod->m_End0.x + width );
+            ymax = MAX( ymax, pt_edge_mod->m_Start0.y + width );
+            ymax = MAX( ymax, pt_edge_mod->m_End0.y + width );
             break;
         }
     }
@@ -986,10 +990,10 @@ void MODULE::Set_Rectangle_Encadrement( void )
     {
         rayon = pad->m_Rayon;
         cx    = pad->m_Pos0.x; cy = pad->m_Pos0.y;
-        m_BoundaryBox.m_Pos.x = min( m_BoundaryBox.m_Pos.x, cx - rayon );
-        m_BoundaryBox.m_Pos.y = min( m_BoundaryBox.m_Pos.y, cy - rayon );
-        xmax = max( xmax, cx + rayon );
-        ymax = max( ymax, cy + rayon );
+        m_BoundaryBox.m_Pos.x = MIN( m_BoundaryBox.m_Pos.x, cx - rayon );
+        m_BoundaryBox.m_Pos.y = MIN( m_BoundaryBox.m_Pos.y, cy - rayon );
+        xmax = MAX( xmax, cx + rayon );
+        ymax = MAX( ymax, cy + rayon );
     }
 
     m_BoundaryBox.SetWidth( xmax - m_BoundaryBox.m_Pos.x );
@@ -1035,22 +1039,22 @@ void MODULE::SetRectangleExinscrit( void )
             uxf    = EdgeMod->m_End.x; uyf = EdgeMod->m_End.y;
             rayon  = (int) hypot( (double) (cx - uxf), (double) (cy - uyf) );
             rayon += width;
-            m_RealBoundaryBox.m_Pos.x = min( m_RealBoundaryBox.m_Pos.x, cx - rayon );
-            m_RealBoundaryBox.m_Pos.y = min( m_RealBoundaryBox.m_Pos.y, cy - rayon );
-            xmax = max( xmax, cx + rayon );
-            ymax = max( ymax, cy + rayon );
+            m_RealBoundaryBox.m_Pos.x = MIN( m_RealBoundaryBox.m_Pos.x, cx - rayon );
+            m_RealBoundaryBox.m_Pos.y = MIN( m_RealBoundaryBox.m_Pos.y, cy - rayon );
+            xmax = MAX( xmax, cx + rayon );
+            ymax = MAX( ymax, cy + rayon );
             break;
         }
 
         default:
-            m_RealBoundaryBox.m_Pos.x = min( m_RealBoundaryBox.m_Pos.x, EdgeMod->m_Start.x - width );
-            m_RealBoundaryBox.m_Pos.x = min( m_RealBoundaryBox.m_Pos.x, EdgeMod->m_End.x - width );
-            m_RealBoundaryBox.m_Pos.y = min( m_RealBoundaryBox.m_Pos.y, EdgeMod->m_Start.y - width );
-            m_RealBoundaryBox.m_Pos.y = min( m_RealBoundaryBox.m_Pos.y, EdgeMod->m_End.y - width );
-            xmax = max( xmax, EdgeMod->m_Start.x + width );
-            xmax = max( xmax, EdgeMod->m_End.x + width );
-            ymax = max( ymax, EdgeMod->m_Start.y + width );
-            ymax = max( ymax, EdgeMod->m_End.y + width );
+            m_RealBoundaryBox.m_Pos.x = MIN( m_RealBoundaryBox.m_Pos.x, EdgeMod->m_Start.x - width );
+            m_RealBoundaryBox.m_Pos.x = MIN( m_RealBoundaryBox.m_Pos.x, EdgeMod->m_End.x - width );
+            m_RealBoundaryBox.m_Pos.y = MIN( m_RealBoundaryBox.m_Pos.y, EdgeMod->m_Start.y - width );
+            m_RealBoundaryBox.m_Pos.y = MIN( m_RealBoundaryBox.m_Pos.y, EdgeMod->m_End.y - width );
+            xmax = MAX( xmax, EdgeMod->m_Start.x + width );
+            xmax = MAX( xmax, EdgeMod->m_End.x + width );
+            ymax = MAX( ymax, EdgeMod->m_Start.y + width );
+            ymax = MAX( ymax, EdgeMod->m_End.y + width );
             break;
         }
     }
@@ -1060,10 +1064,10 @@ void MODULE::SetRectangleExinscrit( void )
     {
         rayon = Pad->m_Rayon;
         cx    = Pad->m_Pos.x; cy = Pad->m_Pos.y;
-        m_RealBoundaryBox.m_Pos.x = min( m_RealBoundaryBox.m_Pos.x, cx - rayon );
-        m_RealBoundaryBox.m_Pos.y = min( m_RealBoundaryBox.m_Pos.y, cy - rayon );
-        xmax = max( xmax, cx + rayon );
-        ymax = max( ymax, cy + rayon );
+        m_RealBoundaryBox.m_Pos.x = MIN( m_RealBoundaryBox.m_Pos.x, cx - rayon );
+        m_RealBoundaryBox.m_Pos.y = MIN( m_RealBoundaryBox.m_Pos.y, cy - rayon );
+        xmax = MAX( xmax, cx + rayon );
+        ymax = MAX( ymax, cy + rayon );
     }
 
     m_RealBoundaryBox.SetWidth( xmax - m_RealBoundaryBox.m_Pos.x );

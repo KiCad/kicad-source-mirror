@@ -104,7 +104,7 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
     m_Pcb->m_Status_Pcb &= ~CHEVELU_LOCAL_OK;
     module->m_Flags |= IS_MOVED;
     ModuleInitOrient = module->m_Orient;
-    ModuleInitLayer  = module->m_Layer;
+    ModuleInitLayer  = module->GetLayer();
 
     /* Effacement chevelu general si necessaire */
     if( g_Show_Ratsnest )
@@ -192,7 +192,7 @@ void Exit_Module( WinEDA_DrawPanel* Panel, wxDC* DC )
     {
         if( ModuleInitOrient != module->m_Orient )
             pcbframe->Rotate_Module( NULL, module, ModuleInitOrient, FALSE );
-        if( ModuleInitLayer != module->m_Layer )
+        if( ModuleInitLayer != module->GetLayer() )
             pcbframe->Change_Side_Module( module, NULL );
         module->Draw( Panel, DC, wxPoint( 0, 0 ), GR_OR );
     }
@@ -337,7 +337,7 @@ void WinEDA_BasePcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
 
     if( Module == NULL )
         return;
-    if( (Module->m_Layer != CMP_N) && (Module->m_Layer != CUIVRE_N) )
+    if( (Module->GetLayer() != CMP_N) && (Module->GetLayer() != CUIVRE_N) )
         return;
 
     m_CurrentScreen->SetModify();
@@ -367,7 +367,7 @@ void WinEDA_BasePcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
     }
 
     /* mise a jour du Flag de l'empreinte et des couches des contours et textes */
-    Module->m_Layer = ChangeSideNumLayer( Module->m_Layer );
+    Module->SetLayer( ChangeSideNumLayer( Module->GetLayer() ) );
 
     /* Inversion miroir de l'orientation */
     Module->m_Orient = -Module->m_Orient;
@@ -397,17 +397,17 @@ void WinEDA_BasePcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
     pt_texte->m_Pos0.y = pt_texte->m_Pos0.y;
     pt_texte->m_Miroir = 1;
     NEGATE_AND_NORMALIZE_ANGLE_POS( pt_texte->m_Orient );
-    pt_texte->m_Layer = Module->m_Layer;
-    pt_texte->m_Layer = ChangeSideNumLayer( pt_texte->m_Layer );
+    pt_texte->SetLayer( Module->GetLayer() );
+    pt_texte->SetLayer( ChangeSideNumLayer( pt_texte->GetLayer() ) );
 
-    if( Module->m_Layer == CUIVRE_N )
-        pt_texte->m_Layer = SILKSCREEN_N_CU;
+    if( Module->GetLayer() == CUIVRE_N )
+        pt_texte->SetLayer( SILKSCREEN_N_CU );
 
-    if( Module->m_Layer == CMP_N )
-        pt_texte->m_Layer = SILKSCREEN_N_CMP;
+    if( Module->GetLayer() == CMP_N )
+        pt_texte->SetLayer( SILKSCREEN_N_CMP );
 
-    if( (Module->m_Layer == SILKSCREEN_N_CU)
-       || (Module->m_Layer == ADHESIVE_N_CU) || (Module->m_Layer == CUIVRE_N) )
+    if( (Module->GetLayer() == SILKSCREEN_N_CU)
+       || (Module->GetLayer() == ADHESIVE_N_CU) || (Module->GetLayer() == CUIVRE_N) )
         pt_texte->m_Miroir = 0;
 
     /* Inversion miroir de la Valeur et mise en miroir : */
@@ -418,17 +418,17 @@ void WinEDA_BasePcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
     pt_texte->m_Pos0.y = pt_texte->m_Pos0.y;
     pt_texte->m_Miroir = 1;
     NEGATE_AND_NORMALIZE_ANGLE_POS( pt_texte->m_Orient );
-    pt_texte->m_Layer = Module->m_Layer;
-    pt_texte->m_Layer = ChangeSideNumLayer( pt_texte->m_Layer );
+    pt_texte->SetLayer( Module->GetLayer() );
+    pt_texte->SetLayer( ChangeSideNumLayer( pt_texte->GetLayer() ) );
 
-    if( Module->m_Layer == CUIVRE_N )
-        pt_texte->m_Layer = SILKSCREEN_N_CU;
+    if( Module->GetLayer() == CUIVRE_N )
+        pt_texte->SetLayer( SILKSCREEN_N_CU );
 
-    if( Module->m_Layer == CMP_N )
-        pt_texte->m_Layer = SILKSCREEN_N_CMP;
+    if( Module->GetLayer() == CMP_N )
+        pt_texte->SetLayer( SILKSCREEN_N_CMP );
 
-    if( (Module->m_Layer == SILKSCREEN_N_CU)
-       || (Module->m_Layer == ADHESIVE_N_CU) || (Module->m_Layer == CUIVRE_N) )
+    if( (Module->GetLayer() == SILKSCREEN_N_CU)
+       || (Module->GetLayer() == ADHESIVE_N_CU) || (Module->GetLayer() == CUIVRE_N) )
         pt_texte->m_Miroir = 0;
 
     /* Inversion miroir des dessins de l'empreinte : */
@@ -453,7 +453,7 @@ void WinEDA_BasePcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
                 pt_edgmod->m_Angle = -pt_edgmod->m_Angle;
             }
 
-            pt_edgmod->m_Layer = ChangeSideNumLayer( pt_edgmod->m_Layer );
+            pt_edgmod->SetLayer( ChangeSideNumLayer( pt_edgmod->GetLayer() ) );
             break;
 
         case TYPETEXTEMODULE:
@@ -466,18 +466,21 @@ void WinEDA_BasePcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
             pt_texte->m_Miroir = 1;
             NEGATE_AND_NORMALIZE_ANGLE_POS( pt_texte->m_Orient );
 
-            pt_texte->m_Layer = Module->m_Layer;
-            pt_texte->m_Layer = ChangeSideNumLayer( pt_texte->m_Layer );
+            pt_texte->SetLayer( Module->GetLayer() ); 
+            pt_texte->SetLayer( ChangeSideNumLayer( pt_texte->GetLayer() ) );
 
-            if( Module->m_Layer == CUIVRE_N )
-                pt_texte->m_Layer = SILKSCREEN_N_CU;
+            if( Module->GetLayer() == CUIVRE_N )
+                pt_texte->SetLayer( SILKSCREEN_N_CU );
 
-            if( Module->m_Layer == CMP_N )
-                pt_texte->m_Layer = SILKSCREEN_N_CMP;
+            if( Module->GetLayer() == CMP_N )
+                pt_texte->SetLayer( SILKSCREEN_N_CMP );
 
-            if( (Module->m_Layer == SILKSCREEN_N_CU)
-               || (Module->m_Layer == ADHESIVE_N_CU) || (Module->m_Layer == CUIVRE_N) )
+            if(  Module->GetLayer() == SILKSCREEN_N_CU
+              || Module->GetLayer() == ADHESIVE_N_CU
+              || Module->GetLayer() == CUIVRE_N )
+            {
                 pt_texte->m_Miroir = 0;
+            }
 
             break;
 

@@ -229,7 +229,8 @@ void WinEDA_PcbFrame::Erase_Zones( wxDC* DC, bool query )
 void WinEDA_PcbFrame::Erase_Segments_Pcb( wxDC* DC, bool is_edges, bool query )
 /*****************************************************************************/
 {
-    EDA_BaseStruct* PtStruct, * PtNext;
+    BOARD_ITEM*     PtStruct;
+    BOARD_ITEM*     PtNext;
     int             masque_layer = (~EDGE_LAYER) & 0x1FFF0000;
 
     if( is_edges )
@@ -244,30 +245,18 @@ void WinEDA_PcbFrame::Erase_Segments_Pcb( wxDC* DC, bool is_edges, bool query )
             return;
     }
 
-    PtStruct = (EDA_BaseStruct*) m_Pcb->m_Drawings;
+    PtStruct = m_Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtNext )
     {
-        PtNext = PtStruct->Pnext;
+        PtNext = PtStruct->Next();
 
         switch( PtStruct->m_StructType )
         {
         case TYPEDRAWSEGMENT:
-            if( g_TabOneLayerMask[( (DRAWSEGMENT*) PtStruct )->m_Layer] & masque_layer )
-                DeleteStructure( PtStruct );
-            break;
-
         case TYPETEXTE:
-            if( g_TabOneLayerMask[( (TEXTE_PCB*) PtStruct )->m_Layer] & masque_layer )
-                DeleteStructure( PtStruct );
-            break;
-
         case TYPECOTATION:
-            if( g_TabOneLayerMask[( (COTATION*) PtStruct )->m_Layer] & masque_layer )
-                DeleteStructure( PtStruct );
-            break;
-
         case TYPEMIRE:
-            if( g_TabOneLayerMask[( (MIREPCB*) PtStruct )->m_Layer] & masque_layer )
+            if( g_TabOneLayerMask[ PtStruct->GetLayer()] & masque_layer )
                 DeleteStructure( PtStruct );
             break;
 

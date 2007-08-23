@@ -203,12 +203,12 @@ wxString msg;
 		trace_val = Sel_Texte_Valeur;
 		trace_ref = Sel_Texte_Reference; // les 2 autorisations de tracer sont donnees
 
-		if( (g_TabOneLayerMask[Module->m_Reference->m_Layer] & masque_layer) == 0)
+		if( (g_TabOneLayerMask[Module->m_Reference->GetLayer()] & masque_layer) == 0)
 			trace_ref = FALSE;
 		if(Module->m_Reference->m_NoShow && !Sel_Texte_Invisible)
 			trace_ref = FALSE;
 
-		if( (g_TabOneLayerMask[Module->m_Value->m_Layer] & masque_layer) == 0)
+		if( (g_TabOneLayerMask[Module->m_Value->GetLayer()] & masque_layer) == 0)
 			trace_val = FALSE;
 		if(Module->m_Value->m_NoShow && !Sel_Texte_Invisible)
 			trace_val = FALSE;
@@ -238,7 +238,7 @@ wxString msg;
 			if( !Sel_Texte_Divers ) continue;
 			if( (pt_texte->m_NoShow) && !Sel_Texte_Invisible )
 				continue;
-			if( (g_TabOneLayerMask[pt_texte->m_Layer] & masque_layer) == 0)
+			if( (g_TabOneLayerMask[pt_texte->GetLayer()] & masque_layer) == 0)
 				continue;
 			PlotTextModule(pt_texte);
 			nb_items++ ;
@@ -281,13 +281,13 @@ void PlotCotation( COTATION * Cotation, int format_plot,int masque_layer)
 {
 DRAWSEGMENT *DrawTmp;
 
-	if( (g_TabOneLayerMask[Cotation->m_Layer] & masque_layer) == 0) return;
+	if( (g_TabOneLayerMask[Cotation->GetLayer()] & masque_layer) == 0) return;
 
 	DrawTmp = new DRAWSEGMENT(NULL);
 
 	masque_layer |= EDGE_LAYER;
 	DrawTmp->m_Width = Cotation->m_Width;
-	DrawTmp->m_Layer = Cotation->m_Layer;
+	DrawTmp->SetLayer( Cotation->GetLayer() );
 
 	PlotTextePcb( Cotation->m_Text,format_plot, masque_layer);
 
@@ -330,13 +330,13 @@ void PlotMirePcb( MIREPCB* Mire, int format_plot,int masque_layer)
 DRAWSEGMENT *DrawTmp;
 int dx1,dx2, dy1, dy2, rayon;
 
-	if( (g_TabOneLayerMask[Mire->m_Layer] & masque_layer) == 0) return;
+	if( (g_TabOneLayerMask[Mire->GetLayer()] & masque_layer) == 0) return;
 
 	DrawTmp = new DRAWSEGMENT(NULL);
 
 	masque_layer |= EDGE_LAYER;
 	DrawTmp->m_Width = Mire->m_Width;
-	DrawTmp->m_Layer = Mire->m_Layer;
+	DrawTmp->SetLayer( Mire->GetLayer() );
 
 	DrawTmp->m_Start.x = Mire->m_Pos.x; DrawTmp->m_Start.y = Mire->m_Pos.y;
 	DrawTmp->m_End.x = DrawTmp->m_Start.x + (Mire->m_Size / 4);
@@ -384,7 +384,7 @@ wxString msg;
 		for ( ;PtEdge != NULL; PtEdge = (EDGE_MODULE*)PtEdge->Pnext)
 		{
 			if(PtEdge->m_StructType != TYPEEDGEMODULE) continue;
-			if( (g_TabOneLayerMask[PtEdge->m_Layer] & masque_layer) == 0) continue;
+			if( (g_TabOneLayerMask[PtEdge->GetLayer()] & masque_layer) == 0) continue;
 			Plot_1_EdgeModule(format_plot, PtEdge);
 		}
 		/* Affichage du nombre de modules traites */
@@ -488,7 +488,7 @@ wxPoint pos;
 wxSize size;
 
 	if( pt_texte->m_Text.IsEmpty() ) return;
-	if( (g_TabOneLayerMask[pt_texte->m_Layer] & masque_layer) == 0 ) return ;
+	if( (g_TabOneLayerMask[pt_texte->GetLayer()] & masque_layer) == 0 ) return ;
 
 	/* calcul des parametres du texte :*/
 	size = pt_texte->m_Size;
@@ -615,7 +615,7 @@ wxPoint start, end;
 int epaisseur;
 int rayon = 0, StAngle = 0, EndAngle = 0;
 
-	if( (g_TabOneLayerMask[pt_segm->m_Layer] & masque_layer) == 0) return;
+	if( (g_TabOneLayerMask[pt_segm->GetLayer()] & masque_layer) == 0) return;
 
 	epaisseur = pt_segm->m_Width;
 	if ( Plot_Mode == FILAIRE) epaisseur = g_PlotLine_Width;

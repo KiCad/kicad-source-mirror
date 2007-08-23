@@ -120,9 +120,7 @@ bool Read_Hotkey_Config( WinEDA_DrawFrame * frame, bool verbose )
 	FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
 	FullFileName += wxT("module_edit");
 	FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
-	frame->ReadHotkeyConfigFile(FullFileName, s_module_edit_Hotkey_List, verbose);
-
-	return TRUE;
+	return frame->ReadHotkeyConfigFile(FullFileName, s_module_edit_Hotkey_List, verbose);
 }
 
 
