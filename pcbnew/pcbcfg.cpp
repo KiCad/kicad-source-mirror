@@ -110,7 +110,7 @@ wxString FullFileName;
 bool Read_Hotkey_Config( WinEDA_DrawFrame * frame, bool verbose )
 /***************************************************************/
 /*
- * Read the hotkey files config for eeschema and libedit
+ * Read the hotkey files config for pcbnew and module_edit
 */
 {
 	wxString FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
@@ -121,8 +121,9 @@ bool Read_Hotkey_Config( WinEDA_DrawFrame * frame, bool verbose )
 	FullFileName += wxT("module_edit");
 	FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
 	frame->ReadHotkeyConfigFile(FullFileName, s_module_edit_Hotkey_List, verbose);
-}
 
+	return TRUE;
+}
 
 
 /**************************************************************************/

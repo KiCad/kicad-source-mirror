@@ -112,6 +112,8 @@ bool Read_Hotkey_Config( WinEDA_DrawFrame * frame, bool verbose )
 	FullFileName += wxT("libedit");
 	FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
 	frame->ReadHotkeyConfigFile(FullFileName, s_LibEdit_Hotkey_List, verbose);
+
+	return TRUE;
 }
 
 
