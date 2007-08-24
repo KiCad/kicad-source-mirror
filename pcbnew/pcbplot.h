@@ -18,6 +18,11 @@
 #define SCALE_HPGL 0.102041
 
 /* Options : */
+eda_global bool Exclude_Edges_Pcb		// True to exclude contents of Edges Pcb layer
+#ifdef MAIN
+= TRUE
+#endif
+;
 eda_global bool Plot_Sheet_Ref;
 eda_global bool g_DrawViaOnMaskLayer;	// True if vias are drawn on Mask layer (ie protected by mask)
 eda_global int Plot_Mode				// = FILAIRE, FILL ou SKETCH
@@ -190,3 +195,4 @@ void trace_1_pad_TRAPEZE_POST(wxPoint centre, wxSize size, wxSize delta,
 
 
 #endif	/* #define PCBPLOT_H */
+

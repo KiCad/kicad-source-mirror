@@ -47,23 +47,24 @@ wxString msg;
 		switch( PtStruct->m_StructType )
 			{
 			case TYPEDRAWSEGMENT:
-				PlotDrawSegment( (DRAWSEGMENT*) PtStruct, format_plot,
-												EDGE_LAYER | masque_layer );
+				PlotDrawSegment( (DRAWSEGMENT*) PtStruct, format_plot, masque_layer );
+				// (Following line has been superceded by new commands elsewhere.)
+//												EDGE_LAYER | masque_layer );
 				break;
 
 			case TYPETEXTE:
-				PlotTextePcb((TEXTE_PCB*) PtStruct,format_plot,
-												EDGE_LAYER | masque_layer);
+				PlotTextePcb( (TEXTE_PCB*) PtStruct,format_plot, masque_layer );
+//												EDGE_LAYER | masque_layer );
 				break;
 
 			case TYPECOTATION:
-				PlotCotation((COTATION*) PtStruct, format_plot,
-												EDGE_LAYER | masque_layer);
+				PlotCotation( (COTATION*) PtStruct, format_plot, masque_layer );
+//												EDGE_LAYER | masque_layer );
 				break;
 
 			case TYPEMIRE:
-				PlotMirePcb((MIREPCB*) PtStruct, format_plot,
-												EDGE_LAYER | masque_layer);
+				PlotMirePcb( (MIREPCB*) PtStruct, format_plot, masque_layer );
+//												EDGE_LAYER | masque_layer );
 				break;
 
 			case TYPEMARQUEUR:
@@ -285,7 +286,8 @@ DRAWSEGMENT *DrawTmp;
 
 	DrawTmp = new DRAWSEGMENT(NULL);
 
-	masque_layer |= EDGE_LAYER;
+//	(Following command has been superceded by new commands elsewhere.)
+//	masque_layer |= EDGE_LAYER;
 	DrawTmp->m_Width = Cotation->m_Width;
 	DrawTmp->SetLayer( Cotation->GetLayer() );
 
@@ -334,7 +336,8 @@ int dx1,dx2, dy1, dy2, rayon;
 
 	DrawTmp = new DRAWSEGMENT(NULL);
 
-	masque_layer |= EDGE_LAYER;
+//	(Following command has been superceded by new commands elsewhere.)
+//	masque_layer |= EDGE_LAYER;
 	DrawTmp->m_Width = Mire->m_Width;
 	DrawTmp->SetLayer( Mire->GetLayer() );
 

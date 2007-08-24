@@ -48,7 +48,7 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer )
     // Compute pen_dim (from g_HPGL_Pen_Diam in mils) in pcb units,
     // with plot scale (if Scale is 2, pen diametre is always g_HPGL_Pen_Diam
     // so apparent pen diam is real pen diam / Scale
-    pen_diam  = (int) round( (g_HPGL_Pen_Diam * 10.0) / Scale_X ); // Assume Scale_X # Scale_Y
+    pen_diam  = (int) round( (g_HPGL_Pen_Diam * U_PCB) / Scale_X ); // Assume Scale_X # Scale_Y
     pen_rayon = pen_diam / 2;
 
     nb_plot_erreur = 0;
@@ -130,6 +130,10 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer )
 
     InitPlotParametresHPGL( g_PlotOffset, scale_x, scale_y, g_PlotOrient );
 
+	// Specify that the contents of the "Edges Pcb" layer are to be plotted
+	// in addition to the contents of the currently specified layer.
+	int layer_mask = g_TabOneLayerMask[Layer] | EDGE_LAYER;
+
     switch( Layer )
     {
     case CUIVRE_N:
@@ -148,12 +152,12 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer )
     case LAYER_N_14:
     case LAYER_N_15:
     case CMP_N:
-        Plot_Layer_HPGL( dest, g_TabOneLayerMask[Layer], 0, 1, modetrace );
+        Plot_Layer_HPGL( dest, layer_mask, 0, 1, modetrace );
         break;
 
     case SILKSCREEN_N_CU:
     case SILKSCREEN_N_CMP:
-        Plot_Serigraphie( PLOT_FORMAT_HPGL, dest, g_TabOneLayerMask[Layer] );
+        Plot_Serigraphie( PLOT_FORMAT_HPGL, dest, layer_mask );
         break;
 
     case SOLDERMASK_N_CU:
@@ -164,18 +168,18 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer )
             tracevia = 1;
         else
             tracevia = 0;
-        Plot_Layer_HPGL( dest, g_TabOneLayerMask[Layer],
+        Plot_Layer_HPGL( dest, layer_mask,
                          g_DesignSettings.m_MaskMargin, tracevia, modetrace );
     }
         break;
 
     case SOLDERPASTE_N_CU:
     case SOLDERPASTE_N_CMP:       /* Trace du masque de pate de soudure */
-        Plot_Layer_HPGL( dest, g_TabOneLayerMask[Layer], 0, 0, modetrace );
+        Plot_Layer_HPGL( dest, layer_mask, 0, 0, modetrace );
         break;
 
     default:       /* Trace des autres couches (dessin, adhesives,eco,comment) */
-        Plot_Serigraphie( PLOT_FORMAT_HPGL, dest, g_TabOneLayerMask[Layer] );
+        Plot_Serigraphie( PLOT_FORMAT_HPGL, dest, layer_mask );
         break;
     }
 
@@ -202,7 +206,8 @@ void WinEDA_BasePcbFrame::Plot_Layer_HPGL( FILE* File, int masque_layer,
     BOARD_ITEM* PtStruct;
     wxString    msg;
 
-    masque_layer |= EDGE_LAYER; /* Les elements de la couche EDGE sont tj traces */
+// 	(Following command has been superceded by new command on line 135.)
+//  masque_layer |= EDGE_LAYER; /* Les elements de la couche EDGE sont tj traces */
 
     /* trace des elements type Drawings Pcb : */
     PtStruct = m_Pcb->m_Drawings;

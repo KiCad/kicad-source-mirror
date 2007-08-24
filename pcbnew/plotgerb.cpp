@@ -87,6 +87,11 @@ int tracevia = 1;
 	nb_plot_erreur = 0 ;
 
 	int layer_mask = g_TabOneLayerMask[Layer];
+	// Specify that the contents of the "Edges Pcb" layer are also to be
+	// plotted, unless the option of excluding that layer has been selected.
+	if( ! Exclude_Edges_Pcb )
+		layer_mask |= EDGE_LAYER;
+
 	switch(Layer)
 		{
 		case CUIVRE_N :
@@ -105,7 +110,7 @@ int tracevia = 1;
 		case LAYER_N_14 :
 		case LAYER_N_15 :
 		case CMP_N  :
-			Plot_Layer_GERBER(dest,layer_mask, 0, 1);
+			Plot_Layer_GERBER(dest, layer_mask, 0, 1);
 			break;
 
 		case SOLDERMASK_N_CU :
@@ -121,7 +126,7 @@ int tracevia = 1;
 			break;
 
 		default:
-			Plot_Serigraphie(PLOT_FORMAT_GERBER,dest, layer_mask);
+			Plot_Serigraphie(PLOT_FORMAT_GERBER, dest, layer_mask);
 			break;
 		}
 
@@ -145,7 +150,8 @@ TRACK * track ;
 EDA_BaseStruct * PtStruct;
 wxString msg;
 
-	masque_layer |= EDGE_LAYER;	/* Les elements de la couche EDGE sont tj traces */
+//	(Following command has been superceded by new command on lines 92 and 93.)
+//	masque_layer |= EDGE_LAYER;	/* Les elements de la couche EDGE sont tj traces */
 
 	/* trace des elements type Drawings Pcb : */
 	PtStruct = m_Pcb->m_Drawings;
@@ -155,22 +161,22 @@ wxString msg;
 			{
 			case TYPEDRAWSEGMENT:
 				PlotDrawSegment( (DRAWSEGMENT*) PtStruct, PLOT_FORMAT_GERBER,
-												masque_layer);
+												masque_layer );
 				break;
 
 			case TYPETEXTE:
-				PlotTextePcb((TEXTE_PCB*) PtStruct,PLOT_FORMAT_GERBER,
-												masque_layer);
+				PlotTextePcb( (TEXTE_PCB*) PtStruct, PLOT_FORMAT_GERBER,
+												masque_layer );
 				break;
 
 			case TYPECOTATION:
-				PlotCotation((COTATION*) PtStruct, PLOT_FORMAT_GERBER,
-												masque_layer);
+				PlotCotation( (COTATION*) PtStruct, PLOT_FORMAT_GERBER,
+												masque_layer );
 				break;
 
 			case TYPEMIRE:
-				PlotMirePcb((MIREPCB*) PtStruct, PLOT_FORMAT_GERBER,
-												masque_layer);
+				PlotMirePcb( (MIREPCB*) PtStruct, PLOT_FORMAT_GERBER,
+												masque_layer );
 				break;
 
 			case TYPEMARQUEUR:
