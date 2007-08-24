@@ -495,7 +495,8 @@ EDA_BaseStruct* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
     // search only for PADs first, then MODULES, and preferably a layer match
     static const KICAD_T scanTypes[] = { TYPEPAD, TYPEMODULE, EOT };
 
-    IterateForward( m_Modules, &inspector, &refPos, scanTypes );
+    // visit this BOARD with the above inspector
+    Visit( &inspector, &refPos, scanTypes );
     
     return inspector.found;
 }
