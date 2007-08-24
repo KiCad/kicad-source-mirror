@@ -5,11 +5,11 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
-2007-Aug-23 UPDATE   Dick Hollenbeck <dick@softplc.com>
+2007-Aug-24 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + eeschema & pcbnew
   * Removed class EDA_BaseLineStruct, which brought no behavioral advantage, only data.
-    Classes which were based on got its data members added and their initializers.
+    Classes which were based on it got its data members added and their initializers.
   * Changed type of EDA_BaseStruct::m_StructType from int to KICAD_T which is an
     enum.  This makes debugging easier since gdb will show the name of the
     KICAD_T rather than simply a number.  Added NOT_USED = -1 to KICAD_T enum for
