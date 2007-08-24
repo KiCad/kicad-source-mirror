@@ -15,7 +15,7 @@
 
                                              
 /* fonctions locales */
-EDA_BaseStruct* Locate_MirePcb( EDA_BaseStruct* PtStruct, int LayerSearch, int typeloc );
+MIREPCB* Locate_MirePcb( BOARD_ITEM* PtStruct, int LayerSearch, int typeloc );
 D_PAD* Locate_Any_Pad( BOARD* Pcb, const wxPoint& ref_pos, bool OnlyCurrentLayer );
 
 
@@ -84,7 +84,7 @@ D_PAD* ReturnPad( MODULE* module, const wxString& name )
 
 
 /*******************************************************************************/
-EDA_BaseStruct* WinEDA_BasePcbFrame::Locate( int typeloc, int LayerSearch )
+BOARD_ITEM* WinEDA_BasePcbFrame::Locate( int typeloc, int LayerSearch )
 /*******************************************************************************/
 
 /* General locate function
@@ -93,7 +93,7 @@ EDA_BaseStruct* WinEDA_BasePcbFrame::Locate( int typeloc, int LayerSearch )
  */
 {
     int             masque_layer;
-    EDA_BaseStruct* item;
+    BOARD_ITEM*     item;
 
     item = Locate_Texte_Pcb( m_Pcb->m_Drawings, LayerSearch, typeloc );
     if( item ) 
@@ -324,7 +324,7 @@ EDGE_MODULE* Locate_Edge_Module( MODULE* module, int typeloc )
 
 
 /*************************************************************************/
-EDA_BaseStruct* Locate_Cotation( BOARD* Pcb, int LayerSearch, int typeloc )
+COTATION* Locate_Cotation( BOARD* Pcb, int LayerSearch, int typeloc )
 /*************************************************************************/
 
 /* Serach for a cotation item , on LayerSearch,
@@ -334,8 +334,8 @@ EDA_BaseStruct* Locate_Cotation( BOARD* Pcb, int LayerSearch, int typeloc )
 {
     wxPoint  ref_pos = RefPos( typeloc );
 
-    EDA_BaseStruct* PtStruct = Pcb->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    BOARD_ITEM* PtStruct = Pcb->m_Drawings;
+    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         if( PtStruct->m_StructType != TYPECOTATION )
             continue;
@@ -1027,8 +1027,7 @@ TRACK* Fast_Locate_Via( TRACK* start_adr, TRACK* end_adr,
 
 
 /***********************************************************************/
-EDA_BaseStruct* Locate_MirePcb( EDA_BaseStruct* PtStruct, int LayerSearch,
-                                int typeloc )
+MIREPCB* Locate_MirePcb( BOARD_ITEM* PtStruct, int LayerSearch, int typeloc )
 /***********************************************************************/
 
 /* Search for a photo target
@@ -1041,20 +1040,18 @@ EDA_BaseStruct* Locate_MirePcb( EDA_BaseStruct* PtStruct, int LayerSearch,
 
     ref_pos = RefPos( typeloc );
 
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
-        MIREPCB* item;
         if( PtStruct->m_StructType != TYPEMIRE )
             continue;
 
-        item = (MIREPCB*) PtStruct;
-        if( LayerSearch != -1 && item->GetLayer() != LayerSearch )
+        if( LayerSearch != -1  &&  PtStruct->GetLayer() != LayerSearch )
             continue;
 
-        if( item->HitTest( ref_pos ) )
+        if( PtStruct->HitTest( ref_pos ) )
             break;
     }
 
-    return PtStruct;
+    return (MIREPCB*) PtStruct;
 }
 

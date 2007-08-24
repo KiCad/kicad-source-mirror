@@ -96,7 +96,7 @@ class WinEDA3D_DrawFrame;
 class PARAM_CFG_BASE;
 class Ki_PageDescr;
 class Ki_HotkeyInfo;
-class ARROWCOLLECTOR;
+class GENERALCOLLECTOR;
 
 
 enum id_librarytype {
@@ -372,6 +372,11 @@ private:
     virtual void    GetComponentFromUndoList( void );
     virtual void    GetComponentFromRedoList( void );
 
+#if defined(DEBUG)
+protected:
+    GENERALCOLLECTOR*  m_Collector;
+#endif
+   
     
 public:
     // Read/write fonctions:
@@ -385,8 +390,8 @@ public:
 
     // Gestion du PCB
     bool            Clear_Pcb( wxDC* DC, bool query );
-    EDA_BaseStruct* PcbGeneralLocateAndDisplay();
-    EDA_BaseStruct* Locate( int typeloc, int LayerSearch );
+    BOARD_ITEM*     PcbGeneralLocateAndDisplay();
+    BOARD_ITEM*     Locate( int typeloc, int LayerSearch );
 
     // Gestion du curseur
     void            place_marqueur( wxDC* DC, const wxPoint& pos, char* pt_bitmap,
@@ -516,11 +521,6 @@ private:
     bool             m_SelTrackWidthBox_Changed;
     bool             m_SelViaSizeBox_Changed;
     wxMenu*          m_FilesMenu;
-
-#if defined(DEBUG)    
-    ARROWCOLLECTOR*  m_ArrowCollector;          ///< while arrow icon tool
-#endif
-
 
 public:
     WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent, const wxString& title,

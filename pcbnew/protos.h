@@ -203,7 +203,7 @@ TRACK * Locate_Zone(TRACK * start_adresse, const wxPoint & ref_pos,int layer);
 	La recherche commence a l'adresse start_adresse
 	*/
 
-EDA_BaseStruct * Locate_Cotation(BOARD * Pcb, int LayerSearch, int typeloc);
+COTATION* Locate_Cotation(BOARD * Pcb, int LayerSearch, int typeloc);
 	/* Localise un element de cotation, en priorite sur la couche active,
 		et a defaut sur les autres couches
 		 retourne un pointeur sur l'element (TRACK ou TEXTE_PCB) localise

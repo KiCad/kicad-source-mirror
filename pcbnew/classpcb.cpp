@@ -429,3 +429,19 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings( void )
     m_PadCMPColor   = RED;              // Pad color for the COPPER side of the pad
     m_RatsnestColor = WHITE;            // Ratsnest color
 }
+
+
+// see pcbstruct.h
+int EDA_BoardDesignSettings::GetVisibleLayers()
+{
+    int layerMask = 0;
+    
+    for( int i=0, mask=1;  i< 32;   ++i, mask<<=1 )
+    {
+        if( !(m_LayerColor[i] & ITEM_NOT_SHOW) )
+            layerMask |= mask;
+    }
+    
+    return layerMask;
+}
+

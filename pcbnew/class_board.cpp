@@ -311,13 +311,21 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
     KICAD_T         stype;
     SEARCH_RESULT   result = SEARCH_CONTINUE;
     const KICAD_T*  p = scanTypes;
+    bool            done=false;
+
+#if defined(DEBUG)
+    std::cout <<  GetClass().mb_str() << ' ';
+#endif    
     
-    while( (stype = *p++) != EOT )
+    while( !done )
     {
+        stype = *p;
         switch( stype )
         {
         case TYPEPCB:
             result = inspector->Inspect( this, testData );  // inspect me
+            // skip over any types handled in the above call.
+            ++p;
             break;
 
         /*  Instances of the requested KICAD_T live in a list, either one
@@ -332,7 +340,21 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
         case TYPETEXTEMODULE:
         case TYPEEDGEMODULE:
             // this calls MODULE::Visit() on each module.
-            result = IterateForward( m_Modules, inspector, testData, scanTypes );
+            result = IterateForward( m_Modules, inspector, testData, p );
+            // skip over any types handled in the above call.
+            for(;;)
+            {
+                switch( stype = *++p )
+                {
+                case TYPEMODULE:
+                case TYPEPAD:
+                case TYPETEXTEMODULE:
+                case TYPEEDGEMODULE:
+                    continue;
+                default:;
+                }
+                break;
+            }
             break;
 
         case TYPEDRAWSEGMENT:
@@ -340,27 +362,59 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
         case TYPEMARQUEUR:
         case TYPECOTATION:
         case TYPEMIRE:
-            result = IterateForward( m_Drawings, inspector, testData, scanTypes );
+            result = IterateForward( m_Drawings, inspector, testData, p );
+            // skip over any types handled in the above call.
+            for(;;)
+            {
+                switch( stype = *++p )
+                {
+                case TYPEDRAWSEGMENT:
+                case TYPETEXTE:
+                case TYPEMARQUEUR:
+                case TYPECOTATION:
+                case TYPEMIRE:
+                    continue;
+                default:;
+                }
+                break;
+            }
+                ;
             break;
             
         case TYPEVIA:
         case TYPETRACK:
-            result = IterateForward( m_Track, inspector, testData, scanTypes );
+            result = IterateForward( m_Track, inspector, testData, p );
+            // skip over any types handled in the above call.
+            for(;;)
+            {
+                switch( stype = *++p )
+                {
+                case TYPEVIA:
+                case TYPETRACK:
+                    continue;
+                default:;
+                }
+                break;
+            }
             break;            
             
         case PCB_EQUIPOT_STRUCT_TYPE:
-            result = IterateForward( m_Equipots, inspector, testData, scanTypes );
+            result = IterateForward( m_Equipots, inspector, testData, p );
+            ++p;
             break;            
 
         case TYPEZONE:
-            result = IterateForward( m_Zone, inspector, testData, scanTypes );
+            result = IterateForward( m_Zone, inspector, testData, p );
+            ++p;
             break;
             
         case TYPEEDGEZONE:
-            result = IterateForward( m_CurrentLimitZone, inspector, testData, scanTypes );
+            result = IterateForward( m_CurrentLimitZone, inspector, testData, p );
+            ++p;
             break;            
             
-        default:
+        default:        // catch EOT or ANY OTHER type here and return.
+            done = true;
             break;
         }
         

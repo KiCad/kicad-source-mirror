@@ -133,7 +133,7 @@ public:
     EDA_BaseStruct* m_Son;              /* Linked list: Link (son struct) */
     EDA_BaseStruct* m_Image;            /* Link to an image copy for undelete or abort command */
 
-    int             m_Flags;            // flags for editions and other
+    int             m_Flags;            // flags for editing and other misc. uses
 #define IS_CHANGED      (1<<0)    
 #define IS_LINKED       (1<<1)
 #define IN_EDIT         (1<<2)
@@ -154,7 +154,6 @@ public:
 
     unsigned long   m_TimeStamp;        // Time stamp used for logical links
     int             m_Selected;         /* Used by block commands, and selective editing */
-//    int             m_Layer;            ///< used by many derived classes, so make common
 
 private:
     int             m_Status;
@@ -394,23 +393,60 @@ public:
     {
     }
 
-    BOARD_ITEM* Next()      { return (BOARD_ITEM*) Pnext; }
-
+    BOARD_ITEM* Next() const         { return (BOARD_ITEM*) Pnext; }
+    BOARD_ITEM* GetParent() const    { return (BOARD_ITEM*) m_Parent; }
     
     /**
      * Function GetLayer
      * returns the layer this item is on.
      */
-    int         GetLayer() const  { return m_Layer; }
+    int GetLayer() const  { return m_Layer; }
     
     /**
      * Function SetLayer
      * sets the layer this item is on.
      * @param aLayer The layer number.
      */
-    void        SetLayer( int aLayer )  { m_Layer = aLayer; }
+    void  SetLayer( int aLayer )  { m_Layer = aLayer; }
+   
+
+    /**
+     * Function IsOnLayer
+     * tests to see if this object is on the given layer.  Is virtual so
+     * objects like D_PAD, which reside on multiple layers can do their own
+     * form of testing.
+     * @param aLayer The layer to test for.
+     * @return bool - true if on given layer, else false.
+     */
+    virtual bool IsOnLayer( int aLayer ) const
+    {
+        return m_Layer == aLayer;
+    }
+
     
-        
+    /**
+     * Function IsOnOneOfTheseLayers
+     * returns true if this object is on one of the given layers.  Is virtual so
+     * objects like D_PAD, which reside on multiple layers, can do their own
+     * form of testing.
+     * @param aLayerMask The bit-mapped set of layers to test for.
+     * @return bool - true if on one of the given layers, else false.
+     */
+    virtual bool IsOnOneOfTheseLayers( int aLayerMask ) const
+    {
+        return ( (1<<m_Layer) & aLayerMask ) != 0;
+    }
+
+    
+    /**
+     * Function IsLocked
+     * @returns bool - true if the object is locked, else false
+     */
+    virtual bool IsLocked() const
+    {
+        return false;   // only MODULEs can be locked at this time.
+    }
+
 };
 
 

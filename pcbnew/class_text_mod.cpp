@@ -369,6 +369,40 @@ void TEXTE_MODULE::Display_Infos( WinEDA_DrawFrame* frame )
 }
 
 
+// see class_text_mod.h
+bool TEXTE_MODULE::IsOnLayer( int aLayer ) const
+{
+    if( m_Layer == aLayer )
+        return true;
+
+    /* test the parent, which is a MODULE */
+    if( aLayer == GetParent()->GetLayer() )
+        return true;
+    
+    if( aLayer == CUIVRE_N )
+    {
+        if( m_Layer==ADHESIVE_N_CU || m_Layer==SILKSCREEN_N_CU )
+            return true;
+    }
+    
+    else if( aLayer == CMP_N )
+    {
+        if( m_Layer==ADHESIVE_N_CMP || m_Layer==SILKSCREEN_N_CMP )
+            return true;
+    }
+    
+    return false;
+}
+
+    
+/* see class_text_mod.h
+bool TEXTE_MODULE::IsOnOneOfTheseLayers( int aLayerMask ) const
+{
+    
+}
+*/
+
+
 #if defined(DEBUG)
 /**
  * Function Show

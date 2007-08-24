@@ -34,7 +34,7 @@
 
 
 // see collectors.h
-const KICAD_T ARROWCOLLECTOR::AllBoardItems[] = {
+const KICAD_T GENERALCOLLECTOR::AllBoardItems[] = {
     TYPETEXTE, 
     TYPEDRAWSEGMENT, 
     TYPECOTATION,
@@ -59,45 +59,82 @@ const KICAD_T ARROWCOLLECTOR::AllBoardItems[] = {
  * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
  *   else SCAN_CONTINUE;
  */ 
-SEARCH_RESULT ARROWCOLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* notUsed )
+SEARCH_RESULT GENERALCOLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* notUsed )
 {
     BOARD_ITEM* item = (BOARD_ITEM*) testItem;
+
+#if 1   // debugging
+    static int breakhere = 0;
+    switch( item->m_StructType )
+    {
+    case TYPEPAD:
+            breakhere++;
+            break;
+    case TYPEVIA:
+            breakhere++;
+            break;
+    case TYPETRACK:
+            breakhere++;
+            break;
+    case TYPETEXTE: 
+            breakhere++;
+            break;
+    case TYPEDRAWSEGMENT: 
+            breakhere++;
+            break;
+    case TYPECOTATION:
+            breakhere++;
+            break;
+    case TYPETEXTEMODULE:
+            TEXTE_MODULE* tm;
+            tm = (TEXTE_MODULE*) item;
+            if( tm->m_Text == wxT("U5") )
+            {
+                breakhere++;
+            }
+            break;
+    case TYPEMODULE:
+            breakhere++;
+            break;
+    default:
+            breakhere++;
+            break;
+    }
+#endif
     
     switch( item->m_StructType )
     {
     case TYPEPAD:
     case TYPEVIA:
-        /*
-        if( item->IsOnOneOfTheseLayers( m_LayerMask ) )
-        {
-            if( item->HitTest( refPos ) )
-                Append2nd( testItem );
-        }
-        */
-        break;
-
     case TYPETRACK:
     case TYPETEXTE: 
     case TYPEDRAWSEGMENT: 
     case TYPECOTATION:
     case TYPETEXTEMODULE:
     case TYPEMODULE:
-        if( item->GetLayer() == m_PreferredLayer )
+        
+        // The primary search criteria:
+        if( item->IsOnLayer( m_PreferredLayer ) )
         {
             if( item->HitTest( m_RefPos ) )
-                Append( item );
+            {
+                if( !item->IsLocked() )
+                    Append( item );
+                else
+                    Append2nd( item );      // 2nd if locked.
+            }
         }
-        /*
+        
+        // The secondary search criteria
         else if( item->IsOnOneOfTheseLayers( m_LayerMask ) )
         {
             if( item->HitTest( m_RefPos ) )
                 Append2nd( item );
         }
-        */
         break;
         
     default:
-        ;   // nothing
+        printf("OOPS, not expecting class type %d\n", item->m_StructType );
     }
 
     return SEARCH_CONTINUE;
@@ -105,16 +142,23 @@ SEARCH_RESULT ARROWCOLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* not
 
 
 // see collectors.h 
-void ARROWCOLLECTOR::Scan( BOARD* board, const wxPoint& refPos, 
+void GENERALCOLLECTOR::Scan( BOARD* board, const wxPoint& refPos, 
                           int aPreferredLayer, int aLayerMask )
 {
     Empty();        // empty the collection, primary criteria list
     Empty2nd();     // empty the collection, secondary criteria list
     
+    SetPreferredLayer( aPreferredLayer );
+    SetLayerMask( aLayerMask );
+    
     /*  remember where the snapshot was taken from and pass refPos to
         the Inspect() function.
     */        
-    SetRefPos( refPos );        
+    SetRefPos( refPos );
+
+#if defined(DEBUG)
+    std::cout << '\n';
+#endif
     
     // visit the board with the INSPECTOR (me).
     board->Visit(   this,       // INSPECTOR* inspector
@@ -123,7 +167,9 @@ void ARROWCOLLECTOR::Scan( BOARD* board, const wxPoint& refPos,
     
     SetTimeNow();               // when snapshot was taken
     
-    // @todo: append 2nd list onto end of the first "list" 
+    // append 2nd list onto end of the first "list" 
+    for( unsigned i=0;  i<list2nd.size();  ++i )
+        Append( list2nd[i] );
     
     Empty2nd();
 }

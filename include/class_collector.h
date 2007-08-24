@@ -34,7 +34,6 @@
 
 
 class EDA_BaseStruct;
-class BOARD;
 
 
 /**
@@ -48,16 +47,10 @@ class BOARD;
  *
  * Later, after collection, the user can iterate through all the objects 
  * in the remembered collection using GetCount() and the [int] operator.
- *
- * Philosophy: this class knows nothing of the context in which as BOARD is used
- * and that means it knows nothing about which layers are visible or current, 
- * but can handle those concerns by the SetPreferredLayer() function.
  */
 class COLLECTOR : public INSPECTOR
 {
 protected:
-//    int             m_Type;
-
     /// Which object types to scan
     const KICAD_T*  m_ScanTypes;
 
@@ -84,18 +77,7 @@ public:
 
     virtual ~COLLECTOR()
     {
-        // empty the list so that ~list() does not try and delete all
-        // the objects that it holds.  list is not the owner of such objects
-        // and this prevents a double free()ing.
-        Empty();
     }
-
-    
-    /**
-     * Function Type
-     * returns the type of the collector.
-    int Type() const { return m_Type; }
-     */
 
     
     void SetPreferredLayer( int aPreferredLayer )
@@ -108,7 +90,7 @@ public:
      * Function GetCount
      * returns the number of objects in the list
      */
-    int GetCount() const
+    unsigned GetCount() const
     {
         return list.size();
     }
@@ -143,7 +125,7 @@ public:
      */
     EDA_BaseStruct* operator[]( int ndx ) const
     {
-        if( (unsigned)ndx < (unsigned)GetCount() )
+        if( (unsigned)ndx < GetCount() )
             return list[ ndx ];
         return NULL;
     }

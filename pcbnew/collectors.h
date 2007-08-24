@@ -33,26 +33,18 @@
 
 #include "class_collector.h"
 
-
-
-class RAT1COLLECTOR : public COLLECTOR
-{
-    ;
-};
-
-
 /**
- * Class ARROWCOLLECTOR
+ * Class GENERALCOLLECTOR
  * is intended for use when the right click button is pressed, or when the 
  * plain "arrow" tool is in effect.  This class can be used by window classes
  * such as WinEDA_PcbFrame.
  *
- * Philosophy: this class knows nothing of the context in which as BOARD is used
+ * Philosophy: this class knows nothing of the context in which a BOARD is used
  * and that means it knows nothing about which layers are visible or current, 
  * but can handle those concerns by the SetPreferredLayer() function and the
  * SetLayerMask() fuction.
  */
-class ARROWCOLLECTOR : public COLLECTOR
+class GENERALCOLLECTOR : public COLLECTOR
 {
     /**
      * A place to hold collected objects which don't match precisely the search 
@@ -60,7 +52,7 @@ class ARROWCOLLECTOR : public COLLECTOR
      * "2nd" choice, which will be appended to the end of COLLECTOR's prime 
      * "list" at the end of the search.
      */
-    std::vector<EDA_BaseStruct*>    list2nd;
+    std::vector<BOARD_ITEM*>    list2nd;
     
 
     /**
@@ -77,9 +69,9 @@ public:
 
 
     /**
-     * Constructor ARROWCOLLECTOR
+     * Constructor GENERALCOLLECTOR
      */ 
-    ARROWCOLLECTOR()
+    GENERALCOLLECTOR()
     {
         m_LayerMask = 0;
         SetScanTypes( AllBoardItems );
@@ -90,7 +82,7 @@ public:
         list2nd.clear();
     }
 
-    void Append2nd( EDA_BaseStruct* item )
+    void Append2nd( BOARD_ITEM* item )
     {
         list2nd.push_back( item );
     }
@@ -99,7 +91,7 @@ public:
     /**
      * Function SetLayerMask
      * takes a bit-mapped layer mask and records it.  During the scan/search,
-     * this is used as a secondary criterion.  That is, if there is no direct 
+     * this is used as a secondary search criterion.  That is, if there is no direct 
      * layer match with COLLECTOR::m_PreferredLayer (the primary criterion), 
      * then an object on any layer given in this bit-map is recorded as a 
      * second choice object if it also HitTest()s true.
@@ -112,6 +104,21 @@ public:
     void SetLayerMask( int aLayerMask )
     {
         m_LayerMask = aLayerMask;
+    }
+
+    
+    /**
+     * Function operator[int]
+     * overloads COLLECTOR::operator[](int) to return a BOARD_ITEM* instead of
+     * an EDA_BaseStruct* type.
+     * @param ndx The index into the list.
+     * @return BOARD_ITEM* - or something derived from it, or NULL.
+     */
+    BOARD_ITEM* operator[]( int ndx ) const
+    {
+        if( (unsigned)ndx < (unsigned)GetCount() )
+            return (BOARD_ITEM*) list[ ndx ];
+        return NULL;
     }
 
     
@@ -133,6 +140,8 @@ public:
      * scans a BOARD using this class's Inspector method, which does the collection.
      * @param board A BOARD to scan.
      * @param refPos A wxPoint to use in hit-testing.
+     * @param aPreferredLayer The layer meeting the primary search criterion.
+     * @param aLayerMask The layers, in bit-mapped form, meeting the secondary search criterion.
      */
     void Scan( BOARD* board, const wxPoint& refPos, int aPreferredLayer, int aLayerMask );
 };

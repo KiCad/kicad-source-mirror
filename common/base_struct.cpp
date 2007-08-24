@@ -210,6 +210,10 @@ SEARCH_RESULT EDA_BaseStruct::Visit( INSPECTOR* inspector, const void* testData,
         const KICAD_T scanTypes[] )
 {
     KICAD_T     stype;
+
+#if defined(DEBUG)
+    std::cout <<  GetClass().mb_str() << ' ';
+#endif
     
     for( const KICAD_T* p = scanTypes;  (stype=*p) != EOT;   ++p )
     {

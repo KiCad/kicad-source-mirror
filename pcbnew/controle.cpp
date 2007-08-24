@@ -16,6 +16,7 @@
 
 #include "id.h"
 #include "protos.h"
+#include "collectors.h"
 
 /* Routines Locales : */
 
@@ -44,8 +45,6 @@ void RemoteCommand( const char* cmdline )
     if( (idcmd == NULL) || (text == NULL) )
         return;
 
-    // @todo: this code does not reposition the window when the chosen part is scrolled off screen. 
-    
     if( strcmp( idcmd, "$PART:" ) == 0 )
     {
         msg    = CONV_FROM_UTF8( text );
@@ -93,11 +92,11 @@ void RemoteCommand( const char* cmdline )
         
         if( netcode > 0 )    /* hightlighted the net selected net*/
         {
-            if( g_HightLigt_Status )	/* erase the old hightlighted net */
+            if( g_HightLigt_Status )        /* erase the old hightlighted net */
                 frame->Hight_Light( &dc );
             
             g_HightLigth_NetCode = netcode;
-            frame->Hight_Light( &dc );	/* hightlighted the new one */
+            frame->Hight_Light( &dc );      /* hightlighted the new one */
             
             frame->DrawPanel->CursorOff( &dc );
             frame->GetScreen()->m_Curseur = pad->m_Pos;
@@ -113,13 +112,13 @@ void RemoteCommand( const char* cmdline )
         frame->Affiche_Message( msg );
     }
         
-    if( module )    // center the module on screen.
+    if( module )    // if found, center the module on screen.
         frame->Recadre_Trace( false );
 }
 
 
 /***********************************************************************/
-EDA_BaseStruct* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( void )
+BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay()
 /***********************************************************************/
 
 /* Search an item under the mouse cursor.
@@ -127,12 +126,43 @@ EDA_BaseStruct* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( void )
  *  if nothing found, an item will be searched without layer restriction
  */
 {
-    EDA_BaseStruct* item;
+    BOARD_ITEM* item;
+    
+#if defined(DEBUG)
 
+    // test scaffolding for Scan():
+    m_Collector->Scan( m_Pcb, 
+                       GetScreen()->RefPos(true), 
+                       
+                       // these two are inadequate, because the layer support
+                       // in Kicad is not elegant or easily understood.
+                       // The final solution will be a new class COLLECTORS_GUIDE!
+                       GetScreen()->m_Active_Layer,
+                       g_DesignSettings.GetVisibleLayers() 
+                       );
+
+    // use only the first one collected for now.
+    item = (*m_Collector)[0];  // grab first one, may be NULL
+    
+    std::cout << "collected " << m_Collector->GetCount() << '\n';       // debugging only
+    
+    if( item )
+    {
+        item->Display_Infos( this );
+        
+        // debugging: print out the collected items, showing their order too.
+        for( unsigned i=0; i<m_Collector->GetCount();  ++i )
+            (*m_Collector)[i]->Show( 0, std::cout ); 
+    }
+    return item;
+    
+#else
+    
     item = Locate( CURSEUR_OFF_GRILLE, GetScreen()->m_Active_Layer );
     if( item == NULL )
         item = Locate( CURSEUR_OFF_GRILLE, -1 );
     return item;
+#endif    
 }
 
 

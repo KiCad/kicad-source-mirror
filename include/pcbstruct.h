@@ -175,6 +175,13 @@ public:
 
 public:
     EDA_BoardDesignSettings( void );
+    
+    /**
+     * Function GetVisibleLayers
+     * returns a bit-map of all the layers that are visible.
+     * @return int - the visible layers in bit-mapped form.
+     */
+    int     GetVisibleLayers();
 };
 
 

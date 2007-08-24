@@ -193,7 +193,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent,
     m_SelViaSizeBox_Changed    = FALSE;
     
 #if defined(DEBUG)    
-    m_ArrowCollector           = new ARROWCOLLECTOR();
+    m_Collector                = new GENERALCOLLECTOR();
 #endif    
 
     m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
@@ -243,7 +243,7 @@ WinEDA_PcbFrame::~WinEDA_PcbFrame( void )
     m_CurrentScreen = ScreenPcb;
     
 #if defined(DEBUG)    
-    delete m_ArrowCollector;
+    delete m_Collector;
 #endif    
 }
 

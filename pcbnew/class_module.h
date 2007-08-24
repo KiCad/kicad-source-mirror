@@ -92,9 +92,10 @@ public:
 
     /**
      * Function IsLocked
+     * (virtual from BOARD_ITEM ) 
      * @returns bool - true if the MODULE is locked, else false
      */
-    bool IsLocked()
+    bool IsLocked() const
     {
         return (m_ModuleStatus & MODULE_is_LOCKED) != 0;
     }
@@ -114,7 +115,7 @@ public:
     }
 
 
-    /* Readind and writing data on files */
+    /* Reading and writing data on files */
     int     WriteDescr( FILE* File );
     int     Write_3D_Descr( FILE* File );
     int     ReadDescr( FILE* File, int* LineNum = NULL );
@@ -146,6 +147,16 @@ public:
      */
     bool    HitTest( const wxPoint& refPos );
 
+    
+    /**
+     * Function GetReference
+     * @return wxString - the reference designator text.
+     */
+    const wxString& GetReference()
+    {
+        return m_Reference->m_Text;
+    }
+    
     
     /**
      * Function Visit

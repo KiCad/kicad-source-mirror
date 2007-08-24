@@ -7,9 +7,21 @@ email address.
 
 2007-Aug-23 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
-  @todo add constructor initializers for classes that were derived from
-   EDA_BaseLineStruct but are now not.  Its late, will do tomorrow.
-  @todo test yesterday's changes, it builds, may not run right yet.
++ eeschema & pcbnew
+  * Fixed MODULE::Visit() and BOARD::Vist() so they traverse certain lists
+    only once and they are working nicely now.
+  * You can test the GENERALCOLLECTOR::Scan() code by compiling with DEBUG=1 on
+    the command line and enabling the stuff near line 124 in
+    pcbnew/controle.cpp, then watch Show( std::cout ) show the selected items in
+    xml format on your console. (launch pcbnew from command line.)
+    @todo:
+    The layer selection mechanism used by the collector is still inadequate, so
+    tomorrow I will add a new class COLLECTORS_GUIDE which can be used by a
+    COLLECTOR to control its operation. It adds the concept of layer
+    locking, even though PCBNEW does not support that in the UI yet.
+    @todo:
+    add constructor initializers for classes that were derived from
+    EDA_BaseLineStruct but are now not. Its late, will do tomorrow.
 
 
 2007-Aug-22 UPDATE   Dick Hollenbeck <dick@softplc.com>
@@ -18,15 +30,15 @@ email address.
   Things are still pretty transient, should be stable a day or two:
   * Fixed a filename case sensitivity problem that would show up on Linux
     but probably not on Windows: bitmap/Reload.xpm needed uppercase R.
-  * Wedged a new class BOARD_ITEM underneath all PCB drawable classes, this is
+  * Wedged a new class BOARD_ITEM underneath all PCB drawable classes. This is
     a big change and may introduce a bug or two, but it is worth it for the
-    future, because we can introduce virtual functions there that do not impact
+    future, because we can add virtual functions there that do not impact
     the entire project (since everything is derived from EDA_BaseStruct).
     The corresponding class in EESCHEMA seems to be DrawPartStruct, so we had
     nothing in PCBNEW like that.
     BOARD_ITEM::GetLayer() and SetLayer() introduced, more functions to come.
     Much of this work is geared towards making collectors.cpp's ARROWCOLLECTOR::Inspect()
-    very very simple, and that can be model for future work.
+    very very simple, and that can be a model for future work.
   * Changed min() and max() macros to MIN() and MAX() because min() and max()
     are actually reserved according to the C++ standard! (and their usage prevented
     the use of #include <vector>).

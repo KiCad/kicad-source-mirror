@@ -1181,17 +1181,25 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
     KICAD_T         stype;
     SEARCH_RESULT   result = SEARCH_CONTINUE;
     const KICAD_T*  p = scanTypes;
+    bool            done = false;
+    
+#if defined(DEBUG)
+    std::cout <<  GetClass().mb_str() << ' ';
+#endif    
 
-    while( (stype = *p++) != EOT )
+    while( !done )
     {
+        stype = *p;
         switch( stype )
         {
         case TYPEMODULE:
             result = inspector->Inspect( this, testData );  // inspect me
+            ++p;
             break;
             
         case TYPEPAD:
-            result = IterateForward( m_Pads, inspector, testData, scanTypes );
+            result = IterateForward( m_Pads, inspector, testData, p );
+            ++p;
             break;
             
         case TYPETEXTEMODULE:
@@ -1203,15 +1211,26 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
             if( result == SEARCH_QUIT )
                 break;
 
-            // m_Drawings can hold TYPETEXTMODULE also?
-            result = IterateForward( m_Drawings, inspector, testData, scanTypes );
-            break;
+            // m_Drawings can hold TYPETEXTMODULE also, so fall thru
             
         case TYPEEDGEMODULE:
-            result = IterateForward( m_Drawings, inspector, testData, scanTypes );
+            result = IterateForward( m_Drawings, inspector, testData, p );
+            // skip over any types handled in the above call.
+            for(;;)
+            {
+                switch( stype = *++p )
+                {
+                case TYPETEXTEMODULE:
+                case TYPEEDGEMODULE:
+                    continue;
+                default: ;
+                }
+                break;
+            }
             break;
                 
         default:
+            done = true;
             break;
         }
         

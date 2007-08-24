@@ -73,6 +73,31 @@ public:
      * @return bool - true if a hit, else false
      */
     bool    HitTest( const wxPoint& posref );
+
+    /**
+     * Function IsOnLayer
+     * tests to see if this object is on the given layer.  Is virtual so
+     * objects like D_PAD, which reside on multiple layers can do their own
+     * form of testing.
+     * virtual inheritance from BOARD_ITEM.
+     * @param aLayer The layer to test for.
+     * @return bool - true if on given layer, else false.
+     */
+    bool IsOnLayer( int aLayer ) const;
+    
+    /**
+     * Function IsOnOneOfTheseLayers
+     * returns true if this object is on one of the given layers.  Is virtual so
+     * objects like D_PAD, which reside on multiple layers, can do their own
+     * form of testing.
+     * virtual inheritance from BOARD_ITEM.
+     * @param aLayerMask The bit-mapped set of layers to test for.
+     * @return bool - true if on one of the given layers, else false.
+    bool IsOnOneOfTheseLayers( int aLayerMask ) const;
+     */
+
+    
+
     
 #if defined(DEBUG)
     /**
