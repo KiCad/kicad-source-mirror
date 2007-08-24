@@ -40,7 +40,7 @@ public:
     int             m_Param;        // Auxiliary variable ( used in some computations )
 
 public:
-    TRACK( BOARD_ITEM* StructFather, DrawStructureType idtype = TYPETRACK );
+    TRACK( BOARD_ITEM* StructFather, KICAD_T idtype = TYPETRACK );
     TRACK( const TRACK& track );
 
     TRACK* Next()   { return (TRACK*) Pnext; }

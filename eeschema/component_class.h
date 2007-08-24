@@ -70,7 +70,7 @@ public:
 	wxPoint m_Pos;				/* Exact position of part. */
 
 public:
-	DrawPartStruct( DrawStructureType struct_type, const wxPoint & pos);
+	DrawPartStruct( KICAD_T struct_type, const wxPoint & pos);
 	~DrawPartStruct(void);
 };
 

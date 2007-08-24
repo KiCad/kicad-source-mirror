@@ -290,6 +290,9 @@ wxPoint pos;
 				MyFree(Poly);
 			}
 				break;
+                
+            default:;
+                
 		}	/* Fin Switch */
 		Plume('U');
 	}	/* Fin Boucle de dessin */

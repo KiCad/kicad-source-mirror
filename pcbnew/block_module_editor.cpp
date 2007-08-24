@@ -502,6 +502,9 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
             ( (EDGE_MODULE*) item )->m_End0.x   += offset.x;
             ( (EDGE_MODULE*) item )->m_End0.y   += offset.y;
             break;
+
+        default:
+            ;
         }
 
         item->m_Flags = item->m_Selected = 0;
@@ -588,6 +591,9 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
             SETMIRROR( ( (TEXTE_MODULE*) item )->m_Pos.x );
             ( (TEXTE_MODULE*) item )->m_Pos0.x = ( (TEXTE_MODULE*) item )->m_Pos.x;
             break;
+            
+        default:
+            ;
         }
 
         item->m_Flags = item->m_Selected = 0;
@@ -639,6 +645,9 @@ void RotateMarkedItems( MODULE* module, wxPoint offset )
             ( (TEXTE_MODULE*) item )->m_Pos0    = ( (TEXTE_MODULE*) item )->m_Pos;
             ( (TEXTE_MODULE*) item )->m_Orient += 900;
             break;
+        
+        default:
+            ;
         }
 
         item->m_Flags = item->m_Selected = 0;

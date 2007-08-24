@@ -358,7 +358,7 @@ public:
     int m_Angle;                // pour les arcs: "longueur" de l'arc en 1/10 deg
 
 public:
-    DRAWSEGMENT( BOARD_ITEM* StructFather, DrawStructureType idtype = TYPEDRAWSEGMENT );
+    DRAWSEGMENT( BOARD_ITEM* StructFather, KICAD_T idtype = TYPEDRAWSEGMENT );
     ~DRAWSEGMENT( void );
 
     // Read/write data

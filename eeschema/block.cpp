@@ -841,6 +841,9 @@ static EDA_BaseStruct* CopyStruct( WinEDA_DrawPanel* panel, wxDC* DC, BASE_SCREE
                 sheet->m_FileName = sheet->m_SheetName + wxT( ".sch" );
                 break;
             }
+            
+            default:
+                ;
             }
 
             SetStructFather( Struct, screen );

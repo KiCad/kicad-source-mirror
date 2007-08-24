@@ -14,8 +14,10 @@ extern std::ostream& operator<<( std::ostream& out, const wxPoint& pt );
 
 
 /* Id for class identification, at run time */
-enum DrawStructureType {
-
+enum KICAD_T {
+    
+    NOT_USED  = -1,         // the 3d code uses this value
+    
     EOT = 0,                // search types array terminator (End Of Types)
     
     TYPE_NOT_INIT = 0,
@@ -80,7 +82,6 @@ enum SEARCH_RESULT {
     SEARCH_CONTINUE
 };    
 
-typedef DrawStructureType   KICAD_T;    // shorter name
 
 class EDA_BaseStruct;
 class WinEDA_DrawFrame;
@@ -126,7 +127,7 @@ public:
 class EDA_BaseStruct        /* Basic class, not directly used */
 {
 public:
-    int             m_StructType;       /* Struct ident for run time identification */
+    KICAD_T         m_StructType;       /* Struct ident for run time identification */
     EDA_BaseStruct* Pnext;              /* Linked list: Link (next struct) */
     EDA_BaseStruct* Pback;              /* Linked list: Link (previous struct) */
     EDA_BaseStruct* m_Parent;           /* Linked list: Link (parent struct) */
@@ -163,11 +164,11 @@ private:
 
 public:
 
-    EDA_BaseStruct( EDA_BaseStruct* parent, int idType );
-    EDA_BaseStruct( int struct_type );
+    EDA_BaseStruct( EDA_BaseStruct* parent, KICAD_T idType );
+    EDA_BaseStruct( KICAD_T struct_type );
     virtual ~EDA_BaseStruct() { };
     
-    EDA_BaseStruct* Next( void ) { return Pnext; }
+    EDA_BaseStruct* Next()  { return Pnext; }
     
     /* Gestion de l'etat (status) de la structure (active, deleted..) */
     int     GetState( int type );
@@ -381,7 +382,7 @@ protected:
 
 public:
 
-    BOARD_ITEM( BOARD_ITEM* StructFather, DrawStructureType idtype ) :
+    BOARD_ITEM( BOARD_ITEM* StructFather, KICAD_T idtype ) :
         EDA_BaseStruct( StructFather, idtype ),
         m_Layer(0)
     {
@@ -447,22 +448,6 @@ public:
         return false;   // only MODULEs can be locked at this time.
     }
 
-};
-
-
-/* Base class for building items like lines, which have 1 start point and 1 end point.
- * Arc and circles can use this class.
- */
-class EDA_BaseLineStruct : public EDA_BaseStruct
-{
-public:
-    int     m_Layer;            // Layer number
-    int     m_Width;            // 0 = line, > 0 = tracks, bus ...
-    wxPoint m_Start;            // Line start point
-    wxPoint m_End;              // Line end point
-
-public:
-    EDA_BaseLineStruct( EDA_BaseStruct* StructFather, DrawStructureType idtype );
 };
 
 

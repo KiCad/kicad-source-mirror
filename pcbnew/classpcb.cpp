@@ -52,10 +52,10 @@ EDGE_ZONE:: ~EDGE_ZONE( void )
 /**********************/
 
 /* Classe DRAWSEGMENT: constructeur */
-DRAWSEGMENT::DRAWSEGMENT( BOARD_ITEM* StructFather, DrawStructureType idtype ) :
+DRAWSEGMENT::DRAWSEGMENT( BOARD_ITEM* StructFather, KICAD_T idtype ) :
     BOARD_ITEM( StructFather, idtype )
 {
-    m_Flags = m_Shape = m_Type = m_Angle = 0;
+    m_Width = m_Flags = m_Shape = m_Type = m_Angle = 0;
 }
 
 

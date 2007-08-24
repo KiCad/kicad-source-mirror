@@ -1254,6 +1254,9 @@ int* WinEDA_BasePcbFrame::build_ratsnest_pad( EDA_BaseStruct* ref,
             conn_number = track_ref->m_Sous_Netcode;
             break;
         }
+
+        default:
+            ;
         }
 
         if( current_net_code <= 0 )

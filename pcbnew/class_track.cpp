@@ -22,9 +22,10 @@
 
 /* Constructeur des classes type pistes, vias et zones */
 
-TRACK::TRACK( BOARD_ITEM* StructFather, DrawStructureType idtype ) :
+TRACK::TRACK( BOARD_ITEM* StructFather, KICAD_T idtype ) :
     BOARD_ITEM( StructFather, idtype )
 {
+    m_Width        = 0;
     m_Shape        = S_SEGMENT;
     start          = end = NULL;
     m_NetCode      = 0;

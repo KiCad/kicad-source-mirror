@@ -501,7 +501,7 @@ public:
     virtual void    SwitchLayer( wxDC* DC, int layer );
 
     // divers
-    void            AddHistory( int value, DrawStructureType type ); // Add value in data list history
+    void            AddHistory( int value, KICAD_T type ); // Add value in data list history
     void            InstallGridFrame( const wxPoint& pos );
 };
 

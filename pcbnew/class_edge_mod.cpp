@@ -31,6 +31,7 @@
 EDGE_MODULE::EDGE_MODULE( MODULE* parent ) : 
     BOARD_ITEM( parent, TYPEEDGEMODULE )
 {
+    m_Width     = 0;
     m_Shape     = S_SEGMENT;
     m_Angle     = 0;
     m_Width     = 120;

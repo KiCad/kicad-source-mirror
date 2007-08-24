@@ -594,6 +594,9 @@ void MoveMarkedItems( EDA_LibComponentStruct* LibEntry, wxPoint offset )
             ( (LibDrawText*) item )->m_Pos.x += offset.x;
             ( (LibDrawText*) item )->m_Pos.y += offset.y;
             break;
+            
+        default:
+            ;
         }
 
         item->m_Flags = item->m_Selected = 0;
@@ -701,6 +704,9 @@ void MirrorMarkedItems( EDA_LibComponentStruct* LibEntry, wxPoint offset )
         case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
             SETMIRROR( ( (LibDrawText*) item )->m_Pos.x );
             break;
+        
+        default:
+            ;
         }
 
         item->m_Flags = item->m_Selected = 0;

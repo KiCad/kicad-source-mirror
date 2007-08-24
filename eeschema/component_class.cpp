@@ -23,7 +23,7 @@
 	/***************************/
 
 /***********************************************************************************/
-DrawPartStruct::DrawPartStruct( DrawStructureType struct_type, const wxPoint & pos):
+DrawPartStruct::DrawPartStruct( KICAD_T struct_type, const wxPoint & pos):
 				EDA_BaseStruct(struct_type)
 /***********************************************************************************/
 {

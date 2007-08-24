@@ -148,7 +148,7 @@ wxString DrawMarkerStruct::GetComment( void )
 /***************************/
 
 EDA_DrawLineStruct::EDA_DrawLineStruct( const wxPoint& pos, int layer ) :
-    EDA_BaseLineStruct( NULL, DRAW_SEGMENT_STRUCT_TYPE )
+    EDA_BaseStruct( NULL, DRAW_SEGMENT_STRUCT_TYPE )
 {
     m_Start = pos;
     m_End   = pos;

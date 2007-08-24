@@ -212,6 +212,8 @@ wxPoint MousePos = m_CurrentScreen->m_MousePosition;
 					}
 						ChangeTextOrient( (DrawTextStruct*)DrawStruct, DC);
 						break;
+                        
+                default:;
 			}
 			break;
 

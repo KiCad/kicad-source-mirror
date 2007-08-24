@@ -17,8 +17,8 @@
 #include "macros.h"
 
 
-// DrawStructureType names for error messages only:
-static wxString DrawStructureTypeName[MAX_STRUCT_TYPE_ID + 1] = {
+// KICAD_T names for error messages only:
+static wxString KICAD_TName[MAX_STRUCT_TYPE_ID + 1] = {
     wxT( "Not init" ),
 
     wxT( "Pcb" ),
@@ -74,7 +74,7 @@ enum textbox {
 
 
 /******************************************************************************/
-EDA_BaseStruct::EDA_BaseStruct( EDA_BaseStruct* parent, int idType )
+EDA_BaseStruct::EDA_BaseStruct( EDA_BaseStruct* parent, KICAD_T idType )
 /******************************************************************************/
 {
     InitVars();
@@ -84,7 +84,7 @@ EDA_BaseStruct::EDA_BaseStruct( EDA_BaseStruct* parent, int idType )
 
 
 /********************************************/
-EDA_BaseStruct::EDA_BaseStruct( int idType )
+EDA_BaseStruct::EDA_BaseStruct( KICAD_T idType )
 /********************************************/
 {
     InitVars();
@@ -183,7 +183,7 @@ wxString EDA_BaseStruct::ReturnClassName() const
 
     if( (ii < 0) || (ii > MAX_STRUCT_TYPE_ID) )
         ii = MAX_STRUCT_TYPE_ID;
-    classname = DrawStructureTypeName[ii];
+    classname = KICAD_TName[ii];
 
     return classname;
 }
@@ -285,16 +285,6 @@ std::ostream& EDA_BaseStruct::NestedSpace( int nestLevel, std::ostream& os )
 
 #endif
 
-
-
-/**********************************************************************************************/
-EDA_BaseLineStruct::EDA_BaseLineStruct( EDA_BaseStruct* StructFather, DrawStructureType idtype ) :
-    EDA_BaseStruct( StructFather, idtype )
-/**********************************************************************************************/
-{
-    m_Layer = 0;
-    m_Width = 0;                // 0 = line, > 0 = tracks, bus ...
-};
 
 
 /*********************************************************/

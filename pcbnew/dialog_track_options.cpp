@@ -281,7 +281,7 @@ void WinEDA_PcbTracksDialog::AcceptPcbOptions(wxCommandEvent& event)
 
 
 /*********************************************************************/
-void WinEDA_BasePcbFrame::AddHistory(int value, DrawStructureType type)
+void WinEDA_BasePcbFrame::AddHistory(int value, KICAD_T type)
 /**********************************************************************/
 // Mise a jour des listes des dernieres epaisseurs de via et track utilisées
 {

@@ -19,7 +19,7 @@
 
 /* Constructeur des classes type pistes, vias et zones */
 
-TRACK::TRACK( EDA_BaseStruct* StructFather, DrawStructureType idtype ) :
+TRACK::TRACK( EDA_BaseStruct* StructFather, KICAD_T idtype ) :
     SEGDRAW_Struct( StructFather, idtype )
 {
     m_Shape        = S_SEGMENT;

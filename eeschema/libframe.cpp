@@ -543,6 +543,7 @@ wxClientDC dc(DrawPanel);
 					case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
 						EditSymbolText(&dc, CurrentDrawItem);
 						break;
+                    default:;
 					}
 				DrawPanel->CursorOn(&dc);
 				}

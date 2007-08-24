@@ -5,6 +5,18 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2007-Aug-23 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ eeschema & pcbnew
+  * Removed class EDA_BaseLineStruct, which brought no behavioral advantage, only data.
+    Classes which were based on got its data members added and their initializers.
+  * Changed type of EDA_BaseStruct::m_StructType from int to KICAD_T which is an
+    enum.  This makes debugging easier since gdb will show the name of the
+    KICAD_T rather than simply a number.  Added NOT_USED = -1 to KICAD_T enum for
+    3d which was using -1.
+  * More beautification using latest uncrustify and the committed uncrustify.cfg
+  
+
 2007-Aug-24 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
 ================================================================================
 + pcbnew
@@ -27,9 +39,6 @@ email address.
     tomorrow I will add a new class COLLECTORS_GUIDE which can be used by a
     COLLECTOR to control its operation. It adds the concept of layer
     locking, even though PCBNEW does not support that in the UI yet.
-    @todo:
-    add constructor initializers for classes that were derived from
-    EDA_BaseLineStruct but are now not. Its late, will do tomorrow.
 
 
 2007-Aug-22 UPDATE   Dick Hollenbeck <dick@softplc.com>

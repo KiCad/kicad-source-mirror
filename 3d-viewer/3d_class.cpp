@@ -25,8 +25,8 @@ S3D_Vertex::S3D_Vertex(void)
 
 
 /**************************************************************************/
-S3D_Material::S3D_Material(Struct3D_Master * father, const wxString & name):
-		EDA_BaseStruct( father, -1)
+S3D_Material::S3D_Material( Struct3D_Master * father, const wxString & name ):
+		EDA_BaseStruct( father, NOT_USED )
 /**************************************************************************/
 {
 	m_DiffuseColor.x = m_DiffuseColor.y = m_DiffuseColor.z = 1.0;
@@ -67,7 +67,7 @@ void Struct3D_Master::Copy(Struct3D_Master * pattern)
 
 /***************************************************************/
 Struct3D_Master::Struct3D_Master(EDA_BaseStruct * StructFather):
-		EDA_BaseStruct( StructFather, -1)
+		EDA_BaseStruct( StructFather, NOT_USED )
 /***************************************************************/
 {
 	m_MatScale.x = m_MatScale.y = m_MatScale.z = 1.0;
@@ -100,7 +100,7 @@ S3D_Material * nextmat;
 
 /***************************************************************/
 Struct3D_Shape::Struct3D_Shape(EDA_BaseStruct * StructFather):
-		EDA_BaseStruct( StructFather, -1)
+		EDA_BaseStruct( StructFather, NOT_USED )
 /***************************************************************/
 {
 	m_3D_Coord = NULL;

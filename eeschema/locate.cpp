@@ -839,6 +839,9 @@ int seuil;
 						return(DrawItem);	/* Texte trouve */
 				}
 				break;
+                
+            default:
+                ;
 			}
 		}
 	return(NULL);
