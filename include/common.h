@@ -13,23 +13,24 @@
 #endif
 
 
-/* Etat des touches speciales du clavier */
-
+/* Flag for special keys */
 #define GR_KB_RIGHTSHIFT    0x10000000              /* Keybd states: right shift key depressed */
 #define GR_KB_LEFTSHIFT     0x20000000              /* left shift key depressed */
 #define GR_KB_CTRL          0x40000000              /* CTRL depressed */
 #define GR_KB_ALT           0x80000000              /* ALT depressed */
 #define GR_KB_SHIFT         (GR_KB_LEFTSHIFT | GR_KB_RIGHTSHIFT)
 #define GR_KB_SHIFTCTRL     (GR_KB_SHIFT | GR_KB_CTRL)
-#define MOUSE_MIDDLE        0x10000                 /* flag indiquant bouton central souris */
+#define MOUSE_MIDDLE        0x08000000               /* Middle button mouse flag for block commands */
 
-/* Pseudo key codes for commands liske panning */
-
+/* Pseudo key codes for command panning */
 enum pseudokeys {
-    EDA_PANNING_UP_KEY = 2000,
+    EDA_PANNING_UP_KEY = 1,
     EDA_PANNING_DOWN_KEY,
     EDA_PANNING_LEFT_KEY,
-    EDA_PANNING_RIGHT_KEY
+    EDA_PANNING_RIGHT_KEY,
+    EDA_ZOOM_IN_FROM_MOUSE,
+    EDA_ZOOM_OUT_FROM_MOUSE,
+    EDA_ZOOM_CENTER_FROM_MOUSE
 };
 
 #define ESC 27
@@ -57,7 +58,7 @@ enum pseudokeys {
 
 
 
-/* Orientation des textes graphiques en 0.1 degre*/
+/* Graphic Texts Orientation in 0.1 degree*/
 #define TEXT_ORIENT_HORIZ  0
 #define TEXT_ORIENT_VERT  900
 

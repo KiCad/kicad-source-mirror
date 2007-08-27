@@ -755,7 +755,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
             else if( event.ControlDown() )
                 localkey = EDA_PANNING_LEFT_KEY;
             else
-                localkey = WXK_F1;
+                localkey = EDA_ZOOM_IN_FROM_MOUSE;
         }
         else
         {
@@ -764,7 +764,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
             else if( event.ControlDown() )
                 localkey = EDA_PANNING_RIGHT_KEY;
             else
-                localkey = WXK_F2;
+                localkey = EDA_ZOOM_OUT_FROM_MOUSE;
         }
     }
 
@@ -833,7 +833,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
     if( event.ButtonUp( 2 ) && (screen->BlockLocate.m_State == STATE_NO_BLOCK) )
     {   // The middle button has been relached, with no block command:
         // We use it for a zoom center command
-        g_KeyPressed = localkey = WXK_F4;
+        g_KeyPressed = localkey = EDA_ZOOM_CENTER_FROM_MOUSE;
     }
 
 

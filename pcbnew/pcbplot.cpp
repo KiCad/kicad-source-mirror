@@ -108,14 +108,12 @@ END_EVENT_TABLE()
 
 
 const int UNITS_MILS = 1000;
-const int H_SIZE = 640;
-const int V_SIZE = 430;
 
 
 /********************************************************************/
 WinEDA_PlotFrame::WinEDA_PlotFrame(WinEDA_BasePcbFrame * parent):
 				wxDialog(parent, -1, _("Plot"),
-				wxPoint(-1,-1), wxSize(H_SIZE, V_SIZE),
+				wxPoint(-1,-1), wxDefaultSize,
 				wxDEFAULT_DIALOG_STYLE)
 /********************************************************************/
 {

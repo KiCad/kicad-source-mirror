@@ -307,9 +307,8 @@ void WinEDA_DrawPanel::Process_Popup_Zoom( wxCommandEvent& event )
 class grid_list_struct
 {
 public:
-    int           m_value;
-    int           m_id;
-    const wxChar* m_msg;
+    int           m_Value;
+    int           m_Id;
 };
 
 
@@ -325,36 +324,36 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
     wxSize           grid;
     int              zoom_value;
     wxString         zoom_msg = _( "Zoom: " );
-    wxString         grid_msg = _( "Grid:" ), msg;
+    wxString         grid_msg = _( "Grid: " ), msg;
     int              ii;
     wxString         line;
 
     static const grid_list_struct grid_list_pcb[] =
     {
-        { 1000, ID_POPUP_GRID_LEVEL_1000, wxT( " 100" )    },
-        { 500,  ID_POPUP_GRID_LEVEL_500,  wxT( " 50" )     },
-        { 250,  ID_POPUP_GRID_LEVEL_250,  wxT( " 25" )     },
-        { 200,  ID_POPUP_GRID_LEVEL_200,  wxT( " 20" )     },
-        { 100,  ID_POPUP_GRID_LEVEL_100,  wxT( " 10" )     },
-        { 50,   ID_POPUP_GRID_LEVEL_50,   wxT( " 5" )      },
-        { 25,   ID_POPUP_GRID_LEVEL_25,   wxT( " 2.5" )    },
-        { 20,   ID_POPUP_GRID_LEVEL_20,   wxT( " 2" )      },
-        { 10,   ID_POPUP_GRID_LEVEL_10,   wxT( " 1" )      },
-        { 5,    ID_POPUP_GRID_LEVEL_5,    wxT( " 0.5" )    },
-        { 2,    ID_POPUP_GRID_LEVEL_2,    wxT( " 0.2" )    },
-        { 1,    ID_POPUP_GRID_LEVEL_1,    wxT( " 0.1" )    },
-        { 0,    ID_POPUP_GRID_USER,       _( "grid user" ) }
+        { 1000, ID_POPUP_GRID_LEVEL_1000 },
+        { 500,  ID_POPUP_GRID_LEVEL_500  },
+        { 250,  ID_POPUP_GRID_LEVEL_250  },
+        { 200,  ID_POPUP_GRID_LEVEL_200  },
+        { 100,  ID_POPUP_GRID_LEVEL_100  },
+        { 50,   ID_POPUP_GRID_LEVEL_50   },
+        { 25,   ID_POPUP_GRID_LEVEL_25   },
+        { 20,   ID_POPUP_GRID_LEVEL_20   },
+        { 10,   ID_POPUP_GRID_LEVEL_10   },
+        { 5,    ID_POPUP_GRID_LEVEL_5    },
+        { 2,    ID_POPUP_GRID_LEVEL_2    },
+        { 1,    ID_POPUP_GRID_LEVEL_1    },
+        { 0,    ID_POPUP_GRID_USER       }
     };
 
     static const grid_list_struct grid_list_schematic[] =
     {
-        { 50, ID_POPUP_GRID_LEVEL_50, wxT( " 50" )     },
-        { 25, ID_POPUP_GRID_LEVEL_25, wxT( " 25" )     },
-        { 10, ID_POPUP_GRID_LEVEL_10, wxT( " 10" )     },
-        { 5,  ID_POPUP_GRID_LEVEL_5,  wxT( " 5" )      },
-        { 2,  ID_POPUP_GRID_LEVEL_2,  wxT( " 2" )      },
-        { 1,  ID_POPUP_GRID_LEVEL_1,  wxT( " 1" )      },
-        { 0,  ID_POPUP_GRID_USER,     _( "grid user" ) }
+        { 50, ID_POPUP_GRID_LEVEL_50 },
+        { 25, ID_POPUP_GRID_LEVEL_25 },
+        { 10, ID_POPUP_GRID_LEVEL_10 },
+        { 5,  ID_POPUP_GRID_LEVEL_5  },
+        { 2,  ID_POPUP_GRID_LEVEL_2  },
+        { 1,  ID_POPUP_GRID_LEVEL_1  },
+        { 0,  ID_POPUP_GRID_USER     }
     };
 
 
@@ -387,39 +386,57 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
 
     grid = m_Parent->m_CurrentScreen->GetGrid();
 
+	// Create grid list
     switch( m_Parent->m_Ident )
     {
     case MODULE_EDITOR_FRAME:
     case GERBER_FRAME:
     case PCB_FRAME:
     case CVPCB_DISPLAY_FRAME:
-        for( ii = 0; ; ii++ )       // Create grid list
+        for( ii = 0; ; ii++ )
         {
-            msg = grid_msg + grid_list_pcb[ii].m_msg;
-            grid_choice->Append( grid_list_pcb[ii].m_id, msg, wxEmptyString, TRUE );
-            if( grid_list_pcb[ii].m_value <= 0 )
+			if ( grid_list_pcb[ii].m_Value )
+			{
+				double grid_value = To_User_Unit(g_UnitMetric, grid_list_pcb[ii].m_Value,
+					((WinEDA_DrawFrame*)m_Parent)->m_InternalUnits);
+				if ( g_UnitMetric == 0)	// inches
+					line.Printf(wxT("%g mils"), grid_value*1000);
+				else
+					line.Printf(wxT("%g mm"), grid_value);
+			}
+			else line = _("grid user");
+            msg = grid_msg + line;
+            grid_choice->Append( grid_list_pcb[ii].m_Id, msg, wxEmptyString, TRUE );
+            if( grid_list_pcb[ii].m_Value <= 0 )
             {
                 if( m_Parent->m_CurrentScreen->m_UserGridIsON )
-                    grid_choice->Check( grid_list_pcb[ii].m_id, TRUE );
+                    grid_choice->Check( grid_list_pcb[ii].m_Id, TRUE );
                 break;
             }
-            if( grid.x == grid_list_pcb[ii].m_value )
-                grid_choice->Check( grid_list_pcb[ii].m_id, TRUE );
+            if( grid.x == grid_list_pcb[ii].m_Value )
+                grid_choice->Check( grid_list_pcb[ii].m_Id, TRUE );
         }
 
         break;
 
     case SCHEMATIC_FRAME:
     case LIBEDITOR_FRAME:
-        for( ii = 0; ; ii++ )       // Create zoom choice 256 .. 1024
+        for( ii = 0; ; ii++ )
         {
-            if( grid_list_schematic[ii].m_value <= 0 )
+            if( grid_list_schematic[ii].m_Value <= 0 )
                 break;
-            msg = grid_msg + grid_list_schematic[ii].m_msg;
-            grid_choice->Append( grid_list_schematic[ii].m_id,
+			double grid_value = To_User_Unit(g_UnitMetric, grid_list_schematic[ii].m_Value,
+				((WinEDA_DrawFrame*)m_Parent)->m_InternalUnits);
+			if ( g_UnitMetric == 0)	// inches
+				line.Printf(wxT("%g mils"), grid_value*1000);
+			else
+				line.Printf(wxT("%g mm"), grid_value);
+
+            msg = grid_msg + line;
+            grid_choice->Append( grid_list_schematic[ii].m_Id,
                                  msg, wxEmptyString, TRUE );
-            if( grid.x == grid_list_schematic[ii].m_value )
-                grid_choice->Check( grid_list_schematic[ii].m_id, TRUE );
+            if( grid.x == grid_list_schematic[ii].m_Value )
+                grid_choice->Check( grid_list_schematic[ii].m_Id, TRUE );
         }
 
         break;
