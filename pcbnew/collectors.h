@@ -33,6 +33,70 @@
 
 #include "class_collector.h"
 
+
+/**
+ * Class COLLECTORS_GUIDE
+ * is an abstract base class that may be passed to a GENERALCOLLECTOR, telling
+ * it what should be collected (aside from HitTest()ing and KICAD_T scanTypes[], 
+ * information which are provided to the GENERALCOLLECTOR through attributes or
+ * arguments separately). 
+ * <p>
+ * This class introduces the notion of layer locking.
+ */
+class COLLECTORS_GUIDE 
+{
+    
+public:
+    virtual     ~COLLECTORS_GUIDE() {}
+
+    /**
+     * Function IsLayerLocked
+     * @return bool - true if the given layer is locked, else false.
+     */
+    virtual     bool IsLayerLocked( int layer ) const = 0;
+    
+    /**
+     * Function IsCopperLayerVisible
+     * @return bool - true if the copper layer is visible.
+     */
+    virtual     bool IsCopperLayerVisible() const = 0;
+ 
+    /**
+     * Function IsComponentLayerVisible
+     * @return bool - true if the component layer is visible, else false.
+     */
+    virtual     bool IsComponentLayerVisible() const = 0;
+    
+    /**
+     * Function IsLayerVisible
+     * @return bool - true if the given layer is visible, else false.
+     */
+    virtual     bool IsLayerVisible( int layer ) const = 0;
+    
+    /**
+     * Function IgnoreLockedLayers
+     * @return bool - true if should ignored locked layers, else false.
+     */
+    virtual     bool IgnoreLockedLayers() const = 0;
+    
+    /**
+     * Function IgnoredNonVisibleLayers
+     * @return bool - true if should ignore non-visible layers, else false.
+     */
+    virtual     bool IgnoreNonVisibleLayers() const = 0;
+    
+    /**
+     * Function GetPreferredLayer
+     * @return int - the preferred layer for HitTest()ing.
+     */
+    virtual     int GetPreferredLayer() const = 0;
+    
+    
+    // more soon
+};
+
+
+
 /**
  * Class GENERALCOLLECTOR
  * is intended for use when the right click button is pressed, or when the 
@@ -144,6 +208,16 @@ public:
      * @param aLayerMask The layers, in bit-mapped form, meeting the secondary search criterion.
      */
     void Scan( BOARD* board, const wxPoint& refPos, int aPreferredLayer, int aLayerMask );
+
+    
+    /**
+     * Function Scan
+     * scans a BOARD using this class's Inspector method, which does the collection.
+     * @param board A BOARD to scan.
+     * @param refPos A wxPoint to use in hit-testing.
+     * @param guide The COLLECTORS_GUIDE to use in collecting items.
+     */
+    void Scan( BOARD* board, const wxPoint& refPos, const COLLECTORS_GUIDE& guide ); 
 };
 
 

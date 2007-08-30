@@ -13,6 +13,7 @@
 #endif
 
 
+
 /**************************************/
 /* Classes pour Pistes, Vias et Zones */
 /**************************************/
@@ -110,14 +111,6 @@ void SEGVIA::ReturnLayerPair( int* top_layer, int* bottom_layer )
 }
 
 
-/************************/
-TRACK* TRACK::Next( void )
-/************************/
-{
-    return (TRACK*) Pnext;
-}
-
-
 /* supprime du chainage la structure Struct
  *  les structures arrieres et avant sont chainees directement
  */
@@ -170,7 +163,8 @@ void TRACK::Insert( BOARD* Pcb, EDA_BaseStruct* InsertPoint )
  *  Si InsertPoint == NULL, insertion en tete de liste
  */
 {
-    TRACK* track, * NextS;
+    TRACK*  track;
+    TRACK*  NextS;
 
     /* Insertion du debut de la chaine a greffer */
     if( InsertPoint == NULL )
@@ -257,9 +251,11 @@ TRACK* TRACK::GetStartNetCode( int NetCode )
     {
         if( Track->m_NetCode > NetCode )
             break;
+        
         if( Track->m_NetCode == NetCode )
         {
-            ii++; break;
+            ii++; 
+            break;
         }
         Track = (TRACK*) Track->Pnext;
     }
@@ -276,7 +272,8 @@ TRACK* TRACK::GetStartNetCode( int NetCode )
  */
 TRACK* TRACK::GetEndNetCode( int NetCode )
 {
-    TRACK* NextS, * Track = this;
+    TRACK* NextS;
+    TRACK* Track = this;
     int    ii = 0;
 
     if( Track == NULL )

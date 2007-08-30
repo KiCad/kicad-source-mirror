@@ -167,8 +167,9 @@ public:
     int    m_ModuleTextCUColor;                 // Text module color for modules on the COPPER layer
     int    m_ModuleTextNOVColor;                // Text module color for "invisible" texts (must be BLACK if really not displayed)
     int    m_AnchorColor;                       // Anchor color for modules and texts
-    int    m_PadCUColor;                        // Pad color for the COMPONENT side of the pad
-    int    m_PadCMPColor;                       // Pad color for the COPPER side of the pad
+    
+    int    m_PadCUColor;                        // Pad color for the COPPER side of the pad
+    int    m_PadCMPColor;                       // Pad color for the COMPONENT side of the pad
     // Pad color for the pads of both sides is m_PadCUColor OR m_PadCMPColor (in terms of colors)
     
     int    m_RatsnestColor;                     // Ratsnest color
@@ -211,11 +212,11 @@ public:
     int             m_NbSegmTrack;              // nombre d'elements de type segments de piste
     int             m_NbSegmZone;               // nombre d'elements de type segments de zone
 
-    BOARD_ITEM*     m_Drawings;                 // pointeur sur liste drawings
-    MODULE*         m_Modules;                  // pointeur sur liste zone modules
-    EQUIPOT*        m_Equipots;                 // pointeur liste zone equipot
-    TRACK*          m_Track;                    // pointeur relatif zone piste
-    TRACK*          m_Zone;                     // pointeur tableau zone zones de cuivre
+    BOARD_ITEM*     m_Drawings;                 // linked list of lines & texts
+    MODULE*         m_Modules;                  // linked list of MODULEs
+    EQUIPOT*        m_Equipots;                 // linked list of nets
+    TRACK*          m_Track;                    // linked list of TRACKs and SEGVIAs
+    TRACK*          m_Zone;                     // linked list of SEGZONEs
     D_PAD**         m_Pads;                     // pointeur liste d'acces aux pads
     int             m_NbPads;                   // nombre total de pads
     CHEVELU*        m_Ratsnest;                 // pointeur liste des chevelus

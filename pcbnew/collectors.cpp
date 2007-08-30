@@ -175,6 +175,38 @@ void GENERALCOLLECTOR::Scan( BOARD* board, const wxPoint& refPos,
 }
 
 
+// see collectors.h 
+void GENERALCOLLECTOR::Scan( BOARD* board, const wxPoint& refPos, 
+                            const COLLECTORS_GUIDE& guide )
+{
+    Empty();        // empty the collection, primary criteria list
+    Empty2nd();     // empty the collection, secondary criteria list
+
+    
+    // @todo: remember the guide here, pass it to Inspect()
+        
+    
+    /*  remember where the snapshot was taken from and pass refPos to
+        the Inspect() function.
+    */        
+    SetRefPos( refPos );
+
+    
+    // visit the board with the INSPECTOR (me).
+    board->Visit(   this,       // INSPECTOR* inspector
+                    NULL,       // const void* testData, not used here 
+                    m_ScanTypes);
+    
+    SetTimeNow();               // when snapshot was taken
+    
+    // append 2nd list onto end of the first "list" 
+    for( unsigned i=0;  i<list2nd.size();  ++i )
+        Append( list2nd[i] );
+    
+    Empty2nd();
+}
+
+
 #endif  // DEBUG
 
 //EOF
