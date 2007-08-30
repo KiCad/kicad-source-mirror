@@ -10,7 +10,7 @@ email address.
 + pcbnew
     Started abstract class COLLECTORS_GUIDE.
     Renamed classtrc.cpp to classtrc.cpp.notused
-    Changed some comments in class BOARD's header to english, starting clarify
+    Changed some comments in class BOARD's header to english, clarifying
     linked list contents.
 
     
