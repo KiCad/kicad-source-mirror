@@ -25,16 +25,16 @@
 /* classe D_PAD : constructeur */
 /*******************************/
 
-D_PAD::D_PAD( MODULE* parent ) : 
+D_PAD::D_PAD( MODULE* parent ) :
     BOARD_ITEM( parent, TYPEPAD )
 {
-    m_NumPadName    = 0;
-    m_Masque_Layer  = CUIVRE_LAYER;
-    m_NetCode       = 0;           /* Numero de net pour comparaisons rapides */
-    m_DrillShape    = CIRCLE;      // Drill shape = circle
-    
+    m_NumPadName   = 0;
+    m_Masque_Layer = CUIVRE_LAYER;
+    m_NetCode    = 0;               /* Numero de net pour comparaisons rapides */
+    m_DrillShape = CIRCLE;          // Drill shape = circle
+
     m_Size.x = m_Size.y = 500;
-    
+
     if( m_Parent && (m_Parent->m_StructType  == TYPEMODULE) )
     {
         m_Pos = ( (MODULE*) m_Parent )->m_Pos;
@@ -73,7 +73,6 @@ void D_PAD::ComputeRayon( void )
         break;
 
     case RECT:
-    case SPECIAL_PAD:
     case TRAPEZE:
         m_Rayon = (int) (sqrt( (float) m_Size.y * m_Size.y
                               + (float) m_Size.x * m_Size.x ) / 2);
@@ -90,16 +89,16 @@ const wxPoint D_PAD::ReturnShapePos( void )
 {
     if( (m_Offset.x == 0) && (m_Offset.y == 0) )
         return m_Pos;
-    
+
     wxPoint shape_pos;
     int     dX, dY;
-    
-    dX = m_Offset.x; 
+
+    dX = m_Offset.x;
     dY = m_Offset.y;
-    
+
     RotatePoint( &dX, &dY, m_Orient );
-    
-    shape_pos.x = m_Pos.x + dX; 
+
+    shape_pos.x = m_Pos.x + dX;
     shape_pos.y = m_Pos.y + dY;
 
     return shape_pos;
@@ -410,7 +409,6 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
         break;
 
     case RECT:
-    case SPECIAL_PAD:
     case TRAPEZE:
     {
         int ddx, ddy;
@@ -464,7 +462,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
         }
     }
         break;
-        
+
 
     default:
         break;
@@ -486,7 +484,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
         switch( m_DrillShape )
         {
         case CIRCLE:
-            if( (hole / zoom) > 1 )     /* draw hole if its size is enought */
+            if( (hole / zoom) > 1 ) /* draw hole if its size is enought */
                 GRFilledCircle( &panel->m_ClipBox, DC, cx0, cy0, hole, 0, color, color );
             break;
 
@@ -517,7 +515,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
     }
 
     GRSetDrawMode( DC, draw_mode );
-    
+
     /* Trace du symbole "No connect" ( / ou \ ou croix en X) si necessaire : */
     if( m_Netname.IsEmpty() && DisplayOpt.DisplayPadNoConn )
     {
@@ -531,26 +529,26 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
             GRLine( &panel->m_ClipBox, DC, cx0 + dx0, cy0 - dx0,
                     cx0 - dx0, cy0 + dx0, 0, nc_color );
     }
-    
+
     /* Trace de la reference */
     if( !frame->m_DisplayPadNum )
         return;
-    
+
     dx = MIN( m_Size.x, m_Size.y );     /* dx = text size */
     if( (dx / zoom) > 12 )              /* size must be enought to draw 2 chars */
     {
         wxString buffer;
-        
+
         ReturnStringPadName( buffer );
         dy = buffer.Len();
-        
+
         /* Draw text with an angle between -90 deg and + 90 deg */
         NORMALIZE_ANGLE_90( angle );
         if( dy < 2 )
             dy = 2;                     /* text min size is 2 char */
-        
+
         dx = (dx * 9 ) / (dy * 13 );    /* Text size ajusted to pad size */
-        
+
         DrawGraphicText( panel, DC, wxPoint( ux0, uy0 ),
                          WHITE, buffer, angle, wxSize( dx, dx ),
                          GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER );
@@ -795,7 +793,7 @@ void D_PAD::Display_Infos( WinEDA_DrawFrame* frame )
     MODULE*  Module;
     wxString Line;
     int      pos = 1;
-    
+
     /* Pad messages */
     static const wxString Msg_Pad_Shape[6] =
     { wxT( "??? " ), wxT( "Circ" ), wxT( "Rect" ), wxT( "Oval" ), wxT( "trap" ), wxT( "spec" ) };
@@ -805,7 +803,7 @@ void D_PAD::Display_Infos( WinEDA_DrawFrame* frame )
         wxT( "??? " ),     wxT( "cmp   " ),  wxT( "cu    " ),  wxT( "cmp+cu " ), wxT( "int    " ),
         wxT( "cmp+int " ), wxT( "cu+int " ), wxT( "all    " ), wxT( "No copp" )
     };
-    
+
     static const wxString Msg_Pad_Attribut[5] =
     { wxT( "norm" ), wxT( "smd " ), wxT( "conn" ), wxT( "hole" ), wxT( "????" ) };
 
@@ -910,16 +908,12 @@ void D_PAD::Display_Infos( WinEDA_DrawFrame* frame )
 
     pos += 6;
     Affiche_1_Parametre( frame, pos, Msg_Pad_Shape[m_PadShape], wxEmptyString, DARKGREEN );
-    /* Affichage en couleur diff si pad stack ou non */
 
-    if( m_Attribut & PAD_STACK )
-        Affiche_1_Parametre( frame, -1, wxEmptyString, Msg_Pad_Attribut[m_Attribut & 15], RED );
-    else
-        Affiche_1_Parametre( frame,
-                             -1,
-                             wxEmptyString,
-                             Msg_Pad_Attribut[m_Attribut & 15],
-                             DARKGREEN );
+    Affiche_1_Parametre( frame,
+                         -1,
+                         wxEmptyString,
+                         Msg_Pad_Attribut[m_Attribut & 15],
+                         DARKGREEN );
 
     valeur_param( m_Size.x, Line );
     pos += 6;
@@ -978,12 +972,12 @@ bool D_PAD::HitTest( const wxPoint& ref_pos )
 
     wxPoint shape_pos = ReturnShapePos();
 
-    deltaX = ref_pos.x - shape_pos.x; 
+    deltaX = ref_pos.x - shape_pos.x;
     deltaY = ref_pos.y - shape_pos.y;
 
     /* Test rapide: le point a tester doit etre a l'interieur du cercle exinscrit ... */
     if( (abs( deltaX ) > m_Rayon )
-     || (abs( deltaY ) > m_Rayon) )
+       || (abs( deltaY ) > m_Rayon) )
         return false;
 
     /* calcul des demi dim  dx et dy */
@@ -1006,35 +1000,38 @@ bool D_PAD::HitTest( const wxPoint& ref_pos )
             return true;
         break;
     }
-    
+
     return false;
 }
 
 
-#if defined(DEBUG)
+#if defined (DEBUG)
+
 /**
  * Function Show
  * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level 
+ * @param nestLevel An aid to prettier tree indenting, and is the level
  *          of nesting of this object within the overall tree.
  * @param os The ostream& to output to.
  */
 void D_PAD::Show( int nestLevel, std::ostream& os )
 {
     char padname[5] = { m_Padname[0], m_Padname[1], m_Padname[2], m_Padname[3], 0 };
-    
+
     char layerMask[16];
+
     sprintf( layerMask, "0x%08X", m_Masque_Layer );
-    
+
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-        " num=\""   << padname << '"' <<
-        " net=\""   << m_Netname.mb_str() << '"' << 
-        " layerMask=\"" << layerMask << '"' << m_Pos << "/>\n";
-    
+    " num=\"" << padname << '"' <<
+    " net=\"" << m_Netname.mb_str() << '"' <<
+    " layerMask=\"" << layerMask << '"' << m_Pos << "/>\n";
+
 //    NestedSpace( nestLevel+1, os ) << m_Text.mb_str() << '\n';
-    
+
 //    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
+
 
 #endif

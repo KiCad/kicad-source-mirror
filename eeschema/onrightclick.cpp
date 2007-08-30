@@ -16,6 +16,7 @@
 
 #include "protos.h"
 #include "id.h"
+#include "hotkeys.h"
 
 #include "bitmaps.h"
 
@@ -272,24 +273,31 @@ void AddMenusForComponent( wxMenu* PopMenu, EDA_SchComponentStruct* Component )
 /* Add menu commands for a component
  */
 {
+    wxString msg;
+
     EDA_LibComponentStruct* LibEntry;
 
     LibEntry = FindLibPart( Component->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
 
     if( !Component->m_Flags )
     {
+        msg = AddHotkeyName( _( "Move Component" ), s_Schematic_Hotkey_List, HK_MOVE_COMPONENT );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_CMP_REQUEST,
-                      _( "Move Component   (M)" ), move_xpm );
+                      msg, move_xpm );
     }
 
     // add menu orient et sous menu:
     wxMenu* orientmenu = new wxMenu;
+    msg = AddHotkeyName( _( "Rotate +" ), s_Schematic_Hotkey_List, HK_ROTATE_COMPONENT );
     ADD_MENUITEM( orientmenu, ID_POPUP_SCH_ROTATE_CMP_COUNTERCLOCKWISE,
-                  _( "Rotate +  (R)" ), rotate_pos_xpm );
+                  msg, rotate_pos_xpm );
     ADD_MENUITEM( orientmenu, ID_POPUP_SCH_ROTATE_CMP_CLOCKWISE, _( "Rotate -" ), rotate_neg_xpm );
-    ADD_MENUITEM( orientmenu, ID_POPUP_SCH_MIROR_X_CMP, _( "Mirror --  (X)" ), mirror_V_xpm );
-    ADD_MENUITEM( orientmenu, ID_POPUP_SCH_MIROR_Y_CMP, _( "Mirror ||  (Y)" ), mirror_H_xpm );
-    ADD_MENUITEM( orientmenu, ID_POPUP_SCH_ORIENT_NORMAL_CMP, _( "Normal  (N)" ), normal_xpm );
+    msg = AddHotkeyName( _( "Mirror --" ), s_Schematic_Hotkey_List, HK_MIRROR_X_COMPONENT );
+    ADD_MENUITEM( orientmenu, ID_POPUP_SCH_MIROR_X_CMP, msg, mirror_V_xpm );
+    msg = AddHotkeyName( _( "Mirror ||" ), s_Schematic_Hotkey_List, HK_MIRROR_Y_COMPONENT );
+    ADD_MENUITEM( orientmenu, ID_POPUP_SCH_MIROR_Y_CMP, msg, mirror_H_xpm );
+    msg = AddHotkeyName( _( "Normal" ), s_Schematic_Hotkey_List, HK_ORIENT_NORMAL_COMPONENT );
+    ADD_MENUITEM( orientmenu, ID_POPUP_SCH_ORIENT_NORMAL_CMP, msg, normal_xpm );
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, orientmenu,
                                ID_POPUP_SCH_GENERIC_ORIENT_CMP, _(
                                    "Orient Component" ), orient_xpm );

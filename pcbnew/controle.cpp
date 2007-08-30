@@ -215,51 +215,6 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
     switch( g_KeyPressed )
     {
-    case WXK_NUMPAD_SUBTRACT:
-    case WXK_SUBTRACT:
-    case '-':
-        ll = GetScreen()->m_Active_Layer;
-        if( ll > CMP_N )
-            break;
-        if( ll <= CUIVRE_N )
-            break;
-        if( m_Pcb->m_BoardSettings->m_CopperLayerCount <= 1 )       // Single layer
-            ll = CUIVRE_N;
-        if( ll == CMP_N )
-            ll = MAX( CUIVRE_N, m_Pcb->m_BoardSettings->m_CopperLayerCount - 2 );
-        else if( ll > CUIVRE_N )
-            ll--;
-        GetScreen()->m_Active_Layer = ll;
-        if( DisplayOpt.ContrastModeDisplay )
-            DrawPanel->Refresh( TRUE );
-        break;
-
-    case WXK_NUMPAD_ADD:
-    case WXK_ADD:
-    case '+':
-        ll = GetScreen()->m_Active_Layer;
-        if( ll >= CMP_N )
-            break;
-        ll++;
-        if( ll >= m_Pcb->m_BoardSettings->m_CopperLayerCount - 1 )
-            ll = CMP_N;
-        if( m_Pcb->m_BoardSettings->m_CopperLayerCount <= 1 )       // Single layer
-            ll = CUIVRE_N;
-        GetScreen()->m_Active_Layer = ll;
-        if( DisplayOpt.ContrastModeDisplay )
-            DrawPanel->Refresh( TRUE );
-        break;
-
-    case WXK_NUMPAD0:
-    case WXK_PAGEUP:
-        SwitchLayer( DC, CMP_N );
-        break;
-
-    case WXK_NUMPAD9:
-    case WXK_PAGEDOWN:
-        SwitchLayer( DC, CUIVRE_N );
-        break;
-
     case EDA_PANNING_UP_KEY:
         OnZoom( ID_ZOOM_PANNING_UP );
         curpos = m_CurrentScreen->m_Curseur;
@@ -281,49 +236,18 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         break;
 
 	case EDA_ZOOM_IN_FROM_MOUSE:
-    case WXK_F1:
         OnZoom( ID_ZOOM_PLUS_KEY );
         oldpos = curpos = GetScreen()->m_Curseur;
         break;
 
 	case EDA_ZOOM_OUT_FROM_MOUSE:
-    case WXK_F2:
         OnZoom( ID_ZOOM_MOINS_KEY );
         oldpos = curpos = GetScreen()->m_Curseur;
         break;
 
-    case WXK_F3:
-        OnZoom( ID_ZOOM_REDRAW_KEY );
-        break;
-
 	case EDA_ZOOM_CENTER_FROM_MOUSE:
-    case WXK_F4:
         OnZoom( ID_ZOOM_CENTER_KEY );
         oldpos = curpos = GetScreen()->m_Curseur;
-        break;
-
-    case WXK_F5:
-        SwitchLayer( DC, LAYER_N_2 );
-        break;
-
-    case WXK_F6:
-        SwitchLayer( DC, LAYER_N_3 );
-        break;
-
-    case WXK_F7:
-        SwitchLayer( DC, LAYER_N_4 );
-        break;
-
-    case WXK_F8:
-        SwitchLayer( DC, LAYER_N_5 );
-        break;
-
-    case WXK_F9:
-        SwitchLayer( DC, LAYER_N_6 );
-        break;
-
-    case WXK_F10:
-        SwitchLayer( DC, LAYER_N_7 );
         break;
 
     case WXK_NUMPAD8:       /* Deplacement curseur vers le haut */

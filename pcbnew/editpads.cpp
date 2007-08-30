@@ -160,12 +160,6 @@ int tmp;
 			m_PadSizeCtrl->Enable(TRUE, TRUE);
 			m_PadShape->SetSelection(3);
 			break;
-
-		case SPECIAL_PAD:
-			m_PadDeltaSizeCtrl->Enable(FALSE, FALSE);
-			m_PadSizeCtrl->Enable(TRUE, TRUE);
-			m_PadShape->SetSelection(4);
-			break;
 		}
 
 	// Selection du type
@@ -415,9 +409,6 @@ bool error = FALSE;
 				break;
 
 			case TRAPEZE:
-				break;
-
-			case SPECIAL_PAD:
 				break;
 		}
 

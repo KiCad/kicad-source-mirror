@@ -25,6 +25,8 @@
 #include  "wx/ownerdrw.h"
 #include  "wx/menuitem.h"
 
+#include "hotkeys.h"
+
 #define MUWAVE_ENBL
 
 #include "mw_Add_Stub.xpm"
@@ -50,7 +52,7 @@
         "Show active layer selections\nand select layer pair for route and place via" )
 
 /* Data to build the layer pair indicator button */
-static wxBitmap* LayerPairBitmap = NULL;
+static wxBitmap*  LayerPairBitmap = NULL;
 static const char s_BitmapLayerIcon[16][16] = {
     // 0 = draw pixel with active layer color
     // 1 = draw pixel with top layer color (top/bottom layer used in autoroute and place via)
@@ -166,7 +168,7 @@ void WinEDA_PcbFrame::PrepareLayerIndicator( void )
                     ColorRefs[color].m_Red,
                     ColorRefs[color].m_Green,
                     ColorRefs[color].m_Blue
-                );
+                    );
                 iconDC.SetPen( pen );
             }
             iconDC.DrawPoint( jj, ii );
@@ -199,9 +201,10 @@ void WinEDA_PcbFrame::PrepareLayerIndicator( void )
 void WinEDA_PcbFrame::ReCreateHToolbar( void )
 /******************************************/
 
-// Create the main horizontal toolbar
+/* Create the main horizontal toolbar for the board editor */
 {
-    int ii;
+    int      ii;
+    wxString msg;
 
     if( m_HToolBar != NULL )
     {           // simple mise a jour de la liste des fichiers anciens
@@ -264,19 +267,25 @@ void WinEDA_PcbFrame::ReCreateHToolbar( void )
                         _( "Plot (HPGL, PostScript, or GERBER format)" ) );
 
     m_HToolBar->AddSeparator();
+    msg = AddHotkeyName( _( "zoom +" ), s_board_edit_Hotkey_List, HK_ZOOM_IN );
     m_HToolBar->AddTool( ID_ZOOM_PLUS_BUTT, wxEmptyString, BITMAP( zoom_in_xpm ),
-                        _( "zoom + (F1)" ) );
+                         msg );
+
+    msg = AddHotkeyName( _( "zoom -" ), s_board_edit_Hotkey_List, HK_ZOOM_OUT );
     m_HToolBar->AddTool( ID_ZOOM_MOINS_BUTT, wxEmptyString, BITMAP( zoom_out_xpm ),
-                        _( "zoom - (F2)" ) );
+                         msg );
+
+    msg = AddHotkeyName( _( "redraw" ), s_board_edit_Hotkey_List, HK_ZOOM_REDRAW );
     m_HToolBar->AddTool( ID_ZOOM_REDRAW_BUTT, wxEmptyString, BITMAP( repaint_xpm ),
-                        _( "redraw (F3)" ) );
+                         msg );
 
     m_HToolBar->AddTool( ID_ZOOM_PAGE_BUTT, wxEmptyString, BITMAP( zoom_optimal_xpm ),
                         _( "auto zoom" ) );
 
     m_HToolBar->AddSeparator();
+    msg = AddHotkeyName( _( "Find components and texts" ), s_board_edit_Hotkey_List, HK_FIND_ITEM );
     m_HToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, BITMAP( find_xpm ),
-                        _( "Find components and texts (Ctrl-F)" ) );
+                         msg );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_GET_NETLIST, wxEmptyString, BITMAP( netlist_xpm ),
@@ -499,7 +508,7 @@ void WinEDA_PcbFrame::ReCreateAuxVToolbar( void )
                             wxNullBitmap, TRUE,
                             -1, -1, (wxObject*) NULL,
                             _( "Create stub (arc) of specified length for microwave applications" )
-    );
+                            );
 
     m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_FUNCTION_SHAPE_CMD,
                            BITMAP( mw_Add_Shape_xpm ),

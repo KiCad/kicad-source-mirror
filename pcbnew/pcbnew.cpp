@@ -58,6 +58,10 @@ bool WinEDA_App::OnInit( void )
 
     Read_Config( FFileName );
     g_DrawBgColor = BLACK;
+    Read_Hotkey_Config( m_PcbFrame, false );  /* Must be called before creating the main frame
+                                               *  in order to display the real hotkeys
+                                               *  in menus or tool tips */
+
 
     /* allocation de la memoire pour le fichier et autres buffers: */
     /* On reserve BUFMEMSIZE octets de ram pour calcul */
@@ -79,7 +83,6 @@ bool WinEDA_App::OnInit( void )
 
     SetTopWindow( m_PcbFrame );
     m_PcbFrame->Show( TRUE );
-	Read_Hotkey_Config(m_PcbFrame, false);
 
     if( CreateServer( m_PcbFrame, KICAD_PCB_PORT_SERVICE_NUMBER ) )
     {

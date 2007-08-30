@@ -174,9 +174,8 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, wxDC* DC, boo
     else
         GetScreen()->m_FileName = FullFileName;
 
-    /////////////////////////
-    /* Lecture Fichier PCB */
-    /////////////////////////
+    /* Start read PCB file
+	*/
 
     source = wxFopen( GetScreen()->m_FileName, wxT( "rt" ) );
     if( source == NULL )
@@ -187,7 +186,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, wxDC* DC, boo
     }
 
 
-    /* Lecture de l'entete et TEST si PCB format ASCII */
+    /* Read header and TEST if it is a PCB file format */
     GetLine( source, cbuf, &ii );
     if( strncmp( cbuf, "PCBNEW-BOARD", 12 ) != 0 )
     {
@@ -199,7 +198,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, wxDC* DC, boo
     SetTitle( GetScreen()->m_FileName );
     SetLastProject( GetScreen()->m_FileName );
 
-    // Rechargement de la configuration:
+    // Reload the corresponding configuration file:
     wxSetWorkingDirectory( wxPathOnly( GetScreen()->m_FileName ) );
     if( Append )
         ReadPcbFile( DC, source, TRUE );
@@ -207,7 +206,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, wxDC* DC, boo
     {
         Read_Config( GetScreen()->m_FileName );
 
-        // Mise a jour du toolbar d'options
+        // Update the option toolbar
         m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
         m_DisplayModText = DisplayOpt.DisplayModText;
         m_DisplayModEdge = DisplayOpt.DisplayModEdge;
@@ -227,11 +226,12 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, wxDC* DC, boo
                   wxGetCwd().GetData(), DIR_SEP, PcbExtBuffer.GetData() );
     }
 
-    /* liste des pads recalculee avec Affichage des messages d'erreur */
+    /* Rebuild the new pad list (for drc and ratsnet control ...) */
     build_liste_pads();
 
     m_Pcb->Display_Infos( this );
 
+	/* reset the auto save timer */
     g_SaveTime = time( NULL );
 
     
