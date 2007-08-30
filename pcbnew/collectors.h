@@ -32,14 +32,25 @@
 
 
 #include "class_collector.h"
+#include "pcbstruct.h"              // LAYER_COUNT, layer defs
 
 
 /**
  * Class COLLECTORS_GUIDE
- * is an abstract base class that may be passed to a GENERALCOLLECTOR, telling
- * it what should be collected (aside from HitTest()ing and KICAD_T scanTypes[], 
- * information which are provided to the GENERALCOLLECTOR through attributes or
- * arguments separately). 
+ * is an abstract base class whose derivatives may be passed to a GENERALCOLLECTOR, 
+ * telling GENERALCOLLECTOR what should be collected (aside from HitTest()ing 
+ * and KICAD_T scanTypes[], information which are provided to the GENERALCOLLECTOR 
+ * through attributes or arguments separately). 
+ * <p>
+ * A justification for this class is to keep the structural storage details of
+ * the program's "global preferences" or "configuration options" out of 
+ * GENERAL_COLLECTOR::Inspect().  This class carries all the necessary details
+ * in with it to the Inspect() call. The constructors or other functions of
+ * this class's derivatives are then the only place where knowledge of the
+ * specific structure of the global preference storage is needed.  Thus, 
+ * GENERAL_COLLECTOR::Inspect() can be kept as simple as possible, and insulated 
+ * from changes in global preference storage (and even then it is 
+ * not simple enough).
  * <p>
  * This class introduces the notion of layer locking.
  */
@@ -56,18 +67,6 @@ public:
     virtual     bool IsLayerLocked( int layer ) const = 0;
     
     /**
-     * Function IsCopperLayerVisible
-     * @return bool - true if the copper layer is visible.
-     */
-    virtual     bool IsCopperLayerVisible() const = 0;
- 
-    /**
-     * Function IsComponentLayerVisible
-     * @return bool - true if the component layer is visible, else false.
-     */
-    virtual     bool IsComponentLayerVisible() const = 0;
-    
-    /**
      * Function IsLayerVisible
      * @return bool - true if the given layer is visible, else false.
      */
@@ -75,7 +74,7 @@ public:
     
     /**
      * Function IgnoreLockedLayers
-     * @return bool - true if should ignored locked layers, else false.
+     * @return bool - true if should ignore locked layers, else false.
      */
     virtual     bool IgnoreLockedLayers() const = 0;
     
@@ -90,15 +89,43 @@ public:
      * @return int - the preferred layer for HitTest()ing.
      */
     virtual     int GetPreferredLayer() const = 0;
+
+    /**
+     * Function IgnorePreferredLayer
+     * provides wildcard behavior regarding the preferred layer.
+     * @return bool - true if should ignore preferred layer, else false.
+     */
+    virtual     bool IgnorePreferredLayer() const = 0;
+
+    /**
+     * Function IgnoreLockedItems
+     * @return bool - true if should ignore locked items, else false.
+     */
+    virtual     bool IgnoreLockedItems() const = 0;
+
+
+    /**
+     * Function IncludeSecondary
+     * determines if the secondary criteria, or 2nd choice items should be
+     * included.
+     * @return bool - true if should include, else false.
+     */
+    virtual     bool IncludeSecondary() const = 0;
     
     
-    // more soon
+    /**
+     * Function UseHitTesting
+     * @return bool - true if Inspect() should use BOARD_ITEM::HitTest()
+     *             or false if Inspect() should use BOARD_ITEM::BoundsTest().
+    virtual     bool UseHitTesting() const = 0;
+     */
+    
 };
 
 
 
 /**
- * Class GENERALCOLLECTOR
+ * Class GENERAL_COLLECTOR
  * is intended for use when the right click button is pressed, or when the 
  * plain "arrow" tool is in effect.  This class can be used by window classes
  * such as WinEDA_PcbFrame.
@@ -108,23 +135,23 @@ public:
  * but can handle those concerns by the SetPreferredLayer() function and the
  * SetLayerMask() fuction.
  */
-class GENERALCOLLECTOR : public COLLECTOR
+class GENERAL_COLLECTOR : public COLLECTOR
 {
+protected:    
     /**
      * A place to hold collected objects which don't match precisely the search 
      * criteria, but would be acceptable if nothing else is found. 
      * "2nd" choice, which will be appended to the end of COLLECTOR's prime 
      * "list" at the end of the search.
      */
-    std::vector<BOARD_ITEM*>    list2nd;
+    std::vector<BOARD_ITEM*>    m_List2nd;
     
-
+    
     /**
-     * A bit-mapped layer mask that defines any layers which are acceptable 
-     * on a secondary search criterion basis.
+     * Determines which items are to be collected by Inspect()
      */
-    int             m_LayerMask;
-    
+    const COLLECTORS_GUIDE*    m_Guide;
+
     
 public:
 
@@ -135,22 +162,29 @@ public:
     /**
      * Constructor GENERALCOLLECTOR
      */ 
-    GENERALCOLLECTOR()
+    GENERAL_COLLECTOR()
     {
-        m_LayerMask = 0;
         SetScanTypes( AllBoardItems );
     }
 
     void Empty2nd()
     {
-        list2nd.clear();
+        m_List2nd.clear();
     }
 
     void Append2nd( BOARD_ITEM* item )
     {
-        list2nd.push_back( item );
+        m_List2nd.push_back( item );
     }
 
+
+    /**
+     * Function SetGuide
+     * records which COLLECTORS_GUIDE to used.
+     * @param aGuide Which guide to use in the collection.
+     */
+    void SetGuide( const COLLECTORS_GUIDE* aGuide ) { m_Guide = aGuide; }
+    
     
     /**
      * Function SetLayerMask
@@ -164,11 +198,11 @@ public:
      *  layers are acceptable.  Caller must pay attention to which layers are
      *  visible, selected, etc.  All those concerns are handled outside this
      *  class, as stated in the class Philosophy above.
-     */
     void SetLayerMask( int aLayerMask )
     {
         m_LayerMask = aLayerMask;
     }
+     */
 
     
     /**
@@ -181,7 +215,7 @@ public:
     BOARD_ITEM* operator[]( int ndx ) const
     {
         if( (unsigned)ndx < (unsigned)GetCount() )
-            return (BOARD_ITEM*) list[ ndx ];
+            return (BOARD_ITEM*) m_List[ ndx ];
         return NULL;
     }
 
@@ -200,25 +234,154 @@ public:
     
     
     /**
-     * Function Scan
+     * Function Collect
      * scans a BOARD using this class's Inspector method, which does the collection.
      * @param board A BOARD to scan.
      * @param refPos A wxPoint to use in hit-testing.
      * @param aPreferredLayer The layer meeting the primary search criterion.
      * @param aLayerMask The layers, in bit-mapped form, meeting the secondary search criterion.
+    void Collect( BOARD* board, const wxPoint& refPos, int aPreferredLayer, int aLayerMask );
      */
-    void Scan( BOARD* board, const wxPoint& refPos, int aPreferredLayer, int aLayerMask );
 
     
     /**
-     * Function Scan
+     * Function Collect
      * scans a BOARD using this class's Inspector method, which does the collection.
-     * @param board A BOARD to scan.
-     * @param refPos A wxPoint to use in hit-testing.
-     * @param guide The COLLECTORS_GUIDE to use in collecting items.
+     * @param aBoard A BOARD to scan.
+     * @param aRefPos A wxPoint to use in hit-testing.
+     * @param aGuide The COLLECTORS_GUIDE to use in collecting items.
      */
-    void Scan( BOARD* board, const wxPoint& refPos, const COLLECTORS_GUIDE& guide ); 
+    void Collect( BOARD* aBoard, const wxPoint& aRefPos, const COLLECTORS_GUIDE* aGuide ); 
 };
 
+
+/**
+ * Class GENERAL_COLLECTORS_GUIDE
+ * is a general implementation of a COLLECTORS_GUIDE.  One of its constructors is
+ * entitled to grab information from the program's global preferences.
+ */ 
+class GENERAL_COLLECTORS_GUIDE : public COLLECTORS_GUIDE
+{
+private:
+    // the storage architecture here is not important, since this is only 
+    // a carrier object and its functions are what is used, and data only indirectly.
+    
+    int     m_PreferredLayer;
+    bool    m_IgnorePreferredLayer;
+    
+    int     m_LayerLocked;                  ///< bit-mapped layer locked bits
+    bool    m_IgnoreLockedLayers;
+
+    int     m_LayerVisible;                 ///< bit-mapped layer visible bits    
+    bool    m_IgnoreNonVisibleLayers;
+    
+    bool    m_IgnoreLockedItems;    
+    bool    m_IncludeSecondary;
+    
+public:
+
+    /**
+     * Constructor GENERAL_COLLECTORS_GUIDE
+     * grabs stuff from global preferences and uses reasonable defaults.
+     * Add more constructors as needed.
+     * @param settings The EDA_BoardDesignSettings to reference.
+     */
+    GENERAL_COLLECTORS_GUIDE( const EDA_BoardDesignSettings* settings )
+    {
+        m_PreferredLayer            = LAYER_CMP_N;
+        m_IgnorePreferredLayer      = false;
+        m_LayerLocked               = 0;
+        m_LayerVisible              = settings->GetVisibleLayers();    
+        m_IgnoreLockedLayers        = true;
+        m_IgnoreNonVisibleLayers    = true;
+        m_IgnoreLockedItems         = true;
+        
+#if defined(USE_MATCH_LAYER)
+        m_IncludeSecondary          = false;
+#else        
+        m_IncludeSecondary          = true;
+#endif        
+    }
+    
+    /**
+     * Function IsLayerLocked
+     * @return bool - true if the given layer is locked, else false.
+     */
+    bool IsLayerLocked( int aLayer ) const  {  return (1<<aLayer) & m_LayerLocked; }
+    void SetLayerLocked( int aLayer, bool isLocked ) 
+    {
+        if( isLocked )
+            m_LayerLocked |= 1 << aLayer;
+        else
+            m_LayerLocked &= ~(1 << aLayer);
+    }
+
+    
+    /**
+     * Function IsLayerVisible
+     * @return bool - true if the given layer is visible, else false.
+     */
+    bool IsLayerVisible( int aLayer ) const { return (1<<aLayer) & m_LayerVisible; }
+    void SetLayerVisible( int aLayer, bool isVisible )
+    {
+        if( isVisible )
+            m_LayerVisible |= 1 << aLayer;
+        else
+            m_LayerVisible &= ~(1 << aLayer);
+    }
+    void SetLayerVisibleBits( int aLayerBits ) { m_LayerVisible = aLayerBits; }
+
+    
+    /**
+     * Function IgnoreLockedLayers
+     * @return bool - true if should ignore locked layers, else false.
+     */
+    bool IgnoreLockedLayers() const { return m_IgnoreLockedLayers; }
+    void SetIgnoreLockedLayers( bool ignore ) { m_IgnoreLockedLayers = ignore; }
+     
+    
+    /**
+     * Function IgnoredNonVisibleLayers
+     * @return bool - true if should ignore non-visible layers, else false.
+     */
+    bool IgnoreNonVisibleLayers() const { return m_IgnoreNonVisibleLayers; }
+    void SetIgnoreNonVisibleLayers( bool ignore ) { m_IgnoreLockedLayers = ignore; }
+
+    
+    /**
+     * Function GetPreferredLayer
+     * @return int - the preferred layer for HitTest()ing.
+     */
+    int GetPreferredLayer() const { return m_PreferredLayer; }
+    void SetPreferredLayer( int aLayer )  { m_PreferredLayer = aLayer; }
+
+    
+    /**
+     * Function IgnorePreferredLayer
+     * provides wildcard behavior regarding the preferred layer.
+     * @return bool - true if should ignore preferred layer, else false.
+     */
+    bool IgnorePreferredLayer() const { return  m_IgnorePreferredLayer; }
+    void SetIgnorePreferredLayer( bool ignore )  { m_IgnorePreferredLayer = ignore; }
+    
+
+    /**
+     * Function IgnoreLockedItems
+     * @return bool - true if should ignore locked items, else false.
+     */
+    bool IgnoreLockedItems() const  { return m_IgnoreLockedItems; }
+    void SetIgnoreLockedItems( bool ignore ) { m_IgnoreLockedItems = ignore; }
+
+
+    /**
+     * Function IncludeSecondary
+     * determines if the secondary criteria, or 2nd choice items should be
+     * included.
+     * @return bool - true if should include, else false.
+     */
+    bool IncludeSecondary() const  { return m_IncludeSecondary; }
+    void SetIncludeSecondary( bool include ) { m_IncludeSecondary = include; } 
+    
+};
 
 #endif // COLLECTORS_H

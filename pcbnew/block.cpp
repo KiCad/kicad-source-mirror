@@ -1288,7 +1288,8 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
         {
             next_track = track->Next();
             if( IsSegmentInBox( GetScreen()->BlockLocate, track ) )
-            {  /* la piste est ici bonne a etre deplacee */
+            {  
+                /* la piste est ici bonne a etre deplacee */
                 new_track = new TRACK( m_Pcb );
                 new_track = track->Copy( 1 );
                 new_track->Insert( m_Pcb, NULL );

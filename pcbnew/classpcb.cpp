@@ -432,7 +432,7 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings( void )
 
 
 // see pcbstruct.h
-int EDA_BoardDesignSettings::GetVisibleLayers()
+int EDA_BoardDesignSettings::GetVisibleLayers() const
 {
     int layerMask = 0;
     

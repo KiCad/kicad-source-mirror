@@ -34,7 +34,7 @@
 
 
 // see collectors.h
-const KICAD_T GENERALCOLLECTOR::AllBoardItems[] = {
+const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     TYPETEXTE, 
     TYPEDRAWSEGMENT, 
     TYPECOTATION,
@@ -59,7 +59,7 @@ const KICAD_T GENERALCOLLECTOR::AllBoardItems[] = {
  * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
  *   else SCAN_CONTINUE;
  */ 
-SEARCH_RESULT GENERALCOLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* notUsed )
+SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* notUsed )
 {
     BOARD_ITEM* item = (BOARD_ITEM*) testItem;
 
@@ -94,7 +94,12 @@ SEARCH_RESULT GENERALCOLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* n
             }
             break;
     case TYPEMODULE:
-            breakhere++;
+            MODULE* m;
+            m = (MODULE*) item;
+            if( m->GetReference() == wxT("L1") )
+            {
+                breakhere++;
+            }
             break;
     default:
             breakhere++;
@@ -102,47 +107,96 @@ SEARCH_RESULT GENERALCOLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* n
     }
 #endif
     
-    switch( item->m_StructType )
+
+#if 1
+
+/*
+    int     m_PreferredLayer;             x
+    bool    m_IgnorePreferredLayer    
+    int     m_LayerVisible;               x
+    bool    m_IgnoreNonVisibleLayers;
+    
+    int     m_LayerLocked;                x
+    bool    m_IgnoreLockedLayers;
+    
+    bool    m_IgnoreLockedItems;          x
+    
+    bool    m_IncludeSecondary;
+*/    
+   
+    if( item->IsOnLayer( m_Guide->GetPreferredLayer() ) || m_Guide->IgnorePreferredLayer() )
     {
-    case TYPEPAD:
-    case TYPEVIA:
-    case TYPETRACK:
-    case TYPETEXTE: 
-    case TYPEDRAWSEGMENT: 
-    case TYPECOTATION:
-    case TYPETEXTEMODULE:
-    case TYPEMODULE:
+        int layer = item->GetLayer();
         
-        // The primary search criteria:
-        if( item->IsOnLayer( m_PreferredLayer ) )
+        if(  m_Guide->IsLayerVisible( layer ) || !m_Guide->IgnoreNonVisibleLayers() )
         {
-            if( item->HitTest( m_RefPos ) )
+            if( !m_Guide->IsLayerLocked(layer) || !m_Guide->IgnoreLockedLayers() )
             {
-                if( !item->IsLocked() )
-                    Append( item );
-                else
-                    Append2nd( item );      // 2nd if locked.
+                if( !item->IsLocked() || !m_Guide->IgnoreLockedItems() )
+                {
+                    if( item->HitTest( m_RefPos ) )
+                    {
+                        Append( item );
+                        goto exit;
+                    }
+                }
             }
         }
-        
-        // The secondary search criteria
-        else if( item->IsOnOneOfTheseLayers( m_LayerMask ) )
-        {
-            if( item->HitTest( m_RefPos ) )
-                Append2nd( item );
-        }
-        break;
-        
-    default:
-        printf("OOPS, not expecting class type %d\n", item->m_StructType );
     }
 
-    return SEARCH_CONTINUE;
+    if( m_Guide->IncludeSecondary() )
+    {
+        // for now, "secondary" means "tolerate any layer".  It has
+        // no effect on other criteria, since there is a separate "ignore" control for 
+        // those in the COLLECTORS_GUIDE
+        
+        int layer = item->GetLayer();
+        
+        if(  m_Guide->IsLayerVisible( layer ) || !m_Guide->IgnoreNonVisibleLayers() )
+        {
+            if( !m_Guide->IsLayerLocked(layer) || !m_Guide->IgnoreLockedLayers() )
+            {
+                if( !item->IsLocked() || !m_Guide->IgnoreLockedItems() )
+                {
+                    if( item->HitTest( m_RefPos ) )
+                    {
+                        Append2nd( item );
+                        goto exit;
+                    }
+                }
+            }
+        }
+    }
+    
+#else
+    // The primary search criteria:
+    if( item->IsOnLayer( m_PreferredLayer ) )
+    {
+        if( item->HitTest( m_RefPos ) )
+        {
+            if( !item->IsLocked() )
+                Append( item );
+            else
+                Append2nd( item );      // 2nd if locked.
+        }
+    }
+    
+    // The secondary search criteria
+    else if( item->IsOnOneOfTheseLayers( m_LayerMask ) )
+    {
+        if( item->HitTest( m_RefPos ) )
+            Append2nd( item );
+    }
+#endif        
+
+exit:
+    return SEARCH_CONTINUE;     // always when collecting
 }
 
 
-// see collectors.h 
-void GENERALCOLLECTOR::Scan( BOARD* board, const wxPoint& refPos, 
+// see collectors.h
+/*
+void GENERAL_COLLECTOR::Collect( BOARD* board, const wxPoint& refPos, 
                           int aPreferredLayer, int aLayerMask )
 {
     Empty();        // empty the collection, primary criteria list
@@ -151,9 +205,7 @@ void GENERALCOLLECTOR::Scan( BOARD* board, const wxPoint& refPos,
     SetPreferredLayer( aPreferredLayer );
     SetLayerMask( aLayerMask );
     
-    /*  remember where the snapshot was taken from and pass refPos to
-        the Inspect() function.
-    */        
+    //  remember refPos, pass to Inspect()
     SetRefPos( refPos );
 
 #if defined(DEBUG)
@@ -173,25 +225,23 @@ void GENERALCOLLECTOR::Scan( BOARD* board, const wxPoint& refPos,
     
     Empty2nd();
 }
+*/
 
 
 // see collectors.h 
-void GENERALCOLLECTOR::Scan( BOARD* board, const wxPoint& refPos, 
-                            const COLLECTORS_GUIDE& guide )
+void GENERAL_COLLECTOR::Collect( BOARD* board, const wxPoint& refPos, 
+                            const COLLECTORS_GUIDE* guide )
 {
     Empty();        // empty the collection, primary criteria list
     Empty2nd();     // empty the collection, secondary criteria list
 
+    // remember guide, pass it to Inspect()
+    SetGuide( guide );
     
-    // @todo: remember the guide here, pass it to Inspect()
-        
-    
-    /*  remember where the snapshot was taken from and pass refPos to
-        the Inspect() function.
-    */        
+    // remember where the snapshot was taken from and pass refPos to
+    // the Inspect() function.
     SetRefPos( refPos );
 
-    
     // visit the board with the INSPECTOR (me).
     board->Visit(   this,       // INSPECTOR* inspector
                     NULL,       // const void* testData, not used here 
@@ -199,12 +249,30 @@ void GENERALCOLLECTOR::Scan( BOARD* board, const wxPoint& refPos,
     
     SetTimeNow();               // when snapshot was taken
     
-    // append 2nd list onto end of the first "list" 
-    for( unsigned i=0;  i<list2nd.size();  ++i )
-        Append( list2nd[i] );
+    // append 2nd list onto end of the first list 
+    for( unsigned i=0;  i<m_List2nd.size();  ++i )
+        Append( m_List2nd[i] );
     
     Empty2nd();
 }
+
+
+/** is still inline
+ * Constructor GENERAL_COLLECTORS_GUIDE
+ * grabs stuff from global preferences and uses reasonable defaults.
+ * Add more constructors as needed.
+GENERAL_COLLECTORS_GUIDE::GENERAL_COLLECTORS_GUIDE()
+{
+    
+    m_LayerLocked;    
+    m_LayerVisible;       
+    m_IgnoreLockedLayers;
+    m_IgnoreNonVisibleLayers;
+    m_PreferredLayer;    
+    m_IgnoreLockedItems;    
+    m_IncludeSecondary;
+}
+ */
 
 
 #endif  // DEBUG

@@ -53,13 +53,14 @@ SEGVIA::SEGVIA( BOARD_ITEM* StructFather ) :
 TRACK::TRACK( const TRACK& Source ) :
     BOARD_ITEM( (const BOARD_ITEM&) Source )
 {
-    m_StructType = Source.m_StructType;
+//    m_StructType = Source.m_StructType;
+//    m_Layer = Source.m_Layer;
+
     m_Shape     = Source.m_Shape;
     m_NetCode   = Source.m_NetCode;
     m_Flags     = Source.m_Flags;
     m_TimeStamp = Source.m_TimeStamp;
     SetStatus( Source.ReturnStatus() );
-    m_Layer = Source.m_Layer;
     m_Start = Source.m_Start;
     m_End   = Source.m_End;
     m_Width = Source.m_Width;
@@ -70,7 +71,7 @@ TRACK::TRACK( const TRACK& Source ) :
 
 
 /***********************/
-bool TRACK::IsNull( void )
+bool TRACK::IsNull()
 /***********************/
 
 // return TRUE if segment length = 0
@@ -134,36 +135,56 @@ int TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
 }
 
 
-/******************************************/
-bool SEGVIA::IsViaOnLayer( int layer_number )
-/******************************************/
+// see class_track.h
+// SEGVIA and SEGZONE inherit this version
+SEARCH_RESULT TRACK::Visit( INSPECTOR* inspector, const void* testData, 
+        const KICAD_T scanTypes[] )
+{
+    KICAD_T     stype = *scanTypes;
 
-/* Retoune TRUE si Via sur layer layer_number
- */
+#if 0 && defined(DEBUG)
+    std::cout <<  GetClass().mb_str() << ' ';
+#endif
+    
+    // If caller wants to inspect my type
+    if( stype == m_StructType )
+    {
+        if( SEARCH_QUIT == inspector->Inspect( this, testData ) )
+            return SEARCH_QUIT;
+    }
+
+    return SEARCH_CONTINUE;    
+}
+
+
+// see class_track.h
+bool SEGVIA::IsOnLayer( int layer_number ) const
 {
     int via_type = Shape();
 
     if( via_type == VIA_NORMALE )
     {
         if( layer_number <= LAYER_CMP_N )
-            return TRUE;
+            return true;
         else
-            return FALSE;
+            return false;
     }
 
     // VIA_BORGNE ou  VIA_ENTERREE:
 
     int bottom_layer, top_layer;
+    
     ReturnLayerPair( &top_layer, &bottom_layer );
-    if( (bottom_layer <= layer_number) && (top_layer >= layer_number) )
-        return TRUE;
+    
+    if( bottom_layer <= layer_number && top_layer >= layer_number )
+        return true;
     else
-        return FALSE;
+        return false;
 }
 
 
 /***********************************/
-int TRACK::ReturnMaskLayer( void )
+int TRACK::ReturnMaskLayer()
 /***********************************/
 
 /* Retourne le masque (liste bit a bit ) des couches occupees par le segment
@@ -217,7 +238,7 @@ void SEGVIA::SetLayerPair( int top_layer, int bottom_layer )
 
 
 /***************************************************************/
-void SEGVIA::ReturnLayerPair( int* top_layer, int* bottom_layer )
+void SEGVIA::ReturnLayerPair( int* top_layer, int* bottom_layer ) const
 /***************************************************************/
 
 /* Retourne les 2 couches limitant la via
@@ -239,7 +260,7 @@ void SEGVIA::ReturnLayerPair( int* top_layer, int* bottom_layer )
 /* supprime du chainage la structure Struct
  *  les structures arrieres et avant sont chainees directement
  */
-void TRACK::UnLink( void )
+void TRACK::UnLink()
 {
     /* Modification du chainage arriere */
     if( Pback )
@@ -503,15 +524,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
 
     if( DisplayOpt.ContrastModeDisplay )
     {
-        if( m_StructType == TYPEVIA )
-        {
-            if( !( (SEGVIA*) this )->IsViaOnLayer( curr_layer ) )
-            {
-                color &= ~MASKCOLOR;
-                color |= DARKDARKGRAY;
-            }
-        }
-        else if( m_Layer != curr_layer )
+        if( !IsOnLayer( curr_layer ) )
         {
             color &= ~MASKCOLOR;
             color |= DARKDARKGRAY;

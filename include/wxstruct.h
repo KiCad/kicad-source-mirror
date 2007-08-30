@@ -96,7 +96,7 @@ class WinEDA3D_DrawFrame;
 class PARAM_CFG_BASE;
 class Ki_PageDescr;
 class Ki_HotkeyInfo;
-class GENERALCOLLECTOR;
+class GENERAL_COLLECTOR;
 
 
 enum id_librarytype {
@@ -374,7 +374,7 @@ private:
 
 #if defined(DEBUG)
 protected:
-    GENERALCOLLECTOR*  m_Collector;
+    GENERAL_COLLECTOR*  m_Collector;
 #endif
    
     

@@ -175,14 +175,14 @@ public:
     int    m_RatsnestColor;                     // Ratsnest color
 
 public:
-    EDA_BoardDesignSettings( void );
+    EDA_BoardDesignSettings();
     
     /**
      * Function GetVisibleLayers
      * returns a bit-map of all the layers that are visible.
      * @return int - the visible layers in bit-mapped form.
      */
-    int     GetVisibleLayers();
+    int    GetVisibleLayers() const;
 };
 
 
@@ -226,20 +226,20 @@ public:
                                                  * de delimitation de la zone en cours de trace */
 
     BOARD( EDA_BaseStruct* StructFather, WinEDA_BasePcbFrame* frame );
-    ~BOARD( void );
+    ~BOARD();
 
     /* supprime du chainage la structure Struct */
-    void    UnLink( void );
+    void    UnLink();
 
     /* Routines de calcul des nombres de segments pistes et zones */
-    int     GetNumSegmTrack( void );
-    int     GetNumSegmZone( void );
-    int     GetNumNoconnect( void );    // retourne le nombre de connexions manquantes
-    int     GetNumRatsnests( void );    // retourne le nombre de chevelus
-    int     GetNumNodes( void );        // retourne le nombre de pads a netcode > 0
+    int     GetNumSegmTrack();
+    int     GetNumSegmZone();
+    int     GetNumNoconnect();    // retourne le nombre de connexions manquantes
+    int     GetNumRatsnests();    // retourne le nombre de chevelus
+    int     GetNumNodes();        // retourne le nombre de pads a netcode > 0
 
     // Calcul du rectangle d'encadrement:
-    bool    ComputeBoundaryBox( void );
+    bool    ComputeBoundaryBox();
 
     
     /**
@@ -247,9 +247,9 @@ public:
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
      * Is virtual from EDA_BaseStruct.
-     * @param frame A WinEDA_BasePcbFrame in which to print status information.
+     * @param frame A WinEDA_DrawFrame in which to print status information.
      */ 
-    void            Display_Infos( WinEDA_DrawFrame* frame );
+    void    Display_Infos( WinEDA_DrawFrame* frame );
     
     
     /**
@@ -284,10 +284,10 @@ public:
     /**
      * Function FindNet
      * searches for a net with the given netcode.
-     * @param anetcode A netcode to search for.
+     * @param aNetcode A netcode to search for.
      * @return EQUIPOT* - the net or NULL if not found.
      */
-    EQUIPOT* FindNet( int anetcode );
+    EQUIPOT* FindNet( int aNetcode );
     
     
 #if defined(DEBUG)
@@ -305,11 +305,11 @@ public:
      * Function Show
      * is used to output the object tree, currently for debugging only.
      * @param nestLevel An aid to prettier tree indenting, and is the level 
-     *          of nesting of this object within the overall tree.
+     *  of nesting of this object within the overall tree.
      * @param os The ostream& to output to.
      */
     void Show( int nestLevel, std::ostream& os );
-
+    
 #endif
 };
 
@@ -324,12 +324,12 @@ public:
 
 public:
     PCB_SCREEN( int idscreen );
-    ~PCB_SCREEN( void );
-    PCB_SCREEN* Next( void ) { return (PCB_SCREEN*) Pnext; }
-    void    Init( void );
-    void    SetNextZoom( void );
-    void    SetPreviousZoom( void );
-    void    SetLastZoom( void );
+    ~PCB_SCREEN();
+    PCB_SCREEN* Next() { return (PCB_SCREEN*) Pnext; }
+    void    Init();
+    void    SetNextZoom();
+    void    SetPreviousZoom();
+    void    SetLastZoom();
 };
 
 /***************************/
@@ -360,14 +360,14 @@ public:
 
 public:
     DRAWSEGMENT( BOARD_ITEM* StructFather, KICAD_T idtype = TYPEDRAWSEGMENT );
-    ~DRAWSEGMENT( void );
+    ~DRAWSEGMENT();
 
     // Read/write data
     bool    WriteDrawSegmentDescr( FILE* File );
     bool    ReadDrawSegmentDescr( FILE* File, int* LineNum );
 
     /* supprime du chainage la structure Struct */
-    void    UnLink( void );
+    void    UnLink();
 
     void    Copy( DRAWSEGMENT* source );
 
@@ -419,7 +419,7 @@ class EDGE_ZONE : public DRAWSEGMENT
 public:
     EDGE_ZONE( BOARD_ITEM* StructFather );
     EDGE_ZONE( const EDGE_ZONE& edgezone );
-    ~EDGE_ZONE( void );
+    ~EDGE_ZONE();
 };
 
 
@@ -439,8 +439,8 @@ public:
 
 public:
     MARQUEUR( BOARD_ITEM* StructFather );
-    ~MARQUEUR( void );
-    void    UnLink( void );
+    ~MARQUEUR();
+    void    UnLink();
     void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int DrawMode );
 };
 
@@ -471,7 +471,7 @@ public:
     bool ContrastModeDisplay;
 
 public:
-    DISPLAY_OPTIONS( void );
+    DISPLAY_OPTIONS();
 };
 
 

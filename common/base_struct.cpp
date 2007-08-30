@@ -211,7 +211,7 @@ SEARCH_RESULT EDA_BaseStruct::Visit( INSPECTOR* inspector, const void* testData,
 {
     KICAD_T     stype;
 
-#if defined(DEBUG)
+#if 0 && defined(DEBUG)
     std::cout <<  GetClass().mb_str() << ' ';
 #endif
     

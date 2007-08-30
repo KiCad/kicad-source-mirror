@@ -134,9 +134,9 @@ public:
      * Function Display_Infos
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
-     * @param frame A WinEDA_BasePcbFrame in which to print status information.
+     * @param frame A WinEDA_DrawFrame in which to print status information.
      */ 
-    void    Display_Infos( WinEDA_BasePcbFrame* frame );
+    void    Display_Infos( WinEDA_DrawFrame* frame );
 
     
     /**

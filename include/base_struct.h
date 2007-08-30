@@ -160,7 +160,7 @@ private:
     int             m_Status;
 
 private:
-    void InitVars( void );
+    void InitVars();
 
 public:
 
@@ -174,7 +174,7 @@ public:
     int     GetState( int type );
     void    SetState( int type, int state );
 
-    int ReturnStatus( void ) const
+    int ReturnStatus() const
     {
         return m_Status;
     }
@@ -347,11 +347,11 @@ public:
 
 public:
     EDA_TextStruct( const wxString& text = wxEmptyString );
-    virtual ~EDA_TextStruct( void );
-    void    CreateDrawData( void );
+    virtual ~EDA_TextStruct();
+    void    CreateDrawData();
 
-    int     GetLength( void ) { return m_Text.Length(); };
-    int     Pitch( void );/* retourne le pas entre 2 caracteres */
+    int     GetLength() { return m_Text.Length(); };
+    int     Pitch();/* retourne le pas entre 2 caracteres */
     void    Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                   const wxPoint& offset, int color,
                   int draw_mode, int display_mode = FILAIRE, int anchor_color = -1 );
@@ -364,13 +364,13 @@ public:
      */
     bool    HitTest( const wxPoint& ref_pos );
     
-    int     Len_Size( void ); // Return the text lenght in internal units
+    int     Len_Size(); // Return the text lenght in internal units
 };
 
 
 /**
  * Class BOARD_ITEM
- * is an abstract base class for any item which can be embedded within the BOARD
+ * is a base class for any item which can be embedded within the BOARD
  * container class, and therefore instances of derived classes should only be 
  * found in PCBNEW or other programs that use class BOARD and its contents. 
  * The corresponding class in EESCHEMA seems to be DrawPartStruct.
@@ -441,7 +441,7 @@ public:
     
     /**
      * Function IsLocked
-     * @returns bool - true if the object is locked, else false
+     * @return bool - true if the object is locked, else false
      */
     virtual bool IsLocked() const
     {
@@ -469,11 +469,11 @@ public:
 
 public:
     DrawPickedStruct( EDA_BaseStruct* pickedstruct = NULL );
-    ~DrawPickedStruct( void );
+    ~DrawPickedStruct();
     void Place( WinEDA_DrawFrame* frame, wxDC* DC ) { };
-    void DeleteWrapperList( void );
+    void DeleteWrapperList();
 
-    DrawPickedStruct* Next( void ) { return (DrawPickedStruct*) Pnext; }
+    DrawPickedStruct* Next() { return (DrawPickedStruct*) Pnext; }
 };
 
 
@@ -490,27 +490,28 @@ public:
     wxSize  m_Size;     // Rectangle Size
 
 public:
-    EDA_Rect( void ) { };
-    wxPoint Centre( void )
+    EDA_Rect() { };
+    
+    wxPoint Centre()
     {
         return wxPoint( m_Pos.x + (m_Size.x >> 1), m_Pos.y + (m_Size.y >> 1) );
     }
 
 
-    void    Normalize( void );              // Ensure the height ant width are >= 0
+    void    Normalize();              // Ensure the height and width are >= 0
     bool    Inside( const wxPoint& point ); // Return TRUE if point is in Rect
 
     bool Inside( int x, int y ) { return Inside( wxPoint( x, y ) ); }
-    wxSize GetSize( void ) { return m_Size; }
-    int GetX( void ) { return m_Pos.x; }
-    int GetY( void ) { return m_Pos.y; }
-    wxPoint GetOrigin( void ) { return m_Pos; }
-    wxPoint GetPosition( void ) { return m_Pos; }
-    wxPoint GetEnd( void ) { return wxPoint( GetRight(), GetBottom() ); }
-    int GetWidth( void ) { return m_Size.x; }
-    int GetHeight( void ) { return m_Size.y; }
-    int GetRight( void ) { return m_Pos.x + m_Size.x; }
-    int GetBottom( void ) { return m_Pos.y + m_Size.y; }
+    wxSize GetSize() { return m_Size; }
+    int GetX() { return m_Pos.x; }
+    int GetY() { return m_Pos.y; }
+    wxPoint GetOrigin() { return m_Pos; }
+    wxPoint GetPosition() { return m_Pos; }
+    wxPoint GetEnd() { return wxPoint( GetRight(), GetBottom() ); }
+    int GetWidth() { return m_Size.x; }
+    int GetHeight() { return m_Size.y; }
+    int GetRight() { return m_Pos.x + m_Size.x; }
+    int GetBottom() { return m_Pos.y + m_Size.y; }
     void SetOrigin( const wxPoint& pos ) { m_Pos = pos; }
     void SetOrigin( int x, int y ) { m_Pos.x = x; m_Pos.y = y; }
     void SetSize( const wxSize& size ) { m_Size = size; }

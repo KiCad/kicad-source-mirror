@@ -530,7 +530,7 @@ int color;
 			break;
 
 		case RECT :
-		case SPECIAL_PAD:
+//		case SPECIAL_PAD:
 		case TRAPEZE:
 			{
 			int ddx, ddy ;

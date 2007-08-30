@@ -54,15 +54,15 @@ protected:
     /// Which object types to scan
     const KICAD_T*  m_ScanTypes;
 
-    /// The layer that is desired as a primary search criterion
-    int             m_PreferredLayer;
-    
     /// A place to hold collected objects without taking ownership of their memory.
-    std::vector<EDA_BaseStruct*>    list;
+    std::vector<EDA_BaseStruct*>    m_List;
 
-    /// The point at which the snapshot was taken.
+    /// A point to test against, andt that was used to make the collection.
     wxPoint         m_RefPos;
 
+    /// A bounding box to test against, and that was used to make the collection.
+    EDA_Rect        m_RefBox;
+    
     /// The time at which the collection was made.
     int             m_TimeAtCollection;
     
@@ -71,7 +71,6 @@ public:
 
     COLLECTOR()
     {
-        m_PreferredLayer = 0;
         m_ScanTypes      = 0;
     }
 
@@ -80,19 +79,13 @@ public:
     }
 
     
-    void SetPreferredLayer( int aPreferredLayer )
-    {
-        m_PreferredLayer = aPreferredLayer;
-    }
-    
-    
     /**
      * Function GetCount
      * returns the number of objects in the list
      */
     unsigned GetCount() const
     {
-        return list.size();
+        return m_List.size();
     }
 
     
@@ -102,7 +95,7 @@ public:
      */
     void Empty()
     {
-        list.clear();
+        m_List.clear();
     }
 
     
@@ -113,7 +106,7 @@ public:
      */
     void Append( EDA_BaseStruct* item )
     {
-        list.push_back( item );
+        m_List.push_back( item );
     }
 
 
@@ -126,22 +119,23 @@ public:
     EDA_BaseStruct* operator[]( int ndx ) const
     {
         if( (unsigned)ndx < GetCount() )
-            return list[ ndx ];
+            return m_List[ ndx ];
         return NULL;
     }
 
+    
+    /**
+     * Function SetScanTypes
+     * records the list of KICAD_T types to consider for collection by
+     * the Inspect() function.
+     * @param scanTypes An array of KICAD_T, terminated by EOT.  No copy is
+     *  is made of this array (so cannot come from caller's stack).
+     */
     void SetScanTypes( const KICAD_T* scanTypes )
     {
         m_ScanTypes = scanTypes;
     }
     
-    wxPoint GetRefPos() const  {  return m_RefPos; }
-    
-    void SetRefPos( const wxPoint& arefPos )
-    {
-        m_RefPos = arefPos;
-    }
-
     void SetTimeNow()
     {
         m_TimeAtCollection = GetTimeStamp();
@@ -151,6 +145,12 @@ public:
         return m_TimeAtCollection;
     }
 
+    void SetRefPos( const wxPoint& aRefPos )  {  m_RefPos = aRefPos; }
+    const wxPoint& GetRefPos() const  {  return m_RefPos; }
+
+    void SetBoundingBox( const EDA_Rect& aRefBox ) { m_RefBox = aRefBox;  }
+    const EDA_Rect& GetBoundingBox() const {  return m_RefBox; }
+    
     
     /**
      * Function IsSimilarPointAndTime
@@ -196,28 +196,56 @@ public:
     
 
     /**
-     * Function Scan
-     * scans a BOARD using this class's Inspector method, which does the collection.
-     * @param board A BOARD to scan.
-     * @param refPos A wxPoint to use in hit-testing.
+     * Function Collect
+     * scans an EDA_BaseStruct using this class's Inspector method, which does 
+     * the collection.
+     * @param container An EDA_BaseStruct to scan, including those items it contains.
+     * @param aRefPos A wxPoint to use in hit-testing.
      *
      * example implementation, in derived class:
      *
-    virtual void Scan( BOARD* board, const wxPoint& refPos )
+    virtual void Collect( EDA_BaseStruct* container, const wxPoint& aRefPos )
     {
         example implementation:
         
-        SetRefPos( refPos );        // remember where the snapshot was taken from
+        SetRefPos( aRefPos );    // remember where the snapshot was taken from
         
         Empty();        // empty the collection
         
         // visit the board with the INSPECTOR (me).
-        board->Visit(   this,       // INSPECTOR* inspector
-                        NULL,       // const void* testData, 
-                        m_ScanTypes);
-        SetTimeNow();               // when it was taken
+        container->Visit(   this,       // INSPECTOR* inspector
+                            NULL,       // const void* testData, 
+                            m_ScanTypes);
+        SetTimeNow();                   // when it was taken
     }
     */
+    
+    
+    /**
+     * Function Collect
+     * scans an EDA_BaseStruct using this class's Inspector method, which does 
+     * the collection.
+     * @param container An EDA_BaseStruct to scan, including those items it contains.
+     * @param aRefBox An EDA_Rect to use in bounds-testing.
+     *
+     * example implementation, in derived class:
+     *
+    virtual void Collect( EDA_BaseStruct* container, const EDA_Rect& aRefBox )
+    {
+        example implementation:
+        
+        SetBoundingBox( aRefBox );  // pass box to Inspect()
+        
+        Empty();        // empty the collection
+        
+        // visit the board with the INSPECTOR (me).
+        container->Visit(   this,       // INSPECTOR* inspector
+                            NULL,       // const void* testData, 
+                            m_ScanTypes);
+        SetTimeNow();                   // when it was taken
+    }
+    */
+    
 };
 
 #endif  // COLLECTOR_H

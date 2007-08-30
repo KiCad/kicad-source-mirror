@@ -240,7 +240,7 @@ TRACK* Locate_Via( BOARD* Pcb, const wxPoint& pos, int layer )
             continue;
         if( layer < 0 )
             return Track;
-        if( ( (SEGVIA*) Track )->IsViaOnLayer( layer ) )
+        if( Track->IsOnLayer( layer ) )
             return Track;
     }
 

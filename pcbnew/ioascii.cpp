@@ -80,8 +80,7 @@ int NbDraw, NbTrack, NbZone, NbMod, NbNets;
 
 /**********************************************************************/
 int WinEDA_BasePcbFrame::ReadListeSegmentDescr( wxDC* DC, FILE* File,
-                                                TRACK* PtSegm, int StructType,
-                                                int* LineNum, int NumSegm )
+       TRACK* PtSegm, int StructType, int* LineNum, int NumSegm )
 /**********************************************************************/
 
 /* Lecture de la description d'une liste de segments (Tracks, zones)
@@ -90,12 +89,16 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( wxDC* DC, FILE* File,
  *      si pas de fin de block ($..) - nombre.
  */
 {
-    int    shape, width, layer, type, flags, net_code;
-    int    ii = 0, PerCent, Pas;
-    char   Line[256];
+    int             shape, width, layer, type, flags, net_code;
+    int             ii = 0, PerCent, Pas;
+    char            line1[256];
+    char            line2[256];
+    
     TRACK* NewTrack;
 
-    PerCent = 0; Pas = NumSegm / 99;
+    PerCent = 0; 
+    
+    Pas = NumSegm / 99;
 
 #ifdef PCBNEW
     switch( StructType )
@@ -111,14 +114,36 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( wxDC* DC, FILE* File,
     }
 #endif
 
-    while( GetLine( File, Line, LineNum ) )
+    while( GetLine( File, line1, LineNum ) )
     {
-        if( Line[0] == '$' )
+        int             makeType;
+        unsigned long   timeStamp;
+        
+        if( line1[0] == '$' )
         {
             return ii;      /* fin de liste OK */
         }
 
-        switch( StructType )
+        // Read the 2nd line to determine the exact type, one of:
+        // TYPETRACK, TYPEVIA, or TYPEZONE.  The type field in 2nd line
+        // differentiates between TYPETRACK and TYPEVIA.  With virtual
+        // functions in use, it is critical to instantiate the TYPEVIA exactly.        
+        if( GetLine( File, line2, LineNum ) == NULL )
+            break;
+        
+        if( line2[0] == '$' )
+            break;
+
+        // parse the 2nd line first to determine the type of object
+        sscanf( line2 + 2, " %d %d %d %lX %X", &layer, &type, &net_code,
+                &timeStamp, &flags );
+
+        if( StructType==TYPETRACK && type==1 )
+            makeType = TYPEVIA;
+        else
+            makeType = StructType;
+        
+        switch( makeType )
         {
         default:
         case TYPETRACK:
@@ -134,29 +159,27 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( wxDC* DC, FILE* File,
             break;
         }
 
-        NewTrack->Insert( m_Pcb, PtSegm ); PtSegm = NewTrack;
+        NewTrack->Insert( m_Pcb, PtSegm );
+        
+        PtSegm = NewTrack;
+        
+        PtSegm->m_TimeStamp = timeStamp;
 
-        int arg_count = sscanf( Line + 2, " %d %d %d %d %d %d %d", &shape,
+        int arg_count = sscanf( line1 + 2, " %d %d %d %d %d %d %d", &shape,
                                 &PtSegm->m_Start.x, &PtSegm->m_Start.y,
                                 &PtSegm->m_End.x, &PtSegm->m_End.y, &width,
                                 &PtSegm->m_Drill );
 
-        PtSegm->m_Width = width; PtSegm->m_Shape = shape;
+        PtSegm->m_Width = width; 
+        PtSegm->m_Shape = shape;
+        
         if( arg_count < 7 )
             PtSegm->m_Drill = -1;
 
-        if( GetLine( File, Line, LineNum ) == NULL )
-            break;
-        if( Line[0] == '$' )
-            break;
-
-        sscanf( Line + 2, " %d %d %d %lX %X", &layer, &type, &net_code,
-                &PtSegm->m_TimeStamp, &flags );
-        if( type == 1 )
-            PtSegm->m_StructType = TYPEVIA;
-        
         PtSegm->SetLayer( layer );
-        PtSegm->m_NetCode = net_code; PtSegm->SetState( flags, ON );
+        PtSegm->m_NetCode = net_code; 
+        PtSegm->SetState( flags, ON );
+        
 #ifdef PCBNEW
         PtSegm->Draw( DrawPanel, DC, GR_OR );
 #endif
@@ -166,7 +189,7 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( wxDC* DC, FILE* File,
             PerCent++;
             
 #ifdef PCBNEW
-            switch( StructType )
+            switch( makeType )
             {
             case TYPETRACK:
             case TYPEVIA:
@@ -178,7 +201,6 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( wxDC* DC, FILE* File,
                 break;
             }
 #endif
-
         }
     }
 

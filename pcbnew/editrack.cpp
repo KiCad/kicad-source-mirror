@@ -114,6 +114,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
             if( LockPoint->m_StructType == TYPEPAD )
             {
                 pt_pad = (D_PAD*) LockPoint;
+                
                 /* le debut de la piste est remis sur le centre du pad */
                 pos = pt_pad->m_Pos;
                 g_HightLigth_NetCode = pt_pad->m_NetCode;
@@ -144,7 +145,8 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
             g_CurrentTrackSegment->start = adr_buf;
 
         if( g_TwoSegmentTrackBuild )
-        {   // Create 2 segments
+        {   
+            // Create 2 segments
             g_CurrentTrackSegment = new TRACK( *g_CurrentTrackSegment );
             g_TrackSegmentCount++;
             g_CurrentTrackSegment->Pback = g_FirstTrackSegment;
@@ -793,13 +795,15 @@ void EnsureEndTrackOnPad( D_PAD* Pad )
 
     TRACK* lasttrack = g_CurrentTrackSegment;
     if( !g_CurrentTrackSegment->IsNull() )
-    { /* Must create a new segment, from track end to pad center */
+    { 
+        /* Must create a new segment, from track end to pad center */
         g_CurrentTrackSegment = new TRACK( *lasttrack );
         g_TrackSegmentCount++;
         lasttrack->Pnext = g_CurrentTrackSegment;
         g_CurrentTrackSegment->Pback = lasttrack;
         lasttrack->end = g_CurrentTrackSegment;
     }
+    
     g_CurrentTrackSegment->m_End = Pad->m_Pos;
     g_CurrentTrackSegment->SetState( END_ONPAD, OFF );
 

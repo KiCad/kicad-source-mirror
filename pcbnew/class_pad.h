@@ -93,10 +93,22 @@ public:
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
      * Is virtual from EDA_BaseStruct.
-     * @param frame A WinEDA_BasePcbFrame in which to print status information.
-     */
+     * @param frame A WinEDA_DrawFrame in which to print status information.
+     */ 
     void            Display_Infos( WinEDA_DrawFrame* frame );
 
+    
+    /**
+     * Function IsOnLayer
+     * tests to see if this object is on the given layer.  Is virtual so
+     * objects like D_PAD, which reside on multiple layers can do their own
+     * form of testing.
+     * @param aLayer The layer to test for.
+     * @return bool - true if on given layer, else false.
+     */
+    bool IsOnLayer( int aLayer ) const;
+
+    
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.

@@ -46,12 +46,12 @@ BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
 /***************/
 /* Destructeur */
 /***************/
-BOARD::~BOARD( void )
+BOARD::~BOARD()
 {
 }
 
 
-void BOARD::UnLink( void )
+void BOARD::UnLink()
 {
     /* Modification du chainage arriere */
     if( Pback )
@@ -75,7 +75,7 @@ void BOARD::UnLink( void )
 
 
 /* Routines de calcul des nombres de segments pistes et zones */
-int BOARD::GetNumSegmTrack( void )
+int BOARD::GetNumSegmTrack()
 {
     TRACK* CurTrack = m_Track;
     int    ii = 0;
@@ -88,7 +88,7 @@ int BOARD::GetNumSegmTrack( void )
 }
 
 
-int BOARD::GetNumSegmZone( void )
+int BOARD::GetNumSegmZone()
 {
     TRACK* CurTrack = m_Zone;
     int    ii = 0;
@@ -102,28 +102,28 @@ int BOARD::GetNumSegmZone( void )
 
 
 // retourne le nombre de connexions manquantes
-int BOARD::GetNumNoconnect( void )
+int BOARD::GetNumNoconnect()
 {
     return m_NbNoconnect;
 }
 
 
 // retourne le nombre de chevelus
-int BOARD::GetNumRatsnests( void )
+int BOARD::GetNumRatsnests()
 {
     return m_NbLinks;
 }
 
 
 // retourne le nombre de pads a netcode > 0
-int BOARD::GetNumNodes( void )
+int BOARD::GetNumNodes()
 {
     return m_NbNodes;
 }
 
 
 /***********************************/
-bool BOARD::ComputeBoundaryBox( void )
+bool BOARD::ComputeBoundaryBox()
 /***********************************/
 
 /* Determine le rectangle d'encadrement du pcb
@@ -313,7 +313,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
     const KICAD_T*  p = scanTypes;
     bool            done=false;
 
-#if defined(DEBUG)
+#if 0 && defined(DEBUG)
     std::cout <<  GetClass().mb_str() << ' ';
 #endif    
     
@@ -380,7 +380,10 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
             }
                 ;
             break;
-            
+
+#if 0   // both these are on same list, so we must scan it twice in order to get VIA priority, 
+        // using new #else code below.
+        // @todo: consider why we are not using separte lists for TRACKs and SEGVIAs.
         case TYPEVIA:
         case TYPETRACK:
             result = IterateForward( m_Track, inspector, testData, p );
@@ -396,7 +399,18 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
                 }
                 break;
             }
-            break;            
+            break;
+#else
+        case TYPEVIA:
+            result = IterateForward( m_Track, inspector, testData, p );
+            ++p;
+            break;
+            
+        case TYPETRACK:
+            result = IterateForward( m_Track, inspector, testData, p );
+            ++p;
+            break;
+#endif
             
         case PCB_EQUIPOT_STRUCT_TYPE:
             result = IterateForward( m_Equipots, inspector, testData, p );
@@ -585,5 +599,49 @@ void BOARD::Show( int nestLevel, std::ostream& os )
     
     NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
+
+
+/* wrote this before discovering ReturnLayerName()
+const char* BOARD::ShowLayer( int aLayer )
+{
+    const char* rs;
+    
+    switch( aLayer )
+    {
+    case LAYER_CUIVRE_N:        rs = "cu";              break;
+    case LAYER_N_2:             rs = "layer2";          break;             
+    case LAYER_N_3:             rs = "layer3";          break;
+    case LAYER_N_4:             rs = "layer4";          break;
+    case LAYER_N_5:             rs = "layer5";          break;
+    case LAYER_N_6:             rs = "layer6";          break;
+    case LAYER_N_7:             rs = "layer7";          break;
+    case LAYER_N_8:             rs = "layer8";          break;
+    case LAYER_N_9:             rs = "layer9";          break;
+    case LAYER_N_10:            rs = "layer10";         break;
+    case LAYER_N_11:            rs = "layer11";         break;
+    case LAYER_N_12:            rs = "layer12";         break;
+    case LAYER_N_13:            rs = "layer13";         break;
+    case LAYER_N_14:            rs = "layer14";         break;
+    case LAYER_N_15:            rs = "layer15";         break;
+    case LAYER_CMP_N:           rs = "cmp";             break;
+    case ADHESIVE_N_CU:         rs = "cu/adhesive";     break;
+    case ADHESIVE_N_CMP:        rs = "cmp/adhesive";    break; 
+    case SOLDERPASTE_N_CU:      rs = "cu/sldrpaste";    break;     
+    case SOLDERPASTE_N_CMP:     rs = "cmp/sldrpaste";   break;
+    case SILKSCREEN_N_CU:       rs = "cu/silkscreen";   break;
+    case SILKSCREEN_N_CMP:      rs = "cmp/silkscreen";  break;
+    case SOLDERMASK_N_CU:       rs = "cu/sldrmask";     break;
+    case SOLDERMASK_N_CMP:      rs = "cmp/sldrmask";    break;
+    case DRAW_N:                rs = "drawing";         break;
+    case COMMENT_N:             rs = "comment";         break;
+    case ECO1_N:                rs = "eco_1";           break;
+    case ECO2_N:                rs = "eco_2";           break;
+    case EDGE_N:                rs = "edge";            break;
+    default:                    rs = "???";             break;        
+    }
+    
+    return rs;
+}
+*/
 
 #endif

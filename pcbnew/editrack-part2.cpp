@@ -228,7 +228,8 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
         Via->SetLayer( 0x0F );
 
     if( Drc_On &&( Drc( this, DC, Via, m_Pcb->m_Track, 1 ) == BAD_DRC ) )
-    { /* Via impossible a placer ici */
+    { 
+        /* Via impossible a placer ici */
         delete Via;
         GetScreen()->m_Active_Layer = g_CurrentTrackSegment->GetLayer();
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
@@ -245,8 +246,10 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
     g_TrackSegmentCount++;
     g_CurrentTrackSegment->Pback = Via;
     Via->Pnext = g_CurrentTrackSegment;
+    
     if( g_TwoSegmentTrackBuild )
-    {   // Create a second segment (we must have 2 track segments to adjust)
+    {   
+        // Create a second segment (we must have 2 track segments to adjust)
         TRACK* track = g_CurrentTrackSegment;
         g_CurrentTrackSegment = new TRACK( *track );
         g_TrackSegmentCount++;

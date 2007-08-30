@@ -130,16 +130,15 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay()
     
 #if defined(DEBUG)
 
-    // test scaffolding for Scan():
-    m_Collector->Scan( m_Pcb, 
+    // test scaffolding for Collect():
+    GENERAL_COLLECTORS_GUIDE    guide( m_Pcb->m_BoardSettings );
+    
+    guide.SetIgnoreLockedItems( false );
+    guide.SetPreferredLayer( GetScreen()->m_Active_Layer );    
+    
+    m_Collector->Collect( m_Pcb, 
                        GetScreen()->RefPos(true), 
-                       
-                       // these two are inadequate, because the layer support
-                       // in Kicad is not elegant or easily understood.
-                       // The final solution will be a new class COLLECTORS_GUIDE!
-                       GetScreen()->m_Active_Layer,
-                       g_DesignSettings.GetVisibleLayers() 
-                       );
+                       &guide );
 
     // use only the first one collected for now.
     item = (*m_Collector)[0];  // grab first one, may be NULL
@@ -150,7 +149,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay()
     {
         item->Display_Infos( this );
         
-        // debugging: print out the collected items, showing their order too.
+        // debugging: print out the collected items, showing their priority order too.
         for( unsigned i=0; i<m_Collector->GetCount();  ++i )
             (*m_Collector)[i]->Show( 0, std::cout ); 
     }
@@ -170,7 +169,6 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay()
 void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 /*****************************************************************/
 {
-    int     ll;
     wxSize  delta;
     int     zoom = GetScreen()->GetZoom();
     wxPoint curpos, oldpos;

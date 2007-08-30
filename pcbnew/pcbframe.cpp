@@ -193,7 +193,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent,
     m_SelViaSizeBox_Changed    = FALSE;
     
 #if defined(DEBUG)    
-    m_Collector                = new GENERALCOLLECTOR();
+    m_Collector                = new GENERAL_COLLECTOR();
 #endif    
 
     m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;

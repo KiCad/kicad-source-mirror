@@ -958,6 +958,13 @@ void D_PAD::Display_Infos( WinEDA_DrawFrame* frame )
 }
 
 
+// see class_pad.h
+bool D_PAD::IsOnLayer( int aLayer ) const
+{
+    return (1<<aLayer) & m_Masque_Layer;
+}
+
+
 /**
  * Function HitTest
  * tests if the given wxPoint is within the bounds of this object.

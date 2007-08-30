@@ -1077,7 +1077,7 @@ void MODULE::SetRectangleExinscrit( void )
 
 
 /*******************************************************/
-void MODULE::Display_Infos( WinEDA_BasePcbFrame* frame )
+void MODULE::Display_Infos( WinEDA_DrawFrame* frame )
 /*******************************************************/
 {
     int      nbpad;
@@ -1183,7 +1183,7 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
     const KICAD_T*  p = scanTypes;
     bool            done = false;
     
-#if defined(DEBUG)
+#if 0 && defined(DEBUG)
     std::cout <<  GetClass().mb_str() << ' ';
 #endif    
 
@@ -1256,8 +1256,9 @@ void MODULE::Show( int nestLevel, std::ostream& os )
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
         " ref=\"" << m_Reference->m_Text.mb_str() << '"' << 
         " value=\"" << m_Value->m_Text.mb_str()     << '"' <<
+        " layer=\"" << ReturnPcbLayerName(m_Layer,true,false).mb_str() << '"' <<
         ">\n";
-        
+
     NestedSpace( nestLevel+1, os ) <<  
         "<boundingBox" << m_BoundaryBox.m_Pos << m_BoundaryBox.m_Size << "/>\n";
 
