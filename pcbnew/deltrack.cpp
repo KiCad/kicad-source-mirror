@@ -50,8 +50,8 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
             if( g_TwoSegmentTrackBuild )
             {   // g_CurrentTrackSegment->Pback must not be a via, or we want delete also the via
                 if( (g_TrackSegmentCount >= 2)
-                   && (g_CurrentTrackSegment->m_StructType != TYPEVIA)
-                   && (g_CurrentTrackSegment->Pback->m_StructType == TYPEVIA) )
+                   && (g_CurrentTrackSegment->Type() != TYPEVIA)
+                   && (g_CurrentTrackSegment->Pback->Type() == TYPEVIA) )
                 {
                     Track = g_CurrentTrackSegment;
                     g_CurrentTrackSegment = (TRACK*) g_CurrentTrackSegment->Pback;
@@ -61,13 +61,13 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
             }
 
             while( g_TrackSegmentCount && g_CurrentTrackSegment
-                  && (g_CurrentTrackSegment->m_StructType == TYPEVIA) )
+                  && (g_CurrentTrackSegment->Type() == TYPEVIA) )
             {
                 Track = g_CurrentTrackSegment;
                 g_CurrentTrackSegment = (TRACK*) g_CurrentTrackSegment->Pback;
                 delete Track;
                 g_TrackSegmentCount--;
-                if( g_CurrentTrackSegment && (g_CurrentTrackSegment->m_StructType != TYPEVIA) )
+                if( g_CurrentTrackSegment && (g_CurrentTrackSegment->Type() != TYPEVIA) )
                     previous_layer = g_CurrentTrackSegment->GetLayer();
             }
 
@@ -82,7 +82,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
             if( g_TwoSegmentTrackBuild )   // We must have 2 segments or more, or 0
             {
                 if( ( g_TrackSegmentCount == 1 )
-                   && (g_CurrentTrackSegment->m_StructType != TYPEVIA) )
+                   && (g_CurrentTrackSegment->Type() != TYPEVIA) )
                 {
                     delete g_CurrentTrackSegment;
                     g_TrackSegmentCount = 0;

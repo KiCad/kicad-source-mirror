@@ -71,7 +71,7 @@ void WinEDA_GerberFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu 
 
     GetScreen()->SetCurItem( DrawStruct );
 
-    switch( DrawStruct->m_StructType )
+    switch( DrawStruct->Type() )
     {
     case TYPETRACK:
 
@@ -84,7 +84,7 @@ void WinEDA_GerberFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu 
     default:
         msg.Printf(
             wxT( "WinEDA_GerberFrame::OnRightClick Error: illegal or unknown DrawType %d" ),
-            DrawStruct->m_StructType );
+            DrawStruct->Type() );
         DisplayError( this, msg );
         break;
     }

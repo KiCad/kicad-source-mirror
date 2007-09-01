@@ -23,7 +23,7 @@ public:
     bool    ReadMirePcbDescr( FILE* File, int* LineNum );
 
     /* supprime du chainage la structure Struct */
-    void    UnLink( void );
+    void    UnLink();
 
     void    Copy( MIREPCB* source );
 

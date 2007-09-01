@@ -63,7 +63,7 @@ public:
     // Constructor and destructor
     WinEDA_CotationPropertiesFrame( WinEDA_PcbFrame* parent,
                                     COTATION* Cotation, wxDC* DC, const wxPoint& pos );
-    ~WinEDA_CotationPropertiesFrame( void )
+    ~WinEDA_CotationPropertiesFrame()
     {
     }
 

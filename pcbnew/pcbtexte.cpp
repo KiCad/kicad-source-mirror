@@ -50,7 +50,7 @@ public:
     // Constructor and destructor
     WinEDA_TextPCBPropertiesFrame( WinEDA_PcbFrame* parent,
                                    TEXTE_PCB* TextPCB, wxDC* DC, const wxPoint& pos );
-    ~WinEDA_TextPCBPropertiesFrame( void )
+    ~WinEDA_TextPCBPropertiesFrame()
     {
     }
 

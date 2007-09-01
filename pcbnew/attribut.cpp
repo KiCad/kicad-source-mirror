@@ -41,7 +41,7 @@ void WinEDA_PcbFrame::Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On )
     TRACK* Track;
     int    nb_segm;
 
-    if( (track == NULL ) || (track->m_StructType == TYPEZONE) )
+    if( (track == NULL ) || (track->Type() == TYPEZONE) )
         return;
 
     DrawPanel->CursorOff( DC );   // Erase cursor shape

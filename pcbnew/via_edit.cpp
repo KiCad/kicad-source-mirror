@@ -61,7 +61,7 @@ TRACK * via_struct ;
 			via_struct = m_Pcb->m_Track ;
 			for ( ; via_struct != NULL; via_struct = (TRACK*) via_struct->Pnext )
 			{
-				if( via_struct->m_StructType == TYPEVIA ) /* mise a jour du diametre de la via */
+				if( via_struct->Type() == TYPEVIA ) /* mise a jour du diametre de la via */
 				{
 					if ( via_struct->m_Width != via->m_Width ) continue;
 					via_struct->Draw(DrawPanel, DC, GR_XOR);
@@ -83,7 +83,7 @@ TRACK * via_struct ;
 			via_struct = m_Pcb->m_Track ;
 			for ( ; via_struct != NULL; via_struct = (TRACK*) via_struct->Pnext )
 			{
-				if( via_struct->m_StructType == TYPEVIA ) /* mise a jour du diametre de la via */
+				if( via_struct->Type() == TYPEVIA ) /* mise a jour du diametre de la via */
 				{
 					if( via_struct->m_Drill != -1 )
 					{

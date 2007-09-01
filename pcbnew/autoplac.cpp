@@ -368,7 +368,7 @@ void WinEDA_PcbFrame::DrawInfoPlace( wxDC* DC )
 
 
 /***************************************/
-int WinEDA_PcbFrame::GenPlaceBoard( void )
+int WinEDA_PcbFrame::GenPlaceBoard()
 /***************************************/
 
 /* Routine de generation du board ( cote composant + cote cuivre ) :
@@ -455,7 +455,7 @@ int WinEDA_PcbFrame::GenPlaceBoard( void )
     {
         DRAWSEGMENT* DrawSegm;
 
-        switch( PtStruct->m_StructType )
+        switch( PtStruct->Type() )
         {
         case TYPEDRAWSEGMENT:
             DrawSegm = (DRAWSEGMENT*) PtStruct;
@@ -1181,7 +1181,7 @@ static MODULE* PickModule( WinEDA_PcbFrame* pcbframe, wxDC* DC )
 
 
 /*******************************************************/
-bool WinEDA_PcbFrame::SetBoardBoundaryBoxFromEdgesOnly( void )
+bool WinEDA_PcbFrame::SetBoardBoundaryBoxFromEdgesOnly()
 /*******************************************************/
 
 /* Determine le rectangle d'encadrement du pcb, selon les contours
@@ -1207,7 +1207,7 @@ bool WinEDA_PcbFrame::SetBoardBoundaryBoxFromEdgesOnly( void )
     PtStruct = m_Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
-        if( PtStruct->m_StructType != TYPEDRAWSEGMENT )
+        if( PtStruct->Type() != TYPEDRAWSEGMENT )
             continue;
         succes = TRUE;
         ptr    = (DRAWSEGMENT*) PtStruct;

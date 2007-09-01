@@ -69,7 +69,7 @@ WinEDA_ModulePropertiesFrame::WinEDA_ModulePropertiesFrame( WinEDA_BasePcbFrame*
 
 
 /*****************************************************/
-void WinEDA_ModulePropertiesFrame::CreateControls( void )
+void WinEDA_ModulePropertiesFrame::CreateControls()
 /*****************************************************/
 {
     wxPoint   pos;
@@ -443,7 +443,7 @@ Panel3D_Ctrl::Panel3D_Ctrl( WinEDA_ModulePropertiesFrame* parentframe,
 
 
 /********************************/
-Panel3D_Ctrl::~Panel3D_Ctrl( void )
+Panel3D_Ctrl::~Panel3D_Ctrl()
 /********************************/
 {
     delete m_3D_ShapeName;
@@ -670,7 +670,7 @@ void WinEDA_ModulePropertiesFrame::SelectTextListBox( wxCommandEvent& event )
 
 
 /*************************************************************************/
-void WinEDA_ModulePropertiesFrame::SetTextListButtons( void )
+void WinEDA_ModulePropertiesFrame::SetTextListButtons()
 /*************************************************************************/
 {
     int choice = m_TextListBox->GetChoice();
@@ -688,7 +688,7 @@ void WinEDA_ModulePropertiesFrame::SetTextListButtons( void )
 
 
 /***********************************************************/
-void WinEDA_ModulePropertiesFrame::ReCreateFieldListBox( void )
+void WinEDA_ModulePropertiesFrame::ReCreateFieldListBox()
 /***********************************************************/
 {
     m_TextListBox->Clear();
@@ -699,7 +699,7 @@ void WinEDA_ModulePropertiesFrame::ReCreateFieldListBox( void )
     EDA_BaseStruct* item = m_CurrentModule->m_Drawings;
     while( item )
     {
-        if( item->m_StructType == TYPETEXTEMODULE )
+        if( item->Type() == TYPETEXTEMODULE )
             m_TextListBox->Append( ( (TEXTE_MODULE*) item )->m_Text );
         item = item->Pnext;
     }
@@ -753,7 +753,7 @@ void WinEDA_ModulePropertiesFrame::EditOrDelTextModule( wxCommandEvent& event )
         int             jj   = 2;
         while( item )
         {
-            if( item->m_StructType == TYPETEXTEMODULE )
+            if( item->Type() == TYPETEXTEMODULE )
             {
                 if( jj == TextType )   // Texte trouvé
                 {

@@ -115,7 +115,7 @@ void WinEDA_GerberFrame::Erase_Segments_Pcb( wxDC* DC,
     {
         PtNext = PtStruct->Next();
 
-        switch( PtStruct->m_StructType )
+        switch( PtStruct->Type() )
         {
         case TYPEDRAWSEGMENT:
         case TYPETEXTE:
@@ -179,7 +179,7 @@ void WinEDA_GerberFrame::Erase_Textes_Pcb( wxDC* DC, bool query )
     for( ; PtStruct != NULL; PtStruct = PtNext )
     {
         PtNext = PtStruct->Next();
-        if( PtStruct->m_StructType == TYPETEXTE )
+        if( PtStruct->Type() == TYPETEXTE )
             DeleteStructure( PtStruct );
     }
 

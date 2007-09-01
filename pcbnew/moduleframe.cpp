@@ -160,7 +160,7 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow* father, WinEDA_App* pa
 
 
 /****************************************************/
-WinEDA_ModuleEditFrame::~WinEDA_ModuleEditFrame( void )
+WinEDA_ModuleEditFrame::~WinEDA_ModuleEditFrame()
 /****************************************************/
 {
     m_Parent->m_ModuleEditFrame = NULL;
@@ -192,7 +192,7 @@ void WinEDA_ModuleEditFrame::OnCloseWindow( wxCloseEvent& Event )
 
 
 /*********************************************/
-void WinEDA_ModuleEditFrame::SetToolbars( void )
+void WinEDA_ModuleEditFrame::SetToolbars()
 /*********************************************/
 {
     bool active, islib = TRUE;

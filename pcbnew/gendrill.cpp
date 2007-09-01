@@ -468,7 +468,7 @@ char line[1024];
 			pt_piste = m_Parent->m_Pcb->m_Track;
 			for( ; pt_piste != NULL; pt_piste = (TRACK*) pt_piste->Pnext)
 			{
-				if(pt_piste->m_StructType != TYPEVIA) continue;
+				if(pt_piste->Type() != TYPEVIA) continue;
 				if ( pt_piste->m_Drill == 0 ) continue;
 				int via_drill = ( pt_piste->m_Drill < 0 ) ? g_DesignSettings.m_ViaDrill : pt_piste->m_Drill;
 				if ( foret->m_Diameter != via_drill )
@@ -706,7 +706,7 @@ char line[1024];
 	TRACK * pt_piste = m_Parent->m_Pcb->m_Track;
 	for( ; pt_piste != NULL; pt_piste = (TRACK*) pt_piste->Pnext )
 	{
-		if(pt_piste->m_StructType != TYPEVIA) continue;
+		if(pt_piste->Type() != TYPEVIA) continue;
 		if ( pt_piste->m_Drill == 0 ) continue;
 		int via_drill = g_DesignSettings.m_ViaDrill;
 		if ( pt_piste->m_Drill > 0 )	// Drill value is not the default value
@@ -972,7 +972,7 @@ wxString msg;
 	PtStruct = m_Parent->m_Pcb->m_Drawings;
 	for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
 		{
-		switch( PtStruct->m_StructType )
+		switch( PtStruct->Type() )
 			{
 			case TYPEDRAWSEGMENT:
 				PlotDrawSegment( (DRAWSEGMENT*) PtStruct, format, EDGE_LAYER );
@@ -1224,7 +1224,7 @@ wxSize size;
 			pt_piste = m_Parent->m_Pcb->m_Track;
 			for( ; pt_piste != NULL; pt_piste = (TRACK*) pt_piste->Pnext)
 			{
-				if(pt_piste->m_StructType != TYPEVIA) continue;
+				if(pt_piste->Type() != TYPEVIA) continue;
 				if(pt_piste->m_Drill == 0) continue;
 
 				int via_drill = g_DesignSettings.m_ViaDrill;

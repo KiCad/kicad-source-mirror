@@ -90,7 +90,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindMarker( int SearchType )
         DrawList = Screen->EEDrawList;
         while( DrawList && NotFound )
         {
-            if( DrawList->m_StructType == DRAW_MARKER_STRUCT_TYPE )
+            if( DrawList->Type() == DRAW_MARKER_STRUCT_TYPE )
             {
                 Marker   = (DrawMarkerStruct*) DrawList;
                 NotFound = FALSE;
@@ -255,7 +255,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
         DrawList = Screen->EEDrawList;
         while( DrawList )
         {
-            switch( DrawList->m_StructType )
+            switch( DrawList->Type() )
             {
             case DRAW_LIB_ITEM_STRUCT_TYPE:
                 EDA_SchComponentStruct* pSch;
@@ -343,7 +343,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
         /* If the struct found is a DRAW_LIB_ITEM_STRUCT_TYPE type,
          *  coordinates must be computed according to its orientation matrix
          */
-        if( Struct->m_StructType == DRAW_LIB_ITEM_STRUCT_TYPE )
+        if( Struct->Type() == DRAW_LIB_ITEM_STRUCT_TYPE )
         {
             EDA_SchComponentStruct* pSch =  (EDA_SchComponentStruct*) Struct;
 

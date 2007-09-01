@@ -39,8 +39,8 @@ public:
 
 public:
     MODULEtoLOAD( const wxString& libname, const wxString& cmpname, int timestamp );
-    ~MODULEtoLOAD( void ) { };
-    MODULEtoLOAD* Next( void ) { return (MODULEtoLOAD*) Pnext; }
+    ~MODULEtoLOAD() { };
+    MODULEtoLOAD* Next() { return (MODULEtoLOAD*) Pnext; }
 };
 
 /* Fonctions locales : */
@@ -496,7 +496,7 @@ int WinEDA_NetlistFrame::SetPadNetName( char* Text, MODULE* Module )
 
 
 /*****************************************************/
-MODULE* WinEDA_PcbFrame::ListAndSelectModuleName( void )
+MODULE* WinEDA_PcbFrame::ListAndSelectModuleName()
 /*****************************************************/
 
 /*	liste les noms des modules du PCB

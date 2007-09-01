@@ -312,7 +312,7 @@ wxString EDA_FileSelector( const wxString& Title,                   /* Dialog ti
 
 
 /********************************************************/
-wxString FindKicadHelpPath( void )
+wxString FindKicadHelpPath()
 /********************************************************/
 /* Find absolute path for kicad/help (or kicad/help/<language>) */
 
@@ -536,7 +536,7 @@ void SetRealLibraryPath( const wxString& shortlibname )
 
 
 /***********************************/
-wxString ReturnKicadDatasPath( void )
+wxString ReturnKicadDatasPath()
 /***********************************/
 
 /* Retourne le chemin des donnees communes de kicad.
@@ -605,7 +605,7 @@ wxString ReturnKicadDatasPath( void )
 
 
 /***************************/
-wxString GetEditorName( void )
+wxString GetEditorName()
 /***************************/
 
 /* Return the prefered editor name

@@ -282,7 +282,7 @@ void WinEDA_LibeditFrame::EditSymbolText(wxDC * DC,
 int DrawMode = g_XorMode;
 
 	if ( DrawItem == NULL ) return;
-	if ( DrawItem->m_StructType != COMPONENT_GRAPHIC_TEXT_DRAW_TYPE ) return;
+	if ( DrawItem->Type() != COMPONENT_GRAPHIC_TEXT_DRAW_TYPE ) return;
 
 	/* Effacement ancien texte */
 	if( ((LibDrawText*)DrawItem)->m_Text && DC)

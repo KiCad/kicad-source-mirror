@@ -33,12 +33,12 @@ COTATION::~COTATION()
 /* supprime du chainage la structure Struct
  *  les structures arrieres et avant sont chainees directement
  */
-void COTATION::UnLink( void )
+void COTATION::UnLink()
 {
     /* Modification du chainage arriere */
     if( Pback )
     {
-        if( Pback->m_StructType != TYPEPCB )
+        if( Pback->Type() != TYPEPCB )
         {
             Pback->Pnext = Pnext;
         }

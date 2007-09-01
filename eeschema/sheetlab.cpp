@@ -54,7 +54,7 @@ public:
     WinEDA_PinSheetPropertiesFrame( WinEDA_SchematicFrame* parent,
                                    DrawSheetLabelStruct* curr_pinsheet,
                                    const wxPoint& framepos = wxPoint( -1, -1 ) );
-    ~WinEDA_PinSheetPropertiesFrame( void ) { };
+    ~WinEDA_PinSheetPropertiesFrame() { };
 
 private:
     void    PinSheetPropertiesAccept( wxCommandEvent& event );
@@ -371,7 +371,7 @@ DrawSheetLabelStruct* WinEDA_SchematicFrame::Import_PinSheet( DrawSheetStruct* S
     GLabel = NULL;
     for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext )
     {
-        if( DrawStruct->m_StructType != DRAW_GLOBAL_LABEL_STRUCT_TYPE )
+        if( DrawStruct->Type() != DRAW_GLOBAL_LABEL_STRUCT_TYPE )
             continue;
         GLabel = (DrawGlobalLabelStruct*) DrawStruct;
 
@@ -437,7 +437,7 @@ void WinEDA_SchematicFrame::DeleteSheetLabel( wxDC*                 DC,
 
     if( DrawStruct ) // Modification du chainage
     {
-        if( DrawStruct->m_StructType != DRAW_SHEET_STRUCT_TYPE )
+        if( DrawStruct->Type() != DRAW_SHEET_STRUCT_TYPE )
         {
             DisplayError( this,
                          wxT( "DeleteSheetLabel error: m_Parent != DRAW_SHEET_STRUCT_TYPE" ) );

@@ -29,7 +29,7 @@ wxString g_Main_Title( wxT( "PCBNEW" ) );
 IMPLEMENT_APP( WinEDA_App )
 
 /****************************/
-bool WinEDA_App::OnInit( void )
+bool WinEDA_App::OnInit()
 /****************************/
 {
     wxString FFileName;

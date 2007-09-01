@@ -88,10 +88,10 @@ class DrawSheetStruct;
 class SCH_SCREEN : public BASE_SCREEN
 {
 public:
-    SCH_SCREEN( int idtype );
+    SCH_SCREEN( int idtype, KICAD_T aType = SCREEN_STRUCT_TYPE );
     ~SCH_SCREEN();
 
-    void            FreeDrawList( void ); // Free EESchema drawing list (does not delete the sub hierarchies)
+    void            FreeDrawList(); // Free EESchema drawing list (does not delete the sub hierarchies)
 
     void Place( WinEDA_DrawFrame* frame, wxDC* DC ) { };
     void            RemoveFromDrawList( EDA_BaseStruct* DrawStruct );/* remove DrawStruct from EEDrawList. */
@@ -101,7 +101,7 @@ public:
     EDA_BaseStruct* ExtractWires( bool CreateCopy );
 
     /* full undo redo management : */
-    virtual void    ClearUndoRedoList( void );
+    virtual void    ClearUndoRedoList();
     virtual void    AddItemToUndoList( EDA_BaseStruct* item );
     virtual void    AddItemToRedoList( EDA_BaseStruct* item );
 };
@@ -119,10 +119,10 @@ public:
        const wxPoint& pos = wxPoint( 0, 0 ), 
        const wxString& text = wxEmptyString );
     
-    ~DrawSheetLabelStruct( void ) { }
-    DrawSheetLabelStruct*   GenCopy( void );
+    ~DrawSheetLabelStruct() { }
+    DrawSheetLabelStruct*   GenCopy();
 
-    DrawSheetLabelStruct* Next( void )
+    DrawSheetLabelStruct* Next()
     { return (DrawSheetLabelStruct*) Pnext; }
     
     void                    Place( WinEDA_DrawFrame* frame, wxDC* DC );
@@ -147,9 +147,9 @@ public:
 
 public:
     DrawSheetStruct( const wxPoint& pos = wxPoint( 0, 0 ) );
-    ~DrawSheetStruct( void );
+    ~DrawSheetStruct();
     void                Place( WinEDA_DrawFrame* frame, wxDC* DC );
-    DrawSheetStruct*    GenCopy( void );
+    DrawSheetStruct*    GenCopy();
     void                Display_Infos( WinEDA_DrawFrame* frame );
     void                CleanupSheet( WinEDA_SchematicFrame* frame, wxDC* DC );
     virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
@@ -169,11 +169,11 @@ private:
 public:
     EDA_ScreenList( EDA_BaseStruct* DrawStruct );
     ~EDA_ScreenList();
-    int GetCount( void ) { return m_Count; }
-    SCH_SCREEN*     GetFirst( void );
-    SCH_SCREEN*     GetNext( void );
+    int GetCount() { return m_Count; }
+    SCH_SCREEN*     GetFirst();
+    SCH_SCREEN*     GetNext();
     SCH_SCREEN*     GetScreen( int index );
-    void            UpdateSheetNumberAndDate( void );
+    void            UpdateSheetNumberAndDate();
 
 private:
     SCH_SCREEN**    BuildScreenList( SCH_SCREEN** ScreenList,

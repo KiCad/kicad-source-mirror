@@ -19,7 +19,7 @@
 /* Routines definies ici: */
 int         Build_Work( BOARD* Pcb, CHEVELU* pt_base_chevelu );
 void        PlaceCells( BOARD* Pcb, int net_code, int flag );
-int         InitBoard( void );
+int         InitBoard();
 BoardCell   GetCell( int, int, int );
 void        SetCell( int row, int col, int side, BoardCell x );
 void        OrCell( int, int, int, BoardCell );
@@ -67,7 +67,7 @@ bool ComputeMatriceSize( WinEDA_BasePcbFrame* frame, int g_GridRoutingSize )
 /* class BOARDHEAD */
 /*******************/
 
-BOARDHEAD::BOARDHEAD( void )
+BOARDHEAD::BOARDHEAD()
 {
     m_BoardSide[0]  = m_BoardSide[1] = NULL;
     m_DistSide[0]   = m_DistSide[1] = NULL;
@@ -79,13 +79,13 @@ BOARDHEAD::BOARDHEAD( void )
 }
 
 
-BOARDHEAD::~BOARDHEAD( void )
+BOARDHEAD::~BOARDHEAD()
 {
 }
 
 
 /******************************/
-int BOARDHEAD::InitBoard( void )
+int BOARDHEAD::InitBoard()
 /*****************************/
 
 /* initialize the data structures
@@ -132,7 +132,7 @@ int BOARDHEAD::InitBoard( void )
 
 
 /*********************************/
-void BOARDHEAD::UnInitBoard( void )
+void BOARDHEAD::UnInitBoard()
 /*********************************/
 /* deallocation de la memoire */
 {
@@ -216,7 +216,7 @@ void PlaceCells( BOARD* Pcb, int net_code, int flag )
         BOARD_ITEM* PtModStruct = ( (MODULE*) PtStruct )->m_Drawings;
         for( ; PtModStruct != NULL; PtModStruct = PtModStruct->Next() )
         {
-            switch( PtModStruct->m_StructType )
+            switch( PtModStruct->Type() )
             {
             case TYPEEDGEMODULE:
             {
@@ -251,7 +251,7 @@ void PlaceCells( BOARD* Pcb, int net_code, int flag )
     PtStruct = Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
-        switch( PtStruct->m_StructType )
+        switch( PtStruct->Type() )
         {
         case TYPEDRAWSEGMENT:
         {

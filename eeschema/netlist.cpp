@@ -353,7 +353,7 @@ int NumInclude;
 
 	while ( DrawList )
 	{
-		switch( DrawList->m_StructType )
+		switch( DrawList->Type() )
 		{
 			case DRAW_SEGMENT_STRUCT_TYPE :
 				#undef STRUCT
@@ -465,7 +465,7 @@ int NumInclude;
 				for ( ;DEntry != NULL; DEntry = DEntry->Next())
 					{
 					LibDrawPin * Pin = (LibDrawPin *) DEntry;
-					if( DEntry->m_StructType != COMPONENT_PIN_DRAW_TYPE) continue;
+					if( DEntry->Type() != COMPONENT_PIN_DRAW_TYPE) continue;
 					if( DEntry->m_Unit &&
 						(DEntry->m_Unit != DrawLibItem->m_Multi) ) continue;
 					if( DEntry->m_Convert &&
@@ -555,7 +555,7 @@ int NumInclude;
 			{
 			wxString msg;
 				msg.Printf( wxT("Netlist: unexpected type struct %d"),
-									DrawList->m_StructType);
+									DrawList->Type());
 				DisplayError(frame, msg);
 				break;
 			}

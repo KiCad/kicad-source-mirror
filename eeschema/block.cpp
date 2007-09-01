@@ -371,7 +371,7 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
             DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
         if( block->m_BlockDrawStruct )
         {
-            if( block->m_BlockDrawStruct->m_StructType == DRAW_PICK_ITEM_STRUCT_TYPE )
+            if( block->m_BlockDrawStruct->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
             {       /* Delete the picked wrapper if this is a picked list. */
                 DrawPickedStruct* PickedList;
                 PickedList = (DrawPickedStruct*) block->m_BlockDrawStruct;
@@ -490,7 +490,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
         PtBlock->Offset( -PtBlock->m_MoveVector.x, -PtBlock->m_MoveVector.y );
 
         /* Effacement ancien affichage */
-        if( PtBlock->m_BlockDrawStruct->m_StructType == DRAW_PICK_ITEM_STRUCT_TYPE )
+        if( PtBlock->m_BlockDrawStruct->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
         {
             PickedList = (DrawPickedStruct*) PtBlock->m_BlockDrawStruct;
             while( PickedList )
@@ -523,7 +523,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
 
     if( PtBlock->m_BlockDrawStruct )
     {
-        if( PtBlock->m_BlockDrawStruct->m_StructType == DRAW_PICK_ITEM_STRUCT_TYPE )
+        if( PtBlock->m_BlockDrawStruct->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
         {
             PickedList = (DrawPickedStruct*) PtBlock->m_BlockDrawStruct;
             while( PickedList )
@@ -558,7 +558,7 @@ bool MoveStruct( WinEDA_DrawPanel* panel, wxDC* DC, EDA_BaseStruct* DrawStruct )
     if( !DrawStruct )
         return FALSE;
 
-    if( DrawStruct->m_StructType == DRAW_PICK_ITEM_STRUCT_TYPE )
+    if( DrawStruct->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
     {
         if( DC )
             RedrawStructList( panel, DC, DrawStruct, g_XorMode );
@@ -613,7 +613,7 @@ void MirrorOneStruct( EDA_BaseStruct* DrawStruct, wxPoint& Center )
     if( !DrawStruct )
         return;
 
-    switch( DrawStruct->m_StructType )
+    switch( DrawStruct->Type() )
     {
     case TYPE_NOT_INIT:
         break;
@@ -756,7 +756,7 @@ bool MirrorStruct( WinEDA_DrawPanel* panel, wxDC* DC, EDA_BaseStruct* DrawStruct
     if( !DrawStruct )
         return FALSE;
 
-    if( DrawStruct->m_StructType == DRAW_PICK_ITEM_STRUCT_TYPE )
+    if( DrawStruct->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
     {
         if( DC )
             RedrawStructList( panel, DC, DrawStruct, g_XorMode );
@@ -813,14 +813,14 @@ static EDA_BaseStruct* CopyStruct( WinEDA_DrawPanel* panel, wxDC* DC, BASE_SCREE
 
     PlaceStruct( screen, NewDrawStruct );
     /* Draw the new structure and chain it in: */
-    if( NewDrawStruct->m_StructType == DRAW_PICK_ITEM_STRUCT_TYPE )
+    if( NewDrawStruct->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
     {
         PickedList = (DrawPickedStruct*) NewDrawStruct;
         while( PickedList )  // Clear annotation for new components
         {
             EDA_BaseStruct* Struct = PickedList->m_PickedStruct;
 
-            switch( Struct->m_StructType )
+            switch( Struct->Type() )
             {
             case DRAW_LIB_ITEM_STRUCT_TYPE:
             {
@@ -862,7 +862,7 @@ static EDA_BaseStruct* CopyStruct( WinEDA_DrawPanel* panel, wxDC* DC, BASE_SCREE
     }
     else
     {
-        switch( NewDrawStruct->m_StructType )
+        switch( NewDrawStruct->Type() )
         {
         case DRAW_POLYLINE_STRUCT_TYPE:
         case DRAW_JUNCTION_STRUCT_TYPE:
@@ -905,7 +905,7 @@ static EDA_BaseStruct* CopyStruct( WinEDA_DrawPanel* panel, wxDC* DC, BASE_SCREE
     }
 
     /* Free the original DrawPickedStruct chain: */
-    if( DrawStruct->m_StructType == DRAW_PICK_ITEM_STRUCT_TYPE )
+    if( DrawStruct->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
     {
         PickedList = (DrawPickedStruct*) DrawStruct;
         PickedList->DeleteWrapperList();
@@ -931,7 +931,7 @@ void DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, EDA_BaseStruct* DrawStruct
         return;
 
 
-    if( DrawStruct->m_StructType == DRAW_SHEETLABEL_STRUCT_TYPE )
+    if( DrawStruct->Type() == DRAW_SHEETLABEL_STRUCT_TYPE )
     {   /* Cette stucture est rattachee a une feuille, et n'est pas
          *  accessible par la liste globale directement */
         frame->SaveCopyInUndoList( ( (DrawSheetLabelStruct*) DrawStruct )->m_Parent, IS_CHANGED );
@@ -939,7 +939,7 @@ void DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, EDA_BaseStruct* DrawStruct
         return;
     }
 
-    if( DrawStruct->m_StructType == DRAW_PICK_ITEM_STRUCT_TYPE )
+    if( DrawStruct->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
     {
         /* Unlink all picked structs from current EEDrawList */
         PickedList = (DrawPickedStruct*) DrawStruct;
@@ -988,7 +988,7 @@ EDA_BaseStruct* SaveStructListForPaste( EDA_BaseStruct* DrawStruct )
     /* Make a copy of the original picked item. */
     DrawStructCopy = DuplicateStruct( DrawStruct );
 
-    if( DrawStruct->m_StructType == DRAW_PICK_ITEM_STRUCT_TYPE )
+    if( DrawStruct->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
     {
         /* Delete the picked wrapper if this is a picked list. */
         PickedList = (DrawPickedStruct*) DrawStruct;
@@ -1036,12 +1036,12 @@ void WinEDA_SchematicFrame::PasteStruct( wxDC* DC )
     RedrawStructList( DrawPanel, DC, DrawStruct, GR_DEFAULT_DRAWMODE );
 
     // Clear annotation and init new time stamp for the new components:
-    if( DrawStruct->m_StructType == DRAW_PICK_ITEM_STRUCT_TYPE )
+    if( DrawStruct->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
     {
         for( PickedList = (DrawPickedStruct*) DrawStruct; PickedList != NULL; ) // Clear annotation for new components
         {
             EDA_BaseStruct* Struct = PickedList->m_PickedStruct;
-            if( Struct->m_StructType == DRAW_LIB_ITEM_STRUCT_TYPE )
+            if( Struct->Type() == DRAW_LIB_ITEM_STRUCT_TYPE )
             {
                 ( (EDA_SchComponentStruct*) Struct )->m_TimeStamp = GetTimeStamp();
                 ( (EDA_SchComponentStruct*) Struct )->ClearAnnotation();
@@ -1065,7 +1065,7 @@ void WinEDA_SchematicFrame::PasteStruct( wxDC* DC )
     }
     else
     {
-        if( DrawStruct->m_StructType == DRAW_LIB_ITEM_STRUCT_TYPE )
+        if( DrawStruct->Type() == DRAW_LIB_ITEM_STRUCT_TYPE )
         {
             ( (EDA_SchComponentStruct*) DrawStruct )->m_TimeStamp = GetTimeStamp();
             ( (EDA_SchComponentStruct*) DrawStruct )->ClearAnnotation();
@@ -1104,7 +1104,7 @@ bool PlaceStruct( BASE_SCREEN* screen, EDA_BaseStruct* DrawStruct )
     move_vector.y = screen->m_Curseur.y -
                     screen->BlockLocate.m_BlockLastCursorPosition.y;
 
-    switch( DrawStruct->m_StructType )
+    switch( DrawStruct->Type() )
     {
     default:
     case TYPE_NOT_INIT:
@@ -1161,7 +1161,7 @@ void MoveOneStruct( EDA_BaseStruct* DrawStruct, const wxPoint& move_vector )
     if( !DrawStruct )
         return;
 
-    switch( DrawStruct->m_StructType )
+    switch( DrawStruct->Type() )
     {
     case TYPE_NOT_INIT:
         break;
@@ -1276,7 +1276,7 @@ EDA_BaseStruct* DuplicateStruct( EDA_BaseStruct* DrawStruct )
         return NULL;
     }
 
-    switch( DrawStruct->m_StructType )
+    switch( DrawStruct->Type() )
     {
     case DRAW_POLYLINE_STRUCT_TYPE:
         NewDrawStruct = ( (DrawPolylineStruct*) DrawStruct )->GenCopy();
@@ -1350,7 +1350,7 @@ EDA_BaseStruct* DuplicateStruct( EDA_BaseStruct* DrawStruct )
     {
         wxString msg;
         msg << wxT( "DuplicateStruct error: unexpected StructType " ) <<
-        DrawStruct->m_StructType << wxT( " " ) << DrawStruct->ReturnClassName();
+        DrawStruct->Type() << wxT( " " ) << DrawStruct->ReturnClassName();
         DisplayError( NULL, msg );
     }
         break;
@@ -1374,10 +1374,10 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
     for( Struct = screen->EEDrawList; Struct != NULL; Struct = Struct->Pnext )
         Struct->m_Flags = 0;
 
-    if( screen->BlockLocate.m_BlockDrawStruct->m_StructType == DRAW_SEGMENT_STRUCT_TYPE )
+    if( screen->BlockLocate.m_BlockDrawStruct->Type() == DRAW_SEGMENT_STRUCT_TYPE )
         screen->BlockLocate.m_BlockDrawStruct->m_Flags = SELECTED;
 
-    else if( screen->BlockLocate.m_BlockDrawStruct->m_StructType == DRAW_PICK_ITEM_STRUCT_TYPE )
+    else if( screen->BlockLocate.m_BlockDrawStruct->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
     {
         DrawStructs = (DrawPickedStruct*) screen->BlockLocate.m_BlockDrawStruct;
         while( DrawStructs )
@@ -1403,7 +1403,7 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
 
     /* Pour Drag Block: remise sous forme de liste de structure, s'il n'y
      *  a qu'un seul element ( pour homogeneiser les traitements ulterieurs */
-    if( screen->BlockLocate.m_BlockDrawStruct->m_StructType != DRAW_PICK_ITEM_STRUCT_TYPE )
+    if( screen->BlockLocate.m_BlockDrawStruct->Type() != DRAW_PICK_ITEM_STRUCT_TYPE )
     {
         DrawStructs = new DrawPickedStruct( screen->BlockLocate.m_BlockDrawStruct );
         screen->BlockLocate.m_BlockDrawStruct = DrawStructs;
@@ -1416,7 +1416,7 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
     {
         Struct      = DrawStructs->m_PickedStruct;
         DrawStructs = (DrawPickedStruct*) DrawStructs->Pnext;
-        if( Struct->m_StructType == DRAW_SEGMENT_STRUCT_TYPE )
+        if( Struct->Type() == DRAW_SEGMENT_STRUCT_TYPE )
         {
             SegmStruct = (EDA_DrawLineStruct*) Struct;
             if( (SegmStruct->m_Start.x < ox) || (SegmStruct->m_Start.x > fx)
@@ -1438,7 +1438,7 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
     {
         Struct      = DrawStructs->m_PickedStruct;
         DrawStructs = (DrawPickedStruct*) DrawStructs->Pnext;
-        if( Struct->m_StructType == DRAW_LIB_ITEM_STRUCT_TYPE )
+        if( Struct->Type() == DRAW_LIB_ITEM_STRUCT_TYPE )
         {
             LibEDA_BaseStruct* DrawItem;
             int x, y;
@@ -1452,18 +1452,18 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
             }
         }
 
-        if( Struct->m_StructType == DRAW_SHEET_STRUCT_TYPE )
+        if( Struct->Type() == DRAW_SHEET_STRUCT_TYPE )
         {
             DrawSheetLabelStruct* SLabel = ( (DrawSheetStruct*) Struct )->m_Label;
             while( SLabel )
             {
-                if( SLabel->m_StructType == DRAW_SHEETLABEL_STRUCT_TYPE )
+                if( SLabel->Type() == DRAW_SHEETLABEL_STRUCT_TYPE )
                     AddPickedItem( screen, SLabel->m_Pos.x, SLabel->m_Pos.y );
                 SLabel = (DrawSheetLabelStruct*) SLabel->Pnext;
             }
         }
 
-        if( Struct->m_StructType == DRAW_BUSENTRY_STRUCT_TYPE )
+        if( Struct->Type() == DRAW_BUSENTRY_STRUCT_TYPE )
         {
             DrawBusEntryStruct* item = (DrawBusEntryStruct*) Struct;
             AddPickedItem( screen, item->m_Pos.x, item->m_Pos.y );
@@ -1487,7 +1487,7 @@ static void AddPickedItem( SCH_SCREEN* screen, int px, int py )
         Struct      = DrawStructs->m_PickedStruct;
         DrawStructs = (DrawPickedStruct*) DrawStructs->Pnext;
 
-        switch( Struct->m_StructType )
+        switch( Struct->Type() )
         {
         case DRAW_SEGMENT_STRUCT_TYPE:
                 #undef STRUCT
@@ -1509,7 +1509,7 @@ static void AddPickedItem( SCH_SCREEN* screen, int px, int py )
     Struct = screen->EEDrawList;
     while( Struct )
     {
-        switch( Struct->m_StructType )
+        switch( Struct->Type() )
         {
         case TYPE_NOT_INIT:
             break;
@@ -1684,7 +1684,7 @@ static LibEDA_BaseStruct* GetNextPinPosition( EDA_SchComponentStruct* DrawLibIte
             continue;
         if( convert && DEntry->m_Convert && (DEntry->m_Convert != convert) )
             continue;
-        if( DEntry->m_StructType != COMPONENT_PIN_DRAW_TYPE )
+        if( DEntry->Type() != COMPONENT_PIN_DRAW_TYPE )
             continue;
 
         Pin = (LibDrawPin*) DEntry;

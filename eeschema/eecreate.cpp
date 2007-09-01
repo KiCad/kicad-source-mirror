@@ -37,7 +37,7 @@ void WinEDA_SchematicFrame::BeginSegment( wxDC* DC, int type )
 
     if( GetScreen()->GetCurItem() )
     {
-        switch( GetScreen()->GetCurItem()->m_StructType )
+        switch( GetScreen()->GetCurItem()->Type() )
         {
         case DRAW_SEGMENT_STRUCT_TYPE:
         case DRAW_POLYLINE_STRUCT_TYPE:
@@ -254,7 +254,7 @@ void WinEDA_SchematicFrame::DeleteCurrentSegment( wxDC* DC )
     }
 
     /* Trace en cours: annulation */
-    if( GetScreen()->GetCurItem()->m_StructType == DRAW_POLYLINE_STRUCT_TYPE )
+    if( GetScreen()->GetCurItem()->Type() == DRAW_POLYLINE_STRUCT_TYPE )
     {
         Polyline_in_Ghost( DrawPanel, DC, FALSE ); /* Effacement du trace en cours */
     }
@@ -353,7 +353,7 @@ void WinEDA_SchematicFrame::RepeatDrawItem( wxDC* DC )
     if( g_ItemToRepeat == NULL )
         return;
 
-    switch( g_ItemToRepeat->m_StructType )
+    switch( g_ItemToRepeat->Type() )
     {
     case DRAW_JUNCTION_STRUCT_TYPE:
             #undef STRUCT
@@ -534,7 +534,7 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
             return TRUE;
 
         item = PickStruct( screen, LABELITEM );
-        if( item && (item->m_StructType != DRAW_TEXT_STRUCT_TYPE)
+        if( item && (item->Type() != DRAW_TEXT_STRUCT_TYPE)
            && ( ( (DrawGlobalLabelStruct*) item )->m_Pos.x == pos.x )
            && ( ( (DrawGlobalLabelStruct*) item )->m_Pos.y == pos.y ) )
             return TRUE;

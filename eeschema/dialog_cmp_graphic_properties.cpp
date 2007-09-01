@@ -71,7 +71,7 @@ LibEDA_BaseStruct * CurrentItem = CurrentDrawItem;
 bool show_fill_option = FALSE;
 int fill_option = 0;
 	if( CurrentItem )
-        switch(CurrentItem->m_StructType)
+        switch(CurrentItem->Type())
  		{
         case COMPONENT_ARC_DRAW_TYPE:
             show_fill_option = TRUE;

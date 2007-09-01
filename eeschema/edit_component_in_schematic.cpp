@@ -44,7 +44,7 @@ void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
  */
 {
     parent->DrawPanel->m_IgnoreMouseEvents = TRUE;
-    if( cmp->m_StructType != DRAW_LIB_ITEM_STRUCT_TYPE )
+    if( cmp->Type() != DRAW_LIB_ITEM_STRUCT_TYPE )
     {
         DisplayError( parent,
                      wxT( "InstallCmpeditFrame() error: This struct is not a component" ) );
@@ -62,7 +62,7 @@ void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
 
 
 /*****************************************************/
-void WinEDA_ComponentPropertiesFrame::InitBuffers( void )
+void WinEDA_ComponentPropertiesFrame::InitBuffers()
 /*****************************************************/
 
 /* Init the buffers to a default value,
@@ -105,7 +105,7 @@ void WinEDA_ComponentPropertiesFrame::InitBuffers( void )
 
 
 /****************************************************************/
-void WinEDA_ComponentPropertiesFrame::CopyDataToPanelField( void )
+void WinEDA_ComponentPropertiesFrame::CopyDataToPanelField()
 /****************************************************************/
 
 /* Set the values displayed on the panel field according to
@@ -153,7 +153,7 @@ void WinEDA_ComponentPropertiesFrame::CopyDataToPanelField( void )
 
 
 /****************************************************************/
-void WinEDA_ComponentPropertiesFrame::CopyPanelFieldToData( void )
+void WinEDA_ComponentPropertiesFrame::CopyPanelFieldToData()
 /****************************************************************/
 
 /* Copy the values displayed on the panel field to the buffers according to
@@ -172,7 +172,7 @@ void WinEDA_ComponentPropertiesFrame::CopyPanelFieldToData( void )
 
 
 /*************************************************************/
-void WinEDA_ComponentPropertiesFrame::BuildPanelFields( void )
+void WinEDA_ComponentPropertiesFrame::BuildPanelFields()
 /*************************************************************/
 {
     int     ii, FieldId;
@@ -226,7 +226,7 @@ void WinEDA_ComponentPropertiesFrame::BuildPanelFields( void )
 
 
 /**********************************************************/
-void WinEDA_ComponentPropertiesFrame::BuildPanelBasic( void )
+void WinEDA_ComponentPropertiesFrame::BuildPanelBasic()
 /**********************************************************/
 
 /* create the basic panel for component properties editing
@@ -691,7 +691,7 @@ void PartTextStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
 
     EDA_SchComponentStruct* Cmp = (EDA_SchComponentStruct*) m_Parent;
     /* save old cmp in undo list */
-    if( g_ItemToUndoCopy && ( g_ItemToUndoCopy->m_StructType == Cmp->m_StructType) )
+    if( g_ItemToUndoCopy && ( g_ItemToUndoCopy->Type() == Cmp->Type()) )
     {
         Cmp->SwapData( (EDA_SchComponentStruct*) g_ItemToUndoCopy );
         ( (WinEDA_SchematicFrame*) frame )->SaveCopyInUndoList( Cmp, IS_CHANGED );

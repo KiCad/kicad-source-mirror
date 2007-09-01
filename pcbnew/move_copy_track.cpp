@@ -190,7 +190,7 @@ void WinEDA_PcbFrame::Start_MoveOneTrackSegment( TRACK* track, wxDC* DC, bool Dr
     if( g_HightLigt_Status )
         Hight_Light( DC );
 
-    if( Drag && track->m_StructType == TYPEVIA )
+    if( Drag && track->Type() == TYPEVIA )
     {
         track->m_Flags = IS_DRAGGED | STARTPOINT | ENDPOINT;
         Collect_TrackSegmentsToDrag( DrawPanel, DC, track->m_Start,
@@ -320,7 +320,7 @@ void WinEDA_PcbFrame::Place_Dupl_Route( Track* Track, wxDC* DC )
         LockPoint   = LocateLockPoint( pt_track->m_Start.x, pt_track->m_Start.y, masquelayer );
         if( LockPoint )
         {
-            if( LockPoint->m_StructType == TYPEPAD )
+            if( LockPoint->Type() == TYPEPAD )
             {
                 pt_pad = (D_PAD*) LockPoint;
                 new_net_code = pt_pad->net_code;
@@ -338,7 +338,7 @@ void WinEDA_PcbFrame::Place_Dupl_Route( Track* Track, wxDC* DC )
         LockPoint = LocateLockPoint( pt_track->m_End.x, pt_track->m_End.y, masquelayer );
         if( LockPoint )
         {
-            if( LockPoint->m_StructType == TYPEPAD )
+            if( LockPoint->Type() == TYPEPAD )
             {
                 pt_pad = (D_PAD*) LockPoint;
                 new_net_code = pt_pad->net_code;
@@ -414,7 +414,7 @@ void WinEDA_PcbFrame::Place_Dupl_Route( Track* Track, wxDC* DC )
             if( LockPoint )
             {
                 pt_track->start = LockPoint;
-                if( LockPoint->m_StructType == TYPEPAD )
+                if( LockPoint->Type() == TYPEPAD )
                 {       /* fin de piste sur un pad */
                     pt_pad = (D_PAD*) LockPoint;
                     pt_track->SetState( BEGIN_ONPAD, ON );
@@ -431,7 +431,7 @@ void WinEDA_PcbFrame::Place_Dupl_Route( Track* Track, wxDC* DC )
             if( LockPoint )
             {
                 pt_track->end = LockPoint;
-                if( LockPoint->m_StructType == TYPEPAD )
+                if( LockPoint->Type() == TYPEPAD )
                 {       /* fin de piste sur un pad */
                     pt_pad = (D_PAD*) LockPoint;
                     pt_track->SetState( END_ONPAD, ON );
@@ -627,7 +627,7 @@ TRACK* CreateLockPoint( int* pX, int* pY, TRACK* ptsegm, TRACK* refsegm )
         return NULL;
 
     /* le point n'est pas sur une extremite de piste */
-    if( ptsegm->m_StructType == TYPEVIA )
+    if( ptsegm->Type() == TYPEVIA )
     {
         *pX = ptsegm->m_Start.x; *pY = ptsegm->m_Start.y;
         return ptsegm;

@@ -237,7 +237,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent,
 }
 
 
-WinEDA_PcbFrame::~WinEDA_PcbFrame( void )
+WinEDA_PcbFrame::~WinEDA_PcbFrame()
 {
     m_Parent->m_PcbFrame = NULL;
     m_CurrentScreen = ScreenPcb;
@@ -312,7 +312,7 @@ void WinEDA_PcbFrame::OnCloseWindow( wxCloseEvent& Event )
 
 
 /***************************************/
-void WinEDA_PcbFrame::SetToolbars( void )
+void WinEDA_PcbFrame::SetToolbars()
 /***************************************/
 
 /*

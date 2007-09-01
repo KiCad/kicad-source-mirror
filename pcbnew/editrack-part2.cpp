@@ -18,7 +18,7 @@
 /* variables locales */
 
 /***********************************************/
-void WinEDA_PcbFrame::DisplayTrackSettings( void )
+void WinEDA_PcbFrame::DisplayTrackSettings()
 /***********************************************/
 
 /* Display the current track width and via diameter
@@ -93,7 +93,7 @@ void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
     TRACK* pt_track;
     int    l1, l2, nb_segm;
 
-    if( (pt_segm == NULL ) || ( pt_segm->m_StructType == TYPEZONE ) )
+    if( (pt_segm == NULL ) || ( pt_segm->Type() == TYPEZONE ) )
     {
         return;
     }
@@ -114,7 +114,7 @@ void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
     ii = 0; pt_segm = pt_track;
     for( ; ii < nb_segm; ii++, pt_segm = (TRACK*) pt_segm->Pnext )
     {
-        if( pt_segm->m_StructType == TYPEVIA )
+        if( pt_segm->Type() == TYPEVIA )
             continue;
 
         /* inversion des couches */
@@ -183,7 +183,7 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
     pt_segm = g_FirstTrackSegment;
     for( ii = 0; ii < g_TrackSegmentCount - 1; ii++, pt_segm = (TRACK*) pt_segm->Pnext )
     {
-        if( (pt_segm->m_StructType == TYPEVIA)
+        if( (pt_segm->Type() == TYPEVIA)
            && (g_CurrentTrackSegment->m_End == pt_segm->m_Start) )
             return;
     }
@@ -240,18 +240,27 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
     Via->Pback = g_CurrentTrackSegment;
     g_CurrentTrackSegment->Pnext = Via;
     g_TrackSegmentCount++;
-    g_CurrentTrackSegment = new TRACK( *g_CurrentTrackSegment );
+
+    // @todo: is this a memory leak bug? is g_CurrentTrackSegment's original lost or is it on some list?
+    g_CurrentTrackSegment = g_CurrentTrackSegment->Copy();
+    
     g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer );
+    
     g_CurrentTrackSegment->m_Start = g_CurrentTrackSegment->m_End = Via->m_Start;
+    
     g_TrackSegmentCount++;
+    
     g_CurrentTrackSegment->Pback = Via;
+    
     Via->Pnext = g_CurrentTrackSegment;
     
     if( g_TwoSegmentTrackBuild )
     {   
         // Create a second segment (we must have 2 track segments to adjust)
         TRACK* track = g_CurrentTrackSegment;
-        g_CurrentTrackSegment = new TRACK( *track );
+        
+        g_CurrentTrackSegment = track->Copy();
+        
         g_TrackSegmentCount++;
         g_CurrentTrackSegment->Pback = track;
         track->Pnext = g_CurrentTrackSegment;
@@ -310,7 +319,7 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
 
     if( item )
     {
-        if( item->m_StructType == TYPEPAD )
+        if( item->Type() == TYPEPAD )
         {
             pt_pad = (D_PAD*) item;
             Module = (MODULE*) pt_pad->m_Parent;
@@ -342,13 +351,13 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
         }
         else
         {
-            if( item->m_StructType == TYPETEXTEMODULE )
+            if( item->Type() == TYPETEXTEMODULE )
             {
-                if( item->m_Parent && (item->m_Parent->m_StructType  == TYPEMODULE) )
+                if( item->m_Parent && (item->m_Parent->Type()  == TYPEMODULE) )
                     Module = (MODULE*) item->m_Parent;
             }
             
-            else if( item->m_StructType == TYPEMODULE )
+            else if( item->Type() == TYPEMODULE )
             {
                 Module = (MODULE*) item;
             }

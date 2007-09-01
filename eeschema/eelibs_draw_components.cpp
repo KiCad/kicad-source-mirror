@@ -48,7 +48,7 @@ static void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
                             int DrawMode, int Color = -1, bool DrawPinText = TRUE );
 
 /******************************/
-static void CreateDummyCmp( void )
+static void CreateDummyCmp()
 /******************************/
 {
     DummyCmp = new              EDA_LibComponentStruct( NULL );
@@ -433,7 +433,7 @@ void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
         SetHightColor = (DEntry->m_Selected & IS_SELECTED) ? HIGHT_LIGHT_FLAG : 0;
         LineWidth = MAX( DEntry->m_Width, g_DrawMinimunLineWidth );
 
-        switch( DEntry->m_StructType )
+        switch( DEntry->Type() )
         {
         case COMPONENT_ARC_DRAW_TYPE:
         {
@@ -925,7 +925,7 @@ void DrawLibraryDrawStruct( WinEDA_DrawPanel* panel, wxDC* DC,
 
     int LineWidth = MAX( DrawItem->m_Width, g_DrawMinimunLineWidth );
 
-    switch( DrawItem->m_StructType )
+    switch( DrawItem->Type() )
     {
     case COMPONENT_ARC_DRAW_TYPE:
     {

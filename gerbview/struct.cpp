@@ -28,7 +28,7 @@ wxString msg;
 	PtNext = PtStruct->Pnext;
 	PtBack = PtStruct->Pback;
 
-	switch( PtStruct->m_StructType )
+	switch( PtStruct->Type() )
 		{
 		case TYPE_NOT_INIT:
 			DisplayError(NULL, wxT("DeleteStruct: Type NOT_INIT"));
@@ -69,7 +69,7 @@ wxString msg;
 		case TYPEPCB:
 		default:
 			msg.Printf( wxT("DeleteStructure: unexpected %d type"),
-										PtStruct->m_StructType);
+										PtStruct->Type());
 			DisplayError(NULL, msg);
 			break;
 		}

@@ -65,7 +65,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
 
 #if 1   // debugging
     static int breakhere = 0;
-    switch( item->m_StructType )
+    switch( item->Type() )
     {
     case TYPEPAD:
             breakhere++;
@@ -88,7 +88,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
     case TYPETEXTEMODULE:
             TEXTE_MODULE* tm;
             tm = (TEXTE_MODULE*) item;
-            if( tm->m_Text == wxT("U5") )
+            if( tm->m_Text == wxT("10uH") )
             {
                 breakhere++;
             }

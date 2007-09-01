@@ -36,7 +36,7 @@ int count = 0;
 		if ( Struct->m_Flags & SKIP_STRUCT ) continue;
 
 			
-		if ( TstJunction && (Struct->m_StructType == DRAW_JUNCTION_STRUCT_TYPE) )
+		if ( TstJunction && (Struct->Type() == DRAW_JUNCTION_STRUCT_TYPE) )
 		{
 		#define JUNCTION ((DrawJunctionStruct*)Struct)
 			if ( (JUNCTION->m_Pos.x == pos.x) && (JUNCTION->m_Pos.y == pos.y) )
@@ -44,7 +44,7 @@ int count = 0;
 		#undef JUNCTION
 		}
 
-		if ( Struct->m_StructType != DRAW_SEGMENT_STRUCT_TYPE ) continue;
+		if ( Struct->Type() != DRAW_SEGMENT_STRUCT_TYPE ) continue;
 		#define SEGM ((EDA_DrawLineStruct*)Struct)
 		if ( SEGM->IsOneEndPointAt(pos) ) count++;
 		#undef SEGM
@@ -68,7 +68,7 @@ EDA_BaseStruct * Struct;
 	for ( Struct = ListStruct; Struct != NULL; Struct = Struct->Pnext)
 	{
 		if ( Struct->m_Flags ) continue;
-		if ( Struct->m_StructType == DRAW_JUNCTION_STRUCT_TYPE )
+		if ( Struct->Type() == DRAW_JUNCTION_STRUCT_TYPE )
 		{
 		#define JUNCTION ((DrawJunctionStruct*)Struct)
 			if ( segment->IsOneEndPointAt(JUNCTION->m_Pos) ) Struct->m_Flags |= CANDIDATE;
@@ -76,7 +76,7 @@ EDA_BaseStruct * Struct;
 		#undef JUNCTION
 		}
 
-		if ( Struct->m_StructType != DRAW_SEGMENT_STRUCT_TYPE ) continue;
+		if ( Struct->Type() != DRAW_SEGMENT_STRUCT_TYPE ) continue;
 
 		#define SEGM ((EDA_DrawLineStruct*)Struct)
 		if ( segment->IsOneEndPointAt(SEGM->m_Start) )
@@ -142,7 +142,7 @@ DrawPickedStruct * PickedItem, *PickedList = NULL;
 		{
 			if ( ! (DelStruct->m_Flags & SELECTEDNODE) ) continue;
 			#define SEGM ((EDA_DrawLineStruct*)DelStruct)
-			if ( DelStruct->m_StructType != DRAW_SEGMENT_STRUCT_TYPE ) continue;
+			if ( DelStruct->Type() != DRAW_SEGMENT_STRUCT_TYPE ) continue;
 			MarkConnected(this, GetScreen()->EEDrawList, SEGM);
 			#undef SEGM
 		}
@@ -154,7 +154,7 @@ DrawPickedStruct * PickedItem, *PickedList = NULL;
 
 			if ( DelStruct->m_Flags & STRUCT_DELETED ) continue;		// Already seen
 			if ( ! (DelStruct->m_Flags & CANDIDATE) ) continue;	// Already seen
-			if ( DelStruct->m_StructType != DRAW_SEGMENT_STRUCT_TYPE ) continue;
+			if ( DelStruct->Type() != DRAW_SEGMENT_STRUCT_TYPE ) continue;
 			DelStruct->m_Flags |= SKIP_STRUCT;
 			#define SEGM ((EDA_DrawLineStruct*)DelStruct)
 			/* Test the SEGM->m_Start point: if this point was connected to an STRUCT_DELETED wire,
@@ -163,7 +163,7 @@ DrawPickedStruct * PickedItem, *PickedList = NULL;
 			for ( removed_struct = GetScreen()->EEDrawList; removed_struct != NULL; removed_struct = removed_struct->Pnext)
 			{
 				if( (removed_struct->m_Flags & STRUCT_DELETED) == 0 ) continue;
-				if ( removed_struct->m_StructType != DRAW_SEGMENT_STRUCT_TYPE ) continue;
+				if ( removed_struct->Type() != DRAW_SEGMENT_STRUCT_TYPE ) continue;
 				#define WIRE ((EDA_DrawLineStruct*)removed_struct)
 				if ( WIRE->IsOneEndPointAt(SEGM->m_Start) ) break;
 			}
@@ -175,7 +175,7 @@ DrawPickedStruct * PickedItem, *PickedList = NULL;
 			for ( removed_struct = GetScreen()->EEDrawList; removed_struct != NULL; removed_struct = removed_struct->Pnext)
 			{
 				if( (removed_struct->m_Flags & STRUCT_DELETED) == 0 ) continue;
-				if ( removed_struct->m_StructType != DRAW_SEGMENT_STRUCT_TYPE ) continue;
+				if ( removed_struct->Type() != DRAW_SEGMENT_STRUCT_TYPE ) continue;
 				if ( WIRE->IsOneEndPointAt(SEGM->m_End) ) break;
 			}
 			if ( removed_struct && ! CountConnectedItems(this, GetScreen()->EEDrawList, SEGM->m_End, TRUE) )
@@ -200,7 +200,7 @@ DrawPickedStruct * PickedItem, *PickedList = NULL;
 			int count;
 			if ( DelStruct->m_Flags & STRUCT_DELETED ) continue;
 			if ( ! (DelStruct->m_Flags & CANDIDATE) ) continue;
-			if ( DelStruct->m_StructType == DRAW_JUNCTION_STRUCT_TYPE )
+			if ( DelStruct->Type() == DRAW_JUNCTION_STRUCT_TYPE )
 			{
 				#define JUNCTION ((DrawJunctionStruct*)DelStruct)
 				count = CountConnectedItems(this, GetScreen()->EEDrawList, JUNCTION->m_Pos, FALSE);
@@ -221,7 +221,7 @@ DrawPickedStruct * PickedItem, *PickedList = NULL;
 		for ( DelStruct = GetScreen()->EEDrawList; DelStruct != NULL; DelStruct = DelStruct->Pnext)
 		{
 			if ( DelStruct->m_Flags & STRUCT_DELETED ) continue;
-			if ( DelStruct->m_StructType != DRAW_LABEL_STRUCT_TYPE ) continue;
+			if ( DelStruct->Type() != DRAW_LABEL_STRUCT_TYPE ) continue;
 			GetScreen()->m_Curseur = ((DrawTextStruct*)DelStruct)->m_Pos;
 			EDA_BaseStruct * TstStruct =
 				PickStruct(GetScreen()->m_Curseur, GetScreen()->EEDrawList,WIREITEM|BUSITEM);
@@ -328,13 +328,13 @@ DrawSheetLabelStruct* SheetLabel, *NextLabel;
 
 		Screen->SetModify();
 
-	if (DrawStruct->m_StructType == DRAW_SHEETLABEL_STRUCT_TYPE)
+	if (DrawStruct->Type() == DRAW_SHEETLABEL_STRUCT_TYPE)
 	{	/* Cette stucture est rattachee a une feuille, et n'est pas
 		accessible par la liste globale directement */
 		DrawList = Screen->EEDrawList;
 		for ( ; DrawList != NULL; DrawList = DrawList->Pnext )
 		{
-			if(DrawList->m_StructType != DRAW_SHEET_STRUCT_TYPE) continue;
+			if(DrawList->Type() != DRAW_SHEET_STRUCT_TYPE) continue;
 			/* Examen de la Sheet */
 			SheetLabel = ((DrawSheetStruct *) DrawList)->m_Label;
 			if (SheetLabel == NULL) continue;
@@ -361,7 +361,7 @@ DrawSheetLabelStruct* SheetLabel, *NextLabel;
 	}
 
 
-	if (DrawStruct->m_StructType == DRAW_PICK_ITEM_STRUCT_TYPE)
+	if (DrawStruct->Type() == DRAW_PICK_ITEM_STRUCT_TYPE)
 	{
 		PickedList = (DrawPickedStruct *) DrawStruct;
 		while (PickedList)
@@ -429,7 +429,7 @@ DrawMarkerStruct * Marker;
 		for ( DrawStruct = screen->EEDrawList; DrawStruct != NULL; DrawStruct = NextStruct)
 		{
 			NextStruct = DrawStruct->Pnext;
-			if(DrawStruct->m_StructType != DRAW_MARKER_STRUCT_TYPE ) continue;
+			if(DrawStruct->Type() != DRAW_MARKER_STRUCT_TYPE ) continue;
 			/* Marqueur trouve */
 			Marker = (DrawMarkerStruct * ) DrawStruct;
 			if( Marker->m_Type != type ) continue;

@@ -80,7 +80,7 @@ Pcb3D_GLCanvas::Pcb3D_GLCanvas( WinEDA3D_DrawFrame* parent, wxWindowID id,
 
 
 /*************************************/
-Pcb3D_GLCanvas::~Pcb3D_GLCanvas( void )
+Pcb3D_GLCanvas::~Pcb3D_GLCanvas()
 /*************************************/
 {
     ClearLists();
@@ -88,7 +88,7 @@ Pcb3D_GLCanvas::~Pcb3D_GLCanvas( void )
 
 
 /*************************************/
-void Pcb3D_GLCanvas::ClearLists( void )
+void Pcb3D_GLCanvas::ClearLists()
 /*************************************/
 {
     if( m_gllist > 0 )
@@ -448,7 +448,7 @@ void Pcb3D_GLCanvas::OnPopUpMenu( wxCommandEvent& event )
 
 
 /***************************************/
-void Pcb3D_GLCanvas::DisplayStatus( void )
+void Pcb3D_GLCanvas::DisplayStatus()
 /***************************************/
 {
     wxString msg;
@@ -573,7 +573,7 @@ void Pcb3D_GLCanvas::InitGL()
 
 
 /***********************************/
-void Pcb3D_GLCanvas::SetLights( void )
+void Pcb3D_GLCanvas::SetLights()
 /***********************************/
 
 /* Init sources lumineuses pour OPENGL

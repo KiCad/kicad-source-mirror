@@ -574,7 +574,7 @@ wxString msg;
 		{
 		Plume('U');
 		layer = LAYER_NOTES;
-		switch( DrawList->m_StructType )
+		switch( DrawList->Type() )
 			{
 			case DRAW_BUSENTRY_STRUCT_TYPE :
 				#undef STRUCT
@@ -585,7 +585,7 @@ wxString msg;
 			case DRAW_SEGMENT_STRUCT_TYPE :
 				#undef STRUCT
 				#define STRUCT ((EDA_DrawLineStruct*)DrawList)
-				if ( DrawList->m_StructType == DRAW_SEGMENT_STRUCT_TYPE)
+				if ( DrawList->Type() == DRAW_SEGMENT_STRUCT_TYPE)
 					{
 					x1 = STRUCT->m_Start.x; y1 = STRUCT->m_Start.y;
 					x2 = STRUCT->m_End.x; y2 = STRUCT->m_End.y;

@@ -1008,7 +1008,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
         {
             /* Reduction des segments alignes a 1 seul */
             OldTrack = (TRACK*) g_CurrentTrackSegment->Pback;
-            if( OldTrack && (OldTrack->m_StructType != TYPEVIA) )
+            if( OldTrack && (OldTrack->Type() != TYPEVIA) )
             {
                 dx1 = g_CurrentTrackSegment->m_End.x - g_CurrentTrackSegment->m_Start.x;
                 dy1 = g_CurrentTrackSegment->m_End.y - g_CurrentTrackSegment->m_Start.y;

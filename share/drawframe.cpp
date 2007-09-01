@@ -108,7 +108,7 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
 
 
 /****************************************/
-WinEDA_DrawFrame::~WinEDA_DrawFrame( void )
+WinEDA_DrawFrame::~WinEDA_DrawFrame()
 /****************************************/
 {
     if( DrawPanel )  // for WinEDA3D_DrawFrame DrawPanel == NULL !
@@ -185,7 +185,7 @@ void WinEDA_DrawFrame::Affiche_Message( const wxString& message )
 
 
 /****************************************/
-void WinEDA_DrawFrame::EraseMsgBox( void )
+void WinEDA_DrawFrame::EraseMsgBox()
 /****************************************/
 {
     if( MsgPanel )
@@ -216,14 +216,14 @@ void WinEDA_DrawFrame::OnMenuOpen( wxMenuEvent& event )
 
 
 /*******************************************************/
-void WinEDA_DrawFrame::ReCreateAuxiliaryToolbar( void )   // fonction virtuelle
+void WinEDA_DrawFrame::ReCreateAuxiliaryToolbar()   // fonction virtuelle
 /*******************************************************/
 {
 }
 
 
 /********************************************/
-void WinEDA_DrawFrame::ReCreateMenuBar( void )    // fonction virtuelle
+void WinEDA_DrawFrame::ReCreateMenuBar()    // fonction virtuelle
 /********************************************/
 {
 }
@@ -342,7 +342,7 @@ void WinEDA_DrawFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 
 
 /***************************************/
-void WinEDA_DrawFrame::SetToolbars( void )
+void WinEDA_DrawFrame::SetToolbars()
 /***************************************/
 {
     DisplayUnitsMsg();
@@ -358,7 +358,7 @@ void WinEDA_DrawFrame::DisplayToolMsg( const wxString msg )
 
 
 /*******************************************/
-void WinEDA_DrawFrame::DisplayUnitsMsg( void )
+void WinEDA_DrawFrame::DisplayUnitsMsg()
 /********************************************/
 
 /* Display current unit Selection on Statusbar
@@ -386,7 +386,7 @@ void WinEDA_DrawFrame::DisplayUnitsMsg( void )
 
 
 /***************************************/
-void WinEDA_DrawFrame::ReDrawPanel( void )
+void WinEDA_DrawFrame::ReDrawPanel()
 /***************************************/
 {
     if( DrawPanel == NULL )
@@ -710,7 +710,7 @@ int WinEDA_DrawFrame::HandleBlockEnd( wxDC* DC )
 
 
 /*********************************************/
-void WinEDA_DrawFrame::AdjustScrollBars( void )
+void WinEDA_DrawFrame::AdjustScrollBars()
 /*********************************************/
 {
     wxSize  draw_size, panel_size;
@@ -834,7 +834,7 @@ void WinEDA_DrawFrame::SetLanguage( wxCommandEvent& event )
 
 
 /***********************************************/
-void WinEDA_DrawFrame::Affiche_Status_Box( void )
+void WinEDA_DrawFrame::Affiche_Status_Box()
 /***********************************************/
 
 /* Routine d'affichage du zoom et des coord curseur.

@@ -177,12 +177,12 @@ public:
     int     m_Width;        /* Width of draw lines */
 
 public:
-    LibEDA_BaseStruct* Next( void )
+    LibEDA_BaseStruct* Next()
     {
         return (LibEDA_BaseStruct*) Pnext;
     }
     LibEDA_BaseStruct( KICAD_T struct_type );
-    virtual ~LibEDA_BaseStruct( void ) { }
+    virtual ~LibEDA_BaseStruct() { }
     void Display_Infos_DrawEntry( WinEDA_DrawFrame* frame );
 };
 
@@ -203,12 +203,12 @@ public:
 //	short m_PinNumWidth, m_PinNameWidth;	/* (Unused) Pin num and Pin name text width */
 
 public:
-    LibDrawPin( void );
-    ~LibDrawPin( void ) { }
-    LibDrawPin* GenCopy( void );
+    LibDrawPin();
+    ~LibDrawPin() { }
+    LibDrawPin* GenCopy();
     bool        WriteDescr( FILE* File );
     void        Display_Infos( WinEDA_DrawFrame* frame );
-    wxPoint     ReturnPinEndPoint( void );
+    wxPoint     ReturnPinEndPoint();
     int         ReturnPinDrawOrient( int TransMat[2][2] );
     void        ReturnPinStringNum( wxString& buffer );
     void        SetPinNumFromString( wxString& buffer );
@@ -234,9 +234,9 @@ public:
     wxPoint m_ArcStart, m_ArcEnd;   /* position des 2 extremites de l'arc en coord reelles*/
 
 public:
-    LibDrawArc( void );
-    ~LibDrawArc( void ) { }
-    LibDrawArc* GenCopy( void );
+    LibDrawArc();
+    ~LibDrawArc() { }
+    LibDrawArc* GenCopy();
     bool        WriteDescr( FILE* File );
 };
 
@@ -247,9 +247,9 @@ public:
     int m_Fill;
 
 public:
-    LibDrawCircle( void );
-    ~LibDrawCircle( void ) { }
-    LibDrawCircle*  GenCopy( void );
+    LibDrawCircle();
+    ~LibDrawCircle() { }
+    LibDrawCircle*  GenCopy();
     bool            WriteDescr( FILE* File );
 };
 
@@ -262,9 +262,9 @@ public:
     wxString m_Text;
 
 public:
-    LibDrawText( void );
-    ~LibDrawText( void ) { }
-    LibDrawText*    GenCopy( void );
+    LibDrawText();
+    ~LibDrawText() { }
+    LibDrawText*    GenCopy();
     bool            WriteDescr( FILE* File );
 };
 
@@ -275,9 +275,9 @@ public:
     int     m_Fill;
 
 public:
-    LibDrawSquare( void );
-    ~LibDrawSquare( void ) { }
-    LibDrawSquare*  GenCopy( void );
+    LibDrawSquare();
+    ~LibDrawSquare() { }
+    LibDrawSquare*  GenCopy();
     bool            WriteDescr( FILE* File );
 };
 
@@ -287,9 +287,9 @@ public:
     wxPoint m_End;
 
 public:
-    LibDrawSegment( void );
-    ~LibDrawSegment( void ) { }
-    LibDrawSegment* GenCopy( void );
+    LibDrawSegment();
+    ~LibDrawSegment() { }
+    LibDrawSegment* GenCopy();
     bool            WriteDescr( FILE* File );
 };
 
@@ -300,12 +300,12 @@ public:
     int m_Fill;
 
 public:
-    LibDrawPolyline( void );
-    ~LibDrawPolyline( void ) {
+    LibDrawPolyline();
+    ~LibDrawPolyline() {
         if( PolyList )
             free( PolyList );
     }
-    LibDrawPolyline*    GenCopy( void );
+    LibDrawPolyline*    GenCopy();
     void                AddPoint( const wxPoint& point );
     bool                WriteDescr( FILE* File );
 };
@@ -327,9 +327,9 @@ public:
 
 public:
     LibDrawField( int idfield = 2 );
-    ~LibDrawField( void );
+    ~LibDrawField();
 
-    LibDrawField*   GenCopy( void );
+    LibDrawField*   GenCopy();
     void            Copy( LibDrawField* Target );
     bool            WriteDescr( FILE* File );
 };
@@ -349,7 +349,7 @@ public:
 
 public:
     LibCmpEntry( LibrEntryType CmpType, const wxChar * CmpName );
-    virtual ~LibCmpEntry( void );
+    virtual ~LibCmpEntry();
     bool WriteDescr( FILE* File );
 };
 
@@ -375,8 +375,8 @@ public:
     EDA_LibComponentStruct( const wxChar * CmpName );
     EDA_Rect    GetBoundaryBox( int Unit, int Convert );/* return Box around the part. */
 
-    ~EDA_LibComponentStruct( void );
-    void        SortDrawItems( void );
+    ~EDA_LibComponentStruct();
+    void        SortDrawItems();
 };
 
 class EDA_LibCmpAliasStruct  : public LibCmpEntry
@@ -386,7 +386,7 @@ public:
 
 public:
     EDA_LibCmpAliasStruct( const wxChar * CmpName, const wxChar * CmpRootName );
-    ~EDA_LibCmpAliasStruct( void );
+    ~EDA_LibCmpAliasStruct();
 };
 
 /* Variables */

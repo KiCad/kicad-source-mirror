@@ -44,12 +44,12 @@ EQUIPOT::~EQUIPOT()
 }
 
 
-void EQUIPOT::UnLink( void )
+void EQUIPOT::UnLink()
 {
     /* Modification du chainage arriere */
     if( Pback )
     {
-        if( Pback->m_StructType != TYPEPCB )
+        if( Pback->Type() != TYPEPCB )
         {
             Pback->Pnext = Pnext;
         }

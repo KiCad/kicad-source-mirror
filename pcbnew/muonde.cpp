@@ -306,7 +306,7 @@ public:
 
     // Constructor and destructor
     WinEDA_SetParamShapeFrame( WinEDA_PcbFrame* parent, const wxPoint& pos );
-    ~WinEDA_SetParamShapeFrame( void ) { };
+    ~WinEDA_SetParamShapeFrame() { };
 
 private:
     void    OnCloseWindow( wxCloseEvent& event );

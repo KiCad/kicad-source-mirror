@@ -78,7 +78,7 @@ static const char s_BitmapLayerIcon[16][16] = {
 
 
 /************************************************************/
-void WinEDA_PcbFrame::PrepareLayerIndicator( void )
+void WinEDA_PcbFrame::PrepareLayerIndicator()
 /************************************************************/
 
 /* Draw the icon for the "Select layet pair" bitmap tool
@@ -198,7 +198,7 @@ void WinEDA_PcbFrame::PrepareLayerIndicator( void )
 
 
 /******************************************/
-void WinEDA_PcbFrame::ReCreateHToolbar( void )
+void WinEDA_PcbFrame::ReCreateHToolbar()
 /******************************************/
 
 /* Create the main horizontal toolbar for the board editor */
@@ -317,7 +317,7 @@ void WinEDA_PcbFrame::ReCreateHToolbar( void )
 
 
 /*********************************************/
-void WinEDA_PcbFrame::ReCreateOptToolbar( void )
+void WinEDA_PcbFrame::ReCreateOptToolbar()
 /*********************************************/
 
 // Create the left vertical toolbar (option selections)
@@ -391,7 +391,7 @@ void WinEDA_PcbFrame::ReCreateOptToolbar( void )
 
 
 /********************************************/
-void WinEDA_PcbFrame::ReCreateVToolbar( void )
+void WinEDA_PcbFrame::ReCreateVToolbar()
 /********************************************/
 
 /* Create the main vertical right toolbar, showing usual tools
@@ -471,7 +471,7 @@ void WinEDA_PcbFrame::ReCreateVToolbar( void )
 
 
 /*********************************************/
-void WinEDA_PcbFrame::ReCreateAuxVToolbar( void )
+void WinEDA_PcbFrame::ReCreateAuxVToolbar()
 /*********************************************/
 
 /* Create the auxiliary vertical right toolbar, showing tools fo microwave applications
@@ -523,7 +523,7 @@ void WinEDA_PcbFrame::ReCreateAuxVToolbar( void )
 
 
 /****************************************************/
-void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar( void )
+void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
 /****************************************************/
 
 /* Create auxiliary horizontal toolbar

@@ -96,7 +96,7 @@ void WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
     if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
     {
         DrawStruct = SchematicGeneralLocateAndDisplay( FALSE );
-        if( DrawStruct && (DrawStruct->m_StructType == DRAW_SHEET_STRUCT_TYPE) )
+        if( DrawStruct && (DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE) )
         {
             DrawSheetLabelStruct* slabel;
             slabel = LocateSheetLabel( (DrawSheetStruct*) DrawStruct,
@@ -148,7 +148,7 @@ void WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
     int  flags  = DrawStruct->m_Flags;
     bool is_new = (flags & IS_NEW) ? TRUE : FALSE;
 
-    switch( DrawStruct->m_StructType )
+    switch( DrawStruct->Type() )
     {
     case DRAW_NOCONNECT_STRUCT_TYPE:
 
@@ -243,7 +243,7 @@ void WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
         wxString msg;
         msg.Printf(
             wxT( "WinEDA_SchematicFrame::OnRightClick Error: unknown DrawType %d" ),
-            DrawStruct->m_StructType );
+            DrawStruct->Type() );
         DisplayError( this, msg );
         break;
     }

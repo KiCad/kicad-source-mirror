@@ -122,7 +122,7 @@ LibDrawPin  * CurrentPin = (LibDrawPin *) CurrentDrawItem;
 	Pin = (LibDrawPin *) CurrentLibEntry->m_Drawings;
 	for ( ; Pin != NULL; Pin = (LibDrawPin *) Pin->Pnext )
 		{
-		if (Pin->m_StructType != COMPONENT_PIN_DRAW_TYPE ) continue;
+		if (Pin->Type() != COMPONENT_PIN_DRAW_TYPE ) continue;
 		if ( Pin == CurrentPin ) continue;
 		if( (Pin->m_Pos == CurrentPin->m_Pos) &&
 			(Pin->m_Orient == CurrentPin->m_Orient) &&
@@ -179,7 +179,7 @@ bool status;
 	// Tst for an other pin in same new position:
 	for ( ; Pin != NULL; Pin = (LibDrawPin *) Pin->Pnext)
 	{
-		if ( Pin->m_StructType != COMPONENT_PIN_DRAW_TYPE ) continue;
+		if ( Pin->Type() != COMPONENT_PIN_DRAW_TYPE ) continue;
 		if ( Pin == CurrentPin ) continue;
 		if( newpos != Pin->m_Pos ) continue;
 		if ( Pin->m_Flags ) continue;
@@ -213,7 +213,7 @@ bool status;
 	Pin = (LibDrawPin *)CurrentLibEntry->m_Drawings;
 	for ( ; Pin != NULL; Pin = (LibDrawPin *)Pin->Pnext)
 	{
-		if(Pin->m_StructType != COMPONENT_PIN_DRAW_TYPE ) continue;
+		if(Pin->Type() != COMPONENT_PIN_DRAW_TYPE ) continue;
 		if( Pin->m_Flags == 0 ) continue;
 		Pin->m_Pos = CurrentPin->m_Pos;
 		Pin->m_Flags = 0;
@@ -270,7 +270,7 @@ wxPoint startPos;
 	for ( ; Pin != NULL; Pin = (LibDrawPin *)Pin->Pnext )
 	{
 		Pin->m_Flags = 0;
-		if (Pin->m_StructType != COMPONENT_PIN_DRAW_TYPE ) continue;
+		if (Pin->Type() != COMPONENT_PIN_DRAW_TYPE ) continue;
 		if ( Pin == CurrentPin) continue;
 		if ( (Pin->m_Pos == CurrentPin->m_Pos) && (Pin->m_Orient == CurrentPin->m_Orient) &&
 			 (g_EditPinByPinIsOn == FALSE ) )
@@ -345,7 +345,7 @@ LibDrawPin * CurrentPin = (LibDrawPin *) CurrentDrawItem;
 		Pin = (LibDrawPin *) CurrentLibEntry->m_Drawings;
 		for ( ; Pin != NULL; Pin = (LibDrawPin *) Pin->Pnext)
 		{
-			if(Pin->m_StructType != COMPONENT_PIN_DRAW_TYPE ) continue;
+			if(Pin->Type() != COMPONENT_PIN_DRAW_TYPE ) continue;
 			if( Pin->m_Flags == 0 ) continue;
 			if( Pin->m_Convert != CurrentPin->m_Convert ) continue;
 			Pin->m_PinShape = newshape;
@@ -373,7 +373,7 @@ LibDrawPin * CurrentPin = (LibDrawPin*)CurrentDrawItem;
 	Pin = (LibDrawPin*)CurrentLibEntry->m_Drawings;
 	for ( ; Pin != NULL; Pin = (LibDrawPin *) Pin->Pnext)
 	{
-		if(Pin->m_StructType != COMPONENT_PIN_DRAW_TYPE ) continue;
+		if(Pin->Type() != COMPONENT_PIN_DRAW_TYPE ) continue;
 		if( Pin->m_Flags == 0 ) continue;
 		Pin->m_PinType = newtype;
 	}
@@ -404,7 +404,7 @@ wxString buf;
 	Pin = (LibDrawPin *) CurrentLibEntry->m_Drawings;
 	for ( ; Pin != NULL; Pin = (LibDrawPin *) Pin->Pnext)
 	{
-		if (Pin->m_StructType != COMPONENT_PIN_DRAW_TYPE ) continue;
+		if (Pin->Type() != COMPONENT_PIN_DRAW_TYPE ) continue;
 		if( (Pin->m_Flags & IS_LINKED) == 0 ) continue;
 		if (newsize >= 0 ) Pin->m_PinNameSize = newsize;
 		Pin->m_PinName = buf;
@@ -439,7 +439,7 @@ wxString buf;
 	Pin = (LibDrawPin *) CurrentLibEntry->m_Drawings;
 	for ( ; Pin != NULL; Pin = (LibDrawPin *) Pin->Pnext)
 	{
-		if (Pin->m_StructType != COMPONENT_PIN_DRAW_TYPE ) continue;
+		if (Pin->Type() != COMPONENT_PIN_DRAW_TYPE ) continue;
 		if( (Pin->m_Flags & IS_LINKED) == 0 ) continue;
 		if( Pin->m_Unit != CurrentPin->m_Unit ) continue;
 		if ( newsize >= 0) Pin->m_PinNumSize = newsize;
@@ -474,7 +474,7 @@ wxPoint PinPos;
 		DrawItem = LibEntry->m_Drawings;
 		for ( ; DrawItem != NULL; )
 		{
-			if (DrawItem->m_StructType != COMPONENT_PIN_DRAW_TYPE )
+			if (DrawItem->Type() != COMPONENT_PIN_DRAW_TYPE )
 			{
 				DrawItem = DrawItem->Next(); continue;
 			}
@@ -591,7 +591,7 @@ LibDrawPin * Pin, * CurrentPin = (LibDrawPin * ) CurrentDrawItem;
 			{
 				Pin = (LibDrawPin *)DrawItem;
 				DrawItem = DrawItem->Next();
-				if( Pin->m_StructType != COMPONENT_PIN_DRAW_TYPE) continue;
+				if( Pin->Type() != COMPONENT_PIN_DRAW_TYPE) continue;
 				if( Pin->m_Flags == 0 ) continue;
 				if( Pin == CurrentPin) continue;
 				if(CurrentPin->m_Convert && (CurrentPin->m_Convert != Pin->m_Convert))
@@ -615,7 +615,7 @@ LibDrawPin * Pin, * CurrentPin = (LibDrawPin * ) CurrentDrawItem;
 			for ( ; DrawItem != NULL; )
 				{
 				Pin = (LibDrawPin *)DrawItem; DrawItem = DrawItem->Next();
-				if(Pin->m_StructType != COMPONENT_PIN_DRAW_TYPE) continue;
+				if(Pin->Type() != COMPONENT_PIN_DRAW_TYPE) continue;
 				if( Pin->m_Flags == 0 ) continue;
 				if( Pin == CurrentPin) continue;
 				if( CurrentPin->m_Unit && (CurrentPin->m_Unit != Pin->m_Unit) )
@@ -672,7 +672,7 @@ LibDrawPin * RefPin, * Pin = (LibDrawPin *) CurrentDrawItem;
 		Pin = (LibDrawPin *)CurrentLibEntry->m_Drawings;
 		for ( ; Pin != NULL; Pin = (LibDrawPin *)Pin->Pnext )
 		{
-			if (Pin->m_StructType != COMPONENT_PIN_DRAW_TYPE ) continue;
+			if (Pin->Type() != COMPONENT_PIN_DRAW_TYPE ) continue;
 			if( Pin->m_Pos != RefPin->m_Pos ) continue;
 			if(Pin->m_Orient != RefPin->m_Orient) continue;
 			if( Pin->m_Convert == RefPin->m_Convert ) Pin->m_PinLen = newsize;
@@ -745,14 +745,14 @@ LibDrawPin * Pin;
 bool selected = (MasterPin->m_Selected & IS_SELECTED) != 0;
 
 	if( (CurrentLibEntry == NULL) || (MasterPin == NULL) ) return;
-	if(MasterPin->m_StructType != COMPONENT_PIN_DRAW_TYPE ) return;
+	if(MasterPin->Type() != COMPONENT_PIN_DRAW_TYPE ) return;
 
 	GetScreen()->SetModify();
 
 	Pin = (LibDrawPin *)CurrentLibEntry->m_Drawings;
 	for( ; Pin != NULL; Pin = (LibDrawPin *) Pin->Pnext )
 		{
-		if ( Pin->m_StructType != COMPONENT_PIN_DRAW_TYPE ) continue;
+		if ( Pin->Type() != COMPONENT_PIN_DRAW_TYPE ) continue;
 		if ( (Pin->m_Convert) && (Pin->m_Convert != CurrentConvert) ) continue;
 		// Is it the "selected mode" ?
 		if (selected && (Pin->m_Selected & IS_SELECTED) == 0 ) continue;
@@ -793,7 +793,7 @@ int ox = 0, oy = 0;
 
 	if(CurrentLibEntry == NULL ) return;
 	if(SourcePin == NULL ) return;
-	if(SourcePin->m_StructType != COMPONENT_PIN_DRAW_TYPE ) return;
+	if(SourcePin->Type() != COMPONENT_PIN_DRAW_TYPE ) return;
 
 	Pin = SourcePin->GenCopy();
 	Pin->Pnext = CurrentLibEntry->m_Drawings;
@@ -848,13 +848,13 @@ wxString msg;
 	Pin = (LibDrawPin *)CurrentLibEntry->m_Drawings;
 	for( nb_pins  = 0; Pin != NULL; Pin = (LibDrawPin *) Pin->Pnext )
 	{
-		if ( Pin->m_StructType == COMPONENT_PIN_DRAW_TYPE ) nb_pins++;
+		if ( Pin->Type() == COMPONENT_PIN_DRAW_TYPE ) nb_pins++;
 	}
 	PinList = (LibDrawPin **) MyZMalloc( (nb_pins+1) * sizeof(LibDrawPin *) );
 	Pin = (LibDrawPin *)CurrentLibEntry->m_Drawings;
 	for( ii = 0; Pin != NULL; Pin = (LibDrawPin *) Pin->Pnext )
 	{
-		if ( Pin->m_StructType == COMPONENT_PIN_DRAW_TYPE ) PinList[ii++] = Pin;
+		if ( Pin->Type() == COMPONENT_PIN_DRAW_TYPE ) PinList[ii++] = Pin;
 	}
 
 	// Classement des pins par numero de pin

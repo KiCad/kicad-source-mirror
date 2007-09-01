@@ -336,9 +336,9 @@ static void ReturnNbViasAndTracks( BOARD* Pcb, int netcode, int* nb_vias,
             return;
         if( track->m_NetCode != netcode )
             continue;
-        if( track->m_StructType == TYPEVIA )
+        if( track->Type() == TYPEVIA )
             (*nb_vias)++;
-        if( track->m_StructType == TYPETRACK )
+        if( track->Type() == TYPETRACK )
             (*nb_tracks)++;
     }
 }
@@ -370,10 +370,10 @@ static void GenExistantTracks( BOARD* Pcb, FILE* outfile,
         plink = track->m_Sous_Netcode;
         via_min_layer = track->GetLayer();
 
-        if( track->m_StructType != type )
+        if( track->Type() != type )
             continue;
 
-        if( track->m_StructType == TYPEVIA )
+        if( track->Type() == TYPEVIA )
         {
             via_min_layer &= 15;
             via_max_layer  = (track->GetLayer() >> 4) & 15;
@@ -406,7 +406,7 @@ static void GenExistantTracks( BOARD* Pcb, FILE* outfile,
             fprintf( outfile, "q c 0 %d 0 0 0\n", track->m_Width / PSCALE );
         }
 
-        if( track->m_StructType == TYPETRACK )
+        if( track->Type() == TYPETRACK )
         {
             fprintf( outfile, "t 0 %d", track->m_Width / PSCALE );
             fprintf( outfile, " %d %d", track->m_Start.x / PSCALE, track->m_Start.y / PSCALE );
@@ -449,7 +449,7 @@ static int GenEdges( BOARD* Pcb, FILE* outfile )
     /* impression des contours  */
     for( PtStruct = Pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
-        if( PtStruct->m_StructType != TYPEDRAWSEGMENT )
+        if( PtStruct->Type() != TYPEDRAWSEGMENT )
             continue;
 
         PtDrawSegment = (DRAWSEGMENT*) PtStruct;

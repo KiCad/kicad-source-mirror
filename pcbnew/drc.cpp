@@ -614,7 +614,7 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
         w_dist += g_DesignSettings.m_TrackClearence;
 
         /* si le segment de reference est une via, le traitement est ici */
-        if( pt_segment->m_StructType == TYPEVIA )
+        if( pt_segment->Type() == TYPEVIA )
         {
             int orgx, orgy; // origine du repere d'axe X = segment a comparer
             int angle = 0;  // angle du segment a tester;
@@ -622,7 +622,7 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
             dx   = pttrack->m_End.x - orgx; dy = pttrack->m_End.y - orgy;
             x0   = pt_segment->m_Start.x - orgx; y0 = pt_segment->m_Start.y - orgy;
 
-            if( pttrack->m_StructType == TYPEVIA )   /* Tst distance entre 2 vias */
+            if( pttrack->Type() == TYPEVIA )   /* Tst distance entre 2 vias */
             {
                 if( (int) hypot( (float) x0, (float) y0 ) < w_dist )
                 {
@@ -669,7 +669,7 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
 
         RotatePoint( &x0, &y0, segm_angle ); RotatePoint( &xf, &yf, segm_angle );
 
-        if( pttrack->m_StructType == TYPEVIA )
+        if( pttrack->Type() == TYPEVIA )
         {
             if( TestMarginToCircle( x0, y0, w_dist, segm_long ) == OK_DRC )
                 continue;
@@ -1305,13 +1305,13 @@ static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb,
     netname2 = wxT( "<noname>" );
 
     tracktype = wxT( "Track" );
-    if( pt_ref->m_StructType == TYPEVIA )
+    if( pt_ref->Type() == TYPEVIA )
         tracktype = wxT( "Via" );
-    if( pt_ref->m_StructType == TYPEZONE )
+    if( pt_ref->Type() == TYPEZONE )
         tracktype = wxT( "Zone" );
 
 
-    if( ( (EDA_BaseStruct*) pt_item )->m_StructType == TYPEPAD )
+    if( ( (EDA_BaseStruct*) pt_item )->Type() == TYPEPAD )
     {
         D_PAD* pad = (D_PAD*) pt_item;
         equipot = Pcb->FindNet( pad->m_NetCode );
@@ -1334,7 +1334,7 @@ static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb,
         if( equipot )
             netname2 = equipot->m_Netname;
         erc_pos = pt_segm->m_Start;
-        if( pt_segm->m_StructType == TYPEVIA )
+        if( pt_segm->Type() == TYPEVIA )
         {
             msg.Printf( _( "%d Err type %d: %s (net %s) and VIA (net %s) @ %d,%d\n" ),
                         ErrorsDRC_Count, errnumber, tracktype.GetData(),

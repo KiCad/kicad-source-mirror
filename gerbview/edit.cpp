@@ -30,12 +30,12 @@ void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     {
         if( DrawStruct && DrawStruct->m_Flags ) // Commande "POPUP" en cours
         {
-            switch( DrawStruct->m_StructType )
+            switch( DrawStruct->Type() )
             {
             default:
                 msg.Printf(
                     wxT( "WinEDA_GerberFrame::ProcessCommand err: Struct %d, m_Flags = %X" ),
-                    (unsigned) DrawStruct->m_StructType,
+                    (unsigned) DrawStruct->Type(),
                     (unsigned) DrawStruct->m_Flags );
                 DisplayError( this, msg );
             }
@@ -60,7 +60,7 @@ void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         DrawStruct = GerberGeneralLocateAndDisplay();
         if( DrawStruct == NULL )
             break;
-        if( DrawStruct->m_StructType == TYPETRACK )
+        if( DrawStruct->Type() == TYPETRACK )
         {
             Delete_Segment( DC, (TRACK*) DrawStruct );
             GetScreen()->SetCurItem( NULL );
@@ -309,13 +309,13 @@ static void Process_Move_Item( WinEDA_GerberFrame* frame,
 
     frame->DrawPanel->MouseToCursorSchema();
 
-    switch( DrawStruct->m_StructType )
+    switch( DrawStruct->Type() )
     {
     default:
         wxString msg;
         msg.Printf(
             wxT( "WinEDA_LibeditFrame::Move_Item Error: Bad DrawType %d" ),
-            DrawStruct->m_StructType );
+            DrawStruct->Type() );
         DisplayError( frame, msg );
         break;
     }
@@ -350,7 +350,7 @@ void WinEDA_GerberFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             break;
 
         // Element localisé
-        switch( DrawStruct->m_StructType )
+        switch( DrawStruct->Type() )
         {
         default:
             break;

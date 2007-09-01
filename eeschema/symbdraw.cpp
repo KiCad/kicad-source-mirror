@@ -71,7 +71,7 @@ bodygraphics_PropertiesAccept( wxCommandEvent& event )
             CurrentDrawItem->m_Convert = 0;
         if( m_Filled  )
         {
-            switch( CurrentDrawItem->m_StructType )
+            switch( CurrentDrawItem->Type() )
             {
             case COMPONENT_ARC_DRAW_TYPE:
                 ( (LibDrawArc*) CurrentDrawItem )->m_Fill  = FlSymbol_Fill;
@@ -143,7 +143,7 @@ static void AbortSymbolTraceOn( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     if( CurrentDrawItem->m_Flags & IS_NEW )
     {
-        if( CurrentDrawItem->m_StructType == COMPONENT_ARC_DRAW_TYPE )
+        if( CurrentDrawItem->Type() == COMPONENT_ARC_DRAW_TYPE )
         {
             Panel->m_Parent->RedrawActiveWindow( DC, TRUE );
         }
@@ -339,7 +339,7 @@ void WinEDA_LibeditFrame::GraphicItemBeginDraw( wxDC* DC )
     if( CurrentDrawItem == NULL )
         return;
 
-    switch( CurrentDrawItem->m_StructType )
+    switch( CurrentDrawItem->Type() )
     {
     case COMPONENT_ARC_DRAW_TYPE:
         if( StateDrawArc == 1 )
@@ -414,7 +414,7 @@ void MoveLibDrawItemAt( LibEDA_BaseStruct* DrawItem, wxPoint newpos )
     int    mx = newpos.x, my = newpos.y;
     wxSize size;
 
-    switch( DrawItem->m_StructType )
+    switch( DrawItem->Type() )
     {
     case COMPONENT_ARC_DRAW_TYPE:
     {
@@ -485,7 +485,7 @@ void WinEDA_LibeditFrame::StartMoveDrawSymbol( wxDC* DC )
     CurrentDrawItem->m_Flags |= IS_MOVED;
     StartCursor = m_CurrentScreen->m_Curseur;
 
-    switch( CurrentDrawItem->m_StructType )
+    switch( CurrentDrawItem->Type() )
     {
     case COMPONENT_ARC_DRAW_TYPE:
         InitPosition = ( (LibDrawArc*) CurrentDrawItem )->m_Pos;
@@ -548,7 +548,7 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
         {
             DrawLibraryDrawStruct( panel, DC, CurrentLibEntry, 0, 0,
                                    CurrentDrawItem, CurrentUnit, DrawMode );
-            if( CurrentDrawItem->m_StructType == COMPONENT_ARC_DRAW_TYPE )
+            if( CurrentDrawItem->Type() == COMPONENT_ARC_DRAW_TYPE )
             {
                 int Color = ReturnLayerColor( LAYER_DEVICE );
                 GRDashedLine( &panel->m_ClipBox, DC, ArcStartX, -ArcStartY,
@@ -563,7 +563,7 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
         }
     }
 
-    switch( CurrentDrawItem->m_StructType )
+    switch( CurrentDrawItem->Type() )
     {
     case COMPONENT_ARC_DRAW_TYPE:
         if( StateDrawArc == 1 )
@@ -620,7 +620,7 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     {
         DrawLibraryDrawStruct( panel, DC, CurrentLibEntry, 0, 0,
                                CurrentDrawItem, CurrentUnit, DrawMode );
-        if( CurrentDrawItem->m_StructType == COMPONENT_ARC_DRAW_TYPE )
+        if( CurrentDrawItem->Type() == COMPONENT_ARC_DRAW_TYPE )
         {
             int Color = ReturnLayerColor( LAYER_DEVICE );
             GRDashedLine( &panel->m_ClipBox, DC, ArcStartX, -ArcStartY,
@@ -652,7 +652,7 @@ void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
     if( CurrentDrawItem == NULL )
         return;
 
-    if( CurrentDrawItem->m_StructType == COMPONENT_ARC_DRAW_TYPE )
+    if( CurrentDrawItem->Type() == COMPONENT_ARC_DRAW_TYPE )
     {
         if( StateDrawArc == 1 ) /* Trace d'arc en cours: doit etre termine */
         {
@@ -673,7 +673,7 @@ void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
         CurrentDrawItem->Pnext      = CurrentLibEntry->m_Drawings;
         CurrentLibEntry->m_Drawings = CurrentDrawItem;
 
-        switch( CurrentDrawItem->m_StructType )
+        switch( CurrentDrawItem->Type() )
         {
         case COMPONENT_ARC_DRAW_TYPE:
             ( (LibDrawArc*) CurrentDrawItem )->m_Fill = FlSymbol_Fill;
@@ -821,7 +821,7 @@ void WinEDA_LibeditFrame::DeleteDrawPoly( wxDC* DC )
 {
     if( CurrentDrawItem == NULL )
         return;
-    if( CurrentDrawItem->m_StructType != COMPONENT_POLYLINE_DRAW_TYPE )
+    if( CurrentDrawItem->Type() != COMPONENT_POLYLINE_DRAW_TYPE )
         return;
 
     int*             ptpoly;

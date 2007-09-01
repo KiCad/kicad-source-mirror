@@ -413,7 +413,7 @@ wxClientDC dc(m_Parent->DrawPanel);
 	DrawStruct = m_Parent->GetScreen()->EEDrawList;
 	for ( ; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext )
 	{
-		if(DrawStruct->m_StructType != DRAW_MARKER_STRUCT_TYPE ) continue;
+		if(DrawStruct->Type() != DRAW_MARKER_STRUCT_TYPE ) continue;
 		/* Marqueur trouve */
 		Marker = (DrawMarkerStruct * ) DrawStruct;
 		if( Marker->m_Type == MARQ_ERC )
@@ -693,7 +693,7 @@ wxString msg;
 		DrawStruct = Screen->EEDrawList;
 		for ( ; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext)
 		{
-			if(DrawStruct->m_StructType != DRAW_MARKER_STRUCT_TYPE )
+			if(DrawStruct->Type() != DRAW_MARKER_STRUCT_TYPE )
 				continue;
 
 			/* Marqueur trouve */

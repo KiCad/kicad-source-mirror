@@ -103,7 +103,6 @@ public:
      */
     virtual     bool IgnoreLockedItems() const = 0;
 
-
     /**
      * Function IncludeSecondary
      * determines if the secondary criteria, or 2nd choice items should be
@@ -111,7 +110,42 @@ public:
      * @return bool - true if should include, else false.
      */
     virtual     bool IncludeSecondary() const = 0;
+
+    /**
+     * Function IgnoreMTextsMarkedNoShow
+     * @return bool -true if MTexts marked as "no show" should be ignored.
+     */
+    virtual     bool IgnoreMTextsMarkedNoShow() const = 0;
     
+    /**
+     * Function IgnoreZones
+     * @return bool - true if should ignore zones.
+    virtual     bool IgnoreZones() const = 0;
+     can simply omit from scanTypes[] TYPEZONE */
+
+    /**
+     * Function IgnoreMTextsOnCu
+     * @return bool - true if should ignore MTexts on copper layer.
+     */
+    virtual     bool IgnoreMTextsOnCopper() const = 0;
+
+    /**
+     * Function IgnoreMTextsOnCmp
+     * @return bool - true if should ignore MTexts on component layer.
+     */
+    virtual     bool IgnoreMTextsOnCmp() const = 0;
+    
+    /**
+     * Function IgnoreModulesOnCu
+     * @return bool - true if should ignore MODULEs on copper layer.
+     */
+    virtual     bool IgnoreModulesOnCu() const = 0;
+
+    /**
+     * Function IgnoreModulesOnCmp
+     * @return bool - ture if should ignore MODULEs on component layer.
+     */
+    virtual     bool IgnoreModulesOnCmp() const = 0;
     
     /**
      * Function UseHitTesting
@@ -119,7 +153,6 @@ public:
      *             or false if Inspect() should use BOARD_ITEM::BoundsTest().
     virtual     bool UseHitTesting() const = 0;
      */
-    
 };
 
 
@@ -278,6 +311,12 @@ private:
     bool    m_IgnoreLockedItems;    
     bool    m_IncludeSecondary;
     
+    bool    m_IgnoreMTextsMarkedNoShow;
+    bool    m_IgnoreMTextsOnCopper;
+    bool    m_IgnoreMTextsOnCmp;
+    bool    m_IgnoreModulesOnCu;
+    bool    m_IgnoreModulesOnCmp;
+    
 public:
 
     /**
@@ -301,7 +340,14 @@ public:
 #else        
         m_IncludeSecondary          = true;
 #endif        
+
+//        m_IgnoreMTextsMarkedNoShow = g_ModuleTextNOVColor;
+        m_IgnoreMTextsOnCopper;
+        m_IgnoreMTextsOnCmp;
+        m_IgnoreModulesOnCu;
+//        m_IgnoreModulesOnCmp = !settings->Show_Modules_Cmp;
     }
+
     
     /**
      * Function IsLayerLocked
@@ -380,8 +426,43 @@ public:
      * @return bool - true if should include, else false.
      */
     bool IncludeSecondary() const  { return m_IncludeSecondary; }
-    void SetIncludeSecondary( bool include ) { m_IncludeSecondary = include; } 
+    void SetIncludeSecondary( bool include ) { m_IncludeSecondary = include; }
+
     
+    /**
+     * Function IgnoreMTextsMarkedNoShow
+     * @return bool -true if MTexts marked as "no show" should be ignored.
+     */
+    bool IgnoreMTextsMarkedNoShow() const { return m_IgnoreMTextsMarkedNoShow; }
+    void SetIgnoreMTextsMarkedNoShow( bool ignore ) { m_IgnoreMTextsMarkedNoShow = ignore; }
+    
+    /**
+     * Function IgnoreMTextsOnCu
+     * @return bool - true if should ignore MTexts on copper layer.
+     */
+    bool IgnoreMTextsOnCopper() const { return m_IgnoreMTextsOnCopper; }
+    void SetIgnoreMTextsOnCopper( bool ignore ) { m_IgnoreMTextsOnCopper = ignore; }
+
+    /**
+     * Function IgnoreMTextsOnCmp
+     * @return bool - true if should ignore MTexts on component layer.
+     */
+    bool IgnoreMTextsOnCmp() const { return m_IgnoreMTextsOnCmp; }
+    void SetIgnoreMTextsOnCmp( bool ignore ) { m_IgnoreMTextsOnCmp = ignore; } 
+    
+    /**
+     * Function IgnoreModulesOnCu
+     * @return bool - true if should ignore MODULEs on copper layer.
+     */
+    bool IgnoreModulesOnCu() const { return m_IgnoreModulesOnCu; }
+    void SetIgnoreModulesOnCu( bool ignore ) { m_IgnoreModulesOnCu = ignore; }
+
+    /**
+     * Function IgnoreModulesOnCmp
+     * @return bool - ture if should ignore MODULEs on component layer.
+     */
+    bool IgnoreModulesOnCmp() const { return m_IgnoreModulesOnCmp; }
+    void SetIgnoreModulesOnCmp( bool ignore ) { m_IgnoreModulesOnCmp = ignore; }
 };
 
 #endif // COLLECTORS_H

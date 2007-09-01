@@ -237,7 +237,7 @@ void FreeCmpLibrary( wxWindow* frame, const wxString& LibName )
 
 
 /******************************/
-const wxChar** GetLibNames( void )
+const wxChar** GetLibNames()
 /******************************/
 
 /* Routine to return pointers to all library names.
@@ -806,7 +806,7 @@ LibraryStruct* FindLibrary( const wxString& Name )
 /*****************************************************************************
 * Routine to find the number of libraries currently loaded.					 *
 *****************************************************************************/
-int NumOfLibraries( void )
+int NumOfLibraries()
 {
     int            ii;
     LibraryStruct* Lib = g_LibraryList;
@@ -1080,7 +1080,7 @@ static bool ReadLibEntryDateAndTime( EDA_LibComponentStruct* LibEntry, char* Lin
 /*******************************************/
 static int SortItemsFct( const void* ref, const void* item );
 
-void EDA_LibComponentStruct::SortDrawItems( void )
+void EDA_LibComponentStruct::SortDrawItems()
 /*******************************************/
 
 /* Trie les éléments graphiques d'un composant lib pour améliorer
@@ -1130,7 +1130,7 @@ int SortItemsFct( const void* ref, const void* item )
 
     int fill_ref = 0, fill_item = 0;
 
-    switch( Ref->m_StructType )
+    switch( Ref->Type() )
     {
     case COMPONENT_ARC_DRAW_TYPE:
     {
@@ -1161,15 +1161,15 @@ int SortItemsFct( const void* ref, const void* item )
     }
 
     case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
-        if( Item->m_StructType == COMPONENT_PIN_DRAW_TYPE )
+        if( Item->Type() == COMPONENT_PIN_DRAW_TYPE )
             return BEFORE;
-        if( Item->m_StructType == COMPONENT_GRAPHIC_TEXT_DRAW_TYPE )
+        if( Item->Type() == COMPONENT_GRAPHIC_TEXT_DRAW_TYPE )
             return 0;
         return 1;
         break;
 
     case COMPONENT_PIN_DRAW_TYPE:
-        if( Item->m_StructType == COMPONENT_PIN_DRAW_TYPE )
+        if( Item->Type() == COMPONENT_PIN_DRAW_TYPE )
         {
             int ii;
 
@@ -1199,7 +1199,7 @@ int SortItemsFct( const void* ref, const void* item )
     }
 
     /* Test de l'item */
-    switch( Item->m_StructType )
+    switch( Item->Type() )
     {
     case COMPONENT_ARC_DRAW_TYPE:
     {

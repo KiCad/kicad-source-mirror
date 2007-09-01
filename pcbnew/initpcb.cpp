@@ -250,7 +250,7 @@ void WinEDA_PcbFrame::Erase_Segments_Pcb( wxDC* DC, bool is_edges, bool query )
     {
         PtNext = PtStruct->Next();
 
-        switch( PtStruct->m_StructType )
+        switch( PtStruct->Type() )
         {
         case TYPEDRAWSEGMENT:
         case TYPETEXTE:
@@ -325,16 +325,16 @@ void WinEDA_PcbFrame::Erase_Modules( wxDC* DC, bool query )
 void WinEDA_PcbFrame::Erase_Textes_Pcb( wxDC* DC, bool query )
 /************************************************************/
 {
-    EDA_BaseStruct* PtStruct, * PtNext;
+    BOARD_ITEM* PtStruct, * PtNext;
 
     if( query && !IsOK( this, _( "Delete Pcb Texts" ) ) )
         return;
 
-    PtStruct = (EDA_BaseStruct*) m_Pcb->m_Drawings;
+    PtStruct = m_Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtNext )
     {
-        PtNext = PtStruct->Pnext;
-        if( PtStruct->m_StructType == TYPETEXTE )
+        PtNext = PtStruct->Next();
+        if( PtStruct->Type() == TYPETEXTE )
             DeleteStructure( PtStruct );
     }
 
@@ -343,16 +343,16 @@ void WinEDA_PcbFrame::Erase_Textes_Pcb( wxDC* DC, bool query )
 
 
 /*******************************************/
-void WinEDA_PcbFrame::Erase_Marqueurs( void )
+void WinEDA_PcbFrame::Erase_Marqueurs()
 /*******************************************/
 {
-    EDA_BaseStruct* PtStruct, * PtNext;
+    BOARD_ITEM* PtStruct, * PtNext;
 
     PtStruct = m_Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtNext )
     {
-        PtNext = PtStruct->Pnext;
-        if( PtStruct->m_StructType == TYPEMARQUEUR )
+        PtNext = PtStruct->Next();
+        if( PtStruct->Type() == TYPEMARQUEUR )
             DeleteStructure( PtStruct );
     }
 

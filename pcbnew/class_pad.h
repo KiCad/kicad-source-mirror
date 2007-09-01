@@ -64,14 +64,14 @@ public:
 public:
     D_PAD( MODULE* parent );
     D_PAD( D_PAD* pad );
-    ~D_PAD( void );
+    ~D_PAD();
 
     void            Copy( D_PAD* source );
 
-    D_PAD* Next( void ) { return (D_PAD*) Pnext; }
+    D_PAD* Next() { return (D_PAD*) Pnext; }
 
     /* remove from linked list */
-    void            UnLink( void );
+    void            UnLink();
 
     /* Reading and writing data on files */
     int             ReadDescr( FILE* File, int* LineNum = NULL );
@@ -83,10 +83,10 @@ public:
 
     // others
     void            SetPadName( const wxString& name );     // Change pad name
-    wxString        ReturnStringPadName( void );            // Return pad name as string in a wxString
+    wxString        ReturnStringPadName();            // Return pad name as string in a wxString
     void            ReturnStringPadName( wxString& text );  // Return pad name as string in a buffer
-    void            ComputeRayon( void );                   // compute m_Rayon, rayon du cercle exinscrit
-    const wxPoint   ReturnShapePos( void );                 // retourne la position
+    void            ComputeRayon();                   // compute m_Rayon, rayon du cercle exinscrit
+    const wxPoint   ReturnShapePos();                 // retourne la position
 
     /**
      * Function Display_Infos

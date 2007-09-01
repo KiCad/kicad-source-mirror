@@ -157,7 +157,7 @@ wxString msg;
 	PtStruct = m_Pcb->m_Drawings;
 	for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
 		{
-		switch( PtStruct->m_StructType )
+		switch( PtStruct->Type() )
 			{
 			case TYPEDRAWSEGMENT:
 				PlotDrawSegment( (DRAWSEGMENT*) PtStruct, PLOT_FORMAT_GERBER,
@@ -197,7 +197,7 @@ wxString msg;
 		 PtStruct = Module->m_Drawings;
 		 for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
 			 {
-			switch( PtStruct->m_StructType )
+			switch( PtStruct->Type() )
 				 {
 				 case TYPEEDGEMODULE:
 					if( masque_layer & g_TabOneLayerMask[((EDGE_MODULE*)PtStruct)->GetLayer()] )
@@ -268,7 +268,7 @@ wxString msg;
 		Affiche_1_Parametre(this, 56, wxT("Vias"), wxEmptyString,RED) ;
 		for( track = m_Pcb->m_Track; track != NULL; track = (TRACK*) track->Pnext)
 		{
-			if( track->m_StructType != TYPEVIA ) continue;
+			if( track->Type() != TYPEVIA ) continue;
 			SEGVIA * Via = (SEGVIA *) track;
 			/* vias not plotted if not on selected layer, but if layer
 			== SOLDERMASK_LAYER_CU or SOLDERMASK_LAYER_CMP, vias are drawn ,
@@ -294,7 +294,7 @@ wxString msg;
 	{
 		wxPoint end;
 
-		if ( track->m_StructType == TYPEVIA ) continue ;
+		if ( track->Type() == TYPEVIA ) continue ;
 		if( (g_TabOneLayerMask[track->GetLayer()] & masque_layer) == 0 ) continue;
 
 		size.x = size.y = track->m_Width;

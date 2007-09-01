@@ -35,12 +35,12 @@ bool Modify = FALSE;
 	DrawList = EEDrawList;
 	for ( ;DrawList != NULL; DrawList = DrawList->Pnext )
 	{
-		if( DrawList->m_StructType == DRAW_SEGMENT_STRUCT_TYPE )
+		if( DrawList->Type() == DRAW_SEGMENT_STRUCT_TYPE )
 		{
 			TstDrawList = DrawList->Pnext;
 			while ( TstDrawList )
 			{
-				if( TstDrawList->m_StructType == DRAW_SEGMENT_STRUCT_TYPE )
+				if( TstDrawList->Type() == DRAW_SEGMENT_STRUCT_TYPE )
 				{
 					flag = TstAlignSegment( (EDA_DrawLineStruct*)DrawList,
 										(EDA_DrawLineStruct*)TstDrawList);
@@ -82,7 +82,7 @@ EDA_BaseStruct *DrawList;
 	DrawList = Screen->EEDrawList;
 	while ( DrawList )
 		{
-		switch( DrawList->m_StructType )
+		switch( DrawList->Type() )
 		{
 			case DRAW_JUNCTION_STRUCT_TYPE :
 				#undef STRUCT
@@ -136,7 +136,7 @@ DrawPickedStruct * List = NULL;
 	DrawList = screen->EEDrawList;
 	while ( DrawList )
 	{
-		switch( DrawList->m_StructType )
+		switch( DrawList->Type() )
 		{
 			case DRAW_SEGMENT_STRUCT_TYPE :
 				segment = (EDA_DrawLineStruct*)DrawList;

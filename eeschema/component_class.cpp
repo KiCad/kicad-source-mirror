@@ -109,7 +109,7 @@ int ii;
 
 
 /**********************************************************************/
-EDA_Rect EDA_SchComponentStruct::GetBoundaryBox( void )
+EDA_Rect EDA_SchComponentStruct::GetBoundaryBox()
 /**********************************************************************/
 {
 EDA_LibComponentStruct * Entry = FindLibPart(m_ChipName.GetData(), wxEmptyString, FIND_ROOT);
@@ -203,7 +203,7 @@ void EDA_SchComponentStruct::Place(WinEDA_DrawFrame * frame, wxDC * DC)
 {
 	/* save old text in undo list */
 	if ( g_ItemToUndoCopy &&
-		 (g_ItemToUndoCopy->m_StructType == m_StructType) &&
+		 (g_ItemToUndoCopy->Type() == Type()) &&
 		((m_Flags & IS_NEW) == 0) )
 	{
 		/* restore old values and save new ones */

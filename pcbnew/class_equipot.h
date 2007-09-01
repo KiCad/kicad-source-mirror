@@ -26,7 +26,7 @@ public:
     ~EQUIPOT();
 
     /* Effacement memoire de la structure */
-    void    UnLink( void );
+    void    UnLink();
 
     /* Readind and writing data on files */
     int     ReadEquipotDescr( FILE* File, int* LineNum );

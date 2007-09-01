@@ -128,7 +128,7 @@ int Nb = 0;
 	{
 		for( Phead=Window->EEDrawList; Phead != NULL; Phead=Phead->Pnext)
 		{
-			if (Phead->m_StructType == DRAW_LIB_ITEM_STRUCT_TYPE)
+			if (Phead->Type() == DRAW_LIB_ITEM_STRUCT_TYPE)
 			{
 				DrawPartStruct * Cmp = (DrawPartStruct *) Phead;
 				if ( Cmp->m_Field[VALUE].m_Text.GetChar(0) != '#' ) Nb++;

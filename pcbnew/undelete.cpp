@@ -21,7 +21,7 @@ void WinEDA_PcbFrame::UnDeleteItem( wxDC* DC )
 /* Restitution d'un element (MODULE ou TRACK ) Efface
  */
 {
-    EDA_BaseStruct* PtStruct, * PtNext;
+    BOARD_ITEM* PtStruct, * PtNext;
     TRACK*          pt_track;
     int             net_code;
 
@@ -33,13 +33,13 @@ void WinEDA_PcbFrame::UnDeleteItem( wxDC* DC )
     if( PtStruct == NULL )
         return;                     // Ne devrait pas se produire
 
-    switch( PtStruct->m_StructType )
+    switch( PtStruct->Type() )
     {
     case TYPEVIA:
     case TYPETRACK:
         for( ; PtStruct != NULL; PtStruct = PtNext )
         {
-            PtNext = PtStruct->Pnext;
+            PtNext = PtStruct->Next();
             PtStruct->SetState( DELETED, OFF );     /* Effacement du bit DELETED */
             ( (TRACK*) PtStruct )->Draw( DrawPanel, DC, GR_OR );
         }
@@ -92,9 +92,9 @@ void WinEDA_PcbFrame::UnDeleteItem( wxDC* DC )
 /* Sauvegarde d'un element aux fins de restitution par Undelete
  *  Supporte actuellement : Module et segments de piste
  */
-EDA_BaseStruct* WinEDA_PcbFrame::SaveItemEfface( EDA_BaseStruct* PtItem, int nbitems )
+BOARD_ITEM* WinEDA_PcbFrame::SaveItemEfface( BOARD_ITEM* PtItem, int nbitems )
 {
-    EDA_BaseStruct* NextS, * PtStruct = PtItem;
+    BOARD_ITEM* NextS, * PtStruct = PtItem;
     int             ii;
 
     if( (PtItem == NULL) || (nbitems == 0) )
@@ -112,21 +112,23 @@ EDA_BaseStruct* WinEDA_PcbFrame::SaveItemEfface( EDA_BaseStruct* PtItem, int nbi
         g_UnDeleteStackPtr--;;
     }
 
-    switch( PtStruct->m_StructType )
+    switch( PtStruct->Type() )
     {
     case TYPEVIA:
     case TYPETRACK:
     {
-        EDA_BaseStruct* Back = NULL;
+        BOARD_ITEM* Back = NULL;
         g_UnDeleteStack[g_UnDeleteStackPtr++] = PtStruct;
 
         for( ; nbitems > 0; nbitems--, PtStruct = NextS )
         {
-            NextS = PtStruct->Pnext;
+            NextS = PtStruct->Next();
             ( (TRACK*) PtStruct )->UnLink();
+            
             PtStruct->SetState( DELETED, ON );
             if( nbitems <= 1 )
                 NextS = NULL;                       /* fin de chaine */
+            
             PtStruct->Pnext = NextS;
             PtStruct->Pback = Back; Back = PtStruct;
             if( NextS == NULL )

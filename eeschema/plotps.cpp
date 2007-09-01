@@ -415,7 +415,7 @@ wxPoint StartPos, EndPos;
 	{
 		Plume('U');
 		layer = LAYER_NOTES;
-		switch( DrawList->m_StructType )
+		switch( DrawList->Type() )
 		{
 			case DRAW_BUSENTRY_STRUCT_TYPE :		/* Struct Raccord et Segment sont identiques */
 				#undef STRUCT
@@ -426,7 +426,7 @@ wxPoint StartPos, EndPos;
 			case DRAW_SEGMENT_STRUCT_TYPE :
 				#undef STRUCT
 				#define STRUCT ((EDA_DrawLineStruct*)DrawList)
-				if ( DrawList->m_StructType == DRAW_SEGMENT_STRUCT_TYPE)
+				if ( DrawList->Type() == DRAW_SEGMENT_STRUCT_TYPE)
 				{
 					StartPos = STRUCT->m_Start;
 					EndPos = STRUCT->m_End;

@@ -58,7 +58,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     PtStruct = Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
-        switch( PtStruct->m_StructType )
+        switch( PtStruct->Type() )
         {
         case TYPEDRAWSEGMENT:
             if( (g_TabOneLayerMask[ PtStruct->GetLayer()] & printmasklayer) == 0 )
@@ -100,7 +100,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     {
         if( ( printmasklayer & pt_piste->ReturnMaskLayer() ) == 0 )
             continue;
-        if( pt_piste->m_StructType == TYPEVIA ) /* VIA rencontree */
+        if( pt_piste->Type() == TYPEVIA ) /* VIA rencontree */
         {
             int rayon = pt_piste->m_Width >> 1;
             int color = g_DesignSettings.m_ViaColor[pt_piste->m_Shape];
@@ -136,7 +136,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     {
         if( ( printmasklayer & pt_piste->ReturnMaskLayer() ) == 0 )
             continue;
-        if( pt_piste->m_StructType == TYPEVIA ) /* VIA rencontree */
+        if( pt_piste->Type() == TYPEVIA ) /* VIA rencontree */
         {
             GRSetDrawMode( DC, drawmode );
             GRFilledCircle( &m_ClipBox, DC, pt_piste->m_Start.x, pt_piste->m_Start.y,
@@ -199,7 +199,7 @@ static void Plot_Module( WinEDA_DrawPanel* panel, wxDC* DC,
 
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
-        switch( PtStruct->m_StructType )
+        switch( PtStruct->Type() )
         {
         case TYPETEXTEMODULE:
             if( (mlayer & masklayer ) == 0 )

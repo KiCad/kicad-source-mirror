@@ -375,8 +375,8 @@ void RemoteCommand( const char* cmdline );
 /*************/
 /* STRUCT.CPP */
 /*************/
-void DeleteStructure(EDA_BaseStruct * Struct);
-void DeleteStructList( EDA_BaseStruct * Struct);
+void DeleteStructure( BOARD_ITEM* Struct );
+void DeleteStructList( BOARD_ITEM* Struct );
 
 
 /***************/

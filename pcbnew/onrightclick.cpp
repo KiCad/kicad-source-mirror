@@ -70,7 +70,7 @@ static void CreatePopUpBlockMenu( wxMenu* menu );
 
 
 /********************************************/
-static wxMenu* Append_Track_Width_List( void )
+static wxMenu* Append_Track_Width_List()
 /********************************************/
 
 /* Ajoute au menu wxMenu * menu un sous-menu liste des epaisseurs de pistes
@@ -205,7 +205,7 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
     
     if( DrawStruct )
     {
-        switch( DrawStruct->m_StructType )
+        switch( DrawStruct->Type() )
         {
         case TYPEMODULE:
             if( !flags )
@@ -343,14 +343,14 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
         case PCB_EQUIPOT_STRUCT_TYPE:
             msg.Printf(
                 wxT( "WinEDA_PcbFrame::OnRightClick() Error: illegal DrawType %d" ),
-                DrawStruct->m_StructType );
+                DrawStruct->Type() );
             DisplayError( this, msg );
             break;
 
         default:
             msg.Printf(
                 wxT( "WinEDA_PcbFrame::OnRightClick() Error: unknown DrawType %d" ),
-                DrawStruct->m_StructType );
+                DrawStruct->Type() );
             DisplayError( this, msg );
             break;
         }
@@ -367,9 +367,9 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
         PopMenu->Append( ID_POPUP_PCB_FILL_ZONE, _( "Fill zone" ) );
 
         if( DrawStruct
-           && ( (DrawStruct->m_StructType == TYPEPAD)
-               || (DrawStruct->m_StructType == TYPETRACK)
-               || (DrawStruct->m_StructType == TYPEVIA) ) )
+           && ( (DrawStruct->Type() == TYPEPAD)
+               || (DrawStruct->Type() == TYPETRACK)
+               || (DrawStruct->Type() == TYPEVIA) ) )
         {
             add_separator = TRUE;
             PopMenu->Append( ID_POPUP_PCB_SELECT_NET_ZONE, _( "Select Net" ) );
@@ -512,7 +512,7 @@ void CreatePopupMenuForTracks( TRACK* Track, wxPoint CursorPosition,
 
     if( flags == 0 )
     {
-        if( Track->m_StructType == TYPEVIA )
+        if( Track->Type() == TYPEVIA )
         {
             ADD_MENUITEM( PopMenu, ID_POPUP_PCB_MOVE_TRACK_NODE, _( "Drag Via" ), move_xpm );
             wxMenu* via_mnu = new wxMenu();

@@ -190,7 +190,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         {
             if( DrawStruct->m_Flags )       // Item selected and edition in progress
             {
-                if( DrawStruct->m_StructType == DRAW_SEGMENT_STRUCT_TYPE )
+                if( DrawStruct->Type() == DRAW_SEGMENT_STRUCT_TYPE )
                 {
                     EDA_DrawLineStruct* segment = (EDA_DrawLineStruct*) DrawStruct;
                     if( segment->m_Layer != LAYER_WIRE )
@@ -214,13 +214,13 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
                                      GetScreen()->EEDrawList, LIBITEM | TEXTITEM | LABELITEM );
             if( DrawStruct == NULL )
                 break;
-            if( DrawStruct->m_StructType == DRAW_LIB_ITEM_STRUCT_TYPE )
+            if( DrawStruct->Type() == DRAW_LIB_ITEM_STRUCT_TYPE )
                 DrawStruct = LocateSmallestComponent( GetScreen() );
             if( DrawStruct == NULL )
                 break;
         }
 
-        switch( DrawStruct->m_StructType )
+        switch( DrawStruct->Type() )
         {
         case DRAW_LIB_ITEM_STRUCT_TYPE:
             if( DrawStruct->m_Flags == 0 )
@@ -368,7 +368,7 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case HK_REPEAT_LAST:
         if( LibItemToRepeat && (LibItemToRepeat->m_Flags == 0)
-           && (LibItemToRepeat->m_StructType == COMPONENT_PIN_DRAW_TYPE) )
+           && (LibItemToRepeat->Type() == COMPONENT_PIN_DRAW_TYPE) )
         {
             RepeatPinItem( DC, (LibDrawPin*) LibItemToRepeat );
         }

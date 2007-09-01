@@ -161,7 +161,7 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Width( EDGE_MODULE* Edge, wxDC* DC )
         Edge = (EDGE_MODULE*) Module->m_Drawings;
         for( ; Edge != NULL; Edge = (EDGE_MODULE*) Edge->Pnext )
         {
-            if( Edge->m_StructType != TYPEEDGEMODULE )
+            if( Edge->Type() != TYPEEDGEMODULE )
                 continue;
             Edge->m_Width = ModuleSegmentWidth;
         }
@@ -198,7 +198,7 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Layer( EDGE_MODULE* Edge, wxDC* DC )
         Edge = (EDGE_MODULE*) Module->m_Drawings;
         for( ; Edge != NULL; Edge = (EDGE_MODULE*) Edge->Pnext )
         {
-            if( Edge->m_StructType != TYPEEDGEMODULE )
+            if( Edge->Type() != TYPEEDGEMODULE )
                 continue;
             Edge->SetLayer( new_layer );
         }
@@ -254,7 +254,7 @@ void WinEDA_ModuleEditFrame::Delete_Edge_Module( EDGE_MODULE* Edge, wxDC* DC )
 {
     if( Edge == NULL )
         return;
-    if( Edge->m_StructType != TYPEEDGEMODULE )
+    if( Edge->Type() != TYPEEDGEMODULE )
     {
         DisplayError( this, wxT( "StructType error: TYPEEDGEMODULE expected" ) );
         return;
@@ -277,7 +277,7 @@ static void Exit_EditEdge_Module( WinEDA_DrawPanel* Panel, wxDC* DC )
 {
     EDGE_MODULE* Edge = (EDGE_MODULE*) Panel->GetScreen()->GetCurItem();
 
-    if( Edge && (Edge->m_StructType == TYPEEDGEMODULE) )    /* error si non */
+    if( Edge && (Edge->Type() == TYPEEDGEMODULE) )    /* error si non */
     {
         if( Edge->m_Flags & IS_NEW )                        /* effacement du nouveau contour */
         {

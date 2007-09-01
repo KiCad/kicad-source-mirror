@@ -82,7 +82,7 @@ void WinEDA_SchematicFrame::StartMoveTexte( DrawTextStruct* TextStruct, wxDC* DC
 
     TextStruct->m_Flags |= IS_MOVED;
 
-    switch( TextStruct->m_StructType )
+    switch( TextStruct->Type() )
     {
     case DRAW_LABEL_STRUCT_TYPE:
     case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
@@ -153,7 +153,7 @@ void WinEDA_SchematicFrame::ChangeTextOrient( DrawTextStruct* TextStruct, wxDC* 
     RedrawOneStruct( DrawPanel, DC, TextStruct, g_XorMode );
 
     /* Rotation du texte */
-    switch( TextStruct->m_StructType )
+    switch( TextStruct->Type() )
     {
     case DRAW_LABEL_STRUCT_TYPE:
     case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
@@ -193,10 +193,8 @@ EDA_BaseStruct* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
         break;
 
     case LAYER_LOCLABEL:
-    {
         NewText = new DrawLabelStruct( m_CurrentScreen->m_Curseur );
         NewText->m_Size.x = NewText->m_Size.y = g_DefaultTextLabelSize;
-    }
         break;
 
     case LAYER_GLOBLABEL:
@@ -250,7 +248,7 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
         RedrawOneStruct( panel, DC, TextStruct, g_XorMode );
 
     /* Redessin du texte */
-    switch( TextStruct->m_StructType )
+    switch( TextStruct->Type() )
     {
     case DRAW_LABEL_STRUCT_TYPE:
     case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
@@ -295,7 +293,7 @@ static void ExitMoveTexte( WinEDA_DrawPanel* Panel, wxDC* DC )
     }
     else    /* Remise a jour des anciens parametres du texte */
     {
-        switch( Struct->m_StructType )
+        switch( Struct->Type() )
         {
         case DRAW_LABEL_STRUCT_TYPE:
         case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
@@ -340,17 +338,17 @@ void WinEDA_SchematicFrame::ConvertTextType( DrawTextStruct* Text,
     switch( newtype )
     {
     case DRAW_LABEL_STRUCT_TYPE:
-        Text->m_StructType = DRAW_LABEL_STRUCT_TYPE;
+        Text->SetType( DRAW_LABEL_STRUCT_TYPE );
         Text->m_Layer = LAYER_LOCLABEL;
         break;
 
     case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-        Text->m_StructType = DRAW_GLOBAL_LABEL_STRUCT_TYPE;
+        Text->SetType( DRAW_GLOBAL_LABEL_STRUCT_TYPE );
         Text->m_Layer = LAYER_GLOBLABEL;
         break;
 
     case DRAW_TEXT_STRUCT_TYPE:
-        Text->m_StructType = DRAW_TEXT_STRUCT_TYPE;
+        Text->SetType( DRAW_TEXT_STRUCT_TYPE );
         Text->m_Layer = LAYER_NOTES;
         break;
 

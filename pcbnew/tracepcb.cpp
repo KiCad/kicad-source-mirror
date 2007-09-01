@@ -148,7 +148,7 @@ void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
         if( PtStruct->m_Flags & IS_MOVED )
             continue;
 
-        switch( PtStruct->m_StructType )
+        switch( PtStruct->Type() )
         {
         case TYPECOTATION:
             ( (COTATION*) PtStruct )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), mode );
@@ -204,7 +204,7 @@ void WinEDA_PcbFrame::Trace_PcbEdges( wxDC* DC, int mode_color )
     {
         if( PtStruct->m_Flags & IS_MOVED )
             continue;
-        if( PtStruct->m_StructType != TYPEDRAWSEGMENT )
+        if( PtStruct->Type() != TYPEDRAWSEGMENT )
             continue;
         Trace_DrawSegmentPcb( DrawPanel, DC, (DRAWSEGMENT*) PtStruct, mode_color );
     }

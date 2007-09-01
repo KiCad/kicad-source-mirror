@@ -87,7 +87,7 @@ SchematicGeneralLocateAndDisplay( bool IncludePin )
         return NULL;
 
     /* Cross probing to pcbnew if a pin or a component is found */
-    switch( DrawStruct->m_StructType )
+    switch( DrawStruct->Type() )
     {
     case COMPONENT_FIELD_DRAW_TYPE:
     {

@@ -36,7 +36,7 @@ void InstallPineditFrame(WinEDA_LibeditFrame * parent, wxDC * DC, const wxPoint 
 {
 wxPoint MousePos = parent->GetScreen()->m_Curseur;
 int accept = TRUE;	
-	if ( (CurrentDrawItem == NULL) || (CurrentDrawItem->m_StructType == COMPONENT_PIN_DRAW_TYPE) )
+	if ( (CurrentDrawItem == NULL) || (CurrentDrawItem->Type() == COMPONENT_PIN_DRAW_TYPE) )
 	{
 		LibDrawPin * Pin = (LibDrawPin *) CurrentDrawItem;
 		WinEDA_PinPropertiesFrame * frame = new WinEDA_PinPropertiesFrame(parent);

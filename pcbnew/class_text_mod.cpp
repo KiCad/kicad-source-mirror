@@ -43,7 +43,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
     m_Unused = 0;
     
     SetLayer( SILKSCREEN_N_CMP );
-    if( Module && (Module->m_StructType == TYPEMODULE) )
+    if( Module && (Module->Type() == TYPEMODULE) )
     {
         m_Pos   = Module->m_Pos;
 
@@ -66,7 +66,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
 }
 
 
-TEXTE_MODULE::~TEXTE_MODULE( void )
+TEXTE_MODULE::~TEXTE_MODULE()
 {
 }
 
@@ -95,12 +95,12 @@ void TEXTE_MODULE::Copy( TEXTE_MODULE* source )      // copy structure
 /* supprime du chainage la structure Struct
  *  les structures arrieres et avant sont chainees directement
  */
-void TEXTE_MODULE::UnLink( void )
+void TEXTE_MODULE::UnLink()
 {
     /* Modification du chainage arriere */
     if( Pback )
     {
-        if( Pback->m_StructType != TYPEMODULE )
+        if( Pback->Type() != TYPEMODULE )
         {
             Pback->Pnext = Pnext;
         }
@@ -119,7 +119,7 @@ void TEXTE_MODULE::UnLink( void )
 
 
 /******************************************/
-int TEXTE_MODULE:: GetLength( void )
+int TEXTE_MODULE:: GetLength()
 /******************************************/
 {
     return m_Text.Len();
@@ -135,7 +135,7 @@ void TEXTE_MODULE:: SetWidth( int new_width )
 
 
 // mise a jour des coordonn�s absolues pour affichage
-void TEXTE_MODULE:: SetDrawCoord( void )
+void TEXTE_MODULE:: SetDrawCoord()
 {
     MODULE* Module = (MODULE*) m_Parent;
 
@@ -154,7 +154,7 @@ void TEXTE_MODULE:: SetDrawCoord( void )
 
 
 // mise a jour des coordonn�s relatives au module
-void TEXTE_MODULE:: SetLocalCoord( void )
+void TEXTE_MODULE:: SetLocalCoord()
 {
     MODULE* Module = (MODULE*) m_Parent;
 
@@ -235,6 +235,7 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, wxPoint offset, int 
     orient = GetDrawRotation();
     miroir = m_Miroir & 1; // = 0 si vu en miroir
     width  = m_Width;
+    
     if( (frame->m_DisplayModText == FILAIRE) || ( (width / zoom) < L_MIN_DESSIN ) )
         width = 0;
     else if( frame->m_DisplayModText == SKETCH )
@@ -267,6 +268,7 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, wxPoint offset, int 
 
     if( m_NoShow )
         color = g_ModuleTextNOVColor;
+    
     if( (color & ITEM_NOT_SHOW) != 0 )
         return;
 
@@ -281,7 +283,7 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, wxPoint offset, int 
 
 
 /******************************************/
-int TEXTE_MODULE::GetDrawRotation( void )
+int TEXTE_MODULE::GetDrawRotation()
 /******************************************/
 
 /* Return text rotation for drawings and plotting

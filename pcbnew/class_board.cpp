@@ -56,7 +56,7 @@ void BOARD::UnLink()
     /* Modification du chainage arriere */
     if( Pback )
     {
-        if( Pback->m_StructType == TYPEPCB )
+        if( Pback->Type() == TYPEPCB )
         {
             Pback->Pnext = Pnext;
         }
@@ -149,7 +149,7 @@ bool BOARD::ComputeBoundaryBox()
     PtStruct = m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
-        if( PtStruct->m_StructType != TYPEDRAWSEGMENT )
+        if( PtStruct->Type() != TYPEDRAWSEGMENT )
             continue;
 
         ptr = (DRAWSEGMENT*) PtStruct;
@@ -280,7 +280,7 @@ void BOARD::Display_Infos( WinEDA_DrawFrame* frame )
     for( ii = 0, Struct = m_Track; Struct != NULL; Struct = Struct->Pnext )
     {
         ii++;
-        if( Struct->m_StructType == TYPEVIA )
+        if( Struct->Type() == TYPEVIA )
             nb_vias++;
     }
 
@@ -459,7 +459,7 @@ EDA_BaseStruct* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
             BOARD_ITEM*     item   = (BOARD_ITEM*) testItem;
             const wxPoint&  refPos = *(const wxPoint*) testData;
     
-            if( item->m_StructType == TYPEPAD )
+            if( item->Type() == TYPEPAD )
             {
                 D_PAD*  pad = (D_PAD*) item;
                 if( pad->HitTest( refPos ) )
@@ -478,7 +478,7 @@ EDA_BaseStruct* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
                 }
             }
             
-            else if( item->m_StructType == TYPEMODULE )
+            else if( item->Type() == TYPEMODULE )
             {
                 MODULE* module = (MODULE*) item;
 

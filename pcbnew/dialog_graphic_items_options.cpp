@@ -25,7 +25,7 @@
 
 
 /**************************************************************/
-void WinEDA_GraphicItemsOptionsDialog::SetDisplayValue( void )
+void WinEDA_GraphicItemsOptionsDialog::SetDisplayValue()
 /**************************************************************/
 {
 	/* Drawings width */

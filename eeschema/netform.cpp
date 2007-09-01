@@ -123,7 +123,7 @@ LibEDA_BaseStruct *DEntry;
 
 	for ( ; DrawList != NULL; DrawList = DrawList->Next() )
 	{
-		if ( DrawList->m_StructType != DRAW_LIB_ITEM_STRUCT_TYPE ) continue;
+		if ( DrawList->Type() != DRAW_LIB_ITEM_STRUCT_TYPE ) continue;
 		Component = (EDA_SchComponentStruct *) DrawList;
 	
 		 /* already tested ? : */
@@ -145,7 +145,7 @@ LibEDA_BaseStruct *DEntry;
 		DEntry = Entry->m_Drawings;
 		for ( ;DEntry != NULL; DEntry = DEntry->Next())
 		{
-			if ( DEntry->m_StructType != COMPONENT_PIN_DRAW_TYPE) continue;
+			if ( DEntry->Type() != COMPONENT_PIN_DRAW_TYPE) continue;
 			if( DEntry->m_Unit &&
 				(DEntry->m_Unit != Component->m_Multi) ) continue;
 			if( DEntry->m_Convert &&
@@ -336,7 +336,7 @@ EDA_BaseStruct *DrawList;
 		DrawList = screen->EEDrawList;
 		while ( DrawList )
 		{
-			if( DrawList->m_StructType == DRAW_LIB_ITEM_STRUCT_TYPE)
+			if( DrawList->Type() == DRAW_LIB_ITEM_STRUCT_TYPE)
 			{
 				EDA_SchComponentStruct * Component = (EDA_SchComponentStruct *) DrawList;
 				Component->m_FlagControlMulti = 0;
@@ -384,7 +384,7 @@ wxChar bufnum[BUFYPOS_LEN+1];
 		for ( DrawList = screen->EEDrawList; DrawList != NULL; DrawList = DrawList->Pnext )
 		{
 			wxChar ident;
-			if ( DrawList->m_StructType != DRAW_TEXT_STRUCT_TYPE ) continue;
+			if ( DrawList->Type() != DRAW_TEXT_STRUCT_TYPE ) continue;
 			#define DRAWTEXT ((DrawTextStruct *) DrawList)
 			text = DRAWTEXT->m_Text; if ( text.IsEmpty() ) continue;
 			ident = text.GetChar(0);
@@ -685,7 +685,7 @@ SCH_SCREEN * screen;
 		DrawList = screen->EEDrawList;
 		while ( DrawList )
 		{
-			switch( DrawList->m_StructType )
+			switch( DrawList->Type() )
 			{
 				case DRAW_LIB_ITEM_STRUCT_TYPE :
 					Component2 = (EDA_SchComponentStruct *) DrawList;
@@ -705,7 +705,7 @@ SCH_SCREEN * screen;
 						DEntry = Entry->m_Drawings;
 						for ( ;DEntry != NULL; DEntry = DEntry->Next())
 						{
-							if ( DEntry->m_StructType != COMPONENT_PIN_DRAW_TYPE) continue;
+							if ( DEntry->Type() != COMPONENT_PIN_DRAW_TYPE) continue;
 							if( DEntry->m_Unit &&
 								(DEntry->m_Unit != Component2->m_Multi) ) continue;
 							if( DEntry->m_Convert &&

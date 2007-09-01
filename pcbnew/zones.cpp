@@ -662,7 +662,7 @@ void WinEDA_BasePcbFrame::DelLimitesZone( wxDC* DC, bool Redraw )
 
 
 /********************************************/
-EDGE_ZONE* WinEDA_PcbFrame::Begin_Zone( void )
+EDGE_ZONE* WinEDA_PcbFrame::Begin_Zone()
 /********************************************/
 
 /*
@@ -924,7 +924,7 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
             continue;
         if( pt_segm->GetLayer() != GetScreen()->m_Active_Layer )
             continue;
-        if( pt_segm->m_StructType != TYPETRACK )
+        if( pt_segm->Type() != TYPETRACK )
             continue;
         TraceSegmentPcb( m_Pcb, pt_segm, CELL_is_FRIEND, 0, WRITE_CELL );
     }

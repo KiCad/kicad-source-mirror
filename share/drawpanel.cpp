@@ -143,7 +143,7 @@ void WinEDA_DrawPanel::CursorOn( wxDC* DC )
 
 
 /***********************************/
-int WinEDA_DrawPanel::GetZoom( void )
+int WinEDA_DrawPanel::GetZoom()
 /***********************************/
 {
     return GetScreen()->GetZoom();
@@ -159,7 +159,7 @@ void WinEDA_DrawPanel::SetZoom( int zoom )
 
 
 /************************************/
-wxSize WinEDA_DrawPanel::GetGrid( void )
+wxSize WinEDA_DrawPanel::GetGrid()
 /************************************/
 {
     return GetScreen()->GetGrid();
@@ -258,7 +258,7 @@ bool WinEDA_DrawPanel::IsPointOnDisplay( wxPoint ref_pos )
 
 
 /********************************************************/
-wxPoint WinEDA_DrawPanel::CursorScreenPosition( void )
+wxPoint WinEDA_DrawPanel::CursorScreenPosition()
 /********************************************************/
 
 /* retourne la position sur l'ecran,en pixels, du curseur
@@ -278,7 +278,7 @@ wxPoint WinEDA_DrawPanel::CursorScreenPosition( void )
 
 
 /*********************************************************/
-wxPoint WinEDA_DrawPanel::GetScreenCenterRealPosition( void )
+wxPoint WinEDA_DrawPanel::GetScreenCenterRealPosition()
 /*********************************************************/
 {
     wxSize  size;
@@ -298,7 +298,7 @@ wxPoint WinEDA_DrawPanel::GetScreenCenterRealPosition( void )
 
 
 /**********************************************/
-void WinEDA_DrawPanel::MouseToCursorSchema( void )
+void WinEDA_DrawPanel::MouseToCursorSchema()
 /**********************************************/
 
 /* place le curseur souris sur la position du curseur schema
@@ -401,7 +401,7 @@ void WinEDA_DrawPanel::OnSize( wxSizeEvent& event )
 
 
 /******************************************/
-void WinEDA_DrawPanel::SetBoundaryBox( void )
+void WinEDA_DrawPanel::SetBoundaryBox()
 /******************************************/
 {
     BASE_SCREEN* Screen = GetScreen();;
@@ -566,10 +566,12 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
     double       pasx, pasy;
 
     color = g_GridColor;
+    
     GRSetDrawMode( DC, GR_COPY );
 
     /* le pas d'affichage doit etre assez grand pour avoir une grille visible */
     drawgrid = m_Parent->m_Draw_Grid;
+    
     pas_grille_affichee = screen->GetGrid();
 
     ii = pas_grille_affichee.x / zoom;
@@ -579,6 +581,7 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
     }
     if( ii < 5 )
         drawgrid = FALSE;           // grille trop petite
+    
     ii = pas_grille_affichee.y / zoom;
     if( ii  < 5 )
     {
@@ -592,16 +595,24 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
     org.x *= ii; org.y *= jj;
     screen->m_StartVisu = org;
 
-    org.x *= zoom; org.y *= zoom;
-    org.x += screen->m_DrawOrg.x; org.y += screen->m_DrawOrg.y;
+    org.x *= zoom; 
+    org.y *= zoom;
+    
+    org.x += screen->m_DrawOrg.x; 
+    org.y += screen->m_DrawOrg.y;
 
     size    = GetClientSize();
-    size.x *= zoom; size.y *= zoom;
+    
+    size.x *= zoom; 
+    size.y *= zoom;
+    
     pasx    = screen->m_UserGrid.x * m_Parent->m_InternalUnits;
     pasy    = screen->m_UserGrid.y * m_Parent->m_InternalUnits;
+    
     if( screen->m_UserGridUnit != INCHES )
     {
-        pasx /= 25.4; pasy /= 25.4;
+        pasx /= 25.4; 
+        pasy /= 25.4;
     }
 
     if( drawgrid )
@@ -613,7 +624,9 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
         {
             xg = screen->m_UserGridIsON ? (int) ( (ii * pasx) + 0.5 )
                  : ii * pas_grille_affichee.x;
+                 
             int xpos = org.x + xg;
+            
             for( jj = 0; ; jj++ )
             {
                 yg = screen->m_UserGridIsON ? (int) ( (jj * pasy) + 0.5 )

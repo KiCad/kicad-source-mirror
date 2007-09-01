@@ -317,7 +317,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
                 if( item->m_Selected == 0 )
                     continue;
 
-                switch( item->m_StructType )
+                switch( item->Type() )
                 {
                 case TYPETEXTEMODULE:
                     ( (TEXTE_MODULE*) item )->Draw( panel, DC, move_offset, g_XorMode );
@@ -362,7 +362,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
             if( item->m_Selected == 0 )
                 continue;
 
-            switch( item->m_StructType )
+            switch( item->Type() )
             {
             case TYPETEXTEMODULE:
                 ( (TEXTE_MODULE*) item )->Draw( panel, DC, move_offset, g_XorMode );
@@ -424,7 +424,7 @@ void CopyMarkedItems( MODULE* module, wxPoint offset )
         item->m_Selected = 0;
         NewStruct = NULL;
 
-        switch( item->m_StructType )
+        switch( item->Type() )
         {
         case TYPETEXTEMODULE:
             NewStruct = new TEXTE_MODULE( module );
@@ -483,7 +483,7 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
         if( item->m_Selected == 0 )
             continue;
 
-        switch( item->m_StructType )
+        switch( item->Type() )
         {
         case TYPETEXTEMODULE:
             ( (TEXTE_MODULE*) item )->m_Pos.x  += offset.x;
@@ -519,8 +519,10 @@ void DeleteMarkedItems( MODULE* module )
 /* Delete marked items
  */
 {
-    EDA_BaseStruct* item, * next_item;
-    D_PAD*          pad, * next_pad;
+    BOARD_ITEM*     item;
+    BOARD_ITEM*     next_item;
+    D_PAD*          pad;
+    D_PAD*          next_pad;
 
     if( module == NULL )
         return;
@@ -577,7 +579,7 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
         if( item->m_Selected == 0 )
             continue;
 
-        switch( item->m_StructType )
+        switch( item->Type() )
         {
         case TYPEEDGEMODULE:
             SETMIRROR( ( (EDGE_MODULE*) item )->m_Start.x );
@@ -631,7 +633,7 @@ void RotateMarkedItems( MODULE* module, wxPoint offset )
         if( item->m_Selected == 0 )
             continue;
 
-        switch( item->m_StructType )
+        switch( item->Type() )
         {
         case TYPEEDGEMODULE:
             ROTATE( ( (EDGE_MODULE*) item )->m_Start );
@@ -707,7 +709,7 @@ int MarkItemsInBloc( MODULE* module, EDA_Rect& Rect )
     {
         item->m_Selected = 0;
 
-        switch( item->m_StructType )
+        switch( item->Type() )
         {
         case TYPEEDGEMODULE:
             pos = ( (EDGE_MODULE*) item )->m_Start;

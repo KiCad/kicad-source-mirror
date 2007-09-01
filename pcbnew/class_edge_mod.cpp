@@ -80,13 +80,13 @@ void EDGE_MODULE:: Copy( EDGE_MODULE* source )       // copy structure
 
 
 /********************************/
-void EDGE_MODULE::UnLink( void )
+void EDGE_MODULE::UnLink()
 /********************************/
 {
     /* Modification du chainage arriere */
     if( Pback )
     {
-        if( Pback->m_StructType != TYPEMODULE )
+        if( Pback->Type() != TYPEMODULE )
         {
             Pback->Pnext = Pnext;
         }
@@ -105,7 +105,7 @@ void EDGE_MODULE::UnLink( void )
 
 
 /***********************************/
-void EDGE_MODULE::SetDrawCoord( void )
+void EDGE_MODULE::SetDrawCoord()
 /***********************************/
 {
     MODULE* Module = (MODULE*) m_Parent;
@@ -147,7 +147,7 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     WinEDA_BasePcbFrame* frame;
     MODULE*              Module = NULL;
 
-    if( m_Parent && (m_Parent->m_StructType == TYPEMODULE) )
+    if( m_Parent && (m_Parent->Type() == TYPEMODULE) )
         Module = (MODULE*) m_Parent;
 
     color = g_DesignSettings.m_LayerColor[m_Layer];

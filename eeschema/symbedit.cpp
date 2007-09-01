@@ -127,7 +127,7 @@ void WinEDA_LibeditFrame::LoadOneSymbol( wxDC* DC )
 
 
 /********************************************/
-void WinEDA_LibeditFrame::SaveOneSymbol( void )
+void WinEDA_LibeditFrame::SaveOneSymbol()
 /********************************************/
 
 /* Save in file the current symbol
@@ -218,7 +218,7 @@ void WinEDA_LibeditFrame::SaveOneSymbol( void )
             if( SymbConvert > 1 )
                 SymbConvert = 1;
 
-            switch( DrawEntry->m_StructType )
+            switch( DrawEntry->Type() )
             {
             case COMPONENT_ARC_DRAW_TYPE:
                 #define DRAWSTRUCT ( (LibDrawArc*) DrawEntry )
@@ -323,14 +323,14 @@ static bool CompareSymbols( LibEDA_BaseStruct* DEntryRef,
     int* ptref, * ptcomp;
 
     /* Comparaison des proprietes generales */
-    if( DEntryRef->m_StructType != DEntryCompare->m_StructType )
+    if( DEntryRef->Type() != DEntryCompare->Type() )
         return FALSE;
     if( DEntryRef->m_Unit != DEntryCompare->m_Unit )
         return FALSE;
     if( DEntryRef->m_Convert != DEntryCompare->m_Convert )
         return FALSE;
 
-    switch( DEntryRef->m_StructType )
+    switch( DEntryRef->Type() )
     {
     case COMPONENT_ARC_DRAW_TYPE:
         #undef REFSTRUCT
@@ -427,7 +427,7 @@ static bool CompareSymbols( LibEDA_BaseStruct* DEntryRef,
 /*	d'ancrage ( coord 0,0 ).                                               */
 /***************************************************************************/
 
-void WinEDA_LibeditFrame::PlaceAncre( void )
+void WinEDA_LibeditFrame::PlaceAncre()
 {
     int ii, * ptsegm;
     int dx, dy;         /* Offsets de deplacement */
@@ -449,7 +449,7 @@ void WinEDA_LibeditFrame::PlaceAncre( void )
     DrawEntry = LibEntry->m_Drawings;
     while( DrawEntry )
     {
-        switch( DrawEntry->m_StructType )
+        switch( DrawEntry->Type() )
         {
         case COMPONENT_ARC_DRAW_TYPE:
             #undef STRUCT

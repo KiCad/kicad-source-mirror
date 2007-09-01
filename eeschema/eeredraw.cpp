@@ -154,7 +154,7 @@ void RedrawStructList(WinEDA_DrawPanel * panel, wxDC * DC,
 {
 	while (Structs)
 		{
-		if (Structs->m_StructType == DRAW_PICK_ITEM_STRUCT_TYPE)
+		if (Structs->Type() == DRAW_PICK_ITEM_STRUCT_TYPE)
 			{
 			RedrawOneStruct(panel, DC,
 						((DrawPickedStruct *) Structs)->m_PickedStruct,
@@ -353,7 +353,7 @@ int width = g_DrawMinimunLineWidth;
 	
 	GRSetDrawMode(DC, DrawMode);
 
-	switch (DrawStruct->m_StructType)
+	switch (DrawStruct->Type())
 		{
 		case DRAW_POLYLINE_STRUCT_TYPE:
 			{

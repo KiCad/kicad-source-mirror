@@ -251,7 +251,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_PS( FILE* File, int masque_layer,
     PtStruct = m_Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
-        switch( PtStruct->m_StructType )
+        switch( PtStruct->Type() )
         {
         case TYPEDRAWSEGMENT:
             PlotDrawSegment( (DRAWSEGMENT*) PtStruct, PLOT_FORMAT_POST,
@@ -292,7 +292,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_PS( FILE* File, int masque_layer,
         PtStruct = Module->m_Drawings;
         for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
         {
-            switch( PtStruct->m_StructType )
+            switch( PtStruct->Type() )
             {
             case TYPEEDGEMODULE:
                 if( masque_layer & g_TabOneLayerMask[ PtStruct->GetLayer() ] )
@@ -361,7 +361,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_PS( FILE* File, int masque_layer,
         Affiche_1_Parametre( this, 56, _( "Vias" ), wxEmptyString, RED );
         for( pts = m_Pcb->m_Track; pts != NULL; pts = pts->Next() )
         {
-            if( pts->m_StructType != TYPEVIA )
+            if( pts->Type() != TYPEVIA )
                 continue;
             SEGVIA* Via = (SEGVIA*) pts;
 
@@ -391,7 +391,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_PS( FILE* File, int masque_layer,
 
     for( pts = m_Pcb->m_Track; pts != NULL; pts = (TRACK*) pts->Pnext )
     {
-        if( pts->m_StructType == TYPEVIA )
+        if( pts->Type() == TYPEVIA )
             continue;
 
         if( (g_TabOneLayerMask[pts->GetLayer()] & masque_layer) == 0 )
@@ -458,7 +458,7 @@ static void PrintDrillMark( BOARD* Pcb )
 
     for( pts = Pcb->m_Track; pts != NULL; pts = (TRACK*) pts->Pnext )
     {
-        if( pts->m_StructType != TYPEVIA )
+        if( pts->Type() != TYPEVIA )
             continue;
         pos = pts->m_Start;
         if( g_DrillShapeOpt == DRILL_MARK )

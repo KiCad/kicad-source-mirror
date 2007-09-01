@@ -142,7 +142,7 @@ wxString dirbuf;
 	Phead = screen->EEDrawList;
 	while (Phead)
 		{
-		switch(Phead->m_StructType)
+		switch(Phead->Type())
 			{
 			case DRAW_LIB_ITEM_STRUCT_TYPE:		  /* Its a library item. */
 				SavePartDescr( f, (EDA_SchComponentStruct *) Phead);

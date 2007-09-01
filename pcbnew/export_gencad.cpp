@@ -580,7 +580,7 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
 
     for( track = pcb->m_Zone; track != NULL; track = (TRACK*) track->Pnext )
     {
-        if( track->m_StructType == TYPEZONE )
+        if( track->Type() == TYPEZONE )
             nbitems++;
     }
 
@@ -592,7 +592,7 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
 
     for( track = pcb->m_Zone; track != NULL; track = (TRACK*) track->Pnext )
     {
-        if( track->m_StructType == TYPEZONE )
+        if( track->Type() == TYPEZONE )
             tracklist[nbitems++] = track;
     }
 
@@ -624,7 +624,7 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
             fprintf( file, "TRACK TRACK%d\n", track->m_Width );
         }
 
-        if( (track->m_StructType == TYPETRACK) || (track->m_StructType == TYPEZONE) )
+        if( (track->Type() == TYPETRACK) || (track->Type() == TYPEZONE) )
         {
             if( old_layer != track->GetLayer() )
             {
@@ -637,7 +637,7 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
                     mapXto( track->m_Start.x ), mapYto( track->m_Start.y ),
                     mapXto( track->m_End.x ), mapYto( track->m_End.y ) );
         }
-        if( track->m_StructType == TYPEVIA )
+        if( track->Type() == TYPEVIA )
         {
             fprintf( file, "VIA viapad%d %d %d ALL %d via%d\n",
                      track->m_Width,
@@ -830,7 +830,7 @@ void ModuleWriteShape( FILE* file, MODULE* module )
     PtStruct = module->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
-        switch( PtStruct->m_StructType )
+        switch( PtStruct->Type() )
         {
         case TYPETEXTEMODULE:
             break;

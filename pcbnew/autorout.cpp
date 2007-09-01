@@ -36,7 +36,7 @@ wxString msg;
 		case ROUTE_NET:
 			if ( GetScreen()->GetCurItem() )
 				{
-				switch ( GetScreen()->GetCurItem()->m_StructType )
+				switch ( GetScreen()->GetCurItem()->Type() )
 					{
 					case TYPEPAD:
 						Pad = (D_PAD*) GetScreen()->GetCurItem();
@@ -55,7 +55,7 @@ wxString msg;
 
 		case ROUTE_MODULE:
 			Module = (MODULE*) GetScreen()->GetCurItem();
-			if( (Module == NULL) || (Module->m_StructType != TYPEMODULE) )
+			if( (Module == NULL) || (Module->Type() != TYPEMODULE) )
 			{
 				DisplayError(this, _("Module not selected") ); return;
 			}
@@ -63,7 +63,7 @@ wxString msg;
  
 		case ROUTE_PAD:
 			Pad = (D_PAD*) GetScreen()->GetCurItem();
-			if( (Pad == NULL)  || (Pad->m_StructType != TYPEPAD) )
+			if( (Pad == NULL)  || (Pad->Type() != TYPEPAD) )
 			{
 				DisplayError(this, _("Pad not selected") ); return;
 			}

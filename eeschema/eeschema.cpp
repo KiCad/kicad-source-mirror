@@ -26,7 +26,7 @@
 
 
 /* Routines locales */
-static void CreateScreens( void );
+static void CreateScreens();
 
 // Global variables
 wxString    g_Main_Title( wxT( "EESchema" ) );
@@ -42,7 +42,7 @@ wxString    g_Main_Title( wxT( "EESchema" ) );
 // not wxApp)
 IMPLEMENT_APP( WinEDA_App )
 
-bool WinEDA_App::OnInit( void )
+bool WinEDA_App::OnInit()
 {
     wxString FFileName;
 
@@ -108,7 +108,7 @@ bool WinEDA_App::OnInit( void )
 
 
 /******************************/
-static void CreateScreens( void )
+static void CreateScreens()
 /******************************/
 
 /*

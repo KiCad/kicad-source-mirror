@@ -44,7 +44,7 @@ public:
     // Constructor and destructor
     WinEDA_ExchangeModuleFrame( WinEDA_BasePcbFrame * parent,
                                 MODULE * Module, wxDC * DC, const wxPoint &pos );
-    ~WinEDA_ExchangeModuleFrame( void )
+    ~WinEDA_ExchangeModuleFrame()
     {
     }
 
@@ -522,7 +522,7 @@ MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
     D_PAD*  pt_pad, * pt_old_pad;
 
 
-    if( (OldModule->m_StructType != TYPEMODULE) || (NewModule->m_StructType != TYPEMODULE) )
+    if( (OldModule->Type() != TYPEMODULE) || (NewModule->Type() != TYPEMODULE) )
     {
         DisplayError( winaff, wxT( "WinEDA_BasePcbFrame::Exchange_Module() StuctType error" ) );
     }
@@ -600,7 +600,7 @@ void WinEDA_ExchangeModuleFrame::Sel_NewMod_By_Liste( wxCommandEvent& event )
 
 
 /***************************************************/
-bool WinEDA_PcbFrame::RecreateCmpFileFromBoard( void )
+bool WinEDA_PcbFrame::RecreateCmpFileFromBoard()
 /***************************************************/
 {
     wxString FullFileNameCmp, mask;

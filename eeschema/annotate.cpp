@@ -26,7 +26,7 @@ static bool SortByPosition = TRUE;
 
 
 /**************************************/
-void ReAnnotatePowerSymbolsOnly( void )
+void ReAnnotatePowerSymbolsOnly()
 /**************************************/
 /* Used to reannotate the power symbols, before testing erc or computing netlist
 when a true component reannotation is not necessary
@@ -48,7 +48,7 @@ In order to avoid conflicts the ref number start with a 0:
 		EDA_BaseStruct *DrawList = screen->EEDrawList;
 		for ( ; DrawList != NULL ; DrawList = DrawList->Pnext )
 		{
-			if ( DrawList->m_StructType != DRAW_LIB_ITEM_STRUCT_TYPE )
+			if ( DrawList->Type() != DRAW_LIB_ITEM_STRUCT_TYPE )
 				continue;
 			EDA_SchComponentStruct * DrawLibItem = (EDA_SchComponentStruct *) DrawList;
 			EDA_LibComponentStruct * Entry =
@@ -194,7 +194,7 @@ EDA_SchComponentStruct *DrawLibItem;
 		EDA_BaseStruct *DrawList = screen->EEDrawList;
 		for ( ; DrawList != NULL ; DrawList = DrawList->Pnext )
 		{
-			if ( DrawList->m_StructType == DRAW_LIB_ITEM_STRUCT_TYPE )
+			if ( DrawList->Type() == DRAW_LIB_ITEM_STRUCT_TYPE )
 			{
 				DrawLibItem = (EDA_SchComponentStruct *) DrawList;
 				DrawLibItem->ClearAnnotation();
@@ -224,7 +224,7 @@ EDA_LibComponentStruct *Entry;
 
 	while ( DrawList )
 		{
-		switch( DrawList->m_StructType )
+		switch( DrawList->Type() )
 			{
 			case DRAW_SEGMENT_STRUCT_TYPE :
 			case DRAW_JUNCTION_STRUCT_TYPE :

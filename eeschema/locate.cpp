@@ -202,7 +202,7 @@ int dx, dy;
 
 		if(DontSnap) if (DontSnap->m_PickedStruct == DrawList) continue;
 
-		switch (DrawList->m_StructType)
+		switch (DrawList->Type())
 		{
 			case DRAW_POLYLINE_STRUCT_TYPE:
 				#undef  STRUCT
@@ -440,7 +440,7 @@ int dx, dy;
 			default:
 			{
 				wxString msg;
-				msg.Printf(wxT("SnapPoint2() error: unexpected strct type %d ("), DrawList->m_StructType);
+				msg.Printf(wxT("SnapPoint2() error: unexpected strct type %d ("), DrawList->Type());
 				msg << DrawList->ReturnClassName() << wxT(")");
 				DisplayError(NULL, msg);
 				break;
@@ -463,7 +463,7 @@ int i, *Points, xt1, yt1, xt2, yt2, NumOfPoints2;
 int dx, dy;
 wxString msg;
 
-	switch (DrawStruct->m_StructType)
+	switch (DrawStruct->Type())
 		{
 		case DRAW_POLYLINE_STRUCT_TYPE:
 			#undef  STRUCT
@@ -612,7 +612,7 @@ wxString msg;
 		default:
 			msg.Printf(
 					wxT("DrawStructInBox() Err: unexpected StructType %d ("),
-					DrawStruct->m_StructType );
+					DrawStruct->Type() );
 			msg << DrawStruct->ReturnClassName() << wxT(")");
 			DisplayError(NULL, msg );
 			break;
@@ -750,7 +750,7 @@ int seuil;
 		if(Convert && DrawItem->m_Convert && (Convert != DrawItem->m_Convert) )
 			continue;
 
-		switch ( DrawItem->m_StructType )
+		switch ( DrawItem->Type() )
 			{
 			case COMPONENT_ARC_DRAW_TYPE:
 				{
@@ -988,7 +988,7 @@ int x1, y1, x2, y2;
 	DrawItem = Entry->m_Drawings;
 	for ( ; DrawItem != NULL; DrawItem = DrawItem->Next())
 	{
-		if(DrawItem->m_StructType == COMPONENT_PIN_DRAW_TYPE) /* Pin Trouvee */
+		if(DrawItem->Type() == COMPONENT_PIN_DRAW_TYPE) /* Pin Trouvee */
 			{
 			Pin = (LibDrawPin *) DrawItem;
 
@@ -1039,7 +1039,7 @@ int size , dy, minx, maxx;
 DrawSheetLabelStruct * SheetLabel;
 
 	SheetLabel = Sheet->m_Label;
-	while((SheetLabel) && (SheetLabel->m_StructType==DRAW_SHEETLABEL_STRUCT_TYPE))
+	while((SheetLabel) && (SheetLabel->Type()==DRAW_SHEETLABEL_STRUCT_TYPE))
 		{
 		size = ( SheetLabel->GetLength()+1 ) * SheetLabel->m_Size.x;
 		if (SheetLabel->m_Edge) size = -size ;
@@ -1067,7 +1067,7 @@ LibDrawPin * Pin = NULL;
 
 	for(DrawStruct = DrawList; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext )
 	{
-		if( DrawStruct->m_StructType != DRAW_LIB_ITEM_STRUCT_TYPE )
+		if( DrawStruct->Type() != DRAW_LIB_ITEM_STRUCT_TYPE )
 					continue;
 		LibItem = (EDA_SchComponentStruct *) DrawStruct;
 		Entry = FindLibPart( LibItem->m_ChipName.GetData(), wxEmptyString, FIND_ROOT);
@@ -1090,7 +1090,7 @@ DrawSheetLabelStruct * PinSheet = NULL;
 
 	for( DrawStruct = DrawList; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext )
 		{
-		if( DrawStruct->m_StructType != DRAW_SHEET_STRUCT_TYPE )
+		if( DrawStruct->Type() != DRAW_SHEET_STRUCT_TYPE )
 					continue;
 		PinSheet = LocateSheetLabel( (DrawSheetStruct *) DrawStruct,
 					RefPos);

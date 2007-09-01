@@ -40,7 +40,7 @@ void WinEDA_ModuleEditFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy,
 
 
 /*********************************************************/
-void WinEDA_ModuleEditFrame::GetComponentFromRedoList( void )
+void WinEDA_ModuleEditFrame::GetComponentFromRedoList()
 /*********************************************************/
 
 /* Redo the last edition:
@@ -64,7 +64,7 @@ void WinEDA_ModuleEditFrame::GetComponentFromRedoList( void )
 
 
 /*********************************************************/
-void WinEDA_ModuleEditFrame::GetComponentFromUndoList( void )
+void WinEDA_ModuleEditFrame::GetComponentFromUndoList()
 /*********************************************************/
 
 /* Undo the last edition:

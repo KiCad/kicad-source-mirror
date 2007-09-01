@@ -168,7 +168,7 @@ glEnable(GL_FOG);
 	/* Tracé des pistes : */
 	for (pt_piste = pcb->m_Track ; pt_piste != NULL ; pt_piste = (TRACK*) pt_piste->Pnext )
 		{
-		if ( pt_piste->m_StructType == TYPEVIA )
+		if ( pt_piste->Type() == TYPEVIA )
 			Draw3D_Via((SEGVIA*)pt_piste);
 		else Draw3D_Track( pt_piste);
 		}
@@ -178,7 +178,7 @@ EDA_BaseStruct * PtStruct;
 	for ( PtStruct = pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Pnext)
 	{
 		#define STRUCT ((DRAWSEGMENT *) PtStruct)
-		if( PtStruct->m_StructType != TYPEDRAWSEGMENT ) continue;
+		if( PtStruct->Type() != TYPEDRAWSEGMENT ) continue;
 		Draw3D_DrawSegment(STRUCT);
 	}
 
@@ -358,7 +358,7 @@ bool As3dShape = FALSE;
 		glNormal3f( 0.0, 0.0, 1.0);	// Normal is Z axis
 		for( ;Struct != NULL; Struct = Struct->Pnext )
 		{
-			switch( Struct->m_StructType )
+			switch( Struct->Type() )
 			{
 				case TYPETEXTEMODULE:
 					break;

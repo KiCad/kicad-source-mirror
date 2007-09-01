@@ -70,16 +70,16 @@ public:
 public:
     MODULE( BOARD* parent );
     MODULE( MODULE* module );
-    ~MODULE( void );
+    ~MODULE();
 
     void    Copy( MODULE* Module );     // Copy structure
 
     MODULE* Next()  { return (MODULE*) Pnext; }
 
-    void    Set_Rectangle_Encadrement( void );/* mise a jour du rect d'encadrement
+    void    Set_Rectangle_Encadrement();/* mise a jour du rect d'encadrement
                                                *  en coord locales (orient 0 et origine = pos  module) */
 
-    void    SetRectangleExinscrit( void );/* mise a jour du rect d'encadrement
+    void    SetRectangleExinscrit();/* mise a jour du rect d'encadrement
                                            *   et de la surface en coord reelles */
 
     // deplacements
@@ -87,7 +87,7 @@ public:
     void    SetOrientation( int newangle );
 
     /* supprime du chainage la structure Struct */
-    void    UnLink( void );
+    void    UnLink();
 
 
     /**

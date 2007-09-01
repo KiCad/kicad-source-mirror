@@ -137,7 +137,7 @@ void WinEDA_SchematicFrame::SetBusEntryShape( wxDC* DC,
     if( BusEntry == NULL )
         return;
 
-    if( BusEntry->m_StructType != DRAW_BUSENTRY_STRUCT_TYPE )
+    if( BusEntry->Type() != DRAW_BUSENTRY_STRUCT_TYPE )
     {
         DisplayError( this, wxT( "SetBusEntryType: Bad StructType" ) );
         return;

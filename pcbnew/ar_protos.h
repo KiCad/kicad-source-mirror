@@ -50,18 +50,18 @@ void TraceArc(int ux0,int uy0,int ux1,int uy1, int ArcAngle, int lg,int layer,
 
 /* QUEUE.CPP */
 void FreeQueue(void);	/* Libere la memoire de la queue de recherche */
-void InitQueue( void );
+void InitQueue();
 void GetQueue( int *, int *, int *, int *, int * );
 int  SetQueue( int, int, int, int, int, int, int );
 void ReSetQueue( int, int, int, int, int, int, int );
 
 
 /* WORK.CPP */
-void InitWork( void );
-void ReInitWork( void );
+void InitWork();
+void ReInitWork();
 int SetWork( int, int, int , int, int, CHEVELU *, int );
 void GetWork( int *, int *, int *, int *, int *, CHEVELU ** );
-void SortWork( void ); /* order the work items; shortest first */
+void SortWork(); /* order the work items; shortest first */
 
 /* DIST.CPP */
 int GetApxDist( int, int, int, int );

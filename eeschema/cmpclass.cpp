@@ -37,7 +37,7 @@ DrawBusEntryStruct::DrawBusEntryStruct( const wxPoint& pos, int shape, int id ) 
 
 
 /*************************************/
-wxPoint DrawBusEntryStruct::m_End( void )
+wxPoint DrawBusEntryStruct::m_End()
 /*************************************/
 
 // retourne la coord de fin du raccord
@@ -47,7 +47,7 @@ wxPoint DrawBusEntryStruct::m_End( void )
 
 
 /***************************************************/
-DrawBusEntryStruct* DrawBusEntryStruct::GenCopy( void )
+DrawBusEntryStruct* DrawBusEntryStruct::GenCopy()
 /***************************************************/
 {
     DrawBusEntryStruct* newitem = new DrawBusEntryStruct( m_Pos, 0, 0 );
@@ -75,7 +75,7 @@ DrawJunctionStruct::DrawJunctionStruct( const wxPoint& pos ) :
 }
 
 
-DrawJunctionStruct* DrawJunctionStruct::GenCopy( void )
+DrawJunctionStruct* DrawJunctionStruct::GenCopy()
 {
     DrawJunctionStruct* newitem = new DrawJunctionStruct( m_Pos );
 
@@ -97,7 +97,7 @@ DrawNoConnectStruct::DrawNoConnectStruct( const wxPoint& pos ) :
 }
 
 
-DrawNoConnectStruct* DrawNoConnectStruct::GenCopy( void )
+DrawNoConnectStruct* DrawNoConnectStruct::GenCopy()
 {
     DrawNoConnectStruct* newitem = new DrawNoConnectStruct( m_Pos );
 
@@ -121,12 +121,12 @@ DrawMarkerStruct::DrawMarkerStruct( const wxPoint& pos, const wxString& text ) :
 }
 
 
-DrawMarkerStruct::~DrawMarkerStruct( void )
+DrawMarkerStruct::~DrawMarkerStruct()
 {
 }
 
 
-DrawMarkerStruct* DrawMarkerStruct::GenCopy( void )
+DrawMarkerStruct* DrawMarkerStruct::GenCopy()
 {
     DrawMarkerStruct* newitem = new DrawMarkerStruct( m_Pos, m_Comment );
 
@@ -137,7 +137,7 @@ DrawMarkerStruct* DrawMarkerStruct::GenCopy( void )
 }
 
 
-wxString DrawMarkerStruct::GetComment( void )
+wxString DrawMarkerStruct::GetComment()
 {
     return m_Comment;
 }
@@ -175,7 +175,7 @@ EDA_DrawLineStruct::EDA_DrawLineStruct( const wxPoint& pos, int layer ) :
 
 
 /***************************************************/
-EDA_DrawLineStruct* EDA_DrawLineStruct::GenCopy( void )
+EDA_DrawLineStruct* EDA_DrawLineStruct::GenCopy()
 /***************************************************/
 {
     EDA_DrawLineStruct* newitem = new EDA_DrawLineStruct( m_Start, m_Layer );
@@ -234,7 +234,7 @@ DrawPolylineStruct::DrawPolylineStruct( int layer ) :
 
 
 /********************************************/
-DrawPolylineStruct::~DrawPolylineStruct( void )
+DrawPolylineStruct::~DrawPolylineStruct()
 /*********************************************/
 {
     if( m_Points )
@@ -243,7 +243,7 @@ DrawPolylineStruct::~DrawPolylineStruct( void )
 
 
 /*****************************************************/
-DrawPolylineStruct* DrawPolylineStruct::GenCopy( void )
+DrawPolylineStruct* DrawPolylineStruct::GenCopy()
 /*****************************************************/
 {
     int memsize;

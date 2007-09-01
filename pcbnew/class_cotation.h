@@ -32,7 +32,7 @@ public:
     bool    WriteCotationDescr( FILE* File );
 
     /* supprime du chainage la structure Struct */
-    void    UnLink( void );
+    void    UnLink();
 
     /* Modification du texte de la cotation */
     void    SetText( const wxString& NewText );

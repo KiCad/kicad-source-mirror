@@ -17,7 +17,7 @@
 /*******************/
 
 /****************************************************************************/
-DrawBlockStruct::DrawBlockStruct( void ) :
+DrawBlockStruct::DrawBlockStruct() :
     EDA_BaseStruct( BLOCK_LOCATE_STRUCT_TYPE )
     , EDA_Rect()
 /****************************************************************************/
@@ -30,7 +30,7 @@ DrawBlockStruct::DrawBlockStruct( void ) :
 
 
 /****************************************/
-DrawBlockStruct::~DrawBlockStruct( void )
+DrawBlockStruct::~DrawBlockStruct()
 /****************************************/
 {
 }
@@ -219,7 +219,7 @@ void AbortBlockCurrentCommand( WinEDA_DrawPanel* Panel, wxDC* DC )
         if( (screen->BlockLocate.m_Command != BLOCK_PASTE)
            && screen->BlockLocate.m_BlockDrawStruct )
         {
-            if( screen->BlockLocate.m_BlockDrawStruct->m_StructType == DRAW_PICK_ITEM_STRUCT_TYPE )
+            if( screen->BlockLocate.m_BlockDrawStruct->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
             {
                 DrawPickedStruct* PickedList;
                 PickedList = (DrawPickedStruct*) screen->BlockLocate.m_BlockDrawStruct;

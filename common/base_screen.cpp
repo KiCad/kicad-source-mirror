@@ -16,7 +16,8 @@
 /*******************************************************/
 /* Class BASE_SCREEN: classe de gestion d'un affichage */
 /*******************************************************/
-BASE_SCREEN::BASE_SCREEN( int idscreen ) : EDA_BaseStruct( SCREEN_STRUCT_TYPE )
+BASE_SCREEN::BASE_SCREEN( int idscreen, KICAD_T aType ) : 
+    EDA_BaseStruct( aType )
 {
     EEDrawList = NULL;   /* Schematic items list */
     m_Type     = idscreen;
@@ -31,7 +32,7 @@ BASE_SCREEN::BASE_SCREEN( int idscreen ) : EDA_BaseStruct( SCREEN_STRUCT_TYPE )
 
 
 /******************************/
-BASE_SCREEN::~BASE_SCREEN( void )
+BASE_SCREEN::~BASE_SCREEN()
 /******************************/
 {
     if( m_ZoomList )
@@ -43,7 +44,7 @@ BASE_SCREEN::~BASE_SCREEN( void )
 
 
 /*******************************/
-void BASE_SCREEN::InitDatas( void )
+void BASE_SCREEN::InitDatas()
 /*******************************/
 {
     m_SheetNumber = m_NumberOfSheet = 1;    /* gestion hierarchie: Root: SheetNumber = 1 */
@@ -121,7 +122,7 @@ wxPoint BASE_SCREEN::CursorRealPosition( const wxPoint& ScreenPos )
 
 
 /***************************************/
-int BASE_SCREEN::GetInternalUnits( void )
+int BASE_SCREEN::GetInternalUnits()
 /***************************************/
 {
     switch( m_Type )
@@ -141,7 +142,7 @@ int BASE_SCREEN::GetInternalUnits( void )
 
 
 /*****************************************/
-wxSize BASE_SCREEN::ReturnPageSize( void )
+wxSize BASE_SCREEN::ReturnPageSize()
 /*****************************************/
 
 /* Retourne en unites internes la taille de la feuille de dessin
@@ -199,7 +200,7 @@ void BASE_SCREEN::SetZoomList( int* zoomlist )
 
 
 /***********************************/
-void BASE_SCREEN::SetFirstZoom( void )
+void BASE_SCREEN::SetFirstZoom()
 /***********************************/
 /* ajuste le coeff de zoom a 1*/
 {
@@ -208,7 +209,7 @@ void BASE_SCREEN::SetFirstZoom( void )
 
 
 /****************************/
-int BASE_SCREEN::GetZoom( void )
+int BASE_SCREEN::GetZoom()
 /****************************/
 /* retourne le coeff de zoom */
 {
@@ -228,7 +229,7 @@ void BASE_SCREEN::SetZoom( int coeff )
 
 
 /********************************/
-void BASE_SCREEN::SetNextZoom( void )
+void BASE_SCREEN::SetNextZoom()
 /********************************/
 
 /* Selectionne le prochain coeff de zoom
@@ -249,7 +250,7 @@ void BASE_SCREEN::SetNextZoom( void )
 
 
 /*************************************/
-void BASE_SCREEN::SetPreviousZoom( void )
+void BASE_SCREEN::SetPreviousZoom()
 /*************************************/
 
 /* Selectionne le precedent coeff de zoom
@@ -262,7 +263,7 @@ void BASE_SCREEN::SetPreviousZoom( void )
 
 
 /**********************************/
-void BASE_SCREEN::SetLastZoom( void )
+void BASE_SCREEN::SetLastZoom()
 /**********************************/
 
 /* ajuste le coeff de zoom au max
@@ -326,7 +327,7 @@ void BASE_SCREEN::SetGrid( const wxSize& size )
 
 
 /*********************************/
-wxSize BASE_SCREEN::GetGrid( void )
+wxSize BASE_SCREEN::GetGrid()
 /*********************************/
 {
     wxSize grid = m_Grid;
@@ -351,7 +352,7 @@ wxSize BASE_SCREEN::GetGrid( void )
 
 
 /*********************************/
-void BASE_SCREEN::SetNextGrid( void )
+void BASE_SCREEN::SetNextGrid()
 /*********************************/
 
 /* Selectionne la prochaine grille
@@ -376,7 +377,7 @@ void BASE_SCREEN::SetNextGrid( void )
 
 
 /*************************************/
-void BASE_SCREEN::SetPreviousGrid( void )
+void BASE_SCREEN::SetPreviousGrid()
 /*************************************/
 
 /* Selectionne le precedent coeff de grille
@@ -401,7 +402,7 @@ void BASE_SCREEN::SetPreviousGrid( void )
 
 
 /**********************************/
-void BASE_SCREEN::SetFirstGrid( void )
+void BASE_SCREEN::SetFirstGrid()
 /**********************************/
 
 /* ajuste le coeff de grille a 1
@@ -419,7 +420,7 @@ void BASE_SCREEN::SetFirstGrid( void )
 
 
 /**********************************/
-void BASE_SCREEN::SetLastGrid( void )
+void BASE_SCREEN::SetLastGrid()
 /**********************************/
 
 /* ajuste le coeff de grille au max
@@ -432,7 +433,7 @@ void BASE_SCREEN::SetLastGrid( void )
 
 
 /*****************************************/
-void BASE_SCREEN::ClearUndoRedoList( void )
+void BASE_SCREEN::ClearUndoRedoList()
 /*****************************************/
 
 /* free the undo and the redo lists
@@ -532,7 +533,7 @@ void BASE_SCREEN::AddItemToRedoList( EDA_BaseStruct* newitem )
 
 
 /*****************************************************/
-EDA_BaseStruct* BASE_SCREEN::GetItemFromUndoList( void )
+EDA_BaseStruct* BASE_SCREEN::GetItemFromUndoList()
 /*****************************************************/
 {
     EDA_BaseStruct* item = m_UndoList;
@@ -544,7 +545,7 @@ EDA_BaseStruct* BASE_SCREEN::GetItemFromUndoList( void )
 
 
 /******************************************************/
-EDA_BaseStruct* BASE_SCREEN::GetItemFromRedoList( void )
+EDA_BaseStruct* BASE_SCREEN::GetItemFromRedoList()
 /******************************************************/
 {
     EDA_BaseStruct* item = m_RedoList;

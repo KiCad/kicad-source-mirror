@@ -48,14 +48,10 @@ SEGVIA::SEGVIA( BOARD_ITEM* StructFather ) :
 }
 
 
-
-/* Copy constructor */
+// Copy constructor
 TRACK::TRACK( const TRACK& Source ) :
-    BOARD_ITEM( (const BOARD_ITEM&) Source )
+    BOARD_ITEM( Source )
 {
-//    m_StructType = Source.m_StructType;
-//    m_Layer = Source.m_Layer;
-
     m_Shape     = Source.m_Shape;
     m_NetCode   = Source.m_NetCode;
     m_Flags     = Source.m_Flags;
@@ -70,13 +66,34 @@ TRACK::TRACK( const TRACK& Source ) :
 }
 
 
+/*  Because of the way SEGVIA is derived from TRACK and because there are 
+    virtual functions being used, we can no longer simply copy a TRACK and
+    expect it to be a via.  We must construct a true SEGVIA so its constructor
+    can initialize the virtual function table properly.  So this constructor
+    is being retired in favor of a factory type function called Copy()
+    which can duplicate either a TRACK or a SEGVIA.
+*/
+
+TRACK* TRACK::Copy() const
+{
+    if( Type() == TYPETRACK )
+        return new TRACK(*this);
+    
+    if( Type() == TYPEVIA )
+        return new SEGVIA( (const SEGVIA&) *this );
+    
+    return NULL;    // should never happen
+}
+
+
+
 /***********************/
 bool TRACK::IsNull()
 /***********************/
 
 // return TRUE if segment length = 0
 {
-    if( ( m_StructType != TYPEVIA ) && ( m_Start == m_End ) )
+    if( ( Type() != TYPEVIA ) && ( m_Start == m_End ) )
         return TRUE;
     else
         return FALSE;
@@ -147,7 +164,7 @@ SEARCH_RESULT TRACK::Visit( INSPECTOR* inspector, const void* testData,
 #endif
     
     // If caller wants to inspect my type
-    if( stype == m_StructType )
+    if( stype == Type() )
     {
         if( SEARCH_QUIT == inspector->Inspect( this, testData ) )
             return SEARCH_QUIT;
@@ -192,7 +209,7 @@ int TRACK::ReturnMaskLayer()
  *  Si PtSegm pointe une via, il y a plusieurs couches occupees
  */
 {
-    if( m_StructType == TYPEVIA )
+    if( Type() == TYPEVIA )
     {
         int via_type = m_Shape & 15;
         if( via_type == VIA_NORMALE )
@@ -265,7 +282,7 @@ void TRACK::UnLink()
     /* Modification du chainage arriere */
     if( Pback )
     {
-        if( Pback->m_StructType != TYPEPCB )
+        if( Pback->Type() != TYPEPCB )
         {
             Pback->Pnext = Pnext;
         }
@@ -274,11 +291,11 @@ void TRACK::UnLink()
             if( GetState( DELETED ) )       // A REVOIR car Pback = NULL si place en undelete
             {
                 if( g_UnDeleteStack )
-                    g_UnDeleteStack[g_UnDeleteStackPtr - 1] = Pnext;
+                    g_UnDeleteStack[g_UnDeleteStackPtr - 1] = (BOARD_ITEM*)Pnext;
             }
             else
             {
-                if( m_StructType == TYPEZONE )
+                if( Type() == TYPEZONE )
                 {
                     ( (BOARD*) Pback )->m_Zone = (TRACK*) Pnext;
                 }
@@ -299,29 +316,27 @@ void TRACK::UnLink()
 
 
 /************************************************************/
-void TRACK::Insert( BOARD* Pcb, EDA_BaseStruct* InsertPoint )
+void TRACK::Insert( BOARD* Pcb, BOARD_ITEM* InsertPoint )
 /************************************************************/
-
-/* Ajoute un element ou une liste  a une liste de base
- *  Si Insertpoint == NULL: insertion en debut de
- *      liste Pcb->Track ou Pcb->Zone
- *  Insertion a la suite de InsertPoint
- *  Si InsertPoint == NULL, insertion en tete de liste
- */
 {
-    TRACK* track, * NextS;
+    TRACK* track;
+    TRACK* NextS;
 
     /* Insertion du debut de la chaine a greffer */
     if( InsertPoint == NULL )
     {
         Pback = Pcb;
-        if( m_StructType == TYPEZONE )
+        
+        if( Type() == TYPEZONE )    // put SEGZONE on front of m_Zone list
         {
-            NextS = Pcb->m_Zone; Pcb->m_Zone = this;
+            NextS = Pcb->m_Zone; 
+            Pcb->m_Zone = this;
         }
-        else
+        
+        else    // put TRACK or SEGVIA on front of m_Track list
         {
-            NextS = Pcb->m_Track; Pcb->m_Track = this;
+            NextS = Pcb->m_Track; 
+            Pcb->m_Track = this;
         }
     }
     else
@@ -356,7 +371,7 @@ TRACK* TRACK::GetBestInsertPoint( BOARD* Pcb )
 {
     TRACK* track, * NextTrack;
 
-    if( m_StructType == TYPEZONE )
+    if( Type() == TYPEZONE )
         track = Pcb->m_Zone;
     else
         track = Pcb->m_Track;
@@ -462,8 +477,11 @@ TRACK* TRACK:: Copy( int NbSegm  )
         Source = Source->Next();
         if( Source == NULL )
             break;
+        
         OldTrack = NewTrack;
-        NewTrack = new TRACK( *Source );
+        
+        NewTrack = Source->Copy();
+        
         NewTrack->Insert( NULL, OldTrack );
     }
 
@@ -477,7 +495,7 @@ bool TRACK::WriteTrackDescr( FILE* File )
 {
     int type = 0;
     
-    if( m_StructType == TYPEVIA )
+    if( Type() == TYPEVIA )
         type = 1;
 
     if( GetState( DELETED ) )
@@ -509,12 +527,12 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
     int rayon;
     int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
-    if( m_StructType == TYPEZONE && (!DisplayOpt.DisplayZones) )
+    if( Type() == TYPEZONE && (!DisplayOpt.DisplayZones) )
         return;
 
     GRSetDrawMode( DC, draw_mode );
 
-    if( m_StructType == TYPEVIA ) /* VIA rencontree */
+    if( Type() == TYPEVIA ) /* VIA rencontree */
         color = g_DesignSettings.m_ViaColor[m_Shape];
     else
         color = g_DesignSettings.m_LayerColor[m_Layer];
@@ -545,7 +563,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
 
     l_piste = m_Width >> 1;
 
-    if( m_StructType == TYPEVIA ) /* VIA rencontree */
+    if( Type() == TYPEVIA ) /* VIA rencontree */
     {
         rayon = l_piste; if( rayon < zoom )
             rayon = zoom;
@@ -629,7 +647,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
 
     /* Trace de l'isolation (pour segments type CUIVRE et TRACK uniquement */
     if( (DisplayOpt.DisplayTrackIsol) && (m_Layer <= CMP_N )
-       && ( m_StructType == TYPETRACK) )
+       && ( Type() == TYPETRACK) )
     {
         GRCSegm( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
                  m_End.x, m_End.y,
@@ -646,7 +664,7 @@ void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
 
     frame->MsgPanel->EraseMsgBox();
 
-    switch( m_StructType )
+    switch( Type() )
     {
     case TYPEVIA:
         msg = g_ViaType_Name[m_Shape & 255];
@@ -668,9 +686,9 @@ void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
 
     /* Affiche NetName pour les segments de piste type cuivre */
     text_pos += 15;
-    if(  m_StructType == TYPETRACK 
-      || m_StructType == TYPEZONE
-      || m_StructType == TYPEVIA )
+    if(  Type() == TYPETRACK 
+      || Type() == TYPEZONE
+      || Type() == TYPEVIA )
     {
         EQUIPOT* equipot = ((WinEDA_PcbFrame*)frame)->m_Pcb->FindNet( m_NetCode );
         if( equipot )
@@ -707,7 +725,7 @@ void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
     Affiche_1_Parametre( frame, text_pos, _( "Stat" ), msg, MAGENTA );
 
     /* Affiche Layer(s) */
-    if( m_StructType == TYPEVIA )
+    if( Type() == TYPEVIA )
     {
         SEGVIA* Via = (SEGVIA*) this;
         int     top_layer, bottom_layer;
@@ -726,7 +744,7 @@ void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
     valeur_param( (unsigned) m_Width, msg );
     text_pos += 11;
     
-    if( m_StructType == TYPEVIA )      // Display Diam and Drill values
+    if( Type() == TYPEVIA )      // Display Diam and Drill values
     {
         Affiche_1_Parametre( frame, text_pos, _( "Diam" ), msg, DARKCYAN );
 
@@ -775,7 +793,7 @@ bool TRACK::HitTest( const wxPoint& ref_pos )
     spot_cX = ref_pos.x - ux0; 
     spot_cY = ref_pos.y - uy0;
 
-    if( m_StructType == TYPEVIA )   /* VIA rencontree */
+    if( Type() == TYPEVIA )   /* VIA rencontree */
     {
         if( (abs( spot_cX ) <= l_piste ) && (abs( spot_cY ) <=l_piste) )
             return true;

@@ -297,7 +297,7 @@ void InstallNetlistFrame(WinEDA_SchematicFrame *parent, wxPoint &pos);
 /***************/
 /* ANNOTATE.CPP */
 /***************/
-void ReAnnotatePowerSymbolsOnly( void );
+void ReAnnotatePowerSymbolsOnly();
 
 void InstallAnnotateFrame(WinEDA_SchematicFrame * parent, wxPoint &pos);
 int CheckAnnotate(WinEDA_SchematicFrame * frame, bool OneSheetOnly);

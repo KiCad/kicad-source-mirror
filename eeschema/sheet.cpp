@@ -385,7 +385,7 @@ void WinEDA_SchematicFrame::ReSizeSheet( DrawSheetStruct* Sheet, wxDC* DC )
     if( Sheet->m_Flags & IS_NEW )
         return;
 
-    if( Sheet->m_StructType != DRAW_SHEET_STRUCT_TYPE )
+    if( Sheet->Type() != DRAW_SHEET_STRUCT_TYPE )
     {
         DisplayError( this, wxT( "WinEDA_SchematicFrame::ReSizeSheet: Bad SructType" ) );
         return;
@@ -420,7 +420,7 @@ void WinEDA_SchematicFrame::ReSizeSheet( DrawSheetStruct* Sheet, wxDC* DC )
 void WinEDA_SchematicFrame::StartMoveSheet( DrawSheetStruct* Sheet, wxDC* DC )
 /*********************************************************************************/
 {
-    if( (Sheet == NULL) || ( Sheet->m_StructType != DRAW_SHEET_STRUCT_TYPE) )
+    if( (Sheet == NULL) || ( Sheet->Type() != DRAW_SHEET_STRUCT_TYPE) )
         return;
 
     DrawPanel->CursorOff( DC );
@@ -573,7 +573,7 @@ void DrawSheetStruct::CleanupSheet( WinEDA_SchematicFrame* frame, wxDC* DC )
         DrawGlobalLabelStruct* GLabel = NULL;
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext )
         {
-            if( DrawStruct->m_StructType != DRAW_GLOBAL_LABEL_STRUCT_TYPE )
+            if( DrawStruct->Type() != DRAW_GLOBAL_LABEL_STRUCT_TYPE )
                 continue;
             GLabel = (DrawGlobalLabelStruct*) DrawStruct;
             if( Pinsheet->m_Text.CmpNoCase( GLabel->m_Text ) == 0 )

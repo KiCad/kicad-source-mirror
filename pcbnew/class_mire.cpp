@@ -23,7 +23,7 @@ MIREPCB::~MIREPCB()
 
 
 /***************************/
-void MIREPCB::UnLink( void )
+void MIREPCB::UnLink()
 /***************************/
 
 /* supprime du chainage la structure Struct
@@ -33,7 +33,7 @@ void MIREPCB::UnLink( void )
     /* Modification du chainage arriere */
     if( Pback )
     {
-        if( Pback->m_StructType != TYPEPCB )
+        if( Pback->Type() != TYPEPCB )
         {
             Pback->Pnext = Pnext;
         }

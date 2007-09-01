@@ -266,7 +266,7 @@ void TraceSegmentPcb( BOARD* Pcb, TRACK* pt_segm, int color, int marge, int op_l
         layer = -1;
 
     /* Test si VIA (cercle plein a tracer) */
-    if( pt_segm->m_StructType == TYPEVIA )
+    if( pt_segm->Type() == TYPEVIA )
     {
         TraceFilledCercle( Pcb, pt_segm->m_Start.x, pt_segm->m_Start.y, demi_largeur,
                            0x0000FFFF, color, op_logique );

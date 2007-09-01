@@ -466,7 +466,7 @@ void WinEDA_SchematicFrame::StartMovePart( EDA_SchComponentStruct* Component,
 {
     if( Component == NULL )
         return;
-    if( Component->m_StructType != DRAW_LIB_ITEM_STRUCT_TYPE )
+    if( Component->Type() != DRAW_LIB_ITEM_STRUCT_TYPE )
         return;
 
     if( Component->m_Flags == 0 )

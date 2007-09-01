@@ -29,7 +29,7 @@ static struct PcbQueue *Tail = NULL;
 static struct PcbQueue *Save = NULL;	/* hold empty queue structs */
 
 /* Routines definies ici : */
-void InitQueue( void );
+void InitQueue();
 void GetQueue( int *, int *, int *, int *, int * );
 int SetQueue( int, int, int, int, int, int, int );
 void ReSetQueue( int, int, int, int, int, int, int );

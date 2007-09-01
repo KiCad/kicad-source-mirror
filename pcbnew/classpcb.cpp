@@ -42,7 +42,7 @@ EDGE_ZONE::EDGE_ZONE( BOARD_ITEM* parent ) :
 
 
 /* Effacement memoire de la structure */
-EDGE_ZONE:: ~EDGE_ZONE( void )
+EDGE_ZONE:: ~EDGE_ZONE()
 {
 }
 
@@ -60,17 +60,17 @@ DRAWSEGMENT::DRAWSEGMENT( BOARD_ITEM* StructFather, KICAD_T idtype ) :
 
 
 /* Effacement memoire de la structure */
-DRAWSEGMENT:: ~DRAWSEGMENT( void )
+DRAWSEGMENT:: ~DRAWSEGMENT()
 {
 }
 
 
-void DRAWSEGMENT::UnLink( void )
+void DRAWSEGMENT::UnLink()
 {
     /* Modification du chainage arriere */
     if( Pback )
     {
-        if( Pback->m_StructType != TYPEPCB )
+        if( Pback->Type() != TYPEPCB )
         {
             Pback->Pnext = Pnext;
         }
@@ -272,7 +272,7 @@ MARQUEUR::MARQUEUR( BOARD_ITEM* StructFather ) :
 
 
 /* Effacement memoire de la structure */
-MARQUEUR:: ~MARQUEUR( void )
+MARQUEUR:: ~MARQUEUR()
 {
 }
 
@@ -280,12 +280,12 @@ MARQUEUR:: ~MARQUEUR( void )
 /* supprime du chainage la structure Struct
  *  les structures arrieres et avant sont chainees directement
  */
-void MARQUEUR::UnLink( void )
+void MARQUEUR::UnLink()
 {
     /* Modification du chainage arriere */
     if( Pback )
     {
-        if( Pback->m_StructType != TYPEPCB )
+        if( Pback->Type() != TYPEPCB )
         {
             Pback->Pnext = Pnext;
         }
@@ -319,14 +319,14 @@ PCB_SCREEN::PCB_SCREEN( int idscreen ) : BASE_SCREEN( TYPESCREEN )
 
 
 /***************************/
-PCB_SCREEN::~PCB_SCREEN( void )
+PCB_SCREEN::~PCB_SCREEN()
 /***************************/
 {
 }
 
 
 /*************************/
-void PCB_SCREEN::Init( void )
+void PCB_SCREEN::Init()
 /*************************/
 {
     InitDatas();
@@ -346,7 +346,7 @@ void PCB_SCREEN::Init( void )
  *  Options diverses d'affichage �l'�ran:
  */
 
-DISPLAY_OPTIONS::DISPLAY_OPTIONS( void )
+DISPLAY_OPTIONS::DISPLAY_OPTIONS()
 {
     DisplayPadFill   = TRUE;
     DisplayPadNum    = TRUE;
@@ -370,7 +370,7 @@ DISPLAY_OPTIONS::DISPLAY_OPTIONS( void )
 
 
 /*****************************************************/
-EDA_BoardDesignSettings::EDA_BoardDesignSettings( void )
+EDA_BoardDesignSettings::EDA_BoardDesignSettings()
 /*****************************************************/
 
 // Default values for designing boards

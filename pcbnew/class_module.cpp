@@ -82,7 +82,7 @@ MODULE::MODULE( BOARD* parent ) :
 
 
 /* Destructeur */
-MODULE::~MODULE( void )
+MODULE::~MODULE()
 {
     D_PAD*          Pad;
     EDA_BaseStruct* Struct, * NextStruct;
@@ -107,7 +107,7 @@ MODULE::~MODULE( void )
     {
         NextStruct = Struct->Pnext;
 
-        switch( (Struct->m_StructType) )
+        switch( (Struct->Type()) )
         {
         case TYPEEDGEMODULE:
             delete (EDGE_MODULE*) Struct;
@@ -175,7 +175,7 @@ void MODULE::Copy( MODULE* Module )
     {
         NewStruct = NULL;
 
-        switch( OldStruct->m_StructType )
+        switch( OldStruct->Type() )
         {
         case TYPETEXTEMODULE:
             NewStruct = new TEXTE_MODULE( this );
@@ -232,12 +232,12 @@ void MODULE::Copy( MODULE* Module )
 /* supprime du chainage la structure Struct
  *  les structures arrieres et avant sont chainees directement
  */
-void MODULE::UnLink( void )
+void MODULE::UnLink()
 {
     /* Modification du chainage arriere */
     if( Pback )
     {
-        if( Pback->m_StructType != TYPEPCB )
+        if( Pback->Type() != TYPEPCB )
         {
             Pback->Pnext = Pnext;
         }
@@ -246,7 +246,7 @@ void MODULE::UnLink( void )
             if( GetState( DELETED ) )       // A REVOIR car Pback = NULL si place en undelete
             {
                 if( g_UnDeleteStack )
-                    g_UnDeleteStack[g_UnDeleteStackPtr - 1] = Pnext;
+                    g_UnDeleteStack[g_UnDeleteStackPtr - 1] = Next();
             }
             else
                 ( (BOARD*) Pback )->m_Modules = (MODULE*) Pnext;
@@ -303,7 +303,7 @@ void MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         if( PtStruct->m_Flags & IS_MOVED )
             continue;
 
-        switch( PtStruct->m_StructType )
+        switch( PtStruct->Type() )
         {
         case TYPETEXTEMODULE:
             PtTexte = (TEXTE_MODULE*) PtStruct;
@@ -332,7 +332,7 @@ void MODULE::DrawEdgesOnly( WinEDA_DrawPanel* panel, wxDC* DC,
     PtStruct = m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
-        switch( PtStruct->m_StructType )
+        switch( PtStruct->Type() )
         {
         case TYPEEDGEMODULE:
             ( (EDGE_MODULE*) PtStruct )->Draw( panel, DC, offset, draw_mode );
@@ -443,7 +443,7 @@ int MODULE::WriteDescr( FILE* File )
     PtStruct = m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
-        switch( PtStruct->m_StructType )
+        switch( PtStruct->Type() )
         {
         case TYPETEXTEMODULE:
             PtText = ( (TEXTE_MODULE*) PtStruct );
@@ -465,7 +465,7 @@ int MODULE::WriteDescr( FILE* File )
 
         default:
             msg.Printf( wxT( "Type (%d) Draw Module inconnu" ),
-                        PtStruct->m_StructType );
+                        PtStruct->Type() );
             DisplayError( NULL, msg );
             break;
         }
@@ -841,7 +841,7 @@ void MODULE::SetPosition( const wxPoint& newpos )
     EDA_BaseStruct* PtStruct = m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
-        switch( PtStruct->m_StructType )
+        switch( PtStruct->Type() )
         {
         case TYPEEDGEMODULE:
         {
@@ -904,12 +904,12 @@ void MODULE::SetOrientation( int newangle )
     EDA_BaseStruct* PtStruct = m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
-        if( PtStruct->m_StructType == TYPEEDGEMODULE )
+        if( PtStruct->Type() == TYPEEDGEMODULE )
         {
             EDGE_MODULE* pt_edgmod = (EDGE_MODULE*) PtStruct;
             pt_edgmod->SetDrawCoord();
         }
-        if( PtStruct->m_StructType == TYPETEXTEMODULE )
+        if( PtStruct->Type() == TYPETEXTEMODULE )
         {
             /* deplacement des inscriptions : */
             TEXTE_MODULE* pt_texte = (TEXTE_MODULE*) PtStruct;
@@ -923,7 +923,7 @@ void MODULE::SetOrientation( int newangle )
 
 
 /************************************************/
-void MODULE::Set_Rectangle_Encadrement( void )
+void MODULE::Set_Rectangle_Encadrement()
 /************************************************/
 
 /* Mise a jour du rectangle d'encadrement du module
@@ -952,7 +952,7 @@ void MODULE::Set_Rectangle_Encadrement( void )
     /* Contours: Recherche des coord min et max et mise a jour du cadre */
     for( ; pt_edge_mod != NULL; pt_edge_mod = (EDGE_MODULE*) pt_edge_mod->Pnext )
     {
-        if( pt_edge_mod->m_StructType != TYPEEDGEMODULE )
+        if( pt_edge_mod->Type() != TYPEEDGEMODULE )
             continue;
         width = pt_edge_mod->m_Width / 2;
 
@@ -1002,7 +1002,7 @@ void MODULE::Set_Rectangle_Encadrement( void )
 
 
 /****************************************/
-void MODULE::SetRectangleExinscrit( void )
+void MODULE::SetRectangleExinscrit()
 /****************************************/
 
 /*	Analogue a MODULE::Set_Rectangle_Encadrement() mais en coord reelles:
@@ -1026,7 +1026,7 @@ void MODULE::SetRectangleExinscrit( void )
     EdgeMod = (EDGE_MODULE*) m_Drawings;
     for( ; EdgeMod != NULL; EdgeMod = (EDGE_MODULE*) EdgeMod->Pnext )
     {
-        if( EdgeMod->m_StructType != TYPEEDGEMODULE )
+        if( EdgeMod->Type() != TYPEEDGEMODULE )
             continue;
         width = EdgeMod->m_Width / 2;
 

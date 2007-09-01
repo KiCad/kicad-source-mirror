@@ -58,7 +58,7 @@ wxString msg;
 	PtStruct = (EDA_BaseStruct *) GenericStructure;
 	if( PtStruct == NULL) return ;
 
-	typestruct = (int)PtStruct->m_StructType;
+	typestruct = (int)PtStruct->Type();
 	IsDeleted = PtStruct->GetState(DELETED);
 
 	PtNext = PtStruct->Pnext;
@@ -167,7 +167,7 @@ wxString msg;
 
 		default:
 			msg.Printf( wxT(" DeleteStructure: Type %d Inattendu"),
-										PtStruct->m_StructType);
+										PtStruct->Type());
 			DisplayError(NULL, msg);
 			break;
 		}

@@ -19,7 +19,7 @@
 
 
 /*********************************************************************/
-EDA_BaseStruct* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( void )
+EDA_BaseStruct* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay()
 /*********************************************************************/
 {
     EDA_BaseStruct* DrawStruct = GetScreen()->GetCurItem();
@@ -441,7 +441,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         EDGE_MODULE* edge = NULL;
         if( GetScreen()->GetCurItem()
            && ( GetScreen()->GetCurItem()->m_Flags & IS_NEW)
-           && (GetScreen()->GetCurItem()->m_StructType == TYPEEDGEMODULE) )
+           && (GetScreen()->GetCurItem()->Type() == TYPEEDGEMODULE) )
         {
             edge = (EDGE_MODULE*) GetScreen()->GetCurItem();
         }
@@ -602,13 +602,13 @@ void WinEDA_ModuleEditFrame::Transform( MODULE* module, wxDC* DC, int transform 
         /* Rectification des contours et textes de l'empreinte : */
         for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
         {
-            if( PtStruct->m_StructType == TYPEEDGEMODULE )
+            if( PtStruct->Type() == TYPEEDGEMODULE )
             {
                 edgemod = (EDGE_MODULE*) PtStruct;
                 edgemod->m_Start0 = edgemod->m_Start;
                 edgemod->m_End0   = edgemod->m_End;
             }
-            if( PtStruct->m_StructType == TYPETEXTEMODULE )
+            if( PtStruct->Type() == TYPETEXTEMODULE )
             {
                 /* deplacement des inscriptions : */
                 textmod = (TEXTE_MODULE*) PtStruct;
@@ -648,7 +648,7 @@ void WinEDA_ModuleEditFrame::Transform( MODULE* module, wxDC* DC, int transform 
         PtStruct = module->m_Drawings;
         for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
         {
-            switch( PtStruct->m_StructType )
+            switch( PtStruct->Type() )
             {
             case TYPEEDGEMODULE:
                 edgemod = (EDGE_MODULE*) PtStruct;

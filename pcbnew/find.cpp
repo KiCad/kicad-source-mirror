@@ -76,7 +76,7 @@ void WinEDA_PcbFindFrame::FindItem( wxCommandEvent& event )
         MARQUEUR* Marker = (MARQUEUR*) m_Parent->m_Pcb->m_Drawings;
         for( ; Marker != NULL; Marker = (MARQUEUR*) Marker->Pnext )
         {
-            if( Marker->m_StructType != TYPEMARQUEUR )
+            if( Marker->Type() != TYPEMARQUEUR )
                 continue;
             StartCount++;
             if( StartCount > s_MarkerCount )

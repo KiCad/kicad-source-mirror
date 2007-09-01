@@ -35,7 +35,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
         if( DrawStruct && DrawStruct->m_Flags ) // Commande "POPUP" en cours
         {
-            switch( DrawStruct->m_StructType )
+            switch( DrawStruct->Type() )
             {
             case DRAW_LABEL_STRUCT_TYPE:
             case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
@@ -86,7 +86,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         if( DrawStruct && DrawStruct->m_Flags )
             break;
         DrawStruct = SchematicGeneralLocateAndDisplay();
-        if( DrawStruct && (DrawStruct->m_StructType == DRAW_SHEET_STRUCT_TYPE) )
+        if( DrawStruct && (DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE) )
         {
             InstallNextScreen( (DrawSheetStruct*) DrawStruct );
         }
@@ -229,7 +229,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         if( DrawStruct == NULL )
             break;
 
-        if( (DrawStruct->m_StructType == DRAW_SHEET_STRUCT_TYPE)
+        if( (DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE)
            && (DrawStruct->m_Flags == 0) )
         {
             if( m_ID_current_state == ID_IMPORT_GLABEL_BUTT )
@@ -239,7 +239,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 m_CurrentScreen->SetCurItem(
                     Create_PinSheet( (DrawSheetStruct*) DrawStruct, DC ) );
         }
-        else if( (DrawStruct->m_StructType == DRAW_SHEETLABEL_STRUCT_TYPE)
+        else if( (DrawStruct->Type() == DRAW_SHEETLABEL_STRUCT_TYPE)
                 && (DrawStruct->m_Flags != 0) )
         {
             DrawStruct->Place( this, DC );
@@ -316,7 +316,7 @@ void WinEDA_SchematicFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             break;
 
         // Element localisé
-        switch( DrawStruct->m_StructType )
+        switch( DrawStruct->Type() )
         {
         case DRAW_SHEET_STRUCT_TYPE:
             InstallNextScreen( (DrawSheetStruct*) DrawStruct );

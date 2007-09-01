@@ -81,7 +81,7 @@ int MarkItemsInBloc( EDA_LibComponentStruct* LibComponent,
             ItemIsInOtherConvert = TRUE;
         if( ItemIsInOtherPart || ItemIsInOtherConvert )
         {
-            if( item->m_StructType == COMPONENT_PIN_DRAW_TYPE )
+            if( item->Type() == COMPONENT_PIN_DRAW_TYPE )
             { // Specific rules for pins:
                 if( g_EditPinByPinIsOn )
                     continue;
@@ -94,7 +94,7 @@ int MarkItemsInBloc( EDA_LibComponentStruct* LibComponent,
                 continue;
         }
 
-        switch( item->m_StructType )
+        switch( item->Type() )
         {
         case COMPONENT_ARC_DRAW_TYPE:
         {
@@ -545,7 +545,7 @@ void MoveMarkedItems( EDA_LibComponentStruct* LibEntry, wxPoint offset )
         if( item->m_Selected == 0 )
             continue;
 
-        switch( item->m_StructType )
+        switch( item->Type() )
         {
         case COMPONENT_PIN_DRAW_TYPE:
             ( (LibDrawPin*) item )->m_Pos.x += offset.x;
@@ -647,7 +647,7 @@ void MirrorMarkedItems( EDA_LibComponentStruct* LibEntry, wxPoint offset )
         if( item->m_Selected == 0 )
             continue;
 
-        switch( item->m_StructType )
+        switch( item->Type() )
         {
         case COMPONENT_PIN_DRAW_TYPE:
             SETMIRROR( ( (LibDrawPin*) item )->m_Pos.x );

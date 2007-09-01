@@ -66,7 +66,7 @@ wxDC * DC = Cmd->DC;
 		LockPoint = LocateLockPoint(pt_track->m_Start.x,pt_track->m_Start.y,masquelayer);
 		if( LockPoint )
 			{
-			if ( LockPoint->m_StructType == TYPEPAD )
+			if ( LockPoint->Type() == TYPEPAD )
 				{
 				pt_pad = (D_PAD*) LockPoint;
 				new_net_code = pt_pad->net_code;
@@ -82,7 +82,7 @@ wxDC * DC = Cmd->DC;
 		LockPoint = LocateLockPoint(pt_track->m_End.x,pt_track->m_End.y,masquelayer);
 		if( LockPoint )
 			{
-			if ( LockPoint->m_StructType == TYPEPAD )
+			if ( LockPoint->Type() == TYPEPAD )
 				{
 				pt_pad = (D_PAD*) LockPoint;
 				new_net_code = pt_pad->net_code;
@@ -151,7 +151,7 @@ wxDC * DC = Cmd->DC;
 			if( LockPoint )
 				{
 				pt_track->start = LockPoint;
-				if ( LockPoint->m_StructType == TYPEPAD )
+				if ( LockPoint->Type() == TYPEPAD )
 					{	/* fin de piste sur un pad */
 					pt_pad = (D_PAD*) LockPoint;
 					pt_track->SetState(BEGIN_ONPAD, ON);
@@ -168,7 +168,7 @@ wxDC * DC = Cmd->DC;
 			if( LockPoint )
 				{
 				pt_track->end = LockPoint;
-				if ( LockPoint->m_StructType == TYPEPAD )
+				if ( LockPoint->Type() == TYPEPAD )
 					{	/* fin de piste sur un pad */
 					pt_pad = (D_PAD*) LockPoint;
 					pt_track->SetState(END_ONPAD, ON);

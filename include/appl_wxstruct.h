@@ -60,21 +60,21 @@ public:
     bool m_PdfBrowserIsDefault;                     // True if the pdf browser is the default (m_PdfBrowser not used)
 
 public:
-    WinEDA_App( void );
-    ~WinEDA_App( void );
-    bool    OnInit( void );
-    int     OnRun( void );
+    WinEDA_App();
+    ~WinEDA_App();
+    bool    OnInit();
+    int     OnRun();
 
-    bool    SetBinDir( void );
+    bool    SetBinDir();
     void    InitEDA_Appl( const wxString& name );
     bool    SetLanguage( bool first_time = FALSE );
     wxMenu* SetLanguageList( wxMenu* MasterMenu );
     void    SetLanguageIdentifier( int menu_id );
-    void    InitOnLineHelp( void );
+    void    InitOnLineHelp();
 
     // Sauvegarde de configurations et options:
-    void    GetSettings( void );
-    void    SaveSettings( void );
+    void    GetSettings();
+    void    SaveSettings();
     void    SetLastProject( const wxString& FullFileName );
     void    WriteProjectConfig( const wxString& local_config_filename,
                                 const wxString& GroupName, PARAM_CFG_BASE** List );
@@ -83,8 +83,8 @@ public:
                                const wxString& GroupName, PARAM_CFG_BASE** List,
                                bool Load_Only_if_New );
 
-    void    ReadPdfBrowserInfos( void );
-    void    WritePdfBrowserInfos( void );
+    void    ReadPdfBrowserInfos();
+    void    WritePdfBrowserInfos();
 };
 
 

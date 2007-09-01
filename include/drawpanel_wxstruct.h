@@ -57,16 +57,16 @@ public:
 
     // Constructor and destructor
     WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id, const wxPoint& pos, const wxSize& size );
-    ~WinEDA_DrawPanel( void ) { }
+    ~WinEDA_DrawPanel() { }
     /****************************/
-    BASE_SCREEN* GetScreen( void ) { return m_Parent->m_CurrentScreen; }
+    BASE_SCREEN* GetScreen() { return m_Parent->m_CurrentScreen; }
 
     void    PrepareGraphicContext( wxDC* DC );
     wxPoint CalcAbsolutePosition( const wxPoint& rel_pos );
     bool    IsPointOnDisplay( wxPoint ref_pos );
     void    OnPaint( wxPaintEvent& event );
     void    OnSize( wxSizeEvent& event );
-    void    SetBoundaryBox( void );
+    void    SetBoundaryBox();
     void    ReDraw( wxDC* DC, bool erasebg = TRUE );
     void    PrintPage( wxDC* DC, bool Print_Sheet_Ref, int PrintMask );
     void    DrawBackGround( wxDC* DC );
@@ -86,18 +86,18 @@ public:
     void    OnScroll( wxScrollWinEvent& event );
 
     void    SetZoom( int mode );
-    int     GetZoom( void );
+    int     GetZoom();
     void    SetGrid( const wxSize& size );
-    wxSize  GetGrid( void );
+    wxSize  GetGrid();
 
     void    AddMenuZoom( wxMenu* MasterMenu );
     void    OnRightClick( wxMouseEvent& event );
     void    Process_Popup_Zoom( wxCommandEvent& event );
     void    Process_Special_Functions( wxCommandEvent& event );
     wxPoint CursorRealPosition( const wxPoint& ScreenPos );
-    wxPoint CursorScreenPosition( void );
-    wxPoint GetScreenCenterRealPosition( void );
-    void    MouseToCursorSchema( void );
+    wxPoint CursorScreenPosition();
+    wxPoint GetScreenCenterRealPosition();
+    void    MouseToCursorSchema();
     void    MouseTo( const wxPoint& Mouse );
 
     /* Cursor functions */
@@ -156,8 +156,8 @@ public:
                                                *  = 0,0 in block paste */
 
 public:
-    DrawBlockStruct( void );
-    ~DrawBlockStruct( void );
+    DrawBlockStruct();
+    ~DrawBlockStruct();
     void    SetMessageBlock( WinEDA_DrawFrame* frame );
     void    Draw( WinEDA_DrawPanel* panel, wxDC* DC );
 };
@@ -229,32 +229,32 @@ public:
     int         m_Zoom;         /* coeff de ZOOM */
 
 public:
-    BASE_SCREEN( int idscreen );
-    ~BASE_SCREEN( void );
+    BASE_SCREEN( int idscreen, KICAD_T aType = SCREEN_STRUCT_TYPE );
+    ~BASE_SCREEN();
 
-    void                    InitDatas( void );/* Inits completes des variables */
-    wxSize                  ReturnPageSize( void );
-    int                     GetInternalUnits( void );
+    void                    InitDatas();/* Inits completes des variables */
+    wxSize                  ReturnPageSize();
+    int                     GetInternalUnits();
 
     wxPoint                 CursorRealPosition( const wxPoint& ScreenPos );
 
     /* general Undo/Redo command control */
-    virtual void            ClearUndoRedoList( void );
+    virtual void            ClearUndoRedoList();
     virtual void            AddItemToUndoList( EDA_BaseStruct* item );
     virtual void            AddItemToRedoList( EDA_BaseStruct* item );
-    virtual EDA_BaseStruct* GetItemFromUndoList( void );
-    virtual EDA_BaseStruct* GetItemFromRedoList( void );
+    virtual EDA_BaseStruct* GetItemFromUndoList();
+    virtual EDA_BaseStruct* GetItemFromRedoList();
 
     /* Manipulation des flags */
-    void    SetRefreshReq( void ) { m_FlagRefreshReq = 1; }
-    void    ClrRefreshReq( void ) { m_FlagRefreshReq = 0; }
-    void    SetModify( void ) { m_FlagModified = 1; m_FlagSave = 0; }
-    void    ClrModify( void ) { m_FlagModified = 0; m_FlagSave = 1; }
-    void    SetSave( void ) { m_FlagSave = 1; }
-    void    ClrSave( void ) { m_FlagSave = 0; }
-    int     IsModify( void ) { return m_FlagModified & 1;  }
-    int     IsRefreshReq( void ) { return m_FlagRefreshReq & 1;  }
-    int     IsSave( void ) { return m_FlagSave & 1;  }
+    void    SetRefreshReq() { m_FlagRefreshReq = 1; }
+    void    ClrRefreshReq() { m_FlagRefreshReq = 0; }
+    void    SetModify() { m_FlagModified = 1; m_FlagSave = 0; }
+    void    ClrModify() { m_FlagModified = 0; m_FlagSave = 1; }
+    void    SetSave() { m_FlagSave = 1; }
+    void    ClrSave() { m_FlagSave = 0; }
+    int     IsModify() { return m_FlagModified & 1;  }
+    int     IsRefreshReq() { return m_FlagRefreshReq & 1;  }
+    int     IsSave() { return m_FlagSave & 1;  }
 
     
     /**
@@ -268,22 +268,22 @@ public:
     EDA_BaseStruct* GetCurItem() const {  return m_CurrentItem; }
     
     /* fonctions relatives au zoom */
-    int     GetZoom( void );                /* retourne le coeff de zoom */
+    int     GetZoom();                /* retourne le coeff de zoom */
     void    SetZoom( int coeff );           /* ajuste le coeff de zoom a coeff */
     void    SetZoomList( int* zoomlist );   /* init liste des zoom (NULL terminated) */
-    void    SetNextZoom( void );            /* ajuste le prochain coeff de zoom */
-    void    SetPreviousZoom( void );        /* ajuste le precedent coeff de zoom */
-    void    SetFirstZoom( void );           /* ajuste le coeff de zoom a 1*/
-    void    SetLastZoom( void );            /* ajuste le coeff de zoom au max */
+    void    SetNextZoom();            /* ajuste le prochain coeff de zoom */
+    void    SetPreviousZoom();        /* ajuste le precedent coeff de zoom */
+    void    SetFirstZoom();           /* ajuste le coeff de zoom a 1*/
+    void    SetLastZoom();            /* ajuste le coeff de zoom au max */
 
     /* fonctions relatives a la grille */
-    wxSize  GetGrid( void );                    /* retourne la grille */
+    wxSize  GetGrid();                    /* retourne la grille */
     void    SetGrid( const wxSize& size );
     void    SetGridList( wxSize* sizelist );    /* init liste des grilles (NULL terminated) */
-    void    SetNextGrid( void );                /* ajuste le prochain coeff de grille */
-    void    SetPreviousGrid( void );            /* ajuste le precedent coeff de grille */
-    void    SetFirstGrid( void );               /* ajuste la grille au mini*/
-    void    SetLastGrid( void );                /* ajuste la grille au max */
+    void    SetNextGrid();                /* ajuste le prochain coeff de grille */
+    void    SetPreviousGrid();            /* ajuste le precedent coeff de grille */
+    void    SetFirstGrid();               /* ajuste la grille au mini*/
+    void    SetLastGrid();                /* ajuste la grille au max */
 
     
     /**

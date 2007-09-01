@@ -17,7 +17,7 @@
 void SetStructFather( EDA_BaseStruct* Struct, BASE_SCREEN* Screen )
 /******************************************************************/
 {
-    switch( Struct->m_StructType )
+    switch( Struct->Type() )
     {
     case DRAW_POLYLINE_STRUCT_TYPE:
     case DRAW_JUNCTION_STRUCT_TYPE:
@@ -82,7 +82,8 @@ void EDA_BaseStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
 static int table_zoom[] = { 1, 2, 4, 8, 16, 32, 64, 128, 0 }; /* Valeurs standards du zoom */
 
 /* Constructeur de SCREEN */
-SCH_SCREEN::SCH_SCREEN( int screentype ) : BASE_SCREEN( screentype )
+SCH_SCREEN::SCH_SCREEN( int screentype, KICAD_T aType ) : 
+    BASE_SCREEN( screentype, aType )
 {
     EEDrawList = NULL;                  /* Schematic items list */
     m_Zoom = 32;
@@ -94,7 +95,7 @@ SCH_SCREEN::SCH_SCREEN( int screentype ) : BASE_SCREEN( screentype )
 
 
 /****************************/
-SCH_SCREEN::~SCH_SCREEN( void )
+SCH_SCREEN::~SCH_SCREEN()
 /****************************/
 {
     ClearUndoRedoList();
@@ -103,7 +104,7 @@ SCH_SCREEN::~SCH_SCREEN( void )
 
 
 /***********************************/
-void SCH_SCREEN::FreeDrawList( void )
+void SCH_SCREEN::FreeDrawList()
 /***********************************/
 
 /* Routine to clear (free) EESchema drawing list of a screen.
@@ -187,7 +188,7 @@ EDA_ScreenList::~EDA_ScreenList()
 
 
 /*****************************************/
-SCH_SCREEN* EDA_ScreenList::GetFirst( void )
+SCH_SCREEN* EDA_ScreenList::GetFirst()
 /*****************************************/
 {
     m_Index = 0;
@@ -199,7 +200,7 @@ SCH_SCREEN* EDA_ScreenList::GetFirst( void )
 
 
 /*****************************************/
-SCH_SCREEN* EDA_ScreenList::GetNext( void )
+SCH_SCREEN* EDA_ScreenList::GetNext()
 /*****************************************/
 {
     if( m_Index < m_Count )
@@ -231,7 +232,7 @@ SCH_SCREEN* EDA_ScreenList::GetScreen( int index )
 
 
 /**************************************************/
-void EDA_ScreenList::UpdateSheetNumberAndDate( void )
+void EDA_ScreenList::UpdateSheetNumberAndDate()
 /**************************************************/
 
 /* Update the sheet number, the sheet count and the date for all sheets in list
@@ -285,7 +286,7 @@ SCH_SCREEN** EDA_ScreenList::BuildScreenList( SCH_SCREEN** ScreenList,
     CurrStruct = DrawStruct;
     while( CurrStruct )
     {
-        if( CurrStruct->m_StructType == DRAW_SHEET_STRUCT_TYPE )
+        if( CurrStruct->Type() == DRAW_SHEET_STRUCT_TYPE )
         {
             HasSubhierarchy = TRUE;
             if( ScreenList )
@@ -306,7 +307,7 @@ SCH_SCREEN** EDA_ScreenList::BuildScreenList( SCH_SCREEN** ScreenList,
     CurrStruct = DrawStruct;
     while( CurrStruct )
     {
-        if( CurrStruct->m_StructType == DRAW_SHEET_STRUCT_TYPE )
+        if( CurrStruct->Type() == DRAW_SHEET_STRUCT_TYPE )
         {
             SCH_SCREEN* Screen = (SCH_SCREEN*) CurrStruct;
 

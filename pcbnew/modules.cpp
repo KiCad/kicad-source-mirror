@@ -69,7 +69,7 @@ void Rastnest_On_Off( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* module )
 
 
 /***************************************************/
-MODULE* WinEDA_BasePcbFrame::GetModuleByName( void )
+MODULE* WinEDA_BasePcbFrame::GetModuleByName()
 /***************************************************/
 
 /* Get a module name from user and return a pointer to the corresponding module
@@ -435,7 +435,7 @@ void WinEDA_BasePcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
     PtStruct = Module->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
-        switch( PtStruct->m_StructType )
+        switch( PtStruct->Type() )
         {
         case TYPEEDGEMODULE:
             pt_edgmod = (EDGE_MODULE*) PtStruct;

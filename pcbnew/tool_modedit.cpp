@@ -34,7 +34,7 @@
 #endif
 
 /***************************************************/
-void WinEDA_ModuleEditFrame::ReCreateHToolbar( void )
+void WinEDA_ModuleEditFrame::ReCreateHToolbar()
 /***************************************************/
 /* Create the main horizontal toolbar for the footprint editor */
 {
@@ -144,7 +144,7 @@ void WinEDA_ModuleEditFrame::ReCreateHToolbar( void )
 
 
 /********************************************************/
-void WinEDA_ModuleEditFrame::ReCreateVToolbar( void )
+void WinEDA_ModuleEditFrame::ReCreateVToolbar()
 /********************************************************/
 {
     if( m_VToolBar )
@@ -196,7 +196,7 @@ void WinEDA_ModuleEditFrame::ReCreateVToolbar( void )
 
 
 /*********************************************************/
-void WinEDA_ModuleEditFrame::ReCreateOptToolbar( void )
+void WinEDA_ModuleEditFrame::ReCreateOptToolbar()
 /*********************************************************/
 {
     if( m_OptionsToolBar )
@@ -258,7 +258,7 @@ void WinEDA_ModuleEditFrame::ReCreateOptToolbar( void )
 
 
 /*********************************************************/
-void WinEDA_ModuleEditFrame::ReCreateAuxiliaryToolbar( void )
+void WinEDA_ModuleEditFrame::ReCreateAuxiliaryToolbar()
 /*********************************************************/
 {
     int      ii;

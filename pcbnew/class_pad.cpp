@@ -35,7 +35,7 @@ D_PAD::D_PAD( MODULE* parent ) :
 
     m_Size.x = m_Size.y = 500;
 
-    if( m_Parent && (m_Parent->m_StructType  == TYPEMODULE) )
+    if( m_Parent && (m_Parent->Type()  == TYPEMODULE) )
     {
         m_Pos = ( (MODULE*) m_Parent )->m_Pos;
     }
@@ -50,13 +50,13 @@ D_PAD::D_PAD( MODULE* parent ) :
 }
 
 
-D_PAD::~D_PAD( void )
+D_PAD::~D_PAD()
 {
 }
 
 
 /****************************/
-void D_PAD::ComputeRayon( void )
+void D_PAD::ComputeRayon()
 /****************************/
 
 /* met a jour m_Rayon, rayon du cercle exinscrit
@@ -82,7 +82,7 @@ void D_PAD::ComputeRayon( void )
 
 
 /*********************************************/
-const wxPoint D_PAD::ReturnShapePos( void )
+const wxPoint D_PAD::ReturnShapePos()
 /*********************************************/
 
 // retourne la position de la forme (pastilles excentrees)
@@ -106,7 +106,7 @@ const wxPoint D_PAD::ReturnShapePos( void )
 
 
 /****************************************/
-wxString D_PAD::ReturnStringPadName( void )
+wxString D_PAD::ReturnStringPadName()
 /****************************************/
 
 /* Return pad name as string in a wxString
@@ -188,7 +188,7 @@ void D_PAD::Copy( D_PAD* source )
 
 
 /**************************/
-void D_PAD::UnLink( void )
+void D_PAD::UnLink()
 /**************************/
 
 /* supprime du chainage la structure Struct
@@ -198,7 +198,7 @@ void D_PAD::UnLink( void )
     /* Modification du chainage arriere */
     if( Pback )
     {
-        if( Pback->m_StructType != TYPEMODULE )
+        if( Pback->Type() != TYPEMODULE )
         {
             Pback->Pnext = Pnext;
         }

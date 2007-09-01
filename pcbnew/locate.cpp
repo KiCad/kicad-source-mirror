@@ -140,7 +140,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::Locate( int typeloc, int LayerSearch )
                                               masque_layer, typeloc ) ) != NULL )
         {
             Track = TrackLocate;
-            if( TrackLocate->m_StructType == TYPEVIA )
+            if( TrackLocate->Type() == TYPEVIA )
                 break;
 
             TrackLocate = (TRACK*) TrackLocate->Pnext;
@@ -232,7 +232,7 @@ TRACK* Locate_Via( BOARD* Pcb, const wxPoint& pos, int layer )
 
     for( Track = Pcb->m_Track; Track != NULL; Track = Track->Next() )
     {
-        if( Track->m_StructType != TYPEVIA )
+        if( Track->Type() != TYPEVIA )
             continue;
         if( Track->m_Start != pos )
             continue;
@@ -311,7 +311,7 @@ EDGE_MODULE* Locate_Edge_Module( MODULE* module, int typeloc )
     EDA_BaseStruct* PtStruct = module->m_Drawings;
     for( ; PtStruct != NULL;  PtStruct = PtStruct->Pnext )
     {
-        if( PtStruct->m_StructType != TYPEEDGEMODULE )
+        if( PtStruct->Type() != TYPEEDGEMODULE )
             continue;
 
         // calls virtual EDGE_MODULE::HitTest() 
@@ -337,7 +337,7 @@ COTATION* Locate_Cotation( BOARD* Pcb, int LayerSearch, int typeloc )
     BOARD_ITEM* PtStruct = Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
-        if( PtStruct->m_StructType != TYPECOTATION )
+        if( PtStruct->Type() != TYPECOTATION )
             continue;
 
         // calls virtual COTATION::HitTest() 
@@ -369,7 +369,7 @@ DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int LayerSearch, int typeloc )
     EDA_BaseStruct* PtStruct = Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
-        if( PtStruct->m_StructType != TYPEDRAWSEGMENT )
+        if( PtStruct->Type() != TYPEDRAWSEGMENT )
             continue;
         
         DRAWSEGMENT*  pts = (DRAWSEGMENT*) PtStruct;
@@ -643,7 +643,7 @@ TEXTE_MODULE* LocateTexteModule( BOARD* Pcb, MODULE** PtModule, int typeloc )
         PtStruct = module->m_Drawings;
         for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
         {
-            if( PtStruct->m_StructType != TYPETEXTEMODULE )
+            if( PtStruct->Type() != TYPETEXTEMODULE )
                 continue;
             
             pt_txt_mod = (TEXTE_MODULE*) PtStruct;
@@ -746,7 +746,7 @@ suite:
 suite1:
             if( PtSegmB == pt_base )
                 PtSegmB = NULL;
-            else if( PtSegmB->m_StructType != TYPEPCB )
+            else if( PtSegmB->Type() != TYPEPCB )
                 PtSegmB = (TRACK*) PtSegmB->Pback;
             else
                 PtSegmB = NULL;
@@ -820,7 +820,7 @@ TRACK* Locate_Pistes( TRACK* start_adresse, const wxPoint& ref_pos, int MasqueLa
         if( (g_DesignSettings.m_LayerColor[Track->GetLayer()] & ITEM_NOT_SHOW) )
             continue;
 
-        if( Track->m_StructType == TYPEVIA ) /* VIA rencontree */
+        if( Track->Type() == TYPEVIA ) /* VIA rencontree */
         {
             if( Track->HitTest( ref_pos ) )
                 return Track;
@@ -893,7 +893,7 @@ TEXTE_PCB* Locate_Texte_Pcb( EDA_BaseStruct* PtStruct, int LayerSearch, int type
 
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
-        if( PtStruct->m_StructType != TYPETEXTE )
+        if( PtStruct->Type() != TYPETEXTE )
             continue;
         
         TEXTE_PCB* pt_txt_pcb = (TEXTE_PCB*) PtStruct;
@@ -1006,7 +1006,7 @@ TRACK* Fast_Locate_Via( TRACK* start_adr, TRACK* end_adr,
 
     for( PtSegm = start_adr; PtSegm != NULL; PtSegm = (TRACK*) PtSegm->Pnext )
     {
-        if( PtSegm->m_StructType == TYPEVIA )
+        if( PtSegm->Type() == TYPEVIA )
         {
             if( pos == PtSegm->m_Start )
             {
@@ -1042,7 +1042,7 @@ MIREPCB* Locate_MirePcb( BOARD_ITEM* PtStruct, int LayerSearch, int typeloc )
 
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
-        if( PtStruct->m_StructType != TYPEMIRE )
+        if( PtStruct->Type() != TYPEMIRE )
             continue;
 
         if( LayerSearch != -1  &&  PtStruct->GetLayer() != LayerSearch )

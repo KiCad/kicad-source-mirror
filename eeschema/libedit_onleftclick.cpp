@@ -32,7 +32,7 @@ LibEDA_BaseStruct* DrawEntry = CurrentDrawItem;
 		if ( DrawEntry && DrawEntry->m_Flags )
 		{
 			SaveCopyInUndoList(CurrentLibEntry);
-			switch (DrawEntry->m_StructType )
+			switch (DrawEntry->Type() )
 			{
 				case COMPONENT_PIN_DRAW_TYPE:
 					PlacePin(DC);
@@ -146,7 +146,7 @@ LibEDA_BaseStruct* DrawEntry = CurrentDrawItem;
 					break;
 				}
 				SaveCopyInUndoList(CurrentLibEntry);
-				if ( DrawEntry->m_StructType == COMPONENT_PIN_DRAW_TYPE )
+				if ( DrawEntry->Type() == COMPONENT_PIN_DRAW_TYPE )
 					DeletePin(DC, CurrentLibEntry, (LibDrawPin*)DrawEntry);
 				else
 					DeleteOneLibraryDrawStruct(DrawPanel, DC, CurrentLibEntry,DrawEntry, TRUE);
@@ -233,7 +233,7 @@ LibEDA_BaseStruct* DrawEntry = CurrentDrawItem;
 	CurrentDrawItem = DrawEntry;
 
 	DrawPanel->m_IgnoreMouseEvents = TRUE;
-	switch ( DrawEntry->m_StructType )
+	switch ( DrawEntry->Type() )
 	{
 		case  COMPONENT_PIN_DRAW_TYPE:
 			if( DrawEntry->m_Flags == 0 )	// Item localisé et non en edition: placement commande move
@@ -282,7 +282,7 @@ LibEDA_BaseStruct* DrawEntry = CurrentDrawItem;
 			wxString msg;
 			msg.Printf(
 				 wxT("WinEDA_LibeditFrame::OnLeftDClick Error: unknown StructType %d"),
-				DrawEntry->m_StructType);
+				DrawEntry->Type());
 			DisplayError(this, msg );
 			break;
 	}

@@ -169,7 +169,7 @@ static void suppression_piste_non_connectee( WinEDA_PcbFrame* frame, wxDC* DC )
     {
         frame->m_Pcb->m_NbSegmTrack++;
         NextS = PtSegm->Pnext;
-        if( PtSegm->m_StructType == TYPEVIA )
+        if( PtSegm->Type() == TYPEVIA )
         {
             if( (PtSegm->m_Start.x != PtSegm->m_End.x )
              || (PtSegm->m_Start.y != PtSegm->m_End.y ) )
@@ -245,7 +245,7 @@ static void suppression_piste_non_connectee( WinEDA_PcbFrame* frame, wxDC* DC )
             else    /* Segment ou via connectee a cette extremite */
             {
                 PtSegm->start = pt_other;
-                if( pt_other->m_StructType == TYPEVIA ) /* recherche d'un autre segment */
+                if( pt_other->Type() == TYPEVIA ) /* recherche d'un autre segment */
                 {
                     PtSegm->SetState( BUSY, ON );
                     pt_via   = pt_other;
@@ -267,7 +267,7 @@ static void suppression_piste_non_connectee( WinEDA_PcbFrame* frame, wxDC* DC )
             else     /* Segment ou via connectee a cette extremite */
             {
                 PtSegm->end = pt_other;
-                if( pt_other->m_StructType == TYPEVIA ) /* recherche d'un autre segment */
+                if( pt_other->Type() == TYPEVIA ) /* recherche d'un autre segment */
                 {
                     PtSegm->SetState( BUSY, ON );
                     pt_via = pt_other;
@@ -377,7 +377,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
             int erase = 0;
             NextS = pt_aux->Pnext;
 
-            if( PtSegm->m_StructType != pt_aux->m_StructType )
+            if( PtSegm->Type() != pt_aux->Type() )
                 continue;
             if( PtSegm->GetLayer() != pt_aux->GetLayer() )
                 continue;
@@ -443,7 +443,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
                 return -1;
         }
 
-        if( PtSegm->m_StructType != TYPETRACK )
+        if( PtSegm->Type() != TYPETRACK )
             continue;
 
         flag = no_inc = 0;
@@ -460,7 +460,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
                     break;
 
                 /* Ce ne peut etre une via */
-                if( pt_segm_s->m_StructType != TYPETRACK )
+                if( pt_segm_s->Type() != TYPETRACK )
                     break;
 
                 /* On ne peut avoir que 1 seul segment connecte */
@@ -497,7 +497,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
                 if( PtSegm->m_Width != pt_segm_e->m_Width )
                     break;
                 /* Ce ne peut etre une via */
-                if( pt_segm_e->m_StructType != TYPETRACK )
+                if( pt_segm_e->Type() != TYPETRACK )
                     break;
 
                 /* On ne peut avoir que 1 seul segment connecte */
@@ -675,7 +675,7 @@ int Netliste_Controle_piste( WinEDA_PcbFrame* frame, wxDC* DC, int affiche )
         /* Calcul du net_code des elements raccordes sur le point de debut */
         net_code_s = -1;
         if( (PtSegm->start != NULL)
-           && ( ( (EDA_BaseStruct*) (PtSegm->start) )->m_StructType == TYPEPAD ) )
+           && ( ( (EDA_BaseStruct*) (PtSegm->start) )->Type() == TYPEPAD ) )
             net_code_s = ( (D_PAD*) (PtSegm->start) )->m_NetCode;
 
         else
@@ -691,7 +691,7 @@ int Netliste_Controle_piste( WinEDA_PcbFrame* frame, wxDC* DC, int affiche )
         /* Calcul du net_code des elements raccordes sur le point de fin */
         net_code_e = -1;
         if( (PtSegm->end != NULL)
-         && ( ( (EDA_BaseStruct*) (PtSegm->end) )->m_StructType == TYPEPAD ) )
+         && ( ( (EDA_BaseStruct*) (PtSegm->end) )->Type() == TYPEPAD ) )
             net_code_e = ( (D_PAD*) (PtSegm->end) )->m_NetCode;
 
         else
@@ -795,7 +795,7 @@ static void Gen_Raccord_Track( WinEDA_PcbFrame* frame, wxDC* DC )
                 break;
             if( pt_aux == PtSegm )
                 continue;
-            if( pt_aux->m_StructType == TYPEVIA )
+            if( pt_aux->Type() == TYPEVIA )
                 continue;
             if( PtSegm->m_Start == pt_aux->m_Start )
                 continue;
@@ -829,7 +829,7 @@ static void Gen_Raccord_Track( WinEDA_PcbFrame* frame, wxDC* DC )
                 break;
             if( pt_aux == PtSegm )
                 continue;
-            if( pt_aux->m_StructType == TYPEVIA )
+            if( pt_aux->Type() == TYPEVIA )
                 continue;
 
             if( (PtSegm->m_End.x == pt_aux->m_Start.x) && (PtSegm->m_End.y == pt_aux->m_Start.y) )

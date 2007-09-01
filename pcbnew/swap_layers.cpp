@@ -36,7 +36,7 @@ public:
 
     // Constructor and destructor
     WinEDA_SwapLayerFrame( WinEDA_BasePcbFrame * parent );
-    ~WinEDA_SwapLayerFrame( void ) { };
+    ~WinEDA_SwapLayerFrame() { };
 
 private:
     void    Sel_Layer( wxCommandEvent& event );
@@ -196,7 +196,7 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
     for( ; pt_segm != NULL; pt_segm = (TRACK*) pt_segm->Pnext )
     {
         m_CurrentScreen->SetModify();
-        if( pt_segm->m_StructType == TYPEVIA )
+        if( pt_segm->Type() == TYPEVIA )
         {
             SEGVIA* Via = (SEGVIA*) pt_segm;
             if( Via->Shape() == VIA_NORMALE )
@@ -231,7 +231,7 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
     PtStruct = m_Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
-        if( PtStruct->m_StructType == TYPEDRAWSEGMENT )
+        if( PtStruct->Type() == TYPEDRAWSEGMENT )
         {
             m_CurrentScreen->SetModify();
             pt_drawsegm = (DRAWSEGMENT*) PtStruct;

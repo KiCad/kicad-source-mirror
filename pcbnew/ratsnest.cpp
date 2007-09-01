@@ -712,7 +712,7 @@ int WinEDA_BasePcbFrame::Test_1_Net_Ratsnest( wxDC* DC, int ref_netcode )
 
 
 /*****************************************************/
-void WinEDA_BasePcbFrame::recalcule_pad_net_code( void )
+void WinEDA_BasePcbFrame::recalcule_pad_net_code()
 /*****************************************************/
 
 /*
@@ -826,7 +826,7 @@ void WinEDA_BasePcbFrame::recalcule_pad_net_code( void )
 
 
 /***********************************************/
-void WinEDA_BasePcbFrame::build_liste_pads( void )
+void WinEDA_BasePcbFrame::build_liste_pads()
 /***********************************************/
 
 /*
@@ -1238,7 +1238,7 @@ int* WinEDA_BasePcbFrame::build_ratsnest_pad( EDA_BaseStruct* ref,
         if( ref == NULL )
             return NULL;
 
-        switch( ref->m_StructType )
+        switch( ref->Type() )
         {
         case TYPEPAD:
             pad_ref = (D_PAD*) ref;

@@ -60,7 +60,7 @@ eda_global wxSize g_GridList[]
 ;
 
 #define UNDELETE_STACK_SIZE 10
-eda_global EDA_BaseStruct* g_UnDeleteStack[UNDELETE_STACK_SIZE]; // Liste des elements supprimes
+eda_global BOARD_ITEM*     g_UnDeleteStack[UNDELETE_STACK_SIZE]; // Liste des elements supprimes
 eda_global int             g_UnDeleteStackPtr;
 
 eda_global bool            g_ShowGrid

@@ -68,7 +68,7 @@ TRACK* Marque_Une_Piste( WinEDA_BasePcbFrame* frame, wxDC* DC,
      *  Si c'est une via, on doit examiner le nombre de segments connectes.
      *  Si <=2, on doit detecter une piste, si > 2 seule la via est marquee
      */
-    if( pt_segm->m_StructType == TYPEVIA )
+    if( pt_segm->Type() == TYPEVIA )
     {
         TRACK* Segm1, * Segm2 = NULL, * Segm3 = NULL;
         Segm1 = Fast_Locate_Piste( frame->m_Pcb->m_Track, NULL,
@@ -108,7 +108,7 @@ TRACK* Marque_Une_Piste( WinEDA_BasePcbFrame* frame, wxDC* DC,
     for( Segm = ListSegm; Segm != NULL; Segm = Segm->Pnext )
     {
         int layer;
-        if( Segm->RefTrack->m_StructType != TYPEVIA )
+        if( Segm->RefTrack->Type() != TYPEVIA )
             continue;
         if( Segm->RefTrack == pt_segm )
             continue;
@@ -317,7 +317,7 @@ int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
     NbEnds = 0; Track = RefTrack; ii = 0;
     for( ; (Track != NULL) && (ii < NbSegm); ii++, Track = (TRACK*) Track->Pnext )
     {
-        if( Track->m_StructType == TYPEVIA )
+        if( Track->Type() == TYPEVIA )
             continue;
 
         masque_layer = Track->ReturnMaskLayer();

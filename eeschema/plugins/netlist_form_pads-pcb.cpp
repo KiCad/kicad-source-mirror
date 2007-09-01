@@ -119,13 +119,13 @@ public:
     long m_TimeStamp;
 
 public:
-    ComponentDataClass( void )
+    ComponentDataClass()
     {
         InitData();
     }
 
 
-    void InitData( void )
+    void InitData()
     {
         m_TimeStamp    = 0;
         m_Reference[0] = 0;

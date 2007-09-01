@@ -169,13 +169,13 @@ public:
     WinEDA_BasicFrame( const WinEDA_BasicFrame& ) { }   // Should throw!!
     WinEDA_BasicFrame() { }                             // Should throw!!
 #endif
-    ~WinEDA_BasicFrame( void );
+    ~WinEDA_BasicFrame();
     
     void            GetKicadHelp( wxCommandEvent& event );
     void            GetKicadAbout( wxCommandEvent& event );
     void            PrintMsg( const wxString& text );
-    void            GetSettings( void );
-    void            SaveSettings( void );
+    void            GetSettings();
+    void            SaveSettings();
 	int             WriteHotkeyConfigFile(const wxString & Filename, Ki_HotkeyInfo ** List, bool verbose);
 	int             ReadHotkeyConfigFile(const wxString & Filename, Ki_HotkeyInfo ** List, bool verbose);
 	void            SetLanguage( wxCommandEvent& event );
@@ -184,7 +184,7 @@ public:
     wxString        GetLastProject( int rang );
     void            SetLastProject( const wxString& FullFileName );
     void            DisplayActivity( int PerCent, const wxString& Text );
-    virtual void    ReCreateMenuBar( void );
+    virtual void    ReCreateMenuBar();
 };
 
 
@@ -233,9 +233,9 @@ public:
                       const wxString& title,
                       const wxPoint& pos, const wxSize& size );
 
-    ~WinEDA_DrawFrame( void );
+    ~WinEDA_DrawFrame();
     
-    BASE_SCREEN*    GetScreen( void ) { return m_CurrentScreen; }
+    BASE_SCREEN*    GetScreen() { return m_CurrentScreen; }
 
     void            OnMenuOpen( wxMenuEvent& event );
     void            OnMouseEvent( wxMouseEvent& event );
@@ -244,15 +244,15 @@ public:
     void            ProcessFontPreferences( wxCommandEvent& event );
 
     void            Affiche_Message( const wxString& message );
-    void            EraseMsgBox( void );
+    void            EraseMsgBox();
     void            Process_PageSettings( wxCommandEvent& event );
     void            SetDrawBgColor( int color_num );
-    virtual void    SetToolbars( void );
+    virtual void    SetToolbars();
     void            SetLanguage( wxCommandEvent& event );
-    virtual void    ReCreateHToolbar( void ) = 0;
-    virtual void    ReCreateVToolbar( void ) = 0;
-    virtual void    ReCreateMenuBar( void );
-    virtual void    ReCreateAuxiliaryToolbar( void );
+    virtual void    ReCreateHToolbar() = 0;
+    virtual void    ReCreateVToolbar() = 0;
+    virtual void    ReCreateMenuBar();
+    virtual void    ReCreateAuxiliaryToolbar();
     void            SetToolID( int id, int new_cursor_id, const wxString& title );
 
     virtual void    OnSelectGrid( wxCommandEvent& event );
@@ -279,13 +279,13 @@ public:
 
     /* Recalcule le zoom et les offsets pour que l'affichage se fasse dans la
      *   fenetre de coord x0, y0 a x1, y1 */
-    virtual int     BestZoom( void ) = 0; // Retourne le meilleur zoom
+    virtual int     BestZoom() = 0; // Retourne le meilleur zoom
 
     void            ToPrinter( wxCommandEvent& event );
     void            SVG_Print( wxCommandEvent& event );
 
     void            OnActivate( wxActivateEvent& event );
-    void            ReDrawPanel( void );
+    void            ReDrawPanel();
     void            TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_width );
     void            DisplayToolMsg( const wxString msg );
     void            Process_Zoom( wxCommandEvent& event );
@@ -296,9 +296,9 @@ public:
     virtual void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
     virtual void    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
     virtual void    ToolOnRightClick( wxCommandEvent& event );
-    void            AdjustScrollBars( void );
-    void            Affiche_Status_Box( void );/* Affichage des coord curseur, zoom .. */
-    void            DisplayUnitsMsg( void );
+    void            AdjustScrollBars();
+    void            Affiche_Status_Box();/* Affichage des coord curseur, zoom .. */
+    void            DisplayUnitsMsg();
 
     /* Gestion generale des operations sur block */
     virtual int     ReturnBlockCommand( int key );
@@ -343,21 +343,21 @@ public:
                          const wxString& title,
                          const wxPoint& pos, const wxSize& size );
 
-    ~WinEDA_BasePcbFrame( void );
+    ~WinEDA_BasePcbFrame();
 
     // General
     virtual void    OnCloseWindow( wxCloseEvent& Event ) = 0;
     virtual void    Process_Special_Functions( wxCommandEvent& event ) = 0;
     virtual void    RedrawActiveWindow( wxDC* DC, bool EraseBg ) = 0;
-    virtual void    ReCreateHToolbar( void ) = 0;
-    virtual void    ReCreateVToolbar( void ) = 0;
+    virtual void    ReCreateHToolbar() = 0;
+    virtual void    ReCreateVToolbar() = 0;
     virtual void    OnLeftClick( wxDC* DC, const wxPoint& MousePos )  = 0;
     virtual void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) = 0;
     virtual void    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
-    virtual void    ReCreateMenuBar( void );
+    virtual void    ReCreateMenuBar();
 
-    PCB_SCREEN*     GetScreen( void ) { return (PCB_SCREEN*) m_CurrentScreen; }
-    int             BestZoom( void ); // Retourne le meilleur zoom
+    PCB_SCREEN*     GetScreen() { return (PCB_SCREEN*) m_CurrentScreen; }
+    int             BestZoom(); // Retourne le meilleur zoom
 
     void            Show3D_Frame( wxCommandEvent& event );
 
@@ -369,8 +369,8 @@ public:
                                         int             flag_type_command = 0 );
 
 private:
-    virtual void    GetComponentFromUndoList( void );
-    virtual void    GetComponentFromRedoList( void );
+    virtual void    GetComponentFromUndoList();
+    virtual void    GetComponentFromRedoList();
 
 #if defined(DEBUG)
 protected:
@@ -409,7 +409,7 @@ public:
                                    bool Overwrite, bool DisplayDialog );
     void            Archive_Modules( const wxString& LibName, bool NewModulesOnly );
     MODULE*         Select_1_Module_From_BOARD( BOARD* Pcb );
-    MODULE*         GetModuleByName( void );
+    MODULE*         GetModuleByName();
 
     // Modules
     MODULE*         Create_1_Module( wxDC* DC, const wxString& module_name );
@@ -459,9 +459,9 @@ public:
     void            Build_Board_Ratsnest( wxDC* DC );
     void            DrawGeneralRatsnest( wxDC* DC, int net_code = 0 );
     void            trace_ratsnest_pad( wxDC* DC );
-    void            recalcule_pad_net_code( void );/* Routine de
+    void            recalcule_pad_net_code();/* Routine de
                                                     *  calcul et de mise a jour des net_codes des PADS */
-    void            build_liste_pads( void );
+    void            build_liste_pads();
     int*            build_ratsnest_pad( EDA_BaseStruct* ref, const wxPoint& refpos, bool init );
 
     void            Tst_Ratsnest( wxDC* DC, int ref_netcode );
@@ -497,7 +497,7 @@ public:
 
     // Gestion des layers:
     int             SelectLayer( int default_layer, int min_layer, int max_layer );
-    void            SelectLayerPair( void );
+    void            SelectLayerPair();
     virtual void    SwitchLayer( wxDC* DC, int layer );
 
     // divers
@@ -526,7 +526,7 @@ public:
     WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent, const wxString& title,
                      const wxPoint& pos, const wxSize& size );
 
-    ~WinEDA_PcbFrame( void );
+    ~WinEDA_PcbFrame();
 
     // Configurations:
     void                InstallConfigFrame( const wxPoint& pos );
@@ -541,14 +541,14 @@ public:
     void                MuWaveCommand( wxDC* DC, const wxPoint& MousePos );
 
     void                RedrawActiveWindow( wxDC* DC, bool EraseBg );
-    void                ReCreateHToolbar( void );
-    void                ReCreateAuxiliaryToolbar( void );
-    void                ReCreateVToolbar( void );
-    void                ReCreateAuxVToolbar( void );
-    void                ReCreateOptToolbar( void );
-    void                ReCreateMenuBar( void );
+    void                ReCreateHToolbar();
+    void                ReCreateAuxiliaryToolbar();
+    void                ReCreateVToolbar();
+    void                ReCreateAuxVToolbar();
+    void                ReCreateOptToolbar();
+    void                ReCreateMenuBar();
     WinEDAChoiceBox*    ReCreateLayerBox( WinEDA_Toolbar* parent );
-    void                PrepareLayerIndicator( void );
+    void                PrepareLayerIndicator();
     void                OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void                OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
     void                OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
@@ -560,7 +560,7 @@ public:
     void                HandleBlockPlace( wxDC* DC );
     int                 HandleBlockEnd( wxDC* DC );
 
-    void                SetToolbars( void );
+    void                SetToolbars();
     void                Process_Settings( wxCommandEvent& event );
     void                InstallPcbOptionsFrame( const wxPoint& pos, wxDC* DC, int id );
     void                InstallPcbGlobalDeleteFrame( const wxPoint& pos );
@@ -576,12 +576,12 @@ public:
     bool                SavePcbFile( const wxString& FileName );
     int                 SavePcbFormatAscii( FILE* File );
     bool                WriteGeneralDescrPcb( FILE* File );
-    bool                RecreateCmpFileFromBoard( void );
+    bool                RecreateCmpFileFromBoard();
 
     void                ExportToGenCAD( wxCommandEvent& event );
 
     /* Fonctions specifiques */
-    MODULE*             ListAndSelectModuleName( void );
+    MODULE*             ListAndSelectModuleName();
     void                Liste_Equipot( wxCommandEvent& event );
     void                Swap_Layers( wxCommandEvent& event );
     int                 Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone );
@@ -614,7 +614,7 @@ public:
     void                Erase_Pistes( wxDC* DC, int masque_type, bool query );
     void                Erase_Modules( wxDC* DC, bool query );
     void                Erase_Textes_Pcb( wxDC* DC, bool query );
-    void                Erase_Marqueurs( void );
+    void                Erase_Marqueurs();
     void                UnDeleteItem( wxDC* DC );
     void                RemoveStruct( EDA_BaseStruct* Item, wxDC* DC );
     void                Via_Edit_Control( wxDC* DC, int command_type, SEGVIA* via );
@@ -625,7 +625,7 @@ public:
     void                DrawHightLight( wxDC* DC, int NetCode );
 
     // Track and via edition:
-    void                DisplayTrackSettings( void );
+    void                DisplayTrackSettings();
     void                Other_Layer_Route( TRACK* track, wxDC* DC );
     void                Affiche_PadsNoConnect( wxDC* DC );
     void                Affiche_Status_Net( wxDC* DC );
@@ -653,7 +653,7 @@ public:
     // Edition des zones
     EDGE_ZONE*          Del_SegmEdgeZone( wxDC* DC, EDGE_ZONE* edge_zone );
     void                CaptureNetName( wxDC* DC );
-    EDGE_ZONE*          Begin_Zone( void );
+    EDGE_ZONE*          Begin_Zone();
     void                End_Zone( wxDC* DC );
     void                Fill_Zone( wxDC* DC );
 
@@ -686,12 +686,12 @@ public:
                                          bool include_fixe, wxDC* DC );
     void                FixeModule( MODULE* Module, bool Fixe );
     void                AutoMoveModulesOnPcb( wxDC* DC, bool PlaceModulesHorsPcb );
-    bool                SetBoardBoundaryBoxFromEdgesOnly( void );
+    bool                SetBoardBoundaryBoxFromEdgesOnly();
     void                AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC );
     int                 RecherchePlacementModule( MODULE* Module, wxDC* DC );
     void                GenModuleOnBoard( MODULE* Module );
     float               Compute_Ratsnest_PlaceModule( wxDC* DC );
-    int                 GenPlaceBoard( void );
+    int                 GenPlaceBoard();
     void                DrawInfoPlace( wxDC* DC );
 
     // Autoroutage:
@@ -705,7 +705,7 @@ public:
     void                Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC );
     void                Ratsnest_On_Off( wxDC* DC );
     void                Clean_Pcb( wxDC* DC );
-    EDA_BaseStruct*     SaveItemEfface( EDA_BaseStruct* PtItem, int nbitems );
+    BOARD_ITEM*         SaveItemEfface( BOARD_ITEM* PtItem, int nbitems );
 
     // divers
     void                InstallFindFrame( const wxPoint& pos, wxDC* DC );
@@ -746,26 +746,26 @@ public:
     WinEDA_GerberFrame( wxWindow* father, WinEDA_App* parent, const wxString& title,
                         const wxPoint& pos, const wxSize& size );
 
-    ~WinEDA_GerberFrame( void );
+    ~WinEDA_GerberFrame();
 
-    void            Update_config( void );
+    void            Update_config();
     void            OnCloseWindow( wxCloseEvent& Event );
     void            Process_Special_Functions( wxCommandEvent& event );
     void            RedrawActiveWindow( wxDC* DC, bool EraseBg );
-    void            ReCreateHToolbar( void );
-    void            ReCreateVToolbar( void );
-    void            ReCreateOptToolbar( void );
-    void            ReCreateMenuBar( void );
+    void            ReCreateHToolbar();
+    void            ReCreateVToolbar();
+    void            ReCreateOptToolbar();
+    void            ReCreateMenuBar();
     void            OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void            OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
     void            OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
-    int             BestZoom( void ); // Retourne le meilleur zoom
+    int             BestZoom(); // Retourne le meilleur zoom
     void            OnSelectOptionToolbar( wxCommandEvent& event );
 
-    EDA_BaseStruct* GerberGeneralLocateAndDisplay( void );
+    EDA_BaseStruct* GerberGeneralLocateAndDisplay();
     EDA_BaseStruct* Locate( int typeloc );
 
-    void            SetToolbars( void );
+    void            SetToolbars();
     void            Process_Settings( wxCommandEvent& event );
     void            Process_Config( wxCommandEvent& event );
     void            InstallConfigFrame( const wxPoint& pos );
@@ -798,7 +798,7 @@ public:
                                       const wxString& D_Code_FullFileName );
     bool            SaveGerberFile( const wxString& FileName, wxDC* DC );
     int             Read_D_Code_File( const wxString& D_Code_FullFileName );
-    void            CopyDCodesSizeToItems( void );
+    void            CopyDCodesSizeToItems();
     void            Liste_D_Codes( wxDC* DC );
 
     /* Fonctions specifiques */
@@ -849,22 +849,22 @@ public:
                             const wxString& title,
                             const wxPoint& pos, const wxSize& size );
 
-    ~WinEDA_ModuleEditFrame( void );
+    ~WinEDA_ModuleEditFrame();
 
     void            InstallOptionsFrame( const wxPoint& pos );
 
     void            OnCloseWindow( wxCloseEvent& Event );
     void            Process_Special_Functions( wxCommandEvent& event );
     void            RedrawActiveWindow( wxDC* DC, bool EraseBg );
-    void            ReCreateHToolbar( void );
-    void            ReCreateVToolbar( void );
-    void            ReCreateOptToolbar( void );
-    void            ReCreateAuxiliaryToolbar( void );
+    void            ReCreateHToolbar();
+    void            ReCreateVToolbar();
+    void            ReCreateOptToolbar();
+    void            ReCreateAuxiliaryToolbar();
     void            OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void            OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
     void            OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
-    void            SetToolbars( void );
-    void            ReCreateMenuBar( void );
+    void            SetToolbars();
+    void            ReCreateMenuBar();
     void            ToolOnRightClick( wxCommandEvent& event );
     void            OnSelectOptionToolbar( wxCommandEvent& event );
     void            OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
@@ -874,14 +874,14 @@ public:
     virtual void    HandleBlockPlace( wxDC* DC );
     virtual int     HandleBlockEnd( wxDC* DC );
 
-    EDA_BaseStruct* ModeditLocateAndDisplay( void );
+    EDA_BaseStruct* ModeditLocateAndDisplay();
 
 public:
     void            SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy, int flag_type_command = 0 );
 
 private:
-    void            GetComponentFromUndoList( void );
-    void            GetComponentFromRedoList( void );
+    void            GetComponentFromUndoList();
+    void            GetComponentFromRedoList();
 
 public:
 
@@ -908,7 +908,7 @@ public:
     // Gestion des librairies:
     void            Delete_Module_In_Library( const wxString& libname );
     int             Create_Librairie( const wxString& LibName );
-    void            Select_Active_Library( void );
+    void            Select_Active_Library();
 
     DECLARE_EVENT_TABLE()
 };
@@ -944,7 +944,7 @@ public:
                            const wxString& title,
                            const wxPoint& pos, const wxSize& size );
 
-    ~WinEDA_SchematicFrame( void );
+    ~WinEDA_SchematicFrame();
 
     void                    OnCloseWindow( wxCloseEvent& Event );
     void                    Process_Special_Functions( wxCommandEvent& event );
@@ -953,13 +953,13 @@ public:
 
     void                    RedrawActiveWindow( wxDC* DC, bool EraseBg );
 
-    void                    ReCreateHToolbar( void );
-    void                    ReCreateVToolbar( void );
-    void                    ReCreateOptToolbar( void );
-    void                    ReCreateMenuBar( void );
-    void                    SetToolbars( void );
+    void                    ReCreateHToolbar();
+    void                    ReCreateVToolbar();
+    void                    ReCreateOptToolbar();
+    void                    ReCreateMenuBar();
+    void                    SetToolbars();
 
-    SCH_SCREEN* GetScreen( void ) { return (SCH_SCREEN*) m_CurrentScreen; }
+    SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) m_CurrentScreen; }
 
     void                    InstallConfigFrame( const wxPoint& pos );
 
@@ -968,17 +968,17 @@ public:
     void                    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
     void                    OnSelectOptionToolbar( wxCommandEvent& event );
     void                    ToolOnRightClick( wxCommandEvent& event );
-    int                     BestZoom( void ); // Retourne le meilleur zoom
+    int                     BestZoom(); // Retourne le meilleur zoom
 
     EDA_BaseStruct*         SchematicGeneralLocateAndDisplay( bool IncludePin = TRUE );
     EDA_BaseStruct*         SchematicGeneralLocateAndDisplay( const wxPoint& refpoint,
                                                               bool                   IncludePin );
 
     /* netlist generation */
-    void*                   BuildNetListBase( void );
+    void*                   BuildNetListBase();
 
     // FUnctions used for hierarchy handling
-    void                    InstallPreviousScreen( void );
+    void                    InstallPreviousScreen();
     void                    InstallNextScreen( DrawSheetStruct* Sheet );
 
     void                    ToPlot_PS( wxCommandEvent& event );
@@ -1095,8 +1095,8 @@ public:
 
 private:
     void                    PutDataInPreviousState( DrawPickedStruct* List );
-    void                    GetSchematicFromRedoList( void );
-    void                    GetSchematicFromUndoList( void );
+    void                    GetSchematicFromRedoList();
+    void                    GetSchematicFromUndoList();
 
 
 public:
@@ -1135,32 +1135,32 @@ public:
                          const wxString& title,
                          const wxPoint& pos, const wxSize& size );
 
-    ~WinEDA_LibeditFrame( void );
+    ~WinEDA_LibeditFrame();
 
     void    Process_Special_Functions( wxCommandEvent& event );
-    void    DisplayLibInfos( void );
+    void    DisplayLibInfos();
     void    RedrawActiveWindow( wxDC* DC, bool EraseBg );
     void    OnCloseWindow( wxCloseEvent& Event );
-    void    ReCreateHToolbar( void );
-    void    ReCreateVToolbar( void );
+    void    ReCreateHToolbar();
+    void    ReCreateVToolbar();
     void    OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
-    int     BestZoom( void ); // Retourne le meilleur zoom
-    void    SetToolbars( void );
+    int     BestZoom(); // Retourne le meilleur zoom
+    void    SetToolbars();
     void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
-    SCH_SCREEN* GetScreen( void ) { return (SCH_SCREEN*) m_CurrentScreen; }
+    SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) m_CurrentScreen; }
     void    OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
 
 private:
 
     // General:
-    void                CreateNewLibraryPart( void );
-    void                DeleteOnePart( void );
-    void                SaveOnePartInMemory( void );
-    void                SelectActiveLibrary( void );
-    bool                LoadOneLibraryPart( void );
-    void                SaveActiveLibrary( void );
-    void                ImportOnePart( void );
+    void                CreateNewLibraryPart();
+    void                DeleteOnePart();
+    void                SaveOnePartInMemory();
+    void                SelectActiveLibrary();
+    bool                LoadOneLibraryPart();
+    void                SaveActiveLibrary();
+    void                ImportOnePart();
     void                ExportOnePart( bool create_lib );
     int                 LoadOneLibraryPartAux( EDA_LibComponentStruct* LibEntry,
                                                LibraryStruct* Library, int noMsg = 0 );
@@ -1173,8 +1173,8 @@ public:
     void                SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy, int flag_type_command = 0 );
 
 private:
-    void                GetComponentFromUndoList( void );
-    void                GetComponentFromRedoList( void );
+    void                GetComponentFromUndoList();
+    void                GetComponentFromRedoList();
 
     // Edition des Pins:
     void                CreatePin( wxDC* DC );
@@ -1187,7 +1187,7 @@ private:
     bool                TestPins( EDA_LibComponentStruct* LibEntry );
 
     // Edition de l'ancre
-    void                PlaceAncre( void );
+    void                PlaceAncre();
 
     // Edition des graphismes:
     LibEDA_BaseStruct*  CreateGraphicItem( wxDC* DC );
@@ -1195,7 +1195,7 @@ private:
     void                StartMoveDrawSymbol( wxDC* DC );
     void                EndDrawGraphicItem( wxDC* DC );
     void                LoadOneSymbol( wxDC* DC );
-    void                SaveOneSymbol( void );
+    void                SaveOneSymbol();
     void                EditGraphicSymbol( wxDC* DC, LibEDA_BaseStruct* DrawItem );
     void                EditSymbolText( wxDC* DC, LibEDA_BaseStruct* DrawItem );
     void                RotateSymbolText( wxDC* DC );
@@ -1214,7 +1214,7 @@ public:
 
     void                DeletePartInLib( LibraryStruct* Library, EDA_LibComponentStruct* Entry );
     void                PlacePin( wxDC* DC );
-    void                InitEditOnePin( void );
+    void                InitEditOnePin();
     void                GlobalSetPins( wxDC* DC, LibDrawPin* MasterPin, int id );
 
     // Repetition automatique de placement de pins
@@ -1241,26 +1241,26 @@ public:
                          LibraryStruct* Library = NULL,
                          wxSemaphore* semaphore = NULL );
 
-    ~WinEDA_ViewlibFrame( void );
+    ~WinEDA_ViewlibFrame();
 
     void    OnSize( wxSizeEvent& event );
-    void    ReCreateListLib( void );
-    void    ReCreateListCmp( void );
+    void    ReCreateListLib();
+    void    ReCreateListCmp();
     void    Process_Special_Functions( wxCommandEvent& event );
-    void    DisplayLibInfos( void );
+    void    DisplayLibInfos();
     void    RedrawActiveWindow( wxDC* DC, bool EraseBg );
     void    OnCloseWindow( wxCloseEvent& Event );
-    void    ReCreateHToolbar( void );
-    void    ReCreateVToolbar( void );
+    void    ReCreateHToolbar();
+    void    ReCreateVToolbar();
     void    OnLeftClick( wxDC* DC, const wxPoint& MousePos );
-    int     BestZoom( void ); // Retourne le meilleur zoom
+    int     BestZoom(); // Retourne le meilleur zoom
     void    ClickOnLibList( wxCommandEvent& event );
     void    ClickOnCmpList( wxCommandEvent& event );
 
-    SCH_SCREEN* GetScreen( void ) { return (SCH_SCREEN*) m_CurrentScreen; }
+    SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) m_CurrentScreen; }
 
 private:
-    void    SelectCurrentLibrary( void );
+    void    SelectCurrentLibrary();
     void    SelectAndViewLibraryPart( int option );
     void    ExportToSchematicLibraryPart( wxCommandEvent& event );
     void    ViewOneLibraryContent( LibraryStruct* Lib, int Flag );
@@ -1291,10 +1291,10 @@ public:
 
     // Constructor and destructor
     WinEDA_MsgPanel( WinEDA_DrawFrame* parent, int id, const wxPoint& pos, const wxSize& size );
-    ~WinEDA_MsgPanel( void );
+    ~WinEDA_MsgPanel();
 
     void    OnPaint( wxPaintEvent& event );
-    void    EraseMsgBox( void );
+    void    EraseMsgBox();
     void    EraseMsgBox( wxDC* DC );
     void    Affiche_1_Parametre( int pos_X, const wxString& texte_H,
                                  const wxString& texte_L, int color );
@@ -1324,17 +1324,17 @@ public:
                       const wxString& TextToEdit, wxBoxSizer* BoxSizer,
                       const wxSize& Size );
 
-    ~WinEDA_EnterText( void )
+    ~WinEDA_EnterText()
     {
     }
 
 
-    wxString    GetValue( void );
+    wxString    GetValue();
     void        GetValue( char* buffer, int lenmax );
     void        SetValue( const wxString& new_text );
     void        Enable( bool enbl );
 
-    void SetFocus( void ) { m_FrameText->SetFocus(); }
+    void SetFocus() { m_FrameText->SetFocus(); }
     void SetInsertionPoint( int n ) { m_FrameText->SetInsertionPoint( n ); }
     void SetSelection( int n, int m )
     {
@@ -1363,14 +1363,14 @@ public:
                             int units, wxBoxSizer* BoxSizer, int framelen = 200,
                             int internal_unit = EESCHEMA_INTERNAL_UNIT );
 
-    ~WinEDA_GraphicTextCtrl( void );
+    ~WinEDA_GraphicTextCtrl();
 
-    wxString    GetText( void );
-    int         GetTextSize( void );
+    wxString    GetText();
+    int         GetTextSize();
     void        Enable( bool state );
     void        SetTitle( const wxString& title );
 
-    void SetFocus( void ) { m_FrameText->SetFocus(); }
+    void SetFocus() { m_FrameText->SetFocus(); }
     void        SetValue( const wxString& value );
     void        SetValue( int value );
 };
@@ -1398,11 +1398,11 @@ public:
                          int units, wxBoxSizer* BoxSizer,
                          int internal_unit = EESCHEMA_INTERNAL_UNIT );
 
-    ~WinEDA_PositionCtrl( void );
+    ~WinEDA_PositionCtrl();
 
     void    Enable( bool x_win_on, bool y_win_on );
     void    SetValue( int x_value, int y_value );
-    wxPoint GetValue( void );
+    wxPoint GetValue();
 };
 
 /*****************************************************************/
@@ -1418,8 +1418,8 @@ public:
                      int units, wxBoxSizer* BoxSizer,
                      int internal_unit = EESCHEMA_INTERNAL_UNIT );
 
-    ~WinEDA_SizeCtrl( void ) { }
-    wxSize GetValue( void );
+    ~WinEDA_SizeCtrl() { }
+    wxSize GetValue();
 };
 
 
@@ -1448,9 +1448,9 @@ public:
                       int units, wxBoxSizer* BoxSizer,
                       int internal_unit = EESCHEMA_INTERNAL_UNIT );
 
-    ~WinEDA_ValueCtrl( void );
+    ~WinEDA_ValueCtrl();
 
-    int     GetValue( void );
+    int     GetValue();
     void    SetValue( int new_value );
     void    Enable( bool enbl );
 
@@ -1477,9 +1477,9 @@ public:
     WinEDA_DFloatValueCtrl( wxWindow* parent, const wxString& title,
                             double value, wxBoxSizer* BoxSizer );
 
-    ~WinEDA_DFloatValueCtrl( void );
+    ~WinEDA_DFloatValueCtrl();
 
-    double  GetValue( void );
+    double  GetValue();
     void    SetValue( double new_value );
     void    Enable( bool enbl );
 
@@ -1506,7 +1506,7 @@ public:
 public:
     WinEDA_Toolbar( id_toolbar type, wxWindow* parent,
                     wxWindowID id, bool horizontal );
-    WinEDA_Toolbar* Next( void ) { return Pnext; }
+    WinEDA_Toolbar* Next() { return Pnext; }
 };
 
 
@@ -1532,13 +1532,13 @@ public:
                    void (* movefct)(wxString& Text) = NULL,
                    const wxColour& colour = wxNullColour,
                    wxPoint dialog_position = wxDefaultPosition );
-    ~WinEDAListBox( void );
+    ~WinEDAListBox();
 
-    void        SortList( void );
+    void        SortList();
     void        Append( const wxString& item );
     void        InsertItems( const wxArrayString& itemlist, int position = 0 );
-    void        MoveMouseToOrigin( void );
-    wxString    GetTextSelection( void );
+    void        MoveMouseToOrigin();
+    wxString    GetTextSelection();
 
 private:
     void        OnClose( wxCloseEvent& event );
@@ -1586,7 +1586,7 @@ public:
     }
 
 
-    int GetChoice( void )
+    int GetChoice()
     {
         return GetCurrentSelection();
     }

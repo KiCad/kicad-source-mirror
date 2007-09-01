@@ -101,7 +101,7 @@ public:
     /// Should we show tooltips?
     static bool ShowToolTips();
 	void AcceptOptions(wxCommandEvent& event);
-	void SetDisplayValue( void );
+	void SetDisplayValue();
 
 ////@begin WinEDA_GraphicItemsOptionsDialog member variables
     wxStaticText* m_GraphicSegmWidthTitle;

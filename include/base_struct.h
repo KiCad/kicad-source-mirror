@@ -126,8 +126,14 @@ public:
 
 class EDA_BaseStruct        /* Basic class, not directly used */
 {
+private:
+    /** 
+     * Run time identification, _keep private_ so it can never be changed after
+     * a constructor sets it.  See comment near SetType() regarding virtual functions.
+     */
+    KICAD_T         m_StructType;       
+    
 public:
-    KICAD_T         m_StructType;       /* Struct ident for run time identification */
     EDA_BaseStruct* Pnext;              /* Linked list: Link (next struct) */
     EDA_BaseStruct* Pback;              /* Linked list: Link (previous struct) */
     EDA_BaseStruct* m_Parent;           /* Linked list: Link (parent struct) */
@@ -161,23 +167,44 @@ private:
 
 private:
     void InitVars();
+    
+    
+protected:
+    /**
+     * Function SetType
+     * is dangerous and should not be used.  It is here to work around a design
+     * issue in the DrawTextStruct -> DrawLabelStruct and
+     * DrawTextStruct -> DrawGlobalLabelStruct class hierarchy of eeschema.
+     * Only constructors should set m_StructType and once set, there should be
+     * no reason to change an object's type.  For if you do, you risk mis-matching
+     * the virtual functions of the object with its Type() function, because the
+     * virtual function table is set in the call to a constructor and cannot be
+     * changed later without doing an "in place constructor" call (ugly and dangerous).
+     */
+    void SetType( KICAD_T aType )   { m_StructType = aType; } 
 
 public:
 
     EDA_BaseStruct( EDA_BaseStruct* parent, KICAD_T idType );
     EDA_BaseStruct( KICAD_T struct_type );
     virtual ~EDA_BaseStruct() { };
+
+    /**
+     * Function Type
+     * returns the type of object.  This attribute should never be changed after
+     * a constructor sets it, so there is no public "setter" method.
+     * @return KICAD_T - the type of object.
+     */
+    KICAD_T Type()  const { return m_StructType; }     
+
     
-    EDA_BaseStruct* Next()  { return Pnext; }
+    EDA_BaseStruct* Next() const  { return Pnext; }
     
     /* Gestion de l'etat (status) de la structure (active, deleted..) */
     int     GetState( int type );
     void    SetState( int type, int state );
 
-    int ReturnStatus() const
-    {
-        return m_Status;
-    }
+    int ReturnStatus() const {  return m_Status;  }
 
     void SetStatus( int new_status )
     {
@@ -389,12 +416,14 @@ public:
     }
 
     BOARD_ITEM( const BOARD_ITEM& src ) :
-        EDA_BaseStruct( src.m_Parent, src.m_StructType ),
+        EDA_BaseStruct( src.m_Parent, src.Type() ),
         m_Layer( src.m_Layer )
     {
     }
 
     BOARD_ITEM* Next() const         { return (BOARD_ITEM*) Pnext; }
+    BOARD_ITEM* Back() const         { return (BOARD_ITEM*) Pback; }
+    
     BOARD_ITEM* GetParent() const    { return (BOARD_ITEM*) m_Parent; }
     
     /**

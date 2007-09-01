@@ -14,7 +14,7 @@
 #include "build_version.h"
 
 /*****************************/
-wxString GetBuildVersion( void )
+wxString GetBuildVersion()
 /*****************************/
 
 /* Return the build date
@@ -193,7 +193,7 @@ int From_User_Unit( bool is_metric, double val, int internal_unit_value )
 
 
 /**********************/
-wxString GenDate( void )
+wxString GenDate()
 /**********************/
 
 /* Return the string date "day month year" like "23 jun 2005"
@@ -427,7 +427,7 @@ void AfficheDoc( WinEDA_DrawFrame* frame, const wxString& Doc, const wxString& K
 
 
 /***********************/
-int GetTimeStamp( void )
+int GetTimeStamp()
 /***********************/
 
 /*

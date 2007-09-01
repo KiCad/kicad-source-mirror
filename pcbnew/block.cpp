@@ -59,7 +59,7 @@ public:
     // Constructor and destructor
     WinEDA_ExecBlockCmdFrame( WinEDA_BasePcbFrame* parent,
                               const wxString&      title );
-    ~WinEDA_ExecBlockCmdFrame( void )
+    ~WinEDA_ExecBlockCmdFrame()
     {
     }
 
@@ -490,7 +490,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
     {
         NextS = PtStruct->Next();
 
-        switch( PtStruct->m_StructType )
+        switch( PtStruct->Type() )
         {
         case TYPEDRAWSEGMENT:
                 #undef STRUCT
@@ -678,7 +678,7 @@ void WinEDA_BasePcbFrame::Block_Rotate( wxDC* DC )
     PtStruct = m_Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
-        switch( PtStruct->m_StructType )
+        switch( PtStruct->Type() )
         {
         case TYPEDRAWSEGMENT:
                 #undef STRUCT
@@ -851,7 +851,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
                 track->Draw( DrawPanel, DC, GR_XOR );   // effacement
                 INVERT( track->m_Start.y );
                 INVERT( track->m_End.y );
-                if( track->m_StructType != TYPEVIA )
+                if( track->Type() != TYPEVIA )
                 {
                     track->SetLayer( ChangeSideNumLayer( track->GetLayer() ) );
                 }
@@ -893,7 +893,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
     PtStruct = m_Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
-        switch( PtStruct->m_StructType )
+        switch( PtStruct->Type() )
         {
         case TYPEDRAWSEGMENT:
                 #undef STRUCT
@@ -1107,7 +1107,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
     PtStruct = m_Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
-        switch( PtStruct->m_StructType )
+        switch( PtStruct->Type() )
         {
         case TYPEDRAWSEGMENT:
                 #undef STRUCT
@@ -1311,7 +1311,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
     PtStruct = m_Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
-        switch( PtStruct->m_StructType )
+        switch( PtStruct->Type() )
         {
         case TYPEDRAWSEGMENT:
         {
@@ -1427,7 +1427,7 @@ static EDA_BaseStruct* IsStructInBox( DrawBlockStruct& blocklocate,
 /* Teste si la structure PtStruct est inscrite dans le block selectionne
  */
 {
-    switch( PtStruct->m_StructType )
+    switch( PtStruct->Type() )
     {
     case TYPEDRAWSEGMENT:
             #undef STRUCT

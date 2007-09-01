@@ -21,7 +21,7 @@
 static void Show_MoveNode( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 static void Show_Drag_Track_Segment_With_Cte_Slope( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC );
-static bool InitialiseDragParameters( void );
+static bool InitialiseDragParameters();
 
 /* variables locales */
 static wxPoint PosInit, s_LastPos;
@@ -427,7 +427,7 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( WinEDA_DrawPanel* panel,
 
 
 /**********************************/
-bool InitialiseDragParameters( void )
+bool InitialiseDragParameters()
 /**********************************/
 
 /* Init variables (slope, Y intersect point, flags) for Show_Drag_Track_Segment_With_Cte_Slope()
@@ -613,7 +613,7 @@ void WinEDA_PcbFrame::Start_MoveOneNodeOrSegment( TRACK* track, wxDC* DC, int co
         Hight_Light( DC );
     PosInit = GetScreen()->m_Curseur;
 
-    if( track->m_StructType == TYPEVIA )
+    if( track->Type() == TYPEVIA )
     {
         track->m_Flags = IS_DRAGGED | STARTPOINT | ENDPOINT;
         if( command != ID_POPUP_PCB_MOVE_TRACK_SEGMENT )
@@ -681,7 +681,7 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC
 
     s_StartSegmentPresent = s_EndSegmentPresent = TRUE;
 
-    if( (track->start == NULL) || (track->start->m_StructType == TYPETRACK) )
+    if( (track->start == NULL) || (track->start->Type() == TYPETRACK) )
         TrackToStartPoint = (TRACK*) Locate_Piste_Connectee( track, m_Pcb->m_Track, NULL, START );
 
     //  Test if more than one segment is connected to this point
@@ -693,7 +693,7 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC
         TrackToStartPoint->SetState( BUSY, OFF );
     }
 
-    if( (track->end == NULL) || (track->end->m_StructType == TYPETRACK) )
+    if( (track->end == NULL) || (track->end->Type() == TYPETRACK) )
         TrackToEndPoint = (TRACK*) Locate_Piste_Connectee( track, m_Pcb->m_Track, NULL, END );
 
     //  Test if more than one segment is connected to this point
@@ -711,10 +711,10 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC
         return;
     }
 
-    if( !TrackToStartPoint || (TrackToStartPoint->m_StructType != TYPETRACK) )
+    if( !TrackToStartPoint || (TrackToStartPoint->Type() != TYPETRACK) )
         s_StartSegmentPresent = FALSE;
 
-    if( !TrackToEndPoint || (TrackToEndPoint->m_StructType != TYPETRACK) )
+    if( !TrackToEndPoint || (TrackToEndPoint->Type() != TYPETRACK) )
         s_EndSegmentPresent = FALSE;
 
     /* Change hight light net: the new one will be hightlighted */
@@ -902,7 +902,7 @@ TRACK* CreateLockPoint( int* pX, int* pY, TRACK* ptsegm, TRACK* refsegm )
         return NULL;
 
     /* le point n'est pas sur une extremite de piste */
-    if( ptsegm->m_StructType == TYPEVIA )
+    if( ptsegm->Type() == TYPEVIA )
     {
         *pX = ptsegm->m_Start.x; *pY = ptsegm->m_Start.y;
         return ptsegm;

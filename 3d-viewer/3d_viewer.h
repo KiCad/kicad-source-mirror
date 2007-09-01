@@ -97,7 +97,7 @@ public:
 
 	void OnEnterWindow( wxMouseEvent& event );
 
-	void Render( void );
+	void Render();
 	GLuint CreateDrawGL_List(void);
 	void InitGL(void);
 	void SetLights(void);

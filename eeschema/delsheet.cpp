@@ -29,7 +29,7 @@ wxString msg;
 
 	if( FirstSheet == NULL ) return;
 
-	if( FirstSheet->m_StructType != DRAW_SHEET_STRUCT_TYPE)
+	if( FirstSheet->Type() != DRAW_SHEET_STRUCT_TYPE)
 		{
 		DisplayError(NULL,
 				wxT("DeleteSubHierarchy error(): NOT a Sheet"));
@@ -54,7 +54,7 @@ wxString msg;
 	{
 		DrawStruct = EEDrawList;
 		EEDrawList = EEDrawList->Pnext;
-		if( DrawStruct->m_StructType == DRAW_SHEET_STRUCT_TYPE)
+		if( DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE)
 		{
 			DeleteSubHierarchy((DrawSheetStruct *) DrawStruct, confirm_deletion);
 		}
@@ -76,7 +76,7 @@ EDA_BaseStruct *DrawStruct;
 		DrawStruct = DrawList;
 		DrawList = DrawList->Pnext;
 
-		if( DrawStruct->m_StructType == DRAW_SHEET_STRUCT_TYPE)
+		if( DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE)
 		{
 			DeleteSubHierarchy((DrawSheetStruct*) DrawStruct, confirm_deletion);
 		}

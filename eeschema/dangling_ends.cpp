@@ -106,7 +106,7 @@ void WinEDA_SchematicFrame::TestDanglingEnds( EDA_BaseStruct* DrawList, wxDC* DC
     // Controle des elements
     for( DrawItem = DrawList; DrawItem != NULL; DrawItem = DrawItem->Pnext )
     {
-        switch( DrawItem->m_StructType )
+        switch( DrawItem->Type() )
         {
         case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
         case DRAW_LABEL_STRUCT_TYPE:
@@ -310,7 +310,7 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
 
     for( DrawItem = DrawList; DrawItem != NULL; DrawItem = DrawItem->Pnext )
     {
-        switch( DrawItem->m_StructType )
+        switch( DrawItem->Type() )
         {
         case DRAW_LABEL_STRUCT_TYPE:
             break;
@@ -402,7 +402,7 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
             LibEDA_BaseStruct* DrawLibItem = Entry->m_Drawings;
             for( ; DrawLibItem != NULL; DrawLibItem = DrawLibItem->Next() )
             {
-                if( DrawLibItem->m_StructType != COMPONENT_PIN_DRAW_TYPE )
+                if( DrawLibItem->Type() != COMPONENT_PIN_DRAW_TYPE )
                     continue;
 
                 LibDrawPin* Pin = (LibDrawPin*) DrawLibItem;

@@ -30,7 +30,7 @@ public:
     ~EDGE_MODULE();
 
     /* supprime du chainage la structure Struct */
-    void    UnLink( void );
+    void    UnLink();
 
     void    Copy( EDGE_MODULE* source );    // copy structure
 
@@ -39,7 +39,7 @@ public:
     int     ReadDescr( char* Line, FILE* File, int* LineNum = NULL );
 
     // Mise a jour des coordon�s pour l'affichage
-    void    SetDrawCoord( void );
+    void    SetDrawCoord();
 
     /* drawing functions */
     void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,

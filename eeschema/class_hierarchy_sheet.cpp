@@ -34,7 +34,7 @@
 
 /***********************************************************/
 DrawSheetStruct::DrawSheetStruct( const wxPoint& pos ) :
-    SCH_SCREEN( SCHEMATIC_FRAME )
+    SCH_SCREEN( DRAW_SHEET_STRUCT_TYPE )
 /***********************************************************/
 {
     m_Label   = NULL;
@@ -42,8 +42,6 @@ DrawSheetStruct::DrawSheetStruct( const wxPoint& pos ) :
     m_Layer   = LAYER_SHEET;
     m_Pos = pos;
     m_SheetNameSize = m_FileNameSize = 60;
-    /* change the struct type: SCREEN_STRUCT_TYPE to DRAW_SHEET_STRUCT_TYPE */
-    m_StructType = DRAW_SHEET_STRUCT_TYPE;
 }
 
 
@@ -63,7 +61,7 @@ DrawSheetStruct::~DrawSheetStruct()
 
 
 /***********************************************/
-DrawSheetStruct* DrawSheetStruct::GenCopy( void )
+DrawSheetStruct* DrawSheetStruct::GenCopy()
 /***********************************************/
 
 /* creates a copy of a sheet
@@ -226,7 +224,7 @@ DrawSheetLabelStruct::DrawSheetLabelStruct( DrawSheetStruct* parent,
 
 
 /***********************************************************/
-DrawSheetLabelStruct* DrawSheetLabelStruct::GenCopy( void )
+DrawSheetLabelStruct* DrawSheetLabelStruct::GenCopy()
 /***********************************************************/
 {
     DrawSheetLabelStruct* newitem =

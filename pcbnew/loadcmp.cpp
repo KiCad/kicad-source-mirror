@@ -17,13 +17,13 @@ public:
     wxString m_Name, m_Doc, m_KeyWord;
 
 public:
-    ModList( void )
+    ModList()
     {
         Next = NULL;
     }
 
 
-    ~ModList( void )
+    ~ModList()
     {
     }
 };

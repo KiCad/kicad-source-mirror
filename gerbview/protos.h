@@ -8,7 +8,7 @@ int * InstallDialogLayerPairChoice(WinEDA_GerberFrame * parent);
 /****************/
 /* undelete.cpp */
 /****************/
-EDA_BaseStruct * SaveItemEfface(EDA_BaseStruct * PtItem, int nbitems);
+BOARD_ITEM* SaveItemEfface( BOARD_ITEM* PtItem, int nbitems );
 
 
 /***********/

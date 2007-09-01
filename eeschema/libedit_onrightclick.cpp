@@ -90,7 +90,7 @@ bool BlockActive = (m_CurrentScreen->BlockLocate.m_Command !=  BLOCK_IDLE);
 
 	CurrentDrawItem = DrawEntry;
 
-	switch ( DrawEntry->m_StructType )
+	switch ( DrawEntry->Type() )
 	{
 		case  COMPONENT_PIN_DRAW_TYPE:
 			AddMenusForPin(PopMenu, (LibDrawPin*)DrawEntry, this);
@@ -202,7 +202,7 @@ bool BlockActive = (m_CurrentScreen->BlockLocate.m_Command !=  BLOCK_IDLE);
 			wxString msg;
 			msg.Printf(
 				 wxT("WinEDA_LibeditFrame::OnRightClick Error: unknown StructType %d"),
-				DrawEntry->m_StructType);
+				DrawEntry->Type());
 			DisplayError(this, msg );
 			CurrentDrawItem = NULL;
 			break;

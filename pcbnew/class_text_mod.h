@@ -29,23 +29,23 @@ public:
 
 public:
     TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
-    ~TEXTE_MODULE( void );
+    ~TEXTE_MODULE();
 
     /* supprime du chainage la structure Struct */
-    void    UnLink( void );
+    void    UnLink();
 
     void    Copy( TEXTE_MODULE* source ); // copy structure
 
     /* Gestion du texte */
     void    SetWidth( int new_width );
-    int     GetLength( void );          /* text length */
-    int     Pitch( void );              /* retourne le pas entre 2 caracteres */
-    int     GetDrawRotation( void );    // Return text rotation for drawings and plotting
+    int     GetLength();          /* text length */
+    int     Pitch();              /* retourne le pas entre 2 caracteres */
+    int     GetDrawRotation();    // Return text rotation for drawings and plotting
 
-    void    SetDrawCoord( void );       // mise a jour des coordonn�s absolues de trac�			
+    void    SetDrawCoord();       // mise a jour des coordonn�s absolues de trac�			
                                         // a partir des coord relatives
 
-    void    SetLocalCoord( void );      // mise a jour des coordonn�s relatives
+    void    SetLocalCoord();      // mise a jour des coordonn�s relatives
 
     // a partir des coord absolues de trac�
     /* Reading and writing data on files */

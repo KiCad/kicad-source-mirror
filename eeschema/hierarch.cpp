@@ -206,7 +206,7 @@ SCH_SCREEN * Screen;
 
 	while( DrawStruct )
 	{
-		if(DrawStruct->m_StructType == DRAW_SHEET_STRUCT_TYPE )
+		if(DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE )
 		{
 			#define STRUCT ((DrawSheetStruct*)DrawStruct)
 			nbsheets++;

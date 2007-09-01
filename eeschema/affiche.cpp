@@ -132,7 +132,7 @@ void LibEDA_BaseStruct::Display_Infos_DrawEntry( WinEDA_DrawFrame* frame )
     /* affichage du type */
     msg = wxT( "??" );
 
-    switch( m_StructType )
+    switch( Type() )
     {
     case COMPONENT_ARC_DRAW_TYPE:
         msg = wxT( "Arc" ); break;

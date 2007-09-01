@@ -48,12 +48,12 @@ void TEXTE_PCB::Copy( TEXTE_PCB* source )
 }
 
 
-void TEXTE_PCB::UnLink( void )
+void TEXTE_PCB::UnLink()
 {
     /* Modification du chainage arriere */
     if( Pback )
     {
-        if( Pback->m_StructType != TYPEPCB )
+        if( Pback->Type() != TYPEPCB )
         {
             Pback->Pnext = Pnext;
         }
@@ -159,7 +159,7 @@ void TEXTE_PCB::Display_Infos( WinEDA_DrawFrame* frame )
 
     frame->MsgPanel->EraseMsgBox();
 
-    if( m_Parent && m_Parent->m_StructType == TYPECOTATION )
+    if( m_Parent && m_Parent->Type() == TYPECOTATION )
         Affiche_1_Parametre( frame, 1, _( "COTATION" ), m_Text, DARKGREEN );
     else
         Affiche_1_Parametre( frame, 1, _( "PCB Text" ), m_Text, DARKGREEN );

@@ -44,7 +44,7 @@ wxString msg;
 	PtStruct = m_Pcb->m_Drawings;
 	for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
 		{
-		switch( PtStruct->m_StructType )
+		switch( PtStruct->Type() )
 			{
 			case TYPEDRAWSEGMENT:
 				PlotDrawSegment( (DRAWSEGMENT*) PtStruct, format_plot, masque_layer );
@@ -71,7 +71,7 @@ wxString msg;
 				break;
 
 			default:
-				DisplayError(this, wxT("Plot_Serigraphie() error: unexpected m_StructType"));
+				DisplayError(this, wxT("Plot_Serigraphie() error: unexpected Type()"));
 				break;
 			}
 		}
@@ -234,7 +234,7 @@ wxString msg;
 		pt_texte = (TEXTE_MODULE *) Module->m_Drawings;
 		for( ;pt_texte != NULL ; pt_texte = (TEXTE_MODULE*)pt_texte->Pnext)
 		{
-			if(pt_texte->m_StructType != TYPETEXTEMODULE ) continue;
+			if(pt_texte->Type() != TYPETEXTEMODULE ) continue;
 
 			if( !Sel_Texte_Divers ) continue;
 			if( (pt_texte->m_NoShow) && !Sel_Texte_Invisible )
@@ -386,7 +386,7 @@ wxString msg;
 		PtEdge = (EDGE_MODULE*) Module->m_Drawings;
 		for ( ;PtEdge != NULL; PtEdge = (EDGE_MODULE*)PtEdge->Pnext)
 		{
-			if(PtEdge->m_StructType != TYPEEDGEMODULE) continue;
+			if(PtEdge->Type() != TYPEEDGEMODULE) continue;
 			if( (g_TabOneLayerMask[PtEdge->GetLayer()] & masque_layer) == 0) continue;
 			Plot_1_EdgeModule(format_plot, PtEdge);
 		}
@@ -407,7 +407,7 @@ int rayon;					/* rayon des cercles a tracer */
 int StAngle, EndAngle;
 wxPoint pos, end;	/* Coord des segments a tracer */
 
-	if(PtEdge->m_StructType != TYPEEDGEMODULE) return;
+	if(PtEdge->Type() != TYPEEDGEMODULE) return;
 	type_trace = PtEdge->m_Shape;
 	epaisseur = PtEdge->m_Width;
 	if ( Plot_Mode == FILAIRE ) epaisseur = g_PlotLine_Width;
@@ -453,7 +453,7 @@ wxPoint pos, end;	/* Coord des segments a tracer */
 			// which are relative to module position, orientation 0
 			int ii, * source, * ptr, * ptr_base;
 			MODULE * Module = NULL;
-			if ( PtEdge->m_Parent && (PtEdge->m_Parent->m_StructType == TYPEMODULE) )
+			if ( PtEdge->m_Parent && (PtEdge->m_Parent->Type() == TYPEMODULE) )
 				Module = (MODULE*) PtEdge->m_Parent;
 			ptr = ptr_base = (int*) MyMalloc( 2 * PtEdge->m_PolyCount * sizeof(int) );
 			source = PtEdge->m_PolyList;

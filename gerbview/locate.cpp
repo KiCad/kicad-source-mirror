@@ -57,7 +57,7 @@ EDA_BaseStruct* WinEDA_GerberFrame::Locate( int typeloc )
         while( ( TrackLocate = Locate_Pistes( TrackLocate, layer, typeloc ) ) != NULL )
         {
             Track = TrackLocate;
-            if( TrackLocate->m_StructType == TYPEVIA )
+            if( TrackLocate->Type() == TYPEVIA )
                 break;
             TrackLocate = (TRACK*) TrackLocate->Pnext;
         }
@@ -112,7 +112,7 @@ DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int typeloc )
     PtStruct = Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
-        if( PtStruct->m_StructType != TYPEDRAWSEGMENT )
+        if( PtStruct->Type() != TYPEDRAWSEGMENT )
             continue;
         pts = (DRAWSEGMENT*) PtStruct;
         ux0 = pts->m_Start.x; uy0 = pts->m_Start.y;
@@ -198,7 +198,7 @@ TRACK* Locate_Pistes( TRACK* start_adresse, wxPoint ref, int Layer )
         dx     -= ux0; dy -= uy0;
         spot_cX = ref.x - ux0; spot_cY = ref.y - uy0;
 
-        if( Track->m_StructType == TYPEVIA ) /* VIA rencontree */
+        if( Track->Type() == TYPEVIA ) /* VIA rencontree */
         {
             if( (abs( spot_cX ) <= l_piste ) && (abs( spot_cY ) <=l_piste) )
             {
@@ -289,7 +289,7 @@ TEXTE_PCB* Locate_Texte_Pcb( TEXTE_PCB* pt_txt_pcb, int typeloc )
     PtStruct = (EDA_BaseStruct*) pt_txt_pcb;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
-        if( PtStruct->m_StructType != TYPETEXTE )
+        if( PtStruct->Type() != TYPETEXTE )
             continue;
         pt_txt_pcb = (TEXTE_PCB*) PtStruct;
 

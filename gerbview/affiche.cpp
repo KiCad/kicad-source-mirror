@@ -25,7 +25,7 @@ void Affiche_Infos_PCB_Texte( WinEDA_BasePcbFrame* frame, TEXTE_PCB* pt_texte )
 
     frame->MsgPanel->EraseMsgBox();
 
-    if( pt_texte->m_StructType == TYPECOTATION )
+    if( pt_texte->Type() == TYPECOTATION )
         Affiche_1_Parametre( frame, 1, _( "COTATION" ), pt_texte->m_Text, DARKGREEN );
 
     else
@@ -74,7 +74,7 @@ void Affiche_Infos_Piste( WinEDA_BasePcbFrame* frame, TRACK* pt_piste )
     d_index   = pt_piste->m_NetCode;
     pt_D_code = ReturnToolDescr( layer, d_index, &ii );
 
-    switch( pt_piste->m_StructType )
+    switch( pt_piste->Type() )
     {
     case TYPETRACK:
         if( pt_piste->m_Shape < S_SPOT_CIRCLE )

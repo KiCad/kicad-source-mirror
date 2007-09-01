@@ -35,7 +35,7 @@
 
 
 /****************************************************/
-void WinEDA_LibeditFrame::ReCreateVToolbar( void )
+void WinEDA_LibeditFrame::ReCreateVToolbar()
 /****************************************************/
 {
     if( m_VToolBar == NULL )
@@ -100,7 +100,7 @@ void WinEDA_LibeditFrame::ReCreateVToolbar( void )
 
 
 /*************************************************/
-void WinEDA_LibeditFrame::ReCreateHToolbar( void )
+void WinEDA_LibeditFrame::ReCreateHToolbar()
 /*************************************************/
 
 /* Create or update the main Horizontal Toolbar for the schematic library editor

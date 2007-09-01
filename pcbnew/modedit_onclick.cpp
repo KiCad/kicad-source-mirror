@@ -41,7 +41,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     {
         if( DrawStruct && DrawStruct->m_Flags ) // Commande "POPUP" en cours
         {
-            switch( DrawStruct->m_StructType )
+            switch( DrawStruct->Type() )
             {
             case TYPETEXTEMODULE:
                 SaveCopyInUndoList( m_Pcb->m_Modules );
@@ -63,7 +63,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 msg.Printf(
                     wxT(
                         "WinEDA_ModEditFrame::ProcessCommand err: m_Flags != 0\nStruct @%p, type %d m_Flag %X" ),
-                    DrawStruct, DrawStruct->m_StructType, DrawStruct->m_Flags );
+                    DrawStruct, DrawStruct->Type(), DrawStruct->m_Flags );
                 DisplayError( this, msg );
                 DrawStruct->m_Flags = 0;
                 break;
@@ -241,7 +241,7 @@ void WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
 
     int flags = DrawStruct->m_Flags;
 
-    switch( DrawStruct->m_StructType )
+    switch( DrawStruct->Type() )
     {
     case TYPEMODULE:
     {
@@ -343,14 +343,14 @@ void WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
     case PCB_EQUIPOT_STRUCT_TYPE:
         msg.Printf(
             wxT( "WinEDA_ModuleEditFrame::OnRightClick Error: illegal DrawType %d" ),
-            DrawStruct->m_StructType );
+            DrawStruct->Type() );
         DisplayError( this, msg );
         break;
 
     default:
         msg.Printf(
             wxT( "WinEDA_ModuleEditFrame::OnRightClick Error: unknown DrawType %d" ),
-            DrawStruct->m_StructType );
+            DrawStruct->Type() );
         DisplayError( this, msg );
         break;
     }
@@ -398,7 +398,7 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         // Element localisé
         m_CurrentScreen->SetCurItem( DrawStruct );
 
-        switch( DrawStruct->m_StructType )
+        switch( DrawStruct->Type() )
         {
         case TYPEPAD:
             InstallPadOptionsFrame(

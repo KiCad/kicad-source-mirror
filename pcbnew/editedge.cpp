@@ -110,7 +110,7 @@ void WinEDA_PcbFrame::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
         Trace_DrawSegmentPcb( DrawPanel, DC, Segment, GR_XOR );
         PtStruct = Segment->Pback;
         DeleteStructure( Segment );
-        if( PtStruct && (PtStruct->m_StructType == TYPEDRAWSEGMENT ) )
+        if( PtStruct && (PtStruct->Type() == TYPEDRAWSEGMENT ) )
             Segment = (DRAWSEGMENT*) PtStruct;
         DisplayOpt.DisplayDrawItems = track_fill_copy;
         GetScreen()->SetCurItem( NULL );
@@ -157,7 +157,8 @@ void WinEDA_PcbFrame::Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC 
 {
     DRAWSEGMENT*    pt_segm;
     TEXTE_PCB*      pt_txt;
-    EDA_BaseStruct* PtStruct, * PtNext;
+    BOARD_ITEM*     PtStruct;
+    BOARD_ITEM*     PtNext;
     COTATION*       Cotation;
     int             layer = Segment->GetLayer();
 
@@ -181,9 +182,9 @@ void WinEDA_PcbFrame::Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC 
     for( ; PtStruct != NULL; PtStruct = PtNext )
     {
         GetScreen()->SetModify();
-        PtNext = PtStruct->Pnext;
+        PtNext = PtStruct->Next();
 
-        switch( PtStruct->m_StructType )
+        switch( PtStruct->Type() )
         {
         case TYPEDRAWSEGMENT:
             pt_segm = (DRAWSEGMENT*) PtStruct;

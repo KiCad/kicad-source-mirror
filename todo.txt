@@ -1,8 +1,15 @@
 
 Here are some source code maintenance tasks that need to be done, and maybe some
-folks will see these items and volunteer to to them.
+folks will see these items and volunteer to do them.
 
 
+*** Look at @todo in editrack-part2.cpp.  Is this is a bug?
+Concerns:
+a) Isn't there a problem with losing the memory of the original?
+b) If this is supposed to duplicate a SEGVIA to, then this call should be changed
+   to the new TRACK::Copy(), i.e. g_CurrentTrackSegment->Copy() 
+
+   
 *** Set up a DOXYGEN environment starting with a configuration file that:
 - understands the JavaDoc style comments that we have started using
 - gives preference to comments in header files over *.cpp files

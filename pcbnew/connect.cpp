@@ -61,14 +61,14 @@ static int change_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn,
         nb_change++;
         pt_conn->m_Sous_Netcode = new_val;
 
-        if( pt_conn->start && ( pt_conn->start->m_StructType == TYPEPAD) )
+        if( pt_conn->start && ( pt_conn->start->Type() == TYPEPAD) )
         {
             pt_pad = (D_PAD*) (pt_conn->start);
             if( pt_pad->m_physical_connexion == old_val )
                 pt_pad->m_physical_connexion = pt_conn->m_Sous_Netcode;
         }
 
-        if( pt_conn->end && (pt_conn->end->m_StructType == TYPEPAD) )
+        if( pt_conn->end && (pt_conn->end->Type() == TYPEPAD) )
         {
             pt_pad = (D_PAD*) (pt_conn->end);
             if( pt_pad->m_physical_connexion == old_val )
@@ -107,11 +107,11 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
     {
         pt_conn->m_Sous_Netcode = 0;
         PtStruct = pt_conn->start;
-        if( PtStruct && (PtStruct->m_StructType == TYPEPAD) )
+        if( PtStruct && (PtStruct->Type() == TYPEPAD) )
             ( (D_PAD*) PtStruct )->m_physical_connexion = 0;
 
         PtStruct = pt_conn->end;
-        if( PtStruct && (PtStruct->m_StructType == TYPEPAD) )
+        if( PtStruct && (PtStruct->Type() == TYPEPAD) )
             ( (D_PAD*) PtStruct )->m_physical_connexion = 0;
 
         if( pt_conn == pt_end_conn )
@@ -127,7 +127,7 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
     {
         /* Traitement des connexions a pads */
         PtStruct = pt_conn->start;
-        if( PtStruct && (PtStruct->m_StructType == TYPEPAD) )
+        if( PtStruct && (PtStruct->Type() == TYPEPAD) )
         /* la connexion debute sur 1 pad */
         {
             pt_pad = (D_PAD*) PtStruct;
@@ -157,7 +157,7 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
         }
 
         PtStruct = pt_conn->end;
-        if( PtStruct && (PtStruct->m_StructType == TYPEPAD) )
+        if( PtStruct && (PtStruct->Type() == TYPEPAD) )
         /* la connexion finit sur 1 pad */
         {
             pt_pad = (D_PAD*) PtStruct;
@@ -188,7 +188,7 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
 
         /* traitement des connexions entre segments */
         PtStruct = pt_conn->start;
-        if( PtStruct && (PtStruct->m_StructType != TYPEPAD) )
+        if( PtStruct && (PtStruct->Type() != TYPEPAD) )
         {      
             /* debut sur une autre piste */
             pt_autre_piste = (TRACK*) PtStruct;
@@ -220,7 +220,7 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
         }
 
         PtStruct = pt_conn->end;
-        if( PtStruct && (PtStruct->m_StructType != TYPEPAD) )
+        if( PtStruct && (PtStruct->Type() != TYPEPAD) )
         {                                   
             /* fin connectee a une autre piste */
             pt_autre_piste = (TRACK*) PtStruct;
@@ -426,7 +426,7 @@ static void calcule_connexite_1_net( TRACK* pt_start_conn, TRACK* pt_end_conn )
     /* calcul des connexions */
     for( Track = pt_start_conn; Track != NULL; Track = (TRACK*) Track->Pnext )
     {
-        if( Track->m_StructType == TYPEVIA )
+        if( Track->Type() == TYPEVIA )
         {
             TRACK* pt_segm;
             int    layermask = Track->ReturnMaskLayer();
@@ -708,7 +708,7 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
         /* look for vias which could be connect many tracks */
         for( TRACK* via = m_Pcb->m_Track; via != NULL; via = via->Next() )
         {
-            if( via->m_StructType != TYPEVIA )
+            if( via->Type() != TYPEVIA )
                 continue;
             if( via->m_NetCode > 0 )
                 continue;                       // Netcode already known
@@ -736,7 +736,7 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
         {
             /* Traitement du point de debut */
             PtStruct = (BOARD_ITEM*) pt_piste->start;
-            if( PtStruct && (PtStruct->m_StructType != TYPEPAD) )
+            if( PtStruct && (PtStruct->Type() != TYPEPAD) )
             {    // Begin on an other track segment
                 pt_next = (TRACK*) PtStruct;
                 if( pt_piste->m_NetCode )
@@ -759,7 +759,7 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
 
             /* Localisation du point de fin */
             PtStruct = pt_piste->end;
-            if( PtStruct &&(PtStruct->m_StructType != TYPEPAD) )
+            if( PtStruct &&(PtStruct->Type() != TYPEPAD) )
             {        // End sur piste
                 pt_next = (TRACK*) PtStruct;
                 if( pt_piste->m_NetCode )

@@ -1063,7 +1063,7 @@ LibEDA_BaseStruct* DrawItem = NULL, * NextDrawItem;
 		for ( ; DrawItem != NULL; DrawItem = DrawItem->Pnext )
 			{
 			/* Duplication des items pour autres elements */
-			if( DrawItem->m_StructType != PIN_DRAW_TYPE ) continue;
+			if( DrawItem->Type() != PIN_DRAW_TYPE ) continue;
 			if( DrawItem->m_Convert == 1 )
 				{
 				if( FlagDel == 0 )

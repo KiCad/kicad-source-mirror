@@ -233,7 +233,7 @@ static int SortItems( const wxString ** ptr1, const wxString ** ptr2 )
 
 
 /************************************/
-void WinEDAListBox:: SortList( void )
+void WinEDAListBox:: SortList()
 /************************************/
 {
 int ii, NbItems = m_List->GetCount();

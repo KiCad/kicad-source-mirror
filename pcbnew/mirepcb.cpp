@@ -46,7 +46,7 @@ public:
     // Constructor and destructor
     WinEDA_MirePropertiesFrame( WinEDA_PcbFrame* parent,
                                 MIREPCB* Mire, wxDC* DC, const wxPoint& pos );
-    ~WinEDA_MirePropertiesFrame( void )
+    ~WinEDA_MirePropertiesFrame()
     {
     }
 

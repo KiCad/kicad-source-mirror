@@ -95,7 +95,7 @@ public:
 	wxPoint GetScreenCoord(const wxPoint & coord);
 	void Display_Infos(WinEDA_DrawFrame * frame);
 	void ClearAnnotation(void);
-	EDA_Rect GetBoundaryBox( void );
+	EDA_Rect GetBoundaryBox();
 	wxString ReturnFieldName(int FieldNumber);
 
 	virtual void Draw(WinEDA_DrawPanel * panel, wxDC * DC, const wxPoint & offset, int draw_mode, int Color = -1);

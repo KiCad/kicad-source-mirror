@@ -86,13 +86,13 @@ public:
     // Constructor and destructor
     WinEDA_ComponentPropertiesFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
                                      EDA_SchComponentStruct* cmp );
-    ~WinEDA_ComponentPropertiesFrame( void )
+    ~WinEDA_ComponentPropertiesFrame()
     {
     }
 
 
 private:
-    void    BuildPanelBasic( void );
+    void    BuildPanelBasic();
     void    ComponentPropertiesAccept( wxCommandEvent& event );
     void    SetInitCmp( wxCommandEvent& event );
     void    OnQuit( wxCommandEvent& event );
@@ -116,7 +116,7 @@ void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
  */
 {
     parent->DrawPanel->m_IgnoreMouseEvents = TRUE;
-    if( cmp->m_StructType != DRAW_LIB_ITEM_STRUCT_TYPE )
+    if( cmp->Type() != DRAW_LIB_ITEM_STRUCT_TYPE )
     {
         DisplayError( parent,
                      wxT( "InstallCmpeditFrame() error: This struct is not a component" ) );
@@ -265,7 +265,7 @@ void WinEDA_ComponentPropertiesFrame::OnQuit( wxCommandEvent& WXUNUSED (event) )
 
 
 /**********************************************************/
-void WinEDA_ComponentPropertiesFrame::BuildPanelBasic( void )
+void WinEDA_ComponentPropertiesFrame::BuildPanelBasic()
 /**********************************************************/
 
 /* create the basic panel for component properties editing

@@ -4,6 +4,19 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+
+2007-Aug-31 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ pcbnew & gerbview
+  * Added TRACK::Copy() which can copy a SEGVIA or a TRACK.
+  * Changed export_to_pcbnew.cpp so it created a SEGVIA properly, a significant change.
+    Moved and changed a big block of code in export_to_pcbnew.cpp so we can
+    properly construct the SEGVIA().  Not tested.
+  * Make EDA_BaseStruct::m_StructType private so we can trap where it is being
+    changed.  (It should never be changed after construction, see comment above
+    EDA_BaseStruct::SetType().)
+
+
 2007-Aug-30 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew

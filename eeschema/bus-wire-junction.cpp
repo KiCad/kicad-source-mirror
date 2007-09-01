@@ -45,7 +45,7 @@ EDA_BaseStruct* SCH_SCREEN::ExtractWires( bool CreateCopy )
     {
         next_item = item->Pnext;
 
-        switch( item->m_StructType )
+        switch( item->Type() )
         {
         case DRAW_JUNCTION_STRUCT_TYPE:
         case DRAW_SEGMENT_STRUCT_TYPE:
@@ -54,7 +54,7 @@ EDA_BaseStruct* SCH_SCREEN::ExtractWires( bool CreateCopy )
             List = item;
             if( CreateCopy )
             {
-                if( item->m_StructType == DRAW_JUNCTION_STRUCT_TYPE )
+                if( item->Type() == DRAW_JUNCTION_STRUCT_TYPE )
                     new_item = ( (DrawJunctionStruct*) item )->GenCopy();
                 else
                     new_item = ( (EDA_DrawLineStruct*) item )->GenCopy();
@@ -85,7 +85,7 @@ static void RestoreOldWires( SCH_SCREEN* screen )
     {
         next_item = item->Pnext;
 
-        switch( item->m_StructType )
+        switch( item->Type() )
         {
         case DRAW_JUNCTION_STRUCT_TYPE:
         case DRAW_SEGMENT_STRUCT_TYPE:
@@ -123,7 +123,7 @@ void WinEDA_SchematicFrame::BeginSegment( wxDC* DC, int type )
 
     if( GetScreen()->GetCurItem() )
     {
-        switch( GetScreen()->GetCurItem()->m_StructType )
+        switch( GetScreen()->GetCurItem()->Type() )
         {
         case DRAW_SEGMENT_STRUCT_TYPE:
         case DRAW_POLYLINE_STRUCT_TYPE:
@@ -337,7 +337,7 @@ void WinEDA_SchematicFrame::EndSegment( wxDC* DC )
     EDA_BaseStruct* item = GetScreen()->EEDrawList;
     while( item )
     {
-        switch( item->m_StructType )
+        switch( item->Type() )
         {
         case DRAW_JUNCTION_STRUCT_TYPE:
         case DRAW_SEGMENT_STRUCT_TYPE:
@@ -510,7 +510,7 @@ void WinEDA_SchematicFrame::DeleteCurrentSegment( wxDC* DC )
     }
 
     /* Trace en cours: annulation */
-    if( GetScreen()->GetCurItem()->m_StructType == DRAW_POLYLINE_STRUCT_TYPE )
+    if( GetScreen()->GetCurItem()->Type() == DRAW_POLYLINE_STRUCT_TYPE )
     {
         Show_Polyline_in_Ghost( DrawPanel, DC, FALSE ); /* Effacement du trace en cours */
     }
@@ -622,7 +622,7 @@ void WinEDA_SchematicFrame::RepeatDrawItem( wxDC* DC )
     if( g_ItemToRepeat == NULL )
         return;
 
-    switch( g_ItemToRepeat->m_StructType )
+    switch( g_ItemToRepeat->Type() )
     {
     case DRAW_JUNCTION_STRUCT_TYPE:
             #undef STRUCT
@@ -825,7 +825,7 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
             return TRUE;
 
         item = PickStruct( pos, screen->EEDrawList, LABELITEM );
-        if( item && (item->m_StructType != DRAW_TEXT_STRUCT_TYPE)
+        if( item && (item->Type() != DRAW_TEXT_STRUCT_TYPE)
            && ( ( (DrawGlobalLabelStruct*) item )->m_Pos.x == pos.x )
            && ( ( (DrawGlobalLabelStruct*) item )->m_Pos.y == pos.y ) )
             return TRUE;

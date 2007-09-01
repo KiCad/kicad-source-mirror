@@ -531,7 +531,7 @@ wxClientDC dc(DrawPanel);
 			if ( CurrentDrawItem )
 				{
 				DrawPanel->CursorOff(&dc);
-				switch ( CurrentDrawItem->m_StructType )
+				switch ( CurrentDrawItem->Type() )
 					{
 					case COMPONENT_ARC_DRAW_TYPE:
 					case COMPONENT_CIRCLE_DRAW_TYPE:
@@ -568,7 +568,7 @@ wxClientDC dc(DrawPanel);
 			DrawPanel->MouseToCursorSchema();
 			DrawPanel->CursorOff(&dc);
 			SaveCopyInUndoList(CurrentLibEntry);
-			if ( CurrentDrawItem->m_StructType == COMPONENT_PIN_DRAW_TYPE )
+			if ( CurrentDrawItem->Type() == COMPONENT_PIN_DRAW_TYPE )
 			{
 				DeletePin(&dc, CurrentLibEntry, (LibDrawPin*)CurrentDrawItem);
 			}
@@ -588,9 +588,9 @@ wxClientDC dc(DrawPanel);
 		case ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST:
 			if ( CurrentDrawItem == NULL) break;
 			DrawPanel->MouseToCursorSchema();
-			if ( CurrentDrawItem->m_StructType == COMPONENT_PIN_DRAW_TYPE )
+			if ( CurrentDrawItem->Type() == COMPONENT_PIN_DRAW_TYPE )
 				StartMovePin(&dc);
-			else if ( CurrentDrawItem->m_StructType == COMPONENT_FIELD_DRAW_TYPE )
+			else if ( CurrentDrawItem->Type() == COMPONENT_FIELD_DRAW_TYPE )
 				StartMoveField(&dc, (LibDrawField *) CurrentDrawItem);
 			else StartMoveDrawSymbol(&dc);
 			break;
@@ -609,7 +609,7 @@ wxClientDC dc(DrawPanel);
 			if ( CurrentDrawItem == NULL) break;
 			DrawPanel->CursorOff(&dc);
 			DrawPanel->MouseToCursorSchema();
-			if ( CurrentDrawItem->m_StructType == COMPONENT_FIELD_DRAW_TYPE )
+			if ( CurrentDrawItem->Type() == COMPONENT_FIELD_DRAW_TYPE )
 			{
 				SaveCopyInUndoList(CurrentLibEntry);
 				RotateField(&dc, (LibDrawField *) CurrentDrawItem);
@@ -620,7 +620,7 @@ wxClientDC dc(DrawPanel);
 		case ID_POPUP_LIBEDIT_FIELD_EDIT_ITEM:
 			if ( CurrentDrawItem == NULL) break;
 			DrawPanel->CursorOff(&dc);
-			if ( CurrentDrawItem->m_StructType == COMPONENT_FIELD_DRAW_TYPE )
+			if ( CurrentDrawItem->Type() == COMPONENT_FIELD_DRAW_TYPE )
 			{
 				EditField(&dc, (LibDrawField *) CurrentDrawItem);
 			}
@@ -631,7 +631,7 @@ wxClientDC dc(DrawPanel);
 		case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNAMESIZE_ITEM:
 		case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNUMSIZE_ITEM:
 			if ( (CurrentDrawItem == NULL) ||
-				 (CurrentDrawItem->m_StructType != COMPONENT_PIN_DRAW_TYPE) )
+				 (CurrentDrawItem->Type() != COMPONENT_PIN_DRAW_TYPE) )
 				break;
 			SaveCopyInUndoList(CurrentLibEntry);
 			GlobalSetPins(&dc, (LibDrawPin *) CurrentDrawItem, id);

@@ -1,7 +1,7 @@
 /* export_to_pcbnew.cpp */
 
 /*
- *  Export des couches vers pcbnew
+ *  Export the layers to pcbnew
  */
 
 #include "fctsys.h"
@@ -119,7 +119,8 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* File,
  */
 {
     char            Line[256];
-    TRACK*          track, * next_track;
+    TRACK*          track;
+    TRACK*          next_track;
     BOARD_ITEM*     PtStruct;
     BOARD_ITEM*     NextStruct;
     BOARD*          GerberPcb = frame->m_Pcb;
@@ -136,6 +137,7 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* File,
         int pcb_layer_number = LayerLookUpTable[layer];
         if( pcb_layer_number < 0 )
             continue;
+        
         if( pcb_layer_number > CMP_N )
         {
             DRAWSEGMENT* drawitem = new DRAWSEGMENT( NULL, TYPEDRAWSEGMENT );
@@ -149,47 +151,57 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* File,
         }
         else
         {
-            TRACK* newtrack = new TRACK( * track );
+            TRACK*  newtrack;
+            
+            // replace spots with vias when possible
+            if( (track->m_Shape == S_SPOT_CIRCLE) 
+             || (track->m_Shape == S_SPOT_RECT)  
+             || (track->m_Shape == S_SPOT_OVALE) )
+            {
+                newtrack = new SEGVIA( (const SEGVIA&) *track );
 
-            newtrack->SetLayer( pcb_layer_number );
+                // A spot is found, and can be a via: change it to via, and delete other
+                // spots at same location
+                newtrack->m_Shape = VIA_NORMALE;
+                
+                newtrack->SetLayer( 0x0F );  // Layers are 0 to 15 (Cu/Cmp)
+                
+                newtrack->m_Drill = -1;
+                
+                // Compute the via position from track position ( Via position is the 
+                // position of the middle of the track segment ) 
+                newtrack->m_Start.x = (newtrack->m_Start.x + newtrack->m_End.x) / 2;
+                newtrack->m_Start.y = (newtrack->m_Start.y + newtrack->m_End.y) / 2;
+                newtrack->m_End = newtrack->m_Start;
+            }
+            else    // a true TRACK
+            {
+                newtrack = new TRACK( *track );
+                newtrack->SetLayer( pcb_layer_number );
+            }
+            
             newtrack->Insert( Pcb, NULL );
         }
     }
 
-    /* replace spots by vias when possible */
-    for( track = Pcb->m_Track; track != NULL; track = (TRACK*) track->Pnext )
-    {
-        if( (track->m_Shape != S_SPOT_CIRCLE) && (track->m_Shape != S_SPOT_RECT)  &&
-           (track->m_Shape != S_SPOT_OVALE) )
-            continue;
-
-        /* A spot is found, and can be a via: change it for via, and delete others
-         *  spots at same location */
-        track->m_Shape      = VIA_NORMALE;
-        track->m_StructType = TYPEVIA;
-        track->SetLayer( 0x0F );  // Layers are 0 to 15 (Cu/Cmp)
-        track->m_Drill = -1;
-        /* Compute the via position from track position ( Via position is the position of the middle of the track segment */
-        track->m_Start.x = (track->m_Start.x + track->m_End.x) / 2;
-        track->m_Start.y = (track->m_Start.y + track->m_End.y) / 2;
-        track->m_End = track->m_Start;
-    }
-
-    /* delete redundant vias */
+    // delete redundant vias
     for( track = Pcb->m_Track; track != NULL; track = track->Next() )
     {
         if( track->m_Shape != VIA_NORMALE )
             continue;
-        /* Search and delete others vias*/
+        
+        // Search and delete others vias
         TRACK* alt_track = track->Next();
         for( ; alt_track != NULL; alt_track = next_track )
         {
-            next_track = (TRACK*) alt_track->Pnext;
+            next_track = alt_track->Next();
             if( alt_track->m_Shape != VIA_NORMALE )
                 continue;
+
             if( alt_track->m_Start != track->m_Start )
                 continue;
-            /* delete track */
+
+            // delete track
             alt_track->UnLink();
             delete alt_track;
         }
@@ -197,17 +209,18 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* File,
 
     // Switch the locale to standard C (needed to print floating point numbers like 1.3)
     setlocale( LC_NUMERIC, "C" );
-    /* Ecriture de l'entete PCB : */
+    
+    // write the PCB heading
     fprintf( File, "PCBNEW-BOARD Version %d date %s\n\n", g_CurrentVersionPCB,
             DateAndTime( Line ) );
     WriteGeneralDescrPcb( Pcb, File );
     WriteSetup( File, Pcb );
 
-    /* Ecriture des donnes utiles du pcb */
+    // write the useful part of the pcb
     PtStruct = Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
-        switch( PtStruct->m_StructType )
+        switch( PtStruct->Type() )
         {
         case TYPETEXTE:
             ( (TEXTE_PCB*) PtStruct )->WriteTextePcbDescr( File );
@@ -232,7 +245,7 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* File,
 
     fprintf( File, "$EndBOARD\n" );
 
-    /* Delete the copy */
+    // Delete the copy
     for( PtStruct = Pcb->m_Drawings; PtStruct != NULL; PtStruct = NextStruct )
     {
         NextStruct = PtStruct->Next();

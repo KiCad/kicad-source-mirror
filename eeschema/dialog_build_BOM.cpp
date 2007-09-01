@@ -641,7 +641,7 @@ BASE_SCREEN * screen;
 		DrawList = screen->EEDrawList;
 		while ( DrawList )
 		{
-			switch( DrawList->m_StructType )
+			switch( DrawList->Type() )
 			{
 
 				case DRAW_LIB_ITEM_STRUCT_TYPE :
@@ -685,7 +685,7 @@ BASE_SCREEN * screen;
 		DrawList = screen->EEDrawList;
 		while ( DrawList )
 		{
-			switch( DrawList->m_StructType )
+			switch( DrawList->Type() )
 			{
 				case DRAW_GLOBAL_LABEL_STRUCT_TYPE :
 					ItemCount++;
@@ -981,7 +981,7 @@ wxString msg;
 		DrawList = List[ii];
 
 		if( DrawList == NULL ) continue;
-		if( DrawList->m_StructType != DRAW_LIB_ITEM_STRUCT_TYPE ) continue;
+		if( DrawList->Type() != DRAW_LIB_ITEM_STRUCT_TYPE ) continue;
 
 		DrawLibItem = (EDA_SchComponentStruct *) DrawList;
 		if( DrawLibItem->m_Field[REFERENCE].m_Text[0] == '#' ) continue;
@@ -1004,7 +1004,7 @@ wxString msg;
 		{
 			DrawSheetStruct * sheet = (DrawSheetStruct *)(DrawLibItem->m_Parent);
 			wxString sheetname;
-			if( sheet && sheet->m_StructType == DRAW_SHEET_STRUCT_TYPE )
+			if( sheet && sheet->Type() == DRAW_SHEET_STRUCT_TYPE )
 				sheetname = sheet->m_SheetName;
 			else sheetname = _("Root");
 			if ( CompactForm ) 
@@ -1047,7 +1047,7 @@ wxString msg;
 		DrawList = List[ii];
 
 		if( DrawList == NULL ) continue;
-		if( DrawList->m_StructType != DRAW_LIB_ITEM_STRUCT_TYPE ) continue;
+		if( DrawList->Type() != DRAW_LIB_ITEM_STRUCT_TYPE ) continue;
 
 		DrawLibItem = (EDA_SchComponentStruct *) DrawList;
 		if( DrawLibItem->m_Field[REFERENCE].m_Text[0] == '#' ) continue;

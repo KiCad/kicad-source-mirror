@@ -130,7 +130,7 @@ LibCmpEntry::LibCmpEntry( LibrEntryType CmpType, const wxChar* CmpName ) :
 
 
 /******************************/
-LibCmpEntry::~LibCmpEntry( void )
+LibCmpEntry::~LibCmpEntry()
 /******************************/
 {
 }
@@ -159,7 +159,7 @@ EDA_LibCmpAliasStruct:: EDA_LibCmpAliasStruct( const wxChar* CmpName,
 }
 
 
-EDA_LibCmpAliasStruct::~EDA_LibCmpAliasStruct( void )
+EDA_LibCmpAliasStruct::~EDA_LibCmpAliasStruct()
 {
 }
 
@@ -187,7 +187,7 @@ EDA_LibComponentStruct:: EDA_LibComponentStruct( const wxChar* CmpName ) :
 
 
 /******************************************************/
-EDA_LibComponentStruct::~EDA_LibComponentStruct( void )
+EDA_LibComponentStruct::~EDA_LibComponentStruct()
 /******************************************************/
 {
     LibEDA_BaseStruct* DrawItem, * NextDrawItem;
@@ -247,7 +247,7 @@ EDA_Rect EDA_LibComponentStruct::GetBoundaryBox( int Unit, int Convert )
             if( (Convert > 0) && (Convert != DrawEntry->m_Convert) )
                 continue;
 
-        switch( DrawEntry->m_StructType )
+        switch( DrawEntry->Type() )
         {
         case COMPONENT_ARC_DRAW_TYPE:
         {
@@ -403,13 +403,13 @@ LibDrawField::LibDrawField( int idfield ) : LibEDA_BaseStruct( COMPONENT_FIELD_D
 }
 
 
-LibDrawField::~LibDrawField( void )
+LibDrawField::~LibDrawField()
 {
 }
 
 
 // Creation et Duplication d'un field
-LibDrawField* LibDrawField::GenCopy( void )
+LibDrawField* LibDrawField::GenCopy()
 {
     LibDrawField* newfield = new LibDrawField( m_FieldId );
 
@@ -447,7 +447,7 @@ LibEDA_BaseStruct::LibEDA_BaseStruct( KICAD_T struct_type ) :
 
 
 /***************************************************************/
-LibDrawPin::LibDrawPin( void ) : LibEDA_BaseStruct( COMPONENT_PIN_DRAW_TYPE )
+LibDrawPin::LibDrawPin() : LibEDA_BaseStruct( COMPONENT_PIN_DRAW_TYPE )
 /***************************************************************/
 {
     m_PinLen      = 300;                /* default Pin len */
@@ -465,7 +465,7 @@ LibDrawPin::LibDrawPin( void ) : LibEDA_BaseStruct( COMPONENT_PIN_DRAW_TYPE )
 
 
 /******************************************/
-wxPoint LibDrawPin::ReturnPinEndPoint( void )
+wxPoint LibDrawPin::ReturnPinEndPoint()
 /******************************************/
 
 /* return the pin end position, for a component in normal orient
@@ -582,7 +582,7 @@ void LibDrawPin::SetPinNumFromString( wxString& buffer )
 
 
 /*************************************/
-LibDrawPin* LibDrawPin::GenCopy( void )
+LibDrawPin* LibDrawPin::GenCopy()
 /*************************************/
 {
     LibDrawPin* newpin = new LibDrawPin();
@@ -608,7 +608,7 @@ LibDrawPin* LibDrawPin::GenCopy( void )
 
 
 /**************************************************************/
-LibDrawArc::LibDrawArc( void ) : LibEDA_BaseStruct( COMPONENT_ARC_DRAW_TYPE )
+LibDrawArc::LibDrawArc() : LibEDA_BaseStruct( COMPONENT_ARC_DRAW_TYPE )
 /**************************************************************/
 {
     m_Rayon = 0;
@@ -619,7 +619,7 @@ LibDrawArc::LibDrawArc( void ) : LibEDA_BaseStruct( COMPONENT_ARC_DRAW_TYPE )
 
 
 /************************************/
-LibDrawArc* LibDrawArc::GenCopy( void )
+LibDrawArc* LibDrawArc::GenCopy()
 /************************************/
 {
     LibDrawArc* newitem = new LibDrawArc();
@@ -640,7 +640,7 @@ LibDrawArc* LibDrawArc::GenCopy( void )
 
 
 /**********************************************************************/
-LibDrawCircle::LibDrawCircle( void ) : LibEDA_BaseStruct( COMPONENT_CIRCLE_DRAW_TYPE )
+LibDrawCircle::LibDrawCircle() : LibEDA_BaseStruct( COMPONENT_CIRCLE_DRAW_TYPE )
 /**********************************************************************/
 {
     m_Rayon = 0;
@@ -649,7 +649,7 @@ LibDrawCircle::LibDrawCircle( void ) : LibEDA_BaseStruct( COMPONENT_CIRCLE_DRAW_
 
 
 /*******************************************/
-LibDrawCircle* LibDrawCircle::GenCopy( void )
+LibDrawCircle* LibDrawCircle::GenCopy()
 /*******************************************/
 {
     LibDrawCircle* newitem = new LibDrawCircle();
@@ -666,7 +666,7 @@ LibDrawCircle* LibDrawCircle::GenCopy( void )
 
 
 /*****************************************************************/
-LibDrawText::LibDrawText( void ) : LibEDA_BaseStruct( COMPONENT_GRAPHIC_TEXT_DRAW_TYPE )
+LibDrawText::LibDrawText() : LibEDA_BaseStruct( COMPONENT_GRAPHIC_TEXT_DRAW_TYPE )
 /*****************************************************************/
 {
     m_Horiz = TEXT_ORIENT_HORIZ;
@@ -677,7 +677,7 @@ LibDrawText::LibDrawText( void ) : LibEDA_BaseStruct( COMPONENT_GRAPHIC_TEXT_DRA
 
 
 /***************************************/
-LibDrawText* LibDrawText::GenCopy( void )
+LibDrawText* LibDrawText::GenCopy()
 /***************************************/
 {
     LibDrawText* newitem = new LibDrawText();
@@ -695,14 +695,14 @@ LibDrawText* LibDrawText::GenCopy( void )
 }
 
 
-LibDrawSquare::LibDrawSquare( void ) : LibEDA_BaseStruct( COMPONENT_RECT_DRAW_TYPE )
+LibDrawSquare::LibDrawSquare() : LibEDA_BaseStruct( COMPONENT_RECT_DRAW_TYPE )
 {
     m_Width = 0;
     m_Fill  = NO_FILL;
 }
 
 
-LibDrawSquare* LibDrawSquare::GenCopy( void )
+LibDrawSquare* LibDrawSquare::GenCopy()
 {
     LibDrawSquare* newitem = new LibDrawSquare();
 
@@ -717,13 +717,13 @@ LibDrawSquare* LibDrawSquare::GenCopy( void )
 }
 
 
-LibDrawSegment::LibDrawSegment( void ) : LibEDA_BaseStruct( COMPONENT_LINE_DRAW_TYPE )
+LibDrawSegment::LibDrawSegment() : LibEDA_BaseStruct( COMPONENT_LINE_DRAW_TYPE )
 {
     m_Width = 0;
 }
 
 
-LibDrawSegment* LibDrawSegment::GenCopy( void )
+LibDrawSegment* LibDrawSegment::GenCopy()
 {
     LibDrawSegment* newitem = new LibDrawSegment();
 
@@ -737,7 +737,7 @@ LibDrawSegment* LibDrawSegment::GenCopy( void )
 }
 
 
-LibDrawPolyline::LibDrawPolyline( void ) : LibEDA_BaseStruct( COMPONENT_POLYLINE_DRAW_TYPE )
+LibDrawPolyline::LibDrawPolyline() : LibEDA_BaseStruct( COMPONENT_POLYLINE_DRAW_TYPE )
 {
     n = 0;
     PolyList = NULL;
@@ -747,7 +747,7 @@ LibDrawPolyline::LibDrawPolyline( void ) : LibEDA_BaseStruct( COMPONENT_POLYLINE
 
 
 /************************************************/
-LibDrawPolyline* LibDrawPolyline::GenCopy( void )
+LibDrawPolyline* LibDrawPolyline::GenCopy()
 /************************************************/
 {
     LibDrawPolyline* newitem = new LibDrawPolyline();

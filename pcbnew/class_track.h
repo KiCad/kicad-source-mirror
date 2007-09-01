@@ -39,13 +39,22 @@ public:
     // chain = 0 indique une connexion non encore traitee
     int             m_Param;        // Auxiliary variable ( used in some computations )
 
+    
 public:
     TRACK( BOARD_ITEM* StructFather, KICAD_T idtype = TYPETRACK );
-    TRACK( const TRACK& track );
+    TRACK( const TRACK& track ); 
 
-    TRACK* Next()   { return (TRACK*) Pnext; }
+    /**
+     * Function Copy
+     * will copy this object whether it is a TRACK or a SEGVIA returning
+     * the corresponding type.
+     * @return - TRACK* or SEGVIA*, typed as the least common demoninator: TRACK
+     */
+    TRACK*  Copy() const;
 
-    TRACK* Back()   { return (TRACK*) Pback; }
+    TRACK* Next() const  { return (TRACK*) Pnext; }
+
+    TRACK* Back() const  { return (TRACK*) Pback; }
 
 
     /* supprime du chainage la structure Struct */
@@ -54,8 +63,16 @@ public:
     // Read/write data
     bool    WriteTrackDescr( FILE* File );
 
-    /* Ajoute un element a la liste */
-    void    Insert( BOARD* Pcb, EDA_BaseStruct* InsertPoint );
+    /**
+     * Function Insert
+     * inserts a TRACK, SEGVIA or SEGZONE into its proper list, either at the
+     * list's front or immediately after the InsertPoint.
+     * If Insertpoint == NULL, then insert at the beginning of the proper list.
+     * If InsertPoint != NULL, then insert immediately after InsertPoint.
+     * TRACKs and SEGVIAs are put on the m_Track list, SEGZONE on the m_Zone list.
+     * @param InsertPoint See above
+     */
+    void    Insert( BOARD* Pcb, BOARD_ITEM* InsertPoint );
 
     /* Recherche du meilleur point d'insertion */
     TRACK*  GetBestInsertPoint( BOARD* Pcb );
@@ -140,6 +157,7 @@ public:
     
 };
 
+
 class SEGZONE : public TRACK
 {
 public:
@@ -159,10 +177,17 @@ public:
     
 };
 
+
 class SEGVIA : public TRACK
 {
 public:
     SEGVIA( BOARD_ITEM* StructFather );
+
+    SEGVIA( const SEGVIA& source ) :
+        TRACK( source )
+    {
+    }
+    
     
     /**
      * Function IsOnLayer

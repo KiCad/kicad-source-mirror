@@ -98,7 +98,7 @@ void WinEDA_ModuleEditFrame::Place_Ancre( MODULE* pt_mod, wxDC* DC )
     PtStruct = pt_mod->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
-        switch( PtStruct->m_StructType )
+        switch( PtStruct->Type() )
         {
         case TYPEEDGEMODULE:
                 #undef STRUCT
@@ -130,7 +130,7 @@ void WinEDA_ModuleEditFrame::RemoveStruct( EDA_BaseStruct* Item, wxDC* DC )
     if( Item == NULL )
         return;
 
-    switch( Item->m_StructType )
+    switch( Item->Type() )
     {
     case TYPEPAD:
         DeletePad( (D_PAD*) Item, DC );
@@ -164,7 +164,7 @@ void WinEDA_ModuleEditFrame::RemoveStruct( EDA_BaseStruct* Item, wxDC* DC )
     {
         wxString Line;
         Line.Printf( wxT( " Remove: StructType %d Inattendu" ),
-                     Item->m_StructType );
+                     Item->Type() );
         DisplayError( this, Line );
     }
         break;

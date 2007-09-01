@@ -64,7 +64,7 @@ wxString msg;
     Create(parent, id, caption, pos, size, style);
 	m_TextLabel->SetValue(m_CurrentText->m_Text);
 	m_TextLabel->SetFocus();
-	switch( m_CurrentText->m_StructType )
+	switch( m_CurrentText->Type() )
 	{
 		case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
 			SetTitle(_("Global Label properties"));
@@ -187,7 +187,7 @@ void WinEDA_LabelPropertiesFrame::CreateControls()
     m_TextShape->SetValidator( wxGenericValidator(& m_CurrentText->m_Shape) );
 ////@end WinEDA_LabelPropertiesFrame content construction
 
-    if (m_CurrentText->m_StructType == DRAW_GLOBAL_LABEL_STRUCT_TYPE )
+    if (m_CurrentText->Type() == DRAW_GLOBAL_LABEL_STRUCT_TYPE )
         m_TextShape->Show(true);
 }
 

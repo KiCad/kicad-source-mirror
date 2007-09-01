@@ -93,7 +93,7 @@ EDA_BaseStruct::EDA_BaseStruct( KICAD_T idType )
 
 
 /********************************************/
-void EDA_BaseStruct::InitVars( void )
+void EDA_BaseStruct::InitVars()
 /********************************************/
 {
     m_StructType = TYPE_NOT_INIT;
@@ -151,7 +151,7 @@ void EDA_BaseStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& off
 
     msg.Printf( wxT(
                     "EDA_BaseStruct::Draw() error. Method for struct type %d used but not implemented (" ),
-                m_StructType );
+                Type() );
     msg += ReturnClassName() + wxT( ")\n" );
     printf( CONV_TO_UTF8( msg ) );
 }
@@ -175,10 +175,10 @@ wxString EDA_BaseStruct::ReturnClassName() const
 /*********************************************/
 
 /* Used at run time for diags: return the class name of the item,
- *  from its .m_StructType value.
+ *  from its .Type() value.
  */
 {
-    int      ii = m_StructType;
+    int      ii = Type();
     wxString classname;
 
     if( (ii < 0) || (ii > MAX_STRUCT_TYPE_ID) )
@@ -218,7 +218,7 @@ SEARCH_RESULT EDA_BaseStruct::Visit( INSPECTOR* inspector, const void* testData,
     for( const KICAD_T* p = scanTypes;  (stype=*p) != EOT;   ++p )
     {
         // If caller wants to inspect my type
-        if( stype == m_StructType )
+        if( stype == Type() )
         {
             if( SEARCH_QUIT == inspector->Inspect( this, testData ) )
                 return SEARCH_QUIT;
@@ -307,7 +307,7 @@ EDA_TextStruct::EDA_TextStruct( const wxString& text )
 }
 
 
-EDA_TextStruct::~EDA_TextStruct( void )
+EDA_TextStruct::~EDA_TextStruct()
 {
     if( m_TextDrawings )    /* pointeur sur la liste des segments de dessin */
     {
@@ -318,7 +318,7 @@ EDA_TextStruct::~EDA_TextStruct( void )
 
 
 /********************************/
-int EDA_TextStruct::Len_Size( void )
+int EDA_TextStruct::Len_Size()
 /********************************/
 
 // Return the text lenght in internal units
@@ -364,7 +364,7 @@ bool EDA_TextStruct::HitTest( const wxPoint& posref )
 
 
 /*******************************/
-int EDA_TextStruct::Pitch( void )
+int EDA_TextStruct::Pitch()
 /*******************************/
 
 /* retourne le pas entre 2 caracteres
@@ -474,7 +474,7 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
 
 /****************************************/
-void EDA_TextStruct::CreateDrawData( void )
+void EDA_TextStruct::CreateDrawData()
 /****************************************/
 
 /* Cree le tableau de donn�s n�essaire au trace d'un texte (pcb, module..)
@@ -683,7 +683,7 @@ void EDA_TextStruct::CreateDrawData( void )
 
 
 /******************************/
-void EDA_Rect::Normalize( void )
+void EDA_Rect::Normalize()
 /******************************/
 
 // Ensure the height ant width are >= 0
@@ -785,13 +785,13 @@ DrawPickedStruct::DrawPickedStruct( EDA_BaseStruct* pickedstruct ) :
 }
 
 
-DrawPickedStruct::~DrawPickedStruct( void )
+DrawPickedStruct::~DrawPickedStruct()
 {
 }
 
 
 /*********************************************/
-void DrawPickedStruct::DeleteWrapperList( void )
+void DrawPickedStruct::DeleteWrapperList()
 /*********************************************/
 
 /* Delete this item all the items of the linked list

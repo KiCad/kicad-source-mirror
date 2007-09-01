@@ -1131,7 +1131,7 @@ int WinEDA_PcbFrame::SavePcbFormatAscii( FILE* File )
     PtStruct = m_Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
-        switch( PtStruct->m_StructType )
+        switch( PtStruct->Type() )
         {
         case TYPETEXTE:
             ( (TEXTE_PCB*) PtStruct )->WriteTextePcbDescr( File );

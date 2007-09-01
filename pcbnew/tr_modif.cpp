@@ -42,7 +42,7 @@ TRACK * BufDeb, *BufEnd;		/* Pointeurs de debut et de fin de la zone
 	la piste complete en utilisant le segment suivant comme reference, car
 	une via est souvent sur un carrefour de segments, et ne caracterise pas
 	une piste */
-	if( pt_new_track->m_StructType == TYPEVIA && (nbptnewpiste > 1 ) )
+	if( pt_new_track->Type() == TYPEVIA && (nbptnewpiste > 1 ) )
 		pt_new_track = (TRACK *) pt_new_track->Pnext;
 	pt_new_track = Marque_Une_Piste(frame, DC, pt_new_track, &nbptnewpiste, 0);
 
@@ -85,7 +85,7 @@ TRACK * BufDeb, *BufEnd;		/* Pointeurs de debut et de fin de la zone
 	/* Il peut y avoir une via ou un pad sur les extremites: */
 	pt_segm = Fast_Locate_Via(Pcb->m_Track, NULL, start, startmasklayer);
 	if( pt_segm ) startmasklayer |= pt_segm->ReturnMaskLayer();
-	if( StartTrack->start && (StartTrack->start->m_StructType == TYPEPAD) )
+	if( StartTrack->start && (StartTrack->start->Type() == TYPEPAD) )
 		{	/* start sur pad */
 		D_PAD * pt_pad = (D_PAD*) (StartTrack->start) ;
 		startmasklayer |=  pt_pad->m_Masque_Layer;
@@ -93,7 +93,7 @@ TRACK * BufDeb, *BufEnd;		/* Pointeurs de debut et de fin de la zone
 
 	pt_segm = Fast_Locate_Via(Pcb->m_Track, NULL, end, endmasklayer);
 	if( pt_segm ) endmasklayer |= pt_segm->ReturnMaskLayer();
-	if( EndTrack->end && ( EndTrack->end->m_StructType == TYPEPAD) )
+	if( EndTrack->end && ( EndTrack->end->Type() == TYPEPAD) )
 		{
 		D_PAD * pt_pad = (D_PAD*) (EndTrack->end) ;
 		endmasklayer |= pt_pad->m_Masque_Layer;
@@ -123,7 +123,7 @@ TRACK * BufDeb, *BufEnd;		/* Pointeurs de debut et de fin de la zone
 		pt_segm = Fast_Locate_Piste( pt_del,BufEnd, end, endmasklayer );
 		if( pt_segm == NULL) break;
 
-		if(pt_segm->m_StructType != TYPEVIA)
+		if(pt_segm->Type() != TYPEVIA)
 			{	/* Segment trouve */
 			 if( pt_segm->GetState(CHAIN) == 0 )
 				 {

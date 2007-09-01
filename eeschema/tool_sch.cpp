@@ -37,7 +37,7 @@
 
 
 /**************************************************************/
-void WinEDA_SchematicFrame::ReCreateHToolbar( void )
+void WinEDA_SchematicFrame::ReCreateHToolbar()
 /**************************************************************/
 
 /* Create  the main Horizontal Toolbar for the schematic editor
@@ -144,7 +144,7 @@ void WinEDA_SchematicFrame::ReCreateHToolbar( void )
 
 
 /*************************************************/
-void WinEDA_SchematicFrame::ReCreateVToolbar( void )
+void WinEDA_SchematicFrame::ReCreateVToolbar()
 /*************************************************/
 
 /* Create Vertical Right Toolbar
@@ -239,7 +239,7 @@ void WinEDA_SchematicFrame::ReCreateVToolbar( void )
 
 
 /****************************************************************/
-void WinEDA_SchematicFrame::ReCreateOptToolbar( void )
+void WinEDA_SchematicFrame::ReCreateOptToolbar()
 /****************************************************************/
 
 /* Create Vertical Left Toolbar (Option Toolbar)

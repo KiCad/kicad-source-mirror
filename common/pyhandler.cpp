@@ -27,7 +27,7 @@ using namespace boost::python;
 /*                        Common Python Binding                              */
 /*****************************************************************************/
 
-static int GetLastID( void ) { return ID_END_LIST; }
+static int GetLastID() { return ID_END_LIST; }
 
 static object ChooseFile( str objTitle, str objMask, object objOpen )
 {

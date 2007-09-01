@@ -62,7 +62,7 @@ TRACK* WinEDA_GerberFrame::Delete_Segment( wxDC* DC, TRACK* Track )
             g_CurrentTrackSegment = (TRACK*) g_CurrentTrackSegment->Pback;
             delete Track; g_TrackSegmentCount--;
 
-            if( g_TrackSegmentCount && (g_CurrentTrackSegment->m_StructType == TYPEVIA) )
+            if( g_TrackSegmentCount && (g_CurrentTrackSegment->Type() == TYPEVIA) )
             {
                 Track = g_CurrentTrackSegment;
                 g_CurrentTrackSegment = (TRACK*) g_CurrentTrackSegment->Pback;

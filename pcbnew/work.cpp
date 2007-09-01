@@ -40,7 +40,7 @@ void InitWork(void);
 void ReInitWork(void);
 int SetWork( int, int, int, int, int, CHEVELU *, int );
 void GetWork( int *, int *, int *, int *, int *, CHEVELU ** );
-void SortWork( void );
+void SortWork();
 
 
 	/************************/

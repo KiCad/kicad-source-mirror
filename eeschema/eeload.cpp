@@ -182,7 +182,7 @@ void LoadSubHierarchy( WinEDA_SchematicFrame* frame, EDA_BaseStruct* DrawList )
 
     while( EEDrawList )
     {
-        if( EEDrawList->m_StructType == DRAW_SHEET_STRUCT_TYPE )
+        if( EEDrawList->Type() == DRAW_SHEET_STRUCT_TYPE )
         {
             #undef STRUCT
             #define STRUCT ( (DrawSheetStruct*) EEDrawList )

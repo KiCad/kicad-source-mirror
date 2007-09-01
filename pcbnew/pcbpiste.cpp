@@ -185,7 +185,7 @@ WinEDA_SwapLayerFrame * frame = new WinEDA_SwapLayerFrame(this);
 	for ( ; pt_segm != NULL;pt_segm = (TRACK*)pt_segm->Pnext )
 	{
 		m_CurrentScreen->SetModify();
-		if( pt_segm->m_StructType == TYPEVIA )
+		if( pt_segm->Type() == TYPEVIA )
 		{
 			SEGVIA * Via = (SEGVIA *) pt_segm;
 			if ( Via->Shape() == VIA_NORMALE ) continue;
@@ -217,7 +217,7 @@ WinEDA_SwapLayerFrame * frame = new WinEDA_SwapLayerFrame(this);
 	PtStruct = m_Pcb->m_Drawings;
 	for ( ; PtStruct != NULL ; PtStruct = PtStruct->Pnext )
 		{
-		if( PtStruct->m_StructType == TYPEDRAWSEGMENT )
+		if( PtStruct->Type() == TYPEDRAWSEGMENT )
 			{
 			m_CurrentScreen->SetModify();
 			pt_drawsegm = (DRAWSEGMENT *) PtStruct;

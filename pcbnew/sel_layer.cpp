@@ -39,7 +39,7 @@ public:
     // Constructor and destructor
     WinEDA_SelLayerFrame( WinEDA_BasePcbFrame* parent, int default_layer,
                           int min_layer, int max_layer );
-    ~WinEDA_SelLayerFrame( void ) { };
+    ~WinEDA_SelLayerFrame() { };
 
 private:
     void    Sel_Layer( wxCommandEvent& event );
@@ -176,7 +176,7 @@ public:
 
     // Constructor and destructor
     WinEDA_SelLayerPairFrame( WinEDA_BasePcbFrame* parent );
-    ~WinEDA_SelLayerPairFrame( void ) { };
+    ~WinEDA_SelLayerPairFrame() { };
 
 private:
     void    Sel_Layer( wxCommandEvent& event );
@@ -194,7 +194,7 @@ EVT_RADIOBOX( ID_LAYER_SELECT, WinEDA_SelLayerPairFrame::Sel_Layer )
 END_EVENT_TABLE()
 
 /***********************************************/
-void WinEDA_BasePcbFrame::SelectLayerPair( void )
+void WinEDA_BasePcbFrame::SelectLayerPair()
 /***********************************************/
 
 /* Affiche une double liste de layers cuivre pour selection d'une paire de layers

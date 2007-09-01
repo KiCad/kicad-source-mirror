@@ -111,7 +111,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
 
         if( LockPoint )
         {
-            if( LockPoint->m_StructType == TYPEPAD )
+            if( LockPoint->Type() == TYPEPAD )
             {
                 pt_pad = (D_PAD*) LockPoint;
                 
@@ -252,8 +252,8 @@ int Add_45_degrees_Segment( WinEDA_BasePcbFrame* frame, wxDC* DC, TRACK* pt_segm
     Previous = (TRACK*) pt_segm->Pback;         // pointe le segment precedent
 
     // Test s'il y a 2 segments consecutifs a raccorder
-    if( (pt_segm->m_StructType != TYPETRACK )
-       || (Previous->m_StructType != TYPETRACK) )
+    if( (pt_segm->Type() != TYPETRACK )
+       || (Previous->Type() != TYPETRACK) )
     {
         return 0;
     }
@@ -407,7 +407,7 @@ void WinEDA_PcbFrame::End_Route( TRACK* track, wxDC* DC )
 
     if( LockPoint ) /* La fin de la piste est sur un PAD */
     {
-        if( LockPoint->m_StructType ==  TYPEPAD )
+        if( LockPoint->Type() ==  TYPEPAD )
         {
             EnsureEndTrackOnPad( (D_PAD*) LockPoint );
         }
@@ -509,7 +509,7 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
     if( g_TwoSegmentTrackBuild )
     {
         TRACK* previous_track = (TRACK*) g_CurrentTrackSegment->Pback;
-        if( previous_track && (previous_track->m_StructType == TYPETRACK) )
+        if( previous_track && (previous_track->Type() == TYPETRACK) )
         {
             previous_track->SetLayer( screen->m_Active_Layer );
             previous_track->m_Width = g_DesignSettings.m_CurrentTrackWidth;
@@ -752,7 +752,7 @@ TRACK* DeleteNullTrackSegments( BOARD* pcb, TRACK* track, int* segmcount )
     }
 
     firsttrack->start = LockPoint;
-    if( LockPoint && (LockPoint->m_StructType == TYPEPAD ) )
+    if( LockPoint && (LockPoint->Type() == TYPEPAD ) )
         firsttrack->SetState( BEGIN_ONPAD, ON );
 
     track = firsttrack;

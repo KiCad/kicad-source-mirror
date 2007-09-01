@@ -14,7 +14,7 @@ public:
 	~TEXTE_PCB();
 
 	/* supprime du chainage la structure Struct */
-	void UnLink( void );
+	void UnLink();
 
 	/* duplicate structure */
 	void Copy( TEXTE_PCB* source );
