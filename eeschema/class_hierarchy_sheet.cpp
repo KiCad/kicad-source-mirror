@@ -34,7 +34,7 @@
 
 /***********************************************************/
 DrawSheetStruct::DrawSheetStruct( const wxPoint& pos ) :
-    SCH_SCREEN( DRAW_SHEET_STRUCT_TYPE )
+    SCH_SCREEN( SCHEMATIC_FRAME, DRAW_SHEET_STRUCT_TYPE )
 /***********************************************************/
 {
     m_Label   = NULL;

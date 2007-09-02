@@ -7,7 +7,6 @@ email address.
 
 2007-Aug-31 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
-These changes broke EESCHEMA, will fix late on Sep 1.
 + pcbnew & gerbview
   * Added TRACK::Copy() which can copy a SEGVIA or a TRACK.
   * Changed export_to_pcbnew.cpp so it created a SEGVIA properly, a significant change.
