@@ -90,12 +90,12 @@ static bool WriteGeneralDescrPcb( BOARD* Pcb, FILE* File )
 {
     int NbLayers;
 
-    /* generation du masque des couches autorisees */
+    /* Print the copper layer count */
     NbLayers = Pcb->m_BoardSettings->m_CopperLayerCount;
     fprintf( File, "$GENERAL\n" );
     fprintf( File, "LayerCount %d\n", NbLayers );
 
-    /* Generation des coord du rectangle d'encadrement */
+    /* Compute and print the board bounding box */
     Pcb->ComputeBoundaryBox();
     fprintf( File, "Di %d %d %d %d\n",
             Pcb->m_BoundaryBox.GetX(), Pcb->m_BoundaryBox.GetY(),
@@ -112,10 +112,11 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* File,
                                int* LayerLookUpTable )
 /*******************************************************************/
 
-/* Routine de sauvegarde du PCB courant sous format ASCII
- *  retourne
- *      1 si OK
- *      0 si sauvegarde non faite
+/* Routine to save the board
+ * @param frame = pointer to the main frame
+ * @param File = FILE * pointer to an already opened file
+ * @param LayerLookUpTable = look up table: pcbnew layer for each gerber layer
+ * @return 1 if OK, 0 if fail
  */
 {
     char            Line[256];
@@ -260,7 +261,7 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* File,
 
     delete Pcb;
 
-    setlocale( LC_NUMERIC, "" );      // revert to the current  locale
+    setlocale( LC_NUMERIC, "" );      // revert to the current locale
     wxEndBusyCursor();
     return 1;
 }

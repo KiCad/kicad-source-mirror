@@ -157,8 +157,11 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
 /****************************************************************/
 
 /*
- *  Change de couche active pour le routage.
- *  Si une piste est en cours de trace : placement d'une Via
+ *  if no track in progress :
+ *		swap the active layer between m_Route_Layer_TOP and m_Route_Layer_BOTTOM
+ *  if a track is in progress :
+ *		put (if possible, i.e. if no DRC problem) a Via on the end of the current
+ *		track, swap the current active layer and start a new trac segment on the new layer
  */
 {
     TRACK*  pt_segm;
@@ -177,7 +180,7 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
         return;
     }
 
-    /* Les vias ne doivent pas etre inutilement empilees: */
+    /* Avoid more than one via on the current location: */
     if( Locate_Via( m_Pcb, g_CurrentTrackSegment->m_End, g_CurrentTrackSegment->GetLayer() ) )
         return;
     pt_segm = g_FirstTrackSegment;
@@ -188,17 +191,20 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
             return;
     }
 
-    /* Test si segment possible a placer */
+    /* Is the current segment Ok (no DRC error) */
     if( Drc_On )
         if( Drc( this, DC, g_CurrentTrackSegment, m_Pcb->m_Track, 1 ) == BAD_DRC )
+			/* DRC error, the change layer is not made */
             return;
 
-    /* save etat actuel pour regeneration si via impossible a placer */
+    /* Saving current state before placing a via.
+		If the via canot be placed this current state will be reused */
     itmp = g_TrackSegmentCount;
     Begin_Route( g_CurrentTrackSegment, DC );
 
     DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 
+	/* create the via */
     Via = new SEGVIA( m_Pcb );
     Via->m_Flags   = IS_NEW;
     Via->m_Width   = g_DesignSettings.m_CurrentViaSize;
@@ -206,9 +212,7 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
     Via->m_NetCode = g_HightLigth_NetCode;
     Via->m_Start   = Via->m_End = g_CurrentTrackSegment->m_End;
 
-    Via->SetLayer( GetScreen()->m_Active_Layer );
-
-    // Provisoirement. indicate the first layer (?)
+    int old_layer = GetScreen()->m_Active_Layer );
 
     //swap the layers.
     if( GetScreen()->m_Active_Layer != GetScreen()->m_Route_Layer_TOP )
@@ -216,36 +220,46 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
     else
         GetScreen()->m_Active_Layer = GetScreen()->m_Route_Layer_BOTTOM;
 
+	/* Adjust the via layer pair */
     if( (Via->m_Shape & 15) == VIA_ENTERREE )
     {
-        Via->SetLayer( Via->GetLayer() | GetScreen()->m_Active_Layer << 4 );
+        Via->SetLayer( old_layer | GetScreen()->m_Active_Layer << 4 );
     }
     else if( (Via->m_Shape & 15) == VIA_BORGNE )    //blind via
     {                                               // A revoir! ( la via devrait deboucher sur 1 cote )
-        Via->SetLayer( Via->GetLayer() |  GetScreen()->m_Active_Layer << 4 );
+        Via->SetLayer( old_layer | GetScreen()->m_Active_Layer << 4 );
     }
     else
-        Via->SetLayer( 0x0F );
+        Via->SetLayer( 0x0F );	// Usual via is from copper to component; layer pair is 0 and 0x0F
 
     if( Drc_On &&( Drc( this, DC, Via, m_Pcb->m_Track, 1 ) == BAD_DRC ) )
     { 
-        /* Via impossible a placer ici */
+        /* DRC fault: the Via cannot be placed here ... */
         delete Via;
-        GetScreen()->m_Active_Layer = g_CurrentTrackSegment->GetLayer();
+        GetScreen()->m_Active_Layer = old_layer;
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
         return;
     }
 
-    /* la via est OK et est inseree apres le segment courant */
+    /* A new via was created. It was Ok.
+	Put it in linked list, after the g_CurrentTrackSegment */
     Via->Pback = g_CurrentTrackSegment;
     g_CurrentTrackSegment->Pnext = Via;
     g_TrackSegmentCount++;
 
-    // @todo: is this a memory leak bug? is g_CurrentTrackSegment's original lost or is it on some list?
-    g_CurrentTrackSegment = g_CurrentTrackSegment->Copy();
+	/* The g_CurrentTrackSegment is now in linked list and we need a new track segment 
+	after the via, starting at via location.
+	it will become the new curren segment (from via to the mouse cursor)
+	*/
+	g_CurrentTrackSegment = g_CurrentTrackSegment->Copy();	/* create a new segment
+	from the last entered segment, with the current width, flags, netcode, etc... values
+	layer, start and end point are not correct, and will be modified next */
     
-    g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer );
+    g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer );	// set the layer to the new value
     
+	/* the start point is the via position,
+	and the end point is the cursor which also is on the via (will change when moving mouse)
+	*/
     g_CurrentTrackSegment->m_Start = g_CurrentTrackSegment->m_End = Via->m_Start;
     
     g_TrackSegmentCount++;

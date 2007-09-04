@@ -21,9 +21,9 @@
 static EDA_BaseStruct*      CopyStruct( WinEDA_DrawPanel* panel, wxDC* DC, BASE_SCREEN* screen,
                                         EDA_BaseStruct* DrawStruct );
 static void                 CollectStructsToDrag( SCH_SCREEN* screen );
-static void                 AddPickedItem( SCH_SCREEN* screen, int px, int py );
+static void                 AddPickedItem( SCH_SCREEN* screen, wxPoint position );
 static LibEDA_BaseStruct*   GetNextPinPosition( EDA_SchComponentStruct* DrawLibItem,
-                                                int* px, int* py );
+                                                wxPoint & position );
 static void                 DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 static EDA_BaseStruct*      SaveStructListForPaste( EDA_BaseStruct* DrawStruct );
 static bool                 MirrorStruct( WinEDA_DrawPanel* panel, wxDC* DC,
@@ -1441,14 +1441,14 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
         if( Struct->Type() == DRAW_LIB_ITEM_STRUCT_TYPE )
         {
             LibEDA_BaseStruct* DrawItem;
-            int x, y;
-            DrawItem = GetNextPinPosition( (EDA_SchComponentStruct*) Struct, &x, &y );
+            wxPoint pos;
+            DrawItem = GetNextPinPosition( (EDA_SchComponentStruct*) Struct, pos );
             while( DrawItem )
             {
-                if( (x < ox) || (x > fx) || (y < oy) || (y > fy) )
-                    AddPickedItem( screen, x, y );
+                if( (pos.x < ox) || (pos.x > fx) || (pos.y < oy) || (pos.y > fy) )
+                    AddPickedItem( screen, pos );
 
-                DrawItem = GetNextPinPosition( NULL, &x, &y );
+                DrawItem = GetNextPinPosition( NULL, pos );
             }
         }
 
@@ -1458,7 +1458,7 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
             while( SLabel )
             {
                 if( SLabel->Type() == DRAW_SHEETLABEL_STRUCT_TYPE )
-                    AddPickedItem( screen, SLabel->m_Pos.x, SLabel->m_Pos.y );
+                    AddPickedItem( screen, SLabel->m_Pos );
                 SLabel = (DrawSheetLabelStruct*) SLabel->Pnext;
             }
         }
@@ -1466,15 +1466,15 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
         if( Struct->Type() == DRAW_BUSENTRY_STRUCT_TYPE )
         {
             DrawBusEntryStruct* item = (DrawBusEntryStruct*) Struct;
-            AddPickedItem( screen, item->m_Pos.x, item->m_Pos.y );
-            AddPickedItem( screen, item->m_End().x, item->m_End().y );
+            AddPickedItem( screen, item->m_Pos );
+            AddPickedItem( screen, item->m_End() );
         }
     }
 }
 
 
 /******************************************************************/
-static void AddPickedItem( SCH_SCREEN* screen, int px, int py )
+static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
 /******************************************************************/
 {
     DrawPickedStruct* DrawStructs;
@@ -1492,10 +1492,10 @@ static void AddPickedItem( SCH_SCREEN* screen, int px, int py )
         case DRAW_SEGMENT_STRUCT_TYPE:
                 #undef STRUCT
                 #define STRUCT ( (EDA_DrawLineStruct*) Struct )
-            if( (STRUCT->m_Start.x == px) && (STRUCT->m_Start.y == py) )
+            if( STRUCT->m_Start == position )
                 STRUCT->m_Flags &= ~STARTPOINT;
 
-            if( (STRUCT->m_End.x == px) && (STRUCT->m_End.y == py) )
+            if( STRUCT->m_End == position )
                 STRUCT->m_Flags &= ~ENDPOINT;
             break;
 
@@ -1524,9 +1524,7 @@ static void AddPickedItem( SCH_SCREEN* screen, int px, int py )
                 #define STRUCT ( (DrawJunctionStruct*) Struct )
             if( Struct->m_Flags & SELECTED )
                 break;                                  /* Deja en liste */
-            if( STRUCT->m_Pos.x != px )
-                break;
-            if( STRUCT->m_Pos.y != py )
+            if( STRUCT->m_Pos != position )
                 break;
             DrawStructs = new DrawPickedStruct( Struct );
             DrawStructs->Pnext =
@@ -1539,7 +1537,7 @@ static void AddPickedItem( SCH_SCREEN* screen, int px, int py )
                 #define STRUCT ( (EDA_DrawLineStruct*) Struct )
             if( Struct->m_Flags & SELECTED )
                 break;                                  /* Deja en liste */
-            if( (STRUCT->m_Start.x == px ) && ( STRUCT->m_Start.y == py ) )
+            if( STRUCT->m_Start == position )
             {
                 DrawStructs = new DrawPickedStruct( Struct );
                 DrawStructs->Pnext =
@@ -1548,7 +1546,7 @@ static void AddPickedItem( SCH_SCREEN* screen, int px, int py )
                 Struct->m_Flags  = SELECTED | ENDPOINT | STARTPOINT;
                 Struct->m_Flags &= ~STARTPOINT;
             }
-            else if( (STRUCT->m_End.x == px ) && ( STRUCT->m_End.y == py ) )
+            else if( STRUCT->m_End == position )
             {
                 DrawStructs = new DrawPickedStruct( Struct );
                 DrawStructs->Pnext =
@@ -1569,10 +1567,8 @@ static void AddPickedItem( SCH_SCREEN* screen, int px, int py )
                 #undef STRUCT
                 #define STRUCT ( (DrawLabelStruct*) Struct )
             if( Struct->m_Flags & SELECTED )
-                break;                                  /* Deja en liste */
-            if( STRUCT->m_Pos.x != px )
-                break;
-            if( STRUCT->m_Pos.y != py )
+                break;                                  /* Already in list */
+            if( STRUCT->m_Pos != position )
                 break;
             DrawStructs = new DrawPickedStruct( Struct );
             DrawStructs->Pnext =
@@ -1585,10 +1581,8 @@ static void AddPickedItem( SCH_SCREEN* screen, int px, int py )
                 #undef STRUCT
                 #define STRUCT ( (DrawGlobalLabelStruct*) Struct )
             if( Struct->m_Flags & SELECTED )
-                break;                                  /* Deja en liste */
-            if( STRUCT->m_Pos.x != px )
-                break;
-            if( STRUCT->m_Pos.y != py )
+                break;                                  /* Already in list */
+            if( STRUCT->m_Pos != position )
                 break;
             DrawStructs = new DrawPickedStruct( Struct );
             DrawStructs->Pnext =
@@ -1613,10 +1607,8 @@ static void AddPickedItem( SCH_SCREEN* screen, int px, int py )
                 #undef STRUCT
                 #define STRUCT ( (DrawMarkerStruct*) Struct )
             if( Struct->m_Flags & SELECTED )
-                break;                                  /* Deja en liste */
-            if( STRUCT->m_Pos.x != px )
-                break;
-            if( STRUCT->m_Pos.y != py )
+                break;                                  /* Already in list */
+            if( STRUCT->m_Pos != position )
                 break;
             DrawStructs = new DrawPickedStruct( Struct );
             DrawStructs->Pnext =
@@ -1629,10 +1621,8 @@ static void AddPickedItem( SCH_SCREEN* screen, int px, int py )
                 #undef STRUCT
                 #define STRUCT ( (DrawNoConnectStruct*) Struct )
             if( Struct->m_Flags & SELECTED )
-                break;                                  /* Deja en liste */
-            if( STRUCT->m_Pos.x != px )
-                break;
-            if( STRUCT->m_Pos.y != py )
+                break;                                  /* Already in list */
+            if( STRUCT->m_Pos != position )
                 break;
             DrawStructs = new DrawPickedStruct( Struct );
             DrawStructs->Pnext =
@@ -1651,14 +1641,14 @@ static void AddPickedItem( SCH_SCREEN* screen, int px, int py )
 
 /*********************************************************************************/
 static LibEDA_BaseStruct* GetNextPinPosition( EDA_SchComponentStruct* DrawLibItem,
-                                              int* px, int* py )
+                                              wxPoint & position )
 /*********************************************************************************/
 {
     EDA_LibComponentStruct* Entry;
     static LibEDA_BaseStruct* NextItem;
     static int Multi, convert, PartX, PartY, TransMat[2][2];
     LibEDA_BaseStruct* DEntry;
-    int x2, y2, orient;
+    int orient;
     LibDrawPin* Pin;
 
     if( DrawLibItem )
@@ -1693,11 +1683,10 @@ static LibEDA_BaseStruct* GetNextPinPosition( EDA_SchComponentStruct* DrawLibIte
         orient = Pin->ReturnPinDrawOrient( TransMat );
 
         /* Calcul de la position du point de reference */
-        x2 = PartX + (TransMat[0][0] * Pin->m_Pos.x)
+        position.x = PartX + (TransMat[0][0] * Pin->m_Pos.x)
              + (TransMat[0][1] * Pin->m_Pos.y);
-        y2 = PartY + (TransMat[1][0] * Pin->m_Pos.x)
+        position.y = PartY + (TransMat[1][0] * Pin->m_Pos.x)
              + (TransMat[1][1] * Pin->m_Pos.y);
-        *px      = x2; *py = y2;
         NextItem = DEntry->Next();
         return DEntry;
     }
