@@ -212,7 +212,7 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
     Via->m_NetCode = g_HightLigth_NetCode;
     Via->m_Start   = Via->m_End = g_CurrentTrackSegment->m_End;
 
-    int old_layer = GetScreen()->m_Active_Layer );
+    int old_layer = GetScreen()->m_Active_Layer;
 
     //swap the layers.
     if( GetScreen()->m_Active_Layer != GetScreen()->m_Route_Layer_TOP )
