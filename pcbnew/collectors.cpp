@@ -62,6 +62,7 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
 SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* notUsed )
 {
     BOARD_ITEM* item = (BOARD_ITEM*) testItem;
+    MODULE*     module = NULL;
 
 #if 1   // debugging
     static int breakhere = 0;
@@ -114,7 +115,9 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
     switch( item->Type() )
     {
     case TYPEPAD:
+        module = (MODULE*) item->GetParent();
         break;
+        
     case TYPEVIA:
         break;
     case TYPETRACK:
@@ -125,29 +128,19 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
         break;
     case TYPECOTATION:
         break;
+        
     case TYPETEXTEMODULE:
         {
+            module = (MODULE*) item->GetParent();
+            
             TEXTE_MODULE*   tm = (TEXTE_MODULE*) item;
-            MODULE*         parent = (MODULE*)tm->GetParent();
             if( m_Guide->IgnoreMTextsMarkedNoShow() && tm->m_NoShow )
                 goto exit;
-
-            if( parent )
-            {
-                if( m_Guide->IgnoreMTextsOnCopper() && parent->GetLayer()==LAYER_CUIVRE_N )
-                    goto exit;
-                
-                if( m_Guide->IgnoreMTextsOnCmp() && parent->GetLayer()==LAYER_CMP_N )
-                    goto exit;
-            }
         }
         break;
         
     case TYPEMODULE:
-        if( m_Guide->IgnoreModulesOnCu() && item->GetLayer()==LAYER_CUIVRE_N )
-            goto exit;
-        if( m_Guide->IgnoreModulesOnCmp() && item->GetLayer()==LAYER_CMP_N )
-            goto exit;
+        module = (MODULE*) item;
         break;
         
     default:
@@ -156,6 +149,16 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
 
     
     // common tests:
+
+    if( module )
+    {
+        if( m_Guide->IgnoreMTextsOnCopper() && module->GetLayer()==LAYER_CUIVRE_N )
+            goto exit;
+        
+        if( m_Guide->IgnoreMTextsOnCmp() && module->GetLayer()==LAYER_CMP_N )
+            goto exit;
+    }
+    
     
     if( item->IsOnLayer( m_Guide->GetPreferredLayer() ) || m_Guide->IgnorePreferredLayer() )
     {
