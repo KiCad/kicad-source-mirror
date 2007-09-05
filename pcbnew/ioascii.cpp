@@ -423,6 +423,7 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             }
             else
                 continue;
+            
             data = strtok( NULL, " =\n\r" );
             if( data )
             {
@@ -431,6 +432,7 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             }
             else
                 g_UserGrid.y = g_UserGrid.x;
+            
             GetScreen()->m_UserGrid = g_UserGrid;
             data = strtok( NULL, " =\n\r" );
             if( data )
@@ -565,6 +567,7 @@ static int WriteSetup( FILE* File, WinEDA_BasePcbFrame* frame )
         ii = frame->GetScreen()->GetGrid().x;
         jj = frame->GetScreen()->GetGrid().y;
     }
+    
     sprintf( text, "GridSize %d %d\n", ii, jj );
     fprintf( File, text );
 
@@ -602,6 +605,7 @@ static int WriteSetup( FILE* File, WinEDA_BasePcbFrame* frame )
     fprintf( File, "TextPcbWidth %d\n", g_DesignSettings.m_PcbTextWidth );
     fprintf( File, "TextPcbSize %d %d\n",
              g_DesignSettings.m_PcbTextSize.x, g_DesignSettings.m_PcbTextSize.y );
+    
     fprintf( File, "EdgeModWidth %d\n", ModuleSegmentWidth );
     fprintf( File, "TextModSize %d %d\n", ModuleTextSize.x, ModuleTextSize.y );
     fprintf( File, "TextModWidth %d\n", ModuleTextWidth );
@@ -613,10 +617,10 @@ static int WriteSetup( FILE* File, WinEDA_BasePcbFrame* frame )
 
     fprintf( File, "AuxiliaryAxisOrg %d %d\n",
              frame->m_Auxiliary_Axis_Position.x, frame->m_Auxiliary_Axis_Position.y );
+    
     fprintf( File, "$EndSETUP\n\n" );
     return 1;
 }
-
 
 #endif
 

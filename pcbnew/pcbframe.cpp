@@ -11,10 +11,6 @@
 #include "protos.h"
 #include "id.h"
 
-#if defined(DEBUG)
-#include "collectors.h"
-#endif
-
 
 /*******************************/
 /* class WinEDA_PcbFrame */
@@ -192,10 +188,6 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent,
     m_SelTrackWidthBox_Changed = FALSE;
     m_SelViaSizeBox_Changed    = FALSE;
     
-#if defined(DEBUG)    
-    m_Collector                = new GENERAL_COLLECTOR();
-#endif    
-
     m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
     m_DisplayPadFill = DisplayOpt.DisplayPadFill;
     m_DisplayPadNum  = DisplayOpt.DisplayPadNum;
@@ -241,10 +233,6 @@ WinEDA_PcbFrame::~WinEDA_PcbFrame()
 {
     m_Parent->m_PcbFrame = NULL;
     m_CurrentScreen = ScreenPcb;
-    
-#if defined(DEBUG)    
-    delete m_Collector;
-#endif    
 }
 
 
@@ -551,3 +539,4 @@ void WinEDA_PcbFrame::SetToolbars()
 
     DisplayUnitsMsg();
 }
+

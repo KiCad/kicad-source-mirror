@@ -280,11 +280,11 @@ public:
     /**
      * Function Collect
      * scans a BOARD using this class's Inspector method, which does the collection.
-     * @param aBoard A BOARD to scan.
+     * @param aItem A BOARD_ITEM to scan, may be a BOARD or MODULE, or whatever. 
      * @param aRefPos A wxPoint to use in hit-testing.
      * @param aGuide The COLLECTORS_GUIDE to use in collecting items.
      */
-    void Collect( BOARD* aBoard, const wxPoint& aRefPos, const COLLECTORS_GUIDE* aGuide ); 
+    void Collect( BOARD_ITEM* aItem, const wxPoint& aRefPos, const COLLECTORS_GUIDE* aGuide ); 
 };
 
 
@@ -325,29 +325,31 @@ public:
      * Add more constructors as needed.
      * @param settings The EDA_BoardDesignSettings to reference.
      */
-    GENERAL_COLLECTORS_GUIDE( const EDA_BoardDesignSettings* settings )
+    GENERAL_COLLECTORS_GUIDE( int aVisibleLayerMask, int aPreferredLayer )
     {
         m_PreferredLayer            = LAYER_CMP_N;
         m_IgnorePreferredLayer      = false;
         m_LayerLocked               = 0;
-        m_LayerVisible              = settings->GetVisibleLayers();    
+        m_LayerVisible              = aVisibleLayerMask;    
         m_IgnoreLockedLayers        = true;
         m_IgnoreNonVisibleLayers    = true;
-        m_IgnoreLockedItems         = true;
+        m_IgnoreLockedItems         = false;
         
 #if defined(USE_MATCH_LAYER)
         m_IncludeSecondary          = false;
 #else        
         m_IncludeSecondary          = true;
-#endif        
+#endif  
 
-//        m_IgnoreMTextsMarkedNoShow = g_ModuleTextNOVColor;
-        m_IgnoreMTextsOnCopper;
-        m_IgnoreMTextsOnCmp;
-        m_IgnoreModulesOnCu;
-//        m_IgnoreModulesOnCmp = !settings->Show_Modules_Cmp;
+        m_PreferredLayer            = aPreferredLayer;
+
+        m_IgnoreMTextsMarkedNoShow  = true; // g_ModuleTextNOVColor;
+        m_IgnoreMTextsOnCopper      = true;
+        m_IgnoreMTextsOnCmp         = false;
+        m_IgnoreModulesOnCu         = true; // !Show_Modules_Cmp;
+        m_IgnoreModulesOnCmp        = false;
     }
-
+    
     
     /**
      * Function IsLayerLocked

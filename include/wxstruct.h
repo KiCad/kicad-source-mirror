@@ -97,6 +97,7 @@ class PARAM_CFG_BASE;
 class Ki_PageDescr;
 class Ki_HotkeyInfo;
 class GENERAL_COLLECTOR;
+class GENERAL_COLLECTORS_GUIDE;
 
 
 enum id_librarytype {
@@ -338,6 +339,12 @@ public:
     bool   m_DisplayPcbTrackFill;   /* FALSE = sketch , TRUE = rempli */
     WinEDA3D_DrawFrame* m_Draw3DFrame;
 
+protected:    
+#if defined(DEBUG)
+    GENERAL_COLLECTOR*  m_Collector;
+#endif
+    
+    
 public:
     WinEDA_BasePcbFrame( wxWindow* father, WinEDA_App* parent, int idtype,
                          const wxString& title,
@@ -372,11 +379,6 @@ private:
     virtual void    GetComponentFromUndoList();
     virtual void    GetComponentFromRedoList();
 
-#if defined(DEBUG)
-protected:
-    GENERAL_COLLECTOR*  m_Collector;
-#endif
-   
     
 public:
     // Read/write fonctions:
@@ -393,6 +395,14 @@ public:
     BOARD_ITEM*     PcbGeneralLocateAndDisplay();
     BOARD_ITEM*     Locate( int typeloc, int LayerSearch );
 
+#if defined(DEBUG)
+    /**
+     * Function GetCollectorsGuide
+     * @return GENERAL_COLLECTORS_GUIDE - that considers the global configuration options.
+     */
+    GENERAL_COLLECTORS_GUIDE GetCollectorsGuide();
+#endif
+    
     // Gestion du curseur
     void            place_marqueur( wxDC* DC, const wxPoint& pos, char* pt_bitmap,
                                     int DrawMode, int color, int type );
@@ -522,6 +532,7 @@ private:
     bool             m_SelViaSizeBox_Changed;
     wxMenu*          m_FilesMenu;
 
+    
 public:
     WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent, const wxString& title,
                      const wxPoint& pos, const wxSize& size );
@@ -764,6 +775,8 @@ public:
 
     EDA_BaseStruct* GerberGeneralLocateAndDisplay();
     EDA_BaseStruct* Locate( int typeloc );
+    
+    
 
     void            SetToolbars();
     void            Process_Settings( wxCommandEvent& event );

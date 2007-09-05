@@ -131,10 +131,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay()
 #if defined(DEBUG)
 
     // test scaffolding for Collect():
-    GENERAL_COLLECTORS_GUIDE    guide( m_Pcb->m_BoardSettings );
-    
-    guide.SetIgnoreLockedItems( false );
-    guide.SetPreferredLayer( GetScreen()->m_Active_Layer );    
+    GENERAL_COLLECTORS_GUIDE  guide = GetCollectorsGuide();
     
     m_Collector->Collect( m_Pcb, 
                        GetScreen()->RefPos(true), 

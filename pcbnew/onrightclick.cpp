@@ -187,7 +187,8 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
 
     if( BlockActive )
     {
-        DrawPanel->CursorOn( &dc ); return;
+        DrawPanel->CursorOn( &dc ); 
+        return;
     }
 
     m_CurrentScreen->SetCurItem( DrawStruct );
@@ -218,7 +219,7 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
                 PopMenu->AppendSeparator();
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_AUTOPLACE_FIXE_MODULE, _( "Lock Module" ),
                               Locked_xpm );
-                ADD_MENUITEM( PopMenu, ID_POPUP_PCB_AUTOPLACE_FREE_MODULE, _( "Free Module" ),
+                ADD_MENUITEM( PopMenu, ID_POPUP_PCB_AUTOPLACE_FREE_MODULE, _( "Unlock Module" ),
                               Unlocked_xpm );
                 if( !flags )
                     PopMenu->Append( ID_POPUP_PCB_AUTOPLACE_CURRENT_MODULE,

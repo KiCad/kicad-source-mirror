@@ -68,62 +68,95 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
     switch( item->Type() )
     {
     case TYPEPAD:
-            breakhere++;
-            break;
+        breakhere++;
+        break;
     case TYPEVIA:
-            breakhere++;
-            break;
+        breakhere++;
+        break;
     case TYPETRACK:
-            breakhere++;
-            break;
+        breakhere++;
+        break;
     case TYPETEXTE: 
-            breakhere++;
-            break;
+        breakhere++;
+        break;
     case TYPEDRAWSEGMENT: 
-            breakhere++;
-            break;
+        breakhere++;
+        break;
     case TYPECOTATION:
-            breakhere++;
-            break;
+        breakhere++;
+        break;
     case TYPETEXTEMODULE:
-            TEXTE_MODULE* tm;
-            tm = (TEXTE_MODULE*) item;
+        {            
+            TEXTE_MODULE* tm = (TEXTE_MODULE*) item;
             if( tm->m_Text == wxT("10uH") )
             {
                 breakhere++;
             }
-            break;
+        }            
+        break;
     case TYPEMODULE:
-            MODULE* m;
-            m = (MODULE*) item;
-            if( m->GetReference() == wxT("L1") )
+        {
+            MODULE* m = (MODULE*) item;
+            if( m->GetReference() == wxT("C98") )
             {
                 breakhere++;
             }
-            break;
+        }
+        break;
+        
     default:
-            breakhere++;
-            break;
+        breakhere++;
+        break;
     }
 #endif
-    
 
-#if 1
 
-/*
-    int     m_PreferredLayer;             x
-    bool    m_IgnorePreferredLayer    
-    int     m_LayerVisible;               x
-    bool    m_IgnoreNonVisibleLayers;
+    switch( item->Type() )
+    {
+    case TYPEPAD:
+        break;
+    case TYPEVIA:
+        break;
+    case TYPETRACK:
+        break;
+    case TYPETEXTE: 
+        break;
+    case TYPEDRAWSEGMENT: 
+        break;
+    case TYPECOTATION:
+        break;
+    case TYPETEXTEMODULE:
+        {
+            TEXTE_MODULE*   tm = (TEXTE_MODULE*) item;
+            MODULE*         parent = (MODULE*)tm->GetParent();
+            if( m_Guide->IgnoreMTextsMarkedNoShow() && tm->m_NoShow )
+                goto exit;
+
+            if( parent )
+            {
+                if( m_Guide->IgnoreMTextsOnCopper() && parent->GetLayer()==LAYER_CUIVRE_N )
+                    goto exit;
+                
+                if( m_Guide->IgnoreMTextsOnCmp() && parent->GetLayer()==LAYER_CMP_N )
+                    goto exit;
+            }
+        }
+        break;
+        
+    case TYPEMODULE:
+        if( m_Guide->IgnoreModulesOnCu() && item->GetLayer()==LAYER_CUIVRE_N )
+            goto exit;
+        if( m_Guide->IgnoreModulesOnCmp() && item->GetLayer()==LAYER_CMP_N )
+            goto exit;
+        break;
+        
+    default:
+        break;
+    }
+
     
-    int     m_LayerLocked;                x
-    bool    m_IgnoreLockedLayers;
+    // common tests:
     
-    bool    m_IgnoreLockedItems;          x
-    
-    bool    m_IncludeSecondary;
-*/    
-   
     if( item->IsOnLayer( m_Guide->GetPreferredLayer() ) || m_Guide->IgnorePreferredLayer() )
     {
         int layer = item->GetLayer();
@@ -144,6 +177,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
         }
     }
 
+    
     if( m_Guide->IncludeSecondary() )
     {
         // for now, "secondary" means "tolerate any layer".  It has
@@ -168,27 +202,6 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
         }
     }
     
-#else
-    // The primary search criteria:
-    if( item->IsOnLayer( m_PreferredLayer ) )
-    {
-        if( item->HitTest( m_RefPos ) )
-        {
-            if( !item->IsLocked() )
-                Append( item );
-            else
-                Append2nd( item );      // 2nd if locked.
-        }
-    }
-    
-    // The secondary search criteria
-    else if( item->IsOnOneOfTheseLayers( m_LayerMask ) )
-    {
-        if( item->HitTest( m_RefPos ) )
-            Append2nd( item );
-    }
-#endif        
-
 exit:
     return SEARCH_CONTINUE;     // always when collecting
 }
@@ -229,21 +242,21 @@ void GENERAL_COLLECTOR::Collect( BOARD* board, const wxPoint& refPos,
 
 
 // see collectors.h 
-void GENERAL_COLLECTOR::Collect( BOARD* board, const wxPoint& refPos, 
-                            const COLLECTORS_GUIDE* guide )
+void GENERAL_COLLECTOR::Collect( BOARD_ITEM* aItem, const wxPoint& refPos, 
+                            const COLLECTORS_GUIDE* aGuide )
 {
     Empty();        // empty the collection, primary criteria list
     Empty2nd();     // empty the collection, secondary criteria list
 
     // remember guide, pass it to Inspect()
-    SetGuide( guide );
+    SetGuide( aGuide );
     
     // remember where the snapshot was taken from and pass refPos to
     // the Inspect() function.
     SetRefPos( refPos );
 
     // visit the board with the INSPECTOR (me).
-    board->Visit(   this,       // INSPECTOR* inspector
+    aItem->Visit(   this,       // INSPECTOR* inspector
                     NULL,       // const void* testData, not used here 
                     m_ScanTypes);
     
@@ -255,24 +268,6 @@ void GENERAL_COLLECTOR::Collect( BOARD* board, const wxPoint& refPos,
     
     Empty2nd();
 }
-
-
-/** is still inline
- * Constructor GENERAL_COLLECTORS_GUIDE
- * grabs stuff from global preferences and uses reasonable defaults.
- * Add more constructors as needed.
-GENERAL_COLLECTORS_GUIDE::GENERAL_COLLECTORS_GUIDE()
-{
-    
-    m_LayerLocked;    
-    m_LayerVisible;       
-    m_IgnoreLockedLayers;
-    m_IgnoreNonVisibleLayers;
-    m_PreferredLayer;    
-    m_IgnoreLockedItems;    
-    m_IncludeSecondary;
-}
- */
 
 
 #endif  // DEBUG

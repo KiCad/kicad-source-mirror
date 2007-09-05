@@ -45,7 +45,8 @@ OBJECTS= \
 		block.o\
 		controle.o\
 		basepcbframe.o\
-		export_to_pcbnew.o
+		export_to_pcbnew.o\
+        collectors.o
 
 setpage.o: ../share/setpage.cpp
 	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
@@ -85,6 +86,9 @@ class_board.o: ../pcbnew/class_board.cpp $(DEPEND)
 basepcbframe.o: ../pcbnew/basepcbframe.cpp $(COMMON)
 	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
+collectors.o: ../pcbnew/collectors.cpp $(COMMON)
+	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+    
 class_track.o: ../pcbnew/class_track.cpp $(COMMON)
 	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 

@@ -4,6 +4,18 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+
+2007-Sep-4 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ pcbnew
+  * Made GENERAL_COLLECTORS_GUIDE and GENERAL_COLLECTOR useable.  They can now
+    serve as a fully functional replacement for PcbGeneralLocateAndDisplay(),
+    see DEBUG code in BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay().
+  * Made GENERAL_COLLECTOR capable of Collect()ing from a MODULE as well as a BOARD.
+  * pcbnew/onrightclick.cpp changed English from "Free Module" to "Unlock Module".
+  Next I hope to add some UI to handle multiple items under the mouse in onrightclick.cpp
+    
+
 2007-sept-04 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew
@@ -39,8 +51,6 @@ email address.
     be instantiated.  This was not happening in ioascii.cpp when reading 
     the vias.  Bug fixed.
   * GENERAL_COLLECTOR getting closer to useable.
-    @todo search further for new TRACK( TRACK* ) and make sure no vias are
-    being made this way.
 
 
 2007-aug-30 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>

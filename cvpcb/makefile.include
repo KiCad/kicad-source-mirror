@@ -43,7 +43,8 @@ OBJECTS = $(TARGET).o \
 			class_edge_mod.o \
 			class_equipot.o \
 			class_track.o\
-			basepcbframe.o
+			basepcbframe.o\
+            collectors.o
 
 cvpcb.o: cvpcb.cpp cvpcb.h $(DEPEND)
 
@@ -99,6 +100,9 @@ class_equipot.o: ../pcbnew/class_equipot.cpp $(DEPEND)
 basepcbframe.o: ../pcbnew/basepcbframe.cpp $(DEPEND)
 	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
+collectors.o: ../pcbnew/collectors.cpp $(COMMON)
+	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+    
 readschematicnetlist.o: readschematicnetlist.cpp $(DEPEND)
 
 viewlogi.o: viewlogi.cpp $(DEPEND)
