@@ -69,7 +69,13 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
     switch( item->Type() )
     {
     case TYPEPAD:
-        breakhere++;
+        {
+            MODULE* m = (MODULE*) item->GetParent();
+            if( m->GetReference() == wxT("Y2") )
+            {
+                breakhere++;
+            }
+        }
         break;
     case TYPEVIA:
         breakhere++;
@@ -133,9 +139,17 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
         {
             module = (MODULE*) item->GetParent();
             
-            TEXTE_MODULE*   tm = (TEXTE_MODULE*) item;
-            if( m_Guide->IgnoreMTextsMarkedNoShow() && tm->m_NoShow )
+            if( m_Guide->IgnoreMTextsMarkedNoShow() && ((TEXTE_MODULE*)item)->m_NoShow )
                 goto exit;
+            
+            if( module )
+            {
+                if( m_Guide->IgnoreMTextsOnCopper() && module->GetLayer()==LAYER_CUIVRE_N )
+                    goto exit;
+                
+                if( m_Guide->IgnoreMTextsOnCmp() && module->GetLayer()==LAYER_CMP_N )
+                    goto exit;
+            }
         }
         break;
         
@@ -150,12 +164,11 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
     
     // common tests:
 
-    if( module )
+    if( module )    // true from case TYPEPAD, TYPETEXTEMODULE, or TYPEMODULE
     {
-        if( m_Guide->IgnoreMTextsOnCopper() && module->GetLayer()==LAYER_CUIVRE_N )
+        if( m_Guide->IgnoreModulesOnCu() && module->GetLayer()==LAYER_CUIVRE_N )
             goto exit;
-        
-        if( m_Guide->IgnoreMTextsOnCmp() && module->GetLayer()==LAYER_CMP_N )
+        if( m_Guide->IgnoreModulesOnCmp() && module->GetLayer()==LAYER_CMP_N )
             goto exit;
     }
     
