@@ -13,11 +13,9 @@
 #include "worksheet.h"
 #include "id.h"
 #include "hotkeys_basic.h"
+#include "hotkeys.h"
 
 #include "protos.h"
-
-extern Ki_HotkeyInfo *s_board_edit_Hotkey_List[];
-extern Ki_HotkeyInfo *s_module_edit_Hotkey_List[];
 
 /* Routines Locales */
 
@@ -89,11 +87,7 @@ wxString FullFileName;
 			FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
 			FullFileName += wxT("pcbnew");
 			FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
-			WriteHotkeyConfigFile(FullFileName, s_board_edit_Hotkey_List, true);
-			FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
-			FullFileName += wxT("module_edit");
-			FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
-			WriteHotkeyConfigFile(FullFileName, s_module_edit_Hotkey_List, true);
+			WriteHotkeyConfigFile(FullFileName, s_Pcbnew_Editor_Hokeys_Descr, true);
 			break;
 
 		case ID_PREFERENCES_READ_CONFIG_HOTKEYS:
@@ -116,11 +110,7 @@ bool Read_Hotkey_Config( WinEDA_DrawFrame * frame, bool verbose )
 	wxString FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
 	FullFileName += wxT("pcbnew");
 	FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
-	frame->ReadHotkeyConfigFile(FullFileName, s_board_edit_Hotkey_List, verbose);
-	FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
-	FullFileName += wxT("module_edit");
-	FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
-	return frame->ReadHotkeyConfigFile(FullFileName, s_module_edit_Hotkey_List, verbose);
+	return frame->ReadHotkeyConfigFile(FullFileName, s_Pcbnew_Editor_Hokeys_Descr, verbose);
 }
 
 

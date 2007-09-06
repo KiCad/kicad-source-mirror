@@ -267,15 +267,15 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
                         _( "Plot (HPGL, PostScript, or GERBER format)" ) );
 
     m_HToolBar->AddSeparator();
-    msg = AddHotkeyName( _( "zoom +" ), s_board_edit_Hotkey_List, HK_ZOOM_IN );
+    msg = AddHotkeyName( _( "zoom +" ), s_Board_Editor_Hokeys_Descr, HK_ZOOM_IN );
     m_HToolBar->AddTool( ID_ZOOM_PLUS_BUTT, wxEmptyString, BITMAP( zoom_in_xpm ),
                          msg );
 
-    msg = AddHotkeyName( _( "zoom -" ), s_board_edit_Hotkey_List, HK_ZOOM_OUT );
+    msg = AddHotkeyName( _( "zoom -" ), s_Board_Editor_Hokeys_Descr, HK_ZOOM_OUT );
     m_HToolBar->AddTool( ID_ZOOM_MOINS_BUTT, wxEmptyString, BITMAP( zoom_out_xpm ),
                          msg );
 
-    msg = AddHotkeyName( _( "redraw" ), s_board_edit_Hotkey_List, HK_ZOOM_REDRAW );
+    msg = AddHotkeyName( _( "redraw" ), s_Board_Editor_Hokeys_Descr, HK_ZOOM_REDRAW );
     m_HToolBar->AddTool( ID_ZOOM_REDRAW_BUTT, wxEmptyString, BITMAP( repaint_xpm ),
                          msg );
 
@@ -283,7 +283,7 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
                         _( "auto zoom" ) );
 
     m_HToolBar->AddSeparator();
-    msg = AddHotkeyName( _( "Find components and texts" ), s_board_edit_Hotkey_List, HK_FIND_ITEM );
+    msg = AddHotkeyName( _( "Find components and texts" ), s_Board_Editor_Hokeys_Descr, HK_FIND_ITEM );
     m_HToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, BITMAP( find_xpm ),
                          msg );
 
@@ -643,9 +643,31 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
         m_SelLayerBox->Clear();
         for( ii = 0, jj = 0; ii <= EDGE_N; ii++ )
         {
+		// List to append hotkeys in layer box selection
+		static int HK_SwitchLayer[EDGE_N+1] = {
+				HK_SWITCH_LAYER_TO_COPPER,
+				HK_SWITCH_LAYER_TO_INNER1,
+				HK_SWITCH_LAYER_TO_INNER2,
+				HK_SWITCH_LAYER_TO_INNER3,
+				HK_SWITCH_LAYER_TO_INNER4,
+				HK_SWITCH_LAYER_TO_INNER5,
+				HK_SWITCH_LAYER_TO_INNER6,
+				HK_SWITCH_LAYER_TO_INNER7,
+				HK_SWITCH_LAYER_TO_INNER8,
+				HK_SWITCH_LAYER_TO_INNER9,
+				HK_SWITCH_LAYER_TO_INNER10,
+				HK_SWITCH_LAYER_TO_INNER11,
+				HK_SWITCH_LAYER_TO_INNER12,
+				HK_SWITCH_LAYER_TO_INNER13,
+				HK_SWITCH_LAYER_TO_INNER14,
+			    HK_SWITCH_LAYER_TO_COMPONENT
+		};
+
             if( (g_TabOneLayerMask[ii] & Masque_Layer) )
             {
-                m_SelLayerBox->Append( ReturnPcbLayerName( ii, false, true ) );
+				wxString msg = ReturnPcbLayerName( ii, false );
+				msg = AddHotkeyName( msg, s_Board_Editor_Hokeys_Descr, HK_SwitchLayer[ii] );
+                m_SelLayerBox->Append( msg );
                 m_SelLayerBox->SetClientData( jj, (void*) ii );
                 jj++;
             }

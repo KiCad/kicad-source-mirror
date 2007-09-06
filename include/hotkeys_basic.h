@@ -8,6 +8,10 @@
 #ifndef  HOTKEYS_BASIC_H
 #define  HOTKEYS_BASIC_H
 
+#ifndef COMMON_GLOBL
+#define COMMON_GLOBL extern
+#endif
+
 #define DEFAULT_HOTKEY_FILENAME_EXT wxT( ".key" )
 
 /* define default path for config key file */
@@ -32,12 +36,60 @@ public:
     Ki_HotkeyInfo( const wxChar* infomsg, int idcommand, int keycode );
 };
 
+/* handle a Section name and the corresponding list of hotkeys (Ki_HotkeyInfo list) */
+struct Ki_HotkeyInfoSectionDescriptor
+{
+public:
+    wxString*       m_SectionTag;           // The section name
+    Ki_HotkeyInfo** m_HK_InfoList;          // pointer on List of Ki_HotkeyInfo
+    char*           m_Comment;              // comment: will be printed in the config file
+
+/*
+ *  public:
+ *  Ki_HotkeyInfoSectionDescriptor( wxString * SectionTag, Ki_HotkeyInfo ** HK_InfoList )
+ *  { m_SectionTag = SectionTag; m_HK_InfoList = HK_InfoList; }
+ */
+};
+
+/* Identifiers (tags) in key code configuration file file
+ *  .m_SectionTag member of a Ki_HotkeyInfoSectionDescriptor
+ */
+COMMON_GLOBL wxString g_CommonSectionTag
+#ifdef EDA_BASE
+( wxT( "[common]" ) )
+#endif
+;
+COMMON_GLOBL wxString g_SchematicSectionTag
+#ifdef EDA_BASE
+( wxT( "[eeschema]" ) )
+#endif
+;
+COMMON_GLOBL wxString g_LibEditSectionTag
+#ifdef EDA_BASE
+( wxT( "[libedit]" ) )
+#endif
+;
+COMMON_GLOBL wxString g_BoardEditorSectionTag
+#ifdef EDA_BASE
+( wxT( "[pcbnew]" ) )
+#endif
+;
+COMMON_GLOBL wxString g_ModuleEditSectionTag
+#ifdef EDA_BASE
+( wxT( "[footprinteditor]" ) )
+#endif
+;
+
 /* Functions:
  */
 wxString    ReturnKeyNameFromKeyCode( int keycode );
 wxString    ReturnKeyNameFromCommandId( Ki_HotkeyInfo** List, int CommandId );
 wxString    AddHotkeyName( const wxString& text, Ki_HotkeyInfo** List, int CommandId );
-void        DisplayHotkeyList( WinEDA_DrawFrame* frame, Ki_HotkeyInfo** List );
+wxString    AddHotkeyName( const wxString& text,
+		struct Ki_HotkeyInfoSectionDescriptor* DescrList,
+		int CommandId );
+void        DisplayHotkeyList( WinEDA_DrawFrame* frame,
+                               struct Ki_HotkeyInfoSectionDescriptor* List );
 int         GetCommandCodeFromHotkey( int key, Ki_HotkeyInfo** List );
 
 

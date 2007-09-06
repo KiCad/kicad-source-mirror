@@ -4,6 +4,7 @@
 
 /* Some functions to handle hotkeys in kicad
  */
+
 #include "fctsys.h"
 #include "common.h"
 #include "wxstruct.h"
@@ -11,7 +12,7 @@
 #include "macros.h"
 
 /* Class to handle hotkey commnands. hotkeys have a default value
- *  This class allows (for the future..) the real key code changed by user(from a key code list file, TODO)
+ *  This class allows the real key code changed by user from a key code list file
  */
 
 Ki_HotkeyInfo::Ki_HotkeyInfo( const wxChar* infomsg, int idcommand, int keycode )
@@ -30,7 +31,8 @@ struct hotkey_name_descr
     int     m_KeyCode;
 };
 
-struct hotkey_name_descr s_Hotkey_Name_List[] =
+
+static struct hotkey_name_descr s_Hotkey_Name_List[] =
 {
     { wxT( "F1" ),        WXK_F1           },
     { wxT( "F2" ),        WXK_F2           },
@@ -71,7 +73,7 @@ struct hotkey_name_descr s_Hotkey_Name_List[] =
     { wxT( "*" ),         '*'              },
     { wxT( "+" ),         '+'              },
     { wxT( "-" ),         '-'              },
-    { wxT( "\%" ),         '%'              },
+    { wxT( "\%" ),        '%'              },
     { wxT( "A" ),         'A'              },
     { wxT( "B" ),         'B'              },
     { wxT( "C" ),         'C'              },
@@ -136,7 +138,7 @@ wxString ReturnKeyNameFromKeyCode( int keycode )
 
 /*
  * return the key name from the key code
- * Only some wxWidgets key values are handled for function key
+ * Only some wxWidgets key values are handled for function key ( see s_Hotkey_Name_List[] )
  * @param key = key code (ascii value, or wxWidgets value for function keys)
  * @return the key name in a wxString
  */
@@ -191,9 +193,41 @@ wxString AddHotkeyName( const wxString& text, Ki_HotkeyInfo** List, int CommandI
 }
 
 
-/***********************************************************************/
+/***********************************************************/
+wxString    AddHotkeyName( const wxString&                        text,
+                           struct Ki_HotkeyInfoSectionDescriptor* DescList,
+                           int                                    CommandId )
+/***********************************************************/
+
+/*
+ * Add the key name from the Command id value ( m_Idcommand member value)
+ * @param List = pointer to a Ki_HotkeyInfoSectionDescriptor* DescrList of commands
+ * @param CommandId = Command Id value
+ * @return text (key name) in a wxString if found or text without modification
+ */
+{
+    wxString        msg     = text;
+    wxString        keyname;
+    Ki_HotkeyInfo** List;
+
+    for( ; DescList->m_HK_InfoList != NULL; DescList++ )
+    {
+        List    = DescList->m_HK_InfoList;
+        keyname = ReturnKeyNameFromCommandId( List, CommandId );
+        if( !keyname.IsEmpty() )
+        {
+            msg << wxT( " (" ) << keyname << wxT( ")" );
+            break;
+        }
+    }
+
+    return msg;
+}
+
+
+/*************************************************************************/
 wxString ReturnKeyNameFromCommandId( Ki_HotkeyInfo** List, int CommandId )
-/***********************************************************************/
+/*************************************************************************/
 
 /*
  * return the key name from the Command id value ( m_Idcommand member value)
@@ -225,7 +259,7 @@ static int ReturnKeyCodeFromKeyName( const wxString& keyname )
 /*
  * return the key code from its key name
  * Only some wxWidgets key values are handled for function key
- * @param keyname = wxString key name to find in s_Hotkey_Name_List[]
+ * @param keyname = wxString key name to find in s_Hotkey_Name_List[], like F2 or space or an usual (ascii) char
  * @return the key code
  */
 {
@@ -246,27 +280,32 @@ static int ReturnKeyCodeFromKeyName( const wxString& keyname )
 }
 
 
-/****************************************************************************/
-void DisplayHotkeyList( WinEDA_DrawFrame* frame, Ki_HotkeyInfo** List )
-/*****************************************************************************/
+/********************************************************************************************/
+void DisplayHotkeyList( WinEDA_DrawFrame* frame, struct Ki_HotkeyInfoSectionDescriptor* DescList )
+/***************************************************************************************/
 
 /*
  * Displays the current hotkey list
- * @param frame = current open frame
- * @param List = pointer to a Ki_HotkeyInfo list of commands
+ * @param frame = current active frame
+ * @param List = pointer to a Ki_HotkeyInfoSectionDescriptor list (Null terminated)
  * @return none
  */
 {
-    wxString keyname;
+    wxString        keyname;
+    Ki_HotkeyInfo** List;
 
-    wxString msg = _( "Current hotkey list:\n\n" );
+    wxString        msg = _( "Current hotkey list:\n\n" );
 
-    for( ; *List != NULL; List++ )
+    for( ; DescList->m_HK_InfoList != NULL; DescList++ )
     {
-        Ki_HotkeyInfo* hk_decr = *List;
-        msg    += _( "key " );
-        keyname = ReturnKeyNameFromKeyCode( hk_decr->m_KeyCode );
-        msg += keyname + wxT( ":    " ) + hk_decr->m_InfoMsg + wxT( "\n" );
+        List = DescList->m_HK_InfoList;
+        for( ; *List != NULL; List++ )
+        {
+            Ki_HotkeyInfo* hk_decr = *List;
+            msg    += _( "key " );
+            keyname = ReturnKeyNameFromKeyCode( hk_decr->m_KeyCode );
+            msg += keyname + wxT( ":    " ) + hk_decr->m_InfoMsg + wxT( "\n" );
+        }
     }
 
     DisplayInfo( frame, msg );
@@ -296,8 +335,9 @@ int GetCommandCodeFromHotkey( int key, Ki_HotkeyInfo** List )
 
 
 /*************************************************************************/
-int WinEDA_BasicFrame::WriteHotkeyConfigFile( const wxString& Filename,
-                                              Ki_HotkeyInfo** List, bool verbose )
+int WinEDA_BasicFrame::WriteHotkeyConfigFile( const wxString&                        Filename,
+                                              struct Ki_HotkeyInfoSectionDescriptor* DescList,
+                                              bool                                   verbose )
 /*************************************************************************/
 
 /*
@@ -371,23 +411,36 @@ int WinEDA_BasicFrame::WriteHotkeyConfigFile( const wxString& Filename,
         }
     }
 
-    /* print the last line */
+    /* print the last line of the info section */
     if( !msg.IsEmpty() )
         msg += wxT( "\n" );
     msg += wxT( "#\n#\n" );
     fprintf( cfgfile, CONV_TO_UTF8( msg ) );
 
-    /* Print the current list */
-    for( ; *List != NULL; List++ )
+    /* Print the current hotkey list */
+    Ki_HotkeyInfo** List;
+    for( ; DescList->m_HK_InfoList != NULL; DescList++ )
     {
-        Ki_HotkeyInfo* hk_decr = *List;
-        msg     = wxT( "shortcut   " );
-        keyname = ReturnKeyNameFromKeyCode( hk_decr->m_KeyCode );
-        AddDelimiterString( keyname );
-        infokey = hk_decr->m_InfoMsg;
-        AddDelimiterString( infokey );
-        msg += keyname + wxT( ":    " ) + infokey + wxT( "\n" );
-        fprintf( cfgfile, CONV_TO_UTF8( msg ) );
+        if( DescList->m_Comment )
+        {
+            fprintf( cfgfile, "# " );
+            fprintf( cfgfile, DescList->m_Comment );
+            fprintf( cfgfile, "\n" );
+        }
+        fprintf( cfgfile, CONV_TO_UTF8( *DescList->m_SectionTag ) );
+        fprintf( cfgfile, "\n" );
+        List = DescList->m_HK_InfoList;
+        for( ; *List != NULL; List++ )
+        {
+            Ki_HotkeyInfo* hk_decr = *List;
+            msg     = wxT( "shortcut   " );
+            keyname = ReturnKeyNameFromKeyCode( hk_decr->m_KeyCode );
+            AddDelimiterString( keyname );
+            infokey = hk_decr->m_InfoMsg;
+            AddDelimiterString( infokey );
+            msg += keyname + wxT( ":    " ) + infokey + wxT( "\n" );
+            fprintf( cfgfile, CONV_TO_UTF8( msg ) );
+        }
     }
 
     msg = wxT( "$Endlist\n" );
@@ -398,16 +451,18 @@ int WinEDA_BasicFrame::WriteHotkeyConfigFile( const wxString& Filename,
 
 
 /********************************************************************************************/
-int WinEDA_BasicFrame::ReadHotkeyConfigFile( const wxString& Filename,
-                                             Ki_HotkeyInfo** CurrentHotkeyList, bool verbose )
+int WinEDA_BasicFrame::ReadHotkeyConfigFile( const wxString&                        Filename,
+                                             struct Ki_HotkeyInfoSectionDescriptor* DescList,
+                                             bool                                   verbose )
 /********************************************************************************************/
 
 /*
  * Read a configuration file (<file>.key) and fill the current hotkey list with hotkeys
  * @param Filename = default full file name to create. If void, A filename will be asked
- * @param CurrentHotkeyList = current hotkey list to initialise.
+ * @param DescList = current hotkey list descr. to initialise.
  * the input format is: shortcut  "key"  "function"
  * lines starting by # are ignored (comments)
+ * lines like [xxx] are tags (example: [common] or [libedit] which identify sections
  *
  */
 {
@@ -446,19 +501,38 @@ int WinEDA_BasicFrame::ReadHotkeyConfigFile( const wxString& Filename,
         return 0;
     }
 
-    wxString keyname;
-    char     Line[1024];
-    int      LineNum = 0;
+    wxString        keyname;
+    char            Line[1024];
+    int             LineNum = 0;
+    Ki_HotkeyInfo** CurrentHotkeyList = NULL;
+
     /* Read the file */
     while(  GetLine( cfgfile, Line, &LineNum ) != NULL )
     {
         char* line_type, * keyname, * fctname;
         line_type = strtok( Line, " \t\n\r" );
         msg = CONV_FROM_UTF8( line_type );
+        if( msg[0]  == '[' ) // A tag is found. search infos in list
+        {
+            CurrentHotkeyList = NULL;
+            Ki_HotkeyInfoSectionDescriptor* DList = DescList;
+            for( ; DList->m_HK_InfoList != NULL; DList++ )
+            {
+                if( *DList->m_SectionTag == msg )
+                {
+                    CurrentHotkeyList = DList->m_HK_InfoList;
+                    break;
+                }
+            }
+
+            continue;
+        }
         if( msg != wxT( "shortcut" ) )
             continue;
         if( msg == wxT( "$Endlist" ) )
             break;
+        if( CurrentHotkeyList == NULL )
+            continue;
 
         /* Get the key name */
         strtok( NULL, "\"\n\r" );

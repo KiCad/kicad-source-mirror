@@ -26,7 +26,7 @@
  *  This can be usefull if the new function cannot be executed while an item is currently being edited
  *  ( For example, one cannot start a new wire when a component is moving.)
  *
- *  Note: If an hotkey is a special key be sure the corresponding wxWidget keycode (WXK_XXXX)
+ *  Note: If an hotkey is a special key, be sure the corresponding wxWidget keycode (WXK_XXXX)
  *  is handled in the hotkey_name_descr s_Hotkey_Name_List list (see hotkeys_basic.cpp)
  *  and see this list for some ascii keys (space ...)
  */
@@ -35,10 +35,10 @@
 /* Hotkey list: */
 static Ki_HotkeyInfo    HkSwitch2CopperLayer( wxT(
                                                   "Switch to Copper layer" ),
-                                              HK_SWITCH_LAYER_TO_COPPER, '-' );
+                                              HK_SWITCH_LAYER_TO_COPPER, WXK_PAGEUP );
 static Ki_HotkeyInfo    HkSwitch2ComponentLayer( wxT(
                                                      "Switch to Component layer" ),
-                                                 HK_SWITCH_LAYER_TO_COMPONENT, '+' );
+                                                 HK_SWITCH_LAYER_TO_COMPONENT, WXK_PAGEDOWN );
 static Ki_HotkeyInfo    HkSwitch2InnerLayer1( wxT(
                                                   "Switch to Inner layer 1" ),
                                               HK_SWITCH_LAYER_TO_INNER1, WXK_F5 );
@@ -57,6 +57,13 @@ static Ki_HotkeyInfo    HkSwitch2InnerLayer5( wxT(
 static Ki_HotkeyInfo    HkSwitch2InnerLayer6( wxT(
                                                   "Switch to Inner layer 6" ),
                                               HK_SWITCH_LAYER_TO_INNER6, WXK_F10 );
+
+static Ki_HotkeyInfo    HkSwitch2NextCopperLayer( wxT(
+                                                  "Switch to Next Layer" ),
+                                              HK_SWITCH_LAYER_TO_NEXT, '+' );
+static Ki_HotkeyInfo    HkSwitch2PreviousCopperLayer( wxT(
+                                                  "Switch to Previous Layer" ),
+                                              HK_SWITCH_LAYER_TO_PREVIOUS, '-');
 
 static Ki_HotkeyInfo    HkSavefile( wxT( "Save board" ), HK_SAVE_BOARD, 'S' + GR_KB_CTRL );
 static Ki_HotkeyInfo    HkLoadfile( wxT( "Load board" ), HK_LOAD_BOARD, 'L' + GR_KB_CTRL );
@@ -83,12 +90,17 @@ static Ki_HotkeyInfo    HkTrackDisplayMode( wxT(
                                                 "Track Display Mode" ),
                                             HK_SWITCH_TRACK_DISPLAY_MODE, 'F' );
 
+// List of common hotkey descriptors 
+Ki_HotkeyInfo* s_Common_Hotkey_List[] = {
+    &HkHelp,
+    &HkZoomIn,                &HkZoomOut,         &HkZoomRedraw, &HkZoomCenter,
+    &HkSwitchUnits,           &HkResetLocalCoord,
+    NULL
+};
 
 // List of hotkey descriptors for pcbnew
 Ki_HotkeyInfo* s_board_edit_Hotkey_List[] = {
-    &HkHelp,
-    &HkZoomIn,                &HkZoomOut,       &HkZoomRedraw,       &HkZoomCenter,
-    &HkResetLocalCoord,       &HkSwitchUnits,   &HkTrackDisplayMode,
+    &HkTrackDisplayMode,
     &HkDelete,                &HkBackspace,
     &HkAddVia,                &HkEndTrack,
     &HkMoveFootprint,         &HkFlipFootprint,
@@ -103,17 +115,39 @@ Ki_HotkeyInfo* s_board_edit_Hotkey_List[] = {
     &HkSwitch2InnerLayer5,
     &HkSwitch2InnerLayer6,
     &HkSwitch2ComponentLayer,
+	&HkSwitch2NextCopperLayer,
+	&HkSwitch2PreviousCopperLayer,
     NULL
 };
 
 // List of hotkey descriptors for the module editor
 Ki_HotkeyInfo* s_module_edit_Hotkey_List[] = {
-    &HkHelp,
-    &HkZoomIn,                &HkZoomOut,         &HkZoomRedraw, &HkZoomCenter,
-    &HkSwitchUnits,           &HkResetLocalCoord,
-    &HkDelete,                &HkBackspace,
     NULL
 };
+
+
+// list of sections and corresponding hotkey list for pcbnew (used to create an hotkey config file)
+struct Ki_HotkeyInfoSectionDescriptor s_Pcbnew_Editor_Hokeys_Descr[] = {
+	{ &g_CommonSectionTag, s_Common_Hotkey_List, "Common keys"},
+	{ &g_BoardEditorSectionTag, s_board_edit_Hotkey_List, "Board editor keys"},
+	{ &g_ModuleEditSectionTag, s_module_edit_Hotkey_List, "Footprint editor keys"},
+	NULL, NULL
+};
+
+// list of sections and corresponding hotkey list for the board editor (used to list current hotkeys)
+struct Ki_HotkeyInfoSectionDescriptor s_Board_Editor_Hokeys_Descr[] = {
+	{ &g_CommonSectionTag, s_Common_Hotkey_List, NULL},
+	{ &g_BoardEditorSectionTag, s_board_edit_Hotkey_List, NULL},
+	NULL, NULL
+};
+
+// list of sections and corresponding hotkey list for the footprint editor (used to list current hotkeys)
+struct Ki_HotkeyInfoSectionDescriptor s_Module_Editor_Hokeys_Descr[] = {
+	{ &g_CommonSectionTag, s_Common_Hotkey_List, NULL},
+	{ &g_ModuleEditSectionTag, s_module_edit_Hotkey_List, NULL},
+	NULL, NULL
+};
+
 
 
 /***********************************************************/
@@ -123,7 +157,6 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
 
 /* Hot keys. Some commands are relatives to the item under the mouse cursor
  *  Commands are case insensitive
- *  Zoom commands are not managed here
  *  @param DC = current device context
  *  @param hotkey = hothey code (ascii or wxWidget code for special keys)
  *  @param DrawStruct = NULL or pointer on a EDA_BaseStruct under the mouse cursor
@@ -148,7 +181,9 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
     if( (hotkey >= 'a') && (hotkey <= 'z') )
         hotkey += 'A' - 'a';
 
-    int CommandCode = GetCommandCodeFromHotkey( hotkey, s_board_edit_Hotkey_List );
+    int CommandCode = GetCommandCodeFromHotkey( hotkey, s_Common_Hotkey_List );
+    if ( CommandCode == HK_NOT_FOUND )
+		CommandCode = GetCommandCodeFromHotkey( hotkey, s_board_edit_Hotkey_List );
     int ll;
 
     switch( CommandCode )
@@ -218,7 +253,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_HELP:       // Display Current hotkey list
-        DisplayHotkeyList( this, s_board_edit_Hotkey_List );
+        DisplayHotkeyList( this, s_Board_Editor_Hokeys_Descr );
         break;
 
     case HK_ZOOM_IN:
@@ -434,9 +469,8 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* DC, int hotkey,
                                        EDA_BaseStruct* DrawStruct )
 /***********************************************************/
 
-/* Gestion des commandes rapides (Raccourcis claviers) concernant l'element
- *  sous le courseur souris
- *  Les majuscules/minuscules sont indifferenciees
+/* Hot keys. Some commands are relative to the item under the mouse cursor
+ *  Commands are case insensitive
  */
 {
     if( hotkey == 0 )
@@ -446,7 +480,9 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* DC, int hotkey,
     if( (hotkey >= 'a') && (hotkey <= 'z') )
         hotkey += 'A' - 'a';
 
-    int CommandCode = GetCommandCodeFromHotkey( hotkey, s_module_edit_Hotkey_List );
+    int CommandCode = GetCommandCodeFromHotkey( hotkey, s_Common_Hotkey_List );
+    if ( CommandCode == HK_NOT_FOUND )
+		CommandCode = GetCommandCodeFromHotkey( hotkey, s_module_edit_Hotkey_List );
 
     switch( CommandCode )
     {
@@ -456,7 +492,7 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_HELP:       // Display Current hotkey list
-        DisplayHotkeyList( this, s_module_edit_Hotkey_List );
+        DisplayHotkeyList( this, s_Module_Editor_Hokeys_Descr );
         break;
 
     case HK_RESET_LOCAL_COORD:         /*Reset the relative coord  */
@@ -491,12 +527,13 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* DC, int hotkey,
 bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* DC, EDA_BaseStruct* DrawStruct )
 /******************************************************************************/
 
-/* Efface l'item pointe par la souris, en reponse a la touche "Del"
- *  Effet dependant de l'outil selectionne:
- *      Outil trace de pistes
- *          Efface le segment en cours ou la piste si pas d'element
- *      Outil module:
- *          Efface le module.
+/* Delete the item foun under the mouse cursor
+ *  Depending on the current active tool::
+ *      Tool track
+ *          if a track is in progress: Delete the last segment
+ *			else delete the entire track
+ *      Tool module (footprint):
+ *          Delete the module.
  */
 {
     bool ItemFree = (GetScreen()->GetCurItem() == NULL )

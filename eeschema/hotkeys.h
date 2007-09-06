@@ -27,9 +27,11 @@ enum hotkey_id_commnand {
     HK_BEGIN_WIRE
 };
 
-// List of hotkey descriptors for schematic
-extern Ki_HotkeyInfo* s_Schematic_Hotkey_List[];
-// List of hotkey descriptors for libray editor
-extern Ki_HotkeyInfo* s_LibEdit_Hotkey_List[];
+// List of hotkey descriptors for eeschema
+extern struct Ki_HotkeyInfoSectionDescriptor s_Eeschema_Hokeys_Descr[];
+// List of hotkey descriptors for the schematic editor only
+extern struct Ki_HotkeyInfoSectionDescriptor s_Schematic_Hokeys_Descr[];
+// List of hotkey descriptors for the lib editor only
+extern struct Ki_HotkeyInfoSectionDescriptor s_Libedit_Hokeys_Descr[];
 
 #endif		// KOTKEYS_H

@@ -167,15 +167,15 @@ void WinEDA_LibeditFrame::ReCreateHToolbar()
                             _( "Test duplicate pins" ) );
 
         m_HToolBar->AddSeparator();
-        msg = AddHotkeyName( _( "zoom +" ), s_LibEdit_Hotkey_List, HK_ZOOM_IN );
+        msg = AddHotkeyName( _( "zoom +" ), s_Libedit_Hokeys_Descr, HK_ZOOM_IN );
         m_HToolBar->AddTool( ID_ZOOM_PLUS_BUTT, wxEmptyString, BITMAP( zoom_in_xpm ),
                              msg );
 
-        msg = AddHotkeyName( _( "zoom -" ), s_LibEdit_Hotkey_List, HK_ZOOM_OUT );
+        msg = AddHotkeyName( _( "zoom -" ), s_Libedit_Hokeys_Descr, HK_ZOOM_OUT );
         m_HToolBar->AddTool( ID_ZOOM_MOINS_BUTT, wxEmptyString, BITMAP( zoom_out_xpm ),
                              msg );
 
-        msg = AddHotkeyName( _( "redraw" ), s_LibEdit_Hotkey_List, HK_ZOOM_REDRAW );
+        msg = AddHotkeyName( _( "redraw" ), s_Libedit_Hokeys_Descr, HK_ZOOM_REDRAW );
         m_HToolBar->AddTool( ID_ZOOM_REDRAW_BUTT, wxEmptyString, BITMAP( repaint_xpm ),
                              msg );
 

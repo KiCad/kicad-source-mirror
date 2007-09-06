@@ -11,11 +11,9 @@
 #include "eeconfig.h"
 #include "worksheet.h"
 #include "hotkeys_basic.h"
+#include "hotkeys.h"
 
 #include "id.h"
-
-extern Ki_HotkeyInfo *s_Schematic_Hotkey_List[];
-extern Ki_HotkeyInfo *s_LibEdit_Hotkey_List[];
 
 /* Variables locales */
 
@@ -80,11 +78,7 @@ wxString FullFileName;
 			FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
 			FullFileName += wxT("eeschema");
 			FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
-			WriteHotkeyConfigFile(FullFileName, s_Schematic_Hotkey_List, true);
-			FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
-			FullFileName += wxT("libedit");
-			FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
-			WriteHotkeyConfigFile(FullFileName, s_LibEdit_Hotkey_List, true);
+			WriteHotkeyConfigFile(FullFileName, s_Eeschema_Hokeys_Descr, true);
 			break;
 
 		case ID_PREFERENCES_READ_CONFIG_HOTKEYS:
@@ -107,11 +101,7 @@ bool Read_Hotkey_Config( WinEDA_DrawFrame * frame, bool verbose )
 	wxString FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
 	FullFileName += wxT("eeschema");
 	FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
-	frame->ReadHotkeyConfigFile(FullFileName, s_Schematic_Hotkey_List, verbose);
-	FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
-	FullFileName += wxT("libedit");
-	FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
-	frame->ReadHotkeyConfigFile(FullFileName, s_LibEdit_Hotkey_List, verbose);
+	frame->ReadHotkeyConfigFile(FullFileName, s_Eeschema_Hokeys_Descr, verbose);
 
 	return TRUE;
 }

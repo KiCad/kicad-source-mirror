@@ -34,12 +34,22 @@ enum hotkey_id_commnand {
     HK_SWITCH_LAYER_TO_INNER3,
     HK_SWITCH_LAYER_TO_INNER4,
     HK_SWITCH_LAYER_TO_INNER5,
-    HK_SWITCH_LAYER_TO_INNER6
+    HK_SWITCH_LAYER_TO_INNER6,
+	HK_SWITCH_LAYER_TO_INNER7,
+	HK_SWITCH_LAYER_TO_INNER8,
+	HK_SWITCH_LAYER_TO_INNER9,
+	HK_SWITCH_LAYER_TO_INNER10,
+	HK_SWITCH_LAYER_TO_INNER11,
+	HK_SWITCH_LAYER_TO_INNER12,
+	HK_SWITCH_LAYER_TO_INNER13,
+	HK_SWITCH_LAYER_TO_INNER14
 };
 
 // List of hotkey descriptors for pcbnew
-extern Ki_HotkeyInfo* s_board_edit_Hotkey_List[];
-// List of hotkey descriptors for the module editor
-extern Ki_HotkeyInfo* s_module_edit_Hotkey_List[];
+extern struct Ki_HotkeyInfoSectionDescriptor s_Pcbnew_Editor_Hokeys_Descr[];
+// List of hotkey descriptors for the board editor only
+extern struct Ki_HotkeyInfoSectionDescriptor s_Board_Editor_Hokeys_Descr[];
+// List of hotkey descriptors for the footprint editor only
+extern struct Ki_HotkeyInfoSectionDescriptor s_Module_Editor_Hokeys_Descr[];
 
 #endif		// KOTKEYS_H

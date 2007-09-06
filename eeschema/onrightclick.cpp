@@ -281,22 +281,22 @@ void AddMenusForComponent( wxMenu* PopMenu, EDA_SchComponentStruct* Component )
 
     if( !Component->m_Flags )
     {
-        msg = AddHotkeyName( _( "Move Component" ), s_Schematic_Hotkey_List, HK_MOVE_COMPONENT );
+        msg = AddHotkeyName( _( "Move Component" ), s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_CMP_REQUEST,
                       msg, move_xpm );
     }
 
     // add menu orient et sous menu:
     wxMenu* orientmenu = new wxMenu;
-    msg = AddHotkeyName( _( "Rotate +" ), s_Schematic_Hotkey_List, HK_ROTATE_COMPONENT );
+    msg = AddHotkeyName( _( "Rotate +" ), s_Schematic_Hokeys_Descr, HK_ROTATE_COMPONENT );
     ADD_MENUITEM( orientmenu, ID_POPUP_SCH_ROTATE_CMP_COUNTERCLOCKWISE,
                   msg, rotate_pos_xpm );
     ADD_MENUITEM( orientmenu, ID_POPUP_SCH_ROTATE_CMP_CLOCKWISE, _( "Rotate -" ), rotate_neg_xpm );
-    msg = AddHotkeyName( _( "Mirror --" ), s_Schematic_Hotkey_List, HK_MIRROR_X_COMPONENT );
+    msg = AddHotkeyName( _( "Mirror --" ), s_Schematic_Hokeys_Descr, HK_MIRROR_X_COMPONENT );
     ADD_MENUITEM( orientmenu, ID_POPUP_SCH_MIROR_X_CMP, msg, mirror_V_xpm );
-    msg = AddHotkeyName( _( "Mirror ||" ), s_Schematic_Hotkey_List, HK_MIRROR_Y_COMPONENT );
+    msg = AddHotkeyName( _( "Mirror ||" ), s_Schematic_Hokeys_Descr, HK_MIRROR_Y_COMPONENT );
     ADD_MENUITEM( orientmenu, ID_POPUP_SCH_MIROR_Y_CMP, msg, mirror_H_xpm );
-    msg = AddHotkeyName( _( "Normal" ), s_Schematic_Hotkey_List, HK_ORIENT_NORMAL_COMPONENT );
+    msg = AddHotkeyName( _( "Normal" ), s_Schematic_Hokeys_Descr, HK_ORIENT_NORMAL_COMPONENT );
     ADD_MENUITEM( orientmenu, ID_POPUP_SCH_ORIENT_NORMAL_CMP, msg, normal_xpm );
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, orientmenu,
                                ID_POPUP_SCH_GENERIC_ORIENT_CMP, _(

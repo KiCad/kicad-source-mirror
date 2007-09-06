@@ -345,7 +345,7 @@ class WinEDA_DrawPanel;
 
 
 /* COMMON.CPP */
-wxString ReturnPcbLayerName(int layer_number, bool is_filename = FALSE,  bool is_gui = FALSE);
+wxString ReturnPcbLayerName(int layer_number, bool is_filename = FALSE);
 /* Return the name of the layer number "layer_number".
     if "is_filename" == TRUE,  the name can be used for a file name
     (not internatinalized, no space)*/

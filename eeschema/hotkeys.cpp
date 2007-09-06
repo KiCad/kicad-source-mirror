@@ -24,7 +24,8 @@
  *      "Command Label" is the name used in hotkey list display, and the identifier in the hotkey list file
  *      MY_NEW_ID_FUNCTION is an equivalent id function used in the switch in OnHotKey() function.
  *      default key value is the default hotkey for this command. Can be overrided by the user hotkey list file
- *  add the HkMyNewEntry pointer in the s_Schematic_Hotkey_List list ( or/and the s_LibEdit_Hotkey_List list)
+ *  add the HkMyNewEntry pointer in the s_Schematic_Hotkey_List list or the s_LibEdit_Hotkey_List list
+ *  ( or s_Common_Hotkey_List if the same command is added both in eeschema and libedit)
  *  Add the new code in the switch in OnHotKey() function.
  *  when the variable PopupOn is true, an item is currently edited.
  *  This can be usefull if the new function cannot be executed while an item is currently being edited
@@ -38,6 +39,15 @@
 
 /* local variables */
 /* Hotkey list: */
+// Common commands
+static Ki_HotkeyInfo    HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4 );
+static Ki_HotkeyInfo    HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 );
+static Ki_HotkeyInfo    HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
+static Ki_HotkeyInfo    HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
+static Ki_HotkeyInfo    HkHelp( wxT( "Help: this message" ), HK_HELP, '?' );
+static Ki_HotkeyInfo    HkResetLocalCoord( wxT( "Reset local coord." ), HK_RESET_LOCAL_COORD, ' ' );
+
+// Schematic editor
 static Ki_HotkeyInfo    HkBeginWire( wxT( "begin Wire" ), HK_BEGIN_WIRE, 'W' );
 static Ki_HotkeyInfo    HkAddComponent( wxT( "Add Component" ), HK_ADD_NEW_COMPONENT, 'A' );
 static Ki_HotkeyInfo    HkMirrorYComponent( wxT(
@@ -54,19 +64,24 @@ static Ki_HotkeyInfo    HkMove2Drag( wxT(
                                      HK_MOVEBLOCK_TO_DRAGBLOCK, '\t' );
 static Ki_HotkeyInfo    HkInsert( wxT( "Repeat Last Item" ), HK_REPEAT_LAST, WXK_INSERT );
 static Ki_HotkeyInfo    HkDelete( wxT( "Delete Item" ), HK_DELETE, WXK_DELETE );
-static Ki_HotkeyInfo    HkResetLocalCoord( wxT( "Reset local coord." ), HK_RESET_LOCAL_COORD, ' ' );
 static Ki_HotkeyInfo    HkNextSearch( wxT( "Next Search" ), HK_NEXT_SEARCH, WXK_F5 );
-static Ki_HotkeyInfo    HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4 );
-static Ki_HotkeyInfo    HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 );
-static Ki_HotkeyInfo    HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
-static Ki_HotkeyInfo    HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
-static Ki_HotkeyInfo    HkHelp( wxT( "Help: this message" ), HK_HELP, '?' );
+
+// Library editor:
+static Ki_HotkeyInfo HkInsertPin( wxT( "Repeat Pin" ), HK_REPEAT_LAST, WXK_INSERT );
+
+
+// List of common hotkey descriptors
+Ki_HotkeyInfo* s_Common_Hotkey_List[] =
+{
+    &HkHelp,
+    &HkZoomIn,          &HkZoomOut, &HkZoomRedraw, &HkZoomCenter,
+    &HkResetLocalCoord,
+    NULL
+};
 
 // List of hotkey descriptors for schematic
 Ki_HotkeyInfo* s_Schematic_Hotkey_List[] = {
-    &HkHelp,
-    &HkZoomIn,          &HkZoomOut,          &HkZoomRedraw,       &HkZoomCenter,
-    &HkNextSearch,      &HkResetLocalCoord,
+    &HkNextSearch,
     &HkDelete,          &HkInsert,           &HkMove2Drag,
     &HkMoveComponent,   &HkAddComponent,
     &HkRotateComponent, &HkMirrorXComponent, &HkMirrorYComponent, &HkOrientNormalComponent,
@@ -74,17 +89,33 @@ Ki_HotkeyInfo* s_Schematic_Hotkey_List[] = {
     NULL
 };
 
-// Library editor:
-static Ki_HotkeyInfo HkInsertPin( wxT( "Repeat Pin" ), HK_REPEAT_LAST, WXK_INSERT );
-
 // List of hotkey descriptors for libray editor
 Ki_HotkeyInfo* s_LibEdit_Hotkey_List[] =
 {
-    &HkHelp,
-    &HkZoomIn,          &HkZoomOut, &HkZoomRedraw, &HkZoomCenter,
-    &HkResetLocalCoord,
     &HkInsertPin,
     NULL
+};
+
+// list of sections and corresponding hotkey list for eeschema (used to create an hotkey config file)
+struct Ki_HotkeyInfoSectionDescriptor s_Eeschema_Hokeys_Descr[] = {
+	{ &g_CommonSectionTag, s_Common_Hotkey_List, "Common keys" },
+	{ &g_SchematicSectionTag, s_Schematic_Hotkey_List, "Schematic editor keys"},
+	{ &g_LibEditSectionTag, s_LibEdit_Hotkey_List, "library editor keys"},
+	NULL, NULL
+};
+
+// list of sections and corresponding hotkey list for the schematic editor (used to list current hotkeys)
+struct Ki_HotkeyInfoSectionDescriptor s_Schematic_Hokeys_Descr[] = {
+	{ &g_CommonSectionTag, s_Common_Hotkey_List, NULL},
+	{ &g_SchematicSectionTag, s_Schematic_Hotkey_List, NULL},
+	NULL, NULL
+};
+
+// list of sections and corresponding hotkey list for the component editor (used to list current hotkeys)
+struct Ki_HotkeyInfoSectionDescriptor s_Libedit_Hokeys_Descr[] = {
+	{ &g_CommonSectionTag, s_Common_Hotkey_List, NULL},
+	{ &g_LibEditSectionTag, s_LibEdit_Hotkey_List, NULL},
+	NULL, NULL
 };
 
 /***********************************************************/
@@ -92,7 +123,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
                                       EDA_BaseStruct* DrawStruct )
 /***********************************************************/
 
-/* Hot keys. Some commands are relatives to the item under the mouse cursor
+/* Hot keys. Some commands are relative to the item under the mouse cursor
  *  Commands are case insensitive
  */
 {
@@ -113,7 +144,9 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         hotkey += 'A' - 'a';
 
     // Search command from key :
-    int CommandCode = GetCommandCodeFromHotkey( hotkey, s_Schematic_Hotkey_List );
+    int CommandCode = GetCommandCodeFromHotkey( hotkey, s_Common_Hotkey_List );
+    if ( CommandCode == HK_NOT_FOUND )
+		CommandCode = GetCommandCodeFromHotkey( hotkey, s_Schematic_Hotkey_List );
 
     switch( CommandCode )
     {
@@ -123,7 +156,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_HELP:       // Display Current hotkey list
-        DisplayHotkeyList( this, s_Schematic_Hotkey_List );
+        DisplayHotkeyList( this, s_Schematic_Hokeys_Descr );
         break;
 
     case HK_RESET_LOCAL_COORD:         /* Reset the relative coord */
@@ -319,7 +352,7 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
                                     EDA_BaseStruct* DrawStruct )
 /***********************************************************/
 
-/* Hot keys for the component editot. Some commands are relatives to the item under the mouse cursor
+/* Hot keys for the component editor. Some commands are relatives to the item under the mouse cursor
  *  Commands are case insensitive
  */
 {
@@ -333,7 +366,9 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
     /* Convert lower to upper case (the usual toupper function has problem with non ascii codes like function keys */
     if( (hotkey >= 'a') && (hotkey <= 'z') )
         hotkey += 'A' - 'a';
-    int CommandCode = GetCommandCodeFromHotkey( hotkey, s_LibEdit_Hotkey_List );
+    int CommandCode = GetCommandCodeFromHotkey( hotkey, s_Common_Hotkey_List );
+    if ( CommandCode == HK_NOT_FOUND )
+		CommandCode = GetCommandCodeFromHotkey( hotkey, s_LibEdit_Hotkey_List );
 
     switch( CommandCode )
     {
@@ -343,7 +378,7 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_HELP:       // Display Current hotkey list
-        DisplayHotkeyList( this, s_LibEdit_Hotkey_List );
+        DisplayHotkeyList( this, s_Libedit_Hokeys_Descr );
         break;
 
     case HK_RESET_LOCAL_COORD:         /* Reset the relative coord */

@@ -26,6 +26,7 @@
 #include "worksheet.h"
 #include "id.h"
 #include "build_version.h"
+#include "hotkeys_basic.h"
 
 #include "bitmaps.h"
 #include "Language.xpm"

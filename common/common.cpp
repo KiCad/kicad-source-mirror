@@ -265,7 +265,7 @@ void MyFree( void* pt_mem )
 
 
 /**************************************************************/
-wxString ReturnPcbLayerName( int layer_number, bool is_filename, bool is_gui )
+wxString ReturnPcbLayerName( int layer_number, bool is_filename )
 /**************************************************************/
 
 /* Return the name of the layer number "layer_number".
@@ -304,21 +304,6 @@ wxString ReturnPcbLayerName( int layer_number, bool is_filename, bool is_gui )
         layer_name = layer_name_list_for_filename[layer_number];
     else
         layer_name = layer_name_list[layer_number];
-
-    if( is_gui )
-    {
-        static const wxString hotkey_list[] = {
-            wxT( "(PgDn)" ), wxT( "(F5)" ), wxT( "(F6)" ),  wxT( "(F7)" ),
-            wxT( "(F8)" ),   wxT( "(F9)" ), wxT( "(F10)" ), wxT( " " ),
-            wxT( " " ),      wxT( " " ),    wxT( " " ),     wxT( " " ),
-            wxT( " " ),      wxT( " " ),    wxT( " " ),     wxT( " (PgUp)" ),
-            wxT( " " ),      wxT( " " ),    wxT( " " ),     wxT( " " ),
-            wxT( " " ),      wxT( " " ),    wxT( " " ),     wxT( " " ),
-            wxT( " " ),      wxT( " " ),    wxT( " " ),     wxT( " " ),
-            wxT( " " ),      wxT( " " ),    wxT( " " ),     wxT( " " )
-        };
-        layer_name += wxT( " " ) + hotkey_list[layer_number];
-    }
 
     return layer_name;
 }

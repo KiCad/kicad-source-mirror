@@ -177,8 +177,8 @@ public:
     void            PrintMsg( const wxString& text );
     void            GetSettings();
     void            SaveSettings();
-	int             WriteHotkeyConfigFile(const wxString & Filename, Ki_HotkeyInfo ** List, bool verbose);
-	int             ReadHotkeyConfigFile(const wxString & Filename, Ki_HotkeyInfo ** List, bool verbose);
+	int             WriteHotkeyConfigFile(const wxString & Filename, struct Ki_HotkeyInfoSectionDescriptor * DescList, bool verbose);
+	int             ReadHotkeyConfigFile(const wxString & Filename, struct Ki_HotkeyInfoSectionDescriptor * DescList, bool verbose);
 	void            SetLanguage( wxCommandEvent& event );
     void            ProcessFontPreferences( int id );
 
