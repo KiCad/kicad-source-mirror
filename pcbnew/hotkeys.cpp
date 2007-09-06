@@ -131,21 +131,21 @@ struct Ki_HotkeyInfoSectionDescriptor s_Pcbnew_Editor_Hokeys_Descr[] = {
 	{ &g_CommonSectionTag, s_Common_Hotkey_List, "Common keys"},
 	{ &g_BoardEditorSectionTag, s_board_edit_Hotkey_List, "Board editor keys"},
 	{ &g_ModuleEditSectionTag, s_module_edit_Hotkey_List, "Footprint editor keys"},
-	NULL, NULL
+    { NULL, NULL, NULL }
 };
 
 // list of sections and corresponding hotkey list for the board editor (used to list current hotkeys)
 struct Ki_HotkeyInfoSectionDescriptor s_Board_Editor_Hokeys_Descr[] = {
 	{ &g_CommonSectionTag, s_Common_Hotkey_List, NULL},
 	{ &g_BoardEditorSectionTag, s_board_edit_Hotkey_List, NULL},
-	NULL, NULL
+	{ NULL, NULL, NULL }
 };
 
 // list of sections and corresponding hotkey list for the footprint editor (used to list current hotkeys)
 struct Ki_HotkeyInfoSectionDescriptor s_Module_Editor_Hokeys_Descr[] = {
 	{ &g_CommonSectionTag, s_Common_Hotkey_List, NULL},
 	{ &g_ModuleEditSectionTag, s_module_edit_Hotkey_List, NULL},
-	NULL, NULL
+	{ NULL, NULL, NULL }
 };
 
 
