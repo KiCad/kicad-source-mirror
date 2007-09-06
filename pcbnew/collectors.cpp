@@ -47,6 +47,19 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
 };    
 
 
+const KICAD_T GENERAL_COLLECTOR::PrimaryItems[] = {
+    TYPETEXTE, 
+    TYPEDRAWSEGMENT, 
+    TYPECOTATION,
+    TYPEVIA,
+    TYPETRACK,
+//    TYPEPAD,              TYPEPAD and TYPETEXTEMODULE are handled in a subsearch
+//    TYPETEXTEMODULE,
+    TYPEMODULE,
+    EOT
+};
+
+
 /**
  * Function Inspect
  * is the examining function within the INSPECTOR which is passed to the 
@@ -223,42 +236,8 @@ exit:
 }
 
 
-// see collectors.h
-/*
-void GENERAL_COLLECTOR::Collect( BOARD* board, const wxPoint& refPos, 
-                          int aPreferredLayer, int aLayerMask )
-{
-    Empty();        // empty the collection, primary criteria list
-    Empty2nd();     // empty the collection, secondary criteria list
-    
-    SetPreferredLayer( aPreferredLayer );
-    SetLayerMask( aLayerMask );
-    
-    //  remember refPos, pass to Inspect()
-    SetRefPos( refPos );
-
-#if defined(DEBUG)
-    std::cout << '\n';
-#endif
-    
-    // visit the board with the INSPECTOR (me).
-    board->Visit(   this,       // INSPECTOR* inspector
-                    NULL,       // const void* testData, not used here 
-                    m_ScanTypes);
-    
-    SetTimeNow();               // when snapshot was taken
-    
-    // append 2nd list onto end of the first "list" 
-    for( unsigned i=0;  i<list2nd.size();  ++i )
-        Append( list2nd[i] );
-    
-    Empty2nd();
-}
-*/
-
-
 // see collectors.h 
-void GENERAL_COLLECTOR::Collect( BOARD_ITEM* aItem, const wxPoint& refPos, 
+void GENERAL_COLLECTOR::Collect( BOARD_ITEM* aItem, const wxPoint& aRefPos, 
                             const COLLECTORS_GUIDE* aGuide )
 {
     Empty();        // empty the collection, primary criteria list
@@ -269,9 +248,9 @@ void GENERAL_COLLECTOR::Collect( BOARD_ITEM* aItem, const wxPoint& refPos,
     
     // remember where the snapshot was taken from and pass refPos to
     // the Inspect() function.
-    SetRefPos( refPos );
+    SetRefPos( aRefPos );
 
-    // visit the board with the INSPECTOR (me).
+    // visit the board or module with the INSPECTOR (me).
     aItem->Visit(   this,       // INSPECTOR* inspector
                     NULL,       // const void* testData, not used here 
                     m_ScanTypes);

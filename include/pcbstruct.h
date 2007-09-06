@@ -325,11 +325,19 @@ public:
 public:
     PCB_SCREEN( int idscreen );
     ~PCB_SCREEN();
+    
     PCB_SCREEN* Next() { return (PCB_SCREEN*) Pnext; }
-    void    Init();
-    void    SetNextZoom();
-    void    SetPreviousZoom();
-    void    SetLastZoom();
+    void        Init();
+    void        SetNextZoom();
+    void        SetPreviousZoom();
+    void        SetLastZoom();
+    
+    /**
+     * Function GetCurItem
+     * returns the currently selected BOARD_ITEM, overriding BASE_SCREEN::GetCurItem().
+     * @return BOARD_ITEM* - the one selected, or NULL.
+     */
+    BOARD_ITEM* GetCurItem() const {  return (BOARD_ITEM*) BASE_SCREEN::GetCurItem(); }
 };
 
 /***************************/

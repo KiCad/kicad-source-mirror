@@ -192,6 +192,13 @@ public:
     static const KICAD_T AllBoardItems[];
 
 
+    /** 
+     * A scan list for all primary board items, omitting items which are subsidiary to
+     * a MODULE, such as D_PAD and TEXTEMODULE.
+     */
+    static const KICAD_T PrimaryItems[];
+    
+    
     /**
      * Constructor GENERALCOLLECTOR
      */ 

@@ -210,8 +210,8 @@ public:
     BASE_SCREEN*      m_CurrentScreen;      // SCREEN en cours
 
     int     m_CurrentCursorShape;           // shape for cursor (0 = default cursor)
-    int     m_ID_current_state;             // Id du bouton actif du tool bar vertical
-    int     m_HTOOL_current_state;          // Id du bouton actif du tool bar horizontal
+    int     m_ID_current_state;             ///< Id of active button on the vertical toolbar
+    int     m_HTOOL_current_state;          ///< Id of active button on horizontal toolbar
 
     int     m_InternalUnits;                // nombre d'unites internes pour 1 pouce
                                             // = 1000 pour schema, = 10000 pour PCB
@@ -394,6 +394,7 @@ public:
     bool            Clear_Pcb( wxDC* DC, bool query );
     BOARD_ITEM*     PcbGeneralLocateAndDisplay();
     BOARD_ITEM*     Locate( int typeloc, int LayerSearch );
+    
 
 #if defined(DEBUG)
     /**
@@ -562,7 +563,16 @@ public:
     void                PrepareLayerIndicator();
     void                OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void                OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
-    void                OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
+    
+    /**
+     * Function OnRightClick
+     * populates a popup menu with the choices appropriate for the current context.
+     * The caller will add the ZOOM menu choices afterwards.
+     * @param aMousePos The current mouse position
+     * @param aPopMenu The menu to add to.
+     */
+    void                OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu );
+    
     void                OnSelectOptionToolbar( wxCommandEvent& event );
     void                ToolOnRightClick( wxCommandEvent& event );
 
