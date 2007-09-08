@@ -91,7 +91,7 @@ PYTHON_VERSION=2.5
 PYLIBS= -L/usr/lib
 PYLIBS+= -L /usr/include/python
 PYLIBS+= -lpython$(PYTHON_VERSION)
-PYLIBS+= -lboost_python
+PYLIBS+= -lboost_python-mt
 EXTRACPPFLAGS+=-I /usr/include/python$(PYTHON_VERSION) -DKICAD_PYTHON -fno-strict-aliasing
 endif
 
