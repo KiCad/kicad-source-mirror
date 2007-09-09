@@ -52,46 +52,46 @@
 #define EXCHG(a,b) { typeof(a) __temp__ = (a); (a) = (b); (b) = __temp__; }
 
 /* macro for insert menuitems with a icon: */
-#define ADD_MENUITEM(menu, id, text, icon) {\
+#define ADD_MENUITEM(menu, id, text, icon) do {\
 		wxMenuItem * l_item;\
 		l_item = new wxMenuItem(menu, id, text);\
-		l_item->SetBitmap(icon); menu->Append(l_item);}
+		l_item->SetBitmap(icon); menu->Append(l_item);} while(0)
 
-#define ADD_MENUITEM_WITH_HELP(menu, id, text, help, icon) {\
+#define ADD_MENUITEM_WITH_HELP(menu, id, text, help, icon) do {\
 		wxMenuItem * l_item;\
 		l_item = new wxMenuItem(menu, id, text, help);\
-		l_item->SetBitmap(icon); menu->Append(l_item);}
+		l_item->SetBitmap(icon); menu->Append(l_item);} while(0)
 
 #ifdef __WINDOWS__
-#define ADD_MENUITEM_WITH_SUBMENU(menu, submenu, id, text, icon) {\
+#define ADD_MENUITEM_WITH_SUBMENU(menu, submenu, id, text, icon) do {\
 		wxMenuItem * l_item;\
 		l_item = new wxMenuItem(menu, id, text);\
 		l_item->SetSubMenu(submenu);\
 		l_item->SetBitmap(icon);\
 		l_item->SetFont(* g_ItalicFont);\
-		menu->Append(l_item);}
+		menu->Append(l_item);} while(0)
 
-#define ADD_MENUITEM_WITH_HELP_AND_SUBMENU(menu, submenu, id, text, help, icon) {\
+#define ADD_MENUITEM_WITH_HELP_AND_SUBMENU(menu, submenu, id, text, help, icon) do {\
 		wxMenuItem * l_item;\
 		l_item = new wxMenuItem(menu, id, text, help);\
 		l_item->SetSubMenu(submenu);\
 		l_item->SetBitmap(icon);\
 		l_item->SetFont(*g_ItalicFont);\
-		menu->Append(l_item);}
+		menu->Append(l_item);} while(0)
 #else
-#define ADD_MENUITEM_WITH_SUBMENU(menu, submenu, id, text, icon) {\
+#define ADD_MENUITEM_WITH_SUBMENU(menu, submenu, id, text, icon) do {\
 		wxMenuItem * l_item;\
 		l_item = new wxMenuItem(menu, id, text);\
 		l_item->SetSubMenu(submenu);\
 		l_item->SetBitmap(icon);\
-		menu->Append(l_item);}
+		menu->Append(l_item);} while(0)
 
-#define ADD_MENUITEM_WITH_HELP_AND_SUBMENU(menu, submenu, id, text, help, icon) {\
+#define ADD_MENUITEM_WITH_HELP_AND_SUBMENU(menu, submenu, id, text, help, icon) do {\
 		wxMenuItem * l_item;\
 		l_item = new wxMenuItem(menu, id, text, help);\
 		l_item->SetSubMenu(submenu);\
 		l_item->SetBitmap(icon);\
-		menu->Append(l_item);}
+		menu->Append(l_item);} while(0)
 #endif
 
 #ifdef __WINDOWS__
