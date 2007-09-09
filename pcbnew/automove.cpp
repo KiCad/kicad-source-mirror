@@ -263,7 +263,7 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( wxDC* DC, bool PlaceModulesHorsPcb )
     for( pt_Dmod = BaseListeModules; *pt_Dmod != NULL; pt_Dmod++ )
     {
         Module = *pt_Dmod;
-        if( Module->m_ModuleStatus & MODULE_is_LOCKED )
+        if( Module->IsLocked() )
             continue;
 
         if( PlaceModulesHorsPcb && EdgeExists )
@@ -308,10 +308,8 @@ void WinEDA_PcbFrame::FixeModule( MODULE* Module, bool Fixe )
 {
     if( Module )    /* Traitement du module */
     {
-        if( Fixe )
-            Module->m_ModuleStatus |= MODULE_is_LOCKED;
-        else
-            Module->m_ModuleStatus &= ~MODULE_is_LOCKED;
+        Module->SetLocked( Fixe );
+        
         Module->Display_Infos( this );
         GetScreen()->SetModify();
     }
@@ -322,10 +320,7 @@ void WinEDA_PcbFrame::FixeModule( MODULE* Module, bool Fixe )
         {
             if( WildCompareString( ModulesMaskSelection, Module->m_Reference->m_Text ) )
             {
-                if( Fixe )
-                    Module->m_ModuleStatus |= MODULE_is_LOCKED;
-                else
-                    Module->m_ModuleStatus &= ~MODULE_is_LOCKED;
+                Module->SetLocked( Fixe );
                 GetScreen()->SetModify();
             }
         }
@@ -353,7 +348,7 @@ void WinEDA_PcbFrame::ReOrientModules( const wxString& ModuleMask,
     Module = m_Pcb->m_Modules;
     for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
     {
-        if( (Module->m_ModuleStatus & MODULE_is_LOCKED ) && !include_fixe )
+        if( Module->IsLocked() && !include_fixe )
             continue;
 
         if( WildCompareString( ModuleMask, Module->m_Reference->m_Text, FALSE ) )
