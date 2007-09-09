@@ -36,3 +36,5 @@ compiler can help with this too.
 *** Translate comments that are in French to English so there can be a broader
 understanding by new developers.
 
+*** Implement the graying in/out of "Edit/Undo", "Edit/Redo" menu items, 
+when Undo/Redo stack is empty/filled.

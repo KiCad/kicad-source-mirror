@@ -115,6 +115,24 @@ wxMenuBar * menuBar = GetMenuBar();
 			m_FilesMenu->Append(item);
 		}
 
+		// Menu Edit:
+		wxMenu * editMenu = new wxMenu;
+		item = new wxMenuItem(editMenu, ID_SCHEMATIC_UNDO,
+			_("&Undo\tCTRL+Z"),
+			_("Undo last edition") );
+	    item->SetBitmap(undo_xpm);
+		editMenu->Append(item);
+/*		if ( GetScreen()->m_UndoList )
+			editMenu->Enable(ID_SCHEMATIC_UNDO,TRUE);
+		else
+			editMenu->Enable(ID_SCHEMATIC_UNDO,FALSE);
+*/
+		item = new wxMenuItem(editMenu, ID_SCHEMATIC_REDO,
+			_("&Redo\tCTRL+Y"),
+			_("Redo the last undo command") );
+	    item->SetBitmap(redo_xpm);
+		editMenu->Append(item);
+
 		// Menu Configuration:
 		wxMenu * configmenu = new wxMenu;
 		item = new wxMenuItem(configmenu, ID_CONFIG_REQ,
@@ -170,6 +188,7 @@ wxMenuBar * menuBar = GetMenuBar();
 
 
 		menuBar->Append(m_FilesMenu, _("&File") );
+		menuBar->Append(editMenu, _("&Edit") );
 		menuBar->Append(configmenu, _("&Preferences") );
 		menuBar->Append(helpMenu, _("&Help") );
 
