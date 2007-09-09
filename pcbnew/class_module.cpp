@@ -369,7 +369,7 @@ int MODULE::WriteDescr( FILE* File )
 
     /* Generation des coord et caracteristiques */
     memset( StringStat, 0, sizeof(StringStat) );
-    if( m_ModuleStatus & MODULE_is_LOCKED )
+    if( IsLocked() )
         StringStat[0] = 'F';
     else
         StringStat[0] = '~';
@@ -670,7 +670,7 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
 
             m_ModuleStatus = 0;
             if( BufCar1[0] == 'F' )
-                m_ModuleStatus |= MODULE_is_LOCKED;
+                SetLocked(true);
             if( BufCar1[1] == 'P' )
                 m_ModuleStatus |= MODULE_is_PLACED;
             break;
@@ -1128,7 +1128,7 @@ void MODULE::Display_Infos( WinEDA_DrawFrame* frame )
 
     pos += 4;
     msg  = wxT( ".." );
-    if( m_ModuleStatus & MODULE_is_LOCKED )
+    if( IsLocked() )
         msg[0] = 'F';
     if( m_ModuleStatus & MODULE_is_PLACED )
         msg[1] = 'P';
@@ -1168,6 +1168,14 @@ bool MODULE::HitTest( const wxPoint& refPos )
 
     /* la souris est-elle dans ce rectangle : */
     if( m_BoundaryBox.Inside( spot_cX, spot_cY ) )
+        return true;
+
+    // The GENERAL_COLLECTOR needs these two tests in order to find a MODULE
+    // when the user clicks on its text.  Keep these 2, needed in OnRightClick().
+    if( m_Reference->HitTest( refPos ) )
+        return true;
+    
+    if( m_Value->HitTest( refPos ) )
         return true;
     
     return false;
@@ -1256,7 +1264,7 @@ void MODULE::Show( int nestLevel, std::ostream& os )
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
         " ref=\"" << m_Reference->m_Text.mb_str() << '"' << 
         " value=\"" << m_Value->m_Text.mb_str()     << '"' <<
-        " layer=\"" << ReturnPcbLayerName(m_Layer,true,false).mb_str() << '"' <<
+        " layer=\"" << ReturnPcbLayerName(m_Layer,true).mb_str() << '"' <<
         ">\n";
 
     NestedSpace( nestLevel+1, os ) <<  
