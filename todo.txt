@@ -3,6 +3,10 @@ Here are some source code maintenance tasks that need to be done, and maybe some
 folks will see these items and volunteer to do them.
 
 
+*** figure out the TRACK::Copy() functions.  There are now two of them, and 
+I doubt the compiler will be calling the original.
+
+
 *** make the ADD_MENUITEM macros in include/macros.h be static inline functions instead
 of macros.  e.g. w/o argument types:
 static inline void ADD_MENUITEM(menu, id, text, icon)
