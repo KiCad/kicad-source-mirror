@@ -352,10 +352,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     DrawPanel->CursorOff( &dc );
     DrawPanel->PrepareGraphicContext( &dc );
     
-#if defined(DEBUG)
-    std::cout << "GetString=" << event.GetString().mb_str() << '\n';
-#endif
-
     wxGetMousePosition( &pos.x, &pos.y );
 
     pos.y += 20;
