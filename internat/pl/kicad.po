@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-09-02 19:46+0100\n"
+"PO-Revision-Date: 2007-09-09 10:40+0100\n"
 "Last-Translator: Mateusz Skowroński <skowri@gmail.com>\n"
 "Language-Team: Polish KiCAD Team - Mateusz Skowroński <skowri@gmail.com>, Krzysztof Kawa <elektrotrans@wp.pl>\n"
 "MIME-Version: 1.0\n"
@@ -54,22 +54,22 @@ msgid "Back View"
 msgstr "Widok z tyłu"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_canvas.cpp:363
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:77
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:78
 msgid "Move left <-"
 msgstr "Przesuń w lewo <-"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_canvas.cpp:368
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:80
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:81
 msgid "Move right ->"
 msgstr "Przesuń w prawo ->"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_canvas.cpp:373
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:83
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:84
 msgid "Move Up ^"
 msgstr "Przesuń w górę ^"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_canvas.cpp:378
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:86
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:87
 msgid "Move Down"
 msgstr "Przesuń w dół"
 
@@ -81,32 +81,32 @@ msgstr "Nazwa pliku obrazu 3D:"
 msgid "Reload board"
 msgstr "Przeładuj płytkę"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:38
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:39
 msgid "Copy 3D Image to Clipboard"
 msgstr "Kopiuj obraz 3D do schowka"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:43
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:44
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/tool_viewlib.cpp:70
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/gerbview/tool_gerber.cpp:260
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/cvpcb/displayframe.cpp:118
 msgid "zoom + (F1)"
 msgstr "Powiększ (F1)"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:46
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:47
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/tool_viewlib.cpp:74
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/gerbview/tool_gerber.cpp:266
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/cvpcb/displayframe.cpp:121
 msgid "zoom - (F2)"
 msgstr "Pomniejsz (F2)"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:49
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:50
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/tool_viewlib.cpp:78
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/gerbview/tool_gerber.cpp:272
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/cvpcb/displayframe.cpp:124
 msgid "redraw (F3)"
 msgstr "Odśwież (F3)"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:52
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:53
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/tool_sch.cpp:120
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/tool_lib.cpp:184
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/gerbview/tool_gerber.cpp:278
@@ -115,31 +115,31 @@ msgstr "Odśwież (F3)"
 msgid "auto zoom"
 msgstr "Dopasuj powiększenie"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:56
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:57
 msgid "Rotate X <-"
 msgstr "Obrót w osi X <-"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:59
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:60
 msgid "Rotate X ->"
 msgstr "Obrót w osi X ->"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:63
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:64
 msgid "Rotate Y <-"
 msgstr "Obrót w osi Y <-"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:66
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:67
 msgid "Rotate Y ->"
 msgstr "Obrót w osi Y ->"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:70
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:71
 msgid "Rotate Z <-"
 msgstr "Obrót w osi Z <-"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:73
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:74
 msgid "Rotate Z ->"
 msgstr "Obrót w osi Z ->"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:107
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:111
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/menubar.cpp:172
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/gerbview/tool_gerber.cpp:144
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/cvpcb/tool_cvpcb.cpp:167
@@ -147,20 +147,20 @@ msgstr "Obrót w osi Z ->"
 msgid "&File"
 msgstr "&Plik"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:109
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:113
 msgid "Create Image (png format)"
 msgstr "Zapisz obraz w formacie PNG"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:110
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:114
 msgid "Create Image (jpeg format)"
 msgstr "Zapisz obraz w formacie JPEG"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:112
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:116
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/genliste.cpp:149
 msgid "&Exit"
 msgstr "&Zakończ"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:115
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:119
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/menubar.cpp:173
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/gerbview/tool_gerber.cpp:145
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/cvpcb/tool_cvpcb.cpp:168
@@ -169,7 +169,7 @@ msgstr "&Zakończ"
 msgid "&Preferences"
 msgstr "&Ustawienia"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:118
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/3d-viewer/3d_toolbar.cpp:122
 msgid "Choose background color"
 msgstr "Wybierz kolor tła"
 
@@ -256,7 +256,7 @@ msgstr "Informacje:"
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/confirm.cpp:109
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/schframe.cpp:187
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/cvpcb/cvframe.cpp:169
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:271
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:260
 msgid "Confirmation"
 msgstr "Potwierdzenie"
 
@@ -281,7 +281,7 @@ msgstr "Nie znaleziono domyślnego edytora, musisz go wybrać"
 msgid "Prefered Editor:"
 msgstr "Preferowany edytor:"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/hotkeys_basic.cpp:262
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/hotkeys_basic.cpp:297
 msgid ""
 "Current hotkey list:\n"
 "\n"
@@ -289,16 +289,16 @@ msgstr ""
 "Lista bieżących klawiszy skrótu:\n"
 "\n"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/hotkeys_basic.cpp:267
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/hotkeys_basic.cpp:305
 msgid "key "
 msgstr "klawisz "
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/hotkeys_basic.cpp:322
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/hotkeys_basic.cpp:424
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/hotkeys_basic.cpp:362
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/hotkeys_basic.cpp:479
 msgid "Hotkey configuration file:"
 msgstr "Plik konfiguracji klawiszy skrótów:"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/hotkeys_basic.cpp:341
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/hotkeys_basic.cpp:381
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/plotps.cpp:389
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/plothpgl.cpp:560
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/gerbview/export_to_pcbnew.cpp:58
@@ -316,11 +316,11 @@ msgstr "Plik konfiguracji klawiszy skrótów:"
 msgid "Unable to create "
 msgstr "Nie mogę utworzyć "
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/hotkeys_basic.cpp:354
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/hotkeys_basic.cpp:394
 msgid "Allowed keys:\n"
 msgstr "Dozwolone klawisze:\n"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/hotkeys_basic.cpp:443
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/hotkeys_basic.cpp:498
 msgid "Unable to read "
 msgstr "Nie mogę odczytać "
 
@@ -481,7 +481,7 @@ msgstr " nie znaleziono"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/eda_doc.cpp:191
 msgid " Cannot find the PDF viewer (xpdf, gpdf or konqueror) in /usr/bin/"
-msgstr "Nie mogę znaleźć przeglądarki PDF (xpdf, gpdf lub konqueror) w katalogu /usr/bin"
+msgstr "Nie mogę znaleźć przeglądarki PDF (xpdf, gpdf lub konqueror) w katalogu /usr/bin/"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/eda_doc.cpp:199
 #, c-format
@@ -536,56 +536,56 @@ msgstr "Ok"
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/modedit_onclick.cpp:233
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/cotation.cpp:115
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbpiste.cpp:87
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:164
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:182
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:160
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:178
 msgid "Cancel"
 msgstr "Anuluj"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:455
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:456
 msgid "Default"
 msgstr "Domyślny"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:465
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:466
 msgid "French"
 msgstr "Francuski"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:470
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:471
 msgid "Spanish"
 msgstr "Hiszpański"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:475
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:476
 msgid "Portuguese"
 msgstr "Portugalski"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:481
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:482
 msgid "Italian"
 msgstr "Włoski"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:486
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:487
 msgid "German"
 msgstr "Niemiecki"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:491
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:492
 msgid "Slovenian"
 msgstr "Słoweński"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:496
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:497
 msgid "Hungarian"
 msgstr "Węgierski"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:501
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:502
 msgid "Polish"
 msgstr "Polski"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:506
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:507
 msgid "Russian"
 msgstr "Rosyjski"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:511
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:512
 msgid "Korean"
 msgstr "Koreański"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:577
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/common/edaappl.cpp:578
 msgid "Language"
 msgstr "Język"
 
@@ -740,11 +740,11 @@ msgstr "Ustawienia strony (rozmiar, teksty)"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/tool_sch.cpp:69
 msgid "go to library editor"
-msgstr "Przejdź do edytora biblioteki"
+msgstr "Przejdź do edytora bibliotek"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/tool_sch.cpp:72
 msgid "go to library browse"
-msgstr "Przejdź do przeglądarki biblioteki"
+msgstr "Przejdź do przeglądarki bibliotek"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/tool_sch.cpp:76
 msgid "Schematic Hierarchy Navigator"
@@ -864,7 +864,7 @@ msgstr "Dodaj wejście magistrali do magistrali"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/tool_sch.cpp:195
 msgid "Add no connect flag"
-msgstr "Ustaw flagę \"Nie podłączone\""
+msgstr "Dodaj flagę \"Nie połączone\""
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/tool_sch.cpp:199
 msgid "Add wire or bus label"
@@ -949,27 +949,27 @@ msgstr "Pokaż ukryte piny"
 msgid "HV orientation for Wires and Bus"
 msgstr "Orientacja dla połączeń i magistral"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/eeconfig.cpp:60
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/eeconfig.cpp:58
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/cvpcb/menucfg.cpp:170
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbcfg.cpp:69
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbcfg.cpp:67
 msgid "Read config file"
 msgstr "Wczytaj plik konfiguracji"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/eeconfig.cpp:72
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/eeconfig.cpp:70
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/gerbview/readgerb.cpp:141
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/gerbview/dcode.cpp:260
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/kicad/files-io.cpp:124
 msgid "File "
 msgstr "Plik"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/eeconfig.cpp:72
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/eeconfig.cpp:70
 msgid "not found"
 msgstr "nie znaleziono"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/eeconfig.cpp:182
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/eeconfig.cpp:172
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/gerbview/cfg.cpp:99
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/cvpcb/cfg.cpp:71
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbcfg.cpp:185
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbcfg.cpp:175
 msgid "Save config file"
 msgstr "Zapisz plik konfiguracji"
 
@@ -1546,7 +1546,7 @@ msgstr "Piny hierarchii wg nazwy"
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/dialog_build_BOM.cpp:260
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/genliste.cpp:138
 msgid "Hierachy Pins by Sheets"
-msgstr "Piny hierarchii wg arkusza"
+msgstr "Piny hierarchii wg arkuszy"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/dialog_build_BOM.cpp:266
 msgid "Text for spreadsheet import"
@@ -2393,12 +2393,12 @@ msgid "Schematic modified, Save before exit ?"
 msgstr "Schemat zmodyfikowany, zapisać przed zakończeniem?"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/schframe.cpp:265
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:389
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:378
 msgid "Grid not show"
 msgstr "Wyłącz siatkę"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/schframe.cpp:265
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:389
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:378
 msgid "Show Grid"
 msgstr "Pokaż siatkę"
 
@@ -2488,7 +2488,7 @@ msgstr "Pliki netlist:"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/netlist_control.cpp:449
 msgid "Must be Annotated, Continue ?"
-msgstr "Musi mieć numerację, kontynować?"
+msgstr "Musi mieć numerację, kontynuować?"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/options.cpp:119
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/dialog_options.cpp:212
@@ -2500,7 +2500,7 @@ msgstr "Pokaż siatkę"
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/dialog_options.cpp:239
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/dialog_general_options.cpp:341
 msgid "Auto PAN"
-msgstr "Autodopasowanie powiększena"
+msgstr "Autodopasowanie powiększenia"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/options.cpp:130
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/dialog_options.cpp:217
@@ -3149,7 +3149,7 @@ msgstr "  Skonwertowana"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/pinedit.cpp:885
 msgid "  Normal"
-msgstr " Normalny"
+msgstr " Normalna"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/files-io.cpp:55
 msgid "Clear SubHierarchy ?"
@@ -3370,7 +3370,7 @@ msgstr "&Zatwierdź przesunięcie"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/plothpgl.cpp:539
 msgid "** Plot End **\n"
-msgstr "** Plot End **\n"
+msgstr "** Koniec Rysunku **\n"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/plothpgl.cpp:564
 msgid "Plot  "
@@ -3480,8 +3480,8 @@ msgstr "Nazwa pinu w środku"
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/libedpart.cpp:279
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/cvpcb/dialog_cvpcb_config.cpp:166
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/cvpcb/dialog_cvpcb_config.cpp:198
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:598
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:716
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:596
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:714
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:789
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/dialog_netlist.cpp:141
 msgid "Delete"
@@ -3525,7 +3525,7 @@ msgstr "Usuń części"
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/edit_component_in_lib.cpp:968
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/libedpart.cpp:1057
 msgid "Create pins for Convert items"
-msgstr "Utwórz piny dla skonwertowanych elementów"
+msgstr "Utwórz piny dla elementów skonwertowanych"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/fieldedi.cpp:1075
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/edit_component_in_lib.cpp:972
@@ -3569,7 +3569,7 @@ msgstr "Wypełnienie:"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/viewlib_frame.cpp:57
 msgid "Library browser"
-msgstr "Przeglądarka biblioteki"
+msgstr "Przeglądarka bibliotek"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/edit_component_in_schematic.cpp:194
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/edit_component_in_lib.cpp:477
@@ -3905,7 +3905,7 @@ msgstr "Rozmiar "
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/onrightclick.cpp:118
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/gerbview/onrightclick.cpp:42
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/modedit_onclick.cpp:205
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:169
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:165
 msgid "End Tool"
 msgstr "Wyłącz narzędzie"
 
@@ -4039,7 +4039,7 @@ msgstr "Rozmiar numeru pinu dla innych"
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/onrightclick.cpp:575
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/gerbview/onrightclick.cpp:51
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/modedit_onclick.cpp:215
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:486
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:484
 msgid "Cancel Block"
 msgstr "Anuluj blok"
 
@@ -4052,7 +4052,7 @@ msgstr "Powiększenie okna (środkowy przycisk + przeciąganie myszką)"
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/onrightclick.cpp:583
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/gerbview/onrightclick.cpp:54
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/modedit_onclick.cpp:220
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:491
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:489
 msgid "Place Block"
 msgstr "Umieść blok"
 
@@ -4063,7 +4063,7 @@ msgstr "Wybierz elementy"
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/libedit_onrightclick.cpp:265
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/onrightclick.cpp:592
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/modedit_onclick.cpp:222
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:493
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:491
 msgid "Copy Block (shift + drag mouse)"
 msgstr "Kopiuj blok (shift + przeciąganie myszką)"
 
@@ -4076,12 +4076,12 @@ msgstr "Odbij blok (ctrl + przeciąganie myszką)"
 msgid "Del. Block (shift+ctrl + drag mouse)"
 msgstr "Usuń blok (shift+ctrl + przeciąganie myszką)"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/hotkeys.cpp:184
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/hotkeys.cpp:217
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/schedit.cpp:337
 msgid "Add Component"
 msgstr "Dodaj element"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/hotkeys.cpp:206
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/hotkeys.cpp:239
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/schedit.cpp:289
 msgid "Add Wire"
 msgstr "Dodaj połączenie"
@@ -4100,12 +4100,12 @@ msgstr "Brak"
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/viewlibs.cpp:306
 #, c-format
 msgid "Current Part: <%s> (is Alias of <%s>)"
-msgstr "Bieżący element: <%s> (inaczej zwany <%s>)"
+msgstr "Bieżący element: <%s> (zwany inaczej <%s>)"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/viewlibs.cpp:312
 #, c-format
 msgid "Error: Root Part <%s> not found"
-msgstr "Błąd: Element główny <%s> nie znaleziony"
+msgstr "Błąd: Nie znaleziony element główny <%s>"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/viewlibs.cpp:331
 #, c-format
@@ -4122,7 +4122,7 @@ msgstr "Nawigacja w hierarchii"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/schedit.cpp:285
 msgid "Add NoConnect Flag"
-msgstr "Ustaw flagę \"Nie podłączony\""
+msgstr "Ustaw flagę \"Nie połączony\""
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/schedit.cpp:293
 msgid "Add Bus"
@@ -4211,7 +4211,7 @@ msgid "Diff values for %s%d%c (%s) and %s%d%c (%s)"
 msgstr "Różnica wartości dla %s%d%c (%s) i %s%d%c (%s)"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/component_class.cpp:51
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:643
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:641
 msgid "Footprint"
 msgstr "Obudowa"
 
@@ -4310,7 +4310,7 @@ msgid "Rotate +"
 msgstr "Obróć +"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/onrightclick.cpp:294
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:659
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:657
 msgid "Rotate -"
 msgstr "Obróć -"
 
@@ -4324,8 +4324,8 @@ msgstr "Zorientuj element"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/eeschema/onrightclick.cpp:306
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/modedit_onclick.cpp:315
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:663
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:712
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:661
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:710
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:785
 msgid "Edit"
 msgstr "Edytuj"
@@ -5142,7 +5142,7 @@ msgstr "Lista kodów wierceń"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/gerbview/onrightclick.cpp:52
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/modedit_onclick.cpp:217
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:488
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:486
 msgid "Zoom Block (Midd butt drag)"
 msgstr "Powiększenie bloku (środkowy przycisk + przeciąganie myszką)"
 
@@ -5268,7 +5268,7 @@ msgid "Retro ext:"
 msgstr "Plik retro:"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/cvpcb/menucfg.cpp:182
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbcfg.cpp:82
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbcfg.cpp:80
 #, c-format
 msgid "File %s not found"
 msgstr "Nie znaleziono pliku %s"
@@ -5291,7 +5291,7 @@ msgstr "%d odpowiedników"
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/cvpcb/autosel.cpp:163
 #, c-format
 msgid "Component %s: Footprint %s not found in libraries"
-msgstr "Element %s: Obudowa %s nie znaleziona w bibliotekach"
+msgstr "Element %s: Nie znaleziono obudowy %s w bibliotekach"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/cvpcb/dialog_cvpcb_config.cpp:131
 msgid "Read Cfg"
@@ -5826,7 +5826,7 @@ msgstr "Przesunąć moduły?"
 msgid "Autoplace modules: No boad edges detected, unable to place modules"
 msgstr "Automatyczne rozmieszczanie modułów: Nie wykryto krawędzi płytki, nie mogę rozmieścić modułów"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/automove.cpp:349
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/automove.cpp:344
 #, c-format
 msgid "Ok to set module orientation to %d degrees ?"
 msgstr "Czy ustawić orientację modułu na %d stopni?"
@@ -6184,7 +6184,7 @@ msgstr "Połącz"
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/netlist.cpp:96
 #, c-format
 msgid "Netlist file %s not found"
-msgstr "Plik netlisty %s nie znaleziony"
+msgstr "Nie znaleziono pliku netlisty %s"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/netlist.cpp:147
 msgid "Read Netlist "
@@ -6240,7 +6240,7 @@ msgstr "Brak w netliście:"
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/netlist.cpp:782
 #, c-format
 msgid "File <%s> not found, use Netlist for lib module selection"
-msgstr "Plik <%s> nie znaleziony, użyj netlisty do wybrania biblioteki modułu"
+msgstr "Nie znaleziono pliku <%s>, użyj netlisty do wybrania biblioteki modułu"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/netlist.cpp:868
 msgid "Netlist Selection:"
@@ -6249,7 +6249,7 @@ msgstr "Wybór netlisty:"
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/netlist.cpp:945
 #, c-format
 msgid "Component [%s]: footprint <%s> not found"
-msgstr "Element [%s]: obudowa %s nie znaleziona"
+msgstr "Element [%s]: nie znaleziono obudowy %s"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/class_edge_mod.cpp:283
 msgid "Seg"
@@ -6321,91 +6321,91 @@ msgstr "Liczba modułów"
 msgid "Incorrect value for Via drill. No via drill change"
 msgstr "Nieprawidłowa wartość dla otworu przelotki. Parametr nie został zmieniony."
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:270
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:259
 msgid "Board modified, Save before exit ?"
 msgstr "Płytka zmodyfikowana, zapisać przed zakończeniem?"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:371
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:360
 msgid "DRC Off (Disable !!!), Currently: DRC is active"
 msgstr "Wyłącz DRC, Aktualnie: DRC jest aktywne"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:372
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:361
 msgid "DRC On (Currently: DRC is inactive !!!)"
 msgstr "Włącz DRC, Aktualnie: DRC jest wyłączone"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:383
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:372
 msgid "Polar Coords not show"
 msgstr "Nie pokazuj współrzędnych polarnych"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:384
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:373
 msgid "Display Polar Coords"
 msgstr "Pokazuj współrzędne polarne"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:398
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:387
 msgid "General ratsnest not show"
 msgstr "Nie pokazuj głównych połączeń"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:398
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:387
 msgid "Show General ratsnest"
 msgstr "Pokaż główne połączenia"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:404
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:393
 msgid "Module ratsnest not show"
 msgstr "Nie pokazuj połączeń modułów"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:405
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:394
 msgid "Show Module ratsnest"
 msgstr "Pokaż połączenia modułów"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:412
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:401
 msgid "Disable Auto Delete old Track"
 msgstr "Wyłącz automatyczne usuwanie starych ścieżek"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:413
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:402
 msgid "Enable Auto Delete old Track"
 msgstr "Włącz automatyczne usuwanie starych ścieżek"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:420
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:409
 msgid "Do not Show Zones"
 msgstr "Nie pokazuj stref"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:420
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:409
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/set_color.cpp:387
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/tool_pcb.cpp:361
 msgid "Show Zones"
 msgstr "Pokaż strefy"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:426
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:415
 msgid "Show Pads Sketch mode"
 msgstr "Pokaż zarys pól lutowniczych"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:427
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:416
 msgid "Show pads filled mode"
 msgstr "Pokaż pola lutownicze jako wypełnione"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:433
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:422
 msgid "Show Tracks Sketch mode"
 msgstr "Pokaż zarys ścieżek"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:434
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:423
 msgid "Show Tracks filled mode"
 msgstr "Pokaż ścieżki jako wypełnione"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:440
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:429
 msgid "Normal Contrast Mode Display"
 msgstr "Wyświetlaj w trybie zwykłego kontrastu"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:441
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:430
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/tool_pcb.cpp:374
 msgid "Hight Contrast Mode Display"
 msgstr "Wyświetlaj w trybie wysokiego kontrastu"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:451
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:440
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/class_track.cpp:674
 msgid "Track"
 msgstr "Ścieżka"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:483
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/pcbframe.cpp:472
 msgid "Via"
 msgstr "Przelotka"
 
@@ -7159,7 +7159,7 @@ msgid "Footprint name:"
 msgstr "Nazwa obudowy:"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/modules.cpp:281
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:669
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:667
 msgid "Delete Module"
 msgstr "Usuń moduł"
 
@@ -7625,7 +7625,7 @@ msgstr "Powiększenie "
 msgid "User Grid"
 msgstr "Siatka użytkownika"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/tool_pcb.cpp:654
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/tool_pcb.cpp:676
 msgid "+/- to switch"
 msgstr "+/- aby zmienić"
 
@@ -7885,17 +7885,17 @@ msgid "Mirror Block (alt + drag mouse)"
 msgstr "Odbij blok (alt + przeciąganie myszką)"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/modedit_onclick.cpp:226
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:497
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:495
 msgid "Rotate Block (ctrl + drag mouse)"
 msgstr "Obróć blok (ctrl + przeciąganie myszką)"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/modedit_onclick.cpp:228
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:499
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:497
 msgid "Delete Block (shift+ctrl + drag mouse)"
 msgstr "Usuń blok (shift+ctrl + przeciąganie myszką)"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/modedit_onclick.cpp:250
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:710
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:708
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:783
 msgid "Rotate"
 msgstr "Obrót"
@@ -7925,17 +7925,17 @@ msgid "Move Pad"
 msgstr "Przesuń pole"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/modedit_onclick.cpp:272
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:741
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:739
 msgid "Edit Pad"
 msgstr "Edytuj pole"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/modedit_onclick.cpp:274
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:744
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:743
 msgid "New Pad Settings"
 msgstr "Nowe ustawienia pola lutowniczego"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/modedit_onclick.cpp:276
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:746
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:745
 msgid "Export Pad Settings"
 msgstr "Eksportuj ustawienia pola lutowniczego"
 
@@ -7944,7 +7944,7 @@ msgid "delete Pad"
 msgstr "Usuń pole"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/modedit_onclick.cpp:283
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:751
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:750
 msgid "Global Pad Settings"
 msgstr "Globalne ustawienia pól lutowniczych"
 
@@ -8008,7 +8008,7 @@ msgstr "Znajdź moduł %s %s"
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/controle.cpp:107
 #, c-format
 msgid "module %s not found"
-msgstr "moduł %s nie znaleziony"
+msgstr "nie znaleziono modułu %s"
 
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/controle.cpp:109
 #, c-format
@@ -8097,12 +8097,12 @@ msgstr "Moduły (%d elementów)"
 msgid "Cotation properties"
 msgstr "Właściwości linii wymiarowej"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/hotkeys.cpp:372
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/hotkeys.cpp:407
 #, c-format
 msgid "Footprint %s found, but locked"
 msgstr "Znaleziono obudowę %s, ale jest ona zablokowana"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/hotkeys.cpp:532
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/hotkeys.cpp:569
 msgid "Delete module?"
 msgstr "Usunąć moduł?"
 
@@ -8389,357 +8389,357 @@ msgstr "Przelotka %.1f"
 msgid "Via %.3f"
 msgstr "Przelotka %.3f"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:203
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:200
 msgid "Get and Move Footprint"
 msgstr "Uchwyć element i przesuń"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:219
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:216
 msgid "Lock Module"
 msgstr "Zablokuj moduł"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:221
-msgid "Free Module"
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:218
+msgid "Unlock Module"
 msgstr "Odblokuj moduł"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:225
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:222
 msgid "Auto place Module"
 msgstr "Automatyczne rozmieszczenie modułu"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:231
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:228
 msgid "Autoroute"
 msgstr "Autorouter"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:250
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:247
 msgid "Autoroute Pad"
 msgstr "Automatyczne rozmieszczenie pola lutowniczego"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:251
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:248
 msgid "Autoroute Net"
 msgstr "Automatyczne rozmieszczenie sieci"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:273
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:270
 msgid "Move Drawing"
 msgstr "Przesuń rysunek"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:278
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:275
 msgid "End Drawing"
 msgstr "Zakończ rysunek"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:280
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:277
 msgid "Edit Drawing"
 msgstr "Edytuj rysunek"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:281
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:278
 msgid "Delete Drawing"
 msgstr "Usuń rysunek"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:288
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:285
 msgid "End edge zone"
 msgstr "Zakończ krawędź strefy"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:291
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:288
 msgid "Delete edge zone"
 msgstr "Usuń krawędź strefy"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:307
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:304
 msgid "Edit Zone"
 msgstr "Edytuj strefę"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:309
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:306
 msgid "Delete Zone"
 msgstr "Usuń strefę"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:314
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:311
 msgid "Delete Marker"
 msgstr "Usuń znacznik"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:321
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:318
 msgid "Edit Cotation"
 msgstr "Edytuj linię wymiarową"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:324
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:321
 msgid "Delete Cotation"
 msgstr "Usuń linię wymarową"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:331
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:328
 msgid "Move Mire"
 msgstr "Przesuń otwór montażowy"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:334
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:331
 msgid "Edit Mire"
 msgstr "Edytuj otwór montażowy"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:336
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:333
 msgid "Delete Mire"
 msgstr "Usuń otwór montażowy"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:367
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:364
 msgid "Fill zone"
 msgstr "Wypełnij strefę"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:375
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:372
 msgid "Select Net"
 msgstr "Wybierz sieć"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:380
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:377
 msgid "Delete Zone Limit"
 msgstr "Usuń ograniczenie sterfy"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:385
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:396
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:409
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:469
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:382
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:393
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:406
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:467
 msgid "Select Working Layer"
 msgstr "Wybierz warstwę roboczą"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:394
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:466
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:391
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:464
 msgid "Select Track Width"
 msgstr "Wybierz szerokość ścieżki"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:398
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:395
 msgid "Select layer pair for vias"
 msgstr "Wybierz parę warstw dla przelotek"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:415
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:412
 msgid "Footprint documentation"
 msgstr "Dokumentacja obudowy"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:425
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:422
 msgid "Glob Move and Place"
 msgstr "Globalne przesuwanie i umieszczanie"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:427
-msgid "Free All Modules"
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:424
+msgid "Unlock All Modules"
 msgstr "Odblokuj wszystkie moduły"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:429
-msgid "Fixe All Modules"
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:426
+msgid "Lock All Modules"
 msgstr "Zablokuj wszystkie moduły"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:432
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:429
 msgid "Move All Modules"
 msgstr "Przesuń wszystkie moduły"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:433
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:430
 msgid "Move New Modules"
 msgstr "Przesuń nowe moduły"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:435
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:432
 msgid "Autoplace All Modules"
 msgstr "Automatyczne rozmieszczenie wszystkich modułów"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:436
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:433
 msgid "Autoplace New Modules"
 msgstr "Automatyczne rozmieszczenie nowych modułów"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:437
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:434
 msgid "Autoplace Next Module"
 msgstr "Automatyczne rozmieszczenie następnego modułu"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:440
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:437
 msgid "Orient All Modules"
 msgstr "Zorientuj wszystkie moduły"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:446
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:444
 msgid "Global Autoroute"
 msgstr "Globalne autoroutowanie"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:448
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:446
 msgid "Select layer pair"
 msgstr "Wybierz parę warstw"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:450
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:448
 msgid "Autoroute All Modules"
 msgstr "Autoroutowanie wszystkich modułów"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:452
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:450
 msgid "Reset Unrouted"
 msgstr "Resetuj niepołączone"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:457
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:455
 msgid "Global AutoRouter"
 msgstr "Globalny autorouter"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:459
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:457
 msgid "Read Global AutoRouter Data"
 msgstr "Wczytaj globalne dane autoroutera"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:495
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:493
 msgid "Flip Block (alt + drag mouse)"
 msgstr "Odbij blok (alt + przeciąganie myszką)"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:517
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:515
 msgid "Drag Via"
 msgstr "Przeciągnij przelotkę"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:520
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:518
 msgid "Edit Via"
 msgstr "Edytuj przelotkę"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:522
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:520
 msgid "Set via hole to Default"
 msgstr "Ustaw otwór przelotki na wartość domyślną"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:524
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:522
 msgid "Set via hole to alt value"
 msgstr "Ustaw otwór przelotki na wartość alternatywną"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:526
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:524
 msgid "Set the via hole alt value"
 msgstr "Ustaw wartość alternatywną otworu przelotki"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:528
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:526
 msgid "Export Via hole to alt value"
 msgstr "Eksportuj otwór przelotki do wartości alternatywnej"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:530
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:528
 msgid "Export via hole to others id vias"
 msgstr "Eksportuj otwór przelotki do innych identycznych przelotek"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:532
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:530
 msgid "Set ALL via holes to default"
 msgstr "Ustaw WSZYSTKIE otwory przelotek na wartość domyślną"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:545
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:543
 msgid "Move Node"
 msgstr "Przesuń węzeł"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:550
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:548
 msgid "Drag Segments, keep slope"
 msgstr "Przeciąganie segmentów, utrzymuj nachylenie"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:552
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:550
 msgid "Drag Segment"
 msgstr "Przeciągnij segment"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:555
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:553
 msgid "Move Segment"
 msgstr "Przesuń segment"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:558
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:556
 msgid "Break Track"
 msgstr "Przerwij ścieżkę"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:565
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:563
 msgid "Place Node"
 msgstr "Umieść węzeł"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:571
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:569
 msgid "End Track (end)"
 msgstr "Zakończ ścieżkę (end)"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:572
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:570
 msgid "Place Via (V)"
 msgstr "Umieść przelotkę (V)"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:578
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:576
 msgid "Change Width"
 msgstr "Zmień szerokość"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:580
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:578
 msgid "Edit Segment"
 msgstr "Edytuj segment"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:584
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:582
 msgid "Edit Track"
 msgstr "Edytuj ścieżkę"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:586
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:584
 msgid "Edit Net"
 msgstr "Edytuj sieć"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:588
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:586
 msgid "Edit ALL Tracks and Vias"
 msgstr "Edytuj wszystkie ścieżki i przelotki"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:590
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:588
 msgid "Edit ALL Vias (no track)"
 msgstr "Edytuj wszystkie przelotki (bez ścieżek)"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:592
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:590
 msgid "Edit ALL Tracks (no via)"
 msgstr "Edytuj wszystkie ścieżki (bez przelotek)"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:600
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:598
 msgid "Delete Segment (backspace)"
 msgstr "Usuń segment (backspace)"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:604
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:602
 msgid "Delete Track (delete)"
 msgstr "Usuń ścieżkę (delete)"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:606
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:604
 msgid "Delete Net"
 msgstr "Usuń sieć"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:611
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:609
 msgid "Set Flags"
 msgstr "Ustaw flagi"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:612
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:610
 msgid "Locked: Yes"
 msgstr "Zablokowany: Tak"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:613
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:611
 msgid "Locked: No"
 msgstr "Zablokowany: Nie"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:623
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:621
 msgid "Track Locked: Yes"
 msgstr "Zablokowana ścieżka: Tak"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:624
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:622
 msgid "Track Locked: No"
 msgstr "Zablokowana ścieżka: Nie"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:626
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:624
 msgid "Net Locked: Yes"
 msgstr "Zablokowana sieć: Tak"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:627
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:625
 msgid "Net Locked: No"
 msgstr "Zablokowana sieć: Nie"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:652
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:650
 msgid "Move (M)"
 msgstr "Przesuń (M)"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:654
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:652
 msgid "Drag (G)"
 msgstr "Przeciągnij (G)"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:657
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:655
 msgid "Rotate  + (R)"
 msgstr "Obróć  + (R)"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:661
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:659
 msgid "Flip (S)"
 msgstr "Odbij (S)"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:688
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:686
 msgid "Footprint ref"
 msgstr "Oznaczenie obudowy"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:692
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:690
 msgid "Footprint value"
 msgstr "Wartość obudowy"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:696
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:694
 msgid "Footprint text"
 msgstr "Tekst obudowy"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:707
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:737
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:705
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:735
 #: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:780
 msgid "Move"
 msgstr "Przesuń"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:729
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:727
 msgid "Pad"
 msgstr "Pole lutownicze"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:739
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/onrightclick.cpp:737
 msgid "Drag"
 msgstr "Przeciągnij"
 
@@ -9133,11 +9133,11 @@ msgstr "Punkt zerowy = środek"
 msgid "Draw origin ( 0,0 ) in sheet center"
 msgstr "Punkt zerowy rysowania (0,0) na środku arkusza"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/basepcbframe.cpp:94
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/basepcbframe.cpp:113
 msgid "3D Frame already opened"
 msgstr "Ramka 3D już otwarta"
 
-#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/basepcbframe.cpp:97
+#: /home/f3nix/devel/kicad/kicad-sf.net/kicad/trunk/kicad/pcbnew/basepcbframe.cpp:116
 msgid "3D Viewer"
 msgstr "Podgląd 3D"
 
