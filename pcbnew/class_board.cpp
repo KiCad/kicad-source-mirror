@@ -601,7 +601,7 @@ void BOARD::Show( int nestLevel, std::ostream& os )
 }
 
 
-/* wrote this before discovering ReturnLayerName()
+/* wrote this before discovering ReturnPcbLayerName()
 const char* BOARD::ShowLayer( int aLayer )
 {
     const char* rs;
