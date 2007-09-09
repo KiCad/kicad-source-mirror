@@ -4,6 +4,16 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+
+2007-Sep-8 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ pcbnew
+  * Made good progress in onrightclick.cpp for multiple items under the mouse.
+  * Fixed some macros in macros.h so they can be followed with a semicolon and
+    used like simple expressions.
+    All changes not yet committed.
+    
+
 2007-sept-6 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + eeschema & pcbnew
