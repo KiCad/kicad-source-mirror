@@ -252,7 +252,7 @@ public:
 
     /**
      * Function IterateForward
-     * walks through the object tree calling the testFunc on each object 
+     * walks through the object tree calling the inspector() on each object 
      * type requested in scanTypes.
      *
      * @param listStart The first in a list of EDA_BaseStructs to iterate over. 
