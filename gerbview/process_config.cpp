@@ -11,12 +11,18 @@
 #include "pcbplot.h"
 #include "cfg.h"
 #include "id.h"
+#include "hotkeys_basic.h"
+#include "hotkeys.h"
 
 #include "protos.h"
 
-/* Routines Locales */
+/* Local functions */
+static bool Read_Hotkey_Config( WinEDA_DrawFrame * frame, bool verbose );
 
 /* Variables locales */
+
+#define HOTKEY_FILENAME wxT("gerbview")
+
 
 /*************************************************************/
 void WinEDA_GerberFrame::Process_Config(wxCommandEvent& event)
@@ -24,6 +30,7 @@ void WinEDA_GerberFrame::Process_Config(wxCommandEvent& event)
 {
 int id = event.GetId();
 wxPoint pos;
+wxString FullFileName;
 
 	pos = GetPosition();
 	pos.x += 20; pos.y += 20;
@@ -48,6 +55,17 @@ wxPoint pos;
 
 		case ID_CONFIG_SAVE:
 			Update_config();
+			break;
+
+		case ID_PREFERENCES_CREATE_CONFIG_HOTKEYS:
+			FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
+			FullFileName += HOTKEY_FILENAME;
+			FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
+			WriteHotkeyConfigFile(FullFileName, s_Gerbview_Hokeys_Descr, true);
+			break;
+
+		case ID_PREFERENCES_READ_CONFIG_HOTKEYS:
+			Read_Hotkey_Config( this, true);
 			break;
 
 		default:
@@ -110,4 +128,19 @@ wxString mask( wxT("*") ),
 	/* ecriture de la configuration */
 	EDA_Appl->WriteProjectConfig(FullFileName, GROUP, ParamCfgList);
 }
+
+
+/***************************************************************/
+bool Read_Hotkey_Config( WinEDA_DrawFrame * frame, bool verbose )
+/***************************************************************/
+/*
+ * Read the hotkey files config for pcbnew and module_edit
+*/
+{
+	wxString FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
+	FullFileName += HOTKEY_FILENAME;
+	FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
+	return frame->ReadHotkeyConfigFile(FullFileName, s_Gerbview_Hokeys_Descr, verbose);
+}
+
 

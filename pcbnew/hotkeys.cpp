@@ -59,11 +59,11 @@ static Ki_HotkeyInfo    HkSwitch2InnerLayer6( wxT(
                                               HK_SWITCH_LAYER_TO_INNER6, WXK_F10 );
 
 static Ki_HotkeyInfo    HkSwitch2NextCopperLayer( wxT(
-                                                  "Switch to Next Layer" ),
-                                              HK_SWITCH_LAYER_TO_NEXT, '+' );
+                                                      "Switch to Next Layer" ),
+                                                  HK_SWITCH_LAYER_TO_NEXT, '+' );
 static Ki_HotkeyInfo    HkSwitch2PreviousCopperLayer( wxT(
-                                                  "Switch to Previous Layer" ),
-                                              HK_SWITCH_LAYER_TO_PREVIOUS, '-');
+                                                          "Switch to Previous Layer" ),
+                                                      HK_SWITCH_LAYER_TO_PREVIOUS, '-' );
 
 static Ki_HotkeyInfo    HkSavefile( wxT( "Save board" ), HK_SAVE_BOARD, 'S' + GR_KB_CTRL );
 static Ki_HotkeyInfo    HkLoadfile( wxT( "Load board" ), HK_LOAD_BOARD, 'L' + GR_KB_CTRL );
@@ -90,23 +90,23 @@ static Ki_HotkeyInfo    HkTrackDisplayMode( wxT(
                                                 "Track Display Mode" ),
                                             HK_SWITCH_TRACK_DISPLAY_MODE, 'F' );
 
-// List of common hotkey descriptors 
+// List of common hotkey descriptors
 Ki_HotkeyInfo* s_Common_Hotkey_List[] = {
     &HkHelp,
-    &HkZoomIn,                &HkZoomOut,         &HkZoomRedraw, &HkZoomCenter,
-    &HkSwitchUnits,           &HkResetLocalCoord,
+    &HkZoomIn,      &HkZoomOut,         &HkZoomRedraw, &HkZoomCenter,
+    &HkSwitchUnits, &HkResetLocalCoord,
     NULL
 };
 
 // List of hotkey descriptors for pcbnew
 Ki_HotkeyInfo* s_board_edit_Hotkey_List[] = {
     &HkTrackDisplayMode,
-    &HkDelete,                &HkBackspace,
-    &HkAddVia,                &HkEndTrack,
-    &HkMoveFootprint,         &HkFlipFootprint,
-    &HkRotateFootprint,       &HkDragFootprint,
+    &HkDelete,                     &HkBackspace,
+    &HkAddVia,                     &HkEndTrack,
+    &HkMoveFootprint,              &HkFlipFootprint,
+    &HkRotateFootprint,            &HkDragFootprint,
     &HkLock_Unlock_Footprint,
-    &HkSavefile,              &HkLoadfile,      &HkFindItem,
+    &HkSavefile,                   &HkLoadfile,      &HkFindItem,
     &HkSwitch2CopperLayer,
     &HkSwitch2InnerLayer1,
     &HkSwitch2InnerLayer2,
@@ -115,8 +115,8 @@ Ki_HotkeyInfo* s_board_edit_Hotkey_List[] = {
     &HkSwitch2InnerLayer5,
     &HkSwitch2InnerLayer6,
     &HkSwitch2ComponentLayer,
-	&HkSwitch2NextCopperLayer,
-	&HkSwitch2PreviousCopperLayer,
+    &HkSwitch2NextCopperLayer,
+    &HkSwitch2PreviousCopperLayer,
     NULL
 };
 
@@ -127,27 +127,29 @@ Ki_HotkeyInfo* s_module_edit_Hotkey_List[] = {
 
 
 // list of sections and corresponding hotkey list for pcbnew (used to create an hotkey config file)
-struct Ki_HotkeyInfoSectionDescriptor s_Pcbnew_Editor_Hokeys_Descr[] = {
-	{ &g_CommonSectionTag, s_Common_Hotkey_List, "Common keys"},
-	{ &g_BoardEditorSectionTag, s_board_edit_Hotkey_List, "Board editor keys"},
-	{ &g_ModuleEditSectionTag, s_module_edit_Hotkey_List, "Footprint editor keys"},
-    { NULL, NULL, NULL }
+struct Ki_HotkeyInfoSectionDescriptor s_Pcbnew_Editor_Hokeys_Descr[] =
+{
+    { &g_CommonSectionTag,      s_Common_Hotkey_List,      "Common keys"           },
+    { &g_BoardEditorSectionTag, s_board_edit_Hotkey_List,  "Board editor keys"     },
+    { &g_ModuleEditSectionTag,  s_module_edit_Hotkey_List, "Footprint editor keys" },
+    { NULL,                     NULL, NULL}
 };
 
 // list of sections and corresponding hotkey list for the board editor (used to list current hotkeys)
-struct Ki_HotkeyInfoSectionDescriptor s_Board_Editor_Hokeys_Descr[] = {
-	{ &g_CommonSectionTag, s_Common_Hotkey_List, NULL},
-	{ &g_BoardEditorSectionTag, s_board_edit_Hotkey_List, NULL},
-	{ NULL, NULL, NULL }
+struct Ki_HotkeyInfoSectionDescriptor s_Board_Editor_Hokeys_Descr[] =
+{
+    { &g_CommonSectionTag,      s_Common_Hotkey_List,     NULL },
+    { &g_BoardEditorSectionTag, s_board_edit_Hotkey_List, NULL },
+    { NULL,                     NULL,                     NULL }
 };
 
 // list of sections and corresponding hotkey list for the footprint editor (used to list current hotkeys)
-struct Ki_HotkeyInfoSectionDescriptor s_Module_Editor_Hokeys_Descr[] = {
-	{ &g_CommonSectionTag, s_Common_Hotkey_List, NULL},
-	{ &g_ModuleEditSectionTag, s_module_edit_Hotkey_List, NULL},
-	{ NULL, NULL, NULL }
+struct Ki_HotkeyInfoSectionDescriptor s_Module_Editor_Hokeys_Descr[] =
+{
+    { &g_CommonSectionTag,     s_Common_Hotkey_List,      NULL },
+    { &g_ModuleEditSectionTag, s_module_edit_Hotkey_List, NULL },
+    { NULL,                    NULL,                      NULL }
 };
-
 
 
 /***********************************************************/
@@ -182,8 +184,8 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         hotkey += 'A' - 'a';
 
     int CommandCode = GetCommandCodeFromHotkey( hotkey, s_Common_Hotkey_List );
-    if ( CommandCode == HK_NOT_FOUND )
-		CommandCode = GetCommandCodeFromHotkey( hotkey, s_board_edit_Hotkey_List );
+    if( CommandCode == HK_NOT_FOUND )
+        CommandCode = GetCommandCodeFromHotkey( hotkey, s_board_edit_Hotkey_List );
     int ll;
 
     switch( CommandCode )
@@ -481,8 +483,8 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* DC, int hotkey,
         hotkey += 'A' - 'a';
 
     int CommandCode = GetCommandCodeFromHotkey( hotkey, s_Common_Hotkey_List );
-    if ( CommandCode == HK_NOT_FOUND )
-		CommandCode = GetCommandCodeFromHotkey( hotkey, s_module_edit_Hotkey_List );
+    if( CommandCode == HK_NOT_FOUND )
+        CommandCode = GetCommandCodeFromHotkey( hotkey, s_module_edit_Hotkey_List );
 
     switch( CommandCode )
     {

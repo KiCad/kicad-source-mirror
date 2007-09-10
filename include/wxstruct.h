@@ -782,6 +782,7 @@ public:
     void            OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
     int             BestZoom(); // Retourne le meilleur zoom
     void            OnSelectOptionToolbar( wxCommandEvent& event );
+    void            OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
 
     EDA_BaseStruct* GerberGeneralLocateAndDisplay();
     EDA_BaseStruct* Locate( int typeloc );
@@ -941,7 +942,7 @@ public:
 /* class WinEDA_SchematicFrame */
 /*******************************/
 
-/* enum utilis� dans RotationMiroir() */
+/* enum used in RotationMiroir() */
 enum fl_rot_cmp {
     CMP_NORMAL,                         // orientation normale (O, pas de miroir)
     CMP_ROTATE_CLOCKWISE,               // nouvelle rotation de -90
@@ -981,6 +982,7 @@ public:
     void                    ReCreateOptToolbar();
     void                    ReCreateMenuBar();
     void                    SetToolbars();
+    void                    OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
 
     SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) m_CurrentScreen; }
 
@@ -1123,7 +1125,7 @@ private:
 
 
 public:
-    void                    OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
+    void                    Key( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
 
     /* Gestion generale des operations sur block */
     int                     ReturnBlockCommand( int key );

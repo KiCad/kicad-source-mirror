@@ -39,6 +39,7 @@
 
 /* local variables */
 /* Hotkey list: */
+
 // Common commands
 static Ki_HotkeyInfo    HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4 );
 static Ki_HotkeyInfo    HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 );
@@ -67,7 +68,7 @@ static Ki_HotkeyInfo    HkDelete( wxT( "Delete Item" ), HK_DELETE, WXK_DELETE );
 static Ki_HotkeyInfo    HkNextSearch( wxT( "Next Search" ), HK_NEXT_SEARCH, WXK_F5 );
 
 // Library editor:
-static Ki_HotkeyInfo HkInsertPin( wxT( "Repeat Pin" ), HK_REPEAT_LAST, WXK_INSERT );
+static Ki_HotkeyInfo    HkInsertPin( wxT( "Repeat Pin" ), HK_REPEAT_LAST, WXK_INSERT );
 
 
 // List of common hotkey descriptors
@@ -97,25 +98,28 @@ Ki_HotkeyInfo* s_LibEdit_Hotkey_List[] =
 };
 
 // list of sections and corresponding hotkey list for eeschema (used to create an hotkey config file)
-struct Ki_HotkeyInfoSectionDescriptor s_Eeschema_Hokeys_Descr[] = {
-	{ &g_CommonSectionTag, s_Common_Hotkey_List, "Common keys" },
-	{ &g_SchematicSectionTag, s_Schematic_Hotkey_List, "Schematic editor keys"},
-	{ &g_LibEditSectionTag, s_LibEdit_Hotkey_List, "library editor keys"},
-	NULL, NULL
+struct Ki_HotkeyInfoSectionDescriptor s_Eeschema_Hokeys_Descr[] =
+{
+    { &g_CommonSectionTag,    s_Common_Hotkey_List,    "Common keys"           },
+    { &g_SchematicSectionTag, s_Schematic_Hotkey_List, "Schematic editor keys" },
+    { &g_LibEditSectionTag,   s_LibEdit_Hotkey_List,   "library editor keys"   },
+    { NULL,                   NULL }
 };
 
 // list of sections and corresponding hotkey list for the schematic editor (used to list current hotkeys)
-struct Ki_HotkeyInfoSectionDescriptor s_Schematic_Hokeys_Descr[] = {
-	{ &g_CommonSectionTag, s_Common_Hotkey_List, NULL},
-	{ &g_SchematicSectionTag, s_Schematic_Hotkey_List, NULL},
-	NULL, NULL
+struct Ki_HotkeyInfoSectionDescriptor s_Schematic_Hokeys_Descr[] =
+{
+    { &g_CommonSectionTag,    s_Common_Hotkey_List,    NULL },
+    { &g_SchematicSectionTag, s_Schematic_Hotkey_List, NULL },
+    { NULL,                   NULL,                    NULL }
 };
 
 // list of sections and corresponding hotkey list for the component editor (used to list current hotkeys)
-struct Ki_HotkeyInfoSectionDescriptor s_Libedit_Hokeys_Descr[] = {
-	{ &g_CommonSectionTag, s_Common_Hotkey_List, NULL},
-	{ &g_LibEditSectionTag, s_LibEdit_Hotkey_List, NULL},
-	NULL, NULL
+struct Ki_HotkeyInfoSectionDescriptor s_Libedit_Hokeys_Descr[] =
+{
+    { &g_CommonSectionTag,  s_Common_Hotkey_List,  NULL },
+    { &g_LibEditSectionTag, s_LibEdit_Hotkey_List, NULL },
+    { NULL,                 NULL,                  NULL }
 };
 
 /***********************************************************/
@@ -145,8 +149,8 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
 
     // Search command from key :
     int CommandCode = GetCommandCodeFromHotkey( hotkey, s_Common_Hotkey_List );
-    if ( CommandCode == HK_NOT_FOUND )
-		CommandCode = GetCommandCodeFromHotkey( hotkey, s_Schematic_Hotkey_List );
+    if( CommandCode == HK_NOT_FOUND )
+        CommandCode = GetCommandCodeFromHotkey( hotkey, s_Schematic_Hotkey_List );
 
     switch( CommandCode )
     {
@@ -367,8 +371,8 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
     if( (hotkey >= 'a') && (hotkey <= 'z') )
         hotkey += 'A' - 'a';
     int CommandCode = GetCommandCodeFromHotkey( hotkey, s_Common_Hotkey_List );
-    if ( CommandCode == HK_NOT_FOUND )
-		CommandCode = GetCommandCodeFromHotkey( hotkey, s_LibEdit_Hotkey_List );
+    if( CommandCode == HK_NOT_FOUND )
+        CommandCode = GetCommandCodeFromHotkey( hotkey, s_LibEdit_Hotkey_List );
 
     switch( CommandCode )
     {

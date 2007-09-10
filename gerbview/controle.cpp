@@ -67,37 +67,6 @@ int hotkey = 0;
 
 	switch(g_KeyPressed)
 		{
-		case WXK_NUMPAD_SUBTRACT :
-		case WXK_SUBTRACT :
-		case '-' :
-			if(GetScreen()->m_Active_Layer > 0)
-				GetScreen()->m_Active_Layer--;
-			break ;
-
-		case WXK_NUMPAD_ADD :
-		case WXK_ADD :
-		case '+' :
-			if(GetScreen()->m_Active_Layer < 31)
-				GetScreen()->m_Active_Layer ++;
-			break ;
-
-		case 'F' | GR_KB_CTRL :
-		case 'f' | GR_KB_CTRL :
-			DisplayOpt.DisplayPcbTrackFill ^= 1; DisplayOpt.DisplayPcbTrackFill &= 1 ;
-			GetScreen()->SetRefreshReq();
-			break ;
-
-		case ' ' : /* Mise a jour de l'origine des coord relatives */
-			GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
-			break ;
-
-
-		case 'U' | GR_KB_CTRL :
-		case 'u' | GR_KB_CTRL :
-			if (g_UnitMetric == INCHES ) g_UnitMetric = MILLIMETRE ;
-			else 	g_UnitMetric = INCHES ;
-			break ;
-
 		case EDA_PANNING_UP_KEY :
 			OnZoom(ID_ZOOM_PANNING_UP);
 			curpos = m_CurrentScreen->m_Curseur;
@@ -118,21 +87,17 @@ int hotkey = 0;
 			curpos = m_CurrentScreen->m_Curseur;
 			break;
 
-		case WXK_F1 :
+		case EDA_ZOOM_IN_FROM_MOUSE :
 			OnZoom(ID_ZOOM_PLUS_KEY);
 			curpos = GetScreen()->m_Curseur;
 			break;
 
-		case WXK_F2 :
+		case EDA_ZOOM_OUT_FROM_MOUSE :
 			OnZoom(ID_ZOOM_MOINS_KEY);
 			curpos = GetScreen()->m_Curseur;
 			break;
 
-		case WXK_F3 :
-			OnZoom(ID_ZOOM_REDRAW_KEY);
-			break;
-
-		case WXK_F4 :
+		case EDA_ZOOM_CENTER_FROM_MOUSE :
 			OnZoom(ID_ZOOM_CENTER_KEY);
 			curpos = GetScreen()->m_Curseur;
 			break;
@@ -186,13 +151,19 @@ int hotkey = 0;
 		}
 	}
 
-	SetToolbars();
-	Affiche_Status_Box();	 /* Affichage des coord curseur */
-
 	if ( hotkey )
 	{
 		OnHotKey(DC, hotkey, NULL);
 	}
+
+    if( GetScreen()->IsRefreshReq() )
+    {
+        RedrawActiveWindow( DC, TRUE );
+    }
+
+	SetToolbars();
+	Affiche_Status_Box();	 /* Affichage des coord curseur */
+
 }
 
 

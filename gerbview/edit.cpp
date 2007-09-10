@@ -216,7 +216,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_PCB_DELETE_ITEM_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, wxT( "Delete item" ) );
+        SetToolID( id, wxCURSOR_BULLSEYE, wxT( "Delete item" ) );
         break;
 
     case ID_POPUP_SCH_MOVE_ITEM_REQUEST:

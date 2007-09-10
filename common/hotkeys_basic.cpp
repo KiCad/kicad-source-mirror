@@ -427,7 +427,8 @@ int WinEDA_BasicFrame::WriteHotkeyConfigFile( const wxString&                   
             fprintf( cfgfile, DescList->m_Comment );
             fprintf( cfgfile, "\n" );
         }
-        fprintf( cfgfile, CONV_TO_UTF8( *DescList->m_SectionTag ) );
+		msg = *DescList->m_SectionTag;
+        fprintf( cfgfile, CONV_TO_UTF8( msg ) );
         fprintf( cfgfile, "\n" );
         List = DescList->m_HK_InfoList;
         for( ; *List != NULL; List++ )

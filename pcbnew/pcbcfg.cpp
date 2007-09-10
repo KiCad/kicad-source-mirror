@@ -21,6 +21,7 @@
 
 /* Variables locales */
 
+#define HOTKEY_FILENAME wxT("pcbnew")
 
 /***********************************************************/
 void WinEDA_PcbFrame::Process_Config(wxCommandEvent& event)
@@ -85,7 +86,7 @@ wxString FullFileName;
 
 		case ID_PREFERENCES_CREATE_CONFIG_HOTKEYS:
 			FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
-			FullFileName += wxT("pcbnew");
+			FullFileName += HOTKEY_FILENAME;
 			FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
 			WriteHotkeyConfigFile(FullFileName, s_Pcbnew_Editor_Hokeys_Descr, true);
 			break;
@@ -108,7 +109,7 @@ bool Read_Hotkey_Config( WinEDA_DrawFrame * frame, bool verbose )
 */
 {
 	wxString FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
-	FullFileName += wxT("pcbnew");
+	FullFileName += HOTKEY_FILENAME;
 	FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
 	return frame->ReadHotkeyConfigFile(FullFileName, s_Pcbnew_Editor_Hokeys_Descr, verbose);
 }

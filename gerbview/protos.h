@@ -11,10 +11,11 @@ int * InstallDialogLayerPairChoice(WinEDA_GerberFrame * parent);
 BOARD_ITEM* SaveItemEfface( BOARD_ITEM* PtItem, int nbitems );
 
 
-/***********/
-/* cfg.cpp */
-/***********/
+/***********************/
+/* gerbview_config.cpp */
+/***********************/
 bool Read_Config(void);
+bool Read_Hotkey_Config( WinEDA_DrawFrame * frame, bool verbose );
 
 
 /* pcbplot.cpp */

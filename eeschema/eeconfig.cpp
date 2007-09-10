@@ -18,6 +18,8 @@
 /* Variables locales */
 
 
+#define HOTKEY_FILENAME wxT("eeschema")
+
 /*********************************************************************/
 void WinEDA_SchematicFrame::Process_Config(wxCommandEvent& event)
 /*********************************************************************/
@@ -76,7 +78,7 @@ wxString FullFileName;
 
 		case ID_PREFERENCES_CREATE_CONFIG_HOTKEYS:
 			FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
-			FullFileName += wxT("eeschema");
+			FullFileName += HOTKEY_FILENAME;
 			FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
 			WriteHotkeyConfigFile(FullFileName, s_Eeschema_Hokeys_Descr, true);
 			break;
@@ -99,7 +101,7 @@ bool Read_Hotkey_Config( WinEDA_DrawFrame * frame, bool verbose )
 */
 {
 	wxString FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
-	FullFileName += wxT("eeschema");
+	FullFileName += HOTKEY_FILENAME;
 	FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
 	frame->ReadHotkeyConfigFile(FullFileName, s_Eeschema_Hokeys_Descr, verbose);
 

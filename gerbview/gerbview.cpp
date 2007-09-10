@@ -43,6 +43,10 @@ wxString FFileName;
 
 	g_DrawBgColor = BLACK;
 
+    Read_Hotkey_Config( m_PcbFrame, false );  /* Must be called before creating the main frame
+                                               *  in order to display the real hotkeys
+                                               *  in menus or tool tips */
+
 	m_GerberFrame = new WinEDA_GerberFrame(NULL, this, wxT("GerbView"),
 				 wxPoint(0,0), wxSize(600,400) );
 	wxString Title = g_Main_Title + wxT(" ") + GetBuildVersion();

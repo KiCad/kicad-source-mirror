@@ -21,7 +21,7 @@ OBJECTS= \
 		drawframe.o\
 		drawpanel.o\
 		set_color.o \
-		cfg.o \
+		gerbview_config.o \
 		cursors.o \
 		affiche.o \
 		tracepcb.o \
@@ -32,6 +32,7 @@ OBJECTS= \
 		options.o \
 		initpcb.o\
 		locate.o\
+		hotkeys.o\
 		deltrack.o\
 		pcbplot.o\
 		readgerb.o\
@@ -58,6 +59,8 @@ drawframe.o: ../share/drawframe.cpp
 	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 controle.o: controle.cpp $(COMMON)
+
+hotkeys.o: hotkeys.cpp hotkeys.h $(COMMON)
 
 set_color.o: set_color.cpp set_color.h $(COMMON)
 
@@ -94,7 +97,7 @@ class_track.o: ../pcbnew/class_track.cpp $(COMMON)
 
 $(TARGET).o: $(TARGET).cpp $(COMMON)
 
-cfg.o: cfg.cpp cfg.h $(COMMON)
+gerbview_config.o: gerbview_config.cpp gerbview_config.h $(COMMON)
 
 tracepcb.o: tracepcb.cpp $(COMMON)
 
