@@ -390,12 +390,18 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
     {
         next_track = track->Next();
         if( IsSegmentInBox( GetScreen()->BlockLocate, track ) )
-        {   /* la piste est ici bonne a etre deplacee */
+        {   
+            /* la piste est ici bonne a etre deplacee */
             m_Pcb->m_Status_Pcb = 0;
-            new_track = track->Copy( 1 );
+            new_track = track->Copy();
             new_track->Insert( m_Pcb, NULL );
-            new_track->m_Start.x += deltaX; new_track->m_Start.y += deltaY;
-            new_track->m_End.x   += deltaX; new_track->m_End.y += deltaY;
+            
+            new_track->m_Start.x += deltaX; 
+            new_track->m_Start.y += deltaY;
+            
+            new_track->m_End.x   += deltaX; 
+            new_track->m_End.y   += deltaY;
+            
             new_track->Draw( DrawPanel, DC, GR_OR ); // reaffichage
         }
         track = next_track;
@@ -407,12 +413,21 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
     {
         next_track = track->Next();
         if( IsSegmentInBox( GetScreen()->BlockLocate, track ) )
-        {  /* la piste est ici bonne a etre deplacee */
+        {  
+            /* la piste est ici bonne a etre deplacee */
+            // @todo: bug? memory leak at this point:
             new_track = new TRACK( m_Pcb );
-            new_track = track->Copy( 1 );
+            
+            new_track = track->Copy();
+            
             new_track->Insert( m_Pcb, NULL );
-            new_track->m_Start.x += deltaX; new_track->m_Start.y += deltaY;
-            new_track->m_End.x   += deltaX; new_track->m_End.y += deltaY;
+            
+            new_track->m_Start.x += deltaX; 
+            new_track->m_Start.y += deltaY;
+            
+            new_track->m_End.x   += deltaX; 
+            new_track->m_End.y   += deltaY;
+            
             new_track->Draw( DrawPanel, DC, GR_OR ); // reaffichage
         }
         track = next_track;
