@@ -5,6 +5,15 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2007-Sep-10 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ pcbnew
+  * Searched and did not see any usage of TRACK::Copy(int), where int was other 
+    than '1', so renamed it to TRACK::CopyList(int) and commented it out because
+    with int==1, this makes Copy(1) equivalent to the new Copy(void).
+  * Made TRACK::Copy() capable or copying SEGZONE too.  
+
+    
 2007-sept-10 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + gerbview
