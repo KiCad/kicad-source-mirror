@@ -1,5 +1,5 @@
 /* XPM */ 
-static const char * add_mires_xpm[] = {
+static char * add_mires_xpm[] = {
 "16 16 64 1",
 " 	c None",
 "!	c black",
