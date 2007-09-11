@@ -183,17 +183,19 @@ protected:
     /**
      * Determines which items are to be collected by Inspect()
      */
-    const COLLECTORS_GUIDE*    m_Guide;
+    const COLLECTORS_GUIDE*     m_Guide;
 
     
 public:
 
-    /// A scan list for all editable board items, like PcbGeneralLocateAndDisplay()
+    /**
+     * A scan list for all editable board items, like PcbGeneralLocateAndDisplay()
+     */
     static const KICAD_T AllBoardItems[];
 
 
     /** 
-     * A scan list for all primary board items, omitting items which are subsidiary to
+     * A scan list for all primary board items, omitting items which are subordinate to
      * a MODULE, such as D_PAD and TEXTEMODULE.
      */
     static const KICAD_T PrimaryItems[];
@@ -220,30 +222,11 @@ public:
 
     /**
      * Function SetGuide
-     * records which COLLECTORS_GUIDE to used.
+     * records which COLLECTORS_GUIDE to use.
      * @param aGuide Which guide to use in the collection.
      */
     void SetGuide( const COLLECTORS_GUIDE* aGuide ) { m_Guide = aGuide; }
     
-    
-    /**
-     * Function SetLayerMask
-     * takes a bit-mapped layer mask and records it.  During the scan/search,
-     * this is used as a secondary search criterion.  That is, if there is no direct 
-     * layer match with COLLECTOR::m_PreferredLayer (the primary criterion), 
-     * then an object on any layer given in this bit-map is recorded as a 
-     * second choice object if it also HitTest()s true.
-     *
-     * @param aLayerMask A layer mask which has bits in it indicating which
-     *  layers are acceptable.  Caller must pay attention to which layers are
-     *  visible, selected, etc.  All those concerns are handled outside this
-     *  class, as stated in the class Philosophy above.
-    void SetLayerMask( int aLayerMask )
-    {
-        m_LayerMask = aLayerMask;
-    }
-     */
-
     
     /**
      * Function operator[int]
@@ -276,22 +259,15 @@ public:
     /**
      * Function Collect
      * scans a BOARD using this class's Inspector method, which does the collection.
-     * @param board A BOARD to scan.
-     * @param refPos A wxPoint to use in hit-testing.
-     * @param aPreferredLayer The layer meeting the primary search criterion.
-     * @param aLayerMask The layers, in bit-mapped form, meeting the secondary search criterion.
-    void Collect( BOARD* board, const wxPoint& refPos, int aPreferredLayer, int aLayerMask );
-     */
-
-    
-    /**
-     * Function Collect
-     * scans a BOARD using this class's Inspector method, which does the collection.
-     * @param aItem A BOARD_ITEM to scan, may be a BOARD or MODULE, or whatever. 
+     * @param aItem A BOARD_ITEM to scan, may be a BOARD or MODULE, or whatever.
+     * @param aScanList A list of KICAD_Ts with a terminating EOT, that specs 
+     *  what is to be collected and the priority order of the resultant 
+     *  collection in "m_List".
      * @param aRefPos A wxPoint to use in hit-testing.
      * @param aGuide The COLLECTORS_GUIDE to use in collecting items.
      */
-    void Collect( BOARD_ITEM* aItem, const wxPoint& aRefPos, const COLLECTORS_GUIDE* aGuide ); 
+    void Collect( BOARD_ITEM* aItem, const KICAD_T aScanList[], 
+                 const wxPoint& aRefPos, const COLLECTORS_GUIDE& aGuide ); 
 };
 
 
