@@ -237,14 +237,16 @@ exit:
 
 
 // see collectors.h 
-void GENERAL_COLLECTOR::Collect( BOARD_ITEM* aItem, const wxPoint& aRefPos, 
-                            const COLLECTORS_GUIDE* aGuide )
+void GENERAL_COLLECTOR::Collect( BOARD_ITEM* aItem, const KICAD_T aScanList[],
+              const wxPoint& aRefPos, const COLLECTORS_GUIDE& aGuide )
 {
     Empty();        // empty the collection, primary criteria list
     Empty2nd();     // empty the collection, secondary criteria list
 
     // remember guide, pass it to Inspect()
-    SetGuide( aGuide );
+    SetGuide( &aGuide );
+
+    SetScanTypes( aScanList );
     
     // remember where the snapshot was taken from and pass refPos to
     // the Inspect() function.
