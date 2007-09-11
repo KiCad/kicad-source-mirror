@@ -77,8 +77,9 @@ public:
     /* Recherche du meilleur point d'insertion */
     TRACK*  GetBestInsertPoint( BOARD* Pcb );
 
-    /* Copie d'un Element d'une chaine de n elements */
-    TRACK*  Copy( int NbSegm = 1 );
+    /* Copie d'un Element d'une chaine de n elements
+    TRACK*  CopyList( int NbSegm = 1 ) const;
+    */
 
     /* Recherche du debut du net
      *  ( les elements sont classes par net_code croissant ) */
