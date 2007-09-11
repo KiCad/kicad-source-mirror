@@ -66,14 +66,12 @@ TRACK::TRACK( const TRACK& Source ) :
 }
 
 
-/*  Because of the way SEGVIA is derived from TRACK and because there are 
+/*  Because of the way SEGVIA and SEGZONE are derived from TRACK and because there are 
     virtual functions being used, we can no longer simply copy a TRACK and
-    expect it to be a via.  We must construct a true SEGVIA so its constructor
-    can initialize the virtual function table properly.  So this constructor
-    is being retired in favor of a factory type function called Copy()
-    which can duplicate either a TRACK or a SEGVIA.
+    expect it to be a via or zone.  We must construct a true SEGVIA or SEGZONE so its constructor
+    can initialize the virtual function table properly.  This factory type of
+    function called Copy() can duplicate either a TRACK, SEGVIA, or SEGZONE.
 */
-
 TRACK* TRACK::Copy() const
 {
     if( Type() == TYPETRACK )
@@ -81,6 +79,9 @@ TRACK* TRACK::Copy() const
     
     if( Type() == TYPEVIA )
         return new SEGVIA( (const SEGVIA&) *this );
+
+    if( Type() == TYPEZONE )
+        return new SEGZONE( (const SEGZONE&) *this );
     
     return NULL;    // should never happen
 }
@@ -458,21 +459,23 @@ TRACK* TRACK::GetEndNetCode( int NetCode )
 }
 
 
+#if 0
 /**********************************/
-TRACK* TRACK:: Copy( int NbSegm  )
+TRACK* TRACK:: CopyList( int NbSegm  ) const
 /**********************************/
-
 /* Copie d'un Element ou d'une chaine de n elements
  *  Retourne un pointeur sur le nouvel element ou le debut de la
  *  nouvelle chaine
  */
 {
-    TRACK* NewTrack, * FirstTrack, * OldTrack, * Source = this;
-    int    ii;
+    TRACK*        NewTrack;
+    TRACK*        FirstTrack;
+    TRACK*        OldTrack;
+    const TRACK*  Source = this;
+    
+    FirstTrack = NewTrack = Source->Copy();
 
-    FirstTrack = NewTrack = new TRACK( *Source );
-
-    for( ii = 1; ii < NbSegm; ii++ )
+    for( int ii = 1; ii < NbSegm; ii++ )
     {
         Source = Source->Next();
         if( Source == NULL )
@@ -487,6 +490,7 @@ TRACK* TRACK:: Copy( int NbSegm  )
 
     return FirstTrack;
 }
+#endif
 
 
 /********************************************/
