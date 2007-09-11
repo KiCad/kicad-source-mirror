@@ -55,12 +55,12 @@
 #define ADD_MENUITEM(menu, id, text, icon) do {\
 		wxMenuItem * l_item;\
 		l_item = new wxMenuItem(menu, id, text);\
-		l_item->SetBitmap(icon); menu->Append(l_item);} while(0)
+		l_item->SetBitmap(icon); (menu)->Append(l_item);} while(0)
 
 #define ADD_MENUITEM_WITH_HELP(menu, id, text, help, icon) do {\
 		wxMenuItem * l_item;\
 		l_item = new wxMenuItem(menu, id, text, help);\
-		l_item->SetBitmap(icon); menu->Append(l_item);} while(0)
+		l_item->SetBitmap(icon); (menu)->Append(l_item);} while(0)
 
 #ifdef __WINDOWS__
 #define ADD_MENUITEM_WITH_SUBMENU(menu, submenu, id, text, icon) do {\
