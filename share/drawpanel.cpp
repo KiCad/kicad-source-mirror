@@ -789,7 +789,8 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 
     if( event.RightDown() )
     {
-        OnRightClick( event ); return;
+        OnRightClick( event ); 
+        return;
     }
 
     if( m_IgnoreMouseEvents )
@@ -797,6 +798,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 
     if( event.LeftIsDown() )
         localrealbutt |= GR_M_LEFT_DOWN;
+    
     if( event.MiddleIsDown() )
         localrealbutt |= GR_M_MIDDLE_DOWN;
 
@@ -805,8 +807,10 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 
     if( event.ButtonDClick( 1 ) )
         localbutt = GR_M_LEFT_DOWN | GR_M_DCLICK;
+    
     if( event.MiddleDown() )
         localbutt = GR_M_MIDDLE_DOWN;
+    
     if( event.ButtonDClick( 2 ) )
     {
     }
@@ -816,6 +820,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 
     /* Compute absolute m_MousePosition in pixel units: */
     screen->m_MousePositionInPixels = CalcAbsolutePosition( wxPoint( event.GetX(), event.GetY() ) );
+    
     /* Compute absolute m_MousePosition in user units: */
     screen->m_MousePosition = CursorRealPosition( screen->m_MousePositionInPixels );
 
@@ -844,7 +849,8 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
         m_Parent->OnLeftClick( &DC, screen->m_MousePositionInPixels );
 
     if( event.ButtonUp( 2 ) && (screen->BlockLocate.m_State == STATE_NO_BLOCK) )
-    {   // The middle button has been relached, with no block command:
+    {   
+        // The middle button has been relached, with no block command:
         // We use it for a zoom center command
         g_KeyPressed = localkey = EDA_ZOOM_CENTER_FROM_MOUSE;
     }
