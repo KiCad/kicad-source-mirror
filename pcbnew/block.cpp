@@ -390,7 +390,8 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool era
     int          Color;
     BASE_SCREEN* screen = panel->GetScreen();
 
-    Color = YELLOW; GRSetDrawMode( DC, g_XorMode );
+    Color = YELLOW; 
+    GRSetDrawMode( DC, g_XorMode );
 
     /* Effacement ancien cadre */
     if( erase )
@@ -1265,9 +1266,10 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
         {
             next_track = track->Next();
             if( IsSegmentInBox( GetScreen()->BlockLocate, track ) )
-            {   /* la piste est ici bonne a etre deplacee */
+            {   
+                /* la piste est ici bonne a etre deplacee */
                 m_Pcb->m_Status_Pcb = 0;
-                new_track = track->Copy( 1 );
+                new_track = track->Copy();
                 new_track->Insert( m_Pcb, NULL );
                 new_track->m_Start.x += deltaX; new_track->m_Start.y += deltaY;
                 new_track->m_End.x   += deltaX; new_track->m_End.y += deltaY;
@@ -1291,7 +1293,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
             {  
                 /* la piste est ici bonne a etre deplacee */
                 new_track = new TRACK( m_Pcb );
-                new_track = track->Copy( 1 );
+                new_track = track->Copy();
                 new_track->Insert( m_Pcb, NULL );
                 new_track->m_Start.x += deltaX; new_track->m_Start.y += deltaY;
                 new_track->m_End.x   += deltaX; new_track->m_End.y += deltaY;
@@ -1315,15 +1317,17 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
         {
         case TYPEDRAWSEGMENT:
         {
-                #undef STRUCT
-                #define STRUCT ( (DRAWSEGMENT*) PtStruct )
+            #undef STRUCT
+            #define STRUCT ( (DRAWSEGMENT*) PtStruct )
             if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
             if( IsStructInBox( GetScreen()->BlockLocate, PtStruct ) == NULL )
                 break;
+            
             /* l'element est ici bon a etre copie */
             DRAWSEGMENT* new_drawsegment = new DRAWSEGMENT( m_Pcb );
             new_drawsegment->Copy( STRUCT );
+            
             new_drawsegment->Pnext   = m_Pcb->m_Drawings;
             new_drawsegment->Pback   = m_Pcb;
             m_Pcb->m_Drawings->Pback = new_drawsegment;
