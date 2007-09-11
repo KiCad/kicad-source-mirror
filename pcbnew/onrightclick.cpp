@@ -643,11 +643,11 @@ void CreatePopUpMenuForFootprints( MODULE* aModule, wxMenu* menu, bool full_menu
 
     sub_menu_footprint = new wxMenu;
     
-    ADD_MENUITEM_WITH_SUBMENU( menu, sub_menu_footprint, -1, msg, module_xpm )
+    ADD_MENUITEM_WITH_SUBMENU( menu, sub_menu_footprint, -1, msg, module_xpm );
     if( full_menu )
     {
         ADD_MENUITEM( sub_menu_footprint, ID_POPUP_PCB_MOVE_MODULE_REQUEST,
-                      _( "Move (M)" ), Move_Module_xpm )
+                      _( "Move (M)" ), Move_Module_xpm );
         ADD_MENUITEM( sub_menu_footprint, ID_POPUP_PCB_DRAG_MODULE_REQUEST,
                       _( "Drag (G)" ), Drag_Module_xpm );
     }
@@ -698,7 +698,7 @@ void CreatePopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* menu )
     msg << wxT( " " ) << FpText->m_Text;
 
     sub_menu_Fp_text = new wxMenu;
-    ADD_MENUITEM_WITH_SUBMENU( menu, sub_menu_Fp_text, -1, msg, footprint_text_xpm )
+    ADD_MENUITEM_WITH_SUBMENU( menu, sub_menu_Fp_text, -1, msg, footprint_text_xpm );
 
     if( !flags )
         ADD_MENUITEM( sub_menu_Fp_text, ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST,
@@ -728,7 +728,7 @@ void CreatePopUpMenuForPads( D_PAD* Pad, wxMenu* menu )
     msg << wxT( " " ) << Pad->ReturnStringPadName();
 
     sub_menu_Pad = new wxMenu;
-    ADD_MENUITEM_WITH_SUBMENU( menu, sub_menu_Pad, -1, msg, pad_xpm )
+    ADD_MENUITEM_WITH_SUBMENU( menu, sub_menu_Pad, -1, msg, pad_xpm );
     if( !flags )
     {
         ADD_MENUITEM( sub_menu_Pad, ID_POPUP_PCB_MOVE_PAD_REQUEST,
@@ -772,7 +772,7 @@ void CreatePopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu )
         msg += Text->m_Text.Left( 5 ) + wxT( ".." );
 
     sub_menu_Text = new wxMenu;
-    ADD_MENUITEM_WITH_SUBMENU( menu, sub_menu_Text, -1, msg, add_text_xpm )
+    ADD_MENUITEM_WITH_SUBMENU( menu, sub_menu_Text, -1, msg, add_text_xpm );
 
     if( !flags )
     {
