@@ -59,7 +59,7 @@ void WinEDA_ModuleEditFrame::Load_Module_Module_From_BOARD( MODULE* Module )
     if( Module == NULL )
         return;
 
-    m_CurrentScreen->SetCurItem( NULL );
+    SetCurItem( NULL );
 
     Clear_Pcb( NULL, TRUE );
 

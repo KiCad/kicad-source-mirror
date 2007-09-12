@@ -171,7 +171,7 @@ void WinEDA_BasePcbFrame::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 
     Text->Display_Infos( this );
 
-    GetScreen()->SetCurItem( Text );
+    SetCurItem( Text );
     DrawPanel->ManageCurseur = Show_MoveTexte_Module;
     DrawPanel->ForceCloseManageCurseur = ExitTextModule;
 

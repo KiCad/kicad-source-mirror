@@ -18,6 +18,13 @@
 #include "protos.h"
 #include "collectors.h"
 
+#include "bitmaps.h"
+#include "Footprint_Text.xpm"
+#include "add_cotation.xpm"
+#include "Add_Mires.xpm"
+#include "Add_Zone.xpm"
+
+
 /* Routines Locales : */
 
 /* Variables Locales */
@@ -117,48 +124,282 @@ void RemoteCommand( const char* cmdline )
 }
 
 
+// @todo: move this to proper source file.
+wxString BOARD_ITEM::MenuText() const
+{
+    wxString            text;
+    const BOARD_ITEM*   item = this;
+    
+    switch( item->Type() )
+    {
+    case PCB_EQUIPOT_STRUCT_TYPE:
+        text << _("Net") << ((EQUIPOT*)item)->m_Netname << wxT(" ") << ((EQUIPOT*)item)->m_NetCode;
+        break;
+        
+    case TYPEMODULE:
+        text << _("Footprint") << wxT(" ") << ((MODULE*)item)->GetReference();
+        break;
+        
+    case TYPEPAD:
+        text << _("Pad") << wxT(" ") << ((D_PAD*)item)->ReturnStringPadName() << _(" of ") << GetParent()->MenuText();
+        break;
+        
+    case TYPEDRAWSEGMENT:
+        text << _("PGraphic");
+        break;
+        
+    case TYPETEXTE:
+        text << _("Pcb Text") << wxT(" ");;
+        if( ((TEXTE_PCB*)item)->m_Text.Len() < 12 )
+            text << ((TEXTE_PCB*)item)->m_Text;
+        else
+            text += ((TEXTE_PCB*)item)->m_Text.Left( 10 ) + wxT( ".." );
+        break;
+        
+    case TYPETEXTEMODULE:
+        switch( ((TEXTE_MODULE*)item)->m_Type )
+        {
+        case TEXT_is_REFERENCE:
+            text << _( "Reference" ) << wxT( " " ) << ((TEXTE_MODULE*)item)->m_Text;
+            break;
+    
+        case TEXT_is_VALUE:
+            text << _( "Value" ) << wxT( " " ) << ((TEXTE_MODULE*)item)->m_Text << _(" of ") << GetParent()->MenuText();
+            break;
+    
+        default:
+            text << _( "Text" ) << wxT( " " ) << ((TEXTE_MODULE*)item)->m_Text << _(" of ") << GetParent()->MenuText();
+            break;
+        }
+        break;
+        
+    case TYPEEDGEMODULE:
+        text << _("MGraphic");     // @todo: expand on the text
+        break;
+        
+    case TYPETRACK:
+        text << _("Track");       // @todo: expand on the text
+        break;
+        
+    case TYPEZONE:
+        text << _("Zone");        // @todo: expand on the text
+        break;
+        
+    case TYPEVIA:
+        text << _("Via");           // @todo: expand on text
+        break;
+        
+    case TYPEMARQUEUR:
+        text << _("Marker");
+        break;
+        
+    case TYPECOTATION:
+        text << _("Dimension");     // @todo: extend text
+        break;
+        
+    case TYPEMIRE:
+        text << _("Mire");          // @todo: extend text,  Mire is not an english word!
+        break;
+        
+    case TYPEEDGEZONE:
+        text << _("Graphic");      // @todo: extend text
+        break;
+        
+    default:
+        text << item->ReturnClassName() << wxT(" BUG!!");
+        break;
+    }
+
+    return text;    
+}
+
+
+// @todo: move this to proper source file.
+const char** BOARD_ITEM::MenuIcon() const
+{
+    char**              xpm;
+    const BOARD_ITEM*   item = this;
+    
+    switch( item->Type() )
+    {
+    case PCB_EQUIPOT_STRUCT_TYPE:
+        xpm = module_xpm;   // @todo: use net icon 
+        break;
+        
+    case TYPEMODULE:
+        xpm = module_xpm;
+        break;
+        
+    case TYPEPAD:
+        xpm = pad_xpm;
+        break;
+        
+    case TYPEDRAWSEGMENT:
+        xpm = module_xpm;   // @todo: use draw segment icon & expand on text
+        break;
+        
+    case TYPETEXTE:
+        xpm = add_text_xpm;
+        break;
+        
+    case TYPETEXTEMODULE:
+        xpm = footprint_text_xpm;
+        break;
+        
+    case TYPEEDGEMODULE:
+        xpm = show_mod_edge_xpm;
+        break;
+        
+    case TYPETRACK:
+        xpm = showtrack_xpm;
+        break;
+        
+    case TYPEZONE:
+        xpm = add_zone_xpm;
+        break;
+        
+    case TYPEVIA:
+        xpm = showtrack_xpm;        // @todo: use via specific xpm
+        break;
+        
+    case TYPEMARQUEUR:
+        xpm = pad_xpm;              // @todo: create and use marker xpm
+        break;
+        
+    case TYPECOTATION:
+        xpm = add_cotation_xpm;
+        break;
+        
+    case TYPEMIRE:
+        xpm = add_mires_xpm; 
+        break;
+        
+    case TYPEEDGEZONE:
+        xpm = show_mod_edge_xpm;    // @todo: pcb edge xpm
+        break;
+        
+    default:
+        xpm = 0;
+        break;
+    }
+    
+    return (const char**) xpm;
+}
+
+
+
 /***********************************************************************/
 BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay()
 /***********************************************************************/
-
-/* Search an item under the mouse cursor.
- *  items are searched first on the current working layer.
- *  if nothing found, an item will be searched without layer restriction
- */
 {
-    BOARD_ITEM* item;
+    BOARD_ITEM*     item;
     
-#if defined(DEBUG)
-
-    // test scaffolding for Collect():
     GENERAL_COLLECTORS_GUIDE  guide = GetCollectorsGuide();
-    
-    m_Collector->Collect( m_Pcb, 
-                       GetScreen()->RefPos(true), 
-                       &guide );
 
-    // use only the first one collected for now.
-    item = (*m_Collector)[0];  // grab first one, may be NULL
+    // Assign to scanList the proper item types desired based on tool type.
+    // May need to pass a hot key code to this function to support hot keys too.
     
-    std::cout << "collected " << m_Collector->GetCount() << '\n';       // debugging only
+    const KICAD_T*  scanList;
     
-    if( item )
+    if( m_ID_current_state == 0 )
     {
-        item->Display_Infos( this );
-        
-        // debugging: print out the collected items, showing their priority order too.
-        for( unsigned i=0; i<m_Collector->GetCount();  ++i )
-            (*m_Collector)[i]->Show( 0, std::cout ); 
+        switch( m_HTOOL_current_state )
+        {
+        case ID_TOOLBARH_PCB_AUTOPLACE:
+            scanList = GENERAL_COLLECTOR::ModuleItems;
+            break;
+            
+        default:
+            scanList = GENERAL_COLLECTOR::AllBoardItems;
+            break;
+        }
     }
+    else
+    {
+        switch( m_ID_current_state )
+        {
+        case ID_PCB_SHOW_1_RATSNEST_BUTT:
+            scanList = GENERAL_COLLECTOR::PadsOrModules;
+            break;            
+
+        case ID_TRACK_BUTT:
+            scanList = GENERAL_COLLECTOR::Tracks;
+            break;            
+
+        case ID_COMPONENT_BUTT:
+            scanList = GENERAL_COLLECTOR::ModuleItems;
+            break;
+            
+        default:
+            scanList = GENERAL_COLLECTOR::AllBoardItems;
+        }
+    }
+
+    m_Collector->Collect( m_Pcb, scanList, GetScreen()->RefPos(true), guide );
+
+    /* debugging: print out the collected items, showing their priority order too.
+    for( unsigned i=0; i<m_Collector->GetCount();  ++i )
+       (*m_Collector)[i]->Show( 0, std::cout ); 
+    */
+
+    if( m_Collector->GetCount() <= 1 )  
+    {
+        item = (*m_Collector)[0];
+        SetCurItem( item );        
+    }
+    
+    // If the first item is a pad or moduletext, and the 2nd item is its parent module:
+    else if( m_Collector->GetCount() == 2 && 
+        ( (*m_Collector)[0]->Type() == TYPEPAD || (*m_Collector)[0]->Type() == TYPETEXTEMODULE) && 
+        (*m_Collector)[1]->Type() == TYPEMODULE && (*m_Collector)[0]->GetParent()==(*m_Collector)[1] )
+    {
+        item = (*m_Collector)[0];
+        SetCurItem( item );        
+    }
+    else    // show a popup menu
+    {
+        wxMenu  itemMenu;
+
+        int limit = MIN( MAX_ITEMS_IN_PICKER, m_Collector->GetCount() );
+
+        itemMenu.SetTitle( _("Selection Clarification") );  // does this work? not under Linux!
+        
+        for( int i=0;  i<limit;  ++i )
+        {
+            wxString        text;
+            const char**    xpm;
+            
+            item = (*m_Collector)[i];
+
+            text = item->MenuText();
+            xpm  = item->MenuIcon();
+            
+            ADD_MENUITEM( &itemMenu, ID_POPUP_PCB_ITEM_SELECTION_START+i, text, xpm );
+        }
+        
+        DrawPanel->m_IgnoreMouseEvents = TRUE;
+
+        // this menu's handler is void WinEDA_BasePcbFrame::ProcessItemSelection()
+        // and it calls SetCurItem() which in turn calls Display_Infos() on the item.
+        PopupMenu( &itemMenu );
+        
+        DrawPanel->MouseToCursorSchema();
+        
+        DrawPanel->m_IgnoreMouseEvents = FALSE;
+        
+        // The function ProcessItemSelection() has set the current item, return it.
+        item = GetCurItem();
+    }
+    
     return item;
     
-#else
+/* old way:
     
     item = Locate( CURSEUR_OFF_GRILLE, GetScreen()->m_Active_Layer );
     if( item == NULL )
         item = Locate( CURSEUR_OFF_GRILLE, -1 );
     return item;
-#endif    
+*/    
 }
 
 

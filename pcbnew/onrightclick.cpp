@@ -131,25 +131,23 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     bool            BlockActive  = (m_CurrentScreen->BlockLocate.m_Command != BLOCK_IDLE);
     wxClientDC      dc( DrawPanel );
 
-    BOARD_ITEM*     item = GetScreen()->GetCurItem();
+    BOARD_ITEM*     item = GetCurItem();
     
     DrawPanel->CursorOff( &dc );
     DrawPanel->m_CanStartBlock = -1;    // Ne pas engager un debut de bloc sur validation menu
 
-    // Simple localisation des elements si possible
-    if( item == NULL || item->m_Flags == 0 )
+    
+    /*  The user must now left click to first make the selection.  OnRightClick()
+        is now only an action mechanism, not a selection mechanism.  The selection
+        mechanism sometimes involves a popup menu, so it is too complex to try
+        and do that here.
+        
+    // Only offer user a new selection if there is currently none.
+    if( item == NULL )
     {
-        if( m_HTOOL_current_state == ID_TOOLBARH_PCB_AUTOPLACE )
-        {
-            item = Locate_Prefered_Module( m_Pcb, CURSEUR_OFF_GRILLE | VISIBLE_ONLY );
-            if( item )
-                item->Display_Infos( this );
-            else
-                item = PcbGeneralLocateAndDisplay();
-        }
-        else
-            item = PcbGeneralLocateAndDisplay();
+        item = PcbGeneralLocateAndDisplay();
     }
+    */
 
     // If command in progress: Put the Cancel command (if needed) and End command
     if( m_ID_current_state )
@@ -187,18 +185,10 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         return;
     }
 
-    m_CurrentScreen->SetCurItem( item );
-
     if( item )
         flags = item->m_Flags;
     else
         flags = 0;
-    
-    if( !flags )
-    {
-        ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST,
-                      _( "Get and Move Footprint" ), Move_Module_xpm );
-    }
     
     if( item )
     {
@@ -230,15 +220,6 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             break;
 
         case TYPEPAD:
-            if( !flags )
-            {
-                MODULE* module = (MODULE*) item->m_Parent;
-                if( module )
-                {
-                    CreatePopUpMenuForFootprints( module, aPopMenu, TRUE );
-                    aPopMenu->AppendSeparator();
-                }
-            }
             CreatePopUpMenuForPads( (D_PAD*) item, aPopMenu );
             if( m_HTOOL_current_state == ID_TOOLBARH_PCB_AUTOROUTE )
             {
@@ -248,19 +229,28 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                     aPopMenu->Append( ID_POPUP_PCB_AUTOROUTE_NET, _( "Autoroute Net" ) );
                 }
             }
-            break;
-
-        case TYPETEXTEMODULE:
             if( !flags )
             {
                 MODULE* module = (MODULE*) item->m_Parent;
                 if( module )
                 {
-                    CreatePopUpMenuForFootprints( module, aPopMenu, TRUE );
                     aPopMenu->AppendSeparator();
+                    CreatePopUpMenuForFootprints( module, aPopMenu, TRUE );
                 }
             }
+            break;
+
+        case TYPETEXTEMODULE:
             CreatePopUpMenuForFpTexts( (TEXTE_MODULE*) item, aPopMenu );
+            if( !flags )
+            {
+                MODULE* module = (MODULE*) item->m_Parent;
+                if( module )
+                {
+                    aPopMenu->AppendSeparator();
+                    CreatePopUpMenuForFootprints( module, aPopMenu, TRUE );
+                }
+            }
             break;
 
         case TYPEDRAWSEGMENT:
@@ -355,6 +345,12 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         aPopMenu->AppendSeparator();
     }
 
+    if( !flags )
+    {
+        ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST,
+                      _( "Get and Move Footprint" ), Move_Module_xpm );
+    }
+    
     /* Traitement des fonctions specifiques */
     switch(  m_ID_current_state )
     {

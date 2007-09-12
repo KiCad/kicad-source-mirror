@@ -440,8 +440,9 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
 }
 
 
+/*
 // see pcbstruct.h     
-EDA_BaseStruct* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
+BOARD_ITEM* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
 {
     class PadOrModule : public INSPECTOR
     {
@@ -514,6 +515,7 @@ EDA_BaseStruct* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
     
     return inspector.found;
 }
+*/
 
 
 /**

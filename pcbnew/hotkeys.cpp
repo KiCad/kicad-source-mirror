@@ -165,11 +165,9 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
  */
 
 {
-    bool PopupOn = GetScreen()->GetCurItem()
-                   && GetScreen()->GetCurItem()->m_Flags;
+    bool PopupOn = (GetCurItem() && GetCurItem()->m_Flags);
 
-    bool ItemFree = (GetScreen()->GetCurItem() == 0 )
-                    || (GetScreen()->GetCurItem()->m_Flags == 0);
+    bool ItemFree = (GetCurItem()==0  || GetCurItem()->m_Flags==0);
 
     if( hotkey == 0 )
         return;
@@ -296,11 +294,15 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
     case HK_BACK_SPACE:
         if( m_ID_current_state == ID_TRACK_BUTT && GetScreen()->m_Active_Layer <= CMP_N )
         {
-            bool ItemFree = (GetScreen()->GetCurItem() == NULL )
-                            || (GetScreen()->GetCurItem()->m_Flags == 0);
+            bool ItemFree = GetCurItem()==NULL || GetCurItem()->m_Flags==0;
             if( ItemFree )
             {
                 // no track is currently being edited - select a segment and remove it.
+                
+                // @todo: possibly? pass the HK command code to PcbGeneralLocateAndDisplay() so it can restrict its search to specific item types.
+                
+                // @todo: use PcbGeneralLocateAndDisplay() everywhere in this source file.
+                
                 DrawStruct = PcbGeneralLocateAndDisplay();
 
                 // don't let backspace delete modules!!
@@ -309,10 +311,10 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
                     Delete_Segment( DC, (TRACK*) DrawStruct );
                 GetScreen()->SetModify();
             }
-            else if( GetScreen()->GetCurItem()->Type() == TYPETRACK  )
+            else if( GetCurItem()->Type() == TYPETRACK  )
             {
                 // then an element is being edited - remove the last segment.
-                GetScreen()->SetCurItem( Delete_Segment( DC, (TRACK*) GetScreen()->GetCurItem() ) );
+                SetCurItem( Delete_Segment( DC, (TRACK*) GetCurItem() ) );
                 GetScreen()->SetModify();
             }
         }
@@ -320,7 +322,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case HK_END_TRACK:
         DrawPanel->MouseToCursorSchema();
-        End_Route( (TRACK*) ( GetScreen()->GetCurItem() ), DC );
+        End_Route( (TRACK*) ( GetCurItem() ), DC );
         break;
 
     case HK_FIND_ITEM:
@@ -357,11 +359,11 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
             Other_Layer_Route( NULL, DC );
             break;
         }
-        if( GetScreen()->GetCurItem()->Type() != TYPETRACK )
+        if( GetCurItem()->Type() != TYPETRACK )
             return;
-        if( (GetScreen()->GetCurItem()->m_Flags & IS_NEW) == 0 )
+        if( (GetCurItem()->m_Flags & IS_NEW) == 0 )
             return;
-        Other_Layer_Route( (TRACK*) GetScreen()->GetCurItem(), DC );
+        Other_Layer_Route( (TRACK*) GetCurItem(), DC );
         if( DisplayOpt.ContrastModeDisplay )
             GetScreen()->SetRefreshReq();
         break;
@@ -371,11 +373,11 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         // get any module, locked or not locked and toggle its locked status
         if( ItemFree )
             module = Locate_Prefered_Module( m_Pcb, CURSEUR_OFF_GRILLE | VISIBLE_ONLY );
-        else if( GetScreen()->GetCurItem()->Type() == TYPEMODULE )
-            module = (MODULE*) GetScreen()->GetCurItem();
+        else if( GetCurItem()->Type() == TYPEMODULE )
+            module = (MODULE*) GetCurItem();
         if( module )
         {
-            GetScreen()->SetCurItem( module );
+            SetCurItem( module );
             module->SetLocked( !module->IsLocked() );
             module->Display_Infos( this );
         }
@@ -415,12 +417,12 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
                 }
             }
         }
-        else if( GetScreen()->GetCurItem()->Type() == TYPEMODULE )
+        else if( GetCurItem()->Type() == TYPEMODULE )
         {
-            module = (MODULE*) GetScreen()->GetCurItem();
+            module = (MODULE*) GetCurItem();
 
             // @todo: might need to add a layer check in if() below
-            if( (GetScreen()->GetCurItem()->m_Flags == 0)
+            if( (GetCurItem()->m_Flags == 0)
                && module->IsLocked() )
                 module = NULL; // do not move, rotate ... it.
         }
@@ -432,13 +434,13 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
          *  does not set GetCurItem() at this time, nor does a mouse click
          *  when the local ratsnest icon is in play set GetCurItem(), and these
          *  actions also call SendMessageToEESCHEMA().
-         *  if( GetScreen()->GetCurItem() != module )
+         *  if( GetCurItem() != module )
          */
         {
             // Send the module via socket to EESCHEMA's search facility.
             SendMessageToEESCHEMA( module );
 
-            GetScreen()->SetCurItem( module );
+            SetCurItem( module );
         }
 
         switch( CommandCode )
@@ -538,8 +540,8 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* DC, EDA_BaseStruct* DrawStruct )
  *          Delete the module.
  */
 {
-    bool ItemFree = (GetScreen()->GetCurItem() == NULL )
-                    || (GetScreen()->GetCurItem()->m_Flags == 0);
+    bool ItemFree = (GetCurItem() == NULL )
+                    || (GetCurItem()->m_Flags == 0);
 
     switch( m_ID_current_state )
     {
@@ -553,10 +555,10 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* DC, EDA_BaseStruct* DrawStruct )
                 return FALSE;
             Delete_Track( DC, (TRACK*) DrawStruct );
         }
-        else if( GetScreen()->GetCurItem()->Type() == TYPETRACK  )
+        else if( GetCurItem()->Type() == TYPETRACK  )
         {
-            GetScreen()->SetCurItem(
-                Delete_Segment( DC, (TRACK*) GetScreen()->GetCurItem() ) );
+            SetCurItem(
+                Delete_Segment( DC, (TRACK*) GetCurItem() ) );
             GetScreen()->SetModify();
             return TRUE;
         }
@@ -581,6 +583,6 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* DC, EDA_BaseStruct* DrawStruct )
     }
 
     GetScreen()->SetModify();
-    GetScreen()->SetCurItem( NULL );
+    SetCurItem( NULL );
     return TRUE;
 }

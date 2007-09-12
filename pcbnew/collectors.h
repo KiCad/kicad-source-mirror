@@ -184,6 +184,13 @@ protected:
      * Determines which items are to be collected by Inspect()
      */
     const COLLECTORS_GUIDE*     m_Guide;
+    
+    
+    /**
+     * The number of items that were originally in the primary list before the 
+     * m_List2nd was concatonated onto the end of it.
+     */
+    int                         m_PrimaryLength;
 
     
 public:
@@ -199,6 +206,24 @@ public:
      * a MODULE, such as D_PAD and TEXTEMODULE.
      */
     static const KICAD_T PrimaryItems[];
+
+
+    /**
+     * A scan list for only MODULEs
+     */
+    static const KICAD_T ModuleItems[];
+
+
+    /**
+     * A scan list for PADs or MODULEs
+     */
+    static const KICAD_T PadsOrModules[];
+
+
+    /**
+     * A scan list for only TRACKS
+     */
+    static const KICAD_T Tracks[];
     
     
     /**
@@ -242,6 +267,13 @@ public:
         return NULL;
     }
 
+    
+    /**
+     * Function GetPrimaryCount
+     * @return int - The number if items which met the primary search criteria
+     */
+    int GetPrimaryCount() { return m_PrimaryLength; }
+    
     
     /**
      * Function Inspect

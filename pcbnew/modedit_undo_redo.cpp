@@ -56,7 +56,7 @@ void WinEDA_ModuleEditFrame::GetComponentFromRedoList()
         (MODULE*) GetScreen()->GetItemFromRedoList();
     if( m_Pcb->m_Modules )
         m_Pcb->m_Modules->Pnext = NULL;
-    GetScreen()->SetCurItem( NULL );;
+    SetCurItem( NULL );;
     GetScreen()->SetModify();
     ReCreateHToolbar();
     SetToolbars();
@@ -82,7 +82,7 @@ void WinEDA_ModuleEditFrame::GetComponentFromUndoList()
     if( m_Pcb->m_Modules )
         m_Pcb->m_Modules->Pnext = NULL;
     GetScreen()->SetModify();
-    GetScreen()->SetCurItem( NULL );;
+    SetCurItem( NULL );;
     ReCreateHToolbar();
     SetToolbars();
 }

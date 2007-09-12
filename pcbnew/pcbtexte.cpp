@@ -251,7 +251,7 @@ void Exit_Texte_Pcb( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
-    Panel->GetScreen()->SetCurItem( NULL );
+    ((WinEDA_PcbFrame*)Panel->m_Parent)->SetCurItem( NULL );
 }
 
 
@@ -270,7 +270,7 @@ void WinEDA_PcbFrame::Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     TextePcb->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
-    m_CurrentScreen->SetCurItem( NULL );
+    SetCurItem( NULL );
     m_CurrentScreen->SetModify();
     TextePcb->m_Flags = 0;
 }
@@ -291,7 +291,7 @@ void WinEDA_PcbFrame::StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC )
     TextePcb->Display_Infos( this );
     DrawPanel->ManageCurseur = Move_Texte_Pcb;
     DrawPanel->ForceCloseManageCurseur = Exit_Texte_Pcb;
-    m_CurrentScreen->SetCurItem( TextePcb );
+    SetCurItem( TextePcb );
     DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 }
 
@@ -332,7 +332,7 @@ void WinEDA_PcbFrame::Delete_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     DeleteStructure( TextePcb );
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
-    m_CurrentScreen->SetCurItem( NULL );
+    SetCurItem( NULL );
 }
 
 

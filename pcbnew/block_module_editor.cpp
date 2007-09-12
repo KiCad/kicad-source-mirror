@@ -192,7 +192,7 @@ int WinEDA_ModuleEditFrame::HandleBlockEnd( wxDC* DC )
         GetScreen()->BlockLocate.m_Command = BLOCK_IDLE;
         DrawPanel->ManageCurseur = NULL;
         DrawPanel->ForceCloseManageCurseur = NULL;
-        GetScreen()->SetCurItem( NULL );
+        SetCurItem( NULL );
         SetToolID( m_ID_current_state, DrawPanel->m_PanelDefaultCursor, wxEmptyString );
         DrawPanel->Refresh( TRUE );
     }
@@ -275,7 +275,7 @@ void WinEDA_ModuleEditFrame::HandleBlockPlace( wxDC* DC )
     GetScreen()->BlockLocate.m_Flags   = 0;
     GetScreen()->BlockLocate.m_State   = STATE_NO_BLOCK;
     GetScreen()->BlockLocate.m_Command = BLOCK_IDLE;
-    GetScreen()->SetCurItem( NULL );
+    SetCurItem( NULL );
     DrawPanel->Refresh( TRUE );
 
     SetToolID( m_ID_current_state, DrawPanel->m_PanelDefaultCursor, wxEmptyString );

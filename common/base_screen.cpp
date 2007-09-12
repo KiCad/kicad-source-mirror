@@ -555,13 +555,3 @@ EDA_BaseStruct* BASE_SCREEN::GetItemFromRedoList()
     return item;
 }
 
-
-void BASE_SCREEN::SetCurItem( EDA_BaseStruct* aCurItem )
-{
-    
-#if 0 && defined(DEBUG)
-    printf( "SetCurItem(%p)\n", aCurItem );
-#endif
-
-    m_CurrentItem = aCurItem; 
-}

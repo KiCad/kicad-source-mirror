@@ -15,14 +15,23 @@
 #include "protos.h"
 #include "id.h"
 
-#if defined(DEBUG)
 #include "collectors.h"
-#endif
 
 
 /*******************************/
 /* class WinEDA_BasePcbFrame */
 /*******************************/
+
+BEGIN_EVENT_TABLE( WinEDA_BasePcbFrame, WinEDA_DrawFrame )
+
+    COMMON_EVENTS_DRAWFRAME
+    
+    EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START, ID_POPUP_PCB_ITEM_SELECTION_END,
+                   WinEDA_BasePcbFrame::ProcessItemSelection )
+    
+END_EVENT_TABLE()
+
+
 
 /****************/
 /* Constructeur */
@@ -48,18 +57,13 @@ WinEDA_BasePcbFrame::WinEDA_BasePcbFrame( wxWindow* father,
     m_DisplayPcbTrackFill = TRUE;   /* FALSE = sketch , TRUE = filled */
     m_Draw3DFrame = NULL;           // Display Window in 3D mode (OpenGL)
     
-#if defined(DEBUG)    
     m_Collector                = new GENERAL_COLLECTOR();
-#endif    
-    
 }
 
 
 WinEDA_BasePcbFrame::~WinEDA_BasePcbFrame( void )
 {
-#if defined(DEBUG)    
     delete m_Collector;
-#endif    
 }
 
 
@@ -168,7 +172,51 @@ void WinEDA_BasePcbFrame::SwitchLayer( wxDC* DC, int layer )
         GetScreen()->SetRefreshReq();
 }
 
+
+
+/*****************************************************************/
+void WinEDA_BasePcbFrame::ProcessItemSelection( wxCommandEvent& event )
+/*****************************************************************/
+{
+    int         id = event.GetId();
+    
+    // index into the collector list:
+    int         itemNdx = id - ID_POPUP_PCB_ITEM_SELECTION_START;
+    
+    BOARD_ITEM* item = (*m_Collector)[itemNdx];
+
 #if defined(DEBUG)
+    item->Show( 0, std::cout );
+#endif
+    
+    SetCurItem( item );
+}
+
+
+/*****************************************************************/
+void WinEDA_BasePcbFrame::SetCurItem( BOARD_ITEM* aItem )
+/*****************************************************************/
+{
+    m_CurrentScreen->SetCurItem( aItem );
+    if( aItem )
+        aItem->Display_Infos(this);
+    else
+    {
+        // we can use either of these:
+        //MsgPanel->EraseMsgBox();
+        m_Pcb->Display_Infos(this);
+    }
+}
+
+
+/*****************************************************************/
+BOARD_ITEM* WinEDA_BasePcbFrame::GetCurItem()
+/*****************************************************************/
+{ 
+    return (BOARD_ITEM*) m_CurrentScreen->GetCurItem(); 
+}
+
+
 /****************************************************************/
 GENERAL_COLLECTORS_GUIDE WinEDA_BasePcbFrame::GetCollectorsGuide()
 /****************************************************************/
@@ -185,6 +233,3 @@ GENERAL_COLLECTORS_GUIDE WinEDA_BasePcbFrame::GetCollectorsGuide()
 
     return guide;
 }
-
-#endif
-

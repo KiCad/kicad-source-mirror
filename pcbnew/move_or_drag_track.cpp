@@ -95,8 +95,7 @@ static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
-    Panel->GetScreen()->SetCurItem( NULL );
-    Panel->m_Parent->EraseMsgBox();
+    ((WinEDA_PcbFrame*)Panel->m_Parent)->SetCurItem(NULL);    
 
     /* Annulation deplacement et Redessin des segments dragges */
     DRAG_SEGM* pt_drag = g_DragSegmentList;

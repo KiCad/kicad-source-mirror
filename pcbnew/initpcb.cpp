@@ -99,7 +99,7 @@ void WinEDA_PcbGlobalDeleteFrame::AcceptPcbDelete( wxCommandEvent& event )
 
     if( redraw )
     {
-        m_Parent->GetScreen()->SetCurItem( NULL );
+        m_Parent->SetCurItem( NULL );
         m_Parent->ReDrawPanel();
     }
 
@@ -182,7 +182,7 @@ bool WinEDA_BasePcbFrame::Clear_Pcb( wxDC* DC, bool query )
     m_Pcb->m_NbNoconnect = 0;
     m_Pcb->m_NbSegmTrack = 0;
     m_Pcb->m_NbSegmZone  = 0;
-    GetScreen()->SetCurItem( NULL );
+    SetCurItem( NULL );
 
     /* Init parametres de gestion */
     GetScreen()->Init();

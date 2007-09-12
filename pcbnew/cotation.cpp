@@ -219,7 +219,7 @@ static void Exit_EditCotation( WinEDA_DrawPanel* Panel, wxDC* DC )
     status_cotation      = 0;
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
-    Panel->GetScreen()->SetCurItem( NULL );
+    ((WinEDA_PcbFrame*)Panel->m_Parent)->SetCurItem(NULL);    
 }
 
 

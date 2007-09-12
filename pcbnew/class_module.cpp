@@ -1170,6 +1170,7 @@ bool MODULE::HitTest( const wxPoint& refPos )
     if( m_BoundaryBox.Inside( spot_cX, spot_cY ) )
         return true;
 
+/* no    
     // The GENERAL_COLLECTOR needs these two tests in order to find a MODULE
     // when the user clicks on its text.  Keep these 2, needed in OnRightClick().
     if( m_Reference->HitTest( refPos ) )
@@ -1177,7 +1178,7 @@ bool MODULE::HitTest( const wxPoint& refPos )
     
     if( m_Value->HitTest( refPos ) )
         return true;
-    
+*/    
     return false;
 }
 

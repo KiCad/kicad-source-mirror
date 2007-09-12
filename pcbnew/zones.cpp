@@ -495,7 +495,7 @@ EDGE_ZONE* WinEDA_PcbFrame::Del_SegmEdgeZone( wxDC* DC, EDGE_ZONE* edge_zone )
 
     Segm = previous_segm;
     m_Pcb->m_CurrentLimitZone = Segm;
-    GetScreen()->SetCurItem( Segm );
+    SetCurItem( Segm );
 
     if( Segm )
     {
@@ -507,7 +507,7 @@ EDGE_ZONE* WinEDA_PcbFrame::Del_SegmEdgeZone( wxDC* DC, EDGE_ZONE* edge_zone )
     {
         DrawPanel->ManageCurseur = NULL;
         DrawPanel->ForceCloseManageCurseur = NULL;
-        GetScreen()->SetCurItem( NULL );
+        SetCurItem( NULL );
     }
     return Segm;
 }
@@ -626,7 +626,7 @@ static void Exit_Zones( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
-    pcbframe->GetScreen()->SetCurItem( NULL );
+    pcbframe->SetCurItem( NULL );
 }
 
 
@@ -656,7 +656,7 @@ void WinEDA_BasePcbFrame::DelLimitesZone( wxDC* DC, bool Redraw )
         segment->Pnext = NULL; delete segment;
     }
 
-    GetScreen()->SetCurItem( NULL );
+    SetCurItem( NULL );
     m_Pcb->m_CurrentLimitZone = NULL;
 }
 

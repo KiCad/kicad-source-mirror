@@ -2,6 +2,8 @@
 #ifndef ID_H
 #define ID_H
 
+#define MAX_ITEMS_IN_PICKER     15  ///< max no. items in the popup menu for item selection
+
 enum main_id {
 	ID_MAIN_FRAME = 100,
 	ID_LEFT_FRAME,
@@ -635,6 +637,10 @@ enum main_id {
 
 	ID_POPUP_PCB_END_RANGE,
 
+    // reserve a block of MAX_ITEMS_IN_PICKER ids for the item selection popup  
+    ID_POPUP_PCB_ITEM_SELECTION_START,
+    ID_POPUP_PCB_ITEM_SELECTION_END = MAX_ITEMS_IN_PICKER + ID_POPUP_PCB_ITEM_SELECTION_START,
+
 	ID_POPUP_PCB_AUTOPLACE_START_RANGE,
 
 	ID_POPUP_PCB_AUTOPLACE_FIXE_MODULE,
@@ -858,7 +864,6 @@ enum main_id {
 	ID_PCB_MUWAVE_END_CMD,
 
 	ID_END_LIST
-
 };
 
 #endif	/* define ID_H */

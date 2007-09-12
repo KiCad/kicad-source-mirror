@@ -1,5 +1,5 @@
 /* XPM */
-char * footprint_text_xpm[] = {
+static char * footprint_text_xpm[] = {
 "16 16 4 1",
 " 	c None",
 ".	c #009B9B",
@@ -21,4 +21,3 @@ char * footprint_text_xpm[] = {
 "     .....+     ",
 "    ........    ",
 "                "};
-

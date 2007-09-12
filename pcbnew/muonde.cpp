@@ -113,7 +113,7 @@ static void Exit_Muonde( WinEDA_DrawFrame* frame, wxDC* DC )
 
     frame->DrawPanel->ManageCurseur = NULL;
     frame->DrawPanel->ForceCloseManageCurseur = NULL;
-    frame->m_CurrentScreen->SetCurItem( NULL );
+    frame->SetCurItem( NULL );
 }
 
 

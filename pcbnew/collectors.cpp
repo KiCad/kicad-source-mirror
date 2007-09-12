@@ -22,8 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#if defined(DEBUG)
-
 #include "collectors.h"  
 #include "pcbnew.h"             // class BOARD
 
@@ -60,6 +58,26 @@ const KICAD_T GENERAL_COLLECTOR::PrimaryItems[] = {
 };
 
 
+const KICAD_T GENERAL_COLLECTOR::ModuleItems[] = {
+    TYPEMODULE,
+    EOT
+};
+
+
+const KICAD_T GENERAL_COLLECTOR::PadsOrModules[] = { 
+    TYPEPAD, 
+    TYPEMODULE, 
+    EOT 
+};
+
+
+const KICAD_T GENERAL_COLLECTOR::Tracks[] = {
+    TYPETRACK,
+    TYPEVIA,
+    EOT
+};
+
+
 /**
  * Function Inspect
  * is the examining function within the INSPECTOR which is passed to the 
@@ -77,7 +95,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
     BOARD_ITEM* item = (BOARD_ITEM*) testItem;
     MODULE*     module = NULL;
 
-#if 1   // debugging
+#if 0   // debugging
     static int breakhere = 0;
     switch( item->Type() )
     {
@@ -258,6 +276,9 @@ void GENERAL_COLLECTOR::Collect( BOARD_ITEM* aItem, const KICAD_T aScanList[],
                     m_ScanTypes);
     
     SetTimeNow();               // when snapshot was taken
+
+    // record the length of the primary list before concatonating on to it.
+    m_PrimaryLength = m_List.size();
     
     // append 2nd list onto end of the first list 
     for( unsigned i=0;  i<m_List2nd.size();  ++i )
@@ -266,7 +287,5 @@ void GENERAL_COLLECTOR::Collect( BOARD_ITEM* aItem, const KICAD_T aScanList[],
     Empty2nd();
 }
 
-
-#endif  // DEBUG
 
 //EOF

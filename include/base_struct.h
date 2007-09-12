@@ -477,6 +477,21 @@ public:
         return false;   // only MODULEs can be locked at this time.
     }
 
+    /**
+     * Function MenuText
+     * @return wxString - The text to use in any menu type UI control which
+     *  must identify this item.
+     * @todo: make this virtual and split into each derived class
+     */
+    wxString MenuText() const;
+    
+    /**
+     * Function MenuIcon
+     * @return const char** - The XPM to use in any UI control which can help
+     *  identify this item.
+     * @todo: make this virtual and split into each derived class
+     */
+    const char** MenuIcon() const;
 };
 
 

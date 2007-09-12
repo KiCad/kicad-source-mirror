@@ -215,7 +215,7 @@ private:
     char            m_FlagRefreshReq;       /* indique que l'ecran doit redessine */
     char            m_FlagModified;         // indique modif du PCB,utilise pour eviter une sortie sans sauvegarde
     char            m_FlagSave;             // indique sauvegarde auto faite
-    EDA_BaseStruct* m_CurrentItem;          /* Current selected object */
+    EDA_BaseStruct* m_CurrentItem;          ///< Current selected object
 
     /* Valeurs du pas de grille et du zoom */
 public:
@@ -232,7 +232,7 @@ public:
     BASE_SCREEN( int idscreen, KICAD_T aType = SCREEN_STRUCT_TYPE );
     ~BASE_SCREEN();
 
-    void                    InitDatas();/* Inits completes des variables */
+    void                    InitDatas();        /* Inits completes des variables */
     wxSize                  ReturnPageSize();
     int                     GetInternalUnits();
 
@@ -264,7 +264,11 @@ public:
      * activity easier in base_screen.cpp.
      * @param current Any object derived from EDA_BaseStruct
      */
-    void            SetCurItem( EDA_BaseStruct* current );
+    void            SetCurItem( EDA_BaseStruct* current )
+    {
+        m_CurrentItem = current; 
+    }
+    
     EDA_BaseStruct* GetCurItem() const {  return m_CurrentItem; }
     
     /* fonctions relatives au zoom */
@@ -290,7 +294,7 @@ public:
      * Function RefPos
      * returns the reference position, coming from either the mouse position or the
      * the cursor position.
-     * @param useMouse If true, return mouse posistion, else cursor's.
+     * @param useMouse If true, return mouse position, else cursor's.
      * @return wxPoint - The reference point, either the mouse position or 
      *   the cursor position.
      */

@@ -36,7 +36,7 @@ void WinEDA_PcbFrame::Start_Move_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC )
     drawitem->Display_Infos( this );
     DrawPanel->ManageCurseur = Move_Segment;
     DrawPanel->ForceCloseManageCurseur = Exit_EditEdge;
-    GetScreen()->SetCurItem( drawitem );
+    SetCurItem( drawitem );
     DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 }
 
@@ -55,7 +55,7 @@ void WinEDA_PcbFrame::Place_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC )
     Trace_DrawSegmentPcb( DrawPanel, DC, drawitem, GR_OR );
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
-    GetScreen()->SetCurItem( NULL );
+    SetCurItem( NULL );
     GetScreen()->SetModify();
     drawitem->m_Flags = 0;
 }
@@ -113,14 +113,14 @@ void WinEDA_PcbFrame::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
         if( PtStruct && (PtStruct->Type() == TYPEDRAWSEGMENT ) )
             Segment = (DRAWSEGMENT*) PtStruct;
         DisplayOpt.DisplayDrawItems = track_fill_copy;
-        GetScreen()->SetCurItem( NULL );
+        SetCurItem( NULL );
     }
     else
     {
         Trace_DrawSegmentPcb( DrawPanel, DC, (DRAWSEGMENT*) Segment, GR_XOR );
         Segment->m_Flags = 0;
         DeleteStructure( Segment );
-        GetScreen()->SetCurItem( NULL );
+        SetCurItem( NULL );
         GetScreen()->SetModify();
     }
 }
@@ -248,7 +248,7 @@ static void Exit_EditEdge( WinEDA_DrawPanel* Panel, wxDC* DC )
     }
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
-    Panel->GetScreen()->SetCurItem( NULL );
+    ((WinEDA_PcbFrame*)Panel->m_Parent)->SetCurItem( NULL );
 }
 
 
@@ -275,7 +275,7 @@ DRAWSEGMENT* WinEDA_PcbFrame::Begin_DrawSegment( DRAWSEGMENT* Segment,
 
     if( Segment == NULL )        /* debut reel du trace */
     {
-        GetScreen()->SetCurItem( Segment = new DRAWSEGMENT( m_Pcb ) );
+        SetCurItem( Segment = new DRAWSEGMENT( m_Pcb ) );
         Segment->m_Flags = IS_NEW;
         Segment->SetLayer( GetScreen()->m_Active_Layer );
         Segment->m_Width = s_large;
@@ -305,7 +305,7 @@ DRAWSEGMENT* WinEDA_PcbFrame::Begin_DrawSegment( DRAWSEGMENT* Segment,
 
                 DrawItem = Segment;
 
-                GetScreen()->SetCurItem( Segment = new DRAWSEGMENT( m_Pcb ) );
+                SetCurItem( Segment = new DRAWSEGMENT( m_Pcb ) );
 
                 Segment->m_Flags = IS_NEW;
                 Segment->SetLayer( DrawItem->GetLayer() );
@@ -353,7 +353,7 @@ void WinEDA_PcbFrame::End_Edge( DRAWSEGMENT* Segment, wxDC* DC )
 
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
-    GetScreen()->SetCurItem( NULL );
+    SetCurItem( NULL );
 }
 
 

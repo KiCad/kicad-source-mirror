@@ -340,9 +340,7 @@ public:
     WinEDA3D_DrawFrame* m_Draw3DFrame;
 
 protected:    
-#if defined(DEBUG)
     GENERAL_COLLECTOR*  m_Collector;
-#endif
     
     
 public:
@@ -392,17 +390,39 @@ public:
 
     // Gestion du PCB
     bool            Clear_Pcb( wxDC* DC, bool query );
-    BOARD_ITEM*     PcbGeneralLocateAndDisplay();
-    BOARD_ITEM*     Locate( int typeloc, int LayerSearch );
     
-
-#if defined(DEBUG)
+    /**
+     * Function PcbGeneralLocateAndDisplay
+     * searches for an item under the mouse cursor.
+     * Items are searched first on the current working layer.
+     * If nothing found, an item will be searched without layer restriction.  If
+     * more than one item is found meeting the current working layer criterion, then
+     * a popup menu is shown which allows the user to pick which item he/she is 
+     * interested in.  Once an item is chosen, then it is make the "current item"
+     * and the status window is updated to reflect this.
+     */
+    BOARD_ITEM*     PcbGeneralLocateAndDisplay();
+    
+    BOARD_ITEM*     Locate( int typeloc, int LayerSearch );
+    void            ProcessItemSelection( wxCommandEvent& event );
+    
+    /**
+     * Function SetCurItem
+     * sets the currently selected item and displays it in the MsgPanel.
+     * If the given item is NULL then the MsgPanel is erased and there is no
+     * currently selected item. This function is intended to make the process
+     * of "selecting" an item more formal, and to indivisibly tie the operation
+     * of selecting an item to displaying it using BOARD_ITEM::Display_Infos().
+     * @param aItem The BOARD_ITEM to make the selected item or NULL if none.
+     */
+    void            SetCurItem( BOARD_ITEM* aItem );
+    BOARD_ITEM*     GetCurItem();
+    
     /**
      * Function GetCollectorsGuide
      * @return GENERAL_COLLECTORS_GUIDE - that considers the global configuration options.
      */
     GENERAL_COLLECTORS_GUIDE GetCollectorsGuide();
-#endif
     
     // Gestion du curseur
     void            place_marqueur( wxDC* DC, const wxPoint& pos, char* pt_bitmap,
@@ -456,9 +476,11 @@ public:
     // Chargement de modules
     MODULE*         Get_Librairie_Module( wxWindow* winaff, const wxString& library,
                                           const wxString& ModuleName, bool show_msg_err );
+    
     wxString        Select_1_Module_From_List(
         WinEDA_DrawFrame* active_window, const wxString& Library,
         const wxString& Mask, const wxString& KeyWord );
+    
     MODULE*         Load_Module_From_Library( const wxString& library, wxDC* DC );
 
     // Gestion des chevelus (ratsnest)
@@ -514,6 +536,8 @@ public:
     // divers
     void            AddHistory( int value, KICAD_T type ); // Add value in data list history
     void            InstallGridFrame( const wxPoint& pos );
+    
+    DECLARE_EVENT_TABLE()
 };
 
 
@@ -533,7 +557,28 @@ private:
     bool             m_SelViaSizeBox_Changed;
     wxMenu*          m_FilesMenu;
 
+#if 0 && defined(DEBUG)
+    /**
+     * Function onRightClickBuilder
+     * is a helper function for private use by OnRightClick().  It helps build
+     * the hierarchical menu.
+     * @param collectorNdx The index into the COLLECTOR that \a aItem represents.
+     * @param aItem The BOARD_ITEM to provide menu support for, or NULL if 
+     *  nothing was under the mouse.
+     * @param pPopMenu What to populate with choices.
+     */
+    void  onRightClickBuilder( int collectorNdx, BOARD_ITEM* aItem, wxMenu* aPopMenu );
     
+    void  popUpMenuForFootprints( int collectorNdx, MODULE* aModule, wxMenu* aPopMenu );
+
+    void  popUpMenuForFpTexts( int collectorNdx, TEXTE_MODULE* aText, wxMenu* aPopMenu );
+    
+    void  popUpMenuForFpPads( int collectorNdx, D_PAD* aPad, wxMenu* aPopMenu );
+    
+    void  popupMenuForTracks( int collectorNdx, TRACK* aTrack, wxMenu* aPopMenu );
+#endif    
+
+
 public:
     WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent, const wxString& title,
                      const wxPoint& pos, const wxSize& size );
@@ -549,6 +594,7 @@ public:
 
     void                OnCloseWindow( wxCloseEvent& Event );
     void                Process_Special_Functions( wxCommandEvent& event );
+    
     void                ProcessMuWaveFunctions( wxCommandEvent& event );
     void                MuWaveCommand( wxDC* DC, const wxPoint& MousePos );
 
@@ -898,7 +944,7 @@ public:
     virtual void    HandleBlockPlace( wxDC* DC );
     virtual int     HandleBlockEnd( wxDC* DC );
 
-    EDA_BaseStruct* ModeditLocateAndDisplay();
+    BOARD_ITEM*     ModeditLocateAndDisplay();
 
 public:
     void            SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy, int flag_type_command = 0 );

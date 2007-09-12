@@ -131,7 +131,7 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow* father, WinEDA_App* pa
 
     m_Pcb->m_PcbFrame = this;
     m_CurrentScreen   = ScreenModule;
-    GetScreen()->SetCurItem( NULL );
+    SetCurItem( NULL );
     GetSettings();
 
     wxSize GridSize( 500, 500 );

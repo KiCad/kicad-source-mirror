@@ -96,7 +96,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
                     Hight_Light( DC );
                 g_CurrentTrackSegment = NULL;
                 g_FirstTrackSegment   = NULL;
-                GetScreen()->SetCurItem( NULL );
+                SetCurItem( NULL );
                 return NULL;
             }
             else

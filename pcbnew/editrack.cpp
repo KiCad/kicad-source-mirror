@@ -61,7 +61,7 @@ static void Exit_Editrack( WinEDA_DrawPanel* Panel, wxDC* DC )
     }
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
-    frame->GetScreen()->SetCurItem( NULL );
+    frame->SetCurItem( NULL );
 }
 
 
@@ -156,7 +156,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
             g_FirstTrackSegment->SetState( BEGIN_ONPAD | END_ONPAD, OFF );
         }
         g_CurrentTrackSegment->Display_Infos( this );
-        GetScreen()->SetCurItem( g_CurrentTrackSegment );
+        SetCurItem( g_CurrentTrackSegment );
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
         if( Drc_On && (Drc( this, DC, g_CurrentTrackSegment, m_Pcb->m_Track, 1 ) == BAD_DRC) )
         {
@@ -221,7 +221,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
         g_CurrentTrackSegment->Display_Infos( this );
     }
 
-    GetScreen()->SetCurItem( g_CurrentTrackSegment );
+    SetCurItem( g_CurrentTrackSegment );
     return g_CurrentTrackSegment;
 }
 
@@ -472,7 +472,7 @@ void WinEDA_PcbFrame::End_Route( TRACK* track, wxDC* DC )
 
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
-    GetScreen()->SetCurItem( NULL );
+    SetCurItem( NULL );
 }
 
 

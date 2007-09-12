@@ -5,13 +5,32 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2007-Sep-11 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ pcbnew
+  * Changed PcbLocateAndDisplay() to be tool specific in its search and to present
+    a popup menu when there are multiple items under the mouse.  It is also
+    a framework for future enhancements.
+    @todo: grep for @todo and finish off those tasks.
+  * Introduced a formal notion of "selected item".  This is done with the addition
+    of the WinEDA_BasePcbFrame::SetCurItem() function.  So now you have to first
+    select an item with the left mouse button before you attempt to use the 
+    right button popup menu.  Right button no longer has an effect on the 
+    currently selected item.  The currently selected item is shown in the MsgPanel.
+    When none is selected, the m_Pcb is shown.  
+  * Tweaked the OnRightClick() popup menus so that the most likely choices are
+    at the top.
+  * Added wxString BOARD_ITEM::MenuText() const and BOARD_ITEM::MenuIcon() and
+    both need more work, work which I will not have time to do.
+
+    
 2007-Sep-10 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew
   * Searched and did not see any usage of TRACK::Copy(int), where int was other 
     than '1', so renamed it to TRACK::CopyList(int) and commented it out because
     with int==1, this makes Copy(1) equivalent to the new Copy(void).
-  * Made TRACK::Copy() capable or copying SEGZONE too.  
+  * Made TRACK::Copy() capable of copying SEGZONE too.  
 
     
 2007-sept-10 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>

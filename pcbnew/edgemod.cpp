@@ -48,7 +48,7 @@ void WinEDA_ModuleEditFrame::Start_Move_EdgeMod( EDGE_MODULE* Edge, wxDC* DC )
     CursorInitialPosition    = GetScreen()->m_Curseur;
     DrawPanel->ManageCurseur = Move_Segment;
     DrawPanel->ForceCloseManageCurseur = Exit_EditEdge_Module;
-    GetScreen()->SetCurItem( Edge );
+    SetCurItem( Edge );
     DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 }
 
@@ -77,7 +77,7 @@ void WinEDA_ModuleEditFrame::Place_EdgeMod( EDGE_MODULE* Edge, wxDC* DC )
     Edge->m_Flags = 0;
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
-    GetScreen()->SetCurItem( NULL );
+    SetCurItem( NULL );
     GetScreen()->SetModify();
     MODULE* Module = (MODULE*) Edge->m_Parent;
     Module->Set_Rectangle_Encadrement();

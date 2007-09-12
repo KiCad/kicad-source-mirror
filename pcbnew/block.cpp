@@ -439,7 +439,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
 
     GetScreen()->SetModify();
     GetScreen()->BlockLocate.Normalize();
-    GetScreen()->SetCurItem( NULL );
+    SetCurItem( NULL );
 
     /* Effacement des modules */
     if( Block_Include_Modules )

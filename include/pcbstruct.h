@@ -276,9 +276,9 @@ public:
      * returned, otherwise any visible Pad or Module on any other layer.
      * The provided layer must be visible.
      * @param refPos The wxPoint to hit-test.
-     * @return EDA_BaseStruct* - if a direct hit, else NULL.
+     * @return BOARD_ITEM* - if a direct hit, else NULL.
      */
-    EDA_BaseStruct* FindPadOrModule( const wxPoint& refPos, int layer );
+//  BOARD_ITEM* FindPadOrModule( const wxPoint& refPos, int layer );
     
 
     /**

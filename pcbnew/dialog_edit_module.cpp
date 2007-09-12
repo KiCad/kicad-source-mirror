@@ -622,7 +622,7 @@ void WinEDA_ModulePropertiesFrame::ExchangeModule( wxCommandEvent& event )
                                          m_DC, wxPoint( -1, -1 ) );
 
     // Attention: si il y a eu echange, m_CurrentModule a été delete!
-    m_Parent->GetScreen()->SetCurItem( NULL );
+    m_Parent->SetCurItem( NULL );
     Close( TRUE );
 }
 

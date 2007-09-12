@@ -7,6 +7,10 @@ folks will see these items and volunteer to do them.
 // @todo: bug? memory leak at this point:  about line 418
 this definitely looks like a memory leak.
 
+*** footprint_text_xpm is included more than once into the link image of pcbnew.
+
+*** @todo: grep for @todo and finish off those tasks.
+
 
 *** make the ADD_MENUITEM macros in include/macros.h be static inline functions instead
 of macros.  e.g. w/o argument types:
@@ -18,10 +22,6 @@ static inline void ADD_MENUITEM(menu, id, text, icon)
 }
 
 
-*** Add hierarchical menu to right mouse click in PCBNEW for the case when
-multiple items are under the mouse cursor.
-
-   
 *** Set up a DOXYGEN environment starting with a configuration file that:
 - understands the JavaDoc style comments that we have started using
 - gives preference to comments in header files over *.cpp files

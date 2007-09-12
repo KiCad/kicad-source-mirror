@@ -50,7 +50,7 @@ void WinEDA_BasePcbFrame::InstallModuleOptionsFrame( MODULE* Module,
 
         m_Parent->m_ModuleEditFrame->Load_Module_Module_From_BOARD(
             (MODULE*) GetScreen()->GetCurItem() );
-        GetScreen()->SetCurItem( NULL );
+        SetCurItem( NULL );
 
         GoToEditor = FALSE;
         m_Parent->m_ModuleEditFrame->Show( TRUE );

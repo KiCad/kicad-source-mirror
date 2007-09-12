@@ -100,7 +100,7 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
     if( module == NULL )
         return;
 
-    m_CurrentScreen->SetCurItem( module );
+    SetCurItem( module );
     m_Pcb->m_Status_Pcb &= ~CHEVELU_LOCAL_OK;
     module->m_Flags |= IS_MOVED;
     ModuleInitOrient = module->m_Orient;
@@ -199,7 +199,7 @@ void Exit_Module( WinEDA_DrawPanel* Panel, wxDC* DC )
     g_Drag_Pistes_On     = FALSE;
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
-    pcbframe->m_CurrentScreen->SetCurItem( NULL );
+    pcbframe->SetCurItem( NULL );
 }
 
 

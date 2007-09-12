@@ -34,7 +34,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
  *  quand un outil est deja selectionné
  */
 {
-    EDA_BaseStruct* DrawStruct = m_CurrentScreen->GetCurItem();
+    BOARD_ITEM* DrawStruct = GetCurItem();
 
     DrawPanel->CursorOff( DC );
     if( m_ID_current_state == 0 )
@@ -72,10 +72,11 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         }
     }
 
-    DrawStruct = m_CurrentScreen->GetCurItem();
+    DrawStruct = GetCurItem();
     if( !DrawStruct || (DrawStruct->m_Flags == 0) )
     {
-        m_CurrentScreen->SetCurItem( DrawStruct = ModeditLocateAndDisplay() );
+        DrawStruct = (BOARD_ITEM*) ModeditLocateAndDisplay();
+        SetCurItem( DrawStruct );
     }
 
     switch( m_ID_current_state )
@@ -97,7 +98,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             if( m_ID_current_state == ID_PCB_ARC_BUTT )
                 shape = S_ARC;
 
-            m_CurrentScreen->SetCurItem( 
+            SetCurItem( 
                  Begin_Edge_Module( (EDGE_MODULE*) NULL, DC, shape ) );
         }
         else if( (DrawStruct->m_Flags & IS_NEW) )
@@ -105,16 +106,16 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             if( ( (EDGE_MODULE*) DrawStruct )->m_Shape == S_CIRCLE )
             {
                 End_Edge_Module( (EDGE_MODULE*) DrawStruct, DC );
-                m_CurrentScreen->SetCurItem( NULL );
+                SetCurItem( NULL );
             }
             else if( ( (EDGE_MODULE*) DrawStruct )->m_Shape == S_ARC )
             {
                 End_Edge_Module( (EDGE_MODULE*) DrawStruct, DC );
-                m_CurrentScreen->SetCurItem( NULL );
+                SetCurItem( NULL );
             }
             else if( ( (EDGE_MODULE*) DrawStruct )->m_Shape == S_SEGMENT )
             {
-                m_CurrentScreen->SetCurItem(
+                SetCurItem(
                     Begin_Edge_Module( (EDGE_MODULE*) DrawStruct, DC, 0 ) );
             }
             else
@@ -130,7 +131,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             {
                 SaveCopyInUndoList( m_Pcb->m_Modules );
                 RemoveStruct( DrawStruct, DC );
-                m_CurrentScreen->SetCurItem( DrawStruct = NULL );
+                SetCurItem( DrawStruct = NULL );
             }
         }
         break;
@@ -144,7 +145,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         Place_Module( m_Pcb->m_Modules, DC );
         RedrawActiveWindow( DC, TRUE );
         SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
-        m_CurrentScreen->SetCurItem( NULL );
+        SetCurItem( NULL );
         break;
 
     case ID_TEXT_COMMENT_BUTT:
@@ -181,7 +182,7 @@ void WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
  *  Ce menu est ensuite complété par la liste des commandes de ZOOM
  */
 {
-    EDA_BaseStruct* DrawStruct = m_CurrentScreen->GetCurItem();
+    BOARD_ITEM*     DrawStruct = GetCurItem();
     wxString        msg;
     bool            append_set_width = FALSE;
     bool            BlockActive = (m_CurrentScreen->BlockLocate.m_Command !=  BLOCK_IDLE);
@@ -189,7 +190,7 @@ void WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
     // Simple localisation des elements si possible
     if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
     {
-        m_CurrentScreen->SetCurItem( DrawStruct = ModeditLocateAndDisplay() );
+        SetCurItem( DrawStruct = ModeditLocateAndDisplay() );
     }
 
     // Si commande en cours: affichage fin de commande
@@ -378,7 +379,7 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
  *      appel de l'editeur correspondant.
  */
 {
-    EDA_BaseStruct* DrawStruct = m_CurrentScreen->GetCurItem();
+    BOARD_ITEM*     DrawStruct = GetCurItem();
     wxPoint         pos = GetPosition();
     wxClientDC      dc( DrawPanel );
 
@@ -396,7 +397,7 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             break;
 
         // Element localisé
-        m_CurrentScreen->SetCurItem( DrawStruct );
+        SetCurItem( DrawStruct );
 
         switch( DrawStruct->Type() )
         {
@@ -429,7 +430,7 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         if( DrawStruct && (DrawStruct->m_Flags & IS_NEW) )
         {
             End_Edge_Module( (EDGE_MODULE*) DrawStruct, DC );
-            m_CurrentScreen->SetCurItem( NULL );
+            SetCurItem( NULL );
         }
         break;
     }

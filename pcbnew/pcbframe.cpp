@@ -6,6 +6,7 @@
 
 #include "common.h"
 #include "pcbnew.h"
+#include "collectors.h"
 
 #include "bitmaps.h"
 #include "protos.h"
@@ -16,7 +17,7 @@
 /* class WinEDA_PcbFrame */
 /*******************************/
 
-BEGIN_EVENT_TABLE( WinEDA_PcbFrame, wxFrame )
+BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
 
     COMMON_EVENTS_DRAWFRAME 
     EVT_SOCKET( ID_EDA_SOCKET_EVENT_SERV, WinEDA_PcbFrame::OnSockRequestServer )
@@ -159,7 +160,7 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, wxFrame )
     // Annulation de commande en cours
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
                     WinEDA_PcbFrame::Process_Special_Functions )
-    
+
     // PopUp Menus pour Zooms traites dans drawpanel.cpp
 
 END_EVENT_TABLE()
