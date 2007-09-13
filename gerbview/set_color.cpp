@@ -28,6 +28,7 @@ enum col_sel_id {
 	ID_COLOR_SETUP
 };
 
+
 	/**********************************/
 	/* Liste des menus de Menu_Layers */
 	/**********************************/
@@ -133,9 +134,9 @@ void DisplayColorSetupFrame(WinEDA_DrawFrame * parent,
 {
 	WinEDA_SetColorsFrame * frame =
 			new WinEDA_SetColorsFrame(parent, framepos);
-	frame->ShowModal(); frame->Destroy();
+	frame->ShowModal();
+	frame->Destroy();
 }
-
 
 
 /**********************************************************************/
@@ -185,7 +186,8 @@ wxBoxSizer * CurrBoxSizer = NULL;
 		{
 			if ( *laytool_list[ii]->m_Color & ITEM_NOT_SHOW )
 				laytool_list[ii]->m_CheckBox->SetValue(FALSE);
-			else laytool_list[ii]->m_CheckBox->SetValue(TRUE);
+			else
+				laytool_list[ii]->m_CheckBox->SetValue(TRUE);
 		}
 
 		else if ( laytool_list[ii]->m_NoDisplay )
@@ -242,6 +244,7 @@ wxBoxSizer * CurrBoxSizer = NULL;
     GetSizer()->SetSizeHints(this);
 }
 
+
 /*******************************************************************/
 void  WinEDA_SetColorsFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 /*******************************************************************/
@@ -249,7 +252,6 @@ void  WinEDA_SetColorsFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
     // true is to force the frame to close
     Close(true);
 }
-
 
 
 /***********************************************************/
@@ -261,16 +263,21 @@ int id = event.GetId();
 int color;
 int w = BUTT_SIZE_X, h = BUTT_SIZE_Y;
 
-
-	color = DisplayColorFrame(this);
-	if ( color < 0) return;
+	color = DisplayColorFrame( this,
+			*laytool_list[id - ID_COLOR_SETUP]->m_Color );
+	if ( color < 0 )
+		return;
 
 	for ( ii = 0; laytool_list[ii] != NULL; ii++ )
-		{
-		if( laytool_list[ii]->m_Id != id) continue;
-		if( laytool_list[ii]->m_Color == NULL) continue;
+	{
+		if( laytool_list[ii]->m_Id != id )
+			continue;
 
-		if( *laytool_list[ii]->m_Color == color) break;
+		if( laytool_list[ii]->m_Color == NULL )
+			continue;
+
+		if( *laytool_list[ii]->m_Color == color )
+			break;
 
 		*laytool_list[ii]->m_Color = color;
 		wxMemoryDC iconDC;
@@ -295,7 +302,7 @@ int w = BUTT_SIZE_X, h = BUTT_SIZE_Y;
 		Button->SetBitmapLabel(ButtBitmap);
 		SetDisplayOnOff(event);
 		m_Parent->GetScreen()->SetRefreshReq();
-		}
+	}
 	Refresh(FALSE);
 }
 
@@ -305,27 +312,27 @@ void WinEDA_SetColorsFrame::SetDisplayOnOff(wxCommandEvent& event)
 /******************************************************************/
 {
 	for ( int ii = 0; laytool_list[ii] != NULL; ii++ )
-		{
-		if ( laytool_list[ii]->m_CheckBox == NULL ) continue;
+	{
+		if ( laytool_list[ii]->m_CheckBox == NULL )
+			continue;
 		if ( ! laytool_list[ii]->m_NoDisplayIsColor &&
-			 (laytool_list[ii]->m_NoDisplay == NULL) ) continue;
+			 (laytool_list[ii]->m_NoDisplay == NULL) )
+			continue;
 
 		if ( laytool_list[ii]->m_NoDisplayIsColor )
-			{
+		{
 			if ( laytool_list[ii]->m_CheckBox->GetValue() )
 				*laytool_list[ii]->m_Color &= ~ITEM_NOT_SHOW;
-			else *laytool_list[ii]->m_Color |= ITEM_NOT_SHOW;
-			}
-
-		else
-			{
-			*laytool_list[ii]->m_NoDisplay = laytool_list[ii]->m_CheckBox->GetValue();
-			}
-
+			else
+				*laytool_list[ii]->m_Color |= ITEM_NOT_SHOW;
 		}
+		else
+		{
+			*laytool_list[ii]->m_NoDisplay = laytool_list[ii]->m_CheckBox->GetValue();
+		}
+	}
 	m_Parent->GetScreen()->SetRefreshReq();
 }
-
 
 
 /***********************************************************************/
@@ -335,10 +342,11 @@ void WinEDA_SetColorsFrame::ResetDisplayLayersCu(wxCommandEvent& event)
 bool NewState = (event.GetId() == ID_COLOR_RESET_SHOW_LAYER_ON) ? TRUE : FALSE;
 
 	for ( int ii = 1; ii < 34; ii++ )
-		{
-		if ( laytool_list[ii]->m_CheckBox == NULL ) continue;
+	{
+		if ( laytool_list[ii]->m_CheckBox == NULL )
+			continue;
 		laytool_list[ii]->m_CheckBox->SetValue(NewState);
-		}
+	}
 
 	SetDisplayOnOff(event);
 }

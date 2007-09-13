@@ -273,8 +273,10 @@ void DisplayColorSetupFrame(WinEDA_DrawFrame * parent,
 {
 	WinEDA_SetColorsFrame * frame =
 			new WinEDA_SetColorsFrame(parent, framepos);
-	frame->ShowModal(); frame->Destroy();
+	frame->ShowModal();
+	frame->Destroy();
 }
+
 
 /**********************************************************************/
 WinEDA_SetColorsFrame::WinEDA_SetColorsFrame(WinEDA_DrawFrame *parent,
@@ -299,9 +301,9 @@ wxPoint bg_color_pos;
 	right = pos.x; bottom = 0;
 	line_height = h;
 	for ( ii = 0; laytool_list[ii] != NULL; ii++ )
+	{
+		if( laytool_list[ii]->m_Color == NULL )
 		{
-		if( laytool_list[ii]->m_Color == NULL)
-			{
 			if( pos.y != START_Y )
 			{
 				pos.x = right + 10;
@@ -309,14 +311,14 @@ wxPoint bg_color_pos;
 				bg_color_pos = pos;
 			}
 			wxString msg = wxGetTranslation(laytool_list[ii]->m_Name);
-			text = new wxStaticText(this,-1,
+			text = new wxStaticText( this, -1,
 					msg,
-					wxPoint(pos.x, pos.y ),
-					wxSize(-1,-1), 0 );
+					wxPoint( pos.x, pos.y ),
+					wxSize(-1, -1), 0 );
 			line_height = MAX(line_height, text->GetRect().GetHeight());
 			pos.y += line_height;
 			continue;
-			}
+		}
 		butt_ID = ID_COLOR_SETUP + ii;
 		laytool_list[ii]->m_Id = butt_ID;
 		wxMemoryDC iconDC;
@@ -334,19 +336,19 @@ wxPoint bg_color_pos;
 		Brush.SetStyle(wxSOLID);
 
 		iconDC.SetBrush(Brush);
-		iconDC.DrawRectangle(0,0, w, h);
+		iconDC.DrawRectangle(0, 0, w, h);
 
-		Button = new wxBitmapButton(this, butt_ID,
+		Button = new wxBitmapButton( this, butt_ID,
 						ButtBitmap,
-						wxPoint(pos.x, pos.y - ((h -line_height)/2) ),
-						wxSize(w,h) );
+						wxPoint( pos.x, pos.y - (h - line_height) / 2 ),
+						wxSize(w, h) );
 		laytool_list[ii]->m_Button = Button;
 
 		wxString msg = wxGetTranslation(laytool_list[ii]->m_Name);
-		text = new wxStaticText(this,-1,
+		text = new wxStaticText( this, -1,
 					msg,
-					wxPoint(pos.x + 5 + w , pos.y ),
-					wxSize(-1,-1), 0 );
+					wxPoint(pos.x + 5 + w, pos.y ),
+					wxSize(-1, -1), 0 );
 		wxPoint lowpos;
 		lowpos.x = text->GetRect().GetRight();
 		lowpos.y = text->GetRect().GetBottom();
@@ -356,7 +358,7 @@ wxPoint bg_color_pos;
 
 		yy = line_height + 5;
 		pos.y += yy;
-		}
+	}
 
 	bg_color_pos.x += 5; bg_color_pos.y += 25;
 wxString bg_choice[2] = { _("White Background"), _("Black Background")};
@@ -364,8 +366,8 @@ wxString bg_choice[2] = { _("White Background"), _("Black Background")};
 			_("Background Colour"), bg_color_pos,
 			wxDefaultSize, 2, bg_choice, 1, wxRA_SPECIFY_COLS);
 	m_SelBgColor->SetSelection( (g_DrawBgColor == BLACK) ? 1 : 0);
-	bottom = MAX(bottom, m_SelBgColor->GetRect().GetBottom());;
-	right = MAX(right, m_SelBgColor->GetRect().GetRight());;
+	bottom = MAX(bottom, m_SelBgColor->GetRect().GetBottom());
+	right = MAX(right, m_SelBgColor->GetRect().GetRight());
 
 	SetClientSize(wxSize(right+10, bottom+10));
 }
@@ -375,17 +377,23 @@ wxString bg_choice[2] = { _("White Background"), _("Black Background")};
 void WinEDA_SetColorsFrame::SetColor(wxCommandEvent& event)
 /***************************************************************/
 {
+int ii;
 int id = event.GetId();
-int color = DisplayColorFrame(this);
+int color;
 int w = BUTT_SIZE_X, h = BUTT_SIZE_Y;
 
-	if ( color < 0) return;
+	color = DisplayColorFrame( this,
+			*laytool_list[id - ID_COLOR_SETUP]->m_Color );
+	if ( color < 0 )
+		return;
 
-	for ( int ii = 0; laytool_list[ii] != NULL; ii++ )
+	for ( ii = 0; laytool_list[ii] != NULL; ii++ )
 	{
-		if( laytool_list[ii]->m_Id != id) continue;
+		if( laytool_list[ii]->m_Id != id )
+			continue;
 
-		if( *laytool_list[ii]->m_Color == color) break;
+		if( *laytool_list[ii]->m_Color == color )
+			break;
 
 		*laytool_list[ii]->m_Color = color;
 		wxMemoryDC iconDC;
@@ -421,19 +429,18 @@ void WinEDA_SetColorsFrame::BgColorChoice(wxCommandEvent& event)
 {
 int color;
 
-	if ( m_SelBgColor->GetSelection() == 0 ) color = WHITE;
-	else  color = BLACK;
+	if ( m_SelBgColor->GetSelection() == 0 )
+		color = WHITE;
+	else
+		color = BLACK;
 
 	if ( color != g_DrawBgColor )
-		{
+	{
 		g_DrawBgColor = color;
 		m_Parent->SetDrawBgColor(g_DrawBgColor);
 		m_Parent->ReDrawPanel();
-		}
-
-
+	}
 }
-
 
 
 /*************************/
@@ -445,18 +452,18 @@ int pt;
 
 	LayerPointer->CommonColor = WHITE;
 	LayerPointer->Flags = 0;
-	pt=0;
+	pt = 0;
 	LayerPointer->CurrentWidth = 1;
 
 	/* seed Up the Layer colours, set all user layers off */
 	for( pt = 0; pt < MAX_LAYERS; pt++ )
-		{
-		LayerPointer->LayerStatus[pt]= 0;
+	{
+		LayerPointer->LayerStatus[pt] = 0;
 		LayerPointer->LayerColor[pt] = DARKGRAY;
-		}
+	}
 	 
 	LayerPointer->NumberOfLayers = pt - 1;
-	/* Couleurs specifiques: Mise a jour par la lecture de la config*/
+	/* Couleurs specifiques: Mise a jour par la lecture de la config */
 }
 
 
@@ -464,10 +471,9 @@ int pt;
 int ReturnLayerColor(int Layer)
 /*******************************/
 {
-	if(g_LayerDescr.Flags==0)
-		return(g_LayerDescr.LayerColor[Layer]);
+	if( g_LayerDescr.Flags==0 )
+		return( g_LayerDescr.LayerColor[Layer] );
 	else
-		return(g_LayerDescr.CommonColor);
+		return( g_LayerDescr.CommonColor );
 }
-
 

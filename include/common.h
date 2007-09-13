@@ -551,7 +551,7 @@ void AfficheDoc(WinEDA_DrawFrame * frame, const wxString & Doc, const wxString &
 
 int GetTimeStamp(void);
     /* Retoure une identification temporelle (Time stamp) differente a chaque appel */
-int DisplayColorFrame(wxWindow * parent);
+int DisplayColorFrame(wxWindow * parent, int OldColor);
 int GetCommandOptions(const int argc, const char **argv, const char * stringtst,
         const char ** optarg, int * optind);
 
@@ -626,5 +626,4 @@ void DrawAndSizingBlockOutlines(WinEDA_DrawPanel * panel, wxDC * DC, bool erase 
 
 
 #endif  // COMMON_H
-
 

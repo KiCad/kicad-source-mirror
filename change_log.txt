@@ -5,6 +5,15 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2007-Sep-13 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
+================================================================================
++ eeschema & pcbnew & gerbview
+    A Cancel button has now been provided for the "Colors" dialog box, which also
+    permits it to (otherwise) be cancelled by pressing the "Esc" key; the button
+    whose color matches that of the color currently selected (for the layer being
+    edited) also has the initial focus set to it.
+
+
 2007-Sep-11 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew

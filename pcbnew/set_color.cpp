@@ -50,11 +50,6 @@ static ColorButton Msg_Layers_Cu =
     _( "Copper Layers" ), -1           /* Title */
 };
 
-static ColorButton Msg_Layers_Tech =
-{
-    _( "Tech Layers" ), -1             /* Title */
-};
-
 static ColorButton Layer_1_Butt =
 {
     wxEmptyString,
@@ -181,6 +176,12 @@ static ColorButton Layer_16_Butt =
     CMP_N,          /* Title */
     ADR( CMP_N ),   /* adr du parametre optionnel */
     TRUE            // toggle bit ITEM_NOT_SHOW of the color variable
+};
+
+
+static ColorButton Msg_Layers_Tech =
+{
+    _( "Tech Layers" ), -1             /* Title */
 };
 
 static ColorButton Layer_17_Butt =
@@ -322,7 +323,8 @@ static ColorButton Ratsnest_Butt =
     _( "Ratsnest" ),                    /* Title */
     -1,
     &g_DesignSettings.m_RatsnestColor,  /* adr du parametre optionnel */
-    FALSE, &g_Show_Ratsnest             // address of boolean display control parameter to toggle
+    FALSE,
+    &g_Show_Ratsnest             // address of boolean display control parameter to toggle
 };
 
 static ColorButton Pad_Cu_Butt =
@@ -455,6 +457,7 @@ static ColorButton* laytool_list[] = {
 
 //	&Layer_30_Butt,
 //	&Layer_31_Butt,
+//	&Layer_32_Butt,
 
     &Msg_Others_Items,
     &Via_Normale_Butt,
@@ -552,7 +555,7 @@ BEGIN_EVENT_TABLE( WinEDA_SetColorsFrame, wxDialog )
     EVT_BUTTON( ID_COLOR_SETUP + 41, WinEDA_SetColorsFrame::SetColor )
     EVT_BUTTON( ID_COLOR_SETUP + 42, WinEDA_SetColorsFrame::SetColor )
     EVT_BUTTON( ID_COLOR_SETUP + 43, WinEDA_SetColorsFrame::SetColor )
-    EVT_BUTTON( ID_COLOR_SETUP + 44, WinEDA_SetColorsFrame::SetColor )
+//  EVT_BUTTON( ID_COLOR_SETUP + 44, WinEDA_SetColorsFrame::SetColor )
 END_EVENT_TABLE()
 
 /*****************************************************/
@@ -561,9 +564,10 @@ void DisplayColorSetupFrame( WinEDA_DrawFrame* parent,
 /*****************************************************/
 {
     WinEDA_SetColorsFrame* frame =
-        new WinEDA_SetColorsFrame( parent,framepos);
+        new WinEDA_SetColorsFrame( parent, framepos );
 
-    frame->ShowModal(); frame->Destroy();
+    frame->ShowModal();
+    frame->Destroy();
 }
 
 
@@ -586,7 +590,7 @@ WinEDA_SetColorsFrame::WinEDA_SetColorsFrame(
     
     SetFont( *g_DialogFont );
 
-    pos.x = 5; 
+    pos.x = 5;
     pos.y = START_Y;
     
     for( ii = 0; laytool_list[ii] != NULL; ii++ )
@@ -595,7 +599,7 @@ WinEDA_SetColorsFrame::WinEDA_SetColorsFrame(
         {
             if( pos.y != START_Y )
             {
-                pos.x += w + 120; 
+                pos.x += w + 120;
                 pos.y = START_Y;
             }
             
@@ -619,7 +623,7 @@ WinEDA_SetColorsFrame::WinEDA_SetColorsFrame(
 
         if( laytool_list[ii]->m_Id == 0 )
             laytool_list[ii]->m_Id = ID_COLOR_SETUP + ii;
-        
+
         butt_ID = laytool_list[ii]->m_Id;
 
         laytool_list[ii]->m_CheckBox = new wxCheckBox( this,
@@ -693,9 +697,9 @@ WinEDA_SetColorsFrame::WinEDA_SetColorsFrame(
         pos.y += yy;
     }
 
-    pos.x = 150; 
+    pos.x = 150;
     pos.y = 300;
-    
+
     wxButton* Button = new wxButton( this, ID_COLOR_RESET_SHOW_LAYER_ON,
                                      _( "Show All" ), pos );
 
@@ -712,8 +716,8 @@ WinEDA_SetColorsFrame::WinEDA_SetColorsFrame(
                            _( "Exit" ), pos );
 
     Button->SetForegroundColour( *wxBLUE );
-    
-    winsize.x = 500; 
+
+    winsize.x = 500;
     winsize.y = pos.y + Button->GetSize().y + 5;
     SetClientSize( winsize );
 }
@@ -736,7 +740,9 @@ void WinEDA_SetColorsFrame::SetColor( wxCommandEvent& event )
     int color;
     int w = BUTT_SIZE_X, h = BUTT_SIZE_Y;
 
-    color = DisplayColorFrame( this );
+	color = DisplayColorFrame( this,
+			*laytool_list[id - ID_COLOR_SETUP]->m_Color );
+
     if( color < 0 )
         return;
 
