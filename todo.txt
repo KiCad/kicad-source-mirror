@@ -19,6 +19,9 @@ referenced.   I think this would be an easier way to manage xpms.
 *** @todo: grep for @todo and finish off those tasks, scattered throughout the source.
 
 
+*** use BOARD_ITEM::MenuText() and MenuIcon() in the onrightclick.cpp
+
+
 *** make the ADD_MENUITEM macros in include/macros.h be static inline functions instead
 of macros.  e.g. w/o argument types:
 static inline void ADD_MENUITEM(menu, id, text, icon)
