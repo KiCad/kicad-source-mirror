@@ -415,9 +415,9 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
      *  si aucun pad ou module n'a ete localise */
     if( (pt_pad == NULL) && (Module == NULL) )
     {
-        MsgPanel->EraseMsgBox();
         DrawGeneralRatsnest( DC );
         pt_chevelu = (CHEVELU*) m_Pcb->m_Ratsnest;
+        
         for( ii = m_Pcb->GetNumRatsnests(); (ii > 0) && pt_chevelu; pt_chevelu++, ii-- )
             pt_chevelu->status &= ~CH_VISIBLE;
     }
