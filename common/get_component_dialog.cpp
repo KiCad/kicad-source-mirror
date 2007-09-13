@@ -46,7 +46,7 @@ public:
 	WinEDA_SelectCmp(WinEDA_DrawFrame *parent, const wxPoint& framepos,
 			wxArrayString & HistoryList, const wxString & Title,
 			bool show_extra_tool );
-	~WinEDA_SelectCmp(void) {};
+	~WinEDA_SelectCmp() {};
 
 private:
 	void Accept(wxCommandEvent& event);

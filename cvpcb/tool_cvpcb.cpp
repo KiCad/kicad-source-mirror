@@ -23,7 +23,7 @@
 
 
 /*********************************************/
-void WinEDA_CvpcbFrame::ReCreateHToolbar(void)
+void WinEDA_CvpcbFrame::ReCreateHToolbar()
 /*********************************************/
 {
 	if ( m_HToolBar != NULL ) return;
@@ -93,7 +93,7 @@ void WinEDA_CvpcbFrame::ReCreateHToolbar(void)
 
 
 /*******************************************/
-void WinEDA_CvpcbFrame::ReCreateMenuBar(void)
+void WinEDA_CvpcbFrame::ReCreateMenuBar()
 /*******************************************/
 /* Creation des menus de la fenetre principale
 */

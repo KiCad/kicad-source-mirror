@@ -113,7 +113,7 @@ GLfloat ax,ay,az,bx,by,bz,nx,ny,nz,r;
 
 
 /**********************************************/
-GLuint Pcb3D_GLCanvas::DisplayCubeforTest(void)
+GLuint Pcb3D_GLCanvas::DisplayCubeforTest()
 /**********************************************/
 {
 GLuint gllist = glGenLists( 1 );
@@ -158,7 +158,7 @@ GLuint gllist = glGenLists( 1 );
 /**********************/
 
 /* Constructor */
-Info_3D_Visu::Info_3D_Visu(void)
+Info_3D_Visu::Info_3D_Visu()
 {
 int ii;
     m_Beginx = m_Beginy = 0.0;	/* position of mouse */
@@ -170,7 +170,7 @@ int ii;
 }
 
 
-Info_3D_Visu::~Info_3D_Visu(void)
+Info_3D_Visu::~Info_3D_Visu()
 {
 }
 
@@ -216,13 +216,13 @@ wxStaticText * msgtitle;
 	GridSizer->Add(m_ZValueCtrl, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5);
 }
 
-WinEDA_VertexCtrl::~WinEDA_VertexCtrl(void)
+WinEDA_VertexCtrl::~WinEDA_VertexCtrl()
 {
 }
 
 
 /*******************************************/
-S3D_Vertex WinEDA_VertexCtrl::GetValue(void)
+S3D_Vertex WinEDA_VertexCtrl::GetValue()
 /*******************************************/
 /* Retourne (en unites internes) les coordonnes entrees (en unites utilisateur)
 */

@@ -1030,7 +1030,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
 
 
 /*******************************************/
-/* static void Place_Piste_en_Buffer(void) */
+/* static void Place_Piste_en_Buffer() */
 /*******************************************/
 
 /* Insere la nouvelle piste creee dans la liste standard des pistes.

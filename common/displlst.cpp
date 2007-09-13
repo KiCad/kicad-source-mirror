@@ -133,13 +133,13 @@ int ii;
 }
 
 
-WinEDAListBox:: ~WinEDAListBox(void)
+WinEDAListBox:: ~WinEDAListBox()
 {
 }
 
 
 /******************************************/
-void WinEDAListBox::MoveMouseToOrigin(void)
+void WinEDAListBox::MoveMouseToOrigin()
 /******************************************/
 {
 int x, y, w, h;
@@ -153,7 +153,7 @@ int orgy = m_List->GetRect().GetTop();
 }
 
 /*********************************************/
-wxString WinEDAListBox::GetTextSelection(void)
+wxString WinEDAListBox::GetTextSelection()
 /*********************************************/
 {
 wxString text = m_List->GetStringSelection();

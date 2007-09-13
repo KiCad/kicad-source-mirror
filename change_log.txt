@@ -4,6 +4,17 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Sep-13 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ kicad
+  * Inverted the logic associated with filters.  Filters now enable a file
+    in the project manager.  The default is to ignore all files.
+  * The filter for *.sch files is smarter, in that it looks to display only
+    top level *.sch files, rather than all *.sch files.
++ Others
+    More beautification
+
+
 2007-sept-13 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + all

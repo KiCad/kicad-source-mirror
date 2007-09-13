@@ -159,7 +159,7 @@ void InstallErcFrame(WinEDA_SchematicFrame *parent, wxPoint & pos)
 
 
 /*********************************************/
-void WinEDA_ErcFrame::ReBuildMatrixPanel(void)
+void WinEDA_ErcFrame::ReBuildMatrixPanel()
 /*********************************************/
 /* Build or rebuild the panel showing the ERC matrix
 */

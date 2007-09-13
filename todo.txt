@@ -2,7 +2,21 @@
 Here are some source code maintenance tasks that need to be done, and maybe some
 folks will see these items and volunteer to do them.
 
-*** @todo: grep for @todo and finish off those tasks.
+
+*** improved xpm handling
+We should: 
+1) make a library out of ALL the xpm files, and 
+2) develop a simple header file which declares ALL of them using conventional C/C++:
+  extern char * somename2_xpm[];
+  extern char * somename3_xpm[];
+  :
+  :
+This way the linker can bundle in the xpms that it has seen referenced.  I don't
+think seeing the extern declaration is cause to do this, it must actually be
+referenced.   I think this would be an easier way to manage xpms.  
+
+
+*** @todo: grep for @todo and finish off those tasks, scattered throughout the source.
 
 
 *** make the ADD_MENUITEM macros in include/macros.h be static inline functions instead
@@ -30,5 +44,7 @@ compiler can help with this too.
 *** Translate comments that are in French to English so there can be a broader
 understanding by new developers.
 
+
 *** Implement the graying in/out of "Edit/Undo", "Edit/Redo" menu items, 
 when Undo/Redo stack is empty/filled.
+

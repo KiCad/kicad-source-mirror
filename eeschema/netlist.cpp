@@ -75,7 +75,7 @@ int i;
 }
 
 /*****************************************************/
-void * WinEDA_SchematicFrame::BuildNetListBase(void)
+void * WinEDA_SchematicFrame::BuildNetListBase()
 /*****************************************************/
 /* Routine qui construit le tableau des elements connectes du projet
 	met a jour:

@@ -22,7 +22,7 @@
 #include "common.h"
 
 /*****************************************/
-void WinEDA_App::ReadPdfBrowserInfos(void)
+void WinEDA_App::ReadPdfBrowserInfos()
 /*****************************************/
 /* Read from Common config the Pdf browser choice
 */
@@ -36,7 +36,7 @@ void WinEDA_App::ReadPdfBrowserInfos(void)
 }
 
 /*****************************************/
-void WinEDA_App::WritePdfBrowserInfos(void)
+void WinEDA_App::WritePdfBrowserInfos()
 /*****************************************/
 /* Write into Common config the Pdf browser choice
 */

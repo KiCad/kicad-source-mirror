@@ -24,7 +24,7 @@
 #include "Lib_next.xpm"
 
 /****************************************************/
-void WinEDA_ViewlibFrame::ReCreateHToolbar(void)
+void WinEDA_ViewlibFrame::ReCreateHToolbar()
 /****************************************************/
 {
 int ii;
@@ -145,7 +145,7 @@ bool asdeMorgan = FALSE, state;
 
 
 /****************************************************/
-void WinEDA_ViewlibFrame::ReCreateVToolbar(void)
+void WinEDA_ViewlibFrame::ReCreateVToolbar()
 /****************************************************/
 {
 }

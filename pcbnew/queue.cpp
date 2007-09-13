@@ -36,7 +36,7 @@ void ReSetQueue( int, int, int, int, int, int, int );
 
 
 /************************/
-void FreeQueue(void)
+void FreeQueue()
 /************************/
 /* Free the memory used for storing all the queue */
 {
@@ -49,11 +49,11 @@ struct PcbQueue *p;
 		}
 }
 	/************************/
-	/* void InitQueue(void) */
+	/* void InitQueue() */
 	/************************/
 
 /* initialize the search queue */
-void InitQueue(void)
+void InitQueue()
 {
 struct PcbQueue *p;
 

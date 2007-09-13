@@ -26,7 +26,7 @@
 
 
 /**********************************************/
-void WinEDA_LibeditFrame::DisplayLibInfos(void)
+void WinEDA_LibeditFrame::DisplayLibInfos()
 /**********************************************/
 /* Affiche dans la zone messages la librairie , et le composant edite */
 {
@@ -60,7 +60,7 @@ wxChar UnitLetter[] = wxT("?ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
 
 /**************************************************/
-void WinEDA_LibeditFrame::SelectActiveLibrary(void)
+void WinEDA_LibeditFrame::SelectActiveLibrary()
 /**************************************************/
 /* Routine to Select Current library
 */
@@ -78,7 +78,7 @@ LibraryStruct *Lib;
 /*************************************************/
 /* Routine to Load one selected library content. */
 /*************************************************/
-bool WinEDA_LibeditFrame::LoadOneLibraryPart(void)
+bool WinEDA_LibeditFrame::LoadOneLibraryPart()
 {
 int i;
 wxString msg;
@@ -216,7 +216,7 @@ void WinEDA_LibeditFrame::RedrawActiveWindow(wxDC * DC, bool EraseBg)
 
 
 /*************************************************/
-void WinEDA_LibeditFrame::SaveActiveLibrary(void)
+void WinEDA_LibeditFrame::SaveActiveLibrary()
 /*************************************************/
 /* Sauvegarde en fichier la librairie pointee par CurrentLib
 	une sauvegarde en .bak de l'ancien fichier est egalement cree
@@ -274,7 +274,7 @@ LibCmpEntry * CmpEntry;
 }
 
 /*********************************************/
-void WinEDA_LibeditFrame::DeleteOnePart(void)
+void WinEDA_LibeditFrame::DeleteOnePart()
 /*********************************************/
 /* Routine de suppression d'un composant dans la librairie courante
 	(effacement en memoire uniquement, le fichier n'est pas modifie)
@@ -359,7 +359,7 @@ wxString msg;
 
 
 /****************************************************/
-void WinEDA_LibeditFrame::CreateNewLibraryPart(void)
+void WinEDA_LibeditFrame::CreateNewLibraryPart()
 /****************************************************/
 /* Routine to create a new library component
 	If an old component is currently in edit, it is deleted.
@@ -540,7 +540,7 @@ EDA_LibCmpAliasStruct * AliasEntry;
 
 
 /***************************************************/
-void WinEDA_LibeditFrame::SaveOnePartInMemory(void)
+void WinEDA_LibeditFrame::SaveOnePartInMemory()
 /***************************************************/
 /* Routine de sauvegarde de la "partlib" courante dans la librairie courante
 	Sauvegarde en memoire uniquement, et PAS sur fichier

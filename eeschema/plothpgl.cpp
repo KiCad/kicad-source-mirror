@@ -372,7 +372,7 @@ wxIcon WinEDA_PlotHPGLFrame::GetIconResource( const wxString& name )
 
 
 /***************************************************/
-void WinEDA_PlotHPGLFrame::SetPageOffsetValue(void)
+void WinEDA_PlotHPGLFrame::SetPageOffsetValue()
 /***************************************************/
 {
 wxString msg;

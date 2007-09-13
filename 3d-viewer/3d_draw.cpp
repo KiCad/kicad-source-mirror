@@ -72,7 +72,7 @@ void Pcb3D_GLCanvas::Redraw( bool finish )
  }
 
 /**********************************************/
-GLuint Pcb3D_GLCanvas::CreateDrawGL_List(void)
+GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
 /**********************************************/
 /* Creation de la liste des elements a afficher
 */

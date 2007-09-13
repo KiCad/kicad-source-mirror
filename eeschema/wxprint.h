@@ -53,7 +53,7 @@ class MyCanvas: public wxScrolledWindow
 {
   public:
 	MyCanvas(wxFrame *frame, const wxPoint& pos, const wxSize& size, long style = wxRETAINED);
-	~MyCanvas(void) ;
+	~MyCanvas() ;
 
 	virtual void OnDraw(wxDC& dc);
 	void OnEvent(wxMouseEvent& event);

@@ -63,7 +63,7 @@ void WinEDA_BasePcbFrame::InstallPadOptionsFrame(D_PAD * Pad,
 }
 
 /********************************************************/
-void WinEDA_PadPropertiesFrame::SetOthersControls(void)
+void WinEDA_PadPropertiesFrame::SetOthersControls()
 /********************************************************/
 {
 int tmp;
@@ -234,7 +234,7 @@ void WinEDA_PadPropertiesFrame::PadTypeSelectedEvent(wxCommandEvent& event)
 	PadTypeSelected();
 }
 
-void WinEDA_PadPropertiesFrame::PadTypeSelected(void)
+void WinEDA_PadPropertiesFrame::PadTypeSelected()
 {
 long layer_mask;
 int ii;

@@ -119,10 +119,10 @@ public:
     /// Should we show tooltips?
     static bool ShowToolTips();
 
-	void InitBuffers(void);
-	void BuildPanelBasic(void);
-	void BuildPanelDoc(void);
-	void BuildPanelAlias(void);
+	void InitBuffers();
+	void BuildPanelBasic();
+	void BuildPanelDoc();
+	void BuildPanelAlias();
 	void BuildPanelEditField();
 	void PartPropertiesAccept(wxCommandEvent& event);
 	void OnQuit(wxCommandEvent& event);
@@ -130,16 +130,16 @@ public:
 	void DeleteAliasOfPart(wxCommandEvent& event);
 	void AddAliasOfPart(wxCommandEvent& event);
 	bool ChangeNbUnitsPerPackage(int newUnit);
-	bool SetUnsetConvert(void);
+	bool SetUnsetConvert();
 	void CopyDocToAlias(wxCommandEvent& event);
 	void BrowseAndSelectDocFile(wxCommandEvent& event);
 	void SelectNewField(wxCommandEvent& event);
 	void CopyFieldDataToBuffer(LibDrawField * Field);
 	void CopyBufferToFieldData(LibDrawField * Field);
-	void CopyDataToPanelField(void);
-	void CopyPanelFieldToData(void);
+	void CopyDataToPanelField();
+	void CopyPanelFieldToData();
 
-	void BuildPanelFootprintFilter(void);
+	void BuildPanelFootprintFilter();
 	void DeleteAllFootprintFilter(wxCommandEvent& event);
 	void DeleteOneFootprintFilter(wxCommandEvent& event);
 	void AddFootprintFilter(wxCommandEvent& event);

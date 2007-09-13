@@ -226,7 +226,7 @@ wxIcon WinEDA_PcbTracksDialog::GetIconResource( const wxString& name )
 }
 
 /*************************************************/
-void WinEDA_PcbTracksDialog::SetDisplayValue(void)
+void WinEDA_PcbTracksDialog::SetDisplayValue()
 /*************************************************/
 {
 	AddUnitSymbol(*m_ViaSizeTitle);

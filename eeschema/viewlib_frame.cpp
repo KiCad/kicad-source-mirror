@@ -106,7 +106,7 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame(wxWindow * father, WinEDA_App *parent,
 	/* Destructeur */
 	/***************/
 
-WinEDA_ViewlibFrame::~WinEDA_ViewlibFrame(void)
+WinEDA_ViewlibFrame::~WinEDA_ViewlibFrame()
 {
 	delete m_CurrentScreen;
 	m_Parent->ViewlibFrame = NULL;
@@ -172,7 +172,7 @@ wxSize Vtoolbar_size;
 
 
 /*******************************************/
-int WinEDA_ViewlibFrame::BestZoom(void)
+int WinEDA_ViewlibFrame::BestZoom()
 /*******************************************/
 {
 int bestzoom, ii, jj;
@@ -212,7 +212,7 @@ EDA_LibComponentStruct * CurrentLibEntry = NULL;
 }
 
 /***************************************************/
-void WinEDA_ViewlibFrame::ReCreateListLib(void)
+void WinEDA_ViewlibFrame::ReCreateListLib()
 /***************************************************/
 {
 const wxChar ** ListNames, ** names;
@@ -251,7 +251,7 @@ bool found = FALSE;
 }
 
 /***********************************************/
-void WinEDA_ViewlibFrame::ReCreateListCmp(void)
+void WinEDA_ViewlibFrame::ReCreateListCmp()
 /***********************************************/
 {
 int ii;

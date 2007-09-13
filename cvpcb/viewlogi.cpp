@@ -33,7 +33,7 @@ STORECMP * BasePseudoCmp;	/* Stockage des descriptions generales */
 
 
 /************************************************/
-int WinEDA_CvpcbFrame::ReadViewlogicWirList(void)
+int WinEDA_CvpcbFrame::ReadViewlogicWirList()
 /************************************************/
 {
 int ii, Type = 0, error, Header;

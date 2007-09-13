@@ -40,7 +40,7 @@ public:
 	wxString m_PinName;
 	wxString m_Repere;		/* utilise selon formats de netliste */
 
-	STOREPIN(void);
+	STOREPIN();
 } ;
 
 class STORECMP
@@ -60,8 +60,8 @@ public:
 	wxArrayString m_FootprintFilter;	/* List of allowed footprints (wildcart allowed
 							if void: no filtering */
 
-	STORECMP(void);
-	~STORECMP(void);
+	STORECMP();
+	~STORECMP();
 } ;
 
 class STOREMOD
@@ -76,7 +76,7 @@ public:
 	wxString m_Doc;			/* Doc associee */
 	wxString m_KeyWord;		/* Mots cles associes */
 
-	STOREMOD(void);
+	STOREMOD();
 };
 
 

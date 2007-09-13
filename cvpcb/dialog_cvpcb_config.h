@@ -128,7 +128,7 @@ public:
     /// Should we show tooltips?
     static bool ShowToolTips();
 
-	void Update(void);
+	void Update();
 	void AcceptCfg(wxCommandEvent& event);
 	void SaveCfg(wxCommandEvent& event);
 	void ReadOldCfg(wxCommandEvent& event);
@@ -137,7 +137,7 @@ public:
 	void EquDelFct(wxCommandEvent& event);
 	void EquAddFct(wxCommandEvent& event);
 	void ReturnNetFormat(wxCommandEvent& event);
-	void SetDialogDatas(void);
+	void SetDialogDatas();
 
 
 ////@begin KiConfigCvpcbFrame member variables

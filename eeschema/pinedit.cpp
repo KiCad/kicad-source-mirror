@@ -107,7 +107,7 @@ wxString msg;
 
 
 /*********************************************/
-void WinEDA_LibeditFrame::InitEditOnePin(void)
+void WinEDA_LibeditFrame::InitEditOnePin()
 /*********************************************/
 /* Routine d'installation du menu d'edition d'une pin
 */

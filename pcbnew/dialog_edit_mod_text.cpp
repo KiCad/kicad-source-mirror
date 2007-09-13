@@ -295,7 +295,7 @@ wxIcon WinEDA_TextModPropertiesFrame::GetIconResource( const wxString& name )
 }
 
 /********************************************************/
-void WinEDA_TextModPropertiesFrame::SetDisplayValue(void)
+void WinEDA_TextModPropertiesFrame::SetDisplayValue()
 /********************************************************/
 {
 wxString msg;

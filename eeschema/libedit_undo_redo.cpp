@@ -39,7 +39,7 @@ EDA_LibComponentStruct * CopyItem;
 }
 
 /******************************************************/
-void WinEDA_LibeditFrame::GetComponentFromRedoList(void)
+void WinEDA_LibeditFrame::GetComponentFromRedoList()
 /******************************************************/
 /* Redo the last edition:
 	- Place the current edited library component in undo list
@@ -59,7 +59,7 @@ void WinEDA_LibeditFrame::GetComponentFromRedoList(void)
 }
 
 /******************************************************/
-void WinEDA_LibeditFrame::GetComponentFromUndoList(void)
+void WinEDA_LibeditFrame::GetComponentFromUndoList()
 /******************************************************/
 /* Undo the last edition:
 	- Place the current edited library component in Redo list

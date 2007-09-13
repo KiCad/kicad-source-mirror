@@ -124,7 +124,7 @@ public:
 	void SelNewCmp(wxCommandEvent& event);
 	void ResetDefaultERCDiag(wxCommandEvent& event);
 	void ChangeErrorLevel(wxCommandEvent& event);
-	void ReBuildMatrixPanel(void);
+	void ReBuildMatrixPanel();
 
 ////@begin WinEDA_ErcFrame member variables
     wxNotebook* m_NoteBook;

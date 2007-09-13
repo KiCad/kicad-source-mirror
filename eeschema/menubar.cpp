@@ -19,7 +19,7 @@
 
 
 /************************************************/
-void WinEDA_SchematicFrame::ReCreateMenuBar(void)
+void WinEDA_SchematicFrame::ReCreateMenuBar()
 /************************************************/
 /* create or update the menubar for the schematic frame
 */

@@ -35,7 +35,7 @@
 
 
 /***************************************************/
-void WinEDA_CvpcbFrame::CreateConfigWindow(void)
+void WinEDA_CvpcbFrame::CreateConfigWindow()
 /***************************************************/
 /* Creation de la fenetre de configuration de CVPCB */
 {
@@ -45,7 +45,7 @@ KiConfigCvpcbFrame * ConfigFrame = new KiConfigCvpcbFrame(this);
 
 
 /*********************************************/
-void KiConfigCvpcbFrame::SetDialogDatas(void)
+void KiConfigCvpcbFrame::SetDialogDatas()
 /*********************************************/
 {
 	m_ListLibr->InsertItems(g_LibName_List,0);
@@ -124,7 +124,7 @@ void KiConfigCvpcbFrame::AcceptCfg(wxCommandEvent& event)
 }
 
 /**********************************/
-void KiConfigCvpcbFrame::Update(void)
+void KiConfigCvpcbFrame::Update()
 /**********************************/
 {
 wxString msg;

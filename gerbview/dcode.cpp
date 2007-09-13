@@ -80,7 +80,7 @@ int ii;
 
 
 
-GERBER_Descr::~GERBER_Descr(void)
+GERBER_Descr::~GERBER_Descr()
 {
 int ii;
 
@@ -95,7 +95,7 @@ int ii;
 }
 
 /******************************************/
-void GERBER_Descr::ResetDefaultValues(void)
+void GERBER_Descr::ResetDefaultValues()
 /******************************************/
 {
 	m_Parent = NULL;
@@ -135,7 +135,7 @@ void GERBER_Descr::ResetDefaultValues(void)
 }
 
 /********************************************/
-int GERBER_Descr::ReturnUsedDcodeNumber(void)
+int GERBER_Descr::ReturnUsedDcodeNumber()
 /********************************************/
 {
 int ii, jj;
@@ -155,7 +155,7 @@ int ii, jj;
 
 
 /******************************/
-void GERBER_Descr::InitToolTable(void)
+void GERBER_Descr::InitToolTable()
 /******************************/
 /* Creation du tableau des MAX_TOOLS DCodes utilisables, si il n'existe pas,
 et Init des DCodes à une valeur raisonnable
@@ -188,11 +188,11 @@ D_CODE::D_CODE(int num_dcode)
 	Clear_D_CODE_Data();
 }
 
-D_CODE::~D_CODE(void)
+D_CODE::~D_CODE()
 {
 }
 
-void D_CODE::Clear_D_CODE_Data(void)
+void D_CODE::Clear_D_CODE_Data()
 {
 	m_Size.x = DEFAULT_SIZE;
 	m_Size.y = DEFAULT_SIZE;
@@ -329,7 +329,7 @@ D_CODE ** ListeDCode;
 
 
 /***************************************************/
-void WinEDA_GerberFrame::CopyDCodesSizeToItems(void)
+void WinEDA_GerberFrame::CopyDCodesSizeToItems()
 /***************************************************/
 /* Set Size Items (Lines, Flashes) from DCodes List
 */

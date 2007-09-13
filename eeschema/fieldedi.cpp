@@ -107,18 +107,18 @@ private:
 public:
 	// Constructor and destructor
 	WinEDA_PartPropertiesFrame(WinEDA_LibeditFrame *parent, wxPoint& pos);
-	~WinEDA_PartPropertiesFrame(void)
+	~WinEDA_PartPropertiesFrame()
 		{
 		if( AliasListCopy ) AliasListCopy->FreeList();
 		};
 
 private:
 	void PartPropertiesAccept(wxCommandEvent& event);
-	void DeleteAllAliasOfPart(void);
-	void DeleteAliasOfPart(void);
-	void AddAliasOfPart(void);
+	void DeleteAllAliasOfPart();
+	void DeleteAliasOfPart();
+	void AddAliasOfPart();
 	bool ChangeNbUnitsPerPackage(int newUnit);
-	bool SetUnsetConvert(void);
+	bool SetUnsetConvert();
 
 	DECLARE_EVENT_TABLE()
 };
@@ -566,10 +566,10 @@ bool recreateTB = FALSE;
 
 
 	/***************************************************************/
-	/* void WinEDA_PartPropertiesFrame::DeleteAllAliasOfPart(void) */
+	/* void WinEDA_PartPropertiesFrame::DeleteAllAliasOfPart() */
 	/***************************************************************/
 
-void WinEDA_PartPropertiesFrame::DeleteAllAliasOfPart(void)
+void WinEDA_PartPropertiesFrame::DeleteAllAliasOfPart()
 {
 
 	if(CurrentLibEntry && AliasListCopy )
@@ -585,10 +585,10 @@ void WinEDA_PartPropertiesFrame::DeleteAllAliasOfPart(void)
 }
 
 	/*********************************************************/
-	/* void WinEDA_PartPropertiesFrame::AddAliasOfPart(void) */
+	/* void WinEDA_PartPropertiesFrame::AddAliasOfPart() */
 	/*********************************************************/
 
-void WinEDA_PartPropertiesFrame::AddAliasOfPart(void)
+void WinEDA_PartPropertiesFrame::AddAliasOfPart()
 {
 char Line[LINE_LEN];
 int llen;
@@ -623,10 +623,10 @@ ListOfAliasStruct * NewAlias;
 }
 
 	/********************************/
-	/* void DeleteAliasOfPart(void) */
+	/* void DeleteAliasOfPart() */
 	/********************************/
 
-void WinEDA_PartPropertiesFrame::DeleteAliasOfPart(void)
+void WinEDA_PartPropertiesFrame::DeleteAliasOfPart()
 {
 ListOfAliasStruct * Alias;
 wxString aliasname;
@@ -745,7 +745,7 @@ LibDrawField *Field = (LibDrawField *)CurrentDrawItem;
 }
 
 	/********************************/
-	/* static void PlaceField(void) */
+	/* static void PlaceField() */
 	/********************************/
 
 void WinEDA_LibeditFrame::PlaceField(wxDC * DC, LibDrawField *Field)
@@ -1046,12 +1046,12 @@ LibEDA_BaseStruct* DrawItem, * NextDrawItem;
 
 
 	/**********************************************************/
-	/* void WinEDA_PartPropertiesFrame::SetUnsetConvert(void) */
+	/* void WinEDA_PartPropertiesFrame::SetUnsetConvert() */
 	/**********************************************************/
 /* crée ou efface (selon option AsConvert) les éléments
 	de la représentation convertie d'un composant
 */
-bool WinEDA_PartPropertiesFrame::SetUnsetConvert(void)
+bool WinEDA_PartPropertiesFrame::SetUnsetConvert()
 {
 int FlagDel = 0;
 LibEDA_BaseStruct* DrawItem = NULL, * NextDrawItem;

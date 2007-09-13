@@ -50,7 +50,7 @@ private:
 	// Constructor and destructor
 public:
 	WinEDA_ConfigFrame(WinEDA_GerberFrame *parent,const wxPoint& pos);
-	~WinEDA_ConfigFrame(void) {};
+	~WinEDA_ConfigFrame() {};
 
 private:
 	void SaveCfg(wxCommandEvent & event);

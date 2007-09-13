@@ -14,7 +14,7 @@
 #include "protos.h"
 
 /*******************************************/
-void WinEDA_CvpcbFrame::CreateScreenCmp(void)
+void WinEDA_CvpcbFrame::CreateScreenCmp()
 /*******************************************/
 /* Creation de la fenetre d'affichage du composant
 */

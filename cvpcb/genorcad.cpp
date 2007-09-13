@@ -25,7 +25,7 @@ static void ChangePinNet(  wxString &  PinNet );
 int NetNumCode;			/* Nombre utilise pour cree des NetNames lors de
 						reaffectation de NetNames */
 
-int genorcad(void)
+int genorcad()
 {
 char Line[1024];
 STOREPIN * Pin;

@@ -126,7 +126,7 @@ int ii = Field->m_FieldId;
 }
 
 /*****************************************************/
-void WinEDA_PartPropertiesFrame::InitBuffers(void)
+void WinEDA_PartPropertiesFrame::InitBuffers()
 /*****************************************************/
 /* Init the buffers to a default value,
 	or to values from CurrentLibEntry if CurrentLibEntry != NULL
@@ -182,7 +182,7 @@ int ii;
 
 
 /*****************************************************/
-void WinEDA_PartPropertiesFrame::BuildPanelAlias(void)
+void WinEDA_PartPropertiesFrame::BuildPanelAlias()
 /*****************************************************/
 /* create the panel for component alias list editing
 */
@@ -241,7 +241,7 @@ wxButton * Button;
 
 
 /*****************************************************************/
-void WinEDA_PartPropertiesFrame::BuildPanelFootprintFilter(void)
+void WinEDA_PartPropertiesFrame::BuildPanelFootprintFilter()
 /*****************************************************************/
 /* create the panel for footprint filtering in cvpcb list
 */
@@ -303,7 +303,7 @@ wxBoxSizer * PanelFpFilterBoxSizer = new wxBoxSizer(wxHORIZONTAL);
 
 
 /*****************************************************/
-void WinEDA_PartPropertiesFrame::BuildPanelDoc(void)
+void WinEDA_PartPropertiesFrame::BuildPanelDoc()
 /*****************************************************/
 /* create the panel for component doc editing
 */
@@ -343,7 +343,7 @@ wxString msg_text;
 
 
 /*****************************************************/
-void WinEDA_PartPropertiesFrame::BuildPanelBasic(void)
+void WinEDA_PartPropertiesFrame::BuildPanelBasic()
 /*****************************************************/
 /* create the basic panel for component properties editing
 */
@@ -402,7 +402,7 @@ void WinEDA_PartPropertiesFrame::BuildPanelBasic(void)
 }
 
 /*********************************************************/
-void WinEDA_PartPropertiesFrame::BuildPanelEditField(void)
+void WinEDA_PartPropertiesFrame::BuildPanelEditField()
 /**********************************************************/
 /* Create and build the panel managing the fields (REF, VALUE ...)
 	of the component
@@ -483,7 +483,7 @@ wxString fieldnamelist[NUMBER_OF_FIELDS];
 }
 
 /****************************************************************/
-void WinEDA_PartPropertiesFrame::CopyDataToPanelField(void)
+void WinEDA_PartPropertiesFrame::CopyDataToPanelField()
 /****************************************************************/
 /* Set the values displayed on the panel field according to
 	the current field number
@@ -520,7 +520,7 @@ int FieldId = m_CurrentFieldId;
 }
 
 /****************************************************************/
-void WinEDA_PartPropertiesFrame::CopyPanelFieldToData(void)
+void WinEDA_PartPropertiesFrame::CopyPanelFieldToData()
 /****************************************************************/
 /* Copy the values displayed on the panel field to the buffers according to
 	the current field number
@@ -944,7 +944,7 @@ LibEDA_BaseStruct* DrawItem, * NextDrawItem;
 
 
 /*****************************************************/
-bool WinEDA_PartPropertiesFrame::SetUnsetConvert(void)
+bool WinEDA_PartPropertiesFrame::SetUnsetConvert()
 /*****************************************************/
 /* crée ou efface (selon option AsConvert) les éléments
 	de la représentation convertie d'un composant

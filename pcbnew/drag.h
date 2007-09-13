@@ -24,7 +24,7 @@ public:
 	DRAG_SEGM(TRACK * segm);
 	~DRAG_SEGM();
 
-	void SetInitialValues(void);
+	void SetInitialValues();
 
 };
 
@@ -39,7 +39,7 @@ void Build_Drag_Liste(WinEDA_DrawPanel * panel, wxDC * DC, MODULE * Module);
 void Build_1_Pad_SegmentsToDrag(WinEDA_DrawPanel * panel, wxDC * DC, D_PAD * PtPad );
 void Collect_TrackSegmentsToDrag(WinEDA_DrawPanel * panel, wxDC * DC,
 	wxPoint & point, int MasqueLayer, int net_code);
-void EraseDragListe(void);
+void EraseDragListe();
 void AddSegmentToDragList(WinEDA_DrawPanel * panel, wxDC * DC,
 	int flag, TRACK * Track); /* Add the segment"Track" to the drag list, and erase it from screen
 	flag = STARTPOINT (if the point to drag is the start point of Track) or ENDPOINT */

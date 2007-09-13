@@ -115,7 +115,7 @@ public:
 	bool OnBeginDocument(int startPage, int endPage);
 	void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo);
 
-	void DrawPage(void);
+	void DrawPage();
 };
 
 /*******************************************************/
@@ -160,7 +160,7 @@ bool PrinterError = FALSE;
 
 
 /*******************************************/
-void WinEDA_PrintFrame::SetOthersDatas(void)
+void WinEDA_PrintFrame::SetOthersDatas()
 /*******************************************/
 {
 #ifndef PCBNEW
@@ -216,7 +216,7 @@ void WinEDA_PrintFrame::SetOthersDatas(void)
 }
 
 /**********************************************************/
-int WinEDA_PrintFrame::SetLayerMaskFromListSelection(void)
+int WinEDA_PrintFrame::SetLayerMaskFromListSelection()
 /**********************************************************/
 {
 int page_count;
@@ -246,7 +246,7 @@ void WinEDA_PrintFrame::SetColorOrBlack(wxCommandEvent& event)
 }
 
 /****************************************************/
-void  WinEDA_PrintFrame::OnClosePrintDialog(void)
+void  WinEDA_PrintFrame::OnClosePrintDialog()
 /****************************************************/
 /* called when WinEDA_PrintFrame is closed
 */
@@ -276,7 +276,7 @@ void  WinEDA_PrintFrame::OnClosePrintDialog(void)
 
 
 /************************************************/
-wxString WinEDA_PrintFrame::BuildPrintTitle(void)
+wxString WinEDA_PrintFrame::BuildPrintTitle()
 /************************************************/
 /* return a valid filename to create a print file
 */
@@ -306,7 +306,7 @@ void WinEDA_PrintFrame::SetScale(wxCommandEvent& event)
 }
 
 /****************************************/
-void WinEDA_PrintFrame::SetPenWidth(void)
+void WinEDA_PrintFrame::SetPenWidth()
 /****************************************/
 /* Get the new pen width value, and verify min et max value
 	NOTE: s_PrintPenMinWidth is in internal units
@@ -559,7 +559,7 @@ bool EDA_Printout::OnBeginDocument(int startPage, int endPage)
 }
 
 /********************************/
-void EDA_Printout::DrawPage(void)
+void EDA_Printout::DrawPage()
 /********************************/
 /*
 	This is the real print function: print the active screen

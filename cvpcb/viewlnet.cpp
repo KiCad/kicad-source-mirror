@@ -36,10 +36,10 @@ static int GenListeComposants(FILE * PkgFile);
 /* Variables Locales */
 
 	/******************************/
-	/* int ReadViewlogicNet(void) */
+	/* int ReadViewlogicNet() */
 	/******************************/
 
-int WinEDA_CvpcbFrame::ReadViewlogicNetList(void)
+int WinEDA_CvpcbFrame::ReadViewlogicNetList()
 {
 int ii, LineNum;
 char Line[1024], *Text;

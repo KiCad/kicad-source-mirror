@@ -36,19 +36,19 @@ static CWORK *Current = NULL;
 
 /* Routines definies ici : */
 
-void InitWork(void);
-void ReInitWork(void);
+void InitWork();
+void ReInitWork();
 int SetWork( int, int, int, int, int, CHEVELU *, int );
 void GetWork( int *, int *, int *, int *, int *, CHEVELU ** );
 void SortWork();
 
 
 	/************************/
-	/* void InitWork (void) */
+	/* void InitWork () */
 	/************************/
 
  /* initialize the work list */
-void InitWork(void)
+void InitWork()
 {
 CWORK *ptr;
 
@@ -61,11 +61,11 @@ CWORK *ptr;
 
 
 	/*************************/
-	/* void ReInitWork(void) */
+	/* void ReInitWork() */
 	/*************************/
 
  /* initialize the work list */
-void ReInitWork(void)
+void ReInitWork()
 	{
 	Current = Head;
 	}
@@ -136,11 +136,11 @@ void GetWork (int *r1,int *c1,int *n_c,int *r2,int *c2,CHEVELU** pt_ch )
 
 
 	/***********************/
-	/* void SortWork(void) */
+	/* void SortWork() */
 	/***********************/
 
 /* order the work items; shortest (low cost) first */
-void SortWork(void)
+void SortWork()
 {
 CWORK *p;
 CWORK *q0; /* put PRIORITY CONNECTs in q0 */

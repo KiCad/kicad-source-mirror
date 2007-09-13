@@ -33,7 +33,7 @@ void UserToDeviceCoordinate(wxPoint & pos );
 	// modifie les coord pos.x et pos.y pour le trace selon l'orientation, l'echelle, les offsets de trace
 void UserToDeviceSize(wxSize & size );
 	// modifie les dimension size.x et size.y pour le trace selon l'echelle
-void ForcePenReinit(void);
+void ForcePenReinit();
 	// set the flag g_CurrentPenWidth to -1 in order
 	// to force a pen width redefinition for the next draw command
 

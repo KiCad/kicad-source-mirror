@@ -57,7 +57,7 @@ enum zeros_fmt {
 };
 
 /* Routines Locales */
-static void Fin_Drill(void);
+static void Fin_Drill();
 static void PlotDrillSymbol(const wxPoint & position,int diametre,int num_forme,int format);
 static void PlotOvalDrillSymbol(const wxPoint & position,const wxSize & size,int orient,int format);
 
@@ -114,21 +114,21 @@ class WinEDA_DrillFrame: public wxDialog
 	// Constructor and destructor
 public:
 	WinEDA_DrillFrame(WinEDA_PcbFrame *parent);
-	~WinEDA_DrillFrame(void) {};
+	~WinEDA_DrillFrame() {};
 
 private:
 	void OnQuit(wxCommandEvent& event);
-	void SetParams(void);
+	void SetParams();
 	void GenDrillFiles(wxCommandEvent& event);
 	void GenDrillMap(int format);
 	void UpdatePrecisionOptions(wxCommandEvent& event);
-	void UpdateConfig(void);
+	void UpdateConfig();
 	int Plot_Drill_PcbMap( FORET * buffer, int format);
-	void GenDrillReport(void);
+	void GenDrillReport();
 	int Gen_Liste_Forets( FORET * buffer,bool print_header);
 	int Gen_Drill_File_EXCELLON( FORET * buffer);
 	void Gen_Line_EXCELLON(char *line, float x, float y);
-	void Init_Drill(void);
+	void Init_Drill();
 
 	DECLARE_EVENT_TABLE()
 };
@@ -264,7 +264,7 @@ wxString choice_drill_report_msg[] =
 
 
 /**************************************/
-void WinEDA_DrillFrame::SetParams(void)
+void WinEDA_DrillFrame::SetParams()
 /**************************************/
 {
 	Unit_Drill_is_Inch = (m_Choice_Unit->GetSelection() == 0) ? FALSE : TRUE;
@@ -316,7 +316,7 @@ WinEDA_DrillFrame * frame = new WinEDA_DrillFrame(this);
 
 
 /******************************************/
-void  WinEDA_DrillFrame::UpdateConfig(void)
+void  WinEDA_DrillFrame::UpdateConfig()
 /******************************************/
 	/* Save drill options: */
 {
@@ -771,7 +771,7 @@ char line[1024];
 
 
 /***************************************/
-void WinEDA_DrillFrame::Init_Drill(void)
+void WinEDA_DrillFrame::Init_Drill()
 /***************************************/
 /* Print the DRILL file header */
 {
@@ -818,7 +818,7 @@ char Line[256];
 }
 
 /************************/
-void Fin_Drill(void)
+void Fin_Drill()
 /************************/
 {
     //add if minimal here
@@ -1426,7 +1426,7 @@ void PlotOvalDrillSymbol(const wxPoint & position,const wxSize & size,int orient
 }
 
 /*******************************************/
-void WinEDA_DrillFrame::GenDrillReport(void)
+void WinEDA_DrillFrame::GenDrillReport()
 /*******************************************/
 /*
 Create a list of drill values and drill count

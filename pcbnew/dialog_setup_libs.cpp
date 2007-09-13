@@ -314,7 +314,7 @@ wxIcon KiConfigPcbnewFrame::GetIconResource( const wxString& name )
 }
 
 /********************************************/
-void KiConfigPcbnewFrame::SetNewOptions(void)
+void KiConfigPcbnewFrame::SetNewOptions()
 /********************************************/
 {
 	g_UserLibDirBuffer = m_TextLibDir->GetValue();

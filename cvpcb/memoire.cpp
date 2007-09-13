@@ -11,7 +11,7 @@
 
 
 /********************************/
-void FreeMemoryModules(void)
+void FreeMemoryModules()
 /********************************/
 
 /* Routine de liberation memoire de la liste des modules
@@ -34,7 +34,7 @@ STOREMOD * Module, * NextMod;
 }
 
 /***********************************/
-void FreeMemoryComponants(void)
+void FreeMemoryComponants()
 /***********************************/
 
 /* Routine de liberation memoire de la liste des composants

@@ -51,7 +51,7 @@ private:
 	wxImageList *imageList;
 
 public:
-	WinEDA_Tree(void) { }
+	WinEDA_Tree() { }
 	WinEDA_Tree(WinEDA_HierFrame *parent);
 
 	DECLARE_DYNAMIC_CLASS(WinEDA_Tree)
@@ -93,7 +93,7 @@ public:
 	WinEDA_HierFrame(WinEDA_SchematicFrame *parent, wxDC * DC, const wxPoint& pos);
 	void BuildSheetList(EDA_BaseStruct * DrawStruct,
 						wxTreeItemId * previousmenu);
-	~WinEDA_HierFrame(void);
+	~WinEDA_HierFrame();
 
 	void OnSelect(wxTreeEvent& event);
 
@@ -165,7 +165,7 @@ wxRect itemrect;
 	}
 }
 
-WinEDA_HierFrame::~WinEDA_HierFrame(void)
+WinEDA_HierFrame::~WinEDA_HierFrame()
 {
 }
 
@@ -267,7 +267,7 @@ DrawSheetStruct * Sheet;
 
 
 /******************************************************/
-void WinEDA_SchematicFrame::InstallPreviousScreen(void)
+void WinEDA_SchematicFrame::InstallPreviousScreen()
 /******************************************************/
 /* Set the current screen to display the parent sheet of the current displayed sheet
 */

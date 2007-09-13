@@ -31,7 +31,7 @@ WinEDA_EnterText::WinEDA_EnterText(wxWindow *parent, const wxString &Title,
 
 
 /****************************************/
-wxString WinEDA_EnterText::GetValue(void)
+wxString WinEDA_EnterText::GetValue()
 /****************************************/
 {
 	m_Modify = m_FrameText->IsModified();
@@ -101,7 +101,7 @@ WinEDA_GraphicTextCtrl::WinEDA_GraphicTextCtrl(wxWindow *parent,
 }
 
 
-WinEDA_GraphicTextCtrl::~WinEDA_GraphicTextCtrl(void)
+WinEDA_GraphicTextCtrl::~WinEDA_GraphicTextCtrl()
 {
 	delete m_FrameText;
 	delete m_Title;
@@ -126,13 +126,13 @@ void WinEDA_GraphicTextCtrl::SetValue(int value)
 }
 
 
-wxString WinEDA_GraphicTextCtrl::GetText(void)
+wxString WinEDA_GraphicTextCtrl::GetText()
 {
 wxString text = m_FrameText->GetValue();
 	return text;
 }
 
-int WinEDA_GraphicTextCtrl::GetTextSize(void)
+int WinEDA_GraphicTextCtrl::GetTextSize()
 {
 int textsize;
 double dtmp;
@@ -188,7 +188,7 @@ wxString text;
 }
 
 
-WinEDA_PositionCtrl::~WinEDA_PositionCtrl(void)
+WinEDA_PositionCtrl::~WinEDA_PositionCtrl()
 {
 	delete m_TextX;
 	delete m_TextY;
@@ -197,7 +197,7 @@ WinEDA_PositionCtrl::~WinEDA_PositionCtrl(void)
 }
 
 /******************************************/
-wxPoint WinEDA_PositionCtrl::GetValue(void)
+wxPoint WinEDA_PositionCtrl::GetValue()
 /******************************************/
 /* Retourne (en unites internes) les coordonnes entrees (en unites utilisateur)
 */
@@ -254,7 +254,7 @@ WinEDA_SizeCtrl::WinEDA_SizeCtrl(wxWindow *parent, const wxString & title,
 }
 
 /*************************************/
-wxSize WinEDA_SizeCtrl::GetValue(void)
+wxSize WinEDA_SizeCtrl::GetValue()
 /*************************************/
 {
 wxPoint pos = WinEDA_PositionCtrl::GetValue();
@@ -293,14 +293,14 @@ wxString stringvalue = ReturnStringFromValue(m_Units, m_Value,m_Internal_Unit);
 	BoxSizer->Add(m_ValueCtrl, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxBOTTOM, 5);
 }
 
-WinEDA_ValueCtrl::~WinEDA_ValueCtrl(void)
+WinEDA_ValueCtrl::~WinEDA_ValueCtrl()
 {
 	delete m_ValueCtrl;
 	delete m_Text;
 }
 
 /***********************************/
-int WinEDA_ValueCtrl::GetValue(void)
+int WinEDA_ValueCtrl::GetValue()
 /***********************************/
 {
 int coord;
@@ -347,13 +347,13 @@ wxString label = title;
 	BoxSizer->Add(m_ValueCtrl, 0, wxGROW|wxLEFT|wxRIGHT|wxBOTTOM, 5);
 }
 
-WinEDA_DFloatValueCtrl::~WinEDA_DFloatValueCtrl(void)
+WinEDA_DFloatValueCtrl::~WinEDA_DFloatValueCtrl()
 {
 	delete m_ValueCtrl;
 	delete m_Text;
 }
 
-double WinEDA_DFloatValueCtrl::GetValue(void)
+double WinEDA_DFloatValueCtrl::GetValue()
 {
 double coord = 0;
 

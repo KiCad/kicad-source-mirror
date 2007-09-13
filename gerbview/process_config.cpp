@@ -75,7 +75,7 @@ wxString FullFileName;
 
 
 /*****************************************************/
-bool Read_Config(void)
+bool Read_Config()
 /*****************************************************/
 /* lit la configuration, si elle n'a pas deja etee lue
 	1 - lit gerbview.cnf
@@ -100,7 +100,7 @@ bool Read_Config(void)
 
 
 /******************************************/
-void WinEDA_GerberFrame::Update_config(void)
+void WinEDA_GerberFrame::Update_config()
 /******************************************/
 /*
  creation du fichier de config

@@ -21,7 +21,7 @@
 
 
 /**********************************************************************/
-EDA_BaseStruct * WinEDA_GerberFrame::GerberGeneralLocateAndDisplay(void)
+EDA_BaseStruct * WinEDA_GerberFrame::GerberGeneralLocateAndDisplay()
 /**********************************************************************/
 {
 	return Locate(CURSEUR_OFF_GRILLE);

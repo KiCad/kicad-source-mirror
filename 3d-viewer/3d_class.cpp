@@ -17,7 +17,7 @@
 
 
 /****************************/
-S3D_Vertex::S3D_Vertex(void)
+S3D_Vertex::S3D_Vertex()
 /****************************/
 {
 	x = y = z = 0.0;
@@ -38,7 +38,7 @@ S3D_Material::S3D_Material( Struct3D_Master * father, const wxString & name ):
 }
 
 /***********************************/
-void S3D_Material::SetMaterial(void)
+void S3D_Material::SetMaterial()
 /***********************************/
 {
     glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
@@ -77,7 +77,7 @@ Struct3D_Master::Struct3D_Master(EDA_BaseStruct * StructFather):
 
 
 /***************************************/
-Struct3D_Master:: ~Struct3D_Master(void)
+Struct3D_Master:: ~Struct3D_Master()
 /***************************************/
 {
 Struct3D_Shape * next;
@@ -110,7 +110,7 @@ Struct3D_Shape::Struct3D_Shape(EDA_BaseStruct * StructFather):
 
 
 /***************************************/
-Struct3D_Shape:: ~Struct3D_Shape(void)
+Struct3D_Shape:: ~Struct3D_Shape()
 /***************************************/
 {
 	delete m_3D_Coord;

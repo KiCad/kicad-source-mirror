@@ -111,13 +111,13 @@ public:
     /// Should we show tooltips?
     static bool ShowToolTips();
 
-	void InitBuffers(void);
-	void BuildPanelBasic(void);
-	void BuildPanelFields(void);
+	void InitBuffers();
+	void BuildPanelBasic();
+	void BuildPanelFields();
 	void ComponentPropertiesAccept(wxCommandEvent& event);
 	void SetInitCmp( wxCommandEvent& event );
-	void CopyDataToPanelField(void);
-	void CopyPanelFieldToData(void);
+	void CopyDataToPanelField();
+	void CopyPanelFieldToData();
 	void SelectNewField(wxCommandEvent& event);
 
 ////@begin WinEDA_ComponentPropertiesFrame member variables

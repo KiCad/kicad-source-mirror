@@ -104,7 +104,7 @@ public:
     wxIcon GetIconResource( const wxString& name );
 ////@end WinEDA_PlotPSFrame member function declarations
 
-	void InitOptVars(void);
+	void InitOptVars();
     void CreatePSFile(int AllPages, int pagesize);
     void PlotOneSheetPS(const wxString & FileName,
 			BASE_SCREEN * screen, Ki_PageDescr * sheet, int BBox[4], wxPoint plot_offset);

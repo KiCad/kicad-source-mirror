@@ -118,7 +118,7 @@ wxString line;
 	/* Destructeur */
 	/***************/
 
-WinEDA_MainFrame::~WinEDA_MainFrame(void)
+WinEDA_MainFrame::~WinEDA_MainFrame()
 {
 	if( m_Parent->m_EDA_Config )
 	{

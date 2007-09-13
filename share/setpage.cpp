@@ -468,7 +468,7 @@ wxString msg;
 
 
 /*******************************************************/
-void WinEDA_SetPageFrame::SearchPageSizeSelection(void)
+void WinEDA_SetPageFrame::SearchPageSizeSelection()
 /*******************************************************/
 /* Search the correct index to activate the radiobox list size selection
 	according to the current page size

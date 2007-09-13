@@ -27,7 +27,7 @@ int PlotOrientOptions, etat_plume;
 static Ki_PageDescr * SheetPS;
 
 /*************************/
-void ForcePenReinit(void)
+void ForcePenReinit()
 /*************************/
 /* set the flag g_CurrentPenWidth to -1 in order to force a pen width redefinition
 	for the next draw command

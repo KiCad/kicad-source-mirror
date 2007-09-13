@@ -21,7 +21,7 @@ class S3D_Color		/* This is a 3D color (R, G, G) 3 floats range 0 to 1.0*/
 public:
 	double m_Red, m_Green, m_Blue;
 public:
-	S3D_Color(void)
+	S3D_Color()
 	{
 		m_Red = m_Green = m_Blue = 0;
 	}
@@ -32,7 +32,7 @@ class S3D_Vertex	/* This is a 3D coordinate (3 float numbers: x,y,z coordinates)
 public:
 	double x, y, z;
 public:
-	S3D_Vertex(void);
+	S3D_Vertex();
 };
 
 class S3D_Material: public EDA_BaseStruct		/* openGL "material" data*/
@@ -48,7 +48,7 @@ public:
 
 public:
 	S3D_Material(Struct3D_Master * father, const wxString & name);
-	void SetMaterial(void);
+	void SetMaterial();
 };
 
 /*******************************************/
@@ -67,10 +67,10 @@ public:
 public:
 
 	Struct3D_Master(EDA_BaseStruct * StructFather);
-	~Struct3D_Master(void);
+	~Struct3D_Master();
 
 	void Copy(Struct3D_Master * pattern);
-	int ReadData(void);
+	int ReadData();
 	int ReadMaterial(FILE * file, int *LineNum);
 	int ReadChildren(FILE * file, int *LineNum);
 	int ReadShape(FILE * file, int *LineNum);
@@ -94,7 +94,7 @@ public:
 public:
 
 	Struct3D_Shape(EDA_BaseStruct * StructFather);
-	~Struct3D_Shape(void);
+	~Struct3D_Shape();
 
 	int ReadData(FILE * file, int *LineNum);
 };
@@ -123,9 +123,9 @@ public:
 						wxBoxSizer * BoxSizer,
 						int units, int internal_unit);
 
-	~WinEDA_VertexCtrl(void);
+	~WinEDA_VertexCtrl();
 
-	S3D_Vertex GetValue(void);
+	S3D_Vertex GetValue();
 	void SetValue(S3D_Vertex vertex);
 	void Enable(bool enbl);
 	void SetToolTip(const wxString & text);

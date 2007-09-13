@@ -82,7 +82,7 @@ int dims[3] = { -1, -1, 250};
 
 
 /******************************************/
-WinEDA_CvpcbFrame::~WinEDA_CvpcbFrame(void)
+WinEDA_CvpcbFrame::~WinEDA_CvpcbFrame()
 /******************************************/
 {
 	if( m_Parent->m_EDA_Config )

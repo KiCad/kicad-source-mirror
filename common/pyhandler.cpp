@@ -55,7 +55,7 @@ static void RegisterCb( str objKey, object callback )
 static void UnRegisterCb( str objKey, object callback )
 { PyHandler::GetInstance()->UnRegisterCallback( PyHandler::MakeStr(objKey), callback ); }
 
-static void init_base_utils(void)
+static void init_base_utils()
 {
     def ( "ChooseFile",         &ChooseFile );
     def ( "RegisterCallback",   &RegisterCb );

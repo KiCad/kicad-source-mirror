@@ -303,7 +303,7 @@ void WinEDA_PlotPSFrame::OnCloseClick( wxCommandEvent& event )
 
 
 /*****************************************/
-void WinEDA_PlotPSFrame::InitOptVars(void)
+void WinEDA_PlotPSFrame::InitOptVars()
 /*****************************************/
 {
 	Plot_Sheet_Ref = m_Plot_Sheet_Ref->GetValue();

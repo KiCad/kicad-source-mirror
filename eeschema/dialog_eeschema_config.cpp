@@ -303,7 +303,7 @@ void KiConfigEeschemaFrame::OnCloseWindow(wxCloseEvent & event)
 
 
 /*********************************************/
-void KiConfigEeschemaFrame::ChangeSetup(void)
+void KiConfigEeschemaFrame::ChangeSetup()
 /*********************************************/
 {
 	g_UserLibDirBuffer = m_LibDirCtrl->GetValue();
@@ -377,7 +377,7 @@ wxString FullLibName,ShortLibName, Mask;
 
 
 /****************************************************/
-void KiConfigEeschemaFrame::SetFormatsNetListes(void)
+void KiConfigEeschemaFrame::SetFormatsNetListes()
 /****************************************************/
 /* Adjust the m_NetFormatBox current selection, according to the current netlist format*/
 

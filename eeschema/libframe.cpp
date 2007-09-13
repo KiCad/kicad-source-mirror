@@ -82,7 +82,7 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame(wxWindow * father, WinEDA_App *parent,
 }
 
 /**********************************************/
-WinEDA_LibeditFrame::~WinEDA_LibeditFrame(void)
+WinEDA_LibeditFrame::~WinEDA_LibeditFrame()
 /**********************************************/
 {
 	m_Parent->LibeditFrame = NULL;
@@ -124,7 +124,7 @@ LibraryStruct *Lib;
 
 
 /******************************************/
-void WinEDA_LibeditFrame::SetToolbars(void)
+void WinEDA_LibeditFrame::SetToolbars()
 /******************************************/
 /* Enable or disable tools of the differents toolbars,
 	according to the current conditions or options
@@ -233,7 +233,7 @@ void WinEDA_LibeditFrame::SetToolbars(void)
 }
 
 /**************************************/
-int WinEDA_LibeditFrame::BestZoom(void)
+int WinEDA_LibeditFrame::BestZoom()
 /**************************************/
 {
 int dx, dy, ii,jj ;

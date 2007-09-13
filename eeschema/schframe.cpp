@@ -156,7 +156,7 @@ WinEDA_SchematicFrame::	WinEDA_SchematicFrame(wxWindow * father, WinEDA_App *par
 	/* Destructeur */
 	/***************/
 
-WinEDA_SchematicFrame::~WinEDA_SchematicFrame(void)
+WinEDA_SchematicFrame::~WinEDA_SchematicFrame()
 {
 	m_Parent->SchematicFrame = NULL;
 	m_CurrentScreen = ScreenSch;
@@ -228,7 +228,7 @@ SCH_SCREEN * screen;
 
 
 /********************************************/
-void WinEDA_SchematicFrame::SetToolbars(void)
+void WinEDA_SchematicFrame::SetToolbars()
 /********************************************/
 /* Active ou desactive les tools du toolbar horizontal, en fonction des commandes
 en cours
@@ -283,7 +283,7 @@ en cours
 }
 
 /******************************************/
-int WinEDA_SchematicFrame::BestZoom(void)
+int WinEDA_SchematicFrame::BestZoom()
 /******************************************/
 {
 int dx, dy, ii,jj ;

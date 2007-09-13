@@ -34,7 +34,7 @@ WinEDA_MsgPanel::WinEDA_MsgPanel(WinEDA_DrawFrame *parent, int id,
 
 
 
-WinEDA_MsgPanel::~WinEDA_MsgPanel(void)
+WinEDA_MsgPanel::~WinEDA_MsgPanel()
 {
 }
 
@@ -110,7 +110,7 @@ wxClientDC dc(this);
 }
 
 /****************************************/
-void WinEDA_MsgPanel::EraseMsgBox(void)
+void WinEDA_MsgPanel::EraseMsgBox()
 /****************************************/
 /* Effacement de la fenetre d'affichage des messages de bas d'ecran
 */

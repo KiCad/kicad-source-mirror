@@ -34,7 +34,7 @@ DRAG_SEGM::~DRAG_SEGM()
 }
 
 
-void DRAG_SEGM::SetInitialValues(void)
+void DRAG_SEGM::SetInitialValues()
 {
 	m_Segm->m_Start = m_StartInitialValue;
 	m_Segm->m_End = m_EndInitialValue;
@@ -188,7 +188,7 @@ BOARD * pcb = ((WinEDA_BasePcbFrame*)(panel->m_Parent))->m_Pcb;
 
 
 /*****************************/
-void EraseDragListe(void)
+void EraseDragListe()
 /*****************************/
 /* Routine de liberation memoire de la liste des structures DRAG_SEGM
 	remet a zero le pointeur global g_DragSegmentList

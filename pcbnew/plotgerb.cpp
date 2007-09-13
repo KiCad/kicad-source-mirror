@@ -27,7 +27,7 @@ static bool ShowDcodeError = TRUE;
 /* Routines Locales */
 
 static void Init_Trace_GERBER(WinEDA_BasePcbFrame * frame, FILE * gerbfile);
-static void Init_ApertureList(void);
+static void Init_ApertureList();
 static void Fin_Trace_GERBER(WinEDA_BasePcbFrame * frame, FILE * gerbfile);
 static void Plot_1_CIRCLE_pad_GERBER(wxPoint pos,int diametre) ;
 static void trace_1_pastille_OVALE_GERBER(wxPoint pos, wxSize size,int orient);
@@ -726,7 +726,7 @@ char Line[1024];
 
 
 /***********************************/
-static void Init_ApertureList(void)
+static void Init_ApertureList()
 /***********************************/
 /* Init the memory to handle the aperture list:
 	the member .m_Type is used by get_D_code() to handle the end of list:

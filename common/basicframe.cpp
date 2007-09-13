@@ -48,7 +48,7 @@ wxSize minsize;
 }
 
 /******************************************/
-WinEDA_BasicFrame::~WinEDA_BasicFrame(void)
+WinEDA_BasicFrame::~WinEDA_BasicFrame()
 /******************************************/
 {
 	if ( m_Parent->m_HtmlCtrl ) delete m_Parent->m_HtmlCtrl;
@@ -56,7 +56,7 @@ WinEDA_BasicFrame::~WinEDA_BasicFrame(void)
 }
 
 /********************************************/
-void WinEDA_BasicFrame::ReCreateMenuBar(void)
+void WinEDA_BasicFrame::ReCreateMenuBar()
 /********************************************/
 // Virtual function
 {
@@ -64,7 +64,7 @@ void WinEDA_BasicFrame::ReCreateMenuBar(void)
 
 
 /*********************************************/
-void WinEDA_BasicFrame::GetSettings(void)
+void WinEDA_BasicFrame::GetSettings()
 /*********************************************/
 {
 wxString text;
@@ -94,7 +94,7 @@ int Ypos_min;
 
 
 /*****************************************/
-void WinEDA_BasicFrame::SaveSettings(void)
+void WinEDA_BasicFrame::SaveSettings()
 /*****************************************/
 {
 wxString text;

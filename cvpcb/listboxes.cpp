@@ -29,7 +29,7 @@ ListBoxBase::ListBoxBase(WinEDA_CvpcbFrame * parent,
 
 
 
-ListBoxBase::~ListBoxBase(void)
+ListBoxBase::~ListBoxBase()
 {
 }
 
@@ -50,7 +50,7 @@ int width = 0;
 
 
 /*********************************/
-int ListBoxBase::GetSelection(void)
+int ListBoxBase::GetSelection()
 /*********************************/
 // Return an index for the selected item
 {
@@ -72,13 +72,13 @@ FootprintListBox::FootprintListBox(WinEDA_CvpcbFrame * parent,
 
 
 
-FootprintListBox::~FootprintListBox(void)
+FootprintListBox::~FootprintListBox()
 {
 }
 
 
 /**********************************/
-int FootprintListBox::GetCount(void)
+int FootprintListBox::GetCount()
 /**********************************/
 // Return number of items
 {
@@ -97,7 +97,7 @@ void FootprintListBox::SetString(unsigned linecount, const wxString & text)
 }
 
 /***************************************************/
-wxString FootprintListBox::GetSelectedFootprint(void)
+wxString FootprintListBox::GetSelectedFootprint()
 /***************************************************/
 // Return an index for the selected item
 {
@@ -165,7 +165,7 @@ ListBoxCmp::ListBoxCmp(WinEDA_CvpcbFrame * parent, wxWindowID id,
 
 
 
-ListBoxCmp::~ListBoxCmp(void)
+ListBoxCmp::~ListBoxCmp()
 {
 }
 
@@ -181,7 +181,7 @@ BEGIN_EVENT_TABLE(ListBoxCmp, LIST_BOX_TYPE)
 END_EVENT_TABLE()
 
 /****************************/
-void ListBoxCmp::Clear(void)
+void ListBoxCmp::Clear()
 /****************************/
 // Reset ALL datas
 {
@@ -190,7 +190,7 @@ void ListBoxCmp::Clear(void)
 }
 
 /******************************/
-int ListBoxCmp::GetCount(void)
+int ListBoxCmp::GetCount()
 /******************************/
 // Return number of items
 {
@@ -243,7 +243,7 @@ void ListBoxCmp::SetSelection(unsigned index, bool State)
 }
 
 /********************************************/
-void WinEDA_CvpcbFrame::BuildCmpListBox(void)
+void WinEDA_CvpcbFrame::BuildCmpListBox()
 /********************************************/
 /* Construit la fenetre d'affichage de la liste des composant.
 	dimx et dimy sont les dimensions de la surface totale d'affichage
@@ -283,7 +283,7 @@ wxSize size(10,10);
 
 
 /*************************************************************/
-void WinEDA_CvpcbFrame::BuildFootprintListBox(void)
+void WinEDA_CvpcbFrame::BuildFootprintListBox()
 /*************************************************************/
 /* Construit la fenetre d'affichage de la liste des Modules.
 	dimx et dimy sont les dimensions de la surface totale d'affichage
@@ -313,7 +313,7 @@ wxSize size(10,10);
 
 
 /************************************************/
-void FootprintListBox::SetFootprintFullList(void)
+void FootprintListBox::SetFootprintFullList()
 /************************************************/
 {
 STOREMOD * FootprintItem;

@@ -134,7 +134,7 @@ public:
 	void Plot_1_Page_HPGL(const wxString &  FullFileName,BASE_SCREEN * screen);
 	void Plot_Schematic_HPGL(int Select_PlotAll, int HPGL_SheetSize);
 	void ReturnSheetDims( BASE_SCREEN * screen, wxSize & SheetSize, wxPoint & SheetOffset);
-	void SetPageOffsetValue(void);
+	void SetPageOffsetValue();
 
 ////@begin WinEDA_PlotHPGLFrame member variables
     wxRadioBox* m_SizeOption;

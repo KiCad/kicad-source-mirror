@@ -56,7 +56,7 @@
 	/* Constructeur de WinEDA_App */
 	/*****************************/
 
-WinEDA_App::WinEDA_App(void)
+WinEDA_App::WinEDA_App()
 {
 	m_Checker = NULL;
 	m_MainFrame = NULL;
@@ -84,7 +84,7 @@ WinEDA_App::WinEDA_App(void)
 	/* Destructeur de WinEDA_App */
 	/*****************************/
 
-WinEDA_App::~WinEDA_App(void)
+WinEDA_App::~WinEDA_App()
 {
 	SaveSettings();
 
@@ -166,7 +166,7 @@ bool succes = SetLanguage(TRUE);
 
 
 /*****************************************/
-void WinEDA_App::InitOnLineHelp(void)
+void WinEDA_App::InitOnLineHelp()
 /*****************************************/
 /* Init On Line Help
 */
@@ -187,7 +187,7 @@ wxString fullfilename = FindKicadHelpPath();
 
 
 /*******************************/
-bool WinEDA_App::SetBinDir(void)
+bool WinEDA_App::SetBinDir()
 /*******************************/
 /*
  Analyse la ligne de commande pour retrouver le chemin de l'executable
@@ -236,7 +236,7 @@ int ii;
 
 
 /*********************************/
-void WinEDA_App::GetSettings(void)
+void WinEDA_App::GetSettings()
 /*********************************/
 /* Lit les infos utiles sauvees lors de la derniere utilisation du logiciel
 */
@@ -305,7 +305,7 @@ unsigned ii;
 
 
 /**********************************/
-void WinEDA_App::SaveSettings(void)
+void WinEDA_App::SaveSettings()
 /**********************************/
 {
 unsigned int ii;
@@ -583,7 +583,7 @@ wxMenuItem * item;
 }
 
 
-int WinEDA_App::OnRun(void)
+int WinEDA_App::OnRun()
 /* Run init scripts */
 {
 	#ifdef KICAD_PYTHON

@@ -27,7 +27,7 @@ int NetNumCode;			/* Nombre utilise pour cree des NetNames lors de
 
 
 /*************************/
-int GenNetlistPcbnew(void)
+int GenNetlistPcbnew()
 /*************************/
 {
 #define NETLIST_HEAD_STRING "EESchema Netlist Version 1.1"

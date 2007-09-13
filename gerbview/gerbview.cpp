@@ -22,7 +22,7 @@ wxString g_Main_Title = wxT("GerbView");
 
 IMPLEMENT_APP(WinEDA_App)
 
-bool WinEDA_App::OnInit(void)
+bool WinEDA_App::OnInit()
 {
 wxString FFileName;
 

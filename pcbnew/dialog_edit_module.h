@@ -53,7 +53,7 @@ public:
 	// Constructor and destructor
 	WinEDA_ModulePropertiesFrame(WinEDA_BasePcbFrame *parent,
 							MODULE * Module, wxDC * DC, const wxPoint & pos);
-	~WinEDA_ModulePropertiesFrame(void)
+	~WinEDA_ModulePropertiesFrame()
 		{
 		}
 
@@ -64,8 +64,8 @@ private:
 	void CreateTextModule(wxCommandEvent& event);
 	void EditOrDelTextModule(wxCommandEvent& event);
 	void SelectTextListBox(wxCommandEvent& event);
-	void ReCreateFieldListBox(void);
-	void SetTextListButtons(void);
+	void ReCreateFieldListBox();
+	void SetTextListButtons();
 	void BuildPanelModuleProperties(bool FullOptions);
 	void ModuleOrientEvent(wxCommandEvent& event);
 	void ExchangeModule(wxCommandEvent& event);
@@ -89,7 +89,7 @@ public:
 public:
 	Panel3D_Ctrl(WinEDA_ModulePropertiesFrame * parentframe,
 		wxNotebook * parent, int id, Struct3D_Master * struct3D);
-	~Panel3D_Ctrl(void);
+	~Panel3D_Ctrl();
 	void Browse3DLib(wxCommandEvent& event);
 	void AddOrRemove3DShape(wxCommandEvent& event);
 	DECLARE_EVENT_TABLE()

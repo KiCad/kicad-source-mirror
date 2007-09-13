@@ -71,10 +71,10 @@ public:
 
 	// Constructor and destructor
 	WinEDA_GenCmpListFrame(WinEDA_DrawFrame *parent, wxPoint& pos);
-	~WinEDA_GenCmpListFrame(void) {};
+	~WinEDA_GenCmpListFrame() {};
 
 	void GenList(wxCommandEvent& event);
-	void GenListUpdateOpt(void);
+	void GenListUpdateOpt();
 	void ToolsExit(wxCommandEvent& event);
 
 	DECLARE_EVENT_TABLE()
@@ -151,7 +151,7 @@ wxPoint pos;
 }
 
 // Fonctions de positionnement des variables d'option
-void WinEDA_GenCmpListFrame::GenListUpdateOpt(void)
+void WinEDA_GenCmpListFrame::GenListUpdateOpt()
 {
 	ItemsToList = 0;
 	if ( m_ListCmpbyRefItems->GetValue() ) ItemsToList |= LISTCMP_BY_REF;

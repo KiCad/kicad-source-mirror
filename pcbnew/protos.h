@@ -382,7 +382,7 @@ void DeleteStructList( BOARD_ITEM* Struct );
 /***************/
 /* AUTOPLACE.CPP */
 /***************/
-int Calcule_Encadrement_EdgeBoard(void);
+int Calcule_Encadrement_EdgeBoard();
 
 /***************/
 /* AUTOROUT.CPP */

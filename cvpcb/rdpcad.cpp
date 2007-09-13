@@ -18,10 +18,10 @@ assure la reaffectation des alimentations selon le format :
 #define SEPARATEUR '|'
 
 /* routines locales : */
-int pin(void) ;
+int pin() ;
 
 /***************************************/
-int WinEDA_CvpcbFrame::rdpcad(void)
+int WinEDA_CvpcbFrame::rdpcad()
 /***************************************/
 {
 int i , j , k ,l ;
@@ -146,7 +146,7 @@ for ( ;; )
 		/* pin() : analyse liste des pines */
 		/***********************************/
 
-int pin(void)
+int pin()
 {
 int i , j , k ;
 char numpin[9] , net[9] ;

@@ -52,7 +52,7 @@ public:
 
 	// Constructor and destructor
 	WinEDA_ConfigFrame(WinEDA_SchematicFrame *parent, const wxPoint& pos);
-	~WinEDA_ConfigFrame(void) {};
+	~WinEDA_ConfigFrame() {};
 
 	void OnCloseWindow(wxCloseEvent & event);
 
@@ -62,7 +62,7 @@ public:
 	void LibDelFct(wxCommandEvent& event);
 	void AddOrInsertLibrary(wxCommandEvent& event);
 	void ReturnNetFormat(wxCommandEvent& event);
-	void ChangeSetup(void);
+	void ChangeSetup();
 
 	DECLARE_EVENT_TABLE()
 
@@ -195,7 +195,7 @@ void WinEDA_ConfigFrame::OnCloseWindow(wxCloseEvent & event)
 
 
 /*******************************************/
-void WinEDA_ConfigFrame::ChangeSetup(void)
+void WinEDA_ConfigFrame::ChangeSetup()
 /*******************************************/
 {
 	g_UserLibDirBuffer = LibDirCtrl->GetData();

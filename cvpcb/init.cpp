@@ -67,7 +67,7 @@ wxString Line;
 }
 
 /********************************************/
-void WinEDA_CvpcbFrame::ReadNetListe(void)
+void WinEDA_CvpcbFrame::ReadNetListe()
 /*******************************************/
 /* Lecture de la netliste selon format, ainsi que du fichier des composants
 */

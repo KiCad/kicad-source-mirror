@@ -47,14 +47,14 @@ public:
 public:
 	// Constructor and destructor
 	WinEDA_ConfigFrame(WinEDA_PcbFrame *parent,const wxPoint& pos);
-	~WinEDA_ConfigFrame(void) {};
+	~WinEDA_ConfigFrame() {};
 
 private:
 	void OnCloseWindow(wxCloseEvent & event);
 	void SaveCfg(wxCommandEvent& event);
 	void LibDelFct(wxCommandEvent& event);
 	void LibInsertFct(wxCommandEvent& event);
-	void SetNewOptions(void);
+	void SetNewOptions();
 
 	DECLARE_EVENT_TABLE()
 
@@ -194,7 +194,7 @@ void WinEDA_ConfigFrame::OnCloseWindow(wxCloseEvent & event)
 }
 
 /********************************************/
-void WinEDA_ConfigFrame::SetNewOptions(void)
+void WinEDA_ConfigFrame::SetNewOptions()
 /********************************************/
 {
 	g_UserLibDirBuffer = m_TextLibDir->GetData();

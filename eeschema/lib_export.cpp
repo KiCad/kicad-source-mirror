@@ -22,7 +22,7 @@
 
 
 /*************************************************/
-void WinEDA_LibeditFrame::ImportOnePart(void)
+void WinEDA_LibeditFrame::ImportOnePart()
 /*************************************************/
 /* Routine de lecture de 1 description.
 	Le format est celui des librairies, mais on ne charge que 1 composant

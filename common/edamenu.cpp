@@ -43,7 +43,7 @@ double value;
 }
 
 /**********************/
-wxString GenDate(void)
+wxString GenDate()
 /**********************/
 /* Retourne la chaine de caractere donnant la date */
 {

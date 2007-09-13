@@ -115,7 +115,7 @@ public:
     /// Should we show tooltips?
     static bool ShowToolTips();
 
-	void SearchPageSizeSelection(void);
+	void SearchPageSizeSelection();
 	void SavePageSettings(wxCommandEvent& event);
 	void ReturnSizeSelected(wxCommandEvent& event);
 

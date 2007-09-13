@@ -18,7 +18,7 @@
 
 
 /***********************************************/
-void WinEDA_ModuleEditFrame::ReCreateMenuBar(void)
+void WinEDA_ModuleEditFrame::ReCreateMenuBar()
 /***********************************************/
 
 /* Cree ou reinitialise le menu du haut d'ecran

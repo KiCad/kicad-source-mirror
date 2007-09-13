@@ -55,7 +55,7 @@ public:
 
 	EDA_NoteBookPage(wxNotebook* parent, const wxString & title,
 			int id_NetType, int idCheckBox, int idCreateFile);
-	~EDA_NoteBookPage(void) {};
+	~EDA_NoteBookPage() {};
 };
 
 
@@ -141,14 +141,14 @@ public:
 public:
 	// Constructor and destructor
 	WinEDA_NetlistFrame(WinEDA_SchematicFrame *parent, wxPoint& pos);
-	~WinEDA_NetlistFrame(void) {};
+	~WinEDA_NetlistFrame() {};
 
 private:
-	void InstallCustomPages(void);
-	void InstallPageSpice(void);
+	void InstallCustomPages();
+	void InstallPageSpice();
 	void GenNetlist(wxCommandEvent& event);
 	void RunSimulator(wxCommandEvent& event);
-	void NetlistUpdateOpt(void);
+	void NetlistUpdateOpt();
 	void NetlistExit(wxCommandEvent& event);
 	void SelectNetlistType(wxCommandEvent& event);
 	void SetupPlugin(wxCommandEvent& event);
@@ -238,7 +238,7 @@ int ii;
 
 
 /*************************************************/
-void WinEDA_NetlistFrame::InstallPageSpice(void)
+void WinEDA_NetlistFrame::InstallPageSpice()
 /*************************************************/
 /* Create the spice page
 */
@@ -278,7 +278,7 @@ wxString netlist_opt[2] = { _("Use Net Names"), _("Use Net Numbers") };
 }
 
 /*************************************************/
-void WinEDA_NetlistFrame::InstallCustomPages(void)
+void WinEDA_NetlistFrame::InstallCustomPages()
 /*************************************************/
 /* create the pages for custom netlist format selection:
 */
@@ -376,7 +376,7 @@ EDA_NoteBookPage * CurrPage;
 }
 
 /***********************************************/
-void WinEDA_NetlistFrame::NetlistUpdateOpt(void)
+void WinEDA_NetlistFrame::NetlistUpdateOpt()
 /***********************************************/
 {
 int ii;

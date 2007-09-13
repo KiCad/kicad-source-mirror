@@ -28,7 +28,7 @@ IMPLEMENT_APP(WinEDA_App)
 	/* Called to initialize the program */
 	/************************************/
 
-bool WinEDA_App::OnInit(void)
+bool WinEDA_App::OnInit()
 {
 wxString msg;
 wxString currCWD = wxGetCwd();

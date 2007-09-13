@@ -19,7 +19,7 @@
 
 
 /***********************************/
-int Struct3D_Master:: ReadData(void)
+int Struct3D_Master:: ReadData()
 /************************************/
 {
 char line[1024], *text;

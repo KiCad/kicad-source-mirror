@@ -114,7 +114,7 @@ public:
 
 ////@end WinEDA_Build_BOM_Frame event handler declarations
 
-	void GenList(void);
+	void GenList();
 
 ////@begin WinEDA_Build_BOM_Frame member function declarations
 
@@ -129,7 +129,7 @@ public:
 	int PrintListeCmpByRef( FILE * f, EDA_BaseStruct ** List, int NbItems, bool CompactForm = FALSE );
 	int PrintListeCmpByVal( FILE *f, EDA_BaseStruct **List, int NbItems);
 	void PrintFieldData(FILE * f, EDA_SchComponentStruct * DrawLibItem, bool CompactForm = FALSE);
-	void SavePreferences(void);
+	void SavePreferences();
 
 
     /// Should we show tooltips?

@@ -64,7 +64,7 @@ WinEDA_DisplayFrame::WinEDA_DisplayFrame( wxWindow * father, WinEDA_App *parent,
 	/* Fonctions de base de WinEDA_DisplayFrame */
 	/*****************************************/
 // Destructeur
-WinEDA_DisplayFrame::~WinEDA_DisplayFrame(void)
+WinEDA_DisplayFrame::~WinEDA_DisplayFrame()
 {
 	if ( m_Pcb->m_Modules ) DeleteStructure( m_Pcb->m_Modules );
 	m_Pcb->m_Modules = NULL;
@@ -93,14 +93,14 @@ wxSize size;
 
 
 /************************************************/
-void WinEDA_DisplayFrame::ReCreateVToolbar(void)
+void WinEDA_DisplayFrame::ReCreateVToolbar()
 /************************************************/
 {
 }
 
 
 /************************************************/
-void WinEDA_DisplayFrame::ReCreateHToolbar(void)
+void WinEDA_DisplayFrame::ReCreateHToolbar()
 /************************************************/
 {
 	if ( m_HToolBar != NULL ) return;
@@ -137,7 +137,7 @@ void WinEDA_DisplayFrame::ReCreateHToolbar(void)
 
 
 /*******************************************/
-void WinEDA_DisplayFrame::SetToolbars(void)
+void WinEDA_DisplayFrame::SetToolbars()
 /*******************************************/
 {
 }

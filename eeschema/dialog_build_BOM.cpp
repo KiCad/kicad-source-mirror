@@ -413,7 +413,7 @@ void WinEDA_Build_BOM_Frame::OnExitClick( wxCommandEvent& event )
 }
 
 /**********************************************************/
-void WinEDA_Build_BOM_Frame::GenList(void)
+void WinEDA_Build_BOM_Frame::GenList()
 /**********************************************************/
 {
 #define EXT_LIST wxT(".lst")
@@ -1142,7 +1142,7 @@ void WinEDA_Build_BOM_Frame::OnCloseWindow( wxCloseEvent& event )
 }
 
 /**************************************************/
-void WinEDA_Build_BOM_Frame::SavePreferences(void)
+void WinEDA_Build_BOM_Frame::SavePreferences()
 /**************************************************/
 {
 	s_Add_F1_state = m_AddField1->GetValue();

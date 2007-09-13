@@ -125,8 +125,8 @@ void GRSFillCSegm(EDA_Rect * ClipBox, wxDC * DC,
 			int x1, int y1, int x2, int y2, int width, int Color);
 
 void GRSetColor(int Color);
-void GRSetDefaultPalette(void);
-int GRGetColor(void);
+void GRSetDefaultPalette();
+int GRGetColor();
 void GRPutPixel(EDA_Rect * ClipBox, wxDC * DC, int x, int y, int color);
 void GRSPutPixel(EDA_Rect * ClipBox, wxDC * DC, int x, int y, int color);
 int GRGetPixel(wxDC * DC, int x, int y);

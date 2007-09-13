@@ -671,7 +671,7 @@ wxPoint newpos;
 
 
 /*******************************************************/
-void WinEDA_ModuleEditFrame::Select_Active_Library(void)
+void WinEDA_ModuleEditFrame::Select_Active_Library()
 /*******************************************************/
 {
 	if ( g_LibName_List.GetCount() == 0 ) return;

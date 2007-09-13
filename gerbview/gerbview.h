@@ -143,11 +143,11 @@ public:
 
 public:
 	GERBER_Descr(int layer);
-	~GERBER_Descr(void);
-	void Clear_GERBER_Descr(void);
-	int ReturnUsedDcodeNumber(void);
-	void ResetDefaultValues(void);
-	void InitToolTable(void);
+	~GERBER_Descr();
+	void Clear_GERBER_Descr();
+	int ReturnUsedDcodeNumber();
+	void ResetDefaultValues();
+	void InitToolTable();
 
 	// Routines utilisées en lecture de ficher gerber
 	wxPoint ReadXYCoord(char * &Text);
@@ -180,7 +180,7 @@ public:
 public:
 	D_CODE(int num_dcode);
 	~D_CODE();
-	void Clear_D_CODE_Data(void);
+	void Clear_D_CODE_Data();
 };
 
 eda_global wxChar *g_GERBER_Tool_Type[6]

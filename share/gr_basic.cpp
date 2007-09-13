@@ -1365,7 +1365,7 @@ long w = 0, h = 0;
 }
 
 	/********************************/
-	/* void GRReseTextFgColor(void) */
+	/* void GRReseTextFgColor() */
 	/********************************/
 
 /* Mise a la couleur par defaut des textes a afficher */

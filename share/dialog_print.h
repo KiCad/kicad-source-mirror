@@ -117,16 +117,16 @@ public:
     /// Should we show tooltips?
     static bool ShowToolTips();
 
-	void OnClosePrintDialog(void);
+	void OnClosePrintDialog();
 	void OnPrintSetup(wxCommandEvent& event);
 	void OnPrintPreview(wxCommandEvent& event);
 	void EDA_PrintPage(wxCommandEvent& event);
 	void SetColorOrBlack(wxCommandEvent& event);
 	void SetScale(wxCommandEvent& event);
-	int SetLayerMaskFromListSelection(void);
-	wxString BuildPrintTitle(void);
-	void SetOthersDatas(void);
-	void SetPenWidth(void);
+	int SetLayerMaskFromListSelection();
+	wxString BuildPrintTitle();
+	void SetOthersDatas();
+	void SetPenWidth();
 
 
 ////@begin WinEDA_PrintFrame member variables

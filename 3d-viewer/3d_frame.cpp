@@ -95,7 +95,7 @@ void WinEDA3D_DrawFrame::OnCloseWindow(wxCloseEvent & Event)
 
 
 /******************************************/
-void WinEDA3D_DrawFrame::GetSettings(void)
+void WinEDA3D_DrawFrame::GetSettings()
 /******************************************/
 {
 wxString text;
@@ -122,7 +122,7 @@ wxConfig * Config = m_ParentAppl->m_EDA_Config;		//  Current config used by appl
 }
 
 /*******************************************/
-void WinEDA3D_DrawFrame::SaveSettings(void)
+void WinEDA3D_DrawFrame::SaveSettings()
 /*******************************************/
 {
 wxString text;
@@ -200,7 +200,7 @@ void WinEDA3D_DrawFrame::OnRightClick(const wxPoint& MousePos, wxMenu * PopMenu)
 }
 
 /************************************/
-int WinEDA3D_DrawFrame::BestZoom(void)
+int WinEDA3D_DrawFrame::BestZoom()
 /************************************/
 // Retourne le meilleur zoom
 {
@@ -288,7 +288,7 @@ void WinEDA3D_DrawFrame::Process_Special_Functions(wxCommandEvent& event)
 
 
 /*****************************************/
-void WinEDA3D_DrawFrame::NewDisplay(void)
+void WinEDA3D_DrawFrame::NewDisplay()
 /*****************************************/
 {
 	m_Canvas->ClearLists();
@@ -299,7 +299,7 @@ void WinEDA3D_DrawFrame::NewDisplay(void)
 
 
 /******************************************/
-void WinEDA3D_DrawFrame::Set3DBgColor(void)
+void WinEDA3D_DrawFrame::Set3DBgColor()
 /******************************************/
 /* called to set the background color of the 3D scene
 */

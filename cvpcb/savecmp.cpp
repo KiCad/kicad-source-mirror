@@ -54,7 +54,7 @@ wxString Title = g_Main_Title + wxT(" ") + GetBuildVersion();
 }
 
 /****************/
-int loadcmp(void)
+int loadcmp()
 /***************/
 /* recupere la liste des associations composants/empreintes
 */

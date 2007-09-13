@@ -128,7 +128,7 @@ private:
 	// Constructor and destructor
 public:
 	WinEDA_GerberGeneralOptionsFrame(WinEDA_BasePcbFrame *parent,const wxPoint& pos);
-	~WinEDA_GerberGeneralOptionsFrame(void) {};
+	~WinEDA_GerberGeneralOptionsFrame() {};
 
 private:
 	void AcceptPcbOptions(wxCommandEvent& event);
@@ -263,7 +263,7 @@ public:
 
 	// Constructor and destructor
 	WinEDA_LookFrame(WinEDA_BasePcbFrame *parent,const wxPoint& pos);
-	~WinEDA_LookFrame(void) {};
+	~WinEDA_LookFrame() {};
 
 	void AcceptPcbOptions(wxCommandEvent& event);
 	void OnQuit(wxCommandEvent & event);

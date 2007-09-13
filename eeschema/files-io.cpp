@@ -114,7 +114,7 @@ wxString LibArchiveFileName;
 }
 
 /************************/
-int CountCmpNumber(void)
+int CountCmpNumber()
 /************************/
 /* Routine retournant le nombre de composants dans le schema,
 powers non comprises */

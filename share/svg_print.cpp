@@ -282,7 +282,7 @@ wxIcon WinEDA_PrintSVGFrame::GetIconResource( const wxString& name )
 
 
 /******************************************************/
-wxString WinEDA_PrintSVGFrame::ReturnFullFileName(void)
+wxString WinEDA_PrintSVGFrame::ReturnFullFileName()
 /******************************************************/
 {
 wxString name, ext;
@@ -294,7 +294,7 @@ wxString name, ext;
 
 
 /********************************************/
-void WinEDA_PrintSVGFrame::SetPenWidth(void)
+void WinEDA_PrintSVGFrame::SetPenWidth()
 /********************************************/
 {
 	s_SVGPenMinWidth = m_DialogPenWidth->GetValue();

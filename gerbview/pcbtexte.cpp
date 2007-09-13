@@ -94,7 +94,7 @@ void WinEDA_PcbFrame::StartMoveTextePcb(TEXTE_PCB * TextePcb, wxDC * DC)
 }
 
 	/*****************************/
-	/* void Move_Texte_Pcb(void) */
+	/* void Move_Texte_Pcb() */
 	/*****************************/
 
 /* Routine deplacant le texte PCB suivant le curseur de la souris */

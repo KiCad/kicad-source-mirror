@@ -47,7 +47,7 @@ void InstallCmpeditFrame(WinEDA_SchematicFrame * parent, wxPoint & pos,
 
 /* Functions common to all EELibs?.c modules: */
 int LibraryEntryCompare(EDA_LibComponentStruct *LE1, EDA_LibComponentStruct *LE2);
-int NumOfLibraries(void);
+int NumOfLibraries();
 EDA_LibComponentStruct *FindLibPart(const wxChar *Name, const wxString & LibName, int Alias);
 
 void DrawingLibInGhost(WinEDA_DrawPanel * panel, wxDC * DC, EDA_LibComponentStruct *LibEntry,
@@ -83,7 +83,7 @@ LibraryStruct * LoadLibraryName(WinEDA_DrawFrame * frame,
 				const wxString & FullLibName, const wxString & LibName);
 void LoadLibraries(WinEDA_DrawFrame * frame);
 void FreeCmpLibrary(wxWindow * frame, const wxString & LibName);
-const wxChar **GetLibNames(void);
+const wxChar **GetLibNames();
 
 void SnapLibItemPoint(int OrigX, int OrigY, int *ClosestX, int *ClosestY,
 						 EDA_SchComponentStruct *DrawLibItem);
@@ -208,14 +208,14 @@ void RedrawOneStruct(WinEDA_DrawPanel * panel, wxDC * DC, EDA_BaseStruct *Struct
 /**************/
 /* EELAYER.CPP */
 /**************/
-void SeedLayers(void);
+void SeedLayers();
 int ReturnLayerColor(int Layer);
 void DisplayColorSetupFrame(WinEDA_DrawFrame * parent, const wxPoint & pos);
 
 /*************/
 /* EELOAD.CPP */
 /*************/
-int CountCmpNumber(void);
+int CountCmpNumber();
 
 
 /***************/

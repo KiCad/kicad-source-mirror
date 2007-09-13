@@ -107,7 +107,7 @@ public:
     /// Should we show tooltips?
     static bool ShowToolTips();
 	void TextModPropertiesAccept(wxCommandEvent& event);
-	void SetDisplayValue(void);
+	void SetDisplayValue();
 
 ////@begin WinEDA_TextModPropertiesFrame member variables
     wxStaticText* m_ModuleInfoText;

@@ -25,7 +25,7 @@ static STOREMOD * TriListeModules(STOREMOD * BaseListe, int nbitems);
 /**/
 
 /*********************/
-int listlib(void)
+int listlib()
 /*********************/
 /* Routine lisant la liste des librairies, et generant la liste chainee
  des modules disponibles

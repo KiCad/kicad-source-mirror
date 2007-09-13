@@ -152,7 +152,7 @@ WinEDA_GerberFrame::WinEDA_GerberFrame(wxWindow * father, WinEDA_App *parent,
 }
 
 
-WinEDA_GerberFrame::~WinEDA_GerberFrame(void)
+WinEDA_GerberFrame::~WinEDA_GerberFrame()
 {
 	m_Parent->m_GerberFrame = NULL;
 	m_CurrentScreen = ScreenPcb;
@@ -196,7 +196,7 @@ PCB_SCREEN * screen;
 }
 
 /*******************************************/
-void WinEDA_GerberFrame::SetToolbars(void)
+void WinEDA_GerberFrame::SetToolbars()
 /*******************************************/
 /* Active ou desactive les tools du toolbar horizontal, en fonction des commandes
 en cours
@@ -285,7 +285,7 @@ GERBER_Descr * Gerber_layer_descr	= g_GERBER_Descr_List[layer];
 }
 
 /*************************************/
-int WinEDA_GerberFrame::BestZoom(void)
+int WinEDA_GerberFrame::BestZoom()
 /*************************************/
 {
 int ii,jj ;

@@ -17,7 +17,7 @@
 
 
 /*******************************************/
-void WinEDA_MainFrame::Load_Prj_Config(void)
+void WinEDA_MainFrame::Load_Prj_Config()
 /*******************************************/
 {
 
@@ -43,7 +43,7 @@ void WinEDA_MainFrame::Load_Prj_Config(void)
 
 
 /*********************************************/
-void WinEDA_MainFrame::Save_Prj_Config(void)
+void WinEDA_MainFrame::Save_Prj_Config()
 /*********************************************/
 {
 wxString FullFileName;

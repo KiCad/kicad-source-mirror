@@ -99,14 +99,14 @@ private:
 public:
 	// Constructor and destructor
 	WinEDA_PartPropertiesFrame(WinEDA_LibeditFrame *parent, wxPoint& pos);
-	~WinEDA_PartPropertiesFrame(void)
+	~WinEDA_PartPropertiesFrame()
 	{
 	};
 
 private:
-	void BuildPanelBasic(void);
-	void BuildPanelDoc(void);
-	void BuildPanelAlias(void);
+	void BuildPanelBasic();
+	void BuildPanelDoc();
+	void BuildPanelAlias();
 	void BuildPanelEditField(int fieldId);
 	void PartPropertiesAccept(wxCommandEvent& event);
 	void OnQuit(wxCommandEvent& event);
@@ -114,7 +114,7 @@ private:
 	void DeleteAliasOfPart(wxCommandEvent& event);
 	void AddAliasOfPart(wxCommandEvent& event);
 	bool ChangeNbUnitsPerPackage(int newUnit);
-	bool SetUnsetConvert(void);
+	bool SetUnsetConvert();
 	void CopyDocToAlias(wxCommandEvent& event);
 	void BrowseAndSelectDocFile(wxCommandEvent& event);
 
@@ -254,7 +254,7 @@ int ii;
 }
 
 /*****************************************************/
-void WinEDA_PartPropertiesFrame::BuildPanelAlias(void)
+void WinEDA_PartPropertiesFrame::BuildPanelAlias()
 /*****************************************************/
 /* create the panel for component alias list editing
 */
@@ -305,7 +305,7 @@ wxButton * Button;
 
 
 /*****************************************************/
-void WinEDA_PartPropertiesFrame::BuildPanelDoc(void)
+void WinEDA_PartPropertiesFrame::BuildPanelDoc()
 /*****************************************************/
 /* create the panel for component doc editing
 */
@@ -388,7 +388,7 @@ wxString msg_text;
 
 
 /*****************************************************/
-void WinEDA_PartPropertiesFrame::BuildPanelBasic(void)
+void WinEDA_PartPropertiesFrame::BuildPanelBasic()
 /*****************************************************/
 /* create the basic panel for component properties editing
 */
@@ -1033,7 +1033,7 @@ LibEDA_BaseStruct* DrawItem, * NextDrawItem;
 
 
 /*****************************************************/
-bool WinEDA_PartPropertiesFrame::SetUnsetConvert(void)
+bool WinEDA_PartPropertiesFrame::SetUnsetConvert()
 /*****************************************************/
 /* crée ou efface (selon option AsConvert) les éléments
 	de la représentation convertie d'un composant

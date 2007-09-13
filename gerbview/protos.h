@@ -14,7 +14,7 @@ BOARD_ITEM* SaveItemEfface( BOARD_ITEM* PtItem, int nbitems );
 /***********************/
 /* gerbview_config.cpp */
 /***********************/
-bool Read_Config(void);
+bool Read_Config();
 bool Read_Hotkey_Config( WinEDA_DrawFrame * frame, bool verbose );
 
 
@@ -69,8 +69,8 @@ void trace_1_contour_GERBER(int cX,int cY, int dimX,int dimY,
 		 ses variations deltaX et deltaY  et son orientation orient */
 
 /* PLOTHPGL.CC */
-void Init_Trace_HPGL(void);
-void Fin_Trace_HPGL(void);
+void Init_Trace_HPGL();
+void Fin_Trace_HPGL();
 void trace_1_segment_HPGL(int pos_X0,int pos_Y0,int pos_X1,int pos_Y1,
 							int hauteur);
 

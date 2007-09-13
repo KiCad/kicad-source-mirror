@@ -54,7 +54,7 @@ public:
 	// Constructor and destructor
 	WinEDA_PadGlobalEditFrame(WinEDA_BasePcbFrame *parent,
 							D_PAD * Pad, wxDC * DC, const wxPoint & pos);
-	~WinEDA_PadGlobalEditFrame(void)
+	~WinEDA_PadGlobalEditFrame()
 		{
 		}
 

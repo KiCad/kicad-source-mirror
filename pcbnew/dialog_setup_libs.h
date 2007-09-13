@@ -116,7 +116,7 @@ public:
 	void SaveCfg(wxCommandEvent& event);
 	void LibDelFct(wxCommandEvent& event);
 	void LibInsertFct(wxCommandEvent& event);
-	void SetNewOptions(void);
+	void SetNewOptions();
 
 ////@begin KiConfigPcbnewFrame member variables
     wxStaticBoxSizer* m_FileExtList;

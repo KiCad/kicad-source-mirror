@@ -23,7 +23,7 @@ static int pin_orcad(STORECMP * CurrentCmp);
 
 
 /************************************************/
-int WinEDA_CvpcbFrame::ReadSchematicNetlist(void)
+int WinEDA_CvpcbFrame::ReadSchematicNetlist()
 /************************************************/
 {
 int i , j , k ,l ;

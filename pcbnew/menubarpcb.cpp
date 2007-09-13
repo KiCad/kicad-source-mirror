@@ -20,7 +20,7 @@
 #include "Post_Compo.xpm"
 
 /***********************************************/
-void WinEDA_PcbFrame::ReCreateMenuBar(void)
+void WinEDA_PcbFrame::ReCreateMenuBar()
 /***********************************************/
 
 /* Cree ou reinitialise le menu du haut d'ecran

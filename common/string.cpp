@@ -96,7 +96,7 @@ struct tm * Date;
 }
 
 /*******************************/
-wxString DateAndTime(void)
+wxString DateAndTime()
 /*******************************/
 /* Retourne la chaine de caractere donnant date+heure */
 {

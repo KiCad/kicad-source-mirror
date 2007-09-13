@@ -119,10 +119,10 @@ public:
     /// Should we show tooltips?
     static bool ShowToolTips();
 
-	void SetFormatsNetListes(void);
+	void SetFormatsNetListes();
 	void LibDelFct(wxCommandEvent& event);
 	void AddOrInsertLibrary(wxCommandEvent& event);
-	void ChangeSetup(void);
+	void ChangeSetup();
 	
 ////@begin KiConfigEeschemaFrame member variables
     wxRadioBox* m_NetFormatBox;

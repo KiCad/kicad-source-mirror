@@ -130,11 +130,11 @@ public:
     static bool ShowToolTips();
 
 	void PadPropertiesAccept(wxCommandEvent& event);
-	void PadTypeSelected(void);
+	void PadTypeSelected();
 	void PadTypeSelectedEvent(wxCommandEvent& event);
 	void PadOrientEvent(wxCommandEvent& event);
 	void SetPadLayersList(long layer_mask);
-	void SetOthersControls(void);
+	void SetOthersControls();
 
 ////@begin WinEDA_PadPropertiesFrame member variables
     wxBoxSizer* m_LeftBoxSizer;

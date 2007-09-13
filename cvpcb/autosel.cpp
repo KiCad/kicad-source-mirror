@@ -22,7 +22,7 @@ public:
 	wxString m_LibName;
 	wxString m_Library;
 
-	AUTOMODULE(void) { m_Type = 0; Pnext = NULL; }
+	AUTOMODULE() { m_Type = 0; Pnext = NULL; }
 } ;
 
 

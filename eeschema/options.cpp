@@ -64,7 +64,7 @@ public:
 
 	// Constructor and destructor
 	WinEDA_SetOptionsFrame(WinEDA_DrawFrame *parent, const wxPoint& framepos);
-	~WinEDA_SetOptionsFrame(void) {};
+	~WinEDA_SetOptionsFrame() {};
 
 private:
 	void Accept(wxCommandEvent& event);

@@ -30,7 +30,7 @@ public:
 	// Constructor and destructor
 	WinEDA_SelColorFrame(wxWindow *parent,
 					const wxPoint& framepos, int OldColor);
-	~WinEDA_SelColorFrame(void) {};
+	~WinEDA_SelColorFrame() {};
 
 private:
 	void OnCancel(wxCommandEvent& event);

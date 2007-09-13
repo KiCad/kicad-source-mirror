@@ -20,7 +20,7 @@
 
 #include "cvpcb.h"
 
-STORECMP::STORECMP(void)
+STORECMP::STORECMP()
 {
 	Pnext = Pback = NULL;
 	m_Type = STRUCT_COMPONENT;
@@ -29,7 +29,7 @@ STORECMP::STORECMP(void)
 	m_Multi = 0;
 }
 
-STORECMP::~STORECMP(void)
+STORECMP::~STORECMP()
 {
 STOREPIN * Pin, * NextPin;
 	
@@ -41,7 +41,7 @@ STOREPIN * Pin, * NextPin;
 
 
 
-STOREMOD::STOREMOD(void)
+STOREMOD::STOREMOD()
 {
 	Pnext = Pback = NULL;
 	m_Type = STRUCT_MODULE;
@@ -49,7 +49,7 @@ STOREMOD::STOREMOD(void)
 }
 
 
-STOREPIN::STOREPIN(void)
+STOREPIN::STOREPIN()
 {
 	m_Type = STRUCT_PIN;	/* Type de la structure */
 	Pnext = NULL;			/* Chainage avant */

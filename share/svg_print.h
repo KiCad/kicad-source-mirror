@@ -117,7 +117,7 @@ public:
 
 	void PrintSVGDoc(wxCommandEvent& event);
 	bool DrawPage(const wxString & FullFileName);
-	wxString ReturnFullFileName(void);
+	wxString ReturnFullFileName();
 
 ////@begin WinEDA_PrintSVGFrame member variables
     wxBoxSizer* m_DialogPenWidthSizer;

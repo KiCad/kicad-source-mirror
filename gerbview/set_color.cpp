@@ -61,7 +61,7 @@ public:
 
 	// Constructor and destructor
 	WinEDA_SetColorsFrame(WinEDA_DrawFrame *parent, const wxPoint& framepos);
-	~WinEDA_SetColorsFrame(void) {};
+	~WinEDA_SetColorsFrame() {};
 
 private:
 	void SetColor(wxCommandEvent& event);

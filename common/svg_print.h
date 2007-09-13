@@ -122,7 +122,7 @@ public:
 	void PrintSVGDoc(wxCommandEvent& event);
 	bool DrawPage(const wxString & FullFileName);
 	void SetPenWidth(wxSpinEvent& event);
-	wxString ReturnFullFileName(void);
+	wxString ReturnFullFileName();
 
 ////@begin WinEDA_PrintSVGFrame member variables
     wxSpinCtrl* m_ButtPenWidth;

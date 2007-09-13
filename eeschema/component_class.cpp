@@ -32,7 +32,7 @@ DrawPartStruct::DrawPartStruct( KICAD_T struct_type, const wxPoint & pos):
 }
 
 /************************************/
-DrawPartStruct::~DrawPartStruct(void)
+DrawPartStruct::~DrawPartStruct()
 /************************************/
 {
 }
@@ -221,7 +221,7 @@ void EDA_SchComponentStruct::Place(WinEDA_DrawFrame * frame, wxDC * DC)
 
 
 /***************************************************/
-void EDA_SchComponentStruct::ClearAnnotation(void)
+void EDA_SchComponentStruct::ClearAnnotation()
 /***************************************************/
 /* Suppress annotation ( i.i IC23 changed to IC? and part reset to 1)
 */
@@ -241,7 +241,7 @@ EDA_LibComponentStruct *Entry;
 }
 
 /**************************************************************/
-EDA_SchComponentStruct * EDA_SchComponentStruct::GenCopy(void)
+EDA_SchComponentStruct * EDA_SchComponentStruct::GenCopy()
 /**************************************************************/
 {
 EDA_SchComponentStruct * new_item = new EDA_SchComponentStruct( m_Pos );
@@ -411,7 +411,7 @@ bool Transform = FALSE;
 
 
 /****************************************************/
-int EDA_SchComponentStruct::GetRotationMiroir(void)
+int EDA_SchComponentStruct::GetRotationMiroir()
 /****************************************************/
 {
 int type_rotate = CMP_ORIENT_0;
@@ -500,7 +500,7 @@ PartTextStruct::PartTextStruct(const wxPoint & pos, const wxString & text):
 }
 
 /************************************/
-PartTextStruct::~PartTextStruct(void)
+PartTextStruct::~PartTextStruct()
 /************************************/
 {
 }
@@ -524,7 +524,7 @@ void PartTextStruct::PartTextCopy(PartTextStruct * target)
 
 
 /*********************************/
-bool PartTextStruct::IsVoid(void)
+bool PartTextStruct::IsVoid()
 /*********************************/
 /* return True if The field is void, i.e.:
 	contains wxEmptyString or "~"
@@ -536,7 +536,7 @@ bool PartTextStruct::IsVoid(void)
 
 
 /********************************************/
-EDA_Rect PartTextStruct::GetBoundaryBox(void)
+EDA_Rect PartTextStruct::GetBoundaryBox()
 /********************************************/
 /* return
 	EDA_Rect contains the real (user coordinates) boundary box for a text field,

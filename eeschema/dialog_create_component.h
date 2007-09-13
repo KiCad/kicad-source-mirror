@@ -91,7 +91,7 @@ public:
     void CreateControls();
 
     // others functions:
-    wxString ReturnCmpName(void)
+    wxString ReturnCmpName()
     {
         return m_CmpName->GetValue();
     }

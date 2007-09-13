@@ -103,7 +103,7 @@ public:
     /// Should we show tooltips?
     static bool ShowToolTips();
 	void AcceptPcbOptions(wxCommandEvent& event);
-	void SetDisplayValue(void);
+	void SetDisplayValue();
 
 ////@begin WinEDA_PcbTracksDialog member variables
     wxStaticText* m_ViaSizeTitle;

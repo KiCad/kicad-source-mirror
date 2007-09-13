@@ -37,7 +37,7 @@ public:
 
 	// Constructor and destructor
 	WinEDA_SwapLayerFrame(WinEDA_GerberFrame *parent);
-	~WinEDA_SwapLayerFrame(void) {};
+	~WinEDA_SwapLayerFrame() {};
 
 private:
 	void Sel_Layer(wxCommandEvent& event);
