@@ -73,8 +73,14 @@ public:
     bool    m_EndIsDangling;       // TRUE si Start ou End not connected  (wires, tracks...)
 
 public:
-    EDA_DrawLineStruct( const wxPoint &pos, int layer );
+    EDA_DrawLineStruct( const wxPoint& pos, int layer );
     ~EDA_DrawLineStruct() { }
+    virtual wxString GetClass() const
+    {
+        return wxT( "EDA_DrawLineStruct" );
+    }
+
+
     bool                IsOneEndPointAt( const wxPoint& pos );
     EDA_DrawLineStruct* GenCopy();
 
@@ -82,6 +88,7 @@ public:
     {
         return m_Start == m_End;
     }
+
 
     virtual void Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode,
                        int Color = -1 );
@@ -97,8 +104,14 @@ public:
     wxString   m_Comment;           /* Texte (commentaireassocie eventuel */
 
 public:
-    DrawMarkerStruct( const wxPoint &pos, const wxString &text );
+    DrawMarkerStruct( const wxPoint& pos, const wxString& text );
     ~DrawMarkerStruct();
+    virtual wxString GetClass() const
+    {
+        return wxT( "DrawMarkerStruct" );
+    }
+
+
     DrawMarkerStruct*   GenCopy();
     wxString            GetComment();
     virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
@@ -112,8 +125,14 @@ public:
     wxPoint m_Pos;                      /* XY coordinates of NoConnect. */
 
 public:
-    DrawNoConnectStruct( const wxPoint &pos );
+    DrawNoConnectStruct( const wxPoint& pos );
     ~DrawNoConnectStruct() { }
+    virtual wxString GetClass() const
+    {
+        return wxT( "DrawNoConnectStruct" );
+    }
+
+
     DrawNoConnectStruct*    GenCopy();
     virtual void            Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                                   int draw_mode, int Color = -1 );
@@ -122,7 +141,7 @@ public:
 
 /**
  * Class DrawBusEntryStruct
- * Struct de descr 1 raccord a 45 degres de BUS ou WIRE 
+ * Struct de descr 1 raccord a 45 degres de BUS ou WIRE
  */
 class DrawBusEntryStruct  : public EDA_BaseStruct
 {
@@ -133,15 +152,21 @@ public:
     wxSize  m_Size;
 
 public:
-    DrawBusEntryStruct( const wxPoint &pos, int shape, int id );
+    DrawBusEntryStruct( const wxPoint& pos, int shape, int id );
     ~DrawBusEntryStruct() { }
+    virtual wxString GetClass() const
+    {
+        return wxT( "DrawBusEntryStruct" );
+    }
+
+
     DrawBusEntryStruct* GenCopy();
     wxPoint             m_End(); // retourne la coord de fin du raccord
     virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                               int draw_mode, int Color = -1 );
 };
 
-class DrawPolylineStruct  : public EDA_BaseStruct/* Polyligne (serie de segments) */
+class DrawPolylineStruct  : public EDA_BaseStruct /* Polyligne (serie de segments) */
 {
 public:
     int  m_Layer;
@@ -152,6 +177,12 @@ public:
 public:
     DrawPolylineStruct( int layer );
     ~DrawPolylineStruct();
+    virtual wxString GetClass() const
+    {
+        return wxT( "DrawPolylineStruct" );
+    }
+
+
     DrawPolylineStruct* GenCopy();
     virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                               int draw_mode, int Color = -1 );
@@ -164,15 +195,22 @@ public:
     wxPoint m_Pos;                  /* XY coordinates of connection. */
 
 public:
-    DrawJunctionStruct( const wxPoint &pos );
+    DrawJunctionStruct( const wxPoint& pos );
     ~DrawJunctionStruct() { }
+    virtual wxString GetClass() const
+    {
+        return wxT( "DrawJunctionStruct" );
+    }
+
+
     DrawJunctionStruct* GenCopy();
     virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                               int draw_mode, int Color = -1 );
 };
 
 
-class DrawTextStruct      : public EDA_BaseStruct, public EDA_TextStruct
+class DrawTextStruct      : public EDA_BaseStruct
+    , public EDA_TextStruct
 {
 public:
     int  m_Layer;
@@ -180,29 +218,23 @@ public:
     bool m_IsDangling;          // TRUE si non connecté
 
 public:
-    DrawTextStruct( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString, 
-                   KICAD_T aType = DRAW_TEXT_STRUCT_TYPE );
+    DrawTextStruct( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString,
+                    KICAD_T aType = DRAW_TEXT_STRUCT_TYPE );
     ~DrawTextStruct() { }
-    
+
+    virtual wxString GetClass() const
+    {
+        return wxT( "DrawTextStruct" );
+    }
+
+
     DrawTextStruct* GenCopy();
     virtual void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode,
                           int Color = -1 );
-    
-    void            SwapData( DrawTextStruct* copyitem );
-    
-    virtual void    Place( WinEDA_DrawFrame* frame, wxDC* DC );
 
-    // selectively give public access to a very dangerous protected function:
-    void            SetType( KICAD_T aType )  { EDA_BaseStruct::SetType( aType ); }
-    
-    
-private:
-    void            DrawAsText( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                                int draw_mode, int Color );
-    void            DrawAsLabel( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                                 int draw_mode, int Color );
-    void            DrawAsGlobalLabel( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                                       int draw_mode, int Color );
+    void            SwapData( DrawTextStruct* copyitem );
+
+    virtual void    Place( WinEDA_DrawFrame* frame, wxDC* DC );
 };
 
 
@@ -211,15 +243,29 @@ class DrawLabelStruct : public DrawTextStruct
 public:
     DrawLabelStruct( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString );
     ~DrawLabelStruct() { }
+    virtual void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode,
+                          int Color = -1 );
+
+    virtual wxString GetClass() const
+    {
+        return wxT( "DrawLabelStruct" );
+    }
 };
 
 
 class DrawGlobalLabelStruct : public DrawTextStruct
 {
 public:
-    DrawGlobalLabelStruct( const wxPoint& pos = wxPoint( 0, 0 ), 
-                          const wxString& text = wxEmptyString );
+    DrawGlobalLabelStruct( const wxPoint& pos = wxPoint( 0, 0 ),
+                           const wxString& text = wxEmptyString );
     ~DrawGlobalLabelStruct() { }
+    virtual void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode,
+                          int Color = -1 );
+
+    virtual wxString GetClass() const
+    {
+        return wxT( "DrawGlobalLabelStruct" );
+    }
 };
 
 

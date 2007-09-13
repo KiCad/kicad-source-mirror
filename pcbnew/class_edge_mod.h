@@ -65,7 +65,6 @@ public:
      */
     bool    HitTest( const wxPoint& refPos );
     
-#if defined(DEBUG)
     /**
      * Function GetClass
      * returns the class name.
@@ -77,6 +76,7 @@ public:
         // return wxT( "EDGE" );  ?
     }
 
+#if defined(DEBUG)
     /**
      * Function Show
      * is used to output the object tree, currently for debugging only.

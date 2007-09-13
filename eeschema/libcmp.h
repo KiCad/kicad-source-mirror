@@ -32,7 +32,7 @@
 #define NO_FILL                  0                          // Poly, Squar, Circle, Arc = option No Fill
 #define FILLED_SHAPE             1                          // Poly, Squar, Circle, Arc = option Fill with current color
 #define FILLED_WITH_BG_BODYCOLOR 2                          // Poly, Squar, Circle, Arc = option Fill
-                                    // with background body color
+// with background body color
 
 //Offsets used in editing library component, for handle aliad dats
 #define ALIAS_NAME         0
@@ -147,10 +147,10 @@ public:
     unsigned long  m_TimeStamp;             // Signature temporelle
     int            m_Flags;                 // variable used in some functions
     bool           m_IsLibCache;            // False for the "standard" libraries,
-                                    // True for the library cache
+    // True for the library cache
 
 public:
-    LibraryStruct( int type, const wxString &name, const wxString &fullname );
+    LibraryStruct( int type, const wxString& name, const wxString& fullname );
     ~LibraryStruct();
     bool    WriteHeader( FILE* file );
     bool    ReadHeader( FILE* file, int* LineNum );
@@ -181,6 +181,8 @@ public:
     {
         return (LibEDA_BaseStruct*) Pnext;
     }
+
+
     LibEDA_BaseStruct( KICAD_T struct_type );
     virtual ~LibEDA_BaseStruct() { }
     void Display_Infos_DrawEntry( WinEDA_DrawFrame* frame );
@@ -198,18 +200,25 @@ public:
     long     m_PinNum;      /* Pin number: 4 Ascii code like "12" or "anod" or "G6"
                              *  "12" is really "12\0\0"*/
     wxString m_PinName;
-    int      m_PinNumSize, m_PinNameSize;/* Pin num and Pin name sizes */
+    int      m_PinNumSize, m_PinNameSize; /* Pin num and Pin name sizes */
 
 //	short m_PinNumWidth, m_PinNameWidth;	/* (Unused) Pin num and Pin name text width */
 
 public:
     LibDrawPin();
     ~LibDrawPin() { }
+    virtual wxString GetClass() const
+    {
+        return wxT( "LibDrawPin" );
+    }
+
+
     LibDrawPin* GenCopy();
     bool        WriteDescr( FILE* File );
     void        Display_Infos( WinEDA_DrawFrame* frame );
     wxPoint     ReturnPinEndPoint();
-    int         ReturnPinDrawOrient( int TransMat[2][2] );
+
+    int ReturnPinDrawOrient( int TransMat[2][2] );
     void        ReturnPinStringNum( wxString& buffer );
     void        SetPinNumFromString( wxString& buffer );
     void        DrawPinSymbol( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& pin_pos,
@@ -236,6 +245,12 @@ public:
 public:
     LibDrawArc();
     ~LibDrawArc() { }
+    virtual wxString GetClass() const
+    {
+        return wxT( "LibDrawArc" );
+    }
+
+
     LibDrawArc* GenCopy();
     bool        WriteDescr( FILE* File );
 };
@@ -249,6 +264,12 @@ public:
 public:
     LibDrawCircle();
     ~LibDrawCircle() { }
+    virtual wxString GetClass() const
+    {
+        return wxT( "LibDrawCircle" );
+    }
+
+
     LibDrawCircle*  GenCopy();
     bool            WriteDescr( FILE* File );
 };
@@ -264,6 +285,12 @@ public:
 public:
     LibDrawText();
     ~LibDrawText() { }
+    virtual wxString GetClass() const
+    {
+        return wxT( "LibDrawText" );
+    }
+
+
     LibDrawText*    GenCopy();
     bool            WriteDescr( FILE* File );
 };
@@ -277,6 +304,12 @@ public:
 public:
     LibDrawSquare();
     ~LibDrawSquare() { }
+    virtual wxString GetClass() const
+    {
+        return wxT( "LibDrawSquare" );
+    }
+
+
     LibDrawSquare*  GenCopy();
     bool            WriteDescr( FILE* File );
 };
@@ -289,6 +322,12 @@ public:
 public:
     LibDrawSegment();
     ~LibDrawSegment() { }
+    virtual wxString GetClass() const
+    {
+        return wxT( "LibDrawSegment" );
+    }
+
+
     LibDrawSegment* GenCopy();
     bool            WriteDescr( FILE* File );
 };
@@ -301,10 +340,19 @@ public:
 
 public:
     LibDrawPolyline();
-    ~LibDrawPolyline() {
+    ~LibDrawPolyline()
+    {
         if( PolyList )
             free( PolyList );
     }
+
+
+    virtual wxString GetClass() const
+    {
+        return wxT( "LibDrawPolyline" );
+    }
+
+
     LibDrawPolyline*    GenCopy();
     void                AddPoint( const wxPoint& point );
     bool                WriteDescr( FILE* File );
@@ -316,18 +364,23 @@ class LibDrawField :  public LibEDA_BaseStruct
 {
 public:
     int      m_FieldId;         // 0 a 11
-                                // 0 = Name 1 = Valeur 2 .. 11 autres fields
+                                // 0 = Name; 1 = Valeur; 2 .. 11 other fields
     wxPoint  m_Pos;
     wxSize   m_Size;
     int      m_Orient;                  /* Orientation */
-    int      m_Attributs;               /* Attributs (Non visible ...) */
-    int      m_HJustify, m_VJustify;    /* Justifications Horiz et Vert du texte */
+    int      m_Attributs;               /* Attributes (Non visible ...) */
+    int      m_HJustify, m_VJustify;    /* Horiz an  Vert Texte Justifications  */
     wxString m_Text;                    /* Field Data */
     wxString m_Name;                    /* Field Name */
 
 public:
     LibDrawField( int idfield = 2 );
     ~LibDrawField();
+    virtual wxString GetClass() const
+    {
+        return wxT( "LibDrawField" );
+    }
+
 
     LibDrawField*   GenCopy();
     void            Copy( LibDrawField* Target );
@@ -335,25 +388,31 @@ public:
 };
 
 
-/* classe de base de description des composants en librairie */
+/* basic class to describe components in libraries (true component or alias), non used directly */
 class LibCmpEntry            : public EDA_BaseStruct
 {
 public:
     LibrEntryType    Type;      /* Type = ROOT;
                                  *      = ALIAS pour struct LibraryAliasType */
     LibDrawField     m_Name;    // name	(74LS00 ..) in lib ( = VALUE )
-    wxString         m_Doc;     /* ligne de documentation */
-    wxString         m_KeyWord; /* liste des mots cles */
-    wxString         m_DocFile; /* nom du fichier Doc Associe */
+    wxString         m_Doc;     /* documentation for info */
+    wxString         m_KeyWord; /* keyword list (used to select a group of components by keyword) */
+    wxString         m_DocFile; /* Associed doc filename */
     LibrEntryOptions m_Options; // special features (i.e. Entry is a POWER)
 
 public:
-    LibCmpEntry( LibrEntryType CmpType, const wxChar * CmpName );
+    LibCmpEntry( LibrEntryType CmpType, const wxChar* CmpName );
     virtual ~LibCmpEntry();
+    virtual wxString GetClass() const
+    {
+        return wxT( "LibCmpEntry" );
+    }
+
+
     bool WriteDescr( FILE* File );
 };
 
-class EDA_LibComponentStruct : public LibCmpEntry        /* composant "racine" */
+class EDA_LibComponentStruct : public LibCmpEntry        /* usual component in lib */
 {
 public:
     LibDrawField       m_Prefix;                /* Prefix ( U, IC ... ) = REFERENCE */
@@ -361,55 +420,62 @@ public:
     wxArrayString      m_FootprintList;         /* list of suitable footprint names for the component (wildcard names accepted)*/
     int                m_UnitCount;             /* Units (or sections) per package */
     bool               m_UnitSelectionLocked;   // True if units are differents and their selection is locked
-                                              // (i.e. if part A cannot be automatically changed in part B
-    int                m_TextInside;/* if 0: pin name drawn on the pin itself
-                                     *  if > 0 pin name drawn inside the component,
-                                     *  with a distance of m_TextInside in mils */
+                                                // (i.e. if part A cannot be automatically changed in part B
+    int                m_TextInside;            /* if 0: pin name drawn on the pin itself
+                                                 *  if > 0 pin name drawn inside the component,
+                                                 *  with a distance of m_TextInside in mils */
     bool               m_DrawPinNum;
     bool               m_DrawPinName;
-    LibDrawField*      Fields;      /* Auxiliairy Field list (id = 2 a 11*/
-    LibEDA_BaseStruct* m_Drawings;  /* How to draw this part */
-    long               m_LastDate;  // Last change Date
+    LibDrawField*      Fields;                  /* Auxiliairy Field list (id = 2 a 11) */
+    LibEDA_BaseStruct* m_Drawings;              /* How to draw this part */
+    long               m_LastDate;              // Last change Date
 
 public:
-    EDA_LibComponentStruct( const wxChar * CmpName );
-    EDA_Rect    GetBoundaryBox( int Unit, int Convert );/* return Box around the part. */
+    virtual wxString GetClass() const
+    {
+        return wxT( "EDA_LibComponentStruct" );
+    }
+
+
+    EDA_LibComponentStruct( const wxChar* CmpName );
+    EDA_Rect    GetBoundaryBox( int Unit, int Convert ); /* return Box around the part. */
 
     ~EDA_LibComponentStruct();
     void        SortDrawItems();
 };
 
-class EDA_LibCmpAliasStruct  : public LibCmpEntry
+class EDA_LibCmpAliasStruct  : public LibCmpEntry        /* alias of an usual component in lib (root component) */
 {
 public:
-    wxString m_RootName;        /* Part name pour le composant de reference */
+    wxString m_RootName;        /* Root component Part name */
 
 public:
-    EDA_LibCmpAliasStruct( const wxChar * CmpName, const wxChar * CmpRootName );
+    EDA_LibCmpAliasStruct( const wxChar* CmpName, const wxChar* CmpRootName );
     ~EDA_LibCmpAliasStruct();
+    virtual wxString GetClass() const
+    {
+        return wxT( "EDA_LibCmpAliasStruct" );
+    }
 };
 
 /* Variables */
-extern LibraryStruct*              LibraryList; /* All part libs are saved here. */
+extern LibraryStruct*              LibraryList; 		/* All part libs are saved here. */
 
-/* Variables Utiles pour les editions de composants en librairie */
-eda_global LibEDA_BaseStruct*      LibItemToRepeat;/* pointeur sur l'élément que l'on
-                                                 *  peut répéter (Pin..;) */
-eda_global LibraryStruct*          CurrentLib;  /* Pointeur sur la librairie du
-                                                *   composant en cours d'edition */
-eda_global EDA_LibComponentStruct* CurrentLibEntry; /* pointeur sur le composant en
-                                                     *  cours d'edition */
-eda_global LibEDA_BaseStruct*      CurrentDrawItem;/* pointeur sur les
-                                                 *  elements de dessin du comp. en edition */
+/* Variables used by LibEdit */
+eda_global LibEDA_BaseStruct*      LibItemToRepeat;     /* pointeur sur l'élément que l'on
+                                                         *  peut répéter (Pin..;) */
+eda_global LibraryStruct*          CurrentLib;          /* Current opened library */
+eda_global EDA_LibComponentStruct* CurrentLibEntry;     /* Current component */
+eda_global LibEDA_BaseStruct*      CurrentDrawItem;     /* current edited item */
 
-eda_global wxString CurrentAliasName;           // Nom de l'alias selectionné
-eda_global bool     g_AsDeMorgan;               // Pour libedit:
-eda_global int      CurrentUnit
+eda_global wxString CurrentAliasName;                   // Current selected alias (for components which have aliases)
+eda_global bool     g_AsDeMorgan;                       // True if the current component has a "De Morgan" representation
+eda_global int      CurrentUnit                         // Current selected part
 #ifdef MAIN
 = 1
 #endif
 ;
-eda_global int CurrentConvert       /* Convert = 1 .. 255 */
+eda_global int CurrentConvert                   /* Convert = 1 .. 255 */
 #ifdef MAIN
 = 1
 #endif

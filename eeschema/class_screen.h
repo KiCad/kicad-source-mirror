@@ -90,6 +90,11 @@ class SCH_SCREEN : public BASE_SCREEN
 public:
     SCH_SCREEN( int idtype, KICAD_T aType = SCREEN_STRUCT_TYPE );
     ~SCH_SCREEN();
+    virtual wxString GetClass() const
+    {
+        return wxT("SCH_SCREEN");
+    }
+    
 
     void            FreeDrawList(); // Free EESchema drawing list (does not delete the sub hierarchies)
 
@@ -120,6 +125,11 @@ public:
        const wxString& text = wxEmptyString );
     
     ~DrawSheetLabelStruct() { }
+    virtual wxString GetClass() const
+    {
+        return wxT("DrawSheetLabelStruct");
+    }
+    
     DrawSheetLabelStruct*   GenCopy();
 
     DrawSheetLabelStruct* Next()
@@ -148,6 +158,11 @@ public:
 public:
     DrawSheetStruct( const wxPoint& pos = wxPoint( 0, 0 ) );
     ~DrawSheetStruct();
+    virtual wxString GetClass() const
+    {
+        return wxT("DrawSheetStruct");
+    }
+    
     void                Place( WinEDA_DrawFrame* frame, wxDC* DC );
     DrawSheetStruct*    GenCopy();
     void                Display_Infos( WinEDA_DrawFrame* frame );

@@ -16,58 +16,6 @@
 
 #include "macros.h"
 
-
-// KICAD_T names for error messages only:
-static wxString KICAD_TName[MAX_STRUCT_TYPE_ID + 1] = {
-    wxT( "Not init" ),
-
-    wxT( "Pcb" ),
-    wxT( "Equipot" ),
-    wxT( "Module" ),
-    wxT( "Pad" ),
-    wxT( "DrawSegment" ),
-    wxT( "Text (pcb)" ),
-    wxT( "Text module" ),
-    wxT( "edge module" ),
-    wxT( "track" ),
-    wxT( "zone" ),
-    wxT( "via" ),
-    wxT( "marker" ),
-    wxT( "cotation" ),
-    wxT( "mire" ),
-    wxT( "screen" ),
-    wxT( "block" ),
-    wxT( "edge zone" ),
-
-    wxT( "Polyline" ),
-    wxT( "Junction" ),
-    wxT( "Text" ),
-    wxT( "Label" ),
-    wxT( "Glob label" ),
-    wxT( "Lib item" ),
-    wxT( "Pick struct" ),
-    wxT( "Segment" ),
-    wxT( "Raccord" ),
-    wxT( "Sheet" ),
-    wxT( "Sheet label" ),
-    wxT( "Marker" ),
-    wxT( "No connect" ),
-    wxT( "Text (lib item)" ),
-    wxT( "Screen" ),
-    wxT( "Block locate" ),
-    wxT( "Library component" ),
-    wxT( "lib cmp draw circle" ),
-    wxT( "lib cmp draw graphic text" ),
-    wxT( "lib cmp draw rect" ),
-    wxT( "lib cmp draw poly line" ),
-    wxT( "lib cmp draw line" ),
-    wxT( "lib cmp pin" ),
-    wxT( "lib cmp field" ),
-    wxT( "unknown" ),
-    wxT( "unknown" )
-};
-
-
 enum textbox {
     ID_TEXTBOX_LIST = 8010
 };
@@ -130,7 +78,7 @@ void EDA_BaseStruct::AddToChain( EDA_BaseStruct* laststruct )
 /*********************************************************/
 
 /*
- *  addition d'une nouvelle struct a la liste chain�, apres la structure laststruct
+ *  Add "this" to the linked list, after laststruct
  */
 {
     Pnext = laststruct->Pnext;
@@ -152,7 +100,7 @@ void EDA_BaseStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& off
     msg.Printf( wxT(
                     "EDA_BaseStruct::Draw() error. Method for struct type %d used but not implemented (" ),
                 Type() );
-    msg += ReturnClassName() + wxT( ")\n" );
+    msg += GetClass() + wxT( ")\n" );
     printf( CONV_TO_UTF8( msg ) );
 }
 
@@ -168,25 +116,6 @@ void EDA_BaseStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
 {
 }
 #endif
-
-
-/*********************************************/
-wxString EDA_BaseStruct::ReturnClassName() const
-/*********************************************/
-
-/* Used at run time for diags: return the class name of the item,
- *  from its .Type() value.
- */
-{
-    int      ii = Type();
-    wxString classname;
-
-    if( (ii < 0) || (ii > MAX_STRUCT_TYPE_ID) )
-        ii = MAX_STRUCT_TYPE_ID;
-    classname = KICAD_TName[ii];
-
-    return classname;
-}
 
 
 // see base_struct.h
@@ -287,9 +216,9 @@ std::ostream& EDA_BaseStruct::NestedSpace( int nestLevel, std::ostream& os )
 
 
 
-/*********************************************************/
-/* EDA_TextStruct (classe de base, non utilis� seule */
-/*********************************************************/
+/**************************************************/
+/* EDA_TextStruct (basic class, not directly used */
+/**************************************************/
 EDA_TextStruct::EDA_TextStruct( const wxString& text )
 {
     m_Size.x    = m_Size.y = DEFAULT_SIZE_TEXT; /* XY size of font */

@@ -4,6 +4,17 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-sept-13 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++ all
+	* EDA_BaseStruct.SetType() removed.
+	The m_StructType member of class EDA_BaseStruct is no more modified in kicad.
+	Now Virtual functions can be widely used.
+	* The old EDA_BaseStruct.ReturnClassName() was removed.
+	the virtual EDA_BaseStruct.GetClass() is used instead. 
+
++ gerbview: hotkeys Ok.
+
 
 2007-Sep-13 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
 ================================================================================

@@ -230,13 +230,11 @@ LibEDA_BaseStruct* CopyDrawEntryStruct( wxWindow*          frame,
                                         LibEDA_BaseStruct* DrawItem )
 /**********************************************************/
 
-/* Routine de Duplication d'une structure DrawLibItem d'une partlib
- *  Parametres d'entree:
- *      DrawEntry = pointeur sur la structure a dupliquer
- *  La structure nouvelle est creee, mais n'est pas inseree dans le
- *  chainage
- *  Retourne:
- *      Pointeur sur la structure creee
+/* Duplicate a DrawLibItem
+ * the new item is only created, it is not put in the current component linked list
+ * @param DrawEntry = DrawLibItem * item to duplicate
+ * @return a pointer to the new item
+ * A better way to duplicate a DrawLibItem is to have a virtual GenCopy() in LibEDA_BaseStruct class (ToDo). 
  */
 {
     LibEDA_BaseStruct* NewDrawItem = NULL;
@@ -345,12 +343,9 @@ EDA_LibComponentStruct* CopyLibEntryStruct( wxWindow* frame, EDA_LibComponentStr
             LastItem = NewDrawings;
             NewDrawings->Pnext = NULL;
         }
-        else        // Probleme rencontré: arret de copie
-        {
-            /* why this? m_StructType is not a flag, it is a type indicator!
-            OldDrawings->Type() = TYPE_NOT_INIT;
-            */
-            
+        else	// Should nevers occurs, just in case...
+        {       // CopyDrawEntryStruct() was not able to duplicate the type of OldDrawings
+				// occurs when an unexpected type is encountered
             DisplayError( frame, wxT( "CopyLibEntryStruct(): error: aborted" ) );
             break;
         }

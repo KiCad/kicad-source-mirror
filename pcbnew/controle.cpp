@@ -19,7 +19,6 @@
 #include "collectors.h"
 
 #include "bitmaps.h"
-#include "Footprint_Text.xpm"
 #include "add_cotation.xpm"
 #include "Add_Mires.xpm"
 #include "Add_Zone.xpm"
@@ -206,7 +205,7 @@ wxString BOARD_ITEM::MenuText() const
         break;
         
     default:
-        text << item->ReturnClassName() << wxT(" BUG!!");
+        text << item->GetClass() << wxT(" Unexpected item type: BUG!!");
         break;
     }
 

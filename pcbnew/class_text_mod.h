@@ -99,7 +99,6 @@ public:
     
 
     
-#if defined(DEBUG)
     /**
      * Function GetClass
      * returns the class name.
@@ -110,6 +109,7 @@ public:
         return wxT( "MTEXT" );
     }
 
+#if defined(DEBUG)
     /**
      * Function Show
      * is used to output the object tree, currently for debugging only.

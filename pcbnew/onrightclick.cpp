@@ -51,7 +51,6 @@
 #include "Width_Net.xpm"
 #include "Width_Track_Via.xpm"
 #include "Select_Layer_Pair.xpm"
-#include "Footprint_Text.xpm"
 
 #include "Flag.xpm"
 

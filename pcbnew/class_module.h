@@ -175,7 +175,6 @@ public:
         const KICAD_T scanTypes[] );
     
     
-#if defined(DEBUG)
     /**
      * Function GetClass
      * returns the class name.
@@ -187,7 +186,8 @@ public:
     }
 
     
-    /**
+ #if defined(DEBUG)
+   /**
      * Function Show
      * is used to output the object tree, currently for debugging only.
      * @param nestLevel An aid to prettier tree indenting, and is the level 

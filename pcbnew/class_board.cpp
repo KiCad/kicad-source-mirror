@@ -383,7 +383,17 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
 
 #if 0   // both these are on same list, so we must scan it twice in order to get VIA priority, 
         // using new #else code below.
-        // @todo: consider why we are not using separte lists for TRACKs and SEGVIAs.
+        // But we are not using separte lists for TRACKs and SEGVIAs, because items are ordered (sortered) in the linked
+		// list by netcode AND by physical distance:
+		// when created, if a track or via is connected to an existing track or via, it is put in linked list
+		// after this existing track or via
+		// So usually, connected tracks or vias are grouped in this list
+		// So the algorithm (used in rastnest computations) which computes the track connectivity is faster (more than 100 time regarding to
+		// a non ordered list) because when it searchs for a connexion, first it tests the near (near in term of linked list) 50 items
+		// from the current item (track or via) in test.
+		// Usually, because of this sort, a connected item (if exists) is found.
+		// If not found (and only in this case) an exhaustive (and time consumming) search is made,
+		// but this case is statistically rare.
         case TYPEVIA:
         case TYPETRACK:
             result = IterateForward( m_Track, inspector, testData, p );

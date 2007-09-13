@@ -216,7 +216,7 @@ public:
     MODULE*         m_Modules;                  // linked list of MODULEs
     EQUIPOT*        m_Equipots;                 // linked list of nets
     TRACK*          m_Track;                    // linked list of TRACKs and SEGVIAs
-    TRACK*          m_Zone;                     // linked list of SEGZONEs
+    SEGZONE*        m_Zone;                     // linked list of SEGZONEs
     D_PAD**         m_Pads;                     // pointeur liste d'acces aux pads
     int             m_NbPads;                   // nombre total de pads
     CHEVELU*        m_Ratsnest;                 // pointeur liste des chevelus
@@ -290,7 +290,6 @@ public:
     EQUIPOT* FindNet( int aNetcode );
     
     
-#if defined(DEBUG)
     /**
      * Function GetClass
      * returns the class name.
@@ -301,6 +300,7 @@ public:
         return wxT( "BOARD" );
     }
 
+#if defined(DEBUG)
     /**
      * Function Show
      * is used to output the object tree, currently for debugging only.
@@ -398,7 +398,6 @@ public:
      */
     bool    HitTest( const wxPoint& ref_pos );
     
-#if defined(DEBUG)
     /**
      * Function GetClass
      * returns the class name.
@@ -406,10 +405,8 @@ public:
      */
     wxString GetClass() const
     {
-        return wxT("pgraphic");
+        return wxT("DRAWSEGMENT");
     }
-#endif    
-    
 };
 
 

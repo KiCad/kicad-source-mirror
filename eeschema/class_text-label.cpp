@@ -41,7 +41,8 @@ DrawTextStruct* DrawTextStruct::GenCopy()
     
     switch( Type() )
     {
-    case DRAW_TEXT_STRUCT_TYPE:
+    default:
+	case DRAW_TEXT_STRUCT_TYPE:
         newitem = new DrawTextStruct( m_Pos, m_Text );
         break;
     case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
@@ -50,8 +51,6 @@ DrawTextStruct* DrawTextStruct::GenCopy()
     case DRAW_LABEL_STRUCT_TYPE:
         newitem = new DrawLabelStruct( m_Pos, m_Text );
         break;
-    default:
-        newitem = 0;        // will crash below
     }
 
     newitem->m_Layer      = m_Layer;
@@ -78,13 +77,6 @@ void DrawTextStruct::SwapData( DrawTextStruct* copyitem )
     EXCHG( m_Shape, copyitem->m_Shape );
     EXCHG( m_Orient, copyitem->m_Orient );
 
-    //	EXCHG( m_StructType, copyitem->m_StructType );
-    // how can you swap a type, it is what it was created as!
-    // this is a very bad usage of m_StructType.
-    KICAD_T aType = copyitem->Type();
-    copyitem->SetType( Type() );
-    SetType( aType );
-    
     EXCHG( m_Layer, copyitem->m_Layer );
     EXCHG( m_HJustify, copyitem->m_HJustify );
     EXCHG( m_VJustify, copyitem->m_VJustify );
@@ -137,37 +129,11 @@ DrawGlobalLabelStruct::DrawGlobalLabelStruct( const wxPoint& pos, const wxString
 }
 
 
-/***************************************************************/
-void DrawTextStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                           int DrawMode, int Color )
-/***************************************************************/
-
-/* Les textes type label ou notes peuvent avoir 4 directions, mais
- *  sont tj cadres par rapport a la 1ere lettre du texte
- */
-{
-    switch( Type() )
-    {
-    case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-        DrawAsGlobalLabel( panel, DC, offset, DrawMode, Color );
-        break;
-
-    case DRAW_LABEL_STRUCT_TYPE:
-        DrawAsLabel( panel, DC, offset, DrawMode, Color );
-        break;
-
-    default:
-        DrawAsText( panel, DC, offset, DrawMode, Color );
-    }
-}
-
-
 /*******************************************************************************************/
-void DrawTextStruct::DrawAsText( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
+void DrawTextStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                                  int DrawMode, int Color )
 /*******************************************************************************************/
-
-/* Texts type Label or Comment (text on layer "NOTE") have 4 directions, and the Text origin is the first letter
+/* Texts type Comment (text on layer "NOTE") have 4 directions, and the Text origin is the first letter
  */
 {
     int color;
@@ -216,25 +182,25 @@ void DrawTextStruct::DrawAsText( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoin
 }
 
 
-/***************************************************************/
-void DrawTextStruct::DrawAsLabel( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
+/*********************************************************************************************/
+void DrawLabelStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                                   int DrawMode, int Color )
-/***************************************************************/
+/*********************************************************************************************/
 {
-    DrawAsText( panel, DC, offset, DrawMode, Color );
+    DrawTextStruct::Draw( panel, DC, offset, DrawMode, Color );
 }
 
 
-/*****************************************************************************/
-void DrawTextStruct::DrawAsGlobalLabel( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
+/*******************************************************************************************/
+void DrawGlobalLabelStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                                         int DrawMode, int Color )
-/*****************************************************************************/
+/******************************************************************************************/
 
 /* Texts type Global Label  have 4 directions, and the Text origin is the graphic icon
  */
 {
     int*   Template;
-    int    Poly[12];
+    int    Poly[20];
     int    ii, jj, imax, color, HalfSize;
     wxSize Size  = m_Size;
     int    width = MAX( m_Width, g_DrawMinimunLineWidth );
@@ -291,8 +257,7 @@ void DrawTextStruct::DrawAsGlobalLabel( WinEDA_DrawPanel* panel, wxDC* DC, const
         jj++; Template++;
     }
 
-//	GRPoly(&panel->m_ClipBox, DC, imax,Poly,1, width, color, color );	/* Polygne Rempli */
-    GRPoly( &panel->m_ClipBox, DC, imax, Poly, 0, width, color, color );   /* Polygne Non Rempli */
+    GRPoly( &panel->m_ClipBox, DC, imax, Poly, 0, width, color, color );
 
     if( m_IsDangling )
         DrawDanglingSymbol( panel, DC, m_Pos + offset, color );

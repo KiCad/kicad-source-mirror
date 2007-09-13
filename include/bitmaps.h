@@ -108,6 +108,7 @@
 	#include "../bitmaps/down.xpm"
 
 	#include "../bitmaps/File_FootPrint.xpm"
+	#include "../bitmaps/Footprint_Text.xpm"
 
 	#include "../bitmaps/Options_Pad.xpm"
 	#include "../bitmaps/Options_New_Pad.xpm"

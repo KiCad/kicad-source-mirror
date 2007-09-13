@@ -298,7 +298,7 @@ void TRACK::UnLink()
             {
                 if( Type() == TYPEZONE )
                 {
-                    ( (BOARD*) Pback )->m_Zone = (TRACK*) Pnext;
+                    ( (BOARD*) Pback )->m_Zone = (SEGZONE*) Pnext;
                 }
                 else
                 {
@@ -331,7 +331,7 @@ void TRACK::Insert( BOARD* Pcb, BOARD_ITEM* InsertPoint )
         if( Type() == TYPEZONE )    // put SEGZONE on front of m_Zone list
         {
             NextS = Pcb->m_Zone; 
-            Pcb->m_Zone = this;
+            Pcb->m_Zone = (SEGZONE*)this;
         }
         
         else    // put TRACK or SEGVIA on front of m_Track list

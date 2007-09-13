@@ -304,7 +304,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
 /************************************************/
 
 /*
- *  routine de deplacement des elements du block deja selectionne
+ *  Function to move items in the current selected block
  */
 {
     int     deltaX, deltaY;
@@ -322,36 +322,35 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
     deltaX = GetScreen()->BlockLocate.m_MoveVector.x;
     deltaY = GetScreen()->BlockLocate.m_MoveVector.y;
 
-/* Deplacement des Segments de piste */
-    TRACK* track;
-    track = m_Pcb->m_Track;
+	/* Move the Track segments in block */
+    TRACK* track = m_Pcb->m_Track;
     while( track )
     {
         if( IsSegmentInBox( GetScreen()->BlockLocate, track ) )
-        {                                           /* la piste est ici bonne a etre deplacee */
+        {
             m_Pcb->m_Status_Pcb = 0;
-            track->Draw( DrawPanel, DC, GR_XOR );   // effacement
+            track->Draw( DrawPanel, DC, GR_XOR );   // erase the display
             track->m_Start.x += deltaX; track->m_Start.y += deltaY;
             track->m_End.x   += deltaX; track->m_End.y += deltaY;
             track->m_Param   += deltaX; track->m_Sous_Netcode += deltaY;
-            track->Draw( DrawPanel, DC, GR_OR ); // reaffichage
+            track->Draw( DrawPanel, DC, GR_OR ); // redraw the moved track
         }
-        track = (TRACK*) track->Pnext;
+        track = track->Next();
     }
 
-    /* Deplacement des Segments de Zone */
-    track = (TRACK*) m_Pcb->m_Zone;
-    while( track )
+    /* Move the Zone segments in block */
+    SEGZONE * zsegment= m_Pcb->m_Zone;
+    while( zsegment )
     {
         if( IsSegmentInBox( GetScreen()->BlockLocate, track ) )
-        {                                           /* la piste est ici bonne a etre deplacee */
-            track->Draw( DrawPanel, DC, GR_XOR );   // effacement
-            track->m_Start.x += deltaX; track->m_Start.y += deltaY;
-            track->m_End.x   += deltaX; track->m_End.y += deltaY;
-            track->m_Param   += deltaX; track->m_Sous_Netcode += deltaY;
-            track->Draw( DrawPanel, DC, GR_OR ); // reaffichage
+        {
+            zsegment->Draw( DrawPanel, DC, GR_XOR );   // erase the display
+            zsegment->m_Start.x += deltaX; track->m_Start.y += deltaY;
+            zsegment->m_End.x   += deltaX; track->m_End.y += deltaY;
+            zsegment->m_Param   += deltaX; track->m_Sous_Netcode += deltaY;
+            zsegment->Draw( DrawPanel, DC, GR_OR ); // redraw the moved zone zegment
         }
-        track = (TRACK*) track->Pnext;
+        zsegment = zsegment->Next();
     }
 
     DrawPanel->Refresh( TRUE );
@@ -363,10 +362,10 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
 /**************************************************/
 
 /*
- *  routine de duplication des elements du block deja selectionne
+ *  Function to duplicate items in the current selected block
  */
 {
-    int     deltaX, deltaY;
+    wxPoint     delta;
     wxPoint oldpos;
 
     oldpos = GetScreen()->m_Curseur;
@@ -379,58 +378,45 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
 
 
     /* calcul du vecteur de deplacement pour les deplacements suivants */
-    deltaX = GetScreen()->BlockLocate.m_MoveVector.x;
-    deltaY = GetScreen()->BlockLocate.m_MoveVector.y;
+    delta = GetScreen()->BlockLocate.m_MoveVector;
 
-    /* Deplacement des Segments de piste */
-    TRACK* track, * next_track, * new_track;
-
-    track = m_Pcb->m_Track;
+    /* Copy selected track segments and move the new track its new location */
+    TRACK* track = m_Pcb->m_Track;
     while( track )
     {
-        next_track = track->Next();
+        TRACK* next_track = track->Next();
         if( IsSegmentInBox( GetScreen()->BlockLocate, track ) )
         {   
-            /* la piste est ici bonne a etre deplacee */
+            /* this track segment must be duplicated */
             m_Pcb->m_Status_Pcb = 0;
-            new_track = track->Copy();
+            TRACK* new_track = track->Copy();
             new_track->Insert( m_Pcb, NULL );
             
-            new_track->m_Start.x += deltaX; 
-            new_track->m_Start.y += deltaY;
+            new_track->m_Start += delta; 
+            new_track->m_End   += delta; 
             
-            new_track->m_End.x   += deltaX; 
-            new_track->m_End.y   += deltaY;
-            
-            new_track->Draw( DrawPanel, DC, GR_OR ); // reaffichage
+            new_track->Draw( DrawPanel, DC, GR_OR ); // draw the new created segment
         }
         track = next_track;
     }
 
-    /* Deplacement des Segments de Zone */
-    track = (TRACK*) m_Pcb->m_Zone;
-    while( track )
+    /* Copy the Zone segments  and move the new segment to its new location */
+    SEGZONE * zsegment= m_Pcb->m_Zone;
+    while( zsegment )
     {
-        next_track = track->Next();
+        SEGZONE * next_zsegment = zsegment->Next();
         if( IsSegmentInBox( GetScreen()->BlockLocate, track ) )
         {  
-            /* la piste est ici bonne a etre deplacee */
-            // @todo: bug? memory leak at this point:
-            new_track = new TRACK( m_Pcb );
+            /* this zone segment must be duplicated */
+            SEGZONE * new_zsegment = (SEGZONE*) zsegment->Copy();
+            new_zsegment->Insert( m_Pcb, NULL );
             
-            new_track = track->Copy();
+            new_zsegment->m_Start += delta; 
+            new_zsegment->m_End   += delta; 
             
-            new_track->Insert( m_Pcb, NULL );
-            
-            new_track->m_Start.x += deltaX; 
-            new_track->m_Start.y += deltaY;
-            
-            new_track->m_End.x   += deltaX; 
-            new_track->m_End.y   += deltaY;
-            
-            new_track->Draw( DrawPanel, DC, GR_OR ); // reaffichage
+            new_zsegment->Draw( DrawPanel, DC, GR_OR ); // draw the new created segment
         }
-        track = next_track;
+        zsegment = next_zsegment;
     }
 }
 

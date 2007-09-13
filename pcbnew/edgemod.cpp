@@ -1,15 +1,12 @@
 /******************************************************/
-/*	 Edition des contours d'un module: Routines		  */
-/* d'effacement et d'edition  de segments et contours */
-/*	appartenant aux modules							  */
+/*	 Edition of footprint edges */
 /******************************************************/
 
 
 /* fichier edgemod.cpp */
 
-/* Routines d'edition des contours d'un module.
- *  La correction des Arcs de cercle n'est pas traitee ( mais
- *  les menus en routines sont prevus
+/* Functions to edit graphic items used to draw footprint edges.
+ *  Function to Arcs are not made (TODO..) but menus are ready to use
  */
 
 #include "fctsys.h"
@@ -37,7 +34,7 @@ static wxPoint CursorInitialPosition;   // Mouse cursor inital position for move
 void WinEDA_ModuleEditFrame::Start_Move_EdgeMod( EDGE_MODULE* Edge, wxDC* DC )
 /****************************************************************************/
 
-/* Routine de preparation du deplacement d'un element graphique type DRAWSEGMENT
+/* Function to initialise the move function params of a graphic item type DRAWSEGMENT
  */
 {
     if( Edge == NULL )
@@ -58,7 +55,7 @@ void WinEDA_ModuleEditFrame::Place_EdgeMod( EDGE_MODULE* Edge, wxDC* DC )
 /*********************************************************************/
 
 /*
- *  Routine de placement de l'element graphique type EDGE_MODULE en cours de deplacement
+ * Function to place a graphic item type EDGE_MODULE currently moved
  */
 {
     if( Edge == NULL )
@@ -87,7 +84,7 @@ void WinEDA_ModuleEditFrame::Place_EdgeMod( EDGE_MODULE* Edge, wxDC* DC )
 /************************************************************************/
 static void Move_Segment( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 /************************************************************************/
-/* redessin du contour du Segment Edge lors des deplacements de la souris */
+/* Move and redraw the current edited graphic item when mouse is moving */
 {
     BASE_SCREEN* screen = panel->GetScreen();
     EDGE_MODULE* Edge   = (EDGE_MODULE*) screen->GetCurItem();
@@ -115,7 +112,7 @@ static void Move_Segment( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 static void ShowEdgeModule( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 /************************************************************************/
 
-/* Affiche le segment Edge Module en cours de trace
+/* Redraw the current edited (moved) graphic item
  */
 {
     BASE_SCREEN* screen = panel->GetScreen();
@@ -149,8 +146,12 @@ static void ShowEdgeModule( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 void WinEDA_ModuleEditFrame::Edit_Edge_Width( EDGE_MODULE* Edge, wxDC* DC )
 /***************************************************************************/
 
-/* change la largeur du EDGE_MODULE Edge, ou de tous si Edge == NULL
- */
+/* Change the EDGE_MODULE Edge width,
+ * if Edge == NULL change the width of the entire footprint edges
+ * @param ModuleSegmentWidth (global) = new width
+ * @param Edge = edge to edit, or NULL
+ * @param DC = current Device Context
+*/
 {
     MODULE* Module = m_Pcb->m_Modules;
 
@@ -180,16 +181,29 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Width( EDGE_MODULE* Edge, wxDC* DC )
 void WinEDA_ModuleEditFrame::Edit_Edge_Layer( EDGE_MODULE* Edge, wxDC* DC )
 /***************************************************************************/
 
-/* change la couche du EDGE_MODULE Edge, ou de tous si Edge == NULL
- */
+/* Change the EDGE_MODULE Edge layer,  (The new layer will be asked)
+ * if Edge == NULL change the layer of the entire footprint edges
+ * @param Edge = edge to edit, or NULL
+ * @param DC = current Device Context
+*/
 {
     MODULE* Module    = m_Pcb->m_Modules;
     int     new_layer = SILKSCREEN_N_CMP;
+    if( Edge != NULL )
+        new_layer = Edge->GetLayer();
 
 
-    new_layer = SelectLayer( SILKSCREEN_N_CMP, LAYER_CUIVRE_N, LAST_NO_COPPER_LAYER );
+	/* Ask for the new layer */
+    new_layer = SelectLayer( new_layer, LAYER_CUIVRE_N, LAST_NO_COPPER_LAYER );
     if( new_layer < 0 )
         return;
+
+	if ( new_layer >= LAYER_CUIVRE_N && new_layer <= LAYER_CMP_N )
+	/* an edge is put on a copper layer, and it is very dangerous. a confirmation is requested */
+	{
+		if ( ! IsOK(this, _("The graphic item will be on a copper layer.It is very dangerous. Are you sure") ) )
+			return;
+	}
 
     SaveCopyInUndoList( Module );
 
@@ -217,9 +231,12 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Layer( EDGE_MODULE* Edge, wxDC* DC )
 void WinEDA_ModuleEditFrame::Enter_Edge_Width( EDGE_MODULE* Edge, wxDC* DC )
 /*************************************************************************/
 
-/*
- *  Entre la nouvelle valeur pour ModuleSegmentWidth.
- *  change la largeur du EDGE_MODULE Edge si Edge != NULL
+/*	Edition of the edge items width
+ *  Ask for a new width and init ModuleSegmentWidth.
+ *  Change the width of EDGE_MODULE Edge if Edge != NULL
+ * @param Edge = edge to edit, or NULL
+ * @param DC = current Device Context
+ * @output ModuleSegmentWidth (global) = new width
  */
 {
     wxString buffer;
@@ -251,6 +268,11 @@ void WinEDA_ModuleEditFrame::Enter_Edge_Width( EDGE_MODULE* Edge, wxDC* DC )
 /****************************************************************************/
 void WinEDA_ModuleEditFrame::Delete_Edge_Module( EDGE_MODULE* Edge, wxDC* DC )
 /****************************************************************************/
+/*	Edition of the edge items width
+ *  delete EDGE_MODULE Edge if Edge != NULL
+ * @param Edge = edge to edit, or NULL
+ * @param DC = current Device Context
+ */
 {
     if( Edge == NULL )
         return;
@@ -274,6 +296,8 @@ void WinEDA_ModuleEditFrame::Delete_Edge_Module( EDGE_MODULE* Edge, wxDC* DC )
 /******************************************************************/
 static void Exit_EditEdge_Module( WinEDA_DrawPanel* Panel, wxDC* DC )
 /******************************************************************/
+/* abort function in moving edge.
+*/
 {
     EDGE_MODULE* Edge = (EDGE_MODULE*) Panel->GetScreen()->GetCurItem();
 
@@ -304,10 +328,11 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
                                                         wxDC* DC, int type_edge )
 /*************************************************************************/
 
-/* Fonction de debut de trace d'un nouveau contour.
- *  - Cree la place en memoire du nouveau contour
- *  - Prepare les coord des differents points
- *  - Met a jour la variable type_edge (= S_SEGMENT,S_ARC ...)
+/* Create a new edge item (line, arc ..).
+ * @param  Edge = if NULL: create new edge else terminate edge and create a new edge
+ * @param  DC = current Device Context
+ * @param type_edge = S_SEGMENT,S_ARC ..
+ * @return the new created edge.
  */
 {
     MODULE* Module = m_Pcb->m_Modules;
@@ -316,13 +341,13 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
     if( Module == NULL )
         return NULL;
 
-    if( Edge == NULL )       /* debut reel du trace */
+    if( Edge == NULL )       /* Start a new edge item */
     {
         SaveCopyInUndoList( Module );
         Edge = new EDGE_MODULE( Module );
         MoveVector.x = MoveVector.y = 0;
 
-        /* Chainage du nouvel element, en tete de liste Drawings */
+        /* Add the new item to the Drawings list head*/
         Edge->Pback = Module;
         Edge->Pnext = Module->m_Drawings;
         if( Module->m_Drawings )
@@ -341,12 +366,12 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
             Edge->SetLayer( SILKSCREEN_N_CMP );
         if( Module->GetLayer() == CUIVRE_N )
             Edge->SetLayer( SILKSCREEN_N_CU );
-        /* Mise a jour du point de depart du segment ou de l'arc */
+        /* Initialise the starting point of the new segment or arc */
         Edge->m_Start = GetScreen()->m_Curseur;
-        /* Mise a jour de la fin du segment , rectangle ou de l'arc*/
+        /* Initialise the ending point of the new segment or arc */
         Edge->m_End = Edge->m_Start;
 
-        /* Mise a jour des coord relatives */
+        /* Initialise the relative coordinates */
         Edge->m_Start0.x = Edge->m_Start.x - Module->m_Pos.x;
         Edge->m_Start0.y = Edge->m_Start.y - Module->m_Pos.y;
         RotatePoint( (int*) &(Edge->m_Start0.x),
@@ -399,10 +424,12 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
 /*************************************************************************/
 void WinEDA_ModuleEditFrame::End_Edge_Module( EDGE_MODULE* Edge, wxDC* DC )
 /*************************************************************************/
+/* Terminate a move or create edge function
+*/
 {
     MODULE* Module = m_Pcb->m_Modules;
 
-    /* test du dernier segment: si null: suppression */
+    /* If last segment length is 0: deletion */
     if( Edge )
     {
         if( (Edge->m_Start.x == Edge->m_End.x)

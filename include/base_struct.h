@@ -168,20 +168,6 @@ private:
 private:
     void InitVars();
     
-    
-protected:
-    /**
-     * Function SetType
-     * is dangerous and should not be used.  It is here to work around a design
-     * issue in the DrawTextStruct -> DrawLabelStruct and
-     * DrawTextStruct -> DrawGlobalLabelStruct class hierarchy of eeschema.
-     * Only constructors should set m_StructType and once set, there should be
-     * no reason to change an object's type.  For if you do, you risk mis-matching
-     * the virtual functions of the object with its Type() function, because the
-     * virtual function table is set in the call to a constructor and cannot be
-     * changed later without doing an "in place constructor" call (ugly and dangerous).
-     */
-    void SetType( KICAD_T aType )   { m_StructType = aType; } 
 
 public:
 
@@ -210,8 +196,6 @@ public:
     {
         m_Status = new_status;
     }
-
-    wxString        ReturnClassName() const;
 
     /* addition d'une nouvelle struct a la liste chain� */
     void            AddToChain( EDA_BaseStruct* laststruct );
@@ -288,8 +272,6 @@ public:
         const KICAD_T scanTypes[] );
 
     
-#if defined(DEBUG)
-
     /**
      * Function GetClass
      * returns the class name.
@@ -297,15 +279,12 @@ public:
      */
     virtual wxString GetClass() const
     {
-        // ReturnClassName() is too hard to maintain, coordinating the array 
-        // with the enum.  It would be nice to migrate to virtual GetClass()
-        // away from ReturnClassName().   Over time, derived classes should
-        // simply return a wxString from their virtual GetClass() function.
-        // Some classes do that now.
-        return ReturnClassName();
+        return wxT("EDA_BaseStruct");
     }
 
     
+#if defined(DEBUG)
+
     /**
      * Function Show
      * is used to output the object tree, currently for debugging only.

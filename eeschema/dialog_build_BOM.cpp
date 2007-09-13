@@ -49,7 +49,7 @@
 /* Structures pour memo et liste des elements */
 typedef struct ListLabel
 {
-	int m_StructType;
+	int m_LabelType;
 	void * m_Label;
 	int m_SheetNumber;
 } ListLabel;
@@ -691,7 +691,7 @@ BASE_SCREEN * screen;
 					ItemCount++;
 					if( List )
 					{
-						List->m_StructType = DRAW_GLOBAL_LABEL_STRUCT_TYPE;
+						List->m_LabelType = DRAW_GLOBAL_LABEL_STRUCT_TYPE;
 						List->m_SheetNumber = screen->m_SheetNumber;
 						List->m_Label = DrawList;
 						List++;
@@ -706,7 +706,7 @@ BASE_SCREEN * screen;
 					{
 						if ( List )
 						{
-							List->m_StructType = DRAW_SHEETLABEL_STRUCT_TYPE;
+							List->m_LabelType = DRAW_SHEETLABEL_STRUCT_TYPE;
 							List->m_SheetNumber = screen->m_SheetNumber;
 							List->m_Label = SheetLabel;
 							List++;
@@ -814,12 +814,12 @@ static int ListTriGLabelByVal(ListLabel *Objet1, ListLabel *Objet2)
 int ii;
 const wxString * Text1, *Text2;
 
-	if( Objet1->m_StructType == DRAW_SHEETLABEL_STRUCT_TYPE )
+	if( Objet1->m_LabelType == DRAW_SHEETLABEL_STRUCT_TYPE )
 		Text1 = &((DrawSheetLabelStruct *)Objet1->m_Label)->m_Text;
 	else
 		Text1 = &((DrawTextStruct *)Objet1->m_Label)->m_Text;
 
-	if( Objet2->m_StructType == DRAW_SHEETLABEL_STRUCT_TYPE )
+	if( Objet2->m_LabelType == DRAW_SHEETLABEL_STRUCT_TYPE )
 		Text2 = &((DrawSheetLabelStruct *)Objet2->m_Label)->m_Text;
 	else
 		Text2 = &((DrawTextStruct *)Objet2->m_Label)->m_Text;
@@ -850,12 +850,12 @@ const wxString * Text1, *Text2;
 
 	if ( ii == 0 )
 	{
-		if( Objet1->m_StructType == DRAW_SHEETLABEL_STRUCT_TYPE )
+		if( Objet1->m_LabelType == DRAW_SHEETLABEL_STRUCT_TYPE )
 			Text1 = &((DrawSheetLabelStruct *)Objet1->m_Label)->m_Text;
 		else
 			Text1 = &((DrawTextStruct *)Objet1->m_Label)->m_Text;
 
-		if( Objet2->m_StructType == DRAW_SHEETLABEL_STRUCT_TYPE )
+		if( Objet2->m_LabelType == DRAW_SHEETLABEL_STRUCT_TYPE )
 			Text2 = &((DrawSheetLabelStruct *)Objet2->m_Label)->m_Text;
 		else
 			Text2 = &((DrawTextStruct *)Objet2->m_Label)->m_Text;
@@ -1092,7 +1092,7 @@ wxString msg;
 	{
 		LabelItem = & List[ii];
 
-		switch( LabelItem->m_StructType )
+		switch( LabelItem->m_LabelType )
 		{
 			case DRAW_GLOBAL_LABEL_STRUCT_TYPE :
 				DrawTextItem = (DrawGlobalLabelStruct *)(LabelItem->m_Label);

@@ -473,7 +473,7 @@ bool SnapPoint2( const wxPoint& PosRef, int SearchMask,
         {
             wxString msg;
             msg.Printf( wxT( "SnapPoint2() error: unexpected strct type %d (" ), DrawList->Type() );
-            msg << DrawList->ReturnClassName() << wxT( ")" );
+            msg << DrawList->GetClass() << wxT( ")" );
             DisplayError( NULL, msg );
             break;
         }
@@ -660,7 +660,7 @@ bool DrawStructInBox( int x1, int y1, int x2, int y2,
         msg.Printf(
             wxT( "DrawStructInBox() Err: unexpected StructType %d (" ),
             DrawStruct->Type() );
-        msg << DrawStruct->ReturnClassName() << wxT( ")" );
+        msg << DrawStruct->GetClass() << wxT( ")" );
         DisplayError( NULL, msg );
         break;
     }

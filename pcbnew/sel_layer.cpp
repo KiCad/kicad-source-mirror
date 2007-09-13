@@ -56,14 +56,15 @@ EVT_RADIOBOX( ID_LAYER_SELECT, WinEDA_SelLayerFrame::Sel_Layer )
 END_EVENT_TABLE()
 
 
-/***********************************************************************************/
+/****************************************************************************************/
 int WinEDA_BasePcbFrame::SelectLayer( int default_layer, int min_layer, int max_layer )
-/***********************************************************************************/
+/****************************************************************************************/
 
 /* Install the dialog box for layer selection
- *  default_layer = Preselection
- *  min_layer = val min de layer selectionnable (-1 si pas de val mini)
- *  max_layer = val max de layer selectionnable (-1 si pas de val maxi)
+ * @param default_layer = Preselection
+ * @param min_layer = min layer value (-1 if no min value)
+ * @param max_layer = max layer value (-1 si no max value)
+ * @return new layer value, or <0 if aborted
  */
 {
     int layer;
@@ -92,7 +93,7 @@ WinEDA_SelLayerFrame::WinEDA_SelLayerFrame( WinEDA_BasePcbFrame* parent,
     m_Parent = parent;
     SetFont( *g_DialogFont );
 
-    /* Construction de la liste des couches autoris�s */
+    /* Build the layer list */
     LayerCount = 0;
     int Masque_Layer = g_TabAllCopperLayerMask[g_DesignSettings.m_CopperLayerCount - 1];
     Masque_Layer += ALL_NO_CU_LAYERS;

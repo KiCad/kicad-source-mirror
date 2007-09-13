@@ -1,7 +1,7 @@
-/**************************************************************************/
-/* EESchema											  					  */
-/* editexte.cpp: creation/ editions des textes (labels, textes sur schema) */
-/**************************************************************************/
+/*********************************************************************/
+/* EESchema											  				 */
+/* edit_label.cpp: label, global label and text creation or edition  */
+/*********************************************************************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -103,6 +103,7 @@ void WinEDA_SchematicFrame::StartMoveTexte( DrawTextStruct* TextStruct, wxDC* DC
     GetScreen()->SetModify();
     DrawPanel->ManageCurseur = ShowWhileMoving;
     DrawPanel->ForceCloseManageCurseur = ExitMoveTexte;
+	GetScreen()->SetCurItem( TextStruct );
     DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
 
     DrawPanel->CursorOn( DC );
@@ -158,8 +159,8 @@ void WinEDA_SchematicFrame::ChangeTextOrient( DrawTextStruct* TextStruct, wxDC* 
     case DRAW_LABEL_STRUCT_TYPE:
     case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
     case DRAW_TEXT_STRUCT_TYPE:
-        ( (DrawTextStruct*) TextStruct )->m_Orient++;
-        ( (DrawTextStruct*) TextStruct )->m_Orient &= 3;
+        TextStruct->m_Orient++;
+        TextStruct->m_Orient &= 3;
         break;
 
     default:
@@ -189,27 +190,25 @@ EDA_BaseStruct* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
     {
     case LAYER_NOTES:
         NewText = new DrawTextStruct( m_CurrentScreen->m_Curseur );
-        NewText->m_Size.x = NewText->m_Size.y = g_DefaultTextLabelSize;
         break;
 
     case LAYER_LOCLABEL:
         NewText = new DrawLabelStruct( m_CurrentScreen->m_Curseur );
-        NewText->m_Size.x = NewText->m_Size.y = g_DefaultTextLabelSize;
         break;
 
     case LAYER_GLOBLABEL:
         NewText = new DrawGlobalLabelStruct( m_CurrentScreen->m_Curseur );
-        NewText->m_Size.x = NewText->m_Size.y = g_DefaultTextLabelSize;
-        ( (DrawGlobalLabelStruct*) NewText )->m_Shape  = s_DefaultShapeGLabel;
-        ( (DrawGlobalLabelStruct*) NewText )->m_Orient = s_DefaultOrientGLabel;
+        NewText->m_Shape  = s_DefaultShapeGLabel;
+        NewText->m_Orient = s_DefaultOrientGLabel;
         break;
 
     default:
-        DisplayError( this, wxT( "Editexte: Internal error" ) );
-        break;
+        DisplayError( this, wxT( "WinEDA_SchematicFrame::CreateNewText() Internal error" ) );
+        return NULL;
     }
 
-    NewText->m_Flags = IS_NEW | IS_MOVED;
+    NewText->m_Size.x = NewText->m_Size.y = g_DefaultTextLabelSize;
+    NewText->m_Flags  = IS_NEW | IS_MOVED;
 
     RedrawOneStruct( DrawPanel, DC, NewText, g_XorMode );
     EditSchematicText( NewText, DC );
@@ -222,8 +221,8 @@ EDA_BaseStruct* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
 
     if( type == LAYER_GLOBLABEL )
     {
-        s_DefaultShapeGLabel  = ( (DrawGlobalLabelStruct*) NewText )->m_Shape;
-        s_DefaultOrientGLabel = ( (DrawGlobalLabelStruct*) NewText )->m_Orient;
+        s_DefaultShapeGLabel  = NewText->m_Shape;
+        s_DefaultOrientGLabel = NewText->m_Orient;
     }
 
     RedrawOneStruct( DrawPanel, DC, NewText, GR_DEFAULT_DRAWMODE );
@@ -236,9 +235,9 @@ EDA_BaseStruct* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
 }
 
 
-/****************************************/
-/*		Dessin du Texte en deplacement	*/
-/****************************************/
+/************************************/
+/*		Redraw a Texte while moving	*/
+/************************************/
 static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
     EDA_BaseStruct* TextStruct = panel->GetScreen()->GetCurItem();
@@ -322,41 +321,95 @@ void WinEDA_SchematicFrame::ConvertTextType( DrawTextStruct* Text,
 /*****************************************************************************/
 
 /* Routine to change a text type to an other one (GraphicText, label or Glabel).
+ * A new test, label or global label is created from the old text.
+ * the old text is deleted
  */
 {
     if( Text == NULL )
         return;
 
-    /* save Text in undo list if not already in edit, or moving ... */
-    if( Text->m_Flags == 0 )
-        SaveCopyInUndoList( Text, IS_CHANGED );
+    DrawTextStruct* newtext;
 
-    DrawPanel->CursorOff( DC );   // Erase schematic cursor
-    RedrawOneStruct( DrawPanel, DC, Text, g_XorMode );
-
-    // erase drawing
     switch( newtype )
     {
     case DRAW_LABEL_STRUCT_TYPE:
-        Text->SetType( DRAW_LABEL_STRUCT_TYPE );
-        Text->m_Layer = LAYER_LOCLABEL;
+        newtext = new DrawLabelStruct( Text->m_Pos, Text->m_Text );
         break;
 
     case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-        Text->SetType( DRAW_GLOBAL_LABEL_STRUCT_TYPE );
-        Text->m_Layer = LAYER_GLOBLABEL;
+        newtext = new DrawGlobalLabelStruct( Text->m_Pos, Text->m_Text );
         break;
 
     case DRAW_TEXT_STRUCT_TYPE:
-        Text->SetType( DRAW_TEXT_STRUCT_TYPE );
-        Text->m_Layer = LAYER_NOTES;
+        newtext = new DrawTextStruct( Text->m_Pos, Text->m_Text );
         break;
 
     default:
+        newtext = NULL;
         DisplayError( this, wxT( "ConvertTextType: Internal error" ) );
-        break;
+        return;
     }
 
-    RedrawOneStruct( DrawPanel, DC, Text, GR_DEFAULT_DRAWMODE );
+    /* copy the old text settings */
+    newtext->m_Shape      = Text->m_Shape;
+    newtext->m_Orient     = Text->m_Orient;
+    newtext->m_Size       = Text->m_Size;
+    newtext->m_Width      = Text->m_Width;
+    newtext->m_HJustify   = Text->m_HJustify;
+    newtext->m_VJustify   = Text->m_VJustify;
+    newtext->m_IsDangling = Text->m_IsDangling;
+
+    // save current text flag:
+    int flags = Text->m_Flags;
+
+    /* add the new text in linked list if old text is in list */
+    if( (flags & IS_NEW) == 0 )
+    {
+        newtext->Pnext = GetScreen()->EEDrawList;
+        GetScreen()->EEDrawList = newtext;
+        GetScreen()->SetModify();
+    }
+
+    /* now delete the old text
+     *  If it is a text flagged IS_NEW it will be deleted by ForceCloseManageCurseur()
+     *  If not, we must delete it.
+     */
+    if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
+    {
+        DrawPanel->ForceCloseManageCurseur( DrawPanel, DC );
+    }
+    if( (flags & IS_NEW) == 0 )    // Delete old text and save it in undo list
+    {
+        Text->m_Flags = 0;
+        DeleteStruct( DrawPanel, DC, Text );
+        m_CurrentScreen->SetCurItem( NULL );
+        g_ItemToRepeat = NULL;
+    }
+    GetScreen()->SetCurItem( newtext );
+
+    delete g_ItemToUndoCopy;
+    g_ItemToUndoCopy = NULL;
+
+    DrawPanel->CursorOff( DC );   // Erase schematic cursor
+
+    /* Save the new text in undo list if the old text was not itself a "new created text"
+     * In this case, the old text is already in undo list as a deleted item
+     * Of course if the old text was a "new created text" the new text will be put in undo list
+     * later, at the end of the current command (if not aborted)
+     */
+    if( (flags & IS_NEW) == 0 )
+    {
+        SaveCopyInUndoList( newtext, IS_NEW );
+    }
+    else
+        newtext->m_Flags = IS_NEW;
+
+
+    if( (flags & IS_MOVED) != 0 )
+    {
+        StartMoveTexte( newtext, DC );
+    }
+
+    RedrawOneStruct( DrawPanel, DC, newtext, GR_DEFAULT_DRAWMODE );
     DrawPanel->CursorOn( DC );    // redraw schematic cursor
 }

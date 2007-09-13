@@ -60,7 +60,6 @@ public:
     bool    HitTest( const wxPoint& ref_pos );
     
     
-#if defined(DEBUG)
     /**
      * Function GetClass
      * returns the class name.
@@ -70,7 +69,6 @@ public:
     {
         return wxT( "DIMENSION" );
     }
-#endif
 };
 
 #endif  // #define COTATION_H

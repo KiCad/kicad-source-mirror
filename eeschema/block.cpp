@@ -1350,7 +1350,7 @@ EDA_BaseStruct* DuplicateStruct( EDA_BaseStruct* DrawStruct )
     {
         wxString msg;
         msg << wxT( "DuplicateStruct error: unexpected StructType " ) <<
-        DrawStruct->Type() << wxT( " " ) << DrawStruct->ReturnClassName();
+        DrawStruct->Type() << wxT( " " ) << DrawStruct->GetClass();
         DisplayError( NULL, msg );
     }
         break;

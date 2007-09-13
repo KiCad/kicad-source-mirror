@@ -47,6 +47,11 @@ public:
 public:
 	PartTextStruct(const wxPoint & pos = wxPoint(0,0), const wxString & text = wxEmptyString);
 	~PartTextStruct(void);
+    virtual wxString GetClass() const
+    {
+        return wxT("PartTextStruct");
+    }
+    
 	void PartTextCopy(PartTextStruct * target);
 	void Place(WinEDA_DrawFrame * frame, wxDC * DC);
 
@@ -72,6 +77,11 @@ public:
 public:
 	DrawPartStruct( KICAD_T struct_type, const wxPoint & pos);
 	~DrawPartStruct(void);
+    virtual wxString GetClass() const
+    {
+        return wxT("DrawPartStruct");
+    }
+    
 };
 
 
@@ -89,6 +99,11 @@ public:
 public:
 	EDA_SchComponentStruct(const wxPoint & pos = wxPoint(0,0));
 	~EDA_SchComponentStruct(void){}
+    virtual wxString GetClass() const
+    {
+        return wxT("EDA_SchComponentStruct");
+    }
+    
 	EDA_SchComponentStruct * GenCopy(void);
 	void SetRotationMiroir( int type );
 	int GetRotationMiroir(void);

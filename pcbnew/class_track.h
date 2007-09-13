@@ -134,7 +134,6 @@ public:
      */
     bool    HitTest( const wxPoint& refPos );
 
-#if defined(DEBUG)
     /**
      * Function GetClass
      * returns the class name.
@@ -154,8 +153,6 @@ public:
      */
     void Show( int nestLevel, std::ostream& os );
     
-#endif
-    
 };
 
 
@@ -164,7 +161,6 @@ class SEGZONE : public TRACK
 public:
     SEGZONE( BOARD_ITEM* StructFather );
     
-#if defined(DEBUG)
     /**
      * Function GetClass
      * returns the class name.
@@ -174,8 +170,9 @@ public:
     {
         return wxT("ZONE");
     }
-#endif
-    
+	
+	SEGZONE* Next() const  { return (SEGZONE*) Pnext; }
+
 };
 
 
@@ -203,7 +200,6 @@ public:
     void    SetLayerPair( int top_layer, int bottom_layer );
     void    ReturnLayerPair( int* top_layer, int* bottom_layer ) const;
     
-#if defined(DEBUG)
     /**
      * Function GetClass
      * returns the class name.
@@ -213,8 +209,6 @@ public:
     {
         return wxT("VIA");
     }
-#endif
-    
 };
 
 
