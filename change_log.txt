@@ -10,6 +10,7 @@ email address.
 + pcbnew
   * controle.cpp, added Function AllAreModulesAndReturnSmallestIfSo() which is
     called from PcbGeneralLocateAndDisplay()
+  * onrightclick.cpp changed to calls to BOARD_ITEM::MenuText()
 
 
 2007-Sep-13 UPDATE   Dick Hollenbeck <dick@softplc.com>

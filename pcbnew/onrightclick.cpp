@@ -630,11 +630,9 @@ void CreatePopUpMenuForFootprints( MODULE* aModule, wxMenu* menu, bool full_menu
  */
 {
     wxMenu*  sub_menu_footprint;
-    wxString msg;
     int      flags = aModule->m_Flags;
 
-    msg = _( "Footprint" );
-    msg << wxT( " " ) << aModule->GetReference();
+    wxString msg = aModule->MenuText();
 
     sub_menu_footprint = new wxMenu;
     
@@ -672,27 +670,12 @@ void CreatePopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* menu )
  */
 {
     wxMenu*  sub_menu_Fp_text;
-    wxString msg;
     int      flags = FpText->m_Flags;
 
-    switch( FpText->m_Type )
-    {
-    case TEXT_is_REFERENCE:
-        msg = _( "Footprint ref" );
-        break;
-
-    case TEXT_is_VALUE:
-        msg = _( "Footprint value" );
-        break;
-
-    default:
-        msg = _( "Footprint text" );
-        break;
-    }
-
-    msg << wxT( " " ) << FpText->m_Text;
-
+    wxString msg = FpText->MenuText();
+    
     sub_menu_Fp_text = new wxMenu;
+    
     ADD_MENUITEM_WITH_SUBMENU( menu, sub_menu_Fp_text, -1, msg, footprint_text_xpm );
 
     if( !flags )
@@ -716,11 +699,9 @@ void CreatePopUpMenuForPads( D_PAD* Pad, wxMenu* menu )
 /* Create pop menu for pads */
 {
     wxMenu*  sub_menu_Pad;
-    wxString msg;
     int      flags = Pad->m_Flags;
 
-    msg = _( "Pad" );
-    msg << wxT( " " ) << Pad->ReturnStringPadName();
+    wxString msg = Pad->MenuText();
 
     sub_menu_Pad = new wxMenu;
     ADD_MENUITEM_WITH_SUBMENU( menu, sub_menu_Pad, -1, msg, pad_xpm );
@@ -757,16 +738,12 @@ void CreatePopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu )
 /* Create pop menu for pcb texts */
 {
     wxMenu*  sub_menu_Text;
-    wxString msg;
     int      flags = Text->m_Flags;
 
-    msg = _( "Pcb Text" ); msg << wxT( " " );
-    if( Text->m_Text.Len() < 8 )
-        msg << Text->m_Text;
-    else
-        msg += Text->m_Text.Left( 5 ) + wxT( ".." );
+    wxString msg = Text->MenuText();
 
     sub_menu_Text = new wxMenu;
+    
     ADD_MENUITEM_WITH_SUBMENU( menu, sub_menu_Text, -1, msg, add_text_xpm );
 
     if( !flags )
