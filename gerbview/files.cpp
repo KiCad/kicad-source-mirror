@@ -172,7 +172,7 @@ wxString filename = FullFileName;
 		penfilesmask += g_PenFilenameExt;
 		filename = frame->GetScreen()->m_FileName;
 		ChangeFileNameExt(filename,g_PenFilenameExt);
-		filename = EDA_FileSelector(_("D CODES files:"),
+		filename = EDA_FileSelector(_("D codes files:"),
 					wxEmptyString,						/* Chemin par defaut */
 					filename, 				/* nom fichier par defaut */
 					g_PenFilenameExt,			/* extension par defaut */

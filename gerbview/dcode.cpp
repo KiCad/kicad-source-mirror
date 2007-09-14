@@ -435,7 +435,7 @@ int layer;
 GERBER_Descr * DcodeList;
 
 	/* Construction de la liste des messages */
-	List = new WinEDA_TextFrame(this, _("List D-Codes"));
+	List = new WinEDA_TextFrame(this, _("List D codes"));
 
 	for (layer = 0; layer < 32; layer++ )
 		{

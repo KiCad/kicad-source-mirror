@@ -249,7 +249,7 @@ wxBusyCursor show_wait;
 			DCodeFileName = GERBER_FullFileName;
 			ChangeFileNameExt(DCodeFileName, g_PenFilenameExt);
 			mask = wxT("*") + g_PenFilenameExt;
-			DCodeFileName = EDA_FileSelector( _("D CODES files:"),
+			DCodeFileName = EDA_FileSelector( _("D codes files:"),
 						wxEmptyString,						/* Chemin par defaut */
 						DCodeFileName,			/* nom fichier par defaut */
 						g_PenFilenameExt,			/* extension par defaut */

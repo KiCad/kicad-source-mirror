@@ -251,7 +251,7 @@ static ColorButton Grid_Butt=
 
 static ColorButton Show_DCodes_Butt=
 {
-	_("DCodes id."),				/* Title */
+	_("D codes id."),				/* Title */
 	&g_DCodesColor,				/* adr du parametre optionnel */
 	FALSE,
 	&DisplayOpt.DisplayPadNum	/* parametre display on/off = bool*/

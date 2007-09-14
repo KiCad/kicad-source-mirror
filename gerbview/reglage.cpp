@@ -126,7 +126,7 @@ wxString title;
 				LeftBoxSizer, size);
 
 	TextPenExt = new WinEDA_EnterText(this,
-				_("DCode File Ext:"),  g_PenFilenameExt,
+				_("D code File Ext:"),  g_PenFilenameExt,
 				LeftBoxSizer, size);
  
 	GetSizer()->Fit(this);

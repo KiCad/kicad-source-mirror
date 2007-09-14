@@ -327,7 +327,7 @@ wxString list_opt3[3] = { _("Sketch"), _("Filled"), _("Line") };
 	m_OptDisplayDrawings->SetSelection(DisplayOpt.DisplayDrawItems);
 	MiddleBoxSizer->Add(m_OptDisplayDrawings, 0, wxGROW|wxALL, 5);
 
-	m_OptDisplayDCodes = new wxCheckBox(this, -1, _("Show D-Codes"));
+	m_OptDisplayDCodes = new wxCheckBox(this, -1, _("Show D codes"));
 	if ( DisplayOpt.DisplayPadNum ) m_OptDisplayDCodes->SetValue(TRUE);
 	MiddleBoxSizer->Add(m_OptDisplayDCodes, 0, wxGROW|wxALL, 5);
  

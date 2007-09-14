@@ -155,12 +155,12 @@ wxMenuBar * menuBar = GetMenuBar();
 		m_Parent->SetLanguageList(configmenu);
 
 		configmenu->AppendSeparator();
-		item = new wxMenuItem(configmenu, ID_CONFIG_SAVE, _("&Save Eeschema Setup"),
-			_("Save options in <project>.pro") );
+		item = new wxMenuItem(configmenu, ID_CONFIG_SAVE, _("&Save preferences"),
+			_("Save application preferences") );
 	    item->SetBitmap(save_setup_xpm);
 		configmenu->Append(item);
-		item = new wxMenuItem(configmenu, ID_CONFIG_READ, _("&Read Setup"),
-				_("Read options from a selected config file"));
+		item = new wxMenuItem(configmenu, ID_CONFIG_READ, _("&Read preferences"),
+				_("Read application preferences"));
 	    item->SetBitmap(read_setup_xpm);
 		configmenu->Append(item);
 

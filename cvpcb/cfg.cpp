@@ -68,7 +68,7 @@ wxString mask( wxT("*"));
 	ChangeFileNameExt( FullFileName, g_Prj_Config_Filename_ext );
 
 	path = wxGetCwd();
-	FullFileName = EDA_FileSelector(_("Save config file"),
+	FullFileName = EDA_FileSelector(_("Save preferences"),
 					path,				/* Chemin par defaut */
 					FullFileName,		/* nom fichier par defaut */
 					g_Prj_Config_Filename_ext,	/* extension par defaut */

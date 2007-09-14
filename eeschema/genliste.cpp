@@ -120,7 +120,7 @@ wxPoint pos;
 	ChangeFileNameExt(m_ListFileName, wxT(".lst"));
 
 	pos.x = 5; pos.y = 15;
-	new wxStaticBox(this, -1,_(" List items : "), pos, wxSize(230, 120));
+	new wxStaticBox(this, -1,_(" List items: "), pos, wxSize(230, 120));
 
 	pos.x = 10; pos.y += 22;
 	m_ListCmpbyRefItems = new wxCheckBox(this,-1, _("Components by Reference"), pos);

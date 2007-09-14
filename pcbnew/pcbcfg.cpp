@@ -173,7 +173,7 @@ wxString mask;
 	FullFileName = GetScreen()->m_FileName.AfterLast('/');
 	ChangeFileNameExt(FullFileName, g_Prj_Config_Filename_ext);
 
-	FullFileName = EDA_FileSelector(_("Save config file"),
+	FullFileName = EDA_FileSelector(_("Save preferences"),
 					wxPathOnly(GetScreen()->m_FileName),	/* Chemin par defaut */
 					FullFileName,		/* nom fichier par defaut */
 					g_Prj_Config_Filename_ext,	/* extension par defaut */
