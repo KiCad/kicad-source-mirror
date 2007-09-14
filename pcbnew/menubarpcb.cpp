@@ -90,7 +90,7 @@ wxMenuBar * menuBar = GetMenuBar();
 
 		// Add plot menu
 		item = new wxMenuItem(m_FilesMenu, ID_GEN_PLOT, _("&Plot"),
-					_("Plot (HPGL, PostScript, or GERBER format)"));
+					_("Plot (HPGL, PostScript, or Gerber format)"));
 	    item->SetBitmap(plot_xpm);
 		m_FilesMenu->Append(item);
 
@@ -172,13 +172,13 @@ wxMenuBar * menuBar = GetMenuBar();
 		m_Parent->SetLanguageList(configmenu);
 
 		configmenu->AppendSeparator();
-		item = new wxMenuItem(configmenu, ID_CONFIG_SAVE, _("&Save Setup"),
-				_("Save options in current directory"));
+		item = new wxMenuItem(configmenu, ID_CONFIG_SAVE, _("&Save preferences"),
+				_("Save application preferences"));
 	    item->SetBitmap(save_setup_xpm);
 		configmenu->Append(item);
 
-		item = new wxMenuItem(configmenu, ID_CONFIG_READ, _("&Read Setup"),
-				_("Read options from a selected config file"));
+		item = new wxMenuItem(configmenu, ID_CONFIG_READ, _("&Read preferences"),
+				_("Read application preferences"));
 	    item->SetBitmap(read_setup_xpm);
 		configmenu->Append(item);
 
