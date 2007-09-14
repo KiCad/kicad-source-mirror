@@ -286,6 +286,47 @@ const char** BOARD_ITEM::MenuIcon() const
 }
 
 
+/**
+ * Function AllAreModulesAndReturnSmallestIfSo
+ * tests that all items in the collection are MODULEs and if so, returns the
+ * smallest MODULE.
+ * @return BOARD_ITEM* - The smallest or NULL.
+ */ 
+static BOARD_ITEM* AllAreModulesAndReturnSmallestIfSo( GENERAL_COLLECTOR* aCollector )
+{
+    int count = aCollector->GetCount();
+    
+    for( int i=0; i<count;  ++i )
+    {
+        if(  (*aCollector)[i]->Type() != TYPEMODULE )
+            return NULL;
+    }
+    
+    // all are modules, now find smallest MODULE
+
+    int minDim = 0x7FFFFFFF;
+    int minNdx = 0;
+    
+    for( int i=0;  i<count;  ++i )
+    {
+        MODULE* module = (MODULE*) (*aCollector)[i];
+        
+        int  lx = module->m_BoundaryBox.GetWidth();
+        int  ly = module->m_BoundaryBox.GetHeight();
+        
+        int  lmin = MIN( lx, ly );
+        
+        if( lmin <= minDim )
+        {
+            minDim = lmin;
+            minNdx = i;
+        }
+    }
+    
+    return (*aCollector)[minNdx];
+}
+
+
 
 /***********************************************************************/
 BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay()
@@ -355,6 +396,13 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay()
         item = (*m_Collector)[0];
         SetCurItem( item );        
     }
+    
+    // if all are modules, find the smallest one amoung the primary choices
+    else if( (item = AllAreModulesAndReturnSmallestIfSo(m_Collector) ) != NULL )
+    {
+        SetCurItem( item );        
+    }
+    
     else    // show a popup menu
     {
         wxMenu  itemMenu;

@@ -4,6 +4,14 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+
+2007-Sep-14 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ pcbnew
+  * controle.cpp, added Function AllAreModulesAndReturnSmallestIfSo() which is
+    called from PcbGeneralLocateAndDisplay()
+
+
 2007-Sep-13 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + kicad
