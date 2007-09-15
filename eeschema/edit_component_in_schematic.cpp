@@ -53,7 +53,8 @@ void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
     {
         WinEDA_ComponentPropertiesFrame* frame =
             new WinEDA_ComponentPropertiesFrame( parent, cmp );
-        frame->ShowModal(); frame->Destroy();
+        frame->ShowModal(); 
+        frame->Destroy();
     }
 
     parent->DrawPanel->MouseToCursorSchema();

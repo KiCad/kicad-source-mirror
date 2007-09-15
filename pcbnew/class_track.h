@@ -39,16 +39,18 @@ public:
     // chain = 0 indique une connexion non encore traitee
     int             m_Param;        // Auxiliary variable ( used in some computations )
 
+protected:    
+    TRACK( const TRACK& track );    // protected so Copy() is used instead.
     
 public:
     TRACK( BOARD_ITEM* StructFather, KICAD_T idtype = TYPETRACK );
-    TRACK( const TRACK& track ); 
 
     /**
      * Function Copy
      * will copy this object whether it is a TRACK or a SEGVIA returning
      * the corresponding type.
-     * @return - TRACK* or SEGVIA*, typed as the least common demoninator: TRACK
+     * @return - TRACK*, SEGVIA*, or SEGZONE*, declared as the least common 
+     *  demoninator: TRACK
      */
     TRACK*  Copy() const;
 

@@ -38,7 +38,7 @@ public:
     bool              m_AutoPAN_Enable;     // TRUE pour autoriser auto pan (autorisation g��ale)
     bool              m_AutoPAN_Request;    // TRUE pour auto pan (lorsque auto pan n�essaire)
 
-    bool              m_IgnoreMouseEvents;  // TRUE pour ne par traiter les evenements souris
+    int               m_IgnoreMouseEvents;  ///< when non-zero, then ignore mouse events
 
     bool              m_Block_Enable;       // TRUE pour autoriser Bloc Commandes (autorisation g��ale)
     int               m_CanStartBlock;      // >= 0 (ou >= n) si un bloc peut demarrer

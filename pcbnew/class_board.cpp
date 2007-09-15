@@ -450,7 +450,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
 }
 
 
-/*
+/*  now using PcbGeneralLocateAndDisplay()
 // see pcbstruct.h     
 BOARD_ITEM* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
 {
@@ -534,7 +534,7 @@ BOARD_ITEM* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
  * @param anetcode The netcode to search for.
  * @return EQUIPOT* - the net or NULL if not found.
  */
-EQUIPOT* BOARD::FindNet( int anetcode )
+EQUIPOT* BOARD::FindNet( int anetcode ) const
 {
     if( anetcode <= 0 )
         return NULL;

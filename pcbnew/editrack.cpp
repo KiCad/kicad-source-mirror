@@ -147,7 +147,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
         if( g_TwoSegmentTrackBuild )
         {   
             // Create 2 segments
-            g_CurrentTrackSegment = new TRACK( *g_CurrentTrackSegment );
+            g_CurrentTrackSegment = g_CurrentTrackSegment->Copy();
             g_TrackSegmentCount++;
             g_CurrentTrackSegment->Pback = g_FirstTrackSegment;
             g_FirstTrackSegment->Pnext   = g_CurrentTrackSegment;
@@ -797,7 +797,7 @@ void EnsureEndTrackOnPad( D_PAD* Pad )
     if( !g_CurrentTrackSegment->IsNull() )
     { 
         /* Must create a new segment, from track end to pad center */
-        g_CurrentTrackSegment = new TRACK( *lasttrack );
+        g_CurrentTrackSegment = lasttrack->Copy();
         g_TrackSegmentCount++;
         lasttrack->Pnext = g_CurrentTrackSegment;
         g_CurrentTrackSegment->Pback = lasttrack;

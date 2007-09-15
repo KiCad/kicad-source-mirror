@@ -557,27 +557,13 @@ private:
     bool             m_SelViaSizeBox_Changed;
     wxMenu*          m_FilesMenu;
 
-#if 0 && defined(DEBUG)
-    /**
-     * Function onRightClickBuilder
-     * is a helper function for private use by OnRightClick().  It helps build
-     * the hierarchical menu.
-     * @param collectorNdx The index into the COLLECTOR that \a aItem represents.
-     * @param aItem The BOARD_ITEM to provide menu support for, or NULL if 
-     *  nothing was under the mouse.
-     * @param pPopMenu What to populate with choices.
-     */
-    void  onRightClickBuilder( int collectorNdx, BOARD_ITEM* aItem, wxMenu* aPopMenu );
-    
-    void  popUpMenuForFootprints( int collectorNdx, MODULE* aModule, wxMenu* aPopMenu );
-
-    void  popUpMenuForFpTexts( int collectorNdx, TEXTE_MODULE* aText, wxMenu* aPopMenu );
-    
-    void  popUpMenuForFpPads( int collectorNdx, D_PAD* aPad, wxMenu* aPopMenu );
-    
-    void  popupMenuForTracks( int collectorNdx, TRACK* aTrack, wxMenu* aPopMenu );
-#endif    
-
+    // we'll use lower case function names for private member functions.    
+    void  createPopUpMenuForFootprints( MODULE* aModule, wxMenu* aPopMenu );
+    void  createPopUpMenuForFpTexts( TEXTE_MODULE* aText, wxMenu* aPopMenu );
+    void  createPopUpMenuForFpPads( D_PAD* aPad, wxMenu* aPopMenu );
+    void  createPopupMenuForTracks( TRACK* aTrack, wxMenu* aPopMenu );
+    void  createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu );
+    void  createPopUpBlockMenu( wxMenu* menu );
 
 public:
     WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent, const wxString& title,

@@ -287,7 +287,7 @@ public:
      * @param aNetcode A netcode to search for.
      * @return EQUIPOT* - the net or NULL if not found.
      */
-    EQUIPOT* FindNet( int aNetcode );
+    EQUIPOT* FindNet( int aNetcode ) const;
     
     
     /**

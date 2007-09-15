@@ -191,7 +191,6 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
     default:
         break;
     }
-
     
     // common tests:
 
@@ -202,13 +201,15 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
         if( m_Guide->IgnoreModulesOnCmp() && module->GetLayer()==LAYER_CMP_N )
             goto exit;
     }
-    
+
     
     if( item->IsOnLayer( m_Guide->GetPreferredLayer() ) || m_Guide->IgnorePreferredLayer() )
     {
         int layer = item->GetLayer();
-        
-        if(  m_Guide->IsLayerVisible( layer ) || !m_Guide->IgnoreNonVisibleLayers() )
+
+        // Modules and their subcomponents: text and pads are not sensitive to the layer 
+        // visibility controls.  They all have their own separate visibility controls        
+        if( module || m_Guide->IsLayerVisible( layer ) || !m_Guide->IgnoreNonVisibleLayers() )
         {
             if( !m_Guide->IsLayerLocked(layer) || !m_Guide->IgnoreLockedLayers() )
             {
@@ -233,7 +234,9 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
         
         int layer = item->GetLayer();
         
-        if(  m_Guide->IsLayerVisible( layer ) || !m_Guide->IgnoreNonVisibleLayers() )
+        // Modules and their subcomponents: text and pads are not sensitive to the layer 
+        // visibility controls.  They all have their own separate visibility controls        
+        if( module || m_Guide->IsLayerVisible( layer ) || !m_Guide->IgnoreNonVisibleLayers() )
         {
             if( !m_Guide->IsLayerLocked(layer) || !m_Guide->IgnoreLockedLayers() )
             {

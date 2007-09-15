@@ -10,7 +10,15 @@ email address.
 + pcbnew
   * controle.cpp, added Function AllAreModulesAndReturnSmallestIfSo() which is
     called from PcbGeneralLocateAndDisplay()
-  * onrightclick.cpp changed to calls to BOARD_ITEM::MenuText()
+  * onrightclick.cpp changed to calls to BOARD_ITEM::MenuText(), and switched
+    to member functions for createPopupMenus() so we can get all the state
+    information we need for the proper menus.
+  * BOARD_ITEM::MenuText() got new argument BOARD*, and elaboration for 
+    TRACKs and VIAs and Pcb Graphics.
+  * Fixed a problem in GENERAL_COLLECTOR::Inspect() so it now knows that MODULEs
+    have their own visibility controls (same for pads and pcb texts).  This 
+    interpretation must always match the drawing code's interpretation.
+  * Made TRACK::TRACK( const TRACK& ) protected to enforce use of TRACK::Copy()
 
 
 2007-Sep-13 UPDATE   Dick Hollenbeck <dick@softplc.com>

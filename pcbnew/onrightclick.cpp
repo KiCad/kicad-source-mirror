@@ -55,19 +55,6 @@
 #include "Flag.xpm"
 
 
-/* local functions */
-static void CreatePopupMenuForTracks( TRACK* Track, wxPoint CursorPosition,
-                                      wxMenu* PopMenu );
-static void CreatePopUpMenuForFootprints( MODULE* Footprint, wxMenu* menu, bool full_menu );
-static void CreatePopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* menu );
-static void CreatePopUpMenuForPads( D_PAD* Pad, wxMenu* menu );
-static void CreatePopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu );
-static void CreatePopUpBlockMenu( wxMenu* menu );
-
-
-/*****/
-
-
 /********************************************/
 static wxMenu* Append_Track_Width_List()
 /********************************************/
@@ -168,7 +155,7 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         if( (item && item->m_Flags) || BlockActive )
         {
             if( BlockActive )
-                CreatePopUpBlockMenu( aPopMenu );
+                createPopUpBlockMenu( aPopMenu );
             else
             {
                 ADD_MENUITEM( aPopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
@@ -194,10 +181,7 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         switch( item->Type() )
         {
         case TYPEMODULE:
-            if( !flags )
-                CreatePopUpMenuForFootprints( (MODULE*) item, aPopMenu, TRUE );
-            else
-                CreatePopUpMenuForFootprints( (MODULE*) item, aPopMenu, FALSE );
+            createPopUpMenuForFootprints( (MODULE*) item, aPopMenu );
 
             if( m_HTOOL_current_state == ID_TOOLBARH_PCB_AUTOPLACE )
             {
@@ -219,37 +203,11 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             break;
 
         case TYPEPAD:
-            CreatePopUpMenuForPads( (D_PAD*) item, aPopMenu );
-            if( m_HTOOL_current_state == ID_TOOLBARH_PCB_AUTOROUTE )
-            {
-                if( !flags )
-                {
-                    aPopMenu->Append( ID_POPUP_PCB_AUTOROUTE_PAD, _( "Autoroute Pad" ) );
-                    aPopMenu->Append( ID_POPUP_PCB_AUTOROUTE_NET, _( "Autoroute Net" ) );
-                }
-            }
-            if( !flags )
-            {
-                MODULE* module = (MODULE*) item->m_Parent;
-                if( module )
-                {
-                    aPopMenu->AppendSeparator();
-                    CreatePopUpMenuForFootprints( module, aPopMenu, TRUE );
-                }
-            }
+            createPopUpMenuForFpPads( (D_PAD*) item, aPopMenu );
             break;
 
         case TYPETEXTEMODULE:
-            CreatePopUpMenuForFpTexts( (TEXTE_MODULE*) item, aPopMenu );
-            if( !flags )
-            {
-                MODULE* module = (MODULE*) item->m_Parent;
-                if( module )
-                {
-                    aPopMenu->AppendSeparator();
-                    CreatePopUpMenuForFootprints( module, aPopMenu, TRUE );
-                }
-            }
+            createPopUpMenuForFpTexts( (TEXTE_MODULE*) item, aPopMenu );
             break;
 
         case TYPEDRAWSEGMENT:
@@ -278,14 +236,13 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             break;
 
         case TYPETEXTE:
-            CreatePopUpMenuForTexts( (TEXTE_PCB*) item, aPopMenu );
+            createPopUpMenuForTexts( (TEXTE_PCB*) item, aPopMenu );
             break;
 
         case TYPETRACK:
         case TYPEVIA:
             locate_track = TRUE;
-            CreatePopupMenuForTracks( (TRACK*) item, GetScreen()->m_Curseur,
-                                     aPopMenu );
+            createPopupMenuForTracks( (TRACK*) item, aPopMenu );
             break;
 
         case TYPEZONE:
@@ -469,7 +426,7 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
 
 /****************************************/
-void CreatePopUpBlockMenu( wxMenu* menu )
+void WinEDA_PcbFrame::createPopUpBlockMenu( wxMenu* menu )
 /****************************************/
 
 /* Create Pop sub menu for block commands
@@ -494,13 +451,14 @@ void CreatePopUpBlockMenu( wxMenu* menu )
 
 
 /********************************************************************/
-void CreatePopupMenuForTracks( TRACK* Track, wxPoint CursorPosition,
-                               wxMenu* PopMenu )
+void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
 /*******************************************************************/
 
 /* Create command lines for a popup menu, for track editing
  */
 {
+    wxPoint cursorPosition = GetScreen()->m_Curseur;
+    
     int flags = Track->m_Flags;
 
     if( flags == 0 )
@@ -532,7 +490,7 @@ void CreatePopupMenuForTracks( TRACK* Track, wxPoint CursorPosition,
         }
         else
         {
-            if( Track->IsPointOnEnds( CursorPosition, -1 ) != 0 )
+            if( Track->IsPointOnEnds( cursorPosition, -1 ) != 0 )
             {
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_MOVE_TRACK_NODE,
                               _( "Move Node" ), move_xpm );
@@ -623,7 +581,7 @@ void CreatePopupMenuForTracks( TRACK* Track, wxPoint CursorPosition,
 
 
 /*********************************************************************************/
-void CreatePopUpMenuForFootprints( MODULE* aModule, wxMenu* menu, bool full_menu )
+void WinEDA_PcbFrame::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu )
 /*********************************************************************************/
 
 /* Create the wxMenuitem list for footprint editing
@@ -632,12 +590,12 @@ void CreatePopUpMenuForFootprints( MODULE* aModule, wxMenu* menu, bool full_menu
     wxMenu*  sub_menu_footprint;
     int      flags = aModule->m_Flags;
 
-    wxString msg = aModule->MenuText();
+    wxString msg = aModule->MenuText( m_Pcb );
 
     sub_menu_footprint = new wxMenu;
     
     ADD_MENUITEM_WITH_SUBMENU( menu, sub_menu_footprint, -1, msg, module_xpm );
-    if( full_menu )
+    if( !flags )
     {
         ADD_MENUITEM( sub_menu_footprint, ID_POPUP_PCB_MOVE_MODULE_REQUEST,
                       _( "Move (M)" ), Move_Module_xpm );
@@ -663,7 +621,7 @@ void CreatePopUpMenuForFootprints( MODULE* aModule, wxMenu* menu, bool full_menu
 
 
 /********************************************************************/
-void CreatePopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* menu )
+void WinEDA_PcbFrame::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* menu )
 /********************************************************************/
 
 /* Create the wxMenuitem list for editing texts on footprints
@@ -672,7 +630,7 @@ void CreatePopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* menu )
     wxMenu*  sub_menu_Fp_text;
     int      flags = FpText->m_Flags;
 
-    wxString msg = FpText->MenuText();
+    wxString msg = FpText->MenuText( m_Pcb );
     
     sub_menu_Fp_text = new wxMenu;
     
@@ -690,18 +648,28 @@ void CreatePopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* menu )
     if( FpText->m_Type == TEXT_is_DIVERS )
         ADD_MENUITEM( sub_menu_Fp_text, ID_POPUP_PCB_DELETE_TEXTMODULE,
                       _( "Delete" ), delete_xpm );
+        
+    if( !flags )
+    {
+        MODULE* module = (MODULE*) FpText->GetParent();
+        if( module )
+        {
+            menu->AppendSeparator();
+            createPopUpMenuForFootprints( module, menu );
+        }
+    }
 }
 
 
 /***************************************************************/
-void CreatePopUpMenuForPads( D_PAD* Pad, wxMenu* menu )
+void WinEDA_PcbFrame::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
 /***************************************************************/
 /* Create pop menu for pads */
 {
     wxMenu*  sub_menu_Pad;
     int      flags = Pad->m_Flags;
 
-    wxString msg = Pad->MenuText();
+    wxString msg = Pad->MenuText( m_Pcb );
 
     sub_menu_Pad = new wxMenu;
     ADD_MENUITEM_WITH_SUBMENU( menu, sub_menu_Pad, -1, msg, pad_xpm );
@@ -729,18 +697,36 @@ void CreatePopUpMenuForPads( D_PAD* Pad, wxMenu* menu )
         ADD_MENUITEM( sub_menu_Pad, ID_POPUP_PCB_DELETE_PAD,
                       _( "delete" ), Delete_Pad_xpm );
     }
+    
+    if( m_HTOOL_current_state == ID_TOOLBARH_PCB_AUTOROUTE )
+    {
+        if( !flags )
+        {
+            menu->Append( ID_POPUP_PCB_AUTOROUTE_PAD, _( "Autoroute Pad" ) );
+            menu->Append( ID_POPUP_PCB_AUTOROUTE_NET, _( "Autoroute Net" ) );
+        }
+    }
+    if( !flags )
+    {
+        MODULE* module = (MODULE*) Pad->GetParent();
+        if( module )
+        {
+            menu->AppendSeparator();
+            createPopUpMenuForFootprints( module, menu );
+        }
+    }
 }
 
 
 /*************************************************************/
-void CreatePopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu )
+void WinEDA_PcbFrame::createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu )
 /*************************************************************/
 /* Create pop menu for pcb texts */
 {
     wxMenu*  sub_menu_Text;
     int      flags = Text->m_Flags;
 
-    wxString msg = Text->MenuText();
+    wxString msg = Text->MenuText( m_Pcb );
 
     sub_menu_Text = new wxMenu;
     

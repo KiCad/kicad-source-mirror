@@ -177,7 +177,7 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* File,
             }
             else    // a true TRACK
             {
-                newtrack = new TRACK( *track );
+                newtrack = track->Copy();
                 newtrack->SetLayer( pcb_layer_number );
             }
             

@@ -85,6 +85,7 @@ enum SEARCH_RESULT {
 
 class EDA_BaseStruct;
 class WinEDA_DrawFrame;
+class BOARD;
 
 /**
  * Class INSPECTOR
@@ -434,20 +435,6 @@ public:
 
     
     /**
-     * Function IsOnOneOfTheseLayers
-     * returns true if this object is on one of the given layers.  Is virtual so
-     * objects like D_PAD, which reside on multiple layers, can do their own
-     * form of testing.
-     * @param aLayerMask The bit-mapped set of layers to test for.
-     * @return bool - true if on one of the given layers, else false.
-     */
-    virtual bool IsOnOneOfTheseLayers( int aLayerMask ) const
-    {
-        return ( (1<<m_Layer) & aLayerMask ) != 0;
-    }
-
-    
-    /**
      * Function IsLocked
      * @return bool - true if the object is locked, else false
      */
@@ -456,13 +443,17 @@ public:
         return false;   // only MODULEs can be locked at this time.
     }
 
+    
     /**
      * Function MenuText
-     * @return wxString - The text to use in any menu type UI control which
-     *  must identify this item.
-     * @todo: make this virtual and split into each derived class
+     * returns the text to use in any menu type UI control which must uniquely
+     * identify this item.
+     * @param aBoard The PCB in which this item resides, needed for Net lookup.
+     * @return wxString
+     * @todo: maybe: make this virtual and split into each derived class
      */
-    wxString MenuText() const;
+    wxString MenuText( const BOARD* aBoard ) const;
+
     
     /**
      * Function MenuIcon

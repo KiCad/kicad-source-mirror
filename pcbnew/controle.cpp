@@ -124,10 +124,11 @@ void RemoteCommand( const char* cmdline )
 
 
 // @todo: move this to proper source file.
-wxString BOARD_ITEM::MenuText() const
+wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
 {
     wxString            text;
     const BOARD_ITEM*   item = this;
+    EQUIPOT*            net;
     
     switch( item->Type() )
     {
@@ -140,11 +141,13 @@ wxString BOARD_ITEM::MenuText() const
         break;
         
     case TYPEPAD:
-        text << _("Pad") << wxT(" ") << ((D_PAD*)item)->ReturnStringPadName() << _(" of ") << GetParent()->MenuText();
+        text << _("Pad") << wxT(" ") << ((D_PAD*)item)->ReturnStringPadName() << _(" of ") 
+//            << GetParent()->MenuText( aPcb );
+            << ((MODULE*)GetParent())->GetReference();
         break;
         
     case TYPEDRAWSEGMENT:
-        text << _("PGraphic");
+        text << _("Pcb Graphic") << _(" on ") << ReturnPcbLayerName( item->GetLayer() );  // @todo: extend text
         break;
         
     case TYPETEXTE:
@@ -163,29 +166,63 @@ wxString BOARD_ITEM::MenuText() const
             break;
     
         case TEXT_is_VALUE:
-            text << _( "Value" ) << wxT( " " ) << ((TEXTE_MODULE*)item)->m_Text << _(" of ") << GetParent()->MenuText();
+            text << _( "Value" ) << wxT( " " ) << ((TEXTE_MODULE*)item)->m_Text << _(" of ") 
+//                << GetParent()->MenuText( aPcb );
+                << ((MODULE*)GetParent())->GetReference(); 
             break;
     
-        default:
-            text << _( "Text" ) << wxT( " " ) << ((TEXTE_MODULE*)item)->m_Text << _(" of ") << GetParent()->MenuText();
+        default:    // wrap this one in quotes:
+            text << _( "Text" ) << wxT( " \"" ) << ((TEXTE_MODULE*)item)->m_Text << wxT("\"") <<  _(" of ") 
+//                << GetParent()->MenuText( aPcb );
+                << ((MODULE*)GetParent())->GetReference();
             break;
         }
         break;
         
     case TYPEEDGEMODULE:
-        text << _("MGraphic");     // @todo: expand on the text
+        text << _("Graphic") << wxT( " " );
+        const wxChar* cp;
+        switch( ((EDGE_MODULE*)item)->m_Shape )
+        {
+        case S_SEGMENT:     cp = _("Line");             break;
+        case S_RECT:        cp = _("Rect");             break;
+        case S_ARC:         cp = _("Arc");              break;
+        case S_CIRCLE:      cp = _("Circle");           break;
+        /* used?            
+        case S_ARC_RECT:    cp = wxT("arc_rect");       break;
+        case S_SPOT_OVALE:  cp = wxT("spot_oval");      break;
+        case S_SPOT_CIRCLE: cp = wxT("spot_circle");    break;
+        case S_SPOT_RECT:   cp = wxT("spot_rect");      break;
+        case S_POLYGON:     cp = wxT("polygon");        break;
+        */
+        default:            cp = wxT("??EDGE??");       break;
+        }
+        text << *cp << _(" of ") 
+//              << GetParent()->MenuText( aPcb );
+                << ((MODULE*)GetParent())->GetReference();
         break;
         
     case TYPETRACK:
-        text << _("Track");       // @todo: expand on the text
+        text << _("Track") << wxT(" ") << ((TRACK*)item)->m_NetCode;
+        net = aPcb->FindNet( ((TRACK*)item)->m_NetCode );
+        if( net )
+        {
+            text << wxT( " [" ) << net->m_Netname << wxT("]");
+        }
+        text << _(" on ") << ReturnPcbLayerName( item->GetLayer() );
         break;
         
     case TYPEZONE:
-        text << _("Zone");        // @todo: expand on the text
+        text << _("Zone") << _(" on ") << ReturnPcbLayerName( item->GetLayer() );
         break;
         
     case TYPEVIA:
-        text << _("Via");           // @todo: expand on text
+        text << _("Via") << wxT(" ") << ((SEGVIA*)item)->m_NetCode;
+        net = aPcb->FindNet( ((TRACK*)item)->m_NetCode );
+        if( net )
+        {
+            text << wxT( " [" ) << net->m_Netname << wxT("]");
+        }
         break;
         
     case TYPEMARQUEUR:
@@ -201,7 +238,7 @@ wxString BOARD_ITEM::MenuText() const
         break;
         
     case TYPEEDGEZONE:
-        text << _("Graphic");      // @todo: extend text
+        text << _("Edge Zone") << _(" on ") << ReturnPcbLayerName( item->GetLayer() );  // @todo: extend text
         break;
         
     default:
@@ -418,7 +455,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay()
             
             item = (*m_Collector)[i];
 
-            text = item->MenuText();
+            text = item->MenuText( m_Pcb );
             xpm  = item->MenuIcon();
             
             ADD_MENUITEM( &itemMenu, ID_POPUP_PCB_ITEM_SELECTION_START+i, text, xpm );

@@ -341,7 +341,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
         }
 
         /* If the struct found is a DRAW_LIB_ITEM_STRUCT_TYPE type,
-         *  coordinates must be computed according to its orientation matrix
+         * coordinates must be computed according to its orientation matrix
          */
         if( Struct->Type() == DRAW_LIB_ITEM_STRUCT_TYPE )
         {
@@ -519,7 +519,8 @@ int WinEDA_FindFrame::ExploreAllLibraries( const wxString& wildmask, wxString& F
         while( GetLine( file, Line, &LineNum, sizeof(Line) ) )
         {
             if( strnicmp( Line, "DEF", 3 ) == 0 )
-            { /* Read one DEF part from library: DEF 74LS00 U 0 30 Y Y 4 0 N */
+            { 
+                /* Read one DEF part from library: DEF 74LS00 U 0 30 Y Y 4 0 N */
                 strtok( Line, " \t\r\n" );
                 name = strtok( NULL, " \t\r\n" );
                 wxString st_name = CONV_FROM_UTF8( name );
@@ -533,7 +534,8 @@ int WinEDA_FindFrame::ExploreAllLibraries( const wxString& wildmask, wxString& F
                 }
             }
             else if( strnicmp( Line, "ALIAS", 5 ) == 0 )
-            { /* Read one ALIAS part from library: ALIAS 74HC00 74HCT00 7400 74LS37 */
+            { 
+                /* Read one ALIAS part from library: ALIAS 74HC00 74HCT00 7400 74LS37 */
                 strtok( Line, " \t\r\n" );
                 while( ( name = strtok( NULL, " \t\r\n" ) ) != NULL )
                 {

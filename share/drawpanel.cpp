@@ -57,7 +57,7 @@ WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
     m_CanStartBlock     = -1; // Command block can start if >= 0
     m_AbortEnable       = m_AbortRequest = FALSE;
     m_AutoPAN_Enable    = TRUE;
-    m_IgnoreMouseEvents = FALSE;
+    m_IgnoreMouseEvents = 0;
 
     ManageCurseur = NULL;
     ForceCloseManageCurseur = NULL;
