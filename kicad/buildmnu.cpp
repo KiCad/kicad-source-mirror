@@ -23,7 +23,6 @@
 #include "zip.xpm"
 #include "unzip.xpm"
 #include "Browse_Files.xpm"
-#include "Editor.xpm"
 #include "New_Project.xpm"
 #include "Open_Project.xpm"
 #include "../bitmaps/icon_python.xpm"

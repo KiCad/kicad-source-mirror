@@ -85,7 +85,7 @@ wxString FullFileName;
 			break;
 
 		case ID_PREFERENCES_CREATE_CONFIG_HOTKEYS:
-			FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
+			FullFileName = ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice );
 			FullFileName += HOTKEY_FILENAME;
 			FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
 			WriteHotkeyConfigFile(FullFileName, s_Pcbnew_Editor_Hokeys_Descr, true);
@@ -93,6 +93,27 @@ wxString FullFileName;
 
 		case ID_PREFERENCES_READ_CONFIG_HOTKEYS:
 			Read_Hotkey_Config( this, true);
+			break;
+
+		case ID_PREFERENCES_EDIT_CONFIG_HOTKEYS:
+			{
+			FullFileName = ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice );
+			FullFileName += HOTKEY_FILENAME;
+			FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
+			wxString editorname = GetEditorName();
+			if ( !editorname.IsEmpty() )
+				ExecuteFile(this, editorname, FullFileName);
+			break;
+			}
+
+		case ID_PREFERENCES_HOTKEY_PATH_IS_HOME:
+			g_ConfigFileLocationChoice = 0;
+			m_Parent->m_EDA_CommonConfig->Write(HOTKEY_CFG_PATH_OPT, g_ConfigFileLocationChoice);
+			break;
+
+		case ID_PREFERENCES_HOTKEY_PATH_IS_KICAD:
+			g_ConfigFileLocationChoice = 1;
+			m_Parent->m_EDA_CommonConfig->Write(HOTKEY_CFG_PATH_OPT, g_ConfigFileLocationChoice);
 			break;
 
 		default:
@@ -108,7 +129,7 @@ bool Read_Hotkey_Config( WinEDA_DrawFrame * frame, bool verbose )
  * Read the hotkey files config for pcbnew and module_edit
 */
 {
-	wxString FullFileName = DEFAULT_HOTKEY_FILENAME_PATH;
+	wxString FullFileName = ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice );
 	FullFileName += HOTKEY_FILENAME;
 	FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
 	return frame->ReadHotkeyConfigFile(FullFileName, s_Pcbnew_Editor_Hokeys_Descr, verbose);

@@ -87,10 +87,11 @@ void WinEDA_SchematicFrame::ReCreateHToolbar()
                         _( "Paste" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_SCHEMATIC_UNDO, wxEmptyString, BITMAP( undo_xpm ),
-                        _( "Undo last edition" ) );
-    m_HToolBar->AddTool( ID_SCHEMATIC_REDO, wxEmptyString, BITMAP( redo_xpm ),
-                        _( "Redo the last undo command" ) );
+	msg = AddHotkeyName( _( "Undo last edition" ), s_Schematic_Hokeys_Descr, HK_UNDO );
+    m_HToolBar->AddTool( ID_SCHEMATIC_UNDO, wxEmptyString, BITMAP( undo_xpm ), msg );
+
+	msg = AddHotkeyName( _( "Redo the last undo command" ), s_Schematic_Hokeys_Descr, HK_REDO );
+    m_HToolBar->AddTool( ID_SCHEMATIC_REDO, wxEmptyString, BITMAP( redo_xpm ), msg );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_GEN_PRINT, wxEmptyString, BITMAP( print_button ),

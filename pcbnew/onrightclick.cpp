@@ -59,17 +59,19 @@
 static wxMenu* Append_Track_Width_List()
 /********************************************/
 
-/* Ajoute au menu wxMenu * menu un sous-menu liste des epaisseurs de pistes
- *  disponibles
+/* create a wxMenu * which shows the last used track widths and via diameters
+ *  @return a pointeur to the menu
  */
 {
+	#define TRACK_HISTORY_NUMBER_MAX 6
+	#define VIA_HISTORY_NUMBER_MAX 4
     int      ii;
     wxString msg;
-    wxMenu*  trackwidth;
+    wxMenu*  trackwidth_menu;
     double   value;
 
-    trackwidth = new wxMenu;
-    for( ii = 0; ii < 6; ii++ )
+    trackwidth_menu = new wxMenu;
+    for( ii = 0; (ii < HIST0RY_NUMBER) && (ii < TRACK_HISTORY_NUMBER_MAX); ii++ )
     {
         if( g_DesignSettings.m_TrackWidhtHistory[ii] == 0 )
             break;
@@ -81,13 +83,13 @@ static wxMenu* Append_Track_Width_List()
         else
             msg.Printf( _( "Track %.3f" ), value );
 
-        trackwidth->Append( ID_POPUP_PCB_SELECT_WIDTH1 + ii, msg, wxEmptyString, TRUE );
+        trackwidth_menu->Append( ID_POPUP_PCB_SELECT_WIDTH1 + ii, msg, wxEmptyString, TRUE );
         if( g_DesignSettings.m_TrackWidhtHistory[ii] == g_DesignSettings.m_CurrentTrackWidth )
-            trackwidth->Check( ID_POPUP_PCB_SELECT_WIDTH1 + ii, TRUE );
+            trackwidth_menu->Check( ID_POPUP_PCB_SELECT_WIDTH1 + ii, TRUE );
     }
 
-    trackwidth->AppendSeparator();
-    for( ii = 0; ii < 4; ii++ )
+    trackwidth_menu->AppendSeparator();
+    for( ii = 0; (ii < HIST0RY_NUMBER) && (ii < VIA_HISTORY_NUMBER_MAX); ii++ )
     {
         if( g_DesignSettings.m_ViaSizeHistory[ii] == 0 )
             break;
@@ -98,12 +100,12 @@ static wxMenu* Append_Track_Width_List()
             msg.Printf( _( "Via %.1f" ), value * 1000 );
         else
             msg.Printf( _( "Via %.3f" ), value );
-        trackwidth->Append( ID_POPUP_PCB_SELECT_VIASIZE1 + ii, msg, wxEmptyString, TRUE );
+        trackwidth_menu->Append( ID_POPUP_PCB_SELECT_VIASIZE1 + ii, msg, wxEmptyString, TRUE );
         if( g_DesignSettings.m_ViaSizeHistory[ii] == g_DesignSettings.m_CurrentViaSize )
-            trackwidth->Check( ID_POPUP_PCB_SELECT_VIASIZE1 + ii, TRUE );
+            trackwidth_menu->Check( ID_POPUP_PCB_SELECT_VIASIZE1 + ii, TRUE );
     }
 
-    return trackwidth;
+    return trackwidth_menu;
 }
 
 
@@ -120,20 +122,7 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     BOARD_ITEM*     item = GetCurItem();
     
     DrawPanel->CursorOff( &dc );
-    DrawPanel->m_CanStartBlock = -1;    // Ne pas engager un debut de bloc sur validation menu
-
-    
-    /*  The user must now left click to first make the selection.  OnRightClick()
-        is now only an action mechanism, not a selection mechanism.  The selection
-        mechanism sometimes involves a popup menu, so it is too complex to try
-        and do that here.
-        
-    // Only offer user a new selection if there is currently none.
-    if( item == NULL )
-    {
-        item = PcbGeneralLocateAndDisplay();
-    }
-    */
+    DrawPanel->m_CanStartBlock = -1;    // Avoid to start a block coomand when clicking on menu
 
     // If command in progress: Put the Cancel command (if needed) and End command
     if( m_ID_current_state )
@@ -171,6 +160,14 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         return;
     }
 
+	/* Select a proper item */
+    if( (item == NULL) || (item->m_Flags == 0) )
+    {
+        item = PcbGeneralLocateAndDisplay();
+		SetCurItem(item);
+    }
+
+	item = GetCurItem();
     if( item )
         flags = item->m_Flags;
     else

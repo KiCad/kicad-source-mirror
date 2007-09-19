@@ -64,11 +64,9 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_MENU( ID_EXIT, WinEDA_PcbFrame::Process_Special_Functions )
     
     // menu Config
-    EVT_MENU( ID_CONFIG_REQ, WinEDA_PcbFrame::Process_Config )
-    EVT_MENU( ID_COLORS_SETUP, WinEDA_PcbFrame::Process_Config )
-    EVT_MENU( ID_OPTIONS_SETUP, WinEDA_PcbFrame::Process_Config )
-    	EVT_MENU( ID_PREFERENCES_CREATE_CONFIG_HOTKEYS, WinEDA_PcbFrame::Process_Config )
-    EVT_MENU( ID_PREFERENCES_READ_CONFIG_HOTKEYS, WinEDA_PcbFrame::Process_Config )
+	EVT_MENU_RANGE(ID_CONFIG_AND_PREFERENCES_START, ID_CONFIG_AND_PREFERENCES_END,
+		WinEDA_PcbFrame::Process_Config)
+
     EVT_MENU( ID_PCB_TRACK_SIZE_SETUP, WinEDA_PcbFrame::Process_Config )
     EVT_MENU( ID_PCB_DRAWINGS_WIDTHS_SETUP, WinEDA_PcbFrame::Process_Config )
     EVT_MENU( ID_PCB_PAD_SETUP, WinEDA_PcbFrame::Process_Config )

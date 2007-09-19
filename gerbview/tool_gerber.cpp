@@ -124,18 +124,7 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
                                 _( "Save application preferences" ), save_setup_xpm );
 
         configmenu->AppendSeparator();
-        item = new wxMenuItem( configmenu, ID_PREFERENCES_CREATE_CONFIG_HOTKEYS,
-                               _( "Create Pcbnew &Hotkey config file" ),
-                               _(
-                                   "Create or Recreate the hotkey config file from current hotkey list" )
-                               );
-        item->SetBitmap( save_setup_xpm );
-        configmenu->Append( item );
-        item = new wxMenuItem( configmenu, ID_PREFERENCES_READ_CONFIG_HOTKEYS,
-                              _( "Reread &Pcbnew Hotkey config file" ),
-                              _( "Reread the hotkey config file" ) );
-        item->SetBitmap( reload_xpm );
-        configmenu->Append( item );
+		AddHotheyConfigMenu( configmenu );
 
 
 // Menu drill ( generation fichiers percage)

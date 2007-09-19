@@ -39,14 +39,15 @@ EDA_LibComponentStruct * CopyItem;
 }
 
 /******************************************************/
-void WinEDA_LibeditFrame::GetComponentFromRedoList()
+bool WinEDA_LibeditFrame::GetComponentFromRedoList()
 /******************************************************/
 /* Redo the last edition:
 	- Place the current edited library component in undo list
 	- Get old version of the current edited library component
+ *  @return FALSE if nothing done, else TRUE
 */
 {
-	if ( GetScreen()->m_RedoList == NULL ) return;
+	if ( GetScreen()->m_RedoList == NULL ) return FALSE;
 		
 	GetScreen()->AddItemToUndoList((EDA_BaseStruct *)CurrentLibEntry);
 	CurrentLibEntry =
@@ -56,17 +57,20 @@ void WinEDA_LibeditFrame::GetComponentFromRedoList()
 	GetScreen()->SetModify();
 	ReCreateHToolbar();
 	SetToolbars();
+	
+	return TRUE;
 }
 
 /******************************************************/
-void WinEDA_LibeditFrame::GetComponentFromUndoList()
+bool WinEDA_LibeditFrame::GetComponentFromUndoList()
 /******************************************************/
 /* Undo the last edition:
 	- Place the current edited library component in Redo list
 	- Get old version of the current edited library component
+ *  @return FALSE if nothing done, else TRUE
 */
 {
-	if ( GetScreen()->m_UndoList == NULL ) return;
+	if ( GetScreen()->m_UndoList == NULL ) return FALSE;
 		
 	GetScreen()->AddItemToRedoList((EDA_BaseStruct *)CurrentLibEntry);
 	CurrentLibEntry =
@@ -77,4 +81,6 @@ void WinEDA_LibeditFrame::GetComponentFromUndoList()
 	GetScreen()->SetModify();
 	ReCreateHToolbar();
 	SetToolbars();
+	
+	return TRUE;
 }

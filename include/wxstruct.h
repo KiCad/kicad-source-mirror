@@ -1152,8 +1152,8 @@ public:
 
 private:
     void                    PutDataInPreviousState( DrawPickedStruct* List );
-    void                    GetSchematicFromRedoList();
-    void                    GetSchematicFromUndoList();
+    bool                    GetSchematicFromRedoList();
+    bool                    GetSchematicFromUndoList();
 
 
 public:
@@ -1230,8 +1230,8 @@ public:
     void                SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy, int flag_type_command = 0 );
 
 private:
-    void                GetComponentFromUndoList();
-    void                GetComponentFromRedoList();
+    bool                GetComponentFromUndoList();
+    bool                GetComponentFromRedoList();
 
     // Edition des Pins:
     void                CreatePin( wxDC* DC );

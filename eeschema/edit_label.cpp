@@ -236,17 +236,17 @@ EDA_BaseStruct* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
 
 
 /************************************/
-/*		Redraw a Texte while moving	*/
+/*		Redraw a Text while moving	*/
 /************************************/
 static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
     EDA_BaseStruct* TextStruct = panel->GetScreen()->GetCurItem();
 
-    /* effacement ancienne position */
+    /* "Undraw" the current text at its old position*/
     if( erase )
         RedrawOneStruct( panel, DC, TextStruct, g_XorMode );
 
-    /* Redessin du texte */
+    /* redraw the text */
     switch( TextStruct->Type() )
     {
     case DRAW_LABEL_STRUCT_TYPE:
@@ -266,7 +266,7 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 /*************************************************************/
 static void ExitMoveTexte( WinEDA_DrawPanel* Panel, wxDC* DC )
 /*************************************************************/
-/* Routine de sortie des menus de Texte */
+/* Abort function for the command move text */
 {
     SCH_SCREEN*     screen = (SCH_SCREEN*) Panel->m_Parent->m_CurrentScreen;
     EDA_BaseStruct* Struct = screen->GetCurItem();
@@ -275,22 +275,20 @@ static void ExitMoveTexte( WinEDA_DrawPanel* Panel, wxDC* DC )
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
 
-    if( Struct == NULL )  /* Pas de trace en cours  */
+    if( Struct == NULL )  /* no current item */
     {
         return;
     }
 
-    /* ici : trace en cours */
-
-    /* Effacement du trace en cours et suppression eventuelle de la structure */
+    /* "Undraw" the text, and delete it if new (i.e. it was beiing just created)*/
     RedrawOneStruct( Panel, DC, Struct, g_XorMode );
 
-    if( Struct->m_Flags & IS_NEW )  /* Suppression du nouveau texte en cours de placement */
+    if( Struct->m_Flags & IS_NEW )
     {
         delete Struct;
         screen->SetCurItem( NULL );
     }
-    else    /* Remise a jour des anciens parametres du texte */
+    else    /* this was a move command on an "old" text: restore its old settings. */
     {
         switch( Struct->Type() )
         {

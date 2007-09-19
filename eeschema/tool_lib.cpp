@@ -147,10 +147,10 @@ void WinEDA_LibeditFrame::ReCreateHToolbar()
                             _( "Create a new library an save current part into" ) );
 
         m_HToolBar->AddSeparator();
-        m_HToolBar->AddTool( ID_LIBEDIT_UNDO, wxEmptyString, BITMAP( undo_xpm ),
-                            _( "Undo last edition" ) );
-        m_HToolBar->AddTool( ID_LIBEDIT_REDO, wxEmptyString, BITMAP( redo_xpm ),
-                            _( "Redo the last undo command" ) );
+		msg = AddHotkeyName( _( "Undo last edition" ), s_Schematic_Hokeys_Descr, HK_UNDO );
+        m_HToolBar->AddTool( ID_LIBEDIT_UNDO, wxEmptyString, BITMAP( undo_xpm ), msg );
+		msg = AddHotkeyName( _( "Redo the last undo command" ), s_Schematic_Hokeys_Descr, HK_REDO );
+        m_HToolBar->AddTool( ID_LIBEDIT_REDO, wxEmptyString, BITMAP( redo_xpm ), msg );
 
         m_HToolBar->AddSeparator();
         m_HToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_PART, BITMAP( part_properties_xpm ),

@@ -21,6 +21,7 @@
 	#include "../bitmaps/Save_NetList.xpm"
 	#include "../bitmaps/Save_SetUp.xpm"
 	#include "../bitmaps/Read_SetUp.xpm"
+	#include "../bitmaps/Editor.xpm"
 
 	#include "../bitmaps/Open_Library.xpm"
 	#include "../bitmaps/New_Library.xpm"

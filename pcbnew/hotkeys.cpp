@@ -33,62 +33,65 @@
 
 /* local variables */
 /* Hotkey list: */
-static Ki_HotkeyInfo    HkSwitch2CopperLayer( wxT(
-                                                  "Switch to Copper layer" ),
-                                              HK_SWITCH_LAYER_TO_COPPER, WXK_PAGEUP );
-static Ki_HotkeyInfo    HkSwitch2ComponentLayer( wxT(
-                                                     "Switch to Component layer" ),
-                                                 HK_SWITCH_LAYER_TO_COMPONENT, WXK_PAGEDOWN );
-static Ki_HotkeyInfo    HkSwitch2InnerLayer1( wxT(
-                                                  "Switch to Inner layer 1" ),
-                                              HK_SWITCH_LAYER_TO_INNER1, WXK_F5 );
-static Ki_HotkeyInfo    HkSwitch2InnerLayer2( wxT(
-                                                  "Switch to Inner layer 2" ),
-                                              HK_SWITCH_LAYER_TO_INNER2, WXK_F6 );
-static Ki_HotkeyInfo    HkSwitch2InnerLayer3( wxT(
-                                                  "Switch to Inner layer 3" ),
-                                              HK_SWITCH_LAYER_TO_INNER3, WXK_F7 );
-static Ki_HotkeyInfo    HkSwitch2InnerLayer4( wxT(
-                                                  "Switch to Inner layer 4" ),
-                                              HK_SWITCH_LAYER_TO_INNER4, WXK_F8 );
-static Ki_HotkeyInfo    HkSwitch2InnerLayer5( wxT(
-                                                  "Switch to Inner layer 5" ),
-                                              HK_SWITCH_LAYER_TO_INNER5, WXK_F9 );
-static Ki_HotkeyInfo    HkSwitch2InnerLayer6( wxT(
-                                                  "Switch to Inner layer 6" ),
-                                              HK_SWITCH_LAYER_TO_INNER6, WXK_F10 );
+static Ki_HotkeyInfo HkSwitch2CopperLayer( wxT(
+                                               "Switch to Copper layer" ),
+                                           HK_SWITCH_LAYER_TO_COPPER, WXK_PAGEUP );
+static Ki_HotkeyInfo HkSwitch2ComponentLayer( wxT(
+                                                  "Switch to Component layer" ),
+                                              HK_SWITCH_LAYER_TO_COMPONENT, WXK_PAGEDOWN );
+static Ki_HotkeyInfo HkSwitch2InnerLayer1( wxT(
+                                               "Switch to Inner layer 1" ),
+                                           HK_SWITCH_LAYER_TO_INNER1, WXK_F5 );
+static Ki_HotkeyInfo HkSwitch2InnerLayer2( wxT(
+                                               "Switch to Inner layer 2" ),
+                                           HK_SWITCH_LAYER_TO_INNER2, WXK_F6 );
+static Ki_HotkeyInfo HkSwitch2InnerLayer3( wxT(
+                                               "Switch to Inner layer 3" ),
+                                           HK_SWITCH_LAYER_TO_INNER3, WXK_F7 );
+static Ki_HotkeyInfo HkSwitch2InnerLayer4( wxT(
+                                               "Switch to Inner layer 4" ),
+                                           HK_SWITCH_LAYER_TO_INNER4, WXK_F8 );
+static Ki_HotkeyInfo HkSwitch2InnerLayer5( wxT(
+                                               "Switch to Inner layer 5" ),
+                                           HK_SWITCH_LAYER_TO_INNER5, WXK_F9 );
+static Ki_HotkeyInfo HkSwitch2InnerLayer6( wxT(
+                                               "Switch to Inner layer 6" ),
+                                           HK_SWITCH_LAYER_TO_INNER6, WXK_F10 );
 
-static Ki_HotkeyInfo    HkSwitch2NextCopperLayer( wxT(
-                                                      "Switch to Next Layer" ),
-                                                  HK_SWITCH_LAYER_TO_NEXT, '+' );
-static Ki_HotkeyInfo    HkSwitch2PreviousCopperLayer( wxT(
-                                                          "Switch to Previous Layer" ),
-                                                      HK_SWITCH_LAYER_TO_PREVIOUS, '-' );
+static Ki_HotkeyInfo HkSwitch2NextCopperLayer( wxT(
+                                                   "Switch to Next Layer" ),
+                                               HK_SWITCH_LAYER_TO_NEXT, '+' );
+static Ki_HotkeyInfo HkSwitch2PreviousCopperLayer( wxT(
+                                                       "Switch to Previous Layer" ),
+                                                   HK_SWITCH_LAYER_TO_PREVIOUS, '-' );
 
-static Ki_HotkeyInfo    HkSavefile( wxT( "Save board" ), HK_SAVE_BOARD, 'S' + GR_KB_CTRL );
-static Ki_HotkeyInfo    HkLoadfile( wxT( "Load board" ), HK_LOAD_BOARD, 'L' + GR_KB_CTRL );
-static Ki_HotkeyInfo    HkFindItem( wxT( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL );
-static Ki_HotkeyInfo    HkBackspace( wxT( "Delete track segment" ), HK_BACK_SPACE, WXK_BACK );
-static Ki_HotkeyInfo    HkAddVia( wxT( "Add Via" ), HK_ADD_VIA, 'V' );
-static Ki_HotkeyInfo    HkEndTrack( wxT( "End Track" ), HK_END_TRACK, WXK_END );
-static Ki_HotkeyInfo    HkFlipFootprint( wxT( "Flip Footprint" ), HK_FLIP_FOOTPRINT, 'F' );
-static Ki_HotkeyInfo    HkRotateFootprint( wxT( "Rotate Footprint" ), HK_ROTATE_FOOTPRINT, 'R' );
-static Ki_HotkeyInfo    HkMoveFootprint( wxT( "Move Footprint" ), HK_MOVE_FOOTPRINT, 'M' );
-static Ki_HotkeyInfo    HkDragFootprint( wxT( "Drag Footprint" ), HK_DRAG_FOOTPRINT, 'G' );
-static Ki_HotkeyInfo    HkLock_Unlock_Footprint( wxT(
-                                                     "Lock/Unlock Footprint" ),
-                                                 HK_LOCK_UNLOCK_FOOTPRINT, 'L' );
-static Ki_HotkeyInfo    HkDelete( wxT( "Delete Track or Footprint" ), HK_DELETE, WXK_DELETE );
-static Ki_HotkeyInfo    HkResetLocalCoord( wxT( "Reset local coord." ), HK_RESET_LOCAL_COORD, ' ' );
-static Ki_HotkeyInfo    HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4 );
-static Ki_HotkeyInfo    HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 );
-static Ki_HotkeyInfo    HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
-static Ki_HotkeyInfo    HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
-static Ki_HotkeyInfo    HkHelp( wxT( "Help: this message" ), HK_HELP, '?' );
-static Ki_HotkeyInfo    HkSwitchUnits( wxT( "Switch Units" ), HK_SWITCH_UNITS, 'U' );
-static Ki_HotkeyInfo    HkTrackDisplayMode( wxT(
-                                                "Track Display Mode" ),
-                                            HK_SWITCH_TRACK_DISPLAY_MODE, 'F' );
+static Ki_HotkeyInfo HkSavefile( wxT( "Save board" ), HK_SAVE_BOARD, 'S' + GR_KB_CTRL );
+static Ki_HotkeyInfo HkLoadfile( wxT( "Load board" ), HK_LOAD_BOARD, 'L' + GR_KB_CTRL );
+static Ki_HotkeyInfo HkFindItem( wxT( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL );
+static Ki_HotkeyInfo HkBackspace( wxT( "Delete track segment" ), HK_BACK_SPACE, WXK_BACK );
+static Ki_HotkeyInfo HkAddVia( wxT( "Add Via" ), HK_ADD_VIA, 'V' );
+static Ki_HotkeyInfo HkEndTrack( wxT( "End Track" ), HK_END_TRACK, WXK_END );
+static Ki_HotkeyInfo HkFlipFootprint( wxT( "Flip Footprint" ), HK_FLIP_FOOTPRINT, 'F' );
+static Ki_HotkeyInfo HkRotateFootprint( wxT( "Rotate Footprint" ), HK_ROTATE_FOOTPRINT, 'R' );
+static Ki_HotkeyInfo HkMoveFootprint( wxT( "Move Footprint" ), HK_MOVE_FOOTPRINT, 'M' );
+static Ki_HotkeyInfo HkDragFootprint( wxT( "Drag Footprint" ), HK_DRAG_FOOTPRINT, 'G' );
+static Ki_HotkeyInfo HkGetAndMoveFootprint( wxT(
+                                                "Get and Move Footprint" ),
+                                            HK_GET_AND_MOVE_FOOTPRINT, 'T' );
+static Ki_HotkeyInfo HkLock_Unlock_Footprint( wxT(
+                                                  "Lock/Unlock Footprint" ),
+                                              HK_LOCK_UNLOCK_FOOTPRINT, 'L' );
+static Ki_HotkeyInfo HkDelete( wxT( "Delete Track or Footprint" ), HK_DELETE, WXK_DELETE );
+static Ki_HotkeyInfo HkResetLocalCoord( wxT( "Reset local coord." ), HK_RESET_LOCAL_COORD, ' ' );
+static Ki_HotkeyInfo HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4 );
+static Ki_HotkeyInfo HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 );
+static Ki_HotkeyInfo HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
+static Ki_HotkeyInfo HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
+static Ki_HotkeyInfo HkHelp( wxT( "Help: this message" ), HK_HELP, '?' );
+static Ki_HotkeyInfo HkSwitchUnits( wxT( "Switch Units" ), HK_SWITCH_UNITS, 'U' + GR_KB_CTRL );
+static Ki_HotkeyInfo HkTrackDisplayMode( wxT(
+                                             "Track Display Mode" ),
+                                         HK_SWITCH_TRACK_DISPLAY_MODE, 'K' );
 
 // List of common hotkey descriptors
 Ki_HotkeyInfo* s_Common_Hotkey_List[] = {
@@ -105,6 +108,7 @@ Ki_HotkeyInfo* s_board_edit_Hotkey_List[] = {
     &HkAddVia,                     &HkEndTrack,
     &HkMoveFootprint,              &HkFlipFootprint,
     &HkRotateFootprint,            &HkDragFootprint,
+    &HkGetAndMoveFootprint,
     &HkLock_Unlock_Footprint,
     &HkSavefile,                   &HkLoadfile,      &HkFindItem,
     &HkSwitch2CopperLayer,
@@ -129,26 +133,26 @@ Ki_HotkeyInfo* s_module_edit_Hotkey_List[] = {
 // list of sections and corresponding hotkey list for pcbnew (used to create an hotkey config file)
 struct Ki_HotkeyInfoSectionDescriptor s_Pcbnew_Editor_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag,      s_Common_Hotkey_List,      "Common keys"           },
-    { &g_BoardEditorSectionTag, s_board_edit_Hotkey_List,  "Board editor keys"     },
-    { &g_ModuleEditSectionTag,  s_module_edit_Hotkey_List, "Footprint editor keys" },
-    { NULL,                     NULL, NULL}
+    { &g_CommonSectionTag, s_Common_Hotkey_List, "Common keys"           },
+    { &g_BoardEditorSectionTag, s_board_edit_Hotkey_List, "Board editor keys"     },
+    { &g_ModuleEditSectionTag, s_module_edit_Hotkey_List, "Footprint editor keys" },
+    { NULL, NULL, NULL }
 };
 
 // list of sections and corresponding hotkey list for the board editor (used to list current hotkeys)
 struct Ki_HotkeyInfoSectionDescriptor s_Board_Editor_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag,      s_Common_Hotkey_List,     NULL },
+    { &g_CommonSectionTag, s_Common_Hotkey_List, NULL },
     { &g_BoardEditorSectionTag, s_board_edit_Hotkey_List, NULL },
-    { NULL,                     NULL,                     NULL }
+    { NULL, NULL, NULL }
 };
 
 // list of sections and corresponding hotkey list for the footprint editor (used to list current hotkeys)
 struct Ki_HotkeyInfoSectionDescriptor s_Module_Editor_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag,     s_Common_Hotkey_List,      NULL },
+    { &g_CommonSectionTag, s_Common_Hotkey_List, NULL },
     { &g_ModuleEditSectionTag, s_module_edit_Hotkey_List, NULL },
-    { NULL,                    NULL,                      NULL }
+    { NULL, NULL, NULL }
 };
 
 
@@ -174,7 +178,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
 
     MODULE* module = NULL;
 
-    // Remap the control key Ctrl A (0x01) to GR_KB_CTRL + 'A' (easier to handle...)
+    // Remap the control key Ctrl A (0x01) to GR_KB_CTRL + 'A' (just easier to handle...)
     if( (hotkey & GR_KB_CTRL) != 0 )
         hotkey += 'A' - 1;
     /* Convert lower to upper case (the usual toupper function has problem with non ascii codes like function keys */
@@ -284,6 +288,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case HK_SWITCH_TRACK_DISPLAY_MODE:
         DisplayOpt.DisplayPcbTrackFill ^= 1; DisplayOpt.DisplayPcbTrackFill &= 1;
+		m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
         GetScreen()->SetRefreshReq();
         break;
 
@@ -294,15 +299,14 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
     case HK_BACK_SPACE:
         if( m_ID_current_state == ID_TRACK_BUTT && GetScreen()->m_Active_Layer <= CMP_N )
         {
-            bool ItemFree = GetCurItem()==NULL || GetCurItem()->m_Flags==0;
             if( ItemFree )
             {
                 // no track is currently being edited - select a segment and remove it.
-                
+
                 // @todo: possibly? pass the HK command code to PcbGeneralLocateAndDisplay() so it can restrict its search to specific item types.
-                
+
                 // @todo: use PcbGeneralLocateAndDisplay() everywhere in this source file.
-                
+
                 DrawStruct = PcbGeneralLocateAndDisplay();
 
                 // don't let backspace delete modules!!
@@ -321,34 +325,49 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_END_TRACK:
-        DrawPanel->MouseToCursorSchema();
-        End_Route( (TRACK*) ( GetCurItem() ), DC );
+		if ( ! ItemFree && (GetCurItem()->Type() == TYPETRACK) && ((GetCurItem()->m_Flags & IS_NEW) != 0) )
+		{	// A new track is in progress: call to End_Route()
+			DrawPanel->MouseToCursorSchema();
+			End_Route( (TRACK*) ( GetCurItem() ), DC );
+		}
+        break;
+
+    case HK_GET_AND_MOVE_FOOTPRINT:
+        if( ItemFree )
+        {
+            wxCommandEvent evt;
+            evt.SetId( ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST );
+            Process_Special_Functions( evt );
+        }
         break;
 
     case HK_FIND_ITEM:
-    {
-        wxCommandEvent evt;
-        evt.SetId( ID_FIND_ITEMS );
-        Process_Special_Functions( evt );
-    }
+        if( ItemFree )
+        {
+            wxCommandEvent evt;
+            evt.SetId( ID_FIND_ITEMS );
+            Process_Special_Functions( evt );
+        }
         break;
 
     case HK_LOAD_BOARD:
-    {
-        // try not to duplicate save, load code etc.
-        wxCommandEvent evt;
-        evt.SetId( ID_LOAD_FILE );
-        Files_io( evt );
-    }
+        if( ItemFree )
+        {
+            // try not to duplicate save, load code etc.
+            wxCommandEvent evt;
+            evt.SetId( ID_LOAD_FILE );
+            Files_io( evt );
+        }
         break;
 
     case HK_SAVE_BOARD:
-    {
-        // try not to duplicate save, load code etc.
-        wxCommandEvent evt;
-        evt.SetId( ID_SAVE_BOARD );
-        Files_io( evt );
-    }
+        if( ItemFree )
+        {
+            // try not to duplicate save, load code etc.
+            wxCommandEvent evt;
+            evt.SetId( ID_SAVE_BOARD );
+            Files_io( evt );
+        }
         break;
 
     case HK_ADD_VIA:          // Switch to alternate layer and Place a via if a track is in progress

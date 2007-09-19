@@ -291,16 +291,17 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy,
 
 
 /**********************************************************/
-void WinEDA_SchematicFrame::GetSchematicFromRedoList()
+bool  WinEDA_SchematicFrame::GetSchematicFromRedoList()
 /**********************************************************/
 
 /* Redo the last edition:
  *  - Save the current schematic in undo list
  *  - Get the old version
+ *  @return FALSE if nothing done, else TRUE
  */
 {
     if( GetScreen()->m_RedoList == NULL )
-        return;
+        return FALSE;
 
     /* Get the old wrapper and put it in UndoList */
     DrawPickedStruct* List = (DrawPickedStruct*) GetScreen()->GetItemFromRedoList();
@@ -312,6 +313,8 @@ void WinEDA_SchematicFrame::GetSchematicFromRedoList()
     GetScreen()->SetModify();
     ReCreateHToolbar();
     SetToolbars();
+	
+	return TRUE;
 }
 
 
@@ -463,16 +466,17 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( DrawPickedStruct* List )
 
 
 /**********************************************************/
-void WinEDA_SchematicFrame::GetSchematicFromUndoList()
+bool WinEDA_SchematicFrame::GetSchematicFromUndoList()
 /**********************************************************/
 
 /* Undo the last edition:
  *  - Save the current schematic in Redo list
  *  - Get an old version of the schematic
+ *  @return FALSE if nothing done, else TRUE
  */
 {
     if( GetScreen()->m_UndoList == NULL )
-        return;
+        return FALSE;
 
     /* Get the old wrapper and put it in RedoList (the real data list is the m_Son member) */
     DrawPickedStruct* List = (DrawPickedStruct*) GetScreen()->GetItemFromUndoList();
@@ -484,6 +488,8 @@ void WinEDA_SchematicFrame::GetSchematicFromUndoList()
     GetScreen()->SetModify();
     ReCreateHToolbar();
     SetToolbars();
+	
+	return TRUE;
 }
 
 

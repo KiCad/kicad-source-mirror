@@ -15,15 +15,15 @@
 #define DEFAULT_HOTKEY_FILENAME_EXT wxT( ".key" )
 
 /* define default path for config key file */
-#ifdef __WINDOWS__
-#define DEFAULT_HOTKEY_FILENAME_PATH EDA_Appl->m_BinDir + wxT( "../template/" )
-#else
-#define DEFAULT_HOTKEY_FILENAME_PATH wxGetHomeDir() + wxT( "/" )
-#endif
+#define DEFAULT_HOTKEY_FILENAME_PATH_IS_HOME wxGetHomeDir() + wxT( "/" )
+#define DEFAULT_HOTKEY_FILENAME_PATH_IS_KICAD EDA_Appl->m_BinDir + wxT( "../template/" )
+
+/* keyword idetifier in kicad config use ti store/retrieve path option */
+#define HOTKEY_CFG_PATH_OPT wxT("HotkeyPathOption")
 
 
 /* Class to handle hotkey commnands. hotkeys have a default value
- *  This class allows (for the future..) the real key code changed by user(from a key code list file, TODO)
+ *  This class allows the real key code changed by user(from a key code list file)
  */
 class Ki_HotkeyInfo
 {
@@ -36,22 +36,25 @@ public:
     Ki_HotkeyInfo( const wxChar* infomsg, int idcommand, int keycode );
 };
 
-/* handle a Section name and the corresponding list of hotkeys (Ki_HotkeyInfo list) */
+/* handle a Section name and the corresponding list of hotkeys (Ki_HotkeyInfo list)
+ * hotkeys are grouped by section.
+ * a section is a list of hotkey infos ( a Ki_HotkeyInfo list).
+ * A full list of hoteys can used one or many sections
+ * for instance:
+ *    the schematic editor uses a common section (zoom hotkeys list ..) and a specific section
+ *    the library editor uses the same common section and a specific section
+ * this feature avoid duplications and made hotkey file config easier to understand ane edit
+ */
 struct Ki_HotkeyInfoSectionDescriptor
 {
 public:
     wxString*       m_SectionTag;           // The section name
-    Ki_HotkeyInfo** m_HK_InfoList;          // pointer on List of Ki_HotkeyInfo
+    Ki_HotkeyInfo** m_HK_InfoList;          // List of Ki_HotkeyInfo pointers
     char*           m_Comment;              // comment: will be printed in the config file
-
-/*
- *  public:
- *  Ki_HotkeyInfoSectionDescriptor( wxString * SectionTag, Ki_HotkeyInfo ** HK_InfoList )
- *  { m_SectionTag = SectionTag; m_HK_InfoList = HK_InfoList; }
- */
+                                            // Info usage only
 };
 
-/* Identifiers (tags) in key code configuration file file
+/* Identifiers (tags) in key code configuration file (or section names)
  *  .m_SectionTag member of a Ki_HotkeyInfoSectionDescriptor
  */
 COMMON_GLOBL wxString g_CommonSectionTag
@@ -80,15 +83,22 @@ COMMON_GLOBL wxString g_ModuleEditSectionTag
 #endif
 ;
 
+COMMON_GLOBL int g_ConfigFileLocationChoice;    /* 0 = files are in Home directory (usefull under unix)
+                                                  * 1 = kicad/template ( usefull only under windows )
+                                                  * 2 ... = unused
+                                                 */
+
 /* Functions:
  */
+wxString    ReturnHotkeyConfigFilePath( int choice );
+void AddHotheyConfigMenu( wxMenu* menu );
 wxString    ReturnKeyNameFromKeyCode( int keycode );
 wxString    ReturnKeyNameFromCommandId( Ki_HotkeyInfo** List, int CommandId );
 wxString    AddHotkeyName( const wxString& text, Ki_HotkeyInfo** List, int CommandId );
-wxString    AddHotkeyName( const wxString& text,
-		struct Ki_HotkeyInfoSectionDescriptor* DescrList,
-		int CommandId );
-void        DisplayHotkeyList( WinEDA_DrawFrame* frame,
+wxString    AddHotkeyName( const wxString&                        text,
+                           struct Ki_HotkeyInfoSectionDescriptor* DescrList,
+                           int                                    CommandId );
+void        DisplayHotkeyList( WinEDA_DrawFrame*                      frame,
                                struct Ki_HotkeyInfoSectionDescriptor* List );
 int         GetCommandCodeFromHotkey( int key, Ki_HotkeyInfo** List );
 

@@ -2,11 +2,7 @@
 /* Routines generales de gestion des commandes usuelles */
 /********************************************************/
 
-/* fichier controle.cpp */
-
-/*
- *  Routines d'affichage grille, Boite de coordonnees, Curseurs, marqueurs ...
- */
+/* controle.cpp */
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -28,9 +24,9 @@
 
 /* Variables Locales */
 
-/**********************************/
+/****************************************/
 void RemoteCommand( const char* cmdline )
-/**********************************/
+/****************************************/
 
 /* Read a remote command send by eeschema via a socket,
  *  port KICAD_PCB_PORT_SERVICE_NUMBER (currently 4242)
@@ -129,7 +125,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
     wxString            text;
     const BOARD_ITEM*   item = this;
     EQUIPOT*            net;
-    
+
     switch( item->Type() )
     {
     case PCB_EQUIPOT_STRUCT_TYPE:
@@ -138,6 +134,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         
     case TYPEMODULE:
         text << _("Footprint") << wxT(" ") << ((MODULE*)item)->GetReference();
+		text  << wxT(" (") << ReturnPcbLayerName( item->m_Layer )  << wxT(")");
         break;
         
     case TYPEPAD:
@@ -188,13 +185,13 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         case S_RECT:        cp = _("Rect");             break;
         case S_ARC:         cp = _("Arc");              break;
         case S_CIRCLE:      cp = _("Circle");           break;
-        /* used?            
+        /* used in Gerbview: */            
         case S_ARC_RECT:    cp = wxT("arc_rect");       break;
         case S_SPOT_OVALE:  cp = wxT("spot_oval");      break;
         case S_SPOT_CIRCLE: cp = wxT("spot_circle");    break;
         case S_SPOT_RECT:   cp = wxT("spot_rect");      break;
         case S_POLYGON:     cp = wxT("polygon");        break;
-        */
+
         default:            cp = wxT("??EDGE??");       break;
         }
         text << *cp << _(" of ") 

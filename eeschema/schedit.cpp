@@ -746,13 +746,13 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_SCHEMATIC_UNDO:
-        GetSchematicFromUndoList();
-        DrawPanel->Refresh( TRUE );
+        if ( GetSchematicFromUndoList() )
+			DrawPanel->Refresh( TRUE );
         break;
 
     case ID_SCHEMATIC_REDO:
-        GetSchematicFromRedoList();
-        DrawPanel->Refresh( TRUE );
+        if ( GetSchematicFromRedoList() )
+			DrawPanel->Refresh( TRUE );
         break;
 
     default:        // Log error:

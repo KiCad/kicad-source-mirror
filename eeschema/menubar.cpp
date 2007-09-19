@@ -16,6 +16,7 @@
 #include "bitmaps.h"
 #include "protos.h"
 #include "id.h"
+#include "hotkeys.h"
 
 
 /************************************************/
@@ -26,6 +27,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 {
 int ii;
 wxMenuBar * menuBar = GetMenuBar();
+wxString msg;
 
 	if( menuBar == NULL )
 	{
@@ -117,18 +119,16 @@ wxMenuBar * menuBar = GetMenuBar();
 
 		// Menu Edit:
 		wxMenu * editMenu = new wxMenu;
+		msg = AddHotkeyName( _( "&Undo\t" ), s_Schematic_Hokeys_Descr, HK_UNDO );
 		item = new wxMenuItem(editMenu, ID_SCHEMATIC_UNDO,
-			_("&Undo\tCTRL+Z"),
+			msg,
 			_("Undo last edition") );
 	    item->SetBitmap(undo_xpm);
 		editMenu->Append(item);
-/*		if ( GetScreen()->m_UndoList )
-			editMenu->Enable(ID_SCHEMATIC_UNDO,TRUE);
-		else
-			editMenu->Enable(ID_SCHEMATIC_UNDO,FALSE);
-*/
+
+		msg = AddHotkeyName( _( "&Redo\t" ), s_Schematic_Hokeys_Descr, HK_REDO );
 		item = new wxMenuItem(editMenu, ID_SCHEMATIC_REDO,
-			_("&Redo\tCTRL+Y"),
+			msg,
 			_("Redo the last undo command") );
 	    item->SetBitmap(redo_xpm);
 		editMenu->Append(item);
@@ -165,14 +165,7 @@ wxMenuBar * menuBar = GetMenuBar();
 		configmenu->Append(item);
 
 		configmenu->AppendSeparator();
-		item = new wxMenuItem(configmenu, ID_PREFERENCES_CREATE_CONFIG_HOTKEYS, _("Create Eeschema &Hotkey config file"),
-			_("Create or Recreate the hotkey config file from current hotkey list") );
-	    item->SetBitmap(save_setup_xpm);
-		configmenu->Append(item);
-		item = new wxMenuItem(configmenu, ID_PREFERENCES_READ_CONFIG_HOTKEYS, _("Reread &Eeschema Hotkey config file"),
-			_("Reread the hotkey config file") );
-	    item->SetBitmap( reload_xpm);
-		configmenu->Append(item);
+		AddHotheyConfigMenu( configmenu );
 
 		// Menu Help:
 		wxMenu *helpMenu = new wxMenu;

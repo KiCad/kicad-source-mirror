@@ -23,8 +23,7 @@ static void Process_Move_Item( WinEDA_PcbFrame* frame,
 void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 /********************************************************************/
 
-/* Traite les commandes declench�e par le bouton gauche de la souris,
- *  quand un outil est deja selectionn�
+/* Handle the left buttom mouse click, when a tool is active
  */
 {
     BOARD_ITEM* DrawStruct = GetCurItem();
@@ -35,7 +34,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     if( (m_ID_current_state == 0) || ( DrawStruct && DrawStruct->m_Flags ) )
     {
         DrawPanel->m_AutoPAN_Request = FALSE;
-        if( DrawStruct && DrawStruct->m_Flags ) // Commande "POPUP" en cours
+        if( DrawStruct && DrawStruct->m_Flags ) // "POPUP" in progress
         {
             switch( DrawStruct->Type() )
             {

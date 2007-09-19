@@ -34,6 +34,7 @@
  *  Note: If an hotkey is a special key be sure the corresponding wxWidget keycode (WXK_XXXX)
  *  is handled in the hotkey_name_descr s_Hotkey_Name_List list (see hotkeys_basic.cpp)
  *  and see this list for some ascii keys (space ...)
+ *  Key modifier are: GR_KB_CTRL GR_KB_ALT
  */
 
 
@@ -47,6 +48,8 @@ static Ki_HotkeyInfo    HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
 static Ki_HotkeyInfo    HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
 static Ki_HotkeyInfo    HkHelp( wxT( "Help: this message" ), HK_HELP, '?' );
 static Ki_HotkeyInfo    HkResetLocalCoord( wxT( "Reset local coord." ), HK_RESET_LOCAL_COORD, ' ' );
+static Ki_HotkeyInfo    HkUndo( wxT( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z' );
+static Ki_HotkeyInfo    HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y' );
 
 // Schematic editor
 static Ki_HotkeyInfo    HkBeginWire( wxT( "begin Wire" ), HK_BEGIN_WIRE, 'W' );
@@ -77,6 +80,7 @@ Ki_HotkeyInfo* s_Common_Hotkey_List[] =
     &HkHelp,
     &HkZoomIn,          &HkZoomOut, &HkZoomRedraw, &HkZoomCenter,
     &HkResetLocalCoord,
+	&HkUndo, &HkRedo,
     NULL
 };
 
@@ -182,6 +186,20 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
     case HK_ZOOM_CENTER:
         OnZoom( ID_ZOOM_CENTER_KEY );
         break;
+
+    case HK_UNDO:
+	{
+		wxCommandEvent event(wxEVT_COMMAND_TOOL_CLICKED, ID_SCHEMATIC_UNDO);
+		wxPostEvent(this, event);
+	}
+        break;
+
+    case HK_REDO:
+	{
+		wxCommandEvent event(wxEVT_COMMAND_TOOL_CLICKED, ID_SCHEMATIC_REDO);
+		wxPostEvent(this, event);
+ 	}
+       break;
 
     case HK_MOVEBLOCK_TO_DRAGBLOCK:        // Switch to drag mode, when block moving
         HandleBlockEndByPopUp( BLOCK_DRAG, DC );
@@ -367,6 +385,9 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
 
     wxPoint MousePos = m_CurrentScreen->m_MousePosition;
 
+    // Remap the control key Ctrl A (0x01) to GR_KB_CTRL + 'A' (easier to handle...)
+    if( (hotkey & GR_KB_CTRL) != 0 )
+        hotkey += 'A' - 1;
     /* Convert lower to upper case (the usual toupper function has problem with non ascii codes like function keys */
     if( (hotkey >= 'a') && (hotkey <= 'z') )
         hotkey += 'A' - 'a';
@@ -404,6 +425,20 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
     case HK_ZOOM_CENTER:
         OnZoom( ID_ZOOM_CENTER_KEY );
         break;
+
+	case HK_UNDO:
+	{
+		wxCommandEvent event(wxEVT_COMMAND_TOOL_CLICKED, ID_LIBEDIT_UNDO);
+		wxPostEvent(this, event);
+	}
+		break;
+
+	case HK_REDO:
+	{
+		wxCommandEvent event(wxEVT_COMMAND_TOOL_CLICKED, ID_LIBEDIT_REDO);
+		wxPostEvent(this, event);
+	}
+		break;
 
     case HK_REPEAT_LAST:
         if( LibItemToRepeat && (LibItemToRepeat->m_Flags == 0)

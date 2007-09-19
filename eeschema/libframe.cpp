@@ -59,11 +59,11 @@ EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
 END_EVENT_TABLE()
 
 
-WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow* father,
-                                          WinEDA_App* parent,
+WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
+                                          WinEDA_App*     parent,
                                           const wxString& title,
-                                          const wxPoint& pos,
-                                          const wxSize& size ) :
+                                          const wxPoint&  pos,
+                                          const wxSize&   size ) :
     WinEDA_DrawFrame( father, LIBEDITOR_FRAME, parent, title, pos, size )
 {
     m_FrameName = wxT( "LibeditFrame" );
@@ -205,7 +205,8 @@ void WinEDA_LibeditFrame::SetToolbars()
             {
                 int AliasLocation = LocateAlias( CurrentLibEntry->m_AliasList, CurrentAliasName );
                 if( AliasLocation >= 0 )
-                    if( !CurrentLibEntry->m_AliasList[AliasLocation + ALIAS_DOC_FILENAME].IsEmpty() )
+                    if( !CurrentLibEntry->m_AliasList[AliasLocation +
+                                                      ALIAS_DOC_FILENAME].IsEmpty() )
                         enable_dtool = TRUE;
             }
             else if( !CurrentLibEntry->m_DocFile.IsEmpty() )
@@ -289,8 +290,8 @@ int WinEDA_LibeditFrame::BestZoom()
 void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
 /*************************************************************************/
 {
-    int     id = event.GetId();
-    wxPoint pos;
+    int        id = event.GetId();
+    wxPoint    pos;
 
     wxClientDC dc( DrawPanel );
 
@@ -709,13 +710,13 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_LIBEDIT_UNDO:
-        GetComponentFromUndoList();
-        DrawPanel->Refresh( TRUE );
+        if( GetComponentFromUndoList() )
+            DrawPanel->Refresh( TRUE );
         break;
 
     case ID_LIBEDIT_REDO:
-        GetComponentFromRedoList();
-        DrawPanel->Refresh( TRUE );
+        if( GetComponentFromRedoList() )
+            DrawPanel->Refresh( TRUE );
         break;
 
     default:

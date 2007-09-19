@@ -250,6 +250,7 @@ unsigned ii;
 	{
 		m_LanguageId = m_EDA_CommonConfig->Read(wxT("Language"), wxLANGUAGE_DEFAULT);
 		g_EditorName = m_EDA_CommonConfig->Read(wxT("Editor"));
+		g_ConfigFileLocationChoice = m_EDA_CommonConfig->Read(HOTKEY_CFG_PATH_OPT, 0L);
 	}
 
 	if ( ! m_EDA_Config ) return;

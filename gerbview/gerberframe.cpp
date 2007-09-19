@@ -57,13 +57,13 @@ BEGIN_EVENT_TABLE(WinEDA_GerberFrame, wxFrame)
 	EVT_MENU(ID_EXIT, WinEDA_GerberFrame::Process_Special_Functions)
 
 	// menu Config
-	EVT_MENU(ID_CONFIG_REQ, WinEDA_GerberFrame::Process_Config)
+	EVT_MENU_RANGE(ID_CONFIG_AND_PREFERENCES_START, ID_CONFIG_AND_PREFERENCES_END,
+		WinEDA_GerberFrame::Process_Config)
+
 	EVT_MENU(ID_COLORS_SETUP, WinEDA_GerberFrame::Process_Config)
 	EVT_MENU(ID_OPTIONS_SETUP, WinEDA_GerberFrame::Process_Config)
 	EVT_MENU(ID_PCB_LOOK_SETUP, WinEDA_GerberFrame::Process_Config)
-	EVT_MENU(ID_CONFIG_SAVE, WinEDA_GerberFrame::Process_Config)
-	EVT_MENU(ID_PREFERENCES_CREATE_CONFIG_HOTKEYS, WinEDA_GerberFrame::Process_Config)
-	EVT_MENU(ID_PREFERENCES_READ_CONFIG_HOTKEYS, WinEDA_GerberFrame::Process_Config)
+
 	EVT_MENU_RANGE(ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,
 		WinEDA_DrawFrame::SetLanguage)
 
