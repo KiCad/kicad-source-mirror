@@ -594,7 +594,7 @@ wxString    ReturnHotkeyConfigFilePath( int choice )
 
 
 /***************************************/
-void AddHotheyConfigMenu( wxMenu* menu )
+void AddHotkeyConfigMenu( wxMenu* menu )
 /***************************************/
 
 /* add hotkey config options to a menu
@@ -647,7 +647,7 @@ void AddHotheyConfigMenu( wxMenu* menu )
 
 
 /************************************************************************/
-void  HandleHotheyConfigMenuSelection( WinEDA_DrawFrame * frame, int id )
+void  HandleHotkeyConfigMenuSelection( WinEDA_DrawFrame * frame, int id )
 /************************************************************************/
 /* called on hotkey file location selecton menu
 *  @param frame = current WinEDA_DrawFrame

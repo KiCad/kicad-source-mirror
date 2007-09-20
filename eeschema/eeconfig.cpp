@@ -1,6 +1,6 @@
 	/******************************************************/
 	/** eeconfig.cpp : routines et menus de configuration */
-/*******************************************************/
+	/*******************************************************/
 	
 #include "fctsys.h"
 #include "common.h"
@@ -100,7 +100,7 @@ wxString FullFileName;
 
 		case ID_PREFERENCES_HOTKEY_PATH_IS_HOME:
 		case ID_PREFERENCES_HOTKEY_PATH_IS_KICAD:
-			HandleHotheyConfigMenuSelection( this, id );
+			HandleHotkeyConfigMenuSelection( this, id );
 			break;
 
 		default:

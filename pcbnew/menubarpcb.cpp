@@ -184,7 +184,7 @@ wxMenuBar * menuBar = GetMenuBar();
 		configmenu->Append(item);
 
 		configmenu->AppendSeparator();
-		AddHotheyConfigMenu( configmenu );
+		AddHotkeyConfigMenu( configmenu );
 
 		/////////////////////////////
 		// Ajustage de dimensions: //

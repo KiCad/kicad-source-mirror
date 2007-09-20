@@ -69,7 +69,7 @@ void WinEDA_GerberFrame::Process_Config( wxCommandEvent& event )
 
     case ID_PREFERENCES_HOTKEY_PATH_IS_HOME:
     case ID_PREFERENCES_HOTKEY_PATH_IS_KICAD:
- 		HandleHotheyConfigMenuSelection( this, id );
+ 		HandleHotkeyConfigMenuSelection( this, id );
         break;
 
     default:

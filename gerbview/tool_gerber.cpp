@@ -124,7 +124,7 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
                                 _( "Save application preferences" ), save_setup_xpm );
 
         configmenu->AppendSeparator();
-		AddHotheyConfigMenu( configmenu );
+		AddHotkeyConfigMenu( configmenu );
 
 
 // Menu drill ( generation fichiers percage)

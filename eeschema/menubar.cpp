@@ -165,7 +165,7 @@ wxString msg;
 		configmenu->Append(item);
 
 		configmenu->AppendSeparator();
-		AddHotheyConfigMenu( configmenu );
+		AddHotkeyConfigMenu( configmenu );
 
 		// Menu Help:
 		wxMenu *helpMenu = new wxMenu;
