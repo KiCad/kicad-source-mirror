@@ -91,7 +91,8 @@ COMMON_GLOBL int g_ConfigFileLocationChoice;    /* 0 = files are in Home directo
 /* Functions:
  */
 wxString    ReturnHotkeyConfigFilePath( int choice );
-void AddHotheyConfigMenu( wxMenu* menu );
+void        AddHotheyConfigMenu( wxMenu* menu );
+void        HandleHotheyConfigMenuSelection( WinEDA_DrawFrame * frame, int id );
 wxString    ReturnKeyNameFromKeyCode( int keycode );
 wxString    ReturnKeyNameFromCommandId( Ki_HotkeyInfo** List, int CommandId );
 wxString    AddHotkeyName( const wxString& text, Ki_HotkeyInfo** List, int CommandId );

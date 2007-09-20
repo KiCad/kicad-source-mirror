@@ -99,19 +99,8 @@ wxString FullFileName;
 			}
 
 		case ID_PREFERENCES_HOTKEY_PATH_IS_HOME:
-			if ( g_ConfigFileLocationChoice != 0 )
-			{
-				g_ConfigFileLocationChoice = 0;
-				m_Parent->m_EDA_CommonConfig->Write(HOTKEY_CFG_PATH_OPT, g_ConfigFileLocationChoice);
-			}
-			break;
-
 		case ID_PREFERENCES_HOTKEY_PATH_IS_KICAD:
-			if ( g_ConfigFileLocationChoice != 1 )
-			{
-				g_ConfigFileLocationChoice = 1;
-				m_Parent->m_EDA_CommonConfig->Write(HOTKEY_CFG_PATH_OPT, g_ConfigFileLocationChoice);
-			}
+			HandleHotheyConfigMenuSelection( this, id );
 			break;
 
 		default:

@@ -639,4 +639,48 @@ void AddHotheyConfigMenu( wxMenu* menu )
 										_( "Hotkey config location" ),
                                         _( "Hotkey config file location selection (home directory or kicad tree)" ),
                                         right_xpm );
+	submenu_hkcfg->Check(ID_PREFERENCES_HOTKEY_PATH_IS_HOME,
+		g_ConfigFileLocationChoice == 0);
+	submenu_hkcfg->Check(ID_PREFERENCES_HOTKEY_PATH_IS_KICAD,
+		g_ConfigFileLocationChoice == 1);
 }
+
+
+/************************************************************************/
+void  HandleHotheyConfigMenuSelection( WinEDA_DrawFrame * frame, int id )
+/************************************************************************/
+/* called on hotkey file location selecton menu
+*  @param frame = current WinEDA_DrawFrame
+*  @param id = selected menu id 
+*  @return g_ConfigFileLocationChoice (global) = new selection
+*/
+{
+wxMenuBar * menu = frame->GetMenuBar();
+	
+	switch (id )
+	{
+		case ID_PREFERENCES_HOTKEY_PATH_IS_HOME:
+			if ( g_ConfigFileLocationChoice != 0 )
+			{
+				g_ConfigFileLocationChoice = 0;
+				menu->Check(ID_PREFERENCES_HOTKEY_PATH_IS_HOME, true);
+				menu->Check(ID_PREFERENCES_HOTKEY_PATH_IS_KICAD, false);
+				frame->m_Parent->m_EDA_CommonConfig->Write(HOTKEY_CFG_PATH_OPT, g_ConfigFileLocationChoice);
+			}
+			break;
+
+		case ID_PREFERENCES_HOTKEY_PATH_IS_KICAD:
+			if ( g_ConfigFileLocationChoice != 1 )
+			{
+				g_ConfigFileLocationChoice = 1;
+				menu->Check(ID_PREFERENCES_HOTKEY_PATH_IS_HOME, false);
+				menu->Check(ID_PREFERENCES_HOTKEY_PATH_IS_KICAD, true);
+				frame->m_Parent->m_EDA_CommonConfig->Write(HOTKEY_CFG_PATH_OPT, g_ConfigFileLocationChoice);
+			}
+			break;
+			
+		default:
+			break;
+	}
+}
+
