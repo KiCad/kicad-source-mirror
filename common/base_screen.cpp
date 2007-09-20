@@ -555,3 +555,29 @@ EDA_BaseStruct* BASE_SCREEN::GetItemFromRedoList()
     return item;
 }
 
+
+#if defined(DEBUG)
+/**
+ * Function Show
+ * is used to output the object tree, currently for debugging only.
+ * @param nestLevel An aid to prettier tree indenting, and is the level 
+ *          of nesting of this object within the overall tree.
+ * @param os The ostream& to output to.
+ */
+void BASE_SCREEN::Show( int nestLevel, std::ostream& os )
+{
+    EDA_BaseStruct* item = EEDrawList;
+    
+    // for now, make it look like XML, expand on this later.
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
+        ">\n";
+    
+    for(  ; item;  item = item->Next() )
+    {
+        item->Show( nestLevel+1, os );
+    }
+    
+    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
+}
+#endif
+    

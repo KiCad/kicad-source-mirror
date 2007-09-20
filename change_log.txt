@@ -4,12 +4,20 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Sep-20 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ eeschema
+  * beautify, add debug Show() functions, changed ReturnFieldName()
+    to return "const wxString&" for speed, added GetFieldValue().
+  * tracking down questionable behavior (a bug?) in erc regarding pwr_flag, still looking
+
+
 2007-sept-20 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + all
-	* hotkeys handling finished
+    * hotkeys handling finished
 + pcbnew
-	* bug fix: a subtle bug in place via : partial drc only was made.
+    * bug fix: a subtle bug in place via : partial drc only was made.
 
 
 2007-Sep-14 UPDATE   Dick Hollenbeck <dick@softplc.com>
@@ -42,11 +50,11 @@ email address.
 2007-sept-13 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + all
-	* EDA_BaseStruct.SetType() removed.
-	The m_StructType member of class EDA_BaseStruct is no more modified in kicad.
-	Now Virtual functions can be widely used.
-	* The old EDA_BaseStruct.ReturnClassName() was removed.
-	the virtual EDA_BaseStruct.GetClass() is used instead. 
+    * EDA_BaseStruct.SetType() removed.
+    The m_StructType member of class EDA_BaseStruct is no more modified in kicad.
+    Now Virtual functions can be widely used.
+    * The old EDA_BaseStruct.ReturnClassName() was removed.
+    the virtual EDA_BaseStruct.GetClass() is used instead. 
 
 + gerbview: hotkeys Ok.
 
@@ -106,10 +114,10 @@ email address.
 ================================================================================
 + eeschema & pcbnew
     Programmable hotkeys update.
-	some features are still subject to change (mainly path for config files: see 2007-aug-30 UPDATE))
-	The preference menu has a command to create and reread config hotkey files.
-	the hotkey ? lists the current hotkeys.
-	
+    some features are still subject to change (mainly path for config files: see 2007-aug-30 UPDATE))
+    The preference menu has a command to create and reread config hotkey files.
+    the hotkey ? lists the current hotkeys.
+    
 
 2007-Sep-4 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
@@ -125,7 +133,7 @@ email address.
 2007-sept-04 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew
-	better comments in editrack-part2 (the todo remark solved) 
+    better comments in editrack-part2 (the todo remark solved) 
 + todo.txt: note about editrack-part2 modified (problem solved)
 
 

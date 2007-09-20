@@ -215,7 +215,7 @@ private:
     char            m_FlagRefreshReq;       /* indique que l'ecran doit redessine */
     char            m_FlagModified;         // indique modif du PCB,utilise pour eviter une sortie sans sauvegarde
     char            m_FlagSave;             // indique sauvegarde auto faite
-    EDA_BaseStruct* m_CurrentItem;          ///< Current selected object
+    EDA_BaseStruct* m_CurrentItem;          ///< Currently selected object
 
     /* Valeurs du pas de grille et du zoom */
 public:
@@ -260,16 +260,11 @@ public:
     /**
      * Function SetCurItem
      * sets the currently selected object, m_CurrentItem.  
-     * This is intentionally not inlined so we can set breakpoints on the 
-     * activity easier in base_screen.cpp.
      * @param current Any object derived from EDA_BaseStruct
      */
-    void            SetCurItem( EDA_BaseStruct* current )
-    {
-        m_CurrentItem = current; 
-    }
-    
+    void SetCurItem( EDA_BaseStruct* current ) {  m_CurrentItem = current; }
     EDA_BaseStruct* GetCurItem() const {  return m_CurrentItem; }
+
     
     /* fonctions relatives au zoom */
     int     GetZoom();                /* retourne le coeff de zoom */
@@ -313,6 +308,18 @@ public:
     {
         return wxT( "BASE_SCREEN" );
     }
+    
+#if defined(DEBUG)
+    /**
+     * Function Show
+     * is used to output the object tree, currently for debugging only.
+     * @param nestLevel An aid to prettier tree indenting, and is the level 
+     *          of nesting of this object within the overall tree.
+     * @param os The ostream& to output to.
+     */
+    void Show( int nestLevel, std::ostream& os );
+#endif
+    
 };
 
 

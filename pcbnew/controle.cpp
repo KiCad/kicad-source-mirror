@@ -441,10 +441,10 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay()
     {
         wxMenu  itemMenu;
 
-        int limit = MIN( MAX_ITEMS_IN_PICKER, m_Collector->GetCount() );
-
         itemMenu.SetTitle( _("Selection Clarification") );  // does this work? not under Linux!
         
+        int limit = MIN( MAX_ITEMS_IN_PICKER, m_Collector->GetCount() );
+
         for( int i=0;  i<limit;  ++i )
         {
             wxString        text;

@@ -15,7 +15,7 @@
 
 /* Definition de la representation du composant */
 #define NUMBER_OF_FIELDS 12 /* Nombre de champs de texte affectes au composant */
-typedef enum {
+enum  NumFieldType {
     REFERENCE = 0,          /* Champ Reference of part, i.e. "IC21" */
     VALUE,                  /* Champ Value of part, i.e. "3.3K" */
     FOOTPRINT,              /* Champ Name Module PCB, i.e. "16DIP300" */
@@ -28,7 +28,7 @@ typedef enum {
     FIELD6,
     FIELD7,
     FIELD8
-} NumFieldType;
+};
 
 
 /* Class to manage component fields.
@@ -46,9 +46,10 @@ public:
 public:
     PartTextStruct( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString );
     ~PartTextStruct();
+    
     virtual wxString GetClass() const
     {
-        return wxT( "PartTextStruct" );
+        return wxT( "PartText" );
     }
 
 
@@ -77,10 +78,18 @@ public:
 public:
     DrawPartStruct( KICAD_T struct_type, const wxPoint &pos );
     ~DrawPartStruct();
+    
     virtual wxString GetClass() const
     {
-        return wxT( "DrawPartStruct" );
+        return wxT( "DrawPart" );
     }
+
+    
+    /**
+     * Function GetReference
+     * returns a reference to the Reference
+     */
+    const wxString& GetReference() { return m_Field[REFERENCE].m_Text; }
 };
 
 
@@ -101,19 +110,30 @@ public:
     
     virtual wxString GetClass() const
     {
-        return wxT( "EDA_SchComponentStruct" );
+        return wxT( "EDA_SchComponent" );
     }
 
 
-    EDA_SchComponentStruct* GenCopy( void );
+    EDA_SchComponentStruct* GenCopy();
     void                    SetRotationMiroir( int type );
     int                     GetRotationMiroir();
     wxPoint                 GetScreenCoord( const wxPoint& coord );
     void                    Display_Infos( WinEDA_DrawFrame* frame );
     void                    ClearAnnotation();
     EDA_Rect                GetBoundaryBox();
-    wxString                ReturnFieldName( int FieldNumber );
 
+    const wxString&         ReturnFieldName( int aFieldNdx ) const;
+    
+
+    /**
+     * Function GetFieldValue
+     * returns a reference to the field value.
+     * @param aFieldNdx An index into the array of fields, 0 - FIELD8
+     * @return const wxString& - the field value or wxEmptyString
+     */
+    const wxString&         GetFieldValue( int aFieldNdx ) const;
+
+    
     virtual void            Draw( WinEDA_DrawPanel* panel,
                                   wxDC* DC,
                                   const wxPoint& offset,
@@ -122,6 +142,17 @@ public:
     void                    SwapData( EDA_SchComponentStruct* copyitem );
 
     virtual void            Place( WinEDA_DrawFrame* frame, wxDC* DC );
+    
+#if defined(DEBUG)    
+    /**
+     * Function Show
+     * is used to output the object tree, currently for debugging only.
+     * @param nestLevel An aid to prettier tree indenting, and is the level 
+     *          of nesting of this object within the overall tree.
+     * @param os The ostream& to output to.
+     */
+    void Show( int nestLevel, std::ostream& os );
+#endif    
 };
 
 

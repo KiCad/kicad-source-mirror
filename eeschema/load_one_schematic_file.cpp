@@ -272,8 +272,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
             if( !Failed )
             {
                 PolylineStruct->Pnext = screen->EEDrawList;
-                screen->EEDrawList    = (EDA_BaseStruct*)
-                                        PolylineStruct;
+                screen->EEDrawList    = (EDA_BaseStruct*) PolylineStruct;
             }
             break;
 
@@ -441,6 +440,10 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
 
     screen->EEDrawList = Phead;
 
+#if defined(DEBUG)
+    screen->Show( 0, std::cout );
+#endif
+    
     fclose( f );
 
     TestDanglingEnds( screen->EEDrawList, NULL );

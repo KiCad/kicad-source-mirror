@@ -188,11 +188,14 @@ void EDA_BaseStruct::Show( int nestLevel, std::ostream& os )
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
 
+    /*
     EDA_BaseStruct* kid = m_Son;
     for( ; kid;  kid = kid->Pnext )
     {
         kid->Show( nestLevel+1, os );
     }
+    */
+    NestedSpace( nestLevel+1, os ) << "Need ::Show() override, shown class is using EDA_BaseStruct::Show()\n";
     
     NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }

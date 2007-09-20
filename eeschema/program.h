@@ -75,9 +75,10 @@ public:
 public:
     EDA_DrawLineStruct( const wxPoint& pos, int layer );
     ~EDA_DrawLineStruct() { }
+    
     virtual wxString GetClass() const
     {
-        return wxT( "EDA_DrawLineStruct" );
+        return wxT( "EDA_DrawLine" );
     }
 
 
@@ -92,6 +93,17 @@ public:
 
     virtual void Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode,
                        int Color = -1 );
+    
+#if defined(DEBUG)    
+    /**
+     * Function Show
+     * is used to output the object tree, currently for debugging only.
+     * @param nestLevel An aid to prettier tree indenting, and is the level 
+     *          of nesting of this object within the overall tree.
+     * @param os The ostream& to output to.
+     */
+    void Show( int nestLevel, std::ostream& os );
+#endif    
 };
 
 
@@ -108,7 +120,7 @@ public:
     ~DrawMarkerStruct();
     virtual wxString GetClass() const
     {
-        return wxT( "DrawMarkerStruct" );
+        return wxT( "DrawMarker" );
     }
 
 
@@ -116,6 +128,16 @@ public:
     wxString            GetComment();
     virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                               int draw_mode, int Color = -1 );
+#if defined(DEBUG)    
+    /**
+     * Function Show
+     * is used to output the object tree, currently for debugging only.
+     * @param nestLevel An aid to prettier tree indenting, and is the level 
+     *          of nesting of this object within the overall tree.
+     * @param os The ostream& to output to.
+     */
+    void Show( int nestLevel, std::ostream& os );
+#endif    
 };
 
 
@@ -129,7 +151,7 @@ public:
     ~DrawNoConnectStruct() { }
     virtual wxString GetClass() const
     {
-        return wxT( "DrawNoConnectStruct" );
+        return wxT( "DrawNoConnect" );
     }
 
 
@@ -154,9 +176,10 @@ public:
 public:
     DrawBusEntryStruct( const wxPoint& pos, int shape, int id );
     ~DrawBusEntryStruct() { }
+    
     virtual wxString GetClass() const
     {
-        return wxT( "DrawBusEntryStruct" );
+        return wxT( "DrawBusEntry" );
     }
 
 
@@ -177,9 +200,10 @@ public:
 public:
     DrawPolylineStruct( int layer );
     ~DrawPolylineStruct();
+    
     virtual wxString GetClass() const
     {
-        return wxT( "DrawPolylineStruct" );
+        return wxT( "DrawPolyline" );
     }
 
 
@@ -197,9 +221,10 @@ public:
 public:
     DrawJunctionStruct( const wxPoint& pos );
     ~DrawJunctionStruct() { }
+    
     virtual wxString GetClass() const
     {
-        return wxT( "DrawJunctionStruct" );
+        return wxT( "DrawJunction" );
     }
 
 
@@ -209,8 +234,7 @@ public:
 };
 
 
-class DrawTextStruct      : public EDA_BaseStruct
-    , public EDA_TextStruct
+class DrawTextStruct : public EDA_BaseStruct, public EDA_TextStruct
 {
 public:
     int  m_Layer;
@@ -224,7 +248,7 @@ public:
 
     virtual wxString GetClass() const
     {
-        return wxT( "DrawTextStruct" );
+        return wxT( "DrawText" );
     }
 
 
@@ -248,7 +272,7 @@ public:
 
     virtual wxString GetClass() const
     {
-        return wxT( "DrawLabelStruct" );
+        return wxT( "DrawLabel" );
     }
 };
 
@@ -264,7 +288,7 @@ public:
 
     virtual wxString GetClass() const
     {
-        return wxT( "DrawGlobalLabelStruct" );
+        return wxT( "DrawGlobalLabel" );
     }
 };
 

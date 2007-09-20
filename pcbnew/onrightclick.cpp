@@ -63,8 +63,8 @@ static wxMenu* Append_Track_Width_List()
  *  @return a pointeur to the menu
  */
 {
-	#define TRACK_HISTORY_NUMBER_MAX 6
-	#define VIA_HISTORY_NUMBER_MAX 4
+    #define TRACK_HISTORY_NUMBER_MAX 6
+    #define VIA_HISTORY_NUMBER_MAX 4
     int      ii;
     wxString msg;
     wxMenu*  trackwidth_menu;
@@ -124,6 +124,7 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     DrawPanel->CursorOff( &dc );
     DrawPanel->m_CanStartBlock = -1;    // Avoid to start a block coomand when clicking on menu
 
+    
     // If command in progress: Put the Cancel command (if needed) and End command
     if( m_ID_current_state )
     {
@@ -160,14 +161,12 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         return;
     }
 
-	/* Select a proper item */
-    if( (item == NULL) || (item->m_Flags == 0) )
+    /* Select a proper item */
+    if( !item  || !item->m_Flags )
     {
         item = PcbGeneralLocateAndDisplay();
-		SetCurItem(item);
     }
 
-	item = GetCurItem();
     if( item )
         flags = item->m_Flags;
     else
@@ -183,10 +182,18 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             if( m_HTOOL_current_state == ID_TOOLBARH_PCB_AUTOPLACE )
             {
                 aPopMenu->AppendSeparator();
-                ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_AUTOPLACE_FIXE_MODULE, _( "Lock Module" ),
-                              Locked_xpm );
-                ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_AUTOPLACE_FREE_MODULE, _( "Unlock Module" ),
-                              Unlocked_xpm );
+                
+                if( !((MODULE*)item)->IsLocked() )
+                {
+                    ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_AUTOPLACE_FIXE_MODULE, _( "Lock Module" ),
+                                  Locked_xpm );
+                }
+                else
+                {
+                    ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_AUTOPLACE_FREE_MODULE, _( "Unlock Module" ),
+                                  Unlocked_xpm );
+                }
+                
                 if( !flags )
                     aPopMenu->Append( ID_POPUP_PCB_AUTOPLACE_CURRENT_MODULE,
                                     _( "Auto place Module" ) );

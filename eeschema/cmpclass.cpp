@@ -143,6 +143,23 @@ wxString DrawMarkerStruct::GetComment()
 }
 
 
+#if defined(DEBUG)
+/**
+ * Function Show
+ * is used to output the object tree, currently for debugging only.
+ * @param nestLevel An aid to prettier tree indenting, and is the level 
+ *          of nesting of this object within the overall tree.
+ * @param os The ostream& to output to.
+ */
+void DrawMarkerStruct::Show( int nestLevel, std::ostream& os )
+{
+    // for now, make it look like XML:
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<  m_Pos 
+        << "/>\n";
+}
+#endif
+
+
 /***************************/
 /* Class EDA_DrawLineStruct */
 /***************************/
@@ -199,6 +216,28 @@ bool EDA_DrawLineStruct::IsOneEndPointAt( const wxPoint& pos )
         return TRUE;
     return FALSE;
 }
+
+
+#if defined(DEBUG)
+/**
+ * Function Show
+ * is used to output the object tree, currently for debugging only.
+ * @param nestLevel An aid to prettier tree indenting, and is the level 
+ *          of nesting of this object within the overall tree.
+ * @param os The ostream& to output to.
+ */
+void EDA_DrawLineStruct::Show( int nestLevel, std::ostream& os )
+{
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << 
+        " layer=\""             << m_Layer      << '"' <<
+        " width=\""             << m_Width      << '"' <<
+        " startIsDangling=\""   << m_StartIsDangling  << '"' << 
+        " endIsDangling=\""     << m_EndIsDangling  << '"' << ">" <<  
+        " <start"               << m_Start      << "/>" <<
+        " <end"                 << m_End        << "/>" <<
+        "</" << GetClass().Lower().mb_str() << ">\n";
+}
+#endif
 
 
 /****************************/
