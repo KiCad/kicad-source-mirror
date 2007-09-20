@@ -373,7 +373,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
     case HK_ADD_VIA:          // Switch to alternate layer and Place a via if a track is in progress
         if( m_ID_current_state != ID_TRACK_BUTT )
             return;
-        if( ItemFree )
+        if( ItemFree )		// no track in progress: switch layer only
         {
             Other_Layer_Route( NULL, DC );
             break;
@@ -382,7 +382,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
             return;
         if( (GetCurItem()->m_Flags & IS_NEW) == 0 )
             return;
-        Other_Layer_Route( (TRACK*) GetCurItem(), DC );
+        Other_Layer_Route( (TRACK*) GetCurItem(), DC );		// place via and switch layer
         if( DisplayOpt.ContrastModeDisplay )
             GetScreen()->SetRefreshReq();
         break;

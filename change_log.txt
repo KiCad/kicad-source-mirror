@@ -8,6 +8,8 @@ email address.
 ================================================================================
 + all
 	* hotkeys handling finished
++ pcbnew
+	* bug fix: a subtle bug in place via : partial drc only was made.
 
 
 2007-Sep-14 UPDATE   Dick Hollenbeck <dick@softplc.com>

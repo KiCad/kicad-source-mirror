@@ -67,13 +67,16 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
 	EVT_MENU_RANGE(ID_CONFIG_AND_PREFERENCES_START, ID_CONFIG_AND_PREFERENCES_END,
 		WinEDA_PcbFrame::Process_Config)
 
+    EVT_MENU( ID_COLORS_SETUP, WinEDA_PcbFrame::Process_Config )
+    EVT_MENU( ID_OPTIONS_SETUP, WinEDA_PcbFrame::Process_Config )
     EVT_MENU( ID_PCB_TRACK_SIZE_SETUP, WinEDA_PcbFrame::Process_Config )
     EVT_MENU( ID_PCB_DRAWINGS_WIDTHS_SETUP, WinEDA_PcbFrame::Process_Config )
     EVT_MENU( ID_PCB_PAD_SETUP, WinEDA_PcbFrame::Process_Config )
     EVT_MENU( ID_PCB_LOOK_SETUP, WinEDA_PcbFrame::Process_Config )
     EVT_MENU( ID_CONFIG_SAVE, WinEDA_PcbFrame::Process_Config )
     EVT_MENU( ID_CONFIG_READ, WinEDA_PcbFrame::Process_Config )
-    EVT_MENU( ID_PCB_USER_GRID_SETUP, WinEDA_PcbFrame::Process_Special_Functions )
+
+	EVT_MENU( ID_PCB_USER_GRID_SETUP, WinEDA_PcbFrame::Process_Special_Functions )
     
     EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,
                     WinEDA_DrawFrame::SetLanguage )

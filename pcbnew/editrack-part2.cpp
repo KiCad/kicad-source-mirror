@@ -162,6 +162,8 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
  *  if a track is in progress :
  *		put (if possible, i.e. if no DRC problem) a Via on the end of the current
  *		track, swap the current active layer and start a new trac segment on the new layer
+ * @param track = track in progress, or NULL
+ * @param DC = current device context
  */
 {
     TRACK*  pt_segm;
@@ -191,20 +193,27 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
             return;
     }
 
-    /* Is the current segment Ok (no DRC error) */
+    /* Is the current segment Ok (no DRC error) ? */
     if( Drc_On )
+    {
         if( Drc( this, DC, g_CurrentTrackSegment, m_Pcb->m_Track, 1 ) == BAD_DRC )
-			/* DRC error, the change layer is not made */
+            /* DRC error, the change layer is not made */
             return;
+        if( g_TwoSegmentTrackBuild && g_CurrentTrackSegment->Back() )    // We must handle 2 segments
+        {
+            if( Drc( this, DC, g_CurrentTrackSegment->Back(), m_Pcb->m_Track, 1 ) == BAD_DRC )
+                return;
+        }
+    }
 
     /* Saving current state before placing a via.
-		If the via canot be placed this current state will be reused */
+     *  If the via canot be placed this current state will be reused */
     itmp = g_TrackSegmentCount;
     Begin_Route( g_CurrentTrackSegment, DC );
 
     DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 
-	/* create the via */
+    /* create the via */
     Via = new SEGVIA( m_Pcb );
     Via->m_Flags   = IS_NEW;
     Via->m_Width   = g_DesignSettings.m_CurrentViaSize;
@@ -220,7 +229,7 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
     else
         GetScreen()->m_Active_Layer = GetScreen()->m_Route_Layer_BOTTOM;
 
-	/* Adjust the via layer pair */
+    /* Adjust the via layer pair */
     if( (Via->m_Shape & 15) == VIA_ENTERREE )
     {
         Via->SetLayer( old_layer | GetScreen()->m_Active_Layer << 4 );
@@ -230,10 +239,10 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
         Via->SetLayer( old_layer | GetScreen()->m_Active_Layer << 4 );
     }
     else
-        Via->SetLayer( 0x0F );	// Usual via is from copper to component; layer pair is 0 and 0x0F
+        Via->SetLayer( 0x0F ); // Usual via is from copper to component; layer pair is 0 and 0x0F
 
     if( Drc_On &&( Drc( this, DC, Via, m_Pcb->m_Track, 1 ) == BAD_DRC ) )
-    { 
+    {
         /* DRC fault: the Via cannot be placed here ... */
         delete Via;
         GetScreen()->m_Active_Layer = old_layer;
@@ -242,39 +251,39 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
     }
 
     /* A new via was created. It was Ok.
-	Put it in linked list, after the g_CurrentTrackSegment */
+     *  Put it in linked list, after the g_CurrentTrackSegment */
     Via->Pback = g_CurrentTrackSegment;
     g_CurrentTrackSegment->Pnext = Via;
     g_TrackSegmentCount++;
 
-	/* The g_CurrentTrackSegment is now in linked list and we need a new track segment 
-	after the via, starting at via location.
-	it will become the new curren segment (from via to the mouse cursor)
-	*/
-	g_CurrentTrackSegment = g_CurrentTrackSegment->Copy();	/* create a new segment
-	from the last entered segment, with the current width, flags, netcode, etc... values
-	layer, start and end point are not correct, and will be modified next */
-    
-    g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer );	// set the layer to the new value
-    
-	/* the start point is the via position,
-	and the end point is the cursor which also is on the via (will change when moving mouse)
-	*/
+    /* The g_CurrentTrackSegment is now in linked list and we need a new track segment
+     *  after the via, starting at via location.
+     *  it will become the new curren segment (from via to the mouse cursor)
+     */
+    g_CurrentTrackSegment = g_CurrentTrackSegment->Copy();  /* create a new segment
+                                                             *  from the last entered segment, with the current width, flags, netcode, etc... values
+                                                             *  layer, start and end point are not correct, and will be modified next */
+
+    g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer ); // set the layer to the new value
+
+    /* the start point is the via position,
+     *  and the end point is the cursor which also is on the via (will change when moving mouse)
+     */
     g_CurrentTrackSegment->m_Start = g_CurrentTrackSegment->m_End = Via->m_Start;
-    
+
     g_TrackSegmentCount++;
-    
+
     g_CurrentTrackSegment->Pback = Via;
-    
+
     Via->Pnext = g_CurrentTrackSegment;
-    
+
     if( g_TwoSegmentTrackBuild )
-    {   
+    {
         // Create a second segment (we must have 2 track segments to adjust)
         TRACK* track = g_CurrentTrackSegment;
-        
+
         g_CurrentTrackSegment = track->Copy();
-        
+
         g_TrackSegmentCount++;
         g_CurrentTrackSegment->Pback = track;
         track->Pnext = g_CurrentTrackSegment;
@@ -324,7 +333,7 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
     MODULE*  Module = NULL;
 
     if( g_Show_Ratsnest )
-        return;                     // Deja Affich�
+        return; // Deja Affich�
 
     if( (m_Pcb->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
     {
@@ -338,7 +347,7 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
             pt_pad = (D_PAD*) item;
             Module = (MODULE*) pt_pad->m_Parent;
         }
-    
+
         if( pt_pad ) /* Affichage du chevelu du net correspondant */
         {
             pt_pad->Display_Infos( this );
@@ -352,7 +361,7 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
                     pt_chevelu->status |= CH_VISIBLE;
                     if( (pt_chevelu->status & CH_ACTIF) == 0 )
                         continue;
-    
+
                     GRSetDrawMode( DC, GR_XOR );
                     GRLine( &DrawPanel->m_ClipBox, DC, pt_chevelu->pad_start->m_Pos.x,
                             pt_chevelu->pad_start->m_Pos.y,
@@ -370,12 +379,11 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
                 if( item->m_Parent && (item->m_Parent->Type()  == TYPEMODULE) )
                     Module = (MODULE*) item->m_Parent;
             }
-            
             else if( item->Type() == TYPEMODULE )
             {
                 Module = (MODULE*) item;
             }
-    
+
             if( Module )
             {
                 Module->Display_Infos( this );
@@ -390,11 +398,11 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
                         {
                             if( pt_chevelu->status & CH_VISIBLE )
                                 continue;
-    
+
                             pt_chevelu->status |= CH_VISIBLE;
                             if( (pt_chevelu->status & CH_ACTIF) == 0 )
                                 continue;
-    
+
                             GRSetDrawMode( DC, GR_XOR );
                             GRLine( &DrawPanel->m_ClipBox, DC, pt_chevelu->pad_start->m_Pos.x,
                                     pt_chevelu->pad_start->m_Pos.y,
@@ -405,7 +413,7 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
                         }
                     }
                 }
-    
+
                 pt_pad = NULL;
             }
         }
@@ -417,7 +425,7 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
     {
         DrawGeneralRatsnest( DC );
         pt_chevelu = (CHEVELU*) m_Pcb->m_Ratsnest;
-        
+
         for( ii = m_Pcb->GetNumRatsnests(); (ii > 0) && pt_chevelu; pt_chevelu++, ii-- )
             pt_chevelu->status &= ~CH_VISIBLE;
     }
