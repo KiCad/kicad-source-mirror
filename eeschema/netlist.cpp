@@ -77,6 +77,8 @@ void ObjetNetListStruct::Show( std::ostream& out, int ndx )
     
     if( m_Comp )
         m_Comp->Show( 1, out );
+    else
+        out << " m_Comp==NULL\n";
     
     out << "</netItem>\n";
 }
@@ -294,7 +296,7 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
     }
 
    
-#if defined(DEBUG)
+#if 0 && defined(DEBUG)
     std::cout << "after sheet local\n";
     dumpNetTable();
 #endif    
@@ -333,7 +335,7 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
         }
     }
 
-#if defined(DEBUG)
+#if 0 && defined(DEBUG)
     std::cout << "after sheet global\n";
     dumpNetTable();
 #endif    
@@ -354,7 +356,7 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
     qsort( g_TabObjNet, g_NbrObjNet, sizeof(ObjetNetListStruct), TriNetCode );
 
     
-#if defined(DEBUG)
+#if 0 && defined(DEBUG)
     std::cout << "after qsort()\n";
     dumpNetTable();
 #endif    

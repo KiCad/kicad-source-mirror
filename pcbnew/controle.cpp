@@ -422,7 +422,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay()
         SetCurItem( item );        
     }
     
-    // If the first item is a pad or moduletext, and the 2nd item is its parent module:
+    // If the count is 2, and first item is a pad or moduletext, and the 2nd item is its parent module:
     else if( m_Collector->GetCount() == 2 && 
         ( (*m_Collector)[0]->Type() == TYPEPAD || (*m_Collector)[0]->Type() == TYPETEXTEMODULE) && 
         (*m_Collector)[1]->Type() == TYPEMODULE && (*m_Collector)[0]->GetParent()==(*m_Collector)[1] )

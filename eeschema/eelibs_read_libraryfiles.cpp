@@ -136,12 +136,16 @@ void LoadLibraries( WinEDA_DrawFrame* frame )
 
         if( LibName.IsEmpty() )
             continue;
+        
         FullLibName = MakeFileName( g_RealLibDirBuffer, LibName, g_LibExtBuffer );
+        
         msg = wxT( "Loading " ) + FullLibName;
+        
         if( LoadLibraryName( frame, FullLibName, LibName ) )
             msg += wxT( " OK" );
         else
             msg += wxT( " ->Error" );
+        
         frame->PrintMsg( msg );
     }
 
@@ -159,7 +163,7 @@ void LoadLibraries( WinEDA_DrawFrame* frame )
     LibraryStruct** libs =
         (LibraryStruct**) MyZMalloc( sizeof(LibraryStruct *) * (NumOfLibs + 2) );
 
-    int             jj = 0;
+    int jj = 0;
     for( ii = 0; ii < g_LibName_List.GetCount(); ii++ )
     {
         if( jj >= NumOfLibs )
@@ -348,7 +352,10 @@ EDA_LibComponentStruct* Read_Component_Definition( WinEDA_DrawFrame* frame, char
  */
 {
     int      unused;
-    char*    p, * Name, * Prefix = NULL;
+    char*    p;
+    char*    name;
+    char*    prefix = NULL;
+    
     EDA_LibComponentStruct* LibEntry = NULL;
     bool     Res;
     wxString Msg;
@@ -366,8 +373,8 @@ EDA_LibComponentStruct* Read_Component_Definition( WinEDA_DrawFrame* frame, char
     char drawnum = 0, drawname = 0;
     LibEntry = new EDA_LibComponentStruct( NULL );
 
-    if( ( Name = strtok( NULL, " \t\n" ) ) == NULL      /* Part name: */
-       || ( Prefix = strtok( NULL, " \t\n" ) ) == NULL  /* Prefix name: */
+    if( ( name = strtok( NULL, " \t\n" ) ) == NULL      /* Part name: */
+       || ( prefix = strtok( NULL, " \t\n" ) ) == NULL  /* Prefix name: */
        || ( p = strtok( NULL, " \t\n" ) ) == NULL       /* NumOfPins: */
        || sscanf( p, "%d", &unused ) != 1
        || ( p = strtok( NULL, " \t\n" ) ) == NULL       /* TextInside: */
@@ -394,23 +401,24 @@ EDA_LibComponentStruct* Read_Component_Definition( WinEDA_DrawFrame* frame, char
     {
         LibEntry->m_DrawPinNum  = (drawnum == 'N') ? FALSE : TRUE;
         LibEntry->m_DrawPinName = (drawname == 'N') ? FALSE : TRUE;
+        
         /* Copy part name and prefix. */
-        strupper( Name );
-        if( Name[0] != '~' )
-            LibEntry->m_Name.m_Text = CONV_FROM_UTF8( Name );
+        strupper( name );
+        if( name[0] != '~' )
+            LibEntry->m_Name.m_Text = CONV_FROM_UTF8( name );
         else
         {
-            LibEntry->m_Name.m_Text       = CONV_FROM_UTF8( &Name[1] );
+            LibEntry->m_Name.m_Text       = CONV_FROM_UTF8( &name[1] );
             LibEntry->m_Name.m_Attributs |= TEXT_NO_VISIBLE;
         }
 
-        if( strcmp( Prefix, "~" ) == 0 )
+        if( strcmp( prefix, "~" ) == 0 )
         {
             LibEntry->m_Prefix.m_Text.Empty();
             LibEntry->m_Prefix.m_Attributs |= TEXT_NO_VISIBLE;
         }
         else
-            LibEntry->m_Prefix.m_Text = CONV_FROM_UTF8( Prefix );
+            LibEntry->m_Prefix.m_Text = CONV_FROM_UTF8( prefix );
 
         // Copy optional infos
         if( ( p = strtok( NULL, " \t\n" ) ) != NULL ) // m_UnitSelectionLocked param
@@ -525,7 +533,10 @@ static LibEDA_BaseStruct* GetDrawEntry( WinEDA_DrawFrame* frame, FILE* f, char* 
                                 &Arc->m_Width, chartmp, &startx, &starty, &endx, &endy );
             if( nbarg < 8 )
                 Error = TRUE;
-            Arc->m_Unit = Unit; Arc->m_Convert = Convert;
+            
+            Arc->m_Unit = Unit; 
+            Arc->m_Convert = Convert;
+            
             if( chartmp[0] == 'F' )
                 Arc->m_Fill = FILLED_SHAPE;
             if( chartmp[0] == 'f' )
@@ -625,8 +636,11 @@ static LibEDA_BaseStruct* GetDrawEntry( WinEDA_DrawFrame* frame, FILE* f, char* 
             Pin->m_PinLen = ll;
             Pin->m_Orient = chartmp1[0] & 255;
 
-            Pin->m_Unit = Unit; Pin->m_Convert = Convert;
+            Pin->m_Unit = Unit; 
+            Pin->m_Convert = Convert;
+            
             strncpy( (char*) &Pin->m_PinNum, PinNum, 4 );
+            
             Error = (i != 11 && i != 12);
 
             Pin->m_PinName = CONV_FROM_UTF8( BufName );
@@ -672,6 +686,7 @@ static LibEDA_BaseStruct* GetDrawEntry( WinEDA_DrawFrame* frame, FILE* f, char* 
             }
 
             if( i == 12 )       /* Special Symbole defined */
+            {
                 for( jj = strlen( Buffer ); jj > 0; )
                 {
                     switch( Buffer[--jj] )
@@ -700,6 +715,7 @@ static LibEDA_BaseStruct* GetDrawEntry( WinEDA_DrawFrame* frame, FILE* f, char* 
                         DisplayError( frame, MsgLine ); break;
                     }
                 }
+            }
 
         }
             break;
@@ -852,7 +868,8 @@ static bool GetLibEntryField( EDA_LibComponentStruct* LibEntry, char* line )
 
     if( *line == 0 )
         return 0;
-    line++; Text = line;
+    line++; 
+    Text = line;
 
     /* recherche fin de texte */
     while( *line && (*line != '"') )
@@ -860,17 +877,23 @@ static bool GetLibEntryField( EDA_LibComponentStruct* LibEntry, char* line )
 
     if( *line == 0 )
         return 0;
-    *line = 0; line++;
+    *line = 0; 
+    line++;
 
     FieldUserName[0] = 0;
+    
     nbparam = sscanf( line, " %d %d %d %c %c %c %c",
                       &posx, &posy, &size, Char1, Char2, Char3, Char4 );
-    orient   = TEXT_ORIENT_HORIZ; if( Char1[0] == 'V' )
+    orient   = TEXT_ORIENT_HORIZ;
+    
+    if( Char1[0] == 'V' )
         orient = TEXT_ORIENT_VERT;
     draw     = TRUE; if( Char2[0] == 'I' )
         draw = FALSE;
+    
     hjustify = GR_TEXT_HJUSTIFY_CENTER;
     vjustify = GR_TEXT_VJUSTIFY_CENTER;
+    
     if( nbparam >= 6 )
     {
         if( *Char3 == 'L' )
@@ -898,6 +921,7 @@ static bool GetLibEntryField( EDA_LibComponentStruct* LibEntry, char* line )
     default:
         if( NumOfField >= NUMBER_OF_FIELDS )
             break;
+        
         Field = new LibDrawField( NumOfField );
 
         Field->Pnext     = LibEntry->Fields;
@@ -910,15 +934,19 @@ static bool GetLibEntryField( EDA_LibComponentStruct* LibEntry, char* line )
 
     Field->m_Pos.x  = posx; Field->m_Pos.y = posy;
     Field->m_Orient = orient;
+    
     if( draw == FALSE )
         Field->m_Attributs |= TEXT_NO_VISIBLE;
+    
     Field->m_Size.x = Field->m_Size.y = size;
     Field->m_Text   = CONV_FROM_UTF8( Text );
+    
     if( NumOfField >= FIELD1 )
     {
         ReadDelimitedText( FieldUserName, line, sizeof(FieldUserName) );
         Field->m_Name = CONV_FROM_UTF8( FieldUserName );
     }
+    
     Field->m_HJustify = hjustify;
     Field->m_VJustify = vjustify;
     return TRUE;
@@ -992,7 +1020,8 @@ int LoadDocLib( WinEDA_DrawFrame* frame, const wxString& FullDocLibName, const w
         return 0;
 
     if( GetLine( f, Line, &LineNum, sizeof(Line) ) == NULL )
-    {   /* pas de lignes utiles */
+    {   
+        /* pas de lignes utiles */
         fclose( f );
         return 0;
     }
@@ -1100,6 +1129,7 @@ void EDA_LibComponentStruct::SortDrawItems()
 
     BufentryBase =
         (LibEDA_BaseStruct**) MyZMalloc( (nbitems + 1) * sizeof(LibEDA_BaseStruct *) );
+        
     /* memorisation du chainage : */
     for( Entry = m_Drawings, ii = 0; Entry != NULL; Entry = Entry->Next() )
         BufentryBase[ii++] = Entry;
