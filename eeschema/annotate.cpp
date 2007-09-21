@@ -9,7 +9,7 @@
 
 /* fonctions exportees */
 int         ListeComposants( CmpListStruct* BaseListeCmp, SCH_SCREEN* screen, int NumSheet );
-int         AnnotTriComposant( CmpListStruct* Objet1, CmpListStruct* Objet2 );
+int         AnnotTriComposant( const void* o1, const void* o2 );
 void        BreakReference( CmpListStruct* BaseListeCmp, int NbOfCmp );
 
 /* fonctions locales */
@@ -236,8 +236,7 @@ int ListeComposants( CmpListStruct* BaseListeCmp, SCH_SCREEN* screen, int NumShe
     EDA_LibComponentStruct* Entry;
 
     DrawList = screen->EEDrawList;
-
-    while( DrawList )
+    for(  ; DrawList;   DrawList = DrawList->Pnext )
     {
         switch( DrawList->Type() )
         {
@@ -253,20 +252,25 @@ int ListeComposants( CmpListStruct* BaseListeCmp, SCH_SCREEN* screen, int NumShe
             Entry = FindLibPart( DrawLibItem->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
             if( Entry == NULL )
                 break;
+            
             if( BaseListeCmp == NULL )      /* Items counting only */
             {
-                NbrCmp++; break;
+                NbrCmp++; 
+                break;
             }
+            
             BaseListeCmp[NbrCmp].m_Cmp         = DrawLibItem;
             BaseListeCmp[NbrCmp].m_NbParts     = Entry->m_UnitCount;
             BaseListeCmp[NbrCmp].m_Unit        = DrawLibItem->m_Multi;
             BaseListeCmp[NbrCmp].m_PartsLocked = Entry->m_UnitSelectionLocked;
             BaseListeCmp[NbrCmp].m_Sheet       = NumSheet;
             BaseListeCmp[NbrCmp].m_IsNew       = FALSE;
-            BaseListeCmp[NbrCmp].m_Pos = DrawLibItem->m_Pos;
-            BaseListeCmp[NbrCmp].m_TimeStamp = DrawLibItem->m_TimeStamp;
+            BaseListeCmp[NbrCmp].m_Pos         = DrawLibItem->m_Pos;
+            BaseListeCmp[NbrCmp].m_TimeStamp   = DrawLibItem->m_TimeStamp;
+            
             if( DrawLibItem->m_Field[REFERENCE].m_Text.IsEmpty() )
                 DrawLibItem->m_Field[REFERENCE].m_Text = wxT( "DefRef?" );
+            
             strncpy( BaseListeCmp[NbrCmp].m_TextRef,
                      CONV_TO_UTF8( DrawLibItem->m_Field[REFERENCE].m_Text ), 32 );
 
@@ -274,6 +278,7 @@ int ListeComposants( CmpListStruct* BaseListeCmp, SCH_SCREEN* screen, int NumShe
 
             if( DrawLibItem->m_Field[VALUE].m_Text.IsEmpty() )
                 DrawLibItem->m_Field[VALUE].m_Text = wxT( "~" );
+            
             strncpy( BaseListeCmp[NbrCmp].m_TextValue,
                      CONV_TO_UTF8( DrawLibItem->m_Field[VALUE].m_Text ), 32 );
             NbrCmp++;
@@ -291,8 +296,6 @@ int ListeComposants( CmpListStruct* BaseListeCmp, SCH_SCREEN* screen, int NumShe
         default:
             break;
         }
-
-        DrawList = DrawList->Pnext;
     }
 
     return NbrCmp;
@@ -300,7 +303,7 @@ int ListeComposants( CmpListStruct* BaseListeCmp, SCH_SCREEN* screen, int NumShe
 
 
 /*****************************************************************/
-int AnnotTriComposant( CmpListStruct* Objet1, CmpListStruct* Objet2 )
+int AnnotTriComposant( const void* o1, const void* o2 )
 /****************************************************************/
 
 /* function used par qsort() for sorting the list
@@ -312,9 +315,11 @@ int AnnotTriComposant( CmpListStruct* Objet1, CmpListStruct* Objet2 )
  *                  if same sheet, by time stamp
  **/
 {
-    int ii;
+    CmpListStruct* Objet1 = (CmpListStruct*) o1; 
+    CmpListStruct* Objet2 = (CmpListStruct*) o2;
 
-    ii = strnicmp( Objet1->m_TextRef, Objet2->m_TextRef, 32 );
+    int ii = strnicmp( Objet1->m_TextRef, Objet2->m_TextRef, 32 );
+    
     if( SortByPosition == TRUE )
     {
         if( ii == 0 )
@@ -401,7 +406,8 @@ void BreakReference( CmpListStruct* BaseListeCmp, int NbOfCmp )
             BaseListeCmp[ii].m_IsNew = TRUE;
             if( !BaseListeCmp[ii].m_PartsLocked )
                 BaseListeCmp[ii].m_Unit = 0x7FFFFFFF;
-            Text[ll] = 0; continue;
+            Text[ll] = 0; 
+            continue;
         }
 
         if( isdigit( Text[ll] ) == 0 )
@@ -646,7 +652,8 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool OneSheetOnly )
     /* 2eme passe : Remplissage du tableau des caracteristiques */
     if( OneSheetOnly == 0 )
     {
-        ii = 0; screen = ScreenSch;
+        ii = 0; 
+        screen = ScreenSch;
         for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
         {
             ii += ListeComposants( ListeCmp + ii, screen, NumSheet );
@@ -658,9 +665,7 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool OneSheetOnly )
         ListeComposants( ListeCmp, screen, NumSheet );
     }
 
-    qsort( ListeCmp, NbOfCmp, sizeof(CmpListStruct),
-           ( int( * ) ( const void*, const void* ) )AnnotTriComposant );
-
+    qsort( ListeCmp, NbOfCmp, sizeof(CmpListStruct), AnnotTriComposant );
 
     /* Separation des Numeros de la reference: IC1 -> IC, et 1 dans .m_NumRef */
     BreakReference( ListeCmp, NbOfCmp );
@@ -669,13 +674,16 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool OneSheetOnly )
     error = 0;
     for( ii = 0; ii < NbOfCmp - 1; ii++ )
     {
-        msg.Empty(); Buff.Empty();
+        msg.Empty(); 
+        Buff.Empty();
+        
         if( ListeCmp[ii].m_IsNew )
         {
             if( ListeCmp[ii].m_NumRef >= 0 )
                 Buff << ListeCmp[ii].m_NumRef;
             else
                 Buff = wxT( "?" );
+            
             cmpref = CONV_FROM_UTF8( ListeCmp[ii].m_TextRef );
             msg.Printf( _( "item not annotated: %s%s" ), cmpref.GetData(), Buff.GetData() );
 
@@ -685,7 +693,8 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool OneSheetOnly )
                 msg << Buff;
             }
             DisplayError( NULL, msg );
-            error++; break;
+            error++; 
+            break;
         }
 
         if( MAX( ListeCmp[ii].m_NbParts, 1 ) < ListeCmp[ii].m_Unit  ) // Annotate error
@@ -702,24 +711,27 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool OneSheetOnly )
                          ListeCmp[ii].m_Unit, ListeCmp[ii].m_NbParts );
             msg << Buff;
             DisplayError( frame, msg );
-            error++; break;
+            error++; 
+            break;
         }
     }
 
     if( error )
         return error;
 
-    /* comptage des elements doublés (si tous sont annotés) */
+    // count the duplicated elements (if all are annotated)
     for( ii = 0; (ii < NbOfCmp - 1) && (error < 4); ii++ )
     {
-        msg.Empty(); Buff.Empty();
+        msg.Empty(); 
+        Buff.Empty();
+        
         if( (stricmp( ListeCmp[ii].m_TextRef, ListeCmp[ii + 1].m_TextRef ) != 0)
            || ( ListeCmp[ii].m_NumRef != ListeCmp[ii + 1].m_NumRef ) )
             continue;
         /* Meme reference trouvée */
 
         /* Il y a erreur si meme unite */
-        if( ListeCmp[ii].m_Unit == ListeCmp[ii + 1].m_Unit )
+        if( ListeCmp[ii].m_Unit == ListeCmp[ii+1].m_Unit )
         {
             if( ListeCmp[ii].m_NumRef >= 0 )
                 Buff << ListeCmp[ii].m_NumRef;
@@ -736,7 +748,8 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool OneSheetOnly )
                 msg << Buff;
             }
             DisplayError( frame, msg );
-            error++; continue;
+            error++; 
+            continue;
         }
 
         /* Il y a erreur si unites differentes mais nombre de parts differentes
@@ -771,9 +784,9 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool OneSheetOnly )
             nextcmpvalue = CONV_FROM_UTF8( ListeCmp[ii + 1].m_TextValue );
             msg.Printf( _( "Diff values for %s%d%c (%s) and %s%d%c (%s)" ),
                        cmpref.GetData(), ListeCmp[ii].m_NumRef, ListeCmp[ii].m_Unit + 'A' - 1,
-                       cmpvalue.GetData(),
-                       nextcmpref.GetData(
-                           ), ListeCmp[ii + 1].m_NumRef, ListeCmp[ii + 1].m_Unit + 'A' - 1,
+                       cmpvalue.GetData(), nextcmpref.GetData(), 
+                       ListeCmp[ii + 1].m_NumRef, 
+                       ListeCmp[ii + 1].m_Unit + 'A' - 1,
                        nextcmpvalue.GetData() );
 
             DisplayError( frame, msg );

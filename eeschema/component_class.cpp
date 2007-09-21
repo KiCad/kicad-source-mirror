@@ -49,21 +49,21 @@ const wxString& ReturnDefaultFieldName( int aFieldNdx )
  *  for I18n
  */
 {
-    // avoid unnecessarily copying wxStrings.
+    // avoid unnecessarily copying wxStrings at runtime.
     static const wxString FieldDefaultNameList[] = {
-        _( "Ref" ),         /* Reference of part, i.e. "IC21" */
-        _( "Value" ),       /* Value of part, i.e. "3.3K" */
-        _( "Footprint" ),   /* Footprint, used by cvpcb or pcbnew, i.e. "16DIP300" */
-        _( "Sheet" ),       /* for components which are a schematic file, schematic file name, i.e. "cnt16.sch" */
-        _( "Field1" ),      /* User fields (1 to n) have an editable name*/
-        _( "Field2" ),
-        _( "Field3" ),
-        _( "Field4" ),
-        _( "Field5" ),
-        _( "Field6" ),
-        _( "Field7" ),
-        _( "Field8" ),
-        wxT( "badFieldNdx!" )       // error, and "sentinel" value
+        _( "Ref" ),             /* Reference of part, i.e. "IC21" */
+        _( "Value" ),           /* Value of part, i.e. "3.3K" */
+        _( "Footprint" ),       /* Footprint, used by cvpcb or pcbnew, i.e. "16DIP300" */
+        _( "Sheet" ),           /* for components which are a schematic file, schematic file name, i.e. "cnt16.sch" */
+        wxString(_( "Field" ))+wxT("1"),
+        wxString(_( "Field" ))+wxT("2"),
+        wxString(_( "Field" ))+wxT("3"),
+        wxString(_( "Field" ))+wxT("4"),
+        wxString(_( "Field" ))+wxT("5"),
+        wxString(_( "Field" ))+wxT("6"),
+        wxString(_( "Field" ))+wxT("7"),
+        wxString(_( "Field" ))+wxT("8"),
+        wxT( "badFieldNdx!" )               // error, and "sentinel" value
     };
     
     if( (unsigned) aFieldNdx > FIELD8 )     // catches < 0 also

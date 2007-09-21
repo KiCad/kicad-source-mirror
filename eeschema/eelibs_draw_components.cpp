@@ -348,7 +348,7 @@ EDA_LibComponentStruct* FindLibPart( const wxChar* Name, const wxString& LibName
 {
     EDA_LibComponentStruct* Entry;
 
-    static EDA_LibComponentStruct DummyEntry( wxEmptyString );/* Used only to call PQFind. */
+    static EDA_LibComponentStruct DummyEntry( wxEmptyString );  /* Used only to call PQFind. */
 
     LibraryStruct* Lib = g_LibraryList;
 
@@ -357,24 +357,30 @@ EDA_LibComponentStruct* FindLibPart( const wxChar* Name, const wxString& LibName
 
     PQCompFunc( (PQCompFuncType) LibraryEntryCompare );
 
-    Entry = NULL; FindLibName.Empty();
+    Entry = NULL; 
+    FindLibName.Empty();
+    
     while( Lib )
     {
         if( !LibName.IsEmpty() )
         {
             if( Lib->m_Name != LibName )
             {
-                Lib = Lib->m_Pnext; continue;
+                Lib = Lib->m_Pnext; 
+                continue;
             }
         }
+        
         if( Lib == NULL )
             break;
+        
         Entry = (EDA_LibComponentStruct*) PQFind( Lib->m_Entries, &DummyEntry );
         if( Entry != NULL )
         {
             FindLibName = Lib->m_Name;
             break;
         }
+        
         Lib = Lib->m_Pnext;
     }
 
@@ -425,11 +431,13 @@ void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
         /* Elimination des elements non relatifs a l'unite */
         if( Multi && DEntry->m_Unit && (DEntry->m_Unit != Multi) )
             continue;
+        
         if( convert && DEntry->m_Convert && (DEntry->m_Convert != convert) )
             continue;
 
         if( DEntry->m_Flags & IS_MOVED )
             continue;                               // Element en deplacement non trace
+        
         SetHightColor = (DEntry->m_Selected & IS_SELECTED) ? HIGHT_LIGHT_FLAG : 0;
         LineWidth = MAX( DEntry->m_Width, g_DrawMinimunLineWidth );
 
@@ -494,10 +502,12 @@ void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
         {
             LibDrawCircle* Circle = (LibDrawCircle*) DEntry;
             CharColor = GETCOLOR( LAYER_DEVICE );
+            
             x1 = Pos.x + TransMat[0][0] * Circle->m_Pos.x +
                  TransMat[0][1] * Circle->m_Pos.y;
             y1 = Pos.y + TransMat[1][0] * Circle->m_Pos.x +
                  TransMat[1][1] * Circle->m_Pos.y;
+                 
             fill_option = Circle->m_Fill & (~g_PrintFillMask);
             if( Color < 0 )
             {
@@ -526,10 +536,12 @@ void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
             /* The text orientation may need to be flipped if the
              *  transformation matrix cuases xy axes to be flipped. */
             t1 = (TransMat[0][0] != 0) ^ (Text->m_Horiz != 0);
+            
             x1 = Pos.x + TransMat[0][0] * Text->m_Pos.x
                  + TransMat[0][1] * Text->m_Pos.y;
             y1 = Pos.y + TransMat[1][0] * Text->m_Pos.x
                  + TransMat[1][1] * Text->m_Pos.y;
+                 
             DrawGraphicText( panel, DC, wxPoint( x1, y1 ), CharColor, Text->m_Text,
                              t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
                              Text->m_Size,
@@ -579,6 +591,7 @@ void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
                    && !g_ShowAllPins )
                     break;
             }
+            
             /* Calcul de l'orientation reelle de la Pin */
             orient = Pin->ReturnPinDrawOrient( TransMat );
 

@@ -36,7 +36,7 @@ typedef enum {
 /* Max pin number per component and footprint */
 #define MAXPIN 5000
 
-typedef enum {      /* Type des objets de Net */
+enum NetObjetType {      /* Type des objets de Net */
     NET_SEGMENT,
     NET_BUS,
     NET_JONCTION,
@@ -49,20 +49,21 @@ typedef enum {      /* Type des objets de Net */
     NET_PINLABEL,
     NET_PIN,
     NET_NOCONNECT
-} NetObjetType;
+};
 
-typedef enum {  /* Valeur du Flag de connection */
+
+enum  IsConnectType {  /* Valeur du Flag de connection */
     UNCONNECT,  /* Pin ou Label non connecte */
     NOCONNECT,  /* Pin volontairement non connectee (Symb. NoConnect utilise) */
     CONNECT     /* connexion normale */
-} IsConnectType;
+};
 
 
 /* Structure decrivant 1 element de connexion (pour netlist ) */
 class ObjetNetListStruct
 {
 public:
-    void*           m_Comp;             /* Pointeur sur la definition de l'objet */
+    EDA_BaseStruct* m_Comp;             /* Pointeur sur la definition de l'objet */
     void*           m_Link;             /* Pour SheetLabelStruct: Pointeur sur la feuille de hierarchie
                                          *  Pour les Pins: pointeur sur le composant */
     int             m_Flag;             /* flag pour calculs internes */
@@ -79,6 +80,11 @@ public:
     long            m_PinNum;       /* numero de pin( 4 octets -> 4 codes ascii) */
     const wxString* m_Label;        /* Tous types Labels:pointeur sur la wxString definissant le label */
     wxPoint         m_Start, m_End;
+
+#if defined(DEBUG)
+    void Show( std::ostream& out, int ndx );
+#endif
+    
 };
 
 
