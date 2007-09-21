@@ -164,7 +164,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
 /* Hot keys. Some commands are relatives to the item under the mouse cursor
  *  Commands are case insensitive
  *  @param DC = current device context
- *  @param hotkey = hothey code (ascii or wxWidget code for special keys)
+ *  @param hotkey = hotkey code (ascii or wxWidget code for special keys)
  *  @param DrawStruct = NULL or pointer on a EDA_BaseStruct under the mouse cursor
  */
 
