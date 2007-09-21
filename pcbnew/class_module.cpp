@@ -1129,7 +1129,7 @@ void MODULE::Display_Infos( WinEDA_DrawFrame* frame )
     pos += 4;
     msg  = wxT( ".." );
     if( IsLocked() )
-        msg[0] = 'F';
+        msg[0] = 'L';
     if( m_ModuleStatus & MODULE_is_PLACED )
         msg[1] = 'P';
     Affiche_1_Parametre( frame, pos, _( "Stat" ), msg, MAGENTA );

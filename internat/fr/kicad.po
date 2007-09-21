@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-09-20 08:44+0100\n"
+"PO-Revision-Date: 2007-09-21 13:38+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -351,15 +351,6 @@ msgstr "Librairie existante "
 msgid "Create error "
 msgstr "Erreur en création "
 
-#: pcbnew/hotkeys.cpp:430
-#, c-format
-msgid "Footprint %s found, but locked"
-msgstr "Module %s trouvé, mais verrouillé"
-
-#: pcbnew/hotkeys.cpp:592
-msgid "Delete module?"
-msgstr "Effacer Module?"
-
 #: pcbnew/muwave_command.cpp:52
 #: eeschema/libframe.cpp:518
 msgid "Add Line"
@@ -595,7 +586,7 @@ msgid "Footprint name:"
 msgstr "Nom Module: "
 
 #: pcbnew/modules.cpp:281
-#: pcbnew/onrightclick.cpp:615
+#: pcbnew/onrightclick.cpp:638
 msgid "Delete Module"
 msgstr "Supprimer Module"
 
@@ -1025,7 +1016,7 @@ msgid "Enable Auto Del Track"
 msgstr "Autoriser l'effacement automatique des pistes"
 
 #: pcbnew/tool_pcb.cpp:362
-#: pcbnew/pcbframe.cpp:408
+#: pcbnew/pcbframe.cpp:411
 #: pcbnew/set_color.cpp:389
 msgid "Show Zones"
 msgstr "Monter Zones"
@@ -1040,7 +1031,7 @@ msgid "Show Tracks Sketch"
 msgstr "Afficher pistes en contour"
 
 #: pcbnew/tool_pcb.cpp:375
-#: pcbnew/pcbframe.cpp:429
+#: pcbnew/pcbframe.cpp:432
 msgid "Hight Contrast Mode Display"
 msgstr "Mode d'affichage Haut Contraste"
 
@@ -1205,8 +1196,7 @@ msgstr "Effacer Textes Pcb"
 #: pcbnew/dialog_edit_module.cpp:119
 #: eeschema/sheetlab.cpp:100
 #: eeschema/editpart.cpp:197
-#: eeschema/fieldedi.cpp:208
-#: eeschema/libedpart.cpp:230
+#: eeschema/libedpart.cpp:235
 #: common/displlst.cpp:102
 msgid "Ok"
 msgstr "Ok"
@@ -1229,7 +1219,7 @@ msgstr "Ok"
 #: eeschema/sheetlab.cpp:105
 #: eeschema/options.cpp:114
 #: eeschema/optionsframe.cpp:155
-#: eeschema/libedpart.cpp:219
+#: eeschema/libedpart.cpp:223
 #: eeschema/libedit_onrightclick.cpp:68
 #: eeschema/libedit_onrightclick.cpp:83
 #: eeschema/onrightclick.cpp:114
@@ -1433,7 +1423,7 @@ msgid "V Size"
 msgstr "Taille V"
 
 #: pcbnew/class_track.cpp:678
-#: pcbnew/pcbframe.cpp:439
+#: pcbnew/pcbframe.cpp:442
 #: pcbnew/controle.cpp:203
 msgid "Track"
 msgstr "Piste"
@@ -1567,7 +1557,7 @@ msgid "Display"
 msgstr "Affichage"
 
 #: pcbnew/dialog_edit_mod_text.cpp:313
-#: eeschema/edit_component_in_lib.cpp:445
+#: eeschema/edit_component_in_lib.cpp:518
 #: eeschema/edit_component_in_schematic.cpp:211
 msgid "Value:"
 msgstr "Valeur:"
@@ -1693,13 +1683,12 @@ msgstr "Supprimer"
 
 #: pcbnew/reglage.cpp:116
 #: pcbnew/dialog_setup_libs.cpp:179
-#: eeschema/fieldedi.cpp:308
 #: eeschema/eestatus.cpp:124
-#: eeschema/edit_component_in_lib.cpp:212
-#: eeschema/edit_component_in_lib.cpp:274
 #: eeschema/dialog_set_status.cpp:174
-#: eeschema/libedpart.cpp:274
 #: eeschema/dialog_eeschema_config.cpp:200
+#: eeschema/libedpart.cpp:284
+#: eeschema/edit_component_in_lib.cpp:233
+#: eeschema/edit_component_in_lib.cpp:312
 msgid "Add"
 msgstr "Ajouter"
 
@@ -1794,13 +1783,12 @@ msgid "Keep"
 msgstr "Garder"
 
 #: pcbnew/dialog_netlist.cpp:141
-#: pcbnew/onrightclick.cpp:546
-#: pcbnew/onrightclick.cpp:647
-#: pcbnew/onrightclick.cpp:744
-#: eeschema/fieldedi.cpp:311
-#: eeschema/edit_component_in_lib.cpp:217
-#: eeschema/edit_component_in_lib.cpp:279
-#: eeschema/libedpart.cpp:279
+#: pcbnew/onrightclick.cpp:563
+#: pcbnew/onrightclick.cpp:670
+#: pcbnew/onrightclick.cpp:767
+#: eeschema/libedpart.cpp:290
+#: eeschema/edit_component_in_lib.cpp:239
+#: eeschema/edit_component_in_lib.cpp:320
 #: cvpcb/dialog_cvpcb_config.cpp:166
 #: cvpcb/dialog_cvpcb_config.cpp:198
 msgid "Delete"
@@ -1841,92 +1829,92 @@ msgstr "Test Modules"
 msgid "Compile"
 msgstr "Compile"
 
-#: pcbnew/pcbframe.cpp:258
+#: pcbnew/pcbframe.cpp:261
 msgid "Board modified, Save before exit ?"
 msgstr "Circuit Imprimé modifiée,  Sauver avant de quitter ?"
 
-#: pcbnew/pcbframe.cpp:259
+#: pcbnew/pcbframe.cpp:262
 #: eeschema/schframe.cpp:181
 #: cvpcb/cvframe.cpp:169
 #: common/confirm.cpp:109
 msgid "Confirmation"
 msgstr "Confirmation"
 
-#: pcbnew/pcbframe.cpp:359
+#: pcbnew/pcbframe.cpp:362
 msgid "DRC Off (Disable !!!), Currently: DRC is active"
 msgstr "DRC off (désactivée !!!), actuellement DRC active"
 
-#: pcbnew/pcbframe.cpp:360
+#: pcbnew/pcbframe.cpp:363
 msgid "DRC On (Currently: DRC is inactive !!!)"
 msgstr "DRC On (Actuellement, DRC désactivée !!!)"
 
-#: pcbnew/pcbframe.cpp:371
+#: pcbnew/pcbframe.cpp:374
 msgid "Polar Coords not show"
 msgstr "Coord Polaires non affichées"
 
-#: pcbnew/pcbframe.cpp:372
+#: pcbnew/pcbframe.cpp:375
 msgid "Display Polar Coords"
 msgstr "Affichage coord Polaires"
 
-#: pcbnew/pcbframe.cpp:377
+#: pcbnew/pcbframe.cpp:380
 #: eeschema/schframe.cpp:259
 msgid "Grid not show"
 msgstr "Grille non montrée"
 
-#: pcbnew/pcbframe.cpp:377
+#: pcbnew/pcbframe.cpp:380
 #: eeschema/schframe.cpp:259
 msgid "Show Grid"
 msgstr "Afficher grille"
 
-#: pcbnew/pcbframe.cpp:386
+#: pcbnew/pcbframe.cpp:389
 msgid "General ratsnest not show"
 msgstr "Chevelu général non affiché"
 
-#: pcbnew/pcbframe.cpp:386
+#: pcbnew/pcbframe.cpp:389
 msgid "Show General ratsnest"
 msgstr "Afficher le chevelu général"
 
-#: pcbnew/pcbframe.cpp:392
+#: pcbnew/pcbframe.cpp:395
 msgid "Module ratsnest not show"
 msgstr "Ne pas montrer le chevelu du module pendant déplacement"
 
-#: pcbnew/pcbframe.cpp:393
+#: pcbnew/pcbframe.cpp:396
 msgid "Show Module ratsnest"
 msgstr "Montrer le chevelu du module"
 
-#: pcbnew/pcbframe.cpp:400
+#: pcbnew/pcbframe.cpp:403
 msgid "Disable Auto Delete old Track"
 msgstr "Ne pas Autoriser l'effacement automatique des pistes"
 
-#: pcbnew/pcbframe.cpp:401
+#: pcbnew/pcbframe.cpp:404
 msgid "Enable Auto Delete old Track"
 msgstr "Autoriser l'effacement automatique des pistes"
 
-#: pcbnew/pcbframe.cpp:408
+#: pcbnew/pcbframe.cpp:411
 msgid "Do not Show Zones"
 msgstr "Ne pas monter Zones"
 
-#: pcbnew/pcbframe.cpp:414
+#: pcbnew/pcbframe.cpp:417
 msgid "Show Pads Sketch mode"
 msgstr "Afficher pastilles en contour"
 
-#: pcbnew/pcbframe.cpp:415
+#: pcbnew/pcbframe.cpp:418
 msgid "Show pads filled mode"
 msgstr "Afficher pastilles en mode plein"
 
-#: pcbnew/pcbframe.cpp:421
+#: pcbnew/pcbframe.cpp:424
 msgid "Show Tracks Sketch mode"
 msgstr "Afficher pistes en contour"
 
-#: pcbnew/pcbframe.cpp:422
+#: pcbnew/pcbframe.cpp:425
 msgid "Show Tracks filled mode"
 msgstr "Afficher pistes en mode plein"
 
-#: pcbnew/pcbframe.cpp:428
+#: pcbnew/pcbframe.cpp:431
 msgid "Normal Contrast Mode Display"
 msgstr "Mode d'affichage Contraste normal"
 
-#: pcbnew/pcbframe.cpp:471
+#: pcbnew/pcbframe.cpp:474
 #: pcbnew/controle.cpp:217
 msgid "Via"
 msgstr "Via"
@@ -2473,7 +2461,6 @@ msgstr "Liste modules"
 #: pcbnew/xchgmod.cpp:137
 #: pcbnew/pcbplot.cpp:209
 #: eeschema/editpart.cpp:175
-#: eeschema/fieldedi.cpp:198
 #: share/zoom.cpp:449
 msgid "Close"
 msgstr "Fermer"
@@ -2610,7 +2597,7 @@ msgid "SMD"
 msgstr "CMS"
 
 #: pcbnew/dialog_pad_edit.cpp:207
-#: eeschema/netlist.cpp:146
+#: eeschema/netlist.cpp:208
 msgid "Conn"
 msgstr "Conn"
 
@@ -2736,106 +2723,14 @@ msgstr " fichier %s non trouvé"
 msgid "Save preferences"
 msgstr "Sauver préférences"
 
-#: pcbnew/controle.cpp:56
+#: pcbnew/hotkeys.cpp:430
 #, c-format
-msgid "Locate module %s %s"
-msgstr "Module localisé %s %s"
+msgid "Footprint %s found, but locked"
+msgstr "Module %s trouvé, mais verrouillé"
 
-#: pcbnew/controle.cpp:109
-#, c-format
-msgid "module %s not found"
-msgstr "module %s non trouvé"
-
-#: pcbnew/controle.cpp:111
-#, c-format
-msgid "Pin %s (module %s) not found"
-msgstr "Pin %s (module %s) non trouvée"
-
-#: pcbnew/controle.cpp:113
-#, c-format
-msgid "Locate Pin %s (module %s)"
-msgstr "Pin localisée %s (module %s)"
-
-#: pcbnew/controle.cpp:132
-#: pcbnew/class_pad.cpp:824
-msgid "Net"
-msgstr "Net"
-
-#: pcbnew/controle.cpp:136
-#: eeschema/component_class.cpp:51
-msgid "Footprint"
-msgstr "Module"
-
-#: pcbnew/controle.cpp:141
-msgid "Pad"
-msgstr "Pad"
-
-#: pcbnew/controle.cpp:141
-#: pcbnew/controle.cpp:166
-#: pcbnew/controle.cpp:172
-#: pcbnew/controle.cpp:197
-msgid " of "
-msgstr " de "
-
-#: pcbnew/controle.cpp:147
-msgid "Pcb Graphic"
-msgstr "Pcb Graphic"
-
-#: pcbnew/controle.cpp:147
-#: pcbnew/controle.cpp:209
-#: pcbnew/controle.cpp:213
-#: pcbnew/controle.cpp:238
-msgid " on "
-msgstr " sur "
-
-#: pcbnew/controle.cpp:151
-msgid "Pcb Text"
-msgstr "Texte Pcb"
-
-#: pcbnew/controle.cpp:166
-#: pcbnew/class_edge_mod.cpp:286
-#: pcbnew/class_text_mod.cpp:323
-#: eeschema/editpart.cpp:777
-#: eeschema/eelayer.cpp:105
-#: eeschema/component_class.cpp:50
-#: eeschema/onrightclick.cpp:310
-#: eeschema/edit_component_in_schematic.cpp:784
-msgid "Value"
-msgstr "Valeur"
-
-#: pcbnew/controle.cpp:172
-#: pcbnew/class_text_mod.cpp:323
-#: pcbnew/class_text_mod.cpp:331
-msgid "Text"
-msgstr "Texte"
-
-#: pcbnew/controle.cpp:180
-msgid "Graphic"
-msgstr "Graphique"
-
-#: pcbnew/controle.cpp:186
-msgid "Arc"
-msgstr "Arc"
-
-#: pcbnew/controle.cpp:226
-msgid "Marker"
-msgstr "Marqueur"
-
-#: pcbnew/controle.cpp:230
-msgid "Dimension"
-msgstr "Dimension"
-
-#: pcbnew/controle.cpp:234
-msgid "Mire"
-msgstr "Mire"
-
-#: pcbnew/controle.cpp:238
-msgid "Edge Zone"
-msgstr "Contour Zone"
-
-#: pcbnew/controle.cpp:446
-msgid "Selection Clarification"
-msgstr "Clarification de la Sélection"
+#: pcbnew/hotkeys.cpp:592
+msgid "Delete module?"
+msgstr "Effacer Module?"
 
 #: pcbnew/loadcmp.cpp:103
 msgid "Module name:"
@@ -2919,6 +2814,107 @@ msgstr "Surbrillance des équipotentielles"
 #: pcbnew/edit.cpp:618
 msgid "Local Ratsnest"
 msgstr "Monter le chevelu général"
+
+#: pcbnew/controle.cpp:56
+#, c-format
+msgid "Locate module %s %s"
+msgstr "Module localisé %s %s"
+
+#: pcbnew/controle.cpp:109
+#, c-format
+msgid "module %s not found"
+msgstr "module %s non trouvé"
+
+#: pcbnew/controle.cpp:111
+#, c-format
+msgid "Pin %s (module %s) not found"
+msgstr "Pin %s (module %s) non trouvée"
+
+#: pcbnew/controle.cpp:113
+#, c-format
+msgid "Locate Pin %s (module %s)"
+msgstr "Pin localisée %s (module %s)"
+
+#: pcbnew/controle.cpp:132
+#: pcbnew/class_pad.cpp:824
+msgid "Net"
+msgstr "Net"
+
+#: pcbnew/controle.cpp:136
+#: eeschema/component_class.cpp:56
+msgid "Footprint"
+msgstr "Module"
+
+#: pcbnew/controle.cpp:141
+msgid "Pad"
+msgstr "Pad"
+
+#: pcbnew/controle.cpp:141
+#: pcbnew/controle.cpp:166
+#: pcbnew/controle.cpp:172
+#: pcbnew/controle.cpp:197
+msgid " of "
+msgstr " de "
+
+#: pcbnew/controle.cpp:147
+msgid "Pcb Graphic"
+msgstr "Pcb Graphic"
+
+#: pcbnew/controle.cpp:147
+#: pcbnew/controle.cpp:209
+#: pcbnew/controle.cpp:213
+#: pcbnew/controle.cpp:238
+msgid " on "
+msgstr " sur "
+
+#: pcbnew/controle.cpp:151
+msgid "Pcb Text"
+msgstr "Texte Pcb"
+
+#: pcbnew/controle.cpp:166
+#: pcbnew/class_edge_mod.cpp:286
+#: pcbnew/class_text_mod.cpp:323
+#: eeschema/editpart.cpp:777
+#: eeschema/eelayer.cpp:105
+#: eeschema/component_class.cpp:55
+#: eeschema/onrightclick.cpp:310
+#: eeschema/edit_component_in_schematic.cpp:784
+msgid "Value"
+msgstr "Valeur"
+
+#: pcbnew/controle.cpp:172
+#: pcbnew/class_text_mod.cpp:323
+#: pcbnew/class_text_mod.cpp:331
+msgid "Text"
+msgstr "Texte"
+
+#: pcbnew/controle.cpp:180
+msgid "Graphic"
+msgstr "Graphique"
+
+#: pcbnew/controle.cpp:186
+msgid "Arc"
+msgstr "Arc"
+
+#: pcbnew/controle.cpp:226
+msgid "Marker"
+msgstr "Marqueur"
+
+#: pcbnew/controle.cpp:230
+msgid "Dimension"
+msgstr "Dimension"
+
+#: pcbnew/controle.cpp:234
+msgid "Mire"
+msgstr "Mire"
+
+#: pcbnew/controle.cpp:238
+msgid "Edge Zone"
+msgstr "Contour Zone"
+
+#: pcbnew/controle.cpp:444
+msgid "Selection Clarification"
+msgstr "Clarification de la Sélection"
 
 #: pcbnew/editmod.cpp:144
 msgid "Text is REFERENCE!"
@@ -3660,7 +3656,7 @@ msgid "End Tool"
 msgstr "Fin Outil"
 
 #: pcbnew/modedit_onclick.cpp:216
-#: pcbnew/onrightclick.cpp:433
+#: pcbnew/onrightclick.cpp:445
 #: eeschema/libedit_onrightclick.cpp:251
 #: eeschema/onrightclick.cpp:575
 #: gerbview/onrightclick.cpp:51
@@ -3668,13 +3664,13 @@ msgid "Cancel Block"
 msgstr "Annuler Bloc"
 
 #: pcbnew/modedit_onclick.cpp:218
-#: pcbnew/onrightclick.cpp:435
+#: pcbnew/onrightclick.cpp:447
 #: gerbview/onrightclick.cpp:52
 msgid "Zoom Block (Midd butt drag)"
 msgstr "Zoom Bloc (drag+bouton milieu)"
 
 #: pcbnew/modedit_onclick.cpp:221
-#: pcbnew/onrightclick.cpp:438
+#: pcbnew/onrightclick.cpp:450
 #: eeschema/libedit_onrightclick.cpp:259
 #: eeschema/onrightclick.cpp:583
 #: gerbview/onrightclick.cpp:54
@@ -3682,7 +3678,7 @@ msgid "Place Block"
 msgstr "Place Bloc"
 
 #: pcbnew/modedit_onclick.cpp:223
-#: pcbnew/onrightclick.cpp:440
+#: pcbnew/onrightclick.cpp:452
 #: eeschema/libedit_onrightclick.cpp:265
 #: eeschema/onrightclick.cpp:592
 msgid "Copy Block (shift + drag mouse)"
@@ -3693,18 +3689,18 @@ msgid "Mirror Block (alt + drag mouse)"
 msgstr "Bloc Miroir (alt + drag mouse)"
 
 #: pcbnew/modedit_onclick.cpp:227
-#: pcbnew/onrightclick.cpp:444
+#: pcbnew/onrightclick.cpp:456
 msgid "Rotate Block (ctrl + drag mouse)"
 msgstr "Rotation Bloc (ctrl + drag mouse)"
 
 #: pcbnew/modedit_onclick.cpp:229
-#: pcbnew/onrightclick.cpp:446
+#: pcbnew/onrightclick.cpp:458
 msgid "Delete Block (shift+ctrl + drag mouse)"
 msgstr "Effacement Bloc (shift+ctrl + drag mouse)"
 
 #: pcbnew/modedit_onclick.cpp:251
-#: pcbnew/onrightclick.cpp:641
-#: pcbnew/onrightclick.cpp:738
+#: pcbnew/onrightclick.cpp:664
+#: pcbnew/onrightclick.cpp:761
 msgid "Rotate"
 msgstr "Rotation"
 
@@ -3733,17 +3729,17 @@ msgid "Move Pad"
 msgstr "Déplace Pad"
 
 #: pcbnew/modedit_onclick.cpp:273
-#: pcbnew/onrightclick.cpp:680
+#: pcbnew/onrightclick.cpp:703
 msgid "Edit Pad"
 msgstr "Edit Pad"
 
 #: pcbnew/modedit_onclick.cpp:275
-#: pcbnew/onrightclick.cpp:684
+#: pcbnew/onrightclick.cpp:707
 msgid "New Pad Settings"
 msgstr "Nouvelles Caract. Pads"
 
 #: pcbnew/modedit_onclick.cpp:277
-#: pcbnew/onrightclick.cpp:686
+#: pcbnew/onrightclick.cpp:709
 msgid "Export Pad Settings"
 msgstr "Exporte Caract. Pads"
 
@@ -3752,7 +3748,7 @@ msgid "delete Pad"
 msgstr "Supprimer Pad"
 
 #: pcbnew/modedit_onclick.cpp:284
-#: pcbnew/onrightclick.cpp:691
+#: pcbnew/onrightclick.cpp:714
 msgid "Global Pad Settings"
 msgstr "Edition Globale des pads"
 
@@ -3785,9 +3781,9 @@ msgid "Place edge"
 msgstr "Place contour"
 
 #: pcbnew/modedit_onclick.cpp:316
-#: pcbnew/onrightclick.cpp:609
-#: pcbnew/onrightclick.cpp:643
-#: pcbnew/onrightclick.cpp:740
+#: pcbnew/onrightclick.cpp:632
+#: pcbnew/onrightclick.cpp:666
+#: pcbnew/onrightclick.cpp:763
 #: eeschema/onrightclick.cpp:306
 msgid "Edit"
 msgstr "Editer"
@@ -3891,11 +3887,10 @@ msgstr "Fichier GenCAD:"
 #: pcbnew/dialog_drc.cpp:141
 #: eeschema/editpart.cpp:208
 #: eeschema/dialog_erc.cpp:237
-#: eeschema/fieldedi.cpp:223
-#: eeschema/libedpart.cpp:241
 #: eeschema/dialog_edit_component_in_lib.cpp:166
 #: eeschema/dialog_create_component.cpp:176
 #: eeschema/dialog_edit_component_in_schematic.cpp:204
+#: eeschema/libedpart.cpp:247
 #: eeschema/dialog_build_BOM.cpp:279
 #: cvpcb/dialog_display_options.h:44
 msgid "Options"
@@ -4053,9 +4048,8 @@ msgid "Goto Module Editor"
 msgstr "Ouvrir Editeur de modules"
 
 #: pcbnew/dialog_edit_module.cpp:195
-#: eeschema/fieldedi.cpp:283
-#: eeschema/libedpart.cpp:246
 #: eeschema/dialog_edit_component_in_lib.cpp:203
+#: eeschema/libedpart.cpp:252
 #: eeschema/onrightclick.cpp:342
 msgid "Doc"
 msgstr "Doc"
@@ -4215,370 +4209,364 @@ msgstr "Fenetre 3D déjà ouverte"
 msgid "3D Viewer"
 msgstr "Visu 3D"
 
-#: pcbnew/onrightclick.cpp:82
+#: pcbnew/onrightclick.cpp:80
 #, c-format
 msgid "Track %.1f"
 msgstr "Piste %.1f"
 
-#: pcbnew/onrightclick.cpp:84
+#: pcbnew/onrightclick.cpp:82
 #, c-format
 msgid "Track %.3f"
 msgstr "Piste %.3f"
 
-#: pcbnew/onrightclick.cpp:100
+#: pcbnew/onrightclick.cpp:98
 #, c-format
 msgid "Via %.1f"
 msgstr "Via %.1f"
 
-#: pcbnew/onrightclick.cpp:102
+#: pcbnew/onrightclick.cpp:100
 #, c-format
 msgid "Via %.3f"
 msgstr "Via %.3f"
 
-#: pcbnew/onrightclick.cpp:186
+#: pcbnew/onrightclick.cpp:189
 msgid "Lock Module"
 msgstr "Verrouiller Modules"
 
-#: pcbnew/onrightclick.cpp:188
+#: pcbnew/onrightclick.cpp:195
 msgid "Unlock Module"
 msgstr "Déverrouiller Modules"
 
-#: pcbnew/onrightclick.cpp:192
+#: pcbnew/onrightclick.cpp:202
 msgid "Auto place Module"
 msgstr "Auto place Module"
 
-#: pcbnew/onrightclick.cpp:198
+#: pcbnew/onrightclick.cpp:208
 msgid "Autoroute"
 msgstr "Autoroute"
 
-#: pcbnew/onrightclick.cpp:214
+#: pcbnew/onrightclick.cpp:224
 msgid "Move Drawing"
 msgstr "Déplace Tracé"
 
-#: pcbnew/onrightclick.cpp:219
+#: pcbnew/onrightclick.cpp:229
 msgid "End Drawing"
 msgstr "Fin tracé"
 
-#: pcbnew/onrightclick.cpp:221
+#: pcbnew/onrightclick.cpp:231
 msgid "Edit Drawing"
 msgstr "Edit Tracé"
 
-#: pcbnew/onrightclick.cpp:222
+#: pcbnew/onrightclick.cpp:232
 msgid "Delete Drawing"
 msgstr "Supprimer Tracé"
 
-#: pcbnew/onrightclick.cpp:229
+#: pcbnew/onrightclick.cpp:239
 msgid "End edge zone"
 msgstr "Fin contour Zone"
 
-#: pcbnew/onrightclick.cpp:232
+#: pcbnew/onrightclick.cpp:242
 msgid "Delete edge zone"
 msgstr "Supprimer Contour Zone"
 
-#: pcbnew/onrightclick.cpp:247
+#: pcbnew/onrightclick.cpp:257
 msgid "Edit Zone"
 msgstr "Editer Zone"
 
-#: pcbnew/onrightclick.cpp:249
+#: pcbnew/onrightclick.cpp:259
 msgid "Delete Zone"
 msgstr "Supprimer Zone"
 
-#: pcbnew/onrightclick.cpp:254
+#: pcbnew/onrightclick.cpp:264
 msgid "Delete Marker"
 msgstr "Effacer Marqueur"
 
-#: pcbnew/onrightclick.cpp:261
+#: pcbnew/onrightclick.cpp:271
 msgid "Edit Cotation"
 msgstr "Editer Cotation"
 
-#: pcbnew/onrightclick.cpp:264
+#: pcbnew/onrightclick.cpp:274
 msgid "Delete Cotation"
 msgstr "Supprimer Cotation"
 
-#: pcbnew/onrightclick.cpp:271
+#: pcbnew/onrightclick.cpp:281
 msgid "Move Mire"
 msgstr "Déplace Mire"
 
-#: pcbnew/onrightclick.cpp:274
+#: pcbnew/onrightclick.cpp:284
 msgid "Edit Mire"
 msgstr "Edit Mire"
 
-#: pcbnew/onrightclick.cpp:276
+#: pcbnew/onrightclick.cpp:286
 msgid "Delete Mire"
 msgstr "Supprimer Mire"
 
-#: pcbnew/onrightclick.cpp:304
+#: pcbnew/onrightclick.cpp:313
 msgid "Get and Move Footprint"
 msgstr "Sel et Dépl.t module"
 
-#: pcbnew/onrightclick.cpp:313
+#: pcbnew/onrightclick.cpp:325
 msgid "Fill zone"
 msgstr "Remplir zone"
 
-#: pcbnew/onrightclick.cpp:321
+#: pcbnew/onrightclick.cpp:333
 msgid "Select Net"
 msgstr "Sélection Net"
 
-#: pcbnew/onrightclick.cpp:326
+#: pcbnew/onrightclick.cpp:338
 msgid "Delete Zone Limit"
 msgstr "Supprimer Limite de Zone"
 
-#: pcbnew/onrightclick.cpp:331
-#: pcbnew/onrightclick.cpp:342
-#: pcbnew/onrightclick.cpp:355
-#: pcbnew/onrightclick.cpp:416
+#: pcbnew/onrightclick.cpp:343
+#: pcbnew/onrightclick.cpp:354
+#: pcbnew/onrightclick.cpp:367
+#: pcbnew/onrightclick.cpp:428
 msgid "Select Working Layer"
 msgstr "Sélection de la couche de travail"
 
-#: pcbnew/onrightclick.cpp:340
-#: pcbnew/onrightclick.cpp:413
+#: pcbnew/onrightclick.cpp:352
+#: pcbnew/onrightclick.cpp:425
 msgid "Select Track Width"
 msgstr "Sélection Epais. Piste"
 
-#: pcbnew/onrightclick.cpp:344
+#: pcbnew/onrightclick.cpp:356
 msgid "Select layer pair for vias"
 msgstr "Selection couple de couches pour Vias"
 
-#: pcbnew/onrightclick.cpp:361
+#: pcbnew/onrightclick.cpp:373
 msgid "Footprint documentation"
 msgstr "Documentation des modules"
 
-#: pcbnew/onrightclick.cpp:371
+#: pcbnew/onrightclick.cpp:383
 msgid "Glob Move and Place"
 msgstr "Move et Place Globaux"
 
-#: pcbnew/onrightclick.cpp:373
+#: pcbnew/onrightclick.cpp:385
 msgid "Unlock All Modules"
 msgstr "Déverrouiller tous les Modules"
 
-#: pcbnew/onrightclick.cpp:375
+#: pcbnew/onrightclick.cpp:387
 msgid "Lock All Modules"
 msgstr "Verrouiller tous les Modules"
 
-#: pcbnew/onrightclick.cpp:378
+#: pcbnew/onrightclick.cpp:390
 msgid "Move All Modules"
 msgstr "Déplace tous les Modules"
 
-#: pcbnew/onrightclick.cpp:379
+#: pcbnew/onrightclick.cpp:391
 msgid "Move New Modules"
 msgstr "Déplace nouveaux Modules"
 
-#: pcbnew/onrightclick.cpp:381
+#: pcbnew/onrightclick.cpp:393
 msgid "Autoplace All Modules"
 msgstr "Autoplace Tous Modules"
 
-#: pcbnew/onrightclick.cpp:382
+#: pcbnew/onrightclick.cpp:394
 msgid "Autoplace New Modules"
 msgstr "AutoPlace nouveaux Modules"
 
-#: pcbnew/onrightclick.cpp:383
+#: pcbnew/onrightclick.cpp:395
 msgid "Autoplace Next Module"
 msgstr "Autoplace Module suivant"
 
-#: pcbnew/onrightclick.cpp:386
+#: pcbnew/onrightclick.cpp:398
 msgid "Orient All Modules"
 msgstr "Oriente Tous Modules"
 
-#: pcbnew/onrightclick.cpp:393
+#: pcbnew/onrightclick.cpp:405
 msgid "Global Autoroute"
 msgstr "Autoroutage global"
 
-#: pcbnew/onrightclick.cpp:395
+#: pcbnew/onrightclick.cpp:407
 msgid "Select layer pair"
 msgstr "Selection couple de couches"
 
-#: pcbnew/onrightclick.cpp:397
+#: pcbnew/onrightclick.cpp:409
 msgid "Autoroute All Modules"
 msgstr "Autoroute Tous Modules"
 
-#: pcbnew/onrightclick.cpp:399
+#: pcbnew/onrightclick.cpp:411
 msgid "Reset Unrouted"
 msgstr "Réinit Non routés"
 
-#: pcbnew/onrightclick.cpp:404
+#: pcbnew/onrightclick.cpp:416
 msgid "Global AutoRouter"
 msgstr "Autorouteur Global"
 
-#: pcbnew/onrightclick.cpp:406
+#: pcbnew/onrightclick.cpp:418
 msgid "Read Global AutoRouter Data"
 msgstr "Lire Données de L'autorouteur global"
 
-#: pcbnew/onrightclick.cpp:442
+#: pcbnew/onrightclick.cpp:454
 msgid "Flip Block (alt + drag mouse)"
 msgstr "Inversion Bloc (alt + drag mouse)"
 
-#: pcbnew/onrightclick.cpp:465
+#: pcbnew/onrightclick.cpp:477
 msgid "Drag Via"
 msgstr "Drag Via"
 
-#: pcbnew/onrightclick.cpp:468
+#: pcbnew/onrightclick.cpp:481
 msgid "Edit Via"
 msgstr "Edit Via"
 
-#: pcbnew/onrightclick.cpp:470
+#: pcbnew/onrightclick.cpp:483
 msgid "Set via hole to Default"
 msgstr "Ajuste perçage via à défaut"
 
-#: pcbnew/onrightclick.cpp:472
+#: pcbnew/onrightclick.cpp:485
 msgid "Set via hole to alt value"
 msgstr "Ajuste perçage via à valeur alternative"
 
-#: pcbnew/onrightclick.cpp:474
+#: pcbnew/onrightclick.cpp:487
 msgid "Set the via hole alt value"
 msgstr "Ajuste la valeur alt. perçage via"
 
-#: pcbnew/onrightclick.cpp:476
+#: pcbnew/onrightclick.cpp:489
 msgid "Export Via hole to alt value"
 msgstr "Exporte perçage via à valeur alt."
 
-#: pcbnew/onrightclick.cpp:478
+#: pcbnew/onrightclick.cpp:491
 msgid "Export via hole to others id vias"
 msgstr "Exporte perçage via aux autres semblables."
 
-#: pcbnew/onrightclick.cpp:480
+#: pcbnew/onrightclick.cpp:493
 msgid "Set ALL via holes to default"
 msgstr "Ajuste perçage TOUTES vias au défaut"
 
-#: pcbnew/onrightclick.cpp:493
+#: pcbnew/onrightclick.cpp:506
 msgid "Move Node"
 msgstr "Déplace Noeud"
 
-#: pcbnew/onrightclick.cpp:498
+#: pcbnew/onrightclick.cpp:511
 msgid "Drag Segments, keep slope"
 msgstr "Drag Segments, garder direction"
 
-#: pcbnew/onrightclick.cpp:500
+#: pcbnew/onrightclick.cpp:513
 msgid "Drag Segment"
 msgstr "Drag Segment"
 
-#: pcbnew/onrightclick.cpp:503
+#: pcbnew/onrightclick.cpp:516
 msgid "Move Segment"
 msgstr "Déplace Segment"
 
-#: pcbnew/onrightclick.cpp:506
+#: pcbnew/onrightclick.cpp:519
 msgid "Break Track"
 msgstr "Briser piste"
 
-#: pcbnew/onrightclick.cpp:513
+#: pcbnew/onrightclick.cpp:526
 msgid "Place Node"
 msgstr "Place noeud"
 
-#: pcbnew/onrightclick.cpp:519
-msgid "End Track (end)"
-msgstr "Terminer Pistes (end)"
+#: pcbnew/onrightclick.cpp:533
+msgid "End Track"
+msgstr "Terminer Piste"
 
-#: pcbnew/onrightclick.cpp:520
-msgid "Place Via (V)"
-msgstr "Place Via (V)"
+#: pcbnew/onrightclick.cpp:536
+msgid "Place Via"
+msgstr "Place Via"
 
-#: pcbnew/onrightclick.cpp:526
+#: pcbnew/onrightclick.cpp:543
 msgid "Change Width"
 msgstr "Change Largeur"
 
-#: pcbnew/onrightclick.cpp:528
+#: pcbnew/onrightclick.cpp:545
 msgid "Edit Segment"
 msgstr "Edit Segment"
 
-#: pcbnew/onrightclick.cpp:532
+#: pcbnew/onrightclick.cpp:549
 msgid "Edit Track"
 msgstr "Editer Piste"
 
-#: pcbnew/onrightclick.cpp:534
+#: pcbnew/onrightclick.cpp:551
 msgid "Edit Net"
 msgstr "Edit Net"
 
-#: pcbnew/onrightclick.cpp:536
+#: pcbnew/onrightclick.cpp:553
 msgid "Edit ALL Tracks and Vias"
 msgstr "Editer TOUTES Pistes et Vias"
 
-#: pcbnew/onrightclick.cpp:538
+#: pcbnew/onrightclick.cpp:555
 msgid "Edit ALL Vias (no track)"
 msgstr "Editer TOUTES Vias (pas les pistes)"
 
-#: pcbnew/onrightclick.cpp:540
+#: pcbnew/onrightclick.cpp:557
 msgid "Edit ALL Tracks (no via)"
 msgstr "Editer TOUTES Pistes (pas les vias)"
 
-#: pcbnew/onrightclick.cpp:548
-msgid "Delete Segment (backspace)"
-msgstr "Supprimer Segment (backspace)"
+#: pcbnew/onrightclick.cpp:564
+msgid "Delete Segment"
+msgstr "SupprimerSegment"
 
-#: pcbnew/onrightclick.cpp:552
-msgid "Delete Track (delete)"
-msgstr "Supprimer Piste (Suppr)"
+#: pcbnew/onrightclick.cpp:569
+msgid "Delete Track"
+msgstr "Effacer Piste"
 
-#: pcbnew/onrightclick.cpp:554
+#: pcbnew/onrightclick.cpp:573
 msgid "Delete Net"
 msgstr "Supprimer Net"
 
-#: pcbnew/onrightclick.cpp:559
+#: pcbnew/onrightclick.cpp:578
 msgid "Set Flags"
 msgstr "Ajust. Flags"
 
-#: pcbnew/onrightclick.cpp:560
+#: pcbnew/onrightclick.cpp:579
 msgid "Locked: Yes"
 msgstr "Verrou: Oui"
 
-#: pcbnew/onrightclick.cpp:561
+#: pcbnew/onrightclick.cpp:580
 msgid "Locked: No"
 msgstr "Verrou: Non"
 
-#: pcbnew/onrightclick.cpp:571
+#: pcbnew/onrightclick.cpp:590
 msgid "Track Locked: Yes"
 msgstr "Piste verrouillée: Oui"
 
-#: pcbnew/onrightclick.cpp:572
+#: pcbnew/onrightclick.cpp:591
 msgid "Track Locked: No"
 msgstr "Piste verrouillée: Non"
 
-#: pcbnew/onrightclick.cpp:574
+#: pcbnew/onrightclick.cpp:593
 msgid "Net Locked: Yes"
 msgstr "Net verrouillé: Oui"
 
-#: pcbnew/onrightclick.cpp:575
+#: pcbnew/onrightclick.cpp:594
 msgid "Net Locked: No"
 msgstr "Net verrouillé: Non"
 
-#: pcbnew/onrightclick.cpp:598
-msgid "Move (M)"
-msgstr "Move (M)"
+#: pcbnew/onrightclick.cpp:616
+#: pcbnew/onrightclick.cpp:661
+#: pcbnew/onrightclick.cpp:699
+#: pcbnew/onrightclick.cpp:758
+msgid "Move"
+msgstr "Move"
 
-#: pcbnew/onrightclick.cpp:600
-msgid "Drag (G)"
-msgstr "Drag (G)"
+#: pcbnew/onrightclick.cpp:619
+#: pcbnew/onrightclick.cpp:701
+msgid "Drag"
+msgstr "Drag"
 
-#: pcbnew/onrightclick.cpp:603
-msgid "Rotate  + (R)"
-msgstr "Rotation +  (R)"
+#: pcbnew/onrightclick.cpp:623
+msgid "Rotate  +"
+msgstr "Rotation +"
 
-#: pcbnew/onrightclick.cpp:605
+#: pcbnew/onrightclick.cpp:627
 #: eeschema/onrightclick.cpp:294
 msgid "Rotate -"
 msgstr "Rotation -"
 
-#: pcbnew/onrightclick.cpp:607
-msgid "Flip (S)"
-msgstr "Change face (S)"
+#: pcbnew/onrightclick.cpp:628
+msgid "Flip"
+msgstr "Change côté"
 
-#: pcbnew/onrightclick.cpp:638
-#: pcbnew/onrightclick.cpp:676
-#: pcbnew/onrightclick.cpp:735
-msgid "Move"
-msgstr "Move"
-
-#: pcbnew/onrightclick.cpp:678
-msgid "Drag"
-msgstr "Drag"
-
-#: pcbnew/onrightclick.cpp:695
+#: pcbnew/onrightclick.cpp:718
 msgid "delete"
 msgstr "Effacer"
 
-#: pcbnew/onrightclick.cpp:702
+#: pcbnew/onrightclick.cpp:725
 msgid "Autoroute Pad"
 msgstr "Autoroute Pad"
 
-#: pcbnew/onrightclick.cpp:703
+#: pcbnew/onrightclick.cpp:726
 msgid "Autoroute Net"
 msgstr "Autoroute Net"
 
@@ -4856,6 +4844,47 @@ msgstr " Pads magnétiques"
 msgid "control the capture of the pcb cursor when the mouse cursor enters a pad area"
 msgstr "Controle la capture du curseur pcb quand le curseuir souris est sur le pad"
 
+#: eeschema/annotate.cpp:181
+msgid "Previous Annotation will be deleted. Continue ?"
+msgstr "La numérotation existante va être détruite, continuer?"
+
+#: eeschema/annotate.cpp:688
+#, c-format
+msgid "item not annotated: %s%s"
+msgstr "item non numéroté: %s%s"
+
+#: eeschema/annotate.cpp:692
+#, c-format
+msgid "( unit %d)"
+msgstr "( Unité %d)"
+
+#: eeschema/annotate.cpp:708
+#, c-format
+msgid "Error item %s%s"
+msgstr "Erreur item %s%s"
+
+#: eeschema/annotate.cpp:710
+#, c-format
+msgid " unit %d and no more than %d parts"
+msgstr " unité %d et plus que %d parts"
+
+#: eeschema/annotate.cpp:742
+#: eeschema/annotate.cpp:765
+#, c-format
+msgid "Multiple item %s%s"
+msgstr "Multipleélément %s%s"
+
+#: eeschema/annotate.cpp:747
+#: eeschema/annotate.cpp:769
+#, c-format
+msgid " (unit %d)"
+msgstr " ( Unité %d)"
+
+#: eeschema/annotate.cpp:785
+#, c-format
+msgid "Diff values for %s%d%c (%s) and %s%d%c (%s)"
+msgstr "Valeurs différentes pour %s%d%c (%s) et %s%d%c (%s)"
+
 #: eeschema/schedit.cpp:281
 msgid "Push/Pop Hierarchy"
 msgstr "Naviger dans Hiérarchie"
@@ -4914,6 +4943,87 @@ msgstr "Ajout Composant"
 msgid "Add Power"
 msgstr "Add Alims"
 
+#: eeschema/erc.cpp:301
+msgid "Annotation Required!"
+msgstr "Numérotation requise!"
+
+#: eeschema/erc.cpp:403
+msgid "ERC file:"
+msgstr "Fichier ERC:"
+
+#: eeschema/erc.cpp:556
+#, c-format
+msgid "Warning GLabel %s not connected to SheetLabel"
+msgstr "Warning GLabel %s non connecté a SheetLabel"
+
+#: eeschema/erc.cpp:560
+#, c-format
+msgid "Warning SheetLabel %s not connected to GLabel"
+msgstr "Warning SheetLabel %s non connecté a GLabel"
+
+#: eeschema/erc.cpp:574
+#, c-format
+msgid "Warning Pin %s Unconnected"
+msgstr "Warning Pin %s Non connectée"
+
+#: eeschema/erc.cpp:583
+#, c-format
+msgid "Warning Pin %s not driven (Net %d)"
+msgstr "Warning Pin %s non pilotée (Net %d)"
+
+#: eeschema/erc.cpp:593
+msgid "Warning More than 1 Pin connected to UnConnect symbol"
+msgstr "Warning: plus que 1 Pin connectée a un symbole de non connexion"
+
+#: eeschema/erc.cpp:603
+#: common/confirm.cpp:79
+msgid "Warning"
+msgstr "Avertissement"
+
+#: eeschema/erc.cpp:606
+#: common/confirm.cpp:82
+msgid "Error"
+msgstr "Erreur"
+
+#: eeschema/erc.cpp:612
+#, c-format
+msgid "%s: Pin %s connected to Pin %s (net %d)"
+msgstr "%s: Pin %s connectée a Pin %s (net %d)"
+
+#: eeschema/erc.cpp:729
+msgid "ERC control"
+msgstr "Controle ERC"
+
+#: eeschema/erc.cpp:739
+#, c-format
+msgid ""
+"\n"
+"***** Sheet %d (%s)\n"
+msgstr ""
+"\n"
+"***** feuille %d (%s)\n"
+
+#: eeschema/erc.cpp:741
+#: eeschema/genliste.cpp:616
+#: eeschema/hierarch.cpp:134
+#: eeschema/dialog_build_BOM.cpp:1009
+msgid "Root"
+msgstr "Racine"
+
+#: eeschema/erc.cpp:757
+#, c-format
+msgid "ERC: %s (X= %2.3f inches, Y= %2.3f inches\n"
+msgstr "ERC: %s (X= %2.3f pouces, Y= %2.3f pouces\n"
+
+#: eeschema/erc.cpp:766
+#, c-format
+msgid ""
+"\n"
+" >> Errors ERC: %d\n"
+msgstr ""
+"\n"
+" >> Erreurs ERC: %d\n"
+
 #: eeschema/symbtext.cpp:130
 msgid " Text : "
 msgstr " Texte : "
@@ -4940,10 +5050,9 @@ msgstr "Commun a converti"
 
 #: eeschema/symbtext.cpp:167
 #: eeschema/editpart.cpp:230
-#: eeschema/fieldedi.cpp:352
-#: eeschema/edit_component_in_lib.cpp:433
-#: eeschema/libedpart.cpp:507
 #: eeschema/dialog_edit_component_in_schematic.cpp:218
+#: eeschema/libedpart.cpp:555
+#: eeschema/edit_component_in_lib.cpp:502
 msgid "Vertical"
 msgstr "Vertical"
 
@@ -5043,87 +5152,6 @@ msgstr "** Fin de Tracé **\n"
 #: eeschema/plothpgl.cpp:564
 msgid "Plot  "
 msgstr "Trace  "
-
-#: eeschema/erc.cpp:284
-msgid "Annotation Required!"
-msgstr "Numérotation requise!"
-
-#: eeschema/erc.cpp:378
-msgid "ERC file:"
-msgstr "Fichier ERC:"
-
-#: eeschema/erc.cpp:519
-#, c-format
-msgid "Warning GLabel %s not connected to SheetLabel"
-msgstr "Warning GLabel %s non connecté a SheetLabel"
-
-#: eeschema/erc.cpp:522
-#, c-format
-msgid "Warning SheetLabel %s not connected to GLabel"
-msgstr "Warning SheetLabel %s non connecté a GLabel"
-
-#: eeschema/erc.cpp:535
-#, c-format
-msgid "Warning Pin %s Unconnected"
-msgstr "Warning Pin %s Non connectée"
-
-#: eeschema/erc.cpp:544
-#, c-format
-msgid "Warning Pin %s not driven (Net %d)"
-msgstr "Warning Pin %s non pilotée (Net %d)"
-
-#: eeschema/erc.cpp:554
-msgid "Warning More than 1 Pin connected to UnConnect symbol"
-msgstr "Warning: plus que 1 Pin connectée a un symbole de non connexion"
-
-#: eeschema/erc.cpp:565
-#: common/confirm.cpp:79
-msgid "Warning"
-msgstr "Avertissement"
-
-#: eeschema/erc.cpp:568
-#: common/confirm.cpp:82
-msgid "Error"
-msgstr "Erreur"
-
-#: eeschema/erc.cpp:574
-#, c-format
-msgid "%s: Pin %s connected to Pin %s (net %d)"
-msgstr "%s: Pin %s connectée a Pin %s (net %d)"
-
-#: eeschema/erc.cpp:681
-msgid "ERC control"
-msgstr "Controle ERC"
-
-#: eeschema/erc.cpp:688
-#, c-format
-msgid ""
-"\n"
-"***** Sheet %d (%s)\n"
-msgstr ""
-"\n"
-"***** feuille %d (%s)\n"
-
-#: eeschema/erc.cpp:690
-#: eeschema/genliste.cpp:616
-#: eeschema/hierarch.cpp:134
-#: eeschema/dialog_build_BOM.cpp:1009
-msgid "Root"
-msgstr "Racine"
-
-#: eeschema/erc.cpp:703
-#, c-format
-msgid "ERC: %s (X= %2.3f inches, Y= %2.3f inches\n"
-msgstr "ERC: %s (X= %2.3f pouces, Y= %2.3f pouces\n"
-
-#: eeschema/erc.cpp:710
-#, c-format
-msgid ""
-"\n"
-" >> Errors ERC: %d\n"
-msgstr ""
-"\n"
-" >> Erreurs ERC: %d\n"
 
 #: eeschema/libedit.cpp:38
 msgid " Part:   "
@@ -5320,82 +5348,41 @@ msgstr "Incrément"
 msgid "Delta Label:"
 msgstr "Incrément Label:"
 
-#: eeschema/annotate.cpp:172
-msgid "Previous Annotation will be deleted. Continue ?"
-msgstr "La numérotation existante va être détruite, continuer?"
-
-#: eeschema/annotate.cpp:628
-#, c-format
-msgid "item not annotated: %s%s"
-msgstr "item non numéroté: %s%s"
-
-#: eeschema/annotate.cpp:632
-#, c-format
-msgid "( unit %d)"
-msgstr "( Unité %d)"
-
-#: eeschema/annotate.cpp:645
-#, c-format
-msgid "Error item %s%s"
-msgstr "Erreur item %s%s"
-
-#: eeschema/annotate.cpp:647
-#, c-format
-msgid " unit %d and no more than %d parts"
-msgstr " unité %d et plus que %d parts"
-
-#: eeschema/annotate.cpp:674
-#: eeschema/annotate.cpp:695
-#, c-format
-msgid "Multiple item %s%s"
-msgstr "Multipleélément %s%s"
-
-#: eeschema/annotate.cpp:679
-#: eeschema/annotate.cpp:699
-#, c-format
-msgid " (unit %d)"
-msgstr " ( Unité %d)"
-
-#: eeschema/annotate.cpp:715
-#, c-format
-msgid "Diff values for %s%d%c (%s) and %s%d%c (%s)"
-msgstr "Valeurs différentes pour %s%d%c (%s) et %s%d%c (%s)"
-
-#: eeschema/netlist.cpp:96
-#: eeschema/netlist.cpp:129
+#: eeschema/netlist.cpp:155
+#: eeschema/netlist.cpp:189
 #: eeschema/dialog_build_BOM.cpp:265
 msgid "List"
 msgstr "Liste"
 
-#: eeschema/netlist.cpp:118
+#: eeschema/netlist.cpp:177
 msgid "No component"
 msgstr "Pas de composants"
 
-#: eeschema/netlist.cpp:135
-#: eeschema/netlist.cpp:229
-#: eeschema/netlist.cpp:261
-#: eeschema/netlist.cpp:278
-#: eeschema/netlist.cpp:292
+#: eeschema/netlist.cpp:198
+#: eeschema/netlist.cpp:303
+#: eeschema/netlist.cpp:341
+#: eeschema/netlist.cpp:362
+#: eeschema/netlist.cpp:377
 msgid "Done"
 msgstr "Fini"
 
-#: eeschema/netlist.cpp:138
+#: eeschema/netlist.cpp:201
 msgid "NbItems"
 msgstr "NbItems"
 
-#: eeschema/netlist.cpp:234
+#: eeschema/netlist.cpp:308
 msgid "Labels"
 msgstr "Labels"
 
-#: eeschema/netlist.cpp:265
+#: eeschema/netlist.cpp:344
 msgid "Hierar."
 msgstr "Hiérar."
 
-#: eeschema/netlist.cpp:281
+#: eeschema/netlist.cpp:365
 msgid "Sorting"
 msgstr "Tri"
 
-#: eeschema/netlist.cpp:667
+#: eeschema/netlist.cpp:806
 msgid "Bad Bus Label: "
 msgstr "Mauvais label de Bus: "
 
@@ -5670,18 +5657,17 @@ msgid "Defaults"
 msgstr "Defauts"
 
 #: eeschema/editpart.cpp:224
-#: eeschema/fieldedi.cpp:346
-#: eeschema/edit_component_in_lib.cpp:429
-#: eeschema/libedpart.cpp:500
 #: eeschema/dialog_edit_component_in_schematic.cpp:214
+#: eeschema/libedpart.cpp:547
+#: eeschema/edit_component_in_lib.cpp:497
 msgid "Show Text"
 msgstr "Texte visible"
 
 #: eeschema/editpart.cpp:247
-#: eeschema/edit_component_in_lib.cpp:451
-#: eeschema/libedpart.cpp:544
-#: eeschema/libedpart.cpp:572
-#: eeschema/libedpart.cpp:616
+#: eeschema/libedpart.cpp:598
+#: eeschema/libedpart.cpp:635
+#: eeschema/libedpart.cpp:687
+#: eeschema/edit_component_in_lib.cpp:524
 #: eeschema/edit_component_in_schematic.cpp:219
 msgid "Pos"
 msgstr "Pos"
@@ -5725,10 +5711,10 @@ msgid "Convert"
 msgstr "Convert"
 
 #: eeschema/editpart.cpp:349
-#: eeschema/libedpart.cpp:466
 #: eeschema/dialog_edit_component_in_lib.cpp:162
 #: eeschema/dialog_create_component.cpp:188
 #: eeschema/dialog_edit_component_in_schematic.cpp:190
+#: eeschema/libedpart.cpp:510
 msgid "Parts are locked"
 msgstr "Les parts sont verrouillées"
 
@@ -6275,134 +6261,6 @@ msgstr "Voir documents des composants"
 msgid "Export to schematic"
 msgstr "Exportervers schematique"
 
-#: eeschema/fieldedi.cpp:143
-msgid "Componant properties"
-msgstr "Propriétés du composant"
-
-#: eeschema/fieldedi.cpp:226
-msgid " General : "
-msgstr " Général :"
-
-#: eeschema/fieldedi.cpp:229
-#: eeschema/edit_component_in_lib.cpp:353
-#: eeschema/libedpart.cpp:410
-#: eeschema/dialog_create_component.cpp:180
-msgid "As Convert"
-msgstr "A une forme \"convertie\""
-
-#: eeschema/fieldedi.cpp:233
-#: eeschema/edit_component_in_lib.cpp:357
-#: eeschema/libedpart.cpp:414
-#: eeschema/dialog_create_component.cpp:247
-msgid "Show Pin Num"
-msgstr "Montre Numéro de Pin"
-
-#: eeschema/fieldedi.cpp:241
-#: eeschema/edit_component_in_lib.cpp:365
-#: eeschema/libedpart.cpp:422
-#: eeschema/dialog_create_component.cpp:251
-msgid "Show Pin Name"
-msgstr "Montre Nom de Pin"
-
-#: eeschema/fieldedi.cpp:249
-#: eeschema/edit_component_in_lib.cpp:373
-#: eeschema/libedpart.cpp:430
-#: eeschema/dialog_create_component.cpp:255
-msgid "Pin Name Inside"
-msgstr "Nom de pin a l'intérieur"
-
-#: eeschema/fieldedi.cpp:257
-#: eeschema/libedpart.cpp:438
-#: eeschema/dialog_edit_component_in_lib.cpp:144
-msgid "Number of Units:"
-msgstr "Nombre de parts:"
-
-#: eeschema/fieldedi.cpp:267
-#: eeschema/libedpart.cpp:448
-#: eeschema/dialog_edit_component_in_lib.cpp:152
-#: eeschema/dialog_create_component.cpp:259
-msgid "Skew:"
-msgstr "Décalage:"
-
-#: eeschema/fieldedi.cpp:286
-#: eeschema/libedpart.cpp:352
-#: eeschema/dialog_edit_component_in_lib.cpp:172
-msgid "Doc:"
-msgstr "Doc:"
-
-#: eeschema/fieldedi.cpp:290
-#: eeschema/libedpart.cpp:364
-#: eeschema/dialog_edit_component_in_lib.cpp:179
-msgid "Keywords:"
-msgstr "Mots Cles:"
-
-#: eeschema/fieldedi.cpp:294
-#: eeschema/libedpart.cpp:375
-#: eeschema/dialog_edit_component_in_lib.cpp:186
-msgid "DocFileName:"
-msgstr "Fichier de Doc:"
-
-#: eeschema/fieldedi.cpp:304
-#: eeschema/fieldedi.cpp:322
-#: eeschema/edit_component_in_lib.cpp:198
-#: eeschema/libedpart.cpp:250
-#: eeschema/libedpart.cpp:294
-#: eeschema/dialog_edit_component_in_lib.cpp:207
-msgid "Alias"
-msgstr "Alias"
-
-#: eeschema/fieldedi.cpp:314
-#: eeschema/edit_component_in_lib.cpp:222
-#: eeschema/edit_component_in_lib.cpp:284
-#: eeschema/libedpart.cpp:284
-msgid "Delete All"
-msgstr "Tout Supprimer"
-
-#: eeschema/fieldedi.cpp:577
-#: eeschema/edit_component_in_lib.cpp:791
-#: eeschema/libedpart.cpp:889
-msgid "Ok to Delete Alias LIST"
-msgstr "Ok pour effacer la LISTE des Alias"
-
-#: eeschema/fieldedi.cpp:600
-msgid "Alias:"
-msgstr "Alias:"
-
-#: eeschema/fieldedi.cpp:608
-#: eeschema/edit_component_in_lib.cpp:830
-#: eeschema/edit_component_in_lib.cpp:1078
-#: eeschema/libedpart.cpp:926
-msgid "Already in use"
-msgstr "Déja en usage"
-
-#: eeschema/fieldedi.cpp:820
-msgid "Text: "
-msgstr "Texte:"
-
-#: eeschema/fieldedi.cpp:1005
-#: eeschema/edit_component_in_lib.cpp:903
-#: eeschema/libedpart.cpp:992
-msgid "Delete units"
-msgstr "Supprimer  unité"
-
-#: eeschema/fieldedi.cpp:1071
-#: eeschema/edit_component_in_lib.cpp:968
-#: eeschema/libedpart.cpp:1057
-msgid "Create pins for Convert items"
-msgstr "Créér les pins des unitées converties"
-
-#: eeschema/fieldedi.cpp:1075
-#: eeschema/edit_component_in_lib.cpp:972
-#: eeschema/libedpart.cpp:1061
-msgid "Part as \"De Morgan\" anymore"
-msgstr "Le composant a une représentation convertie"
-
-#: eeschema/fieldedi.cpp:1100
-#: eeschema/edit_component_in_lib.cpp:997
-#: eeschema/libedpart.cpp:1086
-msgid "Delete Convert items"
-msgstr "Suppression des éléments convertis"
-
 #: eeschema/files-io.cpp:55
 msgid "Clear SubHierarchy ?"
 msgstr "Supprimer la sous hiérarchie?"
@@ -6557,114 +6415,6 @@ msgstr "Sauver fichier "
 msgid "File write operation failed."
 msgstr "Erreur sur écriture sur fichier."
 
-#: eeschema/edit_component_in_lib.cpp:153
-#: eeschema/libedpart.cpp:203
-#: eeschema/dialog_edit_component_in_lib.h:44
-msgid "Lib Component Properties"
-msgstr "Propriétés du composant librairie"
-
-#: eeschema/edit_component_in_lib.cpp:157
-#: eeschema/libedpart.cpp:173
-#: eeschema/libedpart.cpp:329
-msgid "Properties for "
-msgstr "Propriétés pour "
-
-#: eeschema/edit_component_in_lib.cpp:162
-#: eeschema/libedpart.cpp:178
-msgid "(alias of "
-msgstr "(alias de "
-
-#: eeschema/edit_component_in_lib.cpp:251
-msgid "Footprint Filter"
-msgstr "Filtrage Modules"
-
-#: eeschema/edit_component_in_lib.cpp:260
-msgid "Footprints"
-msgstr "Modules"
-
-#: eeschema/edit_component_in_lib.cpp:412
-#: eeschema/libedpart.cpp:484
-msgid "Left justify"
-msgstr "Justifié à gauche"
-
-#: eeschema/edit_component_in_lib.cpp:412
-#: eeschema/edit_component_in_lib.cpp:414
-#: eeschema/libedpart.cpp:484
-#: eeschema/libedpart.cpp:486
-#: share/zoom.cpp:360
-msgid "Center"
-msgstr "Centrer"
-
-#: eeschema/edit_component_in_lib.cpp:412
-#: eeschema/libedpart.cpp:484
-msgid "Right justify"
-msgstr "Justifié à droite"
-
-#: eeschema/edit_component_in_lib.cpp:414
-#: eeschema/libedpart.cpp:486
-msgid "Bottom justify"
-msgstr "Justifié en bas"
-
-#: eeschema/edit_component_in_lib.cpp:414
-#: eeschema/libedpart.cpp:486
-msgid "Top justify"
-msgstr "Justifié en haut"
-
-#: eeschema/edit_component_in_lib.cpp:419
-#: eeschema/eelayer.cpp:111
-#: eeschema/dialog_edit_component_in_schematic.cpp:228
-msgid "Fields"
-msgstr "Champs"
-
-#: eeschema/edit_component_in_lib.cpp:438
-#: eeschema/edit_component_in_schematic.cpp:201
-msgid "Field Name:"
-msgstr "Nom Champ"
-
-#: eeschema/edit_component_in_lib.cpp:456
-#: eeschema/libedpart.cpp:512
-msgid "Hor Justify"
-msgstr "Justifié horiz"
-
-#: eeschema/edit_component_in_lib.cpp:462
-#: eeschema/libedpart.cpp:519
-msgid "Vert Justify"
-msgstr "Justifié Vert."
-
-#: eeschema/edit_component_in_lib.cpp:477
-#: eeschema/edit_component_in_schematic.cpp:195
-msgid "Field to edit"
-msgstr "Champ à éditer"
-
-#: eeschema/edit_component_in_lib.cpp:814
-#: eeschema/libedpart.cpp:910
-msgid "New alias:"
-msgstr "Noveau alias"
-
-#: eeschema/edit_component_in_lib.cpp:821
-#: eeschema/libedpart.cpp:917
-msgid "This is the Root Part"
-msgstr "Ceci est le composant racine"
-
-#: eeschema/edit_component_in_lib.cpp:852
-#: eeschema/libedpart.cpp:946
-msgid " is Current Selected Alias!"
-msgstr " est l' Alias actuellement sélectionné!"
-
-#: eeschema/edit_component_in_lib.cpp:1026
-#: eeschema/libedpart.cpp:1114
-#: common/eda_doc.cpp:129
-msgid "Doc Files"
-msgstr "Fichiers de Doc"
-
-#: eeschema/edit_component_in_lib.cpp:1049
-msgid "Ok to Delete FootprintFilter LIST"
-msgstr "Ok pour effacer la LISTE des filtres de modules"
-
-#: eeschema/edit_component_in_lib.cpp:1068
-msgid "New FootprintFilter:"
-msgstr "Nouveau \"Filtre de Modules"
-
 #: eeschema/dialog_set_status.cpp:135
 #: cvpcb/dialog_cvpcb_config.cpp:140
 msgid "&PcbNew"
@@ -6750,6 +6500,12 @@ msgstr "Num Pin"
 msgid "PinNam"
 msgstr "Nom Pin"
 
+#: eeschema/eelayer.cpp:111
+#: eeschema/dialog_edit_component_in_schematic.cpp:228
+#: eeschema/edit_component_in_lib.cpp:484
+msgid "Fields"
+msgstr "Champs"
+
 #: eeschema/eelayer.cpp:117
 msgid "Body"
 msgstr "Body"
@@ -6771,7 +6527,7 @@ msgid "Pin"
 msgstr "Pin"
 
 #: eeschema/eelayer.cpp:153
-#: eeschema/component_class.cpp:52
+#: eeschema/component_class.cpp:57
 msgid "Sheet"
 msgstr "Feuille"
 
@@ -6821,7 +6577,7 @@ msgid "FileName"
 msgstr "Nom Fichier"
 
 #: eeschema/affiche.cpp:37
-#: eeschema/component_class.cpp:49
+#: eeschema/component_class.cpp:54
 msgid "Ref"
 msgstr "Ref"
 
@@ -6906,30 +6662,59 @@ msgstr "Feuille %s (fichier %s) modifiée. La sauver t?"
 msgid "Arc %.1f deg"
 msgstr "Arc %.1f deg"
 
-#: eeschema/libedpart.cpp:332
-msgid "alias "
-msgstr "alias "
-
-#: eeschema/libedpart.cpp:380
-#: eeschema/dialog_edit_component_in_lib.cpp:195
-msgid "Copy Doc"
-msgstr "Copie Doc"
-
-#: eeschema/libedpart.cpp:385
-#: eeschema/dialog_edit_component_in_lib.cpp:199
-msgid "Browse DocFiles"
-msgstr "Examen Fichiers de Doc"
-
-#: eeschema/libedpart.cpp:407
 #: eeschema/dialog_edit_component_in_lib.cpp:136
+#: eeschema/libedpart.cpp:434
 msgid "General :"
 msgstr " Général :"
 
-#: eeschema/libedpart.cpp:458
+#: eeschema/dialog_edit_component_in_lib.cpp:144
+#: eeschema/libedpart.cpp:476
+msgid "Number of Units:"
+msgstr "Nombre de parts:"
+
+#: eeschema/dialog_edit_component_in_lib.cpp:152
+#: eeschema/dialog_create_component.cpp:259
+#: eeschema/libedpart.cpp:489
+msgid "Skew:"
+msgstr "Décalage:"
+
 #: eeschema/dialog_edit_component_in_lib.cpp:158
 #: eeschema/dialog_create_component.cpp:184
+#: eeschema/libedpart.cpp:501
 msgid "Power Symbol"
 msgstr "Symbole Alimentation"
+
+#: eeschema/dialog_edit_component_in_lib.cpp:172
+#: eeschema/libedpart.cpp:371
+msgid "Doc:"
+msgstr "Doc:"
+
+#: eeschema/dialog_edit_component_in_lib.cpp:179
+#: eeschema/libedpart.cpp:384
+msgid "Keywords:"
+msgstr "Mots Cles:"
+
+#: eeschema/dialog_edit_component_in_lib.cpp:186
+#: eeschema/libedpart.cpp:397
+msgid "DocFileName:"
+msgstr "Fichier de Doc:"
+
+#: eeschema/dialog_edit_component_in_lib.cpp:195
+#: eeschema/libedpart.cpp:402
+msgid "Copy Doc"
+msgstr "Copie Doc"
+
+#: eeschema/dialog_edit_component_in_lib.cpp:199
+#: eeschema/libedpart.cpp:409
+msgid "Browse DocFiles"
+msgstr "Examen Fichiers de Doc"
+
+#: eeschema/dialog_edit_component_in_lib.cpp:207
+#: eeschema/libedpart.cpp:256
+#: eeschema/libedpart.cpp:309
+#: eeschema/edit_component_in_lib.cpp:216
+msgid "Alias"
+msgstr "Alias"
 
 #: eeschema/libarch.cpp:80
 msgid "Failed to create archive lib file "
@@ -6942,6 +6727,12 @@ msgstr "Impossible de créer le fichier lib document"
 #: eeschema/dialog_create_component.cpp:168
 msgid "U"
 msgstr "U"
+
+#: eeschema/dialog_create_component.cpp:180
+#: eeschema/libedpart.cpp:437
+#: eeschema/edit_component_in_lib.cpp:401
+msgid "As Convert"
+msgstr "A une forme \"convertie\""
 
 #: eeschema/dialog_create_component.cpp:211
 msgid "&1"
@@ -7054,6 +6845,24 @@ msgstr "Parts par boiter"
 #: eeschema/dialog_create_component.cpp:243
 msgid "Draw options"
 msgstr "Options affichage"
+
+#: eeschema/dialog_create_component.cpp:247
+#: eeschema/libedpart.cpp:443
+#: eeschema/edit_component_in_lib.cpp:407
+msgid "Show Pin Num"
+msgstr "Montre Numéro de Pin"
+
+#: eeschema/dialog_create_component.cpp:251
+#: eeschema/libedpart.cpp:454
+#: eeschema/edit_component_in_lib.cpp:418
+msgid "Show Pin Name"
+msgstr "Montre Nom de Pin"
+
+#: eeschema/dialog_create_component.cpp:255
+#: eeschema/libedpart.cpp:465
+#: eeschema/edit_component_in_lib.cpp:429
+msgid "Pin Name Inside"
+msgstr "Nom de pin a l'intérieur"
 
 #: eeschema/dialog_create_component.cpp:311
 msgid "You must provide a name for this component"
@@ -7343,6 +7152,136 @@ msgstr "Fichier "
 msgid "not found"
 msgstr " non trouvé"
 
+#: eeschema/load_one_schematic_file.cpp:103
+msgid "Failed to open "
+msgstr "Erreur ouverture "
+
+#: eeschema/load_one_schematic_file.cpp:108
+msgid "Loading "
+msgstr "Chargement "
+
+#: eeschema/load_one_schematic_file.cpp:115
+#: eeschema/load_one_schematic_file.cpp:124
+msgid " is NOT EESchema file"
+msgstr " n'est PAS un fichier EESchema"
+
+#: eeschema/libedpart.cpp:176
+#: eeschema/libedpart.cpp:347
+#: eeschema/edit_component_in_lib.cpp:172
+msgid "Properties for "
+msgstr "Propriétés pour "
+
+#: eeschema/libedpart.cpp:181
+#: eeschema/edit_component_in_lib.cpp:177
+msgid "(alias of "
+msgstr "(alias de "
+
+#: eeschema/libedpart.cpp:206
+#: eeschema/edit_component_in_lib.cpp:168
+#: eeschema/dialog_edit_component_in_lib.h:44
+msgid "Lib Component Properties"
+msgstr "Propriétés du composant librairie"
+
+#: eeschema/libedpart.cpp:296
+#: eeschema/edit_component_in_lib.cpp:245
+#: eeschema/edit_component_in_lib.cpp:328
+msgid "Delete All"
+msgstr "Tout Supprimer"
+
+#: eeschema/libedpart.cpp:350
+msgid "alias "
+msgstr "alias "
+
+#: eeschema/libedpart.cpp:530
+#: eeschema/edit_component_in_lib.cpp:476
+msgid "Left justify"
+msgstr "Justifié à gauche"
+
+#: eeschema/libedpart.cpp:530
+#: eeschema/libedpart.cpp:532
+#: eeschema/edit_component_in_lib.cpp:476
+#: eeschema/edit_component_in_lib.cpp:478
+#: share/zoom.cpp:360
+msgid "Center"
+msgstr "Centrer"
+
+#: eeschema/libedpart.cpp:530
+#: eeschema/edit_component_in_lib.cpp:476
+msgid "Right justify"
+msgstr "Justifié à droite"
+
+#: eeschema/libedpart.cpp:532
+#: eeschema/edit_component_in_lib.cpp:478
+msgid "Bottom justify"
+msgstr "Justifié en bas"
+
+#: eeschema/libedpart.cpp:532
+#: eeschema/edit_component_in_lib.cpp:478
+msgid "Top justify"
+msgstr "Justifié en haut"
+
+#: eeschema/libedpart.cpp:562
+#: eeschema/edit_component_in_lib.cpp:529
+msgid "Hor Justify"
+msgstr "Justifié horiz"
+
+#: eeschema/libedpart.cpp:570
+#: eeschema/edit_component_in_lib.cpp:536
+msgid "Vert Justify"
+msgstr "Justifié Vert."
+
+#: eeschema/libedpart.cpp:979
+#: eeschema/edit_component_in_lib.cpp:889
+msgid "Ok to Delete Alias LIST"
+msgstr "Ok pour effacer la LISTE des Alias"
+
+#: eeschema/libedpart.cpp:1002
+#: eeschema/edit_component_in_lib.cpp:914
+msgid "New alias:"
+msgstr "Noveau alias"
+
+#: eeschema/libedpart.cpp:1010
+#: eeschema/edit_component_in_lib.cpp:922
+msgid "This is the Root Part"
+msgstr "Ceci est le composant racine"
+
+#: eeschema/libedpart.cpp:1019
+#: eeschema/edit_component_in_lib.cpp:931
+#: eeschema/edit_component_in_lib.cpp:1199
+msgid "Already in use"
+msgstr "Déja en usage"
+
+#: eeschema/libedpart.cpp:1041
+#: eeschema/edit_component_in_lib.cpp:956
+msgid " is Current Selected Alias!"
+msgstr " est l' Alias actuellement sélectionné!"
+
+#: eeschema/libedpart.cpp:1089
+#: eeschema/edit_component_in_lib.cpp:1009
+msgid "Delete units"
+msgstr "Supprimer  unité"
+
+#: eeschema/libedpart.cpp:1159
+#: eeschema/edit_component_in_lib.cpp:1079
+msgid "Create pins for Convert items"
+msgstr "Créér les pins des unitées converties"
+
+#: eeschema/libedpart.cpp:1163
+#: eeschema/edit_component_in_lib.cpp:1083
+msgid "Part as \"De Morgan\" anymore"
+msgstr "Le composant a une représentation convertie"
+
+#: eeschema/libedpart.cpp:1188
+#: eeschema/edit_component_in_lib.cpp:1108
+msgid "Delete Convert items"
+msgstr "Suppression des éléments convertis"
+
+#: eeschema/libedpart.cpp:1222
+#: eeschema/edit_component_in_lib.cpp:1143
+#: common/eda_doc.cpp:129
+msgid "Doc Files"
+msgstr "Fichiers de Doc"
+
 #: eeschema/tool_sch.cpp:55
 msgid "New schematic project"
 msgstr "Nouveau Projet schématique"
@@ -7611,7 +7550,14 @@ msgstr ""
 "#Glob labels ( ordre = Alphab. ) nombre = %d\n"
 
 #: eeschema/dialog_build_BOM.cpp:967
-#: eeschema/component_class.cpp:53
+#: eeschema/component_class.cpp:58
+#: eeschema/component_class.cpp:59
+#: eeschema/component_class.cpp:60
+#: eeschema/component_class.cpp:61
+#: eeschema/component_class.cpp:62
+#: eeschema/component_class.cpp:63
+#: eeschema/component_class.cpp:64
+#: eeschema/component_class.cpp:65
 msgid "Field"
 msgstr "Champ"
 
@@ -7794,19 +7740,6 @@ msgstr "Bloc Miroir (ctrl + drag mouse)"
 #: eeschema/onrightclick.cpp:596
 msgid "Del. Block (shift+ctrl + drag mouse)"
 msgstr "Effacement Bloc (shift+ctrl + drag mouse)"
-
-#: eeschema/load_one_schematic_file.cpp:103
-msgid "Failed to open "
-msgstr "Erreur ouverture "
-
-#: eeschema/load_one_schematic_file.cpp:108
-msgid "Loading "
-msgstr "Chargement "
-
-#: eeschema/load_one_schematic_file.cpp:115
-#: eeschema/load_one_schematic_file.cpp:124
-msgid " is NOT EESchema file"
-msgstr " n'est PAS un fichier EESchema"
 
 #: eeschema/viewlib_frame.cpp:57
 msgid "Library browser"
@@ -8057,6 +7990,32 @@ msgstr "Copie dans Presse papier"
 #: eeschema/edit_label.cpp:49
 msgid "Empty Text!"
 msgstr "Texte vide"
+
+#: eeschema/edit_component_in_lib.cpp:281
+msgid "Footprint Filter"
+msgstr "Filtrage Modules"
+
+#: eeschema/edit_component_in_lib.cpp:293
+msgid "Footprints"
+msgstr "Modules"
+
+#: eeschema/edit_component_in_lib.cpp:508
+#: eeschema/edit_component_in_schematic.cpp:201
+msgid "Field Name:"
+msgstr "Nom Champ"
+
+#: eeschema/edit_component_in_lib.cpp:553
+#: eeschema/edit_component_in_schematic.cpp:195
+msgid "Field to edit"
+msgstr "Champ à éditer"
+
+#: eeschema/edit_component_in_lib.cpp:1166
+msgid "Ok to Delete FootprintFilter LIST"
+msgstr "Ok pour effacer la LISTE des filtres de modules"
+
+#: eeschema/edit_component_in_lib.cpp:1188
+msgid "New FootprintFilter:"
+msgstr "Nouveau \"Filtre de Modules"
 
 #: eeschema/annotate_dialog.cpp:122
 msgid "Hierarchy"
