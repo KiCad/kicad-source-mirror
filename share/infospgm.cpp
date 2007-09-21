@@ -67,9 +67,11 @@ wxString Msg = MsgInfos;
 	if( wxSUBRELEASE_NUMBER )
 		Msg << wxT(".") << wxSUBRELEASE_NUMBER;
 	Msg << _("\n\nGPL License");
-	Msg << _("\n\nWeb sites:\n");
+	Msg << _("\n\nAuthor's sites:\n");
 	Msg << wxT("http://iut-tice.ujf-grenoble.fr/kicad/\n");
 	Msg << wxT("http://www.gipsa-lab.inpg.fr/realise_au_lis/kicad/");
+	Msg << _("\n\nInternational wiki:\n");
+	Msg << wxT("http://kicad.sourceforge.net/\n");
 
 	AboutCaption << g_Main_Title << wxT(" ") << GetBuildVersion();
 
