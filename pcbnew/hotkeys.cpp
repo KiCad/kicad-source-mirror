@@ -181,6 +181,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
     // Remap the control key Ctrl A (0x01) to GR_KB_CTRL + 'A' (just easier to handle...)
     if( (hotkey & GR_KB_CTRL) != 0 )
         hotkey += 'A' - 1;
+    
     /* Convert lower to upper case (the usual toupper function has problem with non ascii codes like function keys */
     if( (hotkey >= 'a') && (hotkey <= 'z') )
         hotkey += 'A' - 'a';
@@ -325,8 +326,9 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_END_TRACK:
-		if ( ! ItemFree && (GetCurItem()->Type() == TYPETRACK) && ((GetCurItem()->m_Flags & IS_NEW) != 0) )
-		{	// A new track is in progress: call to End_Route()
+		if( ! ItemFree && (GetCurItem()->Type() == TYPETRACK) && ((GetCurItem()->m_Flags & IS_NEW) != 0) )
+		{	
+            // A new track is in progress: call to End_Route()
 			DrawPanel->MouseToCursorSchema();
 			End_Route( (TRACK*) ( GetCurItem() ), DC );
 		}
@@ -417,9 +419,10 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
                                              | MATCH_LAYER
     #endif
                                              );
+            
             if( module == NULL )          // no footprint found
             {
-                module = Locate_Prefered_Module( m_Pcb, CURSEUR_OFF_GRILLE );
+                module = Locate_Prefered_Module( m_Pcb, CURSEUR_OFF_GRILLE | VISIBLE_ONLY );
                 if( module )
                 {
                     // a footprint is found, but locked or on an other layer

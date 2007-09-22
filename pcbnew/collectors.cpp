@@ -152,7 +152,15 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
     switch( item->Type() )
     {
     case TYPEPAD:
-        module = (MODULE*) item->GetParent();
+        // if pad is a thru hole, then it can be visible when its parent module is not.
+        if( ((D_PAD*)item)->m_Attribut != SMD )    // a hole is present, so multiple layers
+        {
+            // there are no pad specific visibility controls at this time.
+            // proceed to the common tests below, but without the parent module test, 
+            // by leaving module==NULL
+        }
+        else    // smd, so use common test below
+            module = (MODULE*) item->GetParent();
         break;
         
     case TYPEVIA:
@@ -198,6 +206,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
     {
         if( m_Guide->IgnoreModulesOnCu() && module->GetLayer()==LAYER_CUIVRE_N )
             goto exit;
+        
         if( m_Guide->IgnoreModulesOnCmp() && module->GetLayer()==LAYER_CMP_N )
             goto exit;
     }

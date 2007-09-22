@@ -95,6 +95,7 @@ int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
 
     if( g_HightLigt_Status )
         Hight_Light( DC );
+    
     pt_piste = Locate_Pistes( m_Pcb->m_Track, masquelayer, CURSEUR_OFF_GRILLE );
     if( pt_piste )
     {
@@ -108,6 +109,7 @@ int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
         {
             code = g_HightLigth_NetCode = pt_pad->m_NetCode;
             Hight_Light( DC );
+            SendMessageToEESCHEMA( pt_pad );
         }
     }
 
