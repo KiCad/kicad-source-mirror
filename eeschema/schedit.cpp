@@ -53,6 +53,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_MOVE_PINSHEET:
     case ID_POPUP_SCH_MOVE_ITEM_REQUEST:
     case ID_POPUP_SCH_MOVE_CMP_REQUEST:
+    case ID_POPUP_SCH_DRAG_CMP_REQUEST:
     case ID_POPUP_SCH_EDIT_CMP:
     case ID_POPUP_SCH_MIROR_X_CMP:
     case ID_POPUP_SCH_MIROR_Y_CMP:
@@ -486,21 +487,27 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
                            m_CurrentScreen->GetCurItem(), &dc );
         break;
 
+    case ID_POPUP_SCH_DRAG_CMP_REQUEST:
     case ID_POPUP_SCH_MOVE_CMP_REQUEST:
-
         // Ensure the struct is a component (could be a struct of a component, like Field, text..)
         if( m_CurrentScreen->GetCurItem()->Type() != DRAW_LIB_ITEM_STRUCT_TYPE )
             m_CurrentScreen->SetCurItem( LocateSmallestComponent( GetScreen() ) );
         if( m_CurrentScreen->GetCurItem() == NULL )
             break;
-
     case ID_POPUP_SCH_MOVE_ITEM_REQUEST:
         DrawPanel->MouseToCursorSchema();
-        Process_Move_Item( m_CurrentScreen->GetCurItem(), &dc );
+		if ( id == ID_POPUP_SCH_DRAG_CMP_REQUEST )
+		{	// The easiest way to handle a drag component is simulate a block drag command
+           if( GetScreen()->BlockLocate.m_State == STATE_NO_BLOCK )
+            {
+                if( !HandleBlockBegin( &dc, BLOCK_DRAG, GetScreen()->m_Curseur ) ) break;
+                HandleBlockEnd( &dc );
+			}
+		}
+        else Process_Move_Item( m_CurrentScreen->GetCurItem(), &dc );
         break;
 
     case ID_POPUP_SCH_EDIT_CMP:
-
         // Ensure the struct is a component (could be a struct of a component, like Field, text..)
         if( m_CurrentScreen->GetCurItem()->Type() != DRAW_LIB_ITEM_STRUCT_TYPE )
             m_CurrentScreen->SetCurItem( LocateSmallestComponent( GetScreen() ) );

@@ -4,6 +4,18 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+
+2007-sept-22 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++ all
+    * small change in hotkeys handling
+		(Ki_HotkeyInfo: new member m_IdMenuEvent to call an existing event handler from a hotkey list)
+
++ eeschema:
+	* added drag component in pop up menu and hotkeys
+	* plot svg format: incorrect arc draw fixed
+
+
 2007-Sep-22 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew

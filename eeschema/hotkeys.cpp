@@ -27,7 +27,7 @@
  *  add the HkMyNewEntry pointer in the s_Schematic_Hotkey_List list or the s_LibEdit_Hotkey_List list
  *  ( or s_Common_Hotkey_List if the same command is added both in eeschema and libedit)
  *  Add the new code in the switch in OnHotKey() function.
- *  when the variable PopupOn is true, an item is currently edited.
+ *  when the variable ItemInEdit is true, an item is currently edited.
  *  This can be usefull if the new function cannot be executed while an item is currently being edited
  *  ( For example, one cannot start a new wire when a component is moving.)
  *
@@ -48,8 +48,8 @@ static Ki_HotkeyInfo    HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
 static Ki_HotkeyInfo    HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
 static Ki_HotkeyInfo    HkHelp( wxT( "Help: this message" ), HK_HELP, '?' );
 static Ki_HotkeyInfo    HkResetLocalCoord( wxT( "Reset local coord." ), HK_RESET_LOCAL_COORD, ' ' );
-static Ki_HotkeyInfo    HkUndo( wxT( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z' );
-static Ki_HotkeyInfo    HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y' );
+static Ki_HotkeyInfo    HkUndo( wxT( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int)ID_SCHEMATIC_UNDO );
+static Ki_HotkeyInfo    HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y', (int)ID_SCHEMATIC_REDO );
 
 // Schematic editor
 static Ki_HotkeyInfo    HkBeginWire( wxT( "begin Wire" ), HK_BEGIN_WIRE, 'W' );
@@ -62,7 +62,8 @@ static Ki_HotkeyInfo    HkOrientNormalComponent( wxT(
                                                      "Orient Normal Component" ),
                                                  HK_ORIENT_NORMAL_COMPONENT, 'N' );
 static Ki_HotkeyInfo    HkRotateComponent( wxT( "Rotate Component" ), HK_ROTATE_COMPONENT, 'R' );
-static Ki_HotkeyInfo    HkMoveComponent( wxT( "Move Component" ), HK_MOVE_COMPONENT, 'M' );
+static Ki_HotkeyInfo    HkMoveComponent( wxT( "Move Component" ), HK_MOVE_COMPONENT, 'M', ID_POPUP_SCH_MOVE_CMP_REQUEST );
+static Ki_HotkeyInfo    HkDragComponent( wxT( "Drag Component" ), HK_DRAG_COMPONENT, 'G', ID_POPUP_SCH_DRAG_CMP_REQUEST );
 static Ki_HotkeyInfo    HkMove2Drag( wxT(
                                          "Switch move block to drag block" ),
                                      HK_MOVEBLOCK_TO_DRAGBLOCK, '\t' );
@@ -80,7 +81,7 @@ Ki_HotkeyInfo* s_Common_Hotkey_List[] =
     &HkHelp,
     &HkZoomIn,          &HkZoomOut, &HkZoomRedraw, &HkZoomCenter,
     &HkResetLocalCoord,
-	&HkUndo, &HkRedo,
+    &HkUndo,            &HkRedo,
     NULL
 };
 
@@ -88,7 +89,7 @@ Ki_HotkeyInfo* s_Common_Hotkey_List[] =
 Ki_HotkeyInfo* s_Schematic_Hotkey_List[] = {
     &HkNextSearch,
     &HkDelete,          &HkInsert,           &HkMove2Drag,
-    &HkMoveComponent,   &HkAddComponent,
+    &HkMoveComponent,   &HkDragComponent,    &HkAddComponent,
     &HkRotateComponent, &HkMirrorXComponent, &HkMirrorYComponent, &HkOrientNormalComponent,
     &HkBeginWire,
     NULL
@@ -135,7 +136,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
  *  Commands are case insensitive
  */
 {
-    bool PopupOn = m_CurrentScreen->GetCurItem()
+    bool ItemInEdit = m_CurrentScreen->GetCurItem()
                    && m_CurrentScreen->GetCurItem()->m_Flags;
     bool RefreshToolBar = FALSE; // We must refresh tool bar when the undo/redo tool state is modified
 
@@ -152,11 +153,12 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         hotkey += 'A' - 'a';
 
     // Search command from key :
-    int CommandCode = GetCommandCodeFromHotkey( hotkey, s_Common_Hotkey_List );
-    if( CommandCode == HK_NOT_FOUND )
-        CommandCode = GetCommandCodeFromHotkey( hotkey, s_Schematic_Hotkey_List );
+    Ki_HotkeyInfo * HK_Descr = GetDescriptorFromHotkey( hotkey, s_Common_Hotkey_List );
+    if( HK_Descr == NULL )
+        HK_Descr = GetDescriptorFromHotkey( hotkey, s_Schematic_Hotkey_List );
+    if( HK_Descr == NULL ) return;
 
-    switch( CommandCode )
+	switch( HK_Descr->m_Idcommand )
     {
     default:
     case HK_NOT_FOUND:
@@ -188,25 +190,22 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_UNDO:
-	{
-		wxCommandEvent event(wxEVT_COMMAND_TOOL_CLICKED, ID_SCHEMATIC_UNDO);
-		wxPostEvent(this, event);
-	}
-        break;
-
     case HK_REDO:
-	{
-		wxCommandEvent event(wxEVT_COMMAND_TOOL_CLICKED, ID_SCHEMATIC_REDO);
-		wxPostEvent(this, event);
- 	}
-       break;
+        if( ItemInEdit )
+            break;
+    {
+        wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED, HK_Descr->m_IdMenuEvent );
+
+        wxPostEvent( this, event );
+    }
+        break;
 
     case HK_MOVEBLOCK_TO_DRAGBLOCK:        // Switch to drag mode, when block moving
         HandleBlockEndByPopUp( BLOCK_DRAG, DC );
         break;
 
     case HK_DELETE:
-        if( PopupOn )
+        if( ItemInEdit )
             break;
         RefreshToolBar = LocateAndDeleteItem( this, DC );
         m_CurrentScreen->SetModify();
@@ -215,23 +214,25 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_REPEAT_LAST:
+        if( ItemInEdit )
+            break;
         if( g_ItemToRepeat && (g_ItemToRepeat->m_Flags == 0) )
         {
             RepeatDrawItem( DC );
         }
-        else
-            wxBell();
         break;
 
     case HK_NEXT_SEARCH:
-        if( g_LastSearchIsMarker )
+        if( ItemInEdit )
+            break;
+       if( g_LastSearchIsMarker )
             WinEDA_SchematicFrame::FindMarker( 1 );
         else
             FindSchematicItem( wxEmptyString, 2 );
         break;
 
     case HK_ADD_NEW_COMPONENT:      // Add component
-        if( DrawStruct && DrawStruct->m_Flags )
+        if( ItemInEdit )
             break;
 
         // switch to m_ID_current_state = ID_COMPONENT_BUTT;
@@ -351,15 +352,18 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         }
         break;
 
-    case HK_MOVE_COMPONENT:     // Start move Component
-        if( PopupOn )
+    case HK_DRAG_COMPONENT:         // Start drag Component
+    case HK_MOVE_COMPONENT:         // Start move Component
+        if( ItemInEdit )
             break;
         if( DrawStruct == NULL )
             DrawStruct = LocateSmallestComponent( GetScreen() );
         if( DrawStruct && (DrawStruct->m_Flags ==0) )
         {
             m_CurrentScreen->SetCurItem( DrawStruct );
-            Process_Move_Item( m_CurrentScreen->GetCurItem(), DC );
+			wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED, HK_Descr->m_IdMenuEvent );
+
+			wxPostEvent( this, event );
         }
         break;
     }
@@ -378,6 +382,8 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
  *  Commands are case insensitive
  */
 {
+    bool ItemInEdit = m_CurrentScreen->GetCurItem()
+                   && m_CurrentScreen->GetCurItem()->m_Flags;
     bool RefreshToolBar = FALSE; // We must refresh tool bar when the undo/redo tool state is modified
 
     if( hotkey == 0 )
@@ -391,11 +397,12 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
     /* Convert lower to upper case (the usual toupper function has problem with non ascii codes like function keys */
     if( (hotkey >= 'a') && (hotkey <= 'z') )
         hotkey += 'A' - 'a';
-    int CommandCode = GetCommandCodeFromHotkey( hotkey, s_Common_Hotkey_List );
-    if( CommandCode == HK_NOT_FOUND )
-        CommandCode = GetCommandCodeFromHotkey( hotkey, s_LibEdit_Hotkey_List );
+    Ki_HotkeyInfo * HK_Descr = GetDescriptorFromHotkey( hotkey, s_Common_Hotkey_List );
+    if( HK_Descr == NULL )
+        HK_Descr = GetDescriptorFromHotkey( hotkey, s_LibEdit_Hotkey_List );
+    if( HK_Descr == NULL ) return;
 
-    switch( CommandCode )
+    switch( HK_Descr->m_Idcommand )
     {
     default:
     case HK_NOT_FOUND:
@@ -426,19 +433,16 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
         OnZoom( ID_ZOOM_CENTER_KEY );
         break;
 
-	case HK_UNDO:
-	{
-		wxCommandEvent event(wxEVT_COMMAND_TOOL_CLICKED, ID_LIBEDIT_UNDO);
-		wxPostEvent(this, event);
-	}
-		break;
+    case HK_UNDO:
+    case HK_REDO:
+        if( ItemInEdit )
+            break;
+    {
+        wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED, HK_Descr->m_IdMenuEvent );
 
-	case HK_REDO:
-	{
-		wxCommandEvent event(wxEVT_COMMAND_TOOL_CLICKED, ID_LIBEDIT_REDO);
-		wxPostEvent(this, event);
-	}
-		break;
+        wxPostEvent( this, event );
+    }
+        break;
 
     case HK_REPEAT_LAST:
         if( LibItemToRepeat && (LibItemToRepeat->m_Flags == 0)

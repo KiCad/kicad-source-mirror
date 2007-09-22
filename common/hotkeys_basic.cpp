@@ -18,11 +18,12 @@
  *  This class allows the real key code changed by user from a key code list file
  */
 
-Ki_HotkeyInfo::Ki_HotkeyInfo( const wxChar* infomsg, int idcommand, int keycode )
+Ki_HotkeyInfo::Ki_HotkeyInfo( const wxChar* infomsg, int idcommand, int keycode, int idmenuevent )
 {
-    m_KeyCode   = keycode;      // Key code (ascii value for ascii keys or wxWidgets code for function key
-    m_InfoMsg   = infomsg;      // info message.
-    m_Idcommand = idcommand;    // internal id for the corresponding command (see hotkey_id_commnand list)
+    m_KeyCode     = keycode;        // Key code (ascii value for ascii keys or wxWidgets code for function key
+    m_InfoMsg     = infomsg;        // info message.
+    m_Idcommand   = idcommand;      // internal id for the corresponding command (see hotkey_id_commnand list)
+    m_IdMenuEvent = idmenuevent;    // id to call the corresponding event (if any) (see id.h)
 }
 
 
@@ -37,101 +38,101 @@ struct hotkey_name_descr
 
 static struct hotkey_name_descr s_Hotkey_Name_List[] =
 {
-    { wxT( "F1" ), WXK_F1           },
-    { wxT( "F2" ), WXK_F2           },
-    { wxT( "F3" ), WXK_F3           },
-    { wxT( "F4" ), WXK_F4           },
-    { wxT( "F5" ), WXK_F5           },
-    { wxT( "F6" ), WXK_F6           },
-    { wxT( "F7" ), WXK_F7           },
-    { wxT( "F8" ), WXK_F8           },
-    { wxT( "F9" ), WXK_F9           },
-    { wxT( "F10" ), WXK_F10          },
-    { wxT( "F11" ), WXK_F11          },
-    { wxT( "F12" ), WXK_F12          },
+    { wxT( "F1" ),        WXK_F1           },
+    { wxT( "F2" ),        WXK_F2           },
+    { wxT( "F3" ),        WXK_F3           },
+    { wxT( "F4" ),        WXK_F4           },
+    { wxT( "F5" ),        WXK_F5           },
+    { wxT( "F6" ),        WXK_F6           },
+    { wxT( "F7" ),        WXK_F7           },
+    { wxT( "F8" ),        WXK_F8           },
+    { wxT( "F9" ),        WXK_F9           },
+    { wxT( "F10" ),       WXK_F10          },
+    { wxT( "F11" ),       WXK_F11          },
+    { wxT( "F12" ),       WXK_F12          },
 
-    { wxT( "Esc" ), WXK_ESCAPE       },
-    { wxT( "Delete" ), WXK_DELETE       },
-    { wxT( "Esc" ), WXK_ESCAPE       },
-    { wxT( "Tab" ), '\t'             },
+    { wxT( "Esc" ),       WXK_ESCAPE       },
+    { wxT( "Delete" ),    WXK_DELETE       },
+    { wxT( "Esc" ),       WXK_ESCAPE       },
+    { wxT( "Tab" ),       '\t'             },
     { wxT( "Backspace" ), WXK_BACK         },
-    { wxT( "Insert" ), WXK_INSERT       },
+    { wxT( "Insert" ),    WXK_INSERT       },
 
-    { wxT( "End" ), WXK_END          },
-    { wxT( "Page Up" ), WXK_PAGEUP       },
+    { wxT( "End" ),       WXK_END          },
+    { wxT( "Page Up" ),   WXK_PAGEUP       },
     { wxT( "Page Down" ), WXK_PAGEDOWN     },
-    { wxT( "+" ), WXK_ADD          },
-    { wxT( "-" ), WXK_SUBTRACT     },
+    { wxT( "+" ),         WXK_ADD          },
+    { wxT( "-" ),         WXK_SUBTRACT     },
 
-    { wxT( "Up" ), WXK_UP           },
-    { wxT( "Down" ), WXK_DOWN         },
-    { wxT( "Left" ), WXK_LEFT         },
-    { wxT( "Right" ), WXK_RIGHT        },
+    { wxT( "Up" ),        WXK_UP           },
+    { wxT( "Down" ),      WXK_DOWN         },
+    { wxT( "Left" ),      WXK_LEFT         },
+    { wxT( "Right" ),     WXK_RIGHT        },
 
-    { wxT( "space" ), ' '              },
-    { wxT( "?" ), '?'              },
-    { wxT( "!" ), '!'              },
-    { wxT( ":" ), ':'              },
-    { wxT( "," ), ','              },
-    { wxT( "*" ), '*'              },
-    { wxT( "+" ), '+'              },
-    { wxT( "-" ), '-'              },
-    { wxT( "\%" ), '%'              },
-    { wxT( "A" ), 'A'              },
-    { wxT( "B" ), 'B'              },
-    { wxT( "C" ), 'C'              },
-    { wxT( "D" ), 'D'              },
-    { wxT( "E" ), 'E'              },
-    { wxT( "F" ), 'F'              },
-    { wxT( "G" ), 'G'              },
-    { wxT( "H" ), 'H'              },
-    { wxT( "I" ), 'I'              },
-    { wxT( "J" ), 'J'              },
-    { wxT( "K" ), 'K'              },
-    { wxT( "L" ), 'L'              },
-    { wxT( "M" ), 'M'              },
-    { wxT( "N" ), 'N'              },
-    { wxT( "O" ), 'O'              },
-    { wxT( "P" ), 'P'              },
-    { wxT( "Q" ), 'Q'              },
-    { wxT( "R" ), 'R'              },
-    { wxT( "S" ), 'S'              },
-    { wxT( "T" ), 'T'              },
-    { wxT( "U" ), 'U'              },
-    { wxT( "V" ), 'V'              },
-    { wxT( "W" ), 'W'              },
-    { wxT( "X" ), 'X'              },
-    { wxT( "Y" ), 'Y'              },
-    { wxT( "Z" ), 'Z'              },
+    { wxT( "space" ),     ' '              },
+    { wxT( "?" ),         '?'              },
+    { wxT( "!" ),         '!'              },
+    { wxT( ":" ),         ':'              },
+    { wxT( "," ),         ','              },
+    { wxT( "*" ),         '*'              },
+    { wxT( "+" ),         '+'              },
+    { wxT( "-" ),         '-'              },
+    { wxT( "\%" ),        '%'              },
+    { wxT( "A" ),         'A'              },
+    { wxT( "B" ),         'B'              },
+    { wxT( "C" ),         'C'              },
+    { wxT( "D" ),         'D'              },
+    { wxT( "E" ),         'E'              },
+    { wxT( "F" ),         'F'              },
+    { wxT( "G" ),         'G'              },
+    { wxT( "H" ),         'H'              },
+    { wxT( "I" ),         'I'              },
+    { wxT( "J" ),         'J'              },
+    { wxT( "K" ),         'K'              },
+    { wxT( "L" ),         'L'              },
+    { wxT( "M" ),         'M'              },
+    { wxT( "N" ),         'N'              },
+    { wxT( "O" ),         'O'              },
+    { wxT( "P" ),         'P'              },
+    { wxT( "Q" ),         'Q'              },
+    { wxT( "R" ),         'R'              },
+    { wxT( "S" ),         'S'              },
+    { wxT( "T" ),         'T'              },
+    { wxT( "U" ),         'U'              },
+    { wxT( "V" ),         'V'              },
+    { wxT( "W" ),         'W'              },
+    { wxT( "X" ),         'X'              },
+    { wxT( "Y" ),         'Y'              },
+    { wxT( "Z" ),         'Z'              },
 
-    { wxT( "Ctrl A" ), GR_KB_CTRL + 'A' },
-    { wxT( "Ctrl B" ), GR_KB_CTRL + 'B' },
-    { wxT( "Ctrl C" ), GR_KB_CTRL + 'C' },
-    { wxT( "Ctrl D" ), GR_KB_CTRL + 'D' },
-    { wxT( "Ctrl E" ), GR_KB_CTRL + 'E' },
-    { wxT( "Ctrl F" ), GR_KB_CTRL + 'F' },
-    { wxT( "Ctrl G" ), GR_KB_CTRL + 'G' },
-    { wxT( "Ctrl H" ), GR_KB_CTRL + 'H' },
-    { wxT( "Ctrl I" ), GR_KB_CTRL + 'I' },
-    { wxT( "Ctrl J" ), GR_KB_CTRL + 'J' },
-    { wxT( "Ctrl K" ), GR_KB_CTRL + 'K' },
-    { wxT( "Ctrl L" ), GR_KB_CTRL + 'L' },
-    { wxT( "Ctrl M" ), GR_KB_CTRL + 'M' },
-    { wxT( "Ctrl N" ), GR_KB_CTRL + 'N' },
-    { wxT( "Ctrl O" ), GR_KB_CTRL + 'O' },
-    { wxT( "Ctrl P" ), GR_KB_CTRL + 'P' },
-    { wxT( "Ctrl Q" ), GR_KB_CTRL + 'Q' },
-    { wxT( "Ctrl R" ), GR_KB_CTRL + 'R' },
-    { wxT( "Ctrl S" ), GR_KB_CTRL + 'S' },
-    { wxT( "Ctrl T" ), GR_KB_CTRL + 'T' },
-    { wxT( "Ctrl U" ), GR_KB_CTRL + 'U' },
-    { wxT( "Ctrl V" ), GR_KB_CTRL + 'V' },
-    { wxT( "Ctrl W" ), GR_KB_CTRL + 'W' },
-    { wxT( "Ctrl X" ), GR_KB_CTRL + 'X' },
-    { wxT( "Ctrl Y" ), GR_KB_CTRL + 'Y' },
-    { wxT( "Ctrl Z" ), GR_KB_CTRL + 'Z' },
+    { wxT( "Ctrl A" ),    GR_KB_CTRL + 'A' },
+    { wxT( "Ctrl B" ),    GR_KB_CTRL + 'B' },
+    { wxT( "Ctrl C" ),    GR_KB_CTRL + 'C' },
+    { wxT( "Ctrl D" ),    GR_KB_CTRL + 'D' },
+    { wxT( "Ctrl E" ),    GR_KB_CTRL + 'E' },
+    { wxT( "Ctrl F" ),    GR_KB_CTRL + 'F' },
+    { wxT( "Ctrl G" ),    GR_KB_CTRL + 'G' },
+    { wxT( "Ctrl H" ),    GR_KB_CTRL + 'H' },
+    { wxT( "Ctrl I" ),    GR_KB_CTRL + 'I' },
+    { wxT( "Ctrl J" ),    GR_KB_CTRL + 'J' },
+    { wxT( "Ctrl K" ),    GR_KB_CTRL + 'K' },
+    { wxT( "Ctrl L" ),    GR_KB_CTRL + 'L' },
+    { wxT( "Ctrl M" ),    GR_KB_CTRL + 'M' },
+    { wxT( "Ctrl N" ),    GR_KB_CTRL + 'N' },
+    { wxT( "Ctrl O" ),    GR_KB_CTRL + 'O' },
+    { wxT( "Ctrl P" ),    GR_KB_CTRL + 'P' },
+    { wxT( "Ctrl Q" ),    GR_KB_CTRL + 'Q' },
+    { wxT( "Ctrl R" ),    GR_KB_CTRL + 'R' },
+    { wxT( "Ctrl S" ),    GR_KB_CTRL + 'S' },
+    { wxT( "Ctrl T" ),    GR_KB_CTRL + 'T' },
+    { wxT( "Ctrl U" ),    GR_KB_CTRL + 'U' },
+    { wxT( "Ctrl V" ),    GR_KB_CTRL + 'V' },
+    { wxT( "Ctrl W" ),    GR_KB_CTRL + 'W' },
+    { wxT( "Ctrl X" ),    GR_KB_CTRL + 'X' },
+    { wxT( "Ctrl Y" ),    GR_KB_CTRL + 'Y' },
+    { wxT( "Ctrl Z" ),    GR_KB_CTRL + 'Z' },
 
-    { wxT( "" ), 0                } // Do not change: end of list
+    { wxT( "" ),          0                } // Do not change: end of list
 };
 
 
@@ -315,25 +316,25 @@ void DisplayHotkeyList( WinEDA_DrawFrame* frame, struct Ki_HotkeyInfoSectionDesc
 }
 
 
-/******************************************************************/
-int GetCommandCodeFromHotkey( int key, Ki_HotkeyInfo** List )
-/******************************************************************/
+/************************************************************************/
+Ki_HotkeyInfo* GetDescriptorFromHotkey( int key, Ki_HotkeyInfo** List )
+/***********************************************************************/
 
 /*
- * Return an id identifier fron a key code for OnHotKey() function
+ * Return a Ki_HotkeyInfo * pointer fron a key code for OnHotKey() function
  * @param key = key code (ascii value, or wxWidgets value for function keys
  * @param List = pointer to a Ki_HotkeyInfo list of commands
- * @return the corresponding function identifier from the Ki_HotkeyInfo  List
+ * @return the corresponding Ki_HotkeyInfo * pointer from the Ki_HotkeyInfo  List
  */
 {
     for( ; *List != NULL; List++ )
     {
         Ki_HotkeyInfo* hk_decr = *List;
         if( hk_decr->m_KeyCode == key )
-            return hk_decr->m_Idcommand;
+            return hk_decr;
     }
 
-    return 0;
+    return NULL;
 }
 
 
@@ -606,8 +607,9 @@ void AddHotkeyConfigMenu( wxMenu* menu )
     if( menu == NULL )
         return;
     item = new wxMenuItem( menu, ID_PREFERENCES_CREATE_CONFIG_HOTKEYS,
-                          _( "Create Hotkey config file" ),
-                          _( "Create or Recreate the hotkey config file from current hotkey list" ) );
+                           _( "Create Hotkey config file" ),
+                           _( "Create or Recreate the hotkey config file from current hotkey list" )
+                           );
     item->SetBitmap( save_setup_xpm );
     menu->Append( item );
     item = new wxMenuItem( menu, ID_PREFERENCES_READ_CONFIG_HOTKEYS,
@@ -623,64 +625,67 @@ void AddHotkeyConfigMenu( wxMenu* menu )
 
     wxMenu* submenu_hkcfg = new wxMenu();
     item = new wxMenuItem( submenu_hkcfg, ID_PREFERENCES_HOTKEY_PATH_IS_HOME,
-                          _( "home directory" ),
-                          _(  "Use home directory to load or store Hotkey config files" ),
-						  wxITEM_CHECK );
+                           _( "home directory" ),
+                           _(  "Use home directory to load or store Hotkey config files" ),
+                           wxITEM_CHECK );
     submenu_hkcfg->Append( item );
 
     item = new wxMenuItem( submenu_hkcfg, ID_PREFERENCES_HOTKEY_PATH_IS_KICAD,
-                          _( "kicad/template directory" ),
-                          _(  "Use kicad/templatedirectory to load or store Hotkey config files" ),
-						  wxITEM_CHECK );
+                           _( "kicad/template directory" ),
+                           _(  "Use kicad/templatedirectory to load or store Hotkey config files" ),
+                           wxITEM_CHECK );
     submenu_hkcfg->Append( item );
 
-	ADD_MENUITEM_WITH_HELP_AND_SUBMENU( menu, submenu_hkcfg,
+    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( menu, submenu_hkcfg,
                                         -1,
-										_( "Hotkey config location" ),
-                                        _( "Hotkey config file location selection (home directory or kicad tree)" ),
+                                        _( "Hotkey config location" ),
+                                        _(
+                                            "Hotkey config file location selection (home directory or kicad tree)" ),
                                         right_xpm );
-	submenu_hkcfg->Check(ID_PREFERENCES_HOTKEY_PATH_IS_HOME,
-		g_ConfigFileLocationChoice == 0);
-	submenu_hkcfg->Check(ID_PREFERENCES_HOTKEY_PATH_IS_KICAD,
-		g_ConfigFileLocationChoice == 1);
+    submenu_hkcfg->Check( ID_PREFERENCES_HOTKEY_PATH_IS_HOME,
+                          g_ConfigFileLocationChoice == 0 );
+    submenu_hkcfg->Check( ID_PREFERENCES_HOTKEY_PATH_IS_KICAD,
+                          g_ConfigFileLocationChoice == 1 );
 }
 
 
 /************************************************************************/
-void  HandleHotkeyConfigMenuSelection( WinEDA_DrawFrame * frame, int id )
+void  HandleHotkeyConfigMenuSelection( WinEDA_DrawFrame* frame, int id )
 /************************************************************************/
+
 /* called on hotkey file location selecton menu
-*  @param frame = current WinEDA_DrawFrame
-*  @param id = selected menu id 
-*  @return g_ConfigFileLocationChoice (global) = new selection
-*/
+ *  @param frame = current WinEDA_DrawFrame
+ *  @param id = selected menu id
+ *  @return g_ConfigFileLocationChoice (global) = new selection
+ */
 {
-wxMenuBar * menu = frame->GetMenuBar();
-	
-	switch (id )
-	{
-		case ID_PREFERENCES_HOTKEY_PATH_IS_HOME:
-			if ( g_ConfigFileLocationChoice != 0 )
-			{
-				g_ConfigFileLocationChoice = 0;
-				menu->Check(ID_PREFERENCES_HOTKEY_PATH_IS_HOME, true);
-				menu->Check(ID_PREFERENCES_HOTKEY_PATH_IS_KICAD, false);
-				frame->m_Parent->m_EDA_CommonConfig->Write(HOTKEY_CFG_PATH_OPT, g_ConfigFileLocationChoice);
-			}
-			break;
+    wxMenuBar* menu = frame->GetMenuBar();
 
-		case ID_PREFERENCES_HOTKEY_PATH_IS_KICAD:
-			if ( g_ConfigFileLocationChoice != 1 )
-			{
-				g_ConfigFileLocationChoice = 1;
-				menu->Check(ID_PREFERENCES_HOTKEY_PATH_IS_HOME, false);
-				menu->Check(ID_PREFERENCES_HOTKEY_PATH_IS_KICAD, true);
-				frame->m_Parent->m_EDA_CommonConfig->Write(HOTKEY_CFG_PATH_OPT, g_ConfigFileLocationChoice);
-			}
-			break;
-			
-		default:
-			break;
-	}
+    switch( id )
+    {
+    case ID_PREFERENCES_HOTKEY_PATH_IS_HOME:
+        if( g_ConfigFileLocationChoice != 0 )
+        {
+            g_ConfigFileLocationChoice = 0;
+            menu->Check( ID_PREFERENCES_HOTKEY_PATH_IS_HOME, true );
+            menu->Check( ID_PREFERENCES_HOTKEY_PATH_IS_KICAD, false );
+            frame->m_Parent->m_EDA_CommonConfig->Write( HOTKEY_CFG_PATH_OPT,
+                                                        g_ConfigFileLocationChoice );
+        }
+        break;
+
+    case ID_PREFERENCES_HOTKEY_PATH_IS_KICAD:
+        if( g_ConfigFileLocationChoice != 1 )
+        {
+            g_ConfigFileLocationChoice = 1;
+            menu->Check( ID_PREFERENCES_HOTKEY_PATH_IS_HOME, false );
+            menu->Check( ID_PREFERENCES_HOTKEY_PATH_IS_KICAD, true );
+            frame->m_Parent->m_EDA_CommonConfig->Write( HOTKEY_CFG_PATH_OPT,
+                                                        g_ConfigFileLocationChoice );
+        }
+        break;
+
+    default:
+        break;
+    }
 }
-

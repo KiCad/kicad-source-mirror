@@ -284,6 +284,9 @@ void AddMenusForComponent( wxMenu* PopMenu, EDA_SchComponentStruct* Component )
         msg = AddHotkeyName( _( "Move Component" ), s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_CMP_REQUEST,
                       msg, move_xpm );
+        msg = AddHotkeyName( _( "Drag Component" ), s_Schematic_Hokeys_Descr, HK_DRAG_COMPONENT );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DRAG_CMP_REQUEST,
+                      msg, move_xpm );
     }
 
     // add menu orient et sous menu:

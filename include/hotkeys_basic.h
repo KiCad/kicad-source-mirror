@@ -15,11 +15,11 @@
 #define DEFAULT_HOTKEY_FILENAME_EXT wxT( ".key" )
 
 /* define default path for config key file */
-#define DEFAULT_HOTKEY_FILENAME_PATH_IS_HOME wxGetHomeDir() + wxT( "/" )
+#define DEFAULT_HOTKEY_FILENAME_PATH_IS_HOME  wxGetHomeDir() + wxT( "/" )
 #define DEFAULT_HOTKEY_FILENAME_PATH_IS_KICAD EDA_Appl->m_BinDir + wxT( "../template/" )
 
 /* keyword idetifier in kicad config use ti store/retrieve path option */
-#define HOTKEY_CFG_PATH_OPT wxT("HotkeyPathOption")
+#define HOTKEY_CFG_PATH_OPT wxT( "HotkeyPathOption" )
 
 
 /* Class to handle hotkey commnands. hotkeys have a default value
@@ -31,9 +31,10 @@ public:
     int      m_KeyCode;             // Key code (ascii value for ascii keys or wxWidgets code for function key
     wxString m_InfoMsg;             // info message.
     int      m_Idcommand;           // internal id for the corresponding command (see hotkey_id_commnand list)
+    int      m_IdMenuEvent;         // id to call the corresponding event (if any) (see id.h)
 
 public:
-    Ki_HotkeyInfo( const wxChar* infomsg, int idcommand, int keycode );
+    Ki_HotkeyInfo( const wxChar* infomsg, int idcommand, int keycode, int idmenuevent = 0 );
 };
 
 /* handle a Section name and the corresponding list of hotkeys (Ki_HotkeyInfo list)
@@ -84,24 +85,24 @@ COMMON_GLOBL wxString g_ModuleEditSectionTag
 ;
 
 COMMON_GLOBL int g_ConfigFileLocationChoice;    /* 0 = files are in Home directory (usefull under unix)
-                                                  * 1 = kicad/template ( usefull only under windows )
-                                                  * 2 ... = unused
+                                                 * 1 = kicad/template ( usefull only under windows )
+                                                 * 2 ... = unused
                                                  */
 
 /* Functions:
  */
-wxString    ReturnHotkeyConfigFilePath( int choice );
-void        AddHotkeyConfigMenu( wxMenu* menu );
-void        HandleHotkeyConfigMenuSelection( WinEDA_DrawFrame * frame, int id );
-wxString    ReturnKeyNameFromKeyCode( int keycode );
-wxString    ReturnKeyNameFromCommandId( Ki_HotkeyInfo** List, int CommandId );
-wxString    AddHotkeyName( const wxString& text, Ki_HotkeyInfo** List, int CommandId );
-wxString    AddHotkeyName( const wxString&                        text,
-                           struct Ki_HotkeyInfoSectionDescriptor* DescrList,
-                           int                                    CommandId );
-void        DisplayHotkeyList( WinEDA_DrawFrame*                      frame,
-                               struct Ki_HotkeyInfoSectionDescriptor* List );
-int         GetCommandCodeFromHotkey( int key, Ki_HotkeyInfo** List );
+wxString        ReturnHotkeyConfigFilePath( int choice );
+void            AddHotkeyConfigMenu( wxMenu* menu );
+void            HandleHotkeyConfigMenuSelection( WinEDA_DrawFrame* frame, int id );
+wxString        ReturnKeyNameFromKeyCode( int keycode );
+wxString        ReturnKeyNameFromCommandId( Ki_HotkeyInfo** List, int CommandId );
+wxString        AddHotkeyName( const wxString& text, Ki_HotkeyInfo** List, int CommandId );
+wxString        AddHotkeyName( const wxString&                        text,
+                               struct Ki_HotkeyInfoSectionDescriptor* DescrList,
+                               int                                    CommandId );
+void            DisplayHotkeyList( WinEDA_DrawFrame*                      frame,
+                                   struct Ki_HotkeyInfoSectionDescriptor* List );
+Ki_HotkeyInfo*  GetDescriptorFromHotkey( int key, Ki_HotkeyInfo** List );
 
 
 #endif // HOTKEYS_BASIC_H

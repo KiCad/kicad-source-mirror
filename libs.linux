@@ -25,9 +25,9 @@ KICAD_TEMPLATE=$(KICAD_DATA)/template
 
 else
 # used by myself (JP Charras) to build a statically linked distribution intalled in /usr/local (with STD_INSTALL = 0)
-PREFIX = /usr/local/linux
-KICAD_BIN = $(PREFIX)/bin
-KICAD_PLUGINS = $(PREFIX)/linux/plugins
+PREFIX = /usr/local/kicad
+KICAD_BIN = $(PREFIX)/linux
+KICAD_PLUGINS = $(KICAD_BIN)/plugins
 KICAD_DOCS=$(PREFIX)/help
 KICAD_DATA=$(PREFIX)
 KICAD_MODULES=$(KICAD_DATA)/modules
@@ -121,12 +121,15 @@ ifeq ($(KICAD_STATIC_LINK), 1)
 LIBS3D = $(WXPATH)/$(PREFIX_WX_LIBS)$(SUFFIX_WX_LIBGL)\
 	 $(MESALIBSPATH)/libGL.a $(MESALIBSPATH)/libGLU.a
 
+AUXLIB = -lXxf86vm
+#AUXLIB = /usr/X11R6/lib/libXinerama.a
+
 WXSYSLIB= $(WXPATH)/$(PREFIX_WX_LIBS)-$(LIBVERSION).a \
 	$(WXPATH)/libwxpng-$(LIBVERSION).a\
 	$(WXPATH)/libwxjpeg-$(LIBVERSION).a\
 	$(WXPATH)/libwxzlib-$(LIBVERSION).a\
 	$(LIBREGEX)\
-        /usr/X11R6/lib/libXinerama.a \
+         $(AUXLIB)\
 		-lgtk-x11-2.0 -lgdk-x11-2.0 \
         -latk-1.0 -lgdk_pixbuf-2.0 -lm -lpangoxft-1.0 -lpangox-1.0 -lgthread-2.0\
         -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -ldl\
@@ -134,18 +137,8 @@ WXSYSLIB= $(WXPATH)/$(PREFIX_WX_LIBS)-$(LIBVERSION).a \
         -L/usr/lib $(PYLIBS)
 
 
-WXSYSLIB_WITH_GL= $(WXPATH)/$(PREFIX_WX_LIBS)-$(LIBVERSION).a \
-	$(WXPATH)/libwxpng-$(LIBVERSION).a\
-	$(WXPATH)/libwxjpeg-$(LIBVERSION).a\
-	$(WXPATH)/libwxzlib-$(LIBVERSION).a\
-	$(LIBS3D)\
-       /usr/X11R6/lib/libXinerama.a \
-        /usr/X11R6/lib/libXxf86vm.a \
-		-lgtk-x11-2.0 -lgdk-x11-2.0 \
-        -latk-1.0 -lgdk_pixbuf-2.0 -lm -lpangoxft-1.0 -lpangox-1.0 -lgthread-2.0\
-        -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -ldl\
-        -lglib-2.0 -lpangoft2-1.0 -lSM\
-       -L/usr/lib $(PYLIBS)
+WXSYSLIB_WITH_GL= $(WXSYSLIB) $(LIBS3D)
+
 else
 
 ifeq ($(DEBUG), 1)

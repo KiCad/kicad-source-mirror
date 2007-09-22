@@ -166,10 +166,11 @@ char Line[256];
 void PlotPolyPS(int nb_segm, int * coord, int fill, int width)
 /*****************************************************************/
 
-/* Trace un polygone ( ferme si rempli ) en format POSTSCRIPT
- * coord = tableau des coord des sommets
- * nb_segm = nombre de coord ( 1 coord = 2 elements: X et Y du tableau )
- * fill : si != 0 polygone rempli
+/* Draw a polygon ( a filled polygon if fill == 1 ) in POSTSCRIPT format
+ * @param nb_segm = corner count
+ * @param coord = corner list (a corner uses 2 int = X coordinate followed by Y  coordinate
+ * @param fill :if == 0 : filled polygon
+ * @param  width = line width
  */
 {
 int ii;

@@ -186,12 +186,14 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
     if( (hotkey >= 'a') && (hotkey <= 'z') )
         hotkey += 'A' - 'a';
 
-    int CommandCode = GetCommandCodeFromHotkey( hotkey, s_Common_Hotkey_List );
-    if( CommandCode == HK_NOT_FOUND )
-        CommandCode = GetCommandCodeFromHotkey( hotkey, s_board_edit_Hotkey_List );
+    Ki_HotkeyInfo * HK_Descr = GetDescriptorFromHotkey( hotkey, s_Common_Hotkey_List );
+    if( HK_Descr == NULL )
+        HK_Descr = GetDescriptorFromHotkey( hotkey, s_board_edit_Hotkey_List );
+    if( HK_Descr == NULL ) return;
+
     int ll;
 
-    switch( CommandCode )
+    switch( HK_Descr->m_Idcommand )
     {
     default:
     case HK_NOT_FOUND:
@@ -465,7 +467,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
             SetCurItem( module );
         }
 
-        switch( CommandCode )
+        switch( HK_Descr->m_Idcommand )
         {
         case HK_ROTATE_FOOTPRINT:                  // Rotation
             Rotate_Module( DC, module, 900, TRUE );
@@ -506,11 +508,12 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* DC, int hotkey,
     if( (hotkey >= 'a') && (hotkey <= 'z') )
         hotkey += 'A' - 'a';
 
-    int CommandCode = GetCommandCodeFromHotkey( hotkey, s_Common_Hotkey_List );
-    if( CommandCode == HK_NOT_FOUND )
-        CommandCode = GetCommandCodeFromHotkey( hotkey, s_module_edit_Hotkey_List );
+    Ki_HotkeyInfo * HK_Descr = GetDescriptorFromHotkey( hotkey, s_Common_Hotkey_List );
+    if( HK_Descr == NULL )
+        HK_Descr = GetDescriptorFromHotkey( hotkey, s_module_edit_Hotkey_List );
+    if( HK_Descr == NULL ) return;
 
-    switch( CommandCode )
+    switch( HK_Descr->m_Idcommand )
     {
     default:
     case HK_NOT_FOUND:

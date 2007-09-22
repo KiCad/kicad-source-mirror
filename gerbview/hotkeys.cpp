@@ -91,9 +91,10 @@ void WinEDA_GerberFrame::OnHotKey( wxDC* DC, int hotkey,
     if( (hotkey >= 'a') && (hotkey <= 'z') )
         hotkey += 'A' - 'a';
 
-    int CommandCode = GetCommandCodeFromHotkey( hotkey, s_Gerbview_Hotkey_List );
+    Ki_HotkeyInfo * HK_Descr = GetDescriptorFromHotkey( hotkey, s_Gerbview_Hotkey_List );
+    if( HK_Descr == NULL ) return;
 
-    switch( CommandCode )
+    switch( HK_Descr->m_Idcommand )
     {
     default:
     case HK_NOT_FOUND:
