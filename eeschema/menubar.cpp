@@ -143,11 +143,16 @@ wxString msg;
 
 		item = new wxMenuItem(configmenu, ID_COLORS_SETUP,
 			_("&Colors"),
-			_("Setting colors ...") );
+			_("Setting colors...") );
 	    item->SetBitmap(palette_xpm);
 		configmenu->Append(item);
 
-		ADD_MENUITEM(configmenu, ID_OPTIONS_SETUP, _("&Options"), preference_xpm);
+//		ADD_MENUITEM(configmenu, ID_OPTIONS_SETUP, _("&Options"), preference_xpm);
+		item = new wxMenuItem(configmenu, ID_OPTIONS_SETUP,
+			_("&Options"),
+			_("Select general options...") );
+	    item->SetBitmap(preference_xpm);
+		configmenu->Append(item);
 
 		// Font selection and setup
 		AddFontSelectionMenu(configmenu);
@@ -210,5 +215,4 @@ wxString msg;
 			}
 		}
 }
-
 

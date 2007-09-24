@@ -57,6 +57,8 @@ BEGIN_EVENT_TABLE(WinEDA_SchematicFrame, wxFrame)
 	EVT_MENU(ID_EXIT, WinEDA_SchematicFrame::Process_Special_Functions)
 
 	EVT_MENU_RANGE(ID_CONFIG_AND_PREFERENCES_START, ID_CONFIG_AND_PREFERENCES_END, WinEDA_SchematicFrame::Process_Config)
+	EVT_TOOL(ID_COLORS_SETUP, WinEDA_SchematicFrame::Process_Config)
+	EVT_TOOL(ID_OPTIONS_SETUP, WinEDA_SchematicFrame::Process_Config)
 
 	EVT_MENU_RANGE(ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,
 		WinEDA_DrawFrame::SetLanguage)

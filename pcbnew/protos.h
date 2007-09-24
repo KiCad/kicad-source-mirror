@@ -403,10 +403,11 @@ MODULE * ListAndSelectModuleName(COMMAND * Cmd);
 /***************/
 
 /*****************/
-/* SEL_COLOR.CPP */
+/* SET_COLOR.CPP */
 /*****************/
 void DisplayColorSetupFrame(WinEDA_DrawFrame * parent,
 							const wxPoint & framepos);
 
 
 #endif	/* #define PROTO_H */
+

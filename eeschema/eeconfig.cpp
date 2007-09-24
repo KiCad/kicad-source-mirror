@@ -32,16 +32,14 @@ wxString FullFileName;
 
 	pos.y += 5;
 	switch ( id )
-		{
+	{
 		case ID_COLORS_SETUP :
 			DisplayColorSetupFrame(this, pos);
 			break;
 
 		case ID_CONFIG_REQ :		// Creation de la fenetre de configuration
-			{
 			InstallConfigFrame(pos);
 			break;
-			}
 
 		case ID_OPTIONS_SETUP:
 			DisplayOptionFrame(this, pos);
@@ -52,7 +50,7 @@ wxString FullFileName;
 			break;
 
 		case ID_CONFIG_READ:
-			{
+		{
 			wxString mask( wxT("*") ); mask += g_Prj_Config_Filename_ext;
 			FullFileName = ScreenSch->m_FileName;
 			ChangeFileNameExt( FullFileName, g_Prj_Config_Filename_ext );
@@ -68,12 +66,12 @@ wxString FullFileName;
 					);
 			if ( FullFileName.IsEmpty() ) break;
 			if ( ! wxFileExists(FullFileName) )
-				{
+			{
 				wxString msg = _("File ") + FullFileName +_("not found");;
 				DisplayError(this, msg); break;
-				}
-			Read_Config(FullFileName, TRUE );
 			}
+			Read_Config(FullFileName, TRUE );
+		}
 			break;
 
 		case ID_PREFERENCES_CREATE_CONFIG_HOTKEYS:
@@ -88,15 +86,15 @@ wxString FullFileName;
 			break;
 
 		case ID_PREFERENCES_EDIT_CONFIG_HOTKEYS:
-			{
+		{
 			FullFileName = ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice );
 			FullFileName += HOTKEY_FILENAME;
 			FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
 			wxString editorname = GetEditorName();
 			if ( !editorname.IsEmpty() )
 				ExecuteFile(this, editorname, FullFileName);
+		}
 			break;
-			}
 
 		case ID_PREFERENCES_HOTKEY_PATH_IS_HOME:
 		case ID_PREFERENCES_HOTKEY_PATH_IS_KICAD:
@@ -105,7 +103,7 @@ wxString FullFileName;
 
 		default:
 			DisplayError(this, wxT("WinEDA_SchematicFrame::Process_Config internal error") );
-		}
+	}
 }
 
 
@@ -201,3 +199,4 @@ wxString mask( wxT("*") );
 	/* ecriture de la configuration */
 	EDA_Appl->WriteProjectConfig(FullFileName, GROUP, ParamCfgList);
 }
+

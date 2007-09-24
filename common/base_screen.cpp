@@ -580,4 +580,4 @@ void BASE_SCREEN::Show( int nestLevel, std::ostream& os )
     NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
 #endif
-    
+

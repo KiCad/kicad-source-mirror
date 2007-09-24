@@ -27,7 +27,7 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
 {
     int         ii;
     wxMenuBar*  menuBar = GetMenuBar();
-    wxMenuItem* item;
+//  wxMenuItem* item;
 
     if( menuBar == NULL )
     {
@@ -457,3 +457,4 @@ void WinEDA_GerberFrame::ReCreateOptToolbar( void )
 
     SetToolbars();
 }
+
