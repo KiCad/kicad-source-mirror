@@ -4,6 +4,14 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-sept-25 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++ pcbnew:
+	* add class_board_item.cpp file and move BOARD_ITEM::MenuText() and BOARD_ITEM::MenuIcon() in it
+	* Add zone detection, forgotten in PcbGeneralLocateAndDisplay()
++ class_collector.h:
+	add  void COLLECTOR::Remove( unsigned int item_position ), needed by zone detection, see PcbGeneralLocateAndDisplay
+
 
 2007-Sep-25 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
 ================================================================================

@@ -31,6 +31,7 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		class_edge_mod.o \
 		class_text_mod.o\
 		class_pcb_text.o\
+		class_board_item.o\
 		class_board.o\
 		drawframe.o\
 		drawpanel.o\

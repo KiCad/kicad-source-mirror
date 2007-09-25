@@ -38,6 +38,7 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     TYPECOTATION,
     TYPEVIA,
     TYPETRACK,
+    TYPEZONE,
     TYPEPAD,
     TYPETEXTEMODULE,
     TYPEMODULE,
@@ -94,6 +95,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
 {
     BOARD_ITEM* item = (BOARD_ITEM*) testItem;
     MODULE*     module = NULL;
+	bool skip_item = false;
 
 #if 0   // debugging
     static int breakhere = 0;
@@ -112,6 +114,9 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
         breakhere++;
         break;
     case TYPETRACK:
+        breakhere++;
+        break;
+    case TYPEZONE:
         breakhere++;
         break;
     case TYPETEXTE: 
@@ -166,6 +171,9 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
     case TYPEVIA:
         break;
     case TYPETRACK:
+        break;
+    case TYPEZONE:
+		if( ! DisplayOpt.DisplayZones ) skip_item = true;
         break;
     case TYPETEXTE: 
         break;
@@ -226,7 +234,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
                 {
                     if( item->HitTest( m_RefPos ) )
                     {
-                        Append( item );
+                        if ( ! skip_item ) Append( item );
                         goto exit;
                     }
                 }
@@ -253,7 +261,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
                 {
                     if( item->HitTest( m_RefPos ) )
                     {
-                        Append2nd( item );
+                        if ( ! skip_item ) Append2nd( item );
                         goto exit;
                     }
                 }

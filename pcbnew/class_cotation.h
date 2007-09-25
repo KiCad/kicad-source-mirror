@@ -36,6 +36,7 @@ public:
 
     /* Modification du texte de la cotation */
     void    SetText( const wxString& NewText );
+    wxString GetText( void );
 
     void    Copy( COTATION* source );
 

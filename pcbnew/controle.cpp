@@ -9,20 +9,13 @@
 
 #include "common.h"
 #include "pcbnew.h"
+#include "protos.h"
 
 #include "id.h"
-#include "protos.h"
 #include "collectors.h"
 
 #include "bitmaps.h"
-#include "add_cotation.xpm"
-#include "Add_Mires.xpm"
-#include "Add_Zone.xpm"
 
-
-/* Routines Locales : */
-
-/* Variables Locales */
 
 /****************************************/
 void RemoteCommand( const char* cmdline )
@@ -36,7 +29,7 @@ void RemoteCommand( const char* cmdline )
     wxString         msg;
     char*            idcmd;
     char*            text;
-    WinEDA_PcbFrame* frame = EDA_Appl->m_PcbFrame;
+    WinEDA_PcbFrame* frame  = EDA_Appl->m_PcbFrame;
     MODULE*          module = 0;
 
     strncpy( line, cmdline, sizeof(line) - 1 );
@@ -49,13 +42,13 @@ void RemoteCommand( const char* cmdline )
 
     if( strcmp( idcmd, "$PART:" ) == 0 )
     {
-        msg    = CONV_FROM_UTF8( text );
-        
+        msg = CONV_FROM_UTF8( text );
+
         module = ReturnModule( frame->m_Pcb, msg );
-        
+
         msg.Printf( _( "Locate module %s %s" ), msg.GetData(),
                    module ? wxT( "Ok" ) : wxT( "not found" ) );
-        
+
         frame->Affiche_Message( msg );
         if( module )
         {
@@ -71,11 +64,11 @@ void RemoteCommand( const char* cmdline )
     if( idcmd && strcmp( idcmd, "$PIN:" ) == 0 )
     {
         wxString pinName, modName;
-        D_PAD*   pad = NULL;
+        D_PAD*   pad     = NULL;
         int      netcode = -1;
-        
+
         pinName = CONV_FROM_UTF8( text );
-        
+
         text = strtok( NULL, " \n\r" );
         if( text && strcmp( text, "$PART:" ) == 0 )
             text = strtok( NULL, "\n\r" );
@@ -88,18 +81,18 @@ void RemoteCommand( const char* cmdline )
         module  = ReturnModule( frame->m_Pcb, modName );
         if( module )
             pad = ReturnPad( module, pinName );
-        
+
         if( pad )
             netcode = pad->m_NetCode;
-        
-        if( netcode > 0 )    /* hightlighted the net selected net*/
+
+        if( netcode > 0 )               /* hightlighted the net selected net*/
         {
-            if( g_HightLigt_Status )        /* erase the old hightlighted net */
+            if( g_HightLigt_Status )    /* erase the old hightlighted net */
                 frame->Hight_Light( &dc );
-            
+
             g_HightLigth_NetCode = netcode;
             frame->Hight_Light( &dc );      /* hightlighted the new one */
-            
+
             frame->DrawPanel->CursorOff( &dc );
             frame->GetScreen()->m_Curseur = pad->m_Pos;
             frame->DrawPanel->CursorOn( &dc );
@@ -113,210 +106,9 @@ void RemoteCommand( const char* cmdline )
             msg.Printf( _( "Locate Pin %s (module %s)" ), pinName.GetData(), modName.GetData() );
         frame->Affiche_Message( msg );
     }
-        
-    if( module )    // if found, center the module on screen.
+
+    if( module )  // if found, center the module on screen.
         frame->Recadre_Trace( false );
-}
-
-
-// @todo: move this to proper source file.
-wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
-{
-    wxString            text;
-    const BOARD_ITEM*   item = this;
-    EQUIPOT*            net;
-
-    switch( item->Type() )
-    {
-    case PCB_EQUIPOT_STRUCT_TYPE:
-        text << _("Net") << ((EQUIPOT*)item)->m_Netname << wxT(" ") << ((EQUIPOT*)item)->m_NetCode;
-        break;
-        
-    case TYPEMODULE:
-        text << _("Footprint") << wxT(" ") << ((MODULE*)item)->GetReference();
-		text  << wxT(" (") << ReturnPcbLayerName( item->m_Layer )  << wxT(")");
-        break;
-        
-    case TYPEPAD:
-        text << _("Pad") << wxT(" ") << ((D_PAD*)item)->ReturnStringPadName() << _(" of ") 
-//            << GetParent()->MenuText( aPcb );
-            << ((MODULE*)GetParent())->GetReference();
-        break;
-        
-    case TYPEDRAWSEGMENT:
-        text << _("Pcb Graphic") << _(" on ") << ReturnPcbLayerName( item->GetLayer() );  // @todo: extend text
-        break;
-        
-    case TYPETEXTE:
-        text << _("Pcb Text") << wxT(" ");;
-        if( ((TEXTE_PCB*)item)->m_Text.Len() < 12 )
-            text << ((TEXTE_PCB*)item)->m_Text;
-        else
-            text += ((TEXTE_PCB*)item)->m_Text.Left( 10 ) + wxT( ".." );
-        break;
-        
-    case TYPETEXTEMODULE:
-        switch( ((TEXTE_MODULE*)item)->m_Type )
-        {
-        case TEXT_is_REFERENCE:
-            text << _( "Reference" ) << wxT( " " ) << ((TEXTE_MODULE*)item)->m_Text;
-            break;
-    
-        case TEXT_is_VALUE:
-            text << _( "Value" ) << wxT( " " ) << ((TEXTE_MODULE*)item)->m_Text << _(" of ") 
-//                << GetParent()->MenuText( aPcb );
-                << ((MODULE*)GetParent())->GetReference(); 
-            break;
-    
-        default:    // wrap this one in quotes:
-            text << _( "Text" ) << wxT( " \"" ) << ((TEXTE_MODULE*)item)->m_Text << wxT("\"") <<  _(" of ") 
-//                << GetParent()->MenuText( aPcb );
-                << ((MODULE*)GetParent())->GetReference();
-            break;
-        }
-        break;
-        
-    case TYPEEDGEMODULE:
-        text << _("Graphic") << wxT( " " );
-        const wxChar* cp;
-        switch( ((EDGE_MODULE*)item)->m_Shape )
-        {
-        case S_SEGMENT:     cp = _("Line");             break;
-        case S_RECT:        cp = _("Rect");             break;
-        case S_ARC:         cp = _("Arc");              break;
-        case S_CIRCLE:      cp = _("Circle");           break;
-        /* used in Gerbview: */            
-        case S_ARC_RECT:    cp = wxT("arc_rect");       break;
-        case S_SPOT_OVALE:  cp = wxT("spot_oval");      break;
-        case S_SPOT_CIRCLE: cp = wxT("spot_circle");    break;
-        case S_SPOT_RECT:   cp = wxT("spot_rect");      break;
-        case S_POLYGON:     cp = wxT("polygon");        break;
-
-        default:            cp = wxT("??EDGE??");       break;
-        }
-        text << *cp << _(" of ") 
-//              << GetParent()->MenuText( aPcb );
-                << ((MODULE*)GetParent())->GetReference();
-        break;
-        
-    case TYPETRACK:
-        text << _("Track") << wxT(" ") << ((TRACK*)item)->m_NetCode;
-        net = aPcb->FindNet( ((TRACK*)item)->m_NetCode );
-        if( net )
-        {
-            text << wxT( " [" ) << net->m_Netname << wxT("]");
-        }
-        text << _(" on ") << ReturnPcbLayerName( item->GetLayer() );
-        break;
-        
-    case TYPEZONE:
-        text << _("Zone") << _(" on ") << ReturnPcbLayerName( item->GetLayer() );
-        break;
-        
-    case TYPEVIA:
-        text << _("Via") << wxT(" ") << ((SEGVIA*)item)->m_NetCode;
-        net = aPcb->FindNet( ((TRACK*)item)->m_NetCode );
-        if( net )
-        {
-            text << wxT( " [" ) << net->m_Netname << wxT("]");
-        }
-        break;
-        
-    case TYPEMARQUEUR:
-        text << _("Marker");
-        break;
-        
-    case TYPECOTATION:
-        text << _("Dimension");     // @todo: extend text
-        break;
-        
-    case TYPEMIRE:
-        text << _("Mire");          // @todo: extend text,  Mire is not an english word!
-        break;
-        
-    case TYPEEDGEZONE:
-        text << _("Edge Zone") << _(" on ") << ReturnPcbLayerName( item->GetLayer() );  // @todo: extend text
-        break;
-        
-    default:
-        text << item->GetClass() << wxT(" Unexpected item type: BUG!!");
-        break;
-    }
-
-    return text;    
-}
-
-
-// @todo: move this to proper source file.
-const char** BOARD_ITEM::MenuIcon() const
-{
-    char**              xpm;
-    const BOARD_ITEM*   item = this;
-    
-    switch( item->Type() )
-    {
-    case PCB_EQUIPOT_STRUCT_TYPE:
-        xpm = module_xpm;   // @todo: use net icon 
-        break;
-        
-    case TYPEMODULE:
-        xpm = module_xpm;
-        break;
-        
-    case TYPEPAD:
-        xpm = pad_xpm;
-        break;
-        
-    case TYPEDRAWSEGMENT:
-        xpm = module_xpm;   // @todo: use draw segment icon & expand on text
-        break;
-        
-    case TYPETEXTE:
-        xpm = add_text_xpm;
-        break;
-        
-    case TYPETEXTEMODULE:
-        xpm = footprint_text_xpm;
-        break;
-        
-    case TYPEEDGEMODULE:
-        xpm = show_mod_edge_xpm;
-        break;
-        
-    case TYPETRACK:
-        xpm = showtrack_xpm;
-        break;
-        
-    case TYPEZONE:
-        xpm = add_zone_xpm;
-        break;
-        
-    case TYPEVIA:
-        xpm = showtrack_xpm;        // @todo: use via specific xpm
-        break;
-        
-    case TYPEMARQUEUR:
-        xpm = pad_xpm;              // @todo: create and use marker xpm
-        break;
-        
-    case TYPECOTATION:
-        xpm = add_cotation_xpm;
-        break;
-        
-    case TYPEMIRE:
-        xpm = add_mires_xpm; 
-        break;
-        
-    case TYPEEDGEZONE:
-        xpm = show_mod_edge_xpm;    // @todo: pcb edge xpm
-        break;
-        
-    default:
-        xpm = 0;
-        break;
-    }
-    
-    return (const char**) xpm;
 }
 
 
@@ -325,56 +117,55 @@ const char** BOARD_ITEM::MenuIcon() const
  * tests that all items in the collection are MODULEs and if so, returns the
  * smallest MODULE.
  * @return BOARD_ITEM* - The smallest or NULL.
- */ 
+ */
 static BOARD_ITEM* AllAreModulesAndReturnSmallestIfSo( GENERAL_COLLECTOR* aCollector )
 {
     int count = aCollector->GetCount();
-    
-    for( int i=0; i<count;  ++i )
+
+    for( int i = 0; i<count;  ++i )
     {
-        if(  (*aCollector)[i]->Type() != TYPEMODULE )
+        if( (*aCollector)[i]->Type() != TYPEMODULE )
             return NULL;
     }
-    
+
     // all are modules, now find smallest MODULE
 
     int minDim = 0x7FFFFFFF;
     int minNdx = 0;
-    
-    for( int i=0;  i<count;  ++i )
+
+    for( int i = 0;  i<count;  ++i )
     {
         MODULE* module = (MODULE*) (*aCollector)[i];
-        
-        int  lx = module->m_BoundaryBox.GetWidth();
-        int  ly = module->m_BoundaryBox.GetHeight();
-        
-        int  lmin = MIN( lx, ly );
-        
+
+        int     lx = module->m_BoundaryBox.GetWidth();
+        int     ly = module->m_BoundaryBox.GetHeight();
+
+        int     lmin = MIN( lx, ly );
+
         if( lmin <= minDim )
         {
             minDim = lmin;
             minNdx = i;
         }
     }
-    
+
     return (*aCollector)[minNdx];
 }
 
 
-
-/***********************************************************************/
+/*************************************************************/
 BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay()
-/***********************************************************************/
+/*************************************************************/
 {
-    BOARD_ITEM*     item;
-    
-    GENERAL_COLLECTORS_GUIDE  guide = GetCollectorsGuide();
+    BOARD_ITEM* item;
+
+    GENERAL_COLLECTORS_GUIDE guide = GetCollectorsGuide();
 
     // Assign to scanList the proper item types desired based on tool type.
     // May need to pass a hot key code to this function to support hot keys too.
-    
-    const KICAD_T*  scanList;
-    
+
+    const KICAD_T* scanList;
+
     if( m_ID_current_state == 0 )
     {
         switch( m_HTOOL_current_state )
@@ -382,7 +173,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay()
         case ID_TOOLBARH_PCB_AUTOPLACE:
             scanList = GENERAL_COLLECTOR::ModuleItems;
             break;
-            
+
         default:
             scanList = GENERAL_COLLECTOR::AllBoardItems;
             break;
@@ -394,93 +185,111 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay()
         {
         case ID_PCB_SHOW_1_RATSNEST_BUTT:
             scanList = GENERAL_COLLECTOR::PadsOrModules;
-            break;            
+            break;
 
         case ID_TRACK_BUTT:
             scanList = GENERAL_COLLECTOR::Tracks;
-            break;            
+            break;
 
         case ID_COMPONENT_BUTT:
             scanList = GENERAL_COLLECTOR::ModuleItems;
             break;
-            
+
         default:
             scanList = GENERAL_COLLECTOR::AllBoardItems;
         }
     }
 
-    m_Collector->Collect( m_Pcb, scanList, GetScreen()->RefPos(true), guide );
+    m_Collector->Collect( m_Pcb, scanList, GetScreen()->RefPos( true ), guide );
 
     /* debugging: print out the collected items, showing their priority order too.
-    for( unsigned i=0; i<m_Collector->GetCount();  ++i )
-       (*m_Collector)[i]->Show( 0, std::cout ); 
-    */
+     * for( unsigned i=0; i<m_Collector->GetCount();  ++i )
+     * (*m_Collector)[i]->Show( 0, std::cout );
+     */
 
-    if( m_Collector->GetCount() <= 1 )  
+    /* Remove redundancies: most of time, zones are found twice,
+     * because zones are filled twice ( once by by horizontal and once by vertical segments )
+     */
+    unsigned long timestampzone = 0;
+    for( unsigned int ii = 0; ii < m_Collector->GetCount(); ii++ )
+    {
+        item = (*m_Collector)[ii];
+        if( item->Type() != TYPEZONE )
+            continue;
+        /* Found a TYPE ZONE */
+        if( item->m_TimeStamp == timestampzone )    // Remove it, redundant, zone already found
+        {
+            m_Collector->Remove( ii );
+            ii--;
+        }
+        else
+            timestampzone = item->m_TimeStamp;
+    }
+
+    if( m_Collector->GetCount() <= 1 )
     {
         item = (*m_Collector)[0];
-        SetCurItem( item );        
+        SetCurItem( item );
     }
-    
     // If the count is 2, and first item is a pad or moduletext, and the 2nd item is its parent module:
-    else if( m_Collector->GetCount() == 2 && 
-        ( (*m_Collector)[0]->Type() == TYPEPAD || (*m_Collector)[0]->Type() == TYPETEXTEMODULE) && 
-        (*m_Collector)[1]->Type() == TYPEMODULE && (*m_Collector)[0]->GetParent()==(*m_Collector)[1] )
+    else if( m_Collector->GetCount() == 2
+             && ( (*m_Collector)[0]->Type() == TYPEPAD || (*m_Collector)[0]->Type() ==
+                 TYPETEXTEMODULE )
+             && (*m_Collector)[1]->Type() == TYPEMODULE && (*m_Collector)[0]->GetParent()==
+             (*m_Collector)[1] )
     {
         item = (*m_Collector)[0];
-        SetCurItem( item );        
+        SetCurItem( item );
     }
-    
     // if all are modules, find the smallest one amoung the primary choices
-    else if( (item = AllAreModulesAndReturnSmallestIfSo(m_Collector) ) != NULL )
+    else if( ( item = AllAreModulesAndReturnSmallestIfSo( m_Collector ) ) != NULL )
     {
-        SetCurItem( item );        
+        SetCurItem( item );
     }
-    
     else    // show a popup menu
     {
-        wxMenu  itemMenu;
+        wxMenu itemMenu;
 
-        itemMenu.SetTitle( _("Selection Clarification") );  // does this work? not under Linux!
-        
+        itemMenu.SetTitle( _( "Selection Clarification" ) );  // does this work? not under Linux!
+
         int limit = MIN( MAX_ITEMS_IN_PICKER, m_Collector->GetCount() );
 
-        for( int i=0;  i<limit;  ++i )
+        for( int i = 0;  i<limit;  ++i )
         {
-            wxString        text;
-            const char**    xpm;
-            
+            wxString     text;
+            const char** xpm;
+
             item = (*m_Collector)[i];
 
             text = item->MenuText( m_Pcb );
             xpm  = item->MenuIcon();
-            
-            ADD_MENUITEM( &itemMenu, ID_POPUP_PCB_ITEM_SELECTION_START+i, text, xpm );
+
+            ADD_MENUITEM( &itemMenu, ID_POPUP_PCB_ITEM_SELECTION_START + i, text, xpm );
         }
-        
+
         DrawPanel->m_IgnoreMouseEvents = TRUE;
 
         // this menu's handler is void WinEDA_BasePcbFrame::ProcessItemSelection()
         // and it calls SetCurItem() which in turn calls Display_Infos() on the item.
         PopupMenu( &itemMenu );
-        
+
         DrawPanel->MouseToCursorSchema();
-        
+
         DrawPanel->m_IgnoreMouseEvents = FALSE;
-        
+
         // The function ProcessItemSelection() has set the current item, return it.
         item = GetCurItem();
     }
-    
+
     return item;
-    
+
 /* old way:
-    
-    item = Locate( CURSEUR_OFF_GRILLE, GetScreen()->m_Active_Layer );
-    if( item == NULL )
-        item = Locate( CURSEUR_OFF_GRILLE, -1 );
-    return item;
-*/    
+ *
+ * item = Locate( CURSEUR_OFF_GRILLE, GetScreen()->m_Active_Layer );
+ * if( item == NULL )
+ *     item = Locate( CURSEUR_OFF_GRILLE, -1 );
+ * return item;
+ */
 }
 
 
@@ -498,7 +307,7 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     // Save the board after the time out :
     int CurrentTime = time( NULL );
     if( !GetScreen()->IsModify() || GetScreen()->IsSave() )
-    {   
+    {
         /* If no change, reset the time out */
         g_SaveTime = CurrentTime;
     }
@@ -552,17 +361,17 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         curpos = m_CurrentScreen->m_Curseur;
         break;
 
-	case EDA_ZOOM_IN_FROM_MOUSE:
+    case EDA_ZOOM_IN_FROM_MOUSE:
         OnZoom( ID_ZOOM_PLUS_KEY );
         oldpos = curpos = GetScreen()->m_Curseur;
         break;
 
-	case EDA_ZOOM_OUT_FROM_MOUSE:
+    case EDA_ZOOM_OUT_FROM_MOUSE:
         OnZoom( ID_ZOOM_MOINS_KEY );
         oldpos = curpos = GetScreen()->m_Curseur;
         break;
 
-	case EDA_ZOOM_CENTER_FROM_MOUSE:
+    case EDA_ZOOM_CENTER_FROM_MOUSE:
         OnZoom( ID_ZOOM_CENTER_KEY );
         oldpos = curpos = GetScreen()->m_Curseur;
         break;
@@ -607,11 +416,11 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     bool   keep_on_grid = TRUE;
     if( m_ID_current_state == ID_PCB_DELETE_ITEM_BUTT )
         keep_on_grid = FALSE;
-    
+
     /* Cursor is left off grid if no block in progress and no moving object */
     if( GetScreen()->BlockLocate.m_State != STATE_NO_BLOCK )
         keep_on_grid = TRUE;
-    
+
     EDA_BaseStruct* DrawStruct = GetScreen()->GetCurItem();
     if( DrawStruct && DrawStruct->m_Flags )
         keep_on_grid = TRUE;
@@ -626,7 +435,7 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
             pad = NULL;
         if( keep_on_grid )
         {
-            if( pad )       // Put cursor on the pad
+            if( pad )  // Put cursor on the pad
                 GetScreen()->m_Curseur = curpos = pad->m_Pos;
             else
                 // Put cursor on grid

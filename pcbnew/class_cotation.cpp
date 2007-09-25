@@ -56,10 +56,20 @@ void COTATION::UnLink()
 }
 
 
-/* Changement du texte de la cotation */
+/* Setup the dimension text */
 void COTATION:: SetText( const wxString& NewText )
 {
     m_Text->m_Text = NewText;
+}
+
+
+/**********************************/
+wxString COTATION:: GetText( void )
+/**********************************/
+/* Reutun the dimension text
+*/
+{
+	return m_Text->m_Text;
 }
 
 

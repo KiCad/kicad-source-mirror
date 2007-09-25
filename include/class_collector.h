@@ -109,6 +109,15 @@ public:
         m_List.push_back( item );
     }
 
+    /**
+     * Function Remove
+     * removes the  item at item_position (first position is 0);
+     * @param item_position index.
+     */
+    void Remove( unsigned int item_position )
+    {
+        m_List.erase( m_List.begin() + item_position );
+    }
 
     /**
      * Function operator[int]
@@ -219,33 +228,7 @@ public:
         SetTimeNow();                   // when it was taken
     }
     */
-    
-    
-    /**
-     * Function Collect
-     * scans an EDA_BaseStruct using this class's Inspector method, which does 
-     * the collection.
-     * @param container An EDA_BaseStruct to scan, including those items it contains.
-     * @param aRefBox An EDA_Rect to use in bounds-testing.
-     *
-     * example implementation, in derived class:
-     *
-    virtual void Collect( EDA_BaseStruct* container, const EDA_Rect& aRefBox )
-    {
-        example implementation:
-        
-        SetBoundingBox( aRefBox );  // pass box to Inspect()
-        
-        Empty();        // empty the collection
-        
-        // visit the board with the INSPECTOR (me).
-        container->Visit(   this,       // INSPECTOR* inspector
-                            NULL,       // const void* testData, 
-                            m_ScanTypes);
-        SetTimeNow();                   // when it was taken
-    }
-    */
-    
+
 };
 
 #endif  // COLLECTOR_H

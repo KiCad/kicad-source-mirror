@@ -20,18 +20,16 @@ void Trace_Pistes( WinEDA_DrawPanel* panel, BOARD* Pcb, wxDC* DC, int drawmode )
 /* Draw all tracks and zones.
  */
 {
-    TRACK* track;
-
-    track = Pcb->m_Track;
+    TRACK * track = Pcb->m_Track;
     for( ; track != NULL; track = track->Next() )
     {
         track->Draw( panel, DC, drawmode );
     }
 
-    track = Pcb->m_Zone;
-    for( ; track != NULL; track = track->Next() )
+    SEGZONE * zone = Pcb->m_Zone;
+    for( ; zone != NULL; zone = zone->Next() )
     {
-        track->Draw( panel, DC, drawmode );
+        zone->Draw( panel, DC, drawmode );
     }
 }
 

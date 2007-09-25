@@ -45,7 +45,6 @@
 #include "Mode_Track.xpm"
 #include "tool_ratsnet.xpm"
 #include "local_ratsnet.xpm"
-#include "general_ratsnet.xpm"
 #include "add_cotation.xpm"
 
 #define SEL_LAYER_HELP _( \

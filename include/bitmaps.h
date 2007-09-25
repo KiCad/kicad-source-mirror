@@ -181,6 +181,7 @@
 	#include "../bitmaps/library_update.xpm"
 	#include "../bitmaps/transistor.xpm"
 	#include "../bitmaps/kicad_icon_small.xpm"
+	#include "../bitmaps/general_ratsnet.xpm"
 
 // Largeur du toolbar vertical
 #define VTOOLBAR_WIDTH 26
