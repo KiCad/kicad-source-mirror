@@ -5,6 +5,17 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2007-Sep-25 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
+================================================================================
++ gerbview
+    The "Exit" button previously provided within the dialog box invoked from the 
+    "Preferences -> File ext" menu entry has now been replaced by "OK" and "Cancel"
+    buttons. Similarly, the "Accept" button previously provided within each of the
+    dialog boxes invoked from the "Preferences -> Options" and "Preferences -> Display"
+    menu entries has now been replaced by an "OK" button. And each of those three
+    dialog boxes can now (otherwise) be cancelled by pressing the "Esc" key.
+
+
 2007-sept-22 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + all

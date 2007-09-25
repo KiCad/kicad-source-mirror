@@ -5,8 +5,8 @@
 	/*	 Fichier options.cpp 	*/
 
 /*
- Affichage et modifications des parametres de travail Gerbview
-*/
+ * Affichage et modifications des parametres de travail Gerbview
+ */
 
 
 #include "fctsys.h"
@@ -94,7 +94,6 @@ wxClientDC dc(DrawPanel);
 			DrawPanel->ReDraw(&dc, TRUE);
 			break;
 
-
 		default:
 			DisplayError(this, wxT("WinEDA_PcbFrame::OnSelectOptionToolbar error"));
 			break;
@@ -104,11 +103,6 @@ wxClientDC dc(DrawPanel);
 }
 
 
-enum id_optpcb
-{
-	ID_ACCEPT_OPT = 1000,
-	ID_CANCEL_OPT
-};
 	/*************************************************/
 	/* classe derivee pour la frame de Configuration */
 	/*************************************************/
@@ -123,24 +117,22 @@ private:
 	wxRadioBox * m_CursorShape;
 	wxRadioBox * m_GerberDefaultScale;
 
-
-
 	// Constructor and destructor
 public:
 	WinEDA_GerberGeneralOptionsFrame(WinEDA_BasePcbFrame *parent,const wxPoint& pos);
 	~WinEDA_GerberGeneralOptionsFrame() {};
 
 private:
-	void AcceptPcbOptions(wxCommandEvent& event);
-	void OnQuit(wxCommandEvent & event);
+	void OnOkClick(wxCommandEvent& event);
+	void OnCancelClick(wxCommandEvent & event);
 
 	DECLARE_EVENT_TABLE()
 
 };
 /* Construction de la table des evenements pour WinEDA_GerberGeneralOptionsFrame */
 BEGIN_EVENT_TABLE(WinEDA_GerberGeneralOptionsFrame, wxDialog)
-	EVT_BUTTON(ID_ACCEPT_OPT, WinEDA_GerberGeneralOptionsFrame::AcceptPcbOptions)
-	EVT_BUTTON(ID_CANCEL_OPT, WinEDA_GerberGeneralOptionsFrame::OnQuit)
+	EVT_BUTTON(wxID_OK, WinEDA_GerberGeneralOptionsFrame::OnOkClick)
+	EVT_BUTTON(wxID_CANCEL, WinEDA_GerberGeneralOptionsFrame::OnCancelClick)
 END_EVENT_TABLE()
 
 
@@ -168,11 +160,11 @@ WinEDA_GerberGeneralOptionsFrame::WinEDA_GerberGeneralOptionsFrame(WinEDA_BasePc
 	MainBoxSizer->Add(MiddleBoxSizer, 0, wxGROW|wxALL, 5);
 	MainBoxSizer->Add(RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-	wxButton * Button = new wxButton(this, ID_ACCEPT_OPT, _("Accept"));
+	wxButton * Button = new wxButton(this, wxID_OK, _("OK"));
 	Button->SetForegroundColour(*wxRED);
 	RightBoxSizer->Add(Button, 0, wxGROW|wxALL, 5);
 
-	Button = new wxButton(this, ID_CANCEL_OPT, _("Cancel"));
+	Button = new wxButton(this, wxID_CANCEL, _("Cancel"));
 	Button->SetForegroundColour(*wxBLUE);
 	RightBoxSizer->Add(Button, 0, wxGROW|wxALL, 5);
 
@@ -210,28 +202,27 @@ wxString list_scales[2] = { _("format: 2.3"), _("format 3.4") };
 	m_GerberDefaultScale->SetSelection( (g_Default_GERBER_Format == 23) ? 0 : 1);
 	MiddleBoxSizer->Add(m_GerberDefaultScale, 0, wxGROW|wxALL, 5);
 
-
 	GetSizer()->Fit(this);
     GetSizer()->SetSizeHints(this);
 }
 
+
 /************************************************************************/
-void  WinEDA_GerberGeneralOptionsFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
+void  WinEDA_GerberGeneralOptionsFrame::OnCancelClick(wxCommandEvent& WXUNUSED(event))
 /************************************************************************/
 {
-    // true is to force the frame to close
-    Close(true);
+    EndModal(0);
 }
 
 
 
 /*****************************************************************************/
-void WinEDA_GerberGeneralOptionsFrame::AcceptPcbOptions(wxCommandEvent& event)
+void WinEDA_GerberGeneralOptionsFrame::OnOkClick(wxCommandEvent& event)
 /*****************************************************************************/
 {
 	DisplayOpt.DisplayPolarCood =
 		(m_PolarDisplay->GetSelection() == 0) ? FALSE : TRUE;
-	g_UnitMetric = (m_BoxUnits->GetSelection() == 0)  ? 0 : 1;
+	g_UnitMetric = (m_BoxUnits->GetSelection() == 0) ? 0 : 1;
 	g_CursorShape = m_CursorShape->GetSelection();
 	g_Default_GERBER_Format =
 		(m_GerberDefaultScale->GetSelection() == 0) ? 23 : 34;
@@ -265,16 +256,16 @@ public:
 	WinEDA_LookFrame(WinEDA_BasePcbFrame *parent,const wxPoint& pos);
 	~WinEDA_LookFrame() {};
 
-	void AcceptPcbOptions(wxCommandEvent& event);
-	void OnQuit(wxCommandEvent & event);
+	void OnOkClick(wxCommandEvent& event);
+	void OnCancelClick(wxCommandEvent & event);
 
 	DECLARE_EVENT_TABLE()
 
 };
 /* Construction de la table des evenements pour WinEDA_LookFrame */
 BEGIN_EVENT_TABLE(WinEDA_LookFrame, wxDialog)
-	EVT_BUTTON(ID_ACCEPT_OPT, WinEDA_LookFrame::AcceptPcbOptions)
-	EVT_BUTTON(ID_CANCEL_OPT, WinEDA_LookFrame::OnQuit)
+	EVT_BUTTON(wxID_OK, WinEDA_LookFrame::OnOkClick)
+	EVT_BUTTON(wxID_CANCEL, WinEDA_LookFrame::OnCancelClick)
 END_EVENT_TABLE()
 
 
@@ -298,11 +289,11 @@ WinEDA_LookFrame::WinEDA_LookFrame(WinEDA_BasePcbFrame *parent,
 	MainBoxSizer->Add(MiddleBoxSizer, 0, wxGROW|wxALL, 5);
 	MainBoxSizer->Add(RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-	wxButton * Button = new wxButton(this, ID_ACCEPT_OPT, _("Accept"));
+	wxButton * Button = new wxButton(this, wxID_OK, _("OK"));
 	Button->SetForegroundColour(*wxRED);
 	RightBoxSizer->Add(Button, 0, wxGROW|wxALL, 5);
 
-	Button = new wxButton(this, ID_CANCEL_OPT, _("Cancel"));
+	Button = new wxButton(this, wxID_CANCEL, _("Cancel"));
 	Button->SetForegroundColour(*wxBLUE);
 	RightBoxSizer->Add(Button, 0, wxGROW|wxALL, 5);
 
@@ -311,13 +302,15 @@ wxString list_opt2[2] = { _("Sketch"), _("Filled") };
 	m_OptDisplayLines = new wxRadioBox(this, -1, _("Lines:"),
 				wxDefaultPosition, wxDefaultSize,
 				2, list_opt2, 1);
-	if ( DisplayOpt.DisplayPcbTrackFill ) m_OptDisplayLines->SetSelection(1);
+	if ( DisplayOpt.DisplayPcbTrackFill )
+		m_OptDisplayLines->SetSelection(1);
 	LeftBoxSizer->Add(m_OptDisplayLines, 0, wxGROW|wxALL, 5);
 
 	m_OptDisplayFlashes = new wxRadioBox(this, -1, _("Spots:"),
 				wxDefaultPosition, wxDefaultSize,
 				2, list_opt2, 1);
-	if ( DisplayOpt.DisplayPadFill ) m_OptDisplayFlashes->SetSelection(1);
+	if ( DisplayOpt.DisplayPadFill )
+		m_OptDisplayFlashes->SetSelection(1);
 	LeftBoxSizer->Add(m_OptDisplayFlashes, 0, wxGROW|wxALL, 5);
 
 wxString list_opt3[3] = { _("Sketch"), _("Filled"), _("Line") };
@@ -328,7 +321,8 @@ wxString list_opt3[3] = { _("Sketch"), _("Filled"), _("Line") };
 	MiddleBoxSizer->Add(m_OptDisplayDrawings, 0, wxGROW|wxALL, 5);
 
 	m_OptDisplayDCodes = new wxCheckBox(this, -1, _("Show D codes"));
-	if ( DisplayOpt.DisplayPadNum ) m_OptDisplayDCodes->SetValue(TRUE);
+	if ( DisplayOpt.DisplayPadNum )
+		m_OptDisplayDCodes->SetValue(TRUE);
 	MiddleBoxSizer->Add(m_OptDisplayDCodes, 0, wxGROW|wxALL, 5);
  
 	GetSizer()->Fit(this);
@@ -337,27 +331,28 @@ wxString list_opt3[3] = { _("Sketch"), _("Filled"), _("Line") };
 
 
 /**************************************************************/
-void  WinEDA_LookFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
+void  WinEDA_LookFrame::OnCancelClick(wxCommandEvent& WXUNUSED(event))
 /**************************************************************/
 {
-    // true is to force the frame to close
-    Close(true);
+    EndModal(0);
 }
 
 
 /*************************************************************/
-void WinEDA_LookFrame::AcceptPcbOptions(wxCommandEvent& event)
+void WinEDA_LookFrame::OnOkClick(wxCommandEvent& event)
 /*************************************************************/
 /* Met a jour les options
-*/
+ */
 {
-	if ( m_OptDisplayLines->GetSelection() == 1)
+	if ( m_OptDisplayLines->GetSelection() == 1 )
 		DisplayOpt.DisplayPcbTrackFill = TRUE;
-	else DisplayOpt.DisplayPcbTrackFill = FALSE;
+	else
+		DisplayOpt.DisplayPcbTrackFill = FALSE;
 
-	if (m_OptDisplayFlashes->GetSelection() == 1 )
+	if ( m_OptDisplayFlashes->GetSelection() == 1 )
 		 DisplayOpt.DisplayPadFill = TRUE;
-	else DisplayOpt.DisplayPadFill = FALSE;
+	else
+		DisplayOpt.DisplayPadFill = FALSE;
 
 	DisplayOpt.DisplayPadNum = m_OptDisplayDCodes->GetValue();
 
@@ -379,25 +374,25 @@ void WinEDA_LookFrame::AcceptPcbOptions(wxCommandEvent& event)
 void WinEDA_GerberFrame::InstallPcbOptionsFrame(const wxPoint & pos, int id)
 /***************************************************************************/
 {
-
 	switch ( id )
-		{
+	{
 		case ID_PCB_LOOK_SETUP:
-			{
+		{
 			WinEDA_LookFrame * OptionsFrame =
 				new WinEDA_LookFrame(this, pos);
-			OptionsFrame->ShowModal(); OptionsFrame->Destroy();
-			}
+			OptionsFrame->ShowModal();
+			OptionsFrame->Destroy();
+		}
 			break;
 
 		case ID_OPTIONS_SETUP:
-			{
+		{
 			WinEDA_GerberGeneralOptionsFrame * OptionsFrame =
 				new WinEDA_GerberGeneralOptionsFrame(this, pos);
-			OptionsFrame->ShowModal(); OptionsFrame->Destroy();
-			}
-			break;
+			OptionsFrame->ShowModal();
+			OptionsFrame->Destroy();
 		}
+			break;
+	}
 }
-
 

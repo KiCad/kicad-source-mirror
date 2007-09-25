@@ -5,9 +5,9 @@
 	/*	 Fichier reglage.cpp 	*/
 
 /*
- Affichage et modifications des parametres de travail de PcbNew
- Parametres = dimensions des via, pistes, isolements, options...
-*/
+ * Affichage et modifications des parametres de travail de PcbNew
+ * Parametres = dimensions des via, pistes, isolements, options...
+ */
 
 
 #include "fctsys.h"
@@ -25,8 +25,7 @@
 /***********/
 
 enum {
-	ID_SAVE_CFG = 1000,
-	ID_EXIT_CFG
+	ID_SAVE_CFG = 1000
 	};
 
 /* Routines Locales */
@@ -54,8 +53,8 @@ public:
 
 private:
 	void SaveCfg(wxCommandEvent & event);
-	void OnQuit(wxCommandEvent & event);
-	void OnCloseWindow(wxCloseEvent & event);
+	void OnOkClick(wxCommandEvent & event);
+	void OnCancelClick(wxCommandEvent & event);
 
 	DECLARE_EVENT_TABLE()
 
@@ -63,8 +62,8 @@ private:
 /* Construction de la table des evenements pour WinEDA_ConfigFrame */
 BEGIN_EVENT_TABLE(WinEDA_ConfigFrame, wxDialog)
 	EVT_BUTTON(ID_SAVE_CFG, WinEDA_ConfigFrame::SaveCfg)
-	EVT_BUTTON(ID_EXIT_CFG, WinEDA_ConfigFrame::OnQuit)
-	EVT_CLOSE(WinEDA_ConfigFrame::OnCloseWindow)
+	EVT_BUTTON(wxID_OK, WinEDA_ConfigFrame::OnOkClick)
+	EVT_BUTTON(wxID_CANCEL, WinEDA_ConfigFrame::OnCancelClick)
 END_EVENT_TABLE()
 
 
@@ -75,8 +74,9 @@ END_EVENT_TABLE()
 
 void WinEDA_GerberFrame::InstallConfigFrame(const wxPoint & pos)
 {
-WinEDA_ConfigFrame * CfgFrame = new WinEDA_ConfigFrame(this, pos);
-	CfgFrame->ShowModal(); CfgFrame->Destroy();
+	WinEDA_ConfigFrame * CfgFrame = new WinEDA_ConfigFrame(this, pos);
+	CfgFrame->ShowModal();
+	CfgFrame->Destroy();
 }
 
 
@@ -89,7 +89,7 @@ WinEDA_ConfigFrame::WinEDA_ConfigFrame(WinEDA_GerberFrame *parent,
 		wxDialog(parent, -1, wxEmptyString, framepos, wxSize(300, 180),
 		wxDEFAULT_DIALOG_STYLE|wxFRAME_FLOAT_ON_PARENT )
 {
-#define LEN_EXT 100
+const int LEN_EXT = 100;
 wxString title;
 
 	m_Parent = parent;
@@ -105,18 +105,25 @@ wxString title;
 	wxBoxSizer * LeftBoxSizer = new wxBoxSizer(wxVERTICAL);
 	MainBoxSizer->Add(LeftBoxSizer, 0, wxGROW|wxALL, 5);
 	MainBoxSizer->Add(RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-	
+
 	/* Creation des boutons de commande */
-	wxButton * Button = new wxButton(this,	ID_SAVE_CFG, _("Save Cfg"));
+	wxButton * Button = new wxButton(this,	ID_SAVE_CFG, _("Save Cfg..."));
+	RightBoxSizer->Add(Button, 0, wxGROW|wxALL, 5);
+
+	// Provide a spacer to improve appearance of dialog box
+	RightBoxSizer->AddSpacer(20);
+
+	Button = new wxButton(this,	wxID_OK, _("OK"));
 	Button->SetForegroundColour(*wxRED);
 	RightBoxSizer->Add(Button, 0, wxGROW|wxALL, 5);
 
-	Button = new wxButton(this,	ID_EXIT_CFG, _("Exit"));
+	Button = new wxButton(this,	wxID_CANCEL, _("Cancel"));
 	Button->SetForegroundColour(*wxBLUE);
 	RightBoxSizer->Add(Button, 0, wxGROW|wxALL, 5);
 
 	wxSize size;
-	size.x = LEN_EXT; size.y = -1;
+	size.x = LEN_EXT;
+	size.y = -1;
 	TextDrillExt = new WinEDA_EnterText(this,
 				_("Drill File Ext:"), g_DrillFilenameExt,
 				LeftBoxSizer, size);
@@ -138,20 +145,24 @@ wxString title;
 	/* Fonctions de base de WinEDA_ConfigFrame: la fenetre de config */
 	/*****************************************************************/
 
-void WinEDA_ConfigFrame::OnCloseWindow(wxCloseEvent & event)
-{
-	g_DrillFilenameExt = TextDrillExt->GetValue();
-	g_PhotoFilenameExt = TextPhotoExt->GetValue();
-	g_PenFilenameExt = TextPenExt->GetValue();
-	EndModal(0);
-}
 
 /******************************************************************/
-void  WinEDA_ConfigFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
+void  WinEDA_ConfigFrame::OnOkClick(wxCommandEvent& WXUNUSED(event))
 /******************************************************************/
 {
-    // true is to force the frame to close
-    Close(true);
+    g_DrillFilenameExt = TextDrillExt->GetValue();
+    g_PhotoFilenameExt = TextPhotoExt->GetValue();
+    g_PenFilenameExt = TextPenExt->GetValue();
+
+    EndModal(1);
+}
+
+
+/******************************************************************/
+void  WinEDA_ConfigFrame::OnCancelClick(wxCommandEvent& WXUNUSED(event))
+/******************************************************************/
+{
+    EndModal(0);
 }
 
 
@@ -161,5 +172,4 @@ void WinEDA_ConfigFrame::SaveCfg(wxCommandEvent& event)
 {
 	m_Parent->Update_config();
 }
-
 
