@@ -153,9 +153,9 @@ static BOARD_ITEM* AllAreModulesAndReturnSmallestIfSo( GENERAL_COLLECTOR* aColle
 }
 
 
-/*************************************************************/
-BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay()
-/*************************************************************/
+/****************************************************************************/
+BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
+/****************************************************************************/
 {
     BOARD_ITEM* item;
 
@@ -166,7 +166,11 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay()
 
     const KICAD_T* scanList;
 
-    if( m_ID_current_state == 0 )
+    if( aHotKeyCode )
+    {
+        // switch here
+    }
+    else if( m_ID_current_state == 0 )
     {
         switch( m_HTOOL_current_state )
         {
@@ -175,7 +179,9 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay()
             break;
 
         default:
-            scanList = GENERAL_COLLECTOR::AllBoardItems;
+            scanList = DisplayOpt.DisplayZones ? 
+                GENERAL_COLLECTOR::AllBoardItems : 
+                GENERAL_COLLECTOR::AllButZones;
             break;
         }
     }
@@ -196,26 +202,32 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay()
             break;
 
         default:
-            scanList = GENERAL_COLLECTOR::AllBoardItems;
+            scanList = DisplayOpt.DisplayZones ? 
+                GENERAL_COLLECTOR::AllBoardItems : 
+                GENERAL_COLLECTOR::AllButZones;
         }
     }
 
     m_Collector->Collect( m_Pcb, scanList, GetScreen()->RefPos( true ), guide );
 
-    /* debugging: print out the collected items, showing their priority order too.
-     * for( unsigned i=0; i<m_Collector->GetCount();  ++i )
-     * (*m_Collector)[i]->Show( 0, std::cout );
-     */
+#if 0    
+    // debugging: print out the collected items, showing their priority order too.
+    for( unsigned i=0; i<m_Collector->GetCount();  ++i )
+        (*m_Collector)[i]->Show( 0, std::cout );
+#endif    
 
     /* Remove redundancies: most of time, zones are found twice,
      * because zones are filled twice ( once by by horizontal and once by vertical segments )
      */
     unsigned long timestampzone = 0;
-    for( unsigned int ii = 0; ii < m_Collector->GetCount(); ii++ )
+    
+    int limit = m_Collector->GetCount();
+    for( int ii = 0;  ii < limit; ii++ )
     {
         item = (*m_Collector)[ii];
         if( item->Type() != TYPEZONE )
             continue;
+        
         /* Found a TYPE ZONE */
         if( item->m_TimeStamp == timestampzone )    // Remove it, redundant, zone already found
         {
@@ -282,14 +294,6 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay()
     }
 
     return item;
-
-/* old way:
- *
- * item = Locate( CURSEUR_OFF_GRILLE, GetScreen()->m_Active_Layer );
- * if( item == NULL )
- *     item = Locate( CURSEUR_OFF_GRILLE, -1 );
- * return item;
- */
 }
 
 

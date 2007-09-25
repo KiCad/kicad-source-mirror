@@ -4,6 +4,21 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Sep-25 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ pcbnew
+  * got rid of reference to global display options DisplayOpt.DisplayZones from 
+    collectors.cpp so collectors.cpp can continue to be used in multiple future 
+    (non-display related) general contexts.  
+  * Moved TYPEZONE to end of AllBoardItems, added GENERAL_COLLECTOR::AllButZones to
+    provide support of DisplayOpt.DisplayZones.
+  * Added aHotKeyCode to PcbGeneralLocateAndDisplay()
++ gerbview
+  * viewer was getting stuck in a loop when loading a bad gerber file.  Fixed 
+    the bug, but line 223 through 225 of readgerb.cpp need review.
+  * beautified a few files with uncrustify, (any I had to look at).    
+
+  
 2007-sept-25 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew:

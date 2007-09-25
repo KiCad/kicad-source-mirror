@@ -112,11 +112,11 @@ public:
     /**
      * Function Remove
      * removes the  item at item_position (first position is 0);
-     * @param item_position index.
+     * @param ndx The index into the list.
      */
-    void Remove( unsigned int item_position )
+    void Remove( int ndx )
     {
-        m_List.erase( m_List.begin() + item_position );
+        m_List.erase( m_List.begin() + (unsigned) ndx );
     }
 
     /**

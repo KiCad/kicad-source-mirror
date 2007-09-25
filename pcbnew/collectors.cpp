@@ -38,10 +38,10 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     TYPECOTATION,
     TYPEVIA,
     TYPETRACK,
-    TYPEZONE,
     TYPEPAD,
     TYPETEXTEMODULE,
     TYPEMODULE,
+    TYPEZONE,
     EOT
 };    
 
@@ -52,12 +52,23 @@ const KICAD_T GENERAL_COLLECTOR::PrimaryItems[] = {
     TYPECOTATION,
     TYPEVIA,
     TYPETRACK,
-//    TYPEPAD,              TYPEPAD and TYPETEXTEMODULE are handled in a subsearch
-//    TYPETEXTEMODULE,
     TYPEMODULE,
     EOT
 };
 
+
+const KICAD_T GENERAL_COLLECTOR::AllButZones[] = {
+    TYPETEXTE, 
+    TYPEDRAWSEGMENT, 
+    TYPECOTATION,
+    TYPEVIA,
+    TYPETRACK,
+    TYPEPAD,
+    TYPETEXTEMODULE,
+    TYPEMODULE,
+    EOT
+};
+    
 
 const KICAD_T GENERAL_COLLECTOR::ModuleItems[] = {
     TYPEMODULE,
@@ -95,7 +106,6 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
 {
     BOARD_ITEM* item = (BOARD_ITEM*) testItem;
     MODULE*     module = NULL;
-	bool skip_item = false;
 
 #if 0   // debugging
     static int breakhere = 0;
@@ -173,7 +183,6 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
     case TYPETRACK:
         break;
     case TYPEZONE:
-		if( ! DisplayOpt.DisplayZones ) skip_item = true;
         break;
     case TYPETEXTE: 
         break;
@@ -183,20 +192,18 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
         break;
         
     case TYPETEXTEMODULE:
+        module = (MODULE*) item->GetParent();
+        
+        if( m_Guide->IgnoreMTextsMarkedNoShow() && ((TEXTE_MODULE*)item)->m_NoShow )
+            goto exit;
+        
+        if( module )
         {
-            module = (MODULE*) item->GetParent();
-            
-            if( m_Guide->IgnoreMTextsMarkedNoShow() && ((TEXTE_MODULE*)item)->m_NoShow )
+            if( m_Guide->IgnoreMTextsOnCopper() && module->GetLayer()==LAYER_CUIVRE_N )
                 goto exit;
             
-            if( module )
-            {
-                if( m_Guide->IgnoreMTextsOnCopper() && module->GetLayer()==LAYER_CUIVRE_N )
-                    goto exit;
-                
-                if( m_Guide->IgnoreMTextsOnCmp() && module->GetLayer()==LAYER_CMP_N )
-                    goto exit;
-            }
+            if( m_Guide->IgnoreMTextsOnCmp() && module->GetLayer()==LAYER_CMP_N )
+                goto exit;
         }
         break;
         
@@ -234,7 +241,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
                 {
                     if( item->HitTest( m_RefPos ) )
                     {
-                        if ( ! skip_item ) Append( item );
+                        Append( item );
                         goto exit;
                     }
                 }
@@ -261,7 +268,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
                 {
                     if( item->HitTest( m_RefPos ) )
                     {
-                        if ( ! skip_item ) Append2nd( item );
+                        Append2nd( item );
                         goto exit;
                     }
                 }

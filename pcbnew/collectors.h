@@ -146,6 +146,7 @@ public:
      * @return bool - ture if should ignore MODULEs on component layer.
      */
     virtual     bool IgnoreModulesOnCmp() const = 0;
+
     
     /**
      * Function UseHitTesting
@@ -201,6 +202,12 @@ public:
     static const KICAD_T AllBoardItems[];
 
 
+    /**
+     * A scan list for all editable board items, except zones
+     */
+    static const KICAD_T AllButZones[];
+    
+    
     /** 
      * A scan list for all primary board items, omitting items which are subordinate to
      * a MODULE, such as D_PAD and TEXTEMODULE.

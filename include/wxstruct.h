@@ -400,8 +400,12 @@ public:
      * a popup menu is shown which allows the user to pick which item he/she is 
      * interested in.  Once an item is chosen, then it is make the "current item"
      * and the status window is updated to reflect this.
+     *
+     * @param aHotKeyCode The hotkey which relates to the caller and determines the
+     *  type of search to be performed.  If zero, then the mouse tools will be 
+     *  tested instead.
      */
-    BOARD_ITEM*     PcbGeneralLocateAndDisplay();
+    BOARD_ITEM*     PcbGeneralLocateAndDisplay( int aHotKeyCode = 0 );
     
     BOARD_ITEM*     Locate( int typeloc, int LayerSearch );
     void            ProcessItemSelection( wxCommandEvent& event );
