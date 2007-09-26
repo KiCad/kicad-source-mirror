@@ -83,9 +83,9 @@ public:
      * Function GetCount
      * returns the number of objects in the list
      */
-    unsigned GetCount() const
+    int GetCount() const
     {
-        return m_List.size();
+        return (int) m_List.size();
     }
 
     
@@ -127,7 +127,7 @@ public:
      */
     EDA_BaseStruct* operator[]( int ndx ) const
     {
-        if( (unsigned)ndx < GetCount() )
+        if( (unsigned)ndx < (unsigned)GetCount() )  // (unsigned) excludes ndx<0 also
             return m_List[ ndx ];
         return NULL;
     }

@@ -161,14 +161,15 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 
     GENERAL_COLLECTORS_GUIDE guide = GetCollectorsGuide();
 
-    // Assign to scanList the proper item types desired based on tool type.
-    // May need to pass a hot key code to this function to support hot keys too.
+    // Assign to scanList the proper item types desired based on tool type
+    // or hotkey that is in play.
 
     const KICAD_T* scanList;
 
     if( aHotKeyCode )
     {
-        // switch here
+        // @todo: add switch here and add calls to PcbGeneralLocateAndDisplay( int aHotKeyCode )
+        // when searching is needed from a hotkey handler
     }
     else if( m_ID_current_state == 0 )
     {
@@ -212,7 +213,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 
 #if 0    
     // debugging: print out the collected items, showing their priority order too.
-    for( unsigned i=0; i<m_Collector->GetCount();  ++i )
+    for( int i=0; i<m_Collector->GetCount();  ++i )
         (*m_Collector)[i]->Show( 0, std::cout );
 #endif    
 
@@ -221,8 +222,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
      */
     unsigned long timestampzone = 0;
     
-    int limit = m_Collector->GetCount();
-    for( int ii = 0;  ii < limit; ii++ )
+    for( int ii = 0;  ii < m_Collector->GetCount(); ii++ )
     {
         item = (*m_Collector)[ii];
         if( item->Type() != TYPEZONE )
@@ -233,7 +233,6 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
         {
             m_Collector->Remove( ii );
             ii--;
-			limit = m_Collector->GetCount();
         }
         else
             timestampzone = item->m_TimeStamp;
@@ -244,22 +243,23 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
         item = (*m_Collector)[0];
         SetCurItem( item );
     }
+    
     // If the count is 2, and first item is a pad or moduletext, and the 2nd item is its parent module:
     else if( m_Collector->GetCount() == 2
-             && ( (*m_Collector)[0]->Type() == TYPEPAD || (*m_Collector)[0]->Type() ==
-                 TYPETEXTEMODULE )
-             && (*m_Collector)[1]->Type() == TYPEMODULE && (*m_Collector)[0]->GetParent()==
-             (*m_Collector)[1] )
+     && ( (*m_Collector)[0]->Type() == TYPEPAD || (*m_Collector)[0]->Type() == TYPETEXTEMODULE )
+     && (*m_Collector)[1]->Type() == TYPEMODULE && (*m_Collector)[0]->GetParent()== (*m_Collector)[1] )
     {
         item = (*m_Collector)[0];
         SetCurItem( item );
     }
+    
     // if all are modules, find the smallest one amoung the primary choices
     else if( ( item = AllAreModulesAndReturnSmallestIfSo( m_Collector ) ) != NULL )
     {
         SetCurItem( item );
     }
-    else    // show a popup menu
+    
+    else    // we can't figure out which item user wants, do popup menu so user can choose
     {
         wxMenu itemMenu;
 
@@ -280,7 +280,13 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
             ADD_MENUITEM( &itemMenu, ID_POPUP_PCB_ITEM_SELECTION_START + i, text, xpm );
         }
 
+        /* @todo: rather than assignment to TRUE, these should be increment and decrement operators throughout _everywhere_.
+            That way we can handle nesting.
+            But I tried that and found there cases where the assignment to TRUE (converted to a m_IgnoreMouseEvents++ )
+            was not balanced with the -- (now m_IgnoreMouseEvents=FALSE), so I had to revert.  
+            Somebody should track down these and make them balanced.
         DrawPanel->m_IgnoreMouseEvents = TRUE;
+        */
 
         // this menu's handler is void WinEDA_BasePcbFrame::ProcessItemSelection()
         // and it calls SetCurItem() which in turn calls Display_Infos() on the item.
@@ -288,7 +294,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 
         DrawPanel->MouseToCursorSchema();
 
-        DrawPanel->m_IgnoreMouseEvents = FALSE;
+//        DrawPanel->m_IgnoreMouseEvents = FALSE;
 
         // The function ProcessItemSelection() has set the current item, return it.
         item = GetCurItem();

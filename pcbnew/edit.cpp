@@ -89,16 +89,14 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 }
             }
         }
-        else
+        
+        else /* if( !wxGetKeyState(WXK_SHIFT) && !wxGetKeyState(WXK_ALT) &&
+                !wxGetKeyState(WXK_CONTROL) && !wxGetKeyState(WXK_TAB) ) */
         {
-			if ( ! wxGetKeyState(WXK_SHIFT) && ! wxGetKeyState(WXK_ALT) &&
-				! wxGetKeyState(WXK_CONTROL) && ! wxGetKeyState(WXK_TAB))
-			{
-				DrawStruct = PcbGeneralLocateAndDisplay();
-				if( DrawStruct )
-					SendMessageToEESCHEMA( DrawStruct );
-			}
-        }
+            DrawStruct = PcbGeneralLocateAndDisplay();
+            if( DrawStruct )
+                SendMessageToEESCHEMA( DrawStruct );
+        }            
     }
        
     switch( m_ID_current_state )
@@ -1275,8 +1273,7 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             }
             else if( DrawStruct->m_Flags == 0 )
             {
-                Edit_TrackSegm_Width( DC,
-                                      (TRACK*) DrawStruct );
+                Edit_TrackSegm_Width( DC, (TRACK*) DrawStruct );
             }
             break;
 
@@ -1287,14 +1284,12 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             break;
 
         case TYPEPAD:
-            InstallPadOptionsFrame(
-                (D_PAD*) DrawStruct, &dc, pos );
+            InstallPadOptionsFrame( (D_PAD*) DrawStruct, &dc, pos );
             DrawPanel->MouseToCursorSchema();
             break;
 
         case TYPEMODULE:
-            InstallModuleOptionsFrame( (MODULE*) DrawStruct,
-                                      &dc, pos );
+            InstallModuleOptionsFrame( (MODULE*) DrawStruct, &dc, pos );
             DrawPanel->MouseToCursorSchema();
             break;
 
@@ -1304,8 +1299,7 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             break;
 
         case TYPETEXTEMODULE:
-            InstallTextModOptionsFrame( (TEXTE_MODULE*) DrawStruct,
-                                       &dc, pos );
+            InstallTextModOptionsFrame( (TEXTE_MODULE*) DrawStruct, &dc, pos );
             DrawPanel->MouseToCursorSchema();
             break;
 

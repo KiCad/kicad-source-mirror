@@ -845,7 +845,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
     if( localbutt == (int) (GR_M_LEFT_DOWN | GR_M_DCLICK) )
         m_Parent->OnLeftDClick( &DC, screen->m_MousePositionInPixels );
 
-    else if( event.LeftDown() )
+    else if( event.LeftUp() &&  screen->BlockLocate.m_State==STATE_NO_BLOCK )
         m_Parent->OnLeftClick( &DC, screen->m_MousePositionInPixels );
 
     if( event.ButtonUp( 2 ) && (screen->BlockLocate.m_State == STATE_NO_BLOCK) )
@@ -902,12 +902,15 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
             if( screen->BlockLocate.m_State == STATE_NO_BLOCK )
             {
                 int cmd_type = kbstat;
+                
                 if( event.MiddleIsDown() )
                     cmd_type |= MOUSE_MIDDLE;
+                
                 if( !m_Parent->HandleBlockBegin( &DC, cmd_type, m_CursorStartPos ) )
-                {   // error
-                    m_Parent->DisplayToolMsg( wxT( "WinEDA_DrawPanel::OnMouseEvent() Block Error" )
-                                              );
+                {   
+                    // error
+                    m_Parent->DisplayToolMsg( 
+                     wxT( "WinEDA_DrawPanel::OnMouseEvent() Block Error" ) );
                 }
                 else
                 {
