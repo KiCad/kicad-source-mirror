@@ -246,7 +246,8 @@ void SEGVIA::SetLayerPair( int top_layer, int bottom_layer )
 
     if( via_type == VIA_NORMALE )
     {
-        top_layer = LAYER_CMP_N; bottom_layer = LAYER_CUIVRE_N;
+        top_layer    = LAYER_CMP_N; 
+        bottom_layer = LAYER_CUIVRE_N;
     }
 
     if( bottom_layer > top_layer )
@@ -695,12 +696,12 @@ void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
       || Type() == TYPEVIA )
     {
         EQUIPOT* equipot = ((WinEDA_PcbFrame*)frame)->m_Pcb->FindNet( m_NetCode );
+        
         if( equipot )
-        {
             msg = equipot->m_Netname;
-        }
         else
             msg = wxT( "<noname>" );
+        
         Affiche_1_Parametre( frame, text_pos, _( "NetName" ), msg, RED );
 
         /* Affiche net code :*/

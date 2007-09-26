@@ -7,15 +7,17 @@ email address.
 2007-Sep-25 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew
-  * got rid of reference to global display options DisplayOpt.DisplayZones from 
+  * removed reference to global display options DisplayOpt.DisplayZones in 
     collectors.cpp so collectors.cpp can continue to be used in multiple future 
-    (non-display related) general contexts.  
+    (non-display related) general contexts.  I don't want unnecessary dependencies
+    in there.  The way to completely ignore a type is to exclude it from scanList.
+    The way to sometimes ignore a type is to add support for this in COLLECTORS_GUIDE.
   * Moved TYPEZONE to end of AllBoardItems, added GENERAL_COLLECTOR::AllButZones to
-    provide support of DisplayOpt.DisplayZones.
+    provide support for DisplayOpt.DisplayZones.
   * Added aHotKeyCode to PcbGeneralLocateAndDisplay()
 + gerbview
   * viewer was getting stuck in a loop when loading a bad gerber file.  Fixed 
-    the bug, but line 223 through 225 of readgerb.cpp need review.
+    the bug, but line 223 through 225 of readgerb.cpp needs review.
   * beautified a few files with uncrustify, (any I had to look at).    
 
   
