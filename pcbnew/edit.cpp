@@ -91,12 +91,16 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         }
         else
         {
-            DrawStruct = PcbGeneralLocateAndDisplay();
-            if( DrawStruct )
-                SendMessageToEESCHEMA( DrawStruct );
+			if ( ! wxGetKeyState(WXK_SHIFT) && ! wxGetKeyState(WXK_ALT) &&
+				! wxGetKeyState(WXK_CONTROL) && ! wxGetKeyState(WXK_TAB))
+			{
+				DrawStruct = PcbGeneralLocateAndDisplay();
+				if( DrawStruct )
+					SendMessageToEESCHEMA( DrawStruct );
+			}
         }
     }
-
+       
     switch( m_ID_current_state )
     {
     case ID_MAIN_MENUBAR:
@@ -321,6 +325,8 @@ void WinEDA_PcbFrame::SendMessageToEESCHEMA( EDA_BaseStruct* objectToSync )
     char    cmd[1024];
     MODULE* module = NULL;
     
+	if ( objectToSync == NULL ) return ;
+
     if( objectToSync->Type() == TYPEMODULE )
         module = (MODULE*) objectToSync;
     else if( objectToSync->Type() == TYPEPAD )
@@ -1252,6 +1258,8 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags != 0) )
             break;
+
+        SendMessageToEESCHEMA( DrawStruct );
 
         // Element localis�
         SetCurItem( DrawStruct );

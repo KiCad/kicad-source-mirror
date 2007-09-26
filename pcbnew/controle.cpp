@@ -233,6 +233,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
         {
             m_Collector->Remove( ii );
             ii--;
+			limit = m_Collector->GetCount();
         }
         else
             timestampzone = item->m_TimeStamp;
