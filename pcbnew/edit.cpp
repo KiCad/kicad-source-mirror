@@ -90,8 +90,8 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             }
         }
         
-        else /* if( !wxGetKeyState(WXK_SHIFT) && !wxGetKeyState(WXK_ALT) &&
-                !wxGetKeyState(WXK_CONTROL) && !wxGetKeyState(WXK_TAB) ) */
+        else if( !wxGetKeyState(WXK_SHIFT) && !wxGetKeyState(WXK_ALT) &&
+                !wxGetKeyState(WXK_CONTROL) && !wxGetKeyState(WXK_TAB) )
         {
             DrawStruct = PcbGeneralLocateAndDisplay();
             if( DrawStruct )

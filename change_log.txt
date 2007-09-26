@@ -11,6 +11,7 @@ email address.
     test case for OnLeftClick() handling from a release circumstance.
     a few simple changes to void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event ),
     but they affect all programs in a subtle way.
+    TAB key allow double clicking, but is not needed for block selection. 
 
 + pcbnew
     GENERAL_COLLECTOR::GetCount() returns int, not unsigned.  Was tired of the
