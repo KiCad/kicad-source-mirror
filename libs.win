@@ -17,7 +17,7 @@ KICAD_BIN = /f/kicad/winexe
 
 #Define the wxWidget path (if not found in environment variables):
 ifndef WXWIN
-WXWIN=f:/wxMSW-2.8.5
+WXWIN=f:/wxMSW-2.8.6
 endif
 LIBVERSION = 2.8
 

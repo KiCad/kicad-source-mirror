@@ -743,7 +743,8 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
     int                      localrealbutt = 0, localbutt = 0, localkey = 0;
     BASE_SCREEN*             screen = GetScreen();
     static WinEDA_DrawPanel* LastPanel;
-
+	static bool LastClickIsADoubleClick = false;
+	
     if( event.Leaving() || event.Entering() )
     {
         m_CanStartBlock = -1;
@@ -843,10 +844,16 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 
     // Appel des fonctions liées au Double Click ou au Click
     if( localbutt == (int) (GR_M_LEFT_DOWN | GR_M_DCLICK) )
+	{
         m_Parent->OnLeftDClick( &DC, screen->m_MousePositionInPixels );
-
+		LastClickIsADoubleClick = true;
+	}
+	
     else if( event.LeftUp() &&  screen->BlockLocate.m_State==STATE_NO_BLOCK )
-        m_Parent->OnLeftClick( &DC, screen->m_MousePositionInPixels );
+        if ( ! LastClickIsADoubleClick )
+			m_Parent->OnLeftClick( &DC, screen->m_MousePositionInPixels );
+
+	if( event.LeftUp() ) LastClickIsADoubleClick = false;
 
     if( event.ButtonUp( 2 ) && (screen->BlockLocate.m_State == STATE_NO_BLOCK) )
     {   
@@ -854,6 +861,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
         // We use it for a zoom center command
         g_KeyPressed = localkey = EDA_ZOOM_CENTER_FROM_MOUSE;
     }
+
 
 
     /* Appel de la fonction generale de gestion des mouvements souris

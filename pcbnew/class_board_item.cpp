@@ -124,7 +124,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         break;
 
     case TYPETRACK:
-        text << _( "Track" ) << wxT( " " ) << ( (TRACK*) item )->m_NetCode;
+        text << _( "Track" ) << wxT( " " );
         net = aPcb->FindNet( ( (TRACK*) item )->m_NetCode );
         if( net )
         {
@@ -134,7 +134,18 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         break;
 
     case TYPEZONE:
-        text << _( "Zone" ) << _( " on " ) << ReturnPcbLayerName( item->GetLayer() );
+        text << _( "Zone" ) << wxT( " " );
+        {
+            wxString TimeStampText;
+            TimeStampText.Printf( wxT( "(%8.8X)" ), item->m_TimeStamp );
+            text << TimeStampText;
+        }
+        net = aPcb->FindNet( ( (SEGZONE*) item )->m_NetCode );
+        if( net )
+        {
+            text << wxT( " [" ) << net->m_Netname << wxT( "]" );
+        }
+        text << _( " on " ) << ReturnPcbLayerName( item->GetLayer() );
         break;
 
     case TYPEVIA:
@@ -151,7 +162,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         break;
 
     case TYPECOTATION:
-        text << _( "Dimension" ) << wxT(" \"") << ((COTATION*) item)->GetText() << wxT("\"");
+        text << _( "Dimension" ) << wxT( " \"" ) << ( (COTATION*) item )->GetText() << wxT( "\"" );
         break;
 
     case TYPEMIRE:

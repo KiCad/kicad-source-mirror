@@ -27,15 +27,16 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
  */
 {
     BOARD_ITEM* DrawStruct = GetCurItem();
-
-    DrawPanel->m_IgnoreMouseEvents = TRUE;
-    DrawPanel->CursorOff( DC );
+	bool exit = false;
 
     if( (m_ID_current_state == 0) || ( DrawStruct && DrawStruct->m_Flags ) )
     {
         DrawPanel->m_AutoPAN_Request = FALSE;
         if( DrawStruct && DrawStruct->m_Flags ) // "POPUP" in progress
         {
+			DrawPanel->m_IgnoreMouseEvents = TRUE;
+			DrawPanel->CursorOff( DC );
+
             switch( DrawStruct->Type() )
             {
             case TYPETRACK:
@@ -43,40 +44,40 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 if( DrawStruct->m_Flags & IS_DRAGGED )
                 {
                     PlaceDraggedTrackSegment( (TRACK*) DrawStruct, DC );
-                    goto out;
+                    exit = true;
                 }
                 break;
 
             case TYPETEXTE:
                 Place_Texte_Pcb( (TEXTE_PCB*) DrawStruct, DC );
-                goto out;
+                exit = true;
                 break;
 
             case TYPETEXTEMODULE:
                 PlaceTexteModule( (TEXTE_MODULE*) DrawStruct, DC );
-                goto out;
+                exit = true;
                 break;
 
             case TYPEPAD:
                 PlacePad( (D_PAD*) DrawStruct, DC );
-                goto out;
+                exit = true;
                 break;
 
             case TYPEMODULE:
                 Place_Module( (MODULE*) DrawStruct, DC );
-                goto out;
+                exit = true;
                 break;
 
             case TYPEMIRE:
                 Place_Mire( (MIREPCB*) DrawStruct, DC );
-                goto out;
+                exit = true;
                 break;
 
             case TYPEDRAWSEGMENT:
                 if( m_ID_current_state == 0 )
                 {
                     Place_DrawItem( (DRAWSEGMENT*) DrawStruct, DC );
-                    goto out;
+                    exit = true;
                 }
                 break;
 
@@ -85,13 +86,18 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 {
                     DisplayError( this,
                                  wxT( "WinEDA_PcbFrame::OnLeftClick() err: m_Flags != 0" ) );
-                    goto out;
+                    exit = true;
                 }
+				break;
             }
+
+			DrawPanel->m_IgnoreMouseEvents = FALSE;
+			DrawPanel->CursorOn( DC );
+			if ( exit ) return;
         }
         
         else if( !wxGetKeyState(WXK_SHIFT) && !wxGetKeyState(WXK_ALT) &&
-                !wxGetKeyState(WXK_CONTROL) && !wxGetKeyState(WXK_TAB) )
+                !wxGetKeyState(WXK_CONTROL) )
         {
             DrawStruct = PcbGeneralLocateAndDisplay();
             if( DrawStruct )
@@ -310,10 +316,6 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
         break;
     }
-
-out:
-    DrawPanel->m_IgnoreMouseEvents = FALSE;
-    DrawPanel->CursorOn( DC );
 }
 
 
