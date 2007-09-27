@@ -292,9 +292,6 @@ eda_global wxString g_ViaType_Name[4]
 ;
 eda_global int g_ViaHoleLastValue;  // Last value for non default value via hole
 
-/* Couleur de fond affichage de bas d'ecran */
-eda_global int g_PcbGridColor;
-
 /* couleurs des autres items des empreintes */
 #if defined MAIN
 int                    g_PadCMPColor = RED;

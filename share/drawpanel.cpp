@@ -1007,7 +1007,7 @@ void WinEDA_DrawPanel::OnKeyEvent( wxKeyEvent& event )
     case WXK_NUMLOCK:
     case WXK_LBUTTON:
     case WXK_RBUTTON:
-    case 0x0135:        /* Alt key */
+    case WXK_ALT:
         return;
 
     case WXK_ESCAPE:

@@ -343,7 +343,7 @@ void PCB_SCREEN::Init()
 /*************************/
 
 /*
- *  Options diverses d'affichage �l'�ran:
+ *  Handle display options like enable/disable some optional drawings:
  */
 
 DISPLAY_OPTIONS::DISPLAY_OPTIONS()

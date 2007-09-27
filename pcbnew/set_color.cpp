@@ -379,7 +379,7 @@ static ColorButton Grid_Butt =
 {
     _( "Grid" ),        /* Title */
     -1,
-    &g_PcbGridColor,    /* adr du parametre optionnel */
+    &g_GridColor,    /* adr du parametre optionnel */
     FALSE,
     &g_ShowGrid         // address of boolean display control parameter to toggle
 };

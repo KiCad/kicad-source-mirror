@@ -12,6 +12,8 @@ email address.
 	(SHIHT ou CTRL or ALT key is sufficient to suppress the popup menu
 	if needed for a double click )
 	Some work is still needed, of course
++ pcbnew
+	Color grid setting now works
 
 
 2007-Sep-26 UPDATE   Dick Hollenbeck <dick@softplc.com>
