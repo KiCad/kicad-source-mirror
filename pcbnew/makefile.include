@@ -11,6 +11,7 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		modedit_undo_redo.o\
 		block_module_editor.o\
 		onrightclick.o\
+		onleftclick.o\
 		modedit_onclick.o\
 		via_edit.o\
 		wxprint.o \

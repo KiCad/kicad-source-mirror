@@ -743,7 +743,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
     int                      localrealbutt = 0, localbutt = 0, localkey = 0;
     BASE_SCREEN*             screen = GetScreen();
     static WinEDA_DrawPanel* LastPanel;
-	static bool LastClickIsADoubleClick = false;
+	static bool IgnoreNextLeftButtonRelease = false;
 	
     if( event.Leaving() || event.Entering() )
     {
@@ -846,14 +846,14 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
     if( localbutt == (int) (GR_M_LEFT_DOWN | GR_M_DCLICK) )
 	{
         m_Parent->OnLeftDClick( &DC, screen->m_MousePositionInPixels );
-		LastClickIsADoubleClick = true;
+		IgnoreNextLeftButtonRelease = true;
 	}
 	
     else if( event.LeftUp() &&  screen->BlockLocate.m_State==STATE_NO_BLOCK )
-        if ( ! LastClickIsADoubleClick )
+        if ( ! IgnoreNextLeftButtonRelease )
 			m_Parent->OnLeftClick( &DC, screen->m_MousePositionInPixels );
 
-	if( event.LeftUp() ) LastClickIsADoubleClick = false;
+	if( event.LeftUp() ) IgnoreNextLeftButtonRelease = false;
 
     if( event.ButtonUp( 2 ) && (screen->BlockLocate.m_State == STATE_NO_BLOCK) )
     {   
@@ -878,7 +878,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
         m_CanStartBlock = -1;
 
     // A new command block can start after a release buttons
-    // Avoid a false start block when a dialog bos is demiss,
+    // Avoid a false start block when a dialog box is demiss,
     // or when changing panels in hierachy navigation
     if( !event.LeftIsDown() && !event.MiddleIsDown() )
     {
@@ -900,6 +900,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
             {
                 m_AutoPAN_Request = FALSE;
                 m_Parent->HandleBlockPlace( &DC );
+				IgnoreNextLeftButtonRelease = true;
             }
         }
         else if( (m_CanStartBlock >= 0 )

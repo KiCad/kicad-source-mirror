@@ -120,11 +120,20 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
     BOARD_ITEM* item = GetCurItem();
 
-    DrawPanel->CursorOff( &dc );
     DrawPanel->m_CanStartBlock = -1;    // Avoid to start a block coomand when clicking on menu
 
     
-    // If command in progress: Put the Cancel command (if needed) and End command
+    // If command or block in progress: Put the Cancel command (if needed) and the End command
+
+	if( BlockActive )
+	{
+		createPopUpBlockMenu( aPopMenu );
+        aPopMenu->AppendSeparator();
+		return;
+	}
+
+    DrawPanel->CursorOff( &dc );
+
     if( m_ID_current_state )
     {
         if( item && item->m_Flags )
@@ -141,24 +150,14 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     }
     else
     {
-        if( (item && item->m_Flags) || BlockActive )
+        if( item && item->m_Flags )
         {
-            if( BlockActive )
-                createPopUpBlockMenu( aPopMenu );
-            else
-            {
-                ADD_MENUITEM( aPopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
-                              _( "Cancel" ), cancel_xpm );
-            }
+			ADD_MENUITEM( aPopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
+						  _( "Cancel" ), cancel_xpm );
             aPopMenu->AppendSeparator();
         }
     }
 
-    if( BlockActive )
-    {
-        DrawPanel->CursorOn( &dc );
-        return;
-    }
 
     /* Select a proper item */
     if( !item  || !item->m_Flags )
@@ -434,9 +433,9 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 }
 
 
-/****************************************/
+/*********************************************************/
 void WinEDA_PcbFrame::createPopUpBlockMenu( wxMenu* menu )
-/****************************************/
+/*********************************************************/
 
 /* Create Pop sub menu for block commands
  */

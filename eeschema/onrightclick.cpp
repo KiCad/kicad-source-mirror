@@ -92,7 +92,14 @@ void WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
 
     DrawPanel->m_CanStartBlock = -1;    // Ne pas engager un debut de bloc sur validation menu
 
-    // Simple localisation des elements si possible
+    if( BlockActive )
+	{
+		AddMenusForBlock( PopMenu, this );
+        PopMenu->AppendSeparator();
+		return;
+	}
+
+		// Simple localisation des elements si possible
     if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
     {
         DrawStruct = SchematicGeneralLocateAndDisplay( FALSE );
@@ -121,18 +128,13 @@ void WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
     }
     else
     {
-        if( (DrawStruct && DrawStruct->m_Flags) || BlockActive )
+        if( DrawStruct && DrawStruct->m_Flags )
         {
-            if( BlockActive )
-                AddMenusForBlock( PopMenu, this );
-            else
-                ADD_MENUITEM( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel" ), cancel_xpm );
-            PopMenu->AppendSeparator();
+			ADD_MENUITEM( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel" ), cancel_xpm );
+			PopMenu->AppendSeparator();
         }
     }
 
-    if(  BlockActive )
-        return;
     if( DrawStruct == NULL )
     {
         if( m_CurrentScreen != ScreenSch )
