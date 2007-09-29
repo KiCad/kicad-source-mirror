@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-10-02 08:10+0300\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2007-09-29 18:20+0300\n"
+"Last-Translator: Igor Plyatov <plyatov@mail.ru>\n"
 "Language-Team: russian\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -9660,7 +9660,7 @@ msgstr "Чертить слои зеркально"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/block.cpp:1020
 msgid "Move Block"
-msgstr "Двигать блок"
+msgstr "Перемещение блока"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/block.cpp:1032
 msgid "Move footprints"

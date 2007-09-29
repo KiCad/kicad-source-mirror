@@ -33,11 +33,6 @@ static bool Block_Include_Draw_Items  = TRUE;
 static bool Block_Include_Edges_Items = TRUE;
 static bool Block_Include_PcbTextes   = TRUE;
 
-enum id_block_cmd {
-    ID_ACCEPT_BLOCK_COMMAND = 8000,
-    ID_CANCEL_BLOCK_COMMAND
-};
-
 /************************************/
 /* class WinEDA_ExecBlockCmdFrame */
 /************************************/
@@ -72,8 +67,8 @@ private:
 };
 
 BEGIN_EVENT_TABLE( WinEDA_ExecBlockCmdFrame, wxDialog )
-EVT_BUTTON( ID_ACCEPT_BLOCK_COMMAND, WinEDA_ExecBlockCmdFrame::ExecuteCommand )
-EVT_BUTTON( ID_CANCEL_BLOCK_COMMAND, WinEDA_ExecBlockCmdFrame::Cancel )
+EVT_BUTTON( wxID_OK, WinEDA_ExecBlockCmdFrame::ExecuteCommand )
+EVT_BUTTON( wxID_CANCEL, WinEDA_ExecBlockCmdFrame::Cancel )
 END_EVENT_TABLE()
 
 
@@ -102,54 +97,69 @@ static bool InstallBlockCmdFrame( WinEDA_BasePcbFrame* parent,
 /******************************************************************************/
 WinEDA_ExecBlockCmdFrame::WinEDA_ExecBlockCmdFrame( WinEDA_BasePcbFrame* parent,
                                                     const wxString&      title ) :
-    wxDialog( parent, -1, title, wxPoint( -1, -1 ), wxSize( 280, 220 ),
+    wxDialog( parent, -1, title, wxPoint( -1, -1 ), wxDefaultSize,
               DIALOG_STYLE )
 /******************************************************************************/
 {
     wxPoint   pos;
-    wxButton* Button;
+    wxButton* m_button1;
+    wxButton* m_button2;
 
     m_Parent = parent;
     SetFont( *g_DialogFont );
     Centre();
 
-    /* Creation des boutons de commande */
-    pos.x  = 170; pos.y = 10;
-    Button = new wxButton( this, ID_ACCEPT_BLOCK_COMMAND,
-                           _( "Ok" ), pos );
-    Button->SetForegroundColour( *wxRED );
-
-    pos.y += Button->GetDefaultSize().y + 20;
-    Button = new wxButton( this, ID_CANCEL_BLOCK_COMMAND,
-                           _( "Cancel" ), pos );
-    Button->SetForegroundColour( *wxBLUE );
-
-    pos.x = 5; pos.y = 20;
-
+    /* Sizer 1 creation */
+    wxFlexGridSizer* fgSizer1;
+    fgSizer1 = new wxFlexGridSizer( 1, 1, 0, 0 );
+    fgSizer1->SetFlexibleDirection( wxBOTH );
+    fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
     // Selection des options :
-    m_Include_Modules = new wxCheckBox( this, -1, _( "Include Modules" ), pos );
+    m_Include_Modules = new wxCheckBox( this, -1, _( "Include Modules" ), wxDefaultPosition, wxDefaultSize, 0 );
     m_Include_Modules->SetValue( Block_Include_Modules );
+    fgSizer1->Add( m_Include_Modules, 0, wxALL, 5 );
 
-    pos.y += 20;
-    m_Include_Tracks = new wxCheckBox( this, -1, _( "Include tracks" ), pos );
+    m_Include_Tracks = new wxCheckBox( this, -1, _( "Include tracks" ), wxDefaultPosition, wxDefaultSize, 0 );
     m_Include_Tracks->SetValue( Block_Include_Tracks );
+    fgSizer1->Add( m_Include_Tracks, 0, wxALL, 5 );
 
-    pos.y += 20;
-    m_Include_Zones = new wxCheckBox( this, -1, _( "Include zones" ), pos );
+    m_Include_Zones = new wxCheckBox( this, -1, _( "Include zones" ), wxDefaultPosition, wxDefaultSize, 0 );
     m_Include_Zones->SetValue( Block_Include_Zones );
+    fgSizer1->Add( m_Include_Zones, 0, wxALL, 5 );
 
-    pos.y += 20;
     m_Include_PcbTextes = new wxCheckBox( this, -1,
-                                          _( "Include Text on copper layers" ), pos );
+                                          _( "Include Text on copper layers" ), wxDefaultPosition, wxDefaultSize, 0 );
     m_Include_PcbTextes->SetValue( Block_Include_PcbTextes );
+    fgSizer1->Add( m_Include_PcbTextes, 0, wxALL, 5 );
 
-    pos.y += 20;
-    m_Include_Draw_Items = new wxCheckBox( this, -1, _( "Include drawings" ), pos );
+    m_Include_Draw_Items = new wxCheckBox( this, -1, _( "Include drawings" ), wxDefaultPosition, wxDefaultSize, 0 );
     m_Include_Draw_Items->SetValue( Block_Include_Draw_Items );
+    fgSizer1->Add( m_Include_Draw_Items, 0, wxALL, 5 );
 
-    pos.y += 20;
-    m_Include_Edges_Items = new wxCheckBox( this, -1, _( "Include egde layer" ), pos );
+    m_Include_Edges_Items = new wxCheckBox( this, -1, _( "Include egde layer" ), wxDefaultPosition, wxDefaultSize, 0 );
     m_Include_Edges_Items->SetValue( Block_Include_Edges_Items );
+    fgSizer1->Add( m_Include_Edges_Items, 0, wxALL, 5 );
+
+    /* Sizer 2 creation */
+    wxFlexGridSizer* fgSizer2;
+    fgSizer2 = new wxFlexGridSizer( 1, 2, 0, 0 );
+    fgSizer2->SetFlexibleDirection( wxBOTH );
+    fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+    /* Creation des boutons de commande */
+    m_button2 = new wxButton( this, wxID_CANCEL, _( "Cancel" ), wxDefaultPosition, wxDefaultSize, 0 );
+    m_button2->SetForegroundColour( *wxBLUE );
+    fgSizer2->Add( m_button2, 0, wxALL, 5 );
+    m_button1 = new wxButton( this, wxID_OK, _( "Ok" ), wxDefaultPosition, wxDefaultSize, 0 );
+    m_button1->SetForegroundColour( *wxRED );
+    m_button1->SetDefault();
+    fgSizer2->Add( m_button1, 0, wxALL, 5 );
+
+    fgSizer1->Add( fgSizer2, 1, wxALIGN_RIGHT, 5 );
+    this->SetSizer( fgSizer1 );
+    this->Layout();
+    fgSizer1->Fit( this );
 }
 
 
