@@ -332,7 +332,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
 		{	
             // A new track is in progress: call to End_Route()
 			DrawPanel->MouseToCursorSchema();
-			End_Route( (TRACK*) ( GetCurItem() ), DC );
+			End_Route( (TRACK*) GetCurItem(), DC );
 		}
         break;
 

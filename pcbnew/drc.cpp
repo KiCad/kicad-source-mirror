@@ -47,7 +47,7 @@ static int  TestClearanceSegmToPad( const D_PAD* pad_to_test, int seg_width, int
 static int  TestMarginToCircle( int cx, int cy, int rayon, int longueur );
 static int  Tst_Ligne( int x1, int y1, int x2, int y2 );
 static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb,
-                                TRACK* pt_ref, void* pt_item, int errnumber );
+                                TRACK* pt_ref, BOARD_ITEM* pt_item, int errnumber );
 static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC,
                                 BOARD* Pcb, D_PAD* pad1, D_PAD* pad2 );
 
@@ -164,10 +164,12 @@ void WinEDA_DrcFrame::TestDrc( wxCommandEvent& event )
             ListUnconnectedPads( event );
         else
             m_UnconnectedCount = 0;
+        
         if( errors )
             msg.Printf( _( "** End Drc: %d errors **\n" ), errors );
         else if( m_UnconnectedCount == 0 )
             msg = _( "** End Drc: No Error **\n" );
+        
         m_logWindow->AppendText( msg );
 
         if( s_RptFile )
@@ -392,6 +394,7 @@ int WinEDA_PcbFrame::Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone )
         {
             if( pt_segm->Pnext == NULL )
                 break;
+            
             if( jj == 0 )
             {
                 jj = 100;
@@ -410,14 +413,17 @@ int WinEDA_PcbFrame::Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone )
                 jj = 1;
                 wxString msg;
                 EQUIPOT* equipot = m_Pcb->FindNet( pt_segm->m_NetCode );
+                
                 if( equipot )
                     msg = equipot->m_Netname + wxT( "        " );
                 else
                     msg = wxT( "<noname>" );
+                
                 Affiche_1_Parametre( this, 0, _( "Netname" ), msg, YELLOW );
                 old_net = pt_segm->m_NetCode;
             }
             g_HightLigth_NetCode = pt_segm->m_NetCode;
+            
             /* Test drc with other zone segments, and pads */
             flag_err_Drc = Drc( this, DC, pt_segm, (TRACK*) pt_segm->Pnext, 1 );
             if( flag_err_Drc == BAD_DRC )
@@ -444,7 +450,8 @@ int WinEDA_PcbFrame::Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone )
             }
 
             /* Test drc with track segments */
-            int tmp = m_Pcb->m_NbPads; m_Pcb->m_NbPads = 0;    // Pads already tested: disable pad test
+            int tmp = m_Pcb->m_NbPads; 
+            m_Pcb->m_NbPads = 0;    // Pads already tested: disable pad test
             flag_err_Drc    = Drc( this, DC, pt_segm, m_Pcb->m_Track, 1 );
             
             m_Pcb->m_NbPads = tmp;
@@ -464,6 +471,7 @@ int WinEDA_PcbFrame::Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone )
                 PtStruct = m_Pcb->m_Drawings;
                 if( PtStruct )
                     PtStruct->Pback = Marqueur;
+                
                 m_Pcb->m_Drawings = Marqueur;
 
                 GRSetDrawMode( DC, GR_OR );
@@ -508,9 +516,12 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
                          //	l'origine du segment de reference
     wxPoint shape_pos;
 
-    org_X        = pt_segment->m_Start.x; org_Y = pt_segment->m_Start.y;
+    org_X        = pt_segment->m_Start.x; 
+    org_Y        = pt_segment->m_Start.y;
+    
     finx         = dx = pt_segment->m_End.x - org_X;
     finy         = dy = pt_segment->m_End.y - org_Y;
+    
     MaskLayer    = pt_segment->ReturnMaskLayer();
     net_code_ref = pt_segment->m_NetCode;
 
@@ -519,6 +530,7 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
     {
         /* calcul de l'angle d'inclinaison en 0,1 degre */
         segm_angle = ArcTangente( dy, dx );
+        
         /* Calcul de la longueur du segment en segm_long : dx = longueur */
         RotatePoint( &dx, &dy, segm_angle ); /* segm_long = longueur, yf = 0 */
     }
@@ -545,6 +557,7 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
              *  a pseudo pad is used, with a shape and a size like the hole */
             if( pt_pad->m_Drill.x == 0 )
                 continue;
+            
             D_PAD pseudo_pad( (MODULE*) NULL );
 
             pseudo_pad.m_Size     = pt_pad->m_Drill;
@@ -568,7 +581,7 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
 
         /* Le pad doit faire partie d'un net mais pas de probleme
          *  si le pad est du meme net */
-        if( pt_pad->m_NetCode && (net_code_ref == pt_pad->m_NetCode) )
+        if( /*pt_pad->m_NetCode &&*/  net_code_ref == pt_pad->m_NetCode )
             continue;
 
         /* Test DRC pour les pads */
@@ -664,10 +677,14 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
 
         /* calcule x0,y0, xf,yf = coord de debut et fin du segment de piste
          *  a tester, dans le repere axe X = segment de reference */
-        x0 = pttrack->m_Start.x - org_X; y0 = pttrack->m_Start.y - org_Y;
-        xf = pttrack->m_End.x - org_X; yf = pttrack->m_End.y - org_Y;
+        x0 = pttrack->m_Start.x - org_X; 
+        y0 = pttrack->m_Start.y - org_Y;
+        
+        xf = pttrack->m_End.x - org_X; 
+        yf = pttrack->m_End.y - org_Y;
 
-        RotatePoint( &x0, &y0, segm_angle ); RotatePoint( &xf, &yf, segm_angle );
+        RotatePoint( &x0, &y0, segm_angle ); 
+        RotatePoint( &xf, &yf, segm_angle );
 
         if( pttrack->Type() == TYPEVIA )
         {
@@ -822,13 +839,20 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
                 }
                 else    // L'erreur est due a une extremite du segment de reference:
                 {
-                        // il faut tester les extremites de ce segment
+                    // il faut tester les extremites de ce segment
                     int angle, rx0, ry0, rxf, ryf;
-                    x0 = pttrack->m_Start.x; y0 = pttrack->m_Start.y;
-                    xf = pttrack->m_End.x; yf = pttrack->m_End.y;
-                    dx = xf - x0; dy = yf - y0;
+                    x0 = pttrack->m_Start.x; 
+                    y0 = pttrack->m_Start.y;
+                    
+                    xf = pttrack->m_End.x; 
+                    yf = pttrack->m_End.y;
+                    
+                    dx = xf - x0; 
+                    dy = yf - y0;
+                    
                     /* calcul de l'angle d'inclinaison en 0,1 degre */
                     angle = ArcTangente( dy, dx );
+                    
                     /* Calcul de la longueur du segment: dx = longueur */
                     RotatePoint( &dx, &dy, angle );
 
@@ -923,6 +947,7 @@ static bool Test_Pad_to_Pads_Drc( WinEDA_BasePcbFrame* frame,
 
         if( Pad_to_Pad_Isol( pad_ref, pad, g_DesignSettings.m_TrackClearence ) == OK_DRC )
             continue;
+        
         else    /* defaut d'isolation trouve */
         {
             ErrorsDRC_Count++;
@@ -1007,9 +1032,13 @@ static int Pad_to_Pad_Isol( D_PAD* pad_ref, D_PAD* pad, const int dist_min )
 
                 // Test DRC:
                 diag      = BAD_DRC;
-                rel_pos.x = ABS( rel_pos.x ); rel_pos.y = ABS( rel_pos.y );
+                
+                rel_pos.x = ABS( rel_pos.x ); 
+                rel_pos.y = ABS( rel_pos.y );
+                
                 if( ( rel_pos.x - ( (size.x + pad_ref->m_Size.x) / 2 ) ) >= dist_min )
                     diag = OK_DRC;
+                
                 if( ( rel_pos.y - ( (size.y + pad_ref->m_Size.y) / 2 ) ) >= dist_min )
                     diag = OK_DRC;
             }
@@ -1154,6 +1183,7 @@ static int TestClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int dis
             y0 = spot_cY + deltay;
             RotatePoint( &x0, &y0, spot_cX, spot_cY, orient );
             RotatePoint( &x0, &y0, segm_angle );
+            
             bflag = TestMarginToCircle( x0, y0, p_dimx + seuil, segm_long );
             if( bflag == BAD_DRC )
                 return BAD_DRC;
@@ -1162,6 +1192,7 @@ static int TestClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int dis
             y0 = spot_cY - deltay;
             RotatePoint( &x0, &y0, spot_cX, spot_cY, orient );
             RotatePoint( &x0, &y0, segm_angle );
+            
             bflag = TestMarginToCircle( x0, y0, p_dimx + seuil, segm_long );
             if( bflag == BAD_DRC )
                 return BAD_DRC;
@@ -1282,7 +1313,7 @@ static int TestMarginToCircle( int cx, int cy, int rayon, int longueur )
 
 /******************************************************************************/
 static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb,
-                                TRACK* pt_ref, void* pt_item, int errnumber )
+                                TRACK* pt_ref, BOARD_ITEM* pt_item, int errnumber )
 /******************************************************************************/
 
 /* affiche les erreurs de DRC :
@@ -1302,24 +1333,30 @@ static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb,
         netname1 = equipot->m_Netname;
     else
         netname1 = wxT( "<noname>" );
+    
     netname2 = wxT( "<noname>" );
 
-    tracktype = wxT( "Track" );
     if( pt_ref->Type() == TYPEVIA )
         tracktype = wxT( "Via" );
-    if( pt_ref->Type() == TYPEZONE )
+    
+    else if( pt_ref->Type() == TYPEZONE )
         tracktype = wxT( "Zone" );
-
-
-    if( ( (EDA_BaseStruct*) pt_item )->Type() == TYPEPAD )
+    
+    else
+        tracktype = wxT( "Track" );
+    
+    if( pt_item->Type() == TYPEPAD )
     {
         D_PAD* pad = (D_PAD*) pt_item;
         equipot = Pcb->FindNet( pad->m_NetCode );
         if( equipot )
             netname2 = equipot->m_Netname;
+        
         erc_pos = pad->m_Pos;
         wxString pad_name    = pad->ReturnStringPadName();
+        
         wxString module_name = ( (MODULE*) (pad->m_Parent) )->m_Reference->m_Text;
+        
         msg.Printf( _( "%d Drc Err %d %s (net %s)and PAD %s (%s) net %s @ %d,%d\n" ),
                     ErrorsDRC_Count, errnumber, tracktype.GetData(),
                     netname1.GetData(),
@@ -1327,6 +1364,7 @@ static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb,
                     netname2.GetData(),
                     erc_pos.x, erc_pos.y );
     }
+    
     else    /* erreur sur segment de piste */
     {
         pt_segm = (TRACK*) pt_item;
@@ -1349,7 +1387,8 @@ static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb,
                < hypot( (double) (erc_pos.x - pt_ref->m_End.x),
                        (double) (erc_pos.y - pt_ref->m_End.y) ) )
             {
-                EXCHG( erc_pos_f.x, erc_pos.x ); EXCHG( erc_pos_f.y, erc_pos.y );
+                EXCHG( erc_pos_f.x, erc_pos.x ); 
+                EXCHG( erc_pos_f.y, erc_pos.y );
             }
             msg.Printf( _( "%d Err type %d: %s (net %s) and track (net %s) @ %d,%d\n" ),
                         ErrorsDRC_Count, errnumber, tracktype.GetData(),
@@ -1362,11 +1401,13 @@ static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb,
         DrcFrame->m_logWindow->AppendText( msg );
     else
         panel->m_Parent->Affiche_Message( msg );
+    
     if( s_RptFile )
         fprintf( s_RptFile, "%s", CONV_TO_UTF8( msg ) );
 
     if( current_marqueur == NULL )
         current_marqueur = new MARQUEUR( Pcb );
+    
     current_marqueur->m_Pos   = wxPoint( erc_pos.x, erc_pos.y );
     current_marqueur->m_Color = WHITE;
     current_marqueur->m_Diag  = msg;
@@ -1533,20 +1574,22 @@ static int Tst_Ligne( int x1, int y1, int x2, int y2 )
             if( x1 < xcliplo )
             {
                 temp = USCALE( (y1 - y2), (xcliplo - x1), (x2 - x1) );
-                y1  -= temp; x1 = xcliplo;
+                y1  -= temp; 
+                x1 = xcliplo;
                 WHEN_INSIDE;
             }
             if( x2 > xcliphi )
             {
                 temp = USCALE( (y1 - y2), (x2 - xcliphi), (x2 - x1) );
-                y2  += temp; x2 = xcliphi;
+                y2  += temp; 
+                x2 = xcliphi;
                 WHEN_INSIDE;
             }
         }
     } while( 0 );
 
-    if( ( (x2 + x1) / 2 <= xcliphi ) && ( (x2 + x1) / 2 >= xcliplo ) \
-       && ( (y2 + y1) / 2 <= ycliphi ) && ( (y2 + y1) / 2 >= ycliplo ) )
+    if( ( (x2 + x1)/2 <= xcliphi ) && ( (x2 + x1)/2 >= xcliplo ) \
+     && ( (y2 + y1)/2 <= ycliphi ) && ( (y2 + y1)/2 >= ycliplo ) )
     {
         return BAD_DRC;
     }

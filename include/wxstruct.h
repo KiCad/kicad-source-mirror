@@ -773,7 +773,7 @@ public:
      * to a part with the same reference as the objectToSync
      * @param objectToSync The object whose reference is used to syncronize eeschema.
      */
-    void                SendMessageToEESCHEMA( EDA_BaseStruct* objectToSync );
+    void                SendMessageToEESCHEMA( BOARD_ITEM* objectToSync );
 
     /* Special micro_ondes */
     void                Edit_Gap( wxDC* DC, MODULE* Module );

@@ -20,19 +20,20 @@ static void Process_Move_Item( WinEDA_PcbFrame* frame,
                                EDA_BaseStruct* DrawStruct, wxDC* DC );
 
 // see wxstruct.h
-void WinEDA_PcbFrame::SendMessageToEESCHEMA( EDA_BaseStruct* objectToSync )
+void WinEDA_PcbFrame::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
 {
     char    cmd[1024];
     MODULE* module = NULL;
     
-	if ( objectToSync == NULL ) return ;
+	if ( objectToSync == NULL ) 
+        return;
 
     if( objectToSync->Type() == TYPEMODULE )
         module = (MODULE*) objectToSync;
     else if( objectToSync->Type() == TYPEPAD )
-        module = (MODULE*) objectToSync->m_Parent;
+        module = (MODULE*) objectToSync->GetParent();
     else if( objectToSync->Type() == TYPETEXTEMODULE )
-        module = (MODULE*) objectToSync->m_Parent;
+        module = (MODULE*) objectToSync->GetParent();
 
     // ask only for the reference for now, maybe pins later.            
     if( module )

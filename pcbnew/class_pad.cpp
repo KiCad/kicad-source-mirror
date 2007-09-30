@@ -1031,8 +1031,9 @@ void D_PAD::Show( int nestLevel, std::ostream& os )
 
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-    " num=\"" << padname << '"' <<
-    " net=\"" << m_Netname.mb_str() << '"' <<
+    " num=\""       << padname << '"' <<
+    " net=\""       << m_Netname.mb_str() << '"' <<
+    " netcode=\""   << m_NetCode << '"' <<
     " layerMask=\"" << layerMask << '"' << m_Pos << "/>\n";
 
 //    NestedSpace( nestLevel+1, os ) << m_Text.mb_str() << '\n';

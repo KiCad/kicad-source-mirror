@@ -375,7 +375,7 @@ void WinEDA_PcbFrame::End_Route( TRACK* track, wxDC* DC )
     if( track == NULL )
         return;
 
-    if( Drc_On && ( Drc( this, DC, g_CurrentTrackSegment, m_Pcb->m_Track, 1 ) == BAD_DRC) )
+    if( Drc_On && Drc( this, DC, g_CurrentTrackSegment, m_Pcb->m_Track, 1 )==BAD_DRC )
         return;
 
     /* Sauvegarde des coord du point terminal de la piste */
