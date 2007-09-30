@@ -5,6 +5,16 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2007-Sep-29 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ pcbnew
+  * drc.c made a change near line 584 to comment out pt_pad->m_NetCode test against 
+    zero.  This was preventing me from laying out my board.  It's possible that 
+    this broke something else, but it is also clear that something was broke before 
+    this change, because I could not put down some tracks.
+  * beautification, house keeping.    
+
+
 2007-Sep-29 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew
