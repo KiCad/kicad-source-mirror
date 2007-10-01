@@ -607,6 +607,7 @@ void WinEDA_PcbFrame::ReadAutoroutedTracks( wxDC* DC )
                 NewVia->m_Shape = VIA_NORMALE;
             else
                 NewVia->m_Shape = VIA_ENTERREE;
+            
             NewVia->Insert( m_Pcb, NULL );
             NbTrack++;
             break;

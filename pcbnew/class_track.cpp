@@ -178,6 +178,7 @@ SEARCH_RESULT TRACK::Visit( INSPECTOR* inspector, const void* testData,
 // see class_track.h
 bool SEGVIA::IsOnLayer( int layer_number ) const
 {
+/* its the same logic, don't need this    
     int via_type = Shape();
 
     if( via_type == VIA_NORMALE )
@@ -189,12 +190,13 @@ bool SEGVIA::IsOnLayer( int layer_number ) const
     }
 
     // VIA_BORGNE ou  VIA_ENTERREE:
+*/    
 
     int bottom_layer, top_layer;
     
     ReturnLayerPair( &top_layer, &bottom_layer );
     
-    if( bottom_layer <= layer_number && top_layer >= layer_number )
+    if( bottom_layer <= layer_number &&  layer_number <= top_layer )
         return true;
     else
         return false;
@@ -242,7 +244,7 @@ void SEGVIA::SetLayerPair( int top_layer, int bottom_layer )
  *  m_Layer code les 2 couches limitant la via
  */
 {
-    int via_type = m_Shape & 255;
+    int via_type = Shape();
 
     if( via_type == VIA_NORMALE )
     {
@@ -252,6 +254,7 @@ void SEGVIA::SetLayerPair( int top_layer, int bottom_layer )
 
     if( bottom_layer > top_layer )
         EXCHG( bottom_layer, top_layer );
+    
     m_Layer = (top_layer & 15) + ( (bottom_layer & 15) << 4 );
 }
 

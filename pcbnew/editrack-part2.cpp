@@ -185,6 +185,7 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
     /* Avoid more than one via on the current location: */
     if( Locate_Via( m_Pcb, g_CurrentTrackSegment->m_End, g_CurrentTrackSegment->GetLayer() ) )
         return;
+    
     pt_segm = g_FirstTrackSegment;
     for( ii = 0; ii < g_TrackSegmentCount - 1; ii++, pt_segm = (TRACK*) pt_segm->Pnext )
     {
@@ -229,18 +230,25 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
     else
         GetScreen()->m_Active_Layer = GetScreen()->m_Route_Layer_BOTTOM;
 
+    
     /* Adjust the via layer pair */
-    if( (Via->m_Shape & 15) == VIA_ENTERREE )
+    if( Via->Shape() == VIA_ENTERREE )
     {
-        Via->SetLayer( old_layer | GetScreen()->m_Active_Layer << 4 );
+        Via->SetLayerPair( old_layer, GetScreen()->m_Active_Layer );
     }
-    else if( (Via->m_Shape & 15) == VIA_BORGNE )    //blind via
-    {                                               // A revoir! ( la via devrait deboucher sur 1 cote )
-        Via->SetLayer( old_layer | GetScreen()->m_Active_Layer << 4 );
+    
+    else if( Via->Shape() == VIA_BORGNE )    //blind via
+    {                                               
+        // A revoir! ( la via devrait deboucher sur 1 cote )
+        Via->SetLayerPair( old_layer, GetScreen()->m_Active_Layer );
     }
-    else
-        Via->SetLayer( 0x0F ); // Usual via is from copper to component; layer pair is 0 and 0x0F
-
+    
+    else    // @todo: why have this override behaviour?  why does the user even need to tell us what kind of via, when we know which two layers are in play?
+    {        
+        // Usual via is from copper to component; layer pair is 0 and 0x0F.
+        Via->SetLayerPair( LAYER_CUIVRE_N, LAYER_CMP_N );
+    }
+        
     if( Drc_On &&( Drc( this, DC, Via, m_Pcb->m_Track, 1 ) == BAD_DRC ) )
     {
         /* DRC fault: the Via cannot be placed here ... */
