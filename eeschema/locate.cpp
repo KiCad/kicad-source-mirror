@@ -1036,6 +1036,57 @@ int distance( int dx, int dy, int spot_cX, int spot_cY, int seuil )
     return 0;
 }
 
+/*******************************************************************/
+LibDrawPin* LocatePinByNumber( const wxString & ePin_Number,
+                             EDA_SchComponentStruct* eComponent )
+/*******************************************************************/
+
+/** Find a PIN in a component
+ * @param pin_number = pin number (string)
+ * @param pin_number = pin number (string)
+ * @return a pointer on the pin, or NULL if not found
+ */
+{
+    LibEDA_BaseStruct* DrawItem;
+	EDA_LibComponentStruct* Entry;
+    LibDrawPin* Pin;
+	int Unit, Convert;
+
+	Entry = FindLibPart(eComponent->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+    if( Entry == NULL )
+        return NULL;
+
+    if( Entry->Type != ROOT )
+    {
+        DisplayError( NULL, wxT( "LocatePinByNumber() error: Entry is ALIAS" ) );
+        return NULL;
+    }
+
+	Unit = eComponent->m_Multi;
+	Convert = eComponent->m_Convert;
+
+    DrawItem = Entry->m_Drawings;
+    for( ; DrawItem != NULL; DrawItem = DrawItem->Next() )
+    {
+        if( DrawItem->Type() == COMPONENT_PIN_DRAW_TYPE ) /* Pin Trouvee */
+        {
+            Pin = (LibDrawPin*) DrawItem;
+
+            if( Unit && DrawItem->m_Unit && (DrawItem->m_Unit != Unit) )
+                continue;
+
+            if( Convert && DrawItem->m_Convert && (DrawItem->m_Convert != Convert) )
+                continue;
+			wxString pNumber;
+			Pin->ReturnPinStringNum( pNumber );
+            if ( ePin_Number == pNumber )
+				return Pin;
+        }
+    }
+
+    return NULL;
+}
+
 
 /*******************************************************************/
 LibEDA_BaseStruct* LocatePin( const wxPoint& RefPos,
@@ -1047,12 +1098,6 @@ LibEDA_BaseStruct* LocatePin( const wxPoint& RefPos,
  *  retourne un pointeur sur la pin, ou NULL si pas trouve
  *  Si Unit = 0, le numero d'unite n'est pas teste
  *  Si convert = 0, le numero convert n'est pas teste
- * 
- *  m_Transform = matrice de transformation.
- *  Si NULL: 	matrice de transformation " normale" [1 , 0 , 0 , -1]
- *  (la matrice de transformation " normale" etant [1 , 0 , 0 , -1]
- *  la coord dy doit etre inversee).
- *  PartX, PartY: coordonnees de positionnement du composant
  */
 {
     LibEDA_BaseStruct* DrawItem;

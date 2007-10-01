@@ -53,7 +53,7 @@ static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC,
 
 
 /*******************************************/
-/* Frame d'option et execution DRC general */
+/* function relatives to the DRC control */
 /*******************************************/
 #include "dialog_drc.cpp"
 
@@ -206,10 +206,7 @@ void WinEDA_DrcFrame::DelDRCMarkers( wxCommandEvent& event )
 void WinEDA_PcbFrame::Install_Test_DRC_Frame( wxDC* DC )
 /******************************************************/
 
-/* Test des isolements : teste les isolements des pistes et place un
- *  marqueur sur les divers segments en defaut
- *  Principe:
- *      Appelle la routine drc() pour chaque segment de piste existant
+/* install a dialog box to handle the general DRC control
  */
 {
     AbortDrc = FALSE;
@@ -223,10 +220,9 @@ void WinEDA_PcbFrame::Install_Test_DRC_Frame( wxDC* DC )
 int WinEDA_PcbFrame::Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone )
 /************************************************************************/
 
-/* Test des isolements : teste les isolements des pistes et place un
- *  marqueur sur les divers segments en defaut
- *  Principe:
- *      Appelle la routine drc() pour chaque segment de piste existant
+/* Test DRC :
+ *  Run a drc control for each pad and track segment
+ *  Put a marker on pad or track end which have a drc problem
  */
 {
     int             ii, jj, old_net;
@@ -253,10 +249,10 @@ int WinEDA_PcbFrame::Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone )
 
     m_CurrentScreen->SetRefreshReq();
 
-    /* Effacement des anciens marqueurs */
+    /* Delete previous markers */
     Erase_Marqueurs();
 
-    if( TestPad2Pad )  /* Test DRC des pads entre eux */
+    if( TestPad2Pad )  /* First test: Test DRC between pads (no track)*/
     {
         Line.Printf( wxT( "%d" ), m_Pcb->m_NbPads );
         Affiche_1_Parametre( this, PRINT_NB_PAD_POS, wxT( "NbPad" ), Line, RED );
@@ -373,7 +369,7 @@ int WinEDA_PcbFrame::Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone )
         }
     }
 
-    /* Test zone segments segments */
+    /* Test zone segments */
     if( TestZone )
     {
         m_Pcb->m_NbSegmZone = 0;
@@ -494,15 +490,12 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
          TRACK* pt_segment, TRACK* StartBuffer, int show_err )
 /***********************************************************************/
 
-/*
- *  Teste le segment en cours de trace:
- *  pt_segment = pointeur sur segment a controler
- *  StartBuffer = adresse de la zone des pistes a controler
- *  (typiquement m_Pcb->m_Track)
- *  show_err (flag) si 0 pas d'affichage d'erreur sur ecran
- *  retourne :
- *      BAD_DRC (1) si Violation DRC
- *      OK_DRC  (0) si OK
+/**
+ *  Test the current segment:
+ * @param pt_segment = current segment to test
+ * @param StartBuffer = track buffer to test (usually m_Pcb->m_Track)
+ * @param show_err (flag) si 0 pas d'affichage d'erreur sur ecran
+ * @return :      BAD_DRC (1) if DRC error  or OK_DRC (0) if OK
  */
 {
     int     ii;
@@ -526,31 +519,34 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
     net_code_ref = pt_segment->m_NetCode;
 
     segm_angle = 0;
+	/* for a non horizontal or vertical segment Compute the segment angle
+	in 0,1 degrees and its lenght */
     if( dx || dy )
     {
-        /* calcul de l'angle d'inclinaison en 0,1 degre */
+        /* Compute the segment angle in 0,1 degrees */
         segm_angle = ArcTangente( dy, dx );
         
-        /* Calcul de la longueur du segment en segm_long : dx = longueur */
-        RotatePoint( &dx, &dy, segm_angle ); /* segm_long = longueur, yf = 0 */
+        /* Compute the segment lenght: we build an equivalent rotated segment,
+		this segment is horizontal, therefore dx = lenght */
+       RotatePoint( &dx, &dy, segm_angle ); /* dx = lenght, dy = 0 */
     }
 
-    /* Ici le segment a ete tourne de segm_angle, et est horizontal, dx > 0 */
     segm_long = dx;
 
     /******************************************/
     /* Phase 1 : test DRC track to pads :*/
     /******************************************/
 
-    /* calcul de la distance min aux pads : */
+    /* Compute the min distance to pads : */
     w_dist = (unsigned) (pt_segment->m_Width >> 1 );
     for( ii = 0; ii < frame->m_Pcb->m_NbPads; ii++ )
     {
         D_PAD* pt_pad = frame->m_Pcb->m_Pads[ii];
 
-        /* Pas de probleme si les pads sont en surface autre que la couche,
-         *  sauf si le trou de percage gene	(cas des pastilles perc�s simple
-         *  face sur CI double face */
+        /* No problem if pads are on an other layer,
+         *  But if a drill hole exists	(a pad on a single layer can have a hole!)
+		 * we must test the hole
+		*/
         if( (pt_pad->m_Masque_Layer & MaskLayer ) == 0 )
         {
             /* We must test the pad hole. In order to use the function "TestClearanceSegmToPad",
@@ -579,9 +575,10 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
             continue;
         }
 
-        /* Le pad doit faire partie d'un net mais pas de probleme
-         *  si le pad est du meme net */
-        if( /*pt_pad->m_NetCode &&*/ net_code_ref == pt_pad->m_NetCode )
+        /* The pad must be in a net (i.e pt_pad->m_NetCode != 0 )
+         *  but no problem if the pad netcode is the current netcode (same net) */
+        if( pt_pad->m_NetCode &&	// the pad must be connected
+			net_code_ref == pt_pad->m_NetCode )	// the pad net is the same as current net -> Ok
             continue;
 
         /* Test DRC pour les pads */
@@ -591,7 +588,7 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
         if( TestClearanceSegmToPad( pt_pad, w_dist, g_DesignSettings.m_TrackClearence ) == OK_DRC )
             continue;
 
-        /* extremite sur pad ou defaut d'isolation trouve */
+        /* Drc error found! */
         else
         {
             ErrorsDRC_Count++;
@@ -603,20 +600,20 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
     }
 
     /**********************************************/
-    /* Phase 2 : test DRC avec les autres pistes :*/
+    /* Phase 2: test DRC with other track segments */
     /**********************************************/
 
-    /* Ici le segment de reference est sur l'axe X */
+    /* At this point the reference segment is the X axis */
 
-    /* Comparaison du segment de reference aux autres segments de piste */
+    /* Test the reference segment with other track segments */
     pttrack = StartBuffer;
     for( ; pttrack != NULL; pttrack = (TRACK*) pttrack->Pnext )
     {
-        //pas de probleme si le segment a tester est du meme net:
+        //No problem if segments have the meme net code:
         if( net_code_ref == pttrack->m_NetCode )
             continue;
 
-        //pas de probleme si le segment a tester est sur une autre couche :
+        // No problem if segment are on different layers :
         if( ( MaskLayer & pttrack->ReturnMaskLayer() ) == 0 )
             continue;
 
@@ -626,7 +623,7 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
         w_dist += pttrack->m_Width >> 1;
         w_dist += g_DesignSettings.m_TrackClearence;
 
-        /* si le segment de reference est une via, le traitement est ici */
+        /* If the reference segment is a via, we test it here */
         if( pt_segment->Type() == TYPEVIA )
         {
             int orgx, orgy; // origine du repere d'axe X = segment a comparer
@@ -650,12 +647,12 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
                     return BAD_DRC;
                 }
             }
-            else    /* Tst distance de via a segment */
+            else    /* Tst drc via / segment */
             {
-                /* calcul de l'angle */
+                /* Compute l'angle */
                 angle = ArcTangente( dy, dx );
 
-                /* Calcul des coord dans le nouveau repere */
+                /* Compute new coordinates ( the segment become horizontal) */
                 RotatePoint( &dx, &dy, angle );
                 RotatePoint( &x0, &y0, angle );
 
@@ -675,8 +672,10 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
             continue;
         }
 
-        /* calcule x0,y0, xf,yf = coord de debut et fin du segment de piste
-         *  a tester, dans le repere axe X = segment de reference */
+        /* We compute x0,y0, xf,yf = starting and ending point coordinates for the segment to test
+         *  in the new axis : the new X axis is the reference segment
+		 *  We must translate and rotate the segment to test
+		*/
         x0 = pttrack->m_Start.x - org_X; 
         y0 = pttrack->m_Start.y - org_Y;
         
@@ -697,20 +696,20 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
         }
 
 
-        /*
-         *  le segment de reference est Horizontal, par suite des modifs  d'axe.
-         *  3 cas : segment a comparer parallele, perp ou incline
+        /*	We have changed axis:
+         *  the reference segment is Horizontal.
+         *  3 cases : the segment to test can be parallel, perpendicular or have an other direction
          */
-        if( y0 == yf ) // segments paralleles
+        if( y0 == yf ) // parallel segments
         {
             if( abs( y0 ) >= w_dist )
                 continue;
             if( x0 > xf )
                 EXCHG( x0, xf );                                /* pour que x0 <= xf */
 
-            if( x0 > (-w_dist) && x0 < (segm_long + w_dist) )   /* Risque de defaut */
+            if( x0 > (-w_dist) && x0 < (segm_long + w_dist) )   /* possible error drc */
             {
-                /* test fin tenant compte des formes arrondies des extremites */
+                /* Fine test : we consider the rounded shape of the ends */
                 if( x0 >= 0 && x0 <= segm_long )
                 {
                     ErrorsDRC_Count++;
@@ -738,7 +737,7 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
             }
             if( xf > (-w_dist) && xf < (segm_long + w_dist) )
             {
-                /* test fin tenant compte des formes arrondies des extremites */
+                /* Fine test : we consider the rounded shape of the ends */
                 if( xf >= 0 && xf <= segm_long )
                 {
                     ErrorsDRC_Count++;
@@ -773,12 +772,12 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
                 return BAD_DRC;
             }
         }
-        else if( x0 == xf ) // segments perpendiculaires
+        else if( x0 == xf ) // perpendicular segments
         {
             if( ( x0 <= (-w_dist) ) || ( x0 >= (segm_long + w_dist) ) )
                 continue;
 
-            /* test si les segments se croisent */
+            /* Test is segments are crossing */
             if( y0 > yf )
                 EXCHG( y0, yf );
             if( (y0 < 0) && (yf > 0) )
@@ -789,8 +788,7 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
                 return BAD_DRC;
             }
 
-            /* ici l'erreur est due a une extremite pres d'une extremite du segm
-             *  de reference */
+            /* At this point the drc error is due to an end near a reference segm end */
             if( TestMarginToCircle( x0, y0, w_dist, segm_long ) == BAD_DRC )
             {
                 ErrorsDRC_Count++;
@@ -810,17 +808,17 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
         {
             int bflag = OK_DRC;
             /* calcul de la "surface de securite du segment de reference */
-            /* premiere passe : la piste est assimilee a un rectangle */
+            /* First rought 'and fast) test : the track segment is like a rectangle */
 
             xcliplo = ycliplo = -w_dist;
             xcliphi = segm_long + w_dist; ycliphi = w_dist;
 
             bflag = Tst_Ligne( x0, y0, xf, yf );
-            if( bflag == BAD_DRC )
+            if( bflag == BAD_DRC )	/* A fine test is needed because a serment is not exactly a rectangle
+				it has rounded ends */
             {
-                /* 2eme passe : la piste a des extremites arrondies.
-                 *  Si le defaut de drc est du a une extremite : le calcul
-                 *  est affine pour tenir compte de cet arrondi */
+                /* 2eme passe : the track has rounded ends.
+                 * we must a fine test for each rounded end and the rectangular zone */
 
                 xcliplo = 0; xcliphi = segm_long;
                 bflag   = Tst_Ligne( x0, y0, xf, yf );
@@ -837,9 +835,9 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
                                             9 );
                     return BAD_DRC;
                 }
-                else    // L'erreur est due a une extremite du segment de reference:
+                else    // The drc error is due to the starting or the ending point of the reference segment
                 {
-                    // il faut tester les extremites de ce segment
+                    // Test the starting and the ending point
                     int angle, rx0, ry0, rxf, ryf;
                     x0 = pttrack->m_Start.x; 
                     y0 = pttrack->m_Start.y;
@@ -850,14 +848,14 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
                     dx = xf - x0; 
                     dy = yf - y0;
                     
-                    /* calcul de l'angle d'inclinaison en 0,1 degre */
+                    /* Compute the segment orientation (angle) en 0,1 degre */
                     angle = ArcTangente( dy, dx );
                     
-                    /* Calcul de la longueur du segment: dx = longueur */
+                    /* Compute the segment lenght: dx = longueur */
                     RotatePoint( &dx, &dy, angle );
 
-                    /* calcul des coord du segment de reference ds le repere
-                     *  d'axe X = segment courant en tst */
+                    /* Comute the reference segment coordinates relatives to a
+                     *  X axis = current tested segment */
                     rx0 = pt_segment->m_Start.x - x0;
                     ry0 = pt_segment->m_Start.y - y0;
                     rxf = pt_segment->m_End.x - x0;
@@ -908,9 +906,14 @@ static bool Test_Pad_to_Pads_Drc( WinEDA_BasePcbFrame* frame,
                                   bool show_err )
 /*****************************************************************************/
 
-/* Teste l'isolation de pad_ref avec les autres pads.
- *  end_buffer = upper limit of the pad list.
- *  max_size = size of the biggest pad (used to stop the test when the X distance is > max_size)
+/** Test the drc between pad_ref and other pads.
+ * the pad list must be sorted by x coordinate
+ * @param frame = current active frame
+ * @param DC = current DC
+ * @param pad_ref = pad to test
+ * @param end_buffer = upper limit of the pad list.
+ * @param max_size = size of the biggest pad (used to stop the test when the X distance is > max_size)
+ * @param show_err if true, display a marker and amessage.
  */
 {
     int        MaskLayer;
@@ -931,24 +934,24 @@ static bool Test_Pad_to_Pads_Drc( WinEDA_BasePcbFrame* frame,
         if( pad->m_Pos.x > x_limite )
             break;
 
-        /* Pas de probleme si les pads ne sont pas sur les memes couches cuivre*/
+        /* No probleme if pads are on different copper layers */
         if( (pad->m_Masque_Layer & MaskLayer ) == 0 )
             continue;
 
-        /* Le pad doit faire partie d'un net,
-         *  mais pas de probleme si les pads sont du meme net */
+        /* The pad must be in a net (i.e pt_pad->m_NetCode != 0 ),
+         *  But noe probleme if pads have the same netcode (same net)*/
         if( pad->m_NetCode && (pad_ref->m_NetCode == pad->m_NetCode) )
             continue;
 
-        /* pas de pb si les pads sont du meme module et
-         *  de la meme reference ( pads multiples )  */
+        /* No proble if pads are from the same footprint
+         *  and have the same pad number ( equivalent pads  )  */
         if( (pad->m_Parent == pad_ref->m_Parent) && (pad->m_NumPadName == pad_ref->m_NumPadName) )
             continue;
 
         if( Pad_to_Pad_Isol( pad_ref, pad, g_DesignSettings.m_TrackClearence ) == OK_DRC )
             continue;
         
-        else    /* defaut d'isolation trouve */
+        else    /* here we have a drc error! */
         {
             ErrorsDRC_Count++;
             if( show_err )

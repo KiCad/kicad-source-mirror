@@ -118,6 +118,8 @@ bool DrawStructInBox(int x1, int y1, int x2, int y2,
 	/*************/
 	/* LOCATE.CPP */
 	/*************/
+LibDrawPin* LocatePinByNumber( const wxString & ePin_Number,
+                             EDA_SchComponentStruct* eComponent );
 
 EDA_SchComponentStruct * LocateSmallestComponent( SCH_SCREEN * Screen );
 /* Recherche du plus petit (en surface) composant pointe par la souris */

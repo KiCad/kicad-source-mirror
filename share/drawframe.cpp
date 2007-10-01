@@ -56,7 +56,7 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
     DrawPanel = NULL;
     MsgPanel  = NULL;
     m_CurrentScreen = NULL;
-    m_MenuBar = NULL;       // menu du haut d'ecran
+    m_MenuBar = NULL;       // main meun frame
     m_ID_current_state    = 0;
     m_HTOOL_current_state = 0;
     m_Draw_Axis           = FALSE;          // TRUE pour avoir les axes dessines
@@ -66,8 +66,8 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
     m_Draw_Auxiliary_Axis = FALSE;          // TRUE pour avoir les axes auxiliares dessines
     m_UnitType = INTERNAL_UNIT_TYPE;        // Internal unit = inch
 
-    // nombre d'unites internes pour 1 pouce
-    // = 1000 pour schema, = 10000 pour PCB
+    // Internal units per inch
+    // = 1000 for schema, = 10000 for PCB
     m_InternalUnits = EESCHEMA_INTERNAL_UNIT;
     if( (m_Ident == PCB_FRAME) || (m_Ident == GERBER_FRAME)
        || (m_Ident == CVPCB_DISPLAY_FRAME)
@@ -111,7 +111,7 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
 WinEDA_DrawFrame::~WinEDA_DrawFrame()
 /****************************************/
 {
-    if( DrawPanel )  // for WinEDA3D_DrawFrame DrawPanel == NULL !
+    if( DrawPanel )  // Required: in WinEDA3D_DrawFrame, DrawPanel == NULL !
         m_Parent->m_EDA_Config->Write( wxT( "AutoPAN" ), DrawPanel->m_AutoPAN_Enable );
 }
 
@@ -177,7 +177,7 @@ void WinEDA_DrawFrame::Affiche_Message( const wxString& message )
 /**************************************************************/
 
 /*
- *  Affiche un message en bas de l'ecran
+ *  Dispaly the meesage on yhe bottomon the frame
  */
 {
     SetStatusText( message );
@@ -216,40 +216,45 @@ void WinEDA_DrawFrame::OnMenuOpen( wxMenuEvent& event )
 
 
 /*******************************************************/
-void WinEDA_DrawFrame::ReCreateAuxiliaryToolbar()   // fonction virtuelle
+void WinEDA_DrawFrame::ReCreateAuxiliaryToolbar()
 /*******************************************************/
+// Virtual function
 {
 }
 
 
 /********************************************/
-void WinEDA_DrawFrame::ReCreateMenuBar()    // fonction virtuelle
+void WinEDA_DrawFrame::ReCreateMenuBar()
 /********************************************/
+// Virtual function
 {
 }
 
 
 /****************************************************/
 void WinEDA_DrawFrame::OnHotKey( wxDC* DC, int hotkey,
-                                 EDA_BaseStruct* DrawStruct ) // fonction virtuelle
+                                 EDA_BaseStruct* DrawStruct )
 /****************************************************/
+// Virtual function
 {
 }
 
 
 /**************************************************************/
-void WinEDA_DrawFrame::ToolOnRightClick( wxCommandEvent& event ) // fonction virtuelle
+void WinEDA_DrawFrame::ToolOnRightClick( wxCommandEvent& event ) 
 /**************************************************************/
+// Virtual function
 {
 }
 
 
 /********************************************************/
-void WinEDA_DrawFrame::OnSelectGrid( wxCommandEvent& event )  // fonction virtuelle
+void WinEDA_DrawFrame::OnSelectGrid( wxCommandEvent& event )
 /********************************************************/
+// Virtual function
 {
     if( m_SelGridBox == NULL )
-        return;                        //Ne devrait pas se produire!
+        return;                        // Should not occurs
 
     int id = m_SelGridBox->GetChoice();
     if( id < 0 )

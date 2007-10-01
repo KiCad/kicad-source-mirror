@@ -15,34 +15,76 @@
 #include "eda_dde.h"
 
 
-
 static void Process_Move_Item( WinEDA_PcbFrame* frame,
                                EDA_BaseStruct* DrawStruct, wxDC* DC );
 
 // see wxstruct.h
+/**************************************************************************/
 void WinEDA_PcbFrame::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
+/**************************************************************************/
+/** Send a remote command to eeschema via a socket,
+ * @param objectToSync = item to be located on schematic (module, pin or text)
+ * Commands are
+ * $PART: "reference"   put cursor on component anchor
+ * $PART: "reference" $PAD: "pad number" put cursor on the component pin 
+ * $PART: "reference" $REF: "reference" put cursor on the component ref
+ * $PART: "reference" $VAL: "value" put cursor on the component value
+ */
 {
-    char    cmd[1024];
-    MODULE* module = NULL;
-    
-	if ( objectToSync == NULL ) 
+    char          cmd[1024];
+    const char*   text_key;
+    MODULE*       module = NULL;
+    D_PAD*        pad;
+    TEXTE_MODULE* text_mod;
+    wxString      msg;
+
+    if( objectToSync == NULL )
         return;
 
-    if( objectToSync->Type() == TYPEMODULE )
+    switch( objectToSync->Type() )
+    {
+    case TYPEMODULE:
         module = (MODULE*) objectToSync;
-    else if( objectToSync->Type() == TYPEPAD )
-        module = (MODULE*) objectToSync->GetParent();
-    else if( objectToSync->Type() == TYPETEXTEMODULE )
-        module = (MODULE*) objectToSync->GetParent();
+        sprintf( cmd, "$PART: \"%s\"",
+                CONV_TO_UTF8( module->m_Reference->m_Text ) );
+        break;
 
-    // ask only for the reference for now, maybe pins later.            
+    case TYPEPAD:
+        module = (MODULE*) objectToSync->m_Parent;
+        pad    = (D_PAD*) objectToSync;
+        msg    = pad->ReturnStringPadName();
+        sprintf( cmd, "$PART: \"%s\" $PAD: \"%s\"",
+                CONV_TO_UTF8( module->m_Reference->m_Text ),
+                CONV_TO_UTF8( msg ) );
+        break;
+
+    case TYPETEXTEMODULE:
+            #define REFERENCE 0
+            #define VALUE     1
+        module   = (MODULE*) objectToSync->m_Parent;
+        text_mod = (TEXTE_MODULE*) objectToSync;
+        if( text_mod->m_Type == REFERENCE )
+            text_key = "$REF:";
+        else if( text_mod->m_Type == VALUE )
+            text_key = "$VAL:";
+        else
+            break;
+
+        sprintf( cmd, "$PART: \"%s\" %s \"%s\"",
+                CONV_TO_UTF8( module->m_Reference->m_Text ),
+                text_key,
+                CONV_TO_UTF8( text_mod->m_Text ) );
+        break;
+
+    default:
+        break;
+    }
+
     if( module )
     {
-        sprintf( cmd, "$PART: %s", CONV_TO_UTF8(module->m_Reference->m_Text) );
         SendCommand( MSG_TO_SCH, cmd );
     }
 }
-
 
 
 /*********************************************************************/
@@ -59,7 +101,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     DrawPanel->CursorOff( &dc );
     DrawPanel->PrepareGraphicContext( &dc );
-    
+
     wxGetMousePosition( &pos.x, &pos.y );
 
     pos.y += 20;
@@ -189,12 +231,12 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_OPEN_MODULE_EDITOR:
         if( m_Parent->m_ModuleEditFrame == NULL )
         {
-            m_Parent->m_ModuleEditFrame = 
+            m_Parent->m_ModuleEditFrame =
                 new WinEDA_ModuleEditFrame( this,
-                                             m_Parent, _( "Module Editor" ),
-                                             wxPoint( -1,
-                                                      -1 ),
-                                             wxSize( 600, 400 ) );
+                                           m_Parent, _( "Module Editor" ),
+                                           wxPoint( -1,
+                                                    -1 ),
+                                           wxSize( 600, 400 ) );
             m_Parent->m_ModuleEditFrame->Show( TRUE );
             m_Parent->m_ModuleEditFrame->Zoom_Automatique( TRUE );
         }
@@ -262,6 +304,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_GET_TOOLS:
+
         // InstalloolsFrame(this, wxPoint(-1,-1) );
         break;
 
@@ -336,6 +379,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_END_LINE:
         DrawPanel->MouseToCursorSchema();
+
         //	EndSegment(&dc);
         break;
 
@@ -519,7 +563,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         // If the current Item is a pad, text module ...: Get the parent
         if( GetCurItem()->Type() != TYPEMODULE )
             SetCurItem( GetCurItem()->GetParent() );
-        
+
         if( !GetCurItem() || GetCurItem()->Type() != TYPEMODULE )
             break;
         if( Delete_Module( (MODULE*) GetCurItem(), &dc ) )
@@ -534,7 +578,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         // If the current Item is a pad, text module ...: Get the parent
         if( GetCurItem()->Type() != TYPEMODULE )
             SetCurItem( GetCurItem()->GetParent() );
-        
+
         if( !GetCurItem() || GetCurItem()->Type() != TYPEMODULE )
             break;
         Rotate_Module( &dc, (MODULE*) GetCurItem(), -900, TRUE );
@@ -564,6 +608,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_EDIT_MODULE:
+
         // If the current Item is a pad, text module ...: Get the parent
         if( GetCurItem()->Type() != TYPEMODULE )
             SetCurItem( GetCurItem()->GetParent() );
@@ -624,7 +669,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_DELETE_TEXTMODULE:
-        DeleteTextModule( (TEXTE_MODULE*) GetCurItem(),  &dc );
+        DeleteTextModule( (TEXTE_MODULE*) GetCurItem(), &dc );
         SetCurItem( NULL );
         DrawPanel->MouseToCursorSchema();
         break;
@@ -752,7 +797,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         if( GetCurItem() && (GetCurItem()->m_Flags & IS_NEW) )
         {
             SetCurItem( Del_SegmEdgeZone( &dc,
-                                                           (EDGE_ZONE*) GetCurItem() ) );
+                                         (EDGE_ZONE*) GetCurItem() ) );
         }
         break;
 
@@ -931,6 +976,7 @@ static void Process_Move_Item( WinEDA_PcbFrame* frame,
     }
 }
 
+
 /***************************************************************/
 void WinEDA_PcbFrame::RemoveStruct( EDA_BaseStruct* Item, wxDC* DC )
 /***************************************************************/
@@ -987,7 +1033,7 @@ void WinEDA_PcbFrame::RemoveStruct( EDA_BaseStruct* Item, wxDC* DC )
     {
         wxString Line;
         Line.Printf( wxT( "Remove: StructType %d Inattendu" ),
-                     Item->Type() );
+                    Item->Type() );
         DisplayError( this, Line );
     }
         break;

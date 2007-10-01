@@ -30,9 +30,9 @@ public:
     WinEDA_PcbFrame*         m_PcbFrame;
     WinEDA_ModuleEditFrame*  m_ModuleEditFrame;
     WinEDA_GerberFrame*      m_GerberFrame;
-    WinEDA_SchematicFrame*   SchematicFrame;    // Edition des Schemas
-    WinEDA_LibeditFrame*     LibeditFrame;      // Edition des composants
-    WinEDA_ViewlibFrame*     ViewlibFrame;      // Visualisation des composants
+    WinEDA_SchematicFrame*   m_SchematicFrame;    // Edition des Schemas
+    WinEDA_LibeditFrame*     m_LibeditFrame;      // Edition des composants
+    WinEDA_ViewlibFrame*     m_ViewlibFrame;      // Visualisation des composants
     WinEDA_CvpcbFrame*       m_CvpcbFrame;
 
     wxPoint               m_HelpPos;

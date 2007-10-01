@@ -109,7 +109,7 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame(wxWindow * father, WinEDA_App *parent,
 WinEDA_ViewlibFrame::~WinEDA_ViewlibFrame()
 {
 	delete m_CurrentScreen;
-	m_Parent->ViewlibFrame = NULL;
+	m_Parent->m_ViewlibFrame = NULL;
 }
 
 /*****************************************************************/

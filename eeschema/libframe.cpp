@@ -88,7 +88,7 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
 WinEDA_LibeditFrame::~WinEDA_LibeditFrame()
 /**********************************************/
 {
-    m_Parent->LibeditFrame = NULL;
+    m_Parent->m_LibeditFrame = NULL;
     m_CurrentScreen = ScreenSch;
 }
 

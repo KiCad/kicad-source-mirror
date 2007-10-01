@@ -56,6 +56,213 @@ void WinEDA_FindFrame::FindMarker( wxCommandEvent& event )
 }
 
 
+/************************************************************************/
+EDA_BaseStruct* WinEDA_SchematicFrame::FindComponentAndItem(
+    const wxString& component_reference, bool Find_in_hierarchy,
+    int SearchType,
+    const wxString& text_to_find,
+    bool mouseWarp )
+/************************************************************************/
+
+/**
+ * Function FindComponentAndItem
+ * finds a Component in the schematic, and an item in this component.
+ * @param pattern The text to search for, either in value, reference or elsewhere.
+ * @param Find_in_hierarchy:  false => Search is made in current sheet
+ *                     true => the whole hierarchy
+ * @param SearchType:  0 => find component
+ *                     1 => find pin
+ *                     2 => find ref
+ *                     3 => find value
+ *                     >= 4 => unused (same as 0)
+ * @param mouseWarp If true, then move the mouse cursor to the item.
+ */
+{
+    SCH_SCREEN*             Screen, * ScreenWithComponentFound = NULL;
+    EDA_BaseStruct*         DrawList  = NULL;
+    EDA_SchComponentStruct* Component = NULL;
+    wxSize                  DrawAreaSize = DrawPanel->GetClientSize();
+    wxPoint                 pos, curpos;
+    bool                    DoCenterAndRedraw = FALSE;
+    bool                    NotFound = true;
+    wxString                msg;
+    LibDrawPin*             pin;
+
+    EDA_ScreenList          ScreenList( NULL );
+
+    Screen = ScreenList.GetFirst();
+    if( !Find_in_hierarchy )
+        Screen = (SCH_SCREEN*) m_CurrentScreen;
+
+    for( ; Screen != NULL; Screen = ScreenList.GetNext() )
+    {
+        DrawList = Screen->EEDrawList;
+        for( ; (DrawList != NULL) && (NotFound == true); DrawList = DrawList->Pnext )
+        {
+            if( DrawList->Type() == DRAW_LIB_ITEM_STRUCT_TYPE )
+            {
+                EDA_SchComponentStruct* pSch;
+                pSch = (EDA_SchComponentStruct*) DrawList;
+                if( component_reference.CmpNoCase( pSch->m_Field[REFERENCE].m_Text ) == 0 )
+                {
+                    Component = pSch;
+                    ScreenWithComponentFound = Screen;
+
+                    switch( SearchType )
+                    {
+                    default:
+                    case 0:             // Find component only
+                        NotFound = FALSE;
+                        pos = pSch->m_Pos;
+                        break; 
+
+                    case 1:                 // find a pin
+                        pos = pSch->m_Pos;  // temporary: will be changed if the pin is found
+                        pin = LocatePinByNumber( text_to_find, pSch );
+                        if( pin == NULL )
+                            break;
+                        NotFound = FALSE;
+                        pos += pin->m_Pos;
+                        break;
+
+                    case 2:     // find reference
+                        NotFound = FALSE;
+                        pos = pSch->m_Field[REFERENCE].m_Pos;
+                        break;
+
+                    case 3:     // find value
+                        pos = pSch->m_Pos;
+                        if( text_to_find.CmpNoCase( pSch->m_Field[VALUE].m_Text ) != 0 )
+                            break;
+                        NotFound = FALSE;
+                        pos = pSch->m_Field[VALUE].m_Pos;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if( (Find_in_hierarchy == FALSE) || (NotFound == FALSE) )
+            break;
+    }
+
+    if( Component )
+    {
+        Screen = ScreenWithComponentFound;
+        if( Screen != GetScreen() )
+        {
+            Screen->SetZoom( GetScreen()->GetZoom() );
+            m_CurrentScreen = ActiveScreen = Screen;
+            DoCenterAndRedraw   = TRUE;
+        }
+        wxPoint delta;
+        pos -= Component->m_Pos;
+
+        delta.x = Component->m_Transform[0][0] * pos.x + Component->m_Transform[0][1] * pos.y;
+        delta.y = Component->m_Transform[1][0] * pos.x + Component->m_Transform[1][1] * pos.y;
+
+        pos = delta + Component->m_Pos;
+
+        wxPoint old_cursor_position = Screen->m_Curseur;
+        Screen->m_Curseur = pos;
+
+        curpos = DrawPanel->CursorScreenPosition();
+
+        DrawPanel->GetViewStart(
+            &m_CurrentScreen->m_StartVisu.x,
+            &m_CurrentScreen->m_StartVisu.y );
+
+        // calcul des coord curseur avec origine = screen
+        curpos.x -= m_CurrentScreen->m_StartVisu.x;
+        curpos.y -= m_CurrentScreen->m_StartVisu.y;
+
+        /* Il y a peut-etre necessite de recadrer le dessin: */
+		#define MARGIN 30
+        if( (curpos.x <= MARGIN) || (curpos.x >= DrawAreaSize.x - MARGIN)
+           || (curpos.y <= MARGIN) || (curpos.y >= DrawAreaSize.y - MARGIN) )
+        {
+            DoCenterAndRedraw = true;;
+        }
+		#undef MARGIN
+
+        if ( DoCenterAndRedraw )
+            Recadre_Trace( mouseWarp );
+        else
+        {
+            wxClientDC  dc( DrawPanel );
+
+            DrawPanel->PrepareGraphicContext( &dc );
+
+            EXCHG( old_cursor_position, Screen->m_Curseur );
+            DrawPanel->CursorOff( &dc );
+
+            if( mouseWarp )
+                GRMouseWarp( DrawPanel, curpos );
+
+            EXCHG( old_cursor_position, Screen->m_Curseur );
+
+            DrawPanel->CursorOn( &dc );
+        }
+    }
+
+
+    /* Print diaq */
+    wxString msg_item;
+    msg = component_reference;
+
+    switch( SearchType )
+    {
+    default:
+    case 0:
+        break;      // Find component only
+
+    case 1:         // find a pin
+        msg_item = _( "Pin " ) + text_to_find;
+        break;
+
+    case 2:     // find reference
+        msg_item = _( "Ref " ) + text_to_find;
+        break;
+
+    case 3:     // find value
+        msg_item = _( "Value " ) + text_to_find;
+        break;
+
+    case 4:     // find field. todo
+        msg_item = _( "Field " ) + text_to_find;
+        break;
+    }
+
+    if( Component )
+    {
+        if( !NotFound )
+        {
+            if( !msg_item.IsEmpty() )
+                msg += wxT( " " ) + msg_item;
+            msg += _( " Found" );
+        }
+        else
+        {
+            msg += _( " Found" );
+            if( !msg_item.IsEmpty() )
+            {
+                msg += wxT( " but " ) + msg_item + _( " not found" );
+            }
+        }
+    }
+    else
+    {
+        if( !msg_item.IsEmpty() )
+            msg += wxT( " " ) + msg_item;
+        msg += _( " not found" );
+    }
+
+    Affiche_Message( msg );
+
+    return DrawList;
+}
+
+
 /*****************************************************************/
 EDA_BaseStruct* WinEDA_SchematicFrame::FindMarker( int SearchType )
 /*****************************************************************/
@@ -71,9 +278,9 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindMarker( int SearchType )
     int StartCount;
     bool NotFound;
     wxPoint           firstpos, pos;
-    wxSize            size = DrawPanel->GetClientSize();
+    wxSize            DrawAreaSize = DrawPanel->GetClientSize();
     wxPoint           curpos, old_cursor_position;
-    bool force_recadre = FALSE;
+    bool DoCenterAndRedraw = FALSE;
     wxString          msg, WildText;
 
     g_LastSearchIsMarker = TRUE;
@@ -95,7 +302,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindMarker( int SearchType )
                 Marker   = (DrawMarkerStruct*) DrawList;
                 NotFound = FALSE;
                 pos = Marker->m_Pos;
-                if( FirstScreen == NULL )  /* First item found */
+                if( FirstScreen == NULL )    /* First item found */
                 {
                     FirstScreen = Screen; firstpos = pos;
                     FirstStruct = DrawList;
@@ -104,9 +311,9 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindMarker( int SearchType )
                 StartCount++;
                 if( s_MarkerCount >= StartCount )
                 {
-                    NotFound = TRUE;    /* Search for other markers */
+                    NotFound = TRUE;        /* Search for other markers */
                 }
-                else                    /* We have found s_MarkerCount markers -> Ok */
+                else                        /* We have found s_MarkerCount markers -> Ok */
                 {
                     Struct = DrawList; s_MarkerCount++; break;
                 }
@@ -118,8 +325,8 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindMarker( int SearchType )
             break;
     }
 
-    if( NotFound && FirstScreen )   // markers are found, but we have reach the last marker */
-    {                               // After the last marker, the first marker is used */
+    if( NotFound && FirstScreen )       // markers are found, but we have reach the last marker */
+    {                                   // After the last marker, the first marker is used */
         NotFound = FALSE; Screen = FirstScreen;
         Struct   = FirstStruct;
         pos = firstpos; s_MarkerCount = 1;
@@ -131,7 +338,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindMarker( int SearchType )
         {
             Screen->SetZoom( GetScreen()->GetZoom() );
             m_CurrentScreen = ActiveScreen = Screen;
-            force_recadre   = TRUE;
+            DoCenterAndRedraw   = TRUE;
         }
 
         old_cursor_position = Screen->m_Curseur;
@@ -144,12 +351,17 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindMarker( int SearchType )
         curpos.x -= m_CurrentScreen->m_StartVisu.x;
         curpos.y -= m_CurrentScreen->m_StartVisu.y;
 
-		// reposition the window if the chosen marker is off screen. 
-        if( (curpos.x <= 0) || (curpos.x >= size.x - 1)
-           || (curpos.y <= 0) || (curpos.y >= size.y) || force_recadre )
+        // reposition the window if the chosen marker is off screen.
+		#define MARGIN 30
+        if( (curpos.x <= MARGIN) || (curpos.x >= DrawAreaSize.x - MARGIN)
+           || (curpos.y <= MARGIN) || (curpos.y >= DrawAreaSize.y - MARGIN) )
         {
-            Recadre_Trace( TRUE );
+            DoCenterAndRedraw = true;;
         }
+		#undef MARGIN
+
+        if( DoCenterAndRedraw )
+            Recadre_Trace( TRUE );
         else
         {
             wxClientDC dc( DrawPanel );
@@ -218,9 +430,9 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
     bool            NotFound;
     wxPoint         firstpos, pos, old_cursor_position;
     static int      Find_in_hierarchy;
-    wxSize          size = DrawPanel->GetClientSize();
+    wxSize          DrawAreaSize = DrawPanel->GetClientSize();
     wxPoint         curpos;
-    bool            force_recadre = FALSE;
+    bool            DoCenterAndRedraw = FALSE;
     wxString        msg, WildText;
 
     g_LastSearchIsMarker = FALSE;
@@ -240,8 +452,8 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
     if(  SearchType != 2  )
         s_ItemsCount = 0;
 
-    WildText = s_OldStringFound;
-    NotFound = TRUE; 
+    WildText   = s_OldStringFound;
+    NotFound   = TRUE;
     StartCount = 0;
 
     EDA_ScreenList ScreenList( NULL );
@@ -258,8 +470,8 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
             switch( DrawList->Type() )
             {
             case DRAW_LIB_ITEM_STRUCT_TYPE:
-                EDA_SchComponentStruct* pSch;
-                pSch = (EDA_SchComponentStruct*) DrawList; 
+                EDA_SchComponentStruct * pSch;
+                pSch = (EDA_SchComponentStruct*) DrawList;
                 if( WildCompareString( WildText, pSch->m_Field[REFERENCE].m_Text, FALSE ) )
                 {
                     NotFound = FALSE;
@@ -276,8 +488,8 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
             case DRAW_LABEL_STRUCT_TYPE:
             case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
             case DRAW_TEXT_STRUCT_TYPE:
-                DrawTextStruct* pDraw;
-                pDraw = (DrawTextStruct*) DrawList; 
+                DrawTextStruct * pDraw;
+                pDraw = (DrawTextStruct*) DrawList;
                 if( WildCompareString( WildText, pDraw->m_Text, FALSE ) )
                 {
                     NotFound = FALSE;
@@ -289,11 +501,11 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
                 break;
             }
 
-            if( NotFound == FALSE )         /* Item found ! */
+            if( NotFound == FALSE )             /* Item found ! */
             {
-                if( FirstScreen == NULL )   /* First Item found */
+                if( FirstScreen == NULL )       /* First Item found */
                 {
-                    FirstScreen = Screen; 
+                    FirstScreen = Screen;
                     firstpos    = pos;
                     FirstStruct = DrawList;
                 }
@@ -305,8 +517,8 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
                 }
                 else
                 {
-                    Struct = DrawList; 
-                    s_ItemsCount++; 
+                    Struct = DrawList;
+                    s_ItemsCount++;
                     break;
                 }
             }
@@ -314,20 +526,20 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
                 break;
             DrawList = DrawList->Pnext;
         }
-        
+
         if( NotFound == FALSE )
             break;
-        
+
         if( Find_in_hierarchy == FALSE )
             break;
     }
 
     if( NotFound && FirstScreen )
     {
-        NotFound = FALSE; 
-        Screen   = FirstScreen; 
+        NotFound = FALSE;
+        Screen   = FirstScreen;
         Struct   = FirstStruct;
-        pos      = firstpos; 
+        pos = firstpos;
         s_ItemsCount = 1;
     }
 
@@ -337,33 +549,33 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
         {
             Screen->SetZoom( GetScreen()->GetZoom() );
             m_CurrentScreen = ActiveScreen = Screen;
-            force_recadre   = TRUE;
+            DoCenterAndRedraw   = TRUE;
         }
 
-        /* If the struct found is a DRAW_LIB_ITEM_STRUCT_TYPE type,
+        /* the struct is a DRAW_LIB_ITEM_STRUCT_TYPE type,
          * coordinates must be computed according to its orientation matrix
          */
         if( Struct->Type() == DRAW_LIB_ITEM_STRUCT_TYPE )
         {
-            EDA_SchComponentStruct* pSch =  (EDA_SchComponentStruct*) Struct;
+            EDA_SchComponentStruct* pSch = (EDA_SchComponentStruct*) Struct;
 
-            pos.x -= pSch->m_Pos.x; 
+            pos.x -= pSch->m_Pos.x;
             pos.y -= pSch->m_Pos.y;
-            
-            ii    = pSch->m_Transform[0][0] * pos.x + pSch->m_Transform[0][1] * pos.y;
-            jj    = pSch->m_Transform[1][0] * pos.x + pSch->m_Transform[1][1] * pos.y;
-            
-            pos.x = ii + pSch->m_Pos.x; 
+
+            ii = pSch->m_Transform[0][0] * pos.x + pSch->m_Transform[0][1] * pos.y;
+            jj = pSch->m_Transform[1][0] * pos.x + pSch->m_Transform[1][1] * pos.y;
+
+            pos.x = ii + pSch->m_Pos.x;
             pos.y = jj + pSch->m_Pos.y;
         }
 
         old_cursor_position = Screen->m_Curseur;
         Screen->m_Curseur   = pos;
-        
+
         curpos = DrawPanel->CursorScreenPosition();
-        
-        DrawPanel->GetViewStart( 
-            &m_CurrentScreen->m_StartVisu.x, 
+
+        DrawPanel->GetViewStart(
+            &m_CurrentScreen->m_StartVisu.x,
             &m_CurrentScreen->m_StartVisu.y );
 
         // calcul des coord curseur avec origine = screen
@@ -371,25 +583,29 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
         curpos.y -= m_CurrentScreen->m_StartVisu.y;
 
         /* Il y a peut-etre necessite de recadrer le dessin: */
-        if( (curpos.x <= 0) || (curpos.x >= size.x - 1)
-           || (curpos.y <= 0) || (curpos.y >= size.y) || force_recadre )
+		#define MARGIN 30
+        if( (curpos.x <= MARGIN) || (curpos.x >= DrawAreaSize.x - MARGIN)
+           || (curpos.y <= MARGIN) || (curpos.y >= DrawAreaSize.y - MARGIN) )
         {
-            Recadre_Trace( mouseWarp );
+           DoCenterAndRedraw = true;
         }
+
+        if ( DoCenterAndRedraw )
+            Recadre_Trace( mouseWarp );
         else
         {
             wxClientDC  dc( DrawPanel );
 
             DrawPanel->PrepareGraphicContext( &dc );
-            
+
             EXCHG( old_cursor_position, Screen->m_Curseur );
             DrawPanel->CursorOff( &dc );
-            
+
             if( mouseWarp )
                 GRMouseWarp( DrawPanel, curpos );
-            
+
             EXCHG( old_cursor_position, Screen->m_Curseur );
-            
+
             DrawPanel->CursorOn( &dc );
         }
 
@@ -399,10 +615,10 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
     else
     {
         Affiche_Message( wxEmptyString );
-        
-        if( !mouseWarp )     
+
+        if( !mouseWarp )
         {
-            // if called from RemoteCommand() don't popup the dialog which 
+            // if called from RemoteCommand() don't popup the dialog which
             // needs to be dismissed, user is in PCBNEW, and does'nt want to
             // bother with dismissing the dialog in EESCHEMA.
             msg = WildText + _( " Not Found" );
@@ -421,11 +637,11 @@ void WinEDA_FindFrame::LocatePartInLibs( wxCommandEvent& event )
 /* Recherche exhaustive d'un composant en librairies, meme non chargees
  */
 {
-    wxString Text, FindList;
-    const wxChar** ListNames;
-    LibraryStruct* Lib = NULL;
+    wxString                Text, FindList;
+    const wxChar**          ListNames;
+    LibraryStruct*          Lib = NULL;
     EDA_LibComponentStruct* LibEntry;
-    bool FoundInLib = FALSE; // True si reference trouvee ailleurs qu'en cache
+    bool FoundInLib = FALSE;     // True si reference trouvee ailleurs qu'en cache
 
     Text = m_NewTextCtrl->GetValue();
     if( Text.IsEmpty() )
@@ -444,7 +660,7 @@ void WinEDA_FindFrame::LocatePartInLibs( wxCommandEvent& event )
     ListNames = GetLibNames();
 
     nbitems = 0;
-    for( ii = 0; ii < NumOfLibs; ii++ ) /* Recherche de la librairie */
+    for( ii = 0; ii < NumOfLibs; ii++ )    /* Recherche de la librairie */
     {
         bool IsLibCache;
         Lib = FindLibrary( ListNames[ii] );
@@ -503,9 +719,9 @@ int WinEDA_FindFrame::ExploreAllLibraries( const wxString& wildmask, wxString& F
 /***************************************************************************************/
 {
     wxString FullFileName;
-    FILE* file;
-    int nbitems = 0, LineNum = 0;
-    char Line[2048], * name;
+    FILE*    file;
+    int      nbitems = 0, LineNum = 0;
+    char     Line[2048], * name;
 
     FullFileName = MakeFileName( g_RealLibDirBuffer, wxT( "*" ), g_LibExtBuffer );
 
@@ -519,7 +735,7 @@ int WinEDA_FindFrame::ExploreAllLibraries( const wxString& wildmask, wxString& F
         while( GetLine( file, Line, &LineNum, sizeof(Line) ) )
         {
             if( strnicmp( Line, "DEF", 3 ) == 0 )
-            { 
+            {
                 /* Read one DEF part from library: DEF 74LS00 U 0 30 Y Y 4 0 N */
                 strtok( Line, " \t\r\n" );
                 name = strtok( NULL, " \t\r\n" );
@@ -534,7 +750,7 @@ int WinEDA_FindFrame::ExploreAllLibraries( const wxString& wildmask, wxString& F
                 }
             }
             else if( strnicmp( Line, "ALIAS", 5 ) == 0 )
-            { 
+            {
                 /* Read one ALIAS part from library: ALIAS 74HC00 74HCT00 7400 74LS37 */
                 strtok( Line, " \t\r\n" );
                 while( ( name = strtok( NULL, " \t\r\n" ) ) != NULL )

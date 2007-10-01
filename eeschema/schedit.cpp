@@ -182,19 +182,19 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_TO_LIBRARY:
-        if( m_Parent->LibeditFrame )
+        if( m_Parent->m_LibeditFrame )
         {
-            m_Parent->LibeditFrame->Show( TRUE );
+            m_Parent->m_LibeditFrame->Show( TRUE );
         }
         else
         {
-            m_Parent->LibeditFrame = new
-                                     WinEDA_LibeditFrame( m_Parent->SchematicFrame,
+            m_Parent->m_LibeditFrame = new
+                                     WinEDA_LibeditFrame( m_Parent->m_SchematicFrame,
                                                          m_Parent,
                                                          wxT( "Library Editor" ),
                                                          wxPoint( -1, -1 ), wxSize( 600, 400 ) );
             ActiveScreen = ScreenLib;
-            m_Parent->LibeditFrame->AdjustScrollBars();
+            m_Parent->m_LibeditFrame->AdjustScrollBars();
         }
         break;
 
@@ -229,15 +229,15 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     }
 
     case ID_TO_LIBVIEW:
-        if( m_Parent->ViewlibFrame )
+        if( m_Parent->m_ViewlibFrame )
         {
-            m_Parent->ViewlibFrame->Show( TRUE );
+            m_Parent->m_ViewlibFrame->Show( TRUE );
         }
         else
         {
-            m_Parent->ViewlibFrame = new
-                                     WinEDA_ViewlibFrame( m_Parent->SchematicFrame, m_Parent );
-            m_Parent->ViewlibFrame->AdjustScrollBars();
+            m_Parent->m_ViewlibFrame = new
+                                     WinEDA_ViewlibFrame( m_Parent->m_SchematicFrame, m_Parent );
+            m_Parent->m_ViewlibFrame->AdjustScrollBars();
         }
         break;
 

@@ -295,8 +295,8 @@ void KiConfigEeschemaFrame::OnCloseWindow(wxCloseEvent & event)
 	if ( m_LibListChanged )
 	{
 		LoadLibraries(m_Parent);
-		if ( m_Parent->m_Parent->ViewlibFrame )
-			m_Parent->m_Parent->ViewlibFrame->ReCreateListLib();
+		if ( m_Parent->m_Parent->m_ViewlibFrame )
+			m_Parent->m_Parent->m_ViewlibFrame->ReCreateListLib();
 	}
 	EndModal(0);
 }

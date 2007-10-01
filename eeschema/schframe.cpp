@@ -154,7 +154,7 @@ WinEDA_SchematicFrame::	WinEDA_SchematicFrame(wxWindow * father, WinEDA_App *par
 
 WinEDA_SchematicFrame::~WinEDA_SchematicFrame()
 {
-	m_Parent->SchematicFrame = NULL;
+	m_Parent->m_SchematicFrame = NULL;
 	m_CurrentScreen = ScreenSch;
 }
 
@@ -164,9 +164,9 @@ void WinEDA_SchematicFrame::OnCloseWindow(wxCloseEvent & Event)
 {
 SCH_SCREEN * screen;
 
-	if ( m_Parent->LibeditFrame )	// Can close component editor ?
+	if ( m_Parent->m_LibeditFrame )	// Can close component editor ?
 	{
-		if ( ! m_Parent->LibeditFrame->Close() ) return;
+		if ( ! m_Parent->m_LibeditFrame->Close() ) return;
 	}
 
 	screen = ScreenSch ;

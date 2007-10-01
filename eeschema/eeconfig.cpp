@@ -159,13 +159,13 @@ wxArrayString liblist_tmp = g_LibName_List;
 		g_LibName_List.Add( wxT("device") );
 	}
 
-	if ( EDA_Appl->SchematicFrame )
+	if ( EDA_Appl->m_SchematicFrame )
 	{
-		EDA_Appl->SchematicFrame->SetDrawBgColor(g_DrawBgColor);
-		EDA_Appl->SchematicFrame->m_Draw_Grid = g_ShowGrid;
+		EDA_Appl->m_SchematicFrame->SetDrawBgColor(g_DrawBgColor);
+		EDA_Appl->m_SchematicFrame->m_Draw_Grid = g_ShowGrid;
 	}
 
-	LoadLibraries(EDA_Appl->SchematicFrame);
+	LoadLibraries(EDA_Appl->m_SchematicFrame);
 
 	return IsRead;
 }

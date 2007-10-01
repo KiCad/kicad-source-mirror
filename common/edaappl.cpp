@@ -62,9 +62,9 @@ WinEDA_App::WinEDA_App()
 	m_MainFrame = NULL;
 	m_PcbFrame = NULL;
 	m_ModuleEditFrame = NULL;	// Edition des modules
-	SchematicFrame = NULL;		// Edition des Schemas
-	LibeditFrame = NULL;		// Edition des composants
-	ViewlibFrame = NULL;		// Visualisation des composants
+	m_SchematicFrame = NULL;		// Edition des Schemas
+	m_LibeditFrame = NULL;		// Edition des composants
+	m_ViewlibFrame = NULL;		// Visualisation des composants
 	m_CvpcbFrame = NULL;
 	m_GerberFrame = NULL;		// ecran de visualisation GERBER
 

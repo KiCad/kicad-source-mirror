@@ -66,41 +66,41 @@ bool WinEDA_App::OnInit()
     /* init EESCHEMA */
     GetSettings();                                  // read current setup
     SeedLayers();
-    Read_Hotkey_Config( SchematicFrame, false );    /* Must be called before creating the main frame
+    Read_Hotkey_Config( m_SchematicFrame, false );    /* Must be called before creating the main frame
                                                      *  in order to display the real hotkeys in menus
                                                      *  or tool tips */
 
     // Create main frame (schematic frame) :
-    SchematicFrame = new WinEDA_SchematicFrame( NULL, this,
+    m_SchematicFrame = new WinEDA_SchematicFrame( NULL, this,
                                                wxT( "EESchema" ),
                                                wxPoint( 0, 0 ), wxSize( 600, 400 ) );
 
-    SetTopWindow( SchematicFrame );
-    SchematicFrame->Show( TRUE );
+    SetTopWindow( m_SchematicFrame );
+    m_SchematicFrame->Show( TRUE );
 
-    if( CreateServer( SchematicFrame, KICAD_SCH_PORT_SERVICE_NUMBER ) )
+    if( CreateServer( m_SchematicFrame, KICAD_SCH_PORT_SERVICE_NUMBER ) )
     {
         // RemoteCommand is in controle.cpp and is called when PCBNEW
         // sends EESCHEMA a command
         SetupServerFunction( RemoteCommand );
     }
 
-    SchematicFrame->Zoom_Automatique( TRUE );
+    m_SchematicFrame->Zoom_Automatique( TRUE );
 
     /* Load file specified in the command line. */
     if( !FFileName.IsEmpty() )
     {
         ChangeFileNameExt( FFileName, g_SchExtBuffer );
         wxSetWorkingDirectory( wxPathOnly( FFileName ) );
-        if( SchematicFrame->DrawPanel )
-            if( SchematicFrame->LoadOneEEProject( FFileName, FALSE ) <= 0 )
-                SchematicFrame->DrawPanel->Refresh( TRUE ); // File not found or error
+        if( m_SchematicFrame->DrawPanel )
+            if( m_SchematicFrame->LoadOneEEProject( FFileName, FALSE ) <= 0 )
+                m_SchematicFrame->DrawPanel->Refresh( TRUE ); // File not found or error
     }
     else
     {
         Read_Config( wxEmptyString, TRUE ); // Read config file ici si pas de fichier a charger
-        if( SchematicFrame->DrawPanel )
-            SchematicFrame->DrawPanel->Refresh( TRUE );
+        if( m_SchematicFrame->DrawPanel )
+            m_SchematicFrame->DrawPanel->Refresh( TRUE );
     }
 
     return TRUE;

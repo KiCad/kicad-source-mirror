@@ -31,14 +31,14 @@ wxString SelectFromLibBrowser( WinEDA_DrawFrame* parent )
     WinEDA_ViewlibFrame* Viewer;
     wxSemaphore          semaphore( 0, 1 );
 
-    Viewer = parent->m_Parent->ViewlibFrame;
+    Viewer = parent->m_Parent->m_ViewlibFrame;
     /* Close the current Lib browser, if open, and open a new one, in "modal" mode */
     if( Viewer )
         Viewer->Destroy();
 
-    Viewer = parent->m_Parent->ViewlibFrame = new
+    Viewer = parent->m_Parent->m_ViewlibFrame = new
                                               WinEDA_ViewlibFrame(
-                 parent->m_Parent->SchematicFrame,
+                 parent->m_Parent->m_SchematicFrame,
                  parent->m_Parent,
                  NULL,
                  &semaphore );
