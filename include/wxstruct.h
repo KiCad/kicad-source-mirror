@@ -1041,7 +1041,8 @@ public:
     EDA_BaseStruct*                         SchematicGeneralLocateAndDisplay(
         const wxPoint& refpoint,
         bool           IncludePin );
-    EDA_BaseStruct* WinEDA_SchematicFrame:: FindComponentAndItem(
+    
+    EDA_BaseStruct* FindComponentAndItem(
         const wxString& component_reference, bool Find_in_hierarchy,
         int SearchType,
         const wxString& text_to_find,
