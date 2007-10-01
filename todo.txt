@@ -51,3 +51,5 @@ understanding by new developers.
 *** Implement the graying in/out of "Edit/Undo", "Edit/Redo" menu items, 
 when Undo/Redo stack is empty/filled.
 
+*** There is no way to truly edit a via, such as changing its layers.
+

@@ -38,7 +38,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
 
     case TYPEMODULE:
         text << _( "Footprint" ) << wxT( " " ) << ( (MODULE*) item )->GetReference();
-        text << wxT( " (" ) << ReturnPcbLayerName( item->m_Layer ) << wxT( ")" );
+        text << wxT( " (" ) << ReturnPcbLayerName( item->m_Layer ).Trim() << wxT( ")" );
         break;
 
     case TYPEPAD:
@@ -47,7 +47,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         break;
 
     case TYPEDRAWSEGMENT:
-        text << _( "Pcb Graphic" ) << _( " on " ) << ReturnPcbLayerName( item->GetLayer() );  // @todo: extend text
+        text << _( "Pcb Graphic" ) << _( " on " ) << ReturnPcbLayerName( item->GetLayer() ).Trim();  // @todo: extend text
         break;
 
     case TYPETEXTE:
@@ -56,7 +56,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
             text << ( (TEXTE_PCB*) item )->m_Text;
         else
             text += ( (TEXTE_PCB*) item )->m_Text.Left( 10 ) + wxT( ".." );
-        text << _( " on " ) << ReturnPcbLayerName( item->GetLayer() );
+        text << _( " on " ) << ReturnPcbLayerName( item->GetLayer() ).Trim();
         break;
 
     case TYPETEXTEMODULE:
@@ -130,7 +130,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         {
             text << wxT( " [" ) << net->m_Netname << wxT( "]" );
         }
-        text << _( " on " ) << ReturnPcbLayerName( item->GetLayer() );
+        text << _( " on " ) << ReturnPcbLayerName( item->GetLayer() ).Trim();
         break;
 
     case TYPEZONE:
@@ -145,15 +145,33 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         {
             text << wxT( " [" ) << net->m_Netname << wxT( "]" );
         }
-        text << _( " on " ) << ReturnPcbLayerName( item->GetLayer() );
+        text << _( " on " ) << ReturnPcbLayerName( item->GetLayer() ).Trim();
         break;
 
     case TYPEVIA:
-        text << _( "Via" ) << wxT( " " ) << ( (SEGVIA*) item )->m_NetCode;
-        net = aPcb->FindNet( ( (TRACK*) item )->m_NetCode );
-        if( net )
         {
-            text << wxT( " [" ) << net->m_Netname << wxT( "]" );
+            SEGVIA* via = (SEGVIA*) item;
+            text << _( "Via" ) << wxT( " " ) << via->m_NetCode;
+            
+            int shape = via->Shape(); 
+            if( shape == VIA_ENTERREE )
+                text << wxT(" ") << _( "Blind" );
+            else if( shape == VIA_BORGNE )
+                text << wxT(" ") << _("Buried");
+            // else say nothing about normal vias
+            
+            net = aPcb->FindNet( via->m_NetCode );
+            if( net )
+            {
+                text << wxT( " [" ) << net->m_Netname << wxT( "]" );
+            }
+            
+            // say which layers, only two for now
+            int topLayer;
+            int botLayer;
+            via->ReturnLayerPair( &topLayer, &botLayer );
+            text << _( " on " ) << ReturnPcbLayerName( topLayer).Trim() << wxT(" <-> ") 
+                << ReturnPcbLayerName( botLayer ).Trim();
         }
         break;
 
@@ -170,7 +188,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         break;
 
     case TYPEEDGEZONE:
-        text << _( "Edge Zone" ) << _( " on " ) << ReturnPcbLayerName( item->GetLayer() );  // @todo: extend text
+        text << _( "Edge Zone" ) << _( " on " ) << ReturnPcbLayerName( item->GetLayer() ).Trim();  // @todo: extend text
         break;
 
     default:

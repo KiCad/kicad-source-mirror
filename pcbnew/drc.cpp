@@ -581,7 +581,7 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
 
         /* Le pad doit faire partie d'un net mais pas de probleme
          *  si le pad est du meme net */
-        if( /*pt_pad->m_NetCode &&*/  net_code_ref == pt_pad->m_NetCode )
+        if( /*pt_pad->m_NetCode &&*/ net_code_ref == pt_pad->m_NetCode )
             continue;
 
         /* Test DRC pour les pads */

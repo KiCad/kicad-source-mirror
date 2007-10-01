@@ -816,6 +816,7 @@ bool TRACK::HitTest( const wxPoint& ref_pos )
 
 
 #if defined(DEBUG)
+
 /**
  * Function Show
  * is used to output the object tree, currently for debugging only.
@@ -826,16 +827,59 @@ bool TRACK::HitTest( const wxPoint& ref_pos )
 void TRACK::Show( int nestLevel, std::ostream& os )
 {
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-        " shape=\""     << m_Shape      << '"' <<
+//        " shape=\""     << m_Shape      << '"' <<
         " layer=\""     << m_Layer      << '"' <<
         " width=\""     << m_Width      << '"' <<
-        " drill=\""     << m_Drill      << '"' <<
+//        " drill=\""     << m_Drill      << '"' <<
         " netcode=\""   << m_NetCode    << "\">" <<
         "<start"        << m_Start      << "/>" <<
         "<end"          << m_End        << "/>";
         
     os << "</" << GetClass().Lower().mb_str() << ">\n"; 
 }
+
+
+/**
+ * Function Show
+ * is used to output the object tree, currently for debugging only.
+ * @param nestLevel An aid to prettier tree indenting, and is the level 
+ *          of nesting of this object within the overall tree.
+ * @param os The ostream& to output to.
+ */
+void SEGVIA::Show( int nestLevel, std::ostream& os )
+{
+    const char* cp;
+    
+    switch( Shape() )
+    {
+    case VIA_NORMALE:       cp = "through";     break;
+    case VIA_ENTERREE:      cp = "blind";       break;
+    case VIA_BORGNE:        cp = "buried";      break;
+    default:
+    case VIA_NOT_DEFINED:   cp = "undefined";   break;
+    }
+
+    int topLayer;
+    int botLayer;
+    
+    ReturnLayerPair( &topLayer, &botLayer );
+    
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
+        " type=\""      << cp           << '"' <<
+        " layers=\""    << ReturnPcbLayerName( topLayer).Trim().mb_str() << ","  
+                        << ReturnPcbLayerName( botLayer ).Trim().mb_str() << '"' <<
+        " width=\""     << m_Width      << '"' <<
+        " drill=\""     << m_Drill      << '"' <<
+        " netcode=\""   << m_NetCode    << "\">" <<
+        "<pos"          << m_Start      << "/>";
+        
+    os << "</" << GetClass().Lower().mb_str() << ">\n"; 
+}
+
+
+
+
+
 
 #endif
 

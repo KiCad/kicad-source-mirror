@@ -265,7 +265,7 @@ void MyFree( void* pt_mem )
 
 
 /**************************************************************/
-wxString ReturnPcbLayerName( int layer_number, bool is_filename )
+wxString ReturnPcbLayerName( int layer_number, bool omitSpacePadding )
 /**************************************************************/
 
 /* Return the name of the layer number "layer_number".
@@ -273,7 +273,6 @@ wxString ReturnPcbLayerName( int layer_number, bool is_filename )
  *  (not internatinalized, no space)
  */
 {
-    wxString layer_name;
     static const wxString layer_name_list[] = {
         _( "Copper   " ), _( "Inner L1 " ), _( "Inner L2 " ), _( "Inner L3 " ),
         _( "Inner L4 " ), _( "Inner L5 " ), _( "Inner L6 " ), _( "Inner L7 " ),
@@ -285,7 +284,8 @@ wxString ReturnPcbLayerName( int layer_number, bool is_filename )
         _( "Edges Pcb" ), _( "---      " ), _( "---      " ), _( "---      " )
     };
 
-// Same as layer_name_list, without space, not internationalized
+    
+    // Same as layer_name_list, without space, not internationalized
     static const wxString layer_name_list_for_filename[] = {
         wxT( "Copper" ),   wxT( "InnerL1" ),  wxT( "InnerL2" ),  wxT( "InnerL3" ),
         wxT( "InnerL4" ),  wxT( "InnerL5" ),  wxT( "InnerL6" ),  wxT( "InnerL7" ),
@@ -297,15 +297,12 @@ wxString ReturnPcbLayerName( int layer_number, bool is_filename )
         wxT( "EdgesPcb" ), wxT( "---" ),      wxT( "---" ),      wxT( "---" )
     };
 
-    if( layer_number >= 31 )
+    if( (unsigned) layer_number >= 31u )
         layer_number = 31;
 
-    if( is_filename )
-        layer_name = layer_name_list_for_filename[layer_number];
-    else
-        layer_name = layer_name_list[layer_number];
-
-    return layer_name;
+    return omitSpacePadding  ? 
+        layer_name_list_for_filename[layer_number] :
+        layer_name_list[layer_number];
 }
 
 
