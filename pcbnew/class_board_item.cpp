@@ -166,12 +166,15 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
                 text << wxT( " [" ) << net->m_Netname << wxT( "]" );
             }
             
-            // say which layers, only two for now
-            int topLayer;
-            int botLayer;
-            via->ReturnLayerPair( &topLayer, &botLayer );
-            text << _( " on " ) << ReturnPcbLayerName( topLayer).Trim() << wxT(" <-> ") 
-                << ReturnPcbLayerName( botLayer ).Trim();
+            if( shape != VIA_NORMALE )
+            {
+                // say which layers, only two for now
+                int topLayer;
+                int botLayer;
+                via->ReturnLayerPair( &topLayer, &botLayer );
+                text << _( " on " ) << ReturnPcbLayerName( topLayer).Trim() << wxT(" <-> ") 
+                    << ReturnPcbLayerName( botLayer ).Trim();
+            }
         }
         break;
 
