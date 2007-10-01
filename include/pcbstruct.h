@@ -34,46 +34,6 @@
 #define CHAIN       0x01    /* segment marque  */
 
 
-/*************************************/
-/* constantes de gestion des couches */
-/*************************************/
-#define CUIVRE_LAYER            0x00000001      /* Bit layer cuivre */
-#define LAYER_2                 0x00000002      /* Bit layer 2 */
-#define LAYER_3                 0x00000004      /* Bit layer 3 */
-#define LAYER_4                 0x00000008      /* Bit layer 4 */
-#define LAYER_5                 0x00000010      /* Bit layer 5 */
-#define LAYER_6                 0x00000020      /* Bit layer 6 */
-#define LAYER_7                 0x00000040      /* Bit layer 7 */
-#define LAYER_8                 0x00000080      /* Bit layer 8 */
-#define LAYER_9                 0x00000100      /* Bit layer 9 */
-#define LAYER_10                0x00000200      /* Bit layer 10 */
-#define LAYER_11                0x00000400      /* Bit layer 11 */
-#define LAYER_12                0x00000800      /* Bit layer 12 */
-#define LAYER_13                0x00001000      /* Bit layer 13 */
-#define LAYER_14                0x00002000      /* Bit layer 14 */
-#define LAYER_15                0x00004000      /* Bit layer 15 */
-#define CMP_LAYER               0x00008000      /* Bit layer cmp */
-#define ADHESIVE_LAYER_CU       0x00010000
-#define ADHESIVE_LAYER_CMP      0x00020000
-#define SOLDERPASTE_LAYER_CU    0x00040000
-#define SOLDERPASTE_LAYER_CMP   0x00080000
-#define SILKSCREEN_LAYER_CU     0x00100000
-#define SILKSCREEN_LAYER_CMP    0x00200000
-#define SOLDERMASK_LAYER_CU     0x00400000
-#define SOLDERMASK_LAYER_CMP    0x00800000
-#define DRAW_LAYER              0x01000000
-#define COMMENT_LAYER           0x02000000
-#define ECO1_LAYER              0x04000000
-#define ECO2_LAYER              0x08000000
-#define EDGE_LAYER              0x10000000
-//      extra bits              0xE0000000
-/* masques generaux : */
-#define ALL_LAYERS              0x1FFFFFFF
-#define ALL_NO_CU_LAYERS        0x1FFF0000
-#define ALL_CU_LAYERS           0x0000FFFF
-#define INTERNAL_LAYERS         0x00007FFE      /* Bits layers internes */
-#define EXTERNAL_LAYERS         0x00008001
-
 /* Flags pour les couches cuivres */
 /* numero des couches particulieres */
 #define LAYER_CUIVRE_N        0
@@ -114,6 +74,47 @@
 #define NB_LAYERS             (EDGE_N + 1)
 
 #define LAYER_COUNT           32
+
+
+/*************************************/
+/* constantes de gestion des couches */
+/*************************************/
+#define CUIVRE_LAYER            (1<<LAYER_CUIVRE_N)     ///< bit mask for copper layer 
+#define LAYER_2                 (1<<LAYER_N_2)          ///< bit mask for layer 2
+#define LAYER_3                 (1<<LAYER_N_3)          ///< bit mask for layer 3
+#define LAYER_4                 (1<<LAYER_N_4)          ///< bit mask for layer 4
+#define LAYER_5                 (1<<LAYER_N_5)          ///< bit mask for layer 5
+#define LAYER_6                 (1<<LAYER_N_6)          ///< bit mask for layer 6
+#define LAYER_7                 (1<<LAYER_N_7)          ///< bit mask for layer 7
+#define LAYER_8                 (1<<LAYER_N_8)          ///< bit mask for layer 8
+#define LAYER_9                 (1<<LAYER_N_9)          ///< bit mask for layer 9
+#define LAYER_10                (1<<LAYER_N_10)         ///< bit mask for layer 10
+#define LAYER_11                (1<<LAYER_N_11)         ///< bit mask for layer 11
+#define LAYER_12                (1<<LAYER_N_12)         ///< bit mask for layer 12
+#define LAYER_13                (1<<LAYER_N_13)         ///< bit mask for layer 13
+#define LAYER_14                (1<<LAYER_N_14)         ///< bit mask for layer 14
+#define LAYER_15                (1<<LAYER_N_15)         ///< bit mask for layer 15
+#define CMP_LAYER               (1<<LAYER_CMP_N)        ///< bit mask for component layer
+#define ADHESIVE_LAYER_CU       (1<<ADHESIVE_N_CU)
+#define ADHESIVE_LAYER_CMP      (1<<ADHESIVE_N_CMP)
+#define SOLDERPASTE_LAYER_CU    (1<<SOLDERPASTE_N_CU)
+#define SOLDERPASTE_LAYER_CMP   (1<<SOLDERPASTE_N_CMP)
+#define SILKSCREEN_LAYER_CU     (1<<SILKSCREEN_N_CU)
+#define SILKSCREEN_LAYER_CMP    (1<<SILKSCREEN_N_CMP)
+#define SOLDERMASK_LAYER_CU     (1<<SOLDERMASK_N_CU)
+#define SOLDERMASK_LAYER_CMP    (1<<SOLDERMASK_N_CMP)
+#define DRAW_LAYER              (1<<DRAW_N)
+#define COMMENT_LAYER           (1<<COMMENT_N)
+#define ECO1_LAYER              (1<<ECO1_N)
+#define ECO2_LAYER              (1<<ECO2_N)
+#define EDGE_LAYER              (1<<EDGE_N)
+//      extra bits              0xE0000000
+/* masques generaux : */
+#define ALL_LAYERS              0x1FFFFFFF
+#define ALL_NO_CU_LAYERS        0x1FFF0000
+#define ALL_CU_LAYERS           0x0000FFFF
+#define INTERNAL_LAYERS         0x00007FFE      /* Bits layers internes */
+#define EXTERNAL_LAYERS         0x00008001
 
 /* Forme des segments (pistes, contours ..) ( parametre .shape ) */
 enum Track_Shapes {

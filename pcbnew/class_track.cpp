@@ -214,15 +214,19 @@ int TRACK::ReturnMaskLayer()
 {
     if( Type() == TYPEVIA )
     {
-        int via_type = m_Shape & 15;
+        int via_type = Shape();
+        
         if( via_type == VIA_NORMALE )
             return ALL_CU_LAYERS;
 
         // VIA_BORGNE ou  VIA_ENTERREE:
-        int bottom_layer = (m_Layer >> 4) & 15;
-        int top_layer    = m_Layer & 15;
-        if( bottom_layer > top_layer )
-            EXCHG( bottom_layer, top_layer );
+        
+        int bottom_layer;
+        int top_layer;
+
+        // ReturnLayerPair() knows how layers are stored
+        ((SEGVIA*)this)->ReturnLayerPair( &top_layer, &bottom_layer );
+        
         int layermask = 0;
         while( bottom_layer <= top_layer )
         {
@@ -272,8 +276,10 @@ void SEGVIA::ReturnLayerPair( int* top_layer, int* bottom_layer ) const
 
     if( b_layer > t_layer )
         EXCHG( b_layer, t_layer );
+    
     if( top_layer )
         *top_layer = t_layer;
+    
     if( bottom_layer )
         *bottom_layer = b_layer;
 }

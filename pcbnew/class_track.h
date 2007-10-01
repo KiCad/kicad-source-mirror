@@ -96,8 +96,16 @@ public:
     /* divers */
     int Shape() const { return m_Shape & 0xFF; }
 
+    /**
+     * Function ReturnMaskLayer
+     * returns a "layer mask", which is a bitmap of all layers on which the 
+     * TRACK segment or SEGVIA physically resides.
+     * @return int - a layer mask, see pcbstruct.h's CUIVRE_LAYER, etc.
+     */
     int     ReturnMaskLayer();
+    
     int     IsPointOnEnds( const wxPoint& point, int min_dist = 0 );
+    
     bool    IsNull(); // return TRUE if segment lenght = 0
 
     
