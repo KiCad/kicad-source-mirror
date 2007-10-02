@@ -319,7 +319,7 @@ END_EVENT_TABLE()
 /***************************************************************************/
 WinEDA_TextFrame::WinEDA_TextFrame( wxWindow* parent, const wxString& title ) :
     wxDialog( parent, -1, title, wxPoint( -1, -1 ), wxSize( 250, 350 ),
-              wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT )
+              wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT | MAYBE_RESIZE_BORDER  )
 /***************************************************************************/
 {
     wxSize size;
