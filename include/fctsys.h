@@ -75,4 +75,10 @@
 #endif
 
 
+#if defined(__UNIX__) || defined(USE_RESIZE_BORDER)
+#define MAYBE_RESIZE_BORDER wxRESIZE_BORDER // linux users like resizeable borders
+#else
+#define MAYBE_RESIZE_BORDER 0               // no resizeable border
+#endif
+
 #endif /* FCTSYS_H */

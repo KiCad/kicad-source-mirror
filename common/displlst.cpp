@@ -47,8 +47,7 @@ WinEDAListBox::WinEDAListBox( WinEDA_DrawFrame * parent, const wxString & title,
 						void(* movefct)(wxString & Text),
 						const wxColour & colour, wxPoint dialog_position):
 					wxDialog(parent, -1, title, dialog_position, wxDefaultSize,
-					wxDEFAULT_DIALOG_STYLE
-//					|wxRESIZE_BORDER
+					wxDEFAULT_DIALOG_STYLE | MAYBE_RESIZE_BORDER
 					)
 {
 wxSize size;
