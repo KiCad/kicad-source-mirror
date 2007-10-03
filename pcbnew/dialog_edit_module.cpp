@@ -185,7 +185,7 @@ void WinEDA_ModulePropertiesFrame::BuildPanelModuleProperties( bool FullOptions 
         Button->SetForegroundColour( wxColor( 80, 40, 0 ) );
         PropRightSizer->Add( Button, 0, wxGROW | wxALL, 5 );
         Button = new wxButton( m_PanelProperties, ID_GOTO_MODULE_EDITOR,
-                              _( "Goto Module Editor" ) );
+                              _( "Edit Module" ) );
         Button->SetForegroundColour( wxColor( 0, 128, 80 ) );
         PropRightSizer->Add( Button, 0, wxGROW | wxALL, 5 );
     }
@@ -289,7 +289,7 @@ void WinEDA_ModulePropertiesFrame::BuildPanelModuleProperties( bool FullOptions 
 
     /* Controls on right side of the dialog */
     wxString attribut_list[3] = { _( "Normal" ), _( "Normal+Insert" ), _( "Virtual" ) };
-    m_AttributsCtrl = new wxRadioBox( m_PanelProperties, -1, _( "Attributs" ), wxDefaultPosition,
+    m_AttributsCtrl = new wxRadioBox( m_PanelProperties, -1, _( "Attributes" ), wxDefaultPosition,
                                       wxSize( -1, -1 ), 3, attribut_list, 1 );
 #if wxCHECK_VERSION( 2, 8, 0 )
     m_AttributsCtrl->SetItemToolTip( 0, _( "Use this attribute for most non smd components" ) );

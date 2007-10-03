@@ -108,6 +108,8 @@ WinEDA_ExecBlockCmdFrame::WinEDA_ExecBlockCmdFrame( WinEDA_BasePcbFrame* parent,
     m_Parent = parent;
     SetFont( *g_DialogFont );
     Centre();
+    this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+    this->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 90, false, wxEmptyString ) );
 
     /* Sizer 1 creation */
     wxFlexGridSizer* fgSizer1;
