@@ -180,7 +180,7 @@ void Exit_Module( WinEDA_DrawPanel* Panel, wxDC* DC )
 
         if( module->m_Flags & IS_NEW )
         {
-            DeleteStructure( module );
+            module ->DeleteStructure();
             module = NULL;
             pcbframe->m_Pcb->m_Status_Pcb = 0;
             pcbframe->build_liste_pads();

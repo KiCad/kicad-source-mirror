@@ -185,7 +185,10 @@ public:
     KICAD_T Type()  const { return m_StructType; }     
 
     
-    EDA_BaseStruct* Next() const  { return Pnext; }
+    EDA_BaseStruct* Next() const         { return (EDA_BaseStruct*) Pnext; }
+    EDA_BaseStruct* Back() const         { return (EDA_BaseStruct*) Pback; }
+    EDA_BaseStruct* GetParent() const    { return (EDA_BaseStruct*) m_Parent; }
+    
     
     /* Gestion de l'etat (status) de la structure (active, deleted..) */
     int     GetState( int type );
@@ -282,6 +285,14 @@ public:
     {
         return wxT("EDA_BaseStruct");
     }
+
+    
+    /**
+     * Function DeleteStructList
+     * deletes each item in a linked list of EDA_BaseStructs, starting with 
+     * "this" object.
+     */
+    void DeleteStructList();
 
     
 #if defined(DEBUG)
@@ -403,7 +414,6 @@ public:
 
     BOARD_ITEM* Next() const         { return (BOARD_ITEM*) Pnext; }
     BOARD_ITEM* Back() const         { return (BOARD_ITEM*) Pback; }
-    
     BOARD_ITEM* GetParent() const    { return (BOARD_ITEM*) m_Parent; }
     
     /**
@@ -443,6 +453,24 @@ public:
         return false;   // only MODULEs can be locked at this time.
     }
 
+
+    /**
+     * Function UnLink
+     * detaches this object from its owner.
+     */
+    virtual void UnLink() = 0;
+
+
+    /**
+     * Function DeleteStructure
+     * deletes this object after UnLink()ing it from its owner.
+     */
+    void DeleteStructure()
+    {
+        UnLink();
+        delete this;
+    }        
+    
     
     /**
      * Function MenuText

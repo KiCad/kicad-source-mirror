@@ -41,7 +41,6 @@ OBJECTS= \
 		dcode.o\
 		undelete.o\
 		infospgm.o \
-		struct.o \
 		files.o\
 		block.o\
 		controle.o\
@@ -172,8 +171,6 @@ undelete.o: undelete.cpp $(COMMON)
 ioascii.o: ioascii.cpp $(COMMON)
 
 chrono.o: chrono.cpp pcbnew.h
-
-struct.o: struct.cpp $(COMMON)
 
 coordbox.o: coordbox.cpp $(COMMON)
 

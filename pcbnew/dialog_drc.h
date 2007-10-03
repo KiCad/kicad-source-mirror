@@ -52,7 +52,7 @@ class wxBoxSizer;
 #define ID_BUTTON_BROWSE_RPT_FILE 10011
 #define ID_TEXTCTRL_GET_RPT_FILENAME 10010
 #define ID_TEXTCTRL 10001
-#define SYMBOL_WINEDA_DRCFRAME_STYLE wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|MAYBE_RESIZE_BORDER
+#define SYMBOL_WINEDA_DRCFRAME_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX
 #define SYMBOL_WINEDA_DRCFRAME_TITLE _("DRC Control")
 #define SYMBOL_WINEDA_DRCFRAME_IDNAME ID_DIALOG
 #define SYMBOL_WINEDA_DRCFRAME_SIZE wxSize(400, 300)
@@ -87,6 +87,9 @@ public:
 
     /// Creates the controls and sizers
     void CreateControls();
+
+    /// Override the event handler so we can direct the m_lowWindows events here initially
+    virtual bool ProcessEvent( wxEvent& event );
 
 ////@begin WinEDA_DrcFrame event handler declarations
 

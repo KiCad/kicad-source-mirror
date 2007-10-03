@@ -48,6 +48,32 @@ BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
 /***************/
 BOARD::~BOARD()
 {
+    m_Drawings->DeleteStructList();
+    m_Drawings = 0;
+
+    m_Modules->DeleteStructList();
+    m_Modules = 0;
+    
+    m_Equipots->DeleteStructList();
+    m_Equipots = 0;
+    
+    m_Track->DeleteStructList();
+    m_Track = 0;
+    
+    m_Zone->DeleteStructList();
+    m_Zone = 0;
+    
+    m_CurrentLimitZone->DeleteStructList();
+    m_CurrentLimitZone = 0;
+    
+    MyFree( m_Pads );
+    m_Pads = 0;
+    
+    MyFree( m_Ratsnest );
+    m_Ratsnest = 0;
+    
+    MyFree( m_LocalRatsnest );
+    m_LocalRatsnest = 0;
 }
 
 

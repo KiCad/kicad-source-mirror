@@ -533,7 +533,7 @@ void DeleteMarkedItems( MODULE* module )
         next_pad = pad->Next();
         if( pad->m_Selected == 0 )
             continue;
-        DeleteStructure( pad );
+        pad->DeleteStructure();
     }
 
     item = module->m_Drawings;
@@ -542,7 +542,7 @@ void DeleteMarkedItems( MODULE* module )
         next_item = item->Next();
         if( item->m_Selected == 0 )
             continue;
-        DeleteStructure( item );
+        item->DeleteStructure();
     }
 }
 

@@ -103,7 +103,7 @@ BOARD_ITEM* WinEDA_PcbFrame::SaveItemEfface( BOARD_ITEM* PtItem, int nbitems )
     if( g_UnDeleteStackPtr >= UNDELETE_STACK_SIZE )
     {
         /* Delete last deleted item, and shift stack. */
-        DeleteStructList( g_UnDeleteStack[0] );
+        g_UnDeleteStack[0]->DeleteStructList();
         for( ii = 0; ii < (g_UnDeleteStackPtr - 1); ii++ )
         {
             g_UnDeleteStack[ii] = g_UnDeleteStack[ii + 1];

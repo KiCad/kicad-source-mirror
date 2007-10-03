@@ -329,7 +329,7 @@ void WinEDA_PcbFrame::Delete_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     TextePcb->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
 
     /* Suppression du texte en Memoire*/
-    DeleteStructure( TextePcb );
+    TextePcb ->DeleteStructure();
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
     SetCurItem( NULL );
@@ -365,7 +365,7 @@ TEXTE_PCB* WinEDA_PcbFrame::Create_Texte_Pcb( wxDC* DC )
     InstallTextPCBOptionsFrame( TextePcb, DC, TextePcb->m_Pos );
     if( TextePcb->m_Text.IsEmpty() )
     {
-        DeleteStructure( TextePcb );
+        TextePcb ->DeleteStructure();
         TextePcb = NULL;
     }
     else

@@ -86,7 +86,7 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		zones.o undelete.o \
 		copy_track.o\
 		move_or_drag_track.o\
-		ioascii.o struct.o \
+		ioascii.o \
 		mirepcb.o xchgmod.o\
 		plotps.o\
 		dragsegm.o\
@@ -281,8 +281,6 @@ move_or_drag_track.o: move_or_drag_track.cpp $(COMMON)
 copy_track.o: copy_track.cpp $(COMMON)
 
 ioascii.o: ioascii.cpp $(COMMON)
-
-struct.o: struct.cpp $(COMMON)
 
 coordbox.o: coordbox.cpp $(COMMON)
 

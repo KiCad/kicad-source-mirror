@@ -34,10 +34,6 @@ void Set_Rectangle_Encadrement(MODULE * PtModule);
 		/* Mise a jour du rectangle d'encadrement du module
 			  Entree : pointeur sur module */
 
-void DeleteStructure( void * GenericStructure );
-	/* Supprime de la liste chainee la stucture pointee par GenericStructure
-	et libere la memoire correspondante */
-
 	/**************/
 	/* MEMOIRE.CC */
 	/**************/

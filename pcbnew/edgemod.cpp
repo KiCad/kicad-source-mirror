@@ -286,7 +286,7 @@ void WinEDA_ModuleEditFrame::Delete_Edge_Module( EDGE_MODULE* Edge, wxDC* DC )
     Edge->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
 
     /* suppression d'un segment */
-    DeleteStructure( Edge );
+    Edge ->DeleteStructure();
     Module->m_LastEdit_Time = time( NULL );
     Module->Set_Rectangle_Encadrement();
     GetScreen()->SetModify();
@@ -307,7 +307,7 @@ static void Exit_EditEdge_Module( WinEDA_DrawPanel* Panel, wxDC* DC )
         {
             MODULE* Module = (MODULE*) Edge->m_Parent;
             Edge->Draw( Panel, DC, MoveVector, GR_XOR );
-            DeleteStructure( Edge );
+            Edge ->DeleteStructure();
             Module->Set_Rectangle_Encadrement();
         }
         else
@@ -435,7 +435,7 @@ void WinEDA_ModuleEditFrame::End_Edge_Module( EDGE_MODULE* Edge, wxDC* DC )
         if( (Edge->m_Start.x == Edge->m_End.x)
            && (Edge->m_Start.y == Edge->m_End.y) )
         {
-            DeleteStructure( Edge );
+            Edge ->DeleteStructure();
         }
     }
     Edge->m_Flags = 0;

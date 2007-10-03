@@ -110,7 +110,7 @@ void WinEDA_BasePcbFrame::DeleteTextModule( TEXTE_MODULE* Text, wxDC* DC )
         Text->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
 
         /* liberation de la memoire : */
-        DeleteStructure( Text );
+        Text ->DeleteStructure();
         GetScreen()->SetModify();
         Module->m_LastEdit_Time = time( NULL );
     }

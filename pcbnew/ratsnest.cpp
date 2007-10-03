@@ -801,7 +801,7 @@ void WinEDA_BasePcbFrame::recalcule_pad_net_code()
     while( pt_equipot )
     {
         PtStruct = pt_equipot->Pnext;
-        DeleteStructure( pt_equipot );
+        pt_equipot ->DeleteStructure();
         pt_equipot = (EQUIPOT*) PtStruct;
     }
 

@@ -300,7 +300,7 @@ static void suppression_piste_non_connectee( WinEDA_PcbFrame* frame, wxDC* DC )
 
             /* Suppression du segment */
             PtSegm->Draw( frame->DrawPanel, DC, GR_XOR );
-            DeleteStructure( PtSegm );
+            PtSegm->DeleteStructure();
             if( NextS == NULL )
                 break;
         }
@@ -340,7 +340,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
 
         /* Lenght segment = 0; delete it */
         PtSegm->Draw( frame->DrawPanel, DC, GR_XOR );
-        DeleteStructure( PtSegm );
+        PtSegm->DeleteStructure();
         nbpoints_supprimes++;
 
         msg.Printf( wxT( "  %d" ), nbpoints_supprimes );
@@ -402,7 +402,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
             {
                 ii--;
                 pt_aux->Draw( frame->DrawPanel, DC, GR_OR );
-                DeleteStructure( pt_aux );
+                pt_aux->DeleteStructure();
                 nbpoints_supprimes++;
 
                 msg.Printf( wxT( "  %d" ), nbpoints_supprimes );
@@ -482,7 +482,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
             if( pt_segm_delete )
             {
                 nbpoints_supprimes++; no_inc = 1;
-                DeleteStructure( pt_segm_delete );
+                pt_segm_delete->DeleteStructure();
             }
         }
 
@@ -519,7 +519,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
             if( pt_segm_delete )
             {
                 nbpoints_supprimes++; no_inc = 1;
-                DeleteStructure( pt_segm_delete );
+                pt_segm_delete->DeleteStructure();
             }
         }
 

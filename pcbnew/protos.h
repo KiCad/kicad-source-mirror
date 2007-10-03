@@ -372,12 +372,6 @@ TRACK * CreateLockPoint(int *pX, int *pY, TRACK * ptsegm, TRACK * refsegm);
 /****************/
 void RemoteCommand( const char* cmdline );
 
-/*************/
-/* STRUCT.CPP */
-/*************/
-void DeleteStructure( BOARD_ITEM* Struct );
-void DeleteStructList( BOARD_ITEM* Struct );
-
 
 /***************/
 /* AUTOPLACE.CPP */

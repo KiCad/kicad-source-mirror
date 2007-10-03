@@ -103,7 +103,7 @@ static void Exit_Muonde( WinEDA_DrawFrame* frame, wxDC* DC )
         if( Module->m_Flags & IS_NEW )
         {
             Module->Draw( frame->DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
-            DeleteStructure( Module );
+            Module ->DeleteStructure();
         }
         else
         {

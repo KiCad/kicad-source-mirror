@@ -73,6 +73,23 @@ void EDA_BaseStruct::SetState( int type, int state )
 }
 
 
+
+/***********************************************************/
+void EDA_BaseStruct::DeleteStructList()
+/***********************************************************/
+{
+    EDA_BaseStruct* item = this;
+    EDA_BaseStruct* next;
+
+    while( item )
+    {
+        next = item->Next();
+        delete item;
+        item = next;
+    }
+}
+
+
 /*********************************************************/
 void EDA_BaseStruct::AddToChain( EDA_BaseStruct* laststruct )
 /*********************************************************/

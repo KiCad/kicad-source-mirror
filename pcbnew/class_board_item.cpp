@@ -279,3 +279,4 @@ const char** BOARD_ITEM::MenuIcon() const
 
     return (const char**) xpm;
 }
+

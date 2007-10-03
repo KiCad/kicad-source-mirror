@@ -126,12 +126,6 @@ void Trace_1_texte_pcb(WinEDA_DrawPanel * panel, wxDC * DC,
 void Affiche_DCodes_Pistes(WinEDA_DrawPanel * panel, wxDC * DC,
 			BOARD * Pcb, int drawmode);
 
-/**************/
-/* struct.cpp */
-/**************/
-void DeleteStructure(EDA_BaseStruct * Struct);
-void DeleteStructList( EDA_BaseStruct * Struct);
-
 /*************/
 /* dcode.cpp */
 /*************/

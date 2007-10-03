@@ -208,7 +208,7 @@ static void Exit_EditCotation( WinEDA_DrawPanel* Panel, wxDC* DC )
         if( Cotation->m_Flags & IS_NEW )
         {
             Cotation->Draw( Panel, DC, wxPoint( 0, 0 ), GR_XOR );
-            DeleteStructure( Cotation );
+            Cotation ->DeleteStructure();
         }
         else
         {
@@ -378,7 +378,7 @@ void WinEDA_PcbFrame::Delete_Cotation( COTATION* Cotation, wxDC* DC )
 
     if( DC )
         Cotation->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
-    DeleteStructure( Cotation );
+    Cotation ->DeleteStructure();
     m_CurrentScreen->SetModify();
 }
 

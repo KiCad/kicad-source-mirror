@@ -36,21 +36,21 @@ bool WinEDA_GerberFrame::Clear_Pcb( wxDC* DC, bool query )
         }
     }
 
-    DeleteStructList( m_Pcb->m_Drawings );
+    m_Pcb->m_Drawings->DeleteStructList();
     m_Pcb->m_Drawings = NULL;
 
-    DeleteStructList( m_Pcb->m_Track );
+    m_Pcb->m_Track->DeleteStructList();
     m_Pcb->m_Track = NULL;
     m_Pcb->m_NbSegmTrack = 0;
 
-    DeleteStructList( m_Pcb->m_Zone );
+    m_Pcb->m_Zone->DeleteStructList();
     m_Pcb->m_Zone = NULL;
     m_Pcb->m_NbSegmZone = 0;
 
     for( ; g_UnDeleteStackPtr != 0; )
     {
         g_UnDeleteStackPtr--;
-        DeleteStructList( g_UnDeleteStack[ g_UnDeleteStackPtr] );
+        g_UnDeleteStack[ g_UnDeleteStackPtr]->DeleteStructList();
     }
 
     /* init pointeurs  et variables */
@@ -90,7 +90,7 @@ void WinEDA_GerberFrame::Erase_Zones( wxDC* DC, bool query )
 
     if( m_Pcb->m_Zone )
     {
-        DeleteStructList( m_Pcb->m_Zone );
+        m_Pcb->m_Zone->DeleteStructList( );
         m_Pcb->m_Zone = NULL;
         m_Pcb->m_NbSegmZone = 0;
     }
@@ -122,7 +122,7 @@ void WinEDA_GerberFrame::Erase_Segments_Pcb( wxDC* DC,
         case TYPECOTATION:
         case TYPEMIRE:
             if( PtStruct->GetLayer() == layer  || layer < 0 )
-                DeleteStructure( PtStruct );
+                PtStruct->DeleteStructure();
             break;
 
         default:
@@ -158,7 +158,7 @@ void WinEDA_GerberFrame::Erase_Pistes( wxDC* DC, int masque_type,
         PtNext = pt_segm->Next();
         if( pt_segm->GetState( SEGM_FIXE | SEGM_AR ) & masque_type )
             continue;
-        DeleteStructure( pt_segm );
+        pt_segm->DeleteStructure();
     }
 
     ScreenPcb->SetModify();
@@ -180,7 +180,7 @@ void WinEDA_GerberFrame::Erase_Textes_Pcb( wxDC* DC, bool query )
     {
         PtNext = PtStruct->Next();
         if( PtStruct->Type() == TYPETEXTE )
-            DeleteStructure( PtStruct );
+            PtStruct->DeleteStructure();
     }
 
     ScreenPcb->SetModify();
@@ -206,7 +206,7 @@ void WinEDA_GerberFrame::Erase_Current_Layer( wxDC* DC, bool query )
         PtNext = pt_segm->Next();
         if( pt_segm->GetLayer() != layer )
             continue;
-        DeleteStructure( pt_segm );
+        pt_segm->DeleteStructure();
     }
 
     ScreenPcb->SetModify();

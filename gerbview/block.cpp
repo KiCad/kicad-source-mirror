@@ -277,9 +277,10 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
     {
         NextS = pt_segm->Next();
         if( IsSegmentInBox( GetScreen()->BlockLocate, pt_segm ) )
-        {       /* la piste est ici bonne a etre efface */
+        {       
+            /* la piste est ici bonne a etre efface */
             pt_segm->Draw( DrawPanel, DC, GR_XOR );
-            DeleteStructure( pt_segm );
+            pt_segm->DeleteStructure();
         }
     }
 
@@ -288,9 +289,10 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
     {
         NextS = pt_segm->Next();
         if( IsSegmentInBox( GetScreen()->BlockLocate, pt_segm ) )
-        {    /* la piste est ici bonne a etre efface */
+        {    
+            /* la piste est ici bonne a etre efface */
             pt_segm->Draw( DrawPanel, DC, GR_XOR );
-            DeleteStructure( pt_segm );
+            pt_segm->DeleteStructure();
         }
     }
 

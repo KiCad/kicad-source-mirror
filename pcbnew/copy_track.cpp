@@ -128,7 +128,7 @@ wxDC * DC = Cmd->DC;
 			for ( ; ii > 0; ii --, pt_track = NextS)
 				{
 				NextS = (TRACK*) pt_track->Pnext;
-				DeleteStructure(pt_track);
+				pt_track->DeleteStructure();
 				}
 			test_1_net_connexion(DC, old_net_code );
 			}

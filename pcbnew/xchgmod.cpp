@@ -573,7 +573,7 @@ MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
     }
 
     /* Effacement de l'ancien module */
-    DeleteStructure( OldModule );
+    OldModule ->DeleteStructure();
 
     m_Pcb->m_Status_Pcb = 0;
     NewModule->m_Flags  = 0;

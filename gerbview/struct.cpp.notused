@@ -10,6 +10,8 @@
 /* Variables locales */
 
 
+#if 0
+
 /***************************************************/
 void DeleteStructure( EDA_BaseStruct * PtStruct )
 /***************************************************/
@@ -91,3 +93,5 @@ EDA_BaseStruct *PtNext;
 		}
 }
 
+
+#endif

@@ -461,7 +461,7 @@ void WinEDA_PcbFrame::Delete_Zone( wxDC* DC, SEGZONE* Zone )
             modify = TRUE;
             /* effacement des segments a l'ecran */
             Trace_Une_Piste( DrawPanel, DC, pt_segm, nb_segm, GR_XOR );
-            DeleteStructure( pt_segm );
+            pt_segm ->DeleteStructure();
         }
     }
 

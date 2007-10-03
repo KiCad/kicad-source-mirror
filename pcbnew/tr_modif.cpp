@@ -180,7 +180,7 @@ TRACK * BufDeb, *BufEnd;		/* Pointeurs de debut et de fin de la zone
 				for ( jj = 0; jj < nb_segm; jj++, pt_del = NextS)
 					{
 					NextS = (TRACK*) pt_del->Pnext;
-					DeleteStructure(pt_del);
+					pt_del->DeleteStructure();
 					}
 				/* nettoyage des flags */
 				for(pt_del = Pcb->m_Track; pt_del != NULL; pt_del = (TRACK*)pt_del->Pnext)

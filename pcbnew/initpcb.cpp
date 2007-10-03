@@ -129,28 +129,29 @@ bool WinEDA_BasePcbFrame::Clear_Pcb( wxDC* DC, bool query )
     }
 
     /* Suppression des listes chainees */
-    DeleteStructList( m_Pcb->m_Equipots );
+    m_Pcb->m_Equipots->DeleteStructList();
     m_Pcb->m_Equipots = NULL;
 
-    DeleteStructList( m_Pcb->m_Drawings );
+    m_Pcb->m_Drawings->DeleteStructList();
     m_Pcb->m_Drawings = NULL;
 
-    DeleteStructList( m_Pcb->m_Modules );
+    m_Pcb->m_Modules->DeleteStructList();
     m_Pcb->m_Modules = NULL;
 
-    DeleteStructList( m_Pcb->m_Track );
+    m_Pcb->m_Track->DeleteStructList();
     m_Pcb->m_Track = NULL;
     m_Pcb->m_NbSegmTrack = 0;
 
-    DeleteStructList( m_Pcb->m_Zone );
+    m_Pcb->m_Zone->DeleteStructList();
     m_Pcb->m_Zone = NULL;
     m_Pcb->m_NbSegmZone = 0;
+    
     DelLimitesZone( DC, FALSE );
 
     for( ; g_UnDeleteStackPtr != 0; )
     {
         g_UnDeleteStackPtr--;
-        DeleteStructList( g_UnDeleteStack[g_UnDeleteStackPtr] );
+         g_UnDeleteStack[g_UnDeleteStackPtr]->DeleteStructList();
     }
 
     /* init pointeurs  et variables */
@@ -214,11 +215,11 @@ void WinEDA_PcbFrame::Erase_Zones( wxDC* DC, bool query )
 
     if( m_Pcb->m_Zone )
     {
-        while( m_Pcb->m_Zone )
-            DeleteStructure( m_Pcb->m_Zone );
-
+        m_Pcb->m_Zone->DeleteStructList();
+        m_Pcb->m_Zone = NULL;
         m_Pcb->m_NbSegmZone = 0;
     }
+    
     DelLimitesZone( DC, FALSE );
 
     GetScreen()->SetModify();
@@ -257,7 +258,7 @@ void WinEDA_PcbFrame::Erase_Segments_Pcb( wxDC* DC, bool is_edges, bool query )
         case TYPECOTATION:
         case TYPEMIRE:
             if( g_TabOneLayerMask[ PtStruct->GetLayer()] & masque_layer )
-                DeleteStructure( PtStruct );
+                PtStruct->DeleteStructure();
             break;
 
         default:
@@ -280,8 +281,8 @@ void WinEDA_PcbFrame::Erase_Pistes( wxDC* DC, int masque_type, bool query )
  *  Si un des bits est a 1, il n'y a pas effacement du segment de meme bit a 1
  */
 {
-    TRACK*          pt_segm;
-    EDA_BaseStruct* PtNext;
+    TRACK*  pt_segm;
+    TRACK*  PtNext;
 
     if( query && !IsOK( this, _( "Delete Tracks?" ) ) )
         return;
@@ -289,10 +290,12 @@ void WinEDA_PcbFrame::Erase_Pistes( wxDC* DC, int masque_type, bool query )
     /* Marquage des pistes a effacer */
     for( pt_segm = m_Pcb->m_Track; pt_segm != NULL; pt_segm = (TRACK*) PtNext )
     {
-        PtNext = pt_segm->Pnext;
+        PtNext = (TRACK*) pt_segm->Pnext;
+        
         if( pt_segm->GetState( SEGM_FIXE | SEGM_AR ) & masque_type )
             continue;
-        DeleteStructure( pt_segm );
+        
+        pt_segm->DeleteStructure();
     }
 
     GetScreen()->SetModify();
@@ -307,8 +310,8 @@ void WinEDA_PcbFrame::Erase_Modules( wxDC* DC, bool query )
     if( query && !IsOK( this, _( "Delete Modules?" ) ) )
         return;
 
-    while( m_Pcb->m_Modules )
-        DeleteStructure( m_Pcb->m_Modules );
+    m_Pcb->m_Modules->DeleteStructList();
+    m_Pcb->m_Modules = 0;
 
     m_Pcb->m_Status_Pcb = 0;
     m_Pcb->m_NbNets      = 0;
@@ -335,7 +338,7 @@ void WinEDA_PcbFrame::Erase_Textes_Pcb( wxDC* DC, bool query )
     {
         PtNext = PtStruct->Next();
         if( PtStruct->Type() == TYPETEXTE )
-            DeleteStructure( PtStruct );
+            PtStruct ->DeleteStructure();
     }
 
     GetScreen()->SetModify();
@@ -353,7 +356,7 @@ void WinEDA_PcbFrame::Erase_Marqueurs()
     {
         PtNext = PtStruct->Next();
         if( PtStruct->Type() == TYPEMARQUEUR )
-            DeleteStructure( PtStruct );
+            PtStruct ->DeleteStructure();
     }
 
     GetScreen()->SetModify();

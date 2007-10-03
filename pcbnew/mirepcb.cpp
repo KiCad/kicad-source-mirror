@@ -168,7 +168,7 @@ void WinEDA_PcbFrame::Delete_Mire( MIREPCB* MirePcb, wxDC* DC )
         return;
 
     MirePcb->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
-    DeleteStructure( MirePcb );
+    MirePcb ->DeleteStructure();
 }
 
 
@@ -190,7 +190,7 @@ static void Exit_EditMire( WinEDA_DrawPanel* Panel, wxDC* DC )
         if( MirePcb->m_Flags & IS_NEW )
         {
             MirePcb->Draw( Panel, DC, wxPoint( 0, 0 ), GR_XOR );
-            DeleteStructure( MirePcb );
+            MirePcb ->DeleteStructure();
             MirePcb = NULL;
         }
         else    /* Ancienne mire en deplacement: Remise en ancienne position */

@@ -5,6 +5,16 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2007-Oct-3 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ pcbnew
+    made BOARD_ITEM::UnLink() virtual
+    added BOARD_ITEM::DeleteStructure().
+    added EDA_BaseStruct::DeleteStructList()
+    deleted gerbview/struct.cpp, pcbnew/struct.cpp, 
+    BOARD::~BOARD() now deletes objects that it owns.
+    
+
 2007-Oct-2 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + all

@@ -465,7 +465,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
             /* le module est ici bon a etre efface */
             module->m_Flags = 0;
             module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
-            DeleteStructure( module );
+            module->DeleteStructure();
             m_Pcb->m_Status_Pcb = 0;
         }
     }
@@ -483,7 +483,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
             {       
                 /* la piste est ici bonne a etre efface */
                 pt_segm->Draw( DrawPanel, DC, GR_XOR );
-                DeleteStructure( pt_segm );
+                pt_segm->DeleteStructure();
             }
         }
     }
@@ -512,7 +512,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
                 break;
             /* l'element est ici bon a etre efface */
             Trace_DrawSegmentPcb( DrawPanel, DC, (DRAWSEGMENT*) PtStruct, GR_XOR );
-            DeleteStructure( PtStruct );
+            PtStruct->DeleteStructure();
             break;
 
         case TYPETEXTE:
@@ -523,7 +523,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
             /* le texte est ici bon a etre efface */
             ( (TEXTE_PCB*) PtStruct )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
             /* Suppression du texte en Memoire*/
-            DeleteStructure( PtStruct );
+            PtStruct->DeleteStructure();
             break;
 
         case TYPEMIRE:
@@ -535,7 +535,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
                 break;
             /* l'element est ici bon a etre efface */
             ( (MIREPCB*) PtStruct )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
-            DeleteStructure( PtStruct );
+            PtStruct->DeleteStructure();
             break;
 
         case TYPECOTATION:
@@ -547,7 +547,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
                 break;
             /* l'element est ici bon a etre efface */
             ( (COTATION*) PtStruct )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
-            DeleteStructure( PtStruct );
+            PtStruct->DeleteStructure();
             break;
 
         default:
@@ -565,9 +565,10 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
         {
             NextS = pt_segm->Next();
             if( IsSegmentInBox( GetScreen()->BlockLocate, pt_segm ) )
-            {    /* la piste est ici bonne a etre efface */
+            {    
+                /* la piste est ici bonne a etre efface */
                 pt_segm->Draw( DrawPanel, DC, GR_XOR );
-                DeleteStructure( pt_segm );
+                PtStruct->DeleteStructure();
             }
         }
     }

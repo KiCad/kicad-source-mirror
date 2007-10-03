@@ -109,7 +109,7 @@ void WinEDA_PcbFrame::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
         DisplayOpt.DisplayDrawItems = SKETCH;
         Trace_DrawSegmentPcb( DrawPanel, DC, Segment, GR_XOR );
         PtStruct = Segment->Pback;
-        DeleteStructure( Segment );
+        Segment ->DeleteStructure();
         if( PtStruct && (PtStruct->Type() == TYPEDRAWSEGMENT ) )
             Segment = (DRAWSEGMENT*) PtStruct;
         DisplayOpt.DisplayDrawItems = track_fill_copy;
@@ -119,7 +119,7 @@ void WinEDA_PcbFrame::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
     {
         Trace_DrawSegmentPcb( DrawPanel, DC, (DRAWSEGMENT*) Segment, GR_XOR );
         Segment->m_Flags = 0;
-        DeleteStructure( Segment );
+        Segment ->DeleteStructure();
         SetCurItem( NULL );
         GetScreen()->SetModify();
     }
@@ -191,7 +191,7 @@ void WinEDA_PcbFrame::Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC 
             if( pt_segm->GetLayer() == layer )
             {
                 Trace_DrawSegmentPcb( DrawPanel, DC, pt_segm, GR_XOR );
-                DeleteStructure( PtStruct );
+                PtStruct ->DeleteStructure();
             }
             break;
 
@@ -200,7 +200,7 @@ void WinEDA_PcbFrame::Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC 
             if( pt_txt->GetLayer() == layer )
             {
                 pt_txt->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
-                DeleteStructure( PtStruct );
+                PtStruct ->DeleteStructure();
             }
             break;
 
@@ -210,7 +210,7 @@ void WinEDA_PcbFrame::Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC 
             if( Cotation->GetLayer() == layer )
             {
                 Cotation->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
-                DeleteStructure( PtStruct );
+                PtStruct ->DeleteStructure();
             }
             break;
 
@@ -234,7 +234,7 @@ static void Exit_EditEdge( WinEDA_DrawPanel* Panel, wxDC* DC )
     if( Segment->m_Flags & IS_NEW )
     {
         Panel->ManageCurseur( Panel, DC, FALSE );
-        DeleteStructure( Segment );
+        Segment ->DeleteStructure();
         Segment = NULL;
     }
     else
@@ -338,7 +338,7 @@ void WinEDA_PcbFrame::End_Edge( DRAWSEGMENT* Segment, wxDC* DC )
     /* Effacement si Longueur nulle */
     if( (Segment->m_Start.x == Segment->m_End.x)
        && (Segment->m_Start.y == Segment->m_End.y) )
-        DeleteStructure( Segment );
+        Segment ->DeleteStructure();
 
     else
     {
