@@ -225,7 +225,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
     case HK_NEXT_SEARCH:
         if( ItemInEdit )
             break;
-       if( g_LastSearchIsMarker )
+        if( g_LastSearchIsMarker )
             WinEDA_SchematicFrame::FindMarker( 1 );
         else
             FindSchematicItem( wxEmptyString, 2 );

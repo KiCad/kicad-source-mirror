@@ -303,6 +303,36 @@ void MARQUEUR::UnLink()
 }
 
 
+void MARQUEUR::Display_Infos( WinEDA_DrawFrame* frame )
+{
+    int      text_pos;
+
+    frame->MsgPanel->EraseMsgBox();
+
+    text_pos = 1;
+    Affiche_1_Parametre( frame, text_pos, _( "Type" ), _("Marker"), DARKCYAN );
+
+    text_pos = 12;
+    Affiche_1_Parametre( frame, text_pos, _( "Marker Error Text" ), m_Diag, RED );
+}
+
+
+bool MARQUEUR::HitTest( const wxPoint& refPos )
+{
+    // currently the MARKER is about 14 pixels by 14 pixels
+    int xCenter = m_Pos.x + 7;
+    int yCenter = m_Pos.y + 7;
+
+    int dx = refPos.x - xCenter;
+    int dy = refPos.y - yCenter;
+    
+    if( ABS(dx) <= 7 && ABS(dy) <= 7 )
+        return true;
+    else
+        return false;
+}
+
+
 /**************************************************/
 /* Class SCREEN: classe de gestion d'un affichage */
 /***************************************************/

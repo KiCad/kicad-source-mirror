@@ -46,10 +46,12 @@ static bool Test_Pad_to_Pads_Drc( WinEDA_BasePcbFrame* frame,
 static int  TestClearanceSegmToPad( const D_PAD* pad_to_test, int seg_width, int isol );
 static int  TestMarginToCircle( int cx, int cy, int rayon, int longueur );
 static int  Tst_Ligne( int x1, int y1, int x2, int y2 );
+
 static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb,
                                 TRACK* pt_ref, BOARD_ITEM* pt_item, int errnumber );
-static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC,
-                                BOARD* Pcb, D_PAD* pad1, D_PAD* pad2 );
+
+static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, 
+                                D_PAD* pad1, D_PAD* pad2 );
 
 
 /*******************************************/
@@ -923,6 +925,7 @@ static bool Test_Pad_to_Pads_Drc( WinEDA_BasePcbFrame* frame,
     MaskLayer = pad_ref->m_Masque_Layer & ALL_CU_LAYERS;
     int        x_limite = max_size + g_DesignSettings.m_TrackClearence +
                           pad_ref->m_Rayon + pad_ref->m_Pos.x;
+                          
     for( ; pad_list < end_buffer; pad_list++ )
     {
         pad = *pad_list;
@@ -939,11 +942,11 @@ static bool Test_Pad_to_Pads_Drc( WinEDA_BasePcbFrame* frame,
             continue;
 
         /* The pad must be in a net (i.e pt_pad->m_NetCode != 0 ),
-         *  But noe probleme if pads have the same netcode (same net)*/
+         *  But no problem if pads have the same netcode (same net)*/
         if( pad->m_NetCode && (pad_ref->m_NetCode == pad->m_NetCode) )
             continue;
 
-        /* No proble if pads are from the same footprint
+        /* No problem if pads are from the same footprint
          *  and have the same pad number ( equivalent pads  )  */
         if( (pad->m_Parent == pad_ref->m_Parent) && (pad->m_NumPadName == pad_ref->m_NumPadName) )
             continue;
@@ -1151,6 +1154,7 @@ static int TestClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int dis
 
         if( bflag == OK_DRC )
             return OK_DRC;
+        
         /* Erreur DRC : analyse fine de la forme de la pastille */
 
         switch( pad_to_test->m_PadShape )
@@ -1360,7 +1364,7 @@ static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb,
         
         wxString module_name = ( (MODULE*) (pad->m_Parent) )->m_Reference->m_Text;
         
-        msg.Printf( _( "%d Drc Err %d %s (net %s)and PAD %s (%s) net %s @ %d,%d\n" ),
+        msg.Printf( _( "%d Drc Err %d %s (net %s) and PAD %s (%s) net %s @ %d,%d\n" ),
                     ErrorsDRC_Count, errnumber, tracktype.GetData(),
                     netname1.GetData(),
                     pad_name.GetData(), module_name.GetData(),
@@ -1437,12 +1441,14 @@ static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb,
     wxString pad_name2    = pad2->ReturnStringPadName();
     wxString module_name2 = ( (MODULE*) (pad2->m_Parent) )->m_Reference->m_Text;
     wxString netname1, netname2;
+    
     EQUIPOT* equipot = Pcb->FindNet( pad1->m_NetCode );
 
     if( equipot )
         netname1 = equipot->m_Netname;
     else
         netname1 = wxT( "<noname>" );
+    
     equipot = Pcb->FindNet( pad2->m_NetCode );
     if( equipot )
         netname2 = equipot->m_Netname;
@@ -1450,19 +1456,21 @@ static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb,
         netname2 = wxT( "<noname>" );
 
     msg.Printf( _( "%d Drc Err: PAD %s (%s) net %s @ %d,%d and PAD %s (%s) net %s @ %d,%d\n" ),
-                ErrorsDRC_Count, pad_name1.GetData(), module_name1.GetData(),
-                netname1.GetData(), pad1->m_Pos.x, pad1->m_Pos.y,
-                pad_name2.GetData(), module_name2.GetData(),
-                netname2.GetData(), pad2->m_Pos.x, pad2->m_Pos.y );
+        ErrorsDRC_Count, 
+        pad_name1.GetData(), module_name1.GetData(), netname1.GetData(), pad1->m_Pos.x, pad1->m_Pos.y,
+        pad_name2.GetData(), module_name2.GetData(), netname2.GetData(), pad2->m_Pos.x, pad2->m_Pos.y );
+    
     if( DrcFrame )
         DrcFrame->m_logWindow->AppendText( msg );
     else
         panel->m_Parent->Affiche_Message( msg );
+    
     if( s_RptFile )
         fprintf( s_RptFile, "%s", CONV_TO_UTF8( msg ) );
 
     if( current_marqueur == NULL )
         current_marqueur = new MARQUEUR( Pcb );
+    
     current_marqueur->m_Pos   = pad1->m_Pos;
     current_marqueur->m_Color = WHITE;
     current_marqueur->m_Diag  = msg;

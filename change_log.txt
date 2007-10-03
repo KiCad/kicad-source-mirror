@@ -13,6 +13,9 @@ email address.
     added EDA_BaseStruct::DeleteStructList()
     deleted gerbview/struct.cpp, pcbnew/struct.cpp, 
     BOARD::~BOARD() now deletes objects that it owns.
+    Collectors now finds MARQUEURs also
+    added MARQUEURS::Display_Infos()
+    added MARQUEURS::HitTest()
     
 
 2007-Oct-2 UPDATE   Dick Hollenbeck <dick@softplc.com>

@@ -681,7 +681,7 @@ void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
     switch( Type() )
     {
     case TYPEVIA:
-        msg = g_ViaType_Name[m_Shape & 255];
+        msg = g_ViaType_Name[Shape()];
         break;
 
     case TYPETRACK:
@@ -764,6 +764,7 @@ void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
 
         int drill_value = m_Drill >= 0  ?
                           m_Drill : g_DesignSettings.m_ViaDrill;
+                              
         valeur_param( (unsigned) drill_value, msg );
         
         text_pos += 8;

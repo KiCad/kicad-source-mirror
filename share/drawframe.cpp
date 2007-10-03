@@ -565,6 +565,7 @@ void WinEDA_DrawFrame::OnZoom( int zoom_type )
     case ID_POPUP_ZOOM_PLUS:
     case ID_ZOOM_PLUS_KEY:
         move_mouse_cursor = TRUE;
+        // fall thru
 
     case ID_ZOOM_PLUS_BUTT:
         if( zoom_type == ID_ZOOM_PLUS_BUTT )
@@ -576,6 +577,7 @@ void WinEDA_DrawFrame::OnZoom( int zoom_type )
     case ID_POPUP_ZOOM_MOINS:
     case ID_ZOOM_MOINS_KEY:
         move_mouse_cursor = TRUE;
+        // fall thru
 
     case ID_ZOOM_MOINS_BUTT:
         if( zoom_type == ID_ZOOM_MOINS_BUTT )

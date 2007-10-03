@@ -33,8 +33,12 @@
 
 // see collectors.h
 const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
+    
+    // there are some restrictions on the order of items in the general case.
+    // all items in m_Drawings for instance should be contiguous.
     TYPETEXTE, 
     TYPEDRAWSEGMENT, 
+    TYPEMARQUEUR,
     TYPECOTATION,
     TYPEVIA,
     TYPETRACK,
@@ -49,6 +53,7 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
 const KICAD_T GENERAL_COLLECTOR::PrimaryItems[] = {
     TYPETEXTE, 
     TYPEDRAWSEGMENT, 
+    TYPEMARQUEUR,
     TYPECOTATION,
     TYPEVIA,
     TYPETRACK,
@@ -60,6 +65,7 @@ const KICAD_T GENERAL_COLLECTOR::PrimaryItems[] = {
 const KICAD_T GENERAL_COLLECTOR::AllButZones[] = {
     TYPETEXTE, 
     TYPEDRAWSEGMENT, 
+    TYPEMARQUEUR,
     TYPECOTATION,
     TYPEVIA,
     TYPETRACK,

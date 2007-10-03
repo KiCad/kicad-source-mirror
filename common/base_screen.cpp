@@ -190,6 +190,7 @@ void BASE_SCREEN::SetZoomList( int* zoomlist )
     // Init liste
     if( m_ZoomList )
         free( m_ZoomList );
+    
     m_ZoomList = (int*) MyZMalloc( nbitems * sizeof( int) );
 
     for( ii = 0, zoom = zoomlist; ii < nbitems; zoom++, ii++ )
