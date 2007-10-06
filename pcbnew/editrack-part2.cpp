@@ -243,7 +243,7 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
         Via->SetLayerPair( old_layer, GetScreen()->m_Active_Layer );
     }
     
-    else    // @todo: why have this override behaviour?  why does the user even need to tell us what kind of via, when we know which two layers are in play?
+    else
     {        
         // Usual via is from copper to component; layer pair is 0 and 0x0F.
         Via->SetLayerPair( LAYER_CUIVRE_N, LAYER_CMP_N );

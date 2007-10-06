@@ -12,79 +12,10 @@
 
 #include "id.h"
 #include "protos.h"
-#include "eda_dde.h"
 
 
 static void Process_Move_Item( WinEDA_PcbFrame* frame,
                                EDA_BaseStruct* DrawStruct, wxDC* DC );
-
-// see wxstruct.h
-/**************************************************************************/
-void WinEDA_PcbFrame::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
-/**************************************************************************/
-/** Send a remote command to eeschema via a socket,
- * @param objectToSync = item to be located on schematic (module, pin or text)
- * Commands are
- * $PART: "reference"   put cursor on component anchor
- * $PART: "reference" $PAD: "pad number" put cursor on the component pin 
- * $PART: "reference" $REF: "reference" put cursor on the component ref
- * $PART: "reference" $VAL: "value" put cursor on the component value
- */
-{
-    char          cmd[1024];
-    const char*   text_key;
-    MODULE*       module = NULL;
-    D_PAD*        pad;
-    TEXTE_MODULE* text_mod;
-    wxString      msg;
-
-    if( objectToSync == NULL )
-        return;
-
-    switch( objectToSync->Type() )
-    {
-    case TYPEMODULE:
-        module = (MODULE*) objectToSync;
-        sprintf( cmd, "$PART: \"%s\"",
-                CONV_TO_UTF8( module->m_Reference->m_Text ) );
-        break;
-
-    case TYPEPAD:
-        module = (MODULE*) objectToSync->m_Parent;
-        pad    = (D_PAD*) objectToSync;
-        msg    = pad->ReturnStringPadName();
-        sprintf( cmd, "$PART: \"%s\" $PAD: \"%s\"",
-                CONV_TO_UTF8( module->m_Reference->m_Text ),
-                CONV_TO_UTF8( msg ) );
-        break;
-
-    case TYPETEXTEMODULE:
-            #define REFERENCE 0
-            #define VALUE     1
-        module   = (MODULE*) objectToSync->m_Parent;
-        text_mod = (TEXTE_MODULE*) objectToSync;
-        if( text_mod->m_Type == REFERENCE )
-            text_key = "$REF:";
-        else if( text_mod->m_Type == VALUE )
-            text_key = "$VAL:";
-        else
-            break;
-
-        sprintf( cmd, "$PART: \"%s\" %s \"%s\"",
-                CONV_TO_UTF8( module->m_Reference->m_Text ),
-                text_key,
-                CONV_TO_UTF8( text_mod->m_Text ) );
-        break;
-
-    default:
-        break;
-    }
-
-    if( module )
-    {
-        SendCommand( MSG_TO_SCH, cmd );
-    }
-}
 
 
 /*********************************************************************/

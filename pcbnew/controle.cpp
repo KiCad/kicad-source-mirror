@@ -16,113 +16,15 @@
 
 #include "bitmaps.h"
 
-
-/*******************************************/
-void RemoteCommand(  const char* cmdline )
-/*******************************************/
-
-/** Read a remote command send by eeschema via a socket,
- *  port KICAD_PCB_PORT_SERVICE_NUMBER (currently 4242)
- * @param cmdline = received command from eeschema
- * Commands are
- * $PART: "reference"   put cursor on component
- * $PIN: "pin name"  $PART: "reference" put cursor on the footprint pin 
- */
-{
-    char             line[1024];
-    wxString         msg;
-    char*            idcmd;
-    char*            text;
-    MODULE*          module = 0;
-    WinEDA_PcbFrame* frame  = EDA_Appl->m_PcbFrame;
-
-    strncpy( line, cmdline, sizeof(line) - 1 );
-
-    idcmd = strtok( line, " \n\r" );
-    text  = strtok( NULL, " \n\r" );
-    if( (idcmd == NULL) || (text == NULL) )
-        return;
-
-    if( strcmp( idcmd, "$PART:" ) == 0 )
-    {
-        msg = CONV_FROM_UTF8( text );
-
-        module = ReturnModule( frame->m_Pcb, msg );
-
-        msg.Printf( _( "Locate module %s %s" ), msg.GetData(),
-                   module ? wxT( "Ok" ) : wxT( "not found" ) );
-
-        frame->Affiche_Message( msg );
-        if( module )
-        {
-            wxClientDC dc( frame->DrawPanel );
-
-            frame->DrawPanel->PrepareGraphicContext( &dc );
-            frame->DrawPanel->CursorOff( &dc );
-            frame->GetScreen()->m_Curseur = module->m_Pos;
-            frame->DrawPanel->CursorOn( &dc );
-        }
-    }
-
-    if( idcmd && strcmp( idcmd, "$PIN:" ) == 0 )
-    {
-        wxString pinName, modName;
-        D_PAD*   pad     = NULL;
-        int      netcode = -1;
-
-        pinName = CONV_FROM_UTF8( text );
-
-        text = strtok( NULL, " \n\r" );
-        if( text && strcmp( text, "$PART:" ) == 0 )
-            text = strtok( NULL, "\n\r" );
-
-        wxClientDC dc( frame->DrawPanel );
-
-        frame->DrawPanel->PrepareGraphicContext( &dc );
-
-        modName = CONV_FROM_UTF8( text );
-        module  = ReturnModule( frame->m_Pcb, modName );
-        if( module )
-            pad = ReturnPad( module, pinName );
-
-        if( pad )
-            netcode = pad->m_NetCode;
-
-        if( netcode > 0 )               /* hightlighted the net selected net*/
-        {
-            if( g_HightLigt_Status )    /* erase the old hightlighted net */
-                frame->Hight_Light( &dc );
-
-            g_HightLigth_NetCode = netcode;
-            frame->Hight_Light( &dc );      /* hightlighted the new one */
-
-            frame->DrawPanel->CursorOff( &dc );
-            frame->GetScreen()->m_Curseur = pad->m_Pos;
-            frame->DrawPanel->CursorOn( &dc );
-        }
-
-        if( module == NULL )
-            msg.Printf( _( "module %s not found" ), text );
-        else if( pad == NULL )
-            msg.Printf( _( "Pin %s (module %s) not found" ), pinName.GetData(), modName.GetData() );
-        else
-            msg.Printf( _( "Locate Pin %s (module %s)" ), pinName.GetData(), modName.GetData() );
-
-        frame->Affiche_Message( msg );
-    }
-
-    if( module )  // if found, center the module on screen.
-        frame->Recadre_Trace( false );
-}
-
-
+/*************************************************************************************/
+static BOARD_ITEM* AllAreModulesAndReturnSmallestIfSo( GENERAL_COLLECTOR* aCollector )
+/*************************************************************************************/
 /**
  * Function AllAreModulesAndReturnSmallestIfSo
  * tests that all items in the collection are MODULEs and if so, returns the
  * smallest MODULE.
  * @return BOARD_ITEM* - The smallest or NULL.
  */
-static BOARD_ITEM* AllAreModulesAndReturnSmallestIfSo( GENERAL_COLLECTOR* aCollector )
 {
     int count = aCollector->GetCount();
 

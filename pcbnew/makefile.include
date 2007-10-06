@@ -13,6 +13,7 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		onrightclick.o\
 		onleftclick.o\
 		modedit_onclick.o\
+		cross-probing.o\
 		via_edit.o\
 		wxprint.o \
 		cursors.o\

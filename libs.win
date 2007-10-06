@@ -43,9 +43,10 @@ endif
 SYSWXLIB = `$(WXWIN)/wx-config --libs gl`\
 	-lwxpng-$(LIBVERSION) -lwxjpeg-$(LIBVERSION) -lwxzlib-$(LIBVERSION) $(PYLIBS)
 
+CC = gcc
+
 .cpp.o:
 	gcc -c -Wall $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $(EXTRACPPFLAGS) -o $@ $*.cpp
-
 
 # Settings for Cyginw/Mingw32
 # Some versions of windres cannot cope with the --preprocessor

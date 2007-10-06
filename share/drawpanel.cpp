@@ -1,6 +1,6 @@
-/******************************************************************/
-/* drawpanel.cpp - fonctions des classes du type WinEDA_DrawPanel */
-/******************************************************************/
+/******************************************/
+/* drawpanel.cpp - WinEDA_DrawPanel class */
+/******************************************/
 
 
 #ifdef __GNUG__
@@ -14,9 +14,7 @@
 #include "id.h"
 
 // defines locaux
-#define CURSOR_SIZE 12           // taille de la croix du curseur PCB
-
-// Variables locales
+#define CURSOR_SIZE 12           // Cursor size in pixels
 
 // table des evenements captes par un WinEDA_DrawPanel
 BEGIN_EVENT_TABLE( WinEDA_DrawPanel, EDA_DRAW_PANEL )
@@ -76,7 +74,7 @@ void WinEDA_DrawPanel::Trace_Curseur( wxDC* DC, int color )
 /*********************************************************************************/
 
 /*
- *  Trace Le curseur sur la zone PCB , se deplacant sur la grille
+ *  Draw the schematic cursor which is usually on grid
  */
 {
     if( m_CursorLevel != 0 )
@@ -84,10 +82,10 @@ void WinEDA_DrawPanel::Trace_Curseur( wxDC* DC, int color )
         return;
     }
 
-    wxPoint Cursor = GetScreen()->m_Curseur;
-
     if( DC == NULL )
         return;
+
+    wxPoint Cursor = GetScreen()->m_Curseur;
 
     GRSetDrawMode( DC, GR_XOR );
     if( g_CursorShape == 1 )    /* Trace d'un reticule */
@@ -301,7 +299,7 @@ wxPoint WinEDA_DrawPanel::GetScreenCenterRealPosition()
 void WinEDA_DrawPanel::MouseToCursorSchema()
 /**********************************************/
 
-/* place le curseur souris sur la position du curseur schema
+/* Move the mouse cursor to the current schematic cursor
  */
 {
     wxPoint Mouse = CursorScreenPosition();
@@ -314,7 +312,8 @@ void WinEDA_DrawPanel::MouseToCursorSchema()
 void WinEDA_DrawPanel::MouseTo( const wxPoint& Mouse )
 /****************************************************/
 
-/* place le curseur souris sur la position Mouse
+/** Move the mouse cursor to the position "Mouse"
+ * @param Mouse = new mouse cursor position
  */
 {
     wxPoint mouse;
@@ -334,7 +333,7 @@ void WinEDA_DrawPanel::MouseTo( const wxPoint& Mouse )
 void WinEDA_DrawPanel::OnActivate( wxActivateEvent& event )
 /********************************************************/
 {
-    m_CanStartBlock = -1;   // Commande block can't start
+    m_CanStartBlock = -1;   // Block Command can't start
     event.Skip();
 }
 
@@ -356,7 +355,7 @@ void WinEDA_DrawPanel::OnScroll( wxScrollWinEvent& event )
     int x, y;
 
     GetViewStart( &x, &y );
-    dir = event.GetOrientation();   // wxHORIZONTAL ou wxVERTICAL
+    dir = event.GetOrientation();   // wxHORIZONTAL or wxVERTICAL
 
     if( id == wxEVT_SCROLLWIN_LINEUP )
         value = -m_ScrollButt_unit;
@@ -641,19 +640,19 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
         }
     }
 
-    /* trace des axes principaux */
+    /* Draw axis */
     if(  m_Parent->m_Draw_Axis )
     {
-        /* Trace de l'axe vertical */
+        /* Draw the Y axis */
         GRDashedLine( &m_ClipBox, DC, 0, -screen->ReturnPageSize().y,
                       0, screen->ReturnPageSize().y, 0, Color );
 
-        /* Trace de l'axe horizontal */
+        /* Draw the X axis */
         GRDashedLine( &m_ClipBox, DC, -screen->ReturnPageSize().x, 0,
                       screen->ReturnPageSize().x, 0, 0, Color );
     }
 
-    /* trace des axes auxiliaires */
+    /* Draw auxiliary axis */
     if( m_Parent->m_Draw_Auxiliary_Axis )
     {
         m_Draw_Auxiliary_Axis( DC, FALSE );
@@ -674,13 +673,13 @@ void WinEDA_DrawPanel::m_Draw_Auxiliary_Axis( wxDC* DC, int drawmode )
 
     GRSetDrawMode( DC, drawmode );
 
-    /* Trace de l'axe vertical */
+    /* Draw the Y axis */
     GRDashedLine( &m_ClipBox, DC,
                   m_Parent->m_Auxiliary_Axis_Position.x, -screen->ReturnPageSize().y,
                   m_Parent->m_Auxiliary_Axis_Position.x, screen->ReturnPageSize().y,
                   0, Color );
 
-    /* Trace de l'axe horizontal */
+    /* Draw the X axis */
     GRDashedLine( &m_ClipBox, DC,
                   -screen->ReturnPageSize().x, m_Parent->m_Auxiliary_Axis_Position.y,
                   screen->ReturnPageSize().x, m_Parent->m_Auxiliary_Axis_Position.y,
@@ -692,8 +691,7 @@ void WinEDA_DrawPanel::m_Draw_Auxiliary_Axis( wxDC* DC, int drawmode )
 void WinEDA_DrawPanel::OnRightClick( wxMouseEvent& event )
 /*******************************************************/
 
-/* Construit et affiche un menu Popup lorsque on actionne le bouton droit
- *  de la souris
+/* Build and display a Popup menu on a right mouse button click
  */
 {
     wxPoint pos;

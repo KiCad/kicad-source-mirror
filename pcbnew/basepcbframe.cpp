@@ -95,7 +95,10 @@ int WinEDA_BasePcbFrame::BestZoom( void )
 }
 
 
-void WinEDA_BasePcbFrame::ReCreateMenuBar( void ) // fonction virtuelle
+/*************************************************/
+void WinEDA_BasePcbFrame::ReCreateMenuBar( void )
+/*************************************************/
+// Virtual function
 {
 }
 
@@ -106,7 +109,7 @@ void WinEDA_BasePcbFrame::ReCreateMenuBar( void ) // fonction virtuelle
 void WinEDA_BasePcbFrame::Show3D_Frame( wxCommandEvent& event )
 /***********************************************************/
 
-/* Ouvre la frame d'affichage 3D
+/* Creat and show the 3D frame display
  */
 {
 #ifndef GERBVIEW
@@ -151,8 +154,8 @@ void WinEDA_BasePcbFrame::GetComponentFromRedoList( void )
 /****************************************************************/
 void WinEDA_BasePcbFrame::SwitchLayer( wxDC* DC, int layer )
 /*****************************************************************/
+//Note: virtual, overridden in WinEDA_PcbFrame;
 {
-    //Note: virtual, overridden in WinEDA_PcbFrame;
     int preslayer = GetScreen()->m_Active_Layer;
 
     //if there is only one layer, don't switch.
@@ -174,9 +177,9 @@ void WinEDA_BasePcbFrame::SwitchLayer( wxDC* DC, int layer )
 
 
 
-/*****************************************************************/
+/**********************************************************************/
 void WinEDA_BasePcbFrame::ProcessItemSelection( wxCommandEvent& event )
-/*****************************************************************/
+/**********************************************************************/
 {
     int         id = event.GetId();
     

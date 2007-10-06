@@ -359,13 +359,13 @@ public:
 class DRAWSEGMENT : public BOARD_ITEM
 {
 public:
-    int     m_Width;            // 0 = line, > 0 = tracks, bus ...
+    int     m_Width;            // 0 = line. if > 0 = tracks, bus ...
     wxPoint m_Start;            // Line start point
     wxPoint m_End;              // Line end point
     
-    int m_Shape;                // forme: Segment , Cercle..
-    int m_Type;                 // numero de sous type ( cotation.. )
-    int m_Angle;                // pour les arcs: "longueur" de l'arc en 1/10 deg
+    int m_Shape;                // Shape: line, Circle, Arc
+    int m_Type;                 // Used in complex associations ( Dimensions.. )
+    int m_Angle;                // Used only for Arcs: Arc angle in 1/10 deg
 
 public:
     DRAWSEGMENT( BOARD_ITEM* StructFather, KICAD_T idtype = TYPEDRAWSEGMENT );
@@ -375,7 +375,7 @@ public:
     bool    WriteDrawSegmentDescr( FILE* File );
     bool    ReadDrawSegmentDescr( FILE* File, int* LineNum );
 
-    /* supprime du chainage la structure Struct */
+    /* remove this from the linked list */
     void    UnLink();
 
     void    Copy( DRAWSEGMENT* source );
@@ -429,18 +429,17 @@ public:
 };
 
 
-/************************************/
-/* Gestion des marqueurs sur le PCB */
-/************************************/
+/***************************************/
+/* Markers: used to show a drc problem */
+/***************************************/
 
 class MARQUEUR : public BOARD_ITEM
 {
-    /* Description d'un marqueur */
 public:
     wxPoint  m_Pos;
     char*    m_Bitmap;              /* Shape (bitmap) */
     int      m_Type;
-    int      m_Color;               /* couleur */
+    int      m_Color;               /* color */
     wxString m_Diag;                /* Associated text (comment) */
 
 public:

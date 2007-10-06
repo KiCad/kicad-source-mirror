@@ -26,8 +26,7 @@ class WinEDA_DrawPanel : public EDA_DRAW_PANEL
 public:
     int               m_Ident;
     WinEDA_DrawFrame* m_Parent;
-    EDA_Rect          m_ClipBox;    /* position et taille de la fenetre de trace
-                                     *  pour les "RePaint" d'ecran */
+    EDA_Rect          m_ClipBox;    		// the clipbox used in screen redraw (usually gives the visible area in internal units)
     wxPoint           m_CursorStartPos;     // utile dans controles du mouvement curseur
     int               m_Scroll_unit;        //	Valeur de l'unite de scroll en pixels pour les barres de scroll
     int               m_ScrollButt_unit;    //	Valeur de l'unite de scroll en pixels pour les boutons de scroll
@@ -35,14 +34,14 @@ public:
     bool              m_AbortRequest;       // Flag d'arret de commandes longues
     bool              m_AbortEnable;        // TRUE si menu ou bouton Abort doit etre affiche
 
-    bool              m_AutoPAN_Enable;     // TRUE pour autoriser auto pan (autorisation g��ale)
-    bool              m_AutoPAN_Request;    // TRUE pour auto pan (lorsque auto pan n�essaire)
+    bool              m_AutoPAN_Enable;     // TRUE to allow auto pan
+    bool              m_AutoPAN_Request;    // TRUE to request an auto pan (will be made only if m_AutoPAN_Enable = true)
 
-    int               m_IgnoreMouseEvents;  ///< when non-zero, then ignore mouse events
+    int               m_IgnoreMouseEvents;  //  when non-zero (true), then ignore mouse events
 
-    bool              m_Block_Enable;       // TRUE pour autoriser Bloc Commandes (autorisation g��ale)
-    int               m_CanStartBlock;      // >= 0 (ou >= n) si un bloc peut demarrer
-    // (filtrage des commandes de debut de bloc )
+    bool              m_Block_Enable;       // TRUE to accept Block Commands
+    int               m_CanStartBlock;      // >= 0 (or >= n) if a block can start
+    // usefull ot avoid false start block in certain cases (like switch from a sheet to an other scheet
     int               m_PanelDefaultCursor; // Current mouse cursor default shape id for this window
     int               m_PanelCursor;        // Current mouse cursor shape id for this window
     int               m_CursorLevel;        // Index for cursor redraw in XOR mode
