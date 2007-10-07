@@ -577,7 +577,7 @@ wxString ext;
 	int mask = 1;
 	s_SelectedLayers = 0;
 
-	for( layer_to_plot = 0; layer_to_plot < 29; layer_to_plot++, mask <<= 1 )
+	for( layer_to_plot = 0; layer_to_plot < NB_LAYERS; layer_to_plot++, mask <<= 1 )
 	{
 		if( m_BoxSelecLayer[layer_to_plot]->GetValue() )
 		{

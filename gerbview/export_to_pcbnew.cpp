@@ -25,6 +25,23 @@ void WinEDA_GerberFrame::ExportDataInPcbnewFormat( wxCommandEvent& event )
 /* Export data in pcbnew format
  */
 {
+    int ii = 0;
+    bool no_used_layers = true; // Changed to false if any used layer found
+
+    // Check whether any of the Gerber layers are actually currently used
+	while( no_used_layers && ii < 32 )
+	{
+		if( g_GERBER_Descr_List[ii] != NULL )
+			no_used_layers = false;
+        ii++;
+    }
+
+    if( no_used_layers )
+    {
+        DisplayInfo( this, _( "None of the Gerber layers contain any data" ) );
+        return;
+    }
+
     wxString FullFileName, msg;
 
     wxString PcbExt( wxT( ".brd" ) );

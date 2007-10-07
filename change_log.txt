@@ -4,12 +4,59 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Oct-07 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
+================================================================================
++ all
+  * Various dialog boxes can now (otherwise) be cancelled by pressing the "Esc" key.
+    (Some dialog boxes still require attention in that regard though, so that task
+    is not yet complete.) And the captions of the "OK" button within various dialog
+    boxes have been fully capitalised (meaning that an icon is now provided within
+    each of those buttons within the Linux version of KiCad).
+  * DIALOG_STYLE (defined within include/wxstruct.h) now includes MAYBE_RESIZE_BORDER
+    field. (Refer to 2007-Oct-2 UPDATE notes for the relevance of this.)
+  * Beautification and house keeping.
++ eeschema
+  * The editpart.cpp and editpart.cpp files (which are no longer used) have been
+    removed, and replaced with editpart.cpp.notused and editpart.cpp.notused
++ cvpcb
+  * Additional "OK", "Cancel", and "Apply" buttons have now been provided for the
+    "Options" dialog box which lists various display options for footprints.
++ pcbnew
+  * Invoking the "Select Layer Pair:" dialog box is no longer possible whenever only
+    one (copper) layer is currently enabled. And it is no longer possible to select
+    the same layer to be both the Top Layer and Bottom Layer (for any Layer Pair).
+  * Deselecting layers during the "Swap layers" command is now more user-friendly,
+    due to the provision of an additional "(Deselect)" radiobutton within the (child)
+    "Select Layer:" dialog box (which is always invoked whenever a different
+    radiobutton within the "Swap Layers:" dialog box is clicked on). (It had
+    previously been necessary to cancel the "Select Layer:" dialog box before being
+    able to click on the "Deselect" button within the "Swap Layers:" dialog box.)
+  * Definition for NB_LAYERS changed from (EDGE_N + 1) to (LAST_NO_COPPER_LAYER + 1)
+    (Although EDGE_N is currently the "last" layer, that wouldn't necessarily still
+    be true if any additional layers are ever defined in the future.) And comparisons
+    to 29 (or 28) have been replaced with comparisons to NB_LAYERS (when appropriate).
++ gerbview
+  * The previously provided "Exit" button within the "GerbView Layer Colors" dialog
+    box has been replaced with "OK", "Cancel", and "Apply" buttons; and both the
+    visibility and color of the Grid layer can now be edited from the same dialog.
+  * Deselecting (Gerber) layers during the "Export to Pcbnew" command is now more
+    user-friendly, due to the provision of an additional "(Deselect)" radiobutton
+    within the (child) "Select Layer:" dialog box (which is always invoked whenever
+    a different radiobutton within the "Layer selection:" dialog box is clicked on).
+    (It had previously been necessary to cancel the "Select Layer:" dialog box before
+    being able to click on the "Deselect" button within the "Layer selection:" dialog
+    box.)
+  * The "Export to Pcbnew" command now requires at least one Gerber file to have been
+    already loaded. And Gerber files can now be loaded into any of the 32 (Gerber)
+    layers provided. (It had previously been necessary to avoid having any gaps within
+    the sequence of used Gerber layers.)
+
+
 2007-Oct-6 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew
 	create new file cross-probing.cpp
 	move RemoteCommand() and SendMessageToEESCHEMA() to cross-probing.cpp
-
 
 
 2007-Oct-3 UPDATE   Dick Hollenbeck <dick@softplc.com>

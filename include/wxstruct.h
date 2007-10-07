@@ -30,8 +30,8 @@
 #endif
 
 //  Option d'affichage des fenetres de dialogue
-//#define DIALOG_STYLE wxDEFAULT_DIALOG_STYLE|wxFRAME_FLOAT_ON_PARENT|wxSTAY_ON_TOP
-#define DIALOG_STYLE wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT
+// #define DIALOG_STYLE wxDEFAULT_DIALOG_STYLE|wxFRAME_FLOAT_ON_PARENT|wxSTAY_ON_TOP
+#define DIALOG_STYLE wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT | MAYBE_RESIZE_BORDER
 
 #define EDA_DRAW_PANEL wxScrolledWindow
 
@@ -274,8 +274,8 @@ public:
     void            OnPanning( int direction );
     void            OnGrid( int grid_type );
     void            Recadre_Trace( bool ToMouse );
-    void            PutOnGrid( wxPoint* coord );/* corrige la valeur de la coordonnee coord
-                                                 *  pour etre sur le point de grille le plus proche */
+    void            PutOnGrid( wxPoint* coord ); /* corrige la valeur de la coordonnee coord
+                                                  *  pour etre sur le point de grille le plus proche */
     void            Zoom_Automatique( bool move_mouse_cursor );
 
     /* Affiche le schema au meilleur zoom au meilleur centrage pour le dessin
@@ -303,7 +303,7 @@ public:
     virtual void    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
     virtual void    ToolOnRightClick( wxCommandEvent& event );
     void            AdjustScrollBars();
-    void            Affiche_Status_Box();/* Affichage des coord curseur, zoom .. */
+    void            Affiche_Status_Box(); /* Affichage des coord curseur, zoom .. */
     void            DisplayUnitsMsg();
 
     /* Gestion generale des operations sur block */
@@ -494,7 +494,7 @@ public:
     MODULE*         Load_Module_From_Library( const wxString& library, wxDC* DC );
 
     // Gestion des chevelus (ratsnest)
-    void            Compile_Ratsnest( wxDC* DC, bool affiche );/* Recalcul complet du chevelu */
+    void            Compile_Ratsnest( wxDC* DC, bool affiche ); /* Recalcul complet du chevelu */
     void            ReCompile_Ratsnest_After_Changes( wxDC* DC );
     int             Test_1_Net_Ratsnest( wxDC* DC, int net_code );
     char*           build_ratsnest_module( wxDC* DC, MODULE* Module );
@@ -502,8 +502,8 @@ public:
     void            Build_Board_Ratsnest( wxDC* DC );
     void            DrawGeneralRatsnest( wxDC* DC, int net_code = 0 );
     void            trace_ratsnest_pad( wxDC* DC );
-    void            recalcule_pad_net_code();/* Routine de
-                                              *  calcul et de mise a jour des net_codes des PADS */
+    void            recalcule_pad_net_code(); /* Routine de
+                                               *  calcul et de mise a jour des net_codes des PADS */
     void            build_liste_pads();
     int*            build_ratsnest_pad( EDA_BaseStruct* ref, const wxPoint& refpos, bool init );
 
@@ -539,7 +539,9 @@ public:
     void            DelLimitesZone( wxDC* DC, bool Redraw );
 
     // Gestion des layers:
-    int             SelectLayer( int default_layer, int min_layer, int max_layer );
+    // (See pcbnew/sel_layer.cpp for description of why null_layer parameter is provided)
+    int             SelectLayer( int default_layer, int min_layer, int max_layer,
+                                 bool null_layer = false );
     void            SelectLayerPair();
     virtual void    SwitchLayer( wxDC* DC, int layer );
 
@@ -1620,8 +1622,8 @@ public:
 
 private:
     void        OnClose( wxCloseEvent& event );
-    void        Cancel( wxCommandEvent& event );
-    void        Ok( wxCommandEvent& event );
+    void        OnCancelClick( wxCommandEvent& event );
+    void        OnOkClick( wxCommandEvent& event );
     void        ClickOnList( wxCommandEvent& event );
     void        D_ClickOnList( wxCommandEvent& event );
     void        OnKeyEvent( wxKeyEvent& event );

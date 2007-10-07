@@ -36,9 +36,7 @@ static int status_cotation; /*  = 0 : pas de cotation en cours
 
 
 enum id_Cotation_properties {
-    ID_ACCEPT_COTATION_PROPERTIES = 1900,
-    ID_CLOSE_COTATION_PROPERTIES,
-    ID_TEXTPCB_SELECT_LAYER
+    ID_TEXTPCB_SELECT_LAYER = 1900
 };
 
 /************************************/
@@ -69,17 +67,15 @@ public:
 
 
 private:
-    void    OnQuit( wxCommandEvent& event );
-    void    CotationPropertiesAccept( wxCommandEvent& event );
+    void    OnCancelClick( wxCommandEvent& event );
+    void    OnOkClick( wxCommandEvent& event );
 
     DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE( WinEDA_CotationPropertiesFrame, wxDialog )
-EVT_BUTTON( ID_ACCEPT_COTATION_PROPERTIES,
-            WinEDA_CotationPropertiesFrame::CotationPropertiesAccept )
-EVT_BUTTON( ID_CLOSE_COTATION_PROPERTIES,
-            WinEDA_CotationPropertiesFrame::OnQuit )
+EVT_BUTTON( wxID_OK, WinEDA_CotationPropertiesFrame::OnOkClick )
+EVT_BUTTON( wxID_CANCEL, WinEDA_CotationPropertiesFrame::OnCancelClick )
 END_EVENT_TABLE()
 
 
@@ -106,13 +102,11 @@ WinEDA_CotationPropertiesFrame::WinEDA_CotationPropertiesFrame( WinEDA_PcbFrame*
     MainBoxSizer->Add( RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
     /* Creation des boutons de commande */
-    Button = new wxButton( this, ID_ACCEPT_COTATION_PROPERTIES,
-                          _( "Ok" ) );
+    Button = new wxButton( this, wxID_OK, _( "OK" ) );
     Button->SetForegroundColour( *wxRED );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
-    Button = new wxButton( this, ID_CLOSE_COTATION_PROPERTIES,
-                          _( "Cancel" ) );
+    Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
     Button->SetForegroundColour( *wxBLUE );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
@@ -142,7 +136,7 @@ WinEDA_CotationPropertiesFrame::WinEDA_CotationPropertiesFrame( WinEDA_PcbFrame*
                                          wxDefaultPosition, wxDefaultSize );
     LeftBoxSizer->Add( m_SelLayerBox, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
     int ii;
-    for( ii = CMP_N + 1; ii < 29; ii++ )
+    for( ii = CMP_N + 1; ii < NB_LAYERS; ii++ )
     {
         m_SelLayerBox->Append( ReturnPcbLayerName( ii ) );
     }
@@ -155,15 +149,15 @@ WinEDA_CotationPropertiesFrame::WinEDA_CotationPropertiesFrame( WinEDA_PcbFrame*
 
 
 /**********************************************************************/
-void WinEDA_CotationPropertiesFrame::OnQuit( wxCommandEvent& WXUNUSED (event) )
+void WinEDA_CotationPropertiesFrame::OnCancelClick( wxCommandEvent& WXUNUSED (event) )
 /**********************************************************************/
 {
-    Close( true );    // true is to force the frame to close
+    EndModal( -1 );
 }
 
 
 /***********************************************************************************/
-void WinEDA_CotationPropertiesFrame::CotationPropertiesAccept( wxCommandEvent& event )
+void WinEDA_CotationPropertiesFrame::OnOkClick( wxCommandEvent& event )
 /***********************************************************************************/
 {
     if( m_DC )     // Effacement ancien texte
@@ -193,7 +187,7 @@ void WinEDA_CotationPropertiesFrame::CotationPropertiesAccept( wxCommandEvent& e
     }
 
     m_Parent->m_CurrentScreen->SetModify();
-    Close( TRUE );
+    EndModal( 1 );
 }
 
 
@@ -208,7 +202,7 @@ static void Exit_EditCotation( WinEDA_DrawPanel* Panel, wxDC* DC )
         if( Cotation->m_Flags & IS_NEW )
         {
             Cotation->Draw( Panel, DC, wxPoint( 0, 0 ), GR_XOR );
-            Cotation ->DeleteStructure();
+            Cotation->DeleteStructure();
         }
         else
         {
@@ -365,7 +359,8 @@ void WinEDA_PcbFrame::Install_Edit_Cotation( COTATION* Cotation,
 
     WinEDA_CotationPropertiesFrame* frame = new WinEDA_CotationPropertiesFrame( this,
                                                                                 Cotation, DC, pos );
-    frame->ShowModal(); frame->Destroy();
+    frame->ShowModal();
+    frame->Destroy();
 }
 
 
@@ -378,7 +373,7 @@ void WinEDA_PcbFrame::Delete_Cotation( COTATION* Cotation, wxDC* DC )
 
     if( DC )
         Cotation->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
-    Cotation ->DeleteStructure();
+    Cotation->DeleteStructure();
     m_CurrentScreen->SetModify();
 }
 

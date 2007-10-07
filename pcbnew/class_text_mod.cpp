@@ -343,7 +343,7 @@ void TEXTE_MODULE::Display_Infos( WinEDA_DrawFrame* frame )
         Affiche_1_Parametre( frame, -1, wxEmptyString, _( "Yes" ), DARKGREEN );
 
     ii = m_Layer;
-    if( ii <= 28 )
+    if( ii < NB_LAYERS )
         Affiche_1_Parametre( frame, 28, _( "Layer" ), ReturnPcbLayerName( ii ), DARKGREEN );
     else
     {

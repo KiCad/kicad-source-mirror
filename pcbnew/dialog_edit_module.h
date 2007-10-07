@@ -5,9 +5,7 @@
 
 enum id_Module_properties
 {
-	ID_ACCEPT_MODULE_PROPERTIES = 1900,
-	ID_CLOSE_MODULE_PROPERTIES,
-	ID_GOTO_MODULE_EDITOR,
+	ID_GOTO_MODULE_EDITOR =1900,
 	ID_MODULE_PROPERTIES_EXCHANGE,
 	ID_MODULE_EDIT_ADD_TEXT,
 	ID_MODULE_EDIT_EDIT_TEXT,
@@ -59,8 +57,8 @@ public:
 
 private:
     void CreateControls();
-	void OnQuit(wxCommandEvent& event);
-	void ModulePropertiesAccept(wxCommandEvent& event);
+	void OnCancelClick(wxCommandEvent& event);
+	void OnOkClick(wxCommandEvent& event);
 	void CreateTextModule(wxCommandEvent& event);
 	void EditOrDelTextModule(wxCommandEvent& event);
 	void SelectTextListBox(wxCommandEvent& event);

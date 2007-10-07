@@ -11,12 +11,10 @@
 #include "protos.h"
 
 /* Variables locales */
-static int New_Layer[32];
+static int New_Layer[NB_LAYERS];
 
 enum swap_layer_id {
-    ID_SWAP_LAYER_EXECUTE = 1800,
-    ID_SWAP_LAYER_CANCEL,
-    ID_SWAP_LAYER_BUTTON_SELECT,
+    ID_SWAP_LAYER_BUTTON_SELECT = 1800,
     ID_SWAP_LAYER_DESELECT,
     ID_SWAP_LAYER_SELECT
 };
@@ -40,15 +38,16 @@ public:
 
 private:
     void    Sel_Layer( wxCommandEvent& event );
-    void    Cancel( wxCommandEvent& event );
-    void    Execute( wxCommandEvent& event );
+    void    OnOkClick( wxCommandEvent& event );
+    void    OnCancelClick( wxCommandEvent& event );
 
     DECLARE_EVENT_TABLE()
 };
+
 /* Table des evenements pour WinEDA_SwapLayerFrame */
 BEGIN_EVENT_TABLE( WinEDA_SwapLayerFrame, wxDialog )
-EVT_BUTTON( ID_SWAP_LAYER_EXECUTE, WinEDA_SwapLayerFrame::Execute )
-EVT_BUTTON( ID_SWAP_LAYER_CANCEL, WinEDA_SwapLayerFrame::Cancel )
+EVT_BUTTON( wxID_OK, WinEDA_SwapLayerFrame::OnOkClick )
+EVT_BUTTON( wxID_CANCEL, WinEDA_SwapLayerFrame::OnCancelClick )
 EVT_BUTTON( ID_SWAP_LAYER_DESELECT, WinEDA_SwapLayerFrame::Sel_Layer )
 EVT_BUTTON( ID_SWAP_LAYER_BUTTON_SELECT, WinEDA_SwapLayerFrame::Sel_Layer )
 EVT_RADIOBOX( ID_SWAP_LAYER_SELECT, WinEDA_SwapLayerFrame::Sel_Layer )
@@ -65,7 +64,7 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( WinEDA_BasePcbFrame* parent ) :
     wxButton* Button;
     int       ii;
     wxPoint   pos;
-    wxString  g_Layer_Name_Pair[32];
+    wxString  g_Layer_Name_Pair[NB_LAYERS];
     wxSize    winsize;
 
     m_Parent = parent;
@@ -76,42 +75,38 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( WinEDA_BasePcbFrame* parent ) :
         g_Layer_Name_Pair[ii] = ReturnPcbLayerName( ii ) + wxT( " -> " ) + _( "No Change" );
     }
 
-    pos.x = 5; pos.y = START_Y;
+    pos.x = 5;
+    pos.y = START_Y;
     m_LayerList = new wxRadioBox( this, ID_SWAP_LAYER_SELECT, _( "Layers" ),
-                                  pos,
-                                  wxSize( -1, -1 ), 29, g_Layer_Name_Pair, 16, wxRA_SPECIFY_ROWS );
+                                  pos, wxSize( -1, -1 ),
+                                  NB_LAYERS, g_Layer_Name_Pair, 16, wxRA_SPECIFY_ROWS );
 
     winsize.y = m_LayerList->GetRect().GetBottom();
 
-    pos.x  = m_LayerList->GetRect().GetRight() + 12;
-    Button = new wxButton( this, ID_SWAP_LAYER_CANCEL,
-                           _( "Cancel" ), pos );
+    pos.x = m_LayerList->GetRect().GetRight() + 12;
 
-    Button->SetForegroundColour( *wxRED );
+    Button = new wxButton(this, ID_SWAP_LAYER_BUTTON_SELECT, _("Select..."), pos );
+    Button->SetForegroundColour(wxColour(0,100,100));
+
+    pos.y += Button->GetSize().y + 10;
+
+    Button = new wxButton(this, ID_SWAP_LAYER_DESELECT, _("Deselect"), pos );
+    Button->SetForegroundColour(wxColour(0,100,0));
+
+    pos.y = winsize.y - 2 * Button->GetSize().y - 10;
+
+    Button = new wxButton(this, wxID_OK, _("OK"), pos );
+    Button->SetForegroundColour(*wxRED);
+
+    pos.y += Button->GetSize().y + 10;
+
+    Button = new wxButton(this, wxID_CANCEL, _("Cancel"), pos );
+    Button->SetForegroundColour(*wxBLUE);
+
     winsize.x = MAX( winsize.x, Button->GetRect().GetRight() );
-
-    pos.y += Button->GetSize().y + 5;
-    Button = new wxButton( this, ID_SWAP_LAYER_EXECUTE,
-                           _( "OK" ), pos );
-
-    Button->SetForegroundColour( *wxBLUE );
-    winsize.x = MAX( winsize.x, Button->GetRect().GetRight() );
-
-    pos.y += Button->GetSize().y + 15;
-    Button = new wxButton( this, ID_SWAP_LAYER_DESELECT,
-                           _( "Deselect" ), pos );
-
-    Button->SetForegroundColour( wxColour( 0, 100, 0 ) );
-    winsize.x = MAX( winsize.x, Button->GetRect().GetRight() );
-
-    pos.y += Button->GetSize().y + 5;
-    Button = new wxButton( this, ID_SWAP_LAYER_BUTTON_SELECT,
-                           _( "Select" ), pos );
-
-    Button->SetForegroundColour( wxColour( 0, 100, 100 ) );
-    winsize.x = MAX( winsize.x, Button->GetRect().GetRight() );
-
-    winsize.x += 10; winsize.y += 10;
+    winsize.y = MAX( winsize.y, Button->GetRect().GetBottom() );
+    winsize.x += 10;
+    winsize.y += 10;
     SetClientSize( winsize );
 }
 
@@ -127,26 +122,49 @@ void WinEDA_SwapLayerFrame::Sel_Layer( wxCommandEvent& event )
     switch( event.GetId() )
     {
     case ID_SWAP_LAYER_DESELECT:
-        if( New_Layer[ii] != -1 )
+        if( New_Layer[ii] != NB_LAYERS )
         {
-            New_Layer[ii] = -1;
-            m_LayerList->SetString( ii, ReturnPcbLayerName( ii ) +
+            New_Layer[ii] = NB_LAYERS;
+            m_LayerList->SetString( ii, ReturnPcbLayerName( ii )
                                    + wxT( " -> " ) + _( "No Change" ) );
         }
         break;
 
     case ID_SWAP_LAYER_BUTTON_SELECT:
     case ID_SWAP_LAYER_SELECT:
-        jj = m_Parent->SelectLayer( ii, -1, -1 );
-        if( (jj < 0) || (jj >= 29) )
+        jj = New_Layer[ii];
+        if( (jj < 0) || (jj > NB_LAYERS) )
+            jj = NB_LAYERS; // (Defaults to "No Change".)
+        jj = m_Parent->SelectLayer( jj, -1, -1, true );
+
+        if( (jj < 0) || (jj > NB_LAYERS) )
             return;
 
-        if( ii != jj )
+        // No change if the selected layer matches the layer being edited.
+        // (Hence the only way to restore a layer to the "No Change"
+        // state is by specifically deselecting it; any attempt
+        // to select the same layer (instead) will be ignored.)
+        if( jj == ii )
+        {
+            wxString msg;
+            msg = _( "Deselect this layer to restore its No Change state" );
+            DisplayInfo( this, msg );
+            return;
+        }
+
+        if( jj != New_Layer[ii] )
         {
             New_Layer[ii] = jj;
-            m_LayerList->SetString( ii,
-                                   ReturnPcbLayerName( ii ) + wxT( " -> " ) +
-                                   ReturnPcbLayerName( jj ) );
+            if( jj == NB_LAYERS )
+                m_LayerList->SetString( ii,
+                                        ReturnPcbLayerName( ii )
+                                      + wxT( " -> " )
+                                      + _( "No Change" ) );
+            else
+                m_LayerList->SetString( ii,
+                                        ReturnPcbLayerName( ii )
+                                      + wxT( " -> " )
+                                      + ReturnPcbLayerName( jj ) );
         }
         break;
     }
@@ -154,7 +172,7 @@ void WinEDA_SwapLayerFrame::Sel_Layer( wxCommandEvent& event )
 
 
 /*********************************************************/
-void WinEDA_SwapLayerFrame::Cancel( wxCommandEvent& event )
+void WinEDA_SwapLayerFrame::OnCancelClick( wxCommandEvent& event )
 /*********************************************************/
 {
     EndModal( -1 );
@@ -162,7 +180,7 @@ void WinEDA_SwapLayerFrame::Cancel( wxCommandEvent& event )
 
 
 /*********************************************************/
-void WinEDA_SwapLayerFrame::Execute( wxCommandEvent& event )
+void WinEDA_SwapLayerFrame::OnOkClick( wxCommandEvent& event )
 /*********************************************************/
 {
     EndModal( 1 );
@@ -181,15 +199,16 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
 
 
     /* Init default values */
-    for( ii = 0; ii < 32; ii++ )
-        New_Layer[ii] = -1;
+    for( ii = 0; ii < NB_LAYERS; ii++ )
+        New_Layer[ii] = NB_LAYERS;
 
     WinEDA_SwapLayerFrame* frame = new WinEDA_SwapLayerFrame( this );
 
-    ii = frame->ShowModal(); frame->Destroy();
+    ii = frame->ShowModal();
+    frame->Destroy();
 
     if( ii != 1 )
-        return;
+        return; // (Cancelled dialog box returns -1 instead)
 
     /* Modifications des pistes */
     pt_segm = (TRACK*) m_Pcb->m_Track;

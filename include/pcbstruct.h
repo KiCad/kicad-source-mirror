@@ -71,7 +71,7 @@
 #define ECO2_N                27
 #define EDGE_N                28
 #define LAST_NO_COPPER_LAYER  28
-#define NB_LAYERS             (EDGE_N + 1)
+#define NB_LAYERS             (LAST_NO_COPPER_LAYER + 1)
 
 #define LAYER_COUNT           32
 

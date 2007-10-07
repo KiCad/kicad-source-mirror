@@ -154,7 +154,7 @@ void  WinEDA_ConfigFrame::OnOkClick(wxCommandEvent& WXUNUSED(event))
     g_PhotoFilenameExt = TextPhotoExt->GetValue();
     g_PenFilenameExt = TextPenExt->GetValue();
 
-    EndModal(1);
+    EndModal( 1 );
 }
 
 
@@ -162,7 +162,7 @@ void  WinEDA_ConfigFrame::OnOkClick(wxCommandEvent& WXUNUSED(event))
 void  WinEDA_ConfigFrame::OnCancelClick(wxCommandEvent& WXUNUSED(event))
 /******************************************************************/
 {
-    EndModal(0);
+    EndModal( -1 );
 }
 
 
@@ -172,4 +172,3 @@ void WinEDA_ConfigFrame::SaveCfg(wxCommandEvent& event)
 {
 	m_Parent->Update_config();
 }
-

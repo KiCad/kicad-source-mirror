@@ -30,11 +30,6 @@ static wxString shape_list[NBSHAPES] =
     wxT( "Input" ), wxT( "Output" ), wxT( "Bidi" ), wxT( "TriState" ), wxT( "Passive" )
 };
 
-enum id_Textdit {
-    ID_ACCEPT_PINSHEET_PROPERTIES = 1970,
-    ID_CANCEL_PINSHEET_PROPERTIES
-};
-
 
 /*****************************************************/
 class WinEDA_PinSheetPropertiesFrame : public wxDialog
@@ -57,16 +52,15 @@ public:
     ~WinEDA_PinSheetPropertiesFrame() { };
 
 private:
-    void    PinSheetPropertiesAccept( wxCommandEvent& event );
-    void    OnQuit( wxCommandEvent& event );
+    void    OnOkClick( wxCommandEvent& event );
+    void    OnCancelClick( wxCommandEvent& event );
 
     DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE( WinEDA_PinSheetPropertiesFrame, wxDialog )
-EVT_BUTTON( ID_ACCEPT_PINSHEET_PROPERTIES,
-            WinEDA_PinSheetPropertiesFrame::PinSheetPropertiesAccept )
-EVT_BUTTON( ID_CANCEL_PINSHEET_PROPERTIES, WinEDA_PinSheetPropertiesFrame::OnQuit )
+EVT_BUTTON( wxID_OK, WinEDA_PinSheetPropertiesFrame::OnOkClick )
+EVT_BUTTON( wxID_CANCEL, WinEDA_PinSheetPropertiesFrame::OnCancelClick )
 END_EVENT_TABLE()
 
 
@@ -96,13 +90,11 @@ WinEDA_PinSheetPropertiesFrame::WinEDA_PinSheetPropertiesFrame(
     m_CurrentPinSheet = curr_pinsheet;
 
     /* Creation des boutons de commande */
-    Button = new wxButton( this, ID_ACCEPT_PINSHEET_PROPERTIES,
-                          _( "Ok" ) );
+    Button = new wxButton( this, wxID_OK, _( "OK" ) );
     Button->SetForegroundColour( *wxRED );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
-    Button = new wxButton( this, ID_CANCEL_PINSHEET_PROPERTIES,
-                          _( "Cancel" ) );
+    Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
     Button->SetForegroundColour( *wxBLUE );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
@@ -123,23 +115,22 @@ WinEDA_PinSheetPropertiesFrame::WinEDA_PinSheetPropertiesFrame(
 
 
 /************************************************************************/
-void WinEDA_PinSheetPropertiesFrame::OnQuit( wxCommandEvent& WXUNUSED (event) )
+void WinEDA_PinSheetPropertiesFrame::OnCancelClick( wxCommandEvent& WXUNUSED (event) )
 /************************************************************************/
 {
-    // true is to force the frame to close
-    Close( true );
+    EndModal( -1 );
 }
 
 
 /***********************************************************************************/
-void WinEDA_PinSheetPropertiesFrame::PinSheetPropertiesAccept( wxCommandEvent& event )
+void WinEDA_PinSheetPropertiesFrame::OnOkClick( wxCommandEvent& event )
 /***********************************************************************************/
 {
     m_CurrentPinSheet->m_Text   = m_TextWin->GetText();
     m_CurrentPinSheet->m_Size.x = m_CurrentPinSheet->m_Size.y = m_TextWin->GetTextSize();
 
     m_CurrentPinSheet->m_Shape = m_PinSheetShape->GetSelection();
-    Close( TRUE );
+    EndModal( 0 );
 }
 
 

@@ -232,7 +232,7 @@ WinEDA_PartPropertiesFrame::WinEDA_PartPropertiesFrame( WinEDA_LibeditFrame* par
 
     pos.x += Button->GetDefaultSize().x + 70;
     Button = new wxButton( this, ID_ACCEPT_PART_PROPERTIES,
-                           _( "Ok" ), pos );
+                           _( "OK" ), pos );
 
     Button->SetForegroundColour( *wxRED );
     c = new wxLayoutConstraints;

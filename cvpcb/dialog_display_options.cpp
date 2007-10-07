@@ -47,7 +47,8 @@ void WinEDA_DisplayFrame::InstallOptionsDisplay(wxCommandEvent& event)
 /* Creation de la fenetre d'options de la fenetre de visu */
 {
 	KiDisplayOptionsFrame * OptionWindow = new KiDisplayOptionsFrame(this);
-	OptionWindow->ShowModal(); OptionWindow->Destroy();
+	OptionWindow->ShowModal();
+	OptionWindow->Destroy();
 }
 
 
@@ -65,15 +66,13 @@ IMPLEMENT_DYNAMIC_CLASS( KiDisplayOptionsFrame, wxDialog )
 BEGIN_EVENT_TABLE( KiDisplayOptionsFrame, wxDialog )
 
 ////@begin KiDisplayOptionsFrame event table entries
-    EVT_CHECKBOX( PADNUM_OPT, KiDisplayOptionsFrame::OnPadnumOptClick )
-
     EVT_BUTTON( ID_SAVE_CONFIG, KiDisplayOptionsFrame::OnSaveConfigClick )
 
-    EVT_CHECKBOX( PADFILL_OPT, KiDisplayOptionsFrame::OnPadfillOptClick )
+    EVT_BUTTON( wxID_OK, KiDisplayOptionsFrame::OnOkClick )
 
-    EVT_RADIOBOX( EDGE_SELECT, KiDisplayOptionsFrame::OnEdgeSelectSelected )
+    EVT_BUTTON( wxID_CANCEL, KiDisplayOptionsFrame::OnCancelClick )
 
-    EVT_RADIOBOX( TEXT_SELECT, KiDisplayOptionsFrame::OnTextSelectSelected )
+    EVT_BUTTON( wxID_APPLY, KiDisplayOptionsFrame::OnApplyClick )
 
 ////@end KiDisplayOptionsFrame event table entries
 
@@ -101,10 +100,10 @@ KiDisplayOptionsFrame::KiDisplayOptionsFrame( WinEDA_BasePcbFrame* parent, wxWin
 bool KiDisplayOptionsFrame::Create( wxWindow* parent, wxWindowID id, const wxString& caption, const wxPoint& pos, const wxSize& size, long style )
 {
 ////@begin KiDisplayOptionsFrame member initialisation
-    m_IsShowPadNum = NULL;
-    m_IsShowPadFill = NULL;
     m_EdgesDisplayOption = NULL;
     m_TextDisplayOption = NULL;
+    m_IsShowPadNum = NULL;
+    m_IsShowPadFill = NULL;
 ////@end KiDisplayOptionsFrame member initialisation
 
 ////@begin KiDisplayOptionsFrame creation
@@ -132,24 +131,16 @@ void KiDisplayOptionsFrame::CreateControls()
 
     KiDisplayOptionsFrame* itemDialog1 = this;
 
-    wxBoxSizer* itemBoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* itemBoxSizer2 = new wxBoxSizer(wxVERTICAL);
     itemDialog1->SetSizer(itemBoxSizer2);
 
-    wxFlexGridSizer* itemFlexGridSizer3 = new wxFlexGridSizer(3, 2, 0, 0);
-    itemBoxSizer2->Add(itemFlexGridSizer3, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxBoxSizer* itemBoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
+//  itemBoxSizer2->Add(itemBoxSizer3, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+    itemBoxSizer2->Add(itemBoxSizer3, 0, wxALIGN_TOP|wxALL, 5);
 
-    m_IsShowPadNum = new wxCheckBox( itemDialog1, PADNUM_OPT, _("Pad &Num"), wxDefaultPosition, wxDefaultSize, wxCHK_2STATE );
-    m_IsShowPadNum->SetValue(false);
-    itemFlexGridSizer3->Add(m_IsShowPadNum, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-    wxButton* itemButton5 = new wxButton( itemDialog1, ID_SAVE_CONFIG, _("Save Cfg"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer3->Add(itemButton5, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-    m_IsShowPadFill = new wxCheckBox( itemDialog1, PADFILL_OPT, _("&Pad Fill"), wxDefaultPosition, wxDefaultSize, wxCHK_2STATE );
-    m_IsShowPadFill->SetValue(false);
-    itemFlexGridSizer3->Add(m_IsShowPadFill, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-    itemFlexGridSizer3->Add(5, 5, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxBOTTOM, 5);
+    wxBoxSizer* itemBoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
+//  itemBoxSizer2->Add(itemBoxSizer4, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+    itemBoxSizer2->Add(itemBoxSizer4, 0, wxGROW|wxALIGN_TOP|wxALL, 5);
 
     wxString m_EdgesDisplayOptionStrings[] = {
         _("&Filaire"),
@@ -157,7 +148,8 @@ void KiDisplayOptionsFrame::CreateControls()
         _("&Sketch")
     };
     m_EdgesDisplayOption = new wxRadioBox( itemDialog1, EDGE_SELECT, _("Edges:"), wxDefaultPosition, wxDefaultSize, 3, m_EdgesDisplayOptionStrings, 1, wxRA_SPECIFY_COLS );
-    itemFlexGridSizer3->Add(m_EdgesDisplayOption, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+//  itemBoxSizer3->Add(m_EdgesDisplayOption, 0, wxGROW|wxALL, 5);
+    itemBoxSizer3->Add(m_EdgesDisplayOption, 0, wxALIGN_LEFT|wxALL, 5);
 
     wxString m_TextDisplayOptionStrings[] = {
         _("&Filaire"),
@@ -165,13 +157,54 @@ void KiDisplayOptionsFrame::CreateControls()
         _("&Sketch")
     };
     m_TextDisplayOption = new wxRadioBox( itemDialog1, TEXT_SELECT, _("Texts:"), wxDefaultPosition, wxDefaultSize, 3, m_TextDisplayOptionStrings, 1, wxRA_SPECIFY_COLS );
-    itemFlexGridSizer3->Add(m_TextDisplayOption, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+//  itemBoxSizer3->Add(m_TextDisplayOption, 0, wxGROW|wxALL, 5);
+    itemBoxSizer3->Add(m_TextDisplayOption, 0, wxALIGN_LEFT|wxALL, 5);
+
+    wxBoxSizer* itemBoxSizer5 = new wxBoxSizer(wxVERTICAL);
+//  itemBoxSizer3->Add(itemBoxSizer5, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer3->Add(itemBoxSizer5, 0, wxGROW|wxALL, 0);
+
+    // Provide a spacer to improve appearance of dialog box
+    itemBoxSizer5->AddSpacer(5);
+
+    m_IsShowPadNum = new wxCheckBox( itemDialog1, PADNUM_OPT, _("Pad &Num"), wxDefaultPosition, wxDefaultSize, wxCHK_2STATE );
+    m_IsShowPadNum->SetValue(false);
+//  itemBoxSizer5->Add(m_IsShowPadNum, 0, wxGROW|wxALL, 5);
+    itemBoxSizer5->Add(m_IsShowPadNum, 0, wxALIGN_TOP|wxALL, 5);
+
+    m_IsShowPadFill = new wxCheckBox( itemDialog1, PADFILL_OPT, _("&Pad Fill"), wxDefaultPosition, wxDefaultSize, wxCHK_2STATE );
+    m_IsShowPadFill->SetValue(false);
+//  itemBoxSizer5->Add(m_IsShowPadFill, 0, wxGROW|wxALL, 5);
+    itemBoxSizer5->Add(m_IsShowPadFill, 0, wxALIGN_TOP|wxALL, 5);
+
+    // Provide a stretch spacer to improve appearance of dialog box
+    itemBoxSizer5->AddStretchSpacer();
+
+    wxButton* itemButton6 = new wxButton( itemDialog1, ID_SAVE_CONFIG, _("Save Cfg..."), wxDefaultPosition, wxDefaultSize, 0 );
+//  itemBoxSizer5->Add(itemButton6, 0, wxGROW|wxALL, 5);
+    itemBoxSizer5->Add(itemButton6, 0, wxALIGN_BOTTOM|wxALL, 5);
+
+//  itemBoxSizer4->AddStretchSpacer();
+
+    wxButton* itemButton7 = new wxButton( itemDialog1, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemButton7->SetForegroundColour(*wxRED);
+//  itemBoxSizer4->Add(itemButton7, 0, wxGROW|wxALL, 5);
+    itemBoxSizer4->Add(itemButton7, 0, wxALIGN_RIGHT|wxALL, 5);
+
+    wxButton* itemButton8 = new wxButton( itemDialog1, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemButton8->SetForegroundColour(*wxBLUE);
+//  itemBoxSizer4->Add(itemButton8, 0, wxGROW|wxALL, 5);
+    itemBoxSizer4->Add(itemButton8, 0, wxALIGN_RIGHT|wxALL, 5);
+
+    wxButton* itemButton9 = new wxButton( itemDialog1, wxID_APPLY, _("Apply"), wxDefaultPosition, wxDefaultSize, 0 );
+//  itemBoxSizer4->Add(itemButton9, 0, wxGROW|wxALL, 5);
+    itemBoxSizer4->Add(itemButton9, 0, wxALIGN_RIGHT|wxALL, 5);
 
     // Set validators
-    m_IsShowPadNum->SetValidator( wxGenericValidator(& DisplayOpt.DisplayPadNum) );
-    m_IsShowPadFill->SetValidator( wxGenericValidator(& DisplayOpt.DisplayPadFill) );
     m_EdgesDisplayOption->SetValidator( wxGenericValidator(& DisplayOpt.DisplayModEdge) );
     m_TextDisplayOption->SetValidator( wxGenericValidator(& DisplayOpt.DisplayModText) );
+    m_IsShowPadNum->SetValidator( wxGenericValidator(& DisplayOpt.DisplayPadNum) );
+    m_IsShowPadFill->SetValidator( wxGenericValidator(& DisplayOpt.DisplayPadFill) );
 ////@end KiDisplayOptionsFrame content construction
 }
 
@@ -210,37 +243,28 @@ wxIcon KiDisplayOptionsFrame::GetIconResource( const wxString& name )
 ////@end KiDisplayOptionsFrame icon retrieval
 }
 
-
 /*!
- * wxEVT_COMMAND_CHECKBOX_CLICKED event handler for PADFILL_OPT
+ * Update settings related to edges, text strings, and pads
  */
 
-void KiDisplayOptionsFrame::OnPadfillOptClick( wxCommandEvent& event )
+void KiDisplayOptionsFrame::UpdateObjectSettings()
 {
-	DisplayOpt.DisplayPadFill = m_Parent->m_DisplayPadFill =
-		m_IsShowPadFill->GetValue();
-	m_Parent->ReDrawPanel();
-}
-
-/*!
- * wxEVT_COMMAND_CHECKBOX_CLICKED event handler for PADNUM_OPT
- */
-
-void KiDisplayOptionsFrame::OnPadnumOptClick( wxCommandEvent& event )
-{
-    DisplayOpt.DisplayPadNum = m_Parent->m_DisplayPadNum = m_IsShowPadNum->GetValue();
-	m_Parent->ReDrawPanel();
-}
-
-/*!
- * wxEVT_COMMAND_RADIOBOX_SELECTED event handler for EDGE_SELECT
- */
-
-void KiDisplayOptionsFrame::OnEdgeSelectSelected( wxCommandEvent& event )
-{
+    // Update settings
+////@begin KiDisplayOptionsFrame update settings
 	DisplayOpt.DisplayModEdge = m_Parent->m_DisplayModEdge =
 		m_EdgesDisplayOption->GetSelection();
+
+	DisplayOpt.DisplayModText = m_Parent->m_DisplayModText = 
+		m_TextDisplayOption->GetSelection();
+
+    DisplayOpt.DisplayPadNum = m_Parent->m_DisplayPadNum =
+        m_IsShowPadNum->GetValue();
+
+	DisplayOpt.DisplayPadFill = m_Parent->m_DisplayPadFill =
+		m_IsShowPadFill->GetValue();
+
 	m_Parent->ReDrawPanel();
+////@end KiDisplayOptionsFrame update settings
 }
 
 /*!
@@ -253,14 +277,31 @@ void KiDisplayOptionsFrame::OnSaveConfigClick( wxCommandEvent& event )
 }
 
 /*!
- * wxEVT_COMMAND_RADIOBOX_SELECTED event handler for TEXT_SELECT
+ * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
  */
 
-void KiDisplayOptionsFrame::OnTextSelectSelected( wxCommandEvent& event )
+void KiDisplayOptionsFrame::OnOkClick( wxCommandEvent& event )
 {
-	DisplayOpt.DisplayModText = m_Parent->m_DisplayModText = 
-		m_TextDisplayOption->GetSelection();
-	m_Parent->ReDrawPanel();
+	UpdateObjectSettings();
+    EndModal( 1 );
+}
+
+/*!
+ * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
+ */
+
+void KiDisplayOptionsFrame::OnCancelClick( wxCommandEvent& event )
+{
+    EndModal( -1 );
+}
+
+/*!
+ * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_APPLY
+ */
+
+void KiDisplayOptionsFrame::OnApplyClick( wxCommandEvent& event )
+{
+	UpdateObjectSettings();
 }
 
 

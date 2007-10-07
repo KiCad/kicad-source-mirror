@@ -11,9 +11,8 @@
 /**************************************/
 
 BEGIN_EVENT_TABLE( WinEDA_ModulePropertiesFrame, wxDialog )
-    EVT_BUTTON( ID_ACCEPT_MODULE_PROPERTIES,
-                WinEDA_ModulePropertiesFrame::ModulePropertiesAccept )
-    EVT_BUTTON( ID_CLOSE_MODULE_PROPERTIES, WinEDA_ModulePropertiesFrame::OnQuit )
+    EVT_BUTTON( wxID_OK, WinEDA_ModulePropertiesFrame::OnOkClick )
+    EVT_BUTTON( wxID_CANCEL, WinEDA_ModulePropertiesFrame::OnCancelClick )
     EVT_BUTTON( ID_MODULE_EDIT_ADD_TEXT, WinEDA_ModulePropertiesFrame::CreateTextModule )
     EVT_BUTTON( ID_MODULE_EDIT_EDIT_TEXT, WinEDA_ModulePropertiesFrame::EditOrDelTextModule )
     EVT_BUTTON( ID_MODULE_EDIT_DELETE_TEXT, WinEDA_ModulePropertiesFrame::EditOrDelTextModule )
@@ -115,13 +114,11 @@ void WinEDA_ModulePropertiesFrame::CreateControls()
     wxBoxSizer*      ButtonsBoxSizer = new wxBoxSizer( wxHORIZONTAL );
     m_GeneralBoxSizer->Add( ButtonsBoxSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5 );
 
-    Button = new wxButton( this, ID_ACCEPT_MODULE_PROPERTIES,
-                          _( "Ok" ) );
+    Button = new wxButton( this, wxID_OK, _( "OK" ) );
     Button->SetForegroundColour( *wxRED );
     ButtonsBoxSizer->Add( Button, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
-    Button = new wxButton( this, ID_CLOSE_MODULE_PROPERTIES,
-                          _( "Cancel" ) );
+    Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
     Button->SetForegroundColour( *wxBLUE );
     ButtonsBoxSizer->Add( Button, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 }
@@ -486,15 +483,15 @@ void Panel3D_Ctrl::Browse3DLib( wxCommandEvent& event )
 
 
 /**********************************************************************/
-void WinEDA_ModulePropertiesFrame::OnQuit( wxCommandEvent& WXUNUSED (event) )
+void WinEDA_ModulePropertiesFrame::OnCancelClick( wxCommandEvent& WXUNUSED (event) )
 /**********************************************************************/
 {
-    Close( true );    // true is to force the frame to close
+    EndModal( -1 );
 }
 
 
 /******************************************************************************/
-void WinEDA_ModulePropertiesFrame::ModulePropertiesAccept( wxCommandEvent& event )
+void WinEDA_ModulePropertiesFrame::OnOkClick( wxCommandEvent& event )
 /******************************************************************************/
 {
     bool change_layer = FALSE;
@@ -590,7 +587,7 @@ void WinEDA_ModulePropertiesFrame::ModulePropertiesAccept( wxCommandEvent& event
 
     m_Parent->GetScreen()->SetModify();
 
-    Close( TRUE );
+    EndModal( 1 );
 
     if( m_DC )
         m_CurrentModule->Draw( m_Parent->DrawPanel, m_DC, wxPoint( 0, 0 ), GR_OR );

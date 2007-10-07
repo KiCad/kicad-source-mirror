@@ -211,7 +211,7 @@ wxString list_scales[2] = { _("format: 2.3"), _("format 3.4") };
 void  WinEDA_GerberGeneralOptionsFrame::OnCancelClick(wxCommandEvent& WXUNUSED(event))
 /************************************************************************/
 {
-    EndModal(0);
+    EndModal( -1 );
 }
 
 
@@ -227,7 +227,7 @@ void WinEDA_GerberGeneralOptionsFrame::OnOkClick(wxCommandEvent& event)
 	g_Default_GERBER_Format =
 		(m_GerberDefaultScale->GetSelection() == 0) ? 23 : 34;
 
-	EndModal(1);
+	EndModal( 1 );
 }
 
 
@@ -334,7 +334,7 @@ wxString list_opt3[3] = { _("Sketch"), _("Filled"), _("Line") };
 void  WinEDA_LookFrame::OnCancelClick(wxCommandEvent& WXUNUSED(event))
 /**************************************************************/
 {
-    EndModal(0);
+    EndModal( -1 );
 }
 
 
@@ -363,7 +363,7 @@ void WinEDA_LookFrame::OnOkClick(wxCommandEvent& event)
 
 	m_Parent->GetScreen()->SetRefreshReq();
 
-	EndModal(1);
+	EndModal( 1 );
 }
 
 
@@ -395,4 +395,3 @@ void WinEDA_GerberFrame::InstallPcbOptionsFrame(const wxPoint & pos, int id)
 			break;
 	}
 }
-

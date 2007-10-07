@@ -194,7 +194,7 @@ WinEDA_ComponentPropertiesFrame::WinEDA_ComponentPropertiesFrame(
 
     pos.x += MButton->GetDefaultSize().x + 10;
     wxButton* Button = new wxButton( this, ID_ACCEPT_CMP_PROPERTIES,
-                                     _( "Ok" ), pos );
+                                     _( "OK" ), pos );
     Button->SetForegroundColour( *wxBLUE );
     c = new wxLayoutConstraints;
     c->left.SameAs( MButton, wxRight, 20 );

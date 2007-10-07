@@ -21,9 +21,7 @@ static wxPoint old_pos; // position originelle du texte selecte
 
 
 enum id_TextPCB_properties {
-    ID_ACCEPT_TEXTE_PCB_PROPERTIES = 1900,
-    ID_CLOSE_TEXTE_PCB_PROPERTIES,
-    ID_TEXTPCB_SELECT_LAYER
+    ID_TEXTPCB_SELECT_LAYER = 1900
 };
 
 /************************************/
@@ -56,17 +54,15 @@ public:
 
 
 private:
-    void    TextPCBPropertiesAccept( wxCommandEvent& event );
-    void    OnQuit( wxCommandEvent& event );
+    void    OnOkClick( wxCommandEvent& event );
+    void    OnCancelClick( wxCommandEvent& event );
 
     DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE( WinEDA_TextPCBPropertiesFrame, wxDialog )
-EVT_BUTTON( ID_ACCEPT_TEXTE_PCB_PROPERTIES,
-            WinEDA_TextPCBPropertiesFrame::TextPCBPropertiesAccept )
-EVT_BUTTON( ID_CLOSE_TEXTE_PCB_PROPERTIES,
-            WinEDA_TextPCBPropertiesFrame::OnQuit )
+EVT_BUTTON( wxID_OK, WinEDA_TextPCBPropertiesFrame::OnOkClick )
+EVT_BUTTON( wxID_CANCEL, WinEDA_TextPCBPropertiesFrame::OnCancelClick )
 END_EVENT_TABLE()
 
 
@@ -78,7 +74,8 @@ void WinEDA_PcbFrame::InstallTextPCBOptionsFrame( TEXTE_PCB* TextPCB,
     DrawPanel->m_IgnoreMouseEvents = TRUE;
     WinEDA_TextPCBPropertiesFrame* frame = new WinEDA_TextPCBPropertiesFrame( this,
                                                                               TextPCB, DC, pos );
-    frame->ShowModal(); frame->Destroy();
+    frame->ShowModal();
+    frame->Destroy();
     DrawPanel->MouseToCursorSchema();
     DrawPanel->m_IgnoreMouseEvents = FALSE;
 }
@@ -111,12 +108,12 @@ WinEDA_TextPCBPropertiesFrame::WinEDA_TextPCBPropertiesFrame( WinEDA_PcbFrame* p
     MainBoxSizer->Add( RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
     /* Creation des boutons de commande */
-    Button = new wxButton( this, ID_ACCEPT_TEXTE_PCB_PROPERTIES, _( "Ok" ) );
+    Button = new wxButton( this, wxID_OK, _( "OK" ) );
     Button->SetForegroundColour( *wxRED );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
     Button->SetDefault();
 
-    Button = new wxButton( this, ID_CLOSE_TEXTE_PCB_PROPERTIES, _( "Cancel" ) );
+    Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
     Button->SetForegroundColour( *wxBLUE );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
@@ -143,7 +140,7 @@ WinEDA_TextPCBPropertiesFrame::WinEDA_TextPCBPropertiesFrame( WinEDA_PcbFrame* p
     MiddleBoxSizer->Add( m_SelLayerBox, 0, wxGROW | wxALL, 5 );
 
     int ii;
-    for( ii = 0; ii < 29; ii++ )
+    for( ii = 0; ii < NB_LAYERS; ii++ )
     {
         m_SelLayerBox->Append( ReturnPcbLayerName( ii ) );
     }
@@ -181,7 +178,7 @@ WinEDA_TextPCBPropertiesFrame::WinEDA_TextPCBPropertiesFrame( WinEDA_PcbFrame* p
                                wxDefaultPosition, wxSize( -1, -1 ), 2, display_msg,
                                1, wxRA_SPECIFY_COLS );
     if( !TextPCB->m_Miroir )
-        m_Mirror->SetSelection( 1 );;
+        m_Mirror->SetSelection( 1 );
     MiddleBoxSizer->Add( m_Mirror, 0, wxGROW | wxALL, 5 );
 
     GetSizer()->Fit( this );
@@ -190,16 +187,15 @@ WinEDA_TextPCBPropertiesFrame::WinEDA_TextPCBPropertiesFrame( WinEDA_PcbFrame* p
 
 
 /**********************************************************************/
-void WinEDA_TextPCBPropertiesFrame::OnQuit( wxCommandEvent& WXUNUSED (event) )
+void WinEDA_TextPCBPropertiesFrame::OnCancelClick( wxCommandEvent& WXUNUSED (event) )
 /**********************************************************************/
 {
-    // true is to force the frame to close
-    Close( true );
+    EndModal( -1 );
 }
 
 
 /**************************************************************************************/
-void WinEDA_TextPCBPropertiesFrame::TextPCBPropertiesAccept( wxCommandEvent& event )
+void WinEDA_TextPCBPropertiesFrame::OnOkClick( wxCommandEvent& event )
 /**************************************************************************************/
 {
     if( m_DC )     // Effacement ancien texte
@@ -224,7 +220,7 @@ void WinEDA_TextPCBPropertiesFrame::TextPCBPropertiesAccept( wxCommandEvent& eve
         CurrentTextPCB->Draw( m_Parent->DrawPanel, m_DC, wxPoint( 0, 0 ), GR_OR );
     }
     m_Parent->m_CurrentScreen->SetModify();
-    Close( TRUE );
+    EndModal( 1 );
 }
 
 

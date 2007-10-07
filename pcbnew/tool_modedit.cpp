@@ -1,5 +1,5 @@
 /*****************************************************************/
-/*	too_modeit.cpp: construction du menu de l'editeur de modules */
+/* tool_modeit.cpp: construction du menu de l'editeur de modules */
 /*****************************************************************/
 
 #include "fctsys.h"

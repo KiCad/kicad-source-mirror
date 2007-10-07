@@ -284,10 +284,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent( wxDC* DC, int shape_type )
 /**************** Polygon Shapes ***********************/
 
 enum id_mw_cmd {
-    ID_ACCEPT_OPT = 1000,
-    ID_CANCEL_OPT,
-    ID_READ_SHAPE_FILE
-
+    ID_READ_SHAPE_FILE = 1000
 };
 
 /*************************************************/
@@ -309,8 +306,8 @@ public:
     ~WinEDA_SetParamShapeFrame() { };
 
 private:
-    void    OnCloseWindow( wxCloseEvent& event );
-    void    OnCancel( wxCommandEvent& event );
+    void    OnOkClick( wxCommandEvent& event );
+    void    OnCancelClick( wxCommandEvent& event );
     void    ReadDataShapeDescr( wxCommandEvent& event );
     void    AcceptOptions( wxCommandEvent& event );
 
@@ -318,8 +315,8 @@ private:
 };
 /* Construction de la table des evenements pour WinEDA_SetParamShapeFrame */
 BEGIN_EVENT_TABLE( WinEDA_SetParamShapeFrame, wxDialog )
-EVT_BUTTON( ID_ACCEPT_OPT, WinEDA_SetParamShapeFrame::AcceptOptions )
-EVT_BUTTON( ID_CANCEL_OPT, WinEDA_SetParamShapeFrame::OnCancel )
+EVT_BUTTON( wxID_OK, WinEDA_SetParamShapeFrame::OnOkClick )
+EVT_BUTTON( wxID_CANCEL, WinEDA_SetParamShapeFrame::OnCancelClick )
 EVT_BUTTON( ID_READ_SHAPE_FILE, WinEDA_SetParamShapeFrame::ReadDataShapeDescr )
 END_EVENT_TABLE()
 
@@ -348,21 +345,21 @@ WinEDA_SetParamShapeFrame::WinEDA_SetParamShapeFrame( WinEDA_PcbFrame* parent,
     MainBoxSizer->Add( LeftBoxSizer, 0, wxGROW | wxALL, 5 );
     MainBoxSizer->Add( RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
-    wxButton* Button = new wxButton( this, ID_ACCEPT_OPT, _( "Ok" ) );
+    wxButton* Button = new wxButton( this, wxID_OK, _( "OK" ) );
     Button->SetForegroundColour( *wxRED );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
-    Button = new wxButton( this, ID_CANCEL_OPT, _( "Cancel" ) );
+    Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
     Button->SetForegroundColour( *wxBLUE );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
-    Button = new wxButton( this, ID_READ_SHAPE_FILE, _( "Read Shape Descr File" ) );
+    Button = new wxButton( this, ID_READ_SHAPE_FILE, _( "Read Shape Descr File..." ) );
     Button->SetForegroundColour( wxColor( 0, 100, 0 ) );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
-    wxString shapelist[3] = { _( "Normal" ), _( "Symmetrical" ), _( "mirrored" ) };
+    wxString shapelist[3] = { _( "Normal" ), _( "Symmetrical" ), _( "Mirrored" ) };
     m_ShapeOptionCtrl = new wxRadioBox( this, -1, _(
-                                            "ShapeOption" ),
+                                            "Shape Option" ),
                                         wxDefaultPosition, wxDefaultSize, 3, shapelist, 1,
                                         wxRA_SPECIFY_COLS );
     LeftBoxSizer->Add( m_ShapeOptionCtrl, 0, wxGROW | wxALL, 5 );
@@ -371,26 +368,25 @@ WinEDA_SetParamShapeFrame::WinEDA_SetParamShapeFrame( WinEDA_PcbFrame* parent,
                                       ShapeSize,
                                       g_UnitMetric, LeftBoxSizer, PCB_INTERNAL_UNIT );
 
-
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
 }
 
 
 /**********************************************************************/
-void WinEDA_SetParamShapeFrame::OnCancel( wxCommandEvent& WXUNUSED (event) )
+void WinEDA_SetParamShapeFrame::OnCancelClick( wxCommandEvent& WXUNUSED (event) )
 /**********************************************************************/
 {
     if( PolyEdges )
         free( PolyEdges );
     PolyEdges      = NULL;
     PolyEdgesCount = 0;
-    EndModal( 0 );
+    EndModal( -1 );
 }
 
 
 /*******************************************************************/
-void WinEDA_SetParamShapeFrame::AcceptOptions( wxCommandEvent& event )
+void WinEDA_SetParamShapeFrame::OnOkClick( wxCommandEvent& event )
 /*******************************************************************/
 {
     ShapeSize     = m_SizeCtrl->GetValue();

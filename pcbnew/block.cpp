@@ -153,7 +153,7 @@ WinEDA_ExecBlockCmdFrame::WinEDA_ExecBlockCmdFrame( WinEDA_BasePcbFrame* parent,
     m_button2 = new wxButton( this, wxID_CANCEL, _( "Cancel" ), wxDefaultPosition, wxDefaultSize, 0 );
     m_button2->SetForegroundColour( *wxBLUE );
     fgSizer2->Add( m_button2, 0, wxALL, 5 );
-    m_button1 = new wxButton( this, wxID_OK, _( "Ok" ), wxDefaultPosition, wxDefaultSize, 0 );
+    m_button1 = new wxButton( this, wxID_OK, _( "OK" ), wxDefaultPosition, wxDefaultSize, 0 );
     m_button1->SetForegroundColour( *wxRED );
     m_button1->SetDefault();
     fgSizer2->Add( m_button1, 0, wxALL, 5 );
@@ -169,7 +169,7 @@ WinEDA_ExecBlockCmdFrame::WinEDA_ExecBlockCmdFrame( WinEDA_BasePcbFrame* parent,
 void WinEDA_ExecBlockCmdFrame::Cancel( wxCommandEvent& WXUNUSED (event) )
 /**********************************************************************/
 {
-    EndModal( 1 );
+    EndModal( -1 );
 }
 
 
