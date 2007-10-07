@@ -171,7 +171,7 @@ TEXTE_PCB* WinEDA_PcbFrame::Create_Texte_Pcb( wxDC* DC )
     /* Mise a jour des caracteristiques */
     TextePcb->m_Layer  = CurrentScreen->m_Active_Layer;
     TextePcb->m_Miroir = 1;
-    if( CurrentScreen->m_Active_Layer == CUIVRE_N )
+    if( CurrentScreen->m_Active_Layer == COPPER_LAYER_N )
         TextePcb->m_Miroir = 0;
 
     TextePcb->m_Size.y = Texte_Pcb_DimV;

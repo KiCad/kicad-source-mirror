@@ -139,7 +139,7 @@ eda_global DISPLAY_OPTIONS DisplayOpt;
  * Function IsModuleLayerVisible
  * expects either of the two layers on which a module can reside, and returns
  * whether that layer is visible.
- * @param layer One of the two allowed layers for modules: CMP_N or CUIVRE_N
+ * @param layer One of the two allowed layers for modules: CMP_N or COPPER_LAYER_N
  * @return bool - true if the layer is visible, else false.
  */
 bool inline IsModuleLayerVisible( int layer ) 
