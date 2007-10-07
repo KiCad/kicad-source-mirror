@@ -30,13 +30,13 @@ static void AddMenusForPin(wxMenu * PopMenu, LibDrawPin* Pin, WinEDA_LibeditFram
 
 
 /********************************************************************************/
-void WinEDA_LibeditFrame::OnRightClick(const wxPoint& MousePos, wxMenu * PopMenu)
+bool WinEDA_LibeditFrame::OnRightClick(const wxPoint& MousePos, wxMenu * PopMenu)
 /********************************************************************************/
 {
 LibEDA_BaseStruct* DrawEntry = CurrentDrawItem;
 bool BlockActive = (m_CurrentScreen->BlockLocate.m_Command !=  BLOCK_IDLE);
 
-	if ( CurrentLibEntry == NULL ) return;
+	if ( CurrentLibEntry == NULL ) return true;
 
 	if ( (DrawEntry == NULL) || (DrawEntry->m_Flags == 0) )
 	{ 	// Simple localisation des elements
@@ -86,7 +86,7 @@ bool BlockActive = (m_CurrentScreen->BlockLocate.m_Command !=  BLOCK_IDLE);
 	}
 
 	if ( DrawEntry ) DrawEntry->Display_Infos_DrawEntry(this);
-	else return;
+	else return true;
 
 	CurrentDrawItem = DrawEntry;
 
@@ -208,6 +208,7 @@ bool BlockActive = (m_CurrentScreen->BlockLocate.m_Command !=  BLOCK_IDLE);
 			break;
 	}
 	PopMenu->AppendSeparator();
+	return true;
 }
 
 /**********************************************************************************/

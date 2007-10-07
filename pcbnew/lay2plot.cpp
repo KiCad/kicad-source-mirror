@@ -176,7 +176,7 @@ static void Plot_Module( WinEDA_DrawPanel* panel, wxDC* DC,
     /* draw footprint graphic shapes */
     PtStruct = Module->m_Drawings;
     mlayer   = g_TabOneLayerMask[Module->GetLayer()];
-    if( Module->GetLayer() == CUIVRE_N )
+    if( Module->GetLayer() == COPPER_LAYER_N )
         mlayer = SILKSCREEN_LAYER_CU;
     else if( Module->GetLayer() == CMP_N )
         mlayer = SILKSCREEN_LAYER_CMP;

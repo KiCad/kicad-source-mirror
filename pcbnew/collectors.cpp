@@ -205,7 +205,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
         
         if( module )
         {
-            if( m_Guide->IgnoreMTextsOnCopper() && module->GetLayer()==LAYER_CUIVRE_N )
+            if( m_Guide->IgnoreMTextsOnCopper() && module->GetLayer()==COPPER_LAYER_N )
                 goto exit;
             
             if( m_Guide->IgnoreMTextsOnCmp() && module->GetLayer()==LAYER_CMP_N )
@@ -225,7 +225,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
 
     if( module )    // true from case TYPEPAD, TYPETEXTEMODULE, or TYPEMODULE
     {
-        if( m_Guide->IgnoreModulesOnCu() && module->GetLayer()==LAYER_CUIVRE_N )
+        if( m_Guide->IgnoreModulesOnCu() && module->GetLayer()==COPPER_LAYER_N )
             goto exit;
         
         if( m_Guide->IgnoreModulesOnCmp() && module->GetLayer()==LAYER_CMP_N )

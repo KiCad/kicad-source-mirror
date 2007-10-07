@@ -101,7 +101,7 @@ void WinEDA_PcbFrame::ExportToGenCAD( wxCommandEvent& event )
     for( module = m_Pcb->m_Modules; module != NULL; module = module->Next() )
     {
         module->flag = 0;
-        if( module->GetLayer() == CUIVRE_N )
+        if( module->GetLayer() == COPPER_LAYER_N )
         {
             Change_Side_Module( module, NULL );
             module->flag = 1;

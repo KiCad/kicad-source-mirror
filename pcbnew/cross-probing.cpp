@@ -25,7 +25,7 @@ void RemoteCommand(  const char* cmdline )
  * @param cmdline = received command from eeschema
  * Commands are
  * $PART: "reference"   put cursor on component
- * $PIN: "pin name"  $PART: "reference" put cursor on the footprint pin 
+ * $PIN: "pin name"  $PART: "reference" put cursor on the footprint pin
  */
 {
     char             line[1024];
@@ -119,11 +119,12 @@ void RemoteCommand(  const char* cmdline )
 /**************************************************************************/
 void WinEDA_PcbFrame::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
 /**************************************************************************/
+
 /** Send a remote command to eeschema via a socket,
  * @param objectToSync = item to be located on schematic (module, pin or text)
  * Commands are
  * $PART: "reference"   put cursor on component anchor
- * $PART: "reference" $PAD: "pad number" put cursor on the component pin 
+ * $PART: "reference" $PAD: "pad number" put cursor on the component pin
  * $PART: "reference" $REF: "reference" put cursor on the component ref
  * $PART: "reference" $VAL: "value" put cursor on the component value
  */
@@ -182,4 +183,3 @@ void WinEDA_PcbFrame::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
         SendCommand( MSG_TO_SCH, cmd );
     }
 }
-

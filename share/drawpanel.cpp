@@ -688,10 +688,11 @@ void WinEDA_DrawPanel::m_Draw_Auxiliary_Axis( wxDC* DC, int drawmode )
 
 
 /*******************************************************/
-void WinEDA_DrawPanel::OnRightClick( wxMouseEvent& event )
+bool WinEDA_DrawPanel::OnRightClick( wxMouseEvent& event )
 /*******************************************************/
 
-/* Build and display a Popup menu on a right mouse button click
+/** Build and display a Popup menu on a right mouse button click
+ * @return true if a popup menu is shown, or false
  */
 {
     wxPoint pos;
@@ -700,7 +701,8 @@ void WinEDA_DrawPanel::OnRightClick( wxMouseEvent& event )
     pos.x = event.GetX(); 
     pos.y = event.GetY();
     
-    m_Parent->OnRightClick( pos, &MasterMenu );
+    if ( ! m_Parent->OnRightClick( pos, &MasterMenu ) )
+		return false;
     
     AddMenuZoom( &MasterMenu );
     
@@ -708,6 +710,8 @@ void WinEDA_DrawPanel::OnRightClick( wxMouseEvent& event )
     PopupMenu( &MasterMenu, pos );
     MouseToCursorSchema();
     m_IgnoreMouseEvents = FALSE;
+	
+	return true;
 }
 
 

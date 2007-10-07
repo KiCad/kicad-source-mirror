@@ -300,7 +300,7 @@ public:
     virtual void    Process_Special_Functions( wxCommandEvent& event ) = 0;
     virtual void    OnLeftClick( wxDC* DC, const wxPoint& MousePos )   = 0;
     virtual void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
-    virtual void    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
+    virtual bool    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
     virtual void    ToolOnRightClick( wxCommandEvent& event );
     void            AdjustScrollBars();
     void            Affiche_Status_Box(); /* Affichage des coord curseur, zoom .. */
@@ -363,7 +363,7 @@ public:
     virtual void    ReCreateVToolbar() = 0;
     virtual void    OnLeftClick( wxDC* DC, const wxPoint& MousePos )  = 0;
     virtual void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) = 0;
-    virtual void    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
+    virtual bool    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
     virtual void    ReCreateMenuBar();
 
     PCB_SCREEN* GetScreen() { return (PCB_SCREEN*) m_CurrentScreen; }
@@ -614,7 +614,7 @@ public:
      * @param aMousePos The current mouse position
      * @param aPopMenu The menu to add to.
      */
-    void                OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu );
+    bool                OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu );
 
     void                OnSelectOptionToolbar( wxCommandEvent& event );
     void                ToolOnRightClick( wxCommandEvent& event );
@@ -822,7 +822,7 @@ public:
     void            ReCreateMenuBar();
     void            OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void            OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
-    void            OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
+    bool            OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
     int             BestZoom(); // Retourne le meilleur zoom
     void            OnSelectOptionToolbar( wxCommandEvent& event );
     void            OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
@@ -928,7 +928,7 @@ public:
     void            ReCreateAuxiliaryToolbar();
     void            OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void            OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
-    void            OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
+    bool            OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
     void            SetToolbars();
     void            ReCreateMenuBar();
     void            ToolOnRightClick( wxCommandEvent& event );
@@ -1033,7 +1033,7 @@ public:
 
     void                                    OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void                                    OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
-    void                                    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
+    bool                                    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
     void                                    OnSelectOptionToolbar( wxCommandEvent& event );
     void                                    ToolOnRightClick( wxCommandEvent& event );
     int                                     BestZoom(); // Retourne le meilleur zoom
@@ -1043,12 +1043,15 @@ public:
     EDA_BaseStruct*                         SchematicGeneralLocateAndDisplay(
         const wxPoint& refpoint,
         bool           IncludePin );
-    
-    EDA_BaseStruct* FindComponentAndItem(
+
+    EDA_BaseStruct*                         FindComponentAndItem(
         const wxString& component_reference, bool Find_in_hierarchy,
         int SearchType,
         const wxString& text_to_find,
         bool mouseWarp );
+
+    /* Cross probing with pcbnew */
+    void                    SendMessageToPCBNEW( EDA_BaseStruct* objectToSync );
 
     /* netlist generation */
     void*                   BuildNetListBase();
@@ -1223,7 +1226,7 @@ public:
     void                ReCreateHToolbar();
     void                ReCreateVToolbar();
     void                OnLeftClick( wxDC* DC, const wxPoint& MousePos );
-    void                OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
+    bool                OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
     int                 BestZoom(); // Retourne le meilleur zoom
     void                SetToolbars();
     void                OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
@@ -1344,7 +1347,7 @@ private:
     void    SelectAndViewLibraryPart( int option );
     void    ExportToSchematicLibraryPart( wxCommandEvent& event );
     void    ViewOneLibraryContent( LibraryStruct* Lib, int Flag );
-    void    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
+    bool    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
 
     DECLARE_EVENT_TABLE()
 };

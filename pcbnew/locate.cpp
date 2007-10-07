@@ -164,7 +164,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::Locate( int typeloc, int LayerSearch )
     // Priority to the active layer (component or copper).
     // This is useful for small smd components when 2 texts overlap but are not 
     // on the same layer
-    if( LayerSearch == LAYER_CUIVRE_N   ||   LayerSearch == CMP_N )
+    if( LayerSearch == COPPER_LAYER_N   ||   LayerSearch == LAYER_CMP_N )
     {
         MODULE* module = m_Pcb->m_Modules;
         for(   ;   module != NULL;  module = (MODULE*) module->Pnext )
@@ -525,7 +525,7 @@ MODULE* Locate_Prefered_Module( BOARD* Pcb, int typeloc )
         layer = pt_module->GetLayer();
 
         if( layer==ADHESIVE_N_CU || layer==SILKSCREEN_N_CU )
-            layer = CUIVRE_N;
+            layer = COPPER_LAYER_N;
 
         else if( layer==ADHESIVE_N_CMP || layer==SILKSCREEN_N_CMP )
             layer = CMP_N;
@@ -605,7 +605,7 @@ TEXTE_MODULE* LocateTexteModule( BOARD* Pcb, MODULE** PtModule, int typeloc )
     {
         int layer = module->GetLayer();
         if( layer==ADHESIVE_N_CU || layer==SILKSCREEN_N_CU )
-            layer = CUIVRE_N;
+            layer = COPPER_LAYER_N;
         else if( layer==ADHESIVE_N_CMP || layer==SILKSCREEN_N_CMP )
             layer = CMP_N;
 

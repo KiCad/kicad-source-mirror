@@ -136,7 +136,7 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer )
 
     switch( Layer )
     {
-    case CUIVRE_N:
+    case COPPER_LAYER_N:
     case LAYER_N_2:
     case LAYER_N_3:
     case LAYER_N_4:

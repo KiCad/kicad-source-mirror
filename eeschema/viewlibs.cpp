@@ -99,9 +99,10 @@ void WinEDA_ViewlibFrame::OnLeftClick(wxDC * DC, const wxPoint& MousePos)
 }
 
 /********************************************************************************/
-void WinEDA_ViewlibFrame::OnRightClick(const wxPoint& MousePos, wxMenu * PopMenu)
+bool WinEDA_ViewlibFrame::OnRightClick(const wxPoint& MousePos, wxMenu * PopMenu)
 /********************************************************************************/
 {
+	return true;
 }
 
 

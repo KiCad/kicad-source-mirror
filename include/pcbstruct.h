@@ -34,10 +34,8 @@
 #define CHAIN       0x01    /* segment marque  */
 
 
-/* Flags pour les couches cuivres */
-/* numero des couches particulieres */
-#define LAYER_CUIVRE_N        0
-#define CUIVRE_N              0
+/* Layer identification (layer number) */
+#define COPPER_LAYER_N        0
 #define LAYER_N_2             1     /* Numero layer 2 */
 #define LAYER_N_3             2     /* Numero layer 3 */
 #define LAYER_N_4             3     /* Numero layer 4 */
@@ -79,7 +77,7 @@
 /*************************************/
 /* constantes de gestion des couches */
 /*************************************/
-#define CUIVRE_LAYER            (1<<LAYER_CUIVRE_N)     ///< bit mask for copper layer 
+#define CUIVRE_LAYER            (1<<COPPER_LAYER_N)     ///< bit mask for copper layer 
 #define LAYER_2                 (1<<LAYER_N_2)          ///< bit mask for layer 2
 #define LAYER_3                 (1<<LAYER_N_3)          ///< bit mask for layer 3
 #define LAYER_4                 (1<<LAYER_N_4)          ///< bit mask for layer 4

@@ -90,7 +90,7 @@ public:
     wxSize  GetGrid();
 
     void    AddMenuZoom( wxMenu* MasterMenu );
-    void    OnRightClick( wxMouseEvent& event );
+    bool    OnRightClick( wxMouseEvent& event );
     void    Process_Popup_Zoom( wxCommandEvent& event );
     void    Process_Special_Functions( wxCommandEvent& event );
     wxPoint CursorRealPosition( const wxPoint& ScreenPos );

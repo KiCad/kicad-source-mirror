@@ -77,7 +77,7 @@ void WinEDA_SchematicFrame::ToolOnRightClick( wxCommandEvent& event )
 
 
 /*****************************************************************/
-void WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
+bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
                                           wxMenu*        PopMenu )
 /*****************************************************************/
 
@@ -96,7 +96,7 @@ void WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
 	{
 		AddMenusForBlock( PopMenu, this );
         PopMenu->AppendSeparator();
-		return;
+		return true;
 	}
 
 		// Simple localisation des elements si possible
@@ -142,7 +142,7 @@ void WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
             ADD_MENUITEM( PopMenu, ID_POPUP_SCH_LEAVE_SHEET, _( "Leave Sheet" ), leave_sheet_xpm );
             PopMenu->AppendSeparator();
         }
-        return;
+        return true;
     }
 
     m_CurrentScreen->SetCurItem( DrawStruct );
@@ -251,6 +251,7 @@ void WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
     }
 
     PopMenu->AppendSeparator();
+	return true;
 }
 
 

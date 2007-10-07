@@ -246,7 +246,7 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
     else
     {        
         // Usual via is from copper to component; layer pair is 0 and 0x0F.
-        Via->SetLayerPair( LAYER_CUIVRE_N, LAYER_CMP_N );
+        Via->SetLayerPair( COPPER_LAYER_N, LAYER_CMP_N );
     }
         
     if( Drc_On &&( Drc( this, DC, Via, m_Pcb->m_Track, 1 ) == BAD_DRC ) )

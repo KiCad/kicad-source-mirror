@@ -646,7 +646,7 @@ const char* BOARD::ShowLayer( int aLayer )
     
     switch( aLayer )
     {
-    case LAYER_CUIVRE_N:        rs = "cu";              break;
+    case LAYER_COPPER_LAYER_N:        rs = "cu";              break;
     case LAYER_N_2:             rs = "layer2";          break;             
     case LAYER_N_3:             rs = "layer3";          break;
     case LAYER_N_4:             rs = "layer4";          break;

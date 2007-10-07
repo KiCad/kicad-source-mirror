@@ -178,7 +178,7 @@ void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer )
         Plot_Layer_PS( dest, layer_mask, 0, 1, modetrace );
         break;
 
-    case CUIVRE_N:
+    case COPPER_LAYER_N:
     case LAYER_N_2:
     case LAYER_N_3:
     case LAYER_N_4:

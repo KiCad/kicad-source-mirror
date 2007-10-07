@@ -53,8 +53,8 @@ static ColorButton Msg_Layers_Cu =
 static ColorButton Layer_1_Butt =
 {
     wxEmptyString,
-    CUIVRE_N,           /* Title */
-    ADR( CUIVRE_N ),    /* adr du parametre optionnel */
+    COPPER_LAYER_N,           /* Title */
+    ADR( COPPER_LAYER_N ),    /* adr du parametre optionnel */
     TRUE                // toggle bit ITEM_NOT_SHOW of the color variable
 };
 

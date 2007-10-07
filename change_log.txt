@@ -4,6 +4,21 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Oct-7 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++ eeschema
+	create new file cross-probing.cpp
+	move RemoteCommand() to cross-probing.cpp and create SendMessageToPCBNEW()
+
++ pcbnew
+	bug in move pad fixed (could crash pcbnew)
+	Small change in selection clarification (side effect removed):
+	- Escape or click on title does not show the next popup menu.
+	- the title is displayed under linux
+	- definition CUIVRE_N translated into COPPER_LAYER_N
+
+
+
 2007-Oct-07 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
 ================================================================================
 + all

@@ -360,9 +360,9 @@ void PCB_SCREEN::Init()
 /*************************/
 {
     InitDatas();
-    m_Active_Layer       = CUIVRE_N;    /* ref couche active 0.. 31 */
+    m_Active_Layer       = COPPER_LAYER_N;    /* ref couche active 0.. 31 */
     m_Route_Layer_TOP    = CMP_N;       /* ref couches par defaut pour vias (Cu.. Cmp) */
-    m_Route_Layer_BOTTOM = CUIVRE_N;
+    m_Route_Layer_BOTTOM = COPPER_LAYER_N;
     m_Zoom = 128;                       /* valeur */
     m_Grid = wxSize( 500, 500 );        /* pas de la grille en 1/10000 "*/
 }

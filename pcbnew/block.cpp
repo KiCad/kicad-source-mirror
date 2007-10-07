@@ -940,7 +940,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
             /* Redessin du Texte */
             INVERT( STRUCT->m_Pos.y );
             INVERT_ANGLE( STRUCT->m_Orient );
-            if( (STRUCT->GetLayer() == CUIVRE_N) || (STRUCT->GetLayer() == CMP_N) )
+            if( (STRUCT->GetLayer() == COPPER_LAYER_N) || (STRUCT->GetLayer() == CMP_N) )
             {
                 STRUCT->m_Miroir ^= 1;      /* inverse miroir */
             }

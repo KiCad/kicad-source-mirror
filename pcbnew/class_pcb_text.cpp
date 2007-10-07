@@ -99,8 +99,8 @@ int TEXTE_PCB::ReadTextePcbDescr( FILE* File, int* LineNum )
         {
             sscanf( Line + 2, " %d %d %lX %d\n", &m_Layer, &m_Miroir,
                     &m_TimeStamp, &dummy );
-            if( m_Layer < LAYER_CUIVRE_N )
-                m_Layer = LAYER_CUIVRE_N;
+            if( m_Layer < COPPER_LAYER_N )
+                m_Layer = COPPER_LAYER_N;
             if( m_Layer > LAST_NO_COPPER_LAYER )
                 m_Layer = LAST_NO_COPPER_LAYER;
 

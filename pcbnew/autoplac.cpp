@@ -441,7 +441,7 @@ int WinEDA_PcbFrame::GenPlaceBoard()
 
     Route_Layer_BOTTOM = CMP_N;
     if( Nb_Sides == TWO_SIDES )
-        Route_Layer_BOTTOM = CUIVRE_N;
+        Route_Layer_BOTTOM = COPPER_LAYER_N;
     Route_Layer_TOP = CMP_N;
 
     /* Place the edge layer segments */
@@ -538,7 +538,7 @@ void WinEDA_PcbFrame::GenModuleOnBoard( MODULE* Module )
     masque_layer = 0;
     if( Module->GetLayer() == CMP_N )
         masque_layer = CMP_LAYER;
-    if( Module->GetLayer() == CUIVRE_N )
+    if( Module->GetLayer() == COPPER_LAYER_N )
         masque_layer = CUIVRE_LAYER;
 
     TraceFilledRectangle( m_Pcb, ox, oy, fx, fy, masque_layer,
@@ -615,7 +615,7 @@ int WinEDA_PcbFrame::RecherchePlacementModule( MODULE* Module, wxDC* DC )
     {
         D_PAD* Pad; int masque_otherlayer;
         masque_otherlayer = CUIVRE_LAYER;
-        if( Module->GetLayer() == CUIVRE_N )
+        if( Module->GetLayer() == COPPER_LAYER_N )
             masque_otherlayer = CMP_LAYER;
 
         for( Pad = Module->m_Pads; Pad != NULL; Pad = (D_PAD*) Pad->Pnext )
@@ -823,7 +823,7 @@ int TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide )
     int error, Penalite, marge, side, otherside;
 
     side = TOP; otherside = BOTTOM;
-    if( Module->GetLayer() == CUIVRE_N )
+    if( Module->GetLayer() == COPPER_LAYER_N )
     {
         side = BOTTOM; otherside = TOP;
     }

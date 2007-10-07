@@ -129,7 +129,7 @@ void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
         }
         if( !DisplayOpt.Show_Modules_Cu )
         {
-            if( Module->GetLayer() == CUIVRE_N )
+            if( Module->GetLayer() == COPPER_LAYER_N )
                 display = FALSE;
             MaskLay &= ~CUIVRE_LAYER;
         }

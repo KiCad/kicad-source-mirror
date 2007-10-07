@@ -24,25 +24,23 @@
 
 BEGIN_EVENT_TABLE( WinEDA_BasePcbFrame, WinEDA_DrawFrame )
 
-    COMMON_EVENTS_DRAWFRAME
-    
-    EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START, ID_POPUP_PCB_ITEM_SELECTION_END,
-                   WinEDA_BasePcbFrame::ProcessItemSelection )
-    
-END_EVENT_TABLE()
+COMMON_EVENTS_DRAWFRAME EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START,
+                                        ID_POPUP_PCB_ITEM_SELECTION_END,
+                                        WinEDA_BasePcbFrame::ProcessItemSelection )
 
+END_EVENT_TABLE()
 
 
 /****************/
 /* Constructeur */
 /****************/
 
-WinEDA_BasePcbFrame::WinEDA_BasePcbFrame( wxWindow* father,
-                                          WinEDA_App* parent,
-                                          int idtype,
+WinEDA_BasePcbFrame::WinEDA_BasePcbFrame( wxWindow*       father,
+                                          WinEDA_App*     parent,
+                                          int             idtype,
                                           const wxString& title,
-                                          const wxPoint& pos,
-                                          const wxSize& size ) :
+                                          const wxPoint&  pos,
+                                          const wxSize&   size ) :
     WinEDA_DrawFrame( father, idtype, parent, title, pos, size )
 {
     m_InternalUnits = 10000;        // Internal unit = 1/10000 inch
@@ -56,8 +54,8 @@ WinEDA_BasePcbFrame::WinEDA_BasePcbFrame( wxWindow* father,
     m_DisplayModText      = FILLED; // How to show module texts
     m_DisplayPcbTrackFill = TRUE;   /* FALSE = sketch , TRUE = filled */
     m_Draw3DFrame = NULL;           // Display Window in 3D mode (OpenGL)
-    
-    m_Collector                = new GENERAL_COLLECTOR();
+
+    m_Collector = new GENERAL_COLLECTOR();
 }
 
 
@@ -98,6 +96,7 @@ int WinEDA_BasePcbFrame::BestZoom( void )
 /*************************************************/
 void WinEDA_BasePcbFrame::ReCreateMenuBar( void )
 /*************************************************/
+
 // Virtual function
 {
 }
@@ -154,18 +153,19 @@ void WinEDA_BasePcbFrame::GetComponentFromRedoList( void )
 /****************************************************************/
 void WinEDA_BasePcbFrame::SwitchLayer( wxDC* DC, int layer )
 /*****************************************************************/
+
 //Note: virtual, overridden in WinEDA_PcbFrame;
 {
     int preslayer = GetScreen()->m_Active_Layer;
 
     //if there is only one layer, don't switch.
     if( m_Pcb->m_BoardSettings->m_CopperLayerCount <= 1 )
-        layer = LAYER_CUIVRE_N; // Of course we select the copper layer
-    
+        layer = COPPER_LAYER_N; // Of course we select the copper layer
+
     //otherwise, we select the requested layer only if it is possible
     if( layer != LAYER_CMP_N && layer >= m_Pcb->m_BoardSettings->m_CopperLayerCount - 1 )
         return;
-    
+
     if( preslayer == layer )
         return;
 
@@ -176,23 +176,27 @@ void WinEDA_BasePcbFrame::SwitchLayer( wxDC* DC, int layer )
 }
 
 
-
 /**********************************************************************/
 void WinEDA_BasePcbFrame::ProcessItemSelection( wxCommandEvent& event )
 /**********************************************************************/
 {
-    int         id = event.GetId();
-    
-    // index into the collector list:
-    int         itemNdx = id - ID_POPUP_PCB_ITEM_SELECTION_START;
-    
-    BOARD_ITEM* item = (*m_Collector)[itemNdx];
+    int id = event.GetId();
 
-#if defined(DEBUG)
-    item->Show( 0, std::cout );
+    // index into the collector list:
+    int itemNdx = id - ID_POPUP_PCB_ITEM_SELECTION_START;
+
+    if( (id >= ID_POPUP_PCB_ITEM_SELECTION_START)
+       && (id <= ID_POPUP_PCB_ITEM_SELECTION_END) )
+    {
+        BOARD_ITEM* item = (*m_Collector)[itemNdx];
+        DrawPanel->m_AbortRequest = false;
+
+#if defined (DEBUG)
+        item->Show( 0, std::cout );
 #endif
-    
-    SetCurItem( item );
+
+        SetCurItem( item );
+    }
 }
 
 
@@ -202,12 +206,12 @@ void WinEDA_BasePcbFrame::SetCurItem( BOARD_ITEM* aItem )
 {
     m_CurrentScreen->SetCurItem( aItem );
     if( aItem )
-        aItem->Display_Infos(this);
+        aItem->Display_Infos( this );
     else
     {
         // we can use either of these:
         //MsgPanel->EraseMsgBox();
-        m_Pcb->Display_Infos(this);
+        m_Pcb->Display_Infos( this );
     }
 }
 
@@ -215,8 +219,8 @@ void WinEDA_BasePcbFrame::SetCurItem( BOARD_ITEM* aItem )
 /*****************************************************************/
 BOARD_ITEM* WinEDA_BasePcbFrame::GetCurItem()
 /*****************************************************************/
-{ 
-    return (BOARD_ITEM*) m_CurrentScreen->GetCurItem(); 
+{
+    return (BOARD_ITEM*) m_CurrentScreen->GetCurItem();
 }
 
 
@@ -224,8 +228,8 @@ BOARD_ITEM* WinEDA_BasePcbFrame::GetCurItem()
 GENERAL_COLLECTORS_GUIDE WinEDA_BasePcbFrame::GetCollectorsGuide()
 /****************************************************************/
 {
-    GENERAL_COLLECTORS_GUIDE    guide( m_Pcb->m_BoardSettings->GetVisibleLayers(), 
-                                      GetScreen()->m_Active_Layer ); 
+    GENERAL_COLLECTORS_GUIDE guide( m_Pcb->m_BoardSettings->GetVisibleLayers(),
+                                    GetScreen()->m_Active_Layer );
 
     // account for the globals
     guide.SetIgnoreMTextsMarkedNoShow( g_ModuleTextNOVColor & ITEM_NOT_SHOW );

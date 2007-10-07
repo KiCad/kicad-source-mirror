@@ -337,7 +337,7 @@ void WinEDA_BasePcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
 
     if( Module == NULL )
         return;
-    if( (Module->GetLayer() != CMP_N) && (Module->GetLayer() != CUIVRE_N) )
+    if( (Module->GetLayer() != CMP_N) && (Module->GetLayer() != COPPER_LAYER_N) )
         return;
 
     m_CurrentScreen->SetModify();
@@ -400,14 +400,14 @@ void WinEDA_BasePcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
     pt_texte->SetLayer( Module->GetLayer() );
     pt_texte->SetLayer( ChangeSideNumLayer( pt_texte->GetLayer() ) );
 
-    if( Module->GetLayer() == CUIVRE_N )
+    if( Module->GetLayer() == COPPER_LAYER_N )
         pt_texte->SetLayer( SILKSCREEN_N_CU );
 
     if( Module->GetLayer() == CMP_N )
         pt_texte->SetLayer( SILKSCREEN_N_CMP );
 
     if( (Module->GetLayer() == SILKSCREEN_N_CU)
-       || (Module->GetLayer() == ADHESIVE_N_CU) || (Module->GetLayer() == CUIVRE_N) )
+       || (Module->GetLayer() == ADHESIVE_N_CU) || (Module->GetLayer() == COPPER_LAYER_N) )
         pt_texte->m_Miroir = 0;
 
     /* Inversion miroir de la Valeur et mise en miroir : */
@@ -421,14 +421,14 @@ void WinEDA_BasePcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
     pt_texte->SetLayer( Module->GetLayer() );
     pt_texte->SetLayer( ChangeSideNumLayer( pt_texte->GetLayer() ) );
 
-    if( Module->GetLayer() == CUIVRE_N )
+    if( Module->GetLayer() == COPPER_LAYER_N )
         pt_texte->SetLayer( SILKSCREEN_N_CU );
 
     if( Module->GetLayer() == CMP_N )
         pt_texte->SetLayer( SILKSCREEN_N_CMP );
 
     if( (Module->GetLayer() == SILKSCREEN_N_CU)
-       || (Module->GetLayer() == ADHESIVE_N_CU) || (Module->GetLayer() == CUIVRE_N) )
+       || (Module->GetLayer() == ADHESIVE_N_CU) || (Module->GetLayer() == COPPER_LAYER_N) )
         pt_texte->m_Miroir = 0;
 
     /* Inversion miroir des dessins de l'empreinte : */
@@ -469,7 +469,7 @@ void WinEDA_BasePcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
             pt_texte->SetLayer( Module->GetLayer() ); 
             pt_texte->SetLayer( ChangeSideNumLayer( pt_texte->GetLayer() ) );
 
-            if( Module->GetLayer() == CUIVRE_N )
+            if( Module->GetLayer() == COPPER_LAYER_N )
                 pt_texte->SetLayer( SILKSCREEN_N_CU );
 
             if( Module->GetLayer() == CMP_N )
@@ -477,7 +477,7 @@ void WinEDA_BasePcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
 
             if(  Module->GetLayer() == SILKSCREEN_N_CU
               || Module->GetLayer() == ADHESIVE_N_CU
-              || Module->GetLayer() == CUIVRE_N )
+              || Module->GetLayer() == COPPER_LAYER_N )
             {
                 pt_texte->m_Miroir = 0;
             }
@@ -580,11 +580,11 @@ int ChangeSideNumLayer( int oldlayer )
 
     switch( oldlayer )
     {
-    case CUIVRE_N:
+    case COPPER_LAYER_N:
         newlayer = CMP_N; break;
 
     case CMP_N:
-        newlayer = CUIVRE_N; break;
+        newlayer = COPPER_LAYER_N; break;
 
     case SILKSCREEN_N_CU:
         newlayer = SILKSCREEN_N_CMP; break;

@@ -49,7 +49,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
 
         int moduleLayer = Module->GetLayer();
         
-        if( moduleLayer == CUIVRE_N )
+        if( moduleLayer == COPPER_LAYER_N )
             SetLayer( SILKSCREEN_N_CU );
         else if( moduleLayer == CMP_N )
             SetLayer( SILKSCREEN_N_CMP );
@@ -58,7 +58,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
         
         if(  moduleLayer == SILKSCREEN_N_CU
           || moduleLayer == ADHESIVE_N_CU
-          || moduleLayer == CUIVRE_N )
+          || moduleLayer == COPPER_LAYER_N )
         {
             m_Miroir = 0;
         }
@@ -257,7 +257,7 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, wxPoint offset, int 
 
     color = g_DesignSettings.m_LayerColor[Module->GetLayer()];
 
-    if( Module && Module->GetLayer() == CUIVRE_N )
+    if( Module && Module->GetLayer() == COPPER_LAYER_N )
         color = g_ModuleTextCUColor;
     
     else if( Module && Module->GetLayer() == CMP_N )
@@ -381,7 +381,7 @@ bool TEXTE_MODULE::IsOnLayer( int aLayer ) const
     if( aLayer == GetParent()->GetLayer() )
         return true;
     
-    if( aLayer == CUIVRE_N )
+    if( aLayer == COPPER_LAYER_N )
     {
         if( m_Layer==ADHESIVE_N_CU || m_Layer==SILKSCREEN_N_CU )
             return true;

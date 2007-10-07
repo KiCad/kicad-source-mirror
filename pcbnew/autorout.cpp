@@ -27,9 +27,16 @@ D_PAD * Pad = NULL;
 int autoroute_net_code = -1;
 wxString msg;
 
-
-	Route_Layer_TOP = GetScreen()->m_Route_Layer_TOP;
-	Route_Layer_BOTTOM = GetScreen()->m_Route_Layer_BOTTOM;
+	if ( g_DesignSettings.m_CopperLayerCount > 1 )
+	{
+		Route_Layer_TOP = GetScreen()->m_Route_Layer_TOP;
+		Route_Layer_BOTTOM = GetScreen()->m_Route_Layer_BOTTOM;
+	}
+	else
+	{
+		Route_Layer_TOP =
+		Route_Layer_BOTTOM = COPPER_LAYER_N;
+	}
 
 	switch ( mode )
 		{

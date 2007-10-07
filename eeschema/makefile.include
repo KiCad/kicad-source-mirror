@@ -17,6 +17,7 @@ OBJECTS = eeschema.o\
 		libedit_onrightclick.o\
 		libedit_onleftclick.o\
 		dangling_ends.o\
+		cross-probing.o\
 		setpage.o\
 		cmpclass.o\
 		class_hierarchy_sheet.o\

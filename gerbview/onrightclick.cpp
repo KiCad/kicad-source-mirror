@@ -13,7 +13,7 @@
 #include "protos.h"
 
 /********************************************************************************/
-void WinEDA_GerberFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
+bool WinEDA_GerberFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
 /********************************************************************************/
 
 /* Prepare le menu PullUp affiché par un click sur le bouton droit
@@ -62,12 +62,12 @@ void WinEDA_GerberFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu 
     }
 
     if( BlockActive )
-        return;
+        return true;
 
     PopMenu->Append( ID_GERBVIEW_POPUP_DELETE_DCODE_ITEMS, _( "Delete Dcode items" ) );
 
     if( DrawStruct == NULL )
-        return;
+        return true;
 
     GetScreen()->SetCurItem( DrawStruct );
 
@@ -90,4 +90,5 @@ void WinEDA_GerberFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu 
     }
 
     PopMenu->AppendSeparator();
+	return true;
 }

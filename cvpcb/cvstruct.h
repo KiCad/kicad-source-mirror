@@ -192,7 +192,7 @@ public:
 	void RecreateMenuBar();
 	void OnLeftClick(wxDC * DC, const wxPoint& MousePos);
 	void OnLeftDClick(wxDC * DC, const wxPoint& MousePos);
-	void OnRightClick(const wxPoint& MousePos, wxMenu * PopMenu);
+	bool OnRightClick(const wxPoint& MousePos, wxMenu * PopMenu);
 	void SetToolbars();
 	void InstallOptionsDisplay(wxCommandEvent& event);
 	MODULE * Get_Module(const wxString & CmpName);

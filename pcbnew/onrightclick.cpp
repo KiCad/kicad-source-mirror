@@ -108,13 +108,13 @@ static wxMenu* Append_Track_Width_List()
 
 
 /******************************************************************************/
-void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
+bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 /******************************************************************************/
 {
-    wxString msg;
-    int      flags = 0;
-    bool     locate_track = FALSE;
-    bool     BlockActive  = (m_CurrentScreen->BlockLocate.m_Command != BLOCK_IDLE);
+    wxString    msg;
+    int         flags = 0;
+    bool        locate_track = FALSE;
+    bool        BlockActive  = (m_CurrentScreen->BlockLocate.m_Command != BLOCK_IDLE);
 
     wxClientDC  dc( DrawPanel );
 
@@ -122,15 +122,16 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
     DrawPanel->m_CanStartBlock = -1;    // Avoid to start a block coomand when clicking on menu
 
-    
-    // If command or block in progress: Put the Cancel command (if needed) and the End command
 
-	if( BlockActive )
-	{
-		createPopUpBlockMenu( aPopMenu );
+    // If a command or a block is in progress:
+	// Put the Cancel command (if needed) and the End command
+
+    if( BlockActive )
+    {
+        createPopUpBlockMenu( aPopMenu );
         aPopMenu->AppendSeparator();
-		return;
-	}
+        return true;
+    }
 
     DrawPanel->CursorOff( &dc );
 
@@ -152,8 +153,8 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     {
         if( item && item->m_Flags )
         {
-			ADD_MENUITEM( aPopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
-						  _( "Cancel" ), cancel_xpm );
+            ADD_MENUITEM( aPopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
+                          _( "Cancel" ), cancel_xpm );
             aPopMenu->AppendSeparator();
         }
     }
@@ -162,7 +163,14 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     /* Select a proper item */
     if( !item  || !item->m_Flags )
     {
+        DrawPanel->m_AbortRequest = false;
         item = PcbGeneralLocateAndDisplay();
+        if( DrawPanel->m_AbortRequest )
+        {
+            DrawPanel->CursorOn( &dc );
+            return false;
+        }
+
         SetCurItem( item );
     }
 
@@ -182,20 +190,24 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             if( m_HTOOL_current_state == ID_TOOLBARH_PCB_AUTOPLACE )
             {
                 aPopMenu->AppendSeparator();
-                
-                if( !((MODULE*)item)->IsLocked() )
+
+                if( !( (MODULE*) item )->IsLocked() )
                 {
-					msg = AddHotkeyName( _( "Lock Module" ), s_Board_Editor_Hokeys_Descr, HK_LOCK_UNLOCK_FOOTPRINT );
+                    msg = AddHotkeyName( _(
+                                             "Lock Module" ), s_Board_Editor_Hokeys_Descr,
+                                         HK_LOCK_UNLOCK_FOOTPRINT );
                     ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_AUTOPLACE_FIXE_MODULE, msg,
                                   Locked_xpm );
                 }
                 else
                 {
-					msg = AddHotkeyName( _( "Unlock Module" ), s_Board_Editor_Hokeys_Descr, HK_LOCK_UNLOCK_FOOTPRINT );
+                    msg = AddHotkeyName( _(
+                                             "Unlock Module" ), s_Board_Editor_Hokeys_Descr,
+                                         HK_LOCK_UNLOCK_FOOTPRINT );
                     ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_AUTOPLACE_FREE_MODULE, msg,
                                   Unlocked_xpm );
                 }
-                
+
                 if( !flags )
                     aPopMenu->Append( ID_POPUP_PCB_AUTOPLACE_CURRENT_MODULE,
                                      _( "Auto place Module" ) );
@@ -430,6 +442,7 @@ void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     }
 
     DrawPanel->CursorOn( &dc );
+	return true;
 }
 
 

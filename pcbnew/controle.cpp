@@ -70,7 +70,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
     // Assign to scanList the proper item types desired based on tool type
     // or hotkey that is in play.
 
-    const KICAD_T* scanList;
+    const KICAD_T* scanList = NULL;
 
     if( aHotKeyCode )
     {
@@ -170,7 +170,16 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
     {
         wxMenu itemMenu;
 
-        itemMenu.SetTitle( _( "Selection Clarification" ) );  // does this work? not under Linux!
+		/* Give a title to the selection menu. This is also a cancel menu item */
+		wxMenuItem * item_title = new wxMenuItem(&itemMenu, -1, _( "Selection Clarification" ) );
+#ifdef __WINDOWS__
+		wxFont bold_font(*wxNORMAL_FONT);
+		bold_font.SetWeight(wxFONTWEIGHT_BOLD);
+		bold_font.SetStyle( wxFONTSTYLE_ITALIC);
+		item_title->SetFont(bold_font);
+#endif
+		itemMenu.Append(item_title);
+		itemMenu.AppendSeparator();
 
         int limit = MIN( MAX_ITEMS_IN_PICKER, m_Collector->GetCount() );
 
@@ -197,7 +206,8 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 
         // this menu's handler is void WinEDA_BasePcbFrame::ProcessItemSelection()
         // and it calls SetCurItem() which in turn calls Display_Infos() on the item.
-        PopupMenu( &itemMenu );
+		DrawPanel->m_AbortRequest = true;	// changed in false if an item
+        PopupMenu( &itemMenu );	// m_AbortRequest = false if an item is selected
 
         DrawPanel->MouseToCursorSchema();
 

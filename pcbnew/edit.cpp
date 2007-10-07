@@ -551,8 +551,12 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_DRAG_PAD_REQUEST:
         g_Drag_Pistes_On = TRUE;
+        DrawPanel->MouseToCursorSchema();
+        StartMovePad( (D_PAD*) GetCurItem(), &dc );
+        break;
 
     case ID_POPUP_PCB_MOVE_PAD_REQUEST:
+        g_Drag_Pistes_On = false;
         DrawPanel->MouseToCursorSchema();
         StartMovePad( (D_PAD*) GetCurItem(), &dc );
         break;
@@ -982,8 +986,8 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
     if( m_Pcb->m_BoardSettings->m_CopperLayerCount <= 1 )
         return;
 
-    //otherwise, must be at least 2 layers..see if it is possible.
-    if( layer == LAYER_CUIVRE_N || layer == LAYER_CMP_N
+    //otherwise, must be at least 2 layers. see if it is possible.
+    if( layer == COPPER_LAYER_N || layer == LAYER_CMP_N
         || layer < m_Pcb->m_BoardSettings->m_CopperLayerCount - 1 )
     {
         if( preslayer == layer )

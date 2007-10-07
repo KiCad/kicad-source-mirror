@@ -17,79 +17,6 @@
 
 #include "protos.h"
 
-/* Routines locales */
-
-/* variables externes */
-
-
-/***************************************************************/
-void RemoteCommand( const char* cmdline )
-/***************************************************************/
-
-/** Read a remote command sent by pcbnew (via a socket connection) , so when user selects a module
- * or pin in pcbnew, eeschema shows that same component or pin.
- * The cursor is put on the item
- * @param cmdline = received command from pcbnew
- * commands are:
- * $PART: "reference"   put cursor on component
- * $PART: "reference" $REF: "ref"  put cursor on reference component
- * $PART: "reference" $VAL: "value" put cursor on value component
- * $PART: "reference" $PAD: "pin name"  put cursor on the component pin
- */
-{
-    char     line[1024];
-    char*    idcmd;
-    char*    text;
-    WinEDA_SchematicFrame* frame = EDA_Appl->m_SchematicFrame;
-    wxString part_ref, msg;
-
-    strncpy( line, cmdline, sizeof(line) - 1 );
-
-    idcmd = strtok( line, " \n\r" );
-    text  = strtok( NULL, "\"\n\r" );
-    if( (idcmd == NULL) || (text == NULL) )
-        return;
-
-    if( strcmp( idcmd, "$PART:" ) != 0 )
-        return;
-
-    part_ref = CONV_FROM_UTF8( text );
-
-    /* look for a complement */
-    idcmd = strtok( NULL, " \n\r" );
-    if( idcmd == NULL )    // component only
-    {
-        frame->FindComponentAndItem( part_ref, true, 0, wxEmptyString, false );
-        return;
-    }
-
-    text = strtok( NULL, "\"\n\r" );
-    if( text == NULL )
-        return;
-
-    msg = CONV_FROM_UTF8( text );
-
-    if( strcmp( idcmd, "$REF:" ) == 0 )
-    {
-        frame->FindComponentAndItem( part_ref, true, 2, msg, false );
-    }
-
-
-    else if( strcmp( idcmd, "$VAL:" ) == 0 )
-    {
-        frame->FindComponentAndItem( part_ref, true, 3, msg, false );
-    }
-
-    else if( strcmp( idcmd, "$PAD:" ) == 0 )
-    {
-        frame->FindComponentAndItem( part_ref, true, 1, msg, false );
-    }
-	
-	else
-        frame->FindComponentAndItem( part_ref, true, 0, wxEmptyString, false );
-}
-
-
 /**************************************************************/
 EDA_BaseStruct* WinEDA_SchematicFrame::
 SchematicGeneralLocateAndDisplay( bool IncludePin )
@@ -114,7 +41,6 @@ SchematicGeneralLocateAndDisplay( bool IncludePin )
     wxPoint                 mouse_position = GetScreen()->m_MousePosition;
     LibDrawPin*             Pin     = NULL;
     EDA_SchComponentStruct* LibItem = NULL;
-    char Line[1024];
 
     DrawStruct = SchematicGeneralLocateAndDisplay( mouse_position, IncludePin );
     if( !DrawStruct && ( mouse_position != GetScreen()->m_Curseur) )
@@ -128,21 +54,14 @@ SchematicGeneralLocateAndDisplay( bool IncludePin )
     switch( DrawStruct->Type() )
     {
     case COMPONENT_FIELD_DRAW_TYPE:
-    {
-        PartTextStruct* Field = (PartTextStruct*) DrawStruct;
-        LibItem = (EDA_SchComponentStruct*) Field->m_Parent;
-        sprintf( Line, "$PART: %s", CONV_TO_UTF8( LibItem->m_Field[REFERENCE].m_Text ) );
-        SendCommand( MSG_TO_PCB, Line );
-    }
+		SendMessageToPCBNEW( DrawStruct );
         break;
 
     case DRAW_LIB_ITEM_STRUCT_TYPE:
         Pin = LocateAnyPin( m_CurrentScreen->EEDrawList, GetScreen()->m_Curseur, &LibItem );
         if( Pin )
             break; // Priority is probing a pin first
-        LibItem = (EDA_SchComponentStruct*) DrawStruct;
-        sprintf( Line, "$PART: %s", CONV_TO_UTF8( LibItem->m_Field[REFERENCE].m_Text ) );
-        SendCommand( MSG_TO_PCB, Line );
+		SendMessageToPCBNEW( DrawStruct );
         break;
 
     default:
@@ -165,14 +84,7 @@ SchematicGeneralLocateAndDisplay( bool IncludePin )
                                  CYAN );
 
         // Cross probing:2 - pin found, and send a locate pin command to pcbnew (hightlight net)
-        if( Pin->m_PinNum )
-        {
-            wxString pinnum;
-            Pin->ReturnPinStringNum( pinnum );
-            sprintf( Line, "$PIN: %s $PART: %s", CONV_TO_UTF8( pinnum ),
-                    CONV_TO_UTF8( LibItem->m_Field[REFERENCE].m_Text ) );
-            SendCommand( MSG_TO_PCB, Line );
-        }
+		SendMessageToPCBNEW( Pin );
     }
     return DrawStruct;
 }

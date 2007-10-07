@@ -750,7 +750,7 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
             else
                 DrawText->m_NoShow = 0;
 
-            if( layer == CUIVRE_N )
+            if( layer == COPPER_LAYER_N )
                 layer = SILKSCREEN_N_CU;
             else if( layer == CMP_N )
                 layer = SILKSCREEN_N_CMP;

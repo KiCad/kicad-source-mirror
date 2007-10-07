@@ -253,7 +253,7 @@ void SEGVIA::SetLayerPair( int top_layer, int bottom_layer )
     if( via_type == VIA_NORMALE )
     {
         top_layer    = LAYER_CMP_N; 
-        bottom_layer = LAYER_CUIVRE_N;
+        bottom_layer = COPPER_LAYER_N;
     }
 
     if( bottom_layer > top_layer )
@@ -263,9 +263,9 @@ void SEGVIA::SetLayerPair( int top_layer, int bottom_layer )
 }
 
 
-/***************************************************************/
+/*********************************************************************/
 void SEGVIA::ReturnLayerPair( int* top_layer, int* bottom_layer ) const
-/***************************************************************/
+/*********************************************************************/
 
 /* Retourne les 2 couches limitant la via
  *  les pointeurs top_layer et bottom_layer peuvent etre NULLs

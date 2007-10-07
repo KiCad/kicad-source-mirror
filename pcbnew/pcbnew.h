@@ -147,7 +147,7 @@ bool inline IsModuleLayerVisible( int layer )
     if( layer==CMP_N )
         return DisplayOpt.Show_Modules_Cmp;
 
-    else if( layer==CUIVRE_N )
+    else if( layer==COPPER_LAYER_N )
         return DisplayOpt.Show_Modules_Cu;
 
     else

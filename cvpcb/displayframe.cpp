@@ -144,18 +144,25 @@ void WinEDA_DisplayFrame::SetToolbars()
 }
 
 
+/*************************************************************************/
 void WinEDA_DisplayFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
+/*************************************************************************/
 {
 }
 
 
+/*************************************************************************/
 void WinEDA_DisplayFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
+/*************************************************************************/
 {
 }
 
 
-void WinEDA_DisplayFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
+/*********************************************************************************/
+bool WinEDA_DisplayFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
+/*********************************************************************************/
 {
+	return true;
 }
 
 

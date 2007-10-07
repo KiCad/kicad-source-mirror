@@ -287,8 +287,11 @@ MODULE * Module;
 	Pad->m_Flags |= IS_MOVED;
 	Pad->Draw(DrawPanel, DC, wxPoint(0,0),GR_XOR);
 
-	/* Build the list of track segments to drag */
-	Build_1_Pad_SegmentsToDrag(DrawPanel, DC, Pad);
+	/* Build the list of track segments to drag if the command is a drag pad*/
+	if ( g_Drag_Pistes_On )
+		Build_1_Pad_SegmentsToDrag(DrawPanel, DC, Pad);
+	else EraseDragListe();
+
 }
 
 

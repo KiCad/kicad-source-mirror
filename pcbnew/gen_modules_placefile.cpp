@@ -66,7 +66,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
             continue;
         if( (Module->m_Attributs & MOD_CMS)  == 0 )
             continue;
-        if( Module->GetLayer() == CUIVRE_N )
+        if( Module->GetLayer() == COPPER_LAYER_N )
             GenCu = TRUE;
         NbMod++;
     }
@@ -193,7 +193,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
             strcat( Line, "Cmp.\n" );
             fputs( Line, LayerCmp );
         }
-        else if( Liste[ii].m_Module->GetLayer() == CUIVRE_N )
+        else if( Liste[ii].m_Module->GetLayer() == COPPER_LAYER_N )
         {
             strcat( Line, "Cu\n" );
             fputs( Line, LayerCu );
@@ -317,7 +317,7 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
         sprintf( Line, "orientation  %.2f\n", (float) Module->m_Orient / 10 );
         if( Module->GetLayer() == CMP_N )
             strcat( Line, "layer component\n" );
-        else if( Module->GetLayer() == CUIVRE_N )
+        else if( Module->GetLayer() == COPPER_LAYER_N )
             strcat( Line, "layer copper\n" );
         else
             strcat( Line, "layer other\n" );

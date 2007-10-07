@@ -150,7 +150,7 @@ glEnable(GL_FOG);
 	glVertex3f( sx, -sy , zpos);
 	glEnd();
 	glBegin(GL_QUADS);
-	SetGLColor(g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[CUIVRE_N]);
+	SetGLColor(g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[COPPER_LAYER_N]);
 	glNormal3f( 0.0, 0.0, -1.0);	// Normal is -Z axis
 	glVertex3f( -sx, -sy , 0);
 	glVertex3f( -sx, sy , 0);
@@ -213,7 +213,7 @@ double w;
 	zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
 
 	SetGLColor(color);
-	glNormal3f( 0.0, 0.0, (layer == CUIVRE_N) ? -1.0 : 1.0);
+	glNormal3f( 0.0, 0.0, (layer == COPPER_LAYER_N) ? -1.0 : 1.0);
 
 	w = track->m_Width * g_Parm_3D_Visu.m_BoardScale;
 	ox = track->m_Start.x * g_Parm_3D_Visu.m_BoardScale;
@@ -250,7 +250,7 @@ int color;
 		else color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[CMP_N];
 		if ( color & ITEM_NOT_SHOW ) continue;
 		SetGLColor(color);
-		glNormal3f( 0.0, 0.0, (layer == CUIVRE_N) ? -1.0 : 1.0);
+		glNormal3f( 0.0, 0.0, (layer == COPPER_LAYER_N) ? -1.0 : 1.0);
 		Draw3D_FilledCircle(x, -y, r, hole, zpos);
 		if ( layer >= top_layer) break;
 
@@ -284,7 +284,7 @@ int color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[segment->GetLayer()];
 	{
 		for ( layer = 0; layer < g_Parm_3D_Visu.m_Layers; layer++ )
 		{
-			glNormal3f( 0.0, 0.0, (layer == CUIVRE_N) ? -1.0 : 1.0);
+			glNormal3f( 0.0, 0.0, (layer == COPPER_LAYER_N) ? -1.0 : 1.0);
 			zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
 			Draw3D_FilledSegment( x, -y, xf, -yf, w, zpos);
 		}
@@ -312,7 +312,7 @@ D_PAD * pad = m_Pads;
 	}
 	if( ! DisplayOpt.Show_Modules_Cu )
 	{
-		if(m_Layer == CUIVRE_N) return;
+		if(m_Layer == COPPER_LAYER_N) return;
 	}
 #endif
 
@@ -335,7 +335,7 @@ bool As3dShape = FALSE;
 	{
 		glRotatef( (double)m_Orient / 10, 0.0, 0.0, 1.0 );
 	}
-	if ( m_Layer == CUIVRE_N )
+	if ( m_Layer == COPPER_LAYER_N )
 	{
 		glRotatef( 180.0, 0.0, 1.0, 0.0 );
 		glRotatef( 180.0, 0.0, 0.0, 1.0 );
@@ -384,7 +384,7 @@ int color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[m_Layer];
 	if ( color & ITEM_NOT_SHOW ) return;
 
 	SetGLColor(color);
-	glNormal3f( 0.0, 0.0, (m_Layer == CUIVRE_N) ? -1.0 : 1.0);
+	glNormal3f( 0.0, 0.0, (m_Layer == COPPER_LAYER_N) ? -1.0 : 1.0);
 	scale = g_Parm_3D_Visu.m_BoardScale;
 
 	ux0 = m_Start.x;
@@ -477,16 +477,16 @@ int color;
 			x = xc * scale;
 			y = yc * scale;
 			r = (double)dx * scale;
-			for ( layer = CUIVRE_N; layer <= CMP_N; layer ++)
+			for ( layer = COPPER_LAYER_N; layer <= CMP_N; layer ++)
 			{
 				if (layer && (layer == nlmax) ) layer = CMP_N;
 				if ( (layer == CMP_N) && ! Oncmp ) continue;
-				if ( (layer == CUIVRE_N) && ! Oncu ) continue;
-				if ( (layer > CUIVRE_N) && (layer < CMP_N) && !Both) continue;
+				if ( (layer == COPPER_LAYER_N) && ! Oncu ) continue;
+				if ( (layer > COPPER_LAYER_N) && (layer < CMP_N) && !Both) continue;
 				color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
 				if ( color & ITEM_NOT_SHOW ) continue;
 				SetGLColor(color);
-				glNormal3f( 0.0, 0.0, (layer == CUIVRE_N) ? -1.0 : 1.0);
+				glNormal3f( 0.0, 0.0, (layer == COPPER_LAYER_N) ? -1.0 : 1.0);
 				zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
 				Draw3D_FilledCircle(x, -y, r, hole, zpos);
 			}
@@ -513,14 +513,14 @@ int color;
 			oy = (double)(uy0 + delta_cy) * scale;
 			fx = (double)(ux0 - delta_cx) * scale;
 			fy = (double)(uy0 - delta_cy) * scale;
-			for ( layer = CUIVRE_N; layer <= CMP_N; layer ++)
+			for ( layer = COPPER_LAYER_N; layer <= CMP_N; layer ++)
 			{
 				if (layer && (layer == nlmax) ) layer = CMP_N;
 				if ( (layer == CMP_N) && ! Oncmp ) continue;
-				if ( (layer == CUIVRE_N) && ! Oncu ) continue;
-				if ( (layer > CUIVRE_N) && (layer < CMP_N) && !Both) continue;
+				if ( (layer == COPPER_LAYER_N) && ! Oncu ) continue;
+				if ( (layer > COPPER_LAYER_N) && (layer < CMP_N) && !Both) continue;
 				color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
-				glNormal3f( 0.0, 0.0, (layer == CUIVRE_N) ? -1.0 : 1.0);
+				glNormal3f( 0.0, 0.0, (layer == COPPER_LAYER_N) ? -1.0 : 1.0);
 				if ( color & ITEM_NOT_SHOW ) continue;
 				SetGLColor(color);
 				zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
@@ -574,14 +574,14 @@ int color;
 				f_hole_coord[ii][1] += drilly;
 				}
 
-			for ( layer = CUIVRE_N; layer <= CMP_N; layer ++)
+			for ( layer = COPPER_LAYER_N; layer <= CMP_N; layer ++)
 			{
 				if (layer && (layer == nlmax) ) layer = CMP_N;
 				if ( (layer == CMP_N) && ! Oncmp ) continue;
-				if ( (layer == CUIVRE_N) && ! Oncu ) continue;
-				if ( (layer > CUIVRE_N) && (layer < CMP_N) && !Both) continue;
+				if ( (layer == COPPER_LAYER_N) && ! Oncu ) continue;
+				if ( (layer > COPPER_LAYER_N) && (layer < CMP_N) && !Both) continue;
 				color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
-				glNormal3f( 0.0, 0.0, (layer == CUIVRE_N) ? -1.0 : 1.0);
+				glNormal3f( 0.0, 0.0, (layer == COPPER_LAYER_N) ? -1.0 : 1.0);
 				if ( color & ITEM_NOT_SHOW ) continue;
 				SetGLColor(color);
 				zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];

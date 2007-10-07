@@ -82,7 +82,7 @@ void SEGVIA::SetLayerPair( int top_layer, int bottom_layer )
 
     if( via_type == VIA_NORMALE )
     {
-        top_layer = LAYER_CMP_N; bottom_layer = LAYER_CUIVRE_N;
+        top_layer = LAYER_CMP_N; bottom_layer = LAYER_COPPER_LAYER_N;
     }
 
     if( bottom_layer > top_layer )

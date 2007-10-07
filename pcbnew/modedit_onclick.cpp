@@ -173,7 +173,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
 
 /*********************************************************************/
-void WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
+bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
                                            wxMenu*        PopMenu )
 /*********************************************************************/
 
@@ -238,7 +238,7 @@ void WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
     }
 
     if( DrawStruct == NULL )
-        return;
+        return true;
 
     int flags = DrawStruct->m_Flags;
 
@@ -367,6 +367,8 @@ void WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
                       _( "Set Width" ), width_segment_xpm );
         PopMenu->AppendSeparator();
     }
+	
+	return true;
 }
 
 

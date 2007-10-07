@@ -94,7 +94,7 @@ int tracevia = 1;
 
 	switch(Layer)
 		{
-		case CUIVRE_N :
+		case COPPER_LAYER_N :
 		case LAYER_N_2 :
 		case LAYER_N_3 :
 		case LAYER_N_4 :

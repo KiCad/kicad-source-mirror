@@ -204,13 +204,13 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         ll = GetScreen()->m_Active_Layer;
         if( ll > CMP_N )
             break;
-        if( ll <= CUIVRE_N )
+        if( ll <= COPPER_LAYER_N )
             break;
         if( m_Pcb->m_BoardSettings->m_CopperLayerCount <= 1 )  // Single layer
-            ll = CUIVRE_N;
+            ll = COPPER_LAYER_N;
         if( ll == CMP_N )
-            ll = MAX( CUIVRE_N, m_Pcb->m_BoardSettings->m_CopperLayerCount - 2 );
-        else if( ll > CUIVRE_N )
+            ll = MAX( COPPER_LAYER_N, m_Pcb->m_BoardSettings->m_CopperLayerCount - 2 );
+        else if( ll > COPPER_LAYER_N )
             ll--;
         SwitchLayer( DC, ll );
         break;
@@ -223,7 +223,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         if( ll >= m_Pcb->m_BoardSettings->m_CopperLayerCount - 1 )
             ll = CMP_N;
         if( m_Pcb->m_BoardSettings->m_CopperLayerCount <= 1 )  // Single layer
-            ll = CUIVRE_N;
+            ll = COPPER_LAYER_N;
         SwitchLayer( DC, ll );
         break;
 
@@ -232,7 +232,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_SWITCH_LAYER_TO_COPPER:
-        SwitchLayer( DC, CUIVRE_N );
+        SwitchLayer( DC, COPPER_LAYER_N );
         break;
 
     case HK_SWITCH_LAYER_TO_INNER1:

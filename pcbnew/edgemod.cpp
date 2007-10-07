@@ -194,11 +194,11 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Layer( EDGE_MODULE* Edge, wxDC* DC )
 
 
 	/* Ask for the new layer */
-    new_layer = SelectLayer( new_layer, LAYER_CUIVRE_N, LAST_NO_COPPER_LAYER );
+    new_layer = SelectLayer( new_layer, COPPER_LAYER_N, LAST_NO_COPPER_LAYER );
     if( new_layer < 0 )
         return;
 
-	if ( new_layer >= LAYER_CUIVRE_N && new_layer <= LAYER_CMP_N )
+	if ( new_layer >= COPPER_LAYER_N && new_layer <= LAYER_CMP_N )
 	/* an edge is put on a copper layer, and it is very dangerous. a confirmation is requested */
 	{
 		if ( ! IsOK(this, _("The graphic item will be on a copper layer.It is very dangerous. Are you sure") ) )
@@ -364,7 +364,7 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
         Edge->SetLayer( Module->GetLayer() );
         if( Module->GetLayer() == CMP_N )
             Edge->SetLayer( SILKSCREEN_N_CMP );
-        if( Module->GetLayer() == CUIVRE_N )
+        if( Module->GetLayer() == COPPER_LAYER_N )
             Edge->SetLayer( SILKSCREEN_N_CU );
         /* Initialise the starting point of the new segment or arc */
         Edge->m_Start = GetScreen()->m_Curseur;

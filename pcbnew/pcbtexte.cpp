@@ -351,7 +351,7 @@ TEXTE_PCB* WinEDA_PcbFrame::Create_Texte_Pcb( wxDC* DC )
     TextePcb->m_Flags  = IS_NEW;
     TextePcb->SetLayer( GetScreen()->m_Active_Layer );
     TextePcb->m_Miroir = 1;
-    if( TextePcb->GetLayer() == CUIVRE_N )
+    if( TextePcb->GetLayer() == COPPER_LAYER_N )
         TextePcb->m_Miroir = 0;
 
     TextePcb->m_Size  = g_DesignSettings.m_PcbTextSize;
