@@ -265,7 +265,7 @@ void  WinEDA_SetColorsFrame::OnOkClick(wxCommandEvent& WXUNUSED(event))
 /*******************************************************************/
 {
     UpdateLayerSettings();
-	m_Parent->GetScreen()->SetRefreshReq();
+    m_Parent->ReDrawPanel();
     EndModal( 1 );
 }
 
