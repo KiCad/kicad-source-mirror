@@ -195,9 +195,13 @@ wxPoint WinEDA_DrawPanel::CalcAbsolutePosition( const wxPoint& rel_pos )
     CalcUnscrolledPosition( rel_pos.x, rel_pos.y, &pos.x, &pos.y );
 #else
     int ii, jj;
+    
     GetViewStart( &pos.x, &pos.y );
     GetScrollPixelsPerUnit( &ii, &jj );
-    pos.x *= ii; pos.y *= jj;
+    
+    pos.x *= ii; 
+    pos.y *= jj;
+    
     pos.x += rel_pos.x;
     pos.y += rel_pos.y;
 #endif
@@ -243,11 +247,16 @@ bool WinEDA_DrawPanel::IsPointOnDisplay( wxPoint ref_pos )
 
     // Conversion en coord physiques
     pos    = CalcAbsolutePosition( display_rect.GetPosition() );
+    
     pos.x *= GetZoom();
     pos.y *= GetZoom();
+    
     pos.x += GetScreen()->m_DrawOrg.x;
     pos.y += GetScreen()->m_DrawOrg.y;
-    display_rect.SetX( pos.x ); display_rect.SetY( pos.y );
+    
+    display_rect.SetX( pos.x ); 
+    display_rect.SetY( pos.y );
+    
     display_rect.SetWidth( display_rect.GetWidth() * GetZoom() );
     display_rect.SetHeight( display_rect.GetHeight() * GetZoom() );
 
@@ -283,11 +292,15 @@ wxPoint WinEDA_DrawPanel::GetScreenCenterRealPosition()
     wxPoint realpos;
 
     size    = GetClientSize();
-    size.x /= 2; size.y /= 2;
+    
+    size.x /= 2; 
+    size.y /= 2;
 
     realpos    = CalcAbsolutePosition( wxPoint( size.x, size.y ) );
+    
     realpos.x *= GetZoom();
     realpos.y *= GetZoom();
+    
     realpos.x += GetScreen()->m_DrawOrg.x;
     realpos.y += GetScreen()->m_DrawOrg.y;
 
@@ -576,7 +589,8 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
     ii = pas_grille_affichee.x / zoom;
     if( ii  < 5 )
     {
-        pas_grille_affichee.x *= 2; ii *= 2;
+        pas_grille_affichee.x *= 2; 
+        ii *= 2;
     }
     if( ii < 5 )
         drawgrid = FALSE;           // grille trop petite
@@ -584,14 +598,18 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
     ii = pas_grille_affichee.y / zoom;
     if( ii  < 5 )
     {
-        pas_grille_affichee.y *= 2; ii *= 2;
+        pas_grille_affichee.y *= 2; 
+        ii *= 2;
     }
     if( ii < 5 )
         drawgrid = FALSE;           // grille trop petite
 
     GetViewStart( &org.x, &org.y );
     GetScrollPixelsPerUnit( &ii, &jj );
-    org.x *= ii; org.y *= jj;
+    
+    org.x *= ii; 
+    org.y *= jj;
+    
     screen->m_StartVisu = org;
 
     org.x *= zoom; 
@@ -850,12 +868,14 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
         m_Parent->OnLeftDClick( &DC, screen->m_MousePositionInPixels );
 		IgnoreNextLeftButtonRelease = true;
 	}
-	
-    else if( event.LeftUp() &&  screen->BlockLocate.m_State==STATE_NO_BLOCK )
-        if ( ! IgnoreNextLeftButtonRelease )
-			m_Parent->OnLeftClick( &DC, screen->m_MousePositionInPixels );
 
-	if( event.LeftUp() ) IgnoreNextLeftButtonRelease = false;
+    else if( event.LeftUp() )
+    {
+        if( screen->BlockLocate.m_State==STATE_NO_BLOCK  &&  !IgnoreNextLeftButtonRelease )
+			m_Parent->OnLeftClick( &DC, screen->m_MousePositionInPixels );
+        
+        IgnoreNextLeftButtonRelease = false;
+    }
 
     if( event.ButtonUp( 2 ) && (screen->BlockLocate.m_State == STATE_NO_BLOCK) )
     {   

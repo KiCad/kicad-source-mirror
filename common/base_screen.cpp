@@ -37,8 +37,10 @@ BASE_SCREEN::~BASE_SCREEN()
 {
     if( m_ZoomList )
         free( m_ZoomList );
+    
     if( m_GridList )
         free( m_GridList );
+    
     ClearUndoRedoList();
 }
 
@@ -110,9 +112,8 @@ wxPoint BASE_SCREEN::CursorRealPosition( const wxPoint& ScreenPos )
 {
     wxPoint curpos;
 
-    curpos.x = ScreenPos.x* GetZoom();
-
-    curpos.y = ScreenPos.y* GetZoom();
+    curpos.x = ScreenPos.x * GetZoom();
+    curpos.y = ScreenPos.y * GetZoom();
 
     curpos.x += m_DrawOrg.x;
     curpos.y += m_DrawOrg.y;

@@ -56,3 +56,9 @@ when Undo/Redo stack is empty/filled.
 can now identify a marker.  To see where the user gets a menu to delete a marker:
 void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
+
+*** fix MARQUEUR::HitTest():
+the MARKER is 12 pixels by 12 pixels, but is not resized with zoom, so
+as zoom changes, the effective real size of the MARKER changes.
+@todo: compensate for the zoom.  right now it is difficult to select marker when zoomed out.
+

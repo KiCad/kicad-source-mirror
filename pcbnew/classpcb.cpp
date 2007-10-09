@@ -319,14 +319,20 @@ void MARQUEUR::Display_Infos( WinEDA_DrawFrame* frame )
 
 bool MARQUEUR::HitTest( const wxPoint& refPos )
 {
-    // currently the MARKER is about 14 pixels by 14 pixels
-    int xCenter = m_Pos.x + 7;
-    int yCenter = m_Pos.y + 7;
+    // the MARKER is 12 pixels by 12 pixels, but is not resized with zoom, so
+    // as zoom changes, the effective real size of the MARKER changes.
+
+    // @todo: compensate for the zoom.  right now it is difficult to select marker when zoomed out.
+    
+    const int halfSize = 6;
+    
+    int xCenter = m_Pos.x + halfSize;
+    int yCenter = m_Pos.y + halfSize;
 
     int dx = refPos.x - xCenter;
     int dy = refPos.y - yCenter;
     
-    if( ABS(dx) <= 7 && ABS(dy) <= 7 )
+    if( ABS(dx) <= halfSize  &&  ABS(dy) <= halfSize )
         return true;
     else
         return false;
