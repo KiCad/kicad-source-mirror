@@ -93,7 +93,8 @@ void WinEDA_SchematicFrame::SendMessageToPCBNEW( EDA_BaseStruct* objectToSync )
  * $PIN: number $PART: reference put cursor on the footprint pad
  */
 {
-	if ( objectToSync == NULL )return;
+    if( objectToSync == NULL )
+        return;
 
     LibDrawPin*             Pin     = NULL;
     EDA_SchComponentStruct* LibItem = NULL;
@@ -106,7 +107,8 @@ void WinEDA_SchematicFrame::SendMessageToPCBNEW( EDA_BaseStruct* objectToSync )
     {
         PartTextStruct* Field = (PartTextStruct*) objectToSync;
         LibItem = (EDA_SchComponentStruct*) Field->m_Parent;
-        if( LibItem == NULL ) break;
+        if( LibItem == NULL )
+            break;
         sprintf( Line, "$PART: %s", CONV_TO_UTF8( LibItem->m_Field[REFERENCE].m_Text ) );
         SendCommand( MSG_TO_PCB, Line );
     }
@@ -118,23 +120,25 @@ void WinEDA_SchematicFrame::SendMessageToPCBNEW( EDA_BaseStruct* objectToSync )
         SendCommand( MSG_TO_PCB, Line );
         break;
 
-
     case COMPONENT_PIN_DRAW_TYPE:
-        Pin = (LibDrawPin*) objectToSync;
-		LibItem = (EDA_SchComponentStruct *) Pin->m_Parent;
-        if( LibItem == NULL ) break;
-		if ( Pin->m_PinNum )
+        Pin     = (LibDrawPin*) objectToSync;
+        
+        LibItem = (EDA_SchComponentStruct*) Pin->m_Parent;
+        if( LibItem == NULL )
+            break;
+        
+        if( Pin->m_PinNum )
         {
             wxString pinnum;
             Pin->ReturnPinStringNum( pinnum );
             sprintf( Line, "$PIN: %s $PART: %s", CONV_TO_UTF8( pinnum ),
                     CONV_TO_UTF8( LibItem->m_Field[REFERENCE].m_Text ) );
         }
-		else
-			sprintf( Line, "$PART: %s", CONV_TO_UTF8( LibItem->m_Field[REFERENCE].m_Text ) );
-  
-		SendCommand( MSG_TO_PCB, Line );
-       break;
+        else
+            sprintf( Line, "$PART: %s", CONV_TO_UTF8( LibItem->m_Field[REFERENCE].m_Text ) );
+
+        SendCommand( MSG_TO_PCB, Line );
+        break;
 
     default:
         break;
