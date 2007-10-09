@@ -68,5 +68,8 @@ tracked down to this block of code in eeschema/cross-probing.cpp
         LibItem = (EDA_SchComponentStruct*) Pin->m_Parent;
         if( LibItem == NULL )
             break;
-apparently the parent of the pin is not being set during library loading.
+apparently the parent of the pin is not being set during component instantiation.
+The parent must be the instantiated parent, not the general library component so
+we can get the instantiated reference.
+
 
