@@ -83,7 +83,8 @@ void RemoteCommand( const char* cmdline )
 
 
 /*****************************************************************************/
-void WinEDA_SchematicFrame::SendMessageToPCBNEW( EDA_BaseStruct* objectToSync )
+void WinEDA_SchematicFrame::SendMessageToPCBNEW( EDA_BaseStruct*         objectToSync,
+                                                 EDA_SchComponentStruct* LibItem )
 /*****************************************************************************/
 
 /** Send a remote command to eeschema via a socket,
@@ -96,17 +97,16 @@ void WinEDA_SchematicFrame::SendMessageToPCBNEW( EDA_BaseStruct* objectToSync )
     if( objectToSync == NULL )
         return;
 
-    LibDrawPin*             Pin     = NULL;
-    EDA_SchComponentStruct* LibItem = NULL;
-    char Line[1024];
+    LibDrawPin* Pin = NULL;
+    char        Line[1024];
 
     /* Cross probing to pcbnew if a pin or a component is found */
     switch( objectToSync->Type() )
     {
+    case DRAW_PART_TEXT_STRUCT_TYPE:
     case COMPONENT_FIELD_DRAW_TYPE:
     {
-        PartTextStruct* Field = (PartTextStruct*) objectToSync;
-        LibItem = (EDA_SchComponentStruct*) Field->m_Parent;
+//        PartTextStruct* Field = (PartTextStruct*) objectToSync;
         if( LibItem == NULL )
             break;
         sprintf( Line, "$PART: %s", CONV_TO_UTF8( LibItem->m_Field[REFERENCE].m_Text ) );
@@ -121,12 +121,9 @@ void WinEDA_SchematicFrame::SendMessageToPCBNEW( EDA_BaseStruct* objectToSync )
         break;
 
     case COMPONENT_PIN_DRAW_TYPE:
-        Pin     = (LibDrawPin*) objectToSync;
-        
-        LibItem = (EDA_SchComponentStruct*) Pin->m_Parent;
         if( LibItem == NULL )
             break;
-        
+        Pin = (LibDrawPin*) objectToSync;
         if( Pin->m_PinNum )
         {
             wxString pinnum;

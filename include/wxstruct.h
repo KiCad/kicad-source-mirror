@@ -1051,7 +1051,8 @@ public:
         bool mouseWarp );
 
     /* Cross probing with pcbnew */
-    void                    SendMessageToPCBNEW( EDA_BaseStruct* objectToSync );
+    void                    SendMessageToPCBNEW( EDA_BaseStruct* objectToSync,
+							EDA_SchComponentStruct* LibItem	);
 
     /* netlist generation */
     void*                   BuildNetListBase();

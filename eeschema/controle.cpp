@@ -53,15 +53,18 @@ SchematicGeneralLocateAndDisplay( bool IncludePin )
     /* Cross probing to pcbnew if a pin or a component is found */
     switch( DrawStruct->Type() )
     {
+	case DRAW_PART_TEXT_STRUCT_TYPE:
     case COMPONENT_FIELD_DRAW_TYPE:
-		SendMessageToPCBNEW( DrawStruct );
+        LibItem = (EDA_SchComponentStruct*) DrawStruct->m_Parent;
+		SendMessageToPCBNEW( DrawStruct,LibItem );
         break;
 
     case DRAW_LIB_ITEM_STRUCT_TYPE:
         Pin = LocateAnyPin( m_CurrentScreen->EEDrawList, GetScreen()->m_Curseur, &LibItem );
         if( Pin )
             break; // Priority is probing a pin first
-		SendMessageToPCBNEW( DrawStruct );
+        LibItem = (EDA_SchComponentStruct*) DrawStruct;
+		SendMessageToPCBNEW( DrawStruct, LibItem );
         break;
 
     default:
@@ -84,7 +87,7 @@ SchematicGeneralLocateAndDisplay( bool IncludePin )
                                  CYAN );
 
         // Cross probing:2 - pin found, and send a locate pin command to pcbnew (hightlight net)
-		SendMessageToPCBNEW( Pin );
+		SendMessageToPCBNEW( Pin, LibItem );
     }
     return DrawStruct;
 }
