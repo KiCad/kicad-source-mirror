@@ -118,11 +118,9 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
     m_Collector->Collect( m_Pcb, scanList, GetScreen()->RefPos( true ), guide );
 
 #if 0
-
     // debugging: print out the collected items, showing their priority order too.
     for( int i = 0; i<m_Collector->GetCount();  ++i )
         (*m_Collector)[i]->Show( 0, std::cout );
-
 #endif
 
     /* Remove redundancies: most of time, zones are found twice,
@@ -170,16 +168,16 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
     {
         wxMenu itemMenu;
 
-		/* Give a title to the selection menu. This is also a cancel menu item */
-		wxMenuItem * item_title = new wxMenuItem(&itemMenu, -1, _( "Selection Clarification" ) );
+        /* Give a title to the selection menu. This is also a cancel menu item */
+        wxMenuItem * item_title = new wxMenuItem(&itemMenu, -1, _( "Selection Clarification" ) );
 #ifdef __WINDOWS__
-		wxFont bold_font(*wxNORMAL_FONT);
-		bold_font.SetWeight(wxFONTWEIGHT_BOLD);
-		bold_font.SetStyle( wxFONTSTYLE_ITALIC);
-		item_title->SetFont(bold_font);
+        wxFont bold_font(*wxNORMAL_FONT);
+        bold_font.SetWeight(wxFONTWEIGHT_BOLD);
+        bold_font.SetStyle( wxFONTSTYLE_ITALIC);
+        item_title->SetFont(bold_font);
 #endif
-		itemMenu.Append(item_title);
-		itemMenu.AppendSeparator();
+        itemMenu.Append(item_title);
+        itemMenu.AppendSeparator();
 
         int limit = MIN( MAX_ITEMS_IN_PICKER, m_Collector->GetCount() );
 
@@ -206,8 +204,8 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 
         // this menu's handler is void WinEDA_BasePcbFrame::ProcessItemSelection()
         // and it calls SetCurItem() which in turn calls Display_Infos() on the item.
-		DrawPanel->m_AbortRequest = true;	// changed in false if an item
-        PopupMenu( &itemMenu );	// m_AbortRequest = false if an item is selected
+        DrawPanel->m_AbortRequest = true;   // changed in false if an item
+        PopupMenu( &itemMenu ); // m_AbortRequest = false if an item is selected
 
         DrawPanel->MouseToCursorSchema();
 
@@ -234,6 +232,7 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
     // Save the board after the time out :
     int CurrentTime = time( NULL );
+    
     if( !GetScreen()->IsModify() || GetScreen()->IsSave() )
     {
         /* If no change, reset the time out */
@@ -258,10 +257,12 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     }
 
     curpos = DrawPanel->CursorRealPosition( Mouse );
+    
     oldpos = GetScreen()->m_Curseur;
 
     delta.x = (int) round( (double) GetScreen()->GetGrid().x / zoom );
     delta.y = (int) round( (double) GetScreen()->GetGrid().y / zoom );
+    
     if( delta.x <= 0 )
         delta.x = 1;
     if( delta.y <= 0 )
@@ -361,6 +362,7 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         if( (m_ID_current_state != ID_TRACK_BUTT )
            && (g_MagneticPadOption == capture_cursor_in_track_tool) )
             pad = NULL;
+            
         if( keep_on_grid )
         {
             if( pad )  // Put cursor on the pad

@@ -12,6 +12,7 @@
 #include "autorout.h"
 #include "id.h"
 #include "hotkeys.h"
+#include "collectors.h"
 
 /* Bitmaps */
 #include "bitmaps.h"
@@ -159,8 +160,34 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         }
     }
 
-
+    
     /* Select a proper item */
+
+#if 1   // try this
+    wxPoint cursorPos = GetScreen()->m_Curseur;
+    wxPoint selectPos = m_Collector->GetRefPos();
+    
+    PutOnGrid( &selectPos );    
+    
+    // printf( "cursor=(%d, %d) select=(%d,%d)\n", cursorPos.x, cursorPos.y, selectPos.x, selectPos.y );
+
+    // If there is no selected item or the right click happened at a position
+    // other than where the selection was made
+    if( !item ||  cursorPos != selectPos )
+    {
+        DrawPanel->m_AbortRequest = false;
+        item = PcbGeneralLocateAndDisplay();
+        if( DrawPanel->m_AbortRequest )
+        {
+            DrawPanel->CursorOn( &dc );
+            return false;
+        }
+        
+        // SetCurItem( item );  no, PcbGeneralLocateAndDisplay() does this
+    }
+
+#else
+
     if( !item  || !item->m_Flags )
     {
         DrawPanel->m_AbortRequest = false;
@@ -173,6 +200,8 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
         SetCurItem( item );
     }
+#endif
+
 
     item = GetCurItem();
     if( item )
