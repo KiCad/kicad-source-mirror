@@ -19,7 +19,6 @@ email address.
 	cross-probing minor bug solved ( due to last modification): pins/pads not probed
 
 
->>>>>>> .r316
 2007-Oct-08 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
 ================================================================================
 + gerbview
