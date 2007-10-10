@@ -65,67 +65,69 @@ public:
 	~WinEDA_SetColorsFrame() {};
 
 private:
-	void SetColor(wxCommandEvent& event);
-	void OnOkClick(wxCommandEvent& event);
-	void OnCancelClick(wxCommandEvent& event);
-	void OnApplyClick(wxCommandEvent& event);
+	void SetColor( wxCommandEvent& event );
+	void OnOkClick( wxCommandEvent& event );
+	void OnCancelClick( wxCommandEvent& event );
+	void OnApplyClick( wxCommandEvent& event );
 	void UpdateLayerSettings();
-	void ResetDisplayLayersCu(wxCommandEvent& event);
-	DECLARE_EVENT_TABLE()
+	void ResetDisplayLayersCu( wxCommandEvent& event );
 
+	DECLARE_EVENT_TABLE()
 };
+
+
 /* Table des evenements pour WinEDA_SetColorsFrame */
-BEGIN_EVENT_TABLE(WinEDA_SetColorsFrame, wxDialog)
-	EVT_BUTTON(ID_COLOR_RESET_SHOW_LAYER_OFF, WinEDA_SetColorsFrame::ResetDisplayLayersCu)
-	EVT_BUTTON(ID_COLOR_RESET_SHOW_LAYER_ON, WinEDA_SetColorsFrame::ResetDisplayLayersCu)
-	EVT_BUTTON(wxID_OK, WinEDA_SetColorsFrame::OnOkClick)
-	EVT_BUTTON(wxID_CANCEL, WinEDA_SetColorsFrame::OnCancelClick)
-	EVT_BUTTON(wxID_APPLY, WinEDA_SetColorsFrame::OnApplyClick)
-	EVT_BUTTON(ID_COLOR_SETUP, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+1, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+2, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+3, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+4, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+5, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+6, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+7, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+8, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+9, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+10, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+11, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+12, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+13, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+14, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+15, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+16, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+17, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+18, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+19, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+20, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+21, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+22, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+23, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+24, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+25, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+26, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+27, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+28, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+29, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+30, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+31, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+32, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+33, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+34, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+35, WinEDA_SetColorsFrame::SetColor)
-	EVT_BUTTON(ID_COLOR_SETUP+36, WinEDA_SetColorsFrame::SetColor)
-//	EVT_BUTTON(ID_COLOR_SETUP+37, WinEDA_SetColorsFrame::SetColor)
-//	EVT_BUTTON(ID_COLOR_SETUP+38, WinEDA_SetColorsFrame::SetColor)
-//	EVT_BUTTON(ID_COLOR_SETUP+39, WinEDA_SetColorsFrame::SetColor)
-//	EVT_BUTTON(ID_COLOR_SETUP+40, WinEDA_SetColorsFrame::SetColor)
-//	EVT_BUTTON(ID_COLOR_SETUP+41, WinEDA_SetColorsFrame::SetColor)
-//	EVT_BUTTON(ID_COLOR_SETUP+42, WinEDA_SetColorsFrame::SetColor)
-//	EVT_BUTTON(ID_COLOR_SETUP+43, WinEDA_SetColorsFrame::SetColor)
-//	EVT_BUTTON(ID_COLOR_SETUP+44, WinEDA_SetColorsFrame::SetColor)
+BEGIN_EVENT_TABLE( WinEDA_SetColorsFrame, wxDialog )
+	EVT_BUTTON( ID_COLOR_RESET_SHOW_LAYER_OFF, WinEDA_SetColorsFrame::ResetDisplayLayersCu )
+	EVT_BUTTON( ID_COLOR_RESET_SHOW_LAYER_ON, WinEDA_SetColorsFrame::ResetDisplayLayersCu )
+	EVT_BUTTON( wxID_OK, WinEDA_SetColorsFrame::OnOkClick )
+	EVT_BUTTON( wxID_CANCEL, WinEDA_SetColorsFrame::OnCancelClick )
+	EVT_BUTTON( wxID_APPLY, WinEDA_SetColorsFrame::OnApplyClick )
+	EVT_BUTTON( ID_COLOR_SETUP, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 1, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 2, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 3, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 4, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 5, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 6, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 7, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 8, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 9, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 10, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 11, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 12, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 13, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 14, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 15, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 16, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 17, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 18, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 19, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 20, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 21, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 22, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 23, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 24, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 25, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 26, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 27, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 28, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 29, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 30, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 31, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 32, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 33, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 34, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 35, WinEDA_SetColorsFrame::SetColor )
+	EVT_BUTTON( ID_COLOR_SETUP + 36, WinEDA_SetColorsFrame::SetColor )
+//	EVT_BUTTON( ID_COLOR_SETUP + 37, WinEDA_SetColorsFrame::SetColor )
+//	EVT_BUTTON( ID_COLOR_SETUP + 38, WinEDA_SetColorsFrame::SetColor )
+//	EVT_BUTTON( ID_COLOR_SETUP + 39, WinEDA_SetColorsFrame::SetColor )
+//	EVT_BUTTON( ID_COLOR_SETUP + 40, WinEDA_SetColorsFrame::SetColor )
+//	EVT_BUTTON( ID_COLOR_SETUP + 41, WinEDA_SetColorsFrame::SetColor )
+//	EVT_BUTTON( ID_COLOR_SETUP + 42, WinEDA_SetColorsFrame::SetColor )
+//	EVT_BUTTON( ID_COLOR_SETUP + 43, WinEDA_SetColorsFrame::SetColor )
+//	EVT_BUTTON( ID_COLOR_SETUP + 44, WinEDA_SetColorsFrame::SetColor )
 END_EVENT_TABLE()
 
 /**************************************************************/
@@ -356,15 +358,27 @@ void WinEDA_SetColorsFrame::UpdateLayerSettings()
 		}
 		else
 		{
-			*laytool_list[ii]->m_Color = CurrentColor[ii];
-			*laytool_list[ii]->m_NoDisplay = laytool_list[ii]->m_CheckBox->GetValue();
+//			if( laytool_list[ii]->m_Color )
+//				*laytool_list[ii]->m_Color = CurrentColor[ii];
 
-            // A hack, we have both g_DrawGrid and m_Parent->m_Draw_Grid.
-            // A better way preferred, please.
-            if( laytool_list[ii]->m_NoDisplay == &g_ShowGrid )
-                m_Parent->m_Draw_Grid = g_ShowGrid;
+			// As there is a button associated with every layer listed
+			// within this particular dialog box, the previous command
+			// can be replaced with this following command.
+
+			*laytool_list[ii]->m_Color = CurrentColor[ii];
+
+//			if( laytool_list[ii]->m_CheckBox )
+//				*laytool_list[ii]->m_NoDisplay = laytool_list[ii]->m_CheckBox->GetValue();
+
+			// As there is a checkbox associated with every layer listed
+			// within this particular dialog box, the previous command
+			// can be replaced with this following command.
+
+			*laytool_list[ii]->m_NoDisplay = laytool_list[ii]->m_CheckBox->GetValue();
 		}
 	}
+    // Additional command required for updating visibility of grid.
+    m_Parent->m_Draw_Grid = g_ShowGrid;
 }
 
 
