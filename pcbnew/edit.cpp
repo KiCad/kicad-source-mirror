@@ -13,6 +13,8 @@
 #include "id.h"
 #include "protos.h"
 
+// Uncomment following line to enable wxBell() command (which beeps speaker)
+// #include <wx/utils.h>
 
 static void Process_Move_Item( WinEDA_PcbFrame* frame,
                                EDA_BaseStruct* DrawStruct, wxDC* DC );
@@ -621,7 +623,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_NO_CU_LAYER:
-        itmp = SelectLayer( GetScreen()->m_Active_Layer, CMP_N + 1, -1 );
+        itmp = SelectLayer( GetScreen()->m_Active_Layer, FIRST_NO_COPPER_LAYER, -1 );
         if( itmp >= 0 )
             GetScreen()->m_Active_Layer = itmp;
         DrawPanel->MouseToCursorSchema();
@@ -982,36 +984,73 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
 {
     int preslayer = GetScreen()->m_Active_Layer;
 
-    //if there is only one layer, don't switch.
-    if( m_Pcb->m_BoardSettings->m_CopperLayerCount <= 1 )
+    // Check if the specified layer matches the present layer
+    if( layer == preslayer )
         return;
 
-    //otherwise, must be at least 2 layers. see if it is possible.
-    if( layer == COPPER_LAYER_N || layer == LAYER_CMP_N
-        || layer < m_Pcb->m_BoardSettings->m_CopperLayerCount - 1 )
+    // Copper layers cannot be selected unconditionally; how many
+    // of those layers are currently enabled needs to be checked.
+    if( (layer >= COPPER_LAYER_N) && (layer <= CMP_N) )
     {
-        if( preslayer == layer )
-            return;
+        // If only one copper layer is enabled, the only such layer
+        // that can be selected to is the "Copper" layer (so the
+        // selection of any other copper layer is disregarded).
+        if( m_Pcb->m_BoardSettings->m_CopperLayerCount < 2 )
+        {
+            if( layer != COPPER_LAYER_N )
+            {
+                // Uncomment following command (and line 17) to beep
+                // the speaker. (Doing that would provide feedback to
+                // the user that the (layer-switching) command has been
+                // "acknowledged", but is unable to be acted upon.)
+//              wxBell();
+                return;
+            }
+        }
+
+        // If more than one copper layer is enabled, the "Copper"
+        // and "Component" layers can be selected, but the total
+        // number of copper layers determines which internal
+        // layers are also capable of being selected.
+        else
+        {
+            if( (layer != COPPER_LAYER_N) && (layer != LAYER_CMP_N)
+                && (layer >= m_Pcb->m_BoardSettings->m_CopperLayerCount - 1) )
+            {
+                // Uncomment following command (and line 17) to beep
+                // the speaker. (Doing that would provide feedback to
+                // the user that the (layer-switching) command has been
+                // "acknowledged", but is unable to be acted upon.)
+//              wxBell();
+                return;
+            }
+        }
+
         EDA_BaseStruct* current = GetScreen()->GetCurItem();
 
-        //see if we are drawing a segment; if so, add a via?
+        // See if we are drawing a segment; if so, add a via?
         if( m_ID_current_state == ID_TRACK_BUTT && current != NULL )
         {
             if( current->Type() == TYPETRACK && (current->m_Flags & IS_NEW) )
             {
-                //want to set the routing layers so that it switches properly -
-                //see the implementation of Other_Layer_Route - the working
-                //layer is used to 'start' the via and set the layer masks appropriately.
+                // Want to set the routing layers so that it switches properly -
+                // see the implementation of Other_Layer_Route - the working
+                // layer is used to 'start' the via and set the layer masks appropriately.
                 GetScreen()->m_Route_Layer_TOP    = preslayer;
                 GetScreen()->m_Route_Layer_BOTTOM = layer;
                 GetScreen()->m_Active_Layer = preslayer;
                 Other_Layer_Route( (TRACK*) GetScreen()->GetCurItem(), DC );
             }
         }
-
-        GetScreen()->m_Active_Layer = layer;
-
-        if( DisplayOpt.ContrastModeDisplay )
-            GetScreen()->SetRefreshReq();
     }
+
+    // Is yet more checking required? E.g. when the layer to be selected
+    // is a non-copper layer, or when switching between a copper layer
+    // and a non-copper layer, or vice-versa?
+    // ...
+
+    GetScreen()->m_Active_Layer = layer;
+
+    if( DisplayOpt.ContrastModeDisplay )
+        GetScreen()->SetRefreshReq();
 }

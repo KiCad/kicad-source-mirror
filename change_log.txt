@@ -4,6 +4,25 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Oct-11 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
+================================================================================
++ pcbnew
+  * The previously provided "Exit" button within the "Colors:" dialog box has been
+    replaced with "OK", "Cancel", and "Apply" buttons, and the code for editing the
+    visibility of the Grid layer from that dialog now is "cleaner" than before.
+    Details associated with buttons within that dialog box moved from set_color.cpp
+    to set_color.h (matching implementation for GerbView's corresponding dialog box).
+  * Fixed bug which previously prevented the Copper layer from being selected as the
+    current layer when only one copper layer is enabled (and made some modifications
+    to the code for selecting the next copper layer and previous copper layer).
++ gerbview
+  * The code for editing the visibility of the Grid layer from the "GerbView Layer
+    Colors:" dialog box is "cleaner" than before, and assorted other beautification.
++ eeschema
+  * The options.cpp file (which is no longer used) has been removed, and replaced
+    with options.cpp.notused
+
+
 2007-Oct-10 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew

@@ -154,20 +154,47 @@ void WinEDA_BasePcbFrame::GetComponentFromRedoList( void )
 void WinEDA_BasePcbFrame::SwitchLayer( wxDC* DC, int layer )
 /*****************************************************************/
 
-//Note: virtual, overridden in WinEDA_PcbFrame;
+// Note: virtual, overridden in WinEDA_PcbFrame;
 {
     int preslayer = GetScreen()->m_Active_Layer;
 
-    //if there is only one layer, don't switch.
-    if( m_Pcb->m_BoardSettings->m_CopperLayerCount <= 1 )
-        layer = COPPER_LAYER_N; // Of course we select the copper layer
-
-    //otherwise, we select the requested layer only if it is possible
-    if( layer != LAYER_CMP_N && layer >= m_Pcb->m_BoardSettings->m_CopperLayerCount - 1 )
+    // Check if the specified layer matches the present layer
+    if( layer == preslayer )
         return;
 
-    if( preslayer == layer )
-        return;
+    // Copper layers cannot be selected unconditionally; how many
+    // of those layers are currently enabled needs to be checked.
+    if( (layer >= COPPER_LAYER_N) && (layer <= CMP_N) )
+    {
+        // If only one copper layer is enabled, the only such layer
+        // that can be selected to is the "Copper" layer (so the
+        // selection of any other copper layer is disregarded).
+        if( m_Pcb->m_BoardSettings->m_CopperLayerCount < 2 )
+        {
+            if( layer != COPPER_LAYER_N )
+            {
+                return;
+            }
+        }
+
+        // If more than one copper layer is enabled, the "Copper"
+        // and "Component" layers can be selected, but the total
+        // number of copper layers determines which internal
+        // layers are also capable of being selected.
+        else
+        {
+            if( (layer != COPPER_LAYER_N) && (layer != LAYER_CMP_N)
+                && (layer >= m_Pcb->m_BoardSettings->m_CopperLayerCount - 1) )
+            {
+                return;
+            }
+        }
+    }
+
+    // Is yet more checking required? E.g. when the layer to be selected
+    // is a non-copper layer, or when switching between a copper layer
+    // and a non-copper layer, or vice-versa?
+    // ...
 
     GetScreen()->m_Active_Layer = layer;
 

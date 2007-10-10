@@ -23,7 +23,7 @@
  *  add the HkMyNewEntry pointer in the s_board_edit_Hotkey_List list ( or/and the s_module_edit_Hotkey_List list)
  *  Add the new code in the switch in OnHotKey() function.
  *  when the variable PopupOn is true, an item is currently edited.
- *  This can be usefull if the new function cannot be executed while an item is currently being edited
+ *  This can be useful if the new function cannot be executed while an item is currently being edited
  *  ( For example, one cannot start a new wire when a component is moving.)
  *
  *  Note: If an hotkey is a special key, be sure the corresponding wxWidget keycode (WXK_XXXX)
@@ -202,28 +202,27 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case HK_SWITCH_LAYER_TO_PREVIOUS:
         ll = GetScreen()->m_Active_Layer;
-        if( ll > CMP_N )
+        if( (ll <= COPPER_LAYER_N) || (ll > CMP_N) )
             break;
-        if( ll <= COPPER_LAYER_N )
-            break;
-        if( m_Pcb->m_BoardSettings->m_CopperLayerCount <= 1 )  // Single layer
+        if( m_Pcb->m_BoardSettings->m_CopperLayerCount < 2 )  // Single layer
             ll = COPPER_LAYER_N;
-        if( ll == CMP_N )
+        else if( ll == CMP_N )
             ll = MAX( COPPER_LAYER_N, m_Pcb->m_BoardSettings->m_CopperLayerCount - 2 );
-        else if( ll > COPPER_LAYER_N )
+        else
             ll--;
         SwitchLayer( DC, ll );
         break;
 
     case HK_SWITCH_LAYER_TO_NEXT:
         ll = GetScreen()->m_Active_Layer;
-        if( ll >= CMP_N )
+        if( (ll < COPPER_LAYER_N) || (ll >= CMP_N) )
             break;
-        ll++;
-        if( ll >= m_Pcb->m_BoardSettings->m_CopperLayerCount - 1 )
-            ll = CMP_N;
-        if( m_Pcb->m_BoardSettings->m_CopperLayerCount <= 1 )  // Single layer
+        if( m_Pcb->m_BoardSettings->m_CopperLayerCount < 2 )  // Single layer
             ll = COPPER_LAYER_N;
+        else if( ll >= m_Pcb->m_BoardSettings->m_CopperLayerCount - 2 )
+            ll = CMP_N;
+        else
+            ll++;
         SwitchLayer( DC, ll );
         break;
 
