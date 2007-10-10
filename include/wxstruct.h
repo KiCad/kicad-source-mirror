@@ -18,6 +18,8 @@
 #include <wx/laywin.h>
 #include <wx/snglinst.h>
 
+#include <vector>
+
 
 #define INTERNAL_UNIT_TYPE      0        // Internal unit = inch
 
@@ -1365,8 +1367,46 @@ private:
 /* classe representant un ecran d'affichage des messages */
 /*********************************************************/
 
+/**
+ * Struct MsgItem
+ * is used privately by WinEDA_MsgPanel as the item type its vector.
+ * These items are the pairs of text strings shown in the MsgPanel.
+ */
+struct MsgItem
+{
+    int         m_X;
+    int         m_UpperY;
+    int         m_LowerY;
+    wxString    m_UpperText;
+    wxString    m_LowerText;
+    int         m_Color;
+
+    /**
+     * Function operator=
+     * overload the assignment operator so that the wxStrings get copied
+     * properly when copying a MsgItem.
+     * No, actually I'm not sure this needed, C++ compiler may auto-generate it.
+     */
+    MsgItem& operator=( const MsgItem& rv )
+    {
+        m_X         = rv.m_X;
+        m_UpperY    = rv.m_UpperY;
+        m_LowerY    = rv.m_LowerY;
+        m_UpperText = rv.m_UpperText;   // overloaded operator=()
+        m_LowerText = rv.m_LowerText;   // overloaded operator=()
+        m_Color     = rv.m_Color;
+        return *this;
+    }
+};
+
+
 class WinEDA_MsgPanel : public wxPanel
 {
+protected:
+    std::vector<MsgItem>    m_Items;    
+
+    void showItem( wxClientDC& dc, const MsgItem& aItem );
+    
 public:
     WinEDA_DrawFrame* m_Parent;
     int m_BgColor;          // couleur de fond

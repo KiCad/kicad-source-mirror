@@ -12,8 +12,10 @@ email address.
   * bug fix: popup menu was not handling Mires, because the collector was not 
     being asked to find them.
 + all
-    Changed English UI text "Mire" to "Target" according to this post:
+  * Changed English UI text "Mire" to "Target" according to this post:
     http://tech.groups.yahoo.com/group/kicad-users/message/1380
+  * rewrote msgpanel.cpp so it retains wxStrings and therefore can repaint its
+    window when being uncovered, resized or whatever.
     
 
 2007-Oct-9 UPDATE   Dick Hollenbeck <dick@softplc.com>
