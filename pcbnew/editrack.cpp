@@ -37,28 +37,30 @@ static void Exit_Editrack( WinEDA_DrawPanel* Panel, wxDC* DC )
  */
 {
     WinEDA_PcbFrame* frame = (WinEDA_PcbFrame*) Panel->m_Parent;
-    TRACK*           track = (TRACK*) frame->GetScreen()->GetCurItem();
+    TRACK*           track = (TRACK*) frame->GetCurItem();
 
-    if( track != NULL )
+    if( track && ( track->Type()==TYPEVIA || track->Type()==TYPETRACK ) )
     {
         /* Erase the current drawing */
         ShowNewTrackWhenMovingCursor( Panel, DC, FALSE );
         if( g_HightLigt_Status )
             frame->Hight_Light( DC );
+        
         g_HightLigth_NetCode = OldNetCodeSurbrillance;
         if( OldEtatSurbrillance )
             frame->Hight_Light( DC );
 
         frame->MsgPanel->EraseMsgBox();
-        TRACK* previoustrack;
 
         // Delete current (new) track
-        for(  ; track != NULL; track = previoustrack )
+        TRACK* previoustrack;
+        for(  ;   track;   track = previoustrack )
         {
             previoustrack = (TRACK*) track->Pback;
             delete track;
         }
     }
+    
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
     frame->SetCurItem( NULL );
@@ -273,6 +275,7 @@ int Add_45_degrees_Segment( WinEDA_BasePcbFrame* frame, wxDC* DC, TRACK* pt_segm
     // les segments doivent etre de longueur suffisante:
     if( MAX( abs( dx0 ), abs( dy0 ) ) < (pas_45 * 2) )
         return 0;
+    
     if( MAX( abs( dx1 ), abs( dy1 ) ) < (pas_45 * 2) )
         return 0;
 

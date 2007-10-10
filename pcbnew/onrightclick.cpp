@@ -13,6 +13,8 @@
 #include "id.h"
 #include "hotkeys.h"
 #include "collectors.h"
+#include "protos.h"
+
 
 /* Bitmaps */
 #include "bitmaps.h"
@@ -170,10 +172,17 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     PutOnGrid( &selectPos );    
     
     // printf( "cursor=(%d, %d) select=(%d,%d)\n", cursorPos.x, cursorPos.y, selectPos.x, selectPos.y );
-
-    // If there is no selected item or the right click happened at a position
-    // other than where the selection was made
-    if( !item ||  cursorPos != selectPos )
+    
+    /*  If not editing a track, and there is no selected item or the right click 
+        happened at a position other than where the selection was made.
+        We cannot call PcbGeneralLocateAndDisplay() when dragging a track because
+        editrack.cpp's void Exit_Editrack( WinEDA_DrawPanel* Panel, wxDC* DC )
+        uses GetCurItem(), thinking it is an aborted track, yet after calling
+        PcbGeneralLocateAndDisplay(), GetCurItem() is any arbitrary BOARD_ITEM,
+        not the aborted track.
+    */
+    if( ShowNewTrackWhenMovingCursor != DrawPanel->ManageCurseur 
+       && ( !item  ||  cursorPos != selectPos )  )
     {
         DrawPanel->m_AbortRequest = false;
         item = PcbGeneralLocateAndDisplay();
