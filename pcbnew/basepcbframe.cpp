@@ -185,13 +185,13 @@ void WinEDA_BasePcbFrame::ProcessItemSelection( wxCommandEvent& event )
     // index into the collector list:
     int itemNdx = id - ID_POPUP_PCB_ITEM_SELECTION_START;
 
-    if( (id >= ID_POPUP_PCB_ITEM_SELECTION_START)
-       && (id <= ID_POPUP_PCB_ITEM_SELECTION_END) )
+    if( id >= ID_POPUP_PCB_ITEM_SELECTION_START
+     && id <= ID_POPUP_PCB_ITEM_SELECTION_END )
     {
         BOARD_ITEM* item = (*m_Collector)[itemNdx];
         DrawPanel->m_AbortRequest = false;
 
-#if defined (DEBUG)
+#if defined (DEBUG) && 0
         item->Show( 0, std::cout );
 #endif
 
