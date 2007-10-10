@@ -262,7 +262,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_PCB_MIRE_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Mire" ) );
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add Layer Alignment Target" ) );
         break;
 
     case ID_PCB_PLACE_OFFSET_COORD_BUTT:

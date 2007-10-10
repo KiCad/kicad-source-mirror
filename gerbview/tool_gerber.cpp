@@ -373,7 +373,7 @@ void WinEDA_GerberFrame::ReCreateVToolbar( void )
                         BITMAP( junction_xpm ),
                         wxNullBitmap, TRUE,
                         -1, -1, (wxObject*) NULL,
-                        _( "Add Mires" ) );
+                        _( "Add layer alignment target" ) );
 
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_TEXT_COMMENT_BUTT,

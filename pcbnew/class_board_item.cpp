@@ -187,7 +187,10 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         break;
 
     case TYPEMIRE:
-        text << _( "Mire" );          // @todo: extend text,  Mire is not an english word!
+        text << _( "Target" ) //<< wxT( " on " ) << ReturnPcbLayerName( item->GetLayer() ).Trim()
+            // could use if problem with decimal point and user units was fixed:
+            // << wxT( " " ) << wxT( "size" ) << wxT( " " ) << ((MIREPCB*)item)->m_Size
+            ;
         break;
 
     case TYPEEDGEZONE:

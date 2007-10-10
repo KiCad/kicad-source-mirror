@@ -452,7 +452,7 @@ void WinEDA_PcbFrame::ReCreateVToolbar()
 
     m_VToolBar->AddTool( ID_PCB_MIRE_BUTT, wxEmptyString,
                          BITMAP( add_mires_xpm ),
-                         _( "Add Mires" ), wxITEM_CHECK );
+                         _( "Add layer alignment target" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_PCB_DELETE_ITEM_BUTT, wxEmptyString,

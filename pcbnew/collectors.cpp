@@ -40,6 +40,7 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     TYPEDRAWSEGMENT, 
     TYPEMARQUEUR,
     TYPECOTATION,
+    TYPEMIRE,
     TYPEVIA,
     TYPETRACK,
     TYPEPAD,
@@ -50,6 +51,7 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
 };    
 
 
+/*
 const KICAD_T GENERAL_COLLECTOR::PrimaryItems[] = {
     TYPETEXTE, 
     TYPEDRAWSEGMENT, 
@@ -60,6 +62,7 @@ const KICAD_T GENERAL_COLLECTOR::PrimaryItems[] = {
     TYPEMODULE,
     EOT
 };
+*/
 
 
 const KICAD_T GENERAL_COLLECTOR::AllButZones[] = {
@@ -67,6 +70,7 @@ const KICAD_T GENERAL_COLLECTOR::AllButZones[] = {
     TYPEDRAWSEGMENT, 
     TYPEMARQUEUR,
     TYPECOTATION,
+    TYPEMIRE,
     TYPEVIA,
     TYPETRACK,
     TYPEPAD,

@@ -327,12 +327,12 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             if( !flags )
             {
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_MOVE_MIRE_REQUEST,
-                              _( "Move Mire" ), move_xpm );
+                              _( "Move Target" ), move_xpm );
             }
             ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_EDIT_MIRE,
-                          _( "Edit Mire" ), edit_xpm );
+                          _( "Edit Target" ), edit_xpm );
             ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_MIRE,
-                          _( "Delete Mire" ), delete_xpm );
+                          _( "Delete Target" ), delete_xpm );
             break;
 
         case TYPEEDGEMODULE:

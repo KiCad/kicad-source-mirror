@@ -79,7 +79,7 @@ void WinEDA_PcbFrame::InstallMireOptionsFrame( MIREPCB* MirePcb,
 WinEDA_MirePropertiesFrame::WinEDA_MirePropertiesFrame( WinEDA_PcbFrame* parent,
                                                         MIREPCB* Mire, wxDC* DC,
                                                         const wxPoint& framepos ) :
-    wxDialog( parent, -1, _( "Mire properties" ), framepos, wxSize( 270, 210 ),
+    wxDialog( parent, -1, _( "Target Properties" ), framepos, wxSize( 270, 210 ),
               DIALOG_STYLE )
 {
     wxString  number;
@@ -121,7 +121,7 @@ WinEDA_MirePropertiesFrame::WinEDA_MirePropertiesFrame( WinEDA_PcbFrame* parent,
     // Shape
     wxString shape_list[2] = { _( "shape +" ), _( "shape X" ) };
     m_MireShape = new wxRadioBox( this, ID_LISTBOX_SHAPE_MIRE,
-                                  _( "Mire Shape:" ),
+                                  _( "Target Shape:" ),
                                   wxDefaultPosition, wxSize( -1, -1 ),
                                   2, shape_list, 1 );
     m_MireShape->SetSelection( m_MirePcb->m_Shape ? 1 : 0 );

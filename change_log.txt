@@ -4,6 +4,18 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Oct-10 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ pcbnew
+  * prevent OnRightClick() from calling PcbGeneralLocateAndDisplay() when creating
+    a new track.
+  * bug fix: popup menu was not handling Mires, because the collector was not 
+    being asked to find them.
++ all
+    Changed English UI text "Mire" to "Target" according to this post:
+    http://tech.groups.yahoo.com/group/kicad-users/message/1380
+    
+
 2007-Oct-9 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew
