@@ -20,9 +20,7 @@ static wxPoint OldPos;
 static int     MireDefaultSize = 5000;
 
 enum id_mire_properties {
-    ID_ACCEPT_MIRE_PROPERTIES = 1900,
-    ID_CANCEL_MIRE_PROPERTIES,
-    ID_SIZE_MIRE,
+    ID_SIZE_MIRE = 1900,   // (Not currently used anywhere else)
     ID_LISTBOX_SHAPE_MIRE
 };
 
@@ -46,21 +44,18 @@ public:
     // Constructor and destructor
     WinEDA_MirePropertiesFrame( WinEDA_PcbFrame* parent,
                                 MIREPCB* Mire, wxDC* DC, const wxPoint& pos );
-    ~WinEDA_MirePropertiesFrame()
-    {
-    }
-
+    ~WinEDA_MirePropertiesFrame() { }
 
 private:
-    void    MirePropertiesAccept( wxCommandEvent& event );
-    void    OnQuit( wxCommandEvent& event );
+    void    OnOkClick( wxCommandEvent& event );
+    void    OnCancelClick( wxCommandEvent& event );
 
     DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE( WinEDA_MirePropertiesFrame, wxDialog )
-EVT_BUTTON( ID_ACCEPT_MIRE_PROPERTIES, WinEDA_MirePropertiesFrame::MirePropertiesAccept )
-EVT_BUTTON( ID_CANCEL_MIRE_PROPERTIES, WinEDA_MirePropertiesFrame::OnQuit )
+EVT_BUTTON( wxID_OK, WinEDA_MirePropertiesFrame::OnOkClick )
+EVT_BUTTON( wxID_CANCEL, WinEDA_MirePropertiesFrame::OnCancelClick )
 END_EVENT_TABLE()
 
 
@@ -72,7 +67,8 @@ void WinEDA_PcbFrame::InstallMireOptionsFrame( MIREPCB* MirePcb,
     WinEDA_MirePropertiesFrame* frame = new WinEDA_MirePropertiesFrame( this,
                                                                         MirePcb, DC, pos );
 
-    frame->ShowModal(); frame->Destroy();
+    frame->ShowModal();
+    frame->Destroy();
 }
 
 
@@ -100,11 +96,11 @@ WinEDA_MirePropertiesFrame::WinEDA_MirePropertiesFrame( WinEDA_PcbFrame* parent,
     MainBoxSizer->Add( RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
     /* Creation des boutons de commande */
-    Button = new wxButton( this, ID_ACCEPT_MIRE_PROPERTIES, _( "Ok" ) );
+    Button = new wxButton( this, wxID_OK, _( "OK" ) );
     Button->SetForegroundColour( *wxRED );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
-    Button = new wxButton( this, ID_CANCEL_MIRE_PROPERTIES, _( "Cancel" ) );
+    Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
     Button->SetForegroundColour( *wxBLUE );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
@@ -133,15 +129,15 @@ WinEDA_MirePropertiesFrame::WinEDA_MirePropertiesFrame( WinEDA_PcbFrame* parent,
 
 
 /**********************************************************************/
-void WinEDA_MirePropertiesFrame::OnQuit( wxCommandEvent& WXUNUSED (event) )
+void WinEDA_MirePropertiesFrame::OnCancelClick( wxCommandEvent& WXUNUSED (event) )
 /**********************************************************************/
 {
-    Close( true );    // true is to force the frame to close
+    EndModal( -1 );
 }
 
 
 /**************************************************************************/
-void WinEDA_MirePropertiesFrame::MirePropertiesAccept( wxCommandEvent& event )
+void WinEDA_MirePropertiesFrame::OnOkClick( wxCommandEvent& event )
 /**************************************************************************/
 
 /* Met a jour les differents parametres pour le composant en cours d'édition
@@ -156,7 +152,7 @@ void WinEDA_MirePropertiesFrame::MirePropertiesAccept( wxCommandEvent& event )
     m_MirePcb->Draw( m_Parent->DrawPanel, m_DC, wxPoint( 0, 0 ), GR_OR );
 
     m_Parent->GetScreen()->SetModify();
-    Close( TRUE );
+    EndModal( 1 );
 }
 
 

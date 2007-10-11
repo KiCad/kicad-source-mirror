@@ -7,6 +7,20 @@ email address.
 2007-Oct-11 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
 ================================================================================
 + pcbnew
+  * The "Target Properties" dialog box can now (otherwise) be cancelled by pressing
+    the "Esc" key, and the caption of the "OK" button within the "Cotation
+    properties" dialog box has been capitalised (so that an icon is now provided
+    within that button within the Linux version of KiCad).
+  * The pcbpiste.cpp file (which is no longer used) has been removed, and replaced
+    with pcbpiste.cpp.notused
++ cvpcb
+  * The affiche.cpp file (which is no longer used) has been removed, and replaced
+    with affiche.cpp.notused
+
+
+2007-Oct-11 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
+================================================================================
++ pcbnew
   * The previously provided "Exit" button within the "Colors:" dialog box has been
     replaced with "OK", "Cancel", and "Apply" buttons, and the code for editing the
     visibility of the Grid layer from that dialog now is "cleaner" than before.
