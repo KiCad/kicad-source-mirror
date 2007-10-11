@@ -1369,7 +1369,7 @@ private:
 
 /**
  * Struct MsgItem
- * is used privately by WinEDA_MsgPanel as the item type its vector.
+ * is used privately by WinEDA_MsgPanel as the item type of its vector.
  * These items are the pairs of text strings shown in the MsgPanel.
  */
 struct MsgItem

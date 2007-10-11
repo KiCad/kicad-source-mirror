@@ -132,12 +132,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         break;
 
     case ID_PCB_SHOW_1_RATSNEST_BUTT:
-#if 0        
-        DrawStruct = m_Pcb->FindPadOrModule( GetScreen()->RefPos(true), 
-                            GetScreen()->m_Active_Layer );
-#else
         DrawStruct = PcbGeneralLocateAndDisplay();
-#endif
         Show_1_Ratsnest( DrawStruct, DC );
         
         if( DrawStruct )

@@ -438,12 +438,10 @@ void valeur_param( int valeur, wxString& buf_texte )
 {
     if( g_UnitMetric )
     {
-        buf_texte.Printf( wxT( "%3.3f " ), (float) valeur * 0.00254 );
-        buf_texte << wxT( "mm" );
+        buf_texte.Printf( wxT( "%3.3f mm" ), valeur * 0.00254 );
     }
     else
     {
-        buf_texte.Printf( wxT( "%2.4f " ), (float) valeur * 0.0001 );
-        buf_texte << wxT( "\" " );
+        buf_texte.Printf( wxT( "%2.4f \"" ), valeur * 0.0001 );
     }
 }

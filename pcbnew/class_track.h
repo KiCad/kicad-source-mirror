@@ -120,6 +120,12 @@ public:
 
     
     /**
+     * Function ShowWidth
+     * returns the width of the track in displayable user units.
+     */
+    wxString  ShowWidth();
+    
+    /**
      * Function Visit
      * is re-implemented here because TRACKs and SEGVIAs are in the same list
      * within BOARD.  If that were not true, then we could inherit the

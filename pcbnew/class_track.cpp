@@ -35,6 +35,26 @@ TRACK::TRACK( BOARD_ITEM* StructFather, KICAD_T idtype ) :
 }
 
 
+wxString TRACK::ShowWidth()
+{
+    wxString msg;
+    
+#if 0    
+    double   value = To_User_Unit( g_UnitMetric, m_Width, PCB_INTERNAL_UNIT );
+    
+    if( g_UnitMetric == INCHES )  // Affichage en mils
+        msg.Printf( wxT( "%.1f" ), value * 1000 );
+    else
+        msg.Printf( wxT( "%.3f" ), value );
+#else
+
+    valeur_param( m_Width, msg );
+
+#endif
+    
+    return msg;
+}
+
 
 SEGZONE::SEGZONE( BOARD_ITEM* StructFather ) :
     TRACK( StructFather, TYPEZONE )

@@ -44,7 +44,9 @@ void WinEDA_BasePcbFrame::Compile_Ratsnest( wxDC* DC, bool display_status_pcb )
     /* construction de la liste des coordonnées des pastilles */
     m_Pcb->m_Status_Pcb = 0;        /* réinit total du calcul */
     build_liste_pads();
+    
     MsgPanel->EraseMsgBox();        /* effacement du bas d'ecran */
+    
     msg.Printf( wxT( " %d" ), m_Pcb->m_NbPads );
     Affiche_1_Parametre( this, 1, wxT( "pads" ), msg, RED );
 
@@ -52,11 +54,13 @@ void WinEDA_BasePcbFrame::Compile_Ratsnest( wxDC* DC, bool display_status_pcb )
     Affiche_1_Parametre( this, 8, wxT( "Nets" ), msg, CYAN );
 
     reattribution_reference_piste( display_status_pcb );
-    Build_Board_Ratsnest( DC );  /* calcul du chevelu general */
+    
+    Build_Board_Ratsnest( DC ); /* calcul du chevelu general */
+    
     test_connexions( DC );      /* determine les blocks de pads connectés par
                                  *      les pistes existantes */
 
-    Tst_Ratsnest( DC, 0 );   /* calcul du chevelu actif */
+    Tst_Ratsnest( DC, 0 );      /* calcul du chevelu actif */
 
     // Reaffichage des chevelus actifs
     if( g_Show_Ratsnest )
@@ -68,19 +72,25 @@ void WinEDA_BasePcbFrame::Compile_Ratsnest( wxDC* DC, bool display_status_pcb )
 
 
 /*****************************************************************/
-static int tri_par_net( LISTE_PAD* pt_ref, LISTE_PAD* pt_compare )
+static int tri_par_net( const void* o1, const void* o2 )
 /****************************************************************/
 /* routine utilisee par la foncion QSORT */
 {
+    LISTE_PAD* pt_ref     = (LISTE_PAD*) o1;
+    LISTE_PAD* pt_compare = (LISTE_PAD*) o2;    
+    
     return (*pt_ref)->m_NetCode - (*pt_compare)->m_NetCode;
 }
 
 
 /********************************************************/
-static int sort_by_length( CHEVELU* ref, CHEVELU* compare )
+static int sort_by_length( const void* o1, const void* o2 )
 /********************************************************/
 /* routine de tri par longueur des chevelus utilisee par la foncion QSORT */
 {
+    CHEVELU* ref     = (CHEVELU*) o1;
+    CHEVELU* compare = (CHEVELU*) o2;
+    
     return ref->dist - compare->dist;
 }
 
@@ -108,12 +118,15 @@ static int gen_rats_block_to_block( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
 {
     int        dist_min, current_dist;
     int        current_num_block = 1;
-    LISTE_PAD* pt_liste_pad_tmp,
-    * pt_liste_pad_aux,
-    * pt_liste_pad_block1 = NULL,
-    * pt_start_liste;
+    LISTE_PAD* pt_liste_pad_tmp;
+    LISTE_PAD* pt_liste_pad_aux;
+    LISTE_PAD* pt_liste_pad_block1 = NULL;
+    LISTE_PAD* pt_start_liste;
 
-    pt_liste_pad_tmp = NULL; dist_min = 0x7FFFFFFF;
+    pt_liste_pad_tmp = NULL; 
+    
+    dist_min = 0x7FFFFFFF;
+    
     pt_start_liste   = pt_liste_pad;
 
     if( DC )
@@ -123,14 +136,17 @@ static int gen_rats_block_to_block( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
     for( ; pt_liste_pad < pt_limite; pt_liste_pad++ )
     {
         D_PAD* ref_pad = *pt_liste_pad;
+        
         if( ref_pad->m_logical_connexion != 1 )
             continue;
 
         for( pt_liste_pad_aux = pt_start_liste; ; pt_liste_pad_aux++ )
         {
             D_PAD* curr_pad = *pt_liste_pad_aux;
+            
             if( pt_liste_pad_aux >= pt_limite )
                 break;
+            
             if( curr_pad->m_logical_connexion == 1 )
                 continue;
 
@@ -221,19 +237,23 @@ static int gen_rats_pad_to_pad( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
     for(  ; pt_liste_pad < pt_limite; pt_liste_pad++ )
     {
         ref_pad = *pt_liste_pad;
+        
         if( ref_pad->m_logical_connexion )
             continue;                              // Pad deja connecte
 
-        pt_liste_pad_tmp = NULL; dist_min = 0x7FFFFFFF;
+        pt_liste_pad_tmp = NULL; 
+        dist_min = 0x7FFFFFFF;
 
         for( pt_liste_pad_aux = pt_start_liste; ; pt_liste_pad_aux++ )
         {
             if( pt_liste_pad_aux >= pt_limite )
                 break;
+            
             if( pt_liste_pad_aux == pt_liste_pad )
                 continue;
 
             pad = *pt_liste_pad_aux;
+            
             /* Comparaison des distances des pastilles (calcul simplifie) */
             current_dist =
                 abs( pad->m_Pos.x - ref_pad->m_Pos.x )
@@ -263,6 +283,7 @@ static int gen_rats_pad_to_pad( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
             {
                 ref_pad->m_logical_connexion = pad->m_logical_connexion;
             }
+            
             (*nblinks)++;
             g_pt_chevelu->m_NetCode = ref_pad->m_NetCode;
             g_pt_chevelu->status    = CH_ACTIF | CH_VISIBLE;
@@ -335,15 +356,14 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
         recalcule_pad_net_code();
 
     pt_liste_pad = m_Pcb->m_Pads;
-    for( ii = m_Pcb->m_NbPads; ii > 0; pt_liste_pad++, ii-- )
+    for( ii = m_Pcb->m_NbPads; ii > 0;  pt_liste_pad++, ii-- )
     {
         pad = *pt_liste_pad;
         pad->m_logical_connexion = 0;
     }
 
     /* classement des pointeurs sur pads par nets */
-    qsort( m_Pcb->m_Pads, m_Pcb->m_NbPads, sizeof(LISTE_PAD),
-           ( int( * ) ( const void*, const void* ) )tri_par_net );
+    qsort( m_Pcb->m_Pads, m_Pcb->m_NbPads, sizeof(LISTE_PAD), tri_par_net );
 
     /* Allocation memoire du buffer des chevelus: il y a nb_nodes - 1 chevelu
      *  au maximum ( 1 node = 1 pad connecte ).
@@ -429,7 +449,7 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
             qsort( equipot->m_RatsnestStart,
                    equipot->m_RatsnestEnd - equipot->m_RatsnestStart,
                    sizeof(CHEVELU),
-                   ( int( * ) ( const void*, const void* ) )sort_by_length );
+                   sort_by_length );
         }
         pt_liste_pad    = pt_start_liste = pt_end_liste;
         pt_deb_liste_ch = g_pt_chevelu;
@@ -498,6 +518,7 @@ void WinEDA_BasePcbFrame::DrawGeneralRatsnest( wxDC* DC, int net_code )
     {
         if( ( Chevelu->status & (CH_VISIBLE | CH_ACTIF) ) != (CH_VISIBLE | CH_ACTIF) )
             continue;
+        
         if( (net_code <= 0) || (net_code == Chevelu->m_NetCode) )
         {
             GRLine( &DrawPanel->m_ClipBox, DC,
@@ -545,6 +566,7 @@ static int tst_rats_block_to_block( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
     {
         if( chevelu->pad_start->m_logical_connexion == chevelu->pad_end->m_logical_connexion )
             continue;
+        
         if( min_chevelu == NULL )
             min_chevelu = chevelu;
         else if( min_chevelu->dist > chevelu->dist )
@@ -557,6 +579,7 @@ static int tst_rats_block_to_block( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
     min_chevelu->status |= CH_ACTIF;
     current_num_block    = min_chevelu->pad_start->m_logical_connexion;
     min_block = min_chevelu->pad_end->m_logical_connexion;
+    
     if( min_block > current_num_block )
         EXCHG( min_block, current_num_block );
 
@@ -657,6 +680,7 @@ void WinEDA_BasePcbFrame::Tst_Ratsnest( wxDC* DC, int ref_netcode )
         equipot = m_Pcb->FindNet( net_code );
         if( equipot == NULL )
             break;
+        
         if( ref_netcode && (net_code != ref_netcode) )
             continue;
 
@@ -741,15 +765,19 @@ void WinEDA_BasePcbFrame::recalcule_pad_net_code()
     {
         if( (*pad_courant)->m_Netname.IsEmpty() ) // pad non connecte
         {
-            (*pad_courant)->m_NetCode = 0; continue;
+            (*pad_courant)->m_NetCode = 0; 
+            continue;
         }
+        
         m_Pcb->m_NbNodes++;
+        
         /* si le netname a deja ete rencontre: mise a jour , sinon nouveau net_code */
         pad_ref = m_Pcb->m_Pads;
         while( pad_ref < pad_courant )
         {
             if( (*pad_ref)->m_Netname == (*pad_courant)->m_Netname )
                 break;     // sont du meme met
+            
             pad_ref++;
         }
 
@@ -770,7 +798,7 @@ void WinEDA_BasePcbFrame::recalcule_pad_net_code()
     PtStruct = (EDA_BaseStruct*) m_Pcb;
     for( ii = 0; ii <= m_Pcb->m_NbNets; ii++ )
     {
-        if( pt_equipot == NULL ) /* Creation d'une nouvelle equipot */
+        if( pt_equipot == NULL )    /* Creation d'une nouvelle equipot */
         {
             pt_equipot = new EQUIPOT( m_Pcb );
 
@@ -864,11 +892,14 @@ void WinEDA_BasePcbFrame::build_liste_pads()
 
     /* construction de la liste des pointeurs sur les structures D_PAD */
     if( m_Pcb->m_Pads )
+    {
         MyFree( m_Pcb->m_Pads );
-    m_Pcb->m_Pads = NULL;
+        m_Pcb->m_Pads = NULL;
+    }
 
     /* Calcul du nombre de pads */
-    Module = m_Pcb->m_Modules; m_Pcb->m_NbPads = 0;
+    m_Pcb->m_NbPads = 0;
+    Module = m_Pcb->m_Modules; 
     for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
     {
         PtPad = (D_PAD*) Module->m_Pads;
@@ -880,8 +911,8 @@ void WinEDA_BasePcbFrame::build_liste_pads()
         return;
 
     /* Allocation memoire du buffer */
-    pt_liste_pad     = m_Pcb->m_Pads
-                       = (D_PAD**) MyZMalloc( (m_Pcb->m_NbPads + 1) * sizeof(D_PAD *) );
+    pt_liste_pad = m_Pcb->m_Pads
+                 = (D_PAD**) MyZMalloc( (m_Pcb->m_NbPads + 1) * sizeof(D_PAD *) );
     m_Pcb->m_NbNodes = 0;
 
     /* Initialisation du buffer et des variables de travail */
@@ -894,8 +925,10 @@ void WinEDA_BasePcbFrame::build_liste_pads()
             *pt_liste_pad = PtPad;
             PtPad->m_logical_connexion = 0;
             PtPad->m_Parent = Module;
+            
             if( PtPad->m_NetCode )
                 m_Pcb->m_NbNodes++;
+            
             pt_liste_pad++;
         }
     }
@@ -903,9 +936,13 @@ void WinEDA_BasePcbFrame::build_liste_pads()
     *pt_liste_pad = NULL;   // fin de liste
 
     adr_lowmem = buf_work;
+    
     if( m_Pcb->m_Ratsnest )
+    {
         MyFree( m_Pcb->m_Ratsnest );
-    m_Pcb->m_Ratsnest   = NULL;
+        m_Pcb->m_Ratsnest   = NULL;
+    }
+    
     m_Pcb->m_Status_Pcb = LISTE_PAD_OK;
 }
 
@@ -929,14 +966,14 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
  *          Ce chevelu est recalcule a chaque deplacement
  */
 {
-    LISTE_PAD*      pt_liste_pad,
-    * pt_liste_ref,
-    * pt_liste_generale;
-    D_PAD*          pad_ref,
-    * pad_externe;
-    LISTE_PAD*      pt_liste_pad_limite,
-    * pt_start_liste,
-    * pt_end_liste;
+    LISTE_PAD*      pt_liste_pad;
+    LISTE_PAD*      pt_liste_ref;
+    LISTE_PAD*      pt_liste_generale;
+    D_PAD*          pad_ref;
+    D_PAD*          pad_externe;
+    LISTE_PAD*      pt_liste_pad_limite;
+    LISTE_PAD*      pt_start_liste;
+    LISTE_PAD*      pt_end_liste;
     int             ii, jj;
     CHEVELU*        local_chevelu;
     static CHEVELU* pt_fin_int_chevelu;     // pointeur sur la fin de la liste
@@ -955,12 +992,15 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
         goto calcul_chevelu_ext;
 
     /* calcul du chevelu "interne", c.a.d. liant les seuls pads du module */
-    pt_liste_pad = (LISTE_PAD*) adr_lowmem; nb_pads_ref = 0;
+    pt_liste_pad = (LISTE_PAD*) adr_lowmem; 
+    nb_pads_ref = 0;
+    
     pad_ref = Module->m_Pads;
     for( ; pad_ref != NULL; pad_ref = (D_PAD*) pad_ref->Pnext )
     {
         if( pad_ref->m_NetCode == 0 )
             continue;
+        
         *pt_liste_pad = pad_ref;
         pad_ref->m_logical_connexion  = 0;
         pad_ref->m_physical_connexion = 0;
@@ -970,13 +1010,14 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
     if( nb_pads_ref == 0 )
         return (char*) pt_liste_pad;                   /* pas de connexions! */
 
-    qsort( adr_lowmem, nb_pads_ref, sizeof(D_PAD *),
-           ( int( * ) ( const void*, const void* ) )tri_par_net );
+    qsort( adr_lowmem, nb_pads_ref, sizeof(D_PAD *), tri_par_net );
 
     /* construction de la liste des pads connectes aux pads de ce module */
     DisplayRastnestInProgress = FALSE;
     pt_liste_ref     = (LISTE_PAD*) adr_lowmem;
-    nb_pads_externes = 0; current_net_code = 0;
+    
+    nb_pads_externes = 0; 
+    current_net_code = 0;
     for( ii = 0; ii < nb_pads_ref; ii++ )
     {
         pad_ref = pt_liste_ref[ii];
@@ -990,8 +1031,10 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
             pad_externe = *pt_liste_generale; pt_liste_generale++;
             if( pad_externe->m_NetCode != current_net_code )
                 continue;
+            
             if( pad_externe->m_Parent == Module )
                 continue;
+            
             pad_externe->m_logical_connexion  = 0;
             pad_externe->m_physical_connexion = 0;
             *pt_liste_pad = pad_externe; pt_liste_pad++;
@@ -1001,7 +1044,7 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
 
     /* tri par net_codes croissants de la liste des pads externes */
     qsort( pt_liste_ref + nb_pads_ref, nb_pads_externes, sizeof(D_PAD *),
-           ( int( * ) ( const void*, const void* ) )tri_par_net );
+           tri_par_net );
 
     /* calcul du chevelu interne au module:
      *  Ce calcul est identique au calcul du chevelu general, mais il est
@@ -1023,6 +1066,7 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
         {
             if( pt_end_liste >= pt_liste_pad_limite )
                 break;
+            
             if( (*pt_end_liste)->m_NetCode != current_net_code )
                 break;
         }
@@ -1070,6 +1114,7 @@ calcul_chevelu_ext:
     nb_local_chevelu = nb_int_chevelu;
     pt_liste_ref = (LISTE_PAD*) adr_lowmem;
     pad_ref = *pt_liste_ref;
+    
     current_net_code      = pad_ref->m_NetCode;
     local_chevelu->dist   = 0x7FFFFFFF;
     local_chevelu->status = 0;
@@ -1078,8 +1123,9 @@ calcul_chevelu_ext:
     {
         pad_ref = *(pt_liste_ref + ii);
         if( pad_ref->m_NetCode != current_net_code )
-        {     /* un nouveau chevelu est cree (si necessaire) pour
-               *  chaque nouveau net */
+        {     
+            /* un nouveau chevelu est cree (si necessaire) pour
+             *  chaque nouveau net */
             if( increment )
             {
                 nb_local_chevelu++; local_chevelu++;
@@ -1096,13 +1142,17 @@ calcul_chevelu_ext:
         for( jj = nb_pads_externes; jj > 0; jj-- )
         {
             pad_externe = *pt_liste_generale; pt_liste_generale++;
+            
             /* les netcodes doivent etre identiques */
             if( pad_externe->m_NetCode < pad_ref->m_NetCode )
                 continue;
+            
             if( pad_externe->m_NetCode > pad_ref->m_NetCode )
                 break;
+            
             distance = abs( pad_externe->m_Pos.x - pad_pos_X ) +
                        abs( pad_externe->m_Pos.y - pad_pos_Y );
+                       
             if( distance < local_chevelu->dist )
             {
                 local_chevelu->pad_start = pad_ref;
@@ -1117,7 +1167,8 @@ calcul_chevelu_ext:
 
     if( increment ) // fin de balayage : le ratsnest courant doit etre memorise
     {
-        nb_local_chevelu++; local_chevelu++;
+        nb_local_chevelu++; 
+        local_chevelu++;
     }
 
     /* Retourne l'adr de la zone disponible */
@@ -1193,8 +1244,11 @@ void WinEDA_BasePcbFrame::trace_ratsnest_module( wxDC* DC )
  */
 
 /* routine locale de tri par longueur de links utilisee par la fonction QSORT */
-static int sort_by_localnetlength( int* ref, int* compare )
+static int sort_by_localnetlength( const void* o1, const void* o2 )
 {
+    int* ref     = (int*) o1;
+    int* compare = (int*) o2;
+    
     int* org = (int*) adr_lowmem;
     int  ox  = *org++;
     int  oy  = *org++;
@@ -1202,9 +1256,13 @@ static int sort_by_localnetlength( int* ref, int* compare )
 
     lengthref = abs( *ref - ox );
     ref++;
+    
     lengthref += abs( *ref - oy );   // = longueur entre point origine et pad ref
+    
     lengthcmp  = abs( *compare - ox );
+    
     compare++;
+    
     lengthcmp += abs( *compare - oy );   // = longueur entre point origine et pad comparé
 
     return lengthref - lengthcmp;
@@ -1223,7 +1281,7 @@ int* WinEDA_BasePcbFrame::build_ratsnest_pad( EDA_BaseStruct* ref,
     D_PAD*     pad_ref = NULL;
 
     if( ( (m_Pcb->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
-       || ( (m_Pcb->m_Status_Pcb & LISTE_PAD_OK) == 0 ) )
+     || ( (m_Pcb->m_Status_Pcb & LISTE_PAD_OK) == 0 ) )
     {
         nb_local_chevelu = 0;
         return NULL;
@@ -1274,8 +1332,10 @@ int* WinEDA_BasePcbFrame::build_ratsnest_pad( EDA_BaseStruct* ref,
             D_PAD* pad = *padlist;
             if( pad->m_NetCode != current_net_code )
                 continue;
+            
             if( pad == pad_ref )
                 continue;
+            
             if( !pad->m_physical_connexion || (pad->m_physical_connexion != conn_number) )
             {
                 *pt_coord = pad->m_Pos.x; pt_coord++;
@@ -1290,7 +1350,7 @@ int* WinEDA_BasePcbFrame::build_ratsnest_pad( EDA_BaseStruct* ref,
     }
 
     qsort( base_data + 2, nb_local_chevelu, 2 * sizeof(int),
-           ( int( * ) ( const void*, const void* ) )sort_by_localnetlength );
+           sort_by_localnetlength );
     return pt_coord;
 }
 
@@ -1309,12 +1369,15 @@ void WinEDA_BasePcbFrame::trace_ratsnest_pad( wxDC* DC )
 
     if( (m_Pcb->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
         return;
+    
     if( nb_local_chevelu == 0 )
         return;
+    
     if( local_liste_chevelu == NULL )
         return;
 
     pt_coord = (int*) local_liste_chevelu;
+    
     refX = *pt_coord; pt_coord++;
     refY = *pt_coord; pt_coord++;
 
@@ -1323,6 +1386,7 @@ void WinEDA_BasePcbFrame::trace_ratsnest_pad( wxDC* DC )
     {
         if( ii >= g_MaxLinksShowed )
             break;
+        
         GRLine( &DrawPanel->m_ClipBox, DC, refX, refY, *pt_coord, *(pt_coord + 1),
                 0, YELLOW );
         pt_coord += 2;

@@ -26,10 +26,16 @@ email address.
 2007-Oct-10 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew
-  * prevent OnRightClick() from calling PcbGeneralLocateAndDisplay() when creating
-    a new track.
+  * bug fix: prevent OnRightClick() from calling PcbGeneralLocateAndDisplay() 
+    when creating a new track.
   * bug fix: popup menu was not handling Mires, because the collector was not 
     being asked to find them.
+  * added TRACK::ShowWidth() and call it from BOARD_ITEM::MenuText().  There was
+    not enough information in Selection Clarification at a busy junction to 
+    make a reasonable choice.
+  * SEGVIA::MenuText() shows via width, rather than net_code.
+  * Beautified ratsnets.cpp, I would like to understand it better.  It would help
+    if the comments were in English.
 + all
   * Changed English UI text "Mire" to "Target" according to this post:
     http://tech.groups.yahoo.com/group/kicad-users/message/1380

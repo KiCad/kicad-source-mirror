@@ -124,8 +124,8 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         break;
 
     case TYPETRACK:
-        text << _( "Track" ) << wxT( " " );
-        net = aPcb->FindNet( ( (TRACK*) item )->m_NetCode );
+        text << _( "Track" ) << wxT( " " ) << ((TRACK*)item)->ShowWidth();
+        net = aPcb->FindNet( ((TRACK*)item)->m_NetCode );
         if( net )
         {
             text << wxT( " [" ) << net->m_Netname << wxT( "]" );
@@ -151,7 +151,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
     case TYPEVIA:
         {
             SEGVIA* via = (SEGVIA*) item;
-            text << _( "Via" ) << wxT( " " ) << via->m_NetCode;
+            text << _( "Via" ) << wxT( " " ) << via->ShowWidth();
             
             int shape = via->Shape(); 
             if( shape == VIA_ENTERREE )
