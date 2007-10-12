@@ -82,7 +82,7 @@ END_EVENT_TABLE()
 WinEDA_CotationPropertiesFrame::WinEDA_CotationPropertiesFrame( WinEDA_PcbFrame* parent,
                                                                 COTATION* Cotation, wxDC* DC,
                                                                 const wxPoint& framepos ) :
-    wxDialog( parent, -1, _( "Cotation properties" ), framepos, wxSize( 340, 270 ),
+    wxDialog( parent, -1, _( "Dimension properties" ), framepos, wxSize( 340, 270 ),
               DIALOG_STYLE )
 {
     wxButton* Button;

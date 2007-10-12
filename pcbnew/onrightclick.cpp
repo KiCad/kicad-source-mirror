@@ -317,10 +317,10 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             if( !flags )
             {
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_EDIT_COTATION,
-                              _( "Edit Cotation" ), edit_xpm );
+                              _( "Edit Dimension" ), edit_xpm );
             }
             ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_COTATION,
-                          _( "Delete Cotation" ), delete_xpm );
+                          _( "Delete Dimension" ), delete_xpm );
             break;
 
         case TYPEMIRE:

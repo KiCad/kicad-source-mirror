@@ -561,7 +561,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
     int rayon;
     int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
-    if( Type() == TYPEZONE && (!DisplayOpt.DisplayZones) )
+    if( Type() == TYPEZONE && !DisplayOpt.DisplayZones )
         return;
 
     GRSetDrawMode( DC, draw_mode );

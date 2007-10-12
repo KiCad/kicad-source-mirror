@@ -9,6 +9,7 @@
 #include "common.h"
 #include "pcbnew.h"
 #include "trigo.h"
+#include "id.h"             // ID_TRACK_BUTT
 
 #ifdef PCBNEW
 #include "drag.h"
@@ -238,13 +239,16 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
     wxPoint              coord[4];
     int                  zoom;
     int                  fillpad = 0;
-    PCB_SCREEN*          screen;
     WinEDA_BasePcbFrame* frame;
     wxPoint              shape_pos;
 
-    screen = panel ? (PCB_SCREEN*) panel->m_Parent->m_CurrentScreen : (PCB_SCREEN*) ActiveScreen;
-    frame  = (WinEDA_BasePcbFrame*) panel->m_Parent;
+    PCB_SCREEN*          screen = panel ? 
+                                    (PCB_SCREEN*) panel->m_Parent->m_CurrentScreen : 
+                                    (PCB_SCREEN*) ActiveScreen;
 
+    // @todo: if panel could have been NULL above, how can we dereference it here safely?                                     
+    frame  = (WinEDA_BasePcbFrame*) panel->m_Parent;
+    
     /* Calcul de l'aspect du pad */
     if( frame->m_DisplayPadFill == FILLED )
         fillpad = 1;
@@ -255,8 +259,10 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
     if( m_Flags & IS_MOVED )
         fillpad = 0;
 #endif
+
     if( m_Masque_Layer & CMP_LAYER )
         color = g_PadCMPColor;
+    
     if( m_Masque_Layer & CUIVRE_LAYER )
         color |= g_PadCUColor;
 
@@ -322,6 +328,37 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
         }
     }
 
+
+    //-----<test this>-----
+    // if SMD pad and high contrast mode    
+    if( m_Attribut==SMD && DisplayOpt.ContrastModeDisplay )
+    {
+        // when editing tracks show SMD components on either of the routing 
+        // layers as normal, not greyed out.
+        if( frame->m_ID_current_state == ID_TRACK_BUTT )
+        {
+            if( !IsOnLayer( screen->m_Active_Layer )  
+             && !IsOnLayer( screen->m_Route_Layer_TOP) 
+             && !IsOnLayer( screen->m_Route_Layer_BOTTOM) ) 
+            {
+                color &= ~MASKCOLOR;
+                color |= DARKDARKGRAY;
+            }
+        }
+        
+        // when not edting tracks, show SMD components not on active layer as greyed out
+        else
+        {
+            if( !IsOnLayer( screen->m_Active_Layer ) )
+            {
+                color &= ~MASKCOLOR;
+                color |= DARKDARKGRAY;
+            }       
+        }
+    }
+    //-----</test this>----
+    
+
     if( draw_mode & GR_SURBRILL )
     {
         if( draw_mode & GR_AND )
@@ -329,6 +366,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
         else
             color |= HIGHT_LIGHT_FLAG;
     }
+    
     if( color & HIGHT_LIGHT_FLAG )
         color = ColorRefs[color & MASKCOLOR].m_LightColor;
 
@@ -347,6 +385,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
     dy = dy0 = m_Size.y >> 1; /* demi dim  dx et dy */
 
     angle = m_Orient;
+    
     bool DisplayIsol = DisplayOpt.DisplayPadIsol;
     if( ( m_Masque_Layer & ALL_CU_LAYERS ) == 0 )
         DisplayIsol = FALSE;
@@ -375,12 +414,14 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
         /* calcul de l'entraxe de l'ellipse */
         if( dx > dy )       /* ellipse horizontale */
         {
-            delta_cx = dx - dy; delta_cy = 0;
+            delta_cx = dx - dy; 
+            delta_cy = 0;
             rotdx    = m_Size.y;
         }
         else                /* ellipse verticale */
         {
-            delta_cx = 0; delta_cy = dy - dx;
+            delta_cx = 0; 
+            delta_cy = dy - dx;
             rotdx    = m_Size.x;
         }
         RotatePoint( &delta_cx, &delta_cy, angle );
@@ -476,6 +517,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
     if( fillpad && hole )
     {
         color = g_IsPrinting ? WHITE : BLACK; // ou DARKGRAY;
+        
         if( draw_mode != GR_XOR )
             GRSetDrawMode( DC, GR_COPY );
         else
@@ -491,6 +533,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
         case OVALE:
             dx = m_Drill.x >> 1;
             dy = m_Drill.y >> 1;            /* demi dim  dx et dy */
+            
             /* calcul de l'entraxe de l'ellipse */
             if( m_Drill.x > m_Drill.y )     /* ellipse horizontale */
             {
@@ -521,6 +564,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
     {
         dx0 = MIN( dx0, dy0 );
         int nc_color = BLUE;
+        
         if( m_Masque_Layer & CMP_LAYER ) /* Trace forme \ */
             GRLine( &panel->m_ClipBox, DC, cx0 - dx0, cy0 - dx0,
                     cx0 + dx0, cy0 + dx0, 0, nc_color );

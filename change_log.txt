@@ -4,6 +4,17 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+
+2007-Oct-11 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ pcbnew
+  * D_PAD::Draw() so that it shows SMD pads as greyed out when in high contrast
+    mode and not on current layer.  Slight variation on this when laying down
+    tracks: m_Route_Layer_BOTTOM or m_Route_Layer_TOP layers' SMD pads are 
+    not greyed out.
+  * Changed English UI text for "Cotation" to "Dimension".
+
+
 2007-Oct-11 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
 ================================================================================
 + pcbnew

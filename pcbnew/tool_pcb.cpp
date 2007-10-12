@@ -422,11 +422,11 @@ void WinEDA_PcbFrame::ReCreateVToolbar()
 
     m_VToolBar->AddTool( ID_TRACK_BUTT, wxEmptyString,
                          BITMAP( add_tracks_xpm ),
-                         _( "Add Tracks an vias" ), wxITEM_CHECK );
+                         _( "Add tracks and vias" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_PCB_ZONES_BUTT, wxEmptyString,
                          BITMAP( add_zone_xpm ),
-                         _( "Add Zones" ), wxITEM_CHECK );
+                         _( "Add zones" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_LINE_COMMENT_BUTT, wxEmptyString,
@@ -443,12 +443,12 @@ void WinEDA_PcbFrame::ReCreateVToolbar()
 
     m_VToolBar->AddTool( ID_TEXT_COMMENT_BUTT, wxEmptyString,
                          BITMAP( add_text_xpm ),
-                         _( "Add Text" ), wxITEM_CHECK );
+                         _( "Add text" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_PCB_COTATION_BUTT, wxEmptyString,
                          BITMAP( add_cotation_xpm ),
-                         _( "Add Cotation" ), wxITEM_CHECK );
+                         _( "Add dimension" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_PCB_MIRE_BUTT, wxEmptyString,
                          BITMAP( add_mires_xpm ),
