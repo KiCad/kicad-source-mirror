@@ -504,11 +504,22 @@ void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
     if( id < 0 )
         return;
 
+#ifdef PCBNEW
+    // handle color changes for transitions in and out of ID_TRACK_BUTT
+    if( (m_ID_current_state==ID_TRACK_BUTT && id!=ID_TRACK_BUTT)
+     || (m_ID_current_state!=ID_TRACK_BUTT && id==ID_TRACK_BUTT) )
+    {
+        if( DisplayOpt.ContrastModeDisplay )
+            ReDrawPanel();
+    }
+#endif
+    
     // Old Tool Inactif ou ID_NO_SELECT_BUTT actif si pas de nouveau Tool
     if( m_ID_current_state )
     {
         if( m_VToolBar )
             m_VToolBar->ToggleTool( m_ID_current_state, FALSE );
+        
         if( m_AuxVToolBar )
             m_AuxVToolBar->ToggleTool( m_ID_current_state, FALSE );
     }
@@ -518,6 +529,7 @@ void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
         {
             if( m_VToolBar )
                 m_VToolBar->ToggleTool( ID_NO_SELECT_BUTT, FALSE );
+            
             if( m_AuxVToolBar )
                 m_AuxVToolBar->ToggleTool( m_ID_current_state, FALSE );
         }
@@ -530,6 +542,7 @@ void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
     {
         if( m_VToolBar )
             m_VToolBar->ToggleTool( id, TRUE );
+        
         if( m_AuxVToolBar )
             m_AuxVToolBar->ToggleTool( id, TRUE );
     }

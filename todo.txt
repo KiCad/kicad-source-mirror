@@ -63,4 +63,13 @@ as zoom changes, the effective real size of the MARKER changes.
 @todo: compensate for the zoom.  right now it is difficult to select marker when zoomed out.
 
 
+*** Establish consistent policy on UI text upper vs. lower case usage.  My 
+suggestions are below, but the important thing is consistency, not the actual 
+choices.
+Window Titles: all nouns and verbs capitalized.
+Tooltips: all words lower case except first word. (This is a sentence fragment, not a title).
+others (what are they?):
+:
+:
+
 

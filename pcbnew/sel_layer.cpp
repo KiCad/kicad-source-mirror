@@ -244,10 +244,17 @@ void WinEDA_BasePcbFrame::SelectLayerPair()
     WinEDA_SelLayerPairFrame* frame =
         new WinEDA_SelLayerPairFrame( this );
 
-    frame->ShowModal();
+    int result = frame->ShowModal();
     frame->Destroy();
     DrawPanel->MouseToCursorSchema();
     SetToolbars();
+
+    // if user changed colors and we are in high contrast mode, then redraw 
+    // because the SMD pads may change color.     
+    if( result >= 0  &&  DisplayOpt.ContrastModeDisplay )
+    {
+        ReDrawPanel();
+    }
 }
 
 

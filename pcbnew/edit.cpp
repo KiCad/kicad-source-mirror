@@ -151,7 +151,9 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         {
             DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
         }
-        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        
+        if( m_ID_current_state != id )
+            SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
         break;
     }
 
@@ -286,7 +288,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_PCB_COTATION_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Cotation" ) );
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add Dimension" ) );
         break;
 
     case ID_NO_SELECT_BUTT:

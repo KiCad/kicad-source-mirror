@@ -131,8 +131,8 @@ wxClientDC dc(DrawPanel);
             m_AuxVToolBar = NULL;
         }
         {
-        wxSizeEvent SizeEv(GetSize());
-        OnSize(SizeEv);
+            wxSizeEvent SizeEv(GetSize());
+            OnSize(SizeEv);
         }
         break;
 
@@ -259,25 +259,28 @@ void WinEDA_PcbGeneralOptionsFrame::CreateControls()
     wxBoxSizer* itemBoxSizer3 = new wxBoxSizer(wxVERTICAL);
     itemBoxSizer2->Add(itemBoxSizer3, 0, wxGROW|wxALL, 5);
 
-    wxString m_PolarDisplayStrings[] = {
+    static const wxString m_PolarDisplayStrings[] = {
         _("No Display"),
         _("Display")
     };
+    
     m_PolarDisplay = new wxRadioBox( itemDialog1, ID_RADIOBOX, _("Display Polar Coord"), wxDefaultPosition, wxDefaultSize, 2, m_PolarDisplayStrings, 1, wxRA_SPECIFY_COLS );
     itemBoxSizer3->Add(m_PolarDisplay, 0, wxALIGN_LEFT|wxALL, 5);
 
-    wxString m_BoxUnitsStrings[] = {
+    static const wxString m_BoxUnitsStrings[] = {
         _("Inches"),
         _("millimeters")
     };
+    
     m_BoxUnits = new wxRadioBox( itemDialog1, ID_RADIOBOX1, _("Units"), wxDefaultPosition, 
                                     wxDefaultSize, 2, m_BoxUnitsStrings, 1,wxRA_SPECIFY_COLS );
     itemBoxSizer3->Add(m_BoxUnits, 0, wxALIGN_LEFT|wxALL, 5);
 
-    wxString m_CursorShapeStrings[] = {
+    static const wxString m_CursorShapeStrings[] = {
         _("Small"),
         _("Big")
     };
+    
     m_CursorShape = new wxRadioBox( itemDialog1, ID_RADIOBOX2, _("Cursor"), wxDefaultPosition, wxDefaultSize, 2,
                         m_CursorShapeStrings, 1, wxRA_SPECIFY_COLS );
     itemBoxSizer3->Add(m_CursorShape, 0, wxALIGN_LEFT|wxALL, 5);
@@ -348,11 +351,12 @@ void WinEDA_PcbGeneralOptionsFrame::CreateControls()
     m_Track_DoubleSegm_Ctrl->SetForegroundColour(wxColour(0, 144, 0));
     itemStaticBoxSizer15->Add(m_Track_DoubleSegm_Ctrl, 0, wxALIGN_LEFT|wxALL, 5);
 
-    wxString m_MagneticPadOptCtrlStrings[] = {
+    static const wxString m_MagneticPadOptCtrlStrings[] = {
         _("Never"),
         _("When creating tracks"),
         _("Always")
     };
+    
     m_MagneticPadOptCtrl = new wxRadioBox( itemDialog1, ID_MAGNETIC_PAD_CTRL, _("Magnetic Pads"), wxDefaultPosition, wxDefaultSize, 3, m_MagneticPadOptCtrlStrings, 1, wxRA_SPECIFY_COLS );
     if (ShowToolTips())
         m_MagneticPadOptCtrl->SetToolTip(_("control the capture of the pcb cursor when the mouse cursor enters a pad area"));

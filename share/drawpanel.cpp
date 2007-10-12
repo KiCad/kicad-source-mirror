@@ -951,7 +951,6 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
             }
         }
 
-
         if( event.ButtonUp( 1 ) || event.ButtonUp( 2 ) )
         { 
             /* Relachement du bouton: fin de delimitation de block.

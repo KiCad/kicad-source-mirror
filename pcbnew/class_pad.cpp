@@ -333,13 +333,31 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
     // if SMD pad and high contrast mode    
     if( m_Attribut==SMD && DisplayOpt.ContrastModeDisplay )
     {
-        // when editing tracks show SMD components on either of the routing 
-        // layers as normal, not greyed out.
+        // when routing tracks 
         if( frame->m_ID_current_state == ID_TRACK_BUTT )
         {
-            if( !IsOnLayer( screen->m_Active_Layer )  
-             && !IsOnLayer( screen->m_Route_Layer_TOP) 
-             && !IsOnLayer( screen->m_Route_Layer_BOTTOM) ) 
+            int routeTop = screen->m_Route_Layer_TOP;
+            int routeBot = screen->m_Route_Layer_BOTTOM;
+            
+            // if routing between copper and component layers, 
+            // or the current layer is one of said 2 external copper layers, 
+            // then highlight only the current layer. 
+            if( ((1<<routeTop) | (1<<routeBot)) == (CUIVRE_LAYER | CMP_LAYER) 
+             || ((1<<screen->m_Active_Layer) & (CUIVRE_LAYER | CMP_LAYER)) ) 
+            {
+                if( !IsOnLayer( screen->m_Active_Layer ) )
+                {
+                    color &= ~MASKCOLOR;
+                    color |= DARKDARKGRAY;
+                }       
+            }
+            
+            // else routing between an internal signal layer and some other layer.
+            // grey out all SMD pads not on current or the single selected 
+            // external layer.
+            else if( !IsOnLayer( screen->m_Active_Layer )  
+                  && !IsOnLayer( routeTop ) 
+                  && !IsOnLayer( routeBot ) ) 
             {
                 color &= ~MASKCOLOR;
                 color |= DARKDARKGRAY;

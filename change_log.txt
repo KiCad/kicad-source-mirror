@@ -8,6 +8,17 @@ email address.
 2007-Oct-11 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew
+  * D_PAD::Draw() refinements.
+  * WinEDA_DrawFrame::SetToolID() will redraw the DrawPanel if the track
+    button is selected or de-selected and the high-contrast mode is in play.
+  * If high-contrast mode is in play, the Select Layer Pair dialog completion
+    will redraw the DisplayPanel, now that SMD pads' colors are so dependent
+    on these variables.
+
+  
+2007-Oct-11 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ pcbnew
   * D_PAD::Draw() so that it shows SMD pads as greyed out when in high contrast
     mode and not on current layer.  Slight variation on this when laying down
     tracks: m_Route_Layer_BOTTOM or m_Route_Layer_TOP layers' SMD pads are 
