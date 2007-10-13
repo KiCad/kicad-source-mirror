@@ -39,21 +39,23 @@
 
 ////@begin control identifiers
 #define ID_DIALOG 10000
-#define ID_CHECKBOX 10001
-#define ID_CHECKBOX2 10004
-#define ID_CHECKBOX1 10003
-#define ID_CHECKBOX3 10005
-#define ID_CHECKBOX4 10006
-#define ID_RADIOBOX_SELECT_FORMAT 10009
-#define ID_RADIOBOX_SEPARATOR 10015
-#define ID_CHECKBOX6 10016
-#define ID_CHECKBOX_FIELD1 10007
-#define ID_CHECKBOX_FIELD2 10008
-#define ID_CHECKBOX_FIELD4 10010
-#define ID_CHECKBOX_FIELD5 10011
-#define ID_CHECKBOX_FIELD6 10012
-#define ID_CHECKBOX_FIELD7 10013
-#define ID_CHECKBOX_FIELD8 10014
+#define ID_CHECKBOX1 10001
+#define ID_CHECKBOX2 10002
+#define ID_CHECKBOX3 10003
+#define ID_CHECKBOX4 10004
+#define ID_CHECKBOX5 10005
+#define ID_RADIOBOX_SELECT_FORMAT 10006
+#define ID_RADIOBOX_SEPARATOR 10007
+#define ID_CHECKBOX6 10008
+#define ID_CHECKBOX_FIELD1 10009
+#define ID_CHECKBOX_FIELD2 10010
+#define ID_CHECKBOX_FIELD3 10011
+#define ID_CHECKBOX_FIELD4 10012
+#define ID_CHECKBOX_FIELD5 10013
+#define ID_CHECKBOX_FIELD6 10014
+#define ID_CHECKBOX_FIELD7 10015
+#define ID_CHECKBOX_FIELD8 10016
+#define ID_CREATE_LIST 10017
 #define SYMBOL_WINEDA_BUILD_BOM_FRAME_STYLE wxDEFAULT_DIALOG_STYLE|wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|MAYBE_RESIZE_BORDER
 #define SYMBOL_WINEDA_BUILD_BOM_FRAME_TITLE _("List of Material")
 #define SYMBOL_WINEDA_BUILD_BOM_FRAME_IDNAME ID_DIALOG
@@ -99,17 +101,20 @@ public:
 
 ////@begin WinEDA_Build_BOM_Frame event handler declarations
 
-    /// wxEVT_CLOSE_WINDOW event handler for ID_DIALOG
-    void OnCloseWindow( wxCloseEvent& event );
-
     /// wxEVT_COMMAND_RADIOBOX_SELECTED event handler for ID_RADIOBOX_SELECT_FORMAT
     void OnRadioboxSelectFormatSelected( wxCommandEvent& event );
+
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_CREATE_LIST
+    void OnCreateListClick( wxCommandEvent& event );
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
     void OnOkClick( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_EXIT
-    void OnExitClick( wxCommandEvent& event );
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
+    void OnCancelClick( wxCommandEvent& event );
+
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_APPLY
+    void OnApplyClick( wxCommandEvent& event );
 
 ////@end WinEDA_Build_BOM_Frame event handler declarations
 

@@ -5,6 +5,20 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2007-Oct-13 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
+================================================================================
++ eeschema
+  * The previously provided "Quit" button within the "List of Material" dialog box
+    has been replaced with "OK", "Cancel", and "Apply" buttons. Greater consistency
+    has also been achieved after clicking on the "Create List" button; none of the
+    prevailing settings are subsequently saved (previously, some, but not all, of
+    the settings were subsequently saved). (However, settings can still be saved by
+    clicking on either of the "OK" or "Apply" buttons instead.) Assorted cleanup
+    and beautification of associated source code.
+  * The genliste.cpp file (which is no longer used) has been removed, and replaced
+    with genliste.cpp.notused
+
+
 2007-Oct-11 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew
@@ -29,10 +43,10 @@ email address.
 2007-Oct-11 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
 ================================================================================
 + pcbnew
-  * The "Target Properties" dialog box can now (otherwise) be cancelled by pressing
-    the "Esc" key, and the caption of the "OK" button within the "Cotation
-    properties" dialog box has been capitalised (so that an icon is now provided
-    within that button within the Linux version of KiCad).
+  * The "Target Properties" and "Pads Global Edit" dialog boxes can now (otherwise)
+    be cancelled by pressing the "Esc" key, and the caption of the "OK" button
+    within the latter dialog box has been capitalised (so that an icon is now
+    provided within that button within the Linux version of KiCad).
   * The pcbpiste.cpp file (which is no longer used) has been removed, and replaced
     with pcbpiste.cpp.notused
 + cvpcb
