@@ -173,27 +173,26 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     
     // printf( "cursor=(%d, %d) select=(%d,%d)\n", cursorPos.x, cursorPos.y, selectPos.x, selectPos.y );
     
-    /*  If not editing a track, and there is no selected item or the right click 
-        happened at a position other than where the selection was made.
-        We cannot call PcbGeneralLocateAndDisplay() when dragging a track because
-        editrack.cpp's void Exit_Editrack( WinEDA_DrawPanel* Panel, wxDC* DC )
-        uses GetCurItem(), thinking it is an aborted track, yet after calling
-        PcbGeneralLocateAndDisplay(), GetCurItem() is any arbitrary BOARD_ITEM,
-        not the aborted track.
-    */
-    if( ShowNewTrackWhenMovingCursor != DrawPanel->ManageCurseur 
-       && ( !item  ||  cursorPos != selectPos )  )
-    {
-        DrawPanel->m_AbortRequest = false;
-        item = PcbGeneralLocateAndDisplay();
-        if( DrawPanel->m_AbortRequest )
-        {
-            DrawPanel->CursorOn( &dc );
-            return false;
-        }
-        
-        // SetCurItem( item );  no, PcbGeneralLocateAndDisplay() does this
-    }
+ 	/* We can reselect an other item only if there are no item being edited
+	*  because ALL moving functions use GetCurItem(),
+    *  therefore GetCurItem() must return the same item during moving.
+	*  We know an item is moving if ( item && (item->m_Flags != 0)) is true
+	*  and after calling PcbGeneralLocateAndDisplay(), GetCurItem() is any arbitrary BOARD_ITEM,
+    *  not the current editen item.
+	*/
+	if ( ! item || (item->m_Flags == 0) )
+	{
+		if( !item || cursorPos != selectPos )	// Filter
+		{
+			DrawPanel->m_AbortRequest = false;
+			item = PcbGeneralLocateAndDisplay();
+			if( DrawPanel->m_AbortRequest )
+			{
+				DrawPanel->CursorOn( &dc );
+				return false;
+			}
+		}
+	}
 
 #else
 

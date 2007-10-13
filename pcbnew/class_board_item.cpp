@@ -28,6 +28,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
     wxString          text;
     const BOARD_ITEM* item = this;
     EQUIPOT*          net;
+	D_PAD * pad;
 
     switch( item->Type() )
     {
@@ -42,8 +43,17 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         break;
 
     case TYPEPAD:
-        text << _( "Pad" ) << wxT( " " ) << ( (D_PAD*) item )->ReturnStringPadName() << _( " of " )
-             << ( (MODULE*) GetParent() )->GetReference();
+		pad = (D_PAD *) this;
+        text << _( "Pad" ) << wxT( " \"" ) << pad->ReturnStringPadName()
+				<< wxT( "\" (" );
+		if ( (pad->m_Masque_Layer & ALL_CU_LAYERS) == ALL_CU_LAYERS )
+			text << _("all copper layers");
+		else if( (pad->m_Masque_Layer & CUIVRE_LAYER) == CUIVRE_LAYER )
+			text << _("copper layers");
+		else if( (pad->m_Masque_Layer & CMP_LAYER) == CMP_LAYER )
+			text << _("cmp layers");
+		else text << _("???");
+		text << _( ") of " ) << ( (MODULE*) GetParent() )->GetReference();
         break;
 
     case TYPEDRAWSEGMENT:

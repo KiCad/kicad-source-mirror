@@ -1,9 +1,7 @@
-/************************************/
-/****		editeur de PCB		 ****/
-/* traitement du Chevelu (Rastnest) */
-/************************************/
-
-/* Fichier RATSNEST.CPP */
+/***********************/
+/**** ratsnest.cpp  ****/
+/* Ratsnets functions  */
+/***********************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -14,39 +12,110 @@
 
 #include "protos.h"
 
-/* variables locales */
-CHEVELU* g_pt_chevelu;
-CHEVELU* local_liste_chevelu;       // adresse de base du buffer des chevelus locaux
-int      nb_local_chevelu;          // nbr de links du module en deplacement
-int      nb_pads_ref;               // nbr de nodes du module en deplacement
-int      nb_pads_externes;          // nbr de pads connectes au module en deplacement
-bool     DisplayRastnestInProgress; // autorise affichage chevelu en cours de calcul
-                                    // de celui-ci
+/* exported variables */
+CHEVELU*    g_pt_chevelu;
+CHEVELU*    local_liste_chevelu;    // Buffer address for local ratsnest
+// (ratnest relative to one footprint while moving it
+int         nb_local_chevelu;       // link count (active ratnest count) for the footprint beeing moved
 
+/* local variables */
+static int  nb_pads_ref;                    // node count (node = pad with a net code) for the footprint beeing moved
+static int  nb_pads_externes;               // Connected pads count ( pads which are
+//	in other footprints and connected to a pad of the footprint beeing moved
+static bool DisplayRastnestInProgress;      // Enable the display of the ratsnest during the ratsnest computations
 
+/* Note about the ratsnest computation:
+ *  Building the general ratsnest:
+ *  I used the "lee algoritm".
+ *  This is a 2 steps algoritm.
+ *  the m_logical_connexion member of pads handle a "block number" or a "cluster number"
+ *  initially, m_logical_connexion = 0 (pad not connected).
+ *  Build_Board_Ratsnest( wxDC* DC )  Create this rastnest
+ *  for each net:
+ *  First:
+ *  we create links (and therefore a logical block) between 2 pad. This is achieved by:
+ *  search for a pad without link.
+ *  search its nearest pad
+ *  link these 2 pads (i.e. create a ratsnest item)
+ *  the pads are grouped in a logical block ( a cluster).
+ *  until no pad without link found.
+ *  Each logical block has a number called block number,
+ *  stored in m_logical_connexion member for each pad of the block.
+ *  The first block has its block number = 1, the second is 2 ...
+ *  the function to do thas is gen_rats_pad_to_pad()
+ *
+ *  Secondly:
+ *  The first pass created many logical blocks
+ *  A block contains 2 or more pads.
+ *  we create links between 2 block. This is achieved by:
+ *  Test all pads in the first block, and search (for each pad)
+ *  a neighboor in other blocks and compute the distance between pads,
+ *  We select the pad pair which have the smallest distance.
+ *  These 2 pads are linked (i.e. a new ratsnest item is created between thes 2 pads)
+ *  and the 2 block are merged.
+ *  Therefore the logical block 1 contains the initial block 1 "eats" the pads of the other block
+ *  The computation is made until only one block is found.
+ *  the function used is gen_rats_block_to_block()
+ *
+ *
+ *  How existing and new tracks are handled:
+ *  The complete rastnest (using the pad analysis) is computed.
+ *  it is independant of the tracks and handle the "logical connections".
+ *  It depends only on the footprints geometry (and the netlist),
+ *  and must be computed only after a netlist read or a footprints geometry change.
+ *  Each link (ratsnest) can only be INACTIVE (because pads are connected by a track) or ACTIVE (no tracks)
+ *
+ *  After the complete rastnest is built, or when a track is added or deleted,
+ * we run an algorithm derived from the complete rastnest computation.
+ * it is much faster because it analyses only the existing rastnest and not all the pads list
+ * and determine only if an existing rastnest must be activated
+ * (no physical track exists) or not (a physical track exists)
+ * if a track is added or deleted only the corresponding net is tested.
+ *
+ *  the m_logical_connexion member of pads is set to 0 (no blocks), and alls links are set to INACTIVE (ratsnest not show).
+ *  Before running this fast lee algorithm, we create blocks (and their corresponding block number)
+ *  by grouping pads connected by tracks.
+ *  So, when tracks exists, the fast lee algorithm is started with some blocks already created.
+ * because the fast lee algorithm test only the ratsnest and does not search for
+ * nearest pads (this search was previously made) the online ratsnest can be done
+ * when a track is created without noticeable computing time
+ *  First:
+ * for all links (in this step, all are inactive):
+ * search for a link which have 1 (or 2) pad having the m_logical_connexion member = 0.
+ * if found the link is set to ACTIVE (i.e. the ratsnest will be showed) and the pad is meged with the block
+ * or a new block is created ( see tst_rats_pad_to_pad() ).
+ * Secondly:
+ * blocks are tested:
+ * for all links we search if the 2 pads linkeds are in 2 different block.
+ * if yes, the link status is set to ACTIVE, and the 2 block are merged
+ * until only one block is found
+ * ( see tst_rats_block_to_block() )
+ *
+ *
+ */
 /******************************************************************************/
 void WinEDA_BasePcbFrame::Compile_Ratsnest( wxDC* DC, bool display_status_pcb )
 /******************************************************************************/
 
 /*
- *  Génère le chevelu complet de la carte.
- *  Doit etre appelé APRES le calcul de connectivité
- *  Doit etre appelé apres changement de structure de la carte (modif
- *  de pads, de nets, de modules).
- * 
- *  Si display_status_pcb : affichage des résultats en bas d'ecran
+ *  Create the entire board ratsnesr.
+ *  Msut be called AFTER the connectivity computation
+ *  Must be called after a board change (changes for
+ *  pads, footprints or a read netlist ).
+ *
+ *  if display_status_pcb != 0 : Display the computation results
  */
 {
     wxString msg;
 
     DisplayRastnestInProgress = TRUE;
 
-    /* construction de la liste des coordonnées des pastilles */
-    m_Pcb->m_Status_Pcb = 0;        /* réinit total du calcul */
+    /* Create the sorted pad list */
+    m_Pcb->m_Status_Pcb = 0;        /* we want a full ratnest computation, from the scratch */
     build_liste_pads();
-    
-    MsgPanel->EraseMsgBox();        /* effacement du bas d'ecran */
-    
+
+    MsgPanel->EraseMsgBox();
+
     msg.Printf( wxT( " %d" ), m_Pcb->m_NbPads );
     Affiche_1_Parametre( this, 1, wxT( "pads" ), msg, RED );
 
@@ -54,15 +123,25 @@ void WinEDA_BasePcbFrame::Compile_Ratsnest( wxDC* DC, bool display_status_pcb )
     Affiche_1_Parametre( this, 8, wxT( "Nets" ), msg, CYAN );
 
     reattribution_reference_piste( display_status_pcb );
-    
-    Build_Board_Ratsnest( DC ); /* calcul du chevelu general */
-    
-    test_connexions( DC );      /* determine les blocks de pads connectés par
-                                 *      les pistes existantes */
 
-    Tst_Ratsnest( DC, 0 );      /* calcul du chevelu actif */
+    /* Compute the full ratsnest
+     *  which can be see like all the possible links or logical connections.
+     *  some of thems are active (no track connected) and others are inactive (when track connect pads)
+     *  This full ratsnest is not modified by track editing.
+     *  It change only when a netlist is read, or footprints are modified
+     */
+    Build_Board_Ratsnest( DC );
 
-    // Reaffichage des chevelus actifs
+    /* Compute the pad connections due to the existing tracks (physical connections)*/
+    test_connexions( DC );
+
+    /* Compute the active ratsnest, i.e. the unconnected links
+     *  it is faster than Build_Board_Ratsnest()
+     *  because many optimisations and computations are already made
+     */
+    Tst_Ratsnest( DC, 0 );
+
+    // Redraw the active ratsnest ( if enabled )
     if( g_Show_Ratsnest )
         DrawGeneralRatsnest( DC, 0 );
 
@@ -74,11 +153,14 @@ void WinEDA_BasePcbFrame::Compile_Ratsnest( wxDC* DC, bool display_status_pcb )
 /*****************************************************************/
 static int tri_par_net( const void* o1, const void* o2 )
 /****************************************************************/
-/* routine utilisee par la foncion QSORT */
+
+/* Sort function used by  QSORT
+ *  Sort pads by net code
+ */
 {
     LISTE_PAD* pt_ref     = (LISTE_PAD*) o1;
-    LISTE_PAD* pt_compare = (LISTE_PAD*) o2;    
-    
+    LISTE_PAD* pt_compare = (LISTE_PAD*) o2;
+
     return (*pt_ref)->GetNet() - (*pt_compare)->GetNet();
 }
 
@@ -86,11 +168,14 @@ static int tri_par_net( const void* o1, const void* o2 )
 /********************************************************/
 static int sort_by_length( const void* o1, const void* o2 )
 /********************************************************/
-/* routine de tri par longueur des chevelus utilisee par la foncion QSORT */
+
+/* Sort function used by  QSORT
+ *  Sort ratsnest by lenght
+ */
 {
     CHEVELU* ref     = (CHEVELU*) o1;
     CHEVELU* compare = (CHEVELU*) o2;
-    
+
     return ref->dist - compare->dist;
 }
 
@@ -100,20 +185,20 @@ static int gen_rats_block_to_block( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
                                     LISTE_PAD* pt_liste_pad, LISTE_PAD* pt_limite, int* nblinks )
 /*****************************************************************************/
 
-/*
- *  Routine utilisee par Build_Board_Ratsnest()
- *  Routine generant le chevelu entre 2 blocks ( supposes du meme net )
- *  la recherche est faite entre les pads du block 1 et les autres blocks
- *  le block n ( n > 1 ) est alors connecte au block 1 par leur 2 pads
- *  les plus proches.
- *      Entree :
- *          pt_chain_pad = adresse de debut de recherche
- *          pt_limite	  = adresse de fin de recherche (borne non comprise)
- *      Sortie:
- *          liste des chevelus ( structures)
- *          mise a jour de g_pt_chevelu a la 1ere case libre
- *      Retourne:
- *          nombre de blocks non connectes entre eux
+/**
+ *  Function used by Build_Board_Ratsnest()
+ *  This function creates a rastsnet between two blocks ( which fit the same net )
+ *  A block is a group of pads already linked (by a previous ratsnest computation, or tracks)
+ *  The search is made between the pads in block 1 (the reference block) and other blocks
+ *  the block n ( n > 1 ) it connected to block 1 by their 2 nearest pads.
+ *  When the block is found, it is merged with the block 1
+ *  the D_PAD member m_logical_connexion handles the block number
+ *  @param  pt_liste_pad = starting address (within the pad list) for search
+ *  @param  pt_limite	  = ending address (within the pad list) for search
+ *      return in global variables:
+ *          ratsnest list in buffer
+ *          g_pt_chevelu updated to the first free memory location
+ *  @return blocks not connected count
  */
 {
     int        dist_min, current_dist;
@@ -123,39 +208,43 @@ static int gen_rats_block_to_block( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
     LISTE_PAD* pt_liste_pad_block1 = NULL;
     LISTE_PAD* pt_start_liste;
 
-    pt_liste_pad_tmp = NULL; 
-    
+    pt_liste_pad_tmp = NULL;
+
     dist_min = 0x7FFFFFFF;
-    
-    pt_start_liste   = pt_liste_pad;
+
+    pt_start_liste = pt_liste_pad;
 
     if( DC )
         GRSetDrawMode( DC, GR_XOR );
 
-    /* Recherche du pad le plus proche du block 1 */
+    /* Search the nearest pad from block 1 */
     for( ; pt_liste_pad < pt_limite; pt_liste_pad++ )
     {
         D_PAD* ref_pad = *pt_liste_pad;
-        
+
+        /* search a pad which is in the block 1 */
         if( ref_pad->m_logical_connexion != 1 )
             continue;
 
+        /* pad is found, search its nearest neighbour in other blocks */
         for( pt_liste_pad_aux = pt_start_liste; ; pt_liste_pad_aux++ )
         {
             D_PAD* curr_pad = *pt_liste_pad_aux;
-            
+
             if( pt_liste_pad_aux >= pt_limite )
                 break;
-            
-            if( curr_pad->m_logical_connexion == 1 )
+
+            if( curr_pad->m_logical_connexion == 1 )  // not in an other block
                 continue;
 
-            /* Comparaison des distances des pastilles (calcul simplifie) */
+            /* Compare distance between pads ("Manhattan" distance) */
             current_dist = abs( curr_pad->m_Pos.x - ref_pad->m_Pos.x ) +
                            abs( curr_pad->m_Pos.y - ref_pad->m_Pos.y );
 
-            if( dist_min > current_dist )
+            if( dist_min > current_dist )   // we have found a better pad pair
             {
+                // The tested block can be a good candidate for merging
+                // we memorise the "best" current values for merging
                 current_num_block = curr_pad->m_logical_connexion;
                 dist_min = current_dist;
                 pt_liste_pad_tmp    = pt_liste_pad_aux;
@@ -164,9 +253,16 @@ static int gen_rats_block_to_block( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
         }
     }
 
-    if( current_num_block > 1 ) /* le block n a ete connecte au bloc 1 */
+    /*  The reference block is labelled block 1.
+     *  if current_num_block != 1 we have found an other block, and we must merge it
+     *  with the reference block
+     *  The link is made by the 2 nearest pads
+     */
+    if( current_num_block > 1 )
     {
-        /* le block n est fondu avec le bloc 1 : */
+        /* The block n is merged with the bloc 1 :
+         *  to do that, we set the m_logical_connexion member to 1 for all pads in block n
+         */
         for( pt_liste_pad = pt_start_liste; pt_liste_pad < pt_limite; pt_liste_pad++ )
         {
             if( (*pt_liste_pad)->m_logical_connexion == current_num_block )
@@ -175,6 +271,7 @@ static int gen_rats_block_to_block( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
 
         pt_liste_pad = pt_liste_pad_block1;
 
+        /* Create the new ratsnet */
         (*nblinks)++;
         g_pt_chevelu->SetNet( (*pt_liste_pad)->GetNet() );
         g_pt_chevelu->status    = CH_ACTIF | CH_VISIBLE;
@@ -201,25 +298,26 @@ static int gen_rats_pad_to_pad( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
                                 LISTE_PAD* pt_limite, int current_num_block, int* nblinks )
 /*****************************************************************************/
 
-/*
- *  Routine utilisee par Build_Board_Ratsnest()
- *  Routine generant le chevelu entre 2 pads ( supposes du meme net )
- *  la routine connecte 1 pad non deja connecte a un autre et crée donc un certqins nombre
- *  de blocks de pads liées par un chevelu
- *  Ces blocks sont donc constitués de 2 pads.
- * 
- *      Entree :
- *          pt_chain_pad = adresse de debut de recherche
- *          pt_limite	  = adresse de fin de recherche (borne non comprise)
- *          current_num_block = numero du dernier block de pads (constitué par les connexions
- *          de pistes existantes
- * 
- *      Sortie:
- *          liste des chevelus ( structures)
- *          mise a jour de g_pt_chevelu a la 1ere case libre
- * 
- *      Retourne:
- *          nombre de blocks crees (paquets de pads)
+/**
+ *  Function used by Build_Board_Ratsnest()
+ *  this is the first pass of the lee algorithm
+ *  This function creates the link (ratsnest) between 2 pads ( fitting the same net )
+ *  the function search for a first not connected pad
+ *  and search its nearest neighboor
+ * Its creates a block if the 2 pads are not connected, or merge the unconnected pad to the existing block.
+ * These blocks include 2 pads and the 2 pads are linked by a ratsnest.
+ *
+ * @param   pt_liste_pad = starting address in the pad buffer
+ * @param   pt_limite	  = ending address
+ * @param   current_num_block = Last existing block number de pads
+ * These block are created by the existing tracks analysis
+ *
+ *     output:
+ *          Ratsnest list
+ *          g_pt_chevelu updated to the first free memory address
+ *
+ * @return:
+ *          last block number used
  */
 {
     int        dist_min, current_dist;
@@ -236,24 +334,24 @@ static int gen_rats_pad_to_pad( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
     for(  ; pt_liste_pad < pt_limite; pt_liste_pad++ )
     {
         ref_pad = *pt_liste_pad;
-        
-        if( ref_pad->m_logical_connexion )
-            continue;                              // Pad deja connecte
 
-        pt_liste_pad_tmp = NULL; 
+        if( ref_pad->m_logical_connexion )
+            continue; // Pad already connected
+
+        pt_liste_pad_tmp = NULL;
         dist_min = 0x7FFFFFFF;
 
         for( pt_liste_pad_aux = pt_start_liste; ; pt_liste_pad_aux++ )
         {
             if( pt_liste_pad_aux >= pt_limite )
                 break;
-            
+
             if( pt_liste_pad_aux == pt_liste_pad )
                 continue;
 
             pad = *pt_liste_pad_aux;
-            
-            /* Comparaison des distances des pastilles (calcul simplifie) */
+
+            /* Compare distance between pads ("Manhattan" distance) */
             current_dist =  abs( pad->m_Pos.x - ref_pad->m_Pos.x ) +
                             abs( pad->m_Pos.y - ref_pad->m_Pos.y );
 
@@ -268,20 +366,21 @@ static int gen_rats_pad_to_pad( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
         {
             pad = *pt_liste_pad_tmp;
 
-            /* Mise a jour du numero de block ( ou de sous graphe ) */
-            /* si aucun des 2 pads n'est deja connecte : creation d'un nouveau block */
+            /* Update the block number
+             *  if the 2 pads are not already created : a new block is created
+             */
             if( (pad->m_logical_connexion == 0) && (ref_pad->m_logical_connexion == 0) )
             {
                 current_num_block++;
                 pad->m_logical_connexion     = current_num_block;
                 ref_pad->m_logical_connexion = current_num_block;
             }
-            /* si 1 des 2 pads est deja connecte : mise a jour pour l'autre */
+            /* If a pad is already connected connected : merge the other pad in the block */
             else
             {
                 ref_pad->m_logical_connexion = pad->m_logical_connexion;
             }
-            
+
             (*nblinks)++;
             g_pt_chevelu->SetNet( ref_pad->GetNet() );
             g_pt_chevelu->status    = CH_ACTIF | CH_VISIBLE;
@@ -309,31 +408,30 @@ static int gen_rats_pad_to_pad( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
 void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
 /***********************************************************/
 
-/* Routine de calcul du chevelu complet du circuit (algorithme de LEE )
- *  les connexions physiques (pistes) ne sont pas ici prises en compte
- *  Il s'agit donc du chevelu de base qui ne depend que de la disposition des pads.
- * 
- *  - etablit la liste complete des pads si nécessaire
- *          les pads utiles (cad appartenant a un net ) sont appeles
- *          nodes (noeuds)
- *  et la trie par blocs de pads homogenes ( i.e. appartenant au meme net )
- * 
- *  - puis calcule le ratsnest selon l'algorithme de LEE, consistant a
- *      a - etablir le ratsnest entre 1 pad non "connecte" et son plus proche
- *          voisin. Ceci cree des "blocks" ou sous graphes non connectes entre
- *          eux
- *      b - "connecter" (par un chevelu) entre eux ces blocks en prenant le 1er block et
- *          en le connectant a son plus proche voisin par les 2 pads les plus
- *          proches (Iteration jusqu'a ce qu'il n'y ait plus qu'un seul block).
- * 
- *   les chevelus calculés montrent les connexions "logiques"
- * 
- *  Entree = adr du buffer de classement (usuellement buf_work)
- *  met a jour :
- *      nb_nodes = nombre de pads connectes a un net ( pads "utiles")
- *      nb_links = nombre min de liens :
- *           il y a n-1 liens par equipotentielle comportant n pads.
- * 
+/**  Function to compute the full ratsnest (using the LEE algorithm )
+ *  In the functions tracks are not considered
+ *  This is only the "basic" ratsnest depending only on pads.
+ *
+ *  - Create the sorted pad list (if necessary)
+ *          The active pads (i.e included in a net ) are called nodes
+ *    This pad list is sorted by net codes
+ *
+ *  - Compute the ratsnest (LEE algorithm ):
+ *      a - Create the ratsnest between a not connected pad and its nearest
+ *          neighbour. Blocks of pads are created
+ *      b - Create the ratsnest between blocks:
+ *          Test the pads of the 1st block and create a link (ratsnest)
+ *           with the nearest pad found in an other block.
+ *          Thi other block is merged with the first block.
+ *           until only one block is left.
+ *
+ *   A ratnest can be seen as a logical connection.
+ *
+ * Update :
+ *      nb_nodes = Active pads count for the board
+ *      nb_links = link count for the board (logical connection count)
+ *           (there are n-1 links for an equipotent which have n active pads) .
+ *
  */
 {
     LISTE_PAD* pt_liste_pad, * pt_start_liste, * pt_end_liste, * pt_liste_pad_limite;
@@ -349,7 +447,7 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
     if( m_Pcb->m_NbPads == 0 )
         return;
 
-    /* Etablissement de la liste des pads et leur net_codes si necessaire */
+    /* Created pad list and the net_codes if needed */
     if( (m_Pcb->m_Status_Pcb & NET_CODES_OK) == 0 )
         recalcule_pad_net_code();
 
@@ -360,27 +458,27 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
         pad->m_logical_connexion = 0;
     }
 
-    /* classement des pointeurs sur pads par nets */
+    /* Sort the pad list by nets */
     qsort( m_Pcb->m_Pads, m_Pcb->m_NbPads, sizeof(LISTE_PAD), tri_par_net );
 
-    /* Allocation memoire du buffer des chevelus: il y a nb_nodes - 1 chevelu
-     *  au maximum ( 1 node = 1 pad connecte ).
-     *  on alloue donc un buffer pour nb_nodes chevelus... (+ une petite marge)
-     *  le nombre reel de chevelus est nb_links
+    /* Allocate memory for buffer ratsnest: there are nb_nodes - 1 ratsnest
+     *  maximum ( 1 node = 1 active pad ).
+     * Meory is allocated for nb_nodes ratsnests... (+ a bit more, just in case)
+     *  The real ratsnests count nb_links < nb_nodes
      */
     if( m_Pcb->m_Ratsnest )
         MyFree( m_Pcb->m_Ratsnest );
     m_Pcb->m_Ratsnest = NULL;
 
     if( m_Pcb->m_NbNodes == 0 )
-        return;                         /* pas de connexions utiles */
+        return; /* pas de connexions utiles */
 
     m_Pcb->m_Ratsnest = (CHEVELU*) MyZMalloc( (m_Pcb->m_NbNodes + 10 ) * sizeof(CHEVELU) );
     if( m_Pcb->m_Ratsnest == NULL )
         return;
 
 
-    /* calcul du chevelu */
+    /* Ratsnest computation */
     DisplayRastnestInProgress = TRUE;
     g_pt_chevelu = m_Pcb->m_Ratsnest;
     pt_liste_pad = pt_start_liste = m_Pcb->m_Pads;
@@ -393,13 +491,13 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
     {
         pt_deb_liste_ch = g_pt_chevelu;
         pad = *pt_liste_pad;
-        /* saut des pads non connectes */
+        /* Skip the not connected pads */
         if( pad->GetNet() == 0 )
         {
             pt_liste_pad++; pt_start_liste = pt_liste_pad;
             continue;
         }
-        /* Recherche de la fin de la liste des pads du net courant */
+        /* Search the end of pad list des pads for the current net */
         num_block = pad->m_logical_connexion;
         nbpads    = 0;
         for( pt_end_liste = pt_liste_pad + 1; ; pt_end_liste++ )
@@ -416,7 +514,7 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
 
         m_Pcb->m_NbLinks += nbpads;
 
-        /* fin de liste trouvee: calcul du chevelu du net "net_code" */
+        /* End of list found: Compute the ratsnest relative to the current net "net_code" */
         equipot = m_Pcb->FindNet( current_net_code );
         if( equipot == NULL )
             DisplayError( this, wxT( "Gen ratsnest err: NULL equipot" ) );
@@ -429,11 +527,11 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
             equipot->m_RatsnestStart = g_pt_chevelu;
         }
 
-        /* a - connexion des pads entre eux */
+        /* a - first pass : create the blocks from "not in block" pads */
         ii = gen_rats_pad_to_pad( DrawPanel, DC, pt_start_liste,
                                   pt_end_liste, num_block, &noconn );
 
-        /* b - connexion des blocks formes precedemment (Iteration) */
+        /* b - blocks connection (Iteration) */
         while( ii > 1 )
         {
             ii = gen_rats_block_to_block( DrawPanel, DC, pt_liste_pad,
@@ -443,7 +541,7 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
         if( equipot )
         {
             equipot->m_RatsnestEnd = g_pt_chevelu;
-            /* classement des chevelus par longueur croissante */
+            /* sort by lenght */
             qsort( equipot->m_RatsnestStart,
                    equipot->m_RatsnestEnd - equipot->m_RatsnestStart,
                    sizeof(CHEVELU),
@@ -459,7 +557,7 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
     m_Pcb->m_Status_Pcb |= LISTE_CHEVELU_OK;
     adr_lowmem = buf_work;
 
-    // Effacement du chevelu calcule
+    // erase the ratsnest displayed on screen if needed
     CHEVELU* Chevelu = (CHEVELU*) m_Pcb->m_Ratsnest;
     GRSetDrawMode( DC, GR_XOR );
     for( ii = m_Pcb->GetNumRatsnests(); ii > 0; ii--, Chevelu++ )
@@ -479,7 +577,7 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
 void WinEDA_BasePcbFrame::ReCompile_Ratsnest_After_Changes( wxDC* DC )
 /**********************************************************************/
 
-/* recompile rastnest afet am module move, delete, ..
+/* recompile rastnest after a module move, delete, ..
  */
 {
     if( g_Show_Ratsnest && DC )
@@ -491,10 +589,10 @@ void WinEDA_BasePcbFrame::ReCompile_Ratsnest_After_Changes( wxDC* DC )
 void WinEDA_BasePcbFrame::DrawGeneralRatsnest( wxDC* DC, int net_code )
 /*********************************************************************/
 
-/*
- *  Affiche le chevelu general du circuit
- *  Affiche les chevelus dont le bit CH_VISIBLE du status du chevelu est a 1
- *  Si net_code > 0, affichage des seuls chevelus de net_code correspondant
+/**
+ *  Displays the general ratsnest
+ *  Only ratsnets with the status bit CH_VISIBLE is set are displayed
+ *  @param netcode if > 0, Display only the ratsnest relative to the correponding net_code
  */
 {
     int      ii;
@@ -516,7 +614,7 @@ void WinEDA_BasePcbFrame::DrawGeneralRatsnest( wxDC* DC, int net_code )
     {
         if( ( Chevelu->status & (CH_VISIBLE | CH_ACTIF) ) != (CH_VISIBLE | CH_ACTIF) )
             continue;
-        
+
         if( (net_code <= 0) || (net_code == Chevelu->GetNet()) )
         {
             GRLine( &DrawPanel->m_ClipBox, DC,
@@ -534,37 +632,37 @@ static int tst_rats_block_to_block( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
                                     CHEVELU* start_rat_list, CHEVELU* end_rat_list )
 /*****************************************************************************/
 
-/*
- *  Routine utilisee par Tst_Ratsnest()
- *  Routine tres proche de  gen_rats_block_to_block(..)
- *  Routine testant le chevelu entre 2 blocks ( supposes du meme net )
- *  la recherche est faite entre les pads du block 1 et les autres blocks
- *  le block n ( n > 1 ) est alors connecte au block 1 par le chevelu le plus court
- *  A la différence de gen_rats_block_to_block(..),
- *  l'analyse n'est pas faite pads a pads mais a travers la liste générale des chevelus.
- *  La routine active alors le chevelu le plus court reliant le block 1 au block n
- *  (etablissement d'une connexion "logique")
- * 
- *      Entree :
- *          pt_chain_pad = adresse de debut de zone pad utile
- *          pt_limite	  = adresse de fin de zone (borne non comprise)
- *      Sortie:
- *          Membre .state du chevelu sélectionné
- *      Retourne:
- *          nombre de blocks non connectes entre eux
+/**
+ *  Function used by Tst_Ratsnest()
+ *  Function like gen_rats_block_to_block(..)
+ *  Function testing the ratsnest between 2 blocks ( same net )
+ *  The search is made between pads in block 1 and the others blocks
+ *  The block n ( n > 1 ) is merged with block 1 by the smallest ratsnest
+ *  Différence between gen_rats_block_to_block(..):
+ *  The analysis is not made pads to pads but uses the general ratsnest list.
+ *  The function activate the smallest ratsnest between block 1 and the block n
+ *  (activate a logical connexion)
+ *
+ *  @param  pt_liste_pad_start = adresse de debut de zone pad utile
+ *          pt_liste_pad_end = adresse de fin de zone pad
+ *          start_rat_list = adresse de debut de zone ratsnest utile
+ *          end_rat_list = adresse de fin de zone ratsnest
+ *      output:
+ *          .state member of the ratsnests
+ *  @return    blocks not connected count
  */
 {
     int        current_num_block, min_block;
     LISTE_PAD* pt_liste_pad;
     CHEVELU*   chevelu, * min_chevelu;
 
-    /* Recherche du chevelu le plus court d'un block a un autre block */
+    /* Search a link from a blockto an other block */
     min_chevelu = NULL;
     for( chevelu = start_rat_list; chevelu < end_rat_list; chevelu++ )
     {
-        if( chevelu->pad_start->m_logical_connexion == chevelu->pad_end->m_logical_connexion )
+        if( chevelu->pad_start->m_logical_connexion == chevelu->pad_end->m_logical_connexion )  // Same block
             continue;
-        
+
         if( min_chevelu == NULL )
             min_chevelu = chevelu;
         else if( min_chevelu->dist > chevelu->dist )
@@ -574,14 +672,17 @@ static int tst_rats_block_to_block( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
     if( min_chevelu == NULL )
         return 1;
 
+    /* At this point we have found a link between 2 differents blocks (clusters) :
+     * we must set its status to ACTIVE and merge the 2 blocks
+     */
     min_chevelu->status |= CH_ACTIF;
     current_num_block    = min_chevelu->pad_start->m_logical_connexion;
     min_block = min_chevelu->pad_end->m_logical_connexion;
-    
+
     if( min_block > current_num_block )
         EXCHG( min_block, current_num_block );
 
-    /* les 2 blocks vont etre fondus */
+    /* Merging the 2 blocks in one cluster */
     for( pt_liste_pad = pt_liste_pad_start; pt_liste_pad < pt_liste_pad_end; pt_liste_pad++ )
     {
         if( (*pt_liste_pad)->m_logical_connexion == current_num_block )
@@ -600,25 +701,23 @@ static int tst_rats_pad_to_pad( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
                                 CHEVELU* start_rat_list, CHEVELU* end_rat_list )
 /**********************************************************************/
 
-/*
- *  Routine utilisee par Tst_Ratsnest_general()
- *  Routine Activant le chevelu entre 2 pads ( supposes du meme net )
- *  la routine connecte 1 pad non deja connecte a un autre et active donc
- *  un certain nombre de blocks de pads liées par un chevelu
- *  Ces blocks sont donc constitués de 2 pads.
- * 
- *      Entree :
- *          pt_chain_pad = adresse de debut de zone pad
- *          pt_limite	  = adresse de fin de recherche (borne non comprise)
- *          current_num_block = numero du dernier block de pads (constitué par les connexions
- *          de pistes existantes
- * 
- *      Sortie:
- *          liste des chevelus ( structures)
- *          mise a jour du membre .state du chevelu activé
- * 
- *      Retourne:
- *          nombre de blocks crees (paquets de pads)
+/**
+ *  Function used by Tst_Ratsnest_general()
+ *  The general ratsnest list must exists
+ *  Activates the ratsnest between 2 pads ( supposes du meme net )
+ *  The function links 1 pad not already connected an other pad and activate
+ *  some blocks linked by a ratsnest
+ *  Its test only the existing ratsnest and activate some ratsnest (status bit CH_ACTIF set)
+ *
+ * @param   start_rat_list = starting address for the ratnest list
+ * @param   end_rat_list   = ending address for the ratnest list
+ * @param   current_num_block =  last block number (computed from the track analysis)
+ *
+ *      output:
+ *          ratsnest list (status member set)
+ *          and pad list (m_logical_connexion set)
+ *
+ * @return new block number
  */
 {
     D_PAD*   pad_start, * pad_end;
@@ -627,9 +726,9 @@ static int tst_rats_pad_to_pad( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
     for( chevelu = start_rat_list; chevelu < end_rat_list; chevelu++ )
     {
         pad_start = chevelu->pad_start; pad_end = chevelu->pad_end;
-        /* Mise a jour du numero de block ( ou de sous graphe ) */
 
-        /* si aucun des 2 pads n'est deja connecte : creation d'un nouveau block */
+        /* Update the block if the 2 pads are not connected : a new block is created
+         */
         if( (pad_start->m_logical_connexion == 0) && (pad_end->m_logical_connexion == 0) )
         {
             current_num_block++;
@@ -637,7 +736,7 @@ static int tst_rats_pad_to_pad( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
             pad_end->m_logical_connexion   = current_num_block;
             chevelu->status |= CH_ACTIF;
         }
-        /* si 1 des 2 pads est deja connecte : mise a jour pour l'autre */
+        /* If a pad is already connected : the other is merged in the current block */
         else if( pad_start->m_logical_connexion == 0 )
         {
             pad_start->m_logical_connexion = pad_end->m_logical_connexion;
@@ -658,9 +757,9 @@ static int tst_rats_pad_to_pad( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
 void WinEDA_BasePcbFrame::Tst_Ratsnest( wxDC* DC, int ref_netcode )
 /*******************************************************************/
 
-/* calcul du chevelu actif
- *  Le chevelu général doit etre calculé
- *  Determite les chevelus ACTIFS dans la liste générale des chevelus
+/* Compute the active ratsnest
+ *  The general ratsnest list must exists
+ *  Compute the ACTIVE ratsnests in the general ratsnest list
  */
 {
     LISTE_PAD* pt_liste_pad;
@@ -678,7 +777,7 @@ void WinEDA_BasePcbFrame::Tst_Ratsnest( wxDC* DC, int ref_netcode )
         equipot = m_Pcb->FindNet( net_code );
         if( equipot == NULL )
             break;
-        
+
         if( ref_netcode && (net_code != ref_netcode) )
             continue;
 
@@ -696,11 +795,11 @@ void WinEDA_BasePcbFrame::Tst_Ratsnest( wxDC* DC, int ref_netcode )
             chevelu->status &= ~CH_ACTIF;
         }
 
-        /* a - tst connexion des pads entre eux */
+        /* a - tst connection between pads */
         ii = tst_rats_pad_to_pad( DrawPanel, DC, num_block,
                                   equipot->m_RatsnestStart, equipot->m_RatsnestEnd );
 
-        /* b - connexion des blocks formes precedemment (Iteration) */
+        /* b - test connexion between blocks (Iteration) */
         while( ii > 1 )
         {
             ii = tst_rats_block_to_block( DrawPanel, DC,
@@ -722,7 +821,11 @@ void WinEDA_BasePcbFrame::Tst_Ratsnest( wxDC* DC, int ref_netcode )
 /**************************************************************************/
 int WinEDA_BasePcbFrame::Test_1_Net_Ratsnest( wxDC* DC, int ref_netcode )
 /**************************************************************************/
-/* Calcule le chevelu du net net_code */
+
+/**
+ *  Compute the rastnest relative to the net "net_code"
+ *  @param ref_netcode = netcode used to compute the rastnest.
+ */
 {
     DisplayRastnestInProgress = FALSE;
     DrawGeneralRatsnest( DC, ref_netcode );
@@ -737,11 +840,13 @@ int WinEDA_BasePcbFrame::Test_1_Net_Ratsnest( wxDC* DC, int ref_netcode )
 void WinEDA_BasePcbFrame::recalcule_pad_net_code()
 /*****************************************************/
 
-/*
- *  Calcule et met a jour les net_codes des PADS et des equipotentielles
- *  met a jour le buffer des equipotentielles
- *  A utiliser apres edition de nets sur un pad ou lecture d'une netliste
- *  positionne a 1 le bit NET_CODE_OK du status_pcb;
+/**
+ *  Compute and update the net_codes for PADS et and equipots (.m_NetCode member)
+ *  net_codes are >= 1 (net_code = 0 means not connected)
+ *  Update the equipotents buffer
+ *  Must be called after editing pads (netname, or deleting) or after read a netlist
+ *  set to 1 flag NET_CODE_OK  of m_Pcb->m_Status_Pcb;
+ *  m_Pcb->m_NbNodes and m_Pcb->m_NbNets are updated
  */
 {
     LISTE_PAD*      pad_ref, * pad_courant;
@@ -750,7 +855,7 @@ void WinEDA_BasePcbFrame::recalcule_pad_net_code()
     EDA_BaseStruct* PtStruct;
     EQUIPOT**       BufPtEquipot;
 
-    /* construction de la liste des adr des PADS */
+    /* Build the PAD list */
     build_liste_pads();
 
     /* calcul des net_codes des pads */
@@ -758,45 +863,47 @@ void WinEDA_BasePcbFrame::recalcule_pad_net_code()
     m_Pcb->m_NbNodes = 0;
     m_Pcb->m_NbNets  = 0;
 
+    /* search for differents netnames, and create a netcode for each netname */
     pad_courant = m_Pcb->m_Pads;
     for( ; ii > 0; pad_courant++, ii-- )
     {
-        if( (*pad_courant)->m_Netname.IsEmpty() ) // pad non connecte
+        if( (*pad_courant)->m_Netname.IsEmpty() ) // pad not connected
         {
             (*pad_courant)->SetNet( 0 ); 
             continue;
         }
-        
+
         m_Pcb->m_NbNodes++;
-        
-        /* si le netname a deja ete rencontre: mise a jour , sinon nouveau net_code */
+
+        /* if the current netname was already found: use the current net_code , else create a new net_code */
         pad_ref = m_Pcb->m_Pads;
         while( pad_ref < pad_courant )
         {
             if( (*pad_ref)->m_Netname == (*pad_courant)->m_Netname )
-                break;     // sont du meme met
-            
+                break; // sont du meme met
+
             pad_ref++;
         }
 
-        /* si pad_ref = pad_courant: nouveau net sinon, deja net deja traite */
-        if( pad_ref == pad_courant )
+        /* if pad_ref != pad_courant we have found 2 pads on the same net., Use the current net_code for pad_courant
+         * if pad_ref == pad_courant: new net found (end of list reached) without other pad found on the same net:
+         * we must create a new net_code
+         */
+        if( pad_ref == pad_courant )    // create a new net_code
         {
             m_Pcb->m_NbNets++; (*pad_courant)->SetNet( m_Pcb->m_NbNets );
         }
-        else
+        else  //  Use the current net_code for pad_courant
             (*pad_courant)->SetNet( (*pad_ref)->GetNet() );
     }
 
-    /* Construction ou correction de la liste des equipotentielles,
-     *  et construction d'un tableau d'adressage des equipots*/
-
-    BufPtEquipot = (EQUIPOT**) MyMalloc( sizeof(EQUIPOT *) * (m_Pcb->m_NbNets + 1) );
+    /* Build or update the equipotent list: we reuse the old list */
+    BufPtEquipot = (EQUIPOT**) MyMalloc( sizeof(EQUIPOT*) * (m_Pcb->m_NbNets + 1) );
     pt_equipot   = m_Pcb->m_Equipots;
     PtStruct = (EDA_BaseStruct*) m_Pcb;
     for( ii = 0; ii <= m_Pcb->m_NbNets; ii++ )
     {
-        if( pt_equipot == NULL )    /* Creation d'une nouvelle equipot */
+        if( pt_equipot == NULL )    /* Create a new equipot if no more equipot in old list */
         {
             pt_equipot = new EQUIPOT( m_Pcb );
 
@@ -813,7 +920,8 @@ void WinEDA_BasePcbFrame::recalcule_pad_net_code()
             pt_equipot->Pnext = NULL;
         }
 
-        pt_equipot->SetNet( ii ); // Mise a jour du numero d'equipot
+        // Set the net_code for this equipot and reset other values
+        pt_equipot->SetNet(ii);
         pt_equipot->m_NbNodes = 0;
         pt_equipot->m_Netname.Empty();
 
@@ -822,19 +930,19 @@ void WinEDA_BasePcbFrame::recalcule_pad_net_code()
         pt_equipot = (EQUIPOT*) pt_equipot->Pnext;
     }
 
-    /* Effacement des equipots inutiles */
+    /* Delete the unused equipots in the old list */
 
     while( pt_equipot )
     {
         PtStruct = pt_equipot->Pnext;
-        pt_equipot ->DeleteStructure();
+        pt_equipot->DeleteStructure();
         pt_equipot = (EQUIPOT*) PtStruct;
     }
 
     pad_courant = m_Pcb->m_Pads;
     pt_equipot  = m_Pcb->m_Equipots;
 
-    /* Placement des noms de net en structure EQUIPOT */
+    /* Set the equpot net name and node count for each equipot in equipot list */
     for( ii = m_Pcb->m_NbPads; ii > 0; pad_courant++, ii-- )
     {
         jj = (*pad_courant)->GetNet();
@@ -856,29 +964,14 @@ void WinEDA_BasePcbFrame::build_liste_pads()
 /***********************************************/
 
 /*
- *  construction de la liste ( sous forme d'une liste de stucture )
- *  des caract utiles des pads du PCB pour autoroutage,DRC .. )
- *  parametres:
- *      adresse du buffer de classement = buf_work
- *  retourne:
- *      1ere adresse disponible si OK
- *      NULL si trop de pastilles
- * 
- * 
- *  Parametres de routage calcules et mis a jour
- *  - parametre net_code:
- *  numero de code interne de chaque net du PCB.
- *  permet d'accelerer les calculs de chevelu et de connexions
- *  - parametre .link est mis a jour
- *  pour chaque pastille, il indique le nombre d'autres pastilles du meme net
- *  appartenant au meme module.
- * 
- *  Variables globales mise a jour:
- *  pointeur base_adr_liste_pad (adr de classement de la liste des pads)
- *  nb_pads = nombre total de pastilles du PCB
- *  nb_nets = nombre de nets differents
- *  status_pcb |= LISTE_PAD_OK (flag permettant d'eviter la reexecution inutile
- *                          de cette routine)
+ *  Create the pad list
+ * initialise:
+ *   m_Pcb->m_Pads (list of pads)
+ *   m_Pcb->m_NbPads = pad count
+ *   m_Pcb->m_NbNodes = node count
+ * set m_Pcb->m_Status_Pcb = LISTE_PAD_OK;
+ * and clear for all pad their m_logical_connexion member;
+ * delete ( free memory) m_Pcb->m_Ratsnest and set m_Pcb->m_Ratsnest to NULL
  */
 {
     LISTE_PAD* pt_liste_pad;
@@ -888,16 +981,16 @@ void WinEDA_BasePcbFrame::build_liste_pads()
     if( m_Pcb->m_Status_Pcb & LISTE_PAD_OK )
         return;
 
-    /* construction de la liste des pointeurs sur les structures D_PAD */
+    /* delete the old list */
     if( m_Pcb->m_Pads )
     {
         MyFree( m_Pcb->m_Pads );
         m_Pcb->m_Pads = NULL;
     }
 
-    /* Calcul du nombre de pads */
+    /* Set the pad count */
     m_Pcb->m_NbPads = 0;
-    Module = m_Pcb->m_Modules; 
+    Module = m_Pcb->m_Modules;
     for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
     {
         PtPad = (D_PAD*) Module->m_Pads;
@@ -908,12 +1001,12 @@ void WinEDA_BasePcbFrame::build_liste_pads()
     if( m_Pcb->m_NbPads == 0 )
         return;
 
-    /* Allocation memoire du buffer */
-    pt_liste_pad = m_Pcb->m_Pads
-                 = (D_PAD**) MyZMalloc( (m_Pcb->m_NbPads + 1) * sizeof(D_PAD *) );
+    /* Allocate memory for the pad list */
+    pt_liste_pad     = m_Pcb->m_Pads
+                       = (D_PAD**) MyZMalloc( (m_Pcb->m_NbPads + 1) * sizeof(D_PAD*) );
     m_Pcb->m_NbNodes = 0;
 
-    /* Initialisation du buffer et des variables de travail */
+    /* Clear variables used in rastnest computation */
     Module = m_Pcb->m_Modules;
     for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
     {
@@ -922,25 +1015,25 @@ void WinEDA_BasePcbFrame::build_liste_pads()
         {
             *pt_liste_pad = PtPad;
             PtPad->m_logical_connexion = 0;
-            PtPad->m_Parent = Module;
-            
+            PtPad->m_Parent = Module;   // Just in case
+
             if( PtPad->GetNet() )
                 m_Pcb->m_NbNodes++;
-            
+
             pt_liste_pad++;
         }
     }
 
-    *pt_liste_pad = NULL;   // fin de liste
+    *pt_liste_pad = NULL;   // set end of list
 
     adr_lowmem = buf_work;
-    
+
     if( m_Pcb->m_Ratsnest )
     {
         MyFree( m_Pcb->m_Ratsnest );
-        m_Pcb->m_Ratsnest   = NULL;
+        m_Pcb->m_Ratsnest = NULL;
     }
-    
+
     m_Pcb->m_Status_Pcb = LISTE_PAD_OK;
 }
 
@@ -949,19 +1042,19 @@ void WinEDA_BasePcbFrame::build_liste_pads()
 char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
 /*****************************************************************************/
 
-/*
- *  construction de la liste en mode de calcul rapide pour affichage
- *  en temps reel lors des deplacements du chevelu d'un module.
- * 
- *  parametres d'appel:
- *      Module = pointeur sur module dont le ratsnest est a calculer
- * 
- *  retourne: adresse memoire disponible
- *  Le chevelu calcule comporte 2 parties
- *      - un chevelu interne relatif aux pads du module appartenant a un
- *          meme net. Il est calcule 1 seule fois
- *      - le chevelu externe reliant un pad interne a un pad externe au module
- *          Ce chevelu est recalcule a chaque deplacement
+/**
+ *  Build a rastenest relative to one footprint. This is a simplified computation
+ *  used only in move footprint. It is not optimal, but it is fast and sufficient
+ *  to guide a footprint placement
+ * It shows the connections from a pad to the nearest conected pad
+ *  @param Module = module to consider.
+ *
+ *  the general buffer adr_lowmem is used to store the local footprint ratnest (to do: better to allocate memory)
+ *  The ratsnest has 2 sections:
+ *      - An "internal" ratsnet relative to pads of this footprint which are in the same net.
+ *          this ratsnest section is computed once.
+ *      - An "external" rastnest connecting a pad of this footprint to an other pad (in an other footprint)
+ *          The ratsnest section must be computed for each new position
  */
 {
     LISTE_PAD*      pt_liste_pad;
@@ -974,31 +1067,33 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
     LISTE_PAD*      pt_end_liste;
     int             ii, jj;
     CHEVELU*        local_chevelu;
-    static CHEVELU* pt_fin_int_chevelu;     // pointeur sur la fin de la liste
-                                        // des chevelus internes au module
-    static int      nb_int_chevelu;         // nombre e chevelus internes
+    static CHEVELU* pt_fin_int_chevelu;     // End list for "internal" ratsnest
+    static int      nb_int_chevelu;         // "internal" ratsnest count
     int             current_net_code;
     int             increment, distance;    // variables de calcul de ratsnest
-    int             pad_pos_X, pad_pos_Y;   // position reelle des pads du module en mouvement
+    int             pad_pos_X, pad_pos_Y;   // True pad position according to the current footprint position
 
 
     if( (m_Pcb->m_Status_Pcb & LISTE_PAD_OK) == 0 )
         build_liste_pads();
 
-    /* construction de la liste des pads du module si necessaire */
+    /* Compute the "local" ratsnest if needed (when this footprint starts move)
+	and the list of external pads to consider, i.e pads in others footprints which are "connected" to 
+	a pad in the current footprint
+	*/
     if( (m_Pcb->m_Status_Pcb & CHEVELU_LOCAL_OK) != 0 )
         goto calcul_chevelu_ext;
 
-    /* calcul du chevelu "interne", c.a.d. liant les seuls pads du module */
-    pt_liste_pad = (LISTE_PAD*) adr_lowmem; 
-    nb_pads_ref = 0;
-    
+    /* Compute the "internal" ratsnest, i.e the links beteween the curent footprint pads */
+    pt_liste_pad = (LISTE_PAD*) adr_lowmem;
+    nb_pads_ref  = 0;
+
     pad_ref = Module->m_Pads;
     for( ; pad_ref != NULL; pad_ref = (D_PAD*) pad_ref->Pnext )
     {
         if( pad_ref->GetNet() == 0 )
             continue;
-        
+
         *pt_liste_pad = pad_ref;
         pad_ref->m_logical_connexion  = 0;
         pad_ref->m_physical_connexion = 0;
@@ -1006,15 +1101,15 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
     }
 
     if( nb_pads_ref == 0 )
-        return (char*) pt_liste_pad;                   /* pas de connexions! */
+        return (char*) pt_liste_pad; /* pas de connexions! */
 
-    qsort( adr_lowmem, nb_pads_ref, sizeof(D_PAD *), tri_par_net );
+    qsort( adr_lowmem, nb_pads_ref, sizeof(D_PAD*), tri_par_net );
 
-    /* construction de la liste des pads connectes aux pads de ce module */
+    /* Build the list of pads linked to the current ffotprint pads */
     DisplayRastnestInProgress = FALSE;
-    pt_liste_ref     = (LISTE_PAD*) adr_lowmem;
-    
-    nb_pads_externes = 0; 
+    pt_liste_ref = (LISTE_PAD*) adr_lowmem;
+
+    nb_pads_externes = 0;
     current_net_code = 0;
     for( ii = 0; ii < nb_pads_ref; ii++ )
     {
@@ -1029,10 +1124,10 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
             pad_externe = *pt_liste_generale; pt_liste_generale++;
             if( pad_externe->GetNet() != current_net_code )
                 continue;
-            
+
             if( pad_externe->m_Parent == Module )
                 continue;
-            
+
             pad_externe->m_logical_connexion  = 0;
             pad_externe->m_physical_connexion = 0;
             *pt_liste_pad = pad_externe; pt_liste_pad++;
@@ -1040,13 +1135,14 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
         }
     }
 
-    /* tri par net_codes croissants de la liste des pads externes */
-    qsort( pt_liste_ref + nb_pads_ref, nb_pads_externes, sizeof(D_PAD *),
+    /* Sort the pad list by net_code */
+    qsort( pt_liste_ref + nb_pads_ref, nb_pads_externes, sizeof(D_PAD*),
            tri_par_net );
 
-    /* calcul du chevelu interne au module:
-     *  Ce calcul est identique au calcul du chevelu general, mais il est
-     *  restreint aux seuls pads du module courant */
+    /* Compute the internal ratsnet:
+     *  this is the same as general ratsnest, but considers onluy tje currant footprint pads
+	* it is therefore not time consumming, and it is made onlu once
+	*/
     local_liste_chevelu = (CHEVELU*) (pt_liste_pad); // buffer chevelu a la suite de la liste des pads
     nb_local_chevelu    = 0;
     pt_liste_ref = (LISTE_PAD*) adr_lowmem;
@@ -1058,23 +1154,23 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
 
     for( ; pt_liste_pad < pt_liste_pad_limite; )
     {
-        /* Recherche de la fin de la liste des pads du net courant */
+        /* Search the end of pad list relative to the current net */
 
         for( pt_end_liste = pt_liste_pad + 1; ; pt_end_liste++ )
         {
             if( pt_end_liste >= pt_liste_pad_limite )
                 break;
-            
+
             if( (*pt_end_liste)->GetNet() != current_net_code )
                 break;
         }
 
-        /* fin de liste trouvee : */
-        /* a - connexion des pads entre eux */
+        /* End of list found: */
+        /* a - first step of lee algorithm : build the pad to pad link list */
         ii = gen_rats_pad_to_pad( DrawPanel, DC, pt_start_liste, pt_end_liste,
                                   0, &nb_local_chevelu );
 
-        /* b - connexion des blocks formes precedemment (Iteration) */
+        /* b - secon step of lee algorithm : build the block to block link list (Iteration) */
         while( ii > 1 )
         {
             ii = gen_rats_block_to_block( DrawPanel, DC, pt_liste_pad,
@@ -1089,7 +1185,7 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
     pt_fin_int_chevelu = local_chevelu = g_pt_chevelu;
     nb_int_chevelu = nb_local_chevelu;
 
-    /* Mise a 1 du flag LOCAL */
+    /* set the ratsnets status, flag LOCAL_CHEVELU */
     g_pt_chevelu = local_liste_chevelu;
     while( g_pt_chevelu < pt_fin_int_chevelu )
     {
@@ -1098,21 +1194,21 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
 
     m_Pcb->m_Status_Pcb |= CHEVELU_LOCAL_OK;
 
-    /////////////////////////////////////////
-    // calcul du chevelu externe au module //
-    /////////////////////////////////////////
+    /*
+    This section computes the "external" ratsnest: must be done when the footprint position changes
+    */
 calcul_chevelu_ext:
 
-    /* Cette partie est executee a chaque deplacement du module: on calcule
-     *  pour chaque pad du module courant la + courte distance a un pad externe.
-     *  Pour chaque groupe de pad du module courant appartenant a un meme net,
-     *  on ne garde qu'un seul chevelu: le plus court.
+    /* This section search:
+     *  for each current module pad the nearest neighbour external pad (of course for the same net code).
+     *  For each current footprint cluster of pad (pads having the same net code),
+     *  we keep the smaller ratsnest.
      */
     local_chevelu    = pt_fin_int_chevelu;
     nb_local_chevelu = nb_int_chevelu;
     pt_liste_ref = (LISTE_PAD*) adr_lowmem;
     pad_ref = *pt_liste_ref;
-    
+
     current_net_code      = pad_ref->GetNet();
     local_chevelu->dist   = 0x7FFFFFFF;
     local_chevelu->status = 0;
@@ -1121,9 +1217,8 @@ calcul_chevelu_ext:
     {
         pad_ref = *(pt_liste_ref + ii);
         if( pad_ref->GetNet() != current_net_code )
-        {     
-            /* un nouveau chevelu est cree (si necessaire) pour
-             *  chaque nouveau net */
+        {
+            /* if needed a new ratsenest for each new net */
             if( increment )
             {
                 nb_local_chevelu++; local_chevelu++;
@@ -1140,17 +1235,17 @@ calcul_chevelu_ext:
         for( jj = nb_pads_externes; jj > 0; jj-- )
         {
             pad_externe = *pt_liste_generale; pt_liste_generale++;
-            
-            /* les netcodes doivent etre identiques */
+
+            /* we search pads having the same net coade */
             if( pad_externe->GetNet() < pad_ref->GetNet() )
                 continue;
-            
-            if( pad_externe->GetNet() > pad_ref->GetNet() )
+
+            if( pad_externe->GetNet() > pad_ref->GetNet() ) // remember pads are sorted by net code
                 break;
-            
+
             distance = abs( pad_externe->m_Pos.x - pad_pos_X ) +
                        abs( pad_externe->m_Pos.y - pad_pos_Y );
-                       
+
             if( distance < local_chevelu->dist )
             {
                 local_chevelu->pad_start = pad_ref;
@@ -1165,16 +1260,16 @@ calcul_chevelu_ext:
 
     if( increment ) // fin de balayage : le ratsnest courant doit etre memorise
     {
-        nb_local_chevelu++; 
+        nb_local_chevelu++;
         local_chevelu++;
     }
 
-    /* Retourne l'adr de la zone disponible */
+    /* return the newt free memory buffer address, in the general buffer */
     adr_max = MAX( adr_max, (char*) (local_chevelu + 1) );
 
-    return (char*) (local_chevelu + 1);   /* la struct pointee par
-                                           *  local_chevelu est utilisee
-                                           *  pour des calculs temporaires */
+    return (char*) (local_chevelu + 1);   /* the struct pointed by local_chevelu is used
+	in temporary computations, so we skip it
+	*/
 }
 
 
@@ -1183,8 +1278,7 @@ void WinEDA_BasePcbFrame::trace_ratsnest_module( wxDC* DC )
 /**********************************************************/
 
 /*
- *  affiche le chevelu d'un module calcule en mode rapide.
- *  retourne: rien
+ *  Display the rastnest of a moving footprint, computed by build_ratsnest_module()
  */
 {
     CHEVELU* local_chevelu;
@@ -1227,11 +1321,11 @@ void WinEDA_BasePcbFrame::trace_ratsnest_module( wxDC* DC )
 /* int * WinEDA_BasePcbFrame::build_ratsnest_pad(D_PAD * pad_ref, const wxPoint & refpos) */
 /*********************************************************************************************/
 
-/*
+/**
  *  construction de la liste en mode de calcul rapide pour affichage
  *  en temps reel du chevelu d'un pad lors des tracés d'une piste démarrant
  *  sur ce pad.
- * 
+ *
  *  parametres d'appel:
  *      pad_ref ( si null : mise a 0 du nombre de chevelus )
  *      ox, oy = coord de l'extremite de la piste en trace
@@ -1241,27 +1335,27 @@ void WinEDA_BasePcbFrame::trace_ratsnest_module( wxDC* DC )
  *  retourne: adresse memoire disponible
  */
 
-/* routine locale de tri par longueur de links utilisee par la fonction QSORT */
+/* Used by build_ratsnest_pad(): sort function by link lenght (manathann distance)*/
 static int sort_by_localnetlength( const void* o1, const void* o2 )
 {
     int* ref     = (int*) o1;
     int* compare = (int*) o2;
-    
-    int* org = (int*) adr_lowmem;
+
+    int* org = (int*) adr_lowmem;	// ref coordinate (todo : change for a betted code: used an external wxPoint variable)
     int  ox  = *org++;
     int  oy  = *org++;
     int  lengthref, lengthcmp;
 
     lengthref = abs( *ref - ox );
     ref++;
-    
-    lengthref += abs( *ref - oy );   // = longueur entre point origine et pad ref
-    
-    lengthcmp  = abs( *compare - ox );
-    
+
+    lengthref += abs( *ref - oy );   // = distance between ref coordinate and pad ref
+
+    lengthcmp = abs( *compare - ox );
+
     compare++;
-    
-    lengthcmp += abs( *compare - oy );   // = longueur entre point origine et pad comparé
+
+    lengthcmp += abs( *compare - oy );   // = distance between ref coordinate and the other pad
 
     return lengthref - lengthcmp;
 }
@@ -1279,7 +1373,7 @@ int* WinEDA_BasePcbFrame::build_ratsnest_pad( EDA_BaseStruct* ref,
     D_PAD*     pad_ref = NULL;
 
     if( ( (m_Pcb->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
-     || ( (m_Pcb->m_Status_Pcb & LISTE_PAD_OK) == 0 ) )
+       || ( (m_Pcb->m_Status_Pcb & LISTE_PAD_OK) == 0 ) )
     {
         nb_local_chevelu = 0;
         return NULL;
@@ -1330,10 +1424,10 @@ int* WinEDA_BasePcbFrame::build_ratsnest_pad( EDA_BaseStruct* ref,
             D_PAD* pad = *padlist;
             if( pad->GetNet() != current_net_code )
                 continue;
-            
+
             if( pad == pad_ref )
                 continue;
-            
+
             if( !pad->m_physical_connexion || (pad->m_physical_connexion != conn_number) )
             {
                 *pt_coord = pad->m_Pos.x; pt_coord++;
@@ -1341,7 +1435,8 @@ int* WinEDA_BasePcbFrame::build_ratsnest_pad( EDA_BaseStruct* ref,
                 nb_local_chevelu++;
             }
         }
-    }   /* Fin Init */
+    }   /* end if Init */
+
     else if( nb_local_chevelu )
     {
         *pt_coord = refpos.x; 
@@ -1359,7 +1454,7 @@ void WinEDA_BasePcbFrame::trace_ratsnest_pad( wxDC* DC )
 /*******************************************************/
 
 /*
- *  affiche le "chevelu" d'un pad lors des trace de segments de piste
+ *  Displays a "ratsnest" during track creation
  */
 {
     int* pt_coord;
@@ -1368,15 +1463,15 @@ void WinEDA_BasePcbFrame::trace_ratsnest_pad( wxDC* DC )
 
     if( (m_Pcb->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
         return;
-    
+
     if( nb_local_chevelu == 0 )
         return;
-    
+
     if( local_liste_chevelu == NULL )
         return;
 
     pt_coord = (int*) local_liste_chevelu;
-    
+
     refX = *pt_coord++;
     refY = *pt_coord++;
 
@@ -1385,7 +1480,7 @@ void WinEDA_BasePcbFrame::trace_ratsnest_pad( wxDC* DC )
     {
         if( ii >= g_MaxLinksShowed )
             break;
-        
+
         GRLine( &DrawPanel->m_ClipBox, DC, refX, refY, *pt_coord, *(pt_coord + 1),
                 0, YELLOW );
         pt_coord += 2;

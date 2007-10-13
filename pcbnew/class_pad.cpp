@@ -888,7 +888,7 @@ void D_PAD::Display_Infos( WinEDA_DrawFrame* frame )
     pos += 4;
     Affiche_1_Parametre( frame, pos, _( "Net" ), m_Netname, DARKCYAN );
 
-    /* pour mise au point (peut etre supprim� : Affichage du numero de Net et sous net */
+    /* For test and debug only: display m_physical_connexion and m_logical_connexion */
     pos += 10;
 #if 0
     Line.Printf( wxT( "%d.%d " ), m_logical_connexion, m_physical_connexion );
