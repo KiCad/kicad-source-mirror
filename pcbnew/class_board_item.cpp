@@ -33,7 +33,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
     {
     case PCB_EQUIPOT_STRUCT_TYPE:
         text << _( "Net" ) << ( (EQUIPOT*) item )->m_Netname << wxT( " " ) <<
-        ( (EQUIPOT*) item )->m_NetCode;
+        ( (EQUIPOT*) item )->GetNet();
         break;
 
     case TYPEMODULE:
@@ -60,7 +60,6 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         break;
 
     case TYPETEXTEMODULE:
-
         switch( ( (TEXTE_MODULE*) item )->m_Type )
         {
         case TEXT_is_REFERENCE:
@@ -78,7 +77,6 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
                  << ( (MODULE*) GetParent() )->GetReference();
             break;
         }
-
         break;
 
     case TYPEEDGEMODULE:
@@ -124,13 +122,21 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         break;
 
     case TYPETRACK:
-        text << _( "Track" ) << wxT( " " ) << ((TRACK*)item)->ShowWidth();
-        net = aPcb->FindNet( ((TRACK*)item)->m_NetCode );
-        if( net )
+        // deleting tracks requires all the information we can get to 
+        // disambiguate all the crap under the cursor!
         {
-            text << wxT( " [" ) << net->m_Netname << wxT( "]" );
+            wxString txt;
+            
+            text << _( "Track" ) << wxT( " " ) << ((TRACK*)item)->ShowWidth();
+            net = aPcb->FindNet( ((TRACK*)item)->GetNet() );
+            if( net )
+            {
+                text << wxT( " [" ) << net->m_Netname << wxT( "]" );
+            }
+            text << _( " on " ) << ReturnPcbLayerName( item->GetLayer() ).Trim() 
+                 << wxT("  ") << _("Net:") << ((TRACK*)item)->GetNet()
+                 << wxT("  ") << _("Length:") << valeur_param( (int) ((TRACK*)item)->GetLength(), txt );
         }
-        text << _( " on " ) << ReturnPcbLayerName( item->GetLayer() ).Trim();
         break;
 
     case TYPEZONE:
@@ -140,7 +146,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
             TimeStampText.Printf( wxT( "(%8.8X)" ), item->m_TimeStamp );
             text << TimeStampText;
         }
-        net = aPcb->FindNet( ( (SEGZONE*) item )->m_NetCode );
+        net = aPcb->FindNet( ( (SEGZONE*) item )->GetNet() );
         if( net )
         {
             text << wxT( " [" ) << net->m_Netname << wxT( "]" );
@@ -160,7 +166,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
                 text << wxT(" ") << _("Buried");
             // else say nothing about normal vias
             
-            net = aPcb->FindNet( via->m_NetCode );
+            net = aPcb->FindNet( via->GetNet() );
             if( net )
             {
                 text << wxT( " [" ) << net->m_Netname << wxT( "]" );

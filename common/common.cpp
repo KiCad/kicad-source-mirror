@@ -427,7 +427,7 @@ int GetTimeStamp()
 
 
 /*************************************************/
-void valeur_param( int valeur, wxString& buf_texte )
+const wxString& valeur_param( int valeur, wxString& buf_texte )
 /*************************************************/
 
 /* Retourne pour affichage la valeur d'un parametre, selon type d'unites choisies
@@ -444,4 +444,6 @@ void valeur_param( int valeur, wxString& buf_texte )
     {
         buf_texte.Printf( wxT( "%2.4f \"" ), valeur * 0.0001 );
     }
+    
+    return buf_texte;
 }

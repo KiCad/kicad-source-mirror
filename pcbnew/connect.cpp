@@ -51,7 +51,7 @@ static int change_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn,
     pt_conn = pt_start_conn;
     for( ; pt_conn != NULL; pt_conn = (TRACK*) pt_conn->Pnext )
     {
-        if( pt_conn->m_Sous_Netcode != old_val )
+        if( pt_conn->GetSubNet() != old_val )
         {
             if( pt_conn == pt_end_conn )
                 break;
@@ -59,20 +59,20 @@ static int change_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn,
         }
 
         nb_change++;
-        pt_conn->m_Sous_Netcode = new_val;
+        pt_conn->SetSubNet( new_val );
 
         if( pt_conn->start && ( pt_conn->start->Type() == TYPEPAD) )
         {
             pt_pad = (D_PAD*) (pt_conn->start);
             if( pt_pad->m_physical_connexion == old_val )
-                pt_pad->m_physical_connexion = pt_conn->m_Sous_Netcode;
+                pt_pad->m_physical_connexion = pt_conn->GetSubNet();
         }
 
         if( pt_conn->end && (pt_conn->end->Type() == TYPEPAD) )
         {
             pt_pad = (D_PAD*) (pt_conn->end);
             if( pt_pad->m_physical_connexion == old_val )
-                pt_pad->m_physical_connexion = pt_conn->m_Sous_Netcode;
+                pt_pad->m_physical_connexion = pt_conn->GetSubNet();
         }
         if( pt_conn == pt_end_conn )
             break;
@@ -105,7 +105,7 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
     pt_conn = pt_start_conn;
     for( ; pt_conn != NULL; pt_conn = (TRACK*) pt_conn->Pnext )
     {
-        pt_conn->m_Sous_Netcode = 0;
+        pt_conn->SetSubNet( 0 );
         PtStruct = pt_conn->start;
         if( PtStruct && (PtStruct->Type() == TYPEPAD) )
             ( (D_PAD*) PtStruct )->m_physical_connexion = 0;
@@ -119,7 +119,7 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
     }
 
     sous_net_code = 1; 
-    pt_start_conn->m_Sous_Netcode = sous_net_code;
+    pt_start_conn->SetSubNet( sous_net_code );
 
     /* debut du calcul de propagation */
     pt_conn = pt_start_conn;
@@ -127,31 +127,32 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
     {
         /* Traitement des connexions a pads */
         PtStruct = pt_conn->start;
-        if( PtStruct && (PtStruct->Type() == TYPEPAD) )
+        
         /* la connexion debute sur 1 pad */
+        if( PtStruct && (PtStruct->Type() == TYPEPAD) )
         {
             pt_pad = (D_PAD*) PtStruct;
-            if( pt_conn->m_Sous_Netcode )               /* la connexion fait deja partie d'une chaine */
+            if( pt_conn->GetSubNet() )               /* la connexion fait deja partie d'une chaine */
             {
                 if( pt_pad->m_physical_connexion > 0 )  /* le pad fait aussi partie d'une chaine */
                 {
                     change_equipot( pt_start_conn, pt_end_conn,
-                                    pt_pad->m_physical_connexion, pt_conn->m_Sous_Netcode );
+                                    pt_pad->m_physical_connexion, pt_conn->GetSubNet() );
                 }
                 else
-                    pt_pad->m_physical_connexion = pt_conn->m_Sous_Netcode;
+                    pt_pad->m_physical_connexion = pt_conn->GetSubNet();
             }
             else    /* la connexion ne fait pas partie encore d'une chaine */
             {
                 if( pt_pad->m_physical_connexion > 0 )
                 {
-                    pt_conn->m_Sous_Netcode = pt_pad->m_physical_connexion;
+                    pt_conn->SetSubNet( pt_pad->m_physical_connexion );
                 }
                 else
                 {
                     sous_net_code++; 
-                    pt_conn->m_Sous_Netcode = sous_net_code;
-                    pt_pad->m_physical_connexion = pt_conn->m_Sous_Netcode;
+                    pt_conn->SetSubNet( sous_net_code );
+                    pt_pad->m_physical_connexion = pt_conn->GetSubNet();
                 }
             }
         }
@@ -161,26 +162,27 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
         /* la connexion finit sur 1 pad */
         {
             pt_pad = (D_PAD*) PtStruct;
-            if( pt_conn->m_Sous_Netcode )
+            if( pt_conn->GetSubNet() )
             {
                 if( pt_pad->m_physical_connexion > 0 )
                 {
                     change_equipot( pt_start_conn, pt_end_conn,
-                                    pt_pad->m_physical_connexion, pt_conn->m_Sous_Netcode );
+                                    pt_pad->m_physical_connexion, pt_conn->GetSubNet() );
                 }
                 else
-                    pt_pad->m_physical_connexion = pt_conn->m_Sous_Netcode;
+                    pt_pad->m_physical_connexion = pt_conn->GetSubNet();
             }
             else
             {
                 if( pt_pad->m_physical_connexion > 0 )
                 {
-                    pt_conn->m_Sous_Netcode = pt_pad->m_physical_connexion;
+                    pt_conn->SetSubNet( pt_pad->m_physical_connexion );
                 }
                 else
                 {
-                    sous_net_code++; pt_conn->m_Sous_Netcode = sous_net_code;
-                    pt_pad->m_physical_connexion = pt_conn->m_Sous_Netcode;
+                    sous_net_code++; 
+                    pt_conn->SetSubNet( sous_net_code );
+                    pt_pad->m_physical_connexion = pt_conn->GetSubNet();
                 }
             }
         }
@@ -193,28 +195,29 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
             /* debut sur une autre piste */
             pt_autre_piste = (TRACK*) PtStruct;
 
-            if( pt_conn->m_Sous_Netcode )  /* La connexion fait deja partie d'un block */
+            if( pt_conn->GetSubNet() )  /* La connexion fait deja partie d'un block */
             {
-                if( pt_autre_piste->m_Sous_Netcode )
+                if( pt_autre_piste->GetSubNet() )
                 {
                     change_equipot( pt_start_conn, pt_end_conn,
-                                    pt_autre_piste->m_Sous_Netcode, pt_conn->m_Sous_Netcode );
+                                    pt_autre_piste->GetSubNet(), pt_conn->GetSubNet() );
                 }
                 else
                 {
-                    pt_autre_piste->m_Sous_Netcode = pt_conn->m_Sous_Netcode;
+                    pt_autre_piste->SetSubNet( pt_conn->GetSubNet() );
                 }
             }
             else       /* La connexion ne fait partie d'aucun block */
             {
-                if( pt_autre_piste->m_Sous_Netcode )
+                if( pt_autre_piste->GetSubNet() )
                 {
-                    pt_conn->m_Sous_Netcode = pt_autre_piste->m_Sous_Netcode;
+                    pt_conn->SetSubNet( pt_autre_piste->GetSubNet() );
                 }
                 else
                 {
-                    sous_net_code++; pt_conn->m_Sous_Netcode = sous_net_code;
-                    pt_autre_piste->m_Sous_Netcode = pt_conn->m_Sous_Netcode;
+                    sous_net_code++; 
+                    pt_conn->SetSubNet( sous_net_code );
+                    pt_autre_piste->SetSubNet( pt_conn->GetSubNet() );
                 }
             }
         }
@@ -225,26 +228,27 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
             /* fin connectee a une autre piste */
             pt_autre_piste = (TRACK*) PtStruct;
             
-            if( pt_conn->m_Sous_Netcode )   /* La connexion fait deja partie d'un block */
+            if( pt_conn->GetSubNet() )   /* La connexion fait deja partie d'un block */
             {
-                if( pt_autre_piste->m_Sous_Netcode )
+                if( pt_autre_piste->GetSubNet() )
                 {
                     change_equipot( pt_start_conn, pt_end_conn,
-                                    pt_autre_piste->m_Sous_Netcode, pt_conn->m_Sous_Netcode );
+                                    pt_autre_piste->GetSubNet(), pt_conn->GetSubNet() );
                 }
                 else
-                    pt_autre_piste->m_Sous_Netcode = pt_conn->m_Sous_Netcode;
+                    pt_autre_piste->SetSubNet( pt_conn->GetSubNet() );
             }
             else    /* La connexion ne fait partie d'aucun block */
             {
-                if( pt_autre_piste->m_Sous_Netcode )
+                if( pt_autre_piste->GetSubNet() )
                 {
-                    pt_conn->m_Sous_Netcode = pt_autre_piste->m_Sous_Netcode;
+                    pt_conn->SetSubNet( pt_autre_piste->GetSubNet() );
                 }
                 else
                 {
-                    sous_net_code++; pt_conn->m_Sous_Netcode = sous_net_code;
-                    pt_autre_piste->m_Sous_Netcode = pt_conn->m_Sous_Netcode;
+                    sous_net_code++; 
+                    pt_conn->SetSubNet( sous_net_code );
+                    pt_autre_piste->SetSubNet( pt_conn->GetSubNet() );
                 }
             }
         }
@@ -287,7 +291,7 @@ void WinEDA_BasePcbFrame::test_connexions( wxDC* DC )
     pt_start_conn = m_Pcb->m_Track;
     while( pt_start_conn != NULL )
     {
-        current_net_code = pt_start_conn->m_NetCode;
+        current_net_code = pt_start_conn->GetNet();
         pt_end_conn = pt_start_conn->GetEndNetCode( current_net_code );
 
         /* Calcul des connexions type segment du net courant */
@@ -323,7 +327,7 @@ void WinEDA_BasePcbFrame::Recalcule_all_net_connexion( wxDC* DC )
     while( EndConn->Pnext )
         EndConn = (TRACK*) EndConn->Pnext;
 
-    net_code_max = EndConn->m_NetCode;
+    net_code_max = EndConn->GetNet();
 
     for( net_code = 0; net_code <= net_code_max; net_code++ )
     {
@@ -354,11 +358,13 @@ void WinEDA_BasePcbFrame::test_1_net_connexion( wxDC* DC, int net_code )
     pt_pad = (LISTE_PAD*) m_Pcb->m_Pads;
     for( ii = 0; ii < m_Pcb->m_NbPads; ii++, pt_pad++ )
     {
-        int pad_net_code = (*pt_pad)->m_NetCode;
+        int pad_net_code = (*pt_pad)->GetNet();
         if( pad_net_code < net_code )
             continue;
+        
         if( pad_net_code > net_code )
             break;
+        
         (*pt_pad)->m_physical_connexion = 0;
     }
 
@@ -412,10 +418,11 @@ static void calcule_connexite_1_net( TRACK* pt_start_conn, TRACK* pt_end_conn )
     /* Raz des pointeurs sur pistes */
     for( Track = pt_start_conn; Track != NULL; Track = (TRACK*) Track->Pnext )
     {
-        Track->m_Sous_Netcode = 0;
+        Track->SetSubNet( 0 );
 
         if( Track->GetState( BEGIN_ONPAD ) == 0 )
             Track->start = NULL;
+        
         if( Track->GetState( END_ONPAD ) == 0 )
             Track->end = NULL;
 
@@ -433,11 +440,13 @@ static void calcule_connexite_1_net( TRACK* pt_start_conn, TRACK* pt_end_conn )
             for( pt_segm = pt_start_conn; pt_segm != NULL; pt_segm = (TRACK*) pt_segm->Pnext )
             {
                 int curlayermask = pt_segm->ReturnMaskLayer();
+                
                 if( !pt_segm->start && (pt_segm->m_Start == Track->m_Start)
                    && ( layermask & curlayermask ) )
                 {
                     pt_segm->start = Track;
                 }
+                
                 if( !pt_segm->end && (pt_segm->m_End == Track->m_Start)
                    && (layermask & curlayermask) )
                 {
@@ -513,11 +522,15 @@ static D_PAD* SuperFast_Locate_Pad_Connecte( BOARD* pcb, LISTE_PAD* pt_liste,
     {
         pad      = *ptr_pad;
         ii       = nb_pad;
-        nb_pad >>= 1; if( (ii & 1) && ( ii > 1 ) )
+        nb_pad >>= 1;
+        
+        if( (ii & 1) && ( ii > 1 ) )
             nb_pad++;
+        
         if( pad->m_Pos.x < px ) /* on doit chercher plus loin */
         {
-            ptr_pad += nb_pad; if( ptr_pad > lim )
+            ptr_pad += nb_pad; 
+            if( ptr_pad > lim )
                 ptr_pad = lim;
             continue;
         }
@@ -547,11 +560,14 @@ static D_PAD* SuperFast_Locate_Pad_Connecte( BOARD* pcb, LISTE_PAD* pt_liste,
             {
                 if( ptr_pad > lim )
                     return NULL;                        /* hors zone */
+                
                 pad = *ptr_pad;
                 if( pad->m_Pos.x != px )
                     return NULL;                        /* hors zone */
+                
                 if( pad->m_Pos.y != py )
                     continue;
+                
                 /* Pad peut-etre trouve ici: il doit etre sur la bonne couche */
                 if( pad->m_Masque_Layer & masque_layer )
                     return pad;
@@ -563,7 +579,7 @@ static D_PAD* SuperFast_Locate_Pad_Connecte( BOARD* pcb, LISTE_PAD* pt_liste,
 }
 
 
-static int SortPadsByXCoord( void* pt_ref, void* pt_comp )
+static int SortPadsByXCoord( const void* pt_ref, const void* pt_comp )
 
 /* used to Sort a pad list by x coordinate value
  */
@@ -581,14 +597,13 @@ LISTE_PAD* CreateSortedPadListByXCoord( BOARD* pcb )
 
 /* Create a sorted list of pointers to pads.
  *  This list is sorted by X ccordinate value.
- *  The list must be freed bu user
+ *  The list must be freed by user
  */
 {
-    LISTE_PAD* pad_list = (LISTE_PAD*) MyMalloc( pcb->m_NbPads * sizeof( D_PAD *) );
+    LISTE_PAD* pad_list = (LISTE_PAD*) MyMalloc( pcb->m_NbPads * sizeof(D_PAD *) );
 
     memcpy( pad_list, pcb->m_Pads, pcb->m_NbPads * sizeof( D_PAD *) );
-    qsort( pad_list, pcb->m_NbPads, sizeof( D_PAD *),
-           ( int( * ) ( const void*, const void* ) )SortPadsByXCoord );
+    qsort( pad_list, pcb->m_NbPads, sizeof( D_PAD *), SortPadsByXCoord );
     return pad_list;
 }
 
@@ -602,13 +617,15 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
     int             a_color;
     char            new_passe_request = 1, flag;
     LISTE_PAD*      pt_mem;
-    BOARD_ITEM* PtStruct;
+    BOARD_ITEM*     PtStruct;
     int             masque_layer;
     wxString        msg;
 
     if( m_Pcb->m_NbPads == 0 )
         return;
+    
     a_color = CYAN;
+    
     if( affiche )
         Affiche_1_Parametre( this, POS_AFF_CHREF, wxT( "DataBase" ), wxT( "Netcodes" ), a_color );
 
@@ -630,7 +647,7 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
     for( ; pt_piste != NULL; pt_piste = (TRACK*) pt_piste->Pnext )
     {
         pt_piste->SetState( BUSY | EDIT | BEGIN_ONPAD | END_ONPAD, OFF );
-        pt_piste->m_NetCode = 0;
+        pt_piste->SetNet( 0 );
     }
 
     pt_piste = m_Pcb->m_Track;
@@ -648,7 +665,7 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
         if( pt_piste->start != NULL )
         {
             pt_piste->SetState( BEGIN_ONPAD, ON );
-            pt_piste->m_NetCode = ( (D_PAD*) (pt_piste->start) )->m_NetCode;
+            pt_piste->SetNet( ( (D_PAD*) (pt_piste->start) )->GetNet() );
         }
 
         pt_piste->end = SuperFast_Locate_Pad_Connecte( m_Pcb,
@@ -660,7 +677,7 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
         if( pt_piste->end != NULL )
         {
             pt_piste->SetState( END_ONPAD, ON );
-            pt_piste->m_NetCode = ( (D_PAD*) (pt_piste->end) )->m_NetCode;
+            pt_piste->SetNet( ( (D_PAD*) (pt_piste->end) )->GetNet() );
         }
     }
 
@@ -710,15 +727,17 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
         {
             if( via->Type() != TYPEVIA )
                 continue;
-            if( via->m_NetCode > 0 )
+            
+            if( via->GetNet() > 0 )
                 continue;                       // Netcode already known
+            
             // Lock for a connection to a track with a known netcode
             pt_next = m_Pcb->m_Track;
             while( ( pt_next = Locate_Piste_Connectee( via, pt_next, NULL, START ) ) != NULL )
             {
-                if( pt_next->m_NetCode )
+                if( pt_next->GetNet() )
                 {
-                    via->m_NetCode = pt_next->m_NetCode;
+                    via->SetNet( pt_next->GetNet() );
                     break;
                 }
                 pt_next->SetState( BUSY, ON );
@@ -737,21 +756,22 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
             /* Traitement du point de debut */
             PtStruct = (BOARD_ITEM*) pt_piste->start;
             if( PtStruct && (PtStruct->Type() != TYPEPAD) )
-            {    // Begin on an other track segment
+            {    
+                // Begin on an other track segment
                 pt_next = (TRACK*) PtStruct;
-                if( pt_piste->m_NetCode )
+                if( pt_piste->GetNet() )
                 {
-                    if( pt_next->m_NetCode == 0 )
+                    if( pt_next->GetNet() == 0 )
                     {
                         new_passe_request  = 1;
-                        pt_next->m_NetCode = pt_piste->m_NetCode;
+                        pt_next->SetNet( pt_piste->GetNet() );
                     }
                 }
                 else
                 {
-                    if( pt_next->m_NetCode != 0 )
+                    if( pt_next->GetNet() != 0 )
                     {
-                        pt_piste->m_NetCode = pt_next->m_NetCode;
+                        pt_piste->SetNet( pt_next->GetNet() );
                         new_passe_request   = 1;
                     }
                 }
@@ -760,21 +780,22 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
             /* Localisation du point de fin */
             PtStruct = pt_piste->end;
             if( PtStruct &&(PtStruct->Type() != TYPEPAD) )
-            {        // End sur piste
+            {   
+                // End sur piste
                 pt_next = (TRACK*) PtStruct;
-                if( pt_piste->m_NetCode )
+                if( pt_piste->GetNet() )
                 {
-                    if( pt_next->m_NetCode == 0 )
+                    if( pt_next->GetNet() == 0 )
                     {
                         new_passe_request  = 1;
-                        pt_next->m_NetCode = pt_piste->m_NetCode;
+                        pt_next->SetNet( pt_piste->GetNet() );
                     }
                 }
                 else
                 {
-                    if( pt_next->m_NetCode != 0 )
+                    if( pt_next->GetNet() != 0 )
                     {
-                        pt_piste->m_NetCode = pt_next->m_NetCode;
+                        pt_piste->SetNet( pt_next->GetNet() );
                         new_passe_request   = 1;
                     }
                 }
@@ -800,7 +821,7 @@ int tri_par_netcode( TRACK** pt_ref, TRACK** pt_compare )
 {
     int ii;
 
-    ii = (*pt_ref)->m_NetCode - (*pt_compare)->m_NetCode;
+    ii = (*pt_ref)->GetNet() - (*pt_compare)->GetNet();
     return ii;
 }
 

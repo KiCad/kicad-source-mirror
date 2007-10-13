@@ -476,7 +476,7 @@ void CreateSignalsSection( FILE* file, BOARD* pcb )
             equipot->m_Netname << wxT( "NoConnection" ) << NbNoConn++;
         }
 
-        if( equipot->m_NetCode <= 0 )  // dummy equipot (non connexion)
+        if( equipot->GetNet() <= 0 )  // dummy equipot (non connexion)
             continue;
 
         msg = wxT( "\nSIGNAL " ) + equipot->m_Netname;
@@ -487,7 +487,7 @@ void CreateSignalsSection( FILE* file, BOARD* pcb )
             for( pad = module->m_Pads; pad != NULL; pad = (D_PAD*) pad->Pnext )
             {
                 wxString padname;
-                if( pad->m_NetCode != equipot->m_NetCode )
+                if( pad->GetNet() != equipot->GetNet() )
                     continue;
                 pad->ReturnStringPadName( padname );
                 msg.Printf( wxT( "NODE %s %.4s" ),
@@ -545,7 +545,7 @@ static int Track_list_Sort_by_Netcode( const void* refptr, const void* objptr )
 
     ref = *( (TRACK**) refptr );
     cmp = *( (TRACK**) objptr );
-    if( (diff = ref->m_NetCode - cmp->m_NetCode) )
+    if( (diff = ref->GetNet() - cmp->GetNet()) )
         return diff;
     if( (diff = ref->m_Width - cmp->m_Width) )
         return diff;
@@ -606,10 +606,10 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
     for( ii = 0; ii < nbitems; ii++ )
     {
         track = tracklist[ii];
-        if( old_netcode != track->m_NetCode )
+        if( old_netcode != track->GetNet() )
         {
-            old_netcode = track->m_NetCode;
-            EQUIPOT* equipot = pcb->FindNet( track->m_NetCode );
+            old_netcode = track->GetNet();
+            EQUIPOT* equipot = pcb->FindNet( track->GetNet() );
             wxString netname;
             if( equipot && (equipot->m_Netname != wxEmptyString) )
                 netname = equipot->m_Netname;

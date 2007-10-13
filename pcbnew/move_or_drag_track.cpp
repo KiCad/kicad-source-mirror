@@ -618,7 +618,7 @@ void WinEDA_PcbFrame::Start_MoveOneNodeOrSegment( TRACK* track, wxDC* DC, int co
         if( command != ID_POPUP_PCB_MOVE_TRACK_SEGMENT )
         {
             Collect_TrackSegmentsToDrag( DrawPanel, DC, track->m_Start,
-                                         track->ReturnMaskLayer(), track->m_NetCode );
+                                         track->ReturnMaskLayer(), track->GetNet() );
         }
         NewTrack     = track;
         NbPtNewTrack = 1;
@@ -639,17 +639,17 @@ void WinEDA_PcbFrame::Start_MoveOneNodeOrSegment( TRACK* track, wxDC* DC, int co
         case ID_POPUP_PCB_DRAG_TRACK_SEGMENT:
             pos = track->m_Start;
             Collect_TrackSegmentsToDrag( DrawPanel, DC, pos,
-                                         track->ReturnMaskLayer(), track->m_NetCode );
+                                         track->ReturnMaskLayer(), track->GetNet() );
             pos = track->m_End;
             track->m_Flags |= IS_DRAGGED | ENDPOINT | STARTPOINT;
             Collect_TrackSegmentsToDrag( DrawPanel, DC, pos,
-                                         track->ReturnMaskLayer(), track->m_NetCode );
+                                         track->ReturnMaskLayer(), track->GetNet() );
             break;
 
         case ID_POPUP_PCB_MOVE_TRACK_NODE:
             pos = (diag & STARTPOINT) ? track->m_Start : track->m_End;
             Collect_TrackSegmentsToDrag( DrawPanel, DC, pos,
-                                         track->ReturnMaskLayer(), track->m_NetCode );
+                                         track->ReturnMaskLayer(), track->GetNet() );
             PosInit = pos;
             break;
         }
@@ -660,7 +660,7 @@ void WinEDA_PcbFrame::Start_MoveOneNodeOrSegment( TRACK* track, wxDC* DC, int co
     DrawPanel->ManageCurseur = Show_MoveNode;
     DrawPanel->ForceCloseManageCurseur = Abort_MoveTrack;
 
-    g_HightLigth_NetCode = track->m_NetCode;
+    g_HightLigth_NetCode = track->GetNet();
     g_HightLigt_Status   = TRUE;
     DrawHightLight( DC, g_HightLigth_NetCode );
     DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
@@ -753,7 +753,7 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC
     DrawPanel->ManageCurseur = Show_Drag_Track_Segment_With_Cte_Slope;
     DrawPanel->ForceCloseManageCurseur = Abort_MoveTrack;
 
-    g_HightLigth_NetCode = track->m_NetCode;
+    g_HightLigth_NetCode = track->GetNet();
     g_HightLigt_Status   = TRUE;
     DrawHightLight( DC, g_HightLigth_NetCode );
 
@@ -778,7 +778,7 @@ bool WinEDA_PcbFrame::PlaceDraggedTrackSegment( TRACK* Track, wxDC* DC )
     if( Track == NULL )
         return FALSE;
 
-    int current_net_code = Track->m_NetCode;
+    int current_net_code = Track->GetNet();
 
     // DRC control:
     if( Drc_On )

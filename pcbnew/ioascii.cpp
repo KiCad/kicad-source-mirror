@@ -177,7 +177,7 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( wxDC* DC, FILE* File,
             PtSegm->m_Drill = -1;
 
         PtSegm->SetLayer( layer );
-        PtSegm->m_NetCode = net_code; 
+        PtSegm->SetNet( net_code ); 
         PtSegm->SetState( flags, ON );
         
 #ifdef PCBNEW
@@ -356,7 +356,8 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             data = strtok( NULL, " =\n\r" );
             if( data )
                 gy = atoi( data );
-            m_Auxiliary_Axis_Position.x = gx; m_Auxiliary_Axis_Position.y = gy;
+            m_Auxiliary_Axis_Position.x = gx; 
+            m_Auxiliary_Axis_Position.y = gy;
             continue;
         }
 #ifdef PCBNEW

@@ -343,7 +343,7 @@ void WinEDA_ErcFrame::TestErc( wxCommandEvent& event )
     for( ; NetItemRef < Lim; NetItemRef++ )
     {
         /* Tst changement de net */
-        if( OldItem->m_NetCode != NetItemRef->m_NetCode )
+        if( OldItem->GetNet() != NetItemRef->GetNet() )
         {
             MinConn = NOC; 
             NetNbItems = 0; 
@@ -581,7 +581,7 @@ static void Diagnose( WinEDA_DrawPanel* panel, wxDC* DC,
         {
             Marker->m_Comment.Printf(
                 _( "Warning Pin %s not driven (Net %d)" ),
-                MsgPinElectricType[ii], NetItemRef->m_NetCode );
+                MsgPinElectricType[ii], NetItemRef->GetNet() );
             if( screen == panel->GetScreen() )
                 RedrawOneStruct( panel, DC, Marker, GR_COPY );
             return;
@@ -612,7 +612,7 @@ static void Diagnose( WinEDA_DrawPanel* panel, wxDC* DC,
                                       "%s: Pin %s connected to Pin %s (net %d)" ),
                                   DiagLevel.GetData(),
                                   MsgPinElectricType[ii],
-                                  MsgPinElectricType[jj], NetItemRef->m_NetCode );
+                                  MsgPinElectricType[jj], NetItemRef->GetNet() );
 
         if( screen == panel->GetScreen() )
             RedrawOneStruct( panel, DC, Marker, GR_COPY );
@@ -653,7 +653,7 @@ static void TestOthersItems( WinEDA_DrawPanel* panel, wxDC* DC,
 
         /* Est - on toujours dans le meme net ? */
         if( (NetItemTst >= Lim)                                     // fin de liste (donc fin de net)
-           || (NetItemRef->m_NetCode != NetItemTst->m_NetCode) )    // fin de net
+           || (NetItemRef->GetNet() != NetItemTst->GetNet()) )    // fin de net
         {                                                           /* Fin de netcode trouve: Tst connexion minimum */
             if( (*MinConnexion < NET_NC )
                && (local_minconn < NET_NC ) )                       /* pin non connectée ou non pilotee */
@@ -796,7 +796,7 @@ void TestLabel( WinEDA_DrawPanel* panel, wxDC* DC,
 
         /* Est - on toujours dans le meme net ? */
         if( ( NetItemTst ==  Lim )
-           || ( NetItemRef->m_NetCode != NetItemTst->m_NetCode ) )
+           || ( NetItemRef->GetNet() != NetItemTst->GetNet() ) )
         {           
             /* Fin de netcode trouve */
             if( erc )

@@ -119,12 +119,12 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
                 
                 /* le debut de la piste est remis sur le centre du pad */
                 pos = pt_pad->m_Pos;
-                g_HightLigth_NetCode = pt_pad->m_NetCode;
+                g_HightLigth_NetCode = pt_pad->GetNet();
             }
             else /* le point d'accrochage est un segment */
             {
                 adr_buf = (TRACK*) LockPoint;
-                g_HightLigth_NetCode = adr_buf->m_NetCode;
+                g_HightLigth_NetCode = adr_buf->GetNet();
                 CreateLockPoint( &pos.x, &pos.y, adr_buf, NULL );
             }
         }
@@ -137,7 +137,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
         g_CurrentTrackSegment->m_Width   = g_DesignSettings.m_CurrentTrackWidth;
         g_CurrentTrackSegment->m_Start   = pos;
         g_CurrentTrackSegment->m_End     = g_CurrentTrackSegment->m_Start;
-        g_CurrentTrackSegment->m_NetCode = g_HightLigth_NetCode;
+        g_CurrentTrackSegment->SetNet( g_HightLigth_NetCode );
         if( pt_pad )
         {
             g_CurrentTrackSegment->start = pt_pad;
@@ -418,7 +418,7 @@ void WinEDA_PcbFrame::End_Route( TRACK* track, wxDC* DC )
                  *  peut-etre creer un point d'ancrage */
         {
             adr_buf = (TRACK*) LockPoint;
-            g_HightLigth_NetCode = adr_buf->m_NetCode;
+            g_HightLigth_NetCode = adr_buf->GetNet();
             /* creation eventuelle d'un point d'accrochage */
             LockPoint = CreateLockPoint( &g_CurrentTrackSegment->m_End.x,
                                          &g_CurrentTrackSegment->m_End.y,
@@ -458,7 +458,7 @@ void WinEDA_PcbFrame::End_Route( TRACK* track, wxDC* DC )
         }
 
         /* compute the new rastnest : */
-        test_1_net_connexion( DC, g_FirstTrackSegment->m_NetCode );
+        test_1_net_connexion( DC, g_FirstTrackSegment->GetNet() );
 
         GetScreen()->SetModify();
         m_Pcb->Display_Infos( this );

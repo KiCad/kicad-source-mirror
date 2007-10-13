@@ -31,7 +31,7 @@ D_PAD::D_PAD( MODULE* parent ) :
 {
     m_NumPadName   = 0;
     m_Masque_Layer = CUIVRE_LAYER;
-    m_NetCode    = 0;               /* Numero de net pour comparaisons rapides */
+    SetNet( 0 );                    /* Numero de net pour comparaisons rapides */
     m_DrillShape = CIRCLE;          // Drill shape = circle
 
     m_Size.x = m_Size.y = 500;
@@ -169,7 +169,7 @@ void D_PAD::Copy( D_PAD* source )
     m_Masque_Layer = source->m_Masque_Layer;
 
     memcpy( m_Padname, source->m_Padname, sizeof(m_Padname) );  /* nom de la pastille */
-    m_NetCode    = source->m_NetCode;                           /* Numero de net pour comparaisons rapides */
+    SetNet( source->GetNet() );                                 /* Numero de net pour comparaisons rapides */
     m_Drill      = source->m_Drill;                             // Diametre de percage
     m_DrillShape = source->m_DrillShape;
     m_Offset     = source->m_Offset;                            // Offset de la forme
@@ -737,7 +737,10 @@ int D_PAD::ReadDescr( FILE* File, int* LineNum )
             break;
 
         case 'N':       /* Lecture du netname */
-            nn = sscanf( PtLine, "%d", &m_NetCode );
+            int netcode;
+            nn = sscanf( PtLine, "%d", &netcode );
+            SetNet( netcode );
+            
             /* Lecture du netname */
             ReadDelimitedText( BufLine, PtLine, sizeof(BufLine) );
             m_Netname = CONV_FROM_UTF8( StrPurge( BufLine ) );
@@ -834,7 +837,7 @@ int D_PAD::WriteDescr( FILE* File )
     fprintf( File, "At %s N %8.8X\n", texttype, m_Masque_Layer );
     NbLigne++;
 
-    fprintf( File, "Ne %d \"%s\"\n", m_NetCode, CONV_TO_UTF8( m_Netname ) );
+    fprintf( File, "Ne %d \"%s\"\n", GetNet(), CONV_TO_UTF8( m_Netname ) );
     NbLigne++;
 
     fprintf( File, "Po %d %d\n", m_Pos0.x, m_Pos0.y );
@@ -1095,7 +1098,7 @@ void D_PAD::Show( int nestLevel, std::ostream& os )
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
     " num=\""       << padname << '"' <<
     " net=\""       << m_Netname.mb_str() << '"' <<
-    " netcode=\""   << m_NetCode << '"' <<
+    " netcode=\""   << GetNet() << '"' <<
     " layerMask=\"" << layerMask << '"' << m_Pos << "/>\n";
 
 //    NestedSpace( nestLevel+1, os ) << m_Text.mb_str() << '\n';

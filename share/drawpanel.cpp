@@ -683,7 +683,7 @@ void WinEDA_DrawPanel::m_Draw_Auxiliary_Axis( wxDC* DC, int drawmode )
 /********************************************************************/
 {
     if( m_Parent->m_Auxiliary_Axis_Position.x == 0
-        && m_Parent->m_Auxiliary_Axis_Position.y == 0 )
+     && m_Parent->m_Auxiliary_Axis_Position.y == 0 )
         return;
 
     int          Color  = DARKRED;

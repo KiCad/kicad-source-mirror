@@ -334,7 +334,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
             track->Draw( DrawPanel, DC, GR_XOR );   // erase the display
             track->m_Start.x += deltaX; track->m_Start.y += deltaY;
             track->m_End.x   += deltaX; track->m_End.y += deltaY;
-            track->m_Param   += deltaX; track->m_Sous_Netcode += deltaY;
+            track->m_Param   += deltaX; track->SetSubNet( track->GetSubNet() + deltaY );
             track->Draw( DrawPanel, DC, GR_OR ); // redraw the moved track
         }
         track = track->Next();
@@ -349,7 +349,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
             zsegment->Draw( DrawPanel, DC, GR_XOR );   // erase the display
             zsegment->m_Start.x += deltaX; track->m_Start.y += deltaY;
             zsegment->m_End.x   += deltaX; track->m_End.y += deltaY;
-            zsegment->m_Param   += deltaX; track->m_Sous_Netcode += deltaY;
+            zsegment->m_Param   += deltaX; track->SetSubNet( track->GetSubNet() + deltaY );
             zsegment->Draw( DrawPanel, DC, GR_OR ); // redraw the moved zone zegment
         }
         zsegment = zsegment->Next();

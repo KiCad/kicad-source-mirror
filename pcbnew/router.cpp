@@ -162,7 +162,7 @@ static void Out_Pads( BOARD* Pcb, FILE* outfile )
     if( pt_liste_pad == NULL )
         return;
 
-    netcode = (*pt_liste_pad)->m_NetCode;
+    netcode = (*pt_liste_pad)->GetNet();
     nb_pads = 1; plink = 0;
     for( ; pt_liste_pad < pt_liste_pad_limite; )
     {
@@ -171,7 +171,7 @@ static void Out_Pads( BOARD* Pcb, FILE* outfile )
         {
             if( pt_end_liste >= pt_liste_pad_limite )
                 break;
-            if( (*pt_end_liste)->m_NetCode != netcode )
+            if( (*pt_end_liste)->GetNet() != netcode )
                 break;
             nb_pads++;
         }
@@ -197,7 +197,7 @@ static void Out_Pads( BOARD* Pcb, FILE* outfile )
         for( ; pt_liste_pad < pt_end_liste; pt_liste_pad++ )
         {
             pt_pad  = *pt_liste_pad;
-            netcode = pt_pad->m_NetCode;
+            netcode = pt_pad->GetNet();
             plink   = pt_pad->m_physical_connexion;
             /* plink = numero unique si pad non deja connecte a une piste */
             if( plink <= 0 )
@@ -308,7 +308,7 @@ static void Out_Pads( BOARD* Pcb, FILE* outfile )
         nb_pads      = 1;
         pt_liste_pad = pt_start_liste = pt_end_liste;
         if( pt_start_liste < pt_liste_pad_limite )
-            netcode = (*pt_start_liste)->m_NetCode;
+            netcode = (*pt_start_liste)->GetNet();
     }
 }
 
@@ -332,9 +332,9 @@ static void ReturnNbViasAndTracks( BOARD* Pcb, int netcode, int* nb_vias,
 
     for( ; track != NULL; track = (TRACK*) track->Pnext )
     {
-        if( track->m_NetCode > netcode )
+        if( track->GetNet() > netcode )
             return;
-        if( track->m_NetCode != netcode )
+        if( track->GetNet() != netcode )
             continue;
         if( track->Type() == TYPEVIA )
             (*nb_vias)++;
@@ -362,12 +362,12 @@ static void GenExistantTracks( BOARD* Pcb, FILE* outfile,
 
     for( ; track != NULL; track = (TRACK*) track->Pnext )
     {
-        netcode = track->m_NetCode;
+        netcode = track->GetNet();
         if( netcode > current_net_code )
             return;
         if( netcode != current_net_code )
             continue;
-        plink = track->m_Sous_Netcode;
+        plink = track->GetSubNet();
         via_min_layer = track->GetLayer();
 
         if( track->Type() != type )

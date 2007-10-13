@@ -499,6 +499,7 @@ void WinEDA_BasePcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
         if( DC )
         {
             Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+            
             /* affichage chevelu general si necessaire */
             ReCompile_Ratsnest_After_Changes( DC );
         }
@@ -730,6 +731,7 @@ void WinEDA_BasePcbFrame::Rotate_Module( wxDC* DC, MODULE* module,
         if( !(module->m_Flags & IS_MOVED) ) /* Rotation simple */
         {
             module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+            
             /* Reaffichage chevelu general si necessaire */
             ReCompile_Ratsnest_After_Changes( DC );
         }

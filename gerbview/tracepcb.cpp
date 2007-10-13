@@ -112,7 +112,7 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
 		if ( printmasklayer != -1 )
 			if ( (track->ReturnMaskLayer() & printmasklayer) == 0 ) continue;
 
-        if( track->m_NetCode == 0 )    // StartPoint
+        if( track->GetNet() == 0 )    // StartPoint
         {
             if( nbpoints )
             {

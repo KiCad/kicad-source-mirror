@@ -268,6 +268,11 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     if( delta.y <= 0 )
         delta.y = 1;
 
+#if 0 && defined(DEBUG)
+    printf( "delta.x=%d delta.y=%d grid.x=%d, grid.y=%d, zoom=%d\n", 
+           delta.x, delta.y, GetScreen()->GetGrid().x, GetScreen()->GetGrid().y, zoom );
+#endif
+    
     switch( g_KeyPressed )
     {
     case EDA_PANNING_UP_KEY:

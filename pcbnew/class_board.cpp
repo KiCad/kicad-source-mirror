@@ -568,7 +568,7 @@ EQUIPOT* BOARD::FindNet( int anetcode ) const
     EQUIPOT* net = (EQUIPOT*) m_Equipots;
     while( net )
     {
-        if( net->m_NetCode == anetcode )
+        if( net->GetNet() == anetcode )
             break;
         net = (EQUIPOT*) net->Pnext;
     }

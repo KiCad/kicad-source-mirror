@@ -112,7 +112,7 @@ static void Append_1_Flash_ROND_GERBER( int Dcode_tool,
     track->m_Start = track->m_End = pos;
     NEGATE( track->m_Start.y );
     NEGATE( track->m_End.y );
-    track->m_NetCode = Dcode_tool;
+    track->SetNet( Dcode_tool );
     track->m_Shape   = S_SPOT_CIRCLE;
 
     Trace_Segment( frame->DrawPanel, DC, track, GR_OR );
@@ -145,7 +145,7 @@ static void Append_1_Flash_GERBER( int Dcode_index,
     track->m_Start = track->m_End = pos;
     NEGATE( track->m_Start.y );
     NEGATE( track->m_End.y );
-    track->m_NetCode = Dcode_index;
+    track->SetNet( Dcode_index );
 
     if( forme == OVALE )
         track->m_Shape = S_SPOT_OVALE;
@@ -187,7 +187,7 @@ static void Append_1_Line_GERBER( int Dcode_index,
     NEGATE( track->m_Start.y );
     track->m_End = endpoint;
     NEGATE( track->m_End.y );
-    track->m_NetCode = Dcode_index;
+    track->SetNet( Dcode_index );
 
     Trace_Segment( frame->DrawPanel, DC, track, GR_OR );
 }
@@ -279,13 +279,15 @@ static void Append_1_SEG_ARC_GERBER( int Dcode_index,
         }
     }
 
-    track->m_NetCode      = Dcode_index;
+    track->SetNet( Dcode_index );
     track->m_Param        = center.x;
-    track->m_Sous_Netcode = center.y;
+    track->SetSubNet( center.y );
 
     NEGATE( track->m_Start.y );
     NEGATE( track->m_End.y );
-    NEGATE( track->m_Sous_Netcode );
+    
+    //NEGATE( track->GetSubNet() );
+    track->SetSubNet( -track->GetSubNet() );
 
     Trace_Segment( frame->DrawPanel, DC, track, GR_OR );
 }
@@ -745,7 +747,7 @@ bool GERBER_Descr::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
             NEGATE( edge_poly->m_Start.y );
             edge_poly->m_End = m_CurrentPos;
             NEGATE( edge_poly->m_End.y );
-            edge_poly->m_NetCode = m_PolygonFillModeState;
+            edge_poly->SetNet( m_PolygonFillModeState );
             m_PreviousPos = m_CurrentPos;
             m_PolygonFillModeState = 1;
             break;

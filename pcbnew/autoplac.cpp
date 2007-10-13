@@ -449,7 +449,7 @@ int WinEDA_PcbFrame::GenPlaceBoard()
     TRACK TmpSegm( NULL );
 
     TmpSegm.SetLayer( -1 );
-    TmpSegm.m_NetCode = -1;
+    TmpSegm.SetNet( -1 );
     TmpSegm.m_Width   = g_GridRoutingSize / 2;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
@@ -970,7 +970,7 @@ void Build_PlacedPads_List( BOARD* Pcb )
             PtPad->m_physical_connexion = 0;
             PtPad->m_logical_connexion  = 0;
             PtPad->m_Parent = Module;
-            if( PtPad->m_NetCode )
+            if( PtPad->GetNet() )
                 Pcb->m_NbNodes++;
             pt_liste_pad++;
         }

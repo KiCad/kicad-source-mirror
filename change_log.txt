@@ -19,6 +19,40 @@ email address.
     with genliste.cpp.notused
 
 
+    
+2007-Oct-12 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ all
+  * m_NetCode is now private or protected throughout.
+    added SetNet() and GetNet() to all classes which have this member name.
+    ditto for m_Sous_NetCode, for which there is now SetSubNet() and GetSubNet().
++ pcbnew
+    added more disambiguating text to the PcbGeneralLocateAndDisplay() popup
+    menu for tracks. We need all the info we can get there I found after using
+    the software for many hours.
+  
+  
+  Jean-Pierre:    
+    
+  I never thought I would find a greater problem in using Kicad than having to
+  lay down all the ground and power tracks, rather that just linking vias into
+  pre-established zones or "tagged layers".  
+  
+  But I have, hundreds of my tracks and vias are showing
+  unconnected under my BGA, (where say the track or via is NetCode==0) and it
+  should not be, because the damn track ties the BGA pad to a nearby via.
+  How can the software be made to think these three items are on the same net,
+  without re-entering all the damn tracks?
+
+  This issue has been coming up for months on the user list, it must be dealt with now.
+  There is always the same lame answer, "make sure your tracks go to the center of the pads".
+  Nonsense, the software picked the track end points, not me, and grid was on when it did it.  
+  There are bugs here.
+  
+  Does Recalcule_all_net_connexion() work, and why is not called from anywhere?
+
+  
+    
 2007-Oct-11 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew

@@ -146,7 +146,7 @@ void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
         pt_segm->end   = Locate_Pad_Connecte( m_Pcb, pt_segm, END );
     }
 
-    test_1_net_connexion( DC, pt_track->m_NetCode );
+    test_1_net_connexion( DC, pt_track->GetNet() );
     pt_track->Display_Infos( this );
     GetScreen()->SetModify();
 }
@@ -219,7 +219,7 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
     Via->m_Flags   = IS_NEW;
     Via->m_Width   = g_DesignSettings.m_CurrentViaSize;
     Via->m_Shape   = g_DesignSettings.m_CurrentViaType;
-    Via->m_NetCode = g_HightLigth_NetCode;
+    Via->SetNet( g_HightLigth_NetCode );
     Via->m_Start   = Via->m_End = g_CurrentTrackSegment->m_End;
 
     int old_layer = GetScreen()->m_Active_Layer;
@@ -321,7 +321,7 @@ void WinEDA_PcbFrame::Affiche_Status_Net( wxDC* DC )
     if( pt_segm == NULL )
         m_Pcb->Display_Infos( this );
     else
-        test_1_net_connexion( DC, pt_segm->m_NetCode );
+        test_1_net_connexion( DC, pt_segm->GetNet() );
 }
 
 
@@ -362,7 +362,7 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
             pt_chevelu = (CHEVELU*) m_Pcb->m_Ratsnest;
             for( ii = m_Pcb->GetNumRatsnests(); ii > 0; pt_chevelu++, ii-- )
             {
-                if( pt_chevelu->m_NetCode == pt_pad->m_NetCode )
+                if( pt_chevelu->GetNet() == pt_pad->GetNet() )
                 {
                     if( (pt_chevelu->status & CH_VISIBLE) != 0 )
                         continue;

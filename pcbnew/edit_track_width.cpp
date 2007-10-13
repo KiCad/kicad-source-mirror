@@ -87,7 +87,7 @@ int nb_segm_non_modifies = 0;
 	/* balayage des segments */
 	for( pt_segm = m_Pcb->m_Track; pt_segm != NULL; pt_segm = (TRACK*) pt_segm->Pnext )
 		{
-		if ( Netcode != pt_segm->m_NetCode ) /* mauvaise piste */
+		if ( Netcode != pt_segm->GetNet() ) /* mauvaise piste */
 			continue ;
 		/* piste d'un net trouvee */
 		errdrc = Edit_TrackSegm_Width(DC, pt_segm);

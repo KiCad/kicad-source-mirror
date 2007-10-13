@@ -43,7 +43,7 @@ void Affiche_Infos_Equipot( int netcode, WinEDA_BasePcbFrame* frame )
     {
         for( pad = module->m_Pads; pad != 0; pad = (D_PAD*) pad->Pnext )
         {
-            if( pad->m_NetCode == netcode )
+            if( pad->GetNet() == netcode )
                 ii++;
         }
     }
@@ -55,7 +55,7 @@ void Affiche_Infos_Equipot( int netcode, WinEDA_BasePcbFrame* frame )
     {
         ii++;
         if( Struct->Type() == TYPEVIA )
-            if( ( (SEGVIA*) Struct )->m_NetCode == netcode )
+            if( ( (SEGVIA*) Struct )->GetNet() == netcode )
                 nb_vias++;
     }
 

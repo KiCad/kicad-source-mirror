@@ -7,10 +7,13 @@
 
 class EQUIPOT : public BOARD_ITEM
 {
+private:
+    int        m_NetCode;       // numero de code interne du net
+
+
 public:
     wxString   m_Netname;       // nom du net
     int        status;          // no route, hight light...
-    int        m_NetCode;       // numero de code interne du net
     int        m_NbNodes;       // nombre de pads appartenant au net
     int        m_NbLink;        // nombre de chevelus
     int        m_NbNoconn;      // nombre de chevelus actifs
@@ -32,6 +35,13 @@ public:
     int     ReadEquipotDescr( FILE* File, int* LineNum );
     int     WriteEquipotDescr( FILE* File );
 
+    /**
+     * Function GetNet
+     * @return int - the netcode
+     */
+    int GetNet() const { return m_NetCode; }
+    void SetNet( int aNetCode ) { m_NetCode = aNetCode; }
+     
     
     /**
      * Function GetClass

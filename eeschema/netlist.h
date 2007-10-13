@@ -70,7 +70,9 @@ public:
     SCH_SCREEN*     m_Screen;           /* Ecran d'appartenance */
     NetObjetType    m_Type;
     int             m_ElectricalType;   /* Pour Pins et sheet labels: type electrique */
+private:    
     int             m_NetCode;          /* pour elements simples */
+public:    
     int             m_BusNetCode;       /* pour connexions type bus */
     int             m_Member;           /* pour les labels type BUSWIRE ( labels de bus eclate )
                                          *  numero de membre */
@@ -84,7 +86,9 @@ public:
 #if defined(DEBUG)
     void Show( std::ostream& out, int ndx );
 #endif
-    
+
+    void SetNet( int aNetCode ) { m_NetCode = aNetCode; }
+    int GetNet() const { return m_NetCode; }
 };
 
 

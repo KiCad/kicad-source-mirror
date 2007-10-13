@@ -109,7 +109,7 @@ void Build_1_Pad_SegmentsToDrag(WinEDA_DrawPanel * panel, wxDC * DC, D_PAD * PtP
 */
 {
 TRACK * Track;
-int net_code = PtPad->m_NetCode;
+int net_code = PtPad->GetNet();
 int MasqueLayer;
 wxPoint pos;
 BOARD * pcb = ((WinEDA_BasePcbFrame*)(panel->m_Parent))->m_Pcb;
@@ -120,7 +120,7 @@ BOARD * pcb = ((WinEDA_BasePcbFrame*)(panel->m_Parent))->m_Pcb;
 	MasqueLayer = PtPad->m_Masque_Layer;
 	for( ; Track != NULL; Track = (TRACK*)Track->Pnext )
 	{
-		if( Track->m_NetCode != net_code ) break;	/* hors zone */
+		if( Track->GetNet() != net_code ) break;	/* hors zone */
 		if( (MasqueLayer & Track->ReturnMaskLayer()) == 0 ) continue; /* couches differentes */
 		if( pos == Track->m_Start )
 		{
@@ -172,7 +172,7 @@ BOARD * pcb = ((WinEDA_BasePcbFrame*)(panel->m_Parent))->m_Pcb;
 
 	for( ; Track != NULL; Track = (TRACK*)Track->Pnext )
 	{
-		if( Track->m_NetCode != net_code ) break;	/* hors zone */
+		if( Track->GetNet() != net_code ) break;	/* hors zone */
 		if( (MasqueLayer & Track->ReturnMaskLayer()) == 0 ) continue; /* couches differentes */
 		if ( Track->m_Flags & IS_DRAGGED) continue;		// already in list
 		if( Track->m_Start == point )

@@ -110,7 +110,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
     } // Fin traitement si trace en cours
 
 
-    current_net_code = Track->m_NetCode;
+    current_net_code = Track->GetNet();
     Track->Draw( DrawPanel, DC, GR_XOR );
 
     SaveItemEfface( Track, 1 );
@@ -128,7 +128,7 @@ void WinEDA_PcbFrame::Delete_Track( wxDC* DC, TRACK* Track )
 {
     if( Track != NULL )
     {
-        int current_net_code = Track->m_NetCode;
+        int current_net_code = Track->GetNet();
         Supprime_Une_Piste( DC, Track );
         GetScreen()->SetModify();
         test_1_net_connexion( DC, current_net_code );
@@ -152,7 +152,7 @@ void WinEDA_PcbFrame::Delete_net( wxDC* DC, TRACK* Track )
 
     if( IsOK( this, _( "Delete NET ?" ) ) )
     {
-        net_code_delete = pt_segm->m_NetCode;
+        net_code_delete = pt_segm->GetNet();
         /* Recherche du debut de la zone des pistes du net_code courant */
         pt_start = m_Pcb->m_Track->GetStartNetCode( net_code_delete );
 
@@ -160,7 +160,7 @@ void WinEDA_PcbFrame::Delete_net( wxDC* DC, TRACK* Track )
         pt_segm = pt_start;
         for( ii = 0; pt_segm != NULL; pt_segm = (TRACK*) pt_segm->Pnext )
         {
-            if( pt_segm->m_NetCode != net_code_delete )
+            if( pt_segm->GetNet() != net_code_delete )
                 break;
             ii++;
         }

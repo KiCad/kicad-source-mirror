@@ -95,7 +95,7 @@
  *  Les Flash  sont représentées par des DRAWSEGMENTS
  *      - ronds ou ovales: DRAWSEGMENTS
  *      - rectangles: DRAWSEGMENTS
- *  la reference aux D-CODES est placée dans le membre m_NetCode
+ *  la reference aux D-CODES est placée dans le membre GetNet()
  */
 
 

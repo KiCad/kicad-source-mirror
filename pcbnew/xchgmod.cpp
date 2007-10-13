@@ -559,7 +559,7 @@ MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
     for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
     {
         pt_pad->m_Netname = wxEmptyString;
-        pt_pad->m_NetCode = 0;
+        pt_pad->SetNet( 0 );
         pt_old_pad = OldModule->m_Pads;
         for( ; pt_old_pad != NULL; pt_old_pad = (D_PAD*) pt_old_pad->Pnext )
         {
@@ -567,7 +567,7 @@ MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
                          sizeof(pt_pad->m_Padname) ) == 0 )
             {
                 pt_pad->m_Netname = pt_old_pad->m_Netname;
-                pt_pad->m_NetCode = pt_old_pad->m_NetCode;
+                pt_pad->SetNet( pt_old_pad->GetNet() );
             }
         }
     }

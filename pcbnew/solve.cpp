@@ -361,7 +361,7 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
     masque_layers = masque_layer_TOP | masque_layer_BOTTOM;
 
     pt_cur_ch = pt_chevelu;
-    current_net_code   = pt_chevelu->m_NetCode;
+    current_net_code   = pt_chevelu->GetNet();
     pad_masque_layer_s = pt_cur_ch->pad_start->m_Masque_Layer;
     pad_masque_layer_e = pt_cur_ch->pad_end->m_Masque_Layer;
 
@@ -936,7 +936,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
                                                (g_GridRoutingSize * col);
         g_CurrentTrackSegment->m_Width   = g_DesignSettings.m_CurrentViaSize;
         g_CurrentTrackSegment->m_Shape   = g_DesignSettings.m_CurrentViaType;
-        g_CurrentTrackSegment->m_NetCode = current_net_code;
+        g_CurrentTrackSegment->SetNet( current_net_code );
     }
     else    /* Placement d'un segment standard */
     {
@@ -958,7 +958,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
         g_CurrentTrackSegment->SetState( SEGM_AR, ON );
         g_CurrentTrackSegment->m_End.x   = pcb->m_BoundaryBox.m_Pos.x + (g_GridRoutingSize * row);
         g_CurrentTrackSegment->m_End.y   = pcb->m_BoundaryBox.m_Pos.y + (g_GridRoutingSize * col);
-        g_CurrentTrackSegment->m_NetCode = current_net_code;
+        g_CurrentTrackSegment->SetNet( current_net_code );
 
         if( g_CurrentTrackSegment->Pback == NULL ) /* Start Piste */
         {
@@ -1090,7 +1090,7 @@ static void Place_Piste_en_Buffer( WinEDA_PcbFrame* pcbframe, wxDC* DC )
 
     Trace_Une_Piste( panel, DC, g_FirstTrackSegment, g_TrackSegmentCount, GR_OR );
 
-    pcbframe->test_1_net_connexion( DC, g_FirstTrackSegment->m_NetCode );
+    pcbframe->test_1_net_connexion( DC, g_FirstTrackSegment->GetNet() );
 
     /* Trace de la forme exacte de la piste en BOARD */
     for( pt_track = g_FirstTrackSegment; ; pt_track = (TRACK*) pt_track->Pnext )

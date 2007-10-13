@@ -82,8 +82,12 @@ static bool InstallBlockCmdFrame( WinEDA_BasePcbFrame* parent,
 
     parent->DrawPanel->m_IgnoreMouseEvents = TRUE;
     WinEDA_ExecBlockCmdFrame* frame = new WinEDA_ExecBlockCmdFrame( parent, title );
-    nocmd = frame->ShowModal(); frame->Destroy();
-    parent->GetScreen()->     m_Curseur = oldpos;
+    
+    nocmd = frame->ShowModal(); 
+    frame->Destroy();
+    
+    parent->GetScreen()->m_Curseur = oldpos;
+    
     parent->DrawPanel->MouseToCursorSchema();
     parent->DrawPanel->m_IgnoreMouseEvents = FALSE;
 
@@ -494,6 +498,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
     masque_layer = EDGE_LAYER;
     if( Block_Include_Draw_Items )
         masque_layer = ALL_LAYERS;
+    
     if( !Block_Include_Edges_Items )
         masque_layer &= ~EDGE_LAYER;
 

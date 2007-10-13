@@ -76,7 +76,7 @@ void WinEDA_PcbFrame::Attribut_net( wxDC* DC, int net_code, bool Flag_On )
     {
         for( ; Track != NULL; Track = (TRACK*) Track->Pnext )
         {
-            if( net_code == Track->m_NetCode )
+            if( net_code == Track->GetNet() )
                 break;
         }
     }
@@ -84,7 +84,7 @@ void WinEDA_PcbFrame::Attribut_net( wxDC* DC, int net_code, bool Flag_On )
     DrawPanel->CursorOff( DC );     // Erase cursor shape
     while( Track )                  /* Flag change */
     {
-        if( (net_code >= 0 ) && (net_code != Track->m_NetCode) )
+        if( (net_code >= 0 ) && (net_code != Track->GetNet()) )
             break;
         GetScreen()->SetModify();
         Track->SetState( SEGM_FIXE, Flag_On );

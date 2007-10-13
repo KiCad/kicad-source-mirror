@@ -340,7 +340,7 @@ D_CODE * pt_Dcode;	/* Pointeur sur le D code*/
 	track = m_Pcb->m_Track;
 	for ( ; track != NULL ; track = (TRACK*) track->Pnext )
 		{
-		pt_Dcode = ReturnToolDescr(track->GetLayer(), track->m_NetCode);
+		pt_Dcode = ReturnToolDescr(track->GetLayer(), track->GetNet());
 		pt_Dcode->m_InUse = TRUE;
 
 		if (		// Line Item

@@ -543,13 +543,13 @@ void WinEDA_PcbFrame::CaptureNetName( wxDC* DC )
         if( pt_pad )
         {
             pt_pad->Display_Infos( this );
-            netcode = pt_pad->m_NetCode;
+            netcode = pt_pad->GetNet();
         }
     }
     else
     {
         adrpiste->Display_Infos( this );
-        netcode = adrpiste->m_NetCode;
+        netcode = adrpiste->GetNet();
     }
 
     // Mise en surbrillance du net
@@ -584,7 +584,7 @@ static void Display_Zone_Netname( WinEDA_PcbFrame* frame )
     {
         for( ; pt_equipot != NULL; pt_equipot = (EQUIPOT*) pt_equipot->Pnext )
         {
-            if( pt_equipot->m_NetCode == g_HightLigth_NetCode )
+            if( pt_equipot->GetNet() == g_HightLigth_NetCode )
                 break;
         }
 
@@ -920,7 +920,7 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
     TRACK* pt_segm = m_Pcb->m_Track;
     for( ; pt_segm != NULL; pt_segm = (TRACK*) pt_segm->Pnext )
     {
-        if( g_HightLigth_NetCode != pt_segm->m_NetCode )
+        if( g_HightLigth_NetCode != pt_segm->GetNet() )
             continue;
         if( pt_segm->GetLayer() != GetScreen()->m_Active_Layer )
             continue;
@@ -1087,7 +1087,7 @@ static void Genere_Segments_Zone( WinEDA_PcbFrame* frame, wxDC* DC, int net_code
                     /* un segment avait debute de longueur > 0 */
                     pt_track = new SEGZONE( frame->m_Pcb );
                     pt_track->SetLayer( layer );
-                    pt_track->m_NetCode   = net_code;
+                    pt_track->SetNet( net_code );
                     pt_track->m_Width     = g_GridRoutingSize;
                     pt_track->m_Start.x   = ux0; pt_track->m_Start.y = uy0;
                     pt_track->m_End.x     = ux1; pt_track->m_End.y = uy1;
@@ -1126,7 +1126,7 @@ static void Genere_Segments_Zone( WinEDA_PcbFrame* frame, wxDC* DC, int net_code
                     pt_track = new SEGZONE( frame->m_Pcb );
                     pt_track->SetLayer( layer );
                     pt_track->m_Width     = g_GridRoutingSize;
-                    pt_track->m_NetCode   = net_code;
+                    pt_track->SetNet( net_code );
                     pt_track->m_Start.x   = ux0; pt_track->m_Start.y = uy0;
                     pt_track->m_End.x     = ux1; pt_track->m_End.y = uy1;
                     pt_track->m_TimeStamp = s_TimeStamp;
@@ -1310,7 +1310,7 @@ static bool Genere_Pad_Connexion( WinEDA_PcbFrame* frame, wxDC* DC, int layer )
         pt_pad = *pt_liste_pad;
 
         /* la pastille doit etre du meme net */
-        if( pt_pad->m_NetCode != g_HightLigth_NetCode )
+        if( pt_pad->GetNet() != g_HightLigth_NetCode )
             continue;
 
         /* la pastille doit exister sur la couche */
@@ -1329,7 +1329,7 @@ static bool Genere_Pad_Connexion( WinEDA_PcbFrame* frame, wxDC* DC, int layer )
         pt_pad = *pt_liste_pad;
 
         /* la pastille doit etre du meme net */
-        if( pt_pad->m_NetCode != g_HightLigth_NetCode )
+        if( pt_pad->GetNet() != g_HightLigth_NetCode )
             continue;
         /* la pastille doit exister sur la couche */
         if( (pt_pad->m_Masque_Layer & g_TabOneLayerMask[layer]) == 0 )
@@ -1365,7 +1365,7 @@ static bool Genere_Pad_Connexion( WinEDA_PcbFrame* frame, wxDC* DC, int layer )
 
             pt_track->SetLayer( layer );
             pt_track->m_Width   = g_DesignSettings.m_CurrentTrackWidth;
-            pt_track->m_NetCode = g_HightLigth_NetCode;
+            pt_track->SetNet( g_HightLigth_NetCode );
             pt_track->start       = pt_pad;
             pt_track->m_Start.x   = cX; pt_track->m_Start.y = cY;
             pt_track->m_End.x     = cX + sommet[jj][0];

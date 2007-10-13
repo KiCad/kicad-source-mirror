@@ -45,7 +45,7 @@ void WinEDA_PcbFrame::UnDeleteItem( wxDC* DC )
         }
 
         PtStruct = g_UnDeleteStack[g_UnDeleteStackPtr];
-        net_code = ( (TRACK*) PtStruct )->m_NetCode;
+        net_code = ( (TRACK*) PtStruct )->GetNet();
         pt_track = ( (TRACK*) PtStruct )->GetBestInsertPoint( m_Pcb );
         ( (TRACK*) PtStruct )->Insert( m_Pcb, pt_track );
         g_UnDeleteStack[g_UnDeleteStackPtr] = NULL;

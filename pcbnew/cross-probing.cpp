@@ -85,7 +85,7 @@ void RemoteCommand(  const char* cmdline )
             pad = ReturnPad( module, pinName );
 
         if( pad )
-            netcode = pad->m_NetCode;
+            netcode = pad->GetNet();
 
         if( netcode > 0 )               /* hightlighted the net selected net*/
         {

@@ -588,7 +588,7 @@ int         GetCommandOptions( const int argc, const char** argv, const char* st
                                const char** optarg, int* optind );
 
 
-void        valeur_param( int valeur, wxString& buf_texte );
+const wxString& valeur_param( int valeur, wxString& buf_texte );
 
 /* Retourne pour affichage la valeur d'un parametre, selon type d'unites choisies
  *  entree : valeur en mils , buffer de texte

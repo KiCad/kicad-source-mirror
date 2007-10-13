@@ -21,6 +21,9 @@ class Pcb3D_GLCanvas;
 /* Definition type Structure d'un pad */
 class D_PAD : public BOARD_ITEM
 {
+private:
+    int     m_NetCode;              // Net number for fast comparisons
+    
 public:
     union
     {
@@ -54,7 +57,6 @@ public:
     int     m_Attribut;             // NORMAL, SMD, CONN
     int     m_Orient;               // in 1/10 degrees
 
-    int     m_NetCode;              // Net number for fast comparisons
     int     m_logical_connexion;    // variable used in rastnest computations
                                     // handle block number in ratsnet connection
 
@@ -88,6 +90,15 @@ public:
     void            ComputeRayon();                   // compute m_Rayon, rayon du cercle exinscrit
     const wxPoint   ReturnShapePos();                 // retourne la position
 
+    
+    /**
+     * Function GetNet
+     * @return int - the netcode
+     */
+    int GetNet() const { return m_NetCode; }
+    void SetNet( int aNetCode ) { m_NetCode = aNetCode; }
+     
+    
     /**
      * Function Display_Infos
      * has knowledge about the frame and how and where to put status information

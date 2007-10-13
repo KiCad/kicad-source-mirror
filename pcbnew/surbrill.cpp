@@ -46,7 +46,7 @@ void WinEDA_PcbFrame::Liste_Equipot( wxCommandEvent& event )
         if( !WildCompareString( msg, Equipot->m_Netname, FALSE ) )
             continue;
 
-        Line.Printf( wxT( "net_code = %3.3d  [%.16s] " ), Equipot->m_NetCode,
+        Line.Printf( wxT( "net_code = %3.3d  [%.16s] " ), Equipot->GetNet(),
                     Equipot->m_Netname.GetData() );
         List->Append( Line );
     }
@@ -64,7 +64,7 @@ void WinEDA_PcbFrame::Liste_Equipot( wxCommandEvent& event )
             continue;
         if( ii == jj )
         {
-            ii = Equipot->m_NetCode;
+            ii = Equipot->GetNet();
             break;
         }
         jj++;
@@ -99,7 +99,7 @@ int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
     pt_piste = Locate_Pistes( m_Pcb->m_Track, masquelayer, CURSEUR_OFF_GRILLE );
     if( pt_piste )
     {
-        code = g_HightLigth_NetCode = pt_piste->m_NetCode;
+        code = g_HightLigth_NetCode = pt_piste->GetNet();
         Hight_Light( DC );
     }
     else
@@ -107,7 +107,7 @@ int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
         pt_pad = Locate_Any_Pad( m_Pcb, CURSEUR_OFF_GRILLE );
         if( pt_pad != NULL )
         {
-            code = g_HightLigth_NetCode = pt_pad->m_NetCode;
+            code = g_HightLigth_NetCode = pt_pad->GetNet();
             Hight_Light( DC );
             SendMessageToEESCHEMA( pt_pad );
         }
@@ -157,7 +157,7 @@ void WinEDA_PcbFrame::DrawHightLight( wxDC* DC, int NetCode )
     /* Redraw track and vias: */
     for( pts = m_Pcb->m_Track; pts != NULL; pts = (TRACK*) pts->Pnext )
     {
-        if( pts->m_NetCode == NetCode )
+        if( pts->GetNet() == NetCode )
         {
             pts->Draw( DrawPanel, DC, draw_mode );
         }
@@ -176,7 +176,7 @@ static void Pad_Surbrillance( WinEDA_DrawPanel* panel,
     /* trace des pastilles */
     for( pt_pad = Module->m_Pads; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
     {
-        if( pt_pad->m_NetCode == NetCode )
+        if( pt_pad->GetNet() == NetCode )
         {
             pt_pad->Draw( panel, DC, wxPoint( 0, 0 ), draw_mode );
         }

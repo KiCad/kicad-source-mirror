@@ -200,7 +200,7 @@ void PlaceCells( BOARD* Pcb, int net_code, int flag )
     ptr = (LISTE_PAD*) Pcb->m_Pads; ii = Pcb->m_NbPads;
     for( ; ii > 0; ii--, ptr++ )
     {
-        if( (net_code != (*ptr)->m_NetCode ) || (flag & FORCE_PADS) )
+        if( (net_code != (*ptr)->GetNet() ) || (flag & FORCE_PADS) )
         {
             Place_1_Pad_Board( Pcb, *ptr, HOLE, marge, WRITE_CELL );
         }
@@ -230,7 +230,7 @@ void PlaceCells( BOARD* Pcb, int net_code, int flag )
                 TmpSegm->m_Shape   = ( (EDGE_MODULE*) PtModStruct )->m_Shape;
                 TmpSegm->m_Width   = ( (EDGE_MODULE*) PtModStruct )->m_Width;
                 TmpSegm->m_Param   = ( (EDGE_MODULE*) PtModStruct )->m_Angle;
-                TmpSegm->m_NetCode = -1;
+                TmpSegm->SetNet( -1 );
 
                 TraceSegmentPcb( Pcb, TmpSegm, HOLE, marge, WRITE_CELL );
                 TraceSegmentPcb( Pcb, TmpSegm, VIA_IMPOSSIBLE, via_marge,
@@ -270,7 +270,7 @@ void PlaceCells( BOARD* Pcb, int net_code, int flag )
             TmpSegm->m_Shape   = DrawSegm->m_Shape;
             TmpSegm->m_Width   = DrawSegm->m_Width;
             TmpSegm->m_Param   = DrawSegm->m_Angle;
-            TmpSegm->m_NetCode = -1;
+            TmpSegm->SetNet( -1 );
 
             TraceSegmentPcb( Pcb, TmpSegm, type_cell, marge, WRITE_CELL );
 
@@ -313,7 +313,7 @@ void PlaceCells( BOARD* Pcb, int net_code, int flag )
     pt_segm = Pcb->m_Track;
     for( ; pt_segm != NULL; pt_segm = (TRACK*) pt_segm->Pnext )
     {
-        if( net_code == pt_segm->m_NetCode )
+        if( net_code == pt_segm->GetNet() )
             continue;
         TraceSegmentPcb( Pcb, pt_segm, HOLE, marge, WRITE_CELL );
         TraceSegmentPcb( Pcb, pt_segm, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
@@ -323,7 +323,7 @@ void PlaceCells( BOARD* Pcb, int net_code, int flag )
     pt_segm = (TRACK*) Pcb->m_Zone;
     for( ; pt_segm != NULL; pt_segm = (TRACK*) pt_segm->Pnext )
     {
-        if( net_code == pt_segm->m_NetCode )
+        if( net_code == pt_segm->GetNet() )
             continue;
         TraceSegmentPcb( Pcb, pt_segm, HOLE, marge, WRITE_CELL );
         TraceSegmentPcb( Pcb, pt_segm, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
@@ -357,7 +357,7 @@ int Build_Work( BOARD* Pcb, CHEVELU* pt_base_chevelu )
             continue;
         pt_pad = pt_rats->pad_start;
 
-        current_net_code = pt_pad->m_NetCode;
+        current_net_code = pt_pad->GetNet();
         pt_ch = pt_rats;
 
         r1 = (pt_pad->m_Pos.y - Pcb->m_BoundaryBox.m_Pos.y + demi_pas ) / g_GridRoutingSize;

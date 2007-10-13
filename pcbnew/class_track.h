@@ -32,14 +32,14 @@ public:
     BOARD_ITEM*     start;          // pointers on a connected item (pad or track)
     BOARD_ITEM*     end;            
     
-    int             m_NetCode;      // Net number
-    int             m_Sous_Netcode; /* In rastnest routines : for the current net,
-                                     *  block number (number common to the current connected items found) */
-
     // chain = 0 indique une connexion non encore traitee
     int             m_Param;        // Auxiliary variable ( used in some computations )
 
 protected:    
+    int             m_NetCode;      // Net number
+    int             m_Sous_Netcode; /* In rastnest routines : for the current net,
+                                     *  block number (number common to the current connected items found) */
+
     TRACK( const TRACK& track );    // protected so Copy() is used instead.
     
 public:
@@ -90,6 +90,30 @@ public:
     /* Recherche de la fin du net */
     TRACK*  GetEndNetCode( int NetCode );
 
+    /**
+     * Function GetNet
+     * @return int - the net code.
+     */
+    int GetNet() const { return m_NetCode; }
+    void SetNet( int aNetCode ) { m_NetCode = aNetCode; }
+
+
+    /**
+     * Function GetSubNet
+     * @return int - the sub net code.
+     */
+    int GetSubNet() const { return m_Sous_Netcode; }
+    void SetSubNet( int aSubNetCode ) { m_Sous_Netcode = aSubNetCode; }
+
+    
+    /**
+     * Function GetLength
+     * returns the length of the track using the hypotenuse calculation.
+     * @return double - the length of the track
+     */
+    double GetLength() const;
+    
+    
     /* Display on screen: */
     void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode );
 

@@ -28,8 +28,8 @@ TRACK::TRACK( BOARD_ITEM* StructFather, KICAD_T idtype ) :
     m_Width        = 0;
     m_Shape        = S_SEGMENT;
     start          = end = NULL;
-    m_NetCode      = 0;
-    m_Sous_Netcode = 0;
+    SetNet( 0 );
+    SetSubNet( 0 );
     m_Drill        = -1;
     m_Param        = 0;
 }
@@ -73,7 +73,7 @@ TRACK::TRACK( const TRACK& Source ) :
     BOARD_ITEM( Source )
 {
     m_Shape     = Source.m_Shape;
-    m_NetCode   = Source.m_NetCode;
+    SetNet( Source.GetNet() );
     m_Flags     = Source.m_Flags;
     m_TimeStamp = Source.m_TimeStamp;
     SetStatus( Source.ReturnStatus() );
@@ -81,7 +81,7 @@ TRACK::TRACK( const TRACK& Source ) :
     m_End   = Source.m_End;
     m_Width = Source.m_Width;
     m_Drill = Source.m_Drill;
-    m_Sous_Netcode = Source.m_Sous_Netcode;
+    SetSubNet( Source.GetSubNet() );
     m_Param = Source.m_Param;
 }
 
@@ -122,6 +122,21 @@ bool TRACK::IsNull()
 
 
 /*************************************************************/
+double TRACK::GetLength() const
+/*************************************************************/
+{
+    int dx = m_Start.x - m_End.x;
+    int dy = m_Start.y - m_End.y;
+
+    double dist = ( (double) dx * dx ) + ( (double) dy * dy );
+    
+    dist = sqrt( dist );
+    
+    return dist;
+}
+
+
+/*************************************************************/
 int TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
 /*************************************************************/
 
@@ -133,14 +148,14 @@ int TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
  *  if min_dist < 0: min_dist = track_width/2
  */
 {
-    int dx, dy;
     int result = 0;
 
     if( min_dist < 0 )
         min_dist = m_Width / 2;
 
-    dx = m_Start.x - point.x;
-    dy = m_Start.y - point.y;
+    int dx = m_Start.x - point.x;
+    int dy = m_Start.y - point.y;
+    
     if( min_dist == 0 )
     {
         if( (dx == 0) && (dy == 0 ) )
@@ -410,12 +425,12 @@ TRACK* TRACK::GetBestInsertPoint( BOARD* Pcb )
     /* Traitement du debut de liste */
     if( track == NULL )
         return NULL;                    /* pas de piste ! */
-    if( m_NetCode < track->m_NetCode )  /* insertion en tete de liste */
+    if( GetNet() < track->GetNet() )  /* insertion en tete de liste */
         return NULL;
 
     while( (NextTrack = (TRACK*) track->Pnext) != NULL )
     {
-        if( NextTrack->m_NetCode > this->m_NetCode )
+        if( NextTrack->GetNet() > this->GetNet() )
             break;
         track = NextTrack;
     }
@@ -436,16 +451,19 @@ TRACK* TRACK::GetStartNetCode( int NetCode )
     int    ii    = 0;
 
     if( NetCode == -1 )
-        NetCode = m_NetCode;
+        NetCode = GetNet();
 
     while( Track != NULL )
     {
-        if( Track->m_NetCode > NetCode )
+        if( Track->GetNet() > NetCode )
             break;
-        if( Track->m_NetCode == NetCode )
+        
+        if( Track->GetNet() == NetCode )
         {
-            ii++; break;
+            ii++; 
+            break;
         }
+        
         Track = (TRACK*) Track->Pnext;
     }
 
@@ -468,17 +486,20 @@ TRACK* TRACK::GetEndNetCode( int NetCode )
         return NULL;
 
     if( NetCode == -1 )
-        NetCode = m_NetCode;
+        NetCode = GetNet();
 
     while( Track != NULL )
     {
         NextS = (TRACK*) Track->Pnext;
-        if( Track->m_NetCode == NetCode )
+        if( Track->GetNet() == NetCode )
             ii++;
+        
         if( NextS == NULL )
             break;
-        if( NextS->m_NetCode > NetCode )
+        
+        if( NextS->GetNet() > NetCode )
             break;
+        
         Track = NextS;
     }
 
@@ -539,7 +560,7 @@ bool TRACK::WriteTrackDescr( FILE* File )
              m_Start.x, m_Start.y, m_End.x, m_End.y, m_Width, m_Drill );
 
     fprintf( File, "De %d %d %d %lX %X\n",
-            m_Layer, type, m_NetCode,
+            m_Layer, type, GetNet(),
             m_TimeStamp, ReturnStatus() );
     
     return TRUE;
@@ -724,7 +745,7 @@ void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
       || Type() == TYPEZONE
       || Type() == TYPEVIA )
     {
-        EQUIPOT* equipot = ((WinEDA_PcbFrame*)frame)->m_Pcb->FindNet( m_NetCode );
+        EQUIPOT* equipot = ((WinEDA_PcbFrame*)frame)->m_Pcb->FindNet( GetNet() );
         
         if( equipot )
             msg = equipot->m_Netname;
@@ -734,7 +755,7 @@ void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
         Affiche_1_Parametre( frame, text_pos, _( "NetName" ), msg, RED );
 
         /* Affiche net code :*/
-        msg.Printf( wxT( "%d .%d" ), m_NetCode, m_Sous_Netcode );
+        msg.Printf( wxT( "%d .%d" ), GetNet(), GetSubNet() );
         text_pos += 18;
         Affiche_1_Parametre( frame, text_pos, _( "NetCode" ), msg, RED );
     }
@@ -861,7 +882,7 @@ void TRACK::Show( int nestLevel, std::ostream& os )
         " layer=\""     << m_Layer      << '"' <<
         " width=\""     << m_Width      << '"' <<
 //        " drill=\""     << m_Drill      << '"' <<
-        " netcode=\""   << m_NetCode    << "\">" <<
+        " netcode=\""   << GetNet()    << "\">" <<
         "<start"        << m_Start      << "/>" <<
         "<end"          << m_End        << "/>";
         
@@ -900,7 +921,7 @@ void SEGVIA::Show( int nestLevel, std::ostream& os )
                         << ReturnPcbLayerName( botLayer ).Trim().mb_str() << '"' <<
         " width=\""     << m_Width      << '"' <<
         " drill=\""     << m_Drill      << '"' <<
-        " netcode=\""   << m_NetCode    << "\">" <<
+        " netcode=\""   << GetNet()    << "\">" <<
         "<pos"          << m_Start      << "/>";
         
     os << "</" << GetClass().Lower().mb_str() << ">\n"; 

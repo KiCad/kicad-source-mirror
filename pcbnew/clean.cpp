@@ -207,9 +207,9 @@ static void suppression_piste_non_connectee( WinEDA_PcbFrame* frame, wxDC* DC )
         if( frame->DrawPanel->m_AbortRequest )
             break;
 
-        if( PtSegm->m_NetCode != oldnetcode )
+        if( PtSegm->GetNet() != oldnetcode )
         {
-            PtStartNetCode = PtSegm; oldnetcode = PtSegm->m_NetCode;
+            PtStartNetCode = PtSegm; oldnetcode = PtSegm->GetNet();
         }
 
         flag_erase = 0; type_end = 0;
@@ -381,7 +381,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
                 continue;
             if( PtSegm->GetLayer() != pt_aux->GetLayer() )
                 continue;
-            if( PtSegm->m_NetCode != pt_aux->m_NetCode )
+            if( PtSegm->GetNet() != pt_aux->GetNet() )
                 break;
 
             if( (PtSegm->m_Start.x == pt_aux->m_Start.x )
@@ -676,14 +676,14 @@ int Netliste_Controle_piste( WinEDA_PcbFrame* frame, wxDC* DC, int affiche )
         net_code_s = -1;
         if( (PtSegm->start != NULL)
            && ( ( (EDA_BaseStruct*) (PtSegm->start) )->Type() == TYPEPAD ) )
-            net_code_s = ( (D_PAD*) (PtSegm->start) )->m_NetCode;
+            net_code_s = ( (D_PAD*) (PtSegm->start) )->GetNet();
 
         else
         {
             pt_aux = Locate_Piste_Connectee( PtSegm, frame->m_Pcb->m_Track,
                                              NULL, START );
             if( pt_aux )
-                net_code_s = pt_aux->m_NetCode;
+                net_code_s = pt_aux->GetNet();
         }
         if( net_code_s < 0 )
             continue;/* Extremite en l'air */
@@ -692,14 +692,14 @@ int Netliste_Controle_piste( WinEDA_PcbFrame* frame, wxDC* DC, int affiche )
         net_code_e = -1;
         if( (PtSegm->end != NULL)
          && ( ( (EDA_BaseStruct*) (PtSegm->end) )->Type() == TYPEPAD ) )
-            net_code_e = ( (D_PAD*) (PtSegm->end) )->m_NetCode;
+            net_code_e = ( (D_PAD*) (PtSegm->end) )->GetNet();
 
         else
         {
             pt_aux = Locate_Piste_Connectee( PtSegm, frame->m_Pcb->m_Track,
                                              NULL, END );
             if( pt_aux )
-                net_code_e = pt_aux->m_NetCode;
+                net_code_e = pt_aux->GetNet();
         }
 
         if( net_code_e < 0 )

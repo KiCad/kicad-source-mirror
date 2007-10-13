@@ -44,7 +44,7 @@ void Draw_Track_Buffer( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, int draw_
             if( (Track->ReturnMaskLayer() & printmasklayer) == 0 )
                 continue;
 
-        if( (dcode_hightlight == Track->m_NetCode)
+        if( (dcode_hightlight == Track->GetNet())
            && (Track->GetLayer() == layer) )
             Trace_Segment( panel, DC, Track, draw_mode | GR_SURBRILL );
         else
@@ -122,13 +122,13 @@ void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mo
         {
             GRArc1( &panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
                     track->m_End.x, track->m_End.y,
-                    track->m_Param, track->m_Sous_Netcode, 0, color );
+                    track->m_Param, track->GetSubNet(), 0, color );
         }
         else
         {
             GRArc1( &panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
                     track->m_End.x, track->m_End.y,
-                    track->m_Param, track->m_Sous_Netcode,
+                    track->m_Param, track->GetSubNet(),
                     track->m_Width, color );
         }
     }
@@ -344,7 +344,7 @@ void Affiche_DCodes_Pistes( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, int d
             pos.x = (track->m_Start.x + track->m_End.x) / 2;
             pos.y = (track->m_Start.y + track->m_End.y) / 2;
         }
-        Line.Printf( wxT( "D%d" ), track->m_NetCode );
+        Line.Printf( wxT( "D%d" ), track->GetNet() );
         width  = track->m_Width;
         orient = TEXT_ORIENT_HORIZ;
         if( track->m_Shape >= S_SPOT_CIRCLE )   // forme flash

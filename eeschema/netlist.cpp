@@ -66,7 +66,7 @@ void ObjetNetListStruct::Show( std::ostream& out, int ndx )
 {
     out << "<netItem ndx=\"" << ndx << '"' << 
             " type=\"" << ShowType(m_Type) << '"' <<
-            " netCode=\"" << m_NetCode << '"' <<
+            " netCode=\"" << GetNet() << '"' <<
             " sheet=\"" << m_SheetNumber << '"' <<
             ">\n";
 
@@ -226,14 +226,14 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
         case NET_PINLABEL:
         case NET_SHEETLABEL:
         case NET_NOCONNECT:
-            if( g_TabObjNet[i].m_NetCode != 0 )
+            if( g_TabObjNet[i].GetNet() != 0 )
                 break;                                      /* Deja connecte */
 
         case NET_SEGMENT:
             /* Controle des connexions type point a point ( Sans BUS ) */
-            if( g_TabObjNet[i].m_NetCode == 0 )
+            if( g_TabObjNet[i].GetNet() == 0 )
             {
-                g_TabObjNet[i].m_NetCode = LastNetCode;
+                g_TabObjNet[i].SetNet( LastNetCode );
                 LastNetCode++;
             }
             PointToPointConnect( g_TabObjNet + i, 0, istart );
@@ -241,9 +241,9 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
 
         case NET_JONCTION:
             /* Controle des jonction , hors BUS */
-            if( g_TabObjNet[i].m_NetCode == 0 )
+            if( g_TabObjNet[i].GetNet() == 0 )
             {
-                g_TabObjNet[i].m_NetCode = LastNetCode;
+                g_TabObjNet[i].SetNet( LastNetCode );
                 LastNetCode++;
             }
             SegmentToPointConnect( g_TabObjNet + i, 0, istart );
@@ -260,9 +260,9 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
         case NET_LABEL:
         case NET_GLOBLABEL:
             /* Controle des connexions type jonction ( Sans BUS ) */
-            if( g_TabObjNet[i].m_NetCode == 0 )
+            if( g_TabObjNet[i].GetNet() == 0 )
             {
-                g_TabObjNet[i].m_NetCode = LastNetCode;
+                g_TabObjNet[i].SetNet( LastNetCode );
                 LastNetCode++;
             }
             SegmentToPointConnect( g_TabObjNet + i, 0, istart );
@@ -285,7 +285,7 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
         case NET_BUSLABELMEMBER:
         case NET_GLOBBUSLABELMEMBER:
             /* Controle des connexions semblables a des sur BUS */
-            if( g_TabObjNet[i].m_NetCode == 0 )
+            if( g_TabObjNet[i].GetNet() == 0 )
             {
                 g_TabObjNet[i].m_BusNetCode = LastBusNetCode;
                 LastBusNetCode++;
@@ -368,12 +368,12 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
     LastNetCode = NetCode = 0;
     for( i = 0; i < g_NbrObjNet; i++ )
     {
-        if( g_TabObjNet[i].m_NetCode != LastNetCode )
+        if( g_TabObjNet[i].GetNet() != LastNetCode )
         {
             NetCode++; 
-            LastNetCode = g_TabObjNet[i].m_NetCode;
+            LastNetCode = g_TabObjNet[i].GetNet();
         }
-        g_TabObjNet[i].m_NetCode = NetCode;
+        g_TabObjNet[i].SetNet( NetCode );
     }
 
     Affiche_1_Parametre( this, -1, wxEmptyString, _( "Done" ), GREEN );
@@ -393,7 +393,7 @@ static void SheetLabelConnection( ObjetNetListStruct* SheetLabel )
     int i;
     ObjetNetListStruct* ObjetNet;
 
-    if( SheetLabel->m_NetCode == 0 )
+    if( SheetLabel->GetNet() == 0 )
         return;
 
     /* Calcul du numero de sous feuille correspondante au sheetlabel */
@@ -409,17 +409,17 @@ static void SheetLabelConnection( ObjetNetListStruct* SheetLabel )
            && (ObjetNet[i].m_Type != NET_GLOBBUSLABELMEMBER ) )
             continue;
             
-        if( ObjetNet[i].m_NetCode == SheetLabel->m_NetCode )
+        if( ObjetNet[i].GetNet() == SheetLabel->GetNet() )
             continue;
         
         if( ObjetNet[i].m_Label->CmpNoCase( *SheetLabel->m_Label ) != 0 )
             continue;
 
         /* Propagation du Netcode a tous les Objets de meme NetCode */
-        if( ObjetNet[i].m_NetCode )
-            PropageNetCode( ObjetNet[i].m_NetCode, SheetLabel->m_NetCode, 0 );
+        if( ObjetNet[i].GetNet() )
+            PropageNetCode( ObjetNet[i].GetNet(), SheetLabel->GetNet(), 0 );
         else
-            ObjetNet[i].m_NetCode = SheetLabel->m_NetCode;
+            ObjetNet[i].SetNet( SheetLabel->GetNet() );
     }
 }
 
@@ -714,9 +714,9 @@ static void ConnectBusLabels( ObjetNetListStruct* Label, int NbItems )
            || (Label->m_Type == NET_BUSLABELMEMBER)
            || (Label->m_Type == NET_GLOBBUSLABELMEMBER) )
         {
-            if( Label->m_NetCode == 0 )
+            if( Label->GetNet() == 0 )
             {
-                Label->m_NetCode = LastNetCode; 
+                Label->SetNet( LastNetCode ); 
                 LastNetCode++;
             }
             
@@ -732,10 +732,10 @@ static void ConnectBusLabels( ObjetNetListStruct* Label, int NbItems )
                     if( LabelInTst->m_Member != Label->m_Member )
                         continue;
                     
-                    if( LabelInTst->m_NetCode == 0 )
-                        LabelInTst->m_NetCode = Label->m_NetCode;
+                    if( LabelInTst->GetNet() == 0 )
+                        LabelInTst->SetNet( Label->GetNet() );
                     else
-                        PropageNetCode( LabelInTst->m_NetCode, Label->m_NetCode, 0 );
+                        PropageNetCode( LabelInTst->GetNet(), Label->GetNet(), 0 );
                 }
             }
         }
@@ -886,9 +886,9 @@ static void PropageNetCode( int OldNetCode, int NewNetCode, int IsBus )
     {
         for( jj = 0; jj < g_NbrObjNet; jj++, Objet++ )
         {
-            if( Objet->m_NetCode == OldNetCode )
+            if( Objet->GetNet() == OldNetCode )
             {
-                Objet->m_NetCode = NewNetCode;
+                Objet->SetNet( NewNetCode );
             }
         }
     }
@@ -933,7 +933,7 @@ static void PointToPointConnect( ObjetNetListStruct* Ref, int IsBus, int start )
 
     if( IsBus == 0 )    /* Objets autres que BUS et BUSLABELS */
     {
-        netCode = Ref->m_NetCode;
+        netCode = Ref->GetNet();
         for( i = start; i < g_NbrObjNet; i++ )
         {
             if( netTable[i].m_SheetNumber > Ref->m_SheetNumber )
@@ -954,10 +954,10 @@ static void PointToPointConnect( ObjetNetListStruct* Ref, int IsBus, int start )
                  || Ref->m_End   == netTable[i].m_Start
                  || Ref->m_End   == netTable[i].m_End )
                 {
-                    if( netTable[i].m_NetCode == 0 )
-                        netTable[i].m_NetCode = netCode;
+                    if( netTable[i].GetNet() == 0 )
+                        netTable[i].SetNet( netCode );
                     else
-                        PropageNetCode( netTable[i].m_NetCode, netCode, 0 );
+                        PropageNetCode( netTable[i].GetNet(), netCode, 0 );
                 }
                 break;
 
@@ -1052,11 +1052,11 @@ static void SegmentToPointConnect( ObjetNetListStruct* Jonction,
             /* Propagation du Netcode a tous les Objets de meme NetCode */
             if( IsBus == 0 )
             {
-                if( Segment[i].m_NetCode )
-                    PropageNetCode( Segment[i].m_NetCode,
-                                    Jonction->m_NetCode, IsBus );
+                if( Segment[i].GetNet() )
+                    PropageNetCode( Segment[i].GetNet(),
+                                    Jonction->GetNet(), IsBus );
                 else
-                    Segment[i].m_NetCode = Jonction->m_NetCode;
+                    Segment[i].SetNet( Jonction->GetNet() );
             }
             else
             {
@@ -1076,14 +1076,14 @@ static void SegmentToPointConnect( ObjetNetListStruct* Jonction,
  *******************************************************************/
 static void LabelConnection( ObjetNetListStruct* LabelRef )
 {
-    if( LabelRef->m_NetCode == 0 )
+    if( LabelRef->GetNet() == 0 )
         return;
 
     ObjetNetListStruct* netTable = g_TabObjNet;
 
     for( int i=0; i<g_NbrObjNet;  i++ )
     {
-        if( netTable[i].m_NetCode == LabelRef->m_NetCode )
+        if( netTable[i].GetNet() == LabelRef->GetNet() )
             continue;
 
         if( netTable[i].m_SheetNumber != LabelRef->m_SheetNumber )
@@ -1104,10 +1104,10 @@ static void LabelConnection( ObjetNetListStruct* LabelRef )
             /* Ici 2 labels identiques */
 
             /* Propagation du Netcode a tous les Objets de meme NetCode */
-            if( netTable[i].m_NetCode )
-                PropageNetCode( netTable[i].m_NetCode, LabelRef->m_NetCode, 0 );
+            if( netTable[i].GetNet() )
+                PropageNetCode( netTable[i].GetNet(), LabelRef->GetNet(), 0 );
             else
-                netTable[i].m_NetCode = LabelRef->m_NetCode;
+                netTable[i].SetNet( LabelRef->GetNet() );
         }
     }
 }
@@ -1124,7 +1124,7 @@ static int TriNetCode( const void* o1, const void* o2 )
     ObjetNetListStruct* Objet1 = (ObjetNetListStruct*) o1;
     ObjetNetListStruct* Objet2 = (ObjetNetListStruct*) o2;
     
-    return Objet1->m_NetCode - Objet2->m_NetCode;
+    return Objet1->GetNet() - Objet2->GetNet();
 }
 
 
@@ -1173,7 +1173,7 @@ static void SetUnconnectedFlag( ObjetNetListStruct* ListObj, int NbItems )
         NetItemTst = NetItemRef + 1;
 
         if( (NetItemTst >= Lim)
-           || (NetItemRef->m_NetCode != NetItemTst->m_NetCode) )
+           || (NetItemRef->GetNet() != NetItemTst->GetNet()) )
         {   
             /* Net analyse: mise a jour de m_FlagOfConnection */
             NetEnd = NetItemTst;
@@ -1195,7 +1195,7 @@ static void SetUnconnectedFlag( ObjetNetListStruct* ListObj, int NbItems )
         for( ; ; NetItemTst++ )
         {
             if( (NetItemTst >= Lim)
-               || (NetItemRef->m_NetCode != NetItemTst->m_NetCode) )
+               || (NetItemRef->GetNet() != NetItemTst->GetNet()) )
                 break;
 
             switch( NetItemTst->m_Type )

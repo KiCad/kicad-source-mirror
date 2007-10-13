@@ -25,7 +25,7 @@
 EQUIPOT::EQUIPOT( BOARD_ITEM* StructFather ) :
     BOARD_ITEM( StructFather, PCB_EQUIPOT_STRUCT_TYPE )
 {
-    m_NetCode       = 0;
+    SetNet( 0 );
     m_NbNodes       = m_NbLink = m_NbNoconn = 0;
     m_Masque_Layer  = 0;
     m_Masque_Plan   = 0;
@@ -87,7 +87,7 @@ int EQUIPOT:: ReadEquipotDescr( FILE* File, int* LineNum )
         if( strncmp( Line, "Na", 2 ) == 0 ) /* Texte */
         {
             sscanf( Line + 2, " %d", &tmp );
-            m_NetCode = tmp;
+            SetNet( tmp );
 
             ReadDelimitedText( Ltmp, Line + 2, sizeof(Ltmp) );
             m_Netname = CONV_FROM_UTF8( Ltmp );
@@ -114,7 +114,7 @@ int EQUIPOT:: WriteEquipotDescr( FILE* File )
         return 0;
 
     fprintf( File, "$EQUIPOT\n" );
-    fprintf( File, "Na %d \"%.16s\"\n", m_NetCode, CONV_TO_UTF8( m_Netname ) );
+    fprintf( File, "Na %d \"%.16s\"\n", GetNet(), CONV_TO_UTF8( m_Netname ) );
     fprintf( File, "St %s\n", "~" );
     if( m_ForceWidth )
         fprintf( File, "Lw %d\n", m_ForceWidth );
@@ -135,6 +135,6 @@ void EQUIPOT::Show( int nestLevel, std::ostream& os )
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << 
        " name=\"" <<  m_Netname.mb_str() << '"' <<
-       " netcode=\"" << m_NetCode << "\"/>\n";
+       " netcode=\"" << GetNet() << "\"/>\n";
 }
 #endif

@@ -71,7 +71,7 @@ void Affiche_Infos_Piste( WinEDA_BasePcbFrame* frame, TRACK* pt_piste )
 
     frame->MsgPanel->EraseMsgBox();
 
-    d_index   = pt_piste->m_NetCode;
+    d_index   = pt_piste->GetNet();
     pt_D_code = ReturnToolDescr( layer, d_index, &ii );
 
     switch( pt_piste->Type() )

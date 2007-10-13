@@ -54,10 +54,10 @@ TRACK * BufDeb, *BufEnd;		/* Pointeurs de debut et de fin de la zone
 
 	/* Calcul des limites de recherche des segments de piste */
 	/* BufDeb pointe le 1er segment utile */
-	BufDeb = Pcb->m_Track->GetStartNetCode(pt_new_track->m_NetCode);
+	BufDeb = Pcb->m_Track->GetStartNetCode(pt_new_track->GetNet());
 
 	/* BufEnd Pointe le dernier segment */
-	BufEnd = BufDeb->GetEndNetCode(pt_new_track->m_NetCode);
+	BufEnd = BufDeb->GetEndNetCode(pt_new_track->GetNet());
 
 	/* nettoyage des flags pour tout le net */
 	for(pt_del = BufDeb; pt_del != NULL; pt_del = (TRACK*)pt_del->Pnext)

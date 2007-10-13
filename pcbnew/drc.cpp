@@ -87,27 +87,35 @@ void WinEDA_DrcFrame::ListUnconnectedPads( wxCommandEvent& event )
     {
         if( (Ratsnest->status & CH_ACTIF) == 0 )
             continue;
+        
         m_UnconnectedCount++;
         if( m_UnconnectedCount == 1 )
             m_logWindow->AppendText( _( "Unconnected found:\n" ) );
+        
         D_PAD*   pad = Ratsnest->pad_start;
         pad->Draw( panel, m_DC, wxPoint( 0, 0 ), draw_mode );
+        
         wxString pad_name    = pad->ReturnStringPadName();
         wxString module_name = ( (MODULE*) (pad->m_Parent) )->m_Reference->m_Text;
+        
         msg.Printf( _( "%d > Pad %s (%s) @ %.4f,%.4f and " ), m_UnconnectedCount,
-                    pad_name.GetData(), module_name.GetData(
-                    ), pad->m_Pos.x * convert, pad->m_Pos.y * convert );
+                    pad_name.GetData(), module_name.GetData(), 
+                    pad->m_Pos.x * convert, pad->m_Pos.y * convert );
+        
         m_logWindow->AppendText( msg );
         if( s_RptFile )
             fprintf( s_RptFile, "%s", CONV_TO_UTF8( msg ) );
 
         pad = Ratsnest->pad_end;
         pad->Draw( panel, m_DC, wxPoint( 0, 0 ), draw_mode );
+        
         pad_name    = pad->ReturnStringPadName();
         module_name = ( (MODULE*) (pad->m_Parent) )->m_Reference->m_Text;
+        
         msg.Printf( _( "Pad %s (%s) @ %.4f,%.4f\n" ),
-                    pad_name.GetData(), module_name.GetData(
-                    ), pad->m_Pos.x * convert, pad->m_Pos.y * convert );
+                    pad_name.GetData(), module_name.GetData(), 
+                    pad->m_Pos.x * convert, pad->m_Pos.y * convert );
+        
         m_logWindow->AppendText( msg );
         if( s_RptFile )
             fprintf( s_RptFile, "%s", CONV_TO_UTF8( msg ) );
@@ -117,6 +125,7 @@ void WinEDA_DrcFrame::ListUnconnectedPads( wxCommandEvent& event )
         msg.Printf( _( "Active routes: %d\n" ), m_UnconnectedCount );
     else
         msg = _( "OK! (No active routes)\n" );
+    
     m_logWindow->AppendText( msg );
     if( s_RptFile )
         fprintf( s_RptFile, "%s", CONV_TO_UTF8( msg ) );
@@ -135,8 +144,10 @@ void WinEDA_DrcFrame::TestDrc( wxCommandEvent& event )
         if( m_CreateRptCtrl->IsChecked() ) // Create a file rpt
         {
             s_RptFilename = m_RptFilenameCtrl->GetValue();
+            
             if( s_RptFilename.IsEmpty() )
                 OnButtonBrowseRptFileClick( event );
+            
             if( !s_RptFilename.IsEmpty() )
                 s_RptFile = wxFopen( s_RptFilename, wxT( "w" ) );
             else
@@ -153,14 +164,18 @@ void WinEDA_DrcFrame::TestDrc( wxCommandEvent& event )
 
         s_Pad2PadTestOpt     = m_Pad2PadTestCtrl->IsChecked();
         s_UnconnectedTestOpt = m_UnconnectedTestCtrl->IsChecked();
+        
         s_ZonesTestOpt = m_ZonesTestCtrl->IsChecked();
+        
         AbortDrc = FALSE;
         m_logWindow->Clear();
         g_DesignSettings.m_TrackClearence =
             ReturnValueFromTextCtrl( *m_SetClearance, m_Parent->m_InternalUnits );
+            
         /* Test DRC errors (clearance errors, bad connections .. */
         errors = m_Parent->Test_DRC( m_DC, m_Pad2PadTestCtrl->IsChecked(
                                     ), m_ZonesTestCtrl->IsChecked() );
+        
         /* Search for active routes (unconnected pads) */
         if( m_UnconnectedTestCtrl->IsChecked() )
             ListUnconnectedPads( event );
@@ -267,6 +282,7 @@ int WinEDA_PcbFrame::Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone )
         LISTE_PAD* pad_list_limit = &pad_list_start[m_Pcb->m_NbPads];
         int        max_size = 0;
         LISTE_PAD* pad_list;
+        
         /* Compute the max size of the pads ( used to stop the test) */
         for( pad_list = pad_list_start; pad_list < pad_list_limit; pad_list++ )
         {
@@ -319,6 +335,7 @@ int WinEDA_PcbFrame::Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone )
     {
         if( pt_segm->Pnext == NULL )
             break;
+        
         if( jj == 0 )
         {
             jj = 10;
@@ -332,20 +349,20 @@ int WinEDA_PcbFrame::Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone )
             Affiche_1_Parametre( this, PRINT_TST_POS, wxT( "Test" ), Line, CYAN );
         }
 
-        if( old_net != pt_segm->m_NetCode )
+        if( old_net != pt_segm->GetNet() )
         {
             wxString msg;
             jj = 1;
-            EQUIPOT* equipot = m_Pcb->FindNet( pt_segm->m_NetCode );
+            EQUIPOT* equipot = m_Pcb->FindNet( pt_segm->GetNet() );
             if( equipot )
                 msg = equipot->m_Netname + wxT( "        " );
             else
                 msg = wxT( "<noname>" );
             Affiche_1_Parametre( this, 0, _( "Netname" ), msg, YELLOW );
-            old_net = pt_segm->m_NetCode;
+            old_net = pt_segm->GetNet();
         }
 
-        g_HightLigth_NetCode = pt_segm->m_NetCode;
+        g_HightLigth_NetCode = pt_segm->GetNet();
         flag_err_Drc = Drc( this, DC, pt_segm, (TRACK*) pt_segm->Pnext, 1 );
         if( flag_err_Drc == BAD_DRC )
         {
@@ -386,6 +403,7 @@ int WinEDA_PcbFrame::Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone )
             DrcFrame->m_logWindow->AppendText( _( "Tst Zones\n" ) );
 
         pt_segm = (TRACK*) m_Pcb->m_Zone;
+        
         for( ii = 0, old_net = -1, jj = 0;
              pt_segm != NULL;
              pt_segm = (TRACK*) pt_segm->Pnext, ii++, jj-- )
@@ -399,18 +417,19 @@ int WinEDA_PcbFrame::Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone )
                 wxYield();
                 if( AbortDrc )
                 {
-                    AbortDrc = FALSE; break;
+                    AbortDrc = FALSE; 
+                    break;
                 }
                 /* Print stats */
                 Line.Printf( wxT( "%d" ), ii );
                 Affiche_1_Parametre( this, PRINT_TST_POS, wxT( "Test" ), Line, CYAN );
             }
 
-            if( old_net != pt_segm->m_NetCode )
+            if( old_net != pt_segm->GetNet() )
             {
                 jj = 1;
                 wxString msg;
-                EQUIPOT* equipot = m_Pcb->FindNet( pt_segm->m_NetCode );
+                EQUIPOT* equipot = m_Pcb->FindNet( pt_segm->GetNet() );
                 
                 if( equipot )
                     msg = equipot->m_Netname + wxT( "        " );
@@ -418,9 +437,9 @@ int WinEDA_PcbFrame::Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone )
                     msg = wxT( "<noname>" );
                 
                 Affiche_1_Parametre( this, 0, _( "Netname" ), msg, YELLOW );
-                old_net = pt_segm->m_NetCode;
+                old_net = pt_segm->GetNet();
             }
-            g_HightLigth_NetCode = pt_segm->m_NetCode;
+            g_HightLigth_NetCode = pt_segm->GetNet();
             
             /* Test drc with other zone segments, and pads */
             flag_err_Drc = Drc( this, DC, pt_segm, (TRACK*) pt_segm->Pnext, 1 );
@@ -480,7 +499,6 @@ int WinEDA_PcbFrame::Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone )
         }
     }
 
-
     AbortDrc      = FALSE;
     DrcInProgress = FALSE;
     return ErrorsDRC_Count;
@@ -518,7 +536,7 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
     finy         = dy = pt_segment->m_End.y - org_Y;
     
     MaskLayer    = pt_segment->ReturnMaskLayer();
-    net_code_ref = pt_segment->m_NetCode;
+    net_code_ref = pt_segment->GetNet();
 
     segm_angle = 0;
 	/* for a non horizontal or vertical segment Compute the segment angle
@@ -577,10 +595,10 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
             continue;
         }
 
-        /* The pad must be in a net (i.e pt_pad->m_NetCode != 0 )
+        /* The pad must be in a net (i.e pt_pad->GetNet() != 0 )
          *  but no problem if the pad netcode is the current netcode (same net) */
-        if( pt_pad->m_NetCode &&	// the pad must be connected
-			net_code_ref == pt_pad->m_NetCode )	// the pad net is the same as current net -> Ok
+        if( pt_pad->GetNet() &&	// the pad must be connected
+			net_code_ref == pt_pad->GetNet() )	// the pad net is the same as current net -> Ok
             continue;
 
         /* Test DRC pour les pads */
@@ -612,7 +630,7 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
     for( ; pttrack != NULL; pttrack = (TRACK*) pttrack->Pnext )
     {
         //No problem if segments have the meme net code:
-        if( net_code_ref == pttrack->m_NetCode )
+        if( net_code_ref == pttrack->GetNet() )
             continue;
 
         // No problem if segment are on different layers :
@@ -706,6 +724,7 @@ int Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
         {
             if( abs( y0 ) >= w_dist )
                 continue;
+            
             if( x0 > xf )
                 EXCHG( x0, xf );                                /* pour que x0 <= xf */
 
@@ -941,9 +960,9 @@ static bool Test_Pad_to_Pads_Drc( WinEDA_BasePcbFrame* frame,
         if( (pad->m_Masque_Layer & MaskLayer ) == 0 )
             continue;
 
-        /* The pad must be in a net (i.e pt_pad->m_NetCode != 0 ),
+        /* The pad must be in a net (i.e pt_pad->GetNet() != 0 ),
          *  But no problem if pads have the same netcode (same net)*/
-        if( pad->m_NetCode && (pad_ref->m_NetCode == pad->m_NetCode) )
+        if( pad->GetNet() && (pad_ref->GetNet() == pad->GetNet()) )
             continue;
 
         /* No problem if pads are from the same footprint
@@ -1334,7 +1353,7 @@ static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb,
     TRACK*   pt_segm;
     wxString msg;
     wxString tracktype, netname1, netname2;
-    EQUIPOT* equipot = Pcb->FindNet( pt_ref->m_NetCode );
+    EQUIPOT* equipot = Pcb->FindNet( pt_ref->GetNet() );
 
     if( equipot )
         netname1 = equipot->m_Netname;
@@ -1355,7 +1374,7 @@ static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb,
     if( pt_item->Type() == TYPEPAD )
     {
         D_PAD* pad = (D_PAD*) pt_item;
-        equipot = Pcb->FindNet( pad->m_NetCode );
+        equipot = Pcb->FindNet( pad->GetNet() );
         if( equipot )
             netname2 = equipot->m_Netname;
         
@@ -1375,7 +1394,7 @@ static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb,
     else    /* erreur sur segment de piste */
     {
         pt_segm = (TRACK*) pt_item;
-        equipot = Pcb->FindNet( pt_segm->m_NetCode );
+        equipot = Pcb->FindNet( pt_segm->GetNet() );
         if( equipot )
             netname2 = equipot->m_Netname;
         erc_pos = pt_segm->m_Start;
@@ -1442,14 +1461,14 @@ static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb,
     wxString module_name2 = ( (MODULE*) (pad2->m_Parent) )->m_Reference->m_Text;
     wxString netname1, netname2;
     
-    EQUIPOT* equipot = Pcb->FindNet( pad1->m_NetCode );
+    EQUIPOT* equipot = Pcb->FindNet( pad1->GetNet() );
 
     if( equipot )
         netname1 = equipot->m_Netname;
     else
         netname1 = wxT( "<noname>" );
     
-    equipot = Pcb->FindNet( pad2->m_NetCode );
+    equipot = Pcb->FindNet( pad2->GetNet() );
     if( equipot )
         netname2 = equipot->m_Netname;
     else

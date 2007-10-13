@@ -192,7 +192,7 @@ static wxString ReturnPinNetName( ObjetNetListStruct* Pin,
  *  "netname_sheetnumber" for the usual nets
  */
 {
-    int      netcode = Pin->m_NetCode;
+    int      netcode = Pin->GetNet();
     wxString NetName;
 
     if( (netcode == 0 ) || ( Pin->m_FlagOfConnection != CONNECT ) )
@@ -204,7 +204,7 @@ static wxString ReturnPinNetName( ObjetNetListStruct* Pin,
         int jj;
         for( jj = 0; jj < g_NbrObjNet; jj++ )
         {
-            if( g_TabObjNet[jj].m_NetCode != netcode )
+            if( g_TabObjNet[jj].GetNet() != netcode )
                 continue;
             if( ( g_TabObjNet[jj].m_Type != NET_GLOBLABEL)
                && ( g_TabObjNet[jj].m_Type != NET_LABEL)
@@ -481,7 +481,7 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
                     if( NetName == wxT( "0" ) || NetName == wxT( "GND" ) )
                         fprintf( f, " 0" );
                     else
-                        fprintf( f, " %d", Pin->m_NetCode );
+                        fprintf( f, " %d", Pin->GetNet() );
                 }
             }
 
@@ -834,13 +834,13 @@ static void WriteGENERICListOfNets( FILE* f, ObjetNetListStruct* ObjNet )
 
     for( ii = 0; ii < g_NbrObjNet; ii++ )
     {
-        if( (NetCode = ObjNet[ii].m_NetCode) != LastNetCode )   // New net found, write net id;
+        if( (NetCode = ObjNet[ii].GetNet()) != LastNetCode )   // New net found, write net id;
         {
             SameNetcodeCount = 0;                               // Items count for this net
             NetName.Empty();
             for( jj = 0; jj < g_NbrObjNet; jj++ )               // Find a label (if exists) for this net
             {
-                if( ObjNet[jj].m_NetCode != NetCode )
+                if( ObjNet[jj].GetNet() != NetCode )
                     continue;
                 if( ( ObjNet[jj].m_Type != NET_GLOBLABEL)
                    && ( ObjNet[jj].m_Type != NET_LABEL)
@@ -1010,12 +1010,12 @@ static void WriteListOfNetsCADSTAR( FILE* f, ObjetNetListStruct* ObjNet )
     for( ii = 0; ii < g_NbrObjNet; ii++ )
     {
         // Get the NetName of the current net :
-        if( (NetCode = ObjNet[ii].m_NetCode) != LastNetCode )
+        if( (NetCode = ObjNet[ii].GetNet()) != LastNetCode )
         {
             NetName.Empty();
             for( jj = 0; jj < g_NbrObjNet; jj++ )
             {
-                if( ObjNet[jj].m_NetCode != NetCode )
+                if( ObjNet[jj].GetNet() != NetCode )
                     continue;
                 if( ( ObjNet[jj].m_Type != NET_GLOBLABEL)
                    && ( ObjNet[jj].m_Type != NET_LABEL)
@@ -1089,7 +1089,7 @@ static void WriteListOfNetsCADSTAR( FILE* f, ObjetNetListStruct* ObjNet )
         //	pour ne pas generer plusieurs fois la connexion
         for( jj = ii + 1; jj < g_NbrObjNet; jj++ )
         {
-            if( ObjNet[jj].m_NetCode != NetCode )
+            if( ObjNet[jj].GetNet() != NetCode )
                 break;
             if( ObjNet[jj].m_Type != NET_PIN )
                 continue;

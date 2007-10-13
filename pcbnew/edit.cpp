@@ -337,7 +337,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_EDIT_NET:
         if( GetCurItem() == NULL )
             break;
-        Edit_Net_Width( &dc, ( (TRACK*) GetCurItem() )->m_NetCode );
+        Edit_Net_Width( &dc, ( (TRACK*) GetCurItem() )->GetNet() );
         DrawPanel->MouseToCursorSchema();
         GetScreen()->SetModify();
         break;
@@ -427,11 +427,11 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_LOCK_ON_NET:
-        Attribut_net( &dc, ( (TRACK*) GetCurItem() )->m_NetCode, TRUE );
+        Attribut_net( &dc, ( (TRACK*) GetCurItem() )->GetNet(), TRUE );
         break;
 
     case ID_POPUP_PCB_LOCK_OFF_NET:
-        Attribut_net( &dc, ( (TRACK*) GetCurItem() )->m_NetCode, FALSE );
+        Attribut_net( &dc, ( (TRACK*) GetCurItem() )->GetNet(), FALSE );
         break;
 
     case ID_POPUP_PCB_SETFLAGS_TRACK_MNU:
