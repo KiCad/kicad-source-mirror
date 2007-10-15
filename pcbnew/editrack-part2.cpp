@@ -214,42 +214,73 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
 
     DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 
-    /* create the via */
-    Via = new SEGVIA( m_Pcb );
-    Via->m_Flags   = IS_NEW;
-    Via->m_Width   = g_DesignSettings.m_CurrentViaSize;
-    Via->m_Shape   = g_DesignSettings.m_CurrentViaType;
-    Via->SetNet( g_HightLigth_NetCode );
-    Via->m_Start   = Via->m_End = g_CurrentTrackSegment->m_End;
+    // Create the via - but before doing so, determine what
+    // value should really be assigned to its Shape property.
+    // (Use ii to temporarily "store" the appropriate value.)
 
     int old_layer = GetScreen()->m_Active_Layer;
 
-    //swap the layers.
+    // swap the layers.
     if( GetScreen()->m_Active_Layer != GetScreen()->m_Route_Layer_TOP )
         GetScreen()->m_Active_Layer = GetScreen()->m_Route_Layer_TOP;
     else
         GetScreen()->m_Active_Layer = GetScreen()->m_Route_Layer_BOTTOM;
 
-    
-    /* Adjust the via layer pair */
-    if( Via->Shape() == VIA_ENTERREE )
+    /* Assess the type of via */
+    if( g_DesignSettings.m_CurrentViaType == VIA_NORMALE )    // normal via
     {
-        Via->SetLayerPair( old_layer, GetScreen()->m_Active_Layer );
+        ii = VIA_NORMALE;
     }
-    
-    else if( Via->Shape() == VIA_BORGNE )    //blind via
-    {                                               
-        // A revoir! ( la via devrait deboucher sur 1 cote )
-        Via->SetLayerPair( old_layer, GetScreen()->m_Active_Layer );
-    }
-    
     else
-    {        
+    // Either a blind via or buried via was "requested", but still
+    // check both layers of the layer pair, to determine the truly
+    // appropriate value to assign to the via's Type property.
+    {                                               
+        if( ( old_layer == COPPER_LAYER_N
+           && GetScreen()->m_Active_Layer == CMP_N )
+         || ( old_layer == CMP_N
+           && GetScreen()->m_Active_Layer == COPPER_LAYER_N ) )
+        {
+            // Specify the via's Shape property as Standard
+            ii = VIA_NORMALE;
+        }
+        else if( old_layer == COPPER_LAYER_N
+              || old_layer == CMP_N
+              || GetScreen()->m_Active_Layer == COPPER_LAYER_N
+              || GetScreen()->m_Active_Layer == CMP_N )
+        {
+            // Specify the via's Shape property as Blind
+            ii = VIA_BORGNE;
+        }
+        else
+        {
+            // Specify the via's Shape property as Buried
+            ii = VIA_ENTERREE;
+        }
+    }
+
+    Via = new SEGVIA( m_Pcb );
+    Via->m_Flags   = IS_NEW;
+    Via->m_Width   = g_DesignSettings.m_CurrentViaSize;
+    Via->m_Shape   = ii; // ( instead of g_DesignSettings.m_CurrentViaType )
+    Via->SetNet( g_HightLigth_NetCode );
+    Via->m_Start   = Via->m_End = g_CurrentTrackSegment->m_End;
+
+    /* Adjust the via layer pair */
+    if( Via->Shape() == VIA_NORMALE )    // Normal via
+    {
         // Usual via is from copper to component; layer pair is 0 and 0x0F.
         Via->SetLayerPair( COPPER_LAYER_N, LAYER_CMP_N );
     }
-        
-    if( Drc_On &&( Drc( this, DC, Via, m_Pcb->m_Track, 1 ) == BAD_DRC ) )
+    else    // Either a blind via or buried via.
+    {                                               
+        if( old_layer < GetScreen()->m_Active_Layer)
+            Via->SetLayerPair( old_layer, GetScreen()->m_Active_Layer );
+        else
+            Via->SetLayerPair( GetScreen()->m_Active_Layer, old_layer );
+    }
+
+    if( Drc_On && ( Drc( this, DC, Via, m_Pcb->m_Track, 1 ) == BAD_DRC ) )
     {
         /* DRC fault: the Via cannot be placed here ... */
         delete Via;

@@ -206,14 +206,14 @@ SEARCH_RESULT TRACK::Visit( INSPECTOR* inspector, const void* testData,
             return SEARCH_QUIT;
     }
 
-    return SEARCH_CONTINUE;    
+    return SEARCH_CONTINUE;
 }
 
 
 // see class_track.h
 bool SEGVIA::IsOnLayer( int layer_number ) const
 {
-/* its the same logic, don't need this    
+/* its the same logic, don't need this
     int via_type = Shape();
 
     if( via_type == VIA_NORMALE )
@@ -225,13 +225,12 @@ bool SEGVIA::IsOnLayer( int layer_number ) const
     }
 
     // VIA_BORGNE ou  VIA_ENTERREE:
-*/    
-
+*/
     int bottom_layer, top_layer;
-    
+
     ReturnLayerPair( &top_layer, &bottom_layer );
-    
-    if( bottom_layer <= layer_number &&  layer_number <= top_layer )
+
+    if( bottom_layer <= layer_number && layer_number <= top_layer )
         return true;
     else
         return false;
@@ -250,18 +249,17 @@ int TRACK::ReturnMaskLayer()
     if( Type() == TYPEVIA )
     {
         int via_type = Shape();
-        
+
         if( via_type == VIA_NORMALE )
             return ALL_CU_LAYERS;
 
         // VIA_BORGNE ou  VIA_ENTERREE:
-        
-        int bottom_layer;
-        int top_layer;
+
+        int bottom_layer, top_layer;
 
         // ReturnLayerPair() knows how layers are stored
         ((SEGVIA*)this)->ReturnLayerPair( &top_layer, &bottom_layer );
-        
+
         int layermask = 0;
         while( bottom_layer <= top_layer )
         {
@@ -287,7 +285,7 @@ void SEGVIA::SetLayerPair( int top_layer, int bottom_layer )
 
     if( via_type == VIA_NORMALE )
     {
-        top_layer    = LAYER_CMP_N; 
+        top_layer    = LAYER_CMP_N;
         bottom_layer = COPPER_LAYER_N;
     }
 
@@ -549,6 +547,7 @@ bool TRACK::WriteTrackDescr( FILE* File )
 /********************************************/
 {
     int type = 0;
+    int shape;    // Stores genuine value of via's shape property
     
     if( Type() == TYPEVIA )
         type = 1;
@@ -556,7 +555,50 @@ bool TRACK::WriteTrackDescr( FILE* File )
     if( GetState( DELETED ) )
         return FALSE;
 
-    fprintf( File, "Po %d %d %d %d %d %d %d\n", m_Shape,
+    // In the case of a via, check the values of its top_layer and
+    // bottom_layer properties, to determine what value should *really*
+    // be assigned to its shape property (as all versions of KiCad up
+    // until revision 335 (committed on 2007-Oct-13) could sometimes
+    // assign an inappropriate value to that property).
+    if( Type() == TYPEVIA )
+    {
+//      int bottom_layer, top_layer;
+//      ((SEGVIA*)this)->ReturnLayerPair( &top_layer, &bottom_layer );
+
+        // For reasons of efficiency, replace the previous two commands
+        //  with these (next three) commands.
+
+        int bottom_layer = (m_Layer >> 4) & 15;
+        int top_layer = m_Layer & 15;
+
+        if( bottom_layer > top_layer )
+            EXCHG( bottom_layer, top_layer );
+
+        // Now determine what type of via this really is
+        if( bottom_layer == COPPER_LAYER_N && top_layer == CMP_N )
+        {
+            // The via is really of a "standard" (through-hole) type
+            shape = VIA_NORMALE;
+        }
+        else if( bottom_layer == COPPER_LAYER_N || top_layer == CMP_N )
+        {
+            // The via is really of a "blind" type
+            shape = VIA_BORGNE;
+        }
+        else
+        {
+            // The via is really of a "buried" type
+            shape = VIA_ENTERREE;
+        }
+    }
+    else
+        shape = m_Shape; // Cater for other (non-via) types of objects
+
+//  fprintf( File, "Po %d %d %d %d %d %d %d\n", m_Shape,
+//           m_Start.x, m_Start.y, m_End.x, m_End.y, m_Width, m_Drill );
+
+    // (Replace m_Shape within the previous command with shape)
+    fprintf( File, "Po %d %d %d %d %d %d %d\n", shape,
              m_Start.x, m_Start.y, m_End.x, m_End.y, m_Width, m_Drill );
 
     fprintf( File, "De %d %d %d %lX %X\n",
@@ -701,8 +743,8 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
     }
 
     /* Trace de l'isolation (pour segments type CUIVRE et TRACK uniquement */
-    if( (DisplayOpt.DisplayTrackIsol) && (m_Layer <= CMP_N )
-       && ( Type() == TYPETRACK) )
+    if( DisplayOpt.DisplayTrackIsol && ( m_Layer <= CMP_N )
+       && ( Type() == TYPETRACK ) )
     {
         GRCSegm( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
                  m_End.x, m_End.y,
@@ -903,11 +945,22 @@ void SEGVIA::Show( int nestLevel, std::ostream& os )
     
     switch( Shape() )
     {
-    case VIA_NORMALE:       cp = "through";     break;
-    case VIA_ENTERREE:      cp = "blind";       break;
-    case VIA_BORGNE:        cp = "buried";      break;
+    case VIA_NORMALE:
+        cp = "through";
+        break;
+
+    case VIA_ENTERREE:
+        cp = "blind";
+        break;
+
+    case VIA_BORGNE:
+        cp = "buried";
+        break;
+
     default:
-    case VIA_NOT_DEFINED:   cp = "undefined";   break;
+    case VIA_NOT_DEFINED:
+        cp = "undefined";
+        break;
     }
 
     int topLayer;
@@ -933,5 +986,3 @@ void SEGVIA::Show( int nestLevel, std::ostream& os )
 
 
 #endif
-
-

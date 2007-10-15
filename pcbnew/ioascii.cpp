@@ -170,9 +170,37 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( wxDC* DC, FILE* File,
                                 &PtSegm->m_End.x, &PtSegm->m_End.y, &width,
                                 &PtSegm->m_Drill );
 
-        PtSegm->m_Width = width; 
+        PtSegm->m_Width = width;
+
+        // Before specifying the value for any new via's Shape property, check
+        // the values of its top_layer and bottom_layer properties, to determine
+        // what value should *really* be assigned to that property (as all
+        // versions of KiCad up until revision 335 (committed on 2007-Oct-13)
+        // could sometimes assign an inappropriate value to that property).
+        if( makeType == TYPEVIA )
+        {
+            int b_layer = (layer >> 4) & 15;
+            int t_layer = layer & 15;
+            if( ( ( b_layer == COPPER_LAYER_N ) && ( t_layer == CMP_N ) )
+             || ( ( b_layer == CMP_N ) && ( t_layer == COPPER_LAYER_N ) ) )
+            {
+                // The via is really of a "standard" (through-hole) type
+                shape = VIA_NORMALE;
+            }
+            else if( ( b_layer == COPPER_LAYER_N ) || ( t_layer == CMP_N )
+                  || ( b_layer == CMP_N ) || ( t_layer == COPPER_LAYER_N ) )
+            {
+                // The via is really of a "blind" type
+                shape = VIA_BORGNE;
+            }
+            else
+            {
+                // The via is really of a "buried" type
+                shape = VIA_ENTERREE;
+            }
+        }
         PtSegm->m_Shape = shape;
-        
+
         if( arg_count < 7 )
             PtSegm->m_Drill = -1;
 

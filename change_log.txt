@@ -5,6 +5,14 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2007-Oct-15 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
+================================================================================
++ pcbnew
+  * Made some changes involving vias so that these would have the correct value
+    of the Shape property assigned to them - while being created, and while files
+    are being saved, and while files are being loaded.
+
+
 2007-Oct-14 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew:
@@ -38,7 +46,6 @@ email address.
     with genliste.cpp.notused
 
 
-    
 2007-Oct-12 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + all
@@ -70,8 +77,8 @@ email address.
   
   Does Recalcule_all_net_connexion() work, and why is not called from anywhere?
 
-  
-    
+
+
 2007-Oct-11 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew
@@ -82,7 +89,7 @@ email address.
     will redraw the DisplayPanel, now that SMD pads' colors are so dependent
     on these variables.
 
-  
+
 2007-Oct-11 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew
