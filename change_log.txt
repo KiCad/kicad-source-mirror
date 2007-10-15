@@ -4,6 +4,15 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+
+2007-Oct-14 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ pcbnew:
+  * housekeeping and translation to English on bottom third of pcbnew/clean.cpp
+  * my todo: figure out how to intercept double clicks on a wxWidgets text control
+    so I can complete the work I started on MARQUEUR error tracking.
+
+
 2007-Oct-13 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew:

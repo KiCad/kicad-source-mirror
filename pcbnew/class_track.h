@@ -29,7 +29,7 @@ public:
     int             m_Shape;        // vias: shape and type, Track = shape..
     int             m_Drill;        // for vias: via drill (- 1 for default value)
     
-    BOARD_ITEM*     start;          // pointers on a connected item (pad or track)
+    BOARD_ITEM*     start;          // pointers to a connected item (pad or track)
     BOARD_ITEM*     end;            
     
     // chain = 0 indique une connexion non encore traitee

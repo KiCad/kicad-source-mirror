@@ -196,9 +196,10 @@ void WinEDA_PcbFrame::Supprime_Une_Piste( wxDC* DC, TRACK* pt_segm )
     if( nb_segm ) /* Il y a nb_segm segments de piste a effacer */
     {
         Trace_Une_Piste( DrawPanel, DC, pt_track, nb_segm, GR_XOR | GR_SURBRILL );
+        
         /* Effacement flag BUSY */
-        Struct = pt_track; ii = 0;
-        for( ; ii < nb_segm; ii++, Struct = (TRACK*) Struct->Pnext )
+        Struct = pt_track;;
+        for(  ii=0;  ii<nb_segm;  ii++, Struct = (TRACK*) Struct->Pnext )
         {
             Struct->SetState( BUSY, OFF );
         }
