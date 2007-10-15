@@ -8,7 +8,8 @@ email address.
 2007-Oct-14 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew:
-  * housekeeping and translation to English on bottom third of pcbnew/clean.cpp
+  * housekeeping and translation to English on bottom third of pcbnew/clean.cpp.
+    No algorithm changes were intended, only improved readability.
   * my todo: figure out how to intercept double clicks on a wxWidgets text control
     so I can complete the work I started on MARQUEUR error tracking.
 
