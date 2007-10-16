@@ -198,7 +198,7 @@ SEARCH_RESULT TRACK::Visit( INSPECTOR* inspector, const void* testData,
 #if 0 && defined(DEBUG)
     std::cout <<  GetClass().mb_str() << ' ';
 #endif
-    
+
     // If caller wants to inspect my type
     if( stype == Type() )
     {
@@ -226,6 +226,7 @@ bool SEGVIA::IsOnLayer( int layer_number ) const
 
     // VIA_BORGNE ou  VIA_ENTERREE:
 */
+
     int bottom_layer, top_layer;
 
     ReturnLayerPair( &top_layer, &bottom_layer );
@@ -291,7 +292,7 @@ void SEGVIA::SetLayerPair( int top_layer, int bottom_layer )
 
     if( bottom_layer > top_layer )
         EXCHG( bottom_layer, top_layer );
-    
+
     m_Layer = (top_layer & 15) + ( (bottom_layer & 15) << 4 );
 }
 
@@ -547,69 +548,25 @@ bool TRACK::WriteTrackDescr( FILE* File )
 /********************************************/
 {
     int type = 0;
-    int shape;    // Stores genuine value of via's shape property
-    
+
     if( Type() == TYPEVIA )
         type = 1;
 
     if( GetState( DELETED ) )
         return FALSE;
 
-    // In the case of a via, check the values of its top_layer and
-    // bottom_layer properties, to determine what value should *really*
-    // be assigned to its shape property (as all versions of KiCad up
-    // until revision 335 (committed on 2007-Oct-13) could sometimes
-    // assign an inappropriate value to that property).
-    if( Type() == TYPEVIA )
-    {
-//      int bottom_layer, top_layer;
-//      ((SEGVIA*)this)->ReturnLayerPair( &top_layer, &bottom_layer );
-
-        // For reasons of efficiency, replace the previous two commands
-        //  with these (next three) commands.
-
-        int bottom_layer = (m_Layer >> 4) & 15;
-        int top_layer = m_Layer & 15;
-
-        if( bottom_layer > top_layer )
-            EXCHG( bottom_layer, top_layer );
-
-        // Now determine what type of via this really is
-        if( bottom_layer == COPPER_LAYER_N && top_layer == CMP_N )
-        {
-            // The via is really of a "standard" (through-hole) type
-            shape = VIA_NORMALE;
-        }
-        else if( bottom_layer == COPPER_LAYER_N || top_layer == CMP_N )
-        {
-            // The via is really of a "blind" type
-            shape = VIA_BORGNE;
-        }
-        else
-        {
-            // The via is really of a "buried" type
-            shape = VIA_ENTERREE;
-        }
-    }
-    else
-        shape = m_Shape; // Cater for other (non-via) types of objects
-
-//  fprintf( File, "Po %d %d %d %d %d %d %d\n", m_Shape,
-//           m_Start.x, m_Start.y, m_End.x, m_End.y, m_Width, m_Drill );
-
-    // (Replace m_Shape within the previous command with shape)
-    fprintf( File, "Po %d %d %d %d %d %d %d\n", shape,
+    fprintf( File, "Po %d %d %d %d %d %d %d\n", m_Shape,
              m_Start.x, m_Start.y, m_End.x, m_End.y, m_Width, m_Drill );
 
     fprintf( File, "De %d %d %d %lX %X\n",
             m_Layer, type, GetNet(),
             m_TimeStamp, ReturnStatus() );
-    
+
     return TRUE;
 }
 
 
-/**********************************************************************/
+/*********************************************************************/
 void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
 /*********************************************************************/
 

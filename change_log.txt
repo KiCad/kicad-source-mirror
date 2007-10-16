@@ -4,6 +4,14 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Oct-17 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
+================================================================================
++ pcbnew
+  * Rolled back previous changes (made in revision 336) that edited the values of
+    vias' Shape property (following feedback from Jean-Pierre Charras concerning
+    the true significance of that property).
+
+
 2007-Oct-13 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew:
@@ -20,7 +28,6 @@ email address.
 	Other types (BLIND VIA and BURIED VIA) are only experimental.
 	A **lot** of code is needed for a full support.
 	enhancements in connectivity computation
-	
 
 
 2007-Oct-15 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
