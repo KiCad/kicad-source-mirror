@@ -31,7 +31,7 @@
 #define PCB_INTERNAL_UNIT       10000
 #endif
 
-//  Option d'affichage des fenetres de dialogue
+//  Option for dialog boxes
 // #define DIALOG_STYLE wxDEFAULT_DIALOG_STYLE|wxFRAME_FLOAT_ON_PARENT|wxSTAY_ON_TOP
 #define DIALOG_STYLE wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT | MAYBE_RESIZE_BORDER
 
@@ -52,10 +52,10 @@ class WinEDA_MainFrame;
 class BASE_SCREEN;
 class SCH_SCREEN;
 class PCB_SCREEN;
-class WinEDA_SchematicFrame;    // Edition des Schemas
-class WinEDA_LibeditFrame;      // Edition des composants
-class WinEDA_ViewlibFrame;      // Visualisation des composants
-class WinEDA_GerberFrame;       // Visualisation des fichiers GERBER
+class WinEDA_SchematicFrame;    // Schematic main frame
+class WinEDA_LibeditFrame;      // Component creation and edition main frame
+class WinEDA_ViewlibFrame;      // Component viewer main frame
+class WinEDA_GerberFrame;       // GERBER viewer main frame
 class WinEDA_Toolbar;
 class WinEDA_CvpcbFrame;
 class WinEDA_PcbFrame;
@@ -65,7 +65,7 @@ class WinEDAChoiceBox;
 #define WinEDA_Menu     wxMenu
 #define WinEDA_MenuItem wxMenuItem
 
-// Utilisees mais non definies ici :
+// Used but not defined here:
 class LibraryStruct;
 class EDA_LibComponentStruct;
 class LibEDA_BaseStruct;
@@ -124,10 +124,10 @@ enum id_drawframe {
 };
 
 enum id_toolbar {
-    TOOLBAR_MAIN = 1,       // Toolbar horizontal (main)
-    TOOLBAR_TOOL,           // Toolbar vertical tools
-    TOOLBAR_OPTION,         // Toolbar vertical options
-    TOOLBAR_AUX
+    TOOLBAR_MAIN = 1,       // Main horizontal Toolbar
+    TOOLBAR_TOOL,           // Rigth vertical Toolbar (list of tools)
+    TOOLBAR_OPTION,         // Left vertical Toolbar (option toolbar
+    TOOLBAR_AUX       		// Secondary horizontal Toolbar
 };
 
 
@@ -135,7 +135,7 @@ enum id_toolbar {
 /* Classes pour WXWIN */
 /**********************/
 
-#define MSG_PANEL_DEFAULT_HEIGHT  ( 28 )    // hauteur de la zone d'affichage des infos en bas d'ecran
+#define MSG_PANEL_DEFAULT_HEIGHT  ( 28 )    // height of the infos display window
 
 /**********************************************/
 /*  Class representing the entire Application */
@@ -143,9 +143,10 @@ enum id_toolbar {
 #include "appl_wxstruct.h"
 
 
-/********************************************/
-/* classe pour la Fenetre generale de trace */
-/********************************************/
+/******************************************************************/
+/* Basic frame for kicad, eeschema, pcbnew and gerbview.          */
+/* not directly used: the real frames are derived from this class */
+/******************************************************************/
 
 class WinEDA_BasicFrame : public wxFrame
 {
@@ -195,14 +196,14 @@ public:
 };
 
 
-/********************************************/
-/* classe pour la Fenetre generale de trace */
-/********************************************/
+/*******************************************************/
+/* Basic draw frame for eeschema, pcbnew and gerbview. */
+/*******************************************************/
 
 class WinEDA_DrawFrame : public WinEDA_BasicFrame
 {
 public:
-    WinEDA_DrawPanel* DrawPanel;            // surface de dessin
+    WinEDA_DrawPanel* DrawPanel;            // Draw area
     WinEDA_MsgPanel*  MsgPanel;             // Zone d'affichage de caracteristiques
     WinEDA_Toolbar*   m_VToolBar;           // Vertical (right side) Toolbar
     WinEDA_Toolbar*   m_AuxVToolBar;        // Auxiliary Vertical (right side) Toolbar
@@ -213,11 +214,11 @@ public:
     WinEDAChoiceBox*  m_SelZoomBox;         // Dialog box to choose the Zoom value
     int m_ZoomMaxValue;                     // Max zoom value: Draw min scale is 1/m_ZoomMaxValue
 
-    BASE_SCREEN*      m_CurrentScreen;      // SCREEN en cours
+    BASE_SCREEN*      m_CurrentScreen;      // current used SCREEN
 
     int     m_CurrentCursorShape;           // shape for cursor (0 = default cursor)
-    int     m_ID_current_state;             ///< Id of active button on the vertical toolbar
-    int     m_HTOOL_current_state;          ///< Id of active button on horizontal toolbar
+    int     m_ID_current_state;             // Id of active button on the vertical toolbar
+    int     m_HTOOL_current_state;          // Id of active button on horizontal toolbar
 
     int     m_InternalUnits;                // nombre d'unites internes pour 1 pouce
                                             // = 1000 pour schema, = 10000 pour PCB
@@ -276,18 +277,14 @@ public:
     void            OnPanning( int direction );
     void            OnGrid( int grid_type );
     void            Recadre_Trace( bool ToMouse );
-    void            PutOnGrid( wxPoint* coord ); /* corrige la valeur de la coordonnee coord
-                                                  *  pour etre sur le point de grille le plus proche */
+    void            PutOnGrid( wxPoint* coord ); /* set the coordiante "coord" to the nearest grid coordinate */
     void            Zoom_Automatique( bool move_mouse_cursor );
 
-    /* Affiche le schema au meilleur zoom au meilleur centrage pour le dessin
-     *  de facon a avoir tout le circuit affiche a l'ecran */
-
+    /* Set the zoom level to show the area Rect */
     void            Window_Zoom( EDA_Rect& Rect );
 
-    /* Recalcule le zoom et les offsets pour que l'affichage se fasse dans la
-     *   fenetre de coord x0, y0 a x1, y1 */
-    virtual int     BestZoom() = 0; // Retourne le meilleur zoom
+    /* Return the zoom level which displays the full page on screen */
+    virtual int     BestZoom() = 0;
 
     void            ToPrinter( wxCommandEvent& event );
     void            SVG_Print( wxCommandEvent& event );
@@ -308,7 +305,7 @@ public:
     void            Affiche_Status_Box(); /* Affichage des coord curseur, zoom .. */
     void            DisplayUnitsMsg();
 
-    /* Gestion generale des operations sur block */
+    /* Handlers for block commands */
     virtual int     ReturnBlockCommand( int key );
     virtual void    InitBlockPasteInfos();
     virtual bool    HandleBlockBegin( wxDC* DC, int cmd_type, const wxPoint& startpos );
@@ -328,10 +325,9 @@ public:
     EVT_ACTIVATE( WinEDA_DrawFrame::OnActivate )
 
 
-/**************************************************************/
-/* class WinEDA_BasePcbFrame: classe de base commune          */
-/* aux classes d'affichage de PCB, et de l'editeur de Modules */
-/**************************************************************/
+/******************************************************************/
+/* class WinEDA_BasePcbFrame: Basic class for pcbnew and gerbview */
+/******************************************************************/
 
 class WinEDA_BasePcbFrame : public WinEDA_DrawFrame
 {
@@ -339,11 +335,11 @@ public:
     BOARD* m_Pcb;
 
     bool   m_DisplayPadFill;        // How show pads
-    bool   m_DisplayPadNum;         // show pads number
+    bool   m_DisplayPadNum;         // show pads numbers
 
     int    m_DisplayModEdge;        // How show module drawings
     int    m_DisplayModText;        // How show module texts
-    bool   m_DisplayPcbTrackFill;   /* FALSE = sketch , TRUE = rempli */
+    bool   m_DisplayPcbTrackFill;   /* FALSE : tracks are show in sketch mode, TRUE = filled */
     WinEDA3D_DrawFrame* m_Draw3DFrame;
 
 protected:
@@ -369,7 +365,7 @@ public:
     virtual void    ReCreateMenuBar();
 
     PCB_SCREEN* GetScreen() { return (PCB_SCREEN*) m_CurrentScreen; }
-    int             BestZoom(); // Retourne le meilleur zoom
+    int             BestZoom();
 
     void            Show3D_Frame( wxCommandEvent& event );
 
@@ -396,7 +392,7 @@ public:
     int                         ReadSetup( FILE* File, int* LineNum );
     int                         ReadGeneralDescrPcb( wxDC* DC, FILE* File, int* LineNum );
 
-    // Gestion du PCB
+    // PCB handling
     bool                        Clear_Pcb( wxDC* DC, bool query );
 
     /**
@@ -436,12 +432,9 @@ public:
      */
     GENERAL_COLLECTORS_GUIDE    GetCollectorsGuide();
 
-    // Gestion du curseur
+    /* Place un repere sur l'ecran au point de coordonnees PCB pos */
     void                        place_marqueur( wxDC* DC, const wxPoint& pos, char* pt_bitmap,
                                                 int DrawMode, int color, int type );
-
-    /* Place un repere sur l'ecran au point de coordonnees PCB pos */
-
 
     // Gestion des modules
     void            InstallModuleOptionsFrame( MODULE* Module,
@@ -454,7 +447,7 @@ public:
     MODULE*         Select_1_Module_From_BOARD( BOARD* Pcb );
     MODULE*         GetModuleByName();
 
-    // Modules
+    // Modules (footprints)
     MODULE*         Create_1_Module( wxDC* DC, const wxString& module_name );
     void            Edit_Module( MODULE* module, wxDC* DC );
     void            Rotate_Module( wxDC* DC, MODULE* module, int angle, bool incremental );
@@ -463,7 +456,7 @@ public:
     void            InstallExchangeModuleFrame( MODULE* ExchangeModuleModule,
                                                 wxDC* DC, const wxPoint& pos );
 
-    // Textes sur modules
+    // module texts
     void            RotateTextModule( TEXTE_MODULE* Text, wxDC* DC );
     void            DeleteTextModule( TEXTE_MODULE* Text, wxDC* DC );
     void            PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC );
@@ -485,7 +478,7 @@ public:
     void            Global_Import_Pad_Settings( D_PAD* Pad, wxDC* DC );
 
 
-    // Chargement de modules
+    // loading footprints
     MODULE*         Get_Librairie_Module( wxWindow* winaff, const wxString& library,
                                           const wxString& ModuleName, bool show_msg_err );
 
@@ -495,7 +488,7 @@ public:
 
     MODULE*         Load_Module_From_Library( const wxString& library, wxDC* DC );
 
-    // Gestion des chevelus (ratsnest)
+    //  ratsnest functions
     void            Compile_Ratsnest( wxDC* DC, bool affiche ); /* Recalcul complet du chevelu */
     void            ReCompile_Ratsnest_After_Changes( wxDC* DC );
     int             Test_1_Net_Ratsnest( wxDC* DC, int net_code );
@@ -504,8 +497,7 @@ public:
     void            Build_Board_Ratsnest( wxDC* DC );
     void            DrawGeneralRatsnest( wxDC* DC, int net_code = 0 );
     void            trace_ratsnest_pad( wxDC* DC );
-    void            recalcule_pad_net_code(); /* Routine de
-                                               *  calcul et de mise a jour des net_codes des PADS */
+    void            recalcule_pad_net_code(); /* compute and update the PAD net codes */
     void            build_liste_pads();
     int*            build_ratsnest_pad( EDA_BaseStruct* ref, const wxPoint& refpos, bool init );
 
@@ -537,10 +529,10 @@ public:
     void            Block_Move( wxDC* DC );
     void            Block_Duplicate( wxDC* DC );
 
-    // Gestion des zones:
+    // zone handling:
     void            DelLimitesZone( wxDC* DC, bool Redraw );
 
-    // Gestion des layers:
+    // layerhandling:
     // (See pcbnew/sel_layer.cpp for description of why null_layer parameter is provided)
     int             SelectLayer( int default_layer, int min_layer, int max_layer,
                                  bool null_layer = false );
@@ -672,7 +664,7 @@ public:
     void                StartMove_Module( MODULE* module, wxDC* DC );
     bool                Delete_Module( MODULE* module, wxDC* DC );
 
-    // Chargement de modules: voir WinEDA_BasePcbFrame
+    // loading modules: see WinEDA_BasePcbFrame
 
     // Gestion du PCB
     void                Erase_Zones( wxDC* DC, bool query );
@@ -685,7 +677,7 @@ public:
     void                RemoveStruct( EDA_BaseStruct* Item, wxDC* DC );
     void                Via_Edit_Control( wxDC* DC, int command_type, SEGVIA* via );
 
-    // Mise en surbrillance des nets:
+    // Hightlight functions:
     int                 Select_High_Light( wxDC* DC );
     void                Hight_Light( wxDC* DC );
     void                DrawHightLight( wxDC* DC, int NetCode );
@@ -716,34 +708,34 @@ public:
     void                Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC );
     void                SwitchLayer( wxDC* DC, int layer );
 
-    // Edition des zones
+    // zone handling
     EDGE_ZONE*          Del_SegmEdgeZone( wxDC* DC, EDGE_ZONE* edge_zone );
     void                CaptureNetName( wxDC* DC );
     EDGE_ZONE*          Begin_Zone();
     void                End_Zone( wxDC* DC );
     void                Fill_Zone( wxDC* DC );
 
-    // Edition des mires de centrage
+    // Target handling
     MIREPCB*            Create_Mire( wxDC* DC );
     void                Delete_Mire( MIREPCB* MirePcb, wxDC* DC );
     void                StartMove_Mire( MIREPCB* MirePcb, wxDC* DC );
     void                Place_Mire( MIREPCB* MirePcb, wxDC* DC );
     void                InstallMireOptionsFrame( MIREPCB* MirePcb, wxDC* DC, const wxPoint& pos );
 
-    // Gestion des segments de dessin type DRAWSEGMENT:
+    // Graphic segments type DRAWSEGMENT handling:
     DRAWSEGMENT*        Begin_DrawSegment( DRAWSEGMENT* Segment, int shape, wxDC* DC );
     void                End_Edge( DRAWSEGMENT* Segment, wxDC* DC );
     void                Drawing_SetNewWidth( DRAWSEGMENT* DrawSegm, wxDC* DC );
     void                Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC );
     void                Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC );
 
-    // Gestion des cotations:
+    // Dimension handling:
     void                Install_Edit_Cotation( COTATION* Cotation, wxDC* DC, const wxPoint& pos );
     COTATION*           Begin_Cotation( COTATION* Cotation, wxDC* DC );
     void                Delete_Cotation( COTATION* Cotation, wxDC* DC );
 
 
-    // Gestion des netlistes:
+    // netlist  handling:
     void                InstallNetlistFrame( wxDC* DC, const wxPoint& pos );
 
     // Autoplacement:
@@ -760,20 +752,19 @@ public:
     int                 GenPlaceBoard();
     void                DrawInfoPlace( wxDC* DC );
 
-    // Autoroutage:
+    // Autorouting:
     int                 Solve( wxDC* DC, int two_sides );
     void                Reset_Noroutable( wxDC* DC );
     void                Autoroute( wxDC* DC, int mode );
     void                ReadAutoroutedTracks( wxDC* DC );
     void                GlobalRoute( wxDC* DC );
 
-    // fonctions generales
-    void                Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC );
+    // divers
+	void                Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC );
     void                Ratsnest_On_Off( wxDC* DC );
     void                Clean_Pcb( wxDC* DC );
     BOARD_ITEM*         SaveItemEfface( BOARD_ITEM* PtItem, int nbitems );
 
-    // divers
     void                InstallFindFrame( const wxPoint& pos, wxDC* DC );
 
     /**
@@ -784,7 +775,7 @@ public:
      */
     void                SendMessageToEESCHEMA( BOARD_ITEM* objectToSync );
 
-    /* Special micro_ondes */
+    /* Micro waves functions */
     void                Edit_Gap( wxDC* DC, MODULE* Module );
     MODULE*             Create_MuWaveBasicShape( wxDC* DC, const wxString& name, int pad_count );
     MODULE*             Create_MuWaveComponent( wxDC* DC, int shape_type );
@@ -840,7 +831,7 @@ public:
     void            InstallPcbOptionsFrame( const wxPoint& pos, int id );
     void            InstallPcbGlobalDeleteFrame( const wxPoint& pos );
 
-    /* Gestion generale des operations sur block */
+    /* handlers for block commands */
     int             ReturnBlockCommand( int key );
     virtual void    HandleBlockPlace( wxDC* DC );
     virtual int     HandleBlockEnd( wxDC* DC );
@@ -872,14 +863,14 @@ public:
     /* Fonctions specifiques */
     void            Trace_Gerber( wxDC* DC, int draw_mode, int printmasklayer );
 
-    // Gestion des textes sur pcb
+    // Copper texts
     void            Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
     TEXTE_PCB*      Create_Texte_Pcb( wxDC* DC );
     void            Delete_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
     void            StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC );
     void            Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
 
-    // Gestion du PCB
+    // PCB handling
     bool            Clear_Pcb( wxDC* DC, bool query );
     void            Erase_Current_Layer( wxDC* DC, bool query );
     void            Erase_Zones( wxDC* DC, bool query );
@@ -903,7 +894,7 @@ public:
 
 /*********************************************************/
 /* class WinEDA_ModuleEditFrame: public WinEDA_DrawFrame */
-/* Class de la fenetre d'�dition des modules pour PCB    */
+/* Class for the footprint editor                        */
 /*********************************************************/
 
 class WinEDA_ModuleEditFrame : public WinEDA_BasePcbFrame
@@ -937,13 +928,14 @@ public:
     void            OnSelectOptionToolbar( wxCommandEvent& event );
     void            OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
 
-    /* Gestion generale des operations sur block */
+    /* handlers for block commands */
     int             ReturnBlockCommand( int key );
     virtual void    HandleBlockPlace( wxDC* DC );
     virtual int     HandleBlockEnd( wxDC* DC );
 
     BOARD_ITEM*     ModeditLocateAndDisplay();
 
+	/* Undo and redo functions */
 public:
     void            SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy, int flag_type_command = 0 );
 
@@ -953,17 +945,17 @@ private:
 
 public:
 
-    // Gestion des modules
+    // Footprint edition
     void            Place_Ancre( MODULE* module, wxDC* DC );
     void            RemoveStruct( EDA_BaseStruct* Item, wxDC* DC );
     void            Transform( MODULE* module, wxDC* DC, int transform );
 
-    // Chargement de modules
+    // loading Footprint
     MODULE*         Import_Module( wxDC* DC );
     void            Export_Module( MODULE* ptmod, bool createlib );
     void            Load_Module_Module_From_BOARD( MODULE* Module );
 
-    // Gestion des contours
+    // functions to edit footprint edges
     void            Edit_Edge_Width( EDGE_MODULE* Edge, wxDC* DC );
     void            Edit_Edge_Layer( EDGE_MODULE* Edge, wxDC* DC );
     void            Delete_Edge_Module( EDGE_MODULE* Edge, wxDC* DC );
@@ -973,7 +965,7 @@ public:
     void            Start_Move_EdgeMod( EDGE_MODULE* drawitem, wxDC* DC );
     void            Place_EdgeMod( EDGE_MODULE* drawitem, wxDC* DC );
 
-    // Gestion des librairies:
+    // handlers for libraries:
     void            Delete_Module_In_Library( const wxString& libname );
     int             Create_Librairie( const wxString& LibName );
     void            Select_Active_Library();

@@ -4,6 +4,24 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Oct-13 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++ pcbnew:
+	remove a change for Read VIA because via attributes
+	(TROUGH VIA, BLIND VIA or BURIED VIA) are autorisations for layer connection,
+	and are not a real layer indicator. 
+	If a via connect layers from copper to component, it can have a BURIED VIA attribute.
+	the meaning is for this via the layer pair can be changed for other layer pair
+	if after editing this via connect 2 tracks which are only int internal layers,
+	its layer pair can be changed.
+	If a via has a TROUGH VIA attribute, it connects ALL layers, whenever tracks
+	connected to it.
+	Note: curenty: only TROUGH VIA are handled.
+	Other types (BLIND VIA and BURIED VIA) are only experimental.
+	A **lot** of code is needed for a full support.
+	enhancements in connectivity computation
+	
+
 
 2007-Oct-15 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
 ================================================================================

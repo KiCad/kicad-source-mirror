@@ -413,5 +413,5 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     }
 
     SetToolbars();
-    Affiche_Status_Box();    /* Affichage des coord curseur */
+    Affiche_Status_Box();    /* Display new cursor coordinates */
 }

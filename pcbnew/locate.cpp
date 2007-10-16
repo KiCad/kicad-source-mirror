@@ -663,6 +663,21 @@ TEXTE_MODULE* LocateTexteModule( BOARD* Pcb, MODULE** PtModule, int typeloc )
 }
 
 
+
+/******************************************/
+inline int Dist(wxPoint & p1, wxPoint & p2)
+/******************************************/
+/*
+return the dist min between p1 and p2
+*/
+{
+int dist;
+	dist = abs(p1.x - p2.x) + abs (p1.y - p2.y);
+	dist *= 7;
+	dist /= 10;
+	return dist;
+}
+
 /**************************************************************/
 TRACK* Locate_Piste_Connectee( TRACK* PtRefSegm, TRACK* pt_base,
                                TRACK* pt_lim, int extr )
@@ -686,6 +701,7 @@ TRACK* Locate_Piste_Connectee( TRACK* PtRefSegm, TRACK* pt_base,
     int     Reflayer;
     wxPoint pos_ref;
     int     ii;
+	int     min_dist;
 
     if( extr == START )
         pos_ref = PtRefSegm->m_Start;
@@ -708,13 +724,16 @@ TRACK* Locate_Piste_Connectee( TRACK* PtRefSegm, TRACK* pt_base,
                 goto suite;
             if( PtSegmN == PtRefSegm )
                 goto suite;
-            if( pos_ref == PtSegmN->m_Start )
+
+			min_dist = (PtSegmN->m_Width + PtRefSegm->m_Width)/2;
+
+            if( Dist(pos_ref, PtSegmN->m_Start) < min_dist )
             {       /* Test des couches */
                 if( Reflayer & PtSegmN->ReturnMaskLayer() )
                     return PtSegmN;
             }
 
-            if( pos_ref == PtSegmN->m_End )
+            if( Dist(pos_ref, PtSegmN->m_End) < min_dist )
             {       /* Test des couches */
                 if( Reflayer & PtSegmN->ReturnMaskLayer() )
                     return PtSegmN;
@@ -732,13 +751,16 @@ suite:
                 goto suite1;
             if( PtSegmB == PtRefSegm )
                 goto suite1;
-            if( pos_ref == PtSegmB->m_Start )
+
+			min_dist = (PtSegmB->m_Width + PtRefSegm->m_Width)/2;
+
+            if( Dist(pos_ref, PtSegmB->m_Start) < min_dist )
             {       /* Test des couches */
                 if( Reflayer & PtSegmB->ReturnMaskLayer() )
                     return PtSegmB;
             }
 
-            if( pos_ref == PtSegmB->m_End )
+            if( Dist(pos_ref, PtSegmB->m_End) < min_dist )
             {       /* Test des couches */
                 if( Reflayer & PtSegmB->ReturnMaskLayer() )
                     return PtSegmB;
@@ -769,13 +791,16 @@ suite1:
             continue;
         }
 
-        if( pos_ref == PtSegmN->m_Start )
+
+		min_dist = (PtSegmN->m_Width + PtRefSegm->m_Width)/2;
+
+        if( Dist(pos_ref,PtSegmN->m_Start) < min_dist )
         {       /* Test des couches */
             if( Reflayer & PtSegmN->ReturnMaskLayer() )
                 return PtSegmN;
         }
 
-        if( pos_ref == PtSegmN->m_End )
+        if( Dist(pos_ref, PtSegmN->m_End) < min_dist )
         {       /* Test des couches */
             if( Reflayer & PtSegmN->ReturnMaskLayer() )
                 return PtSegmN;

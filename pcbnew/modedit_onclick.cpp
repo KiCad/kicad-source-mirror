@@ -30,8 +30,7 @@
 void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 /*************************************************************************/
 
-/* Traite les commandes declenchée par le bouton gauche de la souris,
- *  quand un outil est deja selectionné
+/* Handle the left click in footprint editor
  */
 {
     BOARD_ITEM* DrawStruct = GetCurItem();
@@ -39,7 +38,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     DrawPanel->CursorOff( DC );
     if( m_ID_current_state == 0 )
     {
-        if( DrawStruct && DrawStruct->m_Flags ) // Commande "POPUP" en cours
+        if( DrawStruct && DrawStruct->m_Flags ) // Command in progress
         {
             switch( DrawStruct->Type() )
             {
@@ -75,7 +74,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     DrawStruct = GetCurItem();
     if( !DrawStruct || (DrawStruct->m_Flags == 0) )
     {
-        DrawStruct = (BOARD_ITEM*) ModeditLocateAndDisplay();
+        DrawStruct = ModeditLocateAndDisplay();
         SetCurItem( DrawStruct );
     }
 
@@ -177,9 +176,9 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
                                            wxMenu*        PopMenu )
 /*********************************************************************/
 
-/* Prepare le menu PullUp affiché par un click sur le bouton droit
- *  de la souris.
- *  Ce menu est ensuite complété par la liste des commandes de ZOOM
+/* Handle the right click in the footprint editor:
+ * Create the pull up menu
+ * After this menu is built, the standart ZOOM menu is added
  */
 {
     BOARD_ITEM*     DrawStruct = GetCurItem();
@@ -376,9 +375,8 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
 void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 /****************************************************************************/
 
-/* Appelé sur un double click:
- *  pour un élément editable (textes, composant):
- *      appel de l'editeur correspondant.
+/*  Handle the double click in the footprin editor:
+ *  If the double clicked item is editable: call the corresponding editor.
  */
 {
     BOARD_ITEM*     DrawStruct = GetCurItem();
@@ -392,13 +390,13 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
     case 0:
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
-            DrawStruct = PcbGeneralLocateAndDisplay();
+            DrawStruct = ModeditLocateAndDisplay();
         }
 
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags != 0) )
             break;
 
-        // Element localisé
+        // Item found
         SetCurItem( DrawStruct );
 
         switch( DrawStruct->Type() )

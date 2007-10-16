@@ -33,7 +33,7 @@ static bool DisplayRastnestInProgress;      // Enable the display of the ratsnes
  *  Build_Board_Ratsnest( wxDC* DC )  Create this rastnest
  *  for each net:
  *  First:
- *  we create links (and therefore a logical block) between 2 pad. This is achieved by:
+ *  we create a link (and therefore a logical block) between 2 pad. This is achieved by:
  *  search for a pad without link.
  *  search its nearest pad
  *  link these 2 pads (i.e. create a ratsnest item)
