@@ -171,13 +171,6 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( wxDC* DC, FILE* File,
                                 &PtSegm->m_Drill );
 
         PtSegm->m_Width = width;
-
-        if( makeType == TYPEVIA )
-        {
-			// a THROUGH HOLE VIA always connects all layers
-			if ( shape == THROUGH_VIA )
-				layer = (COPPER_LAYER_N << 4) + LAYER_CMP_N;
-		}
         PtSegm->m_Shape = shape;
 
         if( arg_count < 7 )
