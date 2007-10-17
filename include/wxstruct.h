@@ -502,7 +502,6 @@ public:
     int*            build_ratsnest_pad( EDA_BaseStruct* ref, const wxPoint& refpos, bool init );
 
     void            Tst_Ratsnest( wxDC* DC, int ref_netcode );
-    void            Recalcule_all_net_connexion( wxDC* DC );
     void            test_connexions( wxDC* DC );
     void            test_1_net_connexion( wxDC* DC, int net_code );
     void            reattribution_reference_piste( int affiche );

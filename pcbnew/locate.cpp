@@ -664,18 +664,27 @@ TEXTE_MODULE* LocateTexteModule( BOARD* Pcb, MODULE** PtModule, int typeloc )
 
 
 
-/******************************************/
-inline int Dist(wxPoint & p1, wxPoint & p2)
-/******************************************/
+/******************************************************************/
+inline bool IsPointsAreNear(wxPoint & p1, wxPoint & p2, int max_dist)
+/******************************************************************/
 /*
-return the dist min between p1 and p2
+return true if the dist between p1 and p2 < max_dist
+Currently in test (currently rasnest algos work only if p1 == p2
 */
+{
+extern bool zflg;
+if (zflg == true)
 {
 int dist;
 	dist = abs(p1.x - p2.x) + abs (p1.y - p2.y);
 	dist *= 7;
 	dist /= 10;
-	return dist;
+	if ( dist < max_dist ) return true;
+}
+else
+	if ( p1 == p2 ) return true;
+//#endif
+	return false;
 }
 
 /**************************************************************/
@@ -683,25 +692,30 @@ TRACK* Locate_Piste_Connectee( TRACK* PtRefSegm, TRACK* pt_base,
                                TRACK* pt_lim, int extr )
 /**************************************************************/
 
-/* recherche le segment connecte au segment pointe par
- *  PtRefSegm:
- *  si int extr = START, le point de debut du segment est utilise
- *  si int extr = END, le point de fin du segment est utilise
- *  La recherche ne se fait que sur les EXTREMITES des segments
+/** Search for the track (or via) segment which is connected to the track segment PtRefSegm
+ *  if extr == START, the starting track segment PtRefSegm is used to locate a connected segment
+ *  if extr == END, the ending track segment PtRefSegm is used
+ *  The test connection consider only end track segments
  * 
- *  La recherche se fait de l'adresse :
- *      pt_base a pt_lim (borne finale comprise)
- *      si pt_lim = NULL, la recherche se fait jusqu'a la fin de la liste
- *  Afin d'accelerer la recherche, une 1ere passe est faite, avec une recherche
- *  realisee sur un ensemble de +/- 100 points autour du point courant.
- *  Si echec: recherche generale
+ *  Search is made from  pt_base to pt_lim (in the track linked list)
+ *  if pt_lim == NULL,  the search  is made from  pt_base to the end of list
+ *
+ *  In order to have a fast computation time:
+ *  a first search is made considering only the +/- 50 next door neightbour of PtRefSegm.
+ *  if no track is found : the entire list is tested
+ *
+ *  @param PtRefSegm = reference segment
+ *  @param pt_base = lower limit for search
+ *  @param pt_lim = upper limit for search (can be NULL)
+ *  @param extr = START or END = end of ref track segment to use in tests
  */
 {
+	#define NEIGHTBOUR_COUNT_MAX 50
     TRACK*  PtSegmB, * PtSegmN;
     int     Reflayer;
     wxPoint pos_ref;
     int     ii;
-	int     min_dist;
+	int     max_dist;
 
     if( extr == START )
         pos_ref = PtRefSegm->m_Start;
@@ -713,7 +727,7 @@ TRACK* Locate_Piste_Connectee( TRACK* PtRefSegm, TRACK* pt_base,
     /* 1ere passe */
     PtSegmB = PtSegmN = PtRefSegm;
 
-    for( ii = 0; ii < 50; ii++ )
+    for( ii = 0; ii < NEIGHTBOUR_COUNT_MAX; ii++ )
     {
         if( (PtSegmN == NULL) && (PtSegmB == NULL) )
             break;
@@ -725,15 +739,16 @@ TRACK* Locate_Piste_Connectee( TRACK* PtRefSegm, TRACK* pt_base,
             if( PtSegmN == PtRefSegm )
                 goto suite;
 
-			min_dist = (PtSegmN->m_Width + PtRefSegm->m_Width)/2;
+			/* max_dist is the max distance between 2 tack ends which ensure a copper continuty */
+			max_dist = (PtSegmN->m_Width + PtRefSegm->m_Width)/2;
 
-            if( Dist(pos_ref, PtSegmN->m_Start) < min_dist )
+            if( IsPointsAreNear(pos_ref, PtSegmN->m_Start, max_dist) )
             {       /* Test des couches */
                 if( Reflayer & PtSegmN->ReturnMaskLayer() )
                     return PtSegmN;
             }
 
-            if( Dist(pos_ref, PtSegmN->m_End) < min_dist )
+            if( IsPointsAreNear(pos_ref, PtSegmN->m_End, max_dist) )
             {       /* Test des couches */
                 if( Reflayer & PtSegmN->ReturnMaskLayer() )
                     return PtSegmN;
@@ -752,15 +767,15 @@ suite:
             if( PtSegmB == PtRefSegm )
                 goto suite1;
 
-			min_dist = (PtSegmB->m_Width + PtRefSegm->m_Width)/2;
+			max_dist = (PtSegmB->m_Width + PtRefSegm->m_Width)/2;
 
-            if( Dist(pos_ref, PtSegmB->m_Start) < min_dist )
+            if( IsPointsAreNear(pos_ref, PtSegmB->m_Start, max_dist) )
             {       /* Test des couches */
                 if( Reflayer & PtSegmB->ReturnMaskLayer() )
                     return PtSegmB;
             }
 
-            if( Dist(pos_ref, PtSegmB->m_End) < min_dist )
+            if( IsPointsAreNear(pos_ref, PtSegmB->m_End, max_dist) )
             {       /* Test des couches */
                 if( Reflayer & PtSegmB->ReturnMaskLayer() )
                     return PtSegmB;
@@ -792,15 +807,15 @@ suite1:
         }
 
 
-		min_dist = (PtSegmN->m_Width + PtRefSegm->m_Width)/2;
+		max_dist = (PtSegmN->m_Width + PtRefSegm->m_Width)/2;
 
-        if( Dist(pos_ref,PtSegmN->m_Start) < min_dist )
+        if( IsPointsAreNear(pos_ref,PtSegmN->m_Start, max_dist) )
         {       /* Test des couches */
             if( Reflayer & PtSegmN->ReturnMaskLayer() )
                 return PtSegmN;
         }
 
-        if( Dist(pos_ref, PtSegmN->m_End) < min_dist )
+        if( IsPointsAreNear(pos_ref, PtSegmN->m_End, max_dist) )
         {       /* Test des couches */
             if( Reflayer & PtSegmN->ReturnMaskLayer() )
                 return PtSegmN;

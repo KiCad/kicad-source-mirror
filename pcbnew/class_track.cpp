@@ -16,6 +16,28 @@
 #include "protos.h"
 
 
+// #define RATSNET_DEBUG
+
+#ifdef RATSNET_DEBUG
+
+/**************************************/
+void DbgDisplayTrackInfos(TRACK * track)
+/**************************************/
+/* Only for ratsnest debug
+*/
+{
+wxString msg;
+	msg << wxT("Netcode ") << track->GetNet();
+	msg << wxT(" - ") << track->GetSubNet();
+	msg << wxT("\nptrS ") << (unsigned) track->start;
+	msg << wxT(" ptrE ") << (unsigned) track->end;
+	msg << wxT(" this ") << (unsigned) track;
+	
+	wxMessageBox(msg);
+}
+
+#endif
+
 /**************************************/
 /* Classes pour Pistes, Vias et Zones */
 /**************************************/
@@ -715,6 +737,9 @@ void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
 {
     wxString msg;
     int      text_pos;
+#ifdef RATSNET_DEBUG
+DbgDisplayTrackInfos(this);
+#endif
 
     frame->MsgPanel->EraseMsgBox();
 
@@ -863,6 +888,7 @@ bool TRACK::HitTest( const wxPoint& ref_pos )
     
     return false;    
 }
+
 
 
 #if defined(DEBUG)
