@@ -1,5 +1,5 @@
 /*******************************************************************/
-/*	class_track.h: definition des structures de donnees type track */
+/*	class_track.h: definitions relatives to tracks, vias and zones */
 /*******************************************************************/
 
 #ifndef CLASS_TRACK_H
@@ -14,10 +14,6 @@
 #define BLIND_VIA        1              /* this via which connect from internal layers to an external layer */
 #define NOT_DEFINED_VIA  0              /* reserved (unused) */
 #define SQUARE_VIA_SHAPE 0x80000000     /* Flag pour forme carree */
-
-#define VIA_NORMALE     THROUGH_VIA
-#define VIA_ENTERREE    BURIED_VIA
-#define VIA_BORGNE      BLIND_VIA
 
 /***/
 
@@ -78,18 +74,20 @@ public:
      */
     void    Insert( BOARD* Pcb, BOARD_ITEM* InsertPoint );
 
-    /* Recherche du meilleur point d'insertion */
+/*Search the "best" insertion point within the track linked list
+ *  the best point is the of the corresponding net code section
+ *  @return the item found in the linked list (or NULL if no track)
+ */
     TRACK*  GetBestInsertPoint( BOARD* Pcb );
 
-    /* Copie d'un Element d'une chaine de n elements
-     *  TRACK*  CopyList( int NbSegm = 1 ) const;
+    /* Search (within the track linked list) the first segment matching the netcode
+     * ( the linked list is always sorted by net codes )
      */
-
-    /* Recherche du debut du net
-     *  ( les elements sont classes par net_code croissant ) */
     TRACK*  GetStartNetCode( int NetCode );
 
-    /* Recherche de la fin du net */
+    /* Search (within the track linked list) the last segment matching the netcode
+     * ( the linked list is always sorted by net codes )
+     */
     TRACK*  GetEndNetCode( int NetCode );
 
     /**

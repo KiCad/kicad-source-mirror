@@ -1,6 +1,6 @@
-/******************************************************************/
-/* fonctions membres des classes TRACK et derivees (voir struct.h */
-/******************************************************************/
+/*******************************************************************/
+/* Functions relatives to tracks, vias and zones(see class_track.h */
+/*******************************************************************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -21,49 +21,50 @@
 #ifdef RATSNET_DEBUG
 
 /**************************************/
-void DbgDisplayTrackInfos(TRACK * track)
+void DbgDisplayTrackInfos( TRACK* track )
 /**************************************/
+
 /* Only for ratsnest debug
-*/
+ */
 {
-wxString msg;
-	msg << wxT("Netcode ") << track->GetNet();
-	msg << wxT(" - ") << track->GetSubNet();
-	msg << wxT("\nptrS ") << (unsigned) track->start;
-	msg << wxT(" ptrE ") << (unsigned) track->end;
-	msg << wxT(" this ") << (unsigned) track;
-	
-	wxMessageBox(msg);
+    wxString msg;
+
+    msg << wxT( "Netcode " ) << track->GetNet();
+    msg << wxT( " - " ) << track->GetSubNet();
+    msg << wxT( "\nptrS " ) << (unsigned) track->start;
+    msg << wxT( " ptrE " ) << (unsigned) track->end;
+    msg << wxT( " this " ) << (unsigned) track;
+
+    wxMessageBox( msg );
 }
+
 
 #endif
 
-/**************************************/
-/* Classes pour Pistes, Vias et Zones */
-/**************************************/
-
-/* Constructeur des classes type pistes, vias et zones */
-
+/**********************************************************/
 TRACK::TRACK( BOARD_ITEM* StructFather, KICAD_T idtype ) :
     BOARD_ITEM( StructFather, idtype )
+/**********************************************************/
 {
-    m_Width        = 0;
-    m_Shape        = S_SEGMENT;
-    start          = end = NULL;
+    m_Width = 0;
+    m_Shape = S_SEGMENT;
+    start   = end = NULL;
     SetNet( 0 );
     SetSubNet( 0 );
-    m_Drill        = -1;
-    m_Param        = 0;
+    m_Drill = -1;
+    m_Param = 0;
 }
 
 
+/***************************/
 wxString TRACK::ShowWidth()
+/***************************/
 {
     wxString msg;
-    
-#if 0    
+
+#if 0
     double   value = To_User_Unit( g_UnitMetric, m_Width, PCB_INTERNAL_UNIT );
-    
+
     if( g_UnitMetric == INCHES )  // Affichage en mils
         msg.Printf( wxT( "%.1f" ), value * 1000 );
     else
@@ -73,7 +74,7 @@ wxString TRACK::ShowWidth()
     valeur_param( m_Width, msg );
 
 #endif
-    
+
     return msg;
 }
 
@@ -94,7 +95,7 @@ SEGVIA::SEGVIA( BOARD_ITEM* StructFather ) :
 TRACK::TRACK( const TRACK& Source ) :
     BOARD_ITEM( Source )
 {
-    m_Shape     = Source.m_Shape;
+    m_Shape = Source.m_Shape;
     SetNet( Source.GetNet() );
     m_Flags     = Source.m_Flags;
     m_TimeStamp = Source.m_TimeStamp;
@@ -108,26 +109,25 @@ TRACK::TRACK( const TRACK& Source ) :
 }
 
 
-/*  Because of the way SEGVIA and SEGZONE are derived from TRACK and because there are 
-    virtual functions being used, we can no longer simply copy a TRACK and
-    expect it to be a via or zone.  We must construct a true SEGVIA or SEGZONE so its constructor
-    can initialize the virtual function table properly.  This factory type of
-    function called Copy() can duplicate either a TRACK, SEGVIA, or SEGZONE.
-*/
+/*  Because of the way SEGVIA and SEGZONE are derived from TRACK and because there are
+ *  virtual functions being used, we can no longer simply copy a TRACK and
+ *  expect it to be a via or zone.  We must construct a true SEGVIA or SEGZONE so its constructor
+ *  can initialize the virtual function table properly.  This factory type of
+ *  function called Copy() can duplicate either a TRACK, SEGVIA, or SEGZONE.
+ */
 TRACK* TRACK::Copy() const
 {
     if( Type() == TYPETRACK )
-        return new TRACK(*this);
-    
+        return new TRACK( *this );
+
     if( Type() == TYPEVIA )
-        return new SEGVIA( (const SEGVIA&) *this );
+        return new SEGVIA( (const SEGVIA &) * this );
 
     if( Type() == TYPEZONE )
-        return new SEGZONE( (const SEGZONE&) *this );
-    
+        return new SEGZONE( (const SEGZONE &) * this );
+
     return NULL;    // should never happen
 }
-
 
 
 /***********************/
@@ -147,13 +147,13 @@ bool TRACK::IsNull()
 double TRACK::GetLength() const
 /*************************************************************/
 {
-    int dx = m_Start.x - m_End.x;
-    int dy = m_Start.y - m_End.y;
+    int    dx = m_Start.x - m_End.x;
+    int    dy = m_Start.y - m_End.y;
 
     double dist = ( (double) dx * dx ) + ( (double) dy * dy );
-    
+
     dist = sqrt( dist );
-    
+
     return dist;
 }
 
@@ -177,7 +177,7 @@ int TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
 
     int dx = m_Start.x - point.x;
     int dy = m_Start.y - point.y;
-    
+
     if( min_dist == 0 )
     {
         if( (dx == 0) && (dy == 0 ) )
@@ -212,13 +212,13 @@ int TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
 
 // see class_track.h
 // SEGVIA and SEGZONE inherit this version
-SEARCH_RESULT TRACK::Visit( INSPECTOR* inspector, const void* testData, 
-        const KICAD_T scanTypes[] )
+SEARCH_RESULT TRACK::Visit( INSPECTOR* inspector, const void* testData,
+                            const KICAD_T scanTypes[] )
 {
-    KICAD_T     stype = *scanTypes;
+    KICAD_T stype = *scanTypes;
 
-#if 0 && defined(DEBUG)
-    std::cout <<  GetClass().mb_str() << ' ';
+#if 0 && defined (DEBUG)
+    std::cout << GetClass().mb_str() << ' ';
 #endif
 
     // If caller wants to inspect my type
@@ -232,22 +232,14 @@ SEARCH_RESULT TRACK::Visit( INSPECTOR* inspector, const void* testData,
 }
 
 
-// see class_track.h
+/***********************************************/
 bool SEGVIA::IsOnLayer( int layer_number ) const
+/***********************************************/
 {
-/* its the same logic, don't need this
-    int via_type = Shape();
-
-    if( via_type == VIA_NORMALE )
-    {
-        if( layer_number <= LAYER_CMP_N )
-            return true;
-        else
-            return false;
-    }
-
-    // VIA_BORGNE ou  VIA_ENTERREE:
-*/
+/**
+ *  @param layer_number = layer number to test
+ *  @return true if the via is on the layer layer_number
+ */
 
     int bottom_layer, top_layer;
 
@@ -264,24 +256,23 @@ bool SEGVIA::IsOnLayer( int layer_number ) const
 int TRACK::ReturnMaskLayer()
 /***********************************/
 
-/* Retourne le masque (liste bit a bit ) des couches occupees par le segment
- *  de piste pointe par PtSegm.
- *  Si PtSegm pointe une via, il y a plusieurs couches occupees
+/* Return the mask layer for this.
+ *  for a via, there is more than one layer used
  */
 {
     if( Type() == TYPEVIA )
     {
         int via_type = Shape();
 
-        if( via_type == VIA_NORMALE )
+        if( via_type == THROUGH_VIA )
             return ALL_CU_LAYERS;
 
-        // VIA_BORGNE ou  VIA_ENTERREE:
+        // BLIND_VIA ou  BURIED_VIA:
 
         int bottom_layer, top_layer;
 
         // ReturnLayerPair() knows how layers are stored
-        ((SEGVIA*)this)->ReturnLayerPair( &top_layer, &bottom_layer );
+        ( (SEGVIA*) this )->ReturnLayerPair( &top_layer, &bottom_layer );
 
         int layermask = 0;
         while( bottom_layer <= top_layer )
@@ -300,13 +291,18 @@ int TRACK::ReturnMaskLayer()
 void SEGVIA::SetLayerPair( int top_layer, int bottom_layer )
 /*********************************************************/
 
-/* Met a jour .m_Layer pour une via:
- *  m_Layer code les 2 couches limitant la via
+/** Set the .m_Layer member param:
+ *  For a via m_Layer contains the 2 layers :
+ * top layer and bottom layer used by the via.
+ * The via connect all layers from top layer to bottom layer
+ * 4 bits for the first layer and 4 next bits for the secaon layer
+ * @param top_layer = first layer connected by the via
+ * @param bottom_layer = last layer connected by the via
  */
 {
     int via_type = Shape();
 
-    if( via_type == VIA_NORMALE )
+    if( via_type == THROUGH_VIA )
     {
         top_layer    = LAYER_CMP_N;
         bottom_layer = COPPER_LAYER_N;
@@ -323,8 +319,10 @@ void SEGVIA::SetLayerPair( int top_layer, int bottom_layer )
 void SEGVIA::ReturnLayerPair( int* top_layer, int* bottom_layer ) const
 /*********************************************************************/
 
-/* Retourne les 2 couches limitant la via
- *  les pointeurs top_layer et bottom_layer peuvent etre NULLs
+/* Return the 2 layers used by  the via (the via actually uses
+ * all layers between these 2 layers)
+ *  @param top_layer = pointer to the first layer (can be null)
+ *  @param bottom_layer = pointer to the last layer (can be null)
  */
 {
     int b_layer = (m_Layer >> 4) & 15;
@@ -332,21 +330,20 @@ void SEGVIA::ReturnLayerPair( int* top_layer, int* bottom_layer ) const
 
     if( b_layer > t_layer )
         EXCHG( b_layer, t_layer );
-    
+
     if( top_layer )
         *top_layer = t_layer;
-    
+
     if( bottom_layer )
         *bottom_layer = b_layer;
 }
 
 
-/* supprime du chainage la structure Struct
- *  les structures arrieres et avant sont chainees directement
+/* Remove this from the track linked list
  */
 void TRACK::UnLink()
 {
-    /* Modification du chainage arriere */
+    /* Remove the back link */
     if( Pback )
     {
         if( Pback->Type() != TYPEPCB )
@@ -358,7 +355,7 @@ void TRACK::UnLink()
             if( GetState( DELETED ) )       // A REVOIR car Pback = NULL si place en undelete
             {
                 if( g_UnDeleteStack )
-                    g_UnDeleteStack[g_UnDeleteStackPtr - 1] = (BOARD_ITEM*)Pnext;
+                    g_UnDeleteStack[g_UnDeleteStackPtr - 1] = (BOARD_ITEM*) Pnext;
             }
             else
             {
@@ -374,7 +371,7 @@ void TRACK::UnLink()
         }
     }
 
-    /* Modification du chainage avant */
+    /* Remove the forward link */
     if( Pnext )
         Pnext->Pback = Pback;
 
@@ -385,24 +382,28 @@ void TRACK::UnLink()
 /************************************************************/
 void TRACK::Insert( BOARD* Pcb, BOARD_ITEM* InsertPoint )
 /************************************************************/
+
+/* insert this (and its linked segments is exists)
+ * in the track linked list
+ * @param InsertPoint = insert point within the linked list
+ * if NULL: insert as first element of Pcb->m_Tracks
+ */
 {
     TRACK* track;
     TRACK* NextS;
 
-    /* Insertion du debut de la chaine a greffer */
     if( InsertPoint == NULL )
     {
         Pback = Pcb;
-        
+
         if( Type() == TYPEZONE )    // put SEGZONE on front of m_Zone list
         {
-            NextS = Pcb->m_Zone; 
-            Pcb->m_Zone = (SEGZONE*)this;
+            NextS = Pcb->m_Zone;
+            Pcb->m_Zone = (SEGZONE*) this;
         }
-        
         else    // put TRACK or SEGVIA on front of m_Track list
         {
-            NextS = Pcb->m_Track; 
+            NextS = Pcb->m_Track;
             Pcb->m_Track = this;
         }
     }
@@ -413,12 +414,12 @@ void TRACK::Insert( BOARD* Pcb, BOARD_ITEM* InsertPoint )
         InsertPoint->Pnext = this;
     }
 
-    /* Chainage de la fin de la liste a greffer */
+    /* Set the forward link */
     track = this;
-    while( track->Pnext )
+    while( track->Pnext )  // Search the end of added chain
         track = (TRACK*) track->Pnext;
 
-    /* Track pointe la fin de la chaine a greffer */
+    /* Link the end of chain */
     track->Pnext = NextS;
     if( NextS )
         NextS->Pback = track;
@@ -429,11 +430,10 @@ void TRACK::Insert( BOARD* Pcb, BOARD_ITEM* InsertPoint )
 TRACK* TRACK::GetBestInsertPoint( BOARD* Pcb )
 /***********************************************/
 
-/* Recherche du meilleur point d'insertion pour le nouveau segment de piste
- *  Retourne
- *      un pointeur sur le segment de piste APRES lequel l'insertion
- *           doit se faire ( dernier segment du net d'apartenance )
- *      NULL si pas de piste ( liste vide );
+/**
+ *  Search the "best" insertion point within the track linked list
+ *  the best point is the of the corresponding net code section
+ *  @return the item found in the linked list (or NULL if no track)
  */
 {
     TRACK* track, * NextTrack;
@@ -445,8 +445,8 @@ TRACK* TRACK::GetBestInsertPoint( BOARD* Pcb )
 
     /* Traitement du debut de liste */
     if( track == NULL )
-        return NULL;                    /* pas de piste ! */
-    if( GetNet() < track->GetNet() )  /* insertion en tete de liste */
+        return NULL;                    /* No tracks ! */
+    if( GetNet() < track->GetNet() )    /* no net code or net code = 0 (track not connected) */
         return NULL;
 
     while( (NextTrack = (TRACK*) track->Pnext) != NULL )
@@ -460,13 +460,13 @@ TRACK* TRACK::GetBestInsertPoint( BOARD* Pcb )
 }
 
 
-/* Recherche du debut du net
- *  ( les elements sont classes par net_code croissant )
- *  la recherche se fait a partir de this
- *  si net_code == -1 le netcode de this sera utilise
- *  Retourne un pointeur sur le debut du net, ou NULL si net non trouve
- */
+/*******************************************/
 TRACK* TRACK::GetStartNetCode( int NetCode )
+/*******************************************/
+
+/* Search (within the track linked list) the first segment matching the netcode
+ * ( the linked list is always sorted by net codes )
+ */
 {
     TRACK* Track = this;
     int    ii    = 0;
@@ -478,13 +478,13 @@ TRACK* TRACK::GetStartNetCode( int NetCode )
     {
         if( Track->GetNet() > NetCode )
             break;
-        
+
         if( Track->GetNet() == NetCode )
         {
-            ii++; 
+            ii++;
             break;
         }
-        
+
         Track = (TRACK*) Track->Pnext;
     }
 
@@ -495,10 +495,13 @@ TRACK* TRACK::GetStartNetCode( int NetCode )
 }
 
 
-/* Recherche de la fin du net
- *  Retourne un pointeur sur la fin du net, ou NULL si net non trouve
- */
+/*****************************************/
 TRACK* TRACK::GetEndNetCode( int NetCode )
+/*****************************************/
+
+/* Search (within the track linked list) the last segment matching the netcode
+ * ( the linked list is always sorted by net codes )
+ */
 {
     TRACK* NextS, * Track = this;
     int    ii = 0;
@@ -514,13 +517,13 @@ TRACK* TRACK::GetEndNetCode( int NetCode )
         NextS = (TRACK*) Track->Pnext;
         if( Track->GetNet() == NetCode )
             ii++;
-        
+
         if( NextS == NULL )
             break;
-        
+
         if( NextS->GetNet() > NetCode )
             break;
-        
+
         Track = NextS;
     }
 
@@ -531,43 +534,11 @@ TRACK* TRACK::GetEndNetCode( int NetCode )
 }
 
 
-#if 0
-/**********************************/
-TRACK* TRACK:: CopyList( int NbSegm  ) const
-/**********************************/
-/* Copie d'un Element ou d'une chaine de n elements
- *  Retourne un pointeur sur le nouvel element ou le debut de la
- *  nouvelle chaine
- */
-{
-    TRACK*        NewTrack;
-    TRACK*        FirstTrack;
-    TRACK*        OldTrack;
-    const TRACK*  Source = this;
-    
-    FirstTrack = NewTrack = Source->Copy();
-
-    for( int ii = 1; ii < NbSegm; ii++ )
-    {
-        Source = Source->Next();
-        if( Source == NULL )
-            break;
-        
-        OldTrack = NewTrack;
-        
-        NewTrack = Source->Copy();
-        
-        NewTrack->Insert( NULL, OldTrack );
-    }
-
-    return FirstTrack;
-}
-#endif
-
-
 /********************************************/
 bool TRACK::WriteTrackDescr( FILE* File )
 /********************************************/
+/* write a via description on file
+*/
 {
     int type = 0;
 
@@ -592,9 +563,10 @@ bool TRACK::WriteTrackDescr( FILE* File )
 void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
 /*********************************************************************/
 
-/* routine de trace de 1 segment de piste.
- *  Parametres :
- *  draw_mode = mode ( GR_XOR, GR_OR..)
+/** Draws the segment.
+ *  @param panel = current panel
+ *  @param DC = current device context
+ *  @param draw_mode = GR_XOR, GR_OR..
  */
 {
     int l_piste;
@@ -608,7 +580,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
 
     GRSetDrawMode( DC, draw_mode );
 
-    if( Type() == TYPEVIA ) /* VIA rencontree */
+    if( Type() == TYPEVIA )
         color = g_DesignSettings.m_ViaColor[m_Shape];
     else
         color = g_DesignSettings.m_LayerColor[m_Layer];
@@ -639,9 +611,10 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
 
     l_piste = m_Width >> 1;
 
-    if( Type() == TYPEVIA ) /* VIA rencontree */
+    if( Type() == TYPEVIA ) /* The via is drawn as a circle */
     {
-        rayon = l_piste; if( rayon < zoom )
+        rayon = l_piste;
+        if( rayon < zoom )
             rayon = zoom;
         GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y, rayon, color );
         if( rayon > (4 * zoom) )
@@ -650,7 +623,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
             GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
                       inner_rayon, color );
 
-            // Draw the via hole if the display option request it
+            // Draw the via hole if the display option allows it
             if( DisplayOpt.m_DisplayViaMode != VIA_HOLE_NOT_SHOW )
             {
                 if( (DisplayOpt.m_DisplayViaMode == ALL_VIA_HOLE_SHOW)
@@ -685,7 +658,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
         }
         else
         {
-            if( l_piste <= zoom ) /* trace simplifie si l_piste/zoom <= 1 */
+            if( l_piste <= zoom ) /* Sketch mode if l_piste/zoom <= 1 */
             {
                 GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y, rayon, color );
             }
@@ -721,9 +694,9 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
                      m_End.x, m_End.y, m_Width, color );
     }
 
-    /* Trace de l'isolation (pour segments type CUIVRE et TRACK uniquement */
+    /* Shows clearance (for tracks and vias, not for zone segments */
     if( DisplayOpt.DisplayTrackIsol && ( m_Layer <= CMP_N )
-       && ( Type() == TYPETRACK ) )
+       && ( Type() == TYPETRACK || Type() == TYPEVIA) )
     {
         GRCSegm( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
                  m_End.x, m_End.y,
@@ -737,8 +710,9 @@ void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
 {
     wxString msg;
     int      text_pos;
+
 #ifdef RATSNET_DEBUG
-DbgDisplayTrackInfos(this);
+    DbgDisplayTrackInfos( this );
 #endif
 
     frame->MsgPanel->EraseMsgBox();
@@ -763,22 +737,22 @@ DbgDisplayTrackInfos(this);
     text_pos = 1;
     Affiche_1_Parametre( frame, text_pos, _( "Type" ), msg, DARKCYAN );
 
-    /* Affiche NetName pour les segments de piste type cuivre */
+    /* Display NetName pour les segments de piste type cuivre */
     text_pos += 15;
-    if(  Type() == TYPETRACK 
-      || Type() == TYPEZONE
-      || Type() == TYPEVIA )
+    if(  Type() == TYPETRACK
+         || Type() == TYPEZONE
+         || Type() == TYPEVIA )
     {
-        EQUIPOT* equipot = ((WinEDA_PcbFrame*)frame)->m_Pcb->FindNet( GetNet() );
-        
+        EQUIPOT* equipot = ( (WinEDA_PcbFrame*) frame )->m_Pcb->FindNet( GetNet() );
+
         if( equipot )
             msg = equipot->m_Netname;
         else
             msg = wxT( "<noname>" );
-        
+
         Affiche_1_Parametre( frame, text_pos, _( "NetName" ), msg, RED );
 
-        /* Affiche net code :*/
+        /* Display net code : (usefull in test or debug) */
         msg.Printf( wxT( "%d .%d" ), GetNet(), GetSubNet() );
         text_pos += 18;
         Affiche_1_Parametre( frame, text_pos, _( "NetCode" ), msg, RED );
@@ -792,26 +766,26 @@ DbgDisplayTrackInfos(this);
             Affiche_1_Parametre( frame, -1, wxEmptyString, _( "Standard" ), RED );
     }
 
-    /* Affiche les flags Status piste */
+    /* Display the Status flags */
     msg = wxT( ". . " );
     if( GetState( SEGM_FIXE ) )
         msg[0] = 'F';
-    
+
     if( GetState( SEGM_AR ) )
         msg[2] = 'A';
-    
+
     text_pos = 42;
     Affiche_1_Parametre( frame, text_pos, _( "Stat" ), msg, MAGENTA );
 
-    /* Affiche Layer(s) */
+    /* Display layer or layer pair) */
     if( Type() == TYPEVIA )
     {
         SEGVIA* Via = (SEGVIA*) this;
         int     top_layer, bottom_layer;
-        
+
         Via->ReturnLayerPair( &top_layer, &bottom_layer );
-        msg = ReturnPcbLayerName( top_layer, TRUE ) + wxT( "/" ) 
-                + ReturnPcbLayerName( bottom_layer, TRUE );
+        msg = ReturnPcbLayerName( top_layer, TRUE ) + wxT( "/" )
+              + ReturnPcbLayerName( bottom_layer, TRUE );
     }
     else
         msg = ReturnPcbLayerName( m_Layer );
@@ -819,25 +793,25 @@ DbgDisplayTrackInfos(this);
     text_pos += 5;
     Affiche_1_Parametre( frame, text_pos, _( "Layer" ), msg, BROWN );
 
-    /* Affiche Epaisseur */
+    /* Display width */
     valeur_param( (unsigned) m_Width, msg );
     text_pos += 11;
-    
+
     if( Type() == TYPEVIA )      // Display Diam and Drill values
     {
         Affiche_1_Parametre( frame, text_pos, _( "Diam" ), msg, DARKCYAN );
 
         int drill_value = m_Drill >= 0  ?
                           m_Drill : g_DesignSettings.m_ViaDrill;
-                              
+
         valeur_param( (unsigned) drill_value, msg );
-        
+
         text_pos += 8;
         wxString title = _( "Drill" );
-        
+
         if( g_DesignSettings.m_ViaDrill >= 0 )
             title += wxT( "*" );
-        
+
         Affiche_1_Parametre( frame, text_pos, _( "Drill" ), msg, RED );
     }
     else
@@ -853,24 +827,24 @@ DbgDisplayTrackInfos(this);
  */
 bool TRACK::HitTest( const wxPoint& ref_pos )
 {
-    int     l_piste;          /* demi-largeur de la piste */
-    int     dx, dy, spot_cX, spot_cY;
-    int     ux0, uy0;
-    
+    int l_piste;          /* demi-largeur de la piste */
+    int dx, dy, spot_cX, spot_cY;
+    int ux0, uy0;
+
     /* calcul des coordonnees du segment teste */
     l_piste = m_Width >> 1;  /* l_piste = demi largeur piste */
-    
-    ux0 = m_Start.x; 
+
+    ux0 = m_Start.x;
     uy0 = m_Start.y;         /* coord de depart */
-    
-    dx = m_End.x; 
+
+    dx = m_End.x;
     dy = m_End.y;            /* coord d'arrivee */
 
     /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
-    dx -= ux0; 
+    dx -= ux0;
     dy -= uy0;
-    
-    spot_cX = ref_pos.x - ux0; 
+
+    spot_cX = ref_pos.x - ux0;
     spot_cY = ref_pos.y - uy0;
 
     if( Type() == TYPEVIA )   /* VIA rencontree */
@@ -885,58 +859,59 @@ bool TRACK::HitTest( const wxPoint& ref_pos )
         if( DistanceTest( l_piste, dx, dy, spot_cX, spot_cY ) )
             return true;
     }
-    
-    return false;    
+
+    return false;
 }
 
 
-
-#if defined(DEBUG)
+#if defined (DEBUG)
 
 /**
  * Function Show
  * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level 
+ * @param nestLevel An aid to prettier tree indenting, and is the level
  *          of nesting of this object within the overall tree.
  * @param os The ostream& to output to.
  */
 void TRACK::Show( int nestLevel, std::ostream& os )
 {
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
+
 //        " shape=\""     << m_Shape      << '"' <<
-        " layer=\""     << m_Layer      << '"' <<
-        " width=\""     << m_Width      << '"' <<
+    " layer=\"" << m_Layer << '"' <<
+    " width=\"" << m_Width << '"' <<
+
 //        " drill=\""     << m_Drill      << '"' <<
-        " netcode=\""   << GetNet()    << "\">" <<
-        "<start"        << m_Start      << "/>" <<
-        "<end"          << m_End        << "/>";
-        
-    os << "</" << GetClass().Lower().mb_str() << ">\n"; 
+    " netcode=\"" << GetNet() << "\">" <<
+    "<start" << m_Start << "/>" <<
+    "<end" << m_End << "/>";
+
+    os << "</" << GetClass().Lower().mb_str() << ">\n";
 }
 
 
 /**
  * Function Show
  * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level 
+ * @param nestLevel An aid to prettier tree indenting, and is the level
  *          of nesting of this object within the overall tree.
  * @param os The ostream& to output to.
  */
 void SEGVIA::Show( int nestLevel, std::ostream& os )
 {
     const char* cp;
-    
+
     switch( Shape() )
     {
-    case VIA_NORMALE:
+    case THROUGH_VIA:
         cp = "through";
         break;
 
-    case VIA_ENTERREE:
+    case BURIED_VIA:
         cp = "blind";
         break;
 
-    case VIA_BORGNE:
+    case BLIND_VIA:
         cp = "buried";
         break;
 
@@ -946,26 +921,22 @@ void SEGVIA::Show( int nestLevel, std::ostream& os )
         break;
     }
 
-    int topLayer;
-    int botLayer;
-    
+    int         topLayer;
+    int         botLayer;
+
     ReturnLayerPair( &topLayer, &botLayer );
-    
+
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-        " type=\""      << cp           << '"' <<
-        " layers=\""    << ReturnPcbLayerName( topLayer).Trim().mb_str() << ","  
-                        << ReturnPcbLayerName( botLayer ).Trim().mb_str() << '"' <<
-        " width=\""     << m_Width      << '"' <<
-        " drill=\""     << m_Drill      << '"' <<
-        " netcode=\""   << GetNet()    << "\">" <<
-        "<pos"          << m_Start      << "/>";
-        
-    os << "</" << GetClass().Lower().mb_str() << ">\n"; 
+    " type=\"" << cp << '"' <<
+    " layers=\"" << ReturnPcbLayerName( topLayer ).Trim().mb_str() << ","
+                                 << ReturnPcbLayerName( botLayer ).Trim().mb_str() << '"' <<
+    " width=\"" << m_Width << '"' <<
+    " drill=\"" << m_Drill << '"' <<
+    " netcode=\"" << GetNet() << "\">" <<
+    "<pos" << m_Start << "/>";
+
+    os << "</" << GetClass().Lower().mb_str() << ">\n";
 }
-
-
-
-
 
 
 #endif

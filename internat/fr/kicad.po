@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-10-13 19:18+0100\n"
+"PO-Revision-Date: 2007-10-19 08:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -734,8 +734,8 @@ msgstr "Outils"
 #: pcbnew/gendrill.cpp:1098
 #: pcbnew/gendrill.cpp:1674
 #: pcbnew/class_pad.cpp:995
-#: pcbnew/class_track.cpp:812
-#: pcbnew/class_track.cpp:817
+#: pcbnew/class_track.cpp:836
+#: pcbnew/class_track.cpp:841
 msgid "Drill"
 msgstr "Perçage"
 
@@ -984,8 +984,8 @@ msgstr "Texte Pcb"
 #: pcbnew/class_text_mod.cpp:347
 #: pcbnew/class_text_mod.cpp:351
 #: pcbnew/class_pad.cpp:972
-#: pcbnew/class_track.cpp:796
 #: pcbnew/dialog_edit_module.cpp:234
+#: pcbnew/class_track.cpp:820
 #: pcbnew/sel_layer.cpp:145
 #: pcbnew/class_module.cpp:1116
 #: gerbview/affiche.cpp:109
@@ -1035,8 +1035,8 @@ msgstr "Orient"
 #: pcbnew/classpcb.cpp:202
 #: pcbnew/class_text_mod.cpp:364
 #: pcbnew/pcbtexte.cpp:130
-#: pcbnew/class_track.cpp:820
 #: pcbnew/class_edge_mod.cpp:297
+#: pcbnew/class_track.cpp:844
 #: eeschema/affiche.cpp:188
 #: eeschema/dialog_cmp_graphic_properties.cpp:188
 #: gerbview/affiche.cpp:52
@@ -1558,7 +1558,7 @@ msgstr "Mode d'affichage Haut Contraste"
 
 #: pcbnew/pcbframe.cpp:442
 #: pcbnew/class_board_item.cpp:140
-#: pcbnew/class_track.cpp:729
+#: pcbnew/class_track.cpp:753
 msgid "Track"
 msgstr "Piste"
 
@@ -1920,10 +1920,6 @@ msgstr "Inclure pistes autoroutées"
 msgid "Include Locked Tracks"
 msgstr "Inclure pistes verrouillées"
 
-#: pcbnew/deltrack.cpp:153
-msgid "Delete NET ?"
-msgstr "Supprimer Net ?"
-
 #: pcbnew/dialog_track_options.cpp:125
 msgid "Via Size"
 msgstr "Diametre Via"
@@ -2004,6 +2000,7 @@ msgid "Filled"
 msgstr "Plein"
 
 #: pcbnew/dialog_display_options.cpp:196
+#: pcbnew/ioascii.cpp:196
 msgid "Tracks:"
 msgstr "Pistes:"
 
@@ -2082,65 +2079,9 @@ msgstr "Afficher autres éléments"
 msgid "Show page limits"
 msgstr " Afficher limites de page"
 
-#: pcbnew/clean.cpp:163
-msgid "Delete unconnected tracks:"
-msgstr "Suppression Pistes non connectées"
-
-#: pcbnew/clean.cpp:181
-msgid "ViaDef"
-msgstr "ViaDef"
-
-#: pcbnew/clean.cpp:332
-msgid "Clean Null Segments"
-msgstr "Nettoyage segments nulls"
-
-#: pcbnew/clean.cpp:420
-msgid "Merging Segments:"
-msgstr "Associe Segment"
-
-#: pcbnew/clean.cpp:422
-msgid "Merge"
-msgstr "Merge"
-
-#: pcbnew/clean.cpp:422
-#: pcbnew/dialog_pad_edit.cpp:186
-#: eeschema/dialog_erc.cpp:192
-#: eeschema/dialog_erc.cpp:196
-#: eeschema/dialog_edit_component_in_schematic.cpp:172
-msgid "0"
-msgstr "0"
-
-#: pcbnew/clean.cpp:435
-msgid "Merge: "
-msgstr "Merge: "
-
-#: pcbnew/clean.cpp:647
-msgid "DRC Control:"
-msgstr "Controle DRC:"
-
-#: pcbnew/clean.cpp:652
-msgid "NetCtr"
-msgstr "NetCtr"
-
-#: pcbnew/clean.cpp:886
-msgid "Centre"
-msgstr "Centre"
-
-#: pcbnew/clean.cpp:886
-msgid "0 "
-msgstr "0"
-
-#: pcbnew/clean.cpp:897
-msgid "Pads: "
-msgstr "Pastilles: "
-
-#: pcbnew/clean.cpp:900
-msgid "Max"
-msgstr "Max"
-
-#: pcbnew/clean.cpp:902
-msgid "Segm"
-msgstr "Segm"
+#: pcbnew/deltrack.cpp:153
+msgid "Delete NET ?"
+msgstr "Supprimer Net ?"
 
 #: pcbnew/plotgerb.cpp:72
 msgid "unable to create file "
@@ -2244,7 +2185,7 @@ msgid "No Net"
 msgstr "No Net"
 
 #: pcbnew/zones.cpp:916
-#: pcbnew/class_track.cpp:755
+#: pcbnew/class_track.cpp:779
 msgid "NetName"
 msgstr "NetName"
 
@@ -2432,10 +2373,6 @@ msgstr "Segment en cours d'édition"
 msgid "Delete Layer "
 msgstr "Effacer Couche"
 
-#: pcbnew/ioascii.cpp:207
-msgid "Error: Unexpected end of file !"
-msgstr "Erreur: Fin de fichier inattendue !"
-
 #: pcbnew/set_grid.cpp:147
 #: pcbnew/dialog_general_options.cpp:271
 #: gerbview/options.cpp:183
@@ -2512,7 +2449,7 @@ msgstr "NetName Pad:"
 #: pcbnew/dialog_pad_edit.cpp:196
 #: pcbnew/classpcb.cpp:186
 #: pcbnew/class_board_item.cpp:108
-#: pcbnew/class_track.cpp:766
+#: pcbnew/class_track.cpp:790
 msgid "Circle"
 msgstr "Cercle"
 
@@ -2524,6 +2461,14 @@ msgstr "Ovale"
 #: pcbnew/dialog_pad_edit.cpp:178
 msgid "Drill Shape:"
 msgstr "Forme du perçage:"
+
+#: pcbnew/dialog_pad_edit.cpp:186
+#: pcbnew/clean.cpp:446
+#: eeschema/dialog_erc.cpp:192
+#: eeschema/dialog_erc.cpp:196
+#: eeschema/dialog_edit_component_in_schematic.cpp:172
+msgid "0"
+msgstr "0"
 
 #: pcbnew/dialog_pad_edit.cpp:187
 msgid "90"
@@ -2562,7 +2507,7 @@ msgid "Pad Shape:"
 msgstr "Forme Pad:"
 
 #: pcbnew/dialog_pad_edit.cpp:205
-#: pcbnew/class_track.cpp:768
+#: pcbnew/class_track.cpp:792
 msgid "Standard"
 msgstr "Standard"
 
@@ -2657,6 +2602,14 @@ msgstr "Supprimer Module"
 msgid "Value "
 msgstr "Valeur "
 
+#: pcbnew/ioascii.cpp:200
+msgid "Zones:"
+msgstr "Zones:"
+
+#: pcbnew/ioascii.cpp:207
+msgid "Error: Unexpected end of file !"
+msgstr "Erreur: Fin de fichier inattendue !"
+
 #: pcbnew/pcbcfg.cpp:68
 #: eeschema/eeconfig.cpp:58
 #: cvpcb/menucfg.cpp:170
@@ -2709,10 +2662,62 @@ msgstr "Librairie: "
 msgid "Modules (%d items)"
 msgstr "Modules (%d éléments)"
 
+#: pcbnew/clean.cpp:169
+msgid "Delete unconnected tracks:"
+msgstr "Suppression Pistes non connectées"
+
+#: pcbnew/clean.cpp:188
+msgid "ViaDef"
+msgstr "ViaDef"
+
+#: pcbnew/clean.cpp:348
+msgid "Clean Null Segments"
+msgstr "Nettoyage segments nulls"
+
+#: pcbnew/clean.cpp:444
+msgid "Merging Segments:"
+msgstr "Associe Segment"
+
+#: pcbnew/clean.cpp:446
+msgid "Merge"
+msgstr "Merge"
+
+#: pcbnew/clean.cpp:460
+msgid "Merge: "
+msgstr "Merge: "
+
+#: pcbnew/clean.cpp:680
+msgid "DRC Control:"
+msgstr "Controle DRC:"
+
+#: pcbnew/clean.cpp:685
+msgid "NetCtr"
+msgstr "NetCtr"
+
+#: pcbnew/clean.cpp:963
+msgid "Centre"
+msgstr "Centre"
+
+#: pcbnew/clean.cpp:963
+msgid "0 "
+msgstr "0"
+
+#: pcbnew/clean.cpp:976
+msgid "Pads: "
+msgstr "Pastilles: "
+
+#: pcbnew/clean.cpp:980
+msgid "Max"
+msgstr "Max"
+
+#: pcbnew/clean.cpp:983
+msgid "Segm"
+msgstr "Segm"
+
 #: pcbnew/classpcb.cpp:181
 #: pcbnew/classpcb.cpp:313
 #: pcbnew/class_text_mod.cpp:337
-#: pcbnew/class_track.cpp:740
+#: pcbnew/class_track.cpp:764
 #: gerbview/affiche.cpp:93
 msgid "Type"
 msgstr "Type"
@@ -2726,7 +2731,7 @@ msgid "  Arc  "
 msgstr "  Arc  "
 
 #: pcbnew/classpcb.cpp:195
-#: pcbnew/class_track.cpp:764
+#: pcbnew/class_track.cpp:788
 msgid "Segment"
 msgstr "Segment"
 
@@ -3586,7 +3591,7 @@ msgid "Length:"
 msgstr "Long.:"
 
 #: pcbnew/class_board_item.cpp:153
-#: pcbnew/class_track.cpp:733
+#: pcbnew/class_track.cpp:757
 msgid "Zone"
 msgstr "Zone"
 
@@ -4013,19 +4018,6 @@ msgstr "Deselection"
 msgid "Deselect this layer to restore its No Change state"
 msgstr "Deselectionner cette couche pour restorer l'option Pas de Changement"
 
-#: pcbnew/class_track.cpp:760
-msgid "NetCode"
-msgstr "NetCode"
-
-#: pcbnew/class_track.cpp:780
-#: pcbnew/class_module.cpp:1135
-msgid "Stat"
-msgstr "Stat"
-
-#: pcbnew/class_track.cpp:804
-msgid "Diam"
-msgstr "Diam"
-
 #: pcbnew/dialog_edit_module.cpp:39
 msgid "Module properties"
 msgstr "Propriétés du Module"
@@ -4199,6 +4191,19 @@ msgstr "Couche Mod."
 #: pcbnew/class_edge_mod.cpp:293
 msgid "Seg Layer"
 msgstr "Couche Seg."
+
+#: pcbnew/class_track.cpp:784
+msgid "NetCode"
+msgstr "NetCode"
+
+#: pcbnew/class_track.cpp:804
+#: pcbnew/class_module.cpp:1135
+msgid "Stat"
+msgstr "Stat"
+
+#: pcbnew/class_track.cpp:828
+msgid "Diam"
+msgstr "Diam"
 
 #: pcbnew/moduleframe.cpp:177
 msgid "Module Editor: module modified!, Continue ?"

@@ -433,7 +433,7 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
     m_CopperLayerCount = 2;             // Default design is a double sided board
     m_ViaDrill = 250;                   // via drill (for the entire board)
     m_CurrentViaSize    = 450;          // Current via size
-    m_CurrentViaType    = VIA_NORMALE;  /* via type (BLIND, TROUGHT ...), bits 1 and 2 (not 0 and 1)*/
+    m_CurrentViaType    = THROUGH_VIA;  /* via type (BLIND, TROUGHT ...), bits 1 and 2 (not 0 and 1)*/
     m_CurrentTrackWidth = 170;          // current track width
     for( ii = 0; ii < HIST0RY_NUMBER; ii++ )
     {
@@ -454,9 +454,9 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
         m_LayerColor[ii] = default_layer_color[ii];
 
     // Layer colors (tracks and graphic items)
-    m_ViaColor[VIA_BORGNE]   = CYAN;
-    m_ViaColor[VIA_ENTERREE] = BROWN;
-    m_ViaColor[VIA_NORMALE]  = WHITE;
+    m_ViaColor[BLIND_VIA]   = CYAN;
+    m_ViaColor[BURIED_VIA] = BROWN;
+    m_ViaColor[THROUGH_VIA]  = WHITE;
     m_ModuleTextCMPColor = LIGHTGRAY;   // Text module color for modules on the COMPONENT layer
     m_ModuleTextCUColor  = MAGENTA;     // Text module color for modules on the COPPER layer
     m_ModuleTextNOVColor = DARKGRAY;    // Text module color for "invisible" texts (must be BLACK if really not displayed)

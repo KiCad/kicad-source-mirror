@@ -170,9 +170,9 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
             text << _( "Via" ) << wxT( " " ) << via->ShowWidth();
             
             int shape = via->Shape(); 
-            if( shape == VIA_ENTERREE )
+            if( shape == BURIED_VIA )
                 text << wxT(" ") << _( "Blind" );
-            else if( shape == VIA_BORGNE )
+            else if( shape == BLIND_VIA )
                 text << wxT(" ") << _("Buried");
             // else say nothing about normal vias
             
@@ -182,7 +182,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
                 text << wxT( " [" ) << net->m_Netname << wxT( "]" );
             }
             
-            if( shape != VIA_NORMALE )
+            if( shape != THROUGH_VIA )
             {
                 // say which layers, only two for now
                 int topLayer;
