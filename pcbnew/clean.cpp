@@ -68,23 +68,23 @@ void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC )
 /************************************************************/
 {
     frame->MsgPanel->EraseMsgBox();
-    frame->m_Pcb->GetNumSegmTrack();    /* Met a jour le compte */
+    frame->m_Pcb->GetNumSegmTrack();    // update the count
     
     /* construction de la liste des coordonn�s des pastilles */
     frame->m_Pcb->m_Status_Pcb = 0;
     frame->build_liste_pads();
     frame->recalcule_pad_net_code();
 
-    if( s_CleanVias )       /* delete redundant vias */
+    if( s_CleanVias )       // delete redundant vias
     {
         TRACK* track;
         TRACK* next_track;
-        for( track = frame->m_Pcb->m_Track; track != NULL; track = track->Next() )
+        for( track = frame->m_Pcb->m_Track;  track;  track = track->Next() )
         {
-            if( track->m_Shape != VIA_THROUGH )
+            if( track->Shape() != VIA_THROUGH )
                 continue;
             
-            /* Search and delete others vias at same location */
+            // Search and delete others vias at same location
             TRACK* alt_track = track->Next();
             for( ; alt_track != NULL; alt_track = next_track )
             {
@@ -156,10 +156,11 @@ static void suppression_piste_non_connectee( WinEDA_PcbFrame* frame, wxDC* DC )
  *  et le segment seront supprimes
  */
 {
-    TRACK*          segment, * pt_other, * pt_via;
-    TRACK*          PtStartNetCode;
-    EDA_BaseStruct* NextS;
-    D_PAD*          ptr_pad;
+    TRACK*          segment;
+    TRACK*          other;
+    TRACK*          startNetcode;
+    TRACK*          next;
+    
     int             nbpoints_supprimes = 0;
     int             masklayer, oldnetcode;
     int             type_end, flag_erase;
@@ -169,20 +170,20 @@ static void suppression_piste_non_connectee( WinEDA_PcbFrame* frame, wxDC* DC )
     frame->Affiche_Message( _( "Delete unconnected tracks:" ) );
     frame->DrawPanel->m_AbortRequest = FALSE;
 
-    /* Correction des defauts des vias et recalcul du nombre de segm */
-    frame->m_Pcb->m_NbSegmTrack = 0; ii = 0;
-    for( segment = frame->m_Pcb->m_Track; segment != NULL; segment = (TRACK*) NextS )
+    // correct via m_End defects and count number of segments
+    frame->m_Pcb->m_NbSegmTrack = 0;
+    ii = 0;
+    for( segment = frame->m_Pcb->m_Track; segment != NULL; segment = next )
     {
         frame->m_Pcb->m_NbSegmTrack++;
-        NextS = segment->Pnext;
+        next = segment->Next();
         
         if( segment->Type() == TYPEVIA )
         {
-            if( (segment->m_Start.x != segment->m_End.x )
-             || (segment->m_Start.y != segment->m_End.y ) )
+            if( segment->m_Start != segment->m_End )
             {
-                segment->m_End.x = segment->m_Start.x;
-                segment->m_End.y = segment->m_Start.y;
+                segment->m_End = segment->m_Start;
+                
                 ii++;
                 msg.Printf( wxT( "%d " ), ii );
                 Affiche_1_Parametre( frame, POS_AFF_PASSE, _( "ViaDef" ), msg, LIGHTRED );
@@ -191,18 +192,17 @@ static void suppression_piste_non_connectee( WinEDA_PcbFrame* frame, wxDC* DC )
         }
     }
 
-    /* Suppression des pistes en l'air */
-    segment     = frame->m_Pcb->m_Track;
+    // removal of unconnected tracks
     percent    = 0; 
     oldpercent = -1;
     oldnetcode = 0; 
     
-    PtStartNetCode = frame->m_Pcb->m_Track;
-    for( ii = 0; segment != NULL; segment = (TRACK*) NextS, ii++ )
+    segment = startNetcode = frame->m_Pcb->m_Track;
+    for( ii = 0;  segment;   segment = next, ii++ )
     {
-        NextS = segment->Pnext;
+        next = segment->Next();
         
-        /* Affiche activite */
+        // display activity
         percent = (100 * ii) / frame->m_Pcb->m_NbSegmTrack;
         if( percent != oldpercent )
         {
@@ -211,6 +211,7 @@ static void suppression_piste_non_connectee( WinEDA_PcbFrame* frame, wxDC* DC )
 
             msg.Printf( wxT( "%d " ), frame->m_Pcb->m_NbSegmTrack );
             Affiche_1_Parametre( frame, POS_AFF_MAX, wxT( "Max" ), msg, GREEN );
+            
             msg.Printf( wxT( "%d " ), ii );
             Affiche_1_Parametre( frame, POS_AFF_NUMSEGM, wxT( "Segm" ), msg, CYAN );
         }
@@ -220,73 +221,84 @@ static void suppression_piste_non_connectee( WinEDA_PcbFrame* frame, wxDC* DC )
 
         if( segment->GetNet() != oldnetcode )
         {
-            PtStartNetCode = segment; oldnetcode = segment->GetNet();
+            startNetcode = segment; 
+            oldnetcode = segment->GetNet();
         }
 
-        flag_erase = 0; type_end = 0;
+        flag_erase = 0; 
+        type_end = 0;
         /* y a t-il une pastille sur chaque extremite */
 
         masklayer = segment->ReturnMaskLayer();
 
-        ptr_pad = Fast_Locate_Pad_Connecte( frame->m_Pcb, segment->m_Start, masklayer );
-
-        if( ptr_pad != NULL )
+        D_PAD* pad;
+        
+        pad = Fast_Locate_Pad_Connecte( frame->m_Pcb, segment->m_Start, masklayer );
+        if( pad != NULL )
         {
-            segment->start = ptr_pad;
-            type_end |= START_SUR_PAD;
+            segment->start = pad;
+            type_end |= START_ON_PAD;
         }
 
-        ptr_pad = Fast_Locate_Pad_Connecte( frame->m_Pcb, segment->m_End, masklayer );
-
-        if( ptr_pad != NULL )
+        pad = Fast_Locate_Pad_Connecte( frame->m_Pcb, segment->m_End, masklayer );
+        if( pad != NULL )
         {
-            segment->end = ptr_pad;
-            type_end   |= END_SUR_PAD;
+            segment->end = pad;
+            type_end |= END_ON_PAD;
         }
 
-        /* Test si une extremite est connectee sur une piste */
-        if( (type_end & START_SUR_PAD ) == 0 )
+        // if not connected to a pad, test if segment's START is connected to another track
+        if( (type_end & START_ON_PAD ) == 0 )
         {
-            pt_other = Locate_Piste_Connectee( segment, frame->m_Pcb->m_Track,
+            other = Locate_Piste_Connectee( segment, frame->m_Pcb->m_Track,
                                                NULL, START );
-
-            if( pt_other == NULL )
+            if( other == NULL )
                 flag_erase |= 1;
 
-            else    /* Segment ou via connectee a cette extremite */
+            else    // segment or via connected to this end
             {
-                segment->start = pt_other;
-                if( pt_other->Type() == TYPEVIA ) /* recherche d'un autre segment */
+                segment->start = other;
+                
+                if( other->Type() == TYPEVIA )  
                 {
+                    // search for another segment following the via
+                    
                     segment->SetState( BUSY, ON );
-                    pt_via   = pt_other;
-                    pt_other = Locate_Piste_Connectee( pt_via, frame->m_Pcb->m_Track,
+                    
+                    TRACK* via = other;
+                    other = Locate_Piste_Connectee( via, frame->m_Pcb->m_Track,
                                                        NULL, START );
-                    if( pt_other == NULL )
+                    if( other == NULL )
                         flag_erase |= 2;
+                    
                     segment->SetState( BUSY, OFF );
                 }
             }
         }
 
-        if( (type_end & END_SUR_PAD ) == 0 )
+        // if not connected to a pad, test if segment's END is connected to another track
+        if( (type_end & END_ON_PAD ) == 0 )
         {
-            pt_other = Locate_Piste_Connectee( segment, frame->m_Pcb->m_Track,
+            other = Locate_Piste_Connectee( segment, frame->m_Pcb->m_Track,
                                                NULL, END );
-            if( pt_other == NULL )
+            if( other == NULL )
                 flag_erase |= 0x10;
-            else     /* Segment ou via connectee a cette extremite */
+            
+            else     // segment or via connected to this end
             {
-                segment->end = pt_other;
-                if( pt_other->Type() == TYPEVIA ) /* recherche d'un autre segment */
+                segment->end = other;
+                if( other->Type() == TYPEVIA )
                 {
+                    // search for another segment following the via
+                    
                     segment->SetState( BUSY, ON );
-                    pt_via = pt_other;
-
-                    pt_other = Locate_Piste_Connectee( pt_via, frame->m_Pcb->m_Track,
+                    
+                    TRACK* via = other;
+                    other = Locate_Piste_Connectee( via, frame->m_Pcb->m_Track,
                                                        NULL, END );
-                    if( pt_other == NULL )
+                    if( other == NULL )
                         flag_erase |= 0x20;
+                    
                     segment->SetState( BUSY, OFF );
                 }
             }
@@ -294,7 +306,7 @@ static void suppression_piste_non_connectee( WinEDA_PcbFrame* frame, wxDC* DC )
 
         if( flag_erase )
         {
-            oldpercent = -1;    /* force affichage activite */
+            oldpercent = -1;    // force dispay activity
             
             nbpoints_supprimes++; 
             ii--;
@@ -302,21 +314,20 @@ static void suppression_piste_non_connectee( WinEDA_PcbFrame* frame, wxDC* DC )
             msg.Printf( wxT( "%d " ), nbpoints_supprimes );
             Affiche_1_Parametre( frame, POS_AFF_VAR, wxT( "NoConn." ), msg, LIGHTRED );
 
-            /* rectification du pointeur segment pour repartir en debut
-             *      du block des segments de meme net_code */
-            if( segment == PtStartNetCode )
+            // update the pointer to start of the contiguous netcode group
+            if( segment == startNetcode )
             {
-                NextS = segment->Pnext;
-                PtStartNetCode = (TRACK*) NextS;
+                next = segment->Next();
+                startNetcode = next;
             }
             else
-                NextS = PtStartNetCode;
+                next = startNetcode;
 
-            /* Suppression du segment */
+            // remove segment from screen and board
             segment->Draw( frame->DrawPanel, DC, GR_XOR );
-            
             segment->DeleteStructure();
-            if( NextS == NULL )
+            
+            if( next == NULL )
                 break;
         }
     }
@@ -328,8 +339,9 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
 /************************************************************/
 /* Supprime segments nulls, points inutiles .. */
 {
-    TRACK*          segment, * pt_aux;
-    EDA_BaseStruct* NextS;
+    TRACK*          segment;
+    TRACK*          other;
+    TRACK*          next;
     int             ii, nbpoints_supprimes = 0;
     int             flag, no_inc, percent, oldpercent;
     wxString        msg;
@@ -344,15 +356,16 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
     nbpoints_supprimes = 0; 
     percent = 0; 
     oldpercent = -1;
+    
     frame->MsgPanel->EraseMsgBox();
     frame->Affiche_Message( _( "Clean Null Segments" ) );
 
     Affiche_1_Parametre( frame, POS_AFF_VAR, wxT( "NullSeg" ), wxT( "0" ), a_color );
     
     segment = frame->m_Pcb->m_Track;
-    for( segment = frame->m_Pcb->m_Track; segment != NULL; segment = (TRACK*) NextS )
+    for( segment = frame->m_Pcb->m_Track;  segment;  segment = next )
     {
-        NextS = segment->Pnext;
+        next = (TRACK*) segment->Next();
         if( !segment->IsNull() )
             continue;
 
@@ -375,7 +388,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
     oldpercent = -1;
     
     segment  = frame->m_Pcb->m_Track;
-    for( ii = 0; segment != NULL; segment = (TRACK*) segment->Pnext, ii++ )
+    for( ii = 0;  segment;  segment = (TRACK*) segment->Next(), ii++ )
     {
         /* affichage activite */
         percent = (100 * ii) / frame->m_Pcb->m_NbSegmTrack;
@@ -394,29 +407,29 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
                 return -1;
         }
 
-        for( pt_aux = (TRACK*) segment->Pnext; pt_aux != NULL; pt_aux = (TRACK*) NextS )
+        for( other = (TRACK*) segment->Next();  other;  other = next )
         {
             int erase = 0;
-            NextS = pt_aux->Pnext;
+            next = (TRACK*) other->Next();
 
-            if( segment->Type() != pt_aux->Type() )
+            if( segment->Type() != other->Type() )
                 continue;
             
-            if( segment->GetLayer() != pt_aux->GetLayer() )
+            if( segment->GetLayer() != other->GetLayer() )
                 continue;
             
-            if( segment->GetNet() != pt_aux->GetNet() )
+            if( segment->GetNet() != other->GetNet() )
                 break;
 
-            if( segment->m_Start == pt_aux->m_Start )
+            if( segment->m_Start == other->m_Start )
             {
-                if( segment->m_End == pt_aux->m_End )
+                if( segment->m_End == other->m_End )
                     erase = 1;
             }
 
-            if( segment->m_Start == pt_aux->m_End )
+            if( segment->m_Start == other->m_End )
             {
-                if( segment->m_End == pt_aux->m_Start )
+                if( segment->m_End == other->m_Start )
                     erase = 1;
             }
 
@@ -424,8 +437,8 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
             if( erase )
             {
                 ii--;
-                pt_aux->Draw( frame->DrawPanel, DC, GR_OR );
-                pt_aux->DeleteStructure();
+                other->Draw( frame->DrawPanel, DC, GR_OR );
+                other->DeleteStructure();
                 nbpoints_supprimes++;
 
                 msg.Printf( wxT( "  %d" ), nbpoints_supprimes );
@@ -446,12 +459,14 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
     Affiche_1_Parametre( frame, POS_AFF_VAR, _( "Merge" ), _( "0" ), a_color );
 
     ii = 0;
-    segment  = frame->m_Pcb->m_Track; 
-    for( segment = frame->m_Pcb->m_Track; segment!= NULL; segment = (TRACK*) NextS )
+    for( segment = frame->m_Pcb->m_Track;  segment;  segment = next )
     {
-        TRACK* pt_segm_s, * pt_segm_e, * pt_segm_delete;
+        TRACK*  segStart;
+        TRACK*  segEnd;
+        TRACK*  pt_segm_delete;
 
-        NextS = segment->Pnext;
+        next = (TRACK*) segment->Next();
+        
         /* affichage activite */
         ii++;
         percent = (100 * ii) / frame->m_Pcb->m_NbSegmTrack;
@@ -475,29 +490,30 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
 
         flag = no_inc = 0;
 
-        /* Recherche d'un point possible raccorde sur DEBUT de segment: */
-        for( pt_segm_s = (TRACK*) segment->Pnext; ; )
+        // search for a possible point that connects on START of segment
+        for( segStart = (TRACK*) segment->Next(); ; )
         {
-            pt_segm_s = Locate_Piste_Connectee( segment, pt_segm_s,
+            segStart = Locate_Piste_Connectee( segment, segStart,
                                                 NULL, START );
-            if( pt_segm_s )
+            if( segStart )
             {
-                /* les 2 segments doivent avoir meme largeur */
-                if( segment->m_Width != pt_segm_s->m_Width )
+                // the two segments must have the same width
+                if( segment->m_Width != segStart->m_Width )
                     break;
 
-                /* Ce ne peut etre une via */
-                if( pt_segm_s->Type() != TYPETRACK )
+                // it cannot be a via
+                if( segStart->Type() != TYPETRACK )
                     break;
 
                 /* On ne peut avoir que 1 seul segment connecte */
-                pt_segm_s->SetState( BUSY, ON );
-                pt_aux = Locate_Piste_Connectee( segment, frame->m_Pcb->m_Track,
+                segStart->SetState( BUSY, ON );
+                other = Locate_Piste_Connectee( segment, frame->m_Pcb->m_Track,
                                                  NULL, START );
-                pt_segm_s->SetState( BUSY, OFF );
+                segStart->SetState( BUSY, OFF );
 
-                if( pt_aux == NULL )
-                    flag = 1;/* OK */
+                if( other == NULL )
+                    flag = 1;           /* OK */
+                
                 break;
             }
             break;
@@ -505,7 +521,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
 
         if( flag )    /* debut de segment raccorde a un autre segment */
         {
-            pt_segm_delete = AlignSegment( frame->m_Pcb, segment, pt_segm_s, START );
+            pt_segm_delete = AlignSegment( frame->m_Pcb, segment, segStart, START );
             if( pt_segm_delete )
             {
                 nbpoints_supprimes++; no_inc = 1;
@@ -514,27 +530,27 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
         }
 
         /* Recherche d'un point possible raccorde sur FIN de segment: */
-        for( pt_segm_e = (TRACK*) segment->Pnext; ; )
+        for( segEnd = (TRACK*) segment->Next(); ; )
         {
-            pt_segm_e = Locate_Piste_Connectee( segment, pt_segm_e,
+            segEnd = Locate_Piste_Connectee( segment, segEnd,
                                                 NULL, END );
-            if( pt_segm_e )
+            if( segEnd )
             {
-                /* les 2 segments doivent avoir meme largeur */
-                if( segment->m_Width != pt_segm_e->m_Width )
+                if( segment->m_Width != segEnd->m_Width )
                     break;
                 
-                /* Ce ne peut etre une via */
-                if( pt_segm_e->Type() != TYPETRACK )
+                if( segEnd->Type() != TYPETRACK )
                     break;
 
                 /* On ne peut avoir que 1 seul segment connecte */
-                pt_segm_e->SetState( BUSY, ON );
-                pt_aux = Locate_Piste_Connectee( segment, frame->m_Pcb->m_Track,
+                segEnd->SetState( BUSY, ON );
+                other = Locate_Piste_Connectee( segment, frame->m_Pcb->m_Track,
                                                  NULL, END );
-                pt_segm_e->SetState( BUSY, OFF );
-                if( pt_aux == NULL )
-                    flag |= 2;/* Ok */
+                segEnd->SetState( BUSY, OFF );
+                
+                if( other == NULL )
+                    flag |= 2;          /* Ok */
+                
                 break;
             }
             else
@@ -543,10 +559,11 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
 
         if( flag & 2 )    /* FIN de segment raccorde a un autre segment */
         {
-            pt_segm_delete = AlignSegment( frame->m_Pcb, segment, pt_segm_e, END );
+            pt_segm_delete = AlignSegment( frame->m_Pcb, segment, segEnd, END );
             if( pt_segm_delete )
             {
-                nbpoints_supprimes++; no_inc = 1;
+                nbpoints_supprimes++; 
+                no_inc = 1;
                 pt_segm_delete->DeleteStructure();
             }
         }
@@ -556,7 +573,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
             msg.Printf( wxT( "%d " ), nbpoints_supprimes );
             Affiche_1_Parametre( frame, POS_AFF_VAR, wxEmptyString, msg, a_color );
             
-            NextS = segment->Pnext;
+            next = (TRACK*) segment->Next();
         }
     }
 
@@ -568,6 +585,10 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
 static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extremite )
 /****************************************************************************/
 
+/**
+ * Function AlignSegment
+ */
+
 /* Routine utilisee par clean_segments.
  *  Verifie l'alignement de pt_segm / pt_ref. et verifie que le point commun
  *  a faire disparaitre n'est pas sur un pad.
@@ -577,16 +598,15 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
  *  sinon retourne NULL
  */
 {
-    int refdx, refdy, segmdx, segmdy;/* projections des segments */
     int flag = 0;
 
-    refdx  = pt_ref->m_End.x - pt_ref->m_Start.x; 
-    refdy = pt_ref->m_End.y - pt_ref->m_Start.y;
+    int refdx = pt_ref->m_End.x - pt_ref->m_Start.x; 
+    int refdy = pt_ref->m_End.y - pt_ref->m_Start.y;
     
-    segmdx = pt_segm->m_End.x - pt_segm->m_Start.x; 
-    segmdy = pt_segm->m_End.y - pt_segm->m_Start.y;
+    int segmdx = pt_segm->m_End.x - pt_segm->m_Start.x; 
+    int segmdy = pt_segm->m_End.y - pt_segm->m_Start.y;
 
-    /* Tst alignement vertical possible: */
+    // test for vertical alignment
     if( refdx == 0 )
     {
         if( segmdx != 0 )
@@ -594,7 +614,8 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
         else
             flag = 1;
     }
-    /* Tst alignement horizontal possible: */
+    
+    // test for horizontal alignment
     if( refdy == 0 )
     {
         if( segmdy != 0 )
@@ -607,7 +628,7 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
      *  il faut que refdy/refdx == (+/-)segmdy/segmdx, c.a.d meme direction */
     if( flag == 0 )
     {
-        if( (refdy * segmdx != refdx * segmdy)
+        if( (refdy * segmdx !=  refdx * segmdy)
          && (refdy * segmdx != -refdx * segmdy) )
             return NULL;
         flag = 4;
@@ -622,22 +643,22 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
                                       g_TabOneLayerMask[pt_ref->GetLayer()] ) )
             return NULL;
 
-        if( (pt_ref->m_Start.x == pt_segm->m_Start.x)
-         && (pt_ref->m_Start.y == pt_segm->m_Start.y) )
+        if( pt_ref->m_Start == pt_segm->m_Start )
         {
-            pt_ref->m_Start.x = pt_segm->m_End.x; pt_ref->m_Start.y = pt_segm->m_End.y;
+            pt_ref->m_Start = pt_segm->m_End; 
             return pt_segm;
         }
         else        /* connexion par la fin de pt_segm */
         {
-            pt_ref->m_Start.x = pt_segm->m_Start.x; pt_ref->m_Start.y = pt_segm->m_Start.y;
+            pt_ref->m_Start = pt_segm->m_Start; 
             return pt_segm;
         }
     }
     else    /* extremite == END */
     {
         /* Ce ne doit pas etre sur un pad */
-        if( Fast_Locate_Pad_Connecte( Pcb, pt_ref->m_End, g_TabOneLayerMask[pt_ref->GetLayer()] ) )
+        if( Fast_Locate_Pad_Connecte( Pcb, pt_ref->m_End, 
+                                     g_TabOneLayerMask[pt_ref->GetLayer()] ) )
             return NULL;
 
         if( pt_ref->m_End == pt_segm->m_Start )

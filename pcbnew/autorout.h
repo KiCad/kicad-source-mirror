@@ -61,13 +61,13 @@ public:
 /****************************************************************/
 /* description d'un point de piste pour le suivi des connexions */
 /****************************************************************/
-#define START_SUR_PAD   0x10
-#define END_SUR_PAD     0x20
-#define START_SUR_TRACK 0x40
-#define END_SUR_TRACK   0x80
+#define START_ON_PAD    0x10
+#define END_ON_PAD      0x20
+#define START_ON_TRACK  0x40
+#define END_ON_TRACK    0x80
 
-#define START_EQU_VIA 0x10
-#define END_EQU_VIA   0x20
+//#define START_EQU_VIA   0x10
+//#define END_EQU_VIA     0x20
 
 
 /* Status bit (OR'ed bits) for class BOARD member .m_Status_Pcb */
