@@ -231,12 +231,12 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
         GetScreen()->m_Active_Layer = GetScreen()->m_Route_Layer_BOTTOM;
 
     /* Adjust the via layer pair */
-    if( Via->Shape() == BURIED_VIA )
+    if( Via->Shape() == VIA_BURIED )
     {
         Via->SetLayerPair( old_layer, GetScreen()->m_Active_Layer );
     }
 
-    else if( Via->Shape() == BLIND_VIA )    //blind via
+    else if( Via->Shape() == VIA_BLIND )    //blind via
     {
         // A revoir! ( la via devrait deboucher sur 1 cote )
         Via->SetLayerPair( old_layer, GetScreen()->m_Active_Layer );

@@ -9,11 +9,11 @@
 
 
 // Via attributes (m_Shape parmeter)
-#define THROUGH_VIA      3              /* Always a through hole via */
-#define BURIED_VIA       2              /* this via can be on internal layers */
-#define BLIND_VIA        1              /* this via which connect from internal layers to an external layer */
-#define NOT_DEFINED_VIA  0              /* reserved (unused) */
-#define SQUARE_VIA_SHAPE 0x80000000     /* Flag pour forme carree */
+#define VIA_THROUGH      3              /* Always a through hole via */
+#define VIA_BURIED       2              /* this via can be on internal layers */
+#define VIA_BLIND        1              /* this via which connect from internal layers to an external layer */
+#define VIA_NOT_DEFINED  0              /* reserved (unused) */
+#define VIA_SQUARE_SHAPE 0x80000000     /* Flag pour forme carree */
 
 /***/
 

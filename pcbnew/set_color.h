@@ -249,27 +249,27 @@ static ColorButton Msg_Others_Items =
     wxT( "Others" ), -1                         // Title
 };
 
-static ColorButton Via_Normale_Butt =
+static ColorButton VIA_THROUGH_Butt =
 {
     wxT( "*" ),
-    VIA_NORMALE,                                // Layer
-    &g_DesignSettings.m_ViaColor[VIA_NORMALE],  // Address of optional parameter
+    VIA_THROUGH,                                // Layer
+    &g_DesignSettings.m_ViaColor[VIA_THROUGH],  // Address of optional parameter
     TRUE                                        // Toggle ITEM_NOT_SHOW bit of the color variable
 };
 
 static ColorButton Via_Aveugle_Butt =
 {
     wxT( "*" ),
-    VIA_ENTERREE,                               // Layer
-    &g_DesignSettings.m_ViaColor[VIA_ENTERREE], // Address of optional parameter
+    VIA_BLIND,                                  // Layer
+    &g_DesignSettings.m_ViaColor[VIA_BLIND],    // Address of optional parameter
     TRUE                                        // Toggle ITEM_NOT_SHOW bit of the color variable
 };
 
 static ColorButton Via_Borgne_Butt =
 {
     wxT( "*" ),
-    VIA_BORGNE,                                 // Layer
-    &g_DesignSettings.m_ViaColor[VIA_BORGNE],   // Address of optional parameter
+    VIA_BURIED,                                 // Layer
+    &g_DesignSettings.m_ViaColor[VIA_BURIED],   // Address of optional parameter
     TRUE                                        // Toggle ITEM_NOT_SHOW bit of the color variable
 };
 
@@ -414,7 +414,7 @@ static ColorButton* laytool_list[] = {
 //  &Layer_32_Butt,
 
     &Msg_Others_Items,
-    &Via_Normale_Butt,
+    &VIA_THROUGH_Butt,
     &Via_Aveugle_Butt,
     &Via_Borgne_Butt,
     &Ratsnest_Butt,

@@ -218,7 +218,7 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
         if( pt_segm->Type() == TYPEVIA )
         {
             SEGVIA* Via = (SEGVIA*) pt_segm;
-            if( Via->Shape() == THROUGH_VIA )
+            if( Via->Shape() == VIA_THROUGH )
                 continue;
             int     top_layer, bottom_layer;
             Via->ReturnLayerPair( &top_layer, &bottom_layer );

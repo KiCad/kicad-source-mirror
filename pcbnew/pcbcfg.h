@@ -140,7 +140,7 @@ static PARAM_CFG_INT TypeViaCfg
 (
     wxT( "TypeVia" ),                               /* Keyword */
     & g_DesignSettings.m_CurrentViaType,            /* Parameter address */
-    VIA_NORMALE,                                    /* Default value */
+    VIA_THROUGH,                                    /* Default value */
     0, 3                                            /* Valeurs extremes */
 );
 
@@ -586,7 +586,7 @@ static PARAM_CFG_SETCOLOR ColorViaNormCfg
 (
     INSETUP,
     wxT( "CoViaNo" ),                           /* Keyword */
-    & g_DesignSettings.m_ViaColor[VIA_NORMALE], /* Parameter address */
+    & g_DesignSettings.m_ViaColor[VIA_THROUGH], /* Parameter address */
     LIGHTGRAY                                   /* Default value */
 );
 
@@ -594,7 +594,7 @@ static PARAM_CFG_SETCOLOR ColorViaborgneCfg
 (
     INSETUP,
     wxT( "CoViaBo" ),                           /* Keyword */
-    & g_DesignSettings.m_ViaColor[VIA_BORGNE],  /* Parameter address */
+    & g_DesignSettings.m_ViaColor[VIA_BURIED],  /* Parameter address */
     CYAN                                        /* Default value */
 );
 
@@ -602,7 +602,7 @@ static PARAM_CFG_SETCOLOR ColorViaEnterreeCfg  // Buried Via Color
 (
     INSETUP,
     wxT( "CoViaEn" ),                               /* Keyword */
-    & g_DesignSettings.m_ViaColor[VIA_ENTERREE],    /* Parameter address */
+    & g_DesignSettings.m_ViaColor[VIA_BLIND],       /* Parameter address */
     BROWN                                           /* Default value */
 );
 

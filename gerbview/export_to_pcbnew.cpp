@@ -180,7 +180,7 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* File,
 
                 // A spot is found, and can be a via: change it to via, and delete other
                 // spots at same location
-                newtrack->m_Shape = VIA_NORMALE;
+                newtrack->m_Shape = VIA_THROUGH;
                 
                 newtrack->SetLayer( 0x0F );  // Layers are 0 to 15 (Cu/Cmp)
                 
@@ -205,7 +205,7 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* File,
     // delete redundant vias
     for( track = Pcb->m_Track; track != NULL; track = track->Next() )
     {
-        if( track->m_Shape != VIA_NORMALE )
+        if( track->m_Shape != VIA_THROUGH )
             continue;
         
         // Search and delete others vias
@@ -213,7 +213,7 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* File,
         for( ; alt_track != NULL; alt_track = next_track )
         {
             next_track = alt_track->Next();
-            if( alt_track->m_Shape != VIA_NORMALE )
+            if( alt_track->m_Shape != VIA_THROUGH )
                 continue;
 
             if( alt_track->m_Start != track->m_Start )

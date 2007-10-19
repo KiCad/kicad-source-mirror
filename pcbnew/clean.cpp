@@ -81,7 +81,7 @@ void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC )
         TRACK* next_track;
         for( track = frame->m_Pcb->m_Track; track != NULL; track = track->Next() )
         {
-            if( track->m_Shape != THROUGH_VIA )
+            if( track->m_Shape != VIA_THROUGH )
                 continue;
             
             /* Search and delete others vias at same location */
@@ -89,7 +89,7 @@ void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC )
             for( ; alt_track != NULL; alt_track = next_track )
             {
                 next_track = alt_track->Next();
-                if( alt_track->m_Shape != THROUGH_VIA )
+                if( alt_track->m_Shape != VIA_THROUGH )
                     continue;
                 
                 if( alt_track->m_Start != track->m_Start )
@@ -105,7 +105,7 @@ void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC )
         for( track = frame->m_Pcb->m_Track; track != NULL; track = next_track )
         {
             next_track = track->Next();
-            if( track->m_Shape != THROUGH_VIA )
+            if( track->m_Shape != VIA_THROUGH )
                 continue;
             
             D_PAD* pad = Fast_Locate_Pad_Connecte( frame->m_Pcb, track->m_Start, ALL_CU_LAYERS );

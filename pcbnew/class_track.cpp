@@ -8,6 +8,7 @@
 #include "common.h"
 #include "pcbnew.h"
 
+
 #ifdef CVPCB
 #include "cvpcb.h"
 #endif
@@ -264,10 +265,10 @@ int TRACK::ReturnMaskLayer()
     {
         int via_type = Shape();
 
-        if( via_type == THROUGH_VIA )
+        if( via_type == VIA_THROUGH )
             return ALL_CU_LAYERS;
 
-        // BLIND_VIA ou  BURIED_VIA:
+        // VIA_BLIND ou  VIA_BURIED:
 
         int bottom_layer, top_layer;
 
@@ -302,7 +303,7 @@ void SEGVIA::SetLayerPair( int top_layer, int bottom_layer )
 {
     int via_type = Shape();
 
-    if( via_type == THROUGH_VIA )
+    if( via_type == VIA_THROUGH )
     {
         top_layer    = LAYER_CMP_N;
         bottom_layer = COPPER_LAYER_N;
@@ -903,15 +904,15 @@ void SEGVIA::Show( int nestLevel, std::ostream& os )
 
     switch( Shape() )
     {
-    case THROUGH_VIA:
+    case VIA_THROUGH:
         cp = "through";
         break;
 
-    case BURIED_VIA:
+    case VIA_BURIED:
         cp = "blind";
         break;
 
-    case BLIND_VIA:
+    case VIA_BLIND:
         cp = "buried";
         break;
 
