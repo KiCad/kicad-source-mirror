@@ -669,21 +669,20 @@ inline bool IsPointsAreNear(wxPoint & p1, wxPoint & p2, int max_dist)
 /******************************************************************/
 /*
 return true if the dist between p1 and p2 < max_dist
-Currently in test (currently rasnest algos work only if p1 == p2
+Currently in test (currently rasnest algos work only if p1 == p2)
 */
 {
-extern bool zflg;
-if (zflg == true)
-{
+#if 0	// Do not change it: does not work
+{	
 int dist;
 	dist = abs(p1.x - p2.x) + abs (p1.y - p2.y);
 	dist *= 7;
 	dist /= 10;
 	if ( dist < max_dist ) return true;
 }
-else
+#else
 	if ( p1 == p2 ) return true;
-//#endif
+#endif
 	return false;
 }
 

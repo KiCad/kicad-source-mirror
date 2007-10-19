@@ -361,8 +361,6 @@ void WinEDA_BasePcbFrame::test_1_net_connexion( wxDC* DC, int net_code )
 }
 
 
-bool zflg;	// DEBUG, must be removed
-
 /***************************************************************************/
 static void calcule_connexite_1_net( TRACK* pt_start_conn, TRACK* pt_end_conn )
 /***************************************************************************/
@@ -421,21 +419,18 @@ static void calcule_connexite_1_net( TRACK* pt_start_conn, TRACK* pt_end_conn )
             }
         }
 
-		zflg = false;
-
         if( Track->start == NULL )	// end track not already connected, search a connection
         {
-            Track->start = Locate_Piste_Connectee( Track, pt_start_conn /*Track*/, pt_end_conn, START );
+            Track->start = Locate_Piste_Connectee( Track, Track, pt_end_conn, START );
         }
 
         if( Track->end == NULL )	// end track not already connected, search a connection
         {
-            Track->end = Locate_Piste_Connectee( Track, pt_start_conn/*Track*/, pt_end_conn, END );
+            Track->end = Locate_Piste_Connectee( Track, Track, pt_end_conn, END );
         }
         if( Track == pt_end_conn )
             break;
     }
-		zflg = false;
 
     /* Generation des sous equipots du net */
     propage_equipot( pt_start_conn, pt_end_conn );
