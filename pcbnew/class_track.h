@@ -244,6 +244,9 @@ public:
     void    SetLayerPair( int top_layer, int bottom_layer );
     void    ReturnLayerPair( int* top_layer, int* bottom_layer ) const;
 
+    const wxPoint& GetPos() const { return m_Start; }
+    void  SetPos( const wxPoint& aPoint ) { m_Start=aPoint;  m_End=aPoint; } 
+    
     /**
      * Function GetClass
      * returns the class name.

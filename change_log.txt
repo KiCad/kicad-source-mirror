@@ -4,6 +4,19 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Oct-19 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ pcbnew
+  * "Clean tracks" changed to "Track operations".
+  * Housekeeping on clean.cpp completed.
+    Added static void ConnectDanglingEndToVia( BOARD* pcb ) in clean.cpp which
+    extends tracks to via centers.  Call it from "extend to pads", works nice.
+  * Added tooltip text to cleaningoptions_dialog.cpp's m_ConnectToPadsOpt
+    but don't know if DialogBlocks will parse this backwards.
+  * Made compilable, somebody broke #define VIA_???? s throughout.  Would not compile. 
+  * SEGVIA::SetPos() & GetPos() added.
+
+  
 2007-Oct-17 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew:
@@ -11,8 +24,6 @@ email address.
 	rastnest computation does not work (errors) with short track segments
 	(lenght < width) . This is not a bug, but an algorithm problem, so
 	I must work on algos.
-	
-	
 
 
 2007-Oct-17 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>

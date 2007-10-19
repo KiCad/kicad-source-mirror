@@ -262,11 +262,10 @@ D_PAD* Locate_Pad_Connecte( BOARD* Pcb, TRACK* ptr_piste, int extr )
  */
 {
     D_PAD*  ptr_pad = NULL;
-    int     masque_layer;
-    MODULE* module;
     wxPoint ref_pos;
 
-    masque_layer = g_TabOneLayerMask[ptr_piste->GetLayer()];
+    int     masque_layer = g_TabOneLayerMask[ptr_piste->GetLayer()];
+    
     if( extr == START )
     {
         ref_pos = ptr_piste->m_Start;
@@ -275,8 +274,8 @@ D_PAD* Locate_Pad_Connecte( BOARD* Pcb, TRACK* ptr_piste, int extr )
     {
         ref_pos = ptr_piste->m_End;
     }
-    module = Pcb->m_Modules;
-    for( ; module != NULL; module = (MODULE*) module->Pnext )
+    
+    for( MODULE* module = Pcb->m_Modules;  module;  module = module->Next() )
     {
         ptr_pad = Locate_Pads( module, ref_pos, masque_layer );
         if( ptr_pad != NULL )
@@ -421,13 +420,12 @@ D_PAD* Locate_Any_Pad( BOARD* Pcb, int typeloc, bool OnlyCurrentLayer )
 
 D_PAD* Locate_Any_Pad( BOARD* Pcb, const wxPoint& ref_pos, bool OnlyCurrentLayer )
 {
-    D_PAD*  pt_pad;
-    MODULE* module;
     int     layer_mask = g_TabOneLayerMask[ ( (PCB_SCREEN*) ActiveScreen )->m_Active_Layer];
 
-    module = Pcb->m_Modules;
-    for( ; module != NULL; module = (MODULE*) module->Pnext )
+    for( MODULE* module=Pcb->m_Modules;  module;   module = module->Next() )
     {
+        D_PAD*  pt_pad;
+        
         /* First: Search a pad on the active layer: */
         if( ( pt_pad = Locate_Pads( module, ref_pos, layer_mask ) ) != NULL )
             return pt_pad;
@@ -468,8 +466,7 @@ D_PAD* Locate_Pads( MODULE* module, int masque_layer, int typeloc )
 
 D_PAD* Locate_Pads( MODULE* module, const wxPoint& ref_pos, int masque_layer )
 {
-    D_PAD*  pt_pad = module->m_Pads;
-    for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
+    for( D_PAD* pt_pad = module->m_Pads;   pt_pad;   pt_pad = pt_pad->Next() )
     {
         /* ... et sur la bonne couche */
         if( (pt_pad->m_Masque_Layer & masque_layer) == 0 )

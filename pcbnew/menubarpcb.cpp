@@ -251,8 +251,8 @@ wxMenuBar * menuBar = GetMenuBar();
 	    item->SetBitmap(tools_xpm);
 		miscellaneous_menu->Append(item);
 
-		item = new wxMenuItem(miscellaneous_menu, ID_MENU_PCB_CLEAN, _("&Clean tracks"),
-				_("Clean stubs, vias, delete break points"));
+		item = new wxMenuItem(miscellaneous_menu, ID_MENU_PCB_CLEAN, _("&Track operations"),
+				_("Clean stubs, vias, delete break points, or connect dangling tracks to pads and vias"));
 	    item->SetBitmap(delete_body_xpm);
 		miscellaneous_menu->Append(item);
 

@@ -72,4 +72,7 @@ others (what are they?):
 :
 :
 
+*** Add tooltip text to cleaningoptions_dialog.cpp throughout for all options.
+Might need to do this using DialogBlocks.
+
 

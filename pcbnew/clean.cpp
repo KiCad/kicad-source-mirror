@@ -40,9 +40,10 @@ static bool s_ConnectToPads = false;
 
 #ifdef CONN2PAD_ENBL
 static void ConnectDanglingEndToPad( WinEDA_PcbFrame* frame, wxDC* DC );
+static void ConnectDanglingEndToVia( BOARD* pcb );
 static void Gen_Raccord_Track( WinEDA_PcbFrame* frame, wxDC* DC );
-
 #endif
+
 
 /*****************************************/
 void WinEDA_PcbFrame::Clean_Pcb( wxDC* DC )
@@ -124,9 +125,10 @@ void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC )
         /* Raccordement des extremites de piste au centre des pastilles : */
         ConnectDanglingEndToPad( frame, DC );
 
-        /* Creation de points de raccordements aux intersections de pistes */
+        // creation of points of connections at the intersection of tracks
 //		Gen_Raccord_Track(frame, DC);
 
+        ConnectDanglingEndToVia( frame->m_Pcb );
     }
 #endif
 
@@ -173,7 +175,7 @@ static void suppression_piste_non_connectee( WinEDA_PcbFrame* frame, wxDC* DC )
     // correct via m_End defects and count number of segments
     frame->m_Pcb->m_NbSegmTrack = 0;
     ii = 0;
-    for( segment = frame->m_Pcb->m_Track; segment != NULL; segment = next )
+    for( segment = frame->m_Pcb->m_Track;  segment;  segment = next )
     {
         frame->m_Pcb->m_NbSegmTrack++;
         next = segment->Next();
@@ -341,7 +343,6 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
 {
     TRACK*          segment;
     TRACK*          other;
-    TRACK*          next;
     int             ii, nbpoints_supprimes = 0;
     int             flag, no_inc, percent, oldpercent;
     wxString        msg;
@@ -362,10 +363,8 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
 
     Affiche_1_Parametre( frame, POS_AFF_VAR, wxT( "NullSeg" ), wxT( "0" ), a_color );
     
-    segment = frame->m_Pcb->m_Track;
-    for( segment = frame->m_Pcb->m_Track;  segment;  segment = next )
+    for( segment = frame->m_Pcb->m_Track;  segment;  segment = segment->Next() )
     {
-        next = (TRACK*) segment->Next();
         if( !segment->IsNull() )
             continue;
 
@@ -387,8 +386,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
     percent = 0;
     oldpercent = -1;
     
-    segment  = frame->m_Pcb->m_Track;
-    for( ii = 0;  segment;  segment = (TRACK*) segment->Next(), ii++ )
+    for( segment  = frame->m_Pcb->m_Track, ii = 0;  segment;  segment = segment->Next(), ii++ )
     {
         /* affichage activite */
         percent = (100 * ii) / frame->m_Pcb->m_NbSegmTrack;
@@ -407,10 +405,9 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
                 return -1;
         }
 
-        for( other = (TRACK*) segment->Next();  other;  other = next )
+        for( other = segment->Next();  other;  other = other->Next() )
         {
             int erase = 0;
-            next = (TRACK*) other->Next();
 
             if( segment->Type() != other->Type() )
                 continue;
@@ -459,13 +456,14 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
     Affiche_1_Parametre( frame, POS_AFF_VAR, _( "Merge" ), _( "0" ), a_color );
 
     ii = 0;
+    TRACK* next;
     for( segment = frame->m_Pcb->m_Track;  segment;  segment = next )
     {
         TRACK*  segStart;
         TRACK*  segEnd;
-        TRACK*  pt_segm_delete;
+        TRACK*  segDelete;
 
-        next = (TRACK*) segment->Next();
+        next = segment->Next();
         
         /* affichage activite */
         ii++;
@@ -491,7 +489,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
         flag = no_inc = 0;
 
         // search for a possible point that connects on START of segment
-        for( segStart = (TRACK*) segment->Next(); ; )
+        for( segStart = segment->Next(); ; )
         {
             segStart = Locate_Piste_Connectee( segment, segStart,
                                                 NULL, START );
@@ -521,19 +519,18 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
 
         if( flag )    /* debut de segment raccorde a un autre segment */
         {
-            pt_segm_delete = AlignSegment( frame->m_Pcb, segment, segStart, START );
-            if( pt_segm_delete )
+            segDelete = AlignSegment( frame->m_Pcb, segment, segStart, START );
+            if( segDelete )
             {
                 nbpoints_supprimes++; no_inc = 1;
-                pt_segm_delete->DeleteStructure();
+                segDelete->DeleteStructure();
             }
         }
 
         /* Recherche d'un point possible raccorde sur FIN de segment: */
-        for( segEnd = (TRACK*) segment->Next(); ; )
+        for( segEnd = segment->Next(); ; )
         {
-            segEnd = Locate_Piste_Connectee( segment, segEnd,
-                                                NULL, END );
+            segEnd = Locate_Piste_Connectee( segment, segEnd, NULL, END );
             if( segEnd )
             {
                 if( segment->m_Width != segEnd->m_Width )
@@ -559,12 +556,12 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
 
         if( flag & 2 )    /* FIN de segment raccorde a un autre segment */
         {
-            pt_segm_delete = AlignSegment( frame->m_Pcb, segment, segEnd, END );
-            if( pt_segm_delete )
+            segDelete = AlignSegment( frame->m_Pcb, segment, segEnd, END );
+            if( segDelete )
             {
                 nbpoints_supprimes++; 
                 no_inc = 1;
-                pt_segm_delete->DeleteStructure();
+                segDelete->DeleteStructure();
             }
         }
 
@@ -573,7 +570,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
             msg.Printf( wxT( "%d " ), nbpoints_supprimes );
             Affiche_1_Parametre( frame, POS_AFF_VAR, wxEmptyString, msg, a_color );
             
-            next = (TRACK*) segment->Next();
+            next = segment->Next();
         }
     }
 
@@ -822,7 +819,6 @@ static void Gen_Raccord_Track( WinEDA_PcbFrame* frame, wxDC* DC )
 {
     TRACK*          segment;
     TRACK*          other;
-    TRACK*          next;
     int             nn = 0;
     int             masquelayer;
     int             ii, percent, oldpercent;
@@ -835,10 +831,8 @@ static void Gen_Raccord_Track( WinEDA_PcbFrame* frame, wxDC* DC )
     frame->DrawPanel->m_AbortRequest = FALSE;
 
     oldpercent = -1; ii = 0;
-    for( segment = frame->m_Pcb->m_Track;  segment;  segment = next )
+    for( segment = frame->m_Pcb->m_Track;  segment;  segment = segment->Next() )
     {
-        next = (TRACK*) segment->Next();
-        
         // display activity
         ii++;
         percent = (100 * ii) / frame->m_Pcb->m_NbSegmTrack;
@@ -860,7 +854,7 @@ static void Gen_Raccord_Track( WinEDA_PcbFrame* frame, wxDC* DC )
         masquelayer = segment->ReturnMaskLayer();
 
         // look at the "start" of the "segment"
-        for( other = frame->m_Pcb->m_Track;  other;  other = (TRACK*) other->Next() )
+        for( other = frame->m_Pcb->m_Track;  other;  other = other->Next() )
         {
             TRACK* newTrack;
             
@@ -909,7 +903,7 @@ static void Gen_Raccord_Track( WinEDA_PcbFrame* frame, wxDC* DC )
         }
 
         // look at the "end" of the "segment"
-        for( other = frame->m_Pcb->m_Track;  other;  other = (TRACK*) other->Next() )
+        for( other = frame->m_Pcb->m_Track;  other;  other = other->Next() )
         {
             TRACK* newTrack;
             
@@ -959,6 +953,81 @@ static void Gen_Raccord_Track( WinEDA_PcbFrame* frame, wxDC* DC )
 }
 
 
+/**
+ * Function ConnectDanglingEndToPad
+ * looks for vias which have no netcode and which are in electrical contact
+ * with a track to the degree that the track's end point falls on the via.
+ * Note that this is not a rigorous electrical check, but is better than
+ * testing for the track endpoint equaling the via center.  When such a via
+ * is found, then add a small track to bridge from the overlapping track to
+ * the via and change the via's netcode so that subsequent continuity checks 
+ * can be done with the faster equality algorithm. 
+ */
+static void ConnectDanglingEndToVia( BOARD* pcb )
+{
+    for( TRACK* track = pcb->m_Track;  track;  track = track->Next() )
+    {
+        SEGVIA* via;
+        
+        if( track->Type()!=TYPEVIA  || (via = (SEGVIA*)track)->GetNet()!=0 )
+            continue;
+
+        for( TRACK* other = pcb->m_Track;  other;  other = other->Next() )
+        {
+            if( other == track )
+                continue;
+
+            if( !via->IsOnLayer( other->GetLayer() ) )
+                continue;
+            
+            // if the other track's m_End does not match the via position, and the track's m_Start is
+            // within the bounds of the via, and the other track has no start
+            if( other->m_End!=via->GetPos() && via->HitTest( other->m_Start ) && !other->start )
+            {
+                TRACK* newTrack = other->Copy();
+                newTrack->Insert( pcb, other );
+                
+                newTrack->m_End = via->GetPos();
+                
+                newTrack->start = other;
+                newTrack->end   = via;
+                other->start = newTrack;
+                
+                via->SetNet( other->GetNet() );
+                
+                if( !via->start )
+                    via->start = other;
+                
+                if( !via->end )
+                    via->end = other;
+            }
+            
+            // if the other track's m_Start does not match the via position, and the track's m_End is
+            // within the bounds of the via, and the other track has no end
+            else if( other->m_Start!=via->GetPos() && via->HitTest( other->m_End ) && !other->end ) 
+            {
+                TRACK* newTrack = other->Copy();
+                newTrack->Insert( pcb, other );
+                
+                newTrack->m_Start = via->GetPos();
+                
+                newTrack->start = via;
+                newTrack->end   = other;
+                other->end = newTrack;
+                
+                via->SetNet( other->GetNet() );
+                
+                if( !via->start )
+                    via->start = other;
+                
+                if( !via->end )
+                    via->end = other;
+            }
+        }
+    }
+}
+
+
 /***************************************************************/
 void ConnectDanglingEndToPad( WinEDA_PcbFrame* frame, wxDC* DC )
 /**************************************************************/
@@ -971,7 +1040,6 @@ void ConnectDanglingEndToPad( WinEDA_PcbFrame* frame, wxDC* DC )
  */
 {
     TRACK*          segment;
-    TRACK*          next;
     int             nb_new_piste = 0;
     wxString        msg;
     int             percent = 0; 
@@ -984,11 +1052,9 @@ void ConnectDanglingEndToPad( WinEDA_PcbFrame* frame, wxDC* DC )
     Affiche_1_Parametre( frame, POS_AFF_VAR, _( "Centre" ), _( "0 " ), a_color );
 
     int ii = 0;
-    for( segment = frame->m_Pcb->m_Track;  segment;  segment = next )
+    for( segment = frame->m_Pcb->m_Track;  segment;  segment = segment->Next() )
     {
         D_PAD*          pad;
-        
-        next = (TRACK*) segment->Next();
         
         ii++;
         percent = (100 * ii) / frame->m_Pcb->m_NbSegmTrack;

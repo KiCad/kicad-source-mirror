@@ -160,6 +160,7 @@ void WinEDA_CleaningOptionsFrame::CreateControls()
     itemStaticBoxSizer4->Add(m_DeleteunconnectedOpt, 0, wxALIGN_LEFT|wxALL, 5);
 
     m_ConnectToPadsOpt = new wxCheckBox( itemDialog1, ID_CHECKBOX, _("Connect to Pads"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_ConnectToPadsOpt->SetToolTip( _("Extend dangling tracks which partially cover a pad or via, all the way to pad or via center") );
     m_ConnectToPadsOpt->SetValue(false);
     itemStaticBoxSizer4->Add(m_ConnectToPadsOpt, 0, wxALIGN_LEFT|wxALL, 5);
 
