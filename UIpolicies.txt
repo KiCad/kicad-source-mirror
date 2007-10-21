@@ -1,0 +1,38 @@
+
+** General UI Guidelines for KICAD Development
+
+
+Capitalization:  
+
+    For any visible text used within Kicad, follow recommendations here:
+    http://library.gnome.org/devel/hig-book/2.20/design-text-labels.html.en#layout-capitalization
+    This applies to all Menus, Titles, Labels, Tooltips, Buttons, etc.
+
+
+Dialogs:  
+
+    Follow the recommendations here:
+    http://library.gnome.org/devel/hig-book/2.20/windows-dialog.html.en
+    paying particular attention to "initial focus", "sensible default values",
+    "default buttons", ESC key termination.
+    
+    Use wxWidgets "sizers" in all dialogs, no matter how simple they are: 
+    http://www.lpthe.jussieu.fr/~zeitlin/wxWindows/docs/wxwin_sizeroverview.html
+    and keep dialogs resizeable.
+    
+    Configure the sizers so that as the dialog window is expanded, the most
+    sensible use of the increased dialog window occurs automatically by the
+    sizers. For example, in the DRC dialog of PCBNEW, sizers should be used to
+    expand the text control to use the full available free window area, so that
+    the user's view of the items in the text control is maximized as he/she
+    expands the dialog window, making it easier to read more DRC error messages.
+    In other dialogs without one component more important than the others, the
+    sizers might be configured to position the controls to sensible positions
+    near the perimeter of the increasingly larger dialog box, not necesarily
+    leaving them all bundled tightly together.  The dialog box should look 
+    nice at any size large enough to show all the components.
+    
+    Use tooltips to explain the functionality of each non-obvious control.  
+    This is important because the help files and the wiki often lag behind
+    the source code.
+    
