@@ -4,6 +4,12 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Oct-21 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
+================================================================================
++ eeschema & pcbnew & gerbview
+  * Sizers have now been provided within the "Colors" dialog box.
+
+
 2007-Oct-19 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew
