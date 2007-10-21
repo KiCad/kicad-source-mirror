@@ -158,7 +158,7 @@ bool ColorFound = false;
     line = new wxStaticLine( this, -1, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
     OuterBoxSizer->Add(line, 0, wxGROW|wxLEFT|wxRIGHT|wxTOP, 5);
 
-#ifdef 0
+#if 0
     BottomBoxSizer = new wxBoxSizer(wxHORIZONTAL);
     OuterBoxSizer->Add(BottomBoxSizer, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 

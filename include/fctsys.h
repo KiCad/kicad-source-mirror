@@ -74,7 +74,7 @@
 #define FALSE      ((bool)0)
 #endif
 
-
+#define USE_RESIZE_BORDER
 #if defined(__UNIX__) || defined(USE_RESIZE_BORDER)
 #define MAYBE_RESIZE_BORDER wxRESIZE_BORDER // linux users like resizeable borders
 #else

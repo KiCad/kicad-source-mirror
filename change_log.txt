@@ -4,6 +4,18 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Oct-21 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++ pcbnew:
+	rename dialog_clean_pcb.pjd to cleaningoptions_dialog.pjd, 
+	accordind to the corresponding cpp filename.
+	enter the new tool tips in cleaningoptions_dialog.pjd.
++all:
+	USE_RESIZE_BORDER is now defined (default) in fctsys.h.
+	Therefore, under windows, dialogs are now resizable (like under unix)
+
+
+
 2007-Oct-21 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
 ================================================================================
 + eeschema & pcbnew & gerbview

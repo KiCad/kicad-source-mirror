@@ -265,7 +265,7 @@ static ColorButton Via_Aveugle_Butt =
     TRUE                                        // Toggle ITEM_NOT_SHOW bit of the color variable
 };
 
-static ColorButton Via_Borgne_Butt =
+static ColorButton BLIND_VIA_Butt =
 {
     wxT( "*" ),
     VIA_BURIED,                                 // Layer
@@ -416,7 +416,7 @@ static ColorButton* laytool_list[] = {
     &Msg_Others_Items,
     &VIA_THROUGH_Butt,
     &Via_Aveugle_Butt,
-    &Via_Borgne_Butt,
+    &BLIND_VIA_Butt,
     &Ratsnest_Butt,
     &Pad_Cu_Butt,
     &Pad_Cmp_Butt,

@@ -173,7 +173,7 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* File,
             
             // replace spots with vias when possible
             if( (track->m_Shape == S_SPOT_CIRCLE) 
-             || (track->m_Shape == S_SPOT_RECT)  
+             || (track->m_Shape == S_SPOT_RECT)
              || (track->m_Shape == S_SPOT_OVALE) )
             {
                 newtrack = new SEGVIA( (const SEGVIA&) *track );
@@ -185,7 +185,7 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* File,
                 newtrack->SetLayer( 0x0F );  // Layers are 0 to 15 (Cu/Cmp)
                 
                 newtrack->m_Drill = -1;
-                
+
                 // Compute the via position from track position ( Via position is the 
                 // position of the middle of the track segment ) 
                 newtrack->m_Start.x = (newtrack->m_Start.x + newtrack->m_End.x) / 2;

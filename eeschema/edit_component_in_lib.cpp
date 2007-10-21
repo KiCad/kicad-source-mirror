@@ -466,7 +466,7 @@ void WinEDA_PartPropertiesFrame::BuildPanelBasic()
 
 /*********************************************************/
 void WinEDA_PartPropertiesFrame::BuildPanelEditField()
-/**********************************************************/
+/*********************************************************/
 
 /* Create and build the panel managing the fields (REF, VALUE ...)
  *  of the component
@@ -515,7 +515,7 @@ void WinEDA_PartPropertiesFrame::BuildPanelEditField()
 
     // Create the box for text editing (text, size)
     m_FieldTextCtrl = new WinEDA_GraphicTextCtrl( m_PanelField,
-                                                  _( "Value:" ),
+                                                  _( "Value/Chip Name:" ),
                                                   m_FieldText[FieldId], m_FieldSize[FieldId],
                                                   g_UnitMetric, LeftBoxSizer, 200 );
 
@@ -548,6 +548,7 @@ void WinEDA_PartPropertiesFrame::BuildPanelEditField()
         else
             fieldnamelist[ii] = m_FieldName[ii];
     }
+	fieldnamelist[VALUE] << wxT("/") << _("Chip Name");
 
     m_FieldSelection = new wxRadioBox( m_PanelField, ID_ON_SELECT_FIELD,
                                        _( "Field to edit" ), wxDefaultPosition, wxDefaultSize,

@@ -366,7 +366,7 @@
                   <string name="proxy-Label">"Delete redundant vias"</string>
                   <bool name="proxy-Initial value">0</bool>
                   <string name="proxy-Help text">""</string>
-                  <string name="proxy-Tooltip text">""</string>
+                  <string name="proxy-Tooltip text">"remove vias on pads with a through hole"</string>
                   <string name="proxy-Data variable">"s_CleanVias"</string>
                   <string name="proxy-Data validator">"wxGenericValidator(&amp; %VARIABLE%)"</string>
                   <string name="proxy-Background colour">""</string>
@@ -424,7 +424,7 @@
                   <string name="proxy-Label">"Merge segments"</string>
                   <bool name="proxy-Initial value">0</bool>
                   <string name="proxy-Help text">""</string>
-                  <string name="proxy-Tooltip text">""</string>
+                  <string name="proxy-Tooltip text">"merge aligned track segments, and remove null segments"</string>
                   <string name="proxy-Data variable">"s_MergeSegments"</string>
                   <string name="proxy-Data validator">"wxGenericValidator(&amp; %VARIABLE%)"</string>
                   <string name="proxy-Background colour">""</string>
@@ -482,7 +482,7 @@
                   <string name="proxy-Label">"Delete unconnected tracks"</string>
                   <bool name="proxy-Initial value">0</bool>
                   <string name="proxy-Help text">""</string>
-                  <string name="proxy-Tooltip text">""</string>
+                  <string name="proxy-Tooltip text">"delete track segment having a dangling end"</string>
                   <string name="proxy-Data variable">"s_DeleteUnconnectedSegm"</string>
                   <string name="proxy-Data validator">"wxGenericValidator(&amp; %VARIABLE%)"</string>
                   <string name="proxy-Background colour">""</string>
@@ -540,7 +540,7 @@
                   <string name="proxy-Label">"Connect to Pads"</string>
                   <bool name="proxy-Initial value">0</bool>
                   <string name="proxy-Help text">""</string>
-                  <string name="proxy-Tooltip text">""</string>
+                  <string name="proxy-Tooltip text">"Extend dangling tracks which partially cover a pad or via, all the way to pad or via center"</string>
                   <string name="proxy-Data variable">""</string>
                   <string name="proxy-Data validator">""</string>
                   <string name="proxy-Background colour">""</string>
@@ -675,9 +675,9 @@
         <long name="title-mode">0</long>
         <long name="locked">1</long>
         <document>
-          <string name="title">"dialog_clean_pcb.rc"</string>
+          <string name="title">"cleaningoptions_dialog.rc"</string>
           <string name="type">"source-editor-document"</string>
-          <string name="filename">"dialog_clean_pcb.rc"</string>
+          <string name="filename">"cleaningoptions_dialog.rc"</string>
           <string name="icon-name">"source-editor"</string>
           <long name="is-transient">0</long>
           <long name="owns-file">0</long>
