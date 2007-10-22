@@ -254,7 +254,7 @@
           <bool name="proxy-wxWS_EX_VALIDATE_RECURSIVELY">0</bool>
           <bool name="proxy-wxWS_EX_BLOCK_EVENTS">0</bool>
           <bool name="proxy-wxWS_EX_TRANSIENT">0</bool>
-          <string name="proxy-Custom styles">""</string>
+          <string name="proxy-Custom styles">"MAYBE_RESIZE_BORDER"</string>
           <bool name="proxy-wxDIALOG_EX_CONTEXTHELP">0</bool>
           <bool name="proxy-Fit to content">1</bool>
           <long name="proxy-X">-1</long>
