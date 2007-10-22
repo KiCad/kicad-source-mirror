@@ -253,13 +253,19 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
 /* Sauvegarde du fichier PCB en format ASCII
  */
 {
-    wxString old_name, FullFileName, msg;
-    bool     saveok = TRUE;
-    FILE*    dest;
+    wxString    old_name;
+    wxString    FullFileName;
+    wxString    upperTxt;
+    wxString    lowerTxt;
+    wxString    msg;
+    
+    bool        saveok = TRUE;
+    FILE*       dest;
 
     if( FileName == wxEmptyString )
     {
         msg = wxT( "*" ) + PcbExtBuffer;
+        
         FullFileName = EDA_FileSelector( _( "Save board files:" ),
                                          wxEmptyString,             /* Chemin par defaut */
                                          GetScreen()->m_FileName,   /* nom fichier par defaut */
@@ -271,6 +277,7 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
                        );
         if( FullFileName == wxEmptyString )
             return FALSE;
+        
         GetScreen()->m_FileName = FullFileName;
     }
     else
@@ -321,9 +328,7 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
         GetScreen()->m_FileName = FullFileName;
         SetTitle( GetScreen()->m_FileName );
         
-        
         SavePcbFormatAscii( dest );
-        
         fclose( dest );
     }
 
@@ -332,18 +337,19 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
 
     if( saveok )
     {
-        msg = _( "Backup file: " ) + old_name;
-        Affiche_1_Parametre( this, 1, msg, wxEmptyString, CYAN );
+        upperTxt = _( "Backup file: " ) + old_name;
     }
 
     if( dest )
-        msg = _( "Write Board file: " );
+        lowerTxt = _( "Wrote board file: " );
     else
-        msg = _( "Failed to create " );
-    msg += FullFileName;
+        lowerTxt = _( "Failed to create " );
+    lowerTxt += FullFileName;
 
-    Affiche_1_Parametre( this, 1, wxEmptyString, msg, CYAN );
+    Affiche_1_Parametre( this, 1, upperTxt, lowerTxt, CYAN );
+    
     g_SaveTime = time( NULL );    /* Reset delai pour sauvegarde automatique */
+    
     GetScreen()->ClrModify();
     return TRUE;
 }
