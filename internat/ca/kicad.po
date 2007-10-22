@@ -1,0 +1,7690 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kicad\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2007-10-22 21:53+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Catalan\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: f:\\kicad-svn\\kicad\n"
+"X-Poedit-SearchPath-0: pcbnew\n"
+"X-Poedit-SearchPath-1: eeschema\n"
+"X-Poedit-SearchPath-2: cvpcb\n"
+"X-Poedit-SearchPath-3: kicad\n"
+"X-Poedit-SearchPath-4: gerbview\n"
+"X-Poedit-SearchPath-5: common\n"
+"X-Poedit-SearchPath-6: 3d-viewer\n"
+"X-Poedit-SearchPath-7: share\n"
+
+#: pcbnew/affiche.cpp:199
+#: pcbnew/affiche.cpp:234
+#: pcbnew/affiche.cpp:265
+#: pcbnew/cotation.cpp:131
+#: pcbnew/edtxtmod.cpp:148
+#: pcbnew/mirepcb.cpp:114
+#: pcbnew/pcbtexte.cpp:127
+#: gerbview/affiche.cpp:46
+#: gerbview/affiche.cpp:105
+#: gerbview/affiche.cpp:142
+msgid "Width"
+msgstr "Ample"
+
+#: pcbnew/affiche.cpp:51
+#: pcbnew/affiche.cpp:108
+#: pcbnew/class_pad.cpp:639
+#: gerbview/affiche.cpp:49
+msgid "H Size"
+msgstr "Mida horitzontal"
+
+#: pcbnew/affiche.cpp:54
+#: pcbnew/affiche.cpp:111
+#: pcbnew/class_pad.cpp:643
+#: gerbview/affiche.cpp:52
+msgid "V Size"
+msgstr "Mida vertical"
+
+#: pcbnew/affiche.cpp:67
+msgid "Ref."
+msgstr "Ref."
+
+#: pcbnew/affiche.cpp:67
+#: pcbnew/affiche.cpp:254
+#: eeschema/editpart.cpp:747
+#: eeschema/eelayer.cpp:105
+#: eeschema/onrightclick.cpp:289
+msgid "Value"
+msgstr "Valor ..."
+
+#: pcbnew/affiche.cpp:67
+#: pcbnew/affiche.cpp:78
+msgid "Text"
+msgstr "Text"
+
+#: pcbnew/affiche.cpp:81
+#: pcbnew/affiche.cpp:145
+#: pcbnew/affiche.cpp:217
+msgid "Type"
+msgstr "Tipus"
+
+#: pcbnew/affiche.cpp:83
+#: pcbnew/cotation.cpp:115
+#: pcbnew/edtxtmod.cpp:170
+#: pcbnew/options.cpp:207
+#: pcbnew/pcbtexte.cpp:174
+#: eeschema/affiche.cpp:94
+#: gerbview/gerberframe.cpp:264
+#: gerbview/options.cpp:175
+msgid "Display"
+msgstr "&Visualització..."
+
+#: pcbnew/affiche.cpp:135
+#: pcbnew/pcbframe.cpp:385
+msgid "Track"
+msgstr "Pista"
+
+#: pcbnew/affiche.cpp:139
+msgid "Zone"
+msgstr "Zona"
+
+#: pcbnew/affiche.cpp:159
+#: pcbnew/zones.cpp:688
+msgid "NetName"
+msgstr "Nom de Xarxa"
+
+#: pcbnew/affiche.cpp:164
+msgid "NetCode"
+msgstr "Codi de Xarxa"
+
+#: pcbnew/affiche.cpp:169
+msgid "Segment"
+msgstr "Segment"
+
+#: pcbnew/affiche.cpp:171
+#: pcbnew/affiche.cpp:221
+#: pcbnew/editpads.cpp:257
+#: gerbview/affiche.cpp:126
+msgid "Circle"
+msgstr "Cercle"
+
+#: pcbnew/affiche.cpp:172
+msgid "Standard"
+msgstr "Estàndard"
+
+#: pcbnew/affiche.cpp:181
+#: pcbnew/class_module.cpp:1049
+msgid "Stat"
+msgstr "Estat"
+
+#: pcbnew/affiche.cpp:219
+#: gerbview/affiche.cpp:124
+msgid "Shape"
+msgstr "Forma"
+
+#: pcbnew/affiche.cpp:251
+msgid "Seg"
+msgstr "Seg"
+
+#: pcbnew/affiche.cpp:252
+#: pcbnew/class_module.cpp:1056
+#: pcbnew/class_pad.cpp:607
+msgid "Module"
+msgstr "Mòdul"
+
+# TimeStamp
+#: pcbnew/affiche.cpp:257
+#: pcbnew/class_module.cpp:1032
+msgid "TimeStamp"
+msgstr "Data"
+
+#: pcbnew/affiche.cpp:259
+msgid "Mod Layer"
+msgstr "Capa Mod."
+
+#: pcbnew/affiche.cpp:261
+msgid "Seg Layer"
+msgstr "Capa Seg."
+
+#: pcbnew/affiche.cpp:288
+#: pcbnew/affiche.cpp:348
+#: pcbnew/class_module.cpp:1043
+msgid "Pads"
+msgstr "Illots"
+
+#: pcbnew/affiche.cpp:297
+#: pcbnew/affiche.cpp:358
+#: pcbnew/plotps.cpp:309
+msgid "Vias"
+msgstr "Vies"
+
+#: pcbnew/affiche.cpp:300
+msgid "Nodes"
+msgstr "Nodes"
+
+#: pcbnew/affiche.cpp:303
+msgid "Links"
+msgstr "Enllaços"
+
+#: pcbnew/affiche.cpp:306
+msgid "Nets"
+msgstr "Xarxes"
+
+#: pcbnew/affiche.cpp:309
+msgid "Connect"
+msgstr "Connectat"
+
+#: pcbnew/affiche.cpp:312
+#: eeschema/eelayer.cpp:177
+msgid "NoConn"
+msgstr "Desconnectat"
+
+#: pcbnew/affiche.cpp:331
+msgid "Net Name"
+msgstr "Nom de xarxa"
+
+#: pcbnew/affiche.cpp:333
+msgid "No Net (not connected)"
+msgstr "Sense xarxa (desconnectat)"
+
+#: pcbnew/affiche.cpp:336
+msgid "Net Code"
+msgstr "Codi de xarxa"
+
+#: pcbnew/automove.cpp:194
+msgid "No Modules!"
+msgstr "No hi ha  Mòduls!"
+
+#: pcbnew/automove.cpp:198
+msgid "Move Modules ?"
+msgstr "Desplaçar Mòduls ?"
+
+#: pcbnew/autoplac.cpp:104
+msgid "Footprints NOT LOCKED will be moved"
+msgstr "Les petjades NO immobilitzades es mouran"
+
+#: pcbnew/autoplac.cpp:376
+msgid "No edge PCB, Unknown board size!"
+msgstr "No existeix vora del PCB, Mida de placa desconeguda!"
+
+#: pcbnew/autoplac.cpp:393
+msgid "Cols"
+msgstr "Columnnes"
+
+#: pcbnew/autoplac.cpp:395
+msgid "Lines"
+msgstr "Línies"
+
+#: pcbnew/autoplac.cpp:397
+msgid "Cells."
+msgstr "Cel·les"
+
+#: pcbnew/autoplac.cpp:453
+msgid "Loop"
+msgstr "Llaç"
+
+#: pcbnew/autoplac.cpp:597
+msgid "Ok to abort ?"
+msgstr "Interrompre ?"
+
+#: pcbnew/autorout.cpp:53
+msgid "Net not selected"
+msgstr "Xarxa no seleccionada"
+
+#: pcbnew/autorout.cpp:61
+msgid "Module not selected"
+msgstr "Mòdul no seleccionat"
+
+#: pcbnew/autorout.cpp:69
+msgid "Pad non selected"
+msgstr "Illot no seleccionat"
+
+#: pcbnew/autorout.cpp:130
+msgid "No memory for autorouting"
+msgstr "No hi ha memòria per fer l'emplaçament automatitzat"
+
+#: pcbnew/autorout.cpp:135
+msgid "Place Cells"
+msgstr "Posa cel·les"
+
+#: pcbnew/basepcbframe.cpp:101
+msgid "3D Frame already opened"
+msgstr "Estructura 3D oberta prèviament"
+
+#: pcbnew/basepcbframe.cpp:104
+msgid "3D Viewer"
+msgstr "Visualitzador 3D"
+
+#: pcbnew/block.cpp:122
+#: pcbnew/cotation.cpp:105
+#: pcbnew/dialog_display_options.cpp:150
+#: pcbnew/dialog_graphic_items_options.cpp:134
+#: pcbnew/dialog_track_options.cpp:81
+#: pcbnew/editmod.cpp:235
+#: pcbnew/editpads.cpp:173
+#: pcbnew/edtxtmod.cpp:124
+#: pcbnew/mirepcb.cpp:98
+#: pcbnew/muonde.cpp:331
+#: pcbnew/options.cpp:199
+#: pcbnew/pcbtexte.cpp:108
+#: pcbnew/set_grid.cpp:112
+#: pcbnew/zones.cpp:751
+#: eeschema/editexte.cpp:111
+#: eeschema/editpart.cpp:193
+#: eeschema/libedpart.cpp:244
+#: eeschema/pinedit.cpp:162
+#: eeschema/sheetlab.cpp:92
+#: eeschema/symbdraw.cpp:91
+#: eeschema/symbtext.cpp:90
+#: common/displlst.cpp:95
+msgid "Ok"
+msgstr "D'acord"
+
+#: pcbnew/block.cpp:127
+#: pcbnew/cotation.cpp:110
+#: pcbnew/dialog_display_options.cpp:155
+#: pcbnew/dialog_graphic_items_options.cpp:137
+#: pcbnew/dialog_track_options.cpp:84
+#: pcbnew/editmod.cpp:240
+#: pcbnew/editpads.cpp:178
+#: pcbnew/edtxtmod.cpp:129
+#: pcbnew/globaleditpad.cpp:106
+#: pcbnew/initpcb.cpp:89
+#: pcbnew/mirepcb.cpp:103
+#: pcbnew/modedit_onclick.cpp:187
+#: pcbnew/modedit_onclick.cpp:200
+#: pcbnew/muonde.cpp:334
+#: pcbnew/onrightclick.cpp:163
+#: pcbnew/onrightclick.cpp:198
+#: pcbnew/options.cpp:202
+#: pcbnew/pcbpiste.cpp:85
+#: pcbnew/pcbplot.cpp:176
+#: pcbnew/pcbtexte.cpp:113
+#: pcbnew/sel_layer.cpp:121
+#: pcbnew/sel_layer.cpp:246
+#: pcbnew/set_grid.cpp:115
+#: pcbnew/zones.cpp:92
+#: eeschema/libedpart.cpp:233
+#: eeschema/libframe.cpp:431
+#: eeschema/libframe.cpp:445
+#: eeschema/onrightclick.cpp:113
+#: eeschema/onrightclick.cpp:127
+#: eeschema/options.cpp:112
+#: eeschema/optionsframe.cpp:155
+#: eeschema/pinedit.cpp:167
+#: eeschema/sheetlab.cpp:97
+#: eeschema/symbdraw.cpp:96
+#: eeschema/symbtext.cpp:95
+#: gerbview/onrightclick.cpp:39
+#: gerbview/onrightclick.cpp:57
+#: gerbview/options.cpp:170
+#: gerbview/options.cpp:287
+#: common/displlst.cpp:98
+#: common/get_component_dialog.cpp:118
+#: common/setpage.cpp:181
+msgid "Cancel"
+msgstr "Cancel·la"
+
+#: pcbnew/block.cpp:133
+msgid "Include Modules"
+msgstr "Inclou mòduls"
+
+#: pcbnew/block.cpp:137
+msgid "Include tracks"
+msgstr "Inclou pistes"
+
+#: pcbnew/block.cpp:141
+msgid "Include zones"
+msgstr "Inclou zones"
+
+#: pcbnew/block.cpp:146
+msgid "Include Text on copper layers"
+msgstr "Inclou text en capes de coure"
+
+#: pcbnew/block.cpp:150
+msgid "Include drawings"
+msgstr "Inclou dibuixos"
+
+#: pcbnew/block.cpp:154
+msgid "Include egde layer"
+msgstr "Inclou capa de vora de placa"
+
+#: pcbnew/block.cpp:553
+msgid "Delete Block"
+msgstr "Esborra bloc"
+
+#: pcbnew/block.cpp:563
+msgid "Delete Footprints"
+msgstr "Esborra petjades"
+
+#: pcbnew/block.cpp:582
+msgid "Delete tracks"
+msgstr "Esborra pistes"
+
+#: pcbnew/block.cpp:599
+msgid "Delete draw layers"
+msgstr "Esborra capes de dibuix"
+
+#: pcbnew/block.cpp:654
+msgid "Delete zones"
+msgstr "Esborra zones"
+
+#: pcbnew/block.cpp:685
+msgid "Rotate Block"
+msgstr "Gira bloc"
+
+#: pcbnew/block.cpp:699
+msgid "Footprint rotation"
+msgstr "Rotació de petjades"
+
+#: pcbnew/block.cpp:730
+msgid "Track rotation"
+msgstr "Rotació de pista"
+
+#: pcbnew/block.cpp:751
+msgid "Zone rotation"
+msgstr "Rotació de zona"
+
+#: pcbnew/block.cpp:770
+msgid "Draw layers rotation"
+msgstr "Rotació de capes de dibuix"
+
+#: pcbnew/block.cpp:889
+msgid "Footprint mirroring"
+msgstr "Reflecteix petjada (footprint)"
+
+#: pcbnew/block.cpp:919
+msgid "Track mirroring"
+msgstr "Reflecteix pista"
+
+#: pcbnew/block.cpp:945
+msgid "Zone mirroring"
+msgstr "Reflecteix zona"
+
+#: pcbnew/block.cpp:1080
+msgid "Move Block"
+msgstr "Mou bloc"
+
+#: pcbnew/block.cpp:1090
+msgid "Move footprints"
+msgstr "Mou petjades (footprints)"
+
+#: pcbnew/block.cpp:1120
+msgid "Move tracks"
+msgstr "Mou pistes"
+
+#: pcbnew/block.cpp:1141
+msgid "Move zones"
+msgstr "Mou zones"
+
+#: pcbnew/block.cpp:1160
+msgid "Move draw layers"
+msgstr "Mou capes de dibuix"
+
+#: pcbnew/block.cpp:1252
+msgid "Copy Block"
+msgstr "Copia bloc"
+
+#: pcbnew/block.cpp:1262
+msgid "Module copy"
+msgstr "Copia mòdul"
+
+#: pcbnew/block.cpp:1297
+msgid "Track copy"
+msgstr "Copia pista"
+
+#: pcbnew/block.cpp:1320
+msgid "Zone copy"
+msgstr "Copia zona"
+
+#: pcbnew/block.cpp:1342
+msgid "Draw layers copy"
+msgstr "Copia capes de dibuix"
+
+#: pcbnew/class_module.cpp:1026
+msgid "Last Change"
+msgstr "Útim canvi"
+
+#: pcbnew/class_module.cpp:1059
+msgid "3D-Shape"
+msgstr "Forma 3D"
+
+#: pcbnew/class_pad.cpp:610
+msgid "RefP"
+msgstr "RefP"
+
+#: pcbnew/class_pad.cpp:613
+msgid "Net"
+msgstr "Xarxa"
+
+#: pcbnew/class_pad.cpp:647
+#: pcbnew/gendrill.cpp:260
+#: pcbnew/gendrill.cpp:667
+msgid "Drill"
+msgstr "Broca"
+
+#: pcbnew/class_pad.cpp:660
+msgid "X Pos"
+msgstr "Posició X"
+
+#: pcbnew/class_pad.cpp:664
+msgid "Y pos"
+msgstr "Posició Y"
+
+#: pcbnew/clean.cpp:118
+msgid "ViaDef"
+msgstr "Definició de via"
+
+#: pcbnew/controle.cpp:41
+#, c-format
+msgid "Locate module %s %s"
+msgstr "Mòdul localizat %s %s"
+
+#: pcbnew/controle.cpp:81
+#, c-format
+msgid "module %s not found"
+msgstr "Mòdul %s no trobat"
+
+#: pcbnew/controle.cpp:83
+#, c-format
+msgid "Pin %s (module %s) not found"
+msgstr "Pin %s (mòdul %s) no trobat"
+
+#: pcbnew/controle.cpp:85
+#, c-format
+msgid "Locate Pin %s (module %s)"
+msgstr "Pin localitzat %s (mòdul %s)"
+
+#: pcbnew/cotation.cpp:88
+msgid "Cotation properties"
+msgstr "Propietats d'acotament"
+
+#: pcbnew/cotation.cpp:114
+#: pcbnew/editmod.cpp:353
+#: pcbnew/editmod.cpp:392
+#: pcbnew/muonde.cpp:344
+#: pcbnew/pcbtexte.cpp:173
+#: eeschema/editpart.cpp:311
+#: eeschema/options.cpp:155
+msgid "Normal"
+msgstr "Normal"
+
+#: pcbnew/cotation.cpp:126
+#: pcbnew/edtxtmod.cpp:143
+#: pcbnew/mirepcb.cpp:108
+#: pcbnew/muonde.cpp:338
+#: pcbnew/pcbtexte.cpp:122
+msgid "Size"
+msgstr "Mida"
+
+#: pcbnew/cotation.cpp:136
+#: gerbview/affiche.cpp:34
+msgid "Layer:"
+msgstr "Capa:"
+
+#: pcbnew/dialog_display_options.cpp:73
+#: cvpcb/displayframe.cpp:113
+msgid "Display Options"
+msgstr "Opcions de visualització"
+
+#: pcbnew/dialog_display_options.cpp:85
+#: pcbnew/dialog_display_options.cpp:105
+#: pcbnew/pcbplot.cpp:294
+#: gerbview/options.cpp:292
+#: gerbview/options.cpp:311
+msgid "Sketch"
+msgstr "Esbós"
+
+#: pcbnew/dialog_display_options.cpp:85
+#: pcbnew/dialog_display_options.cpp:105
+#: pcbnew/pcbplot.cpp:294
+#: eeschema/symbdraw.cpp:146
+#: gerbview/options.cpp:292
+#: gerbview/options.cpp:311
+msgid "Filled"
+msgstr "Farcit"
+
+#: pcbnew/dialog_display_options.cpp:86
+msgid "Tracks:"
+msgstr "Pistes:"
+
+#: pcbnew/dialog_display_options.cpp:91
+msgid "Always"
+msgstr "Sempre"
+
+#: pcbnew/dialog_display_options.cpp:91
+msgid "New track"
+msgstr "Nova pista"
+
+#: pcbnew/dialog_display_options.cpp:91
+msgid "Never"
+msgstr "Mai"
+
+#: pcbnew/dialog_display_options.cpp:94
+msgid "Show Track Clearance"
+msgstr "Mostra marge de pistes"
+
+#: pcbnew/dialog_display_options.cpp:105
+#: pcbnew/pcbplot.cpp:294
+#: gerbview/options.cpp:311
+msgid "Line"
+msgstr "Línia"
+
+#: pcbnew/dialog_display_options.cpp:106
+msgid "Module Texts"
+msgstr "Text de mòdul"
+
+#: pcbnew/dialog_display_options.cpp:112
+msgid "Module Edges:"
+msgstr "Vores de mòdul:"
+
+#: pcbnew/dialog_display_options.cpp:120
+msgid "Pads:"
+msgstr "Illots (pads):"
+
+#: pcbnew/dialog_display_options.cpp:127
+msgid "Show Pad Clearance"
+msgstr "Mostra marge d'illots"
+
+#: pcbnew/dialog_display_options.cpp:132
+msgid "Show Pad Number"
+msgstr "Mostra número d'illot"
+
+#: pcbnew/dialog_display_options.cpp:137
+msgid "Show Pad NoConnect"
+msgstr "Mostra illots no connectats"
+
+#: pcbnew/dialog_display_options.cpp:141
+#: gerbview/options.cpp:312
+msgid "Display other items:"
+msgstr "Mostra altres elements:"
+
+#: pcbnew/dialog_graphic_items_options.cpp:74
+#: pcbnew/menubarpcb.cpp:201
+msgid "Texts and Drawings"
+msgstr "Texts i dibuixos"
+
+#: pcbnew/dialog_graphic_items_options.cpp:85
+msgid "Segm Width"
+msgstr "Amplada de segment"
+
+#: pcbnew/dialog_graphic_items_options.cpp:90
+msgid "Edges Width"
+msgstr "Amplada de vora"
+
+#: pcbnew/dialog_graphic_items_options.cpp:96
+msgid "Text Width"
+msgstr "Amplada de text"
+
+#: pcbnew/dialog_graphic_items_options.cpp:101
+msgid "Text Size V"
+msgstr "Alçada del text"
+
+#: pcbnew/dialog_graphic_items_options.cpp:106
+msgid "Text Size H"
+msgstr "Amplada del text"
+
+#: pcbnew/dialog_graphic_items_options.cpp:113
+msgid "Edges Module Width"
+msgstr "Amplada de la vora del mòdul"
+
+#: pcbnew/dialog_graphic_items_options.cpp:119
+msgid "Text Module Width"
+msgstr "Amplada del text del mòdul"
+
+#: pcbnew/dialog_graphic_items_options.cpp:124
+msgid "Text Module Size V"
+msgstr "Alçada del text del mòdul"
+
+#: pcbnew/dialog_graphic_items_options.cpp:129
+msgid "Text Module Size H"
+msgstr "Amplada del text del mòdul"
+
+#: pcbnew/dialog_setup_libs.cpp:100
+#: eeschema/eestatus.cpp:111
+#: cvpcb/menucfg.cpp:150
+#: gerbview/reglage.cpp:101
+msgid "from "
+msgstr "Des de "
+
+#: pcbnew/dialog_setup_libs.cpp:107
+#: eeschema/eestatus.cpp:116
+#: cvpcb/menucfg.cpp:157
+#: cvpcb/options.cpp:148
+#: gerbview/reglage.cpp:109
+msgid "Save Cfg"
+msgstr "Desa configuració"
+
+#: pcbnew/dialog_setup_libs.cpp:111
+#: eeschema/eestatus.cpp:120
+#: cvpcb/menucfg.cpp:178
+#: cvpcb/menucfg.cpp:190
+msgid "Del"
+msgstr "Elimina"
+
+#: pcbnew/dialog_setup_libs.cpp:115
+#: eeschema/eestatus.cpp:124
+#: eeschema/libedpart.cpp:289
+#: cvpcb/menucfg.cpp:182
+#: cvpcb/menucfg.cpp:194
+msgid "Add"
+msgstr "Afegeix"
+
+#: pcbnew/dialog_setup_libs.cpp:119
+#: eeschema/eestatus.cpp:128
+#: cvpcb/menucfg.cpp:186
+#: cvpcb/menucfg.cpp:198
+msgid "Ins"
+msgstr "Insereix"
+
+#: pcbnew/dialog_setup_libs.cpp:123
+msgid "Lib Modules:"
+msgstr "Biblioteques de mòduls:"
+
+#: pcbnew/dialog_setup_libs.cpp:147
+#: eeschema/eestatus.cpp:153
+#: cvpcb/menucfg.cpp:254
+msgid "Files ext:"
+msgstr "Extensió dels fitxers"
+
+#: pcbnew/dialog_setup_libs.cpp:150
+msgid "Board ext: "
+msgstr "Ext. cir. imprès: "
+
+#: pcbnew/dialog_setup_libs.cpp:154
+msgid "Cmp ext: "
+msgstr "Ext. comp.: "
+
+#: pcbnew/dialog_setup_libs.cpp:158
+msgid "Lib ext: "
+msgstr "Ext. biblio.: "
+
+#: pcbnew/dialog_setup_libs.cpp:162
+msgid "Net ext: "
+msgstr "Ext. xarxa: "
+
+#: pcbnew/dialog_setup_libs.cpp:168
+msgid "Lib Modules Dir:"
+msgstr "Directori de biblioteca de mòduls: "
+
+#: pcbnew/dialog_setup_libs.cpp:175
+#: cvpcb/menucfg.cpp:248
+msgid "Module Doc File:"
+msgstr "Fitxers doc. dels mòduls: "
+
+#: pcbnew/dialog_setup_libs.cpp:257
+msgid "library files:"
+msgstr "Fitxers de biblioteca: "
+
+#: pcbnew/dialog_setup_libs.cpp:278
+msgid "Library exists! No Change"
+msgstr "Existeix la biblioteca! No es canvia"
+
+#: pcbnew/dialog_track_options.cpp:72
+#: pcbnew/menubarpcb.cpp:191
+msgid "Tracks and Vias"
+msgstr "&Pistes i Vies ..."
+
+#: pcbnew/dialog_track_options.cpp:90
+msgid "Via Size"
+msgstr "Diàmetre de la via"
+
+#: pcbnew/dialog_track_options.cpp:94
+#: pcbnew/gendrill.cpp:158
+msgid "Via Drill"
+msgstr "Broca de la via"
+
+#: pcbnew/dialog_track_options.cpp:98
+msgid " Blind Via"
+msgstr "Via cega"
+
+#: pcbnew/dialog_track_options.cpp:98
+#: pcbnew/pcbnew.h:254
+msgid "Buried Via"
+msgstr "Via enterrada"
+
+#: pcbnew/dialog_track_options.cpp:98
+#: pcbnew/pcbnew.h:255
+msgid "Standard Via"
+msgstr "Via estàndard"
+
+#: pcbnew/dialog_track_options.cpp:99
+msgid "Via Type"
+msgstr "Tipus de via"
+
+#: pcbnew/dialog_track_options.cpp:107
+msgid "Track Width"
+msgstr "Amplada de pista"
+
+#: pcbnew/dialog_track_options.cpp:113
+#: pcbnew/drc.cpp:103
+msgid "Clearance"
+msgstr "Marge"
+
+#: pcbnew/dialog_track_options.cpp:118
+msgid "Mask clearance"
+msgstr "Marge de la màscara"
+
+#: pcbnew/dialog_track_options.cpp:142
+msgid ""
+"You have selected VIA Blind or VIA Buried\n"
+"WARNING: this feature is EXPERIMENTAL!!! Accept ?"
+msgstr ""
+"Ha seleccionat una VIA cega o enterrada \n"
+"AVÍS: Aquesta possibilitat ÉS EXPERIMENTAL!!!. Ho accepta ?"
+
+#: pcbnew/drc.cpp:85
+msgid "DRC Control"
+msgstr "Control DRC"
+
+#: pcbnew/drc.cpp:109
+msgid "Test Drc"
+msgstr "Assaja Drc"
+
+#: pcbnew/drc.cpp:114
+msgid "Stop Drc"
+msgstr "Atura Drc"
+
+#: pcbnew/drc.cpp:120
+msgid "Del Markers"
+msgstr "Elimina marcadors"
+
+#: pcbnew/drc.cpp:126
+msgid "List Unconn"
+msgstr "Llista no connectats"
+
+#: pcbnew/drc.cpp:131
+#: pcbnew/netlist.cpp:173
+#: pcbnew/xchgmod.cpp:127
+#: eeschema/editexte.cpp:117
+#: eeschema/editpart.cpp:171
+#: common/zoom.cpp:425
+msgid "Close"
+msgstr "Tanca"
+
+#: pcbnew/drc.cpp:167
+#, c-format
+msgid ""
+"Unconnected:\n"
+"Pad @ %.4f,%.4f and\n"
+"Pad @ %.4f,%.4f\n"
+msgstr ""
+"No connectats:\n"
+"Illot @ %.4f,%.4f y\n"
+"Illot @ %.4f,%.4f\n"
+
+#: pcbnew/drc.cpp:173
+#, c-format
+msgid "Active routes: %d\n"
+msgstr "Rutes actives: %d\n"
+
+#: pcbnew/drc.cpp:174
+msgid "OK! (No unconnect)\n"
+msgstr "D'acord! (no desconnectat)\n"
+
+#: pcbnew/drc.cpp:176
+msgid "End tst"
+msgstr "Fi d'assaig"
+
+#: pcbnew/drc.cpp:213
+#, c-format
+msgid "** End Drc: %d errors **\n"
+msgstr "** Fi Drc: %d errors **\n"
+
+#: pcbnew/drc.cpp:214
+msgid "** End Drc: No Error **\n"
+msgstr "** Fi Drc: Cap Error **\n"
+
+#: pcbnew/drc.cpp:317
+msgid "SegmNb"
+msgstr "SegmNb"
+
+#: pcbnew/drc.cpp:318
+msgid "Track Err"
+msgstr "Error de pistes"
+
+#: pcbnew/drc.cpp:321
+msgid "Tst Tracks\n"
+msgstr "Asssaig de pistes\n"
+
+#: pcbnew/drc.cpp:340
+#: eeschema/eelayer.cpp:141
+msgid "Netname"
+msgstr "Nom de xarxa"
+
+#: pcbnew/drc.cpp:1025
+#, c-format
+msgid "%d Err type %d sur PAD @ %d,%d\n"
+msgstr "%d Error de tipus %d a l'Illot @ %d,%d\n"
+
+#: pcbnew/drc.cpp:1034
+#, c-format
+msgid "%d Err type %d: sur VIA @ %d,%d\n"
+msgstr "%d Error de tipus %d: a la via @ %d,%d\n"
+
+#: pcbnew/drc.cpp:1045
+#, c-format
+msgid "%d Err type %d: sur SEGMENT @ %d,%d\n"
+msgstr "%d Error de tipus %d: al segment @ %d,%d\n"
+
+#: pcbnew/drc.cpp:1077
+#, c-format
+msgid "%d Err pad to pad (PAD @ %d,%d and PAD @ %d,%d\n"
+msgstr "%d Error d'illot a illot (Illot @ %d,%d i Illot @ %d,%d\n"
+
+#: pcbnew/edit.cpp:151
+msgid "Graphic not autorized on Copper layers"
+msgstr "Gràfic no permès en capes de coure"
+
+#: pcbnew/edit.cpp:174
+msgid "Tracks on Copper layers only "
+msgstr "Pistes nomès en capes de coure"
+
+#: pcbnew/edit.cpp:247
+msgid "Cotation not autorized on Copper layers"
+msgstr "Acotament no permès en capes de coure"
+
+#: pcbnew/edit.cpp:428
+#: pcbnew/editmod.cpp:144
+msgid "Module Editor"
+msgstr "Obre l'editor de mòduls"
+
+#: pcbnew/edit.cpp:504
+msgid "Add Tracks"
+msgstr "Afegeix pista"
+
+#: pcbnew/edit.cpp:513
+#: pcbnew/tool_pcb.cpp:242
+msgid "Add Zones"
+msgstr "Afegeix zona"
+
+#: pcbnew/edit.cpp:515
+msgid "Warning: Display Zone is OFF!!!"
+msgstr "Avís :  Visualització de zones desactivada !!!"
+
+#: pcbnew/edit.cpp:522
+msgid "Add Mire"
+msgstr "Afegeix mira"
+
+#: pcbnew/edit.cpp:526
+msgid "Adjust Zero"
+msgstr "Ajusta zero"
+
+#: pcbnew/edit.cpp:532
+msgid "Add Graphic"
+msgstr "Afegeix un gràfic"
+
+#: pcbnew/edit.cpp:536
+#: pcbnew/tool_modedit.cpp:159
+#: pcbnew/tool_pcb.cpp:259
+#: eeschema/libframe.cpp:775
+#: eeschema/schedit.cpp:300
+#: gerbview/tool_gerber.cpp:204
+msgid "Add Text"
+msgstr "Afegeix un text"
+
+#: pcbnew/edit.cpp:540
+msgid "Add Modules"
+msgstr "Afegeix mòduls"
+
+#: pcbnew/edit.cpp:544
+#: pcbnew/tool_pcb.cpp:264
+msgid "Add Cotation"
+msgstr "Afegeix cota"
+
+#: pcbnew/edit.cpp:552
+msgid "Net Highlight"
+msgstr "Ressalta xarxa"
+
+#: pcbnew/edit.cpp:556
+msgid "Local Ratsnest"
+msgstr "Mostra línies aèries locals"
+
+#: pcbnew/edit.cpp:702
+#: eeschema/libframe.cpp:846
+#: eeschema/schedit.cpp:439
+msgid "Delete item"
+msgstr "Elimina element"
+
+#: pcbnew/edit_track_width.cpp:116
+msgid "Edit All Tracks and Vias Sizes"
+msgstr "Edita les mides de totes les pistes i vies"
+
+#: pcbnew/edit_track_width.cpp:121
+msgid "Edit All Via Sizes"
+msgstr "Edita les mides de totes les vies"
+
+#: pcbnew/edit_track_width.cpp:126
+msgid "Edit All Track Sizes"
+msgstr "Edita les mides de totes les pistes"
+
+#: pcbnew/editedge.cpp:158
+msgid "Copper layer global delete not allowed!"
+msgstr "Esborrat global de la capa de coure no permès !"
+
+#: pcbnew/editedge.cpp:164
+msgid "Segment is being edited"
+msgstr "El segment s'està editant"
+
+#: pcbnew/editedge.cpp:168
+msgid "Delete Layer "
+msgstr "Elimina capa"
+
+#: pcbnew/editmod.cpp:165
+msgid "Module properties"
+msgstr "Propietats del mòdul"
+
+#: pcbnew/editmod.cpp:212
+msgid "Properties"
+msgstr "Propietats"
+
+#: pcbnew/editmod.cpp:216
+#: pcbnew/editmod.cpp:225
+#: pcbnew/editmod.cpp:256
+msgid "3D settings"
+msgstr "Opcions 3D"
+
+#: pcbnew/editmod.cpp:290
+msgid "Change module(s)"
+msgstr "Canvia mòdul(s)"
+
+#: pcbnew/editmod.cpp:294
+msgid "Goto Module Editor"
+msgstr "Obre editor de mòduls"
+
+#: pcbnew/editmod.cpp:300
+#: eeschema/libedpart.cpp:260
+#: eeschema/onrightclick.cpp:314
+msgid "Doc"
+msgstr "Mostra full de característiques ..."
+
+#: pcbnew/editmod.cpp:304
+msgid "Keywords"
+msgstr "Paraules clau"
+
+#: pcbnew/editmod.cpp:312
+msgid "Fields:"
+msgstr "Camps:"
+
+#: pcbnew/editmod.cpp:323
+msgid "Add Field"
+msgstr "Afegeix camp"
+
+#: pcbnew/editmod.cpp:328
+#: eeschema/onrightclick.cpp:255
+msgid "Edit Field"
+msgstr "Edita camp"
+
+#: pcbnew/editmod.cpp:333
+msgid "Delete Field"
+msgstr "Esborra camp"
+
+#: pcbnew/editmod.cpp:344
+msgid "Componant"
+msgstr "Component"
+
+#: pcbnew/editmod.cpp:344
+msgid "Copper"
+msgstr "Coure"
+
+#: pcbnew/editmod.cpp:353
+msgid "User"
+msgstr "Usuari"
+
+#: pcbnew/editmod.cpp:386
+msgid "Orient (0.1 deg)"
+msgstr "Orienta (0.1 grad)"
+
+#: pcbnew/editmod.cpp:392
+msgid "Normal+Insert"
+msgstr "Normal+Inserta"
+
+#: pcbnew/editmod.cpp:392
+msgid "Virtual"
+msgstr "Virtual"
+
+#: pcbnew/editmod.cpp:393
+msgid "Attributs"
+msgstr "Atributs"
+
+#: pcbnew/editmod.cpp:418
+msgid "Free"
+msgstr "Lliure"
+
+#: pcbnew/editmod.cpp:418
+msgid "Locked"
+msgstr "Immobilitzat"
+
+#: pcbnew/editmod.cpp:419
+msgid "Auto Place"
+msgstr "Autoposiciona"
+
+#: pcbnew/editmod.cpp:425
+msgid "Rot 90"
+msgstr "Rota 90"
+
+#: pcbnew/editmod.cpp:433
+msgid "Rot 180"
+msgstr "Rota 180"
+
+#: pcbnew/editmod.cpp:457
+msgid "3D Shape Name"
+msgstr "Nom de forma 3D"
+
+#: pcbnew/editmod.cpp:463
+msgid "Browse"
+msgstr "Examina"
+
+#: pcbnew/editmod.cpp:468
+msgid "Add 3D Shape"
+msgstr "Afegeix forma 3D"
+
+#: pcbnew/editmod.cpp:475
+msgid "Remove 3D Shape"
+msgstr "Elimina forma 3D:"
+
+#: pcbnew/editmod.cpp:480
+msgid "Shape Scale:"
+msgstr "Escala de la forma:"
+
+#: pcbnew/editmod.cpp:485
+msgid "Shape Offset:"
+msgstr "Òfset de la Forma:"
+
+#: pcbnew/editmod.cpp:491
+msgid "Shape Rotation:"
+msgstr "Rotació de la forma"
+
+#: pcbnew/editmod.cpp:528
+msgid "3D Shape:"
+msgstr "Forma 3D:"
+
+#: pcbnew/editmod.cpp:790
+#, c-format
+msgid "Delete [%s]"
+msgstr "Elimina [%s]"
+
+#: pcbnew/editmod.cpp:884
+msgid "Text is REFERENCE!"
+msgstr "El text és la REFERENCIA !"
+
+#: pcbnew/editmod.cpp:889
+msgid "Text is VALUE!"
+msgstr "El Text és el VALOR ! "
+
+#: pcbnew/editpads.cpp:146
+msgid "Pad properties"
+msgstr "Propietats dels Illots"
+
+#: pcbnew/editpads.cpp:182
+msgid "Pad Num :"
+msgstr "Nombre d'illot :"
+
+#: pcbnew/editpads.cpp:186
+msgid "Pad Net Name :"
+msgstr "Nom d'illot a la xarxa:"
+
+#: pcbnew/editpads.cpp:190
+msgid "Pad Size"
+msgstr "Mida de l'illot"
+
+#: pcbnew/editpads.cpp:195
+msgid "Delta"
+msgstr "Delta"
+
+#: pcbnew/editpads.cpp:200
+msgid "Pad Drill"
+msgstr "Diàmetre broca Illot"
+
+#: pcbnew/editpads.cpp:205
+#: pcbnew/edtxtmod.cpp:153
+msgid "Offset"
+msgstr "Òfset"
+
+#: pcbnew/editpads.cpp:215
+msgid "Pad Orient (0.1 deg)"
+msgstr "Orientació illot (0.1 graus)"
+
+#: pcbnew/editpads.cpp:221
+msgid "Pad Orient:"
+msgstr "Orientació illot:"
+
+#: pcbnew/editpads.cpp:257
+msgid "Oval"
+msgstr "Oval"
+
+#: pcbnew/editpads.cpp:257
+msgid "Rect"
+msgstr "Rectangular"
+
+#: pcbnew/editpads.cpp:257
+msgid "Trapeze"
+msgstr "Trapezoïdal"
+
+#: pcbnew/editpads.cpp:259
+msgid "Pad Shape:"
+msgstr "Forma de l'Illot  :"
+
+#: pcbnew/editpads.cpp:289
+msgid "Pad Type:"
+msgstr "Tipus d'illot:"
+
+#: pcbnew/editrack.cpp:38
+#, c-format
+msgid "Track Width: %s   Vias Size : %s"
+msgstr "Amplada de pista: %s  Diàmetre de via : %s"
+
+#: pcbnew/edtxtmod.cpp:86
+msgid "TextMod properties"
+msgstr "Propietats del Text al mòdul"
+
+#: pcbnew/edtxtmod.cpp:132
+msgid "Reference:"
+msgstr "Referència:"
+
+#: pcbnew/edtxtmod.cpp:133
+msgid "Value:"
+msgstr "Valor:"
+
+#: pcbnew/edtxtmod.cpp:134
+#: pcbnew/pcbtexte.cpp:117
+#: eeschema/sheetlab.cpp:102
+#: common/confirm.cpp:133
+msgid "Text:"
+msgstr "Text:"
+
+#: pcbnew/edtxtmod.cpp:158
+msgid "horiz"
+msgstr "Horitzontal"
+
+#: pcbnew/edtxtmod.cpp:158
+msgid "vertical"
+msgstr "Vertical"
+
+#: pcbnew/edtxtmod.cpp:159
+#: pcbnew/pcbtexte.cpp:148
+msgid "Orientation"
+msgstr "Orientació"
+
+#: pcbnew/edtxtmod.cpp:169
+msgid "show"
+msgstr "Visible"
+
+#: pcbnew/edtxtmod.cpp:169
+msgid "no show"
+msgstr "Invisible"
+
+#: pcbnew/export_gencad.cpp:66
+msgid "GenCAD file:"
+msgstr "Fixter GenCAD:"
+
+#: pcbnew/export_gencad.cpp:79
+#: pcbnew/files.cpp:300
+#: pcbnew/gen_modules_placefile.cpp:82
+#: pcbnew/gen_modules_placefile.cpp:93
+#: pcbnew/gen_modules_placefile.cpp:236
+#: pcbnew/librairi.cpp:236
+#: pcbnew/librairi.cpp:369
+#: pcbnew/librairi.cpp:506
+#: pcbnew/librairi.cpp:706
+#: pcbnew/plothpgl.cpp:65
+#: eeschema/plothpgl.cpp:422
+#: eeschema/plotps.cpp:281
+#: cvpcb/genequiv.cpp:42
+msgid "Unable to create "
+msgstr "Impossible de crear "
+
+#: pcbnew/files.cpp:56
+msgid "Recovery file "
+msgstr "Fitxer de seguretat "
+
+#: pcbnew/files.cpp:56
+#: eeschema/find.cpp:464
+#: eeschema/libedit.cpp:117
+#: gerbview/dcode.cpp:262
+#: gerbview/readgerb.cpp:142
+#: common/eda_doc.cpp:95
+msgid " not found"
+msgstr " no trobat"
+
+#: pcbnew/files.cpp:62
+msgid "Ok to load Recovery file "
+msgstr "Vol carregar el fitxer de seguretat?"
+
+#: pcbnew/files.cpp:141
+msgid "Board Modified: Continue ?"
+msgstr "Circuit imprès modificat, Continuar ?"
+
+#: pcbnew/files.cpp:159
+#: pcbnew/files.cpp:251
+msgid "Board files:"
+msgstr "Fitxers del circuit imprès:"
+
+#: pcbnew/files.cpp:181
+#: cvpcb/rdorcad.cpp:52
+#, c-format
+msgid "File <%s> not found"
+msgstr "Fitxer %s no trobat"
+
+#: pcbnew/files.cpp:285
+msgid "Warning: unable to create bakfile "
+msgstr "Avís: Impossible crear fitxer de seguretat "
+
+#: pcbnew/files.cpp:318
+msgid "Backup file: "
+msgstr "Fitxer de seguretat: "
+
+#: pcbnew/files.cpp:322
+msgid "Write Board file: "
+msgstr "Escriu fitxer de circuit imprès:"
+
+#: pcbnew/files.cpp:323
+msgid "Failed to create "
+msgstr "Impossible de crear el fitxer"
+
+#: pcbnew/find.cpp:88
+msgid "Find"
+msgstr "Cerca"
+
+#: pcbnew/find.cpp:99
+msgid "Find Item"
+msgstr "Cerca element"
+
+#: pcbnew/find.cpp:104
+msgid "Find Next Item"
+msgstr "Cerca element següent"
+
+#: pcbnew/find.cpp:108
+msgid "Find Marker"
+msgstr "Cerca marcador"
+
+#: pcbnew/find.cpp:112
+msgid "Find Next Marker"
+msgstr "Cerca el següent marcador"
+
+#: pcbnew/find.cpp:122
+#: eeschema/find.cpp:126
+msgid "Item to find:"
+msgstr "Element a cercar:"
+
+#: pcbnew/find.cpp:218
+msgid "Marker found"
+msgstr "Marcador trobat"
+
+#: pcbnew/find.cpp:219
+#, c-format
+msgid "<%s> Found"
+msgstr "<%s> trobat"
+
+#: pcbnew/find.cpp:227
+msgid "Marker not found"
+msgstr "Marcador no trobat"
+
+#: pcbnew/find.cpp:228
+#, c-format
+msgid "<%s> Not Found"
+msgstr "<%s> no trobat"
+
+#: pcbnew/gen_modules_placefile.cpp:71
+msgid "No Modules for Automated Placement"
+msgstr "No hi ha mòduls per a l'emplaçament automatitzat"
+
+#: pcbnew/gen_modules_placefile.cpp:102
+msgid "Component side place file:"
+msgstr "Fitxer del costat dels components:"
+
+#: pcbnew/gen_modules_placefile.cpp:105
+msgid "Copper side place file:"
+msgstr "Fitxer del costat del coure:"
+
+#: pcbnew/gen_modules_placefile.cpp:108
+msgid "Module count"
+msgstr "Compta mòduls"
+
+#: pcbnew/gendrill.cpp:100
+msgid "Drill tools"
+msgstr "Eines de broca"
+
+#: pcbnew/gendrill.cpp:117
+#: pcbnew/options.cpp:216
+#: eeschema/options.cpp:163
+#: gerbview/options.cpp:184
+msgid "millimeters"
+msgstr "mil·límetres"
+
+#: pcbnew/gendrill.cpp:117
+#: eeschema/options.cpp:163
+msgid "inches"
+msgstr "Polzades"
+
+#: pcbnew/gendrill.cpp:119
+msgid "drill units:"
+msgstr "Unitats de broca:"
+
+#: pcbnew/gendrill.cpp:128
+msgid "Absolute"
+msgstr "Absolut"
+
+#: pcbnew/gendrill.cpp:128
+msgid "Auxiliary Axe"
+msgstr "Eix auxiliar"
+
+#: pcbnew/gendrill.cpp:130
+msgid "Drill Origine:"
+msgstr "Origen de coordenades de broca:"
+
+#: pcbnew/gendrill.cpp:139
+msgid "none"
+msgstr "Cap"
+
+#: pcbnew/gendrill.cpp:139
+msgid "drill sheet (HPGL)"
+msgstr "Plànol de broca (HPGL)"
+
+#: pcbnew/gendrill.cpp:139
+msgid "drill sheet (Postscript)"
+msgstr "Plànol de broca (Postscript)"
+
+#: pcbnew/gendrill.cpp:141
+msgid "Drill Sheet:"
+msgstr "Plànol de broca:"
+
+#: pcbnew/gendrill.cpp:149
+msgid "&Execute"
+msgstr "&Executa"
+
+#: pcbnew/gendrill.cpp:154
+#: eeschema/annotate.cpp:118
+#: eeschema/netlist_control.cpp:100
+#: eeschema/netlist_control.cpp:246
+#: common/svg_print.cpp:178
+#: common/wxprint.cpp:392
+msgid "&Close"
+msgstr "&Tanca"
+
+#: pcbnew/gendrill.cpp:164
+#: eeschema/plothpgl.cpp:208
+msgid "Pen Number"
+msgstr "Nombre de ploma"
+
+#: pcbnew/gendrill.cpp:169
+msgid "Speed(cm/s)"
+msgstr "Velocitat de ploma ( cm/s )"
+
+#: pcbnew/gendrill.cpp:229
+msgid "Drill file"
+msgstr "Fitxer de broca"
+
+#: pcbnew/gendrill.cpp:243
+#: pcbnew/gendrill.cpp:590
+#, c-format
+msgid "Unable to create file <%s>"
+msgstr "Impossible de crear fitxer <%s>"
+
+#: pcbnew/gendrill.cpp:250
+#: pcbnew/gendrill.cpp:596
+#: pcbnew/plotgerb.cpp:132
+#: pcbnew/plothpgl.cpp:70
+#: pcbnew/plotps.cpp:50
+msgid "File"
+msgstr "Fitxer"
+
+#: pcbnew/gendrill.cpp:256
+#: pcbnew/gendrill.cpp:601
+msgid "Tools"
+msgstr "Eines"
+
+#: pcbnew/gendrill.cpp:532
+msgid "Drill Map file"
+msgstr "Fitxer plànol de forats"
+
+#: pcbnew/globaleditpad.cpp:75
+msgid "Pads Global Edit"
+msgstr "Illots: Edició global"
+
+#: pcbnew/globaleditpad.cpp:91
+#: pcbnew/menubarmodedit.cpp:45
+#: pcbnew/menubarpcb.cpp:206
+#: pcbnew/tool_modedit.cpp:114
+msgid "Pad Settings"
+msgstr "&Illots ..."
+
+#: pcbnew/globaleditpad.cpp:96
+msgid "Change Module"
+msgstr "Canvia mòdul"
+
+#: pcbnew/globaleditpad.cpp:101
+msgid "Change Id Modules"
+msgstr "Canvia identificador dels mòduls"
+
+#: pcbnew/globaleditpad.cpp:112
+msgid "Pad Filter :"
+msgstr "Filtre per illots :"
+
+#: pcbnew/globaleditpad.cpp:114
+msgid "Shape Filter"
+msgstr "Filtre per forma"
+
+#: pcbnew/globaleditpad.cpp:118
+msgid "Layer Filter"
+msgstr "Filtre per capa"
+
+#: pcbnew/globaleditpad.cpp:123
+msgid "Change Items :"
+msgstr "Elements a canviar:"
+
+#: pcbnew/globaleditpad.cpp:125
+msgid "Change Size"
+msgstr "Canvia de mida"
+
+#: pcbnew/globaleditpad.cpp:129
+msgid "Change Shape"
+msgstr "Canvia de forma"
+
+#: pcbnew/globaleditpad.cpp:133
+msgid "Change Drill"
+msgstr "Canvia de broca"
+
+#: pcbnew/initpcb.cpp:76
+msgid "General Delete"
+msgstr "Esborrat General"
+
+#: pcbnew/initpcb.cpp:86
+#: gerbview/options.cpp:167
+#: gerbview/options.cpp:284
+msgid "Accept"
+msgstr "Accepta"
+
+#: pcbnew/initpcb.cpp:94
+msgid "Delete Zones"
+msgstr "Elimina zones"
+
+#: pcbnew/initpcb.cpp:98
+msgid "Delete Texts"
+msgstr "Elimina texts"
+
+#: pcbnew/initpcb.cpp:102
+msgid "Delete Edges"
+msgstr "Elimina vores"
+
+#: pcbnew/initpcb.cpp:106
+msgid "Delete Drawings"
+msgstr "Elimina dibuixos"
+
+#: pcbnew/initpcb.cpp:110
+msgid "Delete Modules"
+msgstr "Elimina mòduls"
+
+#: pcbnew/initpcb.cpp:114
+msgid "Delete Tracks"
+msgstr "Elimina pistes"
+
+#: pcbnew/initpcb.cpp:118
+msgid "Delete Markers"
+msgstr "Elimina marcadors"
+
+#: pcbnew/initpcb.cpp:122
+msgid "Clear Board"
+msgstr "Neteja placa"
+
+#: pcbnew/initpcb.cpp:125
+msgid "Track Filter"
+msgstr "Filtre per pista"
+
+#: pcbnew/initpcb.cpp:127
+msgid "Include AutoRouted Tracks"
+msgstr "Inclou pistes d'emplaçament automatitzat"
+
+#: pcbnew/initpcb.cpp:132
+msgid "Include Locked Tracks"
+msgstr "Inclou pistes immobilitzades"
+
+#: pcbnew/initpcb.cpp:239
+msgid "Current Board will be lost ?"
+msgstr "La placa de circuit imprès actual es perdrà. Hi esteu d'acord  ?"
+
+#: pcbnew/librairi.cpp:47
+msgid "Import Module:"
+msgstr "Importa mòdul:"
+
+#: pcbnew/librairi.cpp:70
+msgid "Not a module file"
+msgstr "No es un fitxer de mòduls"
+
+#: pcbnew/librairi.cpp:121
+msgid "Create lib"
+msgstr "Crea biblioteca"
+
+#: pcbnew/librairi.cpp:121
+msgid "Export Module:"
+msgstr "Exporta Mòdul:"
+
+#: pcbnew/librairi.cpp:135
+#: pcbnew/librairi.cpp:357
+#, c-format
+msgid "File %s exists, OK to replace ?"
+msgstr "Fitxer %s existent, està d'acord en reemplaçar-lo ?"
+
+#: pcbnew/librairi.cpp:143
+#: eeschema/symbedit.cpp:144
+#, c-format
+msgid "Unable to create <%s>"
+msgstr "Impossible de crear <%s>"
+
+#: pcbnew/librairi.cpp:187
+msgid "Library "
+msgstr "Biblioteca"
+
+#: pcbnew/librairi.cpp:198
+msgid "Not a Library file"
+msgstr "No és un fitxer Biblioteca"
+
+#: pcbnew/librairi.cpp:333
+msgid " No modules to archive!"
+msgstr " No hi ha mòduls per a desar!"
+
+#: pcbnew/librairi.cpp:340
+msgid "Library"
+msgstr "Biblioteca"
+
+#: pcbnew/librairi.cpp:425
+#, c-format
+msgid "Library %s not found"
+msgstr "Biblioteca %s no trobada"
+
+#: pcbnew/librairi.cpp:436
+#: eeschema/symbtext.cpp:102
+#: common/get_component_dialog.cpp:95
+msgid "Name:"
+msgstr "Nom:"
+
+#: pcbnew/librairi.cpp:444
+#, c-format
+msgid "Unable to open %s"
+msgstr "Impossible d'obrir %s"
+
+#: pcbnew/librairi.cpp:454
+#, c-format
+msgid "File %s is not a eeschema library"
+msgstr "El fitxer %s no és una biblioteca Eeschema"
+
+#: pcbnew/librairi.cpp:480
+msgid "Module exists Line "
+msgstr "Mòdul existeix línia "
+
+#: pcbnew/librairi.cpp:588
+#: eeschema/libedit.cpp:117
+#: eeschema/libedit.cpp:401
+msgid "Component "
+msgstr "Component"
+
+#: pcbnew/librairi.cpp:589
+msgid " added in "
+msgstr "afegeix a "
+
+#: pcbnew/librairi.cpp:589
+msgid " replaced in "
+msgstr " reemplaça a "
+
+#: pcbnew/librairi.cpp:618
+msgid "Module Reference:"
+msgstr "Referència de mòdul:"
+
+#: pcbnew/librairi.cpp:668
+msgid "Active Lib:"
+msgstr "Biblioteca Actual:"
+
+#: pcbnew/librairi.cpp:683
+msgid "Module Editor (lib: "
+msgstr "Editor de mòduls (Biblioteca: "
+
+#: pcbnew/librairi.cpp:699
+msgid "Library exists "
+msgstr "Existeix biblioteca"
+
+#: pcbnew/librairi.cpp:714
+msgid "Create error "
+msgstr "Error al crear"
+
+#: pcbnew/loadcmp.cpp:99
+msgid "Module name:"
+msgstr "Nom de mòdul:"
+
+#: pcbnew/loadcmp.cpp:194
+#: eeschema/eelibs1.cpp:67
+#, c-format
+msgid "Library <%s> not found"
+msgstr "Biblioteca %s no trobada"
+
+#: pcbnew/loadcmp.cpp:199
+#, c-format
+msgid "Scan Lib: %s"
+msgstr "Cerca Biblioteca: %s"
+
+#: pcbnew/loadcmp.cpp:208
+msgid "File is Not a library"
+msgstr "El fitxer no es una biblioteca Eeschema"
+
+#: pcbnew/loadcmp.cpp:266
+#, c-format
+msgid "Module <%s> not found"
+msgstr "Mòdul <%s> no trobat"
+
+#: pcbnew/menubarmodedit.cpp:40
+msgid "Sizes and Widths"
+msgstr "Dimensions"
+
+#: pcbnew/menubarmodedit.cpp:41
+#: pcbnew/menubarpcb.cpp:202
+msgid "Adjust width for texts and drawings"
+msgstr "Ajusta les dimensions de texts i gràfics"
+
+#: pcbnew/menubarmodedit.cpp:46
+#: pcbnew/menubarpcb.cpp:207
+msgid "Adjust size,shape,layers... for Pads"
+msgstr "Ajusta la mida, forma, capes... pels illots"
+
+#: pcbnew/menubarmodedit.cpp:50
+#: pcbnew/menubarpcb.cpp:196
+#: pcbnew/set_grid.cpp:71
+msgid "User Grid Size"
+msgstr "Mida de &reixeta d'usuari ..."
+
+#: pcbnew/menubarmodedit.cpp:51
+#: pcbnew/menubarpcb.cpp:197
+msgid "Adjust User Grid"
+msgstr "Ajusta les dimensions de la reixeta d'usuari"
+
+#: pcbnew/menubarmodedit.cpp:60
+#: pcbnew/menubarpcb.cpp:265
+msgid "Pcbnew &Help"
+msgstr "Ajuda &Pcbnew"
+
+#: pcbnew/menubarmodedit.cpp:60
+#: pcbnew/menubarpcb.cpp:265
+#: eeschema/menubar.cpp:140
+#: cvpcb/tool_cvpcb.cpp:136
+#: kicad/buildmnu.cpp:158
+#: gerbview/gerberframe.cpp:290
+msgid "On line doc"
+msgstr "Documentació en línia"
+
+#: pcbnew/menubarmodedit.cpp:64
+#: pcbnew/menubarpcb.cpp:269
+msgid "Pcbnew &About"
+msgstr "Quant a Pcbnew ..."
+
+#: pcbnew/menubarmodedit.cpp:64
+#: pcbnew/menubarpcb.cpp:269
+msgid "Pcbnew Infos"
+msgstr "Informacions diverses de Pcbnew"
+
+#: pcbnew/menubarmodedit.cpp:72
+#: pcbnew/menubarpcb.cpp:277
+msgid "3D Display"
+msgstr "Visualització 3D"
+
+#: pcbnew/menubarmodedit.cpp:72
+#: pcbnew/menubarpcb.cpp:277
+msgid "Show Board in 3D Mode"
+msgstr "Mostra placa en 3D"
+
+#: pcbnew/menubarmodedit.cpp:76
+#: pcbnew/menubarpcb.cpp:283
+msgid "&Dimensions"
+msgstr "&Dimensions"
+
+#: pcbnew/menubarmodedit.cpp:77
+#: pcbnew/menubarpcb.cpp:286
+msgid "&3D Display"
+msgstr "Visualització &3D"
+
+#: pcbnew/menubarmodedit.cpp:78
+#: pcbnew/menubarpcb.cpp:287
+#: eeschema/menubar.cpp:152
+#: cvpcb/tool_cvpcb.cpp:135
+#: cvpcb/tool_cvpcb.cpp:146
+#: kicad/buildmnu.cpp:171
+#: gerbview/gerberframe.cpp:290
+#: gerbview/gerberframe.cpp:297
+msgid "&Help"
+msgstr "A&juda"
+
+#: pcbnew/menubarpcb.cpp:41
+msgid "Load Board"
+msgstr "&Obre ..."
+
+#: pcbnew/menubarpcb.cpp:42
+msgid "Delete old Board and Load new Board"
+msgstr "Elimina el circuit actual i obre un de nou"
+
+#: pcbnew/menubarpcb.cpp:47
+msgid "Append Board"
+msgstr "&Importa ..."
+
+#: pcbnew/menubarpcb.cpp:48
+msgid "Add Board to old Board"
+msgstr "Insereix un altre circuit imprès a l'actual"
+
+#: pcbnew/menubarpcb.cpp:53
+msgid "&New board"
+msgstr "&Nou"
+
+#: pcbnew/menubarpcb.cpp:54
+msgid "Clear old PCB and init a new one"
+msgstr "Elimina el circuit actual i crea un de nou"
+
+#: pcbnew/menubarpcb.cpp:59
+msgid "&Rescue"
+msgstr "&Rescat"
+
+#: pcbnew/menubarpcb.cpp:60
+msgid "Clear old board and get last rescue file"
+msgstr "Elimina el circuit imprès actual i carrega l'últim fitxer de recuperació"
+
+#: pcbnew/menubarpcb.cpp:65
+msgid "&Previous version"
+msgstr "Versió &Anterior"
+
+#: pcbnew/menubarpcb.cpp:66
+msgid "Clear old board and get old version of board"
+msgstr "Elimina el circuit imprès actual i recupera la versió anterior"
+
+#: pcbnew/menubarpcb.cpp:73
+msgid "&Save board"
+msgstr "&Desa la placa"
+
+#: pcbnew/menubarpcb.cpp:74
+msgid "Save current board"
+msgstr "Desa la placa actual"
+
+#: pcbnew/menubarpcb.cpp:79
+msgid "Save Board as.."
+msgstr "Desa la placa &com a.."
+
+#: pcbnew/menubarpcb.cpp:80
+msgid "Save current board as.."
+msgstr "Desa la placa actual com a.."
+
+#: pcbnew/menubarpcb.cpp:87
+#: eeschema/menubar.cpp:64
+#: gerbview/gerberframe.cpp:240
+msgid "P&rint"
+msgstr "Imp&rimeix ..."
+
+#: pcbnew/menubarpcb.cpp:87
+#: eeschema/menubar.cpp:64
+#: gerbview/gerberframe.cpp:240
+msgid "Print on current printer"
+msgstr "Imprimeix a la impressora per defecte"
+
+#: pcbnew/menubarpcb.cpp:92
+#: eeschema/menubar.cpp:86
+msgid "&Plot"
+msgstr "&Traça ..."
+
+#: pcbnew/menubarpcb.cpp:93
+#: pcbnew/tool_pcb.cpp:107
+msgid "Plot (Hplg, Postscript, or Gerber format)"
+msgstr "Traça HPGL,  POSTSCRIPT o GERBER"
+
+#: pcbnew/menubarpcb.cpp:101
+msgid "&GenCAD"
+msgstr "&GenCAD ..."
+
+#: pcbnew/menubarpcb.cpp:101
+msgid "Export GenCAD Format"
+msgstr "Exporta el circuit en Format GenCAD"
+
+#: pcbnew/menubarpcb.cpp:105
+msgid "&Module report"
+msgstr "Informe de &mòduls"
+
+#: pcbnew/menubarpcb.cpp:105
+msgid "Create a pcb report (footprint report)"
+msgstr "Crea informe pcb (informe d'enumeració de potes)"
+
+#: pcbnew/menubarpcb.cpp:108
+msgid "E&xport"
+msgstr "E&xporta"
+
+#: pcbnew/menubarpcb.cpp:108
+msgid "Export board"
+msgstr "Exporta la placa de circuit imprès"
+
+#: pcbnew/menubarpcb.cpp:117
+msgid "Add new footprints"
+msgstr "Afegeix nova petjada"
+
+#: pcbnew/menubarpcb.cpp:118
+msgid "Archive new footprints only in a library (keep other footprints in this lib)"
+msgstr "Desa NOMÉS les noves petjades a una biblioteca (mantenir les altres petjades d'aquesta biblioteca) "
+
+#: pcbnew/menubarpcb.cpp:122
+msgid "Create footprint archive"
+msgstr "Crea fitxer de petjades (footprint)"
+
+#: pcbnew/menubarpcb.cpp:123
+msgid "Archive all footprints  in a library(old lib will be deleted)"
+msgstr "Desa TOTES les petjades a una biblioteca (la biblioteca antiga serà  suprimida)"
+
+#: pcbnew/menubarpcb.cpp:127
+msgid "Archive footprints"
+msgstr "Desa petjades"
+
+#: pcbnew/menubarpcb.cpp:128
+msgid "Archive or Add footprints in a library file"
+msgstr "Desa o afegeix petjades a una biblioteca"
+
+#: pcbnew/menubarpcb.cpp:135
+#: eeschema/menubar.cpp:92
+#: cvpcb/tool_cvpcb.cpp:105
+#: kicad/buildmnu.cpp:121
+#: gerbview/gerberframe.cpp:245
+msgid "E&xit"
+msgstr "&Surt"
+
+#: pcbnew/menubarpcb.cpp:135
+msgid "Quit pcbnew"
+msgstr "Tanca Pcbnew"
+
+#: pcbnew/menubarpcb.cpp:153
+#: eeschema/menubar.cpp:110
+msgid "&Libs and Dir"
+msgstr "&Biblioteques i Directoris ..."
+
+#: pcbnew/menubarpcb.cpp:154
+#: eeschema/menubar.cpp:111
+#: cvpcb/tool_cvpcb.cpp:120
+msgid "Setting Libraries, Directories and others..."
+msgstr "Selecciona biblioteques, directoris, ..."
+
+#: pcbnew/menubarpcb.cpp:158
+#: eeschema/menubar.cpp:116
+#: gerbview/gerberframe.cpp:259
+msgid "&Colors"
+msgstr "&Colors ..."
+
+#: pcbnew/menubarpcb.cpp:159
+msgid "Select Colors and Display for PCB items"
+msgstr "Selecció de colors i visualització d'elements del C.I."
+
+#: pcbnew/menubarpcb.cpp:163
+msgid "&General Options"
+msgstr "Opcions &generals"
+
+#: pcbnew/menubarpcb.cpp:164
+msgid "Select general options for pcbnew"
+msgstr "Selecciona les opcions generals per a pcbnew"
+
+#: pcbnew/menubarpcb.cpp:168
+msgid "&Display Options"
+msgstr "Mostra opcions"
+
+#: pcbnew/menubarpcb.cpp:169
+msgid "Select what items are displayed"
+msgstr "Selecciona elements a visualitzar"
+
+#: pcbnew/menubarpcb.cpp:176
+#: pcbnew/menubarpcb.cpp:212
+msgid "&Save Setup"
+msgstr "&Desa configuració ..."
+
+#: pcbnew/menubarpcb.cpp:177
+#: pcbnew/menubarpcb.cpp:213
+#: gerbview/gerberframe.cpp:271
+msgid "Save options in current directory"
+msgstr "Desa les opcions de configuració al directori actual"
+
+#: pcbnew/menubarpcb.cpp:181
+#: eeschema/menubar.cpp:132
+msgid "&Read Setup"
+msgstr "&Llegeix Configuració ..."
+
+#: pcbnew/menubarpcb.cpp:182
+#: eeschema/menubar.cpp:133
+msgid "Read options from a selected config file"
+msgstr "Llegeix les opcions d'un fitxer de configuració"
+
+#: pcbnew/menubarpcb.cpp:192
+msgid "Adjust size and width for tracks, vias"
+msgstr "Ajusta les dimensions de les pistes i les vies"
+
+#: pcbnew/menubarpcb.cpp:222
+msgid "Create &Modules Pos"
+msgstr "&Posicionat"
+
+#: pcbnew/menubarpcb.cpp:223
+msgid "Gen Position modules file"
+msgstr "Crea un fitxer amb la posició dels mòduls"
+
+#: pcbnew/menubarpcb.cpp:227
+msgid "Create &Drill file"
+msgstr "Crea fitxer de &broques ..."
+
+#: pcbnew/menubarpcb.cpp:228
+msgid "Gen Drill (EXCELLON] file and/or Drill sheet"
+msgstr "Crea un fitxer de forats (EXCELLON] i/o un plànol de broques"
+
+#: pcbnew/menubarpcb.cpp:232
+msgid "Create &Cmp file"
+msgstr "Crea fitxer de &components ..."
+
+#: pcbnew/menubarpcb.cpp:233
+msgid "Recreate .cmp file for CvPcb"
+msgstr "Crea un fitxer amb els components emprats (.cmp per a CvPcb)"
+
+#: pcbnew/menubarpcb.cpp:241
+msgid "Global &Deletions"
+msgstr "&Elimina ..."
+
+#: pcbnew/menubarpcb.cpp:242
+msgid "Delete Tracks, Modules, Texts... on Board"
+msgstr "Elimina Pistes, mòduls, texts... al C.I."
+
+#: pcbnew/menubarpcb.cpp:246
+msgid "&List nets"
+msgstr "&Llista la xarxa ..."
+
+#: pcbnew/menubarpcb.cpp:247
+msgid "List nets (names and id)"
+msgstr "Llista la xarxa (noms i nombres d'identificació)"
+
+#: pcbnew/menubarpcb.cpp:251
+msgid "&Clean tracks"
+msgstr "Elimina pistes"
+
+#: pcbnew/menubarpcb.cpp:252
+msgid "Clean stubs, vias, delete break points"
+msgstr "Elimina terminacions de pistes, vies, punts inútils..."
+
+#: pcbnew/menubarpcb.cpp:256
+msgid "&Swap layers"
+msgstr "&Permuta capes ..."
+
+#: pcbnew/menubarpcb.cpp:257
+msgid "Swap tracks on copper layers or drawings on others layers"
+msgstr "Permuta pistes entre capes"
+
+#: pcbnew/menubarpcb.cpp:281
+#: eeschema/menubar.cpp:150
+#: cvpcb/tool_cvpcb.cpp:144
+#: gerbview/gerberframe.cpp:293
+msgid "&Files"
+msgstr "&Fitxer"
+
+#: pcbnew/menubarpcb.cpp:282
+#: eeschema/menubar.cpp:151
+#: cvpcb/tool_cvpcb.cpp:145
+#: kicad/buildmnu.cpp:170
+#: gerbview/gerberframe.cpp:294
+msgid "&Preferences"
+msgstr "P&referències"
+
+#: pcbnew/menubarpcb.cpp:284
+#: gerbview/gerberframe.cpp:295
+msgid "&Miscellanous"
+msgstr "&Miscel·lània"
+
+#: pcbnew/menubarpcb.cpp:285
+msgid "P&ostprocess"
+msgstr "P&ostprocessadors"
+
+#: pcbnew/mirepcb.cpp:81
+msgid "Mire properties"
+msgstr "Propietats de les mires"
+
+#: pcbnew/mirepcb.cpp:120
+msgid "shape +"
+msgstr "Forma +"
+
+#: pcbnew/mirepcb.cpp:120
+msgid "shape X"
+msgstr "Forma X"
+
+#: pcbnew/mirepcb.cpp:122
+msgid "Mire Shape:"
+msgstr "Forma de la mira:"
+
+#: pcbnew/modedit_onclick.cpp:191
+#: pcbnew/onrightclick.cpp:168
+#: eeschema/libframe.cpp:436
+#: eeschema/onrightclick.cpp:117
+#: gerbview/onrightclick.cpp:40
+msgid "End Tool"
+msgstr "Fi d'eina"
+
+#: pcbnew/modedit_onclick.cpp:215
+msgid "Rotate"
+msgstr "Rotació"
+
+#: pcbnew/modedit_onclick.cpp:219
+msgid "Scale"
+msgstr "Escala"
+
+#: pcbnew/modedit_onclick.cpp:220
+msgid "Scale X"
+msgstr "Escala X"
+
+#: pcbnew/modedit_onclick.cpp:221
+msgid "Scale Y"
+msgstr "Escala Y"
+
+#: pcbnew/modedit_onclick.cpp:224
+#: pcbnew/onrightclick.cpp:82
+msgid "Edit Module"
+msgstr "Edita Mòdul"
+
+#: pcbnew/modedit_onclick.cpp:227
+msgid "Transform Module"
+msgstr "Transforma mòdul"
+
+#: pcbnew/modedit_onclick.cpp:237
+#: pcbnew/onrightclick.cpp:257
+msgid "Edit Pad"
+msgstr "Edita Illot"
+
+#: pcbnew/modedit_onclick.cpp:239
+#: pcbnew/onrightclick.cpp:259
+msgid "New Pad Settings"
+msgstr "Noves característiques dels illots"
+
+#: pcbnew/modedit_onclick.cpp:241
+#: pcbnew/onrightclick.cpp:261
+msgid "Export Pad Settings"
+msgstr "Exporta característiques dels illots"
+
+#: pcbnew/modedit_onclick.cpp:243
+#: pcbnew/onrightclick.cpp:274
+msgid "delete Pad"
+msgstr "Esborra illot"
+
+#: pcbnew/modedit_onclick.cpp:248
+#: pcbnew/onrightclick.cpp:277
+msgid "Global Pad Settings"
+msgstr "Edició global dels illots"
+
+#: pcbnew/modedit_onclick.cpp:256
+#: pcbnew/onrightclick.cpp:291
+msgid "Move Text Mod."
+msgstr "Moure Text Mod."
+
+#: pcbnew/modedit_onclick.cpp:259
+#: pcbnew/onrightclick.cpp:294
+msgid "Rotate Text Mod."
+msgstr "Rota Text Mod."
+
+#: pcbnew/modedit_onclick.cpp:261
+#: pcbnew/onrightclick.cpp:296
+msgid "Edit Text Mod."
+msgstr "Edita Text Mod."
+
+#: pcbnew/modedit_onclick.cpp:264
+#: pcbnew/onrightclick.cpp:299
+msgid "Delete Text Mod."
+msgstr "Elimina Text Mod."
+
+#: pcbnew/modedit_onclick.cpp:271
+msgid "End edge"
+msgstr "Fi de la vora"
+
+#: pcbnew/modedit_onclick.cpp:274
+msgid "Move edge"
+msgstr "Mou la vora"
+
+#: pcbnew/modedit_onclick.cpp:277
+msgid "Place edge"
+msgstr "Posa la vora"
+
+#: pcbnew/modedit_onclick.cpp:280
+#: eeschema/onrightclick.cpp:285
+msgid "Edit"
+msgstr "Edita"
+
+#: pcbnew/modedit_onclick.cpp:282
+msgid "Edit Width (Current)"
+msgstr "Edita espessor (Actual)"
+
+#: pcbnew/modedit_onclick.cpp:284
+msgid "Edit Width (All)"
+msgstr "Edita espessor (tots)"
+
+#: pcbnew/modedit_onclick.cpp:286
+msgid "Edit Layer (Current)"
+msgstr "Edita capa (actual)"
+
+#: pcbnew/modedit_onclick.cpp:288
+msgid "Edit Layer (All)"
+msgstr "Edita capa (totes)"
+
+#: pcbnew/modedit_onclick.cpp:290
+msgid "Delete edge"
+msgstr "Elimina vora"
+
+#: pcbnew/modedit_onclick.cpp:330
+msgid "Set Width"
+msgstr "Ajusta espessor"
+
+#: pcbnew/moduleframe.cpp:155
+msgid "Module Editor: module modified!, Continue ?"
+msgstr "Editor de mòduls: mòdul modificat!.  Voleu continuar ?"
+
+#: pcbnew/modules.cpp:240
+#: pcbnew/onrightclick.cpp:239
+msgid "Delete Module"
+msgstr "Elimina Mòdul"
+
+#: pcbnew/modules.cpp:241
+msgid "Value "
+msgstr "Valor "
+
+#: pcbnew/muonde.cpp:141
+msgid "Gap"
+msgstr "Separació (aïllament)"
+
+#: pcbnew/muonde.cpp:146
+msgid "Stub"
+msgstr "Acabament de pista"
+
+#: pcbnew/muonde.cpp:152
+msgid "Arc Stub"
+msgstr "Acabament en Arc"
+
+#: pcbnew/muonde.cpp:175
+msgid " (inch):"
+msgstr " (polzades):"
+
+#: pcbnew/muonde.cpp:185
+msgid "Angle (0.1deg):"
+msgstr "Angle (0.1graus):"
+
+#: pcbnew/muonde.cpp:316
+msgid "Complex shape"
+msgstr "Forma complexa"
+
+#: pcbnew/muonde.cpp:344
+msgid "Symmetrical"
+msgstr "Simètric"
+
+#: pcbnew/muonde.cpp:344
+msgid "mirrored"
+msgstr "Emmirallament"
+
+#: pcbnew/muonde.cpp:345
+msgid "ShapeOption"
+msgstr "Opcions de forma"
+
+#: pcbnew/muonde.cpp:349
+msgid "Read Shape Descr File"
+msgstr "Llegeix fitxer descriptor de forma"
+
+#: pcbnew/muonde.cpp:407
+msgid "Read descr shape file"
+msgstr "Llegeix fitxer descriptor de forma"
+
+#: pcbnew/muonde.cpp:422
+msgid "File not found"
+msgstr "Fitxer no trobat"
+
+#: pcbnew/muonde.cpp:523
+#: pcbnew/muonde.cpp:528
+msgid "Shape has no points!"
+msgstr "La forma no té punts!"
+
+#: pcbnew/muwave_command.cpp:52
+#: eeschema/libframe.cpp:791
+msgid "Add Line"
+msgstr "Afegeix línia"
+
+#: pcbnew/muwave_command.cpp:56
+msgid "Add Gap"
+msgstr "Afegeix separació"
+
+#: pcbnew/muwave_command.cpp:60
+msgid "Add Stub"
+msgstr "Afegeix acabament de pista"
+
+#: pcbnew/muwave_command.cpp:64
+msgid "Add Arc Stub"
+msgstr "Afegeix acabament en arc"
+
+#: pcbnew/muwave_command.cpp:68
+msgid "Add Polynomial Shape"
+msgstr "Afegeix forma polinomial"
+
+#: pcbnew/netlist.cpp:147
+msgid "Netlist: "
+msgstr "llistat NetList: "
+
+#: pcbnew/netlist.cpp:153
+#: pcbnew/pcbpiste.cpp:100
+msgid "Select"
+msgstr "Selecciona"
+
+#: pcbnew/netlist.cpp:158
+msgid "Read"
+msgstr "Llegeix"
+
+#: pcbnew/netlist.cpp:163
+msgid "Module Test"
+msgstr "Assaig de mòduls"
+
+#: pcbnew/netlist.cpp:168
+msgid "Compile"
+msgstr "Compila"
+
+#: pcbnew/netlist.cpp:177
+#: eeschema/editpart.cpp:710
+#: eeschema/eelayer.cpp:99
+#: eeschema/onrightclick.cpp:290
+msgid "Reference"
+msgstr "Referència ..."
+
+#: pcbnew/netlist.cpp:177
+msgid "Timestamp"
+msgstr "Marca horària"
+
+#: pcbnew/netlist.cpp:179
+msgid "Module Selection:"
+msgstr "Selecció de mòdul:"
+
+#: pcbnew/netlist.cpp:182
+#: pcbnew/netlist.cpp:191
+msgid "Keep"
+msgstr "Conserva"
+
+#: pcbnew/netlist.cpp:182
+#: pcbnew/onrightclick.cpp:582
+#: eeschema/libedpart.cpp:294
+msgid "Delete"
+msgstr "Elimina"
+
+#: pcbnew/netlist.cpp:186
+msgid "Bad Tracks Deletion:"
+msgstr "Esborrat dolent de pistes:"
+
+#: pcbnew/netlist.cpp:191
+msgid "Change"
+msgstr "Canvia"
+
+#: pcbnew/netlist.cpp:192
+msgid "Exchange Module:"
+msgstr "Canvia mòdul:"
+
+#: pcbnew/netlist.cpp:197
+msgid "Display Warnings"
+msgstr "Mostra avisos"
+
+#: pcbnew/netlist.cpp:247
+#, c-format
+msgid "Netlist file %s not found"
+msgstr "Fitxer Netlist <%s> no trobat"
+
+#: pcbnew/netlist.cpp:294
+msgid "Read Netlist "
+msgstr "Llegeix Netlist"
+
+#: pcbnew/netlist.cpp:501
+#, c-format
+msgid "Cmp %s: Mismatch! module is [%s] and netlist said [%s]\n"
+msgstr "Component %s Incorrecte! mòdul és [%s] i netlist diu [%s]\n"
+
+#: pcbnew/netlist.cpp:538
+#, c-format
+msgid "Componant [%s] not found"
+msgstr "Component [%s] no trobat!"
+
+#: pcbnew/netlist.cpp:595
+#, c-format
+msgid "Module [%s]: Pad [%s] not found"
+msgstr "Mòdul [%s]: Illot [%s] no trobat"
+
+#: pcbnew/netlist.cpp:621
+msgid "No Modules"
+msgstr "No hi ha mòduls"
+
+#: pcbnew/netlist.cpp:634
+msgid "Componants"
+msgstr "Components"
+
+#: pcbnew/netlist.cpp:682
+msgid "No modules"
+msgstr "No hi ha mòduls"
+
+#: pcbnew/netlist.cpp:691
+msgid "No modules in NetList"
+msgstr "No hi ha mòduls al fitxer de NetList"
+
+#: pcbnew/netlist.cpp:698
+msgid "Check Modules"
+msgstr "Verifica mòduls"
+
+#: pcbnew/netlist.cpp:701
+msgid "Duplicates"
+msgstr "Duplicats"
+
+#: pcbnew/netlist.cpp:720
+msgid "Lack:"
+msgstr "Manca:"
+
+#: pcbnew/netlist.cpp:742
+msgid "Not in Netlist:"
+msgstr "No hi és a la Netlist:"
+
+#: pcbnew/netlist.cpp:763
+#, c-format
+msgid "%d Errors"
+msgstr "%d errors"
+
+#: pcbnew/netlist.cpp:888
+#, c-format
+msgid "File <%s> not found, use Netlist for lib module selection"
+msgstr "Fitxer <%s> no trobat, Netlist emprat per a la selecció de mòduls a la biblioteca"
+
+#: pcbnew/netlist.cpp:964
+msgid "Netlist Selection:"
+msgstr "Selecció de la Netlist"
+
+#: pcbnew/onrightclick.cpp:71
+msgid "Move Module  (M)"
+msgstr "Mou mòdul  (M)"
+
+#: pcbnew/onrightclick.cpp:73
+msgid "Drag Module  (G)"
+msgstr "Arrossega mòdul  (G)"
+
+#: pcbnew/onrightclick.cpp:76
+msgid "Rotate Module +  (R)"
+msgstr "Gira mòdul +  (R)"
+
+#: pcbnew/onrightclick.cpp:78
+msgid "Rotate Module -"
+msgstr "Gira mòdul -"
+
+#: pcbnew/onrightclick.cpp:80
+msgid "Invert Module  (S)"
+msgstr "Inverteix mòdul  (S)"
+
+#: pcbnew/onrightclick.cpp:103
+#, c-format
+msgid "Track %.1f"
+msgstr "Pista %.1f"
+
+#: pcbnew/onrightclick.cpp:105
+#, c-format
+msgid "Track %.3f"
+msgstr "Pista %.3f"
+
+#: pcbnew/onrightclick.cpp:118
+#, c-format
+msgid "Via %.1f"
+msgstr "Via %.1f"
+
+#: pcbnew/onrightclick.cpp:120
+#, c-format
+msgid "Via %.3f"
+msgstr "Via %.3f"
+
+#: pcbnew/onrightclick.cpp:180
+#: eeschema/onrightclick.cpp:527
+#: gerbview/onrightclick.cpp:50
+msgid "Cancel Block"
+msgstr "Cancel·la bloc"
+
+#: pcbnew/onrightclick.cpp:182
+#: gerbview/onrightclick.cpp:51
+msgid "Zoom Block (Midd butt drag)"
+msgstr "Zoom de bloc (arrossegar botó del mig)"
+
+#: pcbnew/onrightclick.cpp:185
+#: eeschema/onrightclick.cpp:535
+#: gerbview/onrightclick.cpp:53
+msgid "Place Block"
+msgstr "Posa bloc"
+
+#: pcbnew/onrightclick.cpp:187
+msgid "Copy Block (alt + drag mouse)"
+msgstr "Copia bloc (tecla d'alternativa + moure ratolí)"
+
+#: pcbnew/onrightclick.cpp:189
+msgid "Flip Block (shift + drag mouse)"
+msgstr "Inverteix Bloc (tecla de majúscules + moure ratolí)"
+
+#: pcbnew/onrightclick.cpp:191
+msgid "Rotate Block (ctrl + drag mouse)"
+msgstr "Rota bloc (tecla de control + moure ratolí­)"
+
+#: pcbnew/onrightclick.cpp:193
+msgid "Delete Block (shift+ctrl + drag mouse)"
+msgstr "Elimina bloc (tecla de majúscules+tecla de control+moure ratolí)"
+
+#: pcbnew/onrightclick.cpp:220
+msgid "Fix Module"
+msgstr "Fixa mòdul"
+
+#: pcbnew/onrightclick.cpp:222
+msgid "Free Module"
+msgstr "Allibera mòdul"
+
+#: pcbnew/onrightclick.cpp:226
+msgid "Auto place Module"
+msgstr "Autoposiciona mòdul"
+
+#: pcbnew/onrightclick.cpp:232
+msgid "Autoroute"
+msgstr "Emplaçament automatitzat"
+
+#: pcbnew/onrightclick.cpp:253
+msgid "Move Pad"
+msgstr "Mou illot"
+
+#: pcbnew/onrightclick.cpp:255
+msgid "Drag Pad"
+msgstr "Arrossega Illot"
+
+#: pcbnew/onrightclick.cpp:266
+msgid "Autoroute Pad"
+msgstr "Emplaçament automàtic de l'illot"
+
+#: pcbnew/onrightclick.cpp:267
+msgid "Autoroute Net"
+msgstr "Emplaçament automàtic de la xarxa"
+
+#: pcbnew/onrightclick.cpp:306
+msgid "Move Drawing"
+msgstr "Mou dibuix"
+
+#: pcbnew/onrightclick.cpp:311
+msgid "End Drawing"
+msgstr "Finalitza dibuix"
+
+#: pcbnew/onrightclick.cpp:313
+msgid "Edit Drawing"
+msgstr "Edita dibuix"
+
+#: pcbnew/onrightclick.cpp:314
+msgid "Delete Drawing"
+msgstr "Esborra dibuix"
+
+#: pcbnew/onrightclick.cpp:321
+msgid "End edge zone"
+msgstr "Fi de la zona de la vora"
+
+#: pcbnew/onrightclick.cpp:324
+msgid "Delete edge zone"
+msgstr "Elimina zona de la vora"
+
+#: pcbnew/onrightclick.cpp:331
+#: eeschema/libframe.cpp:532
+#: eeschema/onrightclick.cpp:373
+msgid "Move Text"
+msgstr "Mou text"
+
+#: pcbnew/onrightclick.cpp:334
+msgid "Rotate Text"
+msgstr "Gira text"
+
+#: pcbnew/onrightclick.cpp:336
+#: eeschema/onrightclick.cpp:375
+msgid "Edit Text"
+msgstr "Edita text"
+
+#: pcbnew/onrightclick.cpp:338
+#: eeschema/onrightclick.cpp:376
+msgid "Delete Text"
+msgstr "Esborra text"
+
+#: pcbnew/onrightclick.cpp:350
+msgid "Edit Zone"
+msgstr "Edita zona"
+
+#: pcbnew/onrightclick.cpp:352
+msgid "Delete Zone"
+msgstr "Esborra zona"
+
+#: pcbnew/onrightclick.cpp:357
+msgid "Delete Marker"
+msgstr "Esborra marcador"
+
+#: pcbnew/onrightclick.cpp:364
+msgid "Edit Cotation"
+msgstr "Edita cota"
+
+#: pcbnew/onrightclick.cpp:367
+msgid "Delete Cotation"
+msgstr "Esborra cota"
+
+#: pcbnew/onrightclick.cpp:374
+msgid "Move Mire"
+msgstr "Mou mira"
+
+#: pcbnew/onrightclick.cpp:377
+msgid "Edit Mire"
+msgstr "Edita mira"
+
+#: pcbnew/onrightclick.cpp:379
+msgid "Delete Mire"
+msgstr "Esborra mira"
+
+#: pcbnew/onrightclick.cpp:409
+msgid "Fill zone"
+msgstr "Omple zona"
+
+#: pcbnew/onrightclick.cpp:417
+msgid "Select Net"
+msgstr "Selecciona xarxa"
+
+#: pcbnew/onrightclick.cpp:422
+msgid "Delete Zone Limit"
+msgstr "Esborra límit de zona"
+
+#: pcbnew/onrightclick.cpp:426
+#: pcbnew/onrightclick.cpp:437
+#: pcbnew/onrightclick.cpp:450
+#: pcbnew/onrightclick.cpp:509
+msgid "Select Working Layer"
+msgstr "Capa de treball ..."
+
+#: pcbnew/onrightclick.cpp:435
+#: pcbnew/onrightclick.cpp:506
+msgid "Select Track Width"
+msgstr "Selecciona ample de pista"
+
+#: pcbnew/onrightclick.cpp:439
+msgid "Select layer pair for vias"
+msgstr "Selecciona parella de capes per a les vies"
+
+#: pcbnew/onrightclick.cpp:456
+msgid "Footprint documentation"
+msgstr "Documentació de les petjades"
+
+#: pcbnew/onrightclick.cpp:465
+msgid "Glob Move and Place"
+msgstr "Posa i mou globals"
+
+#: pcbnew/onrightclick.cpp:467
+msgid "Free All Modules"
+msgstr "Allibera tots els mòduls"
+
+#: pcbnew/onrightclick.cpp:469
+msgid "Fixe All Modules"
+msgstr "Immobilitza tots els mòduls"
+
+#: pcbnew/onrightclick.cpp:472
+msgid "Move All Modules"
+msgstr "Mou tots els mòduls"
+
+#: pcbnew/onrightclick.cpp:473
+msgid "Move New Modules"
+msgstr "Mou mòduls nous"
+
+#: pcbnew/onrightclick.cpp:475
+msgid "Autoplace All Modules"
+msgstr "Autoposiciona tots els mòduls"
+
+#: pcbnew/onrightclick.cpp:476
+msgid "Autoplace New Modules"
+msgstr "Autoposiciona mòduls nous"
+
+#: pcbnew/onrightclick.cpp:477
+msgid "Autoplace Next Module"
+msgstr "Autoposiciona mòdul següent"
+
+#: pcbnew/onrightclick.cpp:480
+msgid "Orient All Modules"
+msgstr "Orienta tots el mòduls"
+
+#: pcbnew/onrightclick.cpp:486
+msgid "Global Autoroute"
+msgstr "Emplaçament automatitzat global"
+
+#: pcbnew/onrightclick.cpp:488
+msgid "Select layer pair"
+msgstr "Selecciona parella de capes"
+
+#: pcbnew/onrightclick.cpp:490
+msgid "Autoroute All Modules"
+msgstr "Emplaçament automatitzat de tots els mòduls"
+
+#: pcbnew/onrightclick.cpp:492
+msgid "Reset Unrouted"
+msgstr "Reinicia les no emplaçades automàticament"
+
+#: pcbnew/onrightclick.cpp:497
+msgid "Global AutoRouter"
+msgstr "Emplaçament automàtic global"
+
+#: pcbnew/onrightclick.cpp:499
+msgid "Read Global AutoRouter Data"
+msgstr "Llegeix dades globals de l'emplaçament automatitzat"
+
+#: pcbnew/onrightclick.cpp:529
+msgid "Drag Via"
+msgstr "Arrossega via"
+
+#: pcbnew/onrightclick.cpp:535
+msgid "Move Node"
+msgstr "Mou node"
+
+#: pcbnew/onrightclick.cpp:540
+msgid "Break Track"
+msgstr "Pista interrompuda"
+
+#: pcbnew/onrightclick.cpp:548
+msgid "Place Node"
+msgstr "Posa Node"
+
+#: pcbnew/onrightclick.cpp:555
+msgid "End Track"
+msgstr "Acaba pistes"
+
+#: pcbnew/onrightclick.cpp:556
+msgid "Place Via (V)"
+msgstr "Posa via (V)"
+
+#: pcbnew/onrightclick.cpp:562
+msgid "Change Width"
+msgstr "Canvi d'amplada"
+
+#: pcbnew/onrightclick.cpp:564
+msgid "Edit Segment"
+msgstr "Edita segment"
+
+#: pcbnew/onrightclick.cpp:568
+msgid "Edit Track"
+msgstr "Edita pista"
+
+#: pcbnew/onrightclick.cpp:570
+msgid "Edit Net"
+msgstr "Edita xarxa"
+
+#: pcbnew/onrightclick.cpp:572
+msgid "Edit ALL Tracks and Vias"
+msgstr "Edita TOTES les pistes i vies"
+
+#: pcbnew/onrightclick.cpp:574
+msgid "Edit ALL Vias (no track)"
+msgstr "Edita TOTES les vies (les pistes NO)"
+
+#: pcbnew/onrightclick.cpp:576
+msgid "Edit ALL Tracks (no via)"
+msgstr "Edita TOTES les pistes (les vies NO)"
+
+#: pcbnew/onrightclick.cpp:584
+msgid "Delete Segment"
+msgstr "Esborra segment"
+
+#: pcbnew/onrightclick.cpp:588
+msgid "Delete Track"
+msgstr "Esborra pista"
+
+#: pcbnew/onrightclick.cpp:590
+msgid "Delete Net"
+msgstr "Esborra xarxa"
+
+#: pcbnew/onrightclick.cpp:594
+msgid "Set Flags"
+msgstr "Ajusta indicadors"
+
+#: pcbnew/onrightclick.cpp:595
+msgid "Locked: Yes"
+msgstr "Immobilitzat: Sí"
+
+#: pcbnew/onrightclick.cpp:596
+msgid "Locked: No"
+msgstr "Immobilitzat: No"
+
+#: pcbnew/onrightclick.cpp:604
+msgid "Track Locked: Yes"
+msgstr "Pista immobilitzada: Sí"
+
+#: pcbnew/onrightclick.cpp:605
+msgid "Track Locked: No"
+msgstr "Pista immobilitzada: No"
+
+#: pcbnew/onrightclick.cpp:607
+msgid "Net Locked: Yes"
+msgstr "Xarxa immobilitzada: Sí"
+
+#: pcbnew/onrightclick.cpp:608
+msgid "Net Locked: No"
+msgstr "Xarxa immobilitzada: No"
+
+#: pcbnew/options.cpp:187
+msgid "General Options"
+msgstr "Opcions generals"
+
+#: pcbnew/options.cpp:207
+#: gerbview/options.cpp:175
+msgid "No Display"
+msgstr "No visualitzar"
+
+#: pcbnew/options.cpp:208
+#: gerbview/options.cpp:176
+msgid "Display Polar Coord"
+msgstr "Coordenades polars"
+
+#: pcbnew/options.cpp:216
+#: pcbnew/set_grid.cpp:88
+#: gerbview/options.cpp:184
+msgid "Inches"
+msgstr "Polzades"
+
+#: pcbnew/options.cpp:217
+#: pcbnew/set_grid.cpp:91
+#: eeschema/options.cpp:165
+#: eeschema/optionsframe.cpp:135
+#: gerbview/options.cpp:185
+msgid "Units"
+msgstr "Unitats"
+
+#: pcbnew/options.cpp:224
+#: gerbview/options.cpp:191
+msgid "Small"
+msgstr "Petit"
+
+#: pcbnew/options.cpp:224
+#: gerbview/options.cpp:191
+msgid "Big"
+msgstr "Gran"
+
+#: pcbnew/options.cpp:225
+#: gerbview/options.cpp:192
+msgid "Cursor"
+msgstr "Cursor"
+
+#: pcbnew/options.cpp:232
+msgid "Auto Save (minuts):"
+msgstr "Auto desar (min)"
+
+#: pcbnew/options.cpp:241
+msgid "Number of Layers:"
+msgstr "Nombre de capes:"
+
+#: pcbnew/options.cpp:252
+msgid "Max Links:"
+msgstr "Enllaços màx.:"
+
+#: pcbnew/options.cpp:258
+msgid "Drc ON"
+msgstr "DRC actiu"
+
+#: pcbnew/options.cpp:263
+msgid "Show Ratsnest"
+msgstr "Mostra línies aèries"
+
+#: pcbnew/options.cpp:267
+msgid "Show Mod Ratsnest"
+msgstr "Mostra línies aèries a l'arrossegar"
+
+#: pcbnew/options.cpp:271
+msgid "Tracks Auto Del"
+msgstr "Autoesborrat de pistes"
+
+#: pcbnew/options.cpp:275
+msgid "Tracks 45 Only"
+msgstr "Només pistes de 45"
+
+#: pcbnew/options.cpp:279
+msgid "Segments 45 Only"
+msgstr "Només segments de 45"
+
+#: pcbnew/options.cpp:283
+#: eeschema/options.cpp:122
+msgid "Auto PAN"
+msgstr "Auto desplaçament de pantalla"
+
+#: pcbnew/pcbcfg.cpp:67
+#: eeschema/eeconfig.cpp:55
+#: cvpcb/menucfg.cpp:347
+msgid "Read config file"
+msgstr "Llegeix fitxer de configuració"
+
+#: pcbnew/pcbcfg.cpp:80
+#: cvpcb/menucfg.cpp:359
+#, c-format
+msgid "File %s not found"
+msgstr "Fitxer %s no trobat"
+
+#: pcbnew/pcbcfg.cpp:153
+#: eeschema/eeconfig.cpp:143
+#: cvpcb/cfg.cpp:74
+#: kicad/prjconfig.cpp:53
+#: gerbview/cfg.cpp:99
+msgid "Save config file"
+msgstr "Desa fitxer de configuració"
+
+#: pcbnew/pcbframe.cpp:235
+msgid "Board modified, Save before exit ?"
+msgstr "Circuit imprès modificat. Desar abans de sortir?"
+
+#: pcbnew/pcbframe.cpp:236
+#: eeschema/schframe.cpp:159
+#: common/confirm.cpp:112
+msgid "Confirmation"
+msgstr "Confirmació"
+
+#: pcbnew/pcbframe.cpp:321
+msgid "DCR Off (Disable !!!), Currently: DRC is active"
+msgstr "Desactiva DRC"
+
+#: pcbnew/pcbframe.cpp:321
+msgid "DRC On (Currently: DRC is DISABLE !!!)"
+msgstr "Activa DRC"
+
+#: pcbnew/pcbframe.cpp:331
+msgid "Polar Coords not show"
+msgstr "Oculta coordenades polars"
+
+#: pcbnew/pcbframe.cpp:331
+msgid "Display Polar Coords"
+msgstr "Mostra coordenades polars"
+
+#: pcbnew/pcbframe.cpp:336
+#: eeschema/schframe.cpp:238
+msgid "Grid not show"
+msgstr "Oculta reixeta"
+
+#: pcbnew/pcbframe.cpp:336
+#: eeschema/schframe.cpp:238
+msgid "Show Grid"
+msgstr "Mostra reixeta"
+
+# Chevelu gÃ©nÃ©ral non affichÃ©
+#: pcbnew/pcbframe.cpp:344
+msgid "General ratsnest not show"
+msgstr "Oculta línies aèries"
+
+# Afficher le chevelu gÃ©nÃ©ral
+#: pcbnew/pcbframe.cpp:344
+msgid "Show General ratsnest"
+msgstr "Mostra línies aèries"
+
+# Ne pas montrer le chevelu du module pendant dÃ©placement
+#: pcbnew/pcbframe.cpp:349
+msgid "Module ratsnest not show"
+msgstr "Oculta línies aèries al desplaçar"
+
+# Montrer le chevelu du module
+#: pcbnew/pcbframe.cpp:349
+msgid "Show Module ratsnest"
+msgstr "Mostra línies aèries al desplaçar"
+
+#: pcbnew/pcbframe.cpp:354
+msgid "Disable Auto Delete old Track"
+msgstr "No permetre l'esborrat automàtic de pistes"
+
+#: pcbnew/pcbframe.cpp:354
+msgid "Enable Auto Delete old Track"
+msgstr "Permet l'esborrat automàtic de pistes"
+
+#: pcbnew/pcbframe.cpp:359
+msgid "Do not Show Zones"
+msgstr "Oculta zones"
+
+#: pcbnew/pcbframe.cpp:359
+#: pcbnew/set_color.cpp:387
+#: pcbnew/tool_pcb.cpp:178
+msgid "Show Zones"
+msgstr "Mostra zones"
+
+#: pcbnew/pcbframe.cpp:364
+msgid "Show Pads Sketch mode"
+msgstr "Mostra illots en mode esbós"
+
+#: pcbnew/pcbframe.cpp:364
+msgid "Show pads filled mode"
+msgstr "Mostra illots en mode normal"
+
+#: pcbnew/pcbframe.cpp:369
+msgid "Show Tracks Sketch mode"
+msgstr "Mostra pistes en mode esbós"
+
+#: pcbnew/pcbframe.cpp:369
+msgid "Show Tracks filled mode"
+msgstr "Mostra pistes en mode normal"
+
+#: pcbnew/pcbframe.cpp:374
+msgid "Normal Contrast Mode Display"
+msgstr "Visualització en mode de contrast normal"
+
+#: pcbnew/pcbframe.cpp:374
+#: pcbnew/tool_pcb.cpp:191
+msgid "Hight Contrast Mode Display"
+msgstr "Visualització en mode d'alt contrast"
+
+#: pcbnew/pcbframe.cpp:408
+msgid "Via"
+msgstr "Via"
+
+#: pcbnew/pcbnew.cpp:42
+msgid "Pcbnew is already running, Continue?"
+msgstr "Pcbnew s'està executant. Voleu continuar ?"
+
+#: pcbnew/pcbpiste.cpp:62
+msgid "Swap Layers:"
+msgstr "Permuta capes:"
+
+#: pcbnew/pcbpiste.cpp:76
+msgid "No Change"
+msgstr "Sense canvis"
+
+#: pcbnew/pcbpiste.cpp:79
+msgid "Layers"
+msgstr "Capes"
+
+#: pcbnew/pcbpiste.cpp:90
+#: pcbnew/sel_layer.cpp:116
+#: pcbnew/sel_layer.cpp:241
+#: eeschema/options.cpp:108
+#: eeschema/optionsframe.cpp:151
+#: cvpcb/menucfg.cpp:169
+#: common/get_component_dialog.cpp:107
+#: common/setpage.cpp:178
+msgid "OK"
+msgstr "D'acord"
+
+#: pcbnew/pcbpiste.cpp:95
+msgid "Deselect"
+msgstr "Desselecciona"
+
+#: pcbnew/pcbpiste.cpp:231
+msgid "Filter for net names:"
+msgstr "Filtra per noms de xarxa:"
+
+#: pcbnew/pcbpiste.cpp:234
+msgid "List Nets"
+msgstr "Llista xarxes"
+
+#: pcbnew/pcbplot.cpp:107
+#: pcbnew/pcbplot.cpp:171
+#: gerbview/gerberframe.cpp:242
+msgid "Plot"
+msgstr "Traça"
+
+#: pcbnew/pcbplot.cpp:125
+msgid "Plot Format"
+msgstr "Format del traçat"
+
+#: pcbnew/pcbplot.cpp:142
+msgid "Spot min"
+msgstr "Spot min"
+
+#: pcbnew/pcbplot.cpp:147
+msgid "Pen Size"
+msgstr "Mida de la ploma"
+
+#: pcbnew/pcbplot.cpp:152
+msgid "Pen Speed (cm/s)"
+msgstr "Velocitat de la ploma (cm/s)"
+
+#: pcbnew/pcbplot.cpp:154
+msgid "Set pen speed in cm/s"
+msgstr "Ajusta velocitat de la ploma en centímetres per segon"
+
+#: pcbnew/pcbplot.cpp:157
+msgid "Pen Ovr"
+msgstr "Recobriment"
+
+#: pcbnew/pcbplot.cpp:159
+msgid "Set plot overlay for filling"
+msgstr "Ajusta el recobriment del traçat"
+
+#: pcbnew/pcbplot.cpp:162
+msgid "Lines Width"
+msgstr "Amplada línies"
+
+#: pcbnew/pcbplot.cpp:164
+msgid "Set width for lines in Line plot mode"
+msgstr "Ajusta amplada de les línies en la línia del mode de traçat"
+
+#: pcbnew/pcbplot.cpp:181
+msgid "Save options"
+msgstr "Desa opcions"
+
+#: pcbnew/pcbplot.cpp:186
+msgid "Create Drill File"
+msgstr "Crea fitxer de forats"
+
+#: pcbnew/pcbplot.cpp:199
+#: common/wxprint.cpp:301
+msgid "X Scale Adjust"
+msgstr "Ajusta escala X"
+
+#: pcbnew/pcbplot.cpp:200
+#: common/wxprint.cpp:302
+msgid "Set X scale adjust for exact scale plotting"
+msgstr "Ajusta escala X per al traçat a escala natural"
+
+#: pcbnew/pcbplot.cpp:202
+#: common/wxprint.cpp:304
+msgid "Y Scale Adjust"
+msgstr "Ajusta escala Y"
+
+#: pcbnew/pcbplot.cpp:203
+#: common/wxprint.cpp:305
+msgid "Set Y scale adjust for exact scale plotting"
+msgstr "Ajusta escala X per al traçat a escala natural"
+
+#: pcbnew/pcbplot.cpp:222
+#: eeschema/plotps.cpp:160
+#: common/svg_print.cpp:151
+#: common/wxprint.cpp:324
+msgid "Print Sheet Ref"
+msgstr "Imprimeix caixetí"
+
+#: pcbnew/pcbplot.cpp:231
+msgid "Print Pads on Silkscreen"
+msgstr "Imprimeix illots a la serigrafia"
+
+#: pcbnew/pcbplot.cpp:235
+msgid "Enable/disable print/plot pads on Silkscreen layers"
+msgstr "Activa/desactiva traçat d'illots a les capes de serigrafia"
+
+#: pcbnew/pcbplot.cpp:238
+msgid "Always Print Pads"
+msgstr "Sempre imprimeix illots"
+
+#: pcbnew/pcbplot.cpp:241
+msgid "Force print/plot pads on ALL layers"
+msgstr "Força la impressió/traçat d'illots a TOTES les capes"
+
+#: pcbnew/pcbplot.cpp:245
+msgid "Print Module Value"
+msgstr "Imprimeix valor del mòdul"
+
+#: pcbnew/pcbplot.cpp:249
+msgid "Enable/disable print/plot module value on Silkscreen layers"
+msgstr "Activa/desactiva la impressió/traçat de texts de valor dels mòduls en capes de serigrafia"
+
+#: pcbnew/pcbplot.cpp:252
+msgid "Print Module Reference"
+msgstr "Imprimeix referència de mòdul"
+
+#: pcbnew/pcbplot.cpp:256
+msgid "Enable/disable print/plot module reference on Silkscreen layers"
+msgstr "Activa/desactiva la impressió/traçat de texts de referència dels mòduls en capes de serigrafia"
+
+#: pcbnew/pcbplot.cpp:260
+msgid "Print other module texts"
+msgstr "Imprimeix altres texts del mòdul"
+
+#: pcbnew/pcbplot.cpp:264
+msgid "Enable/disable print/plot module field texts on Silkscreen layers"
+msgstr "Activa/desactiva la impressió/traçat de texts de camp dels mòduls en capes de serigrafia"
+
+#: pcbnew/pcbplot.cpp:268
+msgid "Force Print Invisible Texts"
+msgstr "Força impressió de texts invisibles"
+
+#: pcbnew/pcbplot.cpp:272
+msgid "Force print/plot module invisible texts on Silkscreen layers"
+msgstr "Força la impressió/traçat dels texts invisibles en capes de serigrafia"
+
+#: pcbnew/pcbplot.cpp:276
+msgid "No Drill mark"
+msgstr "Sense marques dels forats"
+
+#: pcbnew/pcbplot.cpp:276
+msgid "Small mark"
+msgstr "Marca petita"
+
+#: pcbnew/pcbplot.cpp:276
+msgid "Real Drill"
+msgstr "Broca real"
+
+#: pcbnew/pcbplot.cpp:278
+msgid "Pads Drill Opt"
+msgstr "Broca d'illots opcional"
+
+#: pcbnew/pcbplot.cpp:285
+msgid "Auto scale"
+msgstr "Autoescala"
+
+#: pcbnew/pcbplot.cpp:285
+#: common/wxprint.cpp:282
+msgid "Scale 1"
+msgstr "Escala 1"
+
+#: pcbnew/pcbplot.cpp:285
+msgid "Scale 1.5"
+msgstr "Escala 1,5"
+
+#: pcbnew/pcbplot.cpp:285
+#: common/wxprint.cpp:283
+msgid "Scale 2"
+msgstr "Escala 2"
+
+#: pcbnew/pcbplot.cpp:285
+#: common/wxprint.cpp:283
+msgid "Scale 3"
+msgstr "Escala 3"
+
+#: pcbnew/pcbplot.cpp:287
+msgid "Scale Opt"
+msgstr "Escala opcional"
+
+#: pcbnew/pcbplot.cpp:295
+msgid "Plot mode"
+msgstr "Mode de traçat"
+
+#: pcbnew/pcbplot.cpp:303
+msgid "Plot Mirror"
+msgstr "Traçat emmirallat"
+
+#: pcbnew/pcbplot.cpp:308
+msgid "Vias on Mask"
+msgstr "Vies a la màscara"
+
+#: pcbnew/pcbplot.cpp:311
+msgid "Print/plot vias on mask layers"
+msgstr "Imprimeix/Traça vies en capes de màscara"
+
+#: pcbnew/pcbplot.cpp:316
+msgid "Org = Centre"
+msgstr "Org = Centre"
+
+#: pcbnew/pcbplot.cpp:318
+msgid "Draw origin ( 0,0 )in on sheet center"
+msgstr "Origen de traçat (0,0) al centre del full"
+
+#: pcbnew/pcbtexte.cpp:89
+msgid "TextPCB properties"
+msgstr "Propietats del text PCB"
+
+#: pcbnew/pcbtexte.cpp:132
+msgid "Position"
+msgstr "Posició"
+
+#: pcbnew/plotgerb.cpp:128
+msgid "unable to create file "
+msgstr "Impossible crear fitxer"
+
+#: pcbnew/plotgerb.cpp:776
+#, c-format
+msgid "unable to reopen file <%s>"
+msgstr "Impossible reobrir fitxer <%s>"
+
+#: pcbnew/plotps.cpp:46
+msgid "Unable to create file "
+msgstr "Impossible crear el fitxer"
+
+#: pcbnew/plotps.cpp:325
+msgid "Tracks"
+msgstr "Pistes"
+
+#: pcbnew/router.cpp:67
+msgid "Unable to create temporary file "
+msgstr "Impossible crear el fitxer temporal"
+
+#: pcbnew/router.cpp:72
+msgid "Create temporary file "
+msgstr "Crea fitxer temporal"
+
+#: pcbnew/router.cpp:536
+msgid "Lecture fichier de routage "
+msgstr "Lectura fitxer de fitxer d'emplaçament automatitzat"
+
+#: pcbnew/sel_layer.cpp:74
+msgid "Select Layer:"
+msgstr "Selecció de capa:"
+
+#: pcbnew/sel_layer.cpp:192
+msgid "Select Layer Pair:"
+msgstr "Selecció de parell de capes: "
+
+#: pcbnew/sel_layer.cpp:226
+msgid "Top Layer"
+msgstr "Capa superior"
+
+#: pcbnew/sel_layer.cpp:233
+msgid "Bottom Layer"
+msgstr "Capa inferior"
+
+#: pcbnew/set_color.cpp:50
+msgid "Copper Layers"
+msgstr "Capes de coure"
+
+#: pcbnew/set_color.cpp:55
+msgid "Tech Layers"
+msgstr "Capes tècniques"
+
+# Chevelu
+#: pcbnew/set_color.cpp:322
+msgid "Ratsnest"
+msgstr "Ratsnest"
+
+#: pcbnew/set_color.cpp:330
+msgid "Pad Cu"
+msgstr "Illot Cu"
+
+#: pcbnew/set_color.cpp:338
+msgid "Pad Cmp"
+msgstr "Illot Cmp"
+
+#: pcbnew/set_color.cpp:346
+msgid "Text Module Cu"
+msgstr "Mòdul de text Cu"
+
+#: pcbnew/set_color.cpp:354
+msgid "Text Module Cmp"
+msgstr "Mòdul de text Cmp"
+
+#: pcbnew/set_color.cpp:362
+msgid "Text Module invisible"
+msgstr "Mòdul de text invisible"
+
+#: pcbnew/set_color.cpp:370
+msgid "Anchors"
+msgstr "Àncores"
+
+#: pcbnew/set_color.cpp:378
+#: pcbnew/tool_pcb.cpp:387
+#: gerbview/set_color.h:246
+msgid "Grid"
+msgstr "Reixeta"
+
+#: pcbnew/set_color.cpp:396
+msgid "Show Noconnect"
+msgstr "Mostra desconnectats"
+
+#: pcbnew/set_color.cpp:405
+msgid "Show Modules Cmp"
+msgstr "Mostra mòduls components"
+
+#: pcbnew/set_color.cpp:414
+msgid "Show Modules Cu"
+msgstr "Mostra Mòduls Cu"
+
+#: pcbnew/set_color.cpp:569
+msgid "Colors:"
+msgstr "Colors:"
+
+#: pcbnew/set_color.cpp:678
+#: gerbview/set_color.cpp:235
+msgid "Show All"
+msgstr "Mostra tot"
+
+#: pcbnew/set_color.cpp:683
+#: gerbview/set_color.cpp:240
+msgid "Show None"
+msgstr "Oculta tot"
+
+#: pcbnew/set_color.cpp:688
+#: gerbview/reglage.cpp:114
+#: gerbview/set_color.cpp:245
+msgid "Exit"
+msgstr "Surt"
+
+#: pcbnew/set_grid.cpp:88
+#: common/drawframe.cpp:272
+msgid "mm"
+msgstr "mm"
+
+#: pcbnew/set_grid.cpp:97
+msgid "User Grid Size X"
+msgstr "Mida X reixeta d'usuari"
+
+#: pcbnew/set_grid.cpp:104
+msgid "User Grid Size Y"
+msgstr "Mida Y reixeta d'usuari"
+
+#: pcbnew/tool_modedit.cpp:47
+#: eeschema/tool_lib.cpp:123
+msgid "Select working library"
+msgstr "Selecciona biblioteca de treball"
+
+#: pcbnew/tool_modedit.cpp:50
+msgid "Save Module in working library"
+msgstr "Desa mòdul a la biblioteca de treball"
+
+#: pcbnew/tool_modedit.cpp:54
+msgid "Create new library and save current module"
+msgstr "Crea una nova biblioteca i desa el component"
+
+#: pcbnew/tool_modedit.cpp:59
+#: eeschema/tool_lib.cpp:129
+msgid "Delete part in current library"
+msgstr "Esborra component de la biblioteca de treball"
+
+#: pcbnew/tool_modedit.cpp:64
+#: pcbnew/xchgmod.cpp:144
+msgid "New Module"
+msgstr "Mòdul nou"
+
+#: pcbnew/tool_modedit.cpp:68
+msgid "Load module from lib"
+msgstr "Obre mòdul a partir d'una biblioteca"
+
+#: pcbnew/tool_modedit.cpp:73
+msgid "Load module from current BOARD"
+msgstr "Obre mòdul des de l'actual placa"
+
+#: pcbnew/tool_modedit.cpp:77
+msgid "Replace module in current BOARD"
+msgstr "Reemplaça mòdul des de l'actual placa"
+
+#: pcbnew/tool_modedit.cpp:82
+msgid "import module"
+msgstr "Importa mòdul"
+
+#: pcbnew/tool_modedit.cpp:86
+msgid "export module"
+msgstr "Exporta mòdul"
+
+#: pcbnew/tool_modedit.cpp:92
+msgid "Module Properties"
+msgstr "Propietats del mòdul"
+
+#: pcbnew/tool_modedit.cpp:96
+msgid "Print Module"
+msgstr "Imprimeix mòdul"
+
+#: pcbnew/tool_modedit.cpp:100
+#: pcbnew/tool_pcb.cpp:110
+#: eeschema/tool_lib.cpp:183
+#: cvpcb/displayframe.cpp:118
+#: gerbview/tool_gerber.cpp:105
+msgid "zoom + (F1)"
+msgstr "Zoom + (F1)"
+
+#: pcbnew/tool_modedit.cpp:103
+#: pcbnew/tool_pcb.cpp:111
+#: eeschema/tool_lib.cpp:187
+#: cvpcb/displayframe.cpp:121
+#: gerbview/tool_gerber.cpp:111
+msgid "zoom - (F2)"
+msgstr "Zoom - (F2)"
+
+#: pcbnew/tool_modedit.cpp:106
+#: pcbnew/tool_pcb.cpp:112
+#: eeschema/tool_lib.cpp:191
+#: eeschema/tool_sch.cpp:107
+#: eeschema/tool_viewlib.cpp:78
+#: cvpcb/displayframe.cpp:124
+#: gerbview/tool_gerber.cpp:117
+msgid "redraw (F3)"
+msgstr "Redibuixa (F3)"
+
+#: pcbnew/tool_modedit.cpp:109
+#: pcbnew/tool_pcb.cpp:114
+#: eeschema/tool_lib.cpp:195
+#: eeschema/tool_sch.cpp:110
+#: gerbview/tool_gerber.cpp:123
+msgid "auto zoom"
+msgstr "Zoom automàtic"
+
+#: pcbnew/tool_modedit.cpp:118
+msgid "Module Check"
+msgstr "Verifica mòdul"
+
+#: pcbnew/tool_modedit.cpp:142
+msgid "Add Pads"
+msgstr "Afegeix illot"
+
+#: pcbnew/tool_modedit.cpp:147
+#: pcbnew/tool_pcb.cpp:247
+#: eeschema/tool_sch.cpp:213
+msgid "Add graphic line or polygon"
+msgstr "Afegeix línia o polígon gràfic"
+
+#: pcbnew/tool_modedit.cpp:151
+#: pcbnew/tool_pcb.cpp:251
+msgid "Add graphic circle"
+msgstr "Afegeix cercle"
+
+#: pcbnew/tool_modedit.cpp:155
+#: pcbnew/tool_pcb.cpp:255
+msgid "Add graphic arc"
+msgstr "Afegeix arc"
+
+#: pcbnew/tool_modedit.cpp:164
+msgid "Place anchor"
+msgstr "Posa àncora"
+
+#: pcbnew/tool_modedit.cpp:169
+#: pcbnew/tool_pcb.cpp:273
+#: eeschema/tool_lib.cpp:91
+#: eeschema/tool_sch.cpp:222
+#: gerbview/tool_gerber.cpp:212
+msgid "Delete items"
+msgstr "Esborra element"
+
+#: pcbnew/tool_modedit.cpp:190
+#: pcbnew/tool_pcb.cpp:154
+#: eeschema/tool_sch.cpp:243
+#: gerbview/tool_gerber.cpp:232
+msgid "Display Grid OFF"
+msgstr "Oculta reixeta"
+
+#: pcbnew/tool_modedit.cpp:194
+#: pcbnew/tool_pcb.cpp:156
+#: gerbview/tool_gerber.cpp:238
+msgid "Display Polar Coord ON"
+msgstr "Activa Coordenades Polars"
+
+#: pcbnew/tool_modedit.cpp:198
+#: pcbnew/tool_pcb.cpp:158
+#: eeschema/tool_sch.cpp:247
+#: gerbview/tool_gerber.cpp:242
+msgid "Units = Inch"
+msgstr "Unitats = Polzada"
+
+#: pcbnew/tool_modedit.cpp:202
+#: pcbnew/tool_pcb.cpp:160
+#: eeschema/tool_sch.cpp:251
+#: gerbview/tool_gerber.cpp:246
+msgid "Units = mm"
+msgstr "Unitats = mm"
+
+#: pcbnew/tool_modedit.cpp:208
+#: pcbnew/tool_pcb.cpp:162
+#: eeschema/tool_sch.cpp:255
+#: gerbview/tool_gerber.cpp:252
+msgid "Change Cursor Shape"
+msgstr "Selecciona forma del cursor"
+
+#: pcbnew/tool_modedit.cpp:216
+#: pcbnew/tool_pcb.cpp:183
+msgid "Show Pads Sketch"
+msgstr "Mostra esbós d'illots"
+
+#: pcbnew/tool_modedit.cpp:223
+msgid "Show Texts Sketch"
+msgstr "Mostra esbós de texts"
+
+#: pcbnew/tool_modedit.cpp:230
+msgid "Show Edges Sketch"
+msgstr "Mostra esbós de vores"
+
+#: pcbnew/tool_modedit.cpp:285
+#: pcbnew/tool_pcb.cpp:400
+msgid "User Grid"
+msgstr "Reixeta d'usuari"
+
+#: pcbnew/tool_pcb.cpp:83
+msgid "New Board"
+msgstr "Nova placa de circuit imprès"
+
+#: pcbnew/tool_pcb.cpp:84
+msgid "Open existing Board"
+msgstr "Obre placa existent"
+
+#: pcbnew/tool_pcb.cpp:85
+msgid "Save Board"
+msgstr "Desa placa"
+
+#: pcbnew/tool_pcb.cpp:88
+#: eeschema/tool_sch.cpp:61
+#: gerbview/tool_gerber.cpp:62
+msgid "page settings (size, texts)"
+msgstr "Format de pàgina"
+
+#: pcbnew/tool_pcb.cpp:92
+msgid "Open Module Editor"
+msgstr "Obre editor de mòduls"
+
+#: pcbnew/tool_pcb.cpp:95
+#: eeschema/tool_sch.cpp:77
+#: gerbview/tool_gerber.cpp:73
+msgid "Cut selected item"
+msgstr "Talla element seleccionat"
+
+#: pcbnew/tool_pcb.cpp:98
+#: eeschema/tool_sch.cpp:80
+#: gerbview/tool_gerber.cpp:78
+msgid "Copy selected item"
+msgstr "Copia element seleccionat"
+
+#: pcbnew/tool_pcb.cpp:100
+#: eeschema/tool_sch.cpp:83
+#: gerbview/tool_gerber.cpp:84
+msgid "Paste"
+msgstr "Enganxa"
+
+#: pcbnew/tool_pcb.cpp:103
+#: eeschema/tool_sch.cpp:86
+#: gerbview/tool_gerber.cpp:91
+msgid "Undelete"
+msgstr "Anuŀla l'últim esborrat"
+
+#: pcbnew/tool_pcb.cpp:106
+msgid "Print Board"
+msgstr "Imprimeix placa"
+
+#: pcbnew/tool_pcb.cpp:117
+#: eeschema/tool_sch.cpp:114
+msgid "Find components and texts"
+msgstr "Cerca components i text"
+
+#: pcbnew/tool_pcb.cpp:120
+msgid "Read Netlist"
+msgstr "Llegeix Netlist"
+
+#: pcbnew/tool_pcb.cpp:121
+msgid "Pcb Design Rules Check"
+msgstr "Control de les regles de disseny (DRC)"
+
+#: pcbnew/tool_pcb.cpp:128
+msgid "Mode Module: Manual and Automatic Move or Place for modules"
+msgstr "Mode mòdul: Desplaçament/coŀlocació manual i automàtica dels mòduls"
+
+#: pcbnew/tool_pcb.cpp:130
+msgid "Mode Track and Autorouting"
+msgstr "Mode pistes i emplaçament automatitzat"
+
+#: pcbnew/tool_pcb.cpp:152
+msgid "Drc OFF"
+msgstr "Drc DESACTIVAT"
+
+# Monter le chevelu gÃ©nÃ©ral
+#: pcbnew/tool_pcb.cpp:167
+msgid "Show General Ratsnest"
+msgstr "Mostra línies aèries"
+
+# Monter le chevelu du module pendant dÃ©placement
+#: pcbnew/tool_pcb.cpp:170
+msgid "Show Module Ratsnest when moving"
+msgstr "Mostra línies aèries al desplaçar"
+
+#: pcbnew/tool_pcb.cpp:174
+msgid "Enable Auto Del Track"
+msgstr "Permet l'esborrat automàtic de pistes"
+
+#: pcbnew/tool_pcb.cpp:187
+msgid "Show Tracks Sketch"
+msgstr "Mostra esbós de pistes"
+
+#: pcbnew/tool_pcb.cpp:199
+msgid ""
+"Display auxiliary vertical toolbar (tools for micro wave applications)\n"
+" This is a very experimental feature (under development)"
+msgstr ""
+"Mostra barra de eines auxiliar vertical (eines per a aplicacions de microones)\n"
+" Aquesta es una prestació experimental (en desenvolupament)"
+
+#: pcbnew/tool_pcb.cpp:225
+msgid "Net highlight"
+msgstr "Ressalta nodes de xarxa"
+
+# Afficher le chevelu local (pastilles ou modules)
+#: pcbnew/tool_pcb.cpp:229
+msgid "Display local ratsnest (pad or module)"
+msgstr "Mostra línies aèries (illot o mòdul)"
+
+#: pcbnew/tool_pcb.cpp:234
+msgid "Add modules"
+msgstr "Afegeix mòdul"
+
+#: pcbnew/tool_pcb.cpp:238
+msgid "Add Tracks an vias"
+msgstr "Afegeix pistes i vies"
+
+#: pcbnew/tool_pcb.cpp:268
+#: gerbview/tool_gerber.cpp:197
+msgid "Add Mires"
+msgstr "Afegeix mira"
+
+#: pcbnew/tool_pcb.cpp:278
+msgid "Offset adjust for drill and place files"
+msgstr "Ajusta òfset per a fitxer de posicions i forats"
+
+#: pcbnew/tool_pcb.cpp:301
+msgid "Create line of specified length for microwave applications"
+msgstr "Creació de línies de longitud específica (per a aplicacions de microones)"
+
+#: pcbnew/tool_pcb.cpp:307
+msgid "Create gap of specified length for microwave applications"
+msgstr "Creació de marges de longitud específica (per a aplicacions de microones)"
+
+#: pcbnew/tool_pcb.cpp:315
+msgid "Create stub of specified length for microwave applications"
+msgstr "Creació d'acabament de pistes de longitud específica (per a aplicacions de microones)"
+
+#: pcbnew/tool_pcb.cpp:321
+msgid "Create stub (arc) of specified length for microwave applications"
+msgstr "Creació d'acabaments en arc de longitud específica (per a aplicacions de microones)"
+
+#: pcbnew/tool_pcb.cpp:327
+msgid "Create a polynomial shape for microwave applications"
+msgstr "Creació de formes polinòmiques (per a aplicacions de microones)"
+
+#: pcbnew/tool_pcb.cpp:375
+msgid "Zoom "
+msgstr "Zoom "
+
+#: pcbnew/xchgmod.cpp:85
+msgid "Exchange Modules"
+msgstr "Intercanvia mòduls:"
+
+#: pcbnew/xchgmod.cpp:102
+msgid "Change module"
+msgstr "Canvia mòdul"
+
+#: pcbnew/xchgmod.cpp:107
+msgid "Change same modules"
+msgstr "Canvia mòduls iguals"
+
+#: pcbnew/xchgmod.cpp:112
+msgid "Ch. same module+value"
+msgstr "Canvia igual mòdul i valor"
+
+#: pcbnew/xchgmod.cpp:117
+msgid "Change all"
+msgstr "Canvia tot"
+
+#: pcbnew/xchgmod.cpp:122
+msgid "Browse Libs modules"
+msgstr "Explora biblioteca de mòduls"
+
+#: pcbnew/xchgmod.cpp:132
+msgid "Current Module"
+msgstr "Mòdul actual"
+
+#: pcbnew/xchgmod.cpp:138
+msgid "Current Value"
+msgstr "Valor actual"
+
+#: pcbnew/xchgmod.cpp:206
+#, c-format
+msgid "file %s not found"
+msgstr "Fitxer %s no trobat"
+
+#: pcbnew/xchgmod.cpp:220
+#, c-format
+msgid "Unable to create file %s"
+msgstr "Impossible de crear fitxer <%s>"
+
+#: pcbnew/xchgmod.cpp:388
+msgid "Change ALL modules ?"
+msgstr "Voleu canviar TOTS els mòduls ?"
+
+#: pcbnew/zones.cpp:77
+msgid "Fill Zones Options"
+msgstr "Opcions d'emplenat de zona"
+
+#: pcbnew/zones.cpp:97
+msgid "Fill"
+msgstr "Emplenat"
+
+#: pcbnew/zones.cpp:102
+msgid "Set Options"
+msgstr "Opcions"
+
+#: pcbnew/zones.cpp:110
+msgid "Grid (mm):"
+msgstr "Reixeta (mm):"
+
+#: pcbnew/zones.cpp:110
+msgid "Grid (inches):"
+msgstr "Reixeta (polzades):"
+
+#: pcbnew/zones.cpp:119
+msgid "Include Pads"
+msgstr "Inclou illots"
+
+#: pcbnew/zones.cpp:119
+msgid "Thermal"
+msgstr "Tèrmic"
+
+#: pcbnew/zones.cpp:119
+msgid "Exclude Pads"
+msgstr "Exclou illots"
+
+#: pcbnew/zones.cpp:121
+#: common/zoom.cpp:314
+msgid "Grid:"
+msgstr "Reixeta:"
+
+#: pcbnew/zones.cpp:132
+msgid "Isolation"
+msgstr "Aïllament"
+
+#: pcbnew/zones.cpp:136
+#: eeschema/options.cpp:172
+msgid "Any"
+msgstr "Qualsevol"
+
+#: pcbnew/zones.cpp:136
+msgid "H , V and 45 deg"
+msgstr "H, V i 45 graus"
+
+#: pcbnew/zones.cpp:138
+msgid "Zone edges orient:"
+msgstr "Orientació de vores de la zona"
+
+#: pcbnew/zones.cpp:214
+msgid "New zone segment width: "
+msgstr "Nova amplada de segments de zona"
+
+#: pcbnew/zones.cpp:686
+msgid "No Net"
+msgstr "Sense xarxa"
+
+#: eeschema/affiche.cpp:23
+msgid "Name"
+msgstr "Nom"
+
+#: eeschema/affiche.cpp:24
+msgid "FileName"
+msgstr "Nom de fitxer"
+
+#: eeschema/affiche.cpp:37
+msgid "Ref"
+msgstr "Ref"
+
+#: eeschema/affiche.cpp:41
+msgid "Pwr Symb"
+msgstr "Símbol d'alimentació"
+
+#: eeschema/affiche.cpp:42
+msgid "Val"
+msgstr "Val"
+
+#: eeschema/affiche.cpp:45
+msgid "RefLib"
+msgstr "BibliRef"
+
+#: eeschema/affiche.cpp:72
+msgid "PinName"
+msgstr "Nom de pin"
+
+#: eeschema/affiche.cpp:84
+#: eeschema/eelayer.cpp:87
+msgid "PinNum"
+msgstr "Nombre de pin :"
+
+#: eeschema/affiche.cpp:88
+msgid "PinType"
+msgstr "Tipus de pin"
+
+#: eeschema/affiche.cpp:92
+#: eeschema/affiche.cpp:149
+msgid "no"
+msgstr "no"
+
+#: eeschema/affiche.cpp:93
+#: eeschema/affiche.cpp:150
+msgid "yes"
+msgstr "sí"
+
+#: eeschema/affiche.cpp:98
+msgid "Lengh"
+msgstr "Long."
+
+#: eeschema/affiche.cpp:103
+#: eeschema/editexte.cpp:131
+#: eeschema/pinedit.cpp:222
+msgid "Up"
+msgstr "Adalt"
+
+#: eeschema/affiche.cpp:104
+#: eeschema/editexte.cpp:131
+#: eeschema/pinedit.cpp:222
+msgid "Down"
+msgstr "Abaix"
+
+#: eeschema/affiche.cpp:105
+#: eeschema/editexte.cpp:131
+#: eeschema/pinedit.cpp:222
+msgid "Left"
+msgstr "Esquerra"
+
+#: eeschema/affiche.cpp:106
+#: eeschema/editexte.cpp:131
+#: eeschema/pinedit.cpp:222
+msgid "Right"
+msgstr "Dreta"
+
+#: eeschema/affiche.cpp:144
+#: eeschema/affiche.cpp:148
+#: common/svg_print.cpp:156
+#: common/wxprint.cpp:344
+msgid "All"
+msgstr "Tot"
+
+#: eeschema/annotate.cpp:80
+msgid "EESchema Annotation"
+msgstr "Numeració de components"
+
+#: eeschema/annotate.cpp:96
+msgid "Hierarchy"
+msgstr "Jerarquia"
+
+#: eeschema/annotate.cpp:96
+msgid "Current sheet"
+msgstr "Full actual"
+
+#: eeschema/annotate.cpp:98
+msgid "annotate:"
+msgstr "Numera:"
+
+#: eeschema/annotate.cpp:108
+msgid "&Annotate"
+msgstr "&Numeració"
+
+#: eeschema/annotate.cpp:113
+msgid "&Del Annotate"
+msgstr "&Esborra numeració"
+
+#: eeschema/annotate.cpp:123
+msgid "all components"
+msgstr "Tots els components"
+
+#: eeschema/annotate.cpp:123
+msgid "new components only"
+msgstr "Només nous components"
+
+#: eeschema/annotate.cpp:125
+msgid "select items:"
+msgstr "Selecciona elements:"
+
+#: eeschema/annotate.cpp:256
+msgid "Previous Annotation will be deleted. Continue ?"
+msgstr "La numeració prèvia serà  esborrada.  Voleu continuar?"
+
+#: eeschema/annotate.cpp:706
+#, c-format
+msgid "item not annotated: %s%s"
+msgstr "element no numerat: %s%s"
+
+#: eeschema/annotate.cpp:722
+#, c-format
+msgid "Error item %s%s"
+msgstr "Error element %s%s"
+
+#: eeschema/annotate.cpp:725
+#, c-format
+msgid " unit %d and no more than %d parts"
+msgstr " unitat %d i no més que %d elements"
+
+#: eeschema/annotate.cpp:752
+#: eeschema/annotate.cpp:772
+#, c-format
+msgid "Multiple item %s%s"
+msgstr "Element múltiple %s%s"
+
+#: eeschema/annotate.cpp:786
+#, c-format
+msgid "Diff values for %s%d%c (%s) et %s%d%c (%s)"
+msgstr "Valors diferents per a %s%d%c (%s) i %s%d%c (%s)"
+
+#: eeschema/database.cpp:70
+msgid "No Component found"
+msgstr "Component no trobat"
+
+#: eeschema/database.cpp:96
+msgid "Selection"
+msgstr "Selecció"
+
+#: eeschema/delete.cpp:299
+#: eeschema/schedit.cpp:429
+msgid "Delete SHEET!!"
+msgstr "Esborra full!!"
+
+#: eeschema/editexte.cpp:96
+msgid "Global Label properties"
+msgstr "Propietats d'etiqueta global"
+
+#: eeschema/editexte.cpp:100
+msgid "Label properties"
+msgstr "Propietats d'etiqueta"
+
+#: eeschema/editexte.cpp:104
+msgid "Text properties"
+msgstr "Propietats de text"
+
+#: eeschema/editexte.cpp:132
+msgid "Text Orient:"
+msgstr "Orientació de text:"
+
+#: eeschema/editexte.cpp:142
+msgid "Glabel Shape:"
+msgstr "Forma global d'etiqueta:"
+
+#: eeschema/editpart.cpp:136
+msgid "Component properties"
+msgstr "Propietats del component"
+
+#: eeschema/editpart.cpp:153
+msgid "Component properties (Not found in lib)"
+msgstr "Propietats del component (no trobat a la biblioteca)"
+
+#: eeschema/editpart.cpp:182
+msgid "Defaults"
+msgstr "Per defecte"
+
+#: eeschema/editpart.cpp:204
+#: eeschema/erc.cpp:320
+#: eeschema/libedpart.cpp:255
+#: cvpcb/options.cpp:138
+msgid "Options"
+msgstr "Opcions "
+
+#: eeschema/editpart.cpp:219
+#: eeschema/libedpart.cpp:512
+msgid "Show Text"
+msgstr "Text visible"
+
+#: eeschema/editpart.cpp:225
+#: eeschema/libedpart.cpp:519
+#: eeschema/symbtext.cpp:135
+msgid "Vertical"
+msgstr "Vertical"
+
+#: eeschema/editpart.cpp:241
+#: eeschema/libedpart.cpp:556
+#: eeschema/libedpart.cpp:584
+#: eeschema/libedpart.cpp:625
+msgid "Pos"
+msgstr "Pos"
+
+#: eeschema/editpart.cpp:286
+#: eeschema/onrightclick.cpp:303
+msgid "Unit"
+msgstr "Unitat"
+
+#: eeschema/editpart.cpp:287
+msgid "Unit:"
+msgstr "Unitat:"
+
+#: eeschema/editpart.cpp:301
+msgid "Orient:"
+msgstr "Orientació:"
+
+#: eeschema/editpart.cpp:311
+msgid "Mirror --"
+msgstr "Emmirallament --"
+
+#: eeschema/editpart.cpp:311
+msgid "Mirror |"
+msgstr "Emmirallament |"
+
+#: eeschema/editpart.cpp:312
+msgid "Mirror:"
+msgstr "Emmirallament:"
+
+#: eeschema/editpart.cpp:322
+#: eeschema/onrightclick.cpp:293
+msgid "Convert"
+msgstr "Converteix"
+
+#: eeschema/editpart.cpp:333
+#: eeschema/libedpart.cpp:478
+msgid "Parts are locked"
+msgstr "Els elements estan immobilitzats"
+
+#: eeschema/editpart.cpp:340
+msgid "Chip Name:"
+msgstr "Nom del xip (a la biblioteca)"
+
+#: eeschema/editpart.cpp:364
+msgid "No Component Name!"
+msgstr "No hi ha nom de component!"
+
+#: eeschema/editpart.cpp:370
+#, c-format
+msgid "Component [%s] not found!"
+msgstr "Component [%s] no trobat!"
+
+#: eeschema/editpart.cpp:473
+msgid "No Field to move"
+msgstr "No hi ha camp per a desplaçar"
+
+#: eeschema/editpart.cpp:506
+msgid "No Field To Edit"
+msgstr "No hi ha camp a editar"
+
+#: eeschema/editpart.cpp:519
+msgid ""
+"Part is a POWER, value cannot be modified!\n"
+"You must create a new power"
+msgstr ""
+"Component tipus ALIMENTACIÓ!, el valor no es pot modificar\n"
+"Has de crear un nou component d'alimentació"
+
+#: eeschema/editpart.cpp:558
+msgid "Reference needed !, No change"
+msgstr "Referència NECESSÀRIA: Canvi rebutjat"
+
+#: eeschema/editpart.cpp:562
+msgid "Value needed !, No change"
+msgstr "Valor NECESSARI: canvi rebutjat"
+
+#: eeschema/eeconfig.cpp:67
+#: kicad/files-io.cpp:126
+#: gerbview/dcode.cpp:262
+#: gerbview/readgerb.cpp:142
+msgid "File "
+msgstr "Fitxer"
+
+#: eeschema/eeconfig.cpp:67
+msgid "not found"
+msgstr "no trobat"
+
+#: eeschema/eelayer.cpp:45
+msgid "General"
+msgstr "General"
+
+#: eeschema/eelayer.cpp:51
+msgid "Sheets"
+msgstr "Pàgines"
+
+#: eeschema/eelayer.cpp:57
+msgid "Wire"
+msgstr "Lí­nia"
+
+#: eeschema/eelayer.cpp:63
+msgid "Bus"
+msgstr "Bus"
+
+#: eeschema/eelayer.cpp:69
+msgid "Junction"
+msgstr "Junció"
+
+#: eeschema/eelayer.cpp:75
+msgid "Label"
+msgstr "Etiqueta"
+
+#: eeschema/eelayer.cpp:81
+msgid "GlobLabel"
+msgstr "Etiqueta Global"
+
+#: eeschema/eelayer.cpp:93
+msgid "PinNam"
+msgstr "Nom de Pin"
+
+#: eeschema/eelayer.cpp:111
+msgid "Fields"
+msgstr "Camps"
+
+#: eeschema/eelayer.cpp:117
+msgid "Body"
+msgstr "Cos"
+
+#: eeschema/eelayer.cpp:123
+msgid "Body Bg"
+msgstr "Cos Bg"
+
+#: eeschema/eelayer.cpp:129
+msgid "Device"
+msgstr "Component"
+
+#: eeschema/eelayer.cpp:135
+msgid "Notes"
+msgstr "Notes"
+
+#: eeschema/eelayer.cpp:147
+msgid "Pin"
+msgstr "Pin"
+
+#: eeschema/eelayer.cpp:153
+msgid "Sheet"
+msgstr "Pàgina"
+
+#: eeschema/eelayer.cpp:159
+msgid "SheetName"
+msgstr "Nom de pàgina"
+
+#: eeschema/eelayer.cpp:165
+msgid "Sheetfile"
+msgstr "Fitxer de pàgina"
+
+#: eeschema/eelayer.cpp:171
+msgid "SheetLabel"
+msgstr "Etiqueta de pàgina"
+
+#: eeschema/eelayer.cpp:184
+msgid "Erc Mark"
+msgstr "Marcador ERC"
+
+#: eeschema/eelayer.cpp:190
+msgid "Erc Warning"
+msgstr "Avís ERC"
+
+#: eeschema/eelayer.cpp:196
+msgid "Erc Error"
+msgstr "Error ERC"
+
+#: eeschema/eelayer.cpp:305
+#: eeschema/options.cpp:94
+msgid "EESchema Preferences"
+msgstr "Preferències EESchema"
+
+#: eeschema/eelayer.cpp:369
+msgid "White Background"
+msgstr "Fons Blanc"
+
+#: eeschema/eelayer.cpp:369
+msgid "Black Background"
+msgstr "Fons Negre"
+
+#: eeschema/eelayer.cpp:371
+msgid "Background Colour"
+msgstr "Color de fons"
+
+#: eeschema/eelibs1.cpp:223
+#: eeschema/eelibs1.cpp:230
+msgid "File <"
+msgstr "Fitxer <"
+
+#: eeschema/eelibs1.cpp:248
+msgid "Library <"
+msgstr "Biblioteca <"
+
+#: eeschema/eelibs1.cpp:248
+msgid "> header read error"
+msgstr "> Error lectura en encapçalament"
+
+#: eeschema/eeload.cpp:91
+msgid "Clear Schematic Hierarchy (modified!)?"
+msgstr "Desa la jerarquia de l'esquema (modificat!) ?"
+
+#: eeschema/eeload.cpp:105
+#: eeschema/files-io.cpp:61
+#: eeschema/save_schemas.cpp:70
+msgid "Schematic files:"
+msgstr "Obre projectes d'Eeschema"
+
+#: eeschema/eeload.cpp:125
+msgid ""
+"\n"
+"New schema\n"
+"\n"
+msgstr ""
+"\n"
+"Nou Esquema\n"
+"\n"
+
+#: eeschema/eeload.cpp:131
+msgid ""
+"Ready\n"
+"Working dir: \n"
+msgstr ""
+"Preparat\n"
+"Directori de treball: \n"
+
+#: eeschema/eeload.cpp:184
+#, c-format
+msgid "File %s not found (new project ?)"
+msgstr "Fitxer  %s no trobat (projecte nou?)"
+
+#: eeschema/eeload.cpp:230
+msgid "No FileName in SubSheet"
+msgstr "No hi ha nom de fitxer al subfull"
+
+#: eeschema/eeload.cpp:277
+msgid "Failed to open "
+msgstr "Error d'obertura"
+
+#: eeschema/eeload.cpp:282
+msgid "Loading "
+msgstr "Carregant"
+
+#: eeschema/eeload.cpp:289
+#: eeschema/eeload.cpp:298
+msgid " is NOT EESchema file"
+msgstr " No és un fitxer Eeschema"
+
+#: eeschema/eeschema.cpp:56
+msgid "Eeschema is already running, Continue?"
+msgstr "Eeschema s'està  executant. Voleu continuar ?"
+
+#: eeschema/eestatus.cpp:139
+#: cvpcb/menucfg.cpp:205
+#: cvpcb/menucfg.cpp:410
+msgid "Libraries"
+msgstr "Biblioteques"
+
+#: eeschema/eestatus.cpp:155
+msgid "Cmp file Ext: "
+msgstr "Ext. fitxer comp: "
+
+#: eeschema/eestatus.cpp:159
+msgid "Net file Ext: "
+msgstr "Ext. fitxer Netlist: "
+
+#: eeschema/eestatus.cpp:163
+msgid "Library file Ext: "
+msgstr "Ext. fitxer biblioteca: "
+
+#: eeschema/eestatus.cpp:167
+msgid "Symbol file Ext: "
+msgstr "Ext. fitxer sí­mbol: "
+
+#: eeschema/eestatus.cpp:171
+msgid "Schematic file Ext: "
+msgstr "Ext. fitxer esquema: "
+
+#: eeschema/eestatus.cpp:179
+msgid "Library files path:"
+msgstr "Camí dels fitxers de biblioteca:"
+
+#: eeschema/eestatus.cpp:259
+msgid "Library files:"
+msgstr "Fitxers de bibliotecas:"
+
+#: eeschema/eestatus.cpp:288
+msgid "Library already in use"
+msgstr "Biblioteca ja està en ús"
+
+#: eeschema/eestatus.cpp:319
+#: cvpcb/menucfg.cpp:526
+msgid "NetList Formats:"
+msgstr "Formats NetList:"
+
+#: eeschema/erc.cpp:213
+msgid "EESchema Erc"
+msgstr "Erc d'EESchema"
+
+#: eeschema/erc.cpp:240
+msgid "Erc"
+msgstr "Erc"
+
+#: eeschema/erc.cpp:244
+msgid "Erc Diags:"
+msgstr "Diagnòstics Erc:"
+
+#: eeschema/erc.cpp:246
+msgid "-> Total Errors:  "
+msgstr "-> Errors Totals:  "
+
+#: eeschema/erc.cpp:251
+msgid "-> Last Errors:   "
+msgstr "-> Últims errors"
+
+#: eeschema/erc.cpp:257
+msgid "-> Last Warnings: "
+msgstr "Últims avisos:   "
+
+#: eeschema/erc.cpp:263
+msgid "Erc File Report:"
+msgstr "Fitxer d'informe d'Erc:"
+
+#: eeschema/erc.cpp:267
+msgid "Write erc report"
+msgstr "Escriu informe d'ERC"
+
+#: eeschema/erc.cpp:274
+msgid "&Test Erc"
+msgstr "&Assaig Erc"
+
+#: eeschema/erc.cpp:279
+msgid "&Del Markers"
+msgstr "&Esborra marcadors    "
+
+#: eeschema/erc.cpp:284
+#: eeschema/genliste.cpp:149
+msgid "&Exit"
+msgstr "&Surt"
+
+#: eeschema/erc.cpp:325
+msgid "Reset"
+msgstr "Defecte"
+
+#: eeschema/erc.cpp:385
+msgid "Annotation Required!"
+msgstr "Es requereix que els components estiguin numerats!"
+
+#: eeschema/erc.cpp:453
+msgid "-> Total Errors: "
+msgstr "-> Errors totals: "
+
+#: eeschema/erc.cpp:455
+msgid "-> Errors ERC:   "
+msgstr "-> Errors ERC:   "
+
+#: eeschema/erc.cpp:457
+msgid "-> Warnings ERC: "
+msgstr "-> Avisos ERC: "
+
+#: eeschema/erc.cpp:465
+msgid "ERC file:"
+msgstr "Fitxer ERC:"
+
+#: eeschema/erc.cpp:609
+#, c-format
+msgid "Warning GLabel %s not connected to SheetLabel"
+msgstr "Avís etiqueta global %s no connectada a etiqueta de full"
+
+#: eeschema/erc.cpp:612
+#, c-format
+msgid "Warning SheetLabel %s not connected to GLabel"
+msgstr "Avís etiqueta de full %s no connectada a etiqueta global"
+
+#: eeschema/erc.cpp:626
+#, c-format
+msgid "Warning Pin %s Unconnected"
+msgstr "Avís pin %s no connectat"
+
+#: eeschema/erc.cpp:635
+#, c-format
+msgid "Warning Pin %s not drived (Net %d)"
+msgstr "Avís pin %s no conduït (node de xarxa %d)"
+
+#: eeschema/erc.cpp:646
+#, c-format
+msgid "Warning More than 1 Pin connected to UnConnect symbol"
+msgstr "Avís: hi ha més d'un pin connectat a un símbol no connectat"
+
+#: eeschema/erc.cpp:658
+#: common/confirm.cpp:82
+msgid "Warning"
+msgstr "Avís"
+
+#: eeschema/erc.cpp:661
+#: common/confirm.cpp:85
+msgid "Error"
+msgstr "Error"
+
+#: eeschema/erc.cpp:667
+#, c-format
+msgid "%s: Pin %s connected to Pin %s (net %d)"
+msgstr "%s: Pin %s connectat a pin %s (node de xarxa %d)"
+
+#: eeschema/erc.cpp:774
+#, c-format
+msgid "ERC control (%s)\n"
+msgstr "Control ERC (%s)\n"
+
+#: eeschema/erc.cpp:780
+#, c-format
+msgid ""
+"\n"
+"***** Sheet %d (%s)\n"
+msgstr ""
+"\n"
+"***** Full %d (%s)\n"
+
+#: eeschema/erc.cpp:782
+#: eeschema/genliste.cpp:613
+#: eeschema/hierarch.cpp:135
+msgid "Root"
+msgstr "Arrel"
+
+#: eeschema/erc.cpp:794
+#, c-format
+msgid "ERC: %s (X= %2.3f inches, Y= %2.3f inches\n"
+msgstr "ERC: %s (X= %2.3f polzades, Y= %2.3f polzades\n"
+
+#: eeschema/erc.cpp:800
+#, c-format
+msgid ""
+"\n"
+" >> Errors ERC: %d\n"
+msgstr ""
+"\n"
+" >> Errors ERC: %d\n"
+
+#: eeschema/files-io.cpp:53
+msgid "Clear SubHierarchy ?"
+msgstr "Voleu netejar la subjerarquia?"
+
+#: eeschema/find.cpp:72
+msgid "EESchema Locate"
+msgstr "Cerca a EEschema"
+
+#: eeschema/find.cpp:87
+msgid "Item in &Sheet"
+msgstr "Element a &full"
+
+#: eeschema/find.cpp:91
+msgid "Item in &Hierarchy"
+msgstr "IElement a la &jerarquÃ­a"
+
+#: eeschema/find.cpp:95
+msgid "Find &Next Item"
+msgstr "Cerca &Següent"
+
+#: eeschema/find.cpp:103
+msgid "Cmp in &Lib"
+msgstr "Components a &biblioteca"
+
+#: eeschema/find.cpp:108
+msgid "Find Markers"
+msgstr "Cerca marcadors"
+
+#: eeschema/find.cpp:113
+msgid "Next Marker"
+msgstr "Marcador següent"
+
+#: eeschema/find.cpp:230
+msgid "Marker found in "
+msgstr "Marcador trobat a "
+
+#: eeschema/find.cpp:238
+msgid "Marker Not Found"
+msgstr "Marcador no trobat"
+
+#: eeschema/find.cpp:393
+msgid " Found in "
+msgstr "Trobat a "
+
+#: eeschema/find.cpp:401
+msgid " Not Found"
+msgstr "No trobat"
+
+#: eeschema/find.cpp:429
+#: eeschema/selpart.cpp:39
+msgid "No libraries are loaded"
+msgstr "No s'ha carregat cap biblioteca"
+
+#: eeschema/find.cpp:451
+#: eeschema/find.cpp:507
+#: eeschema/find.cpp:520
+msgid "Found "
+msgstr "Trobat"
+
+#: eeschema/find.cpp:453
+#: eeschema/find.cpp:508
+#: eeschema/find.cpp:521
+msgid " in lib "
+msgstr " a bibl. "
+
+#: eeschema/find.cpp:463
+msgid " found only in cache"
+msgstr "Trobat tan sols a memòria cau"
+
+#: eeschema/find.cpp:465
+msgid ""
+"\n"
+"Explore All Libraries?"
+msgstr ""
+"\n"
+"Explora totes les biblioteques?"
+
+#: eeschema/find.cpp:470
+msgid "Nothing found"
+msgstr "No s'ha trobat res"
+
+#: eeschema/genliste.cpp:101
+msgid "List of Material"
+msgstr "Llista de Materials"
+
+#: eeschema/genliste.cpp:123
+msgid " List items : "
+msgstr " Llista elements:"
+
+#: eeschema/genliste.cpp:126
+msgid "Components by Reference"
+msgstr "Components per referència"
+
+#: eeschema/genliste.cpp:129
+msgid "Components by Value"
+msgstr "Components per valor"
+
+#: eeschema/genliste.cpp:132
+msgid "Sub Components (i.e U2A, U2B..)"
+msgstr "Subcomponents (ex. U2A, U2B..)"
+
+#: eeschema/genliste.cpp:135
+msgid "Hierachy Pins by name"
+msgstr "Pins de jerarquia per nom"
+
+#: eeschema/genliste.cpp:138
+msgid "Hierachy Pins by Sheets"
+msgstr "Pins de jerarquia per fulls"
+
+#: eeschema/genliste.cpp:144
+msgid "&Create List"
+msgstr "&Crea llista"
+
+#: eeschema/genliste.cpp:172
+msgid "List of material:"
+msgstr "Llista de material:"
+
+#: eeschema/genliste.cpp:276
+#, c-format
+msgid ""
+"\n"
+"#Glob labels ( order = Sheet Number )\n"
+msgstr ""
+"\n"
+"#Etiquetes Globals ( ordre = nombre de full )\n"
+
+#: eeschema/genliste.cpp:285
+#, c-format
+msgid ""
+"\n"
+"#Glob labels ( order = Alphab. )\n"
+msgstr ""
+"\n"
+"#Etiquetes Globals ( ordre = alfabètic )\n"
+
+#: eeschema/genliste.cpp:291
+#, c-format
+msgid ""
+"\n"
+"#End List\n"
+msgstr ""
+"\n"
+"#Fi de llista\n"
+
+#: eeschema/genliste.cpp:582
+#, c-format
+msgid ""
+"\n"
+"#Cmp ( order = Reference )"
+msgstr ""
+"\n"
+"#Components ( ordre = referència )"
+
+#: eeschema/genliste.cpp:620
+#: eeschema/genliste.cpp:665
+#, c-format
+msgid "#End Cmp\n"
+msgstr "#Fi de components\n"
+
+#: eeschema/genliste.cpp:634
+#, c-format
+msgid ""
+"\n"
+"#Cmp ( order = Value )"
+msgstr ""
+"\n"
+"#Components ( ordre = valor )"
+
+#: eeschema/genliste.cpp:688
+#, c-format
+msgid "> %-28.28s Global        (Sheet %.2d) pos: %3.3f, %3.3f\n"
+msgstr "> %-28.28s Global        (Full %.2d) pos: %3.3f, %3.3f\n"
+
+#: eeschema/genliste.cpp:700
+#, c-format
+msgid "> %-28.28s Sheet %-7.7s (Sheet %.2d) pos: %3.3f, %3.3f\n"
+msgstr "> %-28.28s Full %-7.7s (Full %.2d) pos: %3.3f, %3.3f\n"
+
+#: eeschema/genliste.cpp:711
+#, c-format
+msgid "#End labels\n"
+msgstr "#Fi d'etiquetes\n"
+
+#: eeschema/getpart.cpp:70
+msgid "Component selection:"
+msgstr "Selecció de components:"
+
+#: eeschema/getpart.cpp:127
+msgid "Failed to find part "
+msgstr "Impossible trobar el component"
+
+#: eeschema/getpart.cpp:127
+msgid " in library"
+msgstr " en biblioteca"
+
+#: eeschema/hierarch.cpp:124
+msgid "Navigator"
+msgstr "Navegador"
+
+#: eeschema/lib_export.cpp:39
+msgid "Import part:"
+msgstr "Importa component:"
+
+#: eeschema/lib_export.cpp:71
+msgid "File is empty"
+msgstr "Fitxer buit"
+
+#: eeschema/lib_export.cpp:92
+msgid "No Part to Save"
+msgstr "No hi ha component per desar"
+
+#: eeschema/lib_export.cpp:99
+msgid "New Library"
+msgstr "Nova biblioteca"
+
+#: eeschema/lib_export.cpp:99
+msgid "Export part:"
+msgstr "Exporta component"
+
+#: eeschema/lib_export.cpp:133
+msgid "0k"
+msgstr "D'acord"
+
+#: eeschema/lib_export.cpp:135
+msgid ""
+"Note: this new library will be available only if it is loaded by eeschema\n"
+"Modify eeschema config if you want use it"
+msgstr ""
+"Nota: Aquesta nova biblioteca només estarà disponible si es carrega a EEschema\n"
+"Modifiqui la configuració d'EEschema si vol fer-ne ús"
+
+#: eeschema/lib_export.cpp:137
+msgid "Error while create "
+msgstr "Error al crear"
+
+#: eeschema/libarch.cpp:80
+msgid "Failed to create archive lib file "
+msgstr "Error al crear el fitxer de biblioteca "
+
+#: eeschema/libarch.cpp:87
+msgid "Failed to create doc lib file "
+msgstr "Error al crear el fitxer de document de biblioteca"
+
+#: eeschema/libedit.cpp:39
+msgid " Part:   "
+msgstr "Element:"
+
+#: eeschema/libedit.cpp:42
+#: eeschema/viewlibs.cpp:119
+msgid "None"
+msgstr "Cap"
+
+#: eeschema/libedit.cpp:53
+msgid "   Convert"
+msgstr "   Converteix"
+
+#: eeschema/libedit.cpp:54
+msgid "   Normal"
+msgstr "  Normal"
+
+#: eeschema/libedit.cpp:57
+msgid "  (Power Symbol)"
+msgstr "  (Símbol d'alimentació)"
+
+#: eeschema/libedit.cpp:92
+msgid "Current Part not saved, continue ?"
+msgstr "Element actual no desat. Voleu continuar ?"
+
+#: eeschema/libedit.cpp:248
+msgid "Ok to modify Library File "
+msgstr "Esteu d'acord a modificar el fitxer de biblioteca"
+
+#: eeschema/libedit.cpp:257
+msgid "Error while saving Library File "
+msgstr "Error al desar el fitxer biblioteca"
+
+#: eeschema/libedit.cpp:263
+msgid "Library File "
+msgstr "Fitxer de biblioteca"
+
+#: eeschema/libedit.cpp:265
+msgid "Document File "
+msgstr "Fitxer de document"
+
+#: eeschema/libedit.cpp:318
+msgid "No Active Library"
+msgstr "No hi ha cap biblioteca carregada"
+
+#: eeschema/libedit.cpp:334
+#, c-format
+msgid "Select Component (%d items)"
+msgstr "Selecciona component (%d elements)"
+
+#: eeschema/libedit.cpp:357
+msgid "Component not found"
+msgstr "Component no trobat"
+
+#: eeschema/libedit.cpp:361
+msgid "Delete component "
+msgstr "Elimina component"
+
+#: eeschema/libedit.cpp:362
+msgid " in library "
+msgstr " en biblioteca "
+
+#: eeschema/libedit.cpp:388
+msgid "Delete old component ?"
+msgstr "Elimina component antic ?"
+
+#: eeschema/libedit.cpp:392
+msgid "Name: "
+msgstr "Nom: "
+
+#: eeschema/libedit.cpp:402
+msgid " exists in library "
+msgstr " existeix en biblioteca"
+
+#: eeschema/libedit.cpp:411
+msgid "Prefix: "
+msgstr "Prefix: "
+
+#: eeschema/libedit.cpp:416
+msgid "Number of Parts for this component: "
+msgstr "Nombre d'elements per aquest component:  "
+
+#: eeschema/libedit.cpp:418
+msgid "Has a convert drawing ?"
+msgstr "Té un dibuix convertit ?"
+
+#: eeschema/libedit.cpp:635
+msgid "Warning: No component to Save"
+msgstr "Avís: No hi ha components per desar"
+
+#: eeschema/libedit.cpp:642
+msgid "No Library specified"
+msgstr "No s'ha especificat la biblioteca"
+
+#: eeschema/libedit.cpp:653
+#, c-format
+msgid "Component %s exists, Change it ?"
+msgstr "El component %s existeix. Voleu canviar-ho ?"
+
+#: eeschema/libedit.cpp:694
+#, c-format
+msgid "Component %s saved in %s"
+msgstr "Component %s desat a %s"
+
+#: eeschema/libedpart.cpp:182
+#: eeschema/libedpart.cpp:344
+msgid "Properties for "
+msgstr "Propietats per"
+
+#: eeschema/libedpart.cpp:186
+msgid "(alias of "
+msgstr "(àlies de "
+
+#: eeschema/libedpart.cpp:217
+msgid "Lib Component Properties"
+msgstr "Propietats del component de biblioteca"
+
+#: eeschema/libedpart.cpp:264
+#: eeschema/libedpart.cpp:309
+msgid "Alias"
+msgstr "Àlies"
+
+#: eeschema/libedpart.cpp:299
+msgid "Delete All"
+msgstr "Esborra tot"
+
+#: eeschema/libedpart.cpp:347
+msgid "alias "
+msgstr "àlies"
+
+#: eeschema/libedpart.cpp:366
+msgid "Doc:"
+msgstr "Doc:"
+
+#: eeschema/libedpart.cpp:377
+msgid "Keywords:"
+msgstr "Paraules clau:"
+
+#: eeschema/libedpart.cpp:387
+msgid "DocFileName:"
+msgstr "Fitxer de document:"
+
+#: eeschema/libedpart.cpp:392
+msgid "Copy Doc"
+msgstr "Copia document"
+
+#: eeschema/libedpart.cpp:397
+msgid "Browse DocFiles"
+msgstr "Examina fitxers de document"
+
+#: eeschema/libedpart.cpp:419
+msgid " General : "
+msgstr " General : "
+
+#: eeschema/libedpart.cpp:422
+msgid "As Convert"
+msgstr "Com convertir"
+
+#: eeschema/libedpart.cpp:426
+msgid "Show Pin Num"
+msgstr "Mostra nombre de pin"
+
+#: eeschema/libedpart.cpp:434
+msgid "Show Pin Name"
+msgstr "Mostra nom de pin"
+
+#: eeschema/libedpart.cpp:442
+msgid "Pin Name Inside"
+msgstr "Nom de pin a l'interior"
+
+#: eeschema/libedpart.cpp:450
+msgid "Number of Units:"
+msgstr "Nombre de components:"
+
+#: eeschema/libedpart.cpp:460
+msgid "Skew:"
+msgstr "Decalatge:"
+
+#: eeschema/libedpart.cpp:470
+msgid "Power Symbol"
+msgstr "Símbol d'alimentació"
+
+#: eeschema/libedpart.cpp:496
+msgid "Left justify"
+msgstr "Justificat a l'esquerra"
+
+#: eeschema/libedpart.cpp:496
+#: eeschema/libedpart.cpp:498
+#: common/zoom.cpp:347
+msgid "Center"
+msgstr "Centra"
+
+#: eeschema/libedpart.cpp:496
+msgid "Right justify"
+msgstr "Justificat a la dreta"
+
+#: eeschema/libedpart.cpp:498
+msgid "Bottom justify"
+msgstr "Justificat inferior"
+
+#: eeschema/libedpart.cpp:498
+msgid "Top justify"
+msgstr "Justificat superior"
+
+#: eeschema/libedpart.cpp:524
+msgid "Hor Justify"
+msgstr "Justificat horitzontal"
+
+#: eeschema/libedpart.cpp:531
+msgid "Vert Justify"
+msgstr "Justificat vertical"
+
+#: eeschema/libedpart.cpp:879
+msgid "Ok to Delete Alias LIST"
+msgstr "Està d'acord a eliminar la LLISTA d'àlies"
+
+#: eeschema/libedpart.cpp:901
+msgid "New alias:"
+msgstr "Nou àlies"
+
+#: eeschema/libedpart.cpp:908
+msgid "This is the Root Part"
+msgstr "Aquest es l'element arrel"
+
+#: eeschema/libedpart.cpp:914
+msgid "Already in use"
+msgstr "Ja està  en ús"
+
+#: eeschema/libedpart.cpp:946
+msgid " is Current Selected Alias!"
+msgstr " es l'àlies actualment seleccionat ! "
+
+#: eeschema/libedpart.cpp:1015
+msgid "Delete units"
+msgstr "Esborra elements"
+
+#: eeschema/libedpart.cpp:1080
+msgid "Create pins for Convert items"
+msgstr "Crea pins de les unitats convertides"
+
+#: eeschema/libedpart.cpp:1084
+msgid "Part as \"De Morgan\" anymore"
+msgstr "El component té una representació convertida"
+
+#: eeschema/libedpart.cpp:1109
+msgid "Delete Convert items"
+msgstr "Elimina els elements convertits"
+
+#: eeschema/libedpart.cpp:1137
+#: common/eda_doc.cpp:80
+msgid "Doc Files"
+msgstr "Obre full de característiques"
+
+#: eeschema/libframe.cpp:110
+msgid "LibEdit: Part modified!, Continue ?"
+msgstr "LibEdit: Element modificat,  Continuar ?"
+
+#: eeschema/libframe.cpp:121
+#, c-format
+msgid "Library %s modified!, Continue ?"
+msgstr "Biblioteca %s modificada! Voleu continuar ?"
+
+#: eeschema/libframe.cpp:462
+msgid "Move Pin"
+msgstr "Mou pin"
+
+#: eeschema/libframe.cpp:465
+msgid "Pin Edit"
+msgstr "Edita pin"
+
+#: eeschema/libframe.cpp:469
+msgid "Pin Delete"
+msgstr "Esborra pin"
+
+#: eeschema/libframe.cpp:473
+msgid "Global"
+msgstr "Global"
+
+#: eeschema/libframe.cpp:475
+msgid "Pin Size to others"
+msgstr "Canvia mida dels altres pins"
+
+#: eeschema/libframe.cpp:477
+msgid "Pin Name Size to others"
+msgstr "Canvia la mida del nom del pin a altres"
+
+#: eeschema/libframe.cpp:479
+msgid "Pin Num Size to others"
+msgstr "Canvia la mida del nombre del pin a altres"
+
+#: eeschema/libframe.cpp:487
+msgid "Move Arc"
+msgstr "Mou arc"
+
+#: eeschema/libframe.cpp:490
+msgid "Arc Options"
+msgstr "Opcions d'arc"
+
+#: eeschema/libframe.cpp:494
+msgid "Arc Delete"
+msgstr "Esborra arc"
+
+#: eeschema/libframe.cpp:502
+msgid "Move Circle"
+msgstr "Mou cercle"
+
+#: eeschema/libframe.cpp:505
+msgid "Circle Options"
+msgstr "Opcions de cercle"
+
+#: eeschema/libframe.cpp:509
+msgid "Circle Delete"
+msgstr "Esborra cercle"
+
+#: eeschema/libframe.cpp:517
+msgid "Move Rect"
+msgstr "Mou rectangle"
+
+#: eeschema/libframe.cpp:520
+msgid "Rect Options"
+msgstr "Opcions del rectangle"
+
+#: eeschema/libframe.cpp:524
+msgid "Rect Delete"
+msgstr "Esborra rectangle"
+
+#: eeschema/libframe.cpp:535
+msgid "Text Edit"
+msgstr "Edita text"
+
+#: eeschema/libframe.cpp:539
+msgid "Text Delete"
+msgstr "Esborra text"
+
+#: eeschema/libframe.cpp:547
+msgid "Move Line"
+msgstr "Mou línia"
+
+#: eeschema/libframe.cpp:552
+msgid "Line End"
+msgstr "Fi de línia"
+
+#: eeschema/libframe.cpp:555
+msgid "Line Options"
+msgstr "Opcions de línia"
+
+#: eeschema/libframe.cpp:559
+msgid "Line Delete"
+msgstr "Esborrat de línies"
+
+#: eeschema/libframe.cpp:567
+#: eeschema/onrightclick.cpp:253
+msgid "Move Field"
+msgstr "Mou camp"
+
+#: eeschema/libframe.cpp:570
+msgid "Field Rotate"
+msgstr "Gira camp"
+
+#: eeschema/libframe.cpp:572
+msgid "Field Edit"
+msgstr "Edita camp"
+
+#: eeschema/libframe.cpp:687
+msgid " Tst Pins OK!"
+msgstr " Assaig de pins satisfactori!"
+
+#: eeschema/libframe.cpp:753
+msgid "Add Pin"
+msgstr "Afegeix pin"
+
+#: eeschema/libframe.cpp:757
+msgid "Set Pin Opt"
+msgstr "Afegeix opcions de pin"
+
+#: eeschema/libframe.cpp:779
+msgid "Add Rectangle"
+msgstr "Afegeix rectangle"
+
+#: eeschema/libframe.cpp:783
+msgid "Add Circle"
+msgstr "Afegeix cercle"
+
+#: eeschema/libframe.cpp:787
+msgid "Add Arc"
+msgstr "Afegeix arc"
+
+#: eeschema/libframe.cpp:795
+msgid "Anchor"
+msgstr "Àncora"
+
+#: eeschema/libframe.cpp:799
+msgid "Import"
+msgstr "Importa"
+
+#: eeschema/libframe.cpp:805
+msgid "Export"
+msgstr "Exporta"
+
+#: eeschema/menubar.cpp:37
+msgid "&Load Schematic Project"
+msgstr "&Obre projecte esquemàtic ..."
+
+#: eeschema/menubar.cpp:38
+msgid "Load a schematic project (Schematic, libraries...)"
+msgstr "Carrega un projecte d'esquemes complet (esquemes, biblioteques ...)"
+
+#: eeschema/menubar.cpp:44
+msgid "&Save Schematic Project"
+msgstr "&Desa projecte esquemàtic..."
+
+#: eeschema/menubar.cpp:45
+msgid "Save all"
+msgstr "Desa tot el projecte (esquemes, biblioteques ...)"
+
+#: eeschema/menubar.cpp:51
+msgid "Save &Current sheet"
+msgstr "Desa &full actual"
+
+#: eeschema/menubar.cpp:52
+msgid "Save current sheet only"
+msgstr "Desa tan sols el full actual"
+
+#: eeschema/menubar.cpp:57
+msgid "Save Current sheet &as.."
+msgstr "Desa full &actual com a..."
+
+#: eeschema/menubar.cpp:58
+msgid "Save current sheet as.."
+msgstr "Desa el full actual amb un altre nom"
+
+#: eeschema/menubar.cpp:70
+msgid "Plot Postscript"
+msgstr "Traça Postscript ..."
+
+#: eeschema/menubar.cpp:70
+msgid "Plotting in Postscript format"
+msgstr "Genera un traçat en format Postscript"
+
+#: eeschema/menubar.cpp:75
+msgid "Plot HPGL"
+msgstr "Traça HPGL ..."
+
+#: eeschema/menubar.cpp:75
+msgid "Plotting in HPGL format"
+msgstr "Genera un traçat en format HPGL"
+
+#: eeschema/menubar.cpp:80
+msgid "Plot SVG"
+msgstr "Traça  SVG"
+
+#: eeschema/menubar.cpp:80
+msgid "Plotting in SVG format"
+msgstr "Genera un traçat en format SVG"
+
+#: eeschema/menubar.cpp:86
+msgid "Plot Hplg, Postscript"
+msgstr "Traçat en format HPGL o POSTSCRIPT"
+
+#: eeschema/menubar.cpp:92
+msgid "Quit Eeschema"
+msgstr "Tanca Eeschema"
+
+#: eeschema/menubar.cpp:117
+msgid "Setting colors ..."
+msgstr "Escull els colors de visualització"
+
+#: eeschema/menubar.cpp:128
+msgid "&Save Eeschema Setup"
+msgstr "&Desa configuració..."
+
+#: eeschema/menubar.cpp:129
+msgid "Save options in <project>.pro"
+msgstr "Desa les opcions a <projecte>.pro"
+
+#: eeschema/menubar.cpp:140
+#: kicad/buildmnu.cpp:158
+msgid "Kicad &Help"
+msgstr "A&juda de KiCad"
+
+#: eeschema/menubar.cpp:145
+msgid "Eeschema &About"
+msgstr "Quant a Eeschema ..."
+
+#: eeschema/menubar.cpp:145
+msgid "Eeschema Infos"
+msgstr "Informació d'Eeschema"
+
+#: eeschema/netform.cpp:56
+#: eeschema/netform.cpp:239
+#: eeschema/save_schemas.cpp:93
+msgid "Failed to create file "
+msgstr "Error al crear el fitxer "
+
+#: eeschema/netlist.cpp:95
+#: eeschema/netlist.cpp:118
+msgid "List"
+msgstr "Llista"
+
+#: eeschema/netlist.cpp:108
+msgid "No component"
+msgstr "No hi ha component"
+
+#: eeschema/netlist.cpp:125
+#: eeschema/netlist.cpp:219
+#: eeschema/netlist.cpp:251
+#: eeschema/netlist.cpp:268
+#: eeschema/netlist.cpp:282
+msgid "Done"
+msgstr "Fet"
+
+#: eeschema/netlist.cpp:128
+msgid "NbItems"
+msgstr "Nombre d'elements"
+
+#: eeschema/netlist.cpp:136
+msgid "Conn"
+msgstr "Conn"
+
+#: eeschema/netlist.cpp:224
+msgid "Labels"
+msgstr "Etiquetes"
+
+#: eeschema/netlist.cpp:255
+msgid "Hierar."
+msgstr "Jerarquia"
+
+#: eeschema/netlist.cpp:271
+msgid "Sorting"
+msgstr "Classifica"
+
+#: eeschema/netlist_control.cpp:81
+#: eeschema/netlist_control.cpp:217
+#: gerbview/options.cpp:200
+msgid "Default format"
+msgstr "Format per defecte"
+
+#: eeschema/netlist_control.cpp:94
+msgid "&Netlist"
+msgstr "&Netlist"
+
+#: eeschema/netlist_control.cpp:151
+#: eeschema/netlist_control.cpp:236
+msgid "Netlist"
+msgstr "Netlist"
+
+#: eeschema/netlist_control.cpp:221
+msgid "Use Net Names"
+msgstr "Empra noms de nodes de xarxa"
+
+#: eeschema/netlist_control.cpp:221
+msgid "Use Net Numbers"
+msgstr "Empra nombres de nodes de xarxa"
+
+#: eeschema/netlist_control.cpp:222
+msgid "Netlist Options:"
+msgstr "Opcions de NetList:"
+
+#: eeschema/netlist_control.cpp:231
+msgid "Simulator command:"
+msgstr "Ordre de simulador:"
+
+#: eeschema/netlist_control.cpp:241
+msgid "&Run Simulator"
+msgstr "&Simulador"
+
+#: eeschema/netlist_control.cpp:282
+msgid "Netlist command:"
+msgstr "ordre de Netlist:"
+
+#: eeschema/netlist_control.cpp:287
+#: common/setpage.cpp:203
+msgid "Title:"
+msgstr "Títol:"
+
+#: eeschema/netlist_control.cpp:367
+msgid "Netlist files:"
+msgstr "Fitxers de Netlist:"
+
+#: eeschema/netlist_control.cpp:383
+msgid "Must be Annotated, Continue ?"
+msgstr "Numeració necessària. Voleu continuar?"
+
+#: eeschema/onrightclick.cpp:137
+msgid "Leave Sheet"
+msgstr "Deixa subfull"
+
+#: eeschema/onrightclick.cpp:152
+msgid "delete noconn"
+msgstr "Esborra la no connexió"
+
+#: eeschema/onrightclick.cpp:162
+msgid "Move bus entry"
+msgstr "Desplaça entrada de bus"
+
+#: eeschema/onrightclick.cpp:164
+msgid "set bus entry /"
+msgstr "Entrada de bus /"
+
+#: eeschema/onrightclick.cpp:165
+msgid "set bus entry \\"
+msgstr "Entrada de bus \\"
+
+#: eeschema/onrightclick.cpp:167
+msgid "delete bus entry"
+msgstr "Esborra entrada de bus"
+
+#: eeschema/onrightclick.cpp:171
+msgid "delete Marker"
+msgstr "Esborra marcador"
+
+#: eeschema/onrightclick.cpp:218
+msgid "End drawing"
+msgstr "Fi del dibuix"
+
+#: eeschema/onrightclick.cpp:220
+msgid "Delete drawing"
+msgstr "Esborra el dibuix"
+
+#: eeschema/onrightclick.cpp:254
+msgid "Rotate Field"
+msgstr "Gira el camp"
+
+#: eeschema/onrightclick.cpp:271
+msgid "Move Component   (M)"
+msgstr "Mou el component (M)"
+
+#: eeschema/onrightclick.cpp:276
+msgid "Rotate +  (R)"
+msgstr "Gira +  (R)"
+
+#: eeschema/onrightclick.cpp:277
+msgid "Rotate -"
+msgstr "Gira -"
+
+#: eeschema/onrightclick.cpp:278
+msgid "Mirror --  (Y)"
+msgstr "Emmirallament --  (Y)"
+
+#: eeschema/onrightclick.cpp:279
+msgid "Mirror ||  (X)"
+msgstr "Emmirallament ||  (X)"
+
+#: eeschema/onrightclick.cpp:280
+msgid "Normal  (N)"
+msgstr "Normal  (N)"
+
+#: eeschema/onrightclick.cpp:282
+msgid "Orient Component"
+msgstr "Orienta component"
+
+#: eeschema/onrightclick.cpp:299
+#, c-format
+msgid "Unit %d"
+msgstr "Unitat %d"
+
+#: eeschema/onrightclick.cpp:307
+msgid "Edit Component"
+msgstr "Edita component"
+
+#: eeschema/onrightclick.cpp:310
+msgid "Delete Component"
+msgstr "Elimina component"
+
+#: eeschema/onrightclick.cpp:327
+msgid "Move Glabel"
+msgstr "Mou etiqueta global"
+
+#: eeschema/onrightclick.cpp:328
+msgid "Rotate GLabel  (R)"
+msgstr "Gira etiqueta global  (R)"
+
+#: eeschema/onrightclick.cpp:329
+msgid "Edit GLabel"
+msgstr "Edita etiqueta global"
+
+#: eeschema/onrightclick.cpp:330
+msgid "Delete Glabel"
+msgstr "Esborra etiqueta global"
+
+#: eeschema/onrightclick.cpp:334
+#: eeschema/onrightclick.cpp:380
+msgid "Change to Label"
+msgstr "Canvi a etiqueta"
+
+#: eeschema/onrightclick.cpp:336
+#: eeschema/onrightclick.cpp:359
+msgid "Change to Text"
+msgstr "Canvia a text"
+
+#: eeschema/onrightclick.cpp:338
+#: eeschema/onrightclick.cpp:361
+#: eeschema/onrightclick.cpp:384
+msgid "Change Type"
+msgstr "Canvia de tipus"
+
+#: eeschema/onrightclick.cpp:350
+msgid "Move Label"
+msgstr "Mou etiqueta"
+
+#: eeschema/onrightclick.cpp:351
+msgid "Rotate Label  (R)"
+msgstr "Gira etiqueta  (R)"
+
+#: eeschema/onrightclick.cpp:352
+msgid "Edit Label"
+msgstr "Edita etiqueta"
+
+#: eeschema/onrightclick.cpp:353
+msgid "Delete Label"
+msgstr "Elimina etiqueta:"
+
+#: eeschema/onrightclick.cpp:357
+#: eeschema/onrightclick.cpp:382
+msgid "Change to Glabel"
+msgstr "Canvia a etiqueta global"
+
+#: eeschema/onrightclick.cpp:374
+msgid "Rotate Text (R)"
+msgstr "Gira text (R)"
+
+#: eeschema/onrightclick.cpp:401
+#: eeschema/onrightclick.cpp:436
+msgid "Break Wire"
+msgstr "Línia de connexió interrompuda"
+
+#: eeschema/onrightclick.cpp:404
+msgid "delete junction"
+msgstr "Esborra junció"
+
+#: eeschema/onrightclick.cpp:409
+#: eeschema/onrightclick.cpp:431
+msgid "Delete node"
+msgstr "Esborra node"
+
+#: eeschema/onrightclick.cpp:410
+#: eeschema/onrightclick.cpp:432
+msgid "Delete connection"
+msgstr "Esborra connexions"
+
+#: eeschema/onrightclick.cpp:425
+msgid "End Wire"
+msgstr "Fi fil"
+
+#: eeschema/onrightclick.cpp:427
+msgid "Delete Wire"
+msgstr "Elimina fil"
+
+#: eeschema/onrightclick.cpp:440
+#: eeschema/onrightclick.cpp:469
+#: eeschema/tool_sch.cpp:195
+msgid "Add junction"
+msgstr "Afegeix junció"
+
+#: eeschema/onrightclick.cpp:441
+#: eeschema/onrightclick.cpp:470
+msgid "Add label"
+msgstr "Afegeix etiqueta"
+
+#: eeschema/onrightclick.cpp:446
+#: eeschema/onrightclick.cpp:474
+#: eeschema/tool_sch.cpp:191
+msgid "Add global label"
+msgstr "Afegeix etiqueta global"
+
+#: eeschema/onrightclick.cpp:459
+msgid "End Bus"
+msgstr "Fi de bus"
+
+#: eeschema/onrightclick.cpp:462
+msgid "Delete Bus"
+msgstr "Elimina bus"
+
+#: eeschema/onrightclick.cpp:466
+msgid "Break Bus"
+msgstr "Bus interromput"
+
+#: eeschema/onrightclick.cpp:485
+msgid "Enter Sheet"
+msgstr "Entra al full"
+
+#: eeschema/onrightclick.cpp:487
+msgid "Move Sheet"
+msgstr "Mou el full"
+
+#: eeschema/onrightclick.cpp:492
+msgid "Place Sheet"
+msgstr "Posa full"
+
+#: eeschema/onrightclick.cpp:496
+msgid "Edit Sheet"
+msgstr "Edita el full"
+
+#: eeschema/onrightclick.cpp:497
+msgid "Resize Sheet"
+msgstr "Redimensiona el full"
+
+#: eeschema/onrightclick.cpp:500
+msgid "Cleanup PinSheets"
+msgstr "Elimina connectors de jerarquia"
+
+#: eeschema/onrightclick.cpp:501
+msgid "Delete Sheet"
+msgstr "Esborra full"
+
+#: eeschema/onrightclick.cpp:513
+msgid "Move PinSheet"
+msgstr "Desplaça connector de jerarquia"
+
+#: eeschema/onrightclick.cpp:515
+msgid "Edit PinSheet"
+msgstr "Edita connector de jerarquia"
+
+#: eeschema/onrightclick.cpp:518
+msgid "Delete PinSheet"
+msgstr "Elimina connector de jerarquia"
+
+#: eeschema/onrightclick.cpp:531
+msgid "Win. Zoom (Midd butt drag mouse)"
+msgstr "Zoom Finestra (arrossegar ratolí amb el botó del mig­)"
+
+#: eeschema/onrightclick.cpp:539
+msgid "Save Block"
+msgstr "Desa bloc"
+
+#: eeschema/onrightclick.cpp:541
+msgid "Copy Block (shift + drag mouse)"
+msgstr "Copia bloc (tecla de majúscules + moure ratolí)"
+
+#: eeschema/onrightclick.cpp:542
+msgid "Drag Block (ctrl + drag mouse)"
+msgstr "Arrossega bloc (tecla de control + moure ratolí)"
+
+#: eeschema/onrightclick.cpp:544
+msgid "Del. Block (shift+ctrl + drag mouse)"
+msgstr "Esborra bloc (tecla de majúscules+tecla de control+moure ratolí)"
+
+#: eeschema/options.cpp:117
+#: eeschema/optionsframe.cpp:106
+msgid "Show grid"
+msgstr "Mostra reixeta"
+
+#: eeschema/options.cpp:128
+msgid "Normal (50 mils)"
+msgstr "Normal (50 mils)"
+
+#: eeschema/options.cpp:129
+msgid "Small (20 mils)"
+msgstr "Petita (20 mils)"
+
+#: eeschema/options.cpp:130
+msgid "Very small (10 mils)"
+msgstr "Molt petita (10 mils)"
+
+#: eeschema/options.cpp:132
+#: eeschema/optionsframe.cpp:116
+msgid "Grid Size"
+msgstr "Mida reixeta"
+
+#: eeschema/options.cpp:155
+msgid "Show alls"
+msgstr "Mostra tots"
+
+#: eeschema/options.cpp:157
+#: eeschema/optionsframe.cpp:124
+msgid "Show pins"
+msgstr "Mostra pins"
+
+#: eeschema/options.cpp:172
+msgid "Horiz/Vertical"
+msgstr "Horitzontal/Vertical"
+
+#: eeschema/options.cpp:174
+msgid "Wires - Bus orient"
+msgstr "Orientació línia-bus"
+
+#: eeschema/options.cpp:182
+msgid "Delta Step"
+msgstr "Increment"
+
+#: eeschema/options.cpp:187
+msgid "Delta Label:"
+msgstr "Increment etiqueta:"
+
+#: eeschema/optionsframe.cpp:112
+msgid "&Normal (50 mils)"
+msgstr "&Normal (50 mils)"
+
+#: eeschema/optionsframe.cpp:113
+msgid "&Small (20 mils)"
+msgstr "&Petita(20 mils)"
+
+#: eeschema/optionsframe.cpp:114
+msgid "&Very small (10 mils)"
+msgstr "&Molt petita (10 mils)"
+
+#: eeschema/optionsframe.cpp:121
+msgid "&Normal"
+msgstr "&Normal"
+
+#: eeschema/optionsframe.cpp:122
+#: eeschema/optionsframe.cpp:133
+msgid "&inches"
+msgstr "&Polzades"
+
+#: eeschema/optionsframe.cpp:132
+msgid "&millimeters"
+msgstr "&mil·límetres"
+
+#: eeschema/optionsframe.cpp:142
+msgid "&Horiz/Vertical"
+msgstr "&Horitzontal/Vertical"
+
+#: eeschema/optionsframe.cpp:143
+msgid "&Any"
+msgstr "&Qualsevol"
+
+#: eeschema/optionsframe.cpp:145
+msgid "Wire - Bus orient"
+msgstr "Línia - bus orientació"
+
+#: eeschema/pinedit.cpp:29
+msgid "line"
+msgstr "Línia"
+
+#: eeschema/pinedit.cpp:29
+msgid "invert"
+msgstr "invertit"
+
+#: eeschema/pinedit.cpp:29
+msgid "clock"
+msgstr "Rellotge"
+
+#: eeschema/pinedit.cpp:29
+msgid "clock inv"
+msgstr "Rellotge inv"
+
+#: eeschema/pinedit.cpp:30
+msgid "low in"
+msgstr "invertit baix"
+
+#: eeschema/pinedit.cpp:30
+msgid "low clock"
+msgstr "rellotge baix"
+
+#: eeschema/pinedit.cpp:30
+msgid "low out"
+msgstr "sortida baixa"
+
+#: eeschema/pinedit.cpp:135
+msgid "Pin properties"
+msgstr "Propietats dels pins"
+
+#: eeschema/pinedit.cpp:171
+msgid "Pin Name :"
+msgstr "Nom del pin :"
+
+#: eeschema/pinedit.cpp:178
+msgid "Pin Num :"
+msgstr "Nombre del pin :"
+
+#: eeschema/pinedit.cpp:186
+msgid " Pin Options :"
+msgstr " Opcions del pin :"
+
+#: eeschema/pinedit.cpp:189
+msgid "Pin lenght :"
+msgstr "Longitud del pin:"
+
+#: eeschema/pinedit.cpp:197
+#: eeschema/symbdraw.cpp:103
+#: eeschema/symbtext.cpp:118
+msgid "Common to Units"
+msgstr "Comú a les unitats"
+
+#: eeschema/pinedit.cpp:205
+#: eeschema/symbdraw.cpp:111
+#: eeschema/symbtext.cpp:126
+msgid "Common to convert"
+msgstr "Comú a convertir"
+
+#: eeschema/pinedit.cpp:213
+msgid "No Draw"
+msgstr "Invisible"
+
+#: eeschema/pinedit.cpp:223
+msgid "Pin Orient:"
+msgstr "Pin d'orientació:"
+
+#: eeschema/pinedit.cpp:248
+msgid "Pin Shape:"
+msgstr "Forma del pin:"
+
+#: eeschema/pinedit.cpp:264
+msgid "Input"
+msgstr "Entrada"
+
+#: eeschema/pinedit.cpp:264
+msgid "Output"
+msgstr "Sortida"
+
+#: eeschema/pinedit.cpp:264
+msgid "Bidi"
+msgstr "Bidireccional"
+
+#: eeschema/pinedit.cpp:264
+msgid "3 States"
+msgstr "3 Estats"
+
+#: eeschema/pinedit.cpp:265
+msgid "Passive"
+msgstr "Passiu"
+
+#: eeschema/pinedit.cpp:265
+msgid "Unspecified"
+msgstr "No especificat"
+
+#: eeschema/pinedit.cpp:266
+msgid "Power In"
+msgstr "Alimentació d'entrada"
+
+#: eeschema/pinedit.cpp:266
+msgid "Power Out"
+msgstr "Alimentació de sortida"
+
+#: eeschema/pinedit.cpp:266
+msgid "Open coll"
+msgstr "Coŀlector obert"
+
+#: eeschema/pinedit.cpp:266
+msgid "Open emit"
+msgstr "Emissor obert"
+
+#: eeschema/pinedit.cpp:268
+msgid "Electrical Type:"
+msgstr "Tipus elèctric:"
+
+#: eeschema/pinedit.cpp:423
+msgid "Occupied by other pin, Continue ?"
+msgstr "Ocupat per un altre pin. Voleu continuar ?"
+
+#: eeschema/pinedit.cpp:1083
+#, c-format
+msgid "Duplicate Pin %4.4s (loc %d, %d)"
+msgstr "Pin duplicat %4.4s (loc %d, %d)"
+
+#: eeschema/pinedit.cpp:1087
+#, c-format
+msgid "  Unit %d"
+msgstr "  Unitat %d"
+
+#: eeschema/pinedit.cpp:1092
+msgid "  Convert"
+msgstr "  Converteix"
+
+#: eeschema/pinedit.cpp:1093
+msgid "  Normal"
+msgstr "  Normal"
+
+#: eeschema/plothpgl.cpp:153
+msgid "EESchema Plot HPGL"
+msgstr "Traçat HPGL per a EEschema"
+
+#: eeschema/plothpgl.cpp:166
+msgid "Sheet Size"
+msgstr "Dimensions Full"
+
+#: eeschema/plothpgl.cpp:167
+#: eeschema/plotps.cpp:122
+msgid "Page Size A4"
+msgstr "Full mida A4"
+
+#: eeschema/plothpgl.cpp:167
+msgid "Page Size A3"
+msgstr "Full mida A3"
+
+#: eeschema/plothpgl.cpp:168
+msgid "Page Size A2"
+msgstr "Full mida A2"
+
+#: eeschema/plothpgl.cpp:168
+msgid "Page Size A1"
+msgstr "Full mida A1"
+
+#: eeschema/plothpgl.cpp:168
+msgid "Page Size A0"
+msgstr "Full mida A0"
+
+#: eeschema/plothpgl.cpp:169
+#: eeschema/plotps.cpp:122
+msgid "Page Size A"
+msgstr "Full mida A"
+
+#: eeschema/plothpgl.cpp:169
+msgid "Page Size B"
+msgstr "Full mida B"
+
+#: eeschema/plothpgl.cpp:170
+msgid "Page Size C"
+msgstr "Full mida C"
+
+#: eeschema/plothpgl.cpp:170
+msgid "Page Size D"
+msgstr "Full mida D"
+
+#: eeschema/plothpgl.cpp:170
+msgid "Page Size E"
+msgstr "Full mida E"
+
+#: eeschema/plothpgl.cpp:172
+#: eeschema/plotps.cpp:125
+msgid "Plot page size:"
+msgstr "Format de pàgina:"
+
+#: eeschema/plothpgl.cpp:179
+#: eeschema/plothpgl.cpp:310
+msgid "Plot Offset"
+msgstr "Òfset de traçat"
+
+#: eeschema/plothpgl.cpp:189
+msgid "&Accept Offset"
+msgstr "&Accepta òfset"
+
+#: eeschema/plothpgl.cpp:194
+msgid "Pen Width ( mils )"
+msgstr "Gruix de ploma (mils)"
+
+#: eeschema/plothpgl.cpp:201
+msgid "Pen Speed ( cm/s )"
+msgstr "Velocitat de ploma ( cm/s )"
+
+#: eeschema/plothpgl.cpp:216
+#: eeschema/plotps.cpp:144
+msgid "&Plot CURRENT"
+msgstr "&Traça actual"
+
+#: eeschema/plothpgl.cpp:221
+#: eeschema/plotps.cpp:149
+msgid "Plot A&LL"
+msgstr "&Traça tot"
+
+#: eeschema/plothpgl.cpp:226
+#: eeschema/plotps.cpp:154
+#: eeschema/sheet.cpp:98
+msgid "&Cancel"
+msgstr "&Canceŀla"
+
+#: eeschema/plothpgl.cpp:401
+msgid "** Plot End **\n"
+msgstr "** Fi de traçat **\n"
+
+#: eeschema/plothpgl.cpp:426
+msgid "Plot  "
+msgstr "Traça"
+
+#: eeschema/plotps.cpp:110
+msgid "EESchema Plot PS"
+msgstr "Traçat PS per a EESchema "
+
+#: eeschema/plotps.cpp:122
+#: common/zoom.cpp:355
+msgid "Auto"
+msgstr "Auto"
+
+#: eeschema/plotps.cpp:134
+msgid "B/W"
+msgstr "B/N"
+
+#: eeschema/plotps.cpp:134
+#: common/wxprint.cpp:329
+msgid "Color"
+msgstr "Traçat a color"
+
+#: eeschema/plotps.cpp:136
+msgid "Plot Color:"
+msgstr "Color del traçat:"
+
+#: eeschema/plotps.cpp:165
+msgid "Messages :"
+msgstr "Missatges :"
+
+#: eeschema/plotps.cpp:287
+#, c-format
+msgid "Plot: %s\n"
+msgstr "Traçat: %s\n"
+
+#: eeschema/save_schemas.cpp:98
+msgid "Save file "
+msgstr "Desa fitxer "
+
+#: eeschema/save_schemas.cpp:114
+#: eeschema/save_schemas.cpp:296
+msgid "File write operation failed."
+msgstr "Error a l'escriure al fitxer"
+
+#: eeschema/schedit.cpp:268
+msgid "Push/Pop Hierarchy"
+msgstr "Cursor de jerarquia"
+
+#: eeschema/schedit.cpp:272
+msgid "Add NoConnect Flag"
+msgstr "Afegeix indicador de no connexió"
+
+#: eeschema/schedit.cpp:276
+msgid "Add Wire"
+msgstr "Afegeix línia"
+
+#: eeschema/schedit.cpp:280
+msgid "Add Bus"
+msgstr "Afegeix bus"
+
+#: eeschema/schedit.cpp:284
+msgid "Add Drawing"
+msgstr "Afegeix dibuix"
+
+#: eeschema/schedit.cpp:288
+msgid "Add Junction"
+msgstr "Afegeix junció"
+
+#: eeschema/schedit.cpp:292
+msgid "Add Label"
+msgstr "Afegeix etiqueta"
+
+#: eeschema/schedit.cpp:296
+msgid "Add Global label"
+msgstr "Afegeix etiqueta global"
+
+#: eeschema/schedit.cpp:304
+msgid "Add Wire to Bus Entry"
+msgstr "Afegeix línia a entrada de bus"
+
+#: eeschema/schedit.cpp:308
+msgid "Add Bus to Bus entry"
+msgstr "Afegeix bus a entrada de bus)"
+
+#: eeschema/schedit.cpp:312
+msgid "Add Sheet"
+msgstr "Afegeix pàgina"
+
+#: eeschema/schedit.cpp:316
+msgid "Add PinSheet"
+msgstr "Afegeix pin de full"
+
+#: eeschema/schedit.cpp:320
+msgid "Import PinSheet"
+msgstr "Importa pin de full"
+
+#: eeschema/schedit.cpp:324
+msgid "Add Component"
+msgstr "Afegeix component"
+
+#: eeschema/schedit.cpp:328
+msgid "Add Power"
+msgstr "Afegeix alimentació"
+
+#: eeschema/schframe.cpp:158
+msgid "Schematic modified, Save before exit ?"
+msgstr "Esquema modificat. Voleu desar abans de sortir ?"
+
+#: eeschema/schframe.cpp:248
+msgid "No show Hidden Pins"
+msgstr "Oculta els pins invisibles"
+
+#: eeschema/schframe.cpp:248
+#: eeschema/tool_sch.cpp:260
+msgid "Show Hidden Pins"
+msgstr "Mostra pins invisibles"
+
+#: eeschema/schframe.cpp:251
+msgid "Draw lines at any direction"
+msgstr "Dibuixa línies a qualsevol direcció"
+
+#: eeschema/schframe.cpp:252
+msgid "Draw lines H, V or 45 deg only"
+msgstr "Traça només línies H, V o 45 graus"
+
+#: eeschema/selpart.cpp:45
+msgid "Select Lib"
+msgstr "Selecciona biblioteca"
+
+#: eeschema/selpart.cpp:94
+#, c-format
+msgid "Select Part (%d items)"
+msgstr "Selecciona element (%d elements)"
+
+#: eeschema/sheet.cpp:70
+msgid "Sheet properties"
+msgstr "Propietats de la pàgina"
+
+#: eeschema/sheet.cpp:84
+#: common/svg_print.cpp:167
+msgid "Filename:"
+msgstr "Nom de fitxer:"
+
+#: eeschema/sheet.cpp:90
+msgid "Sheetname:"
+msgstr "Nom de full:"
+
+#: eeschema/sheet.cpp:103
+msgid "&OK"
+msgstr "&D'acord"
+
+#: eeschema/sheet.cpp:126
+msgid "No Filename! Aborted"
+msgstr "No existeix nom de fitxer! Canceŀlat"
+
+#: eeschema/sheet.cpp:400
+msgid "This sheet has no data, cleanup aborted"
+msgstr "Aquest full no conté dades. Neteja canceŀlada"
+
+#: eeschema/sheet.cpp:404
+msgid "Ok to cleanup this sheet"
+msgstr "Prepearat per netejar aquest full"
+
+#: eeschema/sheetlab.cpp:77
+msgid "PinSheet Properties:"
+msgstr "Propietats dels pins de jerarquia"
+
+#: eeschema/sheetlab.cpp:110
+msgid "PinSheet Shape:"
+msgstr "Forma del pin de jerarquia:"
+
+#: eeschema/symbdraw.cpp:74
+msgid "Graphic shape properties"
+msgstr "Propietats de la forma gràfica"
+
+#: eeschema/symbdraw.cpp:100
+msgid "Options :"
+msgstr "Opcions :"
+
+#: eeschema/symbdraw.cpp:146
+msgid "Void"
+msgstr "Sense"
+
+#: eeschema/symbdraw.cpp:146
+msgid "BgFilled"
+msgstr "Fons emplenat"
+
+#: eeschema/symbdraw.cpp:147
+msgid "Fill:"
+msgstr "Emplenat:"
+
+#: eeschema/symbdraw.cpp:830
+#, c-format
+msgid "Arc %.1f deg"
+msgstr "Arc %.1f graus"
+
+#: eeschema/symbedit.cpp:48
+msgid "Import symbol drawings:"
+msgstr "Importa dibuixos de símbols:"
+
+#: eeschema/symbedit.cpp:63
+#, c-format
+msgid "Failed to open Symbol File <%s>"
+msgstr "No es pot obrir fitxer <%s>"
+
+#: eeschema/symbedit.cpp:74
+msgid "Warning: more than 1 part in Symbol File"
+msgstr "Avís: més d'un element al fitxer de sí­mbols"
+
+#: eeschema/symbedit.cpp:80
+msgid "Symbol File is void"
+msgstr "Fitxer de símbols buit"
+
+#: eeschema/symbedit.cpp:130
+msgid "Export symbol drawings:"
+msgstr "Exporta el símbol:"
+
+#: eeschema/symbedit.cpp:149
+#, c-format
+msgid "Save Symbol in [%s]"
+msgstr "Símbol desat a  [%s]"
+
+#: eeschema/symbtext.cpp:72
+msgid "Graphic text properties"
+msgstr "Propietats gràfiques del text"
+
+#: eeschema/symbtext.cpp:99
+msgid " Text : "
+msgstr " Text : "
+
+#: eeschema/symbtext.cpp:115
+msgid " Text Options : "
+msgstr "Opcions del text:"
+
+#: eeschema/tool_lib.cpp:52
+msgid "Add Pins"
+msgstr "Afegeix Pin"
+
+#: eeschema/tool_lib.cpp:56
+msgid "Add graphic text"
+msgstr "Afegeix text gràfic (comentari)"
+
+#: eeschema/tool_lib.cpp:60
+msgid "Add rectangles"
+msgstr "Afegeix rectangle"
+
+#: eeschema/tool_lib.cpp:64
+msgid "Add circles"
+msgstr "Afegeix cercle"
+
+#: eeschema/tool_lib.cpp:68
+msgid "Add arcs"
+msgstr "Afegeix Arc"
+
+#: eeschema/tool_lib.cpp:72
+msgid "Add lines and polygons"
+msgstr "Afegeix línia o polígon"
+
+#: eeschema/tool_lib.cpp:77
+msgid "Move part anchor"
+msgstr "Mou component ancorat"
+
+#: eeschema/tool_lib.cpp:82
+msgid "Import existing drawings"
+msgstr "Importa dibuix existent"
+
+#: eeschema/tool_lib.cpp:86
+msgid "Export current drawing"
+msgstr "Exporta dibuix actual"
+
+#: eeschema/tool_lib.cpp:117
+msgid "Save current loaded library on disk (file update)"
+msgstr "Desa la biblioteca actual a disc"
+
+#: eeschema/tool_lib.cpp:135
+msgid "New part"
+msgstr "Nou element"
+
+#: eeschema/tool_lib.cpp:138
+msgid "Select part to edit"
+msgstr "Selecciona element a editar"
+
+#: eeschema/tool_lib.cpp:143
+msgid "Save current part into current loaded library (in memory)"
+msgstr "Desa element actual a la biblioteca actual (en memòria)"
+
+#: eeschema/tool_lib.cpp:149
+msgid "import part"
+msgstr "Importa element"
+
+#: eeschema/tool_lib.cpp:155
+msgid "export part"
+msgstr "Exporta element"
+
+#: eeschema/tool_lib.cpp:162
+msgid "Create a new library an save current part into"
+msgstr "Crear nova biblioteca i desa element actual en ella"
+
+#: eeschema/tool_lib.cpp:169
+msgid "Edit Part Properties"
+msgstr "Edita propietats de l'element"
+
+#: eeschema/tool_lib.cpp:176
+msgid "Test duplicate pins"
+msgstr "Mira si hi ha pins duplicats"
+
+#: eeschema/tool_lib.cpp:200
+msgid "show as \"De Morgan\" normal part"
+msgstr "Visualitza com representació normal"
+
+#: eeschema/tool_lib.cpp:206
+msgid "show as \"De Morgan\" convert part"
+msgstr "Visualitzar com a representació convertida"
+
+#: eeschema/tool_lib.cpp:232
+msgid "Edit pins part per part (Carefully use!)"
+msgstr "Edita pins un a un (Utilitzar amb coneixement de causa)"
+
+#: eeschema/tool_lib.cpp:251
+#: eeschema/tool_viewlib.cpp:131
+#, c-format
+msgid "Part %c"
+msgstr "Component %c"
+
+#: eeschema/tool_sch.cpp:51
+msgid "New schematic project"
+msgstr "Nou projecte d'esquema"
+
+#: eeschema/tool_sch.cpp:54
+msgid "Open schematic project"
+msgstr "Obre projecte d'esquema"
+
+#: eeschema/tool_sch.cpp:57
+msgid "Save schematic project"
+msgstr "Desa projecte d'esquema"
+
+#: eeschema/tool_sch.cpp:65
+msgid "go to library editor"
+msgstr "Ves a l'editor de biblioteques i components"
+
+#: eeschema/tool_sch.cpp:68
+msgid "go to library browse"
+msgstr "Obre l'explorador de biblioteques"
+
+#: eeschema/tool_sch.cpp:72
+msgid "Schematic Hierarchy Navigator"
+msgstr "Obre el navegador de jerarquia"
+
+#: eeschema/tool_sch.cpp:90
+msgid "Print schematic"
+msgstr "Imprimeix esquema"
+
+#: eeschema/tool_sch.cpp:94
+msgid "Run Cvpcb"
+msgstr "Obre CvPcb (gestor d'associacions de components/mòduls)"
+
+#: eeschema/tool_sch.cpp:97
+msgid "Run Pcbnew"
+msgstr "Obre Pcbnew (editor de circuits impresos)"
+
+#: eeschema/tool_sch.cpp:118
+msgid "Netlist generation"
+msgstr "Genera NetList"
+
+#: eeschema/tool_sch.cpp:121
+msgid "Schematic Annotation"
+msgstr "Numera components"
+
+#: eeschema/tool_sch.cpp:124
+msgid "Schematic Electric Rules Check"
+msgstr "Revisió Erc de control de regles elèctriques"
+
+#  Lista de componentes y referencias cruzadas
+#: eeschema/tool_sch.cpp:127
+msgid "Bill of material and/or Crossreferences"
+msgstr "Genera llistat de material"
+
+#: eeschema/tool_sch.cpp:152
+msgid "Hierarchy Push/Pop"
+msgstr "Cursor de jerarquia"
+
+#: eeschema/tool_sch.cpp:157
+msgid "Add components"
+msgstr "Afegeix component"
+
+#: eeschema/tool_sch.cpp:161
+msgid "Add powers"
+msgstr "Afegeix alimentació"
+
+#: eeschema/tool_sch.cpp:166
+msgid "Add wires"
+msgstr "Afegeix línies de connexió"
+
+#: eeschema/tool_sch.cpp:170
+msgid "Add bus"
+msgstr "Afegeix bus"
+
+#: eeschema/tool_sch.cpp:174
+msgid "Add wire to bus entry"
+msgstr "Afegeix línia a entrada de bus"
+
+#: eeschema/tool_sch.cpp:178
+msgid "Add bus to bus entry"
+msgstr "Afegeix bus a entrada de bus"
+
+#: eeschema/tool_sch.cpp:183
+msgid "Add no connect flag"
+msgstr "Afegeix indicador de no connexió"
+
+#: eeschema/tool_sch.cpp:187
+msgid "Add wire or bus label"
+msgstr "Afegeix etiqueta de línia o bus"
+
+#: eeschema/tool_sch.cpp:200
+msgid "Add hierarchical symbol (sheet)"
+msgstr "Afegeix símbol jerarquic de full"
+
+#: eeschema/tool_sch.cpp:204
+msgid "import glabel from sheet & create pinsheet"
+msgstr "Importa etiquetes globals i creació de pins"
+
+#: eeschema/tool_sch.cpp:208
+msgid "Add hierachical pin to sheet"
+msgstr "Afegeix pin de jerarquia a full"
+
+#: eeschema/tool_sch.cpp:217
+msgid "Add graphic text (comment)"
+msgstr "Afegeix text gràfic (Comentari)"
+
+#: eeschema/tool_sch.cpp:265
+msgid "HV orientation for Wires and Bus"
+msgstr "Força direcció H, V i X  per línies i busos"
+
+#: eeschema/tool_viewlib.cpp:52
+msgid "Select library to browse"
+msgstr "Selecciona la biblioteca a examinar"
+
+#: eeschema/tool_viewlib.cpp:56
+msgid "Select part to browse"
+msgstr "Selecciona element a visualitzar"
+
+#: eeschema/tool_viewlib.cpp:61
+msgid "Display previous part"
+msgstr "Mostra element anterior"
+
+#: eeschema/tool_viewlib.cpp:65
+msgid "Display next part"
+msgstr "Mostra element següent"
+
+#: eeschema/tool_viewlib.cpp:87
+msgid "Show as \"De Morgan\" normal part"
+msgstr "Mostra en representació normal"
+
+#: eeschema/tool_viewlib.cpp:91
+msgid "Show as \"De Morgan\" convert part"
+msgstr "Mostra en representació \" De Morgan\""
+
+#: eeschema/tool_viewlib.cpp:101
+msgid "View component documents"
+msgstr "Mostra documents de component"
+
+#: eeschema/viewlib_frame.cpp:90
+msgid "Library browser"
+msgstr "Explorador de biblioteques"
+
+#: eeschema/viewlibs.cpp:117
+msgid "Browse library: "
+msgstr "Cerca biblioteca:"
+
+#: eeschema/viewlibs.cpp:308
+#, c-format
+msgid "Current Part: <%s> (is Alias of <%s>)"
+msgstr "Element actual: <%s> (es àlies de <%s>)"
+
+#: eeschema/viewlibs.cpp:313
+#, c-format
+msgid "Error: Root Part <%s> not found"
+msgstr "Error: element arrel <%s> no trobat"
+
+#: eeschema/viewlibs.cpp:332
+#, c-format
+msgid "Current Part: <%s>"
+msgstr "Element actual: <%s>"
+
+#: cvpcb/autosel.cpp:71
+#, c-format
+msgid "Library: <%s> not found"
+msgstr "Biblioteca: <%s > no trobada"
+
+#: cvpcb/autosel.cpp:110
+#, c-format
+msgid "%d equivalences"
+msgstr "%d equivalències"
+
+#: cvpcb/autosel.cpp:168
+#, c-format
+msgid "Component %s: Footprint %s not found in libraries"
+msgstr "Component %s: Petjada %s no trobada en biblioteques"
+
+#: cvpcb/cvframe.cpp:245
+msgid "Save Net List & Cmp"
+msgstr "Desa NetList i llista de components"
+
+#: cvpcb/cvframe.cpp:275
+msgid "Delete selections"
+msgstr "Esborra les associacions existents"
+
+#: cvpcb/cvframe.cpp:289
+#: cvpcb/init.cpp:133
+#, c-format
+msgid "Componants: %d (free: %d)"
+msgstr "Components: %d (lliures: %d)"
+
+#: cvpcb/cvpcb.cpp:41
+msgid "Cvpcb is already running, Continue?"
+msgstr "Cvpcb ja s'està executant. Voleu continuar ?"
+
+#: cvpcb/displayframe.cpp:127
+#: cvpcb/displayframe.cpp:131
+msgid "1:1 zoom"
+msgstr "1:1 Zoom"
+
+#: cvpcb/init.cpp:63
+#, c-format
+msgid "Components: %d (free: %d)"
+msgstr "Components: %d (lliures: %d)"
+
+#: cvpcb/init.cpp:99
+msgid "Unknown Netlist Format"
+msgstr "Format NetList desconegut"
+
+#: cvpcb/init.cpp:153
+msgid "Unable to create component file (.cmp)"
+msgstr "Impossible crear el fitxer component (.cmp)"
+
+#: cvpcb/init.cpp:160
+msgid "Unable to create netlist file"
+msgstr "Impossble crear el fitxer Netlist"
+
+#: cvpcb/init.cpp:189
+msgid "Load Net List"
+msgstr "Carrega NetList"
+
+#: cvpcb/listboxes.cpp:235
+#, c-format
+msgid "Modules: %d"
+msgstr "Mòduls: %d"
+
+#: cvpcb/loadcmp.cpp:51
+msgid "This file is NOT a library file"
+msgstr "El fitxer NO és un fitxer de biblioteca"
+
+#: cvpcb/loadcmp.cpp:98
+#, c-format
+msgid "Module %s not found"
+msgstr "Mòdul %s no trobat"
+
+#: cvpcb/menucfg.cpp:163
+msgid "Read Cfg"
+msgstr "Carrega configuració"
+
+#: cvpcb/menucfg.cpp:216
+#: cvpcb/menucfg.cpp:471
+msgid "Equiv"
+msgstr "Equiv"
+
+#: cvpcb/menucfg.cpp:228
+msgid "Lib Dir:"
+msgstr "Dir Bibli:"
+
+#: cvpcb/menucfg.cpp:234
+msgid "Net Input Ext:"
+msgstr "Node d'entrada ext:"
+
+#: cvpcb/menucfg.cpp:240
+msgid "Pkg Ext:"
+msgstr "Encapsulat Ext:"
+
+#: cvpcb/menucfg.cpp:257
+msgid "Cmp ext:"
+msgstr "Comp. ext.:"
+
+#: cvpcb/menucfg.cpp:261
+msgid "Lib ext:"
+msgstr "Bibl. ext:   "
+
+#: cvpcb/menucfg.cpp:265
+msgid "NetOut ext:"
+msgstr "NetOut ext:   "
+
+#: cvpcb/menucfg.cpp:269
+msgid "Equiv ext:"
+msgstr "Equiv ext:    "
+
+#: cvpcb/menucfg.cpp:273
+msgid "Retro ext:"
+msgstr "Retro ext:     "
+
+#: cvpcb/options.cpp:153
+msgid "&Pad Fill"
+msgstr "&Illot emplenat"
+
+#: cvpcb/options.cpp:159
+msgid "Pad &Num"
+msgstr "&Nombre d'illot"
+
+#: cvpcb/options.cpp:163
+msgid "&Filaire"
+msgstr "&Filar"
+
+#: cvpcb/options.cpp:163
+msgid "&Filled"
+msgstr "&Emplenat"
+
+#: cvpcb/options.cpp:163
+msgid "&Sketch"
+msgstr "&Esbós"
+
+#: cvpcb/options.cpp:165
+msgid "Edges:"
+msgstr "Vores:"
+
+#: cvpcb/options.cpp:173
+msgid "Texts:"
+msgstr "Texts:"
+
+#: cvpcb/rdorcad.cpp:74
+msgid "Netlist Format: EESchema"
+msgstr "Format NetList: EEschema"
+
+#: cvpcb/rdorcad.cpp:117
+#, c-format
+msgid "Netlist error: %s"
+msgstr "Error NetList: %s "
+
+#: cvpcb/tool_cvpcb.cpp:33
+msgid "Open Netlist"
+msgstr "Obre NetList"
+
+#: cvpcb/tool_cvpcb.cpp:36
+msgid "Save Nelist and Cmp list"
+msgstr "Desa NetList i llista de components"
+
+#: cvpcb/tool_cvpcb.cpp:40
+msgid "Configuration"
+msgstr "Configuració"
+
+#: cvpcb/tool_cvpcb.cpp:44
+msgid "View selected part"
+msgstr "Mostra element seleccionat"
+
+#: cvpcb/tool_cvpcb.cpp:47
+msgid "Automatic Association"
+msgstr "Associació automàtica"
+
+#: cvpcb/tool_cvpcb.cpp:51
+msgid "Select previous free component"
+msgstr "Selecciona component lliure anterior"
+
+#: cvpcb/tool_cvpcb.cpp:54
+msgid "Select next free component"
+msgstr "Selecciona següent component lliure"
+
+#: cvpcb/tool_cvpcb.cpp:58
+msgid "Delete all associations"
+msgstr "Esborra totes les associacions"
+
+#: cvpcb/tool_cvpcb.cpp:62
+msgid "Create stuff file (component/module list)"
+msgstr "Crea fitxer de correspondència (component/mòdul)"
+
+#: cvpcb/tool_cvpcb.cpp:66
+msgid "Display/print component documentation (footprint.pdf)"
+msgstr "Visualització/impressió de la documentació dels mòduls (patillatge.pdf)"
+
+#: cvpcb/tool_cvpcb.cpp:92
+msgid "&Load Netlist File"
+msgstr "&Obre Netlist ..."
+
+#: cvpcb/tool_cvpcb.cpp:93
+msgid "Load a Netlist"
+msgstr "Obre una Netlist"
+
+#: cvpcb/tool_cvpcb.cpp:99
+msgid "&Save Netlist"
+msgstr "&Desa Netlist ..."
+
+#: cvpcb/tool_cvpcb.cpp:100
+msgid "Save New Netlist and Cmp file"
+msgstr "Desa NetList i llista de components"
+
+#: cvpcb/tool_cvpcb.cpp:105
+msgid "Quit Cvpcb"
+msgstr "Surt de Cvpcb"
+
+#: cvpcb/tool_cvpcb.cpp:119
+msgid "&Configuration"
+msgstr "&Configuració ..."
+
+#: cvpcb/tool_cvpcb.cpp:128
+msgid "&Save config"
+msgstr "&Desa configuració ..."
+
+#: cvpcb/tool_cvpcb.cpp:129
+msgid "Save configuration in current dir"
+msgstr "Desa les opcions al directori de treball"
+
+#: cvpcb/tool_cvpcb.cpp:139
+msgid "Cvpcb &About"
+msgstr "&Quant a Cvpcb ..."
+
+#: cvpcb/tool_cvpcb.cpp:140
+#: kicad/buildmnu.cpp:163
+msgid "Kicad Infos"
+msgstr "Informacions diverses de KiCad"
+
+#: cvpcb/viewlnet.cpp:66
+#: cvpcb/viewlnet.cpp:97
+#: cvpcb/viewlnet.cpp:112
+#: cvpcb/viewlogi.cpp:62
+msgid "File not found "
+msgstr "Fitxer no trobat"
+
+#: cvpcb/viewlnet.cpp:87
+msgid "Format Netlist: ViewLogic net&pkg"
+msgstr "Format Netlist: ViewLogic net&pkg"
+
+#: cvpcb/viewlnet.cpp:203
+#, c-format
+msgid "Component [%s] not found in .pkg file"
+msgstr "Component [%s] no trobat a fitxer .pkg"
+
+#: cvpcb/viewlogi.cpp:56
+msgid "Netlist file "
+msgstr "Fitxers NetList"
+
+#: kicad/buildmnu.cpp:91
+msgid "&Open Project Descr"
+msgstr "&Obre projecte descr ..."
+
+#: kicad/buildmnu.cpp:92
+#: kicad/buildmnu.cpp:216
+msgid "Select an existing project descriptor"
+msgstr "Obre un descriptor de projecte existent"
+
+#: kicad/buildmnu.cpp:97
+msgid "&New Project Descr"
+msgstr "&Nou projecte descr ..."
+
+#: kicad/buildmnu.cpp:98
+#: kicad/buildmnu.cpp:211
+msgid "Create new project descriptor"
+msgstr "Crea un nou descriptor de projecte"
+
+#: kicad/buildmnu.cpp:103
+msgid "&Save Project Descr"
+msgstr "&Desa projecte descr ..."
+
+#: kicad/buildmnu.cpp:104
+#: kicad/buildmnu.cpp:221
+msgid "Save current project descriptor"
+msgstr "Desa el descriptor de projecte actual"
+
+#: kicad/buildmnu.cpp:110
+msgid "Save &Project Files"
+msgstr "&Comprimeix projecte ..."
+
+#: kicad/buildmnu.cpp:111
+msgid "Save and Zip all project files"
+msgstr "Comprimeix i desa fitxers de projecte"
+
+#: kicad/buildmnu.cpp:115
+msgid "&Unzip Archive"
+msgstr "&Descomprimeix projecte ..."
+
+#: kicad/buildmnu.cpp:116
+msgid "UnZip archive file"
+msgstr "Descomprimeix projecte comprimit prèviament"
+
+#: kicad/buildmnu.cpp:121
+msgid "Quit Kicad"
+msgstr "Tanca KiCad"
+
+#: kicad/buildmnu.cpp:136
+msgid "&Editor"
+msgstr "&Editor ..."
+
+#: kicad/buildmnu.cpp:136
+msgid "Text editor"
+msgstr "Obre l'editor de text"
+
+#: kicad/buildmnu.cpp:140
+msgid "&Browse Files"
+msgstr "E&xamina ..."
+
+#: kicad/buildmnu.cpp:140
+msgid "Read or edit files"
+msgstr "Cerca fitxers per llegir o editar"
+
+#: kicad/buildmnu.cpp:147
+msgid "Select Fonts"
+msgstr "Format font ..."
+
+#: kicad/buildmnu.cpp:147
+msgid "Select Fonts and  Font sizes"
+msgstr "Selecciona tipus i mida de lletra"
+
+#: kicad/buildmnu.cpp:163
+msgid "Kicad &About"
+msgstr "&Quant a KiCad "
+
+#: kicad/buildmnu.cpp:168
+msgid "&Projects"
+msgstr "&Projectes"
+
+#: kicad/buildmnu.cpp:169
+msgid "&Browse"
+msgstr "&Examina"
+
+#: kicad/buildmnu.cpp:227
+msgid "Archive all project files"
+msgstr "Arxiva els fitxers del projecte"
+
+#: kicad/buildmnu.cpp:256
+msgid "EeSchema (Schematic editor)"
+msgstr "EeSchema (Editor d'esquemes)"
+
+#: kicad/buildmnu.cpp:261
+msgid "Cvpcb (Componants to modules)"
+msgstr "Cvpcb ( Associació de components a mòduls)"
+
+#: kicad/buildmnu.cpp:266
+msgid "Pcbnew ( board editor )"
+msgstr "Pcbnew (Editor de circuits impresos)"
+
+#: kicad/buildmnu.cpp:271
+msgid "GerbView ( Gerber viewer )"
+msgstr "GerbView (Visualitzador Gerber)"
+
+#: kicad/files-io.cpp:65
+msgid "Load Project files:"
+msgstr "Fitxers de projecte"
+
+#: kicad/files-io.cpp:118
+msgid "Template file non found "
+msgstr "Fitxer de plantilla no trobat"
+
+#: kicad/files-io.cpp:127
+msgid " exists! OK to continue?"
+msgstr " existeix!  Esteu d'acord en continuar ?"
+
+#: kicad/files-io.cpp:156
+msgid "Unzip Project:"
+msgstr "Descomprimeix projecte"
+
+#: kicad/files-io.cpp:167
+msgid ""
+"\n"
+"Open "
+msgstr ""
+"\n"
+"Obre"
+
+#: kicad/files-io.cpp:170
+msgid "Target Directory"
+msgstr "Directori destí"
+
+#: kicad/files-io.cpp:175
+msgid "Unzip in "
+msgstr "Descomprimeix a"
+
+#: kicad/files-io.cpp:195
+msgid "Extract file "
+msgstr "Extreu Fitxer"
+
+#: kicad/files-io.cpp:202
+msgid " OK\n"
+msgstr "D'acord\n"
+
+#: kicad/files-io.cpp:204
+msgid " *ERROR*\n"
+msgstr "*ERROR*\n"
+
+#: kicad/files-io.cpp:228
+msgid "Archive Project files:"
+msgstr "Fitxers comprimits de projecte:"
+
+#: kicad/files-io.cpp:257
+msgid "Compress file "
+msgstr "Comprimeix fitxer"
+
+#: kicad/files-io.cpp:276
+msgid ""
+"\n"
+"Create Zip Archive "
+msgstr ""
+"\n"
+"Crea fitxer comprimit"
+
+#: kicad/mdiframe.cpp:85
+#, c-format
+msgid ""
+"Ready\n"
+"Working dir: %s\n"
+msgstr ""
+"Preparat\n"
+"Directori de treball: %s\n"
+
+#: kicad/mdiframe.cpp:290
+msgid "Load file:"
+msgstr "Carrega fitxer:"
+
+#: kicad/prjconfig.cpp:24
+msgid "Project File <"
+msgstr "Fitxer de projecte <"
+
+#: kicad/prjconfig.cpp:24
+msgid "> not found"
+msgstr "> no trobat"
+
+#: kicad/prjconfig.cpp:35
+msgid ""
+"\n"
+"Working dir: "
+msgstr ""
+"\n"
+"Directori de treball: "
+
+#: kicad/prjconfig.cpp:36
+msgid ""
+"\n"
+"Project: "
+msgstr ""
+"\n"
+"Projecte: "
+
+#: gerbview/affiche.cpp:129
+msgid "  Arc  "
+msgstr "  Arc"
+
+#: gerbview/block.cpp:354
+msgid "Ok to delete block ?"
+msgstr "Està d'acord en eliminar el bloc ?"
+
+#: gerbview/edit.cpp:233
+msgid "No layer selected"
+msgstr "No hi ha capa seleccionada"
+
+#: gerbview/files.cpp:73
+msgid "Not yet available..."
+msgstr "No està disponible encara..."
+
+#: gerbview/files.cpp:115
+msgid "GERBER PLOT files:"
+msgstr "Fitxers de traçat GERBER:"
+
+#: gerbview/files.cpp:162
+#: gerbview/readgerb.cpp:244
+msgid "D CODES files:"
+msgstr "Fitxers D CODES:"
+
+#: gerbview/files.cpp:193
+msgid "Gerber files:"
+msgstr "Fitxers Gerber:"
+
+#: gerbview/gerberframe.cpp:161
+msgid "Layer modified,  Continue ?"
+msgstr "Capa modificada. Voleu continuar ?"
+
+#: gerbview/gerberframe.cpp:198
+msgid "Clear and Load gerber file"
+msgstr "Elimina el circuit imprès actual i carrega fitxer gerber"
+
+#: gerbview/gerberframe.cpp:199
+msgid "Clear all layers and Load new gerber file"
+msgstr "Esborra totes les capes i carrega un nou fitxer gerber"
+
+#: gerbview/gerberframe.cpp:203
+msgid "Load gerber file"
+msgstr "Carrega fitxer gerber"
+
+#: gerbview/gerberframe.cpp:204
+msgid "Load new gerber file on currrent layer"
+msgstr "Carrega un nou fitxer gerber a la capa actual"
+
+#: gerbview/gerberframe.cpp:208
+msgid "Inc Layer and load gerber file"
+msgstr "Inc capa i carrega fitxer gerber"
+
+#: gerbview/gerberframe.cpp:209
+msgid "Increment layer number, and Load gerber file"
+msgstr "Incrementa el nombre de capa i carrega un fitxer gerber"
+
+#: gerbview/gerberframe.cpp:213
+msgid "Load DCodes"
+msgstr "Obre DCodes ..."
+
+#: gerbview/gerberframe.cpp:214
+msgid "Load D-Codes File"
+msgstr "Obre un fitxer de DCodes"
+
+#: gerbview/gerberframe.cpp:218
+msgid "Load Drill"
+msgstr "Carrega forats ..."
+
+#: gerbview/gerberframe.cpp:219
+msgid "Load Drill File (EXCELLON Format)"
+msgstr "Carrega arxiu de forats (Format EXCELLON)"
+
+#: gerbview/gerberframe.cpp:223
+msgid "&New"
+msgstr "&Nou"
+
+#: gerbview/gerberframe.cpp:224
+msgid "Clear all layers"
+msgstr "Esborra totes les capes i crea una nova"
+
+#: gerbview/gerberframe.cpp:229
+msgid "&Save layers"
+msgstr "&Desa Capa ..."
+
+#: gerbview/gerberframe.cpp:230
+msgid "Save current layers (GERBER format)"
+msgstr "Desa la capa actual (format GERBER)"
+
+#: gerbview/gerberframe.cpp:234
+msgid "Save layers as.."
+msgstr "Desa capa &actual com a .."
+
+#: gerbview/gerberframe.cpp:235
+msgid "Save current layers as.."
+msgstr "Desa la capa actual com a.."
+
+#: gerbview/gerberframe.cpp:242
+msgid "Plotting in various formats"
+msgstr "Traça (diversos formats)"
+
+#: gerbview/gerberframe.cpp:245
+msgid "Quit Gerbview"
+msgstr "Treu Gerbview"
+
+#: gerbview/gerberframe.cpp:257
+msgid "&Files and Dir"
+msgstr "&Fitxers i directoris ..."
+
+#: gerbview/gerberframe.cpp:258
+msgid "Setting Files extension, Directories and others..."
+msgstr "Configuració de les extensions de fitxer, directoris i altres..."
+
+#: gerbview/gerberframe.cpp:260
+msgid "Select Colors and Display for layers"
+msgstr "Configuració de colors i visualització de capes"
+
+#: gerbview/gerberframe.cpp:261
+msgid "&Options"
+msgstr "&Opcions ..."
+
+#: gerbview/gerberframe.cpp:262
+msgid " Select general options"
+msgstr "Configuració de les opcions generals"
+
+#: gerbview/gerberframe.cpp:265
+msgid " Select how items are displayed"
+msgstr "Configuració de la visualització"
+
+#: gerbview/gerberframe.cpp:270
+msgid "&Save Gerbview Setup"
+msgstr "&Desa opcions ..."
+
+#: gerbview/gerberframe.cpp:280
+msgid "&List DCodes"
+msgstr "&Llista DCodes ..."
+
+#: gerbview/gerberframe.cpp:281
+msgid "List and Edit DCodes"
+msgstr "Llista i edita DCodes"
+
+#: gerbview/gerberframe.cpp:282
+msgid "&Show source"
+msgstr "Mo&stra font"
+
+#: gerbview/gerberframe.cpp:283
+msgid "Show source file for the current layer"
+msgstr "Mostra el fitxer font de la capa actual"
+
+#: gerbview/gerberframe.cpp:285
+msgid "&Delete Layer"
+msgstr "&Elimina Capa"
+
+#: gerbview/gerberframe.cpp:286
+msgid "Delete current layer"
+msgstr "Elimina la capa actual"
+
+#: gerbview/gerberframe.cpp:291
+msgid "&About"
+msgstr "&Quant a Gerbview"
+
+#: gerbview/gerberframe.cpp:291
+msgid "Gerbview Infos"
+msgstr "Informació quant a Gerbview"
+
+#: gerbview/gerbview.cpp:39
+msgid "Gerbview is already running, Continue?"
+msgstr "Gerbview s'està executant. Voleu continuar ?"
+
+#: gerbview/initpcb.cpp:33
+msgid "Current Data will be lost ?"
+msgstr "Les dades actuals es perdran?"
+
+#: gerbview/initpcb.cpp:86
+msgid "Delete zones ?"
+msgstr "Elimina Zones ?"
+
+#: gerbview/initpcb.cpp:161
+msgid "Delete Tracks?"
+msgstr "Esborra Pistes ?"
+
+#: gerbview/initpcb.cpp:181
+msgid "Delete Pcb Texts"
+msgstr "Esborra Texts Pcb"
+
+#: gerbview/initpcb.cpp:202
+#, c-format
+msgid "Delete Layer %d"
+msgstr "Esborra capa %d"
+
+#: gerbview/onrightclick.cpp:54
+msgid "Copy Block (shift mouse)"
+msgstr "Copia bloc (tecla de majúscules i ratolí­)"
+
+#: gerbview/onrightclick.cpp:55
+msgid "Delete Block (ctrl + drag mouse)"
+msgstr "Elimina bloc (tecla de control + moure ratolí­)"
+
+#: gerbview/options.cpp:156
+msgid "Gerbview Options"
+msgstr "Opcions Gerbview"
+
+#: gerbview/options.cpp:199
+msgid "format: 2.3"
+msgstr "Format: 2.3"
+
+#: gerbview/options.cpp:199
+msgid "format 3.4"
+msgstr "Format 3.4"
+
+#: gerbview/options.cpp:273
+msgid "Gerbview Draw Options"
+msgstr "Opcions de visualització"
+
+#: gerbview/options.cpp:293
+msgid "Lines:"
+msgstr "Línies:"
+
+#: gerbview/options.cpp:301
+msgid "Show D-Codes"
+msgstr "Mostra D-Codes"
+
+#: gerbview/options.cpp:305
+msgid "Spots:"
+msgstr "Punts :"
+
+#: gerbview/readgerb.cpp:228
+#, c-format
+msgid "%d errors while reading gerber file [%s]"
+msgstr "%d Errors durant la lectura del fitxer gerber [%s]"
+
+#: gerbview/reglage.cpp:120
+msgid "Drill File Ext:"
+msgstr "Ext. fitxer de forats"
+
+#: gerbview/reglage.cpp:127
+msgid "Gerber File Ext:"
+msgstr "Ext. fitxer Gerber"
+
+#: gerbview/reglage.cpp:132
+msgid "DCode File Ext:"
+msgstr "Ext. fitxers DCodes"
+
+#: gerbview/rs274x.cpp:251
+#, c-format
+msgid "Command <%c%c> ignored by Gerbview"
+msgstr "Ordre <%c%c> ignorat per Gerbview"
+
+#: gerbview/rs274x.cpp:274
+msgid "Too many include files!!"
+msgstr "Massa fitxers inclosos!!"
+
+#: gerbview/set_color.cpp:146
+msgid "Gerbview Layer Colors:"
+msgstr "Colors de capa Gerview:"
+
+#: gerbview/tool_gerber.cpp:44
+msgid "New World"
+msgstr "Nou món"
+
+#: gerbview/tool_gerber.cpp:49
+msgid "Open existing Layer"
+msgstr "Obre capa existent"
+
+#: gerbview/tool_gerber.cpp:55
+msgid "Save World"
+msgstr "Desa món"
+
+#: gerbview/tool_gerber.cpp:98
+msgid "Print World"
+msgstr "Imprimeix món"
+
+#: gerbview/tool_gerber.cpp:130
+msgid "Find D Codes"
+msgstr "Cerca DCodes"
+
+#: gerbview/tool_gerber.cpp:138
+msgid "Layer "
+msgstr "Capa"
+
+#: gerbview/tool_gerber.cpp:147
+msgid "No tool"
+msgstr "Sense eina"
+
+#: gerbview/tool_gerber.cpp:151
+msgid "Tool "
+msgstr "Eina"
+
+#: gerbview/tool_gerber.cpp:185
+msgid "Add Flashes"
+msgstr "Afegeix flaixos"
+
+#: gerbview/tool_gerber.cpp:191
+msgid "Add Lines"
+msgstr "Afegeix línies"
+
+#: gerbview/tool_gerber.cpp:260
+msgid "Show Spots Sketch"
+msgstr "Mostra esbós de punts"
+
+#: gerbview/tool_gerber.cpp:267
+msgid "Show Lines Sketch"
+msgstr "Mostra esbós de línies"
+
+#: gerbview/tool_gerber.cpp:274
+msgid "Show dcode number"
+msgstr "Mostra el nombre de DCode"
+
+#: common/basicframe.cpp:219
+msgid "Help files not found"
+msgstr "Fitxers d'ajuda no trobats"
+
+#: common/block_commande.cpp:54
+msgid "Block Move"
+msgstr "Mou bloc"
+
+#: common/block_commande.cpp:58
+msgid "Block Drag"
+msgstr "Arrossega bloc"
+
+#: common/block_commande.cpp:62
+msgid "Block Copy"
+msgstr "Copia bloc"
+
+#: common/block_commande.cpp:66
+msgid "Block Delete"
+msgstr "Esborra bloc"
+
+#: common/block_commande.cpp:70
+msgid "Block Save"
+msgstr "Desa bloc"
+
+#: common/block_commande.cpp:74
+msgid "Block Paste"
+msgstr "Enganxa bloc"
+
+#: common/block_commande.cpp:78
+msgid "Win Zoom"
+msgstr "Finestra de zoom"
+
+#: common/block_commande.cpp:82
+msgid "Block Rotate"
+msgstr "Gira bloc"
+
+#: common/block_commande.cpp:86
+msgid "Block Invert"
+msgstr "Inverteix bloc"
+
+#: common/common.cpp:156
+msgid "Copper   "
+msgstr "Coure"
+
+#: common/common.cpp:156
+msgid "Inner L1 "
+msgstr "Interna 1"
+
+#: common/common.cpp:156
+msgid "Inner L2 "
+msgstr "Interna 2"
+
+#: common/common.cpp:156
+msgid "Inner L3 "
+msgstr "Interna 3"
+
+#: common/common.cpp:157
+msgid "Inner L4 "
+msgstr "Interna 4"
+
+#: common/common.cpp:157
+msgid "Inner L5 "
+msgstr "Interna 5"
+
+#: common/common.cpp:157
+msgid "Inner L6 "
+msgstr "Interna 6"
+
+#: common/common.cpp:157
+msgid "Inner L7 "
+msgstr "Interna 7"
+
+#: common/common.cpp:158
+msgid "Inner L8 "
+msgstr "Interna 8"
+
+#: common/common.cpp:158
+msgid "Inner L9 "
+msgstr "Interna 9"
+
+#: common/common.cpp:158
+msgid "Inner L10"
+msgstr "Interna 10"
+
+#: common/common.cpp:158
+msgid "Inner L11"
+msgstr "Interna 11"
+
+#: common/common.cpp:159
+msgid "Inner L12"
+msgstr "Interna 12"
+
+#: common/common.cpp:159
+msgid "Inner L13"
+msgstr "Interna 13"
+
+#: common/common.cpp:159
+msgid "Inner L14"
+msgstr "Interna 14"
+
+#: common/common.cpp:159
+msgid "Component"
+msgstr "Comp."
+
+#: common/common.cpp:160
+msgid "Adhes Cop"
+msgstr "Adhes Cu "
+
+#: common/common.cpp:160
+msgid "Adhes Cmp"
+msgstr "Adhes  Cmp"
+
+#: common/common.cpp:160
+msgid "SoldP Cop"
+msgstr "SoldP Cu "
+
+#: common/common.cpp:160
+msgid "SoldP Cmp"
+msgstr "SoldP Cmp"
+
+#: common/common.cpp:161
+msgid "SilkS Cop"
+msgstr "Serigr Cu "
+
+#: common/common.cpp:161
+msgid "SilkS Cmp"
+msgstr "Serigr Cmp"
+
+#: common/common.cpp:161
+msgid "Mask Copp"
+msgstr "Màscara Cu "
+
+#: common/common.cpp:161
+msgid "Mask Cmp "
+msgstr "Màscara Cmp"
+
+#: common/common.cpp:162
+msgid "Drawings "
+msgstr "Dibuixos"
+
+#: common/common.cpp:162
+msgid "Comments "
+msgstr "Comentaris "
+
+#: common/common.cpp:162
+msgid "Eco1     "
+msgstr "Eco1     "
+
+#: common/common.cpp:162
+msgid "Eco2     "
+msgstr "Eco2     "
+
+#: common/common.cpp:163
+msgid "Edges Pcb"
+msgstr "Vores Pcb"
+
+#: common/common.cpp:163
+msgid "---      "
+msgstr "---      "
+
+#: common/confirm.cpp:100
+msgid "Infos:"
+msgstr "Infos:"
+
+#: common/drawframe.cpp:269
+msgid "Inch"
+msgstr "Polz."
+
+#: common/drawframe.cpp:275
+msgid "??"
+msgstr "??"
+
+#: common/eda_doc.cpp:95
+msgid "Doc File "
+msgstr "Fitxer Doc "
+
+#: common/eda_doc.cpp:136
+msgid " Cannot find the PDF viewer (xpdf or konqueror) in /usr/bin/"
+msgstr "No trobo el visor de PDF (xpdf o konkeror) a /usr/bin/"
+
+#: common/eda_doc.cpp:144
+#, c-format
+msgid "Unknown MIME type for Doc File [%s] (%s)"
+msgstr "Tipus MIME desconegut pel fitxer Doc [%s][%s]"
+
+#: common/edaappl.cpp:393
+msgid "Default"
+msgstr "Defecte"
+
+#: common/edaappl.cpp:403
+msgid "French"
+msgstr "Francès"
+
+#: common/edaappl.cpp:408
+msgid "Spanish"
+msgstr "Castellà"
+
+#: common/edaappl.cpp:413
+msgid "Portuguese"
+msgstr "Portuguès"
+
+#: common/edaappl.cpp:417
+msgid "Dutch"
+msgstr "Holandès "
+
+#: common/edaappl.cpp:423
+msgid "Russian"
+msgstr "Rus"
+
+#: common/edaappl.cpp:463
+msgid "Language"
+msgstr "&llengua "
+
+#: common/get_component_dialog.cpp:101
+msgid "History list:"
+msgstr "Llista d'Històrics:"
+
+#: common/get_component_dialog.cpp:113
+msgid "Search KeyWord"
+msgstr "Cerca paraula clau"
+
+#: common/get_component_dialog.cpp:123
+msgid "List All"
+msgstr "Llista Tots"
+
+#: common/get_component_dialog.cpp:129
+msgid "By Lib Browser"
+msgstr "Per cercador de biblioteques"
+
+#: common/infospgm.cpp:43
+msgid "Build Version:"
+msgstr "Versió:"
+
+#: common/infospgm.cpp:45
+msgid "Author:"
+msgstr "Autor: "
+
+#: common/infospgm.cpp:46
+msgid "Based on wxWidgets"
+msgstr "Basat en wxWidgets"
+
+#: common/infospgm.cpp:47
+msgid ""
+"\n"
+"\n"
+"GPL License"
+msgstr ""
+"\n"
+"\n"
+"Llicència GPL"
+
+#: common/infospgm.cpp:48
+msgid ""
+"\n"
+"\n"
+"Web sites:\n"
+msgstr ""
+"\n"
+"\n"
+"LLocs Web:\n"
+
+#: common/selcolor.cpp:93
+msgid "Colors"
+msgstr "Colors"
+
+#: common/setpage.cpp:122
+msgid "Page Settings"
+msgstr "Format de pàgina"
+
+#: common/setpage.cpp:184
+#, c-format
+msgid "Number of sheets: %d"
+msgstr "Nombre de fulls: %d"
+
+#: common/setpage.cpp:187
+#, c-format
+msgid "Sheet number: %d"
+msgstr "Full número: %d"
+
+#: common/setpage.cpp:193
+msgid "Revision:"
+msgstr "Revisió:"
+
+#: common/setpage.cpp:198
+msgid "Company:"
+msgstr "Empresa:"
+
+#: common/setpage.cpp:323
+msgid "Size "
+msgstr "Mida"
+
+#: common/setpage.cpp:327
+msgid "Page Size:"
+msgstr "Mida de full:"
+
+#: common/svg_print.cpp:124
+msgid "Print SVG file"
+msgstr "Imprimeix fitxer SVG"
+
+#: common/svg_print.cpp:141
+#: common/wxprint.cpp:314
+msgid "Pen width mini"
+msgstr "Gruix de ploma mínim"
+
+#: common/svg_print.cpp:156
+#: common/wxprint.cpp:344
+msgid "Current"
+msgstr "Actual"
+
+#: common/svg_print.cpp:160
+#: common/wxprint.cpp:350
+msgid "Page Print:"
+msgstr "Imprimeix pàgina"
+
+#: common/svg_print.cpp:173
+#: common/wxprint.cpp:383
+msgid "&Print"
+msgstr "Im&primeix"
+
+#: common/wxprint.cpp:204
+msgid "Error Init Printer info"
+msgstr "Informació d'error d'inici d'impressió"
+
+#: common/wxprint.cpp:242
+msgid "Print"
+msgstr "Imprimeix"
+
+#: common/wxprint.cpp:282
+msgid "fit in page"
+msgstr "Encaixa a la pàgina"
+
+#: common/wxprint.cpp:282
+msgid "Scale 0.5"
+msgstr "Escala 0,5"
+
+#: common/wxprint.cpp:282
+msgid "Scale 0.7"
+msgstr "Escala 0,7"
+
+#: common/wxprint.cpp:283
+msgid "Scale 1.4"
+msgstr "Escala 1,4"
+
+#: common/wxprint.cpp:283
+msgid "Scale 4"
+msgstr "Escala 4"
+
+#: common/wxprint.cpp:288
+msgid "Approx. Scale:"
+msgstr "Escala aproximada:"
+
+#: common/wxprint.cpp:329
+msgid "Black"
+msgstr "Negre"
+
+#: common/wxprint.cpp:333
+msgid "Color Print:"
+msgstr "Imprimeix a color:"
+
+#: common/wxprint.cpp:342
+msgid "1 page per layer"
+msgstr "1 pàgina per capa"
+
+#: common/wxprint.cpp:342
+msgid "Single Page"
+msgstr "Pàgina simple"
+
+#: common/wxprint.cpp:362
+msgid "Print S&etup"
+msgstr "Opcions d'impressió"
+
+#: common/wxprint.cpp:369
+msgid "P&age setup"
+msgstr "Format de pà&gina  "
+
+#: common/wxprint.cpp:376
+msgid "Pre&view"
+msgstr "&Previsualització ...    "
+
+#: common/wxprint.cpp:512
+msgid "Printer Problem!"
+msgstr "Problema d'impressora!"
+
+#: common/wxprint.cpp:562
+msgid "There was a problem previewing"
+msgstr "Hi ha un problema de previsualització"
+
+#: common/wxprint.cpp:625
+msgid "There was a problem printing"
+msgstr "Hi ha un problema d'impressió"
+
+#: common/wxprint.cpp:645
+#, c-format
+msgid "Print page %d"
+msgstr "Imprimeix pàgina %d"
+
+#: common/wxwineda.cpp:119
+msgid "Size (mm):"
+msgstr "Mida (mm):"
+
+#: common/wxwineda.cpp:119
+msgid "Size (\"):"
+msgstr "Mida (\"):"
+
+#: common/wxwineda.cpp:183
+#: common/wxwineda.cpp:193
+msgid "Pos "
+msgstr "Pos "
+
+#: common/wxwineda.cpp:184
+msgid "X (mm):"
+msgstr "X (mm):"
+
+#: common/wxwineda.cpp:184
+msgid "X (\"):"
+msgstr "X (\"):"
+
+#: common/wxwineda.cpp:194
+msgid "Y (mm):"
+msgstr "Y (mm):"
+
+#: common/wxwineda.cpp:194
+msgid "Y (\"):"
+msgstr "Y (\"):"
+
+#: common/wxwineda.cpp:323
+msgid " (\"):"
+msgstr " (\"):"
+
+#: common/wxwineda.cpp:327
+msgid " (mm):"
+msgstr " (mm):"
+
+#: common/zoom.cpp:313
+msgid "Zoom: "
+msgstr "Zoom: "
+
+#: common/zoom.cpp:332
+#: common/zoom.cpp:343
+msgid "grid user"
+msgstr "Reixeta d'usuari"
+
+#: common/zoom.cpp:348
+msgid "Zoom +"
+msgstr "Zoom +"
+
+#: common/zoom.cpp:349
+msgid "Zoom -"
+msgstr "Zoom -"
+
+#: common/zoom.cpp:353
+msgid "Zoom Select"
+msgstr "Selecciona zoom ..."
+
+#: common/zoom.cpp:356
+msgid "Redraw"
+msgstr "Redibuixa"
+
+#: common/zoom.cpp:387
+#: common/zoom.cpp:407
+msgid "Grid Select"
+msgstr "Selecciona reixeta ..."
+
+#: pcbnew/gen_self.h:212
+msgid "Length(inch):"
+msgstr "Longitud (polzades):"
+
+#: pcbnew/gen_self.h:218
+msgid "Length(mm):"
+msgstr "Longitud (mm):"
+
+#: pcbnew/gen_self.h:227
+msgid "Requested length < minimum length"
+msgstr "Longitud soŀlicitada < longitud mínima"
+
+#: pcbnew/gen_self.h:247
+msgid "Unable to create line: Requested length is too big"
+msgstr "Impossible crear la línia: longitud massa gran"
+
+#: pcbnew/pcbnew.h:253
+msgid "Blind Via"
+msgstr "Via cega"
+
+#: eeschema/optionsframe.h:60
+#: eeschema/optionsframe.h:63
+msgid "optionsframe"
+msgstr "Opcions"
+
+#: gerbview/set_color.h:5
+msgid "Layers 1-16"
+msgstr "Capes 1-16"
+
+#: gerbview/set_color.h:10
+msgid "Layers 17-32"
+msgstr "Capes 17-32"
+
+#: gerbview/set_color.h:15
+msgid "Layer 1"
+msgstr "Capa 1"
+
+#: gerbview/set_color.h:22
+msgid "Layer 2"
+msgstr "Capa 2"
+
+#: gerbview/set_color.h:29
+msgid "Layer 3"
+msgstr "Capa 3"
+
+#: gerbview/set_color.h:36
+msgid "Layer 4"
+msgstr "Capa 4"
+
+#: gerbview/set_color.h:43
+msgid "Layer 5"
+msgstr "Capa 5"
+
+#: gerbview/set_color.h:50
+msgid "Layer 6"
+msgstr "Capa 6"
+
+#: gerbview/set_color.h:57
+msgid "Layer 7"
+msgstr "Capa 7"
+
+#: gerbview/set_color.h:64
+msgid "Layer 8"
+msgstr "Capa 8"
+
+#: gerbview/set_color.h:71
+msgid "Layer 9"
+msgstr "Capa 9"
+
+#: gerbview/set_color.h:78
+msgid "Layer 10"
+msgstr "Capa 10"
+
+#: gerbview/set_color.h:85
+msgid "Layer 11"
+msgstr "Capa 11"
+
+#: gerbview/set_color.h:92
+msgid "Layer 12"
+msgstr "Capa 12"
+
+#: gerbview/set_color.h:99
+msgid "Layer 13"
+msgstr "Capa 13"
+
+#: gerbview/set_color.h:106
+msgid "Layer 14"
+msgstr "Capa 14"
+
+#: gerbview/set_color.h:113
+msgid "Layer 15"
+msgstr "Capa 15"
+
+#: gerbview/set_color.h:120
+msgid "Layer 16"
+msgstr "Capa 16"
+
+#: gerbview/set_color.h:127
+msgid "Layer 17"
+msgstr "Capa 17"
+
+#: gerbview/set_color.h:134
+msgid "Layer 18"
+msgstr "Capa 18"
+
+#: gerbview/set_color.h:141
+msgid "Layer 19"
+msgstr "Capa 19"
+
+#: gerbview/set_color.h:148
+msgid "Layer 20"
+msgstr "Capa 20"
+
+#: gerbview/set_color.h:155
+msgid "Layer 21"
+msgstr "Capa 21"
+
+#: gerbview/set_color.h:162
+msgid "Layer 22"
+msgstr "Capa 22"
+
+#: gerbview/set_color.h:169
+msgid "Layer 23"
+msgstr "Capa 23"
+
+#: gerbview/set_color.h:176
+msgid "Layer 24"
+msgstr "Capa 24"
+
+#: gerbview/set_color.h:183
+msgid "Layer 25"
+msgstr "Capa 25"
+
+#: gerbview/set_color.h:190
+msgid "Layer 26"
+msgstr "Capa 26"
+
+#: gerbview/set_color.h:197
+msgid "Layer 27"
+msgstr "Capa 27"
+
+#: gerbview/set_color.h:204
+msgid "Layer 28"
+msgstr "Capa 28"
+
+#: gerbview/set_color.h:211
+msgid "Layer 29"
+msgstr "Capa 29"
+
+#: gerbview/set_color.h:218
+msgid "Layer 30"
+msgstr "Capa 30"
+
+#: gerbview/set_color.h:225
+msgid "Layer 31"
+msgstr "Capa 31"
+
+#: gerbview/set_color.h:232
+msgid "Layer 32"
+msgstr "Capa 32"
+
+#: gerbview/set_color.h:240
+msgid "Others"
+msgstr "Altres"
+
+#: gerbview/set_color.h:254
+msgid "DCodes id."
+msgstr "Identificador de DCodes"
+

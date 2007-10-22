@@ -1,0 +1,36 @@
+/* XPM */
+static char *lang_catalan_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 14 1",
+"* c #E40E04",
+"@ c #F4C20C",
+"  c #FCFE04",
+"X c #F40604",
+"& c #FCA60C",
+"o c #FC0204",
+". c #FCE60C",
+"= c #FCE614",
+"- c #FCE61C",
+"O c #F42E04",
+"+ c #FCFA04",
+"% c #F48E0C",
+"$ c #F46204",
+"# c #F4620C",
+/* pixels */
+"                ",
+"................",
+"XoXoXXoXoXoXoXoX",
+"OOOOOOOOOOOOOOOO",
+"++++++++++++++++",
+"@@@@@@@@@@@@@@@@",
+"oooooooooooooooo",
+"#$#$#$#$#$#$#$#$",
+"+ + + + +++ + + ",
+"%%%%%%%%%%%%%%%%",
+"XXXXXXXXXXXXXXXX",
+"&&&&&&&&&&&&&&&&",
+"                ",
+"$$$$$$$$$$$$$$$$",
+"****************",
+"=-=-=-=-=-=-=-=-"
+};
