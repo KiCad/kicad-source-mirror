@@ -5,6 +5,15 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2007-Oct-23 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
+================================================================================
++ eeschema
+  * Sizers have now been provided for the "EESchema Preferences" dialog box,
+    together with "OK", "Cancel", and "Apply" buttons. And an additional bitmap
+    button and checkbox have also been provided for the purpose of editing the
+    color and visibility of the grid.
+
+
 2007-Oct-21 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
 ================================================================================
 + all

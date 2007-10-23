@@ -1,4 +1,24 @@
-/* Set up color Layers */
+/***************/
+/* eelayer.cpp */
+/***************/
+
+/* Set up color Layers for EESchema
+ */
+
+#if defined(__GNUG__) && !defined(__APPLE__)
+#pragma implementation "eelayer.h"
+#endif
+
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+#include "wx/wx.h"
+#endif
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -12,254 +32,23 @@
 
 #include "protos.h"
 
+#include "eelayer.h"
 
-/* Variables locales */
+// Local variables:
 
-/* Fonctions locales: */
-
-/* Macro utile : */
-#define ADR( numlayer ) & (g_LayerDescr.LayerColor[numlayer])
-
-#define BUTT_SIZE_X 30
-#define BUTT_SIZE_Y 20
+int CurrentColor[NB_BUTT]; // Holds color for each layer while dialog box open
 
 
-enum col_sel_id {
-    ID_COLOR_SETUP = 1800
-};
+IMPLEMENT_DYNAMIC_CLASS( WinEDA_SetColorsFrame, wxDialog )
 
-/**********************************/
-/* Liste des menus de Menu_Layers */
-/**********************************/
-struct ColorButton
-{
-    wxString        m_Name;
-    int*            m_Color;
-    int             m_Id;
-    wxBitmapButton* m_Button;
-    int             m_State;
-};
-
-static ColorButton Msg_General =
-{
-    _( "General" ),                    /* Title */
-    NULL
-};
-
-static ColorButton Msg_Sheets =
-{
-    _( "Sheets" ),                 /* Title */
-    NULL
-};
-
-static ColorButton Layer_Wire_Item =
-{
-    _( "Wire" ),                    /* Title */
-    ADR( LAYER_WIRE )               /* adr du parametre optionnel */
-};
-
-static ColorButton Layer_Bus_Item =
-{
-    _( "Bus" ),                     /* Title */
-    ADR( LAYER_BUS )                /* adr du parametre optionnel */
-};
-
-static ColorButton Layer_Jonction_Item =
-{
-    _( "Junction" ),                /* Title */
-    ADR( LAYER_JUNCTION )           /* adr du parametre optionnel */
-};
-
-static ColorButton Layer_LocalLabel_Item =
-{
-    _( "Label" ),               /* Title */
-    ADR( LAYER_LOCLABEL )       /* adr du parametre optionnel */
-};
-
-static ColorButton Layer_GlobLabel_Item =
-{
-    _( "GlobLabel" ),           /* Title */
-    ADR( LAYER_GLOBLABEL )      /* adr du parametre optionnel */
-};
-
-static ColorButton Layer_PinNum_Item =
-{
-    _( "PinNum" ),              /* Title */
-    ADR( LAYER_PINNUM )         /* adr du parametre optionnel */
-};
-
-static ColorButton Layer_PinNam_Item =
-{
-    _( "PinNam" ),              /* Title */
-    ADR( LAYER_PINNAM )         /* adr du parametre optionnel */
-};
-
-static ColorButton Layer_Reference_Item =
-{
-    _( "Reference" ),               /* Title */
-    ADR( LAYER_REFERENCEPART )      /* adr du parametre optionnel */
-};
-
-static ColorButton Layer_Value_Item =
-{
-    _( "Value" ),               /* Title */
-    ADR( LAYER_VALUEPART )      /* adr du parametre optionnel */
-};
-
-static ColorButton Layer_Fields_Item =
-{
-    _( "Fields" ),              /* Title */
-    ADR( LAYER_FIELDS )         /* adr du parametre optionnel */
-};
-
-static ColorButton Layer_BodyDevice_Item =
-{
-    _( "Body" ),                    /* Title */
-    ADR( LAYER_DEVICE )             /* adr du parametre optionnel */
-};
-
-static ColorButton Layer_BodyBackgroundDevice_Item =
-{
-    _( "Body Bg" ),                         /* Title */
-    ADR( LAYER_DEVICE_BACKGROUND )          /* adr du parametre optionnel */
-};
-
-static ColorButton MsgDevice_Item =
-{
-    _( "Device" ),                 /* Title */
-    NULL
-};
-
-static ColorButton Layer_Notes_Item =
-{
-    _( "Notes" ),               /* Title */
-    ADR( LAYER_NOTES )          /* adr du parametre optionnel */
-};
-
-static ColorButton Layer_NetNam_Item =
-{
-    _( "Netname" ),                 /* Title */
-    ADR( LAYER_NETNAM )             /* adr du parametre optionnel */
-};
-
-static ColorButton Layer_Pin_Item =
-{
-    _( "Pin" ),                     /* Title */
-    ADR( LAYER_PIN )                /* adr du parametre optionnel */
-};
-
-static ColorButton Layer_Sheet_Item =
-{
-    _( "Sheet" ),               /* Title */
-    ADR( LAYER_SHEET )          /* adr du parametre optionnel */
-};
-
-static ColorButton Layer_SheetName_Item =
-{
-    _( "SheetName" ),           /* Title */
-    ADR( LAYER_SHEETNAME )      /* adr du parametre optionnel */
-};
-
-static ColorButton Layer_SheetFileName_Item =
-{
-    _( "Sheetfile" ),           /* Title */
-    ADR( LAYER_SHEETFILENAME )  /* adr du parametre optionnel */
-};
-
-static ColorButton Layer_SheetLabel_Item =
-{
-    _( "SheetLabel" ),          /* Title */
-    ADR( LAYER_SHEETLABEL )     /* adr du parametre optionnel */
-};
-
-static ColorButton Layer_NoConnect_Item =
-{
-    _( "NoConn" ),              /* Title */
-    ADR( LAYER_NOCONNECT )      /* adr du parametre optionnel */
-};
-
-
-static ColorButton Msg_ErcMarck =
-{
-    _( "Erc Mark" ),                   /* Title */
-    NULL
-};
-
-static ColorButton Layer_Erc_Warning_Item =
-{
-    _( "Erc Warning" ),             /* Title */
-    ADR( LAYER_ERC_WARN )           /* adr du parametre optionnel */
-};
-
-static ColorButton Layer_Erc_Error_Item =
-{
-    _( "Erc Error" ),               /* Title */
-    ADR( LAYER_ERC_ERR )            /* adr du parametre optionnel */
-};
-
-#define NB_BUTT 26
-static ColorButton* laytool_list[NB_BUTT + 1] = {
-    &Msg_General,
-    &Layer_Wire_Item,
-    &Layer_Bus_Item,
-    &Layer_Jonction_Item,
-    &Layer_LocalLabel_Item,
-    &Layer_GlobLabel_Item,
-    &Layer_NetNam_Item,
-    &Layer_Notes_Item,
-    &Layer_NoConnect_Item,
-
-    &MsgDevice_Item,
-    &Layer_BodyDevice_Item,
-    &Layer_BodyBackgroundDevice_Item,
-    &Layer_Pin_Item,
-    &Layer_PinNum_Item,
-    &Layer_PinNam_Item,
-    &Layer_Reference_Item,
-    &Layer_Value_Item,
-    &Layer_Fields_Item,
-
-    &Msg_Sheets,
-    &Layer_Sheet_Item,
-    &Layer_SheetFileName_Item,
-    &Layer_SheetName_Item,
-    &Layer_SheetLabel_Item,
-
-    &Msg_ErcMarck,
-    &Layer_Erc_Warning_Item,
-    &Layer_Erc_Error_Item,
-
-    NULL
-};
-
-/*************************************************************/
-/* classe derivee pour la frame de Configuration des couleurs*/
-/*************************************************************/
-
-class WinEDA_SetColorsFrame : public wxDialog
-{
-private:
-    WinEDA_DrawFrame* m_Parent;
-    wxRadioBox*       m_SelBgColor;
-
-public:
-
-    // Constructor and destructor
-    WinEDA_SetColorsFrame( WinEDA_DrawFrame * parent, const wxPoint &framepos );
-    ~WinEDA_SetColorsFrame() { };
-
-private:
-    void    SetColor( wxCommandEvent& event );
-    void    BgColorChoice( wxCommandEvent& event );
-
-    DECLARE_EVENT_TABLE()
-};
-/* Table des evenements pour WinEDA_SetColorsFrame */
+// Table of events for WinEDA_SetColorsFrame
 BEGIN_EVENT_TABLE( WinEDA_SetColorsFrame, wxDialog )
-    EVT_RADIOBOX( ID_SEL_BG_COLOR, WinEDA_SetColorsFrame::BgColorChoice )
-    EVT_COMMAND_RANGE( ID_COLOR_SETUP, ID_COLOR_SETUP + 26,
+    EVT_COMMAND_RANGE( ID_COLOR_SETUP, ID_COLOR_SETUP + NB_BUTT - 1,
                        wxEVT_COMMAND_BUTTON_CLICKED,
                        WinEDA_SetColorsFrame::SetColor )
+    EVT_BUTTON( wxID_OK, WinEDA_SetColorsFrame::OnOkClick )
+    EVT_BUTTON( wxID_CANCEL, WinEDA_SetColorsFrame::OnCancelClick )
+    EVT_BUTTON( wxID_APPLY, WinEDA_SetColorsFrame::OnApplyClick )
 END_EVENT_TABLE()
 
 
@@ -276,55 +65,133 @@ void DisplayColorSetupFrame( WinEDA_DrawFrame* parent,
 }
 
 
-/**********************************************************************/
-WinEDA_SetColorsFrame::WinEDA_SetColorsFrame( WinEDA_DrawFrame* parent,
-                                              const wxPoint&    framepos ) :
-    wxDialog( parent, -1, _( "EESchema Preferences" ), framepos,
-              wxSize( 500, 270 ), DIALOG_STYLE )
-/**********************************************************************/
+// Default Constructor (whose provision is mandated by the inclusion
+// of DECLARE_DYNAMIC_CLASS( WinEDA_SetColorsFrame ) within eelayer.h)
+WinEDA_SetColorsFrame::WinEDA_SetColorsFrame()
 {
-#define START_Y 15
-    wxBitmapButton* Button;
-    int             ii, yy, butt_ID, buttcolor;
-    wxPoint         pos;
-    int             w = BUTT_SIZE_X, h = BUTT_SIZE_Y;
-    wxStaticText*   text;
-    int             right, bottom, line_height;
-    wxPoint         bg_color_pos;
+    Init();
+}
 
+
+// Standard Constructor
+WinEDA_SetColorsFrame::WinEDA_SetColorsFrame( WinEDA_DrawFrame* parent,
+                                              const wxPoint& framepos )
+{
     m_Parent = parent;
+    Init();
+    Create( parent,
+            SYMBOL_WINEDA_SETCOLORSFRAME_IDNAME,
+            SYMBOL_WINEDA_SETCOLORSFRAME_TITLE,
+            framepos,
+            wxDefaultSize,
+            SYMBOL_WINEDA_SETCOLORSFRAME_STYLE );
+}
+
+
+// Destructor
+WinEDA_SetColorsFrame::~WinEDA_SetColorsFrame() { }
+
+
+/**********************************************************/
+bool WinEDA_SetColorsFrame::Create( wxWindow* parent, wxWindowID id,
+                              const wxString& caption, const wxPoint& pos,
+                              const wxSize& size, long style )
+/**********************************************************/
+{
+    SetExtraStyle(wxWS_EX_BLOCK_EVENTS);
+    wxDialog::Create( parent, id, caption, pos, size, style );
+
+    CreateControls();
+    if (GetSizer())
+    {
+        GetSizer()->SetSizeHints(this);
+    }
+    return true;
+}
+
+
+/**********************************************************/
+void WinEDA_SetColorsFrame::Init()
+/**********************************************************/
+{
+    OuterBoxSizer   = NULL;
+    MainBoxSizer    = NULL;
+    ColumnBoxSizer  = NULL;
+    RowBoxSizer     = NULL;
+    BitmapButton    = NULL;
+    text            = NULL;
+    m_ShowGrid      = NULL;
+    m_SelBgColor    = NULL;
+    Line            = NULL;
+    BottomBoxSizer  = NULL;
+    Button          = NULL;
+}
+
+
+/**********************************************************/
+void WinEDA_SetColorsFrame::CreateControls()
+/**********************************************************/
+{
+    int ii, jj, butt_ID, buttcolor;
+
     SetFont( *g_DialogFont );
 
-    pos.x = 10; pos.y = START_Y;
-    right = pos.x; bottom = 0;
-    line_height = h;
-    for( ii = 0; laytool_list[ii] != NULL; ii++ )
-    {
-        if( laytool_list[ii]->m_Color == NULL )
-        {
-            if( pos.y != START_Y )
-            {
-                pos.x = right + 10;
-                pos.y = START_Y;
-                bg_color_pos = pos;
-            }
-            wxString msg = wxGetTranslation( laytool_list[ii]->m_Name );
-            text = new wxStaticText( this, -1,
-                                     msg,
-                                     wxPoint ( pos.x, pos.y ),
-                                     wxSize( -1, -1 ), 0 );
+    OuterBoxSizer = new wxBoxSizer(wxVERTICAL);
+    SetSizer(OuterBoxSizer);
 
-            line_height = MAX( line_height, text->GetRect().GetHeight() );
-            pos.y += line_height;
-            continue;
+    MainBoxSizer = new wxBoxSizer(wxHORIZONTAL);
+    OuterBoxSizer->Add(MainBoxSizer, 1, wxGROW|wxLEFT|wxRIGHT, 5);
+
+    // Add various items to the dialog box, as determined by the
+    // details of each element contained within laytool_list[]
+    for( ii = 0, jj = 0; ii < NB_BUTT; ii++ )
+    {
+        // Look for the initial button of each group of controls.
+        if( ii == laytool_index[jj]->m_Index )
+        {
+            // Add another column spacer, unless the current value of
+            // jj is BUTTON_GROUPS - 1. (The very last group of controls
+            // differs from the previous groups in that its associated
+            // controls are located in the same column as the controls
+            // associated with the preceeding group.)
+            if( jj < BUTTON_GROUPS - 1 )
+            {
+                ColumnBoxSizer = new wxBoxSizer(wxVERTICAL);
+                MainBoxSizer->Add(ColumnBoxSizer, 1, wxALIGN_TOP|wxLEFT|wxTOP, 5);
+            }
+            else
+            {
+                // Add a spacer to better separate the text string (which is
+                // about to be added) from the items located above it.
+                ColumnBoxSizer->AddSpacer(5);
+            }
+
+            RowBoxSizer = new wxBoxSizer(wxHORIZONTAL);
+            ColumnBoxSizer->Add(RowBoxSizer, 0, wxGROW|wxLEFT|wxRIGHT|wxBOTTOM, 5);
+
+            // Add a text string to identify the following set of controls
+            text = new wxStaticText( this, -1, laytool_index[jj]->m_Name,
+                                     wxDefaultPosition, wxDefaultSize, 0 );
+            // Make this text string bold (so that it stands out better)
+            text->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxNORMAL_FONT->GetFamily(),
+                           wxNORMAL, wxBOLD, false, wxNORMAL_FONT->GetFaceName() ) );
+
+            RowBoxSizer->Add(text, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+            jj++;
         }
+
+        RowBoxSizer = new wxBoxSizer(wxHORIZONTAL);
+        ColumnBoxSizer->Add(RowBoxSizer, 0, wxGROW|wxALL, 0);
+
         butt_ID = ID_COLOR_SETUP + ii;
         laytool_list[ii]->m_Id = butt_ID;
         wxMemoryDC iconDC;
-        wxBitmap ButtBitmap( w, h );
+        wxBitmap ButtBitmap( BUTT_SIZE_X, BUTT_SIZE_Y );
 
         iconDC.SelectObject( ButtBitmap );
         buttcolor = *laytool_list[ii]->m_Color;
+        CurrentColor[ii] = buttcolor;
         wxBrush Brush;
         iconDC.SelectObject( ButtBitmap );
         iconDC.SetPen( *wxBLACK_PEN );
@@ -336,117 +203,181 @@ WinEDA_SetColorsFrame::WinEDA_SetColorsFrame( WinEDA_DrawFrame* parent,
         Brush.SetStyle( wxSOLID );
 
         iconDC.SetBrush( Brush );
-        iconDC.DrawRectangle( 0, 0, w, h );
+        iconDC.DrawRectangle( 0, 0, BUTT_SIZE_X, BUTT_SIZE_Y );
 
-        Button = new wxBitmapButton( this, butt_ID,
-                                    ButtBitmap,
-                                    wxPoint ( pos.x, pos.y - (h - line_height) / 2 ),
-                                    wxSize (w, h) );
+        BitmapButton = new wxBitmapButton( this, butt_ID, ButtBitmap, wxDefaultPosition, wxSize(BUTT_SIZE_X, BUTT_SIZE_Y) );
+        RowBoxSizer->Add(BitmapButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxBOTTOM, 5);
 
-        laytool_list[ii]->m_Button = Button;
+        laytool_list[ii]->m_Button = BitmapButton;
 
-        wxString msg = wxGetTranslation( laytool_list[ii]->m_Name );
-        text = new wxStaticText( this, -1,
-                                 msg,
-                                 wxPoint (pos.x + 5 + w, pos.y ),
-                                 wxSize( -1, -1 ), 0 );
-
-        wxPoint lowpos;
-        lowpos.x = text->GetRect().GetRight();
-        lowpos.y = text->GetRect().GetBottom();
-        right    = MAX( right, lowpos.x );
-        bottom   = MAX( bottom, lowpos.y );
-        bg_color_pos.y = lowpos.y;
-
-        yy     = line_height + 5;
-        pos.y += yy;
+        // Add a text string, unless the current value of ii is NB_BUTT - 1
+        if( ii < NB_BUTT - 1 )
+        {
+            text = new wxStaticText( this, wxID_STATIC, wxGetTranslation( laytool_list[ii]->m_Name ),
+                                     wxDefaultPosition, wxDefaultSize, 0 );
+            RowBoxSizer->Add(text, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5);
+        }
+        else
+        {
+            // Special case; provide a checkbox instead (rather than a text string).
+            m_ShowGrid = new wxCheckBox( this, ID_CHECKBOX_SHOW_GRID, _("Grid"), wxDefaultPosition, wxDefaultSize, 0 );
+            m_ShowGrid->SetValue( m_Parent->m_Draw_Grid );
+            RowBoxSizer->Add(m_ShowGrid, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5);
+        }
     }
 
-    bg_color_pos.x += 5; bg_color_pos.y += 25;
-    
-    static const wxString bg_choice[2] = { _( "White Background" ), _( "Black Background" ) };
-    
-    m_SelBgColor = new wxRadioBox( this, ID_SEL_BG_COLOR,
-                                   _( "Background Colour" ), bg_color_pos,
-                                   wxDefaultSize, 2, bg_choice, 1, wxRA_SPECIFY_COLS );
+    // Add a spacer to improve appearance.
+    ColumnBoxSizer->AddSpacer(5);
 
-    m_SelBgColor->SetSelection( (g_DrawBgColor == BLACK) ? 1 : 0 );
-    bottom = MAX( bottom, m_SelBgColor->GetRect().GetBottom() );
-    right  = MAX( right, m_SelBgColor->GetRect().GetRight() );
+    wxArrayString m_SelBgColorStrings;
+    m_SelBgColorStrings.Add(_("White Background"));
+    m_SelBgColorStrings.Add(_("Black Background"));
+    m_SelBgColor = new wxRadioBox( this, ID_RADIOBOX_BACKGROUND_COLOR, _("Background Color"),
+                                   wxDefaultPosition, wxDefaultSize, m_SelBgColorStrings, 1, wxRA_SPECIFY_COLS );
+    m_SelBgColor->SetSelection( ( g_DrawBgColor == BLACK ) ? 1 : 0 );
+    ColumnBoxSizer->Add(m_SelBgColor, 1, wxGROW|wxRIGHT|wxTOP|wxBOTTOM, 5);
 
-    SetClientSize( wxSize( right + 10, bottom + 10 ) );
+    // Provide a line to separate all of the controls added so far from the
+    // "OK", "Cancel", and "Apply" buttons (which will be added after that line).
+    Line = new wxStaticLine( this, -1, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+    OuterBoxSizer->Add(Line, 0, wxGROW|wxALL, 5);
+
+    BottomBoxSizer = new wxBoxSizer(wxHORIZONTAL);
+    OuterBoxSizer->Add(BottomBoxSizer, 0, wxALIGN_RIGHT|wxLEFT|wxRIGHT|wxBOTTOM, 5);
+
+    Button = new wxButton( this, wxID_OK, _( "OK" ), wxDefaultPosition, wxDefaultSize, 0 );
+    Button->SetForegroundColour( *wxRED );
+    BottomBoxSizer->Add(Button, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+
+    Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ), wxDefaultPosition, wxDefaultSize, 0 );
+    Button->SetForegroundColour( *wxBLUE );
+    BottomBoxSizer->Add(Button, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+
+    Button = new wxButton( this, wxID_APPLY, _( "Apply" ), wxDefaultPosition, wxDefaultSize, 0 );
+    BottomBoxSizer->Add(Button, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+
+    // (Dialog now needs to be resized, but the associated command is found elsewhere.)
 }
 
 
-/***************************************************************/
-void WinEDA_SetColorsFrame::SetColor( wxCommandEvent& event )
-/***************************************************************/
+/**********************************************************/
+bool WinEDA_SetColorsFrame::ShowToolTips()
+/**********************************************************/
 {
-    int ii;
+    return true;
+}
+
+
+/**********************************************************/
+wxBitmap WinEDA_SetColorsFrame::GetBitmapResource( const wxString& name )
+/**********************************************************/
+{
+    wxUnusedVar(name);
+    return wxNullBitmap;
+}
+
+
+/**********************************************************/
+wxIcon WinEDA_SetColorsFrame::GetIconResource( const wxString& name )
+/**********************************************************/
+{
+    wxUnusedVar(name);
+    return wxNullIcon;
+}
+
+
+/**********************************************************/
+void WinEDA_SetColorsFrame::SetColor( wxCommandEvent& event )
+/**********************************************************/
+{
     int id = event.GetId();
     int color;
-    int w = BUTT_SIZE_X, h = BUTT_SIZE_Y;
+
+    wxBitmapButton* Button;
 
     color = DisplayColorFrame( this,
-                               *laytool_list[id - ID_COLOR_SETUP]->m_Color );
+            CurrentColor[id - ID_COLOR_SETUP] );
     if( color < 0 )
         return;
 
-    for( ii = 0; laytool_list[ii] != NULL; ii++ )
-    {
-        if( laytool_list[ii]->m_Id != id )
-            continue;
+    if( CurrentColor[id - ID_COLOR_SETUP] == color )
+        return;
 
-        if( *laytool_list[ii]->m_Color == color )
-            break;
+    CurrentColor[id - ID_COLOR_SETUP] = color;
+    wxMemoryDC      iconDC;
 
-        *laytool_list[ii]->m_Color = color;
-        wxMemoryDC      iconDC;
+    Button = laytool_list[id - ID_COLOR_SETUP]->m_Button;
 
-        wxBitmapButton* Button = laytool_list[ii]->m_Button;
+    wxBitmap        ButtBitmap = Button->GetBitmapLabel();
+    iconDC.SelectObject( ButtBitmap );
+    wxBrush         Brush;
+    iconDC.SetPen( *wxBLACK_PEN );
+    Brush.SetColour(
+        ColorRefs[color].m_Red,
+        ColorRefs[color].m_Green,
+        ColorRefs[color].m_Blue
+        );
+    Brush.SetStyle( wxSOLID );
 
-        wxBitmap        ButtBitmap = Button->GetBitmapLabel();
-        iconDC.SelectObject( ButtBitmap );
-        int             buttcolor = *laytool_list[ii]->m_Color;
-        wxBrush         Brush;
-        iconDC.SelectObject( ButtBitmap );
-        iconDC.SetPen( *wxBLACK_PEN );
-        Brush.SetColour(
-            ColorRefs[buttcolor].m_Red,
-            ColorRefs[buttcolor].m_Green,
-            ColorRefs[buttcolor].m_Blue
-            );
-        Brush.SetStyle( wxSOLID );
-
-        iconDC.SetBrush( Brush );
-        iconDC.DrawRectangle( 0, 0, w, h );
-        Button->SetBitmapLabel( ButtBitmap );
-        if( m_Parent->GetScreen() )
-            m_Parent->GetScreen()->SetRefreshReq();
-    }
+    iconDC.SetBrush( Brush );
+    iconDC.DrawRectangle( 0, 0, BUTT_SIZE_X, BUTT_SIZE_Y );
+    Button->SetBitmapLabel( ButtBitmap );
+    Button->Refresh();
 
     Refresh( FALSE );
 }
 
 
-/***************************************************************/
-void WinEDA_SetColorsFrame::BgColorChoice( wxCommandEvent& event )
-/***************************************************************/
+/******************************************************************/
+void WinEDA_SetColorsFrame::UpdateLayerSettings()
+/******************************************************************/
 {
-    int color;
-
-    if( m_SelBgColor->GetSelection() == 0 )
-        color = WHITE;
-    else
-        color = BLACK;
-
-    if( color != g_DrawBgColor )
+    // Update colors for each layer
+    for( int ii = 0; ii < NB_BUTT; ii++ )
     {
-        g_DrawBgColor = color;
-        m_Parent->SetDrawBgColor( g_DrawBgColor );
-        m_Parent->ReDrawPanel();
+        if( laytool_list[ii]->m_Color )
+            *laytool_list[ii]->m_Color = CurrentColor[ii];
     }
+
+    // Update whether grid is actually displayed or otherwise
+    m_Parent->m_Draw_Grid = g_ShowGrid = m_ShowGrid->GetValue();
+
+    // Update color of background
+    if( m_SelBgColor->GetSelection() == 0 )
+        g_DrawBgColor = WHITE;
+    else
+        g_DrawBgColor = BLACK;
+    m_Parent->SetDrawBgColor( g_DrawBgColor );
 }
+
+
+/**********************************************************************/
+void WinEDA_SetColorsFrame::OnOkClick( wxCommandEvent& WXUNUSED (event) )
+/**********************************************************************/
+{
+    UpdateLayerSettings();
+    m_Parent->ReDrawPanel();
+    EndModal( 1 );
+}
+
+
+/*******************************************************************/
+void  WinEDA_SetColorsFrame::OnCancelClick( wxCommandEvent& WXUNUSED (event) )
+/*******************************************************************/
+{
+    EndModal( -1 );
+}
+
+
+/*******************************************************************/
+void  WinEDA_SetColorsFrame::OnApplyClick( wxCommandEvent& WXUNUSED (event) )
+/*******************************************************************/
+{
+    UpdateLayerSettings();
+    m_Parent->ReDrawPanel();
+}
+
+
 
 
 /*************************/
@@ -477,7 +408,7 @@ void SeedLayers()
 int ReturnLayerColor( int Layer )
 /*******************************/
 {
-    if( g_LayerDescr.Flags==0 )
+    if( g_LayerDescr.Flags == 0 )
         return g_LayerDescr.LayerColor[Layer];
     else
         return g_LayerDescr.CommonColor;
