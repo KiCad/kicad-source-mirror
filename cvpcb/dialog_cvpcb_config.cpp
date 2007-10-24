@@ -261,10 +261,11 @@ wxBitmap KiConfigCvpcbFrame::GetBitmapResource( const wxString& name )
 wxIcon KiConfigCvpcbFrame::GetIconResource( const wxString& name )
 {
     // Icon retrieval
-////@begin KiConfigCvpcbFrame icon retrieval
-    wxUnusedVar(name);
-    return wxNullIcon;
-////@end KiConfigCvpcbFrame icon retrieval
+	#ifdef __WINDOWS__
+	return( wxICON(a_icon_cvpcb));
+	#else
+	return( wxICON(icon_cvpcb));
+	#endif
 }
 /*!
  * wxEVT_COMMAND_BUTTON_CLICKED event handler for SAVE_CFG

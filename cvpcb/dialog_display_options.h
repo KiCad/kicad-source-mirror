@@ -24,6 +24,7 @@
 
 ////@begin includes
 #include "wx/valgen.h"
+#include "wx/statline.h"
 ////@end includes
 
 /*!
@@ -39,16 +40,17 @@
 
 ////@begin control identifiers
 #define ID_DIALOG 10000
-#define SYMBOL_KIDISPLAYOPTIONSFRAME_STYLE wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|MAYBE_RESIZE_BORDER
+#define EDGE_SELECT 10003
+#define TEXT_SELECT 10004
+#define PADFILL_OPT 10001
+#define PADNUM_OPT 10002
+#define ID_SAVE_CONFIG 10005
+#define ID_STATICLINE1 10007
+#define SYMBOL_KIDISPLAYOPTIONSFRAME_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX
 #define SYMBOL_KIDISPLAYOPTIONSFRAME_TITLE _("Options")
 #define SYMBOL_KIDISPLAYOPTIONSFRAME_IDNAME ID_DIALOG
 #define SYMBOL_KIDISPLAYOPTIONSFRAME_SIZE wxSize(400, 300)
 #define SYMBOL_KIDISPLAYOPTIONSFRAME_POSITION wxDefaultPosition
-#define PADNUM_OPT 10002
-#define ID_SAVE_CONFIG 10005
-#define PADFILL_OPT 10001
-#define EDGE_SELECT 10003
-#define TEXT_SELECT 10004
 ////@end control identifiers
 
 /*!
@@ -81,6 +83,18 @@ public:
 
 ////@begin KiDisplayOptionsFrame event handler declarations
 
+    /// wxEVT_COMMAND_RADIOBOX_SELECTED event handler for EDGE_SELECT
+    void OnEdgeSelectSelected( wxCommandEvent& event );
+
+    /// wxEVT_COMMAND_RADIOBOX_SELECTED event handler for TEXT_SELECT
+    void OnTextSelectSelected( wxCommandEvent& event );
+
+    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for PADFILL_OPT
+    void OnPadfillOptClick( wxCommandEvent& event );
+
+    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for PADNUM_OPT
+    void OnPadnumOptClick( wxCommandEvent& event );
+
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_SAVE_CONFIG
     void OnSaveConfigClick( wxCommandEvent& event );
 
@@ -102,19 +116,18 @@ public:
 
     /// Retrieves icon resources
     wxIcon GetIconResource( const wxString& name );
-
-    /// Updates settings related to edges, text strings, and pads
-    void UpdateObjectSettings();
 ////@end KiDisplayOptionsFrame member function declarations
 
     /// Should we show tooltips?
     static bool ShowToolTips();
+
+	void UpdateObjectSettings(void);
 	
 ////@begin KiDisplayOptionsFrame member variables
     wxRadioBox* m_EdgesDisplayOption;
     wxRadioBox* m_TextDisplayOption;
-    wxCheckBox* m_IsShowPadNum;
     wxCheckBox* m_IsShowPadFill;
+    wxCheckBox* m_IsShowPadNum;
 ////@end KiDisplayOptionsFrame member variables
 
 	WinEDA_BasePcbFrame * m_Parent;

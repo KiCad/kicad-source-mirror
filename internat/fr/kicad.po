@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-10-21 19:16+0100\n"
+"PO-Revision-Date: 2007-10-24 22:13+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -82,7 +82,7 @@ msgid "Connect"
 msgstr "Connect"
 
 #: pcbnew/class_board.cpp:329
-#: eeschema/eelayer.cpp:177
+#: eeschema/eelayer.h:115
 msgid "NoConn"
 msgstr "Non Conn"
 
@@ -325,7 +325,7 @@ msgstr "Module [%s] non trouvé"
 #: pcbnew/librairi.cpp:518
 #: pcbnew/librairi.cpp:712
 #: pcbnew/plothpgl.cpp:67
-#: pcbnew/files.cpp:314
+#: pcbnew/files.cpp:321
 #: pcbnew/gen_modules_placefile.cpp:87
 #: pcbnew/gen_modules_placefile.cpp:98
 #: pcbnew/gen_modules_placefile.cpp:251
@@ -491,7 +491,7 @@ msgstr "Tst Pistes\n"
 
 #: pcbnew/drc.cpp:361
 #: pcbnew/drc.cpp:439
-#: eeschema/eelayer.cpp:141
+#: eeschema/eelayer.h:103
 msgid "Netname"
 msgstr "NetName"
 
@@ -845,11 +845,11 @@ msgstr "Inclure couche Edge"
 #: pcbnew/sel_layer.cpp:162
 #: pcbnew/sel_layer.cpp:320
 #: eeschema/sheetlab.cpp:97
+#: eeschema/eelayer.cpp:252
 #: eeschema/libedit_onrightclick.cpp:68
 #: eeschema/libedit_onrightclick.cpp:83
 #: eeschema/onrightclick.cpp:121
 #: eeschema/onrightclick.cpp:133
-#: cvpcb/dialog_display_options.cpp:194
 #: gerbview/set_color.cpp:253
 #: gerbview/options.cpp:167
 #: gerbview/options.cpp:296
@@ -875,7 +875,7 @@ msgstr "Annuler"
 #: pcbnew/sel_layer.cpp:158
 #: pcbnew/sel_layer.cpp:316
 #: eeschema/sheetlab.cpp:93
-#: cvpcb/dialog_display_options.cpp:189
+#: eeschema/eelayer.cpp:248
 #: gerbview/set_color.cpp:249
 #: gerbview/options.cpp:163
 #: gerbview/options.cpp:292
@@ -1131,6 +1131,7 @@ msgstr "Offset Y"
 #: eeschema/dialog_cmp_graphic_properties.cpp:178
 #: eeschema/pinedit-dialog.cpp:308
 #: eeschema/dialog_build_BOM.cpp:339
+#: cvpcb/dialog_display_options.cpp:190
 #: cvpcb/dialog_cvpcb_config.cpp:135
 #: share/setpage.cpp:232
 msgid "&OK"
@@ -1154,6 +1155,7 @@ msgstr "&OK"
 #: eeschema/dialog_cmp_graphic_properties.cpp:182
 #: eeschema/pinedit-dialog.cpp:304
 #: eeschema/dialog_build_BOM.cpp:343
+#: cvpcb/dialog_display_options.cpp:195
 #: share/setpage.cpp:237
 msgid "&Cancel"
 msgstr "&Annuler"
@@ -1285,6 +1287,7 @@ msgstr "De "
 #: pcbnew/dialog_setup_libs.cpp:153
 #: eeschema/eestatus.cpp:116
 #: eeschema/dialog_eeschema_config.cpp:161
+#: cvpcb/dialog_display_options.cpp:181
 #: cvpcb/dialog_cvpcb_config.cpp:127
 msgid "Save Cfg"
 msgstr "Sauver config"
@@ -1414,10 +1417,10 @@ msgstr "Couche:"
 
 #: pcbnew/dialog_netlist.cpp:133
 #: pcbnew/class_board_item.cpp:76
-#: eeschema/eelayer.cpp:99
 #: eeschema/dialog_create_component.cpp:164
 #: eeschema/onrightclick.cpp:317
 #: eeschema/edit_component_in_schematic.cpp:745
+#: eeschema/eelayer.h:152
 msgid "Reference"
 msgstr "Référence"
 
@@ -1859,7 +1862,9 @@ msgid "Zoom "
 msgstr "Zoom "
 
 #: pcbnew/tool_pcb.cpp:585
+#: eeschema/eelayer.cpp:223
 #: pcbnew/set_color.h:335
+#: eeschema/eelayer.h:209
 #: gerbview/set_color.h:246
 msgid "Grid"
 msgstr "Grille"
@@ -1991,10 +1996,10 @@ msgstr "Texte Pcb"
 #: pcbnew/class_board_item.cpp:80
 #: pcbnew/class_text_mod.cpp:323
 #: pcbnew/class_edge_mod.cpp:286
-#: eeschema/eelayer.cpp:105
 #: eeschema/component_class.cpp:55
 #: eeschema/onrightclick.cpp:316
 #: eeschema/edit_component_in_schematic.cpp:784
+#: eeschema/eelayer.h:158
 msgid "Value"
 msgstr "Valeur"
 
@@ -2795,42 +2800,6 @@ msgstr "connecte une extrémité de piste en l'air, lorsque elle couvre un pad ou 
 msgid "Clean pcb"
 msgstr "Nettoyage PCB"
 
-#: pcbnew/files.cpp:57
-msgid "Recovery file "
-msgstr "Fichier de secours "
-
-#: pcbnew/files.cpp:63
-msgid "Ok to load Recovery file "
-msgstr "Ok pour charger le fichier de secours"
-
-#: pcbnew/files.cpp:143
-msgid "Board Modified: Continue ?"
-msgstr "Circuit imprimé modifié,  Continuer ?"
-
-#: pcbnew/files.cpp:161
-msgid "Load board files:"
-msgstr "Charger Fichiers C.I.:"
-
-#: pcbnew/files.cpp:263
-msgid "Save board files:"
-msgstr "Sauver Fichiers C.I.:"
-
-#: pcbnew/files.cpp:299
-msgid "Warning: unable to create bakfile "
-msgstr "Attention: Impossible de créer fichier backup "
-
-#: pcbnew/files.cpp:335
-msgid "Backup file: "
-msgstr "Fichier backup: "
-
-#: pcbnew/files.cpp:340
-msgid "Write Board file: "
-msgstr "Ecriture fichier CI: "
-
-#: pcbnew/files.cpp:342
-msgid "Failed to create "
-msgstr "Impossible de créer  fichier "
-
 #: pcbnew/pcbplot.cpp:115
 #: pcbnew/pcbplot.cpp:205
 #: gerbview/tool_gerber.cpp:91
@@ -3286,6 +3255,42 @@ msgstr "Fenetre 3D déjà ouverte"
 msgid "3D Viewer"
 msgstr "Visu 3D"
 
+#: pcbnew/files.cpp:57
+msgid "Recovery file "
+msgstr "Fichier de secours "
+
+#: pcbnew/files.cpp:63
+msgid "Ok to load Recovery file "
+msgstr "Ok pour charger le fichier de secours"
+
+#: pcbnew/files.cpp:143
+msgid "Board Modified: Continue ?"
+msgstr "Circuit imprimé modifié,  Continuer ?"
+
+#: pcbnew/files.cpp:161
+msgid "Load board files:"
+msgstr "Charger Fichiers C.I.:"
+
+#: pcbnew/files.cpp:269
+msgid "Save board files:"
+msgstr "Sauver Fichiers C.I.:"
+
+#: pcbnew/files.cpp:306
+msgid "Warning: unable to create bakfile "
+msgstr "Attention: Impossible de créer fichier backup "
+
+#: pcbnew/files.cpp:340
+msgid "Backup file: "
+msgstr "Fichier backup: "
+
+#: pcbnew/files.cpp:344
+msgid "Wrote board file: "
+msgstr "Ecriture fichier CI: "
+
+#: pcbnew/files.cpp:346
+msgid "Failed to create "
+msgstr "Impossible de créer  fichier "
+
 #: pcbnew/modedit_onclick.cpp:205
 #: pcbnew/onrightclick.cpp:151
 #: eeschema/libedit_onrightclick.cpp:73
@@ -3467,7 +3472,7 @@ msgid "Show None"
 msgstr "Rien Afficher"
 
 #: pcbnew/set_color.cpp:285
-#: cvpcb/dialog_display_options.cpp:199
+#: eeschema/eelayer.cpp:256
 #: gerbview/set_color.cpp:257
 msgid "Apply"
 msgstr "Appliquer"
@@ -4798,7 +4803,7 @@ msgstr "KeyW: "
 #: eeschema/dialog_edit_component_in_lib.cpp:166
 #: eeschema/dialog_create_component.cpp:176
 #: eeschema/dialog_edit_component_in_schematic.cpp:204
-#: cvpcb/dialog_display_options.h:43
+#: cvpcb/dialog_display_options.h:50
 msgid "Options"
 msgstr "Options"
 
@@ -5229,6 +5234,18 @@ msgstr "Forme Pin de hiérarchie:"
 #: eeschema/sheetlab.cpp:386
 msgid "No New Global Label found"
 msgstr "Pas de nouveau Global Label trouvé"
+
+#: eeschema/eelayer.cpp:233
+msgid "White Background"
+msgstr "Fond Blanc"
+
+#: eeschema/eelayer.cpp:234
+msgid "Black Background"
+msgstr "Fond Noir"
+
+#: eeschema/eelayer.cpp:235
+msgid "Background Color"
+msgstr "Couleur du Fond"
 
 #: eeschema/dialog_options.cpp:140
 #: eeschema/dialog_options.cpp:288
@@ -6181,114 +6198,6 @@ msgstr "Erreur: Root Part <%s> non trouvé"
 msgid "Current Part: <%s>"
 msgstr "Cmp Courant: <%s>"
 
-#: eeschema/eelayer.cpp:45
-msgid "General"
-msgstr " Général  "
-
-#: eeschema/eelayer.cpp:51
-msgid "Sheets"
-msgstr "Feuilles"
-
-#: eeschema/eelayer.cpp:57
-msgid "Wire"
-msgstr "Fil"
-
-#: eeschema/eelayer.cpp:63
-msgid "Bus"
-msgstr "Bus"
-
-#: eeschema/eelayer.cpp:69
-msgid "Junction"
-msgstr "Jonction"
-
-#: eeschema/eelayer.cpp:75
-msgid "Label"
-msgstr "Label"
-
-#: eeschema/eelayer.cpp:81
-msgid "GlobLabel"
-msgstr "Lab Global"
-
-#: eeschema/eelayer.cpp:87
-#: eeschema/affiche.cpp:80
-msgid "PinNum"
-msgstr "Num Pin"
-
-#: eeschema/eelayer.cpp:93
-msgid "PinNam"
-msgstr "Nom Pin"
-
-#: eeschema/eelayer.cpp:111
-#: eeschema/dialog_edit_component_in_schematic.cpp:228
-#: eeschema/edit_component_in_lib.cpp:484
-msgid "Fields"
-msgstr "Champs"
-
-#: eeschema/eelayer.cpp:117
-msgid "Body"
-msgstr "Body"
-
-#: eeschema/eelayer.cpp:123
-msgid "Body Bg"
-msgstr "Body Bg"
-
-#: eeschema/eelayer.cpp:129
-msgid "Device"
-msgstr "Composant"
-
-#: eeschema/eelayer.cpp:135
-msgid "Notes"
-msgstr "Notes"
-
-#: eeschema/eelayer.cpp:147
-msgid "Pin"
-msgstr "Pin"
-
-#: eeschema/eelayer.cpp:153
-#: eeschema/component_class.cpp:57
-msgid "Sheet"
-msgstr "Feuille"
-
-#: eeschema/eelayer.cpp:159
-msgid "SheetName"
-msgstr "Nom feuille"
-
-#: eeschema/eelayer.cpp:165
-msgid "Sheetfile"
-msgstr "Fichier feuille"
-
-#: eeschema/eelayer.cpp:171
-msgid "SheetLabel"
-msgstr "SheetLabel"
-
-#: eeschema/eelayer.cpp:184
-msgid "Erc Mark"
-msgstr "Marqueur ERC"
-
-#: eeschema/eelayer.cpp:190
-msgid "Erc Warning"
-msgstr "ERC Warning"
-
-#: eeschema/eelayer.cpp:196
-msgid "Erc Error"
-msgstr "ERC Erreur"
-
-#: eeschema/eelayer.cpp:282
-msgid "EESchema Preferences"
-msgstr "EESchema Préférences"
-
-#: eeschema/eelayer.cpp:367
-msgid "White Background"
-msgstr "Fond Blanc"
-
-#: eeschema/eelayer.cpp:367
-msgid "Black Background"
-msgstr "Fond Noir"
-
-#: eeschema/eelayer.cpp:370
-msgid "Background Colour"
-msgstr "Couleur du fond"
-
 #: eeschema/affiche.cpp:22
 #: eeschema/dialog_create_component.cpp:157
 msgid "Name"
@@ -6322,6 +6231,11 @@ msgstr "Lib"
 #: eeschema/affiche.cpp:72
 msgid "PinName"
 msgstr "Nom Pin"
+
+#: eeschema/affiche.cpp:80
+#: eeschema/eelayer.h:140
+msgid "PinNum"
+msgstr "Num Pin"
 
 #: eeschema/affiche.cpp:84
 msgid "PinType"
@@ -6609,6 +6523,7 @@ msgid "&Spice"
 msgstr "&Spice"
 
 #: eeschema/dialog_eeschema_config.cpp:172
+#: eeschema/eelayer.h:271
 msgid "Other"
 msgstr "Autre"
 
@@ -6758,6 +6673,12 @@ msgstr "Nom en librairie"
 #: eeschema/edit_component_in_lib.cpp:497
 msgid "Show Text"
 msgstr "Texte visible"
+
+#: eeschema/dialog_edit_component_in_schematic.cpp:228
+#: eeschema/edit_component_in_lib.cpp:484
+#: eeschema/eelayer.h:164
+msgid "Fields"
+msgstr "Champs"
 
 #: eeschema/dialog_edit_component_in_schematic.cpp:239
 msgid "Defaults"
@@ -7240,6 +7161,11 @@ msgstr "Effacement Bloc (shift+ctrl + drag mouse)"
 #: eeschema/viewlib_frame.cpp:57
 msgid "Library browser"
 msgstr "Visualisateur des librairies"
+
+#: eeschema/component_class.cpp:57
+#: eeschema/eelayer.h:171
+msgid "Sheet"
+msgstr "Feuille"
 
 #: eeschema/component_class.cpp:58
 #: eeschema/component_class.cpp:59
@@ -7771,6 +7697,7 @@ msgid "Create &List"
 msgstr "Créer &Liste"
 
 #: eeschema/dialog_build_BOM.cpp:347
+#: cvpcb/dialog_display_options.cpp:199
 msgid "&Apply"
 msgstr "&Appliquer"
 
@@ -8110,41 +8037,40 @@ msgstr " Formats NetListe: EESchema"
 msgid "Netlist error: %s"
 msgstr "Erreur Netliste: %s"
 
-#: cvpcb/dialog_display_options.cpp:146
-#: cvpcb/dialog_display_options.cpp:155
-msgid "&Filaire"
-msgstr "&Filaire"
+#: cvpcb/dialog_display_options.cpp:151
+#: cvpcb/dialog_display_options.cpp:159
+msgid "&Line"
+msgstr "&Ligne"
 
-#: cvpcb/dialog_display_options.cpp:147
-#: cvpcb/dialog_display_options.cpp:156
+#: cvpcb/dialog_display_options.cpp:152
+#: cvpcb/dialog_display_options.cpp:160
 msgid "&Filled"
 msgstr "&Plein"
 
-#: cvpcb/dialog_display_options.cpp:148
-#: cvpcb/dialog_display_options.cpp:157
+#: cvpcb/dialog_display_options.cpp:153
+#: cvpcb/dialog_display_options.cpp:161
 msgid "&Sketch"
 msgstr "&Contour"
 
-#: cvpcb/dialog_display_options.cpp:150
+#: cvpcb/dialog_display_options.cpp:154
 msgid "Edges:"
 msgstr "Contours:"
 
-#: cvpcb/dialog_display_options.cpp:159
+#: cvpcb/dialog_display_options.cpp:162
 msgid "Texts:"
 msgstr "Textes:"
 
-#: cvpcb/dialog_display_options.cpp:170
-msgid "Pad &Num"
-msgstr "Pad &Num"
-
-#: cvpcb/dialog_display_options.cpp:175
-msgid "&Pad Fill"
+#: cvpcb/dialog_display_options.cpp:169
+msgid "&Pad Filled"
 msgstr "&Pad plein"
 
-#: cvpcb/dialog_display_options.cpp:183
-#: gerbview/reglage.cpp:110
-msgid "Save Cfg..."
-msgstr "Sauver config..."
+#: cvpcb/dialog_display_options.cpp:173
+msgid "Display Pad &Num"
+msgstr "Afficher Numero de Pad"
+
+#: cvpcb/dialog_display_options.cpp:176
+msgid "Display pad number"
+msgstr "Afficher numéro des pastilles"
 
 #: cvpcb/tool_cvpcb.cpp:35
 msgid "Open Netlist"
@@ -8760,6 +8686,10 @@ msgstr "Spots:"
 msgid "Show D codes"
 msgstr "Monter DCodes"
 
+#: gerbview/reglage.cpp:110
+msgid "Save Cfg..."
+msgstr "Sauver config..."
+
 #: gerbview/reglage.cpp:128
 msgid "Drill File Ext:"
 msgstr "Ext. Fichier de percage"
@@ -9024,51 +8954,55 @@ msgstr "Y"
 msgid "No default editor found, you must choose it"
 msgstr "Pas d'éditeur par défaut trouvé, vous devez en choisir un"
 
-#: common/edaappl.cpp:457
+#: common/edaappl.cpp:487
 msgid "Default"
 msgstr "Defaut"
 
-#: common/edaappl.cpp:467
+#: common/edaappl.cpp:497
 msgid "French"
 msgstr "French"
 
-#: common/edaappl.cpp:472
+#: common/edaappl.cpp:502
 msgid "Spanish"
 msgstr "Espagnol"
 
-#: common/edaappl.cpp:477
+#: common/edaappl.cpp:507
 msgid "Portuguese"
 msgstr "Portugais"
 
-#: common/edaappl.cpp:483
+#: common/edaappl.cpp:513
 msgid "Italian"
 msgstr "Italien"
 
-#: common/edaappl.cpp:488
+#: common/edaappl.cpp:518
 msgid "German"
 msgstr "Allemand"
 
-#: common/edaappl.cpp:493
+#: common/edaappl.cpp:523
 msgid "Slovenian"
 msgstr "Slovène"
 
-#: common/edaappl.cpp:498
+#: common/edaappl.cpp:528
 msgid "Hungarian"
 msgstr "Hongrois"
 
-#: common/edaappl.cpp:503
+#: common/edaappl.cpp:533
 msgid "Polish"
 msgstr "Polonais"
 
-#: common/edaappl.cpp:508
+#: common/edaappl.cpp:538
 msgid "Russian"
 msgstr "Russe"
 
-#: common/edaappl.cpp:513
+#: common/edaappl.cpp:543
 msgid "Korean"
 msgstr "Coréen"
 
-#: common/edaappl.cpp:579
+#: common/edaappl.cpp:548
+msgid "Catalan"
+msgstr "Catalan"
+
+#: common/edaappl.cpp:625
 msgid "Language"
 msgstr "Langage"
 
@@ -9810,10 +9744,6 @@ msgstr "Propriétés des Pads"
 msgid "Netlist: "
 msgstr "Netliste: "
 
-#: pcbnew/cleaningoptions_dialog.h:48
-msgid "Cleaning options"
-msgstr "Options de nettoyage"
-
 #: pcbnew/dialog_general_options.h:44
 #: eeschema/dialog_options.h:55
 msgid "General Options"
@@ -9823,13 +9753,13 @@ msgstr "Options générales"
 msgid "TextMod properties"
 msgstr "Propriétés du Texte sur Module"
 
+#: pcbnew/cleaningoptions_dialog.h:48
+msgid "Cleaning options"
+msgstr "Options de nettoyage"
+
 #: pcbnew/zones.h:54
 msgid "Fill Zones Options"
 msgstr "Options de remplissage de Zone"
-
-#: pcbnew/dialog_drc.h:56
-msgid "DRC Control"
-msgstr "Controle ERC"
 
 #: pcbnew/dialog_initpcb.h:38
 msgid "Global Delete"
@@ -9883,6 +9813,10 @@ msgstr "Afficher Modules Cmp"
 msgid "Show Modules Cu"
 msgstr "Afficher Modules Cu"
 
+#: pcbnew/dialog_drc.h:56
+msgid "DRC Control"
+msgstr "Controle ERC"
+
 #: pcbnew/dialog_track_options.h:42
 msgid "Tracks and Vias Sizes"
 msgstr "Dims pistes et vias"
@@ -9902,6 +9836,86 @@ msgstr "Propriétés des Pins"
 #: eeschema/dialog_erc.h:59
 msgid "EESchema Erc"
 msgstr "EESchema Erc"
+
+#: eeschema/eelayer.h:34
+msgid "EESchema Preferences"
+msgstr "EESchema Préférences"
+
+#: eeschema/eelayer.h:73
+msgid "Wire"
+msgstr "Fil"
+
+#: eeschema/eelayer.h:79
+msgid "Bus"
+msgstr "Bus"
+
+#: eeschema/eelayer.h:85
+msgid "Junction"
+msgstr "Jonction"
+
+#: eeschema/eelayer.h:91
+msgid "Label"
+msgstr "Label"
+
+#: eeschema/eelayer.h:97
+msgid "GlobLabel"
+msgstr "Lab Global"
+
+#: eeschema/eelayer.h:109
+msgid "Notes"
+msgstr "Notes"
+
+#: eeschema/eelayer.h:122
+msgid "Body"
+msgstr "Body"
+
+#: eeschema/eelayer.h:128
+msgid "Body Bg"
+msgstr "Body Bg"
+
+#: eeschema/eelayer.h:134
+msgid "Pin"
+msgstr "Pin"
+
+#: eeschema/eelayer.h:146
+msgid "PinNam"
+msgstr "Nom Pin"
+
+#: eeschema/eelayer.h:177
+msgid "Sheetfile"
+msgstr "Fichier feuille"
+
+#: eeschema/eelayer.h:183
+msgid "SheetName"
+msgstr "Nom feuille"
+
+#: eeschema/eelayer.h:189
+msgid "SheetLabel"
+msgstr "SheetLabel"
+
+#: eeschema/eelayer.h:196
+msgid "Erc Warning"
+msgstr "ERC Warning"
+
+#: eeschema/eelayer.h:202
+msgid "Erc Error"
+msgstr "ERC Erreur"
+
+#: eeschema/eelayer.h:247
+msgid "General"
+msgstr " Général  "
+
+#: eeschema/eelayer.h:253
+msgid "Device"
+msgstr "Composant"
+
+#: eeschema/eelayer.h:259
+msgid "Sheets"
+msgstr "Feuilles"
+
+#: eeschema/eelayer.h:265
+msgid "Erc Mark"
+msgstr "Marqueur ERC"
 
 #: eeschema/annotate_dialog.h:53
 msgid "EESchema Annotation"
