@@ -32,6 +32,7 @@
  */
 
 ////@begin forward declarations
+class wxBoxSizer;
 ////@end forward declarations
 
 /*!
@@ -40,17 +41,17 @@
 
 ////@begin control identifiers
 #define ID_DIALOG 10000
-#define EDGE_SELECT 10003
-#define TEXT_SELECT 10004
-#define PADFILL_OPT 10001
-#define PADNUM_OPT 10002
+#define EDGE_SELECT 10001
+#define TEXT_SELECT 10002
+#define PADFILL_OPT 10003
+#define PADNUM_OPT 10004
 #define ID_SAVE_CONFIG 10005
-#define ID_STATICLINE1 10007
-#define SYMBOL_KIDISPLAYOPTIONSFRAME_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX
-#define SYMBOL_KIDISPLAYOPTIONSFRAME_TITLE _("Options")
-#define SYMBOL_KIDISPLAYOPTIONSFRAME_IDNAME ID_DIALOG
-#define SYMBOL_KIDISPLAYOPTIONSFRAME_SIZE wxSize(400, 300)
-#define SYMBOL_KIDISPLAYOPTIONSFRAME_POSITION wxDefaultPosition
+#define ID_STATICLINE1 10006
+#define SYMBOL_WINEDA_FOOTPRINTDISPLAYOPTIONSFRAME_STYLE wxDEFAULT_DIALOG_STYLE|MAYBE_RESIZE_BORDER
+#define SYMBOL_WINEDA_FOOTPRINTDISPLAYOPTIONSFRAME_TITLE _("Display Options")
+#define SYMBOL_WINEDA_FOOTPRINTDISPLAYOPTIONSFRAME_IDNAME ID_DIALOG
+#define SYMBOL_WINEDA_FOOTPRINTDISPLAYOPTIONSFRAME_SIZE wxSize(400, 300)
+#define SYMBOL_WINEDA_FOOTPRINTDISPLAYOPTIONSFRAME_POSITION wxDefaultPosition
 ////@end control identifiers
 
 /*!
@@ -62,38 +63,26 @@
 #endif
 
 /*!
- * KiDisplayOptionsFrame class declaration
+ * WinEDA_FootprintDisplayOptionsFrame class declaration
  */
 
-class KiDisplayOptionsFrame: public wxDialog
+class WinEDA_FootprintDisplayOptionsFrame: public wxDialog
 {    
-    DECLARE_DYNAMIC_CLASS( KiDisplayOptionsFrame )
+    DECLARE_DYNAMIC_CLASS( WinEDA_FootprintDisplayOptionsFrame )
     DECLARE_EVENT_TABLE()
 
 public:
     /// Constructors
-    KiDisplayOptionsFrame( );
-    KiDisplayOptionsFrame( WinEDA_BasePcbFrame* parent, wxWindowID id = SYMBOL_KIDISPLAYOPTIONSFRAME_IDNAME, const wxString& caption = SYMBOL_KIDISPLAYOPTIONSFRAME_TITLE, const wxPoint& pos = SYMBOL_KIDISPLAYOPTIONSFRAME_POSITION, const wxSize& size = SYMBOL_KIDISPLAYOPTIONSFRAME_SIZE, long style = SYMBOL_KIDISPLAYOPTIONSFRAME_STYLE );
+    WinEDA_FootprintDisplayOptionsFrame( );
+    WinEDA_FootprintDisplayOptionsFrame( WinEDA_BasePcbFrame* parent, wxWindowID id = SYMBOL_WINEDA_FOOTPRINTDISPLAYOPTIONSFRAME_IDNAME, const wxString& caption = SYMBOL_WINEDA_FOOTPRINTDISPLAYOPTIONSFRAME_TITLE, const wxPoint& pos = SYMBOL_WINEDA_FOOTPRINTDISPLAYOPTIONSFRAME_POSITION, const wxSize& size = SYMBOL_WINEDA_FOOTPRINTDISPLAYOPTIONSFRAME_SIZE, long style = SYMBOL_WINEDA_FOOTPRINTDISPLAYOPTIONSFRAME_STYLE );
 
     /// Creation
-    bool Create( wxWindow* parent, wxWindowID id = SYMBOL_KIDISPLAYOPTIONSFRAME_IDNAME, const wxString& caption = SYMBOL_KIDISPLAYOPTIONSFRAME_TITLE, const wxPoint& pos = SYMBOL_KIDISPLAYOPTIONSFRAME_POSITION, const wxSize& size = SYMBOL_KIDISPLAYOPTIONSFRAME_SIZE, long style = SYMBOL_KIDISPLAYOPTIONSFRAME_STYLE );
+    bool Create( wxWindow* parent, wxWindowID id = SYMBOL_WINEDA_FOOTPRINTDISPLAYOPTIONSFRAME_IDNAME, const wxString& caption = SYMBOL_WINEDA_FOOTPRINTDISPLAYOPTIONSFRAME_TITLE, const wxPoint& pos = SYMBOL_WINEDA_FOOTPRINTDISPLAYOPTIONSFRAME_POSITION, const wxSize& size = SYMBOL_WINEDA_FOOTPRINTDISPLAYOPTIONSFRAME_SIZE, long style = SYMBOL_WINEDA_FOOTPRINTDISPLAYOPTIONSFRAME_STYLE );
 
     /// Creates the controls and sizers
     void CreateControls();
 
-////@begin KiDisplayOptionsFrame event handler declarations
-
-    /// wxEVT_COMMAND_RADIOBOX_SELECTED event handler for EDGE_SELECT
-    void OnEdgeSelectSelected( wxCommandEvent& event );
-
-    /// wxEVT_COMMAND_RADIOBOX_SELECTED event handler for TEXT_SELECT
-    void OnTextSelectSelected( wxCommandEvent& event );
-
-    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for PADFILL_OPT
-    void OnPadfillOptClick( wxCommandEvent& event );
-
-    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for PADNUM_OPT
-    void OnPadnumOptClick( wxCommandEvent& event );
+////@begin WinEDA_FootprintDisplayOptionsFrame event handler declarations
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_SAVE_CONFIG
     void OnSaveConfigClick( wxCommandEvent& event );
@@ -107,28 +96,32 @@ public:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_APPLY
     void OnApplyClick( wxCommandEvent& event );
 
-////@end KiDisplayOptionsFrame event handler declarations
+////@end WinEDA_FootprintDisplayOptionsFrame event handler declarations
 
-////@begin KiDisplayOptionsFrame member function declarations
+////@begin WinEDA_FootprintDisplayOptionsFrame member function declarations
 
     /// Retrieves bitmap resources
     wxBitmap GetBitmapResource( const wxString& name );
 
     /// Retrieves icon resources
     wxIcon GetIconResource( const wxString& name );
-////@end KiDisplayOptionsFrame member function declarations
+////@end WinEDA_FootprintDisplayOptionsFrame member function declarations
 
     /// Should we show tooltips?
     static bool ShowToolTips();
 
 	void UpdateObjectSettings(void);
 	
-////@begin KiDisplayOptionsFrame member variables
+////@begin WinEDA_FootprintDisplayOptionsFrame member variables
+    wxBoxSizer* OuterBoxSizer;
+    wxBoxSizer* MainBoxSizer;
     wxRadioBox* m_EdgesDisplayOption;
     wxRadioBox* m_TextDisplayOption;
+    wxBoxSizer* ColumnBoxSizer;
     wxCheckBox* m_IsShowPadFill;
     wxCheckBox* m_IsShowPadNum;
-////@end KiDisplayOptionsFrame member variables
+    wxBoxSizer* BottomBoxSizer;
+////@end WinEDA_FootprintDisplayOptionsFrame member variables
 
 	WinEDA_BasePcbFrame * m_Parent;
 

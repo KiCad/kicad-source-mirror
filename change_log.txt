@@ -4,6 +4,17 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Oct-25 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
+================================================================================
++ cvpcb
+  * Fine-tuned contents of dialog_display_options.cpp, dialog_display_options.h,
+    and dialog_display_options.pjd, so that the controls within the associated
+    ("Display Options") dialog box now also expand if that dialog is expanded.
++ all
+  * The share/selcolor.cpp file (which is no longer used) has been removed, and
+    replaced with share/selcolor.cpp.notused
+
+
 2007-Oct-24 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + cvpcb:
