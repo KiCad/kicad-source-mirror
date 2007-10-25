@@ -15,6 +15,8 @@
 ////@begin includes
 ////@end includes
 
+#include "bitmaps.h"
+
 #include "dialog_cvpcb_config.h"
 
 ////@begin XPM images
