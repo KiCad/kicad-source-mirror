@@ -264,6 +264,9 @@ COMMON_GLOBL wxString g_ProductName
 #endif
 ;
 
+COMMON_GLOBL WinEDA_App* g_EDA_Appl;  /* this is the main application */
+
+
 /* Gestion des librairies */
 COMMON_GLOBL wxString g_RealLibDirBuffer;   // Chemin reel des librairies de module
 // = UserLibDirBuffer si non vide

@@ -95,7 +95,7 @@ wxString title;
 	m_Parent = parent;
 	SetFont(* g_DialogFont);
 
-	title = _("from ") + EDA_Appl->m_CurrentOptionFile;
+	title = _("from ") + g_EDA_Appl->m_CurrentOptionFile;
 	SetTitle(title);
 
 	LibModified = FALSE;

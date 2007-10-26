@@ -286,6 +286,9 @@ public:
     /* Return the zoom level which displays the full page on screen */
     virtual int     BestZoom() = 0;
 
+    /* Return the current zoom level */
+	int             GetZoom(void);
+
     void            ToPrinter( wxCommandEvent& event );
     void            SVG_Print( wxCommandEvent& event );
 

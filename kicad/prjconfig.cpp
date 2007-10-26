@@ -66,7 +66,7 @@ wxString mask( wxT("*"));
 	if ( FullFileName.IsEmpty() ) return;
 
 	/* ecriture de la configuration */
-	EDA_Appl->WriteProjectConfig(FullFileName, wxT("/general"), CfgParamList);
+	g_EDA_Appl->WriteProjectConfig(FullFileName, wxT("/general"), CfgParamList);
 }
 
 // vim: set tabstop=4 : noexpandtab :

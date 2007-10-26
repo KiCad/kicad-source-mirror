@@ -681,7 +681,7 @@ void MirrorOneStruct( EDA_BaseStruct* DrawStruct, wxPoint& Center )
         MirrorYPoint( px, Center );
         px.x -= dx;
 
-        EDA_Appl->m_SchematicFrame->PutOnGrid( &px );
+        g_EDA_Appl->m_SchematicFrame->PutOnGrid( &px );
         DrawText->m_Pos.x = px.x;
         break;
 
@@ -696,14 +696,14 @@ void MirrorOneStruct( EDA_BaseStruct* DrawStruct, wxPoint& Center )
 
         px = DrawText->m_Pos;
         MirrorYPoint( px, Center );
-        EDA_Appl->m_SchematicFrame->PutOnGrid( &px );
+        g_EDA_Appl->m_SchematicFrame->PutOnGrid( &px );
         DrawText->m_Pos.x = px.x;
         break;
 
     case DRAW_LIB_ITEM_STRUCT_TYPE:
         DrawLibItem = (EDA_SchComponentStruct*) DrawStruct;
         dx = DrawLibItem->m_Pos.x;
-        EDA_Appl->m_SchematicFrame->CmpRotationMiroir( DrawLibItem,
+        g_EDA_Appl->m_SchematicFrame->CmpRotationMiroir( DrawLibItem,
                                                      NULL, CMP_MIROIR_Y );
         MirrorYPoint( DrawLibItem->m_Pos, Center );
         dx -= DrawLibItem->m_Pos.x;

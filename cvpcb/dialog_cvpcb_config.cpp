@@ -73,7 +73,7 @@ wxString title;
 	m_Parent = parent;
 	m_DoUpdate = TRUE;
 
-	title = _("from ") + EDA_Appl->m_CurrentOptionFile;
+	title = _("from ") + g_EDA_Appl->m_CurrentOptionFile;
 	SetTitle(title);
     Create(parent, id, caption, pos, size, style);
 }

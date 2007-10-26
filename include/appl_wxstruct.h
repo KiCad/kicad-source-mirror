@@ -18,8 +18,6 @@
 /**********************************************/
 /*  Class representing the entire Application */
 /**********************************************/
-eda_global WinEDA_App* EDA_Appl;  /* application representant le programme */
-
 
 class WinEDA_App : public wxApp
 {

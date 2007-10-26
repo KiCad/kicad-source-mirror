@@ -793,7 +793,7 @@ static void ComputeArc( LibDrawArc* DrawItem, wxPoint ArcCentre )
     wxString msg;
     angle = DrawItem->t2 - DrawItem->t1;
     msg.Printf( _( "Arc %.1f deg" ), (float) angle / 10 );
-    EDA_Appl->m_LibeditFrame->PrintMsg( msg );
+    g_EDA_Appl->m_LibeditFrame->PrintMsg( msg );
 
     while( (DrawItem->t2 - DrawItem->t1) >= 1800 )
     {

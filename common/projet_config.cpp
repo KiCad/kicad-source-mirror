@@ -207,8 +207,8 @@ bool WinEDA_App::ReadProjectConfig(const wxString & local_config_filename,
 	return:
 		TRUE si lue.
 	Met a jour en plus:
-		EDA_Appl->m_CurrentOptionFileDateAndTime
-		EDA_Appl->m_CurrentOptionFile
+		g_EDA_Appl->m_CurrentOptionFileDateAndTime
+		g_EDA_Appl->m_CurrentOptionFile
 */
 {
 const PARAM_CFG_BASE * pt_cfg;
@@ -221,22 +221,22 @@ wxString timestamp;
 	g_Prj_Config->SetPath(UNIX_STRING_DIR_SEP);
 	timestamp = g_Prj_Config->Read( wxT("update") );
 	if ( Load_Only_if_New && ( !timestamp.IsEmpty() ) &&
-		 (timestamp == EDA_Appl->m_CurrentOptionFileDateAndTime) )
+		 (timestamp == g_EDA_Appl->m_CurrentOptionFileDateAndTime) )
 	{
 		return FALSE;
 	}
 	
-	EDA_Appl->m_CurrentOptionFileDateAndTime = timestamp;
+	g_EDA_Appl->m_CurrentOptionFileDateAndTime = timestamp;
 	
 	if ( ! g_Prj_Default_Config_FullFilename.IsEmpty() )
-		EDA_Appl->m_CurrentOptionFile = g_Prj_Default_Config_FullFilename;
+		g_EDA_Appl->m_CurrentOptionFile = g_Prj_Default_Config_FullFilename;
 	else
 	{
 		if ( wxPathOnly(g_Prj_Config_LocalFilename).IsEmpty() )
-			EDA_Appl->m_CurrentOptionFile =
+			g_EDA_Appl->m_CurrentOptionFile =
 				wxGetCwd() + STRING_DIR_SEP + g_Prj_Config_LocalFilename;
 		else	
-			EDA_Appl->m_CurrentOptionFile = g_Prj_Config_LocalFilename;
+			g_EDA_Appl->m_CurrentOptionFile = g_Prj_Config_LocalFilename;
 	}
 
 	for( ; *List != NULL ; List++)

@@ -152,7 +152,7 @@ int ii;
 	/* Init des valeurs par defaut */
 	 g_LibName_List.Clear();
 
-	EDA_Appl->ReadProjectConfig( FullFileName,
+	g_EDA_Appl->ReadProjectConfig( FullFileName,
 		GROUP, ParamCfgList, FALSE);
 
 	/* Traitement des variables particulieres: */
@@ -203,7 +203,7 @@ wxString mask;
 	Pcbdiv_grille = GetScreen()->m_Diviseur_Grille;
 
 	/* ecriture de la configuration */
-	EDA_Appl->WriteProjectConfig(FullFileName, wxT("/pcbnew"), ParamCfgList);
+	g_EDA_Appl->WriteProjectConfig(FullFileName, wxT("/pcbnew"), ParamCfgList);
 }
 
 

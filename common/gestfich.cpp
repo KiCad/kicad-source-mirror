@@ -76,7 +76,7 @@ static wxString    s_KicadBinaryPathList[] = {
 #endif
     wxT( "end_list" )  // End of list symbol, do not change
 };
-extern WinEDA_App* EDA_Appl;
+extern WinEDA_App* g_EDA_Appl;
 
 
 /***************************************************************************/
@@ -339,12 +339,12 @@ wxString FindKicadHelpPath()
     bool     PathFound = FALSE;
 
     /* find kicad/help/ */
-    tmp = EDA_Appl->m_BinDir;
+    tmp = g_EDA_Appl->m_BinDir;
     if( tmp.Last() == '/' )
         tmp.RemoveLast();
     FullPath     = tmp.BeforeLast( '/' ); // Idem cd ..
     FullPath    += wxT( "/help/" );
-    LocaleString = EDA_Appl->m_Locale->GetCanonicalName();
+    LocaleString = g_EDA_Appl->m_Locale->GetCanonicalName();
 
     wxString path_tmp = FullPath;
 #ifdef __WINDOWS__
@@ -357,9 +357,9 @@ wxString FindKicadHelpPath()
     }
 
     /* find kicad/help/ from environment variable  KICAD */
-    if( !PathFound && EDA_Appl->m_Env_Defined )
+    if( !PathFound && g_EDA_Appl->m_Env_Defined )
     {
-        FullPath = EDA_Appl->m_KicadEnv + wxT( "/help/" );
+        FullPath = g_EDA_Appl->m_KicadEnv + wxT( "/help/" );
         if( wxDirExists( FullPath ) )
             PathFound = TRUE;
     }
@@ -424,15 +424,15 @@ wxString FindKicadFile( const wxString& shortname )
 
     /* test de la presence du fichier shortname dans le repertoire de
      *  des binaires de kicad */
-    FullFileName = EDA_Appl->m_BinDir + shortname;
+    FullFileName = g_EDA_Appl->m_BinDir + shortname;
     if( wxFileExists( FullFileName ) )
         return FullFileName;
 
     /* test de la presence du fichier shortname dans le repertoire
      *  defini par la variable d'environnement KICAD */
-    if( EDA_Appl->m_Env_Defined )
+    if( g_EDA_Appl->m_Env_Defined )
     {
-        FullFileName = EDA_Appl->m_KicadEnv + shortname;
+        FullFileName = g_EDA_Appl->m_KicadEnv + shortname;
         if( wxFileExists( FullFileName ) )
             return FullFileName;
     }
@@ -519,7 +519,7 @@ void SetRealLibraryPath( const wxString& shortlibname )
     else
     {
         g_RealLibDirBuffer = ReturnKicadDatasPath();
-        if( EDA_Appl->m_Env_Defined )  // Chemin impose par la variable d'environnement
+        if( g_EDA_Appl->m_Env_Defined )  // Chemin impose par la variable d'environnement
         {
             PathFound = TRUE;
         }
@@ -552,22 +552,22 @@ wxString ReturnKicadDatasPath()
     bool     PathFound = FALSE;
     wxString data_path;
 
-    if( EDA_Appl->m_Env_Defined )  // Chemin impose par la variable d'environnement
+    if( g_EDA_Appl->m_Env_Defined )  // Chemin impose par la variable d'environnement
     {
-        data_path = EDA_Appl->m_KicadEnv;
+        data_path = g_EDA_Appl->m_KicadEnv;
         PathFound = TRUE;
     }
     else    // Chemin cherche par le chemin des executables
     {
             // le chemin est bindir../
-        wxString tmp = EDA_Appl->m_BinDir;
+        wxString tmp = g_EDA_Appl->m_BinDir;
 #ifdef __WINDOWS__
         tmp.MakeLower();
 #endif
         if( tmp.Contains( wxT( "kicad" ) ) )
         {
 #ifdef __WINDOWS__
-            tmp = EDA_Appl->m_BinDir;
+            tmp = g_EDA_Appl->m_BinDir;
 #endif
             if( tmp.Last() == '/' )
                 tmp.RemoveLast();
@@ -636,10 +636,10 @@ wxString GetEditorName()
                                        );
     }
 
-    if( ( !editorname.IsEmpty() ) && EDA_Appl->m_EDA_CommonConfig )
+    if( ( !editorname.IsEmpty() ) && g_EDA_Appl->m_EDA_CommonConfig )
     {
         g_EditorName = editorname;
-        EDA_Appl->m_EDA_CommonConfig->Write( wxT( "Editor" ), g_EditorName );
+        g_EDA_Appl->m_EDA_CommonConfig->Write( wxT( "Editor" ), g_EditorName );
     }
     return g_EditorName;
 }
@@ -651,11 +651,11 @@ void OpenPDF( const wxString& file )
     wxString filename = file;
     wxString type;
 
-    EDA_Appl->ReadPdfBrowserInfos();
-    if( !EDA_Appl->m_PdfBrowserIsDefault )
+    g_EDA_Appl->ReadPdfBrowserInfos();
+    if( !g_EDA_Appl->m_PdfBrowserIsDefault )
     {
         AddDelimiterString( filename );
-        command = EDA_Appl->m_PdfBrowser + filename;
+        command = g_EDA_Appl->m_PdfBrowser + filename;
     }
     else
     {

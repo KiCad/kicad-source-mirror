@@ -339,14 +339,14 @@ public:
     BOARD_ITEM* GetCurItem() const {  return (BOARD_ITEM*) BASE_SCREEN::GetCurItem(); }
 };
 
-/***************************/
-/* Description des Modules */
-/***************************/
+/**********************************/
+/* Module (Footprint) description */
+/**********************************/
 
-#include "class_pad.h"       /* Description des Pastilles :*/
-#include "class_edge_mod.h"
-#include "class_text_mod.h"
-#include "class_module.h"
+#include "class_pad.h"       // class for pads
+#include "class_edge_mod.h"	// Class for  footprint graphic elements
+#include "class_text_mod.h"	// Class for  footprint fields
+#include "class_module.h"	// Class for the footprint
 #include "class_equipot.h"
 
 
@@ -413,6 +413,7 @@ public:
 #include "class_cotation.h"
 #include "class_mire.h"
 #include "class_track.h"
+#include "class_marker.h"
 
 /*******************/
 /* class EDGE_ZONE */
@@ -426,43 +427,6 @@ public:
     ~EDGE_ZONE();
 };
 
-
-/***************************************/
-/* Markers: used to show a drc problem */
-/***************************************/
-
-class MARQUEUR : public BOARD_ITEM
-{
-public:
-    wxPoint  m_Pos;
-    char*    m_Bitmap;              /* Shape (bitmap) */
-    int      m_Type;
-    int      m_Color;               /* color */
-    wxString m_Diag;                /* Associated text (comment) */
-
-public:
-    MARQUEUR( BOARD_ITEM* StructFather );
-    ~MARQUEUR();
-    void    UnLink();
-    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int DrawMode );
-    
-    /**
-     * Function Display_Infos
-     * has knowledge about the frame and how and where to put status information
-     * about this object into the frame's message panel.
-     * @param frame A WinEDA_DrawFrame in which to print status information.
-     */ 
-    void    Display_Infos( WinEDA_DrawFrame* frame );
-
-    
-    /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * @param ref_pos A wxPoint to test
-     * @return bool - true if a hit, else false
-     */
-    bool    HitTest( const wxPoint& ref_pos );
-};
 
 
 class DISPLAY_OPTIONS

@@ -22,7 +22,7 @@ OBJECTS= \
 		drawpanel.o\
 		set_color.o \
 		gerbview_config.o \
-		cursors.o \
+		class_marker.o \
 		affiche.o \
 		tracepcb.o \
 		class_pcb_text.o\
@@ -65,7 +65,7 @@ set_color.o: set_color.cpp set_color.h $(COMMON)
 
 files.o: files.cpp $(COMMON)
 
-cursors.o: ../pcbnew/cursors.cpp $(COMMON)
+class_marker.o: ../pcbnew/class_marker.cpp ../pcbnew/class_marker.h $(COMMON)
 	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 sel_layer.o: ../pcbnew/sel_layer.cpp $(COMMON)

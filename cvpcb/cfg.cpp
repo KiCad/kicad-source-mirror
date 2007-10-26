@@ -35,7 +35,7 @@ wxString FullFileName = FileName ;
 	g_LibName_List.Clear();
 	g_ListName_Equ.Clear();
 
-	EDA_Appl->ReadProjectConfig(FullFileName,
+	g_EDA_Appl->ReadProjectConfig(FullFileName,
 		GROUP, ParamCfgList, FALSE);
 
 	if ( PkgInExtBuffer.IsEmpty() ) PkgInExtBuffer = wxT(".pkg");
@@ -80,6 +80,6 @@ wxString mask( wxT("*"));
 	if ( FullFileName.IsEmpty()) return;
 
 	/* ecriture de la configuration */
-	EDA_Appl->WriteProjectConfig(FullFileName, GROUP, ParamCfgList);
+	g_EDA_Appl->WriteProjectConfig(FullFileName, GROUP, ParamCfgList);
 }
 

@@ -86,7 +86,7 @@ void KiConfigCvpcbFrame::SetDialogDatas()
 				m_PkgExtBoxSizer, wxDefaultSize);
 				
 	wxString DocModuleFileName =
-		EDA_Appl->m_EDA_CommonConfig->Read( wxT("module_doc_file"), wxT("pcbnew/footprints.pdf"));
+		g_EDA_Appl->m_EDA_CommonConfig->Read( wxT("module_doc_file"), wxT("pcbnew/footprints.pdf"));
 	m_TextHelpModulesFileName = new WinEDA_EnterText(this,
 				_("Module Doc File:"),  DocModuleFileName,
 				m_RightBoxSizer, wxDefaultSize);
@@ -132,7 +132,7 @@ wxString msg;
 	if ( ! m_DoUpdate ) return;
 	NetInExtBuffer = m_NetInputExtCtrl->GetValue();
 	PkgInExtBuffer = m_PkgExtCtrl->GetValue();
-	EDA_Appl->m_EDA_CommonConfig->Write( wxT("module_doc_file"),
+	g_EDA_Appl->m_EDA_CommonConfig->Write( wxT("module_doc_file"),
 			m_TextHelpModulesFileName->GetValue());
 
 	msg = m_LibDirCtrl->GetValue();

@@ -144,7 +144,7 @@ static void Create_NewPrj_Config( const wxString PrjFullFileName )
     g_BoardFileName = wxFileNameFromPath( PrjFullFileName );
     ChangeFileNameExt( g_BoardFileName, g_BoardExtBuffer );
 
-    EDA_Appl->WriteProjectConfig( PrjFullFileName, wxT( "/general" ), CfgParamList );
+    g_EDA_Appl->WriteProjectConfig( PrjFullFileName, wxT( "/general" ), CfgParamList );
 }
 
 

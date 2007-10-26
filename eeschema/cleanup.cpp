@@ -63,7 +63,7 @@ bool SCH_SCREEN::SchematicCleanUp( wxDC* DC )
         }
     }
 
-    EDA_Appl->m_SchematicFrame->TestDanglingEnds( EEDrawList, DC );
+    g_EDA_Appl->m_SchematicFrame->TestDanglingEnds( EEDrawList, DC );
     return Modify;
 }
 

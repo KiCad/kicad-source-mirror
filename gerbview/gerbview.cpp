@@ -26,7 +26,7 @@ bool WinEDA_App::OnInit()
 {
 wxString FFileName;
 
-	EDA_Appl = this;
+	g_EDA_Appl = this;
 	InitEDA_Appl( wxT("gerbview") );
 
 	if(argc > 1) FFileName = MakeFileName(wxEmptyString, argv[1], g_PhotoFilenameExt);

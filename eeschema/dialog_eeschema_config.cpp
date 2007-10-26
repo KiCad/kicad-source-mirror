@@ -102,7 +102,7 @@ wxString msg;
 
     Create(parent, id, caption, pos, size, style);
 	
-	msg = _("from ") + EDA_Appl->m_CurrentOptionFile;
+	msg = _("from ") + g_EDA_Appl->m_CurrentOptionFile;
 	SetTitle(msg);
 	SetFormatsNetListes();
 	m_ListLibr->InsertItems(g_LibName_List, 0);

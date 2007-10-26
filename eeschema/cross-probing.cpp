@@ -36,7 +36,7 @@ void RemoteCommand( const char* cmdline )
     char     line[1024];
     char*    idcmd;
     char*    text;
-    WinEDA_SchematicFrame* frame = EDA_Appl->m_SchematicFrame;
+    WinEDA_SchematicFrame* frame = g_EDA_Appl->m_SchematicFrame;
     wxString part_ref, msg;
 
     strncpy( line, cmdline, sizeof(line) - 1 );

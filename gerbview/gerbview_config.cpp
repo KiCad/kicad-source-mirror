@@ -91,7 +91,7 @@ bool Read_Config()
  */
 {
     g_Prj_Config_Filename_ext = wxT( ".cnf" );
-    EDA_Appl->ReadProjectConfig( wxT( "gerbview" ), GROUP, ParamCfgList, FALSE );
+    g_EDA_Appl->ReadProjectConfig( wxT( "gerbview" ), GROUP, ParamCfgList, FALSE );
 
     /* Inits autres variables */
     if( ScreenPcb )
@@ -137,7 +137,7 @@ void WinEDA_GerberFrame::Update_config()
         return;
 
     /* ecriture de la configuration */
-    EDA_Appl->WriteProjectConfig( FullFileName, GROUP, ParamCfgList );
+    g_EDA_Appl->WriteProjectConfig( FullFileName, GROUP, ParamCfgList );
 }
 
 

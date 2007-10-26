@@ -329,7 +329,7 @@ void WinEDA_NetlistFrame::SetupPlugin(wxCommandEvent& event)
 {
 wxString FullFileName, Mask, Path;
 	Mask = wxT("*");
-	Path =  EDA_Appl->m_BinDir;
+	Path =  g_EDA_Appl->m_BinDir;
 	FullFileName = EDA_FileSelector( _("Plugin files:"),
 					Path,		/* Chemin par defaut */
 					FullFileName,		/* nom fichier par defaut */

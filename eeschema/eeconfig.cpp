@@ -142,7 +142,7 @@ wxArrayString liblist_tmp = g_LibName_List;
 	else FullFileName = CfgFileName;
 	g_LibName_List.Clear();
 	
-	if ( ! EDA_Appl->ReadProjectConfig(FullFileName,
+	if ( ! g_EDA_Appl->ReadProjectConfig(FullFileName,
 		GROUP, ParamCfgList, ForceRereadConfig ? FALSE : TRUE) )	// Config non lue
 	{
 		g_LibName_List = liblist_tmp;
@@ -159,13 +159,13 @@ wxArrayString liblist_tmp = g_LibName_List;
 		g_LibName_List.Add( wxT("device") );
 	}
 
-	if ( EDA_Appl->m_SchematicFrame )
+	if ( g_EDA_Appl->m_SchematicFrame )
 	{
-		EDA_Appl->m_SchematicFrame->SetDrawBgColor(g_DrawBgColor);
-		EDA_Appl->m_SchematicFrame->m_Draw_Grid = g_ShowGrid;
+		g_EDA_Appl->m_SchematicFrame->SetDrawBgColor(g_DrawBgColor);
+		g_EDA_Appl->m_SchematicFrame->m_Draw_Grid = g_ShowGrid;
 	}
 
-	LoadLibraries(EDA_Appl->m_SchematicFrame);
+	LoadLibraries(g_EDA_Appl->m_SchematicFrame);
 
 	return IsRead;
 }
@@ -197,6 +197,6 @@ wxString mask( wxT("*") );
 	if ( FullFileName.IsEmpty() ) return;
 
 	/* ecriture de la configuration */
-	EDA_Appl->WriteProjectConfig(FullFileName, GROUP, ParamCfgList);
+	g_EDA_Appl->WriteProjectConfig(FullFileName, GROUP, ParamCfgList);
 }
 

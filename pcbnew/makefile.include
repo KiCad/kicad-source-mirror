@@ -16,7 +16,7 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		cross-probing.o\
 		via_edit.o\
 		wxprint.o \
-		cursors.o\
+		class_marker.o\
 		menubarpcb.o \
 		menubarmodedit.o \
 		tool_onrightclick.o\

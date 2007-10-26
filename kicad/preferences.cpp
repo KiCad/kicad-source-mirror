@@ -28,8 +28,8 @@ wxString mask(wxT("*"));
 mask += wxT(".exe");
 #endif
 
-	EDA_Appl->ReadPdfBrowserInfos();
-	wxString FullFileName = EDA_Appl->m_PdfBrowser;
+	g_EDA_Appl->ReadPdfBrowserInfos();
+	wxString FullFileName = g_EDA_Appl->m_PdfBrowser;
 	FullFileName = EDA_FileSelector( _("Prefered Pdf Browser:"),
 			wxPathOnly(FullFileName),	/* Default path */
 			FullFileName,			/* default filename */
@@ -39,10 +39,10 @@ mask += wxT(".exe");
 			wxFD_OPEN,					/* wxFD_SAVE, wxFD_OPEN ..*/
 			TRUE					/* true = keep the current path */
 			);
-	if ( ! FullFileName.IsEmpty() && (EDA_Appl->m_PdfBrowser != FullFileName) )
+	if ( ! FullFileName.IsEmpty() && (g_EDA_Appl->m_PdfBrowser != FullFileName) )
 	{
-		EDA_Appl->m_PdfBrowser = FullFileName;
-		EDA_Appl->WritePdfBrowserInfos();
+		g_EDA_Appl->m_PdfBrowser = FullFileName;
+		g_EDA_Appl->WritePdfBrowserInfos();
 		return TRUE;
 	}
 	return FALSE;
@@ -62,31 +62,31 @@ mask += wxT(".exe");
 	switch (id)
 	{
 		case ID_SELECT_DEFAULT_PDF_BROWSER:
-			EDA_Appl->m_PdfBrowserIsDefault = TRUE;
-			GetMenuBar()->Check(ID_SELECT_DEFAULT_PDF_BROWSER, EDA_Appl->m_PdfBrowserIsDefault);
-			GetMenuBar()->Check(ID_SELECT_PREFERED_PDF_BROWSER, !EDA_Appl->m_PdfBrowserIsDefault);
-			EDA_Appl->WritePdfBrowserInfos();
+			g_EDA_Appl->m_PdfBrowserIsDefault = TRUE;
+			GetMenuBar()->Check(ID_SELECT_DEFAULT_PDF_BROWSER, g_EDA_Appl->m_PdfBrowserIsDefault);
+			GetMenuBar()->Check(ID_SELECT_PREFERED_PDF_BROWSER, !g_EDA_Appl->m_PdfBrowserIsDefault);
+			g_EDA_Appl->WritePdfBrowserInfos();
 			break;
 
 		case ID_SELECT_PREFERED_PDF_BROWSER:
-			if ( EDA_Appl->m_PdfBrowser.IsEmpty() )
+			if ( g_EDA_Appl->m_PdfBrowser.IsEmpty() )
 			{
 				DisplayError(this, _("You must choose a PDF viewer before use this option"));
 				ChoosePdfBrowser(this);
 			}
-			if ( EDA_Appl->m_PdfBrowser.IsEmpty() )
+			if ( g_EDA_Appl->m_PdfBrowser.IsEmpty() )
 			{
-				EDA_Appl->m_PdfBrowserIsDefault = TRUE;
+				g_EDA_Appl->m_PdfBrowserIsDefault = TRUE;
 				GetMenuBar()->Check(ID_SELECT_DEFAULT_PDF_BROWSER, TRUE);
 				GetMenuBar()->Check(ID_SELECT_PREFERED_PDF_BROWSER, FALSE);
 			}
 			else
 			{
-				EDA_Appl->m_PdfBrowserIsDefault = FALSE;
+				g_EDA_Appl->m_PdfBrowserIsDefault = FALSE;
 				GetMenuBar()->Check(ID_SELECT_DEFAULT_PDF_BROWSER, FALSE);
 				GetMenuBar()->Check(ID_SELECT_PREFERED_PDF_BROWSER, TRUE);
 			}
-			EDA_Appl->WritePdfBrowserInfos();
+			g_EDA_Appl->WritePdfBrowserInfos();
 			break;
 
 		case ID_SELECT_PREFERED_PDF_BROWSER_NAME:
@@ -103,10 +103,10 @@ mask += wxT(".exe");
 					wxFD_OPEN,					/* wxFD_SAVE, wxFD_OPEN ..*/
 					TRUE					/* true = keep the current path */
 					);
-			if ( ( !FullFileName.IsEmpty() ) && EDA_Appl->m_EDA_CommonConfig)
+			if ( ( !FullFileName.IsEmpty() ) && g_EDA_Appl->m_EDA_CommonConfig)
 			{
 				g_EditorName = FullFileName;
-				EDA_Appl->m_EDA_CommonConfig->Write(wxT("Editor"), g_EditorName);
+				g_EDA_Appl->m_EDA_CommonConfig->Write(wxT("Editor"), g_EditorName);
 			}
 			break;
 

@@ -24,7 +24,7 @@ void DeleteSubHierarchy(DrawSheetStruct * FirstSheet, bool confirm_deletion)
 {
 EDA_BaseStruct *DrawStruct;
 EDA_BaseStruct *EEDrawList;
-WinEDA_SchematicFrame * frame = EDA_Appl->m_SchematicFrame;
+WinEDA_SchematicFrame * frame = g_EDA_Appl->m_SchematicFrame;
 wxString msg;
 
 	if( FirstSheet == NULL ) return;

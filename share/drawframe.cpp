@@ -328,6 +328,14 @@ void WinEDA_DrawFrame::OnSelectZoom( wxCommandEvent& event )  // fonction virtue
     }
 }
 
+/***********************************/
+int WinEDA_DrawFrame::GetZoom(void)
+/***********************************/
+/* Return the current zoom level */
+{
+	return m_CurrentScreen->GetZoom();
+}
+
 
 /********************************************************/
 void WinEDA_DrawFrame::OnMouseEvent( wxMouseEvent& event )

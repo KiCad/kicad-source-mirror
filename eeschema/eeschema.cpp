@@ -46,7 +46,7 @@ bool WinEDA_App::OnInit()
 {
     wxString FFileName;
 
-    EDA_Appl = this;
+    g_EDA_Appl = this;
 
     g_DebugLevel = 0;   // Debug level */
 

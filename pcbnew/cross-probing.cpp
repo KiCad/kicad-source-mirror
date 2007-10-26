@@ -33,7 +33,7 @@ void RemoteCommand(  const char* cmdline )
     char*            idcmd;
     char*            text;
     MODULE*          module = 0;
-    WinEDA_PcbFrame* frame  = EDA_Appl->m_PcbFrame;
+    WinEDA_PcbFrame* frame  = g_EDA_Appl->m_PcbFrame;
 
     strncpy( line, cmdline, sizeof(line) - 1 );
 

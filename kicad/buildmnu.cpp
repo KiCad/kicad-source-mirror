@@ -170,7 +170,7 @@ void WinEDA_MainFrame::ReCreateMenuBar()
         SETBITMAPS(datasheet_xpm);
         SubMenuPdfBrowserChoice->Append(item);
         SubMenuPdfBrowserChoice->Check(ID_SELECT_DEFAULT_PDF_BROWSER,
-            EDA_Appl->m_PdfBrowserIsDefault);
+            g_EDA_Appl->m_PdfBrowserIsDefault);
         item = new wxMenuItem(SubMenuPdfBrowserChoice , ID_SELECT_PREFERED_PDF_BROWSER,
                 _("Favourite Pdf Viewer"), _("Use your favourite PDF viewer used to browse datasheets"),
                 wxITEM_CHECK);
@@ -178,7 +178,7 @@ void WinEDA_MainFrame::ReCreateMenuBar()
         SubMenuPdfBrowserChoice->Append(item);
         SubMenuPdfBrowserChoice->AppendSeparator();
         SubMenuPdfBrowserChoice->Check(ID_SELECT_PREFERED_PDF_BROWSER,
-            !EDA_Appl->m_PdfBrowserIsDefault);
+            !g_EDA_Appl->m_PdfBrowserIsDefault);
         item = new wxMenuItem(SubMenuPdfBrowserChoice , ID_SELECT_PREFERED_PDF_BROWSER_NAME,
                 _("Select Pdf Viewer"), _("Select your favourite PDF viewer used to browse datasheets"));
         item->SetBitmap(datasheet_xpm);

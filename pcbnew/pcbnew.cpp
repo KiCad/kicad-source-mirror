@@ -34,7 +34,7 @@ bool WinEDA_App::OnInit()
 {
     wxString FFileName;
 
-    EDA_Appl = this;
+    g_EDA_Appl = this;
     InitEDA_Appl( wxT( "pcbnew" ) );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
