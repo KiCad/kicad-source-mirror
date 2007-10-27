@@ -69,6 +69,9 @@ WinEDA_BasePcbFrame::~WinEDA_BasePcbFrame( void )
 /**************************************/
 int WinEDA_BasePcbFrame::BestZoom( void )
 /**************************************/
+/**
+ * Return the "best" zoom, i.e. the zoom which shows the entire borad on screen
+ */
 {
     int    dx, dy, ii, jj;
     int    bestzoom;
@@ -79,7 +82,6 @@ int WinEDA_BasePcbFrame::BestZoom( void )
 
     m_Pcb->ComputeBoundaryBox();
 
-    /* calcul du zoom montrant tout le dessim */
     dx = m_Pcb->m_BoundaryBox.GetWidth();
     dy = m_Pcb->m_BoundaryBox.GetHeight();
 

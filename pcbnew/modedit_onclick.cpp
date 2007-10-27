@@ -74,6 +74,8 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     DrawStruct = GetCurItem();
     if( !DrawStruct || (DrawStruct->m_Flags == 0) )
     {
+        if( !wxGetKeyState(WXK_SHIFT) && !wxGetKeyState(WXK_ALT) &&
+                !wxGetKeyState(WXK_CONTROL) )
         DrawStruct = ModeditLocateAndDisplay();
         SetCurItem( DrawStruct );
     }

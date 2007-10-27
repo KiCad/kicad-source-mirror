@@ -15,6 +15,10 @@ email address.
 	display frame
 	minor other changes
 
++ pcbnew:
+	Use collector class to locate items in modedit.
+	This is a big enhancement,
+	but a small work for me because Dick made all the work. 
 
 
 2007-Oct-26 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>

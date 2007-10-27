@@ -17,27 +17,109 @@
 #include "protos.h"
 #include "id.h"
 
+#include "collectors.h"
 
-/*********************************************************************/
-BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay()
-/*********************************************************************/
+/****************************************************************************/
+BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
+/****************************************************************************/
 {
-    BOARD_ITEM*     DrawStruct = GetCurItem();
+    BOARD_ITEM*     item = GetCurItem();
     MODULE*         Module = m_Pcb->m_Modules;
 
     if( Module == NULL )
         return NULL;
 
-    DrawStruct = Locate_Edge_Module( Module, CURSEUR_OFF_GRILLE );
-    if( DrawStruct )
+    GENERAL_COLLECTORS_GUIDE guide = GetCollectorsGuide();
+
+    // Assign to scanList the proper item types desired based on tool type
+    // or hotkey that is in play.
+
+    const KICAD_T* scanList = NULL;
+
+    if( aHotKeyCode )
     {
-        DrawStruct->Display_Infos( this );
+        // @todo: add switch here and add calls to PcbGeneralLocateAndDisplay( int aHotKeyCode )
+        // when searching is needed from a hotkey handler
     }
     else
-        DrawStruct = Locate( CURSEUR_OFF_GRILLE, -1 );
+    {
+        scanList = GENERAL_COLLECTOR::ModulesAndTheirItems;
+    }
 
-    return DrawStruct;
+    m_Collector->Collect( m_Pcb, scanList, GetScreen()->RefPos( true ), guide );
+
+    /* Remove redundancies: when an item is found, we can remove the
+	 * module from list
+     */
+	if( m_Collector->GetCount() > 1 )
+	{
+		for( int ii = 0;  ii < m_Collector->GetCount(); ii++ )
+		{
+			item = (*m_Collector)[ii];
+			if( item->Type() != TYPEMODULE )
+				continue;
+			m_Collector->Remove( ii );
+			ii--;
+		}
+	}
+
+    if( m_Collector->GetCount() <= 1 )
+    {
+        item = (*m_Collector)[0];
+        SetCurItem( item );
+    }
+
+    else    // we can't figure out which item user wants, do popup menu so user can choose
+    {
+        wxMenu itemMenu;
+
+        /* Give a title to the selection menu. This is also a cancel menu item */
+        wxMenuItem * item_title = new wxMenuItem(&itemMenu, -1, _( "Selection Clarification" ) );
+#ifdef __WINDOWS__
+        wxFont bold_font(*wxNORMAL_FONT);
+        bold_font.SetWeight(wxFONTWEIGHT_BOLD);
+        bold_font.SetStyle( wxFONTSTYLE_ITALIC);
+        item_title->SetFont(bold_font);
+#endif
+        itemMenu.Append(item_title);
+        itemMenu.AppendSeparator();
+
+        int limit = MIN( MAX_ITEMS_IN_PICKER, m_Collector->GetCount() );
+
+        for( int ii = 0;  ii<limit;  ++ii )
+        {
+            wxString     text;
+            const char** xpm;
+
+            item = (*m_Collector)[ii];
+
+            text = item->MenuText( m_Pcb );
+            xpm  = item->MenuIcon();
+
+            ADD_MENUITEM( &itemMenu, ID_POPUP_PCB_ITEM_SELECTION_START + ii, text, xpm );
+        }
+
+        // this menu's handler is void WinEDA_BasePcbFrame::ProcessItemSelection()
+        // and it calls SetCurItem() which in turn calls Display_Infos() on the item.
+        DrawPanel->m_AbortRequest = true;   // changed in false if an item
+        PopupMenu( &itemMenu ); // m_AbortRequest = false if an item is selected
+
+        DrawPanel->MouseToCursorSchema();
+
+        DrawPanel->m_IgnoreMouseEvents = FALSE;
+
+        // The function ProcessItemSelection() has set the current item, return it.
+        item = GetCurItem();
+    }
+
+    if( item )
+    {
+        item->Display_Infos( this );
+    }
+
+    return item;
 }
+
 
 
 /****************************************************************************/

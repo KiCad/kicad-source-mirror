@@ -14,21 +14,21 @@
 
 #include "protos.h"
 
-/* Constantes de controle de l'affichage des messages */
+/* Position of messages on the bottom display */
 #define AFFICHE         1
 #define POS_AFF_PASSE   40
 #define POS_AFF_VAR     50
 #define POS_AFF_MAX     60
 #define POS_AFF_NUMSEGM 70
 
-/* Routines locales : */
+/* local functions : */
 static int      clean_segments( WinEDA_PcbFrame* frame, wxDC* DC );
 static void     DeleteUnconnectedTracks( WinEDA_PcbFrame* frame, wxDC* DC );
 static TRACK*   AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extremite );
 static void     Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC );
 
-/* Variables locales : */
-static bool a_color;    /* couleur du message */
+/* Local Variables: */
+static bool a_color;    /* message color */
 static bool s_CleanVias     = true;
 static bool s_MergeSegments = true;
 static bool s_DeleteUnconnectedSegm = true;
@@ -48,13 +48,8 @@ static void Gen_Raccord_Track( WinEDA_PcbFrame* frame, wxDC* DC );
 /*****************************************/
 void WinEDA_PcbFrame::Clean_Pcb( wxDC* DC )
 /*****************************************/
-
-/* Regroupement des segments de meme piste.
- *  Suppression des points inutiles
- *      - via sur pad
- *      - points de couche et coord identiques
- *      - points alignes (supp du pt milieu)
- */
+/* Install the track operation dialog frame
+*/
 {
     s_ConnectToPads = false;
     WinEDA_CleaningOptionsFrame* frame = new WinEDA_CleaningOptionsFrame( this, DC );
@@ -67,6 +62,15 @@ void WinEDA_PcbFrame::Clean_Pcb( wxDC* DC )
 /************************************************************/
 void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC )
 /************************************************************/
+/* Main cleaning function.
+ *  Delete
+ * - Redundant points on tracks (merge aligned segments)
+ * - vias on pad
+ * - null segments
+ * - Redundant segments
+ *  Create segments when track ends are incorrecty connected:
+ *  i.e. when a track end covers a pad or a via but is not exactly on the pad or the via center
+ */
 {
     frame->MsgPanel->EraseMsgBox();
     frame->m_Pcb->GetNumSegmTrack();    // update the count
@@ -446,9 +450,9 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
         }
     }
 
-    /****************************/
+    /*******************************/
     /* delete intermediate points  */
-    /****************************/
+    /*******************************/
 
     nbpoints_supprimes = 0;
     percent = 0; 
@@ -489,7 +493,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
 
         flag = no_inc = 0;
 
-        // search for a possible point that connects on START of segment
+        // search for a possible point that connects on the START point of the segment
         for( segStart = segment->Next(); ; )
         {
             segStart = Locate_Piste_Connectee( segment, segStart,
@@ -504,7 +508,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
                 if( segStart->Type() != TYPETRACK )
                     break;
 
-                /* On ne peut avoir que 1 seul segment connecte */
+                /* We must have only one segment connected */
                 segStart->SetState( BUSY, ON );
                 other = Locate_Piste_Connectee( segment, frame->m_Pcb->m_Track,
                                                  NULL, START );
@@ -518,7 +522,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
             break;
         }
 
-        if( flag )    /* debut de segment raccorde a un autre segment */
+        if( flag )    /* We have the starting point of the segment is connecte to an other segment */
         {
             segDelete = AlignSegment( frame->m_Pcb, segment, segStart, START );
             if( segDelete )
@@ -528,7 +532,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
             }
         }
 
-        /* Recherche d'un point possible raccorde sur FIN de segment: */
+        /* search for a possible point that connects on the END point of the segment: */
         for( segEnd = segment->Next(); ; )
         {
             segEnd = Locate_Piste_Connectee( segment, segEnd, NULL, END );
@@ -540,7 +544,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
                 if( segEnd->Type() != TYPETRACK )
                     break;
 
-                /* On ne peut avoir que 1 seul segment connecte */
+                /* We must have only one segment connected */
                 segEnd->SetState( BUSY, ON );
                 other = Locate_Piste_Connectee( segment, frame->m_Pcb->m_Track,
                                                  NULL, END );
@@ -555,7 +559,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
                 break;
         }
 
-        if( flag & 2 )    /* FIN de segment raccorde a un autre segment */
+        if( flag & 2 )    /* We have the ending point of the segment is connecte to an other segment */
         {
             segDelete = AlignSegment( frame->m_Pcb, segment, segEnd, END );
             if( segDelete )
@@ -566,7 +570,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
             }
         }
 
-        if( no_inc ) /* Le segment en cours a ete modifie, il faut le reexaminer */
+        if( no_inc ) /* The current segment was modified, retry to merge it */
         {
             msg.Printf( wxT( "%d " ), nbpoints_supprimes );
             Affiche_1_Parametre( frame, POS_AFF_VAR, wxEmptyString, msg, a_color );
@@ -582,18 +586,16 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
 /****************************************************************************/
 static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extremite )
 /****************************************************************************/
-
-/**
- * Function AlignSegment
- */
-
-/* Routine utilisee par clean_segments.
- *  Verifie l'alignement de pt_segm / pt_ref. et verifie que le point commun
- *  a faire disparaitre n'est pas sur un pad.
- *  l'extremite testee est debut (extremite == START) ou fin (extremite == FIN)
- *  si il y a alignement, modifie les coord d'extremite de pt_ref et retourne
- *  pt_segm.
- *  sinon retourne NULL
+/* Function used by clean_segments.
+ *  Test alignement of pt_segm and pt_ref (which must have acommon end).
+ *  and see if the common point is not on a pad (i.e. if this common point can be removed).
+ *  the ending point of pt_ref is the start point (extremite == START)
+ *  or the end point (extremite == FIN)
+ *  if the common end can be deleted, this function 
+ *    change the common point coordinate of the pt_ref segm
+ *   (and therefore connect the 2 other ending points)
+ *    and return pt_segm (which can be deleted).
+ *  else return NULL
  */
 {
     int flag = 0;
@@ -604,7 +606,7 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
     int segmdx = pt_segm->m_End.x - pt_segm->m_Start.x; 
     int segmdy = pt_segm->m_End.y - pt_segm->m_Start.y;
 
-    // test for vertical alignment
+    // test for vertical alignment (easy to handle)
     if( refdx == 0 )
     {
         if( segmdx != 0 )
@@ -613,7 +615,7 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
             flag = 1;
     }
     
-    // test for horizontal alignment
+    // test for horizontal alignment (easy to handle)
     if( refdy == 0 )
     {
         if( segmdy != 0 )
@@ -622,8 +624,8 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
             flag = 2;
     }
 
-    /* tst si il y a alignement d'angle qcq
-     *  il faut que refdy/refdx == (+/-)segmdy/segmdx, c.a.d meme direction */
+    /* tst if alignement in other cases
+     *  We must have refdy/refdx == (+/-)segmdy/segmdx, (i.e. same orientation) */
     if( flag == 0 )
     {
         if( (refdy * segmdx !=  refdx * segmdy)
@@ -632,21 +634,26 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
         flag = 4;
     }
 
-    /* Ici il y a alignement: il faut determiner les positions relatives
-     *  pour supprimer le point commun et le remplacer */
+    /* Here we have 2 aligned segments:
+	We must change the pt_ref common point only if not on a pad
+	(this function) is called when thre is only 2 connected segments,
+	and if this point is not on a pad, it can be removed and the 2 segments will be merged
+	*/
     if( extremite == START )
     {
-        /* Ce ne doit pas etre sur un pad */
+        /* We do not have a pad */
         if( Fast_Locate_Pad_Connecte( Pcb, pt_ref->m_Start,
                                       g_TabOneLayerMask[pt_ref->GetLayer()] ) )
             return NULL;
 
+		/* change the common point coordinate of pt_segm tu use the other point
+		of pt_segm (pt_segm will be removed later) */
         if( pt_ref->m_Start == pt_segm->m_Start )
         {
             pt_ref->m_Start = pt_segm->m_End; 
             return pt_segm;
         }
-        else        /* connexion par la fin de pt_segm */
+        else
         {
             pt_ref->m_Start = pt_segm->m_Start; 
             return pt_segm;
@@ -654,17 +661,19 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
     }
     else    /* extremite == END */
     {
-        /* Ce ne doit pas etre sur un pad */
+        /* We do not have a pad */
         if( Fast_Locate_Pad_Connecte( Pcb, pt_ref->m_End, 
                                      g_TabOneLayerMask[pt_ref->GetLayer()] ) )
             return NULL;
 
+		/* change the common point coordinate of pt_segm tu use the other point
+		of pt_segm (pt_segm will be removed later) */
         if( pt_ref->m_End == pt_segm->m_Start )
         {
             pt_ref->m_End = pt_segm->m_End;
             return pt_segm;
         }
-        else        /* connexion par la fin de pt_segm */
+        else
         {
             pt_ref->m_End = pt_segm->m_Start;
             return pt_segm;
@@ -768,7 +777,7 @@ int Netliste_Controle_piste( WinEDA_PcbFrame* frame, wxDC* DC, int affiche )
         }
     }
 
-    // suppression of segments
+    // Removal of flagged segments
     for( segment = frame->m_Pcb->m_Track;  segment;  segment = next )
     {
         next = (TRACK*) segment->Next();
@@ -809,13 +818,6 @@ static void Gen_Raccord_Track( WinEDA_PcbFrame* frame, wxDC* DC )
  * on other's end, the other segment is cut into 2, the point of cut being the end of
  * segment first being operated on.  This is done so that the subsequent tests 
  * of connection, which do not test segment overlaps, will see this continuity.
- */
-
-/* Teste les extremites de segments :
- *  si une extremite est sur un segment de piste, mais pas sur une extremite,
- *  le segment est coupe en 2, le point de coupure etant l'extremite du segment
- *  Ceci est fait pour que les tests de connexion qui ne testent que les extremites
- *  de segments voient la connexion
  */
 {
     TRACK*          segment;

@@ -226,6 +226,11 @@ public:
      */
     static const KICAD_T PadsOrModules[];
 
+    /**
+     * A scan list for MODULEs and their items (for Modedit)
+     */
+    static const KICAD_T ModulesAndTheirItems[];
+
 
     /**
      * A scan list for only TRACKS

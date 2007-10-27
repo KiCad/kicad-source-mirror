@@ -942,7 +942,7 @@ public:
     virtual void    HandleBlockPlace( wxDC* DC );
     virtual int     HandleBlockEnd( wxDC* DC );
 
-    BOARD_ITEM*     ModeditLocateAndDisplay();
+    BOARD_ITEM*     ModeditLocateAndDisplay( int aHotKeyCode = 0 );
 
 	/* Undo and redo functions */
 public:

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-10-24 22:13+0100\n"
+"PO-Revision-Date: 2007-10-27 18:37+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -122,7 +122,7 @@ msgstr "Addition éléments graphiques"
 #: pcbnew/edit.cpp:283
 #: pcbnew/tool_modedit.cpp:180
 #: eeschema/schedit.cpp:314
-#: eeschema/libframe.cpp:502
+#: eeschema/libframe.cpp:503
 #: gerbview/tool_gerber.cpp:383
 msgid "Add Text"
 msgstr "Ajout de Texte"
@@ -146,7 +146,7 @@ msgstr "Monter le chevelu général"
 #: pcbnew/edit.cpp:461
 #: pcbnew/modedit.cpp:344
 #: eeschema/schedit.cpp:454
-#: eeschema/libframe.cpp:578
+#: eeschema/libframe.cpp:579
 msgid "Delete item"
 msgstr "Suppression d'éléments"
 
@@ -411,7 +411,7 @@ msgid "Create error "
 msgstr "Erreur en création "
 
 #: pcbnew/muwave_command.cpp:52
-#: eeschema/libframe.cpp:518
+#: eeschema/libframe.cpp:519
 msgid "Add Line"
 msgstr "Addition de lignes"
 
@@ -1131,8 +1131,8 @@ msgstr "Offset Y"
 #: eeschema/dialog_cmp_graphic_properties.cpp:178
 #: eeschema/pinedit-dialog.cpp:308
 #: eeschema/dialog_build_BOM.cpp:339
-#: cvpcb/dialog_display_options.cpp:190
-#: cvpcb/dialog_cvpcb_config.cpp:135
+#: cvpcb/dialog_cvpcb_config.cpp:139
+#: cvpcb/dialog_display_options.cpp:186
 #: share/setpage.cpp:232
 msgid "&OK"
 msgstr "&OK"
@@ -1155,7 +1155,7 @@ msgstr "&OK"
 #: eeschema/dialog_cmp_graphic_properties.cpp:182
 #: eeschema/pinedit-dialog.cpp:304
 #: eeschema/dialog_build_BOM.cpp:343
-#: cvpcb/dialog_display_options.cpp:195
+#: cvpcb/dialog_display_options.cpp:191
 #: share/setpage.cpp:237
 msgid "&Cancel"
 msgstr "&Annuler"
@@ -1278,7 +1278,7 @@ msgstr "Composant [%s]: Module <%sw non trouvé en librairies"
 #: pcbnew/dialog_setup_libs.cpp:97
 #: eeschema/eestatus.cpp:111
 #: eeschema/dialog_eeschema_config.cpp:105
-#: cvpcb/dialog_cvpcb_config.cpp:74
+#: cvpcb/dialog_cvpcb_config.cpp:76
 #: gerbview/reglage.cpp:98
 msgid "from "
 msgstr "De "
@@ -1287,8 +1287,8 @@ msgstr "De "
 #: pcbnew/dialog_setup_libs.cpp:153
 #: eeschema/eestatus.cpp:116
 #: eeschema/dialog_eeschema_config.cpp:161
-#: cvpcb/dialog_display_options.cpp:181
-#: cvpcb/dialog_cvpcb_config.cpp:127
+#: cvpcb/dialog_cvpcb_config.cpp:131
+#: cvpcb/dialog_display_options.cpp:177
 msgid "Save Cfg"
 msgstr "Sauver config"
 
@@ -1296,6 +1296,8 @@ msgstr "Sauver config"
 #: pcbnew/dialog_setup_libs.cpp:175
 #: eeschema/eestatus.cpp:120
 #: eeschema/dialog_eeschema_config.cpp:196
+#: cvpcb/dialog_cvpcb_config.cpp:170
+#: cvpcb/dialog_cvpcb_config.cpp:202
 msgid "Del"
 msgstr "Supprimer"
 
@@ -1305,6 +1307,8 @@ msgstr "Supprimer"
 #: eeschema/dialog_eeschema_config.cpp:200
 #: eeschema/edit_component_in_lib.cpp:233
 #: eeschema/edit_component_in_lib.cpp:312
+#: cvpcb/dialog_cvpcb_config.cpp:174
+#: cvpcb/dialog_cvpcb_config.cpp:206
 msgid "Add"
 msgstr "Ajouter"
 
@@ -1312,6 +1316,8 @@ msgstr "Ajouter"
 #: pcbnew/dialog_setup_libs.cpp:183
 #: eeschema/eestatus.cpp:128
 #: eeschema/dialog_eeschema_config.cpp:204
+#: cvpcb/dialog_cvpcb_config.cpp:178
+#: cvpcb/dialog_cvpcb_config.cpp:210
 msgid "Ins"
 msgstr "Insérer"
 
@@ -1323,7 +1329,7 @@ msgstr "Lib Modules:"
 #: pcbnew/dialog_setup_libs.cpp:159
 #: eeschema/eestatus.cpp:148
 #: eeschema/dialog_eeschema_config.cpp:180
-#: cvpcb/dialog_cvpcb_config.cpp:147
+#: cvpcb/dialog_cvpcb_config.cpp:151
 msgid "Files ext:"
 msgstr "Ext. Fichiers"
 
@@ -1443,8 +1449,6 @@ msgstr "Garder"
 #: pcbnew/onrightclick.cpp:816
 #: eeschema/edit_component_in_lib.cpp:239
 #: eeschema/edit_component_in_lib.cpp:320
-#: cvpcb/dialog_cvpcb_config.cpp:166
-#: cvpcb/dialog_cvpcb_config.cpp:198
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -1480,109 +1484,109 @@ msgstr "Test Modules"
 msgid "Compile"
 msgstr "Compile"
 
-#: pcbnew/pcbframe.cpp:261
+#: pcbnew/pcbframe.cpp:262
 msgid "Board modified, Save before exit ?"
 msgstr "Circuit Imprimé modifiée,  Sauver avant de quitter ?"
 
-#: pcbnew/pcbframe.cpp:262
+#: pcbnew/pcbframe.cpp:263
 #: eeschema/schframe.cpp:183
 #: cvpcb/cvframe.cpp:169
 #: common/confirm.cpp:109
 msgid "Confirmation"
 msgstr "Confirmation"
 
-#: pcbnew/pcbframe.cpp:362
+#: pcbnew/pcbframe.cpp:363
 msgid "DRC Off (Disable !!!), Currently: DRC is active"
 msgstr "DRC off (désactivée !!!), actuellement DRC active"
 
-#: pcbnew/pcbframe.cpp:363
+#: pcbnew/pcbframe.cpp:364
 msgid "DRC On (Currently: DRC is inactive !!!)"
 msgstr "DRC On (Actuellement, DRC désactivée !!!)"
 
-#: pcbnew/pcbframe.cpp:374
+#: pcbnew/pcbframe.cpp:375
 msgid "Polar Coords not show"
 msgstr "Coord Polaires non affichées"
 
-#: pcbnew/pcbframe.cpp:375
+#: pcbnew/pcbframe.cpp:376
 msgid "Display Polar Coords"
 msgstr "Affichage coord Polaires"
 
-#: pcbnew/pcbframe.cpp:380
+#: pcbnew/pcbframe.cpp:381
 #: eeschema/schframe.cpp:261
 msgid "Grid not show"
 msgstr "Grille non montrée"
 
-#: pcbnew/pcbframe.cpp:380
+#: pcbnew/pcbframe.cpp:381
 #: eeschema/schframe.cpp:261
 msgid "Show Grid"
 msgstr "Afficher grille"
 
-#: pcbnew/pcbframe.cpp:389
+#: pcbnew/pcbframe.cpp:390
 msgid "General ratsnest not show"
 msgstr "Chevelu général non affiché"
 
-#: pcbnew/pcbframe.cpp:389
+#: pcbnew/pcbframe.cpp:390
 msgid "Show General ratsnest"
 msgstr "Afficher le chevelu général"
 
-#: pcbnew/pcbframe.cpp:395
+#: pcbnew/pcbframe.cpp:396
 msgid "Module ratsnest not show"
 msgstr "Ne pas montrer le chevelu du module pendant déplacement"
 
-#: pcbnew/pcbframe.cpp:396
+#: pcbnew/pcbframe.cpp:397
 msgid "Show Module ratsnest"
 msgstr "Montrer le chevelu du module"
 
-#: pcbnew/pcbframe.cpp:403
+#: pcbnew/pcbframe.cpp:404
 msgid "Disable Auto Delete old Track"
 msgstr "Ne pas Autoriser l'effacement automatique des pistes"
 
-#: pcbnew/pcbframe.cpp:404
+#: pcbnew/pcbframe.cpp:405
 msgid "Enable Auto Delete old Track"
 msgstr "Autoriser l'effacement automatique des pistes"
 
-#: pcbnew/pcbframe.cpp:411
+#: pcbnew/pcbframe.cpp:412
 msgid "Do not Show Zones"
 msgstr "Ne pas monter Zones"
 
-#: pcbnew/pcbframe.cpp:411
+#: pcbnew/pcbframe.cpp:412
 #: pcbnew/tool_pcb.cpp:361
 #: pcbnew/set_color.h:344
 msgid "Show Zones"
 msgstr "Monter Zones"
 
-#: pcbnew/pcbframe.cpp:417
+#: pcbnew/pcbframe.cpp:418
 msgid "Show Pads Sketch mode"
 msgstr "Afficher pastilles en contour"
 
-#: pcbnew/pcbframe.cpp:418
+#: pcbnew/pcbframe.cpp:419
 msgid "Show pads filled mode"
 msgstr "Afficher pastilles en mode plein"
 
-#: pcbnew/pcbframe.cpp:424
+#: pcbnew/pcbframe.cpp:425
 msgid "Show Tracks Sketch mode"
 msgstr "Afficher pistes en contour"
 
-#: pcbnew/pcbframe.cpp:425
+#: pcbnew/pcbframe.cpp:426
 msgid "Show Tracks filled mode"
 msgstr "Afficher pistes en mode plein"
 
-#: pcbnew/pcbframe.cpp:431
+#: pcbnew/pcbframe.cpp:432
 msgid "Normal Contrast Mode Display"
 msgstr "Mode d'affichage Contraste normal"
 
-#: pcbnew/pcbframe.cpp:432
+#: pcbnew/pcbframe.cpp:433
 #: pcbnew/tool_pcb.cpp:374
 msgid "Hight Contrast Mode Display"
 msgstr "Mode d'affichage Haut Contraste"
 
-#: pcbnew/pcbframe.cpp:442
+#: pcbnew/pcbframe.cpp:443
 #: pcbnew/class_board_item.cpp:140
 #: pcbnew/class_track.cpp:728
 msgid "Track"
 msgstr "Piste"
 
-#: pcbnew/pcbframe.cpp:474
+#: pcbnew/pcbframe.cpp:475
 #: pcbnew/class_board_item.cpp:170
 msgid "Via"
 msgstr "Via"
@@ -2067,7 +2071,7 @@ msgid "Buried"
 msgstr "Borgne"
 
 #: pcbnew/class_board_item.cpp:198
-#: pcbnew/classpcb.cpp:313
+#: pcbnew/class_marker.cpp:92
 msgid "Marker"
 msgstr "Marqueur"
 
@@ -2466,7 +2470,7 @@ msgid "Inches"
 msgstr "Pouces"
 
 #: pcbnew/set_grid.cpp:148
-#: share/drawframe.cpp:381
+#: share/drawframe.cpp:389
 msgid "mm"
 msgstr "mm"
 
@@ -2541,7 +2545,7 @@ msgid "Drill Shape:"
 msgstr "Forme du perçage:"
 
 #: pcbnew/dialog_pad_edit.cpp:186
-#: pcbnew/clean.cpp:456
+#: pcbnew/clean.cpp:462
 #: eeschema/dialog_erc.cpp:192
 #: eeschema/dialog_erc.cpp:196
 #: eeschema/dialog_edit_component_in_schematic.cpp:172
@@ -2736,9 +2740,9 @@ msgid "Modules (%d items)"
 msgstr "Modules (%d éléments)"
 
 #: pcbnew/classpcb.cpp:181
-#: pcbnew/classpcb.cpp:313
 #: pcbnew/class_text_mod.cpp:337
 #: pcbnew/class_track.cpp:739
+#: pcbnew/class_marker.cpp:92
 #: gerbview/affiche.cpp:93
 msgid "Type"
 msgstr "Type"
@@ -2755,10 +2759,6 @@ msgstr "  Arc  "
 #: pcbnew/class_track.cpp:763
 msgid "Segment"
 msgstr "Segment"
-
-#: pcbnew/classpcb.cpp:316
-msgid "Marker Error Text"
-msgstr "Texte du Marqueur d'erreurs"
 
 #: pcbnew/cleaningoptions_dialog.cpp:146
 msgid "Static"
@@ -3024,59 +3024,59 @@ msgstr "Ref."
 #: pcbnew/class_pad.cpp:883
 #: pcbnew/class_edge_mod.cpp:285
 #: pcbnew/class_module.cpp:1142
-#: cvpcb/setvisu.cpp:30
+#: cvpcb/setvisu.cpp:31
 msgid "Module"
 msgstr "Module"
 
-#: pcbnew/clean.cpp:172
+#: pcbnew/clean.cpp:177
 msgid "Delete unconnected tracks:"
 msgstr "Suppression Pistes non connectées"
 
-#: pcbnew/clean.cpp:191
+#: pcbnew/clean.cpp:196
 msgid "ViaDef"
 msgstr "ViaDef"
 
-#: pcbnew/clean.cpp:362
+#: pcbnew/clean.cpp:368
 msgid "Clean Null Segments"
 msgstr "Nettoyage segments nulls"
 
-#: pcbnew/clean.cpp:454
+#: pcbnew/clean.cpp:460
 msgid "Merging Segments:"
 msgstr "Associe Segment"
 
-#: pcbnew/clean.cpp:456
+#: pcbnew/clean.cpp:462
 msgid "Merge"
 msgstr "Merge"
 
-#: pcbnew/clean.cpp:473
+#: pcbnew/clean.cpp:478
 msgid "Merge: "
 msgstr "Merge: "
 
-#: pcbnew/clean.cpp:698
+#: pcbnew/clean.cpp:708
 msgid "DRC Control:"
 msgstr "Controle DRC:"
 
-#: pcbnew/clean.cpp:703
+#: pcbnew/clean.cpp:713
 msgid "NetCtr"
 msgstr "NetCtr"
 
-#: pcbnew/clean.cpp:1052
+#: pcbnew/clean.cpp:1055
 msgid "Centre"
 msgstr "Centre"
 
-#: pcbnew/clean.cpp:1052
+#: pcbnew/clean.cpp:1055
 msgid "0 "
 msgstr "0"
 
-#: pcbnew/clean.cpp:1063
+#: pcbnew/clean.cpp:1066
 msgid "Pads: "
 msgstr "Pastilles: "
 
-#: pcbnew/clean.cpp:1067
+#: pcbnew/clean.cpp:1070
 msgid "Max"
 msgstr "Max"
 
-#: pcbnew/clean.cpp:1070
+#: pcbnew/clean.cpp:1073
 msgid "Segm"
 msgstr "Segm"
 
@@ -3247,11 +3247,12 @@ msgstr "X Pos"
 msgid "Y pos"
 msgstr "Y pos"
 
-#: pcbnew/basepcbframe.cpp:119
+#: pcbnew/basepcbframe.cpp:129
 msgid "3D Frame already opened"
 msgstr "Fenetre 3D déjà ouverte"
 
-#: pcbnew/basepcbframe.cpp:122
+#: pcbnew/basepcbframe.cpp:134
+#: pcbnew/basepcbframe.cpp:137
 msgid "3D Viewer"
 msgstr "Visu 3D"
 
@@ -3481,7 +3482,7 @@ msgstr "Appliquer"
 #: eeschema/eestatus.cpp:139
 #: eeschema/dialog_eeschema_config.cpp:211
 #: cvpcb/menucfg.cpp:231
-#: cvpcb/dialog_cvpcb_config.cpp:181
+#: cvpcb/dialog_cvpcb_config.cpp:185
 msgid "Libraries"
 msgstr "Librairies"
 
@@ -3827,7 +3828,7 @@ msgstr "Deselection"
 msgid "Deselect this layer to restore its No Change state"
 msgstr "Deselectionner cette couche pour restorer l'option Pas de Changement"
 
-#: pcbnew/moduleframe.cpp:177
+#: pcbnew/moduleframe.cpp:178
 msgid "Module Editor: module modified!, Continue ?"
 msgstr "Editeur de Module: module modifié!  Continuer ?"
 
@@ -4326,6 +4327,10 @@ msgstr "&3D Visu"
 msgid "&Help"
 msgstr "&Aide"
 
+#: pcbnew/class_marker.cpp:95
+msgid "Marker Error Text"
+msgstr "Texte du Marqueur d'erreurs"
+
 #: pcbnew/globaleditpad.cpp:76
 msgid "Pads Global Edit"
 msgstr "Pads: Edition globale"
@@ -4803,7 +4808,6 @@ msgstr "KeyW: "
 #: eeschema/dialog_edit_component_in_lib.cpp:166
 #: eeschema/dialog_create_component.cpp:176
 #: eeschema/dialog_edit_component_in_schematic.cpp:204
-#: cvpcb/dialog_display_options.h:50
 msgid "Options"
 msgstr "Options"
 
@@ -5692,52 +5696,52 @@ msgstr ""
 msgid "Nothing found"
 msgstr " Rien trouvé"
 
-#: eeschema/libframe.cpp:104
+#: eeschema/libframe.cpp:105
 msgid "LibEdit: Part modified!, Continue ?"
 msgstr "LibEdit: composant modifié,  Continuer ?"
 
-#: eeschema/libframe.cpp:117
+#: eeschema/libframe.cpp:118
 #, c-format
 msgid "Library %s modified!, Continue ?"
 msgstr "Librairie %s modifiée!, Continuer ?"
 
-#: eeschema/libframe.cpp:343
+#: eeschema/libframe.cpp:344
 msgid "Include last component changes"
 msgstr "Inclure les dernieres modifs du composant"
 
-#: eeschema/libframe.cpp:406
+#: eeschema/libframe.cpp:407
 msgid " Tst Pins OK!"
 msgstr " Test Pins OK!"
 
-#: eeschema/libframe.cpp:480
+#: eeschema/libframe.cpp:481
 msgid "Add Pin"
 msgstr "Addition de \"pins\""
 
-#: eeschema/libframe.cpp:484
+#: eeschema/libframe.cpp:485
 msgid "Set Pin Opt"
 msgstr "Choix Options des pins"
 
-#: eeschema/libframe.cpp:506
+#: eeschema/libframe.cpp:507
 msgid "Add Rectangle"
 msgstr "Addition de rectangles"
 
-#: eeschema/libframe.cpp:510
+#: eeschema/libframe.cpp:511
 msgid "Add Circle"
 msgstr "Addition de cercle"
 
-#: eeschema/libframe.cpp:514
+#: eeschema/libframe.cpp:515
 msgid "Add Arc"
 msgstr "Addition d' arc"
 
-#: eeschema/libframe.cpp:522
+#: eeschema/libframe.cpp:523
 msgid "Anchor"
 msgstr "Ancre"
 
-#: eeschema/libframe.cpp:526
+#: eeschema/libframe.cpp:527
 msgid "Import"
 msgstr "Importer"
 
-#: eeschema/libframe.cpp:532
+#: eeschema/libframe.cpp:533
 msgid "Export"
 msgstr "Exporter"
 
@@ -5997,26 +6001,26 @@ msgid "Display next part"
 msgstr "Afficher composant suivant"
 
 #: eeschema/tool_viewlib.cpp:70
-#: cvpcb/displayframe.cpp:119
+#: cvpcb/displayframe.cpp:124
 #: 3d-viewer/3d_toolbar.cpp:44
 msgid "zoom + (F1)"
 msgstr "zoom + (F1)"
 
 #: eeschema/tool_viewlib.cpp:74
-#: cvpcb/displayframe.cpp:122
+#: cvpcb/displayframe.cpp:127
 #: 3d-viewer/3d_toolbar.cpp:47
 msgid "zoom - (F2)"
 msgstr "zoom - (F2)"
 
 #: eeschema/tool_viewlib.cpp:78
-#: cvpcb/displayframe.cpp:125
+#: cvpcb/displayframe.cpp:130
 #: 3d-viewer/3d_toolbar.cpp:50
 msgid "redraw (F3)"
 msgstr "Redessin (F3)"
 
 #: eeschema/tool_viewlib.cpp:82
-#: cvpcb/displayframe.cpp:128
-#: cvpcb/displayframe.cpp:132
+#: cvpcb/displayframe.cpp:133
+#: cvpcb/displayframe.cpp:137
 msgid "1:1 zoom"
 msgstr "1:1 zoom"
 
@@ -6078,7 +6082,7 @@ msgstr "Librairie déjà en usage"
 
 #: eeschema/eestatus.cpp:303
 #: eeschema/dialog_eeschema_config.cpp:174
-#: cvpcb/dialog_cvpcb_config.cpp:144
+#: cvpcb/dialog_cvpcb_config.cpp:147
 msgid "NetList Formats:"
 msgstr " Formats NetListe:"
 
@@ -7697,7 +7701,7 @@ msgid "Create &List"
 msgstr "Créer &Liste"
 
 #: eeschema/dialog_build_BOM.cpp:347
-#: cvpcb/dialog_display_options.cpp:199
+#: cvpcb/dialog_display_options.cpp:195
 msgid "&Apply"
 msgstr "&Appliquer"
 
@@ -7869,7 +7873,7 @@ msgid "Retro ext:"
 msgstr "Retro ext:"
 
 #: cvpcb/menucfg.cpp:285
-#: cvpcb/dialog_cvpcb_config.cpp:213
+#: cvpcb/dialog_cvpcb_config.cpp:217
 msgid "Equiv"
 msgstr "Equiv"
 
@@ -7960,11 +7964,11 @@ msgstr "Impossible de créer le fichier netliste "
 msgid "Load Net List"
 msgstr "Lire Netliste"
 
-#: cvpcb/setvisu.cpp:43
+#: cvpcb/setvisu.cpp:42
 msgid "Footprint: "
 msgstr "Module: "
 
-#: cvpcb/setvisu.cpp:46
+#: cvpcb/setvisu.cpp:45
 msgid "Lib: "
 msgstr "Lib: "
 
@@ -8023,8 +8027,25 @@ msgstr "Choisir les fontes et leur taille pour les dialogues, infos et ligne d'é
 msgid "Netlist Format: Pcad"
 msgstr " Format NetListe: Pcad"
 
-#: cvpcb/displayframe.cpp:114
+#: cvpcb/dialog_cvpcb_config.cpp:135
+msgid "Read Cfg"
+msgstr "Lire Cfg"
+
+#: cvpcb/dialog_cvpcb_config.cpp:144
+msgid "&PcbNew"
+msgstr "&PcbNew"
+
+#: cvpcb/dialog_cvpcb_config.cpp:145
+msgid "&ViewLogic"
+msgstr "&ViewLogic"
+
+#: cvpcb/dialog_cvpcb_config.cpp:146
+msgid "View &Net + Pkg"
+msgstr "View &Net + Pkg"
+
+#: cvpcb/displayframe.cpp:119
 #: pcbnew/dialog_display_options.h:43
+#: cvpcb/dialog_display_options.h:51
 msgid "Display Options"
 msgstr "Options d'affichage"
 
@@ -8036,41 +8057,6 @@ msgstr " Formats NetListe: EESchema"
 #, c-format
 msgid "Netlist error: %s"
 msgstr "Erreur Netliste: %s"
-
-#: cvpcb/dialog_display_options.cpp:151
-#: cvpcb/dialog_display_options.cpp:159
-msgid "&Line"
-msgstr "&Ligne"
-
-#: cvpcb/dialog_display_options.cpp:152
-#: cvpcb/dialog_display_options.cpp:160
-msgid "&Filled"
-msgstr "&Plein"
-
-#: cvpcb/dialog_display_options.cpp:153
-#: cvpcb/dialog_display_options.cpp:161
-msgid "&Sketch"
-msgstr "&Contour"
-
-#: cvpcb/dialog_display_options.cpp:154
-msgid "Edges:"
-msgstr "Contours:"
-
-#: cvpcb/dialog_display_options.cpp:162
-msgid "Texts:"
-msgstr "Textes:"
-
-#: cvpcb/dialog_display_options.cpp:169
-msgid "&Pad Filled"
-msgstr "&Pad plein"
-
-#: cvpcb/dialog_display_options.cpp:173
-msgid "Display Pad &Num"
-msgstr "Afficher Numero de Pad"
-
-#: cvpcb/dialog_display_options.cpp:176
-msgid "Display pad number"
-msgstr "Afficher numéro des pastilles"
 
 #: cvpcb/tool_cvpcb.cpp:35
 msgid "Open Netlist"
@@ -8156,31 +8142,40 @@ msgstr "Sauver les options en répertoire de travail"
 msgid "Open the cvpcb manual"
 msgstr "Ouvrir la documentation de cvpcb"
 
-#: cvpcb/dialog_cvpcb_config.cpp:131
-msgid "Read Cfg"
-msgstr "Lire Cfg"
+#: cvpcb/dialog_display_options.cpp:147
+#: cvpcb/dialog_display_options.cpp:155
+msgid "&Line"
+msgstr "&Ligne"
 
-#: cvpcb/dialog_cvpcb_config.cpp:140
-msgid "&PcbNew"
-msgstr "&PcbNew"
+#: cvpcb/dialog_display_options.cpp:148
+#: cvpcb/dialog_display_options.cpp:156
+msgid "&Filled"
+msgstr "&Plein"
 
-#: cvpcb/dialog_cvpcb_config.cpp:141
-msgid "&ViewLogic"
-msgstr "&ViewLogic"
+#: cvpcb/dialog_display_options.cpp:149
+#: cvpcb/dialog_display_options.cpp:157
+msgid "&Sketch"
+msgstr "&Contour"
 
-#: cvpcb/dialog_cvpcb_config.cpp:142
-msgid "View &Net + Pkg"
-msgstr "View &Net + Pkg"
+#: cvpcb/dialog_display_options.cpp:150
+msgid "Edges:"
+msgstr "Contours:"
 
-#: cvpcb/dialog_cvpcb_config.cpp:170
-#: cvpcb/dialog_cvpcb_config.cpp:202
-msgid "Add below"
-msgstr "Ajout avant"
+#: cvpcb/dialog_display_options.cpp:158
+msgid "Texts:"
+msgstr "Textes:"
 
-#: cvpcb/dialog_cvpcb_config.cpp:174
-#: cvpcb/dialog_cvpcb_config.cpp:206
-msgid "Add above"
-msgstr "Ajout après"
+#: cvpcb/dialog_display_options.cpp:165
+msgid "&Pad Filled"
+msgstr "&Pad plein"
+
+#: cvpcb/dialog_display_options.cpp:169
+msgid "Display Pad &Num"
+msgstr "Afficher Numero de Pad"
+
+#: cvpcb/dialog_display_options.cpp:172
+msgid "Display pad number"
+msgstr "Afficher numéro des pastilles"
 
 #: kicad/preferences.cpp:33
 msgid "Prefered Pdf Browser:"
@@ -9077,7 +9072,6 @@ msgid "Infos:"
 msgstr "Infos:"
 
 #: common/selcolor.cpp:75
-#: share/selcolor.cpp:99
 msgid "Colors"
 msgstr "Couleurs"
 
@@ -9330,7 +9324,7 @@ msgstr "Liste tous"
 msgid "By Lib Browser"
 msgstr "Par Visualisateur libs"
 
-#: common/basicframe.cpp:217
+#: common/basicframe.cpp:216
 #, c-format
 msgid "Help file %s not found"
 msgstr "Fichier d'aide %s non trouvé"
@@ -9696,11 +9690,11 @@ msgstr ""
 msgid "font for info display"
 msgstr "fonte pour affichage infos"
 
-#: share/drawframe.cpp:377
+#: share/drawframe.cpp:385
 msgid "Inch"
 msgstr "Pouce"
 
-#: share/drawframe.cpp:385
+#: share/drawframe.cpp:393
 msgid "??"
 msgstr "??"
 
@@ -9732,7 +9726,6 @@ msgstr "Chercher"
 #: pcbnew/dialog_setup_libs.h:43
 #: eeschema/dialog_edit_label.h:40
 #: eeschema/dialog_eeschema_config.h:50
-#: cvpcb/dialog_cvpcb_config.h:39
 msgid "Dialog"
 msgstr "Dialog"
 
@@ -9949,6 +9942,10 @@ msgstr "Propriétés du dessin"
 msgid "Component properties"
 msgstr "Propriétés du composant"
 
+#: cvpcb/dialog_cvpcb_config.h:50
+msgid "Cvpcb Configuration"
+msgstr "Configuration de Cvpcb"
+
 #: gerbview/set_color.h:5
 msgid "Layers 1-16"
 msgstr "Couches 1-16"
@@ -10093,13 +10090,14 @@ msgstr "Autres"
 msgid "D codes id."
 msgstr "DCodes id."
 
-#: share/setpage.h:54
-msgid "Page Settings"
-msgstr "Ajustage opt Page"
-
+#: common/svg_print.h:52
 #: share/svg_print.h:50
 msgid "Create SVG file"
 msgstr "Créer Fichier SVG"
+
+#: share/setpage.h:54
+msgid "Page Settings"
+msgstr "Ajustage opt Page"
 
 #: share/dialog_print.h:51
 msgid "Print"

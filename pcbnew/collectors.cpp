@@ -92,6 +92,14 @@ const KICAD_T GENERAL_COLLECTOR::PadsOrModules[] = {
     EOT 
 };
 
+const KICAD_T GENERAL_COLLECTOR::ModulesAndTheirItems[] = { 
+    TYPETEXTEMODULE,
+    TYPEEDGEMODULE,
+    TYPEPAD, 
+    TYPEMODULE, 
+    EOT 
+};
+
 
 const KICAD_T GENERAL_COLLECTOR::Tracks[] = {
     TYPETRACK,
