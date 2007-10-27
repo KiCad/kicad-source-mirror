@@ -4,6 +4,19 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Oct-27 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++ all:
+	remove unused files.
+	some translations
+
++cvpcb:
+	set flag wxFRAME_FLOAT_ON_PARENT when create the footprint 3D frame and the
+	display frame
+	minor other changes
+
+
+
 2007-Oct-26 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew:

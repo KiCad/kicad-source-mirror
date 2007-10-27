@@ -38,9 +38,9 @@ END_EVENT_TABLE()
 
 /*******************************************************************/
 WinEDA3D_DrawFrame::WinEDA3D_DrawFrame(WinEDA_BasePcbFrame * parent,
-		WinEDA_App *app_parent, const wxString& title ):
+		WinEDA_App *app_parent, const wxString& title, long style ):
 	wxFrame(parent, DISPLAY3D_FRAME, title,
-		wxPoint(-1,-1), wxSize(-1,-1) )
+		wxPoint(-1,-1), wxSize(-1,-1), style )
 /*******************************************************************/
 {
 	m_FrameName = wxT("Frame3D");

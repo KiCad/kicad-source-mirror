@@ -104,8 +104,9 @@ END_EVENT_TABLE()
 
 WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow* father, WinEDA_App* parent,
                                                 const wxString& title,
-                                                const wxPoint& pos, const wxSize& size ) :
-    WinEDA_BasePcbFrame( father, parent, MODULE_EDITOR_FRAME, wxEmptyString, pos, size )
+                                                const wxPoint& pos, const wxSize& size,
+												long style ) :
+    WinEDA_BasePcbFrame( father, parent, MODULE_EDITOR_FRAME, wxEmptyString, pos, size, style )
 {
     m_FrameName      = wxT( "ModEditFrame" );
     m_Draw_Axis      = TRUE;    // TRUE pour avoir les axes dessines

@@ -29,6 +29,9 @@
 #include "pcbstruct.h"
 #include "3d_struct.h"
 
+#define KICAD_DEFAULT_3D_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE|wxWANTS_CHARS
+	
+
 #define LIB3D_PATH wxT("packages3d/")
 
 class Pcb3D_GLCanvas;
@@ -124,11 +127,10 @@ public:
 private:
 	wxString m_FrameName;		// name used for writting and reading setup
 								// It is "Frame3D"
-	
 
 public:
 	WinEDA3D_DrawFrame(WinEDA_BasePcbFrame * parent, WinEDA_App *app_parent,
-		const wxString& title );
+		const wxString& title, long style = KICAD_DEFAULT_3D_DRAWFRAME_STYLE );
 
     void Exit3DFrame(wxCommandEvent& event);
 	void OnCloseWindow(wxCloseEvent & Event);

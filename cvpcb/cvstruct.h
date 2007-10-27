@@ -39,7 +39,8 @@ private:
 
 	// Constructor and destructor
 public:
-	WinEDA_CvpcbFrame(WinEDA_App * parent, const wxString & title);
+	WinEDA_CvpcbFrame(WinEDA_App * parent, const wxString & title,
+					  long style = KICAD_DEFAULT_DRAWFRAME_STYLE);
 	~WinEDA_CvpcbFrame();
 
 	void OnLeftClick(wxListEvent & event);
@@ -180,7 +181,8 @@ public:
 public:
 	WinEDA_DisplayFrame( wxWindow * father, WinEDA_App *parent,
 					const wxString & title,
-					const wxPoint& pos, const wxSize& size);
+					const wxPoint& pos, const wxSize& size,
+					long style = KICAD_DEFAULT_DRAWFRAME_STYLE);
 
 	~WinEDA_DisplayFrame();
 
@@ -194,6 +196,7 @@ public:
 	void OnLeftDClick(wxDC * DC, const wxPoint& MousePos);
 	bool OnRightClick(const wxPoint& MousePos, wxMenu * PopMenu);
 	void SetToolbars();
+	void GeneralControle( wxDC* DC, wxPoint Mouse );
 	void InstallOptionsDisplay(wxCommandEvent& event);
 	MODULE * Get_Module(const wxString & CmpName);
 

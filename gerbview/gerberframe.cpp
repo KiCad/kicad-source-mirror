@@ -124,8 +124,8 @@ END_EVENT_TABLE()
 	/****************/
 
 WinEDA_GerberFrame::WinEDA_GerberFrame(wxWindow * father, WinEDA_App *parent,
-					const wxString & title, const wxPoint& pos, const wxSize& size) :
-					WinEDA_BasePcbFrame(father, parent, GERBER_FRAME, title, pos, size)
+					const wxString & title, const wxPoint& pos, const wxSize& size, long style) :
+					WinEDA_BasePcbFrame(father, parent, GERBER_FRAME, title, pos, size, style)
 {
 	m_FrameName = wxT("GerberFrame");
 	m_Draw_Axis = TRUE;			// TRUE pour avoir les axes dessines

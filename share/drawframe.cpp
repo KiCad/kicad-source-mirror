@@ -40,8 +40,8 @@
 
 WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
                                     WinEDA_App* parent, const wxString& title,
-                                    const wxPoint& pos, const wxSize& size ) :
-    WinEDA_BasicFrame( father, idtype, parent, title, pos, size )
+                                    const wxPoint& pos, const wxSize& size, long style ) :
+    WinEDA_BasicFrame( father, idtype, parent, title, pos, size, style )
 {
     wxSize minsize;
 

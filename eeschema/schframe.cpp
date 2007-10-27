@@ -116,8 +116,8 @@ END_EVENT_TABLE()
 	/****************/
 
 WinEDA_SchematicFrame::	WinEDA_SchematicFrame(wxWindow * father, WinEDA_App *parent,
-					const wxString & title, const wxPoint& pos, const wxSize& size) :
-					WinEDA_DrawFrame(father, SCHEMATIC_FRAME, parent, title, pos, size)
+					const wxString & title, const wxPoint& pos, const wxSize& size, long style) :
+					WinEDA_DrawFrame(father, SCHEMATIC_FRAME, parent, title, pos, size, style)
 {
 	m_FrameName = wxT("SchematicFrame");
 	m_Draw_Axis = FALSE;			// TRUE pour avoir les axes dessines

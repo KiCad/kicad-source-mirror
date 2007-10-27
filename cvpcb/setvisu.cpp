@@ -17,7 +17,8 @@
 void WinEDA_CvpcbFrame::CreateScreenCmp()
 /*******************************************/
 
-/* Creation de la fenetre d'affichage du composant
+/* Create or Update the frame showing the current highlighted footprint
+ *  and (if showed) the 3D display frame
  */
 {
     wxString msg, FootprintName;
@@ -28,15 +29,13 @@ void WinEDA_CvpcbFrame::CreateScreenCmp()
     if( DrawFrame == NULL )
     {
         DrawFrame = new WinEDA_DisplayFrame( this, m_Parent, _( "Module" ),
-                                            wxPoint( 0, 0 ), wxSize( 600, 400 ) );
-
+                                             wxPoint( 0, 0 ), wxSize( 600,
+                                                                      400 ),
+                                             KICAD_DEFAULT_DRAWFRAME_STYLE |
+                                             wxFRAME_FLOAT_ON_PARENT );
         IsNew = TRUE;
+        DrawFrame->Show( TRUE );
     }
-    else
-        DrawFrame->Maximize( FALSE );
-
-    DrawFrame->SetFocus();  /* Active entree clavier */
-    DrawFrame->Show( TRUE );
 
     if( !FootprintName.IsEmpty() )
     {
@@ -44,19 +43,19 @@ void WinEDA_CvpcbFrame::CreateScreenCmp()
         DrawFrame->SetTitle( msg );
         STOREMOD* Module = GetModuleDescrByName( FootprintName );
         msg = _( "Lib: " );
-        
+
         if( Module )
             msg += Module->m_LibName;
         else
             msg += wxT( "???" );
-        
+
         DrawFrame->SetStatusText( msg, 0 );
 
         if( DrawFrame->m_Pcb->m_Modules )
         {
             // there is only one module in the list
             DrawFrame->m_Pcb->m_Modules->DeleteStructure();
-            
+
             DrawFrame->m_Pcb->m_Modules = NULL;
         }
 
@@ -72,4 +71,33 @@ void WinEDA_CvpcbFrame::CreateScreenCmp()
         if( DrawFrame->m_Draw3DFrame )
             DrawFrame->m_Draw3DFrame->NewDisplay();
     }
+}
+
+
+
+/*******************************************************************/
+void WinEDA_DisplayFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
+/*******************************************************************/
+/* Draws the current highlighted footprint */
+{
+    if( !m_Pcb )
+        return;
+
+    MODULE* Module = m_Pcb->m_Modules;
+
+    ActiveScreen = (PCB_SCREEN*) GetScreen();
+
+    if( EraseBg )
+        DrawPanel->EraseScreen( DC );
+
+    DrawPanel->DrawBackGround( DC );
+
+    if( Module )
+    {
+        Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_COPY );
+        Module->Display_Infos( this );
+    }
+
+    Affiche_Status_Box();
+    DrawPanel->Trace_Curseur( DC );
 }

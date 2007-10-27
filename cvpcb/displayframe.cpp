@@ -29,21 +29,26 @@ EVT_TOOL( ID_CVPCB_SHOW3D_FRAME, WinEDA_BasePcbFrame::Show3D_Frame )
 END_EVENT_TABLE()
 
 
-/*********************************************************************/
-/* Constructeur de WinEDA_DisplayFrame: la fenetre de visu du composant */
-/*********************************************************************/
+/***************************************************************************/
+/* WinEDA_DisplayFrame: the frame to display the current focused footprint */
+/***************************************************************************/
 
 WinEDA_DisplayFrame::WinEDA_DisplayFrame( wxWindow* father, WinEDA_App* parent,
                                           const wxString& title,
-                                          const wxPoint& pos, const wxSize& size ) :
-    WinEDA_BasePcbFrame( father, parent, CVPCB_DISPLAY_FRAME, title, pos, size )
+                                          const wxPoint& pos, const wxSize& size, long style ) :
+    WinEDA_BasePcbFrame( father, parent, CVPCB_DISPLAY_FRAME, title, pos, size, style )
 {
     m_FrameName      = wxT( "CmpFrame" );
-    m_Draw_Axis      = TRUE;                    // TRUE pour avoir les axes dessines
-    m_Draw_Grid      = TRUE;                    // TRUE pour avoir la axes dessinee
-    m_Draw_Sheet_Ref = FALSE;                   // TRUE pour avoir le cartouche dessiné
+    m_Draw_Axis      = TRUE;                    // TRUE if we want the axis
+    m_Draw_Grid      = TRUE;                    // TRUE if we want the grid
+    m_Draw_Sheet_Ref = FALSE;                   // TRUE if we want the sheet references
 
-    SetIcon( wxIcon( wxT( "icon_cvpcb" ) ) );   // Give an icon
+    // Give an icon
+    #ifdef __WINDOWS__
+    SetIcon( wxICON( a_icon_cvpcb ) );
+    #else
+    SetIcon( wxICON( icon_cvpcb ) );
+    #endif
     SetTitle( title );
 
     m_Pcb = new             BOARD( NULL, this );
@@ -58,17 +63,16 @@ WinEDA_DisplayFrame::WinEDA_DisplayFrame( wxWindow* father, WinEDA_App* parent,
 }
 
 
-/*****************************************/
-/* Fonctions de base de WinEDA_DisplayFrame */
-/*****************************************/
-
-// Destructeur
+/******************************************/
 WinEDA_DisplayFrame::~WinEDA_DisplayFrame()
+/******************************************/
+
+// Destructor
 {
     delete m_CurrentScreen;
-    
+
     delete m_Pcb;
-    
+
     m_Parent->m_CvpcbFrame->DrawFrame = NULL;
 }
 
@@ -77,7 +81,8 @@ WinEDA_DisplayFrame::~WinEDA_DisplayFrame()
 void WinEDA_DisplayFrame::OnCloseWindow( wxCloseEvent& event )
 /************************************************************/
 
-/* Fermeture par icone ou systeme
+/* Called when the frame is closed
+ *  Save current settings (frame position and size
  */
 {
     wxPoint pos;
@@ -162,12 +167,12 @@ void WinEDA_DisplayFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 bool WinEDA_DisplayFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
 /*********************************************************************************/
 {
-	return true;
+    return true;
 }
 
 
 /****************************************************************/
-void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
+void WinEDA_DisplayFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 /****************************************************************/
 {
     wxSize  delta;
@@ -216,28 +221,28 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
             m_CurrentScreen->m_O_Curseur = m_CurrentScreen->m_Curseur;
             break;
 
-        case WXK_NUMPAD8:       /* Deplacement curseur vers le haut */
+        case WXK_NUMPAD8:       /* cursor moved up */
         case WXK_UP:
             DrawPanel->CalcScrolledPosition( Mouse.x, Mouse.y - delta.y,
                                              &Mouse.x, &Mouse.y );
             GRMouseWarp( DrawPanel, Mouse );
             break;
 
-        case WXK_NUMPAD2:       /* Deplacement curseur vers le bas */
+        case WXK_NUMPAD2:       /* cursor moved down */
         case WXK_DOWN:
             DrawPanel->CalcScrolledPosition( Mouse.x, Mouse.y + delta.y,
                                              &Mouse.x, &Mouse.y );
             GRMouseWarp( DrawPanel, Mouse );
             break;
 
-        case WXK_NUMPAD4:       /* Deplacement curseur vers la gauche */
+        case WXK_NUMPAD4:       /*  cursor moved left */
         case WXK_LEFT:
             DrawPanel->CalcScrolledPosition( Mouse.x - delta.x, Mouse.y,
                                              &Mouse.x, &Mouse.y );
             GRMouseWarp( DrawPanel, Mouse );
             break;
 
-        case WXK_NUMPAD6:      /* Deplacement curseur vers la droite */
+        case WXK_NUMPAD6:      /*  cursor moved right */
         case WXK_RIGHT:
             DrawPanel->CalcScrolledPosition( Mouse.x + delta.x, Mouse.y,
                                              &Mouse.x, &Mouse.y );
@@ -246,9 +251,8 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         }
     }
 
-    /* Recalcul de la position du curseur schema */
     m_CurrentScreen->m_Curseur = curpos;
-    /* Placement sur la grille generale */
+    /* Put cursor on grid */
     PutOnGrid( &m_CurrentScreen->m_Curseur );
 
     if( m_CurrentScreen->IsRefreshReq() )
@@ -276,7 +280,7 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         }
     }
 
-    Affiche_Status_Box();    /* Affichage des coord curseur */
+    Affiche_Status_Box();    /* Display new cursor coordinates */
 }
 
 
@@ -284,10 +288,11 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 void WinEDA_DisplayFrame::Process_Special_Functions( wxCommandEvent& event )
 /*************************************************************************/
 
-/* Traite les selections d'outils et les commandes appelees du menu POPUP
+/* Called when a tool is selected, or when a popup menu is clicked
+ *  Currently : no action exists
  */
 {
-    int id = event.GetId();
+    int        id = event.GetId();
 
     wxClientDC dc( DrawPanel );
 

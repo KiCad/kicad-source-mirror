@@ -63,8 +63,9 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
                                           WinEDA_App*     parent,
                                           const wxString& title,
                                           const wxPoint&  pos,
-                                          const wxSize&   size ) :
-    WinEDA_DrawFrame( father, LIBEDITOR_FRAME, parent, title, pos, size )
+                                          const wxSize&   size,
+										  long style ) :
+    WinEDA_DrawFrame( father, LIBEDITOR_FRAME, parent, title, pos, size, style )
 {
     m_FrameName = wxT( "LibeditFrame" );
     m_Draw_Axis = TRUE;             // TRUE pour avoir les axes dessines

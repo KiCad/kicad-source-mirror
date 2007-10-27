@@ -23,7 +23,7 @@
 
 /* Routines locales : */
 static int      clean_segments( WinEDA_PcbFrame* frame, wxDC* DC );
-static void     suppression_piste_non_connectee( WinEDA_PcbFrame* frame, wxDC* DC );
+static void     DeleteUnconnectedTracks( WinEDA_PcbFrame* frame, wxDC* DC );
 static TRACK*   AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extremite );
 static void     Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC );
 
@@ -71,7 +71,7 @@ void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC )
     frame->MsgPanel->EraseMsgBox();
     frame->m_Pcb->GetNumSegmTrack();    // update the count
     
-    /* construction de la liste des coordonn�s des pastilles */
+    /* Rebuild the pad infos (pad list and netcodes) to ensure an up to date info */
     frame->m_Pcb->m_Status_Pcb = 0;
     frame->build_liste_pads();
     frame->recalcule_pad_net_code();
@@ -120,26 +120,28 @@ void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC )
     }
 
 #ifdef CONN2PAD_ENBL
-    if( s_ConnectToPads ) /* Creation de points de connexion */
+	/* Create missing segments when a track end covers a pad or a via,
+	but is not on the pad  or the via center */
+    if( s_ConnectToPads )
     {
-        /* Raccordement des extremites de piste au centre des pastilles : */
-        ConnectDanglingEndToPad( frame, DC );
+	/* Create missing segments when a track end covers a pad, but is not on the pad center */    if( s_ConnectToPads )
+         ConnectDanglingEndToPad( frame, DC );
 
         // creation of points of connections at the intersection of tracks
 //		Gen_Raccord_Track(frame, DC);
 
+	/* Create missing segments when a track end covers a via, but is not on the via center */    if( s_ConnectToPads )
         ConnectDanglingEndToVia( frame->m_Pcb );
     }
 #endif
 
-    /* suppression des segments de longueur nulle et des points intermediaires
-     *  alignes */
+    /* Remove null segments and intermediate points on aligned segments */
     if( s_MergeSegments )
         clean_segments( frame, DC );
 
-    /* suppression des pistes non connectees ( c.a.d dont 1 extremite est en l'air) */
+    /* Delete dangling tracks */
     if( s_DeleteUnconnectedSegm )
-        suppression_piste_non_connectee( frame, DC );
+        DeleteUnconnectedTracks( frame, DC );
 
     frame->Compile_Ratsnest( DC, AFFICHE );
 
@@ -148,14 +150,13 @@ void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC )
 
 
 /*****************************************************************************/
-static void suppression_piste_non_connectee( WinEDA_PcbFrame* frame, wxDC* DC )
+static void DeleteUnconnectedTracks( WinEDA_PcbFrame* frame, wxDC* DC )
 /*****************************************************************************/
 
 /*
- *  Supprime les segments de piste ayant 1 ou 2 extremites non connectees
- *  Cas des vias:
- *  si une extremite de segment est connectee uniquement a une via, la via
- *  et le segment seront supprimes
+ *  Delete dangling tracks
+ *  Vias:
+ *  If a via is only connected to a dangling track, it also will be removed
  */
 {
     TRACK*          segment;
@@ -229,7 +230,8 @@ static void suppression_piste_non_connectee( WinEDA_PcbFrame* frame, wxDC* DC )
 
         flag_erase = 0; 
         type_end = 0;
-        /* y a t-il une pastille sur chaque extremite */
+
+        /* Is a pad found on a track end ? */
 
         masklayer = segment->ReturnMaskLayer();
 
@@ -339,7 +341,7 @@ static void suppression_piste_non_connectee( WinEDA_PcbFrame* frame, wxDC* DC )
 /************************************************************/
 static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
 /************************************************************/
-/* Supprime segments nulls, points inutiles .. */
+/* Delete null lenght segments, and intermediate points .. */
 {
     TRACK*          segment;
     TRACK*          other;
@@ -350,7 +352,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
     frame->DrawPanel->m_AbortRequest = FALSE;
 
     /**********************************************/
-    /* suppression des segments de longueur nulle */
+    /* Delete null segments */
     /**********************************************/
 
     a_color = GREEN;
@@ -378,7 +380,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
     }
 
     /**************************************/
-    /* suppression des segments confondus */
+    /* Delete redundant segments */
     /**************************************/
 
     Affiche_1_Parametre( frame, POS_AFF_VAR, wxT( "Ident" ), wxT( "0" ), a_color );
@@ -388,7 +390,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
     
     for( segment  = frame->m_Pcb->m_Track, ii = 0;  segment;  segment = segment->Next(), ii++ )
     {
-        /* affichage activite */
+        /* Display activity */
         percent = (100 * ii) / frame->m_Pcb->m_NbSegmTrack;
         if( percent != oldpercent )
         {
@@ -430,7 +432,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
                     erase = 1;
             }
 
-            /* suppression du point en trop */
+            /* Delete redundant point */
             if( erase )
             {
                 ii--;
@@ -444,9 +446,9 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
         }
     }
 
-    /**************************************************************/
-    /* suppression des points intermediaires ( segments alignes ) */
-    /**************************************************************/
+    /****************************/
+    /* delete intermediate points  */
+    /****************************/
 
     nbpoints_supprimes = 0;
     percent = 0; 
@@ -465,7 +467,6 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
 
         next = segment->Next();
         
-        /* affichage activite */
         ii++;
         percent = (100 * ii) / frame->m_Pcb->m_NbSegmTrack;
         if( percent != oldpercent )

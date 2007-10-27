@@ -35,6 +35,7 @@
 // #define DIALOG_STYLE wxDEFAULT_DIALOG_STYLE|wxFRAME_FLOAT_ON_PARENT|wxSTAY_ON_TOP
 #define DIALOG_STYLE wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT | MAYBE_RESIZE_BORDER
 
+#define KICAD_DEFAULT_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE|wxWANTS_CHARS
 #define EDA_DRAW_PANEL wxScrolledWindow
 
 class wxMyDialogModalData;
@@ -168,7 +169,8 @@ public:
     // Constructor and destructor
     WinEDA_BasicFrame( wxWindow* father, int idtype, WinEDA_App* parent,
                        const wxString& title,
-                       const wxPoint& pos, const wxSize& size );
+                       const wxPoint& pos, const wxSize& size,
+					   long style = KICAD_DEFAULT_DRAWFRAME_STYLE);
 #ifdef KICAD_PYTHON
     WinEDA_BasicFrame( const WinEDA_BasicFrame& ) { }   // Should throw!!
     WinEDA_BasicFrame() { }                             // Should throw!!
@@ -239,7 +241,8 @@ public:
     // Constructor and destructor
     WinEDA_DrawFrame( wxWindow* father, int idtype, WinEDA_App* parent,
                       const wxString& title,
-                      const wxPoint& pos, const wxSize& size );
+                      const wxPoint& pos, const wxSize& size,
+					  long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~WinEDA_DrawFrame();
 
@@ -352,7 +355,8 @@ protected:
 public:
     WinEDA_BasePcbFrame( wxWindow* father, WinEDA_App* parent, int idtype,
                          const wxString& title,
-                         const wxPoint& pos, const wxSize& size );
+                         const wxPoint& pos, const wxSize& size,
+						 long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~WinEDA_BasePcbFrame();
 
@@ -574,7 +578,8 @@ private:
 
 public:
     WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent, const wxString& title,
-                     const wxPoint& pos, const wxSize& size );
+                     const wxPoint& pos, const wxSize& size,
+					 long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~WinEDA_PcbFrame();
 
@@ -803,7 +808,8 @@ private:
 
 public:
     WinEDA_GerberFrame( wxWindow* father, WinEDA_App* parent, const wxString& title,
-                        const wxPoint& pos, const wxSize& size );
+                        const wxPoint& pos, const wxSize& size,
+					    long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~WinEDA_GerberFrame();
 
@@ -908,7 +914,8 @@ public:
 public:
     WinEDA_ModuleEditFrame( wxWindow* father, WinEDA_App* parent,
                             const wxString& title,
-                            const wxPoint& pos, const wxSize& size );
+                            const wxPoint& pos, const wxSize& size,
+							long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~WinEDA_ModuleEditFrame();
 
@@ -1003,7 +1010,8 @@ private:
 public:
     WinEDA_SchematicFrame( wxWindow* father, WinEDA_App* parent,
                            const wxString& title,
-                           const wxPoint& pos, const wxSize& size );
+                           const wxPoint& pos, const wxSize& size,
+						   long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~WinEDA_SchematicFrame();
 
@@ -1212,7 +1220,8 @@ public:
 public:
     WinEDA_LibeditFrame( wxWindow* father, WinEDA_App* parent,
                          const wxString& title,
-                         const wxPoint& pos, const wxSize& size );
+                         const wxPoint& pos, const wxSize& size,
+						 long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~WinEDA_LibeditFrame();
 
@@ -1357,9 +1366,10 @@ private:
 #include "drawpanel_wxstruct.h"
 
 
-/*********************************************************/
-/* classe representant un ecran d'affichage des messages */
-/*********************************************************/
+/*********************************************************
+class WinEDA_MsgPanel : this is a panel to display various infos
+and messages on items in eeschema an pcbnew
+*********************************************************/
 
 /**
  * Struct MsgItem
@@ -1422,9 +1432,9 @@ public:
 };
 
 
-/******************************************************************/
-/* Classe pour editer une ligne de texte dans les menus de config */
-/******************************************************************/
+/************************************************/
+/* Class to enter a line, is some dialog frames */
+/************************************************/
 class WinEDA_EnterText
 {
 public:
@@ -1460,9 +1470,9 @@ public:
     }
 };
 
-/*********************************************************************/
-/* Classe pour editer un texte graphique + dimension en INCHES ou MM */
-/*********************************************************************/
+/************************************************************************/
+/* Class to edit/enter a graphic text and its dimension ( INCHES or MM )*/
+/************************************************************************/
 class WinEDA_GraphicTextCtrl
 {
 public:
@@ -1494,9 +1504,9 @@ public:
 };
 
 
-/*****************************************************************/
-/* Classe pour afficher et editer une coordonn�e en INCHES ou MM */
-/*****************************************************************/
+/*************************************************************************************/
+/*Class to edit/enter a coordinate (pair of values) ( INCHES or MM ) in dialog boxes */
+/*************************************************************************************/
 class WinEDA_PositionCtrl
 {
 public:
@@ -1523,9 +1533,10 @@ public:
     wxPoint GetValue();
 };
 
-/*****************************************************************/
-/* Classe pour afficher et editer une coordonn�e en INCHES ou MM */
-/*****************************************************************/
+/*************************************************************
+Class to edit/enter a size (pair of values for X and Y size)
+( INCHES or MM ) in dialog boxes
+***************************************************************/
 class WinEDA_SizeCtrl : public WinEDA_PositionCtrl
 {
 public:
@@ -1541,9 +1552,9 @@ public:
 };
 
 
-/*****************************************************************/
-/* Classe pour afficher et editer une valeur en INCHES ou MM */
-/*****************************************************************/
+/****************************************************************/
+/* Class to edit/enter a value ( INCHES or MM ) in dialog boxes */
+/****************************************************************/
 
 /* internal_unit est le nombre d'unites internes par inch
  *  - 1000 sur EESchema
@@ -1578,9 +1589,9 @@ public:
     }
 };
 
-/*****************************************************************/
-/* Classe pour afficher et editer une valeur double flottant */
-/*****************************************************************/
+/************************************************************************/
+/* Class to edit/enter a  pair of float (double) values in dialog boxes */
+/************************************************************************/
 class WinEDA_DFloatValueCtrl
 {
 public:

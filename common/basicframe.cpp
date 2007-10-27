@@ -18,9 +18,8 @@
 
 WinEDA_BasicFrame::WinEDA_BasicFrame( wxWindow * father, int idtype,
 						WinEDA_App *parent, const wxString & title,
-						const wxPoint& pos, const wxSize& size):
-		wxFrame(father, -1, title, pos, size,
-			wxDEFAULT_FRAME_STYLE|wxWANTS_CHARS)
+						const wxPoint& pos, const wxSize& size, long style):
+		wxFrame(father, -1, title, pos, size, style )
 {
 wxSize minsize;
 

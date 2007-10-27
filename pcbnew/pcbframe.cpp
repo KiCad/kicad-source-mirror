@@ -176,8 +176,9 @@ END_EVENT_TABLE()
 
 WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent,
                                   const wxString& title,
-                                  const wxPoint& pos, const wxSize& size ) :
-    WinEDA_BasePcbFrame( father, parent, PCB_FRAME, title, pos, size )
+                                  const wxPoint& pos, const wxSize& size,
+								  long style) :
+    WinEDA_BasePcbFrame( father, parent, PCB_FRAME, title, pos, size, style )
 {
     m_FrameName                = wxT( "PcbFrame" );
     m_Draw_Axis                = TRUE;          // TRUE pour avoir les axes dessines
