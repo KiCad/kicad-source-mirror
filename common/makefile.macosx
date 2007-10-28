@@ -2,7 +2,7 @@
 
 include ../libs.macosx
 
-TARGET = pcbnew
+TARGET = common.a
 
 all: $(TARGET)
 
