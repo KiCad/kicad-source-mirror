@@ -31,11 +31,11 @@ void WinEDA_CvpcbFrame::ReCreateHToolbar()
  	m_HToolBar = new WinEDA_Toolbar(TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE);
   	SetToolBar(m_HToolBar);
 
- 	m_HToolBar->AddTool(ID_CVPCB_READ_INPUT_NETLIST, BITMAP(netlist_xpm),
-					_("Open Netlist"));
+ 	m_HToolBar->AddTool(ID_CVPCB_READ_INPUT_NETLIST, BITMAP(open_xpm),
+					_("Open a NetList file"));
 
- 	m_HToolBar->AddTool(ID_CVPCB_SAVEQUITCVPCB, BITMAP(save_netlist_xpm),
-					_("Save Nelist and Cmp list"));
+ 	m_HToolBar->AddTool(ID_CVPCB_SAVEQUITCVPCB, BITMAP(save_xpm),
+					_("Save NetList and Components List files"));
 
  	m_HToolBar->AddSeparator();
  	m_HToolBar->AddTool(ID_CVPCB_CREATE_CONFIGWINDOW, BITMAP(config_xpm),
@@ -109,16 +109,16 @@ wxMenuBar * menuBar = GetMenuBar();
 
 		m_FilesMenu = new wxMenu;
 		wxMenuItem *item = new wxMenuItem(m_FilesMenu, ID_LOAD_PROJECT,
-					 _("&Load Netlist File"),
-					 _("Load a Netlist") );
+					 _("&Open"),
+					 _("Open a NetList file") );
 	    item->SetBitmap(open_xpm);
 		m_FilesMenu->Append(item);
 
 		m_FilesMenu->AppendSeparator();
 		item = new wxMenuItem(m_FilesMenu, ID_SAVE_PROJECT,
-					 _("&Save Netlist"),
-					 _("Save New Netlist and Cmp file") );
-	    item->SetBitmap(save_netlist_xpm);
+					 _("&Save As..."),
+					 _("Save New NetList and Components List files") );
+	    item->SetBitmap(save_xpm);
 		m_FilesMenu->Append(item);
 
 		m_FilesMenu->AppendSeparator();

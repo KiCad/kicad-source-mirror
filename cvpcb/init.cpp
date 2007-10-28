@@ -161,7 +161,7 @@ wxString NetlistFullFileName = FullFilename;
 			ChangeFileNameExt(NetlistFullFileName, NetExtBuffer);
 		}
 	
-		NetlistFullFileName = EDA_FileSelector( _("Save Net List & Cmp"),
+		NetlistFullFileName = EDA_FileSelector( _("Save NetList and Components List files"),
 						NetDirBuffer,		/* Chemin par defaut */
 						NetlistFullFileName,			/* nom fichier par defaut */
 						NetExtBuffer,		/* extension par defaut */
