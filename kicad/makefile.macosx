@@ -1,64 +1,39 @@
-# File:		makefile for kicad, wxGTK
-
-# Compiler flags.
-CC = gcc
-LD = g++
-
-FINAL = 1
-
-# Compiler flags.
-CPPFLAGS =  -Wall -O2 `wx-config --cxxflags`
-CPPFLAGS += -arch i386 -arch ppc
- 
-LDFLAGS =
+## Makefile for kicad
 
 include ../libs.macosx
 
 TARGET = kicad
 
-all: $(TARGET) $(TARGET).app
+all: $(TARGET).app
 
 include makefile.include
 
 CPPFLAGS += $(EXTRACPPFLAGS)
 EDACPPFLAGS = $(CPPFLAGS)
 
-
-$(TARGET):	$(OBJECTS) $(TARGET).r makefile.macosx $(EXTRALIBS) ../libs.macosx
-	$(LD) $(OBJECTS) $(LDFLAGS)  $(LIBS) -o $(TARGET)
+$(TARGET): $(OBJECTS) $(TARGET).r makefile.macosx makefile.include $(EXTRALIBS) ../libs.macosx
+	$(LD) $(OBJECTS) $(LDFLAGS) $(LIBS) -o $(TARGET)
 	$(RESCOMP) -o $(TARGET) Carbon.r $(TARGET).r
 	$(SETFILE) -a C $(TARGET)
 
 
-$(TARGET).app: $(OBJS)
-	rm -Rf $(TARGET).app
+$(TARGET).app: $(TARGET)
+	rm -rf $(TARGET).app
 	mkdir -p $(TARGET).app
 	mkdir -p $(TARGET).app/Contents
 	mkdir -p $(TARGET).app/Contents/MacOS
 	mkdir -p $(TARGET).app/Contents/Frameworks
 	mkdir -p $(TARGET).app/Contents/Resources
-	sed -e "s/IDENTIFIER/`echo . | sed -e ’s,\.\./,,g’ | sed -e ’s,/,.,g’`/" -e "s/EXECUTABLE/$(TARGET)/" \
-		-e "s/VERSION/$(MKMK_WX_VERSION)/" $(HOME)/wxMac-$(MKMK_WX_VERSION)/src/mac/carbon/wxmac.icns \
-	>$(TARGET).app/Contents/Resources/wxmac.icns
-	sed -e "s/IDENTIFIER/`echo . | sed -e ’s,\.\./,,g’ | sed -e ’s,/,.,g’`/" -e "s/EXECUTABLE/$(TARGET)/"\
-		-e "s/VERSION/$(MKMK_WX_VERSION)/" $(HOME)/wxMac-$(MKMK_WX_VERSION)/src/mac/carbon/Info.plist.in \
+	cp $(TARGET).icns $(TARGET).app/Contents/Resources/$(TARGET).icns
+	sed -e "s/EXECUTABLE/$(TARGET)/" ../Info.plist.in \
 	>$(TARGET).app/Contents/Info.plist
 	echo -n "APPL????" >$(TARGET).app/Contents/PkgInfo
-	ln -f $(TARGET) $(TARGET).app/Contents/MacOS/$(TARGET)
+	cp $(TARGET) $(TARGET).app/Contents/MacOS/$(TARGET)
 
-install:$(TARGET)
-	cp -f  $(TARGET) $(KICAD_BIN)
+install: $(TARGET).app
+	cp -Rf $(TARGET).app $(KICAD_BIN)
 
 clean:
-	rm -f *.o;
-	rm -f *~;
-	rm -f core;
-	rm -f *.bak
+	rm -f *.o; rm -f *~
+	rm -rf $(TARGET).app
 	rm -f $(TARGET)
-
-
-
-
-
-
-

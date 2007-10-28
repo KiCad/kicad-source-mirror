@@ -1,28 +1,41 @@
 #Configuration for build kicad
-KICAD_BIN = /usr/local/kicad/macosx
+KICAD_BIN = $(HOME)/install/kicad/macosx
 
 RESCOMP = /Developer/Tools/Rez -d __DARWIN__ -t APPL -d __WXMAC__ -i .
 SETFILE = /Developer/Tools/SetFile
 
-MKMK_WX_VERSION=`wx-config --version`
+CPPFLAGS = -D__UNIX__ -Wall -I../include `wx-config --cxxflags`
+LDFLAGS =
+CC = g++
+LD = g++
 
-SRCSUFF = .cpp
-OBJSUFF = .o
-FINAL = 1
+# turn on/off debugging for all executables, only tested without KICAD_PYTHON
+DEBUG = 1
+
+ifeq ($(DEBUG), 1)
+CPPFLAGS += -g
+else
+CPPFLAGS += -O2
+endif
+
+# turn on/off universal binaries
+UNIVERSAL = 0
+
+ifeq ($(UNIVERSAL), 1)
+CPPFLAGS += -arch i386 -arch ppc
+endif
 
 # You must comment or uncomment this line to disable/enable python support
 #KICAD_PYTHON = 1
-
-
  
 ifdef KICAD_PYTHON
 PYLIBS= -L/usr/lib
 PYLIBS+= -L /usr/include/python
 PYLIBS+= -lpython2.4
 PYLIBS+= -lboost_python
-EXTRACPPFLAGS+=-I /usr/include/python2.4 -DKICAD_PYTHON -fno-strict-aliasing -ggdb
+EXTRACPPFLAGS+=-I /usr/include/python2.4 -DKICAD_PYTHON -fno-strict-aliasing
 endif
 
 LIBS =	../common/common.a `wx-config --libs` $(PYLIBS)
-LIBS3D = ../common/common.a `wx-config --libs std,gl` $(PYLIBS)
+LIBS3D = ../common/common.a `wx-config --libs std,gl` -framework OpenGL $(PYLIBS)
 

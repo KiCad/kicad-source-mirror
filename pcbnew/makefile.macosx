@@ -1,55 +1,38 @@
-## Makefile for PCBNEW et wxGTK
-CC = gcc
-LD = g++
-
-# Compiler flags.
-
-CPPFLAGS =  -Wall -O2 `wx-config --cxxflags`
-
-LDFLAGS =
+## Makefile for pcbnew
 
 include ../libs.macosx
 
 TARGET = pcbnew
 
-all: $(TARGET) $(TARGET).app
+all: $(TARGET).app
 
 include makefile.include
 
 CPPFLAGS += $(EXTRACPPFLAGS)
-CPPFLAGS += -arch i386 -arch ppc
 EDACPPFLAGS = $(CPPFLAGS)
 
-
-
 $(TARGET): $(OBJECTS) $(TARGET).r makefile.macosx  makefile.include $(LIBVIEWER3D) $(EXTRALIBS) ../libs.macosx
-		$(LD) $(LDFLAGS) $(OBJECTS) $(LIBVIEWER3D) $(LIBS3D) -o $(TARGET)
+	$(LD) $(LDFLAGS) $(OBJECTS) $(LIBVIEWER3D) $(LIBS3D) -o $(TARGET)
 	$(RESCOMP) -o $(TARGET) Carbon.r $(TARGET).r
 	$(SETFILE) -a C $(TARGET)
 
-install: $(TARGET)
-	cp $(TARGET) $(KICAD_BIN)
-
-$(TARGET).app: $(OBJS)
-	rm -Rf $(TARGET).app
+$(TARGET).app: $(TARGET)
+	rm -rf $(TARGET).app
 	mkdir -p $(TARGET).app
 	mkdir -p $(TARGET).app/Contents
 	mkdir -p $(TARGET).app/Contents/MacOS
 	mkdir -p $(TARGET).app/Contents/Frameworks
 	mkdir -p $(TARGET).app/Contents/Resources
-	sed -e "s/IDENTIFIER/`echo . | sed -e ’s,\.\./,,g’ | sed -e ’s,/,.,g’`/" -e "s/EXECUTABLE/$(TARGET)/" \
-		-e "s/VERSION/$(MKMK_WX_VERSION)/" $(HOME)/wxMac-$(MKMK_WX_VERSION)/src/mac/carbon/wxmac.icns \
-	>$(TARGET).app/Contents/Resources/wxmac.icns
-	sed -e "s/IDENTIFIER/`echo . | sed -e ’s,\.\./,,g’ | sed -e ’s,/,.,g’`/" -e "s/EXECUTABLE/$(TARGET)/"\
-		-e "s/VERSION/$(MKMK_WX_VERSION)/" $(HOME)/wxMac-$(MKMK_WX_VERSION)/src/mac/carbon/Info.plist.in \
+	cp $(TARGET).icns $(TARGET).app/Contents/Resources/$(TARGET).icns
+	sed -e "s/EXECUTABLE/$(TARGET)/" ../Info.plist.in \
 	>$(TARGET).app/Contents/Info.plist
 	echo -n "APPL????" >$(TARGET).app/Contents/PkgInfo
-	ln -f $(TARGET) $(TARGET).app/Contents/MacOS/$(TARGET)
+	cp $(TARGET) $(TARGET).app/Contents/MacOS/$(TARGET)
+
+install: $(TARGET).app
+	cp -Rf $(TARGET).app $(KICAD_BIN)
 
 clean:
-	rm -f *.o
-	rm -f *.map
+	rm -f *.o; rm -f *~
+	rm -rf $(TARGET).app
 	rm -f $(TARGET)
-
-
-

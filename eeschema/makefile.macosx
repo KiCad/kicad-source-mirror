@@ -1,26 +1,14 @@
 ## Makefile for eeschema
-CC = gcc
-LD = g++
-
-FINAL = 1
-
-
-LDFLAGS =
 
 include ../libs.macosx
 
 TARGET = eeschema
 
-
-CPPFLAGS = -Wall -O2 `wx-config --cxxflags`
-
-
-all: $(TARGET)  $(TARGET).app netlist_form_pads-pcb
+all: $(TARGET).app netlist_form_pads-pcb
 
 include makefile.include
 
 CPPFLAGS += $(EXTRACPPFLAGS)
-CPPFLAGS += -arch i386 -arch ppc
 EDACPPFLAGS = $(CPPFLAGS)
 
 $(TARGET): $(OBJECTS) $(TARGET).r makefile.macosx makefile.include $(EXTRALIBS) ../libs.macosx
@@ -29,39 +17,29 @@ $(TARGET): $(OBJECTS) $(TARGET).r makefile.macosx makefile.include $(EXTRALIBS) 
 	$(SETFILE) -a C $(TARGET)
 
 
-$(TARGET).app: $(OBJS)
-	rm -Rf $(TARGET).app
+$(TARGET).app: $(TARGET)
+	rm -rf $(TARGET).app
 	mkdir -p $(TARGET).app
 	mkdir -p $(TARGET).app/Contents
 	mkdir -p $(TARGET).app/Contents/MacOS
 	mkdir -p $(TARGET).app/Contents/Frameworks
 	mkdir -p $(TARGET).app/Contents/Resources
-	sed -e "s/IDENTIFIER/`echo . | sed -e ’s,\.\./,,g’ | sed -e ’s,/,.,g’`/" -e "s/EXECUTABLE/$(TARGET)/" \
-		-e "s/VERSION/$(MKMK_WX_VERSION)/" $(HOME)/wxMac-$(MKMK_WX_VERSION)/src/mac/carbon/wxmac.icns \
-	>$(TARGET).app/Contents/Resources/wxmac.icns
-	sed -e "s/IDENTIFIER/`echo . | sed -e ’s,\.\./,,g’ | sed -e ’s,/,.,g’`/" -e "s/EXECUTABLE/$(TARGET)/"\
-		-e "s/VERSION/$(MKMK_WX_VERSION)/" $(HOME)/wxMac-$(MKMK_WX_VERSION)/src/mac/carbon/Info.plist.in \
+	cp $(TARGET).icns $(TARGET).app/Contents/Resources/$(TARGET).icns
+	sed -e "s/EXECUTABLE/$(TARGET)/" ../Info.plist.in \
 	>$(TARGET).app/Contents/Info.plist
 	echo -n "APPL????" >$(TARGET).app/Contents/PkgInfo
-	ln -f $(TARGET) $(TARGET).app/Contents/MacOS/$(TARGET)
+	cp $(TARGET) $(TARGET).app/Contents/MacOS/$(TARGET)
 
 netlist_form_pads-pcb: plugins/netlist_form_pads-pcb.cpp
-	g++   $(CXXFLAGS) -Wall plugins/netlist_form_pads-pcb.cpp -o netlist_form_pads-pcb
+	g++ -D__UNIX__ $(CXXFLAGS) -Wall plugins/netlist_form_pads-pcb.cpp -o netlist_form_pads-pcb
 	
 
-install: $(TARGET)
-	cp $(TARGET) $(KICAD_BIN)
-	cp netlist_form_pads-pcb $(KICAD_BIN)
-
+install: $(TARGET).app
+	cp -Rf $(TARGET).app $(KICAD_BIN)
+	cp -f netlist_form_pads-pcb $(KICAD_BIN)
 
 clean:
-	rm -f *.o; rm -f *~; rm core; rm *.bak
+	rm -f *.o; rm -f *~
+	rm -rf $(TARGET).app
 	rm -f $(TARGET)
-
-
-
-
-
-
-
-
+	rm -f netlist_form_pads-pcb
