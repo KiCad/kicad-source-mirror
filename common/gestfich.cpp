@@ -464,19 +464,7 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& para
     wxString FullFileName;
 
 
-#ifdef __WXMAC__
-
-    // Mac part
-    wxGetEnv( "HOME", &FullFileName );
-    FullFileName += wxString( "/bin/" ) + ExecFile;
-    if( !wxFileExists( FullFileName ) )
-    {
-        FullFileName = FindKicadFile( ExecFile );
-    }
-
-#else
     FullFileName = FindKicadFile( ExecFile );
-#endif
 
     if( wxFileExists( FullFileName ) )
     {

@@ -199,21 +199,30 @@ void WinEDA_App::InitOnLineHelp()
 /*******************************/
 bool WinEDA_App::SetBinDir()
 /*******************************/
-
-/*
- *  Analyse la ligne de commande pour retrouver le chemin de l'executable
- *  Sauve en WinEDA_App::m_BinDir le repertoire de l'executable
- */
-
+// Find the path to the executable and store it in WinEDA_App::m_BinDir
 {
-    /* Calcul du chemin ou se trouve l'executable */
 
-#ifdef __UNIX__
+#ifdef __APPLE__
+  // Derive path from location of the app bundle
+  CFBundleRef mainBundle = CFBundleGetMainBundle();
+  if (mainBundle == NULL) return false;
+  CFURLRef urlref = CFBundleCopyBundleURL(mainBundle);
+  if (urlref == NULL) return false;
+  CFStringRef str = CFURLCopyFileSystemPath(urlref, kCFURLPOSIXPathStyle);
+  if (str == NULL) return false;
+  char *native_str = NULL;
+  int len = CFStringGetMaximumSizeForEncoding(CFStringGetLength(str),
+					      kCFStringEncodingUTF8) + 1;
+  native_str = new char[len];
+  CFStringGetCString(str, native_str, len, kCFStringEncodingUTF8);
+  m_BinDir = CONV_FROM_UTF8(native_str);
+  delete[] native_str;
 
-    /* Sous LINUX ptarg[0] ne donne pas le chemin complet de l'executable,
-     *  il faut le retrouver par la commande "which <filename> si aucun
-     *  chemin n'est donne */
-    FILE*    ftmp;
+#elif defined(__UNIX__)
+
+  // Under Linux, if argv[0] doesn't the complete path to the executable, 
+  // it's necessary to obtain it using "which <filename>".
+  FILE*    ftmp;
 
 #define TMP_FILE "/tmp/kicad.tmp"
     char     Line[1024];
@@ -223,7 +232,7 @@ bool WinEDA_App::SetBinDir()
 
     FileName[0] = 0;
     str_arg0    = argv[0];
-    if( strchr( (const char*) argv[0], '/' ) == NULL ) /* pas de chemin */
+    if( strchr( (const char*) argv[0], '/' ) == NULL ) // no path
     {
         sprintf( FileName, "which %s > %s", CONV_TO_UTF8( str_arg0 ), TMP_FILE );
         ii = system( FileName );
