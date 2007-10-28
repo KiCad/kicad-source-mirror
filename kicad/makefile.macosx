@@ -22,12 +22,11 @@ $(TARGET).app: $(TARGET)
 	mkdir -p $(TARGET).app
 	mkdir -p $(TARGET).app/Contents
 	mkdir -p $(TARGET).app/Contents/MacOS
-	mkdir -p $(TARGET).app/Contents/Frameworks
 	mkdir -p $(TARGET).app/Contents/Resources
-	cp $(TARGET).icns $(TARGET).app/Contents/Resources/$(TARGET).icns
-	sed -e "s/EXECUTABLE/$(TARGET)/" ../Info.plist.in \
-	>$(TARGET).app/Contents/Info.plist
-	echo -n "APPL????" >$(TARGET).app/Contents/PkgInfo
+	cp $(TARGET).icns $(TARGET).app/Contents/Resources
+	cp file_pro.icns $(TARGET).app/Contents/Resources
+	cp Info.plist $(TARGET).app/Contents
+	echo -n "APPL????" > $(TARGET).app/Contents/PkgInfo
 	cp $(TARGET) $(TARGET).app/Contents/MacOS/$(TARGET)
 
 install: $(TARGET).app

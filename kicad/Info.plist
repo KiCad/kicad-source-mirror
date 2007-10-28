@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDisplayName</key>
+	<string>Kicad Project Manager</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>pro</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>file_pro.icns</string>
+		</dict>
+	</array>
+	<key>CFBundleExecutable</key>
+	<string>kicad</string>
+	<key>CFBundleIconFile</key>
+	<string>kicad.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>org.kicad-eda.kicad</string>
+	<key>CFBundleName</key>
+	<string>Kicad</string>
+	<key>LSRequiresCarbon</key>
+	<true/>
+</dict>
+</plist>
