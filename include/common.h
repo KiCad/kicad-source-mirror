@@ -47,12 +47,11 @@ enum pseudokeys {
 #define PCBNEW_EXE   wxT( "pcbnew" )
 #define EESCHEMA_EXE wxT( "eeschema" )
 #define GERBVIEW_EXE wxT( "gerbview" )
-#endif
-#ifdef __WXMAC__
-#define CVPCB_EXE    wxT( "cvpcb.app" )
-#define PCBNEW_EXE   wxT( "pcbnew.app" )
-#define EESCHEMA_EXE wxT( "eeschema.app" )
-#define GERBVIEW_EXE wxT( "gerbview.app" )
+#else
+#define CVPCB_EXE wxT("cvpcb.app/Contents/MacOS/cvpcb")
+#define PCBNEW_EXE wxT("pcbnew.app/Contents/MacOS/pcbnew")
+#define EESCHEMA_EXE wxT("eeschema.app/Contents/MacOS/eeschema")
+#define GERBVIEW_EXE wxT("gerbview.app/Contents/MacOS/gerbview")
 #endif
 #endif
 
