@@ -626,13 +626,13 @@ void AddHotkeyConfigMenu( wxMenu* menu )
     wxMenu* submenu_hkcfg = new wxMenu();
     item = new wxMenuItem( submenu_hkcfg, ID_PREFERENCES_HOTKEY_PATH_IS_HOME,
                            _( "home directory" ),
-                           _(  "Use home directory to load or store Hotkey config files" ),
+                           _( "Use home directory to load or store Hotkey config files" ),
                            wxITEM_CHECK );
     submenu_hkcfg->Append( item );
 
     item = new wxMenuItem( submenu_hkcfg, ID_PREFERENCES_HOTKEY_PATH_IS_KICAD,
                            _( "kicad/template directory" ),
-                           _(  "Use kicad/templatedirectory to load or store Hotkey config files" ),
+                           _( "Use kicad/template directory to load or store Hotkey config files" ),
                            wxITEM_CHECK );
     submenu_hkcfg->Append( item );
 
@@ -640,7 +640,7 @@ void AddHotkeyConfigMenu( wxMenu* menu )
                                         -1,
                                         _( "Hotkey config location" ),
                                         _(
-                                            "Hotkey config file location selection (home directory or kicad tree)" ),
+                                           "Hotkey config file location selection (home directory or kicad tree)" ),
                                         right_xpm );
     submenu_hkcfg->Check( ID_PREFERENCES_HOTKEY_PATH_IS_HOME,
                           g_ConfigFileLocationChoice == 0 );
