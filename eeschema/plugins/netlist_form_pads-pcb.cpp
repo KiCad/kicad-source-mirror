@@ -7,10 +7,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 #include <ctype.h>
 
-#if defined (__UNIX__) || defined (__APPLE__)
-#define stricmp  strcasecmp
+#ifdef __UNIX__
+#define stricmp strcasecmp
 #define strnicmp strncasecmp
 #endif
 
