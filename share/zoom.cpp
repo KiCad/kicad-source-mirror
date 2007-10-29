@@ -34,28 +34,24 @@
 #include "id.h"
 
 
-/* Fonctions locales: */
-
-
 /**************************************************/
 void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
 /**************************************************/
 
-/* Calcule les offsets de trace.
- *  Les offsets sont ajustés a un multiple du pas de grille
- *  si ToMouse == TRUE, le curseur souris (curseur "systeme") est replace
- *  en position curseur graphique (curseur kicad)
+/** Compute draw offset (scroll bars and draw parameters)
+ *  in order to have the current graphic cursor position at the screen center
+ *  @param ToMouse if TRUE, the mouse cursor is moved
+ *  to the graphic cursor position (which is usually on grid)
  * 
  *  Note: Mac OS ** does not ** allow moving mouse cursor by program.
  */
 {
-    /* decalages a apporter au trace en coordonnees ecran */
     PutOnGrid( &m_CurrentScreen->m_Curseur );
     AdjustScrollBars();
 
     ReDrawPanel();
 
-    /* Place le curseur souris sur le curseur SCHEMA*/
+    /* Move the mouse cursor to the on grid graphic cursor position */
     if( ToMouse == TRUE )
         DrawPanel->MouseToCursorSchema();
 }
@@ -64,7 +60,9 @@ void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
 /************************************************/
 void WinEDA_DrawFrame::PutOnGrid( wxPoint* coord )
 /************************************************/
-/* retourne la valeur de la coordonnee coord sur le point de grille le plus proche */
+/** Adjust the coordinate to the nearest grig value
+* @param coord = coordinate to adjust
+*/
 {
     double ftmp;
 
@@ -102,8 +100,7 @@ void WinEDA_DrawFrame::PutOnGrid( wxPoint* coord )
 void WinEDA_DrawFrame::Zoom_Automatique( bool move_mouse_cursor )
 /**************************************************************/
 
-/* Affiche le Schema au meilleur zoom au meilleur centrage pour le dessin
- *  de facon a avoir toute la feuille affichee a l'ecran
+/** Redraw the screen with the zoom level which shows all the page or the board
  */
 {
     int bestzoom;
@@ -118,8 +115,9 @@ void WinEDA_DrawFrame::Zoom_Automatique( bool move_mouse_cursor )
 void WinEDA_DrawFrame::Window_Zoom( EDA_Rect& Rect )
 /*************************************************/
 
-/* Compute the zoom factor and the new draw offset to draw the
+/** Compute the zoom factor and the new draw offset to draw the
  *  selected area (Rect) in full window screen
+ *  @param Rect = selected area th show after zooming
  */
 {
     int    ii, jj;
@@ -146,12 +144,10 @@ void WinEDA_DrawFrame::Window_Zoom( EDA_Rect& Rect )
 void WinEDA_DrawPanel::Process_Popup_Zoom( wxCommandEvent& event )
 /*****************************************************************/
 
-/* Gere les commandes de zoom appelées par le menu Popup
- *  Toute autre commande est transmise a Parent->Process_Special_Functions(event)
+/* Handle only the Popup command zoom and grid level
  */
 {
     int        id = event.GetId();
-    wxClientDC dc( this );
 
     switch( id )
     {
@@ -454,9 +450,8 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
 void WinEDA_DrawFrame::Process_Zoom( wxCommandEvent& event )
 /**********************************************************/
 
-/* fonction de traitement des boutons de Zoom.
- *  Appelle simplement la fonction de traitement du Zoom de la
- *  fenetre active.
+/* Handle the Zoom commands from the zoom tools in the main toolbar.
+ *  Calls the active window Zoom function
  */
 {
     int id = event.GetId();

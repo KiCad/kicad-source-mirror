@@ -1,6 +1,6 @@
-/***************************************************/
-/* Files.cpp: Lecture / Sauvegarde des fichiers PCB */
-/***************************************************/
+/***************************************/
+/* files.cpp: read / write board files */
+/***************************************/
 
 #include "fctsys.h"
 
@@ -14,7 +14,7 @@
 void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
 /****************************************************/
 
-/* Gestion generale  des commandes de lecture de fichiers
+/* Handle the read/write file commands
  */
 {
     int        id = event.GetId();
@@ -23,7 +23,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
 
     DrawPanel->PrepareGraphicContext( &dc );
 
-    // Arret des commandes en cours
+    // If an edition is in progress, stop it
     if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
     {
         DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
@@ -122,14 +122,13 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
 
 
 /*****************************************************************************************/
-int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, wxDC* DC, bool Append )
+int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, wxDC * DC, bool Append )
 /******************************************************************************************/
 
-/*
- *  Lecture d'un fichier PCB, le nom etant dans PcbNameBuffer.s
- *  retourne:
- *  0 si fichier non lu ( annulation de commande ... )
- *  1 si OK
+/**
+ *  Read a board file
+ *  @param FullFileName = file name. If empty, a file name will be asked
+ *  @return 0 if fails or abort, 1 if OK
  */
 {
     int      ii;
@@ -250,10 +249,10 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, wxDC* DC, boo
 bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
 /************************************************************/
 
-/* Sauvegarde du fichier PCB en format ASCII
+/* Write the board file
  */
 {
-    wxString    old_name;
+    wxString    BackupFileName;
     wxString    FullFileName;
     wxString    upperTxt;
     wxString    lowerTxt;
@@ -283,38 +282,40 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
     else
         GetScreen()->m_FileName = FileName;
 
-    /* mise a jour date si modifications */
+    /* If changes are made, update the board date */
     if( GetScreen()->IsModify() )
     {
         GetScreen()->m_Date = GenDate();
     }
 
-    /* Calcul du nom du fichier a creer */
+    /* Get the filename */
     FullFileName = MakeFileName( wxEmptyString, GetScreen()->m_FileName, PcbExtBuffer );
 
-    /* Calcul du nom du fichier de sauvegarde */
-    old_name = FullFileName;
-    ChangeFileNameExt( old_name, wxT( ".000" ) );
+    /* Get the backup file name */
+    BackupFileName = FullFileName;
+    ChangeFileNameExt( BackupFileName, wxT( ".000" ) );
 
-    /* Changement du nom de l'ancien fichier s'il existe */
+    /* If an old backup file exists, delete it.
+	if an old board file existes, rename it to the backup file name
+	*/
     if( wxFileExists( FullFileName ) )
     {
-        /* conversion en *.000 de l'ancien fichier */
-        wxRemoveFile( old_name ); /* S'il y a une ancienne sauvegarde */
-        if( !wxRenameFile( FullFileName, old_name ) )
+        /* rename the "old" file" from xxx.brd to xxx.000 */
+        wxRemoveFile( BackupFileName ); /* Remove the old file xxx.000 (if exists) */
+        if( !wxRenameFile( FullFileName, BackupFileName ) )
         {
-            msg = _( "Warning: unable to create bakfile " ) + old_name;
+            msg = _( "Warning: unable to create bakfile " ) + BackupFileName;
             DisplayError( this, msg, 15 );
             saveok = FALSE;
         }
     }
     else
     {
-        old_name = wxEmptyString; 
+        BackupFileName = wxEmptyString; 
         saveok   = FALSE;
     }
 
-    /* Sauvegarde de l'ancien fichier */
+    /* Create the file */
     dest = wxFopen( FullFileName, wxT( "wt" ) );
     if( dest == 0 )
     {
@@ -332,12 +333,12 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
         fclose( dest );
     }
 
-    /* Affichage des fichiers crees: */
+    /* Display the file names: */
     MsgPanel->EraseMsgBox();
 
     if( saveok )
     {
-        upperTxt = _( "Backup file: " ) + old_name;
+        upperTxt = _( "Backup file: " ) + BackupFileName;
     }
 
     if( dest )
@@ -348,7 +349,7 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
 
     Affiche_1_Parametre( this, 1, upperTxt, lowerTxt, CYAN );
     
-    g_SaveTime = time( NULL );    /* Reset delai pour sauvegarde automatique */
+    g_SaveTime = time( NULL );    /* Reset timer for the automatic saving */
     
     GetScreen()->ClrModify();
     return TRUE;
