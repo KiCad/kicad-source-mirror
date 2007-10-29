@@ -4,6 +4,14 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Oct-29 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++cvpcb: listboxes.cpp problem solved: Workaround for a curious bug in wxWidgets:
+     if we switch from a long list of footprints to a short list (a filtered footprint list),
+     and if the selected item is near the end of the long list,
+     the new list is not displayed from the top of the list box
+
+
 2007-Oct-27 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + all:

@@ -141,7 +141,7 @@ void WinEDA_MsgPanel::Affiche_1_Parametre( int pos_X, const wxString& texte_H,
 }
 
 
-void WinEDA_MsgPanel::showItem( wxWindowDC& dc, const MsgItem& aItem )
+void WinEDA_MsgPanel::showItem( wxDC& dc, const MsgItem& aItem )
 {
     int color = aItem.m_Color;
     

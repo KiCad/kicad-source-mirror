@@ -54,21 +54,21 @@
                                  *  The real font size will be computed at run time */
 
 
-/*****************************/
-/* Constructeur de WinEDA_App */
-/*****************************/
+/**************************/
+/* WinEDA_App Constructor */
+/**************************/
 
 WinEDA_App::WinEDA_App()
 {
     m_Checker   = NULL;
     m_MainFrame = NULL;
     m_PcbFrame  = NULL;
-    m_ModuleEditFrame = NULL;       // Edition des modules
-    m_SchematicFrame  = NULL;       // Edition des Schemas
-    m_LibeditFrame    = NULL;       // Edition des composants
-    m_ViewlibFrame    = NULL;       // Visualisation des composants
+    m_ModuleEditFrame = NULL;       // Frame for footprint edition
+    m_SchematicFrame  = NULL;       // Frame for schematic edition
+    m_LibeditFrame    = NULL;       // Frame for component edition
+    m_ViewlibFrame    = NULL;       // Frame for browsing component libraries
     m_CvpcbFrame  = NULL;
-    m_GerberFrame = NULL;           // ecran de visualisation GERBER
+    m_GerberFrame = NULL;           // Frame for the gerber viewer GERBVIEW
 
     m_LastProjectMaxCount = 10;
     m_HtmlCtrl = NULL;
@@ -83,15 +83,15 @@ WinEDA_App::WinEDA_App()
 }
 
 
-/*****************************/
-/* Destructeur de WinEDA_App */
-/*****************************/
+/*************************/
+/* WinEDA_App Destructor */
+/*************************/
 
 WinEDA_App::~WinEDA_App()
 {
     SaveSettings();
 
-    /* delete data non directement geree par wxAppl */
+    /* delete user datas */
     delete g_Prj_Config;
     delete m_EDA_Config;
     delete m_EDA_CommonConfig;
@@ -116,10 +116,12 @@ void WinEDA_App::InitEDA_Appl( const wxString& name )
     ident     = name + wxT( "-" ) + wxGetUserId();
     m_Checker = new wxSingleInstanceChecker( ident );
 
-    /* Init environnement
-     *  (KICAD definit le chemin de kicad ex: set KICAD=d:\kicad) */
+    /* Init kicad environment
+     * the environment variable KICAD (if exists) gives the kicad path:
+	 * something like set KICAD=d:\kicad
+	*/
     m_Env_Defined = wxGetEnv( wxT( "KICAD" ), &m_KicadEnv );
-    if( m_Env_Defined )    // m_KicadEnv doit finir par "/" ou "\"
+    if( m_Env_Defined )    // ensure m_KicadEnv ends by "/"
     {
         m_KicadEnv.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
         if( m_KicadEnv.Last() != '/' )
@@ -129,13 +131,13 @@ void WinEDA_App::InitEDA_Appl( const wxString& name )
     /* Prepare On Line Help */
     m_HelpFileName = name + wxT( ".html" );
 
-    // Init parametres pour configuration
+    // Init parameters for configuration
     SetVendorName( wxT( "kicad" ) );
     SetAppName( name );
     m_EDA_Config = new wxConfig( name );
     m_EDA_CommonConfig = new wxConfig( wxT( "kicad_common" ) );
 
-    /* Creation des fontes utiles */
+    /* Create the fontes used in dialogs and messages */
     g_StdFontPointSize    = FONT_DEFAULT_SIZE;
     g_MsgFontPointSize    = FONT_DEFAULT_SIZE;
     g_DialogFontPointSize = FONT_DEFAULT_SIZE;
@@ -155,12 +157,12 @@ void WinEDA_App::InitEDA_Appl( const wxString& name )
     wxImage::AddHandler( new wxJPEGHandler );
     wxFileSystem::AddHandler( new wxZipFSHandler );
 
-    // Analyse command line & init binary path
+    // Analyse the command line & init binary path
     SetBinDir();
 
     ReadPdfBrowserInfos();
 
-    // Internationalisation: chargement du Dictionnaire de kicad
+    // Internationalisation: loading the kicad suitable Dictionnary
     m_EDA_CommonConfig->Read( wxT( "Language" ), &m_LanguageId, wxLANGUAGE_DEFAULT );
 
     bool succes = SetLanguage( TRUE );
@@ -262,7 +264,7 @@ bool WinEDA_App::SetBinDir()
 void WinEDA_App::GetSettings()
 /*********************************/
 
-/* Lit les infos utiles sauvees lors de la derniere utilisation du logiciel
+/* Get the last setup used (fontes, files opened...)
  */
 {
     wxString Line, Ident;
@@ -639,8 +641,11 @@ wxMenu* WinEDA_App::SetLanguageList( wxMenu* MasterMenu )
 }
 
 
+/**********************/
 int WinEDA_App::OnRun()
-/* Run init scripts */
+/**********************/
+/* Run init scripts
+*/
 {
     #ifdef KICAD_PYTHON
     PyHandler::GetInstance()->RunScripts();

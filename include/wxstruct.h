@@ -1409,7 +1409,7 @@ class WinEDA_MsgPanel : public wxPanel
 protected:
     std::vector<MsgItem>    m_Items;    
 
-    void showItem( wxWindowDC& dc, const MsgItem& aItem );
+    void showItem( wxDC& dc, const MsgItem& aItem );
     
 public:
     WinEDA_DrawFrame* m_Parent;
