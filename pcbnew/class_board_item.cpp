@@ -25,7 +25,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
  * @param aPcb = the parent board
  */
 {
-    wxString          text;
+    wxString          text, msg;
     const BOARD_ITEM* item = this;
     EQUIPOT*          net;
 	D_PAD * pad;
@@ -174,7 +174,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
                 text << wxT(" ") << _( "Blind" );
             else if( shape == VIA_BLIND )
                 text << wxT(" ") << _("Buried");
-            // else say nothing about normal vias
+            // else say nothing about normal (through) vias
             
             net = aPcb->FindNet( via->GetNet() );
             if( net )
@@ -203,9 +203,9 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         break;
 
     case TYPEMIRE:
-        text << _( "Target" ) //<< wxT( " on " ) << ReturnPcbLayerName( item->GetLayer() ).Trim()
-            // could use if problem with decimal point and user units was fixed:
-            // << wxT( " " ) << wxT( "size" ) << wxT( " " ) << ((MIREPCB*)item)->m_Size
+		valeur_param( ((MIREPCB*)item)->m_Size, msg );
+        text << _( "Target" ) << _( " on " ) << ReturnPcbLayerName( item->GetLayer() ).Trim()
+            << wxT( " " ) << _( "size" ) << wxT( " " ) << msg
             ;
         break;
 

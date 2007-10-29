@@ -48,15 +48,5 @@ compiler can help with this too.
 understanding by new developers.
 
 
-*** Implement the graying in/out of "Edit/Undo", "Edit/Redo" menu items, 
-when Undo/Redo stack is empty/filled.
-
-
-*** Implement action for ID_POPUP_PCB_DELETE_MARKER, since onrightclick.cpp
-can now identify a marker.  To see where the user gets a menu to delete a marker:
-void WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
-
-
-
 *** Add tooltip text to all non-obvious controls in every dialog window.
 Need to do this using DialogBlocks.

@@ -112,7 +112,7 @@ END_EVENT_TABLE()
 
 
 	/****************/
-	/* Constructeur */
+	/* Constructor */
 	/****************/
 
 WinEDA_SchematicFrame::	WinEDA_SchematicFrame(wxWindow * father, WinEDA_App *parent,
@@ -120,9 +120,9 @@ WinEDA_SchematicFrame::	WinEDA_SchematicFrame(wxWindow * father, WinEDA_App *par
 					WinEDA_DrawFrame(father, SCHEMATIC_FRAME, parent, title, pos, size, style)
 {
 	m_FrameName = wxT("SchematicFrame");
-	m_Draw_Axis = FALSE;			// TRUE pour avoir les axes dessines
-	m_Draw_Grid = g_ShowGrid;			// TRUE pour avoir la grille dessinee
-	m_Draw_Sheet_Ref = TRUE;		// TRUE pour avoir le cartouche dessiné
+	m_Draw_Axis = FALSE;			// TRUE to show axis
+	m_Draw_Grid = g_ShowGrid;			// TRUE to show a grid
+	m_Draw_Sheet_Ref = TRUE;		// TRUE to show sheet references
 
 	// Give an icon
 	#ifdef __WINDOWS__
@@ -149,7 +149,7 @@ WinEDA_SchematicFrame::	WinEDA_SchematicFrame(wxWindow * father, WinEDA_App *par
 
 
 	/***************/
-	/* Destructeur */
+	/* Destructor */
 	/***************/
 
 WinEDA_SchematicFrame::~WinEDA_SchematicFrame()
@@ -199,7 +199,7 @@ SCH_SCREEN * screen;
 	}
 
 	screen = ScreenSch ;
-	while( screen )	// suppression flag modify pour eviter d'autres message
+	while( screen )	// Clear "flag modify" to avoid alert messages when closing sub sheets
 	{
 		screen->ClrModify();
 		screen = (SCH_SCREEN*)screen->Pnext;
@@ -210,8 +210,7 @@ SCH_SCREEN * screen;
 
 	ClearProjectDrawList(ScreenSch, TRUE);
 
-	/* Tous les autres SCREEN sont effaces, aussi reselection de
-	 l'ecran de base, pour les evenements de refresh générés par wxWindows */
+	/* allof sub sheets are deleted, only the main sheet is useable */
 	m_CurrentScreen = ActiveScreen = ScreenSch;
 
 	SaveSettings();
@@ -226,8 +225,7 @@ SCH_SCREEN * screen;
 /********************************************/
 void WinEDA_SchematicFrame::SetToolbars()
 /********************************************/
-/* Active ou desactive les tools du toolbar horizontal, en fonction des commandes
-en cours
+/* Enable or disable some tools according to current conditions
 */
 {
 	if( m_HToolBar )
@@ -246,12 +244,27 @@ en cours
 		if ( g_BlockSaveDataList ) m_HToolBar->EnableTool(wxID_PASTE,TRUE);
 		else m_HToolBar->EnableTool(wxID_PASTE,FALSE);
 
+		wxMenuBar * menuBar = GetMenuBar();
 		if ( GetScreen()->m_RedoList )
+		{
 			m_HToolBar->EnableTool(ID_SCHEMATIC_REDO,TRUE);
-		else m_HToolBar->EnableTool(ID_SCHEMATIC_REDO,FALSE);
+			menuBar->Enable(ID_SCHEMATIC_REDO,TRUE);
+		}
+		else
+		{
+			m_HToolBar->EnableTool(ID_SCHEMATIC_REDO,FALSE);
+			menuBar->Enable(ID_SCHEMATIC_REDO,FALSE);
+		}
 		if ( GetScreen()->m_UndoList )
+		{
 			m_HToolBar->EnableTool(ID_SCHEMATIC_UNDO,TRUE);
-		else m_HToolBar->EnableTool(ID_SCHEMATIC_UNDO,FALSE);
+			menuBar->Enable(ID_SCHEMATIC_UNDO,TRUE);
+		}
+		else
+		{
+			m_HToolBar->EnableTool(ID_SCHEMATIC_UNDO,FALSE);
+			menuBar->Enable(ID_SCHEMATIC_UNDO,FALSE);
+		}
 	}
 
 	if ( m_OptionsToolBar )

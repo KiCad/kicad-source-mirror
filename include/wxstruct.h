@@ -681,7 +681,7 @@ public:
     void                Erase_Textes_Pcb( wxDC* DC, bool query );
     void                Erase_Marqueurs();
     void                UnDeleteItem( wxDC* DC );
-    void                RemoveStruct( EDA_BaseStruct* Item, wxDC* DC );
+    void                RemoveStruct( BOARD_ITEM* Item, wxDC* DC );
     void                Via_Edit_Control( wxDC* DC, int command_type, SEGVIA* via );
 
     // Hightlight functions:

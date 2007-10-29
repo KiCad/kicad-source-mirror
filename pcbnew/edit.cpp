@@ -151,7 +151,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         {
             DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
         }
-        
+
         if( m_ID_current_state != id )
             SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
         break;
@@ -697,6 +697,11 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
         break;
 
+    case ID_POPUP_PCB_DELETE_MARKER:
+        RemoveStruct( GetCurItem(), &dc );
+        DrawPanel->MouseToCursorSchema();
+        break;
+
     case ID_POPUP_PCB_DELETE_DRAWING_LAYER:
         Delete_Drawings_All_Layer( (DRAWSEGMENT*) GetCurItem(), &dc );
         SetCurItem( NULL );
@@ -865,7 +870,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     {
         wxString msg = FindKicadHelpPath();
         msg += g_EDA_Appl->m_EDA_CommonConfig->Read( wxT( "module_doc_file" ),
-                                                  wxT( "pcbnew/footprints.pdf" ) );
+                                                    wxT( "pcbnew/footprints.pdf" ) );
         GetAssociatedDocument( this, wxEmptyString, msg );
     }
         break;
@@ -917,7 +922,7 @@ static void Process_Move_Item( WinEDA_PcbFrame* frame,
 
 
 /***************************************************************/
-void WinEDA_PcbFrame::RemoveStruct( EDA_BaseStruct* Item, wxDC* DC )
+void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
 /***************************************************************/
 {
     if( Item == NULL )
@@ -958,6 +963,14 @@ void WinEDA_PcbFrame::RemoveStruct( EDA_BaseStruct* Item, wxDC* DC )
         break;
 
     case TYPEMARQUEUR:
+        if( Item == GetCurItem() )
+            SetCurItem( NULL );
+        ( (MARQUEUR*) Item )->Draw( DrawPanel, DC, GR_XOR );
+
+        /* unlikf item an free the memory
+         *  (not put in undelete stack, because this seems unnecessary)
+         */
+        Item->DeleteStructure();
         break;
 
     case TYPEPAD:
@@ -1009,7 +1022,6 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
                 return;
             }
         }
-
         // If more than one copper layer is enabled, the "Copper"
         // and "Component" layers can be selected, but the total
         // number of copper layers determines which internal
@@ -1017,7 +1029,7 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
         else
         {
             if( (layer != COPPER_LAYER_N) && (layer != LAYER_CMP_N)
-                && (layer >= m_Pcb->m_BoardSettings->m_CopperLayerCount - 1) )
+               && (layer >= m_Pcb->m_BoardSettings->m_CopperLayerCount - 1) )
             {
                 // Uncomment following command (and line 17) to beep
                 // the speaker. (Doing that would provide feedback to

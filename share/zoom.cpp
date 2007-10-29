@@ -60,7 +60,7 @@ void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
 /************************************************/
 void WinEDA_DrawFrame::PutOnGrid( wxPoint* coord )
 /************************************************/
-/** Adjust the coordinate to the nearest grig value
+/** Adjust the coordinate to the nearest grid value
 * @param coord = coordinate to adjust
 */
 {

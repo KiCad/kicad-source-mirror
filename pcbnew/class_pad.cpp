@@ -221,11 +221,10 @@ void D_PAD::UnLink()
 void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode )
 /*******************************************************************************************/
 
-/* Trac�a l'�ran d'un pad:
- *  Entree :
- *      ptr_pad = pointeur sur le pad du module
- *      offset = offset de trace
- *      draw_mode = mode de trace ( GR_OR, GR_XOR, GR_AND)
+/** Draw a pad:
+ *  @param  DC = device context
+ *  @param offset = draw offset
+ *  @param draw_mode = mode: GR_OR, GR_XOR, GR_AND...
  */
 {
     int ii;
@@ -239,20 +238,23 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
     wxPoint              coord[4];
     int                  zoom;
     int                  fillpad = 0;
-    WinEDA_BasePcbFrame* frame;
+    WinEDA_BasePcbFrame* frame = NULL;
     wxPoint              shape_pos;
 
     PCB_SCREEN*          screen = panel ? 
                                     (PCB_SCREEN*) panel->m_Parent->m_CurrentScreen : 
                                     (PCB_SCREEN*) ActiveScreen;
 
-    // @todo: if panel could have been NULL above, how can we dereference it here safely?                                     
-    frame  = (WinEDA_BasePcbFrame*) panel->m_Parent;
-    
-    /* Calcul de l'aspect du pad */
-    if( frame->m_DisplayPadFill == FILLED )
-        fillpad = 1;
+    if ( panel )	// Use current frame setting
+	{
+		frame  = (WinEDA_BasePcbFrame*) panel->m_Parent;
+	}
+	else			// Use board frame setting
+		if( DisplayOpt.DisplayPadFill == FILLED )
+			fillpad = 1;
 
+	if( frame->m_DisplayPadFill == FILLED )
+		fillpad = 1;
     zoom = screen->GetZoom();
 
 #ifdef PCBNEW
@@ -334,7 +336,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
     if( m_Attribut==SMD && DisplayOpt.ContrastModeDisplay )
     {
         // when routing tracks 
-        if( frame->m_ID_current_state == ID_TRACK_BUTT )
+        if( frame && frame->m_ID_current_state == ID_TRACK_BUTT )
         {
             int routeTop = screen->m_Route_Layer_TOP;
             int routeBot = screen->m_Route_Layer_BOTTOM;
@@ -592,8 +594,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
                     cx0 - dx0, cy0 + dx0, 0, nc_color );
     }
 
-    /* Trace de la reference */
-    if( !frame->m_DisplayPadNum )
+    /* Draw the pad number */
+    if( frame && !frame->m_DisplayPadNum )
         return;
 
     dx = MIN( m_Size.x, m_Size.y );     /* dx = text size */

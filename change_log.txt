@@ -10,6 +10,11 @@ email address.
      if we switch from a long list of footprints to a short list (a filtered footprint list),
      and if the selected item is near the end of the long list,
      the new list is not displayed from the top of the list box
++eeschema:
+	Implemented: graying in/out of "Edit/Undo", "Edit/Redo" menu items, 
+	when Undo/Redo stack is empty/filled.
++pcbnew:
+	Implemented: action for ID_POPUP_PCB_DELETE_MARKER
 
 
 2007-Oct-27 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>

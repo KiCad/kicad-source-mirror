@@ -1,5 +1,5 @@
 /**************************************/
-/*	PCBNEW.H :  d�larations communes */
+/*	PCBNEW.H :  headers */
 /**************************************/
 #ifndef PCBNEW_H
 #define PCBNEW_H
@@ -13,8 +13,8 @@
 
 #define U_PCB (PCB_INTERNAL_UNIT / EESCHEMA_INTERNAL_UNIT)
 
-/* valeur de flag indicant si le pointeur de reference pour une localisation
- * est le curseur sur grille ou le curseur a deplacement fin hors grille */
+/* Flag used in locate functions
+ * the locate ref point is the on grid cursor or the off grid mouse cursor */
 #define CURSEUR_ON_GRILLE   (0 << 0)
 #define CURSEUR_OFF_GRILLE  (1 << 0)
 
@@ -23,30 +23,30 @@
 #define VISIBLE_ONLY        (1 << 3)    ///< if module not on a visible layer, do not select
 
 
-#define START 0     /* ctes parametre dans les routines de localisation */
+#define START 0     /* Flag used in locale routines */
 #define END   1
 
-#define DIM_ANCRE_MODULE 3  /* dim du symbole de l'ancre (centre) des modules */
-#define DIM_ANCRE_TEXTE  2  /* dim du symbole de l'ancre (centre) des textes */
+#define DIM_ANCRE_MODULE 3  /* Anchor size (footprint centre) */
+#define DIM_ANCRE_TEXTE  2  /* nchor size (Text centre) */
 
-/* Gestion du Menu Zoom */
+/* Used in Zoom menu */
 #define ZOOM_PLUS   -1
 #define ZOOM_MOINS  -2
 #define ZOOM_AUTO   -3
 #define ZOOM_CENTER -4
 #define ZOOM_REDRAW -5
 
-/* Definition des cas ou l'on force l'affichage en SKETCH (membre .flags) */
+/* Flag to force the SKETCH mode to display items (.flags member) */
 #define FORCE_SKETCH (DRAG | EDIT )
 
-/* Constantes pour options lecture fichier PCB */
-#define APPEND_PCB 1    /* pour ajout d'un nouveau circuit */
-#define NEWPCB     0    /* pour chargement normal */
+/* Flags used in read board file */
+#define APPEND_PCB 1    /* used to append the new board to the existing board */
+#define NEWPCB     0    /* used for normal load file */
 
 
 eda_global wxArrayString g_LibName_List;    // library list to load
 
-eda_global wxSize g_GridList[]
+eda_global wxSize        g_GridList[]
 #ifdef MAIN
 = {
     wxSize( 1000, 1000 ), wxSize( 500, 500 ), wxSize( 250, 250 ), wxSize( 200, 200 ),
@@ -60,10 +60,10 @@ eda_global wxSize g_GridList[]
 ;
 
 #define UNDELETE_STACK_SIZE 10
-eda_global BOARD_ITEM*     g_UnDeleteStack[UNDELETE_STACK_SIZE]; // Liste des elements supprimes
-eda_global int             g_UnDeleteStackPtr;
+eda_global BOARD_ITEM* g_UnDeleteStack[UNDELETE_STACK_SIZE]; // Linked list of deleted items
+eda_global int         g_UnDeleteStackPtr;
 
-eda_global bool            g_ShowGrid
+eda_global bool        g_ShowGrid
 #ifdef MAIN
 = TRUE
 #endif
@@ -82,6 +82,8 @@ eda_global int g_TabOneLayerMask[LAYER_COUNT]
     0x01000000, 0x02000000, 0x04000000, 0x08000000,
     0x10000000, 0x20000000, 0x40000000, 0x80000000
 }
+
+
 #endif
 ;
 
@@ -106,8 +108,8 @@ eda_global bool Drc_On
 = TRUE
 #endif
 ;
-eda_global bool g_AutoDeleteOldTrack    /* autorise effacement automatique
-                                         *  de l'ancienne piste lors des redessins de pistes */
+eda_global bool g_AutoDeleteOldTrack    /* Allows automatic deletion of the old track after
+creation of a new track */
 #ifdef MAIN
 = TRUE
 #endif
@@ -126,12 +128,11 @@ eda_global bool g_Raccord_45_Auto
 = TRUE
 #endif
 ;
-eda_global bool g_ShowIsolDuringCreateTrack; /* .State controle l'affichage
-                                              *  de l'isolation en trace de piste */
+eda_global bool g_ShowIsolDuringCreateTrack; /* Show clearance while track creation */
 
-/**************************************************************/
-/* Options d'affichages (remplissages des segments, textes..) */
-/**************************************************************/
+/*********************************/
+/* Displa otions for board items */
+/*********************************/
 
 eda_global DISPLAY_OPTIONS DisplayOpt;
 
@@ -142,8 +143,7 @@ eda_global DISPLAY_OPTIONS DisplayOpt;
  * @param layer One of the two allowed layers for modules: CMP_N or COPPER_LAYER_N
  * @return bool - true if the layer is visible, else false.
  */
-bool inline IsModuleLayerVisible( int layer ) 
-{
+bool inline IsModuleLayerVisible( int layer ) {
     if( layer==CMP_N )
         return DisplayOpt.Show_Modules_Cmp;
 
@@ -156,10 +156,10 @@ bool inline IsModuleLayerVisible( int layer )
 
 
 eda_global bool            Track_45_Only;   /* Flag pour limiter l'inclinaison
-                                             *  pistes a 45 degres seulement */
+                                            *  pistes a 45 degres seulement */
 eda_global bool            Segments_45_Only;/* Flag pour limiter l'inclinaison
                                              *  edge pcb a 45 degres seulement */
-eda_global wxString        PcbExtBuffer
+eda_global wxString        PcbExtBuffer		// Board file extension
 #ifdef MAIN
 ( wxT( ".brd" ) )
 #endif
@@ -169,13 +169,13 @@ eda_global wxString g_SaveFileName      // File Name for periodic saving
 ( wxT( "$savepcb" ) )
 #endif
 ;
-eda_global wxString NetNameBuffer;
+eda_global wxString NetNameBuffer;		// Netlist file extension 
 eda_global wxString NetExtBuffer
 #ifdef MAIN
 ( wxT( ".net" ) )
 #endif
 ;
-eda_global wxString NetCmpExtBuffer
+eda_global wxString NetCmpExtBuffer		// cmp/footprint association file extension 
 #ifdef MAIN
 ( wxT( ".cmp" ) )
 #endif
@@ -187,7 +187,7 @@ eda_global wxString LibExtBuffer
 ( wxT( ".mod" ) )
 #endif
 ;
-eda_global wxString g_Shapes3DExtBuffer     // extension des fichiers de formes 3D
+eda_global wxString g_Shapes3DExtBuffer     //3D shape file extension 
 #ifdef MAIN
 ( wxT( ".wrl" ) )
 #endif
@@ -201,7 +201,8 @@ eda_global int g_CurrentVersionPCB
 #endif
 ;
 
-#define BUFMEMSIZE 256000       /* taille du buffer de travail (en octets) */
+/* A buffer used in some computations (will be removed in next cleanup code, do not use) */
+#define BUFMEMSIZE 256000       /* buffer size (in bytes) */
 eda_global char* buf_work;      /* pointeur sur le buffer de travail */
 eda_global char* adr_lowmem;    /* adresse de base memoire de calcul disponible*/
 eda_global char* adr_himem;     /* adresse haute limite de la memoire disponible*/
@@ -209,15 +210,16 @@ eda_global char* adr_max;       /* adresse haute maxi utilisee pour la memoire *
 
 
 /* variables g�erales */
-eda_global char   cbuf[1024];           /* buffer de formatage texte */
-eda_global BOARD* g_ModuleEditor_Pcb;   /* Pointeur de l'entete pcb de l'editeur de module*/
-eda_global int    g_TimeOut;            // Duree entre 2 sauvegardes automatiques
-eda_global int    g_SaveTime;           // heure de la prochaine sauvegarde
+
+eda_global char   cbuf[1024];           /* buffer for some text printing */
+eda_global BOARD* g_ModuleEditor_Pcb;   /* board used to edit footprints (used by modedit)*/
+eda_global int    g_TimeOut;            // Timer for automatic saving
+eda_global int    g_SaveTime;           // Time for next saving
 
 
-/* Variables generales d'empreintes */
+/* Variables used in footprint handling */
 extern int        Angle_Rot_Module;
-eda_global wxSize ModuleTextSize;  /* dim des textes sur Modules par defaut */
+eda_global wxSize ModuleTextSize;  /* Default footprint texts size */
 eda_global int    ModuleTextWidth;
 eda_global int    ModuleSegmentWidth;
 eda_global int    Texte_Module_Type;
@@ -227,12 +229,12 @@ eda_global int    Texte_Module_Type;
 /* pistes , vias , pads*/
 /***********************/
 
-#define L_MIN_DESSIN 1  /* seuil de largeur des pistes pour trace autre que filaire */
+#define L_MIN_DESSIN 1  /* Min width segments to allow draws with tickness */
 
 // Current designe settings:
 eda_global class EDA_BoardDesignSettings g_DesignSettings;
 
-// valeurs par defaut des caract. des pads
+// Default values for pad editions
 #ifndef GERBVIEW
 #ifdef MAIN
 D_PAD g_Pad_Master( (MODULE*) NULL );
@@ -243,18 +245,18 @@ extern D_PAD g_Pad_Master;
 #endif
 
 
+/* Layer pair for auto routing and switch layers by hotkey */
 eda_global int  Route_Layer_TOP;
-eda_global int  Route_Layer_BOTTOM;     /* couches de routage actif */
+eda_global int  Route_Layer_BOTTOM;
 
-eda_global int  g_MaxLinksShowed;       // determine le nombre max de links affich�
-//		en routage manuel
+eda_global int  g_MaxLinksShowed;       // Mxa count links showed in routing
 eda_global bool g_TwoSegmentTrackBuild  // FALSE = 1 segment build, TRUE = 2 45 deg segm build
 #ifdef MAIN
 = TRUE
 #endif
 ;
 
-/* How to handle magentic pad: feature to move the pcb cursor on a pad center */
+/* How to handle magnetic pads: feature to move the pcb cursor on a pad center */
 enum MagneticPadOptionValues {
     no_effect,
     capture_cursor_in_track_tool,
@@ -266,16 +268,18 @@ eda_global int g_MagneticPadOption
 = capture_cursor_in_track_tool
 #endif
 ;
+/* Variables to handle hightlight nets */
 eda_global bool g_HightLigt_Status;
-eda_global int  g_HightLigth_NetCode    /* pour mise en surbrillance des pistes */
+eda_global int  g_HightLigth_NetCode
 #ifdef MAIN
 = -1
 #endif
-;                                               /* net_code du net a mettre en surbrillance */
+;
 
-eda_global TRACK*   g_CurrentTrackSegment;      // pointeur sur le segment en cours de trace
-eda_global TRACK*   g_FirstTrackSegment;        // pointeur sur le debut de la piste en cours
-eda_global int      g_TrackSegmentCount;        // nombre de points deja traces
+/* used in track creation : */
+eda_global TRACK*   g_CurrentTrackSegment;      // current created segment
+eda_global TRACK*   g_FirstTrackSegment;        // first segment created
+eda_global int      g_TrackSegmentCount;        // New created segment count
 
 
 eda_global wxString g_ViaType_Name[4]
