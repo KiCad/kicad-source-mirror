@@ -406,6 +406,7 @@ void FootprintListBox::SetActiveFootprintList( bool FullList, bool Redraw )
 {
     bool old_selection = m_UseFootprintFullList;
 
+#ifdef __WINDOWS__
     /* Workaround for a curious bug in wxWidgets:
      *  if we switch from a long list of footprints to a short list (a filtered footprint list),
      *  and if the selected item is near the end of the long list,
@@ -419,7 +420,7 @@ void FootprintListBox::SetActiveFootprintList( bool FullList, bool Redraw )
 		if( new_selection != old_selection )
 			SetSelection( 0, TRUE );
 	}
-
+#endif
     if( FullList )
     {
         m_UseFootprintFullList = TRUE;

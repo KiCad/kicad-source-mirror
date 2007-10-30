@@ -27,8 +27,7 @@
 void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 /**********************************************************************/
 
-/* Trace le PCB, et les elements complementaires ( axes, grille .. )
- *  pour l'ecran actif et ses sous ecran
+/* Draw the footprint editor BOARD, and others elements : axis, grid ..
  */
 
 {
@@ -47,6 +46,7 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     DrawPanel->DrawBackGround( DC );
     TraceWorkSheet( DC, screen, 0 );
 
+	/* Redraw the footprint */
     Module = (MODULE*) m_Pcb->m_Modules;
     for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
     {
@@ -58,7 +58,7 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if( DrawPanel->ManageCurseur )
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 
-    /* Reaffichage du curseur */
+    /* Redraw the cursor */
     DrawPanel->Trace_Curseur( DC );
 
     screen->ClrRefreshReq();
@@ -69,8 +69,7 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 /****************************************************************/
 
-/* Trace le PCB, et les elements complementaires ( axes, grille .. )
- *  pour l'ecran actif et ses sous ecran
+/* Draw the BOARD, and others elements : axis, grid ..
  */
 {
     PCB_SCREEN* Screen = GetScreen();
@@ -90,20 +89,17 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     TraceWorkSheet( DC, GetScreen(), 0 );
     Affiche_Status_Box();
 
-    /* Reaffichage des curseurs */
-    for( Screen = GetScreen(); Screen != NULL; Screen = Screen->Next() )
-    {
-        if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
-        DrawPanel->Trace_Curseur( DC );
-    }
+	if( DrawPanel->ManageCurseur )
+		DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+    /* Redraw the cursor */
+	DrawPanel->Trace_Curseur( DC );
 }
 
 
 /****************************************************/
 void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
 /****************************************************/
-/* Trace l'ensemble des elements du PCB sur l'ecran actif*/
+/* Redraw the BOARD items but not cursors, axis or grid */
 {
     MARQUEUR*       Marqueur;
     MODULE*         Module;
@@ -140,7 +136,7 @@ void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
             Trace_Pads_Only( DrawPanel, DC, Module, 0, 0, MaskLay, mode );
     }
 
-    /* Trace des elements particuliers de Drawings Pcb */
+    /* Draw the graphic items */
 
     PtStruct = m_Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
@@ -167,7 +163,11 @@ void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
             Marqueur->Draw( DrawPanel, DC, mode );
             break;
 
-        default:
+       case TYPEDRAWSEGMENT:
+			Trace_DrawSegmentPcb( DrawPanel, DC, (DRAWSEGMENT*) PtStruct, mode );
+			break;
+
+	   default:
             break;
         }
     }
@@ -184,28 +184,8 @@ void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
         Trace_DrawSegmentPcb( DrawPanel, DC, segment, mode );
     }
 
-    Trace_PcbEdges( DC, mode );
     DrawGeneralRatsnest( DC );
 
     m_CurrentScreen->ClrRefreshReq();
 }
 
-
-/**************************************************************/
-void WinEDA_PcbFrame::Trace_PcbEdges( wxDC* DC, int mode_color )
-/**************************************************************/
-/* impression des contours ( edge pcb) : et draw */
-{
-    EDA_BaseStruct* PtStruct;
-
-    if( !m_Pcb )
-        return;
-    for( PtStruct = m_Pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Pnext )
-    {
-        if( PtStruct->m_Flags & IS_MOVED )
-            continue;
-        if( PtStruct->Type() != TYPEDRAWSEGMENT )
-            continue;
-        Trace_DrawSegmentPcb( DrawPanel, DC, (DRAWSEGMENT*) PtStruct, mode_color );
-    }
-}

@@ -47,6 +47,7 @@
 #define ID_RADIOBOX_SELECT_FORMAT 10006
 #define ID_RADIOBOX_SEPARATOR 10007
 #define ID_CHECKBOX6 10008
+#define ID_CHECKBOX_FOOTPRINT_FIELD 10018
 #define ID_CHECKBOX_FIELD1 10009
 #define ID_CHECKBOX_FIELD2 10010
 #define ID_CHECKBOX_FIELD3 10011
@@ -149,6 +150,7 @@ public:
     wxRadioBox* m_OutputSeparatorCtrl;
     wxCheckBox* m_GetListBrowser;
     wxStaticBoxSizer* m_FieldsToAppendListSizer;
+    wxCheckBox* m_AddFootprintField;
     wxCheckBox* m_AddField1;
     wxCheckBox* m_AddField2;
     wxCheckBox* m_AddField3;

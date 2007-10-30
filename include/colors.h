@@ -51,7 +51,7 @@ class StructColors
 {
 public:
 	unsigned char m_Blue, m_Green, m_Red, m_Numcolor;
-	wxChar* m_Name;
+	const wxChar* m_Name;
 	int m_LightColor;
 };
 

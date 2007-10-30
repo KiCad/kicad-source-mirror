@@ -652,9 +652,8 @@ public:
     int                 Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone );
     void                Install_Test_DRC_Frame( wxDC* DC );
     void                Trace_Pcb( wxDC* DC, int mode );
-    void                Trace_PcbEdges( wxDC* DC, int mode_color );
 
-    // Gestion des textes sur pcb
+    // Handling texts on the board
     void                Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
     TEXTE_PCB*          Create_Texte_Pcb( wxDC* DC );
     void                Delete_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
@@ -663,17 +662,17 @@ public:
     void                InstallTextPCBOptionsFrame( TEXTE_PCB* TextPCB,
                                                     wxDC* DC, const wxPoint& pos );
 
-    // Gestion des Segments type DRAWITEM
+    // Graphic Segments type DRAWSEGMENT
     void                Start_Move_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC );
     void                Place_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC );
 
-    // Gestion des modules (voir egalement WinEDA_BasePcbFrame)
+    // Footprint edition (see also WinEDA_BasePcbFrame)
     void                StartMove_Module( MODULE* module, wxDC* DC );
     bool                Delete_Module( MODULE* module, wxDC* DC );
 
     // loading modules: see WinEDA_BasePcbFrame
 
-    // Gestion du PCB
+    // Borad handling
     void                Erase_Zones( wxDC* DC, bool query );
     void                Erase_Segments_Pcb( wxDC* DC, bool is_edges, bool query );
     void                Erase_Pistes( wxDC* DC, int masque_type, bool query );

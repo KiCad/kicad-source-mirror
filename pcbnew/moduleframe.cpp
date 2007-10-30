@@ -19,10 +19,11 @@
 /* class WinEDA_ModuleEditFrame */
 /********************************/
 BEGIN_EVENT_TABLE( WinEDA_ModuleEditFrame, wxFrame )
-COMMON_EVENTS_DRAWFRAME EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START,
-                                        ID_POPUP_PCB_ITEM_SELECTION_END,
-                                        WinEDA_BasePcbFrame::ProcessItemSelection )
-COMMON_EVENTS_DRAWFRAME EVT_CLOSE( WinEDA_ModuleEditFrame::OnCloseWindow )
+COMMON_EVENTS_DRAWFRAME
+EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START,
+                ID_POPUP_PCB_ITEM_SELECTION_END,
+                WinEDA_BasePcbFrame::ProcessItemSelection )
+EVT_CLOSE( WinEDA_ModuleEditFrame::OnCloseWindow )
 EVT_SIZE( WinEDA_ModuleEditFrame::OnSize )
 
 EVT_KICAD_CHOICEBOX( ID_ON_ZOOM_SELECT, WinEDA_PcbFrame::OnSelectZoom )

@@ -1057,7 +1057,7 @@ void WinEDA_DrillFrame::GenDrillMap( int format )
         break;
     }
 
-    /* Trace du contour ( couche EDGE ) */
+    /* Draw items on edge layer */
     PtStruct = m_Parent->m_Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
@@ -1077,6 +1077,9 @@ void WinEDA_DrillFrame::GenDrillMap( int format )
 
         case TYPEMIRE:
             PlotMirePcb( (MIREPCB*) PtStruct, format, EDGE_LAYER );
+            break;
+
+        case TYPEMARQUEUR:	// do not draw
             break;
 
         default:

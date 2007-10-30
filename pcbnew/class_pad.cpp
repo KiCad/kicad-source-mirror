@@ -772,7 +772,7 @@ int D_PAD::WriteDescr( FILE* File )
 {
     int   cshape, NbLigne = 0;;
 
-    char* texttype;
+    const char* texttype;
 
     if( GetState( DELETED ) )
         return NbLigne;
