@@ -106,6 +106,7 @@ int EQUIPOT:: ReadEquipotDescr( FILE* File, int* LineNum )
 }
 
 
+#if 0   // replaced by Save()
 /********************************************/
 int EQUIPOT:: WriteEquipotDescr( FILE* File )
 /********************************************/
@@ -121,6 +122,32 @@ int EQUIPOT:: WriteEquipotDescr( FILE* File )
     fprintf( File, "$EndEQUIPOT\n" );
     return 1;
 }
+#endif
+
+
+bool EQUIPOT::Save( FILE* aFile ) const
+{
+    if( GetState( DELETED ) )
+        return true;
+
+    bool rc = false;
+    
+    fprintf( aFile, "$EQUIPOT\n" );
+    fprintf( aFile, "Na %d \"%.16s\"\n", GetNet(), CONV_TO_UTF8( m_Netname ) );
+    fprintf( aFile, "St %s\n", "~" );
+    
+    if( m_ForceWidth )
+        fprintf( aFile, "Lw %d\n", m_ForceWidth );
+    
+    if( fprintf( aFile, "$EndEQUIPOT\n" ) != sizeof("$EndEQUIPOT\n")-1 )
+        goto out;
+
+    rc = true;
+    
+out:    
+    return rc;
+}
+
 
 #if defined(DEBUG)
 /**

@@ -384,25 +384,23 @@ void WinEDA_ZoneFrame::ExecFillZone( wxCommandEvent& event )
 
 
 /**************************************************************/
-void WinEDA_PcbFrame::Edit_Zone_Width( wxDC* DC, SEGZONE* Zone )
+void WinEDA_PcbFrame::Edit_Zone_Width( wxDC* DC, SEGZONE* aZone )
 /**************************************************************/
 
 /* Edite (change la largeur des segments) la zone Zone.
  *  La zone est constituee des segments zones de meme TimeStamp
  */
 {
-    SEGZONE*      pt_segm, * NextS;
-    unsigned long TimeStamp;
     bool          modify = FALSE;
     double        f_new_width;
     int           w_tmp;
     wxString      Line;
     wxString      Msg( _( "New zone segment width: " ) );
 
-    if( Zone == NULL )
+    if( aZone == NULL )
         return;
 
-    f_new_width = To_User_Unit( g_UnitMetric, Zone->m_Width, GetScreen()->GetInternalUnits() );
+    f_new_width = To_User_Unit( g_UnitMetric, aZone->m_Width, GetScreen()->GetInternalUnits() );
 
     Line.Printf( wxT( "%.4f" ), f_new_width );
 
@@ -417,15 +415,12 @@ void WinEDA_PcbFrame::Edit_Zone_Width( wxDC* DC, SEGZONE* Zone )
                                                           f_new_width, GetScreen(
                                                               )->GetInternalUnits() );
 
-    TimeStamp = Zone->m_TimeStamp;
-
-    for( pt_segm = (SEGZONE*) m_Pcb->m_Zone; pt_segm != NULL; pt_segm = NextS )
+    for( SEGZONE* zone = m_Pcb->m_Zone;  zone;  zone = zone->Next() )
     {
-        NextS = (SEGZONE*) pt_segm->Pnext;
-        if( pt_segm->m_TimeStamp == TimeStamp )
+        if( zone->m_TimeStamp == aZone->m_TimeStamp )
         {
             modify = TRUE;
-            Edit_TrackSegm_Width( DC, pt_segm );
+            Edit_TrackSegm_Width( DC, zone );
         }
     }
 
@@ -446,22 +441,23 @@ void WinEDA_PcbFrame::Delete_Zone( wxDC* DC, SEGZONE* Zone )
  *  La zone est constituee des segments zones de meme TimeStamp
  */
 {
-    SEGZONE*      pt_segm, * NextS;
     unsigned long TimeStamp;
     int           nb_segm = 0;
     bool          modify  = FALSE;
 
     TimeStamp = Zone->m_TimeStamp;
 
-    for( pt_segm = (SEGZONE*) m_Pcb->m_Zone; pt_segm != NULL; pt_segm = NextS )
+    SEGZONE* next;
+    for( SEGZONE* zone = m_Pcb->m_Zone;   zone;   zone = next )
     {
-        NextS = (SEGZONE*) pt_segm->Pnext;
-        if( pt_segm->m_TimeStamp == TimeStamp )
+        next = zone->Next();
+        if( zone->m_TimeStamp == TimeStamp )
         {
             modify = TRUE;
+            
             /* effacement des segments a l'ecran */
-            Trace_Une_Piste( DrawPanel, DC, pt_segm, nb_segm, GR_XOR );
-            pt_segm ->DeleteStructure();
+            Trace_Une_Piste( DrawPanel, DC, zone, nb_segm, GR_XOR );
+            zone->DeleteStructure();
         }
     }
 
@@ -675,7 +671,7 @@ EDGE_ZONE* WinEDA_PcbFrame::Begin_Zone()
     oldedge = m_Pcb->m_CurrentLimitZone;
 
     if( (m_Pcb->m_CurrentLimitZone == NULL )    /* debut reel du trace */
-       || (DrawPanel->ManageCurseur == NULL) )  /* reprise d'un trace complementaire */
+      || (DrawPanel->ManageCurseur == NULL) )  /* reprise d'un trace complementaire */
     {
         m_Pcb->m_CurrentLimitZone = newedge = new EDGE_ZONE( m_Pcb );
 
@@ -694,8 +690,7 @@ EDGE_ZONE* WinEDA_PcbFrame::Begin_Zone()
     else    /* piste en cours : les coord du point d'arrivee ont ete mises
              *  a jour par la routine Show_Zone_Edge_While_MoveMouse*/
     {
-        if( (oldedge->m_Start.x != oldedge->m_End.x)
-           || (oldedge->m_Start.y != oldedge->m_End.y) )
+        if( oldedge->m_Start != oldedge->m_End )
         {
             newedge = new EDGE_ZONE( oldedge );
             newedge->Pback   = oldedge;
@@ -834,11 +829,15 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
         DisplayError( this, wxT( "Board is empty!" ), 10 );
         return;
     }
+    
     DrawPanel->m_IgnoreMouseEvents = TRUE;
     WinEDA_ZoneFrame* frame = new WinEDA_ZoneFrame( this );
-    ii = frame->ShowModal(); frame->Destroy();
+    
+    ii = frame->ShowModal(); 
+    frame->Destroy();
     DrawPanel->MouseToCursorSchema();
     DrawPanel->m_IgnoreMouseEvents = FALSE;
+    
     if( ii )
         return;
 
@@ -856,7 +855,9 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
     s_TimeStamp = time( NULL );
 
     /* Calcul du pas de routage fixe a 5 mils et plus */
-    E_scale = g_GridRoutingSize / 50; if( g_GridRoutingSize < 1 )
+    E_scale = g_GridRoutingSize / 50; 
+    
+    if( g_GridRoutingSize < 1 )
         g_GridRoutingSize = 1;
 
     /* calcule de Ncols et Nrow, taille de la matrice de routage */
@@ -865,8 +866,10 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
     /* Determination de la cellule pointee par la souris */
     ZoneStartFill.x = ( GetScreen()->m_Curseur.x - m_Pcb->m_BoundaryBox.m_Pos.x +
                        (g_GridRoutingSize / 2) ) / g_GridRoutingSize;
+    
     ZoneStartFill.y = ( GetScreen()->m_Curseur.y - m_Pcb->m_BoundaryBox.m_Pos.y +
                        (g_GridRoutingSize / 2) ) / g_GridRoutingSize;
+    
     if( ZoneStartFill.x < 0 )
         ZoneStartFill.x = 0;
     if( ZoneStartFill.x >= Ncols )
@@ -886,8 +889,10 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
 
     msg.Printf( wxT( "%d" ), Ncols );
     Affiche_1_Parametre( this, 1, wxT( "Cols" ), msg, GREEN );
+    
     msg.Printf( wxT( "%d" ), Nrows );
     Affiche_1_Parametre( this, 7, wxT( "Lines" ), msg, GREEN );
+    
     msg.Printf( wxT( "%d" ), Board.m_MemSize / 1024 );
     Affiche_1_Parametre( this, 14, wxT( "Mem(Ko)" ), msg, CYAN );
 
@@ -922,10 +927,13 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
     {
         if( g_HightLigth_NetCode != pt_segm->GetNet() )
             continue;
+        
         if( pt_segm->GetLayer() != GetScreen()->m_Active_Layer )
             continue;
+        
         if( pt_segm->Type() != TYPETRACK )
             continue;
+        
         TraceSegmentPcb( m_Pcb, pt_segm, CELL_is_FRIEND, 0, WRITE_CELL );
     }
 

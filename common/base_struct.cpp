@@ -58,7 +58,7 @@ void EDA_BaseStruct::InitVars()
 
 
 /* Gestion de l'etat (status) de la structure (active, deleted..) */
-int EDA_BaseStruct::GetState( int type )
+int EDA_BaseStruct::GetState( int type ) const
 {
     return m_Status & type;
 }

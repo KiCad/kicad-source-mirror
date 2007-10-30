@@ -191,7 +191,7 @@ public:
     
     
     /* Gestion de l'etat (status) de la structure (active, deleted..) */
-    int     GetState( int type );
+    int     GetState( int type ) const;
     void    SetState( int type, int state );
 
     int ReturnStatus() const {  return m_Status;  }
@@ -490,6 +490,17 @@ public:
      * @todo: make this virtual and split into each derived class
      */
     const char** MenuIcon() const;
+
+    
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.pcb" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */ 
+    virtual bool Save( FILE* aFile ) const = 0;
+    
+    
 };
 
 

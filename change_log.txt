@@ -4,17 +4,33 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Oct-30 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ pcbnew
+    added BOARD_ITEM::Save() and to all derived classes as well.  Made virtual
+    and removed all UI code from these utility functions.
+    removed WriteDesc() functions from all BOARD_ITEM derived classes, although
+    Keeping old ones in commented out form for a while for reference.  
+    @todo: delete these from *.cpp files eventually.
+    zones.cpp, clean up in prep for enhancements.
++ gerbview
+    fixed bug which came about when BOARD::~BOARD() started deleting the objects
+    that a BOARD owns.  export_to_pcbnew.cpp was not consistent with this 
+    design and was crashing.  Also, export_to_pcbnew.cpp now uses the simple
+    BOARD::Save() function.  It was another place to maintain the PCB file format,
+    rather than simply putting that knowledge into one place like BOARD::Save().
+
+
 2007-Oct-30 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +cvpcb: listboxes.cpp problem solved: exists only under windows
 	now apply to windows only, because this Workaround creates a problem undex linux 
-
 +others:
 	some very minor problems solved
-	
 +eeschema:
 	in B.O.M.: the footprint field can be added to the field list
 
+    
 2007-Oct-29 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +cvpcb: listboxes.cpp problem solved: Workaround for a curious bug in wxWidgets:
@@ -33,12 +49,10 @@ email address.
 + all:
 	remove unused files.
 	some translations
-
 +cvpcb:
 	set flag wxFRAME_FLOAT_ON_PARENT when create the footprint 3D frame and the
 	display frame
 	minor other changes
-
 + pcbnew:
 	Use collector class to locate items in modedit.
 	This is a big enhancement,

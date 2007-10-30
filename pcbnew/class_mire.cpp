@@ -94,6 +94,7 @@ bool MIREPCB::ReadMirePcbDescr( FILE* File, int* LineNum )
 }
 
 
+#if 0 // replaced by Save()
 /************************************************/
 bool MIREPCB::WriteMirePcbDescr( FILE* File )
 /************************************************/
@@ -109,6 +110,34 @@ bool MIREPCB::WriteMirePcbDescr( FILE* File )
     fprintf( File, "$EndMIREPCB\n" );
     return TRUE;
 }
+#endif
+
+
+bool MIREPCB::Save( FILE* aFile ) const
+{
+    if( GetState( DELETED ) )
+        return true;
+
+    bool rc = false;
+    
+    if( fprintf( aFile, "$MIREPCB\n" ) != sizeof("$MIREPCB\n")-1 )
+        goto out;
+    
+    fprintf( aFile, "Po %X %d %d %d %d %d %8.8lX\n",
+             m_Shape, m_Layer,
+             m_Pos.x, m_Pos.y,
+             m_Size, m_Width, m_TimeStamp );
+    
+    if( fprintf( aFile, "$EndMIREPCB\n" ) != sizeof("$EndMIREPCB\n")-1 )
+        goto out;
+    
+    rc = true;
+
+out:    
+    return rc;
+}
+    
+    
 
 
 /**********************************************************/

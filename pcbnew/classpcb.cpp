@@ -102,7 +102,7 @@ void DRAWSEGMENT::Copy( DRAWSEGMENT* source )
     m_TimeStamp = source->m_TimeStamp;
 }
 
-
+#if 0 // replaced by Save()
 /********************************************************/
 bool DRAWSEGMENT::WriteDrawSegmentDescr( FILE* File )
 /********************************************************/
@@ -120,6 +120,36 @@ bool DRAWSEGMENT::WriteDrawSegmentDescr( FILE* File )
             m_TimeStamp, ReturnStatus() );
     fprintf( File, "$EndDRAWSEGMENT\n" );
     return TRUE;
+}
+#endif
+
+
+bool DRAWSEGMENT::Save( FILE* aFile ) const
+{
+    if( GetState( DELETED ) )
+        return true;
+
+    bool rc = false;
+    
+    if( fprintf( aFile, "$DRAWSEGMENT\n" ) != sizeof("%DRAWSEGMENT\n")-1 )
+        goto out;
+    
+    fprintf( aFile, "Po %d %d %d %d %d %d\n",
+             m_Shape,
+             m_Start.x, m_Start.y,
+             m_End.x, m_End.y, m_Width );
+    
+    fprintf( aFile, "De %d %d %d %lX %X\n",
+            m_Layer, m_Type, m_Angle,
+            m_TimeStamp, ReturnStatus() );
+    
+    if( fprintf( aFile, "$EndDRAWSEGMENT\n" ) != sizeof("$EndDRAWSEGMENT\n")-1 )
+        goto out;
+    
+    rc = true;
+    
+out:    
+    return rc;
 }
 
 

@@ -125,7 +125,7 @@ static bool WriteGeneralDescrPcb( BOARD* Pcb, FILE* File )
 
 
 /*******************************************************************/
-static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* File,
+static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* aFile,
                                int* LayerLookUpTable )
 /*******************************************************************/
 
@@ -136,20 +136,17 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* File,
  * @return 1 if OK, 0 if fail
  */
 {
-    char            Line[256];
+    char            line[256];
     TRACK*          track;
-    TRACK*          next_track;
-    BOARD_ITEM*     PtStruct;
-    BOARD_ITEM*     NextStruct;
-    BOARD*          GerberPcb = frame->m_Pcb;
-    BOARD*          Pcb;
+    BOARD*          gerberPcb = frame->m_Pcb;
+    BOARD*          pcb;
 
     wxBeginBusyCursor();
 
-    /* Create an image of gerber data */
-    Pcb = new BOARD( NULL, frame );
+    // create an image of gerber data
+    pcb = new BOARD( NULL, frame );
 
-    for( track = GerberPcb->m_Track; track != NULL; track = (TRACK*) track->Pnext )
+    for( track = gerberPcb->m_Track;  track;  track = track->Next() )
     {
         int layer = track->GetLayer();
         int pcb_layer_number = LayerLookUpTable[layer];
@@ -158,23 +155,23 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* File,
         
         if( pcb_layer_number > CMP_N )
         {
-            DRAWSEGMENT* drawitem = new DRAWSEGMENT( NULL, TYPEDRAWSEGMENT );
+            DRAWSEGMENT* drawitem = new DRAWSEGMENT( pcb, TYPEDRAWSEGMENT );
 
             drawitem->SetLayer( pcb_layer_number );
             drawitem->m_Start = track->m_Start;
             drawitem->m_End   = track->m_End;
             drawitem->m_Width = track->m_Width;
-            drawitem->Pnext   = Pcb->m_Drawings;
-            Pcb->m_Drawings   = drawitem;
+            drawitem->Pnext   = pcb->m_Drawings;
+            pcb->m_Drawings   = drawitem;
         }
         else
         {
             TRACK*  newtrack;
             
             // replace spots with vias when possible
-            if( (track->m_Shape == S_SPOT_CIRCLE) 
-             || (track->m_Shape == S_SPOT_RECT)
-             || (track->m_Shape == S_SPOT_OVALE) )
+            if( track->m_Shape == S_SPOT_CIRCLE 
+             || track->m_Shape == S_SPOT_RECT
+             || track->m_Shape == S_SPOT_OVALE )
             {
                 newtrack = new SEGVIA( (const SEGVIA&) *track );
 
@@ -198,19 +195,20 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* File,
                 newtrack->SetLayer( pcb_layer_number );
             }
             
-            newtrack->Insert( Pcb, NULL );
+            newtrack->Insert( pcb, NULL );
         }
     }
 
     // delete redundant vias
-    for( track = Pcb->m_Track; track != NULL; track = track->Next() )
+    for( track = pcb->m_Track;  track;  track = track->Next() )
     {
         if( track->m_Shape != VIA_THROUGH )
             continue;
         
         // Search and delete others vias
+        TRACK* next_track;
         TRACK* alt_track = track->Next();
-        for( ; alt_track != NULL; alt_track = next_track )
+        for( ;  alt_track;   alt_track = next_track )
         {
             next_track = alt_track->Next();
             if( alt_track->m_Shape != VIA_THROUGH )
@@ -229,54 +227,16 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* File,
     setlocale( LC_NUMERIC, "C" );
     
     // write the PCB heading
-    fprintf( File, "PCBNEW-BOARD Version %d date %s\n\n", g_CurrentVersionPCB,
-            DateAndTime( Line ) );
-    WriteGeneralDescrPcb( Pcb, File );
-    WriteSetup( File, Pcb );
+    fprintf( aFile, "PCBNEW-BOARD Version %d date %s\n\n", g_CurrentVersionPCB,
+            DateAndTime( line ) );
+    WriteGeneralDescrPcb( pcb, aFile );
+    WriteSetup( aFile, pcb );
 
     // write the useful part of the pcb
-    PtStruct = Pcb->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
-    {
-        switch( PtStruct->Type() )
-        {
-        case TYPETEXTE:
-            ( (TEXTE_PCB*) PtStruct )->WriteTextePcbDescr( File );
-            break;
+    pcb->Save( aFile );
 
-        case TYPEDRAWSEGMENT:
-            ( (DRAWSEGMENT*) PtStruct )->WriteDrawSegmentDescr( File );
-            break;
-
-        default:
-            break;
-        }
-    }
-
-    fprintf( File, "$TRACK\n" );
-    for( track = Pcb->m_Track; track != NULL; track = (TRACK*) track->Pnext )
-    {
-        track->WriteTrackDescr( File );
-    }
-
-    fprintf( File, "$EndTRACK\n" );
-
-    fprintf( File, "$EndBOARD\n" );
-
-    // Delete the copy
-    for( PtStruct = Pcb->m_Drawings; PtStruct != NULL; PtStruct = NextStruct )
-    {
-        NextStruct = PtStruct->Next();
-        delete PtStruct;
-    }
-
-    for( track = Pcb->m_Track; track != NULL; track = next_track )
-    {
-        next_track = (TRACK*) track->Pnext;
-        delete track;
-    }
-
-    delete Pcb;
+    // the destructor should destroy all owned sub-objects
+    delete pcb;
 
     setlocale( LC_NUMERIC, "" );      // revert to the current locale
     wxEndBusyCursor();

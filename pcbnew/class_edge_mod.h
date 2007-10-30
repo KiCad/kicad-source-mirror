@@ -34,8 +34,14 @@ public:
 
     void    Copy( EDGE_MODULE* source );    // copy structure
 
-    /* Reading and writing data on files */
-    int     WriteDescr( FILE* File );
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.pcb" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */ 
+    bool Save( FILE* aFile ) const;
+    
     int     ReadDescr( char* Line, FILE* File, int* LineNum = NULL );
 
     // Mise a jour des coordon�s pour l'affichage

@@ -34,6 +34,20 @@ public:
 
     
     /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.pcb" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */ 
+    bool Save( FILE* aFile ) const
+    {
+        // not implemented, this is here to satisfy BOARD_ITEM::Save()
+        // "pure" virtual-ness
+        return true;
+    }
+    
+    
+    /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.
      * @param ref_pos A wxPoint to test

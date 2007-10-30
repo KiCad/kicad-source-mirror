@@ -1070,7 +1070,7 @@ int WinEDA_PcbFrame::ReadPcbFile( wxDC* DC, FILE* File, bool Append )
 
 #ifdef PCBNEW
 /***************************************************/
-int WinEDA_PcbFrame::SavePcbFormatAscii( FILE* File )
+int WinEDA_PcbFrame::SavePcbFormatAscii( FILE* aFile )
 /****************************************************/
 
 /* Routine de sauvegarde du PCB courant sous format ASCII
@@ -1079,139 +1079,35 @@ int WinEDA_PcbFrame::SavePcbFormatAscii( FILE* File )
  *      0 si sauvegarde non faite
  */
 {
-    int             ii, NbModules, nseg;
-    float           Pas;
-    char            Line[256];
-    EQUIPOT*        Equipot;
-    TRACK*          PtSegm;
-    EDA_BaseStruct* PtStruct;
-    MODULE*         Module;
-
-    wxBeginBusyCursor();
-
+    bool    rc;
+    char    line[256];
+    
     m_Pcb->m_Status_Pcb &= ~CONNEXION_OK;
 
-    /* Calcul du nombre des modules */
-    PtStruct  = (EDA_BaseStruct*) m_Pcb->m_Modules;
-    NbModules = 0;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
-        NbModules++;
-
+    wxBeginBusyCursor();
+    
     // Switch the locale to standard C (needed to print floating point numbers like 1.3)
     setlocale( LC_NUMERIC, "C" );
+    
     /* Ecriture de l'entete PCB : */
-    fprintf( File, "PCBNEW-BOARD Version %d date %s\n\n", g_CurrentVersionPCB,
-            DateAndTime( Line ) );
+    fprintf( aFile, "PCBNEW-BOARD Version %d date %s\n\n", g_CurrentVersionPCB,
+            DateAndTime( line ) );
 
-    WriteGeneralDescrPcb( File );
-    WriteSheetDescr( m_CurrentScreen, File );
-    WriteSetup( File, this );
+    WriteGeneralDescrPcb( aFile );
+    WriteSheetDescr( m_CurrentScreen, aFile );
+    WriteSetup( aFile, this );
 
-    /* Ecriture des donnes utiles du pcb */
-
-    Equipot = m_Pcb->m_Equipots;
+    rc = m_Pcb->Save( aFile );
     
-    Pas = 100.0; 
-    if( m_Pcb->m_NbNets )
-        Pas /= m_Pcb->m_NbNets;
-    
-    for( ii = 0; Equipot != NULL; ii++, Equipot = (EQUIPOT*) Equipot->Pnext )
-    {
-        Equipot->WriteEquipotDescr( File );
-        DisplayActivity( (int) ( Pas * ii ), wxT( "Equipot:" ) );
-    }
-
-    Pas = 100.0; 
-    if( NbModules )
-        Pas /= NbModules;
-    
-    Module = m_Pcb->m_Modules;
-    for( ii = 1; Module != NULL; Module = Module->Next(), ii++ )
-    {
-        Module->WriteDescr( File );
-        DisplayActivity( (int) (ii * Pas), wxT( "Modules:" ) );
-    }
-
-    /* sortie des inscriptions du PCB: */
-    PtStruct = m_Pcb->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
-    {
-        switch( PtStruct->Type() )
-        {
-        case TYPETEXTE:
-            ( (TEXTE_PCB*) PtStruct )->WriteTextePcbDescr( File );
-            break;
-
-        case TYPEDRAWSEGMENT:
-            ( (DRAWSEGMENT*) PtStruct )->WriteDrawSegmentDescr( File );
-            break;
-
-        case TYPEMIRE:
-            ( (MIREPCB*) PtStruct )->WriteMirePcbDescr( File );
-            break;
-
-        case TYPECOTATION:
-            ( (COTATION*) PtStruct )->WriteCotationDescr( File );
-            break;
-
-        case TYPEMARQUEUR:      /* sauvegarde inutile */
-            break;
-
-        default:
-            DisplayError( this, wxT( "Unknown Draw Type" ) );
-            break;
-        }
-    }
-
-    Pas = 100.0;
-    if( m_Pcb->m_NbSegmTrack )
-        Pas /= (m_Pcb->m_NbSegmTrack);
-
-    fprintf( File, "$TRACK\n" );
-    PtSegm = m_Pcb->m_Track;
-    
-    DisplayActivity( 0, wxT( "Tracks:" ) );
-    for( nseg = 0, ii = 0; PtSegm != NULL; ii++, PtSegm = (TRACK*) PtSegm->Pnext )
-    {
-        ( (TRACK*) PtSegm )->WriteTrackDescr( File );
-        if( nseg != (int) ( ii * Pas) )
-        {
-            nseg = (int) ( ii * Pas);
-            DisplayActivity( nseg, wxT( "Tracks:" ) );
-        }
-    }
-
-    fprintf( File, "$EndTRACK\n" );
-
-    fprintf( File, "$ZONE\n" );
-    PtSegm = (TRACK*) m_Pcb->m_Zone;
-    ii  = m_Pcb->m_NbSegmZone;
-    
-    Pas = 100.0; 
-    if( ii )
-        Pas /= ii;
-    
-    PtSegm = m_Pcb->m_Zone;
-    
-    DisplayActivity( 0, wxT( "Zones:" ) );
-    for( nseg = 0, ii = 0; PtSegm != NULL; ii++, PtSegm = (TRACK*) PtSegm->Pnext )
-    {
-        ( (TRACK*) PtSegm )->WriteTrackDescr( File );
-        if( nseg != (int) ( ii * Pas) )
-        {
-            nseg = (int) ( ii * Pas);
-            DisplayActivity( nseg, wxT( "Zones:" ) );
-        }
-    }
-
-    fprintf( File, "$EndZONE\n" );
-    fprintf( File, "$EndBOARD\n" );
-
-    setlocale( LC_NUMERIC, "" );      // revert to the current  locale
+    setlocale( LC_NUMERIC, "" );      // revert to the current locale
     wxEndBusyCursor();
-
-    Affiche_Message( wxEmptyString );
-    return 1;
+    
+    if( !rc )
+        DisplayError( this, wxT( "Unable to save PCB file" ) );
+    else
+        Affiche_Message( wxEmptyString );
+    
+    return rc;
 }
 
 #endif

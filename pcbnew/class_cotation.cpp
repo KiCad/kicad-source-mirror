@@ -227,6 +227,7 @@ bool COTATION::ReadCotationDescr( FILE* File, int* LineNum )
 }
 
 
+#if 0
 /**************************************************/
 bool COTATION::WriteCotationDescr( FILE* File )
 /**************************************************/
@@ -285,6 +286,73 @@ bool COTATION::WriteCotationDescr( FILE* File )
 
     return 1;
 }
+#endif
+
+
+bool COTATION::Save( FILE* aFile ) const
+{
+    if( GetState( DELETED ) )
+        return true;
+
+    bool rc = false;
+    
+    if( fprintf( aFile, "$COTATION\n" ) != sizeof("$COTATION\n")-1 )
+        goto out;
+
+    fprintf( aFile, "Ge %d %d %lX\n", m_Shape, m_Layer, m_TimeStamp );
+
+    fprintf( aFile, "Va %d\n", m_Value );
+
+    if( !m_Text->m_Text.IsEmpty() )
+        fprintf( aFile, "Te \"%s\"\n", CONV_TO_UTF8( m_Text->m_Text ) );
+    else
+        fprintf( aFile, "Te \"?\"\n" );
+
+    fprintf( aFile, "Po %d %d %d %d %d %d %d\n",
+             m_Text->m_Pos.x, m_Text->m_Pos.y,
+             m_Text->m_Size.x, m_Text->m_Size.y,
+             m_Text->m_Width, m_Text->m_Orient,
+             m_Text->m_Miroir );
+
+    fprintf( aFile, "Sb %d %d %d %d %d %d\n", S_SEGMENT,
+             Barre_ox, Barre_oy,
+             Barre_fx, Barre_fy, m_Width );
+
+    fprintf( aFile, "Sd %d %d %d %d %d %d\n", S_SEGMENT,
+             TraitD_ox, TraitD_oy,
+             TraitD_fx, TraitD_fy, m_Width );
+
+    fprintf( aFile, "Sg %d %d %d %d %d %d\n", S_SEGMENT,
+             TraitG_ox, TraitG_oy,
+             TraitG_fx, TraitG_fy, m_Width );
+
+    fprintf( aFile, "S1 %d %d %d %d %d %d\n", S_SEGMENT,
+             FlecheD1_ox, FlecheD1_oy,
+             FlecheD1_fx, FlecheD1_fy, m_Width );
+
+    fprintf( aFile, "S2 %d %d %d %d %d %d\n", S_SEGMENT,
+             FlecheD2_ox, FlecheD2_oy,
+             FlecheD2_fx, FlecheD2_fy, m_Width );
+
+
+    fprintf( aFile, "S3 %d %d %d %d %d %d\n", S_SEGMENT,
+             FlecheG1_ox, FlecheG1_oy,
+             FlecheG1_fx, FlecheG1_fy, m_Width );
+
+    fprintf( aFile, "S4 %d %d %d %d %d %d\n", S_SEGMENT,
+             FlecheG2_ox, FlecheG2_oy,
+             FlecheG2_fx, FlecheG2_fy, m_Width );
+
+    if( fprintf( aFile, "$EndCOTATION\n" ) != sizeof("$EndCOTATION\n")-1 )
+        goto out;
+    
+    rc = true;
+    
+out:
+    return rc;
+}
+    
+    
 
 
 /************************************************************************/

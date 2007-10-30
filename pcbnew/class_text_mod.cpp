@@ -71,6 +71,28 @@ TEXTE_MODULE::~TEXTE_MODULE()
 }
 
 
+bool TEXTE_MODULE::Save( FILE* aFile ) const
+{
+    MODULE* parent = (MODULE*) GetParent();
+    int     orient = m_Orient;
+    
+    if( parent )
+        orient += parent->m_Orient;
+    
+    int ret = fprintf( aFile, "T%d %d %d %d %d %d %d %c %c %d \"%.16s\"\n",
+            m_Type,
+            m_Pos0.x, m_Pos0.y,
+            m_Size.y, m_Size.x,
+            orient, 
+            m_Width,
+            m_Miroir ? 'N' : 'M', m_NoShow ? 'I' : 'V',
+            GetLayer(),
+            CONV_TO_UTF8( m_Text ) );
+    
+    return  (ret > 20);
+}
+
+
 void TEXTE_MODULE::Copy( TEXTE_MODULE* source )      // copy structure
 {
     if( source == NULL )

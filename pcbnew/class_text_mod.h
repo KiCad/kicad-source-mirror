@@ -47,9 +47,15 @@ public:
 
     void    SetLocalCoord();      // mise a jour des coordonn�s relatives
 
-    // a partir des coord absolues de trac�
-    /* Reading and writing data on files */
-    int     WriteDescr( FILE* File );
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.pcb" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */ 
+    bool Save( FILE* aFile ) const;
+    
+    
     int     ReadDescr( FILE* File, int* LineNum = NULL );
 
     /* drawing functions */

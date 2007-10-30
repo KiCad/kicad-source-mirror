@@ -763,6 +763,8 @@ int D_PAD::ReadDescr( FILE* File, int* LineNum )
 }
 
 
+
+#if 0
 /***********************************/
 int D_PAD::WriteDescr( FILE* File )
 /***********************************/
@@ -849,6 +851,92 @@ int D_PAD::WriteDescr( FILE* File )
     NbLigne++;
     return NbLigne;
 }
+#endif
+
+
+bool D_PAD::Save( FILE* aFile ) const
+{
+    int         cshape;
+    const char* texttype;
+
+    if( GetState( DELETED ) )
+        return true;
+
+    bool        rc = false;
+
+    // check the return values for first and last fprints() in this function
+    if( fprintf( aFile, "$PAD\n" ) != sizeof("$PAD\n")-1 )
+        goto out;
+
+    switch( m_PadShape )
+    {
+    case CIRCLE:
+        cshape = 'C'; break;
+
+    case RECT:
+        cshape = 'R'; break;
+
+    case OVALE:
+        cshape = 'O'; break;
+
+    case TRAPEZE:
+        cshape = 'T'; break;
+
+    default:
+        cshape = 'C';
+        DisplayError( NULL, _( "Unknown Pad shape" ) );
+        break;
+    }
+
+    fprintf( aFile, "Sh \"%.4s\" %c %d %d %d %d %d\n",
+             m_Padname, cshape, m_Size.x, m_Size.y,
+             m_DeltaSize.x, m_DeltaSize.y, m_Orient );
+    
+    fprintf( aFile, "Dr %d %d %d", m_Drill.x, m_Offset.x, m_Offset.y );
+    if( m_DrillShape == OVALE )
+    {
+        fprintf( aFile, " %c %d %d", 'O', m_Drill.x, m_Drill.y );
+    }
+    fprintf( aFile, "\n" );
+
+    switch( m_Attribut )
+    {
+    case STANDARD:
+        texttype = "STD"; break;
+
+    case SMD:
+        texttype = "SMD"; break;
+
+    case CONN:
+        texttype = "CONN"; break;
+
+    case P_HOLE:
+        texttype = "HOLE"; break;
+
+    case MECA:
+        texttype = "MECA"; break;
+
+    default:
+        texttype = "STD";
+        DisplayError( NULL, wxT( "Invalid Pad attribute" ) );
+        break;
+    }
+
+    fprintf( aFile, "At %s N %8.8X\n", texttype, m_Masque_Layer );
+
+    fprintf( aFile, "Ne %d \"%s\"\n", GetNet(), CONV_TO_UTF8( m_Netname ) );
+
+    fprintf( aFile, "Po %d %d\n", m_Pos0.x, m_Pos0.y );
+
+    if( fprintf( aFile, "$EndPAD\n" ) != sizeof("$EndPAD\n")-1 )
+        goto out;
+
+    rc = true;
+    
+out:
+    return rc;
+}
+
 
 
 /******************************************************/

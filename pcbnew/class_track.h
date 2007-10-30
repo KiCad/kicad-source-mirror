@@ -59,9 +59,16 @@ public:
     /* supprime du chainage la structure Struct */
     void    UnLink();
 
-    // Read/write data
-    bool    WriteTrackDescr( FILE* File );
-
+    
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.pcb" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */ 
+    bool Save( FILE* aFile ) const;
+    
+    
     /**
      * Function Insert
      * inserts a TRACK, SEGVIA or SEGZONE into its proper list, either at the

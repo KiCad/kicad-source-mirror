@@ -112,6 +112,7 @@ int TEXTE_PCB::ReadTextePcbDescr( FILE* File, int* LineNum )
 }
 
 
+#if 0   // replaced by Save()
 /**************************************************/
 int TEXTE_PCB::WriteTextePcbDescr( FILE* File )
 /**************************************************/
@@ -129,6 +130,36 @@ int TEXTE_PCB::WriteTextePcbDescr( FILE* File )
     fprintf( File, "$EndTEXTPCB\n" );
     return 1;
 }
+#endif
+
+
+bool TEXTE_PCB::Save( FILE* aFile ) const
+{
+    if( GetState( DELETED ) )
+        return true;
+
+    if( m_Text.IsEmpty() )
+        return true;
+    
+    bool rc = false;
+    
+    if( fprintf( aFile, "$TEXTPCB\n" ) != sizeof("$TEXTPCB\n")-1 )
+        goto out;
+    
+    fprintf( aFile, "Te \"%s\"\n", CONV_TO_UTF8( m_Text ) );
+    fprintf( aFile, "Po %d %d %d %d %d %d\n",
+             m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, m_Width, m_Orient );
+    fprintf( aFile, "De %d %d %lX %d\n", m_Layer, m_Miroir, m_TimeStamp, 0 );
+    
+    if( fprintf( aFile, "$EndTEXTPCB\n" ) != sizeof("$EndTEXTPCB\n")-1 )
+        goto out;
+    
+    rc = true;
+out:    
+    return rc;
+}
+    
+    
 
 
 /**********************************************************************/

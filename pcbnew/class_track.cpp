@@ -535,6 +535,7 @@ TRACK* TRACK::GetEndNetCode( int NetCode )
 }
 
 
+#if 0   // replaced by Save()
 /********************************************/
 bool TRACK::WriteTrackDescr( FILE* File )
 /********************************************/
@@ -558,6 +559,29 @@ bool TRACK::WriteTrackDescr( FILE* File )
 
     return TRUE;
 }
+#endif
+
+
+bool TRACK::Save( FILE* aFile ) const
+{
+    int     type = 0;
+
+    if( Type() == TYPEVIA )
+        type = 1;
+
+    if( GetState( DELETED ) )
+        return true;
+
+    fprintf( aFile, "Po %d %d %d %d %d %d %d\n", m_Shape,
+             m_Start.x, m_Start.y, m_End.x, m_End.y, m_Width, m_Drill );
+
+    fprintf( aFile, "De %d %d %d %lX %X\n",
+            m_Layer, type, GetNet(),
+            m_TimeStamp, ReturnStatus() );
+
+    return true;
+}
+
 
 
 /*********************************************************************/

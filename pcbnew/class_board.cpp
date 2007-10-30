@@ -576,6 +576,73 @@ EQUIPOT* BOARD::FindNet( int anetcode ) const
 }
 
 
+
+bool BOARD::Save( FILE* aFile ) const
+{
+    bool        rc = false;
+    BOARD_ITEM* item;
+
+    // save the nets
+    for( item = m_Equipots;  item;  item=item->Next() )
+        if( !item->Save( aFile ) )
+            goto out;
+    
+    // save the modules
+    for( item = m_Modules;  item;  item=item->Next() )
+        if( !item->Save( aFile ) )
+            goto out;
+    
+    for( item = m_Drawings;  item;  item=item->Next() )
+    {
+        switch( item->Type() )
+        {
+        case TYPETEXTE:
+        case TYPEDRAWSEGMENT:
+        case TYPEMIRE:
+        case TYPECOTATION:
+            if( !item->Save( aFile ) )
+                goto out;
+            break;
+
+        case TYPEMARQUEUR:      // do not save MARKERs, they can be regenerated easily 
+            break;
+
+        default:
+            // future: throw exception here
+#if defined(DEBUG)            
+            printf( "BOARD::Save() ignoring draw type %d\n", item->Type() );
+#endif            
+            break;
+        }
+    }
+    
+    // save the tracks & vias
+    fprintf( aFile, "$TRACK\n" );
+    for( item = m_Track;  item;  item=item->Next() )
+        if( !item->Save( aFile ) )
+            goto out;
+    fprintf( aFile, "$EndTRACK\n" );
+
+    
+    // save the zones
+    fprintf( aFile, "$ZONE\n" );
+    for( item = m_Zone;  item;  item=item->Next() )
+        if( !item->Save( aFile ) )
+            goto out;
+    fprintf( aFile, "$EndZONE\n" );
+
+    
+    if( fprintf( aFile, "$EndBOARD\n" ) != sizeof("$EndBOARD\n")-1 )
+        goto out;
+
+    rc = true;  // wrote all OK 
+   
+out:
+    return rc;    
+}
+
+
+
 #if defined(DEBUG)
 
 /**

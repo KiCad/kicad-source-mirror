@@ -77,8 +77,16 @@ public:
 
     /* Reading and writing data on files */
     int             ReadDescr( FILE* File, int* LineNum = NULL );
-    int             WriteDescr( FILE* File );
-
+    
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.pcb" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */ 
+    bool Save( FILE* aFile ) const;
+    
+    
     /* drawing functions */
     void            Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode );
     void            Draw3D( Pcb3D_GLCanvas* glcanvas );

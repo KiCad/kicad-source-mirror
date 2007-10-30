@@ -298,6 +298,7 @@ void EDGE_MODULE::Display_Infos( WinEDA_DrawFrame* frame )
 }
 
 
+#if 0  // replaced by Save()
 /*****************************************/
 int EDGE_MODULE::WriteDescr( FILE* File )
 /*****************************************/
@@ -358,6 +359,59 @@ int EDGE_MODULE::WriteDescr( FILE* File )
 
     return NbLigne;
 }
+#endif
+
+bool EDGE_MODULE::Save( FILE* aFile ) const
+{
+    int ret = -1;
+
+    switch( m_Shape )
+    {
+    case S_SEGMENT:
+        ret = fprintf( aFile, "DS %d %d %d %d %d %d\n",
+                 m_Start0.x, m_Start0.y,
+                 m_End0.x, m_End0.y,
+                 m_Width, m_Layer );
+        break;
+
+    case S_CIRCLE:
+        ret = fprintf( aFile, "DC %d %d %d %d %d %d\n",
+                 m_Start0.x, m_Start0.y,
+                 m_End0.x, m_End0.y,
+                 m_Width, m_Layer );
+        break;
+
+    case S_ARC:
+        ret = fprintf( aFile, "DA %d %d %d %d %d %d %d\n",
+                 m_Start0.x, m_Start0.y,
+                 m_End0.x, m_End0.y,
+                 m_Angle,
+                 m_Width, m_Layer );
+        break;
+
+    case S_POLYGON:
+        ret = fprintf( aFile, "DP %d %d %d %d %d %d %d\n",
+                 m_Start0.x, m_Start0.y,
+                 m_End0.x, m_End0.y,
+                 m_PolyCount,
+                 m_Width, m_Layer );
+        
+        int*    pInt;
+        pInt = m_PolyList;
+        for( int i=0;  i<m_PolyCount;  ++i, pInt+=2 )
+            fprintf( aFile, "Dl %d %d\n",  pInt[0], pInt[1] );
+        break;
+
+    default:
+        // future: throw an exception here
+        printf( "%s unexpected EDGE_MODULE::m_Shape: %d\n", __func__, m_Shape );
+        break;
+    }
+
+    return (ret > 5);
+}
+    
+    
 
 
 /****************************************************************/

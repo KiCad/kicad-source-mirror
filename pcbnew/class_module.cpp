@@ -345,6 +345,7 @@ void MODULE::DrawEdgesOnly( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
+#if 0
 /*************************************/
 int MODULE::WriteDescr( FILE* File )
 /*************************************/
@@ -489,10 +490,110 @@ int MODULE::WriteDescr( FILE* File )
     NbLigne++;
     return NbLigne;
 }
+#endif
 
+
+bool MODULE::Save( FILE* aFile ) const
+{
+    char            statusTxt[8];
+    BOARD_ITEM*     item;
+    
+    if( GetState( DELETED ) )
+        return true;
+    
+    bool rc = false;
+
+    fprintf( aFile, "$MODULE %s\n", CONV_TO_UTF8( m_LibRef ) );
+
+    // Generation des coord et caracteristiques
+    memset( statusTxt, 0, sizeof(statusTxt) );
+    if( IsLocked() )
+        statusTxt[0] = 'F';
+    else
+        statusTxt[0] = '~';
+    
+    if( m_ModuleStatus & MODULE_is_PLACED )
+        statusTxt[1] = 'P';
+    else
+        statusTxt[1] = '~';
+
+    fprintf( aFile, "Po %d %d %d %d %8.8lX %8.8lX %s\n",
+             m_Pos.x, m_Pos.y,
+             m_Orient, m_Layer, m_LastEdit_Time,
+             m_TimeStamp, statusTxt );
+
+    fprintf( aFile, "Li %s\n", CONV_TO_UTF8( m_LibRef ) );
+
+    if( !m_Doc.IsEmpty() )
+    {
+        fprintf( aFile, "Cd %s\n", CONV_TO_UTF8( m_Doc ) );
+    }
+
+    if( !m_KeyWord.IsEmpty() )
+    {
+        fprintf( aFile, "Kw %s\n", CONV_TO_UTF8( m_KeyWord ) );
+    }
+
+    fprintf( aFile, "Sc %8.8lX\n", m_TimeStamp );
+
+    fprintf( aFile, "Op %X %X 0\n", m_CntRot90, m_CntRot180 );
+
+    // attributes
+    if( m_Attributs != MOD_DEFAULT )
+    {
+        fprintf( aFile, "At " );
+        if( m_Attributs & MOD_CMS )
+            fprintf( aFile, "SMD " );
+        if( m_Attributs & MOD_VIRTUAL )
+            fprintf( aFile, "VIRTUAL " );
+        fprintf( aFile, "\n" );
+    }
+
+    // save reference
+    if( !m_Reference->Save( aFile ) )
+        goto out;
+    
+    // save value
+    if( !m_Value->Save( aFile ) )
+        goto out;
+
+    // save drawing elements
+    for( item=m_Drawings;  item;  item=item->Next() )
+    {
+        switch( item->Type() )
+        {
+        case TYPETEXTEMODULE:
+        case TYPEEDGEMODULE:
+            if( !item->Save( aFile ) )
+                goto out;
+            break;
+
+        default:
+#if defined(DEBUG)            
+            printf( "MODULE::Save() ignoring type %d\n", item->Type() );
+#endif            
+            break;
+        }
+    }
+
+    // save the pads
+    for( item=m_Pads;  item;  item=item->Next() )
+        if( !item->Save( aFile ) )
+            goto out;
+
+    // Generation des informations de trac�3D
+    Write_3D_Descr( aFile );
+
+    fprintf( aFile, "$EndMODULE  %s\n", CONV_TO_UTF8( m_LibRef ) );
+    
+    rc = true;
+out:    
+    return rc;
+}
+    
 
 /***************************************/
-int MODULE::Write_3D_Descr( FILE* File )
+int MODULE::Write_3D_Descr( FILE* File ) const
 /***************************************/
 
 /* Sauvegarde de la description 3D du MODULE

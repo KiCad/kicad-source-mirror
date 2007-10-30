@@ -33,8 +33,16 @@ public:
 
     /* Readind and writing data on files */
     int     ReadEquipotDescr( FILE* File, int* LineNum );
-    int     WriteEquipotDescr( FILE* File );
 
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.pcb" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */ 
+    bool Save( FILE* aFile ) const;
+    
+    
     /**
      * Function GetNet
      * @return int - the netcode

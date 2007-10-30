@@ -234,7 +234,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, wxDC * DC, bo
     g_SaveTime = time( NULL );
 
     
-#if 0 && defined(DEBUG) 
+#if 1 && defined(DEBUG) 
     // note this seems to freeze up pcbnew when run under the kicad project 
     // manager.  runs fine from command prompt.
     // output the board object tree to stdout:

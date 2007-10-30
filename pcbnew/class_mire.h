@@ -19,7 +19,14 @@ public:
     MIREPCB( BOARD_ITEM* StructFather );
     ~MIREPCB();
 
-    bool    WriteMirePcbDescr( FILE* File );
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.pcb" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */ 
+    bool Save( FILE* aFile ) const;
+    
     bool    ReadMirePcbDescr( FILE* File, int* LineNum );
 
     /* supprime du chainage la structure Struct */

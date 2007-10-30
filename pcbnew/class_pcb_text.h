@@ -24,8 +24,14 @@ public:
 
 	// File Operations:
 	int ReadTextePcbDescr( FILE* File, int* LineNum );
-	int WriteTextePcbDescr( FILE* File );
-
+    
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.pcb" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */ 
+    bool Save( FILE* aFile ) const;
     
     /**
      * Function Display_Infos
