@@ -177,10 +177,11 @@ void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
         DrawHightLight( DC, g_HightLigth_NetCode );
 
     EDGE_ZONE* segment = m_Pcb->m_CurrentLimitZone;
-    for( ; segment != NULL; segment = (EDGE_ZONE*) segment->Pback )
+    for( ; segment != NULL;   segment = (EDGE_ZONE*) segment->Pback )
     {
         if( segment->m_Flags & IS_MOVED )
             continue;
+        
         Trace_DrawSegmentPcb( DrawPanel, DC, segment, mode );
     }
 

@@ -404,7 +404,9 @@ bool EDGE_MODULE::Save( FILE* aFile ) const
 
     default:
         // future: throw an exception here
-        printf( "%s unexpected EDGE_MODULE::m_Shape: %d\n", __func__, m_Shape );
+#if defined(DEBUG)        
+        printf( "EDGE_MODULE::Save(): unexpected m_Shape: %d\n", m_Shape );
+#endif        
         break;
     }
 

@@ -235,9 +235,13 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, wxDC * DC, bo
 
     
 #if 1 && defined(DEBUG) 
-    // note this seems to freeze up pcbnew when run under the kicad project 
-    // manager.  runs fine from command prompt.
-    // output the board object tree to stdout:
+    // note this freezes up pcbnew when run under the kicad project 
+    // manager.  runs fine from command prompt.  This is because the kicad
+    // project manager redirects stdout of the child pcbnew process to itself,
+    // but never reads from that pipe, and that in turn eventually blocks 
+    // the pcbnew program when the pipe it is writing to gets full.
+    
+    // Output the board object tree to stdout, but please run from command prompt:
     m_Pcb->Show( 0, std::cout );
 #endif
     

@@ -57,23 +57,6 @@ void EDA_BaseStruct::InitVars()
 }
 
 
-/* Gestion de l'etat (status) de la structure (active, deleted..) */
-int EDA_BaseStruct::GetState( int type ) const
-{
-    return m_Status & type;
-}
-
-
-void EDA_BaseStruct::SetState( int type, int state )
-{
-    if( state )
-        m_Status |= type;/* state = ON ou OFF */
-    else
-        m_Status &= ~type;
-}
-
-
-
 /***********************************************************/
 void EDA_BaseStruct::DeleteStructList()
 /***********************************************************/

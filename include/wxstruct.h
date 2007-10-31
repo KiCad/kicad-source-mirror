@@ -535,7 +535,13 @@ public:
     void            Block_Move( wxDC* DC );
     void            Block_Duplicate( wxDC* DC );
 
-    // zone handling:
+    
+    /**
+     * Function DelLimitesZone
+     * deletes the limits of a zone.
+     * @param DC A wxDC to draw onto.
+     * @param Redraw If true, means redraw the pcb without the zone limits
+     */
     void            DelLimitesZone( wxDC* DC, bool Redraw );
 
     // layerhandling:

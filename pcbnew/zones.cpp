@@ -412,8 +412,7 @@ void WinEDA_PcbFrame::Edit_Zone_Width( wxDC* DC, SEGZONE* aZone )
     Line.ToDouble( &f_new_width );
 
     g_DesignSettings.m_CurrentTrackWidth = From_User_Unit( g_UnitMetric,
-                                                          f_new_width, GetScreen(
-                                                              )->GetInternalUnits() );
+                               f_new_width, GetScreen()->GetInternalUnits() );
 
     for( SEGZONE* zone = m_Pcb->m_Zone;  zone;  zone = zone->Next() )
     {
@@ -604,16 +603,16 @@ static void Display_Zone_Netname( WinEDA_PcbFrame* frame )
 static void Exit_Zones( WinEDA_DrawPanel* Panel, wxDC* DC )
 /********************************************************/
 
-/* routine d'annulation de la Commande Begin_Zone si une piste est en cours
- *  de tracage, ou de sortie de l'application SEGZONES.
- *  Appel par la touche ESC
+/**
+ * Function Exit_Zones
+ * cancels the Begin_Zone state if at least one EDGE_ZONE has been created.
  */
 {
     WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) Panel->m_Parent;
 
     if( pcbframe->m_Pcb->m_CurrentLimitZone )
     {
-        if( Panel->ManageCurseur ) /* trace en cours */
+        if( Panel->ManageCurseur )  // trace in progress
         {
             Panel->ManageCurseur( Panel, DC, 0 );
         }
@@ -629,12 +628,9 @@ static void Exit_Zones( WinEDA_DrawPanel* Panel, wxDC* DC )
 /**************************************************************/
 void WinEDA_BasePcbFrame::DelLimitesZone( wxDC* DC, bool Redraw )
 /**************************************************************/
-
-/* Supprime la liste des segments constituant la frontiere courante
- *  Libere la memoire correspondante
- */
 {
-    EDGE_ZONE* segment, * Next;
+    EDGE_ZONE*  segment;
+    EDGE_ZONE*  next;
 
     if( m_Pcb->m_CurrentLimitZone == NULL )
         return;
@@ -642,14 +638,17 @@ void WinEDA_BasePcbFrame::DelLimitesZone( wxDC* DC, bool Redraw )
     if( !IsOK( this, _( "Delete Current Zone Edges" ) ) )
         return;
 
-    /* efface ancienne limite de zone */
+    // erase the old zone border, one segment at a time
     segment = m_Pcb->m_CurrentLimitZone;
-    for( ; segment != NULL; segment = Next )
+    for( ; segment != NULL; segment = next )
     {
-        Next = (EDGE_ZONE*) segment->Pback;
+        next = (EDGE_ZONE*) segment->Pback;
+        
         if( Redraw )
             Trace_DrawSegmentPcb( DrawPanel, DC, segment, GR_XOR );
-        segment->Pnext = NULL; delete segment;
+        
+        segment->Pnext = NULL; 
+        delete segment;
     }
 
     SetCurItem( NULL );
@@ -657,47 +656,53 @@ void WinEDA_BasePcbFrame::DelLimitesZone( wxDC* DC, bool Redraw )
 }
 
 
-/********************************************/
-EDGE_ZONE* WinEDA_PcbFrame::Begin_Zone()
-/********************************************/
-
-/*
- *  Routine d'initialisation d'un trace de Limite de Zone ou
- *  de placement d'un point intermediaire
+/**
+ * Function Begin_Zone
+ * either initializes the first segment of a new zone, or adds an 
+ * intermediate segment.
  */
+EDGE_ZONE* WinEDA_PcbFrame::Begin_Zone()
 {
-    EDGE_ZONE* oldedge, * newedge = NULL;
+    EDGE_ZONE* oldedge;
+    EDGE_ZONE* newedge = NULL;
 
     oldedge = m_Pcb->m_CurrentLimitZone;
 
+    // if first segment
     if( (m_Pcb->m_CurrentLimitZone == NULL )    /* debut reel du trace */
       || (DrawPanel->ManageCurseur == NULL) )  /* reprise d'un trace complementaire */
     {
-        m_Pcb->m_CurrentLimitZone = newedge = new EDGE_ZONE( m_Pcb );
-
+        newedge = new EDGE_ZONE( m_Pcb );
         newedge->m_Flags = IS_NEW | STARTPOINT | IS_MOVED;
+        newedge->m_Start = newedge->m_End = GetScreen()->m_Curseur;
+        newedge->SetLayer( GetScreen()->m_Active_Layer );
+        
+        // link into list:
         newedge->Pback   = oldedge;
+
         if( oldedge )
             oldedge->Pnext = newedge;
-        newedge->SetLayer( GetScreen()->m_Active_Layer );
-        newedge->m_Width = 2;      /* Largeur minimum tracable */
-        newedge->m_Start = newedge->m_End = GetScreen()->m_Curseur;
-
+        
         m_Pcb->m_CurrentLimitZone = newedge;
+        
         DrawPanel->ManageCurseur  = Show_Zone_Edge_While_MoveMouse;
         DrawPanel->ForceCloseManageCurseur = Exit_Zones;
     }
+    
+    // edge in progress: 
     else    /* piste en cours : les coord du point d'arrivee ont ete mises
              *  a jour par la routine Show_Zone_Edge_While_MoveMouse*/
     {
         if( oldedge->m_Start != oldedge->m_End )
         {
             newedge = new EDGE_ZONE( oldedge );
-            newedge->Pback   = oldedge;
-            oldedge->Pnext   = newedge;
             newedge->m_Flags = IS_NEW | IS_MOVED;
             newedge->m_Start = newedge->m_End = oldedge->m_End;
             newedge->SetLayer( GetScreen()->m_Active_Layer );
+            
+            // link into list:
+            newedge->Pback   = oldedge;
+            oldedge->Pnext   = newedge;
             m_Pcb->m_CurrentLimitZone = newedge;
         }
     }
@@ -724,11 +729,13 @@ void WinEDA_PcbFrame::End_Zone( wxDC* DC )
         /* il sera raccorde au point de depart */
         PtLim = m_Pcb->m_CurrentLimitZone;
         PtLim->m_Flags &= ~(IS_NEW | IS_MOVED);
+        
         while( PtLim && PtLim->Pback )
         {
             PtLim = (EDGE_ZONE*) PtLim->Pback;
             if( PtLim->m_Flags & STARTPOINT )
                 break;
+            
             PtLim->m_Flags &= ~(IS_NEW | IS_MOVED);
         }
 

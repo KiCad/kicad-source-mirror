@@ -442,6 +442,17 @@ public:
     EDGE_ZONE( BOARD_ITEM* StructFather );
     EDGE_ZONE( const EDGE_ZONE& edgezone );
     ~EDGE_ZONE();
+
+    EDGE_ZONE* Next() { return (EDGE_ZONE*) Pnext; }
+
+    
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.pcb" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */ 
+    bool Save( FILE* aFile ) const;
 };
 
 

@@ -19,6 +19,8 @@ email address.
     design and was crashing.  Also, export_to_pcbnew.cpp now uses the simple
     BOARD::Save() function.  It was another place to maintain the PCB file format,
     rather than simply putting that knowledge into one place like BOARD::Save().
++ all
+    beautified gr_basic.cpp and made CLIP_LINE macro a static inline function.
 
 
 2007-Oct-30 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>

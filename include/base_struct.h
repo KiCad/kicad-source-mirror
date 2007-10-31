@@ -191,8 +191,19 @@ public:
     
     
     /* Gestion de l'etat (status) de la structure (active, deleted..) */
-    int     GetState( int type ) const;
-    void    SetState( int type, int state );
+    
+    int GetState( int type ) const
+    {
+        return m_Status & type;
+    }
+
+    void SetState( int type, int state )
+    {
+        if( state )
+            m_Status |= type;   // state = ON or OFF
+        else
+            m_Status &= ~type;
+    }
 
     int ReturnStatus() const {  return m_Status;  }
 

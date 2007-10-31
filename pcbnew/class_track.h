@@ -80,10 +80,12 @@ public:
      */
     void    Insert( BOARD* Pcb, BOARD_ITEM* InsertPoint );
 
-/*Search the "best" insertion point within the track linked list
- *  the best point is the of the corresponding net code section
- *  @return the item found in the linked list (or NULL if no track)
- */
+    /**
+     * Function GetBestInsertPoint
+     * searches the "best" insertion point within the track linked list.
+     * The best point is the of the corresponding net code section.
+     * @return TRACK* - the item found in the linked list (or NULL if no track)
+     */
     TRACK*  GetBestInsertPoint( BOARD* Pcb );
 
     /* Search (within the track linked list) the first segment matching the netcode

@@ -610,7 +610,7 @@ bool BOARD::Save( FILE* aFile ) const
         default:
             // future: throw exception here
 #if defined(DEBUG)            
-            printf( "BOARD::Save() ignoring draw type %d\n", item->Type() );
+            printf( "BOARD::Save() ignoring m_Drawings type %d\n", item->Type() );
 #endif            
             break;
         }
@@ -623,14 +623,22 @@ bool BOARD::Save( FILE* aFile ) const
             goto out;
     fprintf( aFile, "$EndTRACK\n" );
 
-    
     // save the zones
     fprintf( aFile, "$ZONE\n" );
     for( item = m_Zone;  item;  item=item->Next() )
         if( !item->Save( aFile ) )
             goto out;
     fprintf( aFile, "$EndZONE\n" );
-
+    
+    // save the zone edges
+    if( m_CurrentLimitZone )
+    {
+        fprintf( aFile, "$ZONE_EDGE\n" );
+        for( item = m_CurrentLimitZone;  item;  item=item->Next() )
+            if( !item->Save( aFile ) )
+                goto out;
+        fprintf( aFile, "$EndZONE_EDGE\n" );
+    }
     
     if( fprintf( aFile, "$EndBOARD\n" ) != sizeof("$EndBOARD\n")-1 )
         goto out;
@@ -690,11 +698,11 @@ void BOARD::Show( int nestLevel, std::ostream& os )
         p->Show( nestLevel+2, os );
     NestedSpace( nestLevel+1, os ) << "</zones>\n";
 
-    NestedSpace( nestLevel+1, os ) << "<edgezones>\n";
+    NestedSpace( nestLevel+1, os ) << "<zoneedges>\n";
     p = m_CurrentLimitZone;
     for( ; p; p = p->Pnext )
         p->Show( nestLevel+2, os );
-    NestedSpace( nestLevel+1, os ) << "</edgezones>\n";
+    NestedSpace( nestLevel+1, os ) << "</zoneedges>\n";
     
     p = m_Son;
     for( ; p;  p = p->Pnext )
