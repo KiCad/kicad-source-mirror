@@ -631,6 +631,7 @@ bool BOARD::Save( FILE* aFile ) const
     fprintf( aFile, "$EndZONE\n" );
     
     // save the zone edges
+/*    
     if( m_CurrentLimitZone )
     {
         fprintf( aFile, "$ZONE_EDGE\n" );
@@ -639,6 +640,7 @@ bool BOARD::Save( FILE* aFile ) const
                 goto out;
         fprintf( aFile, "$EndZONE_EDGE\n" );
     }
+*/    
     
     if( fprintf( aFile, "$EndBOARD\n" ) != sizeof("$EndBOARD\n")-1 )
         goto out;
