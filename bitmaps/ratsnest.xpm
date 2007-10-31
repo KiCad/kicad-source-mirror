@@ -1,10 +1,10 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *ratsnest_xpm[];
+extern const char *ratsnest_xpm[];
 
 #else
-char *ratsnest_xpm[] = {
-/* columns rows colors chars-per-pixel */
+const char *ratsnest_xpm[] = {
+/* columns rows colors const chars-per-pixel */
 "16 16 3 1",
 "- c White",
 "o c Red",

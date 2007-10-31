@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *icon_modedit_xpm[];
+extern const char *icon_modedit_xpm[];
 
 #else
-char * icon_modedit_xpm[] = {
+const char * icon_modedit_xpm[] = {
 "32 32 346 2",
 "  	c None",
 ". 	c #2C2C37",

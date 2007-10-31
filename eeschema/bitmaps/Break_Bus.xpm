@@ -1,5 +1,5 @@
 /* XPM */
-static char * break_bus_xpm[] = {
+static const char * break_bus_xpm[] = {
 "16 16 36 1",
 " 	c None",
 ".	c #D72E2E",

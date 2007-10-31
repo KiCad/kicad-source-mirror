@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *rotate_field_xpm[];
+extern const char *rotate_field_xpm[];
 
 #else
-char * rotate_field_xpm[] = {
+const char * rotate_field_xpm[] = {
 "16 16 76 1",
 " 	c None",
 ".	c #D2D2D2",

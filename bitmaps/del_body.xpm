@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char * delete_body_xpm[];
+extern const char * delete_body_xpm[];
 
 #else
-char * delete_body_xpm[] =
+const char * delete_body_xpm[] =
 {
 "16 15 13 1",
 "X c Black",

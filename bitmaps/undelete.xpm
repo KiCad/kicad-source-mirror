@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *undelete_xpm[];
+extern const char *undelete_xpm[];
 
 #else
-char * undelete_xpm[] = {
+const char * undelete_xpm[] = {
 "16 16 93 2",
 "  	c None",
 ". 	c #000000",

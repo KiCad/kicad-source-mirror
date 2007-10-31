@@ -1,5 +1,5 @@
 /* XPM */
-static char * insert_module_board_xpm[] = {
+static const char * insert_module_board_xpm[] = {
 "16 16 49 1",
 " 	c None",
 ".	c #000000",

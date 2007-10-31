@@ -1,10 +1,10 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *show_dcodenumber_xpm[];
+extern const char *show_dcodenumber_xpm[];
 
 #else
-char * show_dcodenumber_xpm[] = {
-/* columns rows colors chars-per-pixel */
+const char * show_dcodenumber_xpm[] = {
+/* columns rows colors const chars-per-pixel */
 "16 15 3 1",
 "- c Red",
 "X c None",

@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *label_xpm[];
+extern const char *label_xpm[];
 
 #else
-char * label_xpm[] = {
+const char * label_xpm[] = {
 "16 15 3 1",
 " 	c None",
 ".	c Black",

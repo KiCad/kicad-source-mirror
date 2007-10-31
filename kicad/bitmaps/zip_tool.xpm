@@ -1,6 +1,6 @@
 /* XPM */
-static char *zip_tool_xpm[] = {
-/* width height num_colors chars_per_pixel */
+static const char *zip_tool_xpm[] = {
+/* width height num_colors const chars_per_pixel */
 "16 15 16 1",
 "A c #040604",
 "B c #9C9A04",

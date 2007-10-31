@@ -1,5 +1,5 @@
 /* XPM */
-static char * add_bus2bus_xpm[] = {
+static const char * add_bus2bus_xpm[] = {
 "16 16 38 1",
 " 	c None",
 ".	c #AFAFFF",

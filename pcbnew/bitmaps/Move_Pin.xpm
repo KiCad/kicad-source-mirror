@@ -1,5 +1,5 @@
 /* XPM */
-static char * Move_Pin_xpm[] = {
+static const char * Move_Pin_xpm[] = {
 "16 16 56 1",
 " 	c None",
 ".	c #D72E2E",

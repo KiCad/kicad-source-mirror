@@ -1,5 +1,5 @@
 /* XPM */
-static char * Options_All_Vias_xpm[] = {
+static const char * Options_All_Vias_xpm[] = {
 "16 16 56 1",
 " 	c None",
 ".	c #D72E2E",

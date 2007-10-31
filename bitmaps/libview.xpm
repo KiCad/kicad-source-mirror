@@ -1,10 +1,10 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char * libview_xpm[];
+extern const char * libview_xpm[];
 
 #else
-char *libview_xpm[] = {
-/* columns rows colors chars-per-pixel */
+const char *libview_xpm[] = {
+/* columns rows colors const chars-per-pixel */
 "16 15 10 1",
 "Q c Black",
 ". c None",

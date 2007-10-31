@@ -1,5 +1,5 @@
 /* XPM */
-static char * Options_All_Tracks_xpm[] = {
+static const char * Options_All_Tracks_xpm[] = {
 "16 16 39 1",
 " 	c None",
 ".	c #007D00",

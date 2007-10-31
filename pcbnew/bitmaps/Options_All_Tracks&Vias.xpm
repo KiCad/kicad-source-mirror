@@ -1,5 +1,5 @@
 /* XPM */
-static char * options_all_tracks_and_vias_xpm[] = {
+static const char * options_all_tracks_and_vias_xpm[] = {
 "16 16 49 1",
 " 	c None",
 ".	c #007D00",

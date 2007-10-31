@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *file_footprint_xpm[];
+extern const char *file_footprint_xpm[];
 
 #else
-char * file_footprint_xpm[] = {
+const char * file_footprint_xpm[] = {
 "16 16 38 1",
 " 	c None",
 ".	c #000000",

@@ -45,8 +45,8 @@ public:
 	Ki_WorkSheetData * Pnext;
 	int m_Posx, m_Posy;		/* position de l'element ou point de depart du segment */
 	int m_Endx, m_Endy;		/* extremite d'un element type segment ou cadre */
-	wxChar * m_Legende;		/* Pour m_Textes: texte a afficher avant le texte lui meme */
-	wxChar * m_Text;		/* Pour m_Textes:pointeur sur le texte a afficher */
+	const wxChar * m_Legende;		/* Pour m_Textes: texte a afficher avant le texte lui meme */
+	const wxChar * m_Text;		/* Pour m_Textes:pointeur sur le texte a afficher */
 };
 
 /* Type des descriptions Ki_WorkSheetData */

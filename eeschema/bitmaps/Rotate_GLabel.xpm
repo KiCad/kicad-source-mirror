@@ -1,5 +1,5 @@
 /* XPM */
-static char * rotate_glabel_xpm[] = {
+static const char * rotate_glabel_xpm[] = {
 "16 16 91 1",
 " 	c None",
 ".	c #695F00",

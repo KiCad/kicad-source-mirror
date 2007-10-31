@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *cursor_shape_xpm[];
+extern const char *cursor_shape_xpm[];
 
 #else
-char * cursor_shape_xpm[] = {
+const char * cursor_shape_xpm[] = {
 "16 16 53 1",
 " 	c None",
 ".	c #373737",

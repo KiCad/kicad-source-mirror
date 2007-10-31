@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *delete_arc_xpm[];
+extern const char *delete_arc_xpm[];
 
 #else
-char * delete_arc_xpm[] = {
+const char * delete_arc_xpm[] = {
 "16 16 138 2",
 "  	c None",
 ". 	c #00009B",

@@ -1,5 +1,5 @@
 /* XPM */
-static char * add_power_xpm[] = {
+static const char * add_power_xpm[] = {
 "16 16 26 1",
 " 	c None",
 ".	c #D72D2D",

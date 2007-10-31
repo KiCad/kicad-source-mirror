@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char * icon_gerbview_xpm[];
+extern const char * icon_gerbview_xpm[];
 
 #else
-char * icon_gerbview_xpm[] = {
+const char * icon_gerbview_xpm[] = {
 "32 32 318 2",
 "  	c None",
 ". 	c #030100",

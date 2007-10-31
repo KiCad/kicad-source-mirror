@@ -1,5 +1,5 @@
 /* XPM */
-static char * Move_Module_xpm[] = {
+static const char * Move_Module_xpm[] = {
 "16 16 55 1",
 " 	c None",
 ".	c #000000",

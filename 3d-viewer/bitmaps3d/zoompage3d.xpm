@@ -1,10 +1,10 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char * zoompage3d_xpm[];
+extern const char * zoompage3d_xpm[];
 
 #else
-char *zoompage3d_xpm[] = {
-/* columns rows colors chars-per-pixel */
+const char *zoompage3d_xpm[] = {
+/* columns rows colors const chars-per-pixel */
 "16 15 5 1",
 "  c Black",
 ". c None",

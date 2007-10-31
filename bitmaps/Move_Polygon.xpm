@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *move_polygon_xpm[];
+extern const char *move_polygon_xpm[];
 
 #else
-char * move_polygon_xpm[] = {
+const char * move_polygon_xpm[] = {
 "16 16 46 1",
 " 	c None",
 ".	c #00009B",

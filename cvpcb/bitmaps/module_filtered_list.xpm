@@ -1,5 +1,5 @@
 /* XPM */
-char * module_filtered_list_xpm[] = {
+const char * module_filtered_list_xpm[] = {
 "16 15 5 1",
 "X c #808080",
 "  c None",

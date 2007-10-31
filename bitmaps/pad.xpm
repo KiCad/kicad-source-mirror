@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *pad_xpm[];
+extern const char *pad_xpm[];
 
 #else
-char * pad_xpm[] = {
+const char * pad_xpm[] = {
 "16 15 3 1",
 "- c green",
 "  c None",

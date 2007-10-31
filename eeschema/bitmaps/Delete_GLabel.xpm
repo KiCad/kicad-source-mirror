@@ -1,5 +1,5 @@
 /* XPM */
-static char * delete_glabel_xpm[] = {
+static const char * delete_glabel_xpm[] = {
 "16 16 133 2",
 "  	c None",
 ". 	c #695F00",

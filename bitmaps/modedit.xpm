@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *modedit_xpm[];
+extern const char *modedit_xpm[];
 
 #else
-char * modedit_xpm[] = {
+const char * modedit_xpm[] = {
 "16 16 90 1",
 " 	c None",
 ".	c #FF7800",

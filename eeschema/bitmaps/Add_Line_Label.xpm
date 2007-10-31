@@ -1,5 +1,5 @@
 /* XPM */
-static char * add_line_label_xpm[] = {
+static const char * add_line_label_xpm[] = {
 "16 16 24 1",
 " 	c None",
 ".	c #000000",

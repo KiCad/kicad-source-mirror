@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *Delete_Polygon_xpm[];
+extern const char *Delete_Polygon_xpm[];
 
 #else
-char * Delete_Polygon_xpm[] = {
+const char * Delete_Polygon_xpm[] = {
 "16 16 120 2",
 "  	c None",
 ". 	c #00009B",

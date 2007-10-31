@@ -1,5 +1,5 @@
 /* XPM */
-static char * Module_Ratsnet_xpm[] = {
+static const char * Module_Ratsnet_xpm[] = {
 "16 16 39 1",
 " 	c None",
 ".	c #FFFFFF",

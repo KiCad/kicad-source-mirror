@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char * zoom_xpm[];
+extern const char * zoom_xpm[];
 
 #else
-char * zoom_xpm[] = {
+const char * zoom_xpm[] = {
 "16 16 3 1",
 "   c None",
 ".	c #00A000",

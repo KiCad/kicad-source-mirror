@@ -1,5 +1,5 @@
 /* XPM */
-static char * gl_change_xpm[] = {
+static const char * gl_change_xpm[] = {
 "16 16 30 1",
 " 	c None",
 ".	c #695F00",

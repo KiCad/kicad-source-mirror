@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char * directory_xpm[];
+extern const char * directory_xpm[];
 
 #else
-char * directory_xpm[] = {
+const char * directory_xpm[] = {
 "16 16 136 2",
 "  	c None",
 ". 	c #469FFF",

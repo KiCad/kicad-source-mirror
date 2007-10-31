@@ -1,5 +1,5 @@
 /* XPM */
-static char * resize_sheet_xpm[] = {
+static const char * resize_sheet_xpm[] = {
 "16 16 15 1",
 " 	c None",
 ".	c #000000",

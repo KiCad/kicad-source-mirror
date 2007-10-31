@@ -1,10 +1,10 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *dashedline_xpm[];
+extern const char *dashedline_xpm[];
 
 #else
-char *dashedline_xpm[] = {
-/* columns rows colors chars-per-pixel */
+const char *dashedline_xpm[] = {
+/* columns rows colors const chars-per-pixel */
 "16 16 2 1",
 "- c Red",
 "  c None",

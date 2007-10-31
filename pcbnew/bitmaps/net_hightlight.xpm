@@ -1,6 +1,6 @@
 /* XPM */
-char *net_hightlight_xpm[] = {
-/* columns rows colors chars-per-pixel */
+const char *net_hightlight_xpm[] = {
+/* columns rows colors const chars-per-pixel */
 "16 16 3 1",
 "- c #008000",
 ". c #00FF00",

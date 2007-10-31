@@ -1,10 +1,10 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *pcbnew_xpm[];
+extern const char *pcbnew_xpm[];
 
 #else
-char *pcbnew_xpm[] = {
-/* columns rows colors chars-per-pixel */
+const char *pcbnew_xpm[] = {
+/* columns rows colors const chars-per-pixel */
 "16 16 54 1",
 " 	c None",
 ".	c #000000",

@@ -1,10 +1,10 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *pin_xpm[];
+extern const char *pin_xpm[];
 
 #else
-char *pin_xpm[] = {
-/* columns rows colors chars-per-pixel */
+const char *pin_xpm[] = {
+/* columns rows colors const chars-per-pixel */
 "16 15 4 1",
 "- c Black",
 "o c Red",

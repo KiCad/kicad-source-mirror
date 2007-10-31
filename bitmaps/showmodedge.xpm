@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char * show_mod_edge_xpm[];
+extern const char * show_mod_edge_xpm[];
 
 #else
-char * show_mod_edge_xpm[] = {
+const char * show_mod_edge_xpm[] = {
 "16 15 4 1",
 "X c Red",
 ". c None",

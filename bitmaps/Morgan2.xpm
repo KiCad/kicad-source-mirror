@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *morgan2_xpm[];
+extern const char *morgan2_xpm[];
 
 #else
-char * morgan2_xpm[] = {
+const char * morgan2_xpm[] = {
 "16 16 77 1",
 " 	c None",
 ".	c #6361D1",

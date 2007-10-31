@@ -1,10 +1,10 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *select_grid_xpm[];
+extern const char *select_grid_xpm[];
 
 #else
-char *select_grid_xpm[] = {
-/* columns rows colors chars-per-pixel */
+const char *select_grid_xpm[] = {
+/* columns rows colors const chars-per-pixel */
 "16 16 5 1",
 " 	c #ffffff",
 ".	c none",

@@ -1,5 +1,5 @@
 /* XPM */
-static char * hierarchy_cursor_xpm[] = {
+static const char * hierarchy_cursor_xpm[] = {
 "16 16 61 1",
 " 	c None",
 ".	c #000000",

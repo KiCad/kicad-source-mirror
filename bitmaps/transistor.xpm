@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *transistor_xpm[];
+extern const char *transistor_xpm[];
 
 #else
-char * transistor_xpm[] =
+const char * transistor_xpm[] =
 {
 "16 15 16 1",
 " 	c none",

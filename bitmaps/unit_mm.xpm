@@ -1,9 +1,9 @@
 /* XPM */ 
 #ifndef XPMMAIN
-extern char *unit_mm_xpm[];
+extern const char *unit_mm_xpm[];
 
 #else
-char * unit_mm_xpm[] = {
+const char * unit_mm_xpm[] = {
 "16 16 23 1",
 " 	c None",
 "!	c black",

@@ -1,5 +1,5 @@
 /* XPM */
-static char * delete_connection_xpm[] = {
+static const char * delete_connection_xpm[] = {
 "16 16 157 2",
 "  	c None",
 ". 	c #000000",

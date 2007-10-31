@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *save_cmpstuff_xpm[];
+extern const char *save_cmpstuff_xpm[];
 
 #else
-char * save_cmpstuff_xpm[] = {
+const char * save_cmpstuff_xpm[] = {
 "16 16 99 2",
 "  	c None",
 ". 	c #160A00",

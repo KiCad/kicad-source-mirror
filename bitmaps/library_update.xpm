@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char * library_update_xpm[];
+extern const char * library_update_xpm[];
 
 #else
-char * library_update_xpm[] = {
+const char * library_update_xpm[] = {
 "16 15 6 1",
 "X c Black",
 ". c None",

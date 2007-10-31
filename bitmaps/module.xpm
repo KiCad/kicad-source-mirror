@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char * module_xpm[];
+extern const char * module_xpm[];
 
 #else
-char * module_xpm[] = {
+const char * module_xpm[] = {
 "16 15 4 1",
 "X c Red",
 ". c None",

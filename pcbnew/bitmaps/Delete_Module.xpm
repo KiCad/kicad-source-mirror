@@ -1,5 +1,5 @@
 /* XPM */
-static char * Delete_Module_xpm[] = {
+static const char * Delete_Module_xpm[] = {
 "16 16 129 2",
 "  	c None",
 ". 	c #000000",

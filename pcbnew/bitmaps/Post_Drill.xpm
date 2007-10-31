@@ -1,5 +1,5 @@
 /* XPM */
-static char * post_drill_xpm[] = {
+static const char * post_drill_xpm[] = {
 "16 16 35 1",
 " 	c None",
 ".	c #000000",

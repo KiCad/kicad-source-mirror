@@ -1,5 +1,5 @@
 /* XPM */
-static char * delete_bus_xpm[] = {
+static const char * delete_bus_xpm[] = {
 "16 16 130 2",
 "  	c None",
 ". 	c #0000C3",

@@ -1,5 +1,5 @@
 /* XPM */
-static char * mw_Add_Stub_xpm[] = {
+static const char * mw_Add_Stub_xpm[] = {
 "16 16 14 1",
 " 	c None",
 ".	c #D72E2E",

@@ -1,5 +1,5 @@
 /* XPM */
-static char * language_xpm[] = {
+static const char * language_xpm[] = {
 "16 16 92 2",
 "  	c None",
 ". 	c #000000",

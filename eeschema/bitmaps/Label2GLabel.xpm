@@ -1,5 +1,5 @@
 /* XPM */
-static char * label2glabel_xpm[] = {
+static const char * label2glabel_xpm[] = {
 "16 16 34 1",
 " 	c None",
 ".	c #000000",

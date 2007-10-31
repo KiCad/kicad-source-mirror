@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *preference_xpm[];
+extern const char *preference_xpm[];
 
 #else
-char * preference_xpm[] = {
+const char * preference_xpm[] = {
 "16 15 7 1",
 " 	c None",
 ".	c #808000",

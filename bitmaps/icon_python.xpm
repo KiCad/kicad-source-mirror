@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char * icon_python_xpm[];
+extern const char * icon_python_xpm[];
 
 #else
-char * icon_python_xpm[] = {
+const char * icon_python_xpm[] = {
 "32 32 72 1",
 " 	c None",
 ".	c #7EA5C6",

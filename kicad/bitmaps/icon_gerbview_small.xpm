@@ -1,5 +1,5 @@
 /* XPM */
-static char * icon_gerbview_small_xpm[] = {
+static const char * icon_gerbview_small_xpm[] = {
 "16 16 166 2",
 "  	c None",
 ". 	c #424040",

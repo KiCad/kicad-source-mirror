@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *orient_xpm[];
+extern const char *orient_xpm[];
 
 #else
-char * orient_xpm[] = {
+const char * orient_xpm[] = {
 "16 16 114 2",
 "  	c None",
 ". 	c #000000",

@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *delete_circle_xpm[];
+extern const char *delete_circle_xpm[];
 
 #else
-char * delete_circle_xpm[] = {
+const char * delete_circle_xpm[] = {
 "16 16 126 2",
 "  	c None",
 ". 	c #00009B",

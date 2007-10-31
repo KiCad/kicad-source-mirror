@@ -1,5 +1,5 @@
 /* XPM */
-static char * edit_component_xpm[] = {
+static const char * edit_component_xpm[] = {
 "16 16 80 1",
 " 	c None",
 ".	c #000000",

@@ -1,5 +1,5 @@
 /* XPM */
-static char * delete_pin_xpm[] = {
+static const char * delete_pin_xpm[] = {
 "16 16 129 2",
 "  	c None",
 ". 	c #D72E2E",

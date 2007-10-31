@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *kicad_icon_xpm[];
+extern const char *kicad_icon_xpm[];
 
 #else
-char * kicad_icon_xpm[] =
+const char * kicad_icon_xpm[] =
 {
 "32 32 16 1",
 " 	c none",

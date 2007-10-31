@@ -1,11 +1,11 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char * schematic_xpm[];
+extern const char * schematic_xpm[];
 
 #else
-char *schematic_xpm[] = {
+const char *schematic_xpm[] = {
 
-/* columns rows colors chars-per-pixel */
+/* columns rows colors const chars-per-pixel */
 "16 15 6 1",
 "  c None",
 ". c Black",

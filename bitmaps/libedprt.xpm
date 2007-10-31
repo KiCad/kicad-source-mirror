@@ -1,10 +1,10 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *libedit_part_xpm[];
+extern const char *libedit_part_xpm[];
 
 #else
-char *libedit_part_xpm[] = {
-/* columns rows colors chars-per-pixel */
+const char *libedit_part_xpm[] = {
+/* columns rows colors const chars-per-pixel */
 
 "16 15 3 1",
 "- c Red",

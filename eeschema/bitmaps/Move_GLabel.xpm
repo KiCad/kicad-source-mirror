@@ -1,5 +1,5 @@
 /* XPM */
-static char * move_glabel_xpm[] = {
+static const char * move_glabel_xpm[] = {
 "16 16 66 1",
 " 	c None",
 ".	c #695F00",

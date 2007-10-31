@@ -1,5 +1,5 @@
 /* XPM */
-static char * options_pinsheet_xpm[] = {
+static const char * options_pinsheet_xpm[] = {
 "16 16 78 1",
 " 	c None",
 ".	c #6F6500",

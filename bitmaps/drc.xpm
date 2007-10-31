@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *drc_xpm[];
+extern const char *drc_xpm[];
 
 #else
-char *drc_xpm[] = {
+const char *drc_xpm[] = {
 "16 16 87 1",
 " 	c None",
 ".	c #000000",

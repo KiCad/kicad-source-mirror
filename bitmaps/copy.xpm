@@ -1,10 +1,10 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *copy_button[];
+extern const char *copy_button[];
 
 #else
-char *copy_button[] = {
-/* columns rows colors chars-per-pixel */
+const char *copy_button[] = {
+/* columns rows colors const chars-per-pixel */
 "16 15 4 1",
 "  c None",
 ". c Black",

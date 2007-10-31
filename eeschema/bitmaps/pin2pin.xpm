@@ -1,6 +1,6 @@
 /* XPM */
-static char *pin2pin_xpm[] = {
-/* columns rows colors chars-per-pixel */
+static const char *pin2pin_xpm[] = {
+/* columns rows colors const chars-per-pixel */
 "16 16 61 1",
 " 	c None",
 ".	c #000000",

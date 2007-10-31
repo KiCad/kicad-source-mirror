@@ -1,5 +1,5 @@
 /* XPM */
-static char * Delete_Net_xpm[] = {
+static const char * Delete_Net_xpm[] = {
 "16 16 128 2",
 "  	c None",
 ". 	c #005900",

@@ -1,10 +1,10 @@
 /* XPM */
 #ifndef XPM_3D_MAIN
-extern char *import3d_xpm[];
+extern const char *import3d_xpm[];
 
 #else
-char *import3d_xpm[] = {
-/* columns rows colors chars-per-pixel */
+const char *import3d_xpm[] = {
+/* columns rows colors const chars-per-pixel */
 "16 15 3 1",
 "- c Black",
 "X c None",

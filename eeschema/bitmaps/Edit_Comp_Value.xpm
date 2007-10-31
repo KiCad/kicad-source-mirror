@@ -1,5 +1,5 @@
 /* XPM */
-static char * edit_comp_value_xpm[] = {
+static const char * edit_comp_value_xpm[] = {
 "16 16 73 1",
 " 	c None",
 ".	c #000000",

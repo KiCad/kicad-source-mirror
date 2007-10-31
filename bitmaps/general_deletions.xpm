@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *general_deletions_xpm[];
+extern const char *general_deletions_xpm[];
 
 #else
-char * general_deletions_xpm[] = {
+const char * general_deletions_xpm[] = {
 "16 16 158 2",
 "  	c None",
 ". 	c #0D0D0D",

@@ -1,5 +1,5 @@
 /* XPM */
-static char * mode_module_xpm[] = {
+static const char * mode_module_xpm[] = {
 "16 16 96 2",
 "  	c None",
 ". 	c #D72E2E",

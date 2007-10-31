@@ -1,5 +1,5 @@
 /* XPM */
-static char * browse_files_xpm[] = {
+static const char * browse_files_xpm[] = {
 "16 16 66 1",
 " 	c None",
 ".	c #000000",

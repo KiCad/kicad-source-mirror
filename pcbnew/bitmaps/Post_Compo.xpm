@@ -1,5 +1,5 @@
 /* XPM */
-static char * post_compo_xpm[] = {
+static const char * post_compo_xpm[] = {
 "16 16 62 1",
 " 	c None",
 ".	c #000000",

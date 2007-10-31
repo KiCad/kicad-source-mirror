@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *exit_xpm[];
+extern const char *exit_xpm[];
 
 #else
-char * exit_xpm[] = {
+const char * exit_xpm[] = {
 "16 16 63 1",
 " 	c None",
 ".	c #000000",

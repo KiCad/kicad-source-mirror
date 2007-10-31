@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char * icon_txt_xpm[];
+extern const char * icon_txt_xpm[];
 
 #else
-char * icon_txt_xpm[] = {
+const char * icon_txt_xpm[] = {
 "16 16 100 2",
 "  	c None",
 ". 	c #AFAFAF",

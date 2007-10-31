@@ -1,6 +1,6 @@
 /* XPM */
-static char *cvpcb_xpm[] = {
-/* columns rows colors chars-per-pixel */
+static const char *cvpcb_xpm[] = {
+/* columns rows colors const chars-per-pixel */
 "16 16 46 1",
 " 	c None",
 ".	c #160A00",

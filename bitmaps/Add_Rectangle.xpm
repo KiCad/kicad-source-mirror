@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *add_rectangle_xpm[];
+extern const char *add_rectangle_xpm[];
 
 #else
-char * add_rectangle_xpm[] = {
+const char * add_rectangle_xpm[] = {
 "16 16 24 1",
 " 	c None",
 ".	c #161616",

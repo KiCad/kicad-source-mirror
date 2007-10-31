@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *add_junction_xpm[];
+extern const char *add_junction_xpm[];
 
 #else
-char * add_junction_xpm[] = {
+const char * add_junction_xpm[] = {
 "16 16 60 1",
 " 	c None",
 ".	c #007D00",

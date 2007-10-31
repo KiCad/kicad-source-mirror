@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *delete_field_xpm[];
+extern const char *delete_field_xpm[];
 
 #else
-char * delete_field_xpm[] = {
+const char * delete_field_xpm[] = {
 "16 16 124 2",
 "  	c None",
 ". 	c #D2D2D2",

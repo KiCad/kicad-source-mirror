@@ -230,7 +230,7 @@ const char** BOARD_ITEM::MenuIcon() const
  * @return an icon pointer (can be NULL)
  */
 {
-    char**            xpm;
+    const char**            xpm;
     const BOARD_ITEM* item = this;
 
     switch( item->Type() )

@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *copyblock_xpm[];
+extern const char *copyblock_xpm[];
 
 #else
-char * copyblock_xpm[] = {
+const char * copyblock_xpm[] = {
 "16 16 18 1",
 " 	c None",
 ".	c #000000",

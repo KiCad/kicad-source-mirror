@@ -1,6 +1,6 @@
 /* XPM */
-static char *tree_sel_xpm[] = {
-/* columns rows colors chars-per-pixel */
+static const char *tree_sel_xpm[] = {
+/* columns rows colors const chars-per-pixel */
 "16 15 6 1",
 "  c Gray0",
 "X c #7b7b7b",

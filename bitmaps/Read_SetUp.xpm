@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *read_setup_xpm[];
+extern const char *read_setup_xpm[];
 
 #else
-char * read_setup_xpm[] = {
+const char * read_setup_xpm[] = {
 "16 16 85 1",
 " 	c None",
 ".	c #000000",

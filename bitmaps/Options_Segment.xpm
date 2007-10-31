@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *options_segment_xpm[];
+extern const char *options_segment_xpm[];
 
 #else
-char * options_segment_xpm[] = {
+const char * options_segment_xpm[] = {
 "16 16 31 1",
 " 	c None",
 ".	c #007D00",

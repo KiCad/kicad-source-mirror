@@ -1,5 +1,5 @@
 /* XPM */
-static char * Delete_Pad_xpm[] = {
+static const char * Delete_Pad_xpm[] = {
 "16 16 120 2",
 "  	c None",
 ". 	c #000000",

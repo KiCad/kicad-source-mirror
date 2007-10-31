@@ -346,7 +346,8 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
 
             sprintf( Line, "orientation  %.2f\n", (float) (pad->m_Orient - Module->m_Orient) / 10 );
             fputs( Line, rptfile );
-            char* shape_name[6] = { "??? ", "Circ", "Rect", "Oval", "trap", "spec" };
+            const char* shape_name[6] =
+				{ "??? ", "Circ", "Rect", "Oval", "trap", "spec" };
             sprintf( Line, "Shape  %s\n", shape_name[pad->m_PadShape] );
             fputs( Line, rptfile );
 

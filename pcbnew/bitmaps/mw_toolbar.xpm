@@ -1,5 +1,5 @@
 /* XPM */
-static char * mw_toolbar_xpm[] = {
+static const char * mw_toolbar_xpm[] = {
 "16 16 67 1",
 " 	c None",
 ".	c #000000",

@@ -1,5 +1,5 @@
 /* XPM */
-static char * invert_module_xpm[] = {
+static const char * invert_module_xpm[] = {
 "16 16 31 1",
 " 	c None",
 ".	c #000000",

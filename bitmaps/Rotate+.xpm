@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *rotate_pos_xpm[];
+extern const char *rotate_pos_xpm[];
 
 #else
-char * rotate_pos_xpm[] = {
+const char * rotate_pos_xpm[] = {
 "16 16 96 2",
 "  	c None",
 ". 	c #000000",

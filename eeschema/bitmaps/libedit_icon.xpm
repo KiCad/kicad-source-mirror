@@ -1,5 +1,5 @@
 /* XPM */
-static char * libedit_icon_xpm[] = {
+static const char * libedit_icon_xpm[] = {
 "32 32 112 2",
 "  	c None",
 ". 	c #000000",

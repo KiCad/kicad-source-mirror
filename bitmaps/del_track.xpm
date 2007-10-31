@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char * auto_delete_track_xpm[];
+extern const char * auto_delete_track_xpm[];
 
 #else
-char * auto_delete_track_xpm[] =
+const char * auto_delete_track_xpm[] =
 {
 "16 15 14 1",
 "X c Black",

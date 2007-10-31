@@ -1,5 +1,5 @@
 /* XPM */
-static char * show_zone_xpm[] = {
+static const char * show_zone_xpm[] = {
 "16 16 71 1",
 " 	c None",
 ".	c #007D00",

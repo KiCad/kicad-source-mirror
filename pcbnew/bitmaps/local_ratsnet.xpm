@@ -1,5 +1,5 @@
 /* XPM */
-static char * local_ratsnet_xpm[] = {
+static const char * local_ratsnet_xpm[] = {
 "16 16 61 1",
 " 	c None",
 ".	c #FFFFFF",

@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char * zoomplus3d_xpm[];
+extern const char * zoomplus3d_xpm[];
 
 #else
-char * zoomplus3d_xpm[] = {
+const char * zoomplus3d_xpm[] = {
 "16 16 3 1",
 "   c None",
 ".	c Black",

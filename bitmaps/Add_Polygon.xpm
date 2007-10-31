@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *add_polygon_xpm[];
+extern const char *add_polygon_xpm[];
 
 #else
-char * add_polygon_xpm[] = {
+const char * add_polygon_xpm[] = {
 "16 16 54 1",
 " 	c None",
 ".	c #161616",

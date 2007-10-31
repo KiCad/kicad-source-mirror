@@ -1,5 +1,5 @@
 /* XPM */
-static char * Move_Field_xpm[] = {
+static const char * Move_Field_xpm[] = {
 "16 16 62 1",
 " 	c None",
 ".	c #D2D2D2",

@@ -1,5 +1,5 @@
 /* XPM */
-static char * part_properties_xpm[] = {
+static const char * part_properties_xpm[] = {
 "16 16 85 1",
 " 	c None",
 ".	c #000000",

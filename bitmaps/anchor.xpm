@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *anchor_xpm[];
+extern const char *anchor_xpm[];
 
 #else
-char * anchor_xpm[] = {
+const char * anchor_xpm[] = {
 "16 16 2 1",
 " 	c None",
 ".	c #000000",

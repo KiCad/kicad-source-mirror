@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char * icon_eeschema_xpm[];
+extern const char * icon_eeschema_xpm[];
 
 #else
-char * icon_eeschema_xpm[] = {
+const char * icon_eeschema_xpm[] = {
 "32 32 200 2",
 "  	c None",
 ". 	c #000000",

@@ -1,10 +1,10 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *tools_xpm[];
+extern const char *tools_xpm[];
 
 #else
-char *tools_xpm[] = {
-/* columns rows colors chars-per-pixel */
+const char *tools_xpm[] = {
+/* columns rows colors const chars-per-pixel */
 "16 15 3 1",
 "- c Blue",
 "X c Gray100",

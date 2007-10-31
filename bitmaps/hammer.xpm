@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char * hammer_xpm[];
+extern const char * hammer_xpm[];
 
 #else
-char * hammer_xpm[] = {
+const char * hammer_xpm[] = {
 "16 15 6 1",
 " 	c none",
 ".	c #444244",

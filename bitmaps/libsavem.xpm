@@ -1,10 +1,10 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *save_part_in_mem_xpm[];
+extern const char *save_part_in_mem_xpm[];
 
 #else
-char *save_part_in_mem_xpm[] = {
-/* columns rows colors chars-per-pixel */
+const char *save_part_in_mem_xpm[] = {
+/* columns rows colors const chars-per-pixel */
 "16 15 5 1",
 "  c None",
 ". c Black",

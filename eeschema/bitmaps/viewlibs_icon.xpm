@@ -1,5 +1,5 @@
 /* XPM */
-static char * viewlibs_icon_xpm[] = {
+static const char * viewlibs_icon_xpm[] = {
 "32 32 345 2",
 "  	c None",
 ". 	c #0C0C0E",

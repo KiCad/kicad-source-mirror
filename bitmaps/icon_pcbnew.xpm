@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *a_icon_pcbnew_xpm[];
+extern const char *a_icon_pcbnew_xpm[];
 
 #else
-char * a_icon_pcbnew_xpm[] = {
+const char * a_icon_pcbnew_xpm[] = {
 "32 32 136 2",
 "  	c None",
 ". 	c #040200",

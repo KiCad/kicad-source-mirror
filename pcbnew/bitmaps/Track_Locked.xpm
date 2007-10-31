@@ -1,5 +1,5 @@
 /* XPM */
-static char * Track_Locked_xpm[] = {
+static const char * Track_Locked_xpm[] = {
 "16 16 89 1",
 " 	c None",
 ".	c #007D00",

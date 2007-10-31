@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *netlist_xpm[];
+extern const char *netlist_xpm[];
 
 #else
-char * netlist_xpm[] = {
+const char * netlist_xpm[] = {
 "16 16 44 1",
 " 	c None",
 ".	c #000000",

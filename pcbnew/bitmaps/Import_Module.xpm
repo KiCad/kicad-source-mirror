@@ -1,5 +1,5 @@
 /* XPM */
-static char * import_module_xpm[] = {
+static const char * import_module_xpm[] = {
 "16 16 79 1",
 " 	c None",
 ".	c #000000",

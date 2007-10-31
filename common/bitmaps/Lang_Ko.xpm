@@ -1,5 +1,5 @@
 /* XPM */
-static char * lang_ko_xpm[] =
+static const char * lang_ko_xpm[] =
 {
 "16 16 17 1",
 

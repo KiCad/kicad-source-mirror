@@ -1,10 +1,10 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *grid_xpm[];
+extern const char *grid_xpm[];
 
 #else
-char * grid_xpm[] = {
-/* columns rows colors chars-per-pixel */
+const char * grid_xpm[] = {
+/* columns rows colors const chars-per-pixel */
 "16 15 2 1",
 "X c None",
 "o c Black",

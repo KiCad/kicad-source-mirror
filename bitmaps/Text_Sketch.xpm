@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *text_sketch_xpm[];
+extern const char *text_sketch_xpm[];
 
 #else
-char * text_sketch_xpm[] = {
+const char * text_sketch_xpm[] = {
 "16 16 2 1",
 " 	c None",
 ".	c #00009B",

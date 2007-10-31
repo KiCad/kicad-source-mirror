@@ -1,5 +1,5 @@
 /* XPM */
-static char * import_glabel_xpm[] = {
+static const char * import_glabel_xpm[] = {
 "16 16 92 2",
 "  	c None",
 ". 	c #000000",

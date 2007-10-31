@@ -1,5 +1,5 @@
 /* XPM */
-static char * libedit_xpm[] = {
+static const char * libedit_xpm[] = {
 "16 16 130 2",
 "  	c None",
 ". 	c #070809",

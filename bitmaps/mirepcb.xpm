@@ -1,10 +1,10 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *mirepcb_xpm[];
+extern const char *mirepcb_xpm[];
 
 #else
-char *mirepcb_xpm[] = {
-/* columns rows colors chars-per-pixel */
+const char *mirepcb_xpm[] = {
+/* columns rows colors const chars-per-pixel */
 "16 15 3 1",
 "- c Blue",
 ". c Red",

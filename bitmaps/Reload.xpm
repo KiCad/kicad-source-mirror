@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char * reload_xpm[];
+extern const char * reload_xpm[];
 
 #else
-char * reload_xpm[] = {
+const char * reload_xpm[] = {
 "16 16 110 2",
 "  	c None",
 ". 	c #000000",

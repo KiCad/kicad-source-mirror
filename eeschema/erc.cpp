@@ -475,7 +475,7 @@ void WinEDA_ErcFrame::ChangeErrorLevel( wxCommandEvent& event )
 {
     int             id, level, ii, x, y;
     wxBitmapButton* Butt;
-    char**          new_bitmap_xpm = NULL;
+    const char**          new_bitmap_xpm = NULL;
     wxPoint         pos;
 
     id   = event.GetId();

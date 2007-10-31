@@ -1,5 +1,5 @@
 /* XPM */
-static char * library_browse_xpm[] = {
+static const char * library_browse_xpm[] = {
 "16 16 130 2",
 "  	c None",
 ". 	c #070809",

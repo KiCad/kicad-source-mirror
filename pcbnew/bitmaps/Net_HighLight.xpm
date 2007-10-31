@@ -1,5 +1,5 @@
 /* XPM */
-static char * Net_HighLight_xpm[] = {
+static const char * Net_HighLight_xpm[] = {
 "16 16 74 1",
 " 	c None",
 ".	c #46FF00",

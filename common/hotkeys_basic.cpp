@@ -31,7 +31,7 @@ Ki_HotkeyInfo::Ki_HotkeyInfo( const wxChar* infomsg, int idcommand, int keycode,
  */
 struct hotkey_name_descr
 {
-    wxChar* m_Name;
+    const wxChar* m_Name;
     int     m_KeyCode;
 };
 

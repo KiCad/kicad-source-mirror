@@ -1,9 +1,9 @@
 /* XPM */ 
 #ifndef XPMMAIN
-extern char *cancel_xpm[];
+extern const char *cancel_xpm[];
 
 #else
-char * cancel_xpm[] = {
+const char * cancel_xpm[] = {
 "16 16 103 2",
 "  	c None",
 "! 	c black",

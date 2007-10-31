@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char * book_xpm[];
+extern const char * book_xpm[];
 
 #else
-char * book_xpm[] = {
+const char * book_xpm[] = {
 "16 16 21 1",
 " 	c None",
 ".	c #007F7F",

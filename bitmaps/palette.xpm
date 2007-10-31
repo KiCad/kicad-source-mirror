@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *palette_xpm[];
+extern const char *palette_xpm[];
 
 #else
-char * palette_xpm[] = {
+const char * palette_xpm[] = {
 "16 15 14 1",
 " 	c #c0c0c0",
 ".	c #808080",

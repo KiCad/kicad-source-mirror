@@ -1,5 +1,5 @@
 /* XPM */
-static char * mw_Add_Gap_xpm[] = {
+static const char * mw_Add_Gap_xpm[] = {
 "16 16 13 1",
 " 	c None",
 ".	c #D72E2E",

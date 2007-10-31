@@ -1,5 +1,5 @@
 /* XPM */
-static char * Delete_Line_xpm[] = {
+static const char * Delete_Line_xpm[] = {
 "16 16 131 2",
 "  	c None",
 ". 	c #007D00",

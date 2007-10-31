@@ -1,5 +1,5 @@
 /* XPM */
-static char * unzip_xpm[] = {
+static const char * unzip_xpm[] = {
 "16 16 16 1",
 " 	c none",
 ".	c #060304",

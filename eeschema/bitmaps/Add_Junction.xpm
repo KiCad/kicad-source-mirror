@@ -1,5 +1,5 @@
 /* XPM */
-static char * add_junction_xpm[] = {
+static const char * add_junction_xpm[] = {
 "16 16 60 1",
 " 	c None",
 ".	c #007D00",

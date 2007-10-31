@@ -1,5 +1,5 @@
 /* XPM */
-static char * Load_Module_Lib_xpm[] = {
+static const char * Load_Module_Lib_xpm[] = {
 "16 16 143 2",
 "  	c None",
 ". 	c #050607",

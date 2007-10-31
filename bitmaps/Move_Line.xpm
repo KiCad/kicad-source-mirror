@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *move_line_xpm[];
+extern const char *move_line_xpm[];
 
 #else
-char * move_line_xpm[] = {
+const char * move_line_xpm[] = {
 "16 16 48 1",
 " 	c None",
 ".	c #00009B",

@@ -1,5 +1,5 @@
 /* XPM */
-static char * glabel2text_xpm[] = {
+static const char * glabel2text_xpm[] = {
 "16 16 42 1",
 " 	c None",
 ".	c #695F00",

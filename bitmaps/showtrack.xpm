@@ -1,10 +1,10 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *showtrack_xpm[];
+extern const char *showtrack_xpm[];
 
 #else
-char *showtrack_xpm[] = {
-/* columns rows colors chars per pixel */
+const char *showtrack_xpm[] = {
+/* columns rows colors const chars per pixel */
 "16 15 3 1",
 "= c Red",
 ": c #008000",

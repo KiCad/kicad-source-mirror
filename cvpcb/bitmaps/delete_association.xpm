@@ -1,5 +1,5 @@
 /* XPM */
-static char * delete_association_xpm[] = {
+static const char * delete_association_xpm[] = {
 "16 16 148 2",
 "  	c None",
 ". 	c #160A00",

@@ -1,10 +1,10 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *find_xpm[];
+extern const char *find_xpm[];
 
 #else
-char *find_xpm[] = {
-/* columns rows colors chars-per-pixel */
+const char *find_xpm[] = {
+/* columns rows colors const chars-per-pixel */
 "16 15 6 1",
 
 "E c #404040",

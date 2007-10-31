@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *edit_xpm[];
+extern const char *edit_xpm[];
 
 #else
-char * edit_xpm[] = {
+const char * edit_xpm[] = {
 "16 16 28 1",
 " 	c None",
 ".	c #000000",

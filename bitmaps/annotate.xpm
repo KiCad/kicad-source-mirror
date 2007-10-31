@@ -1,10 +1,10 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *annotate_xpm[];
+extern const char *annotate_xpm[];
 
 #else
-char *annotate_xpm[] = {
-/* columns rows colors chars-per-pixel */
+const char *annotate_xpm[] = {
+/* columns rows colors const chars-per-pixel */
 "16 16 93 2",
 "  	c None",
 ". 	c #000000",

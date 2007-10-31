@@ -1,10 +1,10 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *eeschema_xpm[];
+extern const char *eeschema_xpm[];
 
 #else
-char *eeschema_xpm[] = {
-/* columns rows colors chars-per-pixel */
+const char *eeschema_xpm[] = {
+/* columns rows colors const chars-per-pixel */
 "16 16 76 1",
 " 	c None",
 ".	c #000000",

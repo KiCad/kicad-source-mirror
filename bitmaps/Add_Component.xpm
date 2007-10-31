@@ -1,9 +1,9 @@
 /* XPM */ 
 #ifndef XPMMAIN
-extern char *add_component_xpm[];
+extern const char *add_component_xpm[];
 
 #else
-char * add_component_xpm[] = {
+const char * add_component_xpm[] = {
 "16 16 67 1",
 " 	c None",
 "!	c black",

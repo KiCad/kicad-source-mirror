@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *delete_cotation_xpm[];
+extern const char *delete_cotation_xpm[];
 
 #else
-char * delete_cotation_xpm[] = {
+const char * delete_cotation_xpm[] = {
 "16 16 110 2",
 "  	c None",
 ". 	c #000000",

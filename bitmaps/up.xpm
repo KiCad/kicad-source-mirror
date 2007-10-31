@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char *up_xpm[];
+extern const char *up_xpm[];
 
 #else
-char * up_xpm[] = {
+const char * up_xpm[] = {
 "16 16 26 1",
 " 	c None",
 ".	c #1C2D3D",

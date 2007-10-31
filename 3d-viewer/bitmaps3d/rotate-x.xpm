@@ -1,10 +1,10 @@
 /* XPM */
 #ifndef XPM_3D_MAIN
-extern char *rotate_neg_X_xpm[];
+extern const char *rotate_neg_X_xpm[];
 
 #else
-char *rotate_neg_X_xpm[] = {
-/* width height num_colors chars_per_pixel */
+const char *rotate_neg_X_xpm[] = {
+/* width height num_colors const chars_per_pixel */
 "    16    15        4            1",
 /* colors */
 ". c #000080",

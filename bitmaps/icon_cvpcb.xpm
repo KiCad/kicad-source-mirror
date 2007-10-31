@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern char * icon_cvpcb_xpm[];
+extern const char * icon_cvpcb_xpm[];
 
 #else
-char * icon_cvpcb_xpm[] = {
+const char * icon_cvpcb_xpm[] = {
 "32 32 372 2",
 "  	c None",
 ". 	c #FF7800",

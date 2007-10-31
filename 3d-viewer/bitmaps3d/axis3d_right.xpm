@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPM_3D_MAIN
-extern char * axis3d_right_xpm[];
+extern const char * axis3d_right_xpm[];
 
 #else
-char * axis3d_right_xpm[] = {
+const char * axis3d_right_xpm[] = {
 "16 15 3 1",
 "   c None",
 ".	c Blue",
