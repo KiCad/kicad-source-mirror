@@ -22,7 +22,7 @@ email address.
 + pcbnew
     zones.cpp, Trace_Pcb(), & EDGE_ZONE class: 
     Reversed the usage of EDGE_ZONE::Pnext and Pback in the list management to be 
-    consistent with other classes and with INSPECTOR::Inspect() and 
+    consistent with other classes and with BOARD_ITEM::IterateForward() and 
     BOARD::~BOARD().
 
 
