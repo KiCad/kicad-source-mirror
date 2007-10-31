@@ -433,6 +433,8 @@ public:
 
     EDGE_ZONE* Next() { return (EDGE_ZONE*) Pnext; }
 
+    EDGE_ZONE* Back() { return (EDGE_ZONE*) Pback; }
+    
     
     /**
      * Function Save

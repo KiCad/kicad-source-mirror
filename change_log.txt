@@ -16,9 +16,14 @@ email address.
 + all
   * Added Doxygen configuration file, whose standard name is Doxyfile.  Output
     is set to go to ./doxygen directory just off the project tree.
-  * added a note to todo.txt which asks folks to start using "Doxygen compatible"
+  * Added a note to todo.txt which asks folks to start using "Doxygen compatible"
     comments in member functions and classes.  Run Doxygen on the project, then
     look at the documentation for class INSPECTOR as an example.
++ pcbnew
+    zones.cpp, Trace_Pcb(), & EDGE_ZONE class: 
+    Reversed the usage of EDGE_ZONE::Pnext and Pback in the list management to be 
+    consistent with other classes and with INSPECTOR::Inspect() and 
+    BOARD::~BOARD().
 
 
 2007-Oct-31 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>

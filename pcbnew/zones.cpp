@@ -433,24 +433,22 @@ void WinEDA_PcbFrame::Edit_Zone_Width( wxDC* DC, SEGZONE* aZone )
 
 
 /**********************************************************/
-void WinEDA_PcbFrame::Delete_Zone( wxDC* DC, SEGZONE* Zone )
+void WinEDA_PcbFrame::Delete_Zone( wxDC* DC, SEGZONE* aZone )
 /**********************************************************/
 
 /* Efface la zone Zone.
  *  La zone est constituee des segments zones de meme TimeStamp
  */
 {
-    unsigned long TimeStamp;
     int           nb_segm = 0;
     bool          modify  = FALSE;
-
-    TimeStamp = Zone->m_TimeStamp;
 
     SEGZONE* next;
     for( SEGZONE* zone = m_Pcb->m_Zone;   zone;   zone = next )
     {
         next = zone->Next();
-        if( zone->m_TimeStamp == TimeStamp )
+        
+        if( zone->m_TimeStamp == aZone->m_TimeStamp )
         {
             modify = TRUE;
             
@@ -473,28 +471,27 @@ EDGE_ZONE* WinEDA_PcbFrame::Del_SegmEdgeZone( wxDC* DC, EDGE_ZONE* edge_zone )
 /*****************************************************************************/
 /* Routine d'effacement du segment de limite zone en cours de trace */
 {
-    EDGE_ZONE* Segm, * previous_segm;
+    EDGE_ZONE*  segm;
 
     if( m_Pcb->m_CurrentLimitZone )
-        Segm = m_Pcb->m_CurrentLimitZone;
+        segm = m_Pcb->m_CurrentLimitZone;
     else
-        Segm = edge_zone;
+        segm = edge_zone;
 
-    if( Segm == NULL )
+    if( segm == NULL )
         return NULL;
 
-    Trace_DrawSegmentPcb( DrawPanel, DC, Segm, GR_XOR );
+    Trace_DrawSegmentPcb( DrawPanel, DC, segm, GR_XOR );
 
-    previous_segm = (EDGE_ZONE*) Segm->Pback;
-    delete Segm;
+    m_Pcb->m_CurrentLimitZone = segm->Next();
+    delete segm;
 
-    Segm = previous_segm;
-    m_Pcb->m_CurrentLimitZone = Segm;
-    SetCurItem( Segm );
+    segm = m_Pcb->m_CurrentLimitZone;
+    SetCurItem( segm );
 
-    if( Segm )
+    if( segm )
     {
-        Segm->Pnext = NULL;
+        segm->Pback = NULL;
         if( DrawPanel->ManageCurseur )
             DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
     }
@@ -504,7 +501,7 @@ EDGE_ZONE* WinEDA_PcbFrame::Del_SegmEdgeZone( wxDC* DC, EDGE_ZONE* edge_zone )
         DrawPanel->ForceCloseManageCurseur = NULL;
         SetCurItem( NULL );
     }
-    return Segm;
+    return segm;
 }
 
 
@@ -639,20 +636,18 @@ void WinEDA_BasePcbFrame::DelLimitesZone( wxDC* DC, bool Redraw )
         return;
 
     // erase the old zone border, one segment at a time
-    segment = m_Pcb->m_CurrentLimitZone;
-    for( ; segment != NULL; segment = next )
+    for( segment = m_Pcb->m_CurrentLimitZone; segment; segment = next )
     {
-        next = (EDGE_ZONE*) segment->Pback;
+        next = segment->Next();
         
         if( Redraw )
             Trace_DrawSegmentPcb( DrawPanel, DC, segment, GR_XOR );
         
-        segment->Pnext = NULL; 
         delete segment;
     }
+    m_Pcb->m_CurrentLimitZone = NULL;
 
     SetCurItem( NULL );
-    m_Pcb->m_CurrentLimitZone = NULL;
 }
 
 
@@ -678,10 +673,10 @@ EDGE_ZONE* WinEDA_PcbFrame::Begin_Zone()
         newedge->SetLayer( GetScreen()->m_Active_Layer );
         
         // link into list:
-        newedge->Pback   = oldedge;
+        newedge->Pnext   = oldedge;
 
         if( oldedge )
-            oldedge->Pnext = newedge;
+            oldedge->Pback = newedge;
         
         m_Pcb->m_CurrentLimitZone = newedge;
         
@@ -701,8 +696,8 @@ EDGE_ZONE* WinEDA_PcbFrame::Begin_Zone()
             newedge->SetLayer( GetScreen()->m_Active_Layer );
             
             // link into list:
-            newedge->Pback   = oldedge;
-            oldedge->Pnext   = newedge;
+            newedge->Pnext   = oldedge;
+            oldedge->Pback   = newedge;
             m_Pcb->m_CurrentLimitZone = newedge;
         }
     }
@@ -719,7 +714,7 @@ void WinEDA_PcbFrame::End_Zone( wxDC* DC )
  *  Routine de fin de trace d'une zone (succession de segments)
  */
 {
-    EDGE_ZONE* PtLim;
+    EDGE_ZONE* edge;
 
     if( m_Pcb->m_CurrentLimitZone )
     {
@@ -727,22 +722,22 @@ void WinEDA_PcbFrame::End_Zone( wxDC* DC )
 
         /* le dernier point genere est de longueur tj nulle donc inutile. */
         /* il sera raccorde au point de depart */
-        PtLim = m_Pcb->m_CurrentLimitZone;
-        PtLim->m_Flags &= ~(IS_NEW | IS_MOVED);
+        edge = m_Pcb->m_CurrentLimitZone;
+        edge->m_Flags &= ~(IS_NEW | IS_MOVED);
         
-        while( PtLim && PtLim->Pback )
+        while( edge && edge->Next() )
         {
-            PtLim = (EDGE_ZONE*) PtLim->Pback;
-            if( PtLim->m_Flags & STARTPOINT )
+            edge = edge->Next();
+            if( edge->m_Flags & STARTPOINT )
                 break;
             
-            PtLim->m_Flags &= ~(IS_NEW | IS_MOVED);
+            edge->m_Flags &= ~(IS_NEW | IS_MOVED);
         }
 
-        if( PtLim )
+        if( edge )
         {
-            PtLim->m_Flags &= ~(IS_NEW | IS_MOVED);
-            m_Pcb->m_CurrentLimitZone->m_End = PtLim->m_Start;
+            edge->m_Flags &= ~(IS_NEW | IS_MOVED);
+            m_Pcb->m_CurrentLimitZone->m_End = edge->m_Start;
         }
         Trace_DrawSegmentPcb( DrawPanel, DC, m_Pcb->m_CurrentLimitZone, GR_XOR );
     }
@@ -759,8 +754,9 @@ static void Show_Zone_Edge_While_MoveMouse( WinEDA_DrawPanel* panel, wxDC* DC, b
 /* redessin du contour de la piste  lors des deplacements de la souris
  */
 {
-    EDGE_ZONE*       PtLim, * edgezone;
-    WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) panel->m_Parent;
+    EDGE_ZONE*          edge;
+    EDGE_ZONE*          currentEdge;
+    WinEDA_PcbFrame*    pcbframe = (WinEDA_PcbFrame*) panel->m_Parent;
 
     if( pcbframe->m_Pcb->m_CurrentLimitZone == NULL )
         return;
@@ -768,37 +764,37 @@ static void Show_Zone_Edge_While_MoveMouse( WinEDA_DrawPanel* panel, wxDC* DC, b
     /* efface ancienne position si elle a ete deja dessinee */
     if( erase )
     {
-        PtLim = pcbframe->m_Pcb->m_CurrentLimitZone;
-        for( ; PtLim != NULL; PtLim = (EDGE_ZONE*) PtLim->Pback )
+        edge = pcbframe->m_Pcb->m_CurrentLimitZone;
+        // for( ;  edge; edge = edge->Next() )
         {
-            Trace_DrawSegmentPcb( panel, DC, PtLim, GR_XOR );
+            Trace_DrawSegmentPcb( panel, DC, edge, GR_XOR );
         }
     }
 
     /* mise a jour de la couche */
-    edgezone = PtLim = pcbframe->m_Pcb->m_CurrentLimitZone;
-    for( ; PtLim != NULL; PtLim = (EDGE_ZONE*) PtLim->Pback )
+    for( edge = pcbframe->m_Pcb->m_CurrentLimitZone; edge; edge = edge->Next() )
     {
-        PtLim->SetLayer( pcbframe->GetScreen()->m_Active_Layer );
+        edge->SetLayer( pcbframe->GetScreen()->m_Active_Layer );
     }
 
     /* dessin de la nouvelle piste : mise a jour du point d'arrivee */
+    currentEdge = pcbframe->m_Pcb->m_CurrentLimitZone;
     if( Zone_45_Only )
-    {/* Calcul de l'extremite de la piste pour orientations permises:
-      *                                 horiz,vertical ou 45 degre */
-        edgezone->m_End = pcbframe->GetScreen()->m_Curseur;
-        Calcule_Coord_Extremite_45( edgezone->m_Start.x, edgezone->m_Start.y,
-                                    &edgezone->m_End.x, &edgezone->m_End.y );
+    {
+        // Calcul de l'extremite de la piste pour orientations permises:
+        // horiz,vertical ou 45 degre
+        currentEdge->m_End = pcbframe->GetScreen()->m_Curseur;
+        Calcule_Coord_Extremite_45( currentEdge->m_Start.x, currentEdge->m_Start.y,
+                                    &currentEdge->m_End.x, &currentEdge->m_End.y );
     }
     else    /* ici l'angle d'inclinaison est quelconque */
     {
-        edgezone->m_End = pcbframe->GetScreen()->m_Curseur;
+        currentEdge->m_End = pcbframe->GetScreen()->m_Curseur;
     }
 
-    PtLim = edgezone;
-    for( ; PtLim != NULL; PtLim = (EDGE_ZONE*) PtLim->Pback )
+    // for( ; currentEdge;  currentEdge = currentEdge->Next() )
     {
-        Trace_DrawSegmentPcb( panel, DC, PtLim, GR_XOR );
+        Trace_DrawSegmentPcb( panel, DC, currentEdge, GR_XOR );
     }
 }
 
@@ -852,7 +848,7 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
 
     /* mise a jour de la couche */
     PtLim = m_Pcb->m_CurrentLimitZone;
-    for( ; PtLim != NULL; PtLim = (EDGE_ZONE*) PtLim->Pback )
+    for( ; PtLim != NULL; PtLim = PtLim->Next() )
     {
         Trace_DrawSegmentPcb( DrawPanel, DC, PtLim, GR_XOR );
         PtLim->SetLayer( GetScreen()->m_Active_Layer );
@@ -930,7 +926,7 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
     /* Init des points d'accrochage possibles de la zone:
      *  les pistes du net sont des points d'accrochage convenables*/
     TRACK* pt_segm = m_Pcb->m_Track;
-    for( ; pt_segm != NULL; pt_segm = (TRACK*) pt_segm->Pnext )
+    for( ; pt_segm != NULL; pt_segm = pt_segm->Next() )
     {
         if( g_HightLigth_NetCode != pt_segm->GetNet() )
             continue;
@@ -950,8 +946,7 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
     Route_Layer_BOTTOM = Route_Layer_TOP = GetScreen()->m_Active_Layer;
 
     /* Trace des limites de la zone sur la matrice de routage: */
-    PtLim = m_Pcb->m_CurrentLimitZone;
-    for( ; PtLim != NULL; PtLim = (EDGE_ZONE*) PtLim->Pback )
+    for( PtLim = m_Pcb->m_CurrentLimitZone; PtLim; PtLim=PtLim->Next() )
     {
         int ux0, uy0, ux1, uy1;
         ux0 = PtLim->m_Start.x - m_Pcb->m_BoundaryBox.m_Pos.x;
@@ -1000,8 +995,7 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
 
     /* Trace des limites de la zone sur la matrice de routage
      *  (a pu etre detruit par PlaceCells()) : */
-    PtLim = m_Pcb->m_CurrentLimitZone;
-    for( ; PtLim != NULL; PtLim = (EDGE_ZONE*) PtLim->Pback )
+    for( PtLim = m_Pcb->m_CurrentLimitZone; PtLim; PtLim = PtLim->Next() )
     {
         int ux0, uy0, ux1, uy1;
         ux0 = PtLim->m_Start.x - m_Pcb->m_BoundaryBox.m_Pos.x;
@@ -1103,10 +1097,17 @@ static void Genere_Segments_Zone( WinEDA_PcbFrame* frame, wxDC* DC, int net_code
                     pt_track = new SEGZONE( frame->m_Pcb );
                     pt_track->SetLayer( layer );
                     pt_track->SetNet( net_code );
+                    
                     pt_track->m_Width     = g_GridRoutingSize;
-                    pt_track->m_Start.x   = ux0; pt_track->m_Start.y = uy0;
-                    pt_track->m_End.x     = ux1; pt_track->m_End.y = uy1;
+                    
+                    pt_track->m_Start.x   = ux0; 
+                    pt_track->m_Start.y   = uy0;
+                    
+                    pt_track->m_End.x     = ux1; 
+                    pt_track->m_End.y     = uy1;
+                    
                     pt_track->m_TimeStamp = s_TimeStamp;
+                    
                     pt_track->Insert( frame->m_Pcb, NULL );
                     pt_track->Draw( frame->DrawPanel, DC, GR_OR );
                     nbsegm++;
@@ -1142,8 +1143,13 @@ static void Genere_Segments_Zone( WinEDA_PcbFrame* frame, wxDC* DC, int net_code
                     pt_track->SetLayer( layer );
                     pt_track->m_Width     = g_GridRoutingSize;
                     pt_track->SetNet( net_code );
-                    pt_track->m_Start.x   = ux0; pt_track->m_Start.y = uy0;
-                    pt_track->m_End.x     = ux1; pt_track->m_End.y = uy1;
+                    
+                    pt_track->m_Start.x   = ux0; 
+                    pt_track->m_Start.y   = uy0;
+                    
+                    pt_track->m_End.x     = ux1; 
+                    pt_track->m_End.y     = uy1;
+                    
                     pt_track->m_TimeStamp = s_TimeStamp;
                     pt_track->Insert( frame->m_Pcb, NULL );
                     pt_track->Draw( frame->DrawPanel, DC, GR_OR );
@@ -1314,6 +1320,7 @@ static bool Genere_Pad_Connexion( WinEDA_PcbFrame* frame, wxDC* DC, int layer )
 
     if( frame->m_Pcb->m_Zone == NULL )
         return FALSE;                                       /* pas de zone */
+    
     if( frame->m_Pcb->m_Zone->m_TimeStamp != s_TimeStamp )  /* c'est une autre zone */
         return FALSE;
 

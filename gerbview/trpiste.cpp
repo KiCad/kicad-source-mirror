@@ -247,14 +247,16 @@ void Trace_DrawSegmentPcb( WinEDA_DrawPanel* panel, wxDC* DC,
     /* coord de depart */
     ux0 = PtDrawSegment->m_Start.x;
     uy0 = PtDrawSegment->m_Start.y;
+    
     /* coord d'arrivee */
     dx = PtDrawSegment->m_End.x;
     dy = PtDrawSegment->m_End.y;
 
-
     mode = DisplayOpt.DisplayPcbTrackFill ? FILLED : SKETCH;
+    
     if( PtDrawSegment->m_Flags & FORCE_SKETCH )
         mode = SKETCH;
+    
     if( l_piste < (L_MIN_DESSIN * zoom) )
         mode = FILAIRE;
 

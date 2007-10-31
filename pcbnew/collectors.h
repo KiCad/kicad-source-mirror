@@ -37,9 +37,9 @@
 
 /**
  * Class COLLECTORS_GUIDE
- * is an abstract base class whose derivatives may be passed to a GENERALCOLLECTOR, 
- * telling GENERALCOLLECTOR what should be collected (aside from HitTest()ing 
- * and KICAD_T scanTypes[], information which are provided to the GENERALCOLLECTOR 
+ * is an abstract base class whose derivatives may be passed to a GENERAL_COLLECTOR, 
+ * telling GENERAL_COLLECTOR what should be collected (aside from HitTest()ing 
+ * and KICAD_T scanTypes[], information which are provided to the GENERAL_COLLECTOR 
  * through attributes or arguments separately). 
  * <p>
  * A justification for this class is to keep the structural storage details of
@@ -113,7 +113,7 @@ public:
 
     /**
      * Function IgnoreMTextsMarkedNoShow
-     * @return bool -true if MTexts marked as "no show" should be ignored.
+     * @return bool - true if MTexts marked as "no show" should be ignored.
      */
     virtual     bool IgnoreMTextsMarkedNoShow() const = 0;
     
@@ -302,7 +302,7 @@ public:
     
     /**
      * Function Collect
-     * scans a BOARD using this class's Inspector method, which does the collection.
+     * scans a BOARD_ITEM using this class's Inspector method, which does the collection.
      * @param aItem A BOARD_ITEM to scan, may be a BOARD or MODULE, or whatever.
      * @param aScanList A list of KICAD_Ts with a terminating EOT, that specs 
      *  what is to be collected and the priority order of the resultant 
@@ -460,7 +460,7 @@ public:
     
     /**
      * Function IgnoreMTextsMarkedNoShow
-     * @return bool -true if MTexts marked as "no show" should be ignored.
+     * @return bool - true if MTexts marked as "no show" should be ignored.
      */
     bool IgnoreMTextsMarkedNoShow() const { return m_IgnoreMTextsMarkedNoShow; }
     void SetIgnoreMTextsMarkedNoShow( bool ignore ) { m_IgnoreMTextsMarkedNoShow = ignore; }
