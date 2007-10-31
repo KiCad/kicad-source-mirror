@@ -98,11 +98,15 @@ int GRMapY( int y )
 }
 
 
-#define WHEN_OUTSIDE return
+#define WHEN_OUTSIDE return true;
 #define WHEN_INSIDE
 
 
-static inline void clip_line( int& x1, int& y1, int& x2, int& y2 )
+/**
+ * Function clip_line
+ * @return bool - true when WHEN_OUTSIDE fires, else false.
+ */ 
+static inline bool clip_line( int& x1, int& y1, int& x2, int& y2 )
 {
     int temp;
 
@@ -197,6 +201,8 @@ static inline void clip_line( int& x1, int& y1, int& x2, int& y2 )
             WHEN_INSIDE;
         }
     }
+    
+    return false;
 }
 
 
@@ -220,7 +226,8 @@ static void WinClipAndDrawLine( EDA_Rect* ClipBox, wxDC* DC,
         xcliphi += width;
         ycliphi += width;
 
-        clip_line( x1, y1, x2, y2 );
+        if( clip_line( x1, y1, x2, y2 ) )
+            return;
     }
 
     GRSetColorPen( DC, Color, width );
@@ -673,7 +680,8 @@ void GRSCSegm( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int 
         xcliphi += width;
         ycliphi += width;
 
-        clip_line( x1, y1, x2, y2 );
+        if( clip_line( x1, y1, x2, y2 ) )
+            return;
     }
 
 
