@@ -724,6 +724,11 @@ public:
     EDGE_ZONE*          Del_SegmEdgeZone( wxDC* DC, EDGE_ZONE* edge_zone );
     void                CaptureNetName( wxDC* DC );
     EDGE_ZONE*          Begin_Zone();
+    
+    /**
+     * Function End_Zone
+     * terminates the zone edge creation process
+     */
     void                End_Zone( wxDC* DC );
     void                Fill_Zone( wxDC* DC );
 

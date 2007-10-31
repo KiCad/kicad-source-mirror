@@ -5,11 +5,21 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2007-Oct-31 UPDATE   Dick Hollenbeck <dickelbeck@yahoo.com>
+================================================================================
++ all
+  * Added Doxygen configuration file, whose standard name is Doxyfile.  Output
+    is set to go to ./doxygen directory just off the project tree.
+  * added a note to todo.txt which asks folks to start using "Doxygen compatible"
+    comments in member functions and classes.  Run Doxygen on the project, then
+    look at the documentation for class INSPECTOR as an example.
+
+
 2007-Oct-31 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +all:
-	gcc 4.2.1 compatibility: change char * to const char * whenever it was necessary,
-	mainly in .xpm files
+    gcc 4.2.1 compatibility: change char * to const char * whenever it was necessary,
+    mainly in .xpm files
 
 
 2007-Oct-30 UPDATE   Dick Hollenbeck <dick@softplc.com>
@@ -34,11 +44,11 @@ email address.
 2007-Oct-30 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +cvpcb: listboxes.cpp problem solved: exists only under windows
-	now apply to windows only, because this Workaround creates a problem undex linux 
+    now apply to windows only, because this Workaround creates a problem undex linux 
 +others:
-	some very minor problems solved
+    some very minor problems solved
 +eeschema:
-	in B.O.M.: the footprint field can be added to the field list
+    in B.O.M.: the footprint field can be added to the field list
 
     
 2007-Oct-29 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
@@ -48,33 +58,33 @@ email address.
      and if the selected item is near the end of the long list,
      the new list is not displayed from the top of the list box
 +eeschema:
-	Implemented: graying in/out of "Edit/Undo", "Edit/Redo" menu items, 
-	when Undo/Redo stack is empty/filled.
+    Implemented: graying in/out of "Edit/Undo", "Edit/Redo" menu items, 
+    when Undo/Redo stack is empty/filled.
 +pcbnew:
-	Implemented: action for ID_POPUP_PCB_DELETE_MARKER
+    Implemented: action for ID_POPUP_PCB_DELETE_MARKER
 
 
 2007-Oct-27 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + all:
-	remove unused files.
-	some translations
+    remove unused files.
+    some translations
 +cvpcb:
-	set flag wxFRAME_FLOAT_ON_PARENT when create the footprint 3D frame and the
-	display frame
-	minor other changes
+    set flag wxFRAME_FLOAT_ON_PARENT when create the footprint 3D frame and the
+    display frame
+    minor other changes
 + pcbnew:
-	Use collector class to locate items in modedit.
-	This is a big enhancement,
-	but a small work for me because Dick made all the work. 
+    Use collector class to locate items in modedit.
+    This is a big enhancement,
+    but a small work for me because Dick made all the work. 
 
 
 2007-Oct-26 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew:
-	Add class_marker.cpp and class_marker.h and move MARQUEUR functions in class_marker.cpp
-	Change MARQUEUR::HitTest to take in account the zoom level.
-	change global var EDA_Appl to g_EDA_Appl
+    Add class_marker.cpp and class_marker.h and move MARQUEUR functions in class_marker.cpp
+    Change MARQUEUR::HitTest to take in account the zoom level.
+    change global var EDA_Appl to g_EDA_Appl
 
 
 2007-Oct-25 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
@@ -91,8 +101,8 @@ email address.
 2007-Oct-24 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + cvpcb:
-	2 missing .prj files added (and updated)
-	dialog_display_option.cpp is rebuild from its dialog_display_option.prj source
+    2 missing .prj files added (and updated)
+    dialog_display_option.cpp is rebuild from its dialog_display_option.prj source
 
 
 2007-Oct-23 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
@@ -120,12 +130,12 @@ email address.
 2007-Oct-21 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew:
-	rename dialog_clean_pcb.pjd to cleaningoptions_dialog.pjd, 
-	accordind to the corresponding cpp filename.
-	enter the new tool tips in cleaningoptions_dialog.pjd.
+    rename dialog_clean_pcb.pjd to cleaningoptions_dialog.pjd, 
+    accordind to the corresponding cpp filename.
+    enter the new tool tips in cleaningoptions_dialog.pjd.
 +all:
-	USE_RESIZE_BORDER is now defined (default) in fctsys.h.
-	Therefore, under windows, dialogs are now resizable (like under unix)
+    USE_RESIZE_BORDER is now defined (default) in fctsys.h.
+    Therefore, under windows, dialogs are now resizable (like under unix)
 
 
 2007-Oct-21 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
@@ -150,10 +160,10 @@ email address.
 2007-Oct-17 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew:
-	Removed enhancements in connectivity computation because
-	rastnest computation does not work (errors) with short track segments
-	(lenght < width) . This is not a bug, but an algorithm problem, so
-	I must work on algos.
+    Removed enhancements in connectivity computation because
+    rastnest computation does not work (errors) with short track segments
+    (lenght < width) . This is not a bug, but an algorithm problem, so
+    I must work on algos.
 
 
 2007-Oct-17 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
@@ -167,19 +177,19 @@ email address.
 2007-Oct-13 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew:
-	remove a change for Read VIA because via attributes
-	(TROUGH VIA, BLIND VIA or BURIED VIA) are autorisations for layer connection,
-	and are not a real layer indicator. 
-	If a via connect layers from copper to component, it can have a BURIED VIA attribute.
-	the meaning is for this via the layer pair can be changed for other layer pair
-	if after editing this via connect 2 tracks which are only int internal layers,
-	its layer pair can be changed.
-	If a via has a TROUGH VIA attribute, it connects ALL layers, whenever tracks
-	connected to it.
-	Note: curenty: only TROUGH VIA are handled.
-	Other types (BLIND VIA and BURIED VIA) are only experimental.
-	A **lot** of code is needed for a full support.
-	enhancements in connectivity computation
+    remove a change for Read VIA because via attributes
+    (TROUGH VIA, BLIND VIA or BURIED VIA) are autorisations for layer connection,
+    and are not a real layer indicator. 
+    If a via connect layers from copper to component, it can have a BURIED VIA attribute.
+    the meaning is for this via the layer pair can be changed for other layer pair
+    if after editing this via connect 2 tracks which are only int internal layers,
+    its layer pair can be changed.
+    If a via has a TROUGH VIA attribute, it connects ALL layers, whenever tracks
+    connected to it.
+    Note: curenty: only TROUGH VIA are handled.
+    Other types (BLIND VIA and BURIED VIA) are only experimental.
+    A **lot** of code is needed for a full support.
+    enhancements in connectivity computation
 
 
 2007-Oct-15 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
@@ -202,11 +212,11 @@ email address.
 2007-Oct-13 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew:
-	ratsnest.cpp translated into english.
-	Many infos on the LEE algorithm used here added.
-	todo (by myself): connect.cpp translation.
-	onrightclick() bug (created by last change) solved: one could reselect an item,
-	while moving a previously selected item (pcbnew crashes).
+    ratsnest.cpp translated into english.
+    Many infos on the LEE algorithm used here added.
+    todo (by myself): connect.cpp translation.
+    onrightclick() bug (created by last change) solved: one could reselect an item,
+    while moving a previously selected item (pcbnew crashes).
 
 
 2007-Oct-13 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
@@ -342,7 +352,7 @@ email address.
 2007-Oct-09 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + eeschema:
-	cross-probing minor bug solved ( due to last modification): pins/pads not probed
+    cross-probing minor bug solved ( due to last modification): pins/pads not probed
 
 
 2007-Oct-08 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
@@ -355,15 +365,15 @@ email address.
 2007-Oct-7 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + eeschema
-	create new file cross-probing.cpp
-	move RemoteCommand() to cross-probing.cpp and create SendMessageToPCBNEW()
+    create new file cross-probing.cpp
+    move RemoteCommand() to cross-probing.cpp and create SendMessageToPCBNEW()
 
 + pcbnew
-	bug in move pad fixed (could crash pcbnew)
-	Small change in selection clarification (side effect removed):
-	- Escape or click on title does not show the next popup menu.
-	- the title is displayed under linux
-	- definition CUIVRE_N translated into COPPER_LAYER_N
+    bug in move pad fixed (could crash pcbnew)
+    Small change in selection clarification (side effect removed):
+    - Escape or click on title does not show the next popup menu.
+    - the title is displayed under linux
+    - definition CUIVRE_N translated into COPPER_LAYER_N
 
 
 2007-Oct-07 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
@@ -417,8 +427,8 @@ email address.
 2007-Oct-6 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew
-	create new file cross-probing.cpp
-	move RemoteCommand() and SendMessageToEESCHEMA() to cross-probing.cpp
+    create new file cross-probing.cpp
+    move RemoteCommand() and SendMessageToEESCHEMA() to cross-probing.cpp
 
 
 2007-Oct-3 UPDATE   Dick Hollenbeck <dick@softplc.com>
@@ -448,15 +458,15 @@ email address.
 2007-Oct-01 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew/eeschema
-	Cross-probing pcbnew to eeschema:
-		A left click on a pad in pcbnew moves the eeschema cursor on the corresponding component pin
-		A left click on a footprint ref or value in pcbnew moves the eeschema cursor on the corresponding component ref or value
-		A left ckick on a footprint moves the eeschema cursor on the corresponding component anchor
+    Cross-probing pcbnew to eeschema:
+        A left click on a pad in pcbnew moves the eeschema cursor on the corresponding component pin
+        A left click on a footprint ref or value in pcbnew moves the eeschema cursor on the corresponding component ref or value
+        A left ckick on a footprint moves the eeschema cursor on the corresponding component anchor
 + pcbnew
-	removed drc.cpp change line 584, and translate comments in english.
-	nothing broken:
-		-> a pad with its netcode = 0 means the pad ** must be left unconnected ** (not attached to *  a net).
-		-> a track with its netcode = 0 means the track is not attached to a net (cannot be connected to any pad).
+    removed drc.cpp change line 584, and translate comments in english.
+    nothing broken:
+        -> a pad with its netcode = 0 means the pad ** must be left unconnected ** (not attached to *  a net).
+        -> a track with its netcode = 0 means the track is not attached to a net (cannot be connected to any pad).
 
 
 2007-Sep-30 UPDATE   Dick Hollenbeck <dick@softplc.com>
@@ -480,20 +490,20 @@ email address.
 2007-Sep-29 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew
-	create new file onleftclick.cpp
-	move onleftcligk() and onleftDcligk() from edit.cpp to onleftclick.cpp
-	
+    create new file onleftclick.cpp
+    move onleftcligk() and onleftDcligk() from edit.cpp to onleftclick.cpp
+    
 
 2007-Sep-27 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + all
     test case for OnLeftClick() handling enhancements.
     TAB key removed, because is not needed for block selection and double click. 
-	(SHIHT ou CTRL or ALT key is sufficient to suppress the popup menu
-	if needed for a double click )
-	Some work is still needed, of course
+    (SHIHT ou CTRL or ALT key is sufficient to suppress the popup menu
+    if needed for a double click )
+    Some work is still needed, of course
 + pcbnew
-	Color grid setting now works
+    Color grid setting now works
 
 
 2007-Sep-26 UPDATE   Dick Hollenbeck <dick@softplc.com>
@@ -529,10 +539,10 @@ email address.
 2007-sept-25 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew:
-	* add class_board_item.cpp file and move BOARD_ITEM::MenuText() and BOARD_ITEM::MenuIcon() in it
-	* Add zone detection, forgotten in PcbGeneralLocateAndDisplay()
+    * add class_board_item.cpp file and move BOARD_ITEM::MenuText() and BOARD_ITEM::MenuIcon() in it
+    * Add zone detection, forgotten in PcbGeneralLocateAndDisplay()
 + class_collector.h:
-	add  void COLLECTOR::Remove( unsigned int item_position ), needed by zone detection, see PcbGeneralLocateAndDisplay
+    add  void COLLECTOR::Remove( unsigned int item_position ), needed by zone detection, see PcbGeneralLocateAndDisplay
 
 
 2007-Sep-25 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
@@ -550,11 +560,11 @@ email address.
 ================================================================================
 + all
     * small change in hotkeys handling
-		(Ki_HotkeyInfo: new member m_IdMenuEvent to call an existing event handler from a hotkey list)
+        (Ki_HotkeyInfo: new member m_IdMenuEvent to call an existing event handler from a hotkey list)
 
 + eeschema:
-	* added drag component in pop up menu and hotkeys
-	* plot svg format: incorrect arc draw fixed
+    * added drag component in pop up menu and hotkeys
+    * plot svg format: incorrect arc draw fixed
 
 
 2007-Sep-22 UPDATE   Dick Hollenbeck <dick@softplc.com>

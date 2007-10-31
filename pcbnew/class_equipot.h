@@ -28,15 +28,17 @@ public:
     EQUIPOT( BOARD_ITEM* StructFather );
     ~EQUIPOT();
 
+    EQUIPOT*    Next() { return (EQUIPOT*) Pnext; }
+    
     /* Effacement memoire de la structure */
-    void    UnLink();
+    void  UnLink();
 
     /* Readind and writing data on files */
-    int     ReadEquipotDescr( FILE* File, int* LineNum );
+    int   ReadEquipotDescr( FILE* File, int* LineNum );
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.pcb" format.
+     * writes the data structures for this object out to a FILE in "*.brd" format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */ 

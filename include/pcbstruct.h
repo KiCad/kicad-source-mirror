@@ -269,18 +269,6 @@ public:
 
 
     /**
-     * Function FindPadOrModule
-     * searches for either a pad or module, giving precedence to pads.
-     * Any Pad or Module on the desired layer that HitTest()s true will be
-     * returned, otherwise any visible Pad or Module on any other layer.
-     * The provided layer must be visible.
-     * @param refPos The wxPoint to hit-test.
-     * @return BOARD_ITEM* - if a direct hit, else NULL.
-     */
-//  BOARD_ITEM* FindPadOrModule( const wxPoint& refPos, int layer );
-    
-
-    /**
      * Function FindNet
      * searches for a net with the given netcode.
      * @param aNetcode A netcode to search for.
@@ -291,7 +279,7 @@ public:
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.pcb" format.
+     * writes the data structures for this object out to a FILE in "*.brd" format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */ 
@@ -382,7 +370,7 @@ public:
     
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.pcb" format.
+     * writes the data structures for this object out to a FILE in "*.brd" format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */ 
@@ -448,7 +436,7 @@ public:
     
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.pcb" format.
+     * writes the data structures for this object out to a FILE in "*.brd" format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */ 

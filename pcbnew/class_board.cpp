@@ -562,17 +562,17 @@ BOARD_ITEM* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
  */
 EQUIPOT* BOARD::FindNet( int anetcode ) const
 {
-    if( anetcode <= 0 )
-        return NULL;
-
-    EQUIPOT* net = (EQUIPOT*) m_Equipots;
-    while( net )
+    // the first valid netcode is 1.
+    // zero is reserved for "no connection" and is not used.
+    if( anetcode > 0 )  
     {
-        if( net->GetNet() == anetcode )
-            break;
-        net = (EQUIPOT*) net->Pnext;
+        for( EQUIPOT* net = m_Equipots;  net;  net=net->Next() )
+        {
+            if( net->GetNet() == anetcode )
+                return net;
+        }
     }
-    return net;
+    return NULL;
 }
 
 

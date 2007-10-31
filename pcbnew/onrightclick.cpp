@@ -165,7 +165,6 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     
     /* Select a proper item */
 
-#if 1   // try this
     wxPoint cursorPos = GetScreen()->m_Curseur;
     wxPoint selectPos = m_Collector->GetRefPos();
     
@@ -173,16 +172,19 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     
     // printf( "cursor=(%d, %d) select=(%d,%d)\n", cursorPos.x, cursorPos.y, selectPos.x, selectPos.y );
     
- 	/* We can reselect an other item only if there are no item being edited
-	*  because ALL moving functions use GetCurItem(),
-    *  therefore GetCurItem() must return the same item during moving.
-	*  We know an item is moving if ( item && (item->m_Flags != 0)) is true
-	*  and after calling PcbGeneralLocateAndDisplay(), GetCurItem() is any arbitrary BOARD_ITEM,
-    *  not the current editen item.
+ 	/*  We can reselect another item only if there are no item being edited
+        because ALL moving functions use GetCurItem(), therefore GetCurItem()
+        must return the same item during moving. We know an item is moving 
+        if( item && (item->m_Flags != 0)) is true and after calling
+        PcbGeneralLocateAndDisplay(), GetCurItem() is any arbitrary BOARD_ITEM,
+        not the current item being edited. In such case we cannot call
+        PcbGeneralLocateAndDisplay().
 	*/
-	if ( ! item || (item->m_Flags == 0) )
+	if( !item || (item->m_Flags == 0) )
 	{
-		if( !item || cursorPos != selectPos )	// Filter
+        // show "item selector" menu only if no item now or selected item was not 
+        // previously picked at this position
+		if( !item || cursorPos != selectPos )	
 		{
 			DrawPanel->m_AbortRequest = false;
 			item = PcbGeneralLocateAndDisplay();
@@ -193,23 +195,6 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 			}
 		}
 	}
-
-#else
-
-    if( !item  || !item->m_Flags )
-    {
-        DrawPanel->m_AbortRequest = false;
-        item = PcbGeneralLocateAndDisplay();
-        if( DrawPanel->m_AbortRequest )
-        {
-            DrawPanel->CursorOn( &dc );
-            return false;
-        }
-
-        SetCurItem( item );
-    }
-#endif
-
 
     item = GetCurItem();
     if( item )

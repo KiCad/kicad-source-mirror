@@ -32,13 +32,18 @@ static inline void ADD_MENUITEM(menu, id, text, icon)
 }
 
 
-*** Set up a DOXYGEN environment starting with a configuration file that:
-- understands the JavaDoc style comments that we have started using
-- gives preference to comments in header files over *.cpp files
-- outputs its HTML stuff relative to the base of trunk, say for example trunk/doxygen
-- is then added to the svn repository (this configuration file only) 
-Then add a shell script and batch file to generate the docs using the config file.
-Then review the generated docs and start to go through the source and make the 
+*** rework zones so they are modifiable and so that the user does not
+need to enter tracks for thru hole pads or vias which connect to a zone.
+I propose a two step solution:
+1) interim enhancement: make zone edges retained in BRD file and make the
+edges editable.
+2) final solution: get rid of requirement for tracks buried within a zone.
+Reivew the GEDA source code and other sources to gather ideas before doing 2).
+
+
+*** Use DOXYGEN compatible comments on member functions.  As configured,
+Doxygen gives priority to comments in header files over *.cpp files.
+Review the generated docs and start to go through the source and make the 
 generated doxygen docs readable and clear using the JavaDoc style comments,
 mostly in the header files.  The error and warning output of the doxygen
 compiler can help with this too.
