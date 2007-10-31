@@ -68,7 +68,8 @@ void WinEDA_MainFrame::AddFastLaunchPy( object & button )
     if ( !success ) return;
 
     Py_INCREF( button.ptr() );
-    AddFastLaunch( btn );
+	btn->Reparent( m_CommandWin );
+    m_CommandWin->AddFastLaunch( btn );
 }
 
 // WinEDA_PrjFrame Special binding functions:

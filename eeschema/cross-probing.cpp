@@ -89,6 +89,7 @@ void WinEDA_SchematicFrame::SendMessageToPCBNEW( EDA_BaseStruct*         objectT
 
 /** Send a remote command to eeschema via a socket,
  * @param objectToSync = item to be located on board (footprint, pad or text)
+ * @param LibItem = component in lib if objectToSync is a sub item of a component
  * Commands are
  * $PART: reference   put cursor on footprint anchor
  * $PIN: number $PART: reference put cursor on the footprint pad

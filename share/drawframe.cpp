@@ -84,7 +84,13 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
         SetSize( 0, 0, minsize.x, minsize.y );
 
     // Creation de la ligne de status
-    static const int dims[6] = { -1, 60, 130, 130, 40, 100 };
+	#define ZOOM_DISPLAY_SIZE 60
+	#define COORD_DISPLAY_SIZE 140
+	#define UNITS_DISPLAY_SIZE 50
+	#define FUNCTION_DISPLAY_SIZE 100
+    static const int dims[6] = { -1, ZOOM_DISPLAY_SIZE,
+		COORD_DISPLAY_SIZE, COORD_DISPLAY_SIZE,
+		UNITS_DISPLAY_SIZE, FUNCTION_DISPLAY_SIZE };
 
     CreateStatusBar( 6 );
     SetStatusWidths( 6, dims );

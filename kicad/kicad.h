@@ -20,8 +20,7 @@ eda_global wxString g_Main_Title
 #endif
 ;
 
-#define WinEDA_CommandFrame wxSashLayoutWindow
-
+class WinEDA_CommandFrame;
 class WinEDA_TreePrj;
 class WinEDA_PrjFrame;
 
@@ -29,6 +28,9 @@ class WinEDA_PrjFrame;
 /* classe pour la Fenetre generale de kicad*/
 /*******************************************/
 
+/* class WinEDA_MainFrame
+ * This is the main kicad frame
+ */
 class WinEDA_MainFrame : public WinEDA_BasicFrame
 {
     /* This class is the main entry point of the py API */
@@ -38,9 +40,9 @@ public:
     WinEDA_PrjFrame*     m_LeftWin;
     wxSashLayoutWindow*  m_BottomWin;
     wxTextCtrl*          m_DialogWin;
-    WinEDA_Toolbar*      m_VToolBar; // Toolbar Vertical bord d'ecran
+    WinEDA_Toolbar*      m_VToolBar; // Verticam Toolbar (not used)
     wxString             m_PrjFileName;
-    
+
     int     m_LeftWin_Width;
     int     m_CommandWin_Height;
 
@@ -50,8 +52,8 @@ private:
 public:
 
     // Constructor and destructor
-    WinEDA_MainFrame( WinEDA_App * eda_app, wxWindow * parent, const wxString &title,
-                      const wxPoint &pos, const wxSize &size );
+    WinEDA_MainFrame( WinEDA_App* eda_app, wxWindow* parent, const wxString& title,
+                      const wxPoint& pos, const wxSize& size );
 
     ~WinEDA_MainFrame();
 
@@ -69,7 +71,6 @@ public:
     void                    Process_Preferences( wxCommandEvent& event );
     void                    ReCreateMenuBar();
     void                    RecreateBaseHToolbar();
-    void                    CreateCommandToolbar();
     void                    PrintMsg( const wxString& text );
     void                    ClearMsg();
     void                    SetLanguage( wxCommandEvent& event );
@@ -83,17 +84,15 @@ public:
 
     boost::python::object   GetPrjName() const;
 
-    WinEDA_MainFrame( const WinEDA_MainFrame & ) {}
-    
-    WinEDA_MainFrame() {}
-    
+    WinEDA_MainFrame( const WinEDA_MainFrame& ) { }
+
+    WinEDA_MainFrame() { }
+
     boost::python::object   ToWx();
     void                    AddFastLaunchPy( boost::python::object& button );
     WinEDA_PrjFrame*        GetTree() const;
 
 #endif
-
-    void                    AddFastLaunch( wxButton* button, int sep = 20 );
 
     DECLARE_EVENT_TABLE()
 };
@@ -114,15 +113,51 @@ enum TreeFileType {
     TREE_MAX,
 };
 
+
+/**************************************************************/
+/* class WinEDA_CommandFrame: window handling command buttons */
+/**************************************************************/
+
+/** class WinEDA_CommandFrame
+ * This is the window handling the main tools to launch eeschema, cvpcb, pcbnew and gerbview
+ */
+class WinEDA_CommandFrame : public wxSashLayoutWindow
+{
+public:
+    WinEDA_CommandFrame( wxWindow* parent, int id, wxPoint pos, wxSize size, long style );
+    ~WinEDA_CommandFrame()
+    { }
+
+    /** Function AddFastLaunch
+      * add a Bitmap Button (fast launch button) to the window
+     */
+public: void AddFastLaunch( wxBitmapButton * button );
+private:
+
+    /** Function CreateCommandToolbar
+      * Create the main buttons (fast launch buttons)
+     */
+    void    CreateCommandToolbar( void );
+
+private:
+    wxPoint m_ButtonLastPosition;   /** position of the last button in the window */
+    int     m_ButtonSeparation;     /** button distance in pixels */
+};
+
+
 /***********************************************************/
 /* Classes pour l'arbre de hierarchie de gestion du projet */
 /***********************************************************/
+
+/** class TreePrjItemData
+ * Handle one item (a file or a directory name) for the tree file
+ */
 class TreePrjItemData : public wxTreeItemData
 {
 public:
     TreeFileType m_Type;
-    bool         m_IsRootFile; // True if m_Filename is a root schematic (same name as project)
-    wxString     m_FileName;
+    bool         m_IsRootFile;  // True if m_Filename is a root schematic (same name as project)
+    wxString     m_FileName;    // Filename for a file, or directory name
 
 private:
     wxTreeCtrl*  m_Parent;
@@ -132,28 +167,34 @@ private:
 public:
 
     TreePrjItemData( TreeFileType type, const wxString& data, wxTreeCtrl* parent );
-    TreePrjItemData() : m_Parent( NULL ) {}
-    
-    TreePrjItemData( const TreePrjItemData &src ) :
-        m_Type( src.m_Type ), 
-        m_FileName( src.m_FileName ), 
-        m_Parent( src.m_Parent ) 
+    TreePrjItemData() : m_Parent( NULL ) { }
+
+    TreePrjItemData( const TreePrjItemData& src ) :
+        m_Type( src.m_Type )
+        , m_FileName( src.m_FileName )
+        , m_Parent( src.m_Parent )
     {
         SetState( src.m_State );
     }
+
 
     TreeFileType GetType() const
     {
         return m_Type;
     }
+
+
     wxString GetFileName() const
     {
         return m_FileName;
     }
+
+
     void SetFileName( const wxString& name )
     {
         m_FileName = name;
     }
+
 
     wxString    GetDir() const;
 
@@ -167,7 +208,8 @@ public:
     {
         return &m_fileMenu;
     }
-    
+
+
     void                    SetState( int state );
 
 #ifdef KICAD_PYTHON
@@ -183,14 +225,16 @@ public:
 #endif
 };
 
-/* Fenetre d'affichage des fichiers du projet */
+/** class WinEDA_PrjFrame
+ * Window to display the tree files
+ */
 class WinEDA_PrjFrame : public wxSashLayoutWindow
 {
 private:
 
     std::vector<wxMenu*>    m_ContextMenus;
     std::vector<wxString>   m_Filters;
-    
+
     wxMenu*  m_PopupMenu;
     wxCursor m_DragCursor;
     wxCursor m_Default;
@@ -210,8 +254,8 @@ public:
 public:
     static wxString                 GetFileExt( TreeFileType type );
 
-    WinEDA_PrjFrame( WinEDA_MainFrame * parent,
-                     const wxPoint &pos, const wxSize &size );
+    WinEDA_PrjFrame( WinEDA_MainFrame* parent,
+                     const wxPoint& pos, const wxSize& size );
     ~WinEDA_PrjFrame() { }
     void                            OnSelect( wxTreeEvent& Event );
     void                            OnRenameAsk( wxTreeEvent& Event );
@@ -243,16 +287,21 @@ public:
 #ifdef KICAD_PYTHON
     boost::python::object           ToWx();
 
-    WinEDA_PrjFrame() {
+    WinEDA_PrjFrame()
+    {
     }
-    WinEDA_PrjFrame( const WinEDA_PrjFrame & ) {
+
+
+    WinEDA_PrjFrame( const WinEDA_PrjFrame& )
+    {
     }
+
 
     void                    OnRunPy( wxCommandEvent& event );
 
-    boost::python::object   GetMenuPy( TreeFileType );
+    boost::python::object GetMenuPy( TreeFileType );
 
-    boost::python::object   GetFtExPy( TreeFileType ) const;
+    boost::python::object GetFtExPy( TreeFileType ) const;
 
     void                    RemoveFilterPy( const boost::python::str& filter );
     void                    AddFilter( const boost::python::str& filter );
@@ -261,8 +310,8 @@ public:
     TreePrjItemData*        GetItemData( const boost::python::object& item );
     void                    AddFilePy( const boost::python::str& name, boost::python::object& root );
     void                    NewFilePy( const boost::python::str& name,
-                                       TreeFileType type,
-                                       boost::python::object& root );
+                                       TreeFileType              type,
+                                       boost::python::object&    root );
 
     TreePrjItemData*        FindItemData( const boost::python::str& name );
 
@@ -277,7 +326,9 @@ public:
 };
 
 
-/** Classe TreeCtrl des fichiers projets **/
+/** Class TreeCtrl
+ * This is the class to show (as a tree) the files in the project directory
+ */
 class WinEDA_TreePrj : public wxTreeCtrl
 {
     DECLARE_DYNAMIC_CLASS( WinEDA_TreePrj )
@@ -291,7 +342,9 @@ public:
     {
         return m_Parent;
     }
-    WinEDA_TreePrj( WinEDA_PrjFrame * parent );
+
+
+    WinEDA_TreePrj( WinEDA_PrjFrame* parent );
     ~WinEDA_TreePrj();
 private:
     /* overlayed sort function */
@@ -303,10 +356,10 @@ eda_global wxString g_SchematicRootFileName;
 eda_global wxString g_BoardFileName;
 
 #ifdef MAIN
-wxString    g_SchExtBuffer( wxT( ".sch" ) );
-wxString    g_BoardExtBuffer( wxT( ".brd" ) );
-wxString    g_NetlistExtBuffer( wxT( ".net" ) );
-wxString    g_GerberExtBuffer( wxT( ".pho" ) );
+wxString            g_SchExtBuffer( wxT( ".sch" ) );
+wxString            g_BoardExtBuffer( wxT( ".brd" ) );
+wxString            g_NetlistExtBuffer( wxT( ".net" ) );
+wxString            g_GerberExtBuffer( wxT( ".pho" ) );
 
 #else
 eda_global wxString g_SchExtBuffer;

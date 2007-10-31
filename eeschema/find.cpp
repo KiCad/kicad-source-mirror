@@ -67,7 +67,8 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindComponentAndItem(
 /**
  * Function FindComponentAndItem
  * finds a Component in the schematic, and an item in this component.
- * @param pattern The text to search for, either in value, reference or elsewhere.
+ * @param component_reference The component reference to find.
+ * @param text_to_find The text to search for, either in value, reference or elsewhere.
  * @param Find_in_hierarchy:  false => Search is made in current sheet
  *                     true => the whole hierarchy
  * @param SearchType:  0 => find component

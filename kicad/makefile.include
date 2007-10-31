@@ -8,9 +8,10 @@ OBJECTS = kicad.o\
 		treeprj_datas.o\
 		buildmnu.o\
 		infospgm.o\
-		mdiframe.o\
+		mainframe.o\
 		prjconfig.o\
 		preferences.o\
+		commandframe.o\
 		files-io.o
 
 
@@ -24,7 +25,7 @@ prjconfig.o: prjconfig.cpp $(DEPEND) prjconfig.h
 
 files-io.o: files-io.cpp $(DEPEND) kicad.h
 
-mdiframe.o: mdiframe.cpp $(DEPEND) kicad.h
+mainframe.o: mainframe.cpp $(DEPEND) kicad.h
 
 buildmnu.o: buildmnu.cpp $(DEPEND) kicad.h
 
