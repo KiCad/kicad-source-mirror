@@ -35,20 +35,21 @@
 ////@begin XPM images
 ////@end XPM images
 
-/* Routines Locales */
+/* Local functions */
 static void Display_Zone_Netname( WinEDA_PcbFrame* frame );
 static void Exit_Zones( WinEDA_DrawPanel* Panel, wxDC* DC );
 static void Show_Zone_Edge_While_MoveMouse( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 static void Genere_Segments_Zone( WinEDA_PcbFrame* frame, wxDC* DC, int net_code );
 static bool Genere_Pad_Connexion( WinEDA_PcbFrame* frame, wxDC* DC, int layer );
 
-/* Variables locales */
+/* Local variables */
 static bool          Zone_Debug        = FALSE;
 static bool          Zone_45_Only      = FALSE;
 static bool          Zone_Exclude_Pads = TRUE;
-static bool          Zone_Genere_Freins_Thermiques = TRUE;
+static bool          s_Zone_Create_Thermal_Relief = TRUE;
 
-static unsigned long s_TimeStamp;           /* signature temporelle pour la zone generee */
+/* Time stamp comon to all segments relative to the new created zone */
+static unsigned long s_TimeStamp; 
 
 /*!
  * WinEDA_ZoneFrame type definition
@@ -262,7 +263,7 @@ void WinEDA_ZoneFrame::CreateControls()
 
     if( Zone_Exclude_Pads )
     {
-        if( Zone_Genere_Freins_Thermiques )
+        if( s_Zone_Create_Thermal_Relief )
             m_FillOpt->SetSelection( 1 );
         else
             m_FillOpt->SetSelection( 2 );
@@ -335,17 +336,17 @@ void WinEDA_ZoneFrame::ExecFillZone( wxCommandEvent& event )
     {
     case 0:
         Zone_Exclude_Pads = FALSE;
-        Zone_Genere_Freins_Thermiques = FALSE;
+        s_Zone_Create_Thermal_Relief = FALSE;
         break;
 
     case 1:
         Zone_Exclude_Pads = TRUE;
-        Zone_Genere_Freins_Thermiques = TRUE;
+        s_Zone_Create_Thermal_Relief = TRUE;
         break;
 
     case 2:
         Zone_Exclude_Pads = TRUE;
-        Zone_Genere_Freins_Thermiques = FALSE;
+        s_Zone_Create_Thermal_Relief = FALSE;
         break;
     }
 
@@ -803,19 +804,15 @@ static void Show_Zone_Edge_While_MoveMouse( WinEDA_DrawPanel* panel, wxDC* DC, b
 void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
 /**********************************************/
 
-/*
- *  Fonction generale de creation de zone
- *  Un contour de zone doit exister, sinon l'ensemble du PCB est utilise
- *
- *  ce qui permet de creer des obstacles et donc des parties non remplies.
- *
- *  Le remplissage s'effectue a partir du point d'ancrage, jusque ves les limites
- *
- *
- *  On place la zone sur la couche (layer) active.
- *
- *
- *  "Hight Light" la zone fera partie de ce net
+/** Function Fill_Zone()
+ *  Init the zone filling
+ *  If a zone edge is found, it is used. 
+ *  Otherwise the whole board is filled by the zone
+ *  The zone edge is a frontier, and can be complex. So non filled zones can be achieved
+ *  The zone is put on the active layer
+ *  If a net is hightlighted, the zone will be attached to this net
+ *  The filling start from a starting point.
+ *  If a net is selected, all tracks attached to this net are also starting points 
  */
 {
     int        ii, jj;
@@ -910,7 +907,7 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
     lp_tmp = g_DesignSettings.m_CurrentTrackWidth;
     g_DesignSettings.m_CurrentTrackWidth = g_GridRoutingSize;
 
-    /* Affichage du NetName */
+    /* Shos the NetName */
     if( g_HightLigth_NetCode > 0 )
     {
         pt_equipot = m_Pcb->FindNet( g_HightLigth_NetCode );
@@ -927,8 +924,8 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
 
     Affiche_1_Parametre( this, 22, _( "NetName" ), msg, RED );
 
-    /* Init des points d'accrochage possibles de la zone:
-     *  les pistes du net sont des points d'accrochage convenables*/
+    /* Create the starting point for thz zone:
+     * The starting point and all the tracks are suitable "starting points" */
     TRACK* pt_segm = m_Pcb->m_Track;
     for( ; pt_segm != NULL; pt_segm = pt_segm->Next() )
     {
@@ -997,8 +994,8 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
     PlaceCells( m_Pcb, g_HightLigth_NetCode, ii );
     Affiche_1_Parametre( this, -1, wxEmptyString, _( "Ok" ), RED );
 
-    /* Trace des limites de la zone sur la matrice de routage
-     *  (a pu etre detruit par PlaceCells()) : */
+    /* Create zone limits on the routing matrix
+     *  (colud be deleted by PlaceCells()) : */
     for( PtLim = m_Pcb->m_CurrentLimitZone; PtLim; PtLim = PtLim->Next() )
     {
         int ux0, uy0, ux1, uy1;
@@ -1009,14 +1006,14 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
         TraceLignePcb( ux0, uy0, ux1, uy1, -1, HOLE | CELL_is_EDGE, WRITE_CELL );
     }
 
-    /* Init du point d'accrochage de la zone donn√© par la position souris
-     *  (a pu etre detruit par PlaceCells()) : */
+    /* Init the starting point for zone filling : this is the mouse position
+     *  (could be deleted by PlaceCells()) : */
     OrCell( ZoneStartFill.y, ZoneStartFill.x, BOTTOM, CELL_is_ZONE );
 
     if( Zone_Debug )
         DisplayBoard( DrawPanel, DC );
 
-    /* Remplissage des cellules (creation effective de la zone)*/
+    /* Filling the cells of the matrix (tjis is the zone building)*/
     ii = 1; jj = 1;
     while( ii )
     {
@@ -1028,15 +1025,15 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
     if( Zone_Debug )
         DisplayBoard( DrawPanel, DC );
 
-    /* Generation des segments de piste type Zone correspondants*/
+    /* Convert the matrix information (cells) to segments which are actually the zone */
     if( g_HightLigth_NetCode < 0 )
         Genere_Segments_Zone( this, DC, 0 );
     else
         Genere_Segments_Zone( this, DC, g_HightLigth_NetCode );
 
-    /* Trace des connexions type frein thermique */
+    /* Create the thermal reliefs */
     g_DesignSettings.m_CurrentTrackWidth = lp_tmp;
-    if( Zone_Exclude_Pads && Zone_Genere_Freins_Thermiques )
+    if( Zone_Exclude_Pads && s_Zone_Create_Thermal_Relief )
         Genere_Pad_Connexion( this, DC, GetScreen()->m_Active_Layer );
 
     g_DesignSettings.m_TrackClearence = save_isol;
@@ -1056,15 +1053,18 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
 static void Genere_Segments_Zone( WinEDA_PcbFrame* frame, wxDC* DC, int net_code )
 /*******************************************************************************/
 
-/* Genere les segments de piste dans les limites de la zone a remplir
- *  Algorithme:
- *      procede en 2 balayages
- *          - Gauche->droite
- *          - Haut->Bas
- *  Parametres:
- *      net_code = net_code a attribuer au segment de zone
- *      TimeStamp(global): signature temporelle d'identification
- *          (mis en .start)
+/** Function Genere_Segments_Zone()
+  * Create the zone segments from the routing matrix structure
+ *  Algorithm:
+ * Search for consecutive cells (flagged "zone") , and create segments
+*  from the first cell to the last cell in the matrix
+ *      2 searchs are made
+ *          1 - From left to right and create horizontal zone segments 
+ *          2 - From top to bottom, and create vertical zone segm˘ents
+ * @param net_code = net_code common to all segment zone created
+ * @param DC = current device context
+ * @param frame = current WinEDA_PcbFrame
+ * global: parameter TimeStamp: time stamp common to all segment zone created
  */
 {
     int      row, col;
@@ -1173,24 +1173,28 @@ static void Genere_Segments_Zone( WinEDA_PcbFrame* frame, wxDC* DC, int net_code
 int Propagation( WinEDA_PcbFrame* frame )
 /********************************************/
 
-/* Determine les cellules inscrites dans les limites de la zone a remplir
- *  Algorithme:
- *  Si une cellule disponible a un voisin faisant partie de la zone, elle
- *  devient elle meme partie de la zone
- *  On procede en 4 balayages de la matrice des cellules
- *          - Gauche->droite de Haut->bas
- *          - Droite->gauche de Haut->bas
- *          - Bas->Haut de Droite->gauche
- *          - Bas->Haut de Gauche->Droite
- *      et pour chaque balayage, on considere des 2 cellules voisines de
- *  la cellule courants: cellule precedente sur la ligne et cellule precedente
- *  sur la colonne.
+/** Function Propagation()
+ * An important function to calculate zones
+ * Uses the routing matrix to fill the cells within the zone
+ * Search and mark cells within the zone, and agree with DRC options.
+ * Requirements:
+ * Start from an initial point, to fill zone
+ * The zone must have no "copper island"
+ *  Algorithm:
+ *  If the current cell has a neightbour flagged as "cell in the zone", it
+ *  become a cell in the zone
+ *  The first point in the zone is the starting point
+ *  4 searches within the matrix are made:
+ *          1 - Left to right and top to bottom
+ *          2 - Right to left and top to bottom
+ *          3 - bottom to top and Right to left
+ *          4 - bottom to top and Left to right
+ *  Given the current cell, for each search, we consider the 2 neightbour cells 
+ *  the previous cell on the same line and the previous cell on the same column.
  *
- *  La routine peut demander plusieurs iterations
- *  les iterations doivent continuer juqu'a ce que la routine ne trouve plus
- *  de cellules a modifier.
- *  Retourne:
- *  Nombre de cellules modifiees (c.a.d mises a la valeur CELL_is_ZONE.
+ *  This funtion can request some iterations
+ *  Iterations are made until no cell is added to the zone.
+ *  @return: added cells count (i.e. which the attribute CELL_is_ZONE is set)
  */
 {
     int       row, col, nn;
@@ -1202,13 +1206,13 @@ int Propagation( WinEDA_PcbFrame* frame )
     wxString  msg;
 
     Affiche_1_Parametre( frame, 57, wxT( "Detect" ), msg, CYAN );
-    /* balayage Gauche-> droite de Haut->bas */
     Affiche_1_Parametre( frame, -1, wxEmptyString, wxT( "1" ), CYAN );
 
-    // Reservation memoire pour stockahe de 1 ligne ou une colonne de cellules
+    // Alloc memory to handle 1 line or 1 colunmn on the routing matrix
     nn = MAX( Nrows, Ncols ) * sizeof(*pt_cell_V);
     pt_cell_V = (long*) MyMalloc( nn );
 
+    /* search 1 : from left to right and top to bottom */
     memset( pt_cell_V, 0, nn );
     for( row = 0; row < Nrows; row++ )
     {
@@ -1216,7 +1220,7 @@ int Propagation( WinEDA_PcbFrame* frame )
         for( col = 0; col < Ncols; col++ )
         {
             current_cell = GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
-            if( current_cell == 0 )  /* une cellule libre a ete trouvee */
+            if( current_cell == 0 )  /* a free cell is found */
             {
                 if( (old_cell_H & CELL_is_ZONE)
                    || (pt_cell_V[col] & CELL_is_ZONE) )
@@ -1230,7 +1234,7 @@ int Propagation( WinEDA_PcbFrame* frame )
         }
     }
 
-    /* balayage Droite-> gauche de Haut->bas */
+    /* search 2 : from right to left and top to bottom */
     Affiche_1_Parametre( frame, -1, wxEmptyString, wxT( "2" ), CYAN );
     memset( pt_cell_V, 0, nn );
     for( row = 0; row < Nrows; row++ )
@@ -1239,7 +1243,7 @@ int Propagation( WinEDA_PcbFrame* frame )
         for( col = Ncols - 1; col >= 0; col-- )
         {
             current_cell = GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
-            if( current_cell == 0 )  /* une cellule libre a ete trouvee */
+            if( current_cell == 0 )  /* a free cell is found */
             {
                 if( (old_cell_H & CELL_is_ZONE)
                    || (pt_cell_V[col] & CELL_is_ZONE) )
@@ -1253,7 +1257,7 @@ int Propagation( WinEDA_PcbFrame* frame )
         }
     }
 
-    /* balayage Bas->Haut de Droite->gauche */
+    /* search 3 : from bottom to top and right to left balayage */
     Affiche_1_Parametre( frame, -1, wxEmptyString, wxT( "3" ), CYAN );
     memset( pt_cell_V, 0, nn );
     for( col = Ncols - 1; col >= 0; col-- )
@@ -1262,7 +1266,7 @@ int Propagation( WinEDA_PcbFrame* frame )
         for( row = Nrows - 1; row >= 0; row-- )
         {
             current_cell = GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
-            if( current_cell == 0 )  /* une cellule libre a ete trouvee */
+            if( current_cell == 0 )  /* a free cell is found */
             {
                 if( (old_cell_H & CELL_is_ZONE)
                    || (pt_cell_V[row] & CELL_is_ZONE) )
@@ -1276,7 +1280,7 @@ int Propagation( WinEDA_PcbFrame* frame )
         }
     }
 
-    /* balayage  Bas->Haut de Gauche->Droite*/
+    /* search 4 : from bottom to top and left to right */
     Affiche_1_Parametre( frame, -1, wxEmptyString, wxT( "4" ), CYAN );
     memset( pt_cell_V, 0, nn );
     for( col = 0; col < Ncols; col++ )
@@ -1285,7 +1289,7 @@ int Propagation( WinEDA_PcbFrame* frame )
         for( row = Nrows - 1; row >= 0; row-- )
         {
             current_cell = GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
-            if( current_cell == 0 )  /* une cellule libre a ete trouvee */
+            if( current_cell == 0 )  /* a free cell is found */
             {
                 if( (old_cell_H & CELL_is_ZONE)
                  || (pt_cell_V[row] & CELL_is_ZONE) )
@@ -1309,8 +1313,8 @@ int Propagation( WinEDA_PcbFrame* frame )
 static bool Genere_Pad_Connexion( WinEDA_PcbFrame* frame, wxDC* DC, int layer )
 /*****************************************************************************/
 
-/* Generation des segments de zone de connexion zone / pad pour constitution
- *  de freins thermiques
+/* Create the thermal relief for each pad in the zone:
+ *  this is 4 small segments from the pad to the zone
  */
 {
     int        ii, jj, Npads;
@@ -1323,23 +1327,23 @@ static bool Genere_Pad_Connexion( WinEDA_PcbFrame* frame, wxDC* DC, int layer )
     wxString   msg;
 
     if( frame->m_Pcb->m_Zone == NULL )
-        return FALSE;                                       /* pas de zone */
+        return FALSE;                                       /* error: no zone */
     
-    if( frame->m_Pcb->m_Zone->m_TimeStamp != s_TimeStamp )  /* c'est une autre zone */
+    if( frame->m_Pcb->m_Zone->m_TimeStamp != s_TimeStamp )  /* error: this is not the new zone */
         return FALSE;
 
-    /* Calcul du nombre de pads a traiter et affichage */
+    /* Count the pads, i.e. the thermal relief to create count, and displays it */
     Affiche_1_Parametre( frame, 50, wxT( "NPads" ), wxT( "    " ), CYAN );
     pt_liste_pad = (LISTE_PAD*) frame->m_Pcb->m_Pads;
     for( ii = 0, Npads = 0; ii < frame->m_Pcb->m_NbPads; ii++, pt_liste_pad++ )
     {
         pt_pad = *pt_liste_pad;
 
-        /* la pastille doit etre du meme net */
+        /* Search pads relative to the selected net code */
         if( pt_pad->GetNet() != g_HightLigth_NetCode )
             continue;
 
-        /* la pastille doit exister sur la couche */
+        /* Is the pad on the active layer ? */
         if( (pt_pad->m_Masque_Layer & g_TabOneLayerMask[layer]) == 0 )
             continue;
         Npads++;
@@ -1348,20 +1352,21 @@ static bool Genere_Pad_Connexion( WinEDA_PcbFrame* frame, wxDC* DC, int layer )
     msg.Printf( wxT( "%d" ), Npads );
     Affiche_1_Parametre( frame, -1, wxEmptyString, msg, CYAN );
 
+	/* Create the thermal reliefs */
     Affiche_1_Parametre( frame, 57, wxT( "Pads" ), wxT( "     " ), CYAN );
     pt_liste_pad = (LISTE_PAD*) frame->m_Pcb->m_Pads;
     for( ii = 0, Npads = 0; ii < frame->m_Pcb->m_NbPads; ii++, pt_liste_pad++ )
     {
         pt_pad = *pt_liste_pad;
 
-        /* la pastille doit etre du meme net */
+        /* Search pads relative to the selected net code */
         if( pt_pad->GetNet() != g_HightLigth_NetCode )
             continue;
-        /* la pastille doit exister sur la couche */
+        /* Is the pad on the active layer ? */
         if( (pt_pad->m_Masque_Layer & g_TabOneLayerMask[layer]) == 0 )
             continue;
 
-        /* traitement du pad en cours */
+        /* Create the theram relief for the current pad */
         Npads++; msg.Printf( wxT( "%d" ), Npads );
         Affiche_1_Parametre( frame, -1, wxEmptyString, msg, CYAN );
         cX  = pt_pad->m_Pos.x;   cY = pt_pad->m_Pos.y;
@@ -1376,7 +1381,7 @@ static bool Genere_Pad_Connexion( WinEDA_PcbFrame* frame, wxDC* DC, int layer )
             dy += abs( pt_pad->m_DeltaSize.x ) / 2;
         }
 
-        /* calcul des coord des 4 segments a rajouter a partir du centre cX,cY */
+        /* calculate the 4 segment coordintes (starting from the pad centre cX,cY) */
         sommet[0][0] = 0; sommet[0][1] = -dy;
         sommet[1][0] = -dx; sommet[1][1] = 0;
         sommet[2][0] = 0; sommet[2][1] = dy;
@@ -1398,13 +1403,13 @@ static bool Genere_Pad_Connexion( WinEDA_PcbFrame* frame, wxDC* DC, int layer )
             pt_track->m_End.y     = cY + sommet[jj][1];
             pt_track->m_TimeStamp = s_TimeStamp;
 
-            /* tst si trace possible */
+            /* Test if the segment is allowed */
             if( Drc( frame, DC, pt_track, frame->m_Pcb->m_Track, 0 ) == BAD_DRC )
             {
                 delete pt_track; continue;
             }
 
-            /* on doit pouvoir se connecter sur la zone */
+            /* Search for a zone segment */
             loctrack = Locate_Zone( frame->m_Pcb->m_Zone, pt_track->m_End, layer );
             if( (loctrack == NULL) || (loctrack->m_TimeStamp != s_TimeStamp) )
             {
