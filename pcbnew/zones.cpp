@@ -846,7 +846,8 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
 
     g_DesignSettings.m_TrackClearence = g_DesignSettings.m_ZoneClearence;
 
-    /* mise a jour de la couche */
+    // set all the EDGE_ZONEs to the currently active layer and redraw them
+    // on that layer.
     PtLim = m_Pcb->m_CurrentLimitZone;
     for( ; PtLim != NULL; PtLim = PtLim->Next() )
     {
@@ -857,16 +858,16 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
 
     s_TimeStamp = time( NULL );
 
-    /* Calcul du pas de routage fixe a 5 mils et plus */
+    // calculate the fixed step of the routing matrix as 5 mils or more
     E_scale = g_GridRoutingSize / 50; 
     
     if( g_GridRoutingSize < 1 )
         g_GridRoutingSize = 1;
 
-    /* calcule de Ncols et Nrow, taille de la matrice de routage */
+    // calculate the Ncols and Nrows, size of the routing matrix
     ComputeMatriceSize( this, g_GridRoutingSize );
 
-    /* Determination de la cellule pointee par la souris */
+    // Determine the cell pointed to by the mouse
     ZoneStartFill.x = ( GetScreen()->m_Curseur.x - m_Pcb->m_BoundaryBox.m_Pos.x +
                        (g_GridRoutingSize / 2) ) / g_GridRoutingSize;
     
@@ -875,14 +876,17 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
     
     if( ZoneStartFill.x < 0 )
         ZoneStartFill.x = 0;
+    
     if( ZoneStartFill.x >= Ncols )
         ZoneStartFill.x = Ncols - 1;
+    
     if( ZoneStartFill.y < 0 )
         ZoneStartFill.y = 0;
+    
     if( ZoneStartFill.y >= Nrows )
         ZoneStartFill.y = Nrows - 1;
 
-    /* Creation du mapping de la matrice de routage */
+    // create the routing matrix in autorout.h's eda_global BOARDHEAD Board
     Nb_Sides = ONE_SIDE;
     if( Board.InitBoard() < 0 )
     {
@@ -913,7 +917,7 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
         if( pt_equipot == NULL )
         {
             if( g_HightLigth_NetCode > 0 )
-                DisplayError( this, wxT( "Equipot Error" ) );
+                DisplayError( this, wxT( "Unable to find Net name" ) );
         }
         else
             msg = pt_equipot->m_Netname;
@@ -940,12 +944,12 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
         TraceSegmentPcb( m_Pcb, pt_segm, CELL_is_FRIEND, 0, WRITE_CELL );
     }
 
-    /* Trace des contours du PCB sur la matrice de routage: */
+    // trace the pcb edges (pcb contour) into the routing matrix
     Route_Layer_BOTTOM = Route_Layer_TOP = EDGE_N;
     PlaceCells( m_Pcb, -1, 0 );
     Route_Layer_BOTTOM = Route_Layer_TOP = GetScreen()->m_Active_Layer;
 
-    /* Trace des limites de la zone sur la matrice de routage: */
+    // trace the zone edges into the routing matrix
     for( PtLim = m_Pcb->m_CurrentLimitZone; PtLim; PtLim=PtLim->Next() )
     {
         int ux0, uy0, ux1, uy1;
@@ -958,7 +962,7 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
 
     OrCell( ZoneStartFill.y, ZoneStartFill.x, BOTTOM, CELL_is_ZONE );
 
-    /* Marquage des cellules faisant partie de la zone*/
+    // mark the cells forming part of the zone
     ii = 1; jj = 1;
     while( ii )
     {
@@ -967,7 +971,7 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
         ii = Propagation( this );
     }
 
-    /* Selection des cellules convenables pour les points d'ancrage de la zone */
+    // selection of the suitable cells for the points of anchoring of the zone
     for( ii = 0; ii < Nrows; ii++ )
     {
         for( jj = 0; jj < Ncols; jj++ )
@@ -981,10 +985,10 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
         }
     }
 
-    /* Maintenant, toutes les cellules candidates sont marquees */
+    // now, all the cell candidates are marked
 
-    /* Placement des cellules (pads, tracks, vias, edges pcb ou segments)
-     *  faisant des obsctacles sur la matrice de routage */
+    // place all the obstacles into the matrix, such as (pads, tracks, vias, 
+    // pcb edges or segments)
     ii = 0;
     if( Zone_Exclude_Pads )
         ii = FORCE_PADS;
@@ -1039,10 +1043,10 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
 
     GetScreen()->SetModify();
 
-    /* Liberation de la memoire */
+    // free the memory
     Board.UnInitBoard();
 
-    /* Reprise des conditions initiales */
+    // restore original values unchanged
     Route_Layer_TOP    = lay_tmp_TOP;
     Route_Layer_BOTTOM = lay_tmp_BOTTOM;
 }
@@ -1284,7 +1288,7 @@ int Propagation( WinEDA_PcbFrame* frame )
             if( current_cell == 0 )  /* une cellule libre a ete trouvee */
             {
                 if( (old_cell_H & CELL_is_ZONE)
-                   || (pt_cell_V[row] & CELL_is_ZONE) )
+                 || (pt_cell_V[row] & CELL_is_ZONE) )
                 {
                     OrCell( row, col, BOTTOM, CELL_is_ZONE );
                     current_cell = CELL_is_ZONE;
