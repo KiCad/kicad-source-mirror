@@ -730,6 +730,14 @@ public:
      * terminates the zone edge creation process
      */
     void                End_Zone( wxDC* DC );
+    
+    /**
+     * Function Fill_Zone
+     * creates a number zone segments by using a flood fill algorithm.  The 
+     * "high-lighted" net is used to determine the netcode of all the zone
+     * segments and what can be connected to and what must be avoided on the
+     * current layer as the flooding occurs.
+     */
     void                Fill_Zone( wxDC* DC );
 
     // Target handling
