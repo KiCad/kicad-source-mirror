@@ -17,7 +17,7 @@ LangString DESC_SEC04 ${LANG_POLISH} "Pliki pomocy."
 
 ;General messages
 LangString WINGS3D_PROMPT ${LANG_POLISH} "Aby edytowaæ lub tworzyæ modele obiektów 3D musisz zainstalowaæ Wings3D. \
-Wings3D oraz instrukcja obs³ugi mo¿e zostaæ pobrana za darmo ze strony Wings3D. Zaznacz tê opcjê, aby otworzyæ stronê g³ówn¹ Wings3D"
+Wings3D oraz instrukcja obs³ugi mog¹ zostaæ pobrane za darmo ze strony Wings3D. Zaznacz tê opcjê, aby otworzyæ stronê g³ówn¹ Wings3D"
 
 LangString UNINST_PROMPT ${LANG_POLISH} "Czy jesteœ pewny, ¿e chcesz usun¹æ $(^Name) i jego wszystkie komponenty? $\n\
 Zostan¹ równie¿ usuniête wszystkie zmodyfikowane i nowe pliki, biblioteki i modu³y znajduj¹ce siê w katalogu programu"
