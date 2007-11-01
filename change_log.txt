@@ -4,6 +4,14 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Nov-01 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
+================================================================================
++ pcbnew
+  * Provided new definitions of FIRST_COPPER_LAYER and LAST_COPPER_LAYER within
+    include/pcbstruct.h, and used those definitions within various other files.
+    Beautified and generally refined 3d-viewer/3d_draw.cpp and pcbnew/plotgerb.cpp.
+
+
 2007-Oct-31 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +kicad:
@@ -401,8 +409,8 @@ email address.
     field. (Refer to 2007-Oct-2 UPDATE notes for the relevance of this.)
   * Beautification and house keeping.
 + eeschema
-  * The editpart.cpp and editpart.cpp files (which are no longer used) have been
-    removed, and replaced with editpart.cpp.notused and editpart.cpp.notused
+  * The editpart.cpp and libedpart.cpp files (which are no longer used) have been
+    removed, and replaced with editpart.cpp.notused and libedpart.cpp.notused
 + cvpcb
   * Additional "OK", "Cancel", and "Apply" buttons have now been provided for the
     "Options" dialog box which lists various display options for footprints.

@@ -173,7 +173,7 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
     GRSetDrawMode( DC, draw_mode );
     typeaff = frame->m_DisplayModEdge;
-    if( m_Layer <= CMP_N )
+    if( m_Layer <= LAST_COPPER_LAYER )
     {
         typeaff = frame->m_DisplayPcbTrackFill;
         if( !typeaff )

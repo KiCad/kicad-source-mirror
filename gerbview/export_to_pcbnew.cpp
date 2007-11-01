@@ -153,7 +153,7 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* aFile,
         if( pcb_layer_number < 0 )
             continue;
         
-        if( pcb_layer_number > CMP_N )
+        if( pcb_layer_number > LAST_COPPER_LAYER )
         {
             DRAWSEGMENT* drawitem = new DRAWSEGMENT( pcb, TYPEDRAWSEGMENT );
 
@@ -169,7 +169,7 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* aFile,
             TRACK*  newtrack;
             
             // replace spots with vias when possible
-            if( track->m_Shape == S_SPOT_CIRCLE 
+            if( track->m_Shape == S_SPOT_CIRCLE
              || track->m_Shape == S_SPOT_RECT
              || track->m_Shape == S_SPOT_OVALE )
             {

@@ -181,7 +181,7 @@ void WinEDA_BasePcbFrame::SwitchLayer( wxDC* DC, int layer )
 
     // Copper layers cannot be selected unconditionally; how many
     // of those layers are currently enabled needs to be checked.
-    if( (layer >= COPPER_LAYER_N) && (layer <= CMP_N) )
+    if( (layer >= FIRST_COPPER_LAYER) && (layer <= LAST_COPPER_LAYER) )
     {
         // If only one copper layer is enabled, the only such layer
         // that can be selected to is the "Copper" layer (so the

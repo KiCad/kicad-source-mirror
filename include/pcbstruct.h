@@ -35,6 +35,7 @@
 
 
 /* Layer identification (layer number) */
+#define FIRST_COPPER_LAYER    0
 #define COPPER_LAYER_N        0
 #define LAYER_N_2             1     /* Numero layer 2 */
 #define LAYER_N_3             2     /* Numero layer 3 */
@@ -52,7 +53,8 @@
 #define LAYER_N_15            14    /* Numero layer 15 */
 #define LAYER_CMP_N           15
 #define CMP_N                 15
-#define NB_COPPER_LAYERS      (CMP_N + 1)
+#define LAST_COPPER_LAYER     15
+#define NB_COPPER_LAYERS      (LAST_COPPER_LAYER + 1)
 
 #define FIRST_NO_COPPER_LAYER 16
 #define ADHESIVE_N_CU         16

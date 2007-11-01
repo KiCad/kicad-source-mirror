@@ -202,12 +202,12 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case HK_SWITCH_LAYER_TO_PREVIOUS:
         ll = GetScreen()->m_Active_Layer;
-        if( (ll <= COPPER_LAYER_N) || (ll > CMP_N) )
+        if( (ll <= FIRST_COPPER_LAYER) || (ll > LAST_COPPER_LAYER) )
             break;
         if( m_Pcb->m_BoardSettings->m_CopperLayerCount < 2 )  // Single layer
             ll = COPPER_LAYER_N;
-        else if( ll == CMP_N )
-            ll = MAX( COPPER_LAYER_N, m_Pcb->m_BoardSettings->m_CopperLayerCount - 2 );
+        else if( ll == LAST_COPPER_LAYER )
+            ll = MAX( FIRST_COPPER_LAYER, m_Pcb->m_BoardSettings->m_CopperLayerCount - 2 );
         else
             ll--;
         SwitchLayer( DC, ll );
@@ -215,12 +215,12 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case HK_SWITCH_LAYER_TO_NEXT:
         ll = GetScreen()->m_Active_Layer;
-        if( (ll < COPPER_LAYER_N) || (ll >= CMP_N) )
+        if( (ll < FIRST_COPPER_LAYER) || (ll >= LAST_COPPER_LAYER) )
             break;
         if( m_Pcb->m_BoardSettings->m_CopperLayerCount < 2 )  // Single layer
             ll = COPPER_LAYER_N;
         else if( ll >= m_Pcb->m_BoardSettings->m_CopperLayerCount - 2 )
-            ll = CMP_N;
+            ll = LAST_COPPER_LAYER;
         else
             ll++;
         SwitchLayer( DC, ll );
@@ -299,7 +299,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_BACK_SPACE:
-        if( m_ID_current_state == ID_TRACK_BUTT && GetScreen()->m_Active_Layer <= CMP_N )
+        if( m_ID_current_state == ID_TRACK_BUTT && GetScreen()->m_Active_Layer <= LAST_COPPER_LAYER )
         {
             if( ItemFree )
             {
@@ -570,7 +570,7 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* DC, EDA_BaseStruct* DrawStruct )
     switch( m_ID_current_state )
     {
     case ID_TRACK_BUTT:
-        if( GetScreen()->m_Active_Layer > CMP_N )
+        if( GetScreen()->m_Active_Layer > LAST_COPPER_LAYER )
             return FALSE;
         if( ItemFree )
         {

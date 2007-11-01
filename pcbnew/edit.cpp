@@ -632,7 +632,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_CU_LAYER:
-        itmp = SelectLayer( GetScreen()->m_Active_Layer, -1, CMP_N );
+        itmp = SelectLayer( GetScreen()->m_Active_Layer, -1, LAST_COPPER_LAYER );
         if( itmp >= 0 )
             GetScreen()->m_Active_Layer = itmp;
         break;
@@ -1005,7 +1005,7 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
 
     // Copper layers cannot be selected unconditionally; how many
     // of those layers are currently enabled needs to be checked.
-    if( (layer >= COPPER_LAYER_N) && (layer <= CMP_N) )
+    if( (layer >= FIRST_COPPER_LAYER) && (layer <= LAST_COPPER_LAYER) )
     {
         // If only one copper layer is enabled, the only such layer
         // that can be selected to is the "Copper" layer (so the

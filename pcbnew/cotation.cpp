@@ -136,12 +136,12 @@ WinEDA_CotationPropertiesFrame::WinEDA_CotationPropertiesFrame( WinEDA_PcbFrame*
                                          wxDefaultPosition, wxDefaultSize );
     LeftBoxSizer->Add( m_SelLayerBox, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
     int ii;
-    for( ii = CMP_N + 1; ii < NB_LAYERS; ii++ )
+    for( ii = FIRST_NO_COPPER_LAYER; ii < NB_LAYERS; ii++ )
     {
         m_SelLayerBox->Append( ReturnPcbLayerName( ii ) );
     }
 
-    m_SelLayerBox->SetSelection( Cotation->GetLayer() - (CMP_N + 1) );
+    m_SelLayerBox->SetSelection( Cotation->GetLayer() - FIRST_NO_COPPER_LAYER );
 
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
@@ -175,8 +175,8 @@ void WinEDA_CotationPropertiesFrame::OnOkClick( wxCommandEvent& event )
                                            m_TxtWidthCtrl->GetValue();
     CurrentCotation->m_Text->m_Miroir = (m_Mirror->GetSelection() == 0) ? 1 : 0;
     
-    CurrentCotation->SetLayer( m_SelLayerBox->GetChoice() + CMP_N + 1 ); 
-    CurrentCotation->m_Text->SetLayer( m_SelLayerBox->GetChoice() + CMP_N + 1 );
+    CurrentCotation->SetLayer( m_SelLayerBox->GetChoice() + FIRST_NO_COPPER_LAYER ); 
+    CurrentCotation->m_Text->SetLayer( m_SelLayerBox->GetChoice() + FIRST_NO_COPPER_LAYER );
 
     CurrentCotation->m_Text->CreateDrawData();
 

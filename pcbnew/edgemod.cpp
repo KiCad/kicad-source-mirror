@@ -194,11 +194,11 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Layer( EDGE_MODULE* Edge, wxDC* DC )
 
 
 	/* Ask for the new layer */
-    new_layer = SelectLayer( new_layer, COPPER_LAYER_N, LAST_NO_COPPER_LAYER );
+    new_layer = SelectLayer( new_layer, FIRST_COPPER_LAYER, LAST_NO_COPPER_LAYER );
     if( new_layer < 0 )
         return;
 
-	if ( new_layer >= COPPER_LAYER_N && new_layer <= LAYER_CMP_N )
+	if ( new_layer >= FIRST_COPPER_LAYER && new_layer <= LAST_COPPER_LAYER )
 	/* an edge is put on a copper layer, and it is very dangerous. a confirmation is requested */
 	{
 		if ( ! IsOK(this, _("The graphic item will be on a copper layer.It is very dangerous. Are you sure") ) )

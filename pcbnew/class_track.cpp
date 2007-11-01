@@ -268,7 +268,7 @@ int TRACK::ReturnMaskLayer()
         if( via_type == VIA_THROUGH )
             return ALL_CU_LAYERS;
 
-        // VIA_BLIND ou  VIA_BURIED:
+        // VIA_BLIND or VIA_BURIED:
 
         int bottom_layer, top_layer;
 
@@ -720,7 +720,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
     }
 
     /* Shows clearance (for tracks and vias, not for zone segments */
-    if( DisplayOpt.DisplayTrackIsol && ( m_Layer <= CMP_N )
+    if( DisplayOpt.DisplayTrackIsol && ( m_Layer <= LAST_COPPER_LAYER )
        && ( Type() == TYPETRACK || Type() == TYPEVIA) )
     {
         GRCSegm( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,

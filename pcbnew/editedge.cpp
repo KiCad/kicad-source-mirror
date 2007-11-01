@@ -162,7 +162,7 @@ void WinEDA_PcbFrame::Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC 
     COTATION*       Cotation;
     int             layer = Segment->GetLayer();
 
-    if( layer <= CMP_N )
+    if( layer <= LAST_COPPER_LAYER )
     {
         DisplayError( this, _( "Copper layer global delete not allowed!" ), 20 );
         return;

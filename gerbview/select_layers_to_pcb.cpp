@@ -266,7 +266,7 @@ bool AsCmpLayer = false;
 			AsCmpLayer = true;
 		else
 		{
-			if( LayerLookUpTable[ii] >= CMP_N )
+			if( LayerLookUpTable[ii] >= LAST_COPPER_LAYER )
 				continue;	// not a copper layer
 			if( LayerLookUpTable[ii] >= g_DesignSettings.m_CopperLayerCount )
 				g_DesignSettings.m_CopperLayerCount++;
@@ -275,8 +275,8 @@ bool AsCmpLayer = false;
 
 	if( AsCmpLayer )
 		g_DesignSettings.m_CopperLayerCount++;
-	if( g_DesignSettings.m_CopperLayerCount > CMP_N + 1 )	// should not occur.
-		g_DesignSettings.m_CopperLayerCount = CMP_N + 1;
+	if( g_DesignSettings.m_CopperLayerCount > NB_COPPER_LAYERS ) // should not occur.
+		g_DesignSettings.m_CopperLayerCount = NB_COPPER_LAYERS;
 
     EndModal( 1 );
 }
