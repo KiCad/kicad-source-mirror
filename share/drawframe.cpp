@@ -506,6 +506,8 @@ void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
  *  Met a jour seulement les variables message et  curseur
  */
 {
+    bool redraw = false;
+    
     // Change Cursor
     if( DrawPanel )
     {
@@ -524,7 +526,7 @@ void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
      || (m_ID_current_state!=ID_TRACK_BUTT && id==ID_TRACK_BUTT) )
     {
         if( DisplayOpt.ContrastModeDisplay )
-            ReDrawPanel();
+            redraw = true;
     }
 #endif
     
@@ -564,6 +566,11 @@ void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
         m_VToolBar->ToggleTool( ID_NO_SELECT_BUTT, TRUE );
 
     m_ID_current_state = id;
+
+    // must do this after the tool has been set, otherwise pad::Draw() does
+    // not show proper color when DisplayOpt.ContrastModeDisplay is true.
+    if( redraw )    
+        ReDrawPanel();
 }
 
 

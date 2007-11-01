@@ -20,10 +20,12 @@ email address.
     comments in member functions and classes.  Run Doxygen on the project, then
     look at the documentation for class INSPECTOR as an example.
 + pcbnew
-    zones.cpp, Trace_Pcb(), & EDGE_ZONE class: 
+  * zones.cpp, Trace_Pcb(), & EDGE_ZONE class: 
     Reversed the usage of EDGE_ZONE::Pnext and Pback in the list management to be 
     consistent with other classes and with BOARD_ITEM::IterateForward() and 
     BOARD::~BOARD().
+  * Fixed a display bug when high contrast mode is enabled and the track tool
+    is selected.
 
 
 2007-Oct-31 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
