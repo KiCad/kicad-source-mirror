@@ -10,13 +10,16 @@
 
 #include "protos.h"
 
+#include "wx/statline.h"
+
 /* Variables locales */
 static int New_Layer[NB_LAYERS];
+wxStaticText* layer_list[NB_LAYERS];
 
 enum swap_layer_id {
-    ID_SWAP_LAYER_BUTTON_SELECT = 1800,
-    ID_SWAP_LAYER_DESELECT,
-    ID_SWAP_LAYER_SELECT
+    ID_WINEDA_SWAPLAYERFRAME = 1800,
+    ID_BUTTON_0,
+    ID_TEXT_0 = ID_BUTTON_0 + NB_LAYERS
 };
 
 
@@ -27,8 +30,15 @@ enum swap_layer_id {
 class WinEDA_SwapLayerFrame : public wxDialog
 {
 private:
-    WinEDA_BasePcbFrame* m_Parent;
-    wxRadioBox*          m_LayerList;
+    WinEDA_BasePcbFrame*    m_Parent;
+    wxBoxSizer*             OuterBoxSizer;
+    wxBoxSizer*             MainBoxSizer;
+    wxFlexGridSizer*        FlexColumnBoxSizer;
+    wxStaticText*           label;
+    wxButton*               Button;
+    wxStaticText*           text;
+    wxStaticLine*           Line;
+    wxStdDialogButtonSizer* StdDialogButtonSizer;
 
 public:
 
@@ -46,68 +56,180 @@ private:
 
 /* Table des evenements pour WinEDA_SwapLayerFrame */
 BEGIN_EVENT_TABLE( WinEDA_SwapLayerFrame, wxDialog )
-EVT_BUTTON( wxID_OK, WinEDA_SwapLayerFrame::OnOkClick )
-EVT_BUTTON( wxID_CANCEL, WinEDA_SwapLayerFrame::OnCancelClick )
-EVT_BUTTON( ID_SWAP_LAYER_DESELECT, WinEDA_SwapLayerFrame::Sel_Layer )
-EVT_BUTTON( ID_SWAP_LAYER_BUTTON_SELECT, WinEDA_SwapLayerFrame::Sel_Layer )
-EVT_RADIOBOX( ID_SWAP_LAYER_SELECT, WinEDA_SwapLayerFrame::Sel_Layer )
+    EVT_COMMAND_RANGE( ID_BUTTON_0, ID_BUTTON_0 + NB_LAYERS - 1,
+                       wxEVT_COMMAND_BUTTON_CLICKED,
+                       WinEDA_SwapLayerFrame::Sel_Layer )
+    EVT_BUTTON( wxID_OK, WinEDA_SwapLayerFrame::OnOkClick )
+    EVT_BUTTON( wxID_CANCEL, WinEDA_SwapLayerFrame::OnCancelClick )
 END_EVENT_TABLE()
 
 
 /*************************************************************************/
 WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( WinEDA_BasePcbFrame* parent ) :
     wxDialog( parent, -1, _( "Swap Layers:" ), wxPoint( -1, -1 ),
-              wxSize( 470, 450 ), DIALOG_STYLE )
+              wxDefaultSize, wxDEFAULT_DIALOG_STYLE|MAYBE_RESIZE_BORDER )
 /*************************************************************************/
 {
-#define START_Y 15
-    wxButton* Button;
-    int       ii;
-    wxPoint   pos;
-    wxString  g_Layer_Name_Pair[NB_LAYERS];
-    wxSize    winsize;
+    OuterBoxSizer = NULL;
+    MainBoxSizer = NULL;
+    FlexColumnBoxSizer = NULL;
+    label = NULL;
+    Button = NULL;
+    text = NULL;
+    Line = NULL;
+    StdDialogButtonSizer = NULL;
 
     m_Parent = parent;
     SetFont( *g_DialogFont );
 
-    for( ii = 0; ii < NB_LAYERS; ii++ )
+    int item_ID;
+    wxSize goodSize;
+
+    // Experimentation has shown that buttons in the Windows version can be 20 pixels
+    // wide and 20 pixels high, but that they need to be 26 pixels wide and 26 pixels
+    // high in the Linux version. (And although the dimensions of those buttons could
+    // be set to 26 pixels wide and 26 pixels high in both of those versions, that would
+    // result in a dialog box which would be excessively high in the Windows version.)
+#ifdef __WINDOWS__
+    int w = 20;
+    int h = 20;
+#else
+    int w = 26;
+    int h = 26;
+#endif
+    // As currently implemented, the dimensions of the buttons in the Mac version are
+    // also 26 pixels wide and 26 pixels high. If appropriate, the above code should be
+    // modified as required in the event that those buttons should be some other size
+    // in that version.
+
+    OuterBoxSizer = new wxBoxSizer(wxVERTICAL);
+    SetSizer(OuterBoxSizer);
+
+    MainBoxSizer = new wxBoxSizer(wxHORIZONTAL);
+    OuterBoxSizer->Add(MainBoxSizer, 1, wxGROW|wxLEFT|wxRIGHT|wxTOP, 5);
+
+    for( int ii = 0; ii < NB_LAYERS; ii++ )
     {
-        g_Layer_Name_Pair[ii] = ReturnPcbLayerName( ii ) + wxT( " -> " ) + _( "No Change" );
+        // Provide a vertical line to separate the two FlexGrid sizers
+        if( ii == 16 )
+        {
+            Line = new wxStaticLine( this, -1, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+            MainBoxSizer->Add(Line, 0, wxGROW|wxLEFT|wxRIGHT, 5);
+        }
+
+        // Provide a separate FlexGrid sizer for every sixteen sets of controls
+        if( ii % 16 == 0 )
+        {
+            // Each layer has an associated static text string (to identify that layer),
+            // a button (for invoking a child dialog box to change which layer that the
+            // layer is mapped to), and a second static text string (to depict which layer
+            // that the layer has been mapped to). Each of those items are placed into
+            // the left hand column, middle column, and right hand column (respectively)
+            // of the Flexgrid sizer, and the color of the second text string is set to blue
+            // (to indicate that the actual text changes depending upon which layer has been
+            // selected by the child dialog box).
+            // (Experimentation has shown that if a text control is used to depict which
+            // layer that each layer is mapped to (instead of a static text string), then
+            // those controls do not behave in a fully satisfactory manner in the Linux
+            // version. Even when the read-only attribute is specified for all of those
+            // controls, they can still be selected when the arrow keys or Tab key is used
+            // to step through all of the controls within the dialog box, and directives
+            // to set the foreground color of the text of each such control to blue (to
+            // indicate that the text is of a read-only nature) are disregarded.)
+
+            // Specify a FlexGrid sizer with sixteen rows and three columns.
+            FlexColumnBoxSizer = new wxFlexGridSizer(16, 3, 0, 0);
+
+            // Specify that all of the rows can be expanded.
+            for( int jj = 0; jj < 16; jj++ )
+            {
+                FlexColumnBoxSizer->AddGrowableRow(jj);
+            }
+
+            // Specify that (just) the right-hand column can be expanded.
+            FlexColumnBoxSizer->AddGrowableCol(2);
+
+            MainBoxSizer->Add(FlexColumnBoxSizer, 1, wxGROW|wxTOP, 5);
+        }
+
+        // Provide a text string to identify this layer (with trailing spaces within that string being purged)
+        label = new wxStaticText( this, wxID_STATIC, ReturnPcbLayerName( ii ).Trim(), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+        FlexColumnBoxSizer->Add(label, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxBOTTOM, 5);
+
+        // Provide a button for this layer (which will invoke a child dialog box)
+        item_ID = ID_BUTTON_0 + ii;
+
+        Button = new wxButton( this, item_ID, wxT("..."), wxDefaultPosition, wxSize(w, h), 0 );
+        FlexColumnBoxSizer->Add(Button, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxBOTTOM, 5);
+
+        // Provide another text string to specify which layer that this layer is
+        // mapped to, set the initial text to "No Change" (to indicate that this
+        // layer is currently unmapped to any other layer), and set the foreground
+        // color of the text to blue (to indicate that the text can be changed).
+        item_ID = ID_TEXT_0 + ii;
+
+        // When the first of these text strings is being added, determine what size is necessary to
+        // to be able to display any possible string without it being truncated. Then specify that
+        // size as the minimum size for all of these text strings. (If this minimum size is not
+        // determined in this fashion, then it is possible for the display of one or more of these
+        // strings to be truncated after different layers are selected.)
+        if( ii == 0 )
+        {
+            text = new wxStaticText( this, item_ID, ReturnPcbLayerName( 0 ), wxDefaultPosition, wxDefaultSize, 0 );
+            goodSize = text->GetSize();
+            for( int jj = 1; jj < NB_LAYERS; jj++ )
+            {
+                text->SetLabel( ReturnPcbLayerName( jj ) );
+                if( goodSize.x < text->GetSize().x )
+                    goodSize.x = text->GetSize().x;
+            }
+            text->SetLabel( _("No Change") );
+            if( goodSize.x < text->GetSize().x )
+                goodSize.x = text->GetSize().x;
+        }
+        else
+            text = new wxStaticText( this, item_ID, _("No Change"), wxDefaultPosition, wxDefaultSize, 0 );
+
+        text->SetMinSize( goodSize );
+        text->SetForegroundColour( *wxBLUE );
+        FlexColumnBoxSizer->Add(text, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxBOTTOM, 5);
+
+        layer_list[ii] = text;
     }
 
-    pos.x = 5;
-    pos.y = START_Y;
-    m_LayerList = new wxRadioBox( this, ID_SWAP_LAYER_SELECT, _( "Layers" ),
-                                  pos, wxSize( -1, -1 ),
-                                  NB_LAYERS, g_Layer_Name_Pair, 16, wxRA_SPECIFY_ROWS );
+    // Provide spacers to occupy otherwise blank cells within the second FlexGrid sizer. (As it
+    // incorporates three columns, three spacers are thus required for each otherwise unused row.)
+    for( int ii = 3 * NB_LAYERS; ii < 96; ii++ )
+    {
+        FlexColumnBoxSizer->Add(5, h, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxBOTTOM, 5);
+    }
 
-    winsize.y = m_LayerList->GetRect().GetBottom();
+    // Provide a line to separate the controls which have been provided so far
+    // from the OK and Cancel buttons (which will be provided after this line)
+    Line = new wxStaticLine( this, -1, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+    OuterBoxSizer->Add(Line, 0, wxGROW|wxLEFT|wxRIGHT|wxTOP, 5);
 
-    pos.x = m_LayerList->GetRect().GetRight() + 12;
+    // Provide a StdDialogButtonSizer to accommodate the OK and Cancel buttons;
+    // using that type of sizer results in those buttons being automatically
+    // located in positions appropriate for each (OS) version of KiCad.
+    StdDialogButtonSizer = new wxStdDialogButtonSizer;
+    OuterBoxSizer->Add(StdDialogButtonSizer, 0, wxALIGN_RIGHT|wxALL, 10);
 
-    Button = new wxButton(this, ID_SWAP_LAYER_BUTTON_SELECT, _("Select..."), pos );
-    Button->SetForegroundColour(wxColour(0,100,100));
+    Button = new wxButton( this, wxID_OK, _("&OK"), wxDefaultPosition, wxDefaultSize, 0 );
+    Button->SetForegroundColour( *wxRED );
+    StdDialogButtonSizer->AddButton(Button);
 
-    pos.y += Button->GetSize().y + 10;
+    Button = new wxButton( this, wxID_CANCEL, _("&Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+    Button->SetForegroundColour( *wxBLUE );
+    StdDialogButtonSizer->AddButton(Button);
 
-    Button = new wxButton(this, ID_SWAP_LAYER_DESELECT, _("Deselect"), pos );
-    Button->SetForegroundColour(wxColour(0,100,0));
+    StdDialogButtonSizer->Realize();
 
-    pos.y = winsize.y - 2 * Button->GetSize().y - 10;
-
-    Button = new wxButton(this, wxID_OK, _("OK"), pos );
-    Button->SetForegroundColour(*wxRED);
-
-    pos.y += Button->GetSize().y + 10;
-
-    Button = new wxButton(this, wxID_CANCEL, _("Cancel"), pos );
-    Button->SetForegroundColour(*wxBLUE);
-
-    winsize.x = MAX( winsize.x, Button->GetRect().GetRight() );
-    winsize.y = MAX( winsize.y, Button->GetRect().GetBottom() );
-    winsize.x += 10;
-    winsize.y += 10;
-    SetClientSize( winsize );
+    // Resize the dialog
+    if( GetSizer() )
+    {
+        GetSizer()->SetSizeHints(this);
+    }
 }
 
 
@@ -117,56 +239,40 @@ void WinEDA_SwapLayerFrame::Sel_Layer( wxCommandEvent& event )
 {
     int ii, jj;
 
-    ii = m_LayerList->GetSelection();
+    ii = event.GetId();
 
-    switch( event.GetId() )
+    if( ii < ID_BUTTON_0 || ii >= ID_BUTTON_0 + NB_LAYERS )
+        return;
+
+    ii = event.GetId() - ID_BUTTON_0;
+
+    jj = New_Layer[ii];
+    if( (jj < 0) || (jj > NB_LAYERS) )
+        jj = NB_LAYERS; // (Defaults to "No Change".)
+    jj = m_Parent->SelectLayer( jj, -1, -1, true );
+ 
+    if( (jj < 0) || (jj > NB_LAYERS) )
+        return;
+
+    // No change if the selected layer matches the layer being edited.
+    // (Hence the only way to restore a layer to the "No Change"
+    // state is by specifically deselecting it; any attempt
+    // to select the same layer (instead) will be ignored.)
+    if( jj == ii )
     {
-    case ID_SWAP_LAYER_DESELECT:
-        if( New_Layer[ii] != NB_LAYERS )
-        {
-            New_Layer[ii] = NB_LAYERS;
-            m_LayerList->SetString( ii, ReturnPcbLayerName( ii )
-                                   + wxT( " -> " ) + _( "No Change" ) );
-        }
-        break;
+        wxString msg;
+        msg = _( "Deselect this layer to select the No Change state" );
+        DisplayInfo( this, msg );
+        return;
+    }
 
-    case ID_SWAP_LAYER_BUTTON_SELECT:
-    case ID_SWAP_LAYER_SELECT:
-        jj = New_Layer[ii];
-        if( (jj < 0) || (jj > NB_LAYERS) )
-            jj = NB_LAYERS; // (Defaults to "No Change".)
-        jj = m_Parent->SelectLayer( jj, -1, -1, true );
-
-        if( (jj < 0) || (jj > NB_LAYERS) )
-            return;
-
-        // No change if the selected layer matches the layer being edited.
-        // (Hence the only way to restore a layer to the "No Change"
-        // state is by specifically deselecting it; any attempt
-        // to select the same layer (instead) will be ignored.)
-        if( jj == ii )
-        {
-            wxString msg;
-            msg = _( "Deselect this layer to restore its No Change state" );
-            DisplayInfo( this, msg );
-            return;
-        }
-
-        if( jj != New_Layer[ii] )
-        {
-            New_Layer[ii] = jj;
-            if( jj == NB_LAYERS )
-                m_LayerList->SetString( ii,
-                                        ReturnPcbLayerName( ii )
-                                      + wxT( " -> " )
-                                      + _( "No Change" ) );
-            else
-                m_LayerList->SetString( ii,
-                                        ReturnPcbLayerName( ii )
-                                      + wxT( " -> " )
-                                      + ReturnPcbLayerName( jj ) );
-        }
-        break;
+    if( jj != New_Layer[ii] )
+    {
+        New_Layer[ii] = jj;
+        if( jj == NB_LAYERS )
+            layer_list[ii]->SetLabel( _( "No Change" ) );
+        else
+            layer_list[ii]->SetLabel( ReturnPcbLayerName( jj ) );
     }
 }
 

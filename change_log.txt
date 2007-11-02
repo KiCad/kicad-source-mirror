@@ -4,6 +4,30 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Nov-02 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
+================================================================================
++ pcbnew
+  * Sizers have now been provided for the "Swap Layers:" dialog box, and the
+    previously provided radiobuttons have been replaced with buttons and static
+    text strings. (In the previous version of this dialog, radiobuttons were being
+    used in an inappropriate manner. The most "orthodox" way of implementing the
+    functionality within this dialog would be to provide a combobox for each layer,
+    but as up to 30 strings would be needed within the dropdown list associated with
+    each of those controls (one string for each of the layers, and another string to
+    deselect the layer), such controls would be less than user-friendly. Hence a
+    button is now provided for each layer instead (and which, like the previously
+    provided radiobutton, invokes the "Select Layer:" dialog box after being clicked
+    on). Two static text strings are also provided for each layer, with one of them
+    being used to identify that layer, and the other being used to identify which
+    layer that each layer is currently being swapped to.) The previously provided
+    "Select" and "Deselect" buttons are no longer required, and are thus no longer
+    provided.
++ gerbview
+  * The "Layer selection" dialog box (invoked during the "Export to Pcbnew" command)
+    has similarly been updated. (This dialog did use spacers before, but once again,
+    the previously provided radiobuttons were being used in an inappropriate manner.)
+
+
 2007-Nov-01 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
 ================================================================================
 + pcbnew
