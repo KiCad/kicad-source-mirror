@@ -1,6 +1,6 @@
-/***********************************************************/
-/*	Module to handle libraries (first part - file and io). */
-/***********************************************************/
+/*****************************************************************/
+/*	Functions to handle component library files : read functions */
+/*****************************************************************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -13,10 +13,7 @@
 
 #include "protos.h"
 
-/* Variables Locales */
-
-/* Fonctions locales */
-/* pour librairies de composants */
+/* Local Functions */
 static LibEDA_BaseStruct*   GetDrawEntry( WinEDA_DrawFrame* frame, FILE* f,
                                           char* Line, int* LineNum );
 static bool                 GetLibEntryField( EDA_LibComponentStruct* LibEntry, char* line );
@@ -27,22 +24,18 @@ static bool                 ReadLibEntryDateAndTime( EDA_LibComponentStruct* Lib
 static int                  AddFootprintFilterList( EDA_LibComponentStruct* LibEntryLibEntry,
                                                     FILE* f, char* Line, int* LineNum );
 
-/* pour doc librairies */
 
-
-/****************************************************/
-/* Routines de lecture des librairies de composants */
-/****************************************************/
-
-
-/*****************************************************************************
-* Routine to load the given library name. FullLibName should hold full path  *
-* of file name to open, while LibName should hold only its name.			 *
-* IF library already exists, it is NOT reloaded.							 *
-* return: new lib or NULL													 *
-*****************************************************************************/
+/*************************************************************************************/
 LibraryStruct* LoadLibraryName( WinEDA_DrawFrame* frame,
                                 const wxString& FullLibName, const wxString& LibName )
+/*************************************************************************************/
+
+/** Function LoadLibraryName
+ * Routine to load the given library name. FullLibName should hold full path
+ * of file name to open, while LibName should hold only its name.
+ * IF library already exists, it is NOT reloaded.
+ * @return : new lib or NULL
+ */
 {
     int            NumOfParts;
     FILE*          f;
@@ -103,8 +96,9 @@ LibraryStruct* LoadLibraryName( WinEDA_DrawFrame* frame,
 void LoadLibraries( WinEDA_DrawFrame* frame )
 /******************************************/
 
-/* Delete toutes les librairies chargees et recree toutes les librairies
- *  donnes dans la liste g_LibName_List
+/* Function LoadLibraries
+ * Clear all alredy loaded librries and load all librairies
+ * given in g_LibName_List
  */
 {
     wxString FullLibName, msg;
@@ -136,16 +130,17 @@ void LoadLibraries( WinEDA_DrawFrame* frame )
 
         if( LibName.IsEmpty() )
             continue;
-        
-        FullLibName = MakeFileName( g_RealLibDirBuffer, LibName, g_LibExtBuffer );
-        
+
+		FullLibName = MakeFileName( g_RealLibDirBuffer, LibName, g_LibExtBuffer );
+
         msg = wxT( "Loading " ) + FullLibName;
-        
+        frame->PrintMsg( msg );
+
         if( LoadLibraryName( frame, FullLibName, LibName ) )
             msg += wxT( " OK" );
         else
             msg += wxT( " ->Error" );
-        
+
         frame->PrintMsg( msg );
     }
 
@@ -161,9 +156,9 @@ void LoadLibraries( WinEDA_DrawFrame* frame )
         return;
 
     LibraryStruct** libs =
-        (LibraryStruct**) MyZMalloc( sizeof(LibraryStruct *) * (NumOfLibs + 2) );
+        (LibraryStruct**) MyZMalloc( sizeof(LibraryStruct*) * (NumOfLibs + 2) );
 
-    int jj = 0;
+    int             jj = 0;
     for( ii = 0; ii < g_LibName_List.GetCount(); ii++ )
     {
         if( jj >= NumOfLibs )
@@ -198,10 +193,13 @@ void LoadLibraries( WinEDA_DrawFrame* frame )
 }
 
 
-/*****************************************************************************
-* Routine to free a library from the current loaded libraries.				 *
-*****************************************************************************/
+/**************************************************************/
 void FreeCmpLibrary( wxWindow* frame, const wxString& LibName )
+/**************************************************************/
+
+/** Function FreeCmpLibrary
+ * Routine to remove and free a library from the current loaded libraries.
+ */
 {
     int            NumOfLibs = NumOfLibraries();
     LibraryStruct* Lib, * TempLib;
@@ -234,7 +232,8 @@ void FreeCmpLibrary( wxWindow* frame, const wxString& LibName )
 
     delete Lib;
 
-    /* La librairie supprimee est peut etre celle selectee dans libedit */
+    /* The removed librairy can be the current library in libedit.
+      * If so, clear the current library in libedit */
     if( Lib == CurrentLib )
         CurrentLib = NULL;
 }
@@ -244,7 +243,8 @@ void FreeCmpLibrary( wxWindow* frame, const wxString& LibName )
 const wxChar** GetLibNames()
 /******************************/
 
-/* Routine to return pointers to all library names.
+/** GetLibNames()
+ * Routine to return pointers to all library names.
  *  User is responsible to deallocate memory
  */
 {
@@ -252,7 +252,7 @@ const wxChar** GetLibNames()
     const wxChar** Names;
     LibraryStruct* Lib;
 
-    Names = (const wxChar**) MyZMalloc( sizeof(wxChar *) * (NumOfLibs + 1) );
+    Names = (const wxChar**) MyZMalloc( sizeof(wxChar*) * (NumOfLibs + 1) );
     for( ii = 0, Lib = g_LibraryList; Lib != NULL; Lib = Lib->m_Pnext, ii++ )
     {
         Names[ii] = Lib->m_Name.GetData();
@@ -264,10 +264,10 @@ const wxChar** GetLibNames()
 }
 
 
-/*****************************************************************************
-* Routine to compare two EDA_LibComponentStruct for the PriorQue module.		 *
-* Comparison (insensitive  case) is based on Part name.											 *
-*****************************************************************************/
+/** Function LibraryEntryCompare
+ * Routine to compare two EDA_LibComponentStruct for the PriorQue module.
+ * Comparison (insensitive  case) is based on Part name.
+ */
 int LibraryEntryCompare( EDA_LibComponentStruct* LE1, EDA_LibComponentStruct* LE2 )
 {
     return LE1->m_Name.m_Text.CmpNoCase( LE2->m_Name.m_Text );
@@ -355,7 +355,7 @@ EDA_LibComponentStruct* Read_Component_Definition( WinEDA_DrawFrame* frame, char
     char*    p;
     char*    name;
     char*    prefix = NULL;
-    
+
     EDA_LibComponentStruct* LibEntry = NULL;
     bool     Res;
     wxString Msg;
@@ -397,11 +397,11 @@ EDA_LibComponentStruct* Read_Component_Definition( WinEDA_DrawFrame* frame, char
 
         return NULL;
     }
-    else    /* Mise a jour des infos de la ligne "DEF" */
+    else    /* Update infos read from the line "DEF" */
     {
         LibEntry->m_DrawPinNum  = (drawnum == 'N') ? FALSE : TRUE;
         LibEntry->m_DrawPinName = (drawname == 'N') ? FALSE : TRUE;
-        
+
         /* Copy part name and prefix. */
         strupper( name );
         if( name[0] != '~' )
@@ -433,11 +433,11 @@ EDA_LibComponentStruct* Read_Component_Definition( WinEDA_DrawFrame* frame, char
         }
     }
 
-    /* Analyse lignes suivantes */
+    /* Read next lines */
     while( GetLine( f, Line, LineNum, 1024 ) )
     {
         p   = strtok( Line, " \t\n" );
-        Res = TRUE; /* Pour test d'erreur (Res = FALSE = erreur) */
+        Res = TRUE; /* This is the error flag ( if an error occurs, Res = FALSE) */
 
         if( (Line[0] == 'T') && (Line[1] == 'i') )
         {
@@ -470,7 +470,7 @@ EDA_LibComponentStruct* Read_Component_Definition( WinEDA_DrawFrame* frame, char
             frame->PrintMsg( Msg );
         }
 
-        /* Fin analyse de la ligne ou block: test de l'info lue */
+        /* End line or block analysis: test for an error */
         if( !Res )
         {           /* Something went wrong there. */
             Msg.Printf( wxT( " Error Line %d, Library not loaded" ), *LineNum );
@@ -533,10 +533,10 @@ static LibEDA_BaseStruct* GetDrawEntry( WinEDA_DrawFrame* frame, FILE* f, char* 
                                 &Arc->m_Width, chartmp, &startx, &starty, &endx, &endy );
             if( nbarg < 8 )
                 Error = TRUE;
-            
-            Arc->m_Unit = Unit; 
+
+            Arc->m_Unit    = Unit;
             Arc->m_Convert = Convert;
-            
+
             if( chartmp[0] == 'F' )
                 Arc->m_Fill = FILLED_SHAPE;
             if( chartmp[0] == 'f' )
@@ -545,12 +545,12 @@ static LibEDA_BaseStruct* GetDrawEntry( WinEDA_DrawFrame* frame, FILE* f, char* 
             NORMALIZE_ANGLE( Arc->t1 );
             NORMALIZE_ANGLE( Arc->t2 );
 
-            if( nbarg >= 13 )      // Coord reelles des extremites de l'arc lues
+            if( nbarg >= 13 )      // Actual Coordinates of arc ends are read from file
             {
                 Arc->m_ArcStart.x = startx; Arc->m_ArcStart.y = starty;
                 Arc->m_ArcEnd.x   = endx; Arc->m_ArcEnd.y = endy;
             }
-            else
+            else      // Actual Coordinates of arc ends are not read from file (old library), calculate them
             {
                 Arc->m_ArcStart.x = Arc->m_Rayon; Arc->m_ArcStart.y = 0;
                 Arc->m_ArcEnd.x   = Arc->m_Rayon; Arc->m_ArcEnd.y = 0;
@@ -636,11 +636,11 @@ static LibEDA_BaseStruct* GetDrawEntry( WinEDA_DrawFrame* frame, FILE* f, char* 
             Pin->m_PinLen = ll;
             Pin->m_Orient = chartmp1[0] & 255;
 
-            Pin->m_Unit = Unit; 
+            Pin->m_Unit    = Unit;
             Pin->m_Convert = Convert;
-            
+
             strncpy( (char*) &Pin->m_PinNum, PinNum, 4 );
-            
+
             Error = (i != 11 && i != 12);
 
             Pin->m_PinName = CONV_FROM_UTF8( BufName );
@@ -716,7 +716,6 @@ static LibEDA_BaseStruct* GetDrawEntry( WinEDA_DrawFrame* frame, FILE* f, char* 
                     }
                 }
             }
-
         }
             break;
 
@@ -868,7 +867,7 @@ static bool GetLibEntryField( EDA_LibComponentStruct* LibEntry, char* line )
 
     if( *line == 0 )
         return 0;
-    line++; 
+    line++;
     Text = line;
 
     /* recherche fin de texte */
@@ -877,23 +876,23 @@ static bool GetLibEntryField( EDA_LibComponentStruct* LibEntry, char* line )
 
     if( *line == 0 )
         return 0;
-    *line = 0; 
+    *line = 0;
     line++;
 
     FieldUserName[0] = 0;
-    
+
     nbparam = sscanf( line, " %d %d %d %c %c %c %c",
                       &posx, &posy, &size, Char1, Char2, Char3, Char4 );
-    orient   = TEXT_ORIENT_HORIZ;
-    
+    orient = TEXT_ORIENT_HORIZ;
+
     if( Char1[0] == 'V' )
         orient = TEXT_ORIENT_VERT;
-    draw     = TRUE; if( Char2[0] == 'I' )
+    draw = TRUE; if( Char2[0] == 'I' )
         draw = FALSE;
-    
+
     hjustify = GR_TEXT_HJUSTIFY_CENTER;
     vjustify = GR_TEXT_VJUSTIFY_CENTER;
-    
+
     if( nbparam >= 6 )
     {
         if( *Char3 == 'L' )
@@ -921,7 +920,7 @@ static bool GetLibEntryField( EDA_LibComponentStruct* LibEntry, char* line )
     default:
         if( NumOfField >= NUMBER_OF_FIELDS )
             break;
-        
+
         Field = new LibDrawField( NumOfField );
 
         Field->Pnext     = LibEntry->Fields;
@@ -934,19 +933,19 @@ static bool GetLibEntryField( EDA_LibComponentStruct* LibEntry, char* line )
 
     Field->m_Pos.x  = posx; Field->m_Pos.y = posy;
     Field->m_Orient = orient;
-    
+
     if( draw == FALSE )
         Field->m_Attributs |= TEXT_NO_VISIBLE;
-    
+
     Field->m_Size.x = Field->m_Size.y = size;
     Field->m_Text   = CONV_FROM_UTF8( Text );
-    
+
     if( NumOfField >= FIELD1 )
     {
         ReadDelimitedText( FieldUserName, line, sizeof(FieldUserName) );
         Field->m_Name = CONV_FROM_UTF8( FieldUserName );
     }
-    
+
     Field->m_HJustify = hjustify;
     Field->m_VJustify = vjustify;
     return TRUE;
@@ -987,7 +986,7 @@ static void InsertAlias( PriorQue** PQ, EDA_LibComponentStruct* LibEntry,
     unsigned ii;
 
     if( LibEntry->m_AliasList.GetCount() == 0 )
-        return;/* No alias for this component */
+        return; /* No alias for this component */
 
     for( ii = 0; ii < LibEntry->m_AliasList.GetCount(); ii++ )
     {
@@ -1020,7 +1019,7 @@ int LoadDocLib( WinEDA_DrawFrame* frame, const wxString& FullDocLibName, const w
         return 0;
 
     if( GetLine( f, Line, &LineNum, sizeof(Line) ) == NULL )
-    {   
+    {
         /* pas de lignes utiles */
         fclose( f );
         return 0;
@@ -1122,20 +1121,20 @@ void EDA_LibComponentStruct::SortDrawItems()
     int ii, nbitems;
 
     if( Entry == NULL )
-        return;                /* Pas d'alias pour ce composant */
+        return; /* Pas d'alias pour ce composant */
     /* calcul du nombre d'items */
     for( nbitems = 0; Entry != NULL; Entry = Entry->Next() )
         nbitems++;
 
     BufentryBase =
-        (LibEDA_BaseStruct**) MyZMalloc( (nbitems + 1) * sizeof(LibEDA_BaseStruct *) );
-        
+        (LibEDA_BaseStruct**) MyZMalloc( (nbitems + 1) * sizeof(LibEDA_BaseStruct*) );
+
     /* memorisation du chainage : */
     for( Entry = m_Drawings, ii = 0; Entry != NULL; Entry = Entry->Next() )
         BufentryBase[ii++] = Entry;
 
     /* Tri du chainage */
-    qsort( BufentryBase, nbitems, sizeof(LibEDA_BaseStruct *), SortItemsFct );
+    qsort( BufentryBase, nbitems, sizeof(LibEDA_BaseStruct*), SortItemsFct );
 
     /* Mise a jour du chainage. Remarque:
      *  le dernier element de BufEntryBase (BufEntryBase[nbitems]) est NULL*/

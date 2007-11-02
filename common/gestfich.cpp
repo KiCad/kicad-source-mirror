@@ -85,17 +85,18 @@ wxString MakeReducedFileName( const wxString& fullfilename,
                               const wxString& default_ext )
 /***************************************************************************/
 
-/* Calcule le nom "reduit" d'un fichier d'apres les chaines
- *  fullfilename = nom complet
- *  default_path = prefixe (chemin) par defaut
- *  default_ext = extension	par defaut
+/** Function MakeReducedFileName
+ * Calculate the "reduced" filename from
+ * @param  fullfilename = full filename
+ * @param  default_path = default path
+ * @param  default_ext = default extension
  * 
- *  retourne le nom reduit, c'est a dire:
- *  sans le chemin si le chemin est default_path
- *  avec ./ si si le chemin est le chemin courant
- *  sans l'extension si l'extension est default_ext
+ * @return  the "reduced" filename, i.e.:
+ *  without path if it is default_path
+ *  wiht ./ if the path is the current path
+ *  without extension if extension is default_ext
  * 
- *  Renvoie un chemin en notation unix ('/' en separateur de repertoire)
+ *  the new flename is in unix like notation ('/' as path separator)
  */
 {
     wxString reduced_filename = fullfilename;
@@ -111,18 +112,19 @@ wxString MakeReducedFileName( const wxString& fullfilename,
     path.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
 
 #ifdef __WINDOWS__
+	// names are case insensitive under windows
     path.MakeLower();
     Cwd.MakeLower();
     ext.MakeLower();
 #endif
 
-    // Si le fichier est dans chemin par defaut -> suppression du chemin par defaut
+    // if the path is "default_path" -> remove it
     wxString root_path = path.Left( Cwd.Length() );
     if( root_path == Cwd )
     {
         reduced_filename.Remove( 0, Cwd.Length() );
     }
-    else    // Si fichier dans repertoire courant -> chemin = ./
+    else    // if the path is the current path -> change path to ./
     {
         Cwd = wxGetCwd() + UNIX_STRING_DIR_SEP;
 #ifdef __WINDOWS__
@@ -130,14 +132,14 @@ wxString MakeReducedFileName( const wxString& fullfilename,
 #endif
         Cwd.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
         if( path == Cwd )
-        {   // lib est dans répertoire courant -> Chemin = "./"
+        {   // the path is the current path -> path = "./"
             reduced_filename.Remove( 0, Cwd.Length() );
             wxString tmp = wxT( "./" ) + reduced_filename;
             reduced_filename = tmp;
         }
     }
 
-    // Suppression extension standard:
+    // remove extension if == default_ext:
     if( !ext.IsEmpty() && reduced_filename.Contains( ext ) )
         reduced_filename.Truncate( reduced_filename.Length() - ext.Length() );
 
@@ -150,15 +152,14 @@ wxString MakeFileName( const wxString& dir,
                        const wxString& shortname, const wxString& ext )
 /***************************************************************************/
 
-/* Calcule le nom complet d'un fichier d'apres les chaines
- *  dir = prefixe (chemin)	  (peut etre "")
- *  shortname = nom avec ou sans chemin ou extension
- *  ext = extension	(peut etre "")
- * 
- *  si shortname possede deja un chemin ou une extension, elles
- *  ne seront pas modifiees
- * 
- *  retourne la chaine calculee
+/** Function MakeFileName
+ * Calculate the full file name from dir, shortname and ext
+ * @param  dir = path	  (can be empty)
+ * @param  shortname = filename with or without path and/or extension
+ * @param  ext = extension	(can be empty)
+ *  If shortname has an absolute path, or a path start by ./ , the path will not be modified
+ *  If shortname has an extension, it will not be modified
+ *  @return full filename
  */
 {
     wxString fullfilename;
@@ -166,31 +167,34 @@ wxString MakeFileName( const wxString& dir,
 
     if( !dir.IsEmpty() )
     {
-        if( !shortname.Contains( UNIX_STRING_DIR_SEP ) && !shortname.Contains( WIN_STRING_DIR_SEP )
-           && !shortname.Contains( wxT( ":" ) ) )
-        { /* aucun chemin n'est donne */
-            fullfilename = dir;
-        }
+		if( !wxIsAbsolutePath( shortname ) )
+		{
+			wxString left = shortname.Left(2);
+			if( left != wxT("./") )
+			{ /* no absolute path in shortname */
+				fullfilename = dir;
+			}
+		}
     }
 
     fullfilename += shortname;
     fullfilename.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
 
-    /* Placement de l'extension s'il n'y en a pas deja une */
+    /* Add an extension if shortname has no extension */
     if( ext.IsEmpty() )
         return fullfilename;
 
-    /* Recherche d'une eventuelle extension */
-    ii = fullfilename.Length(); /* Pointe la fin du texte */
+    /* search for an extension */
+    ii = fullfilename.Length(); /* Get the end of name */
     for( ; ii >= 0; ii-- )
     {
         if( fullfilename.GetChar( ii ) == '/' )
         {
-            /* Pas d'extension: placement de l'extension standard */
+            /* not extension: add ext */
             fullfilename += ext;
             break;
         }
-        if( fullfilename.GetChar( ii ) == '.' ) /* extension trouvee */
+        if( fullfilename.GetChar( ii ) == '.' ) /* extension exists, do nothing */
             break;
     }
 
@@ -202,7 +206,10 @@ wxString MakeFileName( const wxString& dir,
 void ChangeFileNameExt( wxString& FullFileName, const wxString& NewExt )
 /**************************************************************************/
 
-/* Change l'extension du "filename FullFileName" en NewExt.
+/** Function ChangeFileNameExt
+ * change the extension of FullFileName to NewExt.
+ * @param FullFileName = filename to modify
+ * @param NewExt = new extension for FullFileName
  */
 {
     wxString FileName;
@@ -223,7 +230,9 @@ void ChangeFileNameExt( wxString& FullFileName, const wxString& NewExt )
 void AddDelimiterString( wxString& string )
 /*******************************************/
 
-/* ajoute un " en debut et fin de string s'il n'y en a pas deja.
+/** Function AddDelimiterString
+ * Add un " to the start and the end of string (if not already done).
+ * @param string = string to modify
  */
 {
     wxString text;
@@ -237,9 +246,9 @@ void AddDelimiterString( wxString& string )
 }
 
 
-/*************************************/
-/* Fonction de selection de Repertoires */
-/*************************************/
+/***********************************/
+/* Selection Directory dialog box: */
+/***********************************/
 
 bool EDA_DirectorySelector( const wxString& Title,      /* Titre de la fenetre */
                             wxString&       Path,       /* Chemin par defaut */
@@ -300,7 +309,7 @@ wxString EDA_FileSelector( const wxString& Title,                   /* Dialog ti
                                    defaultname,
                                    Ext,
                                    Mask,
-                                   flag,/* options d'affichage (wxFD_OPEN, wxFD_SAVE .. */
+                                   flag,/* open mode wxFD_OPEN, wxFD_SAVE .. */
                                    Frame,
                                    Pos.x, Pos.y );
 
@@ -314,9 +323,9 @@ wxString EDA_FileSelector( const wxString& Title,                   /* Dialog ti
 /********************************************************/
 wxString FindKicadHelpPath()
 /********************************************************/
-/* Find absolute path for kicad/help (or kicad/help/<language>) */
-
-/* Find path kicad/help/xx/ ou kicad/help/:
+/** Function FindKicadHelpPath
+ * Find an absolute path for kicad/help (or kicad/help/<language>)
+ *  Find path kicad/help/xx/ ou kicad/help/:
  *  from BinDir
  *  else from environment variable KICAD
  *  else from one of s_HelpPathList
