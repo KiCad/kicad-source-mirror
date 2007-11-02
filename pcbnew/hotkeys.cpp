@@ -314,13 +314,19 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
                 // don't let backspace delete modules!!
                 if( DrawStruct && (DrawStruct->Type() == TYPETRACK
                                    || DrawStruct->Type() == TYPEVIA) )
+                {
                     Delete_Segment( DC, (TRACK*) DrawStruct );
+                    SetCurItem(NULL);
+                }
                 GetScreen()->SetModify();
             }
             else if( GetCurItem()->Type() == TYPETRACK  )
             {
                 // then an element is being edited - remove the last segment.
-                SetCurItem( Delete_Segment( DC, (TRACK*) GetCurItem() ) );
+                // simple lines for debugger:
+                TRACK* track = (TRACK*) GetCurItem() ;
+                track = Delete_Segment( DC, track );
+                SetCurItem( track );
                 GetScreen()->SetModify();
             }
         }
@@ -581,8 +587,10 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* DC, EDA_BaseStruct* DrawStruct )
         }
         else if( GetCurItem()->Type() == TYPETRACK  )
         {
-            SetCurItem(
-                Delete_Segment( DC, (TRACK*) GetCurItem() ) );
+            // simple lines for debugger:
+            TRACK* track = (TRACK*) GetCurItem();
+            track = Delete_Segment( DC, track ); 
+            SetCurItem( track );
             GetScreen()->SetModify();
             return TRUE;
         }
