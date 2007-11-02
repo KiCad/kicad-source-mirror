@@ -27,7 +27,6 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
 {
     int         ii;
     wxMenuBar*  menuBar = GetMenuBar();
-//  wxMenuItem* item;
 
     if( menuBar == NULL )
     {
@@ -162,7 +161,7 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
         // Associate the menu bar with the frame
         SetMenuBar( menuBar );
     }
-    else        // simple mise a jour de la liste des fichiers anciens
+    else        // Only an update of the files list
     {
         wxMenuItem* item;
         int         max_file = m_Parent->m_LastProjectMaxCount;
@@ -342,6 +341,9 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
 /**********************************************/
 void WinEDA_GerberFrame::ReCreateVToolbar( void )
 /**********************************************/
+/**
+create or update the right vertical toolbar
+*/
 {
     if( m_VToolBar )
         return;
@@ -398,6 +400,9 @@ void WinEDA_GerberFrame::ReCreateVToolbar( void )
 /************************************************/
 void WinEDA_GerberFrame::ReCreateOptToolbar( void )
 /************************************************/
+/**
+create or update the left vertical toolbar (option toolbar
+*/
 {
     if( m_OptionsToolBar )
         return;
@@ -437,14 +442,21 @@ void WinEDA_GerberFrame::ReCreateOptToolbar( void )
                               wxNullBitmap,
                               TRUE,
                               -1, -1, (wxObject*) NULL,
-                              _( "Show Spots Sketch" ) );
+                              _( "Show Spots in Sketch Mode" ) );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
                               BITMAP( showtrack_xpm ),
                               wxNullBitmap,
                               TRUE,
                               -1, -1, (wxObject*) NULL,
-                              _( "Show Lines Sketch" ) );
+                              _( "Show Lines in Sketch Mode" ) );
+
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH,
+                              BITMAP( opt_show_polygon_xpm ),
+                              wxNullBitmap,
+                              TRUE,
+                              -1, -1, (wxObject*) NULL,
+                              _( "Show Polygons in Sketch Mode" ) );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_DCODES,
                               BITMAP( show_dcodenumber_xpm ),

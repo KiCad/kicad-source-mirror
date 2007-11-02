@@ -1,12 +1,11 @@
-	/********************************************/
-	/* PCBNEW - Gestion des Options et Reglages */
-	/********************************************/
+/**********************************************/
+/* GERBVIEW - Gestion des Options et Reglages */
+/**********************************************/
 
-	/*	 Fichier reglage.cpp 	*/
+/*	 Fichier reglage.cpp 	*/
 
 /*
- * Affichage et modifications des parametres de travail de PcbNew
- * Parametres = dimensions des via, pistes, isolements, options...
+ * Options for file extensions
  */
 
 
@@ -18,148 +17,136 @@
 
 #include "protos.h"
 
-/* Fonctions locales */
-
-/* variables locales */
-
 /***********/
 
 enum {
-	ID_SAVE_CFG = 1000
-	};
+    ID_SAVE_CFG = 1000
+};
 
 /* Routines Locales */
 
-	/*************************************************/
-	/* classe derivee pour la frame de Configuration */
-	/*************************************************/
-
-class WinEDA_ConfigFrame: public wxDialog
+class WinEDA_ConfigFrame : public wxDialog
 {
 private:
 
-	WinEDA_GerberFrame * m_Parent;
-	wxListBox * ListLibr;
-	int LibModified;
+    WinEDA_GerberFrame* m_Parent;
+    wxListBox*          ListLibr;
+    int LibModified;
 
-	WinEDA_EnterText * TextDrillExt;
-	WinEDA_EnterText * TextPhotoExt;
-	WinEDA_EnterText * TextPenExt;
+    WinEDA_EnterText*   TextDrillExt;
+    WinEDA_EnterText*   TextPhotoExt;
+    WinEDA_EnterText*   TextPenExt;
 
-	// Constructor and destructor
+    // Constructor and destructor
 public:
-	WinEDA_ConfigFrame(WinEDA_GerberFrame *parent,const wxPoint& pos);
-	~WinEDA_ConfigFrame() {};
+    WinEDA_ConfigFrame( WinEDA_GerberFrame* parent, const wxPoint& pos );
+    ~WinEDA_ConfigFrame() { };
 
 private:
-	void SaveCfg(wxCommandEvent & event);
-	void OnOkClick(wxCommandEvent & event);
-	void OnCancelClick(wxCommandEvent & event);
+    void    SaveCfg( wxCommandEvent& event );
+    void    OnOkClick( wxCommandEvent& event );
+    void    OnCancelClick( wxCommandEvent& event );
 
-	DECLARE_EVENT_TABLE()
-
+    DECLARE_EVENT_TABLE()
 };
 /* Construction de la table des evenements pour WinEDA_ConfigFrame */
-BEGIN_EVENT_TABLE(WinEDA_ConfigFrame, wxDialog)
-	EVT_BUTTON(ID_SAVE_CFG, WinEDA_ConfigFrame::SaveCfg)
-	EVT_BUTTON(wxID_OK, WinEDA_ConfigFrame::OnOkClick)
-	EVT_BUTTON(wxID_CANCEL, WinEDA_ConfigFrame::OnCancelClick)
+BEGIN_EVENT_TABLE( WinEDA_ConfigFrame, wxDialog )
+EVT_BUTTON( ID_SAVE_CFG, WinEDA_ConfigFrame::SaveCfg )
+EVT_BUTTON( wxID_OK, WinEDA_ConfigFrame::OnOkClick )
+EVT_BUTTON( wxID_CANCEL, WinEDA_ConfigFrame::OnCancelClick )
 END_EVENT_TABLE()
 
 
+/*****************************************************************/
+void WinEDA_GerberFrame::InstallConfigFrame( const wxPoint& pos )
+/*****************************************************************/
 
-	/*****************************************************************/
-	/* void WinEDA_GerberFrame::InstallConfigFrame(const wxPoint & pos) */
-	/*****************************************************************/
-
-void WinEDA_GerberFrame::InstallConfigFrame(const wxPoint & pos)
+/** Function InstallConfigFrame
+  * install the dialog box to configure some gerbview options
+  * manly the default file extensions
+ */
 {
-	WinEDA_ConfigFrame * CfgFrame = new WinEDA_ConfigFrame(this, pos);
-	CfgFrame->ShowModal();
-	CfgFrame->Destroy();
+    WinEDA_ConfigFrame* CfgFrame = new WinEDA_ConfigFrame( this, pos );
+
+    CfgFrame->ShowModal();
+    CfgFrame->Destroy();
 }
 
 
-	/************************************************************/
-	/* Constructeur de WinEDA_ConfigFrame: la fenetre de config */
-	/************************************************************/
-
-WinEDA_ConfigFrame::WinEDA_ConfigFrame(WinEDA_GerberFrame *parent,
-		const wxPoint& framepos):
-		wxDialog(parent, -1, wxEmptyString, framepos, wxSize(300, 180),
-		wxDEFAULT_DIALOG_STYLE|wxFRAME_FLOAT_ON_PARENT )
+/************************************************************/
+WinEDA_ConfigFrame::WinEDA_ConfigFrame( WinEDA_GerberFrame* parent,
+                                        const wxPoint&      framepos ) :
+    wxDialog( parent, -1, wxEmptyString, framepos, wxSize( 300, 180 ),
+              wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT )
+/************************************************************/
 {
-const int LEN_EXT = 100;
-wxString title;
+    const int LEN_EXT = 100;
+    wxString  title;
 
-	m_Parent = parent;
-	SetFont(* g_DialogFont);
+    m_Parent = parent;
+    SetFont( *g_DialogFont );
 
-	title = _("from ") + g_EDA_Appl->m_CurrentOptionFile;
-	SetTitle(title);
+	/* Shows the config filename currently used : */
+    title = _( "from " ) + g_EDA_Appl->m_CurrentOptionFile;
+    SetTitle( title );
 
-	LibModified = FALSE;
-	wxBoxSizer * MainBoxSizer = new wxBoxSizer(wxHORIZONTAL);
-	SetSizer(MainBoxSizer);
-	wxBoxSizer * RightBoxSizer = new wxBoxSizer(wxVERTICAL);
-	wxBoxSizer * LeftBoxSizer = new wxBoxSizer(wxVERTICAL);
-	MainBoxSizer->Add(LeftBoxSizer, 0, wxGROW|wxALL, 5);
-	MainBoxSizer->Add(RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    LibModified = FALSE;
+    wxBoxSizer* MainBoxSizer = new wxBoxSizer( wxHORIZONTAL );
+    SetSizer( MainBoxSizer );
+    wxBoxSizer* RightBoxSizer = new wxBoxSizer( wxVERTICAL );
+    wxBoxSizer* LeftBoxSizer  = new wxBoxSizer( wxVERTICAL );
+    MainBoxSizer->Add( LeftBoxSizer, 0, wxGROW | wxALL, 5 );
+    MainBoxSizer->Add( RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
-	/* Creation des boutons de commande */
-	wxButton * Button = new wxButton(this,	ID_SAVE_CFG, _("Save Cfg..."));
-	RightBoxSizer->Add(Button, 0, wxGROW|wxALL, 5);
+    /* Created the buttons */
+    wxButton* Button = new wxButton( this, ID_SAVE_CFG, _( "Save Cfg..." ) );
+    RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
-	// Provide a spacer to improve appearance of dialog box
-	RightBoxSizer->AddSpacer(20);
+    // Provide a spacer to improve appearance of dialog box
+    RightBoxSizer->AddSpacer( 20 );
 
-	Button = new wxButton(this,	wxID_OK, _("OK"));
-	Button->SetForegroundColour(*wxRED);
-	RightBoxSizer->Add(Button, 0, wxGROW|wxALL, 5);
+    Button = new wxButton( this, wxID_OK, _( "OK" ) );
+    Button->SetForegroundColour( *wxRED );
+    RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
-	Button = new wxButton(this,	wxID_CANCEL, _("Cancel"));
-	Button->SetForegroundColour(*wxBLUE);
-	RightBoxSizer->Add(Button, 0, wxGROW|wxALL, 5);
+    Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
+    Button->SetForegroundColour( *wxBLUE );
+    RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
-	wxSize size;
-	size.x = LEN_EXT;
-	size.y = -1;
-	TextDrillExt = new WinEDA_EnterText(this,
-				_("Drill File Ext:"), g_DrillFilenameExt,
-				LeftBoxSizer, size);
+    wxSize size;
+    size.x = LEN_EXT;
+    size.y = -1;
+    TextDrillExt = new WinEDA_EnterText( this,
+                                         _( "Drill File Ext:" ), g_DrillFilenameExt,
+                                         LeftBoxSizer, size );
 
-	TextPhotoExt = new WinEDA_EnterText(this,
-				_("Gerber File Ext:"), g_PhotoFilenameExt,
-				LeftBoxSizer, size);
+    TextPhotoExt = new WinEDA_EnterText( this,
+                                         _( "Gerber File Ext:" ), g_PhotoFilenameExt,
+                                         LeftBoxSizer, size );
 
-	TextPenExt = new WinEDA_EnterText(this,
-				_("D code File Ext:"),  g_PenFilenameExt,
-				LeftBoxSizer, size);
- 
-	GetSizer()->Fit(this);
-    GetSizer()->SetSizeHints(this);
+    TextPenExt = new WinEDA_EnterText( this,
+                                       _( "D code File Ext:" ), g_PenFilenameExt,
+                                       LeftBoxSizer, size );
+
+    GetSizer()->Fit( this );
+    GetSizer()->SetSizeHints( this );
 }
-
-
-	/*****************************************************************/
-	/* Fonctions de base de WinEDA_ConfigFrame: la fenetre de config */
-	/*****************************************************************/
 
 
 /******************************************************************/
-void  WinEDA_ConfigFrame::OnOkClick(wxCommandEvent& WXUNUSED(event))
+void WinEDA_ConfigFrame::OnOkClick( wxCommandEvent& WXUNUSED (event) )
 /******************************************************************/
 {
     g_DrillFilenameExt = TextDrillExt->GetValue();
     g_PhotoFilenameExt = TextPhotoExt->GetValue();
-    g_PenFilenameExt = TextPenExt->GetValue();
+    g_PenFilenameExt   = TextPenExt->GetValue();
 
     EndModal( 1 );
 }
 
 
 /******************************************************************/
-void  WinEDA_ConfigFrame::OnCancelClick(wxCommandEvent& WXUNUSED(event))
+void WinEDA_ConfigFrame::OnCancelClick( wxCommandEvent& WXUNUSED (event) )
 /******************************************************************/
 {
     EndModal( -1 );
@@ -167,8 +154,8 @@ void  WinEDA_ConfigFrame::OnCancelClick(wxCommandEvent& WXUNUSED(event))
 
 
 /******************************************************/
-void WinEDA_ConfigFrame::SaveCfg(wxCommandEvent& event)
+void WinEDA_ConfigFrame::SaveCfg( wxCommandEvent& event )
 /******************************************************/
 {
-	m_Parent->Update_config();
+    m_Parent->Update_config();
 }

@@ -72,6 +72,7 @@
 	#include "../bitmaps/Options_Segment.xpm"
 	#include "../bitmaps/Options_Rectangle.xpm"
 	#include "../bitmaps/Display_Options.xpm"
+	#include "../bitmaps/opt_show_polygon.xpm"
 
 	#include "../bitmaps/Mirror_V.xpm"
 	#include "../bitmaps/Mirror_H.xpm"

@@ -2,10 +2,10 @@
 	/* GERBVIEW - Gestion des Options et Reglages */
 	/********************************************/
 
-	/*	 Fichier options.cpp 	*/
+	/*	 File options.cpp 	*/
 
 /*
- * Affichage et modifications des parametres de travail Gerbview
+ * Set the display options for Gerbview
  */
 
 
@@ -20,45 +20,42 @@
 #include "protos.h"
 #include <wx/spinctrl.h>
 
-/* Fonctions locales */
-
-/* variables locales */
 
 /*****************************************************************/
 void WinEDA_GerberFrame::OnSelectOptionToolbar(wxCommandEvent& event)
 /*****************************************************************/
+/** Function OnSelectOptionToolbar
+ *  called to validate current choices
+ */
 {
 int id = event.GetId();
-wxClientDC dc(DrawPanel);
 
-	DrawPanel->PrepareGraphicContext(&dc);
 	switch ( id )
 	{
 		case ID_TB_OPTIONS_SHOW_GRID:
 			m_Draw_Grid = g_ShowGrid = m_OptionsToolBar->GetToolState(id);
-			DrawPanel->ReDraw(&dc, TRUE);
+			DrawPanel->Refresh(TRUE);
 			break;
 
 		case ID_TB_OPTIONS_SELECT_UNIT_MM:
 			g_UnitMetric = MILLIMETRE;
-			Affiche_Status_Box();	 /* Reaffichage des coord curseur */
+			Affiche_Status_Box();
 			break;
 
 		case ID_TB_OPTIONS_SELECT_UNIT_INCH:
 			g_UnitMetric = INCHES;
-			Affiche_Status_Box();	 /* Reaffichage des coord curseur */
+			Affiche_Status_Box();
 			break;
 
 		case ID_TB_OPTIONS_SHOW_POLAR_COORD:
 			Affiche_Message(wxEmptyString);
 			DisplayOpt.DisplayPolarCood = m_OptionsToolBar->GetToolState(id);
-			Affiche_Status_Box();	 /* Reaffichage des coord curseur */
+			Affiche_Status_Box();
 			break;
 
 		case ID_TB_OPTIONS_SELECT_CURSOR:
-			DrawPanel->CursorOff(&dc);
 			g_CursorShape = m_OptionsToolBar->GetToolState(id);
-			DrawPanel->CursorOn(&dc);
+			DrawPanel->Refresh(TRUE);
 			break;
 
 		case ID_TB_OPTIONS_SHOW_PADS_SKETCH:
@@ -72,7 +69,7 @@ wxClientDC dc(DrawPanel);
 				m_DisplayPadFill = TRUE;
 				DisplayOpt.DisplayPadFill = TRUE;
 			}
-			DrawPanel->ReDraw(&dc, TRUE);
+			DrawPanel->Refresh(TRUE);
 			break;
 
 		case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
@@ -86,12 +83,19 @@ wxClientDC dc(DrawPanel);
 				m_DisplayPcbTrackFill = TRUE;
 				DisplayOpt.DisplayPcbTrackFill = TRUE;
 			}
-			DrawPanel->ReDraw(&dc, TRUE);
+			DrawPanel->Refresh(TRUE);
+			break;
+
+		case ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH:
+			if ( m_OptionsToolBar->GetToolState(id) )	// Polygons filled asked
+				 g_DisplayPolygonsModeSketch = 0;
+			else g_DisplayPolygonsModeSketch = 1;
+			DrawPanel->Refresh(TRUE);
 			break;
 
 		case ID_TB_OPTIONS_SHOW_DCODES:
 			DisplayOpt.DisplayPadNum = m_OptionsToolBar->GetToolState(id);
-			DrawPanel->ReDraw(&dc, TRUE);
+			DrawPanel->Refresh(TRUE);
 			break;
 
 		default:
@@ -103,11 +107,9 @@ wxClientDC dc(DrawPanel);
 }
 
 
-	/*************************************************/
-	/* classe derivee pour la frame de Configuration */
-	/*************************************************/
-
+/******************************************************/
 class WinEDA_GerberGeneralOptionsFrame: public wxDialog
+/******************************************************/
 {
 private:
 
@@ -129,7 +131,7 @@ private:
 	DECLARE_EVENT_TABLE()
 
 };
-/* Construction de la table des evenements pour WinEDA_GerberGeneralOptionsFrame */
+/* Events table for WinEDA_GerberGeneralOptionsFrame */
 BEGIN_EVENT_TABLE(WinEDA_GerberGeneralOptionsFrame, wxDialog)
 	EVT_BUTTON(wxID_OK, WinEDA_GerberGeneralOptionsFrame::OnOkClick)
 	EVT_BUTTON(wxID_CANCEL, WinEDA_GerberGeneralOptionsFrame::OnCancelClick)
@@ -138,15 +140,15 @@ END_EVENT_TABLE()
 
 
 
-	/*************************************************/
-	/* Constructeur de WinEDA_GerberGeneralOptionsFrame */
-	/************************************************/
-
+/**********************************************************************************************/
 WinEDA_GerberGeneralOptionsFrame::WinEDA_GerberGeneralOptionsFrame(WinEDA_BasePcbFrame *parent,
 		const wxPoint& framepos):
 		wxDialog(parent, -1, _("Gerbview Options"),
 				 framepos, wxSize(300, 240),
 				wxDEFAULT_DIALOG_STYLE|wxFRAME_FLOAT_ON_PARENT )
+/**********************************************************************************************/
+/** WinEDA_GerberGeneralOptionsFrame Constructor
+*/
 {
 	m_Parent = parent;
 	SetFont(*g_DialogFont);
@@ -168,7 +170,7 @@ WinEDA_GerberGeneralOptionsFrame::WinEDA_GerberGeneralOptionsFrame(WinEDA_BasePc
 	Button->SetForegroundColour(*wxBLUE);
 	RightBoxSizer->Add(Button, 0, wxGROW|wxALL, 5);
 
-	/* Display Selection affichage des coordonnées polaires */
+	/* Display / not display polar coordinates: */
 wxString list_coord[2] =
 	{ _("No Display"),
 	_("Display") };
@@ -178,7 +180,7 @@ wxString list_coord[2] =
 	m_PolarDisplay->SetSelection(DisplayOpt.DisplayPolarCood ? 1 : 0);
 	LeftBoxSizer->Add(m_PolarDisplay, 0, wxGROW|wxALL, 5);
 
-	/* Selection choix des unités d'affichage */
+	/* Selection of units */
 wxString list_units[2] = {
 	_("Inches"),
 	_("millimeters") };
@@ -187,7 +189,7 @@ wxString list_units[2] = {
 	m_BoxUnits->SetSelection( g_UnitMetric ? 1 : 0);
 	LeftBoxSizer->Add(m_BoxUnits, 0, wxGROW|wxALL, 5);
 
-	/* Selection forme du curseur */
+	/* Selection of cursor shape */
 wxString list_cursors[2] = { _("Small"), _("Big") };
 	m_CursorShape = new wxRadioBox(this, -1, _("Cursor"), wxDefaultPosition, wxDefaultSize,
 					2, list_cursors, 1);
@@ -232,30 +234,25 @@ void WinEDA_GerberGeneralOptionsFrame::OnOkClick(wxCommandEvent& event)
 
 
 
-/******************************************************************/
-/* classe derivee pour la frame de Configuration WinEDA_LookFrame */
-/******************************************************************/
-
+/*******************************************/
+/* Dialog frame to select deisplay options */
+/*******************************************/
 class WinEDA_LookFrame: public wxDialog
 {
 private:
-protected:
-public:
-
 	WinEDA_BasePcbFrame * m_Parent;
-
 	wxRadioBox * m_OptDisplayLines;
-
 	wxRadioBox * m_OptDisplayFlashes;
+	wxRadioBox * m_OptDisplayPolygons;
 	wxCheckBox * m_OptDisplayDCodes;
-
 	wxRadioBox * m_OptDisplayDrawings;
 
-
+public:
 	// Constructor and destructor
 	WinEDA_LookFrame(WinEDA_BasePcbFrame *parent,const wxPoint& pos);
 	~WinEDA_LookFrame() {};
 
+private:
 	void OnOkClick(wxCommandEvent& event);
 	void OnCancelClick(wxCommandEvent & event);
 
@@ -313,6 +310,14 @@ wxString list_opt2[2] = { _("Sketch"), _("Filled") };
 		m_OptDisplayFlashes->SetSelection(1);
 	LeftBoxSizer->Add(m_OptDisplayFlashes, 0, wxGROW|wxALL, 5);
 
+		// Show Option Draw polygons
+	m_OptDisplayPolygons = new wxRadioBox(this, -1, _("Polygons:"),
+				wxDefaultPosition, wxDefaultSize,
+				2, list_opt2, 1);
+	if ( g_DisplayPolygonsModeSketch == 0)
+		m_OptDisplayPolygons->SetSelection(1);
+	LeftBoxSizer->Add(m_OptDisplayPolygons, 0, wxGROW|wxALL, 5);
+
 wxString list_opt3[3] = { _("Sketch"), _("Filled"), _("Line") };
 	m_OptDisplayDrawings = new wxRadioBox(this, -1, _("Display other items:"),
 				wxDefaultPosition, wxDefaultSize,
@@ -353,6 +358,11 @@ void WinEDA_LookFrame::OnOkClick(wxCommandEvent& event)
 		 DisplayOpt.DisplayPadFill = TRUE;
 	else
 		DisplayOpt.DisplayPadFill = FALSE;
+
+	if ( m_OptDisplayPolygons->GetSelection() == 0 )
+		 g_DisplayPolygonsModeSketch = 1;
+	else
+		g_DisplayPolygonsModeSketch = 0;
 
 	DisplayOpt.DisplayPadNum = m_OptDisplayDCodes->GetValue();
 

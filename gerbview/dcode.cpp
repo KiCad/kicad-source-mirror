@@ -233,7 +233,7 @@ char* ptcar;
 int dimH, dimV, drill, type_outil, dummy;
 float fdimH, fdimV, fdrill;
 char c_type_outil[256];
-char Line[1024];
+char Line[2000];
 wxString msg;
 D_CODE * pt_Dcode;
 FILE * dest;
@@ -266,7 +266,7 @@ D_CODE ** ListeDCode;
 
 	ListeDCode = g_GERBER_Descr_List[layer]->m_Aperture_List;
 
-	while( fgets(Line,255,dest) != NULL)
+	while( fgets(Line, sizeof(Line)-1,dest) != NULL)
 		{
 		if (*Line == ';') continue; /* Commentaire */
 		if (strlen(Line) < 10 ) continue ; /* Probablemant ligne vide */

@@ -198,9 +198,9 @@ PCB_SCREEN * screen;
 /*******************************************/
 void WinEDA_GerberFrame::SetToolbars()
 /*******************************************/
-/* Active ou desactive les tools du toolbar horizontal, en fonction des commandes
-en cours
-*/
+/** Function SetToolbars()
+ * Set the tools state for the toolbars, accordint to display options
+ */
 {
 int layer = GetScreen()->m_Active_Layer;
 GERBER_Descr * Gerber_layer_descr	= g_GERBER_Descr_List[layer];
@@ -276,6 +276,9 @@ GERBER_Descr * Gerber_layer_descr	= g_GERBER_Descr_List[layer];
 
 		m_OptionsToolBar->ToggleTool(ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
 			 ! m_DisplayPcbTrackFill);
+
+		m_OptionsToolBar->ToggleTool(ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH,
+			 g_DisplayPolygonsModeSketch == 0 ? 0 : 1);
 
 		m_OptionsToolBar->ToggleTool(ID_TB_OPTIONS_SHOW_DCODES,
 			 DisplayOpt.DisplayPadNum);

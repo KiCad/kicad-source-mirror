@@ -36,7 +36,7 @@
  *  G75			Active interpolation circulaire sur 360 degre
  *  G90			Mode Coordonnees absolues
  *  G91			Mode Coordonnees Relatives
- * 
+ *
  *  Coordonnees X,Y
  *  X,Y sont suivies de + ou - et de m+n chiffres (non separes)
  *          m = partie entiere
@@ -45,20 +45,20 @@
  *                                  m = 3, n = 4 (format 3.4)
  *  ex:
  *  G__ X00345Y-06123 D__*
- * 
+ *
  *  Outils et D_CODES
  *  numero d'outil ( identification des formes )
  *  1 a 99 	(classique)
  *  1 a 999
  *  D_CODES:
- * 
+ *
  *  D01 ... D9 = codes d'action:
  *  D01			= activation de lumiere (baisser de plume) lors du déplacement
  *  D02			= extinction de lumiere (lever de plume) lors du déplacement
  *  D03			= Flash
  *  D09			= VAPE Flash
  *  D51			= precede par G54 -> Select VAPE
- * 
+ *
  *  D10 ... D255 = Indentification d'outils ( d'ouvertures )
  *              Ne sont pas tj dans l'ordre ( voir tableau dans PCBPLOT.H)
  */
@@ -72,25 +72,25 @@
 /* Routine de Lecture d'un fichier de D Codes.
  *  Accepte format standard ou ALSPCB
  *      un ';' demarre un commentaire.
- * 
+ *
  *  Format Standard:
  *  tool,	 Horiz,		  Vert,	  drill, vitesse, acc. ,Type ; [DCODE (commentaire)]
  *  ex:	   1,		  12,		12,		0,		  0,	 0,	  3 ; D10
- * 
+ *
  *  Format ALSPCB:
  *  Ver  ,  Hor , Type , Tool [,Drill]
  *  ex:	0.012, 0.012,  L   , D10
- * 
+ *
  *  Classe les caract en buf_tmp sous forme de tableau de structures D_CODE.
  *  Retourne:
  *      < 0 si erreur:
  *          -1 = Fichier non trouve
  *          -2 = Erreur lecture fichier
  *      Rang de D_code maxi lu ( nbr de dcodes )
- * 
- * 
+ *
+ *
  *  Representation interne:
- * 
+ *
  *  Les lignes sont représentées par des TRACKS standards
  *  Les Flash  sont représentées par des DRAWSEGMENTS
  *      - ronds ou ovales: DRAWSEGMENTS
@@ -105,24 +105,28 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
                                            const wxString& D_Code_FullFileName )
 /********************************************************/
 
-/* Lecture de 1 fichier gerber.
- *  Format
+/* Read a gerber file (RS274D or RS274X format).
+ *  Normal format:
  *      Imperial
- *      Absolu
- *      fin de bloc = *
- *      CrLf apres chaque commande
+ *      Absolute
+ *      end of block = *
+ *      CrLf after each command
  *      G codes repetes
  */
 {
-    int           G_commande = 0, D_commande = 0;   /* Numero de commande G et D codes */
-    char          Line[1024];                       // Buffer des lignes du fichier gerber en cours
+    int           G_commande = 0,
+                  D_commande = 0;   /* command number for G et D commands (like G04 or D02) */
+    char          Line[4000];       /* Buffer to read 1 line of the gerber file
+                                     * warning: some files can have very long lines, so the buffer must be large
+                                     */
     wxString      msg;
     char*         text;
-    int           layer = GetScreen()->m_Active_Layer;
+    int           layer;    /* current layer used in gerbview */
     GERBER_Descr* gerber_layer;
     wxPoint       pos;
     int           error = 0;
 
+    layer = GetScreen()->m_Active_Layer;
 
     if( g_GERBER_Descr_List[layer] == NULL )
     {
@@ -130,16 +134,16 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
     }
 
     gerber_layer = g_GERBER_Descr_List[layer];
-    
-    /* Mise a jour de l'echelle gerber : */
+
+    /* Set the gerber scale: */
     gerber_layer->ResetDefaultValues();
 
-    /* Lecture du fichier de Trace */
+    /* Read the gerber file */
     gerber_layer->m_Current_File = wxFopen( GERBER_FullFileName, wxT( "rt" ) );
     if( gerber_layer->m_Current_File == 0 )
     {
         msg = _( "File " ) + GERBER_FullFileName + _( " not found" );
-        DisplayError( this, msg, 10 ); 
+        DisplayError( this, msg, 10 );
         return FALSE;
     }
 
@@ -152,20 +156,20 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
 
     while( TRUE )
     {
-        if( fgets( Line, 255, gerber_layer->m_Current_File ) == NULL ) // E.O.F
+        if( fgets( Line, sizeof(Line) - 1, gerber_layer->m_Current_File ) == NULL ) // E.O.F
         {
             if( gerber_layer->m_FilesPtr == 0 )
                 break;
-            
+
             fclose( gerber_layer->m_Current_File );
-            
+
             gerber_layer->m_FilesPtr--;
             gerber_layer->m_Current_File =
                 gerber_layer->m_FilesList[gerber_layer->m_FilesPtr];
-                
+
             continue;
         }
-        
+
         text = StrPurge( Line );
 
         while( text && *text )
@@ -187,21 +191,22 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
                 gerber_layer->m_CommandState = CMD_IDLE;
                 while( *text )
                     text++;
+
                 break;
 
-            case 'G':    /* Ligne type Gxx : commande */
+            case 'G':    /* Line type Gxx : command */
                 G_commande = gerber_layer->ReturnGCodeNumber( text );
                 gerber_layer->Execute_G_Command( text, G_commande );
                 break;
 
-            case 'D':       /* Ligne type Dxx : Selection d'un outil ou commande si xx = 0..9*/
+            case 'D':       /* Line type Dxx : Tool selection (xx > 0) or command if xx = 0..9*/
                 D_commande = gerber_layer->ReturnDCodeNumber( text );
                 gerber_layer->Execute_DCODE_Command( this, DC,
                                                      text, D_commande );
                 break;
 
             case 'X':
-            case 'Y':                   /* Commande de deplacement ou de Trace */
+            case 'Y':                   /* Move or draw command */
                 pos = gerber_layer->ReadXYCoord( text );
                 if( *text == '*' )      // command like X12550Y19250*
                 {
@@ -211,7 +216,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
                 break;
 
             case 'I':
-            case 'J':       /* Commande de deplacement ou de Trace */
+            case 'J':       /* Auxiliary Move command */
                 pos = gerber_layer->ReadIJCoord( text );
                 break;
 
@@ -219,7 +224,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
                 if( gerber_layer->m_CommandState != ENTER_RS274X_CMD )
                 {
                     gerber_layer->m_CommandState = ENTER_RS274X_CMD;
-                    
+
                     if( !gerber_layer->ReadRS274XCommand( this, DC, Line, text ) )
                     {
                         error++;
@@ -227,7 +232,6 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
                 }
                 else        //Error
                 {
-                    wxBell(); 
                     error++;
                     gerber_layer->m_CommandState = CMD_IDLE;
                     text++;
@@ -235,7 +239,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
                 break;
 
             default:
-                text++; 
+                text++;
                 error++;
                 break;
             }
@@ -252,7 +256,9 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
 
     setlocale( LC_NUMERIC, "" );
 
-    /* Init tableau des DCodes et Lecture fichier DCODES */
+    /* Init  DCodes list and perhaps read a DCODES file,
+     * if the gerber file is only a RS274D file (without any aperture information)
+     */
     if( !gerber_layer->m_As_DCode )
     {
         wxString DCodeFileName;

@@ -28,7 +28,8 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
 /* routine de trace du pcb, avec selection des couches */
 {
     DISPLAY_OPTIONS save_opt;
-
+	int DisplayPolygonsModeImg;
+	
     save_opt = DisplayOpt;
     if( printmasklayer & ALL_CU_LAYERS )
         DisplayOpt.DisplayPadFill = FILLED;
@@ -43,6 +44,8 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     DisplayOpt.DisplayTrackIsol    = 0;
     DisplayOpt.DisplayDrawItems    = FILLED;
     DisplayOpt.DisplayZones = 1;
+	DisplayPolygonsModeImg = g_DisplayPolygonsModeSketch;
+	g_DisplayPolygonsModeSketch = 0;
 
     ( (WinEDA_GerberFrame*) m_Parent )->Trace_Gerber( DC, GR_COPY, printmasklayer );
 
@@ -50,6 +53,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
         m_Parent->TraceWorkSheet( DC, GetScreen(), 0 );
 
     DisplayOpt = save_opt;
+	g_DisplayPolygonsModeSketch = DisplayPolygonsModeImg;
 }
 
 
@@ -112,13 +116,14 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
 		if ( printmasklayer != -1 )
 			if ( (track->ReturnMaskLayer() & printmasklayer) == 0 ) continue;
 
-        if( track->GetNet() == 0 )    // StartPoint
+        if( track->GetNet() == 0 )  // StartPoint
         {
-            if( nbpoints )
+            if( nbpoints )			// we have found a new polygon: Draw the old polygon
             {
                 int Color = g_DesignSettings.m_LayerColor[track->GetLayer()];
+				int filled = (g_DisplayPolygonsModeSketch == 0) ? 1 : 0;
                 GRClosedPoly( &DrawPanel->m_ClipBox, DC, nbpoints, coord,
-                              1, Color, Color );
+                              filled, Color, Color );
             }
             nbpoints = 2;
             ptcoord  = coord;
@@ -142,8 +147,9 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
         if( track->Next() == NULL )    // Last point
         {
             int Color = g_DesignSettings.m_LayerColor[track->GetLayer()];
+			int filled = (g_DisplayPolygonsModeSketch == 0) ? 1 : 0;
             GRClosedPoly( &DrawPanel->m_ClipBox, DC, nbpoints, coord,
-                          1, Color, Color );
+                          filled, Color, Color );
         }
     }
 
