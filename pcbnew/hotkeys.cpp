@@ -313,14 +313,24 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
 
                 // don't let backspace delete modules!!
                 if( DrawStruct && (DrawStruct->Type() == TYPETRACK
-                                   || DrawStruct->Type() == TYPEVIA) )
+                                || DrawStruct->Type() == TYPEVIA) )
+                {
                     Delete_Segment( DC, (TRACK*) DrawStruct );
+                    SetCurItem(NULL);
+                    // this is an exception to the new rule that only the "selected" item
+                    // gets its Infos displayed, but we cannot "select" a deleted item.
+                    DrawStruct->Display_Infos(this);
+                }
                 GetScreen()->SetModify();
             }
             else if( GetCurItem()->Type() == TYPETRACK  )
             {
                 // then an element is being edited - remove the last segment.
-                SetCurItem( Delete_Segment( DC, (TRACK*) GetCurItem() ) );
+                Delete_Segment( DC, (TRACK*) GetCurItem() );
+                SetCurItem(NULL);
+                // this is an exception to the new rule that only the "selected" item
+                // gets its Infos displayed, but we cannot "select" a deleted item.
+                DrawStruct->Display_Infos(this);
                 GetScreen()->SetModify();
             }
         }
@@ -385,6 +395,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
             return;
         if( (GetCurItem()->m_Flags & IS_NEW) == 0 )
             return;
+        
         Other_Layer_Route( (TRACK*) GetCurItem(), DC );		// place via and switch layer
         if( DisplayOpt.ContrastModeDisplay )
             GetScreen()->SetRefreshReq();
@@ -564,25 +575,33 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* DC, EDA_BaseStruct* DrawStruct )
  *          Delete the module.
  */
 {
-    bool ItemFree = (GetCurItem() == NULL )
-                    || (GetCurItem()->m_Flags == 0);
+    bool ItemFree = (GetCurItem() == NULL ) || (GetCurItem()->m_Flags == 0);
 
     switch( m_ID_current_state )
     {
     case ID_TRACK_BUTT:
         if( GetScreen()->m_Active_Layer > LAST_COPPER_LAYER )
             return FALSE;
+        
         if( ItemFree )
         {
             DrawStruct = PcbGeneralLocateAndDisplay();
             if( DrawStruct && DrawStruct->Type() != TYPETRACK )
                 return FALSE;
+            
             Delete_Track( DC, (TRACK*) DrawStruct );
+            SetCurItem(NULL);
+            // this is an exception to the rule that only the "selected" item
+            // gets its Infos displayed, but we cannot "select" a deleted item.
+            DrawStruct->Display_Infos(this);
         }
         else if( GetCurItem()->Type() == TYPETRACK  )
         {
-            SetCurItem(
-                Delete_Segment( DC, (TRACK*) GetCurItem() ) );
+            Delete_Segment( DC, (TRACK*) GetCurItem() );
+            SetCurItem(NULL);
+            // this is an exception to the new rule that only the "selected" item
+            // gets its Infos displayed, but we cannot "select" a deleted item.
+            DrawStruct->Display_Infos(this);
             GetScreen()->SetModify();
             return TRUE;
         }
@@ -594,8 +613,10 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* DC, EDA_BaseStruct* DrawStruct )
             MODULE* module = Locate_Prefered_Module( m_Pcb, CURSEUR_ON_GRILLE );
             if( module == NULL )
                 return FALSE;
+            
             if( !IsOK( this, _( "Delete module?" ) ) )
                 return FALSE;
+            
             RemoveStruct( module, DC );
         }
         else

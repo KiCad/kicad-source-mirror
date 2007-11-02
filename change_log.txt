@@ -4,14 +4,30 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
-2007-Nov-032 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+
+2007-Nov-2 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ pcbnew
+    fixed a crashing bug which happened if you "dragged" a module with 
+    tracks.  Then deleted one of the pad connected tracks, then deleted the
+    next track attached to the first one.  Memory was being corrupted because
+    PcbGeneralLocate() and display was not being called on the 2nd track to
+    be deleted because the m_Flags test:
+        bool ItemFree = (GetCurItem()==0  || GetCurItem()->m_Flags==0);
+    was returning false. Solution was to SetCurItem(NULL) after deleting a
+    TRACK.  This makes sense, SetCurItem() is used for designating a "selected"
+    item, and a deleted TRACK is not even in the BOARD anymore and should not
+    be selected or selectable.  I think this bug may have been causing spurious
+    crashes for the last couple of months.
+
+
+2007-Nov-02 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +all:
-	solved: eeschema, pcbnew and cvpcb did not find libraries when they were
-	in the default library path, but in a subdirectory
-	(this is because the default path was not added to the name if the name had
-	already a path) 
-	
+    solved: eeschema, pcbnew and cvpcb did not find libraries when they were
+    in the default library path, but in a subdirectory
+    (this is because the default path was not added to the name if the name had
+    already a path) 
 
 
 2007-Nov-02 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
@@ -49,11 +65,11 @@ email address.
 2007-Oct-31 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +kicad:
-	rename mdiframe.cpp to mainframe.cpp
-	create commandframe.cpp to handle the command frame (which have the 4 "fast launch" buttons)
+    rename mdiframe.cpp to mainframe.cpp
+    create commandframe.cpp to handle the command frame (which have the 4 "fast launch" buttons)
 
 
-2007-Oct-31 UPDATE   Dick Hollenbeck <dickelbeck@yahoo.com>
+2007-Oct-31 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + all
   * Added Doxygen configuration file, whose standard name is Doxyfile.  Output
@@ -1124,7 +1140,7 @@ email address.
     better hotkey.cpp (code cleaning and info messages)
 
 
-2007-June-19 UPDATE   Dick Hollenbeck <dickelbeck@yahoo.com>
+2007-June-19 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew
     After locking a module with 'L', update the status window with the locked
@@ -1140,7 +1156,7 @@ email address.
     add install targets for resources and docs
 
     
-2007-June-15 UPDATE   Dick Hollenbeck <dickelbeck@yahoo.com>
+2007-June-15 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew
     **  only modules on the present layer are subject to individual module
@@ -1194,7 +1210,7 @@ email address.
     line e.g. "make -f makefile.gtk KICAD_STATIC_LINK=0"
 
 
-2007-June-11 UPDATE   Dick Hollenbeck <dickelbeck@yahoo.com>
+2007-June-11 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + Started this change log file.
 

@@ -31,6 +31,14 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
 
     if( Track == NULL )
         return NULL;
+    
+    if( Track->GetState(DELETED) )
+    {
+#if defined(DEBUG)        
+        printf("WinEDA_PcbFrame::Delete_Segment(): bug deleted already deleted TRACK\n");
+#endif        
+        return NULL;
+    }
 
     if( Track->m_Flags & IS_NEW )  // Trace en cours, on peut effacer le dernier segment
     {
@@ -48,7 +56,8 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
             g_TrackSegmentCount--;
 
             if( g_TwoSegmentTrackBuild )
-            {   // g_CurrentTrackSegment->Pback must not be a via, or we want delete also the via
+            {   
+                // g_CurrentTrackSegment->Pback must not be a via, or we want delete also the via
                 if( (g_TrackSegmentCount >= 2)
                    && (g_CurrentTrackSegment->Type() != TYPEVIA)
                    && (g_CurrentTrackSegment->Pback->Type() == TYPEVIA) )
@@ -132,7 +141,6 @@ void WinEDA_PcbFrame::Delete_Track( wxDC* DC, TRACK* Track )
         Supprime_Une_Piste( DC, Track );
         GetScreen()->SetModify();
         test_1_net_connexion( DC, current_net_code );
-        m_Pcb->Display_Infos( this );
     }
 }
 

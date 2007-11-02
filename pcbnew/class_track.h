@@ -68,25 +68,28 @@ public:
      */ 
     bool Save( FILE* aFile ) const;
     
-    
     /**
      * Function Insert
-     * inserts a TRACK, SEGVIA or SEGZONE into its proper list, either at the
+     * inserts a single TRACK, SEGVIA or SEGZONE, or a list of such,
+     * into the proper list within a BOARD, either at the
      * list's front or immediately after the InsertPoint.
      * If Insertpoint == NULL, then insert at the beginning of the proper list.
      * If InsertPoint != NULL, then insert immediately after InsertPoint.
      * TRACKs and SEGVIAs are put on the m_Track list, SEGZONE on the m_Zone list.
+     * @param aPcb The BOARD to insert into.
      * @param InsertPoint See above
      */
-    void    Insert( BOARD* Pcb, BOARD_ITEM* InsertPoint );
-
+    void    Insert( BOARD* aPcb, BOARD_ITEM* InsertPoint );
+    
     /**
      * Function GetBestInsertPoint
      * searches the "best" insertion point within the track linked list.
-     * The best point is the of the corresponding net code section.
+     * The best point is the begging of the corresponding net code section.
+     * (The BOARD::m_Track and BOARD::m_Zone lists are sorted by netcode.)
+     * @param aPcb The BOARD to search for the insertion point. 
      * @return TRACK* - the item found in the linked list (or NULL if no track)
      */
-    TRACK*  GetBestInsertPoint( BOARD* Pcb );
+    TRACK*  GetBestInsertPoint( BOARD* aPcb );
 
     /* Search (within the track linked list) the first segment matching the netcode
      * ( the linked list is always sorted by net codes )

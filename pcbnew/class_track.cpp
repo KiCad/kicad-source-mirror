@@ -447,6 +447,7 @@ TRACK* TRACK::GetBestInsertPoint( BOARD* Pcb )
     /* Traitement du debut de liste */
     if( track == NULL )
         return NULL;                    /* No tracks ! */
+    
     if( GetNet() < track->GetNet() )    /* no net code or net code = 0 (track not connected) */
         return NULL;
 
@@ -454,6 +455,7 @@ TRACK* TRACK::GetBestInsertPoint( BOARD* Pcb )
     {
         if( NextTrack->GetNet() > this->GetNet() )
             break;
+        
         track = NextTrack;
     }
 
