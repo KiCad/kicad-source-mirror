@@ -88,8 +88,8 @@ int id = event.GetId();
 
 		case ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH:
 			if ( m_OptionsToolBar->GetToolState(id) )	// Polygons filled asked
-				 g_DisplayPolygonsModeSketch = 0;
-			else g_DisplayPolygonsModeSketch = 1;
+				 g_DisplayPolygonsModeSketch = 1;
+			else g_DisplayPolygonsModeSketch = 0;
 			DrawPanel->Refresh(TRUE);
 			break;
 

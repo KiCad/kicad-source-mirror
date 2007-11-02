@@ -191,8 +191,6 @@ void WinEDA_GerberFrame::Erase_Textes_Pcb( wxDC* DC, bool query )
 void WinEDA_GerberFrame::Erase_Current_Layer( wxDC* DC, bool query )
 /*******************************************************************/
 {
-    TRACK*          pt_segm;
-    BOARD_ITEM*     PtNext;
     int             layer = GetScreen()->m_Active_Layer;
     wxString        msg;
 
@@ -200,8 +198,9 @@ void WinEDA_GerberFrame::Erase_Current_Layer( wxDC* DC, bool query )
     if( query && !IsOK( this, msg ) )
         return;
 
-    /* Marquage des pistes a effacer */
-    for( pt_segm = m_Pcb->m_Track; pt_segm != NULL; pt_segm = (TRACK*) PtNext )
+    /* Delete tracks (spots and lines) */
+    TRACK*     PtNext;
+    for( TRACK* pt_segm = m_Pcb->m_Track; pt_segm != NULL; pt_segm = (TRACK*) PtNext )
     {
         PtNext = pt_segm->Next();
         if( pt_segm->GetLayer() != layer )
@@ -209,6 +208,15 @@ void WinEDA_GerberFrame::Erase_Current_Layer( wxDC* DC, bool query )
         pt_segm->DeleteStructure();
     }
 
+    /* Delete polygons */
+    SEGZONE*     Nextzone;
+    for( SEGZONE* zone = m_Pcb->m_Zone; zone != NULL; zone = Nextzone )
+    {
+        Nextzone = zone->Next();
+        if( zone->GetLayer() != layer )
+            continue;
+        zone->DeleteStructure();
+    }
     ScreenPcb->SetModify();
     ScreenPcb->SetRefreshReq();
 }
