@@ -595,7 +595,10 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     track_mnu = new wxMenu;
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, track_mnu,
                                ID_POPUP_PCB_DELETE_TRACK_MNU, _( "Delete" ), delete_xpm );
-    msg = AddHotkeyName( _( "Delete Segment" ), s_Board_Editor_Hokeys_Descr, HK_BACK_SPACE );
+    
+    msg = AddHotkeyName( Track->Type()==TYPEVIA ? _("Delete Via") : _( "Delete Segment" ), 
+                        s_Board_Editor_Hokeys_Descr, HK_BACK_SPACE );
+    
     ADD_MENUITEM( track_mnu, ID_POPUP_PCB_DELETE_TRACKSEG,
                   msg, Delete_Line_xpm );
     if( !flags )
