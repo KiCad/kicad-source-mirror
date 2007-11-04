@@ -81,5 +81,13 @@ line, such that we can get color.  There may be a requirement to rework the
 generation of the drc error strings to facillitate easy parsing.  Although
 maybe we use structures instead of strings for error reporting so the parsing
 does not need to happen.
+http://www.wxwidgets.org/manuals/2.6/wx_wxlistbox.html#wxlistbox
+The events given to wxHtmlListBox are the same as wxListBox, so the double
+click handling should be easy, plus there is the added benefit that the wxHtmlListBox
+does not own the strings, it asks for them one by one, so this makes it possible
+to keep the errors in struct form and generate html strings or normal strings 
+when needed, on the fly.
+
+
 
 
