@@ -10,6 +10,11 @@ all:
 		$(MAKEGTK) -C $$dir; \
 	done
 
+deps:
+	@for dir in $(KICAD_SUBDIRS); do \
+		$(MAKEGTK) -k -C $$dir deps; \
+	done
+
 install-bin:
 	@for dir in $(KICAD_SUBDIRS_BIN); do \
 		$(MAKEGTK) -C $$dir install; \

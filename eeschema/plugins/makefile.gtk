@@ -15,6 +15,11 @@ endif
 
 all: netlist_form_pads-pcb
 
+deps:
+	$(CXX) $(CPPFLAGS) -E -MMD -MG *.cpp >/dev/null
+
+-include *.d
+
 netlist_form_pads-pcb: netlist_form_pads-pcb.cpp makefile.gtk
 	gcc -D__UNIX__  -Wall netlist_form_pads-pcb.cpp -o netlist_form_pads-pcb $(LIBSTDC)
 
@@ -24,9 +29,5 @@ install: netlist_form_pads-pcb
 
 clean :
 	rm -f netlist_form_pads-pcb
-	rm -f *.o
-	rm -f *.rsc
-	rm -f *.res
-	rm -f *.exe
-	rm -f *.bak
+	rm -f *.o *.rsc *.res *.exe *.bak *.d
 

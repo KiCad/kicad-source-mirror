@@ -12,7 +12,11 @@ TARGET = kicad
 
 all: $(TARGET)
 
+deps:
+	$(CXX) $(CPPFLAGS) -E -MMD -MG *.cpp >/dev/null
+
 include makefile.include
+-include *.d
 
 CPPFLAGS += $(EXTRACPPFLAGS)
 EDACPPFLAGS = $(CPPFLAGS)
@@ -26,15 +30,6 @@ install: $(TARGET)
 	cp -f $(TARGET) $(KICAD_BIN)
 
 clean:
-	rm -f *.o;
-	rm -f *~;
-	rm -f core;
-	rm -f *.bak
+	rm -f *.o *.d *~ *.bak core
 	rm -f $(TARGET)
-
-
-
-
-
-
 

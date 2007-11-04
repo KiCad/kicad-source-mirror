@@ -11,8 +11,11 @@ FINAL = 1
 
 all: $(TARGET).a
 
-include makefile.include
+deps:
+	$(CXX) $(CPPFLAGS) -E -MMD -MG *.cpp >/dev/null
 
+include makefile.include
+-include *.d
 
 $(TARGET).a: $(OBJECTS3D) makefile.gtk makefile.include
 	rm -f $@
@@ -22,10 +25,7 @@ $(TARGET).a: $(OBJECTS3D) makefile.gtk makefile.include
 install:$(TARGET).a
 
 clean:
-	rm -f *.o
-	rm -f *.exe
-	rm -f *.res
-	rm -f *.map
+	rm -f *.o *.exe *.res *.map *.d
 	rm -f $(TARGET).a
 
 

@@ -5,6 +5,7 @@
 /************************************************/
 
 #include "dialog_edit_module.h"
+#include <wx/version.h>
 
 /**************************************/
 /* class WinEDA_ModulePropertiesFrame */

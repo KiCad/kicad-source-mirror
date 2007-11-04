@@ -14,7 +14,11 @@ TARGET = cvpcb
 
 all: $(TARGET)
 
+deps:
+	$(CXX) $(CPPFLAGS) -E -MMD -MG *.cpp >/dev/null
+
 include makefile.include
+-include *.d
 
 CPPFLAGS += $(EXTRACPPFLAGS)
 EDACPPFLAGS = $(CPPFLAGS)
@@ -29,6 +33,6 @@ install: $(TARGET)
 	cp -f $(TARGET) $(KICAD_BIN)
 
 clean:
-		rm -f *.o
+		rm -f *.o *.d
 		rm -f $(TARGET)
 

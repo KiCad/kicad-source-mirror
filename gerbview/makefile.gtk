@@ -11,7 +11,11 @@ TARGET = gerbview
 
 all: $(TARGET)
 
+deps:
+	$(CXX) $(CPPFLAGS) -E -MMD -MG *.cpp >/dev/null
+
 include makefile.include
+-include *.d
 
 CPPFLAGS += $(EXTRACPPFLAGS)
 EDACPPFLAGS = $(CPPFLAGS)
@@ -26,10 +30,6 @@ install: $(TARGET)
 
 
 clean:
-	rm -f *.o
-	rm -f *.exe
-	rm -f *.res
-	rm -f *.map
+	rm -f *.o *.exe *.res *.map *.d
 	rm -f $(TARGET)
 
-    
