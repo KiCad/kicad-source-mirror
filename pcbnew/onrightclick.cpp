@@ -576,7 +576,8 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, track_mnu,
                                ID_POPUP_PCB_EDIT_TRACK_MNU, _( "Change Width" ), width_track_xpm );
     ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACKSEG,
-                  _( "Edit Segment" ), width_segment_xpm );
+                 Track->Type()==TYPEVIA ? _( "Edit Via" ) : _( "Edit Segment" ), width_segment_xpm );
+    
     if( !flags )
     {
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACK,
