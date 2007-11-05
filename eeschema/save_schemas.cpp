@@ -34,7 +34,7 @@ bool WinEDA_SchematicFrame::SaveEEFile(SCH_SCREEN *screen, int FileSave)
 wxString msg;
 wxString Name, BakName;
 const wxChar **LibNames;
-char * layer, *width;
+const char * layer, *width;
 int ii, shape;
 bool Failed = FALSE;
 EDA_BaseStruct *Phead;

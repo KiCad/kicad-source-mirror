@@ -20,7 +20,6 @@
 
 
 #include "wxstruct.h"
-#include "macros.h"
 
 #include "gr_basic.h"
 #include "common.h"
@@ -28,6 +27,7 @@
 #include "id.h"
 #include "build_version.h"
 #include "hotkeys_basic.h"
+#include "macros.h"
 
 #include "bitmaps.h"
 #include "Language.xpm"

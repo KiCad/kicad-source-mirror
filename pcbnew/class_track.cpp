@@ -355,7 +355,7 @@ void TRACK::UnLink()
         {
             if( GetState( DELETED ) )       // A REVOIR car Pback = NULL si place en undelete
             {
-                if( g_UnDeleteStack )
+                if( g_UnDeleteStackPtr )
                     g_UnDeleteStack[g_UnDeleteStackPtr - 1] = (BOARD_ITEM*) Pnext;
             }
             else

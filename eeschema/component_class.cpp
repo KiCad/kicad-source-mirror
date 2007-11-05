@@ -4,12 +4,12 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-#include "macros.h"
 
 #include "common.h"
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
+#include "macros.h"
 #include "id.h"
 
 #include "protos.h"

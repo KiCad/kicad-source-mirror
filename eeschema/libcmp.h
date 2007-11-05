@@ -90,7 +90,7 @@ typedef enum {      /* Type des Pins. si modif: modifier tableau des mgs suivant
 } ElectricPinType;
 
 /* Messages d'affichage du type electrique */
-eda_global wxChar* MsgPinElectricType[]
+eda_global const wxChar* MsgPinElectricType[]
 #ifdef MAIN
 = {
     wxT( "input" ),

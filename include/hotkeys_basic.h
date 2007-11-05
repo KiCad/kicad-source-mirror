@@ -51,7 +51,7 @@ struct Ki_HotkeyInfoSectionDescriptor
 public:
     wxString*       m_SectionTag;           // The section name
     Ki_HotkeyInfo** m_HK_InfoList;          // List of Ki_HotkeyInfo pointers
-    char*           m_Comment;              // comment: will be printed in the config file
+    const char*      m_Comment;             // comment: will be printed in the config file
                                             // Info usage only
 };
 

@@ -22,16 +22,6 @@ referenced.   I think this would be an easier way to manage xpms.
 *** use BOARD_ITEM::MenuIcon() in the onrightclick.cpp
 
 
-*** make the ADD_MENUITEM macros in include/macros.h be static inline functions instead
-of macros.  e.g. w/o argument types:
-static inline void ADD_MENUITEM(menu, id, text, icon)
-{
-    wxMenuItem * l_item;
-    l_item = new wxMenuItem(menu, id, text);
-    l_item->SetBitmap(icon); menu->Append(l_item);
-}
-
-
 *** rework zones so they are modifiable and so that the user does not
 need to enter tracks for thru hole pads or vias which connect to a zone.
 I propose a two step solution:
@@ -90,4 +80,7 @@ when needed, on the fly.
 
 
 
-
+2007-Nov-4 Assigned To: nobody
+asked by: jp Charras
+================================================================================
+Use the collector classes in eeschema.

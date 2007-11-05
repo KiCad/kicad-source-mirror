@@ -443,7 +443,7 @@ static void ComputeReferenceNumber( CmpListStruct* BaseListeCmp, int NbOfCmp )
  */
 {
     int            ii, jj, LastReferenceNumber, NumberOfUnits, Unit;
-    char*          Text, * RefText, * ValText;
+    const char*          Text, * RefText, * ValText;
     CmpListStruct* ObjRef, * ObjToTest;
 
     /* Components with an invisible reference (power...) always are re-annotated*/

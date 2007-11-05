@@ -10,8 +10,8 @@
 
 #include "wxstruct.h"
 #include "gr_basic.h"
-#include "macros.h"
 #include "common.h"
+#include "macros.h"
 
 /* table des evenements captes par un WinEDA_MsgPanel */
 BEGIN_EVENT_TABLE( WinEDA_MsgPanel, wxPanel )
