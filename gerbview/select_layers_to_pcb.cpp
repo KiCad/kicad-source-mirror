@@ -176,8 +176,8 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame(WinEDA_GerberFrame *parent) :
             // pcbnew layer that the Gerber layer has been mapped to). Each of those items are
             // placed into the left hand column, middle column, and right hand column
             // (respectively) of the Flexgrid sizer, and the color of the second text string
-            // is set to blue (to indicate that the actual text changes depending upon which
-            // pcbnew layer has been selected by the child dialog box).
+            // is set to fushia or blue (to respectively indicate whether the Gerber layer has
+            // been mapped to a pcbnew layer or is not being exported at all).
             // (Experimentation has shown that if a text control is used to depict which
             // pcbnew layer that each Gerber layer is mapped to (instead of a static text
             // string), then those controls do not behave in a fully satisfactory manner in
@@ -224,7 +224,7 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame(WinEDA_GerberFrame *parent) :
         // Provide another text string to specify which pcbnew layer that this
         // Gerber layer is initially mapped to, and set the initial text to
         // specify the appropriate pcbnew layer, and set the foreground color
-        // of the text to blue (to indicate that the text can be changed).
+        // of the text to fushia (to indicate that the layer is being exported).
         item_ID = ID_TEXT_0 + ii;
 
         // When the first of these text strings is being added, determine what size is necessary to
@@ -252,7 +252,7 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame(WinEDA_GerberFrame *parent) :
             text = new wxStaticText( this, item_ID, msg, wxDefaultPosition, wxDefaultSize, 0 );
         }
         text->SetMinSize( goodSize );
-        text->SetForegroundColour( *wxBLUE );
+        text->SetForegroundColour( wxColour(255, 0, 128) );
         FlexColumnBoxSizer->Add(text, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxBOTTOM, 5);
 
         layer_list[ii] = text;
@@ -278,7 +278,7 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame(WinEDA_GerberFrame *parent) :
     // using that type of sizer results in those buttons being automatically
     // located in positions appropriate for each (OS) version of KiCad.
     StdDialogButtonSizer = new wxStdDialogButtonSizer;
-    OuterBoxSizer->Add(StdDialogButtonSizer, 0, wxALIGN_RIGHT|wxALL, 10);
+    OuterBoxSizer->Add(StdDialogButtonSizer, 0, wxGROW|wxALL, 10);
 
     Button = new wxButton( this, wxID_OK, _("&OK"), wxDefaultPosition, wxDefaultSize, 0 );
     Button->SetForegroundColour( *wxRED );
@@ -323,9 +323,19 @@ void WinEDA_SwapLayerFrame::Sel_Layer(wxCommandEvent& event)
     {
         LayerLookUpTable[ButtonTable[ii]] = jj;
         if( jj == NB_LAYERS )
+        {
             layer_list[ii]->SetLabel( _( "Do not export" ) );
+            // Change the text color to blue (to highlight
+            // that this layer is *not* being exported)
+            layer_list[ii]->SetForegroundColour( *wxBLUE );
+        }
         else
+        {
             layer_list[ii]->SetLabel( ReturnPcbLayerName( jj ) );
+            // Change the text color to fushia (to highlight
+            // that this layer *is* being exported)
+            layer_list[ii]->SetForegroundColour( wxColour(255, 0, 128) );
+        }
     }
 }
 

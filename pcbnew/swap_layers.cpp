@@ -125,9 +125,9 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( WinEDA_BasePcbFrame* parent ) :
             // layer is mapped to), and a second static text string (to depict which layer
             // that the layer has been mapped to). Each of those items are placed into
             // the left hand column, middle column, and right hand column (respectively)
-            // of the Flexgrid sizer, and the color of the second text string is set to blue
-            // (to indicate that the actual text changes depending upon which layer has been
-            // selected by the child dialog box).
+            // of the Flexgrid sizer, and the color of the second text string is set to
+            // fushia or blue (to respectively indicate whether the layer has been
+            // swapped to another layer or is not being swapped at all).
             // (Experimentation has shown that if a text control is used to depict which
             // layer that each layer is mapped to (instead of a static text string), then
             // those controls do not behave in a fully satisfactory manner in the Linux
@@ -165,7 +165,8 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( WinEDA_BasePcbFrame* parent ) :
         // Provide another text string to specify which layer that this layer is
         // mapped to, set the initial text to "No Change" (to indicate that this
         // layer is currently unmapped to any other layer), and set the foreground
-        // color of the text to blue (to indicate that the text can be changed).
+        // color of the text to blue (which also indicates that the layer is
+        // currently unmapped to any other layer).
         item_ID = ID_TEXT_0 + ii;
 
         // When the first of these text strings is being added, determine what size is necessary to
@@ -213,7 +214,7 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( WinEDA_BasePcbFrame* parent ) :
     // using that type of sizer results in those buttons being automatically
     // located in positions appropriate for each (OS) version of KiCad.
     StdDialogButtonSizer = new wxStdDialogButtonSizer;
-    OuterBoxSizer->Add(StdDialogButtonSizer, 0, wxALIGN_RIGHT|wxALL, 10);
+    OuterBoxSizer->Add(StdDialogButtonSizer, 0, wxGROW|wxALL, 10);
 
     Button = new wxButton( this, wxID_OK, _("&OK"), wxDefaultPosition, wxDefaultSize, 0 );
     Button->SetForegroundColour( *wxRED );
@@ -270,9 +271,19 @@ void WinEDA_SwapLayerFrame::Sel_Layer( wxCommandEvent& event )
     {
         New_Layer[ii] = jj;
         if( jj == NB_LAYERS )
+        {
             layer_list[ii]->SetLabel( _( "No Change" ) );
+            // Change the text color to blue (to highlight
+            // that this layer is *not* being swapped)
+            layer_list[ii]->SetForegroundColour( *wxBLUE );
+        }
         else
+        {
             layer_list[ii]->SetLabel( ReturnPcbLayerName( jj ) );
+            // Change the text color to fushia (to highlight
+            // that this layer *is* being swapped)
+            layer_list[ii]->SetForegroundColour( wxColour(255, 0, 128) );
+        }
     }
 }
 

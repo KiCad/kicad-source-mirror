@@ -4,6 +4,26 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Nov-05 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
+================================================================================
++ eeschema
+  * The previously provided "Close" button within the "Netlist" dialog box has
+    now been replaced with a "Cancel" button, and this dialog can now (otherwise)
+    be cancelled by pressing the "Esc" key. General cleanup and beautification of
+    eeschema/netlist_control.cpp.
++ pcbnew
+  * The color of each text string provided within the "Swap Layers:" dialog box is
+    now set to blue for each string specifying that the associated layer is *not*
+    being swapped with any other layer, or to fushia for each string specifying that
+    the associated layer *is* being swapped with another layer. (This change was
+    made after being suggested by Dick Hollenbeck.)
++ gerbview
+  * The color of each text string provided within the "Layer selection" dialog box
+    is similarly now set to blue for each string specifying that the associated
+    Gerber layer is *not* being exported to any pcbnew layer, or to fushia for each
+    string specifying that the associated Gerber layer *is* being exported to a
+    pcbnew layer.
+
 
 2007-Nov-2 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
