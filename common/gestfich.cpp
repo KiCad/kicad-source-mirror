@@ -157,7 +157,8 @@ wxString MakeFileName( const wxString& dir,
  * @param  dir = path	  (can be empty)
  * @param  shortname = filename with or without path and/or extension
  * @param  ext = extension	(can be empty)
- *  If shortname has an absolute path, or a path start by ./ , the path will not be modified
+ *  If shortname has an absolute path, or a path starts by ./ or ../,
+ *  the path will not be modified
  *  If shortname has an extension, it will not be modified
  *  @return full filename
  */
@@ -169,15 +170,15 @@ wxString MakeFileName( const wxString& dir,
     {
 		if( !wxIsAbsolutePath( shortname ) )
 		{
-			wxString left = shortname.Left(2);
-			if( left != wxT("./") )
-			{ /* no absolute path in shortname */
+			if( ! shortname.StartsWith(wxT("./")) && ! shortname.StartsWith(wxT("../")) )
+			{ /* no absolute path in shortname, add dir to shortname */
 				fullfilename = dir;
 			}
 		}
     }
 
-    fullfilename += shortname;
+    fullfilename += shortname;	// Add shortname to dir or use shortname only
+
     fullfilename.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
 
     /* Add an extension if shortname has no extension */
