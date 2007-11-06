@@ -230,9 +230,9 @@ void WinEDA_SetColorsFrame::CreateControls()
     ColumnBoxSizer->AddSpacer(5);
 
     wxArrayString m_SelBgColorStrings;
-    m_SelBgColorStrings.Add(_("White Background"));
-    m_SelBgColorStrings.Add(_("Black Background"));
-    m_SelBgColor = new wxRadioBox( this, ID_RADIOBOX_BACKGROUND_COLOR, _("Background Color"),
+    m_SelBgColorStrings.Add(_("White"));
+    m_SelBgColorStrings.Add(_("Black"));
+    m_SelBgColor = new wxRadioBox( this, ID_RADIOBOX_BACKGROUND_COLOR, _("Background Color:"),
                                    wxDefaultPosition, wxDefaultSize, m_SelBgColorStrings, 1, wxRA_SPECIFY_COLS );
     m_SelBgColor->SetSelection( ( g_DrawBgColor == BLACK ) ? 1 : 0 );
     ColumnBoxSizer->Add(m_SelBgColor, 1, wxGROW|wxRIGHT|wxTOP|wxBOTTOM, 5);
@@ -253,7 +253,7 @@ void WinEDA_SetColorsFrame::CreateControls()
     Button->SetForegroundColour( *wxBLUE );
     BottomBoxSizer->Add(Button, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
-    Button = new wxButton( this, wxID_APPLY, _( "Apply" ), wxDefaultPosition, wxDefaultSize, 0 );
+    Button = new wxButton( this, wxID_APPLY, _( "&Apply" ), wxDefaultPosition, wxDefaultSize, 0 );
     BottomBoxSizer->Add(Button, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
     // (Dialog now needs to be resized, but the associated command is found elsewhere.)
