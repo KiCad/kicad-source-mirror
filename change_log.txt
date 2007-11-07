@@ -4,6 +4,23 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Nov-07 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
+================================================================================
++ all
+  * The common/svg_print.cpp, common/svg_print.h, and common/svg_print.pjd files (which
+    are not currently used) have been removed, and replaced with svg_print.cpp.notused,
+    svg_print.h.notused, and svg_print.pjd.notused. And common/makefile.include has
+    also been updated so that none of those files are now listed at all.
++ eeschema
+  * A "Cancel" button has now been provided within each of the "Component properties",
+    "EESchema Annotation", "EESchema Erc", "Global Label properties", "Label properties",
+    and "Text properties" dialog boxes, and each of those dialogs can now (otherwise) be
+    cancelled by pressing the "Esc" key. (In due course, each of those dialogs will be
+    refined yet further; this is just an incremental enhancement.)
+  * The eestatus.cpp file (which is not currently used) has been removed, and replaced
+    with eestatus.cpp.notused.
+
+
 2007-Nov-05 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
 ================================================================================
 + eeschema

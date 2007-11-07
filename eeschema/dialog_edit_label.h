@@ -36,15 +36,15 @@
 
 ////@begin control identifiers
 #define ID_DIALOG 10000
-#define SYMBOL_WINEDA_LABELPROPERTIESFRAME_STYLE wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|MAYBE_RESIZE_BORDER
-#define SYMBOL_WINEDA_LABELPROPERTIESFRAME_TITLE _("Dialog")
-#define SYMBOL_WINEDA_LABELPROPERTIESFRAME_IDNAME ID_DIALOG
-#define SYMBOL_WINEDA_LABELPROPERTIESFRAME_SIZE wxSize(400, 300)
-#define SYMBOL_WINEDA_LABELPROPERTIESFRAME_POSITION wxDefaultPosition
 #define ID_TEXTCTRL 10001
 #define ID_RADIOBOX 10003
 #define ID_RADIOBOX1 10004
 #define ID_TEXTCTRL1 10002
+#define SYMBOL_WINEDA_LABELPROPERTIESFRAME_STYLE wxDEFAULT_DIALOG_STYLE|MAYBE_RESIZE_BORDER
+#define SYMBOL_WINEDA_LABELPROPERTIESFRAME_TITLE _("Dialog")
+#define SYMBOL_WINEDA_LABELPROPERTIESFRAME_IDNAME ID_DIALOG
+#define SYMBOL_WINEDA_LABELPROPERTIESFRAME_SIZE wxSize(400, 300)
+#define SYMBOL_WINEDA_LABELPROPERTIESFRAME_POSITION wxDefaultPosition
 ////@end control identifiers
 
 /*!
@@ -80,14 +80,11 @@ public:
 
 ////@begin WinEDA_LabelPropertiesFrame event handler declarations
 
-    /// wxEVT_CLOSE_WINDOW event handler for ID_DIALOG
-    void OnCloseWindow( wxCloseEvent& event );
-
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
     void OnOkClick( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CLOSE
-    void OnCloseClick( wxCommandEvent& event );
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
+    void OnCancelClick( wxCommandEvent& event );
 
 ////@end WinEDA_LabelPropertiesFrame event handler declarations
 

@@ -58,8 +58,6 @@ common_plotHPGL_functions.o: common_plotPS_functions.cpp ../include/plot_common.
 
 drawtxt.o: drawtxt.cpp ../include/grfonte.h $(COMMON)
 
-svg_print.o: svg_print.cpp $(COMMON)
-
 gr_basic.o: gr_basic.cpp ../include/gr_basic.h $(COMMON) ../include/plot_common.h
 
 dcsvg.o: dcsvg.cpp $(COMMON) ../include/dcsvg.h

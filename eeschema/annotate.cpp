@@ -72,7 +72,8 @@ void InstallAnnotateFrame( WinEDA_SchematicFrame* parent, wxPoint& pos )
 {
     WinEDA_AnnotateFrame* frame = new WinEDA_AnnotateFrame( parent );
 
-    frame->ShowModal(); frame->Destroy();
+    frame->ShowModal();
+    frame->Destroy();
 }
 
 
@@ -162,7 +163,7 @@ void WinEDA_AnnotateFrame::AnnotateComponents( wxCommandEvent& event )
     CheckAnnotate( m_Parent, AnnotProject ? FALSE : TRUE );
 
     m_Parent->DrawPanel->Refresh( TRUE ); /* Refresh screen */
-    Close();
+    EndModal( 1 );
 }
 
 
@@ -218,7 +219,7 @@ void WinEDA_AnnotateFrame::DeleteAnnotation( wxCommandEvent& event )
     }
 
     m_Parent->DrawPanel->Refresh( TRUE );
-    Close();
+    EndModal( 0 );
 }
 
 

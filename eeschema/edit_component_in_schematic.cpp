@@ -426,7 +426,7 @@ void WinEDA_ComponentPropertiesFrame::ComponentPropertiesAccept( wxCommandEvent&
     RedrawOneStruct( m_Parent->DrawPanel, &dc, m_Cmp, GR_DEFAULT_DRAWMODE );
     m_Parent->TestDanglingEnds( m_Parent->m_CurrentScreen->EEDrawList, &dc );
 
-    Close();
+    EndModal( 0 );
 }
 
 
@@ -847,5 +847,5 @@ void WinEDA_ComponentPropertiesFrame::SetInitCmp( wxCommandEvent& event )
     m_Parent->m_CurrentScreen->SetModify();
 
     RedrawOneStruct( m_Parent->DrawPanel, &dc, m_Cmp, GR_DEFAULT_DRAWMODE );
-    Close();
+    EndModal( 1 );
 }

@@ -49,7 +49,7 @@
 #define ID_RADIOBOX2 10005
 #define ID_ANNOTATE_CMP 10003
 #define ID_DEANNOTATE_CMP 10004
-#define SYMBOL_WINEDA_ANNOTATEFRAME_STYLE wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|MAYBE_RESIZE_BORDER
+#define SYMBOL_WINEDA_ANNOTATEFRAME_STYLE wxDEFAULT_DIALOG_STYLE|MAYBE_RESIZE_BORDER
 #define SYMBOL_WINEDA_ANNOTATEFRAME_TITLE _("EESchema Annotation")
 #define SYMBOL_WINEDA_ANNOTATEFRAME_IDNAME ID_DIALOG
 #define SYMBOL_WINEDA_ANNOTATEFRAME_SIZE wxSize(400, 300)
@@ -92,8 +92,8 @@ public:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_DEANNOTATE_CMP
     void OnDeannotateCmpClick( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CLOSE
-    void OnCloseClick( wxCommandEvent& event );
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
+    void OnCancelClick( wxCommandEvent& event );
 
 ////@end WinEDA_AnnotateFrame event handler declarations
 

@@ -61,7 +61,8 @@ void WinEDA_LabelPropertiesFrame::TextPropertiesAccept( wxCommandEvent& event )
     if( (m_CurrentText->m_Flags & IS_NEW) != 0 )
         g_DefaultTextLabelSize = m_CurrentText->m_Size.x;
 
-    Close( TRUE );
+    m_Parent->DrawPanel->MouseToCursorSchema();
+    EndModal( 0 );
 }
 
 
