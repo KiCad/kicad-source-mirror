@@ -46,6 +46,26 @@ The main program is /usr/local/kicad/linux/kicad
 If you use KDE, users can copy the shortcut /usr/local/kicad/linux/kicad.desktop
 in <user home directory>/Desktop and use it to run kicad.
 
+
+== Compilation with CMake build system [http://www.cmake.org] ==
+
+This feature is still experimental and only for developers!
+
+=== Requirements: cmake must be installed ===
+
+=== For verbose output of 'make': ===
+ mkdir kicad-build
+ cd kicad-build
+ cmake -DCMAKE_VERBOSE_MAKEFILE=1 ../
+ make
+
+=== For non verbose output of 'make': ===
+ mkdir kicad-build
+ cd kicad-build
+ cmake ../
+ make
+
+
 3D modeler wings3D:
 (Usefull only if you plan to create 3D shapes for Printed board modules)
 Archive and doc files (Linux and windows ) are in ../kicad/wing3d
