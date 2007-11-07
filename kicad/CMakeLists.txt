@@ -25,7 +25,4 @@ ADD_EXECUTABLE(kicad WIN32 ${SRCS})
 # We add to our target 'kicad' the wxWidgets libraries. These are
 # set for us by the find script. If you need other libraries, you
 # can add them here as well. 
-TARGET_LINK_LIBRARIES(kicad ${wxWidgets_LIBRARIES})
-
-LINK_DIRECTORIES(${KICAD_EDA_BINARY_DIR}/common
-)
+TARGET_LINK_LIBRARIES(kicad ${wxWidgets_LIBRARIES} common)

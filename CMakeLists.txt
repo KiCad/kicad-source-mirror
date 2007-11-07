@@ -43,16 +43,10 @@ IF(wxWidgets_FOUND)
     # We define the include paths here, our minimal source dir is one, 
     # and also the include dirs defined by wxWidgets
     INCLUDE_DIRECTORIES(
-                        #${KICAD_EDA_SOURCE_DIR}/include                        
-                        #${KICAD_EDA_SOURCE_DIR}/common
-                        #${KICAD_EDA_SOURCE_DIR}/share
-                        #${KICAD_EDA_SOURCE_DIR}/kicad/bitmaps 
-                        #${KICAD_EDA_SOURCE_DIR}/common/bitmaps 
                         ${CMAKE_BINARY_DIR}
                         ${CMAKE_SOURCE_DIR}
                         ${CMAKE_SOURCE_DIR}/include
                         ${CMAKE_SOURCE_DIR}/common
-                        #${CMAKE_SOURCE_DIR}/share
                         ${CMAKE_SOURCE_DIR}/kicad/bitmaps
                         ${CMAKE_SOURCE_DIR}/common/bitmaps
                         ${wxWidgets_INCLUDE_DIRS}
@@ -65,4 +59,4 @@ ENDIF(wxWidgets_FOUND)
 
 add_subdirectory (common)
 add_subdirectory (kicad)
-#SUBDIRS(common kicad)
+
