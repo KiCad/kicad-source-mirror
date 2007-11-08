@@ -25,15 +25,15 @@ MsgInfos = wxT("** PCBNEW  (sept 1992 .. 2007) **");
 #endif
 
 #ifdef CVPCB
-MsgInfos = wxT("** CVPCB  (sept 1992 .. 2007) **")
+MsgInfos = wxT("** CVPCB  (sept 1992 .. 2007) **");
 #endif
 
 #ifdef KICAD
-MsgInfos = wxT("** KICAD  (jul 2000 .. 2007) **")
+MsgInfos = wxT("** KICAD  (jul 2000 .. 2007) **");
 #endif
 
 #ifdef EESCHEMA
-MsgInfos = wxT("** EESCHEMA  (sept 1994 .. 2007) **")
+MsgInfos = wxT("** EESCHEMA  (sept 1994 .. 2007) **");
 #endif
 
 // Routines Locales
