@@ -2,72 +2,68 @@
 /***** English version *******/
 /*****************************/
 
-Kicad binaries exists for Linux and Windows (XP, 2000)
-Files (schematic, boards, libraries) created on both systems are totally compatibles.
+KiCad binaries exists for Linux and Windows (XP, 2000).
+Files (schematic, boards, libraries) created on both systems are totally compatible.
 
-Used language:
-Doc files are in french, but kicad user interface is internationalized:
+== Used language: ==
+Doc files are in french, but KiCad user interface is internationalized:
 User interface is in English for most countries.
-User interface is in French **only** if you run kicad from a french version of Linux or Windows.
+User interface is in you native language only if you run KiCad from a localized version of you operation system.
 It is easy to add a new translation with poedit.
-Kicad can use this translation without any change.
-(poedit is used to create the french translation).
+KiCad can use this translation without any change.
+'poedit' is used to create the french (and many other) translations.
 See http://poedit.sourceforge.net.
 Contact me for more details.
 
-Installation form archives:
-(both have binary file for Linux and Windows XP and 2000 (not Window 98) )
-kicad.zip
+== Installation from release archive ==
+kicad-{year}-{month}-{day}.zip - archive with statically linked KiCad for Windows XP and 2000 (not Windows 98).
 or
-kicad.tgz
+kicad-{year}-{month}-{day}.tar.bz2 - archive with statically linked KiCad for Linux.
 
-Untar or unzip kicad
-this create the kicad tree in the current directory.
+Untar or unzip KiCad archive (this create the KiCad tree in the current directory).
 
-**Under Windows:
+=== Under Windows: ===
 Goto C:\ or D:\ (or other prefered directory).
 Examples are for an install on C:\.
-Unzip kicad.zip
+Unzip archive kicad-{year}-{month}-{day}.zip
 You must have created c:\kicad.
 Windows executables are in c:\kicad\winexe.
 The main program is kicad.exe and from it you can run other programs
-(schematic, pcb, utilities: cvpcb, gerbview and other) )
+(schematic editor - eeschema, pcb editor - pcbnew, utilities: cvpcb and gerbview).
 I suggest you create a shortcut to c:\kicad\winexe\kicad.exe
 
-
-** Under Linux:
-You do must have libc.so.6 (do not work with libc.so.5)
-You must be "root".
+=== Under Linux: ===
+You do must have libc.so.6 (KiCad doesn't work with libc.so.5)
+You must have the "root" rights.
 goto /usr/local
-Untar kicad.tgz : tar zxvf kicad.tgz (ou unzip kicad.zip)
-(It is possible to unzip kicad.zip: unzip kicad.zip,
+Untar kicad-{year}-{month}-{day}.tar.bz2 by command
+ tar -jxf kicad-{year}-{month}-{day}.tar.bz2.
+(It is possible to unzip KiCad.zip: unzip KiCad.zip,
 and goto /usr/local/kicad/linux and run chmod 755 *)
 The main program is /usr/local/kicad/linux/kicad
-If you use KDE, users can copy the shortcut /usr/local/kicad/linux/kicad.desktop
+If you use KDE, then you can copy the shortcut /usr/local/kicad/linux/kicad.desktop
 in <user home directory>/Desktop and use it to run kicad.
 
-
 == Compilation with CMake build system [http://www.cmake.org] ==
-
-This feature is still experimental and only for developers!
+Remark: this feature is still experimental and only for developers!
 
 === Requirements: cmake must be installed ===
 
-1) An in-source build
+1) An "in-source" type of the build.
 
-An in-source build puts generated files in your source tree.
+Explanation: an "in-source" build puts the generated files in your source tree.
 
 === For verbose output of 'make': ===
- cmake -DCMAKE_VERBOSE_MAKEFILE=1 .
+ cmake -DCMAKE_VERBOSE_MAKEFILE=1 ./
  make
 
 === For non-verbose output of 'make': ===
- cmake .
+ cmake ./
  make
 
-2) An out-of-source build
+2) An "out-of-source" type of the build.
 
-An out-ouf-source build puts the libraries, and executables
+Explanation: an "out-ouf-source" build puts the libraries, and executables
 in a directory separate from the source code directory(ies).
 
 === For verbose output of 'make': ===
@@ -82,12 +78,11 @@ in a directory separate from the source code directory(ies).
  cmake ../
  make
 
-NOTE:
-If don't want to write -DCMAKE_VERBOSE_MAKEFILE=1 each time,
-just uncomment the SET(CMAKE_VERBOSE_MAKEFILE ON) line in the
-top CMakeLists.txt file.
+Remark: If you don't want to write -DCMAKE_VERBOSE_MAKEFILE=1 each time,
+then just uncomment the SET(CMAKE_VERBOSE_MAKEFILE ON) line in the
+CMakeLists.txt file from a KiCad root directory.
 
-3D modeler wings3D:
+== 3D modeler wings3D: ==
 (Usefull only if you plan to create 3D shapes for Printed board modules)
 Archive and doc files (Linux and windows ) are in ../kicad/wing3d
 goto www.wings3d.org to have more details.
@@ -100,7 +95,7 @@ source files (200 sheets) are in OpenOffice (www.openoffice.org) format.
 Can be read, printed and/or modified with OpenOffice.
 See files in kicad/help/doc_src/*
 
-Kicad tree:
+KiCad tree:
 kicad/winexe: windows (XP et 2000 compatible) binaries.
 kicad/linux: linux  binaries (Mandrake 9.2 and 10.0 tested,
 	probably work fine for distributions who have an recent libc)
@@ -119,8 +114,8 @@ kicad/help: On line help (in french)
 kicad/help/doc_src: Documentation (in french) (source doc, 200 sheets) under OpenOffice.
 
 Warning:
-Do not change the kicad tree, or the location of binary files,
-or kicad will **not** be able to found other kicad files (configuration, libraries...)
+Do not change the KiCad tree, or the location of binary files,
+or KiCad will **not** be able to found other KiCad files (configuration, libraries...)
 
 
 /*******************************/
@@ -169,7 +164,7 @@ Documentation:
 L'impression de la documentation (environ 200 pages) peut se faire
 sous OpenOffice (www.openoffice.org) (magnifique logiciel libre de traitement de texte).
 
-Principaux repertoires de Kicad:
+Principaux repertoires de kicad:
 kicad/winexe: executables sous windows (teste sous XP et 2000)
 kicad/linux: executables sous linux (testes sous Mandrake 9.2 et 10.0)
 kicad/library: fichiers libraires de composants schematiques
@@ -198,5 +193,5 @@ Sous linux:
 	ou dans le chemin des executables si /usr/local/kicad n'est pas trouvé.
 
 Uniquement en cas d'installation non standard (et en cas de difficulté),
-definir la variable d'environnement KICAD = <chemin de kicad>
-ex: KICAD=/usr/local/cao/kicad
+definir la variable d'environnement kicad = <chemin de kicad>
+ex: kicad=/usr/local/cao/kicad
