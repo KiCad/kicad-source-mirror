@@ -1,6 +1,6 @@
 		/****************************************************/
-		/* Affichage du panneau d'information (copyright..) */
-		/* Commun a CVPCB, EESCHEMA et PCBNEW				*/
+		/* Display a generic info about kikac (copyright..) */
+		/* Common tp CVPCB, EESCHEMA, PCBNEW and GERBVIEW	*/
 		/****************************************************/
 
 #include "fctsys.h"
@@ -14,26 +14,25 @@
 // Import:
 extern wxString g_Main_Title;
 
-wxString MsgInfos;
-
+// Local
 #ifdef GERBVIEW
-MsgInfos = wxT("** GERBVIEW  (jul 2001 .. 2007) **");
+static wxString MsgInfos(wxT("** GERBVIEW  (jul 2001 .. 2007) **"));
 #else
 #ifdef PCBNEW
-MsgInfos = wxT("** PCBNEW  (sept 1992 .. 2007) **");
+static wxString MsgInfos(wxT("** PCBNEW  (sept 1992 .. 2007) **"));
 #endif
 #endif
 
 #ifdef CVPCB
-MsgInfos = wxT("** CVPCB  (sept 1992 .. 2007) **");
+static wxString MsgInfos(wxT("** CVPCB  (sept 1992 .. 2007) **"));
 #endif
 
 #ifdef KICAD
-MsgInfos = wxT("** KICAD  (jul 2000 .. 2007) **");
+static wxString MsgInfos(wxT("** KICAD  (jul 2000 .. 2007) **"));
 #endif
 
 #ifdef EESCHEMA
-MsgInfos = wxT("** EESCHEMA  (sept 1994 .. 2007) **");
+static wxString MsgInfos(wxT("** EESCHEMA  (sept 1994 .. 2007) **"));
 #endif
 
 // Routines Locales

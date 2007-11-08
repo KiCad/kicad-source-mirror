@@ -1,6 +1,6 @@
-	/************************************************/
-	/* drawtxt.cpp : trace des textes de composants */
-	/************************************************/
+	/*************************************************/
+	/* drawtxt.cpp : Function to draw and plot texts */
+	/*************************************************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -45,10 +45,10 @@ int size_h , size_v , espacement ;
 SH_CODE f_cod , plume = 'U';
 const SH_CODE * ptcar;
 int ptr;
-int ux0, uy0, dx, dy;	// Coord de trace des segments de texte & variables de calcul */
-int cX, cY;				// Centre du texte
-int ox, oy;				// coord de trace du caractere courant
-int coord[100];			// liste des coord des segments a tracer
+int ux0, uy0, dx, dy;	// Draw coordinate for segments to draw. also used in some other calculation
+int cX, cY;				// Texte center
+int ox, oy;				// Draw coordinates for the current char
+int coord[100];			// Buffer coordinate used to draw polylines (char shapes)
 bool sketch_mode = FALSE;
 	
 	zoom = panel->GetZoom();
@@ -63,14 +63,13 @@ bool sketch_mode = FALSE;
 	}
 	kk = 0 ; ptr = 0;	/* ptr = text index */
 
-	/* calcul de la position du debut des textes: ox et oy */
 	nbchar = Text.Len();
 	if ( nbchar == 0 ) return;
 
-	espacement = (10 * size_h ) / 9;
+	espacement = (10 * size_h ) / 9;	// this is the pitch between chars
 	ox = cX = Pos.x; oy = cY = Pos.y;
 
-	/* Si le texte est totalement hors fenetre d'affichage, terminé! */
+	/* Do not draw the text if out of draw area! */
 	if ( panel )
 	{
 		int xm, ym, ll, xc, yc;
@@ -89,13 +88,13 @@ bool sketch_mode = FALSE;
 	}
 
 
-	/* Calcul du cadrage du texte */
+	/* Compute the position ux0, uy0 of the first letter , next */
 	dx = (espacement * nbchar) / 2;
-	dy = size_v / 2;	/* Decalage du debut du texte / centre */
+	dy = size_v / 2;	/* dx, dy = draw offset between first letter and text center */
 
 	ux0 = uy0 = 0;  /* Decalage du centre du texte / coord de ref */
 
-	if( (orient == 0) || (orient == 1800) ) /* Texte Horizontal */
+	if( (orient == 0) || (orient == 1800) ) /* Horizontal Text */
 		{
 		switch(h_justify)
 			{
@@ -126,7 +125,7 @@ bool sketch_mode = FALSE;
 			}
 		}
 
-	else	/* Texte Vertical */
+	else	/* Vertical Text */
 		{
 		switch(h_justify)
 			{
