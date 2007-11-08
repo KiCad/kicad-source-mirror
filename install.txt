@@ -88,11 +88,11 @@ Archive and doc files (Linux and windows ) are in ../kicad/wing3d
 goto www.wings3d.org to have more details.
 Pcbnew use the exported files in wrml (.wrl) format from wings3d (not the native .wings format).
 
-Documentation:
-Currenty only in french.
+== Documentation: ==
+Currenty not only in french.
 "On line" in html format.
-source files (200 sheets) are in OpenOffice (www.openoffice.org) format.
-Can be read, printed and/or modified with OpenOffice.
+Source files (200 sheets) are in OpenOffice.org (www.openoffice.org) format.
+Can be read, printed and/or modified with OpenOffice.org Writer.
 See files in kicad/help/doc_src/*
 
 KiCad tree:

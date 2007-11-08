@@ -1,11 +1,17 @@
+# Our project is called 'kicad' this is how it will be called in
+# visual studio, and in our makefiles. 
 PROJECT(kicad)
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.4 FATAL_ERROR)
 
 #SET(CMAKE_VERBOSE_MAKEFILE ON)
 
+# Here you can define what libraries of wxWidgets you need for your
+# application. You can figure out what libraries you need here;
+# http://www.wxwidgets.org/manuals/2.8/wx_librarieslist.html
 SET(wxWidgets_USE_LIBS base core adv gl html net)
 
+# We need the Find package for wxWidgets to work.
 FIND_PACKAGE(wxWidgets REQUIRED)
 
 #Locations for install targets
@@ -28,11 +34,17 @@ ENDIF(WIN32)
 IF(APPLE)
 ENDIF(APPLE)
 
+# Did we find wxWidgets ? This condition will fail
+# for as long as the internal vars do not point to
+# the proper wxWidgets configuration.
 IF(wxWidgets_FOUND)
 	MESSAGE("-- wxWidgets found")
 	
-	INCLUDE(${wxWidgets_USE_FILE})
+	# Include wxWidgets macros.
+        INCLUDE(${wxWidgets_USE_FILE})
 
+        # We define the include paths here, our source dirs 
+        # and also the include dirs defined by wxWidgets.
 	INCLUDE_DIRECTORIES(
 		${CMAKE_CURRENT_SOURCE_DIR}/include
 		${CMAKE_CURRENT_SOURCE_DIR}/share)
@@ -45,7 +57,8 @@ IF(wxWidgets_FOUND)
 	ADD_SUBDIRECTORY(kicad)
 	ADD_SUBDIRECTORY(pcbnew)
 ELSE(wxWidgets_FOUND)
-	MESSAGE("wxWidgets is required to build KiCad!")
+        # For convenience. When we cannot continue, inform the user.
+        MESSAGE("wxWidgets is required to build KiCad!")
 ENDIF(wxWidgets_FOUND)
 
 ADD_SUBDIRECTORY(internat)
