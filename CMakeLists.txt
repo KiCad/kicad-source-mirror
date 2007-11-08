@@ -4,6 +4,7 @@ PROJECT(kicad)
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.4 FATAL_ERROR)
 
+# Uncomment this line if you want verbose build messages.
 #SET(CMAKE_VERBOSE_MAKEFILE ON)
 
 # Here you can define what libraries of wxWidgets you need for your
@@ -37,19 +38,21 @@ ENDIF(APPLE)
 # Did we find wxWidgets ? This condition will fail
 # for as long as the internal vars do not point to
 # the proper wxWidgets configuration.
+MESSAGE("-- Check for installed wxWidgets:")
 IF(wxWidgets_FOUND)
-	MESSAGE("-- wxWidgets found")
+	MESSAGE("      wxWidgets found")
 	
 	# Include wxWidgets macros.
         INCLUDE(${wxWidgets_USE_FILE})
 
-        # We define the include paths here, our source dirs 
-        # and also the include dirs defined by wxWidgets.
+        # We define the include paths here. 
+        # Include dirs for wxWidgets was defined before.
 	INCLUDE_DIRECTORIES(
 		${CMAKE_CURRENT_SOURCE_DIR}/include
 		${CMAKE_CURRENT_SOURCE_DIR}/share)
 
-	ADD_SUBDIRECTORY(common)
+	# CMake will look at this dirs for nested 'CMakeLists.txt' files
+        ADD_SUBDIRECTORY(common)
 	ADD_SUBDIRECTORY(3d-viewer)
 	ADD_SUBDIRECTORY(cvpcb)
 	ADD_SUBDIRECTORY(eeschema)
@@ -58,9 +61,10 @@ IF(wxWidgets_FOUND)
 	ADD_SUBDIRECTORY(pcbnew)
 ELSE(wxWidgets_FOUND)
         # For convenience. When we cannot continue, inform the user.
-        MESSAGE("wxWidgets is required to build KiCad!")
+        MESSAGE("      Error: wxWidgets doesn't found (it is required to build KiCad!)")
 ENDIF(wxWidgets_FOUND)
 
+# CMake will look at this dirs for nested 'CMakeLists.txt' files
 ADD_SUBDIRECTORY(internat)
 ADD_SUBDIRECTORY(library)
 ADD_SUBDIRECTORY(modules)
