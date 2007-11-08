@@ -53,18 +53,39 @@ This feature is still experimental and only for developers!
 
 === Requirements: cmake must be installed ===
 
+1) An in-source build
+
+An in-source build puts generated files in your source tree.
+
+=== For verbose output of 'make': ===
+ cmake -DCMAKE_VERBOSE_MAKEFILE=1 .
+ make
+
+=== For non-verbose output of 'make': ===
+ cmake .
+ make
+
+2) An out-of-source build
+
+An out-ouf-source build puts the libraries, and executables
+in a directory separate from the source code directory(ies).
+
 === For verbose output of 'make': ===
  mkdir kicad-build
  cd kicad-build
  cmake -DCMAKE_VERBOSE_MAKEFILE=1 ../
  make
 
-=== For non verbose output of 'make': ===
+=== For non-verbose output of 'make': ===
  mkdir kicad-build
  cd kicad-build
  cmake ../
  make
 
+NOTE:
+If don't want to write -DCMAKE_VERBOSE_MAKEFILE=1 each time,
+just uncomment the SET(CMAKE_VERBOSE_MAKEFILE ON) line in the
+top CMakeLists.txt file.
 
 3D modeler wings3D:
 (Usefull only if you plan to create 3D shapes for Printed board modules)

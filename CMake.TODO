@@ -1,0 +1,7 @@
+TODO:
+* Fix kicad/minizip.
+* Fix eeschema/plugins.
+* Add install targets for binaries, docs, translations, libraries.
+* Add DEBUG target.
+* Testing under Windows and Mac.
+* More testing ...
