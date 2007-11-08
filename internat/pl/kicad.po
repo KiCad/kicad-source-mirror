@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-06 10:08+0100\n"
-"PO-Revision-Date: 2007-11-06 10:13+0100\n"
+"POT-Creation-Date: 2007-11-08 00:27+0100\n"
+"PO-Revision-Date: 2007-11-08 08:21+0100\n"
 "Last-Translator: \n"
 "Language-Team: Polish KiCAD Team - Mateusz Skowroński <skowri@gmail.com>, Krzysztof Kawa <elektrotrans@wp.pl>\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,6 @@ msgstr "Nieprawidłowa wartość dla otworu przelotki. Parametr nie został zmie
 #: kicad/pcbnew/dialog_setup_libs.cpp:97
 #: kicad/pcbnew/reglage.cpp:101
 #: kicad/eeschema/dialog_eeschema_config.cpp:105
-#: kicad/eeschema/eestatus.cpp:111
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:76
 #: kicad/gerbview/reglage.cpp:90
 msgid "from "
@@ -31,7 +30,6 @@ msgstr "z "
 #: kicad/pcbnew/dialog_setup_libs.cpp:153
 #: kicad/pcbnew/reglage.cpp:108
 #: kicad/eeschema/dialog_eeschema_config.cpp:161
-#: kicad/eeschema/eestatus.cpp:116
 #: kicad/cvpcb/dialog_display_options.cpp:177
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:131
 msgid "Save Cfg"
@@ -40,7 +38,6 @@ msgstr "Zapisz konfigurację"
 #: kicad/pcbnew/dialog_setup_libs.cpp:159
 #: kicad/pcbnew/reglage.cpp:148
 #: kicad/eeschema/dialog_eeschema_config.cpp:180
-#: kicad/eeschema/eestatus.cpp:148
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:151
 msgid "Files ext:"
 msgstr "Rozszerzenia plików:"
@@ -48,7 +45,6 @@ msgstr "Rozszerzenia plików:"
 #: kicad/pcbnew/dialog_setup_libs.cpp:175
 #: kicad/pcbnew/reglage.cpp:112
 #: kicad/eeschema/dialog_eeschema_config.cpp:196
-#: kicad/eeschema/eestatus.cpp:120
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:170
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:202
 msgid "Del"
@@ -57,7 +53,6 @@ msgstr "Usuń"
 #: kicad/pcbnew/dialog_setup_libs.cpp:179
 #: kicad/pcbnew/reglage.cpp:116
 #: kicad/eeschema/dialog_eeschema_config.cpp:200
-#: kicad/eeschema/eestatus.cpp:124
 #: kicad/eeschema/edit_component_in_lib.cpp:233
 #: kicad/eeschema/edit_component_in_lib.cpp:312
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:174
@@ -68,7 +63,6 @@ msgstr "Dodaj"
 #: kicad/pcbnew/dialog_setup_libs.cpp:183
 #: kicad/pcbnew/reglage.cpp:120
 #: kicad/eeschema/dialog_eeschema_config.cpp:204
-#: kicad/eeschema/eestatus.cpp:128
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:178
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:210
 msgid "Ins"
@@ -76,7 +70,6 @@ msgstr "Wstaw"
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:191
 #: kicad/eeschema/dialog_eeschema_config.cpp:211
-#: kicad/eeschema/eestatus.cpp:139
 #: kicad/cvpcb/menucfg.cpp:231
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:185
 msgid "Libraries"
@@ -619,11 +612,11 @@ msgstr "Rozmiar poziomy tekstu modułu"
 #: kicad/pcbnew/dialog_initpcb.cpp:161
 #: kicad/pcbnew/dialog_display_options.cpp:282
 #: kicad/share/setpage.cpp:232
-#: kicad/eeschema/dialog_edit_label.cpp:176
+#: kicad/eeschema/dialog_edit_label.cpp:174
 #: kicad/eeschema/symbtext.cpp:174
 #: kicad/eeschema/dialog_build_BOM.cpp:346
 #: kicad/eeschema/dialog_create_component.cpp:195
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:243
+#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:240
 #: kicad/eeschema/dialog_edit_component_in_lib.cpp:218
 #: kicad/eeschema/dialog_cmp_graphic_properties.cpp:178
 #: kicad/eeschema/pinedit-dialog.cpp:308
@@ -647,11 +640,15 @@ msgstr "&OK"
 #: kicad/pcbnew/dialog_display_options.cpp:286
 #: kicad/share/setpage.cpp:237
 #: kicad/eeschema/plothpgl.cpp:274
+#: kicad/eeschema/annotate_dialog.cpp:154
+#: kicad/eeschema/dialog_edit_label.cpp:179
 #: kicad/eeschema/symbtext.cpp:178
+#: kicad/eeschema/dialog_erc.cpp:218
 #: kicad/eeschema/dialog_build_BOM.cpp:350
 #: kicad/eeschema/netlist_control.cpp:115
 #: kicad/eeschema/netlist_control.cpp:268
 #: kicad/eeschema/dialog_create_component.cpp:200
+#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:232
 #: kicad/eeschema/dialog_edit_component_in_lib.cpp:214
 #: kicad/eeschema/dialog_cmp_graphic_properties.cpp:182
 #: kicad/eeschema/pinedit-dialog.cpp:304
@@ -821,7 +818,7 @@ msgstr "Połącz"
 #: kicad/pcbnew/dialog_pad_edit.cpp:186
 #: kicad/eeschema/dialog_erc.cpp:192
 #: kicad/eeschema/dialog_erc.cpp:196
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:172
+#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:171
 msgid "0"
 msgstr "0"
 
@@ -1241,11 +1238,7 @@ msgstr "Kompiluj"
 #: kicad/pcbnew/gendrill.cpp:263
 #: kicad/share/dialog_print.cpp:225
 #: kicad/share/svg_print.cpp:222
-#: kicad/eeschema/annotate_dialog.cpp:154
-#: kicad/eeschema/dialog_edit_label.cpp:181
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:235
 #: kicad/eeschema/plotps.cpp:208
-#: kicad/common/svg_print.cpp:220
 msgid "&Close"
 msgstr "&Zamknij"
 
@@ -1917,12 +1910,12 @@ msgid "90"
 msgstr "90"
 
 #: kicad/pcbnew/dialog_pad_edit.cpp:188
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:175
+#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:174
 msgid "-90"
 msgstr "-90"
 
 #: kicad/pcbnew/dialog_pad_edit.cpp:189
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:174
+#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:173
 msgid "180"
 msgstr "180"
 
@@ -2620,7 +2613,7 @@ msgstr "Pomo&c"
 #: kicad/pcbnew/dialog_drc.cpp:141
 #: kicad/eeschema/dialog_erc.cpp:237
 #: kicad/eeschema/dialog_create_component.cpp:176
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:204
+#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:201
 #: kicad/eeschema/dialog_edit_component_in_lib.cpp:166
 msgid "Options"
 msgstr "Opcje"
@@ -2674,7 +2667,6 @@ msgstr "Przeglądaj"
 
 #: kicad/pcbnew/dialog_drc.cpp:215
 #: kicad/share/svg_print.cpp:232
-#: kicad/common/svg_print.cpp:232
 msgid "Messages:"
 msgstr "Wiadomości:"
 
@@ -2878,7 +2870,6 @@ msgstr "Pomiń zawartość warstwy krawędzi PCB na pozostałych warstwach"
 #: kicad/share/dialog_print.cpp:174
 #: kicad/share/svg_print.cpp:200
 #: kicad/eeschema/plotps.cpp:191
-#: kicad/common/svg_print.cpp:197
 msgid "Print Sheet Ref"
 msgstr "Drukuj oznaczenia arkusza"
 
@@ -3178,7 +3169,7 @@ msgstr "Ścieżek"
 #: kicad/pcbnew/cotation.cpp:113
 #: kicad/pcbnew/muonde.cpp:360
 #: kicad/pcbnew/pcbtexte.cpp:176
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:182
+#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:180
 #: kicad/eeschema/onrightclick.cpp:305
 #: kicad/eeschema/dialog_options.cpp:229
 msgid "Normal"
@@ -4961,7 +4952,6 @@ msgstr "Przybliżona skala:"
 #: kicad/share/dialog_print.cpp:183
 #: kicad/share/svg_print.cpp:193
 #: kicad/eeschema/plotps.cpp:185
-#: kicad/common/svg_print.cpp:190
 msgid "Color"
 msgstr "Kolor"
 
@@ -4985,13 +4975,11 @@ msgstr "Pojedyncza strona"
 #: kicad/share/dialog_print.cpp:194
 #: kicad/share/dialog_print.cpp:202
 #: kicad/share/svg_print.cpp:213
-#: kicad/common/svg_print.cpp:207
 msgid "Page Print:"
 msgstr "Wydruk strony:"
 
 #: kicad/share/dialog_print.cpp:199
 #: kicad/share/svg_print.cpp:210
-#: kicad/common/svg_print.cpp:204
 msgid "Current"
 msgstr "Bieżąca"
 
@@ -4999,7 +4987,6 @@ msgstr "Bieżąca"
 #: kicad/share/svg_print.cpp:211
 #: kicad/eeschema/affiche.cpp:169
 #: kicad/eeschema/affiche.cpp:175
-#: kicad/common/svg_print.cpp:205
 msgid "All"
 msgstr "Wszystkie"
 
@@ -5017,7 +5004,6 @@ msgstr "&Drukuj"
 
 #: kicad/share/dialog_print.cpp:236
 #: kicad/share/svg_print.cpp:243
-#: kicad/common/svg_print.cpp:183
 msgid "Pen width mini"
 msgstr "Minimalna szerokość pisaka"
 
@@ -5188,37 +5174,29 @@ msgid "Export to other sheets"
 msgstr "Przenieś na inne arkusze"
 
 #: kicad/share/svg_print.cpp:194
-#: kicad/common/svg_print.cpp:191
 msgid "Black and White"
 msgstr "Czarno-biały"
 
 #: kicad/share/svg_print.cpp:196
-#: kicad/common/svg_print.cpp:193
 msgid "Print mode"
 msgstr "Tryb wydruku"
 
 #: kicad/share/svg_print.cpp:217
-#: kicad/common/svg_print.cpp:216
 msgid "Create &File"
 msgstr "&Utwórz plik"
 
 #: kicad/share/svg_print.cpp:226
 #: kicad/eeschema/sheet.cpp:162
-#: kicad/common/svg_print.cpp:224
 msgid "Filename:"
 msgstr "Nazwa pliku:"
 
 #: kicad/share/svg_print.cpp:363
 #: kicad/share/svg_print.cpp:377
-#: kicad/common/svg_print.cpp:364
-#: kicad/common/svg_print.cpp:377
 msgid "Create file "
 msgstr "Utwórz plik "
 
 #: kicad/share/svg_print.cpp:364
 #: kicad/share/svg_print.cpp:378
-#: kicad/common/svg_print.cpp:365
-#: kicad/common/svg_print.cpp:378
 msgid " error"
 msgstr " błąd"
 
@@ -5464,25 +5442,25 @@ msgid "Lengh"
 msgstr "Długość"
 
 #: kicad/eeschema/affiche.cpp:102
-#: kicad/eeschema/dialog_edit_label.cpp:145
+#: kicad/eeschema/dialog_edit_label.cpp:143
 #: kicad/eeschema/pinedit-dialog.cpp:290
 msgid "Up"
 msgstr "Góra"
 
 #: kicad/eeschema/affiche.cpp:105
-#: kicad/eeschema/dialog_edit_label.cpp:147
+#: kicad/eeschema/dialog_edit_label.cpp:145
 #: kicad/eeschema/pinedit-dialog.cpp:291
 msgid "Down"
 msgstr "Dół"
 
 #: kicad/eeschema/affiche.cpp:108
-#: kicad/eeschema/dialog_edit_label.cpp:146
+#: kicad/eeschema/dialog_edit_label.cpp:144
 #: kicad/eeschema/pinedit-dialog.cpp:289
 msgid "Left"
 msgstr "Lewo"
 
 #: kicad/eeschema/affiche.cpp:111
-#: kicad/eeschema/dialog_edit_label.cpp:144
+#: kicad/eeschema/dialog_edit_label.cpp:142
 #: kicad/eeschema/pinedit-dialog.cpp:288
 msgid "Right"
 msgstr "Prawo"
@@ -5493,7 +5471,7 @@ msgid "Unit"
 msgstr "Część"
 
 #: kicad/eeschema/affiche.cpp:182
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:193
+#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:190
 #: kicad/eeschema/onrightclick.cpp:320
 msgid "Convert"
 msgstr "Skonwertowany"
@@ -5848,48 +5826,39 @@ msgid "Other"
 msgstr "Inny"
 
 #: kicad/eeschema/dialog_eeschema_config.cpp:174
-#: kicad/eeschema/eestatus.cpp:303
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:147
 msgid "NetList Formats:"
 msgstr "Formaty netlist:"
 
 #: kicad/eeschema/dialog_eeschema_config.cpp:219
-#: kicad/eeschema/eestatus.cpp:174
 msgid "Library files path:"
 msgstr "Ścieżka dostępu do pliku bibliotek:"
 
 #: kicad/eeschema/dialog_eeschema_config.cpp:232
-#: kicad/eeschema/eestatus.cpp:150
 msgid "Cmp file Ext: "
 msgstr "Pliki elementów: "
 
 #: kicad/eeschema/dialog_eeschema_config.cpp:236
-#: kicad/eeschema/eestatus.cpp:154
 msgid "Net file Ext: "
 msgstr "Pliki netlisty: "
 
 #: kicad/eeschema/dialog_eeschema_config.cpp:240
-#: kicad/eeschema/eestatus.cpp:158
 msgid "Library file Ext: "
 msgstr "Pliki bibliotek: "
 
 #: kicad/eeschema/dialog_eeschema_config.cpp:244
-#: kicad/eeschema/eestatus.cpp:162
 msgid "Symbol file Ext: "
 msgstr "Pliki symboli: "
 
 #: kicad/eeschema/dialog_eeschema_config.cpp:248
-#: kicad/eeschema/eestatus.cpp:166
 msgid "Schematic file Ext: "
 msgstr "Pliki schematów: "
 
 #: kicad/eeschema/dialog_eeschema_config.cpp:350
-#: kicad/eeschema/eestatus.cpp:249
 msgid "Library files:"
 msgstr "Pliki bibliotek:"
 
 #: kicad/eeschema/dialog_eeschema_config.cpp:373
-#: kicad/eeschema/eestatus.cpp:272
 msgid "Library already in use"
 msgstr "Biblioteka jest już w użyciu"
 
@@ -5977,55 +5946,55 @@ msgstr ""
 msgid "Nothing found"
 msgstr "Nic nie znaleziono"
 
-#: kicad/eeschema/dialog_edit_label.cpp:70
+#: kicad/eeschema/dialog_edit_label.cpp:68
 msgid "Global Label properties"
 msgstr "Właściwości etykiety globalnej"
 
-#: kicad/eeschema/dialog_edit_label.cpp:74
+#: kicad/eeschema/dialog_edit_label.cpp:72
 msgid "Label properties"
 msgstr "Właściwości etykiety"
 
-#: kicad/eeschema/dialog_edit_label.cpp:78
+#: kicad/eeschema/dialog_edit_label.cpp:76
 msgid "Text properties"
 msgstr "Właściwości tekstu"
 
-#: kicad/eeschema/dialog_edit_label.cpp:134
+#: kicad/eeschema/dialog_edit_label.cpp:132
 msgid "Text "
 msgstr "Tekst "
 
-#: kicad/eeschema/dialog_edit_label.cpp:149
+#: kicad/eeschema/dialog_edit_label.cpp:146
 msgid "Text Orient:"
 msgstr "Orientacja tekstu:"
 
-#: kicad/eeschema/dialog_edit_label.cpp:155
+#: kicad/eeschema/dialog_edit_label.cpp:153
 #: kicad/eeschema/pinedit-dialog.cpp:331
 msgid "Input"
 msgstr "Wejście"
 
-#: kicad/eeschema/dialog_edit_label.cpp:156
+#: kicad/eeschema/dialog_edit_label.cpp:154
 #: kicad/eeschema/pinedit-dialog.cpp:332
 msgid "Output"
 msgstr "Wyjście"
 
-#: kicad/eeschema/dialog_edit_label.cpp:157
+#: kicad/eeschema/dialog_edit_label.cpp:155
 #: kicad/eeschema/pinedit-dialog.cpp:333
 msgid "Bidi"
 msgstr "Dwukierunkowy"
 
-#: kicad/eeschema/dialog_edit_label.cpp:158
+#: kicad/eeschema/dialog_edit_label.cpp:156
 msgid "TriState"
 msgstr "Trójstanowy"
 
-#: kicad/eeschema/dialog_edit_label.cpp:159
+#: kicad/eeschema/dialog_edit_label.cpp:157
 #: kicad/eeschema/pinedit-dialog.cpp:335
 msgid "Passive"
 msgstr "Pasywny"
 
-#: kicad/eeschema/dialog_edit_label.cpp:161
+#: kicad/eeschema/dialog_edit_label.cpp:158
 msgid "Glabel Shape:"
 msgstr "Kształt etykiety globalnej:"
 
-#: kicad/eeschema/dialog_edit_label.cpp:168
+#: kicad/eeschema/dialog_edit_label.cpp:166
 msgid "Size "
 msgstr "Rozmiar "
 
@@ -6102,7 +6071,7 @@ msgid "Common to convert"
 msgstr "Wspólny dla skonwertowanych"
 
 #: kicad/eeschema/symbtext.cpp:167
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:218
+#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:215
 #: kicad/eeschema/edit_component_in_lib.cpp:502
 msgid "Vertical"
 msgstr "Pionowo"
@@ -6251,10 +6220,6 @@ msgstr "&Test ERC"
 #: kicad/eeschema/dialog_erc.cpp:215
 msgid "&Del Markers"
 msgstr "&Usuń znaczniki"
-
-#: kicad/eeschema/dialog_erc.cpp:218
-msgid "&Quit"
-msgstr "&Zakończ"
 
 #: kicad/eeschema/dialog_erc.cpp:222
 msgid "erc"
@@ -6676,43 +6641,43 @@ msgstr "Kształt arkusza pinów:"
 msgid "No New Global Label found"
 msgstr "Nie znaleziono nowej etykiety globalnej"
 
-#: kicad/eeschema/annotate.cpp:181
+#: kicad/eeschema/annotate.cpp:182
 msgid "Previous Annotation will be deleted. Continue ?"
 msgstr "Poprzednia numeracja elementów zostanie usunięta. Kontynuować?"
 
-#: kicad/eeschema/annotate.cpp:688
+#: kicad/eeschema/annotate.cpp:689
 #, c-format
 msgid "item not annotated: %s%s"
 msgstr "element nie ma numeru: %s%s"
 
-#: kicad/eeschema/annotate.cpp:692
+#: kicad/eeschema/annotate.cpp:693
 #, c-format
 msgid "( unit %d)"
 msgstr "(część %d)"
 
-#: kicad/eeschema/annotate.cpp:708
+#: kicad/eeschema/annotate.cpp:709
 #, c-format
 msgid "Error item %s%s"
 msgstr "Błąd elementu %s%s"
 
-#: kicad/eeschema/annotate.cpp:710
+#: kicad/eeschema/annotate.cpp:711
 #, c-format
 msgid " unit %d and no more than %d parts"
 msgstr " część %d i nie więcej niż %d elementów"
 
-#: kicad/eeschema/annotate.cpp:742
-#: kicad/eeschema/annotate.cpp:765
+#: kicad/eeschema/annotate.cpp:743
+#: kicad/eeschema/annotate.cpp:766
 #, c-format
 msgid "Multiple item %s%s"
 msgstr "Element wielokrotny %s%s"
 
-#: kicad/eeschema/annotate.cpp:747
-#: kicad/eeschema/annotate.cpp:769
+#: kicad/eeschema/annotate.cpp:748
+#: kicad/eeschema/annotate.cpp:770
 #, c-format
 msgid " (unit %d)"
 msgstr " (część %d)"
 
-#: kicad/eeschema/annotate.cpp:785
+#: kicad/eeschema/annotate.cpp:786
 #, c-format
 msgid "Diff values for %s%d%c (%s) and %s%d%c (%s)"
 msgstr "Różnica wartości dla %s%d%c (%s) i %s%d%c (%s)"
@@ -6732,7 +6697,7 @@ msgid "Power Symbol"
 msgstr "Symbol zasilania"
 
 #: kicad/eeschema/dialog_create_component.cpp:188
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:190
+#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:187
 #: kicad/eeschema/dialog_edit_component_in_lib.cpp:162
 msgid "Parts are locked"
 msgstr "Elementy są zablokowane"
@@ -6998,47 +6963,47 @@ msgstr "Część 25"
 msgid "Unit 26"
 msgstr "Część 26"
 
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:163
+#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:162
 msgid "Unit:"
 msgstr "Część:"
 
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:173
+#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:172
 msgid "+90"
 msgstr "+90"
 
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:177
+#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:175
 msgid "Orient:"
 msgstr "Orientacja:"
 
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:183
+#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:181
 #: kicad/eeschema/onrightclick.cpp:301
 msgid "Mirror --"
 msgstr "Odbij poziomo --"
 
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:184
+#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:182
 msgid "Mirror !"
 msgstr "Odbij !"
 
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:186
+#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:183
 msgid "Mirror:"
 msgstr "Odbicie:"
 
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:197
+#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:194
 msgid "Chip Name:"
 msgstr "Nazwa elementu:"
 
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:214
+#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:211
 #: kicad/eeschema/edit_component_in_lib.cpp:497
 msgid "Show Text"
 msgstr "Pokaż tekst"
 
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:228
+#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:225
 #: kicad/eeschema/edit_component_in_lib.cpp:484
 #: kicad/eeschema/eelayer.h:164
 msgid "Fields"
 msgstr "Pola"
 
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:239
+#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:236
 msgid "Defaults"
 msgstr "Domyślne"
 
@@ -9714,7 +9679,7 @@ msgstr "Opcje wypełniania stref"
 
 #: kicad/pcbnew/dialog_setup_libs.h:43
 #: kicad/eeschema/dialog_eeschema_config.h:50
-#: kicad/eeschema/dialog_edit_label.h:40
+#: kicad/eeschema/dialog_edit_label.h:44
 msgid "Dialog"
 msgstr "Dialog"
 
@@ -9816,7 +9781,6 @@ msgid "Page Settings"
 msgstr "Ustawienia strony"
 
 #: kicad/share/svg_print.h:50
-#: kicad/common/svg_print.h:52
 msgid "Create SVG file"
 msgstr "Utwórz plik SVG"
 
@@ -9904,7 +9868,7 @@ msgstr "Arkusze"
 msgid "Erc Mark"
 msgstr "Znacznik ERC"
 
-#: kicad/eeschema/dialog_erc.h:59
+#: kicad/eeschema/dialog_erc.h:57
 msgid "EESchema Erc"
 msgstr "ERC EESchema"
 
@@ -10095,29 +10059,4 @@ msgstr "Pozostałe"
 #: kicad/gerbview/set_color.h:254
 msgid "D codes id."
 msgstr "ID kodu wiercenia"
-
-#~ msgid "White Background"
-#~ msgstr "Białe tło"
-#~ msgid "Black Background"
-#~ msgstr "Czarne tło"
-#~ msgid "Add Footprint Field"
-#~ msgstr "Dodaj pole obudowy"
-#~ msgid "Add Field 1"
-#~ msgstr "Dodaj pole 1"
-#~ msgid "Add Field 2"
-#~ msgstr "Dodaj pole 2"
-#~ msgid "Add Field 3"
-#~ msgstr "Dodaj pole 3"
-#~ msgid "Add Field 4"
-#~ msgstr "Dodaj pole 4"
-#~ msgid "Add Field 5"
-#~ msgstr "Dodaj pole 5"
-#~ msgid "Add Field 6"
-#~ msgstr "Dodaj pole 6"
-#~ msgid "Add Field 7"
-#~ msgstr "Dodaj pole 7"
-#~ msgid "Add Field 8"
-#~ msgstr "Dodaj pole 8"
-#~ msgid "EESchema Preferences"
-#~ msgstr "Ustawienia EESchema"
 
