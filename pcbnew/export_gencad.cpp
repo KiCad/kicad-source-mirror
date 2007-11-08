@@ -184,7 +184,7 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
  */
 {
     D_PAD* pad, ** padlist, ** pad_list_base;
-    char*  pad_type;
+    const  char*  pad_type;
     int    memsize, ii, dx, dy;
     D_PAD* old_pad = NULL;
     int    pad_name_number;
@@ -320,12 +320,12 @@ void CreateShapesSection( FILE* file, BOARD* pcb )
  *  $ENDSHAPES
  */
 {
-    MODULE*  module;
-    D_PAD*   pad;
-    char*    layer;
-    int      orient;
-    wxString pinname;
-    char*    mirror = "0";
+    MODULE*        module;
+    D_PAD*         pad;
+    const char*    layer;
+    int            orient;
+    wxString       pinname;
+    const char*    mirror = "0";
 
     fputs( "$SHAPES\n", file );
 
@@ -378,13 +378,13 @@ void CreateComponentsSection( FILE* file, BOARD* pcb )
  *  Composants cote CUIVRE:
  *  Les formes sont donnees avec l'option "FLIP", c.a.d.:
  *  - ils sont decrits en vue normale (comme s'ils etaient sur cote COMPOSANT)
- *  - leur orientation est donnée comme s'ils etaient cote composant.
+ *  - leur orientation est donnï¿½e comme s'ils etaient cote composant.
  */
 {
     MODULE*       module = pcb->m_Modules;
     TEXTE_MODULE* PtTexte;
-    char*         mirror;
-    char*         flip;
+    const char*   mirror;
+    const char*   flip;
     int           ii;
 
     fputs( "$COMPONENTS\n", file );

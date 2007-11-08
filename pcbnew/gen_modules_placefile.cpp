@@ -356,7 +356,7 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
                 layer = 1;
             if( pad->m_Masque_Layer & CMP_LAYER )
                 layer |= 2;
-            char* layer_name[4] = { "??? ", "copper", "component", "all" };
+            const char* layer_name[4] = { "??? ", "copper", "component", "all" };
             sprintf( Line, "Layer  %s\n", layer_name[layer] );
             fputs( Line, rptfile );
             fprintf( rptfile, "$EndPAD\n" );
