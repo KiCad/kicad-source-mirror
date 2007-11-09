@@ -4,6 +4,19 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Nov-09 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
+================================================================================
++ 3d-viewer
+  * The 3d_canvas.cpp file has been updated to use a const parameter, as suggested
+    within (Bug) Request ID 1828487.
++ pcbnew
+  * Sizers have now been provided for the "Pcbnew Layer Colors:" dialog box (previously
+    identified as the "Colors:" dialog box), and tool tips have been provided for the
+    "Show All" and "Show None" buttons.
+  * The reglage.cpp file (which is not currently used) has been removed, and replaced
+    with reglage.cpp.notused.
+
+
 2007-Nov-02 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + all

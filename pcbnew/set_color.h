@@ -1,8 +1,85 @@
-/* Set up the button list for the color selection for pcbnew layers */
+/***************/
+/* set_color.h */
+/***************/
 
-static ColorButton Msg_Layers_Cu =
+#ifndef SET_COLOR_H
+#define SET_COLOR_H
+
+#if defined(__GNUG__) && !defined(__APPLE__)
+#pragma interface "set_color.cpp"
+#endif
+
+#include "wx/statline.h"
+
+class wxBoxSizer;
+class wxFlexGridSizer;
+class wxStaticLine;
+class wxStdDialogButtonSizer;
+
+
+// Specify how many elements are contained within laytool_list[]
+const int NB_BUTT = 44;
+
+// Specify how many elements are contained within laytool_index[]
+const int BUTTON_GROUPS = 3;
+
+// Specify the numbers associated with assorted controls
+enum col_sel_id {
+    ID_DIALOG = 1800,
+    ID_COLOR_RESET_SHOW_LAYER_ON,
+    ID_COLOR_RESET_SHOW_LAYER_OFF,
+    ID_COLOR_CHECKBOX_ONOFF,
+    ID_COLOR_SETUP
+};
+
+// Control identifiers
+// #define SYMBOL_WINEDA_SETCOLORSFRAME_STYLE wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER
+#define SYMBOL_WINEDA_SETCOLORSFRAME_STYLE wxDEFAULT_DIALOG_STYLE|MAYBE_RESIZE_BORDER
+#define SYMBOL_WINEDA_SETCOLORSFRAME_TITLE _("Pcbnew Layer Colors:")
+#define SYMBOL_WINEDA_SETCOLORSFRAME_IDNAME ID_DIALOG
+// #define SYMBOL_WINEDA_SETCOLORSFRAME_SIZE wxSize(400, 300)
+// #define SYMBOL_WINEDA_SETCOLORSFRAME_POSITION wxDefaultPosition
+
+#ifndef wxCLOSE_BOX
+#define wxCLOSE_BOX 0x1000
+#endif
+
+// Specify the width and height of every (color-displaying / bitmap) button
+const int BUTT_SIZE_X = 25;
+const int BUTT_SIZE_Y = 15;
+
+/* Macro utile : */
+#define ADR( numlayer )     &g_DesignSettings.m_LayerColor[(numlayer)]
+
+
+/**********************************/
+/* Liste des menus de Menu_Layers */
+/**********************************/
+struct ColorButton
 {
-    _( "Copper Layers" ), -1    // Title
+    const wxString m_Title;
+    int            m_LayerNumber;
+    int*           m_Color;             ///< pointer to color variable to manipulate
+    bool           m_NoDisplayIsColor;  ///< TRUE if bit ITEM_NOT_SHOW of the color variable should be manipulated
+    bool*          m_NoDisplay;         ///< pointer to the on/off display control variable, if it is not the color variable
+
+    int             m_Id;
+    wxBitmapButton* m_Button;
+//  int             m_State;            // (Commented out until when it is actually used.)
+    wxCheckBox*     m_CheckBox;         ///< Display ON/OFF toggle
+};
+
+struct ButtonIndex
+{
+    wxString m_Name;                    // Title
+    int      m_Index;                   // Index to last bitmap button in group
+};
+
+
+static ButtonIndex Msg_Layers_Cu =
+{
+    _( "Copper Layers" ),           // Title
+    15                              // Index to last bitmap button in group
 };
 
 static ColorButton Layer_1_Butt =
@@ -134,9 +211,10 @@ static ColorButton Layer_16_Butt =
 };
 
 
-static ColorButton Msg_Layers_Tech =
+static ButtonIndex Msg_Layers_Tech =
 {
-    _( "Tech Layers" ), -1      // Title
+    _( "Tech Layers" ),             // Title
+    28                              // Index to last bitmap button in group
 };
 
 static ColorButton Layer_17_Butt =
@@ -244,9 +322,10 @@ static ColorButton Layer_29_Butt =
 };
 
 
-static ColorButton Msg_Others_Items =
+static ButtonIndex Msg_Others_Items =
 {
-    wxT( "Others" ), -1                         // Title
+    wxT( "Others" ),                // Title
+    43                              // Index to last bitmap button in group
 };
 
 static ColorButton VIA_THROUGH_Butt =
@@ -377,7 +456,6 @@ static ColorButton Show_Modules_Cu_Butt =
 
 
 static ColorButton* laytool_list[] = {
-    &Msg_Layers_Cu,
     &Layer_1_Butt,
     &Layer_2_Butt,
     &Layer_3_Butt,
@@ -395,7 +473,6 @@ static ColorButton* laytool_list[] = {
     &Layer_15_Butt,
     &Layer_16_Butt,
 
-    &Msg_Layers_Tech,
     &Layer_17_Butt,
     &Layer_18_Butt,
     &Layer_19_Butt,
@@ -413,7 +490,6 @@ static ColorButton* laytool_list[] = {
 //  &Layer_31_Butt,
 //  &Layer_32_Butt,
 
-    &Msg_Others_Items,
     &VIA_THROUGH_Butt,
     &Via_Aveugle_Butt,
     &BLIND_VIA_Butt,
@@ -430,6 +506,69 @@ static ColorButton* laytool_list[] = {
     &Show_Pads_Noconnect_Butt,
     &Show_Modules_Cmp_Butt,
     &Show_Modules_Cu_Butt,
-
-    NULL
 };
+
+
+static ButtonIndex* laytool_index[BUTTON_GROUPS] = {
+    &Msg_Layers_Cu,
+    &Msg_Layers_Tech,
+    &Msg_Others_Items
+};
+
+
+/**************************************************************/
+/* classe derivee pour la frame de Configuration des couleurs */
+/**************************************************************/
+
+class WinEDA_SetColorsFrame: public wxDialog
+{
+private:
+    DECLARE_DYNAMIC_CLASS( WinEDA_SetColorsFrame )
+    DECLARE_EVENT_TABLE()
+
+    WinEDA_DrawFrame*       m_Parent;
+    wxBoxSizer*             OuterBoxSizer;
+    wxBoxSizer*             MainBoxSizer;
+    wxFlexGridSizer*        FlexColumnBoxSizer;
+    wxStaticText*           Label;
+    wxBoxSizer*             RowBoxSizer;
+    wxBitmapButton*         BitmapButton;
+    wxCheckBox*             CheckBox;
+    wxButton*               Button;
+    wxStaticLine*           Line;
+    wxStdDialogButtonSizer* StdDialogButtonSizer;
+
+    // Creation
+    bool Create( wxWindow* parent,
+                 wxWindowID id = SYMBOL_WINEDA_SETCOLORSFRAME_IDNAME,
+                 const wxString& caption = SYMBOL_WINEDA_SETCOLORSFRAME_TITLE,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = SYMBOL_WINEDA_SETCOLORSFRAME_STYLE );
+
+    // Initialises member variables
+    void Init();
+
+    // Creates the controls and sizers
+    void CreateControls();
+
+    wxBitmap GetBitmapResource( const wxString& name );
+    wxIcon GetIconResource( const wxString& name );
+    static bool ShowToolTips();
+
+    void    SetColor( wxCommandEvent& event );
+    void    OnOkClick( wxCommandEvent& event );
+    void    OnCancelClick( wxCommandEvent& event );
+    void    OnApplyClick( wxCommandEvent& event );
+    void    UpdateLayerSettings();
+    void    ResetDisplayLayersCu( wxCommandEvent& event );
+
+public:
+    // Constructors and destructor
+    WinEDA_SetColorsFrame();
+    WinEDA_SetColorsFrame( WinEDA_DrawFrame* parent, const wxPoint& framepos );
+    ~WinEDA_SetColorsFrame();
+};
+
+#endif
+    // SET_COLOR_H

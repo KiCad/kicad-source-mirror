@@ -66,7 +66,7 @@ EVT_MENU_RANGE( ID_POPUP_3D_VIEW_START, ID_POPUP_3D_VIEW_END,
 END_EVENT_TABLE()
 
 /*************************************************************************/
-Pcb3D_GLCanvas::Pcb3D_GLCanvas( WinEDA3D_DrawFrame* parent, wxWindowID id,
+Pcb3D_GLCanvas::Pcb3D_GLCanvas( WinEDA3D_DrawFrame* parent, const wxWindowID id,
                                 int* gl_attrib ) :
     wxGLCanvas( parent, id,
                 wxPoint( -1, -1 ), wxSize( -1, -1 ), 0, wxT( "Pcb3D_glcanvas" ), gl_attrib )
