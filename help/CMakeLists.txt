@@ -1,0 +1,3 @@
+INSTALL(DIRECTORY de en es fr it pt ru
+	DESTINATION ${KICAD_DOCS}
+	PATTERN ".svn" EXCLUDE)

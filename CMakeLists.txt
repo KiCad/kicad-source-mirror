@@ -66,6 +66,7 @@ ENDIF(wxWidgets_FOUND)
 
 # CMake will look at this dirs for nested 'CMakeLists.txt' files
 ADD_SUBDIRECTORY(internat)
+ADD_SUBDIRECTORY(help)
 ADD_SUBDIRECTORY(library)
 ADD_SUBDIRECTORY(modules)
 ADD_SUBDIRECTORY(template)
