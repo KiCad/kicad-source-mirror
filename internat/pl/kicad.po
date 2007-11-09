@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-08 00:27+0100\n"
-"PO-Revision-Date: 2007-11-08 08:21+0100\n"
+"POT-Creation-Date: 2007-11-09 17:55+0100\n"
+"PO-Revision-Date: 2007-11-09 17:58+0100\n"
 "Last-Translator: \n"
 "Language-Team: Polish KiCAD Team - Mateusz Skowroński <skowri@gmail.com>, Krzysztof Kawa <elektrotrans@wp.pl>\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,6 @@ msgid "Incorrect value for Via drill. No via drill change"
 msgstr "Nieprawidłowa wartość dla otworu przelotki. Parametr nie został zmieniony."
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:97
-#: kicad/pcbnew/reglage.cpp:101
 #: kicad/eeschema/dialog_eeschema_config.cpp:105
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:76
 #: kicad/gerbview/reglage.cpp:90
@@ -28,7 +27,6 @@ msgid "from "
 msgstr "z "
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:153
-#: kicad/pcbnew/reglage.cpp:108
 #: kicad/eeschema/dialog_eeschema_config.cpp:161
 #: kicad/cvpcb/dialog_display_options.cpp:177
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:131
@@ -36,14 +34,12 @@ msgid "Save Cfg"
 msgstr "Zapisz konfigurację"
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:159
-#: kicad/pcbnew/reglage.cpp:148
 #: kicad/eeschema/dialog_eeschema_config.cpp:180
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:151
 msgid "Files ext:"
 msgstr "Rozszerzenia plików:"
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:175
-#: kicad/pcbnew/reglage.cpp:112
 #: kicad/eeschema/dialog_eeschema_config.cpp:196
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:170
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:202
@@ -51,7 +47,6 @@ msgid "Del"
 msgstr "Usuń"
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:179
-#: kicad/pcbnew/reglage.cpp:116
 #: kicad/eeschema/dialog_eeschema_config.cpp:200
 #: kicad/eeschema/edit_component_in_lib.cpp:233
 #: kicad/eeschema/edit_component_in_lib.cpp:312
@@ -61,7 +56,6 @@ msgid "Add"
 msgstr "Dodaj"
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:183
-#: kicad/pcbnew/reglage.cpp:120
 #: kicad/eeschema/dialog_eeschema_config.cpp:204
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:178
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:210
@@ -76,43 +70,35 @@ msgid "Libraries"
 msgstr "Biblioteki"
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:199
-#: kicad/pcbnew/reglage.cpp:169
 msgid "Lib Modules Dir:"
 msgstr "Ścieżka dostępu do pliku bibliotek:"
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:206
-#: kicad/pcbnew/reglage.cpp:176
 #: kicad/cvpcb/menucfg.cpp:91
 msgid "Module Doc File:"
 msgstr "Plik dokumentacji modułu:"
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:216
-#: kicad/pcbnew/reglage.cpp:151
 msgid "Board ext: "
 msgstr "Płytka: "
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:220
-#: kicad/pcbnew/reglage.cpp:155
 msgid "Cmp ext: "
 msgstr "Elementy: "
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:224
-#: kicad/pcbnew/reglage.cpp:159
 msgid "Lib ext: "
 msgstr "Biblioteka: "
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:228
-#: kicad/pcbnew/reglage.cpp:163
 msgid "Net ext: "
 msgstr "Netlista: "
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:367
-#: kicad/pcbnew/reglage.cpp:258
 msgid "library files:"
 msgstr "Pliki bibliotek:"
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:390
-#: kicad/pcbnew/reglage.cpp:279
 msgid "Library exists! No Change"
 msgstr "Biblioteka istnieje! Bez zmian"
 
@@ -671,21 +657,26 @@ msgstr "Segment jest edytowany"
 msgid "Delete Layer "
 msgstr "Usuń warstwę "
 
-#: kicad/pcbnew/set_color.cpp:149
-msgid "Colors:"
-msgstr "Kolory"
-
-#: kicad/pcbnew/set_color.cpp:264
-#: kicad/gerbview/set_color.cpp:236
-msgid "Show All"
-msgstr "Wszystkie"
-
-#: kicad/pcbnew/set_color.cpp:270
+#: kicad/pcbnew/set_color.cpp:269
+#: kicad/pcbnew/set_color.cpp:296
 #: kicad/gerbview/set_color.cpp:241
 msgid "Show None"
 msgstr "Żadna"
 
-#: kicad/pcbnew/set_color.cpp:275
+#: kicad/pcbnew/set_color.cpp:278
+#: kicad/gerbview/set_color.cpp:236
+msgid "Show All"
+msgstr "Wszystkie"
+
+#: kicad/pcbnew/set_color.cpp:290
+msgid "Switch on all of the copper layers"
+msgstr "Włącz na wszystkich warstwach ścieżek"
+
+#: kicad/pcbnew/set_color.cpp:299
+msgid "Switch off all of the copper layers"
+msgstr "Wyłącz na wszystkich warstwach ścieżek"
+
+#: kicad/pcbnew/set_color.cpp:353
 #: kicad/pcbnew/mirepcb.cpp:99
 #: kicad/pcbnew/block.cpp:160
 #: kicad/pcbnew/dialog_edit_module.cpp:118
@@ -706,7 +697,7 @@ msgstr "Żadna"
 msgid "OK"
 msgstr "OK"
 
-#: kicad/pcbnew/set_color.cpp:280
+#: kicad/pcbnew/set_color.cpp:357
 #: kicad/pcbnew/mirepcb.cpp:103
 #: kicad/pcbnew/block.cpp:157
 #: kicad/pcbnew/dialog_edit_module.cpp:122
@@ -739,7 +730,7 @@ msgstr "OK"
 msgid "Cancel"
 msgstr "Anuluj"
 
-#: kicad/pcbnew/set_color.cpp:285
+#: kicad/pcbnew/set_color.cpp:361
 #: kicad/gerbview/set_color.cpp:257
 msgid "Apply"
 msgstr "Zastosuj"
@@ -996,7 +987,7 @@ msgstr "Nie pokazuj stref"
 
 #: kicad/pcbnew/pcbframe.cpp:412
 #: kicad/pcbnew/tool_pcb.cpp:361
-#: kicad/pcbnew/set_color.h:344
+#: kicad/pcbnew/set_color.h:423
 msgid "Show Zones"
 msgstr "Pokaż strefy"
 
@@ -1028,10 +1019,6 @@ msgstr "Wyświetlaj w trybie wysokiego kontrastu"
 #: kicad/pcbnew/pcbnew.cpp:42
 msgid "Pcbnew is already running, Continue?"
 msgstr "Pcbnew jest już uruchomione, kontynuować?"
-
-#: kicad/pcbnew/reglage.cpp:124
-msgid "Lib Modules:"
-msgstr "Biblioteka modułów:"
 
 #: kicad/pcbnew/move_or_drag_track.cpp:709
 msgid "Unable to drag this segment: too many segments connected"
@@ -1743,7 +1730,7 @@ msgstr "Powiększenie "
 
 #: kicad/pcbnew/tool_pcb.cpp:585
 #: kicad/eeschema/eelayer.cpp:223
-#: kicad/pcbnew/set_color.h:335
+#: kicad/pcbnew/set_color.h:414
 #: kicad/eeschema/eelayer.h:209
 #: kicad/gerbview/set_color.h:246
 msgid "Grid"
@@ -4843,19 +4830,19 @@ msgstr "Wybór netlisty:"
 msgid "Component [%s]: footprint <%s> not found"
 msgstr "Element [%s]: nie znaleziono obudowy %s"
 
-#: kicad/share/infospgm.cpp:48
+#: kicad/share/infospgm.cpp:47
 msgid "Build Version:"
 msgstr "Kompilacja:"
 
-#: kicad/share/infospgm.cpp:63
+#: kicad/share/infospgm.cpp:62
 msgid "Author:"
 msgstr "Autor:"
 
-#: kicad/share/infospgm.cpp:64
+#: kicad/share/infospgm.cpp:63
 msgid "Based on wxWidgets "
 msgstr "Oparty na wxWidgets "
 
-#: kicad/share/infospgm.cpp:69
+#: kicad/share/infospgm.cpp:68
 msgid ""
 "\n"
 "\n"
@@ -4865,7 +4852,7 @@ msgstr ""
 "\n"
 "Licencja GPL"
 
-#: kicad/share/infospgm.cpp:70
+#: kicad/share/infospgm.cpp:69
 msgid ""
 "\n"
 "\n"
@@ -4875,7 +4862,7 @@ msgstr ""
 "\n"
 "Strony autora:\n"
 
-#: kicad/share/infospgm.cpp:73
+#: kicad/share/infospgm.cpp:72
 msgid ""
 "\n"
 "\n"
@@ -9724,51 +9711,55 @@ msgstr "Znajdź"
 msgid "Netlist: "
 msgstr "Netlista: "
 
-#: kicad/pcbnew/set_color.h:5
+#: kicad/pcbnew/set_color.h:38
+msgid "Pcbnew Layer Colors:"
+msgstr "Kolory warstw Pcbnew:"
+
+#: kicad/pcbnew/set_color.h:81
 msgid "Copper Layers"
 msgstr "Warstwy ścieżek"
 
-#: kicad/pcbnew/set_color.h:139
+#: kicad/pcbnew/set_color.h:216
 msgid "Tech Layers"
 msgstr "Warstwy techniczne"
 
-#: kicad/pcbnew/set_color.h:278
+#: kicad/pcbnew/set_color.h:357
 msgid "Ratsnest"
 msgstr "Połączenia"
 
-#: kicad/pcbnew/set_color.h:287
+#: kicad/pcbnew/set_color.h:366
 msgid "Pad Cu"
 msgstr "Pole lutownicze ścieżek"
 
-#: kicad/pcbnew/set_color.h:295
+#: kicad/pcbnew/set_color.h:374
 msgid "Pad Cmp"
 msgstr "Pole lutownicze elementów"
 
-#: kicad/pcbnew/set_color.h:303
+#: kicad/pcbnew/set_color.h:382
 msgid "Text Module Cu"
 msgstr "Opis po stronie ścieżek"
 
-#: kicad/pcbnew/set_color.h:311
+#: kicad/pcbnew/set_color.h:390
 msgid "Text Module Cmp"
 msgstr "Opis po stronie elementów"
 
-#: kicad/pcbnew/set_color.h:319
+#: kicad/pcbnew/set_color.h:398
 msgid "Text Module invisible"
 msgstr "Ukryty tekst modułu"
 
-#: kicad/pcbnew/set_color.h:327
+#: kicad/pcbnew/set_color.h:406
 msgid "Anchors"
 msgstr "Zakotwiczenia"
 
-#: kicad/pcbnew/set_color.h:353
+#: kicad/pcbnew/set_color.h:432
 msgid "Show Noconnect"
 msgstr "Pokazuj \"nie połączone\""
 
-#: kicad/pcbnew/set_color.h:362
+#: kicad/pcbnew/set_color.h:441
 msgid "Show Modules Cmp"
 msgstr "Pokaż moduły po stronie elementów"
 
-#: kicad/pcbnew/set_color.h:371
+#: kicad/pcbnew/set_color.h:450
 msgid "Show Modules Cu"
 msgstr "Pokaż moduły po stronie ścieżek"
 
