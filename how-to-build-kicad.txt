@@ -1,6 +1,6 @@
 How to build kicad:
 
-kicad do not use configure (not yet...)
+kicad do not use configure (Use of Cmake is in progress)
 it is compiled with make.
 
 kicad needs wxWidgets (the multi platform G.U.I.)
@@ -31,14 +31,20 @@ make install ( libGL.a et libGLU.a are copied in /usr/local/lib, and header in /
 
 kicad compilation:
 in kicad-dev:
- Have a look to libs.linux (you can edit this file if you have problems)
- Currently libs.linux uses wxWidgets 2.7.1 build (see below for suggested configure command)
+ Have a look to libs.linux (you can/must edit this file if you have problems)
+ Currently libs.linux uses wxWidgets 2.8.6 build (see below for suggested configure command)
+ lines to edit:
+ STD_INSTALL = 1
+ which can be (see comments in libs.linux)
+ STD_INSTALL = 1
+
+ after libs.linux edition:
  run make -f makefile.gtk
 
 Windows compilation:
 
 kicad is build with mingw and msys.
-Currently libs.linux uses wxWidgets 2.8.1 (see below for suggested configure command)
+Currently libs.win uses wxWidgets 2.8.6 (see below for suggested configure command)
 
 install mingw  and msys ( see mingw.org )
 (opengl libs are included in mingw or windows)
@@ -47,21 +53,20 @@ Under msys:
 	(Warning: make.exe utility is sometime renamed mingw32-make.exe in install process
 	of msys.)
 
-Build wxWidgets (currently version 2.8.1)
+Build wxWidgets (currently version 2.8.6)
 	See below for suggested configure command, then make
 
 	In include/wx/msw/setup.h, check (and edit if needed) the defines :
 	#define wxUSE_GLCANVAS       1
-	#define WXWIN_COMPATIBILITY_2_4 0
 	#define wxUSE_MOUSEWHEEL  1 // Include mouse wheel support
 	#define wxUSE_HOTKEY 0      // Hotkey support (currently Windows only)
 
 
 Exit msys.
-Set environment variable WXWIN ( something as wxwin=/d/wxWidgets-2.8.1
-for a wxWidget installed in d:\wxWidgets-2.8.1)
+Set environment variable WXWIN ( something as wxwin=/d/wxWidgets-2.8.6
+for a wxWidget installed in d:\wxWidgets-2.8.6)
 
-Have a look to libs.win (Currently this file handle wxWidgets 2.8.1)
+Have a look to libs.win (Currently this file handle wxWidgets 2.8.6)
 
 Under msys:
 	in kicad-dev:
@@ -101,7 +106,7 @@ Patch wxWidgets
 wxGTK version:
 *************************************************************************************
 Patch for printing wide traces that were showing missing rounded end caps:
-wxGTK-2.8.1/src/generic/dcpsg.cpp
+wxGTK-2.8.6/src/generic/dcpsg.cpp
 line 1634
 	PsPrint( "%%EndProlog\n" );
 
