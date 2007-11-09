@@ -15,7 +15,7 @@ SET(wxWidgets_USE_LIBS base core adv gl html net)
 # We need the Find package for wxWidgets to work.
 FIND_PACKAGE(wxWidgets REQUIRED)
 
-#Locations for install targets
+# Locations for install targets
 IF(UNIX)
 	#SET(CMAKE_INSTALL_PATH /usr/local)
 	SET(KICAD_BIN bin CACHE PATH "Location of KiCad binaries.")
@@ -31,7 +31,7 @@ ENDIF(UNIX)
 IF(WIN32)
 ENDIF(WIN32)
 
-#Should this go to IF(UNIX)?
+# Should this go to IF(UNIX)?
 IF(APPLE)
 ENDIF(APPLE)
 
