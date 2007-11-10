@@ -36,7 +36,7 @@ EDA_LibComponentStruct *LibEntry;
 int err = 1;
 
 	mask = wxT("*") + g_LibExtBuffer;
-	Name = EDA_FileSelector( _("Import part:"),
+	Name = EDA_FileSelector( _("Import component:"),
 					wxEmptyString,				/* Chemin par defaut */
 					wxEmptyString,		 	/* nom fichier par defaut */
 					g_LibExtBuffer,	/* extension par defaut */
@@ -98,7 +98,7 @@ int err;
 	mask = wxT("*") + g_LibExtBuffer;
 	wxString def_path;
 	if ( create_lib ) def_path = g_RealLibDirBuffer;
-	Name = EDA_FileSelector( create_lib ? _("New Library") : _("Export part:"),
+	Name = EDA_FileSelector( create_lib ? _("New Library") : _("Export component:"),
 					def_path,	/* Chemin par defaut */
 					Name,		 	/* nom fichier par defaut */
 					g_LibExtBuffer,	/* extension par defaut */
@@ -134,7 +134,7 @@ wxString msg;
 	{
 		msg = Name + _("0k");
 		DisplayInfo(this,
-_("Note: this new library will be available only if it is loaded by eeschema\nModify eeschema config if you want use it") );
+_("Note: this new library will be available only if it is loaded by eeschema.\nModify eeschema config if you want use it.") );
 	}
 	else msg = _("Error while create ") + Name;
 	Affiche_Message(msg);

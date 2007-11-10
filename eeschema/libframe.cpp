@@ -102,7 +102,7 @@ void WinEDA_LibeditFrame::OnCloseWindow( wxCloseEvent& Event )
 
     if( m_CurrentScreen->IsModify() )
     {
-        if( !IsOK( this, _( "LibEdit: Part modified!, Continue ?" ) ) )
+        if( !IsOK( this, _( "Component was modified!\nDiscard changes?" ) ) )
         {
             Event.Veto(); return;
         }
@@ -115,7 +115,7 @@ void WinEDA_LibeditFrame::OnCloseWindow( wxCloseEvent& Event )
         if( Lib->m_Modified )
         {
             wxString msg;
-            msg.Printf( _( "Library %s modified!, Continue ?" ), Lib->m_Name.GetData() );
+            msg.Printf( _( "Library \"%s\" was modified!\nDiscard changes?" ), Lib->m_Name.GetData() );
             if( !IsOK( this, msg ) )
             {
                 Event.Veto(); return;
@@ -404,7 +404,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_LIBEDIT_CHECK_PART:
         if( CurrentLibEntry )
             if( TestPins( CurrentLibEntry ) == FALSE )
-                DisplayInfo( this, _( " Tst Pins OK!" ) );
+                DisplayInfo( this, _( " Pins Test OK!" ) );
         break;
 
     case ID_DE_MORGAN_NORMAL_BUTT:
@@ -482,7 +482,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         }
         else
         {
-            SetToolID( id, wxCURSOR_ARROW, _( "Set Pin Opt" ) );
+            SetToolID( id, wxCURSOR_ARROW, _( "Set Pin Options" ) );
             InstallPineditFrame( this, &dc, pos );
             SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
         }

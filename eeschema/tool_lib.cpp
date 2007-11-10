@@ -123,28 +123,28 @@ void WinEDA_LibeditFrame::ReCreateHToolbar()
                             _( "Select working library" ) );
 
         m_HToolBar->AddTool( ID_LIBEDIT_DELETE_PART, wxEmptyString, BITMAP( delete_xpm ),
-                            _( "Delete part in current library" ) );
+                            _( "Delete component in current library" ) );
 
         m_HToolBar->AddSeparator();
         m_HToolBar->AddTool( ID_LIBEDIT_NEW_PART, wxEmptyString, BITMAP( new_component_xpm ),
-                            _( "New part" ) );
+                            _( "New component" ) );
 
         m_HToolBar->AddTool( ID_LIBEDIT_SELECT_PART, BITMAP( add_component_xpm ),
-                            _( "Select part to edit" ) );
+                            _( "Select component to edit" ) );
 
         m_HToolBar->AddTool( ID_LIBEDIT_SAVE_CURRENT_PART, wxEmptyString,
                             BITMAP( save_part_in_mem_xpm ),
-                            _( "Save current part into current loaded library (in memory)" ) );
+                            _( "Save current component into current loaded library (in memory)" ) );
 
         m_HToolBar->AddTool( ID_LIBEDIT_IMPORT_PART, wxEmptyString, BITMAP( import_xpm ),
-                            _( "import part" ) );
+                            _( "import component" ) );
 
         m_HToolBar->AddTool( ID_LIBEDIT_EXPORT_PART, wxEmptyString, BITMAP( export_xpm ),
-                            _( "export part" ) );
+                            _( "export component" ) );
 
         m_HToolBar->AddTool( ID_LIBEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
                             wxEmptyString, BITMAP( new_library_xpm ),
-                            _( "Create a new library an save current part into" ) );
+                            _( "Create a new library an save current component into" ) );
 
         m_HToolBar->AddSeparator();
 		msg = AddHotkeyName( _( "Undo last edition" ), s_Schematic_Hokeys_Descr, HK_UNDO );
@@ -157,7 +157,7 @@ void WinEDA_LibeditFrame::ReCreateHToolbar()
                             wxNullBitmap,
                             FALSE,
                             -1, -1, (wxObject*) NULL,
-                            _( "Edit Part Properties" ) );
+                            _( "Edit component properties" ) );
 
         m_HToolBar->AddSeparator();
         m_HToolBar->AddTool( ID_LIBEDIT_CHECK_PART, BITMAP( erc_xpm ),

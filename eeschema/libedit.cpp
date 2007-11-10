@@ -232,7 +232,7 @@ int err;
 
 	Name = MakeFileName(g_RealLibDirBuffer, CurrentLib->m_Name, g_LibExtBuffer);
 
-	msg = _("Ok to modify Library File ") + Name;
+	msg = _("Modify Library File \"") + Name + _("\" ?");
 	if( ! IsOK(this, msg) ) return;
 
 	err = SaveOneLibrary(this, Name, CurrentLib);
@@ -241,15 +241,15 @@ int err;
 
 	if ( err )
 	{
-		msg = _("Error while saving Library File ") + Name;
+		msg = _("Error while saving Library File \"") + Name + _("\"");
 		Affiche_1_Parametre(this, 1, wxT(" *** ERROR : **"), msg,BLUE);
 		DisplayError(this, msg);
 	}
 	else
 	{
-		msg = _("Library File ") + Name + wxT(" Ok");
+		msg = _("Library File \"") + Name + wxT("\" Ok");
 		ChangeFileNameExt(Name,DOC_EXT);
-		wxString msg1 = _("Document File ") + Name + wxT(" Ok");
+		wxString msg1 = _("Document File \"") + Name + wxT("\" Ok");
 		Affiche_1_Parametre(this, 1,msg, msg1,BLUE);
 	}
 }
@@ -345,8 +345,8 @@ wxString msg;
 
 		else
 		{
-			msg = _("Delete component ") + LibEntry->m_Name.m_Text +
-				_(" in library ") + CurrentLib->m_Name + wxT("?");
+			msg = _("Delete component \"") + LibEntry->m_Name.m_Text +
+				_("\" from library \"") + CurrentLib->m_Name + wxT("\"?");
 			if( IsOK(this, msg) )
 			{
 				DeletePartInLib( CurrentLib, LibEntry );
@@ -370,7 +370,7 @@ EDA_LibComponentStruct * NewStruct;
 int diag;
 
 	if( CurrentLibEntry )
-		if( ! IsOK(this, _("Delete old component ?")) ) return;
+		if( ! IsOK(this, _("Delete old component?")) ) return;
 
 	CurrentDrawItem = NULL;
 
@@ -387,8 +387,8 @@ int diag;
 		 if( FindLibPart(msg.GetData(), CurrentLib->m_Name, FIND_ALIAS) )
 		{
 			wxString msg;
-			msg << _("Component ") << msg <<
-					_(" exists in library ") << CurrentLib->m_Name;
+			msg << _("Component \"") << Dialogbox.ReturnCmpName() <<
+					_("\" exists in library \"") << CurrentLib->m_Name << _("\".");
 			DisplayError(this, msg);
 			return;
 		}
@@ -555,14 +555,14 @@ bool NewCmp = TRUE;
 
 	if(CurrentLibEntry == NULL)
 	{
-		DisplayError(this, _("Warning: No component to Save") ); return;
+		DisplayError(this, _("No component to Save.") ); return;
 	}
 
 	if(CurrentLib == NULL) SelectActiveLibrary();
 
 	if(CurrentLib == NULL)
 	{
-		DisplayError(this, _("No Library specified"), 20); return;
+		DisplayError(this, _("No Library specified."), 20); return;
 	}
 
 	CurrentLib->m_Modified = 1;
@@ -573,7 +573,7 @@ bool NewCmp = TRUE;
 	if( (Entry = FindLibPart(CurrentLibEntry->m_Name.m_Text.GetData(),
 				CurrentLib->m_Name, FIND_ROOT)) != NULL)
 	{
-		msg.Printf( _("Component %s exists, Change it ?"),
+		msg.Printf( _("Component \"%s\" exists. Change it?"),
 					Entry->m_Name.m_Text.GetData());
 		if( !IsOK(this, msg) ) return;
 		NewCmp = FALSE;
