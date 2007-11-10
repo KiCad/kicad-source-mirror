@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-09 17:55+0100\n"
-"PO-Revision-Date: 2007-11-09 17:58+0100\n"
+"POT-Creation-Date: 2007-11-10 18:28+0100\n"
+"PO-Revision-Date: 2007-11-10 20:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: Polish KiCAD Team - Mateusz Skowroński <skowri@gmail.com>, Krzysztof Kawa <elektrotrans@wp.pl>\n"
 "MIME-Version: 1.0\n"
@@ -34,20 +34,19 @@ msgid "Save Cfg"
 msgstr "Zapisz konfigurację"
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:159
-#: kicad/eeschema/dialog_eeschema_config.cpp:180
+#: kicad/eeschema/dialog_eeschema_config.cpp:178
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:151
 msgid "Files ext:"
 msgstr "Rozszerzenia plików:"
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:175
-#: kicad/eeschema/dialog_eeschema_config.cpp:196
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:170
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:202
 msgid "Del"
 msgstr "Usuń"
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:179
-#: kicad/eeschema/dialog_eeschema_config.cpp:200
+#: kicad/eeschema/dialog_eeschema_config.cpp:197
 #: kicad/eeschema/edit_component_in_lib.cpp:233
 #: kicad/eeschema/edit_component_in_lib.cpp:312
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:174
@@ -56,14 +55,14 @@ msgid "Add"
 msgstr "Dodaj"
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:183
-#: kicad/eeschema/dialog_eeschema_config.cpp:204
+#: kicad/eeschema/dialog_eeschema_config.cpp:203
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:178
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:210
 msgid "Ins"
 msgstr "Wstaw"
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:191
-#: kicad/eeschema/dialog_eeschema_config.cpp:211
+#: kicad/eeschema/dialog_eeschema_config.cpp:213
 #: kicad/cvpcb/menucfg.cpp:231
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:185
 msgid "Libraries"
@@ -631,8 +630,8 @@ msgstr "&OK"
 #: kicad/eeschema/symbtext.cpp:178
 #: kicad/eeschema/dialog_erc.cpp:218
 #: kicad/eeschema/dialog_build_BOM.cpp:350
-#: kicad/eeschema/netlist_control.cpp:115
-#: kicad/eeschema/netlist_control.cpp:268
+#: kicad/eeschema/netlist_control.cpp:251
+#: kicad/eeschema/netlist_control.cpp:375
 #: kicad/eeschema/dialog_create_component.cpp:200
 #: kicad/eeschema/dialog_edit_component_in_schematic.cpp:232
 #: kicad/eeschema/dialog_edit_component_in_lib.cpp:214
@@ -2116,7 +2115,7 @@ msgstr "Auto zapis (minut):"
 #: kicad/pcbnew/dialog_general_options.cpp:315
 #: kicad/share/dialog_print.cpp:167
 #: kicad/eeschema/dialog_build_BOM.cpp:285
-#: kicad/eeschema/netlist_control.cpp:94
+#: kicad/eeschema/netlist_control.cpp:228
 #: kicad/eeschema/dialog_cmp_graphic_properties.cpp:151
 msgid "Options:"
 msgstr "Opcje:"
@@ -2648,7 +2647,7 @@ msgstr "Plik raportu"
 
 #: kicad/pcbnew/dialog_drc.cpp:208
 #: kicad/pcbnew/dialog_edit_module.cpp:395
-#: kicad/eeschema/dialog_eeschema_config.cpp:227
+#: kicad/eeschema/dialog_eeschema_config.cpp:231
 msgid "Browse"
 msgstr "Przeglądaj"
 
@@ -5126,7 +5125,7 @@ msgid "Revision:"
 msgstr "Poprawka:"
 
 #: kicad/share/setpage.cpp:262
-#: kicad/eeschema/netlist_control.cpp:316
+#: kicad/eeschema/netlist_control.cpp:428
 msgid "Title:"
 msgstr "Tytuł:"
 
@@ -5791,65 +5790,75 @@ msgstr "Dodaj element"
 msgid "Add Power"
 msgstr "Dodaj zasilanie"
 
-#: kicad/eeschema/dialog_eeschema_config.cpp:168
-msgid "PcbNew"
-msgstr "PcbNew"
+#: kicad/eeschema/dialog_eeschema_config.cpp:163
+msgid "save current configuration setting in the local .pro file"
+msgstr "Zapisz bieżącą konfigurację w lokalnym pliku .pro"
 
 #: kicad/eeschema/dialog_eeschema_config.cpp:169
-msgid "&OrcadPcb2"
-msgstr "&OrcadPcb2"
-
-#: kicad/eeschema/dialog_eeschema_config.cpp:170
-msgid "&CadStar"
-msgstr "&CadStar"
-
-#: kicad/eeschema/dialog_eeschema_config.cpp:171
-msgid "&Spice"
-msgstr "&Spice"
-
-#: kicad/eeschema/dialog_eeschema_config.cpp:172
-#: kicad/eeschema/eelayer.h:271
-msgid "Other"
-msgstr "Inny"
-
-#: kicad/eeschema/dialog_eeschema_config.cpp:174
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:147
 msgid "NetList Formats:"
 msgstr "Formaty netlist:"
 
-#: kicad/eeschema/dialog_eeschema_config.cpp:219
-msgid "Library files path:"
-msgstr "Ścieżka dostępu do pliku bibliotek:"
+#: kicad/eeschema/dialog_eeschema_config.cpp:191
+msgid "Remove"
+msgstr "Usuń"
 
-#: kicad/eeschema/dialog_eeschema_config.cpp:232
+#: kicad/eeschema/dialog_eeschema_config.cpp:193
+msgid "Unload the selected library"
+msgstr "Usuń wybraną bibliotekę z pamięci"
+
+#: kicad/eeschema/dialog_eeschema_config.cpp:199
+msgid "Add a new library after the selected library, add load it"
+msgstr "Dodaj nową bibliotekę po zaznaczonej i załaduj ją"
+
+#: kicad/eeschema/dialog_eeschema_config.cpp:204
+#: kicad/eeschema/dialog_eeschema_config.cpp:206
+msgid "Add a new library beforer the selected library, add load it"
+msgstr "Dodaj nową bibliotekę przed zaznaczoną i załaduj ją"
+
+#: kicad/eeschema/dialog_eeschema_config.cpp:221
+msgid "Default library file path:"
+msgstr "Domyślna ścieżka dostępu do pliku bibliotek:"
+
+#: kicad/eeschema/dialog_eeschema_config.cpp:228
+msgid ""
+"Default path to search libraries which have no absolute path in name,\n"
+"or a name which does not start by ./ or ../\n"
+"If void, the default path is kicad/library"
+msgstr ""
+"Domyślna ścieżka wyszukiwania bibliotek, które w nazwie nie mają ścieżki bezwzględnej\n"
+"lub nazwa nie zaczyna się od ./ lub ../\n"
+"Jeżeli puste, domyślna ścieżka to kicad/library"
+
+#: kicad/eeschema/dialog_eeschema_config.cpp:236
 msgid "Cmp file Ext: "
 msgstr "Pliki elementów: "
 
-#: kicad/eeschema/dialog_eeschema_config.cpp:236
+#: kicad/eeschema/dialog_eeschema_config.cpp:240
 msgid "Net file Ext: "
 msgstr "Pliki netlisty: "
 
-#: kicad/eeschema/dialog_eeschema_config.cpp:240
+#: kicad/eeschema/dialog_eeschema_config.cpp:244
 msgid "Library file Ext: "
 msgstr "Pliki bibliotek: "
 
-#: kicad/eeschema/dialog_eeschema_config.cpp:244
+#: kicad/eeschema/dialog_eeschema_config.cpp:248
 msgid "Symbol file Ext: "
 msgstr "Pliki symboli: "
 
-#: kicad/eeschema/dialog_eeschema_config.cpp:248
+#: kicad/eeschema/dialog_eeschema_config.cpp:252
 msgid "Schematic file Ext: "
 msgstr "Pliki schematów: "
 
-#: kicad/eeschema/dialog_eeschema_config.cpp:350
+#: kicad/eeschema/dialog_eeschema_config.cpp:367
 msgid "Library files:"
 msgstr "Pliki bibliotek:"
 
-#: kicad/eeschema/dialog_eeschema_config.cpp:373
+#: kicad/eeschema/dialog_eeschema_config.cpp:390
 msgid "Library already in use"
 msgstr "Biblioteka jest już w użyciu"
 
-#: kicad/eeschema/dialog_eeschema_config.cpp:473
+#: kicad/eeschema/dialog_eeschema_config.cpp:463
 msgid " Default Path for libraries"
 msgstr "Domyślna ścieżka dla bibliotek"
 
@@ -6421,70 +6430,84 @@ msgstr "> %-28.28s Arkusz %-7.7s (Arkusz %.2d) pozycja: %3.3f, %3.3f\n"
 msgid "#End labels\n"
 msgstr "#Koniec etykiet\n"
 
-#: kicad/eeschema/netlist_control.cpp:97
-#: kicad/eeschema/netlist_control.cpp:244
+#: kicad/eeschema/netlist_control.cpp:231
+#: kicad/eeschema/netlist_control.cpp:348
 #: kicad/gerbview/options.cpp:201
 msgid "Default format"
 msgstr "Format domyślny"
 
-#: kicad/eeschema/netlist_control.cpp:108
+#: kicad/eeschema/netlist_control.cpp:244
 msgid "&Browse Plugin"
 msgstr "&Przeglądaj wtyczki"
 
-#: kicad/eeschema/netlist_control.cpp:110
+#: kicad/eeschema/netlist_control.cpp:246
 msgid "&Netlist"
 msgstr "&Netlista"
 
-#: kicad/eeschema/netlist_control.cpp:175
-#: kicad/eeschema/netlist_control.cpp:260
+#: kicad/eeschema/netlist_control.cpp:261
+msgid "&Ok"
+msgstr "&Ok"
+
+#: kicad/eeschema/netlist_control.cpp:266
+msgid "&Delete"
+msgstr "&Usuń"
+
+#: kicad/eeschema/netlist_control.cpp:275
+#: kicad/eeschema/netlist_control.cpp:367
 msgid "Netlist"
 msgstr "Netlista"
 
-#: kicad/eeschema/netlist_control.cpp:248
+#: kicad/eeschema/netlist_control.cpp:352
 msgid "Use Net Names"
 msgstr "Użyj nazw sieci"
 
-#: kicad/eeschema/netlist_control.cpp:248
+#: kicad/eeschema/netlist_control.cpp:352
 msgid "Use Net Numbers"
 msgstr "Użyj numerów sieci"
 
-#: kicad/eeschema/netlist_control.cpp:249
+#: kicad/eeschema/netlist_control.cpp:353
 msgid "Netlist Options:"
 msgstr "Opcje netlisty:"
 
-#: kicad/eeschema/netlist_control.cpp:257
+#: kicad/eeschema/netlist_control.cpp:362
 msgid "Simulator command:"
 msgstr "Polecenie symulatora:"
 
-#: kicad/eeschema/netlist_control.cpp:264
+#: kicad/eeschema/netlist_control.cpp:371
 msgid "&Run Simulator"
 msgstr "&Uruchom symulator"
 
-#: kicad/eeschema/netlist_control.cpp:299
+#: kicad/eeschema/netlist_control.cpp:407
 msgid "Add Plugin"
 msgstr "Dodaj wtyczkę"
 
-#: kicad/eeschema/netlist_control.cpp:312
+#: kicad/eeschema/netlist_control.cpp:422
 msgid "Netlist command:"
 msgstr "Polecenie netlisty:"
 
-#: kicad/eeschema/netlist_control.cpp:331
+#: kicad/eeschema/netlist_control.cpp:446
 msgid "Plugin files:"
 msgstr "Pliki wtyczek:"
 
-#: kicad/eeschema/netlist_control.cpp:353
-msgid ""
-"Now, you must choose a title for this netlist control page\n"
-"and close the dialog box"
-msgstr "Teraz wybierz nazwę dla tej netlisty i zamknij okienko dialogowe"
+#: kicad/eeschema/netlist_control.cpp:470
+msgid "Do not forget to choose a title for this netlist control page"
+msgstr "Nie zapomnij wypełnić pola \"Tytuł\""
 
-#: kicad/eeschema/netlist_control.cpp:438
+#: kicad/eeschema/netlist_control.cpp:562
 msgid "Netlist files:"
 msgstr "Pliki netlist:"
 
-#: kicad/eeschema/netlist_control.cpp:455
+#: kicad/eeschema/netlist_control.cpp:579
 msgid "Must be Annotated, Continue ?"
 msgstr "Musi mieć numerację, kontynuować?"
+
+#: kicad/eeschema/netlist_control.cpp:737
+msgid "Error. You must provide a command String"
+msgstr "Błąd. Musisz wypełnić pole \"Polecenie netlisty\""
+
+#: kicad/eeschema/netlist_control.cpp:742
+msgid "Error. You must provide a Title"
+msgstr "Błąd. Musisz wypełnić pole \"Tytuł\""
 
 #: kicad/eeschema/component_class.cpp:57
 #: kicad/eeschema/eelayer.h:171
@@ -7429,7 +7452,7 @@ msgid "Error while create "
 msgstr "Błąd podczas tworzenia "
 
 #: kicad/eeschema/netform.cpp:55
-#: kicad/eeschema/netform.cpp:254
+#: kicad/eeschema/netform.cpp:243
 #: kicad/eeschema/save_schemas.cpp:94
 msgid "Failed to create file "
 msgstr "Błąd tworzenia pliku "
@@ -9859,6 +9882,10 @@ msgstr "Arkusze"
 msgid "Erc Mark"
 msgstr "Znacznik ERC"
 
+#: kicad/eeschema/eelayer.h:271
+msgid "Other"
+msgstr "Inny"
+
 #: kicad/eeschema/dialog_erc.h:57
 msgid "EESchema Erc"
 msgstr "ERC EESchema"
@@ -10050,4 +10077,13 @@ msgstr "Pozostałe"
 #: kicad/gerbview/set_color.h:254
 msgid "D codes id."
 msgstr "ID kodu wiercenia"
+
+#~ msgid "PcbNew"
+#~ msgstr "PcbNew"
+#~ msgid "&OrcadPcb2"
+#~ msgstr "&OrcadPcb2"
+#~ msgid "&CadStar"
+#~ msgstr "&CadStar"
+#~ msgid "&Spice"
+#~ msgstr "&Spice"
 
