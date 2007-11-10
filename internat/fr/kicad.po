@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-11-09 10:18+0100\n"
-"Last-Translator: jp charras <jean-pierre.charras@inpg.fr>\n"
+"PO-Revision-Date: 2007-11-10 16:01+0100\n"
+"Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
@@ -733,7 +733,7 @@ msgid ""
 " Drill map: Too many diameter values to draw to draw one symbol per drill value (max 13)\n"
 "Plot uses circle shape for some drill values"
 msgstr ""
-"Plan de reçage: trop de diametres différents pour tracer 1 symbole par diametre\n"
+"Plan de perçage: trop de diametres différents pour tracer 1 symbole par diametre\n"
 "Le tracé utilise des cercles pour quelques valeurs "
 
 #: pcbnew/gendrill.cpp:1599
@@ -1077,8 +1077,8 @@ msgstr "&OK"
 #: eeschema/dialog_edit_label.cpp:179
 #: eeschema/dialog_edit_component_in_lib.cpp:214
 #: eeschema/dialog_create_component.cpp:200
-#: eeschema/netlist_control.cpp:115
-#: eeschema/netlist_control.cpp:268
+#: eeschema/netlist_control.cpp:251
+#: eeschema/netlist_control.cpp:375
 #: eeschema/dialog_cmp_graphic_properties.cpp:182
 #: eeschema/dialog_build_BOM.cpp:350
 #: eeschema/dialog_erc.cpp:218
@@ -2698,7 +2698,7 @@ msgstr "3D forme"
 
 #: pcbnew/dialog_edit_module.cpp:395
 #: pcbnew/dialog_drc.cpp:208
-#: eeschema/dialog_eeschema_config.cpp:227
+#: eeschema/dialog_eeschema_config.cpp:231
 msgid "Browse"
 msgstr "Examiner"
 
@@ -2843,7 +2843,7 @@ msgstr "Connection aux pads"
 
 #: pcbnew/cleaningoptions_dialog.cpp:171
 msgid "Extend dangling tracks which partially cover a pad or via, all the way to pad or via center"
-msgstr "connecte une extrémité de piste en l'air, lorsque elle couvre un pad ou une via, au centre du pad ou de la via"
+msgstr "Connecte une extrémité de piste en l'air, lorsque elle couvre un pad ou une via, au centre du pad ou de la via"
 
 #: pcbnew/cleaningoptions_dialog.cpp:177
 msgid "Clean pcb"
@@ -3217,7 +3217,7 @@ msgid "Auto Save (minuts):"
 msgstr "Sauveg. Auto (min)"
 
 #: pcbnew/dialog_general_options.cpp:315
-#: eeschema/netlist_control.cpp:94
+#: eeschema/netlist_control.cpp:228
 #: eeschema/dialog_cmp_graphic_properties.cpp:151
 #: eeschema/dialog_build_BOM.cpp:285
 #: share/dialog_print.cpp:167
@@ -3508,20 +3508,19 @@ msgid "Save Cfg"
 msgstr "Sauver config"
 
 #: pcbnew/dialog_setup_libs.cpp:159
-#: eeschema/dialog_eeschema_config.cpp:180
+#: eeschema/dialog_eeschema_config.cpp:178
 #: cvpcb/dialog_cvpcb_config.cpp:151
 msgid "Files ext:"
 msgstr "Ext. Fichiers"
 
 #: pcbnew/dialog_setup_libs.cpp:175
-#: eeschema/dialog_eeschema_config.cpp:196
 #: cvpcb/dialog_cvpcb_config.cpp:170
 #: cvpcb/dialog_cvpcb_config.cpp:202
 msgid "Del"
 msgstr "Supprimer"
 
 #: pcbnew/dialog_setup_libs.cpp:179
-#: eeschema/dialog_eeschema_config.cpp:200
+#: eeschema/dialog_eeschema_config.cpp:197
 #: eeschema/edit_component_in_lib.cpp:233
 #: eeschema/edit_component_in_lib.cpp:312
 #: cvpcb/dialog_cvpcb_config.cpp:174
@@ -3530,14 +3529,14 @@ msgid "Add"
 msgstr "Ajouter"
 
 #: pcbnew/dialog_setup_libs.cpp:183
-#: eeschema/dialog_eeschema_config.cpp:204
+#: eeschema/dialog_eeschema_config.cpp:203
 #: cvpcb/dialog_cvpcb_config.cpp:178
 #: cvpcb/dialog_cvpcb_config.cpp:210
 msgid "Ins"
 msgstr "Insérer"
 
 #: pcbnew/dialog_setup_libs.cpp:191
-#: eeschema/dialog_eeschema_config.cpp:211
+#: eeschema/dialog_eeschema_config.cpp:213
 #: cvpcb/menucfg.cpp:231
 #: cvpcb/dialog_cvpcb_config.cpp:185
 msgid "Libraries"
@@ -5227,6 +5226,78 @@ msgstr " ( Unité %d)"
 msgid "Diff values for %s%d%c (%s) and %s%d%c (%s)"
 msgstr "Valeurs différentes pour %s%d%c (%s) et %s%d%c (%s)"
 
+#: eeschema/dialog_eeschema_config.cpp:163
+msgid "save current configuration setting in the local .pro file"
+msgstr "Sauve configuration courante dans le fichier .pro local"
+
+#: eeschema/dialog_eeschema_config.cpp:169
+#: cvpcb/dialog_cvpcb_config.cpp:147
+msgid "NetList Formats:"
+msgstr " Formats NetListe:"
+
+#: eeschema/dialog_eeschema_config.cpp:191
+msgid "Remove"
+msgstr "Enlever"
+
+#: eeschema/dialog_eeschema_config.cpp:193
+msgid "Unload the selected library"
+msgstr "Décharger la librairie sélectionnée"
+
+#: eeschema/dialog_eeschema_config.cpp:199
+msgid "Add a new library after the selected library, add load it"
+msgstr "Ajoute une nouvelle librairie après la librairie sélectionnée, et la charge"
+
+#: eeschema/dialog_eeschema_config.cpp:204
+#: eeschema/dialog_eeschema_config.cpp:206
+msgid "Add a new library beforer the selected library, add load it"
+msgstr "Ajoute une nouvelle librairie avant la librairie sélectionnée, et la charge"
+
+#: eeschema/dialog_eeschema_config.cpp:221
+msgid "Default library file path:"
+msgstr "Chemin par Défaut des Fichiers Librairies:"
+
+#: eeschema/dialog_eeschema_config.cpp:228
+msgid ""
+"Default path to search libraries which have no absolute path in name,\n"
+"or a name which does not start by ./ or ../\n"
+"If void, the default path is kicad/library"
+msgstr ""
+"Chemin par défaut pour chercher les librairies qui n'ont pas de chemin absolu dans leur nom,\n"
+"ou un nom qui ne commence pas par ./ ou ../ .\n"
+"Si vide, le chemin par défaut est kicad/library"
+
+#: eeschema/dialog_eeschema_config.cpp:236
+msgid "Cmp file Ext: "
+msgstr "Ext fichier Cmp: "
+
+#: eeschema/dialog_eeschema_config.cpp:240
+msgid "Net file Ext: "
+msgstr "Ext fichier Netliste: "
+
+#: eeschema/dialog_eeschema_config.cpp:244
+msgid "Library file Ext: "
+msgstr "Ext fichier Librairie: "
+
+#: eeschema/dialog_eeschema_config.cpp:248
+msgid "Symbol file Ext: "
+msgstr "Ext fichier Symbole: "
+
+#: eeschema/dialog_eeschema_config.cpp:252
+msgid "Schematic file Ext: "
+msgstr "Ext fichier Schema: "
+
+#: eeschema/dialog_eeschema_config.cpp:367
+msgid "Library files:"
+msgstr "Fichiers Librairies:"
+
+#: eeschema/dialog_eeschema_config.cpp:390
+msgid "Library already in use"
+msgstr "Librairie déjà en usage"
+
+#: eeschema/dialog_eeschema_config.cpp:463
+msgid " Default Path for libraries"
+msgstr "Chemin par défaut des librairies"
+
 #: eeschema/sheet.cpp:162
 #: share/svg_print.cpp:226
 msgid "Filename:"
@@ -6018,7 +6089,7 @@ msgstr "Fichiers schématiques:"
 
 #: eeschema/save_schemas.cpp:94
 #: eeschema/netform.cpp:55
-#: eeschema/netform.cpp:254
+#: eeschema/netform.cpp:243
 msgid "Failed to create file "
 msgstr "Impossible de créer le fichier "
 
@@ -6376,68 +6447,6 @@ msgstr "Nom de pin a l'intérieur"
 msgid "You must provide a name for this component"
 msgstr "Vous devez fournir un nom pour ce composant"
 
-#: eeschema/dialog_eeschema_config.cpp:168
-msgid "PcbNew"
-msgstr "PcbNew"
-
-#: eeschema/dialog_eeschema_config.cpp:169
-msgid "&OrcadPcb2"
-msgstr "&OrcadPcb2"
-
-#: eeschema/dialog_eeschema_config.cpp:170
-msgid "&CadStar"
-msgstr "&CadStar"
-
-#: eeschema/dialog_eeschema_config.cpp:171
-msgid "&Spice"
-msgstr "&Spice"
-
-#: eeschema/dialog_eeschema_config.cpp:172
-#: eeschema/eelayer.h:271
-msgid "Other"
-msgstr "Autre"
-
-#: eeschema/dialog_eeschema_config.cpp:174
-#: cvpcb/dialog_cvpcb_config.cpp:147
-msgid "NetList Formats:"
-msgstr " Formats NetListe:"
-
-#: eeschema/dialog_eeschema_config.cpp:219
-msgid "Library files path:"
-msgstr "Chemin Fichiers Librairies:"
-
-#: eeschema/dialog_eeschema_config.cpp:232
-msgid "Cmp file Ext: "
-msgstr "Ext fichier Cmp: "
-
-#: eeschema/dialog_eeschema_config.cpp:236
-msgid "Net file Ext: "
-msgstr "Ext fichier Netliste: "
-
-#: eeschema/dialog_eeschema_config.cpp:240
-msgid "Library file Ext: "
-msgstr "Ext fichier Librairie: "
-
-#: eeschema/dialog_eeschema_config.cpp:244
-msgid "Symbol file Ext: "
-msgstr "Ext fichier Symbole: "
-
-#: eeschema/dialog_eeschema_config.cpp:248
-msgid "Schematic file Ext: "
-msgstr "Ext fichier Schema: "
-
-#: eeschema/dialog_eeschema_config.cpp:350
-msgid "Library files:"
-msgstr "Fichiers Librairies:"
-
-#: eeschema/dialog_eeschema_config.cpp:373
-msgid "Library already in use"
-msgstr "Librairie déjà en usage"
-
-#: eeschema/dialog_eeschema_config.cpp:473
-msgid " Default Path for libraries"
-msgstr "Chemin par défaut des librairies"
-
 #: eeschema/database.cpp:70
 msgid "No Component found"
 msgstr "Pas de composants trouvés"
@@ -6459,75 +6468,89 @@ msgstr "Sélection librairie"
 msgid "Select component (%d items)"
 msgstr "Selection composant (%d items)"
 
-#: eeschema/netlist_control.cpp:97
-#: eeschema/netlist_control.cpp:244
+#: eeschema/netlist_control.cpp:231
+#: eeschema/netlist_control.cpp:348
 #: gerbview/options.cpp:201
 msgid "Default format"
 msgstr "Format par défaut"
 
-#: eeschema/netlist_control.cpp:108
+#: eeschema/netlist_control.cpp:244
 msgid "&Browse Plugin"
 msgstr "&Examen Plugins"
 
-#: eeschema/netlist_control.cpp:110
+#: eeschema/netlist_control.cpp:246
 msgid "&Netlist"
 msgstr "&Netliste"
 
-#: eeschema/netlist_control.cpp:175
-#: eeschema/netlist_control.cpp:260
+#: eeschema/netlist_control.cpp:261
+msgid "&Ok"
+msgstr "&Ok"
+
+#: eeschema/netlist_control.cpp:266
+msgid "&Delete"
+msgstr "&Supprimer"
+
+#: eeschema/netlist_control.cpp:275
+#: eeschema/netlist_control.cpp:367
 msgid "Netlist"
 msgstr "Netliste"
 
-#: eeschema/netlist_control.cpp:248
+#: eeschema/netlist_control.cpp:352
 msgid "Use Net Names"
 msgstr "Utiliser nom de net"
 
-#: eeschema/netlist_control.cpp:248
+#: eeschema/netlist_control.cpp:352
 msgid "Use Net Numbers"
 msgstr "Utiliser numéro de net"
 
-#: eeschema/netlist_control.cpp:249
+#: eeschema/netlist_control.cpp:353
 msgid "Netlist Options:"
 msgstr "Options de netliste:"
 
-#: eeschema/netlist_control.cpp:257
+#: eeschema/netlist_control.cpp:362
 msgid "Simulator command:"
 msgstr "Simulateur commande:"
 
-#: eeschema/netlist_control.cpp:264
+#: eeschema/netlist_control.cpp:371
 msgid "&Run Simulator"
 msgstr "&Simulateur"
 
-#: eeschema/netlist_control.cpp:299
+#: eeschema/netlist_control.cpp:407
 msgid "Add Plugin"
 msgstr "Ajouter Plugin"
 
-#: eeschema/netlist_control.cpp:312
+#: eeschema/netlist_control.cpp:422
 msgid "Netlist command:"
 msgstr "Commande netliste:"
 
-#: eeschema/netlist_control.cpp:316
+#: eeschema/netlist_control.cpp:428
 #: share/setpage.cpp:262
 msgid "Title:"
 msgstr "Titre:"
 
-#: eeschema/netlist_control.cpp:331
+#: eeschema/netlist_control.cpp:446
 msgid "Plugin files:"
 msgstr "Fichiers Plugins:"
 
-#: eeschema/netlist_control.cpp:353
-msgid ""
-"Now, you must choose a title for this netlist control page\n"
-"and close the dialog box"
-msgstr "Maitenant, vous devez choisir un titre pour cette page de controle de netliste"
+#: eeschema/netlist_control.cpp:470
+msgid "Do not forget to choose a title for this netlist control page"
+msgstr "Ne pas oublier de choisir un titre pour cette page de controle de netliste"
 
-#: eeschema/netlist_control.cpp:438
+#: eeschema/netlist_control.cpp:562
 msgid "Netlist files:"
 msgstr "Fichiers Netlist:"
 
-#: eeschema/netlist_control.cpp:455
+#: eeschema/netlist_control.cpp:579
 msgid "Must be Annotated, Continue ?"
 msgstr "Annotation nécessaire, continuer?"
+
+#: eeschema/netlist_control.cpp:737
+msgid "Error. You must provide a command String"
+msgstr "Erreur. Vous devez entre une ligne de commande"
+
+#: eeschema/netlist_control.cpp:742
+msgid "Error. You must provide a Title"
+msgstr "Erreur. Vous devez entre un titre"
 
 #: eeschema/dialog_find.cpp:119
 msgid "Item in &Sheet"
@@ -9874,6 +9897,10 @@ msgstr "Feuilles"
 #: eeschema/eelayer.h:265
 msgid "Erc Mark"
 msgstr "Marqueur ERC"
+
+#: eeschema/eelayer.h:271
+msgid "Other"
+msgstr "Autre"
 
 #: eeschema/dialog_edit_component_in_schematic.h:52
 msgid "Component properties"

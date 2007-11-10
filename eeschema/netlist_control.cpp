@@ -467,14 +467,15 @@ void WinEDA_NetlistFrame::SetupPluginData( wxCommandEvent& event )
     if( title.IsEmpty() )
         DisplayInfo( this,
                     _(
-                        "Do not forget to choose a title for this netlist control page\nand close the dialog box" ) );
+                        "Do not forget to choose a title for this netlist control page" ) );
 }
 
 
-// Fonctions de positionnement des variables d'option
 /*****************************************************************/
 void WinEDA_NetlistFrame::SelectNetlistType( wxCommandEvent& event )
 /*****************************************************************/
+/* Called when the check box "default format" is clicked
+*/
 {
     int ii;
     EDA_NoteBookPage* CurrPage;

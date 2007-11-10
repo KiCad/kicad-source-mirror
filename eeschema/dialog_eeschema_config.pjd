@@ -1154,8 +1154,7 @@
                 <string name="proxy-Help text">""</string>
                 <string name="proxy-Tooltip text">"Default path to search libraries which have no absolute path in name,
 or a name which does not start by ./ or ../
-If void, the default path is kicad/library
-"</string>
+If void, the default path is kicad/library"</string>
                 <string name="proxy-Background colour">""</string>
                 <string name="proxy-Foreground colour">""</string>
                 <string name="proxy-Font">""</string>
