@@ -14,23 +14,15 @@
 #define ISBUS 1
 
 
-/* Indicateurs de type de netliste generee */
+/* Id to select netlist type */
 typedef enum {
-    NET_TYPE_NOT_INIT = 0,
+    NET_TYPE_UNINIT = 0,
     NET_TYPE_PCBNEW,
     NET_TYPE_ORCADPCB2,
     NET_TYPE_CADSTAR,
     NET_TYPE_SPICE,
-    NET_TYPE_CUSTOM1,
-    NET_TYPE_CUSTOM2,
-    NET_TYPE_CUSTOM3,
-    NET_TYPE_CUSTOM4,
-    NET_TYPE_CUSTOM5,
-    NET_TYPE_CUSTOM6,
-    NET_TYPE_CUSTOM7,
-    NET_TYPE_CUSTOM8,
-    NET_TYPE_MAX
-} TypeNetForm;
+    NET_TYPE_CUSTOM1	// NET_TYPE_CUSTOM1 is the first id for user netlist format
+ } TypeNetForm;
 
 
 /* Max pin number per component and footprint */
@@ -118,6 +110,16 @@ eda_global ObjetNetListStruct* g_TabObjNet;
 /* Prototypes: */
 void    WriteNetList( WinEDA_SchematicFrame* frame, const wxString& FileNameNL, bool use_netnames );
 void    FreeTabNetList( ObjetNetListStruct* TabNetItems, int NbrNetItems );
+
+/** Function ReturnUserNetlistTypeName
+ * to retrieve user netlist type names
+ * @param first = true: return first name of the list, false = return next
+ * @return a wxString : name of the type netlist or empty string
+ * this function must be called first with "first_item" = true
+ * and after with "first_item" = false to get all the other existing netlist names
+ */
+#define CUSTOMPANEL_COUNTMAX 8	// Max number of netlist plugins
+wxString ReturnUserNetlistTypeName( bool first_item );
 
 
 #endif

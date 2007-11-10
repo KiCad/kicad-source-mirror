@@ -82,21 +82,10 @@ void WriteNetList( WinEDA_SchematicFrame* frame, const wxString& FileNameNL,
         fclose( f );
         break;
 
-    case NET_TYPE_CUSTOM1:
-    case NET_TYPE_CUSTOM2:
-    case NET_TYPE_CUSTOM3:
-    case NET_TYPE_CUSTOM4:
-    case NET_TYPE_CUSTOM5:
-    case NET_TYPE_CUSTOM6:
-    case NET_TYPE_CUSTOM7:
-    case NET_TYPE_CUSTOM8:
-        Write_GENERIC_NetList( frame, FileNameNL );
+     default:
+       Write_GENERIC_NetList( frame, FileNameNL );
         break;
-
-    default:
-        DisplayError( frame, wxT( "WriteNetList() err: Unknown Netlist Format" ) );
-        break;
-    }
+   }
 }
 
 

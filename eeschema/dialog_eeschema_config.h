@@ -40,10 +40,10 @@
 #define ID_DIALOG 10000
 #define SAVE_CFG 10001
 #define FORMAT_NETLIST 10006
-#define DEL_LIB 10002
-#define ADD_LIB 10003
-#define INSERT_LIB 10004
-#define ID_LIST_LIBS 10005
+#define REMOVE_LIB 10009
+#define ADD_LIB 10010
+#define INSERT_LIB 10011
+#define ID_LISTBOX 10012
 #define ID_TEXTCTRL 10007
 #define ID_LIB_PATH_SEL 10008
 #define SYMBOL_KICONFIGEESCHEMAFRAME_STYLE wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|MAYBE_RESIZE_BORDER
@@ -89,11 +89,11 @@ public:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for SAVE_CFG
     void OnSaveCfgClick( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_RADIOBOX_SELECTED event handler for FORMAT_NETLIST
+    /// wxEVT_COMMAND_LISTBOX_SELECTED event handler for FORMAT_NETLIST
     void OnFormatNetlistSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for DEL_LIB
-    void OnDelLibClick( wxCommandEvent& event );
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for REMOVE_LIB
+    void OnRemoveLibClick( wxCommandEvent& event );
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ADD_LIB
     void OnAddLibClick( wxCommandEvent& event );
@@ -124,7 +124,7 @@ public:
 	void ChangeSetup();
 	
 ////@begin KiConfigEeschemaFrame member variables
-    wxRadioBox* m_NetFormatBox;
+    wxListBox* m_NetFormatBox;
     wxStaticBoxSizer* m_FileExtList;
     wxListBox* m_ListLibr;
     wxTextCtrl* m_LibDirCtrl;
