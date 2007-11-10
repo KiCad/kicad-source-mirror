@@ -13,7 +13,7 @@
 
 #define ISBUS 1
 
-
+#define CUSTOMPANEL_COUNTMAX 8  // Max number of netlist plugins
 /* Id to select netlist type */
 typedef enum {
     NET_TYPE_UNINIT = 0,
@@ -21,8 +21,13 @@ typedef enum {
     NET_TYPE_ORCADPCB2,
     NET_TYPE_CADSTAR,
     NET_TYPE_SPICE,
-    NET_TYPE_CUSTOM1	// NET_TYPE_CUSTOM1 is the first id for user netlist format
- } TypeNetForm;
+    NET_TYPE_CUSTOM1,   /* NET_TYPE_CUSTOM1
+                         * is the first id for user netlist format
+                         * NET_TYPE_CUSTOM1+CUSTOMPANEL_COUNTMAX-1
+                         * is the last id for user netlist format
+                         */
+	NET_TYPE_CUSTOM_MAX = NET_TYPE_CUSTOM1+CUSTOMPANEL_COUNTMAX-1
+} TypeNetForm;
 
 
 /* Max pin number per component and footprint */
@@ -44,10 +49,10 @@ enum NetObjetType {      /* Type des objets de Net */
 };
 
 
-enum  IsConnectType {  /* Valeur du Flag de connection */
-    UNCONNECT,  /* Pin ou Label non connecte */
-    NOCONNECT,  /* Pin volontairement non connectee (Symb. NoConnect utilise) */
-    CONNECT     /* connexion normale */
+enum  IsConnectType {   /* Valeur du Flag de connection */
+    UNCONNECT,          /* Pin ou Label non connecte */
+    NOCONNECT,          /* Pin volontairement non connectee (Symb. NoConnect utilise) */
+    CONNECT             /* connexion normale */
 };
 
 
@@ -62,9 +67,9 @@ public:
     SCH_SCREEN*     m_Screen;           /* Ecran d'appartenance */
     NetObjetType    m_Type;
     int             m_ElectricalType;   /* Pour Pins et sheet labels: type electrique */
-private:    
+private:
     int             m_NetCode;          /* pour elements simples */
-public:    
+public:
     int             m_BusNetCode;       /* pour connexions type bus */
     int             m_Member;           /* pour les labels type BUSWIRE ( labels de bus eclate )
                                          *  numero de membre */
@@ -75,8 +80,9 @@ public:
     const wxString* m_Label;        /* Tous types Labels:pointeur sur la wxString definissant le label */
     wxPoint         m_Start, m_End;
 
-#if defined(DEBUG)
+#if defined (DEBUG)
     void Show( std::ostream& out, int ndx );
+
 #endif
 
     void SetNet( int aNetCode ) { m_NetCode = aNetCode; }
@@ -108,8 +114,10 @@ eda_global int g_NbrObjNet;
 eda_global ObjetNetListStruct* g_TabObjNet;
 
 /* Prototypes: */
-void    WriteNetList( WinEDA_SchematicFrame* frame, const wxString& FileNameNL, bool use_netnames );
-void    FreeTabNetList( ObjetNetListStruct* TabNetItems, int NbrNetItems );
+void        WriteNetList( WinEDA_SchematicFrame* frame,
+                          const wxString&        FileNameNL,
+                          bool                   use_netnames );
+void        FreeTabNetList( ObjetNetListStruct* TabNetItems, int NbrNetItems );
 
 /** Function ReturnUserNetlistTypeName
  * to retrieve user netlist type names
@@ -118,8 +126,7 @@ void    FreeTabNetList( ObjetNetListStruct* TabNetItems, int NbrNetItems );
  * this function must be called first with "first_item" = true
  * and after with "first_item" = false to get all the other existing netlist names
  */
-#define CUSTOMPANEL_COUNTMAX 8	// Max number of netlist plugins
-wxString ReturnUserNetlistTypeName( bool first_item );
+wxString    ReturnUserNetlistTypeName( bool first_item );
 
 
 #endif
