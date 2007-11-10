@@ -39,7 +39,8 @@ static PARAM_CFG_INT NetFormatCfg
 	wxT("NetFmt"),			/* Ident String */
 	&g_NetFormat,			/* Parameter address */
 	NET_TYPE_PCBNEW,	/* Default  value */
-	NET_TYPE_NOT_INIT, NET_TYPE_MAX-1	/*  Min and Max values for the parameter */
+	NET_TYPE_UNINIT, NET_TYPE_CUSTOM1	/*  Min and Max values for the parameter */
+	/*NET_TYPE_NOT_INIT, NET_TYPE_MAX-1*/	
 );
 
 static PARAM_CFG_INT UnitCfg
