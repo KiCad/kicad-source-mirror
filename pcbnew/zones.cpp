@@ -249,7 +249,7 @@ void WinEDA_ZoneFrame::CreateControls()
     static const int GridList[4] = { 50, 100, 250, 500 };
     int selection = 0;
 
-    for( unsigned ii = 0; ii < m_GridCtrl->GetCount(); ii++ )
+    for( int ii = 0; ii < m_GridCtrl->GetCount(); ii++ )
     {
         wxString msg = ReturnStringFromValue( g_UnitMetric,
                                               GridList[ii],

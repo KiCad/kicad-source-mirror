@@ -392,8 +392,6 @@ bool WinEDA_DrcFrame::ProcessEvent( wxEvent& event )
                 if( wxTE_HT_UNKNOWN != m_logWindow->HitTest( pos, &col, &row ) )
                 {
                     wxString text = m_logWindow->GetLineText( row );
-                    
-                    int debug = 1;
                 }
             }
         }
