@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-10 18:28+0100\n"
-"PO-Revision-Date: 2007-11-10 20:14+0100\n"
+"POT-Creation-Date: 2007-11-11 08:12+0100\n"
+"PO-Revision-Date: 2007-11-11 08:24+0100\n"
 "Last-Translator: \n"
 "Language-Team: Polish KiCAD Team - Mateusz Skowroński <skowri@gmail.com>, Krzysztof Kawa <elektrotrans@wp.pl>\n"
 "MIME-Version: 1.0\n"
@@ -115,7 +115,6 @@ msgid "Create new library and save current module"
 msgstr "Utwórz nową bibliotekę i zapisz bieżący moduł"
 
 #: kicad/pcbnew/tool_modedit.cpp:65
-#: kicad/eeschema/tool_lib.cpp:126
 msgid "Delete part in current library"
 msgstr "Usuń element z bieżącej biblioteki"
 
@@ -414,7 +413,7 @@ msgstr "Tekst PCB"
 #: kicad/eeschema/edit_component_in_schematic.cpp:745
 #: kicad/eeschema/dialog_create_component.cpp:164
 #: kicad/eeschema/onrightclick.cpp:317
-#: kicad/eeschema/eelayer.h:152
+#: kicad/eeschema/eelayer.h:153
 msgid "Reference"
 msgstr "Oznaczenie"
 
@@ -424,7 +423,7 @@ msgstr "Oznaczenie"
 #: kicad/eeschema/edit_component_in_schematic.cpp:784
 #: kicad/eeschema/component_class.cpp:55
 #: kicad/eeschema/onrightclick.cpp:316
-#: kicad/eeschema/eelayer.h:158
+#: kicad/eeschema/eelayer.h:159
 msgid "Value"
 msgstr "Wartość"
 
@@ -658,12 +657,13 @@ msgstr "Usuń warstwę "
 
 #: kicad/pcbnew/set_color.cpp:269
 #: kicad/pcbnew/set_color.cpp:296
-#: kicad/gerbview/set_color.cpp:241
+#: kicad/gerbview/set_color.cpp:258
+#: kicad/gerbview/set_color.cpp:285
 msgid "Show None"
 msgstr "Żadna"
 
 #: kicad/pcbnew/set_color.cpp:278
-#: kicad/gerbview/set_color.cpp:236
+#: kicad/gerbview/set_color.cpp:267
 msgid "Show All"
 msgstr "Wszystkie"
 
@@ -684,12 +684,12 @@ msgstr "Wyłącz na wszystkich warstwach ścieżek"
 #: kicad/pcbnew/cotation.cpp:105
 #: kicad/pcbnew/muonde.cpp:348
 #: kicad/pcbnew/pcbtexte.cpp:111
-#: kicad/eeschema/eelayer.cpp:248
+#: kicad/eeschema/eelayer.cpp:251
 #: kicad/eeschema/sheetlab.cpp:93
 #: kicad/common/displlst.cpp:99
 #: kicad/common/selcolor.cpp:165
 #: kicad/common/get_component_dialog.cpp:112
-#: kicad/gerbview/set_color.cpp:249
+#: kicad/gerbview/set_color.cpp:325
 #: kicad/gerbview/reglage.cpp:108
 #: kicad/gerbview/options.cpp:165
 #: kicad/gerbview/options.cpp:289
@@ -712,7 +712,7 @@ msgstr "OK"
 #: kicad/pcbnew/pcbtexte.cpp:116
 #: kicad/eeschema/libedit_onrightclick.cpp:68
 #: kicad/eeschema/libedit_onrightclick.cpp:83
-#: kicad/eeschema/eelayer.cpp:252
+#: kicad/eeschema/eelayer.cpp:255
 #: kicad/eeschema/sheetlab.cpp:97
 #: kicad/eeschema/onrightclick.cpp:121
 #: kicad/eeschema/onrightclick.cpp:133
@@ -720,7 +720,7 @@ msgstr "OK"
 #: kicad/common/selcolor.cpp:169
 #: kicad/common/selcolor.cpp:186
 #: kicad/common/get_component_dialog.cpp:121
-#: kicad/gerbview/set_color.cpp:253
+#: kicad/gerbview/set_color.cpp:329
 #: kicad/gerbview/reglage.cpp:112
 #: kicad/gerbview/options.cpp:169
 #: kicad/gerbview/options.cpp:293
@@ -730,7 +730,8 @@ msgid "Cancel"
 msgstr "Anuluj"
 
 #: kicad/pcbnew/set_color.cpp:361
-#: kicad/gerbview/set_color.cpp:257
+#: kicad/eeschema/eelayer.cpp:259
+#: kicad/gerbview/set_color.cpp:333
 msgid "Apply"
 msgstr "Zastosuj"
 
@@ -921,7 +922,7 @@ msgstr "Pozycja Y"
 
 #: kicad/pcbnew/pcbframe.cpp:262
 msgid "Board modified, Save before exit ?"
-msgstr "Płytka zmodyfikowana, zapisać przed zakończeniem?"
+msgstr "Płytka została zmieniona. Zapisać przed zakończeniem?"
 
 #: kicad/pcbnew/pcbframe.cpp:263
 #: kicad/eeschema/schframe.cpp:183
@@ -1131,7 +1132,7 @@ msgstr "Czy otworzyć plik kopii zapasowej "
 
 #: kicad/pcbnew/files.cpp:142
 msgid "Board Modified: Continue ?"
-msgstr "Płytka zmodyfikowana: kontynuować?"
+msgstr "Płytka została zmieniona: kontynuować?"
 
 #: kicad/pcbnew/files.cpp:160
 msgid "Load board files:"
@@ -1475,7 +1476,7 @@ msgstr "Test ścieżek\n"
 
 #: kicad/pcbnew/drc.cpp:361
 #: kicad/pcbnew/drc.cpp:439
-#: kicad/eeschema/eelayer.h:103
+#: kicad/eeschema/eelayer.h:104
 msgid "Netname"
 msgstr "Nazwa sieci"
 
@@ -1730,8 +1731,8 @@ msgstr "Powiększenie "
 #: kicad/pcbnew/tool_pcb.cpp:585
 #: kicad/eeschema/eelayer.cpp:223
 #: kicad/pcbnew/set_color.h:414
-#: kicad/eeschema/eelayer.h:209
-#: kicad/gerbview/set_color.h:246
+#: kicad/eeschema/eelayer.h:210
+#: kicad/gerbview/set_color.h:324
 msgid "Grid"
 msgstr "Siatka"
 
@@ -2001,7 +2002,7 @@ msgstr "Warstwa szkicu"
 
 #: kicad/pcbnew/moduleframe.cpp:182
 msgid "Module Editor: module modified!, Continue ?"
-msgstr "Edytor modułów: moduł zmodyfikowany! Kontynuować?"
+msgstr "Edytor modułów: moduł został zmieniony! Kontynuować?"
 
 #: kicad/pcbnew/edgemod.cpp:204
 msgid "The graphic item will be on a copper layer.It is very dangerous. Are you sure"
@@ -2748,7 +2749,7 @@ msgid "Connect"
 msgstr "Połącz"
 
 #: kicad/pcbnew/class_board.cpp:329
-#: kicad/eeschema/eelayer.h:115
+#: kicad/eeschema/eelayer.h:116
 msgid "NoConn"
 msgstr "Nie połączone"
 
@@ -4411,7 +4412,6 @@ msgstr "Moduł istnieje Linia "
 
 #: kicad/pcbnew/librairi.cpp:642
 #: kicad/eeschema/libedit.cpp:113
-#: kicad/eeschema/libedit.cpp:390
 msgid "Component "
 msgstr "Element "
 
@@ -5405,7 +5405,7 @@ msgid "PinName"
 msgstr "Nazwa pinu"
 
 #: kicad/eeschema/affiche.cpp:80
-#: kicad/eeschema/eelayer.h:140
+#: kicad/eeschema/eelayer.h:141
 msgid "PinNum"
 msgstr "Numer pinu"
 
@@ -6080,12 +6080,6 @@ msgstr "Biały"
 msgid "Background Color:"
 msgstr "Kolor tła:"
 
-#: kicad/eeschema/eelayer.cpp:256
-#: kicad/eeschema/dialog_build_BOM.cpp:354
-#: kicad/cvpcb/dialog_display_options.cpp:195
-msgid "&Apply"
-msgstr "&Zastosuj"
-
 #: kicad/eeschema/tool_lib.cpp:48
 msgid "deselect current tool"
 msgstr "Odznacz bieżące narzędzie"
@@ -6130,32 +6124,36 @@ msgstr "Eksportuj bieżący rysunek"
 msgid "Save current loaded library on disk (file update)"
 msgstr "Zapisz aktualnie załadowaną bibliotekę na dysk (aktualizacja pliku)"
 
+#: kicad/eeschema/tool_lib.cpp:126
+msgid "Delete component in current library"
+msgstr "Usuń element z bieżącej biblioteki"
+
 #: kicad/eeschema/tool_lib.cpp:130
-msgid "New part"
+msgid "New component"
 msgstr "Nowy element"
 
 #: kicad/eeschema/tool_lib.cpp:133
-msgid "Select part to edit"
+msgid "Select component to edit"
 msgstr "Wybierz element do edycji"
 
 #: kicad/eeschema/tool_lib.cpp:137
-msgid "Save current part into current loaded library (in memory)"
+msgid "Save current component into current loaded library (in memory)"
 msgstr "Zapisz bieżący element w aktualnie załadowanej bibliotece (w pamięci)"
 
 #: kicad/eeschema/tool_lib.cpp:140
-msgid "import part"
+msgid "import component"
 msgstr "Importuj element"
 
 #: kicad/eeschema/tool_lib.cpp:143
-msgid "export part"
+msgid "export component"
 msgstr "Eksportuj element"
 
 #: kicad/eeschema/tool_lib.cpp:147
-msgid "Create a new library an save current part into"
+msgid "Create a new library an save current component into"
 msgstr "Utwórz nową bibliotekę i zapisz w niej bieżący element"
 
 #: kicad/eeschema/tool_lib.cpp:160
-msgid "Edit Part Properties"
+msgid "Edit component properties"
 msgstr "Edytuj właściwości elementu"
 
 #: kicad/eeschema/tool_lib.cpp:167
@@ -6335,6 +6333,11 @@ msgstr "Pole 8"
 msgid "Create &List"
 msgstr "Utwórz &listę"
 
+#: kicad/eeschema/dialog_build_BOM.cpp:354
+#: kicad/cvpcb/dialog_display_options.cpp:195
+msgid "&Apply"
+msgstr "&Zastosuj"
+
 #: kicad/eeschema/dialog_build_BOM.cpp:560
 msgid "Bill of material:"
 msgstr "Lista materiałów:"
@@ -6510,7 +6513,7 @@ msgid "Error. You must provide a Title"
 msgstr "Błąd. Musisz wypełnić pole \"Tytuł\""
 
 #: kicad/eeschema/component_class.cpp:57
-#: kicad/eeschema/eelayer.h:171
+#: kicad/eeschema/eelayer.h:172
 msgid "Sheet"
 msgstr "Arkusz"
 
@@ -6816,17 +6819,16 @@ msgstr "&25"
 msgid "&26"
 msgstr "&26"
 
-#: kicad/eeschema/dialog_create_component.cpp:238
-msgid "Parts per package"
-msgstr "Elementów w obudowie"
+#: kicad/eeschema/dialog_create_component.cpp:237
+msgid "Parts per component"
+msgstr "Części na element"
 
 #: kicad/eeschema/dialog_create_component.cpp:243
 msgid "Draw options"
 msgstr "Opcje rysowania"
 
 #: kicad/eeschema/dialog_create_component.cpp:247
-#: kicad/eeschema/edit_component_in_lib.cpp:407
-msgid "Show Pin Num"
+msgid "Show Pin Number"
 msgstr "Pokaż numer pinu"
 
 #: kicad/eeschema/dialog_create_component.cpp:251
@@ -6850,7 +6852,7 @@ msgstr "Musisz podać nazwę dla tego elementu"
 
 #: kicad/eeschema/schframe.cpp:182
 msgid "Schematic modified, Save before exit ?"
-msgstr "Schemat zmodyfikowany, zapisać przed zakończeniem?"
+msgstr "Schemat został zmieniony. Zapisać przed zakończeniem?"
 
 #: kicad/eeschema/schframe.cpp:284
 msgid "No show Hidden Pins"
@@ -7009,7 +7011,7 @@ msgstr "Pokaż tekst"
 
 #: kicad/eeschema/dialog_edit_component_in_schematic.cpp:225
 #: kicad/eeschema/edit_component_in_lib.cpp:484
-#: kicad/eeschema/eelayer.h:164
+#: kicad/eeschema/eelayer.h:165
 msgid "Fields"
 msgstr "Pola"
 
@@ -7292,7 +7294,7 @@ msgstr "Kopiuj do schowka"
 #: kicad/eeschema/delsheet.cpp:42
 #, c-format
 msgid "Sheet %s (file %s) modified. Save it?"
-msgstr "Arkusz %s (plik %s) został zmodyfikowany. Zapisać go?"
+msgstr "Arkusz %s (plik %s) został zmieniony. Zapisać go?"
 
 #: kicad/eeschema/edit_label.cpp:49
 msgid "Empty Text!"
@@ -7416,7 +7418,7 @@ msgid "Library browser"
 msgstr "Przeglądarka bibliotek"
 
 #: kicad/eeschema/lib_export.cpp:39
-msgid "Import part:"
+msgid "Import component:"
 msgstr "Importuj element:"
 
 #: kicad/eeschema/lib_export.cpp:71
@@ -7432,7 +7434,7 @@ msgid "New Library"
 msgstr "Nowa biblioteka"
 
 #: kicad/eeschema/lib_export.cpp:101
-msgid "Export part:"
+msgid "Export component:"
 msgstr "Eksportuj element:"
 
 #: kicad/eeschema/lib_export.cpp:135
@@ -7441,10 +7443,10 @@ msgstr "0k"
 
 #: kicad/eeschema/lib_export.cpp:137
 msgid ""
-"Note: this new library will be available only if it is loaded by eeschema\n"
-"Modify eeschema config if you want use it"
+"Note: this new library will be available only if it is loaded by eeschema.\n"
+"Modify eeschema config if you want use it."
 msgstr ""
-"Uwaga: Ta nowa biblioteka będzie dostępna tylko wtedy, gdy będzie wczytana w eeschema\n"
+"Uwaga: Ta nowa biblioteka będzie dostępna tylko wtedy, gdy zostanie wczytana przez eeschema.\n"
 "Zmień konfigurację eeschema jeśli chcesz używać tej biblioteki."
 
 #: kicad/eeschema/lib_export.cpp:139
@@ -7462,7 +7464,7 @@ msgid "General :"
 msgstr "Główne:"
 
 #: kicad/eeschema/dialog_edit_component_in_lib.cpp:144
-msgid "Number of Units:"
+msgid "Number of Parts:"
 msgstr "Liczba części:"
 
 #: kicad/eeschema/dialog_edit_component_in_lib.cpp:172
@@ -7536,20 +7538,28 @@ msgid "Current Part not saved, continue ?"
 msgstr "Bieżący element nie został zapisany, kontynuować?"
 
 #: kicad/eeschema/libedit.cpp:235
-msgid "Ok to modify Library File "
-msgstr "Czy zmodyfikować plik biblioteki "
+msgid "Modify Library File \""
+msgstr "Czy zmodyfikować plik biblioteki \""
+
+#: kicad/eeschema/libedit.cpp:235
+msgid "\" ?"
+msgstr "\" ?"
 
 #: kicad/eeschema/libedit.cpp:244
-msgid "Error while saving Library File "
-msgstr "Błąd przy zapisie pliku biblioteki "
+msgid "Error while saving Library File \""
+msgstr "Błąd przy zapisie pliku biblioteki \""
+
+#: kicad/eeschema/libedit.cpp:244
+msgid "\""
+msgstr "\""
 
 #: kicad/eeschema/libedit.cpp:250
-msgid "Library File "
-msgstr "Plik biblioteki "
+msgid "Library File \""
+msgstr "Plik biblioteki \""
 
 #: kicad/eeschema/libedit.cpp:252
-msgid "Document File "
-msgstr "Plik dokumentacji "
+msgid "Document File \""
+msgstr "Plik dokumentacji \""
 
 #: kicad/eeschema/libedit.cpp:305
 msgid "No Active Library"
@@ -7565,33 +7575,41 @@ msgid "Component not found"
 msgstr "Nie znaleziono elementu"
 
 #: kicad/eeschema/libedit.cpp:348
-msgid "Delete component "
-msgstr "Usuń element "
+msgid "Delete component \""
+msgstr "Usuń element \""
 
 #: kicad/eeschema/libedit.cpp:349
-msgid " in library "
-msgstr " w bibliotece "
+msgid "\" from library \""
+msgstr "\" z biblioteki \""
 
 #: kicad/eeschema/libedit.cpp:373
-msgid "Delete old component ?"
+msgid "Delete old component?"
 msgstr "Usunąć stary element?"
 
+#: kicad/eeschema/libedit.cpp:390
+msgid "Component \""
+msgstr "Element \""
+
 #: kicad/eeschema/libedit.cpp:391
-msgid " exists in library "
-msgstr " istnieje w bibliotece "
+msgid "\" exists in library \""
+msgstr "\" istnieje w bibliotece \""
+
+#: kicad/eeschema/libedit.cpp:391
+msgid "\"."
+msgstr "\"."
 
 #: kicad/eeschema/libedit.cpp:558
-msgid "Warning: No component to Save"
-msgstr "Ostrzeżenie: Brak elementu do zapisania"
+msgid "No component to Save."
+msgstr "Brak elementu do zapisania."
 
 #: kicad/eeschema/libedit.cpp:565
-msgid "No Library specified"
-msgstr "Nie wybrano biblioteki"
+msgid "No Library specified."
+msgstr "Nie wybrano żadnej biblioteki."
 
 #: kicad/eeschema/libedit.cpp:576
 #, c-format
-msgid "Component %s exists, Change it ?"
-msgstr "Element %s istnieje, zamienić go?"
+msgid "Component \"%s\" exists. Change it?"
+msgstr "Element \"%s\" istnieje, zamienić go?"
 
 #: kicad/eeschema/libedit.cpp:615
 #, c-format
@@ -7623,6 +7641,10 @@ msgstr "Filtr obudów"
 #: kicad/eeschema/edit_component_in_lib.cpp:293
 msgid "Footprints"
 msgstr "Obudowy"
+
+#: kicad/eeschema/edit_component_in_lib.cpp:407
+msgid "Show Pin Num"
+msgstr "Pokaż numer pinu"
 
 #: kicad/eeschema/edit_component_in_lib.cpp:476
 msgid "Left justify"
@@ -8083,20 +8105,28 @@ msgid "Bad Bus Label: "
 msgstr "Błędna etykieta magistrali: "
 
 #: kicad/eeschema/libframe.cpp:105
-msgid "LibEdit: Part modified!, Continue ?"
-msgstr "LibEdit: Element zmodyfikowany! Kontynuować?"
+msgid ""
+"Component was modified!\n"
+"Discard changes?"
+msgstr ""
+"Element został zmieniony!\n"
+"Porzucić zmiany?"
 
 #: kicad/eeschema/libframe.cpp:118
 #, c-format
-msgid "Library %s modified!, Continue ?"
-msgstr "Biblioteka %s zmodyfikowana! Kontynuować?"
+msgid ""
+"Library \"%s\" was modified!\n"
+"Discard changes?"
+msgstr ""
+"Biblioteka \"%s\" została zmieniona!\n"
+"Porzucić zmiany?"
 
 #: kicad/eeschema/libframe.cpp:344
 msgid "Include last component changes"
 msgstr "Dołącz ostatnie zmiany elementu"
 
 #: kicad/eeschema/libframe.cpp:407
-msgid " Tst Pins OK!"
+msgid " Pins Test OK!"
 msgstr " Test pinów OK!"
 
 #: kicad/eeschema/libframe.cpp:481
@@ -8104,7 +8134,7 @@ msgid "Add Pin"
 msgstr "Dodaj pin"
 
 #: kicad/eeschema/libframe.cpp:485
-msgid "Set Pin Opt"
+msgid "Set Pin Options"
 msgstr "Ustaw opcje pinu"
 
 #: kicad/eeschema/libframe.cpp:507
@@ -8647,7 +8677,7 @@ msgstr "Nie znaleziono modułu %s"
 
 #: kicad/cvpcb/cvframe.cpp:168
 msgid "Netlist and Cmp list modified, Save before exit ?"
-msgstr "Netlista i lista elementów (Cmp) zmodyfikowana, zapisać przez zakończeniem?"
+msgstr "Netlista i lista elementów (Cmp) zostały zmienione. Zapisać przed zakończeniem?"
 
 #: kicad/cvpcb/cvframe.cpp:186
 msgid "Problem when saving files, Exit anyway"
@@ -9309,9 +9339,13 @@ msgstr "Wybierz kolor tła"
 msgid "Vertex "
 msgstr "Wierzchołek "
 
-#: kicad/gerbview/set_color.cpp:151
-msgid "GerbView Layer Colors:"
-msgstr "Kolory warstw GerbView:"
+#: kicad/gerbview/set_color.cpp:279
+msgid "Switch on all of the Gerber layers"
+msgstr "Włącz na wszystkich warstwach Gerbera"
+
+#: kicad/gerbview/set_color.cpp:288
+msgid "Switch off all of the Gerber layers"
+msgstr "Wyłącz na wszystkich warstwach Gerbera"
 
 #: kicad/gerbview/affiche.cpp:34
 #: kicad/gerbview/tool_gerber.cpp:310
@@ -9404,7 +9438,7 @@ msgstr "Czy zmienić istniejący plik?"
 
 #: kicad/gerbview/gerberframe.cpp:177
 msgid "Layer modified,  Continue ?"
-msgstr "Warstwa zmodyfikowana, kontynuować?"
+msgstr "Warstwa została zmieniona. Kontynuować?"
 
 #: kicad/gerbview/options.cpp:146
 msgid "Gerbview Options"
@@ -9802,87 +9836,87 @@ msgstr "Utwórz plik SVG"
 msgid "Graphic shape properties"
 msgstr "Właściwości kształtu (grafika)"
 
-#: kicad/eeschema/eelayer.h:34
+#: kicad/eeschema/eelayer.h:35
 msgid "EESchema Colors"
 msgstr "Kolory EESchema"
 
-#: kicad/eeschema/eelayer.h:73
+#: kicad/eeschema/eelayer.h:74
 msgid "Wire"
 msgstr "Połączenie"
 
-#: kicad/eeschema/eelayer.h:79
+#: kicad/eeschema/eelayer.h:80
 msgid "Bus"
 msgstr "Magistrala"
 
-#: kicad/eeschema/eelayer.h:85
+#: kicad/eeschema/eelayer.h:86
 msgid "Junction"
 msgstr "Węzeł"
 
-#: kicad/eeschema/eelayer.h:91
+#: kicad/eeschema/eelayer.h:92
 msgid "Label"
 msgstr "Etykieta"
 
-#: kicad/eeschema/eelayer.h:97
+#: kicad/eeschema/eelayer.h:98
 msgid "GlobLabel"
 msgstr "Etykieta globalna"
 
-#: kicad/eeschema/eelayer.h:109
+#: kicad/eeschema/eelayer.h:110
 msgid "Notes"
 msgstr "Notatki"
 
-#: kicad/eeschema/eelayer.h:122
+#: kicad/eeschema/eelayer.h:123
 msgid "Body"
 msgstr "Obrys"
 
-#: kicad/eeschema/eelayer.h:128
+#: kicad/eeschema/eelayer.h:129
 msgid "Body Bg"
 msgstr "Tło obrysu"
 
-#: kicad/eeschema/eelayer.h:134
+#: kicad/eeschema/eelayer.h:135
 msgid "Pin"
 msgstr "Pin"
 
-#: kicad/eeschema/eelayer.h:146
+#: kicad/eeschema/eelayer.h:147
 msgid "PinNam"
 msgstr "Nazwa pinu"
 
-#: kicad/eeschema/eelayer.h:177
+#: kicad/eeschema/eelayer.h:178
 msgid "Sheetfile"
 msgstr "Plik arkusza"
 
-#: kicad/eeschema/eelayer.h:183
+#: kicad/eeschema/eelayer.h:184
 msgid "SheetName"
 msgstr "Nazwa arkusza"
 
-#: kicad/eeschema/eelayer.h:189
+#: kicad/eeschema/eelayer.h:190
 msgid "SheetLabel"
 msgstr "Etykieta arkusza"
 
-#: kicad/eeschema/eelayer.h:196
+#: kicad/eeschema/eelayer.h:197
 msgid "Erc Warning"
 msgstr "Ostrzeżenie ERC"
 
-#: kicad/eeschema/eelayer.h:202
+#: kicad/eeschema/eelayer.h:203
 msgid "Erc Error"
 msgstr "Błąd ERC"
 
-#: kicad/eeschema/eelayer.h:247
+#: kicad/eeschema/eelayer.h:248
 msgid "General"
 msgstr "Główne"
 
-#: kicad/eeschema/eelayer.h:253
+#: kicad/eeschema/eelayer.h:254
 msgid "Device"
 msgstr "Element"
 
-#: kicad/eeschema/eelayer.h:259
+#: kicad/eeschema/eelayer.h:260
 msgid "Sheets"
 msgstr "Arkusze"
 
-#: kicad/eeschema/eelayer.h:265
+#: kicad/eeschema/eelayer.h:266
 msgid "Erc Mark"
 msgstr "Znacznik ERC"
 
-#: kicad/eeschema/eelayer.h:271
+#: kicad/eeschema/eelayer.h:272
 msgid "Other"
 msgstr "Inny"
 
@@ -9922,7 +9956,7 @@ msgstr "Właściwości tekstu (grafika)"
 msgid "EESchema Plot PS"
 msgstr "Rysowanie w Postscripcie EESchema"
 
-#: kicad/eeschema/dialog_create_component.h:45
+#: kicad/eeschema/dialog_create_component.h:55
 msgid "Component Creation"
 msgstr "Tworzenie elementu"
 
@@ -9934,150 +9968,172 @@ msgstr "Rysowanie w HPGL EESchema"
 msgid "Cvpcb Configuration"
 msgstr "Konfiguracja Cvpcb"
 
-#: kicad/gerbview/set_color.h:5
+#: kicad/gerbview/set_color.h:38
+msgid "GerbView Layer Colors:"
+msgstr "Kolory warstw GerbView:"
+
+#: kicad/gerbview/set_color.h:80
 msgid "Layers 1-16"
 msgstr "Warstwy 1-16"
 
-#: kicad/gerbview/set_color.h:10
+#: kicad/gerbview/set_color.h:86
 msgid "Layer 1"
 msgstr "Warstwa 1"
 
-#: kicad/gerbview/set_color.h:17
+#: kicad/gerbview/set_color.h:93
 msgid "Layer 2"
 msgstr "Warstwa 2"
 
-#: kicad/gerbview/set_color.h:24
+#: kicad/gerbview/set_color.h:100
 msgid "Layer 3"
 msgstr "Warstwa 3"
 
-#: kicad/gerbview/set_color.h:31
+#: kicad/gerbview/set_color.h:107
 msgid "Layer 4"
 msgstr "Warstwa 4"
 
-#: kicad/gerbview/set_color.h:38
+#: kicad/gerbview/set_color.h:114
 msgid "Layer 5"
 msgstr "Warstwa 5"
 
-#: kicad/gerbview/set_color.h:45
+#: kicad/gerbview/set_color.h:121
 msgid "Layer 6"
 msgstr "Warstwa 6"
 
-#: kicad/gerbview/set_color.h:52
+#: kicad/gerbview/set_color.h:128
 msgid "Layer 7"
 msgstr "Warstwa 7"
 
-#: kicad/gerbview/set_color.h:59
+#: kicad/gerbview/set_color.h:135
 msgid "Layer 8"
 msgstr "Warstwa 8"
 
-#: kicad/gerbview/set_color.h:66
+#: kicad/gerbview/set_color.h:142
 msgid "Layer 9"
 msgstr "Warstwa 9"
 
-#: kicad/gerbview/set_color.h:73
+#: kicad/gerbview/set_color.h:149
 msgid "Layer 10"
 msgstr "Warstwa 10"
 
-#: kicad/gerbview/set_color.h:80
+#: kicad/gerbview/set_color.h:156
 msgid "Layer 11"
 msgstr "Warstwa 11"
 
-#: kicad/gerbview/set_color.h:87
+#: kicad/gerbview/set_color.h:163
 msgid "Layer 12"
 msgstr "Warstwa 12"
 
-#: kicad/gerbview/set_color.h:94
+#: kicad/gerbview/set_color.h:170
 msgid "Layer 13"
 msgstr "Warstwa 13"
 
-#: kicad/gerbview/set_color.h:101
+#: kicad/gerbview/set_color.h:177
 msgid "Layer 14"
 msgstr "Warstwa 14"
 
-#: kicad/gerbview/set_color.h:108
+#: kicad/gerbview/set_color.h:184
 msgid "Layer 15"
 msgstr "Warstwa 15"
 
-#: kicad/gerbview/set_color.h:115
+#: kicad/gerbview/set_color.h:191
 msgid "Layer 16"
 msgstr "Warstwa 16"
 
-#: kicad/gerbview/set_color.h:122
+#: kicad/gerbview/set_color.h:199
 msgid "Layers 17-32"
 msgstr "Warstwy 17-32"
 
-#: kicad/gerbview/set_color.h:127
+#: kicad/gerbview/set_color.h:205
 msgid "Layer 17"
 msgstr "Warstwa 17"
 
-#: kicad/gerbview/set_color.h:134
+#: kicad/gerbview/set_color.h:212
 msgid "Layer 18"
 msgstr "Warstwa 18"
 
-#: kicad/gerbview/set_color.h:141
+#: kicad/gerbview/set_color.h:219
 msgid "Layer 19"
 msgstr "Warstwa 19"
 
-#: kicad/gerbview/set_color.h:148
+#: kicad/gerbview/set_color.h:226
 msgid "Layer 20"
 msgstr "Warstwa 20"
 
-#: kicad/gerbview/set_color.h:155
+#: kicad/gerbview/set_color.h:233
 msgid "Layer 21"
 msgstr "Warstwa 21"
 
-#: kicad/gerbview/set_color.h:162
+#: kicad/gerbview/set_color.h:240
 msgid "Layer 22"
 msgstr "Warstwa 22"
 
-#: kicad/gerbview/set_color.h:169
+#: kicad/gerbview/set_color.h:247
 msgid "Layer 23"
 msgstr "Warstwa 23"
 
-#: kicad/gerbview/set_color.h:176
+#: kicad/gerbview/set_color.h:254
 msgid "Layer 24"
 msgstr "Warstwa 24"
 
-#: kicad/gerbview/set_color.h:183
+#: kicad/gerbview/set_color.h:261
 msgid "Layer 25"
 msgstr "Warstwa 25"
 
-#: kicad/gerbview/set_color.h:190
+#: kicad/gerbview/set_color.h:268
 msgid "Layer 26"
 msgstr "Warstwa 26"
 
-#: kicad/gerbview/set_color.h:197
+#: kicad/gerbview/set_color.h:275
 msgid "Layer 27"
 msgstr "Warstwa 27"
 
-#: kicad/gerbview/set_color.h:204
+#: kicad/gerbview/set_color.h:282
 msgid "Layer 28"
 msgstr "Warstwa 28"
 
-#: kicad/gerbview/set_color.h:211
+#: kicad/gerbview/set_color.h:289
 msgid "Layer 29"
 msgstr "Warstwa 29"
 
-#: kicad/gerbview/set_color.h:218
+#: kicad/gerbview/set_color.h:296
 msgid "Layer 30"
 msgstr "Warstwa 30"
 
-#: kicad/gerbview/set_color.h:225
+#: kicad/gerbview/set_color.h:303
 msgid "Layer 31"
 msgstr "Warstwa 31"
 
-#: kicad/gerbview/set_color.h:232
+#: kicad/gerbview/set_color.h:310
 msgid "Layer 32"
 msgstr "Warstwa 32"
 
-#: kicad/gerbview/set_color.h:240
+#: kicad/gerbview/set_color.h:318
 msgid "Others"
 msgstr "Pozostałe"
 
-#: kicad/gerbview/set_color.h:254
+#: kicad/gerbview/set_color.h:332
 msgid "D codes id."
 msgstr "ID kodu wiercenia"
 
+#~ msgid "New part"
+#~ msgstr "Nowy element"
+#~ msgid "import part"
+#~ msgstr "Importuj element"
+#~ msgid "export part"
+#~ msgstr "Eksportuj element"
+#~ msgid "Edit Part Properties"
+#~ msgstr "Edytuj właściwości elementu"
+#~ msgid "Parts per package"
+#~ msgstr "Elementów w obudowie"
+#~ msgid "Import part:"
+#~ msgstr "Importuj element:"
+#~ msgid "Export part:"
+#~ msgstr "Eksportuj element:"
+#~ msgid "Number of Units:"
+#~ msgstr "Liczba części:"
+#~ msgid "LibEdit: Part modified!, Continue ?"
+#~ msgstr "LibEdit: Element zmodyfikowany! Kontynuować?"
 #~ msgid "PcbNew"
 #~ msgstr "PcbNew"
 #~ msgid "&OrcadPcb2"
