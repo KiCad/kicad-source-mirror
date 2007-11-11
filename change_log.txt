@@ -6,6 +6,11 @@ email address.
 
 2007-Nov-11 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
 ================================================================================
++ eeschema & pcbnew & gerbview
+  * The "Colors" dialog box has been enhanced; the distance between adjacent
+    controls now increases (and in both horizontal and vertical directions)
+    when that dialog is resized. And the "Cancel" button is no longer centre-
+    justified; it is now right-justifed instead.
 + eeschema
   * A wxStdDialogButtonSizer is now used within the "EESchema Colors" dialog box,
     meaning that the sequence of the "OK", "Cancel", and "Apply" buttons within
