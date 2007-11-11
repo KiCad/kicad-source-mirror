@@ -32,10 +32,9 @@
 
 #include "protos.h"
 
-#include "eelayer.h"
+#include "eelayer.h" // Header file associated with this file
 
 // Local variables:
-
 int CurrentColor[NB_BUTT]; // Holds color for each layer while dialog box open
 
 
@@ -114,17 +113,17 @@ bool WinEDA_SetColorsFrame::Create( wxWindow* parent, wxWindowID id,
 void WinEDA_SetColorsFrame::Init()
 /**********************************************************/
 {
-    OuterBoxSizer   = NULL;
-    MainBoxSizer    = NULL;
-    ColumnBoxSizer  = NULL;
-    RowBoxSizer     = NULL;
-    BitmapButton    = NULL;
-    text            = NULL;
-    m_ShowGrid      = NULL;
-    m_SelBgColor    = NULL;
-    Line            = NULL;
-    BottomBoxSizer  = NULL;
-    Button          = NULL;
+    OuterBoxSizer        = NULL;
+    MainBoxSizer         = NULL;
+    ColumnBoxSizer       = NULL;
+    RowBoxSizer          = NULL;
+    Label                = NULL;
+    BitmapButton         = NULL;
+    m_ShowGrid           = NULL;
+    m_SelBgColor         = NULL;
+    Line                 = NULL;
+    StdDialogButtonSizer = NULL;
+    Button               = NULL;
 }
 
 
@@ -132,7 +131,7 @@ void WinEDA_SetColorsFrame::Init()
 void WinEDA_SetColorsFrame::CreateControls()
 /**********************************************************/
 {
-    int ii, jj, butt_ID, buttcolor;
+    int lyr, grp, butt_ID, buttcolor;
 
     SetFont( *g_DialogFont );
 
@@ -144,17 +143,20 @@ void WinEDA_SetColorsFrame::CreateControls()
 
     // Add various items to the dialog box, as determined by the
     // details of each element contained within laytool_list[]
-    for( ii = 0, jj = 0; ii < NB_BUTT; ii++ )
+    for( lyr = 0, grp = 0; lyr < NB_BUTT; lyr++ )
     {
         // Look for the initial button of each group of controls.
-        if( ii == laytool_index[jj]->m_Index )
+        if( lyr == 0 || lyr == laytool_index[grp]->m_Index + 1 )
         {
-            // Add another column spacer, unless the current value of
-            // jj is BUTTON_GROUPS - 1. (The very last group of controls
+            if( lyr != 0 )
+                grp++;
+
+            // Add another column sizer, unless the current value of
+            // grp is BUTTON_GROUPS - 1. (The very last group of controls
             // differs from the previous groups in that its associated
             // controls are located in the same column as the controls
             // associated with the preceeding group.)
-            if( jj < BUTTON_GROUPS - 1 )
+            if( grp < BUTTON_GROUPS - 1 )
             {
                 ColumnBoxSizer = new wxBoxSizer(wxVERTICAL);
                 MainBoxSizer->Add(ColumnBoxSizer, 1, wxALIGN_TOP|wxLEFT|wxTOP, 5);
@@ -170,28 +172,26 @@ void WinEDA_SetColorsFrame::CreateControls()
             ColumnBoxSizer->Add(RowBoxSizer, 0, wxGROW|wxLEFT|wxRIGHT|wxBOTTOM, 5);
 
             // Add a text string to identify the following set of controls
-            text = new wxStaticText( this, -1, laytool_index[jj]->m_Name,
-                                     wxDefaultPosition, wxDefaultSize, 0 );
+            Label = new wxStaticText( this, -1, laytool_index[grp]->m_Name,
+                                      wxDefaultPosition, wxDefaultSize, 0 );
             // Make this text string bold (so that it stands out better)
-            text->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxNORMAL_FONT->GetFamily(),
-                           wxNORMAL, wxBOLD, false, wxNORMAL_FONT->GetFaceName() ) );
+            Label->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxNORMAL_FONT->GetFamily(),
+                            wxNORMAL, wxBOLD, false, wxNORMAL_FONT->GetFaceName() ) );
 
-            RowBoxSizer->Add(text, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-            jj++;
+            RowBoxSizer->Add(Label, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
         }
 
         RowBoxSizer = new wxBoxSizer(wxHORIZONTAL);
         ColumnBoxSizer->Add(RowBoxSizer, 0, wxGROW|wxALL, 0);
 
-        butt_ID = ID_COLOR_SETUP + ii;
-        laytool_list[ii]->m_Id = butt_ID;
+        butt_ID = ID_COLOR_SETUP + lyr;
+        laytool_list[lyr]->m_Id = butt_ID;
         wxMemoryDC iconDC;
         wxBitmap ButtBitmap( BUTT_SIZE_X, BUTT_SIZE_Y );
 
         iconDC.SelectObject( ButtBitmap );
-        buttcolor = *laytool_list[ii]->m_Color;
-        CurrentColor[ii] = buttcolor;
+        buttcolor = *laytool_list[lyr]->m_Color;
+        CurrentColor[lyr] = buttcolor;
         wxBrush Brush;
         iconDC.SelectObject( ButtBitmap );
         iconDC.SetPen( *wxBLACK_PEN );
@@ -208,14 +208,14 @@ void WinEDA_SetColorsFrame::CreateControls()
         BitmapButton = new wxBitmapButton( this, butt_ID, ButtBitmap, wxDefaultPosition, wxSize(BUTT_SIZE_X, BUTT_SIZE_Y) );
         RowBoxSizer->Add(BitmapButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxBOTTOM, 5);
 
-        laytool_list[ii]->m_Button = BitmapButton;
+        laytool_list[lyr]->m_Button = BitmapButton;
 
-        // Add a text string, unless the current value of ii is NB_BUTT - 1
-        if( ii < NB_BUTT - 1 )
+        // Add a text string, unless the current value of lyr is NB_BUTT - 1
+        if( lyr < NB_BUTT - 1 )
         {
-            text = new wxStaticText( this, wxID_STATIC, wxGetTranslation( laytool_list[ii]->m_Name ),
-                                     wxDefaultPosition, wxDefaultSize, 0 );
-            RowBoxSizer->Add(text, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5);
+            Label = new wxStaticText( this, wxID_STATIC, wxGetTranslation( laytool_list[lyr]->m_Name ),
+                                      wxDefaultPosition, wxDefaultSize, 0 );
+            RowBoxSizer->Add(Label, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5);
         }
         else
         {
@@ -242,19 +242,24 @@ void WinEDA_SetColorsFrame::CreateControls()
     Line = new wxStaticLine( this, -1, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
     OuterBoxSizer->Add(Line, 0, wxGROW|wxALL, 5);
 
-    BottomBoxSizer = new wxBoxSizer(wxHORIZONTAL);
-    OuterBoxSizer->Add(BottomBoxSizer, 0, wxALIGN_RIGHT|wxLEFT|wxRIGHT|wxBOTTOM, 5);
+    // Provide a StdDialogButtonSizer to accommodate the OK, Cancel, and Apply
+    // buttons; using that type of sizer results in those buttons being
+    // automatically located in positions appropriate for each (OS) version of KiCad.
+    StdDialogButtonSizer = new wxStdDialogButtonSizer;
+    OuterBoxSizer->Add(StdDialogButtonSizer, 0, wxGROW|wxALL, 10);
 
-    Button = new wxButton( this, wxID_OK, _( "OK" ), wxDefaultPosition, wxDefaultSize, 0 );
+    Button = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
     Button->SetForegroundColour( *wxRED );
-    BottomBoxSizer->Add(Button, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+    StdDialogButtonSizer->AddButton(Button);
 
-    Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ), wxDefaultPosition, wxDefaultSize, 0 );
+    Button = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
     Button->SetForegroundColour( *wxBLUE );
-    BottomBoxSizer->Add(Button, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+    StdDialogButtonSizer->AddButton(Button);
 
-    Button = new wxButton( this, wxID_APPLY, _( "&Apply" ), wxDefaultPosition, wxDefaultSize, 0 );
-    BottomBoxSizer->Add(Button, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+    Button = new wxButton( this, wxID_APPLY, _("Apply"), wxDefaultPosition, wxDefaultSize, 0 );
+    StdDialogButtonSizer->AddButton(Button);
+
+    StdDialogButtonSizer->Realize();
 
     // (Dialog now needs to be resized, but the associated command is found elsewhere.)
 }
@@ -297,6 +302,7 @@ void WinEDA_SetColorsFrame::SetColor( wxCommandEvent& event )
 
     color = DisplayColorFrame( this,
             CurrentColor[id - ID_COLOR_SETUP] );
+
     if( color < 0 )
         return;
 
@@ -333,10 +339,12 @@ void WinEDA_SetColorsFrame::UpdateLayerSettings()
 /******************************************************************/
 {
     // Update colors for each layer
-    for( int ii = 0; ii < NB_BUTT; ii++ )
+    for( int lyr = 0; lyr < NB_BUTT; lyr++ )
     {
-        if( laytool_list[ii]->m_Color )
-            *laytool_list[ii]->m_Color = CurrentColor[ii];
+        // (As a bitmap button has been provided for *every* layer,
+        // it is not necessary to check whether it actually has been
+        // provided for each of those layers.)
+        *laytool_list[lyr]->m_Color = CurrentColor[lyr];
     }
 
     // Update whether grid is actually displayed or otherwise

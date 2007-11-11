@@ -13,6 +13,7 @@
 
 class wxBoxSizer;
 class wxStaticLine;
+class wxStdDialogButtonSizer;
 
 
 // Specify how many elements are contained within laytool_list[]
@@ -58,13 +59,13 @@ struct ColorButton
     int*            m_Color;
     int             m_Id;
     wxBitmapButton* m_Button;
-//  int             m_State;   // This is not used at present (so commented
-};                             // out until such a time that it actually is used)
+//  int             m_State;    // (Commented out until when it is actually used.)
+};
 
 struct ButtonIndex
 {
-    wxString m_Name;
-    int      m_Index;
+    wxString m_Name;            // Title
+    int      m_Index;           // Index to last bitmap button in group
 };
 
 
@@ -245,25 +246,25 @@ static ColorButton* laytool_list[NB_BUTT] = {
 static ButtonIndex Msg_General =
 {
     _( "General" ),                 // Title
-    0                               // Index to first bitmap button in group
+    7                               // Index to first bitmap button in group
 };
 
 static ButtonIndex MsgDevice_Item =
 {
     _( "Device" ),                  // Title
-    8                               // Index to first bitmap button in group
+    15                              // Index to first bitmap button in group
 };
 
 static ButtonIndex Msg_Sheets =
 {
     _( "Sheets" ),                  // Title
-    16                              // Index to first bitmap button in group
+    19                              // Index to first bitmap button in group
 };
 
 static ButtonIndex Msg_ErcMarck =
 {
     _( "Erc Mark" ),                // Title
-    20                              // Index to first bitmap button in group
+    21                              // Index to first bitmap button in group
 };
 
 static ButtonIndex Msg_Other =
@@ -292,18 +293,18 @@ private:
     DECLARE_DYNAMIC_CLASS( WinEDA_SetColorsFrame )
     DECLARE_EVENT_TABLE()
 
-    WinEDA_DrawFrame* m_Parent;
-    wxBoxSizer*       OuterBoxSizer;
-    wxBoxSizer*       MainBoxSizer;
-    wxBoxSizer*       ColumnBoxSizer;
-    wxBoxSizer*       RowBoxSizer;
-    wxBitmapButton*   BitmapButton;
-    wxStaticText*     text;
-    wxCheckBox*       m_ShowGrid;
-    wxRadioBox*       m_SelBgColor;
-    wxStaticLine*     Line;
-    wxBoxSizer*       BottomBoxSizer;
-    wxButton*         Button;
+    WinEDA_DrawFrame*       m_Parent;
+    wxBoxSizer*             OuterBoxSizer;
+    wxBoxSizer*             MainBoxSizer;
+    wxBoxSizer*             ColumnBoxSizer;
+    wxBoxSizer*             RowBoxSizer;
+    wxStaticText*           Label;
+    wxBitmapButton*         BitmapButton;
+    wxCheckBox*             m_ShowGrid;
+    wxRadioBox*             m_SelBgColor;
+    wxStaticLine*           Line;
+    wxStdDialogButtonSizer* StdDialogButtonSizer;
+    wxButton*               Button;
 
     // Creation
     bool Create( wxWindow* parent,

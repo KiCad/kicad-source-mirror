@@ -6,6 +6,14 @@ email address.
 
 2007-Nov-11 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
 ================================================================================
++ eeschema
+  * A wxStdDialogButtonSizer is now used within the "EESchema Colors" dialog box,
+    meaning that the sequence of the "OK", "Cancel", and "Apply" buttons within
+    that dialog now depends upon which (OS) version of KiCad is being used (and
+    thus matching the nature of the corresponding dialogs within Pcbnew and GerbView
+    in that regard). (As of yet, the vertical distance between adjacent controls
+    does not increase when this dialog is resized, but that aspect will also be
+    implemented when time permits.)
 + gerbview
   * The "GerbView Layer Colors:" dialog box has been updated, and is now similar
     in nature to the corresponding dialogs within EESchema and Pcbnew. Tool tips
