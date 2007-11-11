@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-11-11 01:36+0300\n"
+"PO-Revision-Date: 2007-11-11 22:29+0300\n"
 "Last-Translator: Igor Plyatov <plyatov@mail.ru>\n"
 "Language-Team: russian\n"
 "MIME-Version: 1.0\n"
@@ -30,13 +30,12 @@ msgstr "Список истории:"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/common/get_component_dialog.cpp:112
 #: /home/plyatov/Projects/Programming/kicad-svn/common/displlst.cpp:99
-#: /home/plyatov/Projects/Programming/kicad-svn/common/selcolor.cpp:165
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/reglage.cpp:108
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/options.cpp:165
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/options.cpp:289
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.cpp:249
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.cpp:325
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/sheetlab.cpp:93
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.cpp:248
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.cpp:251
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:118
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/pcbtexte.cpp:111
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/sel_layer.cpp:158
@@ -55,20 +54,19 @@ msgstr "Поиск ключевого слова"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/common/get_component_dialog.cpp:121
 #: /home/plyatov/Projects/Programming/kicad-svn/common/displlst.cpp:103
-#: /home/plyatov/Projects/Programming/kicad-svn/common/selcolor.cpp:169
-#: /home/plyatov/Projects/Programming/kicad-svn/common/selcolor.cpp:186
+#: /home/plyatov/Projects/Programming/kicad-svn/common/selcolor.cpp:170
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/reglage.cpp:112
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/onrightclick.cpp:40
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/onrightclick.cpp:59
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/options.cpp:169
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/options.cpp:293
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.cpp:253
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.cpp:329
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit_onrightclick.cpp:68
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit_onrightclick.cpp:83
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:121
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:133
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/sheetlab.cpp:97
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.cpp:252
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.cpp:255
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:122
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/pcbtexte.cpp:116
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/sel_layer.cpp:162
@@ -368,7 +366,6 @@ msgstr "Doc файл"
 #: /home/plyatov/Projects/Programming/kicad-svn/common/eda_doc.cpp:144
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/dcode.cpp:260
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/readgerb.cpp:145
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:113
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:250
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:258
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:699
@@ -633,7 +630,6 @@ msgstr ""
 
 #: /home/plyatov/Projects/Programming/kicad-svn/cvpcb/dialog_display_options.cpp:195
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:354
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.cpp:256
 msgid "&Apply"
 msgstr ""
 
@@ -936,7 +932,7 @@ msgstr "Конфигурация"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:46
 msgid "View selected part"
-msgstr "Просмотр выбранного компонента"
+msgstr "Просмотр выбранного элемента"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:49
 msgid "Automatic Association"
@@ -2330,22 +2326,28 @@ msgstr "Слишком много вложенных файлов!"
 msgid "%d errors while reading Gerber file [%s]"
 msgstr "%d ошибок при чтении Gerber файла [%s]"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.cpp:151
-msgid "GerbView Layer Colors:"
-msgstr "Цвета слоев Gerbview:"
-
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.cpp:236
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/set_color.cpp:278
-msgid "Show All"
-msgstr "Показывать все"
-
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.cpp:241
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.cpp:258
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.cpp:285
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/set_color.cpp:269
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/set_color.cpp:296
 msgid "Show None"
 msgstr "Не показывать все"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.cpp:257
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.cpp:267
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/set_color.cpp:278
+msgid "Show All"
+msgstr "Показывать все"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.cpp:279
+msgid "Switch on all of the Gerber layers"
+msgstr "Включить все слои Gerber"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.cpp:288
+msgid "Switch off all of the Gerber layers"
+msgstr "Выключить все слои Gerber"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.cpp:333
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.cpp:259
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/set_color.cpp:361
 msgid "Apply"
 msgstr ""
@@ -2925,20 +2927,28 @@ msgid "  (Power Symbol)"
 msgstr ""
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:90
-msgid "Current Part not saved, continue ?"
-msgstr ""
+#, fuzzy
+msgid ""
+"Current Part not saved.\n"
+"Continue?"
+msgstr "Текущий элемент не сохранен. Продолжить?"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:113
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/librairi.cpp:642
-msgid "Component "
-msgstr "Компонент"
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:390
+msgid "Component \""
+msgstr "Компонент \""
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:113
+#, fuzzy
+msgid "\" not found."
+msgstr "  не найдено"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:235
 msgid "Modify Library File \""
 msgstr "Изменить файл библиотеки \""
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:235
-msgid "\" ?"
+msgid "\"?"
 msgstr ""
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:244
@@ -2946,7 +2956,8 @@ msgid "Error while saving Library File \""
 msgstr "Ошибка записи в файл библиотеки \""
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:244
-msgid "\""
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:391
+msgid "\"."
 msgstr ""
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:250
@@ -2982,17 +2993,9 @@ msgstr "\" из библиотеки \""
 msgid "Delete old component?"
 msgstr "Удалить старый компонент?"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:390
-msgid "Component \""
-msgstr "Компонент \""
-
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:391
 msgid "\" exists in library \""
 msgstr "\" уже существует в библиотеке \""
-
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:391
-msgid "\"."
-msgstr ""
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:558
 msgid "No component to Save."
@@ -3654,12 +3657,12 @@ msgid ""
 "Library \"%s\" was modified!\n"
 "Discard changes?"
 msgstr ""
-"Библиотека была изменена!\n"
+"Библиотека \"%s\" была изменена!\n"
 "Игнорировать изменения?"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libframe.cpp:344
-msgid "Include last component changes"
-msgstr "Включая последние изменения компонента"
+msgid "Include last component changes?"
+msgstr "Включая последние изменения компонента?"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libframe.cpp:407
 msgid " Pins Test OK!"
@@ -3714,124 +3717,102 @@ msgid "Push/Pop Hierarchy"
 msgstr ""
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:286
-#, fuzzy
 msgid "Add NoConnect Flag"
-msgstr "Addition de symboles de non connexion"
+msgstr "Добавить флаг Нет Соединения"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:290
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/hotkeys.cpp:262
-#, fuzzy
 msgid "Add Wire"
-msgstr "Fin Fil"
+msgstr "Добавить проводник"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:294
-#, fuzzy
 msgid "Add Bus"
-msgstr "Addition de Bus"
+msgstr "Добавить шину"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:298
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/modedit.cpp:408
-#, fuzzy
 msgid "Add Drawing"
-msgstr "Déplace Tracé"
+msgstr "Добавить графическую линию"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:302
-#, fuzzy
 msgid "Add Junction"
-msgstr "Addition de jonctions"
+msgstr "Добавить соединение"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:306
-#, fuzzy
 msgid "Add Label"
-msgstr "Addition de labels globaux"
+msgstr "Добавить метку"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:310
-#, fuzzy
 msgid "Add Global label"
-msgstr "Addition de labels globaux"
+msgstr "Добавить глобальную метку"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:318
-#, fuzzy
 msgid "Add Wire to Bus Entry"
-msgstr "Addition d'entrées de bus (type fil vers bus)"
+msgstr "Добавить ввод проводника в шину"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:322
-#, fuzzy
 msgid "Add Bus to Bus entry"
-msgstr "Addition d'entrées de bus (type bus vers bus)"
+msgstr "Добавить ввод шины в шину"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:326
-#, fuzzy
 msgid "Add Sheet"
-msgstr "Addition d'un symbole de feuille de hiérarchie"
+msgstr "Добавить лист"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:330
-#, fuzzy
 msgid "Add PinSheet"
-msgstr "Déplace Connecteur de hiérarchie"
+msgstr "Добавить вывод для листа"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:334
-#, fuzzy
 msgid "Import PinSheet"
-msgstr "Déplace Connecteur de hiérarchie"
+msgstr "Импортировать вывод для листа"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:338
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/hotkeys.cpp:240
-#, fuzzy
 msgid "Add Component"
-msgstr "Déplace Composant \t(M)"
+msgstr "Добавить компонент"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:342
-#, fuzzy
 msgid "Add Power"
-msgstr "Power In"
+msgstr "Добавить питание"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit.cpp:22
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit-dialog.cpp:317
-#, fuzzy
 msgid "line"
-msgstr "Ligne"
+msgstr "прямой"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit.cpp:22
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit-dialog.cpp:318
-#, fuzzy
 msgid "invert"
-msgstr "invert"
+msgstr "инверсный"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit.cpp:22
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit-dialog.cpp:319
-#, fuzzy
 msgid "clock"
-msgstr "clock"
+msgstr "тактовый"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit.cpp:22
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit-dialog.cpp:320
-#, fuzzy
 msgid "clock inv"
-msgstr "clock inv"
+msgstr "тактовый инв."
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit.cpp:23
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit-dialog.cpp:321
-#, fuzzy
 msgid "low in"
-msgstr "low in"
+msgstr "инв. вход"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit.cpp:23
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit-dialog.cpp:322
-#, fuzzy
 msgid "low clock"
-msgstr "low clock"
+msgstr "инв. тактовый"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit.cpp:23
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit-dialog.cpp:323
-#, fuzzy
 msgid "low out"
-msgstr "low out"
+msgstr "инв. выход"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit.cpp:189
-#, fuzzy
-msgid "Occupied by other pin, Continue ?"
-msgstr "Occupé une autre pin, Continuer ?"
+msgid "Occupied by other pin. Continue?"
+msgstr "Занято дугим выводом. Продолжить?"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit.cpp:874
 #, c-format
@@ -3839,9 +3820,9 @@ msgid "Duplicate Pin %4.4s (Pin %s loc %d, %d, and Pin %s loc %d, %d)"
 msgstr "Копировать Вывод %4.4s (Вывод %s коорд %d, %d, и Вывод %s коорд %d, %d)"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit.cpp:879
-#, fuzzy, c-format
-msgid "  Unit %d"
-msgstr "  Unité %d"
+#, c-format
+msgid "  Part %d"
+msgstr " Часть %d"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit.cpp:884
 #, fuzzy
@@ -4090,7 +4071,7 @@ msgstr "Требуется значение! Не изменено"
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_create_component.cpp:164
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_netlist.cpp:133
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board_item.cpp:76
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:152
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:153
 msgid "Reference"
 msgstr "Ссылка"
 
@@ -4100,7 +4081,7 @@ msgstr "Ссылка"
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_text_mod.cpp:345
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_edge_mod.cpp:286
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board_item.cpp:80
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:158
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:159
 msgid "Value"
 msgstr "Значение"
 
@@ -4415,7 +4396,7 @@ msgid "Ref"
 msgstr "Ref"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/component_class.cpp:57
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:171
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:172
 #, fuzzy
 msgid "Sheet"
 msgstr ""
@@ -5101,7 +5082,7 @@ msgstr "Justifié en haut"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_lib.cpp:484
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_component_in_schematic.cpp:225
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:164
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:165
 #, fuzzy
 msgid "Fields"
 msgstr "Поля"
@@ -5143,9 +5124,8 @@ msgid "New alias:"
 msgstr "Noveau alias"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_lib.cpp:923
-#, fuzzy
 msgid "This is the Root Part"
-msgstr "Ceci est le composant racine"
+msgstr "Это корневой элемент"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_lib.cpp:932
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_lib.cpp:1200
@@ -5168,9 +5148,8 @@ msgid "Create pins for Convert items"
 msgstr "Créér les pins des unitées converties"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_lib.cpp:1084
-#, fuzzy
 msgid "Part as \"De Morgan\" anymore"
-msgstr "Le composant a une représentation convertie"
+msgstr ""
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_lib.cpp:1109
 #, fuzzy
@@ -5416,7 +5395,7 @@ msgstr "выбор компонента (загружено %d штук(и)):"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/getpart.cpp:171
 msgid "Failed to find part "
-msgstr "Не удалось найти компонент "
+msgstr "Не удалось найти элемент "
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/getpart.cpp:171
 msgid " in library"
@@ -5549,9 +5528,8 @@ msgid "Failed to open Symbol File <%s>"
 msgstr "Ne peut pas ouvrir fichier <%s>"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/symbedit.cpp:87
-#, fuzzy
 msgid "Warning: more than 1 part in Symbol File"
-msgstr "Warning: plus de 1élément dans le fichier symbole"
+msgstr "Внимание: больше 1 элемента в файле символа"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/symbedit.cpp:92
 #, fuzzy
@@ -5609,7 +5587,7 @@ msgid "PinName"
 msgstr "Nom Pin"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/affiche.cpp:80
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:140
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:141
 #, fuzzy
 msgid "PinNum"
 msgstr "Num Pin :"
@@ -5711,24 +5689,24 @@ msgid "Browse library: "
 msgstr "Sélection de la librairie a examiner"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/viewlibs.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Current Part: <%s> (is Alias of <%s>)"
-msgstr "Cmp courant: <%s> (est Alias de <%s>)"
+msgstr "Текущий элемент: <%s> (псевдоним для <%s>)"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/viewlibs.cpp:313
-#, fuzzy, c-format
+#, c-format
 msgid "Error: Root Part <%s> not found"
-msgstr "Erreur: Root Part <%s> non trouvé"
+msgstr "Ошибка: Корневой элемент <%s> не найден"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/viewlibs.cpp:332
-#, fuzzy, c-format
+#, c-format
 msgid "Current Part: <%s>"
-msgstr "Cmp Courant: <%s>"
+msgstr "Текущий элемент: <%s>"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.cpp:223
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:585
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:246
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:209
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:324
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:210
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/set_color.h:414
 msgid "Grid"
 msgstr "Сетка"
@@ -6282,7 +6260,7 @@ msgid "Connect"
 msgstr "Connect"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board.cpp:329
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:115
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:116
 #, fuzzy
 msgid "NoConn"
 msgstr "Non Conn"
@@ -6829,6 +6807,10 @@ msgstr "Fichier %s n'est pas une librairie eeschema"
 #, fuzzy
 msgid "Module exists Line "
 msgstr "Module existe Ligne %d"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/librairi.cpp:642
+msgid "Component "
+msgstr "Компонент"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/librairi.cpp:643
 #, fuzzy
@@ -7395,9 +7377,8 @@ msgid "Create new library and save current module"
 msgstr ""
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:65
-#, fuzzy
 msgid "Delete part in current library"
-msgstr "Effacer composant en librairie de travail"
+msgstr "Удалить элемент из текущей библиотеки"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:70
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/xchgmod.cpp:156
@@ -7583,7 +7564,7 @@ msgstr ""
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/drc.cpp:361
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/drc.cpp:439
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:103
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:104
 #, fuzzy
 msgid "Netname"
 msgstr "NetName"
@@ -10493,147 +10474,151 @@ msgstr "Печать"
 msgid "Page Settings"
 msgstr "Настройки страницы"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:5
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:38
+msgid "GerbView Layer Colors:"
+msgstr "Цвета слоев Gerbview:"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:80
 msgid "Layers 1-16"
 msgstr "Слои 1-16"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:10
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:86
 msgid "Layer 1"
 msgstr "Слой 1"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:17
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:93
 msgid "Layer 2"
 msgstr "Слой 2"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:24
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:100
 msgid "Layer 3"
 msgstr "Слой 3"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:31
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:107
 msgid "Layer 4"
 msgstr "Слой 4"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:38
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:114
 msgid "Layer 5"
 msgstr "Слой 5"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:45
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:121
 msgid "Layer 6"
 msgstr "Слой 6"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:52
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:128
 msgid "Layer 7"
 msgstr "Слой 7"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:59
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:135
 msgid "Layer 8"
 msgstr "Слой 8"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:66
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:142
 msgid "Layer 9"
 msgstr "Слой 9"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:73
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:149
 msgid "Layer 10"
 msgstr "Слой 10"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:80
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:156
 msgid "Layer 11"
 msgstr "Слой 11"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:87
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:163
 msgid "Layer 12"
 msgstr "Слой 12"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:94
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:170
 msgid "Layer 13"
 msgstr "Слой 13"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:101
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:177
 msgid "Layer 14"
 msgstr "Слой 14"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:108
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:184
 msgid "Layer 15"
 msgstr "Слой 15"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:115
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:191
 msgid "Layer 16"
 msgstr "Слой 16"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:122
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:199
 msgid "Layers 17-32"
 msgstr "Слои 17-32"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:127
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:205
 msgid "Layer 17"
 msgstr "Слой 17"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:134
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:212
 msgid "Layer 18"
 msgstr "Слой 18"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:141
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:219
 msgid "Layer 19"
 msgstr "Слой 19"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:148
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:226
 msgid "Layer 20"
 msgstr "Слой 20"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:155
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:233
 msgid "Layer 21"
 msgstr "Слой 21"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:162
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:240
 msgid "Layer 22"
 msgstr "Слой 22"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:169
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:247
 msgid "Layer 23"
 msgstr "Слой 23"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:176
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:254
 msgid "Layer 24"
 msgstr "Слой 24"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:183
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:261
 msgid "Layer 25"
 msgstr "Слой 25"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:190
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:268
 msgid "Layer 26"
 msgstr "Слой 26"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:197
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:275
 msgid "Layer 27"
 msgstr "Слой 27"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:204
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:282
 msgid "Layer 28"
 msgstr "Слой 28"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:211
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:289
 msgid "Layer 29"
 msgstr "Слой 29"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:218
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:296
 msgid "Layer 30"
 msgstr "Слой 30"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:225
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:303
 msgid "Layer 31"
 msgstr "Слой 31"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:232
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:310
 msgid "Layer 32"
 msgstr "Слой 32"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:240
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:318
 msgid "Others"
 msgstr "Прочие"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:254
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:332
 msgid "D codes id."
 msgstr ""
 
@@ -10698,102 +10683,102 @@ msgstr "EESchema аннотация"
 msgid "EESchema Erc"
 msgstr "EESchema Erc"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:34
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:35
 #, fuzzy
 msgid "EESchema Colors"
 msgstr "EESchema Erc"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:73
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:74
 #, fuzzy
 msgid "Wire"
 msgstr "Каркас"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:79
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:80
 #, fuzzy
 msgid "Bus"
 msgstr "Fin Bus"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:85
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:86
 #, fuzzy
 msgid "Junction"
 msgstr "Effacer jonction"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:91
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:92
 #, fuzzy
 msgid "Label"
 msgstr "Метка"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:97
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:98
 msgid "GlobLabel"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:109
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:110
 #, fuzzy
 msgid "Notes"
 msgstr "Примечания"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:122
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:123
 #, fuzzy
 msgid "Body"
 msgstr "Тело"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:128
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:129
 #, fuzzy
 msgid "Body Bg"
 msgstr "Пер.план/Фон"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:134
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:135
 #, fuzzy
 msgid "Pin"
 msgstr "Propriétés des Pins"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:146
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:147
 msgid "PinNam"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:177
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:178
 msgid "Sheetfile"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:183
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:184
 msgid "SheetName"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:189
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:190
 msgid "SheetLabel"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:196
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:197
 #, fuzzy
 msgid "Erc Warning"
 msgstr "%s: Предупреждение: Невозможно %s"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:202
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:203
 #, fuzzy
 msgid "Erc Error"
 msgstr "Erreur en création "
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:247
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:248
 #, fuzzy
 msgid "General"
 msgstr "Общие"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:253
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:254
 #, fuzzy
 msgid "Device"
 msgstr "Устройство"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:259
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:260
 #, fuzzy
 msgid "Sheets"
 msgstr "Nombre de feuille&: %d"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:265
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:266
 #, fuzzy
 msgid "Erc Mark"
 msgstr "Petite marque"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:271
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:272
 #, fuzzy
 msgid "Other"
 msgstr "Прочее"

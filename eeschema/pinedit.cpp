@@ -186,7 +186,7 @@ bool status;
 		if ( ask_for_pin )
 		{
 			DrawPanel->m_IgnoreMouseEvents = TRUE;
-			status = IsOK(this, _("Occupied by other pin, Continue ?"));
+			status = IsOK(this, _("Occupied by other pin. Continue?"));
 			DrawPanel->MouseToCursorSchema();
 			DrawPanel->m_IgnoreMouseEvents = FALSE;
 			if( ! status )
@@ -876,7 +876,7 @@ wxString msg;
 				Pin->m_PinName.GetData(), Pin->m_Pos.x, -Pin->m_Pos.y);
 		if ( CurrentLibEntry->m_UnitCount > 1 )
 		{
-			aux_msg.Printf( _("  Unit %d"), curr_pin->m_Unit);
+			aux_msg.Printf( _("  Part %d"), curr_pin->m_Unit);
 			msg += aux_msg;
 		}
 		if ( g_AsDeMorgan )

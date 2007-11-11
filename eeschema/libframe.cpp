@@ -341,7 +341,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_LIBEDIT_SAVE_CURRENT_LIB:
         if( m_CurrentScreen->IsModify() )
         {
-            if( IsOK( this, _( "Include last component changes" ) ) )
+            if( IsOK( this, _( "Include last component changes?" ) ) )
                 SaveOnePartInMemory();
         }
         SaveActiveLibrary();

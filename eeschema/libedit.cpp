@@ -87,7 +87,7 @@ EDA_LibComponentStruct *LibEntry = NULL;
 
 	if( ScreenLib->IsModify() )
 	{
-		if( ! IsOK(this, _("Current Part not saved, continue ?") ) ) return FALSE;
+		if( ! IsOK(this, _("Current Part not saved.\nContinue?") ) ) return FALSE;
 	}
 
 	if(CurrentLib == NULL) SelectActiveLibrary();
@@ -110,7 +110,7 @@ EDA_LibComponentStruct *LibEntry = NULL;
 
 	if( LibEntry == NULL)
 	{
-		msg = _("Component "); msg << CmpName << _(" not found");
+		msg = _("Component \""); msg << CmpName << _("\" not found.");
 		DisplayError(this, msg, 20);
 		return FALSE;
 	}
@@ -145,14 +145,14 @@ const wxChar * CmpName, *RootName = NULL;
 		RootName = ((EDA_LibCmpAliasStruct*)LibEntry)->m_RootName.GetData() ;
 		if( !noMsg )
 			{
-			msg.Printf( wxT("<%s> is Alias of <%s>"), CmpName, RootName);
+			msg.Printf( wxT("\"<%s>\" is Alias of \"<%s>\""), CmpName, RootName);
 			}
 
 		LibEntry = FindLibPart(RootName,Library->m_Name,FIND_ROOT);
 
 		if( LibEntry == NULL)
 			{
-			msg.Printf( wxT("Root Part <%s> not found"), RootName);
+			msg.Printf( wxT("Root Part \"<%s>\" not found."), RootName);
 			DisplayError(this, msg, 20);
 			return(1);
 			}
@@ -232,7 +232,7 @@ int err;
 
 	Name = MakeFileName(g_RealLibDirBuffer, CurrentLib->m_Name, g_LibExtBuffer);
 
-	msg = _("Modify Library File \"") + Name + _("\" ?");
+	msg = _("Modify Library File \"") + Name + _("\"?");
 	if( ! IsOK(this, msg) ) return;
 
 	err = SaveOneLibrary(this, Name, CurrentLib);
@@ -241,7 +241,7 @@ int err;
 
 	if ( err )
 	{
-		msg = _("Error while saving Library File \"") + Name + _("\"");
+		msg = _("Error while saving Library File \"") + Name + _("\".");
 		Affiche_1_Parametre(this, 1, wxT(" *** ERROR : **"), msg,BLUE);
 		DisplayError(this, msg);
 	}
