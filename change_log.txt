@@ -4,6 +4,14 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Nov-11 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++ pcbnew
+    Fixed modedit.cpp bug which occurred when selecting a non pad item (such
+    as a text field) in the module editor, then selecting Dimensions -> Pad Settings
+    in the module editor.
+
+    
 2007-Nov-11 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
 ================================================================================
 + eeschema & pcbnew & gerbview
@@ -28,8 +36,8 @@ email address.
 2007-Nov-10 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +eeschema:
-	More comprehensive dialog in netlist plugin interface.
-	Eeschema configuration now shows the plugin netlist list
+    More comprehensive dialog in netlist plugin interface.
+    Eeschema configuration now shows the plugin netlist list
 
 
 2007-Nov-09 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
@@ -48,7 +56,7 @@ email address.
 2007-Nov-02 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + all
-	removed not used files
+    removed not used files
 
 
 2007-Nov-07 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
@@ -1275,7 +1283,6 @@ email address.
     bug fix:
         crash libedit when loading certain components (linux only)
         incomplete generation of erc file list
-    
 
 
 2007-June-13 UPDATE   Richard A Burton <richardaburton@gmail.com>

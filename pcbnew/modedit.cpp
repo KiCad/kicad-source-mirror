@@ -49,19 +49,19 @@ BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
     m_Collector->Collect( m_Pcb, scanList, GetScreen()->RefPos( true ), guide );
 
     /* Remove redundancies: when an item is found, we can remove the
-	 * module from list
+     * module from list
      */
-	if( m_Collector->GetCount() > 1 )
-	{
-		for( int ii = 0;  ii < m_Collector->GetCount(); ii++ )
-		{
-			item = (*m_Collector)[ii];
-			if( item->Type() != TYPEMODULE )
-				continue;
-			m_Collector->Remove( ii );
-			ii--;
-		}
-	}
+    if( m_Collector->GetCount() > 1 )
+    {
+        for( int ii = 0;  ii < m_Collector->GetCount(); ii++ )
+        {
+            item = (*m_Collector)[ii];
+            if( item->Type() != TYPEMODULE )
+                continue;
+            m_Collector->Remove( ii );
+            ii--;
+        }
+    }
 
     if( m_Collector->GetCount() <= 1 )
     {
@@ -573,8 +573,13 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_PCB_PAD_SETUP:
-        InstallPadOptionsFrame( (D_PAD*) GetScreen()->GetCurItem(),
-                               &dc, pos );
+        {
+            BOARD_ITEM* item = GetCurItem();
+            if( item && item->Type()==TYPEPAD )
+                InstallPadOptionsFrame( (D_PAD*) item, &dc, pos );
+            else
+                InstallPadOptionsFrame( NULL, &dc, pos );
+        }
         break;
 
     case ID_PCB_USER_GRID_SETUP:
