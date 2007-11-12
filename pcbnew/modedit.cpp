@@ -575,10 +575,12 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_PCB_PAD_SETUP:
         {
             BOARD_ITEM* item = GetCurItem();
-            if( item && item->Type()==TYPEPAD )
-                InstallPadOptionsFrame( (D_PAD*) item, &dc, pos );
-            else
-                InstallPadOptionsFrame( NULL, &dc, pos );
+            if( item )
+            {
+                if( item->Type() != TYPEPAD )
+                    item = NULL;
+            }
+            InstallPadOptionsFrame( (D_PAD*) item, &dc, pos );
         }
         break;
 
