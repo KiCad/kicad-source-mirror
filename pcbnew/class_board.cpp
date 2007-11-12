@@ -664,7 +664,7 @@ out:
  */
 void BOARD::Show( int nestLevel, std::ostream& os )
 {
-    EDA_BaseStruct* p;
+    BOARD_ITEM* p;
     
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
@@ -672,42 +672,42 @@ void BOARD::Show( int nestLevel, std::ostream& os )
     // specialization of the output:
     NestedSpace( nestLevel+1, os ) << "<modules>\n";
     p = m_Modules;
-    for( ; p; p = p->Pnext )
+    for( ; p; p = p->Next() )
         p->Show( nestLevel+2, os );
     NestedSpace( nestLevel+1, os ) << "</modules>\n";
 
     NestedSpace( nestLevel+1, os ) << "<pdrawings>\n";
     p = m_Drawings;
-    for( ; p; p = p->Pnext )
+    for( ; p; p = p->Next() )
         p->Show( nestLevel+2, os );
     NestedSpace( nestLevel+1, os ) << "</pdrawings>\n";
     
     NestedSpace( nestLevel+1, os ) << "<nets>\n";
     p = m_Equipots;
-    for( ; p; p = p->Pnext )
+    for( ; p; p = p->Next() )
         p->Show( nestLevel+2, os );
     NestedSpace( nestLevel+1, os ) << "</nets>\n";
 
     NestedSpace( nestLevel+1, os ) << "<tracks>\n";
     p = m_Track;    
-    for( ; p; p = p->Pnext )
+    for( ; p; p = p->Next() )
         p->Show( nestLevel+2, os );
     NestedSpace( nestLevel+1, os ) << "</tracks>\n";
 
     NestedSpace( nestLevel+1, os ) << "<zones>\n";
     p = m_Zone;    
-    for( ; p; p = p->Pnext )
+    for( ; p; p = p->Next() )
         p->Show( nestLevel+2, os );
     NestedSpace( nestLevel+1, os ) << "</zones>\n";
 
     NestedSpace( nestLevel+1, os ) << "<zoneedges>\n";
     p = m_CurrentLimitZone;
-    for( ; p; p = p->Pnext )
+    for( ; p; p = p->Next() )
         p->Show( nestLevel+2, os );
     NestedSpace( nestLevel+1, os ) << "</zoneedges>\n";
     
-    p = m_Son;
-    for( ; p;  p = p->Pnext )
+    p = (BOARD_ITEM*) m_Son;
+    for( ; p;  p = p->Next() )
     {
         p->Show( nestLevel+1, os );
     }
