@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-11 08:12+0100\n"
-"PO-Revision-Date: 2007-11-11 08:24+0100\n"
+"POT-Creation-Date: 2007-11-13 07:45+0100\n"
+"PO-Revision-Date: 2007-11-13 07:45+0100\n"
 "Last-Translator: \n"
 "Language-Team: Polish KiCAD Team - Mateusz Skowroński <skowri@gmail.com>, Krzysztof Kawa <elektrotrans@wp.pl>\n"
 "MIME-Version: 1.0\n"
@@ -687,7 +687,6 @@ msgstr "Wyłącz na wszystkich warstwach ścieżek"
 #: kicad/eeschema/eelayer.cpp:251
 #: kicad/eeschema/sheetlab.cpp:93
 #: kicad/common/displlst.cpp:99
-#: kicad/common/selcolor.cpp:165
 #: kicad/common/get_component_dialog.cpp:112
 #: kicad/gerbview/set_color.cpp:325
 #: kicad/gerbview/reglage.cpp:108
@@ -717,8 +716,7 @@ msgstr "OK"
 #: kicad/eeschema/onrightclick.cpp:121
 #: kicad/eeschema/onrightclick.cpp:133
 #: kicad/common/displlst.cpp:103
-#: kicad/common/selcolor.cpp:169
-#: kicad/common/selcolor.cpp:186
+#: kicad/common/selcolor.cpp:171
 #: kicad/common/get_component_dialog.cpp:121
 #: kicad/gerbview/set_color.cpp:329
 #: kicad/gerbview/reglage.cpp:112
@@ -1119,7 +1117,6 @@ msgstr "Plik kopii zapasowej "
 #: kicad/eeschema/find.cpp:250
 #: kicad/eeschema/find.cpp:258
 #: kicad/eeschema/find.cpp:699
-#: kicad/eeschema/libedit.cpp:113
 #: kicad/common/eda_doc.cpp:144
 #: kicad/gerbview/readgerb.cpp:145
 #: kicad/gerbview/dcode.cpp:260
@@ -4411,7 +4408,6 @@ msgid "Module exists Line "
 msgstr "Moduł istnieje Linia "
 
 #: kicad/pcbnew/librairi.cpp:642
-#: kicad/eeschema/libedit.cpp:113
 msgid "Component "
 msgstr "Element "
 
@@ -7392,8 +7388,8 @@ msgid "low out"
 msgstr "Wyjście L"
 
 #: kicad/eeschema/pinedit.cpp:189
-msgid "Occupied by other pin, Continue ?"
-msgstr "Zajmowane przez inny pin, kontynuować?"
+msgid "Occupied by other pin. Continue?"
+msgstr "Zajmowane przez inny pin. Kontynuować?"
 
 #: kicad/eeschema/pinedit.cpp:874
 #, c-format
@@ -7402,8 +7398,8 @@ msgstr "Zduplikowany pin %4.4s (Pin %s lok. %d, %d, i Pin %s lok. %d, %d)"
 
 #: kicad/eeschema/pinedit.cpp:879
 #, c-format
-msgid "  Unit %d"
-msgstr "  Część %d"
+msgid "  Part %d"
+msgstr " Element %d"
 
 #: kicad/eeschema/pinedit.cpp:884
 msgid "  Convert"
@@ -7534,24 +7530,38 @@ msgid "  (Power Symbol)"
 msgstr " (Symbol zasilania)"
 
 #: kicad/eeschema/libedit.cpp:90
-msgid "Current Part not saved, continue ?"
-msgstr "Bieżący element nie został zapisany, kontynuować?"
+msgid ""
+"Current Part not saved.\n"
+"Continue?"
+msgstr ""
+"Bieżący element nie został zapisany.\n"
+"Kontynuować?"
+
+#: kicad/eeschema/libedit.cpp:113
+#: kicad/eeschema/libedit.cpp:390
+msgid "Component \""
+msgstr "Element \""
+
+#: kicad/eeschema/libedit.cpp:113
+msgid "\" not found."
+msgstr "\" nie znaleziony."
 
 #: kicad/eeschema/libedit.cpp:235
 msgid "Modify Library File \""
 msgstr "Czy zmodyfikować plik biblioteki \""
 
 #: kicad/eeschema/libedit.cpp:235
-msgid "\" ?"
-msgstr "\" ?"
+msgid "\"?"
+msgstr "\"?"
 
 #: kicad/eeschema/libedit.cpp:244
 msgid "Error while saving Library File \""
 msgstr "Błąd przy zapisie pliku biblioteki \""
 
 #: kicad/eeschema/libedit.cpp:244
-msgid "\""
-msgstr "\""
+#: kicad/eeschema/libedit.cpp:391
+msgid "\"."
+msgstr "\"."
 
 #: kicad/eeschema/libedit.cpp:250
 msgid "Library File \""
@@ -7586,17 +7596,9 @@ msgstr "\" z biblioteki \""
 msgid "Delete old component?"
 msgstr "Usunąć stary element?"
 
-#: kicad/eeschema/libedit.cpp:390
-msgid "Component \""
-msgstr "Element \""
-
 #: kicad/eeschema/libedit.cpp:391
 msgid "\" exists in library \""
 msgstr "\" istnieje w bibliotece \""
-
-#: kicad/eeschema/libedit.cpp:391
-msgid "\"."
-msgstr "\"."
 
 #: kicad/eeschema/libedit.cpp:558
 msgid "No component to Save."
@@ -8122,8 +8124,8 @@ msgstr ""
 "Porzucić zmiany?"
 
 #: kicad/eeschema/libframe.cpp:344
-msgid "Include last component changes"
-msgstr "Dołącz ostatnie zmiany elementu"
+msgid "Include last component changes?"
+msgstr "Dołączyć ostatnie zmiany elementu?"
 
 #: kicad/eeschema/libframe.cpp:407
 msgid " Pins Test OK!"
@@ -8303,7 +8305,7 @@ msgstr "Położenie pliku konfiguracyjnego klawiszy skrótów"
 msgid "Hotkey config file location selection (home directory or kicad tree)"
 msgstr "Wybór położenia pliku konfiguracyjnego klawiszy skrótów (katalog domowy lub drzewo katalogów kicada)"
 
-#: kicad/common/selcolor.cpp:75
+#: kicad/common/selcolor.cpp:76
 msgid "Colors"
 msgstr "Kolory"
 
@@ -10116,6 +10118,10 @@ msgstr "Pozostałe"
 msgid "D codes id."
 msgstr "ID kodu wiercenia"
 
+#~ msgid "  Unit %d"
+#~ msgstr "  Część %d"
+#~ msgid "\""
+#~ msgstr "\""
 #~ msgid "New part"
 #~ msgstr "Nowy element"
 #~ msgid "import part"
