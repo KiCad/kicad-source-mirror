@@ -24,6 +24,7 @@
 
 ////@begin includes
 #include "wx/valgen.h"
+#include "wx/statline.h"
 ////@end includes
 
 /*!
@@ -32,6 +33,8 @@
 
 ////@begin forward declarations
 class wxBoxSizer;
+class wxStaticLine;
+class wxStdDialogButtonSizer;
 ////@end forward declarations
 
 /*!
@@ -40,9 +43,9 @@ class wxBoxSizer;
 
 ////@begin control identifiers
 #define ID_DIALOG 10000
-#define ID_TEXTCTRL1 10002
+#define ID_TEXTCTRL_CLEARANCE 10002
 #define ID_CHECKBOX_PAD2PAD 10009
-#define ID_CHECKBOX 10008
+#define ID_CHECKBOX_UNCONNECTED 10008
 #define ID_CHECKBOX_TEST_ZONES 10007
 #define ID_CHECKBOX_CREATE_FILE 10012
 #define ID_DRC_RUN 10003
@@ -52,7 +55,8 @@ class wxBoxSizer;
 #define ID_BUTTON_BROWSE_RPT_FILE 10011
 #define ID_TEXTCTRL_GET_RPT_FILENAME 10010
 #define ID_TEXTCTRL 10001
-#define SYMBOL_WINEDA_DRCFRAME_STYLE wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|MAYBE_RESIZE_BORDER
+#define ID_STATICLINE 10013
+#define SYMBOL_WINEDA_DRCFRAME_STYLE wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER
 #define SYMBOL_WINEDA_DRCFRAME_TITLE _("DRC Control")
 #define SYMBOL_WINEDA_DRCFRAME_IDNAME ID_DIALOG
 #define SYMBOL_WINEDA_DRCFRAME_SIZE wxSize(400, 300)
@@ -80,7 +84,11 @@ public:
     /// Constructors
     WinEDA_DrcFrame( );
     WinEDA_DrcFrame( WinEDA_PcbFrame* parent, wxDC * panelDC,
-		wxWindowID id = SYMBOL_WINEDA_DRCFRAME_IDNAME, const wxString& caption = SYMBOL_WINEDA_DRCFRAME_TITLE, const wxPoint& pos = SYMBOL_WINEDA_DRCFRAME_POSITION, const wxSize& size = SYMBOL_WINEDA_DRCFRAME_SIZE, long style = SYMBOL_WINEDA_DRCFRAME_STYLE );
+                     wxWindowID id = SYMBOL_WINEDA_DRCFRAME_IDNAME,
+                     const wxString& caption = SYMBOL_WINEDA_DRCFRAME_TITLE,
+                     const wxPoint& pos = SYMBOL_WINEDA_DRCFRAME_POSITION,
+                     const wxSize& size = SYMBOL_WINEDA_DRCFRAME_SIZE,
+                     long style = SYMBOL_WINEDA_DRCFRAME_STYLE );
 
     /// Creation
     bool Create( wxWindow* parent, wxWindowID id = SYMBOL_WINEDA_DRCFRAME_IDNAME, const wxString& caption = SYMBOL_WINEDA_DRCFRAME_TITLE, const wxPoint& pos = SYMBOL_WINEDA_DRCFRAME_POSITION, const wxSize& size = SYMBOL_WINEDA_DRCFRAME_SIZE, long style = SYMBOL_WINEDA_DRCFRAME_STYLE );
@@ -92,9 +100,6 @@ public:
     virtual bool ProcessEvent( wxEvent& event );
 
 ////@begin WinEDA_DrcFrame event handler declarations
-
-    /// wxEVT_CLOSE_WINDOW event handler for ID_DIALOG
-    void OnCloseWindow( wxCloseEvent& event );
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_DRC_RUN
     void OnDrcRunClick( wxCommandEvent& event );
@@ -108,11 +113,14 @@ public:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_LIST_UNCONNECTED_PADS
     void OnListUnconnectedPadsClick( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CLOSE
-    void OnCloseClick( wxCommandEvent& event );
-
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_BROWSE_RPT_FILE
     void OnButtonBrowseRptFileClick( wxCommandEvent& event );
+
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
+    void OnOkClick( wxCommandEvent& event );
+
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
+    void OnCancelClick( wxCommandEvent& event );
 
 ////@end WinEDA_DrcFrame event handler declarations
 
@@ -128,9 +136,9 @@ public:
     /// Should we show tooltips?
     static bool ShowToolTips();
 
-	void TestDrc(wxCommandEvent & event);
-	void DelDRCMarkers(wxCommandEvent & event);
-	void ListUnconnectedPads(wxCommandEvent & event);
+    void TestDrc(wxCommandEvent & event);
+    void DelDRCMarkers(wxCommandEvent & event);
+    void ListUnconnectedPads(wxCommandEvent & event);
 
 ////@begin WinEDA_DrcFrame member variables
     wxBoxSizer* m_MainSizer;
@@ -143,10 +151,12 @@ public:
     wxCheckBox* m_CreateRptCtrl;
     wxTextCtrl* m_RptFilenameCtrl;
     wxTextCtrl* m_logWindow;
+    wxStaticLine* Line;
+    wxStdDialogButtonSizer* StdDialogButtonSizer;
 ////@end WinEDA_DrcFrame member variables
-	WinEDA_PcbFrame * m_Parent;
-	wxDC * m_DC;
-	int m_UnconnectedCount;
+    WinEDA_PcbFrame * m_Parent;
+    wxDC * m_DC;
+    int m_UnconnectedCount;
 };
 
 #endif

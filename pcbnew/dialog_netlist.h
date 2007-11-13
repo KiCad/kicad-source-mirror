@@ -21,6 +21,7 @@
 
 ////@begin includes
 #include "wx/valgen.h"
+#include "wx/statline.h"
 ////@end includes
 
 /*!
@@ -28,6 +29,7 @@
  */
 
 ////@begin forward declarations
+class wxStdDialogButtonSizer;
 ////@end forward declarations
 
 /*!
@@ -36,11 +38,6 @@
 
 ////@begin control identifiers
 #define ID_DIALOG 10000
-#define SYMBOL_WINEDA_NETLISTFRAME_STYLE wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|MAYBE_RESIZE_BORDER
-#define SYMBOL_WINEDA_NETLISTFRAME_TITLE _("Netlist: ")
-#define SYMBOL_WINEDA_NETLISTFRAME_IDNAME ID_DIALOG
-#define SYMBOL_WINEDA_NETLISTFRAME_SIZE wxSize(400, 300)
-#define SYMBOL_WINEDA_NETLISTFRAME_POSITION wxDefaultPosition
 #define ID_RADIOBOX 10005
 #define ID_RADIOBOX1 10006
 #define ID_RADIOBOX2 10007
@@ -50,6 +47,12 @@
 #define ID_TEST_NETLIST 10003
 #define ID_COMPILE_RATSNEST 10004
 #define ID_TEXTCTRL 10009
+#define ID_STATICLINE 10010
+#define SYMBOL_WINEDA_NETLISTFRAME_STYLE wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER
+#define SYMBOL_WINEDA_NETLISTFRAME_TITLE _("Netlist: ")
+#define SYMBOL_WINEDA_NETLISTFRAME_IDNAME ID_DIALOG
+#define SYMBOL_WINEDA_NETLISTFRAME_SIZE wxSize(400, 300)
+#define SYMBOL_WINEDA_NETLISTFRAME_POSITION wxDefaultPosition
 ////@end control identifiers
 
 /*!
@@ -95,8 +98,8 @@ public:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_COMPILE_RATSNEST
     void OnCompileRatsnestClick( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CLOSE
-    void OnCloseClick( wxCommandEvent& event );
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
+    void OnCancelClick( wxCommandEvent& event );
 
 ////@end WinEDA_NetlistFrame event handler declarations
 
@@ -112,17 +115,16 @@ public:
     /// Should we show tooltips?
     static bool ShowToolTips();
 
-	void ReadPcbNetlist(wxCommandEvent& event);
-	void Set_NetlisteName(wxCommandEvent& event);
-	bool OpenNetlistFile(wxCommandEvent& event);
-	int BuildListeNetModules(wxCommandEvent& event, wxArrayString & BufName);
-	void ModulesControle(wxCommandEvent& event);
-	int ReadListeModules(const wxString * RefCmp, long TimeStamp, wxString & NameModule);
-	int SetPadNetName( char * Line, MODULE * Module);
-	MODULE * ReadNetModule( char * Text,
-						int * UseFichCmp, int TstOnly);
-	void AddToList(const wxString & NameLibCmp, const wxString & NameCmp,int TimeStamp );
-	void LoadListeModules(wxDC *DC);
+    void ReadPcbNetlist(wxCommandEvent& event);
+    void Set_NetlisteName(wxCommandEvent& event);
+    bool OpenNetlistFile(wxCommandEvent& event);
+    int BuildListeNetModules(wxCommandEvent& event, wxArrayString & BufName);
+    void ModulesControle(wxCommandEvent& event);
+    int ReadListeModules(const wxString * RefCmp, long TimeStamp, wxString & NameModule);
+    int SetPadNetName( char * Line, MODULE * Module);
+    MODULE * ReadNetModule( char * Text, int * UseFichCmp, int TstOnly);
+    void AddToList(const wxString & NameLibCmp, const wxString & NameCmp,int TimeStamp );
+    void LoadListeModules(wxDC *DC);
 
 ////@begin WinEDA_NetlistFrame member variables
     wxRadioBox* m_Select_By_Timestamp;
@@ -130,9 +132,10 @@ public:
     wxRadioBox* m_ChangeExistantModuleCtrl;
     wxCheckBox* m_DisplayWarningCtrl;
     wxTextCtrl* m_MessageWindow;
+    wxStdDialogButtonSizer* StdDialogButtonSizer;
 ////@end WinEDA_NetlistFrame member variables
-	WinEDA_PcbFrame * m_Parent;
-	wxDC * m_DC;
+    WinEDA_PcbFrame * m_Parent;
+    wxDC * m_DC;
 };
 
 #endif

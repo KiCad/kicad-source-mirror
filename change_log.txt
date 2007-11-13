@@ -4,6 +4,18 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Nov-13 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
+================================================================================
++ eeschema & pcbnew
+  * The "Page Settings" dialog box has been enhanced; it now includes a
+    wxStdDialogButtonSizer, and is also now designed to be expandable.
++ pcbnew
+  * The "DRC Control" and "Netlist:" dialog boxes have also been enhanced. Each
+    of those dialogs now includes a wxStdDialogButtonSizer and a "Cancel" button,
+    (so each of those dialogs can now (otherwise) be cancelled by pressing the
+    "Esc" key), and is also now designed to be expandable.
+
+
 2007-Nov-11 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew
