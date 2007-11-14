@@ -598,20 +598,29 @@ wxString    ReturnHotkeyConfigFilePath( int choice )
 void AddHotkeyConfigMenu( wxMenu* menu )
 /***************************************/
 
-/* add hotkey config options to a menu
- * @parm menu : initial menu
+/** add hotkey config options to a menu
+ * @param menu : initial menu
  */
 {
     wxMenuItem* item;
 
     if( menu == NULL )
         return;
+
+    item = new wxMenuItem( menu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
+                           _( "Show Current Hotkey List" ),
+                           _( "Show the current hotkey config" )
+                           );
+    item->SetBitmap( info_xpm );
+    menu->Append( item );
+
     item = new wxMenuItem( menu, ID_PREFERENCES_CREATE_CONFIG_HOTKEYS,
                            _( "Create Hotkey config file" ),
                            _( "Create or Recreate the hotkey config file from current hotkey list" )
                            );
     item->SetBitmap( save_setup_xpm );
     menu->Append( item );
+
     item = new wxMenuItem( menu, ID_PREFERENCES_READ_CONFIG_HOTKEYS,
                           _( "Reread Hotkey config file" ),
                           _( "Reread the hotkey config file" ) );

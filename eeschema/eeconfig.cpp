@@ -101,6 +101,10 @@ wxString FullFileName;
 			HandleHotkeyConfigMenuSelection( this, id );
 			break;
 
+		case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:       // Display Current hotkey list for eeschema
+			DisplayHotkeyList( this, s_Schematic_Hokeys_Descr );
+			break;
+
 		default:
 			DisplayError(this, wxT("WinEDA_SchematicFrame::Process_Config internal error") );
 	}
