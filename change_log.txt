@@ -4,6 +4,12 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with 
 email address.
 
+2007-Nov-15 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+	Removed a bug (function Delete_Zone() ) which crashes pcbnew when erasing a zone by popup menu
+
+
 2007-Nov-13 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
 ================================================================================
 + eeschema & pcbnew

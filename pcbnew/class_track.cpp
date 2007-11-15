@@ -340,7 +340,7 @@ void SEGVIA::ReturnLayerPair( int* top_layer, int* bottom_layer ) const
 }
 
 
-/* Remove this from the track linked list
+/* Remove this from the track or zone linked list
  */
 void TRACK::UnLink()
 {

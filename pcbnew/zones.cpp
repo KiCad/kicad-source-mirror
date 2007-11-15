@@ -437,24 +437,27 @@ void WinEDA_PcbFrame::Edit_Zone_Width( wxDC* DC, SEGZONE* aZone )
 void WinEDA_PcbFrame::Delete_Zone( wxDC* DC, SEGZONE* aZone )
 /**********************************************************/
 
-/* Efface la zone Zone.
- *  La zone est constituee des segments zones de meme TimeStamp
+/* Remove the zone which include the segment aZone.
+ *  A zone is a group of segments which have the same TimeStamp
  */
 {
+	if ( aZone == NULL ) return;
+
     int           nb_segm = 0;
     bool          modify  = FALSE;
+	unsigned long TimeStamp = aZone->m_TimeStamp;	// Save reference time stamp (aZone will be deleted)
 
     SEGZONE* next;
-    for( SEGZONE* zone = m_Pcb->m_Zone;   zone;   zone = next )
+    for( SEGZONE* zone = m_Pcb->m_Zone; zone != NULL; zone = next )
     {
         next = zone->Next();
-        
-        if( zone->m_TimeStamp == aZone->m_TimeStamp )
+        if( zone->m_TimeStamp == TimeStamp )
         {
             modify = TRUE;
             
-            /* effacement des segments a l'ecran */
+            /* Erase segment from screen */
             Trace_Une_Piste( DrawPanel, DC, zone, nb_segm, GR_XOR );
+			/* remove item from linked list and free memory */
             zone->DeleteStructure();
         }
     }

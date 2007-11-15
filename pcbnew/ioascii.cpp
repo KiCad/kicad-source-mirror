@@ -1020,7 +1020,7 @@ int WinEDA_PcbFrame::ReadPcbFile( wxDC* DC, FILE* File, bool Append )
 
             if( Append )
             {
-                for( ; StartTrack != NULL; StartTrack = (TRACK*) StartTrack->Pnext )
+                for( ; StartTrack != NULL; StartTrack = StartTrack->Next() )
                 {
                     if( StartTrack->Pnext == NULL )
                         break;
@@ -1037,11 +1037,11 @@ int WinEDA_PcbFrame::ReadPcbFile( wxDC* DC, FILE* File, bool Append )
 
         if( strnicmp( Line, "$ZONE", 5 ) == 0 )
         {
-            TRACK* StartZone = m_Pcb->m_Zone;
+            SEGZONE* StartZone = m_Pcb->m_Zone;
 
             if( Append )
             {
-                for( ; StartZone != NULL; StartZone = (TRACK*) StartZone->Pnext )
+                for( ; StartZone != NULL; StartZone = StartZone->Next() )
                 {
                     if( StartZone->Pnext == NULL )
                         break;
