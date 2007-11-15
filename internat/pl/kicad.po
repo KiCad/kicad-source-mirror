@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-13 07:45+0100\n"
-"PO-Revision-Date: 2007-11-13 07:45+0100\n"
+"POT-Creation-Date: 2007-11-15 21:11+0100\n"
+"PO-Revision-Date: 2007-11-15 21:15+0100\n"
 "Last-Translator: \n"
 "Language-Team: Polish KiCAD Team - Mateusz Skowroński <skowri@gmail.com>, Krzysztof Kawa <elektrotrans@wp.pl>\n"
 "MIME-Version: 1.0\n"
@@ -409,7 +409,7 @@ msgid "Pcb Text"
 msgstr "Tekst PCB"
 
 #: kicad/pcbnew/class_board_item.cpp:76
-#: kicad/pcbnew/dialog_netlist.cpp:133
+#: kicad/pcbnew/dialog_netlist.cpp:135
 #: kicad/eeschema/edit_component_in_schematic.cpp:745
 #: kicad/eeschema/dialog_create_component.cpp:164
 #: kicad/eeschema/onrightclick.cpp:317
@@ -590,12 +590,13 @@ msgstr "Rozmiar poziomy tekstu modułu"
 #: kicad/pcbnew/set_grid.cpp:171
 #: kicad/pcbnew/dialog_pad_edit.cpp:217
 #: kicad/pcbnew/dialog_general_options.cpp:368
+#: kicad/pcbnew/dialog_drc.cpp:232
 #: kicad/pcbnew/swap_layers.cpp:219
 #: kicad/pcbnew/dialog_track_options.cpp:181
 #: kicad/pcbnew/dialog_edit_mod_text.cpp:213
 #: kicad/pcbnew/dialog_initpcb.cpp:161
 #: kicad/pcbnew/dialog_display_options.cpp:282
-#: kicad/share/setpage.cpp:232
+#: kicad/share/setpage.cpp:442
 #: kicad/eeschema/dialog_edit_label.cpp:174
 #: kicad/eeschema/symbtext.cpp:174
 #: kicad/eeschema/dialog_build_BOM.cpp:346
@@ -613,16 +614,18 @@ msgid "&OK"
 msgstr "&OK"
 
 #: kicad/pcbnew/dialog_graphic_items_options.cpp:265
+#: kicad/pcbnew/dialog_netlist.cpp:189
 #: kicad/pcbnew/zones.cpp:217
 #: kicad/pcbnew/set_grid.cpp:176
 #: kicad/pcbnew/dialog_pad_edit.cpp:221
 #: kicad/pcbnew/dialog_general_options.cpp:372
+#: kicad/pcbnew/dialog_drc.cpp:236
 #: kicad/pcbnew/swap_layers.cpp:223
 #: kicad/pcbnew/dialog_track_options.cpp:185
 #: kicad/pcbnew/dialog_edit_mod_text.cpp:217
 #: kicad/pcbnew/dialog_initpcb.cpp:164
 #: kicad/pcbnew/dialog_display_options.cpp:286
-#: kicad/share/setpage.cpp:237
+#: kicad/share/setpage.cpp:446
 #: kicad/eeschema/plothpgl.cpp:274
 #: kicad/eeschema/annotate_dialog.cpp:154
 #: kicad/eeschema/dialog_edit_label.cpp:179
@@ -1163,20 +1166,20 @@ msgstr "Zapisano plik płytki: "
 msgid "Failed to create "
 msgstr "Błąd przy tworzeniu "
 
-#: kicad/pcbnew/dialog_netlist.cpp:134
+#: kicad/pcbnew/dialog_netlist.cpp:136
 msgid "Timestamp"
 msgstr "Znacznik czasowy"
 
-#: kicad/pcbnew/dialog_netlist.cpp:136
+#: kicad/pcbnew/dialog_netlist.cpp:137
 msgid "Module Selection:"
 msgstr "Wybór modułu:"
 
-#: kicad/pcbnew/dialog_netlist.cpp:140
-#: kicad/pcbnew/dialog_netlist.cpp:147
+#: kicad/pcbnew/dialog_netlist.cpp:142
+#: kicad/pcbnew/dialog_netlist.cpp:149
 msgid "Keep"
 msgstr "Pozostaw"
 
-#: kicad/pcbnew/dialog_netlist.cpp:141
+#: kicad/pcbnew/dialog_netlist.cpp:143
 #: kicad/pcbnew/onrightclick.cpp:598
 #: kicad/pcbnew/onrightclick.cpp:708
 #: kicad/pcbnew/onrightclick.cpp:805
@@ -1185,46 +1188,37 @@ msgstr "Pozostaw"
 msgid "Delete"
 msgstr "Usuń"
 
-#: kicad/pcbnew/dialog_netlist.cpp:143
+#: kicad/pcbnew/dialog_netlist.cpp:144
 msgid "Bad Tracks Deletion:"
 msgstr "Usuwanie błędnych ścieżek:"
 
-#: kicad/pcbnew/dialog_netlist.cpp:148
+#: kicad/pcbnew/dialog_netlist.cpp:150
 msgid "Change"
 msgstr "Zmień"
 
-#: kicad/pcbnew/dialog_netlist.cpp:150
+#: kicad/pcbnew/dialog_netlist.cpp:151
 msgid "Exchange Module:"
 msgstr "Zamień moduł:"
 
-#: kicad/pcbnew/dialog_netlist.cpp:153
+#: kicad/pcbnew/dialog_netlist.cpp:155
 msgid "Display Warnings"
 msgstr "Pokazuj ostrzeżenia"
 
-#: kicad/pcbnew/dialog_netlist.cpp:162
+#: kicad/pcbnew/dialog_netlist.cpp:164
 msgid "Select"
 msgstr "Wybierz"
 
-#: kicad/pcbnew/dialog_netlist.cpp:166
+#: kicad/pcbnew/dialog_netlist.cpp:168
 msgid "Read"
 msgstr "Wczytaj"
 
-#: kicad/pcbnew/dialog_netlist.cpp:170
+#: kicad/pcbnew/dialog_netlist.cpp:172
 msgid "Module Test"
 msgstr "Test modułu"
 
-#: kicad/pcbnew/dialog_netlist.cpp:174
+#: kicad/pcbnew/dialog_netlist.cpp:176
 msgid "Compile"
 msgstr "Kompiluj"
-
-#: kicad/pcbnew/dialog_netlist.cpp:178
-#: kicad/pcbnew/dialog_drc.cpp:201
-#: kicad/pcbnew/gendrill.cpp:263
-#: kicad/share/dialog_print.cpp:225
-#: kicad/share/svg_print.cpp:222
-#: kicad/eeschema/plotps.cpp:208
-msgid "&Close"
-msgstr "&Zamknij"
 
 #: kicad/pcbnew/block.cpp:125
 msgid "Include Modules"
@@ -1235,7 +1229,7 @@ msgid "Include tracks"
 msgstr "Dołącz ścieżki"
 
 #: kicad/pcbnew/block.cpp:133
-#: kicad/pcbnew/dialog_drc.cpp:165
+#: kicad/pcbnew/dialog_drc.cpp:171
 msgid "Include zones"
 msgstr "Dołącz strefy"
 
@@ -1391,7 +1385,7 @@ msgid "Find Next Marker"
 msgstr "Znajdź następny znacznik"
 
 #: kicad/pcbnew/class_track.cpp:780
-#: kicad/pcbnew/zones.cpp:925
+#: kicad/pcbnew/zones.cpp:928
 msgid "NetName"
 msgstr "Nazwa sieci"
 
@@ -1820,19 +1814,19 @@ msgstr "Siatka :"
 msgid "New zone segment width: "
 msgstr "Szerokość segmentu nowej strefy: "
 
-#: kicad/pcbnew/zones.cpp:594
+#: kicad/pcbnew/zones.cpp:597
 msgid "Zone: No net selected"
 msgstr "Strefa: Nie zaznaczono żadnej sieci"
 
-#: kicad/pcbnew/zones.cpp:636
+#: kicad/pcbnew/zones.cpp:639
 msgid "Delete Current Zone Edges"
 msgstr "Usuń krawędzie bieżącej strefy"
 
-#: kicad/pcbnew/zones.cpp:923
+#: kicad/pcbnew/zones.cpp:926
 msgid "No Net"
 msgstr "Brak sieci"
 
-#: kicad/pcbnew/zones.cpp:995
+#: kicad/pcbnew/zones.cpp:998
 msgid "Ok"
 msgstr "Ok"
 
@@ -2594,7 +2588,7 @@ msgstr "Widok &3D"
 msgid "&Help"
 msgstr "Pomo&c"
 
-#: kicad/pcbnew/dialog_drc.cpp:141
+#: kicad/pcbnew/dialog_drc.cpp:147
 #: kicad/eeschema/dialog_erc.cpp:237
 #: kicad/eeschema/dialog_create_component.cpp:176
 #: kicad/eeschema/dialog_edit_component_in_schematic.cpp:201
@@ -2602,59 +2596,59 @@ msgstr "Pomo&c"
 msgid "Options"
 msgstr "Opcje"
 
-#: kicad/pcbnew/dialog_drc.cpp:145
+#: kicad/pcbnew/dialog_drc.cpp:151
 #: kicad/pcbnew/dialog_track_options.cpp:164
 msgid "Clearance"
 msgstr "Prześwit"
 
-#: kicad/pcbnew/dialog_drc.cpp:153
+#: kicad/pcbnew/dialog_drc.cpp:159
 msgid "Test Drc:"
 msgstr "Test DRC:"
 
-#: kicad/pcbnew/dialog_drc.cpp:157
+#: kicad/pcbnew/dialog_drc.cpp:163
 msgid "Include pad to pad test"
 msgstr "Dołącz test pole do pola"
 
-#: kicad/pcbnew/dialog_drc.cpp:161
+#: kicad/pcbnew/dialog_drc.cpp:167
 msgid "Include unconnected"
 msgstr "Dołącz \"nie połączone\""
 
-#: kicad/pcbnew/dialog_drc.cpp:169
+#: kicad/pcbnew/dialog_drc.cpp:175
 msgid "Create Report file"
 msgstr "Utwórz plik raportu"
 
-#: kicad/pcbnew/dialog_drc.cpp:182
+#: kicad/pcbnew/dialog_drc.cpp:190
 msgid "Test Drc"
 msgstr "Test DRC"
 
-#: kicad/pcbnew/dialog_drc.cpp:186
+#: kicad/pcbnew/dialog_drc.cpp:194
 msgid "Stop Drc"
 msgstr "Zatrzymaj DRC"
 
-#: kicad/pcbnew/dialog_drc.cpp:193
+#: kicad/pcbnew/dialog_drc.cpp:201
 msgid "Del Markers"
 msgstr "Usuń znaczniki"
 
-#: kicad/pcbnew/dialog_drc.cpp:197
+#: kicad/pcbnew/dialog_drc.cpp:205
 msgid "List Unconn"
 msgstr "Lista \"nie połączonych\""
 
-#: kicad/pcbnew/dialog_drc.cpp:204
+#: kicad/pcbnew/dialog_drc.cpp:209
 msgid "Report File"
 msgstr "Plik raportu"
 
-#: kicad/pcbnew/dialog_drc.cpp:208
+#: kicad/pcbnew/dialog_drc.cpp:213
 #: kicad/pcbnew/dialog_edit_module.cpp:395
 #: kicad/eeschema/dialog_eeschema_config.cpp:231
 msgid "Browse"
 msgstr "Przeglądaj"
 
-#: kicad/pcbnew/dialog_drc.cpp:215
+#: kicad/pcbnew/dialog_drc.cpp:220
 #: kicad/share/svg_print.cpp:232
 msgid "Messages:"
 msgstr "Wiadomości:"
 
-#: kicad/pcbnew/dialog_drc.cpp:350
+#: kicad/pcbnew/dialog_drc.cpp:342
 msgid "DRC Report file"
 msgstr "Plik raportu DRC"
 
@@ -3006,8 +3000,8 @@ msgstr "Wczytaj plik konfiguracji"
 msgid "File %s not found"
 msgstr "Nie znaleziono pliku %s"
 
-#: kicad/pcbnew/pcbcfg.cpp:192
-#: kicad/eeschema/eeconfig.cpp:188
+#: kicad/pcbnew/pcbcfg.cpp:196
+#: kicad/eeschema/eeconfig.cpp:192
 #: kicad/cvpcb/cfg.cpp:71
 msgid "Save preferences"
 msgstr "Zapisz ustawienia"
@@ -4220,6 +4214,13 @@ msgstr "Minimalny nagłówek"
 msgid "&Execute"
 msgstr "&Uruchom"
 
+#: kicad/pcbnew/gendrill.cpp:263
+#: kicad/share/dialog_print.cpp:225
+#: kicad/share/svg_print.cpp:222
+#: kicad/eeschema/plotps.cpp:208
+msgid "&Close"
+msgstr "&Zamknij"
+
 #: kicad/pcbnew/gendrill.cpp:380
 msgid "Drill file"
 msgstr "Plik wierceń"
@@ -5050,110 +5051,110 @@ msgstr "Wystąpił problem podczas drukowania"
 msgid "Print page %d"
 msgstr "Drukuj stronę %d"
 
-#: kicad/share/setpage.cpp:198
+#: kicad/share/setpage.cpp:274
 msgid "Size A4"
 msgstr "Rozmiar A4"
 
-#: kicad/share/setpage.cpp:199
+#: kicad/share/setpage.cpp:275
 msgid "Size A3"
 msgstr "Rozmiar A3"
 
-#: kicad/share/setpage.cpp:200
+#: kicad/share/setpage.cpp:276
 msgid "Size A2"
 msgstr "Rozmiar A2"
 
-#: kicad/share/setpage.cpp:201
+#: kicad/share/setpage.cpp:277
 msgid "Size A1"
 msgstr "Rozmiar A1"
 
-#: kicad/share/setpage.cpp:202
+#: kicad/share/setpage.cpp:278
 msgid "Size A0"
 msgstr "Rozmiar A0"
 
-#: kicad/share/setpage.cpp:203
+#: kicad/share/setpage.cpp:279
 msgid "Size A"
 msgstr "Rozmiar A"
 
-#: kicad/share/setpage.cpp:204
+#: kicad/share/setpage.cpp:280
 msgid "Size B"
 msgstr "Rozmiar B"
 
-#: kicad/share/setpage.cpp:205
+#: kicad/share/setpage.cpp:281
 msgid "Size C"
 msgstr "Rozmiar C"
 
-#: kicad/share/setpage.cpp:206
+#: kicad/share/setpage.cpp:282
 msgid "Size D"
 msgstr "Rozmiar D"
 
-#: kicad/share/setpage.cpp:207
+#: kicad/share/setpage.cpp:283
 msgid "Size E"
 msgstr "Rozmiar E"
 
-#: kicad/share/setpage.cpp:208
+#: kicad/share/setpage.cpp:284
 msgid "User size"
 msgstr "Rozmiar użytkownika"
 
-#: kicad/share/setpage.cpp:210
+#: kicad/share/setpage.cpp:285
 msgid "Page Size:"
 msgstr "Rozmiar strony:"
 
-#: kicad/share/setpage.cpp:214
+#: kicad/share/setpage.cpp:292
 msgid "User Page Size X: "
 msgstr "Rozmiar strony użytkownika X:"
 
-#: kicad/share/setpage.cpp:220
+#: kicad/share/setpage.cpp:301
 msgid "User Page Size Y: "
 msgstr "Rozmiar strony użytkownika Y:"
 
-#: kicad/share/setpage.cpp:244
+#: kicad/share/setpage.cpp:328
 #, c-format
 msgid "Number of sheets: %d"
 msgstr "Liczba arkuszy: %d"
 
-#: kicad/share/setpage.cpp:250
+#: kicad/share/setpage.cpp:334
 #, c-format
 msgid "Sheet number: %d"
 msgstr "Numer arkusza: %d"
 
-#: kicad/share/setpage.cpp:254
+#: kicad/share/setpage.cpp:338
 msgid "Revision:"
 msgstr "Poprawka:"
 
-#: kicad/share/setpage.cpp:262
+#: kicad/share/setpage.cpp:347
+#: kicad/share/setpage.cpp:361
+#: kicad/share/setpage.cpp:375
+#: kicad/share/setpage.cpp:389
+#: kicad/share/setpage.cpp:403
+#: kicad/share/setpage.cpp:417
+#: kicad/share/setpage.cpp:431
+msgid "Export to other sheets"
+msgstr "Przenieś na inne arkusze"
+
+#: kicad/share/setpage.cpp:352
 #: kicad/eeschema/netlist_control.cpp:428
 msgid "Title:"
 msgstr "Tytuł:"
 
-#: kicad/share/setpage.cpp:270
+#: kicad/share/setpage.cpp:366
 msgid "Company:"
 msgstr "Firma:"
 
-#: kicad/share/setpage.cpp:278
+#: kicad/share/setpage.cpp:380
 msgid "Comment1:"
 msgstr "Komentarz 1:"
 
-#: kicad/share/setpage.cpp:286
+#: kicad/share/setpage.cpp:394
 msgid "Comment2:"
 msgstr "Komentarz 2:"
 
-#: kicad/share/setpage.cpp:294
+#: kicad/share/setpage.cpp:408
 msgid "Comment3:"
 msgstr "Komentarz 3:"
 
-#: kicad/share/setpage.cpp:302
+#: kicad/share/setpage.cpp:422
 msgid "Comment4:"
 msgstr "Komentarz 4:"
-
-#: kicad/share/setpage.cpp:322
-#: kicad/share/setpage.cpp:324
-#: kicad/share/setpage.cpp:326
-#: kicad/share/setpage.cpp:328
-#: kicad/share/setpage.cpp:330
-#: kicad/share/setpage.cpp:332
-#: kicad/share/setpage.cpp:334
-msgid "Export to other sheets"
-msgstr "Przenieś na inne arkusze"
 
 #: kicad/share/svg_print.cpp:194
 msgid "Black and White"
@@ -8237,7 +8238,7 @@ msgid ""
 "Current hotkey list:\n"
 "\n"
 msgstr ""
-"Lista bieżących klawiszy skrótu:\n"
+"Lista bieżących klawiszy skrótów:\n"
 "\n"
 
 #: kicad/common/hotkeys_basic.cpp:309
@@ -8257,51 +8258,59 @@ msgstr "Dozwolone klawisze:\n"
 msgid "Unable to read "
 msgstr "Nie mogę odczytać "
 
-#: kicad/common/hotkeys_basic.cpp:610
+#: kicad/common/hotkeys_basic.cpp:611
+msgid "Show Current Hotkey List"
+msgstr "Pokaż bieżącą listę klawiszy skrótów"
+
+#: kicad/common/hotkeys_basic.cpp:612
+msgid "Show the current hotkey config"
+msgstr "Pokaż bieżącą konfigurację klawiszy skrótów"
+
+#: kicad/common/hotkeys_basic.cpp:618
 msgid "Create Hotkey config file"
 msgstr "Utwórz plik konfiguracyjny klawiszy skrótów"
 
-#: kicad/common/hotkeys_basic.cpp:611
+#: kicad/common/hotkeys_basic.cpp:619
 msgid "Create or Recreate the hotkey config file from current hotkey list"
 msgstr "Utwórz lub odtwórz plik konfiguracji klawiszy skrótów z bieżącej listy klawiszy skrótów"
 
-#: kicad/common/hotkeys_basic.cpp:616
+#: kicad/common/hotkeys_basic.cpp:625
 msgid "Reread Hotkey config file"
 msgstr "Wczytaj ponownie plik konfiguracyjny klawiszy skrótów"
 
-#: kicad/common/hotkeys_basic.cpp:617
+#: kicad/common/hotkeys_basic.cpp:626
 msgid "Reread the hotkey config file"
 msgstr "Wczytaj ponownie plik konfiguracji klawiszy skrótów"
 
-#: kicad/common/hotkeys_basic.cpp:621
+#: kicad/common/hotkeys_basic.cpp:630
 msgid "Edit Hotkey config file"
 msgstr "Edytuj plik konfiguracyjny klawiszy skrótów"
 
-#: kicad/common/hotkeys_basic.cpp:622
+#: kicad/common/hotkeys_basic.cpp:631
 msgid "Run the text editor and edit the hotkey config file"
 msgstr "Uruchom edytor tekstu, aby edytować plik konfiguracyjny klawiszy skrótów"
 
-#: kicad/common/hotkeys_basic.cpp:628
+#: kicad/common/hotkeys_basic.cpp:637
 msgid "home directory"
 msgstr "Katalog domowy"
 
-#: kicad/common/hotkeys_basic.cpp:629
+#: kicad/common/hotkeys_basic.cpp:638
 msgid "Use home directory to load or store Hotkey config files"
 msgstr "Użyj katalogu domowego, aby zapisywać lub wczytywać plik konfiguracyjny klawiszy skrótów"
 
-#: kicad/common/hotkeys_basic.cpp:634
+#: kicad/common/hotkeys_basic.cpp:643
 msgid "kicad/template directory"
 msgstr "Katalog kicad/template"
 
-#: kicad/common/hotkeys_basic.cpp:635
+#: kicad/common/hotkeys_basic.cpp:644
 msgid "Use kicad/template directory to load or store Hotkey config files"
 msgstr "Użyj katalogu kicad/template, aby zapisywać lub wczytywać plik konfiguracyjny klawiszy skrótów"
 
-#: kicad/common/hotkeys_basic.cpp:641
+#: kicad/common/hotkeys_basic.cpp:650
 msgid "Hotkey config location"
 msgstr "Położenie pliku konfiguracyjnego klawiszy skrótów"
 
-#: kicad/common/hotkeys_basic.cpp:643
+#: kicad/common/hotkeys_basic.cpp:652
 msgid "Hotkey config file location selection (home directory or kicad tree)"
 msgstr "Wybór położenia pliku konfiguracyjnego klawiszy skrótów (katalog domowy lub drzewo katalogów kicada)"
 
@@ -9711,7 +9720,7 @@ msgstr "Opcje główne"
 msgid "Tracks and Vias Sizes"
 msgstr "Rozmiary ścieżek i przelotek"
 
-#: kicad/pcbnew/dialog_drc.h:56
+#: kicad/pcbnew/dialog_drc.h:60
 msgid "DRC Control"
 msgstr "Kontrola DRC"
 
@@ -9766,7 +9775,7 @@ msgstr "Usuwanie globalne"
 msgid "Find"
 msgstr "Znajdź"
 
-#: kicad/pcbnew/dialog_netlist.h:40
+#: kicad/pcbnew/dialog_netlist.h:52
 msgid "Netlist: "
 msgstr "Netlista: "
 
@@ -9826,7 +9835,7 @@ msgstr "Pokaż moduły po stronie ścieżek"
 msgid "Print"
 msgstr "Drukuj"
 
-#: kicad/share/setpage.h:54
+#: kicad/share/setpage.h:84
 msgid "Page Settings"
 msgstr "Ustawienia strony"
 
