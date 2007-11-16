@@ -2,7 +2,7 @@
 # visual studio, and in our makefiles. 
 PROJECT(kicad)
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.4 FATAL_ERROR)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.4.6 FATAL_ERROR)
 
 # Uncomment this line if you want verbose build messages.
 #SET(CMAKE_VERBOSE_MAKEFILE ON)
