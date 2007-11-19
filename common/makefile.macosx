@@ -6,7 +6,11 @@ TARGET = common.a
 
 all: $(TARGET)
 
+deps:
+	$(CXX) $(CPPFLAGS) -E -MMD -MG *.cpp >/dev/null
+
 include makefile.include
+-include *.d
 
 CPPFLAGS += $(EXTRACPPFLAGS)
 EDACPPFLAGS = $(CPPFLAGS)

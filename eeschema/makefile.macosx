@@ -6,7 +6,11 @@ TARGET = eeschema
 
 all: $(TARGET).app netlist_form_pads-pcb
 
+deps:
+	$(CXX) $(CPPFLAGS) -E -MMD -MG *.cpp >/dev/null
+
 include makefile.include
+-include *.d
 
 CPPFLAGS += $(EXTRACPPFLAGS)
 EDACPPFLAGS = $(CPPFLAGS)

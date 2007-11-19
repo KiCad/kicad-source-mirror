@@ -6,7 +6,11 @@ TARGET = 3d-viewer.a
 
 all: $(TARGET)
 
+deps:
+	$(CXX) $(CPPFLAGS) -E -MMD -MG *.cpp >/dev/null
+
 include makefile.include
+-include *.d
 
 CPPFLAGS += -DPCBNEW  -I../pcbnew
 EDACPPFLAGS = $(CPPFLAGS)

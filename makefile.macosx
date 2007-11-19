@@ -9,6 +9,9 @@ MAKE_CLEAN = make -f makefile.macosx clean
 all:
 	@for d in $(KICAD_SUBDIRS); do (cd $$d && $(MAKE)); done
 
+deps:
+	@for d in $(KICAD_SUBDIRS); do (cd $$d && $(MAKE) -k deps); done
+
 install:
 	@for d in $(KICAD_SUBDIRS_BIN); do (cd $$d && $(MAKE_INSTALL)); done
 	
