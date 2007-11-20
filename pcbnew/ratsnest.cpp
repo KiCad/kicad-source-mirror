@@ -114,7 +114,7 @@ void WinEDA_BasePcbFrame::Compile_Ratsnest( wxDC* DC, bool display_status_pcb )
     m_Pcb->m_Status_Pcb = 0;        /* we want a full ratnest computation, from the scratch */
     build_liste_pads();
 
-    MsgPanel->EraseMsgBox(DC);
+    MsgPanel->EraseMsgBox();
 
     msg.Printf( wxT( " %d" ), m_Pcb->m_NbPads );
     Affiche_1_Parametre( this, 1, wxT( "pads" ), msg, RED );

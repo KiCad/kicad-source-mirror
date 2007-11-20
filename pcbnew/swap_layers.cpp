@@ -7,12 +7,13 @@
 #include "fctsys.h"
 #include "common.h"
 #include "pcbnew.h"
-
 #include "protos.h"
+
 
 #include "wx/statline.h"
 
 /* Variables locales */
+#define LAYER_NO_CHANGE NB_LAYERS
 static int New_Layer[NB_LAYERS];
 wxStaticText* layer_list[NB_LAYERS];
 
@@ -249,7 +250,7 @@ void WinEDA_SwapLayerFrame::Sel_Layer( wxCommandEvent& event )
 
     jj = New_Layer[ii];
     if( (jj < 0) || (jj > NB_LAYERS) )
-        jj = NB_LAYERS; // (Defaults to "No Change".)
+        jj = LAYER_NO_CHANGE; // (Defaults to "No Change".)
     jj = m_Parent->SelectLayer( jj, -1, -1, true );
  
     if( (jj < 0) || (jj > NB_LAYERS) )
@@ -270,7 +271,7 @@ void WinEDA_SwapLayerFrame::Sel_Layer( wxCommandEvent& event )
     if( jj != New_Layer[ii] )
     {
         New_Layer[ii] = jj;
-        if( jj == NB_LAYERS )
+        if( jj >= LAYER_NO_CHANGE )
         {
             layer_list[ii]->SetLabel( _( "No Change" ) );
             // Change the text color to blue (to highlight
@@ -317,7 +318,7 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
 
     /* Init default values */
     for( ii = 0; ii < NB_LAYERS; ii++ )
-        New_Layer[ii] = NB_LAYERS;
+        New_Layer[ii] = LAYER_NO_CHANGE;
 
     WinEDA_SwapLayerFrame* frame = new WinEDA_SwapLayerFrame( this );
 
@@ -339,16 +340,16 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
                 continue;
             int     top_layer, bottom_layer;
             Via->ReturnLayerPair( &top_layer, &bottom_layer );
-            if( New_Layer[bottom_layer] >= 0 )
+            if(  New_Layer[bottom_layer] >= 0 && New_Layer[bottom_layer] < LAYER_NO_CHANGE )
                 bottom_layer = New_Layer[bottom_layer];
-            if( New_Layer[top_layer] >= 0 )
+            if( New_Layer[top_layer] >= 0 && New_Layer[top_layer] < LAYER_NO_CHANGE )
                 top_layer = New_Layer[top_layer];
             Via->SetLayerPair( top_layer, bottom_layer );
         }
         else
         {
             jj = pt_segm->GetLayer();
-            if( New_Layer[jj] >= 0 )
+            if( New_Layer[jj] >= 0 && New_Layer[jj] < LAYER_NO_CHANGE )
                 pt_segm->SetLayer( New_Layer[jj] );
         }
     }
@@ -359,7 +360,7 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
     {
         m_CurrentScreen->SetModify();
         jj = pt_segm->GetLayer();
-        if( New_Layer[jj] >= 0 )
+        if( New_Layer[jj] >= 0 && New_Layer[jj] < LAYER_NO_CHANGE )
             pt_segm->SetLayer( New_Layer[jj] );
     }
 
@@ -372,7 +373,7 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
             m_CurrentScreen->SetModify();
             pt_drawsegm = (DRAWSEGMENT*) PtStruct;
             jj = pt_drawsegm->GetLayer();
-            if( New_Layer[jj] >= 0 )
+            if( New_Layer[jj] >= 0 && New_Layer[jj] < LAYER_NO_CHANGE )
                 pt_drawsegm->SetLayer( New_Layer[jj] );
         }
     }

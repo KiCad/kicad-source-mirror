@@ -58,7 +58,7 @@ int WinEDA_BasePcbFrame::SelectLayer( int default_layer, int min_layer, int max_
                                       bool null_layer )
 /****************************************************************************************/
 
-/* Install the dialog box for layer selection
+/** Install the dialog box for layer selection
  * @param default_layer = Preselection (NB_LAYERS for "(Deselect)" layer)
  * @param min_layer = min layer value (-1 if no min value)
  * @param max_layer = max layer value (-1 if no max value)
