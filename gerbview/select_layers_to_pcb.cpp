@@ -13,6 +13,7 @@
 #include "wx/statline.h"
 
 /* Variables locales */
+#define LAYER_UNSELECTED NB_LAYERS
 static int ButtonTable[32];      // Indexes buttons to Gerber layers
 static int LayerLookUpTable[32]; // Indexes Gerber layers to PCB file layers
 wxStaticText* layer_list[32];    // Indexes text strings to buttons
@@ -57,7 +58,7 @@ private:
 
 /* Table des evenements pour WinEDA_SwapLayerFrame */
 BEGIN_EVENT_TABLE(WinEDA_SwapLayerFrame, wxDialog)
-    EVT_COMMAND_RANGE( ID_BUTTON_0, ID_BUTTON_0 + NB_LAYERS - 1,
+    EVT_COMMAND_RANGE( ID_BUTTON_0, ID_BUTTON_0 + 31,
                        wxEVT_COMMAND_BUTTON_CLICKED,
                        WinEDA_SwapLayerFrame::Sel_Layer )
     EVT_BUTTON( wxID_OK, WinEDA_SwapLayerFrame::OnOkClick )
@@ -131,7 +132,7 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame(WinEDA_GerberFrame *parent) :
 
         // Specify the default value for each member of these arrays.
         ButtonTable[ii] = -1;
-        LayerLookUpTable[ii] = NB_LAYERS; // Value associated with deselected Gerber layer
+        LayerLookUpTable[ii] = LAYER_UNSELECTED; // Value associated with deselected Gerber layer
     }
 
     int pcb_layer_number = 0;
@@ -312,17 +313,17 @@ void WinEDA_SwapLayerFrame::Sel_Layer(wxCommandEvent& event)
     ii = event.GetId() - ID_BUTTON_0;
 
     jj = LayerLookUpTable[ButtonTable[ii]];
-    if( (jj < 0) || (jj > NB_LAYERS) )
+    if( (jj < 0) || (jj > LAYER_UNSELECTED) )
         jj = 0; // (Defaults to "Copper" layer.)
     jj = m_Parent->SelectLayer(jj, -1, -1, true);
 
-    if( (jj < 0) || (jj > NB_LAYERS) )
+    if( (jj < 0) || (jj > LAYER_UNSELECTED) )
         return;
 
     if( jj != LayerLookUpTable[ButtonTable[ii]] )
     {
         LayerLookUpTable[ButtonTable[ii]] = jj;
-        if( jj == NB_LAYERS )
+        if( jj == LAYER_UNSELECTED )
         {
             layer_list[ii]->SetLabel( _( "Do not export" ) );
             // Change the text color to blue (to highlight

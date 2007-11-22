@@ -29,10 +29,10 @@ void WinEDA_GerberFrame::ExportDataInPcbnewFormat( wxCommandEvent& event )
     bool no_used_layers = true; // Changed to false if any used layer found
 
     // Check whether any of the Gerber layers are actually currently used
-	while( no_used_layers && ii < 32 )
-	{
-		if( g_GERBER_Descr_List[ii] != NULL )
-			no_used_layers = false;
+    while( no_used_layers && ii < 32 )
+    {
+        if( g_GERBER_Descr_List[ii] != NULL )
+            no_used_layers = false;
         ii++;
     }
 
@@ -150,7 +150,7 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* aFile,
     {
         int layer = track->GetLayer();
         int pcb_layer_number = LayerLookUpTable[layer];
-        if( pcb_layer_number < 0 )
+        if( pcb_layer_number < 0 || pcb_layer_number > LAST_NO_COPPER_LAYER )
             continue;
         
         if( pcb_layer_number > LAST_COPPER_LAYER )
