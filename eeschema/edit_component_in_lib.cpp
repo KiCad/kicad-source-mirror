@@ -515,7 +515,7 @@ void WinEDA_PartPropertiesFrame::BuildPanelEditField()
 
     // Create the box for text editing (text, size)
     m_FieldTextCtrl = new WinEDA_GraphicTextCtrl( m_PanelField,
-                                                  _( "Value/Chip Name:" ),
+                                                  _( "Field Text:" ),
                                                   m_FieldText[FieldId], m_FieldSize[FieldId],
                                                   g_UnitMetric, LeftBoxSizer, 200 );
 

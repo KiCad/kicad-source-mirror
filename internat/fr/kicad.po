@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-11-14 16:56+0100\n"
-"Last-Translator: jp charras <jean-pierre.charras@inpg.fr>\n"
+"PO-Revision-Date: 2007-11-20 21:53+0100\n"
+"Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
@@ -982,7 +982,7 @@ msgstr "Offset Y"
 #: pcbnew/dialog_general_options.cpp:368
 #: pcbnew/dialog_graphic_items_options.cpp:261
 #: pcbnew/dialog_drc.cpp:232
-#: pcbnew/swap_layers.cpp:219
+#: pcbnew/swap_layers.cpp:220
 #: pcbnew/dialog_track_options.cpp:181
 #: eeschema/symbtext.cpp:174
 #: eeschema/sheet.cpp:221
@@ -1011,7 +1011,7 @@ msgstr "&OK"
 #: pcbnew/dialog_general_options.cpp:372
 #: pcbnew/dialog_graphic_items_options.cpp:265
 #: pcbnew/dialog_drc.cpp:236
-#: pcbnew/swap_layers.cpp:223
+#: pcbnew/swap_layers.cpp:224
 #: pcbnew/dialog_track_options.cpp:185
 #: eeschema/symbtext.cpp:178
 #: eeschema/plothpgl.cpp:274
@@ -1067,7 +1067,6 @@ msgid "Display"
 msgstr "Affichage"
 
 #: pcbnew/dialog_edit_mod_text.cpp:313
-#: eeschema/edit_component_in_schematic.cpp:211
 msgid "Value:"
 msgstr "Valeur:"
 
@@ -2486,24 +2485,24 @@ msgstr "Grille:"
 msgid "New zone segment width: "
 msgstr "Nouvelle largeur des segments zone:"
 
-#: pcbnew/zones.cpp:594
+#: pcbnew/zones.cpp:597
 msgid "Zone: No net selected"
 msgstr "Zone: Net non sélectionné"
 
-#: pcbnew/zones.cpp:636
+#: pcbnew/zones.cpp:639
 msgid "Delete Current Zone Edges"
 msgstr "Effacer contour zone courant"
 
-#: pcbnew/zones.cpp:923
+#: pcbnew/zones.cpp:926
 msgid "No Net"
 msgstr "No Net"
 
-#: pcbnew/zones.cpp:925
+#: pcbnew/zones.cpp:928
 #: pcbnew/class_track.cpp:780
 msgid "NetName"
 msgstr "NetName"
 
-#: pcbnew/zones.cpp:995
+#: pcbnew/zones.cpp:998
 msgid "Ok"
 msgstr "Ok"
 
@@ -4187,17 +4186,17 @@ msgstr "Fichier rapport de contrôle DRC:"
 msgid "Module Editor: module modified!, Continue ?"
 msgstr "Editeur de Module: module modifié!  Continuer ?"
 
-#: pcbnew/swap_layers.cpp:69
+#: pcbnew/swap_layers.cpp:70
 msgid "Swap Layers:"
 msgstr "Permutte couches"
 
-#: pcbnew/swap_layers.cpp:187
-#: pcbnew/swap_layers.cpp:192
-#: pcbnew/swap_layers.cpp:275
+#: pcbnew/swap_layers.cpp:188
+#: pcbnew/swap_layers.cpp:193
+#: pcbnew/swap_layers.cpp:276
 msgid "No Change"
 msgstr "Garder"
 
-#: pcbnew/swap_layers.cpp:265
+#: pcbnew/swap_layers.cpp:266
 msgid "Deselect this layer to select the No Change state"
 msgstr "Deselectionner cette couche pour restorer l'option Pas de Changement"
 
@@ -6916,6 +6915,11 @@ msgstr "Champ à éditer"
 msgid "Field Name:"
 msgstr "Nom Champ"
 
+#: eeschema/edit_component_in_schematic.cpp:211
+#: eeschema/edit_component_in_lib.cpp:518
+msgid "Field Text:"
+msgstr "Texte du Champ:"
+
 #: eeschema/edit_component_in_schematic.cpp:219
 #: eeschema/edit_component_in_lib.cpp:524
 msgid "Pos"
@@ -7766,10 +7770,6 @@ msgstr "Justifié en bas"
 #: eeschema/edit_component_in_lib.cpp:478
 msgid "Top justify"
 msgstr "Justifié en haut"
-
-#: eeschema/edit_component_in_lib.cpp:518
-msgid "Value/Chip Name:"
-msgstr "Valeur/Nom en librairie"
 
 #: eeschema/edit_component_in_lib.cpp:529
 msgid "Hor Justify"
