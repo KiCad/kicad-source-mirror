@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-15 21:11+0100\n"
-"PO-Revision-Date: 2007-11-15 21:15+0100\n"
+"POT-Creation-Date: 2007-11-22 21:04+0100\n"
+"PO-Revision-Date: 2007-11-22 21:06+0100\n"
 "Last-Translator: \n"
 "Language-Team: Polish KiCAD Team - Mateusz Skowroński <skowri@gmail.com>, Krzysztof Kawa <elektrotrans@wp.pl>\n"
 "MIME-Version: 1.0\n"
@@ -560,11 +560,11 @@ msgstr "Szerokość tekstu ścieżek"
 
 #: kicad/pcbnew/dialog_graphic_items_options.cpp:214
 msgid "Text Size V"
-msgstr "Rozmiar tekstu Pionowy"
+msgstr "Pionowy rozmiar tekstu"
 
 #: kicad/pcbnew/dialog_graphic_items_options.cpp:220
 msgid "Text Size H"
-msgstr "Rozmiar tekstu Poziomy"
+msgstr "Poziomy rozmiar tekstu"
 
 #: kicad/pcbnew/dialog_graphic_items_options.cpp:228
 msgid "Modules:"
@@ -591,7 +591,7 @@ msgstr "Rozmiar poziomy tekstu modułu"
 #: kicad/pcbnew/dialog_pad_edit.cpp:217
 #: kicad/pcbnew/dialog_general_options.cpp:368
 #: kicad/pcbnew/dialog_drc.cpp:232
-#: kicad/pcbnew/swap_layers.cpp:219
+#: kicad/pcbnew/swap_layers.cpp:220
 #: kicad/pcbnew/dialog_track_options.cpp:181
 #: kicad/pcbnew/dialog_edit_mod_text.cpp:213
 #: kicad/pcbnew/dialog_initpcb.cpp:161
@@ -609,7 +609,7 @@ msgstr "Rozmiar poziomy tekstu modułu"
 #: kicad/eeschema/dialog_options.cpp:274
 #: kicad/cvpcb/dialog_display_options.cpp:186
 #: kicad/cvpcb/dialog_cvpcb_config.cpp:139
-#: kicad/gerbview/select_layers_to_pcb.cpp:283
+#: kicad/gerbview/select_layers_to_pcb.cpp:284
 msgid "&OK"
 msgstr "&OK"
 
@@ -620,7 +620,7 @@ msgstr "&OK"
 #: kicad/pcbnew/dialog_pad_edit.cpp:221
 #: kicad/pcbnew/dialog_general_options.cpp:372
 #: kicad/pcbnew/dialog_drc.cpp:236
-#: kicad/pcbnew/swap_layers.cpp:223
+#: kicad/pcbnew/swap_layers.cpp:224
 #: kicad/pcbnew/dialog_track_options.cpp:185
 #: kicad/pcbnew/dialog_edit_mod_text.cpp:217
 #: kicad/pcbnew/dialog_initpcb.cpp:164
@@ -642,7 +642,7 @@ msgstr "&OK"
 #: kicad/eeschema/sheet.cpp:216
 #: kicad/eeschema/dialog_options.cpp:278
 #: kicad/cvpcb/dialog_display_options.cpp:191
-#: kicad/gerbview/select_layers_to_pcb.cpp:287
+#: kicad/gerbview/select_layers_to_pcb.cpp:288
 msgid "&Cancel"
 msgstr "&Anuluj"
 
@@ -3331,17 +3331,17 @@ msgstr "Usuń element"
 msgid "Delete Pad (module %s %s) "
 msgstr "Usuń pole lutownicze (moduł %s %s) "
 
-#: kicad/pcbnew/swap_layers.cpp:69
+#: kicad/pcbnew/swap_layers.cpp:70
 msgid "Swap Layers:"
 msgstr "Zamień warstwy:"
 
-#: kicad/pcbnew/swap_layers.cpp:187
-#: kicad/pcbnew/swap_layers.cpp:192
-#: kicad/pcbnew/swap_layers.cpp:275
+#: kicad/pcbnew/swap_layers.cpp:188
+#: kicad/pcbnew/swap_layers.cpp:193
+#: kicad/pcbnew/swap_layers.cpp:276
 msgid "No Change"
 msgstr "Bez zmian"
 
-#: kicad/pcbnew/swap_layers.cpp:265
+#: kicad/pcbnew/swap_layers.cpp:266
 msgid "Deselect this layer to select the No Change state"
 msgstr "Odznacz tą warstwę, aby przywrócić ją do stanu \"Bez zmian\""
 
@@ -4034,7 +4034,6 @@ msgid "no show"
 msgstr "Nie pokazuj"
 
 #: kicad/pcbnew/dialog_edit_mod_text.cpp:313
-#: kicad/eeschema/edit_component_in_schematic.cpp:211
 msgid "Value:"
 msgstr "Wartość:"
 
@@ -6001,6 +6000,11 @@ msgstr "Pole do edycji"
 msgid "Field Name:"
 msgstr "Nazwa pola:"
 
+#: kicad/eeschema/edit_component_in_schematic.cpp:211
+#: kicad/eeschema/edit_component_in_lib.cpp:518
+msgid "Field Text:"
+msgstr "Tekst pola:"
+
 #: kicad/eeschema/edit_component_in_schematic.cpp:219
 #: kicad/eeschema/edit_component_in_lib.cpp:524
 msgid "Pos"
@@ -7664,10 +7668,6 @@ msgstr "Wyrównanie do dołu"
 #: kicad/eeschema/edit_component_in_lib.cpp:478
 msgid "Top justify"
 msgstr "Wyrównanie do góry"
-
-#: kicad/eeschema/edit_component_in_lib.cpp:518
-msgid "Value/Chip Name:"
-msgstr "Wartość/Nazwa elementu:"
 
 #: kicad/eeschema/edit_component_in_lib.cpp:529
 msgid "Hor Justify"
@@ -9418,16 +9418,16 @@ msgstr "Pliki Gerbera:"
 msgid "D codes files:"
 msgstr "Pliki kodów wierceń:"
 
-#: kicad/gerbview/select_layers_to_pcb.cpp:88
+#: kicad/gerbview/select_layers_to_pcb.cpp:89
 msgid "Layer selection:"
 msgstr "Wybór warstwy:"
 
-#: kicad/gerbview/select_layers_to_pcb.cpp:212
+#: kicad/gerbview/select_layers_to_pcb.cpp:213
 msgid "Gerber layer "
 msgstr "Warstwa Gerbera"
 
-#: kicad/gerbview/select_layers_to_pcb.cpp:237
-#: kicad/gerbview/select_layers_to_pcb.cpp:327
+#: kicad/gerbview/select_layers_to_pcb.cpp:238
+#: kicad/gerbview/select_layers_to_pcb.cpp:328
 msgid "Do not export"
 msgstr "Nie eksportuj"
 
@@ -10126,35 +10126,4 @@ msgstr "Pozostałe"
 #: kicad/gerbview/set_color.h:332
 msgid "D codes id."
 msgstr "ID kodu wiercenia"
-
-#~ msgid "  Unit %d"
-#~ msgstr "  Część %d"
-#~ msgid "\""
-#~ msgstr "\""
-#~ msgid "New part"
-#~ msgstr "Nowy element"
-#~ msgid "import part"
-#~ msgstr "Importuj element"
-#~ msgid "export part"
-#~ msgstr "Eksportuj element"
-#~ msgid "Edit Part Properties"
-#~ msgstr "Edytuj właściwości elementu"
-#~ msgid "Parts per package"
-#~ msgstr "Elementów w obudowie"
-#~ msgid "Import part:"
-#~ msgstr "Importuj element:"
-#~ msgid "Export part:"
-#~ msgstr "Eksportuj element:"
-#~ msgid "Number of Units:"
-#~ msgstr "Liczba części:"
-#~ msgid "LibEdit: Part modified!, Continue ?"
-#~ msgstr "LibEdit: Element zmodyfikowany! Kontynuować?"
-#~ msgid "PcbNew"
-#~ msgstr "PcbNew"
-#~ msgid "&OrcadPcb2"
-#~ msgstr "&OrcadPcb2"
-#~ msgid "&CadStar"
-#~ msgstr "&CadStar"
-#~ msgid "&Spice"
-#~ msgstr "&Spice"
 
