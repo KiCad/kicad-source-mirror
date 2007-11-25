@@ -30,4 +30,4 @@ mainframe.o: mainframe.cpp $(DEPEND) kicad.h
 buildmnu.o: buildmnu.cpp $(DEPEND) kicad.h
 
 infospgm.o: ../share/infospgm.cpp $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
