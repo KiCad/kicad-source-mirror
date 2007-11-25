@@ -9,7 +9,7 @@ email address.
 ================================================================================
 +pcbnew
   * dialog_track_options uses a portable technique for SetFocus(), namely the
-    wxActivateEvent& event handler.
+    function OnInitDialog( wxInitDialogEvent& event ).
   * started work on dialog_drc, not checked in. basic wxHtmlListBox is working with dummied text.
 +all
     makefile.include's now use CXX instead of CC for compiling.
