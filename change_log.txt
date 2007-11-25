@@ -1,8 +1,19 @@
 Change Log for Kicad
 Started 2007-June-11
 
-Please add newer entries at the top, list the date and your name with 
+Please add newer entries at the top, list the date and your name with
 email address.
+
+
+2007-Nov-24 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+  * dialog_track_options uses a portable technique for SetFocus(), namely the
+    wxActivateEvent& event handler.
+  * started work on dialog_drc, not checked in. basic wxHtmlListBox is working with dummied text.
++all
+    makefile.include's now use CXX instead of CC for compiling.
+
 
 2007-Nov-15 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
@@ -29,7 +40,7 @@ email address.
     as a text field) in the module editor, then selecting Dimensions -> Pad Settings
     in the module editor.
 
-    
+
 2007-Nov-11 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
 ================================================================================
 + eeschema & pcbnew & gerbview
@@ -118,7 +129,7 @@ email address.
 2007-Nov-2 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew
-    fixed a crashing bug which happened if you "dragged" a module with 
+    fixed a crashing bug which happened if you "dragged" a module with
     tracks.  Then deleted one of the pad connected tracks, then deleted the
     next track attached to the first one.  Memory was being corrupted because
     PcbGeneralLocate() and display was not being called on the 2nd track to
@@ -137,7 +148,7 @@ email address.
     solved: eeschema, pcbnew and cvpcb did not find libraries when they were
     in the default library path, but in a subdirectory
     (this is because the default path was not added to the name if the name had
-    already a path) 
+    already a path)
 
 
 2007-Nov-02 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
@@ -188,9 +199,9 @@ email address.
     comments in member functions and classes.  Run Doxygen on the project, then
     look at the documentation for class INSPECTOR as an example.
 + pcbnew
-  * zones.cpp, Trace_Pcb(), & EDGE_ZONE class: 
-    Reversed the usage of EDGE_ZONE::Pnext and Pback in the list management to be 
-    consistent with other classes and with BOARD_ITEM::IterateForward() and 
+  * zones.cpp, Trace_Pcb(), & EDGE_ZONE class:
+    Reversed the usage of EDGE_ZONE::Pnext and Pback in the list management to be
+    consistent with other classes and with BOARD_ITEM::IterateForward() and
     BOARD::~BOARD().
   * Fixed a display bug when high contrast mode is enabled and the track tool
     is selected.
@@ -209,12 +220,12 @@ email address.
     added BOARD_ITEM::Save() and to all derived classes as well.  Made virtual
     and removed all UI code from these utility functions.
     removed WriteDesc() functions from all BOARD_ITEM derived classes, although
-    Keeping old ones in commented out form for a while for reference.  
+    Keeping old ones in commented out form for a while for reference.
     @todo: delete these from *.cpp files eventually.
     zones.cpp, clean up in prep for enhancements.
 + gerbview
     fixed bug which came about when BOARD::~BOARD() started deleting the objects
-    that a BOARD owns.  export_to_pcbnew.cpp was not consistent with this 
+    that a BOARD owns.  export_to_pcbnew.cpp was not consistent with this
     design and was crashing.  Also, export_to_pcbnew.cpp now uses the simple
     BOARD::Save() function.  It was another place to maintain the PCB file format,
     rather than simply putting that knowledge into one place like BOARD::Save().
@@ -225,13 +236,13 @@ email address.
 2007-Oct-30 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +cvpcb: listboxes.cpp problem solved: exists only under windows
-    now apply to windows only, because this Workaround creates a problem undex linux 
+    now apply to windows only, because this Workaround creates a problem undex linux
 +others:
     some very minor problems solved
 +eeschema:
     in B.O.M.: the footprint field can be added to the field list
 
-    
+
 2007-Oct-29 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +cvpcb: listboxes.cpp problem solved: Workaround for a curious bug in wxWidgets:
@@ -239,7 +250,7 @@ email address.
      and if the selected item is near the end of the long list,
      the new list is not displayed from the top of the list box
 +eeschema:
-    Implemented: graying in/out of "Edit/Undo", "Edit/Redo" menu items, 
+    Implemented: graying in/out of "Edit/Undo", "Edit/Redo" menu items,
     when Undo/Redo stack is empty/filled.
 +pcbnew:
     Implemented: action for ID_POPUP_PCB_DELETE_MARKER
@@ -257,7 +268,7 @@ email address.
 + pcbnew:
     Use collector class to locate items in modedit.
     This is a big enhancement,
-    but a small work for me because Dick made all the work. 
+    but a small work for me because Dick made all the work.
 
 
 2007-Oct-26 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
@@ -306,12 +317,12 @@ email address.
 ================================================================================
 + all
     added UIpolicies.txt
-    
+
 
 2007-Oct-21 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew:
-    rename dialog_clean_pcb.pjd to cleaningoptions_dialog.pjd, 
+    rename dialog_clean_pcb.pjd to cleaningoptions_dialog.pjd,
     accordind to the corresponding cpp filename.
     enter the new tool tips in cleaningoptions_dialog.pjd.
 +all:
@@ -334,10 +345,10 @@ email address.
     extends tracks to via centers.  Call it from "extend to pads", works nice.
   * Added tooltip text to cleaningoptions_dialog.cpp's m_ConnectToPadsOpt
     but don't know if DialogBlocks will parse this backwards.
-  * Made compilable, somebody broke #define VIA_???? s throughout.  Would not compile. 
+  * Made compilable, somebody broke #define VIA_???? s throughout.  Would not compile.
   * SEGVIA::SetPos() & GetPos() added.
 
-  
+
 2007-Oct-17 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew:
@@ -360,7 +371,7 @@ email address.
 + pcbnew:
     remove a change for Read VIA because via attributes
     (TROUGH VIA, BLIND VIA or BURIED VIA) are autorisations for layer connection,
-    and are not a real layer indicator. 
+    and are not a real layer indicator.
     If a via connect layers from copper to component, it can have a BURIED VIA attribute.
     the meaning is for this via the layer pair can be changed for other layer pair
     if after editing this via connect 2 tracks which are only int internal layers,
@@ -424,14 +435,14 @@ email address.
     added more disambiguating text to the PcbGeneralLocateAndDisplay() popup
     menu for tracks. We need all the info we can get there I found after using
     the software for many hours.
-  
-  
-  Jean-Pierre:    
-    
+
+
+  Jean-Pierre:
+
   I never thought I would find a greater problem in using Kicad than having to
   lay down all the ground and power tracks, rather that just linking vias into
-  pre-established zones or "tagged layers".  
-  
+  pre-established zones or "tagged layers".
+
   But I have, hundreds of my tracks and vias are showing
   unconnected under my BGA, (where say the track or via is NetCode==0) and it
   should not be, because the damn track ties the BGA pad to a nearby via.
@@ -440,9 +451,9 @@ email address.
 
   This issue has been coming up for months on the user list, it must be dealt with now.
   There is always the same lame answer, "make sure your tracks go to the center of the pads".
-  Nonsense, the software picked the track end points, not me, and grid was on when it did it.  
+  Nonsense, the software picked the track end points, not me, and grid was on when it did it.
   There are bugs here.
-  
+
   Does Recalcule_all_net_connexion() work, and why is not called from anywhere?
 
 
@@ -463,7 +474,7 @@ email address.
 + pcbnew
   * D_PAD::Draw() so that it shows SMD pads as greyed out when in high contrast
     mode and not on current layer.  Slight variation on this when laying down
-    tracks: m_Route_Layer_BOTTOM or m_Route_Layer_TOP layers' SMD pads are 
+    tracks: m_Route_Layer_BOTTOM or m_Route_Layer_TOP layers' SMD pads are
     not greyed out.
   * Changed English UI text for "Cotation" to "Dimension".
 
@@ -504,12 +515,12 @@ email address.
 2007-Oct-10 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew
-  * bug fix: prevent OnRightClick() from calling PcbGeneralLocateAndDisplay() 
+  * bug fix: prevent OnRightClick() from calling PcbGeneralLocateAndDisplay()
     when creating a new track.
-  * bug fix: popup menu was not handling Mires, because the collector was not 
+  * bug fix: popup menu was not handling Mires, because the collector was not
     being asked to find them.
   * added TRACK::ShowWidth() and call it from BOARD_ITEM::MenuText().  There was
-    not enough information in Selection Clarification at a busy junction to 
+    not enough information in Selection Clarification at a busy junction to
     make a reasonable choice.
   * SEGVIA::MenuText() shows via width, rather than net_code.
   * Beautified ratsnets.cpp, I would like to understand it better.  It would help
@@ -519,7 +530,7 @@ email address.
     http://tech.groups.yahoo.com/group/kicad-users/message/1380
   * rewrote msgpanel.cpp so it retains wxStrings and therefore can repaint its
     window when being uncovered, resized or whatever.
-    
+
 
 2007-Oct-9 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
@@ -529,7 +540,7 @@ email address.
     click is in a position different from where the selection was previously
     made.
 
-    
+
 2007-Oct-09 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + eeschema:
@@ -618,23 +629,23 @@ email address.
     made BOARD_ITEM::UnLink() virtual
     added BOARD_ITEM::DeleteStructure().
     added EDA_BaseStruct::DeleteStructList()
-    deleted gerbview/struct.cpp, pcbnew/struct.cpp, 
+    deleted gerbview/struct.cpp, pcbnew/struct.cpp,
     BOARD::~BOARD() now deletes objects that it owns.
     Collectors now finds MARQUEURs also
     added MARQUEURS::Display_Infos()
     added MARQUEURS::HitTest()
-    
+
 
 2007-Oct-2 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + all
-    The lack of border resizing in dialogs has been a problem.  In my world, 
+    The lack of border resizing in dialogs has been a problem.  In my world,
     dialog boxes are resizable.  I use large fonts, I like to see stuff.
     So now for __UNIX__ they are resizeable, for windows not.
     See fctsys.h and the #define for MAYBE_RESIZE_BORDER.  For windows it defaults
     to zero which means resizeable is not featured.  A compiler command line
     option of "USE_RESIZE_BORDER" can override this windows default.
-    
+
 
 2007-Oct-01 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
@@ -660,11 +671,11 @@ email address.
 2007-Sep-29 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew
-  * drc.c made a change near line 584 to comment out pt_pad->m_NetCode test against 
-    zero.  This was preventing me from laying out my board.  It's possible that 
-    this broke something else, but it is also clear that something was broke before 
+  * drc.c made a change near line 584 to comment out pt_pad->m_NetCode test against
+    zero.  This was preventing me from laying out my board.  It's possible that
+    this broke something else, but it is also clear that something was broke before
     this change, because I could not put down some tracks.
-  * beautification, house keeping.    
+  * beautification, house keeping.
 
 
 
@@ -673,13 +684,13 @@ email address.
 + pcbnew
     create new file onleftclick.cpp
     move onleftcligk() and onleftDcligk() from edit.cpp to onleftclick.cpp
-    
+
 
 2007-Sep-27 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + all
     test case for OnLeftClick() handling enhancements.
-    TAB key removed, because is not needed for block selection and double click. 
+    TAB key removed, because is not needed for block selection and double click.
     (SHIHT ou CTRL or ALT key is sufficient to suppress the popup menu
     if needed for a double click )
     Some work is still needed, of course
@@ -693,7 +704,7 @@ email address.
     test case for OnLeftClick() handling from a release circumstance.
     a few simple changes to void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event ),
     but they affect all programs in a subtle way.
-    TAB key allow double clicking, but is not needed for block selection. 
+    TAB key allow double clicking, but is not needed for block selection.
 
 + pcbnew
     GENERAL_COLLECTOR::GetCount() returns int, not unsigned.  Was tired of the
@@ -703,8 +714,8 @@ email address.
 2007-Sep-25 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew
-  * removed reference to global display options DisplayOpt.DisplayZones in 
-    collectors.cpp so collectors.cpp can continue to be used in multiple future 
+  * removed reference to global display options DisplayOpt.DisplayZones in
+    collectors.cpp so collectors.cpp can continue to be used in multiple future
     (non-display related) general contexts.  I don't want unnecessary dependencies
     in there.  The way to completely ignore a type is to exclude it from scanList.
     The way to sometimes ignore a type is to add support for this in COLLECTORS_GUIDE.
@@ -712,11 +723,11 @@ email address.
     provide support for DisplayOpt.DisplayZones.
   * Added aHotKeyCode to PcbGeneralLocateAndDisplay()
 + gerbview
-  * viewer was getting stuck in a loop when loading a bad gerber file.  Fixed 
+  * viewer was getting stuck in a loop when loading a bad gerber file.  Fixed
     the bug, but line 223 through 225 of readgerb.cpp needs review.
-  * beautified a few files with uncrustify, (any I had to look at).    
+  * beautified a few files with uncrustify, (any I had to look at).
 
-  
+
 2007-sept-25 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew:
@@ -729,7 +740,7 @@ email address.
 2007-Sep-25 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
 ================================================================================
 + gerbview
-    The "Exit" button previously provided within the dialog box invoked from the 
+    The "Exit" button previously provided within the dialog box invoked from the
     "Preferences -> File ext" menu entry has now been replaced by "OK" and "Cancel"
     buttons. Similarly, the "Accept" button previously provided within each of the
     dialog boxes invoked from the "Preferences -> Options" and "Preferences -> Display"
@@ -754,7 +765,7 @@ email address.
     GENERAL_COLLECTOR::Collect() was skipping thru hole pads even though they
     were visible.
     Highlight tool now sends message to eeschema when a pad is selected.
-    
+
 
 2007-Sep-20 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
@@ -780,10 +791,10 @@ email address.
   * onrightclick.cpp changed to calls to BOARD_ITEM::MenuText(), and switched
     to member functions for createPopupMenus() so we can get all the state
     information we need for the proper menus.
-  * BOARD_ITEM::MenuText() got new argument BOARD*, and elaboration for 
+  * BOARD_ITEM::MenuText() got new argument BOARD*, and elaboration for
     TRACKs and VIAs and Pcb Graphics.
   * Fixed a problem in GENERAL_COLLECTOR::Inspect() so it now knows that MODULEs
-    have their own visibility controls (same for pads and pcb texts).  This 
+    have their own visibility controls (same for pads and pcb texts).  This
     interpretation must always match the drawing code's interpretation.
   * Made TRACK::TRACK( const TRACK& ) protected to enforce use of TRACK::Copy()
 
@@ -806,7 +817,7 @@ email address.
     The m_StructType member of class EDA_BaseStruct is no more modified in kicad.
     Now Virtual functions can be widely used.
     * The old EDA_BaseStruct.ReturnClassName() was removed.
-    the virtual EDA_BaseStruct.GetClass() is used instead. 
+    the virtual EDA_BaseStruct.GetClass() is used instead.
 
 + gerbview: hotkeys Ok.
 
@@ -829,25 +840,25 @@ email address.
     @todo: grep for @todo and finish off those tasks.
   * Introduced a formal notion of "selected item".  This is done with the addition
     of the WinEDA_BasePcbFrame::SetCurItem() function.  So now you have to first
-    select an item with the left mouse button before you attempt to use the 
-    right button popup menu.  Right button no longer has an effect on the 
+    select an item with the left mouse button before you attempt to use the
+    right button popup menu.  Right button no longer has an effect on the
     currently selected item.  The currently selected item is shown in the MsgPanel.
-    When none is selected, the m_Pcb is shown.  
+    When none is selected, the m_Pcb is shown.
   * Tweaked the OnRightClick() popup menus so that the most likely choices are
     at the top.
   * Added wxString BOARD_ITEM::MenuText() const and BOARD_ITEM::MenuIcon() and
     both need more work, work which I will not have time to do.
 
-    
+
 2007-Sep-10 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew
-  * Searched and did not see any usage of TRACK::Copy(int), where int was other 
+  * Searched and did not see any usage of TRACK::Copy(int), where int was other
     than '1', so renamed it to TRACK::CopyList(int) and commented it out because
     with int==1, this makes Copy(1) equivalent to the new Copy(void).
-  * Made TRACK::Copy() capable of copying SEGZONE too.  
+  * Made TRACK::Copy() capable of copying SEGZONE too.
 
-    
+
 2007-sept-10 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + gerbview
@@ -861,7 +872,7 @@ email address.
   * Fixed some macros in macros.h so they can be followed with a semicolon and
     used like simple expressions.
     All changes not yet committed.
-    
+
 2007-sept-6 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + eeschema & pcbnew
@@ -869,7 +880,7 @@ email address.
     some features are still subject to change (mainly path for config files: see 2007-aug-30 UPDATE))
     The preference menu has a command to create and reread config hotkey files.
     the hotkey ? lists the current hotkeys.
-    
+
 
 2007-Sep-4 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
@@ -880,12 +891,12 @@ email address.
   * Made GENERAL_COLLECTOR capable of Collect()ing from a MODULE as well as a BOARD.
   * pcbnew/onrightclick.cpp changed English from "Free Module" to "Unlock Module".
   Next I hope to add some UI to handle multiple items under the mouse in onrightclick.cpp
-    
+
 
 2007-sept-04 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew
-    better comments in editrack-part2 (the todo remark solved) 
+    better comments in editrack-part2 (the todo remark solved)
 + todo.txt: note about editrack-part2 modified (problem solved)
 
 
@@ -904,17 +915,17 @@ email address.
 2007-Aug-30 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew
-  * Removed SEGVIA::IsViaOnLayer, and instead implemented an override to 
+  * Removed SEGVIA::IsViaOnLayer, and instead implemented an override to
     virtual BOARD_ITEM::IsOnLayer() called SEGVIA::IsOnLayer().
-  * Tweaked TRACK::Visit() to not traverse the KICAD_T scan list and a 
-    corresponding change to BOARD::Vist() so we can now get VIA priority 
+  * Tweaked TRACK::Visit() to not traverse the KICAD_T scan list and a
+    corresponding change to BOARD::Vist() so we can now get VIA priority
     if desired.  (Have to traverse m_Tracks twice, wonder if we could use
     two lists: m_Tracks and a new m_Vias?)
   * Changed signature of MODULE::Display_Infos( WinEDA_DrawFrame* frame ) so
     it gets called virtually with any BOARD_ITEM* which is actually a MODULE*.
     This was a bug.
   * With virtual functions, it is now critical that the correct object type
-    be instantiated.  This was not happening in ioascii.cpp when reading 
+    be instantiated.  This was not happening in ioascii.cpp when reading
     the vias.  Bug fixed.
   * GENERAL_COLLECTOR getting closer to useable.
 
@@ -937,7 +948,7 @@ email address.
     Changed some comments in class BOARD's header to english, clarifying
     linked list contents.
 
-    
+
 2007-aug-27 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + all
@@ -954,7 +965,7 @@ email address.
     KICAD_T rather than simply a number.  Added NOT_USED = -1 to KICAD_T enum for
     3d which was using -1.
   * More beautification using latest uncrustify and the committed uncrustify.cfg
-  
+
 
 2007-Aug-24 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
 ================================================================================
@@ -998,7 +1009,7 @@ email address.
   * Changed min() and max() macros to MIN() and MAX() because min() and max()
     are actually reserved according to the C++ standard! (and their usage prevented
     the use of #include <vector>).
-  * Added files class_collector.h, collectors.h, and collectors.cpp.  
+  * Added files class_collector.h, collectors.h, and collectors.cpp.
     File collectors.cpp is still unfinished.
   * Started using a function and class comment style that will make sense to the
     Doxygen source code documenter program.
@@ -1022,7 +1033,7 @@ email address.
 2007-Aug-20 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew & eeschema
-  * Moved allowed m_Flags values from pcbnew.h, general.h, and eeschema/delete.cpp to base_struct.h 
+  * Moved allowed m_Flags values from pcbnew.h, general.h, and eeschema/delete.cpp to base_struct.h
     near m_Flags itself.  Several of the flags values were changed.  I am only
     comfortable with this change if m_Flags is not written to disk anywhere,
     and we need to give that some thought.  If m_Flags is a memory only usage
@@ -1036,7 +1047,7 @@ email address.
   These changes are working towards a concise locate.cpp module, on the way
   to implementing the multiple choice support.  Mass edits should be slowing down
   in a day or so.
-   
+
 
 2007-Aug-20 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>
 ================================================================================
@@ -1060,29 +1071,29 @@ email address.
 2007-Aug-19 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + all
-  * Made BASE_SCREEN::m_CurrentItem private so we can force usage of the new 
+  * Made BASE_SCREEN::m_CurrentItem private so we can force usage of the new
     SetCurItem() function, and use it to put a breakpoint on the only place
-    that m_CurrentItem is changed, namely in the new SetCurItem() function.  
-    ( Added new function GetCurItem() as well to class BASE_SCREEN in 
-    drawpanel_wxstruct.h.)  Using a stack trace at the breakpoint we can tell 
+    that m_CurrentItem is changed, namely in the new SetCurItem() function.
+    ( Added new function GetCurItem() as well to class BASE_SCREEN in
+    drawpanel_wxstruct.h.)  Using a stack trace at the breakpoint we can tell
     who called it.  There were in excess of 450 edits to get this done so I
-    had to commit it asap so other folks could get on with edits without a 
+    had to commit it asap so other folks could get on with edits without a
     merge conflict.
   * Started work on the COLLECTOR class which will assist in giving a choice
     in PCBNEW when there is more than one click candidate at the same mouse
     or cursor coordinates.  COLLECTOR not committed yet.
   * More beautification.
-  * The mouse click and part synchronization from EESCHEMA to PCBNEW would 
+  * The mouse click and part synchronization from EESCHEMA to PCBNEW would
     track fine but would not always position the PCBNEW part on screen.  Now
     we center it unconditionally.  No change was made in the reverse direction
     since that code uses the long established Find support.
-    
+
 
 2007-Aug-14 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + eeschema & pcbnew
-  * Added mouse click, TCP/IP socket based,  part synchronization in the reverse 
-    of how it was working, so a mouse click on a module in PCBNEW will take 
+  * Added mouse click, TCP/IP socket based,  part synchronization in the reverse
+    of how it was working, so a mouse click on a module in PCBNEW will take
     EESCHEMA to the part with the same reference.
   * More beautification, working with developer of uncrustify.  Almost ready
     to add the customized uncrustifiy configuration file to this project.
@@ -1090,14 +1101,14 @@ email address.
     which was using a bool for the MaskLay variable, causing through hole pads
     on modules on copper layer not to be shown when the copper components were
     set to invisible.
-    
+
 
 2007-aug-11 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + eeschema
     modify hotkeys.cpp code.
 
-    
+
 2007-Aug-10 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew & common
@@ -1105,7 +1116,7 @@ email address.
     Ran more source files through auto-beautifier.
     Renamed dupltrac.cpp to dupltrac.cpp.notused.
 
-    
+
 2007-aug-10 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + eeschema
@@ -1130,16 +1141,16 @@ email address.
 ================================================================================
 + pcbnew & common
   * Renamed locate.cpp's distance() to DistanceTest() and moved it to trigo.cpp.
-    Pass more parameters to DistanceTest and removed globals that were used by 
-    distance() in locate.cpp.  
+    Pass more parameters to DistanceTest and removed globals that were used by
+    distance() in locate.cpp.
     Moved and renamed DistanceTest function proto from protos.h to trigo.h.
   * Implemented HitTest() for class_cotation, class_mire, and a few other classes
     by factoring out existing code from locate.cpp.  locate.cpp should operate
     exactly the same as before.
   * Improved or implemented the Show() function for several classes.
-  * Detected that the suspected class_module hit-testing bug was not real, 
+  * Detected that the suspected class_module hit-testing bug was not real,
     i.e. no bug found.
-  
+
 
 2007-aug-08 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
@@ -1151,17 +1162,17 @@ email address.
         rastnest was updated for each footprint, while moving footprints.
         Now it is updated at the end of changes.
     enhancements in block.cpp and connect.cpp
-    
+
 
 2007-Aug-07 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew & common
-  * More searching work.  Made HitTest() virtual.  Factored out a HitTest() 
-    function for both class_module and class_pad from existing code.  
+  * More searching work.  Made HitTest() virtual.  Factored out a HitTest()
+    function for both class_module and class_pad from existing code.
   * Embellished the Show() function for several of the classes.  Could be the
     basis of a possible future XML export, but with the native format being
     ascii already, this is of questionable value as an export.
-  * Discovered a long time existing bug in class_module hit-testing. 
+  * Discovered a long time existing bug in class_module hit-testing.
     Still need to understand it. It could just be an improperly formatted module.
 
 
@@ -1169,13 +1180,13 @@ email address.
 ================================================================================
 + pcbnew & common
     Started sketching out a new search architecture.  To learn more:
-    look for "INSPECTOR" text in base_struct.h. 
-    
+    look for "INSPECTOR" text in base_struct.h.
+
 
 2007-Aug-05 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew & common
-  * Added some conditional DEBUG code for showing the pcb object tree in 
+  * Added some conditional DEBUG code for showing the pcb object tree in
     simple XML format.   See class EDA_BaseStruct's new Show() function.
   * Changed the function name of Locate( const wxPoint& ref_pos ) to bool HitTest(..)
     in both class_text_mod and base_struct.
@@ -1186,10 +1197,10 @@ email address.
 ================================================================================
 + pcbnew
     Read-ability formatting, I am playing with a C++ beautifier called "uncrustify".
-        I had to patch it and spent 2 days getting it configured.  Patch not 
+        I had to patch it and spent 2 days getting it configured.  Patch not
         sent upstream yet.
     Fixed a bug in "display local ratsnest pad or module": if you had a small
-        module and the mouse clicked its reference text, the ratnest for 
+        module and the mouse clicked its reference text, the ratnest for
         the associated module would not show.  The work around was to add
         support to Show_1_Ratsnest() so it could take a TYPETEXTEMODULE as
         the result of the hit-testing.  But I think a longer term better
@@ -1212,7 +1223,7 @@ email address.
     Drill report files also now list the tool assigned to each drill, and
     the correct hole count and oval count for each drill size; the
     file creation date and the selected drill unit are also listed.
-    
+
 
 2007-Jul-30 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
@@ -1221,7 +1232,7 @@ email address.
     Better Drc test:
         Zones can be tested.
         better pad to pad test.
-    
+
 
 2007-Jul-25 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
@@ -1230,19 +1241,19 @@ email address.
     In Drc diags, better (more explicit) messages
     Change (and simplify) code in  'update' as well as 'insert' modules into main PCB from within the module editor,
     because it had a bug (crashes when there was no footprint in pcb)
-    
+
 
 
 2007-June-21 UPDATE Tim Hanson <tim@hardcarve.com>
 ================================================================================
 + pcbnew
-    1. added button to 'update' as well as 'insert' modules into main PCB 
-        from within the module editor.  Made them functional, of course. 
-    2. added control-o, control-s & control-f to pcbnew, 
+    1. added button to 'update' as well as 'insert' modules into main PCB
+        from within the module editor.  Made them functional, of course.
+    2. added control-o, control-s & control-f to pcbnew,
         though I'm not perfectly happy with the implementation -- wxwidgets puts
         the control-characters in alphabetical order!
 
-        
+
 2007-June-25 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew
@@ -1265,7 +1276,7 @@ email address.
 + build
     add install targets for resources and docs
 
-    
+
 2007-June-15 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 + pcbnew
@@ -1277,14 +1288,14 @@ email address.
         just by hovering over it and hitting the 'L' or 'l' key. The lock is
         toggled.
     **  Enhanced locate.cpp's Locate_Prefered_Module(BOARD * Pcb, int typeloc)
-        significantly, it now has a widely ranging behavior based on the 
+        significantly, it now has a widely ranging behavior based on the
         typeloc argument.
-    
+
 
 2007-June-14 UPDATE Igor Plyatov <plyatov@mail.ru>
 ================================================================================
 + eeschema
-    Added sorting by value or position in to the annotation window 
+    Added sorting by value or position in to the annotation window
     (Thanks for patch to Andrey Fedorushkov).
 
 2007-June-13 RELEASE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
@@ -1296,7 +1307,7 @@ email address.
     bug fix (problem in postscript generation due to the internationalization
     of floating point number notation )
     added tool to select layer pair and monitor active layer
-    
+
 + eeschema
     bug fix:
         crash libedit when loading certain components (linux only)
@@ -1336,7 +1347,7 @@ email address.
 2007-May-25 RELEASE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 + pcbnew:
-    bug: problem with 3D shapes. 
+    bug: problem with 3D shapes.
 + Gerbview:
     Better (but crude...) support to export gerber files to pcbnew.
 
