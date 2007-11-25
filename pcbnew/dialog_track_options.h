@@ -38,11 +38,6 @@
 
 ////@begin control identifiers
 #define ID_DIALOG 10000
-#define SYMBOL_WINEDA_PCBTRACKSDIALOG_STYLE wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|MAYBE_RESIZE_BORDER
-#define SYMBOL_WINEDA_PCBTRACKSDIALOG_TITLE _("Tracks and Vias Sizes")
-#define SYMBOL_WINEDA_PCBTRACKSDIALOG_IDNAME ID_DIALOG
-#define SYMBOL_WINEDA_PCBTRACKSDIALOG_SIZE wxSize(400, 300)
-#define SYMBOL_WINEDA_PCBTRACKSDIALOG_POSITION wxDefaultPosition
 #define ID_TEXTCTRL 10001
 #define ID_TEXTCTRL1 10002
 #define ID_TEXTCTRL2 10003
@@ -50,6 +45,11 @@
 #define ID_TEXTCTRL3 10005
 #define ID_TEXTCTRL4 10006
 #define ID_TEXTCTRL5 10007
+#define SYMBOL_WINEDA_PCBTRACKSDIALOG_STYLE wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|MAYBE_RESIZE_BORDER
+#define SYMBOL_WINEDA_PCBTRACKSDIALOG_TITLE _("Tracks and Vias Sizes")
+#define SYMBOL_WINEDA_PCBTRACKSDIALOG_IDNAME ID_DIALOG
+#define SYMBOL_WINEDA_PCBTRACKSDIALOG_SIZE wxSize(400, 300)
+#define SYMBOL_WINEDA_PCBTRACKSDIALOG_POSITION wxDefaultPosition
 ////@end control identifiers
 
 /*!
@@ -82,18 +82,14 @@ public:
 
 ////@begin WinEDA_PcbTracksDialog event handler declarations
 
+    /// wxEVT_INIT_DIALOG event handler for ID_DIALOG
+    void OnInitDialog( wxInitDialogEvent& event );
+
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
     void OnOkClick( wxCommandEvent& event );
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
     void OnCancelClick( wxCommandEvent& event );
-
-    /**
-     * Function OnActivate
-     * gets control when the dialog becomes activated.
-     * After creation, not during creation.
-     */
-    void OnActivate( wxActivateEvent& event );
 
 ////@end WinEDA_PcbTracksDialog event handler declarations
 
