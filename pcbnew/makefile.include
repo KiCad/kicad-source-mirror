@@ -108,13 +108,13 @@ OBJECTS=	$(TARGET).o classpcb.o\
         collectors.o
 
 setpage.o: ../share/setpage.cpp
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 drawpanel.o: ../share/drawpanel.cpp
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 drawframe.o: ../share/drawframe.cpp
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 menubarpcb.o: menubarpcb.cpp $(COMMON)
 
@@ -134,7 +134,7 @@ files.o: files.cpp $(COMMON)
 export_gencad.o: export_gencad.cpp $(COMMON)
 
 wxprint.o: ../share/wxprint.cpp ../share/dialog_print.cpp ../share/dialog_print.h $(COMMON)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 lay2plot.o: lay2plot.cpp $(COMMON)
 
@@ -192,10 +192,10 @@ automove.o: automove.cpp autorout.h $(COMMON)
 loadcmp.o: loadcmp.cpp $(COMMON)
 
 zoom.o: ../share/zoom.cpp $(COMMON)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 infospgm.o: ../share/infospgm.cpp $(COMMON)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 affiche.o: affiche.cpp $(COMMON)
 
@@ -291,4 +291,4 @@ dragsegm.o: dragsegm.cpp drag.h $(COMMON)
 
 router.o: router.cpp $(COMMON)
 
-collectors.o: collectors.cpp collectors.h $(COMMON)  
+collectors.o: collectors.cpp collectors.h $(COMMON)

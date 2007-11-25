@@ -52,10 +52,10 @@ displayframe.o: displayframe.cpp $(DEPEND)
 listboxes.o: listboxes.cpp $(DEPEND)
 
 drawpanel.o: ../share/drawpanel.cpp $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 drawframe.o: ../share/drawframe.cpp $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 init.o: init.cpp $(DEPEND)
 
@@ -64,44 +64,44 @@ memoire.o: memoire.cpp $(DEPEND)
 rdpcad.o: rdpcad.cpp $(DEPEND)
 
 classpcb.o: ../pcbnew/classpcb.cpp $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_mire.o: ../pcbnew/class_mire.cpp ../pcbnew/class_mire.h $(COMMON)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_cotation.o: ../pcbnew/class_cotation.cpp ../pcbnew/class_cotation.h $(COMMON)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_pcb_text.o: ../pcbnew/class_pcb_text.cpp ../pcbnew/class_pcb_text.h $(COMMON)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_board.o: ../pcbnew/class_board.cpp $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_track.o: ../pcbnew/class_track.cpp $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_pad.o: ../pcbnew/class_pad.cpp $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_module.o: ../pcbnew/class_module.cpp $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_text_mod.o: ../pcbnew/class_text_mod.cpp $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_edge_mod.o: ../pcbnew/class_edge_mod.cpp $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_equipot.o: ../pcbnew/class_equipot.cpp $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 basepcbframe.o: ../pcbnew/basepcbframe.cpp $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 collectors.o: ../pcbnew/collectors.cpp $(COMMON)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
-    
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
 readschematicnetlist.o: readschematicnetlist.cpp $(DEPEND)
 
 viewlogi.o: viewlogi.cpp $(DEPEND)
@@ -117,7 +117,7 @@ writenetlistpcbnew.o: writenetlistpcbnew.cpp $(DEPEND)
 genequiv.o: genequiv.cpp $(DEPEND)
 
 ioascii.o: ../pcbnew/ioascii.cpp $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 listlib.o: listlib.cpp $(DEPEND)
 
@@ -126,17 +126,17 @@ cfg.o: cfg.cpp cfg.h $(DEPEND)
 menucfg.o: menucfg.cpp dialog_cvpcb_config.cpp dialog_cvpcb_config.h $(DEPEND)
 
 infospgm.o: ../share/infospgm.cpp $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 autosel.o: autosel.cpp $(DEPEND)
 
 setvisu.o: setvisu.cpp $(DEPEND)
 
 zoom.o: ../share/zoom.cpp $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 tracemod.o: ../pcbnew/tracemod.cpp ../include/gr_basic.h $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 dialog_display_options.o: dialog_display_options.cpp dialog_display_options.h $(DEPEND)
 

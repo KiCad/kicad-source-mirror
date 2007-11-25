@@ -124,25 +124,25 @@ erc.o: erc.cpp dialog_erc.h $(DEPEND) netlist.h
 dialog_erc.o: dialog_erc.cpp dialog_erc.h $(DEPEND)
 
 setpage.o: ../share/setpage.cpp $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 svg_print.o: ../share/svg_print.cpp ../share/svg_print.h $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 zoom.o: ../share/zoom.cpp $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 treeprj.o: ../share/treeprj.cpp $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 drawpanel.o: ../share/drawpanel.cpp  $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 mdiframe.o: ../share/mdiframe.cpp $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 buildmnu.o: ../share/buildmnu.cpp $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 pinedit.o: pinedit.cpp pinedit-dialog.cpp pinedit-dialog.h $(DEPEND)
 
@@ -151,12 +151,12 @@ tool_lib.o: tool_lib.cpp $(DEPEND)
 controle.o: controle.cpp $(DEPEND) ../include/eda_dde.h
 
 wxprint.o: ../share/wxprint.cpp  ../share/dialog_print.cpp ../share/dialog_print.h $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 bus-wire-junction.o: bus-wire-junction.cpp $(DEPEND)
 
 drawframe.o: ../share/drawframe.cpp
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 eelibs_read_libraryfiles.o: eelibs_read_libraryfiles.cpp $(DEPEND)
 
@@ -185,5 +185,5 @@ dialog_eeschema_config.o: dialog_eeschema_config.cpp dialog_eeschema_config.h $(
 libedit.o: libedit.cpp $(DEPEND)
 
 infospgm.o: ../share/infospgm.cpp $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 

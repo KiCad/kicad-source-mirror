@@ -49,13 +49,13 @@ OBJECTS= \
         collectors.o
 
 setpage.o: ../share/setpage.cpp
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 drawpanel.o: ../share/drawpanel.cpp
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 drawframe.o: ../share/drawframe.cpp
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 controle.o: controle.cpp $(COMMON)
 
@@ -66,33 +66,33 @@ set_color.o: set_color.cpp set_color.h $(COMMON)
 files.o: files.cpp $(COMMON)
 
 class_marker.o: ../pcbnew/class_marker.cpp ../pcbnew/class_marker.h $(COMMON)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 sel_layer.o: ../pcbnew/sel_layer.cpp $(COMMON)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 wxprint.o: ../share/wxprint.cpp  ../share/dialog_print.cpp ../share/dialog_print.h $(COMMON)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 lay2plot.o: lay2plot.cpp $(COMMON)
 
 classpcb.o: ../pcbnew/classpcb.cpp $(COMMON)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_pcb_text.o: ../pcbnew/class_pcb_text.cpp ../pcbnew/class_pcb_text.h $(COMMON)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_board.o: ../pcbnew/class_board.cpp $(DEPEND)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 basepcbframe.o: ../pcbnew/basepcbframe.cpp $(COMMON)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 collectors.o: ../pcbnew/collectors.cpp $(COMMON)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
-    
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
 class_track.o: ../pcbnew/class_track.cpp $(COMMON)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 $(TARGET).o: $(TARGET).cpp $(COMMON)
 
@@ -109,10 +109,10 @@ surbrill.o: surbrill.cpp $(COMMON)
 pcbtexte.o: pcbtexte.cpp $(COMMON)
 
 zoom.o: ../share/zoom.cpp $(COMMON)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 infospgm.o: ../share/infospgm.cpp $(COMMON)
-	$(CC) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 affiche.o: affiche.cpp $(COMMON)
 
