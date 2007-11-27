@@ -1,7 +1,6 @@
-/*************************************************************/
-/******************* editeur de PCB **************************/
-/*  traitement du Chevelu: routines de calcul des connexions */
-/*************************************************************/
+/***************************************************************************************/
+/* Rastnest calculations: Function to handle existing tracks in rastsnest calculations */
+/***************************************************************************************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -13,9 +12,7 @@
 #include "protos.h"
 
 
-/* variables locales */
-
-/* Routines locales */
+/* Loca functions */
 static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn );
 static void calcule_connexite_1_net( TRACK* pt_start_conn, TRACK* pt_end_conn );
 static void RebuildTrackChain( BOARD* pcb );
@@ -29,10 +26,18 @@ static int change_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn,
                            int old_val, int new_val )
 /*****************************************************************/
 
-/*
- *  Change les num locaux d'equipot old valeur en new valeur
- *  retourne le nombre de changements
- *  si pt_end_conn = NULL: recherche jusqu'a fin de chaine
+/** Function change_equipot()
+ * Used by propage_equipot()
+ * Change a subnet value to a new value, for tracks ans pads which are connected to corresponding track
+ * for pads, this is the .m_physical_connexion member which is tested and modified
+ * for tracks, this is the .m_Sous_Netcode member which is tested and modified
+ * these members are block numbers (or cluster numbers) for a given net
+ * @return modification count
+ * @param old_val = subnet value to modify
+ * @param new_val = new subnet value for each item whith have old_val as subnet value
+ * @param pt_start_conn = first track segment to test
+ * @param pt_end_conn = last track segment to test
+ * If pt_end_conn = NULL: search is made from pt_start_conn to end of linked list
  */
 {
     TRACK* pt_conn;
@@ -83,13 +88,16 @@ static int change_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn,
 static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
 /******************************************************************/
 
-/* balaye la liste des SEGMENTS de PISTE
- *  - debut = pt_start_conn
- *  - fin	 = pt_end_conn (pointe le dernier segment a analyser)
- *  pour attribuer ou propager un numero d'equipotentielle par
- *  blocs de connexions existantes
- *  la zone balayee est supposee appartenir au meme net, c'est a dire que
- *  les segments de pistes sont tries par net_code
+/** Function propage_equipot
+ * Test a list of track segment, to create or propagate a sub netcode to pads and segments connected together
+ * the track list must be sorted by nets, and all segments from pt_start_conn to pt_end_conn have the save net
+ * When 2 items are connected (a track to a pad, or a track to an other track) they are grouped in a cluster.
+ * for pads, this is the .m_physical_connexion member which is a cluster identifier
+ * for tracks, this is the .m_Sous_Netcode member which is a cluster identifier
+ * For a given net, if all tracks are created, there is only one cluster.
+ * but if not all tracks are created, there are are more than one cluster, and some ratsnets will be shown.
+ * @param pt_start_conn = first track to test
+ * @param pt_end_conn = last segment to test
  */
 {
     TRACK*      pt_conn;
@@ -118,34 +126,34 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
     sous_net_code = 1;
     pt_start_conn->SetSubNet( sous_net_code );
 
-    /* debut du calcul de propagation */
+    /* Start of calculation */
     pt_conn = pt_start_conn;
     for( ; pt_conn != NULL; pt_conn = (TRACK*) pt_conn->Pnext )
     {
-        /* Traitement des connexions a pads */
+        /* First: handling connections to pads */
         PtStruct = pt_conn->start;
 
-        /* la connexion debute sur 1 pad */
+        /* The segment starts on a pad */
         if( PtStruct && (PtStruct->Type() == TYPEPAD) )
         {
             pt_pad = (D_PAD*) PtStruct;
-            if( pt_conn->GetSubNet() )                  /* la connexion fait deja partie d'une chaine */
+            if( pt_conn->GetSubNet() )                  /* the track segment is already a cluster member */
             {
-                if( pt_pad->m_physical_connexion > 0 )  /* le pad fait aussi partie d'une chaine */
+                if( pt_pad->m_physical_connexion > 0 )  /* The pad is already a cluster member, so we can merge the 2 clusters */
                 {
                     change_equipot( pt_start_conn, pt_end_conn,
                                    pt_pad->m_physical_connexion, pt_conn->GetSubNet() );
                 }
-                else
+                else  /* The pad is not yet attached to a cluster , so we can add this pad to the cluster */
                     pt_pad->m_physical_connexion = pt_conn->GetSubNet();
             }
-            else    /* la connexion ne fait pas partie encore d'une chaine */
+            else                                        /* the track segment is not attached to a cluster */
             {
-                if( pt_pad->m_physical_connexion > 0 )
+                if( pt_pad->m_physical_connexion > 0 )  /* it is connected to a pad in a cluster, merge this track */
                 {
                     pt_conn->SetSubNet( pt_pad->m_physical_connexion );
                 }
-                else
+                else    /* it is connected to a pad not in a cluster, so we must create a new cluster (only with the 2 items: the track and the pad) */
                 {
                     sous_net_code++;
                     pt_conn->SetSubNet( sous_net_code );
@@ -156,7 +164,7 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
 
         PtStruct = pt_conn->end;
         if( PtStruct && (PtStruct->Type() == TYPEPAD) )
-        /* la connexion finit sur 1 pad */
+        /* The segment end on a pad */
         {
             pt_pad = (D_PAD*) PtStruct;
             if( pt_conn->GetSubNet() )
@@ -185,32 +193,32 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
         }
 
 
-        /* traitement des connexions entre segments */
+        /* Test connections between segments */
         PtStruct = pt_conn->start;
         if( PtStruct && (PtStruct->Type() != TYPEPAD) )
         {
-            /* debut sur une autre piste */
+            /* The segment starts on an other track */
             pt_autre_piste = (TRACK*) PtStruct;
 
-            if( pt_conn->GetSubNet() )  /* La connexion fait deja partie d'un block */
+            if( pt_conn->GetSubNet() )              /* the track segment is already a cluster member */
             {
-                if( pt_autre_piste->GetSubNet() )
+                if( pt_autre_piste->GetSubNet() )   /* The other track is already a cluster member, so we can merge the 2 clusters */
                 {
                     change_equipot( pt_start_conn, pt_end_conn,
                                    pt_autre_piste->GetSubNet(), pt_conn->GetSubNet() );
                 }
-                else
+                else /* The other track is not yet attached to a cluster , so we can add this other track to the cluster */
                 {
                     pt_autre_piste->SetSubNet( pt_conn->GetSubNet() );
                 }
             }
-            else       /* La connexion ne fait partie d'aucun block */
+            else                                    /* the track segment is not yet attached to a cluster */
             {
-                if( pt_autre_piste->GetSubNet() )
+                if( pt_autre_piste->GetSubNet() )   /* The other track is already a cluster member, so we can add the segment to the cluster */
                 {
                     pt_conn->SetSubNet( pt_autre_piste->GetSubNet() );
                 }
-                else
+                else    /* it is connected to an other segment not in a cluster, so we must create a new cluster (only with the 2 track segments) */
                 {
                     sous_net_code++;
                     pt_conn->SetSubNet( sous_net_code );
@@ -219,13 +227,12 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
             }
         }
 
-        PtStruct = pt_conn->end;
+        PtStruct = pt_conn->end;    // Do the same calculations for the segment end point
         if( PtStruct && (PtStruct->Type() != TYPEPAD) )
         {
-            /* fin connectee a une autre piste */
             pt_autre_piste = (TRACK*) PtStruct;
 
-            if( pt_conn->GetSubNet() )   /* La connexion fait deja partie d'un block */
+            if( pt_conn->GetSubNet() )  /* the track segment is already a cluster member */
             {
                 if( pt_autre_piste->GetSubNet() )
                 {
@@ -235,7 +242,7 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
                 else
                     pt_autre_piste->SetSubNet( pt_conn->GetSubNet() );
             }
-            else    /* La connexion ne fait partie d'aucun block */
+            else      /* the track segment is not yet attached to a cluster */
             {
                 if( pt_autre_piste->GetSubNet() )
                 {
@@ -259,10 +266,12 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
 void WinEDA_BasePcbFrame::test_connexions( wxDC* DC )
 /***************************************************/
 
-/*
- *  Routine recherchant les connexions deja faites et mettant a jour
- *  le status du chevelu ( Bit CH_ACTIF mis a 0 si connexion trouvee
- *  Les pistes sont supposees etre triees par ordre de net_code croissant
+/** Function testing the connections relative to all nets
+ *  This function update le status du chevelu ( flag CH_ACTIF = 0 if a connection is found, = 1 else)
+ * track segments are assumed to be sorted by net codes.
+ * This is the case because when a new track is added, it is put in the linked link according to its net code.
+ * and when nets are changed (when a new netlist is read) tracks are sorted before using this function
+ * @param DC = current Device Context
  */
 {
     TRACK*     pt_start_conn, * pt_end_conn;
@@ -270,31 +279,23 @@ void WinEDA_BasePcbFrame::test_connexions( wxDC* DC )
     LISTE_PAD* pt_pad;
     int        current_net_code;
 
-    /* Etablissement des equipotentielles vraies */
+    /* Clear the cluster identifier for all pads */
     pt_pad = m_Pcb->m_Pads;
     for( ii = 0; ii < m_Pcb->m_NbPads; ii++, pt_pad++ )
     {
         (*pt_pad)->m_physical_connexion = 0;
     }
 
-    ////////////////////////////
-    // Calcul de la connexite //
-    ////////////////////////////
-
-    /*  Les pointeurs .start et .end sont mis a jour, si la
-     *   connexion est du type segment a segment
-     */
-
-    pt_start_conn = m_Pcb->m_Track;
+    /* Test existing connections net by net */
+    pt_start_conn = m_Pcb->m_Track;     // this is the first segment of the first net
     while( pt_start_conn != NULL )
     {
-        current_net_code = pt_start_conn->GetNet();
-        pt_end_conn = pt_start_conn->GetEndNetCode( current_net_code );
+        current_net_code = pt_start_conn->GetNet();                         // this is the current net because pt_start_conn is the first segment of the net
+        pt_end_conn = pt_start_conn->GetEndNetCode( current_net_code );     // this is the last segment of the current net
 
-        /* Calcul des connexions type segment du net courant */
         calcule_connexite_1_net( pt_start_conn, pt_end_conn );
 
-        pt_start_conn = (TRACK*) pt_end_conn->Pnext;
+        pt_start_conn = (TRACK*) pt_end_conn->Pnext;    // this is now the first segment of the next net
     }
 
     return;
@@ -305,8 +306,10 @@ void WinEDA_BasePcbFrame::test_connexions( wxDC* DC )
 void WinEDA_BasePcbFrame::test_1_net_connexion( wxDC* DC, int net_code )
 /*************************************************************************/
 
-/*
- *  Routine recherchant les connexions deja faites relatives a 1 net
+/** Function testing the connections relative to a given net
+ * track segments are assumed to be sorted by net codes
+ * @param DC = current Device Context
+ * @param net_code = net code to test
  */
 {
     TRACK*     pt_start_conn, * pt_end_conn;
@@ -333,7 +336,7 @@ void WinEDA_BasePcbFrame::test_1_net_connexion( wxDC* DC, int net_code )
         (*pt_pad)->m_physical_connexion = 0;
     }
 
-    /* Determination des limites du net */
+    /* Search for the first and the last segment relative to the given net code */
     if( m_Pcb->m_Track )
     {
         pt_end_conn   = NULL;
@@ -348,10 +351,10 @@ void WinEDA_BasePcbFrame::test_1_net_connexion( wxDC* DC, int net_code )
         }
     }
 
-    /* Test des chevelus */
+    /* Test the rastnest for this net */
     nb_net_noconnect = Test_1_Net_Ratsnest( DC, net_code );
 
-    /* Affichage des resultats */
+    /* Display results */
     msg.Printf( wxT( "links %d nc %d  net:nc %d" ),
                 m_Pcb->m_NbLinks, m_Pcb->GetNumNoconnect(),
                 nb_net_noconnect );
@@ -395,7 +398,7 @@ static void calcule_connexite_1_net( TRACK* pt_start_conn, TRACK* pt_end_conn )
     /* Update connections type track to track */
     for( Track = pt_start_conn; Track != NULL; Track = (TRACK*) Track->Pnext )
     {
-        if( Track->Type() == TYPEVIA )	// A via can connect many tracks, we must search for all track segments in this net
+        if( Track->Type() == TYPEVIA )  // A via can connect many tracks, we must search for all track segments in this net
         {
             TRACK* pt_segm;
             int    layermask = Track->ReturnMaskLayer();
@@ -419,12 +422,12 @@ static void calcule_connexite_1_net( TRACK* pt_start_conn, TRACK* pt_end_conn )
             }
         }
 
-        if( Track->start == NULL )	// end track not already connected, search a connection
+        if( Track->start == NULL )  // end track not already connected, search a connection
         {
             Track->start = Locate_Piste_Connectee( Track, Track, pt_end_conn, START );
         }
 
-        if( Track->end == NULL )	// end track not already connected, search a connection
+        if( Track->end == NULL )    // end track not already connected, search a connection
         {
             Track->end = Locate_Piste_Connectee( Track, Track, pt_end_conn, END );
         }
@@ -443,19 +446,20 @@ static void calcule_connexite_1_net( TRACK* pt_start_conn, TRACK* pt_end_conn )
 static D_PAD* SuperFast_Locate_Pad_Connecte( BOARD* pcb, LISTE_PAD* pt_liste,
                                              int px, int py, int masque_layer )
 /******************************************************************************/
-/* recherche le pad connecte a l'extremite de la piste de coord px, py
- *  parametres d'appel:
- *      px, py = coord du point tst
- *      masque_layer = couche(s) de connexion
- *      pt_liste = adresse de la liste des pointeurs de pads, tels que
- *      apparaissant apres build_liste_pad, mais classee par position X
- *      de pads croissantes.
- *  retourne : pointeur sur le pad connecte
- *  la routine travaille par dichotomie sur la liste des pads tries par pos X
- *  croissante, elle est donc beaucoup plus rapide que Fast_Locate_Pad_connecte,
- *  mais implique le calcul de cette liste.
+
+/** Function SuperFast_Locate_Pad_Connecte
+ * Locate the pad connected to a track ended at coord px, py
+ * A track is seen as connected if the px, py position is same as the pad position
+ * @param px = reference X coordinate
+ * @param py = reference Y coordinate
+ * @param masque_layer = Layers (bit to bit) to consider
+ * @param pt_liste = Pointers to pads buffer
+ *      This buffer is a list like the list created by build_liste_pad, but sorted by increasing X pad coordinate
+ * @return : pointer on the connected pad
+ *  This function uses a fast search in this sorted pad list and it is faster than Fast_Locate_Pad_connecte(),
+ *  But this sorted pad list must be built before calling this function.
  *
- *  (la liste placee en m_Pcb->m_Pads et elle triee par netcodes croissants)
+ *  (Note: The usual pad list (created by build_liste_pad) m_Pcb->m_Pads is sorted by increasing netcodes )
  */
 {
     D_PAD*     pad;
@@ -474,14 +478,14 @@ static D_PAD* SuperFast_Locate_Pad_Connecte( BOARD* pcb, LISTE_PAD* pt_liste,
         if( (ii & 1) && ( ii > 1 ) )
             nb_pad++;
 
-        if( pad->m_Pos.x < px ) /* on doit chercher plus loin */
+        if( pad->m_Pos.x < px ) /* Must search after this item */
         {
             ptr_pad += nb_pad;
             if( ptr_pad > lim )
                 ptr_pad = lim;
             continue;
         }
-        if( pad->m_Pos.x > px ) /* on doit chercher moins loin */
+        if( pad->m_Pos.x > px ) /* Must search before this item */
         {
             ptr_pad -= nb_pad;
             if( ptr_pad < pt_liste )
@@ -489,9 +493,9 @@ static D_PAD* SuperFast_Locate_Pad_Connecte( BOARD* pcb, LISTE_PAD* pt_liste,
             continue;
         }
 
-        if( pad->m_Pos.x == px )  /* zone de classement trouvee */
+        if( pad->m_Pos.x == px )  /* A suitable block is found (X coordinate matches the px reference: but wue must matches the Y coordinate */
         {
-            /* recherche du debut de la zone */
+            /* Search the beginning of the block */
             while( ptr_pad >= pt_liste )
             {
                 pad = *ptr_pad;
@@ -501,22 +505,22 @@ static D_PAD* SuperFast_Locate_Pad_Connecte( BOARD* pcb, LISTE_PAD* pt_liste,
                     break;
             }
 
-            ptr_pad++;  /* pointe depart de zone a pad->m_Pos.x = px */
+            ptr_pad++;  /* ptr_pad = first pad which have pad->m_Pos.x = px */
 
             for( ; ; ptr_pad++ )
             {
                 if( ptr_pad > lim )
-                    return NULL; /* hors zone */
+                    return NULL; /* outside suitable block */
 
                 pad = *ptr_pad;
                 if( pad->m_Pos.x != px )
-                    return NULL; /* hors zone */
+                    return NULL; /* outside suitable block */
 
                 if( pad->m_Pos.y != py )
                     continue;
 
-                /* Pad peut-etre trouve ici: il doit etre sur la bonne couche */
-                if( pad->m_Masque_Layer & masque_layer )
+                /* A Pad if found here: but it must mach the layer */
+                if( pad->m_Masque_Layer & masque_layer )  // Matches layer => a connected pad is found !
                     return pad;
             }
         }
@@ -560,10 +564,10 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
 /********************************************************************/
 
 /* search connections between tracks and pads, and propagate pad net codes to the track segments
-  * This is a 2 pass computation.
-  * The pad netcodes are assumed to be initialized.
-  * First:
-  * We search a connection between a track segment and a pad: if found : this segment  netcode is set to the pad netcode
+ * This is a 2 pass computation.
+ * The pad netcodes are assumed to be initialized.
+ * First:
+ * We search a connection between a track segment and a pad: if found : this segment  netcode is set to the pad netcode
  */
 {
     TRACK*      pt_piste,
@@ -605,7 +609,7 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
     }
 
     /* First pass: search connection between a track segment and a pad.
-      * if found, set the track net code to the pad netcode
+     * if found, set the track net code to the pad netcode
      */
     pt_piste = m_Pcb->m_Track;
     for( ; pt_piste != NULL; pt_piste = (TRACK*) pt_piste->Pnext )
@@ -648,7 +652,7 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
     /*  the .start et .end member pointers are updated, only if NULLs
      * (if not nuls, the end is already connected to a pad).
      * the connection (if found) is between segments
-	 * when a track has a net code and the other has a null net code, the null net code is changed
+     * when a track has a net code and the other has a null net code, the null net code is changed
      */
     if( affiche )
         Affiche_1_Parametre( this, POS_AFF_CHREF, wxEmptyString, wxT( "Conn Segm" ), a_color );
@@ -782,8 +786,8 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
 
 
 /*
- *  routine de tri de connexion utilisee par la fonction QSORT
- *  le tri est fait par numero de net
+ *  Sort function for track segments used in RebuildTrackChain() (for the qsort C function)
+ *  The sorting is made by net code
  */
 int Sort_By_NetCode( TRACK** pt_ref, TRACK** pt_compare )
 {
@@ -798,8 +802,9 @@ int Sort_By_NetCode( TRACK** pt_ref, TRACK** pt_compare )
 static void RebuildTrackChain( BOARD* pcb )
 /*****************************************/
 
-/* Recalcule le chainage des pistes pour que le chainage soit fait par
- *  netcodes croissants
+/** Function RebuildTrackChain()
+ * @param pcb = board to rebuild
+ * Rebuild the track segment linked list in order to have a chain sorted by increasing netcodes
  */
 {
     TRACK* Track, ** Liste;
