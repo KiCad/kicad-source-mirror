@@ -235,7 +235,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_HPGL( FILE* File, int masque_layer,
                         masque_layer );
             break;
 
-        case TYPEMARQUEUR:
+        case TYPEMARKER:
             break;
 
         default:

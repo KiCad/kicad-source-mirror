@@ -1079,7 +1079,7 @@ void WinEDA_DrillFrame::GenDrillMap( int format )
             PlotMirePcb( (MIREPCB*) PtStruct, format, EDGE_LAYER );
             break;
 
-        case TYPEMARQUEUR:	// do not draw
+        case TYPEMARKER:	// do not draw
             break;
 
         default:

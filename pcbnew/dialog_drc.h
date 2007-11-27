@@ -88,7 +88,7 @@ class WinEDA_DrcFrame: public wxDialog
 public:
     /// Constructors
     WinEDA_DrcFrame( );
-    WinEDA_DrcFrame( WinEDA_PcbFrame* parent, wxDC * panelDC,
+    WinEDA_DrcFrame( DRC_TESTER* aDrc_tester, WinEDA_PcbFrame* parent, wxDC * panelDC,
                      wxWindowID id = SYMBOL_WINEDA_DRCFRAME_IDNAME,
                      const wxString& caption = SYMBOL_WINEDA_DRCFRAME_TITLE,
                      const wxPoint& pos = SYMBOL_WINEDA_DRCFRAME_POSITION,
@@ -177,9 +177,11 @@ public:
     wxStdDialogButtonSizer* StdDialogButtonSizer;
 ////@end WinEDA_DrcFrame member variables
 
-    WinEDA_PcbFrame * m_Parent;
-    wxDC * m_DC;
-    int m_UnconnectedCount;
+
+    DRC_TESTER*         m_Tester;
+    WinEDA_PcbFrame*    m_Parent;
+    wxDC*               m_DC;
+    int                 m_UnconnectedCount;
 };
 
 #endif  // _DIALOG_DRC_H_

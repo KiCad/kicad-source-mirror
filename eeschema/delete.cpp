@@ -254,7 +254,7 @@ bool LocateAndDeleteItem(WinEDA_SchematicFrame * frame, wxDC * DC)
 /*****************************************************************/
 /* Locate and delete the item found under the mouse cousor
 	If more than one item found: the priority order is:
-	1 : MARQUEUR
+	1 : MARKER
 	2 : JUNCTION
 	2 : NOCONNECT
 	3 : WIRE ou BUS

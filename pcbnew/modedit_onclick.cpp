@@ -334,7 +334,7 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
     case TYPEVIA:
     case TYPETRACK:
     case TYPEZONE:
-    case TYPEMARQUEUR:
+    case TYPEMARKER:
     case TYPECOTATION:
     case TYPEMIRE:
         break;

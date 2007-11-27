@@ -962,15 +962,13 @@ void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
         Delete_Zone( DC, (SEGZONE*) Item );
         break;
 
-    case TYPEMARQUEUR:
+    case TYPEMARKER:
         if( Item == GetCurItem() )
             SetCurItem( NULL );
-        ( (MARQUEUR*) Item )->Draw( DrawPanel, DC, GR_XOR );
+        ( (MARKER*) Item )->Draw( DrawPanel, DC, GR_XOR );
 
-        /* unlikf item an free the memory
-         *  (not put in undelete stack, because this seems unnecessary)
-         */
-        Item->DeleteStructure();
+        // delete the marker, and free memory.  Don't use undelete stack.
+        m_Pcb->Delete( Item );
         break;
 
     case TYPEPAD:

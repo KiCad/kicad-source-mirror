@@ -8,21 +8,39 @@
 #include "base_struct.h"
 
 
-class MARQUEUR : public BOARD_ITEM
+class MARKER : public BOARD_ITEM
 {
+private:
+    wxString m_Diag;                /* Associated text (comment) */
+    
 public:
     wxPoint  m_Pos;
     char*    m_Bitmap;              /* Shape (bitmap) */
     int      m_Type;
     int      m_Color;               /* color */
-    wxString m_Diag;                /* Associated text (comment) */
 	wxSize m_Size;					/* Size of the graphic symbol */
 
 public:
-    MARQUEUR( BOARD_ITEM* StructFather );
-    ~MARQUEUR();
+    MARKER( BOARD_ITEM* StructFather );
+    ~MARKER();
+    
     void    UnLink();
     void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int DrawMode );
+
+    
+    /**
+     * Function GetMessage
+     * @return const wxString& - the diagnostic message
+     */
+    const wxString& GetMessage()
+    {
+        return m_Diag;
+    }
+    void SetMessage( const wxString& aMsg )
+    {
+        m_Diag = aMsg;
+    }
+
     
     /**
      * Function Display_Infos

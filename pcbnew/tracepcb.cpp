@@ -101,7 +101,6 @@ void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
 /****************************************************/
 /* Redraw the BOARD items but not cursors, axis or grid */
 {
-    MARQUEUR*       Marqueur;
     MODULE*         Module;
     EDA_BaseStruct* PtStruct;
 
@@ -158,11 +157,6 @@ void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
             ( (MIREPCB*) PtStruct )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), mode );
             break;
 
-        case TYPEMARQUEUR:       /* Trace des marqueurs */
-            Marqueur = (MARQUEUR*) PtStruct;
-            Marqueur->Draw( DrawPanel, DC, mode );
-            break;
-
        case TYPEDRAWSEGMENT:
 			Trace_DrawSegmentPcb( DrawPanel, DC, (DRAWSEGMENT*) PtStruct, mode );
 			break;
@@ -170,6 +164,12 @@ void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
 	   default:
             break;
         }
+    }
+
+    // draw the BOARD's markers.
+    for( unsigned i=0; i<m_Pcb->m_markers.size();  ++i )
+    {
+        m_Pcb->m_markers[i]->Draw( DrawPanel, DC, mode );
     }
 
     Trace_Pistes( DrawPanel, m_Pcb, DC, mode );

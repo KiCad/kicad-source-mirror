@@ -67,7 +67,7 @@ wxString msg;
 //												EDGE_LAYER | masque_layer );
 				break;
 
-			case TYPEMARQUEUR:
+			case TYPEMARKER:
 				break;
 
 			default:

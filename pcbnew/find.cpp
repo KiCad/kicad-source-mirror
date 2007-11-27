@@ -48,7 +48,6 @@ void WinEDA_PcbFindFrame::FindItem( wxCommandEvent& event )
     wxPoint     locate_pos;
     wxString    msg;
     bool        FindMarker = FALSE;
-    int         StartCount;
     BOARD_ITEM* foundItem = 0;
 
     switch( event.GetId() )
@@ -69,32 +68,22 @@ void WinEDA_PcbFindFrame::FindItem( wxCommandEvent& event )
     s_OldStringFound = m_NewText->GetValue();
 
     m_Parent->DrawPanel->GetViewStart( &screen->m_StartVisu.x, &screen->m_StartVisu.y );
-    StartCount = 0;
 
     if( FindMarker )
     {
-        MARQUEUR* marker = (MARQUEUR*) m_Parent->m_Pcb->m_Drawings;
-        for( ; marker; marker = (MARQUEUR*) marker->Next() )
+        MARKER* marker = m_Parent->m_Pcb->GetMARKER( s_MarkerCount++ );
+        if( marker )
         {
-            if( marker->Type() != TYPEMARQUEUR )
-                continue;
-            
-            StartCount++;
-            if( StartCount > s_MarkerCount )
-            {
-                foundItem  = marker;
-                locate_pos = marker->m_Pos;
-                s_MarkerCount++;
-                break;
-            }
+            foundItem  = marker;
+            locate_pos = marker->m_Pos;
         }
     }
     else
     {
-        for( MODULE* module = m_Parent->m_Pcb->m_Modules; module; module = (MODULE*) module->Next() )
+        int StartCount = 0;
+        for( MODULE* module = m_Parent->m_Pcb->m_Modules;   module;   module = module->Next() )
         {
-            if( WildCompareString( s_OldStringFound, module->GetReference().GetData(),
-                                   FALSE ) )
+            if( WildCompareString( s_OldStringFound, module->GetReference().GetData(), FALSE ) )
             {
                 StartCount++;
                 if( StartCount > s_ItemCount )

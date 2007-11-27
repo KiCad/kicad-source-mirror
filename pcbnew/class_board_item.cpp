@@ -194,8 +194,8 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         }
         break;
 
-    case TYPEMARQUEUR:
-        text << _( "Marker" ) << wxT( " @(" ) << ((MARQUEUR*)item)->m_Pos.x << wxT(",") << ((MARQUEUR*)item)->m_Pos.y << wxT(")");
+    case TYPEMARKER:
+        text << _( "Marker" ) << wxT( " @(" ) << ((MARKER*)item)->m_Pos.x << wxT(",") << ((MARKER*)item)->m_Pos.y << wxT(")");
         break;
 
     case TYPECOTATION:
@@ -275,7 +275,7 @@ const char** BOARD_ITEM::MenuIcon() const
         xpm = pad_sketch_xpm;
         break;
 
-    case TYPEMARQUEUR:
+    case TYPEMARKER:
         xpm = pad_xpm;              // @todo: create and use marker xpm
         break;
 

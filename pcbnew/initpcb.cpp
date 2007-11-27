@@ -349,15 +349,7 @@ void WinEDA_PcbFrame::Erase_Textes_Pcb( wxDC* DC, bool query )
 void WinEDA_PcbFrame::Erase_Marqueurs()
 /*******************************************/
 {
-    BOARD_ITEM* PtStruct, * PtNext;
-
-    PtStruct = m_Pcb->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtNext )
-    {
-        PtNext = PtStruct->Next();
-        if( PtStruct->Type() == TYPEMARQUEUR )
-            PtStruct ->DeleteStructure();
-    }
-
+    m_Pcb->DeleteMARKERs();
     GetScreen()->SetModify();
 }
+

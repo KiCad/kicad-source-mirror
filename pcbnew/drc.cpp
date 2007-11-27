@@ -21,6 +21,10 @@ class WinEDA_DrcFrame;
 WinEDA_DrcFrame* DrcFrame;
 
 
+//#define WXYIELD()   wxYield()
+#define WXYIELD()   do { } while(0)     // nothing
+
+
 /* saving drc options */
 static bool      s_Pad2PadTestOpt     = true;
 static bool      s_UnconnectedTestOpt = true;
@@ -30,7 +34,7 @@ static FILE*     s_RptFile = NULL;
 static wxString  s_RptFilename;
 
 static int       ErrorsDRC_Count;
-static MARQUEUR* current_marqueur; /* Pour gestion des marqueurs sur pcb */
+static MARKER* current_marqueur; /* Pour gestion des marqueurs sur pcb */
 
 static bool      AbortDrc, DrcInProgress = FALSE;
 static int       spot_cX, spot_cY;                      /* position d'elements a tester */
@@ -261,7 +265,7 @@ void WinEDA_PcbFrame::Install_Test_DRC_Frame( wxDC* DC )
  */
 {
     AbortDrc = FALSE;
-    DrcFrame = new WinEDA_DrcFrame( this, DC );
+    DrcFrame = new WinEDA_DrcFrame( NULL, this, DC );   // @todo
     DrcFrame->ShowModal();
     DrcFrame->Destroy();
     DrcFrame = NULL;
@@ -281,8 +285,7 @@ int WinEDA_PcbFrame::Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone )
     int             flag_err_Drc;
     TRACK*          pt_segm;
     D_PAD*          pad;
-    MARQUEUR*       Marqueur;
-    EDA_BaseStruct* PtStruct;
+    MARKER*       Marqueur;
     wxString        Line;
 
 #define PRINT_NB_PAD_POS      42
@@ -344,13 +347,8 @@ int WinEDA_PcbFrame::Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone )
                 }
                 Line.Printf( wxT( "%d" ), ErrorsDRC_Count );
                 Affiche_1_Parametre( this, PRINT_PAD_ERR_POS, wxEmptyString, Line, LIGHTRED );
-                Marqueur->Pnext = m_Pcb->m_Drawings;
-                Marqueur->Pback = m_Pcb;
 
-                PtStruct = m_Pcb->m_Drawings;
-                if( PtStruct )
-                    PtStruct->Pback = Marqueur;
-                m_Pcb->m_Drawings = Marqueur;
+                m_Pcb->Add( Marqueur );
             }
         }
 
@@ -375,7 +373,7 @@ int WinEDA_PcbFrame::Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone )
         if( jj == 0 )
         {
             jj = 10;
-            wxYield();
+            WXYIELD();
             if( AbortDrc )
             {
                 AbortDrc = FALSE; break;
@@ -409,13 +407,8 @@ int WinEDA_PcbFrame::Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone )
                 DisplayError( this, wxT( "Test_Drc(): internal err" ) );
                 return ErrorsDRC_Count;
             }
-            Marqueur->Pnext = m_Pcb->m_Drawings;
-            Marqueur->Pback = m_Pcb;
-
-            PtStruct = m_Pcb->m_Drawings;
-            if( PtStruct )
-                PtStruct->Pback = Marqueur;
-            m_Pcb->m_Drawings = Marqueur;
+            
+            m_Pcb->Add( Marqueur );            
 
             GRSetDrawMode( DC, GR_OR );
             pt_segm->Draw( DrawPanel, DC, RED ^ LIGHTRED );
@@ -449,7 +442,7 @@ int WinEDA_PcbFrame::Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone )
             if( jj == 0 )
             {
                 jj = 100;
-                wxYield();
+                WXYIELD();
                 if( AbortDrc )
                 {
                     AbortDrc = FALSE;
@@ -487,13 +480,8 @@ int WinEDA_PcbFrame::Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone )
                     DisplayError( this, wxT( "Test_Drc(): internal err" ) );
                     return ErrorsDRC_Count;
                 }
-                Marqueur->Pnext = m_Pcb->m_Drawings;
-                Marqueur->Pback = m_Pcb;
-
-                PtStruct = m_Pcb->m_Drawings;
-                if( PtStruct )
-                    PtStruct->Pback = Marqueur;
-                m_Pcb->m_Drawings = Marqueur;
+                
+                m_Pcb->Add( Marqueur );
 
                 GRSetDrawMode( DC, GR_OR );
                 pt_segm->Draw( DrawPanel, DC, RED ^ LIGHTRED );
@@ -517,14 +505,8 @@ int WinEDA_PcbFrame::Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone )
                     DisplayError( this, wxT( "Test_Drc(): internal err" ) );
                     return ErrorsDRC_Count;
                 }
-                Marqueur->Pnext = m_Pcb->m_Drawings;
-                Marqueur->Pback = m_Pcb;
-
-                PtStruct = m_Pcb->m_Drawings;
-                if( PtStruct )
-                    PtStruct->Pback = Marqueur;
-
-                m_Pcb->m_Drawings = Marqueur;
+                
+                m_Pcb->Add( Marqueur );
 
                 GRSetDrawMode( DC, GR_OR );
                 pt_segm->Draw( DrawPanel, DC, RED ^ LIGHTRED );
@@ -1469,11 +1451,11 @@ static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb,
         fprintf( s_RptFile, "%s", CONV_TO_UTF8( msg ) );
 
     if( current_marqueur == NULL )
-        current_marqueur = new MARQUEUR( Pcb );
+        current_marqueur = new MARKER( Pcb );
 
     current_marqueur->m_Pos   = wxPoint( erc_pos.x, erc_pos.y );
     current_marqueur->m_Color = WHITE;
-    current_marqueur->m_Diag  = msg;
+    current_marqueur->SetMessage( msg );
     current_marqueur->Draw( panel, DC, GR_OR );
 }
 
@@ -1527,11 +1509,11 @@ static void Affiche_Erreur_DRC( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb,
         fprintf( s_RptFile, "%s", CONV_TO_UTF8( msg ) );
 
     if( current_marqueur == NULL )
-        current_marqueur = new MARQUEUR( Pcb );
+        current_marqueur = new MARKER( Pcb );
 
     current_marqueur->m_Pos   = pad1->m_Pos;
     current_marqueur->m_Color = WHITE;
-    current_marqueur->m_Diag  = msg;
+    current_marqueur->SetMessage( msg );
     current_marqueur->Draw( panel, DC, GR_OR );
 }
 

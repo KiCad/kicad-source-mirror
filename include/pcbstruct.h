@@ -133,7 +133,7 @@ enum Track_Shapes {
 /* Forward declaration */
 class MODULE;
 class EQUIPOT;
-class MARQUEUR;
+class MARKER;
 class TRACK;
 class D_PAD;
 struct CHEVELU;
@@ -198,6 +198,10 @@ enum DisplayViaMode {
 
 class BOARD : public BOARD_ITEM
 {
+    friend class WinEDA_PcbFrame;
+private:
+    std::vector<MARKER*> m_markers;             ///< MARKERs which we own by pointer                                                 
+    
 public:
     WinEDA_BasePcbFrame*    m_PcbFrame;         // Window de visualisation
     EDA_Rect                m_BoundaryBox;      // Limites d'encadrement du PCB
@@ -232,6 +236,41 @@ public:
     /* supprime du chainage la structure Struct */
     void    UnLink();
 
+    /**
+     * Function Add
+     * adds the given item to this BOARD and takes ownership of its memory.
+     * @param aBoardItem The item to add to this board.
+     * @param aControl An int which can vary how the item is added. 
+     */
+    void    Add( BOARD_ITEM* aBoardItem, int aControl = 0 );
+
+    /**
+     * Function Delete
+     * deletes the given single item from this BOARD and deletes its memory.  If you
+     * need the object after deletion, first copy it.
+     * @param aBoardItem The item to remove from this board and delete
+     */
+    void    Delete( BOARD_ITEM* aBoardItem );
+
+    /**
+     * Function DeleteMARKERs
+     * deletes ALL MARKERS from the board.
+     */
+    void    DeleteMARKERs();
+
+    /**
+     * Function GetMARKER
+     * returns the MARKER at a given index.
+     * @param index The array type index into a collection of MARKERS.
+     * @return MARKER* - a pointer to the MARKER or NULL if index out of range.
+     */
+    MARKER* GetMARKER( int index ) const
+    {
+        if( (unsigned) index < m_markers.size() )
+            return m_markers[index];
+        return NULL;
+    }
+    
     /* Routines de calcul des nombres de segments pistes et zones */
     int     GetNumSegmTrack();
     int     GetNumSegmZone();

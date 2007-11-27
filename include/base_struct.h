@@ -35,7 +35,7 @@ enum KICAD_T {
     TYPETRACK,
     TYPEZONE,
     TYPEVIA,
-    TYPEMARQUEUR,
+    TYPEMARKER,
     TYPECOTATION,
     TYPEMIRE,
     TYPESCREEN,
@@ -178,7 +178,7 @@ private:
 public:
 
     EDA_BaseStruct( EDA_BaseStruct* parent, KICAD_T idType );
-    EDA_BaseStruct( KICAD_T struct_type );
+    EDA_BaseStruct( KICAD_T idType );
     virtual ~EDA_BaseStruct() { };
 
     /**
@@ -218,10 +218,6 @@ public:
     {
         m_Status = new_status;
     }
-
-
-    /* addition d'une nouvelle struct a la liste chain� */
-    void            AddToChain( EDA_BaseStruct* laststruct );
 
     /* fonction de placement */
     virtual void    Place( WinEDA_DrawFrame* frame, wxDC* DC );
@@ -316,6 +312,16 @@ public:
     void DeleteStructList();
 
 
+    /**
+     * Function AddToChain
+     * adds this item just after laststruct in a linked list established
+     * by the Prev and Back pointers of my base EDA_BaseStruct.
+     * @deprecated
+     * @param laststruct The item to add after
+     */
+    void AddToChain( EDA_BaseStruct* laststruct );
+
+    
 #if defined (DEBUG)
 
     /**
@@ -449,6 +455,7 @@ public:
     BOARD_ITEM* Next() const { return (BOARD_ITEM*) Pnext; }
     BOARD_ITEM* Back() const { return (BOARD_ITEM*) Pback; }
     BOARD_ITEM* GetParent() const { return (BOARD_ITEM*) m_Parent; }
+
 
     /**
      * Function GetLayer

@@ -292,7 +292,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                           _( "Delete Zone" ), delete_xpm );
             break;
 
-        case TYPEMARQUEUR:
+        case TYPEMARKER:
             ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_MARKER,
                           _( "Delete Marker" ), delete_xpm );
             break;

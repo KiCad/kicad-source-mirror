@@ -74,6 +74,8 @@ BOARD::~BOARD()
     
     MyFree( m_LocalRatsnest );
     m_LocalRatsnest = 0;
+
+    DeleteMARKERs();
 }
 
 
@@ -100,13 +102,65 @@ void BOARD::UnLink()
 }
 
 
+void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
+{
+    switch( aBoardItem->Type() )
+    {
+    // this one uses a vector
+    case TYPEMARKER:
+        m_markers.push_back( (MARKER*) aBoardItem );
+        break;
+    
+    // other types may use linked list
+    default:
+        wxFAIL_MSG( wxT("BOARD::Add() needs work") );
+    }
+}
+
+
+void BOARD::Delete( BOARD_ITEM* aBoardItem )
+{
+    switch( aBoardItem->Type() )
+    {
+    // this one uses a vector
+    case TYPEMARKER:
+        
+        // find the item in the vector, then delete then erase it.
+        for( unsigned i=0;  i<m_markers.size();  ++i )
+        {
+            if( m_markers[i] == (MARKER*) aBoardItem )
+            {
+                delete m_markers[i]; 
+                m_markers.erase( m_markers.begin() + i );
+                break;
+            }
+        }
+        break;
+    
+    // other types may use linked list
+    default:
+        wxFAIL_MSG( wxT("BOARD::Delete() needs work") );
+    }
+}
+
+
+void BOARD::DeleteMARKERs()
+{
+    // the vector does not know how to delete the MARKER, it holds pointers
+    for( unsigned i=0;  i<m_markers.size();  ++i )
+        delete m_markers[i];
+    
+    m_markers.clear();
+}
+
+
 /* Routines de calcul des nombres de segments pistes et zones */
 int BOARD::GetNumSegmTrack()
 {
     TRACK* CurTrack = m_Track;
     int    ii = 0;
 
-    for( ; CurTrack != NULL; CurTrack = (TRACK*) CurTrack->Pnext )
+    for( ; CurTrack != NULL; CurTrack = CurTrack->Next() )
         ii++;
 
     m_NbSegmTrack = ii;
@@ -119,7 +173,7 @@ int BOARD::GetNumSegmZone()
     TRACK* CurTrack = m_Zone;
     int    ii = 0;
 
-    for( ; CurTrack != NULL; CurTrack = (TRACK*) CurTrack->Pnext )
+    for( ; CurTrack != NULL; CurTrack = CurTrack->Next() )
         ii++;
 
     m_NbSegmZone = ii;
@@ -385,7 +439,6 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
 
         case TYPEDRAWSEGMENT:
         case TYPETEXTE:
-        case TYPEMARQUEUR:
         case TYPECOTATION:
         case TYPEMIRE:
             result = IterateForward( m_Drawings, inspector, testData, p );
@@ -396,7 +449,6 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
                 {
                 case TYPEDRAWSEGMENT:
                 case TYPETEXTE:
-                case TYPEMARQUEUR:
                 case TYPECOTATION:
                 case TYPEMIRE:
                     continue;
@@ -447,7 +499,18 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
             ++p;
             break;
 #endif
-            
+
+        case TYPEMARKER:
+            // MARKERS are in the m_markers std::vector
+            for( unsigned i=0;  i<m_markers.size();  ++i )
+            {
+                result = m_markers[i]->Visit( inspector, testData, p );
+                if( result == SEARCH_QUIT )
+                    break;
+            }
+            ++p;
+            break;
+
         case PCB_EQUIPOT_STRUCT_TYPE:
             result = IterateForward( m_Equipots, inspector, testData, p );
             ++p;
@@ -604,9 +667,6 @@ bool BOARD::Save( FILE* aFile ) const
                 goto out;
             break;
 
-        case TYPEMARQUEUR:      // do not save MARKERs, they can be regenerated easily 
-            break;
-
         default:
             // future: throw exception here
 #if defined(DEBUG)            
@@ -615,6 +675,8 @@ bool BOARD::Save( FILE* aFile ) const
             break;
         }
     }
+
+    // do not save MARKERs, they can be regenerated easily 
     
     // save the tracks & vias
     fprintf( aFile, "$TRACK\n" );

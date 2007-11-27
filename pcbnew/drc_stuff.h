@@ -35,19 +35,57 @@
 
 
 /**
+ * Class REPORT_ISSUE
+ * is an abstract interface used by DRCLISTBOX.  It has functions to return
+ * either html text or disk file report text on this item.  It also can
+ * return the drawing coordinate of the report item.
+ */
+class REPORT_ISSUE
+{
+public:
+
+    /**
+     * Function ShowHtml
+     * translates this object into a fragment of HTML suitable for the
+     * wxWidget's wxHtmlListBox class.
+     * @return wxString - the html text.
+     */
+    virtual wxString ShowHtml() const = 0;
+
+    
+    /**
+     * Function ShowText
+     * translates this object into a text string suitable for saving
+     * to disk in a report.
+     * @return wxString - the simple non-html text.
+     */
+    virtual wxString ShowText() const = 0;
+
+
+    /**
+     * Function GetPosition
+     * @return const wxPoint& - the position of this report item within 
+     *  the drawing.
+     */
+    virtual const wxPoint& GetPosition() const = 0;    
+};
+
+
+
+/**
  * Class DRC_ITEM
  * is a holder for a DRC error item.  It is generated when two objects are
  * too close.  There are holders for information on two items.  The
  * information held is the board coordinate and the MenuText for each item.
- * Also held is the type of error by number and the location of the MARQUEUR.
+ * Also held is the type of error by number and the location of the MARKER.
  * A function is provided to translate that number into text.
  */
-class DRC_ITEM
+class DRC_ITEM : public REPORT_ISSUE 
 {
 
 protected:
     int         m_ErrorCode;    ///< the error code's numeric value
-    wxPoint     m_MarkerPos;    ///< position of the MARKER
+    wxPoint     m_Pos;          ///< position of the issue
     wxString    m_AText;        ///< text for the first BOARD_ITEM
     wxString    m_BText;        ///< text for the second BOARD_ITEM
     wxPoint     m_APos;         ///< the location of the first BOARD_ITEM
@@ -56,16 +94,19 @@ protected:
 
 public:
 
-    DRC_ITEM( int aErrorCode, const wxString& aText, const wxString& bText,
-            const wxPoint& aPos, const wxPoint& bPos )
+    DRC_ITEM( int aErrorCode, const wxPoint& aIssuePos, 
+             const wxString& aText, const wxString& bText,
+             const wxPoint& aPos, const wxPoint& bPos )
     {
         m_ErrorCode = aErrorCode;
+        m_Pos       = aIssuePos;
         m_AText     = aText;
         m_BText     = bText;
         m_APos      = aPos;
         m_BPos      = bPos;
     }
 
+    //-----<Interface REPORT_ISSUE>---------------------------------------
 
     /**
      * Function ShowHtml
@@ -77,14 +118,13 @@ public:
     {
         wxString ret;
 
-        ret.Printf( wxT("<b>%s</b> <ul><li> %s: %s </li> <li> %s: %s </li> </ul>"),
+        ret.Printf( wxT("<b>%s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>"),
             GetErrorText().GetData(),
                 ShowCoord( m_APos ).GetData(), m_AText.GetData(),
                 ShowCoord( m_BPos ).GetData(), m_BText.GetData() );
 
         return ret;
     }
-
 
     /**
      * Function ShowText
@@ -104,7 +144,19 @@ public:
         return ret;
     }
 
+    /**
+     * Function GetPosition
+     * @return const wxPoint& - the position of this report item within 
+     *  the drawing.
+     */
+    const wxPoint& GetPosition() const
+    {
+        return m_Pos;
+    }
 
+    //-----</Interface REPORT_ISSUE>---------------------------------------
+
+    
     /**
      * Function GetErrorText
      * returns the string form of a drc error code.
@@ -119,15 +171,17 @@ public:
      * @return wxString - The formated string
      */
     static wxString ShowCoord( const wxPoint& aPos );
-
 };
 
 
 class WinEDA_DrawPanel;
-class MARQUEUR;
+class MARKER;
 
-typedef std::vector<DRC_ITEM>   DRC_LIST;
+/// A smart pointer to a DRC_ITEM
+//typedef OWNER<DRC_ITEM>                 DRC_ITEM_OWNER;
 
+/// A list of DRC_ITEM_PTRs
+typedef std::vector<DRC_ITEM*>          DRC_LIST;
 
 
 /**
@@ -139,45 +193,83 @@ typedef std::vector<DRC_ITEM>   DRC_LIST;
 class DRC_TESTER
 {
 protected:
-    bool        doPad2PadTest;
-    bool        doUnconnectedTest;
-    bool        doZonesTest;
-    bool        doCreateRptFile;
-    
-    FILE*       rptFile;
-    
-    wxString    rptFilename;
+    bool                m_doPad2PadTest;
+    bool                m_doUnconnectedTest;
+    bool                m_doZonesTest;
+    bool                m_doCreateRptFile;
+                        
+    FILE*               m_rptFile;
+                        
+    wxString            m_rptFilename;
+                        
+    int                 m_errorCount;
+                        
+    MARKER*           m_currentMarker;
+                        
+    bool                m_aboartDRC;
+    bool                m_drcInProgress;
+    int                 m_spotcx;
+    int                 m_spotcy;
+    int                 m_finx;
+    int                 m_finy;           // coord relatives de l'extremite du segm de reference
+                        
+    int                 m_segmAngle;      // angle d'inclinaison du segment de reference en 0,1 degre
+    int                 m_segmLong;       // longueur du segment de reference
+                        
+    int                 m_xcliplo;
+    int                 m_ycliplo;
+    int                 m_xcliphi;
+    int                 m_ycliphi;        // coord de la surface de securite du segment a comparer
+                        
+    int                 m_unconnectedCount;
+                        
+    DRC_LIST*           m_drcList;
 
-    int         errorCount;
-    
-    MARQUEUR*   currentMarker;
-
-    bool        abortDrc;
-    bool        drcInProgress;
-    int         spot_cX;
-    int         spot_cY;
-    int         finx;
-    int         finy;           // coord relatives de l'extremite du segm de reference
-    
-    int         segmAngle;      // angle d'inclinaison du segment de reference en 0,1 degre
-    int         segmLong;       // longueur du segment de reference
-    
-    int         xcliplo;
-    int         ycliplo;
-    int         xcliphi;
-    int         ycliphi;        // coord de la surface de securite du segment a comparer
-    
-    DRC_LIST    drcList;
-
-    WinEDA_DrawPanel*   drawPanel;
+    WinEDA_DrawPanel*   m_drawPanel;
     
 public:
     DRC_TESTER()
     {
-        doPad2PadTest     = true;
-        doUnconnectedTest = true;
-        doZonesTest       = false;
-        doCreateRptFile   = false;
+        m_doPad2PadTest     = true;
+        m_doUnconnectedTest = true;
+        m_doZonesTest       = false;
+        m_doCreateRptFile   = false;
+ 
+        m_rptFile = 0;
+        
+        m_errorCount = 0;
+        
+        m_currentMarker = 0;
+        
+        m_aboartDRC = false;
+        m_drcInProgress = false;
+        m_spotcx = 0;
+        m_spotcy = 0;
+        m_finx = 0;
+        m_finy = 0;           // coord relatives de l'extremite du segm de reference
+        
+        m_segmAngle = 0;      // angle d'inclinaison du segment de reference en 0,1 degre
+        m_segmLong = 0;       // longueur du segment de reference
+        
+        m_xcliplo = 0;
+        m_ycliplo = 0;
+        m_xcliphi = 0;
+        m_ycliphi = 0;        // coord de la surface de securite du segment a comparer
+
+        m_unconnectedCount = 0;        
+
+        m_drcList = new DRC_LIST();
+        
+        m_drawPanel = 0;
+        
+        for( int i=0; i<12; ++i )
+        {
+            DRC_ITEM* ditem = new DRC_ITEM( 2, wxPoint(12000,3000), 
+                       wxString( wxT("A item") ), wxString( wxT("B item") ), 
+                       wxPoint(12000,3000), wxPoint(13000,3000));
+        
+            m_drcList->push_back( ditem );
+        }
     }
 
     
@@ -192,19 +284,16 @@ public:
      */
     void SetTests( bool aPad2PadTest, bool aUnconnectedTest, bool aZonesTest, const wxString& aRptFilename )
     {
-        doPad2PadTest     = aPad2PadTest;
-        doUnconnectedTest = aUnconnectedTest;
-        doZonesTest       = aZonesTest;
+        m_doPad2PadTest     = aPad2PadTest;
+        m_doUnconnectedTest = aUnconnectedTest;
+        m_doZonesTest       = aZonesTest;
 
-        rptFilename       = aRptFilename;
-        if( rptFilename.IsEmpty() )
-            doCreateRptFile = false;
+        m_rptFilename       = aRptFilename;
+        if( m_rptFilename.IsEmpty() )
+            m_doCreateRptFile = false;
         else
-            doCreateRptFile = true;
+            m_doCreateRptFile = true;
     }
-
-
-    
 };
 
 

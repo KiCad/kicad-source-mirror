@@ -35,11 +35,11 @@ static char Default_MarkerBitmap[] =
 
 
 /*******************/
-/* Classe MARQUEUR */
+/* Classe MARKER */
 /*******************/
 
-MARQUEUR::MARQUEUR( BOARD_ITEM* StructFather ) :
-    BOARD_ITEM( StructFather, TYPEMARQUEUR )
+MARKER::MARKER( BOARD_ITEM* StructFather ) :
+    BOARD_ITEM( StructFather, TYPEMARKER )
 {
     m_Bitmap = NULL;
     m_Type   = 0;
@@ -51,38 +51,24 @@ MARQUEUR::MARQUEUR( BOARD_ITEM* StructFather ) :
 
 
 /* Effacement memoire de la structure */
-MARQUEUR:: ~MARQUEUR()
+MARKER::~MARKER()
 {
+#if defined(DEBUG)
+    printf("MARKER %p deleted\n", this );
+#endif
 }
 
 
 /* supprime du chainage la structure Struct
  *  les structures arrieres et avant sont chainees directement
  */
-void MARQUEUR::UnLink()
+void MARKER::UnLink()
 {
-    /* Modification du chainage arriere */
-    if( Pback )
-    {
-        if( Pback->Type() != TYPEPCB )
-        {
-            Pback->Pnext = Pnext;
-        }
-        else /* Le chainage arriere pointe sur la structure "Pere" */
-        {
-            ( (BOARD*) Pback )->m_Drawings = (BOARD_ITEM*) Pnext;
-        }
-    }
-
-    /* Modification du chainage avant */
-    if( Pnext )
-        Pnext->Pback = Pback;
-
-    Pnext = Pback = NULL;
+    wxFAIL_MSG( wxT("MARKER::UnLink is deprecated") );
 }
 
 
-void MARQUEUR::Display_Infos( WinEDA_DrawFrame* frame )
+void MARKER::Display_Infos( WinEDA_DrawFrame* frame )
 {
     int      text_pos;
 
@@ -97,7 +83,7 @@ void MARQUEUR::Display_Infos( WinEDA_DrawFrame* frame )
 
 
 /**********************************************/
-bool MARQUEUR::HitTest( const wxPoint& refPos )
+bool MARKER::HitTest( const wxPoint& refPos )
 /**********************************************/
 {
     // the MARKER is 12 pixels by 12 pixels, but is not resized with zoom, so
@@ -125,7 +111,7 @@ bool MARQUEUR::HitTest( const wxPoint& refPos )
 
 
 /**********************************************************************/
-void MARQUEUR::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int DrawMode )
+void MARKER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int DrawMode )
 /**********************************************************************/
 
 /*

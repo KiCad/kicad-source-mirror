@@ -234,7 +234,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, wxDC * DC, bo
     g_SaveTime = time( NULL );
 
     
-#if 1 && defined(DEBUG) 
+#if 0 && defined(DEBUG) 
     // note this freezes up pcbnew when run under the kicad project 
     // manager.  runs fine from command prompt.  This is because the kicad
     // project manager redirects stdout of the child pcbnew process to itself,

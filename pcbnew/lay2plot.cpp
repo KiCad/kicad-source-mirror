@@ -86,7 +86,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
             ( (MIREPCB*) PtStruct )->Draw( this, DC, wxPoint( 0, 0 ), drawmode );
             break;
 
-        case TYPEMARQUEUR:       /* Trace des marqueurs */
+        case TYPEMARKER:       /* Trace des marqueurs */
             break;
 
         default:
