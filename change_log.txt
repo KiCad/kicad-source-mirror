@@ -4,6 +4,12 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2007-Nov-26 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+    DRC code and dialog rework start.  This breaks DRC, until I get out the
+    other end of the tunnel.
+
 
 2007-Nov-24 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
