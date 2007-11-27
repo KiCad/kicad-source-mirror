@@ -5,7 +5,7 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
-2007-Nov-26 UPDATE   Dick Hollenbeck <dick@softplc.com>
+2007-Nov-27 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew
   * changed class MARQUEUR to class MARKER name only.
@@ -22,6 +22,7 @@ email address.
   * Revised BOARD::Visit() to know about BOARD::m_markers.
   * Revised pcbnew/find.cpp to know about BOARD::m_markers.
   * removed wxYield() from drc.cpp
+  Maybe finish the DRC rework tomorrow.
         
 
 2007-Nov-26 UPDATE   Dick Hollenbeck <dick@softplc.com>
