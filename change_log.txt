@@ -4,6 +4,11 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2007-Nov-29 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+	Removed a bug (function block() ) which crashes pcbnew when erasing a zone by block delete
+
 
 2007-Nov-27 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================

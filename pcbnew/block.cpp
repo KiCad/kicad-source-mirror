@@ -565,17 +565,17 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
     /* Effacement des Zones */
     if( Block_Include_Zones )
     {
-        TRACK* pt_segm;
+        SEGZONE* pt_segm, *NextSegZ;
 
         Affiche_Message( _( "Delete zones" ) );
-        for( pt_segm = m_Pcb->m_Zone; pt_segm != NULL; pt_segm = (TRACK*) NextS )
+        for( pt_segm = m_Pcb->m_Zone; pt_segm != NULL; pt_segm = NextSegZ )
         {
-            NextS = pt_segm->Next();
+            NextSegZ = pt_segm->Next();
             if( IsSegmentInBox( GetScreen()->BlockLocate, pt_segm ) )
             {    
-                /* la piste est ici bonne a etre efface */
+                /* The segment zone is in the block: delete it */
                 pt_segm->Draw( DrawPanel, DC, GR_XOR );
-                PtStruct->DeleteStructure();
+                pt_segm->DeleteStructure();
             }
         }
     }

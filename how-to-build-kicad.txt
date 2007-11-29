@@ -36,7 +36,7 @@ in kicad-dev:
  lines to edit:
  STD_INSTALL = 1
  which can be (see comments in libs.linux)
- STD_INSTALL = 1
+ STD_INSTALL = 0 (or 2)
 
  after libs.linux edition:
  run make -f makefile.gtk
