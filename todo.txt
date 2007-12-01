@@ -47,6 +47,14 @@ understanding by new developers.
 Need to do this using DialogBlocks.
 
 
+2007-Nov-30 Assigned To: nobody
+asked by: Dick Hollenbeck
+================================================================================
+wxString DateAndTime()
+It seems the above function should be using a more user friendly "local time",
+not gmtime.
+
+
 2007-Nov-4 Assigned To: dick, but probably not til January.
 ================================================================================
 Enhance DRC dialog box to:

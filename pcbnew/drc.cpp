@@ -61,15 +61,20 @@ void WinEDA_PcbFrame::Install_Test_DRC_Frame( wxDC* DC )
 void DRC::ShowDialog()
 {
     updatePointers();
+    bool    isNew = false;
 
     if( !m_ui )
     {
         m_ui = new DrcDialog( this, m_mainWindow );
+        isNew = true;
     }
 
     // @todo enter retentitive member data into the DrcDialog here
 
-    m_ui->Show(true);
+    if( isNew )
+        m_ui->Show(true);
+    else
+        m_ui->Raise();
 
    // @todo capture the UI entered data into this DRC object. BUT in the OK handler
 }
@@ -226,6 +231,8 @@ void DRC::WriteReport( FILE* fp )
     for( int i=0; i<m_pcb->GetOPENNETCount();  ++i )
         fprintf( fp, m_pcb->GetOPENNET(i)->GetReporter().ShowReport().mb_str() );
     */
+    
+    fprintf( fp, "** End of Report **\n" );
 }
 
 
