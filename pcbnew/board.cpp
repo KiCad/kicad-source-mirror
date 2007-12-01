@@ -360,38 +360,38 @@ int Build_Work( BOARD* Pcb, CHEVELU* pt_base_chevelu )
         current_net_code = pt_pad->GetNet();
         pt_ch = pt_rats;
 
-        r1 = (pt_pad->m_Pos.y - Pcb->m_BoundaryBox.m_Pos.y + demi_pas ) / g_GridRoutingSize;
+        r1 = (pt_pad->GetPosition().y - Pcb->m_BoundaryBox.m_Pos.y + demi_pas ) / g_GridRoutingSize;
         if( r1 < 0 || r1 >= Nrows )
         {
             msg.Printf( wxT( "erreur : row = %d ( padY %d pcbY %d) " ), r1,
-                        pt_pad->m_Pos.y, Pcb->m_BoundaryBox.m_Pos.y );
+                        pt_pad->GetPosition().y, Pcb->m_BoundaryBox.m_Pos.y );
             DisplayError( NULL, msg );
             return 0;
         }
-        c1 = (pt_pad->m_Pos.x - Pcb->m_BoundaryBox.m_Pos.x + demi_pas ) / g_GridRoutingSize;
+        c1 = (pt_pad->GetPosition().x - Pcb->m_BoundaryBox.m_Pos.x + demi_pas ) / g_GridRoutingSize;
         if( c1 < 0 || c1 >= Ncols )
         {
             msg.Printf( wxT( "erreur : col = %d ( padX %d pcbX %d) " ), c1,
-                        pt_pad->m_Pos.x, Pcb->m_BoundaryBox.m_Pos.x );
+                        pt_pad->GetPosition().x, Pcb->m_BoundaryBox.m_Pos.x );
             DisplayError( NULL, msg );
             return 0;
         }
 
         pt_pad = pt_rats->pad_end;
 
-        r2 = (pt_pad->m_Pos.y - Pcb->m_BoundaryBox.m_Pos.y + demi_pas ) / g_GridRoutingSize;
+        r2 = (pt_pad->GetPosition().y - Pcb->m_BoundaryBox.m_Pos.y + demi_pas ) / g_GridRoutingSize;
         if( r2 < 0 || r2 >= Nrows )
         {
             msg.Printf( wxT( "erreur : row = %d ( padY %d pcbY %d) " ), r2,
-                        pt_pad->m_Pos.y, Pcb->m_BoundaryBox.m_Pos.y );
+                        pt_pad->GetPosition().y, Pcb->m_BoundaryBox.m_Pos.y );
             DisplayError( NULL, msg );
             return 0;
         }
-        c2 = (pt_pad->m_Pos.x - Pcb->m_BoundaryBox.m_Pos.x + demi_pas ) / g_GridRoutingSize;
+        c2 = (pt_pad->GetPosition().x - Pcb->m_BoundaryBox.m_Pos.x + demi_pas ) / g_GridRoutingSize;
         if( c2 < 0 || c2 >= Ncols )
         {
             msg.Printf( wxT( "erreur : col = %d ( padX %d pcbX %d) " ), c2,
-                        pt_pad->m_Pos.x, Pcb->m_BoundaryBox.m_Pos.x );
+                        pt_pad->GetPosition().x, Pcb->m_BoundaryBox.m_Pos.x );
             DisplayError( NULL, msg );
             return 0;
         }

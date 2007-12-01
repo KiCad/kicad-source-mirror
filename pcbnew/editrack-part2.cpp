@@ -123,8 +123,9 @@ void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
         else if( pt_segm->GetLayer() == l2 )
             pt_segm->SetLayer( l1 );
 
-        if( (Drc_On) && ( Drc( this, DC, pt_segm, m_Pcb->m_Track, 1 ) == BAD_DRC ) )
-        {       /* Annulation du changement */
+        if( Drc_On && BAD_DRC==m_drc->Drc( pt_segm, m_Pcb->m_Track ) )
+        {       
+            /* Annulation du changement */
             ii = 0; pt_segm = pt_track;
             for( ; ii < nb_segm; ii++, pt_segm = (TRACK*) pt_segm->Pnext )
             {
@@ -197,12 +198,13 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
     /* Is the current segment Ok (no DRC error) ? */
     if( Drc_On )
     {
-        if( Drc( this, DC, g_CurrentTrackSegment, m_Pcb->m_Track, 1 ) == BAD_DRC )
+        if( BAD_DRC==m_drc->Drc( g_CurrentTrackSegment, m_Pcb->m_Track ) )
             /* DRC error, the change layer is not made */
             return;
+            
         if( g_TwoSegmentTrackBuild && g_CurrentTrackSegment->Back() )    // We must handle 2 segments
         {
-            if( Drc( this, DC, g_CurrentTrackSegment->Back(), m_Pcb->m_Track, 1 ) == BAD_DRC )
+            if( BAD_DRC == m_drc->Drc( g_CurrentTrackSegment->Back(), m_Pcb->m_Track ) )
                 return;
         }
     }
@@ -248,7 +250,7 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
         Via->SetLayerPair( COPPER_LAYER_N, LAYER_CMP_N );
     }
 
-    if( Drc_On &&( Drc( this, DC, Via, m_Pcb->m_Track, 1 ) == BAD_DRC ) )
+    if( Drc_On &&  BAD_DRC==m_drc->Drc( Via, m_Pcb->m_Track ) )
     {
         /* DRC fault: the Via cannot be placed here ... */
         delete Via;

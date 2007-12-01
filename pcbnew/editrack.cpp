@@ -11,14 +11,13 @@
 #include "autorout.h"
 
 #include "protos.h"
+#include "drc_stuff.h"
 
 
 /* Routines Locales */
 static void     Exit_Editrack( WinEDA_DrawPanel* panel, wxDC* DC );
 void            ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel,
                                               wxDC* DC, bool erase );
-static int      Add_45_degrees_Segment( WinEDA_BasePcbFrame* frame, wxDC* DC,
-                                        TRACK* ptfinsegment );
 static void     ComputeBreakPoint( TRACK* track, int n );
 static TRACK*   DeleteNullTrackSegments( BOARD* pcb, TRACK* track, int* segmcount );
 static void     EnsureEndTrackOnPad( D_PAD* Pad );
@@ -160,9 +159,13 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
         g_CurrentTrackSegment->Display_Infos( this );
         SetCurItem( g_CurrentTrackSegment );
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
-        if( Drc_On && (Drc( this, DC, g_CurrentTrackSegment, m_Pcb->m_Track, 1 ) == BAD_DRC) )
+        
+        if( Drc_On )
         {
-            return g_CurrentTrackSegment;
+            if( BAD_DRC == m_drc->Drc( g_CurrentTrackSegment, m_Pcb->m_Track ) )
+            {
+                return g_CurrentTrackSegment;
+            }
         }
     }
     else    /* Track in progress : segment coordinates are updated by ShowNewTrackWhenMovingCursor*/
@@ -170,12 +173,13 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
         /* Tst for a D.R.C. error: */
         if( Drc_On )
         {
-            if( Drc( this, DC, g_CurrentTrackSegment, m_Pcb->m_Track, 1 ) == BAD_DRC )
+            if( BAD_DRC == m_drc->Drc( g_CurrentTrackSegment, m_Pcb->m_Track ) )
                 return NULL;
+            
             if( g_TwoSegmentTrackBuild     // We must handle 2 segments
                && g_CurrentTrackSegment->Back() )
             {
-                if( Drc( this, DC, g_CurrentTrackSegment->Back(), m_Pcb->m_Track, 1 ) == BAD_DRC )
+                if( BAD_DRC == m_drc->Drc( g_CurrentTrackSegment->Back(), m_Pcb->m_Track ) )
                     return NULL;
             }
         }
@@ -196,7 +200,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
 
             if( g_Raccord_45_Auto )
             {
-                if( Add_45_degrees_Segment( this, DC, g_CurrentTrackSegment ) != 0 )
+                if( Add_45_degrees_Segment( DC, g_CurrentTrackSegment ) != 0 )
                     g_TrackSegmentCount++;
             }
             Track = g_CurrentTrackSegment->Copy();
@@ -229,7 +233,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
 
 
 /**************************************************************************/
-int Add_45_degrees_Segment( WinEDA_BasePcbFrame* frame, wxDC* DC, TRACK* pt_segm )
+int WinEDA_PcbFrame::Add_45_degrees_Segment( wxDC* DC, TRACK* pt_segm )
 /***************************************************************************/
 
 /* rectifie un virage a 90 et le modifie par 2 coudes a 45
@@ -260,9 +264,9 @@ int Add_45_degrees_Segment( WinEDA_BasePcbFrame* frame, wxDC* DC, TRACK* pt_segm
         return 0;
     }
 
-    pas_45 = frame->GetScreen()->GetGrid().x / 2;
+    pas_45 = GetScreen()->GetGrid().x / 2;
     if( pas_45 < pt_segm->m_Width )
-        pas_45 = frame->GetScreen()->GetGrid().x;
+        pas_45 = GetScreen()->GetGrid().x;
     while( pas_45 < pt_segm->m_Width )
         pas_45 *= 2;
 
@@ -309,7 +313,7 @@ int Add_45_degrees_Segment( WinEDA_BasePcbFrame* frame, wxDC* DC, TRACK* pt_segm
         else
             NewTrack->m_End.x -= pas_45;
 
-        if( Drc_On && (Drc( frame, DC, pt_segm, frame->m_Pcb->m_Track, 1 ) == BAD_DRC) )
+        if( Drc_On && BAD_DRC==m_drc->Drc( pt_segm, m_Pcb->m_Track ) )
         {
             delete NewTrack;
             return 0;
@@ -317,7 +321,7 @@ int Add_45_degrees_Segment( WinEDA_BasePcbFrame* frame, wxDC* DC, TRACK* pt_segm
 
         Previous->m_End  = NewTrack->m_Start;
         pt_segm->m_Start = NewTrack->m_End;
-        NewTrack->Insert( frame->m_Pcb, Previous );
+        NewTrack->Insert( m_Pcb, Previous );
         return 1;
     }
 
@@ -345,7 +349,7 @@ int Add_45_degrees_Segment( WinEDA_BasePcbFrame* frame, wxDC* DC, TRACK* pt_segm
         else
             NewTrack->m_End.y -= pas_45;
 
-        if( Drc_On && (Drc( frame, DC, NewTrack, frame->m_Pcb->m_Track, 1 ) == BAD_DRC) )
+        if( Drc_On && BAD_DRC==m_drc->Drc( NewTrack, m_Pcb->m_Track ) )
         {
             delete NewTrack;
             return 0;
@@ -353,7 +357,7 @@ int Add_45_degrees_Segment( WinEDA_BasePcbFrame* frame, wxDC* DC, TRACK* pt_segm
 
         Previous->m_End  = NewTrack->m_Start;
         pt_segm->m_Start = NewTrack->m_End;
-        NewTrack->Insert( frame->m_Pcb, Previous );
+        NewTrack->Insert( m_Pcb, Previous );
         return 1;
     }
 
@@ -378,7 +382,7 @@ void WinEDA_PcbFrame::End_Route( TRACK* track, wxDC* DC )
     if( track == NULL )
         return;
 
-    if( Drc_On && Drc( this, DC, g_CurrentTrackSegment, m_Pcb->m_Track, 1 )==BAD_DRC )
+    if( Drc_On && BAD_DRC==m_drc->Drc( g_CurrentTrackSegment, m_Pcb->m_Track) )
         return;
 
     /* Sauvegarde des coord du point terminal de la piste */

@@ -199,8 +199,11 @@ enum DisplayViaMode {
 class BOARD : public BOARD_ITEM
 {
     friend class WinEDA_PcbFrame;
+    
 private:
-    std::vector<MARKER*> m_markers;             ///< MARKERs which we own by pointer                                                 
+    std::vector<MARKER*> m_markers;             ///< MARKERs for clearance problems, owned by pointer                                                 
+//    std::vector<MARKER*> m_markersUnconnected;  ///< MARKERs for unconnected problems, owned by pointer                                                 
+
     
 public:
     WinEDA_BasePcbFrame*    m_PcbFrame;         // Window de visualisation
@@ -233,6 +236,14 @@ public:
     BOARD( EDA_BaseStruct* StructFather, WinEDA_BasePcbFrame* frame );
     ~BOARD();
 
+    /**
+     * Function GetPosition
+     * is here to satisfy BOARD_ITEM's requirements, but this implementation
+     * is a dummy.
+     * @return const wxPoint& of (0,0)
+     */
+    wxPoint& GetPosition();
+    
     /* supprime du chainage la structure Struct */
     void    UnLink();
 
@@ -275,7 +286,16 @@ public:
     int     GetNumSegmTrack();
     int     GetNumSegmZone();
     int     GetNumNoconnect();    // retourne le nombre de connexions manquantes
-    int     GetNumRatsnests();    // retourne le nombre de chevelus
+    
+    /**
+     * Function GetNumRatsnests
+     * @return int - The number of rats
+     */
+    int     GetNumRatsnests()
+    {
+        return m_NbLinks;
+    }
+    
     int     GetNumNodes();        // retourne le nombre de pads a netcode > 0
 
     // Calcul du rectangle d'encadrement:
@@ -407,7 +427,18 @@ public:
     DRAWSEGMENT( BOARD_ITEM* StructFather, KICAD_T idtype = TYPEDRAWSEGMENT );
     ~DRAWSEGMENT();
 
-    // Read/write data
+    
+    /**
+     * Function GetPosition
+     * returns the position of this object.
+     * Required by pure virtual BOARD_ITEM::GetPosition()
+     * @return const wxPoint& - The position of this object.
+     */
+    wxPoint& GetPosition() 
+    {
+        return m_Start;
+    }
+
     
     /**
      * Function Save

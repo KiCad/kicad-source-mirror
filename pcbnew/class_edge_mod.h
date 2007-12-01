@@ -29,6 +29,18 @@ public:
     EDGE_MODULE( EDGE_MODULE* edge );
     ~EDGE_MODULE();
 
+    
+    /**
+     * Function GetPosition
+     * returns the position of this object.
+     * @return const wxPoint& - The position of this object.
+     */
+    wxPoint& GetPosition()
+    {
+        return m_Start;
+    }
+    
+    
     /* supprime du chainage la structure Struct */
     void    UnLink();
 

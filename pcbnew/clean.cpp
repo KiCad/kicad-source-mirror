@@ -985,12 +985,12 @@ static void ConnectDanglingEndToVia( BOARD* pcb )
             
             // if the other track's m_End does not match the via position, and the track's m_Start is
             // within the bounds of the via, and the other track has no start
-            if( other->m_End!=via->GetPos() && via->HitTest( other->m_Start ) && !other->start )
+            if( other->m_End!=via->GetPosition() && via->HitTest( other->m_Start ) && !other->start )
             {
                 TRACK* newTrack = other->Copy();
                 newTrack->Insert( pcb, other );
                 
-                newTrack->m_End = via->GetPos();
+                newTrack->m_End = via->GetPosition();
                 
                 newTrack->start = other;
                 newTrack->end   = via;
@@ -1007,12 +1007,12 @@ static void ConnectDanglingEndToVia( BOARD* pcb )
             
             // if the other track's m_Start does not match the via position, and the track's m_End is
             // within the bounds of the via, and the other track has no end
-            else if( other->m_Start!=via->GetPos() && via->HitTest( other->m_End ) && !other->end ) 
+            else if( other->m_Start!=via->GetPosition() && via->HitTest( other->m_End ) && !other->end ) 
             {
                 TRACK* newTrack = other->Copy();
                 newTrack->Insert( pcb, other );
                 
-                newTrack->m_Start = via->GetPos();
+                newTrack->m_Start = via->GetPosition();
                 
                 newTrack->start = via;
                 newTrack->end   = other;

@@ -79,6 +79,13 @@ BOARD::~BOARD()
 }
 
 
+wxPoint& BOARD::GetPosition()
+{
+    static wxPoint dummy(0,0);
+    return dummy;   // a reference
+}
+
+
 void BOARD::UnLink()
 {
     /* Modification du chainage arriere */
@@ -108,6 +115,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
     {
     // this one uses a vector
     case TYPEMARKER:
+        aBoardItem->m_Parent = this;
         m_markers.push_back( (MARKER*) aBoardItem );
         break;
     
@@ -185,13 +193,6 @@ int BOARD::GetNumSegmZone()
 int BOARD::GetNumNoconnect()
 {
     return m_NbNoconnect;
-}
-
-
-// retourne le nombre de chevelus
-int BOARD::GetNumRatsnests()
-{
-    return m_NbLinks;
 }
 
 
@@ -273,11 +274,13 @@ bool BOARD::ComputeBoundaryBox()
         D_PAD* pt_pad = module->m_Pads;
         for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
         {
+            const wxPoint& pos = pt_pad->GetPosition();
+            
             d    = pt_pad->m_Rayon;
-            xmin = MIN( xmin, pt_pad->m_Pos.x - d );
-            ymin = MIN( ymin, pt_pad->m_Pos.y - d );
-            xmax = MAX( xmax, pt_pad->m_Pos.x + d );
-            ymax = MAX( ymax, pt_pad->m_Pos.y + d );
+            xmin = MIN( xmin, pos.x - d );
+            ymin = MIN( ymin, pos.y - d );
+            xmax = MAX( xmax, pos.x + d );
+            ymax = MAX( ymax, pos.y + d );
         }
     }
 

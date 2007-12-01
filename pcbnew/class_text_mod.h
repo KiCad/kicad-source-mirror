@@ -16,8 +16,8 @@
 class TEXTE_MODULE : public BOARD_ITEM
 {
 public:
-    int      m_Width;
     wxPoint  m_Pos;         // Real coord
+    int      m_Width;
     wxPoint  m_Pos0;        // coord du debut du texte /ancre, orient 0
     char     m_Unused;      // unused (reserved for future extensions)
     char     m_Miroir;      // vue normale / miroir
@@ -31,6 +31,18 @@ public:
     TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
     ~TEXTE_MODULE();
 
+    /**
+     * Function GetPosition
+     * returns the position of this object.
+     * Required by pure virtual BOARD_ITEM::GetPosition()
+     * @return const wxPoint& - The position of this object.
+     */
+    wxPoint& GetPosition()
+    {
+        return m_Pos;
+    }
+
+    
     /* supprime du chainage la structure Struct */
     void    UnLink();
 

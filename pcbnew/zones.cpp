@@ -40,7 +40,6 @@ static void Display_Zone_Netname( WinEDA_PcbFrame* frame );
 static void Exit_Zones( WinEDA_DrawPanel* Panel, wxDC* DC );
 static void Show_Zone_Edge_While_MoveMouse( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 static void Genere_Segments_Zone( WinEDA_PcbFrame* frame, wxDC* DC, int net_code );
-static bool Genere_Pad_Connexion( WinEDA_PcbFrame* frame, wxDC* DC, int layer );
 
 /* Local variables */
 static bool          Zone_Debug        = FALSE;
@@ -1037,7 +1036,7 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
     /* Create the thermal reliefs */
     g_DesignSettings.m_CurrentTrackWidth = lp_tmp;
     if( Zone_Exclude_Pads && s_Zone_Create_Thermal_Relief )
-        Genere_Pad_Connexion( this, DC, GetScreen()->m_Active_Layer );
+        Genere_Pad_Connexion( DC, GetScreen()->m_Active_Layer );
 
     g_DesignSettings.m_TrackClearence = save_isol;
 
@@ -1313,7 +1312,7 @@ int Propagation( WinEDA_PcbFrame* frame )
 
 
 /*****************************************************************************/
-static bool Genere_Pad_Connexion( WinEDA_PcbFrame* frame, wxDC* DC, int layer )
+bool WinEDA_PcbFrame::Genere_Pad_Connexion( wxDC* DC, int layer )
 /*****************************************************************************/
 
 /* Create the thermal relief for each pad in the zone:
@@ -1329,16 +1328,16 @@ static bool Genere_Pad_Connexion( WinEDA_PcbFrame* frame, wxDC* DC, int layer )
     int        sommet[4][2];
     wxString   msg;
 
-    if( frame->m_Pcb->m_Zone == NULL )
+    if( m_Pcb->m_Zone == NULL )
         return FALSE;                                       /* error: no zone */
     
-    if( frame->m_Pcb->m_Zone->m_TimeStamp != s_TimeStamp )  /* error: this is not the new zone */
+    if( m_Pcb->m_Zone->m_TimeStamp != s_TimeStamp )  /* error: this is not the new zone */
         return FALSE;
 
     /* Count the pads, i.e. the thermal relief to create count, and displays it */
-    Affiche_1_Parametre( frame, 50, wxT( "NPads" ), wxT( "    " ), CYAN );
-    pt_liste_pad = (LISTE_PAD*) frame->m_Pcb->m_Pads;
-    for( ii = 0, Npads = 0; ii < frame->m_Pcb->m_NbPads; ii++, pt_liste_pad++ )
+    Affiche_1_Parametre( this, 50, wxT( "NPads" ), wxT( "    " ), CYAN );
+    pt_liste_pad = (LISTE_PAD*) m_Pcb->m_Pads;
+    for( ii = 0, Npads = 0; ii < m_Pcb->m_NbPads; ii++, pt_liste_pad++ )
     {
         pt_pad = *pt_liste_pad;
 
@@ -1353,12 +1352,12 @@ static bool Genere_Pad_Connexion( WinEDA_PcbFrame* frame, wxDC* DC, int layer )
     }
 
     msg.Printf( wxT( "%d" ), Npads );
-    Affiche_1_Parametre( frame, -1, wxEmptyString, msg, CYAN );
+    Affiche_1_Parametre( this, -1, wxEmptyString, msg, CYAN );
 
 	/* Create the thermal reliefs */
-    Affiche_1_Parametre( frame, 57, wxT( "Pads" ), wxT( "     " ), CYAN );
-    pt_liste_pad = (LISTE_PAD*) frame->m_Pcb->m_Pads;
-    for( ii = 0, Npads = 0; ii < frame->m_Pcb->m_NbPads; ii++, pt_liste_pad++ )
+    Affiche_1_Parametre( this, 57, wxT( "Pads" ), wxT( "     " ), CYAN );
+    pt_liste_pad = (LISTE_PAD*) m_Pcb->m_Pads;
+    for( ii = 0, Npads = 0; ii < m_Pcb->m_NbPads; ii++, pt_liste_pad++ )
     {
         pt_pad = *pt_liste_pad;
 
@@ -1370,11 +1369,17 @@ static bool Genere_Pad_Connexion( WinEDA_PcbFrame* frame, wxDC* DC, int layer )
             continue;
 
         /* Create the theram relief for the current pad */
-        Npads++; msg.Printf( wxT( "%d" ), Npads );
-        Affiche_1_Parametre( frame, -1, wxEmptyString, msg, CYAN );
-        cX  = pt_pad->m_Pos.x;   cY = pt_pad->m_Pos.y;
+        Npads++; 
+        
+        msg.Printf( wxT( "%d" ), Npads );
+        Affiche_1_Parametre( this, -1, wxEmptyString, msg, CYAN );
+        
+        cX = pt_pad->GetPosition().x;   
+        cY = pt_pad->GetPosition().y;
+        
         dx  = pt_pad->m_Size.x / 2;
         dy  = pt_pad->m_Size.y / 2;
+        
         dx += g_DesignSettings.m_TrackClearence + g_GridRoutingSize;
         dy += g_DesignSettings.m_TrackClearence + g_GridRoutingSize;
 
@@ -1395,7 +1400,7 @@ static bool Genere_Pad_Connexion( WinEDA_PcbFrame* frame, wxDC* DC, int layer )
         {
             RotatePoint( &sommet[jj][0], &sommet[jj][1], angle );
 
-            pt_track = new SEGZONE( frame->m_Pcb );
+            pt_track = new SEGZONE( m_Pcb );
 
             pt_track->SetLayer( layer );
             pt_track->m_Width   = g_DesignSettings.m_CurrentTrackWidth;
@@ -1407,20 +1412,22 @@ static bool Genere_Pad_Connexion( WinEDA_PcbFrame* frame, wxDC* DC, int layer )
             pt_track->m_TimeStamp = s_TimeStamp;
 
             /* Test if the segment is allowed */
-            if( Drc( frame, DC, pt_track, frame->m_Pcb->m_Track, 0 ) == BAD_DRC )
+            if( BAD_DRC==m_drc->DrcBlind( pt_track, m_Pcb->m_Track ) )
             {
-                delete pt_track; continue;
+                delete pt_track; 
+                continue;
             }
 
             /* Search for a zone segment */
-            loctrack = Locate_Zone( frame->m_Pcb->m_Zone, pt_track->m_End, layer );
+            loctrack = Locate_Zone( m_Pcb->m_Zone, pt_track->m_End, layer );
             if( (loctrack == NULL) || (loctrack->m_TimeStamp != s_TimeStamp) )
             {
-                delete pt_track; continue;
+                delete pt_track; 
+                continue;
             }
 
-            pt_track->Insert( frame->m_Pcb, NULL );
-            pt_track->Draw( frame->DrawPanel, DC, GR_OR );
+            pt_track->Insert( m_Pcb, NULL );
+            pt_track->Draw( DrawPanel, DC, GR_OR );
         }
     }
 

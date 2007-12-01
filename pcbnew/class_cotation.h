@@ -28,6 +28,12 @@ public:
     COTATION( BOARD_ITEM* StructFather );
     ~COTATION();
 
+    wxPoint& GetPosition()
+    {
+        return m_Pos;
+    }
+    
+    
     bool    ReadCotationDescr( FILE* File, int* LineNum );
 
     /**

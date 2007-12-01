@@ -865,22 +865,25 @@ float WinEDA_PcbFrame::Compute_Ratsnest_PlaceModule( wxDC* DC )
     CHEVELU* pt_local_chevelu;
     int      ii;
     float    cout, icout;
-    int      ox, oy, fx, fy, dx, dy;
+    int      ox, oy;
+    int      fx, fy;
+    int      dx, dy;
 
     if( (m_Pcb->m_Status_Pcb & CHEVELU_LOCAL_OK) == 0 )
         return -1;
 
     pt_local_chevelu = local_liste_chevelu;
-    ii = nb_local_chevelu; cout = 0;
+    ii = nb_local_chevelu; 
+    cout = 0;
 
     while( ii-- > 0 )
     {
         if( !(pt_local_chevelu->status & LOCAL_CHEVELU) )
         {
-            ox = pt_local_chevelu->pad_start->m_Pos.x - g_Offset_Module.x;
-            oy = pt_local_chevelu->pad_start->m_Pos.y - g_Offset_Module.y;
-            fx = pt_local_chevelu->pad_end->m_Pos.x;
-            fy = pt_local_chevelu->pad_end->m_Pos.y;
+            ox = pt_local_chevelu->pad_start->GetPosition().x - g_Offset_Module.x;
+            oy = pt_local_chevelu->pad_start->GetPosition().y - g_Offset_Module.y;
+            fx = pt_local_chevelu->pad_end->GetPosition().x;
+            fy = pt_local_chevelu->pad_end->GetPosition().y;
 
             if( AutoPlaceShowAll )
             {
@@ -889,12 +892,18 @@ float WinEDA_PcbFrame::Compute_Ratsnest_PlaceModule( wxDC* DC )
             }
 
             /* Evaluation du cout du chevelu: */
-            dx = fx - ox; dy = fy - oy;
-            dx = abs( dx ); dy = abs( dy );
+            dx = fx - ox; 
+            dy = fy - oy;
+            
+            dx = abs( dx ); 
+            dy = abs( dy );
+            
             if( dx < dy )
                 EXCHG( dx, dy );/* dx >= dy */
+            
             /* cout de la distance: */
             icout = (float) dx * dx;
+            
             /* cout de l'inclinaison */
             icout += 3 * (float) dy * dy;
             icout  = sqrt( icout );

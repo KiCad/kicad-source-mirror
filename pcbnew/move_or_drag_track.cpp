@@ -783,14 +783,14 @@ bool WinEDA_PcbFrame::PlaceDraggedTrackSegment( TRACK* Track, wxDC* DC )
     // DRC control:
     if( Drc_On )
     {
-        errdrc = Drc( this, DC, Track, m_Pcb->m_Track, 1 );
+        errdrc = m_drc->Drc( Track, m_Pcb->m_Track );
         if( errdrc == BAD_DRC )
             return FALSE;
         /* Redraw the dragged segments */
         pt_drag = g_DragSegmentList;
         for( ; pt_drag != NULL; pt_drag = pt_drag->Pnext )
         {
-            errdrc = Drc( this, DC, pt_drag->m_Segm, m_Pcb->m_Track, 1 );
+            errdrc = m_drc->Drc( pt_drag->m_Segm, m_Pcb->m_Track );
             if( errdrc == BAD_DRC )
                 return FALSE;
         }

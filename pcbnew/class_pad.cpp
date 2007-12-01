@@ -38,7 +38,7 @@ D_PAD::D_PAD( MODULE* parent ) :
 
     if( m_Parent && (m_Parent->Type()  == TYPEMODULE) )
     {
-        m_Pos = ( (MODULE*) m_Parent )->m_Pos;
+        m_Pos = ( (MODULE*) m_Parent )->GetPosition();
     }
 
     m_PadShape = CIRCLE;            // forme CERCLE, RECT OVALE TRAPEZE ou libre
@@ -75,8 +75,8 @@ void D_PAD::ComputeRayon()
 
     case RECT:
     case TRAPEZE:
-        m_Rayon = (int) (sqrt( (float) m_Size.y * m_Size.y
-                              + (float) m_Size.x * m_Size.x ) / 2);
+        m_Rayon = (int) (sqrt( (double) m_Size.y * m_Size.y
+                              + (double) m_Size.x * m_Size.x ) / 2);
         break;
     }
 }
@@ -88,7 +88,7 @@ const wxPoint D_PAD::ReturnShapePos()
 
 // retourne la position de la forme (pastilles excentrees)
 {
-    if( (m_Offset.x == 0) && (m_Offset.y == 0) )
+    if( m_Offset.x == 0 && m_Offset.y == 0 )
         return m_Pos;
 
     wxPoint shape_pos;

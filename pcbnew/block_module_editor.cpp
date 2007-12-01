@@ -471,8 +471,8 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
     {
         if( pad->m_Selected == 0 )
             continue;
-        pad->m_Pos.x  += offset.x;
-        pad->m_Pos.y  += offset.y;
+        pad->GetPosition().x  += offset.x;
+        pad->GetPosition().y  += offset.y;
         pad->m_Pos0.x += offset.x;
         pad->m_Pos0.y += offset.y;
     }
@@ -486,8 +486,8 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
         switch( item->Type() )
         {
         case TYPETEXTEMODULE:
-            ( (TEXTE_MODULE*) item )->m_Pos.x  += offset.x;
-            ( (TEXTE_MODULE*) item )->m_Pos.y  += offset.y;
+            ( (TEXTE_MODULE*) item )->GetPosition().x  += offset.x;
+            ( (TEXTE_MODULE*) item )->GetPosition().y  += offset.y;
             ( (TEXTE_MODULE*) item )->m_Pos0.x += offset.x;
             ( (TEXTE_MODULE*) item )->m_Pos0.y += offset.y;
             break;
@@ -495,10 +495,13 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
         case TYPEEDGEMODULE:
             ( (EDGE_MODULE*) item )->m_Start.x  += offset.x;
             ( (EDGE_MODULE*) item )->m_Start.y  += offset.y;
+            
             ( (EDGE_MODULE*) item )->m_End.x    += offset.x;
             ( (EDGE_MODULE*) item )->m_End.y    += offset.y;
+            
             ( (EDGE_MODULE*) item )->m_Start0.x += offset.x;
             ( (EDGE_MODULE*) item )->m_Start0.y += offset.y;
+            
             ( (EDGE_MODULE*) item )->m_End0.x   += offset.x;
             ( (EDGE_MODULE*) item )->m_End0.y   += offset.y;
             break;
@@ -565,8 +568,8 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
     {
         if( pad->m_Selected == 0 )
             continue;
-        SETMIRROR( pad->m_Pos.x );
-        pad->m_Pos0.x      = pad->m_Pos.x;
+        SETMIRROR( pad->GetPosition().x );
+        pad->m_Pos0.x      = pad->GetPosition().x;
         pad->m_Offset.x    = -pad->m_Offset.x;
         pad->m_DeltaSize.x = -pad->m_DeltaSize.x;
         pad->m_Orient = 1800 - pad->m_Orient;
@@ -590,8 +593,8 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
             break;
 
         case TYPETEXTEMODULE:
-            SETMIRROR( ( (TEXTE_MODULE*) item )->m_Pos.x );
-            ( (TEXTE_MODULE*) item )->m_Pos0.x = ( (TEXTE_MODULE*) item )->m_Pos.x;
+            SETMIRROR( ( (TEXTE_MODULE*) item )->GetPosition().x );
+            ( (TEXTE_MODULE*) item )->m_Pos0.x = ( (TEXTE_MODULE*) item )->GetPosition().x;
             break;
             
         default:
@@ -621,8 +624,8 @@ void RotateMarkedItems( MODULE* module, wxPoint offset )
     {
         if( pad->m_Selected == 0 )
             continue;
-        ROTATE( pad->m_Pos );
-        pad->m_Pos0    = pad->m_Pos;
+        ROTATE( pad->GetPosition() );
+        pad->m_Pos0    = pad->GetPosition();
         pad->m_Orient += 900;
         NORMALIZE_ANGLE( pad->m_Orient );
     }
@@ -643,8 +646,8 @@ void RotateMarkedItems( MODULE* module, wxPoint offset )
             break;
 
         case TYPETEXTEMODULE:
-            ROTATE( ( (TEXTE_MODULE*) item )->m_Pos );
-            ( (TEXTE_MODULE*) item )->m_Pos0    = ( (TEXTE_MODULE*) item )->m_Pos;
+            ROTATE( ( (TEXTE_MODULE*) item )->GetPosition() );
+            ( (TEXTE_MODULE*) item )->m_Pos0    = ( (TEXTE_MODULE*) item )->GetPosition();
             ( (TEXTE_MODULE*) item )->m_Orient += 900;
             break;
         
@@ -696,7 +699,7 @@ int MarkItemsInBloc( MODULE* module, EDA_Rect& Rect )
     for( ; pad != NULL; pad = pad->Next() )
     {
         pad->m_Selected = 0;
-        pos = pad->m_Pos;
+        pos = pad->GetPosition();
         if( Rect.Inside( pos ) )
         {
             pad->m_Selected = IS_SELECTED;
@@ -727,7 +730,7 @@ int MarkItemsInBloc( MODULE* module, EDA_Rect& Rect )
             break;
 
         case TYPETEXTEMODULE:
-            pos = ( (TEXTE_MODULE*) item )->m_Pos;
+            pos = ( (TEXTE_MODULE*) item )->GetPosition();
             if( Rect.Inside( pos ) )
             {
                 item->m_Selected = IS_SELECTED;

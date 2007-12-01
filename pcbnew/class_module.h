@@ -37,6 +37,7 @@ enum Mod_Attribut       /* Attributs d'un module */
 
 class MODULE : public BOARD_ITEM
 {
+    
 public:
     wxPoint          m_Pos;             // Real coord on board
     D_PAD*           m_Pads;            /* Pad list (linked list) */
@@ -82,6 +83,18 @@ public:
     void    SetRectangleExinscrit();/* mise a jour du rect d'encadrement
                                            *   et de la surface en coord reelles */
 
+    /**
+     * Function GetPosition
+     * returns the position of this object.
+     * Required by pure virtual BOARD_ITEM::GetPosition()
+     * @return const wxPoint& - The position of this object.
+     */
+    wxPoint& GetPosition()
+    {
+        return m_Pos;
+    }
+
+                                           
     // deplacements
     void    SetPosition( const wxPoint& newpos );
     void    SetOrientation( int newangle );

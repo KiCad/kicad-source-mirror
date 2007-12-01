@@ -29,6 +29,16 @@ public:
     ~EQUIPOT();
 
     EQUIPOT*    Next() { return (EQUIPOT*) Pnext; }
+
+    /**
+     * Function GetPosition
+     * returns the position of this object.
+     * @return wxPoint& - The position of this object, non-const so it 
+     *          can be changed
+     * A dummy to satisfy pure virtual BOARD::GetPosition()
+     */
+    wxPoint& GetPosition();
+    
     
     /* Effacement memoire de la structure */
     void  UnLink();

@@ -351,5 +351,6 @@ void WinEDA_PcbFrame::Erase_Marqueurs()
 {
     m_Pcb->DeleteMARKERs();
     GetScreen()->SetModify();
+    
 }
 

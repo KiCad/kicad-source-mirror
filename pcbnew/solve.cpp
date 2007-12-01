@@ -380,8 +380,8 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
         int cY = (g_GridRoutingSize * row_source) + pcbframe->m_Pcb->m_BoundaryBox.m_Pos.y;
         int dx = pt_cur_ch->pad_start->m_Size.x / 2;
         int dy = pt_cur_ch->pad_start->m_Size.y / 2;
-        int px = pt_cur_ch->pad_start->m_Pos.x;
-        int py = pt_cur_ch->pad_start->m_Pos.y;
+        int px = pt_cur_ch->pad_start->GetPosition().x;
+        int py = pt_cur_ch->pad_start->GetPosition().y;
 
         if( ( (pt_cur_ch->pad_start->m_Orient / 900) & 1 ) != 0 )
             EXCHG( dx, dy );
@@ -392,8 +392,8 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
         cY = (g_GridRoutingSize * row_target) + pcbframe->m_Pcb->m_BoundaryBox.m_Pos.y;
         dx = pt_cur_ch->pad_end->m_Size.x / 2;
         dy = pt_cur_ch->pad_end->m_Size.y / 2;
-        px = pt_cur_ch->pad_end->m_Pos.x;
-        py = pt_cur_ch->pad_end->m_Pos.y;
+        px = pt_cur_ch->pad_end->GetPosition().x;
+        py = pt_cur_ch->pad_end->GetPosition().y;
         if( ( (pt_cur_ch->pad_end->m_Orient / 900) & 1 ) != 0 )
             EXCHG( dx, dy );
 
@@ -968,14 +968,13 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
             /* Replacement sur le centre du pad si hors grille */
             dx1 = g_CurrentTrackSegment->m_End.x - g_CurrentTrackSegment->m_Start.x;
             dy1 = g_CurrentTrackSegment->m_End.y - g_CurrentTrackSegment->m_Start.y;
-            dx0 = pt_cur_ch->pad_end->m_Pos.x - g_CurrentTrackSegment->m_Start.x;
-            dy0 = pt_cur_ch->pad_end->m_Pos.y - g_CurrentTrackSegment->m_Start.y;
+            dx0 = pt_cur_ch->pad_end->GetPosition().x - g_CurrentTrackSegment->m_Start.x;
+            dy0 = pt_cur_ch->pad_end->GetPosition().y - g_CurrentTrackSegment->m_Start.y;
 
             /* si aligne: modif du point origine */
             if( abs( dx0 * dy1 ) == abs( dx1 * dy0 ) ) /* Alignes ! */
             {
-                g_CurrentTrackSegment->m_Start.x = pt_cur_ch->pad_end->m_Pos.x;
-                g_CurrentTrackSegment->m_Start.y = pt_cur_ch->pad_end->m_Pos.y;
+                g_CurrentTrackSegment->m_Start = pt_cur_ch->pad_end->GetPosition();
             }
             else /* Creation d'un segment suppl raccord */
             {
@@ -983,10 +982,9 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
                 g_TrackSegmentCount++;
                 NewTrack->Insert( pcb, g_CurrentTrackSegment );
 
-                g_CurrentTrackSegment->m_Start.x = pt_cur_ch->pad_end->m_Pos.x;
-                g_CurrentTrackSegment->m_Start.y = pt_cur_ch->pad_end->m_Pos.y;
-                NewTrack->m_Start.x = g_CurrentTrackSegment->m_End.x;
-                NewTrack->m_Start.y = g_CurrentTrackSegment->m_End.y;
+                g_CurrentTrackSegment->m_Start = pt_cur_ch->pad_end->GetPosition();
+                
+                NewTrack->m_Start = g_CurrentTrackSegment->m_End;
 
                 g_CurrentTrackSegment = NewTrack;
             }
@@ -1053,26 +1051,25 @@ static void Place_Piste_en_Buffer( WinEDA_PcbFrame* pcbframe, wxDC* DC )
     dy1 = g_CurrentTrackSegment->m_End.y - g_CurrentTrackSegment->m_Start.y;
     /* Replacement sur le centre du pad si hors grille */
 
-    dx0 = pt_cur_ch->pad_start->m_Pos.x - g_CurrentTrackSegment->m_Start.x;
-    dy0 = pt_cur_ch->pad_start->m_Pos.y - g_CurrentTrackSegment->m_Start.y;
+    dx0 = pt_cur_ch->pad_start->GetPosition().x - g_CurrentTrackSegment->m_Start.x;
+    dy0 = pt_cur_ch->pad_start->GetPosition().y - g_CurrentTrackSegment->m_Start.y;
 
     /* si aligne: modif du point origine */
     if( abs( dx0 * dy1 ) == abs( dx1 * dy0 ) ) /* Alignes ! */
     {
-        g_CurrentTrackSegment->m_End.x = pt_cur_ch->pad_start->m_Pos.x;
-        g_CurrentTrackSegment->m_End.y = pt_cur_ch->pad_start->m_Pos.y;
+        g_CurrentTrackSegment->m_End = pt_cur_ch->pad_start->GetPosition();
     }
     else /* Creation d'un segment suppl raccord */
     {
         TRACK* NewTrack = g_CurrentTrackSegment->Copy();
         NewTrack->Insert( pcbframe->m_Pcb, g_CurrentTrackSegment );
 
-        NewTrack->m_End.x   = pt_cur_ch->pad_start->m_Pos.x;
-        NewTrack->m_End.y   = pt_cur_ch->pad_start->m_Pos.y;
-        NewTrack->m_Start.x = g_CurrentTrackSegment->m_End.x;
-        NewTrack->m_Start.y = g_CurrentTrackSegment->m_End.y;
+        NewTrack->m_End   = pt_cur_ch->pad_start->GetPosition();
+        
+        NewTrack->m_Start = g_CurrentTrackSegment->m_End;
 
-        g_CurrentTrackSegment = NewTrack; g_TrackSegmentCount++;
+        g_CurrentTrackSegment = NewTrack; 
+        g_TrackSegmentCount++;
     }
 
 

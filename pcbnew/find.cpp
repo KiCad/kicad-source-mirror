@@ -75,7 +75,7 @@ void WinEDA_PcbFindFrame::FindItem( wxCommandEvent& event )
         if( marker )
         {
             foundItem  = marker;
-            locate_pos = marker->m_Pos;
+            locate_pos = marker->GetPosition();
         }
     }
     else
@@ -89,7 +89,7 @@ void WinEDA_PcbFindFrame::FindItem( wxCommandEvent& event )
                 if( StartCount > s_ItemCount )
                 {
                     foundItem  = module;
-                    locate_pos = module->m_Pos;
+                    locate_pos = module->GetPosition();
                     s_ItemCount++;
                     break;
                 }

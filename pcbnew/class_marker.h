@@ -7,39 +7,106 @@
 
 #include "base_struct.h"
 
+#include "drc_stuff.h"
 
 class MARKER : public BOARD_ITEM
 {
-private:
-    wxString m_Diag;                /* Associated text (comment) */
+protected:
+    char*    m_Bitmap;              ///< Shape (bitmap)
+    int      m_Type;
+    int      m_Color;               ///< color
+    wxSize   m_Size;                ///< Size of the graphic symbol
+
+    DRC_ITEM m_drc;
+    
+    void     init();
     
 public:
-    wxPoint  m_Pos;
-    char*    m_Bitmap;              /* Shape (bitmap) */
-    int      m_Type;
-    int      m_Color;               /* color */
-	wxSize m_Size;					/* Size of the graphic symbol */
 
-public:
     MARKER( BOARD_ITEM* StructFather );
+
+    /**
+     * Constructor
+     * @param aErrorCode The categorizing identifier for an error
+     * @param aMarkerPos The position of the MARKER on the BOARD
+     * @param aText Text describing the first of two objects
+     * @param aPos The position of the first of two objects
+     * @param bText Text describing the second of the two conflicting objects
+     * @param bPos The position of the second of two objects
+     */
+    MARKER( int aErrorCode, const wxPoint& aMarkerPos, 
+           const wxString& aText, const wxPoint& aPos, 
+           const wxString& bText, const wxPoint& bPos );
+    
     ~MARKER();
     
     void    UnLink();
     void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int DrawMode );
 
+
+    /**
+     * Function GetPosition
+     * returns the position of this MARKER.
+     */
+    wxPoint& GetPosition()
+    {
+        return (wxPoint&) m_drc.GetPosition();
+    }
+
+    
+    /**
+     * Function GetPos
+     * returns the position of this MARKER, const.
+     */
+    const wxPoint& GetPos() const
+    {
+        return m_drc.GetPosition();
+    }
+
+    
+    /**
+     * Function SetData
+     * fills in all the reportable data associated with a MARKER.
+     * @param aErrorCode The categorizing identifier for an error
+     * @param aMarkerPos The position of the MARKER on the BOARD
+     * @param aText Text describing the first of two objects
+     * @param aPos The position of the first of two objects
+     * @param bText Text describing the second of the two conflicting objects
+     * @param bPos The position of the second of two objects
+     */
+    void SetData( int aErrorCode, const wxPoint& aMarkerPos, 
+             const wxString& aText, const wxPoint& aPos, 
+             const wxString& bText, const wxPoint& bPos );
     
     /**
      * Function GetMessage
      * @return const wxString& - the diagnostic message
      */
-    const wxString& GetMessage()
+    const wxString GetOneLineMessage()
     {
-        return m_Diag;
+        return m_drc.ShowText();
     }
+
+    
+    /**
+     * Function GetReporter
+     * returns the REPORT_ISSUE held within this MARKER so that its
+     * interface may be used.
+     * @return const& REPORT_ISSUE
+     */
+    const REPORT_ISSUE& GetReporter() const
+    {
+        return m_drc;
+    }
+
+    
+    /*
     void SetMessage( const wxString& aMsg )
     {
         m_Diag = aMsg;
     }
+    */
+     
 
     
     /**
@@ -75,4 +142,4 @@ public:
 };
 
 
-#endif		//  end #ifndef CLASS_MARKER_H
+#endif      //  CLASS_MARKER_H

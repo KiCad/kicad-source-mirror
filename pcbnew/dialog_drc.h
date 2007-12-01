@@ -23,7 +23,6 @@
  */
 
 ////@begin includes
-#include "wx/valgen.h"
 #include "wx/notebook.h"
 ////@end includes
 
@@ -50,8 +49,8 @@ class wxStdDialogButtonSizer;
 #define ID_TEXTCTRL3 10014
 #define ID_BUTTON_BROWSE_RPT_FILE 10018
 #define ID_CHECKBOX2 10019
-#define ID_CHECKBOX3 10020
 #define ID_CHECKBOX7 10021
+#define ID_CHECKBOX3 10011
 #define ID_STARTDRC 10006
 #define ID_LIST_UNCONNECTED 10003
 #define ID_DELETE_ALL 10005
@@ -59,14 +58,14 @@ class wxStdDialogButtonSizer;
 #define ID_NOTEBOOK1 10008
 #define ID_CLEARANCE_LIST 10001
 #define ID_UNCONNECTED_LIST 10009
-#define SYMBOL_WINEDA_DRCFRAME_STYLE wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER
-#define SYMBOL_WINEDA_DRCFRAME_TITLE _("DRC Control")
-#define SYMBOL_WINEDA_DRCFRAME_IDNAME ID_DIALOG
-#define SYMBOL_WINEDA_DRCFRAME_SIZE wxSize(400, 300)
-#define SYMBOL_WINEDA_DRCFRAME_POSITION wxDefaultPosition
+#define SYMBOL_DRCDIALOG_STYLE wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxMAXIMIZE_BOX|wxMINIMIZE_BOX
+#define SYMBOL_DRCDIALOG_TITLE _("DRC Control")
+#define SYMBOL_DRCDIALOG_IDNAME ID_DIALOG
+#define SYMBOL_DRCDIALOG_SIZE wxSize(400, 300)
+#define SYMBOL_DRCDIALOG_POSITION wxDefaultPosition
 ////@end control identifiers
 
-#define ID_DRCLISTCTRL 10001   // outside @end control identifiers since DialogBlocks knows not DRCLISTBOX 
+#define ID_DRCLISTCTRL 14000   // outside @end control identifiers since DialogBlocks knows not DRCLISTBOX 
 
 /*!
  * Compatibility
@@ -77,34 +76,37 @@ class wxStdDialogButtonSizer;
 #endif
 
 /*!
- * WinEDA_DrcFrame class declaration
+ * DrcDialog class declaration
  */
 
-class WinEDA_DrcFrame: public wxDialog
+class DrcDialog: public wxDialog
 {
-    DECLARE_DYNAMIC_CLASS( WinEDA_DrcFrame )
+    DECLARE_DYNAMIC_CLASS( DrcDialog )
     DECLARE_EVENT_TABLE()
 
 public:
     /// Constructors
-    WinEDA_DrcFrame( );
-    WinEDA_DrcFrame( DRC_TESTER* aDrc_tester, WinEDA_PcbFrame* parent, wxDC * panelDC,
-                     wxWindowID id = SYMBOL_WINEDA_DRCFRAME_IDNAME,
-                     const wxString& caption = SYMBOL_WINEDA_DRCFRAME_TITLE,
-                     const wxPoint& pos = SYMBOL_WINEDA_DRCFRAME_POSITION,
-                     const wxSize& size = SYMBOL_WINEDA_DRCFRAME_SIZE,
-                     long style = SYMBOL_WINEDA_DRCFRAME_STYLE );
+    DrcDialog( );
+    DrcDialog( DRC* aTester, WinEDA_PcbFrame* parent,
+                     wxWindowID id = SYMBOL_DRCDIALOG_IDNAME,
+                     const wxString& caption = SYMBOL_DRCDIALOG_TITLE,
+                     const wxPoint& pos = SYMBOL_DRCDIALOG_POSITION,
+                     const wxSize& size = SYMBOL_DRCDIALOG_SIZE,
+                     long style = SYMBOL_DRCDIALOG_STYLE );
 
     /// Creation
-    bool Create( wxWindow* parent, wxWindowID id = SYMBOL_WINEDA_DRCFRAME_IDNAME, const wxString& caption = SYMBOL_WINEDA_DRCFRAME_TITLE, const wxPoint& pos = SYMBOL_WINEDA_DRCFRAME_POSITION, const wxSize& size = SYMBOL_WINEDA_DRCFRAME_SIZE, long style = SYMBOL_WINEDA_DRCFRAME_STYLE );
+    bool Create( wxWindow* parent, wxWindowID id = SYMBOL_DRCDIALOG_IDNAME, const wxString& caption = SYMBOL_DRCDIALOG_TITLE, const wxPoint& pos = SYMBOL_DRCDIALOG_POSITION, const wxSize& size = SYMBOL_DRCDIALOG_SIZE, long style = SYMBOL_DRCDIALOG_STYLE );
 
     /// Creates the controls and sizers
     void CreateControls();
 
-////@begin WinEDA_DrcFrame event handler declarations
+////@begin DrcDialog event handler declarations
 
     /// wxEVT_INIT_DIALOG event handler for ID_DIALOG
     void OnInitDialog( wxInitDialogEvent& event );
+
+    /// wxEVT_DESTROY event handler for ID_DIALOG
+    void OnDestroy( wxWindowDestroyEvent& event );
 
     /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_CHECKBOX
     void OnReportCheckBoxClicked( wxCommandEvent& event );
@@ -139,16 +141,16 @@ public:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
     void OnOkClick( wxCommandEvent& event );
 
-////@end WinEDA_DrcFrame event handler declarations
+////@end DrcDialog event handler declarations
 
-////@begin WinEDA_DrcFrame member function declarations
+////@begin DrcDialog member function declarations
 
     /// Retrieves bitmap resources
     wxBitmap GetBitmapResource( const wxString& name );
 
     /// Retrieves icon resources
     wxIcon GetIconResource( const wxString& name );
-////@end WinEDA_DrcFrame member function declarations
+////@end DrcDialog member function declarations
 
     void OnMarkerSelectionEvent( wxCommandEvent& event );
     void OnUnconnectedSelectionEvent( wxCommandEvent& event );
@@ -156,11 +158,11 @@ public:
     /// Should we show tooltips?
     static bool ShowToolTips();
 
-    void TestDrc(wxCommandEvent & event);
+    void CmdDrc();    
     void DelDRCMarkers(wxCommandEvent & event);
     void ListUnconnectedPads(wxCommandEvent & event);
 
-////@begin WinEDA_DrcFrame member variables
+////@begin DrcDialog member variables
     wxBoxSizer* m_MainSizer;
     wxBoxSizer* m_CommandSizer;
     wxStaticText* m_ClearenceTitle;
@@ -169,18 +171,18 @@ public:
     wxTextCtrl* m_RptFilenameCtrl;
     wxButton* m_BrowseButton;
     wxCheckBox* m_Pad2PadTestCtrl;
-    wxCheckBox* m_UnconnectedTestCtrl;
     wxCheckBox* m_ZonesTestCtrl;
+    wxCheckBox* m_UnconnectedTestCtrl;
+    wxButton* m_DeleteAllButton;
     wxButton* m_DeleteCurrentMarkerButton;
     DRCLISTBOX* m_ClearanceListBox;
     DRCLISTBOX* m_UnconnectedListBox;
     wxStdDialogButtonSizer* StdDialogButtonSizer;
-////@end WinEDA_DrcFrame member variables
+////@end DrcDialog member variables
 
 
-    DRC_TESTER*         m_Tester;
+    DRC*                m_tester;
     WinEDA_PcbFrame*    m_Parent;
-    wxDC*               m_DC;
     int                 m_UnconnectedCount;
 };
 

@@ -11,6 +11,7 @@
 #include "bitmaps.h"
 #include "protos.h"
 #include "id.h"
+#include "drc_stuff.h"
 
 
 /*******************************/
@@ -191,6 +192,8 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent,
     m_ZoomMaxValue             = 2048;
     m_SelTrackWidthBox_Changed = FALSE;
     m_SelViaSizeBox_Changed    = FALSE;
+
+    m_drc = new DRC( this );        // these 2 objects point to each other
     
     m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
     m_DisplayPadFill = DisplayOpt.DisplayPadFill;
@@ -237,6 +240,7 @@ WinEDA_PcbFrame::~WinEDA_PcbFrame()
 {
     m_Parent->m_PcbFrame = NULL;
     m_CurrentScreen = ScreenPcb;
+    delete m_drc;
 }
 
 

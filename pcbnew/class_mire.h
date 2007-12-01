@@ -19,6 +19,12 @@ public:
     MIREPCB( BOARD_ITEM* StructFather );
     ~MIREPCB();
 
+    wxPoint& GetPosition()
+    {
+        return m_Pos;
+    }
+    
+    
     /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.brd" format.

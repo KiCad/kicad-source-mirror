@@ -23,8 +23,11 @@ class D_PAD : public BOARD_ITEM
 {
 private:
     int     m_NetCode;              // Net number for fast comparisons
+
     
 public:
+    wxPoint m_Pos;                  // pad Position on board
+
     union
     {
         unsigned long m_NumPadName;
@@ -42,7 +45,6 @@ public:
     int     m_PadShape;             // Shape: CIRCLE, RECT, OVAL, TRAPEZOID
     int     m_DrillShape;           // Shape CIRCLE, OVAL
 
-    wxPoint m_Pos;                  // pad Position on board
     wxSize  m_Drill;                // Drill diam (drill shape = CIRCLE) or drill size(shape = OVAL)
                                     // for drill shape = CIRCLE, drill diam = m_Drill.x
 
@@ -72,6 +74,21 @@ public:
 
     D_PAD* Next() { return (D_PAD*) Pnext; }
 
+    /**
+     * Function GetPosition
+     * returns the position of this object.
+     * @return const wxPoint& - The position of this object.
+     */
+    wxPoint& GetPosition()
+    {
+        return m_Pos;
+    }
+    void SetPosition( const wxPoint& aPos )
+    {
+        m_Pos = aPos;
+    }
+    
+    
     /* remove from linked list */
     void            UnLink();
 
@@ -86,6 +103,7 @@ public:
      */ 
     bool Save( FILE* aFile ) const;
     
+
     
     /* drawing functions */
     void            Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode );

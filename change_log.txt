@@ -4,10 +4,25 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2007-Nov-30 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+  * added virtual GetPosition() to BOARD_ITEM and derivatives.
+  * added classes DRC, REPORT_ISSUE, DRC_ITEM and rearranged drc.cpp entirely
+    to comprize the DRC class.  The result has finer granularity of functions
+    and each is fairly well documented in English, see drc_stuff.h.
+    Keeping old stuff commented out at bottom of drc.cpp until some more usage 
+    and testing is done.
+  * Made the DRC dialog modeless, so it can sit off to the side while the MARKER
+    are inspected one by one.
+  Need another 4-8 hours or so to finish the actual dialog display, remove
+  debug statements and finish testing.
+
+  
 2007-Nov-29 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:
-	Removed a bug (function block() ) which crashes pcbnew when erasing a zone by block delete
+    Removed a bug (function block() ) which crashes pcbnew when erasing a zone by block delete
 
 
 2007-Nov-27 UPDATE   Dick Hollenbeck <dick@softplc.com>
@@ -50,7 +65,7 @@ email address.
 2007-Nov-15 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:
-	Removed a bug (function Delete_Zone() ) which crashes pcbnew when erasing a zone by popup menu
+    Removed a bug (function Delete_Zone() ) which crashes pcbnew when erasing a zone by popup menu
 
 
 2007-Nov-13 UPDATE   Geoff Harland <gharlandau@yahoo.com.au>

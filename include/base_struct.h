@@ -456,6 +456,13 @@ public:
     BOARD_ITEM* Back() const { return (BOARD_ITEM*) Pback; }
     BOARD_ITEM* GetParent() const { return (BOARD_ITEM*) m_Parent; }
 
+    /**
+     * Function GetPosition
+     * returns the position of this object.
+     * @return wxPoint& - The position of this object, non-const so it 
+     *          can be changed
+     */
+    virtual wxPoint& GetPosition() = 0;
 
     /**
      * Function GetLayer

@@ -58,7 +58,7 @@ void RemoteCommand(  const char* cmdline )
 
             frame->DrawPanel->PrepareGraphicContext( &dc );
             frame->DrawPanel->CursorOff( &dc );
-            frame->GetScreen()->m_Curseur = module->m_Pos;
+            frame->GetScreen()->m_Curseur = module->GetPosition();
             frame->DrawPanel->CursorOn( &dc );
         }
     }
@@ -96,7 +96,7 @@ void RemoteCommand(  const char* cmdline )
             frame->Hight_Light( &dc );      /* hightlighted the new one */
 
             frame->DrawPanel->CursorOff( &dc );
-            frame->GetScreen()->m_Curseur = pad->m_Pos;
+            frame->GetScreen()->m_Curseur = pad->GetPosition();
             frame->DrawPanel->CursorOn( &dc );
         }
 

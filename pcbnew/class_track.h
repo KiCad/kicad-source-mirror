@@ -55,6 +55,16 @@ public:
 
     TRACK* Back() const { return (TRACK*) Pback; }
 
+    /**
+     * Function GetPosition
+     * returns the position of this object.
+     * @return const wxPoint& - The position of this object.
+     */
+    wxPoint& GetPosition()
+    {
+        return m_Start;  // it had to be start or end.
+    }
+    
 
     /* supprime du chainage la structure Struct */
     void    UnLink();
@@ -122,7 +132,12 @@ public:
      * returns the length of the track using the hypotenuse calculation.
      * @return double - the length of the track
      */
-    double  GetLength() const;
+    double  GetLength() const
+    {
+        int    dx = m_Start.x - m_End.x;
+        int    dy = m_Start.y - m_End.y;
+        return hypot( dx, dy );
+    }
 
 
     /* Display on screen: */
@@ -255,8 +270,16 @@ public:
     void    SetLayerPair( int top_layer, int bottom_layer );
     void    ReturnLayerPair( int* top_layer, int* bottom_layer ) const;
 
-    const wxPoint& GetPos() const { return m_Start; }
-    void  SetPos( const wxPoint& aPoint ) { m_Start=aPoint;  m_End=aPoint; } 
+    /**
+     * Function GetPosition
+     * returns the position of this object.
+     * @return const wxPoint& - The position of this object.
+     */
+    wxPoint& GetPosition() 
+    { 
+        return m_Start; 
+    }
+    void  SetPosition( const wxPoint& aPoint ) { m_Start=aPoint;  m_End=aPoint; } 
     
     /**
      * Function GetClass

@@ -55,8 +55,9 @@ public:
     void SetNet( int aNetCode )
     {
         m_NetCode = aNetCode;
-    };
+    }
 };
+
 
 /****************************************************************/
 /* description d'un point de piste pour le suivi des connexions */
@@ -80,9 +81,6 @@ enum StatusPcbFlags {
                              *  de noms de net */
     DO_NOT_SHOW_GENERAL_RASTNEST = 0x20 /* Do not display the general rastnest (used in module moves) */
 };
-
-#define OK_DRC  0
-#define BAD_DRC 1
 
 
 /* Commandes d'autoplacement / autorouage possibles */
@@ -170,4 +168,5 @@ eda_global BOARDHEAD Board;        /* 2-sided board */
 #include "ar_protos.h"
 
 
-#endif  /* AUTOROUT_H */
+#endif  // AUTOROUT_H
+

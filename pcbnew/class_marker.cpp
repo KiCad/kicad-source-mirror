@@ -38,8 +38,7 @@ static char Default_MarkerBitmap[] =
 /* Classe MARKER */
 /*******************/
 
-MARKER::MARKER( BOARD_ITEM* StructFather ) :
-    BOARD_ITEM( StructFather, TYPEMARKER )
+void MARKER::init()
 {
     m_Bitmap = NULL;
     m_Type   = 0;
@@ -49,6 +48,26 @@ MARKER::MARKER( BOARD_ITEM* StructFather ) :
     m_Size.y = Default_MarkerBitmap[1];
 }
 
+MARKER::MARKER( BOARD_ITEM* StructFather ) :
+    BOARD_ITEM( StructFather, TYPEMARKER ),
+    m_drc()
+{
+    init();
+}
+
+
+MARKER::MARKER( int aErrorCode, const wxPoint& aMarkerPos, 
+               const wxString& aText, const wxPoint& aPos, 
+               const wxString& bText, const wxPoint& bPos ) :
+    BOARD_ITEM( NULL, TYPEMARKER )  // parent set during BOARD::Add()
+{
+    init();
+
+    SetData( aErrorCode, aMarkerPos, 
+         aText, aPos,
+         bText, bPos );
+}
+
 
 /* Effacement memoire de la structure */
 MARKER::~MARKER()
@@ -56,6 +75,19 @@ MARKER::~MARKER()
 #if defined(DEBUG)
     printf("MARKER %p deleted\n", this );
 #endif
+}
+
+
+void MARKER::SetData( int aErrorCode, const wxPoint& aMarkerPos, 
+         const wxString& aText, const wxPoint& aPos, 
+         const wxString& bText, const wxPoint& bPos )
+{
+    m_drc.SetData( aErrorCode, aMarkerPos, 
+             aText, bText,
+             aPos, bPos );
+    
+    // @todo: switch on error code to set error code specific color, and possibly bitmap.
+    m_Color = WHITE;
 }
 
 
@@ -78,7 +110,7 @@ void MARKER::Display_Infos( WinEDA_DrawFrame* frame )
     Affiche_1_Parametre( frame, text_pos, _( "Type" ), _("Marker"), DARKCYAN );
 
     text_pos = 12;
-    Affiche_1_Parametre( frame, text_pos, _( "Marker Error Text" ), m_Diag, RED );
+    Affiche_1_Parametre( frame, text_pos, _( "Marker Error Text" ), GetOneLineMessage(), RED );
 }
 
 
@@ -95,9 +127,11 @@ bool MARKER::HitTest( const wxPoint& refPos )
 		TrueSize.x *= ActiveScreen->GetZoom();
 		TrueSize.y *= ActiveScreen->GetZoom();
 	}
+
+    wxPoint pos = GetPosition();
     
-    int dx = refPos.x - m_Pos.x;
-    int dy = refPos.y - m_Pos.y;
+    int dx = refPos.x - pos.x;
+    int dy = refPos.y - pos.y;
 	
 	/* is refPos in the box: Marker size to right an bottom,
 	or size/2 to left or top */
@@ -130,8 +164,8 @@ void MARKER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int DrawMode )
 
     GRSetDrawMode( DC, DrawMode );
 
-    px = GRMapX( m_Pos.x ); 
-    py = GRMapY( m_Pos.y );
+    px = GRMapX( GetPosition().x ); 
+    py = GRMapY( GetPosition().y );
 
     /* Get the bitmap size */
     m_Size.x = *(pt_bitmap++); 

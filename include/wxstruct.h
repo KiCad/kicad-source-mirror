@@ -101,6 +101,7 @@ class Ki_PageDescr;
 class Ki_HotkeyInfo;
 class GENERAL_COLLECTOR;
 class GENERAL_COLLECTORS_GUIDE;
+class DRC;
 
 
 enum id_librarytype {
@@ -574,6 +575,9 @@ private:
     bool             m_SelViaSizeBox_Changed;
     wxMenu*          m_FilesMenu;
 
+    DRC*             m_drc;         ///< the DRC controller, see drc.cpp
+    
+    
     // we'll use lower case function names for private member functions.
     void    createPopUpMenuForFootprints( MODULE* aModule, wxMenu* aPopMenu );
     void    createPopUpMenuForFpTexts( TEXTE_MODULE* aText, wxMenu* aPopMenu );
@@ -655,7 +659,6 @@ public:
     MODULE*             ListAndSelectModuleName();
     void                Liste_Equipot( wxCommandEvent& event );
     void                Swap_Layers( wxCommandEvent& event );
-    int                 Test_DRC( wxDC* DC, bool TestPad2Pad, bool TestZone );
     void                Install_Test_DRC_Frame( wxDC* DC );
     void                Trace_Pcb( wxDC* DC, int mode );
 
@@ -719,6 +722,8 @@ public:
     bool                PlaceDraggedTrackSegment( TRACK* Track, wxDC* DC );
     void                Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC );
     void                SwitchLayer( wxDC* DC, int layer );
+    int                 Add_45_degrees_Segment( wxDC* DC, TRACK* pt_segm );
+    bool                Genere_Pad_Connexion( wxDC* DC, int layer );
 
     // zone handling
     EDGE_ZONE*          Del_SegmEdgeZone( wxDC* DC, EDGE_ZONE* edge_zone );

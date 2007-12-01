@@ -13,6 +13,19 @@ public:
 	TEXTE_PCB( TEXTE_PCB* textepcb );
 	~TEXTE_PCB();
 
+    
+    /**
+     * Function GetPosition
+     * returns the position of this object.
+     * @return wxPoint& - The position of this object, non-const so it 
+     *          can be changed
+     */
+    wxPoint& GetPosition()
+    {
+        return m_Pos;   // within EDA_TextStruct
+    }
+    
+    
 	/* supprime du chainage la structure Struct */
 	void UnLink();
 

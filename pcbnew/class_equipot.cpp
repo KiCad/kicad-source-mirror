@@ -44,6 +44,13 @@ EQUIPOT::~EQUIPOT()
 }
 
 
+wxPoint& EQUIPOT::GetPosition()
+{
+    static wxPoint dummy;
+    return dummy;
+}
+
+
 void EQUIPOT::UnLink()
 {
     /* Modification du chainage arriere */

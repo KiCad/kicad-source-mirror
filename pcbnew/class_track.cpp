@@ -145,21 +145,6 @@ bool TRACK::IsNull()
 
 
 /*************************************************************/
-double TRACK::GetLength() const
-/*************************************************************/
-{
-    int    dx = m_Start.x - m_End.x;
-    int    dy = m_Start.y - m_End.y;
-
-    double dist = ( (double) dx * dx ) + ( (double) dy * dy );
-
-    dist = sqrt( dist );
-
-    return dist;
-}
-
-
-/*************************************************************/
 int TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
 /*************************************************************/
 
