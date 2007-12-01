@@ -34,8 +34,8 @@
 
 
 /// DRC error codes:
-#define DRCE_                           1
-#define DRCE_UNCONNECTED_PADS           2
+#define DRCE_                           1 // not used yet
+#define DRCE_UNCONNECTED_PADS           2   ///< pads are unconnected
 #define DRCE_TRACK_NEAR_THROUGH_HOLE    3   ///< thru hole is too close to track
 #define DRCE_TRACK_NEAR_PAD             4   ///< pad too close to track
 #define DRCE_TRACK_NEAR_VIA             5   ///< track too close to via
@@ -56,52 +56,6 @@
 
 
 /**
- * Class REPORT_ISSUE
- * is an abstract interface used by DRCLISTBOX.  It has functions to return
- * either html text or disk file report text on this item.  It also can
- * return the drawing coordinate of the report item.
- */
-class REPORT_ISSUE
-{
-public:
-
-    /**
-     * Function ShowHtml
-     * translates this object into a fragment of HTML suitable for the
-     * wxWidget's wxHtmlListBox class.
-     * @return wxString - the html text.
-     */
-    virtual wxString ShowHtml() const = 0;
-
-    
-    /**
-     * Function ShowText
-     * translates this object into a text string suitable for showing
-     * in the status panel.
-     * @return wxString - the simple non-html text.
-     */
-    virtual wxString ShowText() const = 0;
-
-    /**
-     * Function ShowText
-     * translates this object into a text string suitable for saving
-     * to disk in a report.
-     * @return wxString - the simple non-html text.
-     */
-    virtual wxString ShowReport() const = 0;
-
-    
-    /**
-     * Function GetPosition
-     * @return const wxPoint& - the position of this report item within 
-     *  the drawing.
-     */
-    virtual const wxPoint& GetPosition() const = 0;
-};
-
-
-
-/**
  * Class DRC_ITEM
  * is a holder for a DRC error item.  It is generated when two objects are
  * too close.  There are holders for information on two items.  The
@@ -109,7 +63,7 @@ public:
  * Also held is the type of error by number and the location of the MARKER.
  * A function is provided to translate that number into text.
  */
-class DRC_ITEM : public REPORT_ISSUE 
+class DRC_ITEM 
 {
 
 protected:
@@ -150,8 +104,6 @@ public:
     }
     
     
-    //-----<Interface REPORT_ISSUE>---------------------------------------
-
     /**
      * Function ShowHtml
      * translates this object into a fragment of HTML suitable for the
@@ -162,51 +114,71 @@ public:
     {
         wxString ret;
 
-        ret.Printf( wxT("<b>%s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>"),
+        ret.Printf( _("<b>ErrType(%d): %s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>"),
+            m_ErrorCode,
             GetErrorText().GetData(),
                 ShowCoord( m_APos ).GetData(), m_AText.GetData(),
                 ShowCoord( m_BPos ).GetData(), m_BText.GetData() );
 
-        return ret;
-    }
-
-    /**
-     * Function ShowText
-     * translates this object into a text string suitable for saving
-     * to disk in a report.  Change this as needed to format the report.
-     * @return wxString - the simple non-html text.
-     */
-    wxString ShowText() const
-    {
-        wxString ret;
-
-        ret.Printf( wxT("%s  %s: %s AND %s: %s"),
-            GetErrorText().GetData(),
-                ShowCoord( m_APos ).GetData(), m_AText.GetData(),
-                ShowCoord( m_BPos ).GetData(), m_BText.GetData() );
-        
         return ret;
     }
 
     
     /**
-     * Function ShowText
+     * Function ShowReport
      * translates this object into a text string suitable for saving
      * to disk in a report.
-     * @return wxString - the simple non-html text.
+     * @return wxString - the simple multi-line report text.
      */
     wxString ShowReport() const
     {
         wxString ret;
 
-        ret.Printf( wxT("%s\n    %s: %s\n    %s: %s\n"),
+        ret.Printf( wxT("ErrType(%d): %s\n    %s: %s\n    %s: %s\n"),
+            m_ErrorCode,
             GetErrorText().GetData(),
                 ShowCoord( m_APos ).GetData(), m_AText.GetData(),
                 ShowCoord( m_BPos ).GetData(), m_BText.GetData() );
         
         return ret;
     }
+
+    /**
+     * Function GetErrorCode
+     * returns the error code.
+     */
+    int GetErrorCode() const
+    {
+        return m_ErrorCode;
+    }
+
     
+    /**
+     * Function GetErrorText
+     * returns the string form of a drc error code.
+     */
+    wxString GetErrorText() const;
+
+    const wxString& GetTextA() const
+    {
+        return m_AText;
+    }
+    
+    const wxString& GetTextB() const
+    {
+        return m_BText;
+    }
+    
+    
+    const wxPoint& GetPointA() const
+    {
+        return m_APos;
+    }
+    
+    const wxPoint& GetPointB() const
+    {
+        return m_BPos;
+    }
     
     /**
      * Function GetPosition
@@ -217,16 +189,6 @@ public:
     {
         return m_Pos;
     }
-
-    //-----</Interface REPORT_ISSUE>---------------------------------------
-
-    
-    /**
-     * Function GetErrorText
-     * returns the string form of a drc error code.
-     */
-    const wxString& GetErrorText() const;
-
 
     /**
      * Function ShowCoord
@@ -268,7 +230,7 @@ private:
                         
     wxString            m_rptFilename;
                         
-    int                 m_errorCount;
+    // int              m_errorCount;
                         
     MARKER*             m_currentMarker;
                         
@@ -477,6 +439,12 @@ public:
         m_doCreateRptFile   = aSaveReport;
     }
 
+    
+    /**
+     * Function RunTests
+     * will actually run all the tests specified with a previous call to
+     * SetSettings()
+     */
     void RunTests();
 
     

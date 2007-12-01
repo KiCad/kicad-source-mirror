@@ -281,6 +281,17 @@ public:
             return m_markers[index];
         return NULL;
     }
+
+    
+    /**
+     * Function GetMARKERCount
+     * @return int - The number of MARKERS.
+     */
+    int GetMARKERCount() const
+    {
+        return (int) m_markers.size();
+    }
+
     
     /* Routines de calcul des nombres de segments pistes et zones */
     int     GetNumSegmTrack();

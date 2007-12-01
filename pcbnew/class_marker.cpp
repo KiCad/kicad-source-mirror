@@ -18,7 +18,7 @@
 /* Default bitmap shape for markers */
 static char Default_MarkerBitmap[] =
 {
-    12, 12,                                 /* x and y sise of the bitmap */
+    12, 12,                                 /* x and y size of the bitmap */
     1,  1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,    /* bitmap: 1 = color, 0 = notrace */
     1,  1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0,
     1,  1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0,
@@ -106,11 +106,26 @@ void MARKER::Display_Infos( WinEDA_DrawFrame* frame )
 
     frame->MsgPanel->EraseMsgBox();
 
+    const DRC_ITEM& rpt = m_drc;
+    
     text_pos = 1;
     Affiche_1_Parametre( frame, text_pos, _( "Type" ), _("Marker"), DARKCYAN );
 
-    text_pos = 12;
-    Affiche_1_Parametre( frame, text_pos, _( "Marker Error Text" ), GetOneLineMessage(), RED );
+    wxString errorTxt;
+    
+    errorTxt << _("ErrType") << wxT("(") << rpt.GetErrorCode() << wxT(")- ") << rpt.GetErrorText() << wxT(":");
+    
+    text_pos = 5;
+    Affiche_1_Parametre( frame, text_pos, errorTxt, wxEmptyString, RED );
+
+    wxString txtA;
+    txtA << DRC_ITEM::ShowCoord( rpt.GetPointA() ) << wxT(": ") << rpt.GetTextA();
+    
+    wxString txtB;
+    txtB << DRC_ITEM::ShowCoord( rpt.GetPointB() ) << wxT(": ") << rpt.GetTextB();     
+    
+    text_pos = 20;      // @todo pick a better color here
+    Affiche_1_Parametre( frame, text_pos, txtA, txtB, BLACK );
 }
 
 

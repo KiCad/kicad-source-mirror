@@ -78,35 +78,17 @@ public:
              const wxString& aText, const wxPoint& aPos, 
              const wxString& bText, const wxPoint& bPos );
     
-    /**
-     * Function GetMessage
-     * @return const wxString& - the diagnostic message
-     */
-    const wxString GetOneLineMessage()
-    {
-        return m_drc.ShowText();
-    }
-
     
     /**
      * Function GetReporter
-     * returns the REPORT_ISSUE held within this MARKER so that its
+     * returns the DRC_ITEM held within this MARKER so that its
      * interface may be used.
-     * @return const& REPORT_ISSUE
+     * @return const& DRC_ITEM
      */
-    const REPORT_ISSUE& GetReporter() const
+    const DRC_ITEM& GetReporter() const
     {
         return m_drc;
     }
-
-    
-    /*
-    void SetMessage( const wxString& aMsg )
-    {
-        m_Diag = aMsg;
-    }
-    */
-     
 
     
     /**
