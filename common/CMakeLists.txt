@@ -33,5 +33,4 @@ SET(COMMON_SRCS
 	worksheet.cpp
 	wxwineda.cpp)
 
-
 ADD_LIBRARY(common ${COMMON_SRCS})

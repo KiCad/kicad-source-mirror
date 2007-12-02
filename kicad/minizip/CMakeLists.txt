@@ -1,8 +1,7 @@
 FIND_PACKAGE(ZLIB)
-MESSAGE("-- Check for installed ZLIB:")
 
 IF(ZLIB_FOUND)
-	MESSAGE("      ZLIB found")
+	MESSAGE(STATUS "Check for installed ZLIB -- found")
 	SET(MINIZIP_SRCS
 		ioapi.c
 		minizip.c
@@ -14,5 +13,5 @@ IF(ZLIB_FOUND)
 
 	INSTALL(TARGETS minizip RUNTIME DESTINATION bin)
 ELSE(ZLIB_FOUND)
-	MESSAGE("      ZLIB not found")
+	MESSAGE(STATUS "Check for installed ZLIB -- not found")
 ENDIF(ZLIB_FOUND)

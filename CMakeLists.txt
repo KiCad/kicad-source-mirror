@@ -7,6 +7,14 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.4.6 FATAL_ERROR)
 # Uncomment this line if you want verbose build messages.
 #SET(CMAKE_VERBOSE_MAKEFILE ON)
 
+# Set default flags for Debug build
+SET(CMAKE_C_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
+SET(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
+# Set default flags for Release build
+SET(CMAKE_C_FLAGS_RELEASE "-Wall -O2 -DNDEBUG")
+SET(CMAKE_CXX_FLAGS_RELEASE "-Wall -O2 -DNDEBUG")
+SET(CMAKE_EXE_LINKER_FLAGS_RELEASE "-s")
+
 # Here you can define what libraries of wxWidgets you need for your
 # application. You can figure out what libraries you need here;
 # http://www.wxwidgets.org/manuals/2.8/wx_librarieslist.html
@@ -17,31 +25,29 @@ FIND_PACKAGE(wxWidgets REQUIRED)
 
 # Locations for install targets
 IF(UNIX)
-	#SET(CMAKE_INSTALL_PATH /usr/local)
-	SET(KICAD_BIN bin CACHE PATH "Location of KiCad binaries.")
-	SET(KICAD_PLUGINS lib/kicad/plugins CACHE PATH "Location of KiCad plugins.")
-	SET(KICAD_DOCS share/doc/kicad CACHE PATH "Location of KiCad documentation files.")
-	SET(KICAD_DATA share/kicad CACHE PATH "Location of KiCad data files.")
-	SET(KICAD_MODULES ${KICAD_DATA}/modules)
-	SET(KICAD_LIBRARY ${KICAD_DATA}/library)
-	SET(KICAD_INTERNAT ${KICAD_DATA}/internat)
-	SET(KICAD_TEMPLATE ${KICAD_DATA}/template)
+	IF(APPLE)
+	ELSE(APPLE)
+		#SET(CMAKE_INSTALL_PATH /usr/local)
+		SET(KICAD_BIN bin CACHE PATH "Location of KiCad binaries.")
+		SET(KICAD_PLUGINS lib/kicad/plugins CACHE PATH "Location of KiCad plugins.")
+		SET(KICAD_DOCS share/doc/kicad CACHE PATH "Location of KiCad documentation files.")
+		SET(KICAD_DATA share/kicad CACHE PATH "Location of KiCad data files.")
+		SET(KICAD_MODULES ${KICAD_DATA}/modules)
+		SET(KICAD_LIBRARY ${KICAD_DATA}/library)
+		SET(KICAD_INTERNAT ${KICAD_DATA}/internat)
+		SET(KICAD_TEMPLATE ${KICAD_DATA}/template)
+	ENDIF(APPLE)
 ENDIF(UNIX)
 
 IF(WIN32)
 ENDIF(WIN32)
 
-# Should this go to IF(UNIX)?
-IF(APPLE)
-ENDIF(APPLE)
-
 # Did we find wxWidgets ? This condition will fail
 # for as long as the internal vars do not point to
 # the proper wxWidgets configuration.
-MESSAGE("-- Check for installed wxWidgets:")
 IF(wxWidgets_FOUND)
-	MESSAGE("      wxWidgets found")
-	
+	MESSAGE(STATUS "Check for installed wxWidgets -- found")
+
 	# Include wxWidgets macros.
         INCLUDE(${wxWidgets_USE_FILE})
 
@@ -61,7 +67,8 @@ IF(wxWidgets_FOUND)
 	ADD_SUBDIRECTORY(pcbnew)
 ELSE(wxWidgets_FOUND)
         # For convenience. When we cannot continue, inform the user.
-        MESSAGE("      Error: wxWidgets doesn't found (it is required to build KiCad!)")
+	MESSAGE(STATUS "Check for installed wxWidgets -- not found")
+        MESSAGE(FATAL_ERROR "wxWidgets was not found - it is required to build KiCad")
 ENDIF(wxWidgets_FOUND)
 
 # CMake will look at this dirs for nested 'CMakeLists.txt' files
