@@ -1,10 +1,10 @@
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-22 21:04+0100\n"
-"PO-Revision-Date: 2007-11-22 21:06+0100\n"
+"POT-Creation-Date: 2007-12-02 10:31+0100\n"
+"PO-Revision-Date: 2007-12-02 13:24+0100\n"
 "Last-Translator: \n"
 "Language-Team: Polish KiCAD Team - Mateusz Skowroński <skowri@gmail.com>, Krzysztof Kawa <elektrotrans@wp.pl>\n"
 "MIME-Version: 1.0\n"
@@ -399,8 +399,8 @@ msgstr "Grafika PCB"
 #: kicad/pcbnew/class_board_item.cpp:146
 #: kicad/pcbnew/class_board_item.cpp:164
 #: kicad/pcbnew/class_board_item.cpp:191
-#: kicad/pcbnew/class_board_item.cpp:207
-#: kicad/pcbnew/class_board_item.cpp:213
+#: kicad/pcbnew/class_board_item.cpp:208
+#: kicad/pcbnew/class_board_item.cpp:214
 msgid " on "
 msgstr " na "
 
@@ -463,15 +463,15 @@ msgstr "Łuk"
 
 #: kicad/pcbnew/class_board_item.cpp:108
 #: kicad/pcbnew/classpcb.cpp:234
-#: kicad/pcbnew/class_track.cpp:791
+#: kicad/pcbnew/class_track.cpp:776
 #: kicad/pcbnew/dialog_pad_edit.cpp:176
 #: kicad/pcbnew/dialog_pad_edit.cpp:196
 msgid "Circle"
 msgstr "Okrąg"
 
 #: kicad/pcbnew/class_board_item.cpp:140
-#: kicad/pcbnew/pcbframe.cpp:443
-#: kicad/pcbnew/class_track.cpp:754
+#: kicad/pcbnew/pcbframe.cpp:447
+#: kicad/pcbnew/class_track.cpp:739
 msgid "Track"
 msgstr "Ścieżka"
 
@@ -484,12 +484,12 @@ msgid "Length:"
 msgstr "Długość:"
 
 #: kicad/pcbnew/class_board_item.cpp:153
-#: kicad/pcbnew/class_track.cpp:758
+#: kicad/pcbnew/class_track.cpp:743
 msgid "Zone"
 msgstr "Strefa"
 
 #: kicad/pcbnew/class_board_item.cpp:170
-#: kicad/pcbnew/pcbframe.cpp:475
+#: kicad/pcbnew/pcbframe.cpp:479
 msgid "Via"
 msgstr "Przelotka"
 
@@ -502,23 +502,23 @@ msgid "Buried"
 msgstr "Zagrzebana"
 
 #: kicad/pcbnew/class_board_item.cpp:198
-#: kicad/pcbnew/class_marker.cpp:92
+#: kicad/pcbnew/class_marker.cpp:112
 msgid "Marker"
 msgstr "Znacznik"
 
-#: kicad/pcbnew/class_board_item.cpp:202
+#: kicad/pcbnew/class_board_item.cpp:203
 msgid "Dimension"
 msgstr "Wymiar"
 
-#: kicad/pcbnew/class_board_item.cpp:207
+#: kicad/pcbnew/class_board_item.cpp:208
 msgid "Target"
 msgstr "Element pozycjonujący"
 
-#: kicad/pcbnew/class_board_item.cpp:208
+#: kicad/pcbnew/class_board_item.cpp:209
 msgid "size"
 msgstr "Rozmiar"
 
-#: kicad/pcbnew/class_board_item.cpp:213
+#: kicad/pcbnew/class_board_item.cpp:214
 msgid "Edge Zone"
 msgstr "Krawędź strefy"
 
@@ -542,57 +542,57 @@ msgstr "Nie znaleziono pinu %s (moduł %s)"
 msgid "Locate Pin %s (module %s)"
 msgstr "Znajdź pin %s (moduł %s)"
 
-#: kicad/pcbnew/dialog_graphic_items_options.cpp:192
+#: kicad/pcbnew/dialog_graphic_items_options.cpp:194
 msgid "Graphics:"
 msgstr "Grafika:"
 
-#: kicad/pcbnew/dialog_graphic_items_options.cpp:196
+#: kicad/pcbnew/dialog_graphic_items_options.cpp:198
 msgid "Graphic segm Width"
 msgstr "Szerokość segmentu grafiki"
 
-#: kicad/pcbnew/dialog_graphic_items_options.cpp:202
+#: kicad/pcbnew/dialog_graphic_items_options.cpp:204
 msgid "Board Edges Width"
 msgstr "Szerokość krawędzi płytki"
 
-#: kicad/pcbnew/dialog_graphic_items_options.cpp:208
+#: kicad/pcbnew/dialog_graphic_items_options.cpp:210
 msgid "Copper Text Width"
 msgstr "Szerokość tekstu ścieżek"
 
-#: kicad/pcbnew/dialog_graphic_items_options.cpp:214
+#: kicad/pcbnew/dialog_graphic_items_options.cpp:216
 msgid "Text Size V"
 msgstr "Pionowy rozmiar tekstu"
 
-#: kicad/pcbnew/dialog_graphic_items_options.cpp:220
+#: kicad/pcbnew/dialog_graphic_items_options.cpp:222
 msgid "Text Size H"
 msgstr "Poziomy rozmiar tekstu"
 
-#: kicad/pcbnew/dialog_graphic_items_options.cpp:228
+#: kicad/pcbnew/dialog_graphic_items_options.cpp:230
 msgid "Modules:"
 msgstr "Moduły:"
 
-#: kicad/pcbnew/dialog_graphic_items_options.cpp:232
+#: kicad/pcbnew/dialog_graphic_items_options.cpp:234
 msgid "Edges Module Width"
 msgstr "Szerokość krawędzi modułu"
 
-#: kicad/pcbnew/dialog_graphic_items_options.cpp:238
+#: kicad/pcbnew/dialog_graphic_items_options.cpp:240
 msgid "Text Module Width"
 msgstr "Szerokość tekstu modułu"
 
-#: kicad/pcbnew/dialog_graphic_items_options.cpp:244
+#: kicad/pcbnew/dialog_graphic_items_options.cpp:246
 msgid "Text Module Size V"
 msgstr "Rozmiar pionowy tekstu modułu"
 
-#: kicad/pcbnew/dialog_graphic_items_options.cpp:250
+#: kicad/pcbnew/dialog_graphic_items_options.cpp:252
 msgid "Text Module Size H"
 msgstr "Rozmiar poziomy tekstu modułu"
 
-#: kicad/pcbnew/dialog_graphic_items_options.cpp:261
+#: kicad/pcbnew/dialog_graphic_items_options.cpp:263
 #: kicad/pcbnew/set_grid.cpp:171
 #: kicad/pcbnew/dialog_pad_edit.cpp:217
 #: kicad/pcbnew/dialog_general_options.cpp:368
-#: kicad/pcbnew/dialog_drc.cpp:232
+#: kicad/pcbnew/dialog_drc.cpp:372
 #: kicad/pcbnew/swap_layers.cpp:220
-#: kicad/pcbnew/dialog_track_options.cpp:181
+#: kicad/pcbnew/dialog_track_options.cpp:186
 #: kicad/pcbnew/dialog_edit_mod_text.cpp:213
 #: kicad/pcbnew/dialog_initpcb.cpp:161
 #: kicad/pcbnew/dialog_display_options.cpp:282
@@ -613,15 +613,15 @@ msgstr "Rozmiar poziomy tekstu modułu"
 msgid "&OK"
 msgstr "&OK"
 
-#: kicad/pcbnew/dialog_graphic_items_options.cpp:265
+#: kicad/pcbnew/dialog_graphic_items_options.cpp:267
 #: kicad/pcbnew/dialog_netlist.cpp:189
-#: kicad/pcbnew/zones.cpp:217
+#: kicad/pcbnew/zones.cpp:216
 #: kicad/pcbnew/set_grid.cpp:176
 #: kicad/pcbnew/dialog_pad_edit.cpp:221
 #: kicad/pcbnew/dialog_general_options.cpp:372
-#: kicad/pcbnew/dialog_drc.cpp:236
+#: kicad/pcbnew/dialog_drc.cpp:368
 #: kicad/pcbnew/swap_layers.cpp:224
-#: kicad/pcbnew/dialog_track_options.cpp:185
+#: kicad/pcbnew/dialog_track_options.cpp:190
 #: kicad/pcbnew/dialog_edit_mod_text.cpp:217
 #: kicad/pcbnew/dialog_initpcb.cpp:164
 #: kicad/pcbnew/dialog_display_options.cpp:286
@@ -738,7 +738,7 @@ msgstr "Zastosuj"
 
 #: kicad/pcbnew/modules.cpp:81
 msgid "Footprint name:"
-msgstr "Nazwa obudowy:"
+msgstr "Oznaczenie elementu (np. R1):"
 
 #: kicad/pcbnew/modules.cpp:281
 #: kicad/pcbnew/onrightclick.cpp:676
@@ -768,7 +768,7 @@ msgstr "Nazwa sieci"
 
 #: kicad/pcbnew/affiche.cpp:36
 msgid "No Net (not connected)"
-msgstr "Brak sieci (nie połączone)"
+msgstr "Brak sieci (niepołączone)"
 
 #: kicad/pcbnew/affiche.cpp:39
 msgid "Net Code"
@@ -776,19 +776,19 @@ msgstr "Kod sieci"
 
 #: kicad/pcbnew/affiche.cpp:52
 #: kicad/pcbnew/class_module.cpp:1228
-#: kicad/pcbnew/class_board.cpp:304
+#: kicad/pcbnew/class_board.cpp:417
 msgid "Pads"
 msgstr "Pola lutownicze"
 
 #: kicad/pcbnew/affiche.cpp:63
-#: kicad/pcbnew/class_board.cpp:314
+#: kicad/pcbnew/class_board.cpp:427
 #: kicad/pcbnew/plotps.cpp:361
 msgid "Vias"
 msgstr "Przelotki"
 
 #: kicad/pcbnew/clean.cpp:177
 msgid "Delete unconnected tracks:"
-msgstr "Usuń nie połączone ścieżki:"
+msgstr "Usuń niepołączone ścieżki:"
 
 #: kicad/pcbnew/clean.cpp:196
 msgid "ViaDef"
@@ -865,7 +865,7 @@ msgstr "Oznaczenie pola lutowniczego"
 
 #: kicad/pcbnew/class_pad.cpp:1062
 #: kicad/pcbnew/classpcb.cpp:245
-#: kicad/pcbnew/class_track.cpp:821
+#: kicad/pcbnew/class_track.cpp:806
 #: kicad/pcbnew/class_module.cpp:1217
 #: kicad/pcbnew/class_pcb_text.cpp:198
 #: kicad/pcbnew/dialog_edit_module.cpp:235
@@ -891,8 +891,8 @@ msgid "V Size"
 msgstr "Rozmiar pionowy"
 
 #: kicad/pcbnew/class_pad.cpp:1085
-#: kicad/pcbnew/class_track.cpp:837
-#: kicad/pcbnew/class_track.cpp:842
+#: kicad/pcbnew/class_track.cpp:822
+#: kicad/pcbnew/class_track.cpp:827
 #: kicad/pcbnew/gendrill.cpp:411
 #: kicad/pcbnew/gendrill.cpp:1101
 #: kicad/pcbnew/gendrill.cpp:1677
@@ -921,98 +921,98 @@ msgstr "Pozycja X"
 msgid "Y pos"
 msgstr "Pozycja Y"
 
-#: kicad/pcbnew/pcbframe.cpp:262
+#: kicad/pcbnew/pcbframe.cpp:266
 msgid "Board modified, Save before exit ?"
 msgstr "Płytka została zmieniona. Zapisać przed zakończeniem?"
 
-#: kicad/pcbnew/pcbframe.cpp:263
+#: kicad/pcbnew/pcbframe.cpp:267
 #: kicad/eeschema/schframe.cpp:183
 #: kicad/common/confirm.cpp:109
 #: kicad/cvpcb/cvframe.cpp:169
 msgid "Confirmation"
 msgstr "Potwierdzenie"
 
-#: kicad/pcbnew/pcbframe.cpp:363
+#: kicad/pcbnew/pcbframe.cpp:367
 msgid "DRC Off (Disable !!!), Currently: DRC is active"
 msgstr "Wyłącz DRC, Aktualnie: DRC jest aktywne"
 
-#: kicad/pcbnew/pcbframe.cpp:364
+#: kicad/pcbnew/pcbframe.cpp:368
 msgid "DRC On (Currently: DRC is inactive !!!)"
 msgstr "Włącz DRC, Aktualnie: DRC jest wyłączone"
 
-#: kicad/pcbnew/pcbframe.cpp:375
+#: kicad/pcbnew/pcbframe.cpp:379
 msgid "Polar Coords not show"
 msgstr "Nie pokazuj współrzędnych polarnych"
 
-#: kicad/pcbnew/pcbframe.cpp:376
+#: kicad/pcbnew/pcbframe.cpp:380
 msgid "Display Polar Coords"
 msgstr "Pokazuj współrzędne polarne"
 
-#: kicad/pcbnew/pcbframe.cpp:381
+#: kicad/pcbnew/pcbframe.cpp:385
 #: kicad/eeschema/schframe.cpp:274
 msgid "Grid not show"
 msgstr "Wyłącz siatkę"
 
-#: kicad/pcbnew/pcbframe.cpp:381
+#: kicad/pcbnew/pcbframe.cpp:385
 #: kicad/eeschema/schframe.cpp:274
 msgid "Show Grid"
 msgstr "Pokaż siatkę"
 
-#: kicad/pcbnew/pcbframe.cpp:390
+#: kicad/pcbnew/pcbframe.cpp:394
 msgid "General ratsnest not show"
 msgstr "Nie pokazuj głównych połączeń"
 
-#: kicad/pcbnew/pcbframe.cpp:390
+#: kicad/pcbnew/pcbframe.cpp:394
 msgid "Show General ratsnest"
 msgstr "Pokaż główne połączenia"
 
-#: kicad/pcbnew/pcbframe.cpp:396
+#: kicad/pcbnew/pcbframe.cpp:400
 msgid "Module ratsnest not show"
 msgstr "Nie pokazuj połączeń modułów"
 
-#: kicad/pcbnew/pcbframe.cpp:397
+#: kicad/pcbnew/pcbframe.cpp:401
 msgid "Show Module ratsnest"
 msgstr "Pokaż połączenia modułów"
 
-#: kicad/pcbnew/pcbframe.cpp:404
+#: kicad/pcbnew/pcbframe.cpp:408
 msgid "Disable Auto Delete old Track"
 msgstr "Wyłącz automatyczne usuwanie starych ścieżek"
 
-#: kicad/pcbnew/pcbframe.cpp:405
+#: kicad/pcbnew/pcbframe.cpp:409
 msgid "Enable Auto Delete old Track"
 msgstr "Włącz automatyczne usuwanie starych ścieżek"
 
-#: kicad/pcbnew/pcbframe.cpp:412
+#: kicad/pcbnew/pcbframe.cpp:416
 msgid "Do not Show Zones"
 msgstr "Nie pokazuj stref"
 
-#: kicad/pcbnew/pcbframe.cpp:412
+#: kicad/pcbnew/pcbframe.cpp:416
 #: kicad/pcbnew/tool_pcb.cpp:361
 #: kicad/pcbnew/set_color.h:423
 msgid "Show Zones"
 msgstr "Pokaż strefy"
 
-#: kicad/pcbnew/pcbframe.cpp:418
+#: kicad/pcbnew/pcbframe.cpp:422
 msgid "Show Pads Sketch mode"
 msgstr "Pokaż zarys pól lutowniczych"
 
-#: kicad/pcbnew/pcbframe.cpp:419
+#: kicad/pcbnew/pcbframe.cpp:423
 msgid "Show pads filled mode"
 msgstr "Pokaż pola lutownicze jako wypełnione"
 
-#: kicad/pcbnew/pcbframe.cpp:425
+#: kicad/pcbnew/pcbframe.cpp:429
 msgid "Show Tracks Sketch mode"
 msgstr "Pokaż zarys ścieżek"
 
-#: kicad/pcbnew/pcbframe.cpp:426
+#: kicad/pcbnew/pcbframe.cpp:430
 msgid "Show Tracks filled mode"
 msgstr "Pokaż ścieżki jako wypełnione"
 
-#: kicad/pcbnew/pcbframe.cpp:432
+#: kicad/pcbnew/pcbframe.cpp:436
 msgid "Normal Contrast Mode Display"
 msgstr "Wyświetlaj w trybie zwykłego kontrastu"
 
-#: kicad/pcbnew/pcbframe.cpp:433
+#: kicad/pcbnew/pcbframe.cpp:437
 #: kicad/pcbnew/tool_pcb.cpp:374
 msgid "Hight Contrast Mode Display"
 msgstr "Wyświetlaj w trybie wysokiego kontrastu"
@@ -1049,7 +1049,7 @@ msgstr "Warstwa segmentu"
 #: kicad/pcbnew/class_edge_mod.cpp:297
 #: kicad/pcbnew/classpcb.cpp:250
 #: kicad/pcbnew/mirepcb.cpp:113
-#: kicad/pcbnew/class_track.cpp:845
+#: kicad/pcbnew/class_track.cpp:830
 #: kicad/pcbnew/class_pcb_text.cpp:212
 #: kicad/pcbnew/class_text_mod.cpp:386
 #: kicad/pcbnew/cotation.cpp:129
@@ -1063,8 +1063,8 @@ msgid "Width"
 msgstr "Szerokość"
 
 #: kicad/pcbnew/classpcb.cpp:229
-#: kicad/pcbnew/class_track.cpp:765
-#: kicad/pcbnew/class_marker.cpp:92
+#: kicad/pcbnew/class_track.cpp:750
+#: kicad/pcbnew/class_marker.cpp:112
 #: kicad/pcbnew/class_text_mod.cpp:359
 #: kicad/gerbview/affiche.cpp:93
 msgid "Type"
@@ -1079,7 +1079,7 @@ msgid "  Arc  "
 msgstr "  Łuk  "
 
 #: kicad/pcbnew/classpcb.cpp:243
-#: kicad/pcbnew/class_track.cpp:789
+#: kicad/pcbnew/class_track.cpp:774
 msgid "Segment"
 msgstr "Segment"
 
@@ -1229,7 +1229,6 @@ msgid "Include tracks"
 msgstr "Dołącz ścieżki"
 
 #: kicad/pcbnew/block.cpp:133
-#: kicad/pcbnew/dialog_drc.cpp:171
 msgid "Include zones"
 msgstr "Dołącz strefy"
 
@@ -1345,156 +1344,152 @@ msgstr "Kopiuj strefę"
 msgid "Draw layers copy"
 msgstr "Kopiuj warstwy rysunkowe"
 
-#: kicad/pcbnew/find.cpp:127
+#: kicad/pcbnew/find.cpp:116
 msgid "Marker found"
 msgstr "Znaleziono znacznik"
 
-#: kicad/pcbnew/find.cpp:129
+#: kicad/pcbnew/find.cpp:118
 #, c-format
 msgid "<%s> Found"
 msgstr "Znaleziono <%s>"
 
-#: kicad/pcbnew/find.cpp:156
+#: kicad/pcbnew/find.cpp:145
 msgid "Marker not found"
 msgstr "Nie znaleziono znacznika"
 
-#: kicad/pcbnew/find.cpp:158
+#: kicad/pcbnew/find.cpp:147
 #, c-format
 msgid "<%s> Not Found"
 msgstr "Nie znaleziono <%s>"
 
-#: kicad/pcbnew/find.cpp:265
+#: kicad/pcbnew/find.cpp:254
 #: kicad/eeschema/dialog_find.cpp:107
 msgid "Item to find:"
 msgstr "Element do wyszukania:"
 
-#: kicad/pcbnew/find.cpp:286
+#: kicad/pcbnew/find.cpp:275
 msgid "Find Item"
 msgstr "Znajdź element"
 
-#: kicad/pcbnew/find.cpp:292
+#: kicad/pcbnew/find.cpp:281
 msgid "Find Next Item"
 msgstr "Znajdź następny element"
 
-#: kicad/pcbnew/find.cpp:301
+#: kicad/pcbnew/find.cpp:290
 msgid "Find Marker"
 msgstr "Znajdź znacznik"
 
-#: kicad/pcbnew/find.cpp:307
+#: kicad/pcbnew/find.cpp:296
 msgid "Find Next Marker"
 msgstr "Znajdź następny znacznik"
 
-#: kicad/pcbnew/class_track.cpp:780
-#: kicad/pcbnew/zones.cpp:928
+#: kicad/pcbnew/class_track.cpp:765
+#: kicad/pcbnew/zones.cpp:927
 msgid "NetName"
 msgstr "Nazwa sieci"
 
-#: kicad/pcbnew/class_track.cpp:785
+#: kicad/pcbnew/class_track.cpp:770
 msgid "NetCode"
 msgstr "Kod sieci"
 
-#: kicad/pcbnew/class_track.cpp:793
+#: kicad/pcbnew/class_track.cpp:778
 #: kicad/pcbnew/dialog_pad_edit.cpp:205
 msgid "Standard"
 msgstr "Standardowe"
 
-#: kicad/pcbnew/class_track.cpp:805
+#: kicad/pcbnew/class_track.cpp:790
 #: kicad/pcbnew/class_module.cpp:1236
 msgid "Stat"
 msgstr "Status"
 
-#: kicad/pcbnew/class_track.cpp:829
+#: kicad/pcbnew/class_track.cpp:814
 msgid "Diam"
 msgstr "Średnica"
 
-#: kicad/pcbnew/drc.cpp:80
-msgid "Look for active routes\n"
-msgstr "Szukaj aktywnych ścieżek\n"
-
-#: kicad/pcbnew/drc.cpp:93
-msgid "Unconnected found:\n"
-msgstr "Znaleziono \"nie połączone\":\n"
-
-#: kicad/pcbnew/drc.cpp:101
-#, c-format
-msgid "%d > Pad %s (%s) @ %.4f,%.4f and "
-msgstr "%d > Pole %s (%s) @ %.4f,%.4f i "
-
-#: kicad/pcbnew/drc.cpp:115
-#, c-format
-msgid "Pad %s (%s) @ %.4f,%.4f\n"
-msgstr "Pole %s (%s) @ %.4f,%.4f\n"
-
-#: kicad/pcbnew/drc.cpp:125
-#, c-format
-msgid "Active routes: %d\n"
-msgstr "Aktywne trasowanie: %d\n"
-
-#: kicad/pcbnew/drc.cpp:127
-msgid "OK! (No active routes)\n"
-msgstr "OK! (Brak aktywnych ścieżek)\n"
-
-#: kicad/pcbnew/drc.cpp:186
-#, c-format
-msgid "** End Drc: %d errors **\n"
-msgstr "** Koniec DRC: %d błędów **\n"
-
-#: kicad/pcbnew/drc.cpp:188
-msgid "** End Drc: No Error **\n"
-msgstr "** Koniec DRC: Brak błędów **\n"
-
-#: kicad/pcbnew/drc.cpp:197
-#, c-format
-msgid "Report file <%s> created\n"
-msgstr "Utworzono plik raportu <%s>\n"
-
-#: kicad/pcbnew/drc.cpp:279
+#: kicad/pcbnew/drc.cpp:1362
 msgid "Tst Pad to Pad\n"
 msgstr "Test pole do pola\n"
 
-#: kicad/pcbnew/drc.cpp:325
-#: kicad/pcbnew/drc.cpp:399
+#: kicad/pcbnew/drc.cpp:1408
+#: kicad/pcbnew/drc.cpp:1482
 msgid "SegmNb"
 msgstr "Numer segmentu"
 
-#: kicad/pcbnew/drc.cpp:326
+#: kicad/pcbnew/drc.cpp:1409
 msgid "Track Err"
 msgstr "Błąd ścieżki"
 
-#: kicad/pcbnew/drc.cpp:330
+#: kicad/pcbnew/drc.cpp:1413
 msgid "Tst Tracks\n"
 msgstr "Test ścieżek\n"
 
-#: kicad/pcbnew/drc.cpp:361
-#: kicad/pcbnew/drc.cpp:439
+#: kicad/pcbnew/drc.cpp:1444
+#: kicad/pcbnew/drc.cpp:1522
 #: kicad/eeschema/eelayer.h:104
 msgid "Netname"
 msgstr "Nazwa sieci"
 
-#: kicad/pcbnew/drc.cpp:400
+#: kicad/pcbnew/drc.cpp:1483
 msgid "Zone Err"
 msgstr "Błąd strefy"
 
-#: kicad/pcbnew/drc.cpp:403
+#: kicad/pcbnew/drc.cpp:1486
 msgid "Tst Zones\n"
 msgstr "Test stref\n"
 
-#: kicad/pcbnew/drc.cpp:1386
+#: kicad/pcbnew/drc.cpp:1609
+msgid "Look for active routes\n"
+msgstr "Szukaj aktywnych ścieżek\n"
+
+#: kicad/pcbnew/drc.cpp:1632
+#, c-format
+msgid "%d > Pad %s (%s) @ %.4f,%.4f and "
+msgstr "%d > Pole %s (%s) @ %.4f,%.4f i "
+
+#: kicad/pcbnew/drc.cpp:1646
+#, c-format
+msgid "Pad %s (%s) @ %.4f,%.4f\n"
+msgstr "Pole %s (%s) @ %.4f,%.4f\n"
+
+#: kicad/pcbnew/drc.cpp:1656
+#, c-format
+msgid "Active routes: %d\n"
+msgstr "Aktywne trasowanie: %d\n"
+
+#: kicad/pcbnew/drc.cpp:1658
+msgid "OK! (No active routes)\n"
+msgstr "OK! (Brak aktywnych ścieżek)\n"
+
+#: kicad/pcbnew/drc.cpp:1717
+#, c-format
+msgid "** End Drc: %d errors **\n"
+msgstr "** Koniec DRC: %d błędów **\n"
+
+#: kicad/pcbnew/drc.cpp:1719
+msgid "** End Drc: No Error **\n"
+msgstr "** Koniec DRC: Brak błędów **\n"
+
+#: kicad/pcbnew/drc.cpp:1728
+#, c-format
+msgid "Report file <%s> created\n"
+msgstr "Utworzono plik raportu <%s>\n"
+
+#: kicad/pcbnew/drc.cpp:2626
 #, c-format
 msgid "%d Drc Err %d %s (net %s) and PAD %s (%s) net %s @ %d,%d\n"
 msgstr "%d Błąd DRC %d %s (sieć %s) i pole %s (%s) sieć %s @ %d,%d\n"
 
-#: kicad/pcbnew/drc.cpp:1403
+#: kicad/pcbnew/drc.cpp:2643
 #, c-format
 msgid "%d Err type %d: %s (net %s) and VIA (net %s) @ %d,%d\n"
 msgstr "%d Błąd typu %d: %s (sieć %s) i przelotka (sieć %s) @ %d,%d\n"
 
-#: kicad/pcbnew/drc.cpp:1419
+#: kicad/pcbnew/drc.cpp:2659
 #, c-format
 msgid "%d Err type %d: %s (net %s) and track (net %s) @ %d,%d\n"
 msgstr "%d Błąd typu %d: %s (sieć %s) i ścieżka (sieć %s) @ %d,%d\n"
 
-#: kicad/pcbnew/drc.cpp:1477
+#: kicad/pcbnew/drc.cpp:2719
 #, c-format
 msgid "%d Drc Err: PAD %s (%s) net %s @ %d,%d and PAD %s (%s) net %s @ %d,%d\n"
 msgstr "%d Błąd DRC: pole %s (%s) sieć %s @ %d,%d i pole %s (%s) sieć %s @ %d,%d\n"
@@ -1521,7 +1516,7 @@ msgstr "Połącz wstawione segmenty ścieżki i usuń puste segmenty"
 
 #: kicad/pcbnew/cleaningoptions_dialog.cpp:162
 msgid "Delete unconnected tracks"
-msgstr "Usuń nie połączone ścieżki"
+msgstr "Usuń niepołączone ścieżki"
 
 #: kicad/pcbnew/cleaningoptions_dialog.cpp:165
 msgid "delete track segment having a dangling end"
@@ -1731,102 +1726,102 @@ msgstr "Siatka"
 msgid "+/- to switch"
 msgstr "+/- aby zmienić"
 
-#: kicad/pcbnew/edit_track_width.cpp:85
+#: kicad/pcbnew/edit_track_width.cpp:94
 msgid "Change track width (entire NET) ?"
 msgstr "Zmienić szerokość ścieżki (cała sieć)?"
 
-#: kicad/pcbnew/edit_track_width.cpp:117
+#: kicad/pcbnew/edit_track_width.cpp:128
 #: kicad/pcbnew/editrout.cpp:116
 msgid "Edit All Tracks and Vias Sizes"
 msgstr "Edytuj rozmiary wszystkich ścieżek i przelotek"
 
-#: kicad/pcbnew/edit_track_width.cpp:122
+#: kicad/pcbnew/edit_track_width.cpp:133
 #: kicad/pcbnew/editrout.cpp:121
 msgid "Edit All Via Sizes"
 msgstr "Edytuj rozmiary wszystkich przelotek"
 
-#: kicad/pcbnew/edit_track_width.cpp:127
+#: kicad/pcbnew/edit_track_width.cpp:138
 #: kicad/pcbnew/editrout.cpp:126
 msgid "Edit All Track Sizes"
 msgstr "Edytuj rozmiary wszystkich ścieżek"
 
+#: kicad/pcbnew/zones.cpp:152
 #: kicad/pcbnew/zones.cpp:153
 #: kicad/pcbnew/zones.cpp:154
 #: kicad/pcbnew/zones.cpp:155
-#: kicad/pcbnew/zones.cpp:156
 msgid "0.00000"
 msgstr "0,00000"
 
-#: kicad/pcbnew/zones.cpp:160
+#: kicad/pcbnew/zones.cpp:159
 msgid "Grid size:"
 msgstr "Rozmiar siatki:"
 
-#: kicad/pcbnew/zones.cpp:165
+#: kicad/pcbnew/zones.cpp:164
 msgid "Zone clearance value (mm):"
 msgstr "Wartość prześwitu strefy (mm):"
 
-#: kicad/pcbnew/zones.cpp:182
+#: kicad/pcbnew/zones.cpp:181
 msgid "Include Pads"
 msgstr "Dołącz pola lutownicze"
 
-#: kicad/pcbnew/zones.cpp:183
+#: kicad/pcbnew/zones.cpp:182
 msgid "Thermal"
 msgstr "Termiczna"
 
-#: kicad/pcbnew/zones.cpp:184
+#: kicad/pcbnew/zones.cpp:183
 msgid "Exclude Pads"
 msgstr "Pomiń pola lutownicze"
 
-#: kicad/pcbnew/zones.cpp:188
+#: kicad/pcbnew/zones.cpp:187
 msgid "Pad options:"
 msgstr "Opcje pól lutowniczych:"
 
-#: kicad/pcbnew/zones.cpp:193
+#: kicad/pcbnew/zones.cpp:192
 #: kicad/eeschema/dialog_options.cpp:257
 msgid "Any"
 msgstr "Dowolna"
 
-#: kicad/pcbnew/zones.cpp:194
+#: kicad/pcbnew/zones.cpp:193
 msgid "H , V and 45 deg"
 msgstr "Poziomo, pionowo i 45 stopni"
 
-#: kicad/pcbnew/zones.cpp:198
+#: kicad/pcbnew/zones.cpp:197
 msgid "Zone edges orient:"
 msgstr "Orientacja krawędzi strefy:"
 
-#: kicad/pcbnew/zones.cpp:210
+#: kicad/pcbnew/zones.cpp:209
 msgid "Fill"
 msgstr "Wypełnij"
 
-#: kicad/pcbnew/zones.cpp:224
+#: kicad/pcbnew/zones.cpp:223
 msgid "Update Options"
 msgstr "Uaktualnij opcje"
 
-#: kicad/pcbnew/zones.cpp:233
+#: kicad/pcbnew/zones.cpp:232
 msgid "Zone clearance value:"
 msgstr "Wartość prześwitu strefy:"
 
-#: kicad/pcbnew/zones.cpp:236
+#: kicad/pcbnew/zones.cpp:235
 msgid "Grid :"
 msgstr "Siatka :"
 
-#: kicad/pcbnew/zones.cpp:399
+#: kicad/pcbnew/zones.cpp:398
 msgid "New zone segment width: "
 msgstr "Szerokość segmentu nowej strefy: "
 
-#: kicad/pcbnew/zones.cpp:597
+#: kicad/pcbnew/zones.cpp:596
 msgid "Zone: No net selected"
 msgstr "Strefa: Nie zaznaczono żadnej sieci"
 
-#: kicad/pcbnew/zones.cpp:639
+#: kicad/pcbnew/zones.cpp:638
 msgid "Delete Current Zone Edges"
 msgstr "Usuń krawędzie bieżącej strefy"
 
-#: kicad/pcbnew/zones.cpp:926
+#: kicad/pcbnew/zones.cpp:925
 msgid "No Net"
 msgstr "Brak sieci"
 
-#: kicad/pcbnew/zones.cpp:998
+#: kicad/pcbnew/zones.cpp:997
 msgid "Ok"
 msgstr "Ok"
 
@@ -2203,9 +2198,9 @@ msgstr "Biblioteka: "
 msgid "Modules (%d items)"
 msgstr "Moduły (%d elementów)"
 
-#: kicad/pcbnew/class_marker.cpp:95
-msgid "Marker Error Text"
-msgstr "Tekst błędu znacznika"
+#: kicad/pcbnew/class_marker.cpp:116
+msgid "ErrType"
+msgstr "TypBłędu"
 
 #: kicad/pcbnew/menubarpcb.cpp:42
 msgid "Load Board    Ctrl-O"
@@ -2422,7 +2417,7 @@ msgid "Adjust User Grid"
 msgstr "Dostosuj siatkę użytkownika"
 
 #: kicad/pcbnew/menubarpcb.cpp:204
-#: kicad/pcbnew/dialog_graphic_items_options.h:38
+#: kicad/pcbnew/dialog_graphic_items_options.h:47
 msgid "Texts and Drawings"
 msgstr "Teksty i rysunki"
 
@@ -2588,7 +2583,7 @@ msgstr "Widok &3D"
 msgid "&Help"
 msgstr "Pomo&c"
 
-#: kicad/pcbnew/dialog_drc.cpp:147
+#: kicad/pcbnew/dialog_drc.cpp:252
 #: kicad/eeschema/dialog_erc.cpp:237
 #: kicad/eeschema/dialog_create_component.cpp:176
 #: kicad/eeschema/dialog_edit_component_in_schematic.cpp:201
@@ -2596,59 +2591,117 @@ msgstr "Pomo&c"
 msgid "Options"
 msgstr "Opcje"
 
-#: kicad/pcbnew/dialog_drc.cpp:151
-#: kicad/pcbnew/dialog_track_options.cpp:164
+#: kicad/pcbnew/dialog_drc.cpp:262
+#: kicad/pcbnew/dialog_track_options.cpp:169
 msgid "Clearance"
 msgstr "Prześwit"
 
-#: kicad/pcbnew/dialog_drc.cpp:159
-msgid "Test Drc:"
-msgstr "Test DRC:"
+#: kicad/pcbnew/dialog_drc.cpp:267
+msgid "In the clearance units, enter the clearance distance"
+msgstr "Wprowadź wartość prześwitu"
 
-#: kicad/pcbnew/dialog_drc.cpp:163
-msgid "Include pad to pad test"
-msgstr "Dołącz test pole do pola"
-
-#: kicad/pcbnew/dialog_drc.cpp:167
-msgid "Include unconnected"
-msgstr "Dołącz \"nie połączone\""
-
-#: kicad/pcbnew/dialog_drc.cpp:175
-msgid "Create Report file"
+#: kicad/pcbnew/dialog_drc.cpp:270
+msgid "Create Report File"
 msgstr "Utwórz plik raportu"
 
-#: kicad/pcbnew/dialog_drc.cpp:190
-msgid "Test Drc"
-msgstr "Test DRC"
+#: kicad/pcbnew/dialog_drc.cpp:277
+msgid "Enable writing report to this file"
+msgstr "Włącz zapisywanie raportu do tego pliku"
 
-#: kicad/pcbnew/dialog_drc.cpp:194
-msgid "Stop Drc"
-msgstr "Zatrzymaj DRC"
+#: kicad/pcbnew/dialog_drc.cpp:282
+msgid "Enter the report filename"
+msgstr "Wprowadź nazwę pliku raportu"
 
-#: kicad/pcbnew/dialog_drc.cpp:201
-msgid "Del Markers"
-msgstr "Usuń znaczniki"
+#: kicad/pcbnew/dialog_drc.cpp:285
+msgid "..."
+msgstr "..."
 
-#: kicad/pcbnew/dialog_drc.cpp:205
-msgid "List Unconn"
-msgstr "Lista \"nie połączonych\""
+#: kicad/pcbnew/dialog_drc.cpp:287
+msgid "Pick a filename interactively"
+msgstr "Wskaż położenie pliku"
 
-#: kicad/pcbnew/dialog_drc.cpp:209
-msgid "Report File"
-msgstr "Plik raportu"
+#: kicad/pcbnew/dialog_drc.cpp:290
+msgid "Include Tests For:"
+msgstr "Dołącz testy dla:"
 
-#: kicad/pcbnew/dialog_drc.cpp:213
-#: kicad/pcbnew/dialog_edit_module.cpp:395
-#: kicad/eeschema/dialog_eeschema_config.cpp:231
-msgid "Browse"
-msgstr "Przeglądaj"
+#: kicad/pcbnew/dialog_drc.cpp:294
+msgid "Pad to pad"
+msgstr "Pole do pola"
 
-#: kicad/pcbnew/dialog_drc.cpp:220
-#: kicad/share/svg_print.cpp:232
-msgid "Messages:"
-msgstr "Wiadomości:"
+#: kicad/pcbnew/dialog_drc.cpp:297
+msgid "Include tests for clearances between pad to pads"
+msgstr "Dołącz testy prześwitu pomiędzy polami"
 
-#: kicad/pcbnew/dialog_drc.cpp:342
+#: kicad/pcbnew/dialog_drc.cpp:300
+msgid "Zones"
+msgstr "Strefy"
+
+#: kicad/pcbnew/dialog_drc.cpp:303
+msgid "Include zones in clearance or unconnected tests"
+msgstr "Dołącz strefy w testach prześwitu lub niepołączenia"
+
+#: kicad/pcbnew/dialog_drc.cpp:306
+#: kicad/pcbnew/class_board.cpp:20
+msgid "Unconnected pads"
+msgstr "Pola niepołączone"
+
+#: kicad/pcbnew/dialog_drc.cpp:309
+msgid "Find unconnected pads"
+msgstr "Znajdź niepołączone pola"
+
+#: kicad/pcbnew/dialog_drc.cpp:315
+msgid "Start DRC"
+msgstr "Uruchom DRC"
+
+#: kicad/pcbnew/dialog_drc.cpp:317
+msgid "Start the Design Rule Checker"
+msgstr "Uruchom DRC (kontrola reguł projektowych)"
+
+#: kicad/pcbnew/dialog_drc.cpp:321
+msgid "List Unconnected"
+msgstr "Lista niepołączonych"
+
+#: kicad/pcbnew/dialog_drc.cpp:323
+msgid "List unconnected pads or tracks"
+msgstr "Pokaż niepołączone pola lub ścieżki"
+
+#: kicad/pcbnew/dialog_drc.cpp:327
+msgid "Delete All Markers"
+msgstr "Usuń wszystkie znaczniki"
+
+#: kicad/pcbnew/dialog_drc.cpp:329
+msgid "Delete every marker"
+msgstr "Usuń każdy znacznik"
+
+#: kicad/pcbnew/dialog_drc.cpp:333
+msgid "Delete Current Marker"
+msgstr "Usuń bieżący znacznik"
+
+#: kicad/pcbnew/dialog_drc.cpp:335
+msgid "Delete the marker selected in the listBox below"
+msgstr "Usuń znacznik zaznaczony na liście poniżej"
+
+#: kicad/pcbnew/dialog_drc.cpp:339
+msgid "Error Messages:"
+msgstr "Błędy:"
+
+#: kicad/pcbnew/dialog_drc.cpp:349
+msgid "MARKERs on the PCB, double click on any MARKER to go there in PCB"
+msgstr "ZNACZNIKi na płytce. Kliknij dwukrotnie na dowolnym ZNACZNIKU, aby do niego przejść."
+
+#: kicad/pcbnew/dialog_drc.cpp:351
+msgid "Distance Problem Markers"
+msgstr "Znaczniki problemów odległości"
+
+#: kicad/pcbnew/dialog_drc.cpp:355
+msgid "Pad to pad, pad to track, and track to track clearance problems"
+msgstr "Problemy z prześwitem pole do pola, pole do ścieżki i ścieżka do ścieżki"
+
+#: kicad/pcbnew/dialog_drc.cpp:357
+msgid "Unconnected"
+msgstr "Niepołączone"
+
+#: kicad/pcbnew/dialog_drc.cpp:481
 msgid "DRC Report file"
 msgstr "Plik raportu DRC"
 
@@ -2723,26 +2776,62 @@ msgstr "Tak"
 msgid "Selection Clarification"
 msgstr "Precyzowanie wyboru"
 
-#: kicad/pcbnew/class_board.cpp:317
+#: kicad/pcbnew/class_board.cpp:22
+msgid "Track near thru-hole"
+msgstr "Ścieżka blisko otworu na wylot"
+
+#: kicad/pcbnew/class_board.cpp:24
+msgid "Track near pad"
+msgstr "Ścieżka blisko pola"
+
+#: kicad/pcbnew/class_board.cpp:26
+msgid "Track near via"
+msgstr "Ścieżka blisko przelotki"
+
+#: kicad/pcbnew/class_board.cpp:28
+msgid "Via near via"
+msgstr "Przelotka blisko przelotki"
+
+#: kicad/pcbnew/class_board.cpp:30
+msgid "Via near track"
+msgstr "Przelotka blisko ścieżki"
+
+#: kicad/pcbnew/class_board.cpp:40
+msgid "Two track ends"
+msgstr "Dwa końce ścieżki"
+
+#: kicad/pcbnew/class_board.cpp:42
+msgid "This looks bad"
+msgstr "To wygląda źle"
+
+#: kicad/pcbnew/class_board.cpp:44
+msgid "Tracks crossing"
+msgstr "Skrzyżowanie ścieżek"
+
+#: kicad/pcbnew/class_board.cpp:46
+msgid "Pad near pad"
+msgstr "Pole blisko pola"
+
+#: kicad/pcbnew/class_board.cpp:430
 msgid "Nodes"
 msgstr "Węzły"
 
-#: kicad/pcbnew/class_board.cpp:320
+#: kicad/pcbnew/class_board.cpp:433
 msgid "Links"
 msgstr "Łącza"
 
-#: kicad/pcbnew/class_board.cpp:323
+#: kicad/pcbnew/class_board.cpp:436
 msgid "Nets"
 msgstr "Sieci"
 
-#: kicad/pcbnew/class_board.cpp:326
+#: kicad/pcbnew/class_board.cpp:439
 msgid "Connect"
-msgstr "Połącz"
+msgstr "Połączone"
 
-#: kicad/pcbnew/class_board.cpp:329
+#: kicad/pcbnew/class_board.cpp:442
 #: kicad/eeschema/eelayer.h:116
 msgid "NoConn"
-msgstr "Nie połączone"
+msgstr "Niepołączone"
 
 #: kicad/pcbnew/pcbplot.cpp:115
 #: kicad/pcbnew/pcbplot.cpp:205
@@ -3217,6 +3306,11 @@ msgstr "Obrót 180"
 msgid "3D Shape Name"
 msgstr "Ścieżka do biblioteki obudowy 3D:"
 
+#: kicad/pcbnew/dialog_edit_module.cpp:395
+#: kicad/eeschema/dialog_eeschema_config.cpp:231
+msgid "Browse"
+msgstr "Przeglądaj"
+
 #: kicad/pcbnew/dialog_edit_module.cpp:399
 msgid "Add 3D Shape"
 msgstr "Dodaj kształt 3D"
@@ -3367,46 +3461,46 @@ msgstr "Automatyczne rozmieszczanie modułów: Nie wykryto krawędzi płytki, ni
 msgid "Ok to set module orientation to %d degrees ?"
 msgstr "Czy ustawić orientację modułu na %d stopni?"
 
-#: kicad/pcbnew/dialog_track_options.cpp:125
+#: kicad/pcbnew/dialog_track_options.cpp:130
 msgid "Via Size"
 msgstr "Rozmiar przelotki"
 
-#: kicad/pcbnew/dialog_track_options.cpp:131
+#: kicad/pcbnew/dialog_track_options.cpp:136
 msgid "Default Via Drill"
 msgstr "Domyślny otwór przelotki"
 
-#: kicad/pcbnew/dialog_track_options.cpp:137
+#: kicad/pcbnew/dialog_track_options.cpp:142
 msgid "Alternate Via Drill"
 msgstr "Alternatywny otwór przelotki"
 
-#: kicad/pcbnew/dialog_track_options.cpp:146
+#: kicad/pcbnew/dialog_track_options.cpp:151
 #: kicad/pcbnew/pcbnew.h:289
 msgid "Blind Via"
 msgstr "Przelotka ślepa"
 
-#: kicad/pcbnew/dialog_track_options.cpp:147
+#: kicad/pcbnew/dialog_track_options.cpp:152
 #: kicad/pcbnew/pcbnew.h:290
 msgid "Buried Via"
 msgstr "Przelotka zagrzebana"
 
-#: kicad/pcbnew/dialog_track_options.cpp:148
+#: kicad/pcbnew/dialog_track_options.cpp:153
 #: kicad/pcbnew/pcbnew.h:291
 msgid "Standard Via"
 msgstr "Przelotka standardowa"
 
-#: kicad/pcbnew/dialog_track_options.cpp:150
+#: kicad/pcbnew/dialog_track_options.cpp:154
 msgid "Via Type"
 msgstr "Typ przelotki"
 
-#: kicad/pcbnew/dialog_track_options.cpp:158
+#: kicad/pcbnew/dialog_track_options.cpp:163
 msgid "Track Width"
 msgstr "Szerokość ścieżki"
 
-#: kicad/pcbnew/dialog_track_options.cpp:170
+#: kicad/pcbnew/dialog_track_options.cpp:175
 msgid "Mask clearance"
 msgstr "Prześwit maski"
 
-#: kicad/pcbnew/dialog_track_options.cpp:257
+#: kicad/pcbnew/dialog_track_options.cpp:262
 msgid ""
 "You have selected VIA Blind or VIA Buried\n"
 "WARNING: this feature is EXPERIMENTAL!!! Accept ?"
@@ -4306,7 +4400,7 @@ msgstr "Pokaż numer pola"
 
 #: kicad/pcbnew/dialog_display_options.cpp:258
 msgid "Show Pad NoConnect"
-msgstr "Pokaż \"nie połączone\" pola lutownicze"
+msgstr "Pokaż niepołączone pola lutownicze"
 
 #: kicad/pcbnew/dialog_display_options.cpp:269
 #: kicad/gerbview/options.cpp:322
@@ -4735,7 +4829,7 @@ msgstr "Zmień orientację"
 msgid "Track Width: %s   Vias Size : %s"
 msgstr "Szerokość ścieżki: %s   Rozmiar przelotki: %s"
 
-#: kicad/pcbnew/editrack-part2.cpp:135
+#: kicad/pcbnew/editrack-part2.cpp:136
 msgid "Drc error, cancelled"
 msgstr "Błąd DRC, anulowano"
 
@@ -5171,6 +5265,10 @@ msgstr "&Utwórz plik"
 #: kicad/eeschema/sheet.cpp:162
 msgid "Filename:"
 msgstr "Nazwa pliku:"
+
+#: kicad/share/svg_print.cpp:232
+msgid "Messages:"
+msgstr "Wiadomości:"
 
 #: kicad/share/svg_print.cpp:363
 #: kicad/share/svg_print.cpp:377
@@ -5734,7 +5832,7 @@ msgstr "Nawigacja w hierarchii"
 
 #: kicad/eeschema/schedit.cpp:286
 msgid "Add NoConnect Flag"
-msgstr "Ustaw flagę \"Nie połączony\""
+msgstr "Ustaw flagę \"Niepołączony\""
 
 #: kicad/eeschema/schedit.cpp:290
 #: kicad/eeschema/hotkeys.cpp:262
@@ -6600,7 +6698,7 @@ msgstr "Dodaj wejście magistrali do magistrali"
 
 #: kicad/eeschema/tool_sch.cpp:196
 msgid "Add no connect flag"
-msgstr "Dodaj flagę \"Nie połączone\""
+msgstr "Dodaj flagę \"Niepołączone\""
 
 #: kicad/eeschema/tool_sch.cpp:200
 msgid "Add wire or bus label"
@@ -7052,7 +7150,7 @@ msgstr "Opuść arkusz"
 
 #: kicad/eeschema/onrightclick.cpp:158
 msgid "delete noconn"
-msgstr "Usuń \"nie połączone\""
+msgstr "Usuń \"niepołączone\""
 
 #: kicad/eeschema/onrightclick.cpp:168
 msgid "Move bus entry"
@@ -7919,7 +8017,7 @@ msgstr "Ostrzeżenie: pin %s nie jest sterowany (sieć %d)"
 
 #: kicad/eeschema/erc.cpp:593
 msgid "Warning More than 1 Pin connected to UnConnect symbol"
-msgstr "Ostrzeżenie: więcej niż 1 pin podłączony do symbolu \"nie połączony\""
+msgstr "Ostrzeżenie: więcej niż 1 pin podłączony do symbolu \"niepołączony\""
 
 #: kicad/eeschema/erc.cpp:603
 #: kicad/common/confirm.cpp:79
@@ -9716,11 +9814,11 @@ msgstr "Lista kodów wierceń"
 msgid "General Options"
 msgstr "Opcje główne"
 
-#: kicad/pcbnew/dialog_track_options.h:42
+#: kicad/pcbnew/dialog_track_options.h:49
 msgid "Tracks and Vias Sizes"
 msgstr "Rozmiary ścieżek i przelotek"
 
-#: kicad/pcbnew/dialog_drc.h:60
+#: kicad/pcbnew/dialog_drc.h:62
 msgid "DRC Control"
 msgstr "Kontrola DRC"
 
@@ -9741,6 +9839,11 @@ msgstr "Dialog"
 #: kicad/pcbnew/dialog_edit_mod_text.h:43
 msgid "TextMod properties"
 msgstr "Właściwości tekstu modułu"
+
+#: kicad/pcbnew/drc_stuff.h:117
+#, c-format
+msgid "<b>ErrType(%d): %s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>"
+msgstr "<b>TypBłędu(%d): %s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>"
 
 #: kicad/pcbnew/gen_self.h:217
 msgid "Length(inch):"
@@ -9821,7 +9924,7 @@ msgstr "Zakotwiczenia"
 
 #: kicad/pcbnew/set_color.h:432
 msgid "Show Noconnect"
-msgstr "Pokazuj \"nie połączone\""
+msgstr "Pokazuj \"niepołączone\""
 
 #: kicad/pcbnew/set_color.h:441
 msgid "Show Modules Cmp"
