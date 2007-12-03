@@ -148,7 +148,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_PCB_GLOBAL_DELETE:
-        Erase_Current_Layer( &dc, TRUE );
+        Erase_Current_Layer( TRUE );
         break;
 
     case wxID_CUT:

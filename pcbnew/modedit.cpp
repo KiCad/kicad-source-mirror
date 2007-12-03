@@ -209,7 +209,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_NEW_MODULE:
-        Clear_Pcb( &dc, TRUE );
+        Clear_Pcb( TRUE );
         GetScreen()->ClearUndoRedoList();
         SetCurItem( NULL );
         GetScreen()->m_Curseur = wxPoint( 0, 0 );
@@ -314,7 +314,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_LIBEDIT_IMPORT_PART:
         GetScreen()->ClearUndoRedoList();
         SetCurItem( NULL );
-        Clear_Pcb( &dc, TRUE );
+        Clear_Pcb( TRUE );
         GetScreen()->m_Curseur = wxPoint( 0, 0 );
         Import_Module( &dc );
         if( m_Pcb->m_Modules )
@@ -342,7 +342,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     {
         GetScreen()->ClearUndoRedoList();
         SetCurItem( NULL );
-        Clear_Pcb( &dc, TRUE );
+        Clear_Pcb( TRUE );
         GetScreen()->m_Curseur = wxPoint( 0, 0 );
         Load_Module_From_Library( m_CurrentLib, &dc );
         if( m_Pcb->m_Modules )

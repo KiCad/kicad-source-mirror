@@ -74,45 +74,25 @@
 
 extern Ki_PageDescr* SheetList[];
 
-/* Variables locales, utilisees pour la lecture des fichiers PCB */
+/* Local Variables */
 int NbDraw, NbTrack, NbZone, NbMod, NbNets;
 
 
 /**********************************************************************/
-int WinEDA_BasePcbFrame::ReadListeSegmentDescr( wxDC* DC, FILE* File,
+int WinEDA_BasePcbFrame::ReadListeSegmentDescr( FILE* File,
        TRACK* PtSegm, int StructType, int* LineNum, int NumSegm )
 /**********************************************************************/
 
-/* Lecture de la description d'une liste de segments (Tracks, zones)
- *  Retourne:
- *      si ok nombre d'items lus.
- *      si pas de fin de block ($..) - nombre.
+/** Read a list of segments (Tracks, zones)
+ * @return items count or - count if no end block ($End...) found.
  */
 {
     int             shape, width, layer, type, flags, net_code;
-    int             ii = 0, PerCent, Pas;
+    int             ii = 0;
     char            line1[256];
     char            line2[256];
     
     TRACK* NewTrack;
-
-    PerCent = 0; 
-    
-    Pas = NumSegm / 99;
-
-#ifdef PCBNEW
-    switch( StructType )
-    {
-    case TYPETRACK:
-    case TYPEVIA:
-        DisplayActivity( PerCent, wxT( "Tracks:" ) );
-        break;
-
-    case TYPEZONE:
-        DisplayActivity( PerCent, wxT( "Zones:" ) );
-        break;
-    }
-#endif
 
     while( GetLine( File, line1, LineNum ) )
     {
@@ -121,7 +101,7 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( wxDC* DC, FILE* File,
         
         if( line1[0] == '$' )
         {
-            return ii;      /* fin de liste OK */
+            return ii;      /* end of segmentlist: OK */
         }
 
         // Read the 2nd line to determine the exact type, one of:
@@ -179,29 +159,6 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( wxDC* DC, FILE* File,
         PtSegm->SetLayer( layer );
         PtSegm->SetNet( net_code ); 
         PtSegm->SetState( flags, ON );
-        
-#ifdef PCBNEW
-        PtSegm->Draw( DrawPanel, DC, GR_OR );
-#endif
-        ii++;
-        if( ( Pas && (ii % Pas ) == 0) )
-        {
-            PerCent++;
-            
-#ifdef PCBNEW
-            switch( makeType )
-            {
-            case TYPETRACK:
-            case TYPEVIA:
-                DisplayActivity( PerCent, _( "Tracks:" ) );
-                break;
-
-            case TYPEZONE:
-                DisplayActivity( PerCent, _( "Zones:" ) );
-                break;
-            }
-#endif
-        }
     }
 
     DisplayError( this, _( "Error: Unexpected end of file !" ) );
@@ -210,7 +167,7 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( wxDC* DC, FILE* File,
 
 
 /**********************************************************************************/
-int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( wxDC* DC, FILE* File, int* LineNum )
+int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( FILE* File, int* LineNum )
 /**********************************************************************************/
 {
     char         Line[1024], * data;
@@ -266,29 +223,6 @@ int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( wxDC* DC, FILE* File, int* LineNum
             m_Pcb->m_BoundaryBox.SetWidth( atoi( data ) - m_Pcb->m_BoundaryBox.GetX() );
             data = strtok( NULL, " =\n\r" );
             m_Pcb->m_BoundaryBox.SetHeight( atoi( data ) - m_Pcb->m_BoundaryBox.GetY() );
-
-            /* calcul du zoom optimal */
-            pcbsize    = m_Pcb->m_BoundaryBox.GetSize();
-            screensize = DrawPanel->GetClientSize();
-            ii = pcbsize.x / screensize.x;
-            jj = pcbsize.y / screensize.y;
-            bestzoom = MAX( ii, jj );
-            screen->m_Curseur = m_Pcb->m_BoundaryBox.Centre();
-
-            screen->SetZoom( bestzoom );
-
-            // la position des trac� a chang� mise a jour dans le DC courant
-            wxPoint org;
-            DrawPanel->GetViewStart( &org.x, &org.y );
-            DrawPanel->GetScrollPixelsPerUnit( &ii, &jj );
-            org.x *= ii; org.y *= jj;
-#ifdef WX_ZOOM
-            DC->SetUserScale( 1.0 / (double) screen->GetZoom(), 1.0 / screen->GetZoom() );
-            org.x *= screen->GetZoom(); org.y *= screen->GetZoom();
-            DC->SetDeviceOrigin( -org.x, -org.y );
-#endif
-            DrawPanel->SetBoundaryBox();
-            Recadre_Trace( TRUE );
             continue;
         }
 
@@ -527,21 +461,6 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             g_Pad_Master.m_Drill.y = g_Pad_Master.m_Drill.x;
             continue;
         }
-
-        if( stricmp( Line, "PadDeltaSize" ) == 0 )
-        {
-            g_Pad_Master.m_DeltaSize.x = atoi( data );
-            data = strtok( NULL, " =\n\r" );
-            g_Pad_Master.m_DeltaSize.y = atoi( data );
-            continue;
-        }
-        if( stricmp( Line, "PadShapeOffset" ) == 0 )
-        {
-            g_Pad_Master.m_Offset.x = atoi( data );
-            data = strtok( NULL, " =\n\r" );
-            g_Pad_Master.m_Offset.y = atoi( data );
-            continue;
-        }
 #endif
     }
 
@@ -613,9 +532,6 @@ static int WriteSetup( FILE* File, WinEDA_BasePcbFrame* frame )
     fprintf( File, "PadSize %d %d\n", g_Pad_Master.m_Size.x, g_Pad_Master.m_Size.y );
     fprintf( File, "PadDrill %d\n", g_Pad_Master.m_Drill.x );
 
-//	fprintf(File, "PadDeltaSize %d %d\n", Pad_DeltaSize.x, Pad_DeltaSize.y);
-//	fprintf(File, "PadDrillOffset %d %d\n", Pad_OffsetSize.x, Pad_OffsetSize.y);
-
     fprintf( File, "AuxiliaryAxisOrg %d %d\n",
              frame->m_Auxiliary_Axis_Position.x, frame->m_Auxiliary_Axis_Position.y );
     
@@ -633,11 +549,7 @@ bool WinEDA_PcbFrame::WriteGeneralDescrPcb( FILE* File )
     EDA_BaseStruct* PtStruct = m_Pcb->m_Modules;
     int             NbModules, NbDrawItem, NbLayers;
 
-    /* Calcul du nombre des modules */
-    for( NbModules = 0; PtStruct != NULL; PtStruct = PtStruct->Pnext )
-        NbModules++;
-
-    /* generation du masque des couches autorisees */
+    /* Write copper layer count */
     NbLayers = m_Pcb->m_BoardSettings->m_CopperLayerCount;
     fprintf( File, "$GENERAL\n" );
     fprintf( File, "LayerCount %d\n", NbLayers );
@@ -647,14 +559,18 @@ bool WinEDA_PcbFrame::WriteGeneralDescrPcb( FILE* File )
     fprintf( File, "Links %d\n", m_Pcb->m_NbLinks );
     fprintf( File, "NoConn %d\n", m_Pcb->m_NbNoconnect );
 
-    /* Generation des coord du rectangle d'encadrement */
+    /* Write Bounding box info */
     m_Pcb->ComputeBoundaryBox();
     fprintf( File, "Di %d %d %d %d\n",
             m_Pcb->m_BoundaryBox.GetX(), m_Pcb->m_BoundaryBox.GetY(),
             m_Pcb->m_BoundaryBox.GetRight(),
             m_Pcb->m_BoundaryBox.GetBottom() );
 
-    /* Generation du nombre de segments type DRAW , TRACT ZONE */
+    /* Write segment count for footprints, drawings, track and zones */
+    /* Calculate the footprint count */
+    for( NbModules = 0; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+        NbModules++;
+
     PtStruct = m_Pcb->m_Drawings; NbDrawItem = 0;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
         NbDrawItem++;
@@ -674,8 +590,12 @@ bool WinEDA_PcbFrame::WriteGeneralDescrPcb( FILE* File )
 /******************************************************/
 bool WriteSheetDescr( BASE_SCREEN* screen, FILE* File )
 /******************************************************/
+/** Function WriteSheetDescr
+*  Save the page information (size, texts, date ..)
+* @param screen BASE_SCREEN to save
+ * @param File = an openen FILE to write info
+*/
 {
-    /* Sauvegarde des dimensions de la feuille de dessin, des textes du cartouche.. */
     Ki_PageDescr* sheet = screen->m_CurrentSheet;
 
     fprintf( File, "$SHEETDESCR\n" );
@@ -701,7 +621,6 @@ static bool ReadSheetDescr( BASE_SCREEN* screen, FILE* File, int* LineNum )
 {
     char Line[1024], buf[1024], * text;
 
-    /* Recheche suite et fin de descr */
     while(  GetLine( File, Line, LineNum ) != NULL )
     {
         if( strnicmp( Line, "$End", 4 ) == 0 )
@@ -799,9 +718,10 @@ static bool ReadSheetDescr( BASE_SCREEN* screen, FILE* File, int* LineNum )
 int WinEDA_PcbFrame::ReadPcbFile( wxDC* DC, FILE* File, bool Append )
 /********************************************************************/
 
-/* Lit un fichier PCB .brd
- *  Si Append == 0: l'ancien pcb en memoire est supprime
- *  Sinon il y a ajout des elements
+/** ReadPcbFile
+ * Read a board file  <file>.brd
+ * @param Append if 0: a previoulsy loaded boar is delete before loadin the file.
+ *  else all items of the board file are added to the existing board
  */
 {
     char            Line[1024];
@@ -852,7 +772,7 @@ int WinEDA_PcbFrame::ReadPcbFile( wxDC* DC, FILE* File, bool Append )
 
         if( strnicmp( Line, "$GENERAL", 8 ) == 0 )
         {
-            ReadGeneralDescrPcb( DC, File, &LineNum );
+            ReadGeneralDescrPcb( File, &LineNum );
             continue;
         }
 
@@ -898,10 +818,6 @@ int WinEDA_PcbFrame::ReadPcbFile( wxDC* DC, FILE* File, bool Append )
 
         if( strnicmp( Line, "$MODULE", 7 ) == 0 )
         {
-            float Pas;
-            Pas = 100.0; if( NbMod > 1 )
-                Pas /= NbMod;
-
             Module = new MODULE( m_Pcb );
             if( Module == NULL )
                 continue;
@@ -919,10 +835,6 @@ int WinEDA_PcbFrame::ReadPcbFile( wxDC* DC, FILE* File, bool Append )
             }
             LastModule = Module;
             nbmod++;
-#ifdef PCBNEW
-            DisplayActivity( (int) ( Pas * nbmod), wxT( "Modules:" ) );
-#endif
-            Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
             continue;
         }
 
@@ -942,9 +854,6 @@ int WinEDA_PcbFrame::ReadPcbFile( wxDC* DC, FILE* File, bool Append )
                 LastStructPcb->Pnext = StructPcb;
             }
             LastStructPcb = StructPcb;
-#ifdef PCBNEW
-            ( (TEXTE_PCB*) StructPcb )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
-#endif
             continue;
         }
 
@@ -963,9 +872,6 @@ int WinEDA_PcbFrame::ReadPcbFile( wxDC* DC, FILE* File, bool Append )
                 LastStructPcb->Pnext = DrawSegm;
             }
             LastStructPcb = DrawSegm;
-#ifdef PCBNEW
-            Trace_DrawSegmentPcb( DrawPanel, DC, DrawSegm, GR_OR );
-#endif
             continue;
         }
 
@@ -985,9 +891,6 @@ int WinEDA_PcbFrame::ReadPcbFile( wxDC* DC, FILE* File, bool Append )
                 LastStructPcb->Pnext = Cotation;
             }
             LastStructPcb = Cotation;
-#ifdef PCBNEW
-            Cotation->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
-#endif
             continue;
         }
 
@@ -1007,9 +910,6 @@ int WinEDA_PcbFrame::ReadPcbFile( wxDC* DC, FILE* File, bool Append )
                 LastStructPcb->Pnext = Mire;
             }
             LastStructPcb = Mire;
-#ifdef PCBNEW
-            Mire->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
-#endif
             continue;
         }
 
@@ -1028,7 +928,7 @@ int WinEDA_PcbFrame::ReadPcbFile( wxDC* DC, FILE* File, bool Append )
             }
 
 #ifdef PCBNEW
-            int ii = ReadListeSegmentDescr( DC, File, StartTrack, TYPETRACK,
+            int ii = ReadListeSegmentDescr( File, StartTrack, TYPETRACK,
                                             &LineNum, NbTrack );
             m_Pcb->m_NbSegmTrack += ii;
 #endif
@@ -1049,7 +949,7 @@ int WinEDA_PcbFrame::ReadPcbFile( wxDC* DC, FILE* File, bool Append )
             }
 
 #ifdef PCBNEW
-            int ii = ReadListeSegmentDescr( DC, File, StartZone, TYPEZONE,
+            int ii = ReadListeSegmentDescr( File, StartZone, TYPEZONE,
                                             &LineNum, NbZone );
             m_Pcb->m_NbSegmZone += ii;
 #endif
@@ -1060,6 +960,9 @@ int WinEDA_PcbFrame::ReadPcbFile( wxDC* DC, FILE* File, bool Append )
     setlocale( LC_NUMERIC, "" );      // revert to the current  locale
 
     Affiche_Message( wxEmptyString );
+	
+	BestZoom();
+	DrawPanel->ReDraw(DC, true);
 
 #ifdef PCBNEW
     Compile_Ratsnest( DC, TRUE );

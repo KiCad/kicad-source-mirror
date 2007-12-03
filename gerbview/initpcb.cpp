@@ -15,7 +15,7 @@
 
 
 /********************************************************/
-bool WinEDA_GerberFrame::Clear_Pcb( wxDC* DC, bool query )
+bool WinEDA_GerberFrame::Clear_Pcb( bool query )
 /********************************************************/
 
 /* Realise les init des pointeurs et variables
@@ -82,7 +82,7 @@ bool WinEDA_GerberFrame::Clear_Pcb( wxDC* DC, bool query )
 
 
 /*********************************************************/
-void WinEDA_GerberFrame::Erase_Zones( wxDC* DC, bool query )
+void WinEDA_GerberFrame::Erase_Zones( bool query )
 /*********************************************************/
 {
     if( query && !IsOK( this, _( "Delete zones ?" ) ) )
@@ -98,10 +98,9 @@ void WinEDA_GerberFrame::Erase_Zones( wxDC* DC, bool query )
 }
 
 
-/*****************************************************/
-void WinEDA_GerberFrame::Erase_Segments_Pcb( wxDC* DC,
-                                             bool all_layers, bool query )
-/*****************************************************/
+/************************************************************************/
+void WinEDA_GerberFrame::Erase_Segments_Pcb( bool all_layers, bool query )
+/************************************************************************/
 {
     BOARD_ITEM*     PtStruct;
     BOARD_ITEM*     PtNext;
@@ -135,10 +134,9 @@ void WinEDA_GerberFrame::Erase_Segments_Pcb( wxDC* DC,
 }
 
 
-/****************************************************************/
-void WinEDA_GerberFrame::Erase_Pistes( wxDC* DC, int masque_type,
-                                       bool query )
-/****************************************************************/
+/******************************************************************/
+void WinEDA_GerberFrame::Erase_Pistes( int masque_type, bool query )
+/******************************************************************/
 
 /* Efface les segments de piste, selon les autorisations affichees
  *  masque_type = masque des options de selection:
@@ -166,7 +164,7 @@ void WinEDA_GerberFrame::Erase_Pistes( wxDC* DC, int masque_type,
 
 
 /*****************************************************************/
-void WinEDA_GerberFrame::Erase_Textes_Pcb( wxDC* DC, bool query )
+void WinEDA_GerberFrame::Erase_Textes_Pcb( bool query )
 /*****************************************************************/
 {
     BOARD_ITEM* PtStruct;
@@ -187,9 +185,9 @@ void WinEDA_GerberFrame::Erase_Textes_Pcb( wxDC* DC, bool query )
 }
 
 
-/*******************************************************************/
-void WinEDA_GerberFrame::Erase_Current_Layer( wxDC* DC, bool query )
-/*******************************************************************/
+/*********************************************************/
+void WinEDA_GerberFrame::Erase_Current_Layer( bool query )
+/*********************************************************/
 {
     int             layer = GetScreen()->m_Active_Layer;
     wxString        msg;

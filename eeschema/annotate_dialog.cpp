@@ -155,6 +155,8 @@ void WinEDA_AnnotateFrame::CreateControls()
     itemBoxSizer7->Add(itemButton10, 0, wxGROW|wxALL, 5);
 
 ////@end WinEDA_AnnotateFrame content construction
+
+	m_AnnotSortCmpCtrl->SetSelection(SortByPosition ? 0 : 1);
 }
 
 /*!

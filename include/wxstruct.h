@@ -393,15 +393,15 @@ public:
 
     // Read/write fonctions:
     EDA_BaseStruct*             ReadDrawSegmentDescr( FILE* File, int* LineNum );
-    int                         ReadListeSegmentDescr( wxDC* DC, FILE* File,
+    int                         ReadListeSegmentDescr( FILE* File,
                                                        TRACK* PtSegm, int StructType,
                                                        int* LineNum, int NumSegm );
 
     int                         ReadSetup( FILE* File, int* LineNum );
-    int                         ReadGeneralDescrPcb( wxDC* DC, FILE* File, int* LineNum );
+    int                         ReadGeneralDescrPcb( FILE* File, int* LineNum );
 
     // PCB handling
-    bool                        Clear_Pcb( wxDC* DC, bool query );
+    bool                        Clear_Pcb( bool query );
 
     /**
      * Function PcbGeneralLocateAndDisplay
@@ -681,12 +681,12 @@ public:
 
     // loading modules: see WinEDA_BasePcbFrame
 
-    // Borad handling
-    void                Erase_Zones( wxDC* DC, bool query );
-    void                Erase_Segments_Pcb( wxDC* DC, bool is_edges, bool query );
+    // Board handling
+    void                Erase_Zones( bool query );
+    void                Erase_Segments_Pcb( bool is_edges, bool query );
     void                Erase_Pistes( wxDC* DC, int masque_type, bool query );
-    void                Erase_Modules( wxDC* DC, bool query );
-    void                Erase_Textes_Pcb( wxDC* DC, bool query );
+    void                Erase_Modules( bool query );
+    void                Erase_Textes_Pcb( bool query );
     void                Erase_Marqueurs();
     void                UnDeleteItem( wxDC* DC );
     void                RemoveStruct( BOARD_ITEM* Item, wxDC* DC );
@@ -902,12 +902,12 @@ public:
     void            Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
 
     // PCB handling
-    bool            Clear_Pcb( wxDC* DC, bool query );
-    void            Erase_Current_Layer( wxDC* DC, bool query );
-    void            Erase_Zones( wxDC* DC, bool query );
-    void            Erase_Segments_Pcb( wxDC* DC, bool is_edges, bool query );
-    void            Erase_Pistes( wxDC* DC, int masque_type, bool query );
-    void            Erase_Textes_Pcb( wxDC* DC, bool query );
+    bool            Clear_Pcb( bool query );
+    void            Erase_Current_Layer( bool query );
+    void            Erase_Zones( bool query );
+    void            Erase_Segments_Pcb( bool is_edges, bool query );
+    void            Erase_Pistes( int masque_type, bool query );
+    void            Erase_Textes_Pcb( bool query );
     void            UnDeleteItem( wxDC* DC );
     void            Delete_DCode_Items( wxDC* DC, int dcode_value, int layer_number );
 

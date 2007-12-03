@@ -643,7 +643,7 @@ void WinEDA_BasePcbFrame::DelLimitesZone( wxDC* DC, bool Redraw )
     {
         next = segment->Next();
         
-        if( Redraw )
+        if( Redraw && DC )
             Trace_DrawSegmentPcb( DrawPanel, DC, segment, GR_XOR );
         
         delete segment;

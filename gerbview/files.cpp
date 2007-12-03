@@ -32,7 +32,7 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
     {
     case ID_MENU_LOAD_FILE:
     case ID_LOAD_FILE:
-        if( Clear_Pcb( &dc, TRUE ) )
+        if( Clear_Pcb( TRUE ) )
         {
             LoadOneGerberFile( wxEmptyString, &dc, 0 );
         }
@@ -56,7 +56,7 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
 
     case ID_MENU_NEW_BOARD:
     case ID_NEW_BOARD:
-        Clear_Pcb( &dc, TRUE );
+        Clear_Pcb( TRUE );
         Zoom_Automatique( FALSE );
         GetScreen()->SetRefreshReq();
         break;
@@ -71,7 +71,7 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
     case ID_LOAD_FILE_8:
     case ID_LOAD_FILE_9:
     case ID_LOAD_FILE_10:
-        if( Clear_Pcb( &dc, TRUE ) )
+        if( Clear_Pcb( TRUE ) )
         {
             LoadOneGerberFile(
                 GetLastProject( id - ID_LOAD_FILE_1 ).GetData(),

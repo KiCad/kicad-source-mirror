@@ -61,7 +61,7 @@ void WinEDA_ModuleEditFrame::Load_Module_Module_From_BOARD( MODULE* Module )
 
     SetCurItem( NULL );
 
-    Clear_Pcb( NULL, TRUE );
+    Clear_Pcb( TRUE );
 
     m_Pcb->m_Status_Pcb = 0;
     NewModule = new MODULE( m_Pcb );

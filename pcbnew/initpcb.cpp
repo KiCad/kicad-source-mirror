@@ -41,38 +41,38 @@ void WinEDA_PcbGlobalDeleteFrame::AcceptPcbDelete( wxCommandEvent& event )
 
     if( m_DelAlls->GetValue() )
     {
-        m_Parent->Clear_Pcb( &dc, TRUE );
+        m_Parent->Clear_Pcb( TRUE );
         redraw = TRUE;
     }
     else
     {
         if( m_DelZones->GetValue() )
         {
-            m_Parent->Erase_Zones( &dc, TRUE );
+            m_Parent->Erase_Zones( TRUE );
             redraw = TRUE;
         }
 
         if( m_DelTexts->GetValue() )
         {
-            m_Parent->Erase_Textes_Pcb( &dc, TRUE );
+            m_Parent->Erase_Textes_Pcb( TRUE );
             redraw = TRUE;
         }
 
         if( m_DelEdges->GetValue() )
         {
-            m_Parent->Erase_Segments_Pcb( &dc, TRUE, TRUE );
+            m_Parent->Erase_Segments_Pcb( TRUE, TRUE );
             redraw = TRUE;
         }
 
         if( m_DelDrawings->GetValue() )
         {
-            m_Parent->Erase_Segments_Pcb( &dc, FALSE, TRUE );
+            m_Parent->Erase_Segments_Pcb( FALSE, TRUE );
             redraw = TRUE;
         }
 
         if( m_DelModules->GetValue() )
         {
-            m_Parent->Erase_Modules( &dc, TRUE );
+            m_Parent->Erase_Modules( TRUE );
             redraw = TRUE;
         }
 
@@ -108,7 +108,7 @@ void WinEDA_PcbGlobalDeleteFrame::AcceptPcbDelete( wxCommandEvent& event )
 
 
 /*********************************************************/
-bool WinEDA_BasePcbFrame::Clear_Pcb( wxDC* DC, bool query )
+bool WinEDA_BasePcbFrame::Clear_Pcb( bool query )
 /*********************************************************/
 
 /* Realise les init des pointeurs et variables
@@ -146,7 +146,7 @@ bool WinEDA_BasePcbFrame::Clear_Pcb( wxDC* DC, bool query )
     m_Pcb->m_Zone = NULL;
     m_Pcb->m_NbSegmZone = 0;
     
-    DelLimitesZone( DC, FALSE );
+    DelLimitesZone( NULL, FALSE );
 
     for( ; g_UnDeleteStackPtr != 0; )
     {
@@ -207,7 +207,7 @@ bool WinEDA_BasePcbFrame::Clear_Pcb( wxDC* DC, bool query )
 
 
 /************************************************************/
-void WinEDA_PcbFrame::Erase_Zones( wxDC* DC, bool query )
+void WinEDA_PcbFrame::Erase_Zones( bool query )
 /************************************************************/
 {
     if( query && !IsOK( this, _( "Delete Zones ?" ) ) )
@@ -220,14 +220,14 @@ void WinEDA_PcbFrame::Erase_Zones( wxDC* DC, bool query )
         m_Pcb->m_NbSegmZone = 0;
     }
     
-    DelLimitesZone( DC, FALSE );
+    DelLimitesZone( NULL, FALSE );
 
     GetScreen()->SetModify();
 }
 
 
 /*****************************************************************************/
-void WinEDA_PcbFrame::Erase_Segments_Pcb( wxDC* DC, bool is_edges, bool query )
+void WinEDA_PcbFrame::Erase_Segments_Pcb( bool is_edges, bool query )
 /*****************************************************************************/
 {
     BOARD_ITEM*     PtStruct;
@@ -272,7 +272,7 @@ void WinEDA_PcbFrame::Erase_Segments_Pcb( wxDC* DC, bool is_edges, bool query )
 
 
 /**************************************************************************/
-void WinEDA_PcbFrame::Erase_Pistes( wxDC* DC, int masque_type, bool query )
+void WinEDA_PcbFrame::Erase_Pistes( wxDC * DC, int masque_type, bool query )
 /**************************************************************************/
 
 /* Efface les segments de piste, selon les autorisations affichees
@@ -304,7 +304,7 @@ void WinEDA_PcbFrame::Erase_Pistes( wxDC* DC, int masque_type, bool query )
 
 
 /**************************************************************/
-void WinEDA_PcbFrame::Erase_Modules( wxDC* DC, bool query )
+void WinEDA_PcbFrame::Erase_Modules( bool query )
 /**************************************************************/
 {
     if( query && !IsOK( this, _( "Delete Modules?" ) ) )
@@ -325,7 +325,7 @@ void WinEDA_PcbFrame::Erase_Modules( wxDC* DC, bool query )
 
 
 /************************************************************/
-void WinEDA_PcbFrame::Erase_Textes_Pcb( wxDC* DC, bool query )
+void WinEDA_PcbFrame::Erase_Textes_Pcb( bool query )
 /************************************************************/
 {
     BOARD_ITEM* PtStruct, * PtNext;

@@ -34,7 +34,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
     {
     case ID_MENU_LOAD_FILE:
     case ID_LOAD_FILE:
-        Clear_Pcb( &dc, TRUE );
+        Clear_Pcb(TRUE );
         LoadOnePcbFile( wxEmptyString, &dc, FALSE );
         ReCreateAuxiliaryToolbar();
         break;
@@ -64,7 +64,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
             if( !IsOK( this, msg ) )
                 break;
         }
-        Clear_Pcb( &dc, TRUE );
+        Clear_Pcb( TRUE );
         LoadOnePcbFile( filename, &dc, FALSE );
         GetScreen()->m_FileName = oldfilename;
         SetTitle( GetScreen()->m_FileName );
@@ -79,7 +79,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
 
     case ID_MENU_NEW_BOARD:
     case ID_NEW_BOARD:
-        Clear_Pcb( &dc, TRUE );
+        Clear_Pcb( TRUE );
         GetScreen()->m_FileName.Printf( wxT( "%s%cnoname%s" ),
                                        wxGetCwd().GetData(), DIR_SEP, PcbExtBuffer.GetData() );
         SetTitle( GetScreen()->m_FileName );
@@ -95,7 +95,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
     case ID_LOAD_FILE_8:
     case ID_LOAD_FILE_9:
     case ID_LOAD_FILE_10:
-        Clear_Pcb( &dc, TRUE );
+        Clear_Pcb(TRUE );
         wxSetWorkingDirectory( wxPathOnly( GetLastProject( id - ID_LOAD_FILE_1 ) ) );
         LoadOnePcbFile( GetLastProject( id - ID_LOAD_FILE_1 ).GetData(),
                         &dc, FALSE );
