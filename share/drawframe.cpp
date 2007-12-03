@@ -410,7 +410,7 @@ void WinEDA_DrawFrame::ReDrawPanel()
 {
     if( DrawPanel == NULL )
         return;
-    
+
     wxClientDC dc( DrawPanel );
 
     DrawPanel->PrepareGraphicContext( &dc );

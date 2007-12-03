@@ -160,7 +160,9 @@ public:
     static bool ShowToolTips();
 
     void DelDRCMarkers();
-
+    void RedrawDrawPanel();
+    
+    
 ////@begin DrcDialog member variables
     wxBoxSizer* m_MainSizer;
     wxBoxSizer* m_CommandSizer;
@@ -179,6 +181,7 @@ public:
     DRCLISTBOX* m_UnconnectedListBox;
     wxStdDialogButtonSizer* StdDialogButtonSizer;
 ////@end DrcDialog member variables
+
 
 
     DRC*                m_tester;

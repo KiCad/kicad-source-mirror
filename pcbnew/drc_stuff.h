@@ -250,11 +250,6 @@ public:
 
 
 
-
-
-
-
-
 /**
  * Class DRC
  * is the Design Rule Checker, and performs all the DRC tests.  The output of

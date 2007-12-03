@@ -39,6 +39,12 @@
 ////@end XPM images
 
 
+/**
+ * Class DRC_LIST_MARKERS
+ * is an implementation of the interface named DRC_ITEM_LIST which uses
+ * a BOARD instance to fulfill the interface.  No ownership is taken of the 
+ * BOARD.
+ */
 class DRC_LIST_MARKERS : public DRC_ITEM_LIST
 {
     BOARD*          m_board;
@@ -55,7 +61,7 @@ public:
     */
 
     
-    //-----<Interface DRC_ITEM_LIST >---------------------------------------
+    //-----<Interface DRC_ITEM_LIST>---------------------------------------
     
     void            DeleteAllItems()
     {
@@ -86,11 +92,9 @@ public:
         return m_board->GetMARKERCount();
     }
     
-    //-----</Interface DRC_ITEM_LIST >--------------------------------------
+    //-----</Interface DRC_ITEM_LIST>--------------------------------------
 
 };
-
-
 
 
 /**
@@ -120,7 +124,7 @@ public:
 
     /**
      * Function SetList
-     * sets the DRC_LIST for this listbox.  Ownership of the DRC_ITEM_LIST is 
+     * sets the DRC_ITEM_LIST for this listbox.  Ownership of the DRC_ITEM_LIST is 
      * transfered to this DRCLISTBOX.
      * @param aList The DRC_ITEM_LIST* containing the DRC_ITEMs which will be
      *  displayed in the wxHtmlListBox
@@ -139,7 +143,7 @@ public:
      * Function OnGetItem
      * returns the html text associated with the DRC_ITEM given by index 'n'.
      * @param n An index into the list.
-     * @return wxString - the simply html text to show in the listbox.
+     * @return wxString - the simple html text to show in the listbox.
      */
     wxString OnGetItem( size_t n ) const
     {
@@ -157,7 +161,7 @@ public:
      * Function OnGetItem
      * returns the html text associated with the given index 'n'.
      * @param n An index into the list.
-     * @return wxString - the simply html text to show in the listbox.
+     * @return wxString - the simple html text to show in the listbox.
      */
     wxString OnGetItemMarkup( size_t n ) const
     {
@@ -463,7 +467,6 @@ void DrcDialog::CreateControls()
     m_UnconnectedListBox->Connect(ID_UNCONNECTED_LIST, wxEVT_RIGHT_UP, wxMouseEventHandler(DrcDialog::OnRightUpUnconnected), NULL, this);
 ////@end DrcDialog content construction
 
-    // @todo this is expanding the Clearance text, so we need to recalc sizers.
     AddUnitSymbol(*m_ClearenceTitle);
 
     Layout();      // adding the units above expanded Clearance text, now resize.
@@ -535,11 +538,11 @@ void DrcDialog::OnStartdrcClick( wxCommandEvent& event )
                         m_ZonesTestCtrl->IsChecked(),
                         reportName, m_CreateRptCtrl->IsChecked() );
 
-    
-    m_Parent->Erase_Marqueurs();
-    m_Parent->ReDrawPanel();
+    DelDRCMarkers();
 
     SetCursor( wxCursor( wxCURSOR_WAIT ) );
+    
+    wxYield();  // process the cursor change event and the redraw.
     
     // run all the tests, with no UI at this time.
     m_tester->RunTests();
@@ -557,14 +560,11 @@ void DrcDialog::OnStartdrcClick( wxCommandEvent& event )
         //msg.Printf( _( "Report file <%s> created\n" ), s_RptFilename.GetData() );
     }
     
-    SetCursor( wxCursor( wxCURSOR_WATCH ) );
+    SetCursor( wxCursor( wxCURSOR_ARROW ) );
     
-    // @todo set the list counts in the DRCLISTITEMS here.
-    
-    m_Parent->ReDrawPanel();
-
-    // printf("done with tests\n");
+    RedrawDrawPanel();
 }
+
 
 /*!
  * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_ERASE_DRC_MARKERS
@@ -572,9 +572,8 @@ void DrcDialog::OnStartdrcClick( wxCommandEvent& event )
 
 void DrcDialog::OnDeleteAllClick( wxCommandEvent& event )
 {
-    m_ClearanceListBox->DeleteAllItems();
-    m_UnconnectedListBox->DeleteAllItems();
-    m_Parent->ReDrawPanel();
+    DelDRCMarkers();
+    RedrawDrawPanel();
 }
 
 
@@ -607,10 +606,11 @@ void DrcDialog::OnListUnconnectedClick( wxCommandEvent& event )
                         m_ZonesTestCtrl->IsChecked(),
                         reportName, m_CreateRptCtrl->IsChecked() );
 
-    
-    DelDRCMarkers();
+    DelDRCMarkers();    
 
     SetCursor( wxCursor( wxCURSOR_WAIT ) );
+
+    wxYield();
     
     // run all the tests, with no UI at this time.
     m_tester->ListUnconnectedPads();
@@ -628,11 +628,11 @@ void DrcDialog::OnListUnconnectedClick( wxCommandEvent& event )
         //msg.Printf( _( "Report file <%s> created\n" ), s_RptFilename.GetData() );
     }
     
-    SetCursor( wxCursor( wxCURSOR_WATCH ) );
+    SetCursor( wxCursor( wxCURSOR_ARROW ) );
     
     // @todo set the list counts in the DRCLISTITEMS here.
     
-    m_Parent->ReDrawPanel();
+    RedrawDrawPanel();
 }
 
 /*!
@@ -826,14 +826,18 @@ void DrcDialog::OnUnconnectedSelectionEvent( wxCommandEvent& event )
 }
 
 
+void DrcDialog::RedrawDrawPanel()
+{
+    m_Parent->DrawPanel->Refresh();
+}
 
 
 /*********************************************************/
 void DrcDialog::DelDRCMarkers()
 /*********************************************************/
 {
-    m_Parent->Erase_Marqueurs();
-    m_Parent->ReDrawPanel();
+    m_ClearanceListBox->DeleteAllItems();
+    m_UnconnectedListBox->DeleteAllItems();
 }
 
 

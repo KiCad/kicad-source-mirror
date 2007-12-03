@@ -92,6 +92,7 @@ DRC::DRC( WinEDA_PcbFrame* aPcbWindow )
     m_mainWindow = aPcbWindow;
     m_drawPanel  = aPcbWindow->DrawPanel;
     m_pcb        = aPcbWindow->m_Pcb;
+    m_ui         = 0;
 
     // establish initial values for everything:    
     m_doPad2PadTest     = true;
