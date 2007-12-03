@@ -204,7 +204,55 @@ class WinEDA_DrawPanel;
 class MARKER;
 class DrcDialog;
 
-typedef std::vector<DRC_ITEM*>          DRC_LIST;
+
+/**
+ * Class DRC_ITEM_LIST
+ * provides an abstract interface of a DRC_ITEM* list manager.  The details
+ * of the actual list architecture are hidden from the caller.  Any class
+ * that implements this interface can then be used by a DRCLISTBOX class without
+ * it knowing the actual architecture of the list.
+ */
+class DRC_ITEM_LIST
+{
+public:
+
+    /**
+     * Function DeleteAllItems
+     * removes and deletes all the items in the list.
+     */
+    virtual void            DeleteAllItems() = 0;
+    
+    /**
+     * Function GetItem
+     * retrieves a DRC_ITEM by pointer.  The actual item remains owned by the
+     * list container.
+     * @param aIndex The 0 based index into the list of the desired item.
+     * @return const DRC_ITEM* - the desired item or NULL if aIndex is out of range.
+     */
+    virtual const DRC_ITEM* GetItem( int aIndex ) = 0;      
+
+    /**
+     * Function DeleteAllItems
+     * removes and deletes desired item from the list.
+     * @param aIndex The 0 based index into the list of the desired item which 
+     *         is to be deleted.
+     */
+    virtual void            DeleteItem( int aIndex ) = 0;
+
+    /**
+     * Function GetCount
+     * returns the number of items in the list.
+     */
+    virtual int             GetCount() = 0;    
+    
+    virtual ~DRC_ITEM_LIST() {}
+};
+
+
+
+
+
+
 
 
 /**
@@ -261,12 +309,7 @@ private:
      * is a private helper function used to update needed pointers from the
      * one pointer which is known not to change, m_mainWindow.
      */
-    void updatePointers()
-    {
-        // update my pointers, m_mainWindow is the only unchangable one
-        m_drawPanel = m_mainWindow->DrawPanel;
-        m_pcb = m_mainWindow->m_Pcb;
-    }
+    void updatePointers();
     
 
     /**
@@ -415,10 +458,19 @@ public:
     /**
      * Function ShowDialog
      * opens a dialog and prompts the user, then if a test run button is 
-     * clicked, runs the test(s) and creates the MARKERS.
+     * clicked, runs the test(s) and creates the MARKERS.  The dialog is only
+     * created if it is not already in existence.
      */
     void ShowDialog();
-    
+
+
+    /**
+     * Function DestroyDialog
+     * deletes this ui dialog box and zeros out its pointer to remember
+     * the state of the dialog's existence. 
+     */
+    void DestroyDialog();
+
     
     /**
      * Function SetSettings
@@ -447,6 +499,14 @@ public:
      */
     void RunTests();
 
+
+    /**
+     * Function ListUnconnectedPad
+     * gathers a list of all the unconnected pads and shows them in the 
+     * dialog, and optionally prints a report of such.
+     */
+    void ListUnconnectedPads();
+    
     
     /**
      * Function WriteReport

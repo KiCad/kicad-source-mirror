@@ -201,6 +201,7 @@ class BOARD : public BOARD_ITEM
     friend class WinEDA_PcbFrame;
     
 private:
+
     std::vector<MARKER*> m_markers;             ///< MARKERs for clearance problems, owned by pointer                                                 
 //    std::vector<MARKER*> m_markersUnconnected;  ///< MARKERs for unconnected problems, owned by pointer                                                 
 
@@ -269,6 +270,15 @@ public:
      */
     void    DeleteMARKERs();
 
+    
+    /**
+     * Function DeleteMARKER
+     * deletes one MARKER from the board.
+     * @param aIndex The index of the marker to delete.
+     */
+    void    DeleteMARKER( int aIndex );
+    
+    
     /**
      * Function GetMARKER
      * returns the MARKER at a given index.

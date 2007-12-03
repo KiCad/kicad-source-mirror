@@ -219,7 +219,6 @@
           <long name="use-xrc">0</long>
           <long name="working-mode">0</long>
           <string name="event-handler-0">"wxEVT_INIT_DIALOG|OnInitDialog|NONE||DrcDialog"</string>
-          <string name="event-handler-1">"wxEVT_DESTROY|OnDestroy|NONE||DrcDialog"</string>
           <string name="proxy-Id name">"ID_DIALOG"</string>
           <long name="proxy-Id value">10000</long>
           <string name="proxy-Class">"DrcDialog"</string>
@@ -250,10 +249,10 @@
           <bool name="proxy-wxDEFAULT_DIALOG_STYLE">1</bool>
           <bool name="proxy-wxCAPTION">0</bool>
           <bool name="proxy-wxRESIZE_BORDER">1</bool>
-          <bool name="proxy-wxSYSTEM_MENU">0</bool>
+          <bool name="proxy-wxSYSTEM_MENU">1</bool>
           <bool name="proxy-wxSTAY_ON_TOP">0</bool>
           <bool name="proxy-wxDIALOG_NO_PARENT">0</bool>
-          <bool name="proxy-wxCLOSE_BOX">0</bool>
+          <bool name="proxy-wxCLOSE_BOX">1</bool>
           <bool name="proxy-wxMAXIMIZE_BOX">1</bool>
           <bool name="proxy-wxMINIMIZE_BOX">1</bool>
           <bool name="proxy-wxDIALOG_MODAL">0</bool>
@@ -1273,6 +1272,7 @@
                   <long name="locked">0</long>
                   <string name="created">"25/11/2007"</string>
                   <string name="proxy-type">"wbButtonProxy"</string>
+                  <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnDeleteOneClick|NONE||DrcDialog"</string>
                   <string name="proxy-Id name">"ID_DELETE_ONE"</string>
                   <long name="proxy-Id value">10007</long>
                   <string name="proxy-Name">""</string>
@@ -1420,7 +1420,7 @@
               <bool name="proxy-Separate files">0</bool>
               <string name="proxy-Implementation filename">""</string>
               <string name="proxy-Header filename">""</string>
-              <string name="proxy-Member variable name">""</string>
+              <string name="proxy-Member variable name">"m_Notebook"</string>
               <bool name="proxy-Notebook sizer">1</bool>
               <string name="proxy-Help text">""</string>
               <string name="proxy-Tooltip text">""</string>

@@ -60,100 +60,30 @@ void WinEDA_PcbFrame::Install_Test_DRC_Frame( wxDC* DC )
 
 void DRC::ShowDialog()
 {
-    updatePointers();
-    bool    isNew = false;
-
     if( !m_ui )
     {
         m_ui = new DrcDialog( this, m_mainWindow );
-        isNew = true;
     }
 
+    updatePointers();
+
+    
+    
     // @todo enter retentitive member data into the DrcDialog here
 
-    if( isNew )
-        m_ui->Show(true);
-    else
-        m_ui->Raise();
+    m_ui->Show(true);
 
    // @todo capture the UI entered data into this DRC object. BUT in the OK handler
 }
 
 
-/*********************************************************/
-void DrcDialog::DelDRCMarkers( wxCommandEvent& event )
-/*********************************************************/
+void DRC::DestroyDialog()
 {
-    m_Parent->Erase_Marqueurs();
-    m_Parent->ReDrawPanel();
-}
-
-
-/****************************************************/
-void DrcDialog::CmdDrc()
-/****************************************************/
-{
-    wxString reportName;
-    
-    if( m_CreateRptCtrl->IsChecked() )      // Create a file rpt
+    if( m_ui )
     {
-        reportName = m_RptFilenameCtrl->GetValue();
-
-        if( reportName.IsEmpty() )
-        {
-            wxCommandEvent junk;
-            OnButtonBrowseRptFileClick( junk );
-        }
-
-        reportName = m_RptFilenameCtrl->GetValue();
+        m_ui->Destroy();
+        m_ui = 0;
     }
-
-    g_DesignSettings.m_TrackClearence =
-        ReturnValueFromTextCtrl( *m_SetClearance, m_Parent->m_InternalUnits );
-    
-    m_tester->SetSettings( m_Pad2PadTestCtrl->IsChecked(),
-                        m_UnconnectedTestCtrl->IsChecked(),                       
-                        m_ZonesTestCtrl->IsChecked(),
-                        reportName, m_CreateRptCtrl->IsChecked() );
-
-    
-    m_Parent->Erase_Marqueurs();
-    m_Parent->ReDrawPanel();
-
-    SetCursor( wxCursor( wxCURSOR_WATCH ) );
-    
-    // run all the tests, with no UI at this time.
-    m_tester->RunTests();
-
-    // Generate the report 
-    if( !reportName.IsEmpty() )
-    {
-        FILE* fp = wxFopen( reportName, wxT( "w" ) );
-        
-        m_tester->WriteReport( fp );
-
-        fclose(fp);
-
-        // @todo put up message box saying we created the report        
-        //msg.Printf( _( "Report file <%s> created\n" ), s_RptFilename.GetData() );
-    }
-    
-    SetCursor( wxCursor( wxCURSOR_WATCH ) );
-    
-    // @todo set the list counts in the DRCLISTITEMS here.
-    
-    
-    // printf("done with tests\n");
-}
-
-
-/***************************************************************/
-void DrcDialog::ListUnconnectedPads( wxCommandEvent& event )
-/***************************************************************/
-{
-    m_tester->testUnconnected();
-    
-    // @todo do report here
 }
 
 
@@ -256,7 +186,33 @@ void DRC::RunTests()
     // find and gather unconnected pads.    
     if( m_doUnconnectedTest )
         testUnconnected();
+    
+    // update the listboxes
+    updatePointers();
 }
+
+
+
+/***************************************************************/
+void DRC::ListUnconnectedPads()
+/***************************************************************/
+{
+    // erase the MARKERs here.
+    m_pcb->DeleteMARKERs();
+    
+    testUnconnected();
+}
+
+
+void DRC::updatePointers()
+{
+    // update my pointers, m_mainWindow is the only unchangable one
+    m_drawPanel = m_mainWindow->DrawPanel;
+    m_pcb = m_mainWindow->m_Pcb;
+    
+    m_ui->m_ClearanceListBox->SetList( new DRC_LIST_MARKERS( m_pcb ) );
+}
+    
 
 
 void DRC::testTracks()

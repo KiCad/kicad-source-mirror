@@ -350,7 +350,6 @@ void WinEDA_PcbFrame::Erase_Marqueurs()
 /*******************************************/
 {
     m_Pcb->DeleteMARKERs();
-    GetScreen()->SetModify();
-    
+    GetScreen()->SetModify();   // @todo : why mark this if MARKERs are not saved in the *.brd file?
 }
 

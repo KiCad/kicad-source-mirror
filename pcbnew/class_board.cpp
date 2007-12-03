@@ -194,8 +194,7 @@ void BOARD::Delete( BOARD_ITEM* aBoardItem )
         {
             if( m_markers[i] == (MARKER*) aBoardItem )
             {
-                delete m_markers[i]; 
-                m_markers.erase( m_markers.begin() + i );
+                DeleteMARKER( i );
                 break;
             }
         }
@@ -204,6 +203,16 @@ void BOARD::Delete( BOARD_ITEM* aBoardItem )
     // other types may use linked list
     default:
         wxFAIL_MSG( wxT("BOARD::Delete() needs work") );
+    }
+}
+
+
+void BOARD::DeleteMARKER( int aIndex )
+{
+    if( (unsigned) aIndex < m_markers.size() )
+    {
+        delete m_markers[aIndex]; 
+        m_markers.erase( m_markers.begin() + aIndex );
     }
 }
 

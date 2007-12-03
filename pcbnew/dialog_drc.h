@@ -33,6 +33,7 @@
 
 ////@begin forward declarations
 class wxBoxSizer;
+class wxNotebook;
 class DRCLISTBOX;
 class wxStdDialogButtonSizer;
 ////@end forward declarations
@@ -58,7 +59,7 @@ class wxStdDialogButtonSizer;
 #define ID_NOTEBOOK1 10008
 #define ID_CLEARANCE_LIST 10001
 #define ID_UNCONNECTED_LIST 10009
-#define SYMBOL_DRCDIALOG_STYLE wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxMAXIMIZE_BOX|wxMINIMIZE_BOX
+#define SYMBOL_DRCDIALOG_STYLE wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX
 #define SYMBOL_DRCDIALOG_TITLE _("DRC Control")
 #define SYMBOL_DRCDIALOG_IDNAME ID_DIALOG
 #define SYMBOL_DRCDIALOG_SIZE wxSize(400, 300)
@@ -105,9 +106,6 @@ public:
     /// wxEVT_INIT_DIALOG event handler for ID_DIALOG
     void OnInitDialog( wxInitDialogEvent& event );
 
-    /// wxEVT_DESTROY event handler for ID_DIALOG
-    void OnDestroy( wxWindowDestroyEvent& event );
-
     /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_CHECKBOX
     void OnReportCheckBoxClicked( wxCommandEvent& event );
 
@@ -122,6 +120,9 @@ public:
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_DELETE_ALL
     void OnDeleteAllClick( wxCommandEvent& event );
+
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_DELETE_ONE
+    void OnDeleteOneClick( wxCommandEvent& event );
 
     /// wxEVT_LEFT_DCLICK event handler for ID_CLEARANCE_LIST
     void OnLeftDClickClearance( wxMouseEvent& event );
@@ -158,9 +159,7 @@ public:
     /// Should we show tooltips?
     static bool ShowToolTips();
 
-    void CmdDrc();    
-    void DelDRCMarkers(wxCommandEvent & event);
-    void ListUnconnectedPads(wxCommandEvent & event);
+    void DelDRCMarkers();
 
 ////@begin DrcDialog member variables
     wxBoxSizer* m_MainSizer;
@@ -175,6 +174,7 @@ public:
     wxCheckBox* m_UnconnectedTestCtrl;
     wxButton* m_DeleteAllButton;
     wxButton* m_DeleteCurrentMarkerButton;
+    wxNotebook* m_Notebook;
     DRCLISTBOX* m_ClearanceListBox;
     DRCLISTBOX* m_UnconnectedListBox;
     wxStdDialogButtonSizer* StdDialogButtonSizer;

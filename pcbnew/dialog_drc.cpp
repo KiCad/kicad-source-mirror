@@ -39,14 +39,68 @@
 ////@end XPM images
 
 
+class DRC_LIST_MARKERS : public DRC_ITEM_LIST
+{
+    BOARD*          m_board;
+
+public:
+
+    DRC_LIST_MARKERS( BOARD* aBoard ) :
+        m_board(aBoard)
+    {
+    }
+
+    /* no destructor since we do not own anything to delete, not even the BOARD.
+    ~DRC_LIST_MARKERS() {}
+    */
+
+    
+    //-----<Interface DRC_ITEM_LIST >---------------------------------------
+    
+    void            DeleteAllItems()
+    {
+        m_board->DeleteMARKERs();
+    }
+
+    
+    const DRC_ITEM* GetItem( int aIndex )
+    {
+        const MARKER* marker = m_board->GetMARKER( aIndex );
+        if( marker )
+            return &marker->GetReporter();
+        return NULL;
+    }
+
+    void DeleteItem( int aIndex )
+    {
+        m_board->DeleteMARKER( aIndex );
+    }
+
+    
+    /**
+     * Function GetCount
+     * returns the number of items in the list.
+     */
+    int  GetCount()
+    {
+        return m_board->GetMARKERCount();
+    }
+    
+    //-----</Interface DRC_ITEM_LIST >--------------------------------------
+
+};
+
+
+
+
 /**
  * Class DRCLISTBOX
- * is used to display a DRC_LIST, which contains DRC_ITEM_OWNERs.
+ * is used to display a DRC_ITEM_LIST.
  */ 
 class DRCLISTBOX : public wxHtmlListBox
 {
 private:
-    DRC_LIST*   m_List;     ///< wxHtmlListBox does not own the list items, we do
+    DRC_ITEM_LIST* m_list;     ///< wxHtmlListBox does not own the list, I do
 
 public:
     DRCLISTBOX( wxWindow* parent, wxWindowID id = wxID_ANY,
@@ -54,36 +108,48 @@ public:
             long style = 0, const wxString& name = wxVListBoxNameStr)
         : wxHtmlListBox( parent, id, pos, size, style, name )
     {
+        m_list = 0;
     }
 
+    
+    ~DRCLISTBOX()
+    {
+        delete m_list;  // I own it, I destroy it.
+    }
+    
 
     /**
      * Function SetList
-     * sets the DRC_LIST for this listbox.  However no ownership is
-     * given, the caller still owns the list and is responsible
-     * for deleting it.
-     * @param aList The DRC_LIST containing the DRC_ITEMs which will be
+     * sets the DRC_LIST for this listbox.  Ownership of the DRC_ITEM_LIST is 
+     * transfered to this DRCLISTBOX.
+     * @param aList The DRC_ITEM_LIST* containing the DRC_ITEMs which will be
      *  displayed in the wxHtmlListBox
      */
-    void SetList( DRC_LIST* aList )
+    void SetList( DRC_ITEM_LIST* aList )
     {
-        m_List = aList;
-        SetItemCount( aList->size() );
+        delete m_list;
+        
+        m_list = aList;
+        SetItemCount( aList->GetCount() );
+        Refresh();
     }
 
     
     /**
      * Function OnGetItem
-     * returns the html text associated with the given index 'n'.
+     * returns the html text associated with the DRC_ITEM given by index 'n'.
      * @param n An index into the list.
      * @return wxString - the simply html text to show in the listbox.
      */
     wxString OnGetItem( size_t n ) const
     {
-        if( m_List )
-            return (*m_List)[n]->ShowHtml();
-        else
-            return wxString();
+        if( m_list )
+        {
+            const DRC_ITEM*   item = m_list->GetItem( (int) n );
+            if( item )
+                return item->ShowHtml();
+        }
+        return wxString();
     }
 
 
@@ -95,27 +161,44 @@ public:
      */
     wxString OnGetItemMarkup( size_t n ) const
     {
-        if( m_List )
-            return (*m_List)[n]->ShowHtml();
-        else
-            return wxString();
+        return OnGetItem( n );
     }
     
     
     /**
      * Function DeleteElement
      * will delete one of the items in the list.
-     * @param ndx The index into the list to delete.
+     * @param aIndex The index into the list to delete.
      */
-    void DeleteElmenent( int ndx )
+    void DeleteItem( int aIndex )
     {
-        if( m_List )
+        if( m_list )
         {
-            if( (size_t) ndx < m_List->size() )
-            {
-                m_List->erase( m_List->begin()+ndx );
-                SetItemCount( m_List->size() );
-            }
+            m_list->DeleteItem( aIndex );
+            int count = m_list->GetCount();
+            SetItemCount( count );
+            
+            if( aIndex < count )
+                SetSelection( aIndex );
+            else
+                SetSelection( aIndex-1 );    // -1 is no selection
+            Refresh();    
+        }
+    }
+
+    
+    /**
+     * Function DeleteAllItems
+     * deletes all items in the list.
+     */
+    void DeleteAllItems()
+    {
+        if( m_list )
+        {
+            m_list->DeleteAllItems();
+            SetItemCount(0);
+            SetSelection( -1 );    // -1 is no selection
+            Refresh();
         }
     }
 };
@@ -136,7 +219,6 @@ BEGIN_EVENT_TABLE( DrcDialog, wxDialog )
 
 ////@begin DrcDialog event table entries
     EVT_INIT_DIALOG( DrcDialog::OnInitDialog )
-    EVT_WINDOW_DESTROY( DrcDialog::OnDestroy )
 
     EVT_CHECKBOX( ID_CHECKBOX, DrcDialog::OnReportCheckBoxClicked )
 
@@ -147,6 +229,8 @@ BEGIN_EVENT_TABLE( DrcDialog, wxDialog )
     EVT_BUTTON( ID_LIST_UNCONNECTED, DrcDialog::OnListUnconnectedClick )
 
     EVT_BUTTON( ID_DELETE_ALL, DrcDialog::OnDeleteAllClick )
+
+    EVT_BUTTON( ID_DELETE_ONE, DrcDialog::OnDeleteOneClick )
 
     EVT_BUTTON( wxID_CANCEL, DrcDialog::OnCancelClick )
 
@@ -205,6 +289,7 @@ bool DrcDialog::Create( wxWindow* parent, wxWindowID id, const wxString& caption
     m_UnconnectedTestCtrl = NULL;
     m_DeleteAllButton = NULL;
     m_DeleteCurrentMarkerButton = NULL;
+    m_Notebook = NULL;
     m_ClearanceListBox = NULL;
     m_UnconnectedListBox = NULL;
     StdDialogButtonSizer = NULL;
@@ -223,10 +308,6 @@ bool DrcDialog::Create( wxWindow* parent, wxWindowID id, const wxString& caption
     Centre();
 ////@end DrcDialog creation
 
-
-//    m_ClearanceListBox->SetList( &gList );
-//    m_UnconnectedListBox->SetList( &gList );
-
     return true;
 }
 
@@ -239,7 +320,7 @@ void DrcDialog::CreateControls()
     SetFont( *g_DialogFont );
 
 ////@begin DrcDialog content construction
-    // Generated by DialogBlocks, Fri 30 Nov 2007 18:52:20 CST (unregistered)
+    // Generated by DialogBlocks, Sun 02 Dec 2007 22:18:27 CST (unregistered)
 
     DrcDialog* itemDialog1 = this;
 
@@ -339,27 +420,27 @@ void DrcDialog::CreateControls()
     wxStaticText* itemStaticText22 = new wxStaticText( itemDialog1, wxID_STATIC, _("Error Messages:"), wxDefaultPosition, wxDefaultSize, 0 );
     m_MainSizer->Add(itemStaticText22, 0, wxGROW|wxLEFT|wxRIGHT|wxADJUST_MINSIZE, 10);
 
-    wxNotebook* itemNotebook23 = new wxNotebook( itemDialog1, ID_NOTEBOOK1, wxDefaultPosition, wxDefaultSize, wxNB_DEFAULT|wxRAISED_BORDER );
+    m_Notebook = new wxNotebook( itemDialog1, ID_NOTEBOOK1, wxDefaultPosition, wxDefaultSize, wxNB_DEFAULT|wxRAISED_BORDER );
 #if !wxCHECK_VERSION(2,5,2)
-    wxNotebookSizer* itemNotebook23Sizer = new wxNotebookSizer(itemNotebook23);
+    wxNotebookSizer* m_NotebookSizer = new wxNotebookSizer(m_Notebook);
 #endif
 
-    m_ClearanceListBox = new DRCLISTBOX( itemNotebook23, ID_CLEARANCE_LIST, wxDefaultPosition, wxSize(100, 300), wxSUNKEN_BORDER|wxHSCROLL|wxVSCROLL );
+    m_ClearanceListBox = new DRCLISTBOX( m_Notebook, ID_CLEARANCE_LIST, wxDefaultPosition, wxSize(100, 300), wxSUNKEN_BORDER|wxHSCROLL|wxVSCROLL );
     if (DrcDialog::ShowToolTips())
         m_ClearanceListBox->SetToolTip(_("MARKERs on the PCB, double click on any MARKER to go there in PCB"));
 
-    itemNotebook23->AddPage(m_ClearanceListBox, _("Distance Problem Markers"));
+    m_Notebook->AddPage(m_ClearanceListBox, _("Distance Problem Markers"));
 
-    m_UnconnectedListBox = new DRCLISTBOX( itemNotebook23, ID_UNCONNECTED_LIST, wxDefaultPosition, wxSize(100, 100), wxSUNKEN_BORDER|wxHSCROLL|wxVSCROLL );
+    m_UnconnectedListBox = new DRCLISTBOX( m_Notebook, ID_UNCONNECTED_LIST, wxDefaultPosition, wxSize(100, 100), wxSUNKEN_BORDER|wxHSCROLL|wxVSCROLL );
     if (DrcDialog::ShowToolTips())
         m_UnconnectedListBox->SetToolTip(_("Pad to pad, pad to track, and track to track clearance problems"));
 
-    itemNotebook23->AddPage(m_UnconnectedListBox, _("Unconnected"));
+    m_Notebook->AddPage(m_UnconnectedListBox, _("Unconnected"));
 
 #if !wxCHECK_VERSION(2,5,2)
-    m_MainSizer->Add(itemNotebook23Sizer, 5, wxGROW|wxALL, 5);
+    m_MainSizer->Add(m_NotebookSizer, 5, wxGROW|wxALL, 5);
 #else
-    m_MainSizer->Add(itemNotebook23, 5, wxGROW|wxALL, 5);
+    m_MainSizer->Add(m_Notebook, 5, wxGROW|wxALL, 5);
 #endif
 
     StdDialogButtonSizer = new wxStdDialogButtonSizer;
@@ -376,7 +457,6 @@ void DrcDialog::CreateControls()
     StdDialogButtonSizer->Realize();
 
     // Connect events and objects
-    itemDialog1->Connect(ID_DIALOG, wxEVT_DESTROY, wxWindowDestroyEventHandler(DrcDialog::OnDestroy), NULL, this);
     m_ClearanceListBox->Connect(ID_CLEARANCE_LIST, wxEVT_LEFT_DCLICK, wxMouseEventHandler(DrcDialog::OnLeftDClickClearance), NULL, this);
     m_ClearanceListBox->Connect(ID_CLEARANCE_LIST, wxEVT_RIGHT_UP, wxMouseEventHandler(DrcDialog::OnRightUpClearance), NULL, this);
     m_UnconnectedListBox->Connect(ID_UNCONNECTED_LIST, wxEVT_LEFT_DCLICK, wxMouseEventHandler(DrcDialog::OnLeftDClickUnconnected), NULL, this);
@@ -423,28 +503,68 @@ wxIcon DrcDialog::GetIconResource( const wxString& name )
     return wxNullIcon;
 ////@end DrcDialog icon retrieval
 }
+
+
+
 /*!
  * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_DRC_RUN
  */
 
 void DrcDialog::OnStartdrcClick( wxCommandEvent& event )
 {
-    CmdDrc();
-}
+    wxString reportName;
+    
+    if( m_CreateRptCtrl->IsChecked() )      // Create a file rpt
+    {
+        reportName = m_RptFilenameCtrl->GetValue();
 
-/*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_STOP_CONTROL_DRC
- */
+        if( reportName.IsEmpty() )
+        {
+            wxCommandEvent junk;
+            OnButtonBrowseRptFileClick( junk );
+        }
 
-/* 
-void DrcDialog::OnStopControlDrcClick( wxCommandEvent& event )
-{
-    if( DrcInProgress )
-        AbortDrc = TRUE;
-    else
-        wxBell();
+        reportName = m_RptFilenameCtrl->GetValue();
+    }
+
+    g_DesignSettings.m_TrackClearence =
+        ReturnValueFromTextCtrl( *m_SetClearance, m_Parent->m_InternalUnits );
+    
+    m_tester->SetSettings( m_Pad2PadTestCtrl->IsChecked(),
+                        m_UnconnectedTestCtrl->IsChecked(),                       
+                        m_ZonesTestCtrl->IsChecked(),
+                        reportName, m_CreateRptCtrl->IsChecked() );
+
+    
+    m_Parent->Erase_Marqueurs();
+    m_Parent->ReDrawPanel();
+
+    SetCursor( wxCursor( wxCURSOR_WAIT ) );
+    
+    // run all the tests, with no UI at this time.
+    m_tester->RunTests();
+
+    // Generate the report 
+    if( !reportName.IsEmpty() )
+    {
+        FILE* fp = wxFopen( reportName, wxT( "w" ) );
+        
+        m_tester->WriteReport( fp );
+
+        fclose(fp);
+
+        // @todo put up message box saying we created the report        
+        //msg.Printf( _( "Report file <%s> created\n" ), s_RptFilename.GetData() );
+    }
+    
+    SetCursor( wxCursor( wxCURSOR_WATCH ) );
+    
+    // @todo set the list counts in the DRCLISTITEMS here.
+    
+    m_Parent->ReDrawPanel();
+
+    // printf("done with tests\n");
 }
-*/
 
 /*!
  * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_ERASE_DRC_MARKERS
@@ -452,8 +572,11 @@ void DrcDialog::OnStopControlDrcClick( wxCommandEvent& event )
 
 void DrcDialog::OnDeleteAllClick( wxCommandEvent& event )
 {
-    DelDRCMarkers(event);
+    m_ClearanceListBox->DeleteAllItems();
+    m_UnconnectedListBox->DeleteAllItems();
+    m_Parent->ReDrawPanel();
 }
+
 
 /*!
  * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_LIST_UNCONNECTED_PADS
@@ -461,7 +584,55 @@ void DrcDialog::OnDeleteAllClick( wxCommandEvent& event )
 
 void DrcDialog::OnListUnconnectedClick( wxCommandEvent& event )
 {
-    ListUnconnectedPads(event);
+    wxString reportName;
+    
+    if( m_CreateRptCtrl->IsChecked() )      // Create a file rpt
+    {
+        reportName = m_RptFilenameCtrl->GetValue();
+
+        if( reportName.IsEmpty() )
+        {
+            wxCommandEvent junk;
+            OnButtonBrowseRptFileClick( junk );
+        }
+
+        reportName = m_RptFilenameCtrl->GetValue();
+    }
+
+    g_DesignSettings.m_TrackClearence =
+        ReturnValueFromTextCtrl( *m_SetClearance, m_Parent->m_InternalUnits );
+    
+    m_tester->SetSettings( m_Pad2PadTestCtrl->IsChecked(),
+                        m_UnconnectedTestCtrl->IsChecked(),                       
+                        m_ZonesTestCtrl->IsChecked(),
+                        reportName, m_CreateRptCtrl->IsChecked() );
+
+    
+    DelDRCMarkers();
+
+    SetCursor( wxCursor( wxCURSOR_WAIT ) );
+    
+    // run all the tests, with no UI at this time.
+    m_tester->ListUnconnectedPads();
+
+    // Generate the report 
+    if( !reportName.IsEmpty() )
+    {
+        FILE* fp = wxFopen( reportName, wxT( "w" ) );
+        
+        m_tester->WriteReport( fp );
+
+        fclose(fp);
+
+        // @todo put up message box saying we created the report        
+        //msg.Printf( _( "Report file <%s> created\n" ), s_RptFilename.GetData() );
+    }
+    
+    SetCursor( wxCursor( wxCURSOR_WATCH ) );
+    
+    // @todo set the list counts in the DRCLISTITEMS here.
+    
+    m_Parent->ReDrawPanel();
 }
 
 /*!
@@ -500,6 +671,12 @@ void DrcDialog::OnButtonBrowseRptFileClick( wxCommandEvent& event )
 
 void DrcDialog::OnOkClick( wxCommandEvent& event )
 {
+#if defined(DEBUG)
+    printf("OK Button handler\n");
+#endif
+
+    SetReturnCode( wxID_OK );
+    m_tester->DestroyDialog();
     event.Skip();
 }
 
@@ -510,10 +687,13 @@ void DrcDialog::OnOkClick( wxCommandEvent& event )
 
 void DrcDialog::OnCancelClick( wxCommandEvent& event )
 {
-////@begin wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL in WinEDA_DrcFrame.
-    // Before editing this code, remove the block markers.
+#if defined(DEBUG)
+    printf("Cancel Button handler\n");
+#endif
+
+    SetReturnCode( wxID_CANCEL );
+    m_tester->DestroyDialog();
     event.Skip();
-////@end wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL in WinEDA_DrcFrame.
 }
 
 
@@ -569,11 +749,10 @@ void DrcDialog::OnLeftDClickClearance( wxMouseEvent& event )
 
     if( selection != wxNOT_FOUND )
     {
-        printf("get item number %d\n", selection );
+        //printf("get item number %d\n", selection );
 
-        // Find the selected MARKER in the PCB, position cursor there,
-        // and close this dialog.        
-        EndModal( 0 );
+        // Find the selected MARKER in the PCB, position cursor there.
+        // Do not close this dialog for users with dual screens.        
     }
     
     event.Skip();
@@ -613,7 +792,7 @@ void DrcDialog::OnLeftDClickUnconnected( wxMouseEvent& event )
 
     if( selection != wxNOT_FOUND )
     {
-        printf("get item number %d\n", selection );
+        //printf("get item number %d\n", selection );
     }
     
     event.Skip();
@@ -628,7 +807,7 @@ void DrcDialog::OnMarkerSelectionEvent( wxCommandEvent& event )
     {
         // until a MARKER is selected, this button is not enabled.
         m_DeleteCurrentMarkerButton->Enable(true);
-        printf("get Marker number %d\n", selection );
+        //printf("get Marker number %d\n", selection );
     }
     
     event.Skip();
@@ -647,15 +826,50 @@ void DrcDialog::OnUnconnectedSelectionEvent( wxCommandEvent& event )
 }
 
 
+
+
+/*********************************************************/
+void DrcDialog::DelDRCMarkers()
+/*********************************************************/
+{
+    m_Parent->Erase_Marqueurs();
+    m_Parent->ReDrawPanel();
+}
+
+
+
 /*!
- * wxEVT_DESTROY event handler for ID_DIALOG
+ * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_DELETE_ONE
  */
 
-void DrcDialog::OnDestroy( wxWindowDestroyEvent& event )
+void DrcDialog::OnDeleteOneClick( wxCommandEvent& event )
 {
-////@begin wxEVT_DESTROY event handler for ID_DIALOG in WinEDA_DrcFrame.
+    int selectedIndex;
+    int curTab =  m_Notebook->GetSelection();
+
+    if( curTab == 0 )
+    {
+        selectedIndex = m_ClearanceListBox->GetSelection();
+        if( selectedIndex != wxNOT_FOUND )
+        {
+            m_ClearanceListBox->DeleteItem( selectedIndex );
+            m_Parent->ReDrawPanel();
+        }
+    }
+    
+    else if( curTab == 1 )
+    {
+        selectedIndex = m_UnconnectedListBox->GetSelection();
+        if( selectedIndex != wxNOT_FOUND )
+        {
+            m_UnconnectedListBox->DeleteItem( selectedIndex );
+            m_Parent->ReDrawPanel();
+        }
+    }
+    
+////@begin wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_DELETE_ONE in DrcDialog.
     // Before editing this code, remove the block markers.
     event.Skip();
-////@end wxEVT_DESTROY event handler for ID_DIALOG in WinEDA_DrcFrame. 
+////@end wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_DELETE_ONE in DrcDialog. 
 }
 
