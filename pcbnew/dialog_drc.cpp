@@ -856,8 +856,8 @@ void DrcDialog::OnLeftDClickClearance( wxMouseEvent& event )
         const DRC_ITEM* item = m_ClearanceListBox->GetItem( selection );
         if( item )
         {
-            // after the goto, process a button OK command later.
             /*
+            // after the goto, process a button OK command later.
             wxCommandEvent  cmd( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ); 
             ::wxPostEvent( GetEventHandler(), cmd );
             */
@@ -892,6 +892,7 @@ void DrcDialog::OnRightUpUnconnected( wxMouseEvent& event )
 void DrcDialog::OnRightUpClearance( wxMouseEvent& event )
 {
     // @todo: add popup menu support to go to either of the items listed in the DRC_ITEM.
+    // that way a user can get to either pad.
     event.Skip();
 }
 

@@ -7,8 +7,8 @@ email address.
 2007-Dec-4 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew
-  * drc.cpp and dialog_drc.cpp intermediate update.
-    Added double click support on a MARKER or unconnected DRC_ITEM in the listbox.
+  * drc.cpp and dialog_drc.cpp update.
+    Added double click support on a MARKER or unconnected DRC_ITEM in the listboxes.
     On Linux, it sometimes pops up the menu from PcbGeneralLocateAndDisplay()
     for some reason after repositioning the cursor.  That is not intended, but 
     after several attempts to work around it, I realized it is not so bad to 

@@ -3,6 +3,8 @@ Here are some source code maintenance tasks that need to be done, and maybe some
 folks will see these items and volunteer to do them.
 
 
+
+
 *** improved xpm handling
 We should: 
 1) make a library out of ALL the xpm files, and 
@@ -55,37 +57,13 @@ It seems the above function should be using a more user friendly "local time",
 not gmtime.
 
 
-2007-Nov-4 Assigned To: dick, but probably not til January.
+2007-Dec-4 Assigned To: Jean-Pierre, per his email
+asked by: Dick Hollenbeck
 ================================================================================
-Enhance DRC dialog box to:
-1) retain lines of error text, so as user re-enters dialog, the previously found errors persist.
-2) support double or single clicking a text line, and have the pcbnew cursor go to the offending marker.
-3) use color in the text line display.
-4) use tooltip on a per line basis, which would show a generic, but error type specific
-message about the error for that line.
-5) Use sizers properly so that as the dialog box is resized, the text area gets 
-all the additional space, both horizontally and vertically.
-6) The initial size of the dialog needs to be big enough to show the text lines
- in a clear way.
-7) Add a delete button so user can remove a single line of text after he fixes that track.  The delete button
-should also delete that single marker.
---------------
-Implementation Ideas:  retain all drc wxStrings in a vector<wxString> so they
-can be re-displayed again on another popup of the dialog.  Switch from wxTextControl 
-to wxHtmlListBox for the errors.  Add parsing and formatting functions to allow
-grabbing of the coordinate of the marker out of text, and to parse a generic
-error message such that it can be embellished into html for use in the html 
-line, such that we can get color.  There may be a requirement to rework the
-generation of the drc error strings to facillitate easy parsing.  Although
-maybe we use structures instead of strings for error reporting so the parsing
-does not need to happen.
-http://www.wxwidgets.org/manuals/2.6/wx_wxlistbox.html#wxlistbox
-The events given to wxHtmlListBox are the same as wxListBox, so the double
-click handling should be easy, plus there is the added benefit that the wxHtmlListBox
-does not own the strings, it asks for them one by one, so this makes it possible
-to keep the errors in struct form and generate html strings or normal strings 
-when needed, on the fly.
-
+1) Improve the zone support so that the perimeters of each zone are editable.
+2) Allow zones to be added early in the routing process.
+3) Remove the requirement to route tracks for situations where a zone is.
+4) Support connections from zones to vias, and zones to tracks, and zones to pads.
 
 
 2007-Nov-4 Assigned To: nobody
