@@ -68,6 +68,12 @@ class wxStdDialogButtonSizer;
 
 #define ID_DRCLISTCTRL 14000   // outside @end control identifiers since DialogBlocks knows not DRCLISTBOX 
 
+#define ID_POPUP_UNCONNECTED_A  14001
+#define ID_POPUP_UNCONNECTED_B  14002
+#define ID_POPUP_MARKERS_A      14003
+#define ID_POPUP_MARKERS_B      14004
+
+
 /*!
  * Compatibility
  */
@@ -152,6 +158,7 @@ public:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
     void OnOkClick( wxCommandEvent& event );
 
+    
 ////@end DrcDialog event handler declarations
 
 ////@begin DrcDialog member function declarations
@@ -171,6 +178,8 @@ public:
 
     void DelDRCMarkers();
     void RedrawDrawPanel();
+
+    void OnPopupMenu( wxCommandEvent& event );
     
     
 ////@begin DrcDialog member variables

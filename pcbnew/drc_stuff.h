@@ -53,6 +53,7 @@
 #define DRCE_ENDS_PROBLEM4              17  ///< track ends are too close
 #define DRCE_ENDS_PROBLEM5              18  ///< track ends are too close
 #define DRCE_PAD_NEAR_PAD1              19  ///< pad too close to pad
+#define DRCE_VIA_HOLE_BIGGER            20  ///< via's hole is bigger than its diameter
 
 
 /**

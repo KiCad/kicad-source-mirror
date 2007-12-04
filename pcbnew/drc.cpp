@@ -320,43 +320,53 @@ void DRC::testZones()
 MARKER* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKER* fillMe )
 {
     wxString    textA = aTrack->MenuText( m_pcb );
-    wxString    textB = aItem->MenuText( m_pcb );
+    wxString    textB;
 
     wxPoint     position;
-
-    if( aItem->Type() == TYPEPAD )
-        position = aItem->GetPosition();
+    wxPoint     posB;
     
-    else if( aItem->Type() == TYPEVIA )
-        position = aItem->GetPosition();
-    
-    else if( aItem->Type() == TYPETRACK )
+    if( aItem )     // aItem might be NULL
     {
-        TRACK*  track  = (TRACK*) aItem;
-        wxPoint endPos = track->m_End;
+        textB = aItem->MenuText( m_pcb );
+        posB  = aItem->GetPosition();
         
-        // either of aItem's start or end will be used for the marker position
-        // first assume start, then switch at end if needed.  decision made on
-        // distance from end of aTrack.
-        position = track->m_Start;
-
-        double dToEnd   = hypot( endPos.x   - aTrack->m_End.x, 
-                                 endPos.y   - aTrack->m_End.y );
-        double dToStart = hypot( position.x - aTrack->m_End.x,
-                                 position.y - aTrack->m_End.y );
-
-        if( dToEnd < dToStart )
-            position = endPos;
+        if( aItem->Type() == TYPEPAD )
+            position = aItem->GetPosition();
+        
+        else if( aItem->Type() == TYPEVIA )
+            position = aItem->GetPosition();
+        
+        else if( aItem->Type() == TYPETRACK )
+        {
+            TRACK*  track  = (TRACK*) aItem;
+            wxPoint endPos = track->m_End;
+            
+            // either of aItem's start or end will be used for the marker position
+            // first assume start, then switch at end if needed.  decision made on
+            // distance from end of aTrack.
+            position = track->m_Start;
+    
+            double dToEnd   = hypot( endPos.x   - aTrack->m_End.x, 
+                                     endPos.y   - aTrack->m_End.y );
+            double dToStart = hypot( position.x - aTrack->m_End.x,
+                                     position.y - aTrack->m_End.y );
+    
+            if( dToEnd < dToStart )
+                position = endPos;
+        }
     }
+    else
+        position = aTrack->GetPosition(); 
 
+    
     if( fillMe )
         fillMe->SetData( aErrorCode, position, 
                             textA, aTrack->GetPosition(), 
-                            textB, aItem->GetPosition() );
+                            textB, posB );
     else
         fillMe = new MARKER( aErrorCode, position, 
                             textA, aTrack->GetPosition(), 
-                            textB, aItem->GetPosition() );
+                            textB, posB );
     
     return fillMe;
 }
@@ -402,6 +412,26 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart )
     net_code_ref = aRefSeg->GetNet();
 
     m_segmAngle = 0;
+
+
+    // @todo: is this necessary?
+    /**************************************************************/
+    /* Phase 0 : test if via's hole is bigger than its diameter : */
+    /**************************************************************/
+    
+    if( aRefSeg->Type() == TYPEVIA )
+    {
+        // This test seems necessary since the dialog box that displays the
+        // desired via hole size and width does not enforce a hole size smaller
+        // than the via's diameter.
+        
+        if( aRefSeg->m_Drill > aRefSeg->m_Width )
+        {
+            m_currentMarker = fillMarker( aRefSeg, NULL, 
+                                DRCE_VIA_HOLE_BIGGER, m_currentMarker );
+            return false;
+        }
+    }
     
 	// for a non horizontal or vertical segment Compute the segment angle
 	// in tenths of degrees and its length

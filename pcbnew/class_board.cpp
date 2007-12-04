@@ -44,6 +44,8 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _("Tracks crossing") );
     case DRCE_PAD_NEAR_PAD1:
         return wxString( _("Pad near pad") );
+    case DRCE_VIA_HOLE_BIGGER:
+        return wxString( _("Via hole > diameter"));
         
     default:
         return wxString( wxT("PROGRAM BUG, PLEASE LEAVE THE ROOM.") );

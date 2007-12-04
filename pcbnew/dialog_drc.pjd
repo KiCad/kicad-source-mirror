@@ -1502,7 +1502,7 @@
                 <string name="proxy-Tab icon">""</string>
                 <bool name="proxy-Create in situ">1</bool>
                 <string name="proxy-Help text">""</string>
-                <string name="proxy-Tooltip text">"MARKERs on the PCB, double click on any MARKER to go there in PCB"</string>
+                <string name="proxy-Tooltip text">"MARKERs, double click any to go there in PCB, right click for popup menu"</string>
                 <string name="proxy-Background colour">""</string>
                 <string name="proxy-Foreground colour">""</string>
                 <string name="proxy-Font">""</string>
@@ -1576,7 +1576,7 @@
                 <string name="proxy-Tab icon">""</string>
                 <bool name="proxy-Create in situ">1</bool>
                 <string name="proxy-Help text">""</string>
-                <string name="proxy-Tooltip text">"Pad to pad, pad to track, and track to track clearance problems"</string>
+                <string name="proxy-Tooltip text">"A list of unconnected pads, right click for popup menu"</string>
                 <string name="proxy-Background colour">""</string>
                 <string name="proxy-Foreground colour">""</string>
                 <string name="proxy-Font">""</string>

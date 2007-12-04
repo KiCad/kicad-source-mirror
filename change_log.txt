@@ -13,9 +13,11 @@ email address.
     for some reason after repositioning the cursor.  That is not intended, but 
     after several attempts to work around it, I realized it is not so bad to 
     have this happen.
+  * Added right click popup menus to the list boxes.  User must first select
+    the item he wants to go to, as the right click does not change the selection.
   * Added WinEDA_BasePcbFrame::CursorGoto( const wxPoint& ) by factoring it
     out of pcbnew/find.cpp
-    Almost done now, its ready for folks to start using it and testing it.
+    Done now, its ready for folks to start using it and testing it.
 
     
 2007-Dec-02 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
