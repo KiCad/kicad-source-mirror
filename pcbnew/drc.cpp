@@ -44,15 +44,9 @@
 #include "dialog_drc.cpp"
 
 
-#define EC_INC   // ++m_errorCount   don't need this anymore, vector counts
-
-
 /******************************************************/
 void WinEDA_PcbFrame::Install_Test_DRC_Frame( wxDC* DC )
 /******************************************************/
-
-/* install a dialog box to handle the general DRC control
- */
 {
     m_drc->ShowDialog();
 }
@@ -63,24 +57,41 @@ void DRC::ShowDialog()
     if( !m_ui )
     {
         m_ui = new DrcDialog( this, m_mainWindow );
+        updatePointers();
+        
+        // copy data retained in this DRC object into the m_ui DrcPanel:
+        
+        PutValueInLocalUnits( *m_ui->m_SetClearance, g_DesignSettings.m_TrackClearence,
+                             m_mainWindow->m_InternalUnits );;
+
+        m_ui->m_Pad2PadTestCtrl->SetValue( m_doPad2PadTest );
+        m_ui->m_ZonesTestCtrl->SetValue( m_doZonesTest );
+        m_ui->m_UnconnectedTestCtrl->SetValue( m_doUnconnectedTest );
+        
+        m_ui->m_CreateRptCtrl->SetValue( m_doCreateRptFile );
+        m_ui->m_RptFilenameCtrl->SetValue( m_rptFilename );
     }
-
-    updatePointers();
-
-    
-    
-    // @todo enter retentitive member data into the DrcDialog here
-
+    else
+        updatePointers();
+        
     m_ui->Show(true);
-
-   // @todo capture the UI entered data into this DRC object. BUT in the OK handler
 }
 
 
-void DRC::DestroyDialog()
+void DRC::DestroyDialog( int aReason )
 {
     if( m_ui )
     {
+        if( aReason == wxID_OK )
+        {
+            // if user clicked OK, save his choices in this DRC object. 
+            m_doCreateRptFile   = m_ui->m_CreateRptCtrl->GetValue();
+            m_doPad2PadTest     = m_ui->m_Pad2PadTestCtrl->GetValue();
+            m_doZonesTest       = m_ui->m_ZonesTestCtrl->GetValue();
+            m_doUnconnectedTest = m_ui->m_UnconnectedTestCtrl->GetValue();
+            m_rptFilename       = m_ui->m_RptFilenameCtrl->GetValue();
+        }
+        
         m_ui->Destroy();
         m_ui = 0;
     }
@@ -103,7 +114,6 @@ DRC::DRC( WinEDA_PcbFrame* aPcbWindow )
 
     // m_rptFilename set to empty by its constructor
 
-    //m_errorCount = 0;
     m_currentMarker = 0;
     
     m_spotcx = 0;
@@ -119,10 +129,15 @@ DRC::DRC( WinEDA_PcbFrame* aPcbWindow )
     m_xcliphi = 0;
     m_ycliphi = 0;
 
-    m_unconnectedCount = 0;        
     m_drawPanel = 0;
 }
 
+DRC::~DRC()
+{
+    // maybe someday look at pointainer.h  <- google for "pointainer.h" 
+    for( unsigned i=0; i<m_unconnected.size();  ++i )
+        delete m_unconnected[i];
+}
 
 /***********************************************************************/
 int DRC::Drc( TRACK* aRefSegm, TRACK* aList )
@@ -142,36 +157,9 @@ int DRC::Drc( TRACK* aRefSegm, TRACK* aList )
 }
 
 
-void DRC::WriteReport( FILE* fp )
-{
-    fprintf( fp, "** Drc report for %s **\n",
-            CONV_TO_UTF8( m_mainWindow->GetScreen()->m_FileName ) );
-    
-    char line[256];
-    fprintf( fp, "** Created on %s **\n", DateAndTime( line ) );
-
-    
-    fprintf( fp, "** Found %d DRC errors **\n", m_pcb->GetMARKERCount()  );
-
-    for( int i=0; i<m_pcb->GetMARKERCount();  ++i )
-        fprintf( fp, m_pcb->GetMARKER(i)->GetReporter().ShowReport().mb_str() );
-
-    // @todo: the unconnected report comes here:
-
-    /*
-    for( int i=0; i<m_pcb->GetOPENNETCount();  ++i )
-        fprintf( fp, m_pcb->GetOPENNET(i)->GetReporter().ShowReport().mb_str() );
-    */
-    
-    fprintf( fp, "** End of Report **\n" );
-}
-
-
 void DRC::RunTests()
 {
-    // erase the MARKERs here.
-    m_pcb->DeleteMARKERs();
-    
+    // someone should have cleared the two lists before calling this.
     
     // test pad to pad clearances, nothing to do with tracks, vias or zones.
     if( m_doPad2PadTest )
@@ -188,7 +176,7 @@ void DRC::RunTests()
     if( m_doUnconnectedTest )
         testUnconnected();
     
-    // update the listboxes
+    // update the m_ui listboxes
     updatePointers();
 }
 
@@ -198,10 +186,10 @@ void DRC::RunTests()
 void DRC::ListUnconnectedPads()
 /***************************************************************/
 {
-    // erase the MARKERs here.
-    m_pcb->DeleteMARKERs();
-    
     testUnconnected();
+    
+    // update the m_ui listboxes
+    updatePointers();
 }
 
 
@@ -212,9 +200,10 @@ void DRC::updatePointers()
     m_pcb = m_mainWindow->m_Pcb;
     
     m_ui->m_ClearanceListBox->SetList( new DRC_LIST_MARKERS( m_pcb ) );
+
+    m_ui->m_UnconnectedListBox->SetList( new DRC_LIST_UNCONNECTED( &m_unconnected ) );
 }
     
-
 
 void DRC::testTracks()
 {
@@ -273,22 +262,20 @@ void DRC::testUnconnected()
     if( m_pcb->m_Ratsnest == NULL )
         return;
 
-    m_unconnectedCount = 0;
-    
     CHEVELU* rat = m_pcb->m_Ratsnest;
     for( int i=0;  i<m_pcb->GetNumRatsnests();  ++i, ++rat )
     {
         if( (rat->status & CH_ACTIF) == 0 )
             continue;
 
-        m_unconnectedCount++;
-
         D_PAD*  padStart = rat->pad_start;
         D_PAD*  padEnd   = rat->pad_end;
 
-        MARKER* marker = fillMarker( padStart, padEnd, DRCE_UNCONNECTED_PADS, NULL );
+        DRC_ITEM* uncItem = new DRC_ITEM( DRCE_UNCONNECTED_PADS, padStart->GetPosition(), 
+                             padStart->MenuText(m_pcb), padEnd->MenuText(m_pcb),
+                             padStart->GetPosition(),   padEnd->GetPosition() );
         
-        m_pcb->Add( marker );
+        m_unconnected.push_back( uncItem );
     }
 }
 
@@ -466,7 +453,6 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart )
             if( !checkClearanceSegmToPad( &pseudo_pad, w_dist,
                                         g_DesignSettings.m_TrackClearence ) )
             {
-                EC_INC;
                 m_currentMarker = fillMarker( aRefSeg, pad, 
                                     DRCE_TRACK_NEAR_THROUGH_HOLE, m_currentMarker );
                 return false;
@@ -487,7 +473,6 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart )
         m_spotcy   = shape_pos.y - org_Y;
         if( !checkClearanceSegmToPad( pad, w_dist, g_DesignSettings.m_TrackClearence ) )
         {
-            EC_INC;
             m_currentMarker = fillMarker( aRefSeg, pad, 
                                 DRCE_TRACK_NEAR_PAD, m_currentMarker );
             return false;
@@ -543,7 +528,6 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart )
                 // Test distance between two vias                
                 if( (int) hypot( x0, y0 ) < w_dist )
                 {
-                    EC_INC;
                     m_currentMarker = fillMarker( aRefSeg, track, 
                                         DRCE_VIA_NEAR_VIA, m_currentMarker );
                     return false;
@@ -560,7 +544,6 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart )
 
                 if( !checkMarginToCircle( x0, y0, w_dist, dx ) )
                 {
-                    EC_INC;
                     m_currentMarker = fillMarker( aRefSeg, track, 
                                         DRCE_VIA_NEAR_TRACK, m_currentMarker );
                     return false;
@@ -587,7 +570,6 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart )
             if( checkMarginToCircle( x0, y0, w_dist, m_segmLength ) )
                 continue;
             
-            EC_INC;
             m_currentMarker = fillMarker( aRefSeg, track, 
                                 DRCE_TRACK_NEAR_VIA, m_currentMarker );
             return false;
@@ -611,14 +593,12 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart )
                 /* Fine test : we consider the rounded shape of the ends */
                 if( x0 >= 0 && x0 <= m_segmLength )
                 {
-                    EC_INC;
                     m_currentMarker = fillMarker( aRefSeg, track, 
                                         DRCE_TRACK_ENDS1, m_currentMarker );
                     return false;
                 }
                 if( !checkMarginToCircle( x0, y0, w_dist, m_segmLength ) )
                 {
-                    EC_INC;
                     m_currentMarker = fillMarker( aRefSeg, track, 
                                         DRCE_TRACK_ENDS2, m_currentMarker );
                     return false;
@@ -629,14 +609,12 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart )
                 /* Fine test : we consider the rounded shape of the ends */
                 if( xf >= 0 && xf <= m_segmLength )
                 {
-                    EC_INC;
                     m_currentMarker = fillMarker( aRefSeg, track, 
                                         DRCE_TRACK_ENDS3, m_currentMarker );
                     return false;
                 }
                 if( !checkMarginToCircle( xf, yf, w_dist, m_segmLength ) )
                 {
-                    EC_INC;
                     m_currentMarker = fillMarker( aRefSeg, track, 
                                         DRCE_TRACK_ENDS4, m_currentMarker );
                     return false;
@@ -645,7 +623,6 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart )
 
             if( x0 <=0 && xf >= 0 )
             {
-                EC_INC;
                 m_currentMarker = fillMarker( aRefSeg, track, 
                                     DRCE_TRACK_UNKNOWN1, m_currentMarker );
                 return false;
@@ -661,7 +638,6 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart )
                 EXCHG( y0, yf );
             if( (y0 < 0) && (yf > 0) )
             {
-                EC_INC;
                 m_currentMarker = fillMarker( aRefSeg, track, 
                                     DRCE_TRACKS_CROSSING, m_currentMarker );
                 return false;
@@ -670,14 +646,12 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart )
             // At this point the drc error is due to an end near a reference segm end
             if( !checkMarginToCircle( x0, y0, w_dist, m_segmLength ) )
             {
-                EC_INC;
                 m_currentMarker = fillMarker( aRefSeg, track, 
                                     DRCE_ENDS_PROBLEM1, m_currentMarker );
                 return false;
             }
             if( !checkMarginToCircle( xf, yf, w_dist, m_segmLength ) )
             {
-                EC_INC;
                 m_currentMarker = fillMarker( aRefSeg, track, 
                                     DRCE_ENDS_PROBLEM2, m_currentMarker );
                 return false;
@@ -706,7 +680,6 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart )
                 
                 if( !checkLine( x0, y0, xf, yf ) )
                 {
-                    EC_INC;
                     m_currentMarker = fillMarker( aRefSeg, track, 
                                         DRCE_ENDS_PROBLEM3, m_currentMarker );
                     return false;
@@ -742,14 +715,12 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart )
                     RotatePoint( &rxf, &ryf, angle );
                     if( !checkMarginToCircle( rx0, ry0, w_dist, dx ) )
                     {
-                        EC_INC;
                         m_currentMarker = fillMarker( aRefSeg, track, 
                                             DRCE_ENDS_PROBLEM4, m_currentMarker );
                         return false;
                     }
                     if( !checkMarginToCircle( rxf, ryf, w_dist, dx ) )
                     {
-                        EC_INC;
                         m_currentMarker = fillMarker( aRefSeg, track, 
                                             DRCE_ENDS_PROBLEM5, m_currentMarker );
                         return false;
@@ -801,7 +772,6 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd,
         if( !checkClearancePadToPad( aRefPad, pad, g_DesignSettings.m_TrackClearence ) )
         {
             // here we have a drc error!
-            EC_INC;
             m_currentMarker = fillMarker( aRefPad, pad, 
                                 DRCE_PAD_NEAR_PAD1, m_currentMarker );
             return false;
@@ -832,16 +802,16 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, const int dist_mi
 
     bool diag = true;
 
-    
     /* tst rapide: si les cercles exinscrits sont distants de dist_min au moins,
      *  il n'y a pas de risque: */
     if( (dist - aRefPad->m_Rayon - aPad->m_Rayon) >= dist_min )
-        return OK_DRC;
+        goto exit;
 
     /* Ici les pads sont proches et les cercles exinxcrits sont trop proches
      *  Selon les formes relatives il peut y avoir ou non erreur */
 
-    bool swap_pads = false;
+    bool swap_pads;
+    swap_pads = false;
     if( (aRefPad->m_PadShape != CIRCLE) && (aPad->m_PadShape == CIRCLE) )
         swap_pads = true;
     else if( (aRefPad->m_PadShape != OVALE) && (aPad->m_PadShape == OVALE) )
@@ -939,6 +909,8 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, const int dist_mi
         break;
     }
 
+exit:       // the only way out (hopefully) for simpler debugging
+    
     return diag;
 }
 

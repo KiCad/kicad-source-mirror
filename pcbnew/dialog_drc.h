@@ -85,6 +85,16 @@ class DrcDialog: public wxDialog
     DECLARE_DYNAMIC_CLASS( DrcDialog )
     DECLARE_EVENT_TABLE()
 
+    /**
+     * Function writeReport
+     * outputs the MARKER items and unconnecte DRC_ITEMs with commentary to an 
+     * open text file.
+     * @param fpOut The text file to write the report to.
+     */
+    void writeReport( FILE* fpOut );
+    
+    
+    
 public:
     /// Constructors
     DrcDialog( );

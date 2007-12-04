@@ -98,6 +98,81 @@ public:
 
 
 /**
+ * Class DRC_LIST_UNCONNECTED
+ * is an implementation of the interface named DRC_ITEM_LIST which uses
+ * a vector of pointers to DRC_ITEMs to fulfill the interface.  No ownership is taken of the 
+ * vector, which will reside in class DRC
+ */
+class DRC_LIST_UNCONNECTED : public DRC_ITEM_LIST
+{
+    DRC_LIST*         m_vector;
+
+public:
+
+    DRC_LIST_UNCONNECTED( DRC_LIST* aList ) :
+        m_vector(aList)
+    {
+    }
+
+    /* no destructor since we do not own anything to delete, not even the BOARD.
+    ~DRC_LIST_UNCONNECTED() {}
+    */
+
+    
+    //-----<Interface DRC_ITEM_LIST>---------------------------------------
+    
+    void            DeleteAllItems()
+    {
+        if( m_vector )
+        {
+            for( unsigned i=0; i<m_vector->size();  ++i )
+                delete (*m_vector)[i];
+            
+            m_vector->clear();
+        }
+    }
+
+    
+    const DRC_ITEM* GetItem( int aIndex )
+    {
+        if( m_vector &&  (unsigned)aIndex < m_vector->size() )
+        {
+            const DRC_ITEM* item = (*m_vector)[aIndex];
+            return item;
+        }
+        return NULL;
+    }
+
+    void DeleteItem( int aIndex )
+    {
+        if( m_vector &&  (unsigned)aIndex < m_vector->size() )
+        {
+            delete (*m_vector)[aIndex];
+            m_vector->erase( m_vector->begin()+aIndex );
+        }
+    }
+
+    
+    /**
+     * Function GetCount
+     * returns the number of items in the list.
+     */
+    int  GetCount()
+    {
+        if( m_vector )
+        {
+            return m_vector->size();
+        }
+        return 0;
+    }
+    
+    //-----</Interface DRC_ITEM_LIST>--------------------------------------
+
+};
+
+
+
+/**
  * Class DRCLISTBOX
  * is used to display a DRC_ITEM_LIST.
  */ 
@@ -192,15 +267,16 @@ public:
     {
         if( m_list )
         {
+            int selection = GetSelection(); 
+
             m_list->DeleteItem( aIndex );
             int count = m_list->GetCount();
             SetItemCount( count );
-            
-            if( aIndex < count )
-                SetSelection( aIndex );
-            else
-                SetSelection( aIndex-1 );    // -1 is no selection
-            Refresh();    
+
+            // if old selection >= new count            
+            if( selection >= count )
+                SetSelection( count-1 );    // -1 is "no selection"
+            Refresh();
         }
     }
 
@@ -283,9 +359,6 @@ DrcDialog::DrcDialog( DRC* aTester, WinEDA_PcbFrame* parent,
     m_Parent = parent;
 
     Create(parent, id, caption, pos, size, style);
-
-    PutValueInLocalUnits( *m_SetClearance, g_DesignSettings.m_TrackClearence,
-                          m_Parent->m_InternalUnits );
 }
 
 /*!
@@ -556,7 +629,7 @@ void DrcDialog::OnStartdrcClick( wxCommandEvent& event )
 
     SetCursor( wxCursor( wxCURSOR_WAIT ) );
     
-    wxYield();  // process the cursor change event and the redraw.
+    wxYield();  // attempt to process the cursor change
     
     // run all the tests, with no UI at this time.
     m_tester->RunTests();
@@ -566,12 +639,19 @@ void DrcDialog::OnStartdrcClick( wxCommandEvent& event )
     {
         FILE* fp = wxFopen( reportName, wxT( "w" ) );
         
-        m_tester->WriteReport( fp );
+        writeReport( fp );
 
         fclose(fp);
 
-        // @todo put up message box saying we created the report        
-        //msg.Printf( _( "Report file <%s> created\n" ), s_RptFilename.GetData() );
+        wxString msg;
+        
+        msg.Printf( _( "Report file \"%s\" created" ), reportName.GetData() );
+        
+        wxString caption( _("Disk File Report Completed") );
+        
+        wxMessageDialog popupWindow( this, msg, caption );
+        
+        popupWindow.ShowModal();
     }
     
     SetCursor( wxCursor( wxCURSOR_ARROW ) );
@@ -624,9 +704,8 @@ void DrcDialog::OnListUnconnectedClick( wxCommandEvent& event )
 
     SetCursor( wxCursor( wxCURSOR_WAIT ) );
 
-    wxYield();
+    wxYield();  // attempt to process the cursor change
     
-    // run all the tests, with no UI at this time.
     m_tester->ListUnconnectedPads();
 
     // Generate the report 
@@ -634,19 +713,26 @@ void DrcDialog::OnListUnconnectedClick( wxCommandEvent& event )
     {
         FILE* fp = wxFopen( reportName, wxT( "w" ) );
         
-        m_tester->WriteReport( fp );
+        writeReport( fp );
 
         fclose(fp);
 
-        // @todo put up message box saying we created the report        
-        //msg.Printf( _( "Report file <%s> created\n" ), s_RptFilename.GetData() );
+        wxString msg;
+        
+        msg.Printf( _( "Report file \"%s\" created" ), reportName.GetData() );
+        
+        wxString caption( _("Disk File Report Completed") );
+        
+        wxMessageDialog popupWindow( this, msg, caption );
+        
+        popupWindow.ShowModal();
     }
     
     SetCursor( wxCursor( wxCURSOR_ARROW ) );
-    
-    // @todo set the list counts in the DRCLISTITEMS here.
-    
+
+    /* there is currently nothing visible on the DrawPanel for unconnected pads    
     RedrawDrawPanel();
+    */
 }
 
 /*!
@@ -690,8 +776,7 @@ void DrcDialog::OnOkClick( wxCommandEvent& event )
 #endif
 
     SetReturnCode( wxID_OK );
-    m_tester->DestroyDialog();
-//    event.Skip();
+    m_tester->DestroyDialog( wxID_OK );
 }
 
 
@@ -706,8 +791,7 @@ void DrcDialog::OnCancelClick( wxCommandEvent& event )
 #endif
 
     SetReturnCode( wxID_CANCEL );
-    m_tester->DestroyDialog();
-//    event.Skip();
+    m_tester->DestroyDialog( wxID_CANCEL );
 }
 
 
@@ -759,6 +843,10 @@ void DrcDialog::OnInitDialog( wxInitDialogEvent& event )
 
 void DrcDialog::OnLeftDClickClearance( wxMouseEvent& event )
 {
+    event.Skip();
+
+    // I am assuming that the double click actually changed the selected item.
+    // please verify this.    
     int selection = m_ClearanceListBox->GetSelection();
 
     if( selection != wxNOT_FOUND )
@@ -768,19 +856,21 @@ void DrcDialog::OnLeftDClickClearance( wxMouseEvent& event )
         const DRC_ITEM* item = m_ClearanceListBox->GetItem( selection );
         if( item )
         {
-            // after the goto, process a button OK command later. 
+            // after the goto, process a button OK command later.
+            /*
             wxCommandEvent  cmd( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ); 
             ::wxPostEvent( GetEventHandler(), cmd );
+            */
             
             m_Parent->CursorGoto( item->GetPosition() );
+            
+            // turn control over to m_Parent, hide this DrcDialog window, 
+            // no destruction so we can preserve listbox cursor
+            Hide();    
+            
+            event.StopPropagation();    // still get the popup window.
         }
     }
-
-    // On linux, the double click is being propagated to the parent.  The
-    // call to StopPropagation was an attempt to prevent this.
-    
-    event.StopPropagation();    // we handled the double click event here.
-                                // well that didn't work, we still get a popup menu
 }
 
 
@@ -812,28 +902,28 @@ void DrcDialog::OnRightUpClearance( wxMouseEvent& event )
 
 void DrcDialog::OnLeftDClickUnconnected( wxMouseEvent& event )
 {
+    event.Skip();
+
+    // I am assuming that the double click actually changed the selected item.
+    // please verify this.    
     int selection = m_UnconnectedListBox->GetSelection();
 
     if( selection != wxNOT_FOUND )
     {
-        // Find the selected DRC_ITEM in the DRC, position cursor there.
-        // Then close the dialog.
+        // Find the selected DRC_ITEM in the listbox, position cursor there, 
+        // at the first of the two pads.
+        // Then hide the dialog.
         const DRC_ITEM* item = m_UnconnectedListBox->GetItem( selection );
         if( item )
         {
-            // after the goto, process a button OK command later. 
-            wxCommandEvent  cmd( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ); 
-            ::wxPostEvent( GetEventHandler(), cmd );
-            
             m_Parent->CursorGoto( item->GetPosition() );
+            
+            Hide();
+            
+            // intermittently, still get the popup window, even with this.
+            event.StopPropagation();    
         }
     }
-
-    // On linux, the double click is being propagated to the parent.  The
-    // call to StopPropagation was an attempt to prevent this.
-    
-    event.StopPropagation();    // we handled the double click event here.
-                                // well that didn't work, we still get a popup menu
 }
 
 
@@ -879,6 +969,33 @@ void DrcDialog::DelDRCMarkers()
 }
 
 
+void DrcDialog::writeReport( FILE* fp )
+{
+    int count;
+
+    fprintf( fp, "** Drc report for %s **\n",
+            CONV_TO_UTF8( m_Parent->GetScreen()->m_FileName ) );
+    
+    char line[256];
+    fprintf( fp, "** Created on %s **\n", DateAndTime( line ) );    //@todo make DateAndTime use localtime, not gmtime 
+
+    count = m_ClearanceListBox->GetItemCount();
+
+    fprintf( fp, "\n** Found %d DRC errors **\n", count );
+    
+    for( int i=0;  i<count;  ++i )
+        fprintf( fp, m_ClearanceListBox->GetItem(i)->ShowReport().mb_str() );
+
+    count = m_UnconnectedListBox->GetItemCount();
+
+    fprintf( fp, "\n** Found %d unconnected pads **\n", count );
+    
+    for( int i=0;  i<count;  ++i )
+        fprintf( fp, m_UnconnectedListBox->GetItem(i)->ShowReport().mb_str() );
+    
+    fprintf( fp, "\n** End of Report **\n" );
+}
+
 
 /*!
  * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_DELETE_ONE
@@ -895,6 +1012,8 @@ void DrcDialog::OnDeleteOneClick( wxCommandEvent& event )
         if( selectedIndex != wxNOT_FOUND )
         {
             m_ClearanceListBox->DeleteItem( selectedIndex );
+            
+            // redraw the pcb
             RedrawDrawPanel();
         }
     }
@@ -905,7 +1024,10 @@ void DrcDialog::OnDeleteOneClick( wxCommandEvent& event )
         if( selectedIndex != wxNOT_FOUND )
         {
             m_UnconnectedListBox->DeleteItem( selectedIndex );
+            
+            /* these unconnected DRC_ITEMs are not currently visible on the pcb 
             RedrawDrawPanel();
+            */
         }
     }
     

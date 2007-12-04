@@ -114,7 +114,9 @@ public:
     {
         wxString ret;
 
-        ret.Printf( _("<b>ErrType(%d): %s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>"),
+        // an html fragment for the entire message in the listbox.  feel free
+        // to add color if you want:
+        ret.Printf( _("ErrType(%d): <b>%s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>"),
             m_ErrorCode,
             GetErrorText().GetData(),
                 ShowCoord( m_APos ).GetData(), m_AText.GetData(),
@@ -249,6 +251,8 @@ public:
 };
 
 
+typedef std::vector<DRC_ITEM*>  DRC_LIST; 
+
 
 /**
  * Class DRC
@@ -292,14 +296,12 @@ private:
     int                 m_xcliphi;
     int                 m_ycliphi;        // coord de la surface de securite du segment a comparer
                         
-    int                 m_unconnectedCount;
-                        
     WinEDA_PcbFrame*    m_mainWindow;
     WinEDA_DrawPanel*   m_drawPanel;
     BOARD*              m_pcb;
     DrcDialog*          m_ui;
 
-    std::vector<DRC_ITEM>   m_unconnected;
+    DRC_LIST            m_unconnected;  ///< list of unconnected pads, as DRC_ITEMs
     
     
     /** 
@@ -425,6 +427,7 @@ private:
 public:
     DRC( WinEDA_PcbFrame* aPcbWindow );
 
+    ~DRC();
     
     /**
      * Function Drc
@@ -465,9 +468,10 @@ public:
     /**
      * Function DestroyDialog
      * deletes this ui dialog box and zeros out its pointer to remember
-     * the state of the dialog's existence. 
+     * the state of the dialog's existence.
+     * @param aReason Indication of which button was clicked to cause the destruction.
      */
-    void DestroyDialog();
+    void DestroyDialog( int aReason );
 
     
     /**
@@ -505,13 +509,6 @@ public:
      */
     void ListUnconnectedPads();
     
-    
-    /**
-     * Function WriteReport
-     * outputs the MARKER items with commentary to an open text file.
-     * @param fpOut The text file to write the report to.
-     */
-    void WriteReport( FILE* fpOut );
 };
 
 
