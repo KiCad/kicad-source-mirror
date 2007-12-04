@@ -138,6 +138,20 @@ public:
         Refresh();
     }
 
+
+    /**
+     * Function GetItem
+     * returns a requested DRC_ITEM* or NULL.
+     */
+    const DRC_ITEM* GetItem( int aIndex )
+    {
+        if( m_list )
+        {
+            return m_list->GetItem( aIndex );
+        }
+        return NULL;
+    }
+    
     
     /**
      * Function OnGetItem
@@ -677,7 +691,7 @@ void DrcDialog::OnOkClick( wxCommandEvent& event )
 
     SetReturnCode( wxID_OK );
     m_tester->DestroyDialog();
-    event.Skip();
+//    event.Skip();
 }
 
 
@@ -693,7 +707,7 @@ void DrcDialog::OnCancelClick( wxCommandEvent& event )
 
     SetReturnCode( wxID_CANCEL );
     m_tester->DestroyDialog();
-    event.Skip();
+//    event.Skip();
 }
 
 
@@ -713,7 +727,7 @@ void DrcDialog::OnReportCheckBoxClicked( wxCommandEvent& event )
         m_RptFilenameCtrl->Enable(false);
         m_BrowseButton->Enable(false);
     }
-    event.Skip();
+//    event.Skip();
 }
 
 
@@ -749,13 +763,24 @@ void DrcDialog::OnLeftDClickClearance( wxMouseEvent& event )
 
     if( selection != wxNOT_FOUND )
     {
-        //printf("get item number %d\n", selection );
-
         // Find the selected MARKER in the PCB, position cursor there.
-        // Do not close this dialog for users with dual screens.        
+        // Then close the dialog.
+        const DRC_ITEM* item = m_ClearanceListBox->GetItem( selection );
+        if( item )
+        {
+            // after the goto, process a button OK command later. 
+            wxCommandEvent  cmd( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ); 
+            ::wxPostEvent( GetEventHandler(), cmd );
+            
+            m_Parent->CursorGoto( item->GetPosition() );
+        }
     }
+
+    // On linux, the double click is being propagated to the parent.  The
+    // call to StopPropagation was an attempt to prevent this.
     
-    event.Skip();
+    event.StopPropagation();    // we handled the double click event here.
+                                // well that didn't work, we still get a popup menu
 }
 
 
@@ -765,6 +790,7 @@ void DrcDialog::OnLeftDClickClearance( wxMouseEvent& event )
 
 void DrcDialog::OnRightUpUnconnected( wxMouseEvent& event )
 {
+    // @todo: add popup menu support to go to either of the items listed in the DRC_ITEM.
     event.Skip();
 }
 
@@ -775,10 +801,8 @@ void DrcDialog::OnRightUpUnconnected( wxMouseEvent& event )
 
 void DrcDialog::OnRightUpClearance( wxMouseEvent& event )
 {
-////@begin wxEVT_RIGHT_UP event handler for ID_CLEARANCE_LIST in WinEDA_DrcFrame.
-    // Before editing this code, remove the block markers.
+    // @todo: add popup menu support to go to either of the items listed in the DRC_ITEM.
     event.Skip();
-////@end wxEVT_RIGHT_UP event handler for ID_CLEARANCE_LIST in WinEDA_DrcFrame. 
 }
 
 
@@ -792,10 +816,24 @@ void DrcDialog::OnLeftDClickUnconnected( wxMouseEvent& event )
 
     if( selection != wxNOT_FOUND )
     {
-        //printf("get item number %d\n", selection );
+        // Find the selected DRC_ITEM in the DRC, position cursor there.
+        // Then close the dialog.
+        const DRC_ITEM* item = m_UnconnectedListBox->GetItem( selection );
+        if( item )
+        {
+            // after the goto, process a button OK command later. 
+            wxCommandEvent  cmd( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ); 
+            ::wxPostEvent( GetEventHandler(), cmd );
+            
+            m_Parent->CursorGoto( item->GetPosition() );
+        }
     }
+
+    // On linux, the double click is being propagated to the parent.  The
+    // call to StopPropagation was an attempt to prevent this.
     
-    event.Skip();
+    event.StopPropagation();    // we handled the double click event here.
+                                // well that didn't work, we still get a popup menu
 }
 
 
@@ -807,7 +845,6 @@ void DrcDialog::OnMarkerSelectionEvent( wxCommandEvent& event )
     {
         // until a MARKER is selected, this button is not enabled.
         m_DeleteCurrentMarkerButton->Enable(true);
-        //printf("get Marker number %d\n", selection );
     }
     
     event.Skip();
@@ -819,7 +856,8 @@ void DrcDialog::OnUnconnectedSelectionEvent( wxCommandEvent& event )
     
     if( selection != wxNOT_FOUND )
     {
-        printf("get Unconnected item number %d\n", selection );
+        // until a MARKER is selected, this button is not enabled.
+        m_DeleteCurrentMarkerButton->Enable(true);
     }
     
     event.Skip();
@@ -857,7 +895,7 @@ void DrcDialog::OnDeleteOneClick( wxCommandEvent& event )
         if( selectedIndex != wxNOT_FOUND )
         {
             m_ClearanceListBox->DeleteItem( selectedIndex );
-            m_Parent->ReDrawPanel();
+            RedrawDrawPanel();
         }
     }
     
@@ -867,13 +905,10 @@ void DrcDialog::OnDeleteOneClick( wxCommandEvent& event )
         if( selectedIndex != wxNOT_FOUND )
         {
             m_UnconnectedListBox->DeleteItem( selectedIndex );
-            m_Parent->ReDrawPanel();
+            RedrawDrawPanel();
         }
     }
     
-////@begin wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_DELETE_ONE in DrcDialog.
-    // Before editing this code, remove the block markers.
-    event.Skip();
-////@end wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_DELETE_ONE in DrcDialog. 
+//    event.Skip();
 }
 

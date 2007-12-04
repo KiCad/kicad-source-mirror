@@ -299,6 +299,9 @@ private:
     BOARD*              m_pcb;
     DrcDialog*          m_ui;
 
+    std::vector<DRC_ITEM>   m_unconnected;
+    
+    
     /** 
      * Function updatePointers
      * is a private helper function used to update needed pointers from the

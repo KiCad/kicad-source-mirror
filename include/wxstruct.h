@@ -440,6 +440,16 @@ public:
      */
     GENERAL_COLLECTORS_GUIDE    GetCollectorsGuide();
 
+    
+    /**
+     * Function CursorGoto
+     * positions the cursor at a given coordinate and reframes the drawing if the
+     * requested point is out of view.
+     * @param aPos The point to go to.
+     */
+    void            CursorGoto(  const wxPoint& aPos );
+    
+    
     /* Place un repere sur l'ecran au point de coordonnees PCB pos */
     void                        place_marqueur( wxDC* DC, const wxPoint& pos, char* pt_bitmap,
                                                 int DrawMode, int color, int type );

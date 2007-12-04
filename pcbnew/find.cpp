@@ -115,25 +115,11 @@ void WinEDA_PcbFindFrame::FindItem( wxCommandEvent& event )
         if( FindMarker )
             msg = _( "Marker found" );
         else
-            msg.Printf( _( "<%s> Found" ), s_OldStringFound.GetData() );
-        
-        m_Parent->Affiche_Message( msg );
+            msg.Printf( _( "<%s> Found" ), s_OldStringFound.GetData() );        
 
-        /* Il y a peut-etre necessite de recadrer le dessin: */
-        if( !m_Parent->DrawPanel->IsPointOnDisplay( locate_pos ) )
-        {
-            screen->m_Curseur = locate_pos;
-            m_Parent->Recadre_Trace( TRUE );
-        }
-        else
-        {
-            // Positionnement du curseur sur l'item
-            m_Parent->DrawPanel->CursorOff( m_DC );
-            screen->m_Curseur = locate_pos;
-            GRMouseWarp( m_Parent->DrawPanel, screen->m_Curseur );
-            m_Parent->DrawPanel->MouseToCursorSchema();
-            m_Parent->DrawPanel->CursorOn( m_DC );
-        }
+        m_Parent->Affiche_Message( msg );
+        
+        m_Parent->CursorGoto( locate_pos );
         
         EndModal( 1 );
     }

@@ -96,6 +96,32 @@ int WinEDA_BasePcbFrame::BestZoom( void )
 }
 
 
+void WinEDA_BasePcbFrame::CursorGoto(  const wxPoint& aPos )
+{
+    // factored out of pcbnew/find.cpp
+
+    PCB_SCREEN* screen = GetScreen();
+    
+    wxClientDC dc( DrawPanel );
+    
+    /* Il y a peut-etre necessite de recadrer le dessin: */
+    if( !DrawPanel->IsPointOnDisplay( aPos ) )
+    {
+        screen->m_Curseur = aPos;
+        Recadre_Trace( TRUE );
+    }
+    else
+    {
+        // Positionnement du curseur sur l'item
+        DrawPanel->CursorOff( &dc );
+        screen->m_Curseur = aPos;
+        GRMouseWarp( DrawPanel, screen->m_Curseur );
+        DrawPanel->MouseToCursorSchema();
+        DrawPanel->CursorOn( &dc );
+    }
+}
+
+
 /*************************************************/
 void WinEDA_BasePcbFrame::ReCreateMenuBar( void )
 /*************************************************/
