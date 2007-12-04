@@ -8,15 +8,16 @@ email address.
 ================================================================================
 +pcbnew
   * drc.cpp and dialog_drc.cpp intermediate update.
-    Added double click support on a MARKER in the listbox.  On Linux, it pops up the
-    menu from PcbGeneralLocateAndDisplay() for some reason after repositioning the
-    cursor.  That is not intended, but after several attempts to work around 
-    it, I realized it is not so bad to have this happen.
-    A few more hours to go for the unconnected tab.
+    Added double click support on a MARKER or unconnected DRC_ITEM in the listbox.
+    On Linux, it sometimes pops up the menu from PcbGeneralLocateAndDisplay()
+    for some reason after repositioning the cursor.  That is not intended, but 
+    after several attempts to work around it, I realized it is not so bad to 
+    have this happen.
   * Added WinEDA_BasePcbFrame::CursorGoto( const wxPoint& ) by factoring it
     out of pcbnew/find.cpp
+    Almost done now, its ready for folks to start using it and testing it.
 
-
+    
 2007-Dec-02 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +eeschema:
