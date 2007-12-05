@@ -884,8 +884,6 @@ void DrcDialog::OnPopupMenu( wxCommandEvent& event )
 {
     int source = event.GetId();
     
-    printf( "source=%d\n", source );
-
     const DRC_ITEM* item = 0;
     wxPoint         pos;
     

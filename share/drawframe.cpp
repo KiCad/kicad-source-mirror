@@ -584,6 +584,9 @@ void WinEDA_DrawFrame::OnZoom( int zoom_type )
  *  replacé au centre de l'ecran
  */
 {
+    D(printf("OnZoom x=%d, y=%d\n", 
+         m_CurrentScreen->m_Curseur.x, m_CurrentScreen->m_Curseur.y );)
+    
     if( DrawPanel == NULL )
         return;
 
@@ -604,7 +607,9 @@ void WinEDA_DrawFrame::OnZoom( int zoom_type )
     case ID_ZOOM_PLUS_BUTT:
         if( zoom_type == ID_ZOOM_PLUS_BUTT )
             m_CurrentScreen->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
+
         m_CurrentScreen->SetPreviousZoom();
+        
         Recadre_Trace( move_mouse_cursor );
         break;
 

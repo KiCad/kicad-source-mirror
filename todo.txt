@@ -70,3 +70,11 @@ asked by: Dick Hollenbeck
 asked by: jp Charras
 ================================================================================
 Use the collector classes in eeschema.
+
+
+2007-Dec-5 Assigned To: charras
+asked by: Dick
+================================================================================
+http://sourceforge.net/tracker/index.php?func=detail&aid=1844960&group_id=145591&atid=762476
+Notice my appended note to this bug report as well.
+

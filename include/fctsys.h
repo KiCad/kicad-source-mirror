@@ -66,6 +66,13 @@
 #define STRING_DIR_SEP wxT( "/" )
 #endif
 
+#ifdef DEBUG
+#define D(x)        x
+#else
+#define D(x)        // nothing
+#endif
+
+
 #define UNIX_STRING_DIR_SEP wxT( "/" )
 #define WIN_STRING_DIR_SEP  wxT( "\\" )
 

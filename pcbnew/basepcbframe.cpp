@@ -119,6 +119,9 @@ void WinEDA_BasePcbFrame::CursorGoto(  const wxPoint& aPos )
         DrawPanel->MouseToCursorSchema();
         DrawPanel->CursorOn( &dc );
     }
+    
+    D(printf("CursorGoto end x=%d, y=%d\n", 
+         m_CurrentScreen->m_Curseur.x, m_CurrentScreen->m_Curseur.y );)
 }
 
 
