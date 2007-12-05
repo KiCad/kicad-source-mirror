@@ -632,9 +632,7 @@ void DrcDialog::OnStartdrcClick( wxCommandEvent& event )
 
     DelDRCMarkers();
 
-    SetCursor( wxCursor( wxCURSOR_WAIT ) );
-    
-    wxYield();  // attempt to process the cursor change
+    wxBeginBusyCursor();
     
     // run all the tests, with no UI at this time.
     m_tester->RunTests();
@@ -662,7 +660,7 @@ void DrcDialog::OnStartdrcClick( wxCommandEvent& event )
         popupWindow.ShowModal();
     }
     
-    SetCursor( wxCursor( wxCURSOR_ARROW ) );
+    wxEndBusyCursor();
     
     RedrawDrawPanel();
 }
@@ -710,9 +708,7 @@ void DrcDialog::OnListUnconnectedClick( wxCommandEvent& event )
 
     DelDRCMarkers();    
 
-    SetCursor( wxCursor( wxCURSOR_WAIT ) );
-
-    wxYield();  // attempt to process the cursor change
+    wxBeginBusyCursor();
     
     m_tester->ListUnconnectedPads();
 
@@ -738,7 +734,7 @@ void DrcDialog::OnListUnconnectedClick( wxCommandEvent& event )
         popupWindow.ShowModal();
     }
     
-    SetCursor( wxCursor( wxCURSOR_ARROW ) );
+    wxEndBusyCursor();
 
     /* there is currently nothing visible on the DrawPanel for unconnected pads    
     RedrawDrawPanel();
