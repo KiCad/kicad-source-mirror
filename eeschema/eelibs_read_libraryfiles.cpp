@@ -25,6 +25,11 @@ static int                  AddFootprintFilterList( EDA_LibComponentStruct* LibE
                                                     FILE* f, char* Line, int* LineNum );
 
 
+
+static wxString currentLibraryName;     // If this code was written in C++ then this would not be needed.
+
+
+
 /*************************************************************************************/
 LibraryStruct* LoadLibraryName( WinEDA_DrawFrame* frame,
                                 const wxString& FullLibName, const wxString& LibName )
@@ -61,6 +66,8 @@ LibraryStruct* LoadLibraryName( WinEDA_DrawFrame* frame,
         return NULL;
     }
 
+    currentLibraryName = FullLibName;    
+    
     NewLib = new LibraryStruct( LIBRARY_TYPE_EESCHEMA, LibName, FullLibName );
 
     Entries = LoadLibraryAux( frame, NewLib, f, &NumOfParts );
@@ -473,7 +480,8 @@ EDA_LibComponentStruct* Read_Component_Definition( WinEDA_DrawFrame* frame, char
         /* End line or block analysis: test for an error */
         if( !Res )
         {           /* Something went wrong there. */
-            Msg.Printf( wxT( " Error Line %d, Library not loaded" ), *LineNum );
+            Msg.Printf( wxT( " Error at line %d of library \n\"%s\",\nlibrary not loaded" ), 
+                       *LineNum, currentLibraryName.GetData() );
             DisplayError( frame, Msg );
             delete LibEntry;
             return NULL;

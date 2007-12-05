@@ -637,7 +637,11 @@ void DrcDialog::OnStartdrcClick( wxCommandEvent& event )
     // run all the tests, with no UI at this time.
     m_tester->RunTests();
 
-    m_Notebook->ChangeSelection(0);     // display the 1at tab "... Markers ..."
+#if wxCHECK_VERSION( 2, 8, 0 )
+    m_Notebook->ChangeSelection(0);     // display the 1at tab "...Markers ..."
+#else
+    m_Notebook->SetSelection(0);        // display the 1at tab "... Markers..."
+#endif
     
     
     // Generate the report 
@@ -712,7 +716,11 @@ void DrcDialog::OnListUnconnectedClick( wxCommandEvent& event )
     
     m_tester->ListUnconnectedPads();
 
+#if wxCHECK_VERSION( 2, 8, 0 )
     m_Notebook->ChangeSelection(1);     // display the 2nd tab "Unconnected..."
+#else
+    m_Notebook->SetSelection(1);        // display the 2nd tab "Unconnected..."
+#endif
     
     // Generate the report 
     if( !reportName.IsEmpty() )

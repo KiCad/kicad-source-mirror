@@ -112,8 +112,7 @@ wxPoint BASE_SCREEN::CursorRealPosition( const wxPoint& ScreenPos )
 {
     wxPoint curpos;
 
-    D(printf("curpos=%d,%d GetZoom=%d, mDrawOrg=%d,%d\n",
-      curpos.x, curpos.y, GetZoom(), m_DrawOrg.x, m_DrawOrg.y );)
+//    D(printf("curpos=%d,%d GetZoom=%d, mDrawOrg=%d,%d\n", curpos.x, curpos.y, GetZoom(), m_DrawOrg.x, m_DrawOrg.y );)
     
     curpos.x = ScreenPos.x * GetZoom();
     curpos.y = ScreenPos.y * GetZoom();

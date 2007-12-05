@@ -52,16 +52,10 @@ void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
 
     ReDrawPanel();
     
-    D(printf("~ReDrawPanel x=%d, y=%d\n", 
-         m_CurrentScreen->m_Curseur.x, m_CurrentScreen->m_Curseur.y );)
-
     /* Move the mouse cursor to the on grid graphic cursor position */
     if( ToMouse == TRUE )
     {
         DrawPanel->MouseToCursorSchema();
-        
-        D(printf("~MouseToCursorSchema x=%d, y=%d\n", 
-             m_CurrentScreen->m_Curseur.x, m_CurrentScreen->m_Curseur.y );)
     }
 }
 
