@@ -1065,9 +1065,10 @@ void DrcDialog::writeReport( FILE* fp )
 
     fprintf( fp, "** Drc report for %s **\n",
             CONV_TO_UTF8( m_Parent->GetScreen()->m_FileName ) );
+
+    wxDateTime now = wxDateTime::Now();
     
-    char line[256];
-    fprintf( fp, "** Created on %s **\n", DateAndTime( line ) );    //@todo make DateAndTime use localtime, not gmtime 
+    fprintf( fp, "** Created on %s **\n", CONV_TO_UTF8(now.Format( wxT("%F %T"))) ); 
 
     count = m_ClearanceListBox->GetItemCount();
 
