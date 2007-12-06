@@ -1066,6 +1066,16 @@ void WinEDA_DrawPanel::OnKeyEvent( wxKeyEvent& event )
         }
     }
 
+	/* some key commands use the mouse position: refresh it */
+	wxPoint mouse_pos = wxGetMousePosition();	// Get the mouse position on screen
+	wxPoint win_pos = GetScreenPosition();		// get the draw area (panel)position on screen
+	mouse_pos -= win_pos;						// mouse_pos = is the mouse position relative to the panel
+    /* Compute absolute m_MousePosition in pixel units (i.e. considering the current scrool) : */
+    Screen->m_MousePositionInPixels = CalcAbsolutePosition( mouse_pos );
+    
+    /* Compute absolute m_MousePosition in user units: */
+    Screen->m_MousePosition = CursorRealPosition( Screen->m_MousePositionInPixels );
+
     m_Parent->GeneralControle( &DC, Screen->m_MousePositionInPixels );
 
 #if 0
