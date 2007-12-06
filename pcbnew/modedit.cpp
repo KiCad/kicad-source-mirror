@@ -356,12 +356,10 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
             TEXTE_MODULE* val = m_Pcb->m_Modules->m_Value;
             if( val && ref )
             {
-                ref->m_NoShow = 0;
-                val->m_NoShow = 0;
-                ref->m_Type   = 0;
-                val->m_Type   = 1;
+                ref->m_Type   = TEXT_is_REFERENCE;	// just in case ...
                 if( ref->m_Text.Length() == 0 )
                     ref->m_Text = L"Ref**";
+				val->m_Type   =  TEXT_is_VALUE;		// just in case ...
                 if( val->m_Text.Length() == 0 )
                     val->m_Text = L"Val**";
             }

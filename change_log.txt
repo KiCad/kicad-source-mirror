@@ -8,8 +8,12 @@ email address.
     
 2007-Dec-06 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
-    Solved zoom key command problems (under linux and windows)
++all
+	Solved zoom key command problems (under linux and windows)
 	(seen http://sourceforge.net/tracker/index.php?func=detail&aid=1844960&group_id=145591&atid=762476)
+	
++pcbnew
+	solved bug when loading a footprint in modedit: invisible text attribute was lost (trunk and tag)
 
 
 2007-Dec-4 UPDATE   Dick Hollenbeck <dick@softplc.com>
