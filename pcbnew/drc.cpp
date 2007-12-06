@@ -199,9 +199,12 @@ void DRC::updatePointers()
     m_drawPanel = m_mainWindow->DrawPanel;
     m_pcb = m_mainWindow->m_Pcb;
     
-    m_ui->m_ClearanceListBox->SetList( new DRC_LIST_MARKERS( m_pcb ) );
+	if ( m_ui ) // Use diag list boxes only in DRC dialog
+	{
+		m_ui->m_ClearanceListBox->SetList( new DRC_LIST_MARKERS( m_pcb ) );
 
-    m_ui->m_UnconnectedListBox->SetList( new DRC_LIST_UNCONNECTED( &m_unconnected ) );
+		m_ui->m_UnconnectedListBox->SetList( new DRC_LIST_UNCONNECTED( &m_unconnected ) );
+	}
 }
     
 

@@ -760,7 +760,7 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool OneSheetOnly )
             continue;
         }
 
-        /* Test error if units are different but number of parts per package to hight
+        /* Test error if units are different but number of parts per package too hight
           * (ex U3 ( 1 part) and we find U3B the is an error) */
         if( ListeCmp[ii].m_NbParts != ListeCmp[ii + 1].m_NbParts )
         {

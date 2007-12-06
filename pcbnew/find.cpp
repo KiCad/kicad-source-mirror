@@ -22,9 +22,7 @@
 
 #include "find.h"
 
-/* Fonctions locales */
-
-/* variables locales */
+/*Local Variables */
 static wxString s_OldStringFound;
 static int      s_ItemCount, s_MarkerCount;
 

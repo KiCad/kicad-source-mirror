@@ -70,7 +70,7 @@ WinEDA_BasePcbFrame::~WinEDA_BasePcbFrame( void )
 int WinEDA_BasePcbFrame::BestZoom( void )
 /**************************************/
 /**
- * Return the "best" zoom, i.e. the zoom which shows the entire borad on screen
+ * Return the "best" zoom, i.e. the zoom which shows the entire board on screen
  */
 {
     int    dx, dy, ii, jj;
@@ -96,7 +96,9 @@ int WinEDA_BasePcbFrame::BestZoom( void )
 }
 
 
+/***********************************************************/
 void WinEDA_BasePcbFrame::CursorGoto(  const wxPoint& aPos )
+/***********************************************************/
 {
     // factored out of pcbnew/find.cpp
 
@@ -112,7 +114,7 @@ void WinEDA_BasePcbFrame::CursorGoto(  const wxPoint& aPos )
     }
     else
     {
-        // Positionnement du curseur sur l'item
+        // Put cursor on item position
         DrawPanel->CursorOff( &dc );
         screen->m_Curseur = aPos;
         GRMouseWarp( DrawPanel, screen->m_Curseur );
@@ -149,7 +151,7 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 void WinEDA_BasePcbFrame::Show3D_Frame( wxCommandEvent& event )
 /***********************************************************/
 
-/* Creat and show the 3D frame display
+/* Creates and shows the 3D frame display
  */
 {
 #ifndef GERBVIEW
