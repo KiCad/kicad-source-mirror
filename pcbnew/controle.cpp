@@ -223,9 +223,6 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 /*****************************************************************/
 {
-    D(printf("GeneralControle x=%d, y=%d\n", 
-         m_CurrentScreen->m_Curseur.x, m_CurrentScreen->m_Curseur.y );)
-    
     wxSize  delta;
     int     zoom = GetScreen()->GetZoom();
     wxPoint curpos, oldpos;
@@ -259,13 +256,8 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         SetTitle( GetScreen()->m_FileName );
     }
 
-    D(printf("GeneralControleA Mouse.x=%d, Mouse.y=%d\n", 
-         Mouse.x, Mouse.y );)
-    
     curpos = DrawPanel->CursorRealPosition( Mouse );
 
-    D(printf("GeneralControleB curpos.x=%d, curpos.y=%d\n", curpos.x, curpos.y );)
-    
     oldpos = GetScreen()->m_Curseur;
 
     delta.x = (int) round( (double) GetScreen()->GetGrid().x / zoom );
@@ -275,12 +267,6 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         delta.x = 1;
     if( delta.y <= 0 )
         delta.y = 1;
-
-#if 0 && defined(DEBUG)
-    printf( "delta.x=%d delta.y=%d grid.x=%d, grid.y=%d, zoom=%d\n", 
-           delta.x, delta.y, GetScreen()->GetGrid().x, GetScreen()->GetGrid().y, zoom );
-#endif
-
 
     switch( g_KeyPressed )
     {
@@ -348,16 +334,9 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         break;
     }
 
-    D(printf("GeneralControle2 x=%d, y=%d\n", 
-         m_CurrentScreen->m_Curseur.x, m_CurrentScreen->m_Curseur.y );)
-    
     /* Put cursor in new position, according to the zoom keys (if any) */
     GetScreen()->m_Curseur = curpos;
 
-    D(printf("GeneralControle3 x=%d, y=%d\n", 
-         m_CurrentScreen->m_Curseur.x, m_CurrentScreen->m_Curseur.y );)
-
-    
     /* Put cursor on grid or a pad centre if requested
      * But if the tool DELETE is active the cursor is left off grid
      * this is better to reach items to delete off grid
