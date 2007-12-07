@@ -24,7 +24,15 @@ referenced.   I think this would be an easier way to manage xpms.
 *** use BOARD_ITEM::MenuIcon() in the onrightclick.cpp
 
 
-*** rework zones so they are modifiable and so that the user does not
+2007-Dec-4 Assigned To: Jean-Pierre, per his email
+asked by: Dick Hollenbeck
+================================================================================
+1) Improve the zone support so that the perimeters of each zone are editable.
+2) Allow zones to be added early in the routing process.
+3) Remove the requirement to route tracks for situations where a zone is.
+4) Support connections from zones to vias, and zones to tracks, and zones to pads.
+
+rework zones so they are modifiable and so that the user does not
 need to enter tracks for thru hole pads or vias which connect to a zone.
 I propose a two step solution:
 1) interim enhancement: make zone edges retained in BRD file and make the
@@ -57,24 +65,8 @@ It seems the above function should be using a more user friendly "local time",
 not gmtime.
 
 
-2007-Dec-4 Assigned To: Jean-Pierre, per his email
-asked by: Dick Hollenbeck
-================================================================================
-1) Improve the zone support so that the perimeters of each zone are editable.
-2) Allow zones to be added early in the routing process.
-3) Remove the requirement to route tracks for situations where a zone is.
-4) Support connections from zones to vias, and zones to tracks, and zones to pads.
-
-
 2007-Nov-4 Assigned To: nobody
 asked by: jp Charras
 ================================================================================
 Use the collector classes in eeschema.
-
-
-2007-Dec-5 Assigned To: charras
-asked by: Dick
-================================================================================
-http://sourceforge.net/tracker/index.php?func=detail&aid=1844960&group_id=145591&atid=762476
-Notice my appended note to this bug report as well.
 
