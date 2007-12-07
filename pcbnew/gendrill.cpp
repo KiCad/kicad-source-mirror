@@ -611,14 +611,14 @@ int WinEDA_DrillFrame::Gen_Drill_File_EXCELLON( FORET* buffer )
                 else
                     Gen_Line_EXCELLON( line, xt * 10, yt * 10 );
                 to_point( line );
-                /* remove the '\n' from end of line: */
+                /* remove the '\n' from end of line, because we must add the "G85" command to the line: */
                 for( int kk = 0; line[kk] != 0; kk++ )
                     if( line[kk] == '\n' || line[kk] =='\r' )
                         line[kk] = 0;
 
                 fputs( line, dest );
 
-                fputs( "G85", dest );
+                fputs( "G85", dest );	// add the "G85" command
 
                 xt = float (xf) * conv_unit; yt = float (yf) * conv_unit;
                 if( Unit_Drill_is_Inch )
@@ -1309,7 +1309,7 @@ int WinEDA_DrillFrame::Plot_Drill_PcbMap( FORET* buffer, int format )
     TRACK*  pt_piste;
     D_PAD*  pt_pad;
     MODULE* Module;
-    int     ii, diam, nb_trous;
+    int     shape_id, diam, nb_trous;
     wxPoint pos;
     wxSize  size;
 
@@ -1324,7 +1324,8 @@ int WinEDA_DrillFrame::Plot_Drill_PcbMap( FORET* buffer, int format )
                      10 );
     }
 
-    for( ii = 0, foret = (FORET*) buffer; ii < DrillToolsCount; ii++, foret++ )
+	// Plot the drill map:
+    for( shape_id = 0, foret = (FORET*) buffer; shape_id < DrillToolsCount; shape_id++, foret++ )
     {
         /* create the via drill map */
         {
@@ -1333,14 +1334,13 @@ int WinEDA_DrillFrame::Plot_Drill_PcbMap( FORET* buffer, int format )
             {
                 if( pt_piste->Type() != TYPEVIA )
                     continue;
-                if( pt_piste->m_Drill == 0 )
-                    continue;
-
                 int via_drill = g_DesignSettings.m_ViaDrill;
                 if( pt_piste->m_Drill >= 0 )
                     via_drill = pt_piste->m_Drill;
+				if( via_drill != foret->m_Diameter )
+					continue;
                 pos = pt_piste->m_Start;
-                PlotDrillSymbol( pos, via_drill, ii, format );
+                PlotDrillSymbol( pos, via_drill, shape_id, format );
 
                 nb_trous++;
             }
@@ -1357,7 +1357,7 @@ int WinEDA_DrillFrame::Plot_Drill_PcbMap( FORET* buffer, int format )
                     diam = pt_pad->m_Drill.x;
                     if( diam != foret->m_Diameter )
                         continue;
-                    PlotDrillSymbol( pt_pad->m_Pos, diam, ii, format );
+                    PlotDrillSymbol( pt_pad->m_Pos, diam, shape_id, format );
                     break;
 
                 case OVALE:
