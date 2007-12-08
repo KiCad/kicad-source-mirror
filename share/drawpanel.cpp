@@ -186,7 +186,7 @@ wxPoint WinEDA_DrawPanel::CalcAbsolutePosition( const wxPoint& rel_pos )
 /*********************************************************************/
 
 /* retourne la position absolue en pixels de la position rel_pos,
- *  donnée en position relative scrollée (en pixel)
+ *  donnï¿½e en position relative scrollï¿½e (en pixel)
  */
 {
     wxPoint pos;
@@ -862,7 +862,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 
     g_MouseOldButtons = localrealbutt;
 
-    // Appel des fonctions liées au Double Click ou au Click
+    // Appel des fonctions liï¿½es au Double Click ou au Click
     if( localbutt == (int) (GR_M_LEFT_DOWN | GR_M_DCLICK) )
 	{
         m_Parent->OnLeftDClick( &DC, screen->m_MousePositionInPixels );
@@ -986,7 +986,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
     }
 
     // Arret de block sur un double click ( qui peut provoquer un move block
-    // si on déplace la souris dans ce double click
+    // si on dï¿½place la souris dans ce double click
     if( localbutt == (int) (GR_M_LEFT_DOWN | GR_M_DCLICK) )
     {
         if( screen->BlockLocate.m_Command != BLOCK_IDLE )
@@ -1066,15 +1066,20 @@ void WinEDA_DrawPanel::OnKeyEvent( wxKeyEvent& event )
         }
     }
 
+#if wxCHECK_VERSION(2, 8, 0)
 	/* some key commands use the mouse position: refresh it */
 	wxPoint mouse_pos = wxGetMousePosition();	// Get the mouse position on screen
 	wxPoint win_pos = GetScreenPosition();		// get the draw area (panel)position on screen
-	mouse_pos -= win_pos;						// mouse_pos = is the mouse position relative to the panel
-    /* Compute absolute m_MousePosition in pixel units (i.e. considering the current scrool) : */
-    Screen->m_MousePositionInPixels = CalcAbsolutePosition( mouse_pos );
-    
-    /* Compute absolute m_MousePosition in user units: */
-    Screen->m_MousePosition = CursorRealPosition( Screen->m_MousePositionInPixels );
+	mouse_pos -= win_pos;				// mouse_pos = is the mouse position relative to the panel
+
+	/* Compute absolute m_MousePosition in pixel units (i.e. considering the current scrool) : */
+	Screen->m_MousePositionInPixels = CalcAbsolutePosition( mouse_pos );
+
+	/* Compute absolute m_MousePosition in user units: */
+	Screen->m_MousePosition = CursorRealPosition( Screen->m_MousePositionInPixels );
+#else
+
+#endif
 
     m_Parent->GeneralControle( &DC, Screen->m_MousePositionInPixels );
 
