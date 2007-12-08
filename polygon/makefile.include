@@ -1,0 +1,16 @@
+EXTRACPPFLAGS += -I$(SYSINCLUDE) -I./ -Ibitmaps -I../include
+
+COMMON =
+
+
+
+OBJECTS= \
+		GenericPolygonClipperLibrary.o \
+		php_polygon.o\
+		php_polygon_vertex.o
+
+GenericPolygonClipperLibrary.o: GenericPolygonClipperLibrary.cpp GenericPolygonClipperLibrary.h
+
+php_polygon.o: php_polygon.cpp php_polygon.h php_polygon_vertex.h defs-macros.h
+
+#polygon1.o: polygon1.cpp polyarea.h vectmatr.h

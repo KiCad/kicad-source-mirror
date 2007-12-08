@@ -1,0 +1,17 @@
+links to software relative to polygons (clipping and and other operations)
+
+used in freePCB (Written by Alan Wright)
+gpc (here: GenericPolygonClipperLibrary.cpp)
+http://www.cs.man.ac.uk/~toby/alan/software/gpc.html
+
+polygon.php (ported in "C++" by Alan Wright)
+the c++ corresponding file is php_polygon.cpp
+http://www.phpclasses.org/browse/file/10683.html
+
+used in gpcb:
+polygon1.c:
+http://www.koders.com/c/
+and for this file:
+http://www.koders.com/c/fidE26CF2236C2DF7E435D597390A05B982EDFB4C38.aspx
+
+gpcb uses a modified file (integer coordinates)

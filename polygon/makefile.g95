@@ -1,0 +1,18 @@
+WXDIR = $(WXWIN)
+
+TARGET = lib_polygon.a
+
+all: $(TARGET)
+
+include ../libs.win
+
+include makefile.include
+
+$(TARGET): $(OBJECTS) ../libs.win makefile.include
+	ar ruv $@ $(OBJECTS)
+	ranlib $@
+
+clean:
+	rm -f *.bak
+	rm -f *.o
+	rm -f $(TARGET)
