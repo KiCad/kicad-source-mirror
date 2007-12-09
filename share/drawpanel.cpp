@@ -13,28 +13,28 @@
 #include "macros.h"
 #include "id.h"
 
-// defines locaux
+// Local defines
 #define CURSOR_SIZE 12           // Cursor size in pixels
 
-// table des evenements captes par un WinEDA_DrawPanel
+// Events used by WinEDA_DrawPanel
 BEGIN_EVENT_TABLE( WinEDA_DrawPanel, EDA_DRAW_PANEL )
-    EVT_LEAVE_WINDOW( WinEDA_DrawPanel::OnMouseLeaving )
-    EVT_MOUSE_EVENTS( WinEDA_DrawPanel::OnMouseEvent )
-    EVT_CHAR( WinEDA_DrawPanel::OnKeyEvent )
-    EVT_CHAR_HOOK( WinEDA_DrawPanel::OnKeyEvent )
-    EVT_PAINT( WinEDA_DrawPanel::OnPaint )
-    EVT_SIZE( WinEDA_DrawPanel::OnSize )
-    EVT_ERASE_BACKGROUND( WinEDA_DrawPanel::OnEraseBackground )
-    EVT_SCROLLWIN( WinEDA_DrawPanel::OnScroll )
-    EVT_ACTIVATE( WinEDA_DrawPanel::OnActivate )
-    
-    EVT_MENU_RANGE( ID_POPUP_ZOOM_START_RANGE, ID_POPUP_ZOOM_END_RANGE,
-                    WinEDA_DrawPanel::Process_Popup_Zoom )
+EVT_LEAVE_WINDOW( WinEDA_DrawPanel::OnMouseLeaving )
+EVT_MOUSE_EVENTS( WinEDA_DrawPanel::OnMouseEvent )
+EVT_CHAR( WinEDA_DrawPanel::OnKeyEvent )
+EVT_CHAR_HOOK( WinEDA_DrawPanel::OnKeyEvent )
+EVT_PAINT( WinEDA_DrawPanel::OnPaint )
+EVT_SIZE( WinEDA_DrawPanel::OnSize )
+EVT_ERASE_BACKGROUND( WinEDA_DrawPanel::OnEraseBackground )
+EVT_SCROLLWIN( WinEDA_DrawPanel::OnScroll )
+EVT_ACTIVATE( WinEDA_DrawPanel::OnActivate )
+
+EVT_MENU_RANGE( ID_POPUP_ZOOM_START_RANGE, ID_POPUP_ZOOM_END_RANGE,
+                WinEDA_DrawPanel::Process_Popup_Zoom )
 END_EVENT_TABLE()
 
-/***********************************************************/
-/* Fonctions de base de WinEDA_DrawPanel: l'ecran de trace */
-/***********************************************************/
+/************************************************************************/
+/* WinEDA_DrawPanel basic functions (WinEDA_DrawPanel is the main panel)*/
+/************************************************************************/
 
 WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
                                     const wxPoint& pos, const wxSize& size ) :
@@ -90,9 +90,9 @@ void WinEDA_DrawPanel::Trace_Curseur( wxDC* DC, int color )
     GRSetDrawMode( DC, GR_XOR );
     if( g_CursorShape == 1 )    /* Trace d'un reticule */
     {
-        int dx = m_ClipBox.GetWidth()*  GetZoom();
+        int dx = m_ClipBox.GetWidth() * GetZoom();
 
-        int dy = m_ClipBox.GetHeight()* GetZoom();
+        int dy = m_ClipBox.GetHeight() * GetZoom();
 
         GRLine( &m_ClipBox, DC, Cursor.x - dx, Cursor.y,
                 Cursor.x + dx, Cursor.y, 0, color );            // axe Y
@@ -101,7 +101,7 @@ void WinEDA_DrawPanel::Trace_Curseur( wxDC* DC, int color )
     }
     else
     {
-        int len = CURSOR_SIZE* GetZoom();
+        int len = CURSOR_SIZE * GetZoom();
 
         GRLine( &m_ClipBox, DC, Cursor.x - len, Cursor.y,
                 Cursor.x + len, Cursor.y, 0, color );
@@ -185,8 +185,10 @@ void WinEDA_DrawPanel::PrepareGraphicContext( wxDC* DC )
 wxPoint WinEDA_DrawPanel::CalcAbsolutePosition( const wxPoint& rel_pos )
 /*********************************************************************/
 
-/* retourne la position absolue en pixels de la position rel_pos,
- *  donn�e en position relative scroll�e (en pixel)
+/** Function CalcAbsolutePosition
+ * @return absolute position in pixels, considering the scroll amount
+ * @param rel_pos = relative position (screen position) in pixel
+ *  ( relative position = position in the panel draw area on screen )
  */
 {
     wxPoint pos;
@@ -195,13 +197,13 @@ wxPoint WinEDA_DrawPanel::CalcAbsolutePosition( const wxPoint& rel_pos )
     CalcUnscrolledPosition( rel_pos.x, rel_pos.y, &pos.x, &pos.y );
 #else
     int ii, jj;
-    
-    GetViewStart( &pos.x, &pos.y );
+
+    GetViewStart( &pos.x, &pos.y ); // pos is the origin in scroll units
     GetScrollPixelsPerUnit( &ii, &jj );
-    
-    pos.x *= ii; 
-    pos.y *= jj;
-    
+
+    pos.x *= ii;
+    pos.y *= jj;    // pos is the origin in pixel units
+
     pos.x += rel_pos.x;
     pos.y += rel_pos.y;
 #endif
@@ -213,8 +215,9 @@ wxPoint WinEDA_DrawPanel::CalcAbsolutePosition( const wxPoint& rel_pos )
 wxPoint WinEDA_DrawPanel::CursorRealPosition( const wxPoint& ScreenPos )
 /**********************************************************************/
 
-/* Retourne la position en unites utilisateur du pointeur souris
- *  ScreenPos = position pointeur en coord absolue ecran
+/** CursorRealPosition (used to calculate the cursor position in internal units)
+ * @return  position (in internal units)
+ * @param  ScreenPos = absolute position in pixels
  */
 {
     wxPoint curpos;
@@ -229,9 +232,10 @@ wxPoint WinEDA_DrawPanel::CursorRealPosition( const wxPoint& ScreenPos )
 bool WinEDA_DrawPanel::IsPointOnDisplay( wxPoint ref_pos )
 /********************************************************/
 
-/* retourne TRUE si le point de coord physique ref_pos
- *  est visible sur l'ecran, c'est a dire:
- *  si ref_pos est sur la partie du schema ou pcb affichee a l'ecran
+/** Funcion IsPointOnDisplay
+ * @param ref_pos is the position to test in pixels, relative to the panel.
+ * @return TRUE if ref_pos is a point currently visible on screen
+ *         FALSE if ref_pos is out of screen
  */
 {
     wxPoint  pos;
@@ -246,17 +250,17 @@ bool WinEDA_DrawPanel::IsPointOnDisplay( wxPoint ref_pos )
     display_rect.Inflate( -PIXEL_MARGIN, -PIXEL_MARGIN );
 
     // Conversion en coord physiques
-    pos    = CalcAbsolutePosition( display_rect.GetPosition() );
-    
+    pos = CalcAbsolutePosition( display_rect.GetPosition() );
+
     pos.x *= GetZoom();
     pos.y *= GetZoom();
-    
+
     pos.x += GetScreen()->m_DrawOrg.x;
     pos.y += GetScreen()->m_DrawOrg.y;
-    
-    display_rect.SetX( pos.x ); 
+
+    display_rect.SetX( pos.x );
     display_rect.SetY( pos.y );
-    
+
     display_rect.SetWidth( display_rect.GetWidth() * GetZoom() );
     display_rect.SetHeight( display_rect.GetHeight() * GetZoom() );
 
@@ -268,8 +272,9 @@ bool WinEDA_DrawPanel::IsPointOnDisplay( wxPoint ref_pos )
 wxPoint WinEDA_DrawPanel::CursorScreenPosition()
 /********************************************************/
 
-/* retourne la position sur l'ecran,en pixels, du curseur
- *  Orgine = coord absolue 0,0;
+/** CursorScreenPosition
+ * @return  relative position in pixels of du curseur
+ *  ( relative position = position in the panel draw area on screen )
  */
 {
     wxPoint curpos = GetScreen()->m_Curseur;
@@ -287,20 +292,24 @@ wxPoint WinEDA_DrawPanel::CursorScreenPosition()
 /*********************************************************/
 wxPoint WinEDA_DrawPanel::GetScreenCenterRealPosition()
 /*********************************************************/
+
+/** Function GetScreenCenterRealPosition()
+ * @return position (in internal units) of the current area centre showed on screen
+ */
 {
     wxSize  size;
     wxPoint realpos;
 
-    size    = GetClientSize();
-    
-    size.x /= 2; 
+    size = GetClientSize();
+
+    size.x /= 2;
     size.y /= 2;
 
-    realpos    = CalcAbsolutePosition( wxPoint( size.x, size.y ) );
-    
+    realpos = CalcAbsolutePosition( wxPoint( size.x, size.y ) );
+
     realpos.x *= GetZoom();
     realpos.y *= GetZoom();
-    
+
     realpos.x += GetScreen()->m_DrawOrg.x;
     realpos.y += GetScreen()->m_DrawOrg.y;
 
@@ -345,6 +354,13 @@ void WinEDA_DrawPanel::MouseTo( const wxPoint& Mouse )
 /********************************************************/
 void WinEDA_DrawPanel::OnActivate( wxActivateEvent& event )
 /********************************************************/
+
+/**
+ * Called on window activation.
+ * init the member m_CanStartBlock to avoid a block start command
+ * on activation (because a left mouse buton can be pressed and no block command wanted
+ * This happens when enter on a hierarchycat sheet on double click
+ */
 {
     m_CanStartBlock = -1;   // Block Command can't start
     event.Skip();
@@ -415,6 +431,10 @@ void WinEDA_DrawPanel::OnSize( wxSizeEvent& event )
 /******************************************/
 void WinEDA_DrawPanel::SetBoundaryBox()
 /******************************************/
+
+/** Function SetBoundaryBox()
+ * set the m_ClipBox member to the current displayed rectangle dimensions
+ */
 {
     BASE_SCREEN* Screen = GetScreen();;
 
@@ -486,13 +506,13 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
         PaintClipBox.y += org.y;
 
 #ifdef WX_ZOOM
-        m_ClipBox.m_Pos.x = PaintClipBox.x*         GetZoom();
+        m_ClipBox.m_Pos.x = PaintClipBox.x * GetZoom();
 
-        m_ClipBox.m_Pos.y = PaintClipBox.y*         GetZoom();
+        m_ClipBox.m_Pos.y = PaintClipBox.y * GetZoom();
 
-        m_ClipBox.m_Size.x = PaintClipBox.m_Size.x* GetZoom();
+        m_ClipBox.m_Size.x = PaintClipBox.m_Size.x * GetZoom();
 
-        m_ClipBox.m_Size.y = PaintClipBox.m_Size.y* GetZoom();
+        m_ClipBox.m_Size.y = PaintClipBox.m_Size.y * GetZoom();
 
         PaintClipBox = m_ClipBox;
 #else
@@ -562,9 +582,12 @@ void WinEDA_DrawPanel::ReDraw( wxDC* DC, bool erasebg )
 void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
 /***********************************************/
 
-/* Trace les axes X et Y et la grille
- *  La grille n'est affichee que si elle peut etre facilement visible
- *  La grille passe toujours par le centre de l'ecran
+/**  Function DrawBackGround
+ * @param DC = current Device Context
+ * Draws X , Y axis
+ * draws the grid
+ *  - the grid is drawn only if the zoom level allows a good visibility
+ *  - the grid is always centered on the screen centre
  */
 {
     int          Color  = BLUE;
@@ -578,57 +601,59 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
     double       pasx, pasy;
 
     color = g_GridColor;
-    
+
     GRSetDrawMode( DC, GR_COPY );
 
-    /* le pas d'affichage doit etre assez grand pour avoir une grille visible */
+    /* The grid must be visible. this is possible only is grid value
+     * and zoom value are sufficient
+     */
     drawgrid = m_Parent->m_Draw_Grid;
-    
+
     pas_grille_affichee = screen->GetGrid();
 
     ii = pas_grille_affichee.x / zoom;
     if( ii  < 5 )
     {
-        pas_grille_affichee.x *= 2; 
+        pas_grille_affichee.x *= 2;
         ii *= 2;
     }
     if( ii < 5 )
-        drawgrid = FALSE;           // grille trop petite
-    
+        drawgrid = FALSE; // The gris is small
+
     ii = pas_grille_affichee.y / zoom;
     if( ii  < 5 )
     {
-        pas_grille_affichee.y *= 2; 
+        pas_grille_affichee.y *= 2;
         ii *= 2;
     }
     if( ii < 5 )
-        drawgrid = FALSE;           // grille trop petite
+        drawgrid = FALSE; // The gris is small
 
     GetViewStart( &org.x, &org.y );
     GetScrollPixelsPerUnit( &ii, &jj );
-    
-    org.x *= ii; 
+
+    org.x *= ii;
     org.y *= jj;
-    
+
     screen->m_StartVisu = org;
 
-    org.x *= zoom; 
+    org.x *= zoom;
     org.y *= zoom;
-    
-    org.x += screen->m_DrawOrg.x; 
+
+    org.x += screen->m_DrawOrg.x;
     org.y += screen->m_DrawOrg.y;
 
-    size    = GetClientSize();
-    
-    size.x *= zoom; 
+    size = GetClientSize();
+
+    size.x *= zoom;
     size.y *= zoom;
-    
-    pasx    = screen->m_UserGrid.x * m_Parent->m_InternalUnits;
-    pasy    = screen->m_UserGrid.y * m_Parent->m_InternalUnits;
-    
+
+    pasx = screen->m_UserGrid.x * m_Parent->m_InternalUnits;
+    pasy = screen->m_UserGrid.y * m_Parent->m_InternalUnits;
+
     if( screen->m_UserGridUnit != INCHES )
     {
-        pasx /= 25.4; 
+        pasx /= 25.4;
         pasy /= 25.4;
     }
 
@@ -641,9 +666,9 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
         {
             xg = screen->m_UserGridIsON ? (int) ( (ii * pasx) + 0.5 )
                  : ii * pas_grille_affichee.x;
-                 
+
             int xpos = org.x + xg;
-            
+
             for( jj = 0; ; jj++ )
             {
                 yg = screen->m_UserGridIsON ? (int) ( (jj * pasy) + 0.5 )
@@ -681,9 +706,14 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
 /********************************************************************/
 void WinEDA_DrawPanel::m_Draw_Auxiliary_Axis( wxDC* DC, int drawmode )
 /********************************************************************/
+
+/** m_Draw_Auxiliary_Axis
+ * Draw the Auxiliary Axis, used in pcbnew which as origin coordinates
+ * for gerber and excellon files
+ */
 {
     if( m_Parent->m_Auxiliary_Axis_Position.x == 0
-     && m_Parent->m_Auxiliary_Axis_Position.y == 0 )
+        && m_Parent->m_Auxiliary_Axis_Position.y == 0 )
         return;
 
     int          Color  = DARKRED;
@@ -716,20 +746,20 @@ bool WinEDA_DrawPanel::OnRightClick( wxMouseEvent& event )
     wxPoint pos;
     wxMenu  MasterMenu;
 
-    pos.x = event.GetX(); 
+    pos.x = event.GetX();
     pos.y = event.GetY();
-    
-    if ( ! m_Parent->OnRightClick( pos, &MasterMenu ) )
-		return false;
-    
+
+    if( !m_Parent->OnRightClick( pos, &MasterMenu ) )
+        return false;
+
     AddMenuZoom( &MasterMenu );
-    
+
     m_IgnoreMouseEvents = TRUE;
     PopupMenu( &MasterMenu, pos );
     MouseToCursorSchema();
     m_IgnoreMouseEvents = FALSE;
-	
-	return true;
+
+    return true;
 }
 
 
@@ -763,14 +793,14 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
     int                      localrealbutt = 0, localbutt = 0, localkey = 0;
     BASE_SCREEN*             screen = GetScreen();
     static WinEDA_DrawPanel* LastPanel;
-	static bool IgnoreNextLeftButtonRelease = false;
-	
+    static bool              IgnoreNextLeftButtonRelease = false;
+
     if( event.Leaving() || event.Entering() )
     {
         m_CanStartBlock = -1;
     }
 
-    if( ManageCurseur == NULL )  // Pas de commande en cours
+    if( ManageCurseur == NULL )  // No command in progress
         m_AutoPAN_Request = FALSE;
 
     if( m_Parent->m_FrameIsActive )
@@ -810,7 +840,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 
     if( event.RightDown() )
     {
-        OnRightClick( event ); 
+        OnRightClick( event );
         return;
     }
 
@@ -819,7 +849,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 
     if( event.LeftIsDown() )
         localrealbutt |= GR_M_LEFT_DOWN;
-    
+
     if( event.MiddleIsDown() )
         localrealbutt |= GR_M_MIDDLE_DOWN;
 
@@ -828,10 +858,10 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 
     if( event.ButtonDClick( 1 ) )
         localbutt = GR_M_LEFT_DOWN | GR_M_DCLICK;
-    
+
     if( event.MiddleDown() )
         localbutt = GR_M_MIDDLE_DOWN;
-    
+
     if( event.ButtonDClick( 2 ) )
     {
     }
@@ -841,7 +871,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 
     /* Compute absolute m_MousePosition in pixel units: */
     screen->m_MousePositionInPixels = CalcAbsolutePosition( wxPoint( event.GetX(), event.GetY() ) );
-    
+
     /* Compute absolute m_MousePosition in user units: */
     screen->m_MousePosition = CursorRealPosition( screen->m_MousePositionInPixels );
 
@@ -862,32 +892,29 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 
     g_MouseOldButtons = localrealbutt;
 
-    // Appel des fonctions li�es au Double Click ou au Click
+    // Calling Double Click and Click functions :
     if( localbutt == (int) (GR_M_LEFT_DOWN | GR_M_DCLICK) )
-	{
+    {
         m_Parent->OnLeftDClick( &DC, screen->m_MousePositionInPixels );
-		IgnoreNextLeftButtonRelease = true;
-	}
-
+        IgnoreNextLeftButtonRelease = true;
+    }
     else if( event.LeftUp() )
     {
         if( screen->BlockLocate.m_State==STATE_NO_BLOCK  &&  !IgnoreNextLeftButtonRelease )
-			m_Parent->OnLeftClick( &DC, screen->m_MousePositionInPixels );
-        
+            m_Parent->OnLeftClick( &DC, screen->m_MousePositionInPixels );
+
         IgnoreNextLeftButtonRelease = false;
     }
 
     if( event.ButtonUp( 2 ) && (screen->BlockLocate.m_State == STATE_NO_BLOCK) )
-    {   
+    {
         // The middle button has been relached, with no block command:
         // We use it for a zoom center command
         g_KeyPressed = localkey = EDA_ZOOM_CENTER_FROM_MOUSE;
     }
 
 
-
-    /* Appel de la fonction generale de gestion des mouvements souris
-     *  et commandes clavier */
+    /* Calling the  general function on mouse changes (and pseudo key commands) */
     m_Parent->GeneralControle( &DC, screen->m_MousePositionInPixels );
 
 
@@ -922,7 +949,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
             {
                 m_AutoPAN_Request = FALSE;
                 m_Parent->HandleBlockPlace( &DC );
-				IgnoreNextLeftButtonRelease = true;
+                IgnoreNextLeftButtonRelease = true;
             }
         }
         else if( (m_CanStartBlock >= 0 )
@@ -933,15 +960,15 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
             if( screen->BlockLocate.m_State == STATE_NO_BLOCK )
             {
                 int cmd_type = kbstat;
-                
+
                 if( event.MiddleIsDown() )
                     cmd_type |= MOUSE_MIDDLE;
-                
+
                 if( !m_Parent->HandleBlockBegin( &DC, cmd_type, m_CursorStartPos ) )
-                {   
+                {
                     // error
-                    m_Parent->DisplayToolMsg( 
-                     wxT( "WinEDA_DrawPanel::OnMouseEvent() Block Error" ) );
+                    m_Parent->DisplayToolMsg(
+                        wxT( "WinEDA_DrawPanel::OnMouseEvent() Block Error" ) );
                 }
                 else
                 {
@@ -952,11 +979,11 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
         }
 
         if( event.ButtonUp( 1 ) || event.ButtonUp( 2 ) )
-        { 
-            /* Relachement du bouton: fin de delimitation de block.
-             * La commande peut etre terminee (DELETE) ou continuer par le placement
-             * du block ainsi delimite (MOVE, COPY).
-             * Cependant bloc est annule si sa taille est trop petite
+        {
+            /* Release the mouse button: end of block.
+             * The command can finish (DELETE) or have a next command
+             * (MOVE, COPY).
+             * However the block command is cancelled if the block size is small
              */
             bool BlockIsSmall =
                 ( ABS( screen->BlockLocate.GetWidth() / GetZoom() ) < 3)
@@ -985,8 +1012,8 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
         }
     }
 
-    // Arret de block sur un double click ( qui peut provoquer un move block
-    // si on d�place la souris dans ce double click
+    // End of block command on a double click
+    // To avoid an unwanted block move command if the move is moved while double click
     if( localbutt == (int) (GR_M_LEFT_DOWN | GR_M_DCLICK) )
     {
         if( screen->BlockLocate.m_Command != BLOCK_IDLE )
@@ -1066,19 +1093,24 @@ void WinEDA_DrawPanel::OnKeyEvent( wxKeyEvent& event )
         }
     }
 
-#if wxCHECK_VERSION(2, 8, 0)
-	/* some key commands use the mouse position: refresh it */
-	wxPoint mouse_pos = wxGetMousePosition();	// Get the mouse position on screen
-	wxPoint win_pos = GetScreenPosition();		// get the draw area (panel)position on screen
-	mouse_pos -= win_pos;				// mouse_pos = is the mouse position relative to the panel
+    /* some key commands use the mouse position: refresh it */
+#if wxCHECK_VERSION( 2, 8, 0 )
+    wxPoint mouse_pos = wxGetMousePosition();   // Get the mouse position on screen
+    wxPoint win_pos   = GetScreenPosition();    // get the draw area (panel)position on screen
+    mouse_pos -= win_pos;                       // mouse_pos = is the mouse position relative to the panel
 
-	/* Compute absolute m_MousePosition in pixel units (i.e. considering the current scrool) : */
-	Screen->m_MousePositionInPixels = CalcAbsolutePosition( mouse_pos );
+    /* Compute absolute m_MousePosition in pixel units (i.e. considering the current scrool) : */
+    Screen->m_MousePositionInPixels = CalcAbsolutePosition( mouse_pos );
 
-	/* Compute absolute m_MousePosition in user units: */
-	Screen->m_MousePosition = CursorRealPosition( Screen->m_MousePositionInPixels );
-#else
+    /* Compute absolute m_MousePosition in user units: */
+    Screen->m_MousePosition = CursorRealPosition( Screen->m_MousePositionInPixels );
 
+    #else
+
+    /* if wxGetMousePosition() does not exist,
+     * m_Cursor should be ok, use it to calculate the cursor position on screen
+     */
+    Screen->m_MousePositionInPixels = CursorScreenPosition();
 #endif
 
     m_Parent->GeneralControle( &DC, Screen->m_MousePositionInPixels );
