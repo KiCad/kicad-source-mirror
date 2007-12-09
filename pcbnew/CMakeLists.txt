@@ -18,6 +18,7 @@ SET(PCBNEW_SRCS
 	class_board.cpp
 	class_board_item.cpp
 	class_cotation.cpp
+	class_drc_item.cpp
 	class_edge_mod.cpp
 	class_equipot.cpp
 	class_marker.cpp
@@ -28,6 +29,7 @@ SET(PCBNEW_SRCS
 	class_pcb_text.cpp
 	class_text_mod.cpp
 	class_track.cpp
+	class_zone.cpp
 	clean.cpp
 #	cleaningoptions_dialog.cpp
 	collectors.cpp
