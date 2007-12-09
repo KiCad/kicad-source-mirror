@@ -41,6 +41,8 @@ enum KICAD_T {
     TYPESCREEN,
     TYPEBLOCK,
     TYPEEDGEZONE,
+    TYPEZONE_POLYEDGE,
+    TYPEZONE_CONTAINER,
 
     // Draw Items in schematic
     DRAW_POLYLINE_STRUCT_TYPE,

@@ -18,6 +18,7 @@ OBJECTS= \
 		onrightclick.o\
 		class_board.o\
 		class_track.o \
+		class_drc_item.o \
 		drawframe.o\
 		drawpanel.o\
 		set_color.o \
@@ -68,6 +69,9 @@ files.o: files.cpp $(COMMON)
 class_marker.o: ../pcbnew/class_marker.cpp ../pcbnew/class_marker.h $(COMMON)
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
+class_drc_item.o: ../pcbnew/class_drc_item.cpp $(COMMON)
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+	
 sel_layer.o: ../pcbnew/sel_layer.cpp $(COMMON)
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 

@@ -6,65 +6,7 @@
 
 #include "pcbnew.h"
 
-#include "bitmaps.h"
-
-
-
-wxString DRC_ITEM::GetErrorText() const
-{
-    switch( m_ErrorCode )
-    {
-//    case DRCE_:    not assigned yet
-        
-    case DRCE_UNCONNECTED_PADS:
-        return wxString( _("Unconnected pads") );
-    case DRCE_TRACK_NEAR_THROUGH_HOLE:
-        return wxString( _("Track near thru-hole") ); 
-    case DRCE_TRACK_NEAR_PAD:
-        return wxString( _("Track near pad") );
-    case DRCE_TRACK_NEAR_VIA:
-        return wxString( _("Track near via") );
-    case DRCE_VIA_NEAR_VIA:
-        return wxString( _("Via near via") );
-    case DRCE_VIA_NEAR_TRACK:
-        return wxString( _("Via near track") );
-    case DRCE_TRACK_ENDS1:
-    case DRCE_TRACK_ENDS2:
-    case DRCE_TRACK_ENDS3:
-    case DRCE_TRACK_ENDS4:
-    case DRCE_ENDS_PROBLEM1: 
-    case DRCE_ENDS_PROBLEM2:
-    case DRCE_ENDS_PROBLEM3:
-    case DRCE_ENDS_PROBLEM4:
-    case DRCE_ENDS_PROBLEM5:
-        return wxString( _("Two track ends") );
-    case DRCE_TRACK_UNKNOWN1:
-        return wxString( _("This looks bad") );  ///< @todo check source code and change this comment
-    case DRCE_TRACKS_CROSSING:
-        return wxString( _("Tracks crossing") );
-    case DRCE_PAD_NEAR_PAD1:
-        return wxString( _("Pad near pad") );
-    case DRCE_VIA_HOLE_BIGGER:
-        return wxString( _("Via hole > diameter"));
-        
-    default:
-        return wxString( wxT("PROGRAM BUG, PLEASE LEAVE THE ROOM.") );
-    }
-}
-
-
-wxString DRC_ITEM::ShowCoord( const wxPoint& aPos )
-{
-    wxString temp;
-    wxString ret;
-
-    ret << wxT("@(") << valeur_param( aPos.x, temp ); 
-    ret << wxT(",")  << valeur_param( aPos.y, temp );
-    ret << wxT(")");
-
-    return ret;
-}
-
+//#include "bitmaps.h"
 
 
 /*****************/
@@ -229,7 +171,7 @@ void BOARD::DeleteMARKERs()
 }
 
 
-/* Routines de calcul des nombres de segments pistes et zones */
+/* Calculate the track segment count */
 int BOARD::GetNumSegmTrack()
 {
     TRACK* CurTrack = m_Track;
@@ -243,6 +185,7 @@ int BOARD::GetNumSegmTrack()
 }
 
 
+/* Calculate the zone segment count */
 int BOARD::GetNumSegmZone()
 {
     TRACK* CurTrack = m_Zone;
@@ -256,14 +199,14 @@ int BOARD::GetNumSegmZone()
 }
 
 
-// retourne le nombre de connexions manquantes
+// return the unconnection count
 int BOARD::GetNumNoconnect()
 {
     return m_NbNoconnect;
 }
 
 
-// retourne le nombre de pads a netcode > 0
+// return the active pad count ( pads with a netcode > 0 )
 int BOARD::GetNumNodes()
 {
     return m_NbNodes;
@@ -274,14 +217,12 @@ int BOARD::GetNumNodes()
 bool BOARD::ComputeBoundaryBox()
 /***********************************/
 
-/* Determine le rectangle d'encadrement du pcb
- *  Ce rectangle englobe les contours pcb, pads , vias et piste
- *  Sortie:
- *  m_PcbBox
+/** Function ComputeBoundaryBox()
+ * Calculate the bounding box of the board
+ *  This box contains pcb edges, pads , vias and tracks
+ *  Update m_PcbBox member
  * 
- *  retourne:
- *      0 si aucun element utile
- *      1 sinon
+ *  @return 0 for an empty board (no items), else 1
  */
 {
     int             rayon, cx, cy, d, xmin, ymin, xmax, ymax;
@@ -293,7 +234,7 @@ bool BOARD::ComputeBoundaryBox()
     xmin = ymin = 0x7FFFFFFFl;
     xmax = ymax = -0x7FFFFFFFl;
 
-    /* Analyse des Contours PCB */
+    /* Analyse PCB edges*/
     PtStruct = m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
@@ -328,7 +269,7 @@ bool BOARD::ComputeBoundaryBox()
         }
     }
 
-    /* Analyse des Modules  */
+    /* Analyse footprints  */
     MODULE* module = m_Modules;
     for( ; module != NULL; module = (MODULE*) module->Pnext )
     {
@@ -351,7 +292,7 @@ bool BOARD::ComputeBoundaryBox()
         }
     }
 
-    /* Analyse des segments de piste et zone*/
+    /* Analyse track and zones */
     for( Track = m_Track; Track != NULL; Track = (TRACK*) Track->Pnext )
     {
         d         = (Track->m_Width / 2) + 1;
@@ -847,48 +788,5 @@ void BOARD::Show( int nestLevel, std::ostream& os )
     NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
 
-
-/* wrote this before discovering ReturnPcbLayerName()
-const char* BOARD::ShowLayer( int aLayer )
-{
-    const char* rs;
-    
-    switch( aLayer )
-    {
-    case LAYER_COPPER_LAYER_N:        rs = "cu";              break;
-    case LAYER_N_2:             rs = "layer2";          break;             
-    case LAYER_N_3:             rs = "layer3";          break;
-    case LAYER_N_4:             rs = "layer4";          break;
-    case LAYER_N_5:             rs = "layer5";          break;
-    case LAYER_N_6:             rs = "layer6";          break;
-    case LAYER_N_7:             rs = "layer7";          break;
-    case LAYER_N_8:             rs = "layer8";          break;
-    case LAYER_N_9:             rs = "layer9";          break;
-    case LAYER_N_10:            rs = "layer10";         break;
-    case LAYER_N_11:            rs = "layer11";         break;
-    case LAYER_N_12:            rs = "layer12";         break;
-    case LAYER_N_13:            rs = "layer13";         break;
-    case LAYER_N_14:            rs = "layer14";         break;
-    case LAYER_N_15:            rs = "layer15";         break;
-    case LAYER_CMP_N:           rs = "cmp";             break;
-    case ADHESIVE_N_CU:         rs = "cu/adhesive";     break;
-    case ADHESIVE_N_CMP:        rs = "cmp/adhesive";    break; 
-    case SOLDERPASTE_N_CU:      rs = "cu/sldrpaste";    break;     
-    case SOLDERPASTE_N_CMP:     rs = "cmp/sldrpaste";   break;
-    case SILKSCREEN_N_CU:       rs = "cu/silkscreen";   break;
-    case SILKSCREEN_N_CMP:      rs = "cmp/silkscreen";  break;
-    case SOLDERMASK_N_CU:       rs = "cu/sldrmask";     break;
-    case SOLDERMASK_N_CMP:      rs = "cmp/sldrmask";    break;
-    case DRAW_N:                rs = "drawing";         break;
-    case COMMENT_N:             rs = "comment";         break;
-    case ECO1_N:                rs = "eco_1";           break;
-    case ECO2_N:                rs = "eco_2";           break;
-    case EDGE_N:                rs = "edge";            break;
-    default:                    rs = "???";             break;        
-    }
-    
-    return rs;
-}
-*/
 
 #endif

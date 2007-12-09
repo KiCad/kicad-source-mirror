@@ -4,6 +4,13 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2007-Dec-09 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+	changes in file organisation and classes to prepare zone redesign. No real new code.
+	class zone functions and definitions moved in class_zone.h and .cpp
+
+
 2007-Dec-07 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew

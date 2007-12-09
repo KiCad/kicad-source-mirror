@@ -31,41 +31,6 @@ void EDA_BaseStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
 
 
 /**********************/
-/* Classe EDGE_ZONE */
-/**********************/
-
-/* Classe EDGE_ZONE: constructeur */
-EDGE_ZONE::EDGE_ZONE( BOARD_ITEM* parent ) :
-    DRAWSEGMENT( parent, TYPEEDGEZONE )
-{
-    m_Width = 2;        // a minimum for visibility, while dragging
-}
-
-
-/* Effacement memoire de la structure */
-EDGE_ZONE:: ~EDGE_ZONE()
-{
-}
-
-
-bool EDGE_ZONE::Save( FILE* aFile ) const
-{
-    if( GetState( DELETED ) )
-        return true;
-
-    int ret = fprintf( aFile, "ZE %d %d %d %d %d %lX %X\n",
-            m_Start.x, m_Start.y,
-            m_End.x, m_End.y,
-            m_Angle,
-            m_TimeStamp,
-            ReturnStatus()
-            );
-    
-    return (ret > 14 );    
-}
-
-
-/**********************/
 /* Classe DRAWSEGMENT */
 /**********************/
 
