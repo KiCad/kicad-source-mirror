@@ -70,6 +70,7 @@ FootprintListBox::FootprintListBox( WinEDA_CvpcbFrame* parent,
                                     int nbitems, wxString choice[] ) :
     ListBoxBase( parent, id, loc, size )
 {
+	m_ActiveFootprintList = NULL;
     SetActiveFootprintList( TRUE );
 }
 

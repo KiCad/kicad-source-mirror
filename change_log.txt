@@ -6,6 +6,13 @@ email address.
 
 2007-Dec-09 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
++cvpcb:
+	listboxes.cpp FootprintListBox::m_ActiveFootprint member was not initialized.
+	Can crash cvpcb (WINDOWS only, i believe)
+
+
+2007-Dec-09 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
 +pcbnew:
 	changes in file organisation and classes to prepare zone redesign. No real new code.
 	class zone functions and definitions moved in class_zone.h and .cpp
