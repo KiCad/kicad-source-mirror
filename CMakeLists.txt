@@ -8,8 +8,8 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.4.6 FATAL_ERROR)
 #SET(CMAKE_VERBOSE_MAKEFILE ON)
 
 # Set default flags for Debug build
-SET(CMAKE_C_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG -D__WXDEBUG__")
-SET(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG -D__WXDEBUG__")
+SET(CMAKE_C_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
+SET(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
 
 # Set default flags for Release build
 SET(CMAKE_C_FLAGS_RELEASE "-Wall -O2 -DNDEBUG")
