@@ -620,7 +620,7 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
         if( parent == NULL )
             return NULL;
         m_SelLayerBox = new WinEDAChoiceBox( parent, ID_TOOLBARH_PCB_SELECT_LAYER,
-                                            wxPoint( -1, -1 ), wxSize( LISTBOX_WIDTH, -1 ) );
+                                            wxPoint( -1, -1 ), wxSize( -1, -1 ) );
         parent->AddControl( m_SelLayerBox );
     }
 

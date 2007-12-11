@@ -61,8 +61,8 @@ static struct hotkey_name_descr s_Hotkey_Name_List[] =
     { wxT( "End" ),       WXK_END          },
     { wxT( "Page Up" ),   WXK_PAGEUP       },
     { wxT( "Page Down" ), WXK_PAGEDOWN     },
-    { wxT( "+" ),         WXK_ADD          },
-    { wxT( "-" ),         WXK_SUBTRACT     },
+    { wxT( "+" ),         '+'              },
+    { wxT( "-" ),         '-'              },
 
     { wxT( "Up" ),        WXK_UP           },
     { wxT( "Down" ),      WXK_DOWN         },
@@ -273,6 +273,7 @@ static int ReturnKeyCodeFromKeyName( const wxString& keyname )
     {
         if( s_Hotkey_Name_List[ii].m_KeyCode == 0 )  // End of list reached
             break;
+        
         if( keyname.CmpNoCase( s_Hotkey_Name_List[ii].m_Name ) == 0 )
         {
             keycode = s_Hotkey_Name_List[ii].m_KeyCode;
@@ -542,10 +543,13 @@ int WinEDA_BasicFrame::ReadHotkeyConfigFile( const wxString&                    
         /* Get the key name */
         strtok( NULL, "\"\n\r" );
         keyname = strtok( NULL, "\"\n\r" );
+        
         strtok( NULL, "\"\n\r" );
+        
         /* Get the command name */
         fctname = strtok( NULL, "\"\n\r" );
         msg = CONV_FROM_UTF8( fctname );
+        
         /* search the hotkey in current hotkey list */
         for( Ki_HotkeyInfo** List = CurrentHotkeyList; *List != NULL; List++ )
         {
@@ -553,9 +557,11 @@ int WinEDA_BasicFrame::ReadHotkeyConfigFile( const wxString&                    
             if( hk_decr->m_InfoMsg == msg )
             {
                 msg = CONV_FROM_UTF8( keyname );
+                
                 int code = ReturnKeyCodeFromKeyName( msg );
                 if( code )
                     hk_decr->m_KeyCode = code;
+                
                 break;
             }
         }

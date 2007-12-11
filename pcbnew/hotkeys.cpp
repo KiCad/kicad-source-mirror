@@ -187,9 +187,12 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         hotkey += 'A' - 'a';
 
     Ki_HotkeyInfo * HK_Descr = GetDescriptorFromHotkey( hotkey, s_Common_Hotkey_List );
+    
     if( HK_Descr == NULL )
         HK_Descr = GetDescriptorFromHotkey( hotkey, s_board_edit_Hotkey_List );
-    if( HK_Descr == NULL ) return;
+    
+    if( HK_Descr == NULL ) 
+        return;
 
     int ll;
 

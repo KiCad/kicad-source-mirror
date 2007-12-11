@@ -4,6 +4,16 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+2007-Dec-11 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++all
+  * Fixed hotkey table for '+' and '-' bug.  The lookup table in 
+    common/hotkeys_basic.cpp had bad entries for + and -.  These hotkeys
+    were not working on Linux.
+  * Added polygon directory to Doxyfile.
+
+
 2007-Dec-09 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +cvpcb:
@@ -14,25 +24,24 @@ email address.
 2007-Dec-09 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:
-	changes in file organisation and classes to prepare zone redesign. No real new code.
-	class zone functions and definitions moved in class_zone.h and .cpp
+    changes in file organisation and classes to prepare zone redesign. No real new code.
+    class zone functions and definitions moved in class_zone.h and .cpp
 
 
 2007-Dec-07 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew
-	Very minor bug in drill map : inaccurate via shapes (I believe EXCELLON drill file has no problems)
-
+    Very minor bug in drill map : inaccurate via shapes (I believe EXCELLON drill file has no problems)
 
     
 2007-Dec-06 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +all
-	Solved zoom key command problems (under linux and windows)
-	(seen http://sourceforge.net/tracker/index.php?func=detail&aid=1844960&group_id=145591&atid=762476)
-	
+    Solved zoom key command problems (under linux and windows)
+    (seen http://sourceforge.net/tracker/index.php?func=detail&aid=1844960&group_id=145591&atid=762476)
+    
 +pcbnew
-	solved bug when loading a footprint in modedit: invisible text attribute was lost (trunk and tag)
+    solved bug when loading a footprint in modedit: invisible text attribute was lost (trunk and tag)
 
 
 2007-Dec-4 UPDATE   Dick Hollenbeck <dick@softplc.com>
@@ -63,7 +72,7 @@ email address.
 ================================================================================
 +eeschema:
     Solved an annotation problem: in multiple parts per package components,
-	when sorted by position, parts were not grouped by package.
+    when sorted by position, parts were not grouped by package.
 
 
 2007-Dec-2 UPDATE   Dick Hollenbeck <dick@softplc.com>

@@ -466,7 +466,9 @@ INPUT                  = kicad \
                          common \
                          gerbview \
                          share \
-                         include
+                         include \
+                         polygon
+                         
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
