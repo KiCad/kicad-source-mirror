@@ -1,3 +1,4 @@
+
 /********************************************************************/
 /* Routines de lecture et sauvegarde des structures en format ASCii */
 /*  Fichier common a PCBNEW et CVPCB								*/
@@ -171,7 +172,6 @@ int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( FILE* File, int* LineNum )
 /**********************************************************************************/
 {
     char         Line[1024], * data;
-    BASE_SCREEN* screen = m_CurrentScreen;
 
     while(  GetLine( File, Line, LineNum ) != NULL )
     {
@@ -213,7 +213,6 @@ int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( FILE* File, int* LineNum )
 
         if( strnicmp( data, "Di", 2 ) == 0 )
         {
-            int    ii, jj, bestzoom;
             wxSize pcbsize, screensize;
             data = strtok( NULL, " =\n\r" );
             m_Pcb->m_BoundaryBox.SetX( atoi( data ) );
