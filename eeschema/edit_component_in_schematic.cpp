@@ -781,9 +781,10 @@ void WinEDA_SchematicFrame::EditComponentValue( EDA_SchComponentStruct* Cmp, wxD
     PartTextStruct* TextField = &Cmp->m_Field[VALUE];
 
     msg = TextField->m_Text;
-    Get_Message( _( "Value" ), msg, this );
+    if( Get_Message( _( "Value" ), msg, this ) )
+		msg.Empty(); //allow the user to remove the value.
 
-    if( !msg.IsEmpty() )
+    if( !msg.IsEmpty() && !msg.IsEmpty())
     {
         /* save old cmp in undo list if not already in edit, or moving ... */
         if( Cmp->m_Flags == 0 )
@@ -799,7 +800,58 @@ void WinEDA_SchematicFrame::EditComponentValue( EDA_SchComponentStruct* Cmp, wxD
     Cmp->Display_Infos( this );
 }
 
+/*****************************************************************************************/
+void WinEDA_SchematicFrame::EditComponentFootprint( EDA_SchComponentStruct* Cmp, wxDC* DC )
+/*****************************************************************************************/
+{
+    wxString msg;
+    EDA_LibComponentStruct* Entry;
+    int      flag = 0;
+	bool wasEmpty = false; 
 
+    if( Cmp == NULL )
+        return;
+
+    Entry = FindLibPart( Cmp->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+    if( Entry == NULL )
+        return;
+    if( Entry->m_UnitCount > 1 )
+        flag = 1;
+
+    PartTextStruct* TextField = &Cmp->m_Field[FOOTPRINT];
+
+    msg = TextField->m_Text;
+	if(msg.IsEmpty() )
+		wasEmpty = true; 
+    if( Get_Message( _( "Footprint" ), msg, this ) )
+		msg.Empty(); //allow the user to remove the value.
+
+	/* save old cmp in undo list if not already in edit, or moving ... */
+	if( Cmp->m_Flags == 0 )
+		SaveCopyInUndoList( Cmp, IS_CHANGED );
+	DrawTextField( DrawPanel, DC, &Cmp->m_Field[FOOTPRINT], flag, g_XorMode );
+	//move the field if it was new.
+	if(wasEmpty && !msg.IsEmpty())
+	{
+		Cmp->m_Field[FOOTPRINT].m_Pos = Cmp->m_Field[REFERENCE].m_Pos; 
+		//add offset here - ? suitable heuristic below?
+		Cmp->m_Field[FOOTPRINT].m_Pos.x += 
+			(Cmp->m_Field[REFERENCE].m_Pos.x - Cmp->m_Pos.x) > 0 ? 
+			(Cmp->m_Field[REFERENCE].m_Size.x) : (-1*Cmp->m_Field[REFERENCE].m_Size.x); 
+		Cmp->m_Field[FOOTPRINT].m_Pos.y += 
+			(Cmp->m_Field[REFERENCE].m_Pos.y - Cmp->m_Pos.y) > 0 ? 
+			(Cmp->m_Field[REFERENCE].m_Size.y) : (-1*Cmp->m_Field[REFERENCE].m_Size.y);
+		
+		Cmp->m_Field[FOOTPRINT].m_Orient = Cmp->m_Field[REFERENCE].m_Orient;
+	}
+	TextField->m_Text = msg; 
+	
+	DrawTextField( DrawPanel, DC, &Cmp->m_Field[FOOTPRINT], flag,
+				   Cmp->m_Flags ? g_XorMode : GR_DEFAULT_DRAWMODE );
+	m_CurrentScreen->SetModify();
+   
+    Cmp->Display_Infos( this );
+}
 /*****************************************************************************/
 void WinEDA_ComponentPropertiesFrame::SetInitCmp( wxCommandEvent& event )
 /*****************************************************************************/

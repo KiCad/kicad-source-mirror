@@ -370,7 +370,7 @@ EDA_LibComponentStruct * NewStruct;
 int diag;
 
 	if( CurrentLibEntry )
-		if( ! IsOK(this, _("Delete old component?")) ) return;
+		if( ! IsOK(this, _("Clear old component from screen (changes will be lost)?")) ) return;
 
 	CurrentDrawItem = NULL;
 

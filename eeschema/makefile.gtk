@@ -26,7 +26,7 @@ $(TARGET):  $(OBJECTS) makefile.gtk makefile.include $(EXTRALIBS) ../libs.linux
 	$(LD) $(OBJECTS) $(LDFLAGS)  $(LIBS) -o $(TARGET)
 
 netlist_form_pads-pcb: plugins/netlist_form_pads-pcb.cpp makefile.gtk
-	gcc $(CXXFLAGS) -D__UNIX__ -Wall plugins/netlist_form_pads-pcb.cpp $(LIBSTDC) -o netlist_form_pads-pcb
+	$(CXX) $(CXXFLAGS) -D__UNIX__ -Wall plugins/netlist_form_pads-pcb.cpp $(LIBSTDC) -o netlist_form_pads-pcb
 
 
 install: $(TARGET)

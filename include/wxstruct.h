@@ -1201,6 +1201,7 @@ private:
     void                    SetInitCmp( EDA_SchComponentStruct* DrawComponent, wxDC* DC );
     void                    EditComponentReference( EDA_SchComponentStruct* DrawLibItem, wxDC* DC );
     void                    EditComponentValue( EDA_SchComponentStruct* DrawLibItem, wxDC* DC );
+	void                    EditComponentFootprint( EDA_SchComponentStruct* DrawLibItem, wxDC* DC );
     void                    StartMoveCmpField( PartTextStruct* Field, wxDC* DC );
     void                    EditCmpFieldText( PartTextStruct* Field, wxDC* DC );
     void                    RotateCmpField( PartTextStruct* Field, wxDC* DC );
@@ -1323,6 +1324,7 @@ private:
     void                RotateSymbolText( wxDC* DC );
     void                DeleteDrawPoly( wxDC* DC );
     LibDrawField*       LocateField( EDA_LibComponentStruct* LibEntry );
+	LibEDA_BaseStruct* LocateItemUsingCursor(); 
     void                RotateField( wxDC* DC, LibDrawField* Field );
     void                PlaceField( wxDC* DC, LibDrawField* Field );
     void                EditField( wxDC* DC, LibDrawField* Field );

@@ -194,7 +194,22 @@ void LoadSubHierarchy( WinEDA_SchematicFrame* frame, EDA_BaseStruct* DrawList )
             }
             if( !STRUCT->m_FileName.IsEmpty() )
             {
-                if( frame->LoadOneEEFile( STRUCT, STRUCT->m_FileName ) == TRUE )
+				//problem -- must check for closed loops here, or we may never exit! 
+				//search back up the linked list tree...
+				EDA_BaseStruct* strct = EEDrawList;
+				bool noRecurse = true; 
+				while( strct->m_Parent ){
+					strct = strct->m_Parent; 
+					if( ((DrawSheetStruct*)strct)->m_FileName ==
+										 STRUCT->m_FileName ){
+						wxString msg; 
+						msg += wxString::Format(_( "The sheet hierarchy has an infinite loop, halting recursive loads. file: "));
+						msg += STRUCT->m_FileName; 
+						DisplayError( frame, msg );
+						noRecurse = false; 
+					}
+				}
+                if( frame->LoadOneEEFile( STRUCT, STRUCT->m_FileName ) == TRUE && noRecurse)
                 {
                     LoadSubHierarchy( frame, STRUCT->EEDrawList );
                 }

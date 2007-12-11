@@ -64,6 +64,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_DISPLAYDOC_CMP:
     case ID_POPUP_SCH_EDIT_VALUE_CMP:
     case ID_POPUP_SCH_EDIT_REF_CMP:
+	case ID_POPUP_SCH_EDIT_FOOTPRINT_CMP:
     case ID_POPUP_SCH_EDIT_CONVERT_CMP:
     case ID_POPUP_SCH_SELECT_UNIT_CMP:
     case ID_POPUP_SCH_SELECT_UNIT1:
@@ -583,8 +584,20 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
             break;
         EditComponentReference(
             (EDA_SchComponentStruct*) m_CurrentScreen->GetCurItem(), &dc );
+        break;  
+		
+	case ID_POPUP_SCH_EDIT_FOOTPRINT_CMP:
+
+        // Ensure the struct is a component (could be a struct of a component, like Field, text..)
+        if( m_CurrentScreen->GetCurItem()->Type() != DRAW_LIB_ITEM_STRUCT_TYPE )
+            m_CurrentScreen->SetCurItem( LocateSmallestComponent( GetScreen() ) );
+        if( m_CurrentScreen->GetCurItem() == NULL )
+            break;
+        EditComponentFootprint(
+            (EDA_SchComponentStruct*) m_CurrentScreen->GetCurItem(), &dc );
         break;
 
+		
     case ID_POPUP_SCH_EDIT_CONVERT_CMP:
 
         // Ensure the struct is a component (could be a struct of a component, like Field, text..)

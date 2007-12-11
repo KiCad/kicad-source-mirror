@@ -62,6 +62,8 @@ static Ki_HotkeyInfo    HkOrientNormalComponent( wxT(
                                                      "Orient Normal Component" ),
                                                  HK_ORIENT_NORMAL_COMPONENT, 'N' );
 static Ki_HotkeyInfo    HkRotateComponent( wxT( "Rotate Component" ), HK_ROTATE_COMPONENT, 'R' );
+static Ki_HotkeyInfo    HkEditComponentValue( wxT( "Edit Component Value" ), HK_EDIT_COMPONENT_VALUE, 'V' );
+static Ki_HotkeyInfo    HkEditComponentFootprint( wxT( "Edit Component Footprint" ), HK_EDIT_COMPONENT_FOOTPRINT, 'F' );
 static Ki_HotkeyInfo    HkMoveComponent( wxT( "Move Component" ), HK_MOVE_COMPONENT, 'M', ID_POPUP_SCH_MOVE_CMP_REQUEST );
 static Ki_HotkeyInfo    HkDragComponent( wxT( "Drag Component" ), HK_DRAG_COMPONENT, 'G', ID_POPUP_SCH_DRAG_CMP_REQUEST );
 static Ki_HotkeyInfo    HkMove2Drag( wxT(
@@ -73,6 +75,9 @@ static Ki_HotkeyInfo    HkNextSearch( wxT( "Next Search" ), HK_NEXT_SEARCH, WXK_
 
 // Library editor:
 static Ki_HotkeyInfo    HkInsertPin( wxT( "Repeat Pin" ), HK_REPEAT_LAST, WXK_INSERT );
+static Ki_HotkeyInfo    HkEditPin( wxT( "Edit Pin" ), HK_EDIT_PIN, 'E' );
+static Ki_HotkeyInfo    HkMovePin( wxT( "Move Pin" ), HK_MOVE_PIN, 'M' );
+static Ki_HotkeyInfo    HkDeletePin( wxT( "Delete Pin" ), HK_DELETE_PIN, WXK_DELETE );
 
 
 // List of common hotkey descriptors
@@ -91,6 +96,7 @@ Ki_HotkeyInfo* s_Schematic_Hotkey_List[] = {
     &HkDelete,          &HkInsert,           &HkMove2Drag,
     &HkMoveComponent,   &HkDragComponent,    &HkAddComponent,
     &HkRotateComponent, &HkMirrorXComponent, &HkMirrorYComponent, &HkOrientNormalComponent,
+	&HkEditComponentValue, &HkEditComponentFootprint,
     &HkBeginWire,
     NULL
 };
@@ -99,6 +105,9 @@ Ki_HotkeyInfo* s_Schematic_Hotkey_List[] = {
 Ki_HotkeyInfo* s_LibEdit_Hotkey_List[] =
 {
     &HkInsertPin,
+	&HkEditPin,
+	&HkMovePin,
+ 	&HkDeletePin,
     NULL
 };
 
@@ -366,6 +375,29 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
 			wxPostEvent( this, event );
         }
         break;
+	case HK_EDIT_COMPONENT_VALUE:
+		if( ItemInEdit )
+            break;
+		if( DrawStruct == NULL )
+            DrawStruct = LocateSmallestComponent( GetScreen() );
+		if(DrawStruct)
+		{
+			EditComponentValue(
+				(EDA_SchComponentStruct*) DrawStruct, DC );
+		}
+        break;
+		
+	case HK_EDIT_COMPONENT_FOOTPRINT:
+		if( ItemInEdit )
+            break;
+		if( DrawStruct == NULL )
+            DrawStruct = LocateSmallestComponent( GetScreen() );
+		if(DrawStruct)
+		{
+			EditComponentFootprint(
+				(EDA_SchComponentStruct*) DrawStruct, DC );
+		}
+        break;
     }
 
     if( RefreshToolBar )
@@ -390,6 +422,8 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
         return;
 
     wxPoint MousePos = m_CurrentScreen->m_MousePosition;
+	
+	LibEDA_BaseStruct* DrawEntry = LocateItemUsingCursor();
 
     // Remap the control key Ctrl A (0x01) to GR_KB_CTRL + 'A' (easier to handle...)
     if( (hotkey & GR_KB_CTRL) != 0 )
@@ -453,8 +487,36 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
         else
             wxBell();
         break;
-    }
-
+	case HK_EDIT_PIN:
+		if(DrawEntry)
+			CurrentDrawItem = DrawEntry; 
+		if(CurrentDrawItem)
+		{
+			if(CurrentDrawItem->Type() == COMPONENT_PIN_DRAW_TYPE)
+				InstallPineditFrame( this, DC, MousePos );
+		}
+		break;
+	case HK_DELETE_PIN:
+		if(DrawEntry)
+			CurrentDrawItem = DrawEntry; 
+		if(CurrentDrawItem)
+		{
+			wxCommandEvent evt; 
+			evt.SetId(ID_POPUP_LIBEDIT_DELETE_ITEM); 
+			Process_Special_Functions(evt); 
+		}
+		break;
+	case HK_MOVE_PIN:
+		if(DrawEntry)
+			CurrentDrawItem = DrawEntry; 
+		if(CurrentDrawItem)
+		{
+			wxCommandEvent evt; 
+			evt.SetId(ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST); 
+			Process_Special_Functions(evt); 
+		}
+		break;
+	}
     if( RefreshToolBar )
         SetToolbars();
 }

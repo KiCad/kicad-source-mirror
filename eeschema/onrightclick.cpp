@@ -43,6 +43,7 @@
 #include "Normal.xpm"
 #include "Edit_Comp_Ref.xpm"
 #include "Edit_Comp_Value.xpm"
+#include "Edit_Comp_Footprint.xpm"
 
 /* functions to add commands and submenus depending on the item */
 static void AddMenusForBlock( wxMenu* PopMenu, WinEDA_SchematicFrame* frame );
@@ -313,8 +314,13 @@ void AddMenusForComponent( wxMenu* PopMenu, EDA_SchComponentStruct* Component )
 
     if( LibEntry && LibEntry->m_Options != ENTRY_POWER )
     {
-        ADD_MENUITEM( editmenu, ID_POPUP_SCH_EDIT_VALUE_CMP, _( "Value" ), edit_comp_value_xpm );
+		msg = AddHotkeyName( _( "Value " ), s_Schematic_Hokeys_Descr, HK_EDIT_COMPONENT_VALUE );
+		ADD_MENUITEM( editmenu, ID_POPUP_SCH_EDIT_VALUE_CMP, msg, edit_comp_value_xpm );
+		
         ADD_MENUITEM( editmenu, ID_POPUP_SCH_EDIT_REF_CMP, _( "Reference" ), edit_comp_ref_xpm );
+		
+		msg = AddHotkeyName( _( "Footprint " ), s_Schematic_Hokeys_Descr, HK_EDIT_COMPONENT_FOOTPRINT );
+		ADD_MENUITEM( editmenu, ID_POPUP_SCH_EDIT_FOOTPRINT_CMP, msg, edit_comp_footprint_xpm );
     }
     if( LibEntry && (LookForConvertPart( LibEntry ) >= 2) )
         editmenu->Append( ID_POPUP_SCH_EDIT_CONVERT_CMP, _( "Convert" ) );

@@ -286,7 +286,6 @@ int LineWidth = MAX(Field->m_Width, g_DrawMinimunLineWidth);
 	DrawPanel->CursorOn(DC);
 }
 
-
 /****************************************************************************/
 LibDrawField * WinEDA_LibeditFrame::LocateField(EDA_LibComponentStruct *LibEntry)
 /****************************************************************************/
@@ -348,7 +347,7 @@ int hjustify, vjustify;
 		if ( hjustify == GR_TEXT_HJUSTIFY_CENTER ) x0 -= dx/2;
 		else if ( hjustify == GR_TEXT_HJUSTIFY_RIGHT ) x0 -= dx;
 		if ( vjustify == GR_TEXT_VJUSTIFY_CENTER ) y0 -= dy/2;
-		else if ( vjustify == GR_TEXT_VJUSTIFY_BOTTOM ) y0 -= dy;
+		else if ( vjustify == GR_TEXT_VJUSTIFY_BOTTOM ) y0 -= dy; 
 		x1 = x0 + dx; y1 = y0 + dy;
 		if( (m_CurrentScreen->m_Curseur.x >= x0) && ( m_CurrentScreen->m_Curseur.x <= x1) &&
 			(m_CurrentScreen->m_Curseur.y >= y0) && ( m_CurrentScreen->m_Curseur.y <= y1) )
@@ -358,3 +357,33 @@ int hjustify, vjustify;
 	return NULL;
 }
 
+/********************************************************************************/
+LibEDA_BaseStruct* WinEDA_LibeditFrame::LocateItemUsingCursor()
+/********************************************************************************/
+{
+	LibEDA_BaseStruct* DrawEntry = CurrentDrawItem;
+
+	if ( CurrentLibEntry == NULL ) return NULL;
+
+	if ( (DrawEntry == NULL) || (DrawEntry->m_Flags == 0) )
+	{ 	// Simple localisation des elements
+		DrawEntry = LocatePin(m_CurrentScreen->m_Curseur, CurrentLibEntry, CurrentUnit, CurrentConvert);
+		if ( DrawEntry == NULL )
+		{
+			DrawEntry = CurrentDrawItem = LocateDrawItem(GetScreen(), 
+					GetScreen()->m_MousePosition,CurrentLibEntry,CurrentUnit,
+					CurrentConvert,LOCATE_ALL_DRAW_ITEM);
+		}
+		if ( DrawEntry == NULL )
+		{
+			DrawEntry = CurrentDrawItem = LocateDrawItem(GetScreen(), GetScreen()->m_Curseur, CurrentLibEntry,CurrentUnit,
+					CurrentConvert,LOCATE_ALL_DRAW_ITEM);
+		}
+		if ( DrawEntry == NULL )
+		{
+			DrawEntry = CurrentDrawItem = (LibEDA_BaseStruct*)
+				LocateField(CurrentLibEntry);
+		}
+	}
+	return DrawEntry; 
+}

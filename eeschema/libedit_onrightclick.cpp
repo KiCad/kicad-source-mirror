@@ -17,6 +17,7 @@
 #include "protos.h"
 
 #include "id.h"
+#include "hotkeys.h"
 
 #include "Pin_to.xpm"
 #include "Pin_Size_to.xpm"
@@ -33,31 +34,10 @@ static void AddMenusForPin(wxMenu * PopMenu, LibDrawPin* Pin, WinEDA_LibeditFram
 bool WinEDA_LibeditFrame::OnRightClick(const wxPoint& MousePos, wxMenu * PopMenu)
 /********************************************************************************/
 {
-LibEDA_BaseStruct* DrawEntry = CurrentDrawItem;
+LibEDA_BaseStruct* DrawEntry = LocateItemUsingCursor();
 bool BlockActive = (m_CurrentScreen->BlockLocate.m_Command !=  BLOCK_IDLE);
 
 	if ( CurrentLibEntry == NULL ) return true;
-
-	if ( (DrawEntry == NULL) || (DrawEntry->m_Flags == 0) )
-	{ 	// Simple localisation des elements
-		DrawEntry = LocatePin(m_CurrentScreen->m_Curseur, CurrentLibEntry, CurrentUnit, CurrentConvert);
-		if ( DrawEntry == NULL )
-		{
-			DrawEntry = CurrentDrawItem = LocateDrawItem(GetScreen(), 
-					GetScreen()->m_MousePosition,CurrentLibEntry,CurrentUnit,
-					CurrentConvert,LOCATE_ALL_DRAW_ITEM);
-		}
-		if ( DrawEntry == NULL )
-		{
-			DrawEntry = CurrentDrawItem = LocateDrawItem(GetScreen(), GetScreen()->m_Curseur, CurrentLibEntry,CurrentUnit,
-					CurrentConvert,LOCATE_ALL_DRAW_ITEM);
-		}
-		if ( DrawEntry == NULL )
-		{
-			DrawEntry = CurrentDrawItem = (LibEDA_BaseStruct*)
-				LocateField(CurrentLibEntry);
-		}
-	}
 
 	//  If Command in progresss: put the menu "cancel" and "end tool"
 	if ( m_ID_current_state	)
@@ -89,7 +69,8 @@ bool BlockActive = (m_CurrentScreen->BlockLocate.m_Command !=  BLOCK_IDLE);
 	else return true;
 
 	CurrentDrawItem = DrawEntry;
-
+	wxString msg; 
+	
 	switch ( DrawEntry->Type() )
 	{
 		case  COMPONENT_PIN_DRAW_TYPE:
@@ -99,53 +80,53 @@ bool BlockActive = (m_CurrentScreen->BlockLocate.m_Command !=  BLOCK_IDLE);
 		case COMPONENT_ARC_DRAW_TYPE:
 			if( DrawEntry->m_Flags == 0 )
 			{
-				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
-					_("Move Arc"), move_arc_xpm);
+				msg = AddHotkeyName( _( "Move Arc " ), s_Libedit_Hokeys_Descr, HK_MOVE_PIN );
+				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST, msg, move_arc_xpm);
 			}
 			ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM,
 					_("Arc Options"), options_arc_xpm );
 			if( DrawEntry->m_Flags == 0 )
 			{
-				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM,
-					_("Arc Delete"), delete_arc_xpm);
+				msg = AddHotkeyName( _( "Delete Arc " ), s_Libedit_Hokeys_Descr, HK_DELETE_PIN );
+				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM, msg, delete_arc_xpm);
 			}
 			break;
 
 		case COMPONENT_CIRCLE_DRAW_TYPE:
 			if( DrawEntry->m_Flags == 0 )
 			{
-				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
-					_("Move Circle"), move_circle_xpm);
+				msg = AddHotkeyName( _( "Move Circle " ), s_Libedit_Hokeys_Descr, HK_MOVE_PIN );
+				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST, msg, move_circle_xpm);
 			}
 			ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM,
 				_("Circle Options"), options_circle_xpm);
 			if( DrawEntry->m_Flags == 0 )
 			{
-				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM,
-					_("Circle Delete"), delete_circle_xpm);
+				msg = AddHotkeyName( _( "Delete Circle " ), s_Libedit_Hokeys_Descr, HK_DELETE_PIN );
+				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM,msg, delete_circle_xpm);
 			}
 			break;
 
 		case COMPONENT_RECT_DRAW_TYPE:
 			if( DrawEntry->m_Flags == 0 )
 			{
-				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
-					_("Move Rect"), move_rectangle_xpm);
+				msg = AddHotkeyName( _( "Move Rect " ), s_Libedit_Hokeys_Descr, HK_MOVE_PIN );
+				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST, msg, move_rectangle_xpm);
 			}
 			ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM,
 				_("Rect Options"), options_rectangle_xpm);
 			if( DrawEntry->m_Flags == 0 )
 			{
-				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM,
-					_("Rect Delete"), delete_rectangle_xpm);
+				msg = AddHotkeyName( _( "Delete Rect " ), s_Libedit_Hokeys_Descr, HK_DELETE_PIN );
+				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM, msg, delete_rectangle_xpm);
 			}
 			break;
 
 		case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
 			if( DrawEntry->m_Flags == 0 )
 			{
-				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
-					_("Move Text"), move_text_xpm);
+				msg = AddHotkeyName( _( "Move Text " ), s_Libedit_Hokeys_Descr, HK_MOVE_PIN );
+				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST, msg, move_text_xpm);
 			}
 			ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM,
 				_("Text Editor"), edit_text_xpm);
@@ -153,16 +134,16 @@ bool BlockActive = (m_CurrentScreen->BlockLocate.m_Command !=  BLOCK_IDLE);
 				_("Rotate Text"), edit_text_xpm);
 			if( DrawEntry->m_Flags == 0 )
 			{
-				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM,
-					_("Text Delete"), delete_text_xpm);
+				msg = AddHotkeyName( _( "Delete Text " ), s_Libedit_Hokeys_Descr, HK_DELETE_PIN );
+				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM, msg, delete_text_xpm);
 			}
 			break;
 
 		case COMPONENT_POLYLINE_DRAW_TYPE:
 			if( DrawEntry->m_Flags == 0 )
 			{
-				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
-					_("Move Line"), move_line_xpm);
+				msg = AddHotkeyName( _( "Move Line " ), s_Libedit_Hokeys_Descr, HK_MOVE_PIN );
+				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST, msg, move_line_xpm);
 			}
 			if ( DrawEntry->m_Flags & IS_NEW )
 			{
@@ -173,23 +154,25 @@ bool BlockActive = (m_CurrentScreen->BlockLocate.m_Command !=  BLOCK_IDLE);
 				_("Line Options"), options_segment_xpm);
 			if( DrawEntry->m_Flags == 0 )
 			{
-				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM,
-					_("Line Delete"), delete_segment_xpm);
+				msg = AddHotkeyName( _( "Delete Line " ), s_Libedit_Hokeys_Descr, HK_DELETE_PIN );
+				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM, msg, delete_segment_xpm);
 			}
 			else if( (DrawEntry->m_Flags & IS_NEW) )
 			{
 				if( ((LibDrawPolyline*)DrawEntry)->n > 2 )
+				{
+					msg = AddHotkeyName( _( "Delete Segment " ), s_Libedit_Hokeys_Descr, HK_DELETE_PIN );
 					ADD_MENUITEM(PopMenu,
-						ID_POPUP_LIBEDIT_DELETE_CURRENT_POLY_SEGMENT,
-						_("Segment Delete"), delete_segment_xpm);
+						ID_POPUP_LIBEDIT_DELETE_CURRENT_POLY_SEGMENT, msg, delete_segment_xpm);
+				}
 			}	
 			break;
 
 		case COMPONENT_FIELD_DRAW_TYPE:
 			if( DrawEntry->m_Flags == 0 )
 			{
-				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
-					_("Move Field"), move_field_xpm);
+				msg = AddHotkeyName( _( "Move Feild " ), s_Libedit_Hokeys_Descr, HK_MOVE_PIN );
+				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST, msg, move_field_xpm);
 			}
 			ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_FIELD_ROTATE_ITEM,
 				_("Field Rotate"), rotate_field_xpm);
@@ -221,12 +204,14 @@ bool not_in_move = (Pin->m_Flags == 0);
 	if( not_in_move )	
 		ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST, _("Move Pin"), move_xpm );
 
-	ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_PIN_EDIT, _("Pin Edit"), edit_xpm );
+	wxString msg; 
+	msg = AddHotkeyName( _( "Edit Pin " ), s_Libedit_Hokeys_Descr, HK_EDIT_PIN );
+	ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_PIN_EDIT, msg, edit_xpm );
 
 	if( not_in_move )
 	{
-		ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM,
-			_("Pin Delete"), delete_pin_xpm );
+		msg = AddHotkeyName( _( "Delete Pin " ), s_Libedit_Hokeys_Descr, HK_DELETE_PIN );
+		ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM, msg, delete_pin_xpm );
 	}
 	wxMenu * global_pin_change = new wxMenu;
 	ADD_MENUITEM_WITH_SUBMENU(PopMenu, global_pin_change, ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_ITEM,
