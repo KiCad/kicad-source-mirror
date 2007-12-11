@@ -46,7 +46,7 @@ enum col_sel_id {
 
 // Specify the width and height of every (color-displaying / bitmap) button
 const int BUTT_SIZE_X = 25;
-const int BUTT_SIZE_Y = 15;
+const int BUTT_SIZE_Y = 20;
 
 /* Macro utile : */
 #define ADR( numlayer )     &g_DesignSettings.m_LayerColor[(numlayer)]
@@ -570,5 +570,4 @@ public:
     ~WinEDA_SetColorsFrame();
 };
 
-#endif
-    // SET_COLOR_H
+#endif   // SET_COLOR_H
