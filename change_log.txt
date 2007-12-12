@@ -5,6 +5,14 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2007-Dec-12 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+  * Fized zone drawing bug in svn HEAD only.
+    pcbnew/zones.cpp, see:
+    http://tech.groups.yahoo.com/group/kicad-users/message/2993
+
+    
 2007-Dec-11 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +all

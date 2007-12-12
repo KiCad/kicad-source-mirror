@@ -693,6 +693,8 @@ EDGE_ZONE* WinEDA_PcbFrame::Begin_Zone()
     {
         if( oldedge->m_Start != oldedge->m_End )
         {
+            oldedge->m_Flags &= ~(IS_NEW | IS_MOVED);
+            
             newedge = new EDGE_ZONE( oldedge );
             newedge->m_Flags = IS_NEW | IS_MOVED;
             newedge->m_Start = newedge->m_End = oldedge->m_End;
