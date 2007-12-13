@@ -10,7 +10,7 @@ email address.
 +pcbnew
   * surbrill.cpp's int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
     was re-written to use the GENERAL_COLLECTOR, and the scanList is set to
-    give pads a higher search priority than tracks, vias or pads.
+    give pads a higher search priority than tracks, vias or zones.
     The objective was to use the pad if possible, rather than a track on a pad,
     so the pad can be sent to eeschema.  Finding the track only (even though
     on a pad) would not send anything to eeschema.
