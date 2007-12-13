@@ -9,6 +9,8 @@
 #include "pcbnew.h"
 
 #include "protos.h"
+#include "collectors.h"
+
 
 #define Pad_fill (Pad_Fill_Item.State == RUN)
 
@@ -88,32 +90,40 @@ int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
 /* Localise track ou pad et met en surbrillance le net correspondant
  *  Retourne le netcode, ou -1 si pas de net localis�*/
 {
-    TRACK* pt_piste;
-    D_PAD* pt_pad;
-    int    masquelayer = g_TabOneLayerMask[GetScreen()->m_Active_Layer];
-    int    code = -1;
-
     if( g_HightLigt_Status )
         Hight_Light( DC );
     
-    pt_piste = Locate_Pistes( m_Pcb->m_Track, masquelayer, CURSEUR_OFF_GRILLE );
-    if( pt_piste )
+    // use this scheme because of pad is higher priority than tracks in the
+    // search, and finding a pad, instead of a track on a pad,
+    // allows us to fire a message to eescema.
+
+    GENERAL_COLLECTORS_GUIDE guide = GetCollectorsGuide();
+
+    // tweak the collector 
+    
+    m_Collector->Collect( m_Pcb, GENERAL_COLLECTOR::PadsOrTracks, 
+                         GetScreen()->RefPos( true ), guide );
+
+    BOARD_ITEM* item = (*m_Collector)[0];
+    
+    if( item )
     {
-        code = g_HightLigth_NetCode = pt_piste->GetNet();
-        Hight_Light( DC );
-    }
-    else
-    {
-        pt_pad = Locate_Any_Pad( m_Pcb, CURSEUR_OFF_GRILLE );
-        if( pt_pad != NULL )
+        switch( item->Type() )
         {
-            code = g_HightLigth_NetCode = pt_pad->GetNet();
+        case TYPEPAD:
+            g_HightLigth_NetCode = ((D_PAD*)item)->GetNet();
             Hight_Light( DC );
-            SendMessageToEESCHEMA( pt_pad );
+            SendMessageToEESCHEMA( item );
+            return g_HightLigth_NetCode;
+            
+        default:
+            g_HightLigth_NetCode = ((TRACK*)item)->GetNet();
+            Hight_Light( DC );
+            return g_HightLigth_NetCode;
         }
     }
-
-    return code;
+    
+    return -1;      // HitTest() failed.
 }
 
 

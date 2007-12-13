@@ -5,6 +5,17 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2007-Dec-13 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+  * surbrill.cpp's int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
+    was re-written to use the GENERAL_COLLECTOR, and the scanList is set to
+    give pads a higher search priority than tracks, vias or pads.
+    The objective was to use the pad if possible, rather than a track on a pad,
+    so the pad can be sent to eeschema.  Finding the track only (even though
+    on a pad) would not send anything to eeschema.
+
+
 2007-Dec-12 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew
@@ -25,8 +36,8 @@ email address.
 2007-Dec-09 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +cvpcb:
-	listboxes.cpp FootprintListBox::m_ActiveFootprint member was not initialized.
-	Can crash cvpcb (WINDOWS only, i believe)
+    listboxes.cpp FootprintListBox::m_ActiveFootprint member was not initialized.
+    Can crash cvpcb (WINDOWS only, i believe)
 
 
 2007-Dec-09 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
