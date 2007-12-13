@@ -99,7 +99,9 @@ int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
 
     GENERAL_COLLECTORS_GUIDE guide = GetCollectorsGuide();
 
-    // tweak the collector 
+    
+    // optionally, modify the "guide" here as needed using its member functions
+    
     
     m_Collector->Collect( m_Pcb, GENERAL_COLLECTOR::PadsOrTracks, 
                          GetScreen()->RefPos( true ), guide );
