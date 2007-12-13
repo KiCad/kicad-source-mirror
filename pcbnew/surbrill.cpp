@@ -116,10 +116,18 @@ int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
             SendMessageToEESCHEMA( item );
             return g_HightLigth_NetCode;
             
-        default:
+        case TYPETRACK:
+        case TYPEVIA:
+        case TYPEZONE:
+            // since these classes are all derived from TRACK, use a common
+            // GetNet() function:
             g_HightLigth_NetCode = ((TRACK*)item)->GetNet();
             Hight_Light( DC );
             return g_HightLigth_NetCode;
+            
+        default:
+            ;   // until somebody changes GENERAL_COLLECTOR::PadsOrTracks,
+                // this should not happen.
         }
     }
     
