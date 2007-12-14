@@ -241,7 +241,6 @@ void EraseDragListe()
     for( ; pt_drag != NULL; pt_drag = NextStruct )
     {
         NextStruct = pt_drag->Pnext;
-		pt_drag->m_Segm->m_Flags = 0;
         pt_drag->m_Segm->m_Flags = 0;        
         delete pt_drag;
     }

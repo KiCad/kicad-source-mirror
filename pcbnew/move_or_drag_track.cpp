@@ -234,7 +234,9 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( WinEDA_DrawPanel* panel,
 
     if( TrackSegWrapper == NULL )
         return;
-    Track = TrackSegWrapper->m_Segm; if( Track == NULL )
+    
+    Track = TrackSegWrapper->m_Segm; 
+    if( Track == NULL )
         return;
 
     TrackSegWrapper = TrackSegWrapper->Pnext;
@@ -260,6 +262,7 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( WinEDA_DrawPanel* panel,
         Track->Draw( panel, DC, draw_mode );
         if( tSegmentToStart )
             tSegmentToStart->Draw( panel, DC, draw_mode );
+        
         if( tSegmentToEnd )
             tSegmentToEnd->Draw( panel, DC, draw_mode );
     }
@@ -386,11 +389,13 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( WinEDA_DrawPanel* panel,
     // update the segment coordinates (if possible)
     if( tSegmentToStart == NULL )
     {
-        xi1 = tx1; yi1 = ty1;
+        xi1 = tx1; 
+        yi1 = ty1;
     }
     if( tSegmentToEnd == NULL )
     {
-        xi2 = tx2; yi2 = ty2;
+        xi2 = tx2; 
+        yi2 = ty2;
     }
 
 
@@ -736,6 +741,7 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC
         AddSegmentToDragList( DrawPanel, DC, flag, TrackToStartPoint );
         track->m_Flags |= STARTPOINT;
     }
+    
     if( TrackToEndPoint )
     {
         int flag = STARTPOINT;

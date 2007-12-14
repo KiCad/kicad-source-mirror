@@ -1051,7 +1051,17 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
                 GetScreen()->m_Route_Layer_TOP    = preslayer;
                 GetScreen()->m_Route_Layer_BOTTOM = layer;
                 GetScreen()->m_Active_Layer = preslayer;
-                Other_Layer_Route( (TRACK*) GetScreen()->GetCurItem(), DC );
+                
+                if( Other_Layer_Route( (TRACK*) GetScreen()->GetCurItem(), DC ) )
+                {
+                    if( DisplayOpt.ContrastModeDisplay )
+                        GetScreen()->SetRefreshReq();
+                }
+                
+                // if the via was allowed by DRC, then the layer swap has already
+                // been done by Other_Layer_Route(). if via not allowed, then 
+                // return now so assignment to m_Active_Layer below doesn't happen.
+                return;
             }
         }
     }

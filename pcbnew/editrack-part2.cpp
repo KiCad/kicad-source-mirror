@@ -153,19 +153,10 @@ void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
 }
 
 
-/****************************************************************/
-void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
-/****************************************************************/
 
-/*
- *  if no track in progress :
- *		swap the active layer between m_Route_Layer_TOP and m_Route_Layer_BOTTOM
- *  if a track is in progress :
- *		put (if possible, i.e. if no DRC problem) a Via on the end of the current
- *		track, swap the current active layer and start a new trac segment on the new layer
- * @param track = track in progress, or NULL
- * @param DC = current device context
- */
+/****************************************************************/
+bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
+/****************************************************************/
 {
     TRACK*  pt_segm;
     SEGVIA* Via;
@@ -180,19 +171,19 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
             GetScreen()->m_Active_Layer = GetScreen()->m_Route_Layer_BOTTOM;
         Affiche_Status_Box();
         SetToolbars();
-        return;
+        return true;
     }
 
     /* Avoid more than one via on the current location: */
     if( Locate_Via( m_Pcb, g_CurrentTrackSegment->m_End, g_CurrentTrackSegment->GetLayer() ) )
-        return;
+        return false;
     
     pt_segm = g_FirstTrackSegment;
     for( ii = 0; ii < g_TrackSegmentCount - 1; ii++, pt_segm = (TRACK*) pt_segm->Pnext )
     {
         if( (pt_segm->Type() == TYPEVIA)
            && (g_CurrentTrackSegment->m_End == pt_segm->m_Start) )
-            return;
+            return false;
     }
 
     /* Is the current segment Ok (no DRC error) ? */
@@ -200,12 +191,12 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
     {
         if( BAD_DRC==m_drc->Drc( g_CurrentTrackSegment, m_Pcb->m_Track ) )
             /* DRC error, the change layer is not made */
-            return;
+            return false;
             
         if( g_TwoSegmentTrackBuild && g_CurrentTrackSegment->Back() )    // We must handle 2 segments
         {
             if( BAD_DRC == m_drc->Drc( g_CurrentTrackSegment->Back(), m_Pcb->m_Track ) )
-                return;
+                return false;
         }
     }
 
@@ -256,7 +247,7 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
         delete Via;
         GetScreen()->m_Active_Layer = old_layer;
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
-        return;
+        return false;
     }
 
     /* A new via was created. It was Ok.
@@ -303,6 +294,8 @@ void WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
 
     Affiche_Status_Box();
     SetToolbars();
+    
+    return true;
 }
 
 

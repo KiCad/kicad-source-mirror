@@ -709,7 +709,20 @@ public:
 
     // Track and via edition:
     void                DisplayTrackSettings();
-    void                Other_Layer_Route( TRACK* track, wxDC* DC );
+    
+    /**
+     * Function Other_Layer_Route
+     * operates in one of two ways.  If argument track is NULL, then swap the active
+     * layer between m_Route_Layer_TOP and m_Route_Layer_BOTTOM.  If a track is
+     * in progress (track is not NULL), and if DRC allows it, place a via on the end
+     * of the current track, and then swap the current active layer and start a new
+     * segment on the new layer.
+     * @param track A TRACK* to append the via to or NULL.
+     * @param DC A device context to draw on.
+     * @return bool - true if the operation was successful, else false such as
+     *   the case where DRC would not allow a via.
+     */ 
+    bool                Other_Layer_Route( TRACK* track, wxDC* DC );
     void                Affiche_PadsNoConnect( wxDC* DC );
     void                Affiche_Status_Net( wxDC* DC );
     TRACK*              Delete_Segment( wxDC* DC, TRACK* Track );
