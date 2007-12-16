@@ -26,6 +26,7 @@
 
 #include "id.h"
 
+
 /******************************************************************/
 WinEDA_PrjFrame::WinEDA_PrjFrame( WinEDA_MainFrame* parent,
                                   const wxPoint&    pos,
@@ -49,6 +50,7 @@ WinEDA_PrjFrame::WinEDA_PrjFrame( WinEDA_MainFrame* parent,
     m_Filters.push_back( wxT( "^.*\\.net$" ) );
     m_Filters.push_back( wxT( "^.*\\.txt$" ) );
     m_Filters.push_back( wxT( "^.*\\.pho$" ) );
+    m_Filters.push_back( wxT( "^no kicad files found" ) );
     
 #ifdef KICAD_PYTHON
     m_Filters.push_back( wxT( "^.*\\.py$" ) );
@@ -517,7 +519,7 @@ wxString WinEDA_PrjFrame::GetFileExt( TreeFileType type )
 
 
 /**************************************************************************/
-void WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
+bool WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
 /**************************************************************************/
 
 /* add filename "name" to the tree
@@ -550,9 +552,8 @@ void WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
                     isSchematic = true;
             }
         }
-    
         if( !addFile )
-            return;
+            return false;
         
         // only show the schematic if it is a top level schematic.  eeschema
         // cannot open a schematic and display it properly unless it starts
@@ -564,13 +565,13 @@ void WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
             char    line[128];  // small because we just need a few bytes from the start of a line
             FILE*   fp;
             
-            wxString FullFileName = wxGetCwd() + STRING_DIR_SEP + name;
+            wxString FullFileName =  name;
             
             fp = wxFopen( FullFileName, wxT( "rt" ) );
             if( fp == NULL )
             {
                 //printf("Unable to open \"%s\"\n", (const char*) FullFileName.mb_str() );
-                return;             // why show a file we cannot open?
+                return false;             // why show a file we cannot open?
             }
 
             addFile = false;
@@ -589,7 +590,7 @@ void WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
             fclose(fp);
             
             if( !addFile )
-                return;     // it is a non-top-level schematic
+                return false;     // it is a non-top-level schematic
         }
         
         for( int i = TREE_PROJECT; i < TREE_MAX; i++ )
@@ -609,7 +610,20 @@ void WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
             }
         }
     }
-
+	//also check to see if it is already there. 
+	wxTreeItemIdValue cookie; 
+	wxTreeItemId kid = m_TreeProject->GetFirstChild(root, cookie); 
+	while(kid.IsOk())
+	{
+		TreePrjItemData* itemData = (TreePrjItemData*) 
+			m_TreeProject->GetItemData(kid); 
+		if( itemData ){
+			if( itemData->m_FileName == name ){
+				return true; //well, we would have added it, but it is already here!
+			}
+		}
+		kid = m_TreeProject->GetNextChild(root, cookie); 
+	}
     // Append the item (only appending the filename not the full path):
 
     wxString         file = wxFileNameFromPath( name );
@@ -632,24 +646,7 @@ void WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
 #ifdef KICAD_PYTHON
     PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::TreeAddFile" ), PyHandler::Convert( name ) );
 #endif
-
-    if( TREE_DIRECTORY == type )
-    {
-        const wxString sep = wxFileName().GetPathSeparator();
-        wxDir dir( name );
-
-        wxString       dir_filename;
-        if( dir.GetFirst( &dir_filename ) )
-        {
-            do
-            {
-                AddFile( name + sep + dir_filename, cellule );
-            } while( dir.GetNext( &dir_filename ) );
-        }
-
-        /* Sort filenames by alphabetic order */
-        m_TreeProject->SortChildren( cellule );
-    }
+	return true; 
 }
 
 
@@ -701,7 +698,8 @@ void WinEDA_PrjFrame::ReCreateTreePrj()
     if( prjOpened )
     {
         wxDir dir( wxGetCwd() );
-
+		wxString dir_str = dir.GetName(); 
+		wxString sep = wxFileName().GetPathSeparator();
         wxString filename;
         
         if( dir.GetFirst( &filename ) )
@@ -711,7 +709,7 @@ void WinEDA_PrjFrame::ReCreateTreePrj()
                 if( filename == Text + wxT( ".pro" ) )
                     continue;
                 
-                AddFile( filename, m_root );
+                AddFile(dir_str + sep + filename, m_root );
                 
             } while( dir.GetNext( &filename ) );
         }
@@ -936,5 +934,5 @@ void WinEDA_PrjFrame::OnSelect( wxTreeEvent& Event )
 
     if( !tree_data )
         return;
-    tree_data->Activate();
+    tree_data->Activate(this);
 }

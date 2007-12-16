@@ -202,7 +202,7 @@ public:
     bool        Rename( const wxString& name, bool check = true );
     bool        Delete( bool check = true );
     void        Move( TreePrjItemData* dest );
-    void        Activate();
+    void        Activate(WinEDA_PrjFrame* prjframe);
 
     const wxMenu* GetMenu()
     {
@@ -320,7 +320,7 @@ public:
 
 #endif
 
-    void                    AddFile( const wxString& name, wxTreeItemId& root );
+    bool                    AddFile( const wxString& name, wxTreeItemId& root );
 
     DECLARE_EVENT_TABLE()
 };

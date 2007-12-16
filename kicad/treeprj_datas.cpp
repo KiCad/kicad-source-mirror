@@ -163,6 +163,10 @@ void TreePrjItemData::OnRename( wxTreeEvent& event, bool check )
 /****************************************************************/
 /* Called upon tree item rename */
 {
+	//this segfaults on linux (in wxEvtHandler::ProcessEvent), wx version 2.8.7
+	//therefore, until it is fixed, we must cancel the rename. 
+	event.Veto();
+	return; 
     if( !Rename( event.GetLabel(), check ) )
         event.Veto();
 }
@@ -174,8 +178,12 @@ void TreePrjItemData::Move( TreePrjItemData* dest )
 
 // Move the object to dest
 {
+	//function not safe.
+	return; 
     const wxString sep = wxFileName().GetPathSeparator();
-
+	
+	if( m_Type == TREE_DIRECTORY )
+		return; 
     if( !dest )
         return;
     if( m_Parent != dest->m_Parent )
@@ -249,6 +257,9 @@ bool TreePrjItemData::Rename( const wxString& name, bool check )
 /****************************************************************/
 /* rename the file checking if extension change occurs */
 {
+	//this is broken & unsafe to use on linux. 
+	if( m_Type == TREE_DIRECTORY )
+		return false; 
     if( name.IsEmpty() )
         return false;
 
@@ -339,11 +350,16 @@ bool TreePrjItemData::Delete( bool check )
 
 
 /**********************************/
-void TreePrjItemData::Activate()
+void TreePrjItemData::Activate(WinEDA_PrjFrame* prjframe)
 /**********************************/
 /* Called under item activation */
 {
-    wxString FullFileName = wxGetCwd() + wxFileName().GetPathSeparator() + GetFileName();
+	wxString sep = wxFileName().GetPathSeparator(); 
+	wxString FullFileName = GetFileName();
+	wxDir 		*dir; 
+	wxString	dir_filename;
+	wxTreeItemId id = GetId(); 
+	int count; 
 
     switch( GetType() )
     {
@@ -351,7 +367,29 @@ void TreePrjItemData::Activate()
         break;
 
     case TREE_DIRECTORY:
-        m_Parent->Toggle( GetId() );
+		if(prjframe){
+			dir = new wxDir(FullFileName); 
+			count = 0; 
+			if( dir && dir->IsOpened() && dir->GetFirst( &dir_filename ) )
+			{
+				do
+				{
+					wxString fil = FullFileName + sep + dir_filename; 
+		
+					if( prjframe->AddFile(fil, id) ){
+						count++;
+					}
+				} while( dir->GetNext( &dir_filename ) );
+			}
+			if(count == 0)
+			{
+				prjframe->AddFile(wxString("no kicad files found in this directory"), id); 
+			}
+			/* Sort filenames by alphabetic order */
+			m_Parent->SortChildren( id );
+			if(dir) delete dir; 
+		}
+        m_Parent->Toggle( id );
         break;
 
     case TREE_SCHEMA:
