@@ -33,6 +33,7 @@ SET(PCBNEW_SRCS
 	class_track.cpp
 	class_zone.cpp
 	clean.cpp
+#   many of the commented out ones are nested in *.cpp files for dialogs     
 #	cleaningoptions_dialog.cpp
 	collectors.cpp
 	connect.cpp
