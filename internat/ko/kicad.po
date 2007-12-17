@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-06-26 14:26+0900\n"
-"Last-Translator: sushizang <sushizang@empal.com>\n"
+"PO-Revision-Date: 2007-12-17 15:07+0900\n"
+"Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -235,11 +235,11 @@ msgstr "활성 라이브러리:"
 
 #: pcbnew/librairi.cpp:689
 msgid "Module Editor (lib: "
-msgstr "Module Editor (라이브러리: "
+msgstr "Module Editor (lib: "
 
 #: pcbnew/librairi.cpp:705
 msgid "Library exists "
-msgstr "라이브러리가 존재합니다: "
+msgstr "라이브러리가 이미 존재합니다: "
 
 #: pcbnew/librairi.cpp:720
 msgid "Create error "
@@ -659,15 +659,15 @@ msgstr "노드 이동"
 
 #: pcbnew/onrightclick.cpp:562
 msgid "Break Track"
-msgstr "트랙 중단"
+msgstr "트랙 끊기"
 
 #: pcbnew/onrightclick.cpp:570
 msgid "Place Node"
 msgstr "노드 설치"
 
 #: pcbnew/onrightclick.cpp:577
-msgid "End Track"
-msgstr "트랙 마침"
+msgid "End Track (end)"
+msgstr "트랙 마침 (end)"
 
 #: pcbnew/onrightclick.cpp:578
 msgid "Place Via (V)"
@@ -900,7 +900,7 @@ msgstr "모듈 (%d 항목)"
 
 #: pcbnew/moduleframe.cpp:177
 msgid "Module Editor: module modified!, Continue ?"
-msgstr "Module Editor: 모듈이 변경되었습니다. 그래도 계속 하시겠습니까?"
+msgstr "Module 에디터: 모듈이 변경되었습니다. 그래도 계속 하시겠습니까?"
 
 #: pcbnew/mirepcb.cpp:81
 msgid "Mire properties"
@@ -1033,12 +1033,12 @@ msgid "Confirmation"
 msgstr "확인"
 
 #: pcbnew/pcbframe.cpp:346
-msgid "DCR Off (Disable !!!), Currently: DRC is active"
-msgstr "DRC 해제 (현재 상태: DRC 활성)"
+msgid "DRC Off (Disable !!!), Currently: DRC is active"
+msgstr "DRC 해제 (사용 안 함 !!!), 현재 상태: DRC 활성"
 
 #: pcbnew/pcbframe.cpp:346
-msgid "DRC On (Currently: DRC is DISABLE !!!)"
-msgstr "DRC 활성 (현재 상태: DRC 불능 !!!)"
+msgid "DRC On (Currently: DRC is inactive !!!)"
+msgstr "DRC 켬 (현재 상태: DRC 비활성 !!!)"
 
 #: pcbnew/pcbframe.cpp:356
 msgid "Polar Coords not show"
@@ -1142,7 +1142,7 @@ msgstr "새 보드"
 msgid "Open existing Board"
 msgstr "보드 열기"
 
-#: pcbnew/tool_pcb.cpp:85
+#: pcbnew/tool_pcb.cpp:221
 msgid "Save Board"
 msgstr "보드 저장"
 
@@ -1154,7 +1154,7 @@ msgstr "페이지 설정"
 
 #: pcbnew/tool_pcb.cpp:92
 msgid "Open Module Editor"
-msgstr "Module Editor 열기"
+msgstr "Module 에디터 열기"
 
 #: pcbnew/tool_pcb.cpp:95
 #: eeschema/tool_sch.cpp:77
@@ -1186,7 +1186,7 @@ msgstr "보드 인쇄"
 
 #: pcbnew/tool_pcb.cpp:107
 #: pcbnew/menubarpcb.cpp:93
-msgid "Plot (Hplg, Postscript, or Gerber format)"
+msgid "Plot (HPGL, PostScript, or GERBER format)"
 msgstr "플로트 (HPLG, Postscript 또는 Gerber 형식)"
 
 #: pcbnew/tool_pcb.cpp:110
@@ -1332,12 +1332,12 @@ msgid "Add modules"
 msgstr "모듈 추가"
 
 #: pcbnew/tool_pcb.cpp:238
-msgid "Add Tracks an vias"
+msgid "Add tracks and vias"
 msgstr "비아 및 트랙 추가"
 
 #: pcbnew/tool_pcb.cpp:242
 #: pcbnew/edit.cpp:525
-msgid "Add Zones"
+msgid "Add zones"
 msgstr "영역 추가"
 
 #: pcbnew/tool_pcb.cpp:247
@@ -1915,10 +1915,6 @@ msgstr "3D 표시 (&3)"
 msgid "&Help"
 msgstr "도움말 (&H)"
 
-#: pcbnew/menubarpcb.cpp:41
-msgid "Load Board"
-msgstr "보드 열기"
-
 #: pcbnew/menubarpcb.cpp:42
 msgid "Delete old Board and Load new Board"
 msgstr "이전 보드 삭제 후 새 보드 열기"
@@ -1954,10 +1950,6 @@ msgstr "이전 버전 (&P)"
 #: pcbnew/menubarpcb.cpp:66
 msgid "Clear old board and get old version of board"
 msgstr "이전 보드 삭제 후 이전 버전 보드 열기"
-
-#: pcbnew/menubarpcb.cpp:73
-msgid "&Save board"
-msgstr "보드 저장 (&S)"
 
 #: pcbnew/menubarpcb.cpp:74
 msgid "Save current board"
@@ -2042,7 +2034,7 @@ msgstr "하나의 라이브러리 파일에 풋프린트 압축 또는 추가"
 #: kicad/buildmnu.cpp:124
 #: gerbview/gerberframe.cpp:249
 msgid "E&xit"
-msgstr "끝내기 (&X)"
+msgstr "종료 (&X)"
 
 #: pcbnew/menubarpcb.cpp:131
 msgid "Quit pcbnew"
@@ -2508,7 +2500,7 @@ msgid "Load module from lib"
 msgstr "라이브러리로부터 모듈 열기"
 
 #: pcbnew/tool_modedit.cpp:73
-msgid "Load module from current BOARD"
+msgid "Load module from current board"
 msgstr "현재 보드로부터 모듈 열기"
 
 #: pcbnew/tool_modedit.cpp:77
@@ -2656,13 +2648,13 @@ msgstr "좌표 표시"
 #: pcbnew/set_grid.cpp:145
 #: gerbview/options.cpp:191
 msgid "Inches"
-msgstr "인치"
+msgstr "Inch"
 
 #: pcbnew/dialog_general_options.cpp:272
 #: pcbnew/gendrill.cpp:158
 #: gerbview/options.cpp:192
 msgid "millimeters"
-msgstr "밀리미터"
+msgstr "mm"
 
 #: pcbnew/dialog_general_options.cpp:274
 #: eeschema/dialog_options.cpp:235
@@ -2729,7 +2721,7 @@ msgstr "45도 세그먼트만"
 #: pcbnew/dialog_general_options.cpp:340
 #: eeschema/dialog_options.cpp:226
 msgid "Auto PAN"
-msgstr "자동 팬"
+msgstr "자동 화면 이동"
 
 #: pcbnew/dialog_general_options.cpp:345
 msgid "Double Segm Track"
@@ -3137,7 +3129,7 @@ msgstr "모듈 바꾸기"
 
 #: pcbnew/dialog_edit_module.cpp:190
 msgid "Goto Module Editor"
-msgstr "Module Editor 실행"
+msgstr "Module 에디터 실행"
 
 #: pcbnew/dialog_edit_module.cpp:196
 #: eeschema/onrightclick.cpp:315
@@ -3168,11 +3160,11 @@ msgstr "필드 삭제"
 
 #: pcbnew/dialog_edit_module.cpp:236
 msgid "Componant"
-msgstr "컴포넌트"
+msgstr "Component"
 
 #: pcbnew/dialog_edit_module.cpp:236
 msgid "Copper"
-msgstr "커퍼"
+msgstr "Copper"
 
 #: pcbnew/dialog_edit_module.cpp:244
 #: pcbnew/dialog_pad_edit.cpp:181
@@ -3207,7 +3199,7 @@ msgstr "속성"
 
 #: pcbnew/dialog_edit_module.cpp:311
 msgid "Free"
-msgstr "프리"
+msgstr "자유"
 
 #: pcbnew/dialog_edit_module.cpp:311
 msgid "Locked"
@@ -3337,7 +3329,7 @@ msgstr "치수는 커퍼 레이어에 추가할 수 없습니다."
 #: pcbnew/edit.cpp:440
 #: pcbnew/editmod.cpp:43
 msgid "Module Editor"
-msgstr "Module Editor"
+msgstr "Module 에디터"
 
 #: pcbnew/edit.cpp:516
 msgid "Add Tracks"
@@ -3389,7 +3381,7 @@ msgstr "패드 크기"
 
 #: pcbnew/editpads.cpp:78
 msgid "Delta"
-msgstr "델타"
+msgstr "증분값"
 
 #: pcbnew/editpads.cpp:82
 msgid "Pad Drill"
@@ -4052,7 +4044,7 @@ msgstr "드릴 도구"
 #: pcbnew/gendrill.cpp:158
 #: eeschema/dialog_options.cpp:233
 msgid "inches"
-msgstr "인치"
+msgstr "inch"
 
 #: pcbnew/gendrill.cpp:160
 msgid "Drill Units:"
@@ -4119,7 +4111,7 @@ msgid "drill sheet (HPGL)"
 msgstr "드릴 시트 (HPGL)"
 
 #: pcbnew/gendrill.cpp:205
-msgid "drill sheet (Postscript)"
+msgid "drill sheet (PostScript)"
 msgstr "드릴 시트 (Postscript)"
 
 #: pcbnew/gendrill.cpp:207
@@ -4136,7 +4128,7 @@ msgid "Pen Number"
 msgstr "펜 번호:"
 
 #: pcbnew/gendrill.cpp:219
-msgid "Speed(cm/s)"
+msgid "Speed (cm/s)"
 msgstr "속도 (센티미터/초):"
 
 #: pcbnew/gendrill.cpp:222
@@ -4541,7 +4533,7 @@ msgid "You must provide a name for this component"
 msgstr "컴포넌트에 이름이 필요합니다."
 
 #: eeschema/dialog_build_BOM.cpp:173
-msgid "List items : "
+msgid "List items:"
 msgstr "항목 목록"
 
 #: eeschema/dialog_build_BOM.cpp:177
@@ -4556,12 +4548,12 @@ msgstr "값에 의한 컴포넌트"
 
 #: eeschema/dialog_build_BOM.cpp:185
 #: eeschema/obsolete/genliste.cpp:132
-msgid "Sub Components (i.e U2A, U2B..)"
-msgstr "서브 컴포넌트 (예: U2A, U2B...)"
+msgid "Sub Components (i.e. U2A, U2B ...)"
+msgstr "서브 컴포넌트 (예: U2A, U2B ...)"
 
 #: eeschema/dialog_build_BOM.cpp:189
 #: eeschema/obsolete/genliste.cpp:135
-msgid "Hierachy Pins by name"
+msgid "Hierachy Pins by Name"
 msgstr "이름에 의한 계층구조 핀"
 
 #: eeschema/dialog_build_BOM.cpp:193
@@ -4719,12 +4711,12 @@ msgstr "상이한 값: %s%d%c (%s) 및 %s%d%c (%s)"
 #: eeschema/dialog_options.cpp:140
 #: eeschema/dialog_options.cpp:267
 msgid "Delta Step X"
-msgstr "델타 스텝 X:"
+msgstr "X 증분값:"
 
 #: eeschema/dialog_options.cpp:145
 #: eeschema/dialog_options.cpp:273
 msgid "Delta Step Y"
-msgstr "델타 스텝 Y:"
+msgstr "Y 증분값:"
 
 #: eeschema/dialog_options.cpp:201
 msgid "Show grid"
@@ -4768,7 +4760,7 @@ msgstr "핀 보이기"
 
 #: eeschema/dialog_options.cpp:232
 msgid "millimeter"
-msgstr "밀리미터"
+msgstr "mm"
 
 #: eeschema/dialog_options.cpp:239
 msgid "Horiz/Vertical"
@@ -4784,7 +4776,7 @@ msgstr "자동 인수 증가"
 
 #: eeschema/dialog_options.cpp:279
 msgid "Delta Label:"
-msgstr "델타 라벨:"
+msgstr "라벨 증분값:"
 
 #: eeschema/plotps.cpp:167
 #: eeschema/plothpgl.cpp:206
@@ -6127,11 +6119,11 @@ msgstr "EESchema 설정"
 
 #: eeschema/eelayer.cpp:362
 msgid "White Background"
-msgstr "백색"
+msgstr "흰색"
 
 #: eeschema/eelayer.cpp:362
 msgid "Black Background"
-msgstr "흑색"
+msgstr "검정색"
 
 #: eeschema/eelayer.cpp:364
 msgid "Background Colour"
@@ -6829,31 +6821,31 @@ msgid "Save current loaded library on disk (file update)"
 msgstr "현재 로드된 라이브러리를 디스크에 저장 (파일 업데이트)"
 
 #: eeschema/tool_lib.cpp:126
-msgid "New part"
+msgid "New component"
 msgstr "새 부품"
 
 #: eeschema/tool_lib.cpp:129
-msgid "Select part to edit"
+msgid "Select component to edit"
 msgstr "편집할 부품 선택"
 
 #: eeschema/tool_lib.cpp:133
-msgid "Save current part into current loaded library (in memory)"
+msgid "Save current component into current loaded library (in memory)"
 msgstr "현재 부품을 로드된 라이브러리에 저장 (메모리)"
 
 #: eeschema/tool_lib.cpp:136
-msgid "import part"
+msgid "import component"
 msgstr "부품 가져오기"
 
 #: eeschema/tool_lib.cpp:139
-msgid "export part"
+msgid "export component"
 msgstr "부품 내보내기"
 
 #: eeschema/tool_lib.cpp:143
-msgid "Create a new library an save current part into"
+msgid "Create a new library an save current component into"
 msgstr "현재 부품을 저장할 새 라이브러리 만들기"
 
 #: eeschema/tool_lib.cpp:156
-msgid "Edit Part Properties"
+msgid "Edit component properties"
 msgstr "부품 속성 편집"
 
 #: eeschema/tool_lib.cpp:163
@@ -7368,7 +7360,7 @@ msgstr "삭제 선택"
 #: cvpcb/init.cpp:134
 #, c-format
 msgid "Componants: %d (free: %d)"
-msgstr "컴포넌트: %d (프리: %d)"
+msgstr "컴포넌트: %d (자유: %d)"
 
 #: cvpcb/cvframe.cpp:373
 #: share/drawframe.cpp:125
@@ -7406,7 +7398,7 @@ msgstr "%s %s 핀 %s: 상이한 네트"
 #: cvpcb/init.cpp:64
 #, c-format
 msgid "Components: %d (free: %d)"
-msgstr "컴포넌트: %d (프리: %d)"
+msgstr "컴포넌트: %d (자유: %d)"
 
 #: cvpcb/init.cpp:100
 msgid "Unknown Netlist Format"
@@ -7526,11 +7518,11 @@ msgstr "자동 패키지 연결"
 
 #: cvpcb/tool_cvpcb.cpp:51
 msgid "Select previous free component"
-msgstr "이전의 프리 컴포넌트를 선택"
+msgstr "이전의 자유 컴포넌트를 선택"
 
 #: cvpcb/tool_cvpcb.cpp:54
 msgid "Select next free component"
-msgstr "다음의 프리 컴포넌트를 선택"
+msgstr "다음의 자유 컴포넌트를 선택"
 
 #: cvpcb/tool_cvpcb.cpp:58
 msgid "Delete all associations"
@@ -7642,7 +7634,7 @@ msgstr "모든 프로젝트 파일 저장 후 Zip 압축하기"
 
 #: kicad/buildmnu.cpp:118
 msgid "&Unzip Archive"
-msgstr "압푹 풀기 (&U)"
+msgstr "압축 풀기 (&U)"
 
 #: kicad/buildmnu.cpp:119
 msgid "UnZip archive file"
@@ -7934,7 +7926,7 @@ msgid "Ok to delete block ?"
 msgstr "블록을 삭제하시겠습니까?"
 
 #: gerbview/dcode.cpp:440
-msgid "List D-Codes"
+msgid "List D codes"
 msgstr "D-Codes 목록"
 
 #: gerbview/edit.cpp:234
@@ -7946,27 +7938,27 @@ msgid "Layer modified,  Continue ?"
 msgstr "레이어가 수정되었습니다. 그래도 계속 하시겠습니까?"
 
 #: gerbview/gerberframe.cpp:202
-msgid "Clear and Load gerber file"
+msgid "Clear and Load Gerber file"
 msgstr "화면을 지운 후 거버 파일 열기"
 
 #: gerbview/gerberframe.cpp:203
-msgid "Clear all layers and Load new gerber file"
+msgid "Clear all layers and Load new Gerber file"
 msgstr "레이어를 모두 지운 후 새 거버 파일 열기"
 
 #: gerbview/gerberframe.cpp:207
-msgid "Load gerber file"
+msgid "Load Gerber file"
 msgstr "거버 파일 열기"
 
 #: gerbview/gerberframe.cpp:208
-msgid "Load new gerber file on currrent layer"
+msgid "Load new Gerber file on currrent layer"
 msgstr "현재 레이어에 새 거버 파일 열기"
 
 #: gerbview/gerberframe.cpp:212
-msgid "Inc Layer and load gerber file"
+msgid "Inc Layer and load Gerber file"
 msgstr "레이어 증가 후 거버 파일 열기"
 
 #: gerbview/gerberframe.cpp:213
-msgid "Increment layer number, and Load gerber file"
+msgid "Increment layer number, and Load Gerber file"
 msgstr "레이어 번호 증가 후 거버 파일 열기"
 
 #: gerbview/gerberframe.cpp:217
@@ -8017,13 +8009,13 @@ msgstr "다양한 형식으로 플로팅"
 msgid "Quit Gerbview"
 msgstr "GERBVIEW 종료"
 
-#: gerbview/gerberframe.cpp:261
-msgid "&Files and Dir"
-msgstr "파일 및 디렉토리 (&F)"
+#: gerbview/tool_gerber.cpp:103
+msgid "&File ext"
+msgstr "파일 확장자 (&F)"
 
-#: gerbview/gerberframe.cpp:262
-msgid "Setting Files extension, Directories and others..."
-msgstr "파일 확장자, 디렉토리 등 설정..."
+#: gerbview/tool_gerber.cpp:104
+msgid "Setting Files extension"
+msgstr "파일 확장자 설정"
 
 #: gerbview/gerberframe.cpp:264
 msgid "Select Colors and Display for layers"
@@ -8067,7 +8059,7 @@ msgstr "현재 레이어 삭제"
 
 #: gerbview/gerberframe.cpp:298
 msgid "&About"
-msgstr "GERBVIEW에 대하여 (&A)"
+msgstr "정보 (&A)"
 
 #: gerbview/gerberframe.cpp:298
 msgid "Gerbview Infos"
@@ -8569,7 +8561,7 @@ msgstr "정보 표시"
 
 #: share/drawframe.cpp:347
 msgid "Inch"
-msgstr "인치"
+msgstr "Inch"
 
 #: share/drawframe.cpp:353
 msgid "??"
@@ -8616,7 +8608,9 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"GPL 라이센스를 준수합니다."
+"GPL 라이센스를 준수합니다.\n"
+"\n"
+"한국어 번역: 박찬규(sushizang@empal.com)"
 
 #: share/infospgm.cpp:51
 msgid ""
@@ -8677,7 +8671,7 @@ msgstr "시트 번호: %d"
 
 #: share/setpage.cpp:231
 msgid "Revision:"
-msgstr "Revision:"
+msgstr "버전:"
 
 #: share/setpage.cpp:238
 msgid "Company:"
@@ -8733,7 +8727,7 @@ msgstr "근사 스케일"
 
 #: share/dialog_print.cpp:171
 msgid "Black"
-msgstr "흑백 이미지"
+msgstr "검정색"
 
 #: share/dialog_print.cpp:173
 msgid "Color Print:"
@@ -8749,11 +8743,11 @@ msgstr "단일 페이지"
 
 #: share/dialog_print.cpp:197
 msgid "Print S&etup"
-msgstr "인쇄 설정 (&e)"
+msgstr "인쇄 설정 (&E)"
 
 #: share/dialog_print.cpp:201
 msgid "Pre&view"
-msgstr "미리 보기 (&v)"
+msgstr "미리 보기 (&V)"
 
 #: share/dialog_print.cpp:205
 msgid "&Print"
@@ -9071,7 +9065,7 @@ msgid "Print as text for spreadsheet import"
 msgstr "스프레드시트에서 읽을 수 있는 텍스트로 인쇄"
 
 #: eeschema/dialog_build_BOM.cpp:226
-msgid "Fields to Add"
+msgid "Fields to add:"
 msgstr "추가할 필드"
 
 #: eeschema/dialog_build_BOM.cpp:230
@@ -9161,7 +9155,7 @@ msgstr "현재 컴포넌트에 대해 필터된 풋프린트 목록만 표시"
 
 #: cvpcb/tool_cvpcb.cpp:79
 msgid "Display the full footprint list (without filtering)"
-msgstr "모든 풋프린트 목록 표시 (필터링 안됨)"
+msgstr "모든 풋프린트 목록 표시 (필터링 안 됨)"
 
 #: pcbnew/editpads.cpp:74
 msgid "Pad Position"
@@ -9324,7 +9318,7 @@ msgstr "텍스트 에디터로 Python 스크립트 편집"
 
 #: kicad/treeprj_frame.cpp:84
 msgid "New D&irectory"
-msgstr "새 디렉토리 (&i)"
+msgstr "새 디렉토리 (&I)"
 
 #: kicad/treeprj_frame.cpp:84
 msgid "Create a New Directory"
@@ -9364,7 +9358,7 @@ msgstr "새 네트리스트 만들기"
 
 #: kicad/treeprj_frame.cpp:107
 msgid "New P&ython Script"
-msgstr "새 Python 스크립트 (&y)"
+msgstr "새 Python 스크립트 (&Y)"
 
 #: kicad/treeprj_frame.cpp:107
 msgid "Create a New Python Script"
@@ -9502,4 +9496,421 @@ msgstr "이 세그먼트를 드래그 할 수 없습니다: 너무 많은 세그
 #: pcbnew/move_or_drag_track.cpp:690
 msgid "Unable to drag this segment: two colinear segments"
 msgstr "이 세그먼트를 드래그 할 수 없습니다: 두 세그먼트가 평행합니다."
+
+#: pcbnew/menubarpcb.cpp:264
+#: pcbnew/menubarmodedit.cpp:60
+#: eeschema/menubar.cpp:152
+#: cvpcb/tool_cvpcb.cpp:158
+#: kicad/buildmnu.cpp:199
+#: gerbview/tool_gerber.cpp:139
+msgid "&Contents"
+msgstr "목차 (&C)"
+
+#: pcbnew/tool_pcb.cpp:49
+msgid ""
+"Show active layer selections\n"
+"and select layer pair for route and place via"
+msgstr ""
+"활성 레이어 선택 보이기 및\n"
+"배선, 비아 설치를 위한 레이어쌍 선택"
+
+#: pcbnew/menubarpcb.cpp:41
+msgid "Load Board    Ctrl-O"
+msgstr "보드 열기         Ctrl-O"
+
+#: pcbnew/menubarpcb.cpp:73
+msgid "&Save board    Ctrl-S"
+msgstr "보드 저장 (&S)    Ctrl-S"
+
+#: gerbview/tool_gerber.cpp:67
+msgid "&Export to Pcbnew"
+msgstr "PCBNEW로 내보내기 (&E)"
+
+#: gerbview/export_to_pcbnew.cpp:31
+msgid "Board file name:"
+msgstr "보드 파일명:"
+
+#: gerbview/export_to_pcbnew.cpp:47
+msgid "Ok to change the existing file ?"
+msgstr "기존 파일을 변경하시겠습니까 ?"
+
+#: pcbnew/onrightclick.cpp:190
+msgid "Get and Move Footprint"
+msgstr "풋프린트 이동"
+
+#: pcbnew/modules.cpp:74
+msgid "Footprint name:"
+msgstr "풋프린트 이름:"
+
+#: pcbnew/tool_modedit.cpp:78
+msgid "Update module in current board"
+msgstr "현재 보드 모듈 업데이트"
+
+#: pcbnew/tool_modedit.cpp:82
+msgid "Insert module into current board"
+msgstr "현재 보드로 모듈 삽입"
+
+#: pcbnew/onrightclick.cpp:577
+msgid "Delete Segment (backspace)"
+msgstr "세그먼트 삭제 (backspace)"
+
+#: pcbnew/onrightclick.cpp:581
+msgid "Delete Track (delete)"
+msgstr "트랙 삭제 (delete)"
+
+#: eeschema/fieldedi.cpp:820
+msgid "Text: "
+msgstr "텍스트: "
+
+#: pcbnew/tool_pcb.cpp:253
+msgid "Find components and texts (Ctrl-F)"
+msgstr "컴포넌트 및 텍스트 찾기 (Ctrl F)"
+
+#: pcbnew/dialog_edit_module.cpp:310
+msgid "Move and Auto Place"
+msgstr "이동 및 자동 배치"
+
+#: eeschema/dialog_build_BOM.cpp:266
+msgid "Text for spreadsheet import"
+msgstr "스프래드시트 형식 텍스트"
+
+#: eeschema/dialog_build_BOM.cpp:267
+msgid "Output format:"
+msgstr "출력 형식"
+
+#: eeschema/dialog_build_BOM.cpp:272
+msgid "Tab"
+msgstr "탭"
+
+#: eeschema/dialog_build_BOM.cpp:273
+msgid ";"
+msgstr ";"
+
+#: eeschema/dialog_build_BOM.cpp:274
+msgid ","
+msgstr ","
+
+#: eeschema/dialog_build_BOM.cpp:275
+msgid "Field separator for spreadsheet import:"
+msgstr "스프래드시트 필드 분리자"
+
+#: eeschema/annotate_dialog.cpp:136
+msgid "by position"
+msgstr "위치 기준"
+
+#: eeschema/annotate_dialog.cpp:137
+msgid "by value"
+msgstr "값 기준"
+
+#: eeschema/annotate_dialog.cpp:138
+msgid "sorting:"
+msgstr "정렬"
+
+#: cvpcb/dialog_cvpcb_config.cpp:170
+#: cvpcb/dialog_cvpcb_config.cpp:202
+msgid "Add below"
+msgstr "아래로 추가"
+
+#: cvpcb/dialog_cvpcb_config.cpp:174
+#: cvpcb/dialog_cvpcb_config.cpp:206
+msgid "Add above"
+msgstr "위로 추가"
+
+#: gerbview/onrightclick.cpp:64
+msgid "Delete Dcode items"
+msgstr "D-Codes 항목 삭제"
+
+#: pcbnew/gendrill.cpp:207
+msgid "Drill Origin:"
+msgstr "드릴 원점:"
+
+#: eeschema/menubar.cpp:122
+msgid "&Undo\t"
+msgstr "되돌리기 (&U)\t"
+
+#: eeschema/menubar.cpp:129
+msgid "&Redo\t"
+msgstr "다시 실행 (&R)\t"
+
+#: eeschema/menubar.cpp:189
+msgid "&Edit"
+msgstr "편집 (&E)"
+
+#: pcbnew/pcbcfg.cpp:196
+#: eeschema/eeconfig.cpp:192
+#: cvpcb/cfg.cpp:71
+msgid "Save preferences"
+msgstr "설정 파일 저장:"
+
+#: pcbnew/menubarpcb.cpp:176
+#: eeschema/menubar.cpp:163
+msgid "&Save preferences"
+msgstr "설정 저장 (&S)"
+
+#: pcbnew/menubarpcb.cpp:177
+#: eeschema/menubar.cpp:164
+#: gerbview/tool_gerber.cpp:123
+msgid "Save application preferences"
+msgstr "응용 프로그램의 설정을 저장합니다."
+
+#: pcbnew/menubarpcb.cpp:181
+#: eeschema/menubar.cpp:167
+msgid "&Read preferences"
+msgstr "설정 읽기 (&R)"
+
+#: pcbnew/menubarpcb.cpp:182
+#: eeschema/menubar.cpp:168
+msgid "Read application preferences"
+msgstr "응용 프로그램의 설정을 불러옵니다."
+
+#: pcbnew/hotkeys.cpp:440
+#, c-format
+msgid "Footprint %s found, but locked"
+msgstr "%s 풋프린트를 찾았습니다. 그러나 잠겨 있습니다"
+
+#: pcbnew/hotkeys.cpp:605
+msgid "Delete module?"
+msgstr "모듈을 삭제하시겠습니까?"
+
+#: common/hotkeys_basic.cpp:301
+msgid ""
+"Current hotkey list:\n"
+"\n"
+msgstr ""
+"현재 단축키 목록:\n"
+"\n"
+
+#: common/hotkeys_basic.cpp:309
+msgid "key "
+msgstr "단축키: "
+
+#: common/hotkeys_basic.cpp:366
+#: common/hotkeys_basic.cpp:484
+msgid "Hotkey configuration file:"
+msgstr "단축키 설정 파일:"
+
+#: common/hotkeys_basic.cpp:398
+msgid "Allowed keys:\n"
+msgstr "허용된 키:\n"
+
+#: common/hotkeys_basic.cpp:503
+msgid "Unable to read "
+msgstr "다음을 읽을 수 없습니다: "
+
+#: common/hotkeys_basic.cpp:611
+msgid "Show Current Hotkey List"
+msgstr "현재 단축키 목록 보이기"
+
+#: common/hotkeys_basic.cpp:612
+msgid "Show the current hotkey config"
+msgstr "현재 단축키 설정 보이기"
+
+#: common/hotkeys_basic.cpp:618
+msgid "Create Hotkey config file"
+msgstr "단축키 설정 파일 만들기"
+
+#: common/hotkeys_basic.cpp:619
+msgid "Create or Recreate the hotkey config file from current hotkey list"
+msgstr "현재 단축키 목록으로부터 단축키 설정 파일을 새로 만들거나 다시 만듭니다."
+
+#: common/hotkeys_basic.cpp:625
+msgid "Reread Hotkey config file"
+msgstr "단축키 설정 파일 다시 읽기"
+
+#: common/hotkeys_basic.cpp:626
+msgid "Reread the hotkey config file"
+msgstr "단축키 설정 파일을 다시 읽습니다."
+
+#: common/hotkeys_basic.cpp:630
+msgid "Edit Hotkey config file"
+msgstr "단축키 설정 파일 편집"
+
+#: common/hotkeys_basic.cpp:631
+msgid "Run the text editor and edit the hotkey config file"
+msgstr "텍스트 에디터로 단축키 설정 파일을 편집합니다."
+
+#: common/hotkeys_basic.cpp:637
+msgid "home directory"
+msgstr "홈 디렉토리 (home)"
+
+#: common/hotkeys_basic.cpp:638
+msgid "Use home directory to load or store Hotkey config files"
+msgstr "홈 디렉토리에서 단축키 설정 파일을 읽거나 저장합니다."
+
+#: common/hotkeys_basic.cpp:643
+msgid "kicad/template directory"
+msgstr "kicad/template 디렉토리"
+
+#: common/hotkeys_basic.cpp:644
+msgid "Use kicad/template directory to load or store Hotkey config files"
+msgstr "kicad/template 디렉토리에서 단축키 설정 파일을 읽거나 저장합니다."
+
+#: common/hotkeys_basic.cpp:650
+msgid "Hotkey config location"
+msgstr "단축키 설정 위치"
+
+#: common/hotkeys_basic.cpp:652
+msgid "Hotkey config file location selection (home directory or kicad tree)"
+msgstr "단축키 설정 위치 선택 (홈 디렉토리 또는 kicad 트리)"
+
+#: pcbnew/tool_pcb.cpp:270
+#: pcbnew/tool_modedit.cpp:115
+#: eeschema/tool_lib.cpp:170
+#: eeschema/tool_sch.cpp:108
+#: gerbview/tool_gerber.cpp:271
+msgid "zoom +"
+msgstr "확대 +"
+
+#: pcbnew/tool_pcb.cpp:274
+#: pcbnew/tool_modedit.cpp:119
+#: eeschema/tool_lib.cpp:174
+#: eeschema/tool_sch.cpp:112
+#: gerbview/tool_gerber.cpp:278
+msgid "zoom -"
+msgstr "축소 -"
+
+#: pcbnew/tool_pcb.cpp:278
+#: pcbnew/tool_modedit.cpp:123
+#: eeschema/tool_lib.cpp:178
+#: eeschema/tool_sch.cpp:116
+#: gerbview/tool_gerber.cpp:285
+msgid "redraw"
+msgstr "새로 고침"
+
+#: eeschema/dialog_build_BOM.cpp:338
+msgid "Create &List"
+msgstr "목록 만들기 (&L)"
+
+#: eeschema/dialog_build_BOM.cpp:354
+#: cvpcb/dialog_display_options.cpp:195
+msgid "&Apply"
+msgstr "적용 (&A)"
+
+#: cvpcb/dialog_cvpcb_config.h:50
+msgid "Cvpcb Configuration"
+msgstr "Cvpcb 설정"
+
+#: cvpcb/tool_cvpcb.cpp:35
+#: cvpcb/tool_cvpcb.cpp:113
+msgid "Open a NetList file"
+msgstr "네트리스트 파일 열기"
+
+#: kicad/treeprj_frame.cpp:85
+msgid "&Open the file in a Text Editor"
+msgstr "텍스트 에디터로 열기 (&O)"
+
+#: cvpcb/tool_cvpcb.cpp:112
+msgid "&Open"
+msgstr "열기 (&O)"
+
+#: cvpcb/init.cpp:164
+#: cvpcb/tool_cvpcb.cpp:38
+msgid "Save NetList and Components List files"
+msgstr "네트리스트 및 컴포넌트 목록 파일 저장"
+
+#: cvpcb/tool_cvpcb.cpp:119
+msgid "&Save As..."
+msgstr "다른 이름으로 저장 (&S)..."
+
+#: pcbnew/menubarpcb.cpp:254
+msgid "&Track operations"
+msgstr "트랙 작업 (&T)"
+
+#: pcbnew/cleaningoptions_dialog.h:48
+msgid "Cleaning options"
+msgstr "정리 설정"
+
+#: pcbnew/cleaningoptions_dialog.cpp:146
+msgid "Static"
+msgstr "고정"
+
+#: pcbnew/cleaningoptions_dialog.cpp:150
+msgid "Delete redundant vias"
+msgstr "중복 비아 삭제"
+
+#: pcbnew/cleaningoptions_dialog.cpp:153
+msgid "remove vias on pads with a through hole"
+msgstr "스루홀 패드 상의 비아 제거"
+
+#: pcbnew/cleaningoptions_dialog.cpp:156
+msgid "Merge segments"
+msgstr "세그먼트 병합"
+
+#: pcbnew/cleaningoptions_dialog.cpp:159
+msgid "merge aligned track segments, and remove null segments"
+msgstr "할당된 트랙 세그먼트를 병합하고 빈 세그먼트를 제거합니다."
+
+#: pcbnew/cleaningoptions_dialog.cpp:162
+msgid "Delete unconnected tracks"
+msgstr "미연결 트랙 삭제"
+
+#: pcbnew/cleaningoptions_dialog.cpp:165
+msgid "delete track segment having a dangling end"
+msgstr "달링으로 종료된 트랙 세그먼트를 삭제합니다."
+
+#: pcbnew/cleaningoptions_dialog.cpp:168
+msgid "Connect to Pads"
+msgstr "패드로 연결"
+
+#: pcbnew/cleaningoptions_dialog.cpp:171
+msgid "Extend dangling tracks which partially cover a pad or via, all the way to pad or via center"
+msgstr "부분적으로 패드 또는 비아를 덮고 있는 달링 트랙을 트랙 또는 비아 중심으로 확장합니다."
+
+#: pcbnew/cleaningoptions_dialog.cpp:177
+msgid "Clean pcb"
+msgstr "PCB 정리"
+
+#: pcbnew/set_color.cpp:361
+#: eeschema/eelayer.cpp:259
+#: gerbview/set_color.cpp:333
+msgid "Apply"
+msgstr "적용"
+
+#: eeschema/dialog_eeschema_config.cpp:221
+msgid "Default library file path:"
+msgstr "기본 라이브러리 파일 경로:"
+
+#: eeschema/dialog_eeschema_config.cpp:191
+msgid "Remove"
+msgstr "제거"
+
+#: eeschema/tool_lib.cpp:126
+msgid "Delete component in current library"
+msgstr "현재 라이브러리의 컴포넌트 삭제"
+
+#: eeschema/eelayer.cpp:235
+msgid "Background Color:"
+msgstr "배경색:"
+
+#: eeschema/eelayer.cpp:233
+msgid "White"
+msgstr "흰색"
+
+#: eeschema/plotps.cpp:179
+msgid "Plot Options:"
+msgstr "플로트 설정:"
+
+#: share/svg_print.cpp:194
+msgid "Black and White"
+msgstr "흑백 이미지"
+
+#: share/svg_print.cpp:196
+msgid "Print mode"
+msgstr "인쇄 모드"
+
+#: gerbview/reglage.cpp:128
+msgid "D code File Ext:"
+msgstr "D-Code 파일 확장자:"
+
+#: gerbview/options.cpp:314
+msgid "Polygons:"
+msgstr "다각형:"
+
+#: gerbview/options.cpp:328
+msgid "Show D codes"
+msgstr "D-Code 보이기"
+
+#: gerbview/reglage.cpp:102
+msgid "Save Cfg..."
+msgstr "설정 저장..."
 
