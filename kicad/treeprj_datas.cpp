@@ -142,10 +142,10 @@ wxString TreePrjItemData::GetDir() const
     if( TREE_DIRECTORY == m_Type )
         return m_FileName;
 
-    wxFileName    filename = wxFileName( m_FileName );
-    
+    wxFileName filename = wxFileName( m_FileName );
+
     filename.MakeRelativeTo( wxGetCwd() );
-    
+
     wxArrayString dirs = filename.GetDirs();
 
     wxString      dir;
@@ -163,10 +163,10 @@ void TreePrjItemData::OnRename( wxTreeEvent& event, bool check )
 /****************************************************************/
 /* Called upon tree item rename */
 {
-	//this segfaults on linux (in wxEvtHandler::ProcessEvent), wx version 2.8.7
-	//therefore, until it is fixed, we must cancel the rename. 
-	event.Veto();
-	return; 
+    //this segfaults on linux (in wxEvtHandler::ProcessEvent), wx version 2.8.7
+    //therefore, until it is fixed, we must cancel the rename.
+    event.Veto();
+    return;
     if( !Rename( event.GetLabel(), check ) )
         event.Veto();
 }
@@ -178,22 +178,22 @@ void TreePrjItemData::Move( TreePrjItemData* dest )
 
 // Move the object to dest
 {
-	//function not safe.
-	return; 
+    //function not safe.
+    return;
     const wxString sep = wxFileName().GetPathSeparator();
-	
-	if( m_Type == TREE_DIRECTORY )
-		return; 
+
+    if( m_Type == TREE_DIRECTORY )
+        return;
     if( !dest )
         return;
     if( m_Parent != dest->m_Parent )
-        return;                                 // Can not cross move!
+        return; // Can not cross move!
     if( dest == this )
-        return;                                 // Can not move to ourself...
+        return; // Can not move to ourself...
 
     wxTreeItemId parent = m_Parent->GetItemParent( GetId() );
     if( dest == dynamic_cast<TreePrjItemData*>( m_Parent->GetItemData( parent ) ) )
-        return;                                                                              // same parent ?
+        return; // same parent ?
 
     // We need to create a new item from us, and move
     // data to there ...
@@ -207,7 +207,7 @@ void TreePrjItemData::Move( TreePrjItemData* dest )
     destName += fname.GetFullName();
 
     if( destName == GetFileName() )
-        return;                              // Same place ??
+        return; // Same place ??
 
     // Move the file on the disk:
 #if ( ( wxMAJOR_VERSION < 2) || ( ( wxMAJOR_VERSION == 2)&& (wxMINOR_VERSION < 7 )  ) )
@@ -257,9 +257,10 @@ bool TreePrjItemData::Rename( const wxString& name, bool check )
 /****************************************************************/
 /* rename the file checking if extension change occurs */
 {
-	//this is broken & unsafe to use on linux. 
-	if( m_Type == TREE_DIRECTORY )
-		return false; 
+    //this is broken & unsafe to use on linux.
+    if( m_Type == TREE_DIRECTORY )
+        return false;
+    
     if( name.IsEmpty() )
         return false;
 
@@ -281,33 +282,32 @@ bool TreePrjItemData::Rename( const wxString& name, bool check )
 
     if( check && !ext.IsEmpty() && !reg.Matches( newFile ) )
     {
-        wxMessageDialog dialog(            m_Parent,
-                                           _(
-                                               "Changing file extension will change file type.\n Do you want to continue ?" ),
-                                           _( "Rename File" ),
-                                           wxYES_NO | wxICON_QUESTION );
+        wxMessageDialog dialog( m_Parent,
+          _( "Changing file extension will change file type.\n Do you want to continue ?" ),
+          _( "Rename File" ),
+          wxYES_NO | wxICON_QUESTION );
 
         if( wxID_YES != dialog.ShowModal() )
             return false;
     }
 
-#if ( (wxMAJOR_VERSION < 2) || ( (wxMAJOR_VERSION == 2) && (wxMINOR_VERSION < 7) ) )
+#if ( ( wxMAJOR_VERSION < 2) || ( ( wxMAJOR_VERSION == 2) && (wxMINOR_VERSION < 7 )  ) )
     if( !wxRenameFile( m_FileName, newFile ) )
 #else
     if( !wxRenameFile( m_FileName, newFile, false ) )
 #endif
     {
-        wxMessageDialog( m_Parent, _( "Unable to rename file ... " ), 
-                        _("Permission error ?" ), wxICON_ERROR | wxOK );
+        wxMessageDialog( m_Parent, _( "Unable to rename file ... " ),
+                         _( "Permission error ?" ), wxICON_ERROR | wxOK );
         return false;
     }
     SetFileName( newFile );
 
-    #ifdef KICAD_PYTHON
+#ifdef KICAD_PYTHON
     object param = make_tuple( PyHandler::Convert( m_FileName ),
                               PyHandler::Convert( newFile ) );
     PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::RenameFile" ), param );
-    #endif
+#endif
     return true;
 }
 
@@ -317,8 +317,8 @@ bool TreePrjItemData::Delete( bool check )
 /*******************************************/
 /* delete a file */
 {
-    wxMessageDialog dialog( m_Parent, _ ("Do you really want to delete ") + GetFileName(), 
-                           _("Delete File" ), wxYES_NO | wxICON_QUESTION );
+    wxMessageDialog dialog( m_Parent, _ ("Do you really want to delete ") + GetFileName(),
+                            _( "Delete File" ), wxYES_NO | wxICON_QUESTION );
 
     if( !check || wxID_YES == dialog.ShowModal() )
     {
@@ -329,16 +329,16 @@ bool TreePrjItemData::Delete( bool check )
         else
         {
             wxArrayString filelist;
-            
+
             wxDir::GetAllFiles( m_FileName, &filelist );
-            
+
             for( unsigned int i = 0; i < filelist.Count(); i++ )
                 wxRemoveFile( filelist[i] );
 
             wxRmdir( m_FileName );
         }
         m_Parent->Delete( GetId() );
-        
+
 #ifdef KICAD_PYTHON
         PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::DeleteFile" ),
                                                PyHandler::Convert( m_FileName ) );
@@ -350,16 +350,16 @@ bool TreePrjItemData::Delete( bool check )
 
 
 /**********************************/
-void TreePrjItemData::Activate(WinEDA_PrjFrame* prjframe)
+void TreePrjItemData::Activate( WinEDA_PrjFrame* prjframe )
 /**********************************/
 /* Called under item activation */
 {
-	wxString sep = wxFileName().GetPathSeparator(); 
-	wxString FullFileName = GetFileName();
-	wxDir 		*dir; 
-	wxString	dir_filename;
-	wxTreeItemId id = GetId(); 
-	int count; 
+    wxString     sep = wxFileName().GetPathSeparator();
+    wxString     FullFileName = GetFileName();
+    wxDir*       dir;
+    wxString     dir_filename;
+    wxTreeItemId id = GetId();
+    int          count;
 
     switch( GetType() )
     {
@@ -367,48 +367,55 @@ void TreePrjItemData::Activate(WinEDA_PrjFrame* prjframe)
         break;
 
     case TREE_DIRECTORY:
-		if(prjframe){
-			dir = new wxDir(FullFileName); 
-			count = 0; 
-			if( dir && dir->IsOpened() && dir->GetFirst( &dir_filename ) )
-			{
-				do
-				{
-					wxString fil = FullFileName + sep + dir_filename; 
-		
-					if( prjframe->AddFile(fil, id) ){
-						count++;
-					}
-				} while( dir->GetNext( &dir_filename ) );
-			}
-			if(count == 0)
-			{
-				prjframe->AddFile(wxString(_("no kicad files found in this directory")), id); 
-			}
-			/* Sort filenames by alphabetic order */
-			m_Parent->SortChildren( id );
-			if(dir) delete dir; 
-		}
+        if( prjframe )
+        {
+            dir = new wxDir( FullFileName );
+
+            count = 0;
+            if( dir && dir->IsOpened() && dir->GetFirst( &dir_filename ) )
+            {
+                do
+                {
+                    wxString fil = FullFileName + sep + dir_filename;
+
+                    if( prjframe->AddFile( fil, id ) )
+                    {
+                        count++;
+                    }
+                } while( dir->GetNext( &dir_filename ) );
+            }
+            
+            if( count == 0 )
+            {
+                /*  The AddFile() text below should match the filter added to handle
+                    it in treeprj_frame.cpp in the line looking like this:
+                    m_Filters.push_back( wxT( "^no kicad files found" ) );
+                */
+				prjframe->AddFile( wxString(_("no kicad files found in this directory")), id ); 
+            }
+            
+            /* Sort filenames by alphabetic order */
+            m_Parent->SortChildren( id );
+            delete dir;
+        }
         m_Parent->Toggle( id );
         break;
 
     case TREE_SCHEMA:
-    {
         AddDelimiterString( FullFileName );
         ExecuteFile( m_Parent, EESCHEMA_EXE, FullFileName );
         break;
-    }
 
     case TREE_PCB:
         AddDelimiterString( FullFileName );
         ExecuteFile( m_Parent, PCBNEW_EXE, FullFileName );
         break;
 
-        #ifdef KICAD_PYTHON
+#ifdef KICAD_PYTHON
     case TREE_PY:
         PyHandler::GetInstance()->RunScript( FullFileName );
         break;
-        #endif
+#endif
 
     case TREE_GERBER:
         AddDelimiterString( FullFileName );
