@@ -294,8 +294,17 @@ void WinEDA_DrillFrame::SetParams()
     wxString ps = m_Choice_Precision->GetStringSelection();
     wxString l  = ps.substr( 0, 1 );
     wxString r  = ps.substr( 2, 1 );
-    l.ToLong( (long*) &s_Precision.m_lhs );
-    r.ToLong( (long*) &s_Precision.m_rhs );
+    
+    
+    // a long is not an int on all machines
+    long lhs;
+    long rhs;
+    
+    l.ToLong( &lhs );
+    r.ToLong( &rhs );
+    
+    s_Precision.m_lhs = lhs;
+    s_Precision.m_rhs = rhs;
 }
 
 
