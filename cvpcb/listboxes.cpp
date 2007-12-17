@@ -155,13 +155,16 @@ void FootprintListBox::SetSelection( unsigned index, bool State )
     if( (int) index >= GetCount() )
         index = GetCount() - 1;
 
+	if ( (index >= 0)  && (GetCount() > 0) )
+	{
 #ifndef __WXMAC__
-    Select( index, State );
+		Select( index, State );
 #endif
-    EnsureVisible( index );
+		EnsureVisible( index );
 #ifdef __WXMAC__
-    Refresh();
+		Refresh();
 #endif
+	}
 }
 
 
@@ -256,13 +259,16 @@ void ListBoxCmp::SetSelection( unsigned index, bool State )
     if( (int) index >= GetCount() )
         index = GetCount() - 1;
 
+	if ( (index >= 0) && (GetCount() > 0) )
+	{
 #ifndef __WXMAC__
-    Select( index, State );
+		Select( index, State );
 #endif
-    EnsureVisible( index );
+		EnsureVisible( index );
 #ifdef __WXMAC__
-    Refresh();
+		Refresh();
 #endif
+	}
 }
 
 

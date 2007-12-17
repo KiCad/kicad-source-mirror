@@ -355,7 +355,8 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     case ID_PCB_ZONES_BUTT:
     {
         bool add_separator = FALSE;
-        aPopMenu->Append( ID_POPUP_PCB_FILL_ZONE, _( "Fill zone" ) );
+        ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_FILL_ZONE,
+                      _( "Fill zone" ), fill_zone_xpm );
 
         if( item
            && ( (item->Type() == TYPEPAD)

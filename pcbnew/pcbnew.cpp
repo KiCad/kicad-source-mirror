@@ -43,10 +43,6 @@ bool WinEDA_App::OnInit()
             return false;
     }
 
-    /* Add image handlers for screen hardcopy */
-    wxImage::AddHandler( new wxPNGHandler );
-    wxImage::AddHandler( new wxJPEGHandler );
-
     ScreenPcb = new PCB_SCREEN( PCB_FRAME );
     GetSettings();
 

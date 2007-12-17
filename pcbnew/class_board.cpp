@@ -650,8 +650,86 @@ EQUIPOT* BOARD::FindNet( int anetcode ) const
 }
 
 
+/* Two sort functions used in BOARD::ReturnSortedNetnamesList */
+// Sort nets by name
+int s_SortByNames(const void * ptr1, const void * ptr2)
+{
+	EQUIPOT* item1 = * (EQUIPOT**) ptr1;
+	EQUIPOT* item2 = * (EQUIPOT**) ptr2;
+	return  item1->m_Netname.CmpNoCase(item2->m_Netname);
+}
 
+// Sort nets by decreasing pad count
+int s_SortByNodes(const void * ptr1, const void * ptr2)
+{
+	EQUIPOT* item1 = * (EQUIPOT**) ptr1;
+	EQUIPOT* item2 = * (EQUIPOT**) ptr2;
+	if ( (item1->m_NbNodes - item2->m_NbNodes) != 0 )
+		return  - (item1->m_NbNodes - item2->m_NbNodes);
+	return  item1->m_Netname.CmpNoCase(item2->m_Netname);
+}
+
+
+/**
+ * Function ReturnSortedNetnamesList
+ * searches for a net with the given netcode.
+ * @param aNames An array string to fill with net names.
+ * @param aSort_Type : NO_SORT = no sort, ALPHA_SORT = sort by alphabetic order, PAD_CNT_SORT = sort by active pads count.
+ * @return int - net names count.
+ */
+int BOARD::ReturnSortedNetnamesList( wxArrayString & aNames, const int aSort_Type)
+{
+	int NetCount = 0;
+	int ii;
+	EQUIPOT* net;
+	
+	/* count items to list and sort */
+	for( net = m_Equipots; net;  net=net->Next() )
+	{
+		if ( net->m_Netname.IsEmpty() ) continue;
+		NetCount++;
+	}
+
+	if ( NetCount == 0 ) return 0;
+
+	/* Build the list */
+	EQUIPOT* * net_ptr_list = (EQUIPOT* *) MyMalloc( NetCount * sizeof(* net_ptr_list) );
+	for( ii = 0, net = m_Equipots; net; net=net->Next() )
+	{
+		if ( net->m_Netname.IsEmpty() ) continue;
+		net_ptr_list[ii] = net;
+		ii++;
+	}
+	
+	/* sort the list */
+	switch ( aSort_Type )
+	{
+		case NO_SORT : break;
+
+		case ALPHA_SORT :
+			qsort (net_ptr_list, NetCount, sizeof(EQUIPOT*), s_SortByNames);
+			break;
+
+		case PAD_CNT_SORT:
+			qsort (net_ptr_list, NetCount, sizeof(EQUIPOT*), s_SortByNodes);
+			break;
+	}
+
+	/* fill the given list */
+	for( ii = 0; ii < NetCount; ii++ )
+	{
+		net = net_ptr_list[ii];
+		aNames.Add(net->m_Netname);
+	}
+	
+	MyFree(net_ptr_list);
+	
+	return NetCount;
+}
+
+/************************************/
 bool BOARD::Save( FILE* aFile ) const
+/************************************/
 {
     bool        rc = false;
     BOARD_ITEM* item;

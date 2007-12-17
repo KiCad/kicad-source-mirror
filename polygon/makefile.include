@@ -7,10 +7,14 @@ COMMON =
 OBJECTS= \
 		GenericPolygonClipperLibrary.o \
 		php_polygon.o\
-		php_polygon_vertex.o
+		php_polygon_vertex.o\
+		PolyLine.o\
+		math_for_graphics.o
 
 GenericPolygonClipperLibrary.o: GenericPolygonClipperLibrary.cpp GenericPolygonClipperLibrary.h
 
 php_polygon.o: php_polygon.cpp php_polygon.h php_polygon_vertex.h defs-macros.h
 
 #polygon1.o: polygon1.cpp polyarea.h vectmatr.h
+
+math_for_graphics.o: math_for_graphics.cpp math_for_graphics.h

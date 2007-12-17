@@ -48,8 +48,7 @@ public:
     CHEVELU*        m_Ratsnest;                 // Rastnest list
     CHEVELU*        m_LocalRatsnest;            // Rastnest list used while moving a footprint
 
-    EDGE_ZONE*      m_CurrentLimitZone;         /* pointeur sur la liste des segments
-                                                 * de delimitation de la zone en cours de trace */
+    EDGE_ZONE*      m_CurrentLimitZone;         /* zone contour currently in progress */
 
     BOARD( EDA_BaseStruct* StructFather, WinEDA_BasePcbFrame* frame );
     ~BOARD();
@@ -174,6 +173,20 @@ public:
      * @return EQUIPOT* - the net or NULL if not found.
      */
     EQUIPOT* FindNet( int aNetcode ) const;
+
+    /**
+     * Function ReturnSortedNetnamesList
+     * searches for a net with the given netcode.
+     * @param aNames An array string to fill with net names.
+     * @param aSort_Type : NO_SORT = no sort, ALPHA_SORT = sort by alphabetic order, PAD_CNT_SORT = sort by active pads count.
+     * @return int - net names count.
+     */
+	enum netname_sort_type {
+		NO_SORT,
+		ALPHA_SORT,
+		PAD_CNT_SORT
+	};
+    int ReturnSortedNetnamesList( wxArrayString & aNames, const int aSort_Type);
 
 
     /**

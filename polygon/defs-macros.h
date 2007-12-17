@@ -25,8 +25,17 @@
 #define abs(x) (((x) >=0) ? (x) : (-(x)))
 #endif
 
+
+#ifndef min
+#define min(x,y) (((x) <= (y)) ? (x) : (y))
+#endif
+
+#ifndef max
+#define max(x,y) (((x) >= (y)) ? (x) : (y))
+#endif
+
 #define TRACE printf
 
-#define ASSERT(x)		// todo : change to DEBUG, under wxWidgets
+#define ASSERT(x)		// todo : change to wxASSERT, under wxWidgets
 
 #endif 		// ifndef DEFS_MACROS_H

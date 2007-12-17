@@ -1,12 +1,18 @@
 EXTRALIBS = ../common/common.a
-EXTRACPPFLAGS += -DPCBNEW  -fno-strict-aliasing -I./ -Ibitmaps -I../include -I../share -I../pcbnew -I../3d-viewer
+EXTRACPPFLAGS += -DPCBNEW  -fno-strict-aliasing -I./ -Ibitmaps -I../include -I../share\
+	-I../pcbnew -I../3d-viewer -I../polygon
 
 #COMMON = pcbnew.h struct.h class_pad.h class_module.h class_text_mod.h \
 #		class_edge_mod.h class_equipot.h
 
 LIBVIEWER3D = ../3d-viewer/3d-viewer.a
 
+ZONE_FILES = zones_by_polygon.o
+#ZONE_FILES = zones.o
+
 OBJECTS=	$(TARGET).o classpcb.o\
+		$(ZONE_FILES)\
+		filling_zone_algorithm.o\
 		lay2plot.o\
 		modedit_undo_redo.o\
 		block_module_editor.o\
@@ -86,7 +92,7 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		autorout.o solve.o\
 		work.o queue.o \
 		board.o dist.o graphpcb.o \
-		zones.o undelete.o \
+		undelete.o \
 		copy_track.o\
 		move_or_drag_track.o\
 		ioascii.o \
@@ -108,6 +114,10 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		export_gencad.o\
 		hotkeys.o \
         collectors.o
+
+
+PolyLine.o: ../polygon/PolyLine.cpp ../polygon/PolyLine.h $(COMMON)
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../polygon/$*.cpp
 
 setpage.o: ../share/setpage.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
@@ -276,6 +286,9 @@ dist.o: dist.cpp cell.h autorout.h $(COMMON)
 graphpcb.o: graphpcb.cpp cell.h autorout.h $(COMMON)
 
 zones.o: zones.cpp cell.h $(COMMON)
+
+zones_by_polygon.o: zones_by_polygon.cpp dialog_zones_by_polygon.cpp dialog_zones_by_polygon.h $(COMMON)
+
 
 undelete.o: undelete.cpp $(COMMON)
 
