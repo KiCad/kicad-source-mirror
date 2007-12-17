@@ -3,7 +3,9 @@ ADD_DEFINITIONS(-DPCBNEW)
 INCLUDE_DIRECTORIES(
 	${CMAKE_CURRENT_SOURCE_DIR}
 	bitmaps
-	../3d-viewer)
+	../3d-viewer
+    ../polygon
+    )
 
 SET(PCBNEW_SRCS
 	affiche.cpp
@@ -66,6 +68,7 @@ SET(PCBNEW_SRCS
 	edtxtmod.cpp
 	export_gencad.cpp
 	files.cpp
+    filling_zone_algorithm.cpp
 	find.cpp
 	gendrill.cpp
 	gen_modules_placefile.cpp
@@ -126,7 +129,9 @@ SET(PCBNEW_SRCS
 	via_edit.cpp
 	work.cpp
 	xchgmod.cpp
-	zones.cpp)
+#	zones.cpp
+    zones_by_polygon.cpp
+    )
 
 SET(PCBNEW_EXTRA_SRCS
 	../share/drawframe.cpp
@@ -134,7 +139,9 @@ SET(PCBNEW_EXTRA_SRCS
 	../share/infospgm.cpp
 	../share/setpage.cpp
 	../share/wxprint.cpp
-	../share/zoom.cpp)
+	../share/zoom.cpp
+#    ../polygon/PolyLine.cpp
+    )
 
 IF(WIN32)
 	SET(PCBNEW_RESOURCES pcbnew.rc)
