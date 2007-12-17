@@ -383,7 +383,7 @@ void TreePrjItemData::Activate(WinEDA_PrjFrame* prjframe)
 			}
 			if(count == 0)
 			{
-				prjframe->AddFile(wxString("no kicad files found in this directory"), id); 
+				prjframe->AddFile(wxString( wxT("no kicad files found in this directory") ), id); 
 			}
 			/* Sort filenames by alphabetic order */
 			m_Parent->SortChildren( id );
