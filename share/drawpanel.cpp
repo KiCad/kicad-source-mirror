@@ -1105,7 +1105,7 @@ void WinEDA_DrawPanel::OnKeyEvent( wxKeyEvent& event )
     /* Compute absolute m_MousePosition in user units: */
     Screen->m_MousePosition = CursorRealPosition( Screen->m_MousePositionInPixels );
 
-    #else
+#else
 
     /* if wxGetMousePosition() does not exist,
      * m_Cursor should be ok, use it to calculate the cursor position on screen

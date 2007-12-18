@@ -4,19 +4,27 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+2007-Dec-17 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+    WinEDA_PcbFrame::Other_Layer_Route() was leaving in the bridging segment
+    when the DRC denied the via insertion.
+
+
 2007-Dec-17 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:
-	some changes about zones: enhanced dialog, and files reorganisation.
+	some changes about zones: enhanced dialog, and files reorganisation
 
-
+    
 2007-Dec-14 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew
     WinEDA_PcbFrame::Other_Layer_Route() now returns bool, so that if the DRC
     would not allow the new via placement, then it can be checked and the layer
     change can also then be aborted.  Previously the layer change would happen
-    in mid track if the via could not be placed.
+    in mid track even if the via could not be placed.
 
 
 2007-Dec-13 UPDATE   Dick Hollenbeck <dick@softplc.com>

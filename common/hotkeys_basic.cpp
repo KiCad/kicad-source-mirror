@@ -53,7 +53,6 @@ static struct hotkey_name_descr s_Hotkey_Name_List[] =
 
     { wxT( "Esc" ),       WXK_ESCAPE       },
     { wxT( "Delete" ),    WXK_DELETE       },
-    { wxT( "Esc" ),       WXK_ESCAPE       },
     { wxT( "Tab" ),       '\t'             },
     { wxT( "Backspace" ), WXK_BACK         },
     { wxT( "Insert" ),    WXK_INSERT       },

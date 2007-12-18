@@ -245,16 +245,21 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
     {
         /* DRC fault: the Via cannot be placed here ... */
         delete Via;
-        GetScreen()->m_Active_Layer = old_layer;
 
-        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+        GetScreen()->m_Active_Layer = old_layer;
         
+        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+
         // delete the track(s) added in Begin_Route() 
         while( g_TrackSegmentCount > itmp )
         {
             Delete_Segment( DC, g_CurrentTrackSegment );
         }
-        SetCurItem( g_CurrentTrackSegment );
+
+        // use the form of SetCurItem() which does not write to the msg panel,
+        // SCREEN::SetCurItem(), so the DRC error remains on screen.
+        // WinEDA_PcbFrame::SetCurItem() calls Display_Infos(). 
+        GetScreen()->SetCurItem( g_CurrentTrackSegment );
         
         return false;
     }
