@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-12-06 08:31+0100\n"
-"Last-Translator: jp charras <jean-pierre.charras@inpg.fr>\n"
+"PO-Revision-Date: 2007-12-20 23:05+0100\n"
+"Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
@@ -3606,7 +3606,7 @@ msgstr "Sélection de la netliste"
 #: pcbnew/netlist.cpp:945
 #, c-format
 msgid "Component [%s]: footprint <%s> not found"
-msgstr "Composant [%s]: Module <%sw non trouvé en librairies"
+msgstr "Composant [%s]: Module <%s> non trouvé en librairie"
 
 #: pcbnew/editmod.cpp:144
 msgid "Text is REFERENCE!"

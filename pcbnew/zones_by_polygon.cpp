@@ -61,10 +61,13 @@ static bool Zone_Exclude_Pads = TRUE;
 static bool s_Zone_Create_Thermal_Relief = TRUE;
 static int s_Zone_Layer;			// Layer used to put the current zone
 static int  s_NetcodeSelection;		// Net code selection for the current zone
-static int s_NetSortingOpt;			// For the net list: sort option (by alphabetic order or bay pad count order
 
 #define ZONE_NET_SORT_OPTION_KEY wxT("Zone_NetSort_Opt")
 
+enum zone_cmd {
+	ZONE_ABORT,
+	ZONE_OK
+};
 
 #include "dialog_zones_by_polygon.cpp"
 
@@ -348,12 +351,38 @@ void WinEDA_BasePcbFrame::DelLimitesZone( wxDC* DC, bool Redraw )
  * either initializes the first segment of a new zone, or adds an
  * intermediate segment.
  */
-EDGE_ZONE* WinEDA_PcbFrame::Begin_Zone()
+EDGE_ZONE* WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
 {
     EDGE_ZONE* oldedge;
     EDGE_ZONE* newedge = NULL;
 
     oldedge = m_Pcb->m_CurrentLimitZone;
+	
+    if( m_Pcb->m_CurrentLimitZone == NULL )    /* Start a new contour: init zone params (net and layer) */
+	{
+		DrawPanel->m_IgnoreMouseEvents = TRUE;
+		WinEDA_ZoneFrame* frame = new WinEDA_ZoneFrame( this );
+
+		int diag = frame->ShowModal();
+		frame->Destroy();
+		DrawPanel->MouseToCursorSchema();
+		DrawPanel->m_IgnoreMouseEvents = FALSE;
+
+		if( diag ==  ZONE_ABORT )
+			return NULL;
+
+		GetScreen()->m_Active_Layer = s_Zone_Layer;
+
+		/* Show the Net */
+		if( (g_HightLigth_NetCode > 0) && (g_HightLigth_NetCode != s_NetcodeSelection) )
+		{
+			Hight_Light( DC );	// Remove old hightlight selection
+	    }
+		
+		g_HightLigth_NetCode = s_NetcodeSelection;
+		if ( ! g_HightLigt_Status )
+			Hight_Light( DC );
+	}
 
     // if first segment
     if( (m_Pcb->m_CurrentLimitZone == NULL )    /* debut reel du trace */
@@ -411,7 +440,7 @@ void WinEDA_PcbFrame::End_Zone( wxDC* DC )
 
     if( m_Pcb->m_CurrentLimitZone )
     {
-        Begin_Zone();
+        Begin_Zone( DC );
 
         /* le dernier point genere est de longueur tj nulle donc inutile. */
         /* il sera raccorde au point de depart */
@@ -519,25 +548,15 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
         return;
     }
 
-    if( m_Parent && m_Parent->m_EDA_Config )
-    {
-        s_NetSortingOpt = m_Parent->m_EDA_Config->Read( ZONE_NET_SORT_OPTION_KEY, (long) BOARD::PAD_CNT_SORT );
-	}
-	int NetSortingOptImg = s_NetSortingOpt;
     DrawPanel->m_IgnoreMouseEvents = TRUE;
     WinEDA_ZoneFrame* frame = new WinEDA_ZoneFrame( this );
 
-    int abrd = frame->ShowModal();
+    int diag = frame->ShowModal();
     frame->Destroy();
     DrawPanel->MouseToCursorSchema();
     DrawPanel->m_IgnoreMouseEvents = FALSE;
 
-    if( (NetSortingOptImg != s_NetSortingOpt ) && m_Parent && m_Parent->m_EDA_Config )
-    {
-        m_Parent->m_EDA_Config->Write( ZONE_NET_SORT_OPTION_KEY, (long) s_NetSortingOpt );
-	}	
-
-    if( abrd )
+    if( diag ==  ZONE_ABORT )
         return;
 
     // set all the EDGE_ZONEs to the currently active layer and redraw them
@@ -551,14 +570,15 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
         Trace_DrawSegmentPcb( DrawPanel, DC, PtLim, GR_XOR );
     }
 
-    /* Show the NetName */
+    /* Show the Net */
     if( (g_HightLigth_NetCode > 0) && (g_HightLigth_NetCode != s_NetcodeSelection) )
     {
-        Hight_Light( DC );
-        g_HightLigth_NetCode = s_NetcodeSelection;
-        Hight_Light( DC );
-    }
+        Hight_Light( DC );	// Remoive old hightlight selection
+   }
+	
     g_HightLigth_NetCode = s_NetcodeSelection;
+	if ( ! g_HightLigt_Status )
+        Hight_Light( DC );
 
     if( g_HightLigth_NetCode > 0 )
     {
@@ -576,7 +596,6 @@ void WinEDA_PcbFrame::Fill_Zone( wxDC* DC )
 
     Affiche_1_Parametre( this, 22, _( "NetName" ), msg, RED );
 
-    Build_Zone( this, DC, g_HightLigth_NetCode, Zone_Exclude_Pads, s_Zone_Create_Thermal_Relief );
-
-    GetScreen()->SetModify();
+	Build_Zone( this, DC, g_HightLigth_NetCode, Zone_Exclude_Pads, s_Zone_Create_Thermal_Relief );
+	GetScreen()->SetModify();
 }

@@ -215,13 +215,13 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     case ID_PCB_ZONES_BUTT:
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
-            SetCurItem( DrawStruct = Begin_Zone() );
+            SetCurItem( DrawStruct = Begin_Zone( DC ) );
         }
         else if( DrawStruct
                 && (DrawStruct->Type() == TYPEEDGEZONE)
                 && (DrawStruct->m_Flags & IS_NEW) )
         {
-            SetCurItem( DrawStruct = Begin_Zone() );
+            SetCurItem( DrawStruct = Begin_Zone( DC ) );
         }
         else
             DisplayError( this, wxT( "Edit: zone internal error" ) );

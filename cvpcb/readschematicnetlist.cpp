@@ -116,6 +116,7 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
 
         /* i points the beginning of the schematic time stamp */
 
+        memset( schematic_timestamp, 0, sizeof(schematic_timestamp) );
         j = 0; while( Line[i] != ' ' )
             schematic_timestamp[j++] = Line[i++];
 
@@ -128,7 +129,6 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
         /* i points the component value */
         LibName = Line + i;
 
-        memset( schematic_timestamp, 0, sizeof(schematic_timestamp) );
         memset( component_reference, 0, sizeof(component_reference) );
         memset( footprint_name, 0, sizeof(footprint_name) );
         memset( component_value, 0, sizeof(component_value) );

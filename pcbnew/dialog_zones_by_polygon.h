@@ -39,11 +39,11 @@
 
 ////@begin control identifiers
 #define ID_DIALOG 10000
-#define ID_RADIOBOX3 10003
+#define ID_RADIOBOX_GRID_SELECTION 10003
 #define ID_TEXTCTRL1 10007
+#define ID_RADIOBOX_OUTLINES_OPTION 10006
 #define ID_RADIOBOX4 10008
 #define ID_RADIOBOX5 10009
-#define ID_BUTTON 10010
 #define ID_NET_SORTING_OPTION 10005
 #define ID_NETNAME_SELECTION 10001
 #define wxID_LAYER_SELECTION 10004
@@ -85,8 +85,8 @@ public:
 
 ////@begin WinEDA_ZoneFrame event handler declarations
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON
-    void ExecFillZone( wxCommandEvent& event );
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
+    void OnOkClick( wxCommandEvent& event );
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
     void OnCancelClick( wxCommandEvent& event );
@@ -98,6 +98,9 @@ public:
 
 ////@begin WinEDA_ZoneFrame member function declarations
 
+    int GetOutlinesOpt() const { return m_OutlinesOpt ; }
+    void SetOutlinesOpt(int value) { m_OutlinesOpt = value ; }
+
     /// Retrieves bitmap resources
     wxBitmap GetBitmapResource( const wxString& name );
 
@@ -108,20 +111,25 @@ public:
     /// Should we show tooltips?
     static bool ShowToolTips();
 	
+	bool AcceptOptions(bool aPromptForErrors);
+	
 
 
 ////@begin WinEDA_ZoneFrame member variables
     wxRadioBox* m_GridCtrl;
     wxStaticText* m_ClearanceValueTitle;
     wxTextCtrl* m_ZoneClearanceCtrl;
+    wxRadioBox* m_OutlineAppearanceCtrl;
     wxRadioBox* m_FillOpt;
     wxRadioBox* m_OrientEdgesOpt;
     wxRadioBox* m_NetSortingOption;
     wxListBox* m_ListNetNameSelection;
     wxListBox* m_LayerSelectionCtrl;
+    int m_OutlinesOpt;
 ////@end WinEDA_ZoneFrame member variables
 
 	WinEDA_PcbFrame * m_Parent;
+	int m_NetSorting;
 	
 	int m_LayerId[LAYER_COUNT];		// Handle the real layer number from layer name position in m_LayerSelectionCtrl
 };

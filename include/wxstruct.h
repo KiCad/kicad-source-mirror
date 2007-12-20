@@ -751,7 +751,7 @@ public:
     // zone handling
     EDGE_ZONE*          Del_SegmEdgeZone( wxDC* DC, EDGE_ZONE* edge_zone );
     void                CaptureNetName( wxDC* DC );
-    EDGE_ZONE*          Begin_Zone();
+    EDGE_ZONE*          Begin_Zone( wxDC* DC );
     
     /**
      * Function End_Zone
