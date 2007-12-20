@@ -26,49 +26,62 @@ FIND_PACKAGE(wxWidgets REQUIRED)
 
 # Locations for install targets
 IF(UNIX)
-	IF(APPLE)
-	ELSE(APPLE)
-		#SET(CMAKE_INSTALL_PATH /usr/local)
-		SET(KICAD_BIN bin CACHE PATH "Location of KiCad binaries.")
-		SET(KICAD_PLUGINS lib/kicad/plugins CACHE PATH "Location of KiCad plugins.")
-		SET(KICAD_DOCS share/doc/kicad CACHE PATH "Location of KiCad documentation files.")
-		SET(KICAD_DATA share/kicad CACHE PATH "Location of KiCad data files.")
-		SET(KICAD_MODULES ${KICAD_DATA}/modules)
-		SET(KICAD_LIBRARY ${KICAD_DATA}/library)
-		SET(KICAD_INTERNAT ${KICAD_DATA}/internat)
-		SET(KICAD_TEMPLATE ${KICAD_DATA}/template)
-	ENDIF(APPLE)
+    IF(APPLE)
+    ELSE(APPLE)
+        # like all variables, CMAKE_INSTALL_PREFIX can be over-ridden on the command line
+        SET(CMAKE_INSTALL_PREFIX /usr/local)
+        # when used later, "bin" and others with no leading / is relative to CMAKE_INSTALL_PREFIX
+        SET(KICAD_BIN bin CACHE PATH "Location of KiCad binaries.")
+        SET(KICAD_PLUGINS lib/kicad/plugins CACHE PATH "Location of KiCad plugins.")
+        SET(KICAD_DOCS share/doc/kicad CACHE PATH "Location of KiCad documentation files.")
+        SET(KICAD_DATA share/kicad CACHE PATH "Location of KiCad data files.")
+        SET(KICAD_MODULES ${KICAD_DATA}/modules)
+        SET(KICAD_LIBRARY ${KICAD_DATA}/library)
+        SET(KICAD_INTERNAT ${KICAD_DATA}/internat)
+        SET(KICAD_TEMPLATE ${KICAD_DATA}/template)
+    ENDIF(APPLE)
 ENDIF(UNIX)
 
 IF(WIN32)
+        # like all variables, CMAKE_INSTALL_PREFIX can be over-ridden on the command line
+        SET(CMAKE_INSTALL_PREFIX C:/kicad)
+        # when used later, "winexe" and others with no leading / is relative to CMAKE_INSTALL_PREFIX
+        SET(KICAD_BIN winexe CACHE PATH "Location of KiCad binaries.")
+        SET(KICAD_PLUGINS lib/kicad/plugins CACHE PATH "Location of KiCad plugins.")
+        SET(KICAD_DOCS share/doc/kicad CACHE PATH "Location of KiCad documentation files.")
+        SET(KICAD_DATA share/kicad CACHE PATH "Location of KiCad data files.")
+        SET(KICAD_MODULES ${KICAD_DATA}/modules)
+        SET(KICAD_LIBRARY ${KICAD_DATA}/library)
+        SET(KICAD_INTERNAT ${KICAD_DATA}/internat)
+        SET(KICAD_TEMPLATE ${KICAD_DATA}/template)
 ENDIF(WIN32)
 
 # Did we find wxWidgets ? This condition will fail
 # for as long as the internal vars do not point to
 # the proper wxWidgets configuration.
 IF(wxWidgets_FOUND)
-	MESSAGE(STATUS "Check for installed wxWidgets -- found")
+    MESSAGE(STATUS "Check for installed wxWidgets -- found")
 
-	# Include wxWidgets macros.
+    # Include wxWidgets macros.
         INCLUDE(${wxWidgets_USE_FILE})
 
-        # We define the include paths here. 
-        # Include dirs for wxWidgets was defined before.
-	INCLUDE_DIRECTORIES(
-		${CMAKE_CURRENT_SOURCE_DIR}/include
-		${CMAKE_CURRENT_SOURCE_DIR}/share)
+    # We define the include paths here. 
+    # Include dirs for wxWidgets was defined before.
+    INCLUDE_DIRECTORIES(
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/share)
 
-	# CMake will look at this dirs for nested 'CMakeLists.txt' files
-        ADD_SUBDIRECTORY(common)
-	ADD_SUBDIRECTORY(3d-viewer)
-	ADD_SUBDIRECTORY(cvpcb)
-	ADD_SUBDIRECTORY(eeschema)
-	ADD_SUBDIRECTORY(gerbview)
-	ADD_SUBDIRECTORY(kicad)
-	ADD_SUBDIRECTORY(pcbnew)
+    # CMake will look at this dirs for nested 'CMakeLists.txt' files
+    ADD_SUBDIRECTORY(common)
+    ADD_SUBDIRECTORY(3d-viewer)
+    ADD_SUBDIRECTORY(cvpcb)
+    ADD_SUBDIRECTORY(eeschema)
+    ADD_SUBDIRECTORY(gerbview)
+    ADD_SUBDIRECTORY(kicad)
+    ADD_SUBDIRECTORY(pcbnew)
 ELSE(wxWidgets_FOUND)
-        # For convenience. When we cannot continue, inform the user.
-	MESSAGE(STATUS "Check for installed wxWidgets -- not found")
+    # For convenience. When we cannot continue, inform the user.
+    MESSAGE(STATUS "Check for installed wxWidgets -- not found")
         MESSAGE(FATAL_ERROR "wxWidgets was not found - it is required to build KiCad")
 ENDIF(wxWidgets_FOUND)
 
@@ -78,3 +91,4 @@ ADD_SUBDIRECTORY(help)
 ADD_SUBDIRECTORY(library)
 ADD_SUBDIRECTORY(modules)
 ADD_SUBDIRECTORY(template)
+
