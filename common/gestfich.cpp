@@ -73,6 +73,7 @@ static wxString    s_KicadBinaryPathList[] = {
     wxT( "/usr/local/bin/" ),
     wxT( "/usr/local/kicad/bin/" ),
     wxT( "/usr/local/kicad/linux/" ),
+    wxT( "/usr/local/kicad/linux-non_unicode/" ),
 #endif
     wxT( "end_list" )  // End of list symbol, do not change
 };
