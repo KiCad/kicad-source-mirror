@@ -31,7 +31,7 @@
 
 #include "fctsys.h"
 #include "pcbnew.h"
-#include "common.h"
+//#include "common.h"
 
 namespace DSN {
 
@@ -43,7 +43,8 @@ namespace DSN {
  */ 
 enum DSN_T {
     
-    // the first few are special
+    // the first few are special (the uppercase ones)
+    T_QUOTE_DEF = -9,
     T_DASH = -8,
     T_SYMBOL = -7,
     T_NUMBER = -6,
@@ -424,364 +425,365 @@ struct KEYWORD
 };
 
 
-#define TOKDEF(x)    { #x, T_##x },
+#define TOKDEF(x)    { #x, T_##x }
 
 // This MUST be sorted alphabetically, and also so MUST enum DSN_T {} be alphabetized.
-// These MUST all be lower case because of the call to strlower() in findToken(). 
+// These MUST all be lower case because of the conversion to lowercase in findToken(). 
 const static KEYWORD tokens[] = {
-    TOKDEF(absolute)
-    TOKDEF(added)
-    TOKDEF(add_group)
-    TOKDEF(add_pins)
-    TOKDEF(allow_antenna)
-    TOKDEF(allow_redundant_wiring)
-    TOKDEF(amp)
-    TOKDEF(ancestor)
-    TOKDEF(antipad)
-    TOKDEF(aperture_type)
-    TOKDEF(array)
-    TOKDEF(attach)
-    TOKDEF(attr)
-    TOKDEF(average_pair_length)
-    TOKDEF(base_design)
-    TOKDEF(bbv_ctr2ctr)
-    TOKDEF(bond)
-    TOKDEF(bottom)
-    TOKDEF(bottom_layer_sel)
-    TOKDEF(boundary)
-    TOKDEF(brickpat)
-    TOKDEF(bundle)
-    TOKDEF(bypass)
-    TOKDEF(capacitance_resolution)
-    TOKDEF(capacitor)
-    TOKDEF(case_sensitive)
-    TOKDEF(cct1)
-    TOKDEF(cct1a)
-    TOKDEF(center_center)
-    TOKDEF(checking_trim_by_pin)
-    TOKDEF(circ)
-    TOKDEF(circle)
-    TOKDEF(circuit)
-    TOKDEF(class)
-    TOKDEF(class_class)
-    TOKDEF(classes)
-    TOKDEF(clear)
-    TOKDEF(clearance)
-    TOKDEF(cluster)
-    TOKDEF(cm)
-    TOKDEF(color)
-    TOKDEF(colors)
-    TOKDEF(comment)
-    TOKDEF(comp)
-    TOKDEF(comp_edge_center)
-    TOKDEF(component)
-    TOKDEF(comp_order)
-    TOKDEF(composite)
-    TOKDEF(conductance_resolution)
-    TOKDEF(conductor)
-    TOKDEF(conflict)
-    TOKDEF(connect)
-    TOKDEF(constant)
-    TOKDEF(contact)
-    TOKDEF(control)
-    TOKDEF(corner)
-    TOKDEF(corners)
-    TOKDEF(cost)
-    TOKDEF(created_time)
-    TOKDEF(cross)
-    TOKDEF(crosstalk_model)
-    TOKDEF(current_resolution)
-    TOKDEF(deleted_keepout)
-    TOKDEF(delete_pins)
-    TOKDEF(delta)
-    TOKDEF(direction)
-    TOKDEF(directory)
-    TOKDEF(effective_via_length)
-    TOKDEF(exclude)
-    TOKDEF(expose)
-    TOKDEF(extra_image_directory)
-    TOKDEF(family)
-    TOKDEF(family_family)
-    TOKDEF(family_family_spacing)
-    TOKDEF(farad)
-    TOKDEF(file)
-    TOKDEF(fit)
-    TOKDEF(fix)
-    TOKDEF(flip_style)
-    TOKDEF(floor_plan)
-    TOKDEF(footprint)
-    TOKDEF(forbidden)
-    TOKDEF(force_to_terminal_point)
-    TOKDEF(forgotten)
-    TOKDEF(fromto)
-    TOKDEF(front)
-    TOKDEF(front_only)
-    TOKDEF(gap)
-    TOKDEF(gates)
-    TOKDEF(global)
-    TOKDEF(grid)
-    TOKDEF(group)
-    TOKDEF(group_set)
-    TOKDEF(guide)
-    TOKDEF(hard)
-    TOKDEF(height)
-    TOKDEF(history)
-    TOKDEF(horizontal)
-    TOKDEF(host_cad)
-    TOKDEF(host_version)
-    TOKDEF(image)
-    TOKDEF(image_image)
-    TOKDEF(image_image_spacing)
-    TOKDEF(image_outline_clearance)
-    TOKDEF(image_type)
-    TOKDEF(inch)
-    TOKDEF(include)
-    TOKDEF(include_pins_in_crosstalk)
-    TOKDEF(inductance_resolution)
-    TOKDEF(insert)
-    TOKDEF(instcnfg)
-    TOKDEF(inter_layer_clearance)
-    TOKDEF(jumper)
-    TOKDEF(junction_type)
-    TOKDEF(keepout)
-    TOKDEF(kg)
-    TOKDEF(kohm)
-    TOKDEF(large)
-    TOKDEF(large_large)
-    TOKDEF(layer)
-    TOKDEF(layer_depth)
-    TOKDEF(layer_noise_weight)
-    TOKDEF(layer_pair)
-    TOKDEF(layer_rule)
-    TOKDEF(length)
-    TOKDEF(length_amplitude)
-    TOKDEF(length_factor)
-    TOKDEF(length_gap)
-    TOKDEF(library)
-    TOKDEF(library_out)
-    TOKDEF(limit)
-    TOKDEF(limit_bends)
-    TOKDEF(limit_crossing)
-    TOKDEF(limit_vias)
-    TOKDEF(limit_way)
-    TOKDEF(linear)
-    TOKDEF(linear_interpolation)
-    TOKDEF(load)
-    TOKDEF(lock_type)
-    TOKDEF(logical_part)
-    TOKDEF(logical_part_mapping)
-    TOKDEF(match_fromto_delay)
-    TOKDEF(match_fromto_length)
-    TOKDEF(match_group_delay)
-    TOKDEF(match_group_length)
-    TOKDEF(match_net_delay)
-    TOKDEF(match_net_length)
-    TOKDEF(max_delay)
-    TOKDEF(max_len)
-    TOKDEF(max_length)
-    TOKDEF(max_noise)
-    TOKDEF(max_restricted_layer_length)
-    TOKDEF(max_stagger)
-    TOKDEF(max_stub)
-    TOKDEF(max_total_delay)
-    TOKDEF(max_total_length)
-    TOKDEF(max_total_vias)
-    TOKDEF(mhenry)
-    TOKDEF(mho)
-    TOKDEF(microvia)
-    TOKDEF(mid_driven)
-    TOKDEF(mil)
-    TOKDEF(min_gap)
-    TOKDEF(mirror)
-    TOKDEF(mirror_first)
-    TOKDEF(mm)
-    TOKDEF(net)
-    TOKDEF(net_number)
-    TOKDEF(net_pin_changes)
-    TOKDEF(nets)
-    TOKDEF(network)
-    TOKDEF(network_out)
-    TOKDEF(no)
-    TOKDEF(noexpose)
-    TOKDEF(noise_accumulation)
-    TOKDEF(noise_calculation)
-    TOKDEF(object_type)
-    TOKDEF(off)
-    TOKDEF(off_grid)
-    TOKDEF(offset)
-    TOKDEF(on)
-    TOKDEF(open)
-    TOKDEF(opposite_side)
-    TOKDEF(order)
-    TOKDEF(outline)
-    TOKDEF(overlap)
-    TOKDEF(pad)
-    TOKDEF(pad_pad)
-    TOKDEF(padstack)
-    TOKDEF(pair)
-    TOKDEF(parallel)
-    TOKDEF(parallel_noise)
-    TOKDEF(parallel_segment)
-    TOKDEF(parser)
-    TOKDEF(part_library)
-    TOKDEF(path)
-    TOKDEF(pcb)
-    TOKDEF(permit_orient)
-    TOKDEF(permit_side)
-    TOKDEF(physical)
-    TOKDEF(physical_part_mapping)
-    TOKDEF(piggyback)
-    TOKDEF(pin)
-    TOKDEF(pin_allow)
-    TOKDEF(pin_cap_via)
-    TOKDEF(pins)
-    TOKDEF(pintype)
-    TOKDEF(pin_via_cap)
-    TOKDEF(pin_width_taper)
-    TOKDEF(place)
-    TOKDEF(place_boundary)
-    TOKDEF(place_control)
-    TOKDEF(placement)
-    TOKDEF(place_rule)
-    TOKDEF(plan)
-    TOKDEF(plane)
-    TOKDEF(PN)
-    TOKDEF(point)
-    TOKDEF(polygon)
-    TOKDEF(position)
-    TOKDEF(power)
-    TOKDEF(power_dissipation)
-    TOKDEF(power_fanout)
-    TOKDEF(prefix)
-    TOKDEF(primary)
-    TOKDEF(priority)
-    TOKDEF(property)
-    TOKDEF(qarc)
-    TOKDEF(quarter)
-    TOKDEF(radius)
-    TOKDEF(ratio)
-    TOKDEF(ratio_tolerance)
-    TOKDEF(rect)
-    TOKDEF(reduced)
-    TOKDEF(region)
-    TOKDEF(region_class)
-    TOKDEF(region_class_class)
-    TOKDEF(region_net)
-    TOKDEF(relative_delay)
-    TOKDEF(relative_group_delay)
-    TOKDEF(relative_group_length)
-    TOKDEF(relative_length)
-    TOKDEF(reorder)
-    TOKDEF(reroute_order_viols)
-    TOKDEF(resistance_resolution)
-    TOKDEF(resolution)
-    TOKDEF(restricted_layer_length_factor)
-    TOKDEF(room)
-    TOKDEF(rotate)
-    TOKDEF(rotate_first)
-    TOKDEF(round)
-    TOKDEF(roundoff_rotation)
-    TOKDEF(route)
-    TOKDEF(routes)
-    TOKDEF(routes_include)
-    TOKDEF(route_to_fanout_only)
-    TOKDEF(rule)
-    TOKDEF(same_net_checking)
-    TOKDEF(sample_window)
-    TOKDEF(saturation_length)
-    TOKDEF(sec)
-    TOKDEF(secondary)
-    TOKDEF(self)
-    TOKDEF(sequence_number)
-    TOKDEF(session)
-    TOKDEF(set_color)
-    TOKDEF(set_pattern)
-    TOKDEF(shape)
-    TOKDEF(shield)
-    TOKDEF(shield_gap)
-    TOKDEF(shield_loop)
-    TOKDEF(shield_tie_down_interval)
-    TOKDEF(shield_width)
-    TOKDEF(side)
-    TOKDEF(signal)
-    TOKDEF(site)
-    TOKDEF(smd)
-    TOKDEF(snap_angle)
-    TOKDEF(source)
-    TOKDEF(space_in_quoted_tokens)
-    TOKDEF(spacing)
-    TOKDEF(spare)
-    TOKDEF(spiral_via)
-    TOKDEF(stack_via)
-    TOKDEF(stack_via_depth)
-    TOKDEF(standard)
-    TOKDEF(starburst)
-    TOKDEF(status)
-    TOKDEF(string_quote)
-    TOKDEF(structure)
-    TOKDEF(structure_out)
-    TOKDEF(subgates)
-    TOKDEF(such)
-    TOKDEF(suffix)
-    TOKDEF(super_placement)
-    TOKDEF(supply)
-    TOKDEF(supply_pin)
-    TOKDEF(swapping)
-    TOKDEF(switch_window)
-    TOKDEF(system)
-    TOKDEF(tandem_noise)
-    TOKDEF(tandem_segment)
-    TOKDEF(tandem_shield_overhang)
-    TOKDEF(terminal)
-    TOKDEF(terminator)
-    TOKDEF(term_only)
-    TOKDEF(test)
-    TOKDEF(testpoint)
-    TOKDEF(test_points)
-    TOKDEF(threshold)
-    TOKDEF(time_length_factor)
-    TOKDEF(time_resolution)
-    TOKDEF(tjunction)
-    TOKDEF(tolerance)
-    TOKDEF(top)
-    TOKDEF(topology)
-    TOKDEF(total)
-    TOKDEF(track_id)
-    TOKDEF(turret)
-    TOKDEF(type)
-    TOKDEF(um)
-    TOKDEF(unassigned)
-    TOKDEF(unconnects)
-    TOKDEF(unit)
-    TOKDEF(up)
-    TOKDEF(use_array)
-    TOKDEF(use_layer)
-    TOKDEF(use_net)
-    TOKDEF(use_via)
-    TOKDEF(value)
-    TOKDEF(via)
-    TOKDEF(via_array_template)
-    TOKDEF(via_at_smd)
-    TOKDEF(via_keepout)
-    TOKDEF(via_number)
-    TOKDEF(via_rotate_first)
-    TOKDEF(via_site)
-    TOKDEF(via_size)
-    TOKDEF(virtual_pin)
-    TOKDEF(volt)
-    TOKDEF(voltage_resolution)
-    TOKDEF(was_is)
-    TOKDEF(way)
-    TOKDEF(weight)
-    TOKDEF(width)
-    TOKDEF(window)
-    TOKDEF(wire)
-    TOKDEF(wires)
-    TOKDEF(wires_include)
-    TOKDEF(wiring)
-    TOKDEF(write_resolution)
-    TOKDEF(x)
+    TOKDEF(absolute),
+    TOKDEF(added),
+    TOKDEF(add_group),
+    TOKDEF(add_pins),
+    TOKDEF(allow_antenna),
+    TOKDEF(allow_redundant_wiring),
+    TOKDEF(amp),
+    TOKDEF(ancestor),
+    TOKDEF(antipad),
+    TOKDEF(aperture_type),
+    TOKDEF(array),
+    TOKDEF(attach),
+    TOKDEF(attr),
+    TOKDEF(average_pair_length),
+    TOKDEF(base_design),
+    TOKDEF(bbv_ctr2ctr),
+    TOKDEF(bond),
+    TOKDEF(bottom),
+    TOKDEF(bottom_layer_sel),
+    TOKDEF(boundary),
+    TOKDEF(brickpat),
+    TOKDEF(bundle),
+    TOKDEF(bypass),
+    TOKDEF(capacitance_resolution),
+    TOKDEF(capacitor),
+    TOKDEF(case_sensitive),
+    TOKDEF(cct1),
+    TOKDEF(cct1a),
+    TOKDEF(center_center),
+    TOKDEF(checking_trim_by_pin),
+    TOKDEF(circ),
+    TOKDEF(circle),
+    TOKDEF(circuit),
+    TOKDEF(class),
+    TOKDEF(class_class),
+    TOKDEF(classes),
+    TOKDEF(clear),
+    TOKDEF(clearance),
+    TOKDEF(cluster),
+    TOKDEF(cm),
+    TOKDEF(color),
+    TOKDEF(colors),
+    TOKDEF(comment),
+    TOKDEF(comp),
+    TOKDEF(comp_edge_center),
+    TOKDEF(component),
+    TOKDEF(comp_order),
+    TOKDEF(composite),
+    TOKDEF(conductance_resolution),
+    TOKDEF(conductor),
+    TOKDEF(conflict),
+    TOKDEF(connect),
+    TOKDEF(constant),
+    TOKDEF(contact),
+    TOKDEF(control),
+    TOKDEF(corner),
+    TOKDEF(corners),
+    TOKDEF(cost),
+    TOKDEF(created_time),
+    TOKDEF(cross),
+    TOKDEF(crosstalk_model),
+    TOKDEF(current_resolution),
+    TOKDEF(deleted_keepout),
+    TOKDEF(delete_pins),
+    TOKDEF(delta),
+    TOKDEF(direction),
+    TOKDEF(directory),
+    TOKDEF(effective_via_length),
+    TOKDEF(exclude),
+    TOKDEF(expose),
+    TOKDEF(extra_image_directory),
+    TOKDEF(family),
+    TOKDEF(family_family),
+    TOKDEF(family_family_spacing),
+    TOKDEF(farad),
+    TOKDEF(file),
+    TOKDEF(fit),
+    TOKDEF(fix),
+    TOKDEF(flip_style),
+    TOKDEF(floor_plan),
+    TOKDEF(footprint),
+    TOKDEF(forbidden),
+    TOKDEF(force_to_terminal_point),
+    TOKDEF(forgotten),
+    TOKDEF(fromto),
+    TOKDEF(front),
+    TOKDEF(front_only),
+    TOKDEF(gap),
+    TOKDEF(gates),
+    TOKDEF(global),
+    TOKDEF(grid),
+    TOKDEF(group),
+    TOKDEF(group_set),
+    TOKDEF(guide),
+    TOKDEF(hard),
+    TOKDEF(height),
+    TOKDEF(history),
+    TOKDEF(horizontal),
+    TOKDEF(host_cad),
+    TOKDEF(host_version),
+    TOKDEF(image),
+    TOKDEF(image_image),
+    TOKDEF(image_image_spacing),
+    TOKDEF(image_outline_clearance),
+    TOKDEF(image_type),
+    TOKDEF(inch),
+    TOKDEF(include),
+    TOKDEF(include_pins_in_crosstalk),
+    TOKDEF(inductance_resolution),
+    TOKDEF(insert),
+    TOKDEF(instcnfg),
+    TOKDEF(inter_layer_clearance),
+    TOKDEF(jumper),
+    TOKDEF(junction_type),
+    TOKDEF(keepout),
+    TOKDEF(kg),
+    TOKDEF(kohm),
+    TOKDEF(large),
+    TOKDEF(large_large),
+    TOKDEF(layer),
+    TOKDEF(layer_depth),
+    TOKDEF(layer_noise_weight),
+    TOKDEF(layer_pair),
+    TOKDEF(layer_rule),
+    TOKDEF(length),
+    TOKDEF(length_amplitude),
+    TOKDEF(length_factor),
+    TOKDEF(length_gap),
+    TOKDEF(library),
+    TOKDEF(library_out),
+    TOKDEF(limit),
+    TOKDEF(limit_bends),
+    TOKDEF(limit_crossing),
+    TOKDEF(limit_vias),
+    TOKDEF(limit_way),
+    TOKDEF(linear),
+    TOKDEF(linear_interpolation),
+    TOKDEF(load),
+    TOKDEF(lock_type),
+    TOKDEF(logical_part),
+    TOKDEF(logical_part_mapping),
+    TOKDEF(match_fromto_delay),
+    TOKDEF(match_fromto_length),
+    TOKDEF(match_group_delay),
+    TOKDEF(match_group_length),
+    TOKDEF(match_net_delay),
+    TOKDEF(match_net_length),
+    TOKDEF(max_delay),
+    TOKDEF(max_len),
+    TOKDEF(max_length),
+    TOKDEF(max_noise),
+    TOKDEF(max_restricted_layer_length),
+    TOKDEF(max_stagger),
+    TOKDEF(max_stub),
+    TOKDEF(max_total_delay),
+    TOKDEF(max_total_length),
+    TOKDEF(max_total_vias),
+    TOKDEF(mhenry),
+    TOKDEF(mho),
+    TOKDEF(microvia),
+    TOKDEF(mid_driven),
+    TOKDEF(mil),
+    TOKDEF(min_gap),
+    TOKDEF(mirror),
+    TOKDEF(mirror_first),
+    TOKDEF(mm),
+    TOKDEF(net),
+    TOKDEF(net_number),
+    TOKDEF(net_pin_changes),
+    TOKDEF(nets),
+    TOKDEF(network),
+    TOKDEF(network_out),
+    TOKDEF(no),
+    TOKDEF(noexpose),
+    TOKDEF(noise_accumulation),
+    TOKDEF(noise_calculation),
+    TOKDEF(object_type),
+    TOKDEF(off),
+    TOKDEF(off_grid),
+    TOKDEF(offset),
+    TOKDEF(on),
+    TOKDEF(open),
+    TOKDEF(opposite_side),
+    TOKDEF(order),
+    TOKDEF(outline),
+    TOKDEF(overlap),
+    TOKDEF(pad),
+    TOKDEF(pad_pad),
+    TOKDEF(padstack),
+    TOKDEF(pair),
+    TOKDEF(parallel),
+    TOKDEF(parallel_noise),
+    TOKDEF(parallel_segment),
+    TOKDEF(parser),
+    TOKDEF(part_library),
+    TOKDEF(path),
+    TOKDEF(pcb),
+    TOKDEF(permit_orient),
+    TOKDEF(permit_side),
+    TOKDEF(physical),
+    TOKDEF(physical_part_mapping),
+    TOKDEF(piggyback),
+    TOKDEF(pin),
+    TOKDEF(pin_allow),
+    TOKDEF(pin_cap_via),
+    TOKDEF(pins),
+    TOKDEF(pintype),
+    TOKDEF(pin_via_cap),
+    TOKDEF(pin_width_taper),
+    TOKDEF(place),
+    TOKDEF(place_boundary),
+    TOKDEF(place_control),
+    TOKDEF(placement),
+    TOKDEF(place_rule),
+    TOKDEF(plan),
+    TOKDEF(plane),
+    TOKDEF(PN),
+    TOKDEF(point),
+    TOKDEF(polygon),
+    TOKDEF(position),
+    TOKDEF(power),
+    TOKDEF(power_dissipation),
+    TOKDEF(power_fanout),
+    TOKDEF(prefix),
+    TOKDEF(primary),
+    TOKDEF(priority),
+    TOKDEF(property),
+    TOKDEF(qarc),
+    TOKDEF(quarter),
+    TOKDEF(radius),
+    TOKDEF(ratio),
+    TOKDEF(ratio_tolerance),
+    TOKDEF(rect),
+    TOKDEF(reduced),
+    TOKDEF(region),
+    TOKDEF(region_class),
+    TOKDEF(region_class_class),
+    TOKDEF(region_net),
+    TOKDEF(relative_delay),
+    TOKDEF(relative_group_delay),
+    TOKDEF(relative_group_length),
+    TOKDEF(relative_length),
+    TOKDEF(reorder),
+    TOKDEF(reroute_order_viols),
+    TOKDEF(resistance_resolution),
+    TOKDEF(resolution),
+    TOKDEF(restricted_layer_length_factor),
+    TOKDEF(room),
+    TOKDEF(rotate),
+    TOKDEF(rotate_first),
+    TOKDEF(round),
+    TOKDEF(roundoff_rotation),
+    TOKDEF(route),
+    TOKDEF(routes),
+    TOKDEF(routes_include),
+    TOKDEF(route_to_fanout_only),
+    TOKDEF(rule),
+    TOKDEF(same_net_checking),
+    TOKDEF(sample_window),
+    TOKDEF(saturation_length),
+    TOKDEF(sec),
+    TOKDEF(secondary),
+    TOKDEF(self),
+    TOKDEF(sequence_number),
+    TOKDEF(session),
+    TOKDEF(set_color),
+    TOKDEF(set_pattern),
+    TOKDEF(shape),
+    TOKDEF(shield),
+    TOKDEF(shield_gap),
+    TOKDEF(shield_loop),
+    TOKDEF(shield_tie_down_interval),
+    TOKDEF(shield_width),
+    TOKDEF(side),
+    TOKDEF(signal),
+    TOKDEF(site),
+    TOKDEF(smd),
+    TOKDEF(snap_angle),
+    TOKDEF(source),
+    TOKDEF(space_in_quoted_tokens),
+    TOKDEF(spacing),
+    TOKDEF(spare),
+    TOKDEF(spiral_via),
+    TOKDEF(stack_via),
+    TOKDEF(stack_via_depth),
+    TOKDEF(standard),
+    TOKDEF(starburst),
+    TOKDEF(status),
+    TOKDEF(string_quote),
+    TOKDEF(structure),
+    TOKDEF(structure_out),
+    TOKDEF(subgates),
+    TOKDEF(such),
+    TOKDEF(suffix),
+    TOKDEF(super_placement),
+    TOKDEF(supply),
+    TOKDEF(supply_pin),
+    TOKDEF(swapping),
+    TOKDEF(switch_window),
+    TOKDEF(system),
+    TOKDEF(tandem_noise),
+    TOKDEF(tandem_segment),
+    TOKDEF(tandem_shield_overhang),
+    TOKDEF(terminal),
+    TOKDEF(terminator),
+    TOKDEF(term_only),
+    TOKDEF(test),
+    TOKDEF(testpoint),
+    TOKDEF(test_points),
+    TOKDEF(threshold),
+    TOKDEF(time_length_factor),
+    TOKDEF(time_resolution),
+    TOKDEF(tjunction),
+    TOKDEF(tolerance),
+    TOKDEF(top),
+    TOKDEF(topology),
+    TOKDEF(total),
+    TOKDEF(track_id),
+    TOKDEF(turret),
+    TOKDEF(type),
+    TOKDEF(um),
+    TOKDEF(unassigned),
+    TOKDEF(unconnects),
+    TOKDEF(unit),
+    TOKDEF(up),
+    TOKDEF(use_array),
+    TOKDEF(use_layer),
+    TOKDEF(use_net),
+    TOKDEF(use_via),
+    TOKDEF(value),
+    TOKDEF(via),
+    TOKDEF(via_array_template),
+    TOKDEF(via_at_smd),
+    TOKDEF(via_keepout),
+    TOKDEF(via_number),
+    TOKDEF(via_rotate_first),
+    TOKDEF(via_site),
+    TOKDEF(via_size),
+    TOKDEF(virtual_pin),
+    TOKDEF(volt),
+    TOKDEF(voltage_resolution),
+    TOKDEF(was_is),
+    TOKDEF(way),
+    TOKDEF(weight),
+    TOKDEF(width),
+    TOKDEF(window),
+    TOKDEF(wire),
+    TOKDEF(wires),
+    TOKDEF(wires_include),
+    TOKDEF(wiring),
+    TOKDEF(write_resolution),
+    TOKDEF(x),
 };
+
 
 static int compare( const void* a1, const void* a2 )
 {
@@ -790,33 +792,6 @@ static int compare( const void* a1, const void* a2 )
     
     int ret = strcmp( k1->name, k2->name );
     return ret;
-}
-
-
-/**
- * Function findToken
- * takes a string and looks up the string in the list of expected
- * tokens.
- * @return int - DSN_T or -1 if argument string is not a recognized token.
-*/ 
-static int findToken( const char* tok )
-{
-    char    lowercase[80];
-    
-    strcpy( lowercase, tok );
-    
-    strlower( lowercase );
-
-    KEYWORD search;
-    search.name = lowercase;
-    
-    const KEYWORD* findings = (const KEYWORD*) bsearch( &search, 
-                                   tokens, sizeof(tokens)/sizeof(tokens[0]),
-                                   sizeof(KEYWORD), compare );
-    if( findings )
-        return findings->token;
-    else
-        return -1;
 }
 
 
@@ -921,15 +896,16 @@ LINE_READER::LINE_READER( FILE* aFile,  unsigned aMaxLineLength )
 
 int LINE_READER::ReadLine() throw (IOError)
 {
-    const char* p = fgets( &line[0], capacity, fp );
+    const char* p = fgets( line, capacity, fp );
     
     if( !p )
     {
-        length = 0;
+        line[0] = 0;
+        length  = 0;
     }
     else
     {
-        length = strlen( &line[0] );
+        length = strlen( line );
 
         if( length > maxLineLength )        
             throw IOError( _("Line length exceeded") );
@@ -957,10 +933,11 @@ class LEXER
     LINE_READER         reader;
     int                 stringDelimiter;
     wxString            filename;
-    int                 lastTok;        ///< curTok from las NextTok() call.
+    int                 lastTok;        ///< curTok from previous NextTok() call.
     
-    int                 curTok;         ///< the DSN_T value of current token
+    DSN_T               curTok;         ///< the current token obtained on last NextTok()
     std::string         curText;        ///< the text of the current token
+    std::string         lowercase;      ///< a scratch buf holding token in lowercase
 
     
     int readLine() throw (IOError)
@@ -972,6 +949,37 @@ class LEXER
         
         return len;
     }
+
+
+    /**
+     * Function findToken
+     * takes a string and looks up the string in the list of expected
+     * tokens.
+     *
+     * @param tok A string holding the token text to lookup, in an 
+     *   unpredictable case: uppercase or lowercase
+     * @return int - DSN_T or -1 if argument string is not a recognized token.
+    */ 
+    int findToken( const std::string& tok )
+    {
+        // convert to lower case once, this should be faster than using strcasecmp()
+        // for each test in compare().
+        lowercase.clear();
+        
+        for( std::string::const_iterator iter = tok.begin();  iter!=tok.end();  ++iter )
+            lowercase += (char) tolower( *iter );
+        
+        KEYWORD search;
+        search.name = lowercase.c_str();
+        
+        const KEYWORD* findings = (const KEYWORD*) bsearch( &search, 
+                                       tokens, sizeof(tokens)/sizeof(tokens[0]),
+                                       sizeof(KEYWORD), compare );
+        if( findings )
+            return findings->token;
+        else
+            return -1;
+    }
     
 
 public:
@@ -982,8 +990,9 @@ public:
         stringDelimiter = '"';
         filename = aFilename;
         
-        // start should never change until we change the reader, and the DSN
-        // format supports an include mechanism but we'll add that later.
+        // "start" should never change until we change the reader.  The DSN
+        // format spec supports an include file mechanism but we can add that later
+        // using a std::stack to hold a stack of LINE_READERs to track nesting.
         start = (char*) reader;     
         
         limit = start;
@@ -991,15 +1000,28 @@ public:
         head  = start;
     }
 
+    /**
+     * Function SetStringDelimiter
+     * changes the string delimiter from the default " to some other character
+     * and returns the old value.
+     * @param aStringDelimiter The character in lowest 8 bits.
+     * @return int - The old delimiter in the lowest 8 bits.
+     */
+    int SetStringDelimiter( int aStringDelimiter )
+    {
+        int old = stringDelimiter;
+        stringDelimiter = aStringDelimiter;
+        return old;
+    }
     
     /**
      * Function NextTok
      * returns the next token found in the input file or T_EOF when reaching
      * the end of file.
-     * @return int - one of the DSN_T values.
+     * @return DSN_T - the type of token found next.
      * @throw IOError - only if the LINE_READER throws it.
      */
-    int NextTok() throw (IOError);
+    DSN_T NextTok() throw (IOError);
     
     
     /**
@@ -1031,7 +1053,7 @@ public:
      * Function CurTok
      * returns whatever NextTok() returned the last time it was called.
      */
-    int CurTok()
+    DSN_T CurTok()
     {
         return curTok;
     }
@@ -1039,9 +1061,8 @@ public:
 };
 
 
-int LEXER::NextTok() throw (IOError)
+DSN_T LEXER::NextTok() throw (IOError)
 {
-L_next:        
     lastTok = curTok;
     
     cur = head;
@@ -1071,17 +1092,11 @@ L_read:
             // switching the string_quote character
             if( lastTok == T_string_quote )
             {
-                stringDelimiter = *cur;
-                
                 curText.clear();
                 curText += *cur;
                 
                 head = cur+1;
-                curTok = T_NONE;
-                
-                // Do not return this to the caller, consume it internally
-                // and go get another token for the caller.
-                goto L_next;
+                curTok = T_QUOTE_DEF;
             }
             
             // a quoted string
@@ -1142,7 +1157,7 @@ L_read:
                     head = cur+1;
                     while( head<limit && strchr( ".0123456789", *head )  )
                         ++head;
-                    
+
                     curText.clear();
                     curText.append( cur, head );
                     curTok = T_NUMBER;
@@ -1154,15 +1169,18 @@ L_read:
             else
             {
                 head = cur+1;
-                while( head<limit && !isspace( *head ) && *head!=')' )
+                while( head<limit && !isspace( *head ) && *head!=')' && *head!='(' )
                     ++head;
                 
                 curText.clear();
                 curText.append( cur, head );
                 
-                curTok  = findToken( curText.c_str() );
+                int found = findToken( curText );
                 
-                if( curTok == -1 )  // unrecogized token
+                if( found != -1 )
+                    curTok = (DSN_T) found;
+                
+                else    // unrecogized token
                 {
                     curTok = T_SYMBOL;
                     
