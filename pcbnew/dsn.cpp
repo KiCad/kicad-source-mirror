@@ -1097,13 +1097,14 @@ L_read:
                 if( head >= limit )
                 {
                     wxString errtxt(_("Un-terminated delimited string") );
-                    
                     ThrowIOError( errtxt, limit-start+1 );
                 }
                 
-                *head++ = '\0';
-
-                curText = cur;
+                curText.clear();
+                curText.append( cur, head );
+                
+                ++head;     // skip over the trailing delimiter
+                
                 curTok  = T_STRING;                    
             }
         
@@ -1139,7 +1140,7 @@ L_read:
                 else
                 {
                     head = cur+1;
-                    while( head<limit && !isspace( *head ) && *head!=')' )
+                    while( head<limit && strchr( ".0123456789", *head )  )
                         ++head;
                     
                     curText.clear();
