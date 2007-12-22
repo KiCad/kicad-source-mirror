@@ -491,6 +491,7 @@ wxString        FindKicadFile( const wxString& shortname );
 /* STRING.CPP */
 /*************/
 char*       strupper( char* Text );
+char*       strlower( char* Text );
 
 int         ReadDelimitedText( char* dest, char* source, int NbMaxChar );
 
