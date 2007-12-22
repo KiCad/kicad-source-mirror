@@ -657,7 +657,8 @@ void GRSFillCSegm( EDA_Rect* ClipBox,
 /****************************************************************/
 void GRSCSegm( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int width, int Color )
 {
-    long rayon, dwx, dwy;
+    long rayon;
+    int  dwx, dwy;
     long dx, dy, dwx2, dwy2;
     long sx1, sy1, ex1, ey1;    /* coord du 1er bord */
     long sx2, sy2, ex2, ey2;    /* coord du 1eme bord */
@@ -696,18 +697,30 @@ void GRSCSegm( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int 
     GRSetBrush( DC, Color, FALSE );
 
     rayon = (width + 1) >> 1;
-    dx    = x2 - x1; dy = y2 - y1;
+    
+    dx = x2 - x1; 
+    dy = y2 - y1;
+    
     if( dx == 0 )  /* segment vertical */
     {
         dwx = rayon;
         if( dy >= 0 )
             dwx = -dwx;
-        sx1 = x1 - dwx; sy1 = y1;
-        ex1 = x2 - dwx; ey1 = y2;
+        
+        sx1 = x1 - dwx; 
+        sy1 = y1;
+        
+        ex1 = x2 - dwx; 
+        ey1 = y2;
+        
         DC->DrawLine( sx1, sy1, ex1, ey1 );
 
-        sx2 = x1 + dwx; sy2 = y1;
-        ex2 = x2 + dwx; ey2 = y2;
+        sx2 = x1 + dwx; 
+        sy2 = y1;
+        
+        ex2 = x2 + dwx; 
+        ey2 = y2;
+        
         DC->DrawLine( sx2, sy2, ex2, ey2 );
     }
     else if( dy == 0 ) /* segment horizontal */
@@ -715,12 +728,21 @@ void GRSCSegm( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int 
         dwy = rayon;
         if( dx < 0 )
             dwy = -dwy;
-        sx1 = x1, sy1 = y1 - dwy;
-        ex1 = x2; ey1 = y2 - dwy;
+        
+        sx1 = x1;
+        sy1 = y1 - dwy;
+        
+        ex1 = x2; 
+        ey1 = y2 - dwy;
+        
         DC->DrawLine( sx1, sy1, ex1, ey1 );
 
-        sx2 = x1; sy2 = y1 + dwy;
-        ex2 = x2; ey2 = y2 + dwy;
+        sx2 = x1; 
+        sy2 = y1 + dwy;
+        
+        ex2 = x2; 
+        ey2 = y2 + dwy;
+        
         DC->DrawLine( sx2, sy2, ex2, ey2 );
     }
     else
@@ -746,16 +768,27 @@ void GRSCSegm( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int 
         else
         {
             int delta_angle = ArcTangente( dy, dx );
-            dwx = 0; dwy = width;
-            RotatePoint( (int*) &dwx, (int*) &dwy, -delta_angle );
+            dwx = 0; 
+            dwy = width;
+            RotatePoint( &dwx, &dwy, -delta_angle );
         }
-        dwx2 = dwx >> 1; dwy2 = dwy >> 1;
-        sx1  = x1 - dwx2; sy1 = y1 - dwy2;
-        ex1  = x2 - dwx2; ey1 = y2 - dwy2;
+        dwx2 = dwx >> 1; 
+        dwy2 = dwy >> 1;
+        
+        sx1 = x1 - dwx2; 
+        sy1 = y1 - dwy2;
+        
+        ex1 = x2 - dwx2; 
+        ey1 = y2 - dwy2;
+        
         DC->DrawLine( sx1, sy1, ex1, ey1 );
 
-        sx2 = x1 + dwx2; sy2 = y1 + dwy2;
-        ex2 = x2 + dwx2; ey2 = y2 + dwy2;
+        sx2 = x1 + dwx2; 
+        sy2 = y1 + dwy2;
+        
+        ex2 = x2 + dwx2; 
+        ey2 = y2 + dwy2;
+        
         DC->DrawLine( sx2, sy2, ex2, ey2 );
     }
 
