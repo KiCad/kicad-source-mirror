@@ -41,7 +41,7 @@ static bool s_ConnectToPads = false;
 #ifdef CONN2PAD_ENBL
 static void ConnectDanglingEndToPad( WinEDA_PcbFrame* frame, wxDC* DC );
 static void ConnectDanglingEndToVia( BOARD* pcb );
-static void Gen_Raccord_Track( WinEDA_PcbFrame* frame, wxDC* DC );
+//static void Gen_Raccord_Track( WinEDA_PcbFrame* frame, wxDC* DC );
 #endif
 
 
@@ -806,7 +806,7 @@ int Netliste_Controle_piste( WinEDA_PcbFrame* frame, wxDC* DC, int affiche )
 }
 
 
-#ifdef CONN2PAD_ENBL
+#if 0
 
 /***************************************************************/
 static void Gen_Raccord_Track( WinEDA_PcbFrame* frame, wxDC* DC )
@@ -955,6 +955,10 @@ static void Gen_Raccord_Track( WinEDA_PcbFrame* frame, wxDC* DC )
     }
 }
 
+#endif
+
+
+#if defined(CONN2PAD_ENBL)
 
 /**
  * Function ConnectDanglingEndToPad
