@@ -4,6 +4,15 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2007-Dec-22 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++all
+    added strlower() to common.h and string.cpp.
+    fixed compiler warnings in common/gr_basic.cpp and pcbnew/clean.cpp
++pcbnew
+    started the DSN file import/export for SPECCTRA routers, adding dsn.cpp and
+    specctra.cpp, with "stand alone" compile support for it in pcbnew/CMakeLists.txt.
+
 
 2007-Dec-17 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================

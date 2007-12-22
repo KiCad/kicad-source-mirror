@@ -116,6 +116,7 @@ SET(PCBNEW_SRCS
 	set_color.cpp
 	set_grid.cpp
 	solve.cpp
+#   specctra.cpp
 	surbrill.cpp
 	swap_layers.cpp
 	tool_modedit.cpp
@@ -152,6 +153,12 @@ IF(APPLE)
 ENDIF(APPLE)
 
 ADD_EXECUTABLE(pcbnew WIN32 MACOSX_BUNDLE ${PCBNEW_SRCS} ${PCBNEW_EXTRA_SRCS} ${PCBNEW_RESOURCES})
+
+# This one gets made only when testing
+SET_SOURCE_FILES_PROPERTIES( dsn.cpp PROPERTIES COMPILE_FLAGS -DSTANDALONE )
+ADD_EXECUTABLE( dsntest EXCLUDE_FROM_ALL dsn.cpp )
+TARGET_LINK_LIBRARIES( dsntest common ${wxWidgets_LIBRARIES} )
+
 
 TARGET_LINK_LIBRARIES(pcbnew common 3d-viewer ${wxWidgets_LIBRARIES})
 
