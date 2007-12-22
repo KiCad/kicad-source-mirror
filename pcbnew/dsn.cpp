@@ -1096,6 +1096,13 @@ L_read:
                 curText += *cur;
                 
                 head = cur+1;
+
+                if( head<limit && *head!=')' && *head!='(' && !isspace(*head) )
+                {
+                    wxString errtxt(_("String delimiter char must be a single char") );
+                    ThrowIOError( errtxt, cur-start+1 );
+                }
+                
                 curTok = T_QUOTE_DEF;
             }
             
@@ -1112,7 +1119,7 @@ L_read:
                 if( head >= limit )
                 {
                     wxString errtxt(_("Un-terminated delimited string") );
-                    ThrowIOError( errtxt, limit-start+1 );
+                    ThrowIOError( errtxt, cur-start+1 );
                 }
                 
                 curText.clear();
