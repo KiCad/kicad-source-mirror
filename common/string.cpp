@@ -373,6 +373,8 @@ char* strupper( char* Text )
     return Text;
 }
 
+
+#if 0
 /********************************/
 char* strlower( char* text )
 /********************************/
@@ -388,3 +390,4 @@ char* strlower( char* text )
 
     return start;
 }
+#endif
