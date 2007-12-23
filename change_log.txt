@@ -4,6 +4,24 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+2007-Dec-23 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++all
+  * Because of the discussion 4 months ago about using Boost::Python, and 
+    because of an excellent boost::ptr_vector class, I want to make some of the
+    boost libraries be necessary for building Kicad.  These would be:
+    1) boost pointer container library (immediately)
+        http://www.boost.org/libs/ptr_container/doc/ptr_container.html
+        See the work in specctra.cpp to see where this is going:
+        typedef boost::ptr_vector<ELEM> ELEM_ARRAY found within class PARENT.
+        I found that gcc 4.2.1 was complaining about the standard ubuntu libboost-dev
+        package and would not compile ptr_vector class.  But the svn of boost
+        fixed this.
+    2) boost::python when building python in.
+  * Added FIND_PACKAGE(Boost) to CMakeLists.txt
+        
+
 2007-Dec-22 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +all
