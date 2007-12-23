@@ -63,7 +63,7 @@ IF(wxWidgets_FOUND)
     MESSAGE(STATUS "Check for installed wxWidgets -- found")
 
     # Include wxWidgets macros.
-        INCLUDE(${wxWidgets_USE_FILE})
+    INCLUDE(${wxWidgets_USE_FILE})
 
     # We define the include paths here. 
     # Include dirs for wxWidgets was defined before.
@@ -71,7 +71,7 @@ IF(wxWidgets_FOUND)
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/share)
 
-    # CMake will look at this dirs for nested 'CMakeLists.txt' files
+    # CMake will look in these dirs for nested 'CMakeLists.txt' files
     ADD_SUBDIRECTORY(common)
     ADD_SUBDIRECTORY(3d-viewer)
     ADD_SUBDIRECTORY(cvpcb)
@@ -82,7 +82,7 @@ IF(wxWidgets_FOUND)
 ELSE(wxWidgets_FOUND)
     # For convenience. When we cannot continue, inform the user.
     MESSAGE(STATUS "Check for installed wxWidgets -- not found")
-        MESSAGE(FATAL_ERROR "wxWidgets was not found - it is required to build KiCad")
+    MESSAGE(FATAL_ERROR "wxWidgets was not found - it is required to build KiCad")
 ENDIF(wxWidgets_FOUND)
 
 # CMake will look at this dirs for nested 'CMakeLists.txt' files

@@ -1,7 +1,13 @@
 ADD_DEFINITIONS(-DPCBNEW)
 
+FIND_PACKAGE(Boost)
+
+INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
+
+
 INCLUDE_DIRECTORIES(
 	${CMAKE_CURRENT_SOURCE_DIR}
+    ${Boost_INCLUDE_DIRS}
 	bitmaps
 	../3d-viewer
     ../polygon
@@ -116,7 +122,7 @@ SET(PCBNEW_SRCS
 	set_color.cpp
 	set_grid.cpp
 	solve.cpp
-#   specctra.cpp
+#    specctra.cpp
 	surbrill.cpp
 	swap_layers.cpp
 	tool_modedit.cpp
@@ -158,6 +164,10 @@ ADD_EXECUTABLE(pcbnew WIN32 MACOSX_BUNDLE ${PCBNEW_SRCS} ${PCBNEW_EXTRA_SRCS} ${
 SET_SOURCE_FILES_PROPERTIES( dsn.cpp PROPERTIES COMPILE_FLAGS -DSTANDALONE )
 ADD_EXECUTABLE( dsntest EXCLUDE_FROM_ALL dsn.cpp )
 TARGET_LINK_LIBRARIES( dsntest common ${wxWidgets_LIBRARIES} )
+
+SET_SOURCE_FILES_PROPERTIES( specctra.cpp PROPERTIES COMPILE_FLAGS -DSTANDALONE )
+ADD_EXECUTABLE( specctra_test EXCLUDE_FROM_ALL specctra.cpp )
+TARGET_LINK_LIBRARIES( specctra_test common ${wxWidgets_LIBRARIES} )
 
 
 TARGET_LINK_LIBRARIES(pcbnew common 3d-viewer ${wxWidgets_LIBRARIES})
