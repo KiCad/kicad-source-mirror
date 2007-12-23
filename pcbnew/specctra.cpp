@@ -23,16 +23,127 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
- 
-#include <stdarg.h>
-#include <stdio.h>
+
+#include <cstdarg>
+#include <cstdio>
+
+#include <boost/ptr_container/ptr_vector.hpp>
+
 
 #include "fctsys.h"
 #include "pcbstruct.h"
 
+#include "dsn.h"
+
+namespace DSN {
 
 
- 
+/**
+ * Class ELEM
+ * is a base class for any DSN element.  It is not a parent node so it 
+ * cannot contain other elements but it can be extended to hold fields 
+ * for any DSN element which contains no other elements, only fields.
+ */ 
+class ELEM
+{
+protected:    
+    DSN_T   type;
+
+public:    
+    
+    ELEM( DSN_T aType ) :
+       type( aType )
+    {
+    }
+    
+    virtual ~ELEM()
+    {
+        printf("~ELEM(%p %d)\n", this, Type() );
+    }
+    
+    DSN_T   Type() { return type; }
+    
+    virtual void Test()
+    {
+        printf("virtual Test()\n" ); 
+    }
+};
+
+
+
+/**
+ * Class PARENT
+ * is a base class holder for any DSN element.  It can contain other
+ * elements, including elements derived from this class.
+ */ 
+ class PARENT : public ELEM
+{
+    //  see http://www.boost.org/libs/ptr_container/doc/ptr_sequence_adapter.html
+    typedef boost::ptr_vector<ELEM> ELEM_ARRAY;
+    
+    ELEM_ARRAY                      kids;      ///< of pointers                   
+   
+    
+public:
+
+    PARENT( DSN_T aType ) :
+       ELEM( aType )
+    {
+    }
+    
+    virtual ~PARENT()
+    {
+        printf("~PARENT(%p %d)\n", this, Type() );
+    }
+
+    //-----< list operations >--------------------------------------------
+    
+    void    Append( ELEM* aElem )
+    {
+        kids.push_back( aElem );
+    }
+
+    ELEM*   Replace( int aIndex, ELEM* aElem )
+    {
+        ELEM_ARRAY::auto_type ret = kids.replace( aIndex, aElem );
+        return ret.release();
+    }
+
+    ELEM*   Remove( int aIndex )
+    {
+        ELEM_ARRAY::auto_type ret = kids.release( kids.begin()+aIndex );
+        return ret.release();
+    }
+    
+    ELEM& operator[]( int aIndex )
+    {
+        return kids[aIndex];
+    }
+
+    const ELEM& operator[]( int aIndex ) const
+    {
+        return kids[aIndex];
+    }
+    
+    void    Insert( int aIndex, ELEM* aElem )
+    {
+        kids.insert( kids.begin()+aIndex, aElem );
+    }
+    
+    ELEM* At( int aIndex )
+    {
+        return &kids[aIndex];
+    }
+    
+    void    Delete( int aIndex )
+    {
+        kids.erase( kids.begin()+aIndex );
+    }
+        
+};
+   
+
+
  
 /**
  * Class SPECCTRA_DB
@@ -42,6 +153,7 @@ class SPECCTRA_DB
 {
     FILE*   fp;    
 
+    
     
     /**
      * Function print
@@ -83,8 +195,31 @@ void SPECCTRA_DB::print( const char* fmt, ... )
 }
 
 
+
 void SPECCTRA_DB::Export( BOARD* aBoard )
 {
+}
+
+
+} // namespace DSN
+
+
+using namespace DSN;
+
+// a test to verify some of the list management functions.
+
+int main( int argc, char** argv )
+{
+    PARENT parent( T_pcb );
+
+    PARENT* child = new PARENT( T_absolute );
+    
+    parent.Append( child );
+
+    parent.At(0)->Test();
+    
+    child->Append( new ELEM( T_absolute ) );
+    
 }
 
 
