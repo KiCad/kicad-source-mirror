@@ -114,7 +114,6 @@ SET(PCBNEW_SRCS
 	plot_rtn.cpp
 	queue.cpp
 	ratsnest.cpp
-#	reglage.cpp
 	router.cpp
 	sel_layer.cpp
 	set_color.cpp
@@ -135,8 +134,9 @@ SET(PCBNEW_SRCS
 	via_edit.cpp
 	work.cpp
 	xchgmod.cpp
+	zones_by_polygon.cpp
 #	zones.cpp
-	zones_by_polygon.cpp)
+	)
 
 SET(PCBNEW_EXTRA_SRCS
 #	../polygon/PolyLine.cpp
