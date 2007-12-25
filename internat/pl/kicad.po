@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-12-02 10:31+0100\n"
-"PO-Revision-Date: 2007-12-02 13:24+0100\n"
+"POT-Creation-Date: 2007-12-25 22:23+0100\n"
+"PO-Revision-Date: 2007-12-25 22:59+0100\n"
 "Last-Translator: \n"
 "Language-Team: Polish KiCAD Team - Mateusz Skowroński <skowri@gmail.com>, Krzysztof Kawa <elektrotrans@wp.pl>\n"
 "MIME-Version: 1.0\n"
@@ -204,7 +204,7 @@ msgstr "Dopasuj powiększenie"
 
 #: kicad/pcbnew/tool_modedit.cpp:133
 #: kicad/pcbnew/menubarpcb.cpp:209
-#: kicad/pcbnew/modedit.cpp:398
+#: kicad/pcbnew/modedit.cpp:396
 #: kicad/pcbnew/menubarmodedit.cpp:45
 msgid "Pad Settings"
 msgstr "Właściwości pól lutowniczych"
@@ -235,14 +235,14 @@ msgstr "Dodaj łuk (grafika)"
 
 #: kicad/pcbnew/tool_modedit.cpp:180
 #: kicad/pcbnew/edit.cpp:283
-#: kicad/eeschema/schedit.cpp:314
+#: kicad/eeschema/schedit.cpp:315
 #: kicad/eeschema/libframe.cpp:503
 #: kicad/gerbview/tool_gerber.cpp:385
 msgid "Add Text"
 msgstr "Dodaj tekst"
 
 #: kicad/pcbnew/tool_modedit.cpp:185
-#: kicad/pcbnew/modedit.cpp:412
+#: kicad/pcbnew/modedit.cpp:410
 msgid "Place anchor"
 msgstr "Umieść zakotwiczenie"
 
@@ -303,7 +303,7 @@ msgstr "Pokaż zarys krawędzi"
 
 #: kicad/pcbnew/tool_modedit.cpp:285
 #: kicad/pcbnew/tool_pcb.cpp:567
-#: kicad/share/zoom.cpp:364
+#: kicad/share/zoom.cpp:367
 #: kicad/eeschema/plotps.cpp:169
 msgid "Auto"
 msgstr "Dopasuj powiększenie"
@@ -349,9 +349,9 @@ msgstr "Nie mogę utworzyć "
 #: kicad/pcbnew/plothpgl.cpp:74
 #: kicad/pcbnew/plotps.cpp:58
 #: kicad/pcbnew/plotgerb.cpp:84
-#: kicad/pcbnew/gendrill.cpp:401
-#: kicad/pcbnew/gendrill.cpp:1027
-#: kicad/pcbnew/gendrill.cpp:1620
+#: kicad/pcbnew/gendrill.cpp:410
+#: kicad/pcbnew/gendrill.cpp:1036
+#: kicad/pcbnew/gendrill.cpp:1629
 msgid "File"
 msgstr "Plik"
 
@@ -361,6 +361,7 @@ msgid "Net"
 msgstr "Sieć"
 
 #: kicad/pcbnew/class_board_item.cpp:41
+#: kicad/eeschema/edit_component_in_schematic.cpp:826
 #: kicad/eeschema/dialog_build_BOM.cpp:300
 #: kicad/eeschema/component_class.cpp:56
 msgid "Footprint"
@@ -412,7 +413,7 @@ msgstr "Tekst PCB"
 #: kicad/pcbnew/dialog_netlist.cpp:135
 #: kicad/eeschema/edit_component_in_schematic.cpp:745
 #: kicad/eeschema/dialog_create_component.cpp:164
-#: kicad/eeschema/onrightclick.cpp:317
+#: kicad/eeschema/onrightclick.cpp:320
 #: kicad/eeschema/eelayer.h:153
 msgid "Reference"
 msgstr "Oznaczenie"
@@ -422,7 +423,6 @@ msgstr "Oznaczenie"
 #: kicad/pcbnew/class_text_mod.cpp:345
 #: kicad/eeschema/edit_component_in_schematic.cpp:784
 #: kicad/eeschema/component_class.cpp:55
-#: kicad/eeschema/onrightclick.cpp:316
 #: kicad/eeschema/eelayer.h:159
 msgid "Value"
 msgstr "Wartość"
@@ -448,6 +448,7 @@ msgstr "Grafika"
 #: kicad/pcbnew/dialog_display_options.cpp:221
 #: kicad/pcbnew/dialog_display_options.cpp:229
 #: kicad/pcbnew/dialog_display_options.cpp:266
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:166
 #: kicad/gerbview/options.cpp:321
 msgid "Line"
 msgstr "Linia"
@@ -462,7 +463,7 @@ msgid "Arc"
 msgstr "Łuk"
 
 #: kicad/pcbnew/class_board_item.cpp:108
-#: kicad/pcbnew/classpcb.cpp:234
+#: kicad/pcbnew/classpcb.cpp:199
 #: kicad/pcbnew/class_track.cpp:776
 #: kicad/pcbnew/dialog_pad_edit.cpp:176
 #: kicad/pcbnew/dialog_pad_edit.cpp:196
@@ -476,6 +477,7 @@ msgid "Track"
 msgstr "Ścieżka"
 
 #: kicad/pcbnew/class_board_item.cpp:147
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:219
 msgid "Net:"
 msgstr "Sieć:"
 
@@ -590,7 +592,7 @@ msgstr "Rozmiar poziomy tekstu modułu"
 #: kicad/pcbnew/set_grid.cpp:171
 #: kicad/pcbnew/dialog_pad_edit.cpp:217
 #: kicad/pcbnew/dialog_general_options.cpp:368
-#: kicad/pcbnew/dialog_drc.cpp:372
+#: kicad/pcbnew/dialog_drc.cpp:549
 #: kicad/pcbnew/swap_layers.cpp:220
 #: kicad/pcbnew/dialog_track_options.cpp:186
 #: kicad/pcbnew/dialog_edit_mod_text.cpp:213
@@ -615,16 +617,17 @@ msgstr "&OK"
 
 #: kicad/pcbnew/dialog_graphic_items_options.cpp:267
 #: kicad/pcbnew/dialog_netlist.cpp:189
-#: kicad/pcbnew/zones.cpp:216
+#: kicad/pcbnew/zones.cpp:219
 #: kicad/pcbnew/set_grid.cpp:176
 #: kicad/pcbnew/dialog_pad_edit.cpp:221
 #: kicad/pcbnew/dialog_general_options.cpp:372
-#: kicad/pcbnew/dialog_drc.cpp:368
+#: kicad/pcbnew/dialog_drc.cpp:545
 #: kicad/pcbnew/swap_layers.cpp:224
 #: kicad/pcbnew/dialog_track_options.cpp:190
 #: kicad/pcbnew/dialog_edit_mod_text.cpp:217
 #: kicad/pcbnew/dialog_initpcb.cpp:164
 #: kicad/pcbnew/dialog_display_options.cpp:286
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:203
 #: kicad/share/setpage.cpp:446
 #: kicad/eeschema/plothpgl.cpp:274
 #: kicad/eeschema/annotate_dialog.cpp:154
@@ -687,9 +690,10 @@ msgstr "Wyłącz na wszystkich warstwach ścieżek"
 #: kicad/pcbnew/cotation.cpp:105
 #: kicad/pcbnew/muonde.cpp:348
 #: kicad/pcbnew/pcbtexte.cpp:111
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:200
 #: kicad/eeschema/eelayer.cpp:251
 #: kicad/eeschema/sheetlab.cpp:93
-#: kicad/common/displlst.cpp:99
+#: kicad/common/displlst.cpp:106
 #: kicad/common/get_component_dialog.cpp:112
 #: kicad/gerbview/set_color.cpp:325
 #: kicad/gerbview/reglage.cpp:108
@@ -712,13 +716,13 @@ msgstr "OK"
 #: kicad/pcbnew/modedit_onclick.cpp:235
 #: kicad/pcbnew/globaleditpad.cpp:108
 #: kicad/pcbnew/pcbtexte.cpp:116
-#: kicad/eeschema/libedit_onrightclick.cpp:68
-#: kicad/eeschema/libedit_onrightclick.cpp:83
+#: kicad/eeschema/libedit_onrightclick.cpp:48
+#: kicad/eeschema/libedit_onrightclick.cpp:63
 #: kicad/eeschema/eelayer.cpp:255
 #: kicad/eeschema/sheetlab.cpp:97
-#: kicad/eeschema/onrightclick.cpp:121
-#: kicad/eeschema/onrightclick.cpp:133
-#: kicad/common/displlst.cpp:103
+#: kicad/eeschema/onrightclick.cpp:122
+#: kicad/eeschema/onrightclick.cpp:134
+#: kicad/common/displlst.cpp:111
 #: kicad/common/selcolor.cpp:171
 #: kicad/common/get_component_dialog.cpp:121
 #: kicad/gerbview/set_color.cpp:329
@@ -741,12 +745,13 @@ msgid "Footprint name:"
 msgstr "Oznaczenie elementu (np. R1):"
 
 #: kicad/pcbnew/modules.cpp:281
-#: kicad/pcbnew/onrightclick.cpp:676
+#: kicad/pcbnew/onrightclick.cpp:677
 msgid "Delete Module"
 msgstr "Usuń moduł"
 
 #: kicad/pcbnew/modules.cpp:282
 #: kicad/eeschema/find.cpp:229
+#: kicad/eeschema/onrightclick.cpp:317
 msgid "Value "
 msgstr "Wartość "
 
@@ -776,12 +781,12 @@ msgstr "Kod sieci"
 
 #: kicad/pcbnew/affiche.cpp:52
 #: kicad/pcbnew/class_module.cpp:1228
-#: kicad/pcbnew/class_board.cpp:417
+#: kicad/pcbnew/class_board.cpp:369
 msgid "Pads"
 msgstr "Pola lutownicze"
 
 #: kicad/pcbnew/affiche.cpp:63
-#: kicad/pcbnew/class_board.cpp:427
+#: kicad/pcbnew/class_board.cpp:379
 #: kicad/pcbnew/plotps.cpp:361
 msgid "Vias"
 msgstr "Przelotki"
@@ -826,23 +831,23 @@ msgstr "Kontrola DRC:"
 msgid "NetCtr"
 msgstr "Kontrola sieci"
 
-#: kicad/pcbnew/clean.cpp:1055
+#: kicad/pcbnew/clean.cpp:1059
 msgid "Centre"
 msgstr "Środek"
 
-#: kicad/pcbnew/clean.cpp:1055
+#: kicad/pcbnew/clean.cpp:1059
 msgid "0 "
 msgstr "0 "
 
-#: kicad/pcbnew/clean.cpp:1066
+#: kicad/pcbnew/clean.cpp:1070
 msgid "Pads: "
 msgstr "Pola lutownicze:"
 
-#: kicad/pcbnew/clean.cpp:1070
+#: kicad/pcbnew/clean.cpp:1074
 msgid "Max"
 msgstr "Maksimum"
 
-#: kicad/pcbnew/clean.cpp:1073
+#: kicad/pcbnew/clean.cpp:1077
 msgid "Segm"
 msgstr "Segment"
 
@@ -864,7 +869,7 @@ msgid "RefP"
 msgstr "Oznaczenie pola lutowniczego"
 
 #: kicad/pcbnew/class_pad.cpp:1062
-#: kicad/pcbnew/classpcb.cpp:245
+#: kicad/pcbnew/classpcb.cpp:210
 #: kicad/pcbnew/class_track.cpp:806
 #: kicad/pcbnew/class_module.cpp:1217
 #: kicad/pcbnew/class_pcb_text.cpp:198
@@ -893,9 +898,9 @@ msgstr "Rozmiar pionowy"
 #: kicad/pcbnew/class_pad.cpp:1085
 #: kicad/pcbnew/class_track.cpp:822
 #: kicad/pcbnew/class_track.cpp:827
-#: kicad/pcbnew/gendrill.cpp:411
-#: kicad/pcbnew/gendrill.cpp:1101
-#: kicad/pcbnew/gendrill.cpp:1677
+#: kicad/pcbnew/gendrill.cpp:420
+#: kicad/pcbnew/gendrill.cpp:1110
+#: kicad/pcbnew/gendrill.cpp:1686
 msgid "Drill"
 msgstr "Wiercenie"
 
@@ -927,8 +932,8 @@ msgstr "Płytka została zmieniona. Zapisać przed zakończeniem?"
 
 #: kicad/pcbnew/pcbframe.cpp:267
 #: kicad/eeschema/schframe.cpp:183
-#: kicad/common/confirm.cpp:109
-#: kicad/cvpcb/cvframe.cpp:169
+#: kicad/common/confirm.cpp:119
+#: kicad/cvpcb/cvframe.cpp:177
 msgid "Confirmation"
 msgstr "Potwierdzenie"
 
@@ -1021,11 +1026,15 @@ msgstr "Wyświetlaj w trybie wysokiego kontrastu"
 msgid "Pcbnew is already running, Continue?"
 msgstr "Pcbnew jest już uruchomione, kontynuować?"
 
-#: kicad/pcbnew/move_or_drag_track.cpp:709
+#: kicad/pcbnew/filling_zone_algorithm.cpp:175
+msgid "Ok"
+msgstr "Ok"
+
+#: kicad/pcbnew/move_or_drag_track.cpp:714
 msgid "Unable to drag this segment: too many segments connected"
 msgstr "Nie mogę przeciągnąć tego segmentu: zbyt wiele połączonych segmentów"
 
-#: kicad/pcbnew/move_or_drag_track.cpp:762
+#: kicad/pcbnew/move_or_drag_track.cpp:768
 msgid "Unable to drag this segment: two collinear segments"
 msgstr "Nie mogę przeciągnąć tego segmentu: dwa współliniowe segmenty"
 
@@ -1047,7 +1056,7 @@ msgid "Seg Layer"
 msgstr "Warstwa segmentu"
 
 #: kicad/pcbnew/class_edge_mod.cpp:297
-#: kicad/pcbnew/classpcb.cpp:250
+#: kicad/pcbnew/classpcb.cpp:215
 #: kicad/pcbnew/mirepcb.cpp:113
 #: kicad/pcbnew/class_track.cpp:830
 #: kicad/pcbnew/class_pcb_text.cpp:212
@@ -1062,7 +1071,7 @@ msgstr "Warstwa segmentu"
 msgid "Width"
 msgstr "Szerokość"
 
-#: kicad/pcbnew/classpcb.cpp:229
+#: kicad/pcbnew/classpcb.cpp:194
 #: kicad/pcbnew/class_track.cpp:750
 #: kicad/pcbnew/class_marker.cpp:112
 #: kicad/pcbnew/class_text_mod.cpp:359
@@ -1070,15 +1079,15 @@ msgstr "Szerokość"
 msgid "Type"
 msgstr "Typ"
 
-#: kicad/pcbnew/classpcb.cpp:231
+#: kicad/pcbnew/classpcb.cpp:196
 msgid "Shape"
 msgstr "Kształt"
 
-#: kicad/pcbnew/classpcb.cpp:238
+#: kicad/pcbnew/classpcb.cpp:203
 msgid "  Arc  "
 msgstr "  Łuk  "
 
-#: kicad/pcbnew/classpcb.cpp:243
+#: kicad/pcbnew/classpcb.cpp:208
 #: kicad/pcbnew/class_track.cpp:774
 msgid "Segment"
 msgstr "Segment"
@@ -1140,7 +1149,7 @@ msgstr "Otwórz pliki płytek:"
 
 #: kicad/pcbnew/files.cpp:182
 #: kicad/pcbnew/librairi.cpp:64
-#: kicad/cvpcb/readschematicnetlist.cpp:51
+#: kicad/cvpcb/readschematicnetlist.cpp:53
 #: kicad/cvpcb/rdpcad.cpp:45
 #, c-format
 msgid "File <%s> not found"
@@ -1180,9 +1189,9 @@ msgid "Keep"
 msgstr "Pozostaw"
 
 #: kicad/pcbnew/dialog_netlist.cpp:143
-#: kicad/pcbnew/onrightclick.cpp:598
-#: kicad/pcbnew/onrightclick.cpp:708
-#: kicad/pcbnew/onrightclick.cpp:805
+#: kicad/pcbnew/onrightclick.cpp:599
+#: kicad/pcbnew/onrightclick.cpp:709
+#: kicad/pcbnew/onrightclick.cpp:806
 #: kicad/eeschema/edit_component_in_lib.cpp:239
 #: kicad/eeschema/edit_component_in_lib.cpp:320
 msgid "Delete"
@@ -1344,47 +1353,48 @@ msgstr "Kopiuj strefę"
 msgid "Draw layers copy"
 msgstr "Kopiuj warstwy rysunkowe"
 
-#: kicad/pcbnew/find.cpp:116
+#: kicad/pcbnew/find.cpp:114
 msgid "Marker found"
 msgstr "Znaleziono znacznik"
 
-#: kicad/pcbnew/find.cpp:118
+#: kicad/pcbnew/find.cpp:116
 #, c-format
 msgid "<%s> Found"
 msgstr "Znaleziono <%s>"
 
-#: kicad/pcbnew/find.cpp:145
+#: kicad/pcbnew/find.cpp:129
 msgid "Marker not found"
 msgstr "Nie znaleziono znacznika"
 
-#: kicad/pcbnew/find.cpp:147
+#: kicad/pcbnew/find.cpp:131
 #, c-format
 msgid "<%s> Not Found"
 msgstr "Nie znaleziono <%s>"
 
-#: kicad/pcbnew/find.cpp:254
+#: kicad/pcbnew/find.cpp:238
 #: kicad/eeschema/dialog_find.cpp:107
 msgid "Item to find:"
 msgstr "Element do wyszukania:"
 
-#: kicad/pcbnew/find.cpp:275
+#: kicad/pcbnew/find.cpp:259
 msgid "Find Item"
 msgstr "Znajdź element"
 
-#: kicad/pcbnew/find.cpp:281
+#: kicad/pcbnew/find.cpp:265
 msgid "Find Next Item"
 msgstr "Znajdź następny element"
 
-#: kicad/pcbnew/find.cpp:290
+#: kicad/pcbnew/find.cpp:274
 msgid "Find Marker"
 msgstr "Znajdź znacznik"
 
-#: kicad/pcbnew/find.cpp:296
+#: kicad/pcbnew/find.cpp:280
 msgid "Find Next Marker"
 msgstr "Znajdź następny znacznik"
 
 #: kicad/pcbnew/class_track.cpp:765
-#: kicad/pcbnew/zones.cpp:927
+#: kicad/pcbnew/zones.cpp:873
+#: kicad/pcbnew/zones_by_polygon.cpp:597
 msgid "NetName"
 msgstr "Nazwa sieci"
 
@@ -1406,90 +1416,90 @@ msgstr "Status"
 msgid "Diam"
 msgstr "Średnica"
 
-#: kicad/pcbnew/drc.cpp:1362
+#: kicad/pcbnew/drc.cpp:1324
 msgid "Tst Pad to Pad\n"
 msgstr "Test pole do pola\n"
 
-#: kicad/pcbnew/drc.cpp:1408
-#: kicad/pcbnew/drc.cpp:1482
+#: kicad/pcbnew/drc.cpp:1370
+#: kicad/pcbnew/drc.cpp:1444
 msgid "SegmNb"
 msgstr "Numer segmentu"
 
-#: kicad/pcbnew/drc.cpp:1409
+#: kicad/pcbnew/drc.cpp:1371
 msgid "Track Err"
 msgstr "Błąd ścieżki"
 
-#: kicad/pcbnew/drc.cpp:1413
+#: kicad/pcbnew/drc.cpp:1375
 msgid "Tst Tracks\n"
 msgstr "Test ścieżek\n"
 
-#: kicad/pcbnew/drc.cpp:1444
-#: kicad/pcbnew/drc.cpp:1522
+#: kicad/pcbnew/drc.cpp:1406
+#: kicad/pcbnew/drc.cpp:1484
 #: kicad/eeschema/eelayer.h:104
 msgid "Netname"
 msgstr "Nazwa sieci"
 
-#: kicad/pcbnew/drc.cpp:1483
+#: kicad/pcbnew/drc.cpp:1445
 msgid "Zone Err"
 msgstr "Błąd strefy"
 
-#: kicad/pcbnew/drc.cpp:1486
+#: kicad/pcbnew/drc.cpp:1448
 msgid "Tst Zones\n"
 msgstr "Test stref\n"
 
-#: kicad/pcbnew/drc.cpp:1609
+#: kicad/pcbnew/drc.cpp:1571
 msgid "Look for active routes\n"
 msgstr "Szukaj aktywnych ścieżek\n"
 
-#: kicad/pcbnew/drc.cpp:1632
+#: kicad/pcbnew/drc.cpp:1594
 #, c-format
 msgid "%d > Pad %s (%s) @ %.4f,%.4f and "
 msgstr "%d > Pole %s (%s) @ %.4f,%.4f i "
 
-#: kicad/pcbnew/drc.cpp:1646
+#: kicad/pcbnew/drc.cpp:1608
 #, c-format
 msgid "Pad %s (%s) @ %.4f,%.4f\n"
 msgstr "Pole %s (%s) @ %.4f,%.4f\n"
 
-#: kicad/pcbnew/drc.cpp:1656
+#: kicad/pcbnew/drc.cpp:1618
 #, c-format
 msgid "Active routes: %d\n"
 msgstr "Aktywne trasowanie: %d\n"
 
-#: kicad/pcbnew/drc.cpp:1658
+#: kicad/pcbnew/drc.cpp:1620
 msgid "OK! (No active routes)\n"
 msgstr "OK! (Brak aktywnych ścieżek)\n"
 
-#: kicad/pcbnew/drc.cpp:1717
+#: kicad/pcbnew/drc.cpp:1679
 #, c-format
 msgid "** End Drc: %d errors **\n"
 msgstr "** Koniec DRC: %d błędów **\n"
 
-#: kicad/pcbnew/drc.cpp:1719
+#: kicad/pcbnew/drc.cpp:1681
 msgid "** End Drc: No Error **\n"
 msgstr "** Koniec DRC: Brak błędów **\n"
 
-#: kicad/pcbnew/drc.cpp:1728
+#: kicad/pcbnew/drc.cpp:1690
 #, c-format
 msgid "Report file <%s> created\n"
 msgstr "Utworzono plik raportu <%s>\n"
 
-#: kicad/pcbnew/drc.cpp:2626
+#: kicad/pcbnew/drc.cpp:2588
 #, c-format
 msgid "%d Drc Err %d %s (net %s) and PAD %s (%s) net %s @ %d,%d\n"
 msgstr "%d Błąd DRC %d %s (sieć %s) i pole %s (%s) sieć %s @ %d,%d\n"
 
-#: kicad/pcbnew/drc.cpp:2643
+#: kicad/pcbnew/drc.cpp:2605
 #, c-format
 msgid "%d Err type %d: %s (net %s) and VIA (net %s) @ %d,%d\n"
 msgstr "%d Błąd typu %d: %s (sieć %s) i przelotka (sieć %s) @ %d,%d\n"
 
-#: kicad/pcbnew/drc.cpp:2659
+#: kicad/pcbnew/drc.cpp:2621
 #, c-format
 msgid "%d Err type %d: %s (net %s) and track (net %s) @ %d,%d\n"
 msgstr "%d Błąd typu %d: %s (sieć %s) i ścieżka (sieć %s) @ %d,%d\n"
 
-#: kicad/pcbnew/drc.cpp:2719
+#: kicad/pcbnew/drc.cpp:2681
 #, c-format
 msgid "%d Drc Err: PAD %s (%s) net %s @ %d,%d and PAD %s (%s) net %s @ %d,%d\n"
 msgstr "%d Błąd DRC: pole %s (%s) sieć %s @ %d,%d i pole %s (%s) sieć %s @ %d,%d\n"
@@ -1534,12 +1544,12 @@ msgstr "Rozciągnij dyndające ścieżki, które częściowo nachodzą na pola l
 msgid "Clean pcb"
 msgstr "Wyczyść PCB"
 
-#: kicad/pcbnew/basepcbframe.cpp:131
+#: kicad/pcbnew/basepcbframe.cpp:159
 msgid "3D Frame already opened"
 msgstr "Ramka 3D już otwarta"
 
-#: kicad/pcbnew/basepcbframe.cpp:136
-#: kicad/pcbnew/basepcbframe.cpp:139
+#: kicad/pcbnew/basepcbframe.cpp:164
+#: kicad/pcbnew/basepcbframe.cpp:167
 msgid "3D Viewer"
 msgstr "Podgląd 3D"
 
@@ -1731,99 +1741,109 @@ msgid "Change track width (entire NET) ?"
 msgstr "Zmienić szerokość ścieżki (cała sieć)?"
 
 #: kicad/pcbnew/edit_track_width.cpp:128
-#: kicad/pcbnew/editrout.cpp:116
 msgid "Edit All Tracks and Vias Sizes"
 msgstr "Edytuj rozmiary wszystkich ścieżek i przelotek"
 
 #: kicad/pcbnew/edit_track_width.cpp:133
-#: kicad/pcbnew/editrout.cpp:121
 msgid "Edit All Via Sizes"
 msgstr "Edytuj rozmiary wszystkich przelotek"
 
 #: kicad/pcbnew/edit_track_width.cpp:138
-#: kicad/pcbnew/editrout.cpp:126
 msgid "Edit All Track Sizes"
 msgstr "Edytuj rozmiary wszystkich ścieżek"
 
-#: kicad/pcbnew/zones.cpp:152
-#: kicad/pcbnew/zones.cpp:153
-#: kicad/pcbnew/zones.cpp:154
 #: kicad/pcbnew/zones.cpp:155
+#: kicad/pcbnew/zones.cpp:156
+#: kicad/pcbnew/zones.cpp:157
+#: kicad/pcbnew/zones.cpp:158
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:152
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:153
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:154
 msgid "0.00000"
 msgstr "0,00000"
 
-#: kicad/pcbnew/zones.cpp:159
+#: kicad/pcbnew/zones.cpp:162
 msgid "Grid size:"
 msgstr "Rozmiar siatki:"
 
-#: kicad/pcbnew/zones.cpp:164
+#: kicad/pcbnew/zones.cpp:167
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:159
 msgid "Zone clearance value (mm):"
 msgstr "Wartość prześwitu strefy (mm):"
 
-#: kicad/pcbnew/zones.cpp:181
+#: kicad/pcbnew/zones.cpp:184
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:179
 msgid "Include Pads"
 msgstr "Dołącz pola lutownicze"
 
-#: kicad/pcbnew/zones.cpp:182
+#: kicad/pcbnew/zones.cpp:185
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:180
 msgid "Thermal"
 msgstr "Termiczna"
 
-#: kicad/pcbnew/zones.cpp:183
+#: kicad/pcbnew/zones.cpp:186
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:181
 msgid "Exclude Pads"
 msgstr "Pomiń pola lutownicze"
 
-#: kicad/pcbnew/zones.cpp:187
+#: kicad/pcbnew/zones.cpp:190
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:182
 msgid "Pad options:"
 msgstr "Opcje pól lutowniczych:"
 
-#: kicad/pcbnew/zones.cpp:192
+#: kicad/pcbnew/zones.cpp:195
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:189
 #: kicad/eeschema/dialog_options.cpp:257
 msgid "Any"
 msgstr "Dowolna"
 
-#: kicad/pcbnew/zones.cpp:193
+#: kicad/pcbnew/zones.cpp:196
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:190
 msgid "H , V and 45 deg"
 msgstr "Poziomo, pionowo i 45 stopni"
 
-#: kicad/pcbnew/zones.cpp:197
+#: kicad/pcbnew/zones.cpp:200
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:191
 msgid "Zone edges orient:"
 msgstr "Orientacja krawędzi strefy:"
 
-#: kicad/pcbnew/zones.cpp:209
+#: kicad/pcbnew/zones.cpp:212
 msgid "Fill"
 msgstr "Wypełnij"
 
-#: kicad/pcbnew/zones.cpp:223
+#: kicad/pcbnew/zones.cpp:226
 msgid "Update Options"
 msgstr "Uaktualnij opcje"
 
-#: kicad/pcbnew/zones.cpp:232
+#: kicad/pcbnew/zones.cpp:235
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:237
 msgid "Zone clearance value:"
 msgstr "Wartość prześwitu strefy:"
 
-#: kicad/pcbnew/zones.cpp:235
+#: kicad/pcbnew/zones.cpp:238
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:240
 msgid "Grid :"
 msgstr "Siatka :"
 
-#: kicad/pcbnew/zones.cpp:398
+#: kicad/pcbnew/zones.cpp:401
+#: kicad/pcbnew/zones_by_polygon.cpp:87
 msgid "New zone segment width: "
 msgstr "Szerokość segmentu nowej strefy: "
 
-#: kicad/pcbnew/zones.cpp:596
+#: kicad/pcbnew/zones.cpp:599
+#: kicad/pcbnew/zones_by_polygon.cpp:287
 msgid "Zone: No net selected"
 msgstr "Strefa: Nie zaznaczono żadnej sieci"
 
-#: kicad/pcbnew/zones.cpp:638
+#: kicad/pcbnew/zones.cpp:641
+#: kicad/pcbnew/zones_by_polygon.cpp:329
 msgid "Delete Current Zone Edges"
 msgstr "Usuń krawędzie bieżącej strefy"
 
-#: kicad/pcbnew/zones.cpp:925
+#: kicad/pcbnew/zones.cpp:871
+#: kicad/pcbnew/zones_by_polygon.cpp:595
 msgid "No Net"
 msgstr "Brak sieci"
-
-#: kicad/pcbnew/zones.cpp:997
-msgid "Ok"
-msgstr "Ok"
 
 #: kicad/pcbnew/editmod.cpp:45
 #: kicad/pcbnew/edit.cpp:171
@@ -1985,6 +2005,63 @@ msgstr "Dodatkowa górna"
 #: kicad/pcbnew/dialog_pad_edit.cpp:279
 msgid "Draft layer"
 msgstr "Warstwa szkicu"
+
+#: kicad/pcbnew/dsn.cpp:455
+msgid "Line length exceeded"
+msgstr "Przekroczona długość linii"
+
+#: kicad/pcbnew/dsn.cpp:530
+msgid "String delimiter char must be a single char"
+msgstr "Separator musi być pojedynczym znakiem"
+
+#: kicad/pcbnew/dsn.cpp:590
+msgid "Un-terminated delimited string"
+msgstr "Niezakończony separator tekstu"
+
+#: kicad/pcbnew/class_drc_item.cpp:39
+#: kicad/pcbnew/dialog_drc.cpp:483
+msgid "Unconnected pads"
+msgstr "Pola niepołączone"
+
+#: kicad/pcbnew/class_drc_item.cpp:41
+msgid "Track near thru-hole"
+msgstr "Ścieżka blisko otworu na wylot"
+
+#: kicad/pcbnew/class_drc_item.cpp:43
+msgid "Track near pad"
+msgstr "Ścieżka blisko pola"
+
+#: kicad/pcbnew/class_drc_item.cpp:45
+msgid "Track near via"
+msgstr "Ścieżka blisko przelotki"
+
+#: kicad/pcbnew/class_drc_item.cpp:47
+msgid "Via near via"
+msgstr "Przelotka blisko przelotki"
+
+#: kicad/pcbnew/class_drc_item.cpp:49
+msgid "Via near track"
+msgstr "Przelotka blisko ścieżki"
+
+#: kicad/pcbnew/class_drc_item.cpp:59
+msgid "Two track ends"
+msgstr "Dwa końce ścieżki"
+
+#: kicad/pcbnew/class_drc_item.cpp:61
+msgid "This looks bad"
+msgstr "To wygląda źle"
+
+#: kicad/pcbnew/class_drc_item.cpp:63
+msgid "Tracks crossing"
+msgstr "Skrzyżowanie ścieżek"
+
+#: kicad/pcbnew/class_drc_item.cpp:65
+msgid "Pad near pad"
+msgstr "Pole blisko pola"
+
+#: kicad/pcbnew/class_drc_item.cpp:67
+msgid "Via hole > diameter"
+msgstr "Otwór przelotki > średnica"
 
 #: kicad/pcbnew/moduleframe.cpp:182
 msgid "Module Editor: module modified!, Continue ?"
@@ -2169,7 +2246,7 @@ msgid "Module name:"
 msgstr "Nazwa modułu:"
 
 #: kicad/pcbnew/loadcmp.cpp:215
-#: kicad/eeschema/eelibs_read_libraryfiles.cpp:59
+#: kicad/eeschema/eelibs_read_libraryfiles.cpp:64
 #, c-format
 msgid "Library <%s> not found"
 msgstr "Nie znaleziono biblioteki <%s>"
@@ -2583,7 +2660,7 @@ msgstr "Widok &3D"
 msgid "&Help"
 msgstr "Pomo&c"
 
-#: kicad/pcbnew/dialog_drc.cpp:252
+#: kicad/pcbnew/dialog_drc.cpp:429
 #: kicad/eeschema/dialog_erc.cpp:237
 #: kicad/eeschema/dialog_create_component.cpp:176
 #: kicad/eeschema/dialog_edit_component_in_schematic.cpp:201
@@ -2591,117 +2668,123 @@ msgstr "Pomo&c"
 msgid "Options"
 msgstr "Opcje"
 
-#: kicad/pcbnew/dialog_drc.cpp:262
+#: kicad/pcbnew/dialog_drc.cpp:439
 #: kicad/pcbnew/dialog_track_options.cpp:169
 msgid "Clearance"
 msgstr "Prześwit"
 
-#: kicad/pcbnew/dialog_drc.cpp:267
+#: kicad/pcbnew/dialog_drc.cpp:444
 msgid "In the clearance units, enter the clearance distance"
 msgstr "Wprowadź wartość prześwitu"
 
-#: kicad/pcbnew/dialog_drc.cpp:270
+#: kicad/pcbnew/dialog_drc.cpp:447
 msgid "Create Report File"
 msgstr "Utwórz plik raportu"
 
-#: kicad/pcbnew/dialog_drc.cpp:277
+#: kicad/pcbnew/dialog_drc.cpp:454
 msgid "Enable writing report to this file"
 msgstr "Włącz zapisywanie raportu do tego pliku"
 
-#: kicad/pcbnew/dialog_drc.cpp:282
+#: kicad/pcbnew/dialog_drc.cpp:459
 msgid "Enter the report filename"
 msgstr "Wprowadź nazwę pliku raportu"
 
-#: kicad/pcbnew/dialog_drc.cpp:285
+#: kicad/pcbnew/dialog_drc.cpp:462
 msgid "..."
 msgstr "..."
 
-#: kicad/pcbnew/dialog_drc.cpp:287
+#: kicad/pcbnew/dialog_drc.cpp:464
 msgid "Pick a filename interactively"
 msgstr "Wskaż położenie pliku"
 
-#: kicad/pcbnew/dialog_drc.cpp:290
+#: kicad/pcbnew/dialog_drc.cpp:467
 msgid "Include Tests For:"
 msgstr "Dołącz testy dla:"
 
-#: kicad/pcbnew/dialog_drc.cpp:294
+#: kicad/pcbnew/dialog_drc.cpp:471
 msgid "Pad to pad"
 msgstr "Pole do pola"
 
-#: kicad/pcbnew/dialog_drc.cpp:297
+#: kicad/pcbnew/dialog_drc.cpp:474
 msgid "Include tests for clearances between pad to pads"
 msgstr "Dołącz testy prześwitu pomiędzy polami"
 
-#: kicad/pcbnew/dialog_drc.cpp:300
+#: kicad/pcbnew/dialog_drc.cpp:477
 msgid "Zones"
 msgstr "Strefy"
 
-#: kicad/pcbnew/dialog_drc.cpp:303
+#: kicad/pcbnew/dialog_drc.cpp:480
 msgid "Include zones in clearance or unconnected tests"
 msgstr "Dołącz strefy w testach prześwitu lub niepołączenia"
 
-#: kicad/pcbnew/dialog_drc.cpp:306
-#: kicad/pcbnew/class_board.cpp:20
-msgid "Unconnected pads"
-msgstr "Pola niepołączone"
-
-#: kicad/pcbnew/dialog_drc.cpp:309
+#: kicad/pcbnew/dialog_drc.cpp:486
 msgid "Find unconnected pads"
 msgstr "Znajdź niepołączone pola"
 
-#: kicad/pcbnew/dialog_drc.cpp:315
+#: kicad/pcbnew/dialog_drc.cpp:492
 msgid "Start DRC"
 msgstr "Uruchom DRC"
 
-#: kicad/pcbnew/dialog_drc.cpp:317
+#: kicad/pcbnew/dialog_drc.cpp:494
 msgid "Start the Design Rule Checker"
 msgstr "Uruchom DRC (kontrola reguł projektowych)"
 
-#: kicad/pcbnew/dialog_drc.cpp:321
+#: kicad/pcbnew/dialog_drc.cpp:498
 msgid "List Unconnected"
 msgstr "Lista niepołączonych"
 
-#: kicad/pcbnew/dialog_drc.cpp:323
+#: kicad/pcbnew/dialog_drc.cpp:500
 msgid "List unconnected pads or tracks"
 msgstr "Pokaż niepołączone pola lub ścieżki"
 
-#: kicad/pcbnew/dialog_drc.cpp:327
+#: kicad/pcbnew/dialog_drc.cpp:504
 msgid "Delete All Markers"
 msgstr "Usuń wszystkie znaczniki"
 
-#: kicad/pcbnew/dialog_drc.cpp:329
+#: kicad/pcbnew/dialog_drc.cpp:506
 msgid "Delete every marker"
 msgstr "Usuń każdy znacznik"
 
-#: kicad/pcbnew/dialog_drc.cpp:333
+#: kicad/pcbnew/dialog_drc.cpp:510
 msgid "Delete Current Marker"
 msgstr "Usuń bieżący znacznik"
 
-#: kicad/pcbnew/dialog_drc.cpp:335
+#: kicad/pcbnew/dialog_drc.cpp:512
 msgid "Delete the marker selected in the listBox below"
 msgstr "Usuń znacznik zaznaczony na liście poniżej"
 
-#: kicad/pcbnew/dialog_drc.cpp:339
+#: kicad/pcbnew/dialog_drc.cpp:516
 msgid "Error Messages:"
 msgstr "Błędy:"
 
-#: kicad/pcbnew/dialog_drc.cpp:349
-msgid "MARKERs on the PCB, double click on any MARKER to go there in PCB"
-msgstr "ZNACZNIKi na płytce. Kliknij dwukrotnie na dowolnym ZNACZNIKU, aby do niego przejść."
+#: kicad/pcbnew/dialog_drc.cpp:526
+msgid "MARKERs, double click any to go there in PCB, right click for popup menu"
+msgstr "ZNACZNIKi na płytce. Kliknij dwukrotnie na dowolnym ZNACZNIKU, aby do niego przejść. Prawy przycisk myszy dla menu podręcznego."
 
-#: kicad/pcbnew/dialog_drc.cpp:351
+#: kicad/pcbnew/dialog_drc.cpp:528
 msgid "Distance Problem Markers"
 msgstr "Znaczniki problemów odległości"
 
-#: kicad/pcbnew/dialog_drc.cpp:355
-msgid "Pad to pad, pad to track, and track to track clearance problems"
-msgstr "Problemy z prześwitem pole do pola, pole do ścieżki i ścieżka do ścieżki"
+#: kicad/pcbnew/dialog_drc.cpp:532
+msgid "A list of unconnected pads, right click for popup menu"
+msgstr "Lista niepołączonych pól. Prawy przycisk myszy dla menu podręcznego."
 
-#: kicad/pcbnew/dialog_drc.cpp:357
+#: kicad/pcbnew/dialog_drc.cpp:534
 msgid "Unconnected"
 msgstr "Niepołączone"
 
-#: kicad/pcbnew/dialog_drc.cpp:481
+#: kicad/pcbnew/dialog_drc.cpp:658
+#: kicad/pcbnew/dialog_drc.cpp:736
+#, c-format
+msgid "Report file \"%s\" created"
+msgstr "Utworzono plik raportu \"%s\""
+
+#: kicad/pcbnew/dialog_drc.cpp:660
+#: kicad/pcbnew/dialog_drc.cpp:738
+msgid "Disk File Report Completed"
+msgstr "Zakończono raportowanie do pliku"
+
+#: kicad/pcbnew/dialog_drc.cpp:766
 msgid "DRC Report file"
 msgstr "Plik raportu DRC"
 
@@ -2722,7 +2805,7 @@ msgid "Delete draw items?"
 msgstr "Usunąć rysunki?"
 
 #: kicad/pcbnew/initpcb.cpp:287
-#: kicad/gerbview/initpcb.cpp:152
+#: kicad/gerbview/initpcb.cpp:150
 msgid "Delete Tracks?"
 msgstr "Usunąć ścieżki?"
 
@@ -2731,7 +2814,7 @@ msgid "Delete Modules?"
 msgstr "Usunąć moduły?"
 
 #: kicad/pcbnew/initpcb.cpp:333
-#: kicad/gerbview/initpcb.cpp:175
+#: kicad/gerbview/initpcb.cpp:173
 msgid "Delete Pcb Texts"
 msgstr "Usuń teksty PCB"
 
@@ -2776,59 +2859,23 @@ msgstr "Tak"
 msgid "Selection Clarification"
 msgstr "Precyzowanie wyboru"
 
-#: kicad/pcbnew/class_board.cpp:22
-msgid "Track near thru-hole"
-msgstr "Ścieżka blisko otworu na wylot"
-
-#: kicad/pcbnew/class_board.cpp:24
-msgid "Track near pad"
-msgstr "Ścieżka blisko pola"
-
-#: kicad/pcbnew/class_board.cpp:26
-msgid "Track near via"
-msgstr "Ścieżka blisko przelotki"
-
-#: kicad/pcbnew/class_board.cpp:28
-msgid "Via near via"
-msgstr "Przelotka blisko przelotki"
-
-#: kicad/pcbnew/class_board.cpp:30
-msgid "Via near track"
-msgstr "Przelotka blisko ścieżki"
-
-#: kicad/pcbnew/class_board.cpp:40
-msgid "Two track ends"
-msgstr "Dwa końce ścieżki"
-
-#: kicad/pcbnew/class_board.cpp:42
-msgid "This looks bad"
-msgstr "To wygląda źle"
-
-#: kicad/pcbnew/class_board.cpp:44
-msgid "Tracks crossing"
-msgstr "Skrzyżowanie ścieżek"
-
-#: kicad/pcbnew/class_board.cpp:46
-msgid "Pad near pad"
-msgstr "Pole blisko pola"
-
-#: kicad/pcbnew/class_board.cpp:430
+#: kicad/pcbnew/class_board.cpp:382
 msgid "Nodes"
 msgstr "Węzły"
 
-#: kicad/pcbnew/class_board.cpp:433
+#: kicad/pcbnew/class_board.cpp:385
 msgid "Links"
 msgstr "Łącza"
 
-#: kicad/pcbnew/class_board.cpp:436
+#: kicad/pcbnew/class_board.cpp:388
 msgid "Nets"
 msgstr "Sieci"
 
-#: kicad/pcbnew/class_board.cpp:439
+#: kicad/pcbnew/class_board.cpp:391
 msgid "Connect"
 msgstr "Połączone"
 
-#: kicad/pcbnew/class_board.cpp:442
+#: kicad/pcbnew/class_board.cpp:394
 #: kicad/eeschema/eelayer.h:116
 msgid "NoConn"
 msgstr "Niepołączone"
@@ -2889,7 +2936,7 @@ msgstr "Punk zerowy rysowania"
 
 #: kicad/pcbnew/pcbplot.cpp:209
 #: kicad/pcbnew/xchgmod.cpp:137
-#: kicad/share/zoom.cpp:445
+#: kicad/share/zoom.cpp:448
 msgid "Close"
 msgstr "Zamknij"
 
@@ -3167,8 +3214,8 @@ msgstr "Pliki elementów:"
 
 #: kicad/pcbnew/xchgmod.cpp:642
 #: kicad/pcbnew/plotps.cpp:51
-#: kicad/pcbnew/gendrill.cpp:394
-#: kicad/pcbnew/gendrill.cpp:1614
+#: kicad/pcbnew/gendrill.cpp:403
+#: kicad/pcbnew/gendrill.cpp:1623
 msgid "Unable to create file "
 msgstr "Nie mogę utworzyć pliku "
 
@@ -3196,7 +3243,7 @@ msgid "Edit Module"
 msgstr "Edytuj moduł"
 
 #: kicad/pcbnew/dialog_edit_module.cpp:193
-#: kicad/eeschema/onrightclick.cpp:348
+#: kicad/eeschema/onrightclick.cpp:354
 #: kicad/eeschema/dialog_edit_component_in_lib.cpp:203
 msgid "Doc"
 msgstr "Dokument"
@@ -3214,7 +3261,7 @@ msgid "Add Field"
 msgstr "Dodaj pole"
 
 #: kicad/pcbnew/dialog_edit_module.cpp:222
-#: kicad/eeschema/onrightclick.cpp:268
+#: kicad/eeschema/onrightclick.cpp:269
 msgid "Edit Field"
 msgstr "Edytuj pole"
 
@@ -3237,7 +3284,7 @@ msgstr "Ścieżek"
 #: kicad/pcbnew/muonde.cpp:360
 #: kicad/pcbnew/pcbtexte.cpp:176
 #: kicad/eeschema/dialog_edit_component_in_schematic.cpp:180
-#: kicad/eeschema/onrightclick.cpp:305
+#: kicad/eeschema/onrightclick.cpp:306
 #: kicad/eeschema/dialog_options.cpp:229
 msgid "Normal"
 msgstr "Normalny"
@@ -3404,18 +3451,18 @@ msgstr ""
 "\n"
 "Nie mogę wstawić tej obudowy"
 
-#: kicad/pcbnew/modedit.cpp:395
+#: kicad/pcbnew/modedit.cpp:393
 msgid "Add Pad"
 msgstr "Dodaj pole lutownicze"
 
-#: kicad/pcbnew/modedit.cpp:408
-#: kicad/eeschema/schedit.cpp:298
+#: kicad/pcbnew/modedit.cpp:406
+#: kicad/eeschema/schedit.cpp:299
 msgid "Add Drawing"
 msgstr "Dodaj rysunek"
 
-#: kicad/pcbnew/modedit.cpp:426
+#: kicad/pcbnew/modedit.cpp:424
 #: kicad/pcbnew/edit.cpp:461
-#: kicad/eeschema/schedit.cpp:454
+#: kicad/eeschema/schedit.cpp:455
 #: kicad/eeschema/libframe.cpp:579
 msgid "Delete item"
 msgstr "Usuń element"
@@ -3439,12 +3486,12 @@ msgstr "Bez zmian"
 msgid "Deselect this layer to select the No Change state"
 msgstr "Odznacz tą warstwę, aby przywrócić ją do stanu \"Bez zmian\""
 
-#: kicad/pcbnew/hotkeys.cpp:440
+#: kicad/pcbnew/hotkeys.cpp:443
 #, c-format
 msgid "Footprint %s found, but locked"
 msgstr "Znaleziono obudowę %s, ale jest ona zablokowana"
 
-#: kicad/pcbnew/hotkeys.cpp:605
+#: kicad/pcbnew/hotkeys.cpp:608
 msgid "Delete module?"
 msgstr "Usunąć moduł?"
 
@@ -3542,8 +3589,8 @@ msgstr "Przelotka %.3f"
 
 #: kicad/pcbnew/onrightclick.cpp:151
 #: kicad/pcbnew/modedit_onclick.cpp:207
-#: kicad/eeschema/libedit_onrightclick.cpp:73
-#: kicad/eeschema/onrightclick.cpp:125
+#: kicad/eeschema/libedit_onrightclick.cpp:53
+#: kicad/eeschema/onrightclick.cpp:126
 #: kicad/gerbview/onrightclick.cpp:42
 msgid "End Tool"
 msgstr "Wyłącz narzędzie"
@@ -3624,346 +3671,346 @@ msgstr "Usuń element pozycjonujący"
 msgid "Get and Move Footprint"
 msgstr "Uchwyć element i przesuń"
 
-#: kicad/pcbnew/onrightclick.cpp:358
+#: kicad/pcbnew/onrightclick.cpp:359
 msgid "Fill zone"
 msgstr "Wypełnij strefę"
 
-#: kicad/pcbnew/onrightclick.cpp:366
+#: kicad/pcbnew/onrightclick.cpp:367
 msgid "Select Net"
 msgstr "Wybierz sieć"
 
-#: kicad/pcbnew/onrightclick.cpp:371
+#: kicad/pcbnew/onrightclick.cpp:372
 msgid "Delete Zone Limit"
 msgstr "Usuń ograniczenie sterfy"
 
-#: kicad/pcbnew/onrightclick.cpp:376
-#: kicad/pcbnew/onrightclick.cpp:387
-#: kicad/pcbnew/onrightclick.cpp:400
-#: kicad/pcbnew/onrightclick.cpp:461
+#: kicad/pcbnew/onrightclick.cpp:377
+#: kicad/pcbnew/onrightclick.cpp:388
+#: kicad/pcbnew/onrightclick.cpp:401
+#: kicad/pcbnew/onrightclick.cpp:462
 msgid "Select Working Layer"
 msgstr "Wybierz warstwę roboczą"
 
-#: kicad/pcbnew/onrightclick.cpp:385
-#: kicad/pcbnew/onrightclick.cpp:458
+#: kicad/pcbnew/onrightclick.cpp:386
+#: kicad/pcbnew/onrightclick.cpp:459
 msgid "Select Track Width"
 msgstr "Wybierz szerokość ścieżki"
 
-#: kicad/pcbnew/onrightclick.cpp:389
+#: kicad/pcbnew/onrightclick.cpp:390
 msgid "Select layer pair for vias"
 msgstr "Wybierz parę warstw dla przelotek"
 
-#: kicad/pcbnew/onrightclick.cpp:406
+#: kicad/pcbnew/onrightclick.cpp:407
 msgid "Footprint documentation"
 msgstr "Dokumentacja obudowy"
 
-#: kicad/pcbnew/onrightclick.cpp:416
+#: kicad/pcbnew/onrightclick.cpp:417
 msgid "Glob Move and Place"
 msgstr "Globalne przesuwanie i umieszczanie"
 
-#: kicad/pcbnew/onrightclick.cpp:418
+#: kicad/pcbnew/onrightclick.cpp:419
 msgid "Unlock All Modules"
 msgstr "Odblokuj wszystkie moduły"
 
-#: kicad/pcbnew/onrightclick.cpp:420
+#: kicad/pcbnew/onrightclick.cpp:421
 msgid "Lock All Modules"
 msgstr "Zablokuj wszystkie moduły"
 
-#: kicad/pcbnew/onrightclick.cpp:423
+#: kicad/pcbnew/onrightclick.cpp:424
 msgid "Move All Modules"
 msgstr "Przesuń wszystkie moduły"
 
-#: kicad/pcbnew/onrightclick.cpp:424
+#: kicad/pcbnew/onrightclick.cpp:425
 msgid "Move New Modules"
 msgstr "Przesuń nowe moduły"
 
-#: kicad/pcbnew/onrightclick.cpp:426
+#: kicad/pcbnew/onrightclick.cpp:427
 msgid "Autoplace All Modules"
 msgstr "Automatyczne rozmieszczenie wszystkich modułów"
 
-#: kicad/pcbnew/onrightclick.cpp:427
+#: kicad/pcbnew/onrightclick.cpp:428
 msgid "Autoplace New Modules"
 msgstr "Automatyczne rozmieszczenie nowych modułów"
 
-#: kicad/pcbnew/onrightclick.cpp:428
+#: kicad/pcbnew/onrightclick.cpp:429
 msgid "Autoplace Next Module"
 msgstr "Automatyczne rozmieszczenie następnego modułu"
 
-#: kicad/pcbnew/onrightclick.cpp:431
+#: kicad/pcbnew/onrightclick.cpp:432
 msgid "Orient All Modules"
 msgstr "Zorientuj wszystkie moduły"
 
-#: kicad/pcbnew/onrightclick.cpp:438
+#: kicad/pcbnew/onrightclick.cpp:439
 msgid "Global Autoroute"
 msgstr "Globalne autoroutowanie"
 
-#: kicad/pcbnew/onrightclick.cpp:440
+#: kicad/pcbnew/onrightclick.cpp:441
 msgid "Select layer pair"
 msgstr "Wybierz parę warstw"
 
-#: kicad/pcbnew/onrightclick.cpp:442
+#: kicad/pcbnew/onrightclick.cpp:443
 msgid "Autoroute All Modules"
 msgstr "Autoroutowanie wszystkich modułów"
 
-#: kicad/pcbnew/onrightclick.cpp:444
+#: kicad/pcbnew/onrightclick.cpp:445
 msgid "Reset Unrouted"
 msgstr "Resetuj niepołączone"
 
-#: kicad/pcbnew/onrightclick.cpp:449
+#: kicad/pcbnew/onrightclick.cpp:450
 msgid "Global AutoRouter"
 msgstr "Globalny autorouter"
 
-#: kicad/pcbnew/onrightclick.cpp:451
+#: kicad/pcbnew/onrightclick.cpp:452
 msgid "Read Global AutoRouter Data"
 msgstr "Wczytaj globalne dane autoroutera"
 
-#: kicad/pcbnew/onrightclick.cpp:479
+#: kicad/pcbnew/onrightclick.cpp:480
 #: kicad/pcbnew/modedit_onclick.cpp:217
-#: kicad/eeschema/libedit_onrightclick.cpp:252
-#: kicad/eeschema/onrightclick.cpp:581
+#: kicad/eeschema/libedit_onrightclick.cpp:237
+#: kicad/eeschema/onrightclick.cpp:587
 #: kicad/gerbview/onrightclick.cpp:51
 msgid "Cancel Block"
 msgstr "Anuluj blok"
 
-#: kicad/pcbnew/onrightclick.cpp:481
+#: kicad/pcbnew/onrightclick.cpp:482
 #: kicad/pcbnew/modedit_onclick.cpp:219
 #: kicad/gerbview/onrightclick.cpp:52
 msgid "Zoom Block (Midd butt drag)"
 msgstr "Powiększenie bloku (środkowy przycisk + przeciąganie myszką)"
 
-#: kicad/pcbnew/onrightclick.cpp:484
+#: kicad/pcbnew/onrightclick.cpp:485
 #: kicad/pcbnew/modedit_onclick.cpp:222
-#: kicad/eeschema/libedit_onrightclick.cpp:260
-#: kicad/eeschema/onrightclick.cpp:589
+#: kicad/eeschema/libedit_onrightclick.cpp:245
+#: kicad/eeschema/onrightclick.cpp:595
 #: kicad/gerbview/onrightclick.cpp:54
 msgid "Place Block"
 msgstr "Umieść blok"
 
-#: kicad/pcbnew/onrightclick.cpp:486
+#: kicad/pcbnew/onrightclick.cpp:487
 #: kicad/pcbnew/modedit_onclick.cpp:224
-#: kicad/eeschema/libedit_onrightclick.cpp:266
-#: kicad/eeschema/onrightclick.cpp:598
+#: kicad/eeschema/libedit_onrightclick.cpp:251
+#: kicad/eeschema/onrightclick.cpp:604
 msgid "Copy Block (shift + drag mouse)"
 msgstr "Kopiuj blok (shift + przeciąganie myszką)"
 
-#: kicad/pcbnew/onrightclick.cpp:488
+#: kicad/pcbnew/onrightclick.cpp:489
 msgid "Flip Block (alt + drag mouse)"
 msgstr "Odbij blok (alt + przeciąganie myszką)"
 
-#: kicad/pcbnew/onrightclick.cpp:490
+#: kicad/pcbnew/onrightclick.cpp:491
 #: kicad/pcbnew/modedit_onclick.cpp:228
 msgid "Rotate Block (ctrl + drag mouse)"
 msgstr "Obróć blok (ctrl + przeciąganie myszką)"
 
-#: kicad/pcbnew/onrightclick.cpp:492
+#: kicad/pcbnew/onrightclick.cpp:493
 #: kicad/pcbnew/modedit_onclick.cpp:230
 msgid "Delete Block (shift+ctrl + drag mouse)"
 msgstr "Usuń blok (shift+ctrl + przeciąganie myszką)"
 
-#: kicad/pcbnew/onrightclick.cpp:511
+#: kicad/pcbnew/onrightclick.cpp:512
 msgid "Drag Via"
 msgstr "Przeciągnij przelotkę"
 
-#: kicad/pcbnew/onrightclick.cpp:515
-#: kicad/pcbnew/onrightclick.cpp:579
+#: kicad/pcbnew/onrightclick.cpp:516
+#: kicad/pcbnew/onrightclick.cpp:580
 msgid "Edit Via"
 msgstr "Edytuj przelotkę"
 
-#: kicad/pcbnew/onrightclick.cpp:517
+#: kicad/pcbnew/onrightclick.cpp:518
 msgid "Set via hole to Default"
 msgstr "Ustaw otwór przelotki na wartość domyślną"
 
-#: kicad/pcbnew/onrightclick.cpp:519
+#: kicad/pcbnew/onrightclick.cpp:520
 msgid "Set via hole to alt value"
 msgstr "Ustaw otwór przelotki na wartość alternatywną"
 
-#: kicad/pcbnew/onrightclick.cpp:521
+#: kicad/pcbnew/onrightclick.cpp:522
 msgid "Set the via hole alt value"
 msgstr "Ustaw wartość alternatywną otworu przelotki"
 
-#: kicad/pcbnew/onrightclick.cpp:523
+#: kicad/pcbnew/onrightclick.cpp:524
 msgid "Export Via hole to alt value"
 msgstr "Eksportuj otwór przelotki do wartości alternatywnej"
 
-#: kicad/pcbnew/onrightclick.cpp:525
+#: kicad/pcbnew/onrightclick.cpp:526
 msgid "Export via hole to others id vias"
 msgstr "Eksportuj otwór przelotki do innych identycznych przelotek"
 
-#: kicad/pcbnew/onrightclick.cpp:527
+#: kicad/pcbnew/onrightclick.cpp:528
 msgid "Set ALL via holes to default"
 msgstr "Ustaw WSZYSTKIE otwory przelotek na wartość domyślną"
 
-#: kicad/pcbnew/onrightclick.cpp:540
+#: kicad/pcbnew/onrightclick.cpp:541
 msgid "Move Node"
 msgstr "Przesuń węzeł"
 
-#: kicad/pcbnew/onrightclick.cpp:545
+#: kicad/pcbnew/onrightclick.cpp:546
 msgid "Drag Segments, keep slope"
 msgstr "Przeciąganie segmentów, utrzymuj nachylenie"
 
-#: kicad/pcbnew/onrightclick.cpp:547
+#: kicad/pcbnew/onrightclick.cpp:548
 msgid "Drag Segment"
 msgstr "Przeciągnij segment"
 
-#: kicad/pcbnew/onrightclick.cpp:550
+#: kicad/pcbnew/onrightclick.cpp:551
 msgid "Move Segment"
 msgstr "Przesuń segment"
 
-#: kicad/pcbnew/onrightclick.cpp:553
+#: kicad/pcbnew/onrightclick.cpp:554
 msgid "Break Track"
 msgstr "Przerwij ścieżkę"
 
-#: kicad/pcbnew/onrightclick.cpp:560
+#: kicad/pcbnew/onrightclick.cpp:561
 msgid "Place Node"
 msgstr "Umieść węzeł"
 
-#: kicad/pcbnew/onrightclick.cpp:567
+#: kicad/pcbnew/onrightclick.cpp:568
 msgid "End Track"
 msgstr "Zakończ ścieżkę"
 
-#: kicad/pcbnew/onrightclick.cpp:570
+#: kicad/pcbnew/onrightclick.cpp:571
 msgid "Place Via"
 msgstr "Umieść przelotkę"
 
-#: kicad/pcbnew/onrightclick.cpp:577
+#: kicad/pcbnew/onrightclick.cpp:578
 msgid "Change Width"
 msgstr "Zmień szerokość"
 
-#: kicad/pcbnew/onrightclick.cpp:579
+#: kicad/pcbnew/onrightclick.cpp:580
 msgid "Edit Segment"
 msgstr "Edytuj segment"
 
-#: kicad/pcbnew/onrightclick.cpp:584
+#: kicad/pcbnew/onrightclick.cpp:585
 msgid "Edit Track"
 msgstr "Edytuj ścieżkę"
 
-#: kicad/pcbnew/onrightclick.cpp:586
+#: kicad/pcbnew/onrightclick.cpp:587
 msgid "Edit Net"
 msgstr "Edytuj sieć"
 
-#: kicad/pcbnew/onrightclick.cpp:588
+#: kicad/pcbnew/onrightclick.cpp:589
 msgid "Edit ALL Tracks and Vias"
 msgstr "Edytuj wszystkie ścieżki i przelotki"
 
-#: kicad/pcbnew/onrightclick.cpp:590
+#: kicad/pcbnew/onrightclick.cpp:591
 msgid "Edit ALL Vias (no track)"
 msgstr "Edytuj wszystkie przelotki (bez ścieżek)"
 
-#: kicad/pcbnew/onrightclick.cpp:592
+#: kicad/pcbnew/onrightclick.cpp:593
 msgid "Edit ALL Tracks (no via)"
 msgstr "Edytuj wszystkie ścieżki (bez przelotek)"
 
-#: kicad/pcbnew/onrightclick.cpp:600
+#: kicad/pcbnew/onrightclick.cpp:601
 msgid "Delete Via"
 msgstr "Usuń przelotkę"
 
-#: kicad/pcbnew/onrightclick.cpp:600
+#: kicad/pcbnew/onrightclick.cpp:601
 msgid "Delete Segment"
 msgstr "Usuń segment"
 
-#: kicad/pcbnew/onrightclick.cpp:607
+#: kicad/pcbnew/onrightclick.cpp:608
 msgid "Delete Track"
 msgstr "Usuń ścieżkę"
 
-#: kicad/pcbnew/onrightclick.cpp:611
+#: kicad/pcbnew/onrightclick.cpp:612
 msgid "Delete Net"
 msgstr "Usuń sieć"
 
-#: kicad/pcbnew/onrightclick.cpp:616
+#: kicad/pcbnew/onrightclick.cpp:617
 msgid "Set Flags"
 msgstr "Ustaw flagi"
 
-#: kicad/pcbnew/onrightclick.cpp:617
+#: kicad/pcbnew/onrightclick.cpp:618
 msgid "Locked: Yes"
 msgstr "Zablokowany: Tak"
 
-#: kicad/pcbnew/onrightclick.cpp:618
+#: kicad/pcbnew/onrightclick.cpp:619
 msgid "Locked: No"
 msgstr "Zablokowany: Nie"
 
-#: kicad/pcbnew/onrightclick.cpp:628
+#: kicad/pcbnew/onrightclick.cpp:629
 msgid "Track Locked: Yes"
 msgstr "Zablokowana ścieżka: Tak"
 
-#: kicad/pcbnew/onrightclick.cpp:629
+#: kicad/pcbnew/onrightclick.cpp:630
 msgid "Track Locked: No"
 msgstr "Zablokowana ścieżka: Nie"
 
-#: kicad/pcbnew/onrightclick.cpp:631
+#: kicad/pcbnew/onrightclick.cpp:632
 msgid "Net Locked: Yes"
 msgstr "Zablokowana sieć: Tak"
 
-#: kicad/pcbnew/onrightclick.cpp:632
+#: kicad/pcbnew/onrightclick.cpp:633
 msgid "Net Locked: No"
 msgstr "Zablokowana sieć: Nie"
 
-#: kicad/pcbnew/onrightclick.cpp:654
-#: kicad/pcbnew/onrightclick.cpp:699
-#: kicad/pcbnew/onrightclick.cpp:737
-#: kicad/pcbnew/onrightclick.cpp:796
+#: kicad/pcbnew/onrightclick.cpp:655
+#: kicad/pcbnew/onrightclick.cpp:700
+#: kicad/pcbnew/onrightclick.cpp:738
+#: kicad/pcbnew/onrightclick.cpp:797
 msgid "Move"
 msgstr "Przesuń"
 
-#: kicad/pcbnew/onrightclick.cpp:657
-#: kicad/pcbnew/onrightclick.cpp:739
+#: kicad/pcbnew/onrightclick.cpp:658
+#: kicad/pcbnew/onrightclick.cpp:740
 msgid "Drag"
 msgstr "Przeciągnij"
 
-#: kicad/pcbnew/onrightclick.cpp:661
+#: kicad/pcbnew/onrightclick.cpp:662
 msgid "Rotate  +"
 msgstr "Obróć +"
 
-#: kicad/pcbnew/onrightclick.cpp:665
-#: kicad/eeschema/onrightclick.cpp:300
+#: kicad/pcbnew/onrightclick.cpp:666
+#: kicad/eeschema/onrightclick.cpp:301
 msgid "Rotate -"
 msgstr "Obróć -"
 
-#: kicad/pcbnew/onrightclick.cpp:666
+#: kicad/pcbnew/onrightclick.cpp:667
 msgid "Flip"
 msgstr "Odbij"
 
-#: kicad/pcbnew/onrightclick.cpp:670
-#: kicad/pcbnew/onrightclick.cpp:704
-#: kicad/pcbnew/onrightclick.cpp:801
+#: kicad/pcbnew/onrightclick.cpp:671
+#: kicad/pcbnew/onrightclick.cpp:705
+#: kicad/pcbnew/onrightclick.cpp:802
 #: kicad/pcbnew/modedit_onclick.cpp:317
-#: kicad/eeschema/onrightclick.cpp:312
+#: kicad/eeschema/onrightclick.cpp:313
 msgid "Edit"
 msgstr "Edytuj"
 
-#: kicad/pcbnew/onrightclick.cpp:702
-#: kicad/pcbnew/onrightclick.cpp:799
+#: kicad/pcbnew/onrightclick.cpp:703
+#: kicad/pcbnew/onrightclick.cpp:800
 #: kicad/pcbnew/modedit_onclick.cpp:252
 msgid "Rotate"
 msgstr "Obrót"
 
-#: kicad/pcbnew/onrightclick.cpp:741
+#: kicad/pcbnew/onrightclick.cpp:742
 #: kicad/pcbnew/modedit_onclick.cpp:274
 msgid "Edit Pad"
 msgstr "Edytuj pole"
 
-#: kicad/pcbnew/onrightclick.cpp:745
+#: kicad/pcbnew/onrightclick.cpp:746
 #: kicad/pcbnew/modedit_onclick.cpp:276
 msgid "New Pad Settings"
 msgstr "Nowe ustawienia pola lutowniczego"
 
-#: kicad/pcbnew/onrightclick.cpp:747
+#: kicad/pcbnew/onrightclick.cpp:748
 #: kicad/pcbnew/modedit_onclick.cpp:278
 msgid "Export Pad Settings"
 msgstr "Eksportuj ustawienia pola lutowniczego"
 
-#: kicad/pcbnew/onrightclick.cpp:752
+#: kicad/pcbnew/onrightclick.cpp:753
 #: kicad/pcbnew/modedit_onclick.cpp:285
 msgid "Global Pad Settings"
 msgstr "Globalne ustawienia pól lutowniczych"
 
-#: kicad/pcbnew/onrightclick.cpp:756
+#: kicad/pcbnew/onrightclick.cpp:757
 msgid "delete"
 msgstr "Usuń"
 
-#: kicad/pcbnew/onrightclick.cpp:763
+#: kicad/pcbnew/onrightclick.cpp:764
 msgid "Autoroute Pad"
 msgstr "Automatyczne rozmieszczenie pola lutowniczego"
 
-#: kicad/pcbnew/onrightclick.cpp:764
+#: kicad/pcbnew/onrightclick.cpp:765
 msgid "Autoroute Net"
 msgstr "Automatyczne rozmieszczenie sieci"
 
@@ -4007,11 +4054,11 @@ msgstr "Podświetl sieć"
 msgid "Local Ratsnest"
 msgstr "Połączenia lokalne"
 
-#: kicad/pcbnew/surbrill.cpp:35
+#: kicad/pcbnew/surbrill.cpp:37
 msgid "Filter for net names:"
 msgstr "Filtr dla nazw sieci:"
 
-#: kicad/pcbnew/surbrill.cpp:39
+#: kicad/pcbnew/surbrill.cpp:41
 msgid "List Nets"
 msgstr "Lista sieci"
 
@@ -4020,6 +4067,7 @@ msgid "Dimension properties"
 msgstr "Właściwości wymiaru"
 
 #: kicad/pcbnew/cotation.cpp:133
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:226
 #: kicad/gerbview/affiche.cpp:37
 msgid "Layer:"
 msgstr "Warstwa:"
@@ -4134,7 +4182,7 @@ msgstr "Wartość:"
 #: kicad/pcbnew/dialog_edit_mod_text.cpp:314
 #: kicad/pcbnew/pcbtexte.cpp:120
 #: kicad/eeschema/sheetlab.cpp:101
-#: kicad/common/confirm.cpp:131
+#: kicad/common/confirm.cpp:145
 msgid "Text:"
 msgstr "Tekst:"
 
@@ -4220,22 +4268,22 @@ msgid "Zeros Format"
 msgstr "Format zer"
 
 #: kicad/pcbnew/gendrill.cpp:192
-#: kicad/pcbnew/gendrill.cpp:443
+#: kicad/pcbnew/gendrill.cpp:452
 msgid "2:3"
 msgstr "2:3"
 
 #: kicad/pcbnew/gendrill.cpp:192
-#: kicad/pcbnew/gendrill.cpp:444
+#: kicad/pcbnew/gendrill.cpp:453
 msgid "2:4"
 msgstr "2:4"
 
 #: kicad/pcbnew/gendrill.cpp:193
-#: kicad/pcbnew/gendrill.cpp:449
+#: kicad/pcbnew/gendrill.cpp:458
 msgid "3:2"
 msgstr "3:2"
 
 #: kicad/pcbnew/gendrill.cpp:193
-#: kicad/pcbnew/gendrill.cpp:450
+#: kicad/pcbnew/gendrill.cpp:459
 msgid "3:3"
 msgstr "3:3"
 
@@ -4314,26 +4362,26 @@ msgstr "&Uruchom"
 msgid "&Close"
 msgstr "&Zamknij"
 
-#: kicad/pcbnew/gendrill.cpp:380
+#: kicad/pcbnew/gendrill.cpp:389
 msgid "Drill file"
 msgstr "Plik wierceń"
 
-#: kicad/pcbnew/gendrill.cpp:407
-#: kicad/pcbnew/gendrill.cpp:1032
-#: kicad/pcbnew/gendrill.cpp:1625
+#: kicad/pcbnew/gendrill.cpp:416
+#: kicad/pcbnew/gendrill.cpp:1041
+#: kicad/pcbnew/gendrill.cpp:1634
 msgid "Tools"
 msgstr "Narzędzia"
 
-#: kicad/pcbnew/gendrill.cpp:962
+#: kicad/pcbnew/gendrill.cpp:971
 msgid "Drill Map file"
 msgstr "Plik mapy wierceń"
 
-#: kicad/pcbnew/gendrill.cpp:1021
+#: kicad/pcbnew/gendrill.cpp:1030
 #, c-format
 msgid "Unable to create file <%s>"
 msgstr "Nie mogę utworzyć pliku <%s>"
 
-#: kicad/pcbnew/gendrill.cpp:1323
+#: kicad/pcbnew/gendrill.cpp:1332
 msgid ""
 " Drill map: Too many diameter values to draw to draw one symbol per drill value (max 13)\n"
 "Plot uses circle shape for some drill values"
@@ -4341,7 +4389,7 @@ msgstr ""
 "Mapa wierceń: Zbyt wiele wartości średnic, aby narysować jeden symbol na jedną wartość wiercenia (maksymalnie 13)\n"
 "Ploter używa kształtu okręgu dla niektórych wartości wierceń"
 
-#: kicad/pcbnew/gendrill.cpp:1599
+#: kicad/pcbnew/gendrill.cpp:1608
 msgid "Drill Report file"
 msgstr "Plik raportu wierceń"
 
@@ -4350,7 +4398,6 @@ msgid "Tracks and vias"
 msgstr "Ścieżki i przelotki"
 
 #: kicad/pcbnew/dialog_display_options.cpp:193
-#: kicad/pcbnew/ioascii.cpp:196
 msgid "Tracks:"
 msgstr "Ścieżki:"
 
@@ -4841,11 +4888,43 @@ msgstr "Właściwości tekstu PCB"
 msgid "Position"
 msgstr "Pozycja"
 
-#: kicad/pcbnew/ioascii.cpp:200
-msgid "Zones:"
-msgstr "Strefy:"
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:155
+msgid "Grid Size for Filling:"
+msgstr "Rozmiar siatki dla wypełniania:"
 
-#: kicad/pcbnew/ioascii.cpp:207
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:167
+msgid "Hatched Outline"
+msgstr "Linia kreskowa"
+
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:168
+msgid "Full Hatched"
+msgstr "Pełne kreskowanie"
+
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:169
+msgid "Outlines Appearance"
+msgstr "Wygląd obrysu"
+
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:210
+msgid "Alphabetic"
+msgstr "Alfabetycznie"
+
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:211
+msgid "Advanced"
+msgstr "Zaawansowane"
+
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:212
+msgid "Net sorting:"
+msgstr "Sortowanie sieci:"
+
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:420
+msgid "Error : you must choose a layer"
+msgstr "Błąd : musisz wybrać warstwę"
+
+#: kicad/pcbnew/dialog_zones_by_polygon.cpp:429
+msgid "Error : you must choose a net name"
+msgstr "Błąd : musisz wybrać nazwę sieci"
+
+#: kicad/pcbnew/ioascii.cpp:165
 msgid "Error: Unexpected end of file !"
 msgstr "Błąd: Nieoczekiwany koniec pliku !"
 
@@ -4962,7 +5041,7 @@ msgstr ""
 "Międzynarodowa wiki:\n"
 
 #: kicad/share/drawframe.cpp:134
-#: kicad/cvpcb/cvframe.cpp:396
+#: kicad/cvpcb/cvframe.cpp:423
 msgid "font for dialog boxes"
 msgstr "Czcionka dla okien dialogowych"
 
@@ -4971,17 +5050,17 @@ msgid "font for info display"
 msgstr "Czcionka dla wyświetlania informacji"
 
 #: kicad/share/drawframe.cpp:138
-#: kicad/cvpcb/cvframe.cpp:400
+#: kicad/cvpcb/cvframe.cpp:427
 msgid "font for Status Line"
 msgstr "Czcionka dla linii stanu"
 
 #: kicad/share/drawframe.cpp:141
-#: kicad/cvpcb/cvframe.cpp:403
+#: kicad/cvpcb/cvframe.cpp:430
 msgid "&Font selection"
 msgstr "&Wybór czcionki"
 
 #: kicad/share/drawframe.cpp:142
-#: kicad/cvpcb/cvframe.cpp:404
+#: kicad/cvpcb/cvframe.cpp:432
 msgid "Choose font type and size for dialogs, infos and status box"
 msgstr "Wybierz typ czcionki i rozmiar dla okien dialogowych, informacji i panelu statusu"
 
@@ -5083,43 +5162,43 @@ msgstr "&Drukuj"
 msgid "Pen width mini"
 msgstr "Minimalna szerokość pisaka"
 
-#: kicad/share/zoom.cpp:322
+#: kicad/share/zoom.cpp:325
 msgid "Zoom: "
 msgstr "Powiększenie: "
 
-#: kicad/share/zoom.cpp:323
+#: kicad/share/zoom.cpp:326
 msgid "Grid: "
 msgstr "Siatka: "
 
-#: kicad/share/zoom.cpp:356
+#: kicad/share/zoom.cpp:359
 #: kicad/eeschema/edit_component_in_lib.cpp:476
 #: kicad/eeschema/edit_component_in_lib.cpp:478
 msgid "Center"
 msgstr "Wyśrodkuj"
 
-#: kicad/share/zoom.cpp:357
+#: kicad/share/zoom.cpp:360
 #: kicad/3d-viewer/3d_canvas.cpp:318
 msgid "Zoom +"
 msgstr "Powiększ"
 
-#: kicad/share/zoom.cpp:358
+#: kicad/share/zoom.cpp:361
 #: kicad/3d-viewer/3d_canvas.cpp:323
 msgid "Zoom -"
 msgstr "Pomniejsz"
 
-#: kicad/share/zoom.cpp:362
+#: kicad/share/zoom.cpp:365
 msgid "Zoom Select"
 msgstr "Wybór powiększenia"
 
-#: kicad/share/zoom.cpp:365
+#: kicad/share/zoom.cpp:368
 msgid "Redraw"
 msgstr "Odśwież"
 
-#: kicad/share/zoom.cpp:381
+#: kicad/share/zoom.cpp:384
 msgid "Grid Select"
 msgstr "Wybór siatki"
 
-#: kicad/share/zoom.cpp:403
+#: kicad/share/zoom.cpp:406
 msgid "grid user"
 msgstr "Siatka użytkownika"
 
@@ -5546,13 +5625,13 @@ msgid "Right"
 msgstr "Prawo"
 
 #: kicad/eeschema/affiche.cpp:172
-#: kicad/eeschema/onrightclick.cpp:333
+#: kicad/eeschema/onrightclick.cpp:339
 msgid "Unit"
 msgstr "Część"
 
 #: kicad/eeschema/affiche.cpp:182
 #: kicad/eeschema/dialog_edit_component_in_schematic.cpp:190
-#: kicad/eeschema/onrightclick.cpp:320
+#: kicad/eeschema/onrightclick.cpp:326
 msgid "Convert"
 msgstr "Skonwertowany"
 
@@ -5682,205 +5761,203 @@ msgstr "Otwórz podręcznik eeschema"
 msgid "&Edit"
 msgstr "&Edytuj"
 
-#: kicad/eeschema/libedit_onrightclick.cpp:103
-msgid "Move Arc"
-msgstr "Przesuń łuk"
+#: kicad/eeschema/libedit_onrightclick.cpp:83
+msgid "Move Arc "
+msgstr "Przesuń łuk "
 
-#: kicad/eeschema/libedit_onrightclick.cpp:106
+#: kicad/eeschema/libedit_onrightclick.cpp:87
 msgid "Arc Options"
 msgstr "Opcje łuku"
 
-#: kicad/eeschema/libedit_onrightclick.cpp:110
-msgid "Arc Delete"
-msgstr "Usuń łuk"
+#: kicad/eeschema/libedit_onrightclick.cpp:90
+msgid "Delete Arc "
+msgstr "Usuń łuk "
 
-#: kicad/eeschema/libedit_onrightclick.cpp:118
-msgid "Move Circle"
-msgstr "Przesuń okrąg"
+#: kicad/eeschema/libedit_onrightclick.cpp:98
+msgid "Move Circle "
+msgstr "Przesuń okrąg "
 
-#: kicad/eeschema/libedit_onrightclick.cpp:121
+#: kicad/eeschema/libedit_onrightclick.cpp:102
 msgid "Circle Options"
 msgstr "Opcje okręgu"
 
-#: kicad/eeschema/libedit_onrightclick.cpp:125
-msgid "Circle Delete"
-msgstr "Usuń okrąg"
+#: kicad/eeschema/libedit_onrightclick.cpp:105
+msgid "Delete Circle "
+msgstr "Usuń okrąg "
 
-#: kicad/eeschema/libedit_onrightclick.cpp:133
-msgid "Move Rect"
-msgstr "Przesuń prostokąt"
+#: kicad/eeschema/libedit_onrightclick.cpp:113
+msgid "Move Rect "
+msgstr "Przesuń prostokąt "
 
-#: kicad/eeschema/libedit_onrightclick.cpp:136
+#: kicad/eeschema/libedit_onrightclick.cpp:117
 msgid "Rect Options"
 msgstr "Opcje prostokąta"
 
-#: kicad/eeschema/libedit_onrightclick.cpp:140
-msgid "Rect Delete"
-msgstr "Usuń prostokąt"
+#: kicad/eeschema/libedit_onrightclick.cpp:120
+msgid "Delete Rect "
+msgstr "Usuń prostokąt "
 
-#: kicad/eeschema/libedit_onrightclick.cpp:148
-#: kicad/eeschema/onrightclick.cpp:412
-msgid "Move Text"
-msgstr "Przesuń tekst"
+#: kicad/eeschema/libedit_onrightclick.cpp:128
+msgid "Move Text "
+msgstr "Przesuń tekst "
 
-#: kicad/eeschema/libedit_onrightclick.cpp:151
+#: kicad/eeschema/libedit_onrightclick.cpp:132
 msgid "Text Editor"
 msgstr "Edytor tekstu"
 
-#: kicad/eeschema/libedit_onrightclick.cpp:153
+#: kicad/eeschema/libedit_onrightclick.cpp:134
 msgid "Rotate Text"
 msgstr "Obróć tekst"
 
-#: kicad/eeschema/libedit_onrightclick.cpp:157
-msgid "Text Delete"
-msgstr "Usuń tekst"
+#: kicad/eeschema/libedit_onrightclick.cpp:137
+msgid "Delete Text "
+msgstr "Usuń tekst "
 
-#: kicad/eeschema/libedit_onrightclick.cpp:165
-msgid "Move Line"
-msgstr "Przesuń linię"
+#: kicad/eeschema/libedit_onrightclick.cpp:145
+msgid "Move Line "
+msgstr "Przesuń linię "
 
-#: kicad/eeschema/libedit_onrightclick.cpp:170
+#: kicad/eeschema/libedit_onrightclick.cpp:151
 msgid "Line End"
 msgstr "Zakończ linię"
 
-#: kicad/eeschema/libedit_onrightclick.cpp:173
+#: kicad/eeschema/libedit_onrightclick.cpp:154
 msgid "Line Options"
 msgstr "Opcje linii"
 
-#: kicad/eeschema/libedit_onrightclick.cpp:177
-msgid "Line Delete"
-msgstr "Usuń linię"
+#: kicad/eeschema/libedit_onrightclick.cpp:157
+msgid "Delete Line "
+msgstr "Usuń linię "
 
-#: kicad/eeschema/libedit_onrightclick.cpp:184
-msgid "Segment Delete"
-msgstr "Usuń segment"
+#: kicad/eeschema/libedit_onrightclick.cpp:164
+msgid "Delete Segment "
+msgstr "Usuń segment "
 
-#: kicad/eeschema/libedit_onrightclick.cpp:192
-#: kicad/eeschema/onrightclick.cpp:266
-msgid "Move Field"
-msgstr "Przesuń pole"
+#: kicad/eeschema/libedit_onrightclick.cpp:174
+msgid "Move Feild "
+msgstr "Przesuń pole "
 
-#: kicad/eeschema/libedit_onrightclick.cpp:195
+#: kicad/eeschema/libedit_onrightclick.cpp:178
 msgid "Field Rotate"
 msgstr "Obróć pole"
 
-#: kicad/eeschema/libedit_onrightclick.cpp:197
+#: kicad/eeschema/libedit_onrightclick.cpp:180
 msgid "Field Edit"
 msgstr "Edytuj pole"
 
-#: kicad/eeschema/libedit_onrightclick.cpp:222
+#: kicad/eeschema/libedit_onrightclick.cpp:205
 msgid "Move Pin"
 msgstr "Przesuń pin"
 
-#: kicad/eeschema/libedit_onrightclick.cpp:224
-msgid "Pin Edit"
-msgstr "Edytuj pin"
+#: kicad/eeschema/libedit_onrightclick.cpp:208
+msgid "Edit Pin "
+msgstr "Edytuj pin "
 
-#: kicad/eeschema/libedit_onrightclick.cpp:229
-msgid "Pin Delete"
-msgstr "Usuń pin"
+#: kicad/eeschema/libedit_onrightclick.cpp:213
+msgid "Delete Pin "
+msgstr "Usuń pin "
 
-#: kicad/eeschema/libedit_onrightclick.cpp:233
+#: kicad/eeschema/libedit_onrightclick.cpp:218
 msgid "Global"
 msgstr "Globalne"
 
-#: kicad/eeschema/libedit_onrightclick.cpp:235
+#: kicad/eeschema/libedit_onrightclick.cpp:220
 msgid "Pin Size to selected pins"
 msgstr "Rozmiar pinu dla wybranych pinów"
 
-#: kicad/eeschema/libedit_onrightclick.cpp:235
+#: kicad/eeschema/libedit_onrightclick.cpp:220
 msgid "Pin Size to others"
 msgstr "Rozmiar pinu dla innych"
 
-#: kicad/eeschema/libedit_onrightclick.cpp:238
+#: kicad/eeschema/libedit_onrightclick.cpp:223
 msgid "Pin Name Size to selected pin"
 msgstr "Rozmiar nazwy pinu dla wybranego pinu"
 
-#: kicad/eeschema/libedit_onrightclick.cpp:238
+#: kicad/eeschema/libedit_onrightclick.cpp:223
 msgid "Pin Name Size to others"
 msgstr "Rozmiar nazwy pinu dla innych"
 
-#: kicad/eeschema/libedit_onrightclick.cpp:241
+#: kicad/eeschema/libedit_onrightclick.cpp:226
 msgid "Pin Num Size to selected pin"
 msgstr "Rozmiar numeru pinu dla wybranego pinu"
 
-#: kicad/eeschema/libedit_onrightclick.cpp:241
+#: kicad/eeschema/libedit_onrightclick.cpp:226
 msgid "Pin Num Size to others"
 msgstr "Rozmiar numeru pinu dla innych"
 
-#: kicad/eeschema/libedit_onrightclick.cpp:256
-#: kicad/eeschema/onrightclick.cpp:587
+#: kicad/eeschema/libedit_onrightclick.cpp:241
+#: kicad/eeschema/onrightclick.cpp:593
 msgid "Win. Zoom (Midd butt drag mouse)"
 msgstr "Powiększenie okna (środkowy przycisk + przeciąganie myszką)"
 
-#: kicad/eeschema/libedit_onrightclick.cpp:264
+#: kicad/eeschema/libedit_onrightclick.cpp:249
 msgid "Select items"
 msgstr "Wybierz elementy"
 
-#: kicad/eeschema/libedit_onrightclick.cpp:267
+#: kicad/eeschema/libedit_onrightclick.cpp:252
 msgid "Mirror Block (ctrl + drag mouse)"
 msgstr "Odbij blok (ctrl + przeciąganie myszką)"
 
-#: kicad/eeschema/libedit_onrightclick.cpp:269
-#: kicad/eeschema/onrightclick.cpp:602
+#: kicad/eeschema/libedit_onrightclick.cpp:254
+#: kicad/eeschema/onrightclick.cpp:608
 msgid "Del. Block (shift+ctrl + drag mouse)"
 msgstr "Usuń blok (shift+ctrl + przeciąganie myszką)"
 
-#: kicad/eeschema/schedit.cpp:282
+#: kicad/eeschema/schedit.cpp:283
 msgid "Push/Pop Hierarchy"
 msgstr "Nawigacja w hierarchii"
 
-#: kicad/eeschema/schedit.cpp:286
+#: kicad/eeschema/schedit.cpp:287
 msgid "Add NoConnect Flag"
 msgstr "Ustaw flagę \"Niepołączony\""
 
-#: kicad/eeschema/schedit.cpp:290
-#: kicad/eeschema/hotkeys.cpp:262
+#: kicad/eeschema/schedit.cpp:291
+#: kicad/eeschema/hotkeys.cpp:271
 msgid "Add Wire"
 msgstr "Dodaj połączenie"
 
-#: kicad/eeschema/schedit.cpp:294
+#: kicad/eeschema/schedit.cpp:295
 msgid "Add Bus"
 msgstr "Dodaj magistralę"
 
-#: kicad/eeschema/schedit.cpp:302
+#: kicad/eeschema/schedit.cpp:303
 msgid "Add Junction"
 msgstr "Dodaj węzeł"
 
-#: kicad/eeschema/schedit.cpp:306
+#: kicad/eeschema/schedit.cpp:307
 msgid "Add Label"
 msgstr "Dodaj etykietę"
 
-#: kicad/eeschema/schedit.cpp:310
+#: kicad/eeschema/schedit.cpp:311
 msgid "Add Global label"
 msgstr "Dodaj etykietę globalną"
 
-#: kicad/eeschema/schedit.cpp:318
+#: kicad/eeschema/schedit.cpp:319
 msgid "Add Wire to Bus Entry"
 msgstr "Dodaj wejście połączenia do magistrali"
 
-#: kicad/eeschema/schedit.cpp:322
+#: kicad/eeschema/schedit.cpp:323
 msgid "Add Bus to Bus entry"
 msgstr "Dodaj wejście magistrali do magistrali"
 
-#: kicad/eeschema/schedit.cpp:326
+#: kicad/eeschema/schedit.cpp:327
 msgid "Add Sheet"
 msgstr "Dodaj arkusz"
 
-#: kicad/eeschema/schedit.cpp:330
+#: kicad/eeschema/schedit.cpp:331
 msgid "Add PinSheet"
 msgstr "Dodaj arkusz pinów"
 
-#: kicad/eeschema/schedit.cpp:334
+#: kicad/eeschema/schedit.cpp:335
 msgid "Import PinSheet"
 msgstr "Importuj arkusz pinów"
 
-#: kicad/eeschema/schedit.cpp:338
-#: kicad/eeschema/hotkeys.cpp:240
+#: kicad/eeschema/schedit.cpp:339
+#: kicad/eeschema/hotkeys.cpp:249
 msgid "Add Component"
 msgstr "Dodaj element"
 
-#: kicad/eeschema/schedit.cpp:342
+#: kicad/eeschema/schedit.cpp:343
 msgid "Add Power"
 msgstr "Dodaj zasilanie"
 
@@ -6705,14 +6782,14 @@ msgid "Add wire or bus label"
 msgstr "Dodaj etykietę połączenia lub magistrali"
 
 #: kicad/eeschema/tool_sch.cpp:204
-#: kicad/eeschema/onrightclick.cpp:491
-#: kicad/eeschema/onrightclick.cpp:523
+#: kicad/eeschema/onrightclick.cpp:497
+#: kicad/eeschema/onrightclick.cpp:529
 msgid "Add global label"
 msgstr "Dodaj etykietę globalną"
 
 #: kicad/eeschema/tool_sch.cpp:208
-#: kicad/eeschema/onrightclick.cpp:485
-#: kicad/eeschema/onrightclick.cpp:517
+#: kicad/eeschema/onrightclick.cpp:491
+#: kicad/eeschema/onrightclick.cpp:523
 msgid "Add junction"
 msgstr "Dodaj węzeł"
 
@@ -6753,43 +6830,43 @@ msgstr "Kształt arkusza pinów:"
 msgid "No New Global Label found"
 msgstr "Nie znaleziono nowej etykiety globalnej"
 
-#: kicad/eeschema/annotate.cpp:182
+#: kicad/eeschema/annotate.cpp:184
 msgid "Previous Annotation will be deleted. Continue ?"
 msgstr "Poprzednia numeracja elementów zostanie usunięta. Kontynuować?"
 
-#: kicad/eeschema/annotate.cpp:689
+#: kicad/eeschema/annotate.cpp:695
 #, c-format
 msgid "item not annotated: %s%s"
 msgstr "element nie ma numeru: %s%s"
 
-#: kicad/eeschema/annotate.cpp:693
+#: kicad/eeschema/annotate.cpp:699
 #, c-format
 msgid "( unit %d)"
 msgstr "(część %d)"
 
-#: kicad/eeschema/annotate.cpp:709
+#: kicad/eeschema/annotate.cpp:715
 #, c-format
 msgid "Error item %s%s"
 msgstr "Błąd elementu %s%s"
 
-#: kicad/eeschema/annotate.cpp:711
+#: kicad/eeschema/annotate.cpp:717
 #, c-format
 msgid " unit %d and no more than %d parts"
 msgstr " część %d i nie więcej niż %d elementów"
 
-#: kicad/eeschema/annotate.cpp:743
-#: kicad/eeschema/annotate.cpp:766
+#: kicad/eeschema/annotate.cpp:750
+#: kicad/eeschema/annotate.cpp:773
 #, c-format
 msgid "Multiple item %s%s"
 msgstr "Element wielokrotny %s%s"
 
-#: kicad/eeschema/annotate.cpp:748
-#: kicad/eeschema/annotate.cpp:770
+#: kicad/eeschema/annotate.cpp:755
+#: kicad/eeschema/annotate.cpp:777
 #, c-format
 msgid " (unit %d)"
 msgstr " (część %d)"
 
-#: kicad/eeschema/annotate.cpp:786
+#: kicad/eeschema/annotate.cpp:793
 #, c-format
 msgid "Diff values for %s%d%c (%s) and %s%d%c (%s)"
 msgstr "Różnica wartości dla %s%d%c (%s) i %s%d%c (%s)"
@@ -7087,7 +7164,7 @@ msgid "Orient:"
 msgstr "Orientacja:"
 
 #: kicad/eeschema/dialog_edit_component_in_schematic.cpp:181
-#: kicad/eeschema/onrightclick.cpp:301
+#: kicad/eeschema/onrightclick.cpp:302
 msgid "Mirror --"
 msgstr "Odbij poziomo --"
 
@@ -7144,249 +7221,261 @@ msgstr "Domyślna szerokość linii"
 msgid "Plot: %s\n"
 msgstr "Rysuj: %s\n"
 
-#: kicad/eeschema/onrightclick.cpp:142
+#: kicad/eeschema/onrightclick.cpp:143
 msgid "Leave Sheet"
 msgstr "Opuść arkusz"
 
-#: kicad/eeschema/onrightclick.cpp:158
+#: kicad/eeschema/onrightclick.cpp:159
 msgid "delete noconn"
 msgstr "Usuń \"niepołączone\""
 
-#: kicad/eeschema/onrightclick.cpp:168
+#: kicad/eeschema/onrightclick.cpp:169
 msgid "Move bus entry"
 msgstr "Przesuń wejście magistrali"
 
-#: kicad/eeschema/onrightclick.cpp:170
+#: kicad/eeschema/onrightclick.cpp:171
 msgid "set bus entry /"
 msgstr "Ustaw wejście magistrali /"
 
-#: kicad/eeschema/onrightclick.cpp:172
+#: kicad/eeschema/onrightclick.cpp:173
 msgid "set bus entry \\"
 msgstr "Ustaw wejście magistrali \\"
 
-#: kicad/eeschema/onrightclick.cpp:174
+#: kicad/eeschema/onrightclick.cpp:175
 msgid "delete bus entry"
 msgstr "Usuń wejście magistrali"
 
-#: kicad/eeschema/onrightclick.cpp:178
+#: kicad/eeschema/onrightclick.cpp:179
 msgid "delete Marker"
 msgstr "Usuń znacznik"
 
-#: kicad/eeschema/onrightclick.cpp:228
+#: kicad/eeschema/onrightclick.cpp:229
 msgid "End drawing"
 msgstr "Zakończ rysowanie"
 
-#: kicad/eeschema/onrightclick.cpp:230
+#: kicad/eeschema/onrightclick.cpp:231
 msgid "Delete drawing"
 msgstr "Usuń rysunek"
 
 #: kicad/eeschema/onrightclick.cpp:267
+msgid "Move Field"
+msgstr "Przesuń pole"
+
+#: kicad/eeschema/onrightclick.cpp:268
 msgid "Rotate Field"
 msgstr "Obróć pole"
 
-#: kicad/eeschema/onrightclick.cpp:287
+#: kicad/eeschema/onrightclick.cpp:288
 msgid "Move Component"
 msgstr "Przesuń element"
 
-#: kicad/eeschema/onrightclick.cpp:290
+#: kicad/eeschema/onrightclick.cpp:291
 msgid "Drag Component"
 msgstr "Przeciągnij element"
 
-#: kicad/eeschema/onrightclick.cpp:297
+#: kicad/eeschema/onrightclick.cpp:298
 msgid "Rotate +"
 msgstr "Obróć +"
 
-#: kicad/eeschema/onrightclick.cpp:303
+#: kicad/eeschema/onrightclick.cpp:304
 msgid "Mirror ||"
 msgstr "Odbij pionowo ||"
 
-#: kicad/eeschema/onrightclick.cpp:309
+#: kicad/eeschema/onrightclick.cpp:310
 msgid "Orient Component"
 msgstr "Zorientuj element"
 
-#: kicad/eeschema/onrightclick.cpp:327
+#: kicad/eeschema/onrightclick.cpp:322
+msgid "Footprint "
+msgstr "Obudowa "
+
+#: kicad/eeschema/onrightclick.cpp:333
 #, c-format
 msgid "Unit %d %c"
 msgstr "Część %d %c"
 
-#: kicad/eeschema/onrightclick.cpp:338
+#: kicad/eeschema/onrightclick.cpp:344
 msgid "Edit Component"
 msgstr "Edytuj element"
 
-#: kicad/eeschema/onrightclick.cpp:342
+#: kicad/eeschema/onrightclick.cpp:348
 msgid "Copy Component"
 msgstr "Kopiuj element"
 
-#: kicad/eeschema/onrightclick.cpp:343
+#: kicad/eeschema/onrightclick.cpp:349
 msgid "Delete Component"
 msgstr "Usuń element"
 
-#: kicad/eeschema/onrightclick.cpp:362
+#: kicad/eeschema/onrightclick.cpp:368
 msgid "Move Glabel"
 msgstr "Przesuń etykietę globalną"
 
-#: kicad/eeschema/onrightclick.cpp:363
+#: kicad/eeschema/onrightclick.cpp:369
 msgid "Rotate GLabel  (R)"
 msgstr "Obróć etykietę globalną (R)"
 
-#: kicad/eeschema/onrightclick.cpp:364
+#: kicad/eeschema/onrightclick.cpp:370
 msgid "Edit GLabel"
 msgstr "Edytuj etykietę globalną"
 
-#: kicad/eeschema/onrightclick.cpp:365
+#: kicad/eeschema/onrightclick.cpp:371
 msgid "Delete Glabel"
 msgstr "Usuń etykietę globalną"
 
-#: kicad/eeschema/onrightclick.cpp:369
-#: kicad/eeschema/onrightclick.cpp:419
+#: kicad/eeschema/onrightclick.cpp:375
+#: kicad/eeschema/onrightclick.cpp:425
 msgid "Change to Label"
 msgstr "Zmień na etykietę"
 
-#: kicad/eeschema/onrightclick.cpp:371
-#: kicad/eeschema/onrightclick.cpp:396
+#: kicad/eeschema/onrightclick.cpp:377
+#: kicad/eeschema/onrightclick.cpp:402
 msgid "Change to Text"
 msgstr "Zmień na tekst"
 
-#: kicad/eeschema/onrightclick.cpp:373
-#: kicad/eeschema/onrightclick.cpp:398
-#: kicad/eeschema/onrightclick.cpp:423
+#: kicad/eeschema/onrightclick.cpp:379
+#: kicad/eeschema/onrightclick.cpp:404
+#: kicad/eeschema/onrightclick.cpp:429
 msgid "Change Type"
 msgstr "Zmień typ"
 
-#: kicad/eeschema/onrightclick.cpp:387
+#: kicad/eeschema/onrightclick.cpp:393
 msgid "Move Label"
 msgstr "Przesuń etykietę"
 
-#: kicad/eeschema/onrightclick.cpp:388
+#: kicad/eeschema/onrightclick.cpp:394
 msgid "Rotate Label  (R)"
 msgstr "Obróć etykietę (R)"
 
-#: kicad/eeschema/onrightclick.cpp:389
+#: kicad/eeschema/onrightclick.cpp:395
 msgid "Edit Label"
 msgstr "Edytuj etykietę"
 
-#: kicad/eeschema/onrightclick.cpp:390
+#: kicad/eeschema/onrightclick.cpp:396
 msgid "Delete Label"
 msgstr "Usuń etykietę"
 
-#: kicad/eeschema/onrightclick.cpp:394
-#: kicad/eeschema/onrightclick.cpp:421
+#: kicad/eeschema/onrightclick.cpp:400
+#: kicad/eeschema/onrightclick.cpp:427
 msgid "Change to Glabel"
 msgstr "Zmień na etykietę globalną"
 
-#: kicad/eeschema/onrightclick.cpp:413
+#: kicad/eeschema/onrightclick.cpp:418
+msgid "Move Text"
+msgstr "Przesuń tekst"
+
+#: kicad/eeschema/onrightclick.cpp:419
 msgid "Rotate Text (R)"
 msgstr "Obróć tekst (R)"
 
-#: kicad/eeschema/onrightclick.cpp:414
+#: kicad/eeschema/onrightclick.cpp:420
 msgid "Edit Text"
 msgstr "Edytuj tekst"
 
-#: kicad/eeschema/onrightclick.cpp:415
+#: kicad/eeschema/onrightclick.cpp:421
 msgid "Delete Text"
 msgstr "Usuń tekst"
 
-#: kicad/eeschema/onrightclick.cpp:441
-#: kicad/eeschema/onrightclick.cpp:481
+#: kicad/eeschema/onrightclick.cpp:447
+#: kicad/eeschema/onrightclick.cpp:487
 msgid "Break Wire"
 msgstr "Przerwij połączenie"
 
-#: kicad/eeschema/onrightclick.cpp:444
+#: kicad/eeschema/onrightclick.cpp:450
 msgid "delete junction"
 msgstr "Usuń węzeł"
 
-#: kicad/eeschema/onrightclick.cpp:449
-#: kicad/eeschema/onrightclick.cpp:475
+#: kicad/eeschema/onrightclick.cpp:455
+#: kicad/eeschema/onrightclick.cpp:481
 msgid "Delete node"
 msgstr "Usuń węzeł"
 
-#: kicad/eeschema/onrightclick.cpp:451
-#: kicad/eeschema/onrightclick.cpp:477
+#: kicad/eeschema/onrightclick.cpp:457
+#: kicad/eeschema/onrightclick.cpp:483
 msgid "Delete connection"
 msgstr "Usuń połączenie"
 
-#: kicad/eeschema/onrightclick.cpp:468
+#: kicad/eeschema/onrightclick.cpp:474
 msgid "End Wire"
 msgstr "Zakończ połączenie"
 
-#: kicad/eeschema/onrightclick.cpp:470
+#: kicad/eeschema/onrightclick.cpp:476
 msgid "Delete Wire"
 msgstr "Usuń połączenie"
 
-#: kicad/eeschema/onrightclick.cpp:486
-#: kicad/eeschema/onrightclick.cpp:518
+#: kicad/eeschema/onrightclick.cpp:492
+#: kicad/eeschema/onrightclick.cpp:524
 msgid "Add label"
 msgstr "Dodaj etykietę"
 
-#: kicad/eeschema/onrightclick.cpp:507
+#: kicad/eeschema/onrightclick.cpp:513
 msgid "End Bus"
 msgstr "Zakończ magistralę"
 
-#: kicad/eeschema/onrightclick.cpp:510
+#: kicad/eeschema/onrightclick.cpp:516
 msgid "Delete Bus"
 msgstr "Usuń magistralę"
 
-#: kicad/eeschema/onrightclick.cpp:514
+#: kicad/eeschema/onrightclick.cpp:520
 msgid "Break Bus"
 msgstr "Przerwij magistralę"
 
-#: kicad/eeschema/onrightclick.cpp:536
+#: kicad/eeschema/onrightclick.cpp:542
 msgid "Enter Sheet"
 msgstr "Wejdź w arkusz"
 
-#: kicad/eeschema/onrightclick.cpp:538
+#: kicad/eeschema/onrightclick.cpp:544
 msgid "Move Sheet"
 msgstr "Przesuń arkusz"
 
-#: kicad/eeschema/onrightclick.cpp:543
+#: kicad/eeschema/onrightclick.cpp:549
 msgid "Place Sheet"
 msgstr "Umieść arkusz"
 
-#: kicad/eeschema/onrightclick.cpp:547
+#: kicad/eeschema/onrightclick.cpp:553
 msgid "Edit Sheet"
 msgstr "Edytuj arkusz"
 
-#: kicad/eeschema/onrightclick.cpp:548
+#: kicad/eeschema/onrightclick.cpp:554
 msgid "Resize Sheet"
 msgstr "Zmień wielkość arkusza"
 
-#: kicad/eeschema/onrightclick.cpp:551
+#: kicad/eeschema/onrightclick.cpp:557
 msgid "Cleanup PinSheets"
 msgstr "Wyczyść arkusz pinów"
 
-#: kicad/eeschema/onrightclick.cpp:552
+#: kicad/eeschema/onrightclick.cpp:558
 msgid "Delete Sheet"
 msgstr "Usuń arkusz"
 
-#: kicad/eeschema/onrightclick.cpp:565
+#: kicad/eeschema/onrightclick.cpp:571
 msgid "Move PinSheet"
 msgstr "Przesuń arkusz pinów"
 
-#: kicad/eeschema/onrightclick.cpp:567
+#: kicad/eeschema/onrightclick.cpp:573
 msgid "Edit PinSheet"
 msgstr "Edytuj arkusz pinów"
 
-#: kicad/eeschema/onrightclick.cpp:570
+#: kicad/eeschema/onrightclick.cpp:576
 msgid "Delete PinSheet"
 msgstr "Usuń arkusz pinów"
 
-#: kicad/eeschema/onrightclick.cpp:595
+#: kicad/eeschema/onrightclick.cpp:601
 msgid "Other block commands"
 msgstr "Pozostałe polecenia bloku"
 
-#: kicad/eeschema/onrightclick.cpp:596
+#: kicad/eeschema/onrightclick.cpp:602
 msgid "Save Block"
 msgstr "Zapisz blok"
 
-#: kicad/eeschema/onrightclick.cpp:600
+#: kicad/eeschema/onrightclick.cpp:606
 msgid "Drag Block (ctrl + drag mouse)"
 msgstr "Przeciągnij blok (ctrl + przeciąganie myszką)"
 
-#: kicad/eeschema/onrightclick.cpp:604
+#: kicad/eeschema/onrightclick.cpp:610
 msgid "Mirror Block ||"
 msgstr "Odbij blok ||"
 
-#: kicad/eeschema/onrightclick.cpp:608
+#: kicad/eeschema/onrightclick.cpp:614
 msgid "Copy to Clipboard"
 msgstr "Kopiuj do schowka"
 
@@ -7696,8 +7785,8 @@ msgid "\" from library \""
 msgstr "\" z biblioteki \""
 
 #: kicad/eeschema/libedit.cpp:373
-msgid "Delete old component?"
-msgstr "Usunąć stary element?"
+msgid "Clear old component from screen (changes will be lost)?"
+msgstr "Usunąć stary element z ekranu (zmiany zostaną porzucone)?"
 
 #: kicad/eeschema/libedit.cpp:391
 msgid "\" exists in library \""
@@ -7958,32 +8047,36 @@ msgstr ""
 msgid "File %s not found (new project ?)"
 msgstr "Nie znaleziono pliku %s (nowy projekt?)"
 
-#: kicad/eeschema/eeload.cpp:203
+#: kicad/eeschema/eeload.cpp:206
+msgid "The sheet hierarchy has an infinite loop, halting recursive loads. file: "
+msgstr "Hierarchia schematów ma nieskończoną pętlę. Zatrzymuję wczytywanie rekursywne. Plik: "
+
+#: kicad/eeschema/eeload.cpp:218
 msgid "No FileName in SubSheet"
 msgstr "Brak nazwy pliku w podarkuszu"
 
-#: kicad/eeschema/eelibs_read_libraryfiles.cpp:108
+#: kicad/eeschema/eelibs_read_libraryfiles.cpp:115
 msgid "Start loading schematic libs"
 msgstr "Rozpocznij wczytywanie bibliotek schematów"
 
-#: kicad/eeschema/eelibs_read_libraryfiles.cpp:295
 #: kicad/eeschema/eelibs_read_libraryfiles.cpp:302
+#: kicad/eeschema/eelibs_read_libraryfiles.cpp:309
 msgid "File <"
 msgstr "Plik <"
 
-#: kicad/eeschema/eelibs_read_libraryfiles.cpp:295
+#: kicad/eeschema/eelibs_read_libraryfiles.cpp:302
 msgid "> is empty!"
 msgstr "> jest pusty!"
 
-#: kicad/eeschema/eelibs_read_libraryfiles.cpp:302
+#: kicad/eeschema/eelibs_read_libraryfiles.cpp:309
 msgid "> is NOT EESCHEMA library!"
 msgstr "> nie jest biblioteką EESCHEMA!"
 
-#: kicad/eeschema/eelibs_read_libraryfiles.cpp:321
+#: kicad/eeschema/eelibs_read_libraryfiles.cpp:328
 msgid "Library <"
 msgstr "Biblioteka <"
 
-#: kicad/eeschema/eelibs_read_libraryfiles.cpp:321
+#: kicad/eeschema/eelibs_read_libraryfiles.cpp:328
 msgid "> header read error"
 msgstr "> błąd wczytywania nagłówka"
 
@@ -8020,12 +8113,12 @@ msgid "Warning More than 1 Pin connected to UnConnect symbol"
 msgstr "Ostrzeżenie: więcej niż 1 pin podłączony do symbolu \"niepołączony\""
 
 #: kicad/eeschema/erc.cpp:603
-#: kicad/common/confirm.cpp:79
+#: kicad/common/confirm.cpp:84
 msgid "Warning"
 msgstr "Ostrzeżenie"
 
 #: kicad/eeschema/erc.cpp:606
-#: kicad/common/confirm.cpp:82
+#: kicad/common/confirm.cpp:88
 msgid "Error"
 msgstr "Błąd"
 
@@ -8327,7 +8420,7 @@ msgstr "X"
 msgid "Y"
 msgstr "Y"
 
-#: kicad/common/confirm.cpp:97
+#: kicad/common/confirm.cpp:106
 msgid "Infos:"
 msgstr "Informacje:"
 
@@ -8356,59 +8449,59 @@ msgstr "Dozwolone klawisze:\n"
 msgid "Unable to read "
 msgstr "Nie mogę odczytać "
 
-#: kicad/common/hotkeys_basic.cpp:611
+#: kicad/common/hotkeys_basic.cpp:616
 msgid "Show Current Hotkey List"
 msgstr "Pokaż bieżącą listę klawiszy skrótów"
 
-#: kicad/common/hotkeys_basic.cpp:612
+#: kicad/common/hotkeys_basic.cpp:617
 msgid "Show the current hotkey config"
 msgstr "Pokaż bieżącą konfigurację klawiszy skrótów"
 
-#: kicad/common/hotkeys_basic.cpp:618
+#: kicad/common/hotkeys_basic.cpp:623
 msgid "Create Hotkey config file"
 msgstr "Utwórz plik konfiguracyjny klawiszy skrótów"
 
-#: kicad/common/hotkeys_basic.cpp:619
+#: kicad/common/hotkeys_basic.cpp:624
 msgid "Create or Recreate the hotkey config file from current hotkey list"
 msgstr "Utwórz lub odtwórz plik konfiguracji klawiszy skrótów z bieżącej listy klawiszy skrótów"
 
-#: kicad/common/hotkeys_basic.cpp:625
+#: kicad/common/hotkeys_basic.cpp:630
 msgid "Reread Hotkey config file"
 msgstr "Wczytaj ponownie plik konfiguracyjny klawiszy skrótów"
 
-#: kicad/common/hotkeys_basic.cpp:626
+#: kicad/common/hotkeys_basic.cpp:631
 msgid "Reread the hotkey config file"
 msgstr "Wczytaj ponownie plik konfiguracji klawiszy skrótów"
 
-#: kicad/common/hotkeys_basic.cpp:630
+#: kicad/common/hotkeys_basic.cpp:635
 msgid "Edit Hotkey config file"
 msgstr "Edytuj plik konfiguracyjny klawiszy skrótów"
 
-#: kicad/common/hotkeys_basic.cpp:631
+#: kicad/common/hotkeys_basic.cpp:636
 msgid "Run the text editor and edit the hotkey config file"
 msgstr "Uruchom edytor tekstu, aby edytować plik konfiguracyjny klawiszy skrótów"
 
-#: kicad/common/hotkeys_basic.cpp:637
+#: kicad/common/hotkeys_basic.cpp:642
 msgid "home directory"
 msgstr "Katalog domowy"
 
-#: kicad/common/hotkeys_basic.cpp:638
+#: kicad/common/hotkeys_basic.cpp:643
 msgid "Use home directory to load or store Hotkey config files"
 msgstr "Użyj katalogu domowego, aby zapisywać lub wczytywać plik konfiguracyjny klawiszy skrótów"
 
-#: kicad/common/hotkeys_basic.cpp:643
+#: kicad/common/hotkeys_basic.cpp:648
 msgid "kicad/template directory"
 msgstr "Katalog kicad/template"
 
-#: kicad/common/hotkeys_basic.cpp:644
+#: kicad/common/hotkeys_basic.cpp:649
 msgid "Use kicad/template directory to load or store Hotkey config files"
 msgstr "Użyj katalogu kicad/template, aby zapisywać lub wczytywać plik konfiguracyjny klawiszy skrótów"
 
-#: kicad/common/hotkeys_basic.cpp:650
+#: kicad/common/hotkeys_basic.cpp:655
 msgid "Hotkey config location"
 msgstr "Położenie pliku konfiguracyjnego klawiszy skrótów"
 
-#: kicad/common/hotkeys_basic.cpp:652
+#: kicad/common/hotkeys_basic.cpp:657
 msgid "Hotkey config file location selection (home directory or kicad tree)"
 msgstr "Wybór położenia pliku konfiguracyjnego klawiszy skrótów (katalog domowy lub drzewo katalogów kicada)"
 
@@ -8597,11 +8690,11 @@ msgstr "Odwróć blok"
 msgid "Block Mirror"
 msgstr "Odbij blok"
 
-#: kicad/common/gestfich.cpp:620
+#: kicad/common/gestfich.cpp:621
 msgid "No default editor found, you must choose it"
 msgstr "Nie znaleziono domyślnego edytora, musisz go wybrać"
 
-#: kicad/common/gestfich.cpp:626
+#: kicad/common/gestfich.cpp:627
 #: kicad/kicad/preferences.cpp:97
 msgid "Prefered Editor:"
 msgstr "Preferowany edytor:"
@@ -8634,18 +8727,18 @@ msgstr "Nie znaleziono pliku biblioteki <%s>"
 msgid "Library file <%s> is not a module library"
 msgstr "Plik biblioteczny <%s> nie jest biblioteką modułów"
 
-#: kicad/cvpcb/readschematicnetlist.cpp:71
+#: kicad/cvpcb/readschematicnetlist.cpp:75
 #: kicad/cvpcb/viewlogi.cpp:72
 #: kicad/cvpcb/rdpcad.cpp:56
 #, c-format
 msgid "Unknown file format <%s>"
 msgstr "Nieznany format pliku <%s>"
 
-#: kicad/cvpcb/readschematicnetlist.cpp:76
+#: kicad/cvpcb/readschematicnetlist.cpp:80
 msgid "Netlist Format: EESchema"
 msgstr "Format netlisty: EESchema"
 
-#: kicad/cvpcb/readschematicnetlist.cpp:126
+#: kicad/cvpcb/readschematicnetlist.cpp:143
 #, c-format
 msgid "Netlist error: %s"
 msgstr "Błąd netlisty: %s"
@@ -8784,25 +8877,25 @@ msgstr "Ten plik NIE jest plikiem biblioteki"
 msgid "Module %s not found"
 msgstr "Nie znaleziono modułu %s"
 
-#: kicad/cvpcb/cvframe.cpp:168
+#: kicad/cvpcb/cvframe.cpp:175
 msgid "Netlist and Cmp list modified, Save before exit ?"
 msgstr "Netlista i lista elementów (Cmp) zostały zmienione. Zapisać przed zakończeniem?"
 
-#: kicad/cvpcb/cvframe.cpp:186
+#: kicad/cvpcb/cvframe.cpp:198
 msgid "Problem when saving files, Exit anyway"
 msgstr "Problem podczas zapisu pliku, kończę mimo to"
 
-#: kicad/cvpcb/cvframe.cpp:306
+#: kicad/cvpcb/cvframe.cpp:325
 msgid "Delete selections"
 msgstr "Usuń zaznaczone"
 
-#: kicad/cvpcb/cvframe.cpp:319
+#: kicad/cvpcb/cvframe.cpp:339
 #: kicad/cvpcb/init.cpp:134
 #, c-format
 msgid "Componants: %d (free: %d)"
 msgstr "Elementy: %d (wolne: %d)"
 
-#: kicad/cvpcb/cvframe.cpp:398
+#: kicad/cvpcb/cvframe.cpp:425
 msgid "font for Lists"
 msgstr "czcionka dla list"
 
@@ -8847,17 +8940,17 @@ msgstr "Format netlisty: ViewLogic net&pkg"
 msgid "Component [%s] not found in .pkg file"
 msgstr "Nie znaleziono elementu [%s] w pliku .pkg"
 
-#: kicad/cvpcb/listboxes.cpp:328
+#: kicad/cvpcb/listboxes.cpp:335
 #, c-format
 msgid "Footprints: %d"
 msgstr "Obudowy: %d"
 
-#: kicad/cvpcb/listboxes.cpp:453
+#: kicad/cvpcb/listboxes.cpp:460
 #, c-format
 msgid "Footprints (All): %d"
 msgstr "Obudowy (wszystkie): %d"
 
-#: kicad/cvpcb/listboxes.cpp:455
+#: kicad/cvpcb/listboxes.cpp:462
 #, c-format
 msgid "Footprints (filtered): %d"
 msgstr "Obudowy (filtrowane): %d"
@@ -9003,117 +9096,117 @@ msgstr ""
 msgid "Save project file"
 msgstr "Zapisz plik projektu"
 
-#: kicad/kicad/treeprj_frame.cpp:76
+#: kicad/kicad/treeprj_frame.cpp:78
 msgid "&Run"
 msgstr "&Uruchom"
 
-#: kicad/kicad/treeprj_frame.cpp:77
+#: kicad/kicad/treeprj_frame.cpp:79
 msgid "Run the Python Script"
 msgstr "Uruchom skrypt Pythona"
 
-#: kicad/kicad/treeprj_frame.cpp:84
-#: kicad/kicad/treeprj_frame.cpp:138
+#: kicad/kicad/treeprj_frame.cpp:86
+#: kicad/kicad/treeprj_frame.cpp:140
 msgid "&Edit in a text editor"
 msgstr "&Edytuj w edytorze tekstu"
 
-#: kicad/kicad/treeprj_frame.cpp:85
+#: kicad/kicad/treeprj_frame.cpp:87
 msgid "&Open the file in a Text Editor"
 msgstr "&Otwórz plik w edytorze tekstu"
 
-#: kicad/kicad/treeprj_frame.cpp:99
+#: kicad/kicad/treeprj_frame.cpp:101
 msgid "New D&irectory"
 msgstr "Nowy &katalog"
 
-#: kicad/kicad/treeprj_frame.cpp:100
+#: kicad/kicad/treeprj_frame.cpp:102
 msgid "Create a New Directory"
 msgstr "Utwórz nowy katalog"
 
-#: kicad/kicad/treeprj_frame.cpp:106
+#: kicad/kicad/treeprj_frame.cpp:108
 msgid "New P&ython Script"
 msgstr "Nowy skrypt P&ythona"
 
-#: kicad/kicad/treeprj_frame.cpp:107
+#: kicad/kicad/treeprj_frame.cpp:109
 msgid "Create a New Python Script"
 msgstr "Utwórz nowy skrypt Pythona"
 
-#: kicad/kicad/treeprj_frame.cpp:113
+#: kicad/kicad/treeprj_frame.cpp:115
 msgid "New &Text File"
 msgstr "Nowy plik &tekstowy"
 
-#: kicad/kicad/treeprj_frame.cpp:114
+#: kicad/kicad/treeprj_frame.cpp:116
 msgid "Create a New Txt File"
 msgstr "Utwórz nowy plik tekstowy"
 
-#: kicad/kicad/treeprj_frame.cpp:119
+#: kicad/kicad/treeprj_frame.cpp:121
 msgid "New &File"
 msgstr "Nowy &plik"
 
-#: kicad/kicad/treeprj_frame.cpp:119
+#: kicad/kicad/treeprj_frame.cpp:121
 msgid "Create a New File"
 msgstr "Utwórz nowy plik"
 
-#: kicad/kicad/treeprj_frame.cpp:130
+#: kicad/kicad/treeprj_frame.cpp:132
 msgid "&Rename File"
 msgstr "&Zmień nazwę pliku"
 
-#: kicad/kicad/treeprj_frame.cpp:130
+#: kicad/kicad/treeprj_frame.cpp:132
 msgid "&Rename Directory"
 msgstr "&Zmień nazwę katalogu"
 
-#: kicad/kicad/treeprj_frame.cpp:131
+#: kicad/kicad/treeprj_frame.cpp:133
 msgid "Rename the File"
 msgstr "Zmień nazwę pliku"
 
-#: kicad/kicad/treeprj_frame.cpp:131
+#: kicad/kicad/treeprj_frame.cpp:133
 msgid "&Rename the Directory"
 msgstr "Zmień nazwę katalogu"
 
-#: kicad/kicad/treeprj_frame.cpp:139
+#: kicad/kicad/treeprj_frame.cpp:141
 msgid "Open the file in a Text Editor"
 msgstr "Otwórz plik w edytorze tekstu"
 
-#: kicad/kicad/treeprj_frame.cpp:145
+#: kicad/kicad/treeprj_frame.cpp:147
 msgid "&Delete File"
 msgstr "&Usuń plik"
 
-#: kicad/kicad/treeprj_frame.cpp:145
+#: kicad/kicad/treeprj_frame.cpp:147
 msgid "&Delete Directory"
 msgstr "&Usuń katalog"
 
-#: kicad/kicad/treeprj_frame.cpp:146
+#: kicad/kicad/treeprj_frame.cpp:148
 msgid "Delete the File"
 msgstr "Usuń plik"
 
-#: kicad/kicad/treeprj_frame.cpp:147
+#: kicad/kicad/treeprj_frame.cpp:149
 msgid "&Delete the Directory and its content"
 msgstr "&Usuń katalog i jego zawartość"
 
-#: kicad/kicad/treeprj_frame.cpp:412
+#: kicad/kicad/treeprj_frame.cpp:414
 msgid "Create New File:"
 msgstr "Utwórz plik:"
 
-#: kicad/kicad/treeprj_frame.cpp:412
+#: kicad/kicad/treeprj_frame.cpp:414
 msgid "Create New Directory"
 msgstr "Utwórz katalog"
 
-#: kicad/kicad/treeprj_frame.cpp:414
+#: kicad/kicad/treeprj_frame.cpp:416
 msgid "noname"
 msgstr "bez_nazwy"
 
-#: kicad/kicad/treeprj_frame.cpp:842
+#: kicad/kicad/treeprj_frame.cpp:840
 msgid "Change File Name: "
 msgstr "Zmień nazwę pliku: "
 
-#: kicad/kicad/treeprj_datas.cpp:211
+#: kicad/kicad/treeprj_datas.cpp:219
 msgid "Unable to move file ... "
 msgstr "Nie mogę przenieść pliku ... "
 
-#: kicad/kicad/treeprj_datas.cpp:212
-#: kicad/kicad/treeprj_datas.cpp:290
+#: kicad/kicad/treeprj_datas.cpp:220
+#: kicad/kicad/treeprj_datas.cpp:301
 msgid "Permission error ?"
 msgstr "Błąd uprawnień?"
 
-#: kicad/kicad/treeprj_datas.cpp:275
+#: kicad/kicad/treeprj_datas.cpp:286
 msgid ""
 "Changing file extension will change file type.\n"
 " Do you want to continue ?"
@@ -9121,21 +9214,25 @@ msgstr ""
 "Zmiana rozszerzenia pliku zmieni typ pliku.\n"
 " Czy chcesz kontynuować?"
 
-#: kicad/kicad/treeprj_datas.cpp:276
+#: kicad/kicad/treeprj_datas.cpp:287
 msgid "Rename File"
 msgstr "Zmień nazwę pliku"
 
-#: kicad/kicad/treeprj_datas.cpp:289
+#: kicad/kicad/treeprj_datas.cpp:300
 msgid "Unable to rename file ... "
 msgstr "Nie mogę zmienić nazwy pliku ... "
 
-#: kicad/kicad/treeprj_datas.cpp:309
+#: kicad/kicad/treeprj_datas.cpp:320
 msgid "Do you really want to delete "
 msgstr "Czy na pewno chcesz usunąć "
 
-#: kicad/kicad/treeprj_datas.cpp:310
+#: kicad/kicad/treeprj_datas.cpp:321
 msgid "Delete File"
 msgstr "Usuń plik"
+
+#: kicad/kicad/treeprj_datas.cpp:394
+msgid "no kicad files found in this directory"
+msgstr "Nie znaleziono plików kicada w tym katalogu"
 
 #: kicad/kicad/commandframe.cpp:58
 msgid "eeschema (Schematic editor)"
@@ -9589,7 +9686,7 @@ msgstr "Bieżące dane zostaną utracone?"
 msgid "Delete zones ?"
 msgstr "Usunąć strefy?"
 
-#: kicad/gerbview/initpcb.cpp:197
+#: kicad/gerbview/initpcb.cpp:195
 #, c-format
 msgid "Delete Layer %d"
 msgstr "Usuń warstwę %d"
@@ -9814,11 +9911,23 @@ msgstr "Lista kodów wierceń"
 msgid "General Options"
 msgstr "Opcje główne"
 
+#: kicad/pcbnew/dsn.h:595
+msgid "in file"
+msgstr "w pliku"
+
+#: kicad/pcbnew/dsn.h:596
+msgid "on line"
+msgstr "w linii"
+
+#: kicad/pcbnew/dsn.h:597
+msgid "at offset"
+msgstr "na pozycji"
+
 #: kicad/pcbnew/dialog_track_options.h:49
 msgid "Tracks and Vias Sizes"
 msgstr "Rozmiary ścieżek i przelotek"
 
-#: kicad/pcbnew/dialog_drc.h:62
+#: kicad/pcbnew/dialog_drc.h:63
 msgid "DRC Control"
 msgstr "Kontrola DRC"
 
@@ -9826,7 +9935,8 @@ msgstr "Kontrola DRC"
 msgid "Cleaning options"
 msgstr "Opcje czyszczenia"
 
-#: kicad/pcbnew/zones.h:54
+#: kicad/pcbnew/zones.h:59
+#: kicad/pcbnew/dialog_zones_by_polygon.h:52
 msgid "Fill Zones Options"
 msgstr "Opcje wypełniania stref"
 
@@ -9840,10 +9950,10 @@ msgstr "Dialog"
 msgid "TextMod properties"
 msgstr "Właściwości tekstu modułu"
 
-#: kicad/pcbnew/drc_stuff.h:117
+#: kicad/pcbnew/drc_stuff.h:120
 #, c-format
-msgid "<b>ErrType(%d): %s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>"
-msgstr "<b>TypBłędu(%d): %s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>"
+msgid "ErrType(%d): <b>%s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>"
+msgstr "TypBłędu(%d): <b>%s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>"
 
 #: kicad/pcbnew/gen_self.h:217
 msgid "Length(inch):"
@@ -10229,4 +10339,28 @@ msgstr "Pozostałe"
 #: kicad/gerbview/set_color.h:332
 msgid "D codes id."
 msgstr "ID kodu wiercenia"
+
+#~ msgid "Arc Delete"
+#~ msgstr "Usuń łuk"
+#~ msgid "Circle Delete"
+#~ msgstr "Usuń okrąg"
+#~ msgid "Rect Delete"
+#~ msgstr "Usuń prostokąt"
+#~ msgid "Text Delete"
+#~ msgstr "Usuń tekst"
+#~ msgid "Line Delete"
+#~ msgstr "Usuń linię"
+#~ msgid "Segment Delete"
+#~ msgstr "Usuń segment"
+#~ msgid "Pin Edit"
+#~ msgstr "Edytuj pin"
+#~ msgid "Pin Delete"
+#~ msgstr "Usuń pin"
+#~ msgid "Delete old component?"
+#~ msgstr "Usunąć stary element?"
+#~ msgid "Pad to pad, pad to track, and track to track clearance problems"
+#~ msgstr ""
+#~ "Problemy z prześwitem pole do pola, pole do ścieżki i ścieżka do ścieżki"
+#~ msgid "Zones:"
+#~ msgstr "Strefy:"
 
