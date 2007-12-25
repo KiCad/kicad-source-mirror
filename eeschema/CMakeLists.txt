@@ -46,7 +46,6 @@ SET(EESCHEMA_SRCS
 	eeload.cpp
 	eeredraw.cpp
 	eeschema.cpp
-#	eestatus.cpp
 	eestring.cpp
 	erc.cpp
 	files-io.cpp
@@ -103,10 +102,6 @@ SET(EESCHEMA_EXTRA_SRCS
 	../share/svg_print.cpp
 	../share/wxprint.cpp
 	../share/zoom.cpp
-
-#	../share/buildmnu.cpp
-#	../share/mdiframe.cpp
-#	../share/treeprj.cpp
 )
 
 IF(WIN32)

@@ -4,12 +4,12 @@ FIND_PACKAGE(Boost)
 
 INCLUDE_DIRECTORIES(
 	${CMAKE_CURRENT_SOURCE_DIR}
-    ${Boost_INCLUDE_DIRS}
+	${Boost_INCLUDE_DIRS}
 	bitmaps
 	../3d-viewer
-    ../polygon
-    )
+	../polygon)
 
+# Many of the commented out ones are nested in *.cpp files for dialogs
 SET(PCBNEW_SRCS
 	affiche.cpp
 	attribut.cpp
@@ -36,7 +36,6 @@ SET(PCBNEW_SRCS
 	class_track.cpp
 	class_zone.cpp
 	clean.cpp
-#   many of the commented out ones are nested in *.cpp files for dialogs     
 #	cleaningoptions_dialog.cpp
 	collectors.cpp
 	connect.cpp
@@ -56,10 +55,12 @@ SET(PCBNEW_SRCS
 #	dialog_pad_edit.cpp
 	dialog_setup_libs.cpp
 #	dialog_track_options.cpp
+#	dialog_zones_by_polygon.cpp
 	dist.cpp
-#	docedit.cpp
+#	docedit.cpp <-- not used
 	dragsegm.cpp
 	drc.cpp
+#	dsn.cpp
 	edgemod.cpp
 	edit.cpp
 	editedge.cpp
@@ -67,12 +68,12 @@ SET(PCBNEW_SRCS
 	editpads.cpp
 	editrack.cpp
 	editrack-part2.cpp
-#	editrout.cpp
+#	editrout.cpp <-- not used
 	edit_track_width.cpp
 	edtxtmod.cpp
 	export_gencad.cpp
 	files.cpp
-    filling_zone_algorithm.cpp
+	filling_zone_algorithm.cpp
 	find.cpp
 	gendrill.cpp
 	gen_modules_placefile.cpp
@@ -94,7 +95,7 @@ SET(PCBNEW_SRCS
 	modedit_undo_redo.cpp
 	moduleframe.cpp
 	modules.cpp
-#	move_copy_track.cpp
+#	move_copy_track.cpp <-- not used
 	move-drag_pads.cpp
 	move_or_drag_track.cpp
 	muonde.cpp
@@ -119,7 +120,7 @@ SET(PCBNEW_SRCS
 	set_color.cpp
 	set_grid.cpp
 	solve.cpp
-#    specctra.cpp
+#	specctra.cpp
 	surbrill.cpp
 	swap_layers.cpp
 	tool_modedit.cpp
@@ -135,18 +136,17 @@ SET(PCBNEW_SRCS
 	work.cpp
 	xchgmod.cpp
 #	zones.cpp
-    zones_by_polygon.cpp
-    )
+	zones_by_polygon.cpp)
 
 SET(PCBNEW_EXTRA_SRCS
+#	../polygon/PolyLine.cpp
+
 	../share/drawframe.cpp
 	../share/drawpanel.cpp
 	../share/infospgm.cpp
 	../share/setpage.cpp
 	../share/wxprint.cpp
-	../share/zoom.cpp
-#    ../polygon/PolyLine.cpp
-    )
+	../share/zoom.cpp)
 
 IF(WIN32)
 	SET(PCBNEW_RESOURCES pcbnew.rc)
@@ -157,14 +157,14 @@ ENDIF(APPLE)
 
 ADD_EXECUTABLE(pcbnew WIN32 MACOSX_BUNDLE ${PCBNEW_SRCS} ${PCBNEW_EXTRA_SRCS} ${PCBNEW_RESOURCES})
 
-# This one gets made only when testing
-SET_SOURCE_FILES_PROPERTIES( dsn.cpp PROPERTIES COMPILE_FLAGS -DSTANDALONE )
-ADD_EXECUTABLE( dsntest EXCLUDE_FROM_ALL dsn.cpp )
-TARGET_LINK_LIBRARIES( dsntest common ${wxWidgets_LIBRARIES} )
+# This one gets made only when testing.
+SET_SOURCE_FILES_PROPERTIES(dsn.cpp PROPERTIES COMPILE_FLAGS -DSTANDALONE)
+ADD_EXECUTABLE(dsntest EXCLUDE_FROM_ALL dsn.cpp)
+TARGET_LINK_LIBRARIES(dsntest common ${wxWidgets_LIBRARIES})
 
-SET_SOURCE_FILES_PROPERTIES( specctra.cpp PROPERTIES COMPILE_FLAGS -DSTANDALONE )
-ADD_EXECUTABLE( specctra_test EXCLUDE_FROM_ALL specctra.cpp )
-TARGET_LINK_LIBRARIES( specctra_test common ${wxWidgets_LIBRARIES} )
+SET_SOURCE_FILES_PROPERTIES(specctra.cpp PROPERTIES COMPILE_FLAGS -DSTANDALONE)
+ADD_EXECUTABLE(specctra_test EXCLUDE_FROM_ALL specctra.cpp)
+TARGET_LINK_LIBRARIES(specctra_test common ${wxWidgets_LIBRARIES})
 
 
 TARGET_LINK_LIBRARIES(pcbnew common 3d-viewer ${wxWidgets_LIBRARIES})
