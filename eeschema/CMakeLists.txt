@@ -101,11 +101,19 @@ SET(EESCHEMA_EXTRA_SRCS
 	../share/setpage.cpp
 	../share/svg_print.cpp
 	../share/wxprint.cpp
-	../share/zoom.cpp
-)
+	../share/zoom.cpp)
 
 IF(WIN32)
-	SET(EESCHEMA_RESOURCES eeschema.rc)
+	IF(MINGW)
+		# resource compilation for mingw (http://www.cmake.org/Bug/view.php?id=4068)
+		ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/eeschema_rc.o
+			COMMAND windres.exe -I ${CMAKE_CURRENT_SOURCE_DIR}
+					    -i ${CMAKE_CURRENT_SOURCE_DIR}/eeschema.rc
+					    -o ${CMAKE_CURRENT_BINARY_DIR}/eeschema_rc.o)
+		SET(EESCHEMA_RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/eeschema_rc.o)
+	ELSE(MINGW)
+		SET(EESCHEMA_RESOURCES eeschema.rc)
+	ENDIF(MINGW)
 ENDIF(WIN32)
 IF(APPLE)
 	SET(EESCHEMA_RESOURCES eeschema.r)

@@ -149,7 +149,16 @@ SET(PCBNEW_EXTRA_SRCS
 	../share/zoom.cpp)
 
 IF(WIN32)
-	SET(PCBNEW_RESOURCES pcbnew.rc)
+	IF(MINGW)
+		# resource compilation for mingw (http://www.cmake.org/Bug/view.php?id=4068)
+		ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_rc.o
+			COMMAND windres.exe -I ${CMAKE_CURRENT_SOURCE_DIR}
+					    -i ${CMAKE_CURRENT_SOURCE_DIR}/pcbnew.rc
+					    -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_rc.o)
+		SET(PCBNEW_RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_rc.o)
+	ELSE(MINGW)
+		SET(PCBNEW_RESOURCES pcbnew.rc)
+	ENDIF(MINGW)
 ENDIF(WIN32)
 IF(APPLE)
 	SET(PCBNEW_RESOURCES pcbnew.r)

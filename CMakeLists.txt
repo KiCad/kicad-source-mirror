@@ -44,16 +44,15 @@ ENDIF(UNIX)
 
 IF(WIN32)
 	# Like all variables, CMAKE_INSTALL_PREFIX can be over-ridden on the command line.
-	SET(CMAKE_INSTALL_PREFIX C:/kicad)
+	SET(CMAKE_INSTALL_PREFIX c:/kicad)
 	# When used later, "winexe" and others with no leading / is relative to CMAKE_INSTALL_PREFIX.
 	SET(KICAD_BIN winexe CACHE PATH "Location of KiCad binaries.")
-	SET(KICAD_PLUGINS lib/kicad/plugins CACHE PATH "Location of KiCad plugins.")
-	SET(KICAD_DOCS share/doc/kicad CACHE PATH "Location of KiCad documentation files.")
-	SET(KICAD_DATA share/kicad CACHE PATH "Location of KiCad data files.")
-	SET(KICAD_MODULES ${KICAD_DATA}/modules)
-	SET(KICAD_LIBRARY ${KICAD_DATA}/library)
-	SET(KICAD_INTERNAT ${KICAD_DATA}/internat)
-	SET(KICAD_TEMPLATE ${KICAD_DATA}/template)
+	SET(KICAD_PLUGINS ${KICAD_BIN}/plugins)
+	SET(KICAD_DOCS help)
+	SET(KICAD_MODULES modules)
+	SET(KICAD_LIBRARY library)
+	SET(KICAD_INTERNAT internat)
+	SET(KICAD_TEMPLATE template)
 ENDIF(WIN32)
 
 # Did we find wxWidgets ? This condition will fail

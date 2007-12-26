@@ -55,7 +55,16 @@ SET(CVPCB_EXTRA_SRCS
 	../share/zoom.cpp)
 
 IF(WIN32)
-	SET(CVPCB_RESOURCES cvpcb.rc)
+	IF(MINGW)
+		# resource compilation for mingw (http://www.cmake.org/Bug/view.php?id=4068)
+		ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/cvpcb_rc.o
+			COMMAND windres.exe -I ${CMAKE_CURRENT_SOURCE_DIR}
+					    -i ${CMAKE_CURRENT_SOURCE_DIR}/cvpcb.rc
+					    -o ${CMAKE_CURRENT_BINARY_DIR}/cvpcb_rc.o)
+		SET(CVPCB_RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/cvpcb_rc.o)
+	ELSE(MINGW)
+		SET(CVPCB_RESOURCES cvpcb.rc)
+	ENDIF(MINGW)
 ENDIF(WIN32)
 IF(APPLE)
 	SET(CVPCB_RESOURCES cvpcb.r)
