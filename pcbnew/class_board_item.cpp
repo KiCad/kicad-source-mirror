@@ -149,8 +149,25 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         }
         break;
 
-    case TYPEZONE:
-        text << _( "Zone" ) << wxT( " " );
+    case TYPEZONE_CONTAINER:
+        text = _( "Zone Outline" );
+		text << wxT( " " );
+        {
+            wxString TimeStampText;
+            TimeStampText.Printf( wxT( "(%8.8X)" ), item->m_TimeStamp );
+            text << TimeStampText;
+        }
+        net = aPcb->FindNet( ( (ZONE_CONTAINER*) item )->GetNet() );
+        if( net )
+        {
+            text << wxT( " [" ) << net->m_Netname << wxT( "]" );
+        }
+        text << _( " on " ) << ReturnPcbLayerName( item->GetLayer() ).Trim();
+		break;
+
+	case TYPEZONE:
+		text = _( "Zone" );
+		text << wxT( " " );
         {
             wxString TimeStampText;
             TimeStampText.Printf( wxT( "(%8.8X)" ), item->m_TimeStamp );
@@ -268,6 +285,7 @@ const char** BOARD_ITEM::MenuIcon() const
         xpm = showtrack_xpm;
         break;
 
+    case TYPEZONE_CONTAINER:
     case TYPEZONE:
         xpm = add_zone_xpm;
         break;

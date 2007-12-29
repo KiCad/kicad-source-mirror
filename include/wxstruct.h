@@ -102,6 +102,7 @@ class Ki_HotkeyInfo;
 class GENERAL_COLLECTOR;
 class GENERAL_COLLECTORS_GUIDE;
 class DRC;
+class ZONE_CONTAINER;
 
 
 enum id_librarytype {
@@ -728,10 +729,8 @@ public:
     TRACK*              Delete_Segment( wxDC* DC, TRACK* Track );
     void                Delete_Track( wxDC* DC, TRACK* Track );
     void                Delete_net( wxDC* DC, TRACK* Track );
-    void                Delete_Zone( wxDC* DC, SEGZONE* Track );
     void                Supprime_Une_Piste( wxDC* DC, TRACK* pt_segm );
     bool                Resize_Pistes_Vias( wxDC* DC, bool Track, bool Via );
-    void                Edit_Zone_Width( wxDC* DC, SEGZONE* pt_ref );
     void                Edit_Net_Width( wxDC* DC, int Netcode );
     void                Edit_Track_Width( wxDC* DC, TRACK* Track );
     int                 Edit_TrackSegm_Width( wxDC* DC, TRACK* segm );
@@ -749,8 +748,13 @@ public:
     bool                Genere_Pad_Connexion( wxDC* DC, int layer );
 
     // zone handling
+    void                Delete_Zone( wxDC* DC, SEGZONE* Track );
     EDGE_ZONE*          Del_SegmEdgeZone( wxDC* DC, EDGE_ZONE* edge_zone );
-    void                CaptureNetName( wxDC* DC );
+    /**
+     * Function Begin_Zone
+     * initiates a zone edge creation process,
+	 * or terminates the current zone edge and creates a new zone edge stub
+     */
     EDGE_ZONE*          Begin_Zone( wxDC* DC );
     
     /**
@@ -761,14 +765,30 @@ public:
     
     /**
      * Function Fill_Zone
-     * creates a number zone segments by using a flood fill algorithm.  The 
-     * "high-lighted" net is used to determine the netcode of all the zone
-     * segments and what can be connected to and what must be avoided on the
-     * current layer as the flooding occurs.
+     * Fills an outline.
      */
-    void                Fill_Zone( wxDC* DC );
+    void                Fill_Zone( wxDC* DC, ZONE_CONTAINER * zone_container );
 
-    // Target handling
+	/**
+	 * Function Edit_Zone_Params
+	 * Edit params (layer, clearance, ...) for a zone outline
+	 */
+    void Edit_Zone_Params( wxDC* DC , ZONE_CONTAINER * zone_container );
+
+	/**
+	 * Function Start_Move_Zone_Corner
+	 * Prepares a move corner in a zone outline,
+	 * called from a move corner command (IsNewCorner = false),
+	 * or a create new cornet command (IsNewCorner = true )
+	 */
+	void Start_Move_Zone_Corner( wxDC* DC , ZONE_CONTAINER * zone_container, int corner_id, bool IsNewCorner );
+	/**
+	 * Function End_Move_Zone_Corner
+	 * Terminates a move corner in a zone outline
+	 */
+	void End_Move_Zone_Corner( wxDC* DC , ZONE_CONTAINER * zone_container );
+
+	// Target handling
     MIREPCB*            Create_Mire( wxDC* DC );
     void                Delete_Mire( MIREPCB* MirePcb, wxDC* DC );
     void                StartMove_Mire( MIREPCB* MirePcb, wxDC* DC );

@@ -9,7 +9,8 @@ OBJECTS= \
 		php_polygon.o\
 		php_polygon_vertex.o\
 		PolyLine.o\
-		math_for_graphics.o
+		math_for_graphics.o\
+		cdisplaylist_stuff.o
 
 GenericPolygonClipperLibrary.o: GenericPolygonClipperLibrary.cpp GenericPolygonClipperLibrary.h
 

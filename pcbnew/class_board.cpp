@@ -6,8 +6,6 @@
 
 #include "pcbnew.h"
 
-//#include "bitmaps.h"
-
 
 /*****************/
 /* Class BOARD: */
@@ -76,6 +74,7 @@ BOARD::~BOARD()
     m_LocalRatsnest = 0;
 
     DeleteMARKERs();
+	DeleteZONEOutlines();
 }
 
 
@@ -128,17 +127,30 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
 
 void BOARD::Delete( BOARD_ITEM* aBoardItem )
 {
+	if ( aBoardItem == NULL ) return;
+
     switch( aBoardItem->Type() )
     {
-    // this one uses a vector
-    case TYPEMARKER:
-        
+    case TYPEMARKER:    // this one uses a vector
         // find the item in the vector, then delete then erase it.
         for( unsigned i=0;  i<m_markers.size();  ++i )
         {
             if( m_markers[i] == (MARKER*) aBoardItem )
             {
                 DeleteMARKER( i );
+                break;
+            }
+        }
+        break;
+
+    case TYPEZONE_CONTAINER:    // this one uses a vector
+        // find the item in the vector, then delete then erase it.
+        for( unsigned i=0;  i<m_ZoneDescriptorList.size();  ++i )
+        {
+            if( m_ZoneDescriptorList[i] == (ZONE_CONTAINER*) aBoardItem )
+            {
+                delete m_ZoneDescriptorList[i];
+				m_ZoneDescriptorList.erase(m_ZoneDescriptorList.begin() + i);
                 break;
             }
         }
@@ -168,6 +180,15 @@ void BOARD::DeleteMARKERs()
         delete m_markers[i];
     
     m_markers.clear();
+}
+
+void BOARD::DeleteZONEOutlines()
+{
+    // the vector does not know how to delete the ZONE Outlines, it holds pointers
+    for( unsigned i=0;  i<m_ZoneDescriptorList.size();  ++i )
+        delete m_ZoneDescriptorList[i];
+    
+    m_ZoneDescriptorList.clear();
 }
 
 
@@ -522,6 +543,17 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
             ++p;
             break;
 
+        case TYPEZONE_CONTAINER:
+            // TYPEZONE_CONTAINER are in the m_ZoneDescriptorList std::vector
+            for( unsigned i=0;  i< m_ZoneDescriptorList.size();  ++i )
+            {
+                result = m_ZoneDescriptorList[i]->Visit( inspector, testData, p );
+                if( result == SEARCH_QUIT )
+                    break;
+            }
+            ++p;
+            break;
+
         case PCB_EQUIPOT_STRUCT_TYPE:
             result = IterateForward( m_Equipots, inspector, testData, p );
             ++p;
@@ -782,16 +814,12 @@ bool BOARD::Save( FILE* aFile ) const
     fprintf( aFile, "$EndZONE\n" );
     
     // save the zone edges
-/*    
-    if( m_CurrentLimitZone )
-    {
-        fprintf( aFile, "$ZONE_EDGE\n" );
-        for( item = m_CurrentLimitZone;  item;  item=item->Next() )
-            if( !item->Save( aFile ) )
-                goto out;
-        fprintf( aFile, "$EndZONE_EDGE\n" );
-    }
-*/    
+	for( unsigned ii = 0; ii < m_ZoneDescriptorList.size(); ii++ )
+	{
+		ZONE_CONTAINER* edge_zone = m_ZoneDescriptorList[ii];
+		edge_zone->Save( aFile );
+	}
+   
     
     if( fprintf( aFile, "$EndBOARD\n" ) != sizeof("$EndBOARD\n")-1 )
         goto out;

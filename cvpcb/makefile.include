@@ -1,8 +1,12 @@
 # makefile pour cvpcb (mingw)
 OBJSUFF = o
 
-EXTRACPPFLAGS += -DCVPCB -fno-strict-aliasing -I./ -I../cvpcb -I../include -Ibitmaps -I../pcbnew -I../3d-viewer
-EXTRALIBS = ../common/common.a
+EXTRACPPFLAGS += -DCVPCB -fno-strict-aliasing\
+	-I./ -I../cvpcb -I../include -Ibitmaps\
+	-I../pcbnew -I../3d-viewer\
+	-I../polygon
+
+EXTRALIBS = ../common/common.a ../polygon/lib_polygon.a
 
 LIBVIEWER3D = ../3d-viewer/3d-viewer.a
 
@@ -10,6 +14,7 @@ LIBVIEWER3D = ../3d-viewer/3d-viewer.a
 
 OBJECTS = $(TARGET).o \
 			class_cvpcb.o\
+			class_zone.o\
             memoire.o \
 			cvframe.o\
 			listboxes.o\
@@ -67,6 +72,9 @@ classpcb.o: ../pcbnew/classpcb.cpp $(DEPEND)
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_mire.o: ../pcbnew/class_mire.cpp ../pcbnew/class_mire.h $(COMMON)
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_zone.o: ../pcbnew/class_zone.cpp ../pcbnew/class_zone.h $(COMMON)
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_cotation.o: ../pcbnew/class_cotation.cpp ../pcbnew/class_cotation.h $(COMMON)

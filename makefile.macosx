@@ -1,4 +1,4 @@
-KICAD_SUBDIRS =  common 3d-viewer eeschema pcbnew cvpcb kicad gerbview
+KICAD_SUBDIRS =  common 3d-viewer polygon eeschema pcbnew cvpcb kicad gerbview
 KICAD_SUBDIRS_BIN =  eeschema pcbnew cvpcb kicad gerbview
 # How to invoke make:
 MAKE = make -f makefile.macosx

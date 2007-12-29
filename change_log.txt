@@ -4,6 +4,14 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2007-Dec-29 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+	First draft (and code..) about new zone handling, using polygons to define an outline.
+	Now currently not useable because the fill function (and many other important functions) is not implemented.
+	Many functions are not yet implemented: merging zones, cutout, DRC ...
+	Nevertheless, one can create, modify edit and save zone outlines
+
 
 2007-Dec-23 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================

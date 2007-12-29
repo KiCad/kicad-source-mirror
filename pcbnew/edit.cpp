@@ -67,13 +67,13 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_STOP_CURRENT_EDGE_ZONE:
     case ID_POPUP_PCB_DELETE_EDGE_ZONE:
     case ID_POPUP_PCB_DELETE_ZONE_LIMIT:
-    case ID_POPUP_PCB_EDIT_ZONE:
+	case ID_POPUP_PCB_PLACE_ZONE_CORNER:
+    case ID_POPUP_PCB_EDIT_ZONE_PARAMS:
     case ID_POPUP_PCB_DELETE_ZONE:
     case ID_POPUP_PCB_DELETE_TRACKSEG:
     case ID_POPUP_PCB_DELETE_TRACK:
     case ID_POPUP_PCB_DELETE_TRACKNET:
     case ID_POPUP_PCB_FILL_ZONE:
-    case ID_POPUP_PCB_SELECT_NET_ZONE:
     case ID_POPUP_PCB_SELECT_LAYER:
     case ID_POPUP_PCB_SELECT_CU_LAYER:
     case ID_POPUP_PCB_SELECT_LAYER_PAIR:
@@ -445,16 +445,69 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         SetCurItem( NULL );
         break;
 
-    case ID_POPUP_PCB_EDIT_ZONE:
-        DrawPanel->MouseToCursorSchema();
-        if( GetCurItem() == NULL )
-            break;
-        Edit_Zone_Width( &dc, (SEGZONE*) GetCurItem() );
+    case ID_POPUP_PCB_EDIT_ZONE_PARAMS:
+        Edit_Zone_Params( &dc, (ZONE_CONTAINER*) GetCurItem() );
         break;
 
+    case ID_POPUP_PCB_DELETE_ZONE_CONTAINER:
+        DrawPanel->MouseToCursorSchema();
+		((ZONE_CONTAINER*)GetCurItem())->Draw(DrawPanel,&dc, wxPoint(0,0), GR_XOR);
+        m_Pcb->Delete( GetCurItem() );
+        SetCurItem( NULL );
+        break;
+
+	case ID_POPUP_PCB_DELETE_ZONE_CORNER:
+	{
+        DrawPanel->MouseToCursorSchema();
+		ZONE_CONTAINER * zone_cont = (ZONE_CONTAINER*)GetCurItem();
+		zone_cont->Draw(DrawPanel,&dc, wxPoint(0,0), GR_XOR);
+ 		zone_cont->DeleteCorner(zone_cont->m_CornerSelection);
+		zone_cont->Draw(DrawPanel,&dc, wxPoint(0,0), GR_XOR);
+        SetCurItem( NULL );
+        break;
+	}
+	
+	case ID_POPUP_PCB_MOVE_ZONE_CORNER:
+	{
+        DrawPanel->MouseToCursorSchema();
+		ZONE_CONTAINER * zone_cont = (ZONE_CONTAINER*)GetCurItem();
+		Start_Move_Zone_Corner(&dc, zone_cont, zone_cont->m_CornerSelection, false);
+        break;
+	}
+
+	case ID_POPUP_PCB_ADD_ZONE_CORNER:
+	{
+        DrawPanel->MouseToCursorSchema();
+		ZONE_CONTAINER * zone_cont = (ZONE_CONTAINER*)GetCurItem();
+		wxPoint pos = GetScreen()->m_Curseur;
+		/* add corner between zone_cont->m_CornerSelection
+		 * and zone_cont->m_CornerSelection+1
+		 * and start move the new corner
+		 */
+		zone_cont->Draw(DrawPanel, &dc, wxPoint(0,0), GR_XOR);
+		zone_cont->InsertCorner( zone_cont->m_CornerSelection, pos.x, pos.y );
+		zone_cont->m_CornerSelection++;
+		zone_cont->Draw(DrawPanel, &dc, wxPoint(0,0), GR_XOR);
+		Start_Move_Zone_Corner(&dc, zone_cont, zone_cont->m_CornerSelection, true);
+        break;
+	}
+
+	case ID_POPUP_PCB_PLACE_ZONE_CORNER:
+	{
+        DrawPanel->MouseToCursorSchema();
+		ZONE_CONTAINER * zone_cont = (ZONE_CONTAINER*)GetCurItem();
+		End_Move_Zone_Corner(&dc, zone_cont);
+        break;
+	}
+	
     case ID_POPUP_PCB_DELETE_ZONE_LIMIT:
         DrawPanel->MouseToCursorSchema();
         DelLimitesZone( &dc, TRUE );
+        break;
+
+    case ID_POPUP_PCB_FILL_ZONE:
+        DrawPanel->MouseToCursorSchema();
+        Fill_Zone( &dc, (ZONE_CONTAINER*)GetCurItem() );
         break;
 
     case ID_PCB_DELETE_ITEM_BUTT:
@@ -743,16 +796,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             SetCurItem( Del_SegmEdgeZone( &dc,
                                          (EDGE_ZONE*) GetCurItem() ) );
         }
-        break;
-
-    case ID_POPUP_PCB_FILL_ZONE:
-        DrawPanel->MouseToCursorSchema();
-        Fill_Zone( &dc );
-        break;
-
-    case ID_POPUP_PCB_SELECT_NET_ZONE:
-        DrawPanel->MouseToCursorSchema();
-        CaptureNetName( &dc );
         break;
 
     case ID_POPUP_PCB_SELECT_WIDTH:

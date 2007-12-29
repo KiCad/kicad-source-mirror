@@ -218,7 +218,6 @@
           <string name="id-suffix">""</string>
           <long name="use-xrc">0</long>
           <long name="working-mode">0</long>
-          <string name="variable-0">"m_OutlinesOpt|int|OutlinesOpt|0|0|0|"</string>
           <string name="proxy-Id name">"ID_DIALOG"</string>
           <long name="proxy-Id value">10000</long>
           <string name="proxy-Class">"WinEDA_ZoneFrame"</string>
@@ -595,8 +594,8 @@
                   <bool name="proxy-Hidden">0</bool>
                   <bool name="proxy-Enabled">1</bool>
                   <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
-                  <string name="proxy-Data variable">"m_OutlinesOpt"</string>
-                  <string name="proxy-Data validator">"wxGenericValidator(&amp; %VARIABLE%)"</string>
+                  <string name="proxy-Data variable">""</string>
+                  <string name="proxy-Data validator">""</string>
                   <string name="proxy-Data source">""</string>
                   <string name="proxy-Data class name">""</string>
                   <string name="proxy-Data class implementation filename">""</string>

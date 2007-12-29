@@ -1,7 +1,6 @@
-/**********************************************/
-/* PCBNEW : Routines d'initialisation globale */
-/******* Fichier INITPCB.C ********************/
-/**********************************************/
+/*********************************************/
+/******* file initpcb.cpp ********************/
+/*********************************************/
 
 
 #include "fctsys.h"
@@ -148,6 +147,9 @@ bool WinEDA_BasePcbFrame::Clear_Pcb( bool query )
     
     DelLimitesZone( NULL, FALSE );
 
+	m_Pcb->DeleteMARKERs();
+	m_Pcb->DeleteZONEOutlines();
+
     for( ; g_UnDeleteStackPtr != 0; )
     {
         g_UnDeleteStackPtr--;
@@ -221,6 +223,7 @@ void WinEDA_PcbFrame::Erase_Zones( bool query )
     }
     
     DelLimitesZone( NULL, FALSE );
+	m_Pcb->DeleteZONEOutlines();
 
     GetScreen()->SetModify();
 }

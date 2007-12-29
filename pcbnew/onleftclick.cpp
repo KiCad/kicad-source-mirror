@@ -38,6 +38,11 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
             switch( DrawStruct->Type() )
             {
+            case TYPEZONE_CONTAINER:
+                End_Move_Zone_Corner( DC, (ZONE_CONTAINER *) DrawStruct );
+                exit = true;
+                break;
+
             case TYPETRACK:
             case TYPEVIA:
                 if( DrawStruct->m_Flags & IS_DRAGGED )

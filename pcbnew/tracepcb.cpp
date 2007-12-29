@@ -8,6 +8,8 @@
  *  Routines d'affichage grille, Boite de coordonnees, Curseurs, marqueurs ...
  */
 
+#include <vector.h>
+
 #include "fctsys.h"
 #include "gr_basic.h"
 
@@ -18,9 +20,7 @@
 
 #include "protos.h"
 
-/* Routines Locales : */
-
-/* Variables Locales */
+using namespace std;
 
 
 /**********************************************************************/
@@ -184,6 +184,12 @@ void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
         
         Trace_DrawSegmentPcb( DrawPanel, DC, segment, mode );
     }
+
+	for( unsigned ii = 0; ii < m_Pcb->m_ZoneDescriptorList.size(); ii++ )
+	{
+		ZONE_CONTAINER* edge_zone =  m_Pcb->m_ZoneDescriptorList[ii];
+		edge_zone->Draw( DrawPanel, DC, wxPoint(0,0), mode);
+	}
 
     DrawGeneralRatsnest( DC );
 

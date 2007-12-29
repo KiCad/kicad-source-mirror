@@ -1,12 +1,17 @@
-EXTRALIBS = ../common/common.a
-EXTRACPPFLAGS= -DGERBVIEW -DPCBNEW -fno-strict-aliasing -I./ -I../gerbview -I../include\
-	-I../share -I../pcbnew -I../3d-viewer
+EXTRALIBS = ../common/common.a ../polygon/lib_polygon.a
+
+EXTRACPPFLAGS= -DGERBVIEW -DPCBNEW -fno-strict-aliasing\
+	-I./ -I../gerbview -I../include\
+	-I../share -I../pcbnew -I../3d-viewer\
+	-I../polygon
+
 
 #COMMON = pcbnew.h struct.h
 
 OBJECTS= \
 		$(TARGET).o\
 		classpcb.o\
+		class_zone.o\
 		select_layers_to_pcb.o\
 		sel_layer.o\
 		lay2plot.o\
@@ -67,6 +72,9 @@ set_color.o: set_color.cpp set_color.h $(COMMON)
 files.o: files.cpp $(COMMON)
 
 class_marker.o: ../pcbnew/class_marker.cpp ../pcbnew/class_marker.h $(COMMON)
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_zone.o: ../pcbnew/class_zone.cpp ../pcbnew/class_zone.h $(COMMON)
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_drc_item.o: ../pcbnew/class_drc_item.cpp $(COMMON)

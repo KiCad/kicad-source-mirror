@@ -4,6 +4,7 @@ INCLUDE_DIRECTORIES(
 	${CMAKE_CURRENT_SOURCE_DIR}
 	bitmaps
 	../3d-viewer
+	../polygon
 	../pcbnew)
 
 SET(CVPCB_SRCS
@@ -35,6 +36,7 @@ SET(CVPCB_SRCS
 SET(CVPCB_EXTRA_SRCS
 	../pcbnew/basepcbframe.cpp
 	../pcbnew/class_board.cpp
+	../pcbnew/class_zone.cpp
 	../pcbnew/class_cotation.cpp
 	../pcbnew/class_edge_mod.cpp
 	../pcbnew/class_equipot.cpp

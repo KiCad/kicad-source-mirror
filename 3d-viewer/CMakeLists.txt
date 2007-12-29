@@ -1,6 +1,6 @@
 ADD_DEFINITIONS(-DPCBNEW)
 
-INCLUDE_DIRECTORIES(../pcbnew)
+INCLUDE_DIRECTORIES(../pcbnew ../polygon)
 
 SET(3D-VIEWER_SRCS
 	3d_aux.cpp

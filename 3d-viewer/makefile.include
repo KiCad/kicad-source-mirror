@@ -1,5 +1,5 @@
 EXTRALIBS =
-EXTRACPPFLAGS= -I./ -I../include -I../common -I../pcbnew
+EXTRACPPFLAGS= -I./ -I../include -I../common -I../polygon -I../pcbnew
 
 CPPFLAGS += $(EXTRACPPFLAGS)
 

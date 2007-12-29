@@ -4,7 +4,8 @@ INCLUDE_DIRECTORIES(
 	${CMAKE_CURRENT_SOURCE_DIR}
 	../3d-viewer
 	../cvpcb
-	../pcbnew)
+	../pcbnew
+	../polygon)
 
 SET(GERBVIEW_SRCS
 	affiche.cpp
@@ -41,6 +42,7 @@ SET(GERBVIEW_SRCS
 SET(GERBVIEW_EXTRA_SRCS
 	../pcbnew/basepcbframe.cpp
 	../pcbnew/class_board.cpp
+	../pcbnew/class_zone.cpp
 	../pcbnew/class_drc_item.cpp
 	../pcbnew/class_marker.cpp
 	../pcbnew/class_pcb_text.cpp
@@ -74,6 +76,6 @@ ENDIF(APPLE)
 
 ADD_EXECUTABLE(gerbview WIN32 MACOSX_BUNDLE ${GERBVIEW_SRCS} ${GERBVIEW_EXTRA_SRCS} ${GERBVIEW_RESOURCES})
 
-TARGET_LINK_LIBRARIES(gerbview common 3d-viewer ${wxWidgets_LIBRARIES})
+TARGET_LINK_LIBRARIES(gerbview common 3d-viewer lib_polygon ${wxWidgets_LIBRARIES})
 
 INSTALL(TARGETS gerbview RUNTIME DESTINATION ${KICAD_BIN})

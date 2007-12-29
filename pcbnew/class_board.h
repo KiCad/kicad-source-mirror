@@ -20,7 +20,6 @@ class BOARD : public BOARD_ITEM
 private:
 
     std::vector<MARKER*> m_markers;             ///< MARKERs for clearance problems, owned by pointer                                                 
-//    std::vector<MARKER*> m_markersUnconnected;  ///< MARKERs for unconnected problems, owned by pointer                                                 
     std::vector<ZONE_CONTAINER*> m_ZoneDescriptorList; 	///< edge zone descriptors, owned by pointer                                                 
 
     
@@ -85,6 +84,12 @@ public:
      * deletes ALL MARKERS from the board.
      */
     void    DeleteMARKERs();
+
+    /**
+     * Function DeleteZONEOutlines
+     * deletes ALL zone outlines from the board.
+     */
+	void    DeleteZONEOutlines();
 
     
     /**

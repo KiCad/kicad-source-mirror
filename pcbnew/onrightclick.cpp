@@ -275,6 +275,41 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                           _( "Delete edge zone" ), delete_xpm );
             break;
 
+        case TYPEZONE_CONTAINER:
+		{
+			ZONE_CONTAINER * edge_zone = (ZONE_CONTAINER *) item;
+			if ( edge_zone->m_Flags )
+			{
+				ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_PLACE_ZONE_CORNER,
+						  _( "Place Corner" ), apply_xpm );
+			}
+			else
+			{
+				edge_zone->m_CornerSelection = -1;
+				int index;
+				if ( (index = edge_zone->HitTestForCorner( GetScreen()->m_Curseur )) >= 0 )
+				{
+					edge_zone->m_CornerSelection = index;
+					ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_MOVE_ZONE_CORNER,
+							  _( "Move Corner" ), move_xpm );
+					ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_ZONE_CORNER,
+							  _( "Delete Corner" ), delete_xpm );
+				}
+				else if ( (index = edge_zone->HitTestForEdge( GetScreen()->m_Curseur )) >= 0 )
+				{
+					edge_zone->m_CornerSelection = index;
+					ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_ADD_ZONE_CORNER,
+							  _( "Create Corner" ), move_xpm );
+				}
+				aPopMenu->AppendSeparator();
+				ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_EDIT_ZONE_PARAMS,
+							  _( "Edit Zone Params" ), edit_xpm );
+				ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_ZONE_CONTAINER,
+							  _( "Delete Zone Outline" ), delete_xpm );
+			}
+		}
+            break;
+
         case TYPETEXTE:
             createPopUpMenuForTexts( (TEXTE_PCB*) item, aPopMenu );
             break;
@@ -286,8 +321,6 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             break;
 
         case TYPEZONE:
-            ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_EDIT_ZONE,
-                          _( "Edit Zone" ), edit_xpm );
             ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_ZONE,
                           _( "Delete Zone" ), delete_xpm );
             break;
@@ -358,14 +391,6 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_FILL_ZONE,
                       _( "Fill zone" ), fill_zone_xpm );
 
-        if( item
-           && ( (item->Type() == TYPEPAD)
-               || (item->Type() == TYPETRACK)
-               || (item->Type() == TYPEVIA) ) )
-        {
-            add_separator = TRUE;
-            aPopMenu->Append( ID_POPUP_PCB_SELECT_NET_ZONE, _( "Select Net" ) );
-        }
         if( m_Pcb->m_CurrentLimitZone )
         {
             add_separator = TRUE;

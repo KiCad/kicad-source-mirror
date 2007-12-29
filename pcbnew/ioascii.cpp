@@ -815,6 +815,13 @@ int WinEDA_PcbFrame::ReadPcbFile( wxDC* DC, FILE* File, bool Append )
             continue;
         }
 
+        if( strnicmp( Line, "$CZONE_OUTLINE", 7 ) == 0 )
+        {
+			ZONE_CONTAINER * zone_descr = new ZONE_CONTAINER(m_Pcb);
+			zone_descr->ReadDescr( File, &LineNum );
+			m_Pcb->m_ZoneDescriptorList.push_back(zone_descr);
+		}
+
         if( strnicmp( Line, "$MODULE", 7 ) == 0 )
         {
             Module = new MODULE( m_Pcb );

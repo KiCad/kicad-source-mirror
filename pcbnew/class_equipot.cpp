@@ -44,6 +44,7 @@ EQUIPOT::~EQUIPOT()
 }
 
 
+
 wxPoint& EQUIPOT::GetPosition()
 {
     static wxPoint dummy;
@@ -172,3 +173,5 @@ void EQUIPOT::Show( int nestLevel, std::ostream& os )
        " netcode=\"" << GetNet() << "\"/>\n";
 }
 #endif
+
+

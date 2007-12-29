@@ -41,7 +41,7 @@ enum KICAD_T {
     TYPESCREEN,
     TYPEBLOCK,
     TYPEEDGEZONE,
-    TYPEZONE_POLYEDGE,
+    TYPEZONE_EDGE_CORNER,
     TYPEZONE_CONTAINER,
 
     // Draw Items in schematic

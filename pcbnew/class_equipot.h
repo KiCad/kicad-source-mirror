@@ -61,7 +61,7 @@ public:
      */
     int GetNet() const { return m_NetCode; }
     void SetNet( int aNetCode ) { m_NetCode = aNetCode; }
-     
+	
     
     /**
      * Function GetClass
@@ -86,3 +86,4 @@ public:
 #endif
     
 };
+

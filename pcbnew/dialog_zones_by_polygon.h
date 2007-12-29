@@ -75,7 +75,13 @@ class WinEDA_ZoneFrame: public wxDialog
 public:
     /// Constructors
     WinEDA_ZoneFrame( );
-    WinEDA_ZoneFrame( WinEDA_PcbFrame* parent, wxWindowID id = SYMBOL_WINEDA_ZONEFRAME_IDNAME, const wxString& caption = SYMBOL_WINEDA_ZONEFRAME_TITLE, const wxPoint& pos = SYMBOL_WINEDA_ZONEFRAME_POSITION, const wxSize& size = SYMBOL_WINEDA_ZONEFRAME_SIZE, long style = SYMBOL_WINEDA_ZONEFRAME_STYLE );
+    WinEDA_ZoneFrame( WinEDA_PcbFrame* parent,
+						ZONE_CONTAINER * zone_container = NULL,
+						wxWindowID id = SYMBOL_WINEDA_ZONEFRAME_IDNAME,
+						const wxString& caption = SYMBOL_WINEDA_ZONEFRAME_TITLE,
+						const wxPoint& pos = SYMBOL_WINEDA_ZONEFRAME_POSITION,
+						const wxSize& size = SYMBOL_WINEDA_ZONEFRAME_SIZE,
+						long style = SYMBOL_WINEDA_ZONEFRAME_STYLE );
 
     /// Creation
     bool Create( wxWindow* parent, wxWindowID id = SYMBOL_WINEDA_ZONEFRAME_IDNAME, const wxString& caption = SYMBOL_WINEDA_ZONEFRAME_TITLE, const wxPoint& pos = SYMBOL_WINEDA_ZONEFRAME_POSITION, const wxSize& size = SYMBOL_WINEDA_ZONEFRAME_SIZE, long style = SYMBOL_WINEDA_ZONEFRAME_STYLE );
@@ -97,9 +103,6 @@ public:
 ////@end WinEDA_ZoneFrame event handler declarations
 
 ////@begin WinEDA_ZoneFrame member function declarations
-
-    int GetOutlinesOpt() const { return m_OutlinesOpt ; }
-    void SetOutlinesOpt(int value) { m_OutlinesOpt = value ; }
 
     /// Retrieves bitmap resources
     wxBitmap GetBitmapResource( const wxString& name );
@@ -125,13 +128,13 @@ public:
     wxRadioBox* m_NetSortingOption;
     wxListBox* m_ListNetNameSelection;
     wxListBox* m_LayerSelectionCtrl;
-    int m_OutlinesOpt;
 ////@end WinEDA_ZoneFrame member variables
 
 	WinEDA_PcbFrame * m_Parent;
 	int m_NetSorting;
 	
 	int m_LayerId[LAYER_COUNT];		// Handle the real layer number from layer name position in m_LayerSelectionCtrl
+	ZONE_CONTAINER * m_Zone_Container;
 };
 
 #endif      // DIALOG_ZONES_H_

@@ -47,6 +47,7 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     TYPETEXTEMODULE,
     TYPEMODULE,
     TYPEZONE,
+	TYPEZONE_CONTAINER,
     EOT
 };    
 
@@ -211,6 +212,8 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
     case TYPETRACK:
         break;
     case TYPEZONE:
+        break;
+    case TYPEZONE_CONTAINER:
         break;
     case TYPETEXTE: 
         break;
