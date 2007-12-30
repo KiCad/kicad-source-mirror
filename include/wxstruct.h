@@ -748,7 +748,15 @@ public:
     bool                Genere_Pad_Connexion( wxDC* DC, int layer );
 
     // zone handling
-    void                Delete_Zone( wxDC* DC, SEGZONE* Track );
+/** Function Delete_Zone
+ * Remove the zone which include the segment aZone, or the zone which have the given time stamp.
+ *  A zone is a group of segments which have the same TimeStamp
+ * @param DC = current Device Context (can be NULL)
+ * @param aZone = zone segment within the zone to delete. Can be NULL
+ * @param aTimestamp = Timestamp for the zone to delete, used if aZone == NULL
+ */
+    void                Delete_Zone( wxDC* DC, SEGZONE* Track, long aTimestamp = 0 );
+
     EDGE_ZONE*          Del_SegmEdgeZone( wxDC* DC, EDGE_ZONE* edge_zone );
     /**
      * Function Begin_Zone
@@ -760,14 +768,31 @@ public:
     /**
      * Function End_Zone
      * terminates the zone edge creation process
+	 * @param DC = current Device Context
      */
     void                End_Zone( wxDC* DC );
     
-    /**
-     * Function Fill_Zone
-     * Fills an outline.
-     */
-    void                Fill_Zone( wxDC* DC, ZONE_CONTAINER * zone_container );
+	/** Function Fill_Zone()
+	 *  Calculate the zone filling for the outline zone_container
+	 *  The zone outline is a frontier, and can be complex (with holes)
+	 *  The filling starts from starting points like pads, tracks.
+	 * If exists the old filling is removed
+	 * @param DC = current Device Context
+	 * @param zone_container = zone to fill
+	 * @param verbose = true to show error messages
+	 * @return error level (0 = no error)
+	 */
+    int                Fill_Zone( wxDC* DC, ZONE_CONTAINER * zone_container, bool verbose = TRUE );
+
+	/** Function Fill_All_Zones()
+	 *  Fill all zones on the board
+	 * The old fillings are removed
+	 * @param frame = reference to the main frame
+	 * @param DC = current Device Context
+	 * @param verbose = true to show error messages
+	 * @return error level (0 = no error)
+	 */
+    int                Fill_All_Zones( wxDC* DC, bool verbose = TRUE );
 
 	/**
 	 * Function Edit_Zone_Params

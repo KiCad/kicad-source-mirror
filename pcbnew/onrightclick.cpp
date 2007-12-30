@@ -302,6 +302,9 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 							  _( "Create Corner" ), move_xpm );
 				}
 				aPopMenu->AppendSeparator();
+				ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_FILL_ZONE,
+							  _( "Fill zone" ), fill_zone_xpm );
+
 				ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_EDIT_ZONE_PARAMS,
 							  _( "Edit Zone Params" ), edit_xpm );
 				ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_ZONE_CONTAINER,
@@ -387,17 +390,13 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     {
     case ID_PCB_ZONES_BUTT:
     {
-        bool add_separator = FALSE;
-        ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_FILL_ZONE,
-                      _( "Fill zone" ), fill_zone_xpm );
-
-        if( m_Pcb->m_CurrentLimitZone )
-        {
-            add_separator = TRUE;
-            aPopMenu->Append( ID_POPUP_PCB_DELETE_ZONE_LIMIT, _( "Delete Zone Limit" ) );
-        }
-        if( add_separator )
+		if (  m_Pcb->m_ZoneDescriptorList.size() > 0 )
+		{
+			ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_FILL_ALL_ZONES,
+                      _( "Fill or Refill All Zones" ), fill_zone_xpm );
             aPopMenu->AppendSeparator();
+		}
+
         ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_SELECT_LAYER,
                       _( "Select Working Layer" ), Select_W_Layer_xpm );
         aPopMenu->AppendSeparator();

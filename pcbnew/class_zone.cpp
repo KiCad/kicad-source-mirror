@@ -19,8 +19,11 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* parent ) :
     , CPolyLine( NULL )
 
 {
-    m_NetCode = -1;              // Net number for fast comparisons
+    m_NetCode = -1;            // Net number for fast comparisons
 	m_CornerSelection = -1;
+	m_ZoneClearance = 200;		// a reasonnable clerance value
+	m_GridFillValue = 50;		// a reasonnable grid used for filling
+	m_PadOption = THERMAL_PAD;
 }
 
 

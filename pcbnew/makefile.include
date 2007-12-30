@@ -12,7 +12,7 @@ ZONE_FILES = zones_by_polygon.o
 
 OBJECTS=	$(TARGET).o classpcb.o\
 		$(ZONE_FILES)\
-		filling_zone_algorithm.o\
+		zone_filling_algorithm.o\
 		lay2plot.o\
 		modedit_undo_redo.o\
 		block_module_editor.o\

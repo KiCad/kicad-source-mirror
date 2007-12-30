@@ -993,7 +993,7 @@ void CPolyLine::StartDraggingToMoveCorner( CDC * pDC, int ic, int x, int y )
 		// get indexes for preceding and following corners
 		int pre_c, post_c;
 		int poly_side_style1, poly_side_style2;
-		int style1, style2;
+		int style1 = DSS_STRAIGHT, style2 = DSS_STRAIGHT;
 		if( ic == istart )
 		{
 			pre_c = iend;
@@ -1057,7 +1057,7 @@ void CPolyLine::HighlightSide( int is )
 	if( !GetClosed() && is >= (int)(corner.size()-1) )
 		return;
 
-	int style;
+	int style = DL_LINE;
 	if( side_style[is] == CPolyLine::STRAIGHT )
 		style = DL_LINE;
 	else if( side_style[is] == CPolyLine::ARC_CW )
@@ -1319,7 +1319,7 @@ void CPolyLine::Hatch()
 			min_a = (int)(min_y - slope*min_x);
 		}
 		min_a = (min_a/spacing)*spacing;
-		int offset;
+		int offset = 0;
 		if( layer < (LAY_TOP_COPPER+2) )
 			offset = 0;
 		else if( layer < (LAY_TOP_COPPER+4) )
@@ -1400,7 +1400,7 @@ void CPolyLine::Hatch()
 				for( int istart=0; istart<(npts-1); istart++ )
 				{
 					int max_x = INT_MIN;
-					int imax;
+					int imax = INT_MIN;
 					for( int i=istart; i<npts; i++ )
 					{
 						if( xx[i] > max_x )

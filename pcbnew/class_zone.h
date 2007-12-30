@@ -18,11 +18,19 @@
 class ZONE_CONTAINER : public BOARD_ITEM, public CPolyLine
 {
 public:
-    wxString m_Netname;             /* Net Name */
+	enum m_PadInZone {			// How pads are covered by copper in zone
+		PAD_NOT_IN_ZONE,		// Pads are not covered
+		THERMAL_PAD,			// Use thermal relief for pads
+		PAD_IN_ZONE				// pads are covered by copper
+	};
+    wxString m_Netname;         // Net Name
 	int m_CornerSelection;      // For corner moving, corner index to drag, or -1 if no selection
+	int m_ZoneClearance;		// clearance value
+	int m_GridFillValue;		// Grid used for filling
+	m_PadInZone m_PadOption;	// see m_PadInZone
 
 private:
-    int     m_NetCode;              // Net number for fast comparisons
+    int     m_NetCode;          // Net number for fast comparisons
 
 public:
 	ZONE_CONTAINER(BOARD * parent);
@@ -70,6 +78,19 @@ public:
 	 * @param refPos : A wxPoint to test
 	 */
 	int HitTestForEdge( const wxPoint& refPos );
+	
+	/** Function Fill_Zone()
+	 *  Calculate the zone filling
+	 *  The zone outline is a frontier, and can be complex (with holes)
+	 *  The filling starts from starting points like pads, tracks.
+	 * If exists the old filling is removed
+	 * @param frame = reference to the main frame
+	 * @param DC = current Device Context
+	 * @param verbose = true to show error messages
+	 * @return error level (0 = no error)
+	 */
+	int Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose = TRUE);
+
 };
 
 /*******************/

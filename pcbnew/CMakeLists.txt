@@ -73,7 +73,6 @@ SET(PCBNEW_SRCS
 	edtxtmod.cpp
 	export_gencad.cpp
 	files.cpp
-	filling_zone_algorithm.cpp
 	find.cpp
 	gendrill.cpp
 	gen_modules_placefile.cpp
@@ -135,6 +134,7 @@ SET(PCBNEW_SRCS
 	work.cpp
 	xchgmod.cpp
 	zones_by_polygon.cpp
+	zone_filling_algorithm.cpp
 #	zones.cpp
 	)
 

@@ -267,14 +267,21 @@ void WinEDA_ZoneFrame::CreateControls()
 
     m_GridCtrl->SetSelection( selection );
 
-    if( Zone_Exclude_Pads )
+    switch( s_Zone_Pad_Options )
     {
-        if( s_Zone_Create_Thermal_Relief )
-            m_FillOpt->SetSelection( 1 );
-        else
+        case ZONE_CONTAINER::PAD_NOT_IN_ZONE:		// Pads are not covered
             m_FillOpt->SetSelection( 2 );
-    }
+			break;
+		case ZONE_CONTAINER::THERMAL_PAD:			// Use thermal relief for pads
+            m_FillOpt->SetSelection( 1 );
+			break;
+		case ZONE_CONTAINER::PAD_IN_ZONE:			// pads are covered by copper
+            m_FillOpt->SetSelection( 0 );
+			break;
+    }		
 
+	if ( m_Zone_Container )
+		s_Zone_Hatching = m_Zone_Container->GetHatch();
     switch( s_Zone_Hatching )
     {
 		case CPolyLine::NO_HATCH:
@@ -296,7 +303,7 @@ void WinEDA_ZoneFrame::CreateControls()
     for( int ii = 0; ii < g_DesignSettings.m_CopperLayerCount; ii++ )
     {
         wxString msg;
-        int      layer_number;
+        int      layer_number = COPPER_LAYER_N;
         if( layer_cnt == 0 || ii < layer_cnt - 1 )
             layer_number = ii;
         else  if( ii == layer_cnt - 1 )
@@ -396,19 +403,16 @@ bool WinEDA_ZoneFrame::AcceptOptions(bool aPromptForErrors)
 {
     switch( m_FillOpt->GetSelection() )
     {
-    case 0:
-        Zone_Exclude_Pads = FALSE;
-        s_Zone_Create_Thermal_Relief = FALSE;
+    case 2:
+        s_Zone_Pad_Options = ZONE_CONTAINER::PAD_NOT_IN_ZONE;		// Pads are not covered
         break;
 
     case 1:
-        Zone_Exclude_Pads = TRUE;
-        s_Zone_Create_Thermal_Relief = TRUE;
+        s_Zone_Pad_Options = ZONE_CONTAINER::THERMAL_PAD;			// Use thermal relief for pads
         break;
 
-    case 2:
-        Zone_Exclude_Pads = TRUE;
-        s_Zone_Create_Thermal_Relief = FALSE;
+    case 0:
+        s_Zone_Pad_Options = ZONE_CONTAINER::PAD_IN_ZONE;			// pads are covered by copper
         break;
     }
 

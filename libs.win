@@ -12,12 +12,20 @@ KICAD_BIN = /f/kicad/winexe
 # DLL use wxWin STATIC	 0					0			   1
 #
 
+# turn on/OFF debugging for all executables, only tested without KICAD_PYTHON
+DEBUG = 0
+
+
 #comment this for static wxWidgets link
 #WXUSINGDLL = 1
 
 #Define the wxWidget path (if not found in environment variables):
 ifndef WXWIN
+ifeq ($(DEBUG), 1)
+WXWIN=f:/wxMSW-2.8.7-debug
+else
 WXWIN=f:/wxMSW-2.8.7
+endif
 endif
 LIBVERSION = 2.8
 
@@ -25,9 +33,17 @@ LIBVERSION = 2.8
 # You must comment or uncomment this line to disable/enable python support
 #KICAD_PYTHON = 1
 
-FINAL = 1
 
-ALL_CPPFLAGS = `$(WXWIN)/wx-config --cppflags`
+ifeq ($(DEBUG), 1)
+CPPFLAGS = -Wall -g3 -ggdb3 -DDEBUG ${WXXFLAGS} -fno-strict-aliasing
+ALL_LDFLAGS = -g3 -ggdb3 #-v
+else
+CPPFLAGS = -Wall -O2 ${WXXFLAGS} -fno-strict-aliasing
+ALL_LDFLAGS = -s #-v
+FINAL = 1
+endif
+
+ALL_CPPFLAGS = `$(WXWIN)/wx-config --cppflags` $(CPPFLAGS)
 EDACPPFLAGS = $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $(EXTRACPPFLAGS)
 EDALIBS = $(EXTRALIBS)
 
