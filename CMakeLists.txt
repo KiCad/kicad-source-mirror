@@ -78,6 +78,7 @@ IF(wxWidgets_FOUND)
 	ADD_SUBDIRECTORY(gerbview)
 	ADD_SUBDIRECTORY(kicad)
 	ADD_SUBDIRECTORY(pcbnew)
+	ADD_SUBDIRECTORY(polygon)
 ELSE(wxWidgets_FOUND)
 	# For convenience. When we cannot continue, inform the user.
 	MESSAGE(STATUS "Check for installed wxWidgets -- not found")

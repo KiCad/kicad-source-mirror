@@ -4,8 +4,8 @@ INCLUDE_DIRECTORIES(
 	${CMAKE_CURRENT_SOURCE_DIR}
 	bitmaps
 	../3d-viewer
-	../polygon
-	../pcbnew)
+	../pcbnew
+	../polygon)
 
 SET(CVPCB_SRCS
 	autosel.cpp
@@ -36,7 +36,6 @@ SET(CVPCB_SRCS
 SET(CVPCB_EXTRA_SRCS
 	../pcbnew/basepcbframe.cpp
 	../pcbnew/class_board.cpp
-	../pcbnew/class_zone.cpp
 	../pcbnew/class_cotation.cpp
 	../pcbnew/class_edge_mod.cpp
 	../pcbnew/class_equipot.cpp
@@ -46,6 +45,7 @@ SET(CVPCB_EXTRA_SRCS
 	../pcbnew/class_pcb_text.cpp
 	../pcbnew/class_text_mod.cpp
 	../pcbnew/class_track.cpp
+	../pcbnew/class_zone.cpp
 	../pcbnew/classpcb.cpp
 	../pcbnew/collectors.cpp
 	../pcbnew/ioascii.cpp
@@ -74,6 +74,6 @@ ENDIF(APPLE)
 
 ADD_EXECUTABLE(cvpcb WIN32 MACOSX_BUNDLE ${CVPCB_SRCS} ${CVPCB_EXTRA_SRCS} ${CVPCB_RESOURCES})
 
-TARGET_LINK_LIBRARIES(cvpcb common 3d-viewer ${wxWidgets_LIBRARIES})
+TARGET_LINK_LIBRARIES(cvpcb common 3d-viewer polygon ${wxWidgets_LIBRARIES})
 
 INSTALL(TARGETS cvpcb RUNTIME DESTINATION ${KICAD_BIN})

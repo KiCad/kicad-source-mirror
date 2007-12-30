@@ -8,7 +8,7 @@
  *  Routines d'affichage grille, Boite de coordonnees, Curseurs, marqueurs ...
  */
 
-#include <vector.h>
+#include <vector>
 
 #include "fctsys.h"
 #include "gr_basic.h"

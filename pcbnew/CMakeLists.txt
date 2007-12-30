@@ -139,8 +139,6 @@ SET(PCBNEW_SRCS
 	)
 
 SET(PCBNEW_EXTRA_SRCS
-#	../polygon/PolyLine.cpp
-
 	../share/drawframe.cpp
 	../share/drawpanel.cpp
 	../share/infospgm.cpp
@@ -176,6 +174,6 @@ ADD_EXECUTABLE(specctra_test EXCLUDE_FROM_ALL specctra.cpp)
 TARGET_LINK_LIBRARIES(specctra_test common ${wxWidgets_LIBRARIES})
 
 
-TARGET_LINK_LIBRARIES(pcbnew common 3d-viewer ${wxWidgets_LIBRARIES})
+TARGET_LINK_LIBRARIES(pcbnew common 3d-viewer polygon ${wxWidgets_LIBRARIES})
 
 INSTALL(TARGETS pcbnew RUNTIME DESTINATION ${KICAD_BIN})
