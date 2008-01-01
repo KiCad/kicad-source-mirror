@@ -672,7 +672,8 @@ void OpenPDF( const wxString& file )
         {
             AddDelimiterString( filename );
             command.Empty();
-            wxString tries[] =
+            
+            const static wxString tries[] =
             {
                 wxT( "/usr/bin/evince" ),
                 wxT( "/usr/bin/xpdf" ),
@@ -680,10 +681,12 @@ void OpenPDF( const wxString& file )
                 wxT( "/usr/bin/gpdf" ),
                 wxT( "" ),
             };
+            
             for( int i = 0; ; i++ )
             {
                 if( tries[i].IsEmpty() )
                     break;
+                
                 if( wxFileExists( tries[i] ) )
                 {
                     command = tries[i] + wxT( " " ) + filename;
