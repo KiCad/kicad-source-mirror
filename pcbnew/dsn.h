@@ -42,11 +42,10 @@ namespace DSN {
 enum DSN_T {
     
     // the first few are special (the uppercase ones)
-    T_QUOTE_DEF = -9,
-    T_DASH = -8,
-    T_SYMBOL = -7,
-    T_NUMBER = -6,
-    T_NONE = -5,            // not a token
+    T_QUOTE_DEF = -8,
+    T_DASH = -7,
+    T_SYMBOL = -6,
+    T_NUMBER = -5,
     T_RIGHT = -4,           // right bracket, ')'
     T_LEFT = -3,            // left bracket, '('
     T_STRING = -2,          // a quoted string, stripped of the quotes
@@ -157,6 +156,7 @@ enum DSN_T {
     T_host_cad,
     T_host_version,
     T_image,
+    T_image_conductor,
     T_image_image,
     T_image_image_spacing,
     T_image_outline_clearance,
@@ -513,8 +513,11 @@ class LEXER
     
     LINE_READER         reader;
     int                 stringDelimiter;
+    bool                space_in_quoted_tokens; ///< blank spaces within quoted strings
+    
     wxString            filename;
     int                 lastTok;        ///< curTok from previous NextTok() call.
+    int                 curOffset;      ///< offset within current line of the current token 
     
     DSN_T               curTok;         ///< the current token obtained on last NextTok()
     std::string         curText;        ///< the text of the current token
@@ -543,24 +546,22 @@ class LEXER
      */ 
     int findToken( const std::string& tok );
 
+    bool isStringTerminator( char cc )
+    {
+        if( !space_in_quoted_tokens && cc==' ' )
+            return true;
+        
+        if( cc == stringDelimiter )
+            return true;
+        
+        return false;
+    }
+    
     
 public:
-    LEXER( FILE* aFile, const wxString& aFilename ) :
-        reader( aFile, 4096 )
-    {
-        curTok = T_NONE;
-        stringDelimiter = '"';
-        filename = aFilename;
-        
-        // "start" should never change until we change the reader.  The DSN
-        // format spec supports an include file mechanism but we can add that later
-        // using a std::stack to hold a stack of LINE_READERs to track nesting.
-        start = (char*) reader;     
-        
-        limit = start;
-        next  = start;
-    }
+    LEXER( FILE* aFile, const wxString& aFilename );
 
+    
     /**
      * Function SetStringDelimiter
      * changes the string delimiter from the default " to some other character
@@ -574,6 +575,19 @@ public:
         stringDelimiter = aStringDelimiter;
         return old;
     }
+
+    /**
+     * Function SetSpaceInQuotedTokens
+     * changes the setting controlling whether a space in a quoted string is
+     * a terminator
+     */
+    bool SetSpaceInQuotedTokens( bool val )
+    {
+        bool old = space_in_quoted_tokens;
+        space_in_quoted_tokens = val;
+        return old;
+    }
+
     
     /**
      * Function NextTok
@@ -590,15 +604,11 @@ public:
      * encapsulates the formatting of an error message which contains the exact
      * location within the input file of a lexical error.
      */
-    void ThrowIOError( wxString aText, int charOffset ) throw (IOError)
-    {
-        aText << wxT(" ") << _("in file") << wxT(" \"") << filename 
-              << wxT("\" ") << _("on line") << wxT(" ") << reader.LineNumber()
-              << wxT(" ") << _("at offset") << wxT(" ") << charOffset;
-              
-        throw IOError( aText );
-    }
+    void ThrowIOError( wxString aText, int charOffset ) throw (IOError);
+
     
+    wxString GetTokenText( DSN_T aTok );
+
     
     /**
      * Function CurText
@@ -617,6 +627,16 @@ public:
     DSN_T CurTok()
     {
         return curTok;
+    }
+
+    /**
+     * Function CurOffset
+     * returns the char offset within the current line, using a 1 based index.
+     * @return int - a one based index into the current line.
+     */
+    int CurOffset()
+    {
+        return curOffset + 1;
     }
     
 };

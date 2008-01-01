@@ -156,6 +156,7 @@ const static KEYWORD tokens[] = {
     TOKDEF(host_cad),
     TOKDEF(host_version),
     TOKDEF(image),
+    TOKDEF(image_conductor),
     TOKDEF(image_image),
     TOKDEF(image_image_spacing),
     TOKDEF(image_outline_clearance),
@@ -464,6 +465,25 @@ int LINE_READER::ReadLine() throw (IOError)
 //-----<LEXER>-------------------------------------------------------------
 
 
+LEXER::LEXER( FILE* aFile, const wxString& aFilename ) :
+        reader( aFile, 4096 )
+{
+    curTok = T_END;
+    stringDelimiter = '"';
+    filename = aFilename;
+
+    space_in_quoted_tokens = false;
+    
+    // "start" should never change until we change the reader.  The DSN
+    // format spec supports an include file mechanism but we can add that later
+    // using a std::stack to hold a stack of LINE_READERs to track nesting.
+    start = (char*) reader;     
+    
+    limit = start;
+    next  = start;
+}
+
+
 int LEXER::findToken( const std::string& tok )
 {
     // convert to lower case once, this should be faster than using strcasecmp()
@@ -485,15 +505,69 @@ int LEXER::findToken( const std::string& tok )
         return -1;
 }
 
+
+wxString LEXER::GetTokenText( DSN_T aTok )
+{
+    wxString    ret;
+    
+    if( aTok < 0 )
+    {
+        switch( aTok )
+        {
+        case T_QUOTE_DEF:
+            ret << _("'quoted text delimiter'");
+            break;
+        case T_DASH:
+            ret << wxT( "'-'" );
+            break;
+        case T_SYMBOL:
+            ret << _("'symbol'");
+            break;
+        case T_NUMBER:
+            ret << _("'number'");
+            break;
+        case T_RIGHT:
+            ret << wxT( "')'" );
+            break;
+        case T_LEFT:
+            ret << wxT( "'('" );
+            break;
+        case T_STRING:
+            ret << _("\"quoted string\"");
+            break;
+        case T_EOF:
+            ret << _("'end of file'");
+            break;
+        default:
+            ;
+        }
+    }
+    else
+    {
+        ret << wxT("'") << CONV_FROM_UTF8( tokens[aTok].name ) << wxT("'");
+    }
+    
+    return ret;
+}
+
+    
+void LEXER::ThrowIOError( wxString aText, int charOffset ) throw (IOError)
+{
+    aText << wxT(" ") << _("in file") << wxT(" \"") << filename 
+          << wxT("\" ") << _("on line") << wxT(" ") << reader.LineNumber()
+          << wxT(" ") << _("at offset") << wxT(" ") << charOffset;
+          
+    throw IOError( aText );
+}
+
+
     
 DSN_T LEXER::NextTok() throw (IOError)
 {
-    char*   head;
-    char*   cur;
+    char*   cur  = next;
+    char*   head = cur;
 
     lastTok = curTok;
-    
-    cur = next;
     
     if( curTok != T_EOF )
     {
@@ -520,15 +594,27 @@ L_read:
         // switching the string_quote character
         if( lastTok == T_string_quote )
         {
+            static const wxString errtxt( _("String delimiter must be a single character of ', \", or $"));   
+            
+            char cc = *cur;
+            switch( cc )
+            {
+            case '\'':
+            case '$':
+            case '"':
+                break;
+            default:
+                ThrowIOError( errtxt, CurOffset() );
+            }
+            
             curText.clear();
-            curText += *cur;
+            curText += cc;
             
             head = cur+1;
 
             if( head<limit && *head!=')' && *head!='(' && !isspace(*head) )
             {
-                wxString errtxt(_("String delimiter char must be a single char") );
-                ThrowIOError( errtxt, cur-start+1 );
+                ThrowIOError( errtxt, CurOffset() );
             }
             
             curTok = T_QUOTE_DEF;
@@ -578,17 +664,17 @@ L_read:
         // a quoted string
         else if( *cur == stringDelimiter )
         {
-            ++cur;  // skip over the leading "
+            ++cur;  // skip over the leading delimiter: ",', or $
 
             head = cur;
         
-            while( head<limit && *head!=stringDelimiter )
+            while( head<limit &&  !isStringTerminator( *head ) )
                 ++head;
             
             if( head >= limit )
             {
                 wxString errtxt(_("Un-terminated delimited string") );
-                ThrowIOError( errtxt, cur-start+1 );
+                ThrowIOError( errtxt, CurOffset() );
             }
             
             curText.clear();
@@ -627,8 +713,10 @@ L_read:
             }
         }
     }
+
+exit:                   // single point of exit
     
-exit:       // single point of exit
+    curOffset = cur - start;
     
     next = head;
     
@@ -640,7 +728,7 @@ exit:       // single point of exit
 
 
 
-#if defined(STANDALONE)
+#if 0 && defined(STANDALONE)
 
 // stand alone testing
 
