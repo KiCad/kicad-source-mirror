@@ -16,23 +16,23 @@ extern wxString g_Main_Title;
 
 // Local
 #ifdef GERBVIEW
-static wxString MsgInfos(wxT("** GERBVIEW  (jul 2001 .. 2007) **"));
+static wxString MsgInfos(wxT("** GERBVIEW  (jul 2001 .. 2008) **"));
 #else
 #ifdef PCBNEW
-static wxString MsgInfos(wxT("** PCBNEW  (sept 1992 .. 2007) **"));
+static wxString MsgInfos(wxT("** PCBNEW  (sept 1992 .. 2008) **"));
 #endif
 #endif
 
 #ifdef CVPCB
-static wxString MsgInfos(wxT("** CVPCB  (sept 1992 .. 2007) **"));
+static wxString MsgInfos(wxT("** CVPCB  (sept 1992 .. 2008) **"));
 #endif
 
 #ifdef KICAD
-static wxString MsgInfos(wxT("** KICAD  (jul 2000 .. 2007) **"));
+static wxString MsgInfos(wxT("** KICAD  (jul 2000 .. 2008) **"));
 #endif
 
 #ifdef EESCHEMA
-static wxString MsgInfos(wxT("** EESCHEMA  (sept 1994 .. 2007) **"));
+static wxString MsgInfos(wxT("** EESCHEMA  (sept 1994 .. 2008) **"));
 #endif
 
 // Routines Locales

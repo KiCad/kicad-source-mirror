@@ -14,7 +14,6 @@
 #include "bitmaps.h"
 #include "add_cotation.xpm"
 #include "Add_Mires.xpm"
-#include "Add_Zone.xpm"
 
 
 /********************************************************/

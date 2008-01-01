@@ -1,0 +1,34 @@
+/* XPM */
+#ifndef XPMMAIN
+extern const char *Add_Corner_xpm[];
+
+#else
+const char * Add_Corner_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 7 1",
+"  c None",
+"X c #808080",
+". c #008000",
+"+ c #FFFF00",
+"@ c #800000",
+"o c #C0C0C0",
+"O c #808000",
+/* pixels */
+"     .XX        ",
+"     .XX        ",
+"    XooO        ",
+"      ooX       ",
+"..X ooooX ..... ",
+"X.XoooooX XXXXXX",
+"XX ooo++O XXXXXX",
+"  X OOO@ X      ",
+"   X    X       ",
+"    X.XX        ",
+"     .XX        ",
+"     .XX        ",
+"     .XX        ",
+"     .XX        ",
+"     .XX        ",
+"      XX        "
+};
+#endif

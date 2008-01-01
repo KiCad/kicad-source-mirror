@@ -38,6 +38,7 @@ CPolyLine::CPolyLine()
 	m_dlist = NULL;
 	m_HatchStyle = 0;
 	m_sel_box = 0;
+	utility = 0;
 	m_gpc_poly = new gpc_polygon;
 	m_gpc_poly->num_contours = 0;
 	m_php_poly = new polygon;

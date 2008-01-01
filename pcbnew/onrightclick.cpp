@@ -27,7 +27,6 @@
 #include "Delete_Track.xpm"
 #include "Move_Module.xpm"
 
-//#include "Move_Track_Segment.xpm"
 #include "Drag_Track_Segment.xpm"
 #include "Drag_Segment_WithSlope.xpm"
 #include "Drag_Module.xpm"
@@ -127,7 +126,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
 
     // If a command or a block is in progress:
-	// Put the Cancel command (if needed) and the End command
+    // Put the Cancel command (if needed) and the End command
 
     if( BlockActive )
     {
@@ -162,39 +161,39 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         }
     }
 
-    
+
     /* Select a proper item */
 
     wxPoint cursorPos = GetScreen()->m_Curseur;
     wxPoint selectPos = m_Collector->GetRefPos();
-    
-    PutOnGrid( &selectPos );    
-    
+
+    PutOnGrid( &selectPos );
+
     // printf( "cursor=(%d, %d) select=(%d,%d)\n", cursorPos.x, cursorPos.y, selectPos.x, selectPos.y );
-    
- 	/*  We can reselect another item only if there are no item being edited
-        because ALL moving functions use GetCurItem(), therefore GetCurItem()
-        must return the same item during moving. We know an item is moving 
-        if( item && (item->m_Flags != 0)) is true and after calling
-        PcbGeneralLocateAndDisplay(), GetCurItem() is any arbitrary BOARD_ITEM,
-        not the current item being edited. In such case we cannot call
-        PcbGeneralLocateAndDisplay().
-	*/
-	if( !item || (item->m_Flags == 0) )
-	{
-        // show "item selector" menu only if no item now or selected item was not 
+
+    /*  We can reselect another item only if there are no item being edited
+      * because ALL moving functions use GetCurItem(), therefore GetCurItem()
+      * must return the same item during moving. We know an item is moving
+      * if( item && (item->m_Flags != 0)) is true and after calling
+      * PcbGeneralLocateAndDisplay(), GetCurItem() is any arbitrary BOARD_ITEM,
+      * not the current item being edited. In such case we cannot call
+      * PcbGeneralLocateAndDisplay().
+     */
+    if( !item || (item->m_Flags == 0) )
+    {
+        // show "item selector" menu only if no item now or selected item was not
         // previously picked at this position
-		if( !item || cursorPos != selectPos )	
-		{
-			DrawPanel->m_AbortRequest = false;
-			item = PcbGeneralLocateAndDisplay();
-			if( DrawPanel->m_AbortRequest )
-			{
-				DrawPanel->CursorOn( &dc );
-				return false;
-			}
-		}
-	}
+        if( !item || cursorPos != selectPos )
+        {
+            DrawPanel->m_AbortRequest = false;
+            item = PcbGeneralLocateAndDisplay();
+            if( DrawPanel->m_AbortRequest )
+            {
+                DrawPanel->CursorOn( &dc );
+                return false;
+            }
+        }
+    }
 
     item = GetCurItem();
     if( item )
@@ -265,7 +264,12 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             aPopMenu->Append( ID_POPUP_PCB_DELETE_DRAWING, _( "Delete Drawing" ) );
             break;
 
-        case TYPEEDGEZONE:
+        case TYPEZONE:      // Item used to fill a zone
+            ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_ZONE,
+                          _( "Delete Zone" ), delete_xpm );
+            break;
+
+        case TYPEEDGEZONE:      // Graphic Item used to create a new zone outline
             if( flags & IS_NEW )
             {
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_STOP_CURRENT_EDGE_ZONE,
@@ -275,42 +279,8 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                           _( "Delete edge zone" ), delete_xpm );
             break;
 
-        case TYPEZONE_CONTAINER:
-		{
-			ZONE_CONTAINER * edge_zone = (ZONE_CONTAINER *) item;
-			if ( edge_zone->m_Flags )
-			{
-				ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_PLACE_ZONE_CORNER,
-						  _( "Place Corner" ), apply_xpm );
-			}
-			else
-			{
-				edge_zone->m_CornerSelection = -1;
-				int index;
-				if ( (index = edge_zone->HitTestForCorner( GetScreen()->m_Curseur )) >= 0 )
-				{
-					edge_zone->m_CornerSelection = index;
-					ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_MOVE_ZONE_CORNER,
-							  _( "Move Corner" ), move_xpm );
-					ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_ZONE_CORNER,
-							  _( "Delete Corner" ), delete_xpm );
-				}
-				else if ( (index = edge_zone->HitTestForEdge( GetScreen()->m_Curseur )) >= 0 )
-				{
-					edge_zone->m_CornerSelection = index;
-					ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_ADD_ZONE_CORNER,
-							  _( "Create Corner" ), move_xpm );
-				}
-				aPopMenu->AppendSeparator();
-				ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_FILL_ZONE,
-							  _( "Fill zone" ), fill_zone_xpm );
-
-				ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_EDIT_ZONE_PARAMS,
-							  _( "Edit Zone Params" ), edit_xpm );
-				ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_ZONE_CONTAINER,
-							  _( "Delete Zone Outline" ), delete_xpm );
-			}
-		}
+        case TYPEZONE_CONTAINER:    // Item used to handle a zone area (outlines, holes ...)
+            createPopUpMenuForZones( (ZONE_CONTAINER*) item, aPopMenu );
             break;
 
         case TYPETEXTE:
@@ -321,11 +291,6 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         case TYPEVIA:
             locate_track = TRUE;
             createPopupMenuForTracks( (TRACK*) item, aPopMenu );
-            break;
-
-        case TYPEZONE:
-            ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_ZONE,
-                          _( "Delete Zone" ), delete_xpm );
             break;
 
         case TYPEMARKER:
@@ -390,12 +355,12 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     {
     case ID_PCB_ZONES_BUTT:
     {
-		if (  m_Pcb->m_ZoneDescriptorList.size() > 0 )
-		{
-			ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_FILL_ALL_ZONES,
-                      _( "Fill or Refill All Zones" ), fill_zone_xpm );
+        if(  m_Pcb->m_ZoneDescriptorList.size() > 0 )
+        {
+            ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_FILL_ALL_ZONES,
+                          _( "Fill or Refill All Zones" ), fill_zone_xpm );
             aPopMenu->AppendSeparator();
-		}
+        }
 
         ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_SELECT_LAYER,
                       _( "Select Working Layer" ), Select_W_Layer_xpm );
@@ -489,7 +454,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     }
 
     DrawPanel->CursorOn( &dc );
-	return true;
+    return true;
 }
 
 
@@ -601,8 +566,9 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, track_mnu,
                                ID_POPUP_PCB_EDIT_TRACK_MNU, _( "Change Width" ), width_track_xpm );
     ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACKSEG,
-                 Track->Type()==TYPEVIA ? _( "Edit Via" ) : _( "Edit Segment" ), width_segment_xpm );
-    
+                  Track->Type()==TYPEVIA ? _( "Edit Via" ) : _(
+                      "Edit Segment" ), width_segment_xpm );
+
     if( !flags )
     {
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACK,
@@ -621,10 +587,10 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     track_mnu = new wxMenu;
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, track_mnu,
                                ID_POPUP_PCB_DELETE_TRACK_MNU, _( "Delete" ), delete_xpm );
-    
-    msg = AddHotkeyName( Track->Type()==TYPEVIA ? _("Delete Via") : _( "Delete Segment" ), 
-                        s_Board_Editor_Hokeys_Descr, HK_BACK_SPACE );
-    
+
+    msg = AddHotkeyName( Track->Type()==TYPEVIA ? _( "Delete Via" ) : _( "Delete Segment" ),
+                         s_Board_Editor_Hokeys_Descr, HK_BACK_SPACE );
+
     ADD_MENUITEM( track_mnu, ID_POPUP_PCB_DELETE_TRACKSEG,
                   msg, Delete_Line_xpm );
     if( !flags )
@@ -655,6 +621,56 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         track_mnu->AppendSeparator();
         track_mnu->Append( ID_POPUP_PCB_LOCK_ON_NET, _( "Net Locked: Yes" ) );
         track_mnu->Append( ID_POPUP_PCB_LOCK_OFF_NET, _( "Net Locked: No" ) );
+    }
+}
+
+
+/********************************************************************************************/
+void WinEDA_PcbFrame::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu* aPopMenu )
+/********************************************************************************************/
+
+/* Create the wxMenuitem list for zone outlines editing and zone filling
+ */
+{
+    if( edge_zone->m_Flags )
+    {
+        ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_PLACE_ZONE_CORNER,
+                      _( "Place Corner" ), apply_xpm );
+    }
+    else
+    {
+        edge_zone->m_CornerSelection = -1;
+        int index;
+        if( ( index = edge_zone->HitTestForCorner( GetScreen()->m_Curseur ) ) >= 0 )
+        {
+            edge_zone->m_CornerSelection = index;
+            ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_MOVE_ZONE_CORNER,
+                          _( "Move Corner" ), move_xpm );
+            ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_ZONE_CORNER,
+                          _( "Delete Corner" ), delete_xpm );
+        }
+        else if( ( index = edge_zone->HitTestForEdge( GetScreen()->m_Curseur ) ) >= 0 )
+        {
+            edge_zone->m_CornerSelection = index;
+            ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_ADD_ZONE_CORNER,
+                          _( "Create Corner" ), Add_Corner_xpm );
+        }
+
+        aPopMenu->AppendSeparator();
+        ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_ZONE_ADD_SIMILAR_ZONE,
+                      _( "Add Similar Zone" ), fill_zone_xpm );
+
+        ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_ZONE_ADD_CUTOUT_ZONE,
+                      _( "Add Cutout Zone" ), add_zone_cutout );
+        aPopMenu->AppendSeparator();
+
+        ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_FILL_ZONE,
+                      _( "Fill Zone" ), fill_zone_xpm );
+
+        ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_EDIT_ZONE_PARAMS,
+                      _( "Edit Zone Params" ), edit_xpm );
+        ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_ZONE_CONTAINER,
+                      _( "Delete Zone Outline" ), delete_xpm );
     }
 }
 
@@ -744,9 +760,9 @@ void WinEDA_PcbFrame::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* m
 }
 
 
-/***************************************************************/
+/************************************************************************/
 void WinEDA_PcbFrame::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
-/***************************************************************/
+/************************************************************************/
 /* Create pop menu for pads */
 {
     wxMenu*  sub_menu_Pad;

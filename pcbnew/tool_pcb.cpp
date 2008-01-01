@@ -36,7 +36,6 @@
 #include "mw_Add_Gap.xpm"
 #include "mw_toolbar.xpm"
 #include "Add_Tracks.xpm"
-#include "Add_Zone.xpm"
 #include "Show_Zone.xpm"
 #include "net_hightlight.xpm"
 #include "PcbOffset.xpm"

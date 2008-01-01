@@ -449,6 +449,14 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         Edit_Zone_Params( &dc, (ZONE_CONTAINER*) GetCurItem() );
         break;
 
+	case ID_POPUP_PCB_ZONE_ADD_SIMILAR_ZONE:
+		wxMessageBox(wxT("ToDo"));
+		break;
+
+	case ID_POPUP_PCB_ZONE_ADD_CUTOUT_ZONE:
+		wxMessageBox(wxT("ToDo"));
+		break;
+
     case ID_POPUP_PCB_DELETE_ZONE_CONTAINER:
 	{
         DrawPanel->MouseToCursorSchema();

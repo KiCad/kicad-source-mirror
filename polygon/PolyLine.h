@@ -158,14 +158,15 @@ private:
 	int m_layer;	// layer to draw on
 	int m_Width;		// line width
 	int m_sel_box;	// corner selection box width/2
-public:
+	int utility;
+protected:
 	std::vector <CPolyPt> corner;	// array of points for corners
 	std::vector <int> side_style;	// array of styles for sides
 private:
 	std::vector <dl_element*> dl_side;	// graphic elements
 	std::vector <dl_element*> dl_side_sel;
 	std::vector <dl_element*> dl_corner_sel;
-public:
+protected:
 	int m_HatchStyle;	// hatch style, see enum above
 	std::vector <CSegment>  m_HatchLines;	// hatch lines
 private:

@@ -34,6 +34,9 @@
 	#include "../bitmaps/plot_PS.xpm"
 	#include "../bitmaps/plot_HPG.xpm"
 
+	#include "../bitmaps/Add_Zone.xpm"
+	#include "../bitmaps/Add_Zone_Cutout.xpm"
+	#include "../bitmaps/Add_Corner.xpm"
 	#include "../bitmaps/Add_Circle.xpm"
 	#include "../bitmaps/Add_Line.xpm"
 	#include "../bitmaps/Add_Arc.xpm"

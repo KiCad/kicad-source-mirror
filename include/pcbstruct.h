@@ -129,16 +129,16 @@ enum Track_Shapes {
     S_POLYGON           /* polygon shape */
 };
 
-
 /* Forward declaration */
-class MODULE;
 class EQUIPOT;
 class MARKER;
-class TRACK;
-class D_PAD;
 struct CHEVELU;
-class Ki_PageDescr;
-class DrawBlockStruct;
+//class Ki_PageDescr;
+//class DrawBlockStruct;
+
+
+/* main window classes : */
+#include "wxPcbStruct.h"
 
 /* Class to handle a board */
 #include "class_board.h"

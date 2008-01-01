@@ -29,7 +29,7 @@ int ZONE_CONTAINER::Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose )
  *  The zone outline is a frontier, and can be complex (with holes)
  *  The filling starts from starting points like pads, tracks.
  * @param frame = reference to the main frame
- * @param DC = current Device Context
+ * @param DC = current Device Context (can be NULL)
  * @param verbose = true to show error messages
  * @return error level (0 = no error)
  */
@@ -40,12 +40,10 @@ int ZONE_CONTAINER::Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose )
     int         save_isol = g_DesignSettings.m_TrackClearence;
     wxPoint     ZoneStartFill;
     wxString    msg;
-    PCB_SCREEN* Screen = frame->GetScreen();
     BOARD*      Pcb    = frame->m_Pcb;
 
     g_DesignSettings.m_TrackClearence = g_DesignSettings.m_ZoneClearence;
-    g_HightLigth_NetCode   = m_NetCode;
-//    Screen->m_Active_Layer = m_Layer;
+    g_HightLigth_NetCode = m_NetCode;
 
     s_TimeStamp = m_TimeStamp;
 
@@ -234,7 +232,7 @@ int ZONE_CONTAINER::Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose )
         }
     }
 
-    if( Zone_Debug )
+    if( Zone_Debug && DC )
         DisplayBoard( frame->DrawPanel, DC );
 
     /* Filling the cells of the matrix (this is the zone building)*/
@@ -250,7 +248,7 @@ int ZONE_CONTAINER::Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose )
     if( m_PadOption == THERMAL_PAD )
         PlaceCells( Pcb, g_HightLigth_NetCode, FORCE_PADS );
 
-    if( Zone_Debug )
+    if( Zone_Debug && DC )
         DisplayBoard( frame->DrawPanel, DC );
 
     /* Convert the matrix information (cells) to segments which are actually the zone */
@@ -291,7 +289,7 @@ static void Genere_Segments_Zone( WinEDA_PcbFrame* frame, wxDC* DC, int net_code
  *          1 - From left to right and create horizontal zone segments
  *          2 - From top to bottom, and create vertical zone segmùents
  * @param net_code = net_code common to all segment zone created
- * @param DC = current device context
+ * @param DC = current device context ( can be NULL )
  * @param frame = current WinEDA_PcbFrame
  * global: parameter TimeStamp: time stamp common to all segment zone created
  */
@@ -341,7 +339,8 @@ static void Genere_Segments_Zone( WinEDA_PcbFrame* frame, wxDC* DC, int net_code
                     pt_track->m_TimeStamp = s_TimeStamp;
 
                     pt_track->Insert( frame->m_Pcb, NULL );
-                    pt_track->Draw( frame->DrawPanel, DC, GR_OR );
+                    if ( DC )
+						pt_track->Draw( frame->DrawPanel, DC, GR_OR );
                     nbsegm++;
                 }
             }
@@ -385,7 +384,8 @@ static void Genere_Segments_Zone( WinEDA_PcbFrame* frame, wxDC* DC, int net_code
 
                     pt_track->m_TimeStamp = s_TimeStamp;
                     pt_track->Insert( frame->m_Pcb, NULL );
-                    pt_track->Draw( frame->DrawPanel, DC, GR_OR );
+                    if( DC )
+                        pt_track->Draw( frame->DrawPanel, DC, GR_OR );
                     nbsegm++;
                 }
             }
@@ -654,7 +654,8 @@ bool WinEDA_PcbFrame::Genere_Pad_Connexion( wxDC* DC, int layer )
             }
 
             pt_track->Insert( m_Pcb, NULL );
-            pt_track->Draw( DrawPanel, DC, GR_OR );
+            if( DC )
+                pt_track->Draw( DrawPanel, DC, GR_OR );
         }
     }
 

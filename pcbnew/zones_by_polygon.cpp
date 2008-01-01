@@ -77,7 +77,7 @@ void WinEDA_PcbFrame::Delete_Zone( wxDC* DC, SEGZONE* aZone, long aTimestamp )
  */
 {
     int           nb_segm = 0;
-    bool          modify  = FALSE;
+    bool          modify  = false;
     unsigned long TimeStamp;
 
     if( aZone == NULL )
@@ -113,7 +113,7 @@ void WinEDA_PcbFrame::Delete_Zone( wxDC* DC, SEGZONE* aZone, long aTimestamp )
 EDGE_ZONE* WinEDA_PcbFrame::Del_SegmEdgeZone( wxDC* DC, EDGE_ZONE* edge_zone )
 /*****************************************************************************/
 
-/* Used only while creating a new zonz outline
+/* Used only while creating a new zone outline
  * Remove and delete the current outline segment in progress
  */
 {
@@ -441,7 +441,7 @@ void WinEDA_PcbFrame::End_Zone( wxDC* DC )
     if( net )
         polygon->m_Netname = net->m_Netname;
     edge = m_Pcb->m_CurrentLimitZone;
-    polygon->Start( GetScreen()->m_Active_Layer, 0, NULL,
+    polygon->Start( GetScreen()->m_Active_Layer, 0, 0,
                     edge->m_Start.x, edge->m_Start.y,
                     s_Zone_Hatching );
     edge = edge->Next();
@@ -585,13 +585,13 @@ int WinEDA_PcbFrame::Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool v
 
     /* Show the Net */
     s_NetcodeSelection = zone_container->GetNet();
-    if( (g_HightLigth_NetCode > 0) && (g_HightLigth_NetCode != s_NetcodeSelection) )
+    if( (g_HightLigth_NetCode > 0) && (g_HightLigth_NetCode != s_NetcodeSelection)  && DC )
     {
-        Hight_Light( DC );  // Remove old hightlight selection
+			Hight_Light( DC );  // Remove old hightlight selection
     }
 
     g_HightLigth_NetCode = s_NetcodeSelection;
-    if( !g_HightLigt_Status )
+    if( !g_HightLigt_Status  && DC)
         Hight_Light( DC );
 
     if( g_HightLigth_NetCode > 0 )
@@ -613,7 +613,7 @@ int WinEDA_PcbFrame::Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool v
         msg = _( "No Net" );
 
     Affiche_1_Parametre( this, 22, _( "NetName" ), msg, RED );
-
+	wxBusyCursor dummy;		// Shows an hourglass cursor (removed by its destructor)
     zone_container->m_PadOption     = s_Zone_Pad_Options;
     zone_container->m_ZoneClearance = g_DesignSettings.m_ZoneClearence;
     zone_container->m_GridFillValue = g_GridRoutingSize;
@@ -641,13 +641,22 @@ int WinEDA_PcbFrame::Fill_All_Zones( wxDC* DC, bool verbose )
     ZONE_CONTAINER* zone_container;
     int             error_level = 0;
 
+	// Remove all zones :
+	if ( m_Pcb->m_Zone )
+	{
+		m_Pcb->m_Zone->DeleteStructList();
+		m_Pcb->m_Zone = NULL;
+		m_Pcb->m_NbSegmZone = 0;
+	}
+
     for( unsigned ii = 0; ii < m_Pcb->m_ZoneDescriptorList.size(); ii++ )
     {
         zone_container = m_Pcb->m_ZoneDescriptorList[ii];
-        error_level    = Fill_Zone( DC, zone_container, verbose );
+        error_level    = Fill_Zone( NULL, zone_container, verbose );
         if( error_level && ! verbose )
             break;
     }
 
+	DrawPanel->Refresh(true);
     return error_level;
 }
