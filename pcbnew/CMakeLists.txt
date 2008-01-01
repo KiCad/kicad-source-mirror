@@ -170,7 +170,7 @@ ADD_EXECUTABLE(dsntest EXCLUDE_FROM_ALL dsn.cpp)
 TARGET_LINK_LIBRARIES(dsntest common ${wxWidgets_LIBRARIES})
 
 SET_SOURCE_FILES_PROPERTIES(specctra.cpp PROPERTIES COMPILE_FLAGS -DSTANDALONE)
-ADD_EXECUTABLE(specctra_test EXCLUDE_FROM_ALL specctra.cpp)
+ADD_EXECUTABLE(specctra_test EXCLUDE_FROM_ALL specctra.cpp dsn.cpp )
 TARGET_LINK_LIBRARIES(specctra_test common ${wxWidgets_LIBRARIES})
 
 
