@@ -310,6 +310,9 @@ void SPECCTRA_DB::Load( const wxString& filename ) throw( IOError )
     
     if( nextTok() != T_pcb )
         expecting( T_pcb );
+
+    delete tree;
+    tree = 0;
     
     tree = new ELEM( T_pcb );
     
@@ -332,7 +335,7 @@ void SPECCTRA_DB::doPCB( ELEM* growth ) throw( IOError )
         expecting( T_STRING );
     }
 
-    while( (tok = nextTok()) != T_EOF )
+    while( (tok = nextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
@@ -361,10 +364,15 @@ void SPECCTRA_DB::doPCB( ELEM* growth ) throw( IOError )
         case T_placement:
         case T_library:
             break;
+            
         default:
-            expecting( wxT("parser, unit, resolution, or structure") );
+            expecting( wxT("parser | unit | resolution | structure | placement | library") );
         }
     }
+    
+    tok = nextTok();
+    if( tok != T_EOF )
+        expecting( T_EOF );
 }
 
 
