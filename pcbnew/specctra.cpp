@@ -2,7 +2,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
+ * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2007 Kicad Developers, see change_log.txt for contributors.
  * 
  * This program is free software; you can redistribute it and/or
@@ -32,10 +32,21 @@
 #include <wx/ffile.h>
 #include "fctsys.h"
 #include "pcbstruct.h"
-
 #include "dsn.h"
 
+
+
+#define EDA_BASE            // build_version.h behavior
+#undef  COMMON_GLOBL
+#define COMMON_GLOBL        // build_version.h behavior
+#include "build_version.h"
+
+
 namespace DSN {
+
+    
+class SPECCTRA_DB;
+class PCB;
 
 
 /**
@@ -64,6 +75,28 @@ public:
  */ 
 
 
+/**
+ * Class OUTPUTFORMATTER
+ * is an interface (abstract class) used to output ASCII text.
+ */
+class OUTPUTFORMATTER
+{
+public:
+
+    /**
+     * Function print
+     * formats and writes text to the output stream.
+     *
+     * @param nestLevel The multiple of spaces to preceed the output with. 
+     * @param fmt A printf style format string.
+     * @param ... a variable list of parameters that will get blended into 
+     *  the output under control of the format string.
+     * @throw IOError if there is a problem outputting, such as a full disk.
+     */
+    virtual void Print( int nestLevel, const char* fmt, ... ) throw( IOError ) = 0;
+};
+ 
+ 
 
 /**
  * Class ELEM
@@ -73,27 +106,48 @@ public:
 class ELEM
 {
 protected:    
-    DSN_T   type;
+    DSN_T           type;
 
+    ELEM*           parent;
+    
     //  see http://www.boost.org/libs/ptr_container/doc/ptr_sequence_adapter.html
     typedef boost::ptr_vector<ELEM> ELEM_ARRAY;
     
-    ELEM_ARRAY                      kids;      ///< of pointers                   
-   
-    
+    ELEM_ARRAY      kids;      ///< ELEM pointers                   
+
 public:
 
-    ELEM( DSN_T aType ) :
-       type( aType )
-    {
-    }
+    ELEM( DSN_T aType, ELEM* aParent = 0 );
     
-    virtual ~ELEM()
+    virtual ~ELEM();
+    
+    DSN_T   Type() { return type; }
+
+    
+    /**
+     * Function GetUnits
+     * returns the units for this section.  Derived classes may override this
+     * to check for section specific overrides.
+     * @return DSN_T - one of the allowed values to <unit_descriptor>
+     */
+    virtual DSN_T   GetUnits()
     {
-        // printf("~ELEM(%p %d)\n", this, Type() );
+        if( parent )
+            return parent->GetUnits();
+        
+        return T_inch;
     }
 
-    DSN_T   Type() { return type; }
+    
+    /**
+     * Function Save
+     * writes this object out in ASCII form according to the SPECCTRA DSN format.
+     * @param out The formatter to write to.
+     * @param nestLevel A multiple of the number of spaces to preceed the output with.
+     * @throw IOError if a system error writing the output, such as a full disk.
+     */
+    virtual void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError );
+
     
     //-----< list operations >--------------------------------------------
 
@@ -104,25 +158,12 @@ public:
      * @param instanceNum The instance number of to find: 0 for first, 1 for second, etc.
      * @return int - The index into the kids array or -1 if not found.
      */
-    int FindElem( DSN_T aType, int instanceNum )
-    {
-        int repeats=0;
-        for( unsigned i=0;  i<kids.size();  ++i )
-        {
-            if( kids[i].Type() == aType )
-            {
-                if( repeats == instanceNum )
-                    return i;
-                ++repeats;
-            }
-        }
-        return -1;
-    }
+    int FindElem( DSN_T aType, int instanceNum = 0 );
 
     
     /**
      * Function Length
-     * returns the number ELEMs in this ELEM.
+     * returns the number of ELEMs in this ELEM.
      * @return int - the count of children
      */
     int     Length() const
@@ -147,28 +188,21 @@ public:
         return ret.release();
     }
 
-/*    
-    ELEM& operator[]( int aIndex )
-    {
-        return kids[aIndex];
-    }
-
-    const ELEM& operator[]( int aIndex ) const
-    {
-        return kids[aIndex];
-    }
-*/    
-    
     void    Insert( int aIndex, ELEM* aElem )
     {
         kids.insert( kids.begin()+aIndex, aElem );
     }
     
-    ELEM* operator[]( int aIndex )
+    ELEM*   At( int aIndex )
     {
-        // we have varying sized object and are using polymorphism, so we
+        // we have varying sized objects and are using polymorphism, so we
         // must return a pointer not a reference.
         return &kids[aIndex];
+    }
+    
+    ELEM* operator[]( int aIndex )
+    {
+        return At( aIndex );
     }
     
     void    Delete( int aIndex )
@@ -176,30 +210,233 @@ public:
         kids.erase( kids.begin()+aIndex );
     }
 };
-   
+
+
+
+ELEM::ELEM( DSN_T aType, ELEM* aParent ) :
+   type( aType ),
+   parent( aParent )
+{
+}
+
+
+ELEM::~ELEM()
+{
+}
+
+
+void ELEM::Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+{
+    out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) ); 
+    
+    for( int i=0;  i<Length();  ++i )
+    {
+        At(i)->Save( out, nestLevel+1 );
+    }
+    
+    out->Print( nestLevel, ")\n" ); 
+}
+
+
+int ELEM::FindElem( DSN_T aType, int instanceNum )
+{
+    int repeats=0;
+    for( unsigned i=0;  i<kids.size();  ++i )
+    {
+        if( kids[i].Type() == aType )
+        {
+            if( repeats == instanceNum )
+                return i;
+            ++repeats;
+        }
+    }
+    return -1;
+}
+
+
+/**
+ * Class PARSER
+ * is simply a configuration record per the SPECCTRA DSN file spec.
+ * It is not actually a parser.
+ */
+class PARSER : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+    char        string_quote;
+    bool        space_in_quoted_tokens;
+    bool        case_sensitive;
+    bool        wires_include_testpoint;
+    bool        routes_include_testpoint;
+    bool        routes_include_guides;
+    bool        routes_include_image_conductor;
+    bool        via_rotate_first;
+    
+    std::string const_id1;
+    std::string const_id2;
+    
+    std::string host_cad;
+    std::string host_version;
+
+    
+public:
+
+    PARSER( ELEM* aParent ) :
+        ELEM( T_parser, aParent )
+    {
+        string_quote = '"';
+        space_in_quoted_tokens = false;
+
+        case_sensitive = false;
+        wires_include_testpoint = false;
+        routes_include_testpoint = false;
+        routes_include_guides = false;
+        routes_include_image_conductor = false;
+        via_rotate_first = true;
+        
+        host_cad = "Kicad's PCBNEW";
+        host_version = CONV_TO_UTF8(g_BuildVersion);
+    }
+
+    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) ); 
+        out->Print( nestLevel+1, "(string_quote %c)\n", string_quote );
+        out->Print( nestLevel+1, "(space_in_quoted_tokens %s)\n", space_in_quoted_tokens ? "on" : "off" );
+        out->Print( nestLevel+1, "(host_cad \"%s\")\n", host_cad.c_str() ); 
+        out->Print( nestLevel+1, "(host_version \"%s\")\n", host_version.c_str() );
+        out->Print( nestLevel+1, "(case_sensitive %s)\n", case_sensitive ? "on" : "off" );
+        out->Print( nestLevel, ")\n" ); 
+    }
+    
+};
+
+
+class RESOLUTION : public ELEM
+{
+    friend class SPECCTRA_DB;
+    
+    DSN_T       units;
+    int         value;
+
+public:
+    RESOLUTION( ELEM* aParent ) :
+        ELEM( T_resolution, aParent )
+    {
+        units = T_inch;
+        value = 2540000;
+    }
+
+    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        out->Print( nestLevel, "(%s %s %d)\n", LEXER::GetTokenText( Type() ), 
+                   LEXER::GetTokenText(units), value ); 
+    }
+    
+    DSN_T   GetUnits()
+    {
+        return units;
+    }
+};
+
+
+class UNIT : public ELEM
+{
+    friend class SPECCTRA_DB;
+    
+    DSN_T       units;
+
+public:
+    UNIT( ELEM* aParent ) :
+        ELEM( T_unit, aParent )
+    {
+        units = T_inch;
+    }
+        
+    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        out->Print( nestLevel, "(%s %s)\n", LEXER::GetTokenText( Type() ), 
+                   LEXER::GetTokenText(units) ); 
+    }
+    
+    DSN_T   GetUnits()
+    {
+        return units;
+    }
+};
+
+
+class PCB : public ELEM
+{
+    friend class SPECCTRA_DB;
+    
+    PARSER*         parser;
+    RESOLUTION*     resolution;
+    UNIT*           unit;
+    
+public:
+    
+    PCB() :
+        ELEM( T_pcb )
+    {
+        parser = 0;
+        resolution = 0;
+        unit = 0;
+    }
+    
+    ~PCB()
+    {
+        delete parser;
+        delete resolution;
+        delete unit;
+    }
+    
+    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
+        
+        if( parser )
+            parser->Save( out, nestLevel+1 );
+        
+        if( resolution )
+            resolution->Save( out, nestLevel+1 );
+
+        if( unit )
+            unit->Save( out, nestLevel+1 );
+        
+        out->Print( nestLevel, ")\n" ); 
+    }
+    
+    DSN_T   GetUnits()
+    {
+        if( unit )
+            return unit->GetUnits();
+        
+        if( resolution )
+            return resolution->GetUnits();
+        
+        return ELEM::GetUnits();
+    }
+    
+};
+
+
 
 /**
  * Class SPECCTRA_DB
  * holds a DSN data tree, usually coming from a DSN file.
  */
-class SPECCTRA_DB
+class SPECCTRA_DB : public OUTPUTFORMATTER
 {
-    LEXER*  lexer;
+    LEXER*      lexer;
     
-    ELEM*   tree;    
+    PCB*        tree;    
 
-    FILE*   fp;
-    
-    
-    /**
-     * Function print
-     * formats and writes text to the output stream.
-     * @param fmt A printf style format string.
-     * @param ... a variable list of parameters that will get blended into 
-     *  the output under control of the format string.
-     */
-    void print( const char* fmt, ... );
+    FILE*       fp;
 
+    wxString    filename;
+    
+    
     /**
      * Function nextTok
      * returns the next token from the lexer.
@@ -209,10 +446,10 @@ class SPECCTRA_DB
     void    expecting( DSN_T ) throw( IOError );
     void    expecting( const wxChar* text ) throw( IOError );
     
-    void doPCB( ELEM* growth ) throw(IOError);
-    void doPARSER( ELEM* growth ) throw(IOError);
-    void doRESOLUTION( ELEM* growth ) throw(IOError);
-    
+    void doPCB( PCB* growth ) throw(IOError);
+    void doPARSER( PARSER* growth ) throw(IOError);
+    void doRESOLUTION( RESOLUTION* growth ) throw(IOError);
+    void doUNIT( UNIT* growth ) throw( IOError );    
     
 public:
 
@@ -233,6 +470,28 @@ public:
     }
 
     
+    //-----<OUTPUTFORMATTER>-------------------------------------------------
+    void Print( int nestLevel, const char* fmt, ... ) throw( IOError );
+    //-----</OUTPUTFORMATTER>------------------------------------------------
+
+    /**
+     * Function MakePCB
+     * makes PCB with all the default ELEMs and parts on the heap.
+     */
+    static PCB* MakePCB();
+
+    
+    /**
+     * Function SetPCB
+     * deletes any existing PCB and replaces it with the given one.
+     */
+    void SetPCB( const PCB* aPcb )
+    {
+        delete tree;
+        tree = (PCB*) aPcb;
+    }
+
+    
     /**
      * Function Load
      * is a recursive descent parser for a DSN file.
@@ -249,7 +508,7 @@ public:
      * writes the given BOARD out as a SPECTRA DSN format file.
      * @param aBoard The BOARD to save.
      */
-    void Export( BOARD* aBoard );
+    void Export( wxString, BOARD* aBoard );
 };
 
 
@@ -270,7 +529,7 @@ void SPECCTRA_DB::expecting( DSN_T aTok ) throw( IOError )
 {
     wxString    errText( _("Expecting") );
     
-    errText << wxT(" ") << lexer->GetTokenText( aTok );
+    errText << wxT(" ") << LEXER::GetTokenString( aTok );
     
     lexer->ThrowIOError( errText, lexer->CurOffset() ); 
 }
@@ -293,12 +552,16 @@ DSN_T SPECCTRA_DB::nextTok()
 
 void SPECCTRA_DB::Load( const wxString& filename ) throw( IOError )
 {
-    wxFFile     file( filename.c_str() );
+    wxFFile     file;
     
-    if( !file.IsOpened() )
+    FILE*       fp = wxFopen( filename, wxT("r") );
+    
+    if( !fp )
     {
         ThrowIOError( _("Unable to open file \"%s\""), filename.GetData() );  
     }
+
+    file.Attach( fp );      // "exception safe" way to close the file.
     
     delete lexer;  
     lexer = 0;
@@ -311,30 +574,19 @@ void SPECCTRA_DB::Load( const wxString& filename ) throw( IOError )
     if( nextTok() != T_pcb )
         expecting( T_pcb );
 
-    delete tree;
-    tree = 0;
-    
-    tree = new ELEM( T_pcb );
+    SetPCB( new PCB() );
     
     doPCB( tree );
 }
 
 
-void SPECCTRA_DB::doPCB( ELEM* growth ) throw( IOError )
+void SPECCTRA_DB::doPCB( PCB* growth ) throw( IOError )
 {
-    ELEM* child;
-    DSN_T   tok = nextTok();
+    DSN_T tok = nextTok();
     
-    switch( tok )
-    {
-    case T_SYMBOL:
-    case T_STRING:
-        break;
-        
-    default:
-        expecting( T_STRING );
-    }
-
+    if( tok!=T_SYMBOL && tok!=T_STRING )
+        expecting( T_SYMBOL );
+    
     while( (tok = nextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
@@ -344,20 +596,18 @@ void SPECCTRA_DB::doPCB( ELEM* growth ) throw( IOError )
         switch( tok )
         {
         case T_parser:
-            child = new ELEM( T_parser );
-            growth->Append( child );
-            doPARSER( child );
+            growth->parser = new PARSER( growth );
+            doPARSER( growth->parser );
             break;
             
         case T_unit:
-            child = new ELEM( T_unit );
-            growth->Append( child );
+            growth->unit = new UNIT( growth );
+            doUNIT( growth->unit );
             break;
             
         case T_resolution:
-            child = new ELEM( T_resolution );
-            growth->Append( child );
-            doRESOLUTION( child );
+            growth->resolution = new RESOLUTION( growth );
+            doRESOLUTION( growth->resolution );
             break;
             
         case T_structure:
@@ -366,7 +616,7 @@ void SPECCTRA_DB::doPCB( ELEM* growth ) throw( IOError )
             break;
             
         default:
-            expecting( wxT("parser | unit | resolution | structure | placement | library") );
+            expecting( wxT("parser|unit|resolution|structure|placement|library") );
         }
     }
     
@@ -376,7 +626,7 @@ void SPECCTRA_DB::doPCB( ELEM* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doPARSER( ELEM* growth ) throw( IOError )
+void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IOError )
 {
     DSN_T   tok;
     
@@ -398,22 +648,23 @@ void SPECCTRA_DB::doPARSER( ELEM* growth ) throw( IOError )
         case T_space_in_quoted_tokens:
             tok = nextTok();
             if( tok!=T_on && tok!=T_off )
-                expecting( _("on or off") );
+                expecting( wxT("on|off") );
             lexer->SetSpaceInQuotedTokens( tok==T_on );
+            growth->space_in_quoted_tokens = (tok==T_on);
             break;
             
         case T_host_cad:
             tok = nextTok();
             if( tok!=T_STRING && tok!=T_SYMBOL )
                 expecting( T_SYMBOL );
-            // @todo
+            growth->host_cad = lexer->CurText();
             break;
             
         case T_host_version:
             tok = nextTok();
             if( tok!=T_STRING && tok!=T_SYMBOL )
                 expecting( T_SYMBOL );
-            // @todo
+            growth->host_version = lexer->CurText();
             break;
 
         case T_constant:
@@ -464,14 +715,14 @@ void SPECCTRA_DB::doPARSER( ELEM* growth ) throw( IOError )
         case T_case_sensitive:
             tok = nextTok();
             if( tok!=T_on && tok!=T_off )
-                expecting( _("on or off") );
-            // @todo
+                expecting( wxT("on|off") );
+            growth->case_sensitive = (tok==T_on);
             break;
 
         case T_via_rotate_first:    // [(via_rotate_first [on | off])]
             tok = nextTok();
             if( tok!=T_on && tok!=T_off )
-                expecting( _("on or off") );
+                expecting( wxT("on|off") );
             // @todo
             break;
             
@@ -484,10 +735,9 @@ void SPECCTRA_DB::doPARSER( ELEM* growth ) throw( IOError )
         if( tok != T_RIGHT )
             expecting( T_RIGHT );
     }
-    
 }
 
-void SPECCTRA_DB::doRESOLUTION( ELEM* growth ) throw(IOError)
+void SPECCTRA_DB::doRESOLUTION( RESOLUTION* growth ) throw(IOError)
 {
     DSN_T   tok = nextTok();
 
@@ -498,15 +748,39 @@ void SPECCTRA_DB::doRESOLUTION( ELEM* growth ) throw(IOError)
     case T_cm:
     case T_mm:
     case T_um:
-        // @todo
+        growth->units = tok;
         break;
     default:
-        expecting( wxT("inch, mil, cm, mm, or um") );
+        expecting( wxT("inch | mil | cm | mm | um") );
     }
     
     tok = nextTok();
     if( tok != T_NUMBER )
         expecting( T_NUMBER );
+
+    growth->value = atoi( lexer->CurText() );
+    
+    tok = nextTok();
+    if( tok != T_RIGHT )
+        expecting( T_RIGHT );
+}
+
+void SPECCTRA_DB::doUNIT( UNIT* growth ) throw(IOError)
+{
+    DSN_T   tok = nextTok();
+
+    switch( tok )
+    {
+    case T_inch:
+    case T_mil:
+    case T_cm:
+    case T_mm:
+    case T_um:
+        growth->units = tok;
+        break;
+    default:
+        expecting( wxT("inch | mil | cm | mm | um") );
+    }
     
     tok = nextTok();
     if( tok != T_RIGHT )
@@ -514,19 +788,48 @@ void SPECCTRA_DB::doRESOLUTION( ELEM* growth ) throw(IOError)
 }
 
 
-void SPECCTRA_DB::print( const char* fmt, ... )
+void SPECCTRA_DB::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
 {
     va_list     args;
 
     va_start( args, fmt );
-    vfprintf( fp, fmt, args );
+    
+    int ret = 0;
+    
+    for( int i=0; i<nestLevel;  ++i )
+    {
+        ret = fprintf( fp, "  " );
+        if( ret < 0 )
+            break;
+    }
+    
+    if( ret<0 || vfprintf( fp, fmt, args )<0 )
+        ThrowIOError( _("System file error writing to file \"%s\""), filename.GetData() );
+    
     va_end( args );
 }
 
 
-
-void SPECCTRA_DB::Export( BOARD* aBoard )
+void SPECCTRA_DB::Export( wxString filename, BOARD* aBoard )
 {
+    fp = wxFopen( filename, wxT("w") );
+    
+    if( !fp )
+    {
+        ThrowIOError( _("Unable to open file \"%s\""), filename.GetData() );  
+    }
+
+    tree->Save( this, 0 );    
+}
+
+
+PCB* SPECCTRA_DB::MakePCB()
+{
+    PCB*    pcb = new PCB();
+    
+    pcb->parser = new PARSER( pcb );
+
+    return pcb;
 }
 
 
@@ -555,6 +858,7 @@ int main( int argc, char** argv )
 //    wxString    filename( wxT("/tmp/testdesigns/test.dsn") );
 
     SPECCTRA_DB     db;
+    bool            failed = false;
     
     try 
     {
@@ -563,10 +867,15 @@ int main( int argc, char** argv )
     catch( IOError ioe )
     {
         printf( "%s\n", CONV_TO_UTF8(ioe.errorText) );
-        exit(1);
+        failed = true;
     }
+
+    if( !failed )    
+        printf("loaded OK\n");
+
+//    db.SetPCB( SPECCTRA_DB::MakePCB() );
     
-    printf("loaded OK\n");
+    db.Export( wxT("/tmp/export.dsn"), 0 );
     
 #endif
     

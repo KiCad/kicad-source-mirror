@@ -2,7 +2,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
+ * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2007 Kicad Developers, see change_log.txt for contributors.
  * 
  * This program is free software; you can redistribute it and/or
@@ -506,48 +506,56 @@ int LEXER::findToken( const std::string& tok )
 }
 
 
-wxString LEXER::GetTokenText( DSN_T aTok )
+const char* LEXER::GetTokenText( DSN_T aTok )
 {
-    wxString    ret;
+    const char* ret;
     
     if( aTok < 0 )
     {
         switch( aTok )
         {
         case T_QUOTE_DEF:
-            ret << _("'quoted text delimiter'");
+            ret = "'quoted text delimiter'";
             break;
         case T_DASH:
-            ret << wxT( "'-'" );
+            ret = "'-'";
             break;
         case T_SYMBOL:
-            ret << _("'symbol'");
+            ret = "'symbol'";
             break;
         case T_NUMBER:
-            ret << _("'number'");
+            ret = "'number'";
             break;
         case T_RIGHT:
-            ret << wxT( "')'" );
+            ret = "')'";
             break;
         case T_LEFT:
-            ret << wxT( "'('" );
+            ret = "'('";
             break;
         case T_STRING:
-            ret << _("\"quoted string\"");
+            ret = "'quoted string'";
             break;
         case T_EOF:
-            ret << _("'end of file'");
+            ret = "'end of file'";
             break;
         default:
-            ;
+            ret = "???";
         }
     }
     else
     {
-        ret << wxT("'") << CONV_FROM_UTF8( tokens[aTok].name ) << wxT("'");
+        ret = tokens[aTok].name;
     }
     
     return ret;
+}
+
+
+wxString LEXER::GetTokenString( DSN_T aTok )
+{
+    wxString    ret = CONV_FROM_UTF8( GetTokenText(aTok) );
+
+    return ret;    
 }
 
     

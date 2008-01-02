@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
+ * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2007 Kicad Developers, see change_log.txt for contributors.
  * 
  * This program is free software; you can redistribute it and/or
@@ -606,8 +606,18 @@ public:
      */
     void ThrowIOError( wxString aText, int charOffset ) throw (IOError);
 
+
+    /**
+     * Function GetTokenString
+     * returns the wxString representation of a DSN_T value.
+     */
+    static wxString GetTokenString( DSN_T aTok );
     
-    wxString GetTokenText( DSN_T aTok );
+    /**
+     * Function GetTokenString
+     * returns the C string representation of a DSN_T value.
+     */
+    static const char* GetTokenText( DSN_T aTok );
 
     
     /**
