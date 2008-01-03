@@ -50,32 +50,6 @@ class PCB;
 
 
 /**
- * Class ELEM
- * is a base class for any DSN element.  It is not a parent node so it 
- * cannot contain other elements but it can be extended to hold fields 
- * for any DSN element which contains no other elements, only fields.
-class ELEM
-{
-protected:    
-    DSN_T   type;
-
-public:    
-    
-    ELEM( DSN_T aType ) :
-       type( aType )
-    {
-    }
-    
-    virtual ~ELEM()
-    {
-        // printf("~ELEM(%p %d)\n", this, Type() );
-    }
-    
-};
- */ 
-
-
-/**
  * Class OUTPUTFORMATTER
  * is an interface (abstract class) used to output ASCII text.
  */
@@ -94,9 +68,20 @@ public:
      * @throw IOError if there is a problem outputting, such as a full disk.
      */
     virtual void Print( int nestLevel, const char* fmt, ... ) throw( IOError ) = 0;
+    
+    virtual char GetQuoteChar() = 0;
 };
  
- 
+
+struct POINT
+{
+    float  x;
+    float  y;
+    
+    POINT() { x=0.0; y=0.0; }
+};
+
+
 
 /**
  * Class ELEM
@@ -212,48 +197,6 @@ public:
 };
 
 
-
-ELEM::ELEM( DSN_T aType, ELEM* aParent ) :
-   type( aType ),
-   parent( aParent )
-{
-}
-
-
-ELEM::~ELEM()
-{
-}
-
-
-void ELEM::Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
-{
-    out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) ); 
-    
-    for( int i=0;  i<Length();  ++i )
-    {
-        At(i)->Save( out, nestLevel+1 );
-    }
-    
-    out->Print( nestLevel, ")\n" ); 
-}
-
-
-int ELEM::FindElem( DSN_T aType, int instanceNum )
-{
-    int repeats=0;
-    for( unsigned i=0;  i<kids.size();  ++i )
-    {
-        if( kids[i].Type() == aType )
-        {
-            if( repeats == instanceNum )
-                return i;
-            ++repeats;
-        }
-    }
-    return -1;
-}
-
-
 /**
  * Class PARSER
  * is simply a configuration record per the SPECCTRA DSN file spec.
@@ -298,17 +241,7 @@ public:
         host_version = CONV_TO_UTF8(g_BuildVersion);
     }
 
-    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
-    {
-        out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) ); 
-        out->Print( nestLevel+1, "(string_quote %c)\n", string_quote );
-        out->Print( nestLevel+1, "(space_in_quoted_tokens %s)\n", space_in_quoted_tokens ? "on" : "off" );
-        out->Print( nestLevel+1, "(host_cad \"%s\")\n", host_cad.c_str() ); 
-        out->Print( nestLevel+1, "(host_version \"%s\")\n", host_version.c_str() );
-        out->Print( nestLevel+1, "(case_sensitive %s)\n", case_sensitive ? "on" : "off" );
-        out->Print( nestLevel, ")\n" ); 
-    }
-    
+    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError );
 };
 
 
@@ -366,6 +299,179 @@ public:
 };
 
 
+class RECTANGLE : public ELEM
+{
+    friend class SPECCTRA_DB;
+    
+    std::string     layer_id;
+
+    POINT           point0;
+    POINT           point1;
+    
+public:
+
+    RECTANGLE( ELEM* aParent ) :
+        ELEM( T_rect, aParent )
+    {
+    }
+    
+    ~RECTANGLE()
+    {
+    }
+    
+    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        char    quote = out->GetQuoteChar();
+        
+        out->Print( nestLevel, "(%s %c%s%c %f %f %f %f)\n", 
+                   LEXER::GetTokenText( Type() ),
+                   quote, layer_id.c_str(), quote,
+                   point0.x, point0.y,
+                   point1.x, point1.y );
+    }
+};
+
+
+class PATH : public ELEM
+{
+    friend class SPECCTRA_DB;
+    
+    std::string     layer_id;
+    double          aperture_width;
+
+    typedef std::vector<POINT> POINTS;
+    
+    POINTS          points;                   
+    
+    DSN_T           aperture_type;
+    
+public:
+
+    PATH( ELEM* aParent ) :
+        ELEM( T_path, aParent )
+    {
+        aperture_width = 0.0;
+        aperture_type  = T_round;
+    }
+    
+    ~PATH()
+    {
+    }
+    
+    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        char    quote = out->GetQuoteChar();
+        
+        out->Print( nestLevel, "(%s %c%s%c %f\n", LEXER::GetTokenText( Type() ),
+                                 quote, layer_id.c_str(), quote, 
+                                 aperture_width );
+
+        for( unsigned i=0; i<points.size();  ++i )
+        {
+            out->Print( nestLevel+1, "%f %f\n", points[i].x, points[i].y );
+        }
+        
+        if( aperture_type == T_square )
+            out->Print( nestLevel+1, "(aperture_type square)\n" );
+
+        out->Print( nestLevel, ")\n" ); 
+    }
+};
+
+
+class BOUNDARY : public ELEM
+{
+    friend class SPECCTRA_DB;
+ 
+    //  see http://www.boost.org/libs/ptr_container/doc/ptr_sequence_adapter.html
+    typedef boost::ptr_vector<PATH> PATHS;
+    
+    PATHS           paths;
+    RECTANGLE*      rectangle;
+    
+public:
+
+    BOUNDARY( ELEM* aParent, DSN_T aType = T_boundary ) :
+        ELEM( aType, aParent )
+    {
+        rectangle = 0;
+    }
+    
+    ~BOUNDARY()
+    {
+        delete rectangle;
+    }
+    
+    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
+
+        if( rectangle )
+            rectangle->Save( out, nestLevel+1 );
+        else
+        {
+            for( unsigned i=0; i<paths.size();  ++i )
+            {
+                paths[i].Save( out, nestLevel+1 );
+            }
+        }
+        
+        out->Print( nestLevel, ")\n" ); 
+    }
+};
+
+
+class STRUCTURE : public ELEM
+{
+    friend class SPECCTRA_DB;
+    
+    UNIT*       unit;
+    BOUNDARY*   boundary;
+    BOUNDARY*   place_boundary;
+    
+public:
+
+    STRUCTURE( ELEM* aParent ) :
+        ELEM( T_structure, aParent )
+    {
+        unit = 0;
+        boundary = 0;
+        place_boundary = 0;
+    }
+    
+    ~STRUCTURE()
+    {
+        delete unit;
+        delete boundary;
+        delete place_boundary;
+    }
+    
+    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
+        
+        if( unit )
+            unit->Save( out, nestLevel+1 );
+
+        if( boundary )
+            boundary->Save( out, nestLevel+1 );
+
+        if( place_boundary )
+            place_boundary->Save( out, nestLevel+1 );
+        
+        out->Print( nestLevel, ")\n" ); 
+    }
+    
+    DSN_T   GetUnits()
+    {
+        if( unit )
+            return unit->GetUnits();
+        
+        return ELEM::GetUnits();
+    }
+};
+
+
 class PCB : public ELEM
 {
     friend class SPECCTRA_DB;
@@ -373,6 +479,7 @@ class PCB : public ELEM
     PARSER*         parser;
     RESOLUTION*     resolution;
     UNIT*           unit;
+    STRUCTURE*      structure;
     
 public:
     
@@ -382,6 +489,7 @@ public:
         parser = 0;
         resolution = 0;
         unit = 0;
+        structure = 0;
     }
     
     ~PCB()
@@ -389,6 +497,7 @@ public:
         delete parser;
         delete resolution;
         delete unit;
+        delete structure;
     }
     
     void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
@@ -403,6 +512,9 @@ public:
 
         if( unit )
             unit->Save( out, nestLevel+1 );
+
+        if( structure )
+            structure->Save( out, nestLevel+1 );
         
         out->Print( nestLevel, ")\n" ); 
     }
@@ -436,6 +548,8 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
 
     wxString    filename;
     
+    char        quote_char;
+    
     
     /**
      * Function nextTok
@@ -443,13 +557,26 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
      */
     DSN_T   nextTok();
 
+    /**
+     * Function expecting
+     * throws an IOError exception with an input file specific error message.
+     * @param DSN_T The token type which was expected at the current input location.
+     * @throw IOError with the location within the input file of the problem.
+     */
     void    expecting( DSN_T ) throw( IOError );
     void    expecting( const wxChar* text ) throw( IOError );
+    void    unexpected( DSN_T aTok ) throw( IOError );
+    void    unexpected( const char* text ) throw( IOError );
     
     void doPCB( PCB* growth ) throw(IOError);
     void doPARSER( PARSER* growth ) throw(IOError);
     void doRESOLUTION( RESOLUTION* growth ) throw(IOError);
     void doUNIT( UNIT* growth ) throw( IOError );    
+    void doSTRUCTURE( STRUCTURE* growth ) throw( IOError );    
+    void doBOUNDARY( BOUNDARY* growth ) throw( IOError );
+    void doRECTANGLE( RECTANGLE* growth ) throw( IOError );
+    void doPATH( PATH* growth ) throw( IOError );
+    
     
 public:
 
@@ -458,6 +585,7 @@ public:
         lexer = 0;
         tree  = 0;
         fp    = 0;
+        quote_char = '"';
     }
 
     ~SPECCTRA_DB()
@@ -472,11 +600,14 @@ public:
     
     //-----<OUTPUTFORMATTER>-------------------------------------------------
     void Print( int nestLevel, const char* fmt, ... ) throw( IOError );
+    
+    char GetQuoteChar() { return quote_char; }
+    
     //-----</OUTPUTFORMATTER>------------------------------------------------
 
     /**
      * Function MakePCB
-     * makes PCB with all the default ELEMs and parts on the heap.
+     * makes a PCB with all the default ELEMs and parts on the heap.
      */
     static PCB* MakePCB();
 
@@ -512,6 +643,9 @@ public:
 };
 
 
+
+//-----<SPECCTRA_DB>-------------------------------------------------
+
 void SPECCTRA_DB::ThrowIOError( const wxChar* fmt, ... ) throw( IOError )
 {
     wxString    errText;
@@ -528,9 +662,7 @@ void SPECCTRA_DB::ThrowIOError( const wxChar* fmt, ... ) throw( IOError )
 void SPECCTRA_DB::expecting( DSN_T aTok ) throw( IOError )
 {
     wxString    errText( _("Expecting") );
-    
     errText << wxT(" ") << LEXER::GetTokenString( aTok );
-    
     lexer->ThrowIOError( errText, lexer->CurOffset() ); 
 }
 
@@ -543,10 +675,25 @@ void SPECCTRA_DB::expecting( const wxChar* text ) throw( IOError )
     lexer->ThrowIOError( errText, lexer->CurOffset() ); 
 }
 
+void SPECCTRA_DB::unexpected( DSN_T aTok ) throw( IOError )
+{
+    wxString    errText( _("Unexpected") );
+    errText << wxT(" ") << LEXER::GetTokenString( aTok );
+    lexer->ThrowIOError( errText, lexer->CurOffset() ); 
+}
+
+void SPECCTRA_DB::unexpected( const char* text ) throw( IOError )
+{
+    wxString    errText( _("Unexpected") );
+    errText << wxT(" '") << CONV_FROM_UTF8(text) << wxT("'");
+    lexer->ThrowIOError( errText, lexer->CurOffset() ); 
+}
+
 
 DSN_T SPECCTRA_DB::nextTok()
 {
-    return lexer->NextTok();
+    DSN_T ret = lexer->NextTok();
+    return ret;
 }
 
 
@@ -611,12 +758,15 @@ void SPECCTRA_DB::doPCB( PCB* growth ) throw( IOError )
             break;
             
         case T_structure:
+            growth->structure = new STRUCTURE( growth );
+            doSTRUCTURE( growth->structure );
+            break;
         case T_placement:
         case T_library:
             break;
             
         default:
-            expecting( wxT("parser|unit|resolution|structure|placement|library") );
+            unexpected( lexer->CurText() );
         }
     }
     
@@ -643,6 +793,8 @@ void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IOError )
             if( tok != T_QUOTE_DEF )
                 expecting( T_QUOTE_DEF );
             lexer->SetStringDelimiter( (unsigned char) *lexer->CurText() );
+            growth->string_quote = *lexer->CurText();
+            quote_char = *lexer->CurText(); 
             break;
             
         case T_space_in_quoted_tokens:
@@ -671,10 +823,11 @@ void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IOError )
             tok = nextTok();
             if( tok!=T_STRING && tok!=T_SYMBOL )
                 expecting( T_SYMBOL );
+            growth->const_id1 = lexer->CurText();
             tok = nextTok();
             if( tok!=T_STRING && tok!=T_SYMBOL )
                 expecting( T_SYMBOL );
-            // @todo
+            growth->const_id2 = lexer->CurText();
             break;
 
         case T_write_resolution:   // [(writee_resolution {<character> <positive_integer >})]
@@ -695,12 +848,16 @@ void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IOError )
                 switch( tok )
                 {
                 case T_testpoint:
+                    growth->routes_include_testpoint = true;
+                    break;
                 case T_guide:
+                    growth->routes_include_guides = true;
+                    break;
                 case T_image_conductor:
-                    // @todo
+                    growth->routes_include_image_conductor = true;
                     break;
                 default:
-                    expecting( _("testpoint, guides, or image_conductor") );
+                    expecting( wxT("testpoint|guides|image_conductor") );
                 }
             }
             continue;   // we ate the T_RIGHT
@@ -709,7 +866,7 @@ void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IOError )
             tok = nextTok();
             if( tok != T_testpoint )
                 expecting( T_testpoint );
-            // @todo
+            growth->routes_include_testpoint = true;
             break;
             
         case T_case_sensitive:
@@ -723,12 +880,11 @@ void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IOError )
             tok = nextTok();
             if( tok!=T_on && tok!=T_off )
                 expecting( wxT("on|off") );
-            // @todo
+            growth->via_rotate_first = (tok==T_on);
             break;
             
-            
         default:
-            expecting( wxT("parser_descriptor contents") );
+            unexpected( lexer->CurText() );
         }
         
         tok = nextTok();
@@ -787,6 +943,189 @@ void SPECCTRA_DB::doUNIT( UNIT* growth ) throw(IOError)
         expecting( T_RIGHT );
 }
 
+void SPECCTRA_DB::doSTRUCTURE( STRUCTURE* growth ) throw(IOError)
+{
+    DSN_T   tok;
+    
+    while( (tok = nextTok()) != T_RIGHT )
+    {
+        if( tok != T_LEFT )
+            expecting( T_LEFT );
+        
+        tok = nextTok();
+        switch( tok )
+        {
+        case T_unit:
+            if( growth->unit )
+                unexpected( T_unit );
+            growth->unit = new UNIT( growth );
+            doUNIT( growth->unit );
+            break;
+
+        case T_place_boundary:
+L_place:            
+            if( growth->place_boundary )
+                unexpected( T_place_boundary );
+            growth->place_boundary = new BOUNDARY( growth, T_place_boundary );
+            doBOUNDARY( growth->place_boundary );
+            break;
+            
+        case T_boundary:
+            if( growth->boundary )
+            {
+                if( growth->place_boundary )
+                    unexpected( T_boundary );
+                goto L_place;
+            }
+            growth->boundary = new BOUNDARY( growth );
+            doBOUNDARY( growth->boundary );
+            break;
+            
+        default:
+            unexpected( lexer->CurText() );
+        }
+    }
+}
+
+
+void SPECCTRA_DB::doBOUNDARY( BOUNDARY* growth ) throw( IOError )
+{
+    DSN_T   tok = nextTok();
+    
+    if( tok != T_LEFT )
+        expecting( T_LEFT );
+        
+    tok = nextTok();
+    if( tok == T_rect )
+    {
+        growth->rectangle = new RECTANGLE( growth );
+        doRECTANGLE( growth->rectangle );
+        if( nextTok() != T_RIGHT )
+            expecting( T_RIGHT );
+    }
+    else if( tok == T_path )
+    {
+        for(;;)
+        {
+            if( tok != T_path )
+                expecting( T_path );
+                    
+            PATH* path = new PATH( growth ) ;
+            growth->paths.push_back( path );
+            
+            doPATH( path );
+
+            tok = nextTok();
+            if( tok == T_RIGHT )
+                break;
+
+            if( tok != T_LEFT )
+                expecting(T_LEFT);
+
+            tok = nextTok();            
+        }
+    }
+    else
+        expecting( wxT("rect|path") );
+}
+
+void SPECCTRA_DB::doPATH( PATH* growth ) throw( IOError )
+{
+    DSN_T   tok = nextTok();
+
+    switch( tok )
+    {
+    case T_SYMBOL:
+    case T_STRING:
+        
+    case T_pcb:         // reserved layer names
+    case T_power:
+    case T_signal:
+        growth->layer_id = lexer->CurText();
+        break;
+        
+    default:
+        expecting( T_SYMBOL );
+    }
+
+    if( nextTok() != T_NUMBER )
+        expecting( wxT("<aperture_width>") );
+    
+    growth->aperture_width = strtod( lexer->CurText(), NULL );
+
+    POINT   ptTemp;
+    
+    tok = nextTok();
+    
+    do
+    {
+        if( tok != T_NUMBER )
+            expecting( T_NUMBER );
+        ptTemp.x = strtod( lexer->CurText(), NULL );
+    
+        if( nextTok() != T_NUMBER )
+            expecting( T_NUMBER );
+        ptTemp.y = strtod( lexer->CurText(), NULL );
+        
+        growth->points.push_back( ptTemp );
+           
+    } while( (tok = nextTok())!=T_RIGHT && tok!=T_LEFT );
+    
+    if( tok == T_LEFT )
+    {
+        if( nextTok() != T_aperture_type )
+            expecting( T_aperture_type );
+        
+        tok = nextTok();
+        if( tok!=T_round && tok!=T_square )
+            expecting( wxT("round|square") );
+
+        growth->aperture_type = tok;
+        
+        if( nextTok() != T_RIGHT )
+            expecting( T_RIGHT );
+    }
+}
+
+
+void SPECCTRA_DB::doRECTANGLE( RECTANGLE* growth ) throw( IOError )
+{
+    DSN_T   tok = nextTok();
+    
+    switch( tok )
+    {
+    case T_SYMBOL:
+    case T_STRING:
+        
+    case T_pcb:         // reserved layer names match these tokens
+    case T_power:
+    case T_signal:
+        growth->layer_id = lexer->CurText();
+        break;
+        
+    default:
+        expecting( T_SYMBOL );
+    }
+    
+    if( nextTok() != T_NUMBER )
+        expecting( T_NUMBER );
+    growth->point0.x = strtod( lexer->CurText(), NULL );
+
+    if( nextTok() != T_NUMBER )
+        expecting( T_NUMBER );
+    growth->point0.y = strtod( lexer->CurText(), NULL );
+
+    if( nextTok() != T_NUMBER )
+        expecting( T_NUMBER );
+    growth->point1.x = strtod( lexer->CurText(), NULL );
+
+    if( nextTok() != T_NUMBER )
+        expecting( T_NUMBER );
+    growth->point1.y = strtod( lexer->CurText(), NULL );
+
+    if( nextTok() != T_RIGHT )
+        expecting( T_RIGHT );
+}
 
 void SPECCTRA_DB::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
 {
@@ -830,6 +1169,81 @@ PCB* SPECCTRA_DB::MakePCB()
     pcb->parser = new PARSER( pcb );
 
     return pcb;
+}
+
+
+//-----<ELEM>---------------------------------------------------------------
+
+ELEM::ELEM( DSN_T aType, ELEM* aParent ) :
+   type( aType ),
+   parent( aParent )
+{
+}
+
+
+ELEM::~ELEM()
+{
+}
+
+
+void ELEM::Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+{
+    out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) ); 
+    
+    for( int i=0;  i<Length();  ++i )
+    {
+        At(i)->Save( out, nestLevel+1 );
+    }
+    
+    out->Print( nestLevel, ")\n" ); 
+}
+
+
+int ELEM::FindElem( DSN_T aType, int instanceNum )
+{
+    int repeats=0;
+    for( unsigned i=0;  i<kids.size();  ++i )
+    {
+        if( kids[i].Type() == aType )
+        {
+            if( repeats == instanceNum )
+                return i;
+            ++repeats;
+        }
+    }
+    return -1;
+}
+
+
+//-----<PARSER>-----------------------------------------------------------
+
+void PARSER::Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+{
+    out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) ); 
+    out->Print( nestLevel+1, "(string_quote %c)\n", string_quote );
+    out->Print( nestLevel+1, "(space_in_quoted_tokens %s)\n", space_in_quoted_tokens ? "on" : "off" );
+    out->Print( nestLevel+1, "(host_cad \"%s\")\n", host_cad.c_str() ); 
+    out->Print( nestLevel+1, "(host_version \"%s\")\n", host_version.c_str() );
+    
+    if( const_id1.length()>0 || const_id2.length()>0 )
+        out->Print( nestLevel+1, "(constant %c%s%c %c%s%c)\n", 
+            string_quote, const_id1.c_str(), string_quote,
+            string_quote, const_id2.c_str(), string_quote );
+
+    if( routes_include_testpoint || routes_include_guides || routes_include_image_conductor )
+        out->Print( nestLevel+1, "(routes_include%s%s%s)\n",
+                   routes_include_testpoint ? " testpoint" : "",
+                   routes_include_guides ? " guides" : "",
+                   routes_include_image_conductor ? " image_conductor" : "");
+    
+    if( wires_include_testpoint )
+        out->Print( nestLevel+1, "(wires_include testpoint)\n" );
+        
+    if( !via_rotate_first )
+        out->Print( nestLevel+1, "(via_rotate_first off)\n" );
+    
+    out->Print( nestLevel+1, "(case_sensitive %s)\n", case_sensitive ? "on" : "off" );
+    out->Print( nestLevel, ")\n" ); 
 }
 
 

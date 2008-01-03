@@ -339,6 +339,7 @@ enum DSN_T {
     T_spacing,
     T_spare,
     T_spiral_via,
+    T_square,
     T_stack_via,
     T_stack_via_depth,
     T_standard,

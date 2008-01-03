@@ -339,6 +339,7 @@ const static KEYWORD tokens[] = {
     TOKDEF(spacing),
     TOKDEF(spare),
     TOKDEF(spiral_via),
+    TOKDEF(square),
     TOKDEF(stack_via),
     TOKDEF(stack_via_depth),
     TOKDEF(standard),
@@ -553,7 +554,9 @@ const char* LEXER::GetTokenText( DSN_T aTok )
 
 wxString LEXER::GetTokenString( DSN_T aTok )
 {
-    wxString    ret = CONV_FROM_UTF8( GetTokenText(aTok) );
+    wxString    ret;
+    
+    ret << wxT("'") << CONV_FROM_UTF8( GetTokenText(aTok) ) << wxT("'");
 
     return ret;    
 }
