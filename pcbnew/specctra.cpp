@@ -68,8 +68,18 @@ public:
      * @throw IOError if there is a problem outputting, such as a full disk.
      */
     virtual void Print( int nestLevel, const char* fmt, ... ) throw( IOError ) = 0;
-    
-    virtual char GetQuoteChar() = 0;
+
+    /**
+     * Function GetQuoteChar
+     * returns the quote character as a single character string for a given 
+     * input wrapee string.  Often the return value is "" the null string if
+     * there are no delimiters in the input string.  If you want the quote_char
+     * to be assuredly not "", then pass in "(" as the wrappee.
+     * @param wrapee A string might need wrapping on each end.
+     * @return const char* - the quote_char as a single character string, or ""
+     *   if the wrapee does not need to be wrapped.
+     */
+    virtual const char* GetQuoteChar( const char* wrapee ) = 0;
 };
  
 
@@ -321,9 +331,9 @@ public:
     
     void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
-        char    quote = out->GetQuoteChar();
+        const char*  quote = out->GetQuoteChar( layer_id.c_str() );
         
-        out->Print( nestLevel, "(%s %c%s%c %f %f %f %f)\n", 
+        out->Print( nestLevel, "(%s %s%s%s %f %f %f %f)\n", 
                    LEXER::GetTokenText( Type() ),
                    quote, layer_id.c_str(), quote,
                    point0.x, point0.y,
@@ -360,9 +370,9 @@ public:
     
     void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
-        char    quote = out->GetQuoteChar();
+        const char* quote = out->GetQuoteChar( layer_id.c_str() );
         
-        out->Print( nestLevel, "(%s %c%s%c %f\n", LEXER::GetTokenText( Type() ),
+        out->Print( nestLevel, "(%s %s%s%s %f\n", LEXER::GetTokenText( Type() ),
                                  quote, layer_id.c_str(), quote, 
                                  aperture_width );
 
@@ -421,6 +431,92 @@ public:
 };
 
 
+class VIA : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+    typedef std::vector<std::string>    STRINGS;
+    
+    STRINGS     padstacks;
+    STRINGS     spares;
+
+public:
+
+    VIA( ELEM* aParent ) :
+        ELEM( T_via, aParent )
+    {
+    }
+    
+    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
+        
+        for( STRINGS::const_iterator i=padstacks.begin();
+            i!=padstacks.end();  ++i )
+        {
+            const char* quote = out->GetQuoteChar( i->c_str() );
+            
+            out->Print( nestLevel+1, "%s%s%s\n", quote, i->c_str(), quote );
+        }
+        
+        if( spares.size() )
+        {
+            out->Print( nestLevel+1, "(spare\n" );
+
+            for( STRINGS::const_iterator i=spares.begin();
+                i!=spares.end();  ++i )
+            {
+                const char* quote = out->GetQuoteChar( i->c_str() );
+                
+                out->Print( nestLevel+2, "%s%s%s\n", quote, i->c_str(), quote );
+            }
+            
+            out->Print( nestLevel+1, ")\n" );
+        }
+        
+        out->Print( nestLevel, ")\n" );
+    }
+};
+
+
+class CONTROL : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+    bool    via_at_smd;
+    bool    via_at_smd_grid_on;
+
+    
+public:
+
+    CONTROL( ELEM* aParent ) :
+        ELEM( T_control, aParent )
+    {
+        via_at_smd = false;
+        via_at_smd_grid_on = false;
+    }
+    
+    ~CONTROL()
+    {
+    }
+    
+    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
+
+        //if( via_at_smd )
+        {
+            out->Print( nestLevel+1, "(via_at_smd %s", via_at_smd ? "on" : "off" );
+            if( via_at_smd_grid_on )
+                out->Print( 0, " grid %s", via_at_smd_grid_on ? "on" : "off" );
+            out->Print( 0, ")\n" );
+        }
+        
+        out->Print( nestLevel, ")\n" ); 
+    }
+};
+
+
 class STRUCTURE : public ELEM
 {
     friend class SPECCTRA_DB;
@@ -428,6 +524,8 @@ class STRUCTURE : public ELEM
     UNIT*       unit;
     BOUNDARY*   boundary;
     BOUNDARY*   place_boundary;
+    VIA*        via;
+    CONTROL*    control;
     
 public:
 
@@ -437,6 +535,8 @@ public:
         unit = 0;
         boundary = 0;
         place_boundary = 0;
+        via = 0;
+        control = 0;
     }
     
     ~STRUCTURE()
@@ -444,6 +544,8 @@ public:
         delete unit;
         delete boundary;
         delete place_boundary;
+        delete via;
+        delete control;
     }
     
     void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
@@ -458,6 +560,17 @@ public:
 
         if( place_boundary )
             place_boundary->Save( out, nestLevel+1 );
+
+        if( via )
+            via->Save( out, nestLevel+1 );
+        
+        if( control )
+            control->Save( out, nestLevel+1 );
+        
+        for( int i=0; i<Length();  ++i )
+        {
+            At(i)->Save( out, nestLevel+1 );
+        }
         
         out->Print( nestLevel, ")\n" ); 
     }
@@ -472,10 +585,65 @@ public:
 };
 
 
+/**
+ * Class BOOLPROP
+ * is a container for a single property whose value is a boolean (on|off).
+ * The name of the property is obtained from the DSN_T.
+ */
+class BOOLPROP : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+    bool    value;
+
+public:
+
+    BOOLPROP( ELEM* aParent, DSN_T aType ) :
+        ELEM( aType, aParent )
+    {
+    }
+    
+    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        out->Print( nestLevel, "(%s %s)\n", LEXER::GetTokenText( Type() ),
+                   value ? "on" : "off" );
+    }
+};
+
+
+/**
+ * Class STRINGPROP
+ * is a container for a single property whose value is a string.
+ * The name of the property is obtained from the DSN_T.
+ */
+class STRINGPROP : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+    std::string     value;
+
+public:
+
+    STRINGPROP( ELEM* aParent, DSN_T aType ) :
+        ELEM( aType, aParent )
+    {
+    }
+    
+    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        const char* quote_char = out->GetQuoteChar( value.c_str() );
+        
+        out->Print( nestLevel, "(%s %s%s%s)\n", LEXER::GetTokenText( Type() ),
+                                quote_char, value.c_str(), quote_char );
+    }
+};
+
+
 class PCB : public ELEM
 {
     friend class SPECCTRA_DB;
-    
+
+    std::string     pcbname;    
     PARSER*         parser;
     RESOLUTION*     resolution;
     UNIT*           unit;
@@ -502,7 +670,10 @@ public:
     
     void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
-        out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
+        const char* quote = out->GetQuoteChar( pcbname.c_str() );
+        
+        out->Print( nestLevel, "(%s %s%s%s\n", LEXER::GetTokenText( Type() ),
+                                quote, pcbname.c_str(), quote );
         
         if( parser )
             parser->Save( out, nestLevel+1 );
@@ -548,7 +719,7 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
 
     wxString    filename;
     
-    char        quote_char;
+    std::string quote_char;
     
     
     /**
@@ -557,6 +728,14 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
      */
     DSN_T   nextTok();
 
+    
+    static bool isSymbol( DSN_T aTok )
+    {
+        // if aTok is >= 0, then it might be a coincidental match to a keyword.
+        return aTok==T_SYMBOL || aTok==T_STRING || aTok>=0;
+    }
+
+    
     /**
      * Function expecting
      * throws an IOError exception with an input file specific error message.
@@ -576,7 +755,11 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     void doBOUNDARY( BOUNDARY* growth ) throw( IOError );
     void doRECTANGLE( RECTANGLE* growth ) throw( IOError );
     void doPATH( PATH* growth ) throw( IOError );
-    
+    void doSTRINGPROP( STRINGPROP* growth ) throw( IOError );
+    void doBOOLPROP( STRINGPROP* growth ) throw( IOError );
+    void doVIA( VIA* growth ) throw( IOError );
+    void doCONTROL( CONTROL* growth ) throw( IOError );    
+
     
 public:
 
@@ -585,7 +768,7 @@ public:
         lexer = 0;
         tree  = 0;
         fp    = 0;
-        quote_char = '"';
+        quote_char += '"';
     }
 
     ~SPECCTRA_DB()
@@ -600,9 +783,7 @@ public:
     
     //-----<OUTPUTFORMATTER>-------------------------------------------------
     void Print( int nestLevel, const char* fmt, ... ) throw( IOError );
-    
-    char GetQuoteChar() { return quote_char; }
-    
+    const char* GetQuoteChar( const char* wrapee ); 
     //-----</OUTPUTFORMATTER>------------------------------------------------
 
     /**
@@ -731,8 +912,10 @@ void SPECCTRA_DB::doPCB( PCB* growth ) throw( IOError )
 {
     DSN_T tok = nextTok();
     
-    if( tok!=T_SYMBOL && tok!=T_STRING )
+    if( !isSymbol(tok) )
         expecting( T_SYMBOL );
+
+    growth->pcbname = lexer->CurText();    
     
     while( (tok = nextTok()) != T_RIGHT )
     {
@@ -761,6 +944,7 @@ void SPECCTRA_DB::doPCB( PCB* growth ) throw( IOError )
             growth->structure = new STRUCTURE( growth );
             doSTRUCTURE( growth->structure );
             break;
+            
         case T_placement:
         case T_library:
             break;
@@ -794,7 +978,7 @@ void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IOError )
                 expecting( T_QUOTE_DEF );
             lexer->SetStringDelimiter( (unsigned char) *lexer->CurText() );
             growth->string_quote = *lexer->CurText();
-            quote_char = *lexer->CurText(); 
+            quote_char = lexer->CurText(); 
             break;
             
         case T_space_in_quoted_tokens:
@@ -980,6 +1164,22 @@ L_place:
             growth->boundary = new BOUNDARY( growth );
             doBOUNDARY( growth->boundary );
             break;
+
+        case T_snap_angle:
+            STRINGPROP* stringprop;
+            growth->Append( stringprop = new STRINGPROP( growth, T_snap_angle ) );
+            doSTRINGPROP( stringprop );
+            break;
+
+        case T_via:
+            growth->via = new VIA( growth );
+            doVIA( growth->via );
+            break;
+            
+        case T_control:
+            growth->control = new CONTROL( growth );
+            doCONTROL( growth->control );
+            break;
             
         default:
             unexpected( lexer->CurText() );
@@ -1092,20 +1292,10 @@ void SPECCTRA_DB::doRECTANGLE( RECTANGLE* growth ) throw( IOError )
 {
     DSN_T   tok = nextTok();
     
-    switch( tok )
-    {
-    case T_SYMBOL:
-    case T_STRING:
-        
-    case T_pcb:         // reserved layer names match these tokens
-    case T_power:
-    case T_signal:
-        growth->layer_id = lexer->CurText();
-        break;
-        
-    default:
+    if( !isSymbol( tok ) )
         expecting( T_SYMBOL );
-    }
+
+    growth->layer_id = lexer->CurText();
     
     if( nextTok() != T_NUMBER )
         expecting( T_NUMBER );
@@ -1127,6 +1317,91 @@ void SPECCTRA_DB::doRECTANGLE( RECTANGLE* growth ) throw( IOError )
         expecting( T_RIGHT );
 }
 
+
+void SPECCTRA_DB::doSTRINGPROP( STRINGPROP* growth ) throw( IOError )
+{
+    DSN_T   tok = nextTok();
+    
+    if( !isSymbol( tok ) )
+        expecting( T_SYMBOL );
+
+    growth->value = lexer->CurText();
+    
+    if( nextTok() != T_RIGHT )
+        expecting( T_RIGHT );
+}
+
+
+void SPECCTRA_DB::doBOOLPROP( STRINGPROP* growth ) throw( IOError )
+{
+    DSN_T   tok = nextTok();
+    
+    if( tok!=T_on && tok!=T_off )
+        expecting( wxT("on|off") );
+
+    growth->value = (tok==T_on);
+    
+    if( nextTok() != T_RIGHT )
+        expecting( T_RIGHT );
+}
+
+
+void SPECCTRA_DB::doVIA( VIA* growth ) throw( IOError )
+{
+    DSN_T   tok;
+    
+    while( (tok = nextTok()) != T_RIGHT )
+    {
+        if( tok == T_LEFT )
+        {
+            if( nextTok() != T_spare )
+                expecting( T_spare );
+            
+            while( (tok = nextTok()) != T_RIGHT )
+            {
+                if( !isSymbol( tok ) )
+                    expecting( T_SYMBOL );
+                
+                growth->spares.push_back( lexer->CurText() );
+            }
+        }
+        else if( isSymbol( tok ) )
+        {
+            growth->padstacks.push_back( lexer->CurText() );
+        }
+        else
+            unexpected( lexer->CurText() );
+    }
+}
+
+
+void SPECCTRA_DB::doCONTROL( CONTROL* growth ) throw( IOError )
+{
+    DSN_T   tok;
+    
+    while( (tok = nextTok()) != T_RIGHT )
+    {
+        if( tok == T_LEFT )
+        {
+            tok = nextTok();
+            
+            switch( tok )
+            {
+            case T_via_at_smd:
+                tok = nextTok();
+                if( tok!=T_on && tok!=T_off )
+                    expecting( wxT("on|off") );
+                growth->via_at_smd = (tok==T_on);
+                break;
+                
+            default:
+                unexpected( lexer->CurText() );
+            }
+        }
+    }
+}
+
+
 void SPECCTRA_DB::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
 {
     va_list     args;
@@ -1146,6 +1421,19 @@ void SPECCTRA_DB::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
         ThrowIOError( _("System file error writing to file \"%s\""), filename.GetData() );
     
     va_end( args );
+}
+
+
+const char* SPECCTRA_DB::GetQuoteChar( const char* wrapee ) 
+{
+    while( *wrapee )
+    {
+        // if the string to be wrapped, the wrapee has a delimiter in it, 
+        // use the quote_char
+        if( strchr( "\t ()", *wrapee++ ) )
+            return quote_char.c_str();
+    }
+    return "";      // can use and unwrapped string.
 }
 
 
