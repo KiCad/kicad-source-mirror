@@ -23,6 +23,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+ 
+/*  This source file implements export and import capabilities to the 
+    specctra dsn file format.  The grammar for that file format is documented
+    fairly well.  There are classes for each major type of descriptor in the
+    spec.
+    
+    Since there are so many classes in here, it may be helpful to generate 
+    the Doxygen directory:
+    
+    $ cd <kicadSourceRoot>
+    $ doxygen
+    Then you can view the html documentation in the <kicadSourceRoot>/doxygen
+    directory.
+*/    
+
 
 #include <cstdarg>
 #include <cstdio>
@@ -91,6 +106,8 @@ struct POINT
     POINT() { x=0.0; y=0.0; }
 };
 
+typedef std::vector<std::string>    STRINGS;
+    
 
 
 /**
@@ -435,8 +452,6 @@ class VIA : public ELEM
 {
     friend class SPECCTRA_DB;
 
-    typedef std::vector<std::string>    STRINGS;
-    
     STRINGS     padstacks;
     STRINGS     spares;
 
@@ -509,6 +524,135 @@ public:
             out->Print( nestLevel+1, "(via_at_smd %s", via_at_smd ? "on" : "off" );
             if( via_at_smd_grid_on )
                 out->Print( 0, " grid %s", via_at_smd_grid_on ? "on" : "off" );
+            
+            out->Print( 0, ")\n" );
+        }
+
+        for( int i=0;  i<Length();  ++i )
+        {
+            At(i)->Save( out, nestLevel+1 );
+        }
+        
+        out->Print( nestLevel, ")\n" ); 
+    }
+};
+
+
+/**
+ * Class RULE
+ * holds a single rule and corresponds to <rule_descriptors>
+ */
+class RULE : public ELEM
+{
+    
+};
+
+
+/**
+ * Class RULES
+ * corresponds to the <rule_descriptor> in the specctra dsn spec.
+ */
+class RULES : public ELEM
+{
+    ;
+};
+
+
+class LAYER : public ELEM
+{
+    friend class SPECCTRA_DB;
+    
+    std::string name;
+    DSN_T       layer_type; ///< one of: T_signal, T_power, T_mixed, T_jumper
+    int         direction;
+    int         cost;       ///< [forbidden | high | medium | low | free | <positive_integer > | -1]
+    int         cost_type;  ///< T_length | T_way 
+    RULES*      rules;
+    STRINGS     use_net;
+    
+    struct PROPERTY
+    {
+        std::string name;
+        std::string value;
+    };
+    
+    typedef std::vector<PROPERTY>   PROPERTYS;
+    
+    PROPERTYS   propertys;
+    
+public:
+
+    LAYER( ELEM* aParent ) :
+        ELEM( T_layer, aParent )
+    {
+        layer_type = T_signal;
+        direction  = -1;
+        cost       = -1;
+        cost_type  = -1;
+        
+        rules = 0;
+    }
+    
+    ~LAYER()
+    {
+        delete rules;
+    }
+    
+    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        const char* quote = out->GetQuoteChar( name.c_str() );
+        
+        out->Print( nestLevel, "(%s %s%s%s\n", LEXER::GetTokenText( Type() ),
+                       quote, name.c_str(), quote );
+
+        out->Print( nestLevel+1, "(type %s)\n", LEXER::GetTokenText( layer_type ) );
+
+        if( propertys.size() )
+        {
+            out->Print( nestLevel+1, "(property \n" );
+            
+            for( PROPERTYS::const_iterator i = propertys.begin();
+                i != propertys.end();  ++i )
+            {
+                const char* quoteName  = out->GetQuoteChar( i->name.c_str() );
+                const char* quoteValue = out->GetQuoteChar( i->value.c_str() );
+                
+                out->Print( nestLevel+2, "(%s%s%s %s%s%s)\n", 
+                           quoteName,  i->name.c_str(), quoteName,
+                           quoteValue, i->value.c_str(), quoteValue );
+            }
+            out->Print( nestLevel+1, ")\n" );
+        }
+        
+        if( direction != -1 )
+            out->Print( nestLevel+1, "(direction %s)\n", 
+                       LEXER::GetTokenText( (DSN_T)direction ) );
+
+        if( rules )
+            rules->Save( out, nestLevel+1 );
+        
+        if( cost != -1 )
+        {
+            if( cost < 0 )
+                out->Print( nestLevel+1, "(cost %d", -cost );   // positive integer, stored as negative
+            else
+                out->Print( nestLevel+1, "(cost %s", LEXER::GetTokenText( (DSN_T)cost ) );
+            
+            if( cost_type != -1 )
+                out->Print( 0, " (type %s)", LEXER::GetTokenText( (DSN_T)cost_type ) );
+            
+            out->Print( 0, ")\n" );
+        }
+
+        if( use_net.size() )
+        {
+            out->Print( nestLevel+1, "(use_net" );
+            for( STRINGS::const_iterator i = use_net.begin();  i!=use_net.end(); ++i )
+            {
+                const char* quote = out->GetQuoteChar( i->c_str() );
+                out->Print( 0, " %s%s%s", 
+                           quote, i->c_str(), quote );
+            }
             out->Print( 0, ")\n" );
         }
         
@@ -526,6 +670,9 @@ class STRUCTURE : public ELEM
     BOUNDARY*   place_boundary;
     VIA*        via;
     CONTROL*    control;
+    
+    typedef boost::ptr_vector<LAYER>    LAYERS;
+    LAYERS      layers;
     
 public:
 
@@ -555,6 +702,9 @@ public:
         if( unit )
             unit->Save( out, nestLevel+1 );
 
+        for( unsigned i=0;  i<layers.size(); ++i )
+            layers[i].Save( out, nestLevel+1 ); 
+        
         if( boundary )
             boundary->Save( out, nestLevel+1 );
 
@@ -586,19 +736,19 @@ public:
 
 
 /**
- * Class BOOLPROP
- * is a container for a single property whose value is a boolean (on|off).
- * The name of the property is obtained from the DSN_T.
+ * Class TOKPROP
+ * is a container for a single property whose value is another token.
+ * The name of the property is obtained from the DSN_T Type().
  */
-class BOOLPROP : public ELEM
+class TOKPROP : public ELEM
 {
     friend class SPECCTRA_DB;
 
-    bool    value;
+    DSN_T       value;
 
 public:
 
-    BOOLPROP( ELEM* aParent, DSN_T aType ) :
+    TOKPROP( ELEM* aParent, DSN_T aType ) :
         ELEM( aType, aParent )
     {
     }
@@ -606,7 +756,7 @@ public:
     void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         out->Print( nestLevel, "(%s %s)\n", LEXER::GetTokenText( Type() ),
-                   value ? "on" : "off" );
+                   LEXER::GetTokenText( value ) );
     }
 };
 
@@ -756,10 +906,10 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     void doRECTANGLE( RECTANGLE* growth ) throw( IOError );
     void doPATH( PATH* growth ) throw( IOError );
     void doSTRINGPROP( STRINGPROP* growth ) throw( IOError );
-    void doBOOLPROP( STRINGPROP* growth ) throw( IOError );
+    void doTOKPROP( TOKPROP* growth ) throw( IOError );
     void doVIA( VIA* growth ) throw( IOError );
     void doCONTROL( CONTROL* growth ) throw( IOError );    
-
+    void doLAYER( LAYER* growth ) throw( IOError );
     
 public:
 
@@ -1167,7 +1317,8 @@ L_place:
 
         case T_snap_angle:
             STRINGPROP* stringprop;
-            growth->Append( stringprop = new STRINGPROP( growth, T_snap_angle ) );
+            stringprop = new STRINGPROP( growth, T_snap_angle ); 
+            growth->Append( stringprop );
             doSTRINGPROP( stringprop );
             break;
 
@@ -1179,6 +1330,13 @@ L_place:
         case T_control:
             growth->control = new CONTROL( growth );
             doCONTROL( growth->control );
+            break;
+
+        case T_layer:
+            LAYER* layer;
+            layer = new LAYER( growth );
+            growth->layers.push_back( layer );
+            doLAYER( layer );
             break;
             
         default:
@@ -1332,14 +1490,14 @@ void SPECCTRA_DB::doSTRINGPROP( STRINGPROP* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doBOOLPROP( STRINGPROP* growth ) throw( IOError )
+void SPECCTRA_DB::doTOKPROP( TOKPROP* growth ) throw( IOError )
 {
     DSN_T   tok = nextTok();
     
-    if( tok!=T_on && tok!=T_off )
-        expecting( wxT("on|off") );
+    if( tok<0 )
+        unexpected( lexer->CurText() );
 
-    growth->value = (tok==T_on);
+    growth->value = tok;
     
     if( nextTok() != T_RIGHT )
         expecting( T_RIGHT );
@@ -1381,22 +1539,176 @@ void SPECCTRA_DB::doCONTROL( CONTROL* growth ) throw( IOError )
     
     while( (tok = nextTok()) != T_RIGHT )
     {
-        if( tok == T_LEFT )
+        if( tok != T_LEFT )
+            expecting( T_LEFT );
+
+        tok = nextTok();
+        switch( tok )
         {
+        case T_via_at_smd:
             tok = nextTok();
+            if( tok!=T_on && tok!=T_off )
+                expecting( wxT("on|off") );
+            growth->via_at_smd = (tok==T_on);
+            if( nextTok() != T_RIGHT )
+                expecting( T_RIGHT );
+            break;
             
+        case T_off_grid:
+        case T_route_to_fanout_only:
+        case T_force_to_terminal_point:
+        case T_same_net_checking:
+        case T_checking_trim_by_pin:
+        case T_noise_calculation:
+        case T_noise_accumulation:
+        case T_include_pins_in_crosstalk:
+        case T_bbv_ctr2ctr:
+        case T_average_pair_length:
+        case T_crosstalk_model:
+        case T_roundoff_rotation:
+        case T_microvia:
+        case T_reroute_order_viols:
+            TOKPROP* tokprop;
+            tokprop = new TOKPROP( growth, tok ) ;
+            growth->Append( tokprop );
+            doTOKPROP( tokprop );
+            break;
+            
+        default:
+            unexpected( lexer->CurText() );
+        }
+    }
+}
+
+
+void SPECCTRA_DB::doLAYER( LAYER* growth ) throw( IOError )
+{
+    DSN_T   tok = nextTok();
+    
+    if( !isSymbol(tok) )
+        expecting(T_SYMBOL);
+
+    growth->name = lexer->CurText();
+    
+    while( (tok = nextTok()) != T_RIGHT )
+    {
+        if( tok != T_LEFT )
+            expecting( T_LEFT );
+
+        tok = nextTok();
+        switch( tok )
+        {
+        case T_type:
+            tok = nextTok();
+            if( tok!=T_signal && tok!=T_power && tok!=T_mixed && tok!=T_jumper )
+                expecting( wxT("signal|power|mixed|jumper") );
+            growth->layer_type = tok;
+            if( nextTok()!=T_RIGHT )
+                expecting(T_RIGHT);
+            break;
+
+        case T_rule:
+            // @todo
+            break;
+            
+        case T_property:
+            {
+                LAYER::PROPERTY property;  // construct it once here, append multiple times.
+    
+                while( (tok = nextTok()) != T_RIGHT )
+                {
+                    if( tok != T_LEFT )
+                        expecting( T_LEFT );
+                    
+                    tok = nextTok();
+                    if( !isSymbol(tok) )
+                        expecting( T_SYMBOL );
+                    property.name = lexer->CurText();
+                    
+                    tok = nextTok();
+                    if( !isSymbol(tok) )
+                        expecting( T_SYMBOL );
+                    property.value = lexer->CurText();
+                    
+                    growth->propertys.push_back( property );
+                    
+                    if( nextTok() != T_RIGHT )
+                        expecting( T_RIGHT );
+                }
+            }
+            break;
+            
+        case T_direction:
+            tok = nextTok();
             switch( tok )
             {
-            case T_via_at_smd:
-                tok = nextTok();
-                if( tok!=T_on && tok!=T_off )
-                    expecting( wxT("on|off") );
-                growth->via_at_smd = (tok==T_on);
+            case T_horizontal:
+            case T_vertical:
+            case T_orthogonal:
+            case T_positive_diagonal:
+            case T_negative_diagonal:
+            case T_diagonal:
+            case T_off:
+                growth->direction = tok;
                 break;
-                
             default:
-                unexpected( lexer->CurText() );
+                expecting( wxT("horizontal|vertical|orthogonal|positive_diagonal|negative_diagonal|diagonal|off") );
             }
+            if( nextTok()!=T_RIGHT )
+                expecting(T_RIGHT);
+            break;
+
+        case T_cost:
+            tok = nextTok();
+            switch( tok )
+            {
+            case T_forbidden:
+            case T_high:
+            case T_medium:
+            case T_low:
+            case T_free:
+                growth->cost = tok;
+                break;
+            case T_NUMBER:
+                // store as negative so we can differentiate between 
+                // DSN_T (positive) and T_NUMBER (negative)
+                growth->cost = -atoi( lexer->CurText() );   
+                break;
+            default:
+                expecting( wxT("forbidden|high|medium|low|free|<positive_integer>|-1") );
+            }
+            tok = nextTok();
+            if( tok == T_LEFT )
+            {
+                if( nextTok() != T_type )
+                    unexpected( lexer->CurText() );
+                
+                tok = nextTok();
+                if( tok!=T_length && tok!=T_way )
+                    expecting( wxT("length|way") );
+                
+                growth->cost_type = tok;
+                if( nextTok()!=T_RIGHT )
+                    expecting(T_RIGHT);
+                
+                tok = nextTok();
+            }
+            if( tok!=T_RIGHT )
+                expecting(T_RIGHT);
+            break;
+
+        case T_use_net:
+            while( (tok = nextTok()) != T_RIGHT )
+            {
+                if( !isSymbol(tok) )
+                    expecting( T_SYMBOL );
+                
+                growth->use_net.push_back( lexer->CurText() );
+            }
+            break;
+            
+        default:
+            unexpected( lexer->CurText() );            
         }
     }
 }
@@ -1428,12 +1740,12 @@ const char* SPECCTRA_DB::GetQuoteChar( const char* wrapee )
 {
     while( *wrapee )
     {
-        // if the string to be wrapped, the wrapee has a delimiter in it, 
-        // use the quote_char
+        // if the string to be wrapped (wrapee) has a delimiter in it, 
+        // return the quote_char so caller wraps the wrapee.
         if( strchr( "\t ()", *wrapee++ ) )
             return quote_char.c_str();
     }
-    return "";      // can use and unwrapped string.
+    return "";      // can use an unwrapped string.
 }
 
 
