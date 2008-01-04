@@ -588,7 +588,7 @@ DSN_T LEXER::NextTok() throw (IOError)
     char*   cur  = next;
     char*   head = cur;
 
-    lastTok = curTok;
+    prevTok = curTok;
     
     if( curTok != T_EOF )
     {
@@ -613,7 +613,7 @@ L_read:
             goto L_read;
         
         // switching the string_quote character
-        if( lastTok == T_string_quote )
+        if( prevTok == T_string_quote )
         {
             static const wxString errtxt( _("String delimiter must be a single character of ', \", or $"));   
             

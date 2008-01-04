@@ -539,22 +539,35 @@ public:
 
 
 /**
- * Class RULE
- * holds a single rule and corresponds to <rule_descriptors>
- */
-class RULE : public ELEM
-{
-    
-};
-
-
-/**
  * Class RULES
  * corresponds to the <rule_descriptor> in the specctra dsn spec.
  */
 class RULES : public ELEM
 {
-    ;
+    friend class SPECCTRA_DB;
+    
+    STRINGS     rules;      ///< rules are saved in std::string form.
+
+public:
+
+    RULES( ELEM* aParent ) :
+        ELEM( T_rule, aParent )
+    {
+    }
+    
+    ~RULES()
+    {
+    }
+    
+    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
+
+        for( STRINGS::const_iterator i = rules.begin();  i!=rules.end(); ++i )
+            out->Print( nestLevel+1, "%s\n", i->c_str() );
+        
+        out->Print( nestLevel, ")\n" );
+    }        
 };
 
 
@@ -670,6 +683,7 @@ class STRUCTURE : public ELEM
     BOUNDARY*   place_boundary;
     VIA*        via;
     CONTROL*    control;
+    RULES*      rules;
     
     typedef boost::ptr_vector<LAYER>    LAYERS;
     LAYERS      layers;
@@ -684,6 +698,7 @@ public:
         place_boundary = 0;
         via = 0;
         control = 0;
+        rules = 0;
     }
     
     ~STRUCTURE()
@@ -693,6 +708,7 @@ public:
         delete place_boundary;
         delete via;
         delete control;
+        delete rules;
     }
     
     void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
@@ -721,6 +737,9 @@ public:
         {
             At(i)->Save( out, nestLevel+1 );
         }
+        
+        if( rules )
+            rules->Save( out, nestLevel+1 );
         
         out->Print( nestLevel, ")\n" ); 
     }
@@ -910,6 +929,7 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     void doVIA( VIA* growth ) throw( IOError );
     void doCONTROL( CONTROL* growth ) throw( IOError );    
     void doLAYER( LAYER* growth ) throw( IOError );
+    void doRULES( RULES* growth ) throw( IOError );
     
 public:
 
@@ -1338,6 +1358,11 @@ L_place:
             growth->layers.push_back( layer );
             doLAYER( layer );
             break;
+
+        case T_rule:
+            growth->rules = new RULES( growth );
+            doRULES( growth->rules );
+            break;
             
         default:
             unexpected( lexer->CurText() );
@@ -1608,7 +1633,8 @@ void SPECCTRA_DB::doLAYER( LAYER* growth ) throw( IOError )
             break;
 
         case T_rule:
-            // @todo
+            growth->rules = new RULES( growth );
+            doRULES( growth->rules );
             break;
             
         case T_property:
@@ -1713,6 +1739,39 @@ void SPECCTRA_DB::doLAYER( LAYER* growth ) throw( IOError )
     }
 }
 
+
+void SPECCTRA_DB::doRULES( RULES* growth ) throw( IOError )
+{
+    std::string     builder;
+    int             bracketNesting = 1; // we already saw the opening T_LEFT
+
+    while( bracketNesting != 0 )
+    {
+        DSN_T tok = nextTok();
+        
+        switch( tok )
+        {
+        case T_LEFT:    ++bracketNesting;   break;
+        case T_RIGHT:   --bracketNesting;   break;
+        default: 
+            ;
+        }
+ 
+        if( bracketNesting >= 1 )
+        {
+            if( lexer->PrevTok() != T_LEFT && tok!=T_RIGHT )
+                builder += ' ';
+            
+            builder += lexer->CurText();
+        }
+        
+        if( bracketNesting == 1 )
+        {
+           growth->rules.push_back( builder );
+           builder.clear();
+        }
+    }
+}
 
 void SPECCTRA_DB::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
 {

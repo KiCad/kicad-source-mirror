@@ -527,7 +527,7 @@ class LEXER
     bool                space_in_quoted_tokens; ///< blank spaces within quoted strings
     
     wxString            filename;
-    int                 lastTok;        ///< curTok from previous NextTok() call.
+    DSN_T               prevTok;        ///< curTok from previous NextTok() call.
     int                 curOffset;      ///< offset within current line of the current token 
     
     DSN_T               curTok;         ///< the current token obtained on last NextTok()
@@ -640,7 +640,6 @@ public:
         return curText.c_str();
     }
 
-    
     /**
      * Function CurTok
      * returns whatever NextTok() returned the last time it was called.
@@ -650,6 +649,15 @@ public:
         return curTok;
     }
 
+    /**
+     * Function PrevTok
+     * returns whatever NextTok() returned the 2nd to last time it was called.
+     */
+    DSN_T PrevTok()
+    {
+        return prevTok;
+    }
+    
     /**
      * Function CurOffset
      * returns the char offset within the current line, using a 1 based index.
