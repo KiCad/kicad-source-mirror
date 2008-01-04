@@ -224,6 +224,123 @@ public:
     void Show( int nestLevel, std::ostream& os );
     
 #endif
+
+	/* Functions used in test, merge and cut outlines */
+	/**
+	  * Function AddArea
+	  * add empty copper area to net
+	  * @return pointer to the new area
+	 */
+	ZONE_CONTAINER* AddArea( int netcode, int layer, int x, int y, int hatch );
+
+	/**
+	 * remove copper area from net
+	 * @param  area = area to remove
+	 * @return 0
+	 */
+	int RemoveArea( ZONE_CONTAINER* area_to_remove );
+
+	/**
+	 * Function InsertArea
+	  * add empty copper area to net, inserting after m_ZoneDescriptorList[iarea]
+	 * @return pointer to the new area
+	 */
+	ZONE_CONTAINER* InsertArea( int netcode, int iarea, int layer, int x, int y, int hatch );
+
+	/**
+	 Function CompleteArea
+	 * complete copper area contour by adding a line from last to first corner
+	 * if there is only 1 or 2 corners, remove (delete) the area
+	 * @param area_to_complete = area to complete or remove
+	 * @param style = style of last corner
+	 * @return 1 if Ok, 0 if area removed
+	*/
+	int CompleteArea( ZONE_CONTAINER* area_to_complete, int style );
+
+	/**
+	 * Function TestAreaPolygon
+	 * Test an area for self-intersection.
+	 *
+	 * @param CurrArea = copper area to test
+	 * @return :
+	 * -1 if arcs intersect other sides
+	 *  0 if no intersecting sides
+	 *  1 if intersecting sides, but no intersecting arcs
+	 * Also sets utility2 flag of area with return value
+	 */
+	int TestAreaPolygon( ZONE_CONTAINER* CurrArea );
+
+	/**
+	 * Function ClipAreaPolygon
+	 * Process an area that has been modified, by clipping its polygon against itself.
+	 * This may change the number and order of copper areas in the net.
+	 * @param bMessageBoxInt == TRUE, shows message when clipping occurs.
+	 * @param  bMessageBoxArc == TRUE, shows message when clipping can't be done due to arcs.
+	 * @return:
+	 *	-1 if arcs intersect other sides, so polygon can't be clipped
+	 *	 0 if no intersecting sides
+	 *	 1 if intersecting sides
+	 * Also sets areas->utility1 flags if areas are modified
+	*/
+	int ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
+								bool bMessageBoxArc, bool bMessageBoxInt, bool bRetainArcs = TRUE );
+
+	/**
+	 * Process an area that has been modified, by clipping its polygon against
+	 * itself and the polygons for any other areas on the same net.
+	 * This may change the number and order of copper areas in the net.
+	 * @param modified_area = area to test
+	 * @param bMessageBox : if TRUE, shows message boxes when clipping occurs.
+	 * @return :
+	 * -1 if arcs intersect other sides, so polygon can't be clipped
+	 *  0 if no intersecting sides
+	 *  1 if intersecting sides, polygon clipped
+	 */
+	int AreaPolygonModified( ZONE_CONTAINER* modified_area,
+									bool            bMessageBoxArc,
+									bool            bMessageBoxInt );
+
+	/**
+	 * Function CombineAllAreasInNet
+	  * Checks all copper areas in net for intersections, combining them if found
+	  * @param aNetCode = net to consider
+	  * @param bMessageBox : if true display warning message box
+	  * @param bUseUtility : if true, don't check areas if both utility flags are 0
+	  * Sets utility flag = 1 for any areas modified
+	  * If an area has self-intersecting arcs, doesn't try to combine it
+	 */
+	int CombineAllAreasInNet( int aNetCode, bool bMessageBox, bool bUseUtility );
+
+	/**
+	  * Function TestAreaIntersections
+	  * Check for intersection of a given copper area with other areas in same net
+	  * @param area_to_test = area to compare to all other areas in the same net
+	 */
+	bool TestAreaIntersections( ZONE_CONTAINER* area_to_test );
+
+	/**
+	  * Function TestAreaIntersection
+	  * Test for intersection of 2 copper areas
+	  * area_to_test must be after area_ref in m_ZoneDescriptorList
+	  * @param area_ref = area reference
+	  * @param area_to_test = area to compare for intersection calculations
+	  * @return : 0 if no intersection
+	  *         1 if intersection
+	  *         2 if arcs intersect
+	 */
+	int TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_test );
+
+	/**
+	  * Function CombineAreas
+	  * If possible, combine 2 copper areas
+	  * area_ref must be BEFORE area_to_combine
+	  * area_to_combine will be deleted, if areas are combined
+	  * @return : 0 if no intersection
+	  *         1 if intersection
+	  *         2 if arcs intersect
+	 */
+	int CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combine );
+
 };
 
 #endif		// #ifndef CLASS_BOARD_H

@@ -529,6 +529,24 @@ public:
 	 */
     int                Fill_All_Zones( wxDC* DC, bool verbose = TRUE );
 
+
+	/**
+	 * Function Add_Zone_Cutout
+	 * Add a cutout zone to a given zone outline
+	 * @param DC = current Device Context
+	 * @param zone_container = parent zone outline
+	 */
+    void Add_Zone_Cutout( wxDC* DC , ZONE_CONTAINER * zone_container );
+
+	/**
+	 * Function Add_Similar_Zone
+	 * Add a zone to a given zone outline.
+	 * if the zones are overlappeing they will be merged
+	 * @param DC = current Device Context
+	 * @param zone_container = parent zone outline
+	 */
+    void Add_Similar_Zone( wxDC* DC , ZONE_CONTAINER * zone_container );
+
 	/**
 	 * Function Edit_Zone_Params
 	 * Edit params (layer, clearance, ...) for a zone outline
@@ -547,6 +565,13 @@ public:
 	 * Terminates a move corner in a zone outline
 	 */
 	void End_Move_Zone_Corner( wxDC* DC , ZONE_CONTAINER * zone_container );
+
+	/**
+	 * Function End_Move_Zone_Corner
+	 * Remove the currently selected corner in a zone outline
+	 * the .m_CornerSelection is used as corner selection
+	 */
+	void Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER * zone_container );
 
 	// Target handling
     MIREPCB*            Create_Mire( wxDC* DC );

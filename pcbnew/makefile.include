@@ -10,8 +10,10 @@ LIBVIEWER3D = ../3d-viewer/3d-viewer.a
 ZONE_FILES = zones_by_polygon.o
 #ZONE_FILES = zones.o
 
+
 OBJECTS=	$(TARGET).o classpcb.o\
 		$(ZONE_FILES)\
+		zones_test_and_combine_areas.o\
 		zone_filling_algorithm.o\
 		lay2plot.o\
 		modedit_undo_redo.o\

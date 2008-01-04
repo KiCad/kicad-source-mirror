@@ -281,7 +281,7 @@ void WinEDA_ZoneFrame::CreateControls()
     }		
 
 	if ( m_Zone_Container )
-		s_Zone_Hatching = m_Zone_Container->GetHatch();
+		s_Zone_Hatching = m_Zone_Container->m_Poly->GetHatchStyle();
     switch( s_Zone_Hatching )
     {
 		case CPolyLine::NO_HATCH:

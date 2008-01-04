@@ -748,6 +748,19 @@ void CPolyLine::RemoveContour( int icont )
 	Draw();
 }
 
+
+void CPolyLine::RemoveAllContours( void )
+/**
+ * function RemoveAllContours
+ * removes all corners from the lists.
+ * Others params are not chnaged
+ */
+{
+	corner.clear( );
+	side_style.clear( );
+}
+
+
 /** Function InsertCorner
  * insert a new corner between two existing corners
  * @param ic = index for the insertion point: the corner is inserted AFTER ic

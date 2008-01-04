@@ -112,20 +112,20 @@ int ZONE_CONTAINER::Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose )
 
     // trace the zone edges into the routing matrix
     int        i_start_contour = 0;
-    for( unsigned ic = 0; ic < corner.size(); ic++ )
+    for( unsigned ic = 0; ic < m_Poly->corner.size(); ic++ )
     {
-        int xi = corner[ic].x - Pcb->m_BoundaryBox.m_Pos.x;
-        int yi = corner[ic].y - Pcb->m_BoundaryBox.m_Pos.y;
+        int xi = m_Poly->corner[ic].x - Pcb->m_BoundaryBox.m_Pos.x;
+        int yi = m_Poly->corner[ic].y - Pcb->m_BoundaryBox.m_Pos.y;
         int xf, yf;
-        if( corner[ic].end_contour == FALSE && ic < corner.size() - 1 )
+        if( m_Poly->corner[ic].end_contour == FALSE && ic < m_Poly->corner.size() - 1 )
         {
-            xf = corner[ic + 1].x - Pcb->m_BoundaryBox.m_Pos.x;
-            yf = corner[ic + 1].y - Pcb->m_BoundaryBox.m_Pos.y;
+            xf = m_Poly->corner[ic + 1].x - Pcb->m_BoundaryBox.m_Pos.x;
+            yf = m_Poly->corner[ic + 1].y - Pcb->m_BoundaryBox.m_Pos.y;
         }
         else
         {
-            xf = corner[i_start_contour].x - Pcb->m_BoundaryBox.m_Pos.x;
-            yf = corner[i_start_contour].y - Pcb->m_BoundaryBox.m_Pos.y;
+            xf = m_Poly->corner[i_start_contour].x - Pcb->m_BoundaryBox.m_Pos.x;
+            yf = m_Poly->corner[i_start_contour].y - Pcb->m_BoundaryBox.m_Pos.y;
             i_start_contour = ic + 1;
         }
         TraceLignePcb( xi, yi, xf, yf, -1, HOLE | CELL_is_EDGE, WRITE_CELL );
@@ -136,9 +136,8 @@ int ZONE_CONTAINER::Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose )
     int        cells_count = 0;
     for( ii = 0, pad = frame->m_Pcb->m_Pads; ii < frame->m_Pcb->m_NbPads; ii++, pad++ )
     {
-        int     icont = 0;
         wxPoint pos;
-        if( TestPointInsideContour( icont, (*pad)->m_Pos.x, (*pad)->m_Pos.y ) )
+        if( m_Poly->TestPointInside( (*pad)->m_Pos.x, (*pad)->m_Pos.y ) )
         {
             ZoneStartFill.x = ( (*pad)->m_Pos.x - Pcb->m_BoundaryBox.m_Pos.x +
                                (g_GridRoutingSize / 2) ) / g_GridRoutingSize;
@@ -196,20 +195,20 @@ int ZONE_CONTAINER::Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose )
     /* Recreate zone limits on the routing matrix
      *  (could be deleted by PlaceCells()) : */
     i_start_contour = 0;
-    for( unsigned ic = 0; ic < corner.size(); ic++ )
+    for( unsigned ic = 0; ic < m_Poly->corner.size(); ic++ )
     {
-        int xi = corner[ic].x - Pcb->m_BoundaryBox.m_Pos.x;
-        int yi = corner[ic].y - Pcb->m_BoundaryBox.m_Pos.y;
+        int xi = m_Poly->corner[ic].x - Pcb->m_BoundaryBox.m_Pos.x;
+        int yi = m_Poly->corner[ic].y - Pcb->m_BoundaryBox.m_Pos.y;
         int xf, yf;
-        if( corner[ic].end_contour == FALSE && ic < corner.size() - 1 )
+        if( m_Poly->corner[ic].end_contour == FALSE && ic < m_Poly->corner.size() - 1 )
         {
-            xf = corner[ic + 1].x - Pcb->m_BoundaryBox.m_Pos.x;
-            yf = corner[ic + 1].y - Pcb->m_BoundaryBox.m_Pos.y;
+            xf = m_Poly->corner[ic + 1].x - Pcb->m_BoundaryBox.m_Pos.x;
+            yf = m_Poly->corner[ic + 1].y - Pcb->m_BoundaryBox.m_Pos.y;
         }
         else
         {
-            xf = corner[i_start_contour].x - Pcb->m_BoundaryBox.m_Pos.x;
-            yf = corner[i_start_contour].y - Pcb->m_BoundaryBox.m_Pos.y;
+            xf = m_Poly->corner[i_start_contour].x - Pcb->m_BoundaryBox.m_Pos.x;
+            yf = m_Poly->corner[i_start_contour].y - Pcb->m_BoundaryBox.m_Pos.y;
             i_start_contour = ic + 1;
         }
         TraceLignePcb( xi, yi, xf, yf, -1, HOLE | CELL_is_EDGE, WRITE_CELL );
@@ -219,9 +218,8 @@ int ZONE_CONTAINER::Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose )
      *  (could be deleted by PlaceCells()) : */
     for( ii = 0, pad = frame->m_Pcb->m_Pads; ii < frame->m_Pcb->m_NbPads; ii++, pad++ )
     {
-        int     icont = 0;
         wxPoint pos;
-        if( TestPointInsideContour( icont, (*pad)->m_Pos.x, (*pad)->m_Pos.y ) )
+        if( m_Poly->TestPointInside( (*pad)->m_Pos.x, (*pad)->m_Pos.y ) )
         {
             ZoneStartFill.x = ( (*pad)->m_Pos.x - Pcb->m_BoundaryBox.m_Pos.x +
                                (g_GridRoutingSize / 2) ) / g_GridRoutingSize;

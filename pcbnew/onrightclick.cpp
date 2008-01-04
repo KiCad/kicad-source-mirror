@@ -658,10 +658,10 @@ void WinEDA_PcbFrame::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu
 
         aPopMenu->AppendSeparator();
         ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_ZONE_ADD_SIMILAR_ZONE,
-                      _( "Add Similar Zone" ), fill_zone_xpm );
+                      _( "Add Similar Zone" ), add_zone_xpm );
 
         ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_ZONE_ADD_CUTOUT_ZONE,
-                      _( "Add Cutout Zone" ), add_zone_cutout );
+                      _( "Add Cutout Area" ), add_zone_cutout );
         aPopMenu->AppendSeparator();
 
         ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_FILL_ZONE,

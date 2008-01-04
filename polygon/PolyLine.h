@@ -81,6 +81,7 @@ public:
 	void MoveCorner( int ic, int x, int y );
 	void Close( int style = STRAIGHT, BOOL bDraw=TRUE );
 	void RemoveContour( int icont );
+	void RemoveAllContours( void );
 
 	// drawing functions
 	void HighlightSide( int is );
@@ -107,6 +108,7 @@ public:
 
 
 	// access functions
+	int GetLayer() { return m_layer;}
 	int GetNumCorners();
 	int GetNumSides();
 	int GetClosed();
@@ -125,7 +127,7 @@ public:
 	id  GetId();
 	int GetSelBoxSize();
 	CDisplayList * GetDisplayList(){ return m_dlist; };
-	int GetHatch(){ return m_HatchStyle; }
+	int GetHatchStyle(){ return m_HatchStyle; }
 	void SetHatch( int hatch ){ Undraw(); m_HatchStyle = hatch; Draw(); };
 	void SetX( int ic, int x );
 	void SetY( int ic, int y );
@@ -159,14 +161,14 @@ private:
 	int m_Width;		// line width
 	int m_sel_box;	// corner selection box width/2
 	int utility;
-protected:
+public:
 	std::vector <CPolyPt> corner;	// array of points for corners
 	std::vector <int> side_style;	// array of styles for sides
 private:
 	std::vector <dl_element*> dl_side;	// graphic elements
 	std::vector <dl_element*> dl_side_sel;
 	std::vector <dl_element*> dl_corner_sel;
-protected:
+public:
 	int m_HatchStyle;	// hatch style, see enum above
 	std::vector <CSegment>  m_HatchLines;	// hatch lines
 private:

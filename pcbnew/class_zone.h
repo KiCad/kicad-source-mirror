@@ -15,7 +15,7 @@
  * others polygons inside this main polygon are holes.
 */
 
-class ZONE_CONTAINER : public BOARD_ITEM, public CPolyLine
+class ZONE_CONTAINER : public BOARD_ITEM
 {
 public:
 	enum m_PadInZone {			// How pads are covered by copper in zone
@@ -24,10 +24,12 @@ public:
 		PAD_IN_ZONE				// pads are covered by copper
 	};
     wxString m_Netname;         // Net Name
+	CPolyLine * m_Poly;			// outlines
 	int m_CornerSelection;      // For corner moving, corner index to drag, or -1 if no selection
 	int m_ZoneClearance;		// clearance value
 	int m_GridFillValue;		// Grid used for filling
 	m_PadInZone m_PadOption;	// see m_PadInZone
+	int utility, utility2;		// flags used in polygon calculations
 
 private:
     int     m_NetCode;          // Net number for fast comparisons
@@ -55,7 +57,7 @@ public:
                    const wxPoint& offset, int draw_mode );
 	
 	int GetNet( void ) { return m_NetCode; }
-	void SetNet( int anet_code ) { m_NetCode = anet_code; }
+	void SetNet( int anet_code );
 	/**
 	 * Function HitTest
 	 * tests if the given wxPoint is within the bounds of this object.
@@ -90,7 +92,6 @@ public:
 	 * @return error level (0 = no error)
 	 */
 	int Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose = TRUE);
-
 };
 
 /*******************/

@@ -8,29 +8,8 @@
 #include "gr_basic.h"
 
 #include "common.h"
+#include "PolyLine.h"
 #include "pcbnew.h"
-
-/************************/
-/* class ZONE_CONTAINER */
-/************************/
-
-ZONE_CONTAINER::ZONE_CONTAINER( BOARD* parent ) :
-    BOARD_ITEM( parent, TYPEZONE_CONTAINER )
-    , CPolyLine( NULL )
-
-{
-    m_NetCode = -1;            // Net number for fast comparisons
-	m_CornerSelection = -1;
-	m_ZoneClearance = 200;		// a reasonnable clerance value
-	m_GridFillValue = 50;		// a reasonnable grid used for filling
-	m_PadOption = THERMAL_PAD;
-}
-
-
-ZONE_CONTAINER::~ZONE_CONTAINER()
-{
-}
-
 
 /**********************/
 /* Class EDGE_ZONE */
@@ -49,13 +28,57 @@ EDGE_ZONE:: ~EDGE_ZONE()
 {
 }
 
-
 /****************************************/
 bool EDGE_ZONE::Save( FILE* aFile ) const
 /****************************************/
 {
 	return true;
 }
+
+
+/************************/
+/* class ZONE_CONTAINER */
+/************************/
+
+ZONE_CONTAINER::ZONE_CONTAINER( BOARD* parent ) :
+    BOARD_ITEM( parent, TYPEZONE_CONTAINER )
+
+{
+    m_NetCode = -1;            // Net number for fast comparisons
+	m_CornerSelection = -1;
+	m_ZoneClearance = 200;		// a reasonnable clerance value
+	m_GridFillValue = 50;		// a reasonnable grid used for filling
+	m_PadOption = THERMAL_PAD;
+	utility = 0;				// flags used in polygon calculations
+	utility2 = 0;				// flags used in polygon calculations
+	m_Poly = new CPolyLine( NULL );	// Outlines
+
+}
+
+
+ZONE_CONTAINER::~ZONE_CONTAINER()
+{
+	delete m_Poly;
+	m_Poly = NULL;
+}
+
+
+/*******************************************/
+void ZONE_CONTAINER::SetNet( int anet_code )
+/*******************************************/
+{
+	m_NetCode = anet_code;
+	if ( m_Parent )
+	{
+		EQUIPOT* net = ((BOARD*) m_Parent)->FindNet( g_HightLigth_NetCode );
+		if( net )
+			m_Netname = net->m_Netname;
+		else m_Netname.Empty();
+	}
+	else m_Netname.Empty();
+}
+
+
 
 /********************************************/
 bool ZONE_CONTAINER::Save( FILE* aFile ) const
@@ -66,7 +89,7 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
 
 	unsigned item_pos;
 	int ret;
-	unsigned corners_count = corner.size();
+	unsigned corners_count = m_Poly->corner.size();
 	int outline_hatch;
 
 	fprintf( aFile, "$CZONE_OUTLINE\n");
@@ -79,16 +102,16 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
 	ret = fprintf( aFile, "ZLayer %d\n",  m_Layer );
 	if ( ret < 1 ) return false;
 	// Save the ouline aux info
-	switch ( m_HatchStyle )
+	switch ( m_Poly->GetHatchStyle() )
 	{
 		default:
-		case NO_HATCH:
+		case CPolyLine::NO_HATCH:
 			outline_hatch = 'N';
 			break;
-		case DIAGONAL_EDGE:
+		case CPolyLine::DIAGONAL_EDGE:
 			outline_hatch = 'E';
 			break;
-		case DIAGONAL_FULL:
+		case CPolyLine::DIAGONAL_FULL:
 			outline_hatch = 'F';
 			break;
 	}
@@ -99,8 +122,8 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
 	for ( item_pos = 0; item_pos < corners_count; item_pos++ )
 	{
 		ret = fprintf( aFile, "ZCorner %d %d %d \n",
-                       corner[item_pos].x, corner[item_pos].y,
-                       corner[item_pos].end_contour );
+                       m_Poly->corner[item_pos].x, m_Poly->corner[item_pos].y,
+                       m_Poly->corner[item_pos].end_contour );
 		if ( ret < 3 ) return false;
 	}
 	fprintf( aFile, "$endCZONE_OUTLINE\n");
@@ -122,7 +145,7 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
 	char netname_buffer[1024];
     int             ret;
 	int n_corner_item = 0;
-	int outline_hatch = NO_HATCH;
+	int outline_hatch = CPolyLine::NO_HATCH;
 	bool error = false, has_corner = false;
 
 	netname_buffer[0] = 0;
@@ -137,13 +160,13 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
 			else
 			{
 				if ( ! has_corner )
-					Start( m_Layer, 0, 0,
+					m_Poly->Start( m_Layer, 0, 0,
 						x, y, 
 						outline_hatch );
 				else
-					AppendCorner( x, y );
+					m_Poly->AppendCorner( x, y );
 				has_corner = true;
-				if ( flag ) Close();
+				if ( flag ) m_Poly->Close();
 			}
 		}
         if( strnicmp(Line, "ZInfo", 5 ) == 0 )	// general info found
@@ -182,15 +205,15 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
 				{
 					case 'n':
 					case 'N':
-						outline_hatch = NO_HATCH;
+						outline_hatch = CPolyLine::NO_HATCH;
 						break;
 					case 'e':
 					case 'E':
-						outline_hatch = DIAGONAL_EDGE;
+						outline_hatch = CPolyLine::DIAGONAL_EDGE;
 						break;
 					case 'f':
 					case 'F':
-						outline_hatch = DIAGONAL_FULL;
+						outline_hatch = CPolyLine::DIAGONAL_FULL;
 						break;
 				}
 			}
@@ -245,32 +268,32 @@ void ZONE_CONTAINER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& off
 
     // draw the lines
     int i_start_contour = 0;
-    for( unsigned ic = 0; ic < corner.size(); ic++ )
+    for( unsigned ic = 0; ic < m_Poly->corner.size(); ic++ )
     {
-        int xi = corner[ic].x + offset.x;
-        int yi = corner[ic].y + offset.y;
+        int xi = m_Poly->corner[ic].x + offset.x;
+        int yi = m_Poly->corner[ic].y + offset.y;
         int xf, yf;
-        if( corner[ic].end_contour == FALSE && ic < corner.size() - 1 )
+        if( m_Poly->corner[ic].end_contour == FALSE && ic < m_Poly->corner.size() - 1 )
         {
-            xf = corner[ic + 1].x + offset.x;
-            yf = corner[ic + 1].y + offset.y;
+            xf = m_Poly->corner[ic + 1].x + offset.x;
+            yf = m_Poly->corner[ic + 1].y + offset.y;
         }
         else
         {
-            xf = corner[i_start_contour].x + offset.x;
-            yf = corner[i_start_contour].y + offset.y;
+            xf = m_Poly->corner[i_start_contour].x + offset.x;
+            yf = m_Poly->corner[i_start_contour].y + offset.y;
             i_start_contour = ic + 1;
         }
         GRLine( &panel->m_ClipBox, DC, xi, yi, xf, yf, 0, color );
     }
 	
 	// draw hatches
-    for( unsigned ic = 0; ic < m_HatchLines.size(); ic++ )
+    for( unsigned ic = 0; ic < m_Poly->m_HatchLines.size(); ic++ )
     {
-        int xi = m_HatchLines[ic].xi + offset.x;
-        int yi = m_HatchLines[ic].yi + offset.y;
-        int xf = m_HatchLines[ic].xf + offset.x;
-        int yf =m_HatchLines[ic].yf + offset.y;
+        int xi = m_Poly->m_HatchLines[ic].xi + offset.x;
+        int yi = m_Poly->m_HatchLines[ic].yi + offset.y;
+        int xf = m_Poly->m_HatchLines[ic].xf + offset.x;
+        int yf =m_Poly->m_HatchLines[ic].yf + offset.y;
         GRLine( &panel->m_ClipBox, DC, xi, yi, xf, yf, 0, color );
     }
 
@@ -307,7 +330,7 @@ int ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
 	#define MIN_DIST_IN_PIXELS 5
     int dist;
 	unsigned item_pos, lim;
-	lim = corner.size();
+	lim = m_Poly->corner.size();
 
 	// Min distance to hit = MIN_DIST_IN_PIXELS pixels :
 	WinEDA_BasePcbFrame* frame = ((BOARD*)GetParent())->m_PcbFrame;
@@ -315,7 +338,7 @@ int ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
 	
 	for ( item_pos = 0; item_pos < lim; item_pos++ )
 	{
-		dist = abs( corner[item_pos].x - refPos.x ) + abs( corner[item_pos].y - refPos.y );
+		dist = abs( m_Poly->corner[item_pos].x - refPos.x ) + abs( m_Poly->corner[item_pos].y - refPos.y );
 		if( dist <= min_dist )
 			return item_pos;
 	}
@@ -335,7 +358,7 @@ int ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
 	#define MIN_DIST_IN_PIXELS 5
     int dist;
 	unsigned item_pos, lim;
-	lim = corner.size();
+	lim = m_Poly->corner.size();
 
 	// Min distance to hit = MIN_DIST_IN_PIXELS pixels :
 	WinEDA_BasePcbFrame* frame = ((BOARD*)GetParent())->m_PcbFrame;
@@ -351,7 +374,7 @@ int ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
 		 * the last segment of the current outline starts at current corner, and ends
 		 * at the first corner of the outline
 		 */
-		if( corner[item_pos].end_contour || end_segm >= lim)
+		if( m_Poly->corner[item_pos].end_contour || end_segm >= lim)
 		{
 			unsigned tmp = first_corner_pos;
 			first_corner_pos = end_segm;	// first_corner_pos is now the beginning of the next outline
@@ -361,10 +384,10 @@ int ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
 		/* test the dist between segment and ref point */
 		dist = (int) GetPointToLineSegmentDistance( refPos.x,
 													refPos.y,
-													corner[item_pos].x,
-													corner[item_pos].y,
-													corner[end_segm].x,
-													corner[end_segm].y );
+													m_Poly->corner[item_pos].x,
+													m_Poly->corner[item_pos].y,
+													m_Poly->corner[end_segm].x,
+													m_Poly->corner[end_segm].y );
 		if( dist <= min_dist )
 			return item_pos;
 	}
@@ -407,10 +430,10 @@ void ZONE_CONTAINER::Display_Infos( WinEDA_DrawFrame* frame )
     Affiche_1_Parametre( frame, text_pos, _( "Layer" ), msg, BROWN );
 
     text_pos += 8;
-	msg.Printf( wxT( "%d" ), corner.size() );
+	msg.Printf( wxT( "%d" ), m_Poly->corner.size() );
     Affiche_1_Parametre( frame, text_pos, _( "Corners" ), msg, BLUE );
 
     text_pos += 8;
-	msg.Printf( wxT( "%d" ), m_HatchLines.size() );
+	msg.Printf( wxT( "%d" ), m_Poly->m_HatchLines.size() );
     Affiche_1_Parametre( frame, text_pos, _( "Hatch lines" ), msg, BLUE );
 }

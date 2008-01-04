@@ -450,11 +450,13 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
 	case ID_POPUP_PCB_ZONE_ADD_SIMILAR_ZONE:
-		wxMessageBox(wxT("ToDo"));
+        DrawPanel->MouseToCursorSchema();
+        Add_Similar_Zone( &dc, (ZONE_CONTAINER*) GetCurItem() );
 		break;
 
 	case ID_POPUP_PCB_ZONE_ADD_CUTOUT_ZONE:
-		wxMessageBox(wxT("ToDo"));
+        DrawPanel->MouseToCursorSchema();
+        Add_Zone_Cutout( &dc, (ZONE_CONTAINER*) GetCurItem() );
 		break;
 
     case ID_POPUP_PCB_DELETE_ZONE_CONTAINER:
@@ -469,23 +471,9 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 	}
 
 	case ID_POPUP_PCB_DELETE_ZONE_CORNER:
-	{
-        DrawPanel->MouseToCursorSchema();
-		ZONE_CONTAINER * zone_cont = (ZONE_CONTAINER*)GetCurItem();
-		zone_cont->Draw(DrawPanel,&dc, wxPoint(0,0), GR_XOR);
-		if ( zone_cont->GetNumCorners() <= 3 )
-		{
-			Delete_Zone( &dc, NULL, zone_cont->m_TimeStamp );
-			m_Pcb->Delete( zone_cont );
-		}
-		else
-		{
-			zone_cont->DeleteCorner(zone_cont->m_CornerSelection);
-			zone_cont->Draw(DrawPanel,&dc, wxPoint(0,0), GR_XOR);
-		}
+		Remove_Zone_Corner( &dc, (ZONE_CONTAINER*)GetCurItem() );
         SetCurItem( NULL );
         break;
-	}
 	
 	case ID_POPUP_PCB_MOVE_ZONE_CORNER:
 	{
@@ -505,7 +493,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 		 * and start move the new corner
 		 */
 		zone_cont->Draw(DrawPanel, &dc, wxPoint(0,0), GR_XOR);
-		zone_cont->InsertCorner( zone_cont->m_CornerSelection, pos.x, pos.y );
+		zone_cont->m_Poly->InsertCorner( zone_cont->m_CornerSelection, pos.x, pos.y );
 		zone_cont->m_CornerSelection++;
 		zone_cont->Draw(DrawPanel, &dc, wxPoint(0,0), GR_XOR);
 		Start_Move_Zone_Corner(&dc, zone_cont, zone_cont->m_CornerSelection, true);
