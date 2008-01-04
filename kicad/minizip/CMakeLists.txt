@@ -13,5 +13,6 @@ IF(ZLIB_FOUND)
 
 	INSTALL(TARGETS minizip RUNTIME DESTINATION bin)
 ELSE(ZLIB_FOUND)
-	MESSAGE(STATUS "Check for installed ZLIB -- not found")
+	MESSAGE(STATUS "Check for installed zlib -- not found")
+	MESSAGE(FATAL_ERROR "zlib was not found - it is required to build KiCad")
 ENDIF(ZLIB_FOUND)
