@@ -104,11 +104,11 @@ void WinEDA_PcbFrame::Add_Zone_Cutout( wxDC* DC, ZONE_CONTAINER* zone_container 
 
 
 /*****************************************************************************/
-void WinEDA_PcbFrame::Delete_Zone( wxDC* DC, SEGZONE* aZone, long aTimestamp )
+void WinEDA_PcbFrame::Delete_Zone_Fill( wxDC* DC, SEGZONE* aZone, long aTimestamp )
 /******************************************************************************/
 
-/** Function Delete_Zone
- * Remove the zone which include the segment aZone, or the zone which have the given time stamp.
+/** Function Delete_Zone_Fill
+ * Remove the zone fillig which include the segment aZone, or the zone which have the given time stamp.
  *  A zone is a group of segments which have the same TimeStamp
  * @param DC = current Device Context (can be NULL)
  * @param aZone = zone segment within the zone to delete. Can be NULL
@@ -257,14 +257,13 @@ void WinEDA_PcbFrame::Start_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_con
  */
 {
     /* Show the Net */
-    if( (g_HightLigth_NetCode > 0) && (g_HightLigth_NetCode != s_NetcodeSelection) )
+    if( g_HightLigt_Status )
     {
         Hight_Light( DC );  // Remove old hightlight selection
     }
 
-    g_HightLigth_NetCode = s_NetcodeSelection;
-    if( !g_HightLigt_Status )
-        Hight_Light( DC );
+    g_HightLigth_NetCode = s_NetcodeSelection = zone_container->GetNet();
+    Hight_Light( DC );
 
     zone_container->m_Flags  = IN_EDIT;
     DrawPanel->ManageCurseur = Show_Zone_Corner_While_Move_Mouse;
@@ -327,7 +326,7 @@ void WinEDA_PcbFrame::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER * zone_contai
 {
 	if ( zone_container->m_Poly->GetNumCorners() <= 3 )
 	{
-		Delete_Zone( DC, NULL, zone_container->m_TimeStamp );
+		Delete_Zone_Fill( DC, NULL, zone_container->m_TimeStamp );
 		m_Pcb->Delete( zone_container );
 		return;
 	}
@@ -466,7 +465,7 @@ EDGE_ZONE* WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
             s_Zone_Hatching = s_CurrentZone->m_Poly->GetHatchStyle();
         }
         /* Show the Net */
-        if( (g_HightLigth_NetCode > 0) && (g_HightLigth_NetCode != s_NetcodeSelection) )
+        if( g_HightLigt_Status && (g_HightLigth_NetCode != s_NetcodeSelection) )
         {
             Hight_Light( DC );  // Remove old hightlight selection
         }
@@ -474,8 +473,7 @@ EDGE_ZONE* WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
         if( s_CurrentZone )
             s_NetcodeSelection = s_CurrentZone->GetNet();
         g_HightLigth_NetCode = s_NetcodeSelection;
-        if( !g_HightLigt_Status )
-            Hight_Light( DC );
+        Hight_Light( DC );
 
         if( !s_AddCutoutToCurrentZone )
             s_CurrentZone = NULL; // the zone is used only once
@@ -742,6 +740,39 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
     GetScreen()->SetModify();
 }
 
+/************************************************************************************/
+void WinEDA_PcbFrame::Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_container )
+/************************************************************************************/
+
+/** Function Delete_Zone_Contour
+ * Remove the zone which include the segment aZone, or the zone which have the given time stamp.
+ *  A zone is a group of segments which have the same TimeStamp
+ * @param DC = current Device Context (can be NULL)
+ * @param zone_container = zone to modify
+ *  the member .m_CornerSelection is used to find the outline to remove.
+ * if the outline is the main outline, all the zone_container is removed (deleted)
+ * otherwise, the hole is deleted
+ */
+{
+	int ncont = zone_container->m_Poly->GetContour(zone_container->m_CornerSelection);
+
+	if ( DC )
+		zone_container->Draw(DrawPanel, DC, wxPoint(0,0), GR_XOR);
+
+	Delete_Zone_Fill( DC, NULL, zone_container->m_TimeStamp );	// Remove fill segments
+	
+	if ( ncont == 0 )	// This is the main outline: remove all
+		m_Pcb->Delete( zone_container );
+
+	else
+	{
+		zone_container->m_Poly->RemoveContour( ncont );
+		if ( DC )
+			zone_container->Draw(DrawPanel, DC, wxPoint(0,0), GR_OR);
+	}
+    GetScreen()->SetModify();
+}
+
 
 /***************************************************************************************/
 int WinEDA_PcbFrame::Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool verbose )
@@ -770,13 +801,13 @@ int WinEDA_PcbFrame::Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool v
 
     /* Show the Net */
     s_NetcodeSelection = zone_container->GetNet();
-    if( (g_HightLigth_NetCode > 0) && (g_HightLigth_NetCode != s_NetcodeSelection)  && DC )
+    if( g_HightLigt_Status && (g_HightLigth_NetCode != s_NetcodeSelection)  && DC )
     {
         Hight_Light( DC );      // Remove old hightlight selection
     }
 
     g_HightLigth_NetCode = s_NetcodeSelection;
-    if( !g_HightLigt_Status  && DC )
+    if( DC )
         Hight_Light( DC );
 
     if( g_HightLigth_NetCode > 0 )

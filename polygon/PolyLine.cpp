@@ -59,7 +59,7 @@ CPolyLine::~CPolyLine()
 // If bRetainArcs == TRUE, try to retain arcs in polys
 // Returns number of external contours, or -1 if error
 //
-int CPolyLine::NormalizeWithGpc( std::vector<CPolyLine*> * pa, BOOL bRetainArcs )
+int CPolyLine::NormalizeWithGpc( std::vector<CPolyLine*> * pa, bool bRetainArcs )
 {
 	std::vector<CArc> arc_array;
 
@@ -495,7 +495,7 @@ int CPolyLine::RestoreArcs( std::vector<CArc> * arc_array, std::vector<CPolyLine
 	}
 
 	// find arcs and replace them
-	BOOL bFound;
+	bool bFound;
 	int arc_start;
 	int arc_end;
 	for( unsigned iarc=0; iarc<arc_array->size(); iarc++ )
@@ -637,7 +637,7 @@ void CPolyLine::Start( int layer, int w, int sel_box, int x, int y,
 
 // add a corner to unclosed polyline
 //
-void CPolyLine::AppendCorner( int x, int y, int style, BOOL bDraw )
+void CPolyLine::AppendCorner( int x, int y, int style, bool bDraw )
 {
 	Undraw();
 	CPolyPt poly_pt( x, y );
@@ -663,7 +663,7 @@ void CPolyLine::AppendCorner( int x, int y, int style, BOOL bDraw )
 
 // close last polyline contour
 //
-void CPolyLine::Close( int style, BOOL bDraw )
+void CPolyLine::Close( int style, bool bDraw )
 {
 	if( GetClosed() )
 		ASSERT(0);
@@ -686,13 +686,13 @@ void CPolyLine::MoveCorner( int ic, int x, int y )
 
 // delete corner and adjust arrays
 //
-void CPolyLine::DeleteCorner( int ic, BOOL bDraw )
+void CPolyLine::DeleteCorner( int ic, bool bDraw )
 {
 	Undraw();
 	int icont = GetContour( ic );
 	int istart = GetContourStart( icont );
 	int iend = GetContourEnd( icont );
-	BOOL bClosed = icont < GetNumContours()-1 || GetClosed();
+	bool bClosed = icont < GetNumContours()-1 || GetClosed();
 
 	if( !bClosed )
 	{
@@ -719,7 +719,14 @@ void CPolyLine::DeleteCorner( int ic, BOOL bDraw )
 		Draw();
 }
 
+/******************************************/
 void CPolyLine::RemoveContour( int icont )
+/******************************************/
+/**
+ * Function RemoveContour
+ * @param icont = contour number to remove
+ * remove a contour only if there is more than 1 contour
+ */
 {
 	Undraw();
 	int istart = GetContourStart( icont );
@@ -733,8 +740,8 @@ void CPolyLine::RemoveContour( int icont )
 	else if( icont == GetNumContours()-1 )
 	{
 		// remove last contour
-		corner.erase( corner.begin() + icont, corner.end() );
-		side_style.erase( side_style.begin() + icont, side_style.end() );
+		corner.erase( corner.begin() + istart, corner.end() );
+		side_style.erase( side_style.begin() + istart, side_style.end() );
 	}
 	else
 	{
@@ -749,7 +756,9 @@ void CPolyLine::RemoveContour( int icont )
 }
 
 
+/******************************************/
 void CPolyLine::RemoveAllContours( void )
+/******************************************/
 /**
  * function RemoveAllContours
  * removes all corners from the lists.
@@ -1162,11 +1171,6 @@ int CPolyLine::GetW()
 	return m_Width;	
 }
 
-int CPolyLine::GetSelBoxSize() 
-{	
-	return m_sel_box;	
-}
-
 int CPolyLine::GetNumContours()
 {
 	int ncont = 0;
@@ -1462,7 +1466,7 @@ void CPolyLine::Hatch()
 
 // test to see if a point is inside polyline
 //
-BOOL CPolyLine::TestPointInside( int x, int y )
+bool CPolyLine::TestPointInside( int x, int y )
 {
 	enum { MAXPTS = 100 };
 	if( !GetClosed() )
@@ -1538,7 +1542,7 @@ BOOL CPolyLine::TestPointInside( int x, int y )
 
 // test to see if a point is inside polyline contour
 //
-BOOL CPolyLine::TestPointInsideContour( int icont, int x, int y )
+bool CPolyLine::TestPointInsideContour( int icont, int x, int y )
 {
 	if( icont >= GetNumContours() )
 		return FALSE;
@@ -1662,25 +1666,6 @@ int CPolyLine::TestIntersection( CPolyLine * poly )
 	return 0;
 }
 
-// set selection box size 
-//
-void CPolyLine::SetSelBoxSize( int sel_box )
-{
-//	Undraw();
-	m_sel_box = sel_box;
-//	Draw();
-}
-
-// set pointer to display list, and draw into display list
-//
-void CPolyLine::SetDisplayList( CDisplayList * dl )
-{
-	if( m_dlist )
-		Undraw();
-	m_dlist = dl;
-	if( m_dlist )
-		Draw();
-}
 
 // copy data from another poly, but don't draw it
 //
@@ -1701,6 +1686,20 @@ void CPolyLine::Copy( CPolyLine * src )
 	FreeGpcPoly();
 }
 
+
+/*******************************************/
+bool CPolyLine::IsCutoutContour( int icont )
+/*******************************************/
+/*
+ * return true if the corner icont is inside the outline (i.e it is a hole)
+ */
+{
+	int ncont = GetContour( icont );
+	if ( ncont == 0 )	// the first contour is the main outline, not an hole
+		return false;
+	return true;
+}
+
 void CPolyLine::MoveOrigin( int x_off, int y_off )
 {
 	Undraw();
@@ -1719,7 +1718,11 @@ void CPolyLine::MoveOrigin( int x_off, int y_off )
 //
 void CPolyLine::SetX( int ic, int x ) { corner[ic].x = x; }
 void CPolyLine::SetY( int ic, int y ) { corner[ic].y = y; }
-void CPolyLine::SetEndContour( int ic, BOOL end_contour ) { corner[ic].end_contour = end_contour; }
+
+void CPolyLine::SetEndContour( int ic, bool end_contour )
+{
+	corner[ic].end_contour = end_contour;
+}
 
 // Create CPolyLine for a pad
 //
@@ -1750,7 +1753,7 @@ CPolyLine * CPolyLine::MakePolylineForPad( int type, int x, int y, int w, int l,
 //
 void CPolyLine::AddContourForPadClearance( int type, int x, int y, int w, 
 						int l, int r, int angle, int fill_clearance,
-						int hole_w, int hole_clearance, BOOL bThermal, int spoke_w )
+						int hole_w, int hole_clearance, bool bThermal, int spoke_w )
 {
 	int dx = l/2;
 	int dy = w/2;

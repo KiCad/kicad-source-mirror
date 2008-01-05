@@ -1,6 +1,6 @@
 /***********************************************************/
-/*                      wxstruct.h:                        */
-/* descriptions des principales classes derivees utilisees */
+/*                      wxPcbStruct.h:                     */
+/*      Classes used in pcbnew, cvpcb and gerbview         */
 /***********************************************************/
 
 #ifndef  WXPCB_STRUCT_H
@@ -14,14 +14,6 @@
 #define PCB_INTERNAL_UNIT       10000
 #endif
 
-//  Option for dialog boxes
-// #define DIALOG_STYLE wxDEFAULT_DIALOG_STYLE|wxFRAME_FLOAT_ON_PARENT|wxSTAY_ON_TOP
-#define DIALOG_STYLE wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT | MAYBE_RESIZE_BORDER
-
-#define KICAD_DEFAULT_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE|wxWANTS_CHARS
-#define EDA_DRAW_PANEL wxScrolledWindow
-
-class wxMyDialogModalData;
 
 /*  Forward declarations of classes. */
 class WinEDA_DrawPanel;
@@ -29,25 +21,12 @@ class WinEDA_DrawFrame;
 
 #include "base_struct.h"
 
-class WinEDA_App;
-class WinEDA_MsgPanel;
-class COMMAND;
-class WinEDA_MainFrame;
-class BASE_SCREEN;
-class SCH_SCREEN;
 class PCB_SCREEN;
-class WinEDA_SchematicFrame;    // Schematic main frame
-class WinEDA_LibeditFrame;      // Component creation and edition main frame
-class WinEDA_ViewlibFrame;      // Component viewer main frame
 class WinEDA_GerberFrame;       // GERBER viewer main frame
 class WinEDA_Toolbar;
 class WinEDA_CvpcbFrame;
 class WinEDA_PcbFrame;
 class WinEDA_ModuleEditFrame;
-class WinEDAChoiceBox;
-#define WinEDA_MenuBar  wxMenuBar
-#define WinEDA_Menu     wxMenu
-#define WinEDA_MenuItem wxMenuItem
 
 // Used but not defined here:
 class BOARD;
@@ -92,7 +71,7 @@ public:
     WinEDA_BasePcbFrame( wxWindow* father, WinEDA_App* parent, int idtype,
                          const wxString& title,
                          const wxPoint& pos, const wxSize& size,
-						 long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+                         long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~WinEDA_BasePcbFrame();
 
@@ -175,131 +154,140 @@ public:
      */
     GENERAL_COLLECTORS_GUIDE    GetCollectorsGuide();
 
-    
+
     /**
      * Function CursorGoto
      * positions the cursor at a given coordinate and reframes the drawing if the
      * requested point is out of view.
      * @param aPos The point to go to.
      */
-    void            CursorGoto(  const wxPoint& aPos );
-    
-    
+    void                        CursorGoto(  const wxPoint& aPos );
+
+
     /* Place un repere sur l'ecran au point de coordonnees PCB pos */
     void                        place_marqueur( wxDC* DC, const wxPoint& pos, char* pt_bitmap,
                                                 int DrawMode, int color, int type );
 
     // Gestion des modules
-    void            InstallModuleOptionsFrame( MODULE* Module,
-                                               wxDC* DC, const wxPoint& pos );
-    MODULE*         Copie_Module( MODULE* module );
-    MODULE*         Exchange_Module( wxWindow* winaff, MODULE* old_module, MODULE* new_module );
-    int             Save_1_Module( const wxString& LibName, MODULE* Module,
-                                   bool Overwrite, bool DisplayDialog );
-    void            Archive_Modules( const wxString& LibName, bool NewModulesOnly );
-    MODULE*         Select_1_Module_From_BOARD( BOARD* Pcb );
-    MODULE*         GetModuleByName();
+    void                        InstallModuleOptionsFrame( MODULE* Module,
+                                                           wxDC* DC, const wxPoint& pos );
+    MODULE*                     Copie_Module( MODULE* module );
+    MODULE*                     Exchange_Module( wxWindow* winaff,
+                                                 MODULE*                       old_module,
+                                                 MODULE*                       new_module );
+    int                         Save_1_Module( const wxString& LibName, MODULE* Module,
+                                               bool Overwrite, bool DisplayDialog );
+    void                        Archive_Modules( const wxString& LibName, bool NewModulesOnly );
+    MODULE*                     Select_1_Module_From_BOARD( BOARD* Pcb );
+    MODULE*                     GetModuleByName();
 
     // Modules (footprints)
-    MODULE*         Create_1_Module( wxDC* DC, const wxString& module_name );
-    void            Edit_Module( MODULE* module, wxDC* DC );
-    void            Rotate_Module( wxDC* DC, MODULE* module, int angle, bool incremental );
-    void            Change_Side_Module( MODULE* Module, wxDC* DC );
-    void            Place_Module( MODULE* module, wxDC* DC );
-    void            InstallExchangeModuleFrame( MODULE* ExchangeModuleModule,
-                                                wxDC* DC, const wxPoint& pos );
+    MODULE*                     Create_1_Module( wxDC* DC, const wxString& module_name );
+    void                        Edit_Module( MODULE* module, wxDC* DC );
+    void                        Rotate_Module( wxDC*   DC,
+                                               MODULE* module,
+                                               int     angle,
+                                               bool    incremental );
+    void                        Change_Side_Module( MODULE* Module, wxDC* DC );
+    void                        Place_Module( MODULE* module, wxDC* DC );
+    void                        InstallExchangeModuleFrame( MODULE* ExchangeModuleModule,
+                                                            wxDC* DC, const wxPoint& pos );
 
     // module texts
-    void            RotateTextModule( TEXTE_MODULE* Text, wxDC* DC );
-    void            DeleteTextModule( TEXTE_MODULE* Text, wxDC* DC );
-    void            PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC );
-    void            StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC );
-    TEXTE_MODULE*   CreateTextModule( MODULE* Module, wxDC* DC );
+    void                        RotateTextModule( TEXTE_MODULE* Text, wxDC* DC );
+    void                        DeleteTextModule( TEXTE_MODULE* Text, wxDC* DC );
+    void                        PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC );
+    void                        StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC );
+    TEXTE_MODULE*               CreateTextModule( MODULE* Module, wxDC* DC );
 
-    void            InstallPadOptionsFrame( D_PAD* pad, wxDC* DC, const wxPoint& pos );
-    void            InstallTextModOptionsFrame( TEXTE_MODULE* TextMod,
-                                                wxDC* DC, const wxPoint& pos );
+    void                        InstallPadOptionsFrame( D_PAD* pad, wxDC* DC, const wxPoint& pos );
+    void                        InstallTextModOptionsFrame( TEXTE_MODULE* TextMod,
+                                                            wxDC* DC, const wxPoint& pos );
 
     // Pads sur modules
-    void            AddPad( MODULE* Module, wxDC* DC );
-    void            DeletePad( D_PAD* Pad, wxDC* DC );
-    void            StartMovePad( D_PAD* Pad, wxDC* DC );
-    void            RotatePad( D_PAD* Pad, wxDC* DC );
-    void            PlacePad( D_PAD* Pad, wxDC* DC );
-    void            Export_Pad_Settings( D_PAD* pt_pad );
-    void            Import_Pad_Settings( D_PAD* pt_pad, wxDC* DC );
-    void            Global_Import_Pad_Settings( D_PAD* Pad, wxDC* DC );
+    void                        AddPad( MODULE* Module, wxDC* DC );
+    void                        DeletePad( D_PAD* Pad, wxDC* DC );
+    void                        StartMovePad( D_PAD* Pad, wxDC* DC );
+    void                        RotatePad( D_PAD* Pad, wxDC* DC );
+    void                        PlacePad( D_PAD* Pad, wxDC* DC );
+    void                        Export_Pad_Settings( D_PAD* pt_pad );
+    void                        Import_Pad_Settings( D_PAD* pt_pad, wxDC* DC );
+    void                        Global_Import_Pad_Settings( D_PAD* Pad, wxDC* DC );
 
 
     // loading footprints
-    MODULE*         Get_Librairie_Module( wxWindow* winaff, const wxString& library,
-                                          const wxString& ModuleName, bool show_msg_err );
+    MODULE*                     Get_Librairie_Module( wxWindow* winaff,
+                                                      const wxString&               library,
+                                                      const wxString&               ModuleName,
+                                                      bool                          show_msg_err );
 
-    wxString        Select_1_Module_From_List(
+    wxString                    Select_1_Module_From_List(
         WinEDA_DrawFrame* active_window, const wxString& Library,
         const wxString& Mask, const wxString& KeyWord );
 
-    MODULE*         Load_Module_From_Library( const wxString& library, wxDC* DC );
+    MODULE*                     Load_Module_From_Library( const wxString& library, wxDC* DC );
 
     //  ratsnest functions
-    void            Compile_Ratsnest( wxDC* DC, bool affiche ); /* Recalcul complet du chevelu */
-    void            ReCompile_Ratsnest_After_Changes( wxDC* DC );
-    int             Test_1_Net_Ratsnest( wxDC* DC, int net_code );
-    char*           build_ratsnest_module( wxDC* DC, MODULE* Module );
-    void            trace_ratsnest_module( wxDC* DC );
-    void            Build_Board_Ratsnest( wxDC* DC );
-    void            DrawGeneralRatsnest( wxDC* DC, int net_code = 0 );
-    void            trace_ratsnest_pad( wxDC* DC );
-    void            recalcule_pad_net_code(); /* compute and update the PAD net codes */
-    void            build_liste_pads();
-    int*            build_ratsnest_pad( EDA_BaseStruct* ref, const wxPoint& refpos, bool init );
+    void                        Compile_Ratsnest( wxDC* DC, bool affiche ); /* Recalcul complet du chevelu */
+    void                        ReCompile_Ratsnest_After_Changes( wxDC* DC );
+    int                         Test_1_Net_Ratsnest( wxDC* DC, int net_code );
+    char*                       build_ratsnest_module( wxDC* DC, MODULE* Module );
+    void                        trace_ratsnest_module( wxDC* DC );
+    void                        Build_Board_Ratsnest( wxDC* DC );
+    void                        DrawGeneralRatsnest( wxDC* DC, int net_code = 0 );
+    void                        trace_ratsnest_pad( wxDC* DC );
+    void                        recalcule_pad_net_code(); /* compute and update the PAD net codes */
+    void                        build_liste_pads();
+    int*                        build_ratsnest_pad( EDA_BaseStruct* ref,
+                                                    const wxPoint&                         refpos,
+                                                    bool                                   init );
 
-    void            Tst_Ratsnest( wxDC* DC, int ref_netcode );
-    void            test_connexions( wxDC* DC );
-    void            test_1_net_connexion( wxDC* DC, int net_code );
-    void            reattribution_reference_piste( int affiche );
+    void                        Tst_Ratsnest( wxDC* DC, int ref_netcode );
+    void                        test_connexions( wxDC* DC );
+    void                        test_1_net_connexion( wxDC* DC, int net_code );
+    void                        reattribution_reference_piste( int affiche );
 
     // Plotting
-    void            ToPlotter( wxCommandEvent& event );
-    void            Plot_Serigraphie( int format_plot, FILE* File, int masque_layer );
-    void            Genere_GERBER( const wxString& FullFileName, int Layer,
-                                   bool PlotOriginIsAuxAxis );
-    void            Genere_HPGL( const wxString& FullFileName, int Layer );
-    void            Genere_PS( const wxString& FullFileName, int Layer );
-    void            Plot_Layer_HPGL( FILE* File, int masque_layer,
-                                     int garde, int tracevia, int modetrace );
-    void            Plot_Layer_GERBER( FILE* File, int masque_layer,
-                                       int garde, int tracevia );
-    int             Gen_D_CODE_File( FILE* file );
-    void            Plot_Layer_PS( FILE* File, int masque_layer,
-                                   int garde, int tracevia, int modetrace );
+    void                        ToPlotter( wxCommandEvent& event );
+    void                        Plot_Serigraphie( int format_plot, FILE* File, int masque_layer );
+    void                        Genere_GERBER( const wxString& FullFileName, int Layer,
+                                               bool PlotOriginIsAuxAxis );
+    void                        Genere_HPGL( const wxString& FullFileName, int Layer );
+    void                        Genere_PS( const wxString& FullFileName, int Layer );
+    void                        Plot_Layer_HPGL( FILE* File, int masque_layer,
+                                                 int garde, int tracevia, int modetrace );
+    void                        Plot_Layer_GERBER( FILE* File, int masque_layer,
+                                                   int garde, int tracevia );
+    int                         Gen_D_CODE_File( FILE* file );
+    void                        Plot_Layer_PS( FILE* File, int masque_layer,
+                                               int garde, int tracevia, int modetrace );
 
     /* Block operations: */
-    void            Block_Delete( wxDC* DC );
-    void            Block_Rotate( wxDC* DC );
-    void            Block_Invert( wxDC* DC );
-    void            Block_Move( wxDC* DC );
-    void            Block_Duplicate( wxDC* DC );
+    void                        Block_Delete( wxDC* DC );
+    void                        Block_Rotate( wxDC* DC );
+    void                        Block_Invert( wxDC* DC );
+    void                        Block_Move( wxDC* DC );
+    void                        Block_Duplicate( wxDC* DC );
 
-    
+
     /**
      * Function DelLimitesZone
      * deletes the limits of a zone.
      * @param DC A wxDC to draw onto.
      * @param Redraw If true, means redraw the pcb without the zone limits
      */
-    void            DelLimitesZone( wxDC* DC, bool Redraw );
+    void                        DelLimitesZone( wxDC* DC, bool Redraw );
 
     // layerhandling:
     // (See pcbnew/sel_layer.cpp for description of why null_layer parameter is provided)
-    int             SelectLayer( int default_layer, int min_layer, int max_layer,
-                                 bool null_layer = false );
-    void            SelectLayerPair();
-    virtual void    SwitchLayer( wxDC* DC, int layer );
+    int                         SelectLayer( int default_layer, int min_layer, int max_layer,
+                                             bool null_layer = false );
+    void                        SelectLayerPair();
+    virtual void                SwitchLayer( wxDC* DC, int layer );
 
     // divers
-    void            AddHistory( int value, KICAD_T type ); // Add value in data list history
-    void            InstallGridFrame( const wxPoint& pos );
+    void                        AddHistory( int value, KICAD_T type ); // Add value in data list history
+    void                        InstallGridFrame( const wxPoint& pos );
 
     DECLARE_EVENT_TABLE()
 };
@@ -321,10 +309,10 @@ private:
     wxMenu*          m_FilesMenu;
 
     DRC*             m_drc;         ///< the DRC controller, see drc.cpp
-    
-    
+
+
     // we'll use lower case function names for private member functions.
-	void 	createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu* aPopMenu );
+    void    createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu* aPopMenu );
     void    createPopUpMenuForFootprints( MODULE* aModule, wxMenu* aPopMenu );
     void    createPopUpMenuForFpTexts( TEXTE_MODULE* aText, wxMenu* aPopMenu );
     void    createPopUpMenuForFpPads( D_PAD* aPad, wxMenu* aPopMenu );
@@ -335,7 +323,7 @@ private:
 public:
     WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent, const wxString& title,
                      const wxPoint& pos, const wxSize& size,
-					 long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+                     long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~WinEDA_PcbFrame();
 
@@ -445,7 +433,7 @@ public:
 
     // Track and via edition:
     void                DisplayTrackSettings();
-    
+
     /**
      * Function Other_Layer_Route
      * operates in one of two ways.  If argument track is NULL, then swap the active
@@ -457,7 +445,7 @@ public:
      * @param DC A device context to draw on.
      * @return bool - true if the operation was successful, else false such as
      *   the case where DRC would not allow a via.
-     */ 
+     */
     bool                Other_Layer_Route( TRACK* track, wxDC* DC );
     void                Affiche_PadsNoConnect( wxDC* DC );
     void                Affiche_Status_Net( wxDC* DC );
@@ -483,97 +471,114 @@ public:
     bool                Genere_Pad_Connexion( wxDC* DC, int layer );
 
     // zone handling
-/** Function Delete_Zone
- * Remove the zone which include the segment aZone, or the zone which have the given time stamp.
- *  A zone is a group of segments which have the same TimeStamp
- * @param DC = current Device Context (can be NULL)
- * @param aZone = zone segment within the zone to delete. Can be NULL
- * @param aTimestamp = Timestamp for the zone to delete, used if aZone == NULL
- */
-    void                Delete_Zone( wxDC* DC, SEGZONE* Track, long aTimestamp = 0 );
+
+    /** Function Delete_Zone_Fill
+     * Remove the zone filling which include the segment aZone, or the zone which have the given time stamp.
+     *  A zone is a group of segments which have the same TimeStamp
+     * @param DC = current Device Context (can be NULL)
+     * @param aZone = zone segment within the zone to delete. Can be NULL
+     * @param aTimestamp = Timestamp for the zone to delete, used if aZone == NULL
+     */
+    void                Delete_Zone_Fill( wxDC* DC, SEGZONE* Track, long aTimestamp = 0 );
 
     EDGE_ZONE*          Del_SegmEdgeZone( wxDC* DC, EDGE_ZONE* edge_zone );
+
     /**
      * Function Begin_Zone
      * initiates a zone edge creation process,
-	 * or terminates the current zone edge and creates a new zone edge stub
+     * or terminates the current zone edge and creates a new zone edge stub
      */
     EDGE_ZONE*          Begin_Zone( wxDC* DC );
-    
+
     /**
      * Function End_Zone
      * terminates the zone edge creation process
-	 * @param DC = current Device Context
+     * @param DC = current Device Context
      */
     void                End_Zone( wxDC* DC );
-    
-	/** Function Fill_Zone()
-	 *  Calculate the zone filling for the outline zone_container
-	 *  The zone outline is a frontier, and can be complex (with holes)
-	 *  The filling starts from starting points like pads, tracks.
-	 * If exists the old filling is removed
-	 * @param DC = current Device Context
-	 * @param zone_container = zone to fill
-	 * @param verbose = true to show error messages
-	 * @return error level (0 = no error)
-	 */
-    int                Fill_Zone( wxDC* DC, ZONE_CONTAINER * zone_container, bool verbose = TRUE );
 
-	/** Function Fill_All_Zones()
-	 *  Fill all zones on the board
-	 * The old fillings are removed
-	 * @param frame = reference to the main frame
-	 * @param DC = current Device Context
-	 * @param verbose = true to show error messages
-	 * @return error level (0 = no error)
-	 */
-    int                Fill_All_Zones( wxDC* DC, bool verbose = TRUE );
+    /** Function Fill_Zone()
+     *  Calculate the zone filling for the outline zone_container
+     *  The zone outline is a frontier, and can be complex (with holes)
+     *  The filling starts from starting points like pads, tracks.
+     * If exists the old filling is removed
+     * @param DC = current Device Context
+     * @param zone_container = zone to fill
+     * @param verbose = true to show error messages
+     * @return error level (0 = no error)
+     */
+    int                 Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool verbose = TRUE );
+
+    /** Function Fill_All_Zones()
+     *  Fill all zones on the board
+     * The old fillings are removed
+     * @param frame = reference to the main frame
+     * @param DC = current Device Context
+     * @param verbose = true to show error messages
+     * @return error level (0 = no error)
+     */
+    int                 Fill_All_Zones( wxDC* DC, bool verbose = TRUE );
 
 
-	/**
-	 * Function Add_Zone_Cutout
-	 * Add a cutout zone to a given zone outline
-	 * @param DC = current Device Context
-	 * @param zone_container = parent zone outline
-	 */
-    void Add_Zone_Cutout( wxDC* DC , ZONE_CONTAINER * zone_container );
+    /**
+     * Function Add_Zone_Cutout
+     * Add a cutout zone to a given zone outline
+     * @param DC = current Device Context
+     * @param zone_container = parent zone outline
+     */
+    void                Add_Zone_Cutout( wxDC* DC, ZONE_CONTAINER* zone_container );
 
-	/**
-	 * Function Add_Similar_Zone
-	 * Add a zone to a given zone outline.
-	 * if the zones are overlappeing they will be merged
-	 * @param DC = current Device Context
-	 * @param zone_container = parent zone outline
-	 */
-    void Add_Similar_Zone( wxDC* DC , ZONE_CONTAINER * zone_container );
+    /**
+     * Function Add_Similar_Zone
+     * Add a zone to a given zone outline.
+     * if the zones are overlappeing they will be merged
+     * @param DC = current Device Context
+     * @param zone_container = parent zone outline
+     */
+    void                Add_Similar_Zone( wxDC* DC, ZONE_CONTAINER* zone_container );
 
-	/**
-	 * Function Edit_Zone_Params
-	 * Edit params (layer, clearance, ...) for a zone outline
-	 */
-    void Edit_Zone_Params( wxDC* DC , ZONE_CONTAINER * zone_container );
+    /**
+     * Function Edit_Zone_Params
+     * Edit params (layer, clearance, ...) for a zone outline
+     */
+    void                Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container );
 
-	/**
-	 * Function Start_Move_Zone_Corner
-	 * Prepares a move corner in a zone outline,
-	 * called from a move corner command (IsNewCorner = false),
-	 * or a create new cornet command (IsNewCorner = true )
-	 */
-	void Start_Move_Zone_Corner( wxDC* DC , ZONE_CONTAINER * zone_container, int corner_id, bool IsNewCorner );
-	/**
-	 * Function End_Move_Zone_Corner
-	 * Terminates a move corner in a zone outline
-	 */
-	void End_Move_Zone_Corner( wxDC* DC , ZONE_CONTAINER * zone_container );
+    /**
+     * Function Start_Move_Zone_Corner
+     * Prepares a move corner in a zone outline,
+     * called from a move corner command (IsNewCorner = false),
+     * or a create new cornet command (IsNewCorner = true )
+     */
+    void                Start_Move_Zone_Corner( wxDC*           DC,
+                                                ZONE_CONTAINER* zone_container,
+                                                int             corner_id,
+                                                bool            IsNewCorner );
 
-	/**
-	 * Function End_Move_Zone_Corner
-	 * Remove the currently selected corner in a zone outline
-	 * the .m_CornerSelection is used as corner selection
-	 */
-	void Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER * zone_container );
+    /**
+     * Function End_Move_Zone_Corner
+     * Terminates a move corner in a zone outline
+     */
+    void                End_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_container );
 
-	// Target handling
+    /**
+     * Function End_Move_Zone_Corner
+     * Remove the currently selected corner in a zone outline
+     * the .m_CornerSelection is used as corner selection
+     */
+    void                Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_container );
+
+    /** Function Delete_Zone
+     * Remove the zone which include the segment aZone, or the zone which have the given time stamp.
+     *  A zone is a group of segments which have the same TimeStamp
+     * @param DC = current Device Context (can be NULL)
+     * @param zone_container = zone to modify
+     *  the member .m_CornerSelection is used to find the outline to remove.
+     * if the outline is the main outline, all the zone is removed
+     * otherwise, the hole is deleted
+     */
+    void                Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_container );
+
+    // Target handling
     MIREPCB*            Create_Mire( wxDC* DC );
     void                Delete_Mire( MIREPCB* MirePcb, wxDC* DC );
     void                StartMove_Mire( MIREPCB* MirePcb, wxDC* DC );
@@ -618,7 +623,7 @@ public:
     void                GlobalRoute( wxDC* DC );
 
     // divers
-	void                Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC );
+    void                Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC );
     void                Ratsnest_On_Off( wxDC* DC );
     void                Clean_Pcb( wxDC* DC );
     BOARD_ITEM*         SaveItemEfface( BOARD_ITEM* PtItem, int nbitems );
@@ -660,7 +665,7 @@ private:
 public:
     WinEDA_GerberFrame( wxWindow* father, WinEDA_App* parent, const wxString& title,
                         const wxPoint& pos, const wxSize& size,
-					    long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+                        long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~WinEDA_GerberFrame();
 
@@ -766,7 +771,7 @@ public:
     WinEDA_ModuleEditFrame( wxWindow* father, WinEDA_App* parent,
                             const wxString& title,
                             const wxPoint& pos, const wxSize& size,
-							long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+                            long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~WinEDA_ModuleEditFrame();
 
@@ -795,7 +800,7 @@ public:
 
     BOARD_ITEM*     ModeditLocateAndDisplay( int aHotKeyCode = 0 );
 
-	/* Undo and redo functions */
+    /* Undo and redo functions */
 public:
     void            SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy, int flag_type_command = 0 );
 

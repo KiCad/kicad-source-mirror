@@ -48,7 +48,7 @@ int ZONE_CONTAINER::Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose )
     s_TimeStamp = m_TimeStamp;
 
     // Delete the old filling, if any :
-    frame->Delete_Zone( DC, NULL, m_TimeStamp );
+    frame->Delete_Zone_Fill( DC, NULL, m_TimeStamp );
 
     // calculate the fixed step of the routing matrix as 5 mils or more
     E_scale = g_GridRoutingSize / 50;

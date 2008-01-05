@@ -331,6 +331,7 @@ int ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
     int dist;
 	unsigned item_pos, lim;
 	lim = m_Poly->corner.size();
+	m_CornerSelection = -1;
 
 	// Min distance to hit = MIN_DIST_IN_PIXELS pixels :
 	WinEDA_BasePcbFrame* frame = ((BOARD*)GetParent())->m_PcbFrame;
@@ -340,7 +341,10 @@ int ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
 	{
 		dist = abs( m_Poly->corner[item_pos].x - refPos.x ) + abs( m_Poly->corner[item_pos].y - refPos.y );
 		if( dist <= min_dist )
+		{
+			m_CornerSelection = item_pos;
 			return item_pos;
+		}
 	}
 
     return -1;
@@ -366,6 +370,7 @@ int ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
 
     /* Test for an entire segment */
     unsigned first_corner_pos = 0, end_segm;
+	m_CornerSelection = -1;
 
 	for ( item_pos = 0; item_pos < lim; item_pos++ )
 	{
@@ -389,7 +394,10 @@ int ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
 													m_Poly->corner[end_segm].x,
 													m_Poly->corner[end_segm].y );
 		if( dist <= min_dist )
+		{
+			m_CornerSelection = item_pos;
 			return item_pos;
+		}
 	}
 
     return -1;
@@ -406,6 +414,9 @@ void ZONE_CONTAINER::Display_Infos( WinEDA_DrawFrame* frame )
     frame->MsgPanel->EraseMsgBox();
 
 	msg = _( "Zone Outline" );
+
+	int ncont = m_Poly->GetContour(m_CornerSelection);
+	if ( ncont ) msg << wxT(" ") << _("(Cutout)");
 
     text_pos = 1;
     Affiche_1_Parametre( frame, text_pos, _( "Type" ), msg, DARKCYAN );

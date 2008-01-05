@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-01-01 17:55+0100\n"
+"PO-Revision-Date: 2008-01-05 14:17+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -639,7 +639,7 @@ msgstr "Cuivre"
 #: pcbnew/classpcb.cpp:210
 #: pcbnew/class_track.cpp:806
 #: pcbnew/class_module.cpp:1217
-#: pcbnew/class_zone.cpp:407
+#: pcbnew/class_zone.cpp:441
 #: gerbview/affiche.cpp:109
 msgid "Layer"
 msgstr "Couche"
@@ -1357,7 +1357,7 @@ msgstr "Module"
 #: pcbnew/classpcb.cpp:194
 #: pcbnew/class_marker.cpp:112
 #: pcbnew/class_track.cpp:750
-#: pcbnew/class_zone.cpp:388
+#: pcbnew/class_zone.cpp:422
 #: gerbview/affiche.cpp:93
 msgid "Type"
 msgstr "Type"
@@ -1629,11 +1629,11 @@ msgstr "Hauteur Texte Module"
 msgid "Text Module Size H"
 msgstr "Largeur Texte Module"
 
-#: pcbnew/zone_filling_algorithm.cpp:156
+#: pcbnew/zone_filling_algorithm.cpp:155
 msgid "No pads or starting point found to fill this zone outline"
 msgstr "Pas de pads ou de points de départ pour remplir ce contour de zone"
 
-#: pcbnew/zone_filling_algorithm.cpp:194
+#: pcbnew/zone_filling_algorithm.cpp:193
 msgid "Ok"
 msgstr "Ok"
 
@@ -1911,8 +1911,8 @@ msgstr "Garder"
 
 #: pcbnew/dialog_netlist.cpp:143
 #: pcbnew/onrightclick.cpp:589
-#: pcbnew/onrightclick.cpp:749
-#: pcbnew/onrightclick.cpp:846
+#: pcbnew/onrightclick.cpp:754
+#: pcbnew/onrightclick.cpp:851
 #: eeschema/edit_component_in_lib.cpp:239
 #: eeschema/edit_component_in_lib.cpp:320
 msgid "Delete"
@@ -2086,7 +2086,7 @@ msgid "Add Drawing"
 msgstr "Ajout d'éléments graphiques"
 
 #: pcbnew/modedit.cpp:424
-#: pcbnew/edit.cpp:536
+#: pcbnew/edit.cpp:518
 #: eeschema/schedit.cpp:455
 #: eeschema/libframe.cpp:579
 msgid "Delete item"
@@ -2144,8 +2144,8 @@ msgid "Delete Block (shift+ctrl + drag mouse)"
 msgstr "Effacement Bloc (shift+ctrl + drag mouse)"
 
 #: pcbnew/modedit_onclick.cpp:252
-#: pcbnew/onrightclick.cpp:743
-#: pcbnew/onrightclick.cpp:840
+#: pcbnew/onrightclick.cpp:748
+#: pcbnew/onrightclick.cpp:845
 msgid "Rotate"
 msgstr "Rotation"
 
@@ -2170,17 +2170,17 @@ msgid "Move Pad"
 msgstr "Déplace Pad"
 
 #: pcbnew/modedit_onclick.cpp:274
-#: pcbnew/onrightclick.cpp:782
+#: pcbnew/onrightclick.cpp:787
 msgid "Edit Pad"
 msgstr "Edit Pad"
 
 #: pcbnew/modedit_onclick.cpp:276
-#: pcbnew/onrightclick.cpp:786
+#: pcbnew/onrightclick.cpp:791
 msgid "New Pad Settings"
 msgstr "Nouvelles Caract. Pads"
 
 #: pcbnew/modedit_onclick.cpp:278
-#: pcbnew/onrightclick.cpp:788
+#: pcbnew/onrightclick.cpp:793
 msgid "Export Pad Settings"
 msgstr "Exporte Caract. Pads"
 
@@ -2189,7 +2189,7 @@ msgid "delete Pad"
 msgstr "Supprimer Pad"
 
 #: pcbnew/modedit_onclick.cpp:285
-#: pcbnew/onrightclick.cpp:793
+#: pcbnew/onrightclick.cpp:798
 msgid "Global Pad Settings"
 msgstr "Edition Globale des pads"
 
@@ -2222,9 +2222,9 @@ msgid "Place edge"
 msgstr "Place contour"
 
 #: pcbnew/modedit_onclick.cpp:317
-#: pcbnew/onrightclick.cpp:711
-#: pcbnew/onrightclick.cpp:745
-#: pcbnew/onrightclick.cpp:842
+#: pcbnew/onrightclick.cpp:716
+#: pcbnew/onrightclick.cpp:750
+#: pcbnew/onrightclick.cpp:847
 #: eeschema/onrightclick.cpp:313
 msgid "Edit"
 msgstr "Editer"
@@ -2565,7 +2565,7 @@ msgid "Footprint name:"
 msgstr "Nom Module: "
 
 #: pcbnew/modules.cpp:281
-#: pcbnew/onrightclick.cpp:717
+#: pcbnew/onrightclick.cpp:722
 msgid "Delete Module"
 msgstr "Supprimer Module"
 
@@ -3212,7 +3212,6 @@ msgid "Add Similar Zone"
 msgstr "Addition d'une Zone Semblable"
 
 #: pcbnew/onrightclick.cpp:664
-#, fuzzy
 msgid "Add Cutout Area"
 msgstr "Addition d'une Zone Interdite"
 
@@ -3224,44 +3223,48 @@ msgstr "Remplir Zone"
 msgid "Edit Zone Params"
 msgstr "Editer Paramètres de la Zone"
 
-#: pcbnew/onrightclick.cpp:673
+#: pcbnew/onrightclick.cpp:675
+msgid "Delete Cutout"
+msgstr "Supprimer Zone Interdite"
+
+#: pcbnew/onrightclick.cpp:678
 msgid "Delete Zone Outline"
 msgstr "Supprimer Contour de Zone"
 
-#: pcbnew/onrightclick.cpp:695
-#: pcbnew/onrightclick.cpp:740
-#: pcbnew/onrightclick.cpp:778
-#: pcbnew/onrightclick.cpp:837
+#: pcbnew/onrightclick.cpp:700
+#: pcbnew/onrightclick.cpp:745
+#: pcbnew/onrightclick.cpp:783
+#: pcbnew/onrightclick.cpp:842
 msgid "Move"
 msgstr "Move"
 
-#: pcbnew/onrightclick.cpp:698
-#: pcbnew/onrightclick.cpp:780
+#: pcbnew/onrightclick.cpp:703
+#: pcbnew/onrightclick.cpp:785
 msgid "Drag"
 msgstr "Drag"
 
-#: pcbnew/onrightclick.cpp:702
+#: pcbnew/onrightclick.cpp:707
 msgid "Rotate  +"
 msgstr "Rotation +"
 
-#: pcbnew/onrightclick.cpp:706
+#: pcbnew/onrightclick.cpp:711
 #: eeschema/onrightclick.cpp:301
 msgid "Rotate -"
 msgstr "Rotation -"
 
-#: pcbnew/onrightclick.cpp:707
+#: pcbnew/onrightclick.cpp:712
 msgid "Flip"
 msgstr "Change côté"
 
-#: pcbnew/onrightclick.cpp:797
+#: pcbnew/onrightclick.cpp:802
 msgid "delete"
 msgstr "Effacer"
 
-#: pcbnew/onrightclick.cpp:804
+#: pcbnew/onrightclick.cpp:809
 msgid "Autoroute Pad"
 msgstr "Autoroute Pad"
 
-#: pcbnew/onrightclick.cpp:805
+#: pcbnew/onrightclick.cpp:810
 msgid "Autoroute Net"
 msgstr "Autoroute Net"
 
@@ -3612,11 +3615,11 @@ msgstr "Pcb Graphic"
 #: pcbnew/class_board_item.cpp:59
 #: pcbnew/class_board_item.cpp:68
 #: pcbnew/class_board_item.cpp:145
-#: pcbnew/class_board_item.cpp:164
-#: pcbnew/class_board_item.cpp:180
-#: pcbnew/class_board_item.cpp:207
-#: pcbnew/class_board_item.cpp:224
-#: pcbnew/class_board_item.cpp:230
+#: pcbnew/class_board_item.cpp:169
+#: pcbnew/class_board_item.cpp:185
+#: pcbnew/class_board_item.cpp:212
+#: pcbnew/class_board_item.cpp:229
+#: pcbnew/class_board_item.cpp:235
 msgid " on "
 msgstr " sur "
 
@@ -3659,46 +3662,51 @@ msgid "Length:"
 msgstr "Long.:"
 
 #: pcbnew/class_board_item.cpp:152
-#: pcbnew/class_zone.cpp:385
+#: pcbnew/class_zone.cpp:416
 msgid "Zone Outline"
 msgstr "Contour de Zone"
 
-#: pcbnew/class_board_item.cpp:168
+#: pcbnew/class_board_item.cpp:156
+#: pcbnew/class_zone.cpp:419
+msgid "(Cutout)"
+msgstr "(Cutout)"
+
+#: pcbnew/class_board_item.cpp:173
 #: pcbnew/class_track.cpp:743
 msgid "Zone"
 msgstr "Zone"
 
-#: pcbnew/class_board_item.cpp:186
+#: pcbnew/class_board_item.cpp:191
 #: pcbnew/pcbframe.cpp:479
 msgid "Via"
 msgstr "Via"
 
-#: pcbnew/class_board_item.cpp:190
+#: pcbnew/class_board_item.cpp:195
 msgid "Blind"
 msgstr "Enterrée"
 
-#: pcbnew/class_board_item.cpp:192
+#: pcbnew/class_board_item.cpp:197
 msgid "Buried"
 msgstr "Borgne"
 
-#: pcbnew/class_board_item.cpp:214
+#: pcbnew/class_board_item.cpp:219
 #: pcbnew/class_marker.cpp:112
 msgid "Marker"
 msgstr "Marqueur"
 
-#: pcbnew/class_board_item.cpp:219
+#: pcbnew/class_board_item.cpp:224
 msgid "Dimension"
 msgstr "Dimension"
 
-#: pcbnew/class_board_item.cpp:224
+#: pcbnew/class_board_item.cpp:229
 msgid "Target"
 msgstr "Mire"
 
-#: pcbnew/class_board_item.cpp:225
+#: pcbnew/class_board_item.cpp:230
 msgid "size"
 msgstr "dimension"
 
-#: pcbnew/class_board_item.cpp:230
+#: pcbnew/class_board_item.cpp:235
 msgid "Edge Zone"
 msgstr "Contour Zone"
 
@@ -3874,13 +3882,13 @@ msgstr "Pads"
 
 #: pcbnew/class_track.cpp:765
 #: pcbnew/zones.cpp:873
-#: pcbnew/zones_by_polygon.cpp:705
-#: pcbnew/class_zone.cpp:398
+#: pcbnew/zones_by_polygon.cpp:831
+#: pcbnew/class_zone.cpp:432
 msgid "NetName"
 msgstr "NetName"
 
 #: pcbnew/class_track.cpp:770
-#: pcbnew/class_zone.cpp:403
+#: pcbnew/class_zone.cpp:437
 msgid "NetCode"
 msgstr "NetCode"
 
@@ -4433,73 +4441,30 @@ msgid "Delete Current Zone Edges"
 msgstr "Effacer contour zone courant"
 
 #: pcbnew/zones.cpp:871
-#: pcbnew/zones_by_polygon.cpp:703
+#: pcbnew/zones_by_polygon.cpp:829
 msgid "No Net"
 msgstr "No Net"
 
-#: pcbnew/dsn.cpp:456
-msgid "Line length exceeded"
-msgstr "Longueur de ligne dépassée"
-
-#: pcbnew/dsn.cpp:518
-msgid "'quoted text delimiter'"
-msgstr "'delimiteur de texte balisé'"
-
-#: pcbnew/dsn.cpp:524
-msgid "'symbol'"
-msgstr "'symbole'"
-
-#: pcbnew/dsn.cpp:527
-msgid "'number'"
-msgstr "'nombre'"
-
-#: pcbnew/dsn.cpp:536
-msgid "\"quoted string\""
-msgstr "\"chaîne entre quotes\""
-
-#: pcbnew/dsn.cpp:539
-msgid "'end of file'"
-msgstr "fin de fichier'"
-
-#: pcbnew/dsn.cpp:556
-msgid "in file"
-msgstr "dans le fichier"
-
-#: pcbnew/dsn.cpp:557
-msgid "on line"
-msgstr "en ligne"
-
-#: pcbnew/dsn.cpp:558
-msgid "at offset"
-msgstr "a l'offset"
-
-#: pcbnew/dsn.cpp:597
-msgid "String delimiter must be a single character of ', \", or $"
-msgstr "Le caractère de délimitation de ligne doit être un seul caractère  ', \", or $"
-
-#: pcbnew/dsn.cpp:676
-msgid "Un-terminated delimited string"
-msgstr "Ligne délimitée non terminée"
-
-#: pcbnew/specctra.cpp:271
-#: pcbnew/specctra.cpp:280
+#: pcbnew/specctra.cpp:1015
+#: pcbnew/specctra.cpp:1022
 msgid "Expecting"
 msgstr "Attendu"
 
-#: pcbnew/specctra.cpp:300
+#: pcbnew/specctra.cpp:1031
+#: pcbnew/specctra.cpp:1038
+msgid "Unexpected"
+msgstr "Inattendu"
+
+#: pcbnew/specctra.cpp:1059
+#: pcbnew/specctra.cpp:1817
 #, c-format
 msgid "Unable to open file \"%s\""
 msgstr "Ne peut pas ouvrirle  fichier \"%s\""
 
-#: pcbnew/specctra.cpp:401
-#: pcbnew/specctra.cpp:467
-#: pcbnew/specctra.cpp:474
-msgid "on or off"
-msgstr "on ou off"
-
-#: pcbnew/specctra.cpp:452
-msgid "testpoint, guides, or image_conductor"
-msgstr "testpoint, guides, ou image_conductor"
+#: pcbnew/specctra.cpp:1792
+#, c-format
+msgid "System file error writing to file \"%s\""
+msgstr "Erreur système sur écriture fichier \"%s\""
 
 #: pcbnew/move_or_drag_track.cpp:714
 msgid "Unable to drag this segment: too many segments connected"
@@ -4544,6 +4509,30 @@ msgstr "Erreur. Vous devez choisir une couche"
 #: pcbnew/dialog_zones_by_polygon.cpp:471
 msgid "Error : you must choose a net name"
 msgstr "Erreur. Vous devez choisir une équipotentielle"
+
+#: pcbnew/dsn.cpp:467
+msgid "Line length exceeded"
+msgstr "Longueur de ligne dépassée"
+
+#: pcbnew/dsn.cpp:577
+msgid "in file"
+msgstr "dans le fichier"
+
+#: pcbnew/dsn.cpp:578
+msgid "on line"
+msgstr "en ligne"
+
+#: pcbnew/dsn.cpp:579
+msgid "at offset"
+msgstr "a l'offset"
+
+#: pcbnew/dsn.cpp:618
+msgid "String delimiter must be a single character of ', \", or $"
+msgstr "Le caractère de délimitation de ligne doit être un seul caractère  ', \", or $"
+
+#: pcbnew/dsn.cpp:697
+msgid "Un-terminated delimited string"
+msgstr "Ligne délimitée non terminée"
 
 #: pcbnew/initpcb.cpp:125
 msgid "Current Board will be lost ?"
@@ -4860,11 +4849,11 @@ msgstr "Fichier rapport terminé"
 msgid "DRC Report file"
 msgstr "Fichier rapport de contrôle DRC:"
 
-#: pcbnew/class_zone.cpp:411
+#: pcbnew/class_zone.cpp:445
 msgid "Corners"
 msgstr "Sommets"
 
-#: pcbnew/class_zone.cpp:415
+#: pcbnew/class_zone.cpp:449
 msgid "Hatch lines"
 msgstr "Lignes de Hachure"
 

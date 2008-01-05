@@ -639,37 +639,42 @@ void WinEDA_PcbFrame::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu
     }
     else
     {
-        edge_zone->m_CornerSelection = -1;
+		wxMenu * zones_menu = new wxMenu();
+		ADD_MENUITEM_WITH_SUBMENU( aPopMenu, zones_menu,
+                               -1, _( "Zones" ), add_zone_xpm );
         int index;
         if( ( index = edge_zone->HitTestForCorner( GetScreen()->m_Curseur ) ) >= 0 )
         {
-            edge_zone->m_CornerSelection = index;
-            ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_MOVE_ZONE_CORNER,
+            ADD_MENUITEM( zones_menu, ID_POPUP_PCB_MOVE_ZONE_CORNER,
                           _( "Move Corner" ), move_xpm );
-            ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_ZONE_CORNER,
+            ADD_MENUITEM( zones_menu, ID_POPUP_PCB_DELETE_ZONE_CORNER,
                           _( "Delete Corner" ), delete_xpm );
         }
         else if( ( index = edge_zone->HitTestForEdge( GetScreen()->m_Curseur ) ) >= 0 )
         {
-            edge_zone->m_CornerSelection = index;
-            ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_ADD_ZONE_CORNER,
+            ADD_MENUITEM( zones_menu, ID_POPUP_PCB_ADD_ZONE_CORNER,
                           _( "Create Corner" ), Add_Corner_xpm );
         }
 
-        aPopMenu->AppendSeparator();
-        ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_ZONE_ADD_SIMILAR_ZONE,
+        zones_menu->AppendSeparator();
+        ADD_MENUITEM( zones_menu, ID_POPUP_PCB_ZONE_ADD_SIMILAR_ZONE,
                       _( "Add Similar Zone" ), add_zone_xpm );
 
-        ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_ZONE_ADD_CUTOUT_ZONE,
+        ADD_MENUITEM( zones_menu, ID_POPUP_PCB_ZONE_ADD_CUTOUT_ZONE,
                       _( "Add Cutout Area" ), add_zone_cutout );
-        aPopMenu->AppendSeparator();
+        zones_menu->AppendSeparator();
 
-        ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_FILL_ZONE,
+        ADD_MENUITEM( zones_menu, ID_POPUP_PCB_FILL_ZONE,
                       _( "Fill Zone" ), fill_zone_xpm );
 
-        ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_EDIT_ZONE_PARAMS,
+        ADD_MENUITEM( zones_menu, ID_POPUP_PCB_EDIT_ZONE_PARAMS,
                       _( "Edit Zone Params" ), edit_xpm );
-        ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_ZONE_CONTAINER,
+
+		if ( index >= 0 && edge_zone->m_Poly->IsCutoutContour( edge_zone->m_CornerSelection ) )
+			ADD_MENUITEM( zones_menu, ID_POPUP_PCB_DELETE_ZONE_CUTOUT,
+						  _( "Delete Cutout" ), delete_xpm );
+			
+        ADD_MENUITEM( zones_menu, ID_POPUP_PCB_DELETE_ZONE_CONTAINER,
                       _( "Delete Zone Outline" ), delete_xpm );
     }
 }

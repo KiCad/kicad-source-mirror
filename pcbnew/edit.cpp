@@ -441,7 +441,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
         if( GetCurItem() == NULL )
             break;
-        Delete_Zone( &dc, (SEGZONE*) GetCurItem() );
+        Delete_Zone_Fill( &dc, (SEGZONE*) GetCurItem() );
         SetCurItem( NULL );
         break;
 
@@ -460,15 +460,11 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 		break;
 
     case ID_POPUP_PCB_DELETE_ZONE_CONTAINER:
-	{
+	case ID_POPUP_PCB_DELETE_ZONE_CUTOUT:
         DrawPanel->MouseToCursorSchema();
-		ZONE_CONTAINER * zone_cont = (ZONE_CONTAINER*)GetCurItem();
-		zone_cont->Draw(DrawPanel,&dc, wxPoint(0,0), GR_XOR);
-		Delete_Zone( &dc, NULL, zone_cont->m_TimeStamp );
-        m_Pcb->Delete( zone_cont );
+		Delete_Zone_Contour( &dc, (ZONE_CONTAINER*)GetCurItem() );
         SetCurItem( NULL );
-        break;
-	}
+		break;
 
 	case ID_POPUP_PCB_DELETE_ZONE_CORNER:
 		Remove_Zone_Corner( &dc, (ZONE_CONTAINER*)GetCurItem() );
@@ -1010,7 +1006,7 @@ void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
         break;
 
     case TYPEZONE:
-        Delete_Zone( DC, (SEGZONE*) Item );
+        Delete_Zone_Fill( DC, (SEGZONE*) Item );
         break;
 
     case TYPEMARKER:

@@ -2,24 +2,9 @@
 
 #include "PolyLine.h"
 
-dl_element * CDisplayList::Add( id id, void * ptr, int glayer, int gtype, int visible,
-						int w, int holew, int x, int y, int xf, int yf, int xo, int yo, 
-						int radius, int orig_layer )
-{
-	return NULL;
-}
-
-dl_element * CDisplayList::AddSelector( id id, void * ptr, int glayer, int gtype, int visible,
-						int w, int holew, int x, int y, int xf, int yf, int xo, int yo, int radius )
-{
-	return NULL;
-}
-
-
 void CDisplayList::Set_visible( dl_element * el, int visible )
 {
 }
-
 
 int CDisplayList::StopDragging()
 {
@@ -29,10 +14,6 @@ int CDisplayList::StopDragging()
 int CDisplayList::CancelHighLight()
 {
 	return 0;
-}
-
-void CDisplayList::Set_id( dl_element * el, id * id )
-{
 }
 
 id CDisplayList::Remove( dl_element * element )
@@ -83,3 +64,4 @@ int CDisplayList::StartDraggingArc( CDC * pDC, int style, int x, int y, int xi, 
 {
 	return 0;
 }
+

@@ -20,12 +20,6 @@ bool bDontShowIntersectionArcsWarning;
 bool bDontShowIntersectionWarning;
 
 
-#define poly m_Poly
-
-// carea: describes a copper area
-#define carea ZONE_CONTAINER
-
-
 /**
  * Function AddArea
  * add empty copper area to net
@@ -69,7 +63,7 @@ ZONE_CONTAINER* BOARD::InsertArea( int netcode, int iarea, int layer, int x, int
     else
         m_ZoneDescriptorList.push_back( new_area );
 
-    new_area->poly->Start( layer, 1, 10 * NM_PER_MIL, x, y,
+    new_area->m_Poly->Start( layer, 1, 10 * NM_PER_MIL, x, y,
                            hatch );
     return new_area;
 }
@@ -85,9 +79,9 @@ ZONE_CONTAINER* BOARD::InsertArea( int netcode, int iarea, int layer, int x, int
  */
 int BOARD::CompleteArea( ZONE_CONTAINER* area_to_complete, int style )
 {
-    if( area_to_complete->poly->GetNumCorners() > 2 )
+    if( area_to_complete->m_Poly->GetNumCorners() > 2 )
     {
-        area_to_complete->poly->Close( style );
+        area_to_complete->m_Poly->Close( style );
         return 1;
     }
     else
@@ -111,7 +105,7 @@ int BOARD::CompleteArea( ZONE_CONTAINER* area_to_complete, int style )
  */
 int BOARD::TestAreaPolygon( ZONE_CONTAINER* CurrArea )
 {
-    CPolyLine*         p = CurrArea->poly;
+    CPolyLine*         p = CurrArea->m_Poly;
 
     // first, check for sides intersecting other sides, especially arcs
     bool               bInt    = false;
@@ -234,7 +228,7 @@ int BOARD::TestAreaPolygon( ZONE_CONTAINER* CurrArea )
 int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
                             bool bMessageBoxArc, bool bMessageBoxInt, bool bRetainArcs )
 {
-    CPolyLine* p    = CurrArea->poly;
+    CPolyLine* p    = CurrArea->m_Poly;
     int        test = TestAreaPolygon( CurrArea ); // this sets utility2 flag
 
     if( test == -1 && !bRetainArcs )
@@ -284,7 +278,7 @@ int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
     {
         std::vector<CPolyLine*> * pa = new std::vector<CPolyLine*>;
         p->Undraw();
-        int n_poly = CurrArea->poly->NormalizeWithGpc( pa, bRetainArcs );
+        int n_poly = CurrArea->m_Poly->NormalizeWithGpc( pa, bRetainArcs );
         if( n_poly > 1 )    // i.e if clippinf has created some polygons, we must add these new copper areas
         {
             for( int ip = 1; ip < n_poly; ip++ )
@@ -295,9 +289,9 @@ int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
 
                 // remove the poly that was automatically created for the new area
                 // and replace it with a poly from NormalizeWithGpc
-                delete CurrArea->poly;
-                CurrArea->poly = new_p;
-                CurrArea->poly->Draw();
+                delete CurrArea->m_Poly;
+                CurrArea->m_Poly = new_p;
+                CurrArea->m_Poly->Draw();
                 CurrArea->utility = 1;
             }
         }
@@ -368,15 +362,15 @@ int BOARD::CombineAllAreasInNet( int aNetCode, bool bMessageBox, bool bUseUtilit
                 continue;
 
             // legal polygon
-            CRect b1      = curr_area->poly->GetCornerBounds();
+            CRect b1      = curr_area->m_Poly->GetCornerBounds();
             bool  mod_ia1 = false;
             for( unsigned ia2 = m_ZoneDescriptorList.size() - 1; ia2 > ia1; ia2-- )
             {
                 ZONE_CONTAINER* area2 = m_ZoneDescriptorList[ia2];
-                if( curr_area->poly->GetLayer() == area2->poly->GetLayer()
+                if( curr_area->GetLayer() == area2->GetLayer()
                     && curr_area->utility2 != -1 && area2->utility2 != -1 )
                 {
-                    CRect b2 = area2->poly->GetCornerBounds();
+                    CRect b2 = area2->m_Poly->GetCornerBounds();
                     if( !( b1.left > b2.right || b1.right < b2.left
                            || b1.bottom > b2.top || b1.top < b2.bottom ) )
                     {
@@ -443,7 +437,7 @@ int BOARD::CombineAllAreasInNet( int aNetCode, bool bMessageBox, bool bUseUtilit
  */
 bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
 {
-    CPolyLine* poly1 = area_to_test->poly;
+    CPolyLine* poly1 = area_to_test->m_Poly;
 
     for( unsigned ia2 = 0; ia2 < m_ZoneDescriptorList.size(); ia2++ )
     {
@@ -456,7 +450,7 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
             if( area_to_test->GetLayer() != area2->GetLayer() )
                 continue;
 
-            CPolyLine* poly2 = area2->poly;
+            CPolyLine* poly2 = area2->m_Poly;
 
             // test bounding rects
             CRect      b1 = poly1->GetCornerBounds();
@@ -488,7 +482,7 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
                         yf1 = poly1->GetY( is1 );
                     }
                     style1 = poly1->GetSideStyle( ic1 );
-                    for( int icont2 = 0; icont2<poly2->GetNumContours(); icont2++ )
+                    for( int icont2 = 0; icont2 < poly2->GetNumContours(); icont2++ )
                     {
                         int is2 = poly2->GetContourStart( icont2 );
                         int ie2 = poly2->GetContourEnd( icont2 );
@@ -539,8 +533,8 @@ int BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_
     if( area_ref->GetLayer() != area_to_test->GetLayer() )
         return 0;
 
-    CPolyLine* poly1 = area_ref->poly;
-    CPolyLine* poly2 = area_to_test->poly;
+    CPolyLine* poly1 = area_ref->m_Poly;
+    CPolyLine* poly2 = area_to_test->m_Poly;
 
     // test bounding rects
     CRect      b1 = poly1->GetCornerBounds();
@@ -647,8 +641,8 @@ int BOARD::CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combi
 #endif
 
     // polygons intersect, combine them
-    CPolyLine*        poly1 = area_ref->poly;
-    CPolyLine*        poly2 = area_to_combine->poly;
+    CPolyLine*        poly1 = area_ref->m_Poly;
+    CPolyLine*        poly2 = area_to_combine->m_Poly;
     std::vector<CArc> arc_array1;
     std::vector<CArc> arc_array2;
     poly1->MakeGpcPoly( -1, &arc_array1 );
@@ -747,7 +741,7 @@ void dra_areas( CDlgLog* log, int copper_layers,
     // now iterate through all areas
     for( int ia = 0; ia<net->nareas; ia++ )
     {
-        carea*   a = &net->area[ia];
+        ZONE_CONTAINER*   a = &net->area[ia];
 
         // iterate through all nets again
         POSITION pos2 = pos;
@@ -759,17 +753,17 @@ void dra_areas( CDlgLog* log, int copper_layers,
             cnet* net2 = (cnet*) ptr2;
             for( int ia2 = 0; ia2<net2->nareas; ia2++ )
             {
-                carea* a2 = &net2->area[ia2];
+                ZONE_CONTAINER* a2 = &net2->area[ia2];
 
                 // test for same layer
-                if( a->poly->GetLayer() == a2->poly->GetLayer() )
+                if( a->m_Poly->GetLayer() == a2->m_Poly->GetLayer() )
                 {
                     // test for points inside one another
-                    for( int ic = 0; ic<a->poly->GetNumCorners(); ic++ )
+                    for( int ic = 0; ic<a->m_Poly->GetNumCorners(); ic++ )
                     {
-                        int x = a->poly->GetX( ic );
-                        int y = a->poly->GetY( ic );
-                        if( a2->poly->TestPointInside( x, y ) )
+                        int x = a->m_Poly->GetX( ic );
+                        int y = a->m_Poly->GetY( ic );
+                        if( a2->m_Poly->TestPointInside( x, y ) )
                         {
                             // COPPERAREA_COPPERAREA error
                             id id_a = net->id;
@@ -804,11 +798,11 @@ void dra_areas( CDlgLog* log, int copper_layers,
                         }
                     }
 
-                    for( int ic2 = 0; ic2<a2->poly->GetNumCorners(); ic2++ )
+                    for( int ic2 = 0; ic2<a2->m_Poly->GetNumCorners(); ic2++ )
                     {
-                        int x = a2->poly->GetX( ic2 );
-                        int y = a2->poly->GetY( ic2 );
-                        if( a->poly->TestPointInside( x, y ) )
+                        int x = a2->m_Poly->GetX( ic2 );
+                        int y = a2->m_Poly->GetY( ic2 );
+                        if( a->m_Poly->TestPointInside( x, y ) )
                         {
                             // COPPERAREA_COPPERAREA error
                             id id_a = net2->id;
@@ -841,10 +835,10 @@ void dra_areas( CDlgLog* log, int copper_layers,
                     }
 
                     // now test spacing between areas
-                    for( int icont = 0; icont<a->poly->GetNumContours(); icont++ )
+                    for( int icont = 0; icont<a->m_Poly->GetNumContours(); icont++ )
                     {
-                        int ic_start = a->poly->GetContourStart( icont );
-                        int ic_end   = a->poly->GetContourEnd( icont );
+                        int ic_start = a->m_Poly->GetContourStart( icont );
+                        int ic_end   = a->m_Poly->GetContourEnd( icont );
                         for( int ic = ic_start; ic<=ic_end; ic++ )
                         {
                             id id_a = net->id;
@@ -852,24 +846,24 @@ void dra_areas( CDlgLog* log, int copper_layers,
                             id_a.i   = ia;
                             id_a.sst = ID_SIDE;
                             id_a.ii  = ic;
-                            int ax1 = a->poly->GetX( ic );
-                            int ay1 = a->poly->GetY( ic );
+                            int ax1 = a->m_Poly->GetX( ic );
+                            int ay1 = a->m_Poly->GetY( ic );
                             int ax2, ay2;
                             if( ic == ic_end )
                             {
-                                ax2 = a->poly->GetX( ic_start );
-                                ay2 = a->poly->GetY( ic_start );
+                                ax2 = a->m_Poly->GetX( ic_start );
+                                ay2 = a->m_Poly->GetY( ic_start );
                             }
                             else
                             {
-                                ax2 = a->poly->GetX( ic + 1 );
-                                ay2 = a->poly->GetY( ic + 1 );
+                                ax2 = a->m_Poly->GetX( ic + 1 );
+                                ay2 = a->m_Poly->GetY( ic + 1 );
                             }
-                            int astyle = a->poly->GetSideStyle( ic );
-                            for( int icont2 = 0; icont2<a2->poly->GetNumContours(); icont2++ )
+                            int astyle = a->m_Poly->GetSideStyle( ic );
+                            for( int icont2 = 0; icont2<a2->m_Poly->GetNumContours(); icont2++ )
                             {
-                                int ic_start2 = a2->poly->GetContourStart( icont2 );
-                                int ic_end2   = a2->poly->GetContourEnd( icont2 );
+                                int ic_start2 = a2->m_Poly->GetContourStart( icont2 );
+                                int ic_end2   = a2->m_Poly->GetContourEnd( icont2 );
                                 for( int ic2 = ic_start2; ic2<=ic_end2; ic2++ )
                                 {
                                     id id_b = net2->id;
@@ -877,20 +871,20 @@ void dra_areas( CDlgLog* log, int copper_layers,
                                     id_b.i   = ia2;
                                     id_b.sst = ID_SIDE;
                                     id_b.ii  = ic2;
-                                    int bx1 = a2->poly->GetX( ic2 );
-                                    int by1 = a2->poly->GetY( ic2 );
+                                    int bx1 = a2->m_Poly->GetX( ic2 );
+                                    int by1 = a2->m_Poly->GetY( ic2 );
                                     int bx2, by2;
                                     if( ic2 == ic_end2 )
                                     {
-                                        bx2 = a2->poly->GetX( ic_start2 );
-                                        by2 = a2->poly->GetY( ic_start2 );
+                                        bx2 = a2->m_Poly->GetX( ic_start2 );
+                                        by2 = a2->m_Poly->GetY( ic_start2 );
                                     }
                                     else
                                     {
-                                        bx2 = a2->poly->GetX( ic2 + 1 );
-                                        by2 = a2->poly->GetY( ic2 + 1 );
+                                        bx2 = a2->m_Poly->GetX( ic2 + 1 );
+                                        by2 = a2->m_Poly->GetY( ic2 + 1 );
                                     }
-                                    int bstyle = a2->poly->GetSideStyle( ic2 );
+                                    int bstyle = a2->m_Poly->GetSideStyle( ic2 );
                                     int x, y;
                                     int d = ::GetClearanceBetweenSegments( bx1,
                                                                            by1,

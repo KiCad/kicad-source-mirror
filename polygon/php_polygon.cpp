@@ -656,10 +656,15 @@ BOOL polygon::isInside( vertex * v )
 	int winding_number3 = 0;
 	int winding_number4 = 0;
 //**	vertex * point_at_infinity = new vertex(-10000000,v->Y());	// Create point at infinity
-	vertex * point_at_infinity = new vertex(-1000000000,-50000000);	// Create point at infinity
+/*	vertex * point_at_infinity = new vertex(-1000000000,-50000000);	// Create point at infinity
 	vertex * point_at_infinity2 = new vertex(1000000000,+50000000);	// Create point at infinity
 	vertex * point_at_infinity3 = new vertex(500000000,1000000000);	// Create point at infinity
 	vertex * point_at_infinity4 = new vertex(-500000000,1000000000);	// Create point at infinity
+*/
+	vertex point_at_infinity(-1000000000,-50000000);	// Create point at infinity
+	vertex point_at_infinity2(1000000000,+50000000);	// Create point at infinity
+	vertex point_at_infinity3(500000000,1000000000);	// Create point at infinity
+	vertex point_at_infinity4(-500000000,1000000000);	// Create point at infinity
 	vertex * q = m_first;		// End vertex of a line segment in polygon 
 	do
 	{
@@ -667,20 +672,20 @@ BOOL polygon::isInside( vertex * v )
 		{
 			int n;
 			double x[2], y[2], aP[2], aQ[2];
-			if( ints( point_at_infinity, v, q, nxt(q->Next()), &n, x, y, aP, aQ ) )
+			if( ints( &point_at_infinity, v, q, nxt(q->Next()), &n, x, y, aP, aQ ) )
 				winding_number += n;		// Add number of intersections found
-			if( ints( point_at_infinity2, v, q, nxt(q->Next()), &n, x, y, aP, aQ ) )
+			if( ints( &point_at_infinity2, v, q, nxt(q->Next()), &n, x, y, aP, aQ ) )
 				winding_number2 += n;		// Add number of intersections found
-			if( ints( point_at_infinity3, v, q, nxt(q->Next()), &n, x, y, aP, aQ ) )
+			if( ints( &point_at_infinity3, v, q, nxt(q->Next()), &n, x, y, aP, aQ ) )
 				winding_number3 += n;		// Add number of intersections found
-			if( ints( point_at_infinity4, v, q, nxt(q->Next()), &n, x, y, aP, aQ ) )
+			if( ints( &point_at_infinity4, v, q, nxt(q->Next()), &n, x, y, aP, aQ ) )
 				winding_number4 += n;		// Add number of intersections found
 		}
 		q = q->Next();
 	}
 	while( q->id() != m_first->id() );
-	delete point_at_infinity;		
-	delete point_at_infinity2;
+//	delete point_at_infinity;		
+//	delete point_at_infinity2;
 	if( winding_number%2 != winding_number2%2 
 	|| winding_number3%2 != winding_number4%2 
 	|| winding_number%2 != winding_number3%2 )

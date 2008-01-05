@@ -46,17 +46,17 @@ public:
 	int style;
 	int xi, yi, xf, yf;
 	int n_steps;	// number of straight-line segments in gpc_poly 
-	BOOL bFound;
+	bool bFound;
 };
 
 class CPolyPt
 {
 public:
-	CPolyPt( int qx=0, int qy=0, BOOL qf=FALSE )
+	CPolyPt( int qx=0, int qy=0, bool qf=FALSE )
 	{ x=qx; y=qy; end_contour=qf; utility = 0; };
 	int x;
 	int y;
-	BOOL end_contour;
+	bool end_contour;
 	int utility;
 };
 
@@ -75,11 +75,11 @@ public:
 	// functions for modifying polyline
 	void Start( int layer, int w, int sel_box, int x, int y,
 		int hatch );
-	void AppendCorner( int x, int y, int style = STRAIGHT, BOOL bDraw=TRUE );
+	void AppendCorner( int x, int y, int style = STRAIGHT, bool bDraw=TRUE );
 	void InsertCorner( int ic, int x, int y );
-	void DeleteCorner( int ic, BOOL bDraw=TRUE );
+	void DeleteCorner( int ic, bool bDraw=TRUE );
 	void MoveCorner( int ic, int x, int y );
-	void Close( int style = STRAIGHT, BOOL bDraw=TRUE );
+	void Close( int style = STRAIGHT, bool bDraw=TRUE );
 	void RemoveContour( int icont );
 	void RemoveAllContours( void );
 
@@ -93,7 +93,7 @@ public:
 	void Undraw();
 	void Draw( CDisplayList * dl = NULL );
 	void Hatch();
-	void MakeVisible( BOOL visible = TRUE );
+	void MakeVisible( bool visible = TRUE );
 	void MoveOrigin( int x_off, int y_off );
 
 	// misc. functions
@@ -101,8 +101,9 @@ public:
 	CRect GetCornerBounds();
 	CRect GetCornerBounds( int icont );
 	void Copy( CPolyLine * src );
-	BOOL TestPointInside( int x, int y );
-	BOOL TestPointInsideContour( int icont, int x, int y );
+	bool TestPointInside( int x, int y );
+	bool TestPointInsideContour( int icont, int x, int y );
+	bool IsCutoutContour( int icont );
 	int TestIntersection( CPolyLine * poly );
 	void AppendArc( int xi, int yi, int xf, int yf, int xc, int yc, int num );
 
@@ -124,30 +125,25 @@ public:
 	void SetUtility( int ic, int utility ){ corner[ic].utility = utility; };
 	int GetW();
 	int GetSideStyle( int is );
-	id  GetId();
-	int GetSelBoxSize();
-	CDisplayList * GetDisplayList(){ return m_dlist; };
 	int GetHatchStyle(){ return m_HatchStyle; }
 	void SetHatch( int hatch ){ Undraw(); m_HatchStyle = hatch; Draw(); };
 	void SetX( int ic, int x );
 	void SetY( int ic, int y );
-	void SetEndContour( int ic, BOOL end_contour );
+	void SetEndContour( int ic, bool end_contour );
 //	void SetLayer( int layer );
 	void SetW( int w );
 	void SetSideStyle( int is, int style );
-	void SetSelBoxSize( int sel_box );
-	void SetDisplayList( CDisplayList * dl );
 
 	// GPC functions
 	int MakeGpcPoly( int icontour=0, std::vector<CArc> * arc_array=NULL );
 	int FreeGpcPoly();
 	gpc_polygon * GetGpcPoly(){ return m_gpc_poly; };
-	int NormalizeWithGpc( std::vector<CPolyLine*> * pa=NULL, BOOL bRetainArcs=FALSE );
+	int NormalizeWithGpc( std::vector<CPolyLine*> * pa=NULL, bool bRetainArcs=FALSE );
 	int RestoreArcs( std::vector<CArc> * arc_array, std::vector<CPolyLine*> * pa=NULL );
 	CPolyLine * MakePolylineForPad( int type, int x, int y, int w, int l, int r, int angle );
 	void AddContourForPadClearance( int type, int x, int y, int w, 
 						int l, int r, int angle, int fill_clearance,
-						int hole_w, int hole_clearance, BOOL bThermal=FALSE, int spoke_w=0 );
+						int hole_w, int hole_clearance, bool bThermal=FALSE, int spoke_w=0 );
 	void ClipGpcPolygon( gpc_op op, CPolyLine * poly );
 
 	// PHP functions
@@ -174,7 +170,7 @@ public:
 private:
 	gpc_polygon * m_gpc_poly;	// polygon in gpc format
 	polygon * m_php_poly;
-	BOOL bDrawn;
+	bool bDrawn;
 };
 
 #endif	// #ifndef POLYLINE_H

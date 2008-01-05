@@ -150,6 +150,11 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
 
     case TYPEZONE_CONTAINER:
         text = _( "Zone Outline" );
+		{
+		ZONE_CONTAINER* area = (ZONE_CONTAINER*) this;
+		int ncont = area->m_Poly->GetContour(area->m_CornerSelection);
+		if ( ncont ) text << wxT(" ") << _("(Cutout)");
+		}
 		text << wxT( " " );
         {
             wxString TimeStampText;
