@@ -2,7 +2,7 @@
 
 How to build kicad using CMAKE.
 First Written: 19-Dec-2007
-Last Revised: 27-Dec-2007
+Last Revised: 05-Jan-2008
 
 
 Kicad needs wxWidgets, the multi platform G.U.I.
@@ -15,11 +15,12 @@ sections below.)
 2)  If linux, then install "mesa".
 3)  Make sure g++ and "make" are in your path.
 4)  Install wxWidgets [and build it if on windows].
-5)  Install CMAKE
-6)  Install the kicad source tree.
-7)  Use cmake to build the kicad makefiles.
-8)  Use make to build and install kicad.
-9) Making a "Debug" build.
+5)  Install zlib [and build it if on windows].
+6)  Install CMAKE
+7)  Install the kicad source tree.
+8)  Use cmake to build the kicad makefiles.
+9)  Use make to build and install kicad.
+10) Making a "Debug" build.
 
 
 ===== Step Details ====================================================
@@ -78,7 +79,22 @@ restart your msys shell, depending on how you modify your PATH.
 
 -----------------------------------------------------------------------------
 
-5)  Install CMAKE.
+5)  Install zlib [and build it if on windows].
+If on windows, download http://www.zlib.net/zlib123.zip or a newer version.
+Start msys so you have a bash shell. Decide where your zlib build directory
+will be. It must be where you can access it from within the msys environment,
+such as home/<user>. Edit your msys/1.0/etc/fstab file if needed to provide 
+access to this build directory from msys. Unzip the zlib123.zip file into this 
+build directory. Change directories into there, and then:
+    ./configure (CHANGES NEEDED!!!)
+    make
+    make install
+
+If linux, use your package manager to install zlib.
+
+-----------------------------------------------------------------------------
+
+6)  Install CMAKE.
 If windows, download the installation binary for windows from cmake.org.  
 Install that and choose to add cmake to your path during installation.  You
 will have to restart and command shells for the new path to take effect.
@@ -91,12 +107,12 @@ command prompt.
 
 -----------------------------------------------------------------------------
 
-6)  Install the kicad source tree.
+7)  Install the kicad source tree.
 You can use the subversion repository or a tar file for this.  See the wiki. 
 
 -----------------------------------------------------------------------------
 
-7)  Use cmake to create the kicad makefiles.
+8)  Use cmake to create the kicad makefiles.
 If windows, go into your msys shell.  Linux and windows users both then make 
 two "out of source" build directories:
     cd <kicadSource>
@@ -121,7 +137,7 @@ editor and re-run the same cmake command again, but with no
 
 -----------------------------------------------------------------------------
 
-8)  Use make to build and install kicad.
+9)  Use make to build and install kicad.
 You compile Kicad here.  You will only need to do step 8) again when one of the 
 CMakeLists.txt files change.  If windows, you must be in your msys shell.
 On either platform then:
@@ -133,7 +149,7 @@ You are now done unless you want to make a Debug build.
 
 -----------------------------------------------------------------------------
 
-9) Making a "Debug" build.
+10) Making a "Debug" build.
 
     cd <kicadSource>/debug
 
