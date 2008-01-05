@@ -1,4 +1,4 @@
-# Our project is called 'kicad'.This is how it will be called in
+# Our project is called 'kicad'. This is what it will be called in
 # Visual Studio and in our makefiles.
 PROJECT(kicad)
 
@@ -6,6 +6,9 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.4.6 FATAL_ERROR)
 
 # Uncomment this line if you want verbose build messages.
 #SET(CMAKE_VERBOSE_MAKEFILE ON)
+
+# Comment this out if you don't want to build minizip.
+SET(BUILD_MINIZIP ON CACHE BOOL "Build minizip?")
 
 # Set default flags for Debug build.
 SET(CMAKE_C_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
