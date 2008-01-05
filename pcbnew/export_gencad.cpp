@@ -226,14 +226,14 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
         switch( pad->m_PadShape )
         {
         default:
-        case CIRCLE:
+        case PAD_CIRCLE:
             pad_type = "ROUND";
             fprintf( file, " %s %d\n", pad_type, pad->m_Drill.x );
             fprintf( file, "CIRCLE %d %d %d\n",
                      pad->m_Offset.x, -pad->m_Offset.y, pad->m_Size.x / 2 );
             break;
 
-        case RECT:
+        case PAD_RECT:
             pad_type = "RECTANGULAR";
             fprintf( file, " %s %d\n", pad_type, pad->m_Drill.x );
             fprintf( file, "RECTANGLE %d %d %d %d\n",
@@ -241,7 +241,7 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
                      dx + pad->m_Offset.x, -pad->m_Offset.y + dy );
             break;
 
-        case OVALE:     /* description du contour par 2 linges et 2 arcs */
+        case PAD_OVAL:     /* description du contour par 2 linges et 2 arcs */
         {
             pad_type = "FINGER";
             fprintf( file, " %s %d\n", pad_type, pad->m_Drill.x );
@@ -288,7 +288,7 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
             break;
         }
 
-        case TRAPEZE:
+        case PAD_TRAPEZOID:
             pad_type = "POLYGON";
             break;
         }
@@ -803,7 +803,7 @@ void ModuleWriteShape( FILE* file, MODULE* module )
  *  shape_descr (line, arc ..):
  *  LINE startX startY endX endY
  *  ARC startX startY endX endY centreX scentreY
- *  CIRCLE centreX scentreY radius
+ *  PAD_CIRCLE centreX scentreY radius
  */
 {
     EDGE_MODULE*    PtEdge;
@@ -819,7 +819,7 @@ void ModuleWriteShape( FILE* file, MODULE* module )
     {
         fprintf( file, "ATTRIBUTE" );
         if( module->m_Attributs & MOD_CMS )
-            fprintf( file, " SMD" );
+            fprintf( file, " PAD_SMD" );
         if( module->m_Attributs & MOD_VIRTUAL )
             fprintf( file, " VIRTUAL" );
         fprintf( file, "\n" );

@@ -52,7 +52,7 @@ enum NetObjetType {      /* Type des objets de Net */
 enum  IsConnectType {   /* Valeur du Flag de connection */
     UNCONNECT,          /* Pin ou Label non connecte */
     NOCONNECT,          /* Pin volontairement non connectee (Symb. NoConnect utilise) */
-    CONNECT             /* connexion normale */
+    PAD_CONNECT             /* connexion normale */
 };
 
 

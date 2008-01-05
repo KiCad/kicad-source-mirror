@@ -433,8 +433,8 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     PtPad->m_Pos0.y = PtPad->m_Pos.y - Module->m_Pos.y;
     PtPad->m_Size.x = PtPad->m_Size.y = LastSegm->m_Width;
     PtPad->m_Masque_Layer = g_TabOneLayerMask[LastSegm->GetLayer()];
-    PtPad->m_Attribut = SMD;
-    PtPad->m_PadShape = CIRCLE;
+    PtPad->m_Attribut = PAD_SMD;
+    PtPad->m_PadShape = PAD_CIRCLE;
     PtPad->m_Rayon    = PtPad->m_Size.x / 2;
 
     D_PAD* newpad = new D_PAD( Module );

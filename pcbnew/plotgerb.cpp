@@ -240,11 +240,11 @@ wxString msg;
 
 			switch( PtPad->m_PadShape )
 			{
-			case CIRCLE:
+			case PAD_CIRCLE:
 				Plot_1_CIRCLE_pad_GERBER(pos, size.x);
 				break;
 
-			case OVALE:
+			case PAD_OVAL:
 				// Check whether the pad really has a circular shape instead
 				if( size.x == size.y )
 					Plot_1_CIRCLE_pad_GERBER(pos, size.x);
@@ -252,7 +252,7 @@ wxString msg;
 					trace_1_pastille_OVALE_GERBER(pos, size, PtPad->m_Orient);
 				break;
 
-			case TRAPEZE:
+			case PAD_TRAPEZOID:
 				{
 					wxSize delta = PtPad->m_DeltaSize;
 					trace_1_pad_TRAPEZE_GERBER(pos, size,
@@ -260,7 +260,7 @@ wxString msg;
 				}
 				break;
 
-			case RECT:
+			case PAD_RECT:
 			default:
 				PlotRectangularPad_GERBER(pos, size, PtPad->m_Orient);
 				break;
@@ -354,7 +354,7 @@ wxString msg;
 void trace_1_pastille_OVALE_GERBER(wxPoint pos, wxSize size, int orient)
 /**********************************************************************/
 
-/* Trace 1 pastille OVALE en position pos_X,Y:
+/* Trace 1 pastille PAD_OVAL en position pos_X,Y:
  *     dimensions dx, dy,
  *     orientation orient
  * Pour une orientation verticale ou horizontale, la forme est flashee
@@ -875,7 +875,7 @@ int nb_dcodes = 0 ;
 			sprintf(text, "C,%f*%%\n", ptr_tool->m_Size.x * fscale);
 			break;
 
-		case 2:	// RECT
+		case 2:	// PAD_RECT
 			sprintf(text, "R,%fX%f*%%\n", ptr_tool->m_Size.x * fscale,
 							ptr_tool->m_Size.y * fscale);
 			break;
@@ -884,7 +884,7 @@ int nb_dcodes = 0 ;
 			sprintf(text, "C,%f*%%\n", ptr_tool->m_Size.x * fscale);
 			break;
 
-		case 4:	// OVALE
+		case 4:	// PAD_OVAL
 			sprintf(text, "O,%fX%f*%%\n", ptr_tool->m_Size.x * fscale,
 							ptr_tool->m_Size.y * fscale);
 			break;

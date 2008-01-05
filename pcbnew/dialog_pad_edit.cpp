@@ -368,7 +368,7 @@ void WinEDA_PadPropertiesFrame::OnListboxShapePadSelected( wxCommandEvent& event
 			m_PadSizeCtrl->Enable(TRUE, TRUE);
 			break;
 
-		case 2: // RECT:
+		case 2: // PAD_RECT:
 			m_PadDeltaSizeCtrl->Enable(FALSE, FALSE);
 			m_PadSizeCtrl->Enable(TRUE, TRUE);
 			break;

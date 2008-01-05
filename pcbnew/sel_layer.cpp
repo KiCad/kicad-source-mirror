@@ -250,7 +250,7 @@ void WinEDA_BasePcbFrame::SelectLayerPair()
     SetToolbars();
 
     // if user changed colors and we are in high contrast mode, then redraw 
-    // because the SMD pads may change color.     
+    // because the PAD_SMD pads may change color.     
     if( result >= 0  &&  DisplayOpt.ContrastModeDisplay )
     {
         ReDrawPanel();

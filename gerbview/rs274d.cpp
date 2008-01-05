@@ -147,7 +147,7 @@ static void Append_1_Flash_GERBER( int Dcode_index,
     NEGATE( track->m_End.y );
     track->SetNet( Dcode_index );
 
-    if( forme == OVALE )
+    if( forme == PAD_OVAL )
         track->m_Shape = S_SPOT_OVALE;
     else
         track->m_Shape = S_SPOT_RECT; // donc rectangle ou carré
@@ -840,14 +840,14 @@ bool GERBER_Descr::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
                 Append_1_Flash_GERBER( dcode,
                                        frame, DC, m_CurrentPos,
                                        size,
-                                       OVALE );
+                                       PAD_OVAL );
                 break;
 
             case GERB_RECT:
                 Append_1_Flash_GERBER( dcode,
                                        frame, DC, m_CurrentPos,
                                        size,
-                                       RECT );
+                                       PAD_RECT );
                 break;
 
             default:        // Special (Macro) : Non implanté

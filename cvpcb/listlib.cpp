@@ -34,7 +34,7 @@ Module descr format:
 $MODULE c64acmd
 Li c64acmd
 Cd Connecteur DIN Europe 96 Contacts AC male droit
-Kw CONN DIN
+Kw PAD_CONN DIN
 $EndMODULE
 
 */

@@ -66,7 +66,7 @@ void Place_1_Pad_Board( BOARD* Pcb, D_PAD* pt_pad, int color, int marge, int op_
 
     dx = pt_pad->m_Size.x / 2; dx += marge;
 
-    if( pt_pad->m_PadShape == CIRCLE )
+    if( pt_pad->m_PadShape == PAD_CIRCLE )
     {
         TraceFilledCercle( Pcb, shape_pos.x, shape_pos.y, dx,
                            pt_pad->m_Masque_Layer, color, op_logique );
@@ -76,7 +76,7 @@ void Place_1_Pad_Board( BOARD* Pcb, D_PAD* pt_pad, int color, int marge, int op_
 
     dy = pt_pad->m_Size.y / 2; dy += marge;
 
-    if( pt_pad->m_PadShape == TRAPEZE )
+    if( pt_pad->m_PadShape == PAD_TRAPEZOID )
     {
         dx += abs( pt_pad->m_DeltaSize.y ) / 2;
         dy += abs( pt_pad->m_DeltaSize.x ) / 2;

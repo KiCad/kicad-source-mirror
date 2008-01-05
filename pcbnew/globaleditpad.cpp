@@ -303,18 +303,18 @@ WinEDA_PadGlobalEditFrame * frame = new WinEDA_PadGlobalEditFrame(this, Pad,DC,
 			}
 
 			/* Traitement des cas particuliers : */
-			if( g_Pad_Master.m_PadShape != TRAPEZE )
+			if( g_Pad_Master.m_PadShape != PAD_TRAPEZOID )
 			{
 				pt_pad->m_DeltaSize.x = 0;
 				pt_pad->m_DeltaSize.y = 0;
 			}
-			if( g_Pad_Master.m_PadShape == CIRCLE )
+			if( g_Pad_Master.m_PadShape == PAD_CIRCLE )
 				pt_pad->m_Size.y = pt_pad->m_Size.x;
 
 			switch( g_Pad_Master.m_Attribut & 0x7F )
 			{
-			case SMD:
-			case CONN:
+			case PAD_SMD:
+			case PAD_CONN:
 				pt_pad->m_Drill = wxSize(0, 0);
 				pt_pad->m_Offset.x = 0;
 				pt_pad->m_Offset.y = 0;

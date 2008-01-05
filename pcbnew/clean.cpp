@@ -128,14 +128,16 @@ void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC )
 	but is not on the pad  or the via center */
     if( s_ConnectToPads )
     {
-	/* Create missing segments when a track end covers a pad, but is not on the pad center */    if( s_ConnectToPads )
-         ConnectDanglingEndToPad( frame, DC );
+        /* Create missing segments when a track end covers a pad, but is not on the pad center */    
+        if( s_ConnectToPads )
+             ConnectDanglingEndToPad( frame, DC );
 
         // creation of points of connections at the intersection of tracks
 //		Gen_Raccord_Track(frame, DC);
 
-	/* Create missing segments when a track end covers a via, but is not on the via center */    if( s_ConnectToPads )
-        ConnectDanglingEndToVia( frame->m_Pcb );
+        /* Create missing segments when a track end covers a via, but is not on the via center */    
+        if( s_ConnectToPads )
+            ConnectDanglingEndToVia( frame->m_Pcb );
     }
 #endif
 

@@ -4,19 +4,8 @@
 
 class Pcb3D_GLCanvas;
 
-/* Pad shape id : ( .m_PadShape member) */
-#define CIRCLE      1
-#define RECT        2
-#define OVALE       3
-#define TRAPEZE     4       // trapezoid
+#include "pad_shapes.h"
 
-/* PADS attributes */
-#define STANDARD    0       // Usual pad
-#define SMD         1       // Smd pad, appears on the layer paste (default)
-#define CONN        2       // Like smd, does not appear on the layer paste (default)
-// reserved, but not yet really used:
-#define P_HOLE      3       // trou simple, utile sur pad stack
-#define MECA        4       // PAD "mecanique" (fixation, zone cuivre...)
 
 /* Definition type Structure d'un pad */
 class D_PAD : public BOARD_ITEM
@@ -42,11 +31,11 @@ public:
                                     // 2..14 = internal layers
                                     // 16 .. 31 = technical layers
 
-    int     m_PadShape;             // Shape: CIRCLE, RECT, OVAL, TRAPEZOID
-    int     m_DrillShape;           // Shape CIRCLE, OVAL
+    int     m_PadShape;             // Shape: PAD_CIRCLE, PAD_RECT, OVAL, TRAPEZOID
+    int     m_DrillShape;           // Shape PAD_CIRCLE, OVAL
 
-    wxSize  m_Drill;                // Drill diam (drill shape = CIRCLE) or drill size(shape = OVAL)
-                                    // for drill shape = CIRCLE, drill diam = m_Drill.x
+    wxSize  m_Drill;                // Drill diam (drill shape = PAD_CIRCLE) or drill size(shape = OVAL)
+                                    // for drill shape = PAD_CIRCLE, drill diam = m_Drill.x
 
     wxSize  m_Offset;               // Offset de la forme (pastilles excentrees)
     wxSize  m_Size;                 // X and Y size ( relative to orient 0)
@@ -56,7 +45,7 @@ public:
     wxPoint m_Pos0;                 // Initial Pad position (i.e. pas position relative to the module anchor, orientation 0
 
     int     m_Rayon;                // rayon du cercle exinscrit du pad
-    int     m_Attribut;             // NORMAL, SMD, CONN
+    int     m_Attribut;             // NORMAL, PAD_SMD, PAD_CONN
     int     m_Orient;               // in 1/10 degrees
 
     int     m_logical_connexion;    // variable used in rastnest computations

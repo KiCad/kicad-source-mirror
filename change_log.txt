@@ -4,37 +4,49 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Jan-5 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew:
+  * Added pad_shapes.h and blended it into class_pad.h and PolyLine2Kicad.h.
+    Renamed the pad shapes in there to avoid namespace conflicts.
+    RECT became PAD_RECT, CIRCLE became PAD_CIRCLE, etc.
+  * common.cpp's ReturnPcbLayerName( int layer_number, bool omitSpacePadding )
+    has commented out code that I tested as part of a possible new scheme to support
+    custom layer names per project.
+  * More specctra dsn import export work.
+  
+
 2008-jan-05 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:
-	Added: Delete cutout outline in zone popup menu
-	the GUI about zones is now working.
-	Some work is needed ( a zone in a zone of the same net is not merged )
-	Currently No DRC for outlines
+    Added: Delete cutout outline in zone popup menu
+    the GUI about zones is now working.
+    Some work is needed ( a zone in a zone of the same net is not merged )
+    Currently No DRC for outlines
 
 
 2008-jan-04 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:
-	More about zones:
-		Outlines can be edited. Outlines are merged if needeed.
-		Currently No DRC for outlines
+    More about zones:
+        Outlines can be edited. Outlines are merged if needeed.
+        Currently No DRC for outlines
 
 
 2008-jan-01 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +all
-	wxstruct modified and wxPcbStuct.h added:
-		classes relatives to pcbnew, cvpcb and gerbview are moved in wxPcbStuct.h
+    wxstruct modified and wxPcbStuct.h added:
+        classes relatives to pcbnew, cvpcb and gerbview are moved in wxPcbStuct.h
 
 
 2007-Dec-29 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:
-	First draft (and code..) about new zone handling, using polygons to define an outline.
-	Now currently not useable because the fill function (and many other important functions) is not implemented.
-	Many functions are not yet implemented: merging zones, cutout, DRC ...
-	Nevertheless, one can create, modify edit and save zone outlines
+    First draft (and code..) about new zone handling, using polygons to define an outline.
+    Now currently not useable because the fill function (and many other important functions) is not implemented.
+    Many functions are not yet implemented: merging zones, cutout, DRC ...
+    Nevertheless, one can create, modify edit and save zone outlines
 
 
 2007-Dec-23 UPDATE   Dick Hollenbeck <dick@softplc.com>
@@ -74,7 +86,7 @@ email address.
 2007-Dec-17 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:
-	some changes about zones: enhanced dialog, and files reorganisation
+    some changes about zones: enhanced dialog, and files reorganisation
 
     
 2007-Dec-14 UPDATE   Dick Hollenbeck <dick@softplc.com>

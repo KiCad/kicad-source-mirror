@@ -104,7 +104,7 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
 
                 switch( pt_pad->m_PadShape & 0x7F )
                 {
-                case CIRCLE:
+                case PAD_CIRCLE:
 
                     switch( format_plot )
                     {
@@ -124,7 +124,7 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
 
                     break;
 
-                case OVALE:
+                case PAD_OVAL:
 
                     switch( format_plot )
                     {
@@ -147,7 +147,7 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
 
                     break;
 
-                case TRAPEZE:
+                case PAD_TRAPEZOID:
                 {
                     wxSize delta;
                     delta = pt_pad->m_DeltaSize;
@@ -176,7 +176,7 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
                     break;
                 }
 
-                case RECT:
+                case PAD_RECT:
                 default:
 
                     switch( format_plot )

@@ -539,7 +539,7 @@ int WinEDA_DrillFrame::Gen_Drill_File_EXCELLON( FORET* buffer )
             pt_pad = (D_PAD*) Module->m_Pads;
             for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
             {
-                if( pt_pad->m_DrillShape != CIRCLE )
+                if( pt_pad->m_DrillShape != PAD_CIRCLE )
                     continue;
                 diam = pt_pad->m_Drill.x;
                 if( diam == 0 )
@@ -579,7 +579,7 @@ int WinEDA_DrillFrame::Gen_Drill_File_EXCELLON( FORET* buffer )
             pt_pad = (D_PAD*) Module->m_Pads;
             for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
             {
-                if( pt_pad->m_DrillShape != OVALE )
+                if( pt_pad->m_DrillShape != PAD_OVAL )
                     continue;
 
                 diam = MIN( pt_pad->m_Drill.x, pt_pad->m_Drill.y );
@@ -807,7 +807,7 @@ int WinEDA_DrillFrame::Gen_Liste_Forets( FORET* buffer, bool print_header )
         pt_pad = (D_PAD*) Module->m_Pads;
         for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
         {
-            if( pt_pad->m_DrillShape == CIRCLE )
+            if( pt_pad->m_DrillShape == PAD_CIRCLE )
                 diam = pt_pad->m_Drill.x;
             else
                 diam = MIN( pt_pad->m_Drill.x, pt_pad->m_Drill.y );
@@ -819,7 +819,7 @@ int WinEDA_DrillFrame::Gen_Liste_Forets( FORET* buffer, bool print_header )
             if( foret )
             {
                 foret->m_TotalCount++;
-                if( pt_pad->m_DrillShape == OVALE )
+                if( pt_pad->m_DrillShape == PAD_OVAL )
                     foret->m_OvalCount++;
             }
         }
@@ -1362,15 +1362,15 @@ int WinEDA_DrillFrame::Plot_Drill_PcbMap( FORET* buffer, int format )
             {
                 switch( pt_pad->m_DrillShape )
                 {
-                case CIRCLE:
+                case PAD_CIRCLE:
                     diam = pt_pad->m_Drill.x;
                     if( diam != foret->m_Diameter )
                         continue;
                     PlotDrillSymbol( pt_pad->m_Pos, diam, shape_id, format );
                     break;
 
-                case OVALE:
-                    if( pt_pad->m_DrillShape != OVALE )
+                case PAD_OVAL:
+                    if( pt_pad->m_DrillShape != PAD_OVAL )
                         continue;
                     diam = MIN( pt_pad->m_Drill.x, pt_pad->m_Drill.y );
                     if( diam != foret->m_Diameter )

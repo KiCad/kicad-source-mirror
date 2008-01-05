@@ -228,17 +228,17 @@ static void Out_Pads( BOARD* Pcb, FILE* outfile )
             /* type of device (1 = IC, 2 = edge conn, 3 = discret, 4 = other */
             switch( pt_pad->m_Attribut )
             {
-            case STANDARD:
-            case SMD:
+            case PAD_STANDARD:
+            case PAD_SMD:
                 fprintf( outfile, " %d", 1 );
                 break;
 
-            case CONN:
+            case PAD_CONN:
                 fprintf( outfile, " %d", 2 );
                 break;
 
-            case P_HOLE:
-            case MECA:
+            case PAD_P_HOLE:
+            case PAD_MECA:
                 fprintf( outfile, " %d", 4 );
                 break;
             }
@@ -264,14 +264,14 @@ static void Out_Pads( BOARD* Pcb, FILE* outfile )
 
             switch( pt_pad->m_PadShape )  /* out type, dims */
             {
-            case CIRCLE:
+            case PAD_CIRCLE:
                 fprintf( outfile, " c 0 %d 0",
                          pt_pad->m_Size.x / PSCALE );
                 break;
 
-            case OVALE:
-            case RECT:
-            case TRAPEZE:
+            case PAD_OVAL:
+            case PAD_RECT:
+            case PAD_TRAPEZOID:
                 int lmax = pt_pad->m_Size.x;
                 int lmin  = pt_pad->m_Size.y;
                 int angle = pt_pad->m_Orient / 10;

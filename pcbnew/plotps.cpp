@@ -326,15 +326,15 @@ void WinEDA_BasePcbFrame::Plot_Layer_PS( FILE* File, int masque_layer,
 
             switch( PtPad->m_PadShape )
             {
-            case CIRCLE:
+            case PAD_CIRCLE:
                 trace_1_pastille_RONDE_POST( pos, size.x, modetrace );
                 break;
 
-            case OVALE:
+            case PAD_OVAL:
                 trace_1_pastille_OVALE_POST( pos, size, PtPad->m_Orient, modetrace );
                 break;
 
-            case TRAPEZE:
+            case PAD_TRAPEZOID:
             {
                 wxSize delta;
                 delta = PtPad->m_DeltaSize;
@@ -343,7 +343,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_PS( FILE* File, int masque_layer,
                 break;
             }
 
-            case RECT:
+            case PAD_RECT:
             default:
                 trace_1_pad_rectangulaire_POST( pos, size, PtPad->m_Orient, modetrace );
                 break;
@@ -498,7 +498,7 @@ static void PrintDrillMark( BOARD* Pcb )
 void trace_1_pastille_OVALE_POST( wxPoint pos, wxSize size, int orient, int modetrace )
 /************************************************************************************/
 
-/* Trace 1 pastille OVALE en position pos_X,Y:
+/* Trace 1 pastille PAD_OVAL en position pos_X,Y:
  * dimensions dx,dy,
  * orientation orient
  * La forme est tracee comme un segment

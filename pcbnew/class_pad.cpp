@@ -32,7 +32,7 @@ D_PAD::D_PAD( MODULE* parent ) :
     m_NumPadName   = 0;
     m_Masque_Layer = CUIVRE_LAYER;
     SetNet( 0 );                    /* Numero de net pour comparaisons rapides */
-    m_DrillShape = CIRCLE;          // Drill shape = circle
+    m_DrillShape = PAD_CIRCLE;          // Drill shape = circle
 
     m_Size.x = m_Size.y = 500;
 
@@ -41,8 +41,8 @@ D_PAD::D_PAD( MODULE* parent ) :
         m_Pos = ( (MODULE*) m_Parent )->GetPosition();
     }
 
-    m_PadShape = CIRCLE;            // forme CERCLE, RECT OVALE TRAPEZE ou libre
-    m_Attribut = STANDARD;          // NORMAL, SMD, CONN, Bit 7 = STACK
+    m_PadShape = PAD_CIRCLE;            // forme CERCLE, PAD_RECT PAD_OVAL PAD_TRAPEZOID ou libre
+    m_Attribut = PAD_STANDARD;          // NORMAL, PAD_SMD, PAD_CONN, Bit 7 = STACK
     m_Orient   = 0;                 // en 1/10 degres
 
     m_logical_connexion  = 0;
@@ -65,16 +65,16 @@ void D_PAD::ComputeRayon()
 {
     switch( m_PadShape & 0x7F )
     {
-    case CIRCLE:
+    case PAD_CIRCLE:
         m_Rayon = m_Size.x / 2;
         break;
 
-    case OVALE:
+    case PAD_OVAL:
         m_Rayon = MAX( m_Size.x, m_Size.y ) / 2;
         break;
 
-    case RECT:
-    case TRAPEZE:
+    case PAD_RECT:
+    case PAD_TRAPEZOID:
         m_Rayon = (int) (sqrt( (double) m_Size.y * m_Size.y
                               + (double) m_Size.x * m_Size.x ) / 2);
         break;
@@ -178,8 +178,8 @@ void D_PAD::Copy( D_PAD* source )
     m_Pos0 = source->m_Pos0;                                    // Coord relatives a l'ancre du pad en
     //  orientation 0
     m_Rayon    = source->m_Rayon;                               // rayon du cercle exinscrit du pad
-    m_PadShape = source->m_PadShape;                            // forme CERCLE, RECT OVALE TRAPEZE ou libre
-    m_Attribut = source->m_Attribut;                            // NORMAL, SMD, CONN, Bit 7 = STACK
+    m_PadShape = source->m_PadShape;                            // forme CERCLE, PAD_RECT PAD_OVAL PAD_TRAPEZOID ou libre
+    m_Attribut = source->m_Attribut;                            // NORMAL, PAD_SMD, PAD_CONN, Bit 7 = STACK
     m_Orient   = source->m_Orient;                              // en 1/10 degres
 
     m_logical_connexion  = 0;                                   // variable utilisee lors du calcul du chevelu
@@ -332,8 +332,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
 
 
     //-----<test this>-----
-    // if SMD pad and high contrast mode    
-    if( m_Attribut==SMD && DisplayOpt.ContrastModeDisplay )
+    // if PAD_SMD pad and high contrast mode    
+    if( m_Attribut==PAD_SMD && DisplayOpt.ContrastModeDisplay )
     {
         // when routing tracks 
         if( frame && frame->m_ID_current_state == ID_TRACK_BUTT )
@@ -355,7 +355,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
             }
             
             // else routing between an internal signal layer and some other layer.
-            // grey out all SMD pads not on current or the single selected 
+            // grey out all PAD_SMD pads not on current or the single selected 
             // external layer.
             else if( !IsOnLayer( screen->m_Active_Layer )  
                   && !IsOnLayer( routeTop ) 
@@ -366,7 +366,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
             }
         }
         
-        // when not edting tracks, show SMD components not on active layer as greyed out
+        // when not edting tracks, show PAD_SMD components not on active layer as greyed out
         else
         {
             if( !IsOnLayer( screen->m_Active_Layer ) )
@@ -412,7 +412,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
 
     switch( m_PadShape & 0x7F )
     {
-    case CIRCLE:
+    case PAD_CIRCLE:
         if( fillpad )
             GRFilledCircle( &panel->m_ClipBox, DC, xc, yc, dx, 0, color, color );
         else
@@ -430,7 +430,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
         }
         break;
 
-    case OVALE:
+    case PAD_OVAL:
         /* calcul de l'entraxe de l'ellipse */
         if( dx > dy )       /* ellipse horizontale */
         {
@@ -469,8 +469,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
         }
         break;
 
-    case RECT:
-    case TRAPEZE:
+    case PAD_RECT:
+    case PAD_TRAPEZOID:
     {
         int ddx, ddy;
         ddx = m_DeltaSize.x >> 1;
@@ -545,12 +545,12 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
 
         switch( m_DrillShape )
         {
-        case CIRCLE:
+        case PAD_CIRCLE:
             if( (hole / zoom) > 1 ) /* draw hole if its size is enought */
                 GRFilledCircle( &panel->m_ClipBox, DC, cx0, cy0, hole, 0, color, color );
             break;
 
-        case OVALE:
+        case PAD_OVAL:
             dx = m_Drill.x >> 1;
             dy = m_Drill.y >> 1;            /* demi dim  dx et dy */
             
@@ -683,21 +683,21 @@ int D_PAD::ReadDescr( FILE* File, int* LineNum )
             ll = 0xFF & BufCar[0];
 
             /* Mise a jour de la forme */
-            m_PadShape = CIRCLE;
+            m_PadShape = PAD_CIRCLE;
 
             switch( ll )
             {
             case 'C':
-                m_PadShape = CIRCLE; break;
+                m_PadShape = PAD_CIRCLE; break;
 
             case 'R':
-                m_PadShape = RECT; break;
+                m_PadShape = PAD_RECT; break;
 
             case 'O':
-                m_PadShape = OVALE; break;
+                m_PadShape = PAD_OVAL; break;
 
             case 'T':
-                m_PadShape = TRAPEZE; break;
+                m_PadShape = PAD_TRAPEZOID; break;
             }
 
             ComputeRayon();
@@ -708,14 +708,14 @@ int D_PAD::ReadDescr( FILE* File, int* LineNum )
             nn = sscanf( PtLine, "%d %d %d %s %d %d", &m_Drill.x,
                          &m_Offset.x, &m_Offset.y, BufCar, &dx, &dy );
             m_Drill.y    = m_Drill.x;
-            m_DrillShape = CIRCLE;
+            m_DrillShape = PAD_CIRCLE;
 
             if( nn >= 6 )       // Drill shape = OVAL ?
             {
                 if( BufCar[0] == 'O' )
                 {
                     m_Drill.x    = dx; m_Drill.y = dy;
-                    m_DrillShape = OVALE;
+                    m_DrillShape = PAD_OVAL;
                 }
             }
             break;
@@ -727,15 +727,15 @@ int D_PAD::ReadDescr( FILE* File, int* LineNum )
             /* Contenu de BufCar non encore utilise ( reserve pour evolutions
              *  ulterieures */
             /* Mise a jour de l'attribut */
-            m_Attribut = STANDARD;
+            m_Attribut = PAD_STANDARD;
             if( strncmp( BufLine, "SMD", 3 ) == 0 )
-                m_Attribut = SMD;
+                m_Attribut = PAD_SMD;
             if( strncmp( BufLine, "CONN", 4 ) == 0 )
-                m_Attribut = CONN;
+                m_Attribut = PAD_CONN;
             if( strncmp( BufLine, "HOLE", 4 ) == 0 )
-                m_Attribut = P_HOLE;
+                m_Attribut = PAD_P_HOLE;
             if( strncmp( BufLine, "MECA", 4 ) == 0 )
-                m_Attribut = MECA;
+                m_Attribut = PAD_MECA;
             break;
 
         case 'N':       /* Lecture du netname */
@@ -784,16 +784,16 @@ int D_PAD::WriteDescr( FILE* File )
 
     switch( m_PadShape )
     {
-    case CIRCLE:
+    case PAD_CIRCLE:
         cshape = 'C'; break;
 
-    case RECT:
+    case PAD_RECT:
         cshape = 'R'; break;
 
-    case OVALE:
+    case PAD_OVAL:
         cshape = 'O'; break;
 
-    case TRAPEZE:
+    case PAD_TRAPEZOID:
         cshape = 'T'; break;
 
     default:
@@ -807,7 +807,7 @@ int D_PAD::WriteDescr( FILE* File )
              m_DeltaSize.x, m_DeltaSize.y, m_Orient );
     NbLigne++;
     fprintf( File, "Dr %d %d %d", m_Drill.x, m_Offset.x, m_Offset.y );
-    if( m_DrillShape == OVALE )
+    if( m_DrillShape == PAD_OVAL )
     {
         fprintf( File, " %c %d %d", 'O', m_Drill.x, m_Drill.y );
     }
@@ -817,16 +817,16 @@ int D_PAD::WriteDescr( FILE* File )
 
     switch( m_Attribut )
     {
-    case STANDARD:
+    case PAD_STANDARD:
         texttype = "STD"; break;
 
-    case SMD:
+    case PAD_SMD:
         texttype = "SMD"; break;
 
-    case CONN:
+    case PAD_CONN:
         texttype = "CONN"; break;
 
-    case P_HOLE:
+    case PAD_P_HOLE:
         texttype = "HOLE"; break;
 
     case MECA:
@@ -870,16 +870,16 @@ bool D_PAD::Save( FILE* aFile ) const
 
     switch( m_PadShape )
     {
-    case CIRCLE:
+    case PAD_CIRCLE:
         cshape = 'C'; break;
 
-    case RECT:
+    case PAD_RECT:
         cshape = 'R'; break;
 
-    case OVALE:
+    case PAD_OVAL:
         cshape = 'O'; break;
 
-    case TRAPEZE:
+    case PAD_TRAPEZOID:
         cshape = 'T'; break;
 
     default:
@@ -893,7 +893,7 @@ bool D_PAD::Save( FILE* aFile ) const
              m_DeltaSize.x, m_DeltaSize.y, m_Orient );
     
     fprintf( aFile, "Dr %d %d %d", m_Drill.x, m_Offset.x, m_Offset.y );
-    if( m_DrillShape == OVALE )
+    if( m_DrillShape == PAD_OVAL )
     {
         fprintf( aFile, " %c %d %d", 'O', m_Drill.x, m_Drill.y );
     }
@@ -901,19 +901,19 @@ bool D_PAD::Save( FILE* aFile ) const
 
     switch( m_Attribut )
     {
-    case STANDARD:
+    case PAD_STANDARD:
         texttype = "STD"; break;
 
-    case SMD:
+    case PAD_SMD:
         texttype = "SMD"; break;
 
-    case CONN:
+    case PAD_CONN:
         texttype = "CONN"; break;
 
-    case P_HOLE:
+    case PAD_P_HOLE:
         texttype = "HOLE"; break;
 
-    case MECA:
+    case PAD_MECA:
         texttype = "MECA"; break;
 
     default:
@@ -1080,7 +1080,7 @@ void D_PAD::Display_Infos( WinEDA_DrawFrame* frame )
 
     pos += 7;
     valeur_param( (unsigned) m_Drill.x, Line );
-    if( m_DrillShape == CIRCLE )
+    if( m_DrillShape == PAD_CIRCLE )
     {
         Affiche_1_Parametre( frame, pos, _( "Drill" ), Line, RED );
     }
@@ -1149,7 +1149,7 @@ bool D_PAD::HitTest( const wxPoint& ref_pos )
     /* localisation ? */
     switch( m_PadShape & 0x7F )
     {
-    case CIRCLE:
+    case PAD_CIRCLE:
         dist = hypot( deltaX, deltaY );
         if( (int) ( round( dist ) ) <= dx )
             return true;

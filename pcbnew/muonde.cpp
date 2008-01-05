@@ -40,7 +40,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveBasicShape( wxDC* DC,
 
 /* Create a footprint with pad_count pads for micro wave applications
  *  This footprint has pad_count pads:
- *  SMD, rectangular, H size = V size = current track width.
+ *  PAD_SMD, rectangular, H size = V size = current track width.
  */
 {
     MODULE*  Module;
@@ -77,8 +77,8 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveBasicShape( wxDC* DC,
         }
         pad->m_Size.x       = pad->m_Size.y = g_DesignSettings.m_CurrentTrackWidth;
         pad->m_Pos          = Module->m_Pos;
-        pad->m_PadShape     = RECT;
-        pad->m_Attribut     = SMD;
+        pad->m_PadShape     = PAD_RECT;
+        pad->m_Attribut     = PAD_SMD;
         pad->m_Masque_Layer = CMP_LAYER;
         Line.Printf( wxT( "%d" ), pad_num );
         pad->SetPadName( Line );
@@ -127,7 +127,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent( wxDC* DC, int shape_type )
 /* Create a module "GAP" or "STUB"
  *  This a "gap" or  "stub" used in micro wave designs
  *  This modue has 2 pads:
- *  SMD, rectangular, H size = V size = current track width.
+ *  PAD_SMD, rectangular, H size = V size = current track width.
  *  the "gap" is isolation created between this 2 pads
  */
 {

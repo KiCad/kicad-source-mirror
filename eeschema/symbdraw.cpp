@@ -176,8 +176,8 @@ LibEDA_BaseStruct* WinEDA_LibeditFrame::CreateGraphicItem( wxDC* DC )
 /* Routine de creation d'un nouvel element type LibraryDrawStruct
  *  POLYLINE
  *  ARC
- *  CIRCLE
- *  RECTANGLE
+ *  PAD_CIRCLE
+ *  PAD_RECTANGLE
  */
 {
     int  DrawType;

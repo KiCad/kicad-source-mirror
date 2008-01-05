@@ -6,7 +6,7 @@
 #define PROTO_H
 
 /***************/
-/* CONNECT.CPP */
+/* PAD_CONNECT.CPP */
 /***************/
 LISTE_PAD* CreateSortedPadListByXCoord(BOARD * pcb);
 /* Create a sorted list of pointers to pads.

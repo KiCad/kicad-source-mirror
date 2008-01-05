@@ -149,11 +149,11 @@ void WinEDA_BasePcbFrame::Import_Pad_Settings(D_PAD * pt_pad, wxDC * DC)
 	/* Traitement des cas particuliers : */
 	switch ( g_Pad_Master.m_PadShape)
 		{
-		case TRAPEZE :
+		case PAD_TRAPEZOID :
 			pt_pad->m_DeltaSize = g_Pad_Master.m_DeltaSize;
 			break;
 
-		case CIRCLE :
+		case PAD_CIRCLE :
 			pt_pad->m_Size.y = pt_pad->m_Size.x;
 			break;
 
@@ -161,8 +161,8 @@ void WinEDA_BasePcbFrame::Import_Pad_Settings(D_PAD * pt_pad, wxDC * DC)
 
 	switch( g_Pad_Master.m_Attribut & 0x7F)
 		{
-		case SMD:
-		case CONN :
+		case PAD_SMD:
+		case PAD_CONN :
 			pt_pad->m_Drill = wxSize(0,0);
 			pt_pad->m_Offset.x = 0;
 			pt_pad->m_Offset.y = 0;

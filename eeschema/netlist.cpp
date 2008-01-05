@@ -1166,7 +1166,7 @@ static void SetUnconnectedFlag( ObjetNetListStruct* ListObj, int NbItems )
     for( ; NetItemRef < Lim; NetItemRef++ )
     {
         if( NetItemRef->m_Type == NET_NOCONNECT )
-            if( StateFlag != CONNECT )
+            if( StateFlag != PAD_CONNECT )
                 StateFlag = NOCONNECT;
 
         /* Analyse du net en cours */
@@ -1214,11 +1214,11 @@ static void SetUnconnectedFlag( ObjetNetListStruct* ListObj, int NbItems )
 
             case NET_PIN:
                 if( NetItemRef->m_Type == NET_PIN )
-                    StateFlag = CONNECT;
+                    StateFlag = PAD_CONNECT;
                 break;
 
             case NET_NOCONNECT:
-                if( StateFlag != CONNECT )
+                if( StateFlag != PAD_CONNECT )
                     StateFlag = NOCONNECT;
                 break;
             }

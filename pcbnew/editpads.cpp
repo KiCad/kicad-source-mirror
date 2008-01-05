@@ -22,14 +22,14 @@ static wxString Current_PadNetName;
 #define NBSHAPES 4
 int CodeShape[NBSHAPES] = /* forme des pads  */
 {
-    CIRCLE, OVALE, RECT, TRAPEZE
+    PAD_CIRCLE, PAD_OVAL, PAD_RECT, PAD_TRAPEZOID
 };
 
 
 #define NBTYPES 5
 int CodeType[NBTYPES] =
 {
-    STANDARD, SMD, CONN, P_HOLE, MECA
+    PAD_STANDARD, PAD_SMD, PAD_CONN, PAD_P_HOLE, PAD_MECA
 };
 
 
@@ -155,25 +155,25 @@ void WinEDA_PadPropertiesFrame::SetOthersControls()
 
     switch( tmp )
     {
-    case CIRCLE:
+    case PAD_CIRCLE:
         m_PadDeltaSizeCtrl->Enable( FALSE, FALSE );
         m_PadSizeCtrl->Enable( TRUE, FALSE );
         m_PadShape->SetSelection( 0 );
         break;
 
-    case OVALE:
+    case PAD_OVAL:
         m_PadDeltaSizeCtrl->Enable( FALSE, FALSE );
         m_PadSizeCtrl->Enable( TRUE, TRUE );
         m_PadShape->SetSelection( 1 );
         break;
 
-    case RECT:
+    case PAD_RECT:
         m_PadDeltaSizeCtrl->Enable( FALSE, FALSE );
         m_PadSizeCtrl->Enable( TRUE, TRUE );
         m_PadShape->SetSelection( 2 );
         break;
 
-    case TRAPEZE:
+    case PAD_TRAPEZOID:
         m_PadDeltaSizeCtrl->Enable( TRUE, TRUE );
         m_PadSizeCtrl->Enable( TRUE, TRUE );
         m_PadShape->SetSelection( 3 );
@@ -195,12 +195,12 @@ void WinEDA_PadPropertiesFrame::SetOthersControls()
 
     switch( tmp )
     {
-    case CIRCLE:
+    case PAD_CIRCLE:
         m_DrillShapeCtrl->SetSelection( 0 );
         m_PadDrillCtrl->Enable( TRUE, FALSE );
         break;
 
-    case OVALE:
+    case PAD_OVAL:
         m_DrillShapeCtrl->SetSelection( 1 );
         m_PadDrillCtrl->Enable( TRUE, TRUE );
         break;
@@ -365,18 +365,18 @@ void WinEDA_PadPropertiesFrame::PadPropertiesAccept( wxCommandEvent& event )
     g_Pad_Master.m_Pos  = m_PadPositionCtrl->GetValue();
     g_Pad_Master.m_Pos0 = g_Pad_Master.m_Pos;
     g_Pad_Master.m_Size = m_PadSizeCtrl->GetValue();
-    if( g_Pad_Master.m_PadShape == CIRCLE )
+    if( g_Pad_Master.m_PadShape == PAD_CIRCLE )
         g_Pad_Master.m_Size.y = g_Pad_Master.m_Size.x;
     g_Pad_Master.m_DeltaSize = m_PadDeltaSizeCtrl->GetValue();
     g_Pad_Master.m_Offset    = m_PadOffsetCtrl->GetValue();
     g_Pad_Master.m_Drill = m_PadDrillCtrl->GetValue();
     if( m_DrillShapeCtrl->GetSelection() == 0 )
     {
-        g_Pad_Master.m_DrillShape = CIRCLE;
+        g_Pad_Master.m_DrillShape = PAD_CIRCLE;
         g_Pad_Master.m_Drill.y    = g_Pad_Master.m_Drill.x;
     }
     else
-        g_Pad_Master.m_DrillShape = OVALE;
+        g_Pad_Master.m_DrillShape = PAD_OVAL;
     g_Pad_Master.m_Orient = m_PadOrientCtrl->GetValue();
     g_Current_PadName  = m_PadNumCtrl->GetValue().Left( 4 );
     Current_PadNetName = m_PadNetNameCtrl->GetValue();
@@ -468,36 +468,36 @@ void WinEDA_PadPropertiesFrame::PadPropertiesAccept( wxCommandEvent& event )
 
         switch( CurrentPad->m_PadShape )
         {
-        case CIRCLE:
+        case PAD_CIRCLE:
             CurrentPad->m_DeltaSize = wxSize( 0, 0 );
             CurrentPad->m_Size.y    = CurrentPad->m_Size.x;
             break;
 
-        case RECT:
+        case PAD_RECT:
             CurrentPad->m_DeltaSize = wxSize( 0, 0 );
             break;
 
-        case OVALE:
+        case PAD_OVAL:
             CurrentPad->m_DeltaSize = wxSize( 0, 0 );
             break;
 
-        case TRAPEZE:
+        case PAD_TRAPEZOID:
             break;
         }
 
         switch( CurrentPad->m_Attribut )
         {
-        case STANDARD:
+        case PAD_STANDARD:
             break;
 
-        case CONN:
-        case SMD:
+        case PAD_CONN:
+        case PAD_SMD:
             CurrentPad->m_Offset = wxSize( 0, 0 );
             CurrentPad->m_Drill  = wxSize( 0, 0 );
             break;
 
-        case P_HOLE:
-        case MECA:
+        case PAD_P_HOLE:
+        case PAD_MECA:
             break;
         }
 

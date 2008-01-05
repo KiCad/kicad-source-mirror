@@ -845,9 +845,9 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, const int dist_mi
 
     bool swap_pads;
     swap_pads = false;
-    if( (aRefPad->m_PadShape != CIRCLE) && (aPad->m_PadShape == CIRCLE) )
+    if( (aRefPad->m_PadShape != PAD_CIRCLE) && (aPad->m_PadShape == PAD_CIRCLE) )
         swap_pads = true;
-    else if( (aRefPad->m_PadShape != OVALE) && (aPad->m_PadShape == OVALE) )
+    else if( (aRefPad->m_PadShape != PAD_OVAL) && (aPad->m_PadShape == PAD_OVAL) )
         swap_pads = true;
 
     if( swap_pads )
@@ -859,7 +859,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, const int dist_mi
 
     switch( aRefPad->m_PadShape )
     {
-    case CIRCLE:        // aRefPad is like a track segment with a null lenght
+    case PAD_CIRCLE:        // aRefPad is like a track segment with a null lenght
         m_segmLength  = 0;
         m_segmAngle = 0;
         
@@ -871,11 +871,11 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, const int dist_mi
         diag = checkClearanceSegmToPad( aPad, aRefPad->m_Rayon, dist_min );
         break;
 
-    case RECT:
+    case PAD_RECT:
         RotatePoint( &rel_pos.x, &rel_pos.y, aRefPad->m_Orient );
         pad_angle = aRefPad->m_Orient + aPad->m_Orient;      // pad_angle = pad orient relative to the aRefPad orient
         NORMALIZE_ANGLE_POS( pad_angle );
-        if( aPad->m_PadShape == RECT )
+        if( aPad->m_PadShape == PAD_RECT )
         {
             wxSize size = aPad->m_Size;
             if( (pad_angle == 0) || (pad_angle == 900) || (pad_angle == 1800) ||
@@ -905,7 +905,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, const int dist_mi
         }
         break;
 
-    case OVALE:     /* an oval pad is like a track segment */
+    case PAD_OVAL:     /* an oval pad is like a track segment */
     {
         /* Create and test a track segment with same dimensions */
         int segm_width;
@@ -961,7 +961,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int dis
     p_dimx = pad_to_test->m_Size.x >> 1;
     p_dimy = pad_to_test->m_Size.y >> 1;
 
-    if( pad_to_test->m_PadShape == CIRCLE )
+    if( pad_to_test->m_PadShape == PAD_CIRCLE )
     {
         /* calcul des coord centre du pad dans le repere axe X confondu
          *  avec le segment en tst */
@@ -996,7 +996,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int dis
         default:
             return false;
 
-        case OVALE:
+        case PAD_OVAL:
             /* test de la pastille ovale ramenee au type ovale vertical */
             if( p_dimx > p_dimy )
             {
@@ -1037,7 +1037,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int dis
                 return false;
             break;
 
-        case RECT:      /* 2 rectangle + 4 1/4 cercles a tester */
+        case PAD_RECT:      /* 2 rectangle + 4 1/4 cercles a tester */
             /* Test du rectangle dimx + seuil, dimy */
             m_xcliplo = m_spotcx - p_dimx - seuil;
             m_ycliplo = m_spotcy - p_dimy;
@@ -2219,9 +2219,9 @@ static int Pad_to_Pad_Isol( D_PAD* pad_ref, D_PAD* pad, const int dist_min )
      *  Selon les formes relatives il peut y avoir ou non erreur */
 
     bool swap_pads = false;
-    if( (pad_ref->m_PadShape != CIRCLE) && (pad->m_PadShape == CIRCLE) )
+    if( (pad_ref->m_PadShape != PAD_CIRCLE) && (pad->m_PadShape == PAD_CIRCLE) )
         swap_pads = true;
-    else if( (pad_ref->m_PadShape != OVALE) && (pad->m_PadShape == OVALE) )
+    else if( (pad_ref->m_PadShape != PAD_OVAL) && (pad->m_PadShape == PAD_OVAL) )
         swap_pads = true;
 
     if( swap_pads )
@@ -2233,7 +2233,7 @@ static int Pad_to_Pad_Isol( D_PAD* pad_ref, D_PAD* pad, const int dist_min )
 
     switch( pad_ref->m_PadShape )
     {
-    case CIRCLE:        // pad_ref is like a track segment with a null lenght
+    case PAD_CIRCLE:        // pad_ref is like a track segment with a null lenght
         segm_long  = 0;
         segm_angle = 0;
         finx    = finy = 0;
@@ -2242,11 +2242,11 @@ static int Pad_to_Pad_Isol( D_PAD* pad_ref, D_PAD* pad, const int dist_min )
         diag    = TestClearanceSegmToPad( pad, pad_ref->m_Rayon, dist_min );
         break;
 
-    case RECT:
+    case PAD_RECT:
         RotatePoint( &rel_pos.x, &rel_pos.y, pad_ref->m_Orient );
         pad_angle = pad_ref->m_Orient + pad->m_Orient;      // pad_angle = pad orient relative to the pad_ref orient
         NORMALIZE_ANGLE_POS( pad_angle );
-        if( pad->m_PadShape == RECT )
+        if( pad->m_PadShape == PAD_RECT )
         {
             wxSize size = pad->m_Size;
             if( (pad_angle == 0) || (pad_angle == 900) || (pad_angle == 1800) ||
@@ -2276,7 +2276,7 @@ static int Pad_to_Pad_Isol( D_PAD* pad_ref, D_PAD* pad, const int dist_min )
         }
         break;
 
-    case OVALE:     /* an oval pad is like a track segment */
+    case PAD_OVAL:     /* an oval pad is like a track segment */
     {
         /* Create and test a track segment with same dimensions */
         int segm_width;
@@ -2346,7 +2346,7 @@ static int TestClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int dis
     p_dimx = pad_to_test->m_Size.x >> 1;
     p_dimy = pad_to_test->m_Size.y >> 1;
 
-    if( pad_to_test->m_PadShape == CIRCLE )
+    if( pad_to_test->m_PadShape == PAD_CIRCLE )
     {
         /* calcul des coord centre du pad dans le repere axe X confondu
          *  avec le segment en tst */
@@ -2383,7 +2383,7 @@ static int TestClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int dis
         default:
             return BAD_DRC;
 
-        case OVALE:
+        case PAD_OVAL:
             /* test de la pastille ovale ramenee au type ovale vertical */
             if( p_dimx > p_dimy )
             {
@@ -2426,7 +2426,7 @@ static int TestClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int dis
                 return BAD_DRC;
             break;
 
-        case RECT:      /* 2 rectangle + 4 1/4 cercles a tester */
+        case PAD_RECT:      /* 2 rectangle + 4 1/4 cercles a tester */
             /* Test du rectangle dimx + seuil, dimy */
             xcliplo = spot_cX - p_dimx - seuil;
             ycliplo = spot_cY - p_dimy;

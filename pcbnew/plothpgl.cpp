@@ -289,17 +289,17 @@ void WinEDA_BasePcbFrame::Plot_Layer_HPGL( FILE* File, int masque_layer,
 
             switch( PtPad->m_PadShape & 0x7F )
             {
-            case CIRCLE:
+            case PAD_CIRCLE:
                 trace_1_pastille_RONDE_HPGL( start, size.x, modetrace );
                 break;
 
-            case OVALE:
+            case PAD_OVAL:
             {
                 trace_1_pastille_OVALE_HPGL( start, size, PtPad->m_Orient, modetrace );
                 break;
             }
 
-            case TRAPEZE:
+            case PAD_TRAPEZOID:
             {
                 wxSize delta;
                 delta = PtPad->m_DeltaSize;
@@ -308,7 +308,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_HPGL( FILE* File, int masque_layer,
                 break;
             }
 
-            case RECT:
+            case PAD_RECT:
             default:
                 PlotRectangularPad_HPGL( start, size,
                                          PtPad->m_Orient, modetrace );
@@ -433,7 +433,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_HPGL( FILE* File, int masque_layer,
 /************************************************************************************/
 void trace_1_pastille_OVALE_HPGL( wxPoint pos, wxSize size, int orient, int modetrace )
 /************************************************************************************/
-/* Trace 1 pastille OVALE en position pos_X,Y , de dim size.x, size.y */
+/* Trace 1 pastille PAD_OVAL en position pos_X,Y , de dim size.x, size.y */
 {
     int rayon, deltaxy, cx, cy;
     int trace_orient = orient;

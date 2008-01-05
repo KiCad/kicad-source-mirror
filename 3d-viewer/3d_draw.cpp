@@ -495,7 +495,7 @@ int color;
 	Both = Oncu && Oncmp;
 	switch( m_PadShape & 0x7F )
 	{
-	case CIRCLE :
+	case PAD_CIRCLE :
 		x = xc * scale;
 		y = yc * scale;
 		r = (double)dx * scale;
@@ -519,7 +519,7 @@ int color;
 		}
 		break;
 
-	case OVALE :
+	case PAD_OVAL :
 		/* calcul de l'entraxe de l'ellipse */
 		if( dx > dy ) /* ellipse horizontale */
 		{
@@ -563,9 +563,9 @@ int color;
 		}
 		break;
 
-	case RECT :
+	case PAD_RECT :
 //	case SPECIAL_PAD:
-	case TRAPEZE:
+	case PAD_TRAPEZOID:
 		{
 			int ddx, ddy ;
 			ddx = m_DeltaSize.x >> 1 ;

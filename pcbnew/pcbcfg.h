@@ -60,7 +60,7 @@ static PARAM_CFG_INT PadFormeCfg
 (
     wxT( "PadForm" ),               /* Keyword */
     & g_Pad_Master.m_PadShape,      /* Parameter address */
-    CIRCLE,                         /* Default value */
+    PAD_CIRCLE,                     /* Default value */
     0, 0x7F                         /* Valeurs extremes */
 );
 

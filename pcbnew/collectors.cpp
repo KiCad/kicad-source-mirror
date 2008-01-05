@@ -197,7 +197,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
     {
     case TYPEPAD:
         // if pad is a thru hole, then it can be visible when its parent module is not.
-        if( ((D_PAD*)item)->m_Attribut != SMD )    // a hole is present, so multiple layers
+        if( ((D_PAD*)item)->m_Attribut != PAD_SMD )    // a hole is present, so multiple layers
         {
             // there are no pad specific visibility controls at this time.
             // proceed to the common tests below, but without the parent module test, 

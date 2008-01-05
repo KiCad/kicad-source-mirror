@@ -19,17 +19,9 @@
 #define PCBU_PER_MIL 10
 #define MAX_LAYERS 32
 #define NM_PER_MIL 10 // 25400
-// pad shapes
-enum
-{
-	PAD_NONE = 0,
-	PAD_ROUND,
-	PAD_SQUARE,
-	PAD_RECT,
-	PAD_RRECT,
-	PAD_OVAL,
-	PAD_OCTAGON
-};
+
+
+#include "pad_shapes.h"
 
 
 #define LAY_SELECTION  0

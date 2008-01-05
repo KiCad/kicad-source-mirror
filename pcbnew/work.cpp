@@ -143,8 +143,8 @@ void GetWork (int *r1,int *c1,int *n_c,int *r2,int *c2,CHEVELU** pt_ch )
 void SortWork()
 {
 CWORK *p;
-CWORK *q0; /* put PRIORITY CONNECTs in q0 */
-CWORK *q1; /* sort other CONNECTs in q1 */
+CWORK *q0; /* put PRIORITY PAD_CONNECTs in q0 */
+CWORK *q1; /* sort other PAD_CONNECTs in q1 */
 CWORK *r;
 
 	q0 = q1 = NULL;
@@ -174,7 +174,7 @@ CWORK *r;
 		}
 
 	if( (p = q0) != NULL)
-		{ /* any priority CONNECTs? */
+		{ /* any priority PAD_CONNECTs? */
 		while (q0->Next) q0 = q0->Next;
 		q0->Next = q1;
 		}

@@ -184,7 +184,7 @@ static wxString ReturnPinNetName( ObjetNetListStruct* Pin,
     int      netcode = Pin->GetNet();
     wxString NetName;
 
-    if( (netcode == 0 ) || ( Pin->m_FlagOfConnection != CONNECT ) )
+    if( (netcode == 0 ) || ( Pin->m_FlagOfConnection != PAD_CONNECT ) )
     {
         return NetName;
     }

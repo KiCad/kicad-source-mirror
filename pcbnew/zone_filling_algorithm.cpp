@@ -608,7 +608,7 @@ bool WinEDA_PcbFrame::Genere_Pad_Connexion( wxDC* DC, int layer )
         dx += g_DesignSettings.m_TrackClearence + g_GridRoutingSize;
         dy += g_DesignSettings.m_TrackClearence + g_GridRoutingSize;
 
-        if( pt_pad->m_PadShape == TRAPEZE )
+        if( pt_pad->m_PadShape == PAD_TRAPEZOID )
         {
             dx += abs( pt_pad->m_DeltaSize.y ) / 2;
             dy += abs( pt_pad->m_DeltaSize.x ) / 2;
