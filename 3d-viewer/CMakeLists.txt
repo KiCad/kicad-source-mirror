@@ -1,4 +1,3 @@
-
 FIND_PACKAGE(OpenGL REQUIRED)
 IF(OPENGL_FOUND)
 	MESSAGE(STATUS "Check for installed OpenGL -- found")

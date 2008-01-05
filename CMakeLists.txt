@@ -21,6 +21,8 @@ SET(CMAKE_EXE_LINKER_FLAGS_RELEASE "-s")
 # http://www.wxwidgets.org/manuals/2.8/wx_librarieslist.html
 SET(wxWidgets_USE_LIBS base core adv gl html net)
 
+# OpenGL support
+SET(WXWINDOWS_USE_GL 1)
 # We need the Find package for wxWidgets to work.
 FIND_PACKAGE(wxWidgets REQUIRED)
 
