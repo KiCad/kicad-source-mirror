@@ -581,7 +581,6 @@ void LEXER::ThrowIOError( wxString aText, int charOffset ) throw (IOError)
     throw IOError( aText );
 }
 
-
     
 DSN_T LEXER::NextTok() throw (IOError)
 {

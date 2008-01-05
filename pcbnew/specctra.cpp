@@ -57,6 +57,7 @@
 #include "build_version.h"
 
 
+
 namespace DSN {
 
     
@@ -66,23 +67,31 @@ class PCB;
 
 /**
  * Class OUTPUTFORMATTER
- * is an interface (abstract class) used to output ASCII text.
+ * is an interface (abstract class) used to output ASCII text.  The destination
+ * of the ASCII text is up to the implementer.
  */
 class OUTPUTFORMATTER
 {
-public:
 
+// When used on a C++ function, we must account for the "this" pointer,
+// so increase the STRING-INDEX and FIRST-TO_CHECK by one.
+// See http://docs.freebsd.org/info/gcc/gcc.info.Function_Attributes.html
+// Then to get format checking during the compile, compile with -Wall or -Wformat
+#define PRINTF_FUNC       __attribute__ ((format (printf, 3, 4)))
+    
+public:
+    
     /**
      * Function print
      * formats and writes text to the output stream.
      *
      * @param nestLevel The multiple of spaces to preceed the output with. 
-     * @param fmt A printf style format string.
+     * @param fmt A printf() style format string.
      * @param ... a variable list of parameters that will get blended into 
      *  the output under control of the format string.
      * @throw IOError if there is a problem outputting, such as a full disk.
      */
-    virtual void Print( int nestLevel, const char* fmt, ... ) throw( IOError ) = 0;
+    virtual void PRINTF_FUNC Print( int nestLevel, const char* fmt, ... ) throw( IOError ) = 0;
 
     /**
      * Function GetQuoteChar
@@ -90,7 +99,7 @@ public:
      * input wrapee string.  Often the return value is "" the null string if
      * there are no delimiters in the input string.  If you want the quote_char
      * to be assuredly not "", then pass in "(" as the wrappee.
-     * @param wrapee A string might need wrapping on each end.
+     * @param wrapee A string that might need wrapping on each end.
      * @return const char* - the quote_char as a single character string, or ""
      *   if the wrapee does not need to be wrapped.
      */
@@ -107,7 +116,7 @@ struct POINT
 };
 
 typedef std::vector<std::string>    STRINGS;
-    
+typedef std::vector<POINT>          POINTS;
 
 
 /**
@@ -152,13 +161,14 @@ public:
 
     
     /**
-     * Function Save
-     * writes this object out in ASCII form according to the SPECCTRA DSN format.
+     * Function Format
+     * writes this object as ASCII out to an OUTPUTFORMATTER according to the 
+     * SPECCTRA DSN format.
      * @param out The formatter to write to.
      * @param nestLevel A multiple of the number of spaces to preceed the output with.
      * @throw IOError if a system error writing the output, such as a full disk.
      */
-    virtual void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError );
+    virtual void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError );
 
     
     //-----< list operations >--------------------------------------------
@@ -268,7 +278,7 @@ public:
         host_version = CONV_TO_UTF8(g_BuildVersion);
     }
 
-    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError );
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError );
 };
 
 
@@ -287,7 +297,7 @@ public:
         value = 2540000;
     }
 
-    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         out->Print( nestLevel, "(%s %s %d)\n", LEXER::GetTokenText( Type() ), 
                    LEXER::GetTokenText(units), value ); 
@@ -313,7 +323,7 @@ public:
         units = T_inch;
     }
         
-    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         out->Print( nestLevel, "(%s %s)\n", LEXER::GetTokenText( Type() ), 
                    LEXER::GetTokenText(units) ); 
@@ -346,7 +356,7 @@ public:
     {
     }
     
-    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         const char*  quote = out->GetQuoteChar( layer_id.c_str() );
         
@@ -359,6 +369,44 @@ public:
 };
 
 
+/**
+ * Class RULES
+ * corresponds to the <rule_descriptor> in the specctra dsn spec.
+ */
+class RULES : public ELEM
+{
+    friend class SPECCTRA_DB;
+    
+    STRINGS     rules;      ///< rules are saved in std::string form.
+
+public:
+
+    RULES( ELEM* aParent ) :
+        ELEM( T_rule, aParent )
+    {
+    }
+    
+    ~RULES()
+    {
+    }
+    
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
+
+        for( STRINGS::const_iterator i = rules.begin();  i!=rules.end(); ++i )
+            out->Print( nestLevel+1, "%s\n", i->c_str() );
+        
+        out->Print( nestLevel, ")\n" );
+    }        
+};
+
+
+/**
+ * Class PATH
+ * supports both the <path_descriptor> and the <polygon_descriptor> per
+ * the specctra dsn spec.
+ */
 class PATH : public ELEM
 {
     friend class SPECCTRA_DB;
@@ -366,16 +414,14 @@ class PATH : public ELEM
     std::string     layer_id;
     double          aperture_width;
 
-    typedef std::vector<POINT> POINTS;
-    
     POINTS          points;                   
     
     DSN_T           aperture_type;
     
 public:
 
-    PATH( ELEM* aParent ) :
-        ELEM( T_path, aParent )
+    PATH( ELEM* aParent, DSN_T aType ) :
+        ELEM( aType, aParent )
     {
         aperture_width = 0.0;
         aperture_type  = T_round;
@@ -385,7 +431,7 @@ public:
     {
     }
     
-    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         const char* quote = out->GetQuoteChar( layer_id.c_str() );
         
@@ -406,13 +452,15 @@ public:
 };
 
 
+//  see http://www.boost.org/libs/ptr_container/doc/ptr_sequence_adapter.html
+typedef boost::ptr_vector<PATH> PATHS;
+
+
 class BOUNDARY : public ELEM
 {
     friend class SPECCTRA_DB;
  
-    //  see http://www.boost.org/libs/ptr_container/doc/ptr_sequence_adapter.html
-    typedef boost::ptr_vector<PATH> PATHS;
-    
+    // only one or the other of these two is used, not both
     PATHS           paths;
     RECTANGLE*      rectangle;
     
@@ -429,22 +477,141 @@ public:
         delete rectangle;
     }
     
-    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
 
         if( rectangle )
-            rectangle->Save( out, nestLevel+1 );
+            rectangle->Format( out, nestLevel+1 );
         else
         {
-            for( unsigned i=0; i<paths.size();  ++i )
+            for( unsigned i=0;  i<paths.size();  ++i )
             {
-                paths[i].Save( out, nestLevel+1 );
+                paths[i].Format( out, nestLevel+1 );
             }
         }
         
         out->Print( nestLevel, ")\n" ); 
     }
+};
+
+
+class WINDOW : public ELEM
+{
+    friend class SPECCTRA_DB;
+    
+    WINDOW( ELEM* aParent ) :
+        ELEM( T_window, aParent )
+    {
+    }
+};
+
+
+class CIRCLE : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+public:    
+    CIRCLE( ELEM* aParent ) :
+        ELEM( T_circle, aParent )
+    {
+    }
+};
+
+
+class QARC : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+public:    
+    QARC( ELEM* aParent ) :
+        ELEM( T_circle, aParent )
+    {
+    }
+};
+
+
+class KEEPOUT : public ELEM
+{
+    friend class SPECCTRA_DB;
+    
+    std::string     name;
+    int             sequence_number;
+    RULES*          rules;
+    RULES*          place_rules;
+    
+    typedef boost::ptr_vector<WINDOW>   WINDOWS;
+    WINDOWS         windows;
+    
+    //----- only one of these is used, like a union -----
+    PATH*           path;           ///< used for both path and polygon
+    RECTANGLE*      rectangle;
+    CIRCLE*         circle;
+    QARC*           qarc;
+    //---------------------------------------------------
+
+    
+public:
+
+    /**
+     * Constructor KEEPOUT
+     * requires a DSN_T because this class is used for T_place_keepout, T_via_keepout,
+     * T_wire_keepout, T_bend_keepout, and T_elongate_keepout as well as T_keepout.
+     */
+    KEEPOUT( ELEM* aParent, DSN_T aType ) :
+        ELEM( aType, aParent )
+    {
+        rules = 0;
+        place_rules = 0;
+
+        path = 0;
+        rectangle = 0;
+        circle = 0;
+        qarc = 0;
+        
+        sequence_number = -1;
+    }
+    
+    ~KEEPOUT()
+    {
+        delete rules;
+        delete place_rules;
+
+        delete path;
+        delete rectangle;
+        delete circle;
+        delete qarc;
+    }
+    
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
+
+        if( name.size() )
+        {
+            const char* quote = out->GetQuoteChar( name.c_str() );
+            out->Print( nestLevel+1, "%s%s%s\n", quote, name.c_str(), quote );
+        }
+
+        if( sequence_number != -1 )
+            out->Print( nestLevel+1, "(sequence_number %d\n", sequence_number );
+        
+        // these are mutually exclusive
+        if( rectangle )
+            rectangle->Format( out, nestLevel+1 );
+        
+        if( path )
+            path->Format( out, nestLevel+1 );
+        
+        if( circle )
+            circle->Format( out, nestLevel+1 );
+
+        if( qarc )
+            qarc->Format( out, nestLevel+1 );
+        
+        out->Print( nestLevel, ")\n" ); 
+    }
+    
 };
 
 
@@ -462,7 +629,7 @@ public:
     {
     }
     
-    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
         
@@ -515,7 +682,7 @@ public:
     {
     }
     
-    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
 
@@ -530,44 +697,11 @@ public:
 
         for( int i=0;  i<Length();  ++i )
         {
-            At(i)->Save( out, nestLevel+1 );
+            At(i)->Format( out, nestLevel+1 );
         }
         
         out->Print( nestLevel, ")\n" ); 
     }
-};
-
-
-/**
- * Class RULES
- * corresponds to the <rule_descriptor> in the specctra dsn spec.
- */
-class RULES : public ELEM
-{
-    friend class SPECCTRA_DB;
-    
-    STRINGS     rules;      ///< rules are saved in std::string form.
-
-public:
-
-    RULES( ELEM* aParent ) :
-        ELEM( T_rule, aParent )
-    {
-    }
-    
-    ~RULES()
-    {
-    }
-    
-    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
-    {
-        out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
-
-        for( STRINGS::const_iterator i = rules.begin();  i!=rules.end(); ++i )
-            out->Print( nestLevel+1, "%s\n", i->c_str() );
-        
-        out->Print( nestLevel, ")\n" );
-    }        
 };
 
 
@@ -611,7 +745,7 @@ public:
         delete rules;
     }
     
-    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         const char* quote = out->GetQuoteChar( name.c_str() );
         
@@ -642,7 +776,7 @@ public:
                        LEXER::GetTokenText( (DSN_T)direction ) );
 
         if( rules )
-            rules->Save( out, nestLevel+1 );
+            rules->Format( out, nestLevel+1 );
         
         if( cost != -1 )
         {
@@ -663,8 +797,7 @@ public:
             for( STRINGS::const_iterator i = use_net.begin();  i!=use_net.end(); ++i )
             {
                 const char* quote = out->GetQuoteChar( i->c_str() );
-                out->Print( 0, " %s%s%s", 
-                           quote, i->c_str(), quote );
+                out->Print( 0, " %s%s%s",  quote, i->c_str(), quote );
             }
             out->Print( 0, ")\n" );
         }
@@ -687,6 +820,10 @@ class STRUCTURE : public ELEM
     
     typedef boost::ptr_vector<LAYER>    LAYERS;
     LAYERS      layers;
+
+    typedef boost::ptr_vector<KEEPOUT>  KEEPOUTS;
+    KEEPOUTS    keepouts;
+    
     
 public:
 
@@ -711,35 +848,38 @@ public:
         delete rules;
     }
     
-    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
         
         if( unit )
-            unit->Save( out, nestLevel+1 );
+            unit->Format( out, nestLevel+1 );
 
         for( unsigned i=0;  i<layers.size(); ++i )
-            layers[i].Save( out, nestLevel+1 ); 
+            layers[i].Format( out, nestLevel+1 ); 
         
         if( boundary )
-            boundary->Save( out, nestLevel+1 );
+            boundary->Format( out, nestLevel+1 );
 
         if( place_boundary )
-            place_boundary->Save( out, nestLevel+1 );
+            place_boundary->Format( out, nestLevel+1 );
 
+        for( unsigned i=0;  i<keepouts.size();  ++i )
+            keepouts[i].Format( out, nestLevel+1 );
+        
         if( via )
-            via->Save( out, nestLevel+1 );
+            via->Format( out, nestLevel+1 );
         
         if( control )
-            control->Save( out, nestLevel+1 );
+            control->Format( out, nestLevel+1 );
         
         for( int i=0; i<Length();  ++i )
         {
-            At(i)->Save( out, nestLevel+1 );
+            At(i)->Format( out, nestLevel+1 );
         }
         
         if( rules )
-            rules->Save( out, nestLevel+1 );
+            rules->Format( out, nestLevel+1 );
         
         out->Print( nestLevel, ")\n" ); 
     }
@@ -756,7 +896,7 @@ public:
 
 /**
  * Class TOKPROP
- * is a container for a single property whose value is another token.
+ * is a container for a single property whose value is another DSN_T token.
  * The name of the property is obtained from the DSN_T Type().
  */
 class TOKPROP : public ELEM
@@ -772,7 +912,7 @@ public:
     {
     }
     
-    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         out->Print( nestLevel, "(%s %s)\n", LEXER::GetTokenText( Type() ),
                    LEXER::GetTokenText( value ) );
@@ -798,7 +938,7 @@ public:
     {
     }
     
-    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         const char* quote_char = out->GetQuoteChar( value.c_str() );
         
@@ -837,7 +977,7 @@ public:
         delete structure;
     }
     
-    void Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         const char* quote = out->GetQuoteChar( pcbname.c_str() );
         
@@ -845,16 +985,16 @@ public:
                                 quote, pcbname.c_str(), quote );
         
         if( parser )
-            parser->Save( out, nestLevel+1 );
+            parser->Format( out, nestLevel+1 );
         
         if( resolution )
-            resolution->Save( out, nestLevel+1 );
+            resolution->Format( out, nestLevel+1 );
 
         if( unit )
-            unit->Save( out, nestLevel+1 );
+            unit->Format( out, nestLevel+1 );
 
         if( structure )
-            structure->Save( out, nestLevel+1 );
+            structure->Format( out, nestLevel+1 );
         
         out->Print( nestLevel, ")\n" ); 
     }
@@ -869,9 +1009,7 @@ public:
         
         return ELEM::GetUnits();
     }
-    
 };
-
 
 
 /**
@@ -952,7 +1090,8 @@ public:
 
     
     //-----<OUTPUTFORMATTER>-------------------------------------------------
-    void Print( int nestLevel, const char* fmt, ... ) throw( IOError );
+    void PRINTF_FUNC Print( int nestLevel, const char* fmt, ... ) throw( IOError );
+    
     const char* GetQuoteChar( const char* wrapee ); 
     //-----</OUTPUTFORMATTER>------------------------------------------------
 
@@ -1114,10 +1253,12 @@ void SPECCTRA_DB::doPCB( PCB* growth ) throw( IOError )
             growth->structure = new STRUCTURE( growth );
             doSTRUCTURE( growth->structure );
             break;
-            
+
+/*            
         case T_placement:
         case T_library:
             break;
+*/            
             
         default:
             unexpected( lexer->CurText() );
@@ -1247,6 +1388,7 @@ void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IOError )
     }
 }
 
+
 void SPECCTRA_DB::doRESOLUTION( RESOLUTION* growth ) throw(IOError)
 {
     DSN_T   tok = nextTok();
@@ -1261,7 +1403,7 @@ void SPECCTRA_DB::doRESOLUTION( RESOLUTION* growth ) throw(IOError)
         growth->units = tok;
         break;
     default:
-        expecting( wxT("inch | mil | cm | mm | um") );
+        expecting( wxT("inch|mil|cm|mm|um") );
     }
     
     tok = nextTok();
@@ -1274,6 +1416,7 @@ void SPECCTRA_DB::doRESOLUTION( RESOLUTION* growth ) throw(IOError)
     if( tok != T_RIGHT )
         expecting( T_RIGHT );
 }
+
 
 void SPECCTRA_DB::doUNIT( UNIT* growth ) throw(IOError)
 {
@@ -1289,7 +1432,7 @@ void SPECCTRA_DB::doUNIT( UNIT* growth ) throw(IOError)
         growth->units = tok;
         break;
     default:
-        expecting( wxT("inch | mil | cm | mm | um") );
+        expecting( wxT("inch|mil|cm|mm|um") );
     }
     
     tok = nextTok();
@@ -1363,6 +1506,16 @@ L_place:
             growth->rules = new RULES( growth );
             doRULES( growth->rules );
             break;
+
+        case T_keepout:
+/* @todo            
+        case T_place_keepout:
+        case T_via_keepout:
+        case T_wire_keepout:
+        case T_bend_keepout:
+        case T_elongate_keepout:
+*/            
+            break;
             
         default:
             unexpected( lexer->CurText() );
@@ -1381,6 +1534,9 @@ void SPECCTRA_DB::doBOUNDARY( BOUNDARY* growth ) throw( IOError )
     tok = nextTok();
     if( tok == T_rect )
     {
+        if( growth->paths.size() )
+            unexpected( "rect when path already encountered" );
+    
         growth->rectangle = new RECTANGLE( growth );
         doRECTANGLE( growth->rectangle );
         if( nextTok() != T_RIGHT )
@@ -1388,12 +1544,15 @@ void SPECCTRA_DB::doBOUNDARY( BOUNDARY* growth ) throw( IOError )
     }
     else if( tok == T_path )
     {
+        if( growth->rectangle )
+            unexpected( "path when rect already encountered" );
+
         for(;;)
         {
             if( tok != T_path )
                 expecting( T_path );
                     
-            PATH* path = new PATH( growth ) ;
+            PATH* path = new PATH( growth, T_path ) ;
             growth->paths.push_back( path );
             
             doPATH( path );
@@ -1412,24 +1571,15 @@ void SPECCTRA_DB::doBOUNDARY( BOUNDARY* growth ) throw( IOError )
         expecting( wxT("rect|path") );
 }
 
+
 void SPECCTRA_DB::doPATH( PATH* growth ) throw( IOError )
 {
     DSN_T   tok = nextTok();
 
-    switch( tok )
-    {
-    case T_SYMBOL:
-    case T_STRING:
-        
-    case T_pcb:         // reserved layer names
-    case T_power:
-    case T_signal:
-        growth->layer_id = lexer->CurText();
-        break;
-        
-    default:
-        expecting( T_SYMBOL );
-    }
+    if( !isSymbol( tok ) )
+        expecting( wxT("<layer_id>") );
+    
+    growth->layer_id = lexer->CurText();
 
     if( nextTok() != T_NUMBER )
         expecting( wxT("<aperture_width>") );
@@ -1744,33 +1894,44 @@ void SPECCTRA_DB::doRULES( RULES* growth ) throw( IOError )
 {
     std::string     builder;
     int             bracketNesting = 1; // we already saw the opening T_LEFT
+    DSN_T           tok = T_END;
 
-    while( bracketNesting != 0 )
+    while( bracketNesting!=0 && tok!=T_EOF )
     {
-        DSN_T tok = nextTok();
+        tok = nextTok();
         
-        switch( tok )
-        {
-        case T_LEFT:    ++bracketNesting;   break;
-        case T_RIGHT:   --bracketNesting;   break;
-        default: 
-            ;
-        }
- 
+        if( tok==T_LEFT)
+            ++bracketNesting;
+        
+        else if( tok==T_RIGHT )
+            --bracketNesting;
+
         if( bracketNesting >= 1 )
         {
             if( lexer->PrevTok() != T_LEFT && tok!=T_RIGHT )
                 builder += ' ';
+
+            if( tok==T_STRING )
+                builder += quote_char;
             
             builder += lexer->CurText();
+            
+            if( tok==T_STRING )
+                builder += quote_char;
         }
-        
+
+        // when the nested rule is closed with a T_RIGHT and we are back down
+        // to bracketNesting == 1, (inside the <rule_descriptor> but outside
+        // the last rule) then save the last rule and clear the string builder.
         if( bracketNesting == 1 )
         {
            growth->rules.push_back( builder );
            builder.clear();
         }
     }
+    
+    if( tok==T_EOF )
+        unexpected( T_EOF );
 }
 
 void SPECCTRA_DB::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
@@ -1783,7 +1944,7 @@ void SPECCTRA_DB::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
     
     for( int i=0; i<nestLevel;  ++i )
     {
-        ret = fprintf( fp, "  " );
+        ret = fprintf( fp, "    " );
         if( ret < 0 )
             break;
     }
@@ -1817,7 +1978,7 @@ void SPECCTRA_DB::Export( wxString filename, BOARD* aBoard )
         ThrowIOError( _("Unable to open file \"%s\""), filename.GetData() );  
     }
 
-    tree->Save( this, 0 );    
+    tree->Format( this, 0 );    
 }
 
 
@@ -1845,13 +2006,13 @@ ELEM::~ELEM()
 }
 
 
-void ELEM::Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+void ELEM::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
 {
     out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) ); 
     
     for( int i=0;  i<Length();  ++i )
     {
-        At(i)->Save( out, nestLevel+1 );
+        At(i)->Format( out, nestLevel+1 );
     }
     
     out->Print( nestLevel, ")\n" ); 
@@ -1876,7 +2037,7 @@ int ELEM::FindElem( DSN_T aType, int instanceNum )
 
 //-----<PARSER>-----------------------------------------------------------
 
-void PARSER::Save( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+void PARSER::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
 {
     out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) ); 
     out->Print( nestLevel+1, "(string_quote %c)\n", string_quote );
