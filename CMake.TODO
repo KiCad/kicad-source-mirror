@@ -1,7 +1,6 @@
 TODO:
 * Fix minizip build on windows.
-* Add install targets for binaries, docs, translations, libraries on Mac.
+* Add install targets for binaries and resources on Mac.
 * Add PYTHON.
-* Add shared/static.
 * Testing.
 * More testing ...

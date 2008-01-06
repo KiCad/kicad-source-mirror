@@ -1,3 +1,21 @@
+# List of variables that may be set from command line:
+#
+# CMAKE_BUILD_TYPE Release/Debug (REQUIRED)
+#   Choose build type: Release/Debug
+#
+# wxWidgets_USE_DEBUG ON/OFF (REQUIRED)
+#   Should be set to ON only when CMAKE_BUILD_TYPE=Debug.
+#
+# wxWidgets_USE_STATIC ON/OFF (OPTIONAL)
+#   
+#
+# CMAKE_VERBOSE_MAKEFILE ON/OFF (OPTIONAL)
+#   Turns ON/OFF verbose build messages.
+#
+# CMAKE_INSTALL_PREFIX (OPTIONAL)
+#   
+#
+
 # Our project is called 'kicad'. This is what it will be called in
 # our makefiles.
 PROJECT(kicad)
@@ -6,19 +24,6 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.4.6 FATAL_ERROR)
 
 # Path to local CMake modules
 SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
-
-# List of variables that may be set from command line:
-# CMAKE_VERBOSE_MAKEFILE ON/OFF (OPTIONAL)
-#   Turns ON/OFF verbose build messages.
-#
-# CMAKE_BUILD_TYPE Release/Debug (REQUIRED)
-#   
-#
-# wxWidgets_USE_DEBUG ON/OFF (REQUIRED)
-#   Should be set to ON only when CMAKE_BUILD_TYPE=Debug.
-#
-# CMAKE_INSTALL_PREFIX (OPTIONAL)
-#   
 
 # Comment this out if you don't want to build minizip.
 SET(KICAD_MINIZIP ON CACHE BOOL "Build minizip?")
