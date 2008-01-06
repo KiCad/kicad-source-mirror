@@ -44,44 +44,6 @@ The main program is /usr/local/kicad/linux/kicad
 If you use KDE, then you can copy the shortcut /usr/local/kicad/linux/kicad.desktop
 in <user home directory>/Desktop and use it to run kicad.
 
-== Compilation with CMake build system [http://www.cmake.org] ==
-Remark: this feature is still experimental and only for developers!
-
-=== Requirements: cmake must be installed ===
-
-1) An "in-source" type of the build.
-
-Explanation: an "in-source" build puts the generated files in your source tree.
-
-=== For verbose output of 'make': ===
- cmake -DCMAKE_VERBOSE_MAKEFILE=1 ./
- make
-
-=== For non-verbose output of 'make': ===
- cmake ./
- make
-
-2) An "out-of-source" type of the build.
-
-Explanation: an "out-ouf-source" build puts the libraries, and executables
-in a directory separate from the source code directory(ies).
-
-=== For verbose output of 'make': ===
- mkdir kicad-build
- cd kicad-build
- cmake -DCMAKE_VERBOSE_MAKEFILE=1 ../
- make
-
-=== For non-verbose output of 'make': ===
- mkdir kicad-build
- cd kicad-build
- cmake ../
- make
-
-Remark: If you don't want to write -DCMAKE_VERBOSE_MAKEFILE=1 each time,
-then just uncomment the SET(CMAKE_VERBOSE_MAKEFILE ON) line in the
-CMakeLists.txt file from a KiCad root directory.
-
 == 3D modeler wings3D: ==
 (Usefull only if you plan to create 3D shapes for Printed board modules)
 Archive and doc files (Linux and windows ) are in ../kicad/wing3d
@@ -137,13 +99,13 @@ du repertoire courant.
 
 **Sous Windows:
 se placer dans C:\ (ou D:\ ou tout disque et repertoire de son choix)
-On supposera ici que l'on s'est placé dans c:\
+On supposera ici que l'on s'est placï¿½ dans c:\
 Decompacter kicad.zip
-Créer un raccourci vers c:\kicad\winexe\kicad.exe
+Crï¿½er un raccourci vers c:\kicad\winexe\kicad.exe
 On pourra alors lancer le gestionnaire de projets kicad.exe
 
 Sous Linux
-On se placera de préférence en /usr/local
+On se placera de prï¿½fï¿½rence en /usr/local
 Il faudra sans doute aussi etre "root"
 Decompacter kicad.tgz ou kicad.zip
   - kicad.tgz: faire tar zxvf <chemin de kicad.tgz>/kicad.tgz
@@ -155,10 +117,10 @@ On lancera kicad par /usr/local/kicad/linux/kicad
 Sous KDE on pourra copier /usr/local/kicad/linux/kicad.desktop sur le bureau
 de KDE comme raccourci.
 
-Installation du modeleur 3D wings3D pour créer les formes 3D des modules du PCB:
+Installation du modeleur 3D wings3D pour crï¿½er les formes 3D des modules du PCB:
 Il est fourni dans ..kicad/wings3d pour Windows et Linux.
-Se reporter au site du créateur pour tous détails (www.wings3d.org)
-Se reporter aussi a la doc de pcbnew pour la génération des fichiers 3d
+Se reporter au site du crï¿½ateur pour tous dï¿½tails (www.wings3d.org)
+Se reporter aussi a la doc de pcbnew pour la gï¿½nï¿½ration des fichiers 3d
 
 Documentation:
 L'impression de la documentation (environ 200 pages) peut se faire
@@ -169,8 +131,8 @@ kicad/winexe: executables sous windows (teste sous XP et 2000)
 kicad/linux: executables sous linux (testes sous Mandrake 9.2 et 10.0)
 kicad/library: fichiers libraires de composants schematiques
 kicad/library/doc: fichiers documentation des composants schematiques (.pdf)
-	(accessibles directement de la schematique si l'on a installé acrobat ou Xpdf)
-kicad/modules: fichiers de composants (modules) pour le circuit imprimé
+	(accessibles directement de la schematique si l'on a installï¿½ acrobat ou Xpdf)
+kicad/modules: fichiers de composants (modules) pour le circuit imprimï¿½
 kicad/modules/packages3d: fichiers de formes 3D des modules
 
 kicad/demos: C'est toujours utile...
@@ -181,17 +143,17 @@ kicad/help/doc_src: fichiers d'aides (doc source, 200 pages) sous OpenOffice,
 
 
 Complements:
--En cas de difficulté:
-Un problème peut surgir pour kicad lors de la recherche des fichiers utiles
-comme fichiers de config, librairies, dictionnaire anglais->français, docs...
+-En cas de difficultï¿½:
+Un problï¿½me peut surgir pour kicad lors de la recherche des fichiers utiles
+comme fichiers de config, librairies, dictionnaire anglais->franï¿½ais, docs...
 Sous Windows:
-	La recherche se fait là ou sont lus les executables.
-	Il ne faut donc pas recopier les executables ailleurs que là ou ils sont.
+	La recherche se fait lï¿½ ou sont lus les executables.
+	Il ne faut donc pas recopier les executables ailleurs que lï¿½ ou ils sont.
 	Toutefois, si cela ne marche pas, kicad cherche le repertoire c:\kicad
 Sous linux:
-	La recherche se fait sur /usr/local/kicad (installation conseillée),
-	ou dans le chemin des executables si /usr/local/kicad n'est pas trouvé.
+	La recherche se fait sur /usr/local/kicad (installation conseillï¿½e),
+	ou dans le chemin des executables si /usr/local/kicad n'est pas trouvï¿½.
 
-Uniquement en cas d'installation non standard (et en cas de difficulté),
+Uniquement en cas d'installation non standard (et en cas de difficultï¿½),
 definir la variable d'environnement kicad = <chemin de kicad>
 ex: kicad=/usr/local/cao/kicad
