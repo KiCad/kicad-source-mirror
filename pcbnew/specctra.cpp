@@ -381,8 +381,8 @@ class RULES : public ELEM
 
 public:
 
-    RULES( ELEM* aParent ) :
-        ELEM( T_rule, aParent )
+    RULES( ELEM* aParent, DSN_T aType ) :
+        ELEM( aType, aParent )
     {
     }
     
@@ -496,25 +496,28 @@ public:
 };
 
 
-class WINDOW : public ELEM
-{
-    friend class SPECCTRA_DB;
-    
-    WINDOW( ELEM* aParent ) :
-        ELEM( T_window, aParent )
-    {
-    }
-};
-
-
 class CIRCLE : public ELEM
 {
     friend class SPECCTRA_DB;
-
+    
+    std::string layer_id;
+    
+    double      diameter;
+    POINT       vertex;
+    
 public:    
     CIRCLE( ELEM* aParent ) :
         ELEM( T_circle, aParent )
     {
+        diameter = 0.0;
+    }
+    
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        const char* quote = out->GetQuoteChar( layer_id.c_str() );
+        out->Print( nestLevel, "(%s %s%s%s %f %f %f)\n", LEXER::GetTokenText( Type() ) ,
+                                 quote, layer_id.c_str(), quote,
+                                 diameter, vertex.x, vertex.y );
     }
 };
 
@@ -522,11 +525,81 @@ public:
 class QARC : public ELEM
 {
     friend class SPECCTRA_DB;
+    
+    std::string layer_id;
+    double      aperture_width;
+    POINT       vertex[3];
 
 public:    
     QARC( ELEM* aParent ) :
-        ELEM( T_circle, aParent )
+        ELEM( T_qarc, aParent )
     {
+        aperture_width = 0.0;
+    }
+    
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        const char* quote = out->GetQuoteChar( layer_id.c_str() );
+        out->Print( nestLevel, "(%s %s%s%s %f\n", LEXER::GetTokenText( Type() ) ,
+                                 quote, layer_id.c_str(), quote,
+                                 aperture_width);
+        
+        for( int i=0;  i<3;  ++i )
+            out->Print( nestLevel+1, "%f %f\n",  vertex[i].x, vertex[i].y );
+        
+        out->Print( nestLevel, ")\n" );
+    }
+};
+
+
+class WINDOW : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+    //----- only one of these is used, like a union -----
+    PATH*           path;           ///< used for both path and polygon
+    RECTANGLE*      rectangle;
+    CIRCLE*         circle;
+    QARC*           qarc;
+    //---------------------------------------------------
+
+public:
+    
+    WINDOW( ELEM* aParent ) :
+        ELEM( T_window, aParent )
+    {
+        path = 0;
+        rectangle = 0;
+        circle = 0;
+        qarc = 0;
+    }
+    
+    ~WINDOW()
+    {
+        delete path;
+        delete rectangle;
+        delete circle;
+        delete qarc;
+    }
+    
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
+
+        // these are mutually exclusive
+        if( rectangle )
+            rectangle->Format( out, nestLevel+1 );
+        
+        if( path )
+            path->Format( out, nestLevel+1 );
+        
+        if( circle )
+            circle->Format( out, nestLevel+1 );
+
+        if( qarc )
+            qarc->Format( out, nestLevel+1 );
+
+        out->Print( nestLevel, ")\n" ); 
     }
 };
 
@@ -549,7 +622,6 @@ class KEEPOUT : public ELEM
     CIRCLE*         circle;
     QARC*           qarc;
     //---------------------------------------------------
-
     
 public:
 
@@ -594,7 +666,7 @@ public:
         }
 
         if( sequence_number != -1 )
-            out->Print( nestLevel+1, "(sequence_number %d\n", sequence_number );
+            out->Print( nestLevel+1, "(sequence_number %d)\n", sequence_number );
         
         // these are mutually exclusive
         if( rectangle )
@@ -608,10 +680,18 @@ public:
 
         if( qarc )
             qarc->Format( out, nestLevel+1 );
+
+        if( rules )
+            rules->Format( out, nestLevel+1 );
+        
+        if( place_rules )
+            place_rules->Format( out, nestLevel+1 );
+
+        for( unsigned i=0;  i<windows.size();  ++i )
+            windows[i].Format( out, nestLevel+1 );
         
         out->Print( nestLevel, ")\n" ); 
     }
-    
 };
 
 
@@ -807,23 +887,82 @@ public:
 };
 
 
+class LAYER_PAIR : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+    std::string     layer_id0;
+    std::string     layer_id1;
+
+    double          layer_weight;    
+    
+public:
+    LAYER_PAIR( ELEM* aParent ) :
+        ELEM( T_layer_pair, aParent )
+    {
+        layer_weight = 0.0;
+    }
+
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        const char* quote0 = out->GetQuoteChar( layer_id0.c_str() );
+        const char* quote1 = out->GetQuoteChar( layer_id1.c_str() );
+        
+        out->Print( nestLevel, "(%s %s%s%s %s%s%s %f)\n", LEXER::GetTokenText( Type() ),
+               quote0, layer_id0.c_str(), quote0,
+               quote1, layer_id1.c_str(), quote1,
+               layer_weight );
+    }
+};
+
+
+class LAYER_NOISE_WEIGHT : public ELEM
+{
+    friend class SPECCTRA_DB;
+    
+    typedef boost::ptr_vector<LAYER_PAIR>  LAYER_PAIRS;
+    LAYER_PAIRS     layer_pairs;
+    
+public:
+
+    LAYER_NOISE_WEIGHT( ELEM* aParent ) :
+        ELEM( T_layer_noise_weight, aParent )
+    {
+    }
+    
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
+        
+        for( unsigned i=0; i<layer_pairs.size();  ++i )
+            layer_pairs[i].Format( out, nestLevel+1 );
+        
+        out->Print( nestLevel, ")\n" );
+    }
+};
+
+
 class STRUCTURE : public ELEM
 {
     friend class SPECCTRA_DB;
     
     UNIT*       unit;
+    RESOLUTION* resolution;
+    
+    typedef boost::ptr_vector<LAYER>    LAYERS;
+    LAYERS      layers;
+
+    LAYER_NOISE_WEIGHT*  layer_noise_weight;
+    
     BOUNDARY*   boundary;
     BOUNDARY*   place_boundary;
     VIA*        via;
     CONTROL*    control;
     RULES*      rules;
     
-    typedef boost::ptr_vector<LAYER>    LAYERS;
-    LAYERS      layers;
-
     typedef boost::ptr_vector<KEEPOUT>  KEEPOUTS;
     KEEPOUTS    keepouts;
-    
+
     
 public:
 
@@ -831,6 +970,8 @@ public:
         ELEM( T_structure, aParent )
     {
         unit = 0;
+        resolution = 0;
+        layer_noise_weight = 0;
         boundary = 0;
         place_boundary = 0;
         via = 0;
@@ -841,6 +982,8 @@ public:
     ~STRUCTURE()
     {
         delete unit;
+        delete resolution;
+        delete layer_noise_weight;
         delete boundary;
         delete place_boundary;
         delete via;
@@ -855,8 +998,14 @@ public:
         if( unit )
             unit->Format( out, nestLevel+1 );
 
-        for( unsigned i=0;  i<layers.size(); ++i )
+        if( resolution )
+            resolution->Format( out, nestLevel+1 );
+        
+        for( unsigned i=0;  i<layers.size();  ++i )
             layers[i].Format( out, nestLevel+1 ); 
+
+        if( layer_noise_weight )
+            layer_noise_weight->Format( out, nestLevel+1 );
         
         if( boundary )
             boundary->Format( out, nestLevel+1 );
@@ -1058,7 +1207,9 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     void doPARSER( PARSER* growth ) throw(IOError);
     void doRESOLUTION( RESOLUTION* growth ) throw(IOError);
     void doUNIT( UNIT* growth ) throw( IOError );    
-    void doSTRUCTURE( STRUCTURE* growth ) throw( IOError );    
+    void doSTRUCTURE( STRUCTURE* growth ) throw( IOError );
+    void doLAYER_NOISE_WEIGHT( LAYER_NOISE_WEIGHT* growth ) throw( IOError );
+    void doLAYER_PAIR( LAYER_PAIR* growth ) throw( IOError );    
     void doBOUNDARY( BOUNDARY* growth ) throw( IOError );
     void doRECTANGLE( RECTANGLE* growth ) throw( IOError );
     void doPATH( PATH* growth ) throw( IOError );
@@ -1068,6 +1219,10 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     void doCONTROL( CONTROL* growth ) throw( IOError );    
     void doLAYER( LAYER* growth ) throw( IOError );
     void doRULES( RULES* growth ) throw( IOError );
+    void doKEEPOUT( KEEPOUT* growth ) throw( IOError );
+    void doCIRCLE( CIRCLE* growth ) throw( IOError );
+    void doQARC( QARC* growth ) throw( IOError );
+    void doWINDOW( WINDOW* growth ) throw( IOError );
     
 public:
 
@@ -1440,6 +1595,47 @@ void SPECCTRA_DB::doUNIT( UNIT* growth ) throw(IOError)
         expecting( T_RIGHT );
 }
 
+
+void SPECCTRA_DB::doLAYER_PAIR( LAYER_PAIR* growth ) throw( IOError )
+{
+    DSN_T   tok = nextTok();
+    
+    if( !isSymbol( tok ) )
+        expecting( T_SYMBOL );
+    growth->layer_id0 = lexer->CurText();
+
+    tok = nextTok();        
+    if( !isSymbol( tok ) )
+        expecting( T_SYMBOL );
+    growth->layer_id1 = lexer->CurText();
+    
+    if( nextTok() != T_NUMBER )
+        expecting( T_NUMBER );
+    growth->layer_weight = strtod( lexer->CurText(), 0 );
+
+    if( nextTok() != T_RIGHT )
+        expecting( T_RIGHT );
+}
+
+
+void SPECCTRA_DB::doLAYER_NOISE_WEIGHT( LAYER_NOISE_WEIGHT* growth ) throw( IOError )
+{
+    DSN_T   tok;
+    
+    while( (tok = nextTok()) != T_RIGHT )
+    {
+        if( tok != T_LEFT )
+            expecting( T_LEFT );
+        
+        if( nextTok() != T_layer_pair )
+            expecting( T_layer_pair );
+        
+        LAYER_PAIR* layer_pair = new LAYER_PAIR( growth );
+        growth->layer_pairs.push_back( layer_pair );
+        doLAYER_PAIR( layer_pair );
+    }
+}
+
 void SPECCTRA_DB::doSTRUCTURE( STRUCTURE* growth ) throw(IOError)
 {
     DSN_T   tok;
@@ -1453,12 +1649,24 @@ void SPECCTRA_DB::doSTRUCTURE( STRUCTURE* growth ) throw(IOError)
         switch( tok )
         {
         case T_unit:
-            if( growth->unit )
+            if( growth->unit || growth->resolution )
                 unexpected( T_unit );
             growth->unit = new UNIT( growth );
             doUNIT( growth->unit );
             break;
+            
+        case T_resolution:
+            if( growth->unit || growth->resolution )
+                unexpected( T_resolution );
+            growth->resolution = new RESOLUTION( growth );
+            doRESOLUTION( growth->resolution );
+            break;
 
+        case T_layer_noise_weight:
+            growth->layer_noise_weight = new LAYER_NOISE_WEIGHT( growth );
+            doLAYER_NOISE_WEIGHT( growth->layer_noise_weight );
+            break;            
+            
         case T_place_boundary:
 L_place:            
             if( growth->place_boundary )
@@ -1503,7 +1711,7 @@ L_place:
             break;
 
         case T_rule:
-            growth->rules = new RULES( growth );
+            growth->rules = new RULES( growth, T_rule );
             doRULES( growth->rules );
             break;
 
@@ -1514,12 +1722,135 @@ L_place:
         case T_wire_keepout:
         case T_bend_keepout:
         case T_elongate_keepout:
-*/            
+*/
+            KEEPOUT* keepout;
+            keepout = new KEEPOUT( growth, tok );
+            growth->keepouts.push_back( keepout );
+            doKEEPOUT( keepout );
             break;
             
         default:
             unexpected( lexer->CurText() );
         }
+    }
+}
+
+
+void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth ) throw( IOError )
+{
+    DSN_T   tok = nextTok();
+    
+    if( tok==T_SYMBOL || tok==T_STRING )
+    {
+        growth->name = lexer->CurText();
+        tok = nextTok();
+    }
+    
+    if( tok!=T_LEFT )    
+        expecting( T_LEFT );
+
+    while( tok != T_RIGHT )
+    {
+        if( tok!=T_LEFT )
+            expecting( T_LEFT );
+        
+        tok = nextTok();
+        
+        switch( tok )
+        {
+        case T_sequence_number:
+            if( nextTok() != T_NUMBER )
+                expecting( T_NUMBER );
+            growth->sequence_number = atoi( lexer->CurText() );
+            if( nextTok() != T_RIGHT )
+                expecting( T_RIGHT );
+            break;
+            
+        case T_rule:
+            growth->rules = new RULES( growth, T_rule );
+            doRULES( growth->rules );
+            break;
+            
+        case T_place_rule:
+            growth->place_rules = new RULES( growth, T_place_rule );
+            doRULES( growth->place_rules );
+            break;
+            
+        case T_rect:
+            growth->rectangle = new RECTANGLE( growth );
+            doRECTANGLE( growth->rectangle );
+            break;
+            
+        case T_circle:
+            growth->circle = new CIRCLE( growth );
+            doCIRCLE( growth->circle );
+            break;
+            
+        case T_path:
+        case T_polygon:
+            growth->path = new PATH( growth, tok );
+            doPATH( growth->path );
+            break;
+            
+        case T_qarc:
+            growth->qarc = new QARC( growth );
+            doQARC( growth->qarc );
+            break;
+            
+        case T_window:
+            WINDOW* window;
+            window = new WINDOW( growth );
+            growth->windows.push_back( window );
+            doWINDOW( window );
+            break;
+
+        default:
+            unexpected( lexer->CurText() );
+        }
+        
+        tok = nextTok();
+    }
+}
+
+
+void SPECCTRA_DB::doWINDOW( WINDOW* growth ) throw( IOError )
+{
+    DSN_T   tok = nextTok();
+    
+    while( tok != T_RIGHT )
+    {
+        if( tok!=T_LEFT )
+            expecting( T_LEFT );
+        
+        tok = nextTok();
+        switch( tok )
+        {
+        case T_rect:
+            growth->rectangle = new RECTANGLE( growth );
+            doRECTANGLE( growth->rectangle );
+            break;
+            
+        case T_circle:
+            growth->circle = new CIRCLE( growth );
+            doCIRCLE( growth->circle );
+            break;
+            
+        case T_path:
+        case T_polygon:
+            growth->path = new PATH( growth, tok );
+            doPATH( growth->path );
+            break;
+            
+        case T_qarc:
+            growth->qarc = new QARC( growth );
+            doQARC( growth->qarc );
+            break;
+            
+        default:
+            unexpected( lexer->CurText() );
+        }
+        
+        tok = nextTok();
     }
 }
 
@@ -1646,6 +1977,65 @@ void SPECCTRA_DB::doRECTANGLE( RECTANGLE* growth ) throw( IOError )
         expecting( T_NUMBER );
     growth->point1.y = strtod( lexer->CurText(), NULL );
 
+    if( nextTok() != T_RIGHT )
+        expecting( T_RIGHT );
+}
+
+
+void SPECCTRA_DB::doCIRCLE( CIRCLE* growth ) throw( IOError )
+{
+    DSN_T   tok = nextTok();
+    
+    if( !isSymbol(tok) )
+        expecting( T_SYMBOL );
+    
+    growth->layer_id = lexer->CurText();
+    
+    if( nextTok() != T_NUMBER )
+        expecting( T_NUMBER );
+    growth->diameter = strtod( lexer->CurText(), 0 );
+    
+    tok = nextTok();
+    if( tok == T_NUMBER )
+    {
+        growth->vertex.x = strtod( lexer->CurText(), 0 );
+        
+        if( nextTok() != T_NUMBER )
+            expecting( T_NUMBER );
+        growth->vertex.y = strtod( lexer->CurText(), 0 );
+        
+        tok = nextTok();
+    }
+    
+    if( tok != T_RIGHT )
+        expecting( T_RIGHT );
+}
+
+
+void SPECCTRA_DB::doQARC( QARC* growth ) throw( IOError )
+{
+    DSN_T   tok = nextTok();
+    
+    if( !isSymbol(tok) )
+        expecting( T_SYMBOL );
+    
+    growth->layer_id = lexer->CurText();
+    
+    if( nextTok() != T_NUMBER )
+        expecting( T_NUMBER );
+    growth->aperture_width = strtod( lexer->CurText(), 0 );
+    
+    for( int i=0;  i<3;  ++i )
+    {
+        if( nextTok() != T_NUMBER )
+            expecting( T_NUMBER );
+        growth->vertex[i].x = strtod( lexer->CurText(), 0 );
+        
+        if( nextTok() != T_NUMBER )
+            expecting( T_NUMBER );
+        growth->vertex[i].y = strtod( lexer->CurText(), 0 );
+    }
+    
     if( nextTok() != T_RIGHT )
         expecting( T_RIGHT );
 }
@@ -1783,7 +2173,7 @@ void SPECCTRA_DB::doLAYER( LAYER* growth ) throw( IOError )
             break;
 
         case T_rule:
-            growth->rules = new RULES( growth );
+            growth->rules = new RULES( growth, T_rule );
             doRULES( growth->rules );
             break;
             
@@ -1962,7 +2352,8 @@ const char* SPECCTRA_DB::GetQuoteChar( const char* wrapee )
     {
         // if the string to be wrapped (wrapee) has a delimiter in it, 
         // return the quote_char so caller wraps the wrapee.
-        if( strchr( "\t ()", *wrapee++ ) )
+        // I include '#' so a symbol is not confused with a comment. 
+        if( strchr( "#\t ()", *wrapee++ ) )
             return quote_char.c_str();
     }
     return "";      // can use an unwrapped string.
