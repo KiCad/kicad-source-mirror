@@ -49,21 +49,32 @@ http://prdownloads.sourceforge.net/wxwindows/wxMSW-2.8.7.zip or a newer version.
 Start msys so you have a bash shell.  Decide where your wxWidgets build directory
 will be.  It must be where you can access it from within the msys environment, 
 such as home/<user>.   Edit your msys/1.0/etc/fstab file if needed to provide 
-access to this build directory from msys.  Unzip the wmMWS zip file into this 
-build directory.  Change directories into there, and then 
-    rm *.cache
-    ./configure --enable-unicode=yes --enable-shared=no --enable-monolithic --with-msw --with-opengl
+access to this build directory from msys.  (Note that if you want you can build
+a "debug" version of the wxWidgets library at this point, instead of the release
+version, or in addition to the the release version.)
+Unzip the wmMWS zip file into the build directory.  Change directories into there,
+and then:
+
+    mkdir build-release
+    mkdir build-debug
+
+-- release
+    cd build-release
+    ../configure --enable-unicode --enable-monolithic --disable-shared --with-msw --with-opengl
     make
     make install
+
+-- debug
+    cd build-debug
+    ../confgiure --enable-unicode --enable-monolithic --enable-debug --enable-debug_gdb --disable-shared --with-msw --with-opengl
+    make
+    make install
+
 I think the default is to install into /usr/local/wxMSW-2.8.7.  You can probably
 pass --prefix=<wxInstallDir> to configure above to change where "make install"
 puts everything.  We will refer to <wxInstallDir> again below.  Without the
 --prefix=<wxInstallDir> passed to configure, <wxInstallDir> will likely be
     /usr/local/wxMSW-2.8.7
-
-Also note that if you want you can build a "debug" version of the wxWidgets
-library at this point, instead of the release version, or in addition to the
-the release version.
 
 Verify that wx-config is in your path.  Modify your PATH environment variable
 if need be so you can run wx-config from a command prompt.  You may have to 
