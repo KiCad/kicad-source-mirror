@@ -530,17 +530,17 @@ void ZONE_CONTAINER::Mirror( const wxPoint& mirror_ref)
 
 
 /** Function copy
- * copy data from the source.
- * flags and some poinetrs are NOT copied
+ * copy usefull data from the source.
+ * flags and linked list pointers are NOT copied
  */
 void ZONE_CONTAINER::Copy( ZONE_CONTAINER * src )
 {
 	m_Parent = src->m_Parent;
     m_Layer         = src->m_Layer;
 	SetNet(src->GetNet());
-    m_TimeStamp     = GetTimeStamp();
+    m_TimeStamp     = src->m_TimeStamp;
 	m_Poly->Copy(src->m_Poly);			// copy outlines
-	m_CornerSelection = -1;      // For corner moving, corner index to drag, or -1 if no selection
+	m_CornerSelection = -1;      		// For corner moving, corner index to drag, or -1 if no selection
 	m_ZoneClearance = src->m_ZoneClearance;		// clearance value
 	m_GridFillValue = src->m_GridFillValue;		// Grid used for filling
 	m_PadOption = src->m_PadOption;

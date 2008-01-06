@@ -566,11 +566,11 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
             }
         }
 		
-		for ( unsigned ii = 0; ii < m_Pcb->m_ZoneDescriptorList.size(); ii++ )
+		for ( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
 		{
-            if( m_Pcb->m_ZoneDescriptorList[ii]->HitTest( GetScreen()->BlockLocate ) )
+            if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->BlockLocate ) )
 			{
-				m_Pcb->Delete(m_Pcb->m_ZoneDescriptorList[ii]);
+				m_Pcb->Delete(m_Pcb->GetArea(ii));
 				ii--;	// because the current data was removed, ii points actually the next data
 			}
 		}
@@ -666,11 +666,11 @@ void WinEDA_BasePcbFrame::Block_Rotate( wxDC* DC )
             }
             track = track->Next();
         }
-		for ( unsigned ii = 0; ii < m_Pcb->m_ZoneDescriptorList.size(); ii++ )
+		for ( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
 		{
-            if( m_Pcb->m_ZoneDescriptorList[ii]->HitTest( GetScreen()->BlockLocate ) )
+            if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->BlockLocate ) )
 			{
-				m_Pcb->m_ZoneDescriptorList[ii]->Rotate(centre, 900);
+				m_Pcb->GetArea(ii)->Rotate(centre, 900);
 			}
 		}
     }
@@ -842,12 +842,12 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
             }
             track = (TRACK*) track->Pnext;
         }
-		for ( unsigned ii = 0; ii < m_Pcb->m_ZoneDescriptorList.size(); ii++ )
+		for ( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
 		{
-            if( m_Pcb->m_ZoneDescriptorList[ii]->HitTest( GetScreen()->BlockLocate ) )
+            if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->BlockLocate ) )
 			{
-				m_Pcb->m_ZoneDescriptorList[ii]->Mirror( wxPoint(0, centerY) );
-                m_Pcb->m_ZoneDescriptorList[ii]->SetLayer( ChangeSideNumLayer( m_Pcb->m_ZoneDescriptorList[ii]->GetLayer() ) );
+				m_Pcb->GetArea(ii)->Mirror( wxPoint(0, centerY) );
+                m_Pcb->GetArea(ii)->SetLayer( ChangeSideNumLayer( m_Pcb->GetArea(ii)->GetLayer() ) );
 			}
 		}
     }
@@ -1012,11 +1012,11 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
             }
             track = (TRACK*) track->Pnext;
         }
-		for ( unsigned ii = 0; ii < m_Pcb->m_ZoneDescriptorList.size(); ii++ )
+		for ( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
 		{
-            if( m_Pcb->m_ZoneDescriptorList[ii]->HitTest( GetScreen()->BlockLocate ) )
+            if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->BlockLocate ) )
 			{
-				m_Pcb->m_ZoneDescriptorList[ii]->Move( MoveVector );
+				m_Pcb->GetArea(ii)->Move( MoveVector );
 			}
 		}
     }
@@ -1176,25 +1176,25 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
         {
             if( segzone->HitTest( GetScreen()->BlockLocate ) )
             {  
-                /* la piste est ici bonne a etre dupliquee */
                 new_segzone = (SEGZONE*) segzone->Copy();
                 new_segzone->Insert( m_Pcb, NULL );
                 new_segzone->m_Start += MoveVector;
                 new_segzone->m_End   += MoveVector;
-                new_segzone->Draw( DrawPanel, DC, GR_OR ); // reaffichage
+                new_segzone->Draw( DrawPanel, DC, GR_OR );
             }
             segzone = segzone->Next();
         }
 
-		unsigned imax = m_Pcb->m_ZoneDescriptorList.size();
+		unsigned imax = m_Pcb->GetAreaCount();
 		for ( unsigned ii = 0; ii < imax; ii++ )
 		{
-            if( m_Pcb->m_ZoneDescriptorList[ii]->HitTest( GetScreen()->BlockLocate ) )
+            if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->BlockLocate ) )
 			{
 				ZONE_CONTAINER * new_zone = new ZONE_CONTAINER(m_Pcb);
-				new_zone->Copy( m_Pcb->m_ZoneDescriptorList[ii] );
+				new_zone->Copy( m_Pcb->GetArea(ii) );
+				new_zone->m_TimeStamp = GetTimeStamp();
 				new_zone->Move( MoveVector );
-				m_Pcb->m_ZoneDescriptorList.push_back(new_zone);
+				m_Pcb->Add(new_zone);
 				new_zone->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
 			}
 		}

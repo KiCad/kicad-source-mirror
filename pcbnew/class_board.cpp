@@ -118,6 +118,12 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
         m_markers.push_back( (MARKER*) aBoardItem );
         break;
     
+    // this one uses a vector
+    case TYPEZONE_CONTAINER:
+        aBoardItem->m_Parent = this;
+        m_ZoneDescriptorList.push_back( (ZONE_CONTAINER*) aBoardItem );
+        break;
+    
     // other types may use linked list
     default:
         wxFAIL_MSG( wxT("BOARD::Add() needs work") );

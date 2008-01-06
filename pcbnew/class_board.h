@@ -19,8 +19,6 @@ class BOARD : public BOARD_ITEM
     
 private:
     std::vector<MARKER*> m_markers;             ///< MARKERs for clearance problems, owned by pointer                                                 
-
-public:
 	std::vector<ZONE_CONTAINER*> m_ZoneDescriptorList; 	///< edge zone descriptors, owned by pointer                                                 
 
 public:
@@ -224,6 +222,30 @@ public:
     void Show( int nestLevel, std::ostream& os );
     
 #endif
+
+	/* Copper Areas handling */
+    /**
+     * Function GetArea
+     * returns the Area (Zone Container) at a given index.
+     * @param index The array type index into a collection of ZONE_CONTAINER *.
+     * @return ZONE_CONTAINER* - a pointer to the Area or NULL if index out of range.
+     */
+    ZONE_CONTAINER* GetArea( int index ) const
+    {
+        if( (unsigned) index < m_ZoneDescriptorList.size() )
+            return m_ZoneDescriptorList[index];
+        return NULL;
+    }
+
+    
+    /**
+     * Function GetAreaCount
+     * @return int - The number of Areas or ZONE_CONTAINER.
+     */
+    int GetAreaCount() const
+    {
+        return (int) m_ZoneDescriptorList.size();
+    }
 
 	/* Functions used in test, merge and cut outlines */
 	/**

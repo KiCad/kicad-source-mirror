@@ -133,7 +133,6 @@ public:
      */
     BOARD_ITEM*                 PcbGeneralLocateAndDisplay( int aHotKeyCode = 0 );
 
-    BOARD_ITEM*                 Locate( int typeloc, int LayerSearch );
     void                        ProcessItemSelection( wxCommandEvent& event );
 
     /**

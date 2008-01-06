@@ -45,8 +45,8 @@ public:
 	void UnLink(void) {};
 
 	/** Function copy
-	 * copy data from the source.
-	 * flags and some poinetrs are NOT copied
+	 * copy usefull data from the source.
+	 * flags and linked list pointers are NOT copied
 	 */
 	void Copy( ZONE_CONTAINER * src );
 

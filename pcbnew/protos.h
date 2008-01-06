@@ -138,15 +138,6 @@ D_PAD * Locate_Pads(MODULE * Module, const wxPoint & ref_pos,int layer) ;
 			  pointeur NULL si pastille non trouvee
 	*/
 
-TEXTE_MODULE * LocateTexteModule(BOARD * Pcb, MODULE ** Module, int typeloc);
-		/* localisation du texte pointe par la souris (texte sur empreinte)
-			  si Module == NULL; recherche sur tous les modules
-			  sinon sur le module pointe par Module
-			  retourne
-				   - pointeur sur le texte localise ( ou NULL )
-				   - pointeur sur module Module ( non modifie sinon ) */
-
-
 MODULE * Locate_Prefered_Module(BOARD * Pcb, int typeloc);
 	/* localisation d'une empreinte par son rectangle d'encadrement */
 
@@ -160,24 +151,11 @@ D_PAD * Locate_Pads(MODULE * Module, int typeloc);
 			  pointeur NULL si pastille non trouvee
 	*/
 
-EDGE_MODULE * Locate_Edge_Module(MODULE * Module, int typeloc);
-	/* Localisation de segments de contour du type edge MODULE
-		Les contours sont de differents type:
-		simple, Arcs de cercles, box.
-	Retourne:
-		Pointeur sur DEBUT du segment localise
-		NULL si rien trouve
-	*/
-
 TRACK * Locate_Pistes(TRACK * start_adresse, int typeloc);
 	/* routine de localisation du segment de piste pointe par la souris
 		La recherche commence a l'adresse start_adresse */
 
 DRAWSEGMENT * Locate_Segment_Pcb(BOARD * Pcb, int LayerSearch , int typeloc) ;
-
-TEXTE_PCB * Locate_Texte_Pcb(EDA_BaseStruct * PtStruct, int LayerSearch , int typeloc);
-	/* localisation des inscriptions sur le Pcb:
-		la recherche se fait a partir de l'adresse pr_texte */
 
 
 D_PAD * Fast_Locate_Pad_Connecte(BOARD * Pcb, const wxPoint & ref_pos, int layer);
@@ -202,12 +180,6 @@ TRACK * Locate_Zone(TRACK * start_adresse, const wxPoint & ref_pos,int layer);
 
 	La recherche commence a l'adresse start_adresse
 	*/
-
-COTATION* Locate_Cotation(BOARD * Pcb, int LayerSearch, int typeloc);
-	/* Localise un element de cotation, en priorite sur la couche active,
-		et a defaut sur les autres couches
-		 retourne un pointeur sur l'element (TRACK ou TEXTE_PCB) localise
-		sinon retiurne NULL */
 
 
 	/*************/

@@ -299,17 +299,17 @@ void WinEDA_PcbFrame::End_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_conta
     /* Combine zones if possible */
     int layer = zone_container->GetLayer();
 
-    for( unsigned ii = 0; ii < m_Pcb->m_ZoneDescriptorList.size(); ii++ )
+    for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
     {
-        ZONE_CONTAINER* edge_zone = m_Pcb->m_ZoneDescriptorList[ii];
+        ZONE_CONTAINER* edge_zone = m_Pcb->GetArea(ii);
         if( layer == edge_zone->GetLayer() )
             edge_zone->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
     }
 
     m_Pcb->AreaPolygonModified( zone_container, true, false );
-    for( unsigned ii = 0; ii < m_Pcb->m_ZoneDescriptorList.size(); ii++ )
+    for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
     {
-        ZONE_CONTAINER* edge_zone = m_Pcb->m_ZoneDescriptorList[ii];
+        ZONE_CONTAINER* edge_zone = m_Pcb->GetArea(ii);
         if( layer == edge_zone->GetLayer() )
             edge_zone->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
     }
@@ -336,9 +336,9 @@ void WinEDA_PcbFrame::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER * zone_contai
 
     if ( DC )
 	{
-		for( unsigned ii = 0; ii < m_Pcb->m_ZoneDescriptorList.size(); ii++ )
+		for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
 		{
-			ZONE_CONTAINER* edge_zone = m_Pcb->m_ZoneDescriptorList[ii];
+			ZONE_CONTAINER* edge_zone = m_Pcb->GetArea(ii);
 			if( layer == edge_zone->GetLayer() )
 				edge_zone->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
 		}
@@ -350,9 +350,9 @@ void WinEDA_PcbFrame::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER * zone_contai
     m_Pcb->AreaPolygonModified( zone_container, true, false );
     if ( DC )
 	{
-		for( unsigned ii = 0; ii < m_Pcb->m_ZoneDescriptorList.size(); ii++ )
+		for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
 		{
-			ZONE_CONTAINER* edge_zone = m_Pcb->m_ZoneDescriptorList[ii];
+			ZONE_CONTAINER* edge_zone = m_Pcb->GetArea(ii);
 			if( layer == edge_zone->GetLayer() )
 				edge_zone->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
 		}
@@ -429,15 +429,15 @@ EDGE_ZONE* WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
     EDGE_ZONE* newedge = NULL;
 
     // verify if s_CurrentZone exists:
-    unsigned   ii;
+    int   ii;
 
-    for( ii = 0; ii < m_Pcb->m_ZoneDescriptorList.size(); ii++ )
+    for( ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
     {
-        if( s_CurrentZone == m_Pcb->m_ZoneDescriptorList[ii] )
+        if( s_CurrentZone == m_Pcb->GetArea(ii) )
             break;
     }
 
-    if( ii == m_Pcb->m_ZoneDescriptorList.size() ) // Not found: coul be deleted since last selection
+    if( ii == m_Pcb->GetAreaCount() ) // Not found: coul be deleted since last selection
     {
         s_AddCutoutToCurrentZone = false;
         s_CurrentZone = NULL;
@@ -568,9 +568,9 @@ void WinEDA_PcbFrame::End_Zone( wxDC* DC )
     DrawPanel->ForceCloseManageCurseur = NULL;
 
     // Undraw old drawings, because they can have important changes
-    for( unsigned ii = 0; ii < m_Pcb->m_ZoneDescriptorList.size(); ii++ )
+    for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
     {
-        ZONE_CONTAINER* edge_zone = m_Pcb->m_ZoneDescriptorList[ii];
+        ZONE_CONTAINER* edge_zone = m_Pcb->GetArea(ii);
         if( layer == edge_zone->GetLayer() )
             edge_zone->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
     }
@@ -629,9 +629,9 @@ void WinEDA_PcbFrame::End_Zone( wxDC* DC )
     m_Pcb->AreaPolygonModified( new_zone_container, true, false );
 
     // Redraw the real edge zone :
-    for( unsigned ii = 0; ii < m_Pcb->m_ZoneDescriptorList.size(); ii++ )
+    for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
     {
-        ZONE_CONTAINER* edge_zone = m_Pcb->m_ZoneDescriptorList[ii];
+        ZONE_CONTAINER* edge_zone = m_Pcb->GetArea(ii);
         if( layer == edge_zone->GetLayer() )
             edge_zone->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
     }
@@ -712,9 +712,9 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
         return;
 
 	// Undraw old zone outlines
-    for( unsigned ii = 0; ii < m_Pcb->m_ZoneDescriptorList.size(); ii++ )
+    for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
     {
-        ZONE_CONTAINER* edge_zone = m_Pcb->m_ZoneDescriptorList[ii];
+        ZONE_CONTAINER* edge_zone = m_Pcb->GetArea(ii);
         edge_zone->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
     }
 
@@ -732,9 +732,9 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
     m_Pcb->AreaPolygonModified( zone_container, true, false );
 
     // Redraw the real new zone outlines:
-    for( unsigned ii = 0; ii < m_Pcb->m_ZoneDescriptorList.size(); ii++ )
+    for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
     {
-        ZONE_CONTAINER* edge_zone = m_Pcb->m_ZoneDescriptorList[ii];
+        ZONE_CONTAINER* edge_zone = m_Pcb->GetArea(ii);
 		edge_zone->m_Flags = 0;
         edge_zone->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
     }
@@ -867,9 +867,9 @@ int WinEDA_PcbFrame::Fill_All_Zones( wxDC* DC, bool verbose )
         m_Pcb->m_NbSegmZone = 0;
     }
 
-    for( unsigned ii = 0; ii < m_Pcb->m_ZoneDescriptorList.size(); ii++ )
+    for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
     {
-        zone_container = m_Pcb->m_ZoneDescriptorList[ii];
+        zone_container = m_Pcb->GetArea(ii);
         error_level    = Fill_Zone( NULL, zone_container, verbose );
         if( error_level && !verbose )
             break;
