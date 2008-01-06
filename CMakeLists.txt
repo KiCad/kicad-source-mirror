@@ -34,7 +34,7 @@ IF(UNIX)
 	IF(APPLE)
 	ELSE(APPLE)
 	# Like all variables, CMAKE_INSTALL_PREFIX can be over-ridden on the command line.
-	SET(CMAKE_INSTALL_PREFIX /usr/local)
+	SET(CMAKE_INSTALL_PREFIX /usr/local CACHE PATH "")
 	# When used later, "bin" and others with no leading / is relative to CMAKE_INSTALL_PREFIX.
 	SET(KICAD_BIN bin CACHE PATH "Location of KiCad binaries.")
 	SET(KICAD_PLUGINS lib/kicad/plugins CACHE PATH "Location of KiCad plugins.")
