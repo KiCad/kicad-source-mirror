@@ -45,6 +45,7 @@
 #define ID_RADIOBOX4 10008
 #define ID_RADIOBOX5 10009
 #define ID_NET_SORTING_OPTION 10005
+#define ID_TEXTCTRL_NETNAMES_FILTER 10010
 #define ID_NETNAME_SELECTION 10001
 #define wxID_LAYER_SELECTION 10004
 #define ID_LAYER_CHOICE 10002
@@ -126,6 +127,7 @@ public:
     wxRadioBox* m_FillOpt;
     wxRadioBox* m_OrientEdgesOpt;
     wxRadioBox* m_NetSortingOption;
+    wxTextCtrl* m_NetNameFilter;
     wxListBox* m_ListNetNameSelection;
     wxListBox* m_LayerSelectionCtrl;
 ////@end WinEDA_ZoneFrame member variables

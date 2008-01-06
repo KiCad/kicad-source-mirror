@@ -56,6 +56,7 @@ static ZONE_CONTAINER*             s_CurrentZone;               // if != NULL, t
 
 // key used to store net sort option in config file :
 #define ZONE_NET_SORT_OPTION_KEY wxT( "Zone_NetSort_Opt" )
+#define ZONE_NET_FILTER_STRING_KEY wxT( "Zone_Filter_Opt" )
 
 enum zone_cmd {
     ZONE_ABORT,
@@ -734,6 +735,7 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
     for( unsigned ii = 0; ii < m_Pcb->m_ZoneDescriptorList.size(); ii++ )
     {
         ZONE_CONTAINER* edge_zone = m_Pcb->m_ZoneDescriptorList[ii];
+		edge_zone->m_Flags = 0;
         edge_zone->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
     }
 

@@ -447,6 +447,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_EDIT_ZONE_PARAMS:
         Edit_Zone_Params( &dc, (ZONE_CONTAINER*) GetCurItem() );
+        SetCurItem( NULL );	// Outlines can have changed
         break;
 
 	case ID_POPUP_PCB_ZONE_ADD_SIMILAR_ZONE:
