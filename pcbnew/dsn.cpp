@@ -601,12 +601,22 @@ L_read:
                 goto exit;
             }
             
-            cur = next;
+            cur = start;
+            
+            // skip leading whitespace
+            while( cur<limit && isspace(*cur) )
+                ++cur;
+
+            // if the first non-blank character is #, this line is a comment.
+            if( cur<limit && *cur=='#' )
+                goto L_read;
         }
-        
-        // skip leading whitespace
-        while( cur<limit && isspace(*cur) )
-            ++cur;
+        else
+        {
+            // skip leading whitespace
+            while( cur<limit && isspace(*cur) )
+                ++cur;
+        }
 
         if( cur >= limit )
             goto L_read;
