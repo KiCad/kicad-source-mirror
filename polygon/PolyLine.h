@@ -63,10 +63,8 @@ class CPolyLine
 public:
 	enum { STRAIGHT, ARC_CW, ARC_CCW };	// side styles
 	enum { NO_HATCH, DIAGONAL_FULL, DIAGONAL_EDGE }; // hatch styles
-	enum { DEF_SIZE = 50, DEF_ADD = 50 };	// number of array elements to add at a time
 
 	// constructors/destructor
-//	CPolyLine( CDisplayList * dl = NULL );
 	CPolyLine();
 	~CPolyLine();
 
@@ -82,16 +80,9 @@ public:
 	void RemoveAllContours( void );
 
 	// drawing functions
-/*	void HighlightSide( int is );
-	void HighlightCorner( int ic );
-	void StartDraggingToInsertCorner( CDC * pDC, int ic, int x, int y);
-	void StartDraggingToMoveCorner( CDC * pDC, int ic, int x, int y);
-	void CancelDraggingToInsertCorner( int ic );
-	void CancelDraggingToMoveCorner( int ic );
-*/	void Undraw();
+	void Undraw();
 	void Draw( );
 	void Hatch();
-//	void MakeVisible( bool visible = TRUE );
 	void MoveOrigin( int x_off, int y_off );
 
 	// misc. functions
@@ -121,15 +112,12 @@ public:
 	int GetEndContour( int ic );
 	int GetUtility( int ic ){ return corner[ic].utility; };
 	void SetUtility( int ic, int utility ){ corner[ic].utility = utility; };
-	int GetW();
 	int GetSideStyle( int is );
 	int GetHatchStyle(){ return m_HatchStyle; }
 	void SetHatch( int hatch ){ Undraw(); m_HatchStyle = hatch; Draw(); };
 	void SetX( int ic, int x );
 	void SetY( int ic, int y );
 	void SetEndContour( int ic, bool end_contour );
-//	void SetLayer( int layer );
-	void SetW( int w );
 	void SetSideStyle( int is, int style );
 
 	// GPC functions
@@ -150,7 +138,6 @@ public:
 	void ClipPhpPolygon( int php_op, CPolyLine * poly );
 
 private:
-//	CDisplayList * m_dlist;		// display list 
 	int m_layer;	// layer to draw on
 	int m_Width;		// line width
 	int m_sel_box;	// corner selection box width/2
@@ -158,11 +145,6 @@ private:
 public:
 	std::vector <CPolyPt> corner;	// array of points for corners
 	std::vector <int> side_style;	// array of styles for sides
-private:
-//	std::vector <dl_element*> dl_side;	// graphic elements
-//	std::vector <dl_element*> dl_side_sel;
-//	std::vector <dl_element*> dl_corner_sel;
-public:
 	int m_HatchStyle;	// hatch style, see enum above
 	std::vector <CSegment>  m_HatchLines;	// hatch lines
 private:

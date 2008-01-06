@@ -688,6 +688,31 @@ EQUIPOT* BOARD::FindNet( int anetcode ) const
 }
 
 
+/**
+ * Function FindNet overlayed
+ * searches for a net with the given name.
+ * @param aNetname A Netname to search for.
+ * @return EQUIPOT* - the net or NULL if not found.
+ */
+EQUIPOT* BOARD::FindNet( const wxString & aNetname ) const
+{
+    // the first valid netcode is 1.
+    // zero is reserved for "no connection" and is not used.
+    if( ! aNetname.IsEmpty() )  
+    {
+        for( EQUIPOT* net = m_Equipots;  net;  net=net->Next() )
+        {
+            if( net->m_Netname == aNetname )
+                return net;
+        }
+    }
+    return NULL;
+}
+
+
+
+
+
 /* Two sort functions used in BOARD::ReturnSortedNetnamesList */
 // Sort nets by name
 int s_SortByNames(const void * ptr1, const void * ptr2)

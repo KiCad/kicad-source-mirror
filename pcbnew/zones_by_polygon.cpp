@@ -878,3 +878,34 @@ int WinEDA_PcbFrame::Fill_All_Zones( wxDC* DC, bool verbose )
     DrawPanel->Refresh( true );
     return error_level;
 }
+
+
+/**
+ * Function SetAreasNetCodesFromNetNames
+ * Set the .m_NetCode member of all copper areas, according to the area Net Name
+ * The SetNetCodesFromNetNames is an equivalent to net name, for fas comparisons.
+ * However the Netcode is an arbitrary equyivalence, it must be set after each netlist read
+ * or net change
+ * Must be called after pad netcodes are calculated
+ * @return : error count
+ */
+int BOARD::SetAreasNetCodesFromNetNames(void)
+{
+	int error_count = 0;
+	
+	for ( int ii = 0; ii < GetAreaCount(); ii++ )
+	{
+		const EQUIPOT* net = FindNet( GetArea(ii)->m_Netname );
+		if ( net )
+		{
+			GetArea(ii)->SetNet(net->GetNet());
+		}
+		else
+		{
+			error_count++;
+			GetArea(ii)->SetNet(-1);	//keep Net Name ane set m_NetCode to -1 : error flag
+		}
+	}
+	
+	return error_count;
+}

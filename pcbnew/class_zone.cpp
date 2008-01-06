@@ -67,16 +67,24 @@ ZONE_CONTAINER::~ZONE_CONTAINER()
 /*******************************************/
 void ZONE_CONTAINER::SetNet( int anet_code )
 /*******************************************/
+/**
+ * Set the netcode and the netname 
+ * if netcode >= 0, set the netname
+ * if netcode < 0: keep old netname (used to set an necode error flag)
+ */
 {
 	m_NetCode = anet_code;
+	
+	if ( anet_code < 0 ) return;
+		
 	if ( m_Parent )
 	{
-		EQUIPOT* net = ((BOARD*) m_Parent)->FindNet( g_HightLigth_NetCode );
+		EQUIPOT* net = ((BOARD*) m_Parent)->FindNet( anet_code );
 		if( net )
 			m_Netname = net->m_Netname;
 		else m_Netname.Empty();
 	}
-	else m_Netname.Empty();
+	else  m_Netname.Empty();
 }
 
 
@@ -446,12 +454,22 @@ void ZONE_CONTAINER::Display_Infos( WinEDA_DrawFrame* frame )
     Affiche_1_Parametre( frame, text_pos, _( "Type" ), msg, DARKCYAN );
 
     text_pos += 15;
-    EQUIPOT* equipot = ( (WinEDA_PcbFrame*) frame )->m_Pcb->FindNet( GetNet() );
+	
+	if ( GetNet() >= 0 )
+	{
+		EQUIPOT* equipot = ( (WinEDA_PcbFrame*) frame )->m_Pcb->FindNet( GetNet() );
 
-	if( equipot )
-		msg = equipot->m_Netname;
-	else
-		msg = wxT( "<noname>" );
+		if( equipot )
+			msg = equipot->m_Netname;
+		else
+			msg = wxT( "<noname>" );
+	}
+	else	// a netcode <à is an error
+	{
+		msg = wxT( " [" );
+		msg << m_Netname + wxT( "]" );
+		msg << wxT(" <") << _("Not Found") << wxT(">");
+	}
 
 	Affiche_1_Parametre( frame, text_pos, _( "NetName" ), msg, RED );
 

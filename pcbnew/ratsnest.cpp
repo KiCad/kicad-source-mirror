@@ -956,6 +956,8 @@ void WinEDA_BasePcbFrame::recalcule_pad_net_code()
 
     MyFree( BufPtEquipot );
     m_Pcb->m_Status_Pcb |= NET_CODES_OK;
+	
+	m_Pcb->SetAreasNetCodesFromNetNames();
 }
 
 

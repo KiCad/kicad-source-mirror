@@ -178,6 +178,14 @@ public:
     EQUIPOT* FindNet( int aNetcode ) const;
 
     /**
+     * Function FindNet overlayed
+     * searches for a net with the given name.
+     * @param aNetname A Netname to search for.
+     * @return EQUIPOT* - the net or NULL if not found.
+     */
+    EQUIPOT* FindNet( const wxString & aNetname ) const;
+
+    /**
      * Function ReturnSortedNetnamesList
      * searches for a net with the given netcode.
      * @param aNames An array string to fill with net names.
@@ -223,8 +231,22 @@ public:
     
 #endif
 
+	/*************************/
 	/* Copper Areas handling */
-    /**
+	/*************************/
+	
+	/**
+	 * Function SetAreasNetCodesFromNetNames
+	 * Set the .m_NetCode member of all copper areas, according to the area Net Name
+	 * The SetNetCodesFromNetNames is an equivalent to net name, for fas comparisons.
+	 * However the Netcode is an arbitrary equyivalence, it must be set after each netlist read
+	 * or net change
+	 * Must be called after pad netcodes are calculated
+	 * @return : error count
+	 */
+	int SetAreasNetCodesFromNetNames(void);
+
+	/**
      * Function GetArea
      * returns the Area (Zone Container) at a given index.
      * @param index The array type index into a collection of ZONE_CONTAINER *.

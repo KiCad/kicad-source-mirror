@@ -30,20 +30,6 @@
 #define CDC wxDC
 class wxDC;
 
-#if 0
-class dl_element;
-class CDisplayList {
-public:
-	void Set_visible(void*, int) {};
-	int Get_x(void) { return 0;};
-	int Get_y(void) { return 0;};
-	void StopDragging(void) {};
-	void CancelHighLight(void) {};
-	void StartDraggingLineVertex(...) {};
-	void Add() {};
-};
-#endif
-
 
 class CRect {
 public:

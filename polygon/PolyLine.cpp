@@ -1,6 +1,6 @@
 // PolyLine.cpp ... implementation of CPolyLine class from FreePCB.
 //
-// Adaptation for kicad
+// implementation for kicad
 //
 using namespace std;
 
@@ -879,11 +879,6 @@ int CPolyLine::GetNumSides()
 		return corner.size()-1;	
 }
 
-int CPolyLine::GetW() 
-{	
-	return m_Width;	
-}
-
 int CPolyLine::GetNumContours()
 {
 	int ncont = 0;
@@ -1011,7 +1006,6 @@ void CPolyLine::Hatch()
 	{
 		enum {
 			MAXPTS = 100,
-			MAXLINES = 1000
 		};
 		int xx[MAXPTS], yy[MAXPTS];
 

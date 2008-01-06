@@ -161,11 +161,19 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
             TimeStampText.Printf( wxT( "(%8.8X)" ), item->m_TimeStamp );
             text << TimeStampText;
         }
-        net = aPcb->FindNet( ( (ZONE_CONTAINER*) item )->GetNet() );
-        if( net )
-        {
-            text << wxT( " [" ) << net->m_Netname << wxT( "]" );
-        }
+		if ( ((ZONE_CONTAINER*) item)->GetNet() >= 0 )
+		{
+			net = aPcb->FindNet( ( (ZONE_CONTAINER*) item )->GetNet() );
+			if( net )
+			{
+				text << wxT( " [" ) << net->m_Netname << wxT( "]" );
+			}
+		}
+		else	// A netcode < 0 is an error flag (Netname not found or area not initialised)
+		{
+			text << wxT( " [" ) << ( (ZONE_CONTAINER*) item )->m_Netname << wxT( "]" );
+			text << wxT(" <") << _("Not Found") << wxT(">");
+		}
         text << _( " on " ) << ReturnPcbLayerName( item->GetLayer() ).Trim();
 		break;
 
