@@ -226,70 +226,109 @@ bool COTATION::ReadCotationDescr( FILE* File, int* LineNum )
     return FALSE;
 }
 
-
-#if 0
-/**************************************************/
-bool COTATION::WriteCotationDescr( FILE* File )
-/**************************************************/
+/****************************************/
+void COTATION::Move(const wxPoint& offset)
+/****************************************/
+/**
+ * Function Move
+ * @param offset : moving vector
+ */
 {
-    if( GetState( DELETED ) )
-        return FALSE;
-
-    fprintf( File, "$COTATION\n" );
-
-    fprintf( File, "Ge %d %d %lX\n", m_Shape,
-             m_Layer, m_TimeStamp );
-
-    fprintf( File, "Va %d\n", m_Value );
-
-    if( !m_Text->m_Text.IsEmpty() )
-        fprintf( File, "Te \"%s\"\n", CONV_TO_UTF8( m_Text->m_Text ) );
-    else
-        fprintf( File, "Te \"?\"\n" );
-
-    fprintf( File, "Po %d %d %d %d %d %d %d\n",
-             m_Text->m_Pos.x, m_Text->m_Pos.y,
-             m_Text->m_Size.x, m_Text->m_Size.y,
-             m_Text->m_Width, m_Text->m_Orient,
-             m_Text->m_Miroir );
-
-    fprintf( File, "Sb %d %d %d %d %d %d\n", S_SEGMENT,
-             Barre_ox, Barre_oy,
-             Barre_fx, Barre_fy, m_Width );
-
-    fprintf( File, "Sd %d %d %d %d %d %d\n", S_SEGMENT,
-             TraitD_ox, TraitD_oy,
-             TraitD_fx, TraitD_fy, m_Width );
-
-    fprintf( File, "Sg %d %d %d %d %d %d\n", S_SEGMENT,
-             TraitG_ox, TraitG_oy,
-             TraitG_fx, TraitG_fy, m_Width );
-
-    fprintf( File, "S1 %d %d %d %d %d %d\n", S_SEGMENT,
-             FlecheD1_ox, FlecheD1_oy,
-             FlecheD1_fx, FlecheD1_fy, m_Width );
-
-    fprintf( File, "S2 %d %d %d %d %d %d\n", S_SEGMENT,
-             FlecheD2_ox, FlecheD2_oy,
-             FlecheD2_fx, FlecheD2_fy, m_Width );
-
-
-    fprintf( File, "S3 %d %d %d %d %d %d\n", S_SEGMENT,
-             FlecheG1_ox, FlecheG1_oy,
-             FlecheG1_fx, FlecheG1_fy, m_Width );
-
-    fprintf( File, "S4 %d %d %d %d %d %d\n", S_SEGMENT,
-             FlecheG2_ox, FlecheG2_oy,
-             FlecheG2_fx, FlecheG2_fy, m_Width );
-
-    fprintf( File, "$EndCOTATION\n" );
-
-    return 1;
+	m_Pos += offset;
+	m_Text->m_Pos += offset;
+	Barre_ox    += offset.x; Barre_oy += offset.y;
+	Barre_fx    += offset.x; Barre_fy += offset.y;
+	TraitG_ox   += offset.x; TraitG_oy += offset.y;
+	TraitG_fx   += offset.x; TraitG_fy += offset.y;
+	TraitD_ox   += offset.x; TraitD_oy += offset.y;
+	TraitD_fx   += offset.x; TraitD_fy += offset.y;
+	FlecheG1_ox += offset.x; FlecheG1_oy += offset.y;
+	FlecheG1_fx += offset.x; FlecheG1_fy += offset.y;
+	FlecheG2_ox += offset.x; FlecheG2_oy += offset.y;
+	FlecheG2_fx += offset.x; FlecheG2_fy += offset.y;
+	FlecheD1_ox += offset.x; FlecheD1_oy += offset.y;
+	FlecheD1_fx += offset.x; FlecheD1_fy += offset.y;
+	FlecheD2_ox += offset.x; FlecheD2_oy += offset.y;
+	FlecheD2_fx += offset.x; FlecheD2_fy += offset.y;
 }
-#endif
 
 
+/******************************************************/
+void COTATION::Rotate(const wxPoint& centre, int angle)
+/******************************************************/
+/**
+ * Function Rotate
+ * @param offset : Rotation point
+ * @param angle : Rotation angle in 0.1 degrees
+ */
+{
+	RotatePoint( &m_Pos, centre, 900 );
+
+	RotatePoint( &m_Text->m_Pos, centre, 900 );
+	m_Text->m_Orient += 900;
+	if( m_Text->m_Orient >= 3600 )
+		m_Text->m_Orient -= 3600;
+	if( (m_Text->m_Orient > 900)
+	   && (m_Text->m_Orient <2700) )
+		m_Text->m_Orient -= 1800;
+
+	RotatePoint( &Barre_ox, &Barre_oy, centre.x, centre.y, 900 );
+	RotatePoint( &Barre_fx, &Barre_fy, centre.x, centre.y, 900 );
+	RotatePoint( &TraitG_ox, &TraitG_oy, centre.x, centre.y, 900 );
+	RotatePoint( &TraitG_fx, &TraitG_fy, centre.x, centre.y, 900 );
+	RotatePoint( &TraitD_ox, &TraitD_oy, centre.x, centre.y, 900 );
+	RotatePoint( &TraitD_fx, &TraitD_fy, centre.x, centre.y, 900 );
+	RotatePoint( &FlecheG1_ox, &FlecheG1_oy, centre.x, centre.y, 900 );
+	RotatePoint( &FlecheG1_fx, &FlecheG1_fy, centre.x, centre.y, 900 );
+	RotatePoint( &FlecheG2_ox, &FlecheG2_oy, centre.x, centre.y, 900 );
+	RotatePoint( &FlecheG2_fx, &FlecheG2_fy, centre.x, centre.y, 900 );
+	RotatePoint( &FlecheD1_ox, &FlecheD1_oy, centre.x, centre.y, 900 );
+	RotatePoint( &FlecheD1_fx, &FlecheD1_fy, centre.x, centre.y, 900 );
+	RotatePoint( &FlecheD2_ox, &FlecheD2_oy, centre.x, centre.y, 900 );
+	RotatePoint( &FlecheD2_fx, &FlecheD2_fy, centre.x, centre.y, 900 );
+}
+
+
+/**********************************************/
+void COTATION::Mirror(const wxPoint& axis_pos)
+/**********************************************/
+/**
+ * Function Mirror
+ * Mirror the Dimension , relative to a given horizontal axis
+ * the text is not mirrored. only its position (and angle) is mirrored
+ * the layer is not changed
+ * @param axis_pos : vertical axis position
+ */
+{
+#define INVERT( pos )       (pos) = axis_pos.y - ( (pos) - axis_pos.y )
+#define INVERT_ANGLE( phi ) (phi) = -(phi)
+	INVERT( m_Pos.y );
+	INVERT( m_Text->m_Pos.y );
+	INVERT_ANGLE( m_Text->m_Orient );
+	if( m_Text->m_Orient >= 3600 )
+		m_Text->m_Orient -= 3600;
+	if( (m_Text->m_Orient > 900) && (m_Text->m_Orient <2700) )
+		m_Text->m_Orient -= 1800;
+
+	INVERT( Barre_oy );
+	INVERT( Barre_fy );
+	INVERT( TraitG_oy );
+	INVERT( TraitG_fy );
+	INVERT( TraitD_oy );
+	INVERT( TraitD_fy );
+	INVERT( FlecheG1_oy );
+	INVERT( FlecheG1_fy );
+	INVERT( FlecheG2_oy );
+	INVERT( FlecheG2_fy );
+	INVERT( FlecheD1_oy );
+	INVERT( FlecheD1_fy );
+	INVERT( FlecheD2_oy );
+	INVERT( FlecheD2_fy );
+}
+
+/****************************************/
 bool COTATION::Save( FILE* aFile ) const
+/****************************************/
 {
     if( GetState( DELETED ) )
         return true;
@@ -571,3 +610,15 @@ bool COTATION::HitTest( const wxPoint& ref_pos )
     return false;
 }
 
+/**
+ * Function HitTest (overlayed)
+ * tests if the given EDA_Rect intersect this object.
+ * @param EDA_Rect : the given EDA_Rect
+ * @return bool - true if a hit, else false
+ */
+bool    COTATION::HitTest( EDA_Rect& refArea )
+{
+	if( refArea.Inside( m_Pos ) )
+		return true;
+	return false;
+}

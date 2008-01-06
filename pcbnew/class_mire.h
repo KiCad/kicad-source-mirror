@@ -50,6 +50,16 @@ public:
      * @return bool - true if a hit, else false
      */
     bool    HitTest( const wxPoint& refPos );
+
+    /**
+     * Function HitTest (overlayed)
+     * tests if the given EDA_Rect intersect this object.
+	 * For now, the anchor must be inside this rect.
+     * @param refArea : the given EDA_Rect
+     * @return bool - true if a hit, else false
+     */
+    bool    HitTest( EDA_Rect& refArea );
+
 };
 
 

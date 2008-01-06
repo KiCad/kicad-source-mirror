@@ -10,6 +10,7 @@
 #include "common.h"
 #include "PolyLine.h"
 #include "pcbnew.h"
+#include "trigo.h"
 
 /**********************/
 /* Class EDGE_ZONE */
@@ -51,7 +52,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* parent ) :
 	m_PadOption = THERMAL_PAD;
 	utility = 0;				// flags used in polygon calculations
 	utility2 = 0;				// flags used in polygon calculations
-	m_Poly = new CPolyLine( NULL );	// Outlines
+	m_Poly = new CPolyLine();	// Outlines
 
 }
 
@@ -403,6 +404,29 @@ int ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
     return -1;
 }
 
+/**
+ * Function HitTest (overlayed)
+ * tests if the given EDA_Rect contains the bounds of this object.
+ * @param refArea : the given EDA_Rect
+ * @return bool - true if a hit, else false
+ */
+bool    ZONE_CONTAINER::HitTest( EDA_Rect& refArea )
+{
+    bool is_out_of_box = false;
+
+	CRect rect = m_Poly->GetCornerBounds();
+
+    if( rect.left < refArea.GetX() )
+        is_out_of_box = true;
+    if( rect.top < refArea.GetY() )
+        is_out_of_box = true;
+    if( rect.right > refArea.GetRight() )
+        is_out_of_box = true;
+    if( rect.bottom > refArea.GetBottom() )
+        is_out_of_box = true;
+
+    return is_out_of_box ? false : true;
+}
 
 /************************************************************/
 void ZONE_CONTAINER::Display_Infos( WinEDA_DrawFrame* frame )
@@ -448,3 +472,79 @@ void ZONE_CONTAINER::Display_Infos( WinEDA_DrawFrame* frame )
 	msg.Printf( wxT( "%d" ), m_Poly->m_HatchLines.size() );
     Affiche_1_Parametre( frame, text_pos, _( "Hatch lines" ), msg, BLUE );
 }
+
+
+/* Geometric transformations: */
+/**
+ * Function Move
+ * Move the outlines
+ * @param offset = moving vector
+ */
+void ZONE_CONTAINER::Move(const wxPoint& offset )
+{
+	for ( unsigned ii = 0; ii < m_Poly->corner.size(); ii++ )
+	{
+		m_Poly->corner[ii].x += offset.x;
+		m_Poly->corner[ii].y += offset.y;
+	}
+	m_Poly->Hatch();
+}
+
+/**
+ * Function Move
+ * Move the outlines
+ * @param centre = rot centre
+ * @param angle = in 0.1 degree
+ */
+void ZONE_CONTAINER::Rotate( const wxPoint& centre, int angle)
+{
+	for ( unsigned ii = 0; ii < m_Poly->corner.size(); ii++ )
+	{
+		wxPoint pos;
+		pos.x = m_Poly->corner[ii].x;
+ 		pos.y = m_Poly->corner[ii].y;
+        RotatePoint(&pos, centre, angle );
+		m_Poly->corner[ii].x = pos.x;
+ 		m_Poly->corner[ii].y = pos.y;
+	}
+	
+	m_Poly->Hatch();
+}
+
+
+/**
+ * Function Mirror
+ * flip the outlines , relative to a given horizontal axis
+ * @param mirror_ref = vertical axis position
+ */
+void ZONE_CONTAINER::Mirror( const wxPoint& mirror_ref)
+{
+	for ( unsigned ii = 0; ii < m_Poly->corner.size(); ii++ )
+	{
+		m_Poly->corner[ii].y -= mirror_ref.y;
+		m_Poly->corner[ii].y = - m_Poly->corner[ii].y;
+		m_Poly->corner[ii].y += mirror_ref.y;
+	}
+	m_Poly->Hatch();
+}
+
+
+/** Function copy
+ * copy data from the source.
+ * flags and some poinetrs are NOT copied
+ */
+void ZONE_CONTAINER::Copy( ZONE_CONTAINER * src )
+{
+	m_Parent = src->m_Parent;
+    m_Layer         = src->m_Layer;
+	SetNet(src->GetNet());
+    m_TimeStamp     = GetTimeStamp();
+	m_Poly->Copy(src->m_Poly);			// copy outlines
+	m_CornerSelection = -1;      // For corner moving, corner index to drag, or -1 if no selection
+	m_ZoneClearance = src->m_ZoneClearance;		// clearance value
+	m_GridFillValue = src->m_GridFillValue;		// Grid used for filling
+	m_PadOption = src->m_PadOption;
+	m_Poly->SetHatch(src->m_Poly->GetHatchStyle());
+}
+
+

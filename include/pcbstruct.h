@@ -302,6 +302,15 @@ public:
     bool    HitTest( const wxPoint& ref_pos );
     
     /**
+     * Function HitTest (overlayed)
+     * tests if the given EDA_Rect intersect this object.
+	 * For now, an ending point must be inside this rect.
+     * @param refPos the given EDA_Rect to test
+     * @return bool - true if a hit, else false
+     */
+    bool    HitTest( EDA_Rect& refArea );
+
+    /**
      * Function GetClass
      * returns the class name.
      * @return wxString

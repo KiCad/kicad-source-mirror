@@ -294,6 +294,20 @@ bool EDA_TextStruct::HitTest( const wxPoint& posref )
     return false;
 }
 
+/**
+ * Function HitTest (overlayed)
+ * tests if the given EDA_Rect intersect this object.
+ * @param refArea the given EDA_Rect to test
+ * @return bool - true if a hit, else false
+ */
+/*********************************************************/
+bool    EDA_TextStruct::HitTest( EDA_Rect& refArea )
+/*********************************************************/
+{
+	if( refArea.Inside( m_Pos ) )
+		return true;
+	return false;
+}
 
 /*******************************/
 int EDA_TextStruct::Pitch()

@@ -44,6 +44,12 @@ public:
 	wxPoint & GetPosition( ) { static wxPoint pos ;return pos; }
 	void UnLink(void) {};
 
+	/** Function copy
+	 * copy data from the source.
+	 * flags and some poinetrs are NOT copied
+	 */
+	void Copy( ZONE_CONTAINER * src );
+
 	void Display_Infos( WinEDA_DrawFrame* frame );
 
 	/** Function Draw
@@ -81,6 +87,14 @@ public:
 	 */
 	int HitTestForEdge( const wxPoint& refPos );
 	
+    /**
+     * Function HitTest (overlayed)
+     * tests if the given EDA_Rect contains the bounds of this object.
+     * @param refArea : the given EDA_Rect
+     * @return bool - true if a hit, else false
+     */
+    bool    HitTest( EDA_Rect& refArea );
+
 	/** Function Fill_Zone()
 	 *  Calculate the zone filling
 	 *  The zone outline is a frontier, and can be complex (with holes)
@@ -92,6 +106,32 @@ public:
 	 * @return error level (0 = no error)
 	 */
 	int Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose = TRUE);
+	
+	/* Geometric transformations: */
+	/**
+	 * Function Move
+	 * Move the outlines
+	 * @param offset = moving vector
+	 */
+	void Move(const wxPoint& offset );
+
+	/**
+	 * Function Move
+	 * Move the outlines
+	 * @param centre = rot centre
+	 * @param angle = in 0.1 degree
+	 */
+	void Rotate( const wxPoint& centre, int angle);
+	
+	
+	/**
+	 * Function Mirror
+	 * Mirror the outlines , relative to a given horizontal axis
+	 * the layer is not changed
+	 * @param mirror_ref = vertical axis position
+	 */
+	void Mirror( const wxPoint& mirror_ref);
+	
 };
 
 /*******************/

@@ -1,9 +1,11 @@
-// PolyLine.cpp ... implementation of CPolyLine class
-
-// from FreePCB.
+// PolyLine.cpp ... implementation of CPolyLine class from FreePCB.
+//
 // Adaptation for kicad
 //
 using namespace std;
+
+#define SetSize reserve		// used in conversion from freePCB to kicad.: The code using it must be rewitten
+
 
 #include <math.h>
 #include <vector>
@@ -12,30 +14,13 @@ using namespace std;
 
 #define to_int(x) (int)round((x))
 
-/* Stuff to compile PolyLine.cpp, used in std::vector as CArray. does not work. must be redesigned, only for test */
-#define SetSize reserve
-
 
 #define pi  3.14159265359
 #define DENOM 10	// to use mils for php clipping
 //#define DENOM 1			// to use internal units for php clipping
 
-//   dl is a pointer to CDisplayList for drawing graphic elements
-//   if dl = NULL, doesn't draw anything but can still hold data
-//
-CPolyLine::CPolyLine( CDisplayList * dl )
-{
-	m_dlist = dl;
-	m_HatchStyle = 0;
-	m_sel_box = 0;
-	m_gpc_poly = new gpc_polygon;
-	m_gpc_poly->num_contours = 0;
-	m_php_poly = new polygon;
-}
-
 CPolyLine::CPolyLine()
 { 
-	m_dlist = NULL;
 	m_HatchStyle = 0;
 	m_sel_box = 0;
 	utility = 0;
@@ -496,8 +481,8 @@ int CPolyLine::RestoreArcs( std::vector<CArc> * arc_array, std::vector<CPolyLine
 
 	// find arcs and replace them
 	bool bFound;
-	int arc_start;
-	int arc_end;
+	int arc_start = 0;
+	int arc_end = 0;
 	for( unsigned iarc=0; iarc<arc_array->size(); iarc++ )
 	{
 		int arc_xi = (*arc_array)[iarc].xi;
@@ -804,22 +789,6 @@ void CPolyLine::InsertCorner( int ic, int x, int y )
 //
 void CPolyLine::Undraw()
 {
-	if( m_dlist && bDrawn )
-	{
-		// remove display elements, if present
-		for( unsigned i=0; i<dl_side.size(); i++ )
-			m_dlist->Remove( dl_side[i] );
-		for( unsigned i=0; i<dl_side_sel.size(); i++ )
-			m_dlist->Remove( dl_side_sel[i] );
-		for( unsigned i=0; i<dl_corner_sel.size(); i++ )
-			m_dlist->Remove( dl_corner_sel[i] );
-
-		// remove pointers
-		dl_side.clear();
-		dl_side_sel.clear();
-		dl_corner_sel.clear();
-	}
-	
 	m_HatchLines.clear();
 	bDrawn = FALSE;
 }
@@ -828,271 +797,15 @@ void CPolyLine::Undraw()
 // if side style is ARC_CW or ARC_CCW but endpoints are not angled,
 // convert to STRAIGHT
 //
-void CPolyLine::Draw(  CDisplayList * dl )
+void CPolyLine::Draw( )
 {
 
 	// first, undraw if necessary
 	if( bDrawn )
 		Undraw(); 
 
-	// use new display list if provided
-	if( dl )
-		m_dlist = dl;
-
-#if 0
-	int i_start_contour = 0;
-	if( m_dlist )
-	{
-		// set up std::vectors
-		dl_side.SetSize( corner.size() );
-		if( m_sel_box )
-		{
-			dl_side_sel.SetSize( corner.size() );
-			dl_corner_sel.SetSize( corner.size() );
-		}
-		else
-		{
-			dl_side_sel.clear();
-			dl_corner_sel.clear();
-		}
-		// now draw elements
-		for( int ic=0; ic<corner.size(); ic++ )
-		{
-			m_id.ii = ic;
-			int xi = corner[ic].x;
-			int yi = corner[ic].y;
-			int xf, yf;
-			if( corner[ic].end_contour == FALSE && ic < corner.size()-1 )
-			{
-				xf = corner[ic+1].x;
-				yf = corner[ic+1].y;
-			}
-			else
-			{
-				xf = corner[i_start_contour].x;
-				yf = corner[i_start_contour].y;
-				i_start_contour = ic+1;
-			}
-			// draw
-			if( m_sel_box )
-			{
-				m_id.sst = ID_SEL_CORNER;
-				dl_corner_sel[ic] = m_dlist->AddSelector( m_id, m_ptr, m_layer, DL_HOLLOW_RECT, 
-					1, 0, 0, xi-m_sel_box, yi-m_sel_box, 
-					xi+m_sel_box, yi+m_sel_box, 0, 0 );
-			}
-			if( ic<(corner.size()-1) || corner[ic].end_contour )
-			{
-				// draw side
-				if( xi == xf || yi == yf )
-				{
-					// if endpoints not angled, make side STRAIGHT
-					side_style[ic] = STRAIGHT;
-				}
-				int g_type = DL_LINE;
-				if( side_style[ic] == STRAIGHT )
-					g_type = DL_LINE;
-				else if( side_style[ic] == ARC_CW )
-					g_type = DL_ARC_CW;
-				else if( side_style[ic] == ARC_CCW )
-					g_type = DL_ARC_CCW;
-				m_id.sst = ID_SIDE;
-				dl_side[ic] = m_dlist->Add( m_id, m_ptr, m_layer, g_type, 
-					1, m_w, 0, xi, yi, xf, yf, 0, 0 );
-				if( m_sel_box )
-				{
-					m_id.sst = ID_SEL_SIDE;
-					dl_side_sel[ic] = m_dlist->AddSelector( m_id, m_ptr, m_layer, g_type, 
-						1, m_w, 0, xi, yi, xf, yf, 0, 0 );
-				}
-			}
-		}
-//		if( m_HatchStyle )
-//			Hatch();
-	}
-#endif
 	Hatch();
 	bDrawn = TRUE;
-}
-
-
-// start dragging new corner to be inserted into side, make side and hatching invisible
-//
-void CPolyLine::StartDraggingToInsertCorner( CDC * pDC, int ic, int x, int y )
-{
-	if( !m_dlist )
-		ASSERT(0);
-
-	int icont = GetContour( ic );
-	int istart = GetContourStart( icont );
-	int iend = GetContourEnd( icont );
-	int post_c;
-
-	if( ic == iend )
-		post_c = istart;
-	else
-		post_c = ic + 1;
-	int xi = corner[ic].x;
-	int yi = corner[ic].y;
-	int xf = corner[post_c].x;
-	int yf = corner[post_c].y;
-	m_dlist->StartDraggingLineVertex( pDC, x, y, xi, yi, xf, yf, 
-		LAY_SELECTION, LAY_SELECTION, 1, 1, DSS_STRAIGHT, DSS_STRAIGHT,
-		0, 0, 0, 0, 1 );
-	m_dlist->CancelHighLight();
-	m_dlist->Set_visible( dl_side[ic], 0 );
-/*	for( int ih=0; ih<m_nhatch; ih++ )
-		m_dlist->Set_visible( dl_hatch[ih], 0 );
-*/
-}
-
-// cancel dragging inserted corner, make side and hatching visible again
-//
-void CPolyLine::CancelDraggingToInsertCorner( int ic )
-{
-	if( !m_dlist )
-		ASSERT(0);
-
-	int post_c;
-	if( ic == (int)(corner.size()-1) )
-		post_c = 0;
-	else
-		post_c = ic + 1;
-	m_dlist->StopDragging();
-/*	m_dlist->Set_visible( dl_side[ic], 1 );
-	for( int ih=0; ih<m_nhatch; ih++ )
-		m_dlist->Set_visible( dl_hatch[ih], 1 );
-*/
-}
-
-// start dragging corner to new position, make adjacent sides and hatching invisible
-//
-void CPolyLine::StartDraggingToMoveCorner( CDC * pDC, int ic, int x, int y )
-{
-	if( !m_dlist )
-		ASSERT(0);
-
-	// see if corner is the first or last corner of an open contour
-	int icont = GetContour( ic );
-	int istart = GetContourStart( icont );
-	int iend = GetContourEnd( icont );
-	if( !GetClosed()
-		&& icont == GetNumContours() - 1
-		&& (ic == istart || ic == iend) )
-	{
-		// yes
-		int style, xi, yi, iside;
-		if( ic == istart )
-		{
-			// first corner
-			iside = ic;
-			xi = GetX( ic+1 );
-			yi = GetY( ic+1 );
-			style = GetSideStyle( iside );
-			// reverse arc since we are drawing from corner 1 to 0
-			if( style == CPolyLine::ARC_CW )
-				style = CPolyLine::ARC_CCW;
-			else if( style == CPolyLine::ARC_CCW )
-				style = CPolyLine::ARC_CW;
-		}
-		else
-		{
-			// last corner
-			iside = ic - 1;
-			xi = GetX( ic-1 );
-			yi = GetY( ic-1);
-			style = GetSideStyle( iside );
-		}		
-		m_dlist->StartDraggingArc( pDC, style, GetX(ic), GetY(ic), xi, yi, LAY_SELECTION, 1, 1 );
-		m_dlist->CancelHighLight();
-		m_dlist->Set_visible( dl_side[iside], 0 );
-/*		for( int ih=0; ih<m_nhatch; ih++ )
-			m_dlist->Set_visible( dl_hatch[ih], 0 );
-*/
-	}
-	else
-	{
-		// no
-		// get indexes for preceding and following corners
-		int pre_c, post_c;
-		int poly_side_style1, poly_side_style2;
-		int style1 = DSS_STRAIGHT, style2 = DSS_STRAIGHT;
-		if( ic == istart )
-		{
-			pre_c = iend;
-			post_c = istart+1;
-			poly_side_style1 = side_style[iend];
-			poly_side_style2 = side_style[istart];
-		}
-		else if( ic == iend )
-		{
-			// last side
-			pre_c = ic-1;
-			post_c = istart;
-			poly_side_style1 = side_style[ic-1];
-			poly_side_style2 = side_style[ic];
-		}
-		else
-		{
-			pre_c = ic-1;
-			post_c = ic+1;
-			poly_side_style1 = side_style[ic-1];
-			poly_side_style2 = side_style[ic];
-		}
-		if( poly_side_style1 == STRAIGHT )
-			style1 = DSS_STRAIGHT;
-		else if( poly_side_style1 == ARC_CW )
-			style1 = DSS_ARC_CW;
-		else if( poly_side_style1 == ARC_CCW )
-			style1 = DSS_ARC_CCW;
-		if( poly_side_style2 == STRAIGHT )
-			style2 = DSS_STRAIGHT;
-		else if( poly_side_style2 == ARC_CW )
-			style2 = DSS_ARC_CW;
-		else if( poly_side_style2 == ARC_CCW )
-			style2 = DSS_ARC_CCW;
-		int xi = corner[pre_c].x;
-		int yi = corner[pre_c].y;
-		int xf = corner[post_c].x;
-		int yf = corner[post_c].y;
-		m_dlist->StartDraggingLineVertex( pDC, x, y, xi, yi, xf, yf, 
-			LAY_SELECTION, LAY_SELECTION, 1, 1, style1, style2, 
-			0, 0, 0, 0, 1 );
-		m_dlist->CancelHighLight();
-		m_dlist->Set_visible( dl_side[pre_c], 0 );
-		m_dlist->Set_visible( dl_side[ic], 0 );
-/*		for( int ih=0; ih<m_nhatch; ih++ )
-			m_dlist->Set_visible( dl_hatch[ih], 0 );
-*/	}
-}
-
-// cancel dragging corner to new position, make sides and hatching visible again
-//
-
-// highlight side by drawing line over it
-//
-void CPolyLine::HighlightSide( int is )
-{
-	if( !m_dlist )
-		ASSERT(0);
-	if( GetClosed() && is >= (int)corner.size() )
-		return;
-	if( !GetClosed() && is >= (int)(corner.size()-1) )
-		return;
-
-	int style = DL_LINE;
-	if( side_style[is] == CPolyLine::STRAIGHT )
-		style = DL_LINE;
-	else if( side_style[is] == CPolyLine::ARC_CW )
-		style = DL_ARC_CW;
-	else if( side_style[is] == CPolyLine::ARC_CCW )
-		style = DL_ARC_CCW;
-	m_dlist->HighLight( style, 
-		m_dlist->Get_x( dl_side_sel[is] ),
-		m_dlist->Get_y( dl_side_sel[is] ),
-		m_dlist->Get_xf( dl_side_sel[is] ),
-		m_dlist->Get_yf( dl_side_sel[is] ),
-		m_dlist->Get_w( dl_side_sel[is]) );
 }
 
 
@@ -1672,16 +1385,13 @@ int CPolyLine::TestIntersection( CPolyLine * poly )
 void CPolyLine::Copy( CPolyLine * src )
 {
 	Undraw();
-	m_dlist = src->m_dlist;
-	m_sel_box = src->m_sel_box;
+
 	// copy corners
-	for( unsigned i=0; i< src->corner.size(); i++ )
-		corner.push_back(src->corner[i]);
+	for( unsigned ii=0; ii < src->corner.size(); ii++ )
+		corner.push_back(src->corner[ii]);
 	// copy side styles
-	int nsides = src->GetNumSides();
-	side_style.SetSize(nsides);
-	for( int i=0; i<nsides; i++ )
-		side_style[i] = src->side_style[i];
+	for( unsigned ii=0; ii < src->side_style.size(); ii++ )
+		side_style.push_back(src->side_style[ii]);
 	// don't copy the Gpc_poly, just clear the old one
 	FreeGpcPoly();
 }

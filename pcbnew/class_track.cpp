@@ -875,6 +875,22 @@ bool TRACK::HitTest( const wxPoint& ref_pos )
     return false;
 }
 
+/**
+ * Function HitTest (overlayed)
+ * tests if the given EDA_Rect intersect this object.
+ * For now, an ending point must be inside this rect.
+ * @param refArea : the given EDA_Rect
+ * @return bool - true if a hit, else false
+ */
+ bool    TRACK::HitTest( EDA_Rect& refArea )
+{
+	if( refArea.Inside( m_Start ) )
+		return true;
+	if( refArea.Inside( m_End ) )
+		return true;
+	return false;
+}
+
 
 #if defined (DEBUG)
 

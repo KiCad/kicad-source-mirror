@@ -85,27 +85,6 @@ void DRAWSEGMENT::Copy( DRAWSEGMENT* source )
     m_TimeStamp = source->m_TimeStamp;
 }
 
-#if 0 // replaced by Save()
-/********************************************************/
-bool DRAWSEGMENT::WriteDrawSegmentDescr( FILE* File )
-/********************************************************/
-{
-    if( GetState( DELETED ) )
-        return FALSE;
-
-    fprintf( File, "$DRAWSEGMENT\n" );
-    fprintf( File, "Po %d %d %d %d %d %d\n",
-             m_Shape,
-             m_Start.x, m_Start.y,
-             m_End.x, m_End.y, m_Width );
-    fprintf( File, "De %d %d %d %lX %X\n",
-            m_Layer, m_Type, m_Angle,
-            m_TimeStamp, ReturnStatus() );
-    fprintf( File, "$EndDRAWSEGMENT\n" );
-    return TRUE;
-}
-#endif
-
 
 bool DRAWSEGMENT::Save( FILE* aFile ) const
 {
@@ -269,6 +248,22 @@ bool DRAWSEGMENT::HitTest( const wxPoint& ref_pos )
     return false;
 }
 
+
+/**
+ * Function HitTest (overlayed)
+ * tests if the given EDA_Rect intersect this object.
+ * For now, an ending point must be inside this rect.
+ * @param refArea : the given EDA_Rect
+ * @return bool - true if a hit, else false
+ */
+ bool    DRAWSEGMENT::HitTest( EDA_Rect& refArea )
+{
+	if( refArea.Inside( m_Start ) )
+		return true;
+	if( refArea.Inside( m_End ) )
+		return true;
+	return false;
+}
 
 
 /**************************************************/

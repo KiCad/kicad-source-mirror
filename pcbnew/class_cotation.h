@@ -54,8 +54,29 @@ public:
     void    Copy( COTATION* source );
 
     void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int mode_color );
+	
+	/**
+	 * Function Move
+	 * @param offset : moving vector
+	 */
+	void    Move(const wxPoint& offset);
 
-    
+	/**
+	 * Function Rotate
+	 * @param offset : Rotation point
+	 * @param angle : Rotation angle in 0.1 degrees
+	 */
+	void    Rotate(const wxPoint& centre, int angle);
+
+	/**
+	 * Function Mirror
+	 * Mirror the Dimension , relative to a given horizontal axis
+	 * the text is not mirrored. only its position (and angle) is mirrored
+	 * the layer is not changed
+	 * @param axis_pos : vertical axis position
+	 */
+	void    Mirror(const wxPoint& axis_pos);
+
     /**
      * Function Display_Infos
      * has knowledge about the frame and how and where to put status information
@@ -73,6 +94,15 @@ public:
      */
     bool    HitTest( const wxPoint& ref_pos );
     
+    /**
+     * Function HitTest (overlayed)
+     * tests if the given EDA_Rect intersect this object.
+	 * For now, the anchor must be inside this rect.
+     * @param refArea : the given EDA_Rect
+     * @return bool - true if a hit, else false
+     */
+    bool    HitTest( EDA_Rect& refArea );
+
     
     /**
      * Function GetClass

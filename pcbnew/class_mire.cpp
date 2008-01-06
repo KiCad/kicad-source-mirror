@@ -219,3 +219,16 @@ bool MIREPCB::HitTest( const wxPoint& refPos )
     return abs(dX)<=rayon && abs(dY)<=rayon;
 }
 
+/**
+ * Function HitTest (overlayed)
+ * tests if the given EDA_Rect intersect this object.
+ * @param EDA_Rect : the given EDA_Rect
+ * @return bool - true if a hit, else false
+ */
+bool    MIREPCB::HitTest( EDA_Rect& refArea )
+{
+	if( refArea.Inside( m_Pos ) )
+		return true;
+	return false;
+}
+

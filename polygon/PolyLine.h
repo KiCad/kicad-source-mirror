@@ -10,8 +10,6 @@
 //
 // When used for copper areas, the first contour is the outer edge 
 // of the area, subsequent ones are "holes" in the copper.
-//
-// If a CDisplayList pointer is provided, the polyline can draw itself 
 
 #ifndef POLYLINE_H
 #define POLYLINE_H
@@ -68,7 +66,7 @@ public:
 	enum { DEF_SIZE = 50, DEF_ADD = 50 };	// number of array elements to add at a time
 
 	// constructors/destructor
-	CPolyLine( CDisplayList * dl );
+//	CPolyLine( CDisplayList * dl = NULL );
 	CPolyLine();
 	~CPolyLine();
 
@@ -84,16 +82,16 @@ public:
 	void RemoveAllContours( void );
 
 	// drawing functions
-	void HighlightSide( int is );
+/*	void HighlightSide( int is );
 	void HighlightCorner( int ic );
 	void StartDraggingToInsertCorner( CDC * pDC, int ic, int x, int y);
 	void StartDraggingToMoveCorner( CDC * pDC, int ic, int x, int y);
 	void CancelDraggingToInsertCorner( int ic );
 	void CancelDraggingToMoveCorner( int ic );
-	void Undraw();
-	void Draw( CDisplayList * dl = NULL );
+*/	void Undraw();
+	void Draw( );
 	void Hatch();
-	void MakeVisible( bool visible = TRUE );
+//	void MakeVisible( bool visible = TRUE );
 	void MoveOrigin( int x_off, int y_off );
 
 	// misc. functions
@@ -152,7 +150,7 @@ public:
 	void ClipPhpPolygon( int php_op, CPolyLine * poly );
 
 private:
-	CDisplayList * m_dlist;		// display list 
+//	CDisplayList * m_dlist;		// display list 
 	int m_layer;	// layer to draw on
 	int m_Width;		// line width
 	int m_sel_box;	// corner selection box width/2
@@ -161,9 +159,9 @@ public:
 	std::vector <CPolyPt> corner;	// array of points for corners
 	std::vector <int> side_style;	// array of styles for sides
 private:
-	std::vector <dl_element*> dl_side;	// graphic elements
-	std::vector <dl_element*> dl_side_sel;
-	std::vector <dl_element*> dl_corner_sel;
+//	std::vector <dl_element*> dl_side;	// graphic elements
+//	std::vector <dl_element*> dl_side_sel;
+//	std::vector <dl_element*> dl_corner_sel;
 public:
 	int m_HatchStyle;	// hatch style, see enum above
 	std::vector <CSegment>  m_HatchLines;	// hatch lines

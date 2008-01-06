@@ -68,6 +68,17 @@ public:
     }
     
     
+	/**
+	 * Function HitTest (overlayed)
+	 * tests if the given EDA_Rect intersect this object.
+	 * @param refArea the given EDA_Rect to test
+	 * @return bool - true if a hit, else false
+	 */
+    bool    HitTest( EDA_Rect& refArea )
+    {
+        return EDA_TextStruct::HitTest( refArea );
+    }
+    
     /**
      * Function GetClass
      * returns the class name.

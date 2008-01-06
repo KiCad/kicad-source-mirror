@@ -1284,6 +1284,31 @@ bool MODULE::HitTest( const wxPoint& refPos )
 }
 
 
+/**
+ * Function HitTest (overlayed)
+ * tests if the given EDA_Rect intersect the bounds of this object.
+ * @param refArea : the given EDA_Rect
+ * @return bool - true if a hit, else false
+ */
+bool    MODULE::HitTest( EDA_Rect& refArea )
+{
+    bool is_out_of_box = false;
+
+    SetRectangleExinscrit();
+
+    if( m_RealBoundaryBox.m_Pos.x < refArea.GetX() )
+        is_out_of_box = true;
+    if( m_RealBoundaryBox.m_Pos.y < refArea.GetY() )
+        is_out_of_box = true;
+    if( m_RealBoundaryBox.GetRight() > refArea.GetRight() )
+        is_out_of_box = true;
+    if( m_RealBoundaryBox.GetBottom() > refArea.GetBottom() )
+        is_out_of_box = true;
+
+    return is_out_of_box ? false : true;
+}
+
+
 // see class_module.h     
 SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData, 
     const KICAD_T scanTypes[] )

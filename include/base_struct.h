@@ -89,6 +89,7 @@ enum SEARCH_RESULT {
 class EDA_BaseStruct;
 class WinEDA_DrawFrame;
 class BOARD;
+class EDA_Rect;
 
 /**
  * Class INSPECTOR
@@ -250,6 +251,18 @@ public:
      * @return bool - true if a hit, else false
      */
     virtual bool    HitTest( const wxPoint& refPos )
+    {
+        return false;   // derived classes should override this function
+    }
+
+	/**
+	 * Function HitTest (overlayed)
+	 * tests if the given EDA_Rect intersect this object.
+	 * For now, an ending point must be inside this rect.
+	 * @param refArea : the given EDA_Rect
+	 * @return bool - true if a hit, else false
+	 */
+    virtual bool    HitTest( EDA_Rect& refArea )
     {
         return false;   // derived classes should override this function
     }
@@ -419,6 +432,15 @@ public:
     bool    HitTest( const wxPoint& ref_pos );
 
     /**
+     * Function HitTest (overlayed)
+     * tests if the given EDA_Rect intersect this object.
+	 * For now, the anchor must be inside this rect.
+     * @param refArea : the given EDA_Rect
+     * @return bool - true if a hit, else false
+     */
+    bool    HitTest( EDA_Rect& refArea );
+
+	/**
      * Function Len_Size
      * Return the text lenght in internal units
      */

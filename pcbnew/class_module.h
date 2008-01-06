@@ -170,6 +170,14 @@ public:
 
     
     /**
+     * Function HitTest (overlayed)
+     * tests if the given EDA_Rect intersect the bounds of this object.
+     * @param refArea : the given EDA_Rect
+     * @return bool - true if a hit, else false
+     */
+    bool    HitTest( EDA_Rect& refArea );
+
+	/**
      * Function GetReference
      * @return wxString - the reference designator text.
      */
