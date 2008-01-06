@@ -175,6 +175,6 @@ ADD_EXECUTABLE(specctra_test EXCLUDE_FROM_ALL specctra.cpp dsn.cpp )
 TARGET_LINK_LIBRARIES(specctra_test common ${wxWidgets_LIBRARIES})
 
 
-TARGET_LINK_LIBRARIES(pcbnew common 3d-viewer polygon ${wxWidgets_LIBRARIES})
+TARGET_LINK_LIBRARIES(pcbnew common 3d-viewer polygon ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES})
 
 INSTALL(TARGETS pcbnew RUNTIME DESTINATION ${KICAD_BIN} COMPONENT binary)

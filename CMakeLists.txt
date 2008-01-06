@@ -1,33 +1,39 @@
 # Our project is called 'kicad'. This is what it will be called in
-# Visual Studio and in our makefiles.
+# our makefiles.
 PROJECT(kicad)
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.4.6 FATAL_ERROR)
 
-# Uncomment this line if you want verbose build messages.
-#SET(CMAKE_VERBOSE_MAKEFILE ON)
+# Path to local CMake modules
+SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
+
+# List of variables that may be set from command line:
+# CMAKE_VERBOSE_MAKEFILE ON/OFF (OPTIONAL)
+#   Turns ON/OFF verbose build messages.
+#
+# CMAKE_BUILD_TYPE Release/Debug (REQUIRED)
+#   
+#
+# wxWidgets_USE_DEBUG ON/OFF (REQUIRED)
+#   Should be set to ON only when CMAKE_BUILD_TYPE=Debug.
+#
+# CMAKE_INSTALL_PREFIX (OPTIONAL)
+#   
 
 # Comment this out if you don't want to build minizip.
-SET(BUILD_MINIZIP ON CACHE BOOL "Build minizip?")
+SET(KICAD_MINIZIP ON CACHE BOOL "Build minizip?")
 
-# Set default flags for Debug build.
-SET(CMAKE_C_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
-SET(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
+# Comment this out if you don't want to build with Python support.
+# SET(KICAD_PYTHON ON CACHE BOOL "Build with Python support?")
 
 # Set default flags for Release build.
 SET(CMAKE_C_FLAGS_RELEASE "-Wall -O2 -DNDEBUG")
 SET(CMAKE_CXX_FLAGS_RELEASE "-Wall -O2 -DNDEBUG")
 SET(CMAKE_EXE_LINKER_FLAGS_RELEASE "-s")
 
-# Here you can define what libraries of wxWidgets you need for your
-# application. You can figure out what libraries you need here;
-# http://www.wxwidgets.org/manuals/2.8/wx_librarieslist.html
-SET(wxWidgets_USE_LIBS base core adv gl html net)
-
-# OpenGL support
-SET(WXWINDOWS_USE_GL 1)
-# We need the Find package for wxWidgets to work.
-FIND_PACKAGE(wxWidgets REQUIRED)
+# Set default flags for Debug build.
+SET(CMAKE_C_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
+SET(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
 
 # Locations for install targets.
 IF(UNIX)
@@ -49,7 +55,7 @@ ENDIF(UNIX)
 
 IF(WIN32)
 	# Like all variables, CMAKE_INSTALL_PREFIX can be over-ridden on the command line.
-	SET(CMAKE_INSTALL_PREFIX c:/kicad)
+	SET(CMAKE_INSTALL_PREFIX c:/kicad CACHE PATH "")
 	# When used later, "winexe" and others with no leading / is relative to CMAKE_INSTALL_PREFIX.
 	SET(KICAD_BIN winexe CACHE PATH "Location of KiCad binaries.")
 	SET(KICAD_PLUGINS ${KICAD_BIN}/plugins)
@@ -60,37 +66,45 @@ IF(WIN32)
 	SET(KICAD_TEMPLATE template)
 ENDIF(WIN32)
 
-# Did we find wxWidgets ? This condition will fail
-# for as long as the internal vars do not point to
-# the proper wxWidgets configuration.
+FIND_PACKAGE(OpenGL)
+IF(OPENGL_FOUND)
+	MESSAGE(STATUS "Check for installed OpenGL -- found")
+ELSE(OPENGL_FOUND)
+	MESSAGE(STATUS "Check for installed OpenGL -- not found")
+	MESSAGE(FATAL_ERROR "OpenGL was not found - it is required to build KiCad")
+ENDIF(OPENGL_FOUND)
+
+# Here you can define what libraries of wxWidgets you need for your
+# application. You can figure out what libraries you need here;
+# http://www.wxwidgets.org/manuals/2.8/wx_librarieslist.html
+SET(wxWidgets_USE_LIBS base core adv gl html net)
+FIND_PACKAGE(wxWidgetsCVS)
 IF(wxWidgets_FOUND)
 	MESSAGE(STATUS "Check for installed wxWidgets -- found")
-
-	# Include wxWidgets macros.
-	INCLUDE(${wxWidgets_USE_FILE})
-
-	# We define the include paths here.
-	# Include dirs for wxWidgets was defined before.
-	INCLUDE_DIRECTORIES(
-	${CMAKE_CURRENT_SOURCE_DIR}/include
-	${CMAKE_CURRENT_SOURCE_DIR}/share)
-
-	# CMake will look in these dirs for nested 'CMakeLists.txt' files.
-	ADD_SUBDIRECTORY(common)
-	ADD_SUBDIRECTORY(3d-viewer)
-	ADD_SUBDIRECTORY(cvpcb)
-	ADD_SUBDIRECTORY(eeschema)
-	ADD_SUBDIRECTORY(gerbview)
-	ADD_SUBDIRECTORY(kicad)
-	ADD_SUBDIRECTORY(pcbnew)
-	ADD_SUBDIRECTORY(polygon)
 ELSE(wxWidgets_FOUND)
-	# For convenience. When we cannot continue, inform the user.
 	MESSAGE(STATUS "Check for installed wxWidgets -- not found")
 	MESSAGE(FATAL_ERROR "wxWidgets was not found - it is required to build KiCad")
 ENDIF(wxWidgets_FOUND)
 
-# CMake will look at this dirs for nested 'CMakeLists.txt' files.
+# Include wxWidgets macros.
+INCLUDE(${wxWidgets_USE_FILE})
+
+# Include paths.
+INCLUDE_DIRECTORIES(
+	${CMAKE_CURRENT_SOURCE_DIR}/include
+	${CMAKE_CURRENT_SOURCE_DIR}/share)
+
+# CMake will look in these dirs for nested 'CMakeLists.txt' files.
+# Binaries.
+ADD_SUBDIRECTORY(common)
+ADD_SUBDIRECTORY(3d-viewer)
+ADD_SUBDIRECTORY(cvpcb)
+ADD_SUBDIRECTORY(eeschema)
+ADD_SUBDIRECTORY(gerbview)
+ADD_SUBDIRECTORY(kicad)
+ADD_SUBDIRECTORY(pcbnew)
+ADD_SUBDIRECTORY(polygon)
+# Resources.
 ADD_SUBDIRECTORY(internat)
 ADD_SUBDIRECTORY(help)
 ADD_SUBDIRECTORY(library)

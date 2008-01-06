@@ -1,9 +1,6 @@
 TODO:
 * Fix minizip build on windows.
 * Add install targets for binaries, docs, translations, libraries on Mac.
-  Linux version has a preliminary support.
-  Windows version has a preliminary support.
-* Add DEBUG.
 * Add PYTHON.
 * Add shared/static.
 * Testing.

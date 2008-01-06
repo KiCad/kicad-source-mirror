@@ -1,11 +1,3 @@
-FIND_PACKAGE(OpenGL)
-IF(OPENGL_FOUND)
-	MESSAGE(STATUS "Check for installed OpenGL -- found")
-ELSE(OPENGL_FOUND)
-	MESSAGE(STATUS "Check for installed OpenGL -- not found")
-	MESSAGE(FATAL_ERROR "OpenGL was not found - it is required to build KiCad")
-ENDIF(OPENGL_FOUND)
-
 ADD_DEFINITIONS(-DPCBNEW)
 
 INCLUDE_DIRECTORIES(

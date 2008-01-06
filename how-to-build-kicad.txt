@@ -1,8 +1,6 @@
-
-
-How to build kicad using CMAKE.
+--== How to build kicad using CMAKE ==--
 First Written: 19-Dec-2007
-Last Revised: 05-Jan-2008
+Last Revised: 06-Jan-2008
 
 
 Kicad needs wxWidgets, the multi platform G.U.I.
@@ -46,12 +44,6 @@ If windows, then try running g++ and make from within your msys bash shell.
 -----------------------------------------------------------------------------
 
 4)  Install wxWidgets [and build it if on windows].
-
-If on linux, use your package manager to install shared object libraries and the
-development versions of the wxWidgets packages which include the C++ headers. An
-alternative is to build static libaries from source. Verify that wx-config is in
-your path by running it from a command prompt. Linux users then go to next step.
-
 If on windows, download
 http://prdownloads.sourceforge.net/wxwindows/wxMSW-2.8.7.zip or a newer version.
 Start msys so you have a bash shell.  Decide where your wxWidgets build directory
@@ -77,6 +69,12 @@ Verify that wx-config is in your path.  Modify your PATH environment variable
 if need be so you can run wx-config from a command prompt.  You may have to 
 restart your msys shell, depending on how you modify your PATH.
 
+
+If on linux, use your package manager to install shared object libraries and the
+development versions of the wxWidgets packages which include the C++ headers. An
+alternative is to build static libaries from source. Verify that wx-config is in
+your path by running it from a command prompt. Linux users then go to next step.
+
 -----------------------------------------------------------------------------
 
 5)  Install zlib [and build it if on windows].
@@ -90,6 +88,7 @@ build directory. Change directories into there, and then:
     make
     make install
 
+
 If linux, use your package manager to install zlib.
 
 -----------------------------------------------------------------------------
@@ -99,6 +98,7 @@ If windows, download the installation binary for windows from cmake.org.
 Install that and choose to add cmake to your path during installation.  You
 will have to restart and command shells for the new path to take effect.
 Verify that cmake is in your path by trying to run it from a command prompt.
+
 
 If linux, use your package manager to install cmake. You should get cmake 2.4.7
 or later. If only an older one is available in your package repository, build
@@ -116,19 +116,18 @@ You can use the subversion repository or a tar file for this.  See the wiki.
 If windows, go into your msys shell.  Linux and windows users both then make 
 two "out of source" build directories:
     cd <kicadSource>
-    mkdir release
-    mkdir debug
-    cd release
+    mkdir -p Build/Release
+    mkdir Build/Debug
+    cd Build/Release
 
 On either cmake command line shown below, you can optionally include
     -DCMAKE_INSTALL_PREFIX=<finallInstallDir>
-before the final .. argument.    
-    
+
 If windows, run the following command:
-    cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DwxWidgets_ROOT_DIR=<wxInstallDir> ..
+    cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DwxWidgets_ROOT_DIR=<wxInstallDir> ../../
 
 If linux, run instead the following command:
-    cmake -DCMAKE_BUILD_TYPE=Release ../
+    cmake -DCMAKE_BUILD_TYPE=Release ../../
 
 Take a look at CMakeCache.txt, and in particular CMAKE_INSTALL_PREFIX, which
 gives the final install directory. If not what you want, edit it with a text
@@ -141,7 +140,7 @@ editor and re-run the same cmake command again, but with no
 You compile Kicad here.  You will only need to do step 8) again when one of the 
 CMakeLists.txt files change.  If windows, you must be in your msys shell.
 On either platform then:
-    cd <kicadSource>/release
+    cd <kicadSource>/Build/Release
     make
     [sudo] make install
 
@@ -151,34 +150,25 @@ You are now done unless you want to make a Debug build.
 
 10) Making a "Debug" build.
 
-    cd <kicadSource>/debug
+    cd <kicadSource>/Build/Debug
 
 On either cmake command line shown below, you can optionally include
--DCMAKE_INSTALL_PREFIX=<finallInstallDir> before the final .. argument. Although
+-DCMAKE_INSTALL_PREFIX=<finallInstallDir> before the final ../../ argument. Although
 normally you do not install the Debug binaries, you can debug them where they
 were built.
 
-
 If windows, run the following command:
-    cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Debug -DwxWidgets_ROOT_DIR=<wxInstallDir> ..
+    cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Debug -DwxWidgets_USE_DEBUG=ON -DwxWidgets_ROOT_DIR=<wxInstallDir> ../../
 
 If linux, run instead the following command:
-    cmake -DCMAKE_BUILD_TYPE=Debug ../
-
-Edit CMakeCache.txt, and look for the line that defines wxWidgets_CONFIG_EXECUTABLE:
-    wxWidgets_CONFIG_EXECUTABLE:FILEPATH=E:/usr/local/bin/wx-config
-If you have debug libaries for wxWidgets, which should be the case if you installed
-them in linux or if you built them on windows, then add "--debug" to the end of
-the wx-config command, for example:
-
-    wxWidgets_CONFIG_EXECUTABLE:FILEPATH=E:/usr/local/bin/wx-config --debug
-    
-Re-run the same cmake command again as given above for your respective platform.
+    cmake -DCMAKE_BUILD_TYPE=Debug -DwxWidgets_USE_DEBUG=ON ../../
 
 Make the Debug binaries:
     make
-    
-Note that it is easy to build only a specific binary such as pcbnew alone:
+
+-----------------------------------------------------------------------------
+
+Note: that it is easy to build only a specific binary such as pcbnew alone:
     make pcbnew
 
 -----------------------------------------------------------------------------
@@ -333,4 +323,3 @@ line 410
     if ( !pItem->IsOwnerDrawn()  )
 must be
     if ( !pItem->IsOwnerDrawn() && !pItem->IsSeparator() )
-
