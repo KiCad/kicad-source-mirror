@@ -280,7 +280,7 @@ enum DSN_T {
     T_place_rule,
     T_plan,
     T_plane,
-    T_PN,
+    T_pn,
     T_point,
     T_polygon,
     T_position,

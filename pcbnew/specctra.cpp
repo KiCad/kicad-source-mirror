@@ -604,10 +604,15 @@ public:
 };
 
 
+/**
+ * Class KEEPOUT
+ * is used for <keepout_descriptor> and <plane_descriptor>.
+ */
 class KEEPOUT : public ELEM
 {
     friend class SPECCTRA_DB;
-    
+
+protected:    
     std::string     name;
     int             sequence_number;
     RULES*          rules;
@@ -942,104 +947,14 @@ public:
 };
 
 
-class STRUCTURE : public ELEM
+class PLANE : public KEEPOUT
 {
     friend class SPECCTRA_DB;
-    
-    UNIT*       unit;
-    RESOLUTION* resolution;
-    
-    typedef boost::ptr_vector<LAYER>    LAYERS;
-    LAYERS      layers;
 
-    LAYER_NOISE_WEIGHT*  layer_noise_weight;
-    
-    BOUNDARY*   boundary;
-    BOUNDARY*   place_boundary;
-    VIA*        via;
-    CONTROL*    control;
-    RULES*      rules;
-    
-    typedef boost::ptr_vector<KEEPOUT>  KEEPOUTS;
-    KEEPOUTS    keepouts;
-
-    
-public:
-
-    STRUCTURE( ELEM* aParent ) :
-        ELEM( T_structure, aParent )
-    {
-        unit = 0;
-        resolution = 0;
-        layer_noise_weight = 0;
-        boundary = 0;
-        place_boundary = 0;
-        via = 0;
-        control = 0;
-        rules = 0;
-    }
-    
-    ~STRUCTURE()
-    {
-        delete unit;
-        delete resolution;
-        delete layer_noise_weight;
-        delete boundary;
-        delete place_boundary;
-        delete via;
-        delete control;
-        delete rules;
-    }
-    
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
-    {
-        out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
-        
-        if( unit )
-            unit->Format( out, nestLevel+1 );
-
-        if( resolution )
-            resolution->Format( out, nestLevel+1 );
-        
-        for( unsigned i=0;  i<layers.size();  ++i )
-            layers[i].Format( out, nestLevel+1 ); 
-
-        if( layer_noise_weight )
-            layer_noise_weight->Format( out, nestLevel+1 );
-        
-        if( boundary )
-            boundary->Format( out, nestLevel+1 );
-
-        if( place_boundary )
-            place_boundary->Format( out, nestLevel+1 );
-
-        for( unsigned i=0;  i<keepouts.size();  ++i )
-            keepouts[i].Format( out, nestLevel+1 );
-        
-        if( via )
-            via->Format( out, nestLevel+1 );
-        
-        if( control )
-            control->Format( out, nestLevel+1 );
-        
-        for( int i=0; i<Length();  ++i )
-        {
-            At(i)->Format( out, nestLevel+1 );
-        }
-        
-        if( rules )
-            rules->Format( out, nestLevel+1 );
-        
-        out->Print( nestLevel, ")\n" ); 
-    }
-    
-    DSN_T   GetUnits()
-    {
-        if( unit )
-            return unit->GetUnits();
-        
-        return ELEM::GetUnits();
-    }
+public:    
+    PLANE( ELEM* aParent ) :
+        KEEPOUT( aParent, T_plane )
+   {}
 };
 
 
@@ -1093,6 +1008,179 @@ public:
         
         out->Print( nestLevel, "(%s %s%s%s)\n", LEXER::GetTokenText( Type() ),
                                 quote_char, value.c_str(), quote_char );
+    }
+};
+
+
+class REGION : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+    std::string     region_id;
+
+    //-----<mutually exclusive>--------------------------------------
+    RECTANGLE*      rectangle;
+    PATH*           polygon;
+    //-----</mutually exclusive>-------------------------------------
+
+    STRINGPROP*     region_data;  ///< region_net | region_class | region_class_class
+    RULES*          rules;    
+
+public:
+    REGION( ELEM* aParent ) :
+        ELEM( T_region, aParent )
+    {
+        rectangle = 0;
+        polygon = 0;
+        region_data = 0;
+        rules = 0;
+    }
+
+    ~REGION()
+    {
+        delete rectangle;
+        delete polygon;
+        delete region_data;
+        delete rules;
+    }
+    
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        out->Print( nestLevel, "(%s", LEXER::GetTokenText( Type() ) );
+        
+        if( region_id.size() )
+        {
+            const char* quote = out->GetQuoteChar( region_id.c_str() );
+            out->Print( 0, " %s%s%s", quote, region_id.c_str(), quote );
+        }
+        
+        out->Print( 0, "\n" );
+        
+        if( rectangle )
+            rectangle->Format( out, nestLevel+1 );
+        
+        if( polygon )
+            polygon->Format( out, nestLevel+1 );
+        
+        if( region_data )
+            region_data->Format( out, nestLevel+1 );
+        
+        if( rules )
+            rules->Format( out, nestLevel+1 );
+        
+        out->Print( nestLevel, ")\n" );
+    }
+};
+
+
+class STRUCTURE : public ELEM
+{
+    friend class SPECCTRA_DB;
+    
+    UNIT*       unit;
+    RESOLUTION* resolution;
+    
+    typedef boost::ptr_vector<LAYER>    LAYERS;
+    LAYERS      layers;
+
+    LAYER_NOISE_WEIGHT*  layer_noise_weight;
+    
+    BOUNDARY*   boundary;
+    BOUNDARY*   place_boundary;
+    VIA*        via;
+    CONTROL*    control;
+    RULES*      rules;
+    
+    typedef boost::ptr_vector<KEEPOUT>  KEEPOUTS;
+    KEEPOUTS    keepouts;
+
+    typedef boost::ptr_vector<PLANE>    PLANES;
+    PLANES      planes;
+
+    typedef boost::ptr_vector<REGION>   REGIONS;
+    REGIONS     regions;
+    
+public:
+
+    STRUCTURE( ELEM* aParent ) :
+        ELEM( T_structure, aParent )
+    {
+        unit = 0;
+        resolution = 0;
+        layer_noise_weight = 0;
+        boundary = 0;
+        place_boundary = 0;
+        via = 0;
+        control = 0;
+        rules = 0;
+    }
+    
+    ~STRUCTURE()
+    {
+        delete unit;
+        delete resolution;
+        delete layer_noise_weight;
+        delete boundary;
+        delete place_boundary;
+        delete via;
+        delete control;
+        delete rules;
+    }
+    
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
+        
+        if( unit )
+            unit->Format( out, nestLevel+1 );
+
+        if( resolution )
+            resolution->Format( out, nestLevel+1 );
+        
+        for( unsigned i=0;  i<layers.size();  ++i )
+            layers[i].Format( out, nestLevel+1 ); 
+
+        if( layer_noise_weight )
+            layer_noise_weight->Format( out, nestLevel+1 );
+        
+        if( boundary )
+            boundary->Format( out, nestLevel+1 );
+
+        if( place_boundary )
+            place_boundary->Format( out, nestLevel+1 );
+
+        for( unsigned i=0;  i<planes.size();  ++i )
+            planes[i].Format( out, nestLevel+1 );
+
+        for( unsigned i=0;  i<regions.size();  ++i )
+            regions[i].Format( out, nestLevel+1 );
+        
+        for( unsigned i=0;  i<keepouts.size();  ++i )
+            keepouts[i].Format( out, nestLevel+1 );
+        
+        if( via )
+            via->Format( out, nestLevel+1 );
+        
+        if( control )
+            control->Format( out, nestLevel+1 );
+        
+        for( int i=0; i<Length();  ++i )
+        {
+            At(i)->Format( out, nestLevel+1 );
+        }
+        
+        if( rules )
+            rules->Format( out, nestLevel+1 );
+        
+        out->Print( nestLevel, ")\n" ); 
+    }
+    
+    DSN_T   GetUnits()
+    {
+        if( unit )
+            return unit->GetUnits();
+        
+        return ELEM::GetUnits();
     }
 };
 
@@ -1161,6 +1249,7 @@ public:
 };
 
 
+
 /**
  * Class SPECCTRA_DB
  * holds a DSN data tree, usually coming from a DSN file.
@@ -1223,6 +1312,8 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     void doCIRCLE( CIRCLE* growth ) throw( IOError );
     void doQARC( QARC* growth ) throw( IOError );
     void doWINDOW( WINDOW* growth ) throw( IOError );
+    void doREGION( REGION* region ) throw( IOError );
+    
     
 public:
 
@@ -1686,6 +1777,20 @@ L_place:
             doBOUNDARY( growth->boundary );
             break;
 
+        case T_plane:
+            PLANE* plane;
+            plane = new PLANE( growth );
+            growth->planes.push_back( plane );
+            doKEEPOUT( plane );
+            break;
+
+        case T_region:
+            REGION* region;
+            region = new REGION( growth );
+            growth->regions.push_back( region );
+            doREGION( region );
+            break;
+            
         case T_snap_angle:
             STRINGPROP* stringprop;
             stringprop = new STRINGPROP( growth, T_snap_angle ); 
@@ -2324,6 +2429,59 @@ void SPECCTRA_DB::doRULES( RULES* growth ) throw( IOError )
         unexpected( T_EOF );
 }
 
+
+void SPECCTRA_DB::doREGION( REGION* growth ) throw( IOError )
+{
+    DSN_T tok = nextTok();
+    
+    if( isSymbol(tok) )
+    {
+        growth->region_id = lexer->CurText();
+        tok = nextTok();
+    }
+
+    do
+    {
+        if( tok != T_LEFT )
+            expecting( T_LEFT );
+
+        tok = nextTok();
+        switch( tok )
+        {
+        case T_rect:
+            growth->rectangle = new RECTANGLE( growth );
+            doRECTANGLE( growth->rectangle );
+            break;
+            
+        case T_polygon:
+            growth->polygon = new PATH( growth, T_polygon );
+            doPATH( growth->polygon );
+            break;
+            
+        case T_region_net:
+        case T_region_class:
+            growth->region_data = new STRINGPROP( growth, tok );
+            doSTRINGPROP( growth->region_data );
+            break;            
+
+/* @todo            
+        case T_class_class:
+            break;
+*/            
+            
+        case T_rule:
+            growth->rules = new RULES( growth, T_rule );
+            doRULES( growth->rules );
+            break;
+            
+        default:
+            unexpected( lexer->CurText() );
+        }
+        
+    } while( (tok = nextTok()) != T_RIGHT );
+}
+
+
 void SPECCTRA_DB::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
 {
     va_list     args;
@@ -2348,12 +2506,18 @@ void SPECCTRA_DB::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
 
 const char* SPECCTRA_DB::GetQuoteChar( const char* wrapee ) 
 {
+    // I include '#' so a symbol is not confused with a comment.  We intend
+    // to wrap any symbol starting with a '#'.
+    // Our LEXER class handles comments, and comments appear to be an extension
+    // to the SPECCTRA DSN specification. 
+    if( *wrapee == '#' )
+        return quote_char.c_str();
+    
     while( *wrapee )
     {
         // if the string to be wrapped (wrapee) has a delimiter in it, 
         // return the quote_char so caller wraps the wrapee.
-        // I include '#' so a symbol is not confused with a comment. 
-        if( strchr( "#\t ()", *wrapee++ ) )
+        if( strchr( "\t ()", *wrapee++ ) )
             return quote_char.c_str();
     }
     return "";      // can use an unwrapped string.

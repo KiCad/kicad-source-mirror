@@ -280,7 +280,7 @@ const static KEYWORD tokens[] = {
     TOKDEF(place_rule),
     TOKDEF(plan),
     TOKDEF(plane),
-    TOKDEF(PN),
+    TOKDEF(pn),
     TOKDEF(point),
     TOKDEF(polygon),
     TOKDEF(position),
