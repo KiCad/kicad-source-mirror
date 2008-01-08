@@ -560,7 +560,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
         for( pt_segm = m_Pcb->m_Zone; pt_segm != NULL; pt_segm = NextSegZ )
         {
             NextSegZ = pt_segm->Next();
-            if( PtStruct->HitTest( GetScreen()->BlockLocate ) )
+            if( pt_segm->HitTest( GetScreen()->BlockLocate ) )
             {    
                 pt_segm->DeleteStructure();
             }
