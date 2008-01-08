@@ -459,12 +459,15 @@ EDGE_ZONE* WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
 
             if( diag ==  ZONE_ABORT )
                 return NULL;
+			
+			GetScreen()->m_Active_Layer = s_Zone_Layer;	// Set by the dialog frame
         }
         else /* Start a new contour: init zone params (net and layer) from an existing zone */
         {
             GetScreen()->m_Active_Layer = s_Zone_Layer = s_CurrentZone->GetLayer();
             s_Zone_Hatching = s_CurrentZone->m_Poly->GetHatchStyle();
         }
+
         /* Show the Net */
         if( g_HightLigt_Status && (g_HightLigth_NetCode != s_NetcodeSelection) )
         {

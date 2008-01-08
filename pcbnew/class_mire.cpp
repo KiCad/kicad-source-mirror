@@ -215,7 +215,6 @@ bool MIREPCB::HitTest( const wxPoint& refPos )
     int dX    = refPos.x - m_Pos.x;
     int dY    = refPos.y - m_Pos.y;
     int rayon = m_Size / 2;
-
     return abs(dX)<=rayon && abs(dY)<=rayon;
 }
 
