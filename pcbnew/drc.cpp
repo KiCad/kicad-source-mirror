@@ -285,6 +285,10 @@ void DRC::testUnconnected()
 
 void DRC::testZones()
 {
+
+	// Test copper areas outlines, and create markers when needed
+	m_pcb->Test_Drc_Areas_Outlines_To_Areas_Outlines( NULL, true );
+
     TRACK* zoneSeg;
 
     /* this was for display purposes, don't know that we need it anymore    
@@ -293,7 +297,7 @@ void DRC::testZones()
         ++m_pcb->m_NbSegmZone;
     */
 
-    for( zoneSeg = m_pcb->m_Zone;  zoneSeg && zoneSeg->Next();  zoneSeg=zoneSeg->Next() )
+    for( zoneSeg = m_pcb->m_Zone;  zoneSeg && zoneSeg->Next(); zoneSeg=zoneSeg->Next() )
     {
         // Test zoneSeg with other zone segments and with all pads
         if( !doTrackDrc( zoneSeg, zoneSeg->Next() ) )

@@ -65,6 +65,10 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _("Pad near pad") );
     case DRCE_VIA_HOLE_BIGGER:
         return wxString( _("Via hole > diameter"));
+    case COPPERAREA_INSIDE_COPPERAREA:
+        return wxString( _("Copper area inside copper area"));
+    case COPPERAREA_CLOSE_TO_COPPERAREA:
+        return wxString( _("Copper areas intersect or too close"));
         
     default:
         return wxString( wxT("PROGRAM BUG, PLEASE LEAVE THE ROOM.") );

@@ -54,7 +54,8 @@
 #define DRCE_ENDS_PROBLEM5              18  ///< track ends are too close
 #define DRCE_PAD_NEAR_PAD1              19  ///< pad too close to pad
 #define DRCE_VIA_HOLE_BIGGER            20  ///< via's hole is bigger than its diameter
-
+#define COPPERAREA_INSIDE_COPPERAREA    21  ///< copper area outlines intersect
+#define COPPERAREA_CLOSE_TO_COPPERAREA        22  ///< copper area outlines are too close
 
 /**
  * Class DRC_ITEM

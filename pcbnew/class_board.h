@@ -259,6 +259,21 @@ public:
         return NULL;
     }
 
+	/**
+     * Function GetAreaIndex
+     * returns the Area Index  for the given Zone Container.
+     * @param  aArea :The ZONE_CONTAINER to find.
+     * @return an Area Index in m_ZoneDescriptorList or -1 if non found.
+     */
+    int GetAreaIndex( const ZONE_CONTAINER* aArea) const
+    {
+        for( int ii = 0; ii < GetAreaCount(); ii++ )	// Search for aArea in list
+		{
+            if ( aArea == GetArea( ii ) )	// Found !
+				return ii;
+		}
+        return -1;
+    }
     
     /**
      * Function GetAreaCount
@@ -385,6 +400,16 @@ public:
 	 */
 	int CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combine );
 
+	/**
+	 * Function Test_Drc_Areas_Outlines_To_Areas_Outlines
+	 * Test Areas outlines for DRC:
+	 *      Test areas inside other areas
+	 *      Test areas too close 
+	 * @param aArea_To_Examine: area to compare with other areas. if NULL: all areas are compared tp all others
+	 * @param aCreate_Markers: if true create DRC markers. False: do not creates anything
+	 * @return errors count
+	*/
+	int Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_Examine,bool aCreate_Markers );
 };
 
 #endif		// #ifndef CLASS_BOARD_H

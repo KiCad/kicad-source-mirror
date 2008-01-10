@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        zones_by_polygon.cpp
-// Licence:     GNU License
+// Licence:     GPL License
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined (__GNUG__) && !defined (NO_GCC_PRAGMA)
@@ -35,7 +34,7 @@ using namespace std;
 
 /* Local functions */
 
-// Outile creation:
+// Outline creation:
 static void Abort_Zone_Create_Outline( WinEDA_DrawPanel* Panel, wxDC* DC );
 static void Show_New_Zone_Edge_While_Move_Mouse( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 
@@ -54,7 +53,8 @@ static bool                        s_CornerIsNew;               // Used to abort
 static bool                        s_AddCutoutToCurrentZone;    // if true, the next outline will be addes to s_CurrentZone
 static ZONE_CONTAINER*             s_CurrentZone;               // if != NULL, these ZONE_CONTAINER params will be used for the next zone
 
-// key used to store net sort option in config file :
+// keys used to store net sort option in config file :
+#define ZONE_NET_OUTLINES_HATCH_OPTION_KEY wxT( "Zone_Ouline_Hatch_Opt" )
 #define ZONE_NET_SORT_OPTION_KEY wxT( "Zone_NetSort_Opt" )
 #define ZONE_NET_FILTER_STRING_KEY wxT( "Zone_Filter_Opt" )
 
@@ -297,6 +297,8 @@ void WinEDA_PcbFrame::End_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_conta
     SetCurItem( NULL );       // This outine can be deleted when merging outlines
 
     /* Combine zones if possible */
+	wxBusyCursor dummy;
+
     int layer = zone_container->GetLayer();
 
     for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
@@ -313,6 +315,14 @@ void WinEDA_PcbFrame::End_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_conta
         if( layer == edge_zone->GetLayer() )
             edge_zone->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
     }
+	
+	int ii = m_Pcb->GetAreaIndex(zone_container);	// test if zone_container exists
+	if ( ii < 0 ) zone_container = NULL;			// was removed by combining zones
+	int error_count = m_Pcb->Test_Drc_Areas_Outlines_To_Areas_Outlines(zone_container, true);
+	if ( error_count )
+	{
+		DisplayError(this, _("Area: DRC outline error"));
+	}
 }
 
 
@@ -325,6 +335,8 @@ void WinEDA_PcbFrame::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER * zone_contai
  * the .m_CornerSelection is used as corner selection
  */
 {
+    GetScreen()->SetModify();
+
 	if ( zone_container->m_Poly->GetNumCorners() <= 3 )
 	{
 		Delete_Zone_Fill( DC, NULL, zone_container->m_TimeStamp );
@@ -356,6 +368,14 @@ void WinEDA_PcbFrame::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER * zone_contai
 			if( layer == edge_zone->GetLayer() )
 				edge_zone->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
 		}
+	}
+
+	int ii = m_Pcb->GetAreaIndex(zone_container);	// test if zone_container exists
+	if ( ii < 0 ) zone_container = NULL;			// was removed by combining zones
+	int error_count = m_Pcb->Test_Drc_Areas_Outlines_To_Areas_Outlines(zone_container, true);
+	if ( error_count )
+	{
+		DisplayError(this, _("Area: DRC outline error"));
 	}
 }
 
@@ -638,6 +658,14 @@ void WinEDA_PcbFrame::End_Zone( wxDC* DC )
         if( layer == edge_zone->GetLayer() )
             edge_zone->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
     }
+
+	int ii = m_Pcb->GetAreaIndex(new_zone_container);	// test if zone_container exists
+	if ( ii < 0 ) new_zone_container = NULL;			// was removed by combining zones
+	int error_count = m_Pcb->Test_Drc_Areas_Outlines_To_Areas_Outlines(new_zone_container, true);
+	if ( error_count )
+	{
+		DisplayError(this, _("Area: DRC outline error"));
+	}
 
     GetScreen()->SetModify();
 }

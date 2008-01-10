@@ -290,6 +290,10 @@ void WinEDA_ZoneFrame::CreateControls()
 
 	if ( m_Zone_Container )
 		s_Zone_Hatching = m_Zone_Container->m_Poly->GetHatchStyle();
+	else
+        s_Zone_Hatching = m_Parent->m_Parent->m_EDA_Config->Read( ZONE_NET_OUTLINES_HATCH_OPTION_KEY,
+			(long) CPolyLine::DIAGONAL_EDGE );
+
     switch( s_Zone_Hatching )
     {
 		case CPolyLine::NO_HATCH:
@@ -460,6 +464,11 @@ bool WinEDA_ZoneFrame::AcceptOptions(bool aPromptForErrors)
         s_Zone_Hatching = CPolyLine::DIAGONAL_FULL;
         break;
     }
+
+    if( m_Parent->m_Parent->m_EDA_Config )
+    {
+		m_Parent->m_Parent->m_EDA_Config->Write( ZONE_NET_OUTLINES_HATCH_OPTION_KEY, (long)s_Zone_Hatching);
+	}	
 
     switch( m_GridCtrl->GetSelection() )
     {

@@ -35,7 +35,7 @@
 const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     // there are some restrictions on the order of items in the general case.
     // all items in m_Drawings for instance should be contiguous.
-    //  *** all items in a same list (shown here) must be contigous ****
+    //  *** all items in a same list (shown here) must be contiguous ****
     TYPEMARKER,                 // in m_markers
     TYPETEXTE,                  // in m_Drawings
     TYPEDRAWSEGMENT,            // in m_Drawings

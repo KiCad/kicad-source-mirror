@@ -113,7 +113,7 @@ void MARKER::Display_Infos( WinEDA_DrawFrame* frame )
 
     wxString errorTxt;
     
-    errorTxt << _("ErrType") << wxT("(") << rpt.GetErrorCode() << wxT(")- ") << rpt.GetErrorText() << wxT(":");
+    errorTxt << _("ErrType") << wxT("(") << rpt.GetErrorCode() << wxT(")-  ") << rpt.GetErrorText() << wxT(":");
     
     text_pos = 5;
     Affiche_1_Parametre( frame, text_pos, errorTxt, wxEmptyString, RED );
@@ -124,8 +124,8 @@ void MARKER::Display_Infos( WinEDA_DrawFrame* frame )
     wxString txtB;
     txtB << DRC_ITEM::ShowCoord( rpt.GetPointB() ) << wxT(": ") << rpt.GetTextB();     
     
-    text_pos = 20;      // @todo pick a better color here
-    Affiche_1_Parametre( frame, text_pos, txtA, txtB, BLACK );
+    text_pos = 25;
+    Affiche_1_Parametre( frame, text_pos, txtA, txtB, DARKBROWN );
 }
 
 
