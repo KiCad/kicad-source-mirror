@@ -276,8 +276,8 @@ const static KEYWORD tokens[] = {
     TOKDEF(place),
     TOKDEF(place_boundary),
     TOKDEF(place_control),
-    TOKDEF(placement),
     TOKDEF(place_rule),
+    TOKDEF(placement),
     TOKDEF(plan),
     TOKDEF(plane),
     TOKDEF(pn),
@@ -342,6 +342,7 @@ const static KEYWORD tokens[] = {
     TOKDEF(signal),
     TOKDEF(site),
     TOKDEF(smd),
+    TOKDEF(snap),
     TOKDEF(snap_angle),
     TOKDEF(source),
     TOKDEF(space_in_quoted_tokens),
@@ -419,6 +420,7 @@ const static KEYWORD tokens[] = {
     TOKDEF(wiring),
     TOKDEF(write_resolution),
     TOKDEF(x),
+    TOKDEF(y),
 };
 
 

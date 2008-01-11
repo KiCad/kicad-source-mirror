@@ -134,8 +134,8 @@ protected:
     //  see http://www.boost.org/libs/ptr_container/doc/ptr_sequence_adapter.html
     typedef boost::ptr_vector<ELEM> ELEM_ARRAY;
     
-    ELEM_ARRAY      kids;      ///< ELEM pointers                   
-
+    ELEM_ARRAY      kids;      ///< ELEM pointers
+    
 public:
 
     ELEM( DSN_T aType, ELEM* aParent = 0 );
@@ -169,6 +169,18 @@ public:
      * @throw IOError if a system error writing the output, such as a full disk.
      */
     virtual void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError );
+
+    
+    /**
+     * Function FormatContents
+     * writes the contents as ASCII out to an OUTPUTFORMATTER according to the 
+     * SPECCTRA DSN format.  This is the same as Format() except that the outter
+     * wrapper is not included.
+     * @param out The formatter to write to.
+     * @param nestLevel A multiple of the number of spaces to preceed the output with.
+     * @throw IOError if a system error writing the output, such as a full disk.
+     */
+    virtual void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError );
 
     
     //-----< list operations >--------------------------------------------
@@ -352,10 +364,6 @@ public:
     {
     }
     
-    ~RECTANGLE()
-    {
-    }
-    
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         const char*  quote = out->GetQuoteChar( layer_id.c_str() );
@@ -399,6 +407,43 @@ public:
         
         out->Print( nestLevel, ")\n" );
     }        
+};
+
+
+class LAYER_RULES : public ELEM
+{
+    friend class SPECCTRA_DB;
+    
+    STRINGS         layer_ids;
+    RULES*          rules;
+    
+public:
+
+    LAYER_RULES( ELEM* aParent ) :
+        ELEM( T_layer_rule, aParent )
+    {
+        rules = 0;
+    }
+    ~LAYER_RULES()
+    {
+        delete rules;
+    }
+    
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
+        
+        for( STRINGS::const_iterator i=layer_ids.begin();  i!=layer_ids.end();  ++i )
+        {
+            const char* quote = out->GetQuoteChar( i->c_str() );
+            out->Print( nestLevel, "%s%s%s\n", quote, i->c_str(), quote );
+        }
+        
+        if( rules )
+            rules->Format( out, nestLevel+1 );
+        
+        out->Print( nestLevel, ")\n" );
+    }
 };
 
 
@@ -746,6 +791,67 @@ public:
 };
 
 
+class CLASSES : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+    STRINGS         class_ids;
+    
+public:
+    CLASSES( ELEM* aParent ) :
+        ELEM( T_classes, aParent )
+    {
+    }
+    
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        for( STRINGS::const_iterator i=class_ids.begin();  i!=class_ids.end();  ++i )
+        {
+            const char* quote = out->GetQuoteChar( i->c_str() );
+            out->Print( nestLevel, "%s%s%s\n", quote, i->c_str(), quote );
+        }
+    }
+};
+
+
+class CLASS_CLASS : public ELEM
+{
+    friend class SPECCTRA_DB;
+    
+    CLASSES*        classes;
+    
+    /*  rule | layer_rule are put into the kids container.
+    */
+    
+
+public:
+    
+    /**
+     * Constructor CLASS_CLASS
+     * @param aType May be either T_class_class or T_region_class_class
+     */
+    CLASS_CLASS( ELEM* aParent, DSN_T aType ) :
+        ELEM( aType, aParent )
+    {
+        classes = 0;
+    }
+    
+    ~CLASS_CLASS()
+    {
+        delete classes;
+    }
+
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        if( classes )
+            classes->Format( out, nestLevel );
+
+        // format the kids
+        ELEM::FormatContents( out, nestLevel );
+    }
+};
+
+
 class CONTROL : public ELEM
 {
     friend class SPECCTRA_DB;
@@ -1023,7 +1129,10 @@ class REGION : public ELEM
     PATH*           polygon;
     //-----</mutually exclusive>-------------------------------------
 
-    STRINGPROP*     region_data;  ///< region_net | region_class | region_class_class
+    /* region_net | region_class | region_class_class are all mutually
+       exclusive and are put into the kids container.
+    */
+    
     RULES*          rules;    
 
 public:
@@ -1032,7 +1141,6 @@ public:
     {
         rectangle = 0;
         polygon = 0;
-        region_data = 0;
         rules = 0;
     }
 
@@ -1040,35 +1148,78 @@ public:
     {
         delete rectangle;
         delete polygon;
-        delete region_data;
         delete rules;
+    }
+    
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        if( region_id.size() )
+        {
+            const char* quote = out->GetQuoteChar( region_id.c_str() );
+            out->Print( nestLevel, "%s%s%s\n", quote, region_id.c_str(), quote );
+        }
+        
+        if( rectangle )
+            rectangle->Format( out, nestLevel );
+        
+        if( polygon )
+            polygon->Format( out, nestLevel );
+
+        ELEM::FormatContents( out, nestLevel );
+        
+        if( rules )
+            rules->Format( out, nestLevel );
+    }
+};
+
+
+class GRID : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+    DSN_T       grid_type;      ///< T_via | T_wire | T_via_keepout | T_place | T_snap
+
+    float       dimension;
+    
+    DSN_T       direction;      ///< T_x | T_y | -1 for both
+    
+    float       offset;
+    
+    DSN_T       image_type;
+    
+public:
+    
+    GRID( ELEM* aParent ) :
+        ELEM( T_grid, aParent )
+    {
+        grid_type = T_via;
+        direction = (DSN_T) -1;
+        dimension = 0.0;
+        offset    = 0.0;
+        image_type= (DSN_T) -1;
     }
     
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
-        out->Print( nestLevel, "(%s", LEXER::GetTokenText( Type() ) );
-        
-        if( region_id.size() )
+        out->Print( nestLevel, "(%s %s %f",
+                   LEXER::GetTokenText( Type() ),
+                   LEXER::GetTokenText( grid_type ), dimension );
+     
+        if( grid_type == T_place )
         {
-            const char* quote = out->GetQuoteChar( region_id.c_str() );
-            out->Print( 0, " %s%s%s", quote, region_id.c_str(), quote );
+            if( image_type==T_smd || image_type==T_pin )
+                out->Print( 0, " (image_type %s)", LEXER::GetTokenText( image_type ) );
+        }
+        else
+        {
+            if( direction==T_x || direction==T_y )
+                out->Print( 0, " (direction %s)", LEXER::GetTokenText( direction ) );
         }
         
-        out->Print( 0, "\n" );
+        if( offset != 0.0 )
+            out->Print( 0, " (offset %f)", offset );
         
-        if( rectangle )
-            rectangle->Format( out, nestLevel+1 );
-        
-        if( polygon )
-            polygon->Format( out, nestLevel+1 );
-        
-        if( region_data )
-            region_data->Format( out, nestLevel+1 );
-        
-        if( rules )
-            rules->Format( out, nestLevel+1 );
-        
-        out->Print( nestLevel, ")\n" );
+        out->Print( 0, ")\n");
     }
 };
 
@@ -1100,6 +1251,9 @@ class STRUCTURE : public ELEM
     typedef boost::ptr_vector<REGION>   REGIONS;
     REGIONS     regions;
     
+    typedef boost::ptr_vector<GRID>     GRIDS;
+    GRIDS       grids;
+    
 public:
 
     STRUCTURE( ELEM* aParent ) :
@@ -1127,52 +1281,51 @@ public:
         delete rules;
     }
     
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
-        out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
-        
         if( unit )
-            unit->Format( out, nestLevel+1 );
+            unit->Format( out, nestLevel );
 
         if( resolution )
-            resolution->Format( out, nestLevel+1 );
+            resolution->Format( out, nestLevel );
         
         for( unsigned i=0;  i<layers.size();  ++i )
-            layers[i].Format( out, nestLevel+1 ); 
+            layers[i].Format( out, nestLevel ); 
 
         if( layer_noise_weight )
-            layer_noise_weight->Format( out, nestLevel+1 );
+            layer_noise_weight->Format( out, nestLevel );
         
         if( boundary )
-            boundary->Format( out, nestLevel+1 );
+            boundary->Format( out, nestLevel );
 
         if( place_boundary )
-            place_boundary->Format( out, nestLevel+1 );
+            place_boundary->Format( out, nestLevel );
 
         for( unsigned i=0;  i<planes.size();  ++i )
-            planes[i].Format( out, nestLevel+1 );
+            planes[i].Format( out, nestLevel );
 
         for( unsigned i=0;  i<regions.size();  ++i )
-            regions[i].Format( out, nestLevel+1 );
+            regions[i].Format( out, nestLevel );
         
         for( unsigned i=0;  i<keepouts.size();  ++i )
-            keepouts[i].Format( out, nestLevel+1 );
+            keepouts[i].Format( out, nestLevel );
         
         if( via )
-            via->Format( out, nestLevel+1 );
+            via->Format( out, nestLevel );
         
         if( control )
-            control->Format( out, nestLevel+1 );
+            control->Format( out, nestLevel );
         
         for( int i=0; i<Length();  ++i )
         {
-            At(i)->Format( out, nestLevel+1 );
+            At(i)->Format( out, nestLevel );
         }
         
         if( rules )
-            rules->Format( out, nestLevel+1 );
+            rules->Format( out, nestLevel );
         
-        out->Print( nestLevel, ")\n" ); 
+        for( unsigned i=0;  i<grids.size();  ++i )
+            grids[i].Format( out, nestLevel );
     }
     
     DSN_T   GetUnits()
@@ -1312,8 +1465,12 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     void doCIRCLE( CIRCLE* growth ) throw( IOError );
     void doQARC( QARC* growth ) throw( IOError );
     void doWINDOW( WINDOW* growth ) throw( IOError );
-    void doREGION( REGION* region ) throw( IOError );
-    
+    void doREGION( REGION* growth ) throw( IOError );
+    void doCLASS_CLASS( CLASS_CLASS* growth ) throw( IOError );    
+    void doLAYER_RULES( LAYER_RULES* growth ) throw( IOError );
+    void doCLASSES( CLASSES* growth ) throw( IOError );
+    void doGRID( GRID* growth ) throw( IOError );
+
     
 public:
 
@@ -1727,6 +1884,7 @@ void SPECCTRA_DB::doLAYER_NOISE_WEIGHT( LAYER_NOISE_WEIGHT* growth ) throw( IOEr
     }
 }
 
+
 void SPECCTRA_DB::doSTRUCTURE( STRUCTURE* growth ) throw(IOError)
 {
     DSN_T   tok;
@@ -1833,6 +1991,13 @@ L_place:
             growth->keepouts.push_back( keepout );
             doKEEPOUT( keepout );
             break;
+
+        case T_grid:
+            GRID* grid;
+            grid = new GRID( growth );
+            growth->grids.push_back( grid );
+            doGRID( grid );
+            break;
             
         default:
             unexpected( lexer->CurText() );
@@ -1872,11 +2037,15 @@ void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth ) throw( IOError )
             break;
             
         case T_rule:
+            if( growth->rules )
+                unexpected( tok );
             growth->rules = new RULES( growth, T_rule );
             doRULES( growth->rules );
             break;
             
         case T_place_rule:
+            if( growth->place_rules )
+                unexpected( tok );
             growth->place_rules = new RULES( growth, T_place_rule );
             doRULES( growth->place_rules );
             break;
@@ -2440,7 +2609,7 @@ void SPECCTRA_DB::doREGION( REGION* growth ) throw( IOError )
         tok = nextTok();
     }
 
-    do
+    for(;;)
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
@@ -2460,14 +2629,18 @@ void SPECCTRA_DB::doREGION( REGION* growth ) throw( IOError )
             
         case T_region_net:
         case T_region_class:
-            growth->region_data = new STRINGPROP( growth, tok );
-            doSTRINGPROP( growth->region_data );
+            STRINGPROP* stringprop;
+            stringprop = new STRINGPROP( growth, tok );
+            growth->Append( stringprop );
+            doSTRINGPROP( stringprop );
             break;            
 
-/* @todo            
-        case T_class_class:
+        case T_region_class_class:
+            CLASS_CLASS* class_class;
+            class_class = new CLASS_CLASS( growth, tok );
+            growth->Append( class_class );
+            doCLASS_CLASS( class_class ); 
             break;
-*/            
             
         case T_rule:
             growth->rules = new RULES( growth, T_rule );
@@ -2477,8 +2650,148 @@ void SPECCTRA_DB::doREGION( REGION* growth ) throw( IOError )
         default:
             unexpected( lexer->CurText() );
         }
+
+        tok = nextTok();
+        if( tok == T_RIGHT )
+        {
+            if( !growth->rules )
+                expecting( T_rule );
+            break;
+        }
+    }
+}
+
+
+void SPECCTRA_DB::doCLASS_CLASS( CLASS_CLASS* growth ) throw( IOError )
+{
+    DSN_T   tok = nextTok();
+    
+    if( tok != T_LEFT )
+        expecting( T_LEFT );
+    
+    while( (tok = nextTok()) != T_RIGHT )
+    {
+        switch( tok )
+        {
+        case T_classes:
+            if( growth->classes )
+                unexpected( tok );
+            growth->classes = new CLASSES( growth );
+            doCLASSES( growth->classes );
+            break;
+            
+        case T_rule:
+            if( growth->Type() == T_region_class_class )
+                unexpected( tok );
+            RULES* rule;
+            rule = new RULES( growth, T_rule );
+            growth->Append( rule );
+            doRULES( rule );
+            break;
+            
+        case T_layer_rule:
+            if( growth->Type() == T_region_class_class )
+                unexpected( tok );
+            LAYER_RULES* layer_rule;
+            layer_rule = new LAYER_RULES( growth );
+            growth->Append( layer_rule );
+//            doLAYER_RULES( layer_rule );
+            // @todo
+            break;
+            
+        default:            
+            unexpected( tok );
+        }
+    }
+}
+
+
+void SPECCTRA_DB::doCLASSES( CLASSES* growth ) throw( IOError )
+{
+    DSN_T   tok = nextTok();
+
+    // require at least 2 class_ids
+    
+    if( !isSymbol( tok ) )
+        expecting( wxT("<class_id>") );
+    
+    growth->class_ids.push_back( lexer->CurText() );
+    
+    do
+    {
+        tok = nextTok();
+        if( !isSymbol( tok ) )
+            expecting( wxT("<class_id>") );
+        
+        growth->class_ids.push_back( lexer->CurText() );
         
     } while( (tok = nextTok()) != T_RIGHT );
+    
+}
+
+
+void SPECCTRA_DB::doGRID( GRID* growth ) throw( IOError )
+{
+    DSN_T   tok = nextTok();
+    
+    switch( tok )
+    {
+    case T_via:
+    case T_wire:
+    case T_via_keepout:
+    case T_snap:
+    case T_place:
+        growth->grid_type = tok;
+        if( nextTok() != T_NUMBER )
+            expecting( T_NUMBER );
+        growth->dimension = strtod( lexer->CurText(), 0 );
+        tok = nextTok();
+        if( tok == T_LEFT )
+        {
+            while( (tok=nextTok()) != T_RIGHT )
+            {
+                if( tok==T_direction )
+                {
+                    if( growth->grid_type == T_place )
+                        unexpected( tok );
+                    tok = nextTok();
+                    if( tok!=T_x && tok!=T_y )
+                        unexpected( lexer->CurText() );
+                    growth->direction = tok;
+                    if( nextTok() != T_RIGHT )
+                        expecting(T_RIGHT);
+                }
+                else if( tok==T_offset )
+                {
+                    if( growth->grid_type == T_place )
+                        unexpected( tok );
+                    
+                    if( nextTok() != T_NUMBER )
+                        expecting( T_NUMBER );
+                    
+                    growth->offset = strtod( lexer->CurText(), 0 );
+                    
+                    if( nextTok() != T_RIGHT )
+                        expecting(T_RIGHT);
+                }
+                else if( tok==T_image_type )
+                {
+                    if( growth->grid_type != T_place )
+                        unexpected( tok );
+                    tok = nextTok();
+                    if( tok!=T_smd && tok!=T_pin )
+                        unexpected( lexer->CurText() );
+                    growth->image_type = tok;
+                    if( nextTok() != T_RIGHT )
+                        expecting(T_RIGHT);
+                }
+            }
+        }
+        break;
+
+    default:
+        unexpected( tok );
+    }
 }
 
 
@@ -2564,13 +2877,19 @@ ELEM::~ELEM()
 void ELEM::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
 {
     out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) ); 
-    
-    for( int i=0;  i<Length();  ++i )
-    {
-        At(i)->Format( out, nestLevel+1 );
-    }
+
+    FormatContents( out, nestLevel+1 );
     
     out->Print( nestLevel, ")\n" ); 
+}
+
+
+void ELEM::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+{
+    for( int i=0;  i<Length();  ++i )
+    {
+        At(i)->Format( out, nestLevel );
+    }
 }
 
 

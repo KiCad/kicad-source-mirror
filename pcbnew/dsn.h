@@ -276,8 +276,8 @@ enum DSN_T {
     T_place,
     T_place_boundary,
     T_place_control,
-    T_placement,
     T_place_rule,
+    T_placement,
     T_plan,
     T_plane,
     T_pn,
@@ -342,6 +342,7 @@ enum DSN_T {
     T_signal,
     T_site,
     T_smd,
+    T_snap,
     T_snap_angle,
     T_source,
     T_space_in_quoted_tokens,
@@ -419,6 +420,7 @@ enum DSN_T {
     T_wiring,
     T_write_resolution,
     T_x,
+    T_y,
     T_END       // just a sentinel, not a token
 };
 
@@ -649,6 +651,25 @@ public:
         return curTok;
     }
 
+    /**
+     * Function CurLineNumber
+     * returns the current line number within my LINE_READER
+     */
+    int CurLineNumber()
+    {
+        return reader.LineNumber();
+    }
+
+    /**
+     * Function CurFilename
+     * returns the current input filename.
+     * @return const wxString& - the filename.
+     */
+    const wxString& CurFilename()
+    {
+        return filename;
+    }
+    
     /**
      * Function PrevTok
      * returns whatever NextTok() returned the 2nd to last time it was called.
