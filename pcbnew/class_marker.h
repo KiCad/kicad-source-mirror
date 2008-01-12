@@ -37,8 +37,18 @@ public:
     MARKER( int aErrorCode, const wxPoint& aMarkerPos, 
            const wxString& aText, const wxPoint& aPos, 
            const wxString& bText, const wxPoint& bPos );
-    
-    ~MARKER();
+     /**
+     * Constructor
+     * @param aErrorCode The categorizing identifier for an error
+     * @param aMarkerPos The position of the MARKER on the BOARD
+     * @param aText Text describing the object
+     * @param aPos The position of the object
+     */
+    MARKER( int aErrorCode, const wxPoint& aMarkerPos, 
+           const wxString& aText, const wxPoint& aPos );
+     
+
+	~MARKER();
     
     void    UnLink();
     void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int DrawMode );
@@ -77,6 +87,17 @@ public:
     void SetData( int aErrorCode, const wxPoint& aMarkerPos, 
              const wxString& aText, const wxPoint& aPos, 
              const wxString& bText, const wxPoint& bPos );
+    
+    /**
+     * Function SetData
+     * fills in all the reportable data associated with a MARKER.
+     * @param aErrorCode The categorizing identifier for an error
+     * @param aMarkerPos The position of the MARKER on the BOARD
+     * @param aText Text describing the object
+     * @param aPos The position of the object
+     */
+    void SetData( int aErrorCode, const wxPoint& aMarkerPos, 
+             const wxString& aText, const wxPoint& aPos );
     
     
     /**

@@ -19,6 +19,8 @@
 #include "trigo.h"
 
 
+
+
 /**************************************************************/
 void EDA_BaseStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
 /**************************************************************/
@@ -301,6 +303,29 @@ void PCB_SCREEN::Init()
 }
 
 
+/* Return true if a microvia can be put on board
+ * A microvia ia a small via restricted to 2 near neighbour layers
+ * because its is hole is made by laser which can penetrate only one layer
+ * It is mainly used to connect BGA to the first inner layer
+ * And it is allowed from an external layer to the first inner layer
+ */
+bool PCB_SCREEN::IsMicroViaAcceptable(void)
+{
+	int copperlayercnt = g_DesignSettings.m_CopperLayerCount;
+
+	if ( ! g_DesignSettings.m_MicroViasAllowed )
+		return false;	// Obvious..
+	if ( copperlayercnt < 4 )
+		return false;	// Only on multilayer boards..
+	if ( (m_Active_Layer == COPPER_LAYER_N) ||
+		 (m_Active_Layer == LAYER_CMP_N) ||
+		 (m_Active_Layer == g_DesignSettings.m_CopperLayerCount - 2) ||
+		 (m_Active_Layer == LAYER_N_2) )
+		return true;
+	
+	return false;
+}
+
 /*************************/
 /* class DISPLAY_OPTIONS */
 /*************************/
@@ -381,8 +406,9 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
         m_LayerColor[ii] = default_layer_color[ii];
 
     // Layer colors (tracks and graphic items)
-    m_ViaColor[VIA_BLIND]   = CYAN;
-    m_ViaColor[VIA_BURIED] = BROWN;
+    m_ViaColor[VIA_NOT_DEFINED]   = DARKGRAY;
+    m_ViaColor[VIA_MICROVIA]   = CYAN;
+    m_ViaColor[VIA_BLIND_BURIED] = BROWN;
     m_ViaColor[VIA_THROUGH]  = WHITE;
     m_ModuleTextCMPColor = LIGHTGRAY;   // Text module color for modules on the COMPONENT layer
     m_ModuleTextCUColor  = MAGENTA;     // Text module color for modules on the COPPER layer

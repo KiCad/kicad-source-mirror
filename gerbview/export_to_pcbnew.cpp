@@ -181,7 +181,7 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* aFile,
                 
                 newtrack->SetLayer( 0x0F );  // Layers are 0 to 15 (Cu/Cmp)
                 
-                newtrack->m_Drill = -1;
+                newtrack->SetDrillDefault();
 
                 // Compute the via position from track position ( Via position is the 
                 // position of the middle of the track segment ) 

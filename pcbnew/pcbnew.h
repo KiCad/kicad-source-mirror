@@ -109,7 +109,7 @@ eda_global bool Drc_On
 #endif
 ;
 eda_global bool g_AutoDeleteOldTrack    /* Allows automatic deletion of the old track after
-creation of a new track */
+                                          * creation of a new track */
 #ifdef MAIN
 = TRUE
 #endif
@@ -157,9 +157,9 @@ bool inline IsModuleLayerVisible( int layer ) {
 
 eda_global bool            Track_45_Only;   /* Flag pour limiter l'inclinaison
                                             *  pistes a 45 degres seulement */
-eda_global bool            Segments_45_Only;/* Flag pour limiter l'inclinaison
+eda_global bool            Segments_45_Only; /* Flag pour limiter l'inclinaison
                                              *  edge pcb a 45 degres seulement */
-eda_global wxString        PcbExtBuffer		// Board file extension
+eda_global wxString        PcbExtBuffer     // Board file extension
 #ifdef MAIN
 ( wxT( ".brd" ) )
 #endif
@@ -169,13 +169,13 @@ eda_global wxString g_SaveFileName      // File Name for periodic saving
 ( wxT( "$savepcb" ) )
 #endif
 ;
-eda_global wxString NetNameBuffer;		// Netlist file extension 
+eda_global wxString NetNameBuffer;      // Netlist file extension
 eda_global wxString NetExtBuffer
 #ifdef MAIN
 ( wxT( ".net" ) )
 #endif
 ;
-eda_global wxString NetCmpExtBuffer		// cmp/footprint association file extension 
+eda_global wxString NetCmpExtBuffer     // cmp/footprint association file extension
 #ifdef MAIN
 ( wxT( ".cmp" ) )
 #endif
@@ -187,7 +187,7 @@ eda_global wxString LibExtBuffer
 ( wxT( ".mod" ) )
 #endif
 ;
-eda_global wxString g_Shapes3DExtBuffer     //3D shape file extension 
+eda_global wxString g_Shapes3DExtBuffer     //3D shape file extension
 #ifdef MAIN
 ( wxT( ".wrl" ) )
 #endif
@@ -237,7 +237,7 @@ eda_global class EDA_BoardDesignSettings g_DesignSettings;
 // Default values for pad editions
 #ifndef GERBVIEW
 #ifdef MAIN
-D_PAD g_Pad_Master( (MODULE*) NULL );
+D_PAD        g_Pad_Master( (MODULE*) NULL );
 
 #else
 extern D_PAD g_Pad_Master;
@@ -285,10 +285,10 @@ eda_global int      g_TrackSegmentCount;        // New created segment count
 eda_global wxString g_ViaType_Name[4]
 #if defined MAIN
 = {
-    wxT( "???" ),           // Unused
-    _( "Blind Via" ),       // from inner layer to external layer (TOP or BOTTOM)
-    _( "Buried Via" ),      // from inner to inner layer
-    _( "Standard Via" )     // Usual via (from TOP to BOTTOM layer)
+    _( "??? Via" ),                 // Not used yet
+    _( "Micro Via" ),               // from external layer (TOP or BOTTOM) from the near neightbour inner layer only
+    _( "Blind/Buried Via" ),        // from inner or external to inner or external layer (no restriction)
+    _( "Through Via" )              // Usual via (from TOP to BOTTOM layer only )
 }
 
 

@@ -199,10 +199,10 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
             text << _( "Via" ) << wxT( " " ) << via->ShowWidth();
             
             int shape = via->Shape(); 
-            if( shape == VIA_BURIED )
-                text << wxT(" ") << _( "Blind" );
-            else if( shape == VIA_BLIND )
-                text << wxT(" ") << _("Buried");
+            if( shape == VIA_BLIND_BURIED )
+                text << wxT(" ") << _( "Blind/Buried" );
+            else if( shape == VIA_MICROVIA )
+                text << wxT(" ") << _("Micro Via");
             // else say nothing about normal (through) vias
             
             net = aPcb->FindNet( via->GetNet() );

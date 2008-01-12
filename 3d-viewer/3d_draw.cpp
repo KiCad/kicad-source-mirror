@@ -250,7 +250,8 @@ double zpos, height;
 int color;
 
 	r = via->m_Width * g_Parm_3D_Visu.m_BoardScale / 2;
-	hole = g_Parm_3D_Visu.m_BoardSettings->m_ViaDrill * g_Parm_3D_Visu.m_BoardScale / 2;
+	hole = via->GetDrillValue();
+	hole *= g_Parm_3D_Visu.m_BoardScale / 2;
 	x = via->m_Start.x * g_Parm_3D_Visu.m_BoardScale;
 	y = via->m_Start.y * g_Parm_3D_Visu.m_BoardScale;
 

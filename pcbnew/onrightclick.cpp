@@ -515,7 +515,7 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
                           _( "Export via hole to others id vias" ), global_options_pad_xpm );
             ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_RESET_TO_DEFAULT,
                           _( "Set ALL via holes to default" ), apply_xpm );
-            if( Track->m_Drill <= 0 )
+            if( ! Track->IsDrillDefault() )
             {
                 via_mnu->Enable( ID_POPUP_PCB_VIA_HOLE_EXPORT, FALSE );
             }
@@ -559,6 +559,12 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         }
         msg = AddHotkeyName( _( "Place Via" ), s_Board_Editor_Hokeys_Descr, HK_ADD_VIA );
         PopMenu->Append( ID_POPUP_PCB_PLACE_VIA, msg );
+		// See if we can place a Micro Via (4 or more layers, and start from an external layer):
+		if ( GetScreen()->IsMicroViaAcceptable() )
+		{
+			msg = AddHotkeyName( _( "Place Micro Via" ), s_Board_Editor_Hokeys_Descr, HK_ADD_MICROVIA );
+			PopMenu->Append( ID_POPUP_PCB_PLACE_MICROVIA, msg );
+		}
     }
 
     // track Width control :

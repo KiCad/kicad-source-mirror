@@ -4,6 +4,16 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2007-Dec-12 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema:
+	missing footprints in export netlist (bug 1867321)
+	Affected: PadsPcb converter did not list all footprints
+
++pcbnew:
+	fixed: memory not freeed in block copy (minor bug)
+	Support for micro vias (generation of drill files not finished)
+
 2008-jan-06 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:

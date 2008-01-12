@@ -210,11 +210,10 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
     /* create the via */
     Via = new SEGVIA( m_Pcb );
     Via->m_Flags   = IS_NEW;
-    Via->m_Width   = g_DesignSettings.m_CurrentViaSize;
     Via->m_Shape   = g_DesignSettings.m_CurrentViaType;
+    Via->m_Width   = g_DesignSettings.m_CurrentViaSize;
     Via->SetNet( g_HightLigth_NetCode );
     Via->m_Start   = Via->m_End = g_CurrentTrackSegment->m_End;
-
     int old_layer = GetScreen()->m_Active_Layer;
 
     //swap the layers.
@@ -224,21 +223,30 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
         GetScreen()->m_Active_Layer = GetScreen()->m_Route_Layer_BOTTOM;
 
     /* Adjust the via layer pair */
-    if( Via->Shape() == VIA_BURIED )
-    {
-        Via->SetLayerPair( old_layer, GetScreen()->m_Active_Layer );
-    }
+    switch ( Via->Shape() )
+	{
+		case VIA_BLIND_BURIED:
+			Via->SetLayerPair( old_layer, GetScreen()->m_Active_Layer );
+			break;
+	
+		case VIA_MICROVIA:	// from external to the near neghbour inner layer
+			if ( old_layer == COPPER_LAYER_N )
+				GetScreen()->m_Active_Layer = LAYER_N_2;
+			else if ( old_layer == LAYER_CMP_N )
+				GetScreen()->m_Active_Layer = m_Pcb->m_BoardSettings->m_CopperLayerCount - 2;
+			else if ( old_layer == LAYER_N_2 )
+				GetScreen()->m_Active_Layer = COPPER_LAYER_N;
+			else if ( old_layer == m_Pcb->m_BoardSettings->m_CopperLayerCount - 2 )
+				GetScreen()->m_Active_Layer = LAYER_CMP_N;
+			// else error 
+			Via->SetLayerPair( old_layer, GetScreen()->m_Active_Layer );
+			Via->m_Width   = g_DesignSettings.m_CurrentMicroViaSize;
+			break;
 
-    else if( Via->Shape() == VIA_BLIND )    //blind via
-    {
-        // A revoir! ( la via devrait deboucher sur 1 cote )
-        Via->SetLayerPair( old_layer, GetScreen()->m_Active_Layer );
-    }
-
-    else
-    {
-        // Usual via is from copper to component; layer pair is 0 and 0x0F.
-        Via->SetLayerPair( COPPER_LAYER_N, LAYER_CMP_N );
+		default:
+			// Usual via is from copper to component; layer pair is 0 and 0x0F.
+			Via->SetLayerPair( COPPER_LAYER_N, LAYER_CMP_N );
+			break;
     }
 
     if( Drc_On &&  BAD_DRC==m_drc->Drc( Via, m_Pcb->m_Track ) )

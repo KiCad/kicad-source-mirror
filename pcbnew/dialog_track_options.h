@@ -23,6 +23,7 @@
  */
 
 ////@begin includes
+#include "wx/valgen.h"
 ////@end includes
 
 /*!
@@ -42,6 +43,9 @@
 #define ID_TEXTCTRL1 10002
 #define ID_TEXTCTRL2 10003
 #define ID_VIA_TYPE_SELECTION 10004
+#define ID_TEXTCTRL7 10008
+#define ID_TEXTCTRL6 10010
+#define ID_CHECKBOX_ALLOWS_MICROVIA 10009
 #define ID_TEXTCTRL3 10005
 #define ID_TEXTCTRL4 10006
 #define ID_TEXTCTRL5 10007
@@ -85,6 +89,9 @@ public:
     /// wxEVT_INIT_DIALOG event handler for ID_DIALOG
     void OnInitDialog( wxInitDialogEvent& event );
 
+    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_CHECKBOX_ALLOWS_MICROVIA
+    void OnCheckboxAllowsMicroviaClick( wxCommandEvent& event );
+
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
     void OnOkClick( wxCommandEvent& event );
 
@@ -115,6 +122,11 @@ public:
     wxStaticText* m_ViaAltDrillValueTitle;
     wxTextCtrl* m_OptCustomViaDrill;
     wxRadioBox* m_OptViaType;
+    wxStaticText* m_MicroViaSizeTitle;
+    wxTextCtrl* m_MicroViaSizeCtrl;
+    wxStaticText* m_MicroViaDrillTitle;
+    wxTextCtrl* m_MicroViaDrillCtrl;
+    wxCheckBox* m_AllowMicroViaCtrl;
     wxStaticText* m_TrackWidthTitle;
     wxTextCtrl* m_OptTrackWidth;
     wxStaticText* m_TrackClearanceTitle;

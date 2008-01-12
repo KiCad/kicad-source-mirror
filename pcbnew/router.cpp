@@ -606,7 +606,7 @@ void WinEDA_PcbFrame::ReadAutoroutedTracks( wxDC* DC )
             if( NewVia->GetLayer() == 0x0F || NewVia->GetLayer() == 0xF0 )
                 NewVia->m_Shape = VIA_THROUGH;
             else
-                NewVia->m_Shape = VIA_BURIED;
+                NewVia->m_Shape = VIA_BLIND_BURIED;
             
             NewVia->Insert( m_Pcb, NULL );
             NbTrack++;

@@ -20,21 +20,21 @@ static int Pcbdiv_grille;   /* memorisation temporaire */
 static PARAM_CFG_WXSTRING UserLibDirBufCfg
 (
     wxT( "LibDir" ),            /* Keyword */
-    & g_UserLibDirBuffer,       /* Parameter address */
+    &g_UserLibDirBuffer,        /* Parameter address */
     GROUPLIB
 );
 
 static PARAM_CFG_LIBNAME_LIST LibNameBufCfg
 (
     wxT( "LibName" ),           /* Keyword */
-    & g_LibName_List,           /* Parameter address */
+    &g_LibName_List,            /* Parameter address */
     GROUPLIB
 );
 
 static PARAM_CFG_INT PadDrillCfg
 (
     wxT( "PadDrlX" ),                   /* Keyword */
-    & g_Pad_Master.m_Drill.x,           /* Parameter address */
+    &g_Pad_Master.m_Drill.x,            /* Parameter address */
     320,                                /* Default value */
     0, 0x7FFF                           /* Valeurs extremes */
 );
@@ -42,7 +42,7 @@ static PARAM_CFG_INT PadDrillCfg
 static PARAM_CFG_INT PadDimHCfg     //Pad Diameter / H Size
 (
     wxT( "PadDimH" ),               /* Keyword */
-    & g_Pad_Master.m_Size.x,        /* Parameter address */
+    &g_Pad_Master.m_Size.x,         /* Parameter address */
     550,                            /* Default value */
     0, 0x7FFF                       /* Valeurs extremes */
 );
@@ -50,7 +50,7 @@ static PARAM_CFG_INT PadDimHCfg     //Pad Diameter / H Size
 static PARAM_CFG_INT PadDimVCfg
 (
     wxT( "PadDimV" ),           /* Keyword */
-    & g_Pad_Master.m_Size.y,    /* Parameter address */
+    &g_Pad_Master.m_Size.y,     /* Parameter address */
     550,                        /* Default value */
     0, 0x7FFF                   /* Valeurs extremes */
 );
@@ -59,7 +59,7 @@ static PARAM_CFG_INT PadDimVCfg
 static PARAM_CFG_INT PadFormeCfg
 (
     wxT( "PadForm" ),               /* Keyword */
-    & g_Pad_Master.m_PadShape,      /* Parameter address */
+    &g_Pad_Master.m_PadShape,       /* Parameter address */
     PAD_CIRCLE,                     /* Default value */
     0, 0x7F                         /* Valeurs extremes */
 );
@@ -67,14 +67,14 @@ static PARAM_CFG_INT PadFormeCfg
 static PARAM_CFG_INT PadMasqueLayerCfg
 (
     wxT( "PadMask" ),                   /* Keyword */
-    & g_Pad_Master.m_Masque_Layer,      /* Parameter address */
+    &g_Pad_Master.m_Masque_Layer,       /* Parameter address */
     0x0000FFFF                          /* Default value */
 );
 
 static PARAM_CFG_INT ViaDiametreCfg
 (
     wxT( "ViaDiam" ),                           /* Keyword */
-    & g_DesignSettings.m_CurrentViaSize,        /* Parameter address */
+    &g_DesignSettings.m_CurrentViaSize,         /* Parameter address */
     450,                                        /* Default value */
     0, 0xFFFF                                   /* Valeurs extremes */
 );
@@ -82,15 +82,32 @@ static PARAM_CFG_INT ViaDiametreCfg
 static PARAM_CFG_INT ViaDrillCfg
 (
     wxT( "ViaDril" ),                           /* Keyword */
-    & g_DesignSettings.m_ViaDrill,              /* Parameter address */
+    &g_DesignSettings.m_ViaDrill,               /* Parameter address */
     250,                                        /* Default value */
     0, 0xFFFF                                   /* Valeurs extremes */
 );
+
+static PARAM_CFG_INT MicroViaDiametreCfg
+(
+    wxT( "MViaDia" ),                               /* Keyword */
+    &g_DesignSettings.m_CurrentMicroViaSize,        /* Parameter address */
+    200,                                            /* Default value */
+    0, 1000                                       /* Valeurs extremes */
+);
+
+static PARAM_CFG_INT MicroViaDrillCfg
+(
+    wxT( "MViaDrl" ),                           /* Keyword */
+    &g_DesignSettings.m_MicroViaDrill,          /* Parameter address */
+    80,                                         /* Default value */
+    0, 800                                     /* Valeurs extremes */
+);
+
 static PARAM_CFG_INT ViaShowHoleCfg
 (
     INSETUP,
     wxT( "ViaSHole" ),                  /* Keyword */
-    & DisplayOpt.m_DisplayViaMode,      /* Parameter address */
+    &DisplayOpt.m_DisplayViaMode,       /* Parameter address */
     VIA_SPECIAL_HOLE_SHOW,              /* Default value */
     VIA_HOLE_NOT_SHOW,                  /* Valeurs extremes */
     OPT_VIA_HOLE_END - 1                /* Valeurs extremes */
@@ -99,7 +116,7 @@ static PARAM_CFG_INT ViaShowHoleCfg
 static PARAM_CFG_INT TrackClearenceCfg
 (
     wxT( "Isol" ),                                  /* Keyword */
-    & g_DesignSettings.m_TrackClearence,            /* Parameter address */
+    &g_DesignSettings.m_TrackClearence,             /* Parameter address */
     120,                                            /* Default value */
     0, 0xFFFF                                       /* Valeurs extremes */
 );
@@ -107,15 +124,15 @@ static PARAM_CFG_INT TrackClearenceCfg
 static PARAM_CFG_INT LayerCountCfg                      // Mask Working Layers
 (
     wxT( "Countlayer" ),                                /* Keyword */
-    & g_DesignSettings.m_CopperLayerCount,              /* Parameter address */
+    &g_DesignSettings.m_CopperLayerCount,               /* Parameter address */
     2,                                                  /* Default value */
-    1,                 NB_COPPER_LAYERS                 /* Valeurs extremes */
+    1, NB_COPPER_LAYERS                                 /* Valeurs extremes */
 );
 
 static PARAM_CFG_INT TrackWidthCfg
 (
     wxT( "Lpiste" ),                                /* Keyword */
-    & g_DesignSettings.m_CurrentTrackWidth,         /* Parameter address */
+    &g_DesignSettings.m_CurrentTrackWidth,          /* Parameter address */
     170,                                            /* Default value */
     2, 0xFFFF                                       /* Valeurs extremes */
 );
@@ -123,7 +140,7 @@ static PARAM_CFG_INT TrackWidthCfg
 static PARAM_CFG_INT RouteLayTopCfg     // First current working layer
 (
     wxT( "RouteTo" ),                   /* Keyword */
-    & Route_Layer_TOP,                  /* Parameter address */
+    &Route_Layer_TOP,                   /* Parameter address */
     15,                                 /* Default value */
     0, 15                               /* Valeurs extremes */
 );
@@ -131,7 +148,7 @@ static PARAM_CFG_INT RouteLayTopCfg     // First current working layer
 static PARAM_CFG_INT RouteLayBotCfg     // second current working layer
 (
     wxT( "RouteBo" ),                   /* Keyword */
-    & Route_Layer_BOTTOM,               /* Parameter address */
+    &Route_Layer_BOTTOM,                /* Parameter address */
     0,                                  /* Default value */
     0, 15                               /* Valeurs extremes */
 );
@@ -139,7 +156,7 @@ static PARAM_CFG_INT RouteLayBotCfg     // second current working layer
 static PARAM_CFG_INT TypeViaCfg
 (
     wxT( "TypeVia" ),                               /* Keyword */
-    & g_DesignSettings.m_CurrentViaType,            /* Parameter address */
+    &g_DesignSettings.m_CurrentViaType,             /* Parameter address */
     VIA_THROUGH,                                    /* Default value */
     0, 3                                            /* Valeurs extremes */
 );
@@ -147,70 +164,70 @@ static PARAM_CFG_INT TypeViaCfg
 static PARAM_CFG_BOOL Segm45Cfg     // Segm Pistes a 0, 45, 90 degres uniquement
 (
     wxT( "Segm45" ),                /* Keyword */
-    & Track_45_Only,                /* Parameter address */
+    &Track_45_Only,                 /* Parameter address */
     TRUE                            /* Default value */
 );
 
 static PARAM_CFG_BOOL Raccord45Cfg  // Generation automatique des Raccords a 45 degres
 (
     wxT( "Racc45" ),                /* Keyword */
-    & g_Raccord_45_Auto,            /* Parameter address */
+    &g_Raccord_45_Auto,             /* Parameter address */
     TRUE                            /* Default value */
 );
 
 static PARAM_CFG_INT UnitCfg    // Units: 0 inch, 1 mm
 (
     wxT( "Unite" ),             /* Keyword */
-    & g_UnitMetric,             /* Parameter address */
+    &g_UnitMetric,              /* Parameter address */
     FALSE                       /* Default value */
 );
 
 static PARAM_CFG_BOOL SegmFillCfg
 (
     wxT( "SegFill" ),                               /* Keyword */
-    & DisplayOpt.DisplayPcbTrackFill,               /* Parameter address */
+    &DisplayOpt.DisplayPcbTrackFill,                /* Parameter address */
     TRUE                                            /* Default value */
 );
 
 static PARAM_CFG_BOOL NewTrackAfficheGardeCfg
 (
     wxT( "NewAffG" ),               /* Keyword */
-    & g_ShowIsolDuringCreateTrack,  /* Parameter address */
+    &g_ShowIsolDuringCreateTrack,   /* Parameter address */
     TRUE                            /* Default value */
 );
 
 static PARAM_CFG_BOOL TrackAfficheGardeCfg
 (
     wxT( "SegAffG" ),               /* Keyword */
-    & DisplayOpt.DisplayTrackIsol,  /* Parameter address */
+    &DisplayOpt.DisplayTrackIsol,   /* Parameter address */
     FALSE                           /* Default value */
 );
 
 static PARAM_CFG_BOOL PadFillCfg
 (
     wxT( "PadFill" ),               /* Keyword */
-    & DisplayOpt.DisplayPadFill,    /* Parameter address */
+    &DisplayOpt.DisplayPadFill,     /* Parameter address */
     TRUE                            /* Default value */
 );
 
 static PARAM_CFG_BOOL PadAfficheGardeCfg
 (
     wxT( "PadAffG" ),               /* Keyword */
-    & DisplayOpt.DisplayPadIsol,    /* Parameter address */
+    &DisplayOpt.DisplayPadIsol,     /* Parameter address */
     TRUE                            /* Default value */
 );
 
 static PARAM_CFG_BOOL PadShowNumCfg
 (
     wxT( "PadSNum" ),               /* Keyword */
-    & DisplayOpt.DisplayPadNum,     /* Parameter address */
+    &DisplayOpt.DisplayPadNum,      /* Parameter address */
     TRUE                            /* Default value */
 );
 
 static PARAM_CFG_INT AfficheContourModuleCfg    // Module Edges: fill/line/sketch
 (
     wxT( "ModAffC" ),                           /* Keyword */
-    & DisplayOpt.DisplayModEdge,                /* Parameter address */
+    &DisplayOpt.DisplayModEdge,                 /* Parameter address */
     FILAIRE,                                    /* Default value */
     0, 2                                        /* Valeurs extremes */
 );
@@ -218,7 +235,7 @@ static PARAM_CFG_INT AfficheContourModuleCfg    // Module Edges: fill/line/sketc
 static PARAM_CFG_INT AfficheTexteModuleCfg  // Module Texts: fill/line/sketch
 (
     wxT( "ModAffT" ),                       /* Keyword */
-    & DisplayOpt.DisplayModText,            /* Parameter address */
+    &DisplayOpt.DisplayModText,             /* Parameter address */
     FILAIRE,                                /* Default value */
     0, 2                                    /* Valeurs extremes */
 );
@@ -226,7 +243,7 @@ static PARAM_CFG_INT AfficheTexteModuleCfg  // Module Texts: fill/line/sketch
 static PARAM_CFG_INT AfficheTextePcbCfg     // PCB Texts: fill/line/sketch
 (
     wxT( "PcbAffT" ),                       /* Keyword */
-    & DisplayOpt.DisplayDrawItems,          /* Parameter address */
+    &DisplayOpt.DisplayDrawItems,           /* Parameter address */
     FILAIRE,                                /* Default value */
     0, 2                                    /* Valeurs extremes */
 );
@@ -234,14 +251,14 @@ static PARAM_CFG_INT AfficheTextePcbCfg     // PCB Texts: fill/line/sketch
 static PARAM_CFG_BOOL SegmPcb45Cfg  // Force 45 degrees for segments
 (
     wxT( "SgPcb45" ),               /* Keyword */
-    & Segments_45_Only,             /* Parameter address */
+    &Segments_45_Only,              /* Parameter address */
     TRUE                            /* Default value */
 );
 
 static PARAM_CFG_INT TextePcbDimVCfg
 (
     wxT( "TxtPcbV" ),                               /* Keyword */
-    & g_DesignSettings.m_PcbTextSize.y,             /* Parameter address */
+    &g_DesignSettings.m_PcbTextSize.y,              /* Parameter address */
     600,                                            /* Default value */
     10, 2000                                        /* Valeurs extremes */
 );
@@ -249,7 +266,7 @@ static PARAM_CFG_INT TextePcbDimVCfg
 static PARAM_CFG_INT TextePcbDimHCfg
 (
     wxT( "TxtPcbH" ),                               /* Keyword */
-    & g_DesignSettings.m_PcbTextSize.x,             /* Parameter address */
+    &g_DesignSettings.m_PcbTextSize.x,              /* Parameter address */
     600,                                            /* Default value */
     10, 2000                                        /* Valeurs extremes */
 );
@@ -258,7 +275,7 @@ static PARAM_CFG_SETCOLOR ColorLayer0Cfg   // CU Layer Color
 (
     INSETUP,
     wxT( "ColLay0" ),                           /* Keyword */
-    & g_DesignSettings.m_LayerColor[0],         /* Parameter address */
+    &g_DesignSettings.m_LayerColor[0],          /* Parameter address */
     GREEN                                       /* Default value */
 );
 
@@ -266,7 +283,7 @@ static PARAM_CFG_SETCOLOR ColorLayer1Cfg
 (
     INSETUP,
     wxT( "ColLay1" ),                           /* Keyword */
-    & g_DesignSettings.m_LayerColor[1],         /* Parameter address */
+    &g_DesignSettings.m_LayerColor[1],          /* Parameter address */
     BLUE                                        /* Default value */
 );
 
@@ -274,7 +291,7 @@ static PARAM_CFG_SETCOLOR ColorLayer2Cfg
 (
     INSETUP,
     wxT( "ColLay2" ),                           /* Keyword */
-    & g_DesignSettings.m_LayerColor[2],         /* Parameter address */
+    &g_DesignSettings.m_LayerColor[2],          /* Parameter address */
     LIGHTGRAY                                   /* Default value */
 );
 
@@ -282,7 +299,7 @@ static PARAM_CFG_SETCOLOR ColorLayer3Cfg
 (
     INSETUP,
     wxT( "ColLay3" ),                           /* Keyword */
-    & g_DesignSettings.m_LayerColor[3],         /* Parameter address */
+    &g_DesignSettings.m_LayerColor[3],          /* Parameter address */
     5                                           /* Default value */
 );
 
@@ -290,7 +307,7 @@ static PARAM_CFG_SETCOLOR ColorLayer4Cfg
 (
     INSETUP,
     wxT( "ColLay4" ),                           /* Keyword */
-    & g_DesignSettings.m_LayerColor[4],         /* Parameter address */
+    &g_DesignSettings.m_LayerColor[4],          /* Parameter address */
     4                                           /* Default value */
 );
 
@@ -298,7 +315,7 @@ static PARAM_CFG_SETCOLOR ColorLayer5Cfg
 (
     INSETUP,
     wxT( "ColLay5" ),                           /* Keyword */
-    & g_DesignSettings.m_LayerColor[5],         /* Parameter address */
+    &g_DesignSettings.m_LayerColor[5],          /* Parameter address */
     5                                           /* Default value */
 );
 
@@ -306,7 +323,7 @@ static PARAM_CFG_SETCOLOR ColorLayer6Cfg
 (
     INSETUP,
     wxT( "ColLay6" ),                           /* Keyword */
-    & g_DesignSettings.m_LayerColor[6],         /* Parameter address */
+    &g_DesignSettings.m_LayerColor[6],          /* Parameter address */
     6                                           /* Default value */
 );
 
@@ -314,7 +331,7 @@ static PARAM_CFG_SETCOLOR ColorLayer7Cfg
 (
     INSETUP,
     wxT( "ColLay7" ),                           /* Keyword */
-    & g_DesignSettings.m_LayerColor[7],         /* Parameter address */
+    &g_DesignSettings.m_LayerColor[7],          /* Parameter address */
     5                                           /* Default value */
 );
 
@@ -322,7 +339,7 @@ static PARAM_CFG_SETCOLOR ColorLayer8Cfg
 (
     INSETUP,
     wxT( "ColLay8" ),                           /* Keyword */
-    & g_DesignSettings.m_LayerColor[8],         /* Parameter address */
+    &g_DesignSettings.m_LayerColor[8],          /* Parameter address */
     7                                           /* Default value */
 );
 
@@ -330,7 +347,7 @@ static PARAM_CFG_SETCOLOR ColorLayer9Cfg
 (
     INSETUP,
     wxT( "ColLay9" ),                       /* Keyword */
-    & g_DesignSettings.m_LayerColor[9],     /* Parameter address */
+    &g_DesignSettings.m_LayerColor[9],      /* Parameter address */
     1                                       /* Default value */
 );
 
@@ -338,7 +355,7 @@ static PARAM_CFG_SETCOLOR ColorLayer10Cfg
 (
     INSETUP,
     wxT( "ColLayA" ),                       /* Keyword */
-    & g_DesignSettings.m_LayerColor[10],    /* Parameter address */
+    &g_DesignSettings.m_LayerColor[10],     /* Parameter address */
     2                                       /* Default value */
 );
 
@@ -346,7 +363,7 @@ static PARAM_CFG_SETCOLOR ColorLayer11Cfg
 (
     INSETUP,
     wxT( "ColLayB" ),                       /* Keyword */
-    & g_DesignSettings.m_LayerColor[11],    /* Parameter address */
+    &g_DesignSettings.m_LayerColor[11],     /* Parameter address */
     3                                       /* Default value */
 );
 
@@ -354,7 +371,7 @@ static PARAM_CFG_SETCOLOR ColorLayer12Cfg
 (
     INSETUP,
     wxT( "ColLayC" ),                       /* Keyword */
-    & g_DesignSettings.m_LayerColor[12],    /* Parameter address */
+    &g_DesignSettings.m_LayerColor[12],     /* Parameter address */
     12                                      /* Default value */
 );
 
@@ -362,7 +379,7 @@ static PARAM_CFG_SETCOLOR ColorLayer13Cfg
 (
     INSETUP,
     wxT( "ColLayD" ),                       /* Keyword */
-    & g_DesignSettings.m_LayerColor[13],    /* Parameter address */
+    &g_DesignSettings.m_LayerColor[13],     /* Parameter address */
     13                                      /* Default value */
 );
 
@@ -370,7 +387,7 @@ static PARAM_CFG_SETCOLOR ColorLayer14Cfg
 (
     INSETUP,
     wxT( "ColLayE" ),                       /* Keyword */
-    & g_DesignSettings.m_LayerColor[14],    /* Parameter address */
+    &g_DesignSettings.m_LayerColor[14],     /* Parameter address */
     14                                      /* Default value */
 );
 
@@ -378,7 +395,7 @@ static PARAM_CFG_SETCOLOR ColorLayer15Cfg  // CMP Layer Color
 (
     INSETUP,
     wxT( "ColLayF" ),                       /* Keyword */
-    & g_DesignSettings.m_LayerColor[15],    /* Parameter address */
+    &g_DesignSettings.m_LayerColor[15],     /* Parameter address */
     RED                                     /* Default value */
 );
 
@@ -386,7 +403,7 @@ static PARAM_CFG_SETCOLOR ColorLayer16Cfg  // Adhesive CU Layer Color
 (
     INSETUP,
     wxT( "ColLayG" ),                       /* Keyword */
-    & g_DesignSettings.m_LayerColor[16],    /* Parameter address */
+    &g_DesignSettings.m_LayerColor[16],     /* Parameter address */
     1                                       /* Default value */
 );
 
@@ -394,7 +411,7 @@ static PARAM_CFG_SETCOLOR ColorLayer17Cfg  // Adhesive CMP Layer Color
 (
     INSETUP,
     wxT( "ColLayH" ),                       /* Keyword */
-    & g_DesignSettings.m_LayerColor[17],    /* Parameter address */
+    &g_DesignSettings.m_LayerColor[17],     /* Parameter address */
     5                                       /* Default value */
 );
 
@@ -402,7 +419,7 @@ static PARAM_CFG_SETCOLOR ColorLayer18Cfg  // Solder Mask CU Layer Color
 (
     INSETUP,
     wxT( "ColLayI" ),                       /* Keyword */
-    & g_DesignSettings.m_LayerColor[18],    /* Parameter address */
+    &g_DesignSettings.m_LayerColor[18],     /* Parameter address */
     11                                      /* Default value */
 );
 
@@ -410,7 +427,7 @@ static PARAM_CFG_SETCOLOR ColorLayer19Cfg  // Solder Mask CMP Layer Color
 (
     INSETUP,
     wxT( "ColLayJ" ),                       /* Keyword */
-    & g_DesignSettings.m_LayerColor[19],    /* Parameter address */
+    &g_DesignSettings.m_LayerColor[19],     /* Parameter address */
     4                                       /* Default value */
 );
 
@@ -418,7 +435,7 @@ static PARAM_CFG_SETCOLOR ColorLayer20Cfg  // Silk Screen CU Layer Color
 (
     INSETUP,
     wxT( "ColLayK" ),                       /* Keyword */
-    & g_DesignSettings.m_LayerColor[20],    /* Parameter address */
+    &g_DesignSettings.m_LayerColor[20],     /* Parameter address */
     5                                       /* Default value */
 );
 
@@ -426,7 +443,7 @@ static PARAM_CFG_SETCOLOR ColorLayer21Cfg  // Silk Screen CMP Layer Color
 (
     INSETUP,
     wxT( "ColLayL" ),                       /* Keyword */
-    & g_DesignSettings.m_LayerColor[21],    /* Parameter address */
+    &g_DesignSettings.m_LayerColor[21],     /* Parameter address */
     3                                       /* Default value */
 );
 
@@ -434,7 +451,7 @@ static PARAM_CFG_SETCOLOR ColorLayer22Cfg  // Mask CU Layer Color
 (
     INSETUP,
     wxT( "ColLayM" ),                       /* Keyword */
-    & g_DesignSettings.m_LayerColor[22],    /* Parameter address */
+    &g_DesignSettings.m_LayerColor[22],     /* Parameter address */
     6                                       /* Default value */
 );
 
@@ -442,7 +459,7 @@ static PARAM_CFG_SETCOLOR ColorLayer23Cfg  // Mask CMP Layer Color
 (
     INSETUP,
     wxT( "ColLayN" ),                       /* Keyword */
-    & g_DesignSettings.m_LayerColor[23],    /* Parameter address */
+    &g_DesignSettings.m_LayerColor[23],     /* Parameter address */
     5                                       /* Default value */
 );
 
@@ -450,7 +467,7 @@ static PARAM_CFG_SETCOLOR ColorLayer24Cfg  // DRAW Layer Color
 (
     INSETUP,
     wxT( "ColLayO" ),                           /* Keyword */
-    & g_DesignSettings.m_LayerColor[24],        /* Parameter address */
+    &g_DesignSettings.m_LayerColor[24],         /* Parameter address */
     LIGHTGRAY                                   /* Default value */
 );
 
@@ -458,7 +475,7 @@ static PARAM_CFG_SETCOLOR ColorLayer25Cfg  // Comment Layer Color
 (
     INSETUP,
     wxT( "ColLayP" ),                       /* Keyword */
-    & g_DesignSettings.m_LayerColor[25],    /* Parameter address */
+    &g_DesignSettings.m_LayerColor[25],     /* Parameter address */
     1                                       /* Default value */
 );
 
@@ -466,7 +483,7 @@ static PARAM_CFG_SETCOLOR ColorLayer26Cfg  // ECO1 Layer Color
 (
     INSETUP,
     wxT( "ColLayQ" ),                       /* Keyword */
-    & g_DesignSettings.m_LayerColor[26],    /* Parameter address */
+    &g_DesignSettings.m_LayerColor[26],     /* Parameter address */
     2                                       /* Default value */
 );
 
@@ -474,7 +491,7 @@ static PARAM_CFG_SETCOLOR ColorLayer27Cfg  //ECO2 Layer Color
 (
     INSETUP,
     wxT( "ColLayR" ),                           /* Keyword */
-    & g_DesignSettings.m_LayerColor[27],        /* Parameter address */
+    &g_DesignSettings.m_LayerColor[27],         /* Parameter address */
     14                                          /* Default value */
 );
 
@@ -482,7 +499,7 @@ static PARAM_CFG_SETCOLOR ColorLayer28Cfg  // EDGES Layer Color
 (
     INSETUP,
     wxT( "ColLayS" ),                           /* Keyword */
-    & g_DesignSettings.m_LayerColor[28],        /* Parameter address */
+    &g_DesignSettings.m_LayerColor[28],         /* Parameter address */
     YELLOW                                      /* Default value */
 );
 
@@ -490,7 +507,7 @@ static PARAM_CFG_SETCOLOR ColorLayer29Cfg
 (
     INSETUP,
     wxT( "ColLayT" ),                       /* Keyword */
-    & g_DesignSettings.m_LayerColor[29],    /* Parameter address */
+    &g_DesignSettings.m_LayerColor[29],     /* Parameter address */
     13                                      /* Default value */
 );
 
@@ -498,7 +515,7 @@ static PARAM_CFG_SETCOLOR ColorLayer30Cfg
 (
     INSETUP,
     wxT( "ColLayU" ),                       /* Keyword */
-    & g_DesignSettings.m_LayerColor[30],    /* Parameter address */
+    &g_DesignSettings.m_LayerColor[30],     /* Parameter address */
     14                                      /* Default value */
 );
 
@@ -506,7 +523,7 @@ static PARAM_CFG_SETCOLOR ColorLayer31Cfg
 (
     INSETUP,
     wxT( "ColLayV" ),                       /* Keyword */
-    & g_DesignSettings.m_LayerColor[31],    /* Parameter address */
+    &g_DesignSettings.m_LayerColor[31],     /* Parameter address */
     7                                       /* Default value */
 );
 
@@ -514,7 +531,7 @@ static PARAM_CFG_SETCOLOR ColorTxtModCmpCfg
 (
     INSETUP,
     wxT( "CTxtMoC" ),       /* Keyword */
-    & g_ModuleTextCMPColor, /* Parameter address */
+    &g_ModuleTextCMPColor,  /* Parameter address */
     LIGHTGRAY               /* Default value */
 );
 
@@ -522,7 +539,7 @@ static PARAM_CFG_SETCOLOR ColorTxtModCuCfg
 (
     INSETUP,
     wxT( "CTxtMoS" ),       /* Keyword */
-    & g_ModuleTextCUColor,  /* Parameter address */
+    &g_ModuleTextCUColor,   /* Parameter address */
     1                       /* Default value */
 );
 
@@ -530,14 +547,14 @@ static PARAM_CFG_SETCOLOR VisibleTxtModCfg
 (
     INSETUP,
     wxT( "CTxtVis" ),           /* Keyword */
-    & g_ModuleTextNOVColor,     /* Parameter address */
+    &g_ModuleTextNOVColor,      /* Parameter address */
     DARKGRAY                    /* Default value */
 );
 
 static PARAM_CFG_INT TexteModDimVCfg
 (
     wxT( "TxtModV" ),       /* Keyword */
-    & ModuleTextSize.y,     /* Parameter address */
+    &ModuleTextSize.y,      /* Parameter address */
     500,                    /* Default value */
     1, 20000                /* Valeurs extremes */
 );
@@ -545,7 +562,7 @@ static PARAM_CFG_INT TexteModDimVCfg
 static PARAM_CFG_INT TexteModDimHCfg
 (
     wxT( "TxtModH" ),               /* Keyword */
-    & ModuleTextSize.x,             /* Parameter address */
+    &ModuleTextSize.x,              /* Parameter address */
     500,                            /* Default value */
     1, 20000                        /* Valeurs extremes */
 );
@@ -553,7 +570,7 @@ static PARAM_CFG_INT TexteModDimHCfg
 static PARAM_CFG_INT TexteModWidthCfg
 (
     wxT( "TxtModW" ),               /* Keyword */
-    & ModuleTextWidth,              /* Parameter address */
+    &ModuleTextWidth,               /* Parameter address */
     100,                            /* Default value */
     1, 10000                        /* Valeurs extremes */
 );
@@ -562,7 +579,7 @@ static PARAM_CFG_SETCOLOR ColorAncreModCfg
 (
     INSETUP,
     wxT( "CAncreM" ),       /* Keyword */
-    & g_AnchorColor,        /* Parameter address */
+    &g_AnchorColor,         /* Parameter address */
     BLUE                    /* Default value */
 );
 
@@ -570,7 +587,7 @@ static PARAM_CFG_SETCOLOR ColorPadCuCfg
 (
     INSETUP,
     wxT( "CoPadCu" ),           /* Keyword */
-    & g_PadCUColor,             /* Parameter address */
+    &g_PadCUColor,              /* Parameter address */
     GREEN                       /* Default value */
 );
 
@@ -578,39 +595,39 @@ static PARAM_CFG_SETCOLOR ColorPadCmpCfg
 (
     INSETUP,
     wxT( "CoPadCm" ),           /* Keyword */
-    & g_PadCMPColor,            /* Parameter address */
+    &g_PadCMPColor,             /* Parameter address */
     RED                         /* Default value */
 );
 
-static PARAM_CFG_SETCOLOR ColorViaNormCfg
+static PARAM_CFG_SETCOLOR ColorViaThroughCfg
 (
     INSETUP,
-    wxT( "CoViaNo" ),                           /* Keyword */
-    & g_DesignSettings.m_ViaColor[VIA_THROUGH], /* Parameter address */
+    wxT( "CoViaTh" ),                           /* Keyword */
+    &g_DesignSettings.m_ViaColor[VIA_THROUGH],  /* Parameter address */
     LIGHTGRAY                                   /* Default value */
 );
 
-static PARAM_CFG_SETCOLOR ColorViaborgneCfg
+static PARAM_CFG_SETCOLOR ColorViaBlindBuriedCfg
 (
     INSETUP,
-    wxT( "CoViaBo" ),                           /* Keyword */
-    & g_DesignSettings.m_ViaColor[VIA_BURIED],  /* Parameter address */
-    CYAN                                        /* Default value */
+    wxT( "CoViaBu" ),                                   /* Keyword */
+    &g_DesignSettings.m_ViaColor[VIA_BLIND_BURIED],     /* Parameter address */
+    BROWN                                               /* Default value */
 );
 
-static PARAM_CFG_SETCOLOR ColorViaEnterreeCfg  // Buried Via Color
+static PARAM_CFG_SETCOLOR ColorViaMicroViaCfg  // Buried Via Color
 (
     INSETUP,
-    wxT( "CoViaEn" ),                               /* Keyword */
-    & g_DesignSettings.m_ViaColor[VIA_BLIND],       /* Parameter address */
-    BROWN                                           /* Default value */
+    wxT( "CoViaMi" ),                                   /* Keyword */
+    &g_DesignSettings.m_ViaColor[VIA_MICROVIA],         /* Parameter address */
+    CYAN                                                /* Default value */
 );
 
 static PARAM_CFG_SETCOLOR ColorpcbGrilleCfg
 (
     INSETUP,
     wxT( "CoPcbGr" ),           /* Keyword */
-    & g_GridColor,              /* Parameter address */
+    &g_GridColor,               /* Parameter address */
     DARKGRAY                    /* Default value */
 );
 
@@ -618,14 +635,14 @@ static PARAM_CFG_SETCOLOR ColorCheveluCfg
 (
     INSETUP,
     wxT( "CoRatsN" ),                           /* Keyword */
-    & g_DesignSettings.m_RatsnestColor,         /* Parameter address */
+    &g_DesignSettings.m_RatsnestColor,          /* Parameter address */
     WHITE                                       /* Default value */
 );
 
 static PARAM_CFG_INT HPGLpenNumCfg
 (
     wxT( "HPGLnum" ),               /* Keyword */
-    & g_HPGL_Pen_Num,               /* Parameter address */
+    &g_HPGL_Pen_Num,                /* Parameter address */
     1,                              /* Default value */
     1, 16                           /* Valeurs extremes */
 );
@@ -633,7 +650,7 @@ static PARAM_CFG_INT HPGLpenNumCfg
 static PARAM_CFG_INT HPGLdiamCfg    // HPGL pen size (mils)
 (
     wxT( "HPGdiam" ),               /* Keyword */
-    & g_HPGL_Pen_Diam,              /* Parameter address */
+    &g_HPGL_Pen_Diam,               /* Parameter address */
     15,                             /* Default value */
     0, 100                          /* Valeurs extremes */
 );
@@ -641,7 +658,7 @@ static PARAM_CFG_INT HPGLdiamCfg    // HPGL pen size (mils)
 static PARAM_CFG_INT HPGLspeedCfg   //HPGL pen speed (cm/s)
 (
     wxT( "HPGLSpd" ),               /* Keyword */
-    & g_HPGL_Pen_Speed,             /* Parameter address */
+    &g_HPGL_Pen_Speed,              /* Parameter address */
     20,                             /* Default value */
     0, 1000                         /* Valeurs extremes */
 );
@@ -649,7 +666,7 @@ static PARAM_CFG_INT HPGLspeedCfg   //HPGL pen speed (cm/s)
 static PARAM_CFG_INT HPGLrecouvrementCfg
 (
     wxT( "HPGLrec" ),           /* Keyword */
-    & g_HPGL_Pen_Recouvrement,  /* Parameter address */
+    &g_HPGL_Pen_Recouvrement,   /* Parameter address */
     2,                          /* Default value */
     0, 0x100                    /* Valeurs extremes */
 );
@@ -657,14 +674,14 @@ static PARAM_CFG_INT HPGLrecouvrementCfg
 static PARAM_CFG_BOOL HPGLcenterCfg     //HPGL Org Coord ( 0 normal, 1 Centre)
 (
     wxT( "HPGLorg" ),                   /* Keyword */
-    & HPGL_Org_Centre,                  /* Parameter address */
+    &HPGL_Org_Centre,                   /* Parameter address */
     FALSE                               /* Default value */
 );
 
 static PARAM_CFG_INT GERBERSpotMiniCfg  //Aperture Mini (mils)
 (
     wxT( "GERBmin" ),                   /* Keyword */
-    & spot_mini,                        /* Parameter address */
+    &spot_mini,                         /* Parameter address */
     15,                                 /* Default value */
     1, 100                              /* Valeurs extremes */
 );
@@ -672,7 +689,7 @@ static PARAM_CFG_INT GERBERSpotMiniCfg  //Aperture Mini (mils)
 static PARAM_CFG_INT VernisEpargneGardeCfg
 (
     wxT( "VEgarde" ),                       /* Keyword */
-    & g_DesignSettings.m_MaskMargin,        /* Parameter address */
+    &g_DesignSettings.m_MaskMargin,         /* Parameter address */
     100,                                    /* Default value */
     0, 0xFFFF                               /* Valeurs extremes */
 );
@@ -680,7 +697,7 @@ static PARAM_CFG_INT VernisEpargneGardeCfg
 static PARAM_CFG_INT DrawSegmLargeurCfg
 (
     wxT( "DrawLar" ),                               /* Keyword */
-    & g_DesignSettings.m_DrawSegmentWidth,          /* Parameter address */
+    &g_DesignSettings.m_DrawSegmentWidth,           /* Parameter address */
     120,                                            /* Default value */
     0, 0xFFFF                                       /* Valeurs extremes */
 );
@@ -688,7 +705,7 @@ static PARAM_CFG_INT DrawSegmLargeurCfg
 static PARAM_CFG_INT EdgeSegmLargeurCfg
 (
     wxT( "EdgeLar" ),                               /* Keyword */
-    & g_DesignSettings.m_EdgeSegmentWidth,          /* Parameter address */
+    &g_DesignSettings.m_EdgeSegmentWidth,           /* Parameter address */
     120,                                            /* Default value */
     0, 0xFFFF                                       /* Valeurs extremes */
 );
@@ -696,7 +713,7 @@ static PARAM_CFG_INT EdgeSegmLargeurCfg
 static PARAM_CFG_INT TexteSegmLargeurCfg
 (
     wxT( "TxtLar" ),                            /* Keyword */
-    & g_DesignSettings.m_PcbTextWidth,          /* Parameter address */
+    &g_DesignSettings.m_PcbTextWidth,           /* Parameter address */
     120,                                        /* Default value */
     0, 0xFFFF                                   /* Valeurs extremes */
 );
@@ -704,7 +721,7 @@ static PARAM_CFG_INT TexteSegmLargeurCfg
 static PARAM_CFG_INT ModuleSegmWidthCfg
 (
     wxT( "MSegLar" ),               /* Keyword */
-    & ModuleSegmentWidth,           /* Parameter address */
+    &ModuleSegmentWidth,            /* Parameter address */
     120,                            /* Default value */
     0, 0xFFFF                       /* Valeurs extremes */
 );
@@ -712,7 +729,7 @@ static PARAM_CFG_INT ModuleSegmWidthCfg
 static PARAM_CFG_INT FormatPlotCfg
 (
     wxT( "ForPlot" ),           /* Keyword */
-    & format_plot,              /* Parameter address */
+    &format_plot,               /* Parameter address */
     1,                          /* Default value */
     0, 3                        /* Valeurs extremes */
 );
@@ -720,7 +737,7 @@ static PARAM_CFG_INT FormatPlotCfg
 static PARAM_CFG_INT WTraitSerigraphiePlotCfg
 (
     wxT( "WpenSer" ),           /* Keyword */
-    & g_PlotLine_Width,         /* Parameter address */
+    &g_PlotLine_Width,          /* Parameter address */
     10,                         /* Default value */
     1, 10000                    /* Valeurs extremes */
 );
@@ -728,7 +745,7 @@ static PARAM_CFG_INT WTraitSerigraphiePlotCfg
 static PARAM_CFG_DOUBLE UserGrilleXCfg
 (
     wxT( "UserGrX" ),           /* Keyword */
-    & g_UserGrid.x,             /* Parameter address */
+    &g_UserGrid.x,              /* Parameter address */
     0.01,                       /* Default value */
     0.0001, 100.0               /* Valeurs extremes (inches)*/
 );
@@ -736,7 +753,7 @@ static PARAM_CFG_DOUBLE UserGrilleXCfg
 static PARAM_CFG_DOUBLE UserGrilleYCfg
 (
     wxT( "UserGrY" ),           /* Keyword */
-    & g_UserGrid.y,             /* Parameter address */
+    &g_UserGrid.y,              /* Parameter address */
     0.01,                       /* Default value */
     0.0001, 100.0               /* Valeurs extremes  (inches)*/
 );
@@ -744,7 +761,7 @@ static PARAM_CFG_DOUBLE UserGrilleYCfg
 static PARAM_CFG_INT UserGrilleUnitCfg
 (
     wxT( "UserGrU" ),               /* Keyword */
-    & g_UserGrid_Unit,              /* Parameter address */
+    &g_UserGrid_Unit,               /* Parameter address */
     1,                              /* Default value */
     0, 1                            /* Valeurs extremes */
 );
@@ -752,7 +769,7 @@ static PARAM_CFG_INT UserGrilleUnitCfg
 static PARAM_CFG_INT DivGrillePcbCfg
 (
     wxT( "DivGrPc" ),               /* Keyword */
-    & Pcbdiv_grille,                /* Parameter address */
+    &Pcbdiv_grille,                 /* Parameter address */
     1,                              /* Default value */
     1, 10                           /* Valeurs extremes */
 );
@@ -760,7 +777,7 @@ static PARAM_CFG_INT DivGrillePcbCfg
 static PARAM_CFG_INT TimeOutCfg     //Duree entre Sauvegardes auto en secondes
 (
     wxT( "TimeOut" ),               /* Keyword */
-    & g_TimeOut,                    /* Parameter address */
+    &g_TimeOut,                     /* Parameter address */
     600,                            /* Default value */
     0, 60000                        /* Valeurs extremes */
 );
@@ -769,7 +786,7 @@ static PARAM_CFG_BOOL DisplPolairCfg
 (
     INSETUP,
     wxT( "DPolair" ),                   /* Keyword */
-    & DisplayOpt.DisplayPolarCood,      /* Parameter address */
+    &DisplayOpt.DisplayPolarCood,       /* Parameter address */
     FALSE                               /* Default value */
 );
 
@@ -777,7 +794,7 @@ static PARAM_CFG_INT CursorShapeCfg
 (
     INSETUP,
     wxT( "CuShape" ),               /* Keyword */
-    & g_CursorShape,                /* Parameter address */
+    &g_CursorShape,                 /* Parameter address */
     0,                              /* Default value */
     0, 1                            /* Valeurs extremes */
 );
@@ -785,7 +802,7 @@ static PARAM_CFG_INT CursorShapeCfg
 static PARAM_CFG_INT PrmMaxLinksShowed
 (
     wxT( "MaxLnkS" ),               /* Keyword */
-    & g_MaxLinksShowed,             /* Parameter address */
+    &g_MaxLinksShowed,              /* Parameter address */
     3,                              /* Default value */
     0, 15                           /* Valeurs extremes */
 );
@@ -793,14 +810,14 @@ static PARAM_CFG_INT PrmMaxLinksShowed
 static PARAM_CFG_BOOL ShowRatsnestCfg
 (
     wxT( "ShowRat" ),               /* Keyword */
-    & g_Show_Ratsnest,              /* Parameter address */
+    &g_Show_Ratsnest,               /* Parameter address */
     FALSE                           /* Default value */
 );
 
 static PARAM_CFG_BOOL ShowModuleRatsnestCfg
 (
     wxT( "ShowMRa" ),               /* Keyword */
-    & g_Show_Module_Ratsnest,       /* Parameter address */
+    &g_Show_Module_Ratsnest,        /* Parameter address */
     TRUE                            /* Default value */
 );
 
@@ -808,7 +825,7 @@ static PARAM_CFG_BOOL TwoSegmentTrackBuildCfg
 (
     INSETUP,
     wxT( "TwoSegT" ),               /* Keyword */
-    & g_TwoSegmentTrackBuild,       /* Parameter address */
+    &g_TwoSegmentTrackBuild,        /* Parameter address */
     TRUE                            /* Default value */
 );
 
@@ -823,6 +840,8 @@ PARAM_CFG_BASE* ParamCfgList[] =
     &PadMasqueLayerCfg,
     &ViaDiametreCfg,
     &ViaDrillCfg,
+    &MicroViaDiametreCfg,
+    &MicroViaDrillCfg,
     &ViaShowHoleCfg,
     &TrackClearenceCfg,
     &LayerCountCfg,
@@ -886,9 +905,9 @@ PARAM_CFG_BASE* ParamCfgList[] =
     &ColorAncreModCfg,
     &ColorPadCuCfg,
     &ColorPadCmpCfg,
-    &ColorViaNormCfg,
-    &ColorViaborgneCfg,
-    &ColorViaEnterreeCfg,
+    &ColorViaThroughCfg,
+    &ColorViaBlindBuriedCfg,
+    &ColorViaMicroViaCfg,
     &ColorpcbGrilleCfg,
     &ColorCheveluCfg,
     &HPGLpenNumCfg,

@@ -110,6 +110,12 @@ void BOARD::UnLink()
 
 void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
 {
+	if ( aBoardItem == NULL )
+	{
+        wxFAIL_MSG( wxT("BOARD::Add() param error: aBoardItem NULL") );
+		return;
+	}
+	
     switch( aBoardItem->Type() )
     {
     // this one uses a vector

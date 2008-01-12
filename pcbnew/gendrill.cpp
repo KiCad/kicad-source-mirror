@@ -469,7 +469,7 @@ void WinEDA_DrillFrame::UpdatePrecisionOptions( wxCommandEvent& event )
 int WinEDA_DrillFrame::Gen_Drill_File_EXCELLON( FORET* buffer )
 /***************************************************************/
 
-/* Create the drill file in EXECELLON format
+/* Create the drill file in EXCELLON format
  *  Return hole count
  *  buffer: Drill tools list
  */
@@ -497,10 +497,10 @@ int WinEDA_DrillFrame::Gen_Drill_File_EXCELLON( FORET* buffer )
             {
                 if( pt_piste->Type() != TYPEVIA )
                     continue;
-                if( pt_piste->m_Drill == 0 )
+                int via_drill = pt_piste->GetDrillValue();
+                if( via_drill == 0 )
                     continue;
-                int via_drill = ( pt_piste->m_Drill <
-                                  0 ) ? g_DesignSettings.m_ViaDrill : pt_piste->m_Drill;
+					
                 if( foret->m_Diameter != via_drill )
                     continue;
 
@@ -789,11 +789,9 @@ int WinEDA_DrillFrame::Gen_Liste_Forets( FORET* buffer, bool print_header )
     {
         if( pt_piste->Type() != TYPEVIA )
             continue;
-        if( pt_piste->m_Drill == 0 )
+        int via_drill = pt_piste->GetDrillValue();
+        if( via_drill == 0 )
             continue;
-        int via_drill = g_DesignSettings.m_ViaDrill;
-        if( pt_piste->m_Drill > 0 )  // Drill value is not the default value
-            via_drill = pt_piste->m_Drill;
         foret = GetOrAddForet( buffer, via_drill );
         if( foret )
             foret->m_TotalCount++;
@@ -1343,9 +1341,7 @@ int WinEDA_DrillFrame::Plot_Drill_PcbMap( FORET* buffer, int format )
             {
                 if( pt_piste->Type() != TYPEVIA )
                     continue;
-                int via_drill = g_DesignSettings.m_ViaDrill;
-                if( pt_piste->m_Drill >= 0 )
-                    via_drill = pt_piste->m_Drill;
+                int via_drill = pt_piste->GetDrillValue();
 				if( via_drill != foret->m_Diameter )
 					continue;
                 pos = pt_piste->m_Start;

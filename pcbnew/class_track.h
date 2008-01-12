@@ -9,10 +9,10 @@
 
 
 // Via attributes (m_Shape parmeter)
-#define VIA_THROUGH      3              /* Always a through hole via */
-#define VIA_BURIED       2              /* this via can be on internal layers */
-#define VIA_BLIND        1              /* this via which connect from internal layers to an external layer */
-#define VIA_NOT_DEFINED  0              /* reserved (unused) */
+#define VIA_THROUGH             3           /* Always a through hole via */
+#define VIA_BLIND_BURIED        2           /* this via can be on internal layers */
+#define VIA_MICROVIA            1           /* this via which connect from an external layer to the near neightbour internal layer */
+#define VIA_NOT_DEFINED         0           /* not yet used */
 
 /***/
 
@@ -22,10 +22,12 @@ public:
     int         m_Width;            // 0 = line, > 0 = tracks, bus ...
     wxPoint     m_Start;            // Line start point
     wxPoint     m_End;              // Line end point
-
     int         m_Shape;            // vias: shape and type, Track = shape..
-    int         m_Drill;            // for vias: via drill (- 1 for default value)
 
+protected:
+	int         m_Drill;            // for vias: via drill (- 1 for default value)
+
+public:
     BOARD_ITEM* start;              // pointers to a connected item (pad or track)
     BOARD_ITEM* end;
 
@@ -64,20 +66,20 @@ public:
     {
         return m_Start;  // it had to be start or end.
     }
-    
+
 
     /* supprime du chainage la structure Struct */
     void    UnLink();
 
-    
+
     /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.brd" format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
-     */ 
-    bool Save( FILE* aFile ) const;
-    
+     */
+    bool    Save( FILE* aFile ) const;
+
     /**
      * Function Insert
      * inserts a single TRACK, SEGVIA or SEGZONE, or a list of such,
@@ -90,13 +92,13 @@ public:
      * @param InsertPoint See above
      */
     void    Insert( BOARD* aPcb, BOARD_ITEM* InsertPoint );
-    
+
     /**
      * Function GetBestInsertPoint
      * searches the "best" insertion point within the track linked list.
      * The best point is the begging of the corresponding net code section.
      * (The BOARD::m_Track and BOARD::m_Zone lists are sorted by netcode.)
-     * @param aPcb The BOARD to search for the insertion point. 
+     * @param aPcb The BOARD to search for the insertion point.
      * @return TRACK* - the item found in the linked list (or NULL if no track)
      */
     TRACK*  GetBestInsertPoint( BOARD* aPcb );
@@ -134,8 +136,9 @@ public:
      */
     double  GetLength() const
     {
-        int    dx = m_Start.x - m_End.x;
-        int    dy = m_Start.y - m_End.y;
+        int dx = m_Start.x - m_End.x;
+        int dy = m_Start.y - m_End.y;
+
         return hypot( dx, dy );
     }
 
@@ -145,6 +148,32 @@ public:
 
     /* divers */
     int Shape() const { return m_Shape & 0xFF; }
+	
+	/**
+     * Function SetDrillValue
+	 * Set the drill value for vias
+	 * @param drill_value = new drill value
+	*/
+	void SetDrillValue(int drill_value) { m_Drill = drill_value; }
+
+	/**
+     * Function SetDrillDefault
+	 * Set the drill value for vias at default value (-1)
+	*/
+	void SetDrillDefault(void) { m_Drill = -1; }
+	
+	/**
+     * Function IsDrillDefault
+	 * @return true if the drill value is default value (-1)
+	*/
+	bool IsDrillDefault(void) { return m_Drill < 0; }
+
+	/**
+     * Function GetDrillValue
+	 * calculate the drill value for vias (m-Drill if > 0, or default drill value for the board
+	 * @return real drill_value
+	*/
+	int GetDrillValue(void);
 
     /**
      * Function ReturnMaskLayer
@@ -203,13 +232,13 @@ public:
     /**
      * Function HitTest (overlayed)
      * tests if the given wxRect intersect this object.
-	 * For now, an ending point must be inside this rect.
+     * For now, an ending point must be inside this rect.
      * @param refPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool    HitTest( EDA_Rect& refArea );
+    bool            HitTest( EDA_Rect& refArea );
 
-	/**
+    /**
      * Function GetClass
      * returns the class name.
      * @return wxString
@@ -284,12 +313,14 @@ public:
      * returns the position of this object.
      * @return const wxPoint& - The position of this object.
      */
-    wxPoint& GetPosition() 
-    { 
-        return m_Start; 
+    wxPoint& GetPosition()
+    {
+        return m_Start;
     }
-    void  SetPosition( const wxPoint& aPoint ) { m_Start=aPoint;  m_End=aPoint; } 
-    
+
+
+    void  SetPosition( const wxPoint& aPoint ) { m_Start = aPoint;  m_End = aPoint; }
+
     /**
      * Function GetClass
      * returns the class name.

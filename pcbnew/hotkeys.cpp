@@ -69,7 +69,8 @@ static Ki_HotkeyInfo HkSavefile( wxT( "Save board" ), HK_SAVE_BOARD, 'S' + GR_KB
 static Ki_HotkeyInfo HkLoadfile( wxT( "Load board" ), HK_LOAD_BOARD, 'L' + GR_KB_CTRL );
 static Ki_HotkeyInfo HkFindItem( wxT( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL );
 static Ki_HotkeyInfo HkBackspace( wxT( "Delete track segment" ), HK_BACK_SPACE, WXK_BACK );
-static Ki_HotkeyInfo HkAddVia( wxT( "Add Via" ), HK_ADD_VIA, 'V' );
+static Ki_HotkeyInfo HkAddMicroVia( wxT( "Add Via" ), HK_ADD_VIA, 'V' );
+static Ki_HotkeyInfo HkAddVia( wxT( "Add MicroVia" ), HK_ADD_MICROVIA, 'V' + GR_KB_CTRL );
 static Ki_HotkeyInfo HkEndTrack( wxT( "End Track" ), HK_END_TRACK, WXK_END );
 static Ki_HotkeyInfo HkFlipFootprint( wxT( "Flip Footprint" ), HK_FLIP_FOOTPRINT, 'F' );
 static Ki_HotkeyInfo HkRotateFootprint( wxT( "Rotate Footprint" ), HK_ROTATE_FOOTPRINT, 'R' );
@@ -105,7 +106,9 @@ Ki_HotkeyInfo* s_Common_Hotkey_List[] = {
 Ki_HotkeyInfo* s_board_edit_Hotkey_List[] = {
     &HkTrackDisplayMode,
     &HkDelete,                     &HkBackspace,
-    &HkAddVia,                     &HkEndTrack,
+    &HkAddVia,
+	&HkAddMicroVia,
+	&HkEndTrack,
     &HkMoveFootprint,              &HkFlipFootprint,
     &HkRotateFootprint,            &HkDragFootprint,
     &HkGetAndMoveFootprint,
@@ -381,6 +384,28 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
             Files_io( evt );
         }
         break;
+
+    case HK_ADD_MICROVIA:     // Place a micro via if a track is in progress
+        if( m_ID_current_state != ID_TRACK_BUTT )
+            return;
+        if( ItemFree )		// no track in progress: nothing to do
+            break;
+        if( GetCurItem()->Type() != TYPETRACK )	// Should not occur
+            return;
+        if( (GetCurItem()->m_Flags & IS_NEW) == 0 )
+            return;
+
+		// place micro via and switch layer
+		if ( GetScreen()->IsMicroViaAcceptable() )
+		{
+			int v_type = g_DesignSettings.m_CurrentViaType;
+			g_DesignSettings.m_CurrentViaType = VIA_MICROVIA;
+			Other_Layer_Route( (TRACK*) GetCurItem(), DC );
+			g_DesignSettings.m_CurrentViaType = v_type;
+			if( DisplayOpt.ContrastModeDisplay )
+				GetScreen()->SetRefreshReq();
+		}
+		break;
 
     case HK_ADD_VIA:          // Switch to alternate layer and Place a via if a track is in progress
         if( m_ID_current_state != ID_TRACK_BUTT )

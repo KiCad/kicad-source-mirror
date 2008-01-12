@@ -65,6 +65,8 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _("Pad near pad") );
     case DRCE_VIA_HOLE_BIGGER:
         return wxString( _("Via hole > diameter"));
+    case DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR:
+        return wxString( _("Micro Via: incorrect layer pairs (not adjacent)"));
     case COPPERAREA_INSIDE_COPPERAREA:
         return wxString( _("Copper area inside copper area"));
     case COPPERAREA_CLOSE_TO_COPPERAREA:

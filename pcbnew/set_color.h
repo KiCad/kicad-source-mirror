@@ -336,19 +336,19 @@ static ColorButton VIA_THROUGH_Butt =
     TRUE                                        // Toggle ITEM_NOT_SHOW bit of the color variable
 };
 
-static ColorButton Via_Aveugle_Butt =
+static ColorButton VIA_BLIND_BURIED_Butt =
 {
     wxT( "*" ),
-    VIA_BLIND,                                  // Layer
-    &g_DesignSettings.m_ViaColor[VIA_BLIND],    // Address of optional parameter
+    VIA_BLIND_BURIED,                                  // Layer
+    &g_DesignSettings.m_ViaColor[VIA_BLIND_BURIED],    // Address of optional parameter
     TRUE                                        // Toggle ITEM_NOT_SHOW bit of the color variable
 };
 
-static ColorButton BLIND_VIA_Butt =
+static ColorButton MICRO_VIA_Butt =
 {
     wxT( "*" ),
-    VIA_BURIED,                                 // Layer
-    &g_DesignSettings.m_ViaColor[VIA_BURIED],   // Address of optional parameter
+    VIA_MICROVIA,                                 // Layer
+    &g_DesignSettings.m_ViaColor[VIA_MICROVIA],   // Address of optional parameter
     TRUE                                        // Toggle ITEM_NOT_SHOW bit of the color variable
 };
 
@@ -491,8 +491,8 @@ static ColorButton* laytool_list[] = {
 //  &Layer_32_Butt,
 
     &VIA_THROUGH_Butt,
-    &Via_Aveugle_Butt,
-    &BLIND_VIA_Butt,
+    &VIA_BLIND_BURIED_Butt,
+	&MICRO_VIA_Butt,
     &Ratsnest_Butt,
     &Pad_Cu_Butt,
     &Pad_Cmp_Butt,

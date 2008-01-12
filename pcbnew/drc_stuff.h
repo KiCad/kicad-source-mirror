@@ -34,28 +34,29 @@
 
 
 /// DRC error codes:
-#define DRCE_                           1 // not used yet
-#define DRCE_UNCONNECTED_PADS           2   ///< pads are unconnected
-#define DRCE_TRACK_NEAR_THROUGH_HOLE    3   ///< thru hole is too close to track
-#define DRCE_TRACK_NEAR_PAD             4   ///< pad too close to track
-#define DRCE_TRACK_NEAR_VIA             5   ///< track too close to via
-#define DRCE_VIA_NEAR_VIA               6   ///< via too close to via
-#define DRCE_VIA_NEAR_TRACK             7   ///< via too close to track
-#define DRCE_TRACK_ENDS1                8   ///< @todo say what this problem is
-#define DRCE_TRACK_ENDS2                9   ///< @todo say what this problem is
-#define DRCE_TRACK_ENDS3                10  ///< @todo say what this problem is
-#define DRCE_TRACK_ENDS4                11  ///< @todo say what this problem is
-#define DRCE_TRACK_UNKNOWN1             12  ///< @todo check source code and change this comment
-#define DRCE_TRACKS_CROSSING            13  ///< tracks are crossing
-#define DRCE_ENDS_PROBLEM1              14  ///< track ends are too close 
-#define DRCE_ENDS_PROBLEM2              15  ///< track ends are too close
-#define DRCE_ENDS_PROBLEM3              16  ///< track ends are too close
-#define DRCE_ENDS_PROBLEM4              17  ///< track ends are too close
-#define DRCE_ENDS_PROBLEM5              18  ///< track ends are too close
-#define DRCE_PAD_NEAR_PAD1              19  ///< pad too close to pad
-#define DRCE_VIA_HOLE_BIGGER            20  ///< via's hole is bigger than its diameter
-#define COPPERAREA_INSIDE_COPPERAREA    21  ///< copper area outlines intersect
-#define COPPERAREA_CLOSE_TO_COPPERAREA        22  ///< copper area outlines are too close
+#define DRCE_                               1   // not used yet
+#define DRCE_UNCONNECTED_PADS               2   ///< pads are unconnected
+#define DRCE_TRACK_NEAR_THROUGH_HOLE        3   ///< thru hole is too close to track
+#define DRCE_TRACK_NEAR_PAD                 4   ///< pad too close to track
+#define DRCE_TRACK_NEAR_VIA                 5   ///< track too close to via
+#define DRCE_VIA_NEAR_VIA                   6   ///< via too close to via
+#define DRCE_VIA_NEAR_TRACK                 7   ///< via too close to track
+#define DRCE_TRACK_ENDS1                    8   ///< @todo say what this problem is
+#define DRCE_TRACK_ENDS2                    9   ///< @todo say what this problem is
+#define DRCE_TRACK_ENDS3                    10  ///< @todo say what this problem is
+#define DRCE_TRACK_ENDS4                    11  ///< @todo say what this problem is
+#define DRCE_TRACK_UNKNOWN1                 12  ///< @todo check source code and change this comment
+#define DRCE_TRACKS_CROSSING                13  ///< tracks are crossing
+#define DRCE_ENDS_PROBLEM1                  14  ///< track ends are too close
+#define DRCE_ENDS_PROBLEM2                  15  ///< track ends are too close
+#define DRCE_ENDS_PROBLEM3                  16  ///< track ends are too close
+#define DRCE_ENDS_PROBLEM4                  17  ///< track ends are too close
+#define DRCE_ENDS_PROBLEM5                  18  ///< track ends are too close
+#define DRCE_PAD_NEAR_PAD1                  19  ///< pad too close to pad
+#define DRCE_VIA_HOLE_BIGGER                20  ///< via's hole is bigger than its diameter
+#define DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR 21  ///< micro via's layer pair incorrect (layers must be adjacent)
+#define COPPERAREA_INSIDE_COPPERAREA        22  ///< copper area outlines intersect
+#define COPPERAREA_CLOSE_TO_COPPERAREA      23  ///< copper area outlines are too close
 
 /**
  * Class DRC_ITEM
@@ -64,48 +65,67 @@
  * information held is the board coordinate and the MenuText for each item.
  * Also held is the type of error by number and the location of the MARKER.
  * A function is provided to translate that number into text.
+ * Some errors involve only one item (item with an incorrect param) so m_AsSecondItem is set to false in this case
  */
-class DRC_ITEM 
+class DRC_ITEM
 {
-
 protected:
-    int         m_ErrorCode;    ///< the error code's numeric value
-    wxPoint     m_Pos;          ///< position of the issue
-    wxString    m_AText;        ///< text for the first BOARD_ITEM
-    wxString    m_BText;        ///< text for the second BOARD_ITEM
-    wxPoint     m_APos;         ///< the location of the first BOARD_ITEM
-    wxPoint     m_BPos;         ///< the location of the first BOARD_ITEM
+    int      m_ErrorCode;       ///< the error code's numeric value
+    wxPoint  m_Pos;             ///< position of the issue
+    wxString m_AText;           ///< text for the first BOARD_ITEM
+    wxString m_BText;           ///< text for the second BOARD_ITEM
+    wxPoint  m_APos;            ///< the location of the first (or main ) BOARD_ITEM
+    wxPoint  m_BPos;            ///< the location of the second BOARD_ITEM
+	bool m_AsSecondItem;		///< true when 2 items create a DRC error, false if only one item
 
 
 public:
 
     DRC_ITEM() :
-        m_ErrorCode(0)
+        m_ErrorCode( 0 )
     {
     }
 
-    DRC_ITEM( int aErrorCode, const wxPoint& aIssuePos, 
-             const wxString& aText, const wxString& bText,
-             const wxPoint& aPos, const wxPoint& bPos )
+
+    DRC_ITEM( int aErrorCode, const wxPoint& aIssuePos,
+              const wxString& aText, const wxString& bText,
+              const wxPoint& aPos, const wxPoint& bPos )
     {
-        SetData( aErrorCode, aIssuePos, 
+        SetData( aErrorCode, aIssuePos,
                  aText, bText,
                  aPos, bPos );
     }
 
-    void SetData( int aErrorCode, const wxPoint& aIssuePos, 
-             const wxString& aText, const wxString& bText,
-             const wxPoint& aPos, const wxPoint& bPos )
+	DRC_ITEM( int aErrorCode, const wxPoint& aIssuePos,
+              const wxString& aText, const wxPoint& aPos )
+    {
+        SetData( aErrorCode, aIssuePos, aText, aPos );
+    }
+
+
+    void SetData( int aErrorCode, const wxPoint& aIssuePos,
+                  const wxString& aText, const wxPoint& aPos )
+	{
+        SetData( aErrorCode, aIssuePos,
+                 aText, aText,
+                 aPos, aPos );
+		m_AsSecondItem = false;
+	}
+
+    void SetData( int aErrorCode, const wxPoint& aIssuePos,
+                  const wxString& aText, const wxString& bText,
+                  const wxPoint& aPos, const wxPoint& bPos )
     {
         m_ErrorCode = aErrorCode;
-        m_Pos       = aIssuePos;
-        m_AText     = aText;
-        m_BText     = bText;
-        m_APos      = aPos;
-        m_BPos      = bPos;
+        m_Pos   = aIssuePos;
+        m_AText = aText;
+        m_BText = bText;
+        m_APos  = aPos;
+        m_BPos  = bPos;
+		m_AsSecondItem = true;
     }
-    
-    
+
+	bool AsSecondItem(void) const { return m_AsSecondItem; }
     /**
      * Function ShowHtml
      * translates this object into a fragment of HTML suitable for the
@@ -118,16 +138,16 @@ public:
 
         // an html fragment for the entire message in the listbox.  feel free
         // to add color if you want:
-        ret.Printf( _("ErrType(%d): <b>%s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>"),
-            m_ErrorCode,
-            GetErrorText().GetData(),
-                ShowCoord( m_APos ).GetData(), m_AText.GetData(),
-                ShowCoord( m_BPos ).GetData(), m_BText.GetData() );
+        ret.Printf( _( "ErrType(%d): <b>%s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>" ),
+                   m_ErrorCode,
+                   GetErrorText().GetData(),
+                   ShowCoord( m_APos ).GetData(), m_AText.GetData(),
+                   ShowCoord( m_BPos ).GetData(), m_BText.GetData() );
 
         return ret;
     }
 
-    
+
     /**
      * Function ShowReport
      * translates this object into a text string suitable for saving
@@ -138,14 +158,15 @@ public:
     {
         wxString ret;
 
-        ret.Printf( wxT("ErrType(%d): %s\n    %s: %s\n    %s: %s\n"),
-            m_ErrorCode,
-            GetErrorText().GetData(),
-                ShowCoord( m_APos ).GetData(), m_AText.GetData(),
-                ShowCoord( m_BPos ).GetData(), m_BText.GetData() );
-        
+        ret.Printf( wxT( "ErrType(%d): %s\n    %s: %s\n    %s: %s\n" ),
+                   m_ErrorCode,
+                   GetErrorText().GetData(),
+                   ShowCoord( m_APos ).GetData(), m_AText.GetData(),
+                   ShowCoord( m_BPos ).GetData(), m_BText.GetData() );
+
         return ret;
     }
+
 
     /**
      * Function GetErrorCode
@@ -156,7 +177,7 @@ public:
         return m_ErrorCode;
     }
 
-    
+
     /**
      * Function GetErrorText
      * returns the string form of a drc error code.
@@ -167,32 +188,36 @@ public:
     {
         return m_AText;
     }
-    
+
+
     const wxString& GetTextB() const
     {
         return m_BText;
     }
-    
-    
-    const wxPoint& GetPointA() const
+
+
+    const wxPoint&  GetPointA() const
     {
         return m_APos;
     }
-    
-    const wxPoint& GetPointB() const
+
+
+    const wxPoint&  GetPointB() const
     {
         return m_BPos;
     }
-    
+
+
     /**
      * Function GetPosition
-     * @return wxPoint& - the position of this report item within 
+     * @return wxPoint& - the position of this report item within
      *  the drawing.
      */
-    const wxPoint& GetPosition() const
+    const wxPoint&  GetPosition() const
     {
         return m_Pos;
     }
+
 
     /**
      * Function ShowCoord
@@ -225,7 +250,7 @@ public:
      * removes and deletes all the items in the list.
      */
     virtual void            DeleteAllItems() = 0;
-    
+
     /**
      * Function GetItem
      * retrieves a DRC_ITEM by pointer.  The actual item remains owned by the
@@ -233,12 +258,12 @@ public:
      * @param aIndex The 0 based index into the list of the desired item.
      * @return const DRC_ITEM* - the desired item or NULL if aIndex is out of range.
      */
-    virtual const DRC_ITEM* GetItem( int aIndex ) = 0;      
+    virtual const DRC_ITEM* GetItem( int aIndex ) = 0;
 
     /**
      * Function DeleteAllItems
      * removes and deletes desired item from the list.
-     * @param aIndex The 0 based index into the list of the desired item which 
+     * @param aIndex The 0 based index into the list of the desired item which
      *         is to be deleted.
      */
     virtual void            DeleteItem( int aIndex ) = 0;
@@ -247,13 +272,13 @@ public:
      * Function GetCount
      * returns the number of items in the list.
      */
-    virtual int             GetCount() = 0;    
-    
-    virtual ~DRC_ITEM_LIST() {}
+    virtual int             GetCount() = 0;
+
+    virtual ~DRC_ITEM_LIST() { }
 };
 
 
-typedef std::vector<DRC_ITEM*>  DRC_LIST; 
+typedef std::vector<DRC_ITEM*>  DRC_LIST;
 
 
 /**
@@ -264,88 +289,89 @@ typedef std::vector<DRC_ITEM*>  DRC_LIST;
  * be sent to a text file on disk.
  * This class is given access to the windows and the BOARD
  * that it needs via its constructor or public access functions.
- */  
+ */
 class DRC
 {
-    friend class DrcDialog;    
-    
-private:
-    //  protected or private functions() are lowercase first character.
-    
-    bool                m_doPad2PadTest;
-    bool                m_doUnconnectedTest;
-    bool                m_doZonesTest;
-    bool                m_doCreateRptFile;
-                        
-    wxString            m_rptFilename;
-                        
-    // int              m_errorCount;
-                        
-    MARKER*             m_currentMarker;
-                        
-    bool                m_aboartDRC;
-    bool                m_drcInProgress;
-    int                 m_spotcx;
-    int                 m_spotcy;
-    int                 m_finx;
-    int                 m_finy;           // coord relatives de l'extremite du segm de reference
-                        
-    int                 m_segmAngle;      // angle d'inclinaison du segment de reference en 0,1 degre
-    int                 m_segmLength;     // length of the reference segment
-                        
-    int                 m_xcliplo;
-    int                 m_ycliplo;
-    int                 m_xcliphi;
-    int                 m_ycliphi;        // coord de la surface de securite du segment a comparer
-                        
-    WinEDA_PcbFrame*    m_mainWindow;
-    WinEDA_DrawPanel*   m_drawPanel;
-    BOARD*              m_pcb;
-    DrcDialog*          m_ui;
+    friend class DrcDialog;
 
-    DRC_LIST            m_unconnected;  ///< list of unconnected pads, as DRC_ITEMs
-    
-    
-    /** 
+private:
+
+    //  protected or private functions() are lowercase first character.
+
+    bool     m_doPad2PadTest;
+    bool     m_doUnconnectedTest;
+    bool     m_doZonesTest;
+    bool     m_doCreateRptFile;
+
+    wxString m_rptFilename;
+
+    // int              m_errorCount;
+
+    MARKER*           m_currentMarker;
+
+    bool              m_aboartDRC;
+    bool              m_drcInProgress;
+    int               m_spotcx;
+    int               m_spotcy;
+    int               m_finx;
+    int               m_finy;               // coord relatives de l'extremite du segm de reference
+
+    int               m_segmAngle;          // angle d'inclinaison du segment de reference en 0,1 degre
+    int               m_segmLength;         // length of the reference segment
+
+    int               m_xcliplo;
+    int               m_ycliplo;
+    int               m_xcliphi;
+    int               m_ycliphi;          // coord de la surface de securite du segment a comparer
+
+    WinEDA_PcbFrame*  m_mainWindow;
+    WinEDA_DrawPanel* m_drawPanel;
+    BOARD*            m_pcb;
+    DrcDialog*        m_ui;
+
+    DRC_LIST          m_unconnected;    ///< list of unconnected pads, as DRC_ITEMs
+
+
+    /**
      * Function updatePointers
      * is a private helper function used to update needed pointers from the
      * one pointer which is known not to change, m_mainWindow.
      */
-    void updatePointers();
-    
+    void    updatePointers();
+
 
     /**
      * Function fillMarker
-     * optionally creates a marker and fills it in with information, 
-     * but does not add it to the BOARD.  Use this to report any kind of 
+     * optionally creates a marker and fills it in with information,
+     * but does not add it to the BOARD.  Use this to report any kind of
      * DRC problem, or unconnected pad problem.
      *
      * @param aTrack The reference track
-     * @param aItem  Another item on the BOARD, such as a SEGVIA, SEGZONE, 
+     * @param aItem  Another item on the BOARD, such as a SEGVIA, SEGZONE,
      *         or TRACK.
      * @param aErrorCode A categorizing identifier for the particular type
      *         of error that is being reported.
-     * @param fillMe A MARKER* which is to be filled in, or NULL if one is to 
+     * @param fillMe A MARKER* which is to be filled in, or NULL if one is to
      *         first be allocated, then filled.
      */
     MARKER* fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKER* fillMe );
 
     MARKER* fillMarker( D_PAD* aPad, D_PAD* bPad, int aErrorCode, MARKER* fillMe );
 
-    
-    //-----<categorical group tests>----------------------------------------- 
-    
-    void testTracks();
-    
-    void testPad2Pad();
 
-    void testUnconnected();
+    //-----<categorical group tests>-----------------------------------------
 
-    void testZones();
+    void    testTracks();
 
-    
-    //-----<single "item" tests>----------------------------------------- 
-    
+    void    testPad2Pad();
+
+    void    testUnconnected();
+
+    void    testZones();
+
+
+    //-----<single "item" tests>-----------------------------------------
+
     /**
      * Function doPadToPadsDrc
      * tests the clearance between aRefPad and other pads.
@@ -355,18 +381,18 @@ private:
      * @param aEnd Marks the end of the list and is not included
      * @param max_size The size of the biggest pad (used to stop the test when the X distance is > max_size)
      */
-    bool doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, 
-                              LISTE_PAD* aEnd, int max_size );
-    
+    bool    doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart,
+                            LISTE_PAD* aEnd, int max_size );
+
     /**
      * Function DoTrackDrc
-     * tests the current segment.  
+     * tests the current segment.
      * @param aRefSeg The segment to test
      * @param aStart The head of a list of tracks to test against (usually BOARD::m_Track)
-     * @return bool - true if no poblems, else false and m_currentMarker is 
+     * @return bool - true if no poblems, else false and m_currentMarker is
      *          filled in with the problem information.
      */
-    bool doTrackDrc( TRACK* aRefSeg, TRACK* aStart );
+    bool    doTrackDrc( TRACK* aRefSeg, TRACK* aStart );
 
 
     //-----<single tests>----------------------------------------------
@@ -377,9 +403,9 @@ private:
      * @param aPad Another pad to check against
      * @return bool - true if clearance between aRefPad and pad is >= dist_min, else false
      */
-    bool checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, const int dist_min );
-     
-    
+    bool        checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, const int dist_min );
+
+
     /**
      * Function checkClearanceSegmToPad
      * check the distance from a pad to segment.  This function uses several
@@ -390,30 +416,30 @@ private:
      *      spot_cX, spot_cY = position of pad / origin of segment
      * @param pad_to_test Is the pad involved in the check
      * @param w_segm Hhalf width of the segment to test
-     * @param dist_min Is the minimum clearance needed 
+     * @param dist_min Is the minimum clearance needed
      *
      * @return false distance >= dist_min,
      *         true if distance < dist_min
      */
-    bool checkClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int dist_min );
+    bool        checkClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int dist_min );
 
-    
+
     /**
      * Function checkMarginToCircle
      * @todo this translation is no good, fix this:
      * calculates the distance from a circle (via or round end of track) to the
      * segment of reference on the right hand side.
-     * 
+     *
      * @param cx The x coordinate of the circle's center
-     * @param cy The y coordinate of the circle's center 
-     * @param radius A "keep out" radius centered over the circle 
+     * @param cy The y coordinate of the circle's center
+     * @param radius A "keep out" radius centered over the circle
      * @param length The length of the segment (i.e. coordinate of end)
      * @return bool - true if distance >= radius, else
      *                false when distance < radius
      */
     static bool checkMarginToCircle( int cx, int cy, int radius, int length );
 
-    
+
     /**
      * Function checkLine
      * tests to see if one track is in contact with another track.
@@ -422,15 +448,15 @@ private:
      * dans le cadre (xcliplo,ycliplo xcliphi,ycliphi) (variables globales,
      * locales a ce fichier)
      */
-    bool checkLine( int x1, int y1, int x2, int y2 );
-    
+    bool        checkLine( int x1, int y1, int x2, int y2 );
+
     //-----</single tests>---------------------------------------------
-    
+
 public:
     DRC( WinEDA_PcbFrame* aPcbWindow );
 
     ~DRC();
-    
+
     /**
      * Function Drc
      * tests the current segment and returns the result and displays the error
@@ -441,10 +467,10 @@ public:
      */
     int Drc( TRACK* aRefSeg, TRACK* aList );
 
-    
+
     /**
      * Function DrcBlind
-     * tests the current segment and returns the result.  Any error is not 
+     * tests the current segment and returns the result.  Any error is not
      * displayed in the status panel.
      * @param aRefSeg The current segment to test.
      * @param aList The track list to test (usually m_Pcb->m_Track)
@@ -453,18 +479,18 @@ public:
     int DrcBlind( TRACK* aRefSeg, TRACK* aList )
     {
         updatePointers();
-        
+
         return doTrackDrc( aRefSeg, aList ) ? OK_DRC : BAD_DRC;
     }
-    
-    
+
+
     /**
      * Function ShowDialog
-     * opens a dialog and prompts the user, then if a test run button is 
+     * opens a dialog and prompts the user, then if a test run button is
      * clicked, runs the test(s) and creates the MARKERS.  The dialog is only
      * created if it is not already in existence.
      */
-    void ShowDialog();
+    void    ShowDialog();
 
 
     /**
@@ -473,9 +499,9 @@ public:
      * the state of the dialog's existence.
      * @param aReason Indication of which button was clicked to cause the destruction.
      */
-    void DestroyDialog( int aReason );
+    void    DestroyDialog( int aReason );
 
-    
+
     /**
      * Function SetSettings
      * saves all the UI or test settings and may be called before running the tests.
@@ -483,36 +509,34 @@ public:
      * @param aUnconnectedTest Tells whether to list unconnected pads.
      * @param aZonesTest Tells whether to test zones.
      * @param aReportName A string telling the disk file report name entered.
-     * @param aSaveReport A boolean telling whether to generate disk file report. 
+     * @param aSaveReport A boolean telling whether to generate disk file report.
      */
-    void SetSettings( bool aPad2PadTest, bool aUnconnectedTest, 
-                  bool aZonesTest, const wxString& aReportName, bool aSaveReport )
+    void SetSettings( bool aPad2PadTest, bool aUnconnectedTest,
+                      bool aZonesTest, const wxString& aReportName, bool aSaveReport )
     {
         m_doPad2PadTest     = aPad2PadTest;
         m_doUnconnectedTest = aUnconnectedTest;
-        m_doZonesTest       = aZonesTest;
-        m_rptFilename       = aReportName;
-        m_doCreateRptFile   = aSaveReport;
+        m_doZonesTest     = aZonesTest;
+        m_rptFilename     = aReportName;
+        m_doCreateRptFile = aSaveReport;
     }
 
-    
+
     /**
      * Function RunTests
      * will actually run all the tests specified with a previous call to
      * SetSettings()
      */
-    void RunTests();
+    void    RunTests();
 
 
     /**
      * Function ListUnconnectedPad
-     * gathers a list of all the unconnected pads and shows them in the 
+     * gathers a list of all the unconnected pads and shows them in the
      * dialog, and optionally prints a report of such.
      */
-    void ListUnconnectedPads();
-    
+    void    ListUnconnectedPads();
 };
-
 
 
 #endif  // _DRC_STUFF_H

@@ -88,7 +88,7 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( FILE* File,
  * @return items count or - count if no end block ($End...) found.
  */
 {
-    int             shape, width, layer, type, flags, net_code;
+    int             shape, width, drill, layer, type, flags, net_code;
     int             ii = 0;
     char            line1[256];
     char            line2[256];
@@ -149,13 +149,15 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( FILE* File,
         int arg_count = sscanf( line1 + 2, " %d %d %d %d %d %d %d", &shape,
                                 &PtSegm->m_Start.x, &PtSegm->m_Start.y,
                                 &PtSegm->m_End.x, &PtSegm->m_End.y, &width,
-                                &PtSegm->m_Drill );
+                                &drill );
 
         PtSegm->m_Width = width;
         PtSegm->m_Shape = shape;
 
-        if( arg_count < 7 )
-            PtSegm->m_Drill = -1;
+        if( arg_count < 7 || drill <= 0 )
+            PtSegm->SetDrillDefault();
+		else
+            PtSegm->SetDrillValue(drill);
 
         PtSegm->SetLayer( layer );
         PtSegm->SetNet( net_code ); 
@@ -399,6 +401,12 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             continue;
         }
 
+        if( stricmp( Line, "MicroViaSize" ) == 0 )
+        {
+            g_DesignSettings.m_CurrentMicroViaSize = atoi( data );
+            continue;
+        }
+
         if( stricmp( Line, "ViaSizeHistory" ) == 0 )
         {
             int tmp = atoi( data );
@@ -409,6 +417,18 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
         if( stricmp( Line, "ViaDrill" ) == 0 )
         {
             g_DesignSettings.m_ViaDrill = atoi( data );
+            continue;
+        }
+
+        if( stricmp( Line, "MicroViaDrill" ) == 0 )
+        {
+            g_DesignSettings.m_MicroViaDrill = atoi( data );
+            continue;
+        }
+
+        if( stricmp( Line, "MicroViasAllowed" ) == 0 )
+        {
+            g_DesignSettings.m_MicroViasAllowed = atoi( data );
             continue;
         }
 
@@ -520,6 +540,10 @@ static int WriteSetup( FILE* File, WinEDA_BasePcbFrame* frame )
             break;
         fprintf( File, "ViaSizeHistory %d\n", g_DesignSettings.m_ViaSizeHistory[ii] );
     }
+
+	fprintf( File, "MicroViaSize %d\n", g_DesignSettings.m_CurrentMicroViaSize);
+	fprintf( File, "MicroViaDrill %d\n", g_DesignSettings.m_MicroViaDrill);
+    fprintf( File, "MicroViasAllowed %d\n", g_DesignSettings.m_MicroViasAllowed);
 
     fprintf( File, "TextPcbWidth %d\n", g_DesignSettings.m_PcbTextWidth );
     fprintf( File, "TextPcbSize %d %d\n",

@@ -150,7 +150,10 @@ class EDA_BoardDesignSettings
 public:
     int    m_CopperLayerCount;                  // Number of copper layers for this design
     int    m_ViaDrill;                          // via drill (for the entire board)
+    int    m_MicroViaDrill;                     // micro via drill (for the entire board)
     int    m_CurrentViaSize;                    // Current via size
+    int    m_CurrentMicroViaSize;               // Current micro via size
+	bool   m_MicroViasAllowed;						// true to allow micro vias
     int    m_ViaSizeHistory[HIST0RY_NUMBER];    // Last HIST0RY_NUMBER used via sizes
     int    m_CurrentViaType;                    // via type (BLIND, TROUGHT ...), bits 1 and 2 (not 0 and 1)
     int    m_CurrentTrackWidth;                 // current track width
@@ -222,6 +225,14 @@ public:
      * @return BOARD_ITEM* - the one selected, or NULL.
      */
     BOARD_ITEM* GetCurItem() const {  return (BOARD_ITEM*) BASE_SCREEN::GetCurItem(); }
+
+	/* Return true if a microvia can be put on board
+	 * A microvia ia a small via restricted to 2 near neighbour layers
+     * because its is hole is made by laser which can penetrate only one layer
+	 * It is mainly used to connect BGA to the first inner layer
+	 * And it is allowed from an external layer to the first inner layer
+     */
+	bool IsMicroViaAcceptable(void);
 };
 
 /**********************************/

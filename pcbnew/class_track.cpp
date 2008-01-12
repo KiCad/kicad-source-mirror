@@ -52,7 +52,7 @@ TRACK::TRACK( BOARD_ITEM* StructFather, KICAD_T idtype ) :
     start   = end = NULL;
     SetNet( 0 );
     SetSubNet( 0 );
-    m_Drill = -1;
+    SetDrillDefault();
     m_Param = 0;
 }
 
@@ -128,6 +128,24 @@ TRACK* TRACK::Copy() const
         return new SEGZONE( (const SEGZONE &) * this );
 
     return NULL;    // should never happen
+}
+
+
+/**
+ * Function GetDrillValue
+ * calculate the drill value for vias (m-Drill if > 0, or default drill value for the board
+ * @return real drill_value
+*/
+int TRACK::GetDrillValue(void)
+{
+	if ( Type() != TYPEVIA ) return 0;
+
+	if ( m_Drill >= 0 ) return m_Drill;
+	
+	if ( m_Shape == VIA_MICROVIA )
+		return g_DesignSettings.m_MicroViaDrill;
+
+	return g_DesignSettings.m_ViaDrill;
 }
 
 
@@ -253,7 +271,7 @@ int TRACK::ReturnMaskLayer()
         if( via_type == VIA_THROUGH )
             return ALL_CU_LAYERS;
 
-        // VIA_BLIND or VIA_BURIED:
+        // VIA_BLIND_BURIED or VIA_MICRVIA:
 
         int bottom_layer, top_layer;
 
@@ -522,33 +540,6 @@ TRACK* TRACK::GetEndNetCode( int NetCode )
 }
 
 
-#if 0   // replaced by Save()
-/********************************************/
-bool TRACK::WriteTrackDescr( FILE* File )
-/********************************************/
-/* write a via description on file
-*/
-{
-    int type = 0;
-
-    if( Type() == TYPEVIA )
-        type = 1;
-
-    if( GetState( DELETED ) )
-        return FALSE;
-
-    fprintf( File, "Po %d %d %d %d %d %d %d\n", m_Shape,
-             m_Start.x, m_Start.y, m_End.x, m_End.y, m_Width, m_Drill );
-
-    fprintf( File, "De %d %d %d %lX %X\n",
-            m_Layer, type, GetNet(),
-            m_TimeStamp, ReturnStatus() );
-
-    return TRUE;
-}
-#endif
-
-
 bool TRACK::Save( FILE* aFile ) const
 {
     int     type = 0;
@@ -631,21 +622,18 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
         GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y, rayon, color );
         if( rayon > (4 * zoom) )
         {
-            int drill_rayon, inner_rayon = rayon - (2 * zoom);
+            int drill_rayon = GetDrillValue() / 2;
+			int inner_rayon = rayon - (2 * zoom);
             GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
                       inner_rayon, color );
 
             // Draw the via hole if the display option allows it
             if( DisplayOpt.m_DisplayViaMode != VIA_HOLE_NOT_SHOW )
             {
-                if( (DisplayOpt.m_DisplayViaMode == ALL_VIA_HOLE_SHOW)
-                   || ( m_Drill > 0 ) )
+                if( (DisplayOpt.m_DisplayViaMode == ALL_VIA_HOLE_SHOW) || 	// Display all drill holes requested
+					( (drill_rayon > 0 ) && ! IsDrillDefault() ) ) 			// Or Display non default holes requested
                 {
-                    if( m_Drill > 0 )
-                        drill_rayon = m_Drill / 2;
-                    else
-                        drill_rayon = g_DesignSettings.m_ViaDrill / 2;
-                    if( drill_rayon < inner_rayon ) // We can show the via hole
+                   if( drill_rayon < inner_rayon ) // We can show the via hole
                     {
                         GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
                                   drill_rayon, color );
@@ -656,6 +644,33 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
             if( DisplayOpt.DisplayTrackIsol )
                 GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
                           rayon + g_DesignSettings.m_TrackClearence, color );
+			// for Micro Vias, draw a partial cross :
+			// X on component layer, or + on copper layer
+			// (so we can see 2 superimposed microvias ):
+			if ( Shape() == VIA_MICROVIA )
+			{
+				int ax, ay, bx, by;
+				if ( IsOnLayer(COPPER_LAYER_N) )
+				{
+					ax = rayon; ay = 0;
+					bx = drill_rayon; by = 0;
+				}
+				else 
+				{
+					ax = ay = (rayon * 707) / 1000;
+					bx = by = (drill_rayon * 707) / 1000;
+				}
+				/* lines | or \ */
+				GRLine( &panel->m_ClipBox, DC, m_Start.x - ax , m_Start.y - ay,
+						m_Start.x - bx , m_Start.y - by, 0, color );
+				GRLine( &panel->m_ClipBox, DC, m_Start.x + bx , m_Start.y + by,
+						m_Start.x + ax , m_Start.y + ay, 0, color );
+				/* lines - or / */
+				GRLine( &panel->m_ClipBox, DC, m_Start.x + ay, m_Start.y - ax ,
+						m_Start.x + by, m_Start.y - bx, 0, color );
+				GRLine( &panel->m_ClipBox, DC, m_Start.x - by, m_Start.y + bx ,
+						m_Start.x - ay, m_Start.y + ax, 0, color );
+			}
         }
         return;
     }
@@ -813,8 +828,7 @@ void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
     {
         Affiche_1_Parametre( frame, text_pos, _( "Diam" ), msg, DARKCYAN );
 
-        int drill_value = m_Drill >= 0  ?
-                          m_Drill : g_DesignSettings.m_ViaDrill;
+        int drill_value = GetDrillValue();
 
         valeur_param( (unsigned) drill_value, msg );
 
@@ -909,7 +923,7 @@ void TRACK::Show( int nestLevel, std::ostream& os )
     " layer=\"" << m_Layer << '"' <<
     " width=\"" << m_Width << '"' <<
 
-//        " drill=\""     << m_Drill      << '"' <<
+//        " drill=\""     << GetDrillValue()   << '"' <<
     " netcode=\"" << GetNet() << "\">" <<
     "<start" << m_Start << "/>" <<
     "<end" << m_End << "/>";
@@ -935,12 +949,12 @@ void SEGVIA::Show( int nestLevel, std::ostream& os )
         cp = "through";
         break;
 
-    case VIA_BURIED:
-        cp = "blind";
+    case VIA_BLIND_BURIED:
+        cp = "blind/buried";
         break;
 
-    case VIA_BLIND:
-        cp = "buried";
+    case VIA_MICROVIA:
+        cp = "micro via";
         break;
 
     default:
@@ -959,7 +973,7 @@ void SEGVIA::Show( int nestLevel, std::ostream& os )
     " layers=\"" << ReturnPcbLayerName( topLayer ).Trim().mb_str() << ","
                                  << ReturnPcbLayerName( botLayer ).Trim().mb_str() << '"' <<
     " width=\"" << m_Width << '"' <<
-    " drill=\"" << m_Drill << '"' <<
+    " drill=\"" << GetDrillValue() << '"' <<
     " netcode=\"" << GetNet() << "\">" <<
     "<pos" << m_Start << "/>";
 

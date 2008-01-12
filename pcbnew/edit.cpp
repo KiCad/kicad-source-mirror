@@ -61,6 +61,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_STOP_CURRENT_DRAWING:
     case ID_POPUP_PCB_END_TRACK:
     case ID_POPUP_PCB_PLACE_VIA:
+    case ID_POPUP_PCB_PLACE_MICROVIA:
     case ID_POPUP_PCB_IMPORT_PAD_SETTINGS:
     case ID_POPUP_PCB_EXPORT_PAD_SETTINGS:
     case ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS:
@@ -372,6 +373,9 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         }
         break;
 
+    case ID_POPUP_PCB_PLACE_MICROVIA:
+		if ( ! GetScreen()->IsMicroViaAcceptable() )
+			break;
     case ID_POPUP_PCB_PLACE_VIA:
         DrawPanel->MouseToCursorSchema();
         if( GetCurItem()->m_Flags & IS_DRAGGED )
@@ -380,13 +384,17 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         }
         else
         {
+			int v_type = g_DesignSettings.m_CurrentViaType;
+			if ( id == ID_POPUP_PCB_PLACE_MICROVIA )
+				g_DesignSettings.m_CurrentViaType = VIA_MICROVIA;	// place micro via and switch layer
             Other_Layer_Route( (TRACK*) GetCurItem(), &dc );
+			g_DesignSettings.m_CurrentViaType = v_type;
             if( DisplayOpt.ContrastModeDisplay )
                 GetScreen()->SetRefreshReq();
         }
         break;
 
-    case ID_POPUP_PCB_DELETE_TRACKSEG:
+	case ID_POPUP_PCB_DELETE_TRACKSEG:
         if( GetCurItem() == NULL )
             break;
         DrawPanel->MouseToCursorSchema();

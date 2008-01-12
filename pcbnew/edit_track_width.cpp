@@ -34,6 +34,8 @@ int WinEDA_PcbFrame::Edit_TrackSegm_Width( wxDC* DC, TRACK* pt_segm )
     if( pt_segm->Type() == TYPEVIA )
     {
         consigne = pt_segm->m_Width = g_DesignSettings.m_CurrentViaSize;
+		if ( pt_segm->m_Shape == VIA_MICROVIA )
+			consigne = pt_segm->m_Width = g_DesignSettings.m_CurrentMicroViaSize;
     }
 
     if( old_w < consigne ) /* DRC utile puisque augm de dimension */

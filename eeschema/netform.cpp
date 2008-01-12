@@ -250,7 +250,8 @@ void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame,
 
     /* Create netlist module section */
     fprintf( tmpfile, "$BeginComponentList\n" );
-    for( CurrScreen = ScreenSch; CurrScreen != NULL; CurrScreen = (BASE_SCREEN*) CurrScreen->Pnext )
+    EDA_ScreenList ScreenList( NULL );
+    for( CurrScreen = ScreenList.GetFirst(); CurrScreen != NULL; CurrScreen = ScreenList.GetNext() )
     {
         for( DrawList = CurrScreen->EEDrawList; DrawList != NULL; DrawList = DrawList->Pnext )
         {

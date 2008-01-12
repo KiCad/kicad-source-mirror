@@ -464,12 +464,8 @@ static void PrintDrillMark( BOARD* Pcb )
         if( g_DrillShapeOpt == DRILL_MARK )
             diam.x = diam.y = SMALL_DRILL;
         else
-        {
-            if( pts->m_Drill < 0 )
-                diam.x = diam.y = g_DesignSettings.m_ViaDrill;
-            else
-                diam.x = diam.y = pts->m_Drill;
-        }
+			diam.x = diam.y = pts->GetDrillValue();
+
         trace_1_pastille_RONDE_POST( pos, diam.x, FILLED );
     }
 

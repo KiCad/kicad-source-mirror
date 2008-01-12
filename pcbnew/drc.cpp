@@ -215,8 +215,8 @@ void DRC::testTracks()
         if( !doTrackDrc( segm, segm->Next() ) )
         {
             wxASSERT( m_currentMarker );
-            m_pcb->Add( m_currentMarker );
-            m_currentMarker = 0;            
+			m_pcb->Add( m_currentMarker );
+			m_currentMarker = 0;            
         }
     }
 }
@@ -367,13 +367,25 @@ MARKER* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKE
 
     
     if( fillMe )
-        fillMe->SetData( aErrorCode, position, 
+	{
+		if ( aItem )
+			fillMe->SetData( aErrorCode, position, 
                             textA, aTrack->GetPosition(), 
                             textB, posB );
+		else
+			fillMe->SetData( aErrorCode, position, 
+                            textA, aTrack->GetPosition() );
+	}
     else
-        fillMe = new MARKER( aErrorCode, position, 
+	{
+		if ( aItem )
+			fillMe = new MARKER( aErrorCode, position, 
                             textA, aTrack->GetPosition(), 
                             textB, posB );
+		else
+			fillMe = new MARKER( aErrorCode, position, 
+                            textA, aTrack->GetPosition() );
+	}
     
     return fillMe;
 }
@@ -421,23 +433,41 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart )
     m_segmAngle = 0;
 
 
-    // @todo: is this necessary?
-    /**************************************************************/
-    /* Phase 0 : test if via's hole is bigger than its diameter : */
-    /**************************************************************/
-    
+    /* Phase 0 : Test vias : */
     if( aRefSeg->Type() == TYPEVIA )
     {
+		// test if via's hole is bigger than its diameter
         // This test seems necessary since the dialog box that displays the
         // desired via hole size and width does not enforce a hole size smaller
         // than the via's diameter.
         
-        if( aRefSeg->m_Drill > aRefSeg->m_Width )
+        if( aRefSeg->GetDrillValue() > aRefSeg->m_Width )
         {
             m_currentMarker = fillMarker( aRefSeg, NULL, 
                                 DRCE_VIA_HOLE_BIGGER, m_currentMarker );
             return false;
         }
+		
+		// For microvias: test if they are blindvias and only between 2 layers
+		// because they are used for very small drill size and are drill by laser
+		// and **only** one layer can be drilled
+        if( aRefSeg->Shape() == VIA_MICROVIA )
+        {
+			int layer1, layer2;
+			bool err = true;
+			((SEGVIA*)aRefSeg)->ReturnLayerPair(&layer1, &layer2);
+			if (layer1> layer2 ) EXCHG(layer1,layer2);
+			// test:
+			if (layer1 == COPPER_LAYER_N && layer2 == LAYER_N_2 ) err = false;
+			if (layer1 == (g_DesignSettings.m_CopperLayerCount - 2 ) && layer2 == LAYER_CMP_N ) err = false;
+			if ( err )
+			{
+				m_currentMarker = fillMarker( aRefSeg, NULL, 
+                                DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR, m_currentMarker );
+				return false;
+			}
+        }
+		
     }
     
 	// for a non horizontal or vertical segment Compute the segment angle

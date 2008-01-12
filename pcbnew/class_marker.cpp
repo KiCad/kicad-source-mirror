@@ -68,6 +68,16 @@ MARKER::MARKER( int aErrorCode, const wxPoint& aMarkerPos,
          bText, bPos );
 }
 
+MARKER::MARKER( int aErrorCode, const wxPoint& aMarkerPos, 
+           const wxString& aText, const wxPoint& aPos ) :
+    BOARD_ITEM( NULL, TYPEMARKER )  // parent set during BOARD::Add()
+{
+    init();
+
+    SetData( aErrorCode, aMarkerPos, 
+         aText, aPos );
+}
+
 
 /* Effacement memoire de la structure */
 MARKER::~MARKER()
@@ -85,6 +95,17 @@ void MARKER::SetData( int aErrorCode, const wxPoint& aMarkerPos,
     m_drc.SetData( aErrorCode, aMarkerPos, 
              aText, bText,
              aPos, bPos );
+    
+    // @todo: switch on error code to set error code specific color, and possibly bitmap.
+    m_Color = WHITE;
+}
+
+
+void MARKER::SetData( int aErrorCode, const wxPoint& aMarkerPos, 
+         const wxString& aText, const wxPoint& aPos )
+{
+    m_drc.SetData( aErrorCode, aMarkerPos, 
+             aText, aPos );
     
     // @todo: switch on error code to set error code specific color, and possibly bitmap.
     m_Color = WHITE;
@@ -122,7 +143,8 @@ void MARKER::Display_Infos( WinEDA_DrawFrame* frame )
     txtA << DRC_ITEM::ShowCoord( rpt.GetPointA() ) << wxT(": ") << rpt.GetTextA();
     
     wxString txtB;
-    txtB << DRC_ITEM::ShowCoord( rpt.GetPointB() ) << wxT(": ") << rpt.GetTextB();     
+	if ( rpt.AsSecondItem() )
+		txtB << DRC_ITEM::ShowCoord( rpt.GetPointB() ) << wxT(": ") << rpt.GetTextB();     
     
     text_pos = 25;
     Affiche_1_Parametre( frame, text_pos, txtA, txtB, DARKBROWN );
