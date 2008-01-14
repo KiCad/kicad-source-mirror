@@ -42,6 +42,7 @@ namespace DSN {
 enum DSN_T {
     
     // the first few are special (the uppercase ones)
+    T_NONE = -9,
     T_QUOTE_DEF = -8,
     T_DASH = -7,
     T_SYMBOL = -6,
@@ -123,6 +124,7 @@ enum DSN_T {
     T_diagonal,
     T_direction,
     T_directory,
+    T_discrete,
     T_effective_via_length,
     T_exclude,
     T_expose,
@@ -163,6 +165,7 @@ enum DSN_T {
     T_image_image,
     T_image_image_spacing,
     T_image_outline_clearance,
+    T_image_set,
     T_image_type,
     T_inch,
     T_include,
@@ -310,6 +313,7 @@ enum DSN_T {
     T_reorder,
     T_reroute_order_viols,
     T_resistance_resolution,
+    T_resistor,
     T_resolution,
     T_restricted_layer_length_factor,
     T_room,
@@ -341,6 +345,7 @@ enum DSN_T {
     T_side,
     T_signal,
     T_site,
+    T_small,
     T_smd,
     T_snap,
     T_snap_angle,
@@ -420,6 +425,7 @@ enum DSN_T {
     T_wiring,
     T_write_resolution,
     T_x,
+    T_xy,
     T_y,
     T_END       // just a sentinel, not a token
 };

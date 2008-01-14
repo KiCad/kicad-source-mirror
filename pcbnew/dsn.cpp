@@ -46,11 +46,13 @@ namespace DSN {
 struct KEYWORD
 {
     const char* name;
-    int         token;
+//    int         token;
 };
 
 
-#define TOKDEF(x)    { #x, T_##x }
+//#define TOKDEF(x)    { #x, T_##x }
+#define TOKDEF(x)    { #x }
+
 
 // This MUST be sorted alphabetically, and also so MUST enum DSN_T {} be alphabetized.
 // These MUST all be lower case because of the conversion to lowercase in findToken(). 
@@ -123,6 +125,7 @@ const static KEYWORD tokens[] = {
     TOKDEF(diagonal),
     TOKDEF(direction),
     TOKDEF(directory),
+    TOKDEF(discrete),
     TOKDEF(effective_via_length),
     TOKDEF(exclude),
     TOKDEF(expose),
@@ -163,6 +166,7 @@ const static KEYWORD tokens[] = {
     TOKDEF(image_image),
     TOKDEF(image_image_spacing),
     TOKDEF(image_outline_clearance),
+    TOKDEF(image_set),
     TOKDEF(image_type),
     TOKDEF(inch),
     TOKDEF(include),
@@ -310,6 +314,7 @@ const static KEYWORD tokens[] = {
     TOKDEF(reorder),
     TOKDEF(reroute_order_viols),
     TOKDEF(resistance_resolution),
+    TOKDEF(resistor),
     TOKDEF(resolution),
     TOKDEF(restricted_layer_length_factor),
     TOKDEF(room),
@@ -341,6 +346,7 @@ const static KEYWORD tokens[] = {
     TOKDEF(side),
     TOKDEF(signal),
     TOKDEF(site),
+    TOKDEF(small),
     TOKDEF(smd),
     TOKDEF(snap),
     TOKDEF(snap_angle),
@@ -420,6 +426,7 @@ const static KEYWORD tokens[] = {
     TOKDEF(wiring),
     TOKDEF(write_resolution),
     TOKDEF(x),
+    TOKDEF(xy),
     TOKDEF(y),
 };
 
@@ -513,7 +520,8 @@ int LEXER::findToken( const std::string& tok )
                                    tokens, sizeof(tokens)/sizeof(tokens[0]),
                                    sizeof(KEYWORD), compare );
     if( findings )
-        return findings->token;
+//        return findings->token;
+        return findings - tokens; 
     else
         return -1;
 }
