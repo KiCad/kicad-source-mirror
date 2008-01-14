@@ -89,7 +89,7 @@ static bool    Mirror  = true;
 /**********************************************/
 void WinEDA_DrillFrame::InitDisplayParams(void)
 /**********************************************/
-/* some param values befor display dialog
+/* some param values initialisation before display dialog window
 */
 {
 	wxString msg;
@@ -119,7 +119,7 @@ void WinEDA_DrillFrame::InitDisplayParams(void)
 	msg <<  g_HPGL_Pen_Speed;
 	m_PenSpeed->SetValue(msg);
 	
-	// See if we have some microvias, and display drill value if so
+	// See if we have some buried vias or/and microvias, and display microvias drill value if so
 	m_ThroughViasCount = 0;
 	m_MicroViasCount = 0;
 	m_BlindOrBuriedViasCount = 0;
@@ -639,9 +639,9 @@ int Sort_by_Drill_Value( void* foret1, void* foret2 )
 }
 
 
-/*********************************************************************/
+/*******************************************************************************/
 int WinEDA_DrillFrame::Gen_Liste_Forets( DRILL_TOOL* buffer, bool print_header )
-/**********************************************************************/
+/*******************************************************************************/
 
 /* Etablit la liste des forets de percage, dans l'ordre croissant des
  *  diametres
@@ -660,7 +660,7 @@ int WinEDA_DrillFrame::Gen_Liste_Forets( DRILL_TOOL* buffer, bool print_header )
 
     s_DrillToolsCount = 0; foret = buffer;
 
-    /* Create the via tools */
+    /* Creates the via tools */
     TRACK* pt_piste = m_Parent->m_Pcb->m_Track;
     for( ; pt_piste != NULL; pt_piste = (TRACK*) pt_piste->Pnext )
     {
@@ -1182,7 +1182,7 @@ void WinEDA_DrillFrame::GenDrillMap( int format )
 int WinEDA_DrillFrame::Plot_Drill_PcbMap( DRILL_TOOL* buffer, int format )
 /*********************************************************************/
 
-/** Trace la liste des trous a percer en format HPGL ou POSTSCRIPT
+/** Creates the drill map file in HPGL or POSTSCRIPT format 
  * @return drill count
  * @param buffer = drill list buffer
  * @param format = ouput format (hpgl / ps)
@@ -1227,10 +1227,10 @@ int WinEDA_DrillFrame::Plot_Drill_PcbMap( DRILL_TOOL* buffer, int format )
             }
         }
         /* create the pad drill map: */
-        for( Module = m_Parent->m_Pcb->m_Modules; Module != NULL; Module = (MODULE*) Module->Pnext )
+        for( Module = m_Parent->m_Pcb->m_Modules; Module != NULL; Module = Module->Next() )
         {
             pt_pad = (D_PAD*) Module->m_Pads;
-            for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
+            for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
             {
                 switch( pt_pad->m_DrillShape )
                 {
@@ -1442,9 +1442,12 @@ void PlotDrillSymbol( const wxPoint& position, int diametre, int num_forme, int 
 }
 
 
-/*******************************************************************************************/
+/*********************************************************************************************/
 void PlotOvalDrillSymbol( const wxPoint& position, const wxSize& size, int orient, int format )
-/*******************************************************************************************/
+/*********************************************************************************************/
+/* Draws an oblong hole.
+ * because functions to draw oblong shapes exist to draw oblong pads, Use they.
+ */
 {
     switch( format )
     {

@@ -152,10 +152,10 @@ private:
     void    GenDrillMap( int format );
     void    UpdatePrecisionOptions( wxCommandEvent& event );
     void    UpdateConfig();
-    int     Plot_Drill_PcbMap( FORET* buffer, int format );
+    int     Plot_Drill_PcbMap( DRILL_TOOL* buffer, int format );
     void    GenDrillReport();
-    int     Gen_Liste_Forets( FORET* buffer, bool print_header );
-    int     Create_Drill_File_EXCELLON( FORET* buffer );
+    int     Gen_Liste_Forets( DRILL_TOOL* buffer, bool print_header );
+    int     Create_Drill_File_EXCELLON( DRILL_TOOL* buffer );
     void    Init_Drill();
 };
 
