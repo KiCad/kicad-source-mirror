@@ -37,6 +37,7 @@ SET(CVPCB_EXTRA_SRCS
 	../pcbnew/basepcbframe.cpp
 	../pcbnew/class_board.cpp
 	../pcbnew/class_cotation.cpp
+	../pcbnew/class_drawsegment.cpp
 	../pcbnew/class_edge_mod.cpp
 	../pcbnew/class_equipot.cpp
 	../pcbnew/class_mire.cpp

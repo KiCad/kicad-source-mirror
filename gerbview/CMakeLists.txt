@@ -42,6 +42,7 @@ SET(GERBVIEW_SRCS
 SET(GERBVIEW_EXTRA_SRCS
 	../pcbnew/basepcbframe.cpp
 	../pcbnew/class_board.cpp
+	../pcbnew/class_drawsegment.cpp
 	../pcbnew/class_drc_item.cpp
 	../pcbnew/class_marker.cpp
 	../pcbnew/class_pcb_text.cpp

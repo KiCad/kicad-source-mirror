@@ -32,6 +32,7 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		setpage.o \
 		tool_pcb.o \
 		pcbframe.o \
+		class_drawsegment.o \
 		class_track.o \
 		class_mire.o\
 		class_cotation.o\
@@ -265,7 +266,7 @@ readgerb.o: readgerb.cpp pcbplot.h $(COMMON)
 
 plot_rtn.o: plot_rtn.cpp pcbplot.h $(COMMON)
 
-gendrill.o: gendrill.cpp pcbplot.h $(COMMON)
+gendrill.o: gendrill.cpp dialog_gendrill.cpp dialog_gendrill.h pcbplot.h $(COMMON)
 
 librairi.o: librairi.cpp $(COMMON)
 

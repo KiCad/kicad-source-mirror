@@ -22,6 +22,7 @@ OBJECTS= \
 		gerberframe.o\
 		onrightclick.o\
 		class_board.o\
+		class_drawsegment.o\
 		class_track.o \
 		class_drc_item.o \
 		drawframe.o\
@@ -75,6 +76,9 @@ class_marker.o: ../pcbnew/class_marker.cpp ../pcbnew/class_marker.h $(COMMON)
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_zone.o: ../pcbnew/class_zone.cpp ../pcbnew/class_zone.h $(COMMON)
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_drawsegment.o: ../pcbnew/class_drawsegment.cpp ../pcbnew/class_drawsegment.h $(DEPEND)
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_drc_item.o: ../pcbnew/class_drc_item.cpp $(COMMON)

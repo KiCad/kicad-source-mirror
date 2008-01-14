@@ -89,7 +89,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 if( m_ID_current_state == 0 )
                 {
                     DisplayError( this,
-                                 wxT( "WinEDA_PcbFrame::OnLeftClick() err: m_Flags != 0" ) );
+                         wxT( "WinEDA_PcbFrame::OnLeftClick() err: DrawType %d m_Flags != 0" ), DrawStruct->Type() );
                     exit = true;
                 }
 				break;

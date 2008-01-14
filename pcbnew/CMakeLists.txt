@@ -23,6 +23,7 @@ SET(PCBNEW_SRCS
 	class_board.cpp
 	class_board_item.cpp
 	class_cotation.cpp
+	class_drawsegment.cpp
 	class_drc_item.cpp
 	class_edge_mod.cpp
 	class_equipot.cpp

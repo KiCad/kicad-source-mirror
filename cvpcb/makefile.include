@@ -40,6 +40,7 @@ OBJECTS = $(TARGET).o \
 			zoom.o \
 			tracemod.o \
  			classpcb.o \
+			class_drawsegment.o \
 			class_board.o \
 			class_module.o \
 			class_pad.o \
@@ -84,6 +85,9 @@ class_pcb_text.o: ../pcbnew/class_pcb_text.cpp ../pcbnew/class_pcb_text.h $(COMM
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_board.o: ../pcbnew/class_board.cpp $(DEPEND)
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_drawsegment.o: ../pcbnew/class_drawsegment.cpp ../pcbnew/class_drawsegment.h $(DEPEND)
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_track.o: ../pcbnew/class_track.cpp $(DEPEND)

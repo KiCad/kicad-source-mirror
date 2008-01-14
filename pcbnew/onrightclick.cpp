@@ -329,6 +329,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                 wxT( "WinEDA_PcbFrame::OnRightClick() Error: illegal DrawType %d" ),
                 item->Type() );
             DisplayError( this, msg );
+			SetCurItem(NULL);
             break;
 
         default:
@@ -336,6 +337,9 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                 wxT( "WinEDA_PcbFrame::OnRightClick() Error: unknown DrawType %d" ),
                 item->Type() );
             DisplayError( this, msg );
+			// Attempt to clear error (but should no occurs )
+			if ( item->Type() >= MAX_STRUCT_TYPE_ID )
+				SetCurItem(NULL);
             break;
         }
 
