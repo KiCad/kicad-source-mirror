@@ -71,6 +71,7 @@ const static KEYWORD tokens[] = {
     TOKDEF(attach),
     TOKDEF(attr),
     TOKDEF(average_pair_length),
+    TOKDEF(back),
     TOKDEF(base_design),
     TOKDEF(bbv_ctr2ctr),
     TOKDEF(bond),
@@ -102,8 +103,8 @@ const static KEYWORD tokens[] = {
     TOKDEF(comment),
     TOKDEF(comp),
     TOKDEF(comp_edge_center),
-    TOKDEF(component),
     TOKDEF(comp_order),
+    TOKDEF(component),
     TOKDEF(composite),
     TOKDEF(conductance_resolution),
     TOKDEF(conductor),
@@ -119,8 +120,9 @@ const static KEYWORD tokens[] = {
     TOKDEF(cross),
     TOKDEF(crosstalk_model),
     TOKDEF(current_resolution),
-    TOKDEF(deleted_keepout),
     TOKDEF(delete_pins),
+    TOKDEF(deleted),
+    TOKDEF(deleted_keepout),
     TOKDEF(delta),
     TOKDEF(diagonal),
     TOKDEF(direction),
@@ -148,6 +150,7 @@ const static KEYWORD tokens[] = {
     TOKDEF(front),
     TOKDEF(front_only),
     TOKDEF(gap),
+    TOKDEF(gate),
     TOKDEF(gates),
     TOKDEF(global),
     TOKDEF(grid),
@@ -364,7 +367,9 @@ const static KEYWORD tokens[] = {
     TOKDEF(string_quote),
     TOKDEF(structure),
     TOKDEF(structure_out),
+    TOKDEF(subgate),
     TOKDEF(subgates),
+    TOKDEF(substituted),
     TOKDEF(such),
     TOKDEF(suffix),
     TOKDEF(super_placement),
@@ -535,29 +540,32 @@ const char* LEXER::GetTokenText( DSN_T aTok )
     {
         switch( aTok )
         {
+        case T_NONE:
+            ret = "NONE";
+            break;
         case T_QUOTE_DEF:
-            ret = "'quoted text delimiter'";
+            ret = "quoted text delimiter";
             break;
         case T_DASH:
-            ret = "'-'";
+            ret = "-";
             break;
         case T_SYMBOL:
-            ret = "'symbol'";
+            ret = "symbol";
             break;
         case T_NUMBER:
-            ret = "'number'";
+            ret = "number";
             break;
         case T_RIGHT:
-            ret = "')'";
+            ret = ")";
             break;
         case T_LEFT:
-            ret = "'('";
+            ret = "(";
             break;
         case T_STRING:
-            ret = "'quoted string'";
+            ret = "quoted string";
             break;
         case T_EOF:
-            ret = "'end of file'";
+            ret = "end of file";
             break;
         default:
             ret = "???";
