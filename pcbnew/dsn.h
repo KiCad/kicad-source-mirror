@@ -53,8 +53,9 @@ enum DSN_T {
     T_EOF = -1,             // special case for end of file
 
     // from here down, this list segment should be coordinated with the
-    // const static KEYWORD tokens[] array below, and must be sorted
-    // alphabetically.
+    // const static KEYWORD tokens[] array in dsn.cpp, and must be sorted
+    // alphabetically.  Remember that '_' is less than any alpha character
+    // according to ASCII.
 
     T_absolute,             // this one should be == zero
     T_added,
@@ -74,6 +75,7 @@ enum DSN_T {
     T_base_design,
     T_bbv_ctr2ctr,
     T_bond,
+    T_both,
     T_bottom,
     T_bottom_layer_sel,
     T_boundary,
@@ -245,6 +247,7 @@ enum DSN_T {
     T_noexpose,
     T_noise_accumulation,
     T_noise_calculation,
+    T_normal,
     T_object_type,
     T_off,
     T_off_grid,
@@ -326,8 +329,8 @@ enum DSN_T {
     T_roundoff_rotation,
     T_route,
     T_routes,
-    T_routes_include,
     T_route_to_fanout_only,
+    T_routes_include,
     T_rule,
     T_same_net_checking,
     T_sample_window,
@@ -384,8 +387,8 @@ enum DSN_T {
     T_terminator,
     T_term_only,
     T_test,
-    T_testpoint,
     T_test_points,
+    T_testpoint,
     T_threshold,
     T_time_length_factor,
     T_time_resolution,

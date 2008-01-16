@@ -585,10 +585,8 @@ public:
             rectangle->Format( out, nestLevel+1 );
         else
         {
-            for( unsigned i=0;  i<paths.size();  ++i )
-            {
-                paths[i].Format( out, nestLevel+1 );
-            }
+            for( PATHS::iterator i=paths.begin();  i!=paths.end();  ++i )
+                i->Format( out, nestLevel+1 );
         }
         
         out->Print( nestLevel, ")\n" ); 
@@ -793,8 +791,8 @@ public:
         if( place_rules )
             place_rules->Format( out, nestLevel+1 );
 
-        for( unsigned i=0;  i<windows.size();  ++i )
-            windows[i].Format( out, nestLevel+1 );
+        for( WINDOWS::iterator i=windows.begin();  i!=windows.end();  ++i )
+            i->Format( out, nestLevel+1 );
         
         out->Print( nestLevel, ")\n" ); 
     }
@@ -819,8 +817,7 @@ public:
     {
         out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
         
-        for( STRINGS::const_iterator i=padstacks.begin();
-            i!=padstacks.end();  ++i )
+        for( STRINGS::iterator i=padstacks.begin();  i!=padstacks.end();  ++i )
         {
             const char* quote = out->GetQuoteChar( i->c_str() );
             
@@ -1088,8 +1085,8 @@ public:
     {
         out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
         
-        for( unsigned i=0; i<layer_pairs.size();  ++i )
-            layer_pairs[i].Format( out, nestLevel+1 );
+        for( LAYER_PAIRS::iterator i=layer_pairs.begin(); i!=layer_pairs.end();  ++i )
+            i->Format( out, nestLevel+1 );
         
         out->Print( nestLevel, ")\n" );
     }
@@ -1330,8 +1327,8 @@ public:
         if( unit )
             unit->Format( out, nestLevel );
         
-        for( unsigned i=0;  i<layers.size();  ++i )
-            layers[i].Format( out, nestLevel ); 
+        for( LAYERS::iterator i=layers.begin();  i!=layers.end();  ++i )
+            i->Format( out, nestLevel ); 
 
         if( layer_noise_weight )
             layer_noise_weight->Format( out, nestLevel );
@@ -1342,14 +1339,14 @@ public:
         if( place_boundary )
             place_boundary->Format( out, nestLevel );
 
-        for( unsigned i=0;  i<planes.size();  ++i )
-            planes[i].Format( out, nestLevel );
+        for( PLANES::iterator i=planes.begin();  i!=planes.end();  ++i )
+            i->Format( out, nestLevel );
 
-        for( unsigned i=0;  i<regions.size();  ++i )
-            regions[i].Format( out, nestLevel );
+        for( REGIONS::iterator i=regions.begin();  i!=regions.end();  ++i )
+            i->Format( out, nestLevel );
         
-        for( unsigned i=0;  i<keepouts.size();  ++i )
-            keepouts[i].Format( out, nestLevel );
+        for( KEEPOUTS::iterator i=keepouts.begin();  i!=keepouts.end();  ++i )
+            i->Format( out, nestLevel );
         
         if( via )
             via->Format( out, nestLevel );
@@ -1368,8 +1365,8 @@ public:
         if( place_rules )
             place_rules->Format( out, nestLevel );
         
-        for( unsigned i=0;  i<grids.size();  ++i )
-            grids[i].Format( out, nestLevel );
+        for( GRIDS::iterator i=grids.begin();  i!=grids.end();  ++i )
+            i->Format( out, nestLevel );
     }
     
     DSN_T   GetUnits()
@@ -1448,7 +1445,7 @@ public:
     void SetRotation( double aRotation )
     {
         rotation = (float) aRotation;
-        isRotated = true;
+        isRotated = (aRotation != 0.0);
     }
     
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError );
@@ -1477,8 +1474,8 @@ public:
         out->Print( nestLevel, "(%s %s%s%s\n", LEXER::GetTokenText( Type() ),
                                 quote, image_id.c_str(), quote );
 
-        for( unsigned i=0;  i<places.size();  ++i )
-            places[i].Format( out, nestLevel+1 );
+        for( PLACES::iterator i=places.begin();  i!=places.end();  ++i )
+            i->Format( out, nestLevel+1 );
         
         out->Print( nestLevel, ")\n" );
     }
@@ -1520,30 +1517,10 @@ public:
                        LEXER::GetTokenText( flip_style ) );
         }
         
-        for( unsigned i=0;  i<components.size();  ++i )
-            components[i].Format( out, nestLevel );
+        for( COMPONENTS::iterator i=components.begin();  i!=components.end();  ++i )
+            i->Format( out, nestLevel );
     }
-};
-
-
-class IMAGE : public ELEM
-{
-    friend class SPECCTRA_DB;
     
-    UNIT_RES*       unit;
-
-public:
-    
-    IMAGE( ELEM* aParent ) :
-        ELEM( T_image, aParent )
-    {
-        unit = 0;
-    }
-    ~IMAGE()
-    {
-        delete unit;
-    }
-
     DSN_T   GetUnits()
     {
         if( unit )
@@ -1571,8 +1548,8 @@ class SHAPE : public ELEM
     
     
 public:
-    SHAPE( ELEM* aParent ) :
-        ELEM( T_shape, aParent )
+    SHAPE( ELEM* aParent, DSN_T aType = T_shape ) :
+        ELEM( aType, aParent )
     {
         connect = T_on;
         
@@ -1607,8 +1584,128 @@ public:
         if( connect == T_off )
             out->Print( nestLevel, "(connect %s)\n", LEXER::GetTokenText( connect ) );
         
-        for( unsigned i=0;  i<windows.size();  ++i )
-            windows[i].Format( out, nestLevel );
+        for( WINDOWS::iterator i=windows.begin();  i!=windows.end();  ++i )
+            i->Format( out, nestLevel );
+    }
+};
+
+
+class PIN : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+    std::string     padstack_id;
+    float           rotation;
+    bool            isRotated;
+    std::string     pin_id;
+    POINT           vertex;
+    
+public:
+    PIN( ELEM* aParent ) :
+        ELEM( T_pin, aParent )
+    {
+        rotation = 0.0;
+        isRotated = false;
+    }
+
+    void SetRotation( double aRotation )
+    {
+        rotation = (float) aRotation;
+        isRotated = (aRotation != 0.0);
+    }
+    
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        const char* quote = out->GetQuoteChar( padstack_id.c_str() );
+        if( isRotated )
+            out->Print( nestLevel, "(pin %s%s%s (rotate %1.2f)", 
+                                     quote, padstack_id.c_str(), quote,
+                                     rotation
+                                     );
+        else
+            out->Print( nestLevel, "(pin %s%s%s", quote, padstack_id.c_str(), quote );
+        
+        quote = out->GetQuoteChar( pin_id.c_str() );
+        out->Print( 0, " %s%s%s %f %f)\n", quote, pin_id.c_str(), quote, 
+                   vertex.x, vertex.y );
+    }
+};
+
+
+class IMAGE : public ELEM
+{
+    friend class SPECCTRA_DB;
+    
+    std::string     image_id;
+    DSN_T           side;
+    UNIT_RES*       unit;
+    
+    /*  The grammar spec says only one outline is supported, but I am seeing
+        *.dsn examples with multiple outlines.  So the outlines will go into 
+        the kids list. 
+    */
+    
+    typedef boost::ptr_vector<PIN>  PINS;
+    PINS            pins;
+
+    RULE*           rules;
+    RULE*           place_rules;
+    
+public:
+    
+    IMAGE( ELEM* aParent ) :
+        ELEM( T_image, aParent )
+    {
+        side = T_both;
+        unit = 0;
+        rules = 0;
+        place_rules = 0;
+    }
+    ~IMAGE()
+    {
+        delete unit;
+        delete rules;
+        delete place_rules;
+    }
+
+    
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        const char* quote = out->GetQuoteChar( image_id.c_str() );
+        
+        out->Print( nestLevel, "(%s %s%s%s", LEXER::GetTokenText( Type() ),
+                                quote, image_id.c_str(), quote );
+
+        if( side != T_both )
+            out->Print( 0, " (side %s)", LEXER::GetTokenText( side ) );
+        
+        out->Print( 0, "\n");
+        
+        if( unit )
+            unit->Format( out, nestLevel+1 );
+
+        // format the kids, which in this class are the shapes
+        ELEM::FormatContents( out, nestLevel+1 );
+    
+        for( PINS::iterator i=pins.begin();  i!=pins.end();  ++i )
+            i->Format( out, nestLevel+1 );
+
+        if( rules )
+            rules->Format( out, nestLevel+1 );
+        
+        if( place_rules )
+            place_rules->Format( out, nestLevel+1 );
+        
+        out->Print( nestLevel, ")\n" );
+    }
+    
+    
+    DSN_T   GetUnits()
+    {
+        if( unit )
+            return unit->GetUnits();
+        
+        return ELEM::GetUnits();
     }
 };
 
@@ -1621,10 +1718,13 @@ class PADSTACK : public ELEM
     UNIT_RES*       unit;
 
     /* The shapes are stored in the kids list */
-    
-    RULE*           rules;
+
     DSN_T           rotate;
     DSN_T           absolute;
+    DSN_T           attach;
+    std::string     via_id;
+    
+    RULE*           rules;
 
 public:
     
@@ -1632,9 +1732,10 @@ public:
         ELEM( T_padstack, aParent )
     {
         unit = 0;
-        rules = 0;
         rotate = T_on;
         absolute = T_off;
+        rules = 0;
+        attach = T_off;
     }
     ~PADSTACK()
     {
@@ -1654,12 +1755,27 @@ public:
 
         // format the kids, which in this class are the shapes
         ELEM::FormatContents( out, nestLevel+1 );
-        
-        if( rotate == T_off )
-            out->Print( nestLevel+1, "(rotate %s)", LEXER::GetTokenText( rotate ) );
 
-        if( absolute == T_on )
-            out->Print( nestLevel+1, "(absolute %s)", LEXER::GetTokenText( absolute ) );
+        out->Print( nestLevel+1, "%s", "" );
+        
+        // spec for <attach_descriptor> says default is on, so
+        // print the off condition to override this.        
+        if( attach == T_off )
+            out->Print( 0, "(attach off)" );
+        else if( attach == T_on )
+        {
+            const char* quote = out->GetQuoteChar( via_id.c_str() );
+            out->Print( 0, "(attach on (use_via %s%s%s))",
+                       quote, via_id.c_str(), quote );
+        }
+        
+        if( rotate == T_off )   // print the non-default
+            out->Print( 0, "(rotate %s)", LEXER::GetTokenText( rotate ) );
+
+        if( absolute == T_on )  // print the non-default
+            out->Print( 0, "(absolute %s)", LEXER::GetTokenText( absolute ) );
+
+        out->Print( 0, "\n" );
         
         if( rules )
             rules->Format( out, nestLevel+1 );
@@ -1712,11 +1828,11 @@ public:
         if( unit )
             unit->Format( out, nestLevel );
         
-        for( unsigned i=0;  i<images.size();  ++i )
-            images[i].Format( out, nestLevel );
+        for( IMAGES::iterator i=images.begin();  i!=images.end();  ++i )
+            i->Format( out, nestLevel );
 
-        for( unsigned i=0;  i<padstacks.size();  ++i )
-            padstacks[i].Format( out, nestLevel );
+        for( PADSTACKS::iterator i=padstacks.begin();  i!=padstacks.end();  ++i )
+            i->Format( out, nestLevel );
     }
     
     DSN_T   GetUnits()
@@ -1725,6 +1841,113 @@ public:
             return unit->GetUnits();
         
         return ELEM::GetUnits();
+    }
+};
+
+
+class PIN_REF : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+    std::string     component_id;
+    std::string     pin_id;
+    
+public:
+
+    PIN_REF( ELEM* aParent ) :
+        ELEM( T_pin, aParent )
+    {
+    }
+    
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        out->Print( nestLevel, "\"%s\"-\"%s\"\n", 
+                component_id.c_str(), pin_id.c_str() );
+    }
+};
+
+
+class NET : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+    std::string     net_id;
+    bool            unassigned;
+    int             net_number;
+
+    DSN_T           pins_type;      ///< T_pins | T_order
+    
+    typedef std::vector<PIN_REF>   PIN_REFS;
+    PIN_REFS        pins;
+
+    DSN_T           type;           ///< T_fix | T_normal
+    
+    DSN_T           supply;         ///< T_power | T_ground
+    
+    RULE*           rules;
+    
+public:
+
+    NET( ELEM* aParent ) :
+        ELEM( T_net, aParent )
+    {
+        unassigned = false;
+        net_number = T_NONE;
+        pins_type = T_pins;
+        
+        type = T_NONE;
+        supply = T_NONE;
+        
+        rules = 0;
+    }
+    
+    ~NET()
+    {
+        delete rules;
+    }
+    
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        const char* quote = out->GetQuoteChar( net_id.c_str() );
+        
+        out->Print( nestLevel, "(%s %s%s%s ", LEXER::GetTokenText( Type() ), 
+                   quote, net_id.c_str(), quote );
+        
+        if( unassigned )
+            out->Print( 0, "(unassigned)" );
+        
+        if( net_number != T_NONE )
+            out->Print( 0, "(net_number %d)", net_number );
+        
+        out->Print( 0, "\n" );
+        
+        out->Print( nestLevel+1, "(%s\n", LEXER::GetTokenText( pins_type ) );
+        for( PIN_REFS::iterator i=pins.begin();  i!=pins.end();  ++i )
+            i->Format( out, nestLevel+2 ); 
+        out->Print( nestLevel+1, ")\n" );
+        out->Print( nestLevel, ")\n" );
+    }
+};
+
+
+class NETWORK : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+    typedef boost::ptr_vector<NET>  NETS;
+    NETS        nets;
+    
+public:
+
+    NETWORK( ELEM* aParent ) :
+        ELEM( T_network, aParent )
+    {
+    }
+    
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        for( NETS::iterator i=nets.begin();  i!=nets.end();  ++i )
+            i->Format( out, nestLevel );
     }
 };
 
@@ -1740,6 +1963,7 @@ class PCB : public ELEM
     STRUCTURE*      structure;
     PLACEMENT*      placement;
     LIBRARY*        library;
+    NETWORK*        network;
     
 public:
     
@@ -1752,6 +1976,7 @@ public:
         structure = 0;
         placement = 0;
         library = 0;
+        network = 0;
     }
     
     ~PCB()
@@ -1762,6 +1987,7 @@ public:
         delete structure;
         delete placement;
         delete library;
+        delete network;
     }
     
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
@@ -1788,6 +2014,9 @@ public:
         
         if( library )
             library->Format( out, nestLevel+1 );
+
+        if( network )
+            network->Format( out, nestLevel+1 );
         
         out->Print( nestLevel, ")\n" ); 
     }
@@ -1879,8 +2108,11 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     void doPROPERTIES( PROPERTIES* growth ) throw( IOError );
     void doPADSTACK( PADSTACK* growth ) throw( IOError );
     void doSHAPE( SHAPE* growth ) throw( IOError );
+    void doIMAGE( IMAGE* growth ) throw( IOError );
     void doLIBRARY( LIBRARY* growth ) throw( IOError );
-
+    void doPIN( PIN* growth ) throw( IOError );
+    void doNET( NET* growth ) throw( IOError );
+    void doNETWORK( NETWORK* growth ) throw( IOError );
     
 public:
 
@@ -2085,6 +2317,13 @@ void SPECCTRA_DB::doPCB( PCB* growth ) throw( IOError )
                 unexpected( tok );
             growth->library = new LIBRARY( growth );
             doLIBRARY( growth->library );
+            break;
+            
+        case T_network:
+            if( growth->network )
+                unexpected( tok );
+            growth->network = new NETWORK( growth );
+            doNETWORK( growth->network );
             break;
             
         default:
@@ -3550,6 +3789,20 @@ void SPECCTRA_DB::doPLACEMENT( PLACEMENT* growth ) throw( IOError )
 void SPECCTRA_DB::doPADSTACK( PADSTACK* growth ) throw( IOError )
 {
     DSN_T   tok = nextTok();
+
+    /*  (padstack <padstack_id >
+        [<unit_descriptor> ]
+        {(shape <shape_descriptor>
+            [<reduced_shape_descriptor> ]
+            [(connect [on | off])]
+            [{<window_descriptor> }]
+        )}
+        [<attach_descriptor> ]
+        [{<pad_via_site_descriptor> }]
+        [(rotate [on | off])]
+        [(absolute [on | off])]
+        [(rule <clearance_descriptor> )])
+    */
     
     if( !isSymbol( tok ) )
         expecting( "padstack_id" );
@@ -3595,6 +3848,39 @@ void SPECCTRA_DB::doPADSTACK( PADSTACK* growth ) throw( IOError )
             growth->Append( shape );
             doSHAPE( shape );
             break;
+
+        case T_attach:
+            tok = nextTok();
+            if( tok!=T_off && tok!=T_on )
+                expecting( "off|on" );
+            growth->attach = tok;
+            tok = nextTok();
+            if( tok == T_LEFT )
+            {
+                if( nextTok() != T_use_via )
+                    expecting( T_use_via );
+                
+                tok = nextTok();
+                if( !isSymbol( tok ) )
+                    expecting( T_SYMBOL );
+                growth->via_id = lexer->CurText();
+                
+                if( nextTok()!=T_RIGHT || nextTok()!=T_RIGHT )
+                    expecting( T_RIGHT );
+            }
+            break;
+            
+        /*
+        case T_via_site:        not supported
+            break;
+        */            
+            
+        case T_rule:
+            if( growth->rules )
+                unexpected( tok );
+            growth->rules = new RULE( growth, T_rule );
+            doRULE( growth->rules );
+            break;
             
         default:
             unexpected( lexer->CurText() );
@@ -3606,6 +3892,12 @@ void SPECCTRA_DB::doPADSTACK( PADSTACK* growth ) throw( IOError )
 void SPECCTRA_DB::doSHAPE( SHAPE* growth ) throw( IOError )
 {
     DSN_T   tok;
+
+    /*  (shape <shape_descriptor>
+         [<reduced_shape_descriptor> ]
+         [(connect [on | off])]
+         [{<window_descriptor> }])
+    */
     
     while( (tok = nextTok()) != T_RIGHT )
     {
@@ -3613,6 +3905,18 @@ void SPECCTRA_DB::doSHAPE( SHAPE* growth ) throw( IOError )
             expecting( T_LEFT );
         
         tok = nextTok();
+        switch( tok )
+        {
+        case T_rect:
+        case T_circle:
+        case T_path:
+        case T_polygon:
+        case T_qarc:
+            if( growth->rectangle || growth->circle || growth->path || growth->qarc )
+                unexpected( tok );
+        default: ;
+        }
+        
         switch( tok )
         {
         case T_rect:
@@ -3641,6 +3945,8 @@ void SPECCTRA_DB::doSHAPE( SHAPE* growth ) throw( IOError )
             if( tok!=T_on && tok!=T_off )
                 expecting( "on|off" );
             growth->connect = tok;
+            if( nextTok() != T_RIGHT )
+                expecting( T_RIGHT );
             break;
 
         case T_window:
@@ -3657,9 +3963,31 @@ void SPECCTRA_DB::doSHAPE( SHAPE* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doLIBRARY( LIBRARY* growth ) throw( IOError )
+void SPECCTRA_DB::doIMAGE( IMAGE* growth ) throw( IOError )
 {
-    DSN_T   tok;
+    DSN_T   tok = nextTok();
+
+    /*  <image_descriptor >::=
+        (image <image_id >
+           [(side [front | back | both])]
+           [<unit_descriptor> ]
+           [<outline_descriptor> ]
+           {(pin <padstack_id > [(rotate <rotation> )]
+              [<reference_descriptor> | <pin_array_descriptor> ]
+              [<user_property_descriptor> ])}
+           [{<conductor_shape_descriptor> }]
+           [{<conductor_via_descriptor> }]
+           [<rule_descriptor> ]
+           [<place_rule_descriptor> ]
+           [{<keepout_descriptor> }]
+        [<image_property_descriptor> ]
+        )
+    */
+
+    if( !isSymbol( tok ) )
+        expecting( "image_id" );
+    
+    growth->image_id = lexer->CurText();
     
     while( (tok = nextTok()) != T_RIGHT )
     {
@@ -3670,6 +3998,132 @@ void SPECCTRA_DB::doLIBRARY( LIBRARY* growth ) throw( IOError )
         switch( tok )
         {
         case T_unit:
+            if( growth->unit )
+                unexpected( tok );
+            growth->unit = new UNIT_RES( growth, tok );
+            doUNIT( growth->unit );
+            break;
+
+        case T_side:
+            tok = nextTok();
+            if( tok!=T_front && tok!=T_back && tok!=T_both )
+                expecting( "front|back|both" );
+            growth->side = tok;
+            if( nextTok() != T_RIGHT )
+                expecting( T_RIGHT );
+            break;
+
+        case T_outline:
+            SHAPE* outline;
+            outline = new SHAPE( growth, T_outline );   // use SHAPE for T_outline
+            growth->Append( outline );
+            doSHAPE( outline );
+            break;
+
+        case T_pin:
+            PIN* pin;
+            pin = new PIN( growth );
+            growth->pins.push_back( pin );
+            doPIN( pin );
+            break;
+            
+        case T_rule:
+            if( growth->rules )
+                unexpected( tok );
+            growth->rules = new RULE( growth, tok );
+            doRULE( growth->rules );
+            break;
+
+        case T_place_rule:
+            if( growth->place_rules )
+                unexpected( tok );
+            growth->place_rules = new RULE( growth, tok );
+            doRULE( growth->place_rules );
+            break;
+            
+        default:
+            unexpected( lexer->CurText() );
+        }
+    }
+}
+
+
+void SPECCTRA_DB::doPIN( PIN* growth ) throw( IOError )
+{
+    DSN_T   tok = nextTok();
+
+    /*  (pin <padstack_id > [(rotate <rotation> )]
+          [<reference_descriptor> | <pin_array_descriptor> ]
+          [<user_property_descriptor> ])
+    */
+
+    if( !isSymbol( tok ) )
+        expecting( "padstack_id" );
+    
+    growth->padstack_id = lexer->CurText();
+    
+    tok = nextTok();
+    if( tok == T_LEFT )
+    {
+        tok = nextTok();
+        if( tok != T_rotate )
+            expecting( T_rotate );
+        
+        if( nextTok() != T_NUMBER )
+            expecting( T_NUMBER );
+        growth->SetRotation( strtod( lexer->CurText(), 0 ) );
+        if( nextTok() != T_RIGHT )
+            expecting( T_RIGHT );
+        tok = nextTok();
+    }
+    
+    if( !isSymbol(tok) && tok!=T_NUMBER )
+        expecting( "pin_id" );
+
+    growth->pin_id = lexer->CurText();
+
+    if( nextTok() != T_NUMBER )
+        expecting( T_NUMBER );
+    growth->vertex.x = strtod( lexer->CurText(), 0 );
+    
+    if( nextTok() != T_NUMBER )
+        expecting( T_NUMBER );
+    growth->vertex.x = strtod( lexer->CurText(), 0 );
+
+    if( nextTok() != T_RIGHT )
+        unexpected( lexer->CurText() );
+}
+
+
+void SPECCTRA_DB::doLIBRARY( LIBRARY* growth ) throw( IOError )
+{
+    DSN_T   tok;
+
+    /*  <library_descriptor >::=
+        (library
+           [<unit_descriptor> ]
+           {<image_descriptor> }
+           [{<jumper_descriptor> }]
+           {<padstack_descriptor> }
+           {<via_array_template_descriptor> }
+           [<directory_descriptor> ]
+           [<extra_image_directory_descriptor> ]
+           [{<family_family_descriptor> }]
+           [{<image_image_descriptor> }]
+        )
+    */
+    
+    while( (tok = nextTok()) != T_RIGHT )
+    {
+        if( tok != T_LEFT )
+            expecting( T_LEFT );
+        
+        tok = nextTok();
+        switch( tok )
+        {
+        case T_unit:
+            if( growth->unit )
+                unexpected( tok );
             growth->unit = new UNIT_RES( growth, tok );
             doUNIT( growth->unit );
             break;
@@ -3681,11 +4135,148 @@ void SPECCTRA_DB::doLIBRARY( LIBRARY* growth ) throw( IOError )
             doPADSTACK( padstack );
             break;
 
-/* @todo            
         case T_image:
+            IMAGE*  image;
+            image = new IMAGE( growth );
+            growth->images.push_back( image );
+            doIMAGE( image );
             break;
-*/            
             
+        default:
+            unexpected( lexer->CurText() );
+        }
+    }
+}
+
+
+void SPECCTRA_DB::doNET( NET* growth ) throw( IOError )
+{
+    DSN_T   tok = nextTok();
+
+    /*  <net_descriptor >::=
+        (net <net_id >
+          [(unassigned)]
+          [(net_number <integer >)]
+          [(pins {<pin_reference> }) | (order {<pin_reference> })]
+          [<component_order_descriptor> ]
+          [(type [fix | normal])]
+          [<user_property_descriptor> ]
+          [<circuit_descriptor> ]
+          [<rule_descriptor> ]
+          [{<layer_rule_descriptor> }]
+          [<fromto_descriptor> ]
+          [(expose {<pin_reference> })]
+          [(noexpose {<pin_reference> })]
+          [(source {<pin_reference> })]
+          [(load {<pin_reference> })]
+          [(terminator {<pin_reference> })]
+          [(supply [power | ground])]
+        )
+    */
+
+    if( !isSymbol( tok ) )
+        expecting( "net_id" );
+    
+    growth->net_id = lexer->CurText();
+    
+    while( (tok = nextTok()) != T_RIGHT )
+    {
+        if( tok != T_LEFT )
+            expecting( T_LEFT );
+        
+        tok = nextTok();
+        switch( tok )
+        {
+        case T_unassigned:
+            growth->unassigned = true;
+            if( nextTok() != T_RIGHT )
+                expecting( T_RIGHT );
+            break;
+
+        case T_net_number:
+            if( nextTok() != T_NUMBER )
+                expecting( T_NUMBER );
+            growth->net_number = atoi( lexer->CurText() );
+            if( nextTok() != T_NUMBER )
+                expecting( T_NUMBER );
+            break;
+
+        case T_type:
+            tok = nextTok();
+            if( tok!=T_fix && tok!=T_normal )
+                expecting( "fix|normal" );
+            growth->type = tok;
+            if( nextTok() != T_RIGHT )
+                expecting( T_RIGHT );
+            break;
+
+        case T_pins:
+        case T_order:
+            growth->pins_type = tok;
+            {
+                PIN_REF     empty( growth );
+                while( (tok = nextTok()) != T_RIGHT )
+                {
+                    PIN_REF*    pin_ref;
+    
+                    // copy the empty one, then fill its copy later thru pin_ref.                
+                    growth->pins.push_back( empty );
+    
+                    pin_ref = &growth->pins.back();
+    
+                    if( !isSymbol(tok) )
+                        expecting("component_id");
+                    pin_ref->component_id = lexer->CurText();
+                    
+                    if( nextTok() != T_DASH )
+                        expecting( T_DASH );
+                    tok = nextTok();
+                    
+                    if( !isSymbol(tok) )
+                        expecting("component_id");
+                    pin_ref->pin_id = lexer->CurText();
+                }
+            }
+            break;
+            
+        default:
+            unexpected( lexer->CurText() );
+        }
+    }
+}
+
+
+void SPECCTRA_DB::doNETWORK( NETWORK* growth ) throw( IOError )
+{
+    DSN_T   tok;
+
+    /*  <network_descriptor >::=
+        (network
+          {<net_descriptor>}
+          [{<class_descriptor> }]
+          [{<class_class_descriptor> }]
+          [{<group_descriptor> }]
+          [{<group_set_descriptor> }]
+          [{<pair_descriptor> }]
+          [{<bundle_descriptor> }]
+        )
+    */
+
+    while( (tok = nextTok()) != T_RIGHT )
+    {
+        if( tok != T_LEFT )
+            expecting( T_LEFT );
+        
+        tok = nextTok();
+        switch( tok )
+        {
+        case T_net:
+            NET* net;
+            net = new NET( growth );
+            growth->nets.push_back( net );
+            doNET( net );
+            break;
+
         default:
             unexpected( lexer->CurText() );
         }
