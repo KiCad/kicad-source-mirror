@@ -52,7 +52,7 @@ static wxPoint                     s_CornerInitialPosition;     // Used to abort
 static bool                        s_CornerIsNew;               // Used to abort a move corner command (if it is a new corner, it must be deleted)
 static bool                        s_AddCutoutToCurrentZone;    // if true, the next outline will be addes to s_CurrentZone
 static ZONE_CONTAINER*             s_CurrentZone;               // if != NULL, these ZONE_CONTAINER params will be used for the next zone
-
+static wxPoint                     s_CursorLastPosition;		// in move zone outline, last cursor position. Used to calculate the move vector
 // keys used to store net sort option in config file :
 #define ZONE_NET_OUTLINES_HATCH_OPTION_KEY wxT( "Zone_Ouline_Hatch_Opt" )
 #define ZONE_NET_SORT_OPTION_KEY wxT( "Zone_NetSort_Opt" )
@@ -297,8 +297,7 @@ void WinEDA_PcbFrame::Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_c
     zone_container->m_Flags  = IS_MOVED;
     DrawPanel->ManageCurseur = Show_Zone_Corner_Or_Outline_While_Move_Mouse;
     DrawPanel->ForceCloseManageCurseur = Abort_Zone_Move_Corner_Or_Outlines;
-    s_CornerInitialPosition.x = zone_container->m_Poly->GetX( 0 );
-    s_CornerInitialPosition.y = zone_container->m_Poly->GetY( 0 );
+    s_CursorLastPosition = s_CornerInitialPosition = GetScreen()->m_Curseur;
     s_CornerIsNew = false;
     s_AddCutoutToCurrentZone = false;
     s_CurrentZone = NULL;
@@ -428,8 +427,7 @@ void Abort_Zone_Move_Corner_Or_Outlines( WinEDA_DrawPanel* Panel, wxDC* DC )
 	if ( zone_container->m_Flags == IS_MOVED )
 	{
 		wxPoint offset;
-		offset.x = s_CornerInitialPosition.x - zone_container->m_Poly->GetX( 0 );
-		offset.y = s_CornerInitialPosition.y - zone_container->m_Poly->GetY( 0 );
+		offset = s_CornerInitialPosition - s_CursorLastPosition;
 		zone_container->Move(offset);
 	}
 	else
@@ -474,9 +472,10 @@ void Show_Zone_Corner_Or_Outline_While_Move_Mouse( WinEDA_DrawPanel* Panel, wxDC
 	if( zone_container->m_Flags == IS_MOVED )
 	{
 		wxPoint offset;
-		offset.x = pos.x - zone_container->m_Poly->GetX( 0 );
-		offset.y = pos.y - zone_container->m_Poly->GetY( 0 );
+		offset.x = pos.x - s_CursorLastPosition.x;
+		offset.y = pos.y - s_CursorLastPosition.y;
 		zone_container->Move(offset);
+		s_CursorLastPosition = pos;
 	}
 	else
 		zone_container->m_Poly->MoveCorner( zone_container->m_CornerSelection, pos.x, pos.y );
