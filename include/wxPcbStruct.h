@@ -554,13 +554,15 @@ public:
                                                 bool            IsNewCorner );
 
     /**
-     * Function End_Move_Zone_Corner
-     * Terminates a move corner in a zone outline
+	 * Function End_Move_Zone_Corner_Or_Outlines
+	 * Terminates a move corner in a zone outline, or a move zone outlines
+	 * @param DC = current Device Context (can be NULL)
+	 * @param zone_container: the given zone
      */
-    void                End_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_container );
+    void                End_Move_Zone_Corner_Or_Outlines( wxDC* DC, ZONE_CONTAINER* zone_container );
 
     /**
-     * Function End_Move_Zone_Corner
+     * Function End_Move_Zone_Corner_Or_Outlines
      * Remove the currently selected corner in a zone outline
      * the .m_CornerSelection is used as corner selection
      */
@@ -577,7 +579,15 @@ public:
      */
     void                Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_container );
 
-    // Target handling
+	/**
+	 * Function Start_Move_Zone_Outlines
+	 * Initialise parametres to move an existing zone outlines.
+     * @param DC = current Device Context (can be NULL)
+	 * @param zone_container: the given zone to move
+	 */
+	void 				Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_container );
+
+   // Target handling
     MIREPCB*            Create_Mire( wxDC* DC );
     void                Delete_Mire( MIREPCB* MirePcb, wxDC* DC );
     void                StartMove_Mire( MIREPCB* MirePcb, wxDC* DC );

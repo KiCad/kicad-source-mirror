@@ -50,6 +50,9 @@
 
 #include <math.h>
 
+#include "fctsys.h"
+
+
 #include "php_polygon_vertex.h"
 #include "php_polygon.h"
 
@@ -427,9 +430,9 @@ BOOL polygon::ints( vertex * p1, vertex * p2, vertex * q1, vertex * q2,
 						double tua = ((tx4-tx3)*(ty1-ty3)-(ty4-ty3)*(tx1-tx3))/td;
 						double tub = ((tx2-tx1)*(ty1-ty3)-(ty2-ty1)*(tx1-tx3))/td;
 						if( abs(tua)<=eps || abs(1.0-tua)<=eps || abs(tub)<=eps || abs(1.0-tub)<=eps )
-							ASSERT(0);
+							wxASSERT(0);
 						else if( (tua > 0 && tua < 1) && (tub > 0 && tub < 1) )
-							ASSERT(0);
+							wxASSERT(0);
 						TRACE( "      perturb:\n      new s = (%f,%f) to (%f,%f)\n      new c = (%f,%f) to (%f,%f)\n      new ua = %.17f, ub = %.17f\n",
 							tx1, ty1, tx2, ty2, tx3, ty3, tx4, ty4, tua, tub );
 					}
@@ -650,7 +653,7 @@ BOOL polygon::isInside( vertex * v )
 {
 	//** modified for testing
 	if( v->isIntersect() )
-		ASSERT(0);
+		wxASSERT(0);
 	int winding_number = 0;
 	int winding_number2 = 0;
 	int winding_number3 = 0;
@@ -689,7 +692,7 @@ BOOL polygon::isInside( vertex * v )
 	if( winding_number%2 != winding_number2%2 
 	|| winding_number3%2 != winding_number4%2 
 	|| winding_number%2 != winding_number3%2 )
-		ASSERT(0);
+		wxASSERT(0);
 	if( winding_number%2 == 0 )	// Check even or odd
 		return FALSE;				// even == outside
 	else
@@ -780,9 +783,9 @@ polygon * polygon::boolean( polygon * polyB, int oper )
 		s = s->Next();
 	} while( s->id() != polyB->m_first->id() );
 	if( n_ints != n_polyB_ints )
-		ASSERT(0);
+		wxASSERT(0);
 	if( n_ints%2 != 0 )
-		ASSERT(0);
+		wxASSERT(0);
 	//** end test
 	
 	/*
@@ -817,7 +820,7 @@ polygon * polygon::boolean( polygon * polyB, int oper )
 	s = m_first;
 	//** testing
 	if( s->isIntersect() )
-		ASSERT(0);
+		wxASSERT(0);
 	//** end test
 	BOOL entry;
 	if (polyB->isInside(s)) // if we are already inside

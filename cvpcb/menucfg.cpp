@@ -228,25 +228,40 @@ wxString FullFileName, ShortLibName, mask;
 
 	Update();
 	mask = wxT("*") + LibExtBuffer;
-	FullFileName = EDA_FileSelector( _("Libraries"),
-					g_RealLibDirBuffer,		/* Chemin par defaut */
-					wxEmptyString,					/* nom fichier par defaut */
-					LibExtBuffer,		/* extension par defaut */
-					mask,				/* Masque d'affichage */
-					this,
-					0,
-					TRUE				/* ne chage pas de repertoire courant */
-					);
-	if (FullFileName == wxEmptyString ) return;
 
-	ShortLibName = MakeReducedFileName(FullFileName,g_RealLibDirBuffer,LibExtBuffer);
+	wxFileDialog FilesDialog(this, _("Library Files:"), g_RealLibDirBuffer,
+		wxEmptyString, mask,
+		wxFD_DEFAULT_STYLE | wxFD_MULTIPLE);
 
-	g_LibName_List.Insert(ShortLibName, ii);
+	FilesDialog.ShowModal();
+	wxArrayString Filenames;
+	FilesDialog.GetFilenames(Filenames);
+	
+	if ( Filenames.GetCount() == 0 )
+		return;
+
+	for ( unsigned jj = 0; jj < Filenames.GetCount(); jj ++ )
+	{
+		FullFileName = Filenames[jj];
+		ShortLibName = MakeReducedFileName(FullFileName,g_RealLibDirBuffer,LibExtBuffer);
+
+		//Add or insert new library name
+		if ( g_LibName_List.Index(ShortLibName) == wxNOT_FOUND)
+		{
+			ListModIsModified = 1;
+			g_LibName_List.Insert(ShortLibName, ii++);
+		}
+		else
+		{
+			wxString msg;
+			msg << wxT("<") << ShortLibName << wxT("> : ") << _("Library already in use");
+			DisplayError(this, msg);
+		}
+	}
 	
 	g_UserLibDirBuffer = m_LibDirCtrl->GetValue();
 	SetRealLibraryPath( wxT("modules") );
 	listlib();
-	ListModIsModified = 1;
 
 	m_Parent->BuildFootprintListBox();
 
@@ -282,23 +297,37 @@ wxString FullFileName, ShortLibName, mask;
 
 	Update();
 	mask = wxT("*") + g_EquivExtBuffer;
-	FullFileName = EDA_FileSelector( _("Equiv"),
-					g_RealLibDirBuffer,		/* Chemin par defaut */
-					wxEmptyString,					/* nom fichier par defaut */
-					g_EquivExtBuffer,		/* extension par defaut */
-					mask,				/* Masque d'affichage */
-					this,
-					0,
-					TRUE				/* ne chage pas de repertoire courant */
-					);
 
-	if (FullFileName == wxEmptyString ) return;
+	wxFileDialog FilesDialog(this, _("Equiv Files:"), g_RealLibDirBuffer,
+		wxEmptyString, mask,
+		wxFD_DEFAULT_STYLE | wxFD_MULTIPLE);
 
-	ShortLibName = MakeReducedFileName(FullFileName,g_RealLibDirBuffer,g_EquivExtBuffer);
+	FilesDialog.ShowModal();
+	wxArrayString Filenames;
+	FilesDialog.GetFilenames(Filenames);
+	
+	if ( Filenames.GetCount() == 0 )
+		return;
 
-	g_ListName_Equ.Insert(ShortLibName, ii);
+	for ( unsigned jj = 0; jj < Filenames.GetCount(); jj ++ )
+	{
+		FullFileName = Filenames[jj];
+		ShortLibName = MakeReducedFileName(FullFileName,g_RealLibDirBuffer,g_EquivExtBuffer);
 
-	/* Mise a jour de l'affichage */
+		//Add or insert new equiv library name
+		if ( g_ListName_Equ.Index(ShortLibName) == wxNOT_FOUND)
+		{
+			g_ListName_Equ.Insert(ShortLibName, ii++);
+		}
+		else
+		{
+			wxString msg;
+			msg << wxT("<") << ShortLibName << wxT("> : ") << _("Library already in use");
+			DisplayError(this, msg);
+		}
+	}
+
+	/* Update display list */
 	g_UserLibDirBuffer = m_LibDirCtrl->GetValue();
 	SetRealLibraryPath( wxT("modules") );
 	listlib();

@@ -36,6 +36,4 @@
 
 #define TRACE printf
 
-#define ASSERT(x)		// todo : change to wxASSERT, under wxWidgets
-
 #endif 		// ifndef DEFS_MACROS_H

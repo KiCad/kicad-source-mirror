@@ -364,29 +364,34 @@ wxString mask = wxT("*");
 	mask += LibExtBuffer;
 	g_RealLibDirBuffer.Replace( wxT("\\"), wxT("/"));
 
-	fullfilename = EDA_FileSelector( _("library files:"),
-				g_RealLibDirBuffer,			/* Chemin par defaut */
-				wxEmptyString,					/* nom fichier par defaut */
-				LibExtBuffer,		/* extension par defaut */
-				mask,				/* Masque d'affichage */
-				this,
-				0,
-				TRUE
-				);
+	wxFileDialog FilesDialog(this, _("Library Files:"), g_RealLibDirBuffer,
+		wxEmptyString, mask,
+		wxFD_DEFAULT_STYLE | wxFD_MULTIPLE);
 
-	if ( fullfilename.IsEmpty() ) return;
-
-	ShortLibName =
-		MakeReducedFileName(fullfilename, g_RealLibDirBuffer, LibExtBuffer);
-
-	//Add or insert new library name
-	if ( g_LibName_List.Index(ShortLibName) == wxNOT_FOUND)
+	FilesDialog.ShowModal();
+	wxArrayString Filenames;
+	FilesDialog.GetFilenames(Filenames);
+	
+	for ( unsigned jj = 0; jj < Filenames.GetCount(); jj ++ )
 	{
-		m_LibModified = TRUE;
-		g_LibName_List.Insert(ShortLibName, ii);
-		m_ListLibr->Clear();
-		m_ListLibr->InsertItems(g_LibName_List, 0);
+		fullfilename = Filenames[jj];
+		ShortLibName =
+			MakeReducedFileName(fullfilename, g_RealLibDirBuffer, LibExtBuffer);
+
+		//Add or insert new library name
+		if ( g_LibName_List.Index(ShortLibName) == wxNOT_FOUND)
+		{
+			m_LibModified = TRUE;
+			g_LibName_List.Insert(ShortLibName, ii);
+			m_ListLibr->Clear();
+			m_ListLibr->InsertItems(g_LibName_List, 0);
+		}
+		else
+		{
+			wxString msg;
+			msg << wxT("<") << ShortLibName << wxT("> : ") << _("Library already in use");
+			DisplayError(this, msg);
+		}
 	}
-	else DisplayError(this, _("Library exists! No Change"));
 }
 

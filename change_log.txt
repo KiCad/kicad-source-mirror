@@ -3,6 +3,15 @@ Started 2007-June-11
 
 Please add newer entries at the top, list the date and your name with
 email address.
+
+2007-Dec-16 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+	Move Zone outlines added
+	Zone outline DRC works (needs improvements)
+	some bugs solved, but polyline.cpp still needs work.
+	gendrill: code cleaning.
+
 2007-Dec-14 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:

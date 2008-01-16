@@ -183,10 +183,10 @@ int BOARD::TestAreaPolygon( ZONE_CONTAINER* CurrArea )
                             if( ret )
                             {
                                 // intersection between non-adjacent sides
-                                bInt = TRUE;
+                                bInt = true;
                                 if( style != CPolyLine::STRAIGHT || style2 != CPolyLine::STRAIGHT )
                                 {
-                                    bArcInt = TRUE;
+                                    bArcInt = true;
                                     break;
                                 }
                             }
@@ -219,8 +219,8 @@ int BOARD::TestAreaPolygon( ZONE_CONTAINER* CurrArea )
  * Function ClipAreaPolygon
  * Process an area that has been modified, by clipping its polygon against itself.
  * This may change the number and order of copper areas in the net.
- * @param bMessageBoxInt == TRUE, shows message when clipping occurs.
- * @param  bMessageBoxArc == TRUE, shows message when clipping can't be done due to arcs.
+ * @param bMessageBoxInt == true, shows message when clipping occurs.
+ * @param  bMessageBoxArc == true, shows message when clipping can't be done due to arcs.
  * @return:
  *	-1 if arcs intersect other sides, so polygon can't be clipped
  *	 0 if no intersecting sides
@@ -230,7 +230,7 @@ int BOARD::TestAreaPolygon( ZONE_CONTAINER* CurrArea )
 int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
                             bool bMessageBoxArc, bool bMessageBoxInt, bool bRetainArcs )
 {
-    CPolyLine* p    = CurrArea->m_Poly;
+    CPolyLine* curr_polygon    = CurrArea->m_Poly;
     int        test = TestAreaPolygon( CurrArea ); // this sets utility2 flag
 
     if( test == -1 && !bRetainArcs )
@@ -241,7 +241,7 @@ int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
         if( bMessageBoxArc && bDontShowSelfIntersectionArcsWarning == false )
         {
             wxString str;
-            str.Printf( wxT( "Area %X of net \"%s\" has arcs intersecting other sides.\n" ),
+            str.Printf( wxT( "Area %8.8X of net \"%s\" has arcs intersecting other sides.\n" ),
                        CurrArea->m_TimeStamp, CurrArea->m_Netname.GetData() );
             str += wxT( "This may cause problems with other editing operations,\n" );
             str += wxT( "such as adding cutouts. It can't be fixed automatically.\n" );
@@ -265,7 +265,7 @@ int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
         if( bMessageBoxInt && bDontShowSelfIntersectionWarning == false )
         {
             wxString str;
-            str.Printf( wxT( "Area %d of net \"%s\" is self-intersecting and will be clipped.\n" ),
+            str.Printf( wxT( "Area %8.8X of net \"%s\" is self-intersecting and will be clipped.\n" ),
                        CurrArea->m_TimeStamp, CurrArea->m_Netname.GetData() );
             str += wxT( "This may result in splitting the area.\n" );
             str += wxT( "If the area is complex, this may take a few seconds." );
@@ -279,25 +279,26 @@ int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
 //**	if( test == 1 )
     {
         std::vector<CPolyLine*> * pa = new std::vector<CPolyLine*>;
-        p->Undraw();
+        curr_polygon->Undraw();
         int n_poly = CurrArea->m_Poly->NormalizeWithGpc( pa, bRetainArcs );
-        if( n_poly > 1 )    // i.e if clippinf has created some polygons, we must add these new copper areas
+        if( n_poly > 1 )    // i.e if clipping has created some polygons, we must add these new copper areas
         {
+			ZONE_CONTAINER* NewArea;
             for( int ip = 1; ip < n_poly; ip++ )
             {
                 // create new copper area and copy poly into it
                 CPolyLine* new_p = (*pa)[ip - 1];
-                CurrArea = AddArea( CurrArea->GetNet(), CurrArea->GetLayer(), 0, 0, 0 );
+                NewArea = AddArea( CurrArea->GetNet(), CurrArea->GetLayer(), 0, 0, 0 );
 
                 // remove the poly that was automatically created for the new area
                 // and replace it with a poly from NormalizeWithGpc
-                delete CurrArea->m_Poly;
-                CurrArea->m_Poly = new_p;
-                CurrArea->m_Poly->Draw();
-                CurrArea->utility = 1;
+                delete NewArea->m_Poly;
+                NewArea->m_Poly = new_p;
+                NewArea->m_Poly->Draw();
+                NewArea->utility = 1;
             }
         }
-        p->Draw();
+        curr_polygon->Draw();
         delete pa;
     }
     return test;
@@ -309,7 +310,7 @@ int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
  * itself and the polygons for any other areas on the same net.
  * This may change the number and order of copper areas in the net.
  * @param modified_area = area to test
- * @param bMessageBox : if TRUE, shows message boxes when clipping occurs.
+ * @param bMessageBox : if true, shows message boxes when clipping occurs.
  * @return :
  * -1 if arcs intersect other sides, so polygon can't be clipped
  *  0 if no intersecting sides
@@ -328,11 +329,11 @@ int BOARD::AreaPolygonModified( ZONE_CONTAINER* modified_area,
     // now see if we need to clip against other areas
     bool bCheckAllAreas = false;
     if( test == 1 )
-        bCheckAllAreas = TRUE;
+        bCheckAllAreas = true;
     else
         bCheckAllAreas = TestAreaIntersections( modified_area );
     if( bCheckAllAreas )
-        CombineAllAreasInNet( modified_area->GetNet(), bMessageBoxInt, TRUE );
+        CombineAllAreasInNet( modified_area->GetNet(), bMessageBoxInt, true );
 
     return test;
 }
@@ -400,7 +401,7 @@ int BOARD::CombineAllAreasInNet( int aNetCode, bool bMessageBox, bool bUseUtilit
 
 //                                    bDontShowIntersectionWarning = dlg.bDontShowBoxState;
                                 }
-                                mod_ia1 = TRUE;
+                                mod_ia1 = true;
                             }
                             else if( ret == 2 )
                             {
@@ -508,12 +509,33 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
 						int n_int = FindSegmentIntersections( xi1, yi1, xf1, yf1, style1,
 															  xi2, yi2, xf2, yf2, style2 );
 						if( n_int )
-							return TRUE;
+							return true;
 					}
 				}
 			}
 		}
-    }
+		
+		// If a contour is inside an other contour, no segments intersects, but the zones can be combined
+		// test a corner inside an outline (only one corner is enought)
+/*		for( int ic2 = 0; ic2 < poly2->GetNumCorners(); ic2++ )
+		{
+			int x = poly2->GetX( ic2 );
+			int y = poly2->GetY( ic2 );
+			if( poly1->TestPointInside( x, y ) )
+			{
+				return true;
+			}
+		}
+		for( int ic1 = 0; ic1 < poly1->GetNumCorners(); ic1++ )
+		{
+			int x = poly1->GetX( ic1 );
+			int y = poly1->GetY( ic1 );
+			if( poly2->TestPointInside( x, y ) )
+			{
+				return true;
+			}
+		}
+*/    }
 
     return false;
 }
@@ -594,9 +616,9 @@ int BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_
                                                           xi2, yi2, xf2, yf2, style2 );
                     if( n_int )
                     {
-                        bInt = TRUE;
+                        bInt = true;
                         if( style1 != CPolyLine::STRAIGHT || style2 != CPolyLine::STRAIGHT )
-                            bArcInt = TRUE;
+                            bArcInt = true;
                         break;
                     }
                 }
@@ -614,7 +636,32 @@ int BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_
     }
 
     if( !bInt )
-        return 0;
+	{
+/*		if( bArcInt ) return 0;
+
+		// If a contour is inside an other contour, no segments intersects, but the zones can be combined
+		// test a corner inside an outline (only one corner is enought)
+		for( int ic2 = 0; ic2 < poly2->GetNumCorners(); ic2++ )
+		{
+			int x = poly2->GetX( ic2 );
+			int y = poly2->GetY( ic2 );
+			if( poly1->TestPointInside( x, y ) )
+			{
+				return 1;
+			}
+		}
+		for( int ic1 = 0; ic1 < poly1->GetNumCorners(); ic1++ )
+		{
+			int x = poly1->GetX( ic1 );
+			int y = poly1->GetY( ic1 );
+			if( poly2->TestPointInside( x, y ) )
+			{
+				return 1;
+			}
+		}
+		
+*/        return 0;
+	}
     if( bArcInt )
         return 2;
     return 1;

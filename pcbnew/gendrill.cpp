@@ -4,6 +4,10 @@
 
 #include "fctsys.h"
 
+using namespace std;
+
+#include <vector>
+
 #include "common.h"
 #include "plot_common.h"
 #include "trigo.h"
@@ -20,7 +24,7 @@
  *  Units
  *      - Decimal
  *      - Metric
- * 
+ *
  *  The drill maps can be created in HPGL or PS format
  *
  * dialog_gendrill.cpp  is the file (included in this file) which handles the Dialog box for drill file generation
@@ -29,9 +33,16 @@
 class DRILL_TOOL
 {
 public:
+    int m_Diameter;
     int m_TotalCount;
     int m_OvalCount;
-    int m_Diameter;
+public:
+    DRILL_TOOL( int diametre )
+    {
+        m_TotalCount = 0;
+        m_OvalCount  = 0;
+        m_Diameter   = diametre;
+    }
 };
 
 /* drill precision format */
@@ -63,16 +74,17 @@ static void PlotOvalDrillSymbol( const wxPoint& position,
                                  int            format );
 
 /* Local Variables : */
-static int     s_DrillToolsCount;                 /* Nombre de forets a utiliser */
-static float   conv_unit;                       /* coeff de conversion des unites drill / pcb */
-static int     s_Unit_Drill_is_Inch = TRUE;       /* INCH,LZ (2:4) */
-static int     s_Zeros_Format = DECIMAL_FORMAT;
-static DrillPrecision s_Precision( 2, 4 );
+static float                   conv_unit;                   /* coeff de conversion des unites drill / pcb */
+static int                     s_Unit_Drill_is_Inch = TRUE; /* INCH,LZ (2:4) */
+static int                     s_Zeros_Format = DECIMAL_FORMAT;
+static DrillPrecision          s_Precision( 2, 4 );
 
-static bool    DrillOriginIsAuxAxis;    // Axis selection (main / auxiliary) for Drill Origin coordinates
-static wxPoint File_Drill_Offset;       /* Offset des coord de percage pour le fichier généré */
-static bool    Minimal = false;
-static bool    Mirror  = true;
+static bool                    DrillOriginIsAuxAxis;    // Axis selection (main / auxiliary) for Drill Origin coordinates
+static wxPoint                 File_Drill_Offset;       /* Offset des coord de percage pour le fichier généré */
+static bool                    Minimal = false;
+static bool                    Mirror  = true;
+
+static std::vector<DRILL_TOOL> s_ToolListBuffer;
 
 // Keywords for read and write config
 #define ZerosFormatKey          wxT( "DrillZerosFormat" )
@@ -83,96 +95,114 @@ static bool    Mirror  = true;
 #define UnitDrillInchKey        wxT( "DrillUnit" )
 #define DrillOriginIsAuxAxisKey wxT( "DrillAuxAxis" )
 
-#include "dialog_gendrill.cpp"	//  Dialog box for drill file generation
+#include "dialog_gendrill.cpp"   //  Dialog box for drill file generation
 
-
-/**********************************************/
-void WinEDA_DrillFrame::InitDisplayParams(void)
-/**********************************************/
-/* some param values initialisation before display dialog window
-*/
+/* Compare function used for sorting tools */
+static bool CmpDrillDiameterTool( const DRILL_TOOL& a, const DRILL_TOOL& b )
 {
-	wxString msg;
+    return a.m_Diameter < b.m_Diameter;
+}
+
+
+/**********************************************/
+void WinEDA_DrillFrame::InitDisplayParams( void )
+/**********************************************/
+
+/* some param values initialisation before display dialog window
+ */
+{
+    wxString msg;
+
     if( s_Zeros_Format==DECIMAL_FORMAT )
         m_Choice_Precision->Enable( false );
     if( DrillOriginIsAuxAxis )
         m_Choice_Drill_Offset->SetSelection( 1 );
-	
+
     msg << s_Precision.m_lhs << wxT( ":" ) << s_Precision.m_rhs;
     m_Choice_Precision->SetStringSelection( msg );
     if( s_Zeros_Format==DECIMAL_FORMAT )
         m_Choice_Precision->Enable( false );
 
-	msg = ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_ViaDrill, m_Parent->m_InternalUnits );
-	msg += ReturnUnitSymbol( g_UnitMetric );
-	m_ViaDrillValue->SetLabel(msg);
-	
-	msg = ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_MicroViaDrill, m_Parent->m_InternalUnits );
-	msg += ReturnUnitSymbol( g_UnitMetric );
-	m_MicroViaDrillValue->SetLabel(msg);
+    msg  = ReturnStringFromValue( g_UnitMetric,
+                                  g_DesignSettings.m_ViaDrill,
+                                  m_Parent->m_InternalUnits );
+    msg += ReturnUnitSymbol( g_UnitMetric );
+    m_ViaDrillValue->SetLabel( msg );
 
-	msg.Empty();
-	msg << g_HPGL_Pen_Num;
-	m_PenNum->SetValue(msg);
-	
-	msg.Empty();
-	msg <<  g_HPGL_Pen_Speed;
-	m_PenSpeed->SetValue(msg);
-	
-	// See if we have some buried vias or/and microvias, and display microvias drill value if so
-	m_ThroughViasCount = 0;
-	m_MicroViasCount = 0;
-	m_BlindOrBuriedViasCount = 0;
-	for ( TRACK * track = m_Parent->m_Pcb->m_Track; track != NULL; track = track->Next() )
-	{
-		if ( track->Type() != TYPEVIA ) continue;
-		if ( track->Shape() == VIA_THROUGH )
-			m_ThroughViasCount++;
-		else if ( track->Shape() == VIA_MICROVIA )
-			m_MicroViasCount++;
-		else if ( track->Shape() == VIA_BLIND_BURIED )
-			m_BlindOrBuriedViasCount++;
-	}
-	m_MicroViasDrillSizer->Enable(m_MicroViasCount);
-	m_MicroViaDrillValue->Enable(m_MicroViasCount);
-	
-	/* Display statistics */
-	// Pads holes cound:
-	m_PadsHoleCount = 0;
-	for ( MODULE * module = m_Parent->m_Pcb->m_Modules; module != NULL; module=module->Next() )
-	{
-		for ( D_PAD * pad = module->m_Pads; pad != NULL; pad = pad->Next() )
-		{
+    msg  = ReturnStringFromValue( g_UnitMetric,
+                                  g_DesignSettings.m_MicroViaDrill,
+                                  m_Parent->m_InternalUnits );
+    msg += ReturnUnitSymbol( g_UnitMetric );
+    m_MicroViaDrillValue->SetLabel( msg );
+
+    msg.Empty();
+    msg << g_HPGL_Pen_Num;
+    m_PenNum->SetValue( msg );
+
+    msg.Empty();
+    msg << g_HPGL_Pen_Speed;
+    m_PenSpeed->SetValue( msg );
+
+    // See if we have some buried vias or/and microvias, and display microvias drill value if so
+    m_ThroughViasCount = 0;
+    m_MicroViasCount   = 0;
+    m_BlindOrBuriedViasCount = 0;
+    for( TRACK* track = m_Parent->m_Pcb->m_Track; track != NULL; track = track->Next() )
+    {
+        if( track->Type() != TYPEVIA )
+            continue;
+        if( track->Shape() == VIA_THROUGH )
+            m_ThroughViasCount++;
+        else if( track->Shape() == VIA_MICROVIA )
+            m_MicroViasCount++;
+        else if( track->Shape() == VIA_BLIND_BURIED )
+            m_BlindOrBuriedViasCount++;
+    }
+
+    m_MicroViasDrillSizer->Enable( m_MicroViasCount );
+    m_MicroViaDrillValue->Enable( m_MicroViasCount );
+
+    /* Display statistics */
+
+    // Pads holes cound:
+    m_PadsHoleCount = 0;
+    for( MODULE* module = m_Parent->m_Pcb->m_Modules; module != NULL; module = module->Next() )
+    {
+        for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
+        {
             if( pad->m_DrillShape == PAD_CIRCLE )
-                if( pad->m_Drill.x != 0) m_PadsHoleCount++;
-            else
-                if ( MIN( pad->m_Drill.x, pad->m_Drill.y ) != 0 ) m_PadsHoleCount++;
-		}
-	}
-	msg = m_PadsCountInfoMsg->GetLabel();
-	msg << wxT(" ") << m_PadsHoleCount;
-	m_PadsCountInfoMsg->SetLabel(msg);
+                if( pad->m_Drill.x != 0 )
+                    m_PadsHoleCount++;
+                else
+                if( MIN( pad->m_Drill.x, pad->m_Drill.y ) != 0 )
+                    m_PadsHoleCount++;
+        }
+    }
 
-	msg = m_ThroughViasInfoMsg->GetLabel();
-	msg << wxT(" ") << m_ThroughViasCount;
-	m_ThroughViasInfoMsg->SetLabel(msg);
-	
-	msg = m_MicroViasInfoMsg->GetLabel();
-	msg << wxT(" ") << m_MicroViasCount;
-	m_MicroViasInfoMsg->SetLabel(msg);
-	
-	msg = m_BuriedViasInfoMsg->GetLabel();
-	msg << wxT(" ") << m_BlindOrBuriedViasCount;
-	m_BuriedViasInfoMsg->SetLabel(msg);
+    msg = m_PadsCountInfoMsg->GetLabel();
+    msg << wxT( " " ) << m_PadsHoleCount;
+    m_PadsCountInfoMsg->SetLabel( msg );
+
+    msg = m_ThroughViasInfoMsg->GetLabel();
+    msg << wxT( " " ) << m_ThroughViasCount;
+    m_ThroughViasInfoMsg->SetLabel( msg );
+
+    msg = m_MicroViasInfoMsg->GetLabel();
+    msg << wxT( " " ) << m_MicroViasCount;
+    m_MicroViasInfoMsg->SetLabel( msg );
+
+    msg = m_BuriedViasInfoMsg->GetLabel();
+    msg << wxT( " " ) << m_BlindOrBuriedViasCount;
+    m_BuriedViasInfoMsg->SetLabel( msg );
 }
 
 
 /**************************************/
-void WinEDA_DrillFrame::SetParams(void)
+void WinEDA_DrillFrame::SetParams( void )
 /**************************************/
 {
-	wxString msg;
-	long ltmp;
+    wxString msg;
+    long     ltmp;
 
     s_Unit_Drill_is_Inch = (m_Choice_Unit->GetSelection() == 0) ? FALSE : TRUE;
     Minimal = m_Check_Minimal->IsChecked();
@@ -181,11 +211,13 @@ void WinEDA_DrillFrame::SetParams(void)
     DrillOriginIsAuxAxis = m_Choice_Drill_Offset->GetSelection();
 
     msg = m_PenSpeed->GetValue();
-    if ( msg.ToLong(&ltmp) ) g_HPGL_Pen_Speed = ltmp;
+    if( msg.ToLong( &ltmp ) )
+        g_HPGL_Pen_Speed = ltmp;
     msg = m_PenNum->GetValue();
 
-    if ( msg.ToLong(&ltmp) ) g_HPGL_Pen_Num = ltmp;
-		if( m_Choice_Drill_Offset->GetSelection() == 0 )
+    if( msg.ToLong( &ltmp ) )
+        g_HPGL_Pen_Num = ltmp;
+    if( m_Choice_Drill_Offset->GetSelection() == 0 )
         File_Drill_Offset = wxPoint( 0, 0 );
     else
         File_Drill_Offset = m_Parent->m_Auxiliary_Axis_Position;
@@ -195,15 +227,15 @@ void WinEDA_DrillFrame::SetParams(void)
     wxString ps = m_Choice_Precision->GetStringSelection();
     wxString l  = ps.substr( 0, 1 );
     wxString r  = ps.substr( 2, 1 );
-    
-    
+
+
     // a long is not an int on all machines
     long lhs;
     long rhs;
-    
+
     l.ToLong( &lhs );
     r.ToLong( &rhs );
-    
+
     s_Precision.m_lhs = lhs;
     s_Precision.m_rhs = rhs;
 }
@@ -259,8 +291,9 @@ void WinEDA_DrillFrame::UpdateConfig()
 /*************************************************************/
 void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
 /*************************************************************/
-/* Calls the functions to create EXCELLOn drill files and/od drill map files
-*/
+
+/* Calls the functions to create EXCELLON drill files and/od drill map files
+ */
 {
     wxString FullFileName, Mask( wxT( "*" ) ), Ext( wxT( ".drl" ) );
     int      ii;
@@ -303,19 +336,20 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
         /* Init : */
         Affiche_1_Parametre( m_Parent, 0, _( "File" ), FullFileName, BLUE );
 
-		setlocale (LC_NUMERIC, "C");	// Use the standard notation for float numbers
-		Init_Drill();
+        setlocale( LC_NUMERIC, "C" ); // Use the standard notation for float numbers
+        Init_Drill();
 
-        ii = Gen_Liste_Forets( (DRILL_TOOL*) adr_lowmem, TRUE );
+        ii = Gen_Liste_Tools( s_ToolListBuffer, TRUE );
+
         msg.Printf( wxT( "%d" ), ii );
         Affiche_1_Parametre( m_Parent, 30, _( "Tools" ), msg, BROWN );
 
-        ii = Create_Drill_File_EXCELLON( (DRILL_TOOL*) adr_lowmem );
+        ii = Create_Drill_File_EXCELLON( s_ToolListBuffer );
         msg.Printf( wxT( "%d" ), ii );
         Affiche_1_Parametre( m_Parent, 45, _( "Drill" ), msg, GREEN );
 
         Write_End_Of_File_Drill();
-		setlocale (LC_NUMERIC, "");	// Revert to locale float notation
+        setlocale( LC_NUMERIC, "" );  // Revert to locale float notation
     }
 
     switch( m_Choice_Drill_Map->GetSelection() )
@@ -324,16 +358,16 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
         break;
 
     case 1:
-        GenDrillMap( PLOT_FORMAT_HPGL );
+        GenDrillMap( s_ToolListBuffer, PLOT_FORMAT_HPGL );
         break;
 
     case 2:
-        GenDrillMap( PLOT_FORMAT_POST );
+        GenDrillMap( s_ToolListBuffer, PLOT_FORMAT_POST );
         break;
     }
 
     if( m_Choice_Drill_Report->GetSelection() > 0 )
-        GenDrillReport();
+        GenDrillReport( s_ToolListBuffer );
 
     EndModal( 0 );
 }
@@ -361,29 +395,28 @@ void WinEDA_DrillFrame::UpdatePrecisionOptions( wxCommandEvent& event )
 }
 
 
-/***************************************************************/
-int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( DRILL_TOOL* buffer )
-/***************************************************************/
+/**********************************************************************************/
+int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( std::vector<DRILL_TOOL>& buffer )
+/**********************************************************************************/
 
 /* Create the drill file in EXCELLON format
  *  Return hole count
  *  buffer: Drill tools list
  */
 {
-    DRILL_TOOL*  foret;
     TRACK*  pt_piste;
     D_PAD*  pt_pad;
     MODULE* Module;
-    int     ii, diam, nb_trous;
+    int     diam, holes_count;
     int     x0, y0, xf, yf, xc, yc;
     float   xt, yt;
     char    line[1024];
 
     /* Create the pad drill list : */
-    nb_trous = 0;
+    holes_count = 0;
 
     /* Read the hole file  */
-    for( ii = 0, foret = buffer; ii < s_DrillToolsCount; ii++, foret++ )
+    for( unsigned ii = 0; ii < buffer.size(); ii++ )
     {
         sprintf( line, "T%d\n", ii + 1 ); fputs( line, dest );
         /* Read the via list */
@@ -396,8 +429,8 @@ int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( DRILL_TOOL* buffer )
                 int via_drill = pt_piste->GetDrillValue();
                 if( via_drill == 0 )
                     continue;
-					
-                if( foret->m_Diameter != via_drill )
+
+                if( buffer[ii].m_Diameter != via_drill )
                     continue;
 
                 x0 = pt_piste->m_Start.x - File_Drill_Offset.x;
@@ -411,7 +444,6 @@ int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( DRILL_TOOL* buffer )
                 {
                     Gen_Line_EXCELLON( line, xt, yt );
                 }
-
                 else
                 {
                     /* metric 3:3 */
@@ -419,7 +451,7 @@ int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( DRILL_TOOL* buffer )
                 }
 
                 fputs( line, dest );
-                nb_trous++;
+                holes_count++;
             }
         }
 
@@ -436,7 +468,7 @@ int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( DRILL_TOOL* buffer )
                 diam = pt_pad->m_Drill.x;
                 if( diam == 0 )
                     continue;
-                if( diam != foret->m_Diameter )
+                if( diam != buffer[ii].m_Diameter )
                     continue;
 
                 /* Compute the hole coordinates: */
@@ -453,9 +485,13 @@ int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( DRILL_TOOL* buffer )
                     Gen_Line_EXCELLON( line, xt * 10, yt * 10 );
 
                 fputs( line, dest );
-                nb_trous++;
-            }     /* ens analyse one module */
-        }	// End analyse module list
+                holes_count++;
+            }
+
+            /* ens analyse one module */
+        }
+
+        // End analyse module list
 
 
         /* Read pad list and create Drill infos for oblong holes only: */
@@ -472,7 +508,7 @@ int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( DRILL_TOOL* buffer )
                 diam = MIN( pt_pad->m_Drill.x, pt_pad->m_Drill.y );
                 if( diam == 0 )
                     continue;
-                if( diam != foret->m_Diameter )
+                if( diam != buffer[ii].m_Diameter )
                     continue;
 
                 /* Compute the hole coordinates: */
@@ -511,7 +547,7 @@ int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( DRILL_TOOL* buffer )
 
                 fputs( line, dest );
 
-                fputs( "G85", dest );	// add the "G85" command
+                fputs( "G85", dest );    // add the "G85" command
 
                 xt = float (xf) * conv_unit; yt = float (yf) * conv_unit;
                 if( s_Unit_Drill_is_Inch )
@@ -519,12 +555,16 @@ int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( DRILL_TOOL* buffer )
                 else
                     Gen_Line_EXCELLON( line, xt * 10, yt * 10 );
                 fputs( "G05\n", dest );
-                nb_trous++;
-            }  /* End Analyse pad list for the module */
-        }      /* End analyse modules for the current tool */
+                holes_count++;
+            }
+
+            /* End Analyse pad list for the module */
+        }
+
+        /* End analyse modules for the current tool */
     }
 
-    return nb_trous;
+    return holes_count;
 }
 
 
@@ -597,71 +637,60 @@ void Gen_Line_EXCELLON( char* line, float x, float y )
         sprintf( line, "X%sY%s\n", CONV_TO_UTF8( xs ), CONV_TO_UTF8( ys ) );
         break;
     }
-
-    ;
 }
 
 
-/***************************************************/
-DRILL_TOOL* GetOrAddForet( DRILL_TOOL* buffer, int diameter )
-/***************************************************/
+/*************************************************************************/
+int GetOrAddForet( std::vector<DRILL_TOOL>& buffer, int diameter )
+/*************************************************************************/
 
 /* Search the drill tool for the diameter "diameter"
  *  Create a new one if not found
+ * return the index in buffer
  */
 {
-    int    ii;
-    DRILL_TOOL* foret;
+    unsigned    ii;
 
     if( diameter == 0 )
-        return NULL;
+        return -1;
 
     /* Search for an existing tool: */
-    for( ii = 0, foret = buffer; ii < s_DrillToolsCount; ii++, foret++ )
+    for( ii = 0; ii < buffer.size(); ii++ )
     {
-        if( foret->m_Diameter == diameter ) /* found */
-            return foret;
+        if( buffer[ii].m_Diameter == diameter )  /* found */
+            return ii;
     }
 
     /* No tool found, we must create a new one */
-    s_DrillToolsCount++;
-    foret->m_TotalCount = 0;
-    foret->m_OvalCount  = 0;
-    foret->m_Diameter   = diameter;
-    return foret;
+    DRILL_TOOL new_tool( diameter );
+    buffer.push_back( new_tool );
+    return  buffer.size() - 1;
 }
 
 
-/* Sort function by drill value */
-int Sort_by_Drill_Value( void* foret1, void* foret2 )
-{
-    return ( (DRILL_TOOL*) foret1 )->m_Diameter - ( (DRILL_TOOL*) foret2 )->m_Diameter;
-}
+/*********************************************************************************************/
+int WinEDA_DrillFrame::Gen_Liste_Tools( std::vector<DRILL_TOOL>& buffer, bool print_header )
+/*********************************************************************************************/
 
-
-/*******************************************************************************/
-int WinEDA_DrillFrame::Gen_Liste_Forets( DRILL_TOOL* buffer, bool print_header )
-/*******************************************************************************/
-
-/* Etablit la liste des forets de percage, dans l'ordre croissant des
+/* Etablit la liste des drill_tools de percage, dans l'ordre croissant des
  *  diametres
  *      Retourne:
  *      Nombre de Forets
  *
- *      Mise a jour: s_DrillToolsCount = nombre de forets differents
- *      Genere une liste de s_DrillToolsCount structures DRILL_TOOL a partir de buffer
+ *     Fills the list of tools buffer
  */
 {
-    DRILL_TOOL*  foret;
-    D_PAD*  pt_pad;
-    MODULE* Module;
-    int     ii, diam;
-    char    line[1024];
+    D_PAD*   pt_pad;
+    MODULE*  Module;
+    unsigned ii;
+    int      diam;
+    char     line[1024];
 
-    s_DrillToolsCount = 0; foret = buffer;
+    buffer.clear();
 
-    /* Creates the via tools */
-    TRACK* pt_piste = m_Parent->m_Pcb->m_Track;
+    /* Creates the via tools list*/
+    TRACK*   pt_piste = m_Parent->m_Pcb->m_Track;
+
     for( ; pt_piste != NULL; pt_piste = (TRACK*) pt_piste->Pnext )
     {
         if( pt_piste->Type() != TYPEVIA )
@@ -669,16 +698,17 @@ int WinEDA_DrillFrame::Gen_Liste_Forets( DRILL_TOOL* buffer, bool print_header )
         int via_drill = pt_piste->GetDrillValue();
         if( via_drill == 0 )
             continue;
-        foret = GetOrAddForet( buffer, via_drill );
-        if( foret )
-            foret->m_TotalCount++;
+		
+		ii = GetOrAddForet( buffer, via_drill );
+        if ( ii >= 0 )
+			buffer[ii].m_TotalCount++;
     }
 
     /* Create the pad tools : */
     Module = m_Parent->m_Pcb->m_Modules;
     for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
     {
-        /* Examen  des pastilles */
+        /* See the pad list for hole sizes */
         pt_pad = (D_PAD*) Module->m_Pads;
         for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
         {
@@ -690,33 +720,30 @@ int WinEDA_DrillFrame::Gen_Liste_Forets( DRILL_TOOL* buffer, bool print_header )
             if( diam == 0 )
                 continue;
 
-            foret = GetOrAddForet( buffer, diam );
-            if( foret )
-            {
-                foret->m_TotalCount++;
-                if( pt_pad->m_DrillShape == PAD_OVAL )
-                    foret->m_OvalCount++;
-            }
+            ii = GetOrAddForet( buffer, diam );
+			if ( ii >= 0 )
+			{
+				buffer[ii].m_TotalCount++;
+				if( pt_pad->m_DrillShape == PAD_OVAL )
+					buffer[ii].m_OvalCount++;
+			}
         }
-
-        /* Fin examen 1 module */
     }
 
-    /* tri des forets par ordre de diametre croissant */
-    qsort( buffer, s_DrillToolsCount, sizeof(DRILL_TOOL),
-           ( int( * ) ( const void*, const void* ) )Sort_by_Drill_Value );
+    /* Sort drill_tools by increasing size */
+    sort( buffer.begin(), buffer.end(), CmpDrillDiameterTool );
 
-    /* Generation de la section liste des outils */
+    /* Write the tool list in excellon file */
     if( print_header )
     {
-        for( ii = 0, foret = (DRILL_TOOL*) buffer; ii < s_DrillToolsCount; ii++, foret++ )
+        for( ii = 0; ii < buffer.size(); ii++ )
         {
-            if( s_Unit_Drill_is_Inch ) /* does it need T01, T02 or is T1,T2 ok?*/
+            if( s_Unit_Drill_is_Inch )  /* does it need T01, T02 or is T1,T2 ok?*/
                 sprintf( line, "T%dC%.3f\n", ii + 1,
-                         float (foret->m_Diameter) * conv_unit );
+                         float (buffer[ii].m_Diameter) * conv_unit );
             else
                 sprintf( line, "T%dC%.3f\n", ii + 1,
-                         float (foret->m_Diameter) * conv_unit * 10.0 );
+                         float (buffer[ii].m_Diameter) * conv_unit * 10.0 );
 
             fputs( line, dest );
         }
@@ -732,7 +759,7 @@ int WinEDA_DrillFrame::Gen_Liste_Forets( DRILL_TOOL* buffer, bool print_header )
             fputs( "M71\n", dest ); /* M71 = metric mode */
     }
 
-    return s_DrillToolsCount;
+    return buffer.size();
 }
 
 
@@ -794,16 +821,16 @@ void Write_End_Of_File_Drill()
 }
 
 
-/***********************************************/
-void WinEDA_DrillFrame::GenDrillMap( int format )
-/***********************************************/
+/**********************************************************************************/
+void WinEDA_DrillFrame::GenDrillMap( std::vector<DRILL_TOOL>& buffer, int format )
+/**********************************************************************************/
 
 /* Genere le plan de percage (Drill map) format HPGL ou POSTSCRIPT
  */
 {
-    int             ii, x, y;
+    unsigned        ii;
+    int             x, y;
     int             plotX, plotY, TextWidth;
-    DRILL_TOOL*          foret;
     int             intervalle = 0, CharSize = 0;
     EDA_BaseStruct* PtStruct;
     int             old_g_PlotOrient = g_PlotOrient;
@@ -852,7 +879,7 @@ void WinEDA_DrillFrame::GenDrillMap( int format )
     if( FullFileName.IsEmpty() )
         return;
 
-	setlocale (LC_NUMERIC, "C");	// Use the standard notation for float numbers
+    setlocale( LC_NUMERIC, "C" ); // Use the standard notation for float numbers
     g_PlotOrient = 0;
     /* calcul des dimensions et centre du PCB */
     m_Parent->m_Pcb->ComputeBoundaryBox();
@@ -908,8 +935,8 @@ void WinEDA_DrillFrame::GenDrillMap( int format )
     m_Parent->MsgPanel->EraseMsgBox();
     Affiche_1_Parametre( m_Parent, 0, _( "File" ), FullFileName, BLUE );
 
-    /* Calcul de la liste des diametres de percage (liste des forets) */
-    ii = Gen_Liste_Forets( (DRILL_TOOL*) adr_lowmem, FALSE );
+    /* Calcul de la liste des diametres de percage (liste des drill_tools) */
+    ii = Gen_Liste_Tools( s_ToolListBuffer, FALSE );
     msg.Printf( wxT( "%d" ), ii );
     Affiche_1_Parametre( m_Parent, 48, _( "Tools" ), msg, BROWN );
 
@@ -961,7 +988,7 @@ void WinEDA_DrillFrame::GenDrillMap( int format )
             PlotMirePcb( (MIREPCB*) PtStruct, format, EDGE_LAYER );
             break;
 
-        case TYPEMARKER:	// do not draw
+        case TYPEMARKER:    // do not draw
             break;
 
         default:
@@ -978,7 +1005,7 @@ void WinEDA_DrillFrame::GenDrillMap( int format )
         fputs( line, dest );
     }
 
-    ii = Plot_Drill_PcbMap( (DRILL_TOOL*) adr_lowmem, format );
+    ii = Plot_Drill_PcbMap( s_ToolListBuffer, format );
     msg.Printf( wxT( "%d" ), ii );
     Affiche_1_Parametre( m_Parent, 64, _( "Drill" ), msg, GREEN );
 
@@ -1056,13 +1083,13 @@ void WinEDA_DrillFrame::GenDrillMap( int format )
     }
 
 
-    for( ii = 0, foret = (DRILL_TOOL*) adr_lowmem; ii < s_DrillToolsCount; ii++, foret++ )
+    for( ii = 0; ii < buffer.size(); ii++ )
     {
         int plot_diam;
-        if( foret->m_TotalCount == 0 )
+        if( buffer[ii].m_TotalCount == 0 )
             continue;
 
-        plot_diam = (int) (foret->m_Diameter);
+        plot_diam = (int) (buffer[ii].m_Diameter);
         x = plotX; y = plotY;
         x = -g_PlotOffset.x + (int) (x * fTextScale);
         y = g_PlotOffset.y - (int) (y * fTextScale);
@@ -1090,31 +1117,31 @@ void WinEDA_DrillFrame::GenDrillMap( int format )
                 sprintf( line, "PU %d, %d; LB%2.3f\" / %2.2fmm ",
                          x + (int) (intervalle * CharScale * fTextScale),
                          y - (int) (CharSize / 2 * CharScale * fTextScale),
-                         float (foret->m_Diameter) * 0.0001,
-                         float (foret->m_Diameter) * 0.00254 );
+                         float (buffer[ii].m_Diameter) * 0.0001,
+                         float (buffer[ii].m_Diameter) * 0.00254 );
             else
                 sprintf( line, "PU %d, %d; LB%2.2fmm / %2.3f\" ",
                          x + (int) (intervalle * CharScale * fTextScale),
                          y - (int) (CharSize / 2 * CharScale * fTextScale),
-                         float (foret->m_Diameter) * 0.00254,
-                         float (foret->m_Diameter) * 0.0001 );
+                         float (buffer[ii].m_Diameter) * 0.00254,
+                         float (buffer[ii].m_Diameter) * 0.0001 );
             fputs( line, dest );
 
             // Now list how many holes and ovals are associated with each drill.
-            if( ( foret->m_TotalCount == 1 ) && ( foret->m_OvalCount == 0 ) )
+            if( ( buffer[ii].m_TotalCount == 1 ) && ( buffer[ii].m_OvalCount == 0 ) )
                 sprintf( line, "(1 hole)\n" );
-            else if( foret->m_TotalCount == 1 )  // && ( foret->m_OvalCount == 1 )
+            else if( buffer[ii].m_TotalCount == 1 )  // && ( buffer[ii]m_OvalCount == 1 )
                 sprintf( line, "(1 hole) (with 1 oblong)\n" );
-            else if( foret->m_OvalCount == 0 )
+            else if( buffer[ii].m_OvalCount == 0 )
                 sprintf( line, "(%d holes)\n",
-                         foret->m_TotalCount );
-            else if( foret->m_OvalCount == 1 )
+                         buffer[ii].m_TotalCount );
+            else if( buffer[ii].m_OvalCount == 1 )
                 sprintf( line, "(%d holes) (with 1 oblong)\n",
-                         foret->m_TotalCount );
-            else  //  if ( foret->m_OvalCount > 1 )
+                         buffer[ii].m_TotalCount );
+            else  //  if ( buffer[ii]m_OvalCount > 1 )
                 sprintf( line, "(%d holes) (with %d oblongs)\n",
-                         foret->m_TotalCount,
-                         foret->m_OvalCount );
+                         buffer[ii].m_TotalCount,
+                         buffer[ii].m_OvalCount );
             fputs( line, dest );
             fputs( "\03;\n", dest );
             break;
@@ -1125,29 +1152,29 @@ void WinEDA_DrillFrame::GenDrillMap( int format )
             // and then its diameter in the other Drill Unit.
             if( s_Unit_Drill_is_Inch )
                 sprintf( line, "%2.3f\" / %2.2fmm ",
-                         float (foret->m_Diameter) * 0.0001,
-                         float (foret->m_Diameter) * 0.00254 );
+                         float (buffer[ii].m_Diameter) * 0.0001,
+                         float (buffer[ii].m_Diameter) * 0.00254 );
             else
                 sprintf( line, "%2.2fmm / %2.3f\" ",
-                         float (foret->m_Diameter) * 0.00254,
-                         float (foret->m_Diameter) * 0.0001 );
+                         float (buffer[ii].m_Diameter) * 0.00254,
+                         float (buffer[ii].m_Diameter) * 0.0001 );
             msg = CONV_FROM_UTF8( line );
 
             // Now list how many holes and ovals are associated with each drill.
-            if( ( foret->m_TotalCount == 1 ) && ( foret->m_OvalCount == 0 ) )
+            if( ( buffer[ii].m_TotalCount == 1 ) && ( buffer[ii].m_OvalCount == 0 ) )
                 sprintf( line, "(1 hole)" );
-            else if( foret->m_TotalCount == 1 )  // && ( foret->m_OvalCount == 1 )
+            else if( buffer[ii].m_TotalCount == 1 )  // && ( buffer[ii]m_OvalCount == 1 )
                 sprintf( line, "(1 hole) (with 1 oblong)" );
-            else if( foret->m_OvalCount == 0 )
+            else if( buffer[ii].m_OvalCount == 0 )
                 sprintf( line, "(%d holes)",
-                         foret->m_TotalCount );
-            else if( foret->m_OvalCount == 1 )
+                         buffer[ii].m_TotalCount );
+            else if( buffer[ii].m_OvalCount == 1 )
                 sprintf( line, "(%d holes) (with 1 oblong)",
-                         foret->m_TotalCount );
-            else  // if ( foret->m_OvalCount > 1 )
+                         buffer[ii].m_TotalCount );
+            else  // if ( buffer[ii]m_OvalCount > 1 )
                 sprintf( line, "(%d holes) (with %d oblongs)",
-                         foret->m_TotalCount,
-                         foret->m_OvalCount );
+                         buffer[ii].m_TotalCount,
+                         buffer[ii].m_OvalCount );
             msg += CONV_FROM_UTF8( line );
             Plot_1_texte( format, msg, 0, TextWidth,
                           x, y,
@@ -1160,7 +1187,6 @@ void WinEDA_DrillFrame::GenDrillMap( int format )
         plotY += intervalle;
     }
 
- 
     switch( format )
     {
     case PLOT_FORMAT_HPGL:
@@ -1172,34 +1198,34 @@ void WinEDA_DrillFrame::GenDrillMap( int format )
         break;
     }
 
-	setlocale (LC_NUMERIC, "");	// Revert to local notation for float numbers
+    setlocale( LC_NUMERIC, "" );  // Revert to local notation for float numbers
 
     g_PlotOrient = old_g_PlotOrient;
 }
 
 
-/********************************************************************/
-int WinEDA_DrillFrame::Plot_Drill_PcbMap( DRILL_TOOL* buffer, int format )
-/*********************************************************************/
+/****************************************************************************************/
+int WinEDA_DrillFrame::Plot_Drill_PcbMap( std::vector<DRILL_TOOL>& buffer, int format )
+/****************************************************************************************/
 
-/** Creates the drill map file in HPGL or POSTSCRIPT format 
+/** Creates the drill map file in HPGL or POSTSCRIPT format
  * @return drill count
  * @param buffer = drill list buffer
  * @param format = ouput format (hpgl / ps)
  */
 {
-    DRILL_TOOL*  foret;
-    TRACK*  pt_piste;
-    D_PAD*  pt_pad;
-    MODULE* Module;
-    int     shape_id, diam, nb_trous;
-    wxPoint pos;
-    wxSize  size;
+    TRACK*   pt_piste;
+    D_PAD*   pt_pad;
+    MODULE*  Module;
+    unsigned shape_id;
+    int      diam, holes_count;
+    wxPoint  pos;
+    wxSize   size;
 
-    nb_trous = 0;
+    holes_count = 0;
 
     /* create the drill list */
-    if( s_DrillToolsCount > 13 )
+    if( buffer.size() > 13 )
     {
         DisplayInfo( this,
                      _(
@@ -1207,8 +1233,8 @@ int WinEDA_DrillFrame::Plot_Drill_PcbMap( DRILL_TOOL* buffer, int format )
                      10 );
     }
 
-	// Plot the drill map:
-    for( shape_id = 0, foret = (DRILL_TOOL*) buffer; shape_id < s_DrillToolsCount; shape_id++, foret++ )
+    // Plot the drill map:
+    for( shape_id = 0; shape_id < buffer.size(); shape_id++ )
     {
         /* create the via drill map */
         {
@@ -1218,12 +1244,12 @@ int WinEDA_DrillFrame::Plot_Drill_PcbMap( DRILL_TOOL* buffer, int format )
                 if( pt_piste->Type() != TYPEVIA )
                     continue;
                 int via_drill = pt_piste->GetDrillValue();
-				if( via_drill != foret->m_Diameter )
-					continue;
+                if( via_drill != buffer[shape_id].m_Diameter )
+                    continue;
                 pos = pt_piste->m_Start;
                 PlotDrillSymbol( pos, via_drill, shape_id, format );
 
-                nb_trous++;
+                holes_count++;
             }
         }
         /* create the pad drill map: */
@@ -1236,7 +1262,7 @@ int WinEDA_DrillFrame::Plot_Drill_PcbMap( DRILL_TOOL* buffer, int format )
                 {
                 case PAD_CIRCLE:
                     diam = pt_pad->m_Drill.x;
-                    if( diam != foret->m_Diameter )
+                    if( diam != buffer[shape_id].m_Diameter )
                         continue;
                     PlotDrillSymbol( pt_pad->m_Pos, diam, shape_id, format );
                     break;
@@ -1245,24 +1271,24 @@ int WinEDA_DrillFrame::Plot_Drill_PcbMap( DRILL_TOOL* buffer, int format )
                     if( pt_pad->m_DrillShape != PAD_OVAL )
                         continue;
                     diam = MIN( pt_pad->m_Drill.x, pt_pad->m_Drill.y );
-                    if( diam != foret->m_Diameter )
+                    if( diam != buffer[shape_id].m_Diameter )
                         continue;
                     PlotOvalDrillSymbol( pt_pad->m_Pos, pt_pad->m_Drill, pt_pad->m_Orient, format );
                     break;
                 }
 
-                nb_trous++;
+                holes_count++;
             }
 
             /* Fin examen 1 module */
         }
 
-        /* Fin 1 passe de foret */
+        /* Fin 1 passe de drill_tool */
     }
 
     /* fin analyse des trous de modules */
 
-    return nb_trous;
+    return holes_count;
 }
 
 
@@ -1445,6 +1471,7 @@ void PlotDrillSymbol( const wxPoint& position, int diametre, int num_forme, int 
 /*********************************************************************************************/
 void PlotOvalDrillSymbol( const wxPoint& position, const wxSize& size, int orient, int format )
 /*********************************************************************************************/
+
 /* Draws an oblong hole.
  * because functions to draw oblong shapes exist to draw oblong pads, Use they.
  */
@@ -1462,18 +1489,17 @@ void PlotOvalDrillSymbol( const wxPoint& position, const wxSize& size, int orien
 }
 
 
-/*******************************************/
-void WinEDA_DrillFrame::GenDrillReport()
-/*******************************************/
+/***************************************************************************/
+void WinEDA_DrillFrame::GenDrillReport( std::vector<DRILL_TOOL>& buffer )
+/***************************************************************************/
 
 /*
  *  Create a list of drill values and drill count
  */
 {
     wxString FileName, Mask( wxT( "*" ) ), Ext( wxT( ".rpt" ) );
-    int      ii, TotalHoleCount;
+    unsigned ii, TotalHoleCount;
     char     line[1024];
-    DRILL_TOOL*   foret;
     wxString msg;
 
     FileName = m_Parent->m_CurrentScreen->m_FileName;
@@ -1504,7 +1530,7 @@ void WinEDA_DrillFrame::GenDrillReport()
     Affiche_1_Parametre( m_Parent, 0, _( "File" ), FileName, BLUE );
 
     /* Determine the list of the different drill diameters. */
-    ii = Gen_Liste_Forets( (DRILL_TOOL*) adr_lowmem, FALSE );
+    ii = Gen_Liste_Tools( buffer, FALSE );
     msg.Printf( wxT( "%d" ), ii );
     Affiche_1_Parametre( m_Parent, 30, _( "Tools" ), msg, BROWN );
 
@@ -1520,7 +1546,7 @@ void WinEDA_DrillFrame::GenDrillReport()
 
     TotalHoleCount = 0;
 
-    for( ii = 0, foret = (DRILL_TOOL*) adr_lowmem; ii < s_DrillToolsCount; ii++, foret++ )
+    for( ii = 0; ii < buffer.size(); ii++ )
     {
         // List the tool number assigned to each drill,
         // then its diameter in the selected Drill Unit,
@@ -1528,37 +1554,39 @@ void WinEDA_DrillFrame::GenDrillReport()
         if( s_Unit_Drill_is_Inch )
             sprintf( line, "T%d  %2.3f\"  %2.2fmm  ",
                      ii + 1,
-                     float (foret->m_Diameter) * 0.0001,
-                     float (foret->m_Diameter) * 0.00254 );
+                     float (buffer[ii].m_Diameter) * 0.0001,
+                     float (buffer[ii].m_Diameter) * 0.00254 );
         else
             sprintf( line, "T%d  %2.2fmm  %2.3f\"  ",
                      ii + 1,
-                     float (foret->m_Diameter) * 0.00254,
-                     float (foret->m_Diameter) * 0.0001 );
+                     float (buffer[ii].m_Diameter) * 0.00254,
+                     float (buffer[ii].m_Diameter) * 0.0001 );
         fputs( line, dest );
 
         // Now list how many holes and ovals are associated with each drill.
-        if( ( foret->m_TotalCount == 1 ) && ( foret->m_OvalCount == 0 ) )
+        if( ( buffer[ii].m_TotalCount == 1 ) && ( buffer[ii].m_OvalCount == 0 ) )
             sprintf( line, "(1 hole)\n" );
-        else if( foret->m_TotalCount == 1 )
+        else if( buffer[ii].m_TotalCount == 1 )
             sprintf( line, "(1 hole)  (with 1 oblong)\n" );
-        else if( foret->m_OvalCount == 0 )
+        else if( buffer[ii].m_OvalCount == 0 )
             sprintf( line, "(%d holes)\n",
-                     foret->m_TotalCount );
-        else if( foret->m_OvalCount == 1 )
+                     buffer[ii].m_TotalCount );
+        else if( buffer[ii].m_OvalCount == 1 )
             sprintf( line, "(%d holes)  (with 1 oblong)\n",
-                     foret->m_TotalCount );
-        else  //  if ( foret->m_OvalCount > 1 )
+                     buffer[ii].m_TotalCount );
+        else  //  if ( buffer[ii]m_OvalCount > 1 )
             sprintf( line, "(%d holes)  (with %d oblongs)\n",
-                     foret->m_TotalCount,
-                     foret->m_OvalCount );
+                     buffer[ii].m_TotalCount,
+                     buffer[ii].m_OvalCount );
         fputs( line, dest );
 
-        TotalHoleCount += foret->m_TotalCount;
+        TotalHoleCount += buffer[ii].m_TotalCount;
     }
 
-    msg.Printf( wxT( "%d" ), TotalHoleCount );
-    Affiche_1_Parametre( m_Parent, 45, _( "Drill" ), msg, GREEN );
+
+	
+	sprintf( line, "\ntotal holes count %d\n", TotalHoleCount );
+    fputs( line, dest );
 
     fclose( dest );
 }

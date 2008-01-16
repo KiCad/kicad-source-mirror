@@ -644,8 +644,12 @@ void WinEDA_PcbFrame::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu
 {
     if( edge_zone->m_Flags )
     {
-        ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_PLACE_ZONE_CORNER,
-                      _( "Place Corner" ), apply_xpm );
+		if( (edge_zone->m_Flags & IN_EDIT ) )
+			ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_PLACE_ZONE_CORNER,
+						  _( "Place Corner" ), apply_xpm );
+		else
+			ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_PLACE_ZONE_OUTLINES,
+						  _( "Place Zone" ), apply_xpm );
     }
     else
     {
@@ -677,9 +681,13 @@ void WinEDA_PcbFrame::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu
         ADD_MENUITEM( zones_menu, ID_POPUP_PCB_FILL_ZONE,
                       _( "Fill Zone" ), fill_zone_xpm );
 
+        ADD_MENUITEM( zones_menu, ID_POPUP_PCB_MOVE_ZONE_OUTLINES,
+                      _( "Move Zone" ), move_xpm );
+
         ADD_MENUITEM( zones_menu, ID_POPUP_PCB_EDIT_ZONE_PARAMS,
                       _( "Edit Zone Params" ), edit_xpm );
 
+        zones_menu->AppendSeparator();
 		if ( index >= 0 && edge_zone->m_Poly->IsCutoutContour( edge_zone->m_CornerSelection ) )
 			ADD_MENUITEM( zones_menu, ID_POPUP_PCB_DELETE_ZONE_CUTOUT,
 						  _( "Delete Cutout" ), delete_xpm );

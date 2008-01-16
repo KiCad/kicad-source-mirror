@@ -69,8 +69,12 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_DELETE_EDGE_ZONE:
     case ID_POPUP_PCB_FILL_ALL_ZONES:
 	case ID_POPUP_PCB_PLACE_ZONE_CORNER:
+	case ID_POPUP_PCB_PLACE_ZONE_OUTLINES:
     case ID_POPUP_PCB_EDIT_ZONE_PARAMS:
     case ID_POPUP_PCB_DELETE_ZONE:
+	case ID_POPUP_PCB_MOVE_ZONE_CORNER:
+	case ID_POPUP_PCB_MOVE_ZONE_OUTLINES:
+	case ID_POPUP_PCB_ADD_ZONE_CORNER:
     case ID_POPUP_PCB_DELETE_TRACKSEG:
     case ID_POPUP_PCB_DELETE_TRACK:
     case ID_POPUP_PCB_DELETE_TRACKNET:
@@ -488,6 +492,14 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 	}
 
+	case ID_POPUP_PCB_MOVE_ZONE_OUTLINES:
+	{
+        DrawPanel->MouseToCursorSchema();
+		ZONE_CONTAINER * zone_cont = (ZONE_CONTAINER*)GetCurItem();
+		Start_Move_Zone_Outlines(&dc, zone_cont);
+        break;
+	}
+
 	case ID_POPUP_PCB_ADD_ZONE_CORNER:
 	{
         DrawPanel->MouseToCursorSchema();
@@ -505,11 +517,12 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 	}
 
+	case ID_POPUP_PCB_PLACE_ZONE_OUTLINES:
 	case ID_POPUP_PCB_PLACE_ZONE_CORNER:
 	{
         DrawPanel->MouseToCursorSchema();
 		ZONE_CONTAINER * zone_cont = (ZONE_CONTAINER*)GetCurItem();
-		End_Move_Zone_Corner(&dc, zone_cont);
+		End_Move_Zone_Corner_Or_Outlines(&dc, zone_cont);
         break;
 	}
 	

@@ -32,15 +32,15 @@ using namespace std;
 
 #include "protos.h"
 
-/* Local functions */
+bool verbose = false;		// false if zone outline diags mst not be shown
 
 // Outline creation:
 static void Abort_Zone_Create_Outline( WinEDA_DrawPanel* Panel, wxDC* DC );
 static void Show_New_Zone_Edge_While_Move_Mouse( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 
 // Corner moving
-static void Abort_Zone_Move_Corner( WinEDA_DrawPanel* Panel, wxDC* DC );
-static void Show_Zone_Corner_While_Move_Mouse( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
+static void Abort_Zone_Move_Corner_Or_Outlines( WinEDA_DrawPanel* Panel, wxDC* DC );
+static void Show_Zone_Corner_Or_Outline_While_Move_Mouse( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 
 /* Local variables */
 static bool                        Zone_45_Only = FALSE;
@@ -104,9 +104,9 @@ void WinEDA_PcbFrame::Add_Zone_Cutout( wxDC* DC, ZONE_CONTAINER* zone_container 
 }
 
 
-/*****************************************************************************/
+/**********************************************************************************/
 void WinEDA_PcbFrame::Delete_Zone_Fill( wxDC* DC, SEGZONE* aZone, long aTimestamp )
-/******************************************************************************/
+/**********************************************************************************/
 
 /** Function Delete_Zone_Fill
  * Remove the zone fillig which include the segment aZone, or the zone which have the given time stamp.
@@ -254,7 +254,35 @@ void WinEDA_PcbFrame::Start_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_con
 /**
  * Function Start_Move_Zone_Corner
  * Initialise parametres to move an existing corner of a zone.
- * if IsNewCorner is true, the Abort_Zone_Move_Corner will remove this corner, if called
+ * if IsNewCorner is true, the Abort_Zone_Move_Corner_Or_Outlines will remove this corner, if called
+ */
+{
+    /* Show the Net */
+    if( g_HightLigt_Status && DC)
+    {
+        Hight_Light( DC );  // Remove old hightlight selection
+    }
+
+    g_HightLigth_NetCode = s_NetcodeSelection = zone_container->GetNet();
+    if ( DC ) Hight_Light( DC );
+
+    zone_container->m_Flags  = IN_EDIT;
+    DrawPanel->ManageCurseur = Show_Zone_Corner_Or_Outline_While_Move_Mouse;
+    DrawPanel->ForceCloseManageCurseur = Abort_Zone_Move_Corner_Or_Outlines;
+    s_CornerInitialPosition.x = zone_container->m_Poly->GetX( corner_id );
+    s_CornerInitialPosition.y = zone_container->m_Poly->GetY( corner_id );
+    s_CornerIsNew = IsNewCorner;
+    s_AddCutoutToCurrentZone = false;
+    s_CurrentZone = NULL;
+}
+
+/*******************************************************************************************************/
+void WinEDA_PcbFrame::Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_container )
+/*******************************************************************************************************/
+
+/**
+ * Function Start_Move_Zone_Outlines
+ * Initialise parametres to move an existing zone outlines.
  */
 {
     /* Show the Net */
@@ -266,30 +294,33 @@ void WinEDA_PcbFrame::Start_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_con
     g_HightLigth_NetCode = s_NetcodeSelection = zone_container->GetNet();
     Hight_Light( DC );
 
-    zone_container->m_Flags  = IN_EDIT;
-    DrawPanel->ManageCurseur = Show_Zone_Corner_While_Move_Mouse;
-    DrawPanel->ForceCloseManageCurseur = Abort_Zone_Move_Corner;
-    s_CornerInitialPosition.x = zone_container->m_Poly->GetX( corner_id );
-    s_CornerInitialPosition.y = zone_container->m_Poly->GetY( corner_id );
-    s_CornerIsNew = IsNewCorner;
+    zone_container->m_Flags  = IS_MOVED;
+    DrawPanel->ManageCurseur = Show_Zone_Corner_Or_Outline_While_Move_Mouse;
+    DrawPanel->ForceCloseManageCurseur = Abort_Zone_Move_Corner_Or_Outlines;
+    s_CornerInitialPosition.x = zone_container->m_Poly->GetX( 0 );
+    s_CornerInitialPosition.y = zone_container->m_Poly->GetY( 0 );
+    s_CornerIsNew = false;
     s_AddCutoutToCurrentZone = false;
     s_CurrentZone = NULL;
 }
 
 
-/***************************************************************************************/
-void WinEDA_PcbFrame::End_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_container )
-/****************************************************************************************/
+/*************************************************************************************************/
+void WinEDA_PcbFrame::End_Move_Zone_Corner_Or_Outlines( wxDC* DC, ZONE_CONTAINER* zone_container )
+/*************************************************************************************************/
 
 /**
- * Function End_Move_Zone_Corner
- * Terminates a move corner in a zone outline
+ * Function End_Move_Zone_Corner_Or_Outlines
+ * Terminates a move corner in a zone outline, or a move zone outlines
+ * @param DC = current Device Context (can be NULL)
+ * @param zone_container: the given zone
  */
 {
     zone_container->m_Flags  = 0;
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
-    zone_container->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+    if ( DC )
+		zone_container->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
     GetScreen()->SetModify();
     s_AddCutoutToCurrentZone = false;
     s_CurrentZone = NULL;
@@ -304,15 +335,15 @@ void WinEDA_PcbFrame::End_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_conta
     for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* edge_zone = m_Pcb->GetArea(ii);
-        if( layer == edge_zone->GetLayer() )
+        if( layer == edge_zone->GetLayer() && DC)
             edge_zone->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
     }
 
-    m_Pcb->AreaPolygonModified( zone_container, true, false );
+    m_Pcb->AreaPolygonModified( zone_container, true, verbose );
     for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* edge_zone = m_Pcb->GetArea(ii);
-        if( layer == edge_zone->GetLayer() )
+        if( layer == edge_zone->GetLayer() && DC)
             edge_zone->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
     }
 	
@@ -359,7 +390,7 @@ void WinEDA_PcbFrame::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER * zone_contai
 	zone_container->m_Poly->DeleteCorner(zone_container->m_CornerSelection);
 	
 	// modify zones outlines accordiing to the new zone_container shape
-    m_Pcb->AreaPolygonModified( zone_container, true, false );
+    m_Pcb->AreaPolygonModified( zone_container, true, verbose );
     if ( DC )
 	{
 		for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
@@ -380,12 +411,12 @@ void WinEDA_PcbFrame::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER * zone_contai
 }
 
 
-/**************************************************************/
-void Abort_Zone_Move_Corner( WinEDA_DrawPanel* Panel, wxDC* DC )
-/**************************************************************/
+/**************************************************************************/
+void Abort_Zone_Move_Corner_Or_Outlines( WinEDA_DrawPanel* Panel, wxDC* DC )
+/**************************************************************************/
 
 /**
- * Function Abort_Zone_Move_Corner
+ * Function Abort_Zone_Move_Corner_Or_Outlines
  * cancels the Begin_Zone state if at least one EDGE_ZONE has been created.
  */
 {
@@ -394,15 +425,25 @@ void Abort_Zone_Move_Corner( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     zone_container->Draw( Panel, DC, wxPoint( 0, 0 ), GR_XOR );
 
-    if( s_CornerIsNew )
-    {
-        zone_container->m_Poly->DeleteCorner( zone_container->m_CornerSelection );
-    }
-    else
-    {
-        wxPoint pos = s_CornerInitialPosition;
-        zone_container->m_Poly->MoveCorner( zone_container->m_CornerSelection, pos.x, pos.y );
-    }
+	if ( zone_container->m_Flags == IS_MOVED )
+	{
+		wxPoint offset;
+		offset.x = s_CornerInitialPosition.x - zone_container->m_Poly->GetX( 0 );
+		offset.y = s_CornerInitialPosition.y - zone_container->m_Poly->GetY( 0 );
+		zone_container->Move(offset);
+	}
+	else
+	{
+		if( s_CornerIsNew )
+		{
+			zone_container->m_Poly->DeleteCorner( zone_container->m_CornerSelection );
+		}
+		else
+		{
+			wxPoint pos = s_CornerInitialPosition;
+			zone_container->m_Poly->MoveCorner( zone_container->m_CornerSelection, pos.x, pos.y );
+		}
+	}
     zone_container->Draw( Panel, DC, wxPoint( 0, 0 ), GR_XOR );
 
     Panel->ManageCurseur = NULL;
@@ -414,9 +455,9 @@ void Abort_Zone_Move_Corner( WinEDA_DrawPanel* Panel, wxDC* DC )
 }
 
 
-/**************************************************************************************/
-void Show_Zone_Corner_While_Move_Mouse( WinEDA_DrawPanel* Panel, wxDC* DC, bool erase )
-/**************************************************************************************/
+/*************************************************************************************************/
+void Show_Zone_Corner_Or_Outline_While_Move_Mouse( WinEDA_DrawPanel* Panel, wxDC* DC, bool erase )
+/*************************************************************************************************/
 
 /* Redraws the zone outline when moving a corner according to the cursor position
  */
@@ -430,7 +471,16 @@ void Show_Zone_Corner_While_Move_Mouse( WinEDA_DrawPanel* Panel, wxDC* DC, bool 
     }
 
     wxPoint          pos = pcbframe->GetScreen()->m_Curseur;
-    zone_container->m_Poly->MoveCorner( zone_container->m_CornerSelection, pos.x, pos.y );
+	if( zone_container->m_Flags == IS_MOVED )
+	{
+		wxPoint offset;
+		offset.x = pos.x - zone_container->m_Poly->GetX( 0 );
+		offset.y = pos.y - zone_container->m_Poly->GetY( 0 );
+		zone_container->Move(offset);
+	}
+	else
+		zone_container->m_Poly->MoveCorner( zone_container->m_CornerSelection, pos.x, pos.y );
+
     zone_container->Draw( Panel, DC, wxPoint( 0, 0 ), GR_XOR );
 }
 
@@ -649,7 +699,7 @@ void WinEDA_PcbFrame::End_Zone( wxDC* DC )
     SetCurItem( NULL );       // This outine can be deleted when merging outlines
 
     // Combine zones if possible :
-    m_Pcb->AreaPolygonModified( new_zone_container, true, false );
+    m_Pcb->AreaPolygonModified( new_zone_container, true, verbose );
 
     // Redraw the real edge zone :
     for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
@@ -760,7 +810,7 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
     zone_container->m_GridFillValue = g_GridRoutingSize;
 
     // Combine zones if possible :
-    m_Pcb->AreaPolygonModified( zone_container, true, false );
+    m_Pcb->AreaPolygonModified( zone_container, true, verbose );
 
     // Redraw the real new zone outlines:
     for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )

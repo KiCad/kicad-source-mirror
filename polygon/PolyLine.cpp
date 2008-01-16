@@ -10,6 +10,9 @@ using namespace std;
 #include <math.h>
 #include <vector>
 
+#include "fctsys.h"
+
+
 #include "PolyLine.h"
 
 #define to_int(x) (int)round((x))
@@ -83,8 +86,7 @@ int CPolyLine::NormalizeWithGpc( std::vector<CPolyLine*> * pa, bool bRetainArcs 
 			{
 				// next external contour, create new poly
 				CPolyLine * poly = new CPolyLine;
-				pa->SetSize(n_ext_cont);	// put in array
-				(*pa)[n_ext_cont-1] = poly;
+				pa->push_back(poly);	// put in array
 				for( int i=0; i<m_gpc_poly->contour[ic].num_vertices; i++ )
 				{
 					int x = to_int(((m_gpc_poly->contour)[ic].vertex)[i].x);
@@ -136,7 +138,7 @@ int CPolyLine::NormalizeWithGpc( std::vector<CPolyLine*> * pa, bool bRetainArcs 
 				}
 			}
 			if( !ext_poly )
-				ASSERT(0);
+				wxASSERT(0);
 			for( int i=0; i<m_gpc_poly->contour[ic].num_vertices; i++ )
 			{
 				int x = to_int(((m_gpc_poly->contour)[ic].vertex)[i].x);
@@ -422,7 +424,7 @@ int CPolyLine::MakeGpcPoly( int icontour, std::vector<CArc> * arc_array )
 			}
 		}
 		if( n_vertices != ivtx )
-			ASSERT(0);
+			wxASSERT(0);
 		// add vertex_list to gpc
 		gpc_add_contour( gpc, g_v_list, 0 );
 		// now clip m_gpc_poly with gpc, put new poly into result
@@ -641,7 +643,7 @@ void CPolyLine::AppendCorner( int x, int y, int style, bool bDraw )
 	else if( style == CPolyLine::ARC_CCW )
 		dl_type = DL_ARC_CCW;
 	else
-		ASSERT(0);
+		wxASSERT(0);
 	if( bDraw )
 		Draw();
 }
@@ -651,7 +653,7 @@ void CPolyLine::AppendCorner( int x, int y, int style, bool bDraw )
 void CPolyLine::Close( int style, bool bDraw )
 {
 	if( GetClosed() )
-		ASSERT(0);
+		wxASSERT(0);
 	Undraw();
 	side_style[corner.size()-1] = style;
 	corner[corner.size()-1].end_contour = TRUE;
@@ -720,7 +722,7 @@ void CPolyLine::RemoveContour( int icont )
 	if( icont == 0 && GetNumContours() == 1 )
 	{
 		// remove the only contour
-		ASSERT(0);
+		wxASSERT(0);
 	}
 	else if( icont == GetNumContours()-1 )
 	{
@@ -919,7 +921,7 @@ int CPolyLine::GetContourStart( int icont )
 				return i+1;
 		}
 	}
-	ASSERT(0);
+	wxASSERT(0);
 	return 0;
 }
 
@@ -941,7 +943,7 @@ int CPolyLine::GetContourEnd( int icont )
 			ncont++;
 		}
 	}
-	ASSERT(0);
+	wxASSERT(0);
 	return 0;
 }
 
@@ -1062,7 +1064,7 @@ void CPolyLine::Hatch()
 		else if( layer < (LAY_TOP_COPPER+16) )
 			offset = 7*spacing/8;
 		else
-			ASSERT(0);
+			wxASSERT(0);
 		min_a += offset;
 
 		// now calculate and draw hatch lines
@@ -1104,20 +1106,20 @@ void CPolyLine::Hatch()
 						xx[npts] = (int)x;
 						yy[npts] = (int)y;
 						npts++;
-						ASSERT( npts<MAXPTS );	// overflow
+						wxASSERT( npts<MAXPTS );	// overflow
 					}
 					if( ok == 2 )
 					{
 						xx[npts] = (int)x2;
 						yy[npts] = (int)y2;
 						npts++;
-						ASSERT( npts<MAXPTS );	// overflow
+						wxASSERT( npts<MAXPTS );	// overflow
 					}
 				}
 				nloops++;
 				a += PCBU_PER_MIL/100;
 			} while( npts%2 != 0 && nloops < 3 );
-			ASSERT( npts%2==0 );	// odd number of intersection points, error
+			wxASSERT( npts%2==0 );	// odd number of intersection points, error
 
 			// sort points in order of descending x (if more than 2)
 			if( npts>2 )
@@ -1177,7 +1179,7 @@ bool CPolyLine::TestPointInside( int x, int y )
 {
 	enum { MAXPTS = 100 };
 	if( !GetClosed() )
-		ASSERT(0);
+		wxASSERT(0);
 
 	// define line passing through (x,y), with slope = 2/3;
 	// get intersection points
@@ -1216,21 +1218,21 @@ bool CPolyLine::TestPointInside( int x, int y )
 					xx[npts] = (int)x;
 					yy[npts] = (int)y;
 					npts++;
-					ASSERT( npts<MAXPTS );	// overflow
+					wxASSERT( npts<MAXPTS );	// overflow
 				}
 				if( ok == 2 )
 				{
 					xx[npts] = (int)x2;
 					yy[npts] = (int)y2;
 					npts++;
-					ASSERT( npts<MAXPTS );	// overflow
+					wxASSERT( npts<MAXPTS );	// overflow
 				}
 			}
 		}
 		nloops++;
 		a += PCBU_PER_MIL/100;
 	} while( npts%2 != 0 && nloops < 3 );
-	ASSERT( npts%2==0 );	// odd number of intersection points, error
+	wxASSERT( npts%2==0 );	// odd number of intersection points, error
 
 	// count intersection points to right of (x,y), if odd (x,y) is inside polyline
 	int ncount = 0;
@@ -1256,7 +1258,7 @@ bool CPolyLine::TestPointInsideContour( int icont, int x, int y )
 
 	enum { MAXPTS = 100 };
 	if( !GetClosed() )
-		ASSERT(0);
+		wxASSERT(0);
 
 	// define line passing through (x,y), with slope = 2/3;
 	// get intersection points
@@ -1293,20 +1295,20 @@ bool CPolyLine::TestPointInsideContour( int icont, int x, int y )
 				xx[npts] = (int)x;
 				yy[npts] = (int)y;
 				npts++;
-				ASSERT( npts<MAXPTS );	// overflow
+				wxASSERT( npts<MAXPTS );	// overflow
 			}
 			if( ok == 2 )
 			{
 				xx[npts] = (int)x2;
 				yy[npts] = (int)y2;
 				npts++;
-				ASSERT( npts<MAXPTS );	// overflow
+				wxASSERT( npts<MAXPTS );	// overflow
 			}
 		}
 		nloops++;
 		a += PCBU_PER_MIL/100;
 	} while( npts%2 != 0 && nloops < 3 );
-	ASSERT( npts%2==0 );	// odd number of intersection points, error
+	wxASSERT( npts%2==0 );	// odd number of intersection points, error
 
 	// count intersection points to right of (x,y), if odd (x,y) is inside polyline
 	int ncount = 0;
@@ -1328,9 +1330,9 @@ bool CPolyLine::TestPointInsideContour( int icont, int x, int y )
 int CPolyLine::TestIntersection( CPolyLine * poly )
 {
 	if( !GetClosed() )
-		ASSERT(0);
+		wxASSERT(0);
 	if( !poly->GetClosed() )
-		ASSERT(0);
+		wxASSERT(0);
 	for( int ic=0; ic<GetNumContours(); ic++ )
 	{
 		int istart = GetContourStart(ic);
