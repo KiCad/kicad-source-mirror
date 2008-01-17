@@ -60,8 +60,11 @@
 
 
 
+
 namespace DSN {
 
+#define NESTWIDTH           4   ///< how many spaces per nestLevel    
+    
     
 class SPECCTRA_DB;
 class PCB;
@@ -91,9 +94,10 @@ public:
      * @param fmt A printf() style format string.
      * @param ... a variable list of parameters that will get blended into 
      *  the output under control of the format string.
-     * @throw IOError if there is a problem outputting, such as a full disk.
+     * @return int - the number of characters output.
+     * @throw IOError, if there is a problem outputting, such as a full disk.
      */
-    virtual void PRINTF_FUNC Print( int nestLevel, const char* fmt, ... ) throw( IOError ) = 0;
+    virtual int PRINTF_FUNC Print( int nestLevel, const char* fmt, ... ) throw( IOError ) = 0;
 
     /**
      * Function GetQuoteChar
@@ -161,20 +165,14 @@ typedef std::vector<PROPERTY>       PROPERTIES;
 
 /**
  * Class ELEM
- * is a holder for any DSN element.  It can contain other
- * elements, including elements derived from this class.
+ * is a base class for any DSN element class. 
+ * See class ELEM_HOLDER also.
  */ 
 class ELEM
 {
 protected:    
     DSN_T           type;
-
     ELEM*           parent;
-    
-    //  see http://www.boost.org/libs/ptr_container/doc/ptr_sequence_adapter.html
-    typedef boost::ptr_vector<ELEM> ELEM_ARRAY;
-    
-    ELEM_ARRAY      kids;      ///< ELEM pointers
     
 public:
 
@@ -220,8 +218,34 @@ public:
      * @param nestLevel A multiple of the number of spaces to preceed the output with.
      * @throw IOError if a system error writing the output, such as a full disk.
      */
-    virtual void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError );
+    virtual void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        // overridden in ELEM_HOLDER
+    }
+};
 
+
+/**
+ * Class ELEM_HOLDER
+ * is a holder for any DSN class.  It can contain other
+ * class instances, including classes derived from this class.
+ */ 
+class ELEM_HOLDER : public ELEM
+{
+    //  see http://www.boost.org/libs/ptr_container/doc/ptr_sequence_adapter.html
+    typedef boost::ptr_vector<ELEM> ELEM_ARRAY;
+    
+    ELEM_ARRAY      kids;      ///< ELEM pointers
+
+public:    
+    
+    ELEM_HOLDER( DSN_T aType, ELEM* aParent = 0 ) :
+        ELEM( aType, aParent )
+    {
+    }
+
+    virtual void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError );
+    
     
     //-----< list operations >--------------------------------------------
 
@@ -488,16 +512,21 @@ public:
         delete rule;
     }
     
-    void FormatContent( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
+        out->Print( nestLevel, "(%s", LEXER::GetTokenText( Type() ) );
+        
         for( STRINGS::const_iterator i=layer_ids.begin();  i!=layer_ids.end();  ++i )
         {
             const char* quote = out->GetQuoteChar( i->c_str() );
-            out->Print( nestLevel, "%s%s%s\n", quote, i->c_str(), quote );
+            out->Print( 0, " %s%s%s", quote, i->c_str(), quote );
         }
+        out->Print( 0 , "\n" );
         
         if( rule )
-            rule->Format( out, nestLevel );
+            rule->Format( out, nestLevel+1 );
+        
+        out->Print( nestLevel, ")\n" );
     }
 };
 
@@ -867,7 +896,7 @@ public:
 };
 
 
-class CLASS_CLASS : public ELEM
+class CLASS_CLASS : public ELEM_HOLDER
 {
     friend class SPECCTRA_DB;
     
@@ -884,7 +913,7 @@ public:
      * @param aType May be either T_class_class or T_region_class_class
      */
     CLASS_CLASS( ELEM* aParent, DSN_T aType ) :
-        ELEM( aType, aParent )
+        ELEM_HOLDER( aType, aParent )
     {
         classes = 0;
     }
@@ -900,28 +929,26 @@ public:
             classes->Format( out, nestLevel );
 
         // format the kids
-        ELEM::FormatContents( out, nestLevel );
+        ELEM_HOLDER::FormatContents( out, nestLevel );
     }
 };
 
 
-class CONTROL : public ELEM
+class CONTROL : public ELEM_HOLDER
 {
     friend class SPECCTRA_DB;
 
     bool    via_at_smd;
     bool    via_at_smd_grid_on;
-
     
 public:
-
     CONTROL( ELEM* aParent ) :
-        ELEM( T_control, aParent )
+        ELEM_HOLDER( T_control, aParent )
     {
         via_at_smd = false;
         via_at_smd_grid_on = false;
     }
-    
+   
     ~CONTROL()
     {
     }
@@ -1158,7 +1185,7 @@ public:
 };
 
 
-class REGION : public ELEM
+class REGION : public ELEM_HOLDER
 {
     friend class SPECCTRA_DB;
 
@@ -1177,7 +1204,7 @@ class REGION : public ELEM
 
 public:
     REGION( ELEM* aParent ) :
-        ELEM( T_region, aParent )
+        ELEM_HOLDER( T_region, aParent )
     {
         rectangle = 0;
         polygon = 0;
@@ -1205,7 +1232,7 @@ public:
         if( polygon )
             polygon->Format( out, nestLevel );
 
-        ELEM::FormatContents( out, nestLevel );
+        ELEM_HOLDER::FormatContents( out, nestLevel );
         
         if( rules )
             rules->Format( out, nestLevel );
@@ -1264,7 +1291,7 @@ public:
 };
 
 
-class STRUCTURE : public ELEM
+class STRUCTURE : public ELEM_HOLDER
 {
     friend class SPECCTRA_DB;
     
@@ -1298,7 +1325,7 @@ class STRUCTURE : public ELEM
 public:
 
     STRUCTURE( ELEM* aParent ) :
-        ELEM( T_structure, aParent )
+        ELEM_HOLDER( T_structure, aParent )
     {
         unit = 0;
         layer_noise_weight = 0;
@@ -1632,7 +1659,7 @@ public:
 };
 
 
-class IMAGE : public ELEM
+class IMAGE : public ELEM_HOLDER
 {
     friend class SPECCTRA_DB;
     
@@ -1654,7 +1681,7 @@ class IMAGE : public ELEM
 public:
     
     IMAGE( ELEM* aParent ) :
-        ELEM( T_image, aParent )
+        ELEM_HOLDER( T_image, aParent )
     {
         side = T_both;
         unit = 0;
@@ -1685,7 +1712,7 @@ public:
             unit->Format( out, nestLevel+1 );
 
         // format the kids, which in this class are the shapes
-        ELEM::FormatContents( out, nestLevel+1 );
+        ELEM_HOLDER::FormatContents( out, nestLevel+1 );
     
         for( PINS::iterator i=pins.begin();  i!=pins.end();  ++i )
             i->Format( out, nestLevel+1 );
@@ -1710,7 +1737,7 @@ public:
 };
 
 
-class PADSTACK : public ELEM
+class PADSTACK : public ELEM_HOLDER
 {
     friend class SPECCTRA_DB;
 
@@ -1729,7 +1756,7 @@ class PADSTACK : public ELEM
 public:
     
     PADSTACK( ELEM* aParent ) :
-        ELEM( T_padstack, aParent )
+        ELEM_HOLDER( T_padstack, aParent )
     {
         unit = 0;
         rotate = T_on;
@@ -1754,7 +1781,7 @@ public:
             unit->Format( out, nestLevel+1 );
 
         // format the kids, which in this class are the shapes
-        ELEM::FormatContents( out, nestLevel+1 );
+        ELEM_HOLDER::FormatContents( out, nestLevel+1 );
 
         out->Print( nestLevel+1, "%s", "" );
         
@@ -1930,12 +1957,146 @@ public:
 };
 
 
+class FROMTO : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+public:    
+    FROMTO( ELEM* aParent ) :
+        ELEM( T_fromto, aParent )
+    {
+    }
+};
+
+
+class COMP_ORDER : public ELEM
+{
+    friend class SPECCTRA_DB;
+    
+public:    
+    COMP_ORDER( ELEM* aParent ) :
+        ELEM( T_comp_order, aParent )
+    {
+    }
+};
+
+
+class TOPOLOGY : public ELEM
+{
+    friend class SPECCTRA_DB;
+    
+    typedef boost::ptr_vector<FROMTO>       FROMTOS;
+    FROMTOS         fromtos;
+  
+    typedef boost::ptr_vector<COMP_ORDER>   COMP_ORDERS;
+    COMP_ORDERS     comp_orders;
+
+public:    
+    TOPOLOGY( ELEM* aParent ) :
+        ELEM( T_topology, aParent )
+    {
+    }
+
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        for( FROMTOS::iterator i=fromtos.begin();  i!=fromtos.end();  ++i )
+            i->Format( out, nestLevel );
+        
+        for( COMP_ORDERS::iterator i=comp_orders.begin();  i!=comp_orders.end();  ++i )
+            i->Format( out, nestLevel );
+    }
+};
+
+
+class CLASS : public ELEM
+{
+    friend class SPECCTRA_DB;
+    
+    std::string     class_id;
+    
+    STRINGS         net_ids;
+    
+    /// <circuit_descriptors>
+    STRINGS         circuit;
+    
+    RULE*           rules;
+    
+    typedef boost::ptr_vector<LAYER_RULE>   LAYER_RULES;
+    LAYER_RULES     layer_rules;
+    
+    TOPOLOGY*       topology;
+    
+public:
+
+    CLASS( ELEM* aParent ) :
+        ELEM( T_class, aParent )
+    {
+        rules = 0;
+        topology = 0;
+    }
+    ~CLASS()
+    {
+        delete rules;
+        delete topology;
+    }
+
+    
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        const char* quote = out->GetQuoteChar( class_id.c_str() );
+        out->Print( nestLevel, "(%s %s%s%s", LEXER::GetTokenText( Type() ),
+                                 quote, class_id.c_str(), quote );
+
+        const int NETGAP = 2;
+        const int RIGHTMARGIN = 92;
+        
+        int perRow=RIGHTMARGIN;
+        for( STRINGS::iterator i=net_ids.begin();  i!=net_ids.end();  ++i )
+        {
+            quote = out->GetQuoteChar( i->c_str() );
+            int slength = strlen( i->c_str() );
+            if( *quote!='\0' )
+                slength += 2;
+
+            if( perRow + slength + NETGAP > RIGHTMARGIN )
+            {
+                out->Print( 0, "\n" );
+                perRow = 0;
+                perRow += out->Print( nestLevel+1, "%s%s%s", 
+                                     quote, i->c_str(), quote );
+            }
+            else
+            {
+                perRow += out->Print( 0, "%*c%s%s%s", NETGAP, ' ',
+                                     quote, i->c_str(), quote );
+            }
+        }
+        out->Print( 0, "\n" );
+
+        for( STRINGS::iterator i=circuit.begin();  i!=circuit.end();  ++i )
+            out->Print( nestLevel+1, "%s\n", i->c_str() );
+
+        for( LAYER_RULES::iterator i=layer_rules.begin();  i!=layer_rules.end();  ++i )
+            i->Format( out, nestLevel+1 );
+        
+        if( topology )
+            topology->Format( out, nestLevel+1 );
+        
+        out->Print( nestLevel, ")\n" );
+    }
+};
+    
+
 class NETWORK : public ELEM
 {
     friend class SPECCTRA_DB;
 
     typedef boost::ptr_vector<NET>  NETS;
     NETS        nets;
+    
+    typedef boost::ptr_vector<CLASS> CLASSLIST;
+    CLASSLIST   classes;
+    
     
 public:
 
@@ -1947,6 +2108,9 @@ public:
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         for( NETS::iterator i=nets.begin();  i!=nets.end();  ++i )
+            i->Format( out, nestLevel );
+        
+        for( CLASSLIST::iterator i=classes.begin();  i!=classes.end();  ++i )
             i->Format( out, nestLevel );
     }
 };
@@ -2064,7 +2228,32 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
         // if aTok is >= 0, then it might be a coincidental match to a keyword.
         return aTok==T_SYMBOL || aTok==T_STRING || aTok>=0;
     }
+    
+    
+    /**
+     * Function needLEFT
+     * calls nextTok() and then verifies that the token read in is a T_LEFT.
+     * If it is not, an IOError is thrown.
+     * @throw IOError, if the next token is not a T_LEFT
+     */
+    void needLEFT() throw( IOError );
 
+    /**
+     * Function needRIGHT
+     * calls nextTok() and then verifies that the token read in is a T_RIGHT.
+     * If it is not, an IOError is thrown.
+     * @throw IOError, if the next token is not a T_RIGHT
+     */
+    void needRIGHT() throw( IOError );
+
+    /**
+     * Function needSYMBOL
+     * calls nextTok() and then verifies that the token read in 
+     * satisfies bool isSymbol().
+     * If not, an IOError is thrown.
+     * @throw IOError, if the next token does not satisfy isSymbol()
+     */
+    void needSYMBOL() throw( IOError );
     
     /**
      * Function expecting
@@ -2113,6 +2302,11 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     void doPIN( PIN* growth ) throw( IOError );
     void doNET( NET* growth ) throw( IOError );
     void doNETWORK( NETWORK* growth ) throw( IOError );
+    void doCLASS( CLASS* growth ) throw( IOError );
+    void doTOPOLOGY( TOPOLOGY* growth ) throw( IOError );
+    void doFROMTO( FROMTO* growth ) throw( IOError );
+    void doCOMP_ORDER( COMP_ORDER* growth ) throw( IOError );
+    
     
 public:
 
@@ -2135,7 +2329,7 @@ public:
 
     
     //-----<OUTPUTFORMATTER>-------------------------------------------------
-    void PRINTF_FUNC Print( int nestLevel, const char* fmt, ... ) throw( IOError );
+    int PRINTF_FUNC Print( int nestLevel, const char* fmt, ... ) throw( IOError );
     
     const char* GetQuoteChar( const char* wrapee ); 
     //-----</OUTPUTFORMATTER>------------------------------------------------
@@ -2176,7 +2370,6 @@ public:
      */
     void Export( wxString, BOARD* aBoard );
 };
-
 
 
 //-----<SPECCTRA_DB>-------------------------------------------------
@@ -2230,6 +2423,29 @@ DSN_T SPECCTRA_DB::nextTok()
 }
 
 
+void SPECCTRA_DB::needLEFT() throw( IOError )
+{
+    DSN_T tok = nextTok();
+    if( tok != T_LEFT )
+        expecting( T_LEFT );
+}
+
+void SPECCTRA_DB::needRIGHT() throw( IOError )
+{
+    DSN_T tok = nextTok();
+    if( tok != T_RIGHT )
+        expecting( T_RIGHT );
+}
+
+
+void SPECCTRA_DB::needSYMBOL() throw( IOError )
+{
+    DSN_T tok = nextTok();
+    if( !isSymbol( tok ) )
+        expecting( T_SYMBOL );
+}
+
+
 void SPECCTRA_DB::Load( const wxString& filename ) throw( IOError )
 {
     wxFFile     file;
@@ -2262,11 +2478,10 @@ void SPECCTRA_DB::Load( const wxString& filename ) throw( IOError )
 
 void SPECCTRA_DB::doPCB( PCB* growth ) throw( IOError )
 {
-    DSN_T tok = nextTok();
+    DSN_T tok;
     
-    if( !isSymbol(tok) )
-        expecting( T_SYMBOL );
-
+    needSYMBOL();
+    
     growth->pcbname = lexer->CurText();    
     
     while( (tok = nextTok()) != T_RIGHT )
@@ -2367,27 +2582,19 @@ void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IOError )
             break;
             
         case T_host_cad:
-            tok = nextTok();
-            if( tok!=T_STRING && tok!=T_SYMBOL )
-                expecting( T_SYMBOL );
+            needSYMBOL();
             growth->host_cad = lexer->CurText();
             break;
             
         case T_host_version:
-            tok = nextTok();
-            if( tok!=T_STRING && tok!=T_SYMBOL )
-                expecting( T_SYMBOL );
+            needSYMBOL();
             growth->host_version = lexer->CurText();
             break;
 
         case T_constant:
-            tok = nextTok();
-            if( tok!=T_STRING && tok!=T_SYMBOL )
-                expecting( T_SYMBOL );
+            needSYMBOL();
             growth->const_id1 = lexer->CurText();
-            tok = nextTok();
-            if( tok!=T_STRING && tok!=T_SYMBOL )
-                expecting( T_SYMBOL );
+            needSYMBOL();
             growth->const_id2 = lexer->CurText();
             break;
 
@@ -2447,10 +2654,8 @@ void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IOError )
         default:
             unexpected( lexer->CurText() );
         }
-        
-        tok = nextTok();
-        if( tok != T_RIGHT )
-            expecting( T_RIGHT );
+
+        needRIGHT();        
     }
 }
 
@@ -2478,9 +2683,7 @@ void SPECCTRA_DB::doRESOLUTION( UNIT_RES* growth ) throw(IOError)
 
     growth->value = atoi( lexer->CurText() );
     
-    tok = nextTok();
-    if( tok != T_RIGHT )
-        expecting( T_RIGHT );
+    needRIGHT();
 }
 
 
@@ -2501,31 +2704,23 @@ void SPECCTRA_DB::doUNIT( UNIT_RES* growth ) throw(IOError)
         expecting( "inch|mil|cm|mm|um" );
     }
     
-    tok = nextTok();
-    if( tok != T_RIGHT )
-        expecting( T_RIGHT );
+    needRIGHT();
 }
 
 
 void SPECCTRA_DB::doLAYER_PAIR( LAYER_PAIR* growth ) throw( IOError )
 {
-    DSN_T   tok = nextTok();
-    
-    if( !isSymbol( tok ) )
-        expecting( T_SYMBOL );
+    needSYMBOL();
     growth->layer_id0 = lexer->CurText();
 
-    tok = nextTok();        
-    if( !isSymbol( tok ) )
-        expecting( T_SYMBOL );
+    needSYMBOL();
     growth->layer_id1 = lexer->CurText();
     
     if( nextTok() != T_NUMBER )
         expecting( T_NUMBER );
     growth->layer_weight = strtod( lexer->CurText(), 0 );
 
-    if( nextTok() != T_RIGHT )
-        expecting( T_RIGHT );
+    needRIGHT();
 }
 
 
@@ -2700,8 +2895,7 @@ void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth ) throw( IOError )
             if( nextTok() != T_NUMBER )
                 expecting( T_NUMBER );
             growth->sequence_number = atoi( lexer->CurText() );
-            if( nextTok() != T_RIGHT )
-                expecting( T_RIGHT );
+            needRIGHT();
             break;
             
         case T_rule:
@@ -2812,8 +3006,7 @@ void SPECCTRA_DB::doBOUNDARY( BOUNDARY* growth ) throw( IOError )
     
         growth->rectangle = new RECTANGLE( growth );
         doRECTANGLE( growth->rectangle );
-        if( nextTok() != T_RIGHT )
-            expecting( T_RIGHT );
+        needRIGHT();
     }
     else if( tok == T_path )
     {
@@ -2888,19 +3081,14 @@ void SPECCTRA_DB::doPATH( PATH* growth ) throw( IOError )
 
         growth->aperture_type = tok;
         
-        if( nextTok() != T_RIGHT )
-            expecting( T_RIGHT );
+        needRIGHT();
     }
 }
 
 
 void SPECCTRA_DB::doRECTANGLE( RECTANGLE* growth ) throw( IOError )
 {
-    DSN_T   tok = nextTok();
-    
-    if( !isSymbol( tok ) )
-        expecting( T_SYMBOL );
-
+    needSYMBOL();
     growth->layer_id = lexer->CurText();
     
     if( nextTok() != T_NUMBER )
@@ -2919,18 +3107,15 @@ void SPECCTRA_DB::doRECTANGLE( RECTANGLE* growth ) throw( IOError )
         expecting( T_NUMBER );
     growth->point1.y = strtod( lexer->CurText(), NULL );
 
-    if( nextTok() != T_RIGHT )
-        expecting( T_RIGHT );
+    needRIGHT();
 }
 
 
 void SPECCTRA_DB::doCIRCLE( CIRCLE* growth ) throw( IOError )
 {
-    DSN_T   tok = nextTok();
+    DSN_T   tok;
     
-    if( !isSymbol(tok) )
-        expecting( T_SYMBOL );
-    
+    needSYMBOL();
     growth->layer_id = lexer->CurText();
     
     if( nextTok() != T_NUMBER )
@@ -2948,7 +3133,7 @@ void SPECCTRA_DB::doCIRCLE( CIRCLE* growth ) throw( IOError )
         
         tok = nextTok();
     }
-    
+
     if( tok != T_RIGHT )
         expecting( T_RIGHT );
 }
@@ -2956,11 +3141,7 @@ void SPECCTRA_DB::doCIRCLE( CIRCLE* growth ) throw( IOError )
 
 void SPECCTRA_DB::doQARC( QARC* growth ) throw( IOError )
 {
-    DSN_T   tok = nextTok();
-    
-    if( !isSymbol(tok) )
-        expecting( T_SYMBOL );
-    
+    needSYMBOL();
     growth->layer_id = lexer->CurText();
     
     if( nextTok() != T_NUMBER )
@@ -2977,23 +3158,16 @@ void SPECCTRA_DB::doQARC( QARC* growth ) throw( IOError )
             expecting( T_NUMBER );
         growth->vertex[i].y = strtod( lexer->CurText(), 0 );
     }
-    
-    if( nextTok() != T_RIGHT )
-        expecting( T_RIGHT );
+
+    needRIGHT();    
 }
 
 
 void SPECCTRA_DB::doSTRINGPROP( STRINGPROP* growth ) throw( IOError )
 {
-    DSN_T   tok = nextTok();
-    
-    if( !isSymbol( tok ) )
-        expecting( T_SYMBOL );
-
+    needSYMBOL();
     growth->value = lexer->CurText();
-    
-    if( nextTok() != T_RIGHT )
-        expecting( T_RIGHT );
+    needRIGHT();
 }
 
 
@@ -3005,9 +3179,8 @@ void SPECCTRA_DB::doTOKPROP( TOKPROP* growth ) throw( IOError )
         unexpected( lexer->CurText() );
 
     growth->value = tok;
-    
-    if( nextTok() != T_RIGHT )
-        expecting( T_RIGHT );
+
+    needRIGHT();    
 }
 
 
@@ -3057,8 +3230,7 @@ void SPECCTRA_DB::doCONTROL( CONTROL* growth ) throw( IOError )
             if( tok!=T_on && tok!=T_off )
                 expecting( "on|off" );
             growth->via_at_smd = (tok==T_on);
-            if( nextTok() != T_RIGHT )
-                expecting( T_RIGHT );
+            needRIGHT();
             break;
             
         case T_off_grid:
@@ -3098,20 +3270,15 @@ void SPECCTRA_DB::doPROPERTIES( PROPERTIES* growth ) throw( IOError )
         if( tok != T_LEFT )
             expecting( T_LEFT );
         
-        tok = nextTok();
-        if( !isSymbol(tok) )
-            expecting( T_SYMBOL );
+        needSYMBOL();
         property.name = lexer->CurText();
-        
-        tok = nextTok();
-        if( !isSymbol(tok) )
-            expecting( T_SYMBOL );
+
+        needSYMBOL();        
         property.value = lexer->CurText();
         
         growth->push_back( property );
-        
-        if( nextTok() != T_RIGHT )
-            expecting( T_RIGHT );
+
+        needRIGHT();        
     }
 }
 
@@ -3339,8 +3506,7 @@ void SPECCTRA_DB::doPLACE_RULE( PLACE_RULE* growth, bool expect_object_type ) th
             if( tok!=T_smd && tok!=T_pin )
                 expecting( "smd|pin" );
             
-            if( nextTok() != T_RIGHT )
-                expecting( T_RIGHT );
+            needRIGHT();
             
             tok = nextTok();
         }
@@ -3558,18 +3724,17 @@ void SPECCTRA_DB::doGRID( GRID* growth ) throw( IOError )
 
 void SPECCTRA_DB::doLAYER_RULE( LAYER_RULE* growth ) throw( IOError )
 {
-    DSN_T   tok = nextTok();
+    DSN_T   tok;
     
-    if( !isSymbol(tok ) )
-       expecting( "layer_id" );
-
+    needSYMBOL();
+    
     do
     {
         growth->layer_ids.push_back( lexer->CurText() );
         
     }  while( isSymbol(tok = nextTok()) );
  
-    if( nextTok() != T_LEFT )
+    if( tok != T_LEFT )
         expecting( T_LEFT );
     
     if( nextTok() != T_rule )
@@ -3578,8 +3743,7 @@ void SPECCTRA_DB::doLAYER_RULE( LAYER_RULE* growth ) throw( IOError )
     growth->rule = new RULE( growth, T_rule );
     doRULE( growth->rule );
     
-    if( nextTok() != T_RIGHT )
-        expecting( T_RIGHT );
+    needRIGHT();
 }
 
 
@@ -3758,13 +3922,9 @@ void SPECCTRA_DB::doPLACEMENT( PLACEMENT* growth ) throw( IOError )
         else
             expecting("mirror_first|rotate_first");
 
-        if( nextTok() != T_RIGHT )
-            expecting( T_RIGHT );
-        if( nextTok() != T_RIGHT )
-            expecting( T_RIGHT );
-        
-        if( nextTok() != T_LEFT )
-            expecting( T_LEFT );
+        needRIGHT();
+        needRIGHT();
+        needLEFT();        
         tok = nextTok();
     }
 
@@ -3829,8 +3989,7 @@ void SPECCTRA_DB::doPADSTACK( PADSTACK* growth ) throw( IOError )
             if( tok!=T_on && tok!=T_off )
                 expecting( "on|off" );
             growth->rotate = tok;
-            if( nextTok() != T_RIGHT )
-                expecting( T_RIGHT );
+            needRIGHT();
             break;
 
         case T_absolute:
@@ -3838,8 +3997,7 @@ void SPECCTRA_DB::doPADSTACK( PADSTACK* growth ) throw( IOError )
             if( tok!=T_on && tok!=T_off )
                 expecting( "on|off" );
             growth->absolute = tok;
-            if( nextTok() != T_RIGHT )
-                expecting( T_RIGHT );
+            needRIGHT();
             break;
             
         case T_shape:
@@ -3860,13 +4018,11 @@ void SPECCTRA_DB::doPADSTACK( PADSTACK* growth ) throw( IOError )
                 if( nextTok() != T_use_via )
                     expecting( T_use_via );
                 
-                tok = nextTok();
-                if( !isSymbol( tok ) )
-                    expecting( T_SYMBOL );
+                needSYMBOL();
                 growth->via_id = lexer->CurText();
-                
-                if( nextTok()!=T_RIGHT || nextTok()!=T_RIGHT )
-                    expecting( T_RIGHT );
+
+                needRIGHT();
+                needRIGHT();                
             }
             break;
             
@@ -3945,8 +4101,7 @@ void SPECCTRA_DB::doSHAPE( SHAPE* growth ) throw( IOError )
             if( tok!=T_on && tok!=T_off )
                 expecting( "on|off" );
             growth->connect = tok;
-            if( nextTok() != T_RIGHT )
-                expecting( T_RIGHT );
+            needRIGHT();
             break;
 
         case T_window:
@@ -4009,8 +4164,7 @@ void SPECCTRA_DB::doIMAGE( IMAGE* growth ) throw( IOError )
             if( tok!=T_front && tok!=T_back && tok!=T_both )
                 expecting( "front|back|both" );
             growth->side = tok;
-            if( nextTok() != T_RIGHT )
-                expecting( T_RIGHT );
+            needRIGHT();
             break;
 
         case T_outline:
@@ -4072,8 +4226,7 @@ void SPECCTRA_DB::doPIN( PIN* growth ) throw( IOError )
         if( nextTok() != T_NUMBER )
             expecting( T_NUMBER );
         growth->SetRotation( strtod( lexer->CurText(), 0 ) );
-        if( nextTok() != T_RIGHT )
-            expecting( T_RIGHT );
+        needRIGHT();
         tok = nextTok();
     }
     
@@ -4189,8 +4342,7 @@ void SPECCTRA_DB::doNET( NET* growth ) throw( IOError )
         {
         case T_unassigned:
             growth->unassigned = true;
-            if( nextTok() != T_RIGHT )
-                expecting( T_RIGHT );
+            needRIGHT();
             break;
 
         case T_net_number:
@@ -4206,8 +4358,7 @@ void SPECCTRA_DB::doNET( NET* growth ) throw( IOError )
             if( tok!=T_fix && tok!=T_normal )
                 expecting( "fix|normal" );
             growth->type = tok;
-            if( nextTok() != T_RIGHT )
-                expecting( T_RIGHT );
+            needRIGHT();
             break;
 
         case T_pins:
@@ -4246,6 +4397,152 @@ void SPECCTRA_DB::doNET( NET* growth ) throw( IOError )
 }
 
 
+void SPECCTRA_DB::doTOPOLOGY( TOPOLOGY* growth ) throw( IOError )
+{
+    DSN_T   tok;
+
+    /*  <topology_descriptor >::=
+        (topology {[<fromto_descriptor> |
+        <component_order_descriptor> ]})
+    */
+
+    while( (tok = nextTok()) != T_RIGHT )
+    {
+        if( tok != T_LEFT )
+            expecting( T_LEFT );
+        
+        tok = nextTok();
+        switch( tok )
+        {
+        case T_fromto:
+            FROMTO* fromto;
+            fromto = new FROMTO( growth );
+            growth->fromtos.push_back( fromto );
+//            doFROMTO( fromto );
+            break;
+        
+        case T_comp_order:
+            COMP_ORDER*  comp_order;
+            comp_order = new COMP_ORDER( growth );
+            growth->comp_orders.push_back( comp_order );
+//            doCOMP_ORDER( comp_order );
+            break;
+
+        default:
+            unexpected( lexer->CurText() );
+        }
+    }
+}
+
+
+void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IOError )
+{
+    DSN_T   tok;
+
+    /*  <class_descriptor >::=
+        (class
+           <class_id > {[{<net_id >} | {<composite_name_list> }]}
+           [<circuit_descriptor> ]
+           [<rule_descriptor> ]
+           [{<layer_rule_descriptor> }]
+           [<topology_descriptor> ]
+        )
+    */
+
+    needSYMBOL();
+    
+    growth->class_id = lexer->CurText();
+
+    // do net_ids, do not support <composite_name_list>s at this time
+    while( isSymbol(tok = nextTok()) )
+    {
+        growth->net_ids.push_back( lexer->CurText() );
+    }
+    
+    
+    while( tok != T_RIGHT )
+    {
+        if( tok != T_LEFT )
+            expecting( T_LEFT );
+        
+        tok = nextTok();
+        switch( tok )
+        {
+        case T_rule:
+            if( growth->rules )
+                unexpected( tok );
+            growth->rules = new RULE( growth, T_rule );
+            doRULE( growth->rules );
+            break;
+            
+        case T_layer_rule:
+            LAYER_RULE* layer_rule;
+            layer_rule = new LAYER_RULE( growth );
+            growth->layer_rules.push_back( layer_rule );
+            doLAYER_RULE( layer_rule );
+            break;
+            
+        case T_topology:
+            if( growth->topology )
+                unexpected( tok );
+            growth->topology = new TOPOLOGY( growth );
+            doTOPOLOGY( growth->topology );
+            break;
+            
+        default:    // handle all the circuit_descriptor here as strings
+            {
+                std::string     builder;
+                int             bracketNesting = 1; // we already saw the opening T_LEFT
+                DSN_T           tok = T_NONE;
+            
+                builder += '(';
+                builder += lexer->CurText();
+                
+                while( bracketNesting!=0 && tok!=T_EOF )
+                {
+                    tok = nextTok();
+                    
+                    if( tok==T_LEFT)
+                        ++bracketNesting;
+                    
+                    else if( tok==T_RIGHT )
+                        --bracketNesting;
+            
+                    if( bracketNesting >= 1 )
+                    {
+                        if( lexer->PrevTok() != T_LEFT && tok!=T_RIGHT )
+                            builder += ' ';
+            
+                        if( tok==T_STRING )
+                            builder += quote_char;
+                        
+                        builder += lexer->CurText();
+                        
+                        if( tok==T_STRING )
+                            builder += quote_char;
+                    }
+            
+                    // When the nested rule is closed with a T_RIGHT and we are back down
+                    // to bracketNesting == 0, then save the builder and break;
+                    if( bracketNesting == 0 )
+                    {
+                        builder += ')';
+                       growth->circuit.push_back( builder );
+                       break;
+                    }
+                }
+                
+                if( tok==T_EOF )
+                    unexpected( T_EOF );
+            }                                   // scope bracket
+        }                                       // switch
+        
+        tok = nextTok();
+        
+    } // while
+}
+
+
 void SPECCTRA_DB::doNETWORK( NETWORK* growth ) throw( IOError )
 {
     DSN_T   tok;
@@ -4276,6 +4573,13 @@ void SPECCTRA_DB::doNETWORK( NETWORK* growth ) throw( IOError )
             growth->nets.push_back( net );
             doNET( net );
             break;
+        
+        case T_class:
+            CLASS*  myclass;
+            myclass = new CLASS( growth );
+            growth->classes.push_back( myclass );
+            doCLASS( myclass );
+            break;
 
         default:
             unexpected( lexer->CurText() );
@@ -4284,25 +4588,31 @@ void SPECCTRA_DB::doNETWORK( NETWORK* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
+int SPECCTRA_DB::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
 {
     va_list     args;
 
     va_start( args, fmt );
     
-    int ret = 0;
+    int result = 0;
+    int total  = 0;
     
     for( int i=0; i<nestLevel;  ++i )
     {
-        ret = fprintf( fp, "    " );
-        if( ret < 0 )
+        result = fprintf( fp, "%*c", NESTWIDTH, ' ' );
+        if( result < 0 )
             break;
+        
+        total += result;
     }
     
-    if( ret<0 || vfprintf( fp, fmt, args )<0 )
+    if( result<0 || (result=vfprintf( fp, fmt, args ))<0 )
         ThrowIOError( _("System file error writing to file \"%s\""), filename.GetData() );
     
     va_end( args );
+    
+    total += result;
+    return total;
 }
 
 
@@ -4382,7 +4692,7 @@ void ELEM::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
 }
 
 
-void ELEM::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+void ELEM_HOLDER::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
 {
     for( int i=0;  i<Length();  ++i )
     {
@@ -4391,7 +4701,7 @@ void ELEM::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError 
 }
 
 
-int ELEM::FindElem( DSN_T aType, int instanceNum )
+int ELEM_HOLDER::FindElem( DSN_T aType, int instanceNum )
 {
     int repeats=0;
     for( unsigned i=0;  i<kids.size();  ++i )
@@ -4553,8 +4863,9 @@ int main( int argc, char** argv )
 
 //    db.SetPCB( SPECCTRA_DB::MakePCB() );
     
+
+    // export what we read in, making this test program basically a beautifier
     db.Export( wxT("/tmp/export.dsn"), 0 );
-    
 }
 
 
