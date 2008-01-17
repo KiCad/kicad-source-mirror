@@ -8,6 +8,8 @@ using namespace std;
 #include <float.h>
 #include <limits.h>
 
+#include "fctsys.h"
+
 #include "defs-macros.h"
 
 #include "PolyLine2Kicad.h"
@@ -60,7 +62,7 @@ CPoint GetInflectionPoint( CPoint pi, CPoint pf, int mode )
 				}
 			}
 			else
-				ASSERT(0);
+				wxASSERT(0);
 		}
 		else
 		{
@@ -86,7 +88,7 @@ CPoint GetInflectionPoint( CPoint pi, CPoint pf, int mode )
 				}
 			}
 			else
-				ASSERT(0);
+				wxASSERT(0);
 		}
 	}
 	return p;
@@ -613,7 +615,7 @@ int FindLineSegmentIntersection( double a, double b, int xi, int yi, int xf, int
 			return npts;
 		}
 		else
-			ASSERT(0);
+			wxASSERT(0);
 	}
 	else
 	{
@@ -1062,7 +1064,7 @@ void DrawArc( CDC * pDC, int shape, int xxi, int yyi, int xxf, int yyf, bool bMe
 		pDC->MoveTo( xxf, yyf );
 	}
 	else
-		ASSERT(0);	// oops
+		wxASSERT(0);	// oops
 }
 
 #endif
@@ -1182,7 +1184,7 @@ void GetPadElements( int type, int x, int y, int wid, int len, int radius, int a
 		}
 		return;
 	}
-	ASSERT(0);
+	wxASSERT(0);
 }
 
 // Find distance from a staright line segment to a pad
@@ -1310,9 +1312,9 @@ int GetClearanceBetweenSegments( int x1i, int y1i, int x1f, int y1f, int style1,
 	const int NSTEPS = 32;
 
 	if( el1.theta2 > el1.theta1 )
-		ASSERT(0);
+		wxASSERT(0);
 	if( bArcs && el2.theta2 > el2.theta1 )
-		ASSERT(0);
+		wxASSERT(0);
 
 	// test multiple points in both segments
 	double th1;
@@ -1570,7 +1572,7 @@ double Distance( int x1, int y1, int x2, int y2 )
 	double d;
 	d = sqrt( (double)(x1-x2)*(x1-x2) + (double)(y1-y2)*(y1-y2) );
 	if( d > INT_MAX || d < INT_MIN )
-		ASSERT(0);
+		wxASSERT(0);
 	return (int)d;
 }
 
@@ -1581,9 +1583,9 @@ int GetArcIntersections( EllipseKH * el1, EllipseKH * el2,
 						double * x1, double * y1, double * x2, double * y2 )						
 {
 	if( el1->theta2 > el1->theta1 )
-		ASSERT(0);
+		wxASSERT(0);
 	if( el2->theta2 > el2->theta1 )
-		ASSERT(0);
+		wxASSERT(0);
 
 	const int NSTEPS = 32;
 	double xret[2], yret[2];
@@ -1637,7 +1639,7 @@ int GetArcIntersections( EllipseKH * el1, EllipseKH * el2,
 					yret[n] = y*el1->yrad + el1->Center.Y;
 					n++;
 					if( n > 2 )
-						ASSERT(0);
+						wxASSERT(0);
 				}
 			}
 		}
@@ -1664,9 +1666,9 @@ double GetArcClearance( EllipseKH * el1, EllipseKH * el2,
 	const int NSTEPS = 32;
 
 	if( el1->theta2 > el1->theta1 )
-		ASSERT(0);
+		wxASSERT(0);
 	if( el2->theta2 > el2->theta1 )
-		ASSERT(0);
+		wxASSERT(0);
 
 	// test multiple positions in both arcs, moving clockwise (ie. decreasing theta)
 	double th_start = el1->theta1;

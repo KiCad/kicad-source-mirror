@@ -4,9 +4,6 @@
 //
 using namespace std;
 
-#define SetSize reserve		// used in conversion from freePCB to kicad.: The code using it must be rewitten
-
-
 #include <math.h>
 #include <vector>
 
@@ -250,7 +247,7 @@ int CPolyLine::MakeGpcPoly( int icontour, std::vector<CArc> * arc_array )
 		last_contour = GetNumContours() - 1;
 	}
 	if( arc_array )
-		arc_array->SetSize(0);
+		arc_array->clear();
 	int iarc = 0;
 	for( int icont=first_contour; icont<=last_contour; icont++ )
 	{
@@ -398,13 +395,14 @@ int CPolyLine::MakeGpcPoly( int icontour, std::vector<CArc> * arc_array )
 				// now write steps for arc
 				if( arc_array )
 				{
-					arc_array->SetSize(iarc+1);
-					(*arc_array)[iarc].style = style;
-					(*arc_array)[iarc].n_steps = n;
-					(*arc_array)[iarc].xi = x1;
-					(*arc_array)[iarc].yi = y1;
-					(*arc_array)[iarc].xf = x2;
-					(*arc_array)[iarc].yf = y2;
+					CArc new_arc;
+					new_arc.style = style;
+					new_arc.n_steps = n;
+					new_arc.xi = x1;
+					new_arc.yi = y1;
+					new_arc.xf = x2;
+					new_arc.yf = y2;
+					arc_array->push_back(new_arc);
 					iarc++;
 				}
 				for( int is=0; is<n; is++ )
