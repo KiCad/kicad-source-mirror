@@ -296,7 +296,7 @@ static void PlotTextModule( TEXTE_MODULE* pt_texte )
         epaisseur = g_PlotLine_Width;
 
     if( no_miroir == 0 )
-        size.y = -size.y;                       // Text is mirrored
+        size.x = -size.x;                       // Text is mirrored
 
     Plot_1_texte( format_plot, pt_texte->m_Text,
                   orient, epaisseur,
@@ -590,7 +590,10 @@ void Plot_1_texte( int format_plot, const wxString& Text, int angle,
         ptcar = graphic_fonte_shape[code];  /* ptcar pointe la description
                                              *  du caractere a dessiner */
 
-        plume = 'U'; ox = sx; oy = sy;
+        plume = 'U'; 
+        ox = sx; 
+        oy = sy;
+        
         RotatePoint( &ox, &oy, cX, cY, angle );
         fx = ox; fy = oy;
 
