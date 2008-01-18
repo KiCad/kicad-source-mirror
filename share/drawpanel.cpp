@@ -797,9 +797,6 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 
     #define MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND 5        /* Adjust value to filter mouse deplacement before
                                                               * consider the drag mouse is really a drag command, not just a movement while click
-                                                              * static int MinDragEventCount;	/* in order to avoid unwanted start block command
-                                                              * this variable counts drag events and a block command will be started
-                                                              * if MinDragEventCount > MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND
                                                               */
     static int               MinDragEventCount; /* counts the drag events.
                                                  * used to filter mouse moves before starting a block command
@@ -951,7 +948,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
         MinDragEventCount = 0;
         m_CanStartBlock   = 0;
 
-        /* rembember the last cursor position when a drag mouse starts
+        /* remember the last cursor position when a drag mouse starts
 		 * this is the last postion ** before ** clicking a button
 		 * this is usefull to start a block command from the point where the mouse was clicked first 
 		 * (a filter creates a delay for the real block command start, and we must remember this point)

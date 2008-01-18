@@ -5,14 +5,11 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
-time travelling?
-  |
-  V
-2007-Dec-18 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+2008-Jan-18 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +all:
 	filtering small mouse moves ( < 5 pixels) when clicking.
-	Starting a wire or a track is now more easily because now these small moves do not start a block commnad.
+	Starting a wire or a track is now more easily because these small moves do not start a block commnad.
 	
 +pcbnew:
 	rework of drill filles creation (excellon and reports)
