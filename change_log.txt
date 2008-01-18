@@ -7,6 +7,10 @@ email address.
 
 2007-Dec-18 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
++all:
+	filtering small mouse moves ( < 5 pixels) when clicking.
+	Starting a wire or a track is now more easily because now these small moves do not start a block commnad.
+	
 +pcbnew:
 	rework of drill filles creation (excellon and reports)
 	needed to have a clean implantation of buried vias and mainly microvia

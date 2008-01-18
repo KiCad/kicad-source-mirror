@@ -795,6 +795,17 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
     static WinEDA_DrawPanel* LastPanel;
     static bool              IgnoreNextLeftButtonRelease = false;
 
+    #define MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND 5        /* Adjust value to filter mouse deplacement before
+                                                              * consider the drag mouse is really a drag command, not just a movement while click
+                                                              * static int MinDragEventCount;	/* in order to avoid unwanted start block command
+                                                              * this variable counts drag events and a block command will be started
+                                                              * if MinDragEventCount > MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND
+                                                              */
+    static int               MinDragEventCount; /* counts the drag events.
+                                                 * used to filter mouse moves before starting a block command
+                                                 * a block comman can be started only if MinDragEventCount > MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND
+                                                 * in order to avoid spurious block commands
+                                                 */
     if( event.Leaving() || event.Entering() )
     {
         m_CanStartBlock = -1;
@@ -924,14 +935,28 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 
     // Command block can't start if mouse is dragging a new panel
     if( LastPanel != this )
-        m_CanStartBlock = -1;
+    {
+        MinDragEventCount = 0;
+        m_CanStartBlock   = -1;
+    }
 
-    // A new command block can start after a release buttons
-    // Avoid a false start block when a dialog box is demiss,
-    // or when changing panels in hierachy navigation
+    /* A new command block can start after a release buttons
+     * and if the drag is enougth
+     * This is to avoid a false start block when a dialog box is demiss,
+     * or when changing panels in hierachy navigation
+     * or when clicking while and moving mouse
+     */
     if( !event.LeftIsDown() && !event.MiddleIsDown() )
     {
-        m_CanStartBlock = 0;
+        MinDragEventCount = 0;
+        m_CanStartBlock   = 0;
+
+        /* rembember the last cursor position when a drag mouse starts
+		 * this is the last postion ** before ** clicking a button
+		 * this is usefull to start a block command from the point where the mouse was clicked first 
+		 * (a filter creates a delay for the real block command start, and we must remember this point)
+         */
+        m_CursorStartPos = screen->m_Curseur;
     }
 
     if( m_Block_Enable && !(localbutt & GR_M_DCLICK) )
@@ -939,12 +964,10 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
         if( (screen->BlockLocate.m_Command == BLOCK_IDLE)
            || (screen->BlockLocate.m_State == STATE_NO_BLOCK) )
         {
-            m_CursorStartPos = screen->m_Curseur;
             screen->BlockLocate.SetOrigin( m_CursorStartPos );
         }
         if( event.LeftDown() || event.MiddleDown() )
         {
-            m_CursorStartPos = screen->m_Curseur;
             if( screen->BlockLocate.m_State == STATE_BLOCK_MOVE )
             {
                 m_AutoPAN_Request = FALSE;
@@ -956,24 +979,33 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
                 && ( event.LeftIsDown() || event.MiddleIsDown() )
                 && ManageCurseur == NULL
                 && ForceCloseManageCurseur == NULL )
-        {
+        {       // Mouse is dragging: if no block in progress:  start a block command
             if( screen->BlockLocate.m_State == STATE_NO_BLOCK )
-            {
+            {   //  Start a block command
                 int cmd_type = kbstat;
 
                 if( event.MiddleIsDown() )
                     cmd_type |= MOUSE_MIDDLE;
 
-                if( !m_Parent->HandleBlockBegin( &DC, cmd_type, m_CursorStartPos ) )
-                {
-                    // error
-                    m_Parent->DisplayToolMsg(
-                        wxT( "WinEDA_DrawPanel::OnMouseEvent() Block Error" ) );
-                }
+                /* A block command is started if the drag is enought.
+                 * A small drag is ignored (it is certainly a little mouse move when clicking)
+                 * not really a drag mouse
+                 */
+                if( MinDragEventCount < MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND )
+                    MinDragEventCount++;
                 else
                 {
-                    m_AutoPAN_Request = TRUE;
-                    SetCursor( m_PanelCursor = wxCURSOR_SIZING );
+                    if( !m_Parent->HandleBlockBegin( &DC, cmd_type, m_CursorStartPos ) )
+                    {
+                        // should not occurs: error
+                        m_Parent->DisplayToolMsg(
+                            wxT( "WinEDA_DrawPanel::OnMouseEvent() Block Error" ) );
+                    }
+                    else
+                    {
+                        m_AutoPAN_Request = TRUE;
+                        SetCursor( m_PanelCursor = wxCURSOR_SIZING );
+                    }
                 }
             }
         }
@@ -981,13 +1013,15 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
         if( event.ButtonUp( 1 ) || event.ButtonUp( 2 ) )
         {
             /* Release the mouse button: end of block.
-             * The command can finish (DELETE) or have a next command
-             * (MOVE, COPY).
+             * The command can finish (DELETE) or have a next command (MOVE, COPY).
              * However the block command is cancelled if the block size is small
+             * Because a block command filtering is already made, this case happens,
+             * but only when the on grid cursor has not moved.
              */
+			#define BLOCK_MINSIZE_LIMIT 1
             bool BlockIsSmall =
-                ( ABS( screen->BlockLocate.GetWidth() / GetZoom() ) < 3)
-                && ( ABS( screen->BlockLocate.GetHeight() / GetZoom() ) < 3);
+                ( ABS( screen->BlockLocate.GetWidth() / GetZoom() ) < BLOCK_MINSIZE_LIMIT)
+                && ( ABS( screen->BlockLocate.GetHeight() / GetZoom() ) < BLOCK_MINSIZE_LIMIT);
 
             if( (screen->BlockLocate.m_State != STATE_NO_BLOCK) && BlockIsSmall )
             {
