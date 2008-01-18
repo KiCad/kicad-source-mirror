@@ -323,7 +323,9 @@ void SEGVIA::SetLayerPair( int top_layer, int bottom_layer )
 void SEGVIA::ReturnLayerPair( int* top_layer, int* bottom_layer ) const
 /*********************************************************************/
 
-/* Return the 2 layers used by  the via (the via actually uses
+/**
+ * Function ReturnLayerPair
+ * Return the 2 layers used by  the via (the via actually uses
  * all layers between these 2 layers)
  *  @param top_layer = pointer to the first layer (can be null)
  *  @param bottom_layer = pointer to the last layer (can be null)

@@ -297,12 +297,6 @@ void WinEDA_PcbTracksDialog::AcceptPcbOptions(wxCommandEvent& event)
 	g_DesignSettings.m_CurrentViaType = VIA_THROUGH;
     if ( m_OptViaType->GetSelection() > 0 )
 		g_DesignSettings.m_CurrentViaType = VIA_BLIND_BURIED;
-	if ( g_DesignSettings.m_CurrentViaType != VIA_THROUGH )
-	{
-		if( ! IsOK(this,
-			_("You have selected VIA Blind and Buried\nWARNING: this feature is EXPERIMENTAL!!! Accept ?") ) )
-			g_DesignSettings.m_CurrentViaType = VIA_THROUGH;
-	}
 
 	g_DesignSettings.m_CurrentViaSize =
 		ReturnValueFromTextCtrl(*m_OptViaSize, m_Parent->m_InternalUnits);

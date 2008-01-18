@@ -149,14 +149,13 @@ private:
     void    InitDisplayParams(void);
     void    SetParams(void);
     void    GenDrillFiles( wxCommandEvent& event );
-    void    GenDrillMap( std::vector<DRILL_TOOL> & buffer, int format );
+    void    GenDrillMap( const wxString aFileName, std::vector<HOLE_INFO> & aHoleListBuffer, std::vector<DRILL_TOOL> & aToolListBuffer, int format );
     void    UpdatePrecisionOptions( wxCommandEvent& event );
     void    UpdateConfig();
-    int     Plot_Drill_PcbMap( std::vector<DRILL_TOOL> & buffer, int format );
-    void    GenDrillReport( std::vector<DRILL_TOOL> & buffer );
-    int     Gen_Liste_Forets( std::vector<DRILL_TOOL> & buffer, bool print_header );
-    int     Create_Drill_File_EXCELLON( std::vector<DRILL_TOOL> & buffer );
-    void    Init_Drill();
+	void    Write_Excellon_Header( FILE * aFile);
+    void    GenDrillReport( const wxString aFileName, std::vector<DRILL_TOOL> & buffer );
+    int     Create_Drill_File_EXCELLON( std::vector<HOLE_INFO> & aHoleListBuffer,
+		std::vector<DRILL_TOOL> & aToolListBuffer );
 	int 	Gen_Liste_Tools( std::vector<DRILL_TOOL> & buffer, bool print_header );
 };
 

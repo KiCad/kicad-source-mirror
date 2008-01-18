@@ -657,14 +657,14 @@ void WinEDA_PcbFrame::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu
 		ADD_MENUITEM_WITH_SUBMENU( aPopMenu, zones_menu,
                                -1, _( "Zones" ), add_zone_xpm );
         int index;
-        if( ( index = edge_zone->HitTestForCorner( GetScreen()->m_Curseur ) ) >= 0 )
+        if( ( index = edge_zone->HitTestForCorner( GetScreen()->RefPos( true ) ) ) >= 0 )
         {
             ADD_MENUITEM( zones_menu, ID_POPUP_PCB_MOVE_ZONE_CORNER,
                           _( "Move Corner" ), move_xpm );
             ADD_MENUITEM( zones_menu, ID_POPUP_PCB_DELETE_ZONE_CORNER,
                           _( "Delete Corner" ), delete_xpm );
         }
-        else if( ( index = edge_zone->HitTestForEdge( GetScreen()->m_Curseur ) ) >= 0 )
+        else if( ( index = edge_zone->HitTestForEdge( GetScreen()->RefPos( true ) ) ) >= 0 )
         {
             ADD_MENUITEM( zones_menu, ID_POPUP_PCB_ADD_ZONE_CORNER,
                           _( "Create Corner" ), Add_Corner_xpm );

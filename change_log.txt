@@ -5,6 +5,22 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2007-Dec-18 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+	rework of drill filles creation (excellon and reports)
+	needed to have a clean implantation of buried vias and mainly microvia
+	which involve a more complex drill files generation
+	This is better to continue work on zones because :
+	hight density boards = use of BGA = microvias + good zones handling
+	When a board has buried or blind vias (microvia are blind vias),
+	pcbnew creates a drill file per layer pair. for a 4 layer board:
+	drill file for layer1 to layer 2
+	drill file for layer2 to layer 3
+	drill file for layer3 to layer 4
+
+
+
 2008-Jan-18 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
     how-to-build-kicad.txt: added the Boost C++ Libraries installation info

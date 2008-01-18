@@ -88,6 +88,8 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		librairi.o edgemod.o\
 		connect.o muonde.o  attribut.o\
 		gendrill.o\
+		gen_holes_and_tools_lists_for_drill.o\
+		gen_drill_report_files.o\
 		sel_layer.o \
 		cotation.o\
 		automove.o\

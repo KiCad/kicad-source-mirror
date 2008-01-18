@@ -611,6 +611,7 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
 /**************************************************************************/
 {
     int  ii, jj, ll;
+	unsigned lenght = 0;
     bool rebuild = FALSE;
     long current_mask_layer;
 
@@ -679,10 +680,12 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
                 msg = AddHotkeyName( msg, s_Board_Editor_Hokeys_Descr, HK_SwitchLayer[ii] );
                 m_SelLayerBox->Append( msg );
                 m_SelLayerBox->SetClientData( jj, (void*) ii );
+				lenght = max(lenght, msg.Len() );
                 jj++;
             }
         }
-
+		int lchar = m_SelLayerBox->GetFont().GetPointSize();
+		m_SelLayerBox->SetSize(wxSize(lenght * lchar,-1));
         m_SelLayerBox->SetToolTip( _( "+/- to switch" ) );
     }
 
