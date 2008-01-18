@@ -75,8 +75,10 @@ SET(PCBNEW_SRCS
 	export_gencad.cpp
 	files.cpp
 	find.cpp
-	gendrill.cpp
+    gen_drill_report_files.cpp
+    gen_holes_and_tools_lists_for_drill.cpp 
 	gen_modules_placefile.cpp
+	gendrill.cpp
 	globaleditpad.cpp
 	graphpcb.cpp
 	hotkeys.cpp
