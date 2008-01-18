@@ -81,6 +81,7 @@ const static KEYWORD tokens[] = {
     TOKDEF(boundary),
     TOKDEF(brickpat),
     TOKDEF(bundle),
+    TOKDEF(bus),
     TOKDEF(bypass),
     TOKDEF(capacitance_resolution),
     TOKDEF(capacitor),
@@ -136,6 +137,7 @@ const static KEYWORD tokens[] = {
     TOKDEF(family),
     TOKDEF(family_family),
     TOKDEF(family_family_spacing),
+    TOKDEF(fanout),
     TOKDEF(farad),
     TOKDEF(file),
     TOKDEF(fit),
@@ -301,6 +303,7 @@ const static KEYWORD tokens[] = {
     TOKDEF(primary),
     TOKDEF(priority),
     TOKDEF(property),
+    TOKDEF(protect),
     TOKDEF(qarc),
     TOKDEF(quarter),
     TOKDEF(radius),
@@ -355,6 +358,7 @@ const static KEYWORD tokens[] = {
     TOKDEF(smd),
     TOKDEF(snap),
     TOKDEF(snap_angle),
+    TOKDEF(soft),
     TOKDEF(source),
     TOKDEF(space_in_quoted_tokens),
     TOKDEF(spacing),
@@ -688,27 +692,28 @@ L_read:
             head = cur+1;
         }
 
-        // handle T_DASH or T_NUMBER                
+        /*  get the dash out of a <pin_reference> which is embedded for example
+            like:  U2-14 or "U2"-"14"
+            This is detectable by a non-space immediately preceeding the dash.
+        */
+        else if( *cur == '-' && cur>start && !isspace( cur[-1] ) )
+        {
+            head = cur+1;
+            curText.clear();
+            curText += '-';
+            curTok = T_DASH;
+        }
+        
+        // handle T_NUMBER                
         else if( strchr( "+-.0123456789", *cur ) )
         {
-            if( *cur=='-' && !strchr( ".0123456789", *(cur+1) ) )
-            {
-                head = cur+1;
-                
-                curText.clear();
-                curText += *cur;
-                curTok = T_DASH;
-            }
-            else
-            {
-                head = cur+1;
-                while( head<limit && strchr( ".0123456789", *head )  )
-                    ++head;
+            head = cur+1;
+            while( head<limit && strchr( ".0123456789", *head )  )
+                ++head;
 
-                curText.clear();
-                curText.append( cur, head );
-                curTok = T_NUMBER;
-            }
+            curText.clear();
+            curText.append( cur, head );
+            curTok = T_NUMBER;
         }
         
         // a quoted string

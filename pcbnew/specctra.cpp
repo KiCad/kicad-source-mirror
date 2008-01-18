@@ -187,7 +187,7 @@ public:
      * Function GetUnits
      * returns the units for this section.  Derived classes may override this
      * to check for section specific overrides.
-     * @return DSN_T - one of the allowed values to <unit_descriptor>
+     * @return DSN_T - one of the allowed values to &lt;unit_descriptor&gt;
      */
     virtual DSN_T   GetUnits()
     {
@@ -212,7 +212,7 @@ public:
     /**
      * Function FormatContents
      * writes the contents as ASCII out to an OUTPUTFORMATTER according to the 
-     * SPECCTRA DSN format.  This is the same as Format() except that the outter
+     * SPECCTRA DSN format.  This is the same as Format() except that the outer
      * wrapper is not included.
      * @param out The formatter to write to.
      * @param nestLevel A multiple of the number of spaces to preceed the output with.
@@ -313,7 +313,7 @@ public:
 /**
  * Class PARSER
  * is simply a configuration record per the SPECCTRA DSN file spec.
- * It is not actually a parser.
+ * It is not actually a parser, but rather corresponds to &lt;parser_descriptor&gt;
  */
 class PARSER : public ELEM
 {
@@ -427,7 +427,7 @@ public:
 
 /**
  * Class RULE
- * corresponds to the <rule_descriptor> in the specctra dsn spec.
+ * corresponds to the &lt;rule_descriptor&gt; in the specctra dsn spec.
  */
 class RULE : public ELEM
 {
@@ -442,10 +442,28 @@ public:
     {
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
-        for( STRINGS::const_iterator i = rules.begin();  i!=rules.end(); ++i )
-            out->Print( nestLevel, "%s\n", i->c_str() );
+        out->Print( nestLevel, "(%s ", LEXER::GetTokenText( Type() ) );
+        
+        bool singleLine;
+        
+        if( rules.size() == 1 )
+        {
+            singleLine = true;
+            out->Print( 0, "%s)", rules.begin()->c_str() );
+        }
+        
+        else
+        {
+            singleLine = false;
+            for( STRINGS::const_iterator i = rules.begin();  i!=rules.end(); ++i )
+                out->Print( nestLevel, "%s\n", i->c_str() );
+            out->Print( nestLevel, ")" );
+        }
+        
+        if( nestLevel || !singleLine )
+            out->Print( 0, "\n" );
     }
 };
 
@@ -530,10 +548,12 @@ public:
     }
 };
 
+typedef boost::ptr_vector<LAYER_RULE>   LAYER_RULES;
+
 
 /**
  * Class PATH
- * supports both the <path_descriptor> and the <polygon_descriptor> per
+ * supports both the &lt;path_descriptor&gt; and the &lt;polygon_descriptor&gt; per
  * the specctra dsn spec.
  */
 class PATH : public ELEM
@@ -581,7 +601,7 @@ public:
 };
 
 
-//  see http://www.boost.org/libs/ptr_container/doc/ptr_sequence_adapter.html
+///  see http://www.boost.org/libs/ptr_container/doc/ptr_sequence_adapter.html
 typedef boost::ptr_vector<PATH> PATHS;
 
 
@@ -709,24 +729,20 @@ public:
         delete qarc;
     }
     
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
-        out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
-
         // these are mutually exclusive
         if( rectangle )
-            rectangle->Format( out, nestLevel+1 );
+            rectangle->Format( out, nestLevel );
         
-        if( path )
-            path->Format( out, nestLevel+1 );
+        else if( path )
+            path->Format( out, nestLevel );
         
-        if( circle )
-            circle->Format( out, nestLevel+1 );
+        else if( circle )
+            circle->Format( out, nestLevel );
 
-        if( qarc )
-            qarc->Format( out, nestLevel+1 );
-
-        out->Print( nestLevel, ")\n" ); 
+        else if( qarc )
+            qarc->Format( out, nestLevel );
     }
 };
 
@@ -805,13 +821,13 @@ public:
         if( rectangle )
             rectangle->Format( out, nestLevel+1 );
         
-        if( path )
+        else if( path )
             path->Format( out, nestLevel+1 );
         
-        if( circle )
+        else if( circle )
             circle->Format( out, nestLevel+1 );
 
-        if( qarc )
+        else if( qarc )
             qarc->Format( out, nestLevel+1 );
 
         if( rules )
@@ -849,7 +865,6 @@ public:
         for( STRINGS::iterator i=padstacks.begin();  i!=padstacks.end();  ++i )
         {
             const char* quote = out->GetQuoteChar( i->c_str() );
-            
             out->Print( nestLevel+1, "%s%s%s\n", quote, i->c_str(), quote );
         }
         
@@ -857,11 +872,9 @@ public:
         {
             out->Print( nestLevel+1, "(spare\n" );
 
-            for( STRINGS::const_iterator i=spares.begin();
-                i!=spares.end();  ++i )
+            for( STRINGS::iterator i=spares.begin();  i!=spares.end();  ++i )
             {
                 const char* quote = out->GetQuoteChar( i->c_str() );
-                
                 out->Print( nestLevel+2, "%s%s%s\n", quote, i->c_str(), quote );
             }
             
@@ -887,7 +900,7 @@ public:
     
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
-        for( STRINGS::const_iterator i=class_ids.begin();  i!=class_ids.end();  ++i )
+        for( STRINGS::iterator i=class_ids.begin();  i!=class_ids.end();  ++i )
         {
             const char* quote = out->GetQuoteChar( i->c_str() );
             out->Print( nestLevel, "%s%s%s\n", quote, i->c_str(), quote );
@@ -1021,8 +1034,7 @@ public:
         {
             out->Print( nestLevel+1, "(property \n" );
             
-            for( PROPERTIES::const_iterator i = properties.begin();
-                i != properties.end();  ++i )
+            for( PROPERTIES::iterator i = properties.begin();  i != properties.end();  ++i )
             {
                 i->Format( out, nestLevel+2 );
             }
@@ -1177,10 +1189,10 @@ public:
     
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
-        const char* quote_char = out->GetQuoteChar( value.c_str() );
+        const char* quote = out->GetQuoteChar( value.c_str() );
         
         out->Print( nestLevel, "(%s %s%s%s)\n", LEXER::GetTokenText( Type() ),
-                                quote_char, value.c_str(), quote_char );
+                                quote, value.c_str(), quote );
     }
 };
 
@@ -1497,7 +1509,6 @@ public:
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         const char* quote = out->GetQuoteChar( image_id.c_str() );
-        
         out->Print( nestLevel, "(%s %s%s%s\n", LEXER::GetTokenText( Type() ),
                                 quote, image_id.c_str(), quote );
 
@@ -1599,13 +1610,13 @@ public:
         if( path )
             path->Format( out, nestLevel );
         
-        if( rectangle )
+        else if( rectangle )
             rectangle->Format( out, nestLevel );
         
-        if( circle )
+        else if( circle )
             circle->Format( out, nestLevel );
         
-        if( qarc )
+        else if( qarc )
             qarc->Format( out, nestLevel );
         
         if( connect == T_off )
@@ -1822,7 +1833,7 @@ public:
 
 /**
  * Class LIBRARY
- * corresponds to the <library_descriptor> in the specctra dsn specification.
+ * corresponds to the &lt;library_descriptor&gt; in the specctra dsn specification.
  * Only unit_descriptor, image_descriptors, and padstack_descriptors are 
  * included as children at this time.
  */
@@ -1894,6 +1905,107 @@ public:
 };
 
 
+
+class FROMTO : public ELEM
+{
+    friend class SPECCTRA_DB;
+    
+    std::string     fromText;
+    std::string     toText;
+    
+    DSN_T           fromto_type;
+    std::string     net_id;
+    RULE*           rules;
+//    std::string     circuit;
+    LAYER_RULES     layer_rules;
+    
+
+public:    
+    FROMTO( ELEM* aParent ) :
+        ELEM( T_fromto, aParent )
+    {
+        rules = 0;
+        fromto_type  = T_NONE;
+    }
+    ~FROMTO()
+    {
+        delete rules;
+    }
+    
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        // no quoting on these two, the lexer preserved the quotes on input
+        out->Print( nestLevel, "(%s %s %s ", 
+                 LEXER::GetTokenText( Type() ), fromText.c_str(), toText.c_str() );
+
+        if( type != T_NONE )
+            out->Print( 0, "(type %s)", LEXER::GetTokenText( fromto_type ) );
+        
+        if( net_id.size() )
+        {
+            const char* quote = out->GetQuoteChar( net_id.c_str() );
+            out->Print( 0, "(net %s%s%s)",  quote, net_id.c_str(), quote );
+        }
+
+        bool singleLine = true;
+        
+        if( rules || layer_rules.size() )
+        {
+            out->Print( 0, "\n" );
+            singleLine = false;
+        }
+        
+        if( rules )
+            rules->Format( out, nestLevel+1 );
+        
+        /*
+        if( circuit.size() )
+            out->Print( nestLevel, "%s\n", circuit.c_str() );
+        */
+     
+        for( LAYER_RULES::iterator i=layer_rules.begin();  i!=layer_rules.end();  ++i )
+            i->Format( out, nestLevel+1 );
+        
+        out->Print( singleLine ? 0 : nestLevel, ")" );
+        if( nestLevel || !singleLine )
+            out->Print( 0, "\n" );
+    }
+};
+
+
+/**
+ * Class COMP_ORDER
+ * corresponds to the &lt;component_order_descriptor&gt;
+ */
+class COMP_ORDER : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+    STRINGS         placement_ids;
+    
+public:    
+    COMP_ORDER( ELEM* aParent ) :
+        ELEM( T_comp_order, aParent )
+    {
+    }
+    
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        out->Print( nestLevel, "(%s", LEXER::GetTokenText( Type() ) );
+        
+        for( STRINGS::iterator i=placement_ids.begin();  i!=placement_ids.end();  ++i )
+        {
+            const char* quote = out->GetQuoteChar( i->c_str() );
+            out->Print( 0, " %s%s%s", quote, i->c_str(), quote );
+        }
+        
+        out->Print( 0, ")" );
+        if( nestLevel )
+            out->Print( 0, "\n" );
+    }
+};
+
+
 class NET : public ELEM
 {
     friend class SPECCTRA_DB;
@@ -1913,6 +2025,12 @@ class NET : public ELEM
     
     RULE*           rules;
     
+    LAYER_RULES     layer_rules;
+    
+    FROMTO*         fromto;
+    
+    COMP_ORDER*     comp_order;
+    
 public:
 
     NET( ELEM* aParent ) :
@@ -1926,11 +2044,15 @@ public:
         supply = T_NONE;
         
         rules = 0;
+        fromto = 0;
+        comp_order = 0;
     }
     
     ~NET()
     {
         delete rules;
+        delete fromto;
+        delete comp_order;
     }
     
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
@@ -1952,31 +2074,23 @@ public:
         for( PIN_REFS::iterator i=pins.begin();  i!=pins.end();  ++i )
             i->Format( out, nestLevel+2 ); 
         out->Print( nestLevel+1, ")\n" );
+
+        if( comp_order )
+            comp_order->Format( out, nestLevel+1 );
+        
+        if( type != T_NONE )
+            out->Print( nestLevel+1, "(type %s)\n", LEXER::GetTokenText( type ) );
+        
+        if( rules )
+            rules->Format( out, nestLevel+1 );
+        
+        for( LAYER_RULES::iterator i=layer_rules.begin();  i!=layer_rules.end();  ++i )
+            i->Format( out, nestLevel+1 );
+
+        if( fromto )
+            fromto->Format( out, nestLevel+1 );
+        
         out->Print( nestLevel, ")\n" );
-    }
-};
-
-
-class FROMTO : public ELEM
-{
-    friend class SPECCTRA_DB;
-
-public:    
-    FROMTO( ELEM* aParent ) :
-        ELEM( T_fromto, aParent )
-    {
-    }
-};
-
-
-class COMP_ORDER : public ELEM
-{
-    friend class SPECCTRA_DB;
-    
-public:    
-    COMP_ORDER( ELEM* aParent ) :
-        ELEM( T_comp_order, aParent )
-    {
     }
 };
 
@@ -2016,12 +2130,11 @@ class CLASS : public ELEM
     
     STRINGS         net_ids;
     
-    /// <circuit_descriptors>
+    /// <circuit_descriptor> list
     STRINGS         circuit;
     
     RULE*           rules;
     
-    typedef boost::ptr_vector<LAYER_RULE>   LAYER_RULES;
     LAYER_RULES     layer_rules;
     
     TOPOLOGY*       topology;
@@ -2116,6 +2229,163 @@ public:
 };
 
 
+class CONNECT : public ELEM
+{
+};
+
+
+/**
+ * Class WIRE
+ * corresponds to &lt;wire_shape_descriptor&gt; in the specctra dsn spec.
+ */
+class WIRE : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+    //----- only one of these is used, like a union -----
+    PATH*           path;           ///< used for both path and polygon
+    RECTANGLE*      rectangle;
+    CIRCLE*         circle;
+    QARC*           qarc;
+    //---------------------------------------------------
+    
+    std::string     net_id;
+    int             turret;
+    DSN_T           type;
+    DSN_T           attr;
+    std::string     shield;
+    WINDOWS         windows;
+    CONNECT*        connect;
+    bool            supply;
+    
+public:
+    WIRE( ELEM* aParent ) :
+        ELEM( T_wire, aParent )
+    {
+        path = 0;
+        rectangle = 0;
+        circle = 0;
+        qarc = 0;
+        connect = 0;
+        
+        turret = -1;
+        type = T_NONE;
+        attr = T_NONE;
+        supply = false;
+    }
+    
+    ~WIRE()
+    {
+        delete path;
+        delete rectangle;
+        delete circle;
+        delete qarc;
+        delete connect;
+    }
+
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        // these are mutually exclusive
+        if( rectangle )
+            rectangle->Format( out, nestLevel );
+        
+        else if( path )
+            path->Format( out, nestLevel );
+        
+        else if( circle )
+            circle->Format( out, nestLevel );
+
+        else if( qarc )
+            qarc->Format( out, nestLevel );
+        
+        if( net_id.size() )
+        {
+            const char* quote = out->GetQuoteChar( net_id.c_str() );
+            out->Print( nestLevel, "(net %s%s%s)\n", 
+                       quote, net_id.c_str(), quote );
+        }
+        
+        if( turret >= 0 )
+            out->Print( nestLevel, "(turrent %d)\n", turret );
+
+        if( type != T_NONE )
+            out->Print( nestLevel, "(type %s)\n", LEXER::GetTokenText( type ) );
+        
+        if( attr != T_NONE )
+            out->Print( nestLevel, "(attr %s)\n", LEXER::GetTokenText( attr ) );
+        
+        if( shield.size() )
+        {
+            const char* quote = out->GetQuoteChar( shield.c_str() );
+            out->Print( nestLevel, "(shield %s%s%s)\n", 
+                       quote, shield.c_str(), quote );
+        }
+        
+        for( WINDOWS::iterator i=windows.begin();  i!=windows.end();  ++i )
+            i->Format( out, nestLevel );
+
+        if( connect )
+            connect->Format( out, nestLevel );
+        
+        if( supply )
+            out->Print( nestLevel, "(supply)\n" );
+    }
+};
+typedef boost::ptr_vector<WIRE>     WIRES;
+
+
+/**
+ * Class WIRE_VIA
+ * corresponds to &lt;wire_via_descriptor&gt; in the specctra dsn spec.
+ */
+class WIRE_VIA : public ELEM
+{
+    // @todo
+};
+
+
+/**
+ * Class WIRING
+ * corresponds to &lt;wiring_descriptor&gt; in the specctra dsn spec.
+ */
+class WIRING : public ELEM
+{
+    friend class SPECCTRA_DB;
+    
+    UNIT_RES*   unit;
+    WIRES       wires;    
+
+public:
+
+    WIRING( ELEM* aParent ) :
+        ELEM( T_wiring, aParent )
+    {
+        unit = 0;
+    }
+    ~WIRING()
+    {
+        delete unit;
+    }
+
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        if( unit )
+            unit->Format( out, nestLevel );
+
+        for( WIRES::iterator i=wires.begin();  i!=wires.end();  ++i )
+            i->Format( out, nestLevel );
+    }
+
+    DSN_T   GetUnits()
+    {
+        if( unit )
+            return unit->GetUnits();
+        
+        return ELEM::GetUnits();
+    }
+};
+
+
 class PCB : public ELEM
 {
     friend class SPECCTRA_DB;
@@ -2128,6 +2398,7 @@ class PCB : public ELEM
     PLACEMENT*      placement;
     LIBRARY*        library;
     NETWORK*        network;
+    WIRING*         wiring;
     
 public:
     
@@ -2141,6 +2412,7 @@ public:
         placement = 0;
         library = 0;
         network = 0;
+        wiring = 0;
     }
     
     ~PCB()
@@ -2152,6 +2424,7 @@ public:
         delete placement;
         delete library;
         delete network;
+        delete wiring;
     }
     
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
@@ -2182,6 +2455,9 @@ public:
         if( network )
             network->Format( out, nestLevel+1 );
         
+        if( wiring )
+            wiring->Format( out, nestLevel+1 );
+        
         out->Print( nestLevel, ")\n" ); 
     }
     
@@ -2196,7 +2472,6 @@ public:
         return ELEM::GetUnits();
     }
 };
-
 
 
 /**
@@ -2254,6 +2529,24 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
      * @throw IOError, if the next token does not satisfy isSymbol()
      */
     void needSYMBOL() throw( IOError );
+
+    /**
+     * Function readCOMPnPIN
+     * reads a &lt;pin_reference&gt; and splits it into the two parts which are
+     * on either side of the hyphen.  This function is specialized because
+     * pin_reference may or may not double quotes involved.  Both of these
+     * are legal:  U2-14 or "U2"-"14".  The lexer treats the first one as a 
+     * single T_SYMBOL, so in that case we have to split it into two here.
+     * <p>
+     * The caller should have already read in the first token comprizing the 
+     * pin_reference and it will be tested through lexer->CurTok().
+     *
+     * @param component_id Where to put the text preceeding the '-' hyphen.
+     * @param pin_d Where to put the text which trails the '-'.
+     * @throw IOError, if the next token or two do no make up a pin_reference,
+     * or there is an error reading from the input stream.
+     */
+    void readCOMPnPIN( std::string* component_id, std::string* pid_id ) throw( IOError );
     
     /**
      * Function expecting
@@ -2306,7 +2599,8 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     void doTOPOLOGY( TOPOLOGY* growth ) throw( IOError );
     void doFROMTO( FROMTO* growth ) throw( IOError );
     void doCOMP_ORDER( COMP_ORDER* growth ) throw( IOError );
-    
+    void doWIRE( WIRE* growth ) throw( IOError );
+    void doWIRING( WIRING* growth ) throw( IOError );    
     
 public:
 
@@ -2366,9 +2660,10 @@ public:
     /**
      * Function Export
      * writes the given BOARD out as a SPECTRA DSN format file.
+     * @param aFilename The file to save to.
      * @param aBoard The BOARD to save.
      */
-    void Export( wxString, BOARD* aBoard );
+    void Export( wxString aFilename, BOARD* aBoard );
 };
 
 
@@ -2422,7 +2717,6 @@ DSN_T SPECCTRA_DB::nextTok()
     return ret;
 }
 
-
 void SPECCTRA_DB::needLEFT() throw( IOError )
 {
     DSN_T tok = nextTok();
@@ -2437,12 +2731,54 @@ void SPECCTRA_DB::needRIGHT() throw( IOError )
         expecting( T_RIGHT );
 }
 
-
 void SPECCTRA_DB::needSYMBOL() throw( IOError )
 {
     DSN_T tok = nextTok();
     if( !isSymbol( tok ) )
         expecting( T_SYMBOL );
+}
+
+
+void SPECCTRA_DB::readCOMPnPIN( std::string* component_id, std::string* pin_id ) throw( IOError )
+{
+    DSN_T tok;
+    
+    static const char pin_def[] = "<pin_reference>::=<component_id>-<pin_id>"; 
+    
+    if( !isSymbol( lexer->CurTok() ) )
+        expecting( pin_def );
+
+    // case for:  A12-14, i.e. no wrapping quotes.  This should be a single
+    // token, so split it.    
+    if( lexer->CurTok() != T_STRING )
+    {
+        const char* toktext = lexer->CurText();
+        const char* dash    = strchr( toktext, '-' );
+        
+        if( !dash )
+            expecting( pin_def );
+        
+        while( toktext != dash )
+            *component_id += *toktext++;
+
+        ++toktext;  // skip the dash
+
+        while( *toktext )
+            *pin_id += *toktext++;
+    }
+    
+    // quoted string:  "U12"-"14" or "U12"-14,  3 tokens in either case
+    else
+    {
+        *component_id = lexer->CurText();
+
+        tok = nextTok();
+        if( tok!=T_DASH )
+            expecting( pin_def );
+        
+        nextTok();          // accept anything after the dash.
+        *pin_id = lexer->CurText();
+    }
 }
 
 
@@ -2479,9 +2815,31 @@ void SPECCTRA_DB::Load( const wxString& filename ) throw( IOError )
 void SPECCTRA_DB::doPCB( PCB* growth ) throw( IOError )
 {
     DSN_T tok;
+
+    /*  <design_descriptor >::=
+        (pcb <pcb_id >
+          [<parser_descriptor> ]
+          [<capacitance_resolution_descriptor> ]
+          [<conductance_resolution_descriptor> ]
+          [<current_resolution_descriptor> ]
+          [<inductance_resolution_descriptor> ]
+          [<resistance_resolution_descriptor> ]
+          [<resolution_descriptor> ]
+          [<time_resolution_descriptor> ]
+          [<voltage_resolution_descriptor> ]
+          [<unit_descriptor> ]
+          [<structure_descriptor> | <file_descriptor> ]
+          [<placement_descriptor> | <file_descriptor> ]
+          [<library_descriptor> | <file_descriptor> ]
+          [<floor_plan_descriptor> | <file_descriptor> ]
+          [<part_library_descriptor> | <file_descriptor> ]
+          [<network_descriptor> | <file_descriptor> ]
+          [<wiring_descriptor> ]
+          [<color_descriptor> ]
+        )
+    */
     
     needSYMBOL();
-    
     growth->pcbname = lexer->CurText();    
     
     while( (tok = nextTok()) != T_RIGHT )
@@ -2539,6 +2897,13 @@ void SPECCTRA_DB::doPCB( PCB* growth ) throw( IOError )
                 unexpected( tok );
             growth->network = new NETWORK( growth );
             doNETWORK( growth->network );
+            break;
+
+        case T_wiring:
+            if( growth->wiring )
+                unexpected( tok );
+            growth->wiring = new WIRING( growth );
+            doWIRING( growth->wiring );
             break;
             
         default:
@@ -3412,7 +3777,7 @@ void SPECCTRA_DB::doRULE( RULE* growth ) throw( IOError )
 
         if( bracketNesting >= 1 )
         {
-            if( lexer->PrevTok() != T_LEFT && tok!=T_RIGHT )
+            if( lexer->PrevTok()!=T_LEFT && tok!=T_RIGHT && (tok!=T_LEFT || bracketNesting>2) )
                 builder += ' ';
 
             if( tok==T_STRING )
@@ -4368,26 +4733,35 @@ void SPECCTRA_DB::doNET( NET* growth ) throw( IOError )
                 PIN_REF     empty( growth );
                 while( (tok = nextTok()) != T_RIGHT )
                 {
-                    PIN_REF*    pin_ref;
-    
                     // copy the empty one, then fill its copy later thru pin_ref.                
                     growth->pins.push_back( empty );
-    
-                    pin_ref = &growth->pins.back();
-    
-                    if( !isSymbol(tok) )
-                        expecting("component_id");
-                    pin_ref->component_id = lexer->CurText();
-                    
-                    if( nextTok() != T_DASH )
-                        expecting( T_DASH );
-                    tok = nextTok();
-                    
-                    if( !isSymbol(tok) )
-                        expecting("component_id");
-                    pin_ref->pin_id = lexer->CurText();
+
+                    PIN_REF* pin_ref = &growth->pins.back();
+
+                    readCOMPnPIN( &pin_ref->component_id, &pin_ref->pin_id );
                 }
             }
+            break;
+
+        case T_fromto:
+            if( growth->fromto )
+                unexpected( tok );
+            growth->fromto = new FROMTO( growth );
+            doFROMTO( growth->fromto );
+            break;
+
+        case T_comp_order:
+            if( growth->comp_order )
+                unexpected( tok );
+            growth->comp_order = new COMP_ORDER( growth );
+            doCOMP_ORDER( growth->comp_order );
+            break;
+            
+        case T_layer_rule:
+            LAYER_RULE* layer_rule;
+            layer_rule = new LAYER_RULE( growth );
+            growth->layer_rules.push_back( layer_rule );
+            doLAYER_RULE( layer_rule );
             break;
             
         default:
@@ -4418,14 +4792,14 @@ void SPECCTRA_DB::doTOPOLOGY( TOPOLOGY* growth ) throw( IOError )
             FROMTO* fromto;
             fromto = new FROMTO( growth );
             growth->fromtos.push_back( fromto );
-//            doFROMTO( fromto );
+            doFROMTO( fromto );
             break;
         
         case T_comp_order:
             COMP_ORDER*  comp_order;
             comp_order = new COMP_ORDER( growth );
             growth->comp_orders.push_back( comp_order );
-//            doCOMP_ORDER( comp_order );
+            doCOMP_ORDER( comp_order );
             break;
 
         default:
@@ -4581,6 +4955,270 @@ void SPECCTRA_DB::doNETWORK( NETWORK* growth ) throw( IOError )
             doCLASS( myclass );
             break;
 
+        default:
+            unexpected( lexer->CurText() );
+        }
+    }
+}
+
+
+void SPECCTRA_DB::doCOMP_ORDER( COMP_ORDER* growth ) throw( IOError )
+{
+    DSN_T   tok;
+
+    /*  <component_order_descriptor >::=
+        (comp_order {<placement_id> })
+    */
+
+    while( isSymbol(tok = nextTok()) )
+    {
+        growth->placement_ids.push_back( lexer->CurText() );
+    }
+    
+    if( tok != T_RIGHT )
+        expecting( T_RIGHT );
+}
+
+
+void SPECCTRA_DB::doFROMTO( FROMTO* growth ) throw( IOError )
+{
+    DSN_T   tok;
+
+    /*  <fromto_descriptor >::=
+        {(fromto
+           [<pin_reference> | <virtual_pin_descriptor> ] | <component_id >]
+           [<pin_reference> | <virtual_pin_descriptor> | <component_id >]
+           [(type [fix | normal | soft])]
+           [(net <net_id >)]
+           [<rule_descriptor> ]
+           [<circuit_descriptor> ]
+           [{<layer_rule_descriptor> }]
+        )}
+    */
+
+    
+    // read the first two grammar items in as 2 single tokens, i.e. do not
+    // split apart the <pin_reference>s into 3 separate tokens.  Do this by
+    // turning off the string delimiter in the lexer.
+    
+    int old = lexer->SetStringDelimiter( 0 );
+    
+    if( !isSymbol(nextTok() ) )
+    {
+        lexer->SetStringDelimiter( old );
+        expecting( T_SYMBOL );
+    }
+    growth->fromText = lexer->CurText();
+    
+    if( !isSymbol(nextTok() ) )
+    {
+        lexer->SetStringDelimiter( old );
+        expecting( T_SYMBOL );
+    }
+    growth->toText = lexer->CurText();
+
+    lexer->SetStringDelimiter( old );
+    
+    while( (tok = nextTok()) != T_RIGHT )
+    {
+        if( tok != T_LEFT )
+            expecting( T_LEFT );
+        
+        tok = nextTok();
+        switch( tok )
+        {
+        case T_type:
+            tok = nextTok();
+            if( tok!=T_fix && tok!=T_normal && tok!=T_soft )
+                expecting( "fix|normal|soft" );
+            growth->fromto_type = tok;
+            needRIGHT();
+            break;
+        
+        case T_rule:
+            if( growth->rules )
+                unexpected( tok );
+            growth->rules = new RULE( growth, T_rule );
+            doRULE( growth->rules );
+            break;
+
+        case T_layer_rule:
+            LAYER_RULE* layer_rule;
+            layer_rule = new LAYER_RULE( growth );
+            growth->layer_rules.push_back( layer_rule );
+            doLAYER_RULE( layer_rule );
+            break;
+
+        case T_net:
+            if( growth->net_id.size() )
+                unexpected( tok );
+            needSYMBOL();
+            growth->net_id = lexer->CurText();
+            needRIGHT();
+            break;
+            
+        // circuit descriptor not supported at this time
+            
+        default:
+            unexpected( lexer->CurText() );
+        }
+    }
+}
+
+
+void SPECCTRA_DB::doWIRE( WIRE* growth ) throw( IOError )
+{
+    DSN_T   tok;
+
+    /*  <wire_shape_descriptor >::=
+        (wire
+          <shape_descriptor>
+          [(net <net_id >)]
+          [(turret <turret#> )]
+          [(type [fix | route | normal | protect])]
+          [(attr [test | fanout | bus | jumper])]
+          [(shield <net_id >)]
+          [{<window_descriptor> }]
+          [(connect
+             (terminal <object_type> [<pin_reference> ])
+             (terminal <object_type> [<pin_reference> ])
+          )]
+          [(supply)]
+        )
+    */
+
+    while( (tok = nextTok()) != T_RIGHT )
+    {
+        if( tok != T_LEFT )
+            expecting( T_LEFT );
+
+        tok = nextTok();
+        switch( tok )
+        {
+        case T_rect:
+        case T_circle:
+        case T_path:
+        case T_polygon:
+        case T_qarc:
+            if( growth->rectangle || growth->circle || growth->path || growth->qarc )
+                unexpected( tok );
+        default: ;
+        }
+        
+        switch( tok )
+        {
+        case T_rect:
+            growth->rectangle = new RECTANGLE( growth );
+            doRECTANGLE( growth->rectangle );
+            break;
+            
+        case T_circle:
+            growth->circle = new CIRCLE( growth );
+            doCIRCLE( growth->circle );
+            break;
+        
+        case T_path:
+        case T_polygon:
+            growth->path = new PATH( growth, tok );
+            doPATH( growth->path );
+            break;
+            
+        case T_qarc:
+            growth->qarc = new QARC( growth );
+            doQARC( growth->qarc );
+            break;
+
+        case T_net:
+            needSYMBOL();
+            growth->net_id = lexer->CurText();
+            needRIGHT();
+            break;
+            
+        case T_turret:
+            if( nextTok() != T_NUMBER )
+                expecting( T_NUMBER );
+            growth->turret = atoi( lexer->CurText() );
+            needRIGHT();
+            break;
+            
+        case T_type:
+            tok = nextTok();
+            if( tok!=T_fix && tok!=T_route && tok!=T_normal && tok!=T_protect )
+                expecting( "fix|route|normal|protect" );
+            growth->type = tok;
+            needRIGHT();
+            break;
+
+        case T_attr:
+            tok = nextTok();
+            if( tok!=T_test && tok!=T_fanout && tok!=T_bus && tok!=T_jumper )
+                expecting( "test|fanout|bus|jumper" );
+            growth->attr = tok;
+            needRIGHT();
+            break;
+
+        case T_shield:
+            needSYMBOL();
+            growth->shield = lexer->CurText();
+            needRIGHT();
+            break;
+            
+        case T_window:
+            WINDOW* window;
+            window = new WINDOW( growth );
+            growth->windows.push_back( window );
+            doWINDOW( window );
+            break;
+            
+        case T_connect:
+            if( growth->connect )
+                unexpected( tok );
+/* @todo            
+            growth->connect = new CONNECT( growth );
+            doCONNECT( growth->connect );
+*/            
+            break;
+            
+        case T_supply:
+            growth->supply = true;
+            needRIGHT();
+            break;
+            
+        default:
+            unexpected( lexer->CurText() );
+        }
+    }
+}
+
+
+void SPECCTRA_DB::doWIRING( WIRING* growth ) throw( IOError )
+{
+    DSN_T   tok;
+
+    /*  <wiring_descriptor >::=
+        (wiring
+          [<unit_descriptor> | <resolution_descriptor> | null]
+          {<wire_descriptor> }
+          [<test_points_descriptor> ]
+          {[<supply_pin_descriptor> ]}
+        )
+    */
+
+    while( (tok = nextTok()) != T_RIGHT )
+    {
+        if( tok != T_LEFT )
+            expecting( T_LEFT );
+        
+        tok = nextTok();
+        switch( tok )
+        {
+        case T_wire:
+            WIRE* wire;
+            wire = new WIRE( growth );
+            growth->wires.push_back( wire );
+            doWIRE( wire );
+            break;
+            
         default:
             unexpected( lexer->CurText() );
         }
