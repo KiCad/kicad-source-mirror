@@ -15,10 +15,11 @@ sections below.)
 4)  Install wxWidgets [and build it if on windows].
 5)  Install zlib [and build it if on windows].
 6)  Install CMAKE
-7)  Install the kicad source tree.
-8)  Use cmake to build the kicad makefiles.
-9)  Use make to build and install kicad.
-10) Making a "Debug" build.
+7)  Install Boost C++ Template Libraries (*.hpp files)
+8)  Install the kicad source tree.
+9)  Use cmake to build the kicad makefiles.
+10) Use make to build and install kicad.
+11) Making a "Debug" build.
 
 
 ===== Step Details ====================================================
@@ -100,7 +101,7 @@ build directory. Change directories into there, and then:
     make install
 
 
-If linux, use your package manager to install zlib.
+If linux, use your package manager to install zlib pre-built binaries.
 
 -----------------------------------------------------------------------------
 
@@ -116,14 +117,35 @@ or later. If only an older one is available in your package repository, build
 2.4.7 from source. Verify that cmake is in your path by trying to run it from a
 command prompt.
 
+
+7)  Install Boost C++ Libraries
+If windows, well I'm guessing, so somebody please try these two options and
+correct this text please according to which ever is easier:
+(optionA) Go to http://sourceforge.net/project/showfiles.php?group_id=7586
+and download boost_1_34_1.zip or later and unzip it so as to put the files 
+into C:\Program Files\boost\boost_1_34_1
+(optionB) 
+Go to http://www.boost-consulting.com/products/free
+and download the http://www.boost-consulting.com/boost_1_34_1_setup.exe
+file and run it.
+
+If linux, and using a GCC earlier than 4.2, then install the 
+"Boost C++ Libraries development files" or similarly named package using your
+package manager. Note that if you are using gcc 4.2 or later, there were
+incompatibilities that exist between boost 1.34.1 and gcc 4.2. So in this case,
+instead of installing boost using your package manager, you should use the svn
+HEAD copy which overcomes the gcc 4.2 incompatibility, specifically with
+<boost/ptr_container/ptr_vector.hpp>.
+
+
 -----------------------------------------------------------------------------
 
-7)  Install the kicad source tree.
+8)  Install the kicad source tree.
 You can use the subversion repository or a tar file for this.  See the wiki. 
 
 -----------------------------------------------------------------------------
 
-8)  Use cmake to create the kicad makefiles.
+9)  Use cmake to create the kicad makefiles.
 If windows, go into your msys shell.  Linux and windows users both then make 
 two "out of source" build directories:
     cd <kicadSource>
@@ -145,9 +167,19 @@ gives the final install directory. If not what you want, edit it with a text
 editor and re-run the same cmake command again, but with no
 -DCMAKE_INSTALL_PREFIX given on the command line.
 
+CMake will try and find the boost header files and will often fail.  If it
+fails, you will have to edit your CMakeCache.txt file manually and set your
+Boost_INCLUDE_DIR:PATH=/svn/boost-trunk
+setting to point to the base of the boost installation directory.  Account
+for the fact that the boost #include references use a <boost/..> type prefix.
+Example C++ code:  #include <boost/ptr_container/ptr_vector.hpp> and please
+notice the leading <boost/ in the path.
+So point your Boost_INCLUDE_DIR:PATH= variable to a directory above the
+"boost" directory.
+
 -----------------------------------------------------------------------------
 
-9)  Use make to build and install kicad.
+10)  Use make to build and install kicad.
 You compile Kicad here.  You will only need to do step 8) again when one of the 
 CMakeLists.txt files change.  If windows, you must be in your msys shell.
 On either platform then:
@@ -159,7 +191,7 @@ You are now done unless you want to make a Debug build.
 
 -----------------------------------------------------------------------------
 
-10) Making a "Debug" build.
+11) Making a "Debug" build.
 
     cd <kicadSource>/Build/Debug
 
