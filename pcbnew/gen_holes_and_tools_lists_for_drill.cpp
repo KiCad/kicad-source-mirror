@@ -17,10 +17,16 @@ using namespace std;
 
 
 /* Local Functions */
-/* Compare function used for sorting holes  by increasing diameter value */
+/* Compare function used for sorting holes  by increasing diameter value 
+ * and X value
+*/
 static bool CmpHoleDiameterValue( const HOLE_INFO& a, const HOLE_INFO& b )
 {
-    return a.m_Hole_Diameter < b.m_Hole_Diameter;
+	if ( a.m_Hole_Diameter != b.m_Hole_Diameter )
+		return a.m_Hole_Diameter < b.m_Hole_Diameter;
+	if ( a.m_Hole_Pos_X != b.m_Hole_Pos_X )
+		return a.m_Hole_Pos_X < b.m_Hole_Pos_X;
+	return a.m_Hole_Pos_Y < b.m_Hole_Pos_Y;
 }
 
 

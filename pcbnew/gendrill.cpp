@@ -522,6 +522,7 @@ int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( std::vector<HOLE_INFO>&  aHol
             Gen_Line_EXCELLON( line, xt, yt );
         else
             Gen_Line_EXCELLON( line, xt * 10, yt * 10 );
+        fputs( line, dest );
         fputs( "G05\n", dest );
         holes_count++;
     }

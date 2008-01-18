@@ -684,8 +684,10 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
                 jj++;
             }
         }
-		int lchar = m_SelLayerBox->GetFont().GetPointSize();
-		m_SelLayerBox->SetSize(wxSize(lenght * lchar,-1));
+// Test me:
+//		int lchar = m_SelLayerBox->GetFont().GetPointSize();
+//		m_SelLayerBox->SetSize(wxSize(lenght * lchar,-1));
+
         m_SelLayerBox->SetToolTip( _( "+/- to switch" ) );
     }
 
