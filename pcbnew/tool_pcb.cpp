@@ -1,5 +1,5 @@
 /*********************************************/
-/*	tool_pcb.cpp: construction des tool bars */
+/*  tool_pcb.cpp: construction des tool bars */
 /*********************************************/
 
 #include "fctsys.h"
@@ -618,8 +618,19 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
     {
         if( parent == NULL )
             return NULL;
+        
         m_SelLayerBox = new WinEDAChoiceBox( parent, ID_TOOLBARH_PCB_SELECT_LAYER,
-                                            wxPoint( -1, -1 ), wxSize( -1, -1 ) );
+                                            
+                                wxPoint( -1, -1 ),
+#if defined(__UNIX__)                  
+                                // Width enough for the longest string: "Component (Page Down)"
+                                // Maybe that string is too long?
+                                wxSize( 230, -1 )     
+#else
+                                wxSize( LISTBOX_WIDTH+40, -1 )
+#endif
+                              );
+        
         parent->AddControl( m_SelLayerBox );
     }
 
@@ -642,30 +653,30 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
         m_SelLayerBox->Clear();
         for( ii = 0, jj = 0; ii <= EDGE_N; ii++ )
         {
-		// List to append hotkeys in layer box selection
-		static int HK_SwitchLayer[EDGE_N+1] = {
-				HK_SWITCH_LAYER_TO_COPPER,
-				HK_SWITCH_LAYER_TO_INNER1,
-				HK_SWITCH_LAYER_TO_INNER2,
-				HK_SWITCH_LAYER_TO_INNER3,
-				HK_SWITCH_LAYER_TO_INNER4,
-				HK_SWITCH_LAYER_TO_INNER5,
-				HK_SWITCH_LAYER_TO_INNER6,
-				HK_SWITCH_LAYER_TO_INNER7,
-				HK_SWITCH_LAYER_TO_INNER8,
-				HK_SWITCH_LAYER_TO_INNER9,
-				HK_SWITCH_LAYER_TO_INNER10,
-				HK_SWITCH_LAYER_TO_INNER11,
-				HK_SWITCH_LAYER_TO_INNER12,
-				HK_SWITCH_LAYER_TO_INNER13,
-				HK_SWITCH_LAYER_TO_INNER14,
-			    HK_SWITCH_LAYER_TO_COMPONENT
-		};
+        // List to append hotkeys in layer box selection
+        static int HK_SwitchLayer[EDGE_N+1] = {
+                HK_SWITCH_LAYER_TO_COPPER,
+                HK_SWITCH_LAYER_TO_INNER1,
+                HK_SWITCH_LAYER_TO_INNER2,
+                HK_SWITCH_LAYER_TO_INNER3,
+                HK_SWITCH_LAYER_TO_INNER4,
+                HK_SWITCH_LAYER_TO_INNER5,
+                HK_SWITCH_LAYER_TO_INNER6,
+                HK_SWITCH_LAYER_TO_INNER7,
+                HK_SWITCH_LAYER_TO_INNER8,
+                HK_SWITCH_LAYER_TO_INNER9,
+                HK_SWITCH_LAYER_TO_INNER10,
+                HK_SWITCH_LAYER_TO_INNER11,
+                HK_SWITCH_LAYER_TO_INNER12,
+                HK_SWITCH_LAYER_TO_INNER13,
+                HK_SWITCH_LAYER_TO_INNER14,
+                HK_SWITCH_LAYER_TO_COMPONENT
+        };
 
             if( (g_TabOneLayerMask[ii] & Masque_Layer) )
             {
-				wxString msg = ReturnPcbLayerName( ii, false );
-				msg = AddHotkeyName( msg, s_Board_Editor_Hokeys_Descr, HK_SwitchLayer[ii] );
+                wxString msg = ReturnPcbLayerName( ii, false );
+                msg = AddHotkeyName( msg, s_Board_Editor_Hokeys_Descr, HK_SwitchLayer[ii] );
                 m_SelLayerBox->Append( msg );
                 m_SelLayerBox->SetClientData( jj, (void*) ii );
                 jj++;
