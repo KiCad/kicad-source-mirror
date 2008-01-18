@@ -4,36 +4,43 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
-2007-Dec-16 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+
+2008-Jan-18 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
+    how-to-build-kicad.txt: added the Boost C++ Libraries installation info
+    and requirement.
+
+
+2008-Jan-16 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:
-	Move Zone outlines added
-	Zone outline DRC works (needs improvements)
-	some bugs solved, but polyline.cpp still needs work.
-	gendrill: code cleaning.
+    Move Zone outlines added
+    Zone outline DRC works (needs improvements)
+    some bugs solved, but polyline.cpp still needs work.
+    gendrill: code cleaning.
 
-2007-Dec-14 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+2008-Jan-14 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:
-	code cleaning:
-	 DRAWSEGMENT class functions moved in the new files class_drawsegment.cpp et .h
+    code cleaning:
+     DRAWSEGMENT class functions moved in the new files class_drawsegment.cpp et .h
 
 
-2007-Dec-12 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+2008-Jan-12 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +eeschema:
-	missing footprints in export netlist (bug 1867321)
-	Affected: PadsPcb converter did not list all footprints
+    missing footprints in export netlist (bug 1867321)
+    Affected: PadsPcb converter did not list all footprints
 
 +pcbnew:
-	fixed: memory not freeed in block copy (minor bug)
-	Support for micro vias (generation of drill files not finished)
+    fixed: memory not freeed in block copy (minor bug)
+    Support for micro vias (generation of drill files not finished)
 
 2008-jan-06 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:
     Block commands now works with zones.
-	Some code cleanning.
+    Some code cleanning.
 
 
 2008-Jan-5 UPDATE   Dick Hollenbeck <dick@softplc.com>
