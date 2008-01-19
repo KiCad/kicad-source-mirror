@@ -45,9 +45,11 @@
 #include "gr_basic.h"
 
 // Old wxWidget compatibility (prior to wxWidget 2.7):
-#if ( ( wxMAJOR_VERSION < 2) || ( ( wxMAJOR_VERSION == 2)&& (wxMINOR_VERSION < 7 )  ) )
+#if !wxCHECK_VERSION( 2, 7, 0 )
 #define wxFD_OPEN             wxOPEN
 #define wxFD_SAVE             wxSAVE
+#define wxFD_DEFAULT_STYLE    wxOPEN
+#define wxFD_MULTIPLE         wxMULTIPLE
 #define wxFD_OVERWRITE_PROMPT wxOVERWRITE_PROMPT
 #define WXK_PAGEUP            WXK_PRIOR
 #define WXK_PAGEDOWN          WXK_NEXT
