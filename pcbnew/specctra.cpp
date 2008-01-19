@@ -2340,8 +2340,90 @@ typedef boost::ptr_vector<WIRE>     WIRES;
  */
 class WIRE_VIA : public ELEM
 {
-    // @todo
+    friend class SPECCTRA_DB;
+
+    std::string     padstack_id;
+    POINTS          vertexes;
+    std::string     net_id;
+    int             via_number;
+    DSN_T           type;
+    DSN_T           attr;
+    std::string     virtual_pin_name;
+    STRINGS         contact_layers;
+    bool            supply;
+    
+public:
+    WIRE_VIA( ELEM* aParent ) :
+        ELEM( T_via, aParent )
+    {
+        via_number = -1;
+        type = T_NONE;
+        attr = T_NONE;
+        supply = false;
+    }
+
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        const char* quote = out->GetQuoteChar( padstack_id.c_str() );
+        out->Print( nestLevel, "(%s %s%s%s", LEXER::GetTokenText( Type() ),
+                   quote, padstack_id.c_str(), quote );
+
+        const int RIGHTMARGIN = 80;        
+        int perLine=RIGHTMARGIN;
+        for( POINTS::iterator i=vertexes.begin();  i!=vertexes.end();  ++i )
+        {
+            if( perLine >= RIGHTMARGIN )
+            {
+                out->Print( 0, "\n" );
+                perLine = 0;
+                perLine += out->Print( nestLevel+1, "%f %f", i->x, i->y ); 
+            }
+            else
+            {
+                perLine += out->Print( 0, "    %f %f", i->x, i->y );
+            }
+        }
+        out->Print( 0, "\n" );
+        
+        if( net_id.size() )
+        {
+            const char* quote = out->GetQuoteChar( net_id.c_str() );
+            out->Print( nestLevel+1, "(net %s%s%s)\n", quote, net_id.c_str(), quote ); 
+        }
+        
+        if( type != T_NONE )
+            out->Print( nestLevel+1, "(type %s)\n", LEXER::GetTokenText( type ) );
+        
+        if( attr != T_NONE )
+        {
+            if( attr == T_virtual_pin )
+            {
+                const char* quote = out->GetQuoteChar( virtual_pin_name.c_str() );
+                out->Print( nestLevel+1, "(attr virtual_pin %s%s%s)\n",
+                           quote, virtual_pin_name.c_str(), quote );
+            }
+            else
+                out->Print( nestLevel+1, "(attr %s)\n", LEXER::GetTokenText( attr ) );
+        }
+        
+        if( contact_layers.size() )
+        {
+            out->Print( nestLevel+1, "(contact\n" );
+            for( STRINGS::iterator i=contact_layers.begin();  i!=contact_layers.end();  ++i )
+            {
+                const char* quote = out->GetQuoteChar( i->c_str() );
+                out->Print( nestLevel+2, "%s%s%s\n", quote, i->c_str(), quote );
+            }
+            out->Print( nestLevel+1, ")\n" );
+        }
+        
+        if( supply )
+            out->Print( nestLevel+1, "(supply)\n" );
+        
+        out->Print( nestLevel, ")\n" );
+    }
 };
+typedef boost::ptr_vector<WIRE_VIA>      WIRE_VIAS;
 
 
 /**
@@ -2353,7 +2435,8 @@ class WIRING : public ELEM
     friend class SPECCTRA_DB;
     
     UNIT_RES*   unit;
-    WIRES       wires;    
+    WIRES       wires;
+    WIRE_VIAS   wire_vias;    
 
 public:
 
@@ -2373,6 +2456,9 @@ public:
             unit->Format( out, nestLevel );
 
         for( WIRES::iterator i=wires.begin();  i!=wires.end();  ++i )
+            i->Format( out, nestLevel );
+        
+        for( WIRE_VIAS::iterator i=wire_vias.begin();  i!=wire_vias.end();  ++i )
             i->Format( out, nestLevel );
     }
 
@@ -2534,7 +2620,7 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
      * Function readCOMPnPIN
      * reads a &lt;pin_reference&gt; and splits it into the two parts which are
      * on either side of the hyphen.  This function is specialized because
-     * pin_reference may or may not double quotes involved.  Both of these
+     * pin_reference may or may not be using double quotes.  Both of these
      * are legal:  U2-14 or "U2"-"14".  The lexer treats the first one as a 
      * single T_SYMBOL, so in that case we have to split it into two here.
      * <p>
@@ -2554,10 +2640,10 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
      * @param DSN_T The token type which was expected at the current input location.
      * @throw IOError with the location within the input file of the problem.
      */
-    void    expecting( DSN_T ) throw( IOError );
-    void    expecting( const char* text ) throw( IOError );
-    void    unexpected( DSN_T aTok ) throw( IOError );
-    void    unexpected( const char* text ) throw( IOError );
+    void expecting( DSN_T ) throw( IOError );
+    void expecting( const char* text ) throw( IOError );
+    void unexpected( DSN_T aTok ) throw( IOError );
+    void unexpected( const char* text ) throw( IOError );
     
     void doPCB( PCB* growth ) throw(IOError);
     void doPARSER( PARSER* growth ) throw(IOError);
@@ -2600,6 +2686,7 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     void doFROMTO( FROMTO* growth ) throw( IOError );
     void doCOMP_ORDER( COMP_ORDER* growth ) throw( IOError );
     void doWIRE( WIRE* growth ) throw( IOError );
+    void doWIRE_VIA( WIRE_VIA* growth ) throw( IOError );
     void doWIRING( WIRING* growth ) throw( IOError );    
     
 public:
@@ -5191,6 +5278,110 @@ void SPECCTRA_DB::doWIRE( WIRE* growth ) throw( IOError )
 }
 
 
+void SPECCTRA_DB::doWIRE_VIA( WIRE_VIA* growth ) throw( IOError )
+{
+    DSN_T   tok;
+    POINT   point;
+    
+    /*  <wire_via_descriptor >::=
+        (via
+           <padstack_id > {<vertex> }
+           [(net <net_id >)]
+           [(via_number <via#> )]
+           [(type [fix | route | normal | protect])]
+           [(attr [test | fanout | jumper |
+              virtual_pin <virtual_pin_name> ])]
+           [(contact {<layer_id >})]
+           [(supply)]
+        )
+        (virtual_pin
+           <virtual_pin_name> <vertex> (net <net_id >)
+        )
+    */
+
+    needSYMBOL();
+    growth->padstack_id = lexer->CurText();
+
+    while( (tok = nextTok()) == T_NUMBER )
+    {
+        point.x = strtod( lexer->CurText(), 0 );
+        
+        if( nextTok() != T_NUMBER )
+            expecting( "vertex.y" );
+        
+        point.y = strtod( lexer->CurText(), 0 );
+        
+        growth->vertexes.push_back( point );
+    }
+
+    while( tok != T_RIGHT )
+    {
+        if( tok != T_LEFT )
+            expecting( T_LEFT );
+        
+        tok = nextTok();
+        switch( tok )
+        {
+        case T_net:
+            needSYMBOL();
+            growth->net_id = lexer->CurText();
+            needRIGHT();
+            break;
+            
+        case T_via_number:
+            if( nextTok() != T_NUMBER )
+                expecting( "<via#>" );
+            growth->via_number = atoi( lexer->CurText() );
+            needRIGHT();
+            break;
+            
+        case T_type:
+            tok = nextTok();
+            if( tok!=T_fix && tok!=T_route && tok!=T_normal && tok!=T_protect )
+                expecting( "fix|route|normal|protect" );
+            growth->type = tok;
+            needRIGHT();
+            break;
+            
+        case T_attr:
+            tok = nextTok();
+            if( tok!=T_test && tok!=T_fanout && tok!=T_jumper && tok!=T_virtual_pin )
+                expecting( "test|fanout|jumper|virtual_pin" );
+            growth->attr = tok;
+            if( tok == T_virtual_pin )
+            {
+                needSYMBOL();
+                growth->virtual_pin_name = lexer->CurText();
+            }
+            needRIGHT();
+            break;
+            
+        case T_contact:
+            needSYMBOL();
+            tok = T_SYMBOL;
+            while( isSymbol(tok) )
+            {
+                growth->contact_layers.push_back( lexer->CurText() );
+                tok = nextTok();
+            }
+            if( tok != T_RIGHT )
+                expecting( T_RIGHT );
+            break;
+            
+        case T_supply:
+            growth->supply = true;
+            needRIGHT();
+            break;
+            
+        default:
+            unexpected( lexer->CurText() );
+        }
+        
+        tok = nextTok();
+    }
+}
+
+
 void SPECCTRA_DB::doWIRING( WIRING* growth ) throw( IOError )
 {
     DSN_T   tok;
@@ -5217,6 +5408,13 @@ void SPECCTRA_DB::doWIRING( WIRING* growth ) throw( IOError )
             wire = new WIRE( growth );
             growth->wires.push_back( wire );
             doWIRE( wire );
+            break;
+
+        case T_via:
+            WIRE_VIA* wire_via;
+            wire_via = new WIRE_VIA( growth );
+            growth->wire_vias.push_back( wire_via );
+            doWIRE_VIA( wire_via );
             break;
             
         default:
