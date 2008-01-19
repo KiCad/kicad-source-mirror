@@ -342,6 +342,7 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
     if( m_TextDrawings == NULL ) /* pointeur sur la liste des segments de dessin */
         CreateDrawData();
+    
     if( m_TextDrawings == NULL )
         return;
 
@@ -349,6 +350,7 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     width = m_Width / zoom;
     if( display_mode == FILAIRE )
         width = 0;
+    
     /* choix de la couleur du texte : */
     if( draw_mode != -1 )
         GRSetDrawMode( DC, draw_mode );
@@ -370,12 +372,15 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         {
             int anchor_size = 2 * zoom;
             anchor_color &= MASKCOLOR;
+            
             /* calcul de la position du texte */
             int cX = m_Pos.x - offset.x;
             int cY = m_Pos.y - offset.y;
+            
             /* trace ancre du texte */
             GRLine( &panel->m_ClipBox, DC, cX - anchor_size, cY,
                     cX + anchor_size, cY, 0, anchor_color );
+            
             GRLine( &panel->m_ClipBox, DC, cX, cY - anchor_size,
                     cX, cY + anchor_size, 0, anchor_color );
         }
@@ -385,15 +390,14 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
             nbpoints = m_TextDrawings[jj];
             if( nbpoints > 50 )
                 nbpoints = 50;
+            
             for( kk = 0, ll = 0; (kk < nbpoints) && (ii < m_TextDrawingsSize); kk++ )
             {
-                coord[ll] = m_TextDrawings[ii] + offset.x + m_Pos.x;
-                ll++; ii++;
-                coord[ll] = m_TextDrawings[ii] + offset.y + m_Pos.y;
-                ll++; ii++;
+                coord[ll++] = m_TextDrawings[ii++] + offset.x + m_Pos.x;
+                coord[ll++] = m_TextDrawings[ii++] + offset.y + m_Pos.y;
             }
 
-            jj = ii; ii++;
+            jj = ii++;
 
             if( width > 2 )
             {
@@ -544,8 +548,13 @@ void EDA_TextStruct::CreateDrawData()
     m_ZoomLevelDrawable = m_Size.x / 3;
     dx  = (espacement * nbchar) / 2;
     dy  = size_v / 2;    /* Decalage du debut du texte / centre */
-    ux0 = cX - dx; uy0 = cY;
-    dx += cX; dy = cY;
+    
+    ux0 = cX - dx; 
+    uy0 = cY;
+    
+    dx += cX; 
+    dy = cY;
+    
     RotatePoint( &ux0, &uy0, cX, cY, m_Orient );
     RotatePoint( &dx, &dy, cX, cY, m_Orient );
 
@@ -582,9 +591,10 @@ void EDA_TextStruct::CreateDrawData()
                         coord = (int*) realloc( coord, coord_count_max * sizeof(int) );
                     }
                     coord[jj] = nbpoints;
-                    jj = ii; ii++;
+                    jj = ii++; 
                 }
-                plume = f_cod; nbpoints = 0;
+                plume = f_cod; 
+                nbpoints = 0;
                 break;
 
             case 'D':
@@ -600,14 +610,20 @@ void EDA_TextStruct::CreateDrawData()
                 f_cod = *ptcar;
                 k2    = f_cod;  /* trace sur axe H */
                 k2    = (k2 * size_h) / 9;
-                dx    = k2 + ox; dy = k1 + oy;
+                
+                dx    = k2 + ox; 
+                dy    = k1 + oy;
+                
                 RotatePoint( &dx, &dy, cX, cY, m_Orient );
                 if( ii >= coord_count_max )
                 {
                     coord_count_max *= 2;
                     coord = (int*) realloc( coord, coord_count_max * sizeof(int) );
                 }
-                coord[ii] = dx;  ii++; coord[ii] = dy; ii++;
+                
+                coord[ii++] = dx;  
+                coord[ii++] = dy;
+                
                 nbpoints++;
                 break;
             }
@@ -618,7 +634,8 @@ void EDA_TextStruct::CreateDrawData()
 
         /* end boucle for = end trace de 1 caractere */
 
-        ptr++; ox += espacement;
+        ptr++; 
+        ox += espacement;
     }
 
     /* end trace du texte */
@@ -661,13 +678,16 @@ bool EDA_Rect::Inside( const wxPoint& point )
 
     if( size.x < 0 )
     {
-        size.x = -size.x; rel_posx += size.x;
+        size.x = -size.x; 
+        rel_posx += size.x;
     }
 
     if( size.y < 0 )
     {
-        size.y = -size.y; rel_posy += size.y;
+        size.y = -size.y; 
+        rel_posy += size.y;
     }
+    
     return (rel_posx >= 0) && (rel_posy >= 0)
            && ( rel_posy <= size.y)
            && ( rel_posx <= size.x)
