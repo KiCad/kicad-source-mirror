@@ -37,7 +37,6 @@ enum Mod_Attribut       /* Attributs d'un module */
 
 class MODULE : public BOARD_ITEM
 {
-    
 public:
     wxPoint          m_Pos;             // Real coord on board
     D_PAD*           m_Pads;            /* Pad list (linked list) */
@@ -46,27 +45,29 @@ public:
     TEXTE_MODULE*    m_Reference;       // texte reference du composant (U34, R18..)
     TEXTE_MODULE*    m_Value;           // texte valeur du composant (74LS00, 22K..)
     wxString         m_LibRef;          /* nom du module en librairie */
+    wxString         m_AlternateReference;  /* Used when m_Reference cannot be used to
+                                              * identify the footprint ( after a full reannotation of the schematic */
 
-    int              m_Attributs;       /* Flags bits a bit ( voir enum Mod_Attribut ) */
-    int              m_Orient;          /* orientation en 1/10 degres */
-    int              flag;              /* flag utilise en trace rastnest et routage auto */
-    int              m_ModuleStatus;    /* For autoplace: flags (LOCKED, AUTOPLACED) */
-    EDA_Rect         m_BoundaryBox;     /* position/taille du cadre de reperage (coord locales)*/
-    EDA_Rect         m_RealBoundaryBox; /* position/taille du module (coord relles) */
-    int              m_PadNum;          // Nombre total de pads
-    int              m_AltPadNum;       // en placement auto Nombre de pads actifs pour
+    int           m_Attributs;          /* Flags bits a bit ( voir enum Mod_Attribut ) */
+    int           m_Orient;             /* orientation en 1/10 degres */
+    int           flag;                 /* flag utilise en trace rastnest et routage auto */
+    int           m_ModuleStatus;       /* For autoplace: flags (LOCKED, AUTOPLACED) */
+    EDA_Rect      m_BoundaryBox;        /* position/taille du cadre de reperage (coord locales)*/
+    EDA_Rect      m_RealBoundaryBox;    /* position/taille du module (coord relles) */
+    int           m_PadNum;             // Nombre total de pads
+    int           m_AltPadNum;          // en placement auto Nombre de pads actifs pour
                                         // les calculs
-                                        
-    int              m_CntRot90;        // Placement auto: cout ( 0..10 ) de la rotation 90 degre
-    int              m_CntRot180;       // Placement auto: cout ( 0..10 ) de la rotation 180 degre
-    wxSize           m_Ext;             // marges de "garde": utilise en placement auto.
-    float            m_Surface;         // surface du rectangle d'encadrement
 
-    unsigned long    m_Link;            // variable temporaire ( pour editions, ...)
-    long             m_LastEdit_Time;   // Date de la derniere modification du module (gestion de librairies)
+    int           m_CntRot90;           // Placement auto: cout ( 0..10 ) de la rotation 90 degre
+    int           m_CntRot180;          // Placement auto: cout ( 0..10 ) de la rotation 180 degre
+    wxSize        m_Ext;                // marges de "garde": utilise en placement auto.
+    float         m_Surface;            // surface du rectangle d'encadrement
 
-    wxString         m_Doc;             // Texte de description du module
-    wxString         m_KeyWord;         // Liste des mots cles relatifs au module
+    unsigned long m_Link;               // variable temporaire ( pour editions, ...)
+    long          m_LastEdit_Time;      // Date de la derniere modification du module (gestion de librairies)
+
+    wxString      m_Doc;                // Texte de description du module
+    wxString      m_KeyWord;            // Liste des mots cles relatifs au module
 
 public:
     MODULE( BOARD* parent );
@@ -77,11 +78,11 @@ public:
 
     MODULE* Next()  { return (MODULE*) Pnext; }
 
-    void    Set_Rectangle_Encadrement();/* mise a jour du rect d'encadrement
-                                               *  en coord locales (orient 0 et origine = pos  module) */
+    void    Set_Rectangle_Encadrement(); /* mise a jour du rect d'encadrement
+                                         *  en coord locales (orient 0 et origine = pos  module) */
 
-    void    SetRectangleExinscrit();/* mise a jour du rect d'encadrement
-                                           *   et de la surface en coord reelles */
+    void    SetRectangleExinscrit(); /* mise a jour du rect d'encadrement
+                                     *   et de la surface en coord reelles */
 
     /**
      * Function GetPosition
@@ -94,7 +95,7 @@ public:
         return m_Pos;
     }
 
-                                           
+
     // deplacements
     void    SetPosition( const wxPoint& newpos );
     void    SetOrientation( int newangle );
@@ -105,7 +106,7 @@ public:
 
     /**
      * Function IsLocked
-     * (virtual from BOARD_ITEM ) 
+     * (virtual from BOARD_ITEM )
      * @returns bool - true if the MODULE is locked, else false
      */
     bool IsLocked() const
@@ -129,15 +130,15 @@ public:
 
 
     /* Reading and writing data on files */
-    
+
     /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.brd" format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
-     */ 
-    bool Save( FILE* aFile ) const;
-    
+     */
+    bool    Save( FILE* aFile ) const;
+
     int     Write_3D_Descr( FILE* File ) const;
     int     ReadDescr( FILE* File, int* LineNum = NULL );
     int     Read_3D_Descr( FILE* File, int* LineNum = NULL );
@@ -156,10 +157,10 @@ public:
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
      * @param frame A WinEDA_DrawFrame in which to print status information.
-     */ 
+     */
     void    Display_Infos( WinEDA_DrawFrame* frame );
 
-    
+
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.
@@ -168,7 +169,7 @@ public:
      */
     bool    HitTest( const wxPoint& refPos );
 
-    
+
     /**
      * Function HitTest (overlayed)
      * tests if the given EDA_Rect intersect the bounds of this object.
@@ -177,7 +178,7 @@ public:
      */
     bool    HitTest( EDA_Rect& refArea );
 
-	/**
+    /**
      * Function GetReference
      * @return wxString - the reference designator text.
      */
@@ -185,8 +186,8 @@ public:
     {
         return m_Reference->m_Text;
     }
-    
-    
+
+
     /**
      * Function Visit
      * should be re-implemented for each derived class in order to handle
@@ -195,15 +196,15 @@ public:
      * to do so on lists of such data.
      * @param inspector An INSPECTOR instance to use in the inspection.
      * @param testData Arbitrary data used by the inspector.
-     * @param scanTypes Which KICAD_T types are of interest and the order 
+     * @param scanTypes Which KICAD_T types are of interest and the order
      *  is significant too, terminated by EOT.
      * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
      *   else SCAN_CONTINUE;
      */
-    SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData, 
-        const KICAD_T scanTypes[] );
-    
-    
+    SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
+                         const KICAD_T scanTypes[] );
+
+
     /**
      * Function GetClass
      * returns the class name.
@@ -214,17 +215,17 @@ public:
         return wxT( "MODULE" );
     }
 
-    
- #if defined(DEBUG)
-   /**
+
+ #if defined (DEBUG)
+
+    /**
      * Function Show
      * is used to output the object tree, currently for debugging only.
-     * @param nestLevel An aid to prettier tree indenting, and is the level 
+     * @param nestLevel An aid to prettier tree indenting, and is the level
      *          of nesting of this object within the overall tree.
      * @param os The ostream& to output to.
      */
     virtual void Show( int nestLevel, std::ostream& os );
 
 #endif
-    
 };

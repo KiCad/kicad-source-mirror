@@ -62,7 +62,7 @@ public:
 	void Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                    const wxPoint& offset, int draw_mode );
 	
-	int GetNet( void ) { return m_NetCode; }
+	int GetNet( void ) const { return m_NetCode; }
 	void SetNet( int anet_code );
 	/**
 	 * Function HitTest
@@ -137,19 +137,37 @@ public:
 /*******************/
 /* class EDGE_ZONE */
 /*******************/
-
+/* Classe used temporary to create a zone outline.
+*
+* TODO: remove this class and use only the ZONE_CONTAINER::m_Poly
+* to create outlines
+*/
 class EDGE_ZONE : public DRAWSEGMENT
 {
+private:
+	int m_NetCode;
+
 public:
-    EDGE_ZONE( BOARD_ITEM* StructFather );
-    EDGE_ZONE( const EDGE_ZONE& edgezone );
+    EDGE_ZONE( BOARD * StructFather );
+
     ~EDGE_ZONE();
 
     EDGE_ZONE* Next() { return (EDGE_ZONE*) Pnext; }
 
     EDGE_ZONE* Back() { return (EDGE_ZONE*) Pback; }
     
+	int GetNet( void ) const { return m_NetCode; }
+	void SetNet( int anet_code ) { m_NetCode = anet_code; }
     
+    /**
+     * Function Display_Infos
+     * has knowledge about the frame and how and where to put status information
+     * about this object into the frame's message panel.
+     * Is virtual from EDA_BaseStruct.
+     * @param frame A WinEDA_BasePcbFrame in which to print status information.
+     */
+    void    Display_Infos( WinEDA_DrawFrame* frame );
+
     /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.brd" format.

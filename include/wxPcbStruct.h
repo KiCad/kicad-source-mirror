@@ -491,10 +491,11 @@ public:
 
     /**
      * Function End_Zone
-     * terminates the zone edge creation process
+     * terminates (if no DRC error ) the zone edge creation process
      * @param DC = current Device Context
+	 * @return true if Ok, false if DRC error
      */
-    void                End_Zone( wxDC* DC );
+    bool                End_Zone( wxDC* DC );
 
     /** Function Fill_Zone()
      *  Calculate the zone filling for the outline zone_container

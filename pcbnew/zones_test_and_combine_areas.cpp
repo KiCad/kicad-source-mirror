@@ -230,7 +230,7 @@ int BOARD::TestAreaPolygon( ZONE_CONTAINER* CurrArea )
 int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
                             bool bMessageBoxArc, bool bMessageBoxInt, bool bRetainArcs )
 {
-    CPolyLine* curr_polygon    = CurrArea->m_Poly;
+    CPolyLine* curr_polygon = CurrArea->m_Poly;
     int        test = TestAreaPolygon( CurrArea ); // this sets utility2 flag
 
     if( test == -1 && !bRetainArcs )
@@ -248,7 +248,7 @@ int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
             str += wxT( "Manual correction is recommended." );
             wxMessageBox( str );
 
-//            bDontShowSelfIntersectionArcsWarning = dlg.bDontShowBoxState;
+//          bDontShowSelfIntersectionArcsWarning = dlg.bDontShowBoxState;
         }
         return -1;  // arcs intersect with other sides, error
     }
@@ -265,7 +265,8 @@ int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
         if( bMessageBoxInt && bDontShowSelfIntersectionWarning == false )
         {
             wxString str;
-            str.Printf( wxT( "Area %8.8X of net \"%s\" is self-intersecting and will be clipped.\n" ),
+            str.Printf( wxT(
+                           "Area %8.8X of net \"%s\" is self-intersecting and will be clipped.\n" ),
                        CurrArea->m_TimeStamp, CurrArea->m_Netname.GetData() );
             str += wxT( "This may result in splitting the area.\n" );
             str += wxT( "If the area is complex, this may take a few seconds." );
@@ -283,7 +284,7 @@ int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
         int n_poly = CurrArea->m_Poly->NormalizeWithGpc( pa, bRetainArcs );
         if( n_poly > 1 )    // i.e if clipping has created some polygons, we must add these new copper areas
         {
-			ZONE_CONTAINER* NewArea;
+            ZONE_CONTAINER* NewArea;
             for( int ip = 1; ip < n_poly; ip++ )
             {
                 // create new copper area and copy poly into it
@@ -448,94 +449,95 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
         if( area_to_test->GetNet() != area2->GetNet() )
             continue;
         if( area_to_test == area2 )
-			continue;
+            continue;
 
-		// see if areas are on same layer
-		if( area_to_test->GetLayer() != area2->GetLayer() )
-			continue;
+        // see if areas are on same layer
+        if( area_to_test->GetLayer() != area2->GetLayer() )
+            continue;
 
-		CPolyLine* poly2 = area2->m_Poly;
+        CPolyLine* poly2 = area2->m_Poly;
 
-		// test bounding rects
-		CRect      b1 = poly1->GetCornerBounds();
-		CRect      b2 = poly2->GetCornerBounds();
-		if(    b1.bottom > b2.top
-			   || b1.top < b2.bottom
-			   || b1.left > b2.right
-			   || b1.right < b2.left )
-			continue;
+        // test bounding rects
+        CRect      b1 = poly1->GetCornerBounds();
+        CRect      b2 = poly2->GetCornerBounds();
+        if(    b1.bottom > b2.top
+               || b1.top < b2.bottom
+               || b1.left > b2.right
+               || b1.right < b2.left )
+            continue;
 
-		// test for intersecting segments
-		for( int icont1 = 0; icont1<poly1->GetNumContours(); icont1++ )
-		{
-			int is1 = poly1->GetContourStart( icont1 );
-			int ie1 = poly1->GetContourEnd( icont1 );
-			for( int ic1 = is1; ic1<=ie1; ic1++ )
-			{
-				int xi1 = poly1->GetX( ic1 );
-				int yi1 = poly1->GetY( ic1 );
-				int xf1, yf1, style1;
-				if( ic1 < ie1 )
-				{
-					xf1 = poly1->GetX( ic1 + 1 );
-					yf1 = poly1->GetY( ic1 + 1 );
-				}
-				else
-				{
-					xf1 = poly1->GetX( is1 );
-					yf1 = poly1->GetY( is1 );
-				}
-				style1 = poly1->GetSideStyle( ic1 );
-				for( int icont2 = 0; icont2 < poly2->GetNumContours(); icont2++ )
-				{
-					int is2 = poly2->GetContourStart( icont2 );
-					int ie2 = poly2->GetContourEnd( icont2 );
-					for( int ic2 = is2; ic2<=ie2; ic2++ )
-					{
-						int xi2 = poly2->GetX( ic2 );
-						int yi2 = poly2->GetY( ic2 );
-						int xf2, yf2, style2;
-						if( ic2 < ie2 )
-						{
-							xf2 = poly2->GetX( ic2 + 1 );
-							yf2 = poly2->GetY( ic2 + 1 );
-						}
-						else
-						{
-							xf2 = poly2->GetX( is2 );
-							yf2 = poly2->GetY( is2 );
-						}
-						style2 = poly2->GetSideStyle( ic2 );
-						int n_int = FindSegmentIntersections( xi1, yi1, xf1, yf1, style1,
-															  xi2, yi2, xf2, yf2, style2 );
-						if( n_int )
-							return true;
-					}
-				}
-			}
-		}
-		
-		// If a contour is inside an other contour, no segments intersects, but the zones can be combined
-		// test a corner inside an outline (only one corner is enought)
-/*		for( int ic2 = 0; ic2 < poly2->GetNumCorners(); ic2++ )
-		{
-			int x = poly2->GetX( ic2 );
-			int y = poly2->GetY( ic2 );
-			if( poly1->TestPointInside( x, y ) )
-			{
-				return true;
-			}
-		}
-		for( int ic1 = 0; ic1 < poly1->GetNumCorners(); ic1++ )
-		{
-			int x = poly1->GetX( ic1 );
-			int y = poly1->GetY( ic1 );
-			if( poly2->TestPointInside( x, y ) )
-			{
-				return true;
-			}
-		}
-*/    }
+        // test for intersecting segments
+        for( int icont1 = 0; icont1<poly1->GetNumContours(); icont1++ )
+        {
+            int is1 = poly1->GetContourStart( icont1 );
+            int ie1 = poly1->GetContourEnd( icont1 );
+            for( int ic1 = is1; ic1<=ie1; ic1++ )
+            {
+                int xi1 = poly1->GetX( ic1 );
+                int yi1 = poly1->GetY( ic1 );
+                int xf1, yf1, style1;
+                if( ic1 < ie1 )
+                {
+                    xf1 = poly1->GetX( ic1 + 1 );
+                    yf1 = poly1->GetY( ic1 + 1 );
+                }
+                else
+                {
+                    xf1 = poly1->GetX( is1 );
+                    yf1 = poly1->GetY( is1 );
+                }
+                style1 = poly1->GetSideStyle( ic1 );
+                for( int icont2 = 0; icont2 < poly2->GetNumContours(); icont2++ )
+                {
+                    int is2 = poly2->GetContourStart( icont2 );
+                    int ie2 = poly2->GetContourEnd( icont2 );
+                    for( int ic2 = is2; ic2<=ie2; ic2++ )
+                    {
+                        int xi2 = poly2->GetX( ic2 );
+                        int yi2 = poly2->GetY( ic2 );
+                        int xf2, yf2, style2;
+                        if( ic2 < ie2 )
+                        {
+                            xf2 = poly2->GetX( ic2 + 1 );
+                            yf2 = poly2->GetY( ic2 + 1 );
+                        }
+                        else
+                        {
+                            xf2 = poly2->GetX( is2 );
+                            yf2 = poly2->GetY( is2 );
+                        }
+                        style2 = poly2->GetSideStyle( ic2 );
+                        int n_int = FindSegmentIntersections( xi1, yi1, xf1, yf1, style1,
+                                                              xi2, yi2, xf2, yf2, style2 );
+                        if( n_int )
+                            return true;
+                    }
+                }
+            }
+        }
+
+        // If a contour is inside an other contour, no segments intersects, but the zones can be combined
+        // test a corner inside an outline (only one corner is enought)
+        for( int ic2 = 0; ic2 < poly2->GetNumCorners(); ic2++ )
+        {
+            int x = poly2->GetX( ic2 );
+            int y = poly2->GetY( ic2 );
+            if( poly1->TestPointInside( x, y ) )
+            {
+                return true;
+            }
+        }
+
+        for( int ic1 = 0; ic1 < poly1->GetNumCorners(); ic1++ )
+        {
+            int x = poly1->GetX( ic1 );
+            int y = poly1->GetY( ic1 );
+            if( poly2->TestPointInside( x, y ) )
+            {
+                return true;
+            }
+        }
+    }
 
     return false;
 }
@@ -636,32 +638,34 @@ int BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_
     }
 
     if( !bInt )
-	{
-/*		if( bArcInt ) return 0;
+    {
+        if( bArcInt )
+            return 0;
 
-		// If a contour is inside an other contour, no segments intersects, but the zones can be combined
-		// test a corner inside an outline (only one corner is enought)
-		for( int ic2 = 0; ic2 < poly2->GetNumCorners(); ic2++ )
-		{
-			int x = poly2->GetX( ic2 );
-			int y = poly2->GetY( ic2 );
-			if( poly1->TestPointInside( x, y ) )
-			{
-				return 1;
-			}
-		}
-		for( int ic1 = 0; ic1 < poly1->GetNumCorners(); ic1++ )
-		{
-			int x = poly1->GetX( ic1 );
-			int y = poly1->GetY( ic1 );
-			if( poly2->TestPointInside( x, y ) )
-			{
-				return 1;
-			}
-		}
-		
-*/        return 0;
-	}
+        // If a contour is inside an other contour, no segments intersects, but the zones can be combined
+        // test a corner inside an outline (only one corner is enought)
+        for( int ic2 = 0; ic2 < poly2->GetNumCorners(); ic2++ )
+        {
+            int x = poly2->GetX( ic2 );
+            int y = poly2->GetY( ic2 );
+            if( poly1->TestPointInside( x, y ) )
+            {
+                return 1;
+            }
+        }
+
+        for( int ic1 = 0; ic1 < poly1->GetNumCorners(); ic1++ )
+        {
+            int x = poly1->GetX( ic1 );
+            int y = poly1->GetY( ic1 );
+            if( poly2->TestPointInside( x, y ) )
+            {
+                return 1;
+            }
+        }
+
+        return 0;
+    }
     if( bArcInt )
         return 2;
     return 1;
@@ -777,8 +781,8 @@ int BOARD::CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combi
 }
 
 
+#if 0   // Currently not used: work in progress
 
-#if 0	// Currently not used: work in progress
 /**
  * Function Is_Area_Inside_Area
  * Test a given area to see if it is inside an other area, or an other area is inside the given area
@@ -786,48 +790,52 @@ int BOARD::CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combi
  * @param Area_Ref: the given area to compare with other areas
  * used to remove redundant areas
  */
-ZONE_CONTAINER* BOARD::Is_Area_Inside_Area( ZONE_CONTAINER* Area_Ref)
+ZONE_CONTAINER* BOARD::Is_Area_Inside_Area( ZONE_CONTAINER* Area_Ref )
 {
+    int corners_inside_count;
 
-	int corners_inside_count;
-	for( int ia = 0; ia < GetAreaCount(); ia++ )
-	{
-		ZONE_CONTAINER* Area_To_Test = GetArea( ia );
+    for( int ia = 0; ia < GetAreaCount(); ia++ )
+    {
+        ZONE_CONTAINER* Area_To_Test = GetArea( ia );
 
-		if( Area_Ref == Area_To_Test )
-			continue;
-		// test for same layer
-		if( Area_Ref->GetLayer() != Area_To_Test->GetLayer() )
-			continue;
+        if( Area_Ref == Area_To_Test )
+            continue;
 
-		// test if Area_Ref inside Area_To_Test
-		corners_inside_count = Area_Ref->m_Poly->GetNumCorners();
-		for( int ic = 0; ic < Area_Ref->m_Poly->GetNumCorners(); ic++ )
-		{
-			int x = Area_Ref->m_Poly->GetX( ic );
-			int y = Area_Ref->m_Poly->GetY( ic );
-			if( Area_To_Test->m_Poly->TestPointInside( x, y ) )
-				corners_inside_count--;
-		}
-		if ( corners_inside_count == 0 )
-			return Area_Ref;
+        // test for same layer
+        if( Area_Ref->GetLayer() != Area_To_Test->GetLayer() )
+            continue;
 
-		// test if Area_To_Test inside Area_Ref
-		corners_inside_count = Area_To_Test->m_Poly->GetNumCorners();
-		for( int ic2 = 0; ic2 < Area_To_Test->m_Poly->GetNumCorners(); ic2++ )
-		{
-			int x = Area_To_Test->m_Poly->GetX( ic2 );
-			int y = Area_To_Test->m_Poly->GetY( ic2 );
-			if( Area_Ref->m_Poly->TestPointInside( x, y ) )
-				corners_inside_count--;
-		}
-		if ( corners_inside_count == 0 )
-			return Area_Ref;
+        // test if Area_Ref inside Area_To_Test
+        corners_inside_count = Area_Ref->m_Poly->GetNumCorners();
+        for( int ic = 0; ic < Area_Ref->m_Poly->GetNumCorners(); ic++ )
+        {
+            int x = Area_Ref->m_Poly->GetX( ic );
+            int y = Area_Ref->m_Poly->GetY( ic );
+            if( Area_To_Test->m_Poly->TestPointInside( x, y ) )
+                corners_inside_count--;
+        }
 
-	}
-	
-	return NULL;
+        if( corners_inside_count == 0 )
+            return Area_Ref;
+
+        // test if Area_To_Test inside Area_Ref
+        corners_inside_count = Area_To_Test->m_Poly->GetNumCorners();
+        for( int ic2 = 0; ic2 < Area_To_Test->m_Poly->GetNumCorners(); ic2++ )
+        {
+            int x = Area_To_Test->m_Poly->GetX( ic2 );
+            int y = Area_To_Test->m_Poly->GetY( ic2 );
+            if( Area_Ref->m_Poly->TestPointInside( x, y ) )
+                corners_inside_count--;
+        }
+
+        if( corners_inside_count == 0 )
+            return Area_Ref;
+    }
+
+    return NULL;
 }
+
+
 #endif
 
 
@@ -835,14 +843,14 @@ ZONE_CONTAINER* BOARD::Is_Area_Inside_Area( ZONE_CONTAINER* Area_Ref)
  * Function Test_Drc_Areas_Outlines_To_Areas_Outlines
  * Test Areas outlines for DRC:
  *      Test areas inside other areas
- *      Test areas too close 
+ *      Test areas too close
  * @param aArea_To_Examine: area to compare with other areas. if NULL: all areas are compared tp all others
  * @param aCreate_Markers: if true create DRC markers. False: do not creates anything
  * @return errors count
  */
 
 int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_Examine,
-	bool aCreate_Markers)
+                                                      bool            aCreate_Markers )
 {
     wxString str;
     long     nerrors = 0;
@@ -851,19 +859,21 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
     for( int ia = 0; ia < GetAreaCount(); ia++ )
     {
         ZONE_CONTAINER* Area_Ref = GetArea( ia );
-		if ( aArea_To_Examine && (aArea_To_Examine != Area_Ref) )
-			continue;
+        if( aArea_To_Examine && (aArea_To_Examine != Area_Ref) )
+            continue;
         for( int ia2 = 0; ia2 < GetAreaCount(); ia2++ )
         {
             ZONE_CONTAINER* Area_To_Test = GetArea( ia2 );
 
             if( Area_Ref == Area_To_Test )
                 continue;
+
             // test for same layer
             if( Area_Ref->GetLayer() != Area_To_Test->GetLayer() )
                 continue;
-			// Test for same net
-            if( Area_Ref->GetNet() == Area_To_Test->GetNet() )
+
+            // Test for same net
+            if( Area_Ref->GetNet() == Area_To_Test->GetNet() && Area_Ref->GetNet() > 0 )
                 continue;
 
             // test for some corners of Area_Ref inside Area_To_Test
@@ -874,20 +884,20 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
                 if( Area_To_Test->m_Poly->TestPointInside( x, y ) )
                 {
                     // COPPERAREA_COPPERAREA error: copper area ref corner inside copper area
-					if ( aCreate_Markers )
-					{
-						wxString msg1 = Area_Ref->MenuText(this); 
-						wxString msg2 = Area_To_Test->MenuText(this);
-						MARKER* marker = new MARKER( COPPERAREA_INSIDE_COPPERAREA, wxPoint( x, y ),
-													msg1, wxPoint( x, y ),
-													msg2, wxPoint( x, y ) );
-						Add( marker );
-					}
+                    if( aCreate_Markers )
+                    {
+                        wxString msg1   = Area_Ref->MenuText( this );
+                        wxString msg2   = Area_To_Test->MenuText( this );
+                        MARKER*  marker = new MARKER( COPPERAREA_INSIDE_COPPERAREA, wxPoint( x, y ),
+                                                     msg1, wxPoint( x, y ),
+                                                     msg2, wxPoint( x, y ) );
+                        Add( marker );
+                    }
                     nerrors++;
                 }
             }
 
-			// test for some corners of Area_To_Test inside Area_Ref
+            // test for some corners of Area_To_Test inside Area_Ref
             for( int ic2 = 0; ic2 < Area_To_Test->m_Poly->GetNumCorners(); ic2++ )
             {
                 int x = Area_To_Test->m_Poly->GetX( ic2 );
@@ -895,15 +905,15 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
                 if( Area_Ref->m_Poly->TestPointInside( x, y ) )
                 {
                     // COPPERAREA_COPPERAREA error: copper area corner inside copper area ref
-					if ( aCreate_Markers )
-					{
-						wxString msg1 = Area_To_Test->MenuText(this);
-						wxString msg2 = Area_Ref->MenuText(this); 
-						MARKER* marker = new MARKER( COPPERAREA_INSIDE_COPPERAREA, wxPoint( x, y ),
-													msg1, wxPoint( x, y ),
-													msg2, wxPoint( x, y ) );
-						Add( marker );
-					}
+                    if( aCreate_Markers )
+                    {
+                        wxString msg1   = Area_To_Test->MenuText( this );
+                        wxString msg2   = Area_Ref->MenuText( this );
+                        MARKER*  marker = new MARKER( COPPERAREA_INSIDE_COPPERAREA, wxPoint( x, y ),
+                                                     msg1, wxPoint( x, y ),
+                                                     msg2, wxPoint( x, y ) );
+                        Add( marker );
+                    }
                     nerrors++;
                 }
             }
@@ -950,33 +960,28 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
                             }
                             int bstyle = Area_To_Test->m_Poly->GetSideStyle( ic2 );
                             int x, y;
-                            int d = ::GetClearanceBetweenSegments( bx1,
-                                                                   by1,
-                                                                   bx2,
-                                                                   by2,
-                                                                   bstyle,
-                                                                   0,
-                                                                   ax1,
-                                                                   ay1,
-                                                                   ax2,
-                                                                   ay2,
-                                                                   astyle,
-                                                                   0,
-                                                                   g_DesignSettings.m_TrackClearence,
-                                                                   &x,
-                                                                   &y );
+                            int d = ::GetClearanceBetweenSegments(
+                                bx1, by1, bx2, by2, bstyle,
+                                0,
+                                ax1, ay1, ax2,
+                                ay2, astyle,
+                                0,
+                                g_DesignSettings.
+                                m_TrackClearence,
+                                &x, &y );
                             if( d < g_DesignSettings.m_TrackClearence )
                             {
                                 // COPPERAREA_COPPERAREA error : intersect or too close
-								if ( aCreate_Markers )
-								{
-									wxString msg1 = Area_Ref->MenuText(this); 
-									wxString msg2 = Area_To_Test->MenuText(this);
-									MARKER* marker = new MARKER( COPPERAREA_CLOSE_TO_COPPERAREA, wxPoint( x, y ),
-																msg1, wxPoint( x, y ),
-																msg2, wxPoint( x, y ) );
-									Add( marker );
-								}
+                                if( aCreate_Markers )
+                                {
+                                    wxString msg1   = Area_Ref->MenuText( this );
+                                    wxString msg2   = Area_To_Test->MenuText( this );
+                                    MARKER*  marker = new MARKER( COPPERAREA_CLOSE_TO_COPPERAREA,
+                                                                 wxPoint( x, y ),
+                                                                 msg1, wxPoint( x, y ),
+                                                                 msg2, wxPoint( x, y ) );
+                                    Add( marker );
+                                }
                                 nerrors++;
                             }
                         }
@@ -985,7 +990,94 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
             }
         }
     }
-	
-	return nerrors;
+
+    return nerrors;
 }
 
+
+/**
+ * Function doEdgeZoneDrc
+ * tests the current EDGE_ZONE segment and returns the result and displays the error
+ * in the status panel only if one exists.
+ *      Test Edge inside other areas
+ *      Test Edge too close other areas
+ * @param aEdge The current segment to test.
+ * @return bool - false if DRC error  or true if OK
+ */
+
+bool DRC::doEdgeZoneDrc( const EDGE_ZONE* aEdge )
+{
+    wxString str;
+
+    // iterate through all areas
+    for( int ia2 = 0; ia2 < m_pcb->GetAreaCount(); ia2++ )
+    {
+        ZONE_CONTAINER* Area_To_Test = m_pcb->GetArea( ia2 );
+
+        // test for same layer
+        if( Area_To_Test->GetLayer() != aEdge->GetLayer() )
+            continue;
+
+        // Test for same net
+        if( (aEdge->GetNet() == Area_To_Test->GetNet()) && (aEdge->GetNet() > 0) )
+            continue;
+
+        // test for ending line inside Area_To_Test
+        int x = aEdge->m_End.x;
+        int y = aEdge->m_End.y;
+        if( Area_To_Test->m_Poly->TestPointInside( x, y ) )
+        {
+            // COPPERAREA_COPPERAREA error: corner inside copper area
+            m_currentMarker = fillMarker( aEdge, wxPoint( x, y ),
+                                          COPPERAREA_INSIDE_COPPERAREA,
+                                          m_currentMarker );
+            return false;
+        }
+
+        // now test spacing between areas
+        int astyle = CPolyLine::STRAIGHT;
+        int ax1    = aEdge->m_Start.x;
+        int ay1    = aEdge->m_Start.y;
+        int ax2    = aEdge->m_End.x;
+        int ay2    = aEdge->m_End.y;
+        for( int icont2 = 0; icont2 < Area_To_Test->m_Poly->GetNumContours(); icont2++ )
+        {
+            int ic_start2 = Area_To_Test->m_Poly->GetContourStart( icont2 );
+            int ic_end2   = Area_To_Test->m_Poly->GetContourEnd( icont2 );
+            for( int ic2 = ic_start2; ic2<=ic_end2; ic2++ )
+            {
+                int bx1 = Area_To_Test->m_Poly->GetX( ic2 );
+                int by1 = Area_To_Test->m_Poly->GetY( ic2 );
+                int bx2, by2;
+                if( ic2 == ic_end2 )
+                {
+                    bx2 = Area_To_Test->m_Poly->GetX( ic_start2 );
+                    by2 = Area_To_Test->m_Poly->GetY( ic_start2 );
+                }
+                else
+                {
+                    bx2 = Area_To_Test->m_Poly->GetX( ic2 + 1 );
+                    by2 = Area_To_Test->m_Poly->GetY( ic2 + 1 );
+                }
+                int bstyle = Area_To_Test->m_Poly->GetSideStyle( ic2 );
+                int x, y;
+                int d = ::GetClearanceBetweenSegments( bx1, by1, bx2, by2, bstyle,
+                                                       0,
+                                                       ax1, ay1, ax2, ay2, astyle,
+                                                       0,
+                                                       g_DesignSettings.m_ZoneClearence,
+                                                       &x, &y );
+                if( d < g_DesignSettings.m_ZoneClearence )
+                {
+                    // COPPERAREA_COPPERAREA error : edge intersect or too close
+                    m_currentMarker = fillMarker( aEdge, wxPoint( x, y ),
+                                                  COPPERAREA_CLOSE_TO_COPPERAREA,
+                                                  m_currentMarker );
+                   return false;
+                }
+            }
+        }
+    }
+
+	return true;
+}

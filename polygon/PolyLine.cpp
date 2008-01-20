@@ -1323,56 +1323,6 @@ bool CPolyLine::TestPointInsideContour( int icont, int x, int y )
 		return FALSE;
 }
 
-// Test for intersection of sides
-//
-int CPolyLine::TestIntersection( CPolyLine * poly )
-{
-	if( !GetClosed() )
-		wxASSERT(0);
-	if( !poly->GetClosed() )
-		wxASSERT(0);
-	for( int ic=0; ic<GetNumContours(); ic++ )
-	{
-		int istart = GetContourStart(ic);
-		int iend = GetContourEnd(ic);
-		for( int is=istart; is<=iend; is++ )
-		{
-			int xf, yf;
-			if( is < GetContourEnd(ic) )
-			{
-				xf = GetX(is+1);
-				yf = GetY(is+1);
-			}
-			else
-			{
-				xf = GetX(istart);
-				yf = GetY(istart);
-			}
-			for( int ic2=0; ic2<poly->GetNumContours(); ic2++ )
-			{
-				int istart2 = poly->GetContourStart(ic2);
-				int iend2 = poly->GetContourEnd(ic2);
-				for( int is2=istart2; is2<=iend2; is2++ )
-				{
-					int xf2, yf2;
-					if( is2 < poly->GetContourEnd(ic2) )
-					{
-						xf2 = poly->GetX(is2+1);
-						yf2 = poly->GetY(is2+1);
-					}
-					else
-					{
-						xf2 = poly->GetX(istart2);
-						yf2 = poly->GetY(istart2);
-					}
-					// test for intersection between side and side2
-				}
-			}
-		}
-	}
-	return 0;
-}
-
 
 // copy data from another poly, but don't draw it
 //

@@ -62,19 +62,8 @@ wxString TRACK::ShowWidth()
 /***************************/
 {
     wxString msg;
-
-#if 0
-    double   value = To_User_Unit( g_UnitMetric, m_Width, PCB_INTERNAL_UNIT );
-
-    if( g_UnitMetric == INCHES )  // Affichage en mils
-        msg.Printf( wxT( "%.1f" ), value * 1000 );
-    else
-        msg.Printf( wxT( "%.3f" ), value );
-#else
-
+	
     valeur_param( m_Width, msg );
-
-#endif
 
     return msg;
 }
@@ -672,6 +661,26 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
 						m_Start.x + by, m_Start.y - bx, 0, color );
 				GRLine( &panel->m_ClipBox, DC, m_Start.x - by, m_Start.y + bx ,
 						m_Start.x - ay, m_Start.y + ax, 0, color );
+			}
+			// for Buried Vias, draw a partial line :
+			// orient depending on layer pair
+			// (so we can see superimposed buried vias ):
+			if ( Shape() == VIA_BLIND_BURIED )
+			{
+				int ax = 0, ay = rayon, bx = 0, by = drill_rayon;
+				int layer_top, layer_bottom ;
+				((SEGVIA*)this)->ReturnLayerPair(&layer_top, &layer_bottom);
+				/* lines for the top layer */
+				RotatePoint( &ax, &ay, layer_top * 3600 / g_DesignSettings.m_CopperLayerCount);
+				RotatePoint( &bx, &by, layer_top * 3600 / g_DesignSettings.m_CopperLayerCount);
+				GRLine( &panel->m_ClipBox, DC, m_Start.x - ax , m_Start.y - ay,
+						m_Start.x - bx , m_Start.y - by, 0, color );
+				/* lines for the bottom layer */
+				ax = 0; ay = rayon; bx = 0; by = drill_rayon;
+				RotatePoint( &ax, &ay, layer_bottom * 3600 / g_DesignSettings.m_CopperLayerCount);
+				RotatePoint( &bx, &by, layer_bottom * 3600 / g_DesignSettings.m_CopperLayerCount);
+				GRLine( &panel->m_ClipBox, DC, m_Start.x - ax , m_Start.y - ay,
+						m_Start.x - bx , m_Start.y - by, 0, color );
 			}
         }
         return;

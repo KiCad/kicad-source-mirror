@@ -139,9 +139,9 @@ DRC::~DRC()
         delete m_unconnected[i];
 }
 
-/***********************************************************************/
+/*********************************************/
 int DRC::Drc( TRACK* aRefSegm, TRACK* aList )
-/***********************************************************************/
+/*********************************************/
 {
     updatePointers();
     
@@ -157,6 +157,33 @@ int DRC::Drc( TRACK* aRefSegm, TRACK* aList )
 }
 
 
+/*********************************************/
+int DRC::Drc( const EDGE_ZONE*  aEdge )
+/*********************************************/
+/**
+ * Function Drc
+ * tests the current EDGE_ZONE segment and returns the result and displays the error
+ * in the status panel only if one exists.
+ *      Test Edge inside other areas
+ *      Test Edge too close other areas
+ * @param aEdge The current segment to test.
+ * @return int - BAD_DRC (1) if DRC error  or OK_DRC (0) if OK
+ */
+{
+    updatePointers();
+    
+    if( ! doEdgeZoneDrc( aEdge ) )
+    {
+        wxASSERT( m_currentMarker );
+        m_currentMarker->Display_Infos( m_mainWindow );
+        return BAD_DRC;
+    }
+    
+    return OK_DRC;
+}
+
+
+
 void DRC::RunTests()
 {
     // someone should have cleared the two lists before calling this.
@@ -169,8 +196,7 @@ void DRC::RunTests()
     testTracks();
 
     // test zone clearances to other zones, pads, tracks, and vias    
-    if( m_doZonesTest )
-        testZones();
+    testZones(m_doZonesTest);
 
     // find and gather unconnected pads.    
     if( m_doUnconnectedTest )
@@ -283,8 +309,22 @@ void DRC::testUnconnected()
 }
 
 
-void DRC::testZones()
+void DRC::testZones(bool adoTestFillSegments)
 {
+
+	// Test copper areas for valide netcodes
+	// if a netcode is < 0 the netname was not found when reading a netlist
+	for( int ii = 0; ii < m_pcb->GetAreaCount(); ii++ )
+	{
+		ZONE_CONTAINER* Area_To_Test = m_pcb->GetArea( ii );
+		if( Area_To_Test->GetNet() <= 0 )
+		{
+			m_currentMarker = fillMarker( Area_To_Test, 
+							DRCE_NON_EXISTANT_NET_FOR_ZONE_OUTLINE, m_currentMarker );
+			m_pcb->Add( m_currentMarker );
+			m_currentMarker = 0;            
+		}
+	}
 
 	// Test copper areas outlines, and create markers when needed
 	m_pcb->Test_Drc_Areas_Outlines_To_Areas_Outlines( NULL, true );
@@ -296,7 +336,7 @@ void DRC::testZones()
     for( zoneSeg = m_pcb->m_Zone;   zoneSeg;   zoneSeg = zoneSeg->Next() )
         ++m_pcb->m_NbSegmZone;
     */
-
+	if ( ! adoTestFillSegments ) return;
     for( zoneSeg = m_pcb->m_Zone;  zoneSeg && zoneSeg->Next(); zoneSeg=zoneSeg->Next() )
     {
         // Test zoneSeg with other zone segments and with all pads
@@ -403,6 +443,34 @@ MARKER* DRC::fillMarker( D_PAD* aPad, D_PAD* bPad, int aErrorCode, MARKER* fillM
         fillMe->SetData( aErrorCode, posA, textA, posA, textB, posB );
     else
         fillMe = new MARKER( aErrorCode, posA, textA, posA, textB, posB );
+    
+    return fillMe;
+}
+
+MARKER* DRC::fillMarker( ZONE_CONTAINER * aArea, int aErrorCode, MARKER* fillMe )
+{
+    wxString    textA = aArea->MenuText( m_pcb );
+
+    wxPoint posA = aArea->GetPosition();
+
+    if( fillMe )
+        fillMe->SetData( aErrorCode, posA, textA, posA );
+    else
+        fillMe = new MARKER( aErrorCode, posA, textA, posA );
+    
+    return fillMe;
+}
+
+MARKER* DRC::fillMarker( const EDGE_ZONE * aEdge, const wxPoint & aPos, int aErrorCode, MARKER* fillMe )
+{
+    wxString    textA = aEdge->MenuText( m_pcb );
+
+    wxPoint posA = aPos;
+
+    if( fillMe )
+        fillMe->SetData( aErrorCode, posA, textA, posA );
+    else
+        fillMe = new MARKER( aErrorCode, posA, textA, posA );
     
     return fillMe;
 }

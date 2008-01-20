@@ -93,7 +93,6 @@ public:
 	bool TestPointInside( int x, int y );
 	bool TestPointInsideContour( int icont, int x, int y );
 	bool IsCutoutContour( int icont );
-	int TestIntersection( CPolyLine * poly );
 	void AppendArc( int xi, int yi, int xf, int yf, int xc, int yc, int num );
 
 

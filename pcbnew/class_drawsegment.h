@@ -56,7 +56,7 @@ public:
      * Is virtual from EDA_BaseStruct.
      * @param frame A WinEDA_BasePcbFrame in which to print status information.
      */
-    void    Display_Infos( WinEDA_DrawFrame* frame );
+    virtual void    Display_Infos( WinEDA_DrawFrame* frame );
 
 
     /**

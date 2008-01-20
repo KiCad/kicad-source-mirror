@@ -406,9 +406,11 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         break;
 
     case ID_PCB_ZONES_BUTT:
-        End_Zone( DC );
-        DrawPanel->m_AutoPAN_Request = FALSE;
-        SetCurItem( NULL );
+        if ( End_Zone( DC ) )
+		{
+			DrawPanel->m_AutoPAN_Request = FALSE;
+			SetCurItem( NULL );
+		}
         break;
 
     case ID_LINE_COMMENT_BUTT:

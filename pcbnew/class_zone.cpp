@@ -15,12 +15,17 @@
 /**********************/
 /* Class EDGE_ZONE */
 /**********************/
-
+/* now used only to create a zone outline
+* TODO: remove this class and use only the ZONE_CONTAINER::m_Poly
+* to create outlines
+ */
+ 
 /* Constructor */
-EDGE_ZONE::EDGE_ZONE( BOARD_ITEM* parent ) :
+EDGE_ZONE::EDGE_ZONE( BOARD* parent ) :
     DRAWSEGMENT( parent, TYPEEDGEZONE )
 {
     m_Width = 2;        // a minimum for visibility, while dragging
+	SetNet(0);
 }
 
 
@@ -32,10 +37,42 @@ EDGE_ZONE:: ~EDGE_ZONE()
 /****************************************/
 bool EDGE_ZONE::Save( FILE* aFile ) const
 /****************************************/
+/* edge_zone is a temporary item only used when creating a zone area.
+* it will not saved in file
+*/
 {
 	return true;
 }
 
+// see pcbstruct.h
+void EDGE_ZONE::Display_Infos( WinEDA_DrawFrame* frame )
+{
+    int      itype;
+    wxString msg;
+
+    frame->MsgPanel->EraseMsgBox();
+
+    itype = m_Type & 0x0F;
+
+    msg = wxT( "Edge Zone" );
+
+    Affiche_1_Parametre( frame, 1, _( "Type" ), msg, DARKCYAN );
+
+    Affiche_1_Parametre( frame, 16, _( "Layer" ),
+                         ReturnPcbLayerName( GetLayer() ), BROWN );
+
+	msg.Empty(); msg << GetNet();
+    Affiche_1_Parametre( frame, 25, _( "Netcode" ), msg, RED );
+
+	msg = wxT("???");
+	if ( m_Parent )
+	{
+		EQUIPOT* net = ((BOARD*) m_Parent)->FindNet( GetNet() );
+		if( net )
+			msg = net->m_Netname;
+	}
+    Affiche_1_Parametre( frame, 34, _( "Netname" ), msg, RED );
+}
 
 /************************/
 /* class ZONE_CONTAINER */
@@ -330,26 +367,22 @@ bool ZONE_CONTAINER::HitTest( const wxPoint& refPos )
 /**
  * Function HitTestForCorner
  * tests if the given wxPoint near a corner, or near the segment define by 2 corners.
- * "near" means MIN_DIST_IN_PIXELS pixels
+ * "near" means CORNER_MIN_DIST_IN_PIXELS pixels
  * @return -1 if none, corner index in .corner <vector>
  * @param refPos : A wxPoint to test
  */
 int ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
 {
-	#define MIN_DIST_IN_PIXELS 5
+	#define CORNER_MIN_DIST 500		// distance (in internal units) to detect a corner in a zone outline
     int dist;
 	unsigned item_pos, lim;
 	lim = m_Poly->corner.size();
 	m_CornerSelection = -1;
 
-	// Min distance to hit = MIN_DIST_IN_PIXELS pixels :
-	WinEDA_BasePcbFrame* frame = ((BOARD*)GetParent())->m_PcbFrame;
-    int min_dist = frame ? frame->GetZoom() * MIN_DIST_IN_PIXELS : 3;
-	
 	for ( item_pos = 0; item_pos < lim; item_pos++ )
 	{
 		dist = abs( m_Poly->corner[item_pos].x - refPos.x ) + abs( m_Poly->corner[item_pos].y - refPos.y );
-		if( dist <= min_dist )
+		if( dist <= CORNER_MIN_DIST )
 		{
 			m_CornerSelection = item_pos;
 			return item_pos;
@@ -362,20 +395,16 @@ int ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
 /**
  * Function HitTestForEdge
  * tests if the given wxPoint near a corner, or near the segment define by 2 corners.
- * "near" means MIN_DIST_IN_PIXELS pixels
+ * "near" means EDGE_MIN_DIST_IN_PIXELS pixels
  * @return -1 if none,  or index of the starting corner in .corner <vector>
  * @param refPos : A wxPoint to test
  */
 int ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
 {
-	#define MIN_DIST_IN_PIXELS 5
+	#define EDGE_MIN_DIST 200	// distance (in internal units) to detect a zone outline
     int dist;
 	unsigned item_pos, lim;
 	lim = m_Poly->corner.size();
-
-	// Min distance to hit = MIN_DIST_IN_PIXELS pixels :
-	WinEDA_BasePcbFrame* frame = ((BOARD*)GetParent())->m_PcbFrame;
-    int min_dist = frame ? frame->GetZoom() * MIN_DIST_IN_PIXELS : 3;
 
     /* Test for an entire segment */
     unsigned first_corner_pos = 0, end_segm;
@@ -402,7 +431,7 @@ int ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
 													m_Poly->corner[item_pos].y,
 													m_Poly->corner[end_segm].x,
 													m_Poly->corner[end_segm].y );
-		if( dist <= min_dist )
+		if( dist <= EDGE_MIN_DIST )
 		{
 			m_CornerSelection = item_pos;
 			return item_pos;

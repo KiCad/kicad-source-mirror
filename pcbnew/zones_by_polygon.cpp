@@ -197,7 +197,7 @@ static void Abort_Zone_Create_Outline( WinEDA_DrawPanel* Panel, wxDC* DC )
 
 /**
  * Function Abort_Zone_Create_Outline
- * cancels the Begin_Zone command if at least one EDGE_ZONE has been created.
+ * cancels the Begin_Zone command if at least one EDGE_ZONE was created.
  */
 {
     WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) Panel->m_Parent;
@@ -235,7 +235,10 @@ void WinEDA_BasePcbFrame::DelLimitesZone( wxDC* DC, bool Redraw )
         next = segment->Next();
 
         if( Redraw && DC )
+		{
+            Trace_DrawSegmentPcb( DrawPanel, DC, segment, GR_OR );
             Trace_DrawSegmentPcb( DrawPanel, DC, segment, GR_XOR );
+		}
 
         delete segment;
     }
@@ -388,7 +391,7 @@ void WinEDA_PcbFrame::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER * zone_contai
 
 	zone_container->m_Poly->DeleteCorner(zone_container->m_CornerSelection);
 	
-	// modify zones outlines accordiing to the new zone_container shape
+	// modify zones outlines according to the new zone_container shape
     m_Pcb->AreaPolygonModified( zone_container, true, verbose );
     if ( DC )
 	{
@@ -506,7 +509,7 @@ EDGE_ZONE* WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
             break;
     }
 
-    if( ii == m_Pcb->GetAreaCount() ) // Not found: coul be deleted since last selection
+    if( ii == m_Pcb->GetAreaCount() ) // Not found: could be deleted since last selection
     {
         s_AddCutoutToCurrentZone = false;
         s_CurrentZone = NULL;
@@ -560,6 +563,14 @@ EDGE_ZONE* WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
         newedge->m_Flags = IS_NEW | STARTPOINT | IS_MOVED;
         newedge->m_Start = newedge->m_End = GetScreen()->m_Curseur;
         newedge->SetLayer( GetScreen()->m_Active_Layer );
+        newedge->SetNet( s_NetcodeSelection );
+        if( Drc_On && m_drc->Drc( newedge ) == BAD_DRC )
+		{
+			delete newedge;
+			SetCurItem(NULL);
+			DisplayError(this, _("DRC error: this start point is inside or too close an other area"));
+			return NULL;
+		}
 
         // link into list:
         newedge->Pnext = oldedge;
@@ -578,12 +589,18 @@ EDGE_ZONE* WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
         /* edge in progress : the ending point coordinate was set by Show_New_Zone_Edge_While_Move_Mouse */
         if( oldedge->m_Start != oldedge->m_End )
         {
+			if ( Drc_On && m_drc->Drc( oldedge ) == BAD_DRC )
+			{
+				return oldedge;
+			}
+
             oldedge->m_Flags &= ~(IS_NEW | IS_MOVED);
 
-            newedge = new EDGE_ZONE( oldedge );
+            newedge = new EDGE_ZONE( m_Pcb );
             newedge->m_Flags = IS_NEW | IS_MOVED;
             newedge->m_Start = newedge->m_End = oldedge->m_End;
-            newedge->SetLayer( GetScreen()->m_Active_Layer );
+            newedge->SetLayer( oldedge->GetLayer() );
+			newedge->SetNet( s_NetcodeSelection );
 
             // link into list:
             newedge->Pnext = oldedge;
@@ -597,44 +614,65 @@ EDGE_ZONE* WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
 
 
 /*********************************************/
-void WinEDA_PcbFrame::End_Zone( wxDC* DC )
+bool WinEDA_PcbFrame::End_Zone( wxDC* DC )
 /*********************************************/
 
 /** Function End_Zone
  * Terminates a zone outline creation
- * Close the current zone outline considered as a polygon
- * put it in the main list m_Pcb->m_ZoneDescriptorList (a vector<ZONE_CONTAINER*>)
+ * terminates (if no DRC error ) the zone edge creation process
+ * @param DC = current Device Context
+ * @return true if Ok, false if DRC error
+ * if ok, put it in the main list m_Pcb->m_ZoneDescriptorList (a vector<ZONE_CONTAINER*>)
  */
 {
-    EDGE_ZONE* edge;
-    int        layer = GetScreen()->m_Active_Layer;
+	if( m_Pcb->m_CurrentLimitZone == NULL ) return true;
+     
+	EDGE_ZONE* edge =  m_Pcb->m_CurrentLimitZone;
+	EDGE_ZONE* last_edge =  m_Pcb->m_CurrentLimitZone;
+    int        layer = edge->GetLayer();
 
-    if( m_Pcb->m_CurrentLimitZone )
-    {
-        Begin_Zone( DC );
+	// Validate the current edge:
+	if ( edge->m_Start != edge->m_End )
+	{
+		Begin_Zone( DC );
+		if ( edge == m_Pcb->m_CurrentLimitZone )	// no new segment -> DRC error
+		{
+			return false;
+		}
+	}
 
-        /* The last segment is a stub: its lenght is 0.
-         * Use it to close the polygon by setting its ending point coordinate = start point of first segment
-         */
-        edge = m_Pcb->m_CurrentLimitZone;
-        edge->m_Flags &= ~(IS_NEW | IS_MOVED);
+	/* The last segment is a stub: its lenght is 0.
+	 * Use it to close the polygon by setting its ending point coordinate = start point of first segment
+	 */
+	/* search first segment outline ( last item of the linked list ) */
+	edge = m_Pcb->m_CurrentLimitZone;
+	while( edge->Next() )
+	{
+		edge = edge->Next();
+		edge->m_Flags &= ~(IS_NEW | IS_MOVED);
+	}
 
-        while( edge && edge->Next() )
-        {
-            edge = edge->Next();
-            if( edge->m_Flags & STARTPOINT )
-                break;
+	wxPoint curr_endpoint = m_Pcb->m_CurrentLimitZone->m_End;
+	m_Pcb->m_CurrentLimitZone->m_End = edge->m_Start;
+	edge = m_Pcb->m_CurrentLimitZone;
+	if ( Drc_On && m_drc->Drc( edge ) == BAD_DRC )
+	{
+		edge->m_End = curr_endpoint;
+		if ( last_edge != edge )	// Remove edge create previously
+		{
+			delete edge;
+			m_Pcb->m_CurrentLimitZone = edge = last_edge;
+			edge->Pback = NULL;
+			edge->m_Flags = (IS_NEW | IS_MOVED);
+		}
+		SetCurItem( edge );
+		DisplayError(this, _("DRC error: closing this area creates a drc error with an other area"));
+        DrawPanel->MouseToCursorSchema();
+		return false;
+	}
 
-            edge->m_Flags &= ~(IS_NEW | IS_MOVED);
-        }
-
-        if( edge )
-        {
-            edge->m_Flags &= ~(IS_NEW | IS_MOVED);
-            m_Pcb->m_CurrentLimitZone->m_End = edge->m_Start;
-        }
-        Trace_DrawSegmentPcb( DrawPanel, DC, m_Pcb->m_CurrentLimitZone, GR_XOR );
-    }
+	edge->m_Flags &= ~(IS_NEW | IS_MOVED);
+	Trace_DrawSegmentPcb( DrawPanel, DC, m_Pcb->m_CurrentLimitZone, GR_XOR );
 
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
@@ -642,9 +680,9 @@ void WinEDA_PcbFrame::End_Zone( wxDC* DC )
     // Undraw old drawings, because they can have important changes
     for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
     {
-        ZONE_CONTAINER* edge_zone = m_Pcb->GetArea(ii);
-        if( layer == edge_zone->GetLayer() )
-            edge_zone->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+        ZONE_CONTAINER* area = m_Pcb->GetArea(ii);
+        if( layer ==  area->GetLayer() )
+             area->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
     }
 
     /* Put edges in list */
@@ -717,6 +755,7 @@ void WinEDA_PcbFrame::End_Zone( wxDC* DC )
 	}
 
     GetScreen()->SetModify();
+	return true;
 }
 
 
@@ -742,12 +781,6 @@ static void Show_New_Zone_Edge_While_Move_Mouse( WinEDA_DrawPanel* panel, wxDC* 
         {
             Trace_DrawSegmentPcb( panel, DC, edge, GR_XOR );
         }
-    }
-
-    /* Reinit layer (which can be changed) */
-    for( edge = pcbframe->m_Pcb->m_CurrentLimitZone; edge; edge = edge->Next() )
-    {
-        edge->SetLayer( pcbframe->GetScreen()->m_Active_Layer );
     }
 
     /* Redraw the curent edge in its new position */

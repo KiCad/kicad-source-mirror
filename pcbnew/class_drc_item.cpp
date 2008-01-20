@@ -70,7 +70,10 @@ wxString DRC_ITEM::GetErrorText() const
     case COPPERAREA_INSIDE_COPPERAREA:
         return wxString( _("Copper area inside copper area"));
     case COPPERAREA_CLOSE_TO_COPPERAREA:
-        return wxString( _("Copper areas intersect or too close"));
+        return wxString( _("Copper areas intersect or are too close"));
+	case DRCE_NON_EXISTANT_NET_FOR_ZONE_OUTLINE:
+        return wxString( _("Copper area has a non existent net name"));
+		
         
     default:
         return wxString( wxT("PROGRAM BUG, PLEASE LEAVE THE ROOM.") );
@@ -83,7 +86,7 @@ wxString DRC_ITEM::ShowCoord( const wxPoint& aPos )
     wxString temp;
     wxString ret;
 
-    ret << wxT("@(") << valeur_param( aPos.x, temp ); 
+    ret << wxT("@ (") << valeur_param( aPos.x, temp ); 
     ret << wxT(",")  << valeur_param( aPos.y, temp );
     ret << wxT(")");
 

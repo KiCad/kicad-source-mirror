@@ -57,6 +57,7 @@
 #define DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR 21  ///< micro via's layer pair incorrect (layers must be adjacent)
 #define COPPERAREA_INSIDE_COPPERAREA        22  ///< copper area outlines intersect
 #define COPPERAREA_CLOSE_TO_COPPERAREA      23  ///< copper area outlines are too close
+#define DRCE_NON_EXISTANT_NET_FOR_ZONE_OUTLINE  24  ///< copper area outline has an incorrect netcode due to a netname not found
 
 /**
  * Class DRC_ITEM
@@ -358,6 +359,21 @@ private:
 
     MARKER* fillMarker( D_PAD* aPad, D_PAD* bPad, int aErrorCode, MARKER* fillMe );
 
+	MARKER* fillMarker( ZONE_CONTAINER * aArea, int aErrorCode, MARKER* fillMe );
+
+    /**
+     * Function fillMarker
+     * optionally creates a marker and fills it in with information,
+     * but does not add it to the BOARD.  Use this to report any kind of
+     * DRC problem, or unconnected pad problem.
+     *
+     * @param aEdge edge zone to test
+     * @param aPos position of error
+     * @param aErrorCode  Type of error
+     * @param fillMe A MARKER* which is to be filled in, or NULL if one is to
+     *         first be allocated, then filled.
+     */
+	MARKER* fillMarker( const EDGE_ZONE * aEdge, const wxPoint & aPos, int aErrorCode, MARKER* fillMe );
 
     //-----<categorical group tests>-----------------------------------------
 
@@ -367,7 +383,7 @@ private:
 
     void    testUnconnected();
 
-    void    testZones();
+    void    testZones(bool adoTestFillSegments);
 
 
     //-----<single "item" tests>-----------------------------------------
@@ -394,6 +410,17 @@ private:
      */
     bool    doTrackDrc( TRACK* aRefSeg, TRACK* aStart );
 
+
+	/**
+	 * Function doEdgeZoneDrc
+	 * tests the current EDGE_ZONE segment:
+	 *      Test Edge inside other areas
+	 *      Test Edge too close other areas
+	 * @param aEdge The current segment to test.
+	 * @return bool - false if DRC error  or true if OK
+	 */
+
+	bool doEdgeZoneDrc( const EDGE_ZONE* aEdge );
 
     //-----<single tests>----------------------------------------------
 
@@ -467,6 +494,16 @@ public:
      */
     int Drc( TRACK* aRefSeg, TRACK* aList );
 
+	/**
+	 * Function Drc
+	 * tests the current EDGE_ZONE segment and returns the result and displays the error
+	 * in the status panel only if one exists.
+	 *      Test Edge inside other areas
+	 *      Test Edge too close other areas
+	 * @param aEdge The current segment to test.
+	 * @return int - BAD_DRC (1) if DRC error  or OK_DRC (0) if OK
+	 */
+	int Drc( const EDGE_ZONE*  aEdge );
 
     /**
      * Function DrcBlind

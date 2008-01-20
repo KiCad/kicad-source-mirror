@@ -810,8 +810,8 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
         if( GetCurItem() && (GetCurItem()->m_Flags & IS_NEW) )
         {
-            End_Zone( &dc );
-            SetCurItem( NULL );
+            if ( End_Zone( &dc ) )
+				SetCurItem( NULL );
         }
         break;
 
