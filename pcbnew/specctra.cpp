@@ -334,6 +334,7 @@ class PARSER : public ELEM
     bool        routes_include_guides;
     bool        routes_include_image_conductor;
     bool        via_rotate_first;
+    bool        generated_by_freeroute;
     
     std::string const_id1;
     std::string const_id2;
@@ -356,6 +357,7 @@ public:
         routes_include_guides = false;
         routes_include_image_conductor = false;
         via_rotate_first = true;
+        generated_by_freeroute = false;
         
         host_cad = "Kicad's PCBNEW";
         host_version = CONV_TO_UTF8(g_BuildVersion);
@@ -1890,6 +1892,10 @@ public:
 };
 
 
+/**
+ * Class PIN_REF
+ * corresponds to the &lt;pin_reference&gt; definition in the specctra dsn spec.
+ */
 class PIN_REF : public ELEM
 {
     friend class SPECCTRA_DB;
@@ -1906,11 +1912,14 @@ public:
     
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
-        out->Print( nestLevel, "\"%s\"-\"%s\"\n", 
-                component_id.c_str(), pin_id.c_str() );
+        // only print the newline if there is a nest level, and make
+        // the quotes unconditional on this one.
+        const char* newline = nestLevel ? "\n" : "";
+        out->Print( nestLevel, "\"%s\"-\"%s\"%s", 
+                component_id.c_str(), pin_id.c_str(), newline );
     }
 };
-
+typedef std::vector<PIN_REF>   PIN_REFS;
 
 
 class FROMTO : public ELEM
@@ -2023,7 +2032,6 @@ class NET : public ELEM
 
     DSN_T           pins_type;      ///< T_pins | T_order
     
-    typedef std::vector<PIN_REF>   PIN_REFS;
     PIN_REFS        pins;
 
     DSN_T           type;           ///< T_fix | T_normal
@@ -2661,18 +2669,110 @@ class ROUTE : public ELEM
 {
     friend class SPECCTRA_DB;
 
-    std::string     session_id;
-    std::string     base_design;
+    UNIT_RES*       resolution;
+    PARSER*         parser;
+    STRUCTURE*      structure;
+    LIBRARY*        library;
+    NETWORK*        network;
+//    TEST_POINTS*    test_points;    
 
 public:
     
     ROUTE( ELEM* aParent ) :
         ELEM( T_route, aParent )
     {
+        resolution = 0;
+        parser = 0;
+        structure = 0;
+        library = 0;
+        network = 0;
+    }
+    ~ROUTE()
+    {
+        delete resolution;
+        delete parser;
+        delete structure;
+        delete library;
+        delete network;
+//        delete test_points;
+    }
+    
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        if( resolution )
+            resolution->Format( out, nestLevel );
+        
+        if( parser )
+            parser->Format( out, nestLevel );
+        
+        if( structure )
+            structure->Format( out, nestLevel );
+        
+        if( library )
+            library->Format( out, nestLevel );
+        
+        if( network )
+            library->Format( out, nestLevel );
+        
+//        if( test_poinst )
+//            test_points->Format( out, nestLevel );
     }
 };
 
 
+/**
+ * Struct PIN_PAIR
+ * is used within the WAS_IS class below to hold a pair of PIN_REFs and
+ * corresponds to the (pins was is) construct within the specctra dsn spec.
+ */
+struct PIN_PAIR
+{
+    PIN_PAIR( ELEM* aParent = 0 ) :
+        was( aParent ),
+        is( aParent )
+    {
+    }
+    
+    PIN_REF     was;
+    PIN_REF     is;
+};
+typedef std::vector<PIN_PAIR>   PIN_PAIRS;
+
+
+/**
+ * Class WAS_IS
+ * corresponds to the &lt;was_is_descriptor&gt; in the specctra dsn spec.
+ */
+class WAS_IS : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+    PIN_PAIRS       pin_pairs;
+
+public:
+    WAS_IS( ELEM* aParent ) :
+        ELEM( T_was_is, aParent )
+    {
+    }
+    
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        for( PIN_PAIRS::iterator i=pin_pairs.begin();  i!=pin_pairs.end();  ++i )
+        {
+            out->Print( nestLevel, "(pins " );
+            i->was.Format( out, 0 );
+            out->Print( 0, " " );
+            i->is.Format( out, 0 );
+            out->Print( 0, ")\n" );
+        }
+    }
+};
+
+
+/**
+ * Class SESSION
+ * corresponds to the &lt;session_file_descriptor&gt; in the specctra dsn spec.
+ */
 class SESSION : public ELEM
 {
     friend class SPECCTRA_DB;
@@ -2683,12 +2783,12 @@ class SESSION : public ELEM
     HISTORY*        history;    
     STRUCTURE*      structure;
     PLACEMENT*      placement;
+    WAS_IS*         was_is;
     ROUTE*          route;
 
 /*  not supported:
     FLOOR_PLAN*         floor_plan;
     NET_PIN_CHANGES*    net_pin_changes;
-    WAS_IS*             was_is;
     SWAP_HISTORY*       swap_history;
 */
 
@@ -2700,6 +2800,7 @@ public:
         history = 0;
         structure = 0;
         placement = 0;
+        was_is = 0;
         route = 0;
     }
     ~SESSION()
@@ -2707,6 +2808,7 @@ public:
         delete history;
         delete structure;
         delete placement;
+        delete was_is;
         delete route;
     }
 
@@ -2726,6 +2828,9 @@ public:
         
         if( placement )
             placement->Format( out, nestLevel+1 );
+
+        if( was_is )
+            was_is->Format( out, nestLevel+1 );
         
         if( route )
             route->Format( out, nestLevel+1 );
@@ -2886,7 +2991,8 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     void doSESSION( SESSION* growth ) throw( IOError );
     void doANCESTOR( ANCESTOR* growth ) throw( IOError );
     void doHISTORY( HISTORY* growth ) throw( IOError );
-    void doROUTE( ROUTE* growth ) throw( IOError );    
+    void doROUTE( ROUTE* growth ) throw( IOError );
+    void doWAS_IS( WAS_IS* growth ) throw( IOError );    
     
 public:
 
@@ -3436,6 +3542,10 @@ void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IOError )
             if( tok!=T_on && tok!=T_off )
                 expecting( "on|off" );
             growth->via_rotate_first = (tok==T_on);
+            break;
+
+        case T_generated_by_freeroute:
+            growth->generated_by_freeroute = true;
             break;
             
         default:
@@ -5907,15 +6017,127 @@ void SPECCTRA_DB::doSESSION( SESSION* growth ) throw( IOError )
             growth->placement = new PLACEMENT( growth );
             doPLACEMENT( growth->placement );
             break;
+            
+        case T_was_is:
+            if( growth->was_is )
+                unexpected( tok );
+            growth->was_is = new WAS_IS( growth );
+            doWAS_IS( growth->was_is );
+            break;
 
-/*            
-        case T_route:
+        case T_routes:
             if( growth->route )
                 unexpected( tok );
             growth->route = new ROUTE( growth );
             doROUTE( growth->route );
             break;
-*/            
+            
+        default:
+            unexpected( lexer->CurText() );
+        }
+    }
+}
+
+
+void SPECCTRA_DB::doWAS_IS( WAS_IS* growth ) throw( IOError )
+{
+    DSN_T       tok;
+    PIN_PAIR    empty( growth );
+    PIN_PAIR*   pin_pair;
+
+    /*  <was_is_descriptor >::=
+        (was_is {(pins <pin_reference> <pin_reference> )})
+    */
+
+    // none of the pins is ok too
+    while( (tok = nextTok()) != T_RIGHT )
+    {
+                
+        if( tok != T_LEFT )
+            expecting( T_LEFT );
+        
+        tok = nextTok();
+        switch( tok )
+        {
+        case T_pins:
+            // copy the empty one, then fill its copy later thru pin_pair.                
+            growth->pin_pairs.push_back( empty );
+            pin_pair= &growth->pin_pairs.back();
+            
+            needSYMBOL();       // readCOMPnPIN() expects 1st token to have been read
+            readCOMPnPIN( &pin_pair->was.component_id, &pin_pair->was.pin_id );
+            
+            needSYMBOL();       // readCOMPnPIN() expects 1st token to have been read
+            readCOMPnPIN( &pin_pair->is.component_id, &pin_pair->is.pin_id );
+            
+            needRIGHT();
+            break;
+            
+        default:
+            unexpected( lexer->CurText() );
+        }
+    }
+}
+
+
+void SPECCTRA_DB::doROUTE( ROUTE* growth ) throw( IOError )
+{
+    DSN_T   tok;
+
+    /*  <route_descriptor >::=
+        (routes
+           <resolution_descriptor>
+           <parser_descriptor>
+           <structure_out_descriptor>
+           <library_out_descriptor>
+           <network_out_descriptor>
+           <test_points_descriptor>
+        )
+    */
+
+    while( (tok = nextTok()) != T_RIGHT )
+    {
+        if( tok != T_LEFT )
+            expecting( T_LEFT );
+        
+        tok = nextTok();
+        switch( tok )
+        {
+        case T_resolution:
+            if( growth->resolution )
+                unexpected( tok );
+            growth->resolution = new UNIT_RES( growth, tok );
+            doRESOLUTION( growth->resolution );
+            break;
+
+        case T_parser:
+            if( growth->parser )
+                unexpected( tok );
+            growth->parser = new PARSER( growth );
+            doPARSER( growth->parser );
+            break;
+
+        case T_structure:
+            if( growth->structure )
+                unexpected( tok );
+            growth->structure = new STRUCTURE( growth );
+            doSTRUCTURE( growth->structure );
+            break;
+
+        case T_library:
+            if( growth->library )
+                unexpected( tok );
+            growth->library = new LIBRARY( growth );
+            doLIBRARY( growth->library );
+            break;
+                    
+        case T_network:
+            if( growth->network )
+                unexpected( tok );
+            growth->network = new NETWORK( growth );
+            doNETWORK( growth->network );
+            break;
+
         default:
             unexpected( lexer->CurText() );
         }
