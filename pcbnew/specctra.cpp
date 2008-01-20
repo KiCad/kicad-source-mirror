@@ -37,7 +37,12 @@
     
     Then you can view the html documentation in the <kicadSourceRoot>/doxygen
     directory.  The main class in this file is SPECCTRA_DB and its main
-    functions are Load() and Export(). 
+    functions are LoadPCB(), LoadSESSION(), and ExportPCB().
+    
+    Wide use is made of boost::ptr_vector<> and std::vector<> template classes.
+    If the contained object is small, then std::vector tends to be used.
+    If the contained object is large, or variable size, then boost::ptr_vector
+    cannot be beat.
 */    
 
 
@@ -51,6 +56,8 @@
 #include "pcbstruct.h"
 #include "dsn.h"
 
+
+//#include <time.h>
 
 
 #define EDA_BASE            // build_version.h behavior
@@ -2488,8 +2495,8 @@ class PCB : public ELEM
     
 public:
     
-    PCB() :
-        ELEM( T_pcb )
+    PCB( ELEM* aParent = 0 ) :
+        ELEM( T_pcb, aParent )
     {
         parser = 0;
         resolution = 0;
@@ -2560,6 +2567,174 @@ public:
 };
 
 
+class ANCESTOR : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+    std::string     filename;    
+    std::string     comment;
+    time_t          time_stamp;
+
+    
+public:
+    ANCESTOR( ELEM* aParent ) :
+        ELEM( T_ancestor, aParent )
+    {
+        time_stamp = time(NULL);
+    }
+
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        char    temp[80];
+        struct  tm* tmp;
+        
+        tmp = localtime( &time_stamp );
+        strftime( temp, sizeof(temp), "%b %d %H : %M : %S %Y", tmp );
+        
+        // format the time first to temp
+        // filename may be empty, so quote it just in case.
+        out->Print( nestLevel, "(%s \"%s\" (created_time %s)\n", 
+                     LEXER::GetTokenText( Type() ),
+                     filename.c_str(),
+                     temp );
+        
+        if( comment.size() )
+        {
+            const char* quote = out->GetQuoteChar( comment.c_str() );
+            out->Print( nestLevel+1, "(comment %s%s%s)\n", 
+                       quote, comment.c_str(), quote );
+        }
+        
+        out->Print( nestLevel, ")\n" );
+    }
+};
+typedef boost::ptr_vector<ANCESTOR>     ANCESTORS;
+
+
+class HISTORY : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+    ANCESTORS       ancestors;
+    time_t          time_stamp;   
+    STRINGS         comments;
+    
+public:
+
+    HISTORY( ELEM* aParent ) :
+        ELEM( T_history, aParent )
+    {
+        time_stamp = time(NULL);
+    }
+    ~HISTORY()
+    {
+        ;
+    }
+    
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        for( ANCESTORS::iterator i=ancestors.begin();  i!=ancestors.end();  ++i )
+            i->Format( out, nestLevel );
+        
+        char    temp[80];
+        struct  tm* tmp;
+        
+        tmp = localtime( &time_stamp );
+        strftime( temp, sizeof(temp), "%b %d %H : %M : %S %Y", tmp );
+    
+        // format the time first to temp
+        out->Print( nestLevel, "(self (created_time %s)\n", temp );
+        
+        for( STRINGS::iterator i=comments.begin();  i!=comments.end();  ++i )
+        {
+            const char* quote = out->GetQuoteChar( i->c_str() );
+            out->Print( nestLevel+1, "(comment %s%s%s)\n", 
+                       quote, i->c_str(), quote );
+        }
+        
+        out->Print( nestLevel, ")\n" );
+    }
+};
+
+
+class ROUTE : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+    std::string     session_id;
+    std::string     base_design;
+
+public:
+    
+    ROUTE( ELEM* aParent ) :
+        ELEM( T_route, aParent )
+    {
+    }
+};
+
+
+class SESSION : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+    std::string     session_id;
+    std::string     base_design;
+    
+    HISTORY*        history;    
+    STRUCTURE*      structure;
+    PLACEMENT*      placement;
+    ROUTE*          route;
+
+/*  not supported:
+    FLOOR_PLAN*         floor_plan;
+    NET_PIN_CHANGES*    net_pin_changes;
+    WAS_IS*             was_is;
+    SWAP_HISTORY*       swap_history;
+*/
+
+public:
+    
+    SESSION( ELEM* aParent = 0 ) :
+        ELEM( T_pcb, aParent )
+    {
+        history = 0;
+        structure = 0;
+        placement = 0;
+        route = 0;
+    }
+    ~SESSION()
+    {
+        delete history;
+        delete structure;
+        delete placement;
+        delete route;
+    }
+
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        const char* quote = out->GetQuoteChar( session_id.c_str() );
+        out->Print( nestLevel, "(%s %s%s%s\n", LEXER::GetTokenText( Type() ),
+                                quote, session_id.c_str(), quote );
+        
+        out->Print( nestLevel+1, "(base_design \"%s\")\n", base_design.c_str() );
+        
+        if( history )
+            history->Format( out, nestLevel+1 );
+        
+        if( structure )
+            structure->Format( out, nestLevel+1 );
+        
+        if( placement )
+            placement->Format( out, nestLevel+1 );
+        
+        if( route )
+            route->Format( out, nestLevel+1 );
+        
+        out->Print( nestLevel, ")\n" );
+    }
+};
+
+
 /**
  * Class SPECCTRA_DB
  * holds a DSN data tree, usually coming from a DSN file.
@@ -2568,7 +2743,9 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
 {
     LEXER*      lexer;
     
-    PCB*        tree;    
+    PCB*        pcb;
+
+    SESSION*    session;    
 
     FILE*       fp;
 
@@ -2633,6 +2810,24 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
      * or there is an error reading from the input stream.
      */
     void readCOMPnPIN( std::string* component_id, std::string* pid_id ) throw( IOError );
+
+
+    /**
+     * Function readTIME
+     * reads a &lt;time_stamp&gt; which consists of 8 lexer tokens:
+     * "month date hour : minute : second year".
+     * This function is specialized because time_stamps occur more than
+     * once in a session file.
+     * <p>
+     * The caller should not have already read in the first token comprizing the 
+     * time stamp.
+     *
+     * @param time_stamp Where to put the parsed time value.
+     * @throw IOError, if the next token or 8 do no make up a time stamp,
+     * or there is an error reading from the input stream.
+     */
+    void readTIME( time_t* time_stamp ) throw( IOError );
+
     
     /**
      * Function expecting
@@ -2687,14 +2882,19 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     void doCOMP_ORDER( COMP_ORDER* growth ) throw( IOError );
     void doWIRE( WIRE* growth ) throw( IOError );
     void doWIRE_VIA( WIRE_VIA* growth ) throw( IOError );
-    void doWIRING( WIRING* growth ) throw( IOError );    
+    void doWIRING( WIRING* growth ) throw( IOError );
+    void doSESSION( SESSION* growth ) throw( IOError );
+    void doANCESTOR( ANCESTOR* growth ) throw( IOError );
+    void doHISTORY( HISTORY* growth ) throw( IOError );
+    void doROUTE( ROUTE* growth ) throw( IOError );    
     
 public:
 
     SPECCTRA_DB()
     {
         lexer = 0;
-        tree  = 0;
+        pcb   = 0;
+        session = 0;
         fp    = 0;
         quote_char += '"';
     }
@@ -2702,7 +2902,8 @@ public:
     ~SPECCTRA_DB()
     {
         delete lexer;
-        delete tree;
+        delete pcb;
+        delete session;
         
         if( fp )
             fclose( fp );
@@ -2726,31 +2927,68 @@ public:
      * Function SetPCB
      * deletes any existing PCB and replaces it with the given one.
      */
-    void SetPCB( const PCB* aPcb )
+    void SetPCB( PCB* aPcb )
     {
-        delete tree;
-        tree = (PCB*) aPcb;
+        delete pcb;
+        pcb = aPcb;
     }
 
+    /**
+     * Function SetSESSION
+     * deletes any existing SESSION and replaces it with the given one.
+     */
+    void SetSESSION( SESSION* aSession )
+    {
+        delete session;
+        session = aSession;
+    }
+    
     
     /**
-     * Function Load
-     * is a recursive descent parser for a DSN file.
+     * Function LoadPCB
+     * is a recursive descent parser for a SPECCTRA DSN "design" file.
+     * A design file is nearly a full description of a PCB (seems to be 
+     * missing only the silkscreen stuff).
+     *
      * @param filename The name of the dsn file to load.
      * @throw IOError if there is a lexer or parser error. 
      */
-    void Load( const wxString& filename ) throw( IOError );
+    void LoadPCB( const wxString& filename ) throw( IOError );
 
+    
+    /**
+     * Function LoadSESSION
+     * is a recursive descent parser for a SPECCTRA DSN "session" file.
+     * A session file is file that is fed back from the router to the layout
+     * tool (PCBNEW) and should be used to update a BOARD object with the new
+     * tracks, vias, and component locations. 
+     *
+     * @param filename The name of the dsn file to load.
+     * @throw IOError if there is a lexer or parser error. 
+     */
+    void LoadSESSION( const wxString& filename ) throw( IOError );
+
+    
     void ThrowIOError( const wxChar* fmt, ... ) throw( IOError );
     
     
     /**
-     * Function Export
+     * Function ExportPCB
      * writes the given BOARD out as a SPECTRA DSN format file.
+     *
      * @param aFilename The file to save to.
      * @param aBoard The BOARD to save.
      */
-    void Export( wxString aFilename, BOARD* aBoard );
+    void ExportPCB( wxString aFilename, BOARD* aBoard );
+
+    
+    /**
+     * Function ExportSESSION
+     * writes the internal session out as a SPECTRA DSN format file.
+     *
+     * @param aFilename The file to save to.
+     */
+    void ExportSESSION( wxString aFilename );
 };
 
 
@@ -2869,7 +3107,74 @@ void SPECCTRA_DB::readCOMPnPIN( std::string* component_id, std::string* pin_id )
 }
 
 
-void SPECCTRA_DB::Load( const wxString& filename ) throw( IOError )
+void SPECCTRA_DB::readTIME( time_t* time_stamp ) throw( IOError )
+{
+    DSN_T tok;
+    
+    std::string     builder;
+    
+    static const char time_toks[] = "<month> <day> <hour> : <minute> : <second> <year>"; 
+
+    needSYMBOL();       // month
+    builder += lexer->CurText();
+    builder += ' ';
+    
+    tok = nextTok();    // day
+    if( tok != T_NUMBER )
+        expecting( time_toks );
+    builder += lexer->CurText();
+    builder += ' ';
+    
+    tok = nextTok();    // hour
+    if( tok != T_NUMBER )
+        expecting( time_toks );
+    builder += lexer->CurText();
+    builder += ' ';
+
+    // : colon    
+    needSYMBOL();
+    if( *lexer->CurText() != ':' || strlen( lexer->CurText() )!=1 )
+        expecting( time_toks );
+    builder += *lexer->CurText();
+    builder += ' ';
+
+    tok = nextTok();    // minute
+    if( tok != T_NUMBER )
+        expecting( time_toks );
+    builder += lexer->CurText();
+    builder += ' ';
+    
+    // : colon    
+    needSYMBOL();
+    if( *lexer->CurText() != ':' || strlen( lexer->CurText() )!=1 )
+        expecting( time_toks );
+    builder += *lexer->CurText();
+    builder += ' ';
+
+    tok = nextTok();    // second
+    if( tok != T_NUMBER )
+        expecting( time_toks );
+    builder += lexer->CurText();
+    builder += ' ';
+    
+    tok = nextTok();    // year
+    if( tok != T_NUMBER )
+        expecting( time_toks );
+    builder += lexer->CurText();
+
+    struct tm mytime;
+    
+    if( strptime( builder.c_str(), "%b %d %H : %M : %S %Y", &mytime ) 
+       != builder.c_str() + strlen(builder.c_str() ) )
+    {
+        expecting( time_toks );
+    }
+    
+    *time_stamp = mktime( &mytime ); 
+}
+
+
+void SPECCTRA_DB::LoadPCB( const wxString& filename ) throw( IOError )
 {
     wxFFile     file;
     
@@ -2895,7 +3200,37 @@ void SPECCTRA_DB::Load( const wxString& filename ) throw( IOError )
 
     SetPCB( new PCB() );
     
-    doPCB( tree );
+    doPCB( pcb );
+}
+
+
+void SPECCTRA_DB::LoadSESSION( const wxString& filename ) throw( IOError )
+{
+    wxFFile     file;
+    
+    FILE*       fp = wxFopen( filename, wxT("r") );
+    
+    if( !fp )
+    {
+        ThrowIOError( _("Unable to open file \"%s\""), filename.GetData() );  
+    }
+
+    file.Attach( fp );      // "exception safe" way to close the file.
+    
+    delete lexer;  
+    lexer = 0;
+    
+    lexer = new LEXER( file.fp(), filename );
+
+    if( nextTok() != T_LEFT )
+        expecting( T_LEFT );
+    
+    if( nextTok() != T_session )
+        expecting( T_session );
+
+    SetSESSION( new SESSION() );
+    
+    doSESSION( session );
 }
 
 
@@ -4340,16 +4675,15 @@ void SPECCTRA_DB::doCOMPONENT( COMPONENT* growth ) throw( IOError )
 
 void SPECCTRA_DB::doPLACEMENT( PLACEMENT* growth ) throw( IOError )
 {
-    DSN_T   tok = nextTok();
+    DSN_T   tok;
     
-    if( tok != T_LEFT )
-        expecting( T_LEFT );
+    needLEFT();
+    
     tok = nextTok();
-
     if( tok==T_unit || tok==T_resolution )
     {
         growth->unit = new UNIT_RES( growth, tok );
-        if( tok==T_unit )
+        if( tok==T_resolution )
             doRESOLUTION( growth->unit );
         else
             doUNIT( growth->unit );
@@ -5424,6 +5758,171 @@ void SPECCTRA_DB::doWIRING( WIRING* growth ) throw( IOError )
 }
 
 
+void SPECCTRA_DB::doANCESTOR( ANCESTOR* growth ) throw( IOError )
+{
+    DSN_T   tok;
+
+    /*  <ancestor_file_descriptor >::=
+          (ancestor <file_path_name> (created_time <time_stamp> )
+          [(comment <comment_string> )])
+    */
+    
+    needSYMBOL();
+    growth->filename = lexer->CurText();
+    
+    while( (tok = nextTok()) != T_RIGHT )
+    {
+        if( tok != T_LEFT )
+            expecting( T_LEFT );
+        
+        tok = nextTok();
+        switch( tok )
+        {
+        case T_created_time:
+            readTIME( &growth->time_stamp );
+            needRIGHT();
+            break;
+            
+        case T_comment:
+            needSYMBOL();
+            growth->comment = lexer->CurText();
+            needRIGHT();
+            break;
+            
+        default:
+            unexpected( lexer->CurText() );
+        }
+    }
+}
+
+
+void SPECCTRA_DB::doHISTORY( HISTORY* growth ) throw( IOError )
+{
+    DSN_T   tok;
+
+    /*  <history_descriptor >::=
+        (history [{<ancestor_file_descriptor> }] <self_descriptor> )
+    */
+    
+    while( (tok = nextTok()) != T_RIGHT )
+    {
+        if( tok != T_LEFT )
+            expecting( T_LEFT );
+        
+        tok = nextTok();
+        switch( tok )
+        {
+        case T_ancestor:
+            ANCESTOR* ancestor;
+            ancestor = new ANCESTOR( growth );
+            growth->ancestors.push_back( ancestor );
+            doANCESTOR( ancestor );
+            break;
+            
+        case T_self:
+            while( (tok = nextTok()) != T_RIGHT )
+            {
+                if( tok != T_LEFT )
+                    expecting( T_LEFT );
+
+                tok = nextTok();                
+                switch( tok )
+                {
+                case T_created_time:
+                    readTIME( &growth->time_stamp );
+                    needRIGHT();
+                    break;
+                
+                case T_comment:
+                    needSYMBOL();
+                    growth->comments.push_back( lexer->CurText() );
+                    needRIGHT();
+                    break;
+                    
+                default:
+                    unexpected( lexer->CurText() );
+                }
+            }
+            break;
+            
+        default:
+            unexpected( lexer->CurText() );
+        }
+    }
+}
+
+
+void SPECCTRA_DB::doSESSION( SESSION* growth ) throw( IOError )
+{
+    DSN_T   tok;
+
+    /*  <session_file_descriptor >::=
+        (session <session_id >
+          (base_design <path/filename >)
+          [<history_descriptor> ]
+          [<session_structure_descriptor> ]
+          [<placement_descriptor> ]
+          [<floor_plan_descriptor> ]
+          [<net_pin_changes_descriptor> ]
+          [<was_is_descriptor> ]
+          <swap_history_descriptor> ]
+          [<route_descriptor> ]
+        )
+    */
+    
+    needSYMBOL();
+    growth->session_id = lexer->CurText();
+
+    while( (tok = nextTok()) != T_RIGHT )
+    {
+        if( tok != T_LEFT )
+            expecting( T_LEFT );
+        
+        tok = nextTok();
+        switch( tok )
+        {
+        case T_base_design:
+            needSYMBOL();
+            growth->base_design = lexer->CurText();
+            needRIGHT();
+            break;
+            
+        case T_history:
+            if( growth->history )
+                unexpected( tok );
+            growth->history = new HISTORY( growth );
+            doHISTORY( growth->history );
+            break;
+            
+        case T_structure:
+            if( growth->structure )
+                unexpected( tok );
+            growth->structure = new STRUCTURE( growth );
+            doSTRUCTURE( growth->structure );
+            break;
+            
+        case T_placement:
+            if( growth->placement )
+                unexpected( tok );
+            growth->placement = new PLACEMENT( growth );
+            doPLACEMENT( growth->placement );
+            break;
+
+/*            
+        case T_route:
+            if( growth->route )
+                unexpected( tok );
+            growth->route = new ROUTE( growth );
+            doROUTE( growth->route );
+            break;
+*/            
+        default:
+            unexpected( lexer->CurText() );
+        }
+    }
+}
+
+
 int SPECCTRA_DB::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
 {
     va_list     args;
@@ -5481,7 +5980,26 @@ const char* SPECCTRA_DB::GetQuoteChar( const char* wrapee )
 }
 
 
-void SPECCTRA_DB::Export( wxString filename, BOARD* aBoard )
+void SPECCTRA_DB::ExportPCB( wxString filename, BOARD* aBoard )
+{
+    fp = wxFopen( filename, wxT("w") );
+    
+    if( !fp )
+    {
+        ThrowIOError( _("Unable to open file \"%s\""), filename.GetData() );  
+    }
+    
+    // copy the BOARD to an empty PCB here.
+
+    if( pcb )
+        pcb->Format( this, 0 );
+
+    fclose( fp );
+    fp = 0;
+}
+
+
+void SPECCTRA_DB::ExportSESSION( wxString filename )
 {
     fp = wxFopen( filename, wxT("w") );
     
@@ -5490,7 +6008,11 @@ void SPECCTRA_DB::Export( wxString filename, BOARD* aBoard )
         ThrowIOError( _("Unable to open file \"%s\""), filename.GetData() );  
     }
 
-    tree->Format( this, 0 );    
+    if( session )
+        session->Format( this, 0 );    
+    
+    fclose( fp );
+    fp = 0;
 }
 
 
@@ -5678,15 +6200,17 @@ using namespace DSN;
 
 int main( int argc, char** argv )
 {
-    wxString    filename( wxT("/tmp/fpcroute/Sample_1sided/demo_1sided.dsn") );
+//    wxString    filename( wxT("/tmp/fpcroute/Sample_1sided/demo_1sided.dsn") );
 //    wxString    filename( wxT("/tmp/testdesigns/test.dsn") );
+    wxString    filename( wxT("/tmp/testdesigns/test.ses") );
 
     SPECCTRA_DB     db;
     bool            failed = false;
     
     try 
     {
-        db.Load( filename );
+//        db.LoadPCB( filename );
+        db.LoadSESSION( filename );
     } 
     catch( IOError ioe )
     {
@@ -5701,7 +6225,9 @@ int main( int argc, char** argv )
     
 
     // export what we read in, making this test program basically a beautifier
-    db.Export( wxT("/tmp/export.dsn"), 0 );
+    db.ExportSESSION( wxT("/tmp/export.ses") );
+//    db.ExportPCB( wxT("/tmp/export.dsn"), 0 ); 
+    
 }
 
 

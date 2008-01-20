@@ -503,7 +503,7 @@ LEXER::LEXER( FILE* aFile, const wxString& aFilename ) :
     stringDelimiter = '"';
     filename = aFilename;
 
-    space_in_quoted_tokens = false;
+    space_in_quoted_tokens = true;
     
     // "start" should never change until we change the reader.  The DSN
     // format spec supports an include file mechanism but we can add that later
