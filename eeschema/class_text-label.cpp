@@ -22,8 +22,8 @@
 
 /**************************************************************************/
 DrawTextStruct::DrawTextStruct( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
-    EDA_BaseStruct( aType ), 
-    EDA_TextStruct( text )
+    EDA_BaseStruct( aType )
+    , EDA_TextStruct( text )
 /**************************************************************************/
 {
     m_Layer      = LAYER_NOTES;
@@ -38,16 +38,18 @@ DrawTextStruct* DrawTextStruct::GenCopy()
 /*********************************************/
 {
     DrawTextStruct* newitem;
-    
+
     switch( Type() )
     {
     default:
-	case DRAW_TEXT_STRUCT_TYPE:
+    case DRAW_TEXT_STRUCT_TYPE:
         newitem = new DrawTextStruct( m_Pos, m_Text );
         break;
+
     case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
         newitem = new DrawGlobalLabelStruct( m_Pos, m_Text );
         break;
+
     case DRAW_LABEL_STRUCT_TYPE:
         newitem = new DrawLabelStruct( m_Pos, m_Text );
         break;
@@ -93,13 +95,13 @@ void DrawTextStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
     {
         /* restore old values and save new ones */
         SwapData( (DrawTextStruct*) g_ItemToUndoCopy );
-        
+
         /* save in undo list */
         ( (WinEDA_SchematicFrame*) frame )->SaveCopyInUndoList( this, IS_CHANGED );
-        
+
         /* restore new values */
         SwapData( (DrawTextStruct*) g_ItemToUndoCopy );
-        
+
         delete g_ItemToUndoCopy;
         g_ItemToUndoCopy = NULL;
     }
@@ -131,8 +133,9 @@ DrawGlobalLabelStruct::DrawGlobalLabelStruct( const wxPoint& pos, const wxString
 
 /*******************************************************************************************/
 void DrawTextStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                                 int DrawMode, int Color )
+                           int DrawMode, int Color )
 /*******************************************************************************************/
+
 /* Texts type Comment (text on layer "NOTE") have 4 directions, and the Text origin is the first letter
  */
 {
@@ -147,33 +150,39 @@ void DrawTextStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& off
 
     switch( m_Orient )
     {
-    case 0:         /* Orientation horiz normale */
+    case 0: /* Horiz Normal Orientation (left justified) */
         DrawGraphicText( panel, DC,
                          wxPoint( m_Pos.x + offset.x, m_Pos.y - TXTMARGE + offset.y ),
-                         color,
-                         m_Text, m_Orient * 900, m_Size,
-                         GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM, width );
+                         color, m_Text, TEXT_ORIENT_HORIZ, m_Size,
+                         GR_TEXT_HJUSTIFY_LEFT,
+                         GR_TEXT_VJUSTIFY_BOTTOM, width );
         break;
 
-    case 1:         /* Orientation vert UP */
+    case 1: /* Vert Orientation UP */
         DrawGraphicText( panel, DC,
-                         wxPoint( m_Pos.x - TXTMARGE + offset.x, m_Pos.y + offset.y ), color,
-                         m_Text, m_Orient * 900, m_Size,
-                         GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_BOTTOM, width );
+                         wxPoint( m_Pos.x - TXTMARGE + offset.x,
+                                  m_Pos.y + offset.y ),
+                         color, m_Text, TEXT_ORIENT_VERT, m_Size,
+                         GR_TEXT_HJUSTIFY_RIGHT,
+                         GR_TEXT_VJUSTIFY_BOTTOM, width );
         break;
 
-    case 2:         /* Orientation horiz inverse */
+    case 2: /* Horiz Orientation - Right justified */
         DrawGraphicText( panel, DC,
-                         wxPoint( m_Pos.x + offset.x, m_Pos.y + TXTMARGE + offset.y ), color,
-                         m_Text, m_Orient * 900, m_Size,
-                         GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_TOP, width );
+                         wxPoint( m_Pos.x + offset.x, m_Pos.y -
+                                  TXTMARGE + offset.y ),
+                         color, m_Text, TEXT_ORIENT_HORIZ, m_Size,
+                         GR_TEXT_HJUSTIFY_RIGHT,
+                         GR_TEXT_VJUSTIFY_BOTTOM, width );
         break;
 
-    case 3:         /* Orientation vert BOTTOM */
+    case 3: /*  Vert Orientation BOTTOM */
         DrawGraphicText( panel, DC,
-                         wxPoint( m_Pos.x + TXTMARGE + offset.y, m_Pos.y + offset.y ), color,
-                         m_Text, m_Orient * 900, m_Size,
-                         GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, width );
+                         wxPoint( m_Pos.x - TXTMARGE + offset.x,
+                                  m_Pos.y + offset.y ),
+                         color, m_Text, TEXT_ORIENT_VERT, m_Size,
+                         GR_TEXT_HJUSTIFY_RIGHT,
+                         GR_TEXT_VJUSTIFY_TOP, width );
         break;
     }
 
@@ -184,7 +193,7 @@ void DrawTextStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& off
 
 /*********************************************************************************************/
 void DrawLabelStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                                  int DrawMode, int Color )
+                            int DrawMode, int Color )
 /*********************************************************************************************/
 {
     DrawTextStruct::Draw( panel, DC, offset, DrawMode, Color );
@@ -193,7 +202,7 @@ void DrawLabelStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& of
 
 /*******************************************************************************************/
 void DrawGlobalLabelStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                                        int DrawMode, int Color )
+                                  int DrawMode, int Color )
 /******************************************************************************************/
 
 /* Texts type Global Label  have 4 directions, and the Text origin is the graphic icon

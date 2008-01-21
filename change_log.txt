@@ -6,6 +6,12 @@ email address.
 
 2008-Jan-20 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
++eeschema:
+	labels and texts display changed when rotated 180 degres:
+	horizontal text are now right justified insteed of 180 degree rotated, and are readable.
+
+2008-Jan-20 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
 +pcbnew:
 	On line DRC when creating a zone outline.
 	Needs more work to display errors DRC.
