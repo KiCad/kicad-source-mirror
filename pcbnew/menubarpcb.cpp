@@ -100,7 +100,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
 		wxMenu * submenuexport = new wxMenu();
 
 		item = new wxMenuItem(submenuexport, ID_GEN_EXPORT_SPECCTRA,
-			_("&Specctra DSN"), _("Export board to a \"Specctra DSN\" file") );
+			_("&Specctra DSN"), _("Export the current board to a \"Specctra DSN\" file") );
 	    item->SetBitmap(export_xpm);
 		submenuexport->Append(item);
         
