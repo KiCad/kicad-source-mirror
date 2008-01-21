@@ -356,6 +356,7 @@ void WinEDA_PadPropertiesFrame::PadPropertiesAccept( wxCommandEvent& event )
 {
     long PadLayerMask;
     bool error = FALSE;
+	bool RastnestIsChanged = false;
 
     if( m_DC )
         m_Parent->DrawPanel->CursorOff( m_DC );
@@ -445,7 +446,11 @@ void WinEDA_PadPropertiesFrame::PadPropertiesAccept( wxCommandEvent& event )
             CurrentPad->Draw( m_Parent->DrawPanel, m_DC, wxPoint( 0, 0 ), GR_XOR );
         CurrentPad->m_PadShape = g_Pad_Master.m_PadShape;
         CurrentPad->m_Attribut = g_Pad_Master.m_Attribut;
-        CurrentPad->m_Pos = g_Pad_Master.m_Pos;
+		if (CurrentPad->m_Pos != g_Pad_Master.m_Pos )
+		{
+			CurrentPad->m_Pos = g_Pad_Master.m_Pos;
+			RastnestIsChanged = true;
+		}
 
         /* compute the pos 0 value, i.e. pad position for module orient = 0 i.e.
          *  refer to module origin (module position) */
@@ -460,11 +465,30 @@ void WinEDA_PadPropertiesFrame::PadPropertiesAccept( wxCommandEvent& event )
         CurrentPad->m_Drill        = g_Pad_Master.m_Drill;
         CurrentPad->m_DrillShape   = g_Pad_Master.m_DrillShape;
         CurrentPad->m_Offset       = g_Pad_Master.m_Offset;
-        CurrentPad->m_Masque_Layer = g_Pad_Master.m_Masque_Layer;
+        if ( CurrentPad->m_Masque_Layer != g_Pad_Master.m_Masque_Layer )
+		{
+			RastnestIsChanged = true;
+			CurrentPad->m_Masque_Layer = g_Pad_Master.m_Masque_Layer;
+		}
         CurrentPad->SetPadName( g_Current_PadName );
-        CurrentPad->m_Netname = Current_PadNetName;
-        if( Current_PadNetName.IsEmpty() )
-            CurrentPad->SetNet( 0 );
+		
+        if ( CurrentPad->m_Netname != Current_PadNetName )
+		{
+			if( Current_PadNetName.IsEmpty() )
+				CurrentPad->SetNet( 0 );
+			else
+			{
+				const EQUIPOT* net = m_Parent->m_Pcb->FindNet( Current_PadNetName );
+				if ( net )
+				{
+					RastnestIsChanged = true;
+					CurrentPad->m_Netname = Current_PadNetName;
+					CurrentPad->SetNet(net->GetNet());
+				}
+				else
+					DisplayError(this, _("Unknown netname, no change"));
+			}
+		}
 
         switch( CurrentPad->m_PadShape )
         {
@@ -514,4 +538,8 @@ void WinEDA_PadPropertiesFrame::PadPropertiesAccept( wxCommandEvent& event )
 
     if( m_DC )
         m_Parent->DrawPanel->CursorOn( m_DC );
+	if ( RastnestIsChanged )	// The net ratsnest must be recalculated
+        m_Parent->m_Pcb->m_Status_Pcb = 0;
+
+		
 }

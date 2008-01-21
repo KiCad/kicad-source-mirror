@@ -9,6 +9,9 @@ email address.
 +eeschema:
 	labels and texts display changed when rotated 180 degres:
 	horizontal text are now right justified insteed of 180 degree rotated, and are readable.
+	
++pcbnew:
+	bug 1874663 solved (edit a pad netname does not work very well)
 
 2008-Jan-20 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
