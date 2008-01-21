@@ -242,6 +242,7 @@ const static KEYWORD tokens[] = {
     TOKDEF(negative_diagonal),
     TOKDEF(net),
     TOKDEF(net_number),
+    TOKDEF(net_out),
     TOKDEF(net_pin_changes),
     TOKDEF(nets),
     TOKDEF(network),
@@ -673,52 +674,62 @@ L_read:
             }
             
             curTok = T_QUOTE_DEF;
+            goto exit;
         }
         
-        else if( *cur == '(' )
+        if( *cur == '(' )
         {
             curText.clear();
             curText += *cur;
             
             curTok = T_LEFT;
             head = cur+1;
+            goto exit;
         }
         
-        else if( *cur == ')' )
+        if( *cur == ')' )
         {
             curText.clear();
             curText += *cur;
             
             curTok = T_RIGHT;
             head = cur+1;
+            goto exit;
         }
 
         /*  get the dash out of a <pin_reference> which is embedded for example
             like:  U2-14 or "U2"-"14"
             This is detectable by a non-space immediately preceeding the dash.
         */
-        else if( *cur == '-' && cur>start && !isspace( cur[-1] ) )
+        if( *cur == '-' && cur>start && !isspace( cur[-1] ) )
         {
             head = cur+1;
             curText.clear();
             curText += '-';
             curTok = T_DASH;
+            goto exit;
         }
         
         // handle T_NUMBER                
-        else if( strchr( "+-.0123456789", *cur ) )
+        if( strchr( "+-.0123456789", *cur ) )
         {
             head = cur+1;
             while( head<limit && strchr( ".0123456789", *head )  )
                 ++head;
 
-            curText.clear();
-            curText.append( cur, head );
-            curTok = T_NUMBER;
+            if( (head<limit && isspace(*head)) || *head==')' || *head=='(' || head==limit )
+            {
+                curText.clear();
+                curText.append( cur, head );
+                curTok = T_NUMBER;
+                goto exit;
+            }
+            
+            // else it was something like +5V, reset head back
         }
         
         // a quoted string
-        else if( *cur == stringDelimiter )
+        if( *cur == stringDelimiter )
         {
             ++cur;  // skip over the leading delimiter: ",', or $
 
@@ -738,12 +749,12 @@ L_read:
             
             ++head;     // skip over the trailing delimiter
             
-            curTok  = T_STRING;                    
+            curTok  = T_STRING;
+            goto exit;
         }
     
         // a token we hope to find in the tokens[] array.  If not, then
         // call it a T_SYMBOL.
-        else
         {
             head = cur+1;
             while( head<limit && !isspace( *head ) && *head!=')' && *head!='(' )
@@ -757,16 +768,8 @@ L_read:
             if( found != -1 )
                 curTok = (DSN_T) found;
             
-            else    // unrecogized token
-            {
-                curTok = T_SYMBOL;  
-                
-                /*
-                wxString    errTxt( CONV_FROM_UTF8( curText.c_str() ) );
-                errTxt << wxT(" ") << _("is an unrecognized token");
-                ThrowIOError( errTxt, cur-start+1 );
-                */
-            }
+            else                    // unrecogized token, call it a symbol
+                curTok = T_SYMBOL;
         }
     }
 
@@ -775,6 +778,8 @@ exit:                   // single point of exit
     curOffset = cur - start;
     
     next = head;
+
+    // printf("tok:\"%s\"\n", curText.c_str() );
     
     return curTok;
 }

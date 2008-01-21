@@ -242,6 +242,7 @@ enum DSN_T {
     T_negative_diagonal,
     T_net,
     T_net_number,
+    T_net_out,
     T_net_pin_changes,
     T_nets,
     T_network,
