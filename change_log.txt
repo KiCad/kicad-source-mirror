@@ -4,40 +4,56 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+
+2008-Jan-21 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew:
+    Added specctra_export.cpp, specctra.cpp, specctra.h, dsn.cpp, and dsn.h to
+    pcbnew's link requirements. Updated CMakeLists.txt to reflect this. This
+    increased pcbnew's size by 175kb so far. Started the actual export (i.e.
+    BOARD to DSN::PCB copying logic) which is going into specctra_export.cpp's
+    void WinEDA_PcbFrame::ExportToSPECCTRA( wxCommandEvent& event ) so that the
+    huge header file, specctra.h need only be included in one or two *.cpp
+    files. The specctra export menu support was added to id.h, wxPcbStruct.h,
+    menubarpcb.cpp, and pcbframe.cpp. After dsn export, I intend to add an
+    import, and a session file feedback merge. See the revised
+    how-to-build-kicad.txt for the new boost c++ libraries requirement.
+    
+    
 2008-Jan-21 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +eeschema:
-	labels and texts display changed when rotated 180 degres:
-	horizontal text are now right justified insteed of 180 degree rotated, and are readable.
-	
+    labels and texts display changed when rotated 180 degres:
+    horizontal text are now right justified insteed of 180 degree rotated, and are readable.
+    
 +pcbnew:
-	bug 1874663 solved (edit a pad netname does not work very well)
+    bug 1874663 solved (edit a pad netname does not work very well)
 
 2008-Jan-20 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:
-	On line DRC when creating a zone outline.
-	Needs more work to display errors DRC.
+    On line DRC when creating a zone outline.
+    Needs more work to display errors DRC.
 
 
 2008-Jan-18 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +all:
-	filtering small mouse moves ( < 5 pixels) when clicking.
-	Starting a wire or a track is now more easily because these small moves do not start a block commnad.
-	
+    filtering small mouse moves ( < 5 pixels) when clicking.
+    Starting a wire or a track is now more easily because these small moves do not start a block commnad.
+    
 +pcbnew:
-	rework of drill filles creation (excellon and reports)
-	needed to have a clean implantation of buried vias and mainly microvia
-	which involve a more complex drill files generation
-	This is better to continue work on zones because :
-	hight density boards = use of BGA = microvias + good zones handling
-	When a board has buried or blind vias (microvia are blind vias),
-	pcbnew creates a drill file per layer pair. for a 4 layer board:
-	drill file for layer1 to layer 2
-	drill file for layer2 to layer 3
-	drill file for layer3 to layer 4
-
+    rework of drill filles creation (excellon and reports)
+    needed to have a clean implantation of buried vias and mainly microvia
+    which involve a more complex drill files generation
+    This is better to continue work on zones because :
+    hight density boards = use of BGA = microvias + good zones handling
+    When a board has buried or blind vias (microvia are blind vias),
+    pcbnew creates a drill file per layer pair. for a 4 layer board:
+    drill file for layer1 to layer 2
+    drill file for layer2 to layer 3
+    drill file for layer3 to layer 4
 
 
 2008-Jan-18 UPDATE   Dick Hollenbeck <dick@softplc.com>

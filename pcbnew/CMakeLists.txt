@@ -61,7 +61,7 @@ SET(PCBNEW_SRCS
 #   docedit.cpp <-- not used
     dragsegm.cpp
     drc.cpp
-#   dsn.cpp
+    dsn.cpp
     edgemod.cpp
     edit.cpp
     editedge.cpp
@@ -121,7 +121,8 @@ SET(PCBNEW_SRCS
     set_color.cpp
     set_grid.cpp
     solve.cpp
-#   specctra.cpp
+    specctra.cpp
+    specctra_export.cpp
     surbrill.cpp
     swap_layers.cpp
     tool_modedit.cpp

@@ -1,6 +1,3 @@
-#ifndef SPECCTRA_H_
-#define SPECCTRA_H_
-
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
@@ -25,8 +22,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#ifndef SPECCTRA_H_
+#define SPECCTRA_H_
+
  
-/*  This source file implements export and import capabilities to the 
+//  see http://www.boost.org/libs/ptr_container/doc/ptr_sequence_adapter.html
+#include <boost/ptr_container/ptr_vector.hpp>
+
+#include "fctsys.h"
+#include "dsn.h"
+
+
+
+/**
+    This source file implements export and import capabilities to the 
     specctra dsn file format.  The grammar for that file format is documented
     fairly well.  There are classes for each major type of descriptor in the
     spec.
@@ -47,21 +56,9 @@
     an assignment operator() or copy constructore, then boost::ptr_vector
     cannot be beat.
 */    
-
-
-#include <boost/ptr_container/ptr_vector.hpp>
-
-#include "fctsys.h"
-#include "pcbstruct.h"
-#include "dsn.h"
-
-
-
 namespace DSN {
-
     
 class SPECCTRA_DB;
-class PCB;
 
 
 /**
@@ -579,9 +576,6 @@ public:
         out->Print( nestLevel, ")\n" ); 
     }
 };
-
-
-///  see http://www.boost.org/libs/ptr_container/doc/ptr_sequence_adapter.html
 typedef boost::ptr_vector<PATH> PATHS;
 
 
@@ -3163,17 +3157,28 @@ public:
     
     /**
      * Function ExportPCB
-     * writes the given BOARD out as a SPECTRA DSN format file.
+     * writes the internal PCB instance out as a SPECTRA DSN format file.
      *
      * @param aFilename The file to save to.
-     * @param aBoard The BOARD to save.
+     * @throw IOError, if an i/o error occurs saving the file.
      */
-    void ExportPCB( wxString aFilename, BOARD* aBoard );
+    void ExportPCB( wxString aFilename ) throw( IOError );
 
     
     /**
+     * Function FromBOARD
+     * adds the entire BOARD to the PCB but does not write it out.
+     *
+     * @param aBoard The BOARD to convert to a PCB.
+     * @throw IOError, if the BOARD cannot be converted, and the text of the
+     *   exception tells the error message.
+     */
+    void FromBOARD( BOARD* aBoard ) throw( IOError );
+    
+    
+    /**
      * Function ExportSESSION
-     * writes the internal session out as a SPECTRA DSN format file.
+     * writes the internal SESSION instance out as a SPECTRA DSN format file.
      *
      * @param aFilename The file to save to.
      */

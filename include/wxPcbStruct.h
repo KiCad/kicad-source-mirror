@@ -387,6 +387,14 @@ public:
     bool                RecreateCmpFileFromBoard();
 
     void                ExportToGenCAD( wxCommandEvent& event );
+    
+    /**
+     * Function ExporttoSPECCTRA
+     * will export the current BOARD to a specctra dsn file.  See
+     * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
+     * specification.
+     */
+    void                ExportToSPECCTRA( wxCommandEvent& event );
 
     /* Fonctions specifiques */
     MODULE*             ListAndSelectModuleName();

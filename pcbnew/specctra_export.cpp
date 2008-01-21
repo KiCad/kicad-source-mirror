@@ -34,18 +34,37 @@
 
 #include "specctra.h"
 
+using namespace DSN;
+
 
 // see wxPcbStruct.h
 void WinEDA_PcbFrame::ExportToSPECCTRA( wxCommandEvent& event )
 {
-    
-}
+    SPECCTRA_DB     db;
 
+    db.SetPCB( SPECCTRA_DB::MakePCB() );
+    
+    try 
+    {    
+        db.FromBOARD( m_Pcb );
+//        db.Export(  filename );
+    } 
+    catch ( IOError ioe )
+    {
+        
+    }
+}
 
 
 
 namespace DSN {
 
+
+void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
+{
+
+    
+}
     
     
 }       // namespace DSN

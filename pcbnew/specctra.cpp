@@ -55,9 +55,15 @@
 #include <wx/ffile.h>
 
 
-#define EDA_BASE            // build_version.h behavior
-#undef  COMMON_GLOBL
-#define COMMON_GLOBL        // build_version.h behavior
+#define STANDALONE      0   // set to 1 for "stand alone, i.e. unit testing"
+                            // set to 0 for component of pcbnew 
+
+
+#if STANDALONE
+ #define EDA_BASE           // build_version.h behavior
+ #undef  COMMON_GLOBL
+ #define COMMON_GLOBL       // build_version.h behavior
+#endif
 #include "build_version.h"
 
 
@@ -3320,7 +3326,7 @@ const char* SPECCTRA_DB::GetQuoteChar( const char* wrapee )
 }
 
 
-void SPECCTRA_DB::ExportPCB( wxString filename, BOARD* aBoard )
+void SPECCTRA_DB::ExportPCB( wxString filename ) throw( IOError )
 {
     fp = wxFopen( filename, wxT("w") );
     
@@ -3329,8 +3335,6 @@ void SPECCTRA_DB::ExportPCB( wxString filename, BOARD* aBoard )
         ThrowIOError( _("Unable to open file \"%s\""), filename.GetData() );  
     }
     
-    // copy the BOARD to an empty PCB here.
-
     if( pcb )
         pcb->Format( this, 0 );
 
@@ -3361,6 +3365,18 @@ PCB* SPECCTRA_DB::MakePCB()
     PCB*    pcb = new PCB();
     
     pcb->parser = new PARSER( pcb );
+    pcb->resolution = new UNIT_RES( pcb, T_resolution );
+    pcb->unit = new UNIT_RES( pcb, T_unit );
+    
+    pcb->structure = new STRUCTURE( pcb );
+    
+    pcb->placement = new PLACEMENT( pcb );
+    
+    pcb->library = new LIBRARY( pcb );
+    
+    pcb->network = new NETWORK( pcb );
+    
+    pcb->wiring = new WIRING( pcb );
 
     return pcb;
 }
@@ -3556,7 +3572,7 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
 
 // unit test this source file
 
-#if 1
+#if STANDALONE
 
 using namespace DSN;
 
@@ -3589,7 +3605,7 @@ int main( int argc, char** argv )
 
     // export what we read in, making this test program basically a beautifier
     db.ExportSESSION( wxT("/tmp/export.ses") );
-//    db.ExportPCB( wxT("/tmp/export.dsn"), 0 ); 
+//    db.ExportPCB( wxT("/tmp/export.dsn") ); 
     
 }
 

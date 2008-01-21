@@ -27,8 +27,8 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
 /* Cree ou reinitialise le menu du haut d'ecran
 */
 {
-int ii;
-wxMenuBar * menuBar = GetMenuBar();
+    int ii;
+    wxMenuBar * menuBar = GetMenuBar();
 
 	if( menuBar == NULL )
 	{
@@ -98,10 +98,17 @@ wxMenuBar * menuBar = GetMenuBar();
 		// Add Export menu
 		m_FilesMenu->AppendSeparator();
 		wxMenu * submenuexport = new wxMenu();
+
+		item = new wxMenuItem(submenuexport, ID_GEN_EXPORT_SPECCTRA,
+			_("&Specctra DSN"), _("Export board to a \"Specctra DSN\" file") );
+	    item->SetBitmap(export_xpm);
+		submenuexport->Append(item);
+        
 		item = new wxMenuItem(submenuexport, ID_GEN_EXPORT_FILE_GENCADFORMAT,
 			_("&GenCAD"), _("Export GenCAD Format") );
 	    item->SetBitmap(export_xpm);
 		submenuexport->Append(item);
+        
 		item = new wxMenuItem(submenuexport, ID_GEN_EXPORT_FILE_MODULE_REPORT,
 			_("&Module report"), _("Create a pcb report (footprint report)") );
 	    item->SetBitmap(tools_xpm);
