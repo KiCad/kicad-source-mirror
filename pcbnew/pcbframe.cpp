@@ -56,6 +56,7 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_MENU_RANGE( ID_LOAD_FILE_1, ID_LOAD_FILE_10,
                     WinEDA_PcbFrame::Files_io )
     
+    EVT_MENU( ID_GEN_EXPORT_SPECCTRA, WinEDA_PcbFrame::ExportToSPECCTRA )
     EVT_MENU( ID_GEN_EXPORT_FILE_GENCADFORMAT, WinEDA_PcbFrame::ExportToGenCAD )
     EVT_MENU( ID_GEN_EXPORT_FILE_MODULE_REPORT, WinEDA_PcbFrame::GenModuleReport )
     
