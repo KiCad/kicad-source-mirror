@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
+ * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2004-2007 Kicad Developers, see change_log.txt for contributors.
  * 
  * This program is free software; you can redistribute it and/or
@@ -26,7 +26,6 @@
 #define COLLECTOR_H
 
 #include <vector>
-//#include <cstdlib>          // abs()
 
 #include "fctsys.h"
 #include "base_struct.h"    // SEARCH_RESULT
@@ -116,7 +115,7 @@ public:
      */
     void Remove( int ndx )
     {
-        m_List.erase( m_List.begin() + (unsigned) ndx );
+        m_List.erase( m_List.begin() + ndx );
     }
 
     /**
