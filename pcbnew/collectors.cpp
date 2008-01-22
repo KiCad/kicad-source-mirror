@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
+ * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2004-2007 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -364,5 +364,25 @@ void GENERAL_COLLECTOR::Collect( BOARD_ITEM* aItem, const KICAD_T aScanList[],
     Empty2nd();
 }
 
+
+// see collectors.h
+SEARCH_RESULT TYPE_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* testData )
+{
+    // The Vist() function only visits the testItem if its type was in the 
+    // the scanList, so therefore we can collect anything given to us here.
+    Append( testItem );
+    
+    return SEARCH_CONTINUE;     // always when collecting
+}
+
+void TYPE_COLLECTOR::Collect( BOARD_ITEM* aBoard, const KICAD_T aScanList[] )
+{
+    Empty();        // empty any existing collection
+    
+    // visit the board with the INSPECTOR (me).
+    aBoard->Visit(      this,       // INSPECTOR* inspector
+                        NULL,       // const void* testData, 
+                        aScanList );
+}
 
 //EOF

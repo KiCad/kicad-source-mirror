@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
+ * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2004-2007 Kicad Developers, see change_log.txt for contributors.
  * 
  * This program is free software; you can redistribute it and/or
@@ -499,5 +499,56 @@ public:
     bool IgnoreModulesOnCmp() const { return m_IgnoreModulesOnCmp; }
     void SetIgnoreModulesOnCmp( bool ignore ) { m_IgnoreModulesOnCmp = ignore; }
 };
+
+
+/**
+ * Class TYPE_COLLECTOR
+ * merely gathers up all BOARD_ITEMs of a given set of KICAD_T type(s).
+ * @see class COLLECTOR
+ */
+class TYPE_COLLECTOR : public COLLECTOR
+{
+    
+public:
+
+    /**
+     * Function operator[int]
+     * overloads COLLECTOR::operator[](int) to return a BOARD_ITEM* instead of
+     * an EDA_BaseStruct* type.
+     * @param ndx The index into the list.
+     * @return BOARD_ITEM* - or something derived from it, or NULL.
+     */
+    BOARD_ITEM* operator[]( int ndx ) const
+    {
+        if( (unsigned)ndx < (unsigned)GetCount() )
+            return (BOARD_ITEM*) m_List[ ndx ];
+        return NULL;
+    }
+    
+
+    /**
+     * Function Inspect
+     * is the examining function within the INSPECTOR which is passed to the 
+     * Iterate function.
+     *
+     * @param testItem An EDA_BaseStruct to examine.
+     * @param testData is not used in this class.
+     * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
+     *   else SCAN_CONTINUE;
+     */ 
+    SEARCH_RESULT Inspect( EDA_BaseStruct* testItem, const void* testData );
+    
+
+    /**
+     * Function Collect
+     * scans a BOARD_ITEM using this class's Inspector method, which does 
+     * the collection.
+     * @param aBoard The BOARD_ITEM to scan.
+     * @param aScanList The KICAD_Ts to gather up.
+     */
+    void Collect( BOARD_ITEM* aBoard, const KICAD_T aScanList[] );
+};
+
+
 
 #endif // COLLECTORS_H
