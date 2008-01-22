@@ -85,6 +85,12 @@ public:
     {
         return wxT( "DRAWSEGMENT" );
     }
+
+    
+#if defined(DEBUG)    
+    void Show( int nestLevel, std::ostream& os );
+#endif    
+    
 };
 
 

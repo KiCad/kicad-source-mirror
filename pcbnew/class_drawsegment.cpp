@@ -249,3 +249,25 @@ bool DRAWSEGMENT::HitTest( EDA_Rect& refArea )
         return true;
     return false;
 }
+
+
+#if defined(DEBUG)
+/**
+ * Function Show
+ * is used to output the object tree, currently for debugging only.
+ * @param nestLevel An aid to prettier tree indenting, and is the level
+ *          of nesting of this object within the overall tree.
+ * @param os The ostream& to output to.
+ */
+void DRAWSEGMENT::Show( int nestLevel, std::ostream& os )
+{
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
+
+    " layer=\"" << GetLayer() << '"' <<
+    " width=\"" << m_Width << '"' <<
+    "<start" << m_Start << "/>" <<
+    "<end" << m_End << "/>";
+
+    os << "</" << GetClass().Lower().mb_str() << ">\n";
+}
+#endif
