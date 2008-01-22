@@ -5,6 +5,16 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2008-Jan-22 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew:
+  * Actually able now to export a *.dsn file, but the contents of the file
+    is incomplete, not a complete input BOARD.
+  * Added DRAWSEGMENT::Show() for debugging.
+  * Changed specctra.h's POINT to use double for coordinates.  Changed format
+    string for Format()ing a double.
+  * Changed specctra_export.cpp to actually output an incomplete file.
+
 
 2008-Jan-21 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================

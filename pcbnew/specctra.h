@@ -106,10 +106,20 @@ public:
 
 struct POINT
 {
-    float  x;
-    float  y;
+    double  x;
+    double  y;
     
     POINT() { x=0.0; y=0.0; }
+    
+    bool operator==( const POINT& other ) const
+    {
+        return x==other.x && y==other.y;
+    }
+    
+    bool operator!=( const POINT& other ) const
+    {
+        return !( *this == other );
+    }
     
     /**
      * Function Format
@@ -121,7 +131,7 @@ struct POINT
      */
     void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IOError )
     {
-        out->Print( nestLevel, " %f %f", x, y ); 
+        out->Print( nestLevel, " %.6g %.6g", x, y ); 
     }
 };
 
@@ -161,6 +171,8 @@ typedef std::vector<PROPERTY>       PROPERTIES;
  */ 
 class ELEM
 {
+    friend class SPECCTRA_DB;
+    
 protected:    
     DSN_T           type;
     ELEM*           parent;
@@ -213,6 +225,11 @@ public:
     {
         // overridden in ELEM_HOLDER
     }
+    
+    void SetParent( ELEM* aParent )
+    {
+        parent = aParent;
+    }
 };
 
 
@@ -223,7 +240,8 @@ public:
  */ 
 class ELEM_HOLDER : public ELEM
 {
-    //  see http://www.boost.org/libs/ptr_container/doc/ptr_sequence_adapter.html
+    friend class SPECCTRA_DB;
+    
     typedef boost::ptr_vector<ELEM> ELEM_ARRAY;
     
     ELEM_ARRAY      kids;      ///< ELEM pointers
@@ -393,7 +411,7 @@ public:
     {
         const char*  quote = out->GetQuoteChar( layer_id.c_str() );
         
-        out->Print( nestLevel, "(%s %s%s%s %f %f %f %f)\n", 
+        out->Print( nestLevel, "(%s %s%s%s %.6g %.6g %.6g %.6g)\n", 
                    LEXER::GetTokenText( Type() ),
                    quote, layer_id.c_str(), quote,
                    point0.x, point0.y,
@@ -546,7 +564,7 @@ class PATH : public ELEM
     
 public:
 
-    PATH( ELEM* aParent, DSN_T aType ) :
+    PATH( ELEM* aParent, DSN_T aType = T_path ) :
         ELEM( aType, aParent )
     {
         aperture_width = 0.0;
@@ -561,13 +579,13 @@ public:
     {
         const char* quote = out->GetQuoteChar( layer_id.c_str() );
         
-        out->Print( nestLevel, "(%s %s%s%s %f\n", LEXER::GetTokenText( Type() ),
+        out->Print( nestLevel, "(%s %s%s%s %.6g\n", LEXER::GetTokenText( Type() ),
                                  quote, layer_id.c_str(), quote, 
                                  aperture_width );
 
         for( unsigned i=0; i<points.size();  ++i )
         {
-            out->Print( nestLevel+1, "%f %f\n", points[i].x, points[i].y );
+            out->Print( nestLevel+1, "%.6g %.6g\n", points[i].x, points[i].y );
         }
         
         if( aperture_type == T_square )
@@ -586,6 +604,7 @@ class BOUNDARY : public ELEM
     // only one or the other of these two is used, not both
     PATHS           paths;
     RECTANGLE*      rectangle;
+    
     
 public:
 
@@ -636,7 +655,7 @@ public:
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         const char* quote = out->GetQuoteChar( layer_id.c_str() );
-        out->Print( nestLevel, "(%s %s%s%s %f %f %f)\n", LEXER::GetTokenText( Type() ) ,
+        out->Print( nestLevel, "(%s %s%s%s %.6g %.6g %.6g)\n", LEXER::GetTokenText( Type() ) ,
                                  quote, layer_id.c_str(), quote,
                                  diameter, vertex.x, vertex.y );
     }
@@ -661,12 +680,12 @@ public:
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         const char* quote = out->GetQuoteChar( layer_id.c_str() );
-        out->Print( nestLevel, "(%s %s%s%s %f\n", LEXER::GetTokenText( Type() ) ,
+        out->Print( nestLevel, "(%s %s%s%s %.6g\n", LEXER::GetTokenText( Type() ) ,
                                  quote, layer_id.c_str(), quote,
                                  aperture_width);
         
         for( int i=0;  i<3;  ++i )
-            out->Print( nestLevel+1, "%f %f\n",  vertex[i].x, vertex[i].y );
+            out->Print( nestLevel+1, "%.6g %.6g\n",  vertex[i].x, vertex[i].y );
         
         out->Print( nestLevel, ")\n" );
     }
@@ -1072,7 +1091,7 @@ public:
         const char* quote0 = out->GetQuoteChar( layer_id0.c_str() );
         const char* quote1 = out->GetQuoteChar( layer_id1.c_str() );
         
-        out->Print( nestLevel, "(%s %s%s%s %s%s%s %f)\n", LEXER::GetTokenText( Type() ),
+        out->Print( nestLevel, "(%s %s%s%s %s%s%s %.6g)\n", LEXER::GetTokenText( Type() ),
                quote0, layer_id0.c_str(), quote0,
                quote1, layer_id1.c_str(), quote1,
                layer_weight );
@@ -1113,7 +1132,7 @@ class PLANE : public KEEPOUT
 public:    
     PLANE( ELEM* aParent ) :
         KEEPOUT( aParent, T_plane )
-   {}
+    {}
 };
 
 
@@ -1232,11 +1251,11 @@ class GRID : public ELEM
 
     DSN_T       grid_type;      ///< T_via | T_wire | T_via_keepout | T_place | T_snap
 
-    float       dimension;
+    double      dimension;
     
     DSN_T       direction;      ///< T_x | T_y | -1 for both
     
-    float       offset;
+    double      offset;
     
     DSN_T       image_type;
     
@@ -1254,7 +1273,7 @@ public:
     
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
-        out->Print( nestLevel, "(%s %s %f",
+        out->Print( nestLevel, "(%s %s %.6g",
                    LEXER::GetTokenText( Type() ),
                    LEXER::GetTokenText( grid_type ), dimension );
      
@@ -1270,7 +1289,7 @@ public:
         }
         
         if( offset != 0.0 )
-            out->Print( 0, " (offset %f)", offset );
+            out->Print( 0, " (offset %.6g)", offset );
         
         out->Print( 0, ")\n");
     }
@@ -1333,6 +1352,24 @@ public:
         delete control;
         delete rules;
         delete place_rules;
+    }
+    
+    void SetBOUNDARY( BOUNDARY *aBoundary )
+    {
+        delete boundary;
+        boundary = aBoundary;
+        if( boundary )
+        {
+            boundary->SetParent( this );
+        }
+    }
+    
+    void SetPlaceBOUNDARY( BOUNDARY *aBoundary )
+    {
+        delete place_boundary;
+        place_boundary = aBoundary;
+        if( place_boundary )
+            place_boundary->SetParent( this );
     }
     
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
@@ -1401,7 +1438,7 @@ class PLACE : public ELEM
     DSN_T           side;
     
     bool            isRotated;
-    float           rotation;
+    double          rotation;
     
     bool            hasVertex;
     POINT           vertex;
@@ -1457,7 +1494,7 @@ public:
 
     void SetRotation( double aRotation )
     {
-        rotation = (float) aRotation;
+        rotation = aRotation;
         isRotated = (aRotation != 0.0);
     }
     
@@ -1607,7 +1644,7 @@ class PIN : public ELEM
     friend class SPECCTRA_DB;
 
     std::string     padstack_id;
-    float           rotation;
+    double          rotation;
     bool            isRotated;
     std::string     pin_id;
     POINT           vertex;
@@ -1622,7 +1659,7 @@ public:
 
     void SetRotation( double aRotation )
     {
-        rotation = (float) aRotation;
+        rotation = aRotation;
         isRotated = (aRotation != 0.0);
     }
     
@@ -1630,7 +1667,7 @@ public:
     {
         const char* quote = out->GetQuoteChar( padstack_id.c_str() );
         if( isRotated )
-            out->Print( nestLevel, "(pin %s%s%s (rotate %1.2f)", 
+            out->Print( nestLevel, "(pin %s%s%s (rotate %.6g)", 
                                      quote, padstack_id.c_str(), quote,
                                      rotation
                                      );
@@ -1638,7 +1675,7 @@ public:
             out->Print( nestLevel, "(pin %s%s%s", quote, padstack_id.c_str(), quote );
         
         quote = out->GetQuoteChar( pin_id.c_str() );
-        out->Print( 0, " %s%s%s %f %f)\n", quote, pin_id.c_str(), quote, 
+        out->Print( 0, " %s%s%s %.6g %.6g)\n", quote, pin_id.c_str(), quote, 
                    vertex.x, vertex.y );
     }
 };
@@ -2356,11 +2393,11 @@ public:
             {
                 out->Print( 0, "\n" );
                 perLine = 0;
-                perLine += out->Print( nestLevel+1, "%f %f", i->x, i->y ); 
+                perLine += out->Print( nestLevel+1, "%.6g %.6g", i->x, i->y ); 
             }
             else
             {
-                perLine += out->Print( 0, "    %f %f", i->x, i->y );
+                perLine += out->Print( 0, "    %.6g %.6g", i->x, i->y );
             }
         }
         out->Print( 0, "\n" );
@@ -2370,6 +2407,9 @@ public:
             const char* quote = out->GetQuoteChar( net_id.c_str() );
             out->Print( nestLevel+1, "(net %s%s%s)\n", quote, net_id.c_str(), quote ); 
         }
+
+        if( via_number != -1 )
+            out->Print( nestLevel+1, "(via_number %d)\n", via_number );
         
         if( type != T_NONE )
             out->Print( nestLevel+1, "(type %s)\n", LEXER::GetTokenText( type ) );
@@ -2598,10 +2638,6 @@ public:
         ELEM( T_history, aParent )
     {
         time_stamp = time(NULL);
-    }
-    ~HISTORY()
-    {
-        ;
     }
     
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
@@ -3070,6 +3106,14 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     void doWAS_IS( WAS_IS* growth ) throw( IOError );
     void doNET_OUT( NET_OUT* growth ) throw( IOError );
     void doSUPPLY_PIN( SUPPLY_PIN* growth ) throw( IOError );    
+
+    
+    /**
+     * Function exportEdges
+     * exports the EDGES_N layer of the board.
+     */
+    void exportEdges( BOARD* aBoard ) throw( IOError );
+
     
 public:
 
@@ -3160,9 +3204,11 @@ public:
      * writes the internal PCB instance out as a SPECTRA DSN format file.
      *
      * @param aFilename The file to save to.
+     * @param aNameChange If true, causes the pcb's name to change to "aFilename" 
+     *          and also to to be changed in the output file.
      * @throw IOError, if an i/o error occurs saving the file.
      */
-    void ExportPCB( wxString aFilename ) throw( IOError );
+    void ExportPCB( wxString aFilename,  bool aNameChange=false ) throw( IOError );
 
     
     /**

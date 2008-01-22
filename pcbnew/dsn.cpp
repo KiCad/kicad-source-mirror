@@ -36,6 +36,14 @@
 #include "pcbnew.h"
 
 
+/**
+ * Class LEXER
+ * implements a lexical analyzer for the SPECCTRA DSN file format.  It
+ * reads lexical tokens from the current LINE_READER through the NextTok()
+ * function.  The NextTok() function returns one of the DSN_T values.
+ */
+
+
 namespace DSN {
 
 

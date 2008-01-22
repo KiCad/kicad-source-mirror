@@ -535,6 +535,7 @@ public:
 
 /**
  * Class LEXER
+ * implements a lexical analyzer for the SPECCTRA DSN file format.  It
  * reads lexical tokens from the current LINE_READER through the NextTok()
  * function.  The NextTok() function returns one of the DSN_T values.
  */
@@ -635,7 +636,7 @@ public:
     /**
      * Function ThrowIOError
      * encapsulates the formatting of an error message which contains the exact
-     * location within the input file of a lexical error.
+     * location within the input file of something the caller is rejecting.
      */
     void ThrowIOError( wxString aText, int charOffset ) throw (IOError);
 

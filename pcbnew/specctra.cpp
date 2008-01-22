@@ -55,11 +55,10 @@
 #include <wx/ffile.h>
 
 
-#define STANDALONE      0   // set to 1 for "stand alone, i.e. unit testing"
-                            // set to 0 for component of pcbnew 
+//#define STANDALONE        // define "stand alone, i.e. unit testing"
 
 
-#if STANDALONE
+#if defined(STANDALONE)
  #define EDA_BASE           // build_version.h behavior
  #undef  COMMON_GLOBL
  #define COMMON_GLOBL       // build_version.h behavior
@@ -3326,7 +3325,7 @@ const char* SPECCTRA_DB::GetQuoteChar( const char* wrapee )
 }
 
 
-void SPECCTRA_DB::ExportPCB( wxString filename ) throw( IOError )
+void SPECCTRA_DB::ExportPCB( wxString filename, bool aNameChange ) throw( IOError )
 {
     fp = wxFopen( filename, wxT("w") );
     
@@ -3334,10 +3333,18 @@ void SPECCTRA_DB::ExportPCB( wxString filename ) throw( IOError )
     {
         ThrowIOError( _("Unable to open file \"%s\""), filename.GetData() );  
     }
-    
-    if( pcb )
-        pcb->Format( this, 0 );
 
+    if( pcb )
+    {
+        if( aNameChange )
+            pcb->pcbname = CONV_TO_UTF8(filename); 
+        
+        pcb->Format( this, 0 );
+    }
+
+    // if an exception is thrown by Format, then ~SPECCTRA_DB() will close
+    // the file.
+    
     fclose( fp );
     fp = 0;
 }
@@ -3369,6 +3376,7 @@ PCB* SPECCTRA_DB::MakePCB()
     pcb->unit = new UNIT_RES( pcb, T_unit );
     
     pcb->structure = new STRUCTURE( pcb );
+    pcb->structure->boundary = new BOUNDARY( pcb->structure );
     
     pcb->placement = new PLACEMENT( pcb );
     
@@ -3506,13 +3514,13 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     }
 
     if( hasVertex )
-        out->Print( 0, " %f %f", vertex.x, vertex.y );
+        out->Print( 0, " %.6g %.6g", vertex.x, vertex.y );
     
     if( side != T_NONE )
         out->Print( 0, " %s", LEXER::GetTokenText( side ) );
     
     if( isRotated )
-        out->Print( 0, " %f", rotation );
+        out->Print( 0, " %.6g", rotation );
     
     if( mirror != T_NONE )
         out->Print( 0, " (mirror %s)", LEXER::GetTokenText( mirror ) );
@@ -3572,7 +3580,7 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
 
 // unit test this source file
 
-#if STANDALONE
+#if defined(STANDALONE)
 
 using namespace DSN;
 
