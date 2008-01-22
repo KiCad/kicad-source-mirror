@@ -169,12 +169,10 @@ ENDIF(APPLE)
 ADD_EXECUTABLE(pcbnew WIN32 MACOSX_BUNDLE ${PCBNEW_SRCS} ${PCBNEW_EXTRA_SRCS} ${PCBNEW_RESOURCES})
 
 # This one gets made only when testing.
-#SET_SOURCE_FILES_PROPERTIES(dsn.cpp PROPERTIES COMPILE_FLAGS "-DSTANDALONE -Wall")
 ADD_EXECUTABLE(dsntest EXCLUDE_FROM_ALL dsn.cpp)
 TARGET_LINK_LIBRARIES(dsntest common ${wxWidgets_LIBRARIES})
 
 # This one gets made only when testing.
-#SET_SOURCE_FILES_PROPERTIES(specctra.cpp PROPERTIES COMPILE_FLAGS "-DSTANDALONE -Wall")
 ADD_EXECUTABLE(specctra_test EXCLUDE_FROM_ALL specctra.cpp dsn.cpp )
 TARGET_LINK_LIBRARIES(specctra_test common ${wxWidgets_LIBRARIES})
 
