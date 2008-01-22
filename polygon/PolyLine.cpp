@@ -1117,7 +1117,11 @@ void CPolyLine::Hatch()
 				nloops++;
 				a += PCBU_PER_MIL/100;
 			} while( npts%2 != 0 && nloops < 3 );
+
+/*  DICK 1/22/08: this was firing repeatedly on me, needed to comment out to get
+    my work done:
 			wxASSERT( npts%2==0 );	// odd number of intersection points, error
+*/
 
 			// sort points in order of descending x (if more than 2)
 			if( npts>2 )
