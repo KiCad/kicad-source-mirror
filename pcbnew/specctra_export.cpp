@@ -198,7 +198,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
     {
         // get all the DRAWSEGMENTS into 'items', then look for layer == EDGE_N,
         // and those segments comprize the board's perimeter.
-        const KICAD_T  scanDRAWSEGMENTS[] = { TYPEDRAWSEGMENT, EOT };
+        static const KICAD_T  scanDRAWSEGMENTS[] = { TYPEDRAWSEGMENT, EOT };
         items.Collect( aBoard, scanDRAWSEGMENTS );
     
         bool haveEdges = false;
@@ -304,7 +304,48 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         }
     }
     
+    //-----<zone containers become planes>--------------------------------------------
+    {
+        static const KICAD_T  scanZONEs[] = { TYPEZONE_CONTAINER, EOT };
+        items.Collect( aBoard, scanZONEs );
+
+        for( int i=0;  i<items.GetCount();  ++i )
+        {
+            ZONE_CONTAINER* item = (ZONE_CONTAINER*) items[i];
+
+            wxString        layerName = aBoard->GetLayerName( item->GetLayer() );
+            COPPER_PLANE*   plane = new COPPER_PLANE( pcb->structure );
+            PATH*           polygon = new PATH( plane, T_polygon );
+
+            plane->path = polygon;
+            plane->name = CONV_TO_UTF8( item->m_Netname );
+            
+            polygon->layer_id = CONV_TO_UTF8( layerName );
+            
+            int count = item->m_Poly->corner.size();
+            for( int j=0; j<count; ++j )
+            {
+                wxPoint   point( item->m_Poly->corner[j].x, item->m_Poly->corner[j].y );
+
+                polygon->points.push_back( mapPt(point) );
+            }
+            
+            pcb->structure->planes.push_back( plane );
+        }
+    }
+    
     //-----<build the padstack list here, no output>------------------------
+    {
+        // get all the DRAWSEGMENTS into 'items', then look for layer == EDGE_N,
+        // and those segments comprize the board's perimeter.
+        static const KICAD_T  scanPADnVIAs[] = { TYPEPAD, TYPEVIA, EOT };
+        items.Collect( aBoard, scanPADnVIAs );
+
+        for( int i=0;  i<items.GetCount();  ++i )
+        {
+//            items[i]->Show( 0, std::cout );
+        }
+    }
     
     
     //-----<via_descriptor>-------------------------------------------------
