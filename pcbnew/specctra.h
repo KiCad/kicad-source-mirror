@@ -559,7 +559,6 @@ class PATH : public ELEM
     double          aperture_width;
 
     POINTS          points;                   
-    
     DSN_T           aperture_type;
     
 public:
@@ -579,19 +578,32 @@ public:
     {
         const char* quote = out->GetQuoteChar( layer_id.c_str() );
         
-        out->Print( nestLevel, "(%s %s%s%s %.6g\n", LEXER::GetTokenText( Type() ),
-                                 quote, layer_id.c_str(), quote, 
-                                 aperture_width );
+        const int RIGHTMARGIN = 80;        
+        int perLine = out->Print( nestLevel, "(%s %s%s%s %.6g", 
+                               LEXER::GetTokenText( Type() ),
+                               quote, layer_id.c_str(), quote, 
+                               aperture_width );
 
-        for( unsigned i=0; i<points.size();  ++i )
+        for( unsigned i=0;  i<points.size();  ++i )
         {
-            out->Print( nestLevel+1, "%.6g %.6g\n", points[i].x, points[i].y );
+            if( perLine > RIGHTMARGIN )
+            {
+                out->Print( 0, "\n" );
+                perLine = out->Print( nestLevel+1, "%s", "" );
+            }
+            else
+                perLine += out->Print( 0, "  " );
+            
+            perLine += out->Print( 0, "%.6g %.6g", points[i].x, points[i].y );
         }
-        
-        if( aperture_type == T_square )
-            out->Print( nestLevel+1, "(aperture_type square)\n" );
 
-        out->Print( nestLevel, ")\n" ); 
+        if( aperture_type == T_square )
+        {
+            out->Print( 0, "\n" );
+            out->Print( nestLevel+1, "(aperture_type square)\n" );
+        }
+
+        out->Print( 0, ")\n" ); 
     }
 };
 typedef boost::ptr_vector<PATH> PATHS;
@@ -835,6 +847,7 @@ public:
         out->Print( nestLevel, ")\n" ); 
     }
 };
+typedef boost::ptr_vector<KEEPOUT>  KEEPOUTS;
 
 
 /**
@@ -1129,15 +1142,20 @@ public:
 };
 
 
-class PLANE : public KEEPOUT
+/**
+ * Class COPPER_PLANE
+ * corresponds to a &lt;plane_descriptor&gt; in the specctra dsn spec.
+ */
+class COPPER_PLANE : public KEEPOUT
 {
     friend class SPECCTRA_DB;
 
 public:    
-    PLANE( ELEM* aParent ) :
+    COPPER_PLANE( ELEM* aParent ) :
         KEEPOUT( aParent, T_plane )
     {}
 };
+typedef boost::ptr_vector<COPPER_PLANE>    COPPER_PLANES;
 
 
 /**
@@ -1317,11 +1335,9 @@ class STRUCTURE : public ELEM_HOLDER
     CONTROL*    control;
     RULE*       rules;
     
-    typedef boost::ptr_vector<KEEPOUT>  KEEPOUTS;
     KEEPOUTS    keepouts;
 
-    typedef boost::ptr_vector<PLANE>    PLANES;
-    PLANES      planes;
+    COPPER_PLANES      planes;
 
     typedef boost::ptr_vector<REGION>   REGIONS;
     REGIONS     regions;
@@ -1393,7 +1409,7 @@ public:
         if( place_boundary )
             place_boundary->Format( out, nestLevel );
 
-        for( PLANES::iterator i=planes.begin();  i!=planes.end();  ++i )
+        for( COPPER_PLANES::iterator i=planes.begin();  i!=planes.end();  ++i )
             i->Format( out, nestLevel );
 
         for( REGIONS::iterator i=regions.begin();  i!=regions.end();  ++i )
@@ -1470,7 +1486,7 @@ public:
     PLACE( ELEM* aParent ) :
         ELEM( T_place, aParent )
     {
-        side = T_NONE;
+        side = T_front;
         isRotated = false;
         hasVertex = false;
         
@@ -1703,6 +1719,8 @@ class IMAGE : public ELEM_HOLDER
 
     RULE*           rules;
     RULE*           place_rules;
+
+    KEEPOUTS        keepouts;
     
 public:
     
@@ -1748,6 +1766,9 @@ public:
         
         if( place_rules )
             place_rules->Format( out, nestLevel+1 );
+
+        for( KEEPOUTS::iterator i=keepouts.begin();  i!=keepouts.end();  ++i )
+            i->Format( out, nestLevel+1 );
         
         out->Print( nestLevel, ")\n" );
     }
@@ -1866,8 +1887,8 @@ class LIBRARY : public ELEM
 
 public:
 
-    LIBRARY( ELEM* aParent ) :
-        ELEM( T_library, aParent )
+    LIBRARY( ELEM* aParent, DSN_T aType = T_library ) :
+        ELEM( aType, aParent )
     {
         unit = 0;
     }
@@ -1915,13 +1936,19 @@ public:
         ELEM( T_pin, aParent )
     {
     }
-    
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+
+    /**
+     * Function FormatIt
+     * is like Format() but is not virual and returns the number of characters
+     * that were output.
+     */
+    int FormatIt( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         // only print the newline if there is a nest level, and make
         // the quotes unconditional on this one.
         const char* newline = nestLevel ? "\n" : "";
-        out->Print( nestLevel, "\"%s\"-\"%s\"%s", 
+        
+        return out->Print( nestLevel, "\"%s\"-\"%s\"%s", 
                 component_id.c_str(), pin_id.c_str(), newline );
     }
 };
@@ -1960,7 +1987,7 @@ public:
         out->Print( nestLevel, "(%s %s %s ", 
                  LEXER::GetTokenText( Type() ), fromText.c_str(), toText.c_str() );
 
-        if( type != T_NONE )
+        if( fromto_type != T_NONE )
             out->Print( 0, "(type %s)", LEXER::GetTokenText( fromto_type ) );
         
         if( net_id.size() )
@@ -1993,6 +2020,7 @@ public:
             out->Print( 0, "\n" );
     }
 };
+typedef boost::ptr_vector<FROMTO>       FROMTOS;
 
 
 /**
@@ -2048,7 +2076,7 @@ class NET : public ELEM
     
     LAYER_RULES     layer_rules;
     
-    FROMTO*         fromto;
+    FROMTOS         fromtos;
     
     COMP_ORDER*     comp_order;
     
@@ -2065,14 +2093,12 @@ public:
         supply = T_NONE;
         
         rules = 0;
-        fromto = 0;
         comp_order = 0;
     }
     
     ~NET()
     {
         delete rules;
-        delete fromto;
         delete comp_order;
     }
     
@@ -2090,11 +2116,24 @@ public:
             out->Print( 0, "(net_number %d)", net_number );
         
         out->Print( 0, "\n" );
+
+                
+        const int RIGHTMARGIN = 80;
+        int perLine = out->Print( nestLevel+1, "(%s", LEXER::GetTokenText( pins_type ) );
         
-        out->Print( nestLevel+1, "(%s\n", LEXER::GetTokenText( pins_type ) );
         for( PIN_REFS::iterator i=pins.begin();  i!=pins.end();  ++i )
-            i->Format( out, nestLevel+2 ); 
-        out->Print( nestLevel+1, ")\n" );
+        {
+            if( perLine > RIGHTMARGIN )
+            {
+                out->Print( 0, "\n");
+                perLine = out->Print( nestLevel+2, "%s", "" );
+            }
+            else
+                perLine += out->Print( 0, " " );
+            
+            perLine += i->FormatIt( out, 0 );
+        }
+        out->Print( 0, ")\n" );
 
         if( comp_order )
             comp_order->Format( out, nestLevel+1 );
@@ -2108,8 +2147,8 @@ public:
         for( LAYER_RULES::iterator i=layer_rules.begin();  i!=layer_rules.end();  ++i )
             i->Format( out, nestLevel+1 );
 
-        if( fromto )
-            fromto->Format( out, nestLevel+1 );
+        for( FROMTOS::iterator i=fromtos.begin();  i!=fromtos.end();  ++i )
+            i->Format( out, nestLevel+1 );
         
         out->Print( nestLevel, ")\n" );
     }
@@ -2120,7 +2159,6 @@ class TOPOLOGY : public ELEM
 {
     friend class SPECCTRA_DB;
     
-    typedef boost::ptr_vector<FROMTO>       FROMTOS;
     FROMTOS         fromtos;
   
     typedef boost::ptr_vector<COMP_ORDER>   COMP_ORDERS;
@@ -2372,6 +2410,7 @@ class WIRE_VIA : public ELEM
     std::string     virtual_pin_name;
     STRINGS         contact_layers;
     bool            supply;
+
     
 public:
     WIRE_VIA( ELEM* aParent ) :
@@ -2386,65 +2425,97 @@ public:
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         const char* quote = out->GetQuoteChar( padstack_id.c_str() );
-        out->Print( nestLevel, "(%s %s%s%s", LEXER::GetTokenText( Type() ),
-                   quote, padstack_id.c_str(), quote );
-
+        
         const int RIGHTMARGIN = 80;        
-        int perLine=RIGHTMARGIN;
+        int perLine = out->Print( nestLevel, "(%s %s%s%s", 
+                       LEXER::GetTokenText( Type() ),
+                       quote, padstack_id.c_str(), quote );
+
         for( POINTS::iterator i=vertexes.begin();  i!=vertexes.end();  ++i )
         {
-            if( perLine >= RIGHTMARGIN )
+            if( perLine > RIGHTMARGIN )
             {
                 out->Print( 0, "\n" );
-                perLine = 0;
-                perLine += out->Print( nestLevel+1, "%.6g %.6g", i->x, i->y ); 
+                perLine = out->Print( nestLevel+1, "%s", "" );
             }
             else
-            {
-                perLine += out->Print( 0, "    %.6g %.6g", i->x, i->y );
-            }
+                perLine += out->Print( 0, "  " );
+            
+            perLine += out->Print( 0, "%.6g %.6g", i->x, i->y ); 
         }
-        out->Print( 0, "\n" );
         
         if( net_id.size() )
         {
+            if( perLine > RIGHTMARGIN )
+            {
+                out->Print( 0, "\n" );
+                perLine = out->Print( nestLevel+1, "%s", "" );
+            }
             const char* quote = out->GetQuoteChar( net_id.c_str() );
-            out->Print( nestLevel+1, "(net %s%s%s)\n", quote, net_id.c_str(), quote ); 
+            perLine += out->Print( 0, "(net %s%s%s)", quote, net_id.c_str(), quote ); 
         }
 
         if( via_number != -1 )
-            out->Print( nestLevel+1, "(via_number %d)\n", via_number );
+        {
+            if( perLine > RIGHTMARGIN )
+            {
+                out->Print( 0, "\n" );
+                perLine = out->Print( nestLevel+1, "%s", "" );
+            }
+            perLine += out->Print( 0, "(via_number %d)", via_number );
+        }
         
         if( type != T_NONE )
-            out->Print( nestLevel+1, "(type %s)\n", LEXER::GetTokenText( type ) );
+        {
+            if( perLine > RIGHTMARGIN )
+            {
+                out->Print( 0, "\n" );
+                perLine = out->Print( nestLevel+1, "%s", "" );
+            }
+            perLine += out->Print( 0, "(type %s)", LEXER::GetTokenText( type ) );
+        }
         
         if( attr != T_NONE )
         {
+            if( perLine > RIGHTMARGIN )
+            {
+                out->Print( 0, "\n" );
+                perLine = out->Print( nestLevel+1, "%s", "" );
+            }
             if( attr == T_virtual_pin )
             {
                 const char* quote = out->GetQuoteChar( virtual_pin_name.c_str() );
-                out->Print( nestLevel+1, "(attr virtual_pin %s%s%s)\n",
+                perLine += out->Print( 0, "(attr virtual_pin %s%s%s)",
                            quote, virtual_pin_name.c_str(), quote );
             }
             else
-                out->Print( nestLevel+1, "(attr %s)\n", LEXER::GetTokenText( attr ) );
+                perLine += out->Print( 0, "(attr %s)", LEXER::GetTokenText( attr ) );
+        }
+
+        if( supply )
+        {
+            if( perLine > RIGHTMARGIN )
+            {
+                out->Print( 0, "\n" );
+                perLine = out->Print( nestLevel+1, "%s", "" );
+            }
+            perLine += out->Print( 0, "(supply)" );
         }
         
         if( contact_layers.size() )
         {
+            out->Print( 0, "\n" );
             out->Print( nestLevel+1, "(contact\n" );
+            
             for( STRINGS::iterator i=contact_layers.begin();  i!=contact_layers.end();  ++i )
             {
                 const char* quote = out->GetQuoteChar( i->c_str() );
                 out->Print( nestLevel+2, "%s%s%s\n", quote, i->c_str(), quote );
             }
-            out->Print( nestLevel+1, ")\n" );
+            out->Print( nestLevel+1, "))\n" );
         }
-        
-        if( supply )
-            out->Print( nestLevel+1, "(supply)\n" );
-        
-        out->Print( nestLevel, ")\n" );
+        else
+            out->Print( 0, ")\n" );
     }
 };
 typedef boost::ptr_vector<WIRE_VIA>      WIRE_VIAS;
@@ -2700,7 +2771,7 @@ public:
         else
         {
             for( PIN_REFS::iterator i=pin_refs.begin();  i!=pin_refs.end();  ++i )
-                i->Format( out, nestLevel+1 );
+                i->FormatIt( out, nestLevel+1 );
         }
         
         if( net_id.size() )
