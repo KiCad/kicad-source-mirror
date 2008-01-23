@@ -194,7 +194,7 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
 
     fputs( "$PADS\n", file );
 
-    if( pcb->m_NbPads > 0 )
+    if( pcb->m_NbPads > 0 )     // pcb->m_Pads is NULL unless this is true
     {
         // Generation de la liste des pads tries par forme et dimensions:
         memsize = (pcb->m_NbPads + 1) * sizeof(D_PAD *);
@@ -227,7 +227,8 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
 
         fprintf( file, "PAD PAD%d", pad->m_logical_connexion );
 
-        dx = pad->m_Size.x / 2; dy = pad->m_Size.y / 2;
+        dx = pad->m_Size.x / 2; 
+        dy = pad->m_Size.y / 2;
 
         switch( pad->m_PadShape )
         {
@@ -302,8 +303,7 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
 
     fputs( "$ENDPADS\n\n", file );
     
-    if( pad_list_base )
-        MyFree( pad_list_base );
+    MyFree( pad_list_base );
 }
 
 
