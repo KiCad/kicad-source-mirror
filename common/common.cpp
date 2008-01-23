@@ -277,7 +277,7 @@ wxString ReturnPcbLayerName( int layer_number, bool omitSpacePadding )
  */
 {
 
-#if 0 || defined(DEBUG)  
+#if 0 && defined(DEBUG)  
 
     // Dick: this code is working fine, but we have no place to store the layer names yet.
     
