@@ -16,6 +16,11 @@
 
 #define PLOT_DEFAULT_MARGE 300	// mils
 
+/* Keywords to r/w options in config */
+#define EDGELAYER_GERBER_OPT_KEY wxT("EdgeLayerGerberOpt")
+#define PLOT_XFINESCALE_ADJ_KEY wxT("PlotXFineScaleAdj")
+#define PLOT_YFINESCALE_ADJ_KEY wxT("PlotYFineScaleAdj")
+
 // variables locale :
 static long s_SelectedLayers = CUIVRE_LAYER | CMP_LAYER |
 					SILKSCREEN_LAYER_CMP | SILKSCREEN_LAYER_CU;
@@ -222,8 +227,9 @@ wxString choice_plot_offset_msg[] =
 	m_XScaleAdjust = m_YScaleAdjust = 1.0;
 	if( m_Parent->m_Parent->m_EDA_Config )
 	{
-		m_Parent->m_Parent->m_EDA_Config->Read(wxT("PlotXFineScaleAdj"), &m_XScaleAdjust);
-		m_Parent->m_Parent->m_EDA_Config->Read(wxT("PlotYFineScaleAdj"), &m_YScaleAdjust);
+		m_Parent->m_Parent->m_EDA_Config->Read( EDGELAYER_GERBER_OPT_KEY, &g_Exclude_Edges_Pcb);
+		m_Parent->m_Parent->m_EDA_Config->Read( PLOT_XFINESCALE_ADJ_KEY, &m_XScaleAdjust);
+		m_Parent->m_Parent->m_EDA_Config->Read( PLOT_XFINESCALE_ADJ_KEY, &m_YScaleAdjust);
 	}
 	m_FineAdjustXscaleOpt = new WinEDA_DFloatValueCtrl(this, _("X Scale Adjust"), m_XScaleAdjust, RightBoxSizer);
 	m_FineAdjustXscaleOpt->SetToolTip(_("Set X scale adjust for exact scale plotting"));
@@ -253,9 +259,10 @@ wxString choice_plot_offset_msg[] =
 	}
 
 	// Option for excluding contents of "Edges Pcb" layer
+	
 	m_Exclude_Edges_Pcb = new wxCheckBox(this,
-			ID_EXCLUDE_EDGES_PCB, _("Exclude Edges Pcb layer") );
-	m_Exclude_Edges_Pcb->SetValue(Exclude_Edges_Pcb);
+			ID_EXCLUDE_EDGES_PCB, _("Exclude Edges Pcb Layer") );
+	m_Exclude_Edges_Pcb->SetValue(g_Exclude_Edges_Pcb);
 	m_Exclude_Edges_Pcb->SetToolTip(
 		_("Exclude contents of Edges Pcb layer from all other layers") );
 	LeftBoxSizer->Add(m_Exclude_Edges_Pcb, 0, wxGROW|wxALL, 1);
@@ -480,7 +487,7 @@ int format_list[] =
 void WinEDA_PlotFrame::SaveOptPlot(wxCommandEvent & event)
 /*********************************************************/
 {
-	Exclude_Edges_Pcb = m_Exclude_Edges_Pcb->GetValue();
+	g_Exclude_Edges_Pcb = m_Exclude_Edges_Pcb->GetValue();
 
 	if( m_Plot_Sheet_Ref )
 		Plot_Sheet_Ref = m_Plot_Sheet_Ref->GetValue();
@@ -516,8 +523,9 @@ void WinEDA_PlotFrame::SaveOptPlot(wxCommandEvent & event)
 
 	if( m_Parent->m_Parent->m_EDA_Config )
 	{
-		m_Parent->m_Parent->m_EDA_Config->Write(wxT("PlotXFineScaleAdj"), m_XScaleAdjust);
-		m_Parent->m_Parent->m_EDA_Config->Write(wxT("PlotYFineScaleAdj"), m_YScaleAdjust);
+		m_Parent->m_Parent->m_EDA_Config->Write( EDGELAYER_GERBER_OPT_KEY, g_Exclude_Edges_Pcb);
+		m_Parent->m_Parent->m_EDA_Config->Write( PLOT_XFINESCALE_ADJ_KEY, m_XScaleAdjust);
+		m_Parent->m_Parent->m_EDA_Config->Write( PLOT_YFINESCALE_ADJ_KEY, m_YScaleAdjust);
 	}
 
 	g_Plot_PS_Negative = m_Plot_PS_Negative->GetValue();

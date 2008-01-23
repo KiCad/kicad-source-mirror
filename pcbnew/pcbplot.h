@@ -18,9 +18,9 @@
 #define SCALE_HPGL 0.102041
 
 /* Options : */
-eda_global bool Exclude_Edges_Pcb		// True to exclude contents of Edges Pcb layer
+eda_global bool g_Exclude_Edges_Pcb		// True to exclude contents of Edges Pcb layer
 #ifdef MAIN
-= TRUE
+= FALSE
 #endif
 ;
 eda_global bool Plot_Sheet_Ref;

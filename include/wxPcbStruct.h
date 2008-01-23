@@ -488,7 +488,7 @@ public:
      */
     void                Delete_Zone_Fill( wxDC* DC, SEGZONE* Track, long aTimestamp = 0 );
 
-    EDGE_ZONE*          Del_SegmEdgeZone( wxDC* DC, EDGE_ZONE* edge_zone );
+    EDGE_ZONE*          Del_LastSegmEdgeZone( wxDC* DC );
 
     /**
      * Function Begin_Zone

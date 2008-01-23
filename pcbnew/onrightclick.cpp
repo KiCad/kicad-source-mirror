@@ -275,8 +275,8 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_STOP_CURRENT_EDGE_ZONE,
                               _( "End edge zone" ), apply_xpm );
             }
-            ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_EDGE_ZONE,
-                          _( "Delete edge zone" ), delete_xpm );
+            ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_ZONE_LAST_CREATED_CORNER,
+                          _( "Delete Current Edge" ), delete_xpm );
             break;
 
         case TYPEZONE_CONTAINER:    // Item used to handle a zone area (outlines, holes ...)

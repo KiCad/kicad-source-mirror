@@ -879,6 +879,24 @@ out:
     return rc;    
 }
 
+/***********************************************************************************************/
+void BOARD::RedrawAreasOutlines(WinEDA_DrawPanel* panel, wxDC * aDC, int aDrawMode, int aLayer)
+/***********************************************************************************************/
+/**
+ * Function RedrawAreasOutlines
+ * Redraw all areas outlines on layer aLayer ( redraw all if aLayer < 0 )
+ */
+{
+    if ( ! aDC ) return;
+
+	for( int ii = 0; ii < GetAreaCount(); ii++ )
+	{
+		ZONE_CONTAINER* edge_zone = GetArea(ii);
+		if( (aLayer < 0) || (aLayer == edge_zone->GetLayer()) )
+			edge_zone->Draw( panel, aDC, wxPoint( 0, 0 ), aDrawMode );
+	}
+}
+
 
 
 #if defined(DEBUG)

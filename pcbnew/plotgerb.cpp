@@ -90,7 +90,7 @@ int tracevia = 1;
 	int layer_mask = g_TabOneLayerMask[Layer];
 	// Specify that the contents of the "Edges Pcb" layer are also to be
 	// plotted, unless the option of excluding that layer has been selected.
-	if( ! Exclude_Edges_Pcb )
+	if( ! g_Exclude_Edges_Pcb )
 		layer_mask |= EDGE_LAYER;
 
 	switch( Layer )

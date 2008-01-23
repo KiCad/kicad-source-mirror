@@ -66,7 +66,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_EXPORT_PAD_SETTINGS:
     case ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS:
     case ID_POPUP_PCB_STOP_CURRENT_EDGE_ZONE:
-    case ID_POPUP_PCB_DELETE_EDGE_ZONE:
+    case ID_POPUP_PCB_DELETE_ZONE_LAST_CREATED_CORNER:
     case ID_POPUP_PCB_FILL_ALL_ZONES:
 	case ID_POPUP_PCB_PLACE_ZONE_CORNER:
 	case ID_POPUP_PCB_PLACE_ZONE_OUTLINES:
@@ -815,12 +815,11 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         }
         break;
 
-    case ID_POPUP_PCB_DELETE_EDGE_ZONE:
+    case ID_POPUP_PCB_DELETE_ZONE_LAST_CREATED_CORNER:
         DrawPanel->MouseToCursorSchema();
         if( GetCurItem() && (GetCurItem()->m_Flags & IS_NEW) )
         {
-            SetCurItem( Del_SegmEdgeZone( &dc,
-                                         (EDGE_ZONE*) GetCurItem() ) );
+            SetCurItem( Del_LastSegmEdgeZone( &dc ) );
         }
         break;
 
