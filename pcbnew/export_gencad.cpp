@@ -183,7 +183,10 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
  *  pour les formes de pad PAD1 a PADn
  */
 {
-    D_PAD* pad, ** padlist, ** pad_list_base;
+    D_PAD*      pad;
+    D_PAD**     padlist;
+    D_PAD**     pad_list_base = NULL;
+    
     const  char*  pad_type;
     int    memsize, ii, dx, dy;
     D_PAD* old_pad = NULL;
@@ -191,11 +194,14 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
 
     fputs( "$PADS\n", file );
 
-    // Generation de la liste des pads tries par forme et dimensions:
-    memsize = (pcb->m_NbPads + 1) * sizeof(D_PAD *);
-    pad_list_base = (D_PAD**) MyZMalloc( memsize );
-    memcpy( pad_list_base, pcb->m_Pads, memsize );
-    qsort( pad_list_base, pcb->m_NbPads, sizeof(D_PAD *), Pad_list_Sort_by_Shapes );
+    if( pcb->m_NbPads > 0 )
+    {
+        // Generation de la liste des pads tries par forme et dimensions:
+        memsize = (pcb->m_NbPads + 1) * sizeof(D_PAD *);
+        pad_list_base = (D_PAD**) MyZMalloc( memsize );
+        memcpy( pad_list_base, pcb->m_Pads, memsize );
+        qsort( pad_list_base, pcb->m_NbPads, sizeof(D_PAD *), Pad_list_Sort_by_Shapes );
+    }
 
     pad_name_number = 0;
     for( padlist = pad_list_base, ii = 0; ii < pcb->m_NbPads; padlist++, ii++ )
@@ -295,7 +301,9 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
     }
 
     fputs( "$ENDPADS\n\n", file );
-    MyFree( pad_list_base );
+    
+    if( pad_list_base )
+        MyFree( pad_list_base );
 }
 
 
