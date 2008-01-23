@@ -78,6 +78,18 @@ BOARD::~BOARD()
 }
 
 
+wxString BOARD::GetLayerName( int aLayerIndex ) const
+{
+    return ReturnPcbLayerName( aLayerIndex, true );
+}
+
+
+int BOARD::GetCopperLayerCount() const
+{
+    return m_BoardSettings->m_CopperLayerCount;
+}
+
+
 wxPoint& BOARD::GetPosition()
 {
     static wxPoint dummy(0,0);

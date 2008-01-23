@@ -121,6 +121,21 @@ public:
         return (int) m_markers.size();
     }
 
+    /**
+     * Function GetCopperLayerCount
+     * @return int - The number of copper layers in the BOARD.
+     */
+    int GetCopperLayerCount() const;
+    
+    /**
+     * Function GetLayerName
+     * returns the name of the requested layer.  Hopefully layer names will
+     * be stored in the BOARD.  This function anticipates that.
+     *
+     * @param aLayerIndex A layer index, like COPPER_LAYER_N, etc.
+     * @return wxString - the layer name.
+     */
+    wxString GetLayerName( int aLayerIndex ) const; 
     
     /* Routines de calcul des nombres de segments pistes et zones */
     int     GetNumSegmTrack();
