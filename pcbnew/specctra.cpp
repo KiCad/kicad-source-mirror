@@ -68,7 +68,7 @@
 
 namespace DSN {
 
-#define NESTWIDTH           4   ///< how many spaces per nestLevel    
+#define NESTWIDTH           2   ///< how many spaces per nestLevel    
 
 
 
@@ -199,64 +199,63 @@ void SPECCTRA_DB::readTIME( time_t* time_stamp ) throw( IOError )
 {
     DSN_T tok;
     
-    std::string     builder;
+    struct tm   mytime;
     
     static const char time_toks[] = "<month> <day> <hour> : <minute> : <second> <year>"; 
 
+    static const char* months[] = {  // index 0 = Jan
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", NULL
+    };
+    
     needSYMBOL();       // month
-    builder += lexer->CurText();
-    builder += ' ';
+    
+    const char* ptok = lexer->CurText();
+
+    mytime.tm_mon = 0;      // remains of we don't find a month match.
+    for( int m=0;  months[m];  ++m )
+    {
+        if( !stricmp( months[m], ptok ) )
+        {
+            mytime.tm_mon = m;
+            break;
+        }
+    }
     
     tok = nextTok();    // day
     if( tok != T_NUMBER )
         expecting( time_toks );
-    builder += lexer->CurText();
-    builder += ' ';
+    mytime.tm_mday = atoi( lexer->CurText() );
     
     tok = nextTok();    // hour
     if( tok != T_NUMBER )
         expecting( time_toks );
-    builder += lexer->CurText();
-    builder += ' ';
+    mytime.tm_hour = atoi( lexer->CurText() );
 
     // : colon    
     needSYMBOL();
     if( *lexer->CurText() != ':' || strlen( lexer->CurText() )!=1 )
         expecting( time_toks );
-    builder += *lexer->CurText();
-    builder += ' ';
 
     tok = nextTok();    // minute
     if( tok != T_NUMBER )
         expecting( time_toks );
-    builder += lexer->CurText();
-    builder += ' ';
+    mytime.tm_min = atoi( lexer->CurText() );
     
     // : colon    
     needSYMBOL();
     if( *lexer->CurText() != ':' || strlen( lexer->CurText() )!=1 )
         expecting( time_toks );
-    builder += *lexer->CurText();
-    builder += ' ';
 
     tok = nextTok();    // second
     if( tok != T_NUMBER )
         expecting( time_toks );
-    builder += lexer->CurText();
-    builder += ' ';
+    mytime.tm_sec = atoi( lexer->CurText() );
     
     tok = nextTok();    // year
     if( tok != T_NUMBER )
         expecting( time_toks );
-    builder += lexer->CurText();
-
-    struct tm mytime;
-    
-    if( strptime( builder.c_str(), "%b %d %H : %M : %S %Y", &mytime ) 
-       != builder.c_str() + strlen(builder.c_str() ) )
-    {
-        expecting( time_toks );
-    }
+    mytime.tm_year = atoi( lexer->CurText() ) - 1900;
     
     *time_stamp = mktime( &mytime ); 
 }
@@ -696,8 +695,8 @@ L_place:
             break;
 
         case T_plane:
-            PLANE* plane;
-            plane = new PLANE( growth );
+            COPPER_PLANE* plane;
+            plane = new COPPER_PLANE( growth );
             growth->planes.push_back( plane );
             doKEEPOUT( plane );
             break;
@@ -744,13 +743,11 @@ L_place:
             break;            
             
         case T_keepout:
-/* @todo            
         case T_place_keepout:
         case T_via_keepout:
         case T_wire_keepout:
         case T_bend_keepout:
         case T_elongate_keepout:
-*/
             KEEPOUT* keepout;
             keepout = new KEEPOUT( growth, tok );
             growth->keepouts.push_back( keepout );
@@ -1234,6 +1231,17 @@ void SPECCTRA_DB::doLAYER( LAYER* growth ) throw( IOError )
                 growth->direction = tok;
                 break;
             default:
+                // the spec has an example show an abbreviation of the "horizontal" keyword.  Ouch.
+                if( !strcmp( "hori", lexer->CurText() ) )
+                {
+                    growth->direction = T_horizontal;
+                    break;
+                }
+                else if( !strcmp( "vert", lexer->CurText() ) )
+                {
+                    growth->direction = T_vertical;
+                    break;
+                }
                 expecting( "horizontal|vertical|orthogonal|positive_diagonal|negative_diagonal|diagonal|off" );
             }
             if( nextTok()!=T_RIGHT )
@@ -1447,11 +1455,15 @@ void SPECCTRA_DB::doREGION( REGION* growth ) throw( IOError )
         switch( tok )
         {
         case T_rect:
+            if( growth->rectangle )
+                unexpected( tok );
             growth->rectangle = new RECTANGLE( growth );
             doRECTANGLE( growth->rectangle );
             break;
             
         case T_polygon:
+            if( growth->polygon )
+                unexpected( tok );
             growth->polygon = new PATH( growth, T_polygon );
             doPATH( growth->polygon );
             break;
@@ -1472,6 +1484,8 @@ void SPECCTRA_DB::doREGION( REGION* growth ) throw( IOError )
             break;
             
         case T_rule:
+            if( growth->rules )
+                unexpected( tok );
             growth->rules = new RULE( growth, T_rule );
             doRULE( growth->rules );
             break;
@@ -1865,7 +1879,8 @@ void SPECCTRA_DB::doPADSTACK( PADSTACK* growth ) throw( IOError )
         [(rule <clearance_descriptor> )])
     */
     
-    if( !isSymbol( tok ) )
+    // padstack_id may be a number
+    if( !isSymbol( tok ) && tok!=T_NUMBER )
         expecting( "padstack_id" );
     
     growth->padstack_id = lexer->CurText();
@@ -1969,9 +1984,17 @@ void SPECCTRA_DB::doSHAPE( SHAPE* growth ) throw( IOError )
         case T_path:
         case T_polygon:
         case T_qarc:
+L_done_that:    
             if( growth->rectangle || growth->circle || growth->path || growth->qarc )
                 unexpected( tok );
-        default: ;
+            break;
+        default:
+            // the example in the spec uses "circ" instead of "circle".  Bad!
+            if( !strcmp( "circ", lexer->CurText() ) )
+            {
+                tok = T_circle;
+                goto L_done_that;
+            }
         }
         
         switch( tok )
@@ -2095,6 +2118,18 @@ void SPECCTRA_DB::doIMAGE( IMAGE* growth ) throw( IOError )
             growth->place_rules = new RULE( growth, tok );
             doRULE( growth->place_rules );
             break;
+
+        case T_keepout:
+        case T_place_keepout:
+        case T_via_keepout:
+        case T_wire_keepout:
+        case T_bend_keepout:
+        case T_elongate_keepout:
+            KEEPOUT* keepout;
+            keepout = new KEEPOUT( growth, tok );
+            growth->keepouts.push_back( keepout );
+            doKEEPOUT( keepout );
+            break;
             
         default:
             unexpected( lexer->CurText() );
@@ -2112,7 +2147,8 @@ void SPECCTRA_DB::doPIN( PIN* growth ) throw( IOError )
           [<user_property_descriptor> ])
     */
 
-    if( !isSymbol( tok ) )
+    // a padstack_id may be a number
+    if( !isSymbol( tok ) && tok!=T_NUMBER )
         expecting( "padstack_id" );
     
     growth->padstack_id = lexer->CurText();
@@ -2142,7 +2178,7 @@ void SPECCTRA_DB::doPIN( PIN* growth ) throw( IOError )
     
     if( nextTok() != T_NUMBER )
         expecting( T_NUMBER );
-    growth->vertex.x = strtod( lexer->CurText(), 0 );
+    growth->vertex.y = strtod( lexer->CurText(), 0 );
 
     if( nextTok() != T_RIGHT )
         unexpected( lexer->CurText() );
@@ -2250,15 +2286,6 @@ void SPECCTRA_DB::doNET( NET* growth ) throw( IOError )
             if( nextTok() != T_NUMBER )
                 expecting( T_NUMBER );
             growth->net_number = atoi( lexer->CurText() );
-            if( nextTok() != T_NUMBER )
-                expecting( T_NUMBER );
-            break;
-
-        case T_type:
-            tok = nextTok();
-            if( tok!=T_fix && tok!=T_normal )
-                expecting( "fix|normal" );
-            growth->type = tok;
             needRIGHT();
             break;
 
@@ -2279,18 +2306,31 @@ void SPECCTRA_DB::doNET( NET* growth ) throw( IOError )
             }
             break;
 
-        case T_fromto:
-            if( growth->fromto )
-                unexpected( tok );
-            growth->fromto = new FROMTO( growth );
-            doFROMTO( growth->fromto );
-            break;
-
         case T_comp_order:
             if( growth->comp_order )
                 unexpected( tok );
             growth->comp_order = new COMP_ORDER( growth );
             doCOMP_ORDER( growth->comp_order );
+            break;
+            
+        case T_type:
+            tok = nextTok();
+            if( tok!=T_fix && tok!=T_normal )
+                expecting( "fix|normal" );
+            growth->type = tok;
+            needRIGHT();
+            break;
+
+/* @todo            
+        case T_circuit:
+            break;
+*/
+
+        case T_rule:
+            if( growth->rules )
+                unexpected( tok );
+            growth->rules = new RULE( growth, T_rule );
+            doRULE( growth->rules );
             break;
             
         case T_layer_rule:
@@ -2300,6 +2340,13 @@ void SPECCTRA_DB::doNET( NET* growth ) throw( IOError )
             doLAYER_RULE( layer_rule );
             break;
             
+        case T_fromto:
+            FROMTO* fromto;
+            fromto = new FROMTO( growth );
+            growth->fromtos.push_back( fromto );
+            doFROMTO( fromto );
+            break;
+
         default:
             unexpected( lexer->CurText() );
         }
@@ -2852,6 +2899,20 @@ void SPECCTRA_DB::doWIRING( WIRING* growth ) throw( IOError )
         tok = nextTok();
         switch( tok )
         {
+        case T_unit:
+            if( growth->unit )
+                unexpected( tok );
+            growth->unit = new UNIT_RES( growth, tok );
+            doUNIT( growth->unit );
+            break;
+            
+        case T_resolution:
+            if( growth->unit )
+                unexpected( tok );
+            growth->unit = new UNIT_RES( growth, tok );
+            doRESOLUTION( growth->unit );
+            break;
+            
         case T_wire:
             WIRE* wire;
             wire = new WIRE( growth );
@@ -3132,7 +3193,7 @@ void SPECCTRA_DB::doROUTE( ROUTE* growth ) throw( IOError )
         case T_library_out:
             if( growth->library )
                 unexpected( tok );
-            growth->library = new LIBRARY( growth );
+            growth->library = new LIBRARY( growth, tok );
             doLIBRARY( growth->library );
             break;
                     
@@ -3514,13 +3575,13 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     }
 
     if( hasVertex )
+    {
         out->Print( 0, " %.6g %.6g", vertex.x, vertex.y );
     
-    if( side != T_NONE )
         out->Print( 0, " %s", LEXER::GetTokenText( side ) );
     
-    if( isRotated )
         out->Print( 0, " %.6g", rotation );
+    }
     
     if( mirror != T_NONE )
         out->Print( 0, " (mirror %s)", LEXER::GetTokenText( mirror ) );
@@ -3590,6 +3651,7 @@ int main( int argc, char** argv )
 //    wxString    filename( wxT("/tmp/fpcroute/Sample_1sided/demo_1sided.dsn") );
 //    wxString    filename( wxT("/tmp/testdesigns/test.dsn") );
     wxString    filename( wxT("/tmp/testdesigns/test.ses") );
+//    wxString    filename( wxT("/tmp/specctra_big.dsn") );
 
     SPECCTRA_DB     db;
     bool            failed = false;
@@ -3608,8 +3670,6 @@ int main( int argc, char** argv )
     if( !failed )    
         printf("loaded OK\n");
 
-//    db.SetPCB( SPECCTRA_DB::MakePCB() );
-    
 
     // export what we read in, making this test program basically a beautifier
     db.ExportSESSION( wxT("/tmp/export.ses") );
