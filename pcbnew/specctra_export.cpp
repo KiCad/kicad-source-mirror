@@ -68,14 +68,17 @@ void WinEDA_PcbFrame::ExportToSPECCTRA( wxCommandEvent& event )
     {    
         db.FromBOARD( m_Pcb );
         db.ExportPCB(  fullFileName, true );
+        
+        // if an exception is thrown by FromBOARD or Export(), then 
+        // ~SPECCTRA_DB() will close the file.
     } 
     catch ( IOError ioe )
     {
         DisplayError( this, ioe.errorText );
+        return;
     }
     
-    // if an exception is thrown by FromBOARD or Export(), then 
-    // ~SPECCTRA_DB() will close the file.
+    // @todo display a message saying the export is complete.
 }
 
 
@@ -100,11 +103,17 @@ static inline void swap( POINT_PAIR& pair )
 }
 
 
+/**
+ * Function mapPt
+ * converts a Kicad point into a DSN file point.  Kicad's BOARD coordinates
+ * are in deci-mils  (i.e. 1/10,000th of an inch) and we are exporting in units
+ * of mils, so we have to divide by 10.
+ */
 static POINT mapPt( const wxPoint& pt )
 {
     POINT ret;
-    ret.x = pt.x;
-    ret.y = -pt.y;      // make y negative, since it is increasing going down.
+    ret.x = pt.x / 10.0;
+    ret.y = -pt.y /10.0;      // make y negative, since it is increasing going down.
     return ret;
 }
 
@@ -138,7 +147,7 @@ static void swapEnds( POINT_PAIRS& aList )
 
 /**
  * Function isRectangle
- * tests to see if the POINT_PAIRS list make up a vertically/horizontally 
+ * tests to see if the POINT_PAIRS list makes up a vertically/horizontally 
  * oriented rectangle.
  * @return bool - true if there are 4 point pairs making a rectangle.
  */ 
@@ -177,103 +186,132 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
     if( !pcb )
         pcb = SPECCTRA_DB::MakePCB();
 
-    //-----<header stuff>-------------------------------------------------    
-    pcb->unit->units = T_mil;
-    pcb->resolution->units = T_mil;
-    pcb->resolution->value = 10;
-
-    //-----<board edges>--------------------------------------------------
- 
-    // get all the DRAWSEGMENTS into 'items', then look for layer == EDGE_N,
-    // and those segments comprize the board's perimeter.
-    const KICAD_T  scanDRAWSEGMENTS[] = { TYPEDRAWSEGMENT, EOT };
-    items.Collect( aBoard, scanDRAWSEGMENTS );
-
-    bool haveEdges = false;
-    ppairs.clear();
-    for( int i=0;  i<items.GetCount();  ++i )
-    {
-        DRAWSEGMENT* item = (DRAWSEGMENT*) items[i];
-        
-        wxASSERT( item->Type() == TYPEDRAWSEGMENT );
-        
-        if( item->GetLayer() == EDGE_N )
-        {
-            pair.p1 = mapPt( item->m_Start );
-            pair.p2 = mapPt( item->m_End );
-            pair.item = item;
-            ppairs.push_back( pair );
-            haveEdges = true;
-        }
+    //-----<unit_descriptor> & <resolution_descriptor>--------------------
+    {    
+        pcb->unit->units = T_mil;
+        pcb->resolution->units = T_mil;
+        pcb->resolution->value = 100;
     }
 
-    if( haveEdges )
+    
+    //-----<boundary_descriptor>------------------------------------------
     {
-        swapEnds( ppairs );
-
-#if defined(DEBUG)        
-        for( unsigned i=0;  i<ppairs.size();  ++i )
+        // get all the DRAWSEGMENTS into 'items', then look for layer == EDGE_N,
+        // and those segments comprize the board's perimeter.
+        const KICAD_T  scanDRAWSEGMENTS[] = { TYPEDRAWSEGMENT, EOT };
+        items.Collect( aBoard, scanDRAWSEGMENTS );
+    
+        bool haveEdges = false;
+        ppairs.clear();
+        for( int i=0;  i<items.GetCount();  ++i )
         {
-            POINT_PAIR* p = &ppairs[i];
-            p->item->Show( 0, std::cout );
+            DRAWSEGMENT* item = (DRAWSEGMENT*) items[i];
+            
+            wxASSERT( item->Type() == TYPEDRAWSEGMENT );
+            
+            if( item->GetLayer() == EDGE_N )
+            {
+                pair.p1 = mapPt( item->m_Start );
+                pair.p2 = mapPt( item->m_End );
+                pair.item = item;
+                ppairs.push_back( pair );
+                haveEdges = true;
+            }
         }
-#endif        
-
-        BOUNDARY*   boundary = new BOUNDARY(0);
-
-        if( isRectangle( ppairs ) )
+    
+        if( haveEdges )
         {
-            RECTANGLE*  rect = new RECTANGLE( boundary );
-            
-            rect->layer_id = "pcb";
-            // opposite corners
-            rect->point0 = ppairs[0].p1;
-            rect->point1 = ppairs[2].p1;
-            
-            boundary->rectangle = rect;
+            swapEnds( ppairs );
+    
+    #if defined(DEBUG)        
+            for( unsigned i=0;  i<ppairs.size();  ++i )
+            {
+                POINT_PAIR* p = &ppairs[i];
+                p->item->Show( 0, std::cout );
+            }
+    #endif        
+    
+            BOUNDARY*   boundary = new BOUNDARY(0);
+    
+            if( isRectangle( ppairs ) )
+            {
+                RECTANGLE*  rect = new RECTANGLE( boundary );
+                rect->layer_id = "pcb";
+                
+                // opposite corners
+                rect->point0 = ppairs[0].p1;
+                rect->point1 = ppairs[2].p1;
+                
+                boundary->rectangle = rect;
+            }
+            else
+            {
+                PATH*  path = new PATH( boundary );
+                
+                path->layer_id = "pcb";
+                for( unsigned i=0; i<ppairs.size();  ++i )
+                {
+                    // unless its a closed polygon, this probably won't work,
+                    // otherwise it will.
+                    path->points.push_back( ppairs[i].p1 );
+                }
+                
+                boundary->paths.push_back( path );
+            }
+    
+            pcb->structure->SetBOUNDARY( boundary );
         }
         else
         {
-            PATH*  path = new PATH( boundary );
+            aBoard->ComputeBoundaryBox();
             
-            path->layer_id = "pcb";
-            for( unsigned i=0; i<ppairs.size();  ++i )
-            {
-                // unless its a closed polygon, this probably won't work,
-                // otherwise it will.
-                path->points.push_back( ppairs[i].p1 );
-            }
+            BOUNDARY*   boundary = new BOUNDARY(0);
+            RECTANGLE*  rect = new RECTANGLE( boundary );
+    
+            rect->layer_id = "pcb";
             
-            boundary->paths.push_back( path );
+            // opposite corners
+            wxPoint bottomRight;
+            bottomRight.x = aBoard->m_BoundaryBox.GetRight();
+            bottomRight.y = aBoard->m_BoundaryBox.GetBottom();
+            
+            rect->point0 = mapPt( aBoard->m_BoundaryBox.GetOrigin() );
+            rect->point1 = mapPt( bottomRight );
+            
+            boundary->rectangle = rect;
+            
+            pcb->structure->SetBOUNDARY( boundary );
         }
-
-        pcb->structure->SetBOUNDARY( boundary );
     }
-    else
+
+    
+    //-----<layer_descriptor>-----------------------------------------------
     {
-        aBoard->ComputeBoundaryBox();
+        // specctra wants top physical layer first, then going down to the 
+        // bottom most physical layer in physical sequence.
+        // @question : why does Kicad not display layers in that order?
+        int layerCount = aBoard->GetCopperLayerCount();
         
-        BOUNDARY*   boundary = new BOUNDARY(0);
-        RECTANGLE*  rect = new RECTANGLE( boundary );
-
-        rect->layer_id = "pcb";
-        
-        // opposite corners
-        wxPoint bottomRight;
-        bottomRight.x = aBoard->m_BoundaryBox.GetRight();
-        bottomRight.y = aBoard->m_BoundaryBox.GetBottom();
-        
-        rect->point0 = mapPt( aBoard->m_BoundaryBox.GetOrigin() );
-        rect->point1 = mapPt( bottomRight );
-        
-        boundary->rectangle = rect;
-        
-        pcb->structure->SetBOUNDARY( boundary );
+        for( int ndx=layerCount-1;  ndx >= 0;  --ndx )
+        {
+            wxString    layerName = aBoard->GetLayerName( ndx>0 && ndx==layerCount-1 ? LAYER_CMP_N : ndx );
+            LAYER*      layer = new LAYER( pcb->structure );
+            
+            layer->name = CONV_TO_UTF8( layerName );
+            
+            // layer->type =
+            pcb->structure->layers.push_back( layer );
+        }
     }
     
-    //-----<layers>-------------------------------------------------------
+    //-----<build the padstack list here, no output>------------------------
     
     
+    //-----<via_descriptor>-------------------------------------------------
+    {
+        // Output the vias in the padstack list here, by name
+    }
+
     
 }
 

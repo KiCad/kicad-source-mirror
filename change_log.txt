@@ -14,6 +14,7 @@ email address.
   * Changed specctra.h's POINT to use double for coordinates.  Changed format
     string for Format()ing a double.
   * Changed specctra_export.cpp to actually output an incomplete file.
+  * Added BOARD::GetCopperLayerCount() and BOARD::GetLayerName().
 
 
 2008-Jan-21 UPDATE   Dick Hollenbeck <dick@softplc.com>

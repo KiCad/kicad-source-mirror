@@ -837,6 +837,10 @@ public:
 };
 
 
+/**
+ * Class VIA
+ * corresponds to the &lt;via_descriptor&gt; in the specctra dsn spec.
+ */
 class VIA : public ELEM
 {
     friend class SPECCTRA_DB;
