@@ -579,6 +579,12 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
     DrawPanel->Refresh( TRUE );
     if( g_Show_Ratsnest )
         Compile_Ratsnest( DC, TRUE );
+	else
+	{
+	    m_Pcb->m_Status_Pcb = 0;        /* we need (later) a full ratnest computation */
+		build_liste_pads();
+	}
+
 }
 
 

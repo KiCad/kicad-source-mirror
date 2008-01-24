@@ -248,6 +248,7 @@
           <bool name="proxy-wxDEFAULT_DIALOG_STYLE">0</bool>
           <bool name="proxy-wxCAPTION">1</bool>
           <bool name="proxy-wxRESIZE_BORDER">0</bool>
+          <bool name="proxy-wxTHICK_FRAME">0</bool>
           <bool name="proxy-wxSYSTEM_MENU">1</bool>
           <bool name="proxy-wxSTAY_ON_TOP">0</bool>
           <bool name="proxy-wxDIALOG_NO_PARENT">0</bool>
@@ -368,7 +369,7 @@
                   <string name="proxy-Member variable name">"m_GridCtrl"</string>
                   <string name="proxy-Label">"Grid Size for Filling:"</string>
                   <long name="proxy-Major dimension count">1</long>
-                  <string name="proxy-Items">"0.00000|0.00000|0.00000"</string>
+                  <string name="proxy-Items">"0.00000|0.00000|0.00000|0.00000"</string>
                   <long name="proxy-Initial value">0</long>
                   <string name="proxy-Help text">""</string>
                   <string name="proxy-Tooltip text">""</string>

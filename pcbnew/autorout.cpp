@@ -203,31 +203,41 @@ void DisplayBoard( WinEDA_DrawPanel* panel, wxDC* DC )
     int dcell0, dcell1 = 0, color;
     int maxi;
 
-    maxi = ( /*ActiveScreen->Lim_XD - 20*/ 500) / Ncols;
+    maxi = 600 / Ncols;
     maxi = (maxi * 3 ) / 4;
     if( !maxi )
         maxi = 1;
 
+    GRSetDrawMode( DC, GR_COPY );
     for( col = 0; col < Ncols; col++ )
     {
         for( row = 0; row < Nrows; row++ )
         {
             color  = 0;
-            dcell0 = GetCell( row, col, BOTTOM ); if( dcell0 & HOLE )
+            dcell0 = GetCell( row, col, BOTTOM );
+			if( dcell0 & HOLE )
                 color = GREEN;
-            if( Nb_Sides )
-                dcell1 = GetCell( row, col, TOP );
+//            if( Nb_Sides )
+//                dcell1 = GetCell( row, col, TOP );
             if( dcell1 & HOLE )
                 color |= RED;
-            dcell0 |= dcell1;
+//            dcell0 |= dcell1;
             if( !color && (dcell0 & VIA_IMPOSSIBLE) )
                 color = BLUE;
-            if( color )
+			if( dcell0 & CELL_is_EDGE )
+                color = YELLOW;
+			else if( dcell0 & CELL_is_ZONE )
+                color = YELLOW;
+			
+			#define DRAW_OFFSET_X -20
+			#define DRAW_OFFSET_Y 20
+//            if( color )
             {
                 for( i = 0; i < maxi; i++ )
                     for( j = 0; j < maxi; j++ )
                         GRSPutPixel( &panel->m_ClipBox, DC,
-                                     (col * maxi) + i + 10, (row * maxi) + 60 + j, color );
+                                     (col * maxi) + i + DRAW_OFFSET_X,
+									 (row * maxi) + j + DRAW_OFFSET_Y, color );
 
             }
         }

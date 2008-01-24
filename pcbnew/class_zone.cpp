@@ -367,6 +367,7 @@ bool ZONE_CONTAINER::HitTest( const wxPoint& refPos )
 /**
  * Function HitTestForCorner
  * tests if the given wxPoint near a corner, or near the segment define by 2 corners.
+ * Choose the nearest corner
  * "near" means CORNER_MIN_DIST_IN_PIXELS pixels
  * @return -1 if none, corner index in .corner <vector>
  * @param refPos : A wxPoint to test
@@ -374,20 +375,24 @@ bool ZONE_CONTAINER::HitTest( const wxPoint& refPos )
 int ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
 {
 	#define CORNER_MIN_DIST 500		// distance (in internal units) to detect a corner in a zone outline
-    int dist;
+    int dist, min_dist;
 	unsigned item_pos, lim;
 	lim = m_Poly->corner.size();
 	m_CornerSelection = -1;
-
+	
+	min_dist = CORNER_MIN_DIST;
 	for ( item_pos = 0; item_pos < lim; item_pos++ )
 	{
 		dist = abs( m_Poly->corner[item_pos].x - refPos.x ) + abs( m_Poly->corner[item_pos].y - refPos.y );
-		if( dist <= CORNER_MIN_DIST )
+		if( dist <= min_dist )
 		{
 			m_CornerSelection = item_pos;
-			return item_pos;
+			min_dist = dist;
 		}
 	}
+
+	if ( m_CornerSelection >= 0 )
+		return item_pos;
 
     return -1;
 }
@@ -395,6 +400,7 @@ int ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
 /**
  * Function HitTestForEdge
  * tests if the given wxPoint near a corner, or near the segment define by 2 corners.
+ * choose the nearest segment
  * "near" means EDGE_MIN_DIST_IN_PIXELS pixels
  * @return -1 if none,  or index of the starting corner in .corner <vector>
  * @param refPos : A wxPoint to test
@@ -402,13 +408,14 @@ int ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
 int ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
 {
 	#define EDGE_MIN_DIST 200	// distance (in internal units) to detect a zone outline
-    int dist;
+    int dist, min_dist;
 	unsigned item_pos, lim;
 	lim = m_Poly->corner.size();
 
     /* Test for an entire segment */
     unsigned first_corner_pos = 0, end_segm;
 	m_CornerSelection = -1;
+	min_dist = EDGE_MIN_DIST;
 
 	for ( item_pos = 0; item_pos < lim; item_pos++ )
 	{
@@ -431,12 +438,15 @@ int ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
 													m_Poly->corner[item_pos].y,
 													m_Poly->corner[end_segm].x,
 													m_Poly->corner[end_segm].y );
-		if( dist <= EDGE_MIN_DIST )
+		if( dist <= min_dist )
 		{
 			m_CornerSelection = item_pos;
-			return item_pos;
+			min_dist = dist;
 		}
 	}
+
+	if ( m_CornerSelection >= 0 )
+		return item_pos;
 
     return -1;
 }

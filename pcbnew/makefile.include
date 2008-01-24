@@ -1,6 +1,7 @@
+
 EXTRALIBS = ../common/common.a ../polygon/lib_polygon.a
 EXTRACPPFLAGS += -DPCBNEW  -fno-strict-aliasing -I./ -Ibitmaps -I../include -I../share\
-	-I../pcbnew -I../3d-viewer -I../polygon
+	-I../pcbnew -I../3d-viewer -I../polygon -I$(BOOST_LIB)
 
 #COMMON = pcbnew.h struct.h class_pad.h class_module.h class_text_mod.h \
 #		class_edge_mod.h class_equipot.h
@@ -10,9 +11,11 @@ LIBVIEWER3D = ../3d-viewer/3d-viewer.a
 ZONE_FILES = zones_by_polygon.o
 #ZONE_FILES = zones.o
 
+SPECCTRA_TOOLS = specctra.o specctra_export.o dsn.o
 
 OBJECTS=	$(TARGET).o classpcb.o\
 		$(ZONE_FILES)\
+		$(SPECCTRA_TOOLS)\
 		zones_test_and_combine_areas.o\
 		zone_filling_algorithm.o\
 		lay2plot.o\

@@ -1,7 +1,7 @@
 #makefile for pcbnew, Windows
 
 WXDIR = $(WXWIN)
-
+BOOST_LIB = /f/boost/boost_1_34_1
 TARGET=pcbnew
 
 include ../libs.win
