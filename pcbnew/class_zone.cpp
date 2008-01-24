@@ -285,6 +285,7 @@ void ZONE_CONTAINER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& off
  * @param draw_mode = draw mode: OR, XOR ..
  */
 {
+	if ( DC == NULL ) return;
     int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
     int color = g_DesignSettings.m_LayerColor[m_Layer];
 

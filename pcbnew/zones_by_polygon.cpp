@@ -357,6 +357,7 @@ void WinEDA_PcbFrame::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER * zone_contai
 
 	if ( zone_container->m_Poly->GetNumCorners() <= 3 )
 	{
+		zone_container->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
 		Delete_Zone_Fill( DC, NULL, zone_container->m_TimeStamp );
 		m_Pcb->Delete( zone_container );
 		return;
@@ -373,7 +374,7 @@ void WinEDA_PcbFrame::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER * zone_contai
     m_Pcb->RedrawAreasOutlines(DrawPanel, DC, GR_OR, layer);
 
 	int ii = m_Pcb->GetAreaIndex(zone_container);	// test if zone_container exists
-	if ( ii < 0 ) zone_container = NULL;			// was removed by combining zones
+	if ( ii < 0 ) zone_container = NULL;			// zone_container does not exist anymaore, after combining zones
 	int error_count = m_Pcb->Test_Drc_Areas_Outlines_To_Areas_Outlines(zone_container, true);
 	if ( error_count )
 	{
@@ -536,13 +537,17 @@ EDGE_ZONE* WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
         if( Drc_On && m_drc->Drc( newedge ) == BAD_DRC )
 		{
 			delete newedge;
-			SetCurItem(NULL);
+			// use the form of SetCurItem() which does not write to the msg panel,
+			// SCREEN::SetCurItem(), so the DRC error remains on screen.
+			// WinEDA_PcbFrame::SetCurItem() calls Display_Infos(). 
+			GetScreen()->SetCurItem( NULL );
 			DisplayError(this, _("DRC error: this start point is inside or too close an other area"));
 			return NULL;
 		}
 
         // link into list:
         newedge->Pnext = oldedge;
+		SetCurItem( newedge );
 
         if( oldedge )
             oldedge->Pback = newedge;
@@ -575,6 +580,7 @@ EDGE_ZONE* WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
             newedge->Pnext = oldedge;
             oldedge->Pback = newedge;
             m_Pcb->m_CurrentLimitZone = newedge;
+			SetCurItem( newedge );
         }
     }
 
@@ -697,7 +703,7 @@ bool WinEDA_PcbFrame::End_Zone( wxDC* DC )
     DelLimitesZone( DC, TRUE );
 
     new_zone_container->m_Flags = 0;
-    SetCurItem( NULL );       // This outine can be deleted when merging outlines
+    GetScreen()->SetCurItem( NULL );       // This outine can be deleted when merging outlines
 
     // Combine zones if possible :
     m_Pcb->AreaPolygonModified( new_zone_container, true, verbose );
