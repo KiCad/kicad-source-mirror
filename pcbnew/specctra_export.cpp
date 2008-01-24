@@ -34,6 +34,7 @@
 
 #include "specctra.h"
 #include "collectors.h"
+#include "wxPcbStruct.h"        // Change_Side_Module()
 
 using namespace DSN;
 
@@ -61,27 +62,59 @@ void WinEDA_PcbFrame::ExportToSPECCTRA( wxCommandEvent& event )
 
     
     SPECCTRA_DB     db;
+    bool            ok = true;
+    wxString        errorText;
     
     db.SetPCB( SPECCTRA_DB::MakePCB() );
+
+
+    //  DSN Images (=Kicad MODULES and pads) must be presented from the
+    //  top view.  So we temporarily flip any modules which are on the back
+    //  side of the board to the front, and record this in the MODULE's flag field.
+    for( MODULE* module = m_Pcb->m_Modules;  module;  module = module->Next() )
+    {
+        module->flag = 0;
+        if( module->GetLayer() == COPPER_LAYER_N )
+        {
+            Change_Side_Module( module, NULL );
+            module->flag = 1;
+        }
+    }
     
     try 
     {    
         db.FromBOARD( m_Pcb );
         db.ExportPCB(  fullFileName, true );
-        
-        // if an exception is thrown by FromBOARD or Export(), then 
+    
+        // if an exception is thrown by FromBOARD or ExportPCB(), then 
         // ~SPECCTRA_DB() will close the file.
     } 
     catch ( IOError ioe )
     {
-        DisplayError( this, ioe.errorText );
-        return;
+        ok = false;
+        
+        // display no messages until we flip back the modules below.
+        errorText = ioe.errorText;
+    }
+
+    //  DSN Images (=Kicad MODULES and pads) must be presented from the
+    //  top view.  Restore those that were flipped.
+    for( MODULE* module = m_Pcb->m_Modules;  module;  module = module->Next() )
+    {
+        if( module->flag )
+        {
+            Change_Side_Module( module, NULL );
+            module->flag = 0;
+        }
     }
     
-    // @todo display a message saying the export is complete.
+    if( ok )
+    {
+        // @todo display a message saying the export is complete.
+    }
+    else
+        DisplayError( this, errorText );
 }
-
-
 
 
 namespace DSN {
@@ -103,6 +136,22 @@ static inline void swap( POINT_PAIR& pair )
 }
 
 
+static inline double scale( int kicadDist )
+{
+    return kicadDist/10.0;
+}
+
+static inline double mapX( int x )
+{
+    return scale(x);
+}
+
+static inline double mapY( int y )
+{
+    return -scale(y);      // make y negative, since it is increasing going down.
+}
+
+
 /**
  * Function mapPt
  * converts a Kicad point into a DSN file point.  Kicad's BOARD coordinates
@@ -112,8 +161,8 @@ static inline void swap( POINT_PAIR& pair )
 static POINT mapPt( const wxPoint& pt )
 {
     POINT ret;
-    ret.x = pt.x / 10.0;
-    ret.y = -pt.y /10.0;      // make y negative, since it is increasing going down.
+    ret.x = mapX( pt.x );
+    ret.y = mapY( pt.y );
     return ret;
 }
 
@@ -172,8 +221,199 @@ static bool isRectangle( POINT_PAIRS& aList )
 }
 
 
-void SPECCTRA_DB::exportEdges( BOARD* aBoard ) throw( IOError )
+/**************************************************************************/
+static int Pad_list_Sort_by_Shapes( const void* refptr, const void* objptr )
+/**************************************************************************/
 {
+    const D_PAD* padref = *(D_PAD**)refptr;
+    const D_PAD* padcmp = *(D_PAD**)objptr;
+
+    return D_PAD::Compare( padref, padcmp );     
+}
+
+
+/**
+ * Function makePADSTACKs
+ * makes all the PADSTACKs, and marks each D_PAD with the index into the 
+ * LIBRARY::padstacks list that it matches.
+ */
+static void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads, 
+                          LIBRARY* aLibrary, PADSTACKS& aPadstacks )
+{
+    if( aPads.GetCount() )
+    {
+        qsort( (void*) aPads.BasePtr(), aPads.GetCount(), sizeof(D_PAD*), Pad_list_Sort_by_Shapes );
+    }
+
+    D_PAD*  old_pad = NULL;
+    int     padstackNdx = 0;
+    
+    for( int i=0;  i<aPads.GetCount();  ++i )
+    {
+        D_PAD*  pad = (D_PAD*) aPads[i];
+
+        pad->m_logical_connexion = padstackNdx;
+
+        if( old_pad  && 0==D_PAD::Compare( old_pad, pad ) )
+        {
+            continue;
+        }
+
+        old_pad = pad;
+
+        // this is the index into the library->padstacks, be careful.
+        pad->m_logical_connexion = padstackNdx++;
+
+        PADSTACK*   padstack = new PADSTACK( aLibrary );
+        SHAPE*      shape = new SHAPE( padstack );
+        padstack->Append( shape );
+        
+        switch( pad->m_PadShape )
+        {
+        default:
+        case PAD_CIRCLE:
+            {
+                CIRCLE* circle;
+                double  diameter = scale(pad->m_Size.x);
+                int coppers = 0;
+
+                if( pad->IsOnLayer( COPPER_LAYER_N ) )
+                {
+                    circle = new CIRCLE( shape );
+                    circle->SetLayerId( CONV_TO_UTF8(aBoard->GetLayerName( COPPER_LAYER_N )) );
+                    circle->SetDiameter( diameter );
+                    shape->Append( circle );
+                    ++coppers;
+                }
+                
+                if( pad->IsOnLayer( LAYER_CMP_N ) )
+                {
+                    circle = new CIRCLE( shape );
+                    circle->SetLayerId( CONV_TO_UTF8(aBoard->GetLayerName( LAYER_CMP_N )) );
+                    circle->SetDiameter( diameter );
+                    shape->Append( circle );
+                    ++coppers;
+                }
+
+                char    name[50];
+                
+                snprintf( name, sizeof(name),  "Round%dPad_%.6g_mil", coppers, scale(pad->m_Size.x) );
+                
+                name[ sizeof(name)-1 ] = 0;
+
+                // @todo verify that all pad names are unique, there is a chance that 
+                // D_PAD::Compare() could say two pads are different, yet the get the same
+                // name here. If so, blend in the padNdx into the name.
+                
+                padstack->SetPadstackId( name );
+                
+                aLibrary->AddPadstack( padstack );
+            }
+            break;
+
+        case PAD_RECT:
+            {
+                double dx = scale( pad->m_Size.x ) / 2.0;
+                double dy = scale( pad->m_Size.y ) / 2.0;
+
+                RECTANGLE* rect;
+                int coppers = 0;
+
+                if( pad->IsOnLayer( COPPER_LAYER_N ) )
+                {
+                    rect = new RECTANGLE( shape );
+                    rect->SetLayerId( CONV_TO_UTF8(aBoard->GetLayerName( COPPER_LAYER_N )) );
+                    rect->SetCorners( POINT(-dx,-dy), POINT(dx,dy) );
+                    shape->Append( rect );
+                    ++coppers;
+                }
+                
+                if( pad->IsOnLayer( LAYER_CMP_N ) )
+                {
+                    rect = new RECTANGLE( shape );
+                    rect->SetLayerId( CONV_TO_UTF8(aBoard->GetLayerName( LAYER_CMP_N )) );
+                    rect->SetCorners( POINT(-dx,-dy), POINT(dx,dy) );
+                    shape->Append( rect );
+                    ++coppers;
+                }
+
+                char    name[50];
+                
+                snprintf( name, sizeof(name),  "Rect%dPad_%.6gx%.6g_mil", 
+                         coppers, scale(pad->m_Size.x), scale(pad->m_Size.y)  );
+                
+                name[ sizeof(name)-1 ] = 0;
+
+                // @todo verify that all pad names are unique, there is a chance that 
+                // D_PAD::Compare() could say two pads are different, yet the get the same
+                // name here. If so, blend in the padNdx into the name.
+                
+                padstack->SetPadstackId( name );
+                
+                aLibrary->AddPadstack( padstack );
+            }
+            break;
+#if 0            
+            pad_type = "RECTANGULAR";
+            fprintf( file, " %s %d\n", pad_type, pad->m_Drill.x );
+            fprintf( file, "RECTANGLE %d %d %d %d\n",
+                     -dx + pad->m_Offset.x, -dy - pad->m_Offset.y,
+                     dx + pad->m_Offset.x, -pad->m_Offset.y + dy );
+            break;
+    
+        case PAD_OVAL:     /* description du contour par 2 linges et 2 arcs */
+        {
+            pad_type = "FINGER";
+            fprintf( file, " %s %d\n", pad_type, pad->m_Drill.x );
+            int dr = dx - dy;
+            if( dr >= 0 )       // ovale horizontal
+            {
+                int rayon = dy;
+                fprintf( file, "LINE %d %d %d %d\n",
+                         -dr + pad->m_Offset.x, -pad->m_Offset.y - rayon,
+                         dr + pad->m_Offset.x, -pad->m_Offset.y - rayon );
+                fprintf( file, "ARC %d %d %d %d %d %d\n",
+                         dr + pad->m_Offset.x, -pad->m_Offset.y - rayon,
+                         dr + pad->m_Offset.x, -pad->m_Offset.y + rayon,
+                         dr + pad->m_Offset.x, -pad->m_Offset.y );
+    
+                fprintf( file, "LINE %d %d %d %d\n",
+                         dr + pad->m_Offset.x, -pad->m_Offset.y + rayon,
+                         -dr + pad->m_Offset.x, -pad->m_Offset.y + rayon );
+                fprintf( file, "ARC %d %d %d %d %d %d\n",
+                         -dr + pad->m_Offset.x, -pad->m_Offset.y + rayon,
+                         -dr + pad->m_Offset.x, -pad->m_Offset.y - rayon,
+                         -dr + pad->m_Offset.x, -pad->m_Offset.y );
+            }
+            else        // ovale vertical
+            {
+                dr = -dr;
+                int rayon = dx;
+                fprintf( file, "LINE %d %d %d %d\n",
+                         -rayon + pad->m_Offset.x, -pad->m_Offset.y - dr,
+                         -rayon + pad->m_Offset.x, -pad->m_Offset.y + dr );
+                fprintf( file, "ARC %d %d %d %d %d %d\n",
+                         -rayon + pad->m_Offset.x, -pad->m_Offset.y + dr,
+                         rayon + pad->m_Offset.x, -pad->m_Offset.y + dr,
+                         pad->m_Offset.x, -pad->m_Offset.y + dr );
+    
+                fprintf( file, "LINE %d %d %d %d\n",
+                         rayon + pad->m_Offset.x, -pad->m_Offset.y + dr,
+                         rayon + pad->m_Offset.x, -pad->m_Offset.y - dr );
+                fprintf( file, "ARC %d %d %d %d %d %d\n",
+                         rayon + pad->m_Offset.x, -pad->m_Offset.y - dr,
+                         -rayon + pad->m_Offset.x, -pad->m_Offset.y - dr,
+                         pad->m_Offset.x, -pad->m_Offset.y - dr );
+            }
+            break;
+        }
+    
+        case PAD_TRAPEZOID:
+            pad_type = "POLYGON";
+            break;
+#endif
+        }
+    }
 }
 
 
@@ -223,13 +463,13 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         {
             swapEnds( ppairs );
     
-    #if defined(DEBUG)        
+#if defined(DEBUG)        
             for( unsigned i=0;  i<ppairs.size();  ++i )
             {
                 POINT_PAIR* p = &ppairs[i];
                 p->item->Show( 0, std::cout );
             }
-    #endif        
+#endif        
     
             BOUNDARY*   boundary = new BOUNDARY(0);
     
@@ -303,6 +543,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             pcb->structure->layers.push_back( layer );
         }
     }
+
     
     //-----<zone containers become planes>--------------------------------------------
     {
@@ -333,20 +574,49 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             pcb->structure->planes.push_back( plane );
         }
     }
+
+    // keepouts could go here, there are none in Kicad at this time.
+    // although COPPER_PLANEs probably will need them for the thru holes, etc.
+    // but in that case they are WINDOWs within the COPPER_PLANEs.
+
     
     //-----<build the padstack list here, no output>------------------------
     {
-        // get all the DRAWSEGMENTS into 'items', then look for layer == EDGE_N,
-        // and those segments comprize the board's perimeter.
-        static const KICAD_T  scanPADnVIAs[] = { TYPEPAD, TYPEVIA, EOT };
-        items.Collect( aBoard, scanPADnVIAs );
+        static const KICAD_T scanPADs[] = { TYPEPAD, EOT };
 
-        for( int i=0;  i<items.GetCount();  ++i )
+        TYPE_COLLECTOR  pads;
+
+        // get all the D_PADs into pads.        
+        pads.Collect( aBoard, scanPADs );
+
+        makePADSTACKs( aBoard, pads, pcb->library, pcb->library->padstacks );
+
+        for( int p=0;  p<pads.GetCount();  ++p )
+            pads[p]->Show( 0, std::cout );
+        
+/*        
+        static const KICAD_T scanMODULEs[] = { TYPEMODULE, EOT };
+        
+        items.Collect( aBoard, scanMODULEs );
+
+        for( int m=0;  m<items.GetCount();  ++m )
         {
-//            items[i]->Show( 0, std::cout );
+            MODULE* module = (MODULE*) items[m];
+            
+
+            // collate all the pads, and make a component.
+            for( int p=0;  p<pads.GetCount();  ++p )
+            {
+                D_PAD* pad = (D_PAD*) pads[p];
+                
+                D(pad->Show( 0, std::cout );)
+                
+                // lookup and maybe add this pad to the padstack.
+                wxString padName = lookupPad( pcb->library->padstacks, pad ); 
+            }
         }
+*/        
     }
-    
     
     //-----<via_descriptor>-------------------------------------------------
     {

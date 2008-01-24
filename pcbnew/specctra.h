@@ -111,6 +111,11 @@ struct POINT
     
     POINT() { x=0.0; y=0.0; }
     
+    POINT( double aX, double aY ) :
+        x(aX), y(aY)
+    {
+    }
+    
     bool operator==( const POINT& other ) const
     {
         return x==other.x && y==other.y;
@@ -406,6 +411,17 @@ public:
         ELEM( T_rect, aParent )
     {
     }
+
+    void SetLayerId( const char* aLayerId )
+    {
+        layer_id = aLayerId;
+    }
+    
+    void SetCorners( const POINT& aPoint0, const POINT& aPoint1 )
+    {
+        point0 = aPoint0;
+        point1 = aPoint1;
+    }
     
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
@@ -439,21 +455,22 @@ public:
 
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
-        out->Print( nestLevel, "(%s ", LEXER::GetTokenText( Type() ) );
+        out->Print( nestLevel, "(%s", LEXER::GetTokenText( Type() ) );
         
         bool singleLine;
         
         if( rules.size() == 1 )
         {
             singleLine = true;
-            out->Print( 0, "%s)", rules.begin()->c_str() );
+            out->Print( 0, " %s)", rules.begin()->c_str() );
         }
         
         else
         {
+            out->Print( 0, "\n" );
             singleLine = false;
             for( STRINGS::const_iterator i = rules.begin();  i!=rules.end(); ++i )
-                out->Print( nestLevel, "%s\n", i->c_str() );
+                out->Print( nestLevel+1, "%s\n", i->c_str() );
             out->Print( nestLevel, ")" );
         }
         
@@ -671,6 +688,16 @@ public:
                                  quote, layer_id.c_str(), quote,
                                  diameter, vertex.x, vertex.y );
     }
+    
+    void SetLayerId( const char* aLayerId )
+    {
+        layer_id = aLayerId;
+    }
+    
+    void SetDiameter( double aDiameter )
+    {
+        diameter = aDiameter;
+    }
 };
 
 
@@ -870,28 +897,42 @@ public:
     
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
-        out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
+        const int RIGHTMARGIN = 80;
+        int perLine = out->Print( nestLevel, "(%s", LEXER::GetTokenText( Type() ) );
         
         for( STRINGS::iterator i=padstacks.begin();  i!=padstacks.end();  ++i )
         {
+            if( perLine > RIGHTMARGIN )
+            {
+                out->Print( 0, "\n" );
+                perLine = out->Print( nestLevel+1, "%s", "");
+            }
+
             const char* quote = out->GetQuoteChar( i->c_str() );
-            out->Print( nestLevel+1, "%s%s%s\n", quote, i->c_str(), quote );
+            perLine += out->Print( 0, " %s%s%s", quote, i->c_str(), quote );
         }
         
         if( spares.size() )
         {
-            out->Print( nestLevel+1, "(spare\n" );
+            out->Print( 0, "\n" );
+            
+            perLine = out->Print( nestLevel+1, "(spare" );
 
             for( STRINGS::iterator i=spares.begin();  i!=spares.end();  ++i )
             {
+                if( perLine > RIGHTMARGIN )
+                {
+                    out->Print( 0, "\n" );
+                    perLine = out->Print( nestLevel+2, "%s", "");
+                }
                 const char* quote = out->GetQuoteChar( i->c_str() );
-                out->Print( nestLevel+2, "%s%s%s\n", quote, i->c_str(), quote );
+                perLine += out->Print( 0, " %s%s%s", quote, i->c_str(), quote );
             }
             
-            out->Print( nestLevel+1, ")\n" );
+            out->Print( 0, ")" );
         }
         
-        out->Print( nestLevel, ")\n" );
+        out->Print( 0, ")\n" );
     }
 };
 
@@ -1600,55 +1641,34 @@ public:
 };
 
 
-class SHAPE : public ELEM
+class SHAPE : public ELEM_HOLDER
 {
     friend class SPECCTRA_DB;
 
     DSN_T           connect;
     
-    //----- only one of these is used, like a union -----
+    /*----- only one of these is used, like a union -----
+    single item, but now in the kids list
+    
     PATH*           path;           ///< used for both path and polygon
     RECTANGLE*      rectangle;
     CIRCLE*         circle;
     QARC*           qarc;
-    //---------------------------------------------------
+    //--------------------------------------------------- */
     
     WINDOWS         windows;
     
     
 public:
     SHAPE( ELEM* aParent, DSN_T aType = T_shape ) :
-        ELEM( aType, aParent )
+        ELEM_HOLDER( aType, aParent )
     {
         connect = T_on;
-        
-        path = 0;
-        rectangle = 0;
-        circle = 0;
-        qarc = 0;
-    }
-    
-    ~SHAPE()
-    {
-        delete path;
-        delete rectangle;
-        delete circle;
-        delete qarc;
     }
     
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
-        if( path )
-            path->Format( out, nestLevel );
-        
-        else if( rectangle )
-            rectangle->Format( out, nestLevel );
-        
-        else if( circle )
-            circle->Format( out, nestLevel );
-        
-        else if( qarc )
-            qarc->Format( out, nestLevel );
+        ELEM_HOLDER::FormatContents( out, nestLevel );
         
         if( connect == T_off )
             out->Print( nestLevel, "(connect %s)\n", LEXER::GetTokenText( connect ) );
@@ -1817,6 +1837,11 @@ public:
         delete rules;
     }
 
+    void SetPadstackId( const char* aPadstackId )
+    {
+        padstack_id = aPadstackId;
+    }
+    
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         const char* quote = out->GetQuoteChar( padstack_id.c_str() );
@@ -1865,6 +1890,7 @@ public:
         return ELEM::GetUnits();
     }
 };
+typedef boost::ptr_vector<PADSTACK> PADSTACKS;
 
 
 /**
@@ -1882,7 +1908,6 @@ class LIBRARY : public ELEM
     typedef boost::ptr_vector<IMAGE>    IMAGES;
     IMAGES          images;
 
-    typedef boost::ptr_vector<PADSTACK> PADSTACKS;
     PADSTACKS       padstacks;
 
 public:
@@ -1915,6 +1940,11 @@ public:
             return unit->GetUnits();
         
         return ELEM::GetUnits();
+    }
+    
+    void AddPadstack( PADSTACK* aPadstack )
+    {
+        padstacks.push_back( aPadstack );
     }
 };
 
@@ -2215,35 +2245,32 @@ public:
     
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
-        const char* quote = out->GetQuoteChar( class_id.c_str() );
-        out->Print( nestLevel, "(%s %s%s%s", LEXER::GetTokenText( Type() ),
-                                 quote, class_id.c_str(), quote );
-
-        const int NETGAP = 2;
-        const int RIGHTMARGIN = 92;
+        const int RIGHTMARGIN = 80;
         
-        int perRow=RIGHTMARGIN;
+        const char* quote = out->GetQuoteChar( class_id.c_str() );
+        
+        int perLine = out->Print( nestLevel, "(%s %s%s%s", 
+                              LEXER::GetTokenText( Type() ),
+                              quote, class_id.c_str(), quote );
+
         for( STRINGS::iterator i=net_ids.begin();  i!=net_ids.end();  ++i )
         {
-            quote = out->GetQuoteChar( i->c_str() );
-            int slength = strlen( i->c_str() );
-            if( *quote!='\0' )
-                slength += 2;
-
-            if( perRow + slength + NETGAP > RIGHTMARGIN )
+            if( perLine > RIGHTMARGIN )
             {
                 out->Print( 0, "\n" );
-                perRow = 0;
-                perRow += out->Print( nestLevel+1, "%s%s%s", 
-                                     quote, i->c_str(), quote );
+                perLine = out->Print( nestLevel+1, "%s", "" );
             }
-            else
-            {
-                perRow += out->Print( 0, "%*c%s%s%s", NETGAP, ' ',
-                                     quote, i->c_str(), quote );
-            }
+            
+            quote = out->GetQuoteChar( i->c_str() );
+            perLine += out->Print( 0, " %s%s%s", quote, i->c_str(), quote );
         }
-        out->Print( 0, "\n" );
+        
+        bool newLine = false;
+        if( circuit.size() || layer_rules.size() || topology )
+        {
+            out->Print( 0, "\n" );
+            newLine = true;
+        }
 
         for( STRINGS::iterator i=circuit.begin();  i!=circuit.end();  ++i )
             out->Print( nestLevel+1, "%s\n", i->c_str() );
@@ -2254,7 +2281,7 @@ public:
         if( topology )
             topology->Format( out, nestLevel+1 );
         
-        out->Print( nestLevel, ")\n" );
+        out->Print( newLine ? nestLevel : 0, ")\n" );
     }
 };
     
@@ -2443,6 +2470,9 @@ public:
             
             perLine += out->Print( 0, "%.6g %.6g", i->x, i->y ); 
         }
+        
+        if( net_id.size() || via_number!=-1 || type!=T_NONE || attr!=T_NONE || supply)
+            out->Print( 0, " " );
         
         if( net_id.size() )
         {
@@ -3183,13 +3213,6 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     void doSUPPLY_PIN( SUPPLY_PIN* growth ) throw( IOError );    
 
     
-    /**
-     * Function exportEdges
-     * exports the EDGES_N layer of the board.
-     */
-    void exportEdges( BOARD* aBoard ) throw( IOError );
-
-    
 public:
 
     SPECCTRA_DB()
@@ -3288,7 +3311,17 @@ public:
     
     /**
      * Function FromBOARD
-     * adds the entire BOARD to the PCB but does not write it out.
+     * adds the entire BOARD to the PCB but does not write it out.  Note that
+     * the BOARD given to this function must have all the MODULEs on the component
+     * side of the BOARD.
+     *
+     * See void WinEDA_PcbFrame::ExportToSPECCTRA( wxCommandEvent& event )
+     * for how this can be done before calling this function.  
+     * @todo
+     * I would have liked to put the flipping logic into the ExportToSPECCTRA()
+     * function directly, but for some strange reason, 
+     * void Change_Side_Module( MODULE* Module, wxDC* DC ) is a member of 
+     * of class WinEDA_BasePcbFrame rather than class BOARD.
      *
      * @param aBoard The BOARD to convert to a PCB.
      * @throw IOError, if the BOARD cannot be converted, and the text of the

@@ -212,7 +212,7 @@ void SPECCTRA_DB::readTIME( time_t* time_stamp ) throw( IOError )
     
     const char* ptok = lexer->CurText();
 
-    mytime.tm_mon = 0;      // remains of we don't find a month match.
+    mytime.tm_mon = 0;      // remains if we don't find a month match.
     for( int m=0;  months[m];  ++m )
     {
         if( !stricmp( months[m], ptok ) )
@@ -1985,7 +1985,7 @@ void SPECCTRA_DB::doSHAPE( SHAPE* growth ) throw( IOError )
         case T_polygon:
         case T_qarc:
 L_done_that:    
-            if( growth->rectangle || growth->circle || growth->path || growth->qarc )
+            if( growth->Length() )
                 unexpected( tok );
             break;
         default:
@@ -2000,24 +2000,32 @@ L_done_that:
         switch( tok )
         {
         case T_rect:
-            growth->rectangle = new RECTANGLE( growth );
-            doRECTANGLE( growth->rectangle );
+            RECTANGLE* rectangle;
+            rectangle = new RECTANGLE( growth );
+            growth->Append( rectangle );
+            doRECTANGLE( rectangle );
             break;
             
         case T_circle:
-            growth->circle = new CIRCLE( growth );
-            doCIRCLE( growth->circle );
+            CIRCLE* circle;
+            circle = new CIRCLE( growth );
+            growth->Append( circle );
+            doCIRCLE( circle );
             break;
         
         case T_path:
         case T_polygon:
-            growth->path = new PATH( growth, tok );
-            doPATH( growth->path );
+            PATH* path;
+            path = new PATH( growth, tok );
+            growth->Append( path );
+            doPATH( path );
             break;
             
         case T_qarc:
-            growth->qarc = new QARC( growth );
-            doQARC( growth->qarc );
+            QARC* qarc;
+            qarc = new QARC( growth );
+            growth->Append( qarc );
+            doQARC( qarc );
             break;
 
         case T_connect:
@@ -3650,16 +3658,16 @@ int main( int argc, char** argv )
 {
 //    wxString    filename( wxT("/tmp/fpcroute/Sample_1sided/demo_1sided.dsn") );
 //    wxString    filename( wxT("/tmp/testdesigns/test.dsn") );
-    wxString    filename( wxT("/tmp/testdesigns/test.ses") );
-//    wxString    filename( wxT("/tmp/specctra_big.dsn") );
+//    wxString    filename( wxT("/tmp/testdesigns/test.ses") );
+    wxString    filename( wxT("/tmp/specctra_big.dsn") );
 
     SPECCTRA_DB     db;
     bool            failed = false;
     
     try 
     {
-//        db.LoadPCB( filename );
-        db.LoadSESSION( filename );
+        db.LoadPCB( filename );
+//        db.LoadSESSION( filename );
     } 
     catch( IOError ioe )
     {
@@ -3672,8 +3680,8 @@ int main( int argc, char** argv )
 
 
     // export what we read in, making this test program basically a beautifier
-    db.ExportSESSION( wxT("/tmp/export.ses") );
-//    db.ExportPCB( wxT("/tmp/export.dsn") ); 
+//    db.ExportSESSION( wxT("/tmp/export.ses") );
+    db.ExportPCB( wxT("/tmp/export.dsn") ); 
     
 }
 

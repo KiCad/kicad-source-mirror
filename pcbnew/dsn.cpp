@@ -737,7 +737,7 @@ L_read:
                 goto exit;
             }
             
-            // else it was something like +5V, reset head back
+            // else it was something like +5V, fall through below
         }
         
         // a quoted string
