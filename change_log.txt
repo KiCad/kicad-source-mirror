@@ -4,13 +4,22 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Jan-24 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew:
+  * Export a specctra *.dsn file includes some padstacks, not ovals yet.
+  * Many many refinements to specctra.cpp and specctra.h.
+  * added COLLECTOR::BasePtr(), which is used in qsort.  Could have used
+  * std::sort() instead.
+  * Wrote D_PAD::Compare()
+  * updated todo.txt  
 
+  
 2008-Jan-24 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:
 	Bugs about fill zones removed (not all, of course).
 	Fixed an old bug in block delete (could crashes pcbnew after deleting footprints).
-
 
 2008-Jan-23 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================

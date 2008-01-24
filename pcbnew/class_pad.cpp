@@ -245,16 +245,15 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
                                     (PCB_SCREEN*) panel->m_Parent->m_CurrentScreen : 
                                     (PCB_SCREEN*) ActiveScreen;
 
-    if ( panel )	// Use current frame setting
-	{
-		frame  = (WinEDA_BasePcbFrame*) panel->m_Parent;
-	}
-	else			// Use board frame setting
-		if( DisplayOpt.DisplayPadFill == FILLED )
-			fillpad = 1;
+    if ( panel )    // Use current frame setting
+    {
+        frame  = (WinEDA_BasePcbFrame*) panel->m_Parent;
+    }
+    else if( DisplayOpt.DisplayPadFill == FILLED )     // Use board frame setting
+        fillpad = 1;
 
-	if( frame->m_DisplayPadFill == FILLED )
-		fillpad = 1;
+    if( frame->m_DisplayPadFill == FILLED )
+        fillpad = 1;
     zoom = screen->GetZoom();
 
 #ifdef PCBNEW
@@ -331,7 +330,6 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
     }
 
 
-    //-----<test this>-----
     // if PAD_SMD pad and high contrast mode    
     if( m_Attribut==PAD_SMD && DisplayOpt.ContrastModeDisplay )
     {
@@ -376,8 +374,6 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
             }       
         }
     }
-    //-----</test this>----
-    
 
     if( draw_mode & GR_SURBRILL )
     {
@@ -463,6 +459,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
         if( DisplayIsol )
         {
             rotdx = rotdx + g_DesignSettings.m_TrackClearence + g_DesignSettings.m_TrackClearence;
+            
             GRCSegm( &panel->m_ClipBox, DC, ux0 + delta_cx, uy0 + delta_cy,
                      ux0 - delta_cx, uy0 - delta_cy,
                      rotdx, color );
@@ -499,7 +496,9 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
 
         if( DisplayIsol )
         {
-            dx += g_DesignSettings.m_TrackClearence; dy += g_DesignSettings.m_TrackClearence;
+            dx += g_DesignSettings.m_TrackClearence; 
+            dy += g_DesignSettings.m_TrackClearence;
+            
             coord[0].x = -dx - ddy;
             coord[0].y = dy + ddx;
 
@@ -761,97 +760,6 @@ int D_PAD::ReadDescr( FILE* File, int* LineNum )
 
     return 2;   /* error : EOF */
 }
-
-
-
-#if 0
-/***********************************/
-int D_PAD::WriteDescr( FILE* File )
-/***********************************/
-
-/* Sauvegarde de la description d'un PAD
- */
-{
-    int   cshape, NbLigne = 0;;
-
-    const char* texttype;
-
-    if( GetState( DELETED ) )
-        return NbLigne;
-
-    /* Generation du fichier pad: */
-    fprintf( File, "$PAD\n" ); NbLigne++;
-
-    switch( m_PadShape )
-    {
-    case PAD_CIRCLE:
-        cshape = 'C'; break;
-
-    case PAD_RECT:
-        cshape = 'R'; break;
-
-    case PAD_OVAL:
-        cshape = 'O'; break;
-
-    case PAD_TRAPEZOID:
-        cshape = 'T'; break;
-
-    default:
-        cshape = 'C';
-        DisplayError( NULL, _( "Unknown Pad shape" ) );
-        break;
-    }
-
-    fprintf( File, "Sh \"%.4s\" %c %d %d %d %d %d\n",
-             m_Padname, cshape, m_Size.x, m_Size.y,
-             m_DeltaSize.x, m_DeltaSize.y, m_Orient );
-    NbLigne++;
-    fprintf( File, "Dr %d %d %d", m_Drill.x, m_Offset.x, m_Offset.y );
-    if( m_DrillShape == PAD_OVAL )
-    {
-        fprintf( File, " %c %d %d", 'O', m_Drill.x, m_Drill.y );
-    }
-    fprintf( File, "\n" );
-
-    NbLigne++;
-
-    switch( m_Attribut )
-    {
-    case PAD_STANDARD:
-        texttype = "STD"; break;
-
-    case PAD_SMD:
-        texttype = "SMD"; break;
-
-    case PAD_CONN:
-        texttype = "CONN"; break;
-
-    case PAD_P_HOLE:
-        texttype = "HOLE"; break;
-
-    case MECA:
-        texttype = "MECA"; break;
-
-    default:
-        texttype = "STD";
-        DisplayError( NULL, wxT( "attribut Pad inconnu" ) );
-        break;
-    }
-
-    fprintf( File, "At %s N %8.8X\n", texttype, m_Masque_Layer );
-    NbLigne++;
-
-    fprintf( File, "Ne %d \"%s\"\n", GetNet(), CONV_TO_UTF8( m_Netname ) );
-    NbLigne++;
-
-    fprintf( File, "Po %d %d\n", m_Pos0.x, m_Pos0.y );
-    NbLigne++;
-
-    fprintf( File, "$EndPAD\n" );
-    NbLigne++;
-    return NbLigne;
-}
-#endif
 
 
 bool D_PAD::Save( FILE* aFile ) const
@@ -1167,7 +1075,65 @@ bool D_PAD::HitTest( const wxPoint& ref_pos )
 }
 
 
+/************************************************************/
+int D_PAD::Compare( const D_PAD* padref, const D_PAD* padcmp ) 
+/************************************************************/
+{
+    int          diff;
+
+    if( (diff = padref->m_PadShape - padcmp->m_PadShape) )
+        return diff;
+    if( (diff = padref->m_Size.x - padcmp->m_Size.x) )
+        return diff;
+    if( (diff = padref->m_Size.y - padcmp->m_Size.y) )
+        return diff;
+    if( (diff = padref->m_Offset.x - padcmp->m_Offset.x) )
+        return diff;
+    if( (diff = padref->m_Offset.y - padcmp->m_Offset.y) )
+        return diff;
+    if( (diff = padref->m_DeltaSize.x - padcmp->m_DeltaSize.x) )
+        return diff;
+    if( (diff = padref->m_DeltaSize.y - padcmp->m_DeltaSize.y) )
+        return diff;
+
+    // @todo check if export_gencad still works:    
+    // specctra_export needs this, but maybe export_gencad does not.  added on Jan 24 2008 by Dick.
+    if( (diff = padref->m_Masque_Layer - padcmp->m_Masque_Layer) )
+        return diff;
+
+    return 0;
+}
+
+
 #if defined (DEBUG)
+
+// @todo: could this be useable elsewhere also?
+static const char* ShowPadType( int aPadType )
+{
+    switch( aPadType )
+    {
+    case PAD_CIRCLE:        return "circle";
+    case PAD_OVAL:          return "oval";
+    case PAD_RECT:          return "rect";
+    case PAD_TRAPEZOID:     return "trap";
+    default:                return "??unknown??";
+    }
+}
+
+
+static const char* ShowPadAttr( int aPadAttr )
+{
+    switch( aPadAttr )
+    {
+    case PAD_STANDARD:      return "STD";
+    case PAD_SMD:           return "SMD";
+    case PAD_CONN:          return "CONN";
+    case PAD_P_HOLE:        return "HOLE";
+    case PAD_MECA:          return "MECA";
+    default:                return "??unkown??";
+    }
+}
+
 
 /**
  * Function Show
@@ -1186,6 +1152,8 @@ void D_PAD::Show( int nestLevel, std::ostream& os )
 
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
+    " shape=\""     << ShowPadType( m_PadShape ) << '"' <<
+    " attr=\""      << ShowPadAttr( m_Attribut ) << '"' <<
     " num=\""       << padname << '"' <<
     " net=\""       << m_Netname.mb_str() << '"' <<
     " netcode=\""   << GetNet() << '"' <<
@@ -1195,6 +1163,5 @@ void D_PAD::Show( int nestLevel, std::ostream& os )
 
 //    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
-
 
 #endif

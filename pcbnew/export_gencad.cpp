@@ -145,32 +145,11 @@ void WinEDA_PcbFrame::ExportToGenCAD( wxCommandEvent& event )
 /**************************************************************************/
 static int Pad_list_Sort_by_Shapes( const void* refptr, const void* objptr )
 /**************************************************************************/
-
-/*
- *  Routine de tri de la liste des pads par type, puis pa taille
- */
 {
-    const D_PAD* padref, * padcmp;
-    int          diff;
+    const D_PAD* padref = *(D_PAD**)refptr;
+    const D_PAD* padcmp = *(D_PAD**)objptr;
 
-    padref = *( (D_PAD**) refptr );
-    padcmp = *( (D_PAD**) objptr );
-    if( (diff = padref->m_PadShape - padcmp->m_PadShape) )
-        return diff;
-    if( (diff = padref->m_Size.x - padcmp->m_Size.x) )
-        return diff;
-    if( (diff = padref->m_Size.y - padcmp->m_Size.y) )
-        return diff;
-    if( (diff = padref->m_Offset.x - padcmp->m_Offset.x) )
-        return diff;
-    if( (diff = padref->m_Offset.y - padcmp->m_Offset.y) )
-        return diff;
-    if( (diff = padref->m_DeltaSize.x - padcmp->m_DeltaSize.x) )
-        return diff;
-    if( (diff = padref->m_DeltaSize.y - padcmp->m_DeltaSize.y) )
-        return diff;
-
-    return 0;
+    return D_PAD::Compare( padref, padcmp );     
 }
 
 
@@ -209,15 +188,7 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
         pad = *padlist;
         pad->m_logical_connexion = pad_name_number;
 
-        if( old_pad
-            && (old_pad->m_PadShape == pad->m_PadShape)
-            && (old_pad->m_Size.x == pad->m_Size.x)
-            && (old_pad->m_Size.y == pad->m_Size.y)
-            && (old_pad->m_Offset.x == pad->m_Offset.x)
-            && (old_pad->m_Offset.y == pad->m_Offset.y)
-            && (old_pad->m_DeltaSize.x == pad->m_DeltaSize.x)
-            && (old_pad->m_DeltaSize.y == pad->m_DeltaSize.y)
-            )
+        if( old_pad && 0==D_PAD::Compare( old_pad, pad ) )
             continue; // Forme deja generee
 
         old_pad = pad;

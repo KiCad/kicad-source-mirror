@@ -27,12 +27,12 @@ public:
 
     wxString m_Netname;             /* Net Name */
 
-    int      m_Masque_Layer;        // Bitwise layer :1= copper layer, 15= cmp,
+    int     m_Masque_Layer;         // Bitwise layer :1= copper layer, 15= cmp,
                                     // 2..14 = internal layers
                                     // 16 .. 31 = technical layers
 
-    int     m_PadShape;             // Shape: PAD_CIRCLE, PAD_RECT, OVAL, TRAPEZOID
-    int     m_DrillShape;           // Shape PAD_CIRCLE, OVAL
+    int     m_PadShape;             // Shape: PAD_CIRCLE, PAD_RECT, PAD_OVAL, PAD_TRAPEZOID
+    int     m_DrillShape;           // Shape PAD_CIRCLE, PAD_OVAL
 
     wxSize  m_Drill;                // Drill diam (drill shape = PAD_CIRCLE) or drill size(shape = OVAL)
                                     // for drill shape = PAD_CIRCLE, drill diam = m_Drill.x
@@ -152,6 +152,15 @@ public:
     {
         return wxT( "PAD" );
     }
+    
+    
+    /**
+     * Function Compare
+     * compares two pads and return 0 if they are equal.
+     * @return int - <0 if left less than right, 0 if equal, >0 if left greater than right.
+     */
+    static int Compare( const D_PAD* padref, const D_PAD* padcmp ); 
+
 
 #if defined (DEBUG)
     /**
