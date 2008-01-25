@@ -131,6 +131,17 @@ public:
         return NULL;
     }
 
+    /**
+     * Function BasePtr
+     * returns the address of the first element in the array.  Only call this
+     * if there is at least one element in the vector m_List, otherwise a
+     * C++ exception should get thrown.
+     */
+    EDA_BaseStruct* const* BasePtr() const
+    {
+        return &m_List[0];
+    }
+
     
     /**
      * Function SetScanTypes

@@ -242,8 +242,7 @@ static void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads,
 {
     if( aPads.GetCount() )
     {
-#warning "uncomment next line asap"
-//JPC        qsort( (void*) aPads.BasePtr(), aPads.GetCount(), sizeof(D_PAD*), Pad_list_Sort_by_Shapes );
+        qsort( (void*) aPads.BasePtr(), aPads.GetCount(), sizeof(D_PAD*), Pad_list_Sort_by_Shapes );
     }
 
     D_PAD*  old_pad = NULL;
