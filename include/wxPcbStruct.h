@@ -187,7 +187,6 @@ public:
                                                MODULE* module,
                                                int     angle,
                                                bool    incremental );
-    void                        Change_Side_Module( MODULE* Module, wxDC* DC );
     void                        Place_Module( MODULE* module, wxDC* DC );
     void                        InstallExchangeModuleFrame( MODULE* ExchangeModuleModule,
                                                             wxDC* DC, const wxPoint& pos );

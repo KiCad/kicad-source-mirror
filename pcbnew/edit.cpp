@@ -618,7 +618,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             SetCurItem( GetCurItem()->GetParent() );
         if( !GetCurItem() || GetCurItem()->Type() != TYPEMODULE )
             break;
-        Change_Side_Module( (MODULE*) GetCurItem(), &dc );
+        m_Pcb->Change_Side_Module( (MODULE*) GetCurItem(), &dc );
         break;
 
     case ID_POPUP_PCB_EDIT_MODULE:

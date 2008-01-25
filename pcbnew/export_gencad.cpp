@@ -103,7 +103,7 @@ void WinEDA_PcbFrame::ExportToGenCAD( wxCommandEvent& event )
         module->flag = 0;
         if( module->GetLayer() == COPPER_LAYER_N )
         {
-            Change_Side_Module( module, NULL );
+            m_Pcb->Change_Side_Module( module, NULL );
             module->flag = 1;
         }
     }
@@ -135,7 +135,7 @@ void WinEDA_PcbFrame::ExportToGenCAD( wxCommandEvent& event )
     {
         if( module->flag )
         {
-            Change_Side_Module( module, NULL );
+            m_Pcb->Change_Side_Module( module, NULL );
             module->flag = 0;
         }
     }

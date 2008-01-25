@@ -538,7 +538,7 @@ MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
     /* Changement eventuel de couche */
     if( OldModule->GetLayer() != NewModule->GetLayer() )
     {
-        Change_Side_Module( NewModule, NULL );
+        m_Pcb->Change_Side_Module( NewModule, NULL );
     }
 
     /* Rotation eventuelle du module */

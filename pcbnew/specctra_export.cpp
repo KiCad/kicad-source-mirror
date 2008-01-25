@@ -76,7 +76,7 @@ void WinEDA_PcbFrame::ExportToSPECCTRA( wxCommandEvent& event )
         module->flag = 0;
         if( module->GetLayer() == COPPER_LAYER_N )
         {
-            Change_Side_Module( module, NULL );
+            m_Pcb->Change_Side_Module( module, NULL );
             module->flag = 1;
         }
     }
@@ -103,7 +103,7 @@ void WinEDA_PcbFrame::ExportToSPECCTRA( wxCommandEvent& event )
     {
         if( module->flag )
         {
-            Change_Side_Module( module, NULL );
+            m_Pcb->Change_Side_Module( module, NULL );
             module->flag = 0;
         }
     }
@@ -242,7 +242,8 @@ static void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads,
 {
     if( aPads.GetCount() )
     {
-        qsort( (void*) aPads.BasePtr(), aPads.GetCount(), sizeof(D_PAD*), Pad_list_Sort_by_Shapes );
+#warning "uncomment next line asap"
+//JPC        qsort( (void*) aPads.BasePtr(), aPads.GetCount(), sizeof(D_PAD*), Pad_list_Sort_by_Shapes );
     }
 
     D_PAD*  old_pad = NULL;
@@ -591,8 +592,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 
         makePADSTACKs( aBoard, pads, pcb->library, pcb->library->padstacks );
 
+#if defined(DEBUG)
         for( int p=0;  p<pads.GetCount();  ++p )
             pads[p]->Show( 0, std::cout );
+#endif    
         
 /*        
         static const KICAD_T scanMODULEs[] = { TYPEMODULE, EOT };

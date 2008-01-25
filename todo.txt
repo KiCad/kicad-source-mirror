@@ -71,14 +71,3 @@ asked by: jp Charras
 Use the collector classes in eeschema.
 
 
-2008-Jan-24 Assigned To: nobody
-asked by: Dick Hollenbeck
-================================================================================
-See specctra.h's such comment
-* @todo
-* I would have liked to put the flipping logic into the ExportToSPECCTRA()
-* function directly, but for some strange reason, 
-* void Change_Side_Module( MODULE* Module, wxDC* DC ) is a member of 
-* of class WinEDA_BasePcbFrame rather than class BOARD.
-*
-

@@ -525,7 +525,7 @@ void WinEDA_ModulePropertiesFrame::OnOkClick( wxCommandEvent& event )
 
     if( change_layer )
     {
-        m_Parent->Change_Side_Module( m_CurrentModule, m_DC );
+        m_Parent->m_Pcb->Change_Side_Module( m_CurrentModule, m_DC );
     }
 
     if( m_AutoPlaceCtrl->GetSelection() == 1 )

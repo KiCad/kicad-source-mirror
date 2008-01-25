@@ -801,7 +801,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
             Place_Module( module, NULL );
 
             /* inversion du module  */
-            Change_Side_Module( module, DC );
+            m_Pcb->Change_Side_Module( module, DC );
 
             /* regeneration des valeurs originelles */
             GetScreen()->m_Curseur = memo;

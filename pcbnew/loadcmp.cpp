@@ -80,7 +80,7 @@ void WinEDA_ModuleEditFrame::Load_Module_Module_From_BOARD( MODULE* Module )
     m_CurrentScreen->m_Curseur.x = m_CurrentScreen->m_Curseur.y = 0;
     Place_Module( Module, NULL );
     if( Module->GetLayer() != CMP_N )
-        Change_Side_Module( Module, NULL );
+        m_Pcb->Change_Side_Module( Module, NULL );
     Rotate_Module( NULL, Module, 0, FALSE );
     m_CurrentScreen->ClrModify();
     Zoom_Automatique( TRUE );

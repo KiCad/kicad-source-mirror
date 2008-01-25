@@ -193,7 +193,7 @@ void Exit_Module( WinEDA_DrawPanel* Panel, wxDC* DC )
         if( ModuleInitOrient != module->m_Orient )
             pcbframe->Rotate_Module( NULL, module, ModuleInitOrient, FALSE );
         if( ModuleInitLayer != module->GetLayer() )
-            pcbframe->Change_Side_Module( module, NULL );
+            pcbframe->m_Pcb->Change_Side_Module( module, NULL );
         module->Draw( Panel, DC, wxPoint( 0, 0 ), GR_OR );
     }
     g_Drag_Pistes_On     = FALSE;
@@ -320,14 +320,18 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module, wxDC* DC )
 }
 
 
-/**********************************************************************/
-void WinEDA_BasePcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
-/**********************************************************************/
+/****************************************************************************/
+void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
+/****************************************************************************/
 
-/* Change de cote un composant : il y a inversion MIROIR autour de l'axe X
- *  Le changement n'est fait que si la couche est
- *      - CUIVRE ou CMP
- *      Si DC == NULL, il n'y a pas de redessin du composant et du chevelu
+/** 
+ * Function Change_Side_Module
+ * Filp a footprint (switch layer from component or component to copper)
+ * The mirroring is made from X axis
+ * if a footprint is not on copper or component layer it is not flipped
+ * (it could be on an adhesive layer, not supported at this time)
+ * @param Module the footprint to fli^p
+ * @param  DC Current Device Context. if NULL, no redraw
  */
 {
     D_PAD*          pt_pad;
@@ -340,17 +344,17 @@ void WinEDA_BasePcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
     if( (Module->GetLayer() != CMP_N) && (Module->GetLayer() != COPPER_LAYER_N) )
         return;
 
-    m_CurrentScreen->SetModify();
+    m_PcbFrame->GetScreen()->SetModify();
 
     if( !(Module->m_Flags & IS_MOVED) )
     {
-        m_Pcb->m_Status_Pcb &= ~( LISTE_CHEVELU_OK | CONNEXION_OK);
-        if( DC )
-            Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+        m_Status_Pcb &= ~( LISTE_CHEVELU_OK | CONNEXION_OK);
+        if( DC && m_PcbFrame )
+            Module->Draw( m_PcbFrame->DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
 
         /* Effacement chevelu general si necessaire */
         if( DC && g_Show_Ratsnest )
-            DrawGeneralRatsnest( DC );
+            m_PcbFrame->DrawGeneralRatsnest( DC );
 
         /* Init des variables utilisees dans la routine Dessine_Drag_segment() */
         g_Offset_Module.x = 0;
@@ -359,10 +363,10 @@ void WinEDA_BasePcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
     else    // Module en deplacement
     {
         /* efface empreinte ( vue en contours) si elle a ete deja dessinee */
-        if( DC )
+        if( DC && m_PcbFrame )
         {
-            DrawModuleOutlines( DrawPanel, DC, Module );
-            Dessine_Segments_Dragges( DrawPanel, DC );
+            DrawModuleOutlines( m_PcbFrame->DrawPanel, DC, Module );
+            Dessine_Segments_Dragges( m_PcbFrame->DrawPanel, DC );
         }
     }
 
@@ -485,33 +489,34 @@ void WinEDA_BasePcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
             break;
 
         default:
-            DisplayError( this, wxT( "Unknown Draw Type" ) ); break;
+            DisplayError( m_PcbFrame, wxT( "Unknown Draw Type" ) ); break;
         }
     }
 
     /* calcul du rectangle d'encadrement */
     Module->Set_Rectangle_Encadrement();
 
-    Module->Display_Infos( this );
+    if ( m_PcbFrame )
+		Module->Display_Infos( m_PcbFrame );
 
     if( !(Module->m_Flags & IS_MOVED) ) /* Inversion simple */
     {
-        if( DC )
+        if( DC && m_PcbFrame )
         {
-            Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+            Module->Draw( m_PcbFrame->DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
             
             /* affichage chevelu general si necessaire */
-            ReCompile_Ratsnest_After_Changes( DC );
+            m_PcbFrame->ReCompile_Ratsnest_After_Changes( DC );
         }
     }
     else
     {
-        if( DC )
+        if( DC && m_PcbFrame )
         {
-            DrawModuleOutlines( DrawPanel, DC, Module );
-            Dessine_Segments_Dragges( DrawPanel, DC );
+            DrawModuleOutlines( m_PcbFrame->DrawPanel, DC, Module );
+            Dessine_Segments_Dragges( m_PcbFrame->DrawPanel, DC );
         }
-        m_Pcb->m_Status_Pcb &= ~CHEVELU_LOCAL_OK;
+        m_Status_Pcb &= ~CHEVELU_LOCAL_OK;
     }
 }
 

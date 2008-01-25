@@ -507,7 +507,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
             break;
 
         case HK_FLIP_FOOTPRINT:                  // move to other side
-            Change_Side_Module( module, DC );
+            m_Pcb->Change_Side_Module( module, DC );
             break;
 
         case HK_DRAG_FOOTPRINT:                  // Start move (and drag) module
