@@ -1985,7 +1985,7 @@ void SPECCTRA_DB::doSHAPE( SHAPE* growth ) throw( IOError )
         case T_polygon:
         case T_qarc:
 L_done_that:    
-            if( growth->Length() )
+            if( growth->shape )
                 unexpected( tok );
             break;
         default:
@@ -2000,32 +2000,24 @@ L_done_that:
         switch( tok )
         {
         case T_rect:
-            RECTANGLE* rectangle;
-            rectangle = new RECTANGLE( growth );
-            growth->Append( rectangle );
-            doRECTANGLE( rectangle );
+            growth->shape = new RECTANGLE( growth );
+            doRECTANGLE( (RECTANGLE*) growth->shape );
             break;
             
         case T_circle:
-            CIRCLE* circle;
-            circle = new CIRCLE( growth );
-            growth->Append( circle );
-            doCIRCLE( circle );
+            growth->shape = new CIRCLE( growth );
+            doCIRCLE( (CIRCLE*)growth->shape );
             break;
         
         case T_path:
         case T_polygon:
-            PATH* path;
-            path = new PATH( growth, tok );
-            growth->Append( path );
-            doPATH( path );
+            growth->shape = new PATH( growth, tok );
+            doPATH( (PATH*)growth->shape );
             break;
             
         case T_qarc:
-            QARC* qarc;
-            qarc = new QARC( growth );
-            growth->Append( qarc );
-            doQARC( qarc );
+            growth->shape = new QARC( growth );
+            doQARC( (QARC*)growth->shape );
             break;
 
         case T_connect:

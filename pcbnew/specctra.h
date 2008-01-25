@@ -126,6 +126,25 @@ struct POINT
         return !( *this == other );
     }
     
+    POINT& operator+=( const POINT& other )
+    {
+        x += other.x;
+        y += other.y;
+        return *this;
+    }
+    
+    POINT& operator=( const POINT& other )
+    {
+        x = other.x;
+        if( x == -0.0 )     // correct -0.0 so output looks nice.
+            x = 0.0;
+        y = other.y;
+        if( y == -0.0 )
+            y = 0.0;
+        return *this;        
+    }
+
+    
     /**
      * Function Format
      * writes this object as ASCII out to an OUTPUTFORMATTER according to the 
@@ -425,13 +444,16 @@ public:
     
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
-        const char*  quote = out->GetQuoteChar( layer_id.c_str() );
+        const char* newline = nestLevel ? "\n" : "";
         
-        out->Print( nestLevel, "(%s %s%s%s %.6g %.6g %.6g %.6g)\n", 
+        const char* quote = out->GetQuoteChar( layer_id.c_str() );
+        
+        out->Print( nestLevel, "(%s %s%s%s %.6g %.6g %.6g %.6g)%s", 
                    LEXER::GetTokenText( Type() ),
                    quote, layer_id.c_str(), quote,
                    point0.x, point0.y,
-                   point1.x, point1.y );
+                   point1.x, point1.y,
+                   newline );
     }
 };
 
@@ -587,12 +609,20 @@ public:
         aperture_type  = T_round;
     }
     
-    ~PATH()
+    void AppendPoint( const POINT& aPoint )
     {
+        points.push_back( aPoint );
+    }
+    
+    void SetLayerId( const char* aLayerId )
+    {
+        layer_id = aLayerId;
     }
     
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
+        const char* newline = nestLevel ? "\n" : "";
+        
         const char* quote = out->GetQuoteChar( layer_id.c_str() );
         
         const int RIGHTMARGIN = 80;        
@@ -607,6 +637,7 @@ public:
             {
                 out->Print( 0, "\n" );
                 perLine = out->Print( nestLevel+1, "%s", "" );
+                newline = "\n";
             }
             else
                 perLine += out->Print( 0, "  " );
@@ -617,10 +648,10 @@ public:
         if( aperture_type == T_square )
         {
             out->Print( 0, "\n" );
-            out->Print( nestLevel+1, "(aperture_type square)\n" );
+            out->Print( nestLevel+1, "(aperture_type square))\n" );
         }
-
-        out->Print( 0, ")\n" ); 
+        else
+            out->Print( 0, ")%s", newline ); 
     }
 };
 typedef boost::ptr_vector<PATH> PATHS;
@@ -672,7 +703,7 @@ class CIRCLE : public ELEM
     std::string layer_id;
     
     double      diameter;
-    POINT       vertex;
+    POINT       vertex;     // POINT's constructor sets to (0,0)
     
 public:    
     CIRCLE( ELEM* aParent ) :
@@ -683,10 +714,17 @@ public:
     
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
+        const char* newline = nestLevel ? "\n" : "";
+        
         const char* quote = out->GetQuoteChar( layer_id.c_str() );
-        out->Print( nestLevel, "(%s %s%s%s %.6g %.6g %.6g)\n", LEXER::GetTokenText( Type() ) ,
-                                 quote, layer_id.c_str(), quote,
-                                 diameter, vertex.x, vertex.y );
+        out->Print( nestLevel, "(%s %s%s%s %.6g", LEXER::GetTokenText( Type() ),
+                                quote, layer_id.c_str(), quote,
+                                diameter );
+
+        if( vertex.x!=0.0 || vertex.y!=0.0 )
+            out->Print( 0, " %.6g %.6g)%s", vertex.x, vertex.y, newline );
+        else
+            out->Print( 0, ")%s", newline );
     }
     
     void SetLayerId( const char* aLayerId )
@@ -697,6 +735,11 @@ public:
     void SetDiameter( double aDiameter )
     {
         diameter = aDiameter;
+    }
+    
+    void SetVertex( const POINT& aVertex )
+    {
+        vertex = aVertex;
     }
 };
 
@@ -718,15 +761,34 @@ public:
     
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
+        const char* newline = nestLevel ? "\n" : "";
+        
         const char* quote = out->GetQuoteChar( layer_id.c_str() );
-        out->Print( nestLevel, "(%s %s%s%s %.6g\n", LEXER::GetTokenText( Type() ) ,
+        out->Print( nestLevel, "(%s %s%s%s %.6g", LEXER::GetTokenText( Type() ) ,
                                  quote, layer_id.c_str(), quote,
                                  aperture_width);
         
         for( int i=0;  i<3;  ++i )
-            out->Print( nestLevel+1, "%.6g %.6g\n",  vertex[i].x, vertex[i].y );
+            out->Print( 0, "  %.6g %.6g",  vertex[i].x, vertex[i].y );
         
-        out->Print( nestLevel, ")\n" );
+        out->Print( 0, ")%s", newline );
+    }
+    
+    void SetLayerId( const char* aLayerId )
+    {
+        layer_id = aLayerId;
+    }
+    void SetStart( const POINT& aStart )
+    {
+        vertex[0] = aStart;    
+    }
+    void SetEnd( const POINT& aEnd )
+    {
+        vertex[1] = aEnd;
+    }
+    void SetCenter( const POINT& aCenter )
+    {
+        vertex[2] = aCenter;
     }
 };
 
@@ -1641,40 +1703,85 @@ public:
 };
 
 
-class SHAPE : public ELEM_HOLDER
+/**
+ * Class SHAPE
+ * corresponds to the "(shape ..)" element in the specctra dsn spec.
+ * It is not a &lt;shape_descriptor&gt; which is one of things that this
+ * elements contains, i.e. in its "shape" field.  This class also implements
+ * the "(outline ...)" element as a dual personality.
+ */
+class SHAPE : public ELEM
 {
     friend class SPECCTRA_DB;
 
     DSN_T           connect;
     
-    /*----- only one of these is used, like a union -----
-    single item, but now in the kids list
-    
-    PATH*           path;           ///< used for both path and polygon
-    RECTANGLE*      rectangle;
-    CIRCLE*         circle;
-    QARC*           qarc;
-    //--------------------------------------------------- */
+    /*  <shape_descriptor >::=
+        [<rectangle_descriptor> |
+        <circle_descriptor> |
+        <polygon_descriptor> |
+        <path_descriptor> |
+        <qarc_descriptor> ]
+    */
+    ELEM*           shape;
     
     WINDOWS         windows;
     
-    
 public:
     SHAPE( ELEM* aParent, DSN_T aType = T_shape ) :
-        ELEM_HOLDER( aType, aParent )
+        ELEM( aType, aParent )
     {
         connect = T_on;
+        shape = 0;
+    }
+    ~SHAPE()
+    {
+        delete shape;
+    }
+
+    
+    void SetShape( ELEM* aShape )
+    {
+        delete shape;
+        
+        shape = aShape;
+        
+        if( aShape )
+        {
+            wxASSERT(aShape->Type()==T_rect || aShape->Type()==T_circle 
+                     || aShape->Type()==T_qarc || aShape->Type()==T_path 
+                     || aShape->Type()==T_polygon);
+            
+            aShape->SetParent( this );            
+        }
     }
     
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void SetConnect( DSN_T aConnect )
     {
-        ELEM_HOLDER::FormatContents( out, nestLevel );
+        connect = aConnect;
+    }
+    
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        out->Print( nestLevel, "(%s ", LEXER::GetTokenText( Type() ) );
+        
+        if( shape )
+            shape->Format( out, 0 );
         
         if( connect == T_off )
-            out->Print( nestLevel, "(connect %s)\n", LEXER::GetTokenText( connect ) );
-        
-        for( WINDOWS::iterator i=windows.begin();  i!=windows.end();  ++i )
-            i->Format( out, nestLevel );
+            out->Print( 0, "(connect %s)", LEXER::GetTokenText( connect ) );
+
+        if( windows.size() )
+        {
+            out->Print( 0, "\n" );
+            
+            for( WINDOWS::iterator i=windows.begin();  i!=windows.end();  ++i )
+                i->Format( out, nestLevel+1 );
+            
+            out->Print( nestLevel, ")\n" );            
+        }
+        else
+            out->Print( 0, ")\n" );
     }
 };
 
@@ -3324,10 +3431,8 @@ public:
      * of class WinEDA_BasePcbFrame rather than class BOARD.
      *
      * @param aBoard The BOARD to convert to a PCB.
-     * @throw IOError, if the BOARD cannot be converted, and the text of the
-     *   exception tells the error message.
      */
-    void FromBOARD( BOARD* aBoard ) throw( IOError );
+    void FromBOARD( BOARD* aBoard );
     
     
     /**

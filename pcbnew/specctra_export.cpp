@@ -67,20 +67,6 @@ void WinEDA_PcbFrame::ExportToSPECCTRA( wxCommandEvent& event )
     
     db.SetPCB( SPECCTRA_DB::MakePCB() );
 
-
-    //  DSN Images (=Kicad MODULES and pads) must be presented from the
-    //  top view.  So we temporarily flip any modules which are on the back
-    //  side of the board to the front, and record this in the MODULE's flag field.
-    for( MODULE* module = m_Pcb->m_Modules;  module;  module = module->Next() )
-    {
-        module->flag = 0;
-        if( module->GetLayer() == COPPER_LAYER_N )
-        {
-            m_Pcb->Change_Side_Module( module, NULL );
-            module->flag = 1;
-        }
-    }
-    
     try 
     {    
         db.FromBOARD( m_Pcb );
@@ -97,17 +83,6 @@ void WinEDA_PcbFrame::ExportToSPECCTRA( wxCommandEvent& event )
         errorText = ioe.errorText;
     }
 
-    //  DSN Images (=Kicad MODULES and pads) must be presented from the
-    //  top view.  Restore those that were flipped.
-    for( MODULE* module = m_Pcb->m_Modules;  module;  module = module->Next() )
-    {
-        if( module->flag )
-        {
-            m_Pcb->Change_Side_Module( module, NULL );
-            module->flag = 0;
-        }
-    }
-    
     if( ok )
     {
         // @todo display a message saying the export is complete.
@@ -233,6 +208,34 @@ static int Pad_list_Sort_by_Shapes( const void* refptr, const void* objptr )
 
 
 /**
+ * Function makePath
+ * creates a PATH element with a single straight line, a pair of vertices.
+ */
+static PATH* makePath( const POINT& aStart, const POINT& aEnd, const std::string& aLayerName )
+{
+    PATH*   path = new PATH( 0, T_path );
+
+    path->AppendPoint( aStart );
+    path->AppendPoint( aEnd );
+    path->SetLayerId( aLayerName.c_str() );
+    return path;
+}
+
+
+static QARC* makeArc( const POINT& aStart, const POINT& aEnd, 
+                     const POINT& aCenter, const std::string& aLayerName ) 
+{
+    QARC*   qarc = new QARC(0);
+    
+    qarc->SetStart( aStart );
+    qarc->SetEnd( aEnd );
+    qarc->SetCenter( aCenter );
+    qarc->SetLayerId( aLayerName.c_str() );
+    return qarc;
+}
+                         
+
+/**
  * Function makePADSTACKs
  * makes all the PADSTACKs, and marks each D_PAD with the index into the 
  * LIBRARY::padstacks list that it matches.
@@ -247,7 +250,19 @@ static void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads,
 
     D_PAD*  old_pad = NULL;
     int     padstackNdx = 0;
+
     
+    // for now, report on only the top and bottom layers with respect to the copper
+    // within a padstack.  this is usually correct, but not rigorous.  We could do
+    // better if there was actually a "layer type" field within Kicad which would
+    // hold one of:  T_signal, T_power, T_mixed, T_jumper
+    // See page bottom of page 74 of the SECCTRA Design Language Reference, May 2000.
+    
+    std::string layerId[2] = {
+        CONV_TO_UTF8(aBoard->GetLayerName( LAYER_CMP_N )),
+        CONV_TO_UTF8(aBoard->GetLayerName( COPPER_LAYER_N )), 
+    };
+
     for( int i=0;  i<aPads.GetCount();  ++i )
     {
         D_PAD*  pad = (D_PAD*) aPads[i];
@@ -265,39 +280,51 @@ static void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads,
         pad->m_logical_connexion = padstackNdx++;
 
         PADSTACK*   padstack = new PADSTACK( aLibrary );
-        SHAPE*      shape = new SHAPE( padstack );
-        padstack->Append( shape );
+        aLibrary->AddPadstack( padstack );
+        
+        // paddOfset is the offset of copper shape relative to hole position, 
+        // and pad->m_Pos is hole position. All shapes must be shifted by
+        // this distance, normally (0,0).
+        
+        // Note that the y correction here is set negative.
+        POINT       padOffset( scale(pad->m_Offset.x), -scale(pad->m_Offset.y) );
+
+        bool doLayer[2] =  { 
+            pad->IsOnLayer( LAYER_CMP_N ),
+            pad->IsOnLayer( COPPER_LAYER_N ) 
+        };
+                                     
+        int         coppers = 0;
         
         switch( pad->m_PadShape )
         {
         default:
         case PAD_CIRCLE:
             {
-                CIRCLE* circle;
                 double  diameter = scale(pad->m_Size.x);
-                int coppers = 0;
-
-                if( pad->IsOnLayer( COPPER_LAYER_N ) )
+                
+                for( int layer=0;  layer<2;  ++layer )
                 {
-                    circle = new CIRCLE( shape );
-                    circle->SetLayerId( CONV_TO_UTF8(aBoard->GetLayerName( COPPER_LAYER_N )) );
-                    circle->SetDiameter( diameter );
-                    shape->Append( circle );
-                    ++coppers;
+                    if( doLayer[i] )
+                    {
+                        CIRCLE*     circle;
+                        SHAPE*      shape = new SHAPE( padstack );
+                        
+                        padstack->Append( shape );
+    
+                        circle = new CIRCLE( shape );
+                        shape->SetShape( circle );
+                        
+                        circle->SetLayerId( layerId[layer].c_str() );
+                        circle->SetDiameter( diameter );
+                        circle->SetVertex( padOffset );
+                        ++coppers;
+                    }
                 }
                 
-                if( pad->IsOnLayer( LAYER_CMP_N ) )
-                {
-                    circle = new CIRCLE( shape );
-                    circle->SetLayerId( CONV_TO_UTF8(aBoard->GetLayerName( LAYER_CMP_N )) );
-                    circle->SetDiameter( diameter );
-                    shape->Append( circle );
-                    ++coppers;
-                }
-
-                char    name[50];
+                char    name[80];
                 
-                snprintf( name, sizeof(name),  "Round%dPad_%.6g_mil", coppers, scale(pad->m_Size.x) );
+                snprintf( name, sizeof(name), "Round%dPad_%.6g_mil", coppers, scale(pad->m_Size.x) );
                 
                 name[ sizeof(name)-1 ] = 0;
 
@@ -306,8 +333,6 @@ static void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads,
                 // name here. If so, blend in the padNdx into the name.
                 
                 padstack->SetPadstackId( name );
-                
-                aLibrary->AddPadstack( padstack );
             }
             break;
 
@@ -315,29 +340,30 @@ static void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads,
             {
                 double dx = scale( pad->m_Size.x ) / 2.0;
                 double dy = scale( pad->m_Size.y ) / 2.0;
+                
+                POINT   lowerLeft( -dx, -dy );
+                POINT   upperRight( dx, dy );
 
-                RECTANGLE* rect;
-                int coppers = 0;
+                lowerLeft  += padOffset;
+                upperRight += padOffset;
 
-                if( pad->IsOnLayer( COPPER_LAYER_N ) )
+                for( int layer=0;  layer<2;  ++layer )
                 {
-                    rect = new RECTANGLE( shape );
-                    rect->SetLayerId( CONV_TO_UTF8(aBoard->GetLayerName( COPPER_LAYER_N )) );
-                    rect->SetCorners( POINT(-dx,-dy), POINT(dx,dy) );
-                    shape->Append( rect );
-                    ++coppers;
+                    if( doLayer[i] )
+                    {
+                        SHAPE*      shape = new SHAPE( padstack );
+                        padstack->Append( shape );
+                        
+                        RECTANGLE*  rect = new RECTANGLE( shape );
+                        shape->SetShape( rect );
+                        
+                        rect->SetLayerId( layerId[layer].c_str() );
+                        rect->SetCorners( lowerLeft, upperRight );
+                        ++coppers;
+                    }
                 }
                 
-                if( pad->IsOnLayer( LAYER_CMP_N ) )
-                {
-                    rect = new RECTANGLE( shape );
-                    rect->SetLayerId( CONV_TO_UTF8(aBoard->GetLayerName( LAYER_CMP_N )) );
-                    rect->SetCorners( POINT(-dx,-dy), POINT(dx,dy) );
-                    shape->Append( rect );
-                    ++coppers;
-                }
-
-                char    name[50];
+                char    name[80];
                 
                 snprintf( name, sizeof(name),  "Rect%dPad_%.6gx%.6g_mil", 
                          coppers, scale(pad->m_Size.x), scale(pad->m_Size.y)  );
@@ -345,79 +371,145 @@ static void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads,
                 name[ sizeof(name)-1 ] = 0;
 
                 // @todo verify that all pad names are unique, there is a chance that 
-                // D_PAD::Compare() could say two pads are different, yet the get the same
+                // D_PAD::Compare() could say two pads are different, yet they get the same
                 // name here. If so, blend in the padNdx into the name.
                 
                 padstack->SetPadstackId( name );
+            }
+            break;
+            
+        case PAD_OVAL:
+            {
+                double dx = scale( pad->m_Size.x ) / 2.0;
+                double dy = scale( pad->m_Size.y ) / 2.0;
+                double dr = dx - dy;
+
+                if( dr >= 0 )       // oval is horizontal
+                {
+                    double  radius = dy;
+
+                    for( int layer=0;  layer<2;  ++layer )
+                    {
+                        // each oval is 2 lines and 4 (quarter circle) qarcs
+    
+                        SHAPE*  shape;
+                        PATH*   path;
+                        QARC*   qarc;
+                        
+                        shape = new SHAPE( padstack );
+                        padstack->Append( shape );
+                        path = makePath( 
+                                POINT( -dr + padOffset.x, padOffset.y - radius ),     // aStart
+                                POINT(  dr + padOffset.x, padOffset.y - radius ),     // aEnd
+                                layerId[layer] );
+                        shape->SetShape( path );
+                        
+                        shape = new SHAPE( padstack );
+                        padstack->Append( shape );
+                        // @todo: this 1/2 circle arc needs to be split into two quarter circle arcs 
+                        qarc = makeArc( 
+                                POINT(  dr + padOffset.x, padOffset.y - radius),      // aStart
+                                POINT(  dr + padOffset.x, padOffset.y + radius),      // aEnd
+                                POINT(  dr + padOffset.x, padOffset.y ),              // aCenter
+                                layerId[layer] );
+                        shape->SetShape( qarc );
+
+                        shape = new SHAPE( padstack );
+                        padstack->Append( shape );
+                        path = makePath( 
+                                POINT(  dr + padOffset.x, padOffset.y + radius ),     // aStart
+                                POINT( -dr + padOffset.x, padOffset.y + radius ),     // aEnd
+                                layerId[layer] );
+                        shape->SetShape( path );
+
+                        shape = new SHAPE( padstack );
+                        padstack->Append( shape );
+                        // @todo: this 1/2 circle arc needs to be split into two quarter circle arcs 
+                        qarc = makeArc( 
+                                POINT( -dr + padOffset.x, padOffset.y + radius),      // aStart
+                                POINT( -dr + padOffset.x, padOffset.y - radius),      // aEnd
+                                POINT( -dr + padOffset.x, padOffset.y ),              // aCenter
+                                layerId[layer] );
+                        shape->SetShape( qarc );
+                    }
+                }
+                else        // oval is vertical
+                {
+                    double  radius = dx;
+                    
+                    dr = -dr;
+
+                    for( int layer=0;  layer<2;  ++layer )
+                    {
+                        // each oval is 2 lines and 2 qarcs
+    
+                        SHAPE*  shape;
+                        PATH*   path;
+                        QARC*   qarc;
+                        
+                        shape = new SHAPE( padstack );
+                        padstack->Append( shape );
+                        path = makePath( 
+                                POINT( -radius + padOffset.x, padOffset.y - dr ),   // aStart
+                                POINT( -radius + padOffset.x, padOffset.y + dr ),   // aEnd
+                                layerId[layer] );
+                        shape->SetShape( path );
+
+                        shape = new SHAPE( padstack );
+                        padstack->Append( shape );
+                        // @todo: this 1/2 circle arc needs to be split into two quarter circle arcs 
+                        qarc = makeArc( 
+                                POINT( -radius + padOffset.x, padOffset.y + dr ),   // aStart
+                                POINT(  radius + padOffset.x, padOffset.y + dr),    // aEnd
+                                POINT(  padOffset.x, padOffset.y +dr ),             // aCenter
+                                layerId[layer] );
+                        shape->SetShape( qarc );
+
+                        shape = new SHAPE( padstack );
+                        padstack->Append( shape );
+                        path = makePath( 
+                                POINT(  radius + padOffset.x, padOffset.y + dr ),   // aStart
+                                POINT(  radius + padOffset.x, padOffset.y - dr ),   // aEnd
+                                layerId[layer] );
+                        shape->SetShape( path );
+
+                        shape = new SHAPE( padstack );
+                        padstack->Append( shape );
+                        // @todo: this 1/2 circle arc needs to be split into two quarter circle arcs 
+                        qarc = makeArc( 
+                                POINT(  radius + padOffset.x, padOffset.y - dr),    // aStart
+                                POINT( -radius + padOffset.x, padOffset.y - dr),    // aEnd
+                                POINT( padOffset.x, padOffset.y - dr ),             // aCenter
+                                layerId[layer] );
+                        shape->SetShape( qarc );
+                    }
+                }
                 
-                aLibrary->AddPadstack( padstack );
+                char    name[80];
+                
+                snprintf( name, sizeof(name),  "Oval%dPad_%.6gx%.6g_mil", 
+                         coppers, scale(pad->m_Size.x), scale(pad->m_Size.y)  );
+                
+                name[ sizeof(name)-1 ] = 0;
+                
+                // @todo verify that all pad names are unique, there is a chance that 
+                // D_PAD::Compare() could say two pads are different, yet they get the same
+                // name here. If so, blend in the padNdx into the name.
+                
+                padstack->SetPadstackId( name );
             }
             break;
-#if 0            
-            pad_type = "RECTANGULAR";
-            fprintf( file, " %s %d\n", pad_type, pad->m_Drill.x );
-            fprintf( file, "RECTANGLE %d %d %d %d\n",
-                     -dx + pad->m_Offset.x, -dy - pad->m_Offset.y,
-                     dx + pad->m_Offset.x, -pad->m_Offset.y + dy );
-            break;
-    
-        case PAD_OVAL:     /* description du contour par 2 linges et 2 arcs */
-        {
-            pad_type = "FINGER";
-            fprintf( file, " %s %d\n", pad_type, pad->m_Drill.x );
-            int dr = dx - dy;
-            if( dr >= 0 )       // ovale horizontal
-            {
-                int rayon = dy;
-                fprintf( file, "LINE %d %d %d %d\n",
-                         -dr + pad->m_Offset.x, -pad->m_Offset.y - rayon,
-                         dr + pad->m_Offset.x, -pad->m_Offset.y - rayon );
-                fprintf( file, "ARC %d %d %d %d %d %d\n",
-                         dr + pad->m_Offset.x, -pad->m_Offset.y - rayon,
-                         dr + pad->m_Offset.x, -pad->m_Offset.y + rayon,
-                         dr + pad->m_Offset.x, -pad->m_Offset.y );
-    
-                fprintf( file, "LINE %d %d %d %d\n",
-                         dr + pad->m_Offset.x, -pad->m_Offset.y + rayon,
-                         -dr + pad->m_Offset.x, -pad->m_Offset.y + rayon );
-                fprintf( file, "ARC %d %d %d %d %d %d\n",
-                         -dr + pad->m_Offset.x, -pad->m_Offset.y + rayon,
-                         -dr + pad->m_Offset.x, -pad->m_Offset.y - rayon,
-                         -dr + pad->m_Offset.x, -pad->m_Offset.y );
-            }
-            else        // ovale vertical
-            {
-                dr = -dr;
-                int rayon = dx;
-                fprintf( file, "LINE %d %d %d %d\n",
-                         -rayon + pad->m_Offset.x, -pad->m_Offset.y - dr,
-                         -rayon + pad->m_Offset.x, -pad->m_Offset.y + dr );
-                fprintf( file, "ARC %d %d %d %d %d %d\n",
-                         -rayon + pad->m_Offset.x, -pad->m_Offset.y + dr,
-                         rayon + pad->m_Offset.x, -pad->m_Offset.y + dr,
-                         pad->m_Offset.x, -pad->m_Offset.y + dr );
-    
-                fprintf( file, "LINE %d %d %d %d\n",
-                         rayon + pad->m_Offset.x, -pad->m_Offset.y + dr,
-                         rayon + pad->m_Offset.x, -pad->m_Offset.y - dr );
-                fprintf( file, "ARC %d %d %d %d %d %d\n",
-                         rayon + pad->m_Offset.x, -pad->m_Offset.y - dr,
-                         -rayon + pad->m_Offset.x, -pad->m_Offset.y - dr,
-                         pad->m_Offset.x, -pad->m_Offset.y - dr );
-            }
-            break;
-        }
-    
+
+/*            
         case PAD_TRAPEZOID:
-            pad_type = "POLYGON";
             break;
-#endif
+*/            
         }
     }
 }
 
 
-void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
+void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 {
     TYPE_COLLECTOR          items;
     POINT_PAIRS             ppairs;
@@ -426,6 +518,21 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
     if( !pcb )
         pcb = SPECCTRA_DB::MakePCB();
 
+
+    //  DSN Images (=Kicad MODULES and pads) must be presented from the
+    //  top view.  So we temporarily flip any modules which are on the back
+    //  side of the board to the front, and record this in the MODULE's flag field.
+    for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
+    {
+        module->flag = 0;
+        if( module->GetLayer() == COPPER_LAYER_N )
+        {
+            aBoard->Change_Side_Module( module, NULL );
+            module->flag = 1;
+        }
+    }
+    
+    
     //-----<unit_descriptor> & <resolution_descriptor>--------------------
     {    
         pcb->unit->units = T_mil;
@@ -463,7 +570,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         {
             swapEnds( ppairs );
     
-#if defined(DEBUG)        
+#if 0 && defined(DEBUG)        
             for( unsigned i=0;  i<ppairs.size();  ++i )
             {
                 POINT_PAIR* p = &ppairs[i];
@@ -539,7 +646,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             
             layer->name = CONV_TO_UTF8( layerName );
             
-            // layer->type =
+            // layer->type =  @todo need this, the export would be better.
+            
             pcb->structure->layers.push_back( layer );
         }
     }
@@ -589,9 +697,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         // get all the D_PADs into pads.        
         pads.Collect( aBoard, scanPADs );
 
+        
         makePADSTACKs( aBoard, pads, pcb->library, pcb->library->padstacks );
 
-#if defined(DEBUG)
+#if 0 && defined(DEBUG)
         for( int p=0;  p<pads.GetCount();  ++p )
             pads[p]->Show( 0, std::cout );
 #endif    
@@ -626,6 +735,16 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
     }
 
     
+    //  DSN Images (=Kicad MODULES and pads) must be presented from the
+    //  top view.  Restore those that were flipped.
+    for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
+    {
+        if( module->flag )
+        {
+            aBoard->Change_Side_Module( module, NULL );
+            module->flag = 0;
+        }
+    }
 }
 
     
