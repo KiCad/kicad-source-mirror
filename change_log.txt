@@ -9,7 +9,18 @@ email address.
 2008-Jan-25 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:
-	void Change_Side_Module( MODULE* Module, wxDC* DC ) is now member of class BOARD.
+	- void Change_Side_Module( MODULE* Module, wxDC* DC ) is now member of class BOARD.
+
+	- Better support for micro vias and buried vias (drill files now are useable for board manufacturers)
+	But not yet tested by a board manufacturer. Be carefull.
+	Todo: tools to conversion  between via through and buried via and buried viad optimisation.
+	But must works for micro vias (needed for my next board)
+	(in pcbnew micro vias are blind vias between 2 adjacent layers: micro vias must be enabled
+	in Dimensions/track and via menu, and placed by ctrl v.
+	They are intended to connect small pitch BGA pins to the inner layer, and can be drilled by laser
+	if the hole diameter is small < 0.2mm. A laser can only drill a hole between 2 adjacent layers ).
+	
+	** Currently use buried via for tests only, not for production **.
 	
 
 2008-Jan-24 UPDATE   Dick Hollenbeck <dick@softplc.com>

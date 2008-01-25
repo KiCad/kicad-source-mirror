@@ -1,11 +1,11 @@
-/*******************************************************************************/
-/* classes and functions declaration unsed in drill file and report generation */
-/*******************************************************************************/
+/******************************************************************************/
+/* classes and functions declaration used in drill file and report generation */
+/******************************************************************************/
 
 #ifndef GENDRILL_H
 #define GENDRILL_H
 
-/* the DRILL_TOOL class  handle tools used in the excellon drill file */
+/* the DRILL_TOOL class  handles tools used in the excellon drill file */
 class DRILL_TOOL
 {
 public:
@@ -62,13 +62,18 @@ enum zeros_fmt {
 /**
  * Function BuildHolesList
  * Create the list of holes and tools for a given board
+ * The list is sorted by incraesin drill values
+ * Only holes from aFirstLayer to aLastLayer copper layers  are listed (for vias, because pad holes are always through holes)
  * @param Pcb : the given board
- * @param aHoleListBuffer : the std::vector<HOLE_INFO> to fill with pcb info
+ * @param aHoleListBuffer : the std::vector<HOLE_INFO> to fill with pcb holes info
  * @param aToolListBuffer : the std::vector<DRILL_TOOL> to fill with tools to use
+ * @param aFirstLayer = first layer to consider. if < 0 aFirstLayer is ignored
+ * @param aLastLayer = last layer to consider. if < 0 aLastLayer is ignored
+ * @param aExcludeThroughHoles : if true, exclude through holes ( pads and vias through )
  */
 void    Build_Holes_List( BOARD* Pcb, std::vector<HOLE_INFO>& aHoleListBuffer,
                           std::vector<DRILL_TOOL>& aToolListBuffer,
-                          int aFirstLayer, int aLastLayer );
+                          int aFirstLayer, int aLastLayer, bool aExcludeThroughHoles );
 
 
 void    GenDrillMapFile( BOARD* aPcb,
@@ -87,8 +92,12 @@ void    Gen_Drill_PcbMap( BOARD* aPcb, FILE* aFile,
 
 /*
  *  Create a list of drill values and drill count
+ *  there is only one report for all drill files even when buried or blinds vias exist
  */
-void GenDrillReportFile( FILE* aFile, const wxString& aBoardFilename,
-                         std::vector<DRILL_TOOL>& aToolListBuffer, bool aUnit_Drill_is_Inch );
+void GenDrillReportFile( FILE* aFile, BOARD * aPcb, const wxString& aBoardFilename,
+                         bool aUnit_Drill_is_Inch,
+						std::vector<HOLE_INFO> & aHoleListBuffer, 
+						std::vector<DRILL_TOOL>& aToolListBuffer 
+						);
 
 #endif  //	#ifndef GENDRILL_H

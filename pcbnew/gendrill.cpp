@@ -251,14 +251,23 @@ void WinEDA_DrillFrame::UpdateConfig()
 void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
 /*************************************************************/
 
-/* Calls the functions to create EXCELLON drill files and/od drill map files
+/**
+ * Function GenDrillFiles
+ * Calls the functions to create EXCELLON drill files and/od drill map files
+ * When all holes are through, one excellon file is created
+ * when there are some partial holes (some blind or buried vias:
+ * One excellon file is created, for all through holes.
+ * And one file per layer pair, which have one or more holes, excluding through holes, already in the first file.
  */
 {
     wxString FullFileName, Mask( wxT( "*" ) ), Ext( wxT( ".drl" ) );
+    wxString BaseFileName;
+    wxString layer_extend;              // added to the  Board FileName to create FullFileName (= Board FileName + layer pair names)
     wxString msg;
-    bool     ExistsBuriedVias = false;  // If true, driil files are created layer pair by layer pair
+    bool     ExistsBuriedVias = false;  // If true, drill files are created layer pair by layer pair for buried vias
     int      layer1 = COPPER_LAYER_N;
     int      layer2 = LAYER_CMP_N;
+    bool     gen_through_holes = true;
 
     UpdateConfig(); /* set params and Save drill options */
 
@@ -272,16 +281,17 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
     if( m_MicroViasCount || m_BlindOrBuriedViasCount )
         ExistsBuriedVias = true;
 
-    if(  ExistsBuriedVias )
-        layer2 = layer1 + 1;;
-    /* Get the file name */
     Mask += Ext;
     for( ; ; )
     {
+        Build_Holes_List( m_Parent->m_Pcb, s_HoleListBuffer, s_ToolListBuffer,
+                          layer1, layer2, gen_through_holes ? false : true );
+        if( s_ToolListBuffer.size() == 0 )  // No holes !
+            continue;
+
         FullFileName = m_Parent->m_CurrentScreen->m_FileName;
-        wxString layer_extend;
         layer_extend.Empty();
-        if( ExistsBuriedVias )
+        if( !gen_through_holes )
         {
             if( layer1 == COPPER_LAYER_N )
                 layer_extend << wxT( "-copper" );
@@ -305,9 +315,6 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
                                          TRUE
                                          );
 
-        Build_Holes_List( m_Parent->m_Pcb, s_HoleListBuffer, s_ToolListBuffer,
-                          layer1, layer2 );
-
         if( FullFileName != wxEmptyString )
         {
             dest = wxFopen( FullFileName, wxT( "w" ) );
@@ -328,32 +335,35 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
             break;
 
         case 1:
-            GenDrillMap( FullFileName,
-                         s_HoleListBuffer,
-                         s_ToolListBuffer,
-                         PLOT_FORMAT_HPGL );
+            GenDrillMap( FullFileName, s_HoleListBuffer, s_ToolListBuffer, PLOT_FORMAT_HPGL );
             break;
 
         case 2:
-            GenDrillMap( FullFileName,
-                         s_HoleListBuffer,
-                         s_ToolListBuffer,
-                         PLOT_FORMAT_POST );
+            GenDrillMap( FullFileName, s_HoleListBuffer, s_ToolListBuffer, PLOT_FORMAT_POST );
             break;
         }
 
-        if( m_Choice_Drill_Report->GetSelection() > 0 )
-            GenDrillReport( FullFileName, s_ToolListBuffer );
-
         if(  !ExistsBuriedVias )
             break;
-
-        if( layer2 >= LAYER_CMP_N )                                 // no more layer pair to consider
-            break;
-        layer1++; layer2++;                                         // use next layer pair
-        if( layer2 == g_DesignSettings.m_CopperLayerCount - 1 )     // The last layer is reached
-            layer2 = LAYER_CMP_N;                                   // the last layer is always the component layer
+        if(  gen_through_holes )
+            layer2 = layer1 + 1;
+        else
+        {
+            if( layer2 >= LAYER_CMP_N )                                 // no more layer pair to consider
+                break;
+            layer1++; layer2++;                                         // use next layer pair
+            if( layer2 == g_DesignSettings.m_CopperLayerCount - 1 )     // The last layer is reached
+                layer2 = LAYER_CMP_N;                                   // the last layer is always the component layer
+        }
+        gen_through_holes = false;
     }
+
+    if( m_Choice_Drill_Report->GetSelection() > 0 )
+    {
+        FullFileName = m_Parent->m_CurrentScreen->m_FileName;
+        GenDrillReport( FullFileName );
+    }
+
 
     EndModal( 0 );
 }
@@ -747,7 +757,7 @@ void WinEDA_DrillFrame::GenDrillMap( const wxString aFileName,
 
 
 /**************************************************************************************************/
-void WinEDA_DrillFrame::GenDrillReport( const wxString aFileName, std::vector<DRILL_TOOL>& buffer )
+void WinEDA_DrillFrame::GenDrillReport( const wxString aFileName )
 /**************************************************************************************************/
 
 /*
@@ -780,6 +790,9 @@ void WinEDA_DrillFrame::GenDrillReport( const wxString aFileName, std::vector<DR
         DisplayError( this, msg );
         return;
     }
-
-    GenDrillReportFile( dest, m_Parent->m_CurrentScreen->m_FileName, buffer, s_Unit_Drill_is_Inch );
+    GenDrillReportFile( dest, m_Parent->m_Pcb,
+                        m_Parent->m_CurrentScreen->m_FileName,
+                        s_Unit_Drill_is_Inch,
+                        s_HoleListBuffer,
+                        s_ToolListBuffer );
 }

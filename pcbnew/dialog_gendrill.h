@@ -153,7 +153,7 @@ private:
     void    UpdatePrecisionOptions( wxCommandEvent& event );
     void    UpdateConfig();
 	void    Write_Excellon_Header( FILE * aFile);
-    void    GenDrillReport( const wxString aFileName, std::vector<DRILL_TOOL> & buffer );
+    void    GenDrillReport( const wxString aFileName );
     int     Create_Drill_File_EXCELLON( std::vector<HOLE_INFO> & aHoleListBuffer,
 		std::vector<DRILL_TOOL> & aToolListBuffer );
 	int 	Gen_Liste_Tools( std::vector<DRILL_TOOL> & buffer, bool print_header );

@@ -285,10 +285,10 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName, w
             fputs( line, aFile );
 
             // Now list how many holes and ovals are associated with each drill.
-            if( ( aToolListBuffer[ii].m_TotalCount == 1 ) &&
-               ( aToolListBuffer[ii].m_OvalCount == 0 ) )
+            if( ( aToolListBuffer[ii].m_TotalCount == 1 )
+               && ( aToolListBuffer[ii].m_OvalCount == 0 ) )
                 sprintf( line, "(1 hole)\n" );
-            else if( aToolListBuffer[ii].m_TotalCount == 1 )      // && ( buffer[ii]m_OvalCount == 1 )
+            else if( aToolListBuffer[ii].m_TotalCount == 1 )  // && ( buffer[ii]m_OvalCount == 1 )
                 sprintf( line, "(1 hole) (with 1 oblong)\n" );
             else if( aToolListBuffer[ii].m_OvalCount == 0 )
                 sprintf( line, "(%d holes)\n",
@@ -296,7 +296,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName, w
             else if( aToolListBuffer[ii].m_OvalCount == 1 )
                 sprintf( line, "(%d holes) (with 1 oblong)\n",
                          aToolListBuffer[ii].m_TotalCount );
-            else      //  if ( aToolListBuffer[ii]m_OvalCount > 1 )
+            else  //  if ( aToolListBuffer[ii]m_OvalCount > 1 )
                 sprintf( line, "(%d holes) (with %d oblongs)\n",
                          aToolListBuffer[ii].m_TotalCount,
                          aToolListBuffer[ii].m_OvalCount );
@@ -319,10 +319,10 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName, w
             msg = CONV_FROM_UTF8( line );
 
             // Now list how many holes and ovals are associated with each drill.
-            if( ( aToolListBuffer[ii].m_TotalCount == 1 ) &&
-               ( aToolListBuffer[ii].m_OvalCount == 0 ) )
+            if( ( aToolListBuffer[ii].m_TotalCount == 1 )
+               && ( aToolListBuffer[ii].m_OvalCount == 0 ) )
                 sprintf( line, "(1 hole)" );
-            else if( aToolListBuffer[ii].m_TotalCount == 1 )      // && ( aToolListBuffer[ii]m_OvalCount == 1 )
+            else if( aToolListBuffer[ii].m_TotalCount == 1 )  // && ( aToolListBuffer[ii]m_OvalCount == 1 )
                 sprintf( line, "(1 hole) (with 1 oblong)" );
             else if( aToolListBuffer[ii].m_OvalCount == 0 )
                 sprintf( line, "(%d holes)",
@@ -330,7 +330,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName, w
             else if( aToolListBuffer[ii].m_OvalCount == 1 )
                 sprintf( line, "(%d holes) (with 1 oblong)",
                          aToolListBuffer[ii].m_TotalCount );
-            else      // if ( aToolListBuffer[ii]m_OvalCount > 1 )
+            else  // if ( aToolListBuffer[ii]m_OvalCount > 1 )
                 sprintf( line, "(%d holes) (with %d oblongs)",
                          aToolListBuffer[ii].m_TotalCount,
                          aToolListBuffer[ii].m_OvalCount );
@@ -610,8 +610,11 @@ void PlotOvalDrillSymbol( const wxPoint& position, const wxSize& size, int orien
 
 
 /**************************************************************************************************/
-void GenDrillReportFile( FILE* aFile, const wxString& aBoardFilename,
-                         std::vector<DRILL_TOOL>& aToolListBuffer, bool aUnit_Drill_is_Inch )
+void GenDrillReportFile( FILE* aFile, BOARD* aPcb, const wxString& aBoardFilename,
+                         bool aUnit_Drill_is_Inch,
+                         std::vector<HOLE_INFO>& aHoleListBuffer,
+                         std::vector<DRILL_TOOL>& aToolListBuffer
+                         )
 /*************************************************************************************************/
 
 /*
@@ -620,6 +623,10 @@ void GenDrillReportFile( FILE* aFile, const wxString& aBoardFilename,
 {
     unsigned TotalHoleCount;
     char     line[1024];
+    int      layer1 = COPPER_LAYER_N;
+    int      layer2 = LAYER_CMP_N;
+    bool     gen_through_holes = true;
+
 
     fprintf( aFile, "Drill report for %s\n", CONV_TO_UTF8( aBoardFilename ) );
     fprintf( aFile, "Created on %s\n", DateAndTime( line ) );
@@ -630,47 +637,97 @@ void GenDrillReportFile( FILE* aFile, const wxString& aBoardFilename,
     else
         fputs( "Selected Drill Unit: Metric (mm)\n\n", aFile );
 
-    TotalHoleCount = 0;
+    /* build hole lists:
+     * 1 - through holes
+     * 2 - for partial holes only: by layer pair
+     */
 
-    for( unsigned ii = 0; ii < aToolListBuffer.size(); ii++ )
+    for( ; ; )
     {
-        // List the tool number assigned to each drill,
-        // then its diameter in the selected Drill Unit,
-        // and then its diameter in the other Drill Unit.
-        if( aUnit_Drill_is_Inch )
-            sprintf( line, "T%d  %2.3f\"  %2.2fmm  ",
-                     ii + 1,
-                     float (aToolListBuffer[ii].m_Diameter) * 0.0001,
-                     float (aToolListBuffer[ii].m_Diameter) * 0.00254 );
+        Build_Holes_List( aPcb,
+                          aHoleListBuffer,
+                          aToolListBuffer,
+                          layer1,
+                          layer2,
+                          gen_through_holes ? false : true );
+
+        TotalHoleCount = 0;
+
+        if( gen_through_holes )
+		{
+            sprintf( line, "Drill report for through holes :\n" );
+		}
         else
-            sprintf( line, "T%d  %2.2fmm  %2.3f\"  ",
-                     ii + 1,
-                     float (aToolListBuffer[ii].m_Diameter) * 0.00254,
-                     float (aToolListBuffer[ii].m_Diameter) * 0.0001 );
+		{
+			if ( layer1 == COPPER_LAYER_N )	// First partial hole list
+			{
+				sprintf( line, "Drill report for buried and blind vias :\n\n");
+				fputs( line, aFile );
+			}
+				
+            sprintf( line, "Drill report for holes from layer %s to layer %s\n",
+			CONV_TO_UTF8 (aPcb->GetLayerName(layer1) ),
+			CONV_TO_UTF8 (aPcb->GetLayerName(layer2) ) );
+		}
+
         fputs( line, aFile );
 
-        // Now list how many holes and ovals are associated with each drill.
-        if( ( aToolListBuffer[ii].m_TotalCount == 1 ) && ( aToolListBuffer[ii].m_OvalCount == 0 ) )
-            sprintf( line, "(1 hole)\n" );
-        else if( aToolListBuffer[ii].m_TotalCount == 1 )
-            sprintf( line, "(1 hole)  (with 1 oblong)\n" );
-        else if( aToolListBuffer[ii].m_OvalCount == 0 )
-            sprintf( line, "(%d holes)\n",
-                     aToolListBuffer[ii].m_TotalCount );
-        else if( aToolListBuffer[ii].m_OvalCount == 1 )
-            sprintf( line, "(%d holes)  (with 1 oblong)\n",
-                     aToolListBuffer[ii].m_TotalCount );
-        else  //  if ( buffer[ii]m_OvalCount > 1 )
-            sprintf( line, "(%d holes)  (with %d oblongs)\n",
-                     aToolListBuffer[ii].m_TotalCount,
-                     aToolListBuffer[ii].m_OvalCount );
+        for( unsigned ii = 0; ii < aToolListBuffer.size(); ii++ )
+        {
+            // List the tool number assigned to each drill,
+            // then its diameter in the selected Drill Unit,
+            // and then its diameter in the other Drill Unit.
+            if( aUnit_Drill_is_Inch )
+                sprintf( line, "T%d  %2.3f\"  %2.2fmm  ",
+                         ii + 1,
+                         float (aToolListBuffer[ii].m_Diameter) * 0.0001,
+                         float (aToolListBuffer[ii].m_Diameter) * 0.00254 );
+            else
+                sprintf( line, "T%d  %2.2fmm  %2.3f\"  ",
+                         ii + 1,
+                         float (aToolListBuffer[ii].m_Diameter) * 0.00254,
+                         float (aToolListBuffer[ii].m_Diameter) * 0.0001 );
+            fputs( line, aFile );
+
+            // Now list how many holes and ovals are associated with each drill.
+            if( ( aToolListBuffer[ii].m_TotalCount == 1 )
+               && ( aToolListBuffer[ii].m_OvalCount == 0 ) )
+                sprintf( line, "(1 hole)\n" );
+            else if( aToolListBuffer[ii].m_TotalCount == 1 )
+                sprintf( line, "(1 hole)  (with 1 oblong)\n" );
+            else if( aToolListBuffer[ii].m_OvalCount == 0 )
+                sprintf( line, "(%d holes)\n",
+                         aToolListBuffer[ii].m_TotalCount );
+            else if( aToolListBuffer[ii].m_OvalCount == 1 )
+                sprintf( line, "(%d holes)  (with 1 oblong)\n",
+                         aToolListBuffer[ii].m_TotalCount );
+            else  //  if ( buffer[ii]m_OvalCount > 1 )
+                sprintf( line, "(%d holes)  (with %d oblongs)\n",
+                         aToolListBuffer[ii].m_TotalCount,
+                         aToolListBuffer[ii].m_OvalCount );
+            fputs( line, aFile );
+
+            TotalHoleCount += aToolListBuffer[ii].m_TotalCount;
+        }
+
+        sprintf( line, "\ntotal holes count %d\n\n\n", TotalHoleCount );
         fputs( line, aFile );
 
-        TotalHoleCount += aToolListBuffer[ii].m_TotalCount;
+        if( g_DesignSettings.m_CopperLayerCount <= 2 )
+            break;
+
+        if(  gen_through_holes )
+            layer2 = layer1 + 1;
+        else
+        {
+            if( layer2 >= LAYER_CMP_N )                                 // no more layer pair to consider
+                break;
+            layer1++; layer2++;                                         // use next layer pair
+            if( layer2 == g_DesignSettings.m_CopperLayerCount - 1 )     // The last layer is reached
+                layer2 = LAYER_CMP_N;                                   // the last layer is always the component layer
+        }
+        gen_through_holes = false;
     }
-
-    sprintf( line, "\ntotal holes count %d\n", TotalHoleCount );
-    fputs( line, aFile );
 
     fclose( aFile );
 }
