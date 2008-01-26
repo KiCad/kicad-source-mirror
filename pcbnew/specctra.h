@@ -1706,7 +1706,7 @@ public:
 /**
  * Class SHAPE
  * corresponds to the "(shape ..)" element in the specctra dsn spec.
- * It is not a &lt;shape_descriptor&gt; which is one of things that this
+ * It is not a &lt;shape_descriptor&gt;, which is one of things that this
  * elements contains, i.e. in its "shape" field.  This class also implements
  * the "(outline ...)" element as a dual personality.
  */
@@ -1739,11 +1739,9 @@ public:
         delete shape;
     }
 
-    
     void SetShape( ELEM* aShape )
     {
         delete shape;
-        
         shape = aShape;
         
         if( aShape )

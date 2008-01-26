@@ -71,12 +71,12 @@ static wxMenu* Append_Track_Width_List()
     double   value;
 
     trackwidth_menu = new wxMenu;
-    for( ii = 0; (ii < HIST0RY_NUMBER) && (ii < TRACK_HISTORY_NUMBER_MAX); ii++ )
+    for( ii = 0; (ii < HISTORY_NUMBER) && (ii < TRACK_HISTORY_NUMBER_MAX); ii++ )
     {
-        if( g_DesignSettings.m_TrackWidhtHistory[ii] == 0 )
+        if( g_DesignSettings.m_TrackWidthHistory[ii] == 0 )
             break;
         value = To_User_Unit( g_UnitMetric,
-                              g_DesignSettings.m_TrackWidhtHistory[ii],
+                              g_DesignSettings.m_TrackWidthHistory[ii],
                               PCB_INTERNAL_UNIT );
         if( g_UnitMetric == INCHES )  // Affichage en mils
             msg.Printf( _( "Track %.1f" ), value * 1000 );
@@ -84,12 +84,12 @@ static wxMenu* Append_Track_Width_List()
             msg.Printf( _( "Track %.3f" ), value );
 
         trackwidth_menu->Append( ID_POPUP_PCB_SELECT_WIDTH1 + ii, msg, wxEmptyString, TRUE );
-        if( g_DesignSettings.m_TrackWidhtHistory[ii] == g_DesignSettings.m_CurrentTrackWidth )
+        if( g_DesignSettings.m_TrackWidthHistory[ii] == g_DesignSettings.m_CurrentTrackWidth )
             trackwidth_menu->Check( ID_POPUP_PCB_SELECT_WIDTH1 + ii, TRUE );
     }
 
     trackwidth_menu->AppendSeparator();
-    for( ii = 0; (ii < HIST0RY_NUMBER) && (ii < VIA_HISTORY_NUMBER_MAX); ii++ )
+    for( ii = 0; (ii < HISTORY_NUMBER) && (ii < VIA_HISTORY_NUMBER_MAX); ii++ )
     {
         if( g_DesignSettings.m_ViaSizeHistory[ii] == 0 )
             break;

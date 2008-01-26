@@ -192,13 +192,13 @@ bool WinEDA_BasePcbFrame::Clear_Pcb( bool query )
 
     g_HightLigt_Status = 0;
 
-    for( int ii = 1; ii < HIST0RY_NUMBER; ii++ )
+    for( int ii = 1; ii < HISTORY_NUMBER; ii++ )
     {
         g_DesignSettings.m_ViaSizeHistory[ii] =
-            g_DesignSettings.m_TrackWidhtHistory[ii] = 0;
+            g_DesignSettings.m_TrackWidthHistory[ii] = 0;
     }
 
-    g_DesignSettings.m_TrackWidhtHistory[0] = g_DesignSettings.m_CurrentTrackWidth;
+    g_DesignSettings.m_TrackWidthHistory[0] = g_DesignSettings.m_CurrentTrackWidth;
     g_DesignSettings.m_ViaSizeHistory[0]    = g_DesignSettings.m_CurrentViaSize;
 
     Zoom_Automatique( TRUE );

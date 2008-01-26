@@ -519,12 +519,12 @@ static int WriteSetup( FILE* File, WinEDA_BasePcbFrame* frame )
 
     fprintf( File, "Layers %d\n", g_DesignSettings.m_CopperLayerCount );
     fprintf( File, "TrackWidth %d\n", g_DesignSettings.m_CurrentTrackWidth );
-    for( ii = 0; ii < HIST0RY_NUMBER; ii++ )
+    for( ii = 0; ii < HISTORY_NUMBER; ii++ )
     {
-        if( g_DesignSettings.m_TrackWidhtHistory[ii] == 0 )
+        if( g_DesignSettings.m_TrackWidthHistory[ii] == 0 )
             break;
         fprintf( File, "TrackWidthHistory %d\n",
-                 g_DesignSettings.m_TrackWidhtHistory[ii] );
+                 g_DesignSettings.m_TrackWidthHistory[ii] );
     }
 
     fprintf( File, "TrackClearence %d\n", g_DesignSettings.m_TrackClearence );
@@ -534,7 +534,7 @@ static int WriteSetup( FILE* File, WinEDA_BasePcbFrame* frame )
     fprintf( File, "EdgeSegmWidth %d\n", g_DesignSettings.m_EdgeSegmentWidth );
     fprintf( File, "ViaSize %d\n", g_DesignSettings.m_CurrentViaSize );
     fprintf( File, "ViaDrill %d\n", g_DesignSettings.m_ViaDrill );
-    for( ii = 0; ii < HIST0RY_NUMBER; ii++ )
+    for( ii = 0; ii < HISTORY_NUMBER; ii++ )
     {
         if( g_DesignSettings.m_ViaSizeHistory[ii] == 0 )
             break;

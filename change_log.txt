@@ -8,28 +8,29 @@ email address.
 2008-Jan-25 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew:
-    SPECCTRA export does padstacks ok, except that oval arcs need to be split
-    into quarter circle arcs, and no consideration is given to "layer types"
+  * SPECCTRA export does padstacks ok, except that oval pad's arcs need to be split
+    into quarter circle arcs, and no consideration is given to "layer types".
     See page bottom of page 74 of the SECCTRA Design Language Reference, May 2000.
-    Still working today...
+  * HISTORY_NUMBER was spelt with a zero.
+  * Width was spelt as Widht
     
 
 2008-Jan-25 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:
-	- void Change_Side_Module( MODULE* Module, wxDC* DC ) is now member of class BOARD.
+    - void Change_Side_Module( MODULE* Module, wxDC* DC ) is now member of class BOARD.
 
-	- Better support for micro vias and buried vias (drill files now are useable for board manufacturers)
-	But not yet tested by a board manufacturer. Be carefull.
-	Todo: tools to conversion  between via through and buried via and buried viad optimisation.
-	But must works for micro vias (needed for my next board)
-	(in pcbnew micro vias are blind vias between 2 adjacent layers: micro vias must be enabled
-	in Dimensions/track and via menu, and placed by ctrl v.
-	They are intended to connect small pitch BGA pins to the inner layer, and can be drilled by laser
-	if the hole diameter is small < 0.2mm. A laser can only drill a hole between 2 adjacent layers ).
-	
-	** Currently use buried via for tests only, not for production **.
-	
+    - Better support for micro vias and buried vias (drill files now are useable for board manufacturers)
+    But not yet tested by a board manufacturer. Be carefull.
+    Todo: tools to conversion  between via through and buried via and buried viad optimisation.
+    But must works for micro vias (needed for my next board)
+    (in pcbnew micro vias are blind vias between 2 adjacent layers: micro vias must be enabled
+    in Dimensions/track and via menu, and placed by ctrl v.
+    They are intended to connect small pitch BGA pins to the inner layer, and can be drilled by laser
+    if the hole diameter is small < 0.2mm. A laser can only drill a hole between 2 adjacent layers ).
+    
+    ** Currently use buried via for tests only, not for production **.
+    
 
 2008-Jan-24 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
@@ -45,8 +46,8 @@ email address.
 2008-Jan-24 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:
-	Bugs about fill zones removed (not all, of course).
-	Fixed an old bug in block delete (could crashes pcbnew after deleting footprints).
+    Bugs about fill zones removed (not all, of course).
+    Fixed an old bug in block delete (could crashes pcbnew after deleting footprints).
 
 2008-Jan-23 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================

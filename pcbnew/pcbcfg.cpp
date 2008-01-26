@@ -170,11 +170,11 @@ int ii;
 		ScreenPcb->m_UserGridUnit = g_UserGrid_Unit;
 	}
 
-	g_DesignSettings.m_TrackWidhtHistory[0] = g_DesignSettings.m_CurrentTrackWidth;
+	g_DesignSettings.m_TrackWidthHistory[0] = g_DesignSettings.m_CurrentTrackWidth;
 	g_DesignSettings.m_ViaSizeHistory[0] = g_DesignSettings.m_CurrentViaSize;
-	for ( ii = 1; ii < HIST0RY_NUMBER; ii++)
+	for ( ii = 1; ii < HISTORY_NUMBER; ii++)
 	{
-		g_DesignSettings.m_TrackWidhtHistory[ii] = 0;
+		g_DesignSettings.m_TrackWidthHistory[ii] = 0;
 		g_DesignSettings.m_ViaSizeHistory[ii] = 0;
 	}
 

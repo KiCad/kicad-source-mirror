@@ -71,3 +71,9 @@ asked by: jp Charras
 Use the collector classes in eeschema.
 
 
+2008-Jan-25 Assigned To: any one who wants to
+asked by: dick
+================================================================================
+Split the QARCs being created as 1/2 circles into quarter arcs.  Problem
+is in 4 places in specctra_export.cpp
+

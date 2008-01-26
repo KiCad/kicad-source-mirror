@@ -1,5 +1,5 @@
 /**************************************************************/
-/*	pcbstruct.h :  definition des structures de donnees type PCB */
+/*  pcbstruct.h :  definition des structures de donnees type PCB */
 /**************************************************************/
 
 #ifndef PCBSTRUCT_H
@@ -144,7 +144,7 @@ struct CHEVELU;
 #include "class_board.h"
 
 // Class for handle current printed board design settings
-#define HIST0RY_NUMBER 8
+#define HISTORY_NUMBER 8
 class EDA_BoardDesignSettings
 {
 public:
@@ -153,11 +153,11 @@ public:
     int    m_MicroViaDrill;                     // micro via drill (for the entire board)
     int    m_CurrentViaSize;                    // Current via size
     int    m_CurrentMicroViaSize;               // Current micro via size
-	bool   m_MicroViasAllowed;						// true to allow micro vias
-    int    m_ViaSizeHistory[HIST0RY_NUMBER];    // Last HIST0RY_NUMBER used via sizes
+    bool   m_MicroViasAllowed;                  // true to allow micro vias
+    int    m_ViaSizeHistory[HISTORY_NUMBER];    // Last HISTORY_NUMBER used via sizes
     int    m_CurrentViaType;                    // via type (BLIND, TROUGHT ...), bits 1 and 2 (not 0 and 1)
     int    m_CurrentTrackWidth;                 // current track width
-    int    m_TrackWidhtHistory[HIST0RY_NUMBER]; // Last HIST0RY_NUMBER used track widths
+    int    m_TrackWidthHistory[HISTORY_NUMBER]; // Last HISTORY_NUMBER used track widths
     int    m_DrawSegmentWidth;                  // current graphic line width (not EDGE layer)
     int    m_EdgeSegmentWidth;                  // current graphic line width (EDGE layer only)
     int    m_PcbTextWidth;                      // current Pcb (not module) Text width
@@ -226,13 +226,13 @@ public:
      */
     BOARD_ITEM* GetCurItem() const {  return (BOARD_ITEM*) BASE_SCREEN::GetCurItem(); }
 
-	/* Return true if a microvia can be put on board
-	 * A microvia ia a small via restricted to 2 near neighbour layers
+    /* Return true if a microvia can be put on board
+     * A microvia ia a small via restricted to 2 near neighbour layers
      * because its is hole is made by laser which can penetrate only one layer
-	 * It is mainly used to connect BGA to the first inner layer
-	 * And it is allowed from an external layer to the first inner layer
+     * It is mainly used to connect BGA to the first inner layer
+     * And it is allowed from an external layer to the first inner layer
      */
-	bool IsMicroViaAcceptable(void);
+    bool IsMicroViaAcceptable(void);
 };
 
 /**********************************/
@@ -240,9 +240,9 @@ public:
 /**********************************/
 
 #include "class_pad.h"       // class for pads
-#include "class_edge_mod.h"	// Class for  footprint graphic elements
-#include "class_text_mod.h"	// Class for  footprint fields
-#include "class_module.h"	// Class for the footprint
+#include "class_edge_mod.h" // Class for  footprint graphic elements
+#include "class_text_mod.h" // Class for  footprint fields
+#include "class_module.h"   // Class for the footprint
 #include "class_equipot.h"
 
 

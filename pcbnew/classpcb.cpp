@@ -127,7 +127,8 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
 // Default values for designing boards
 {
     int ii;
-    int default_layer_color[32] = {
+    
+    static const int default_layer_color[32] = {
         GREEN,     LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
         LIGHTGRAY, LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
         LIGHTGRAY, LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
@@ -150,10 +151,10 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
     m_CurrentViaSize    = 450;          // Current via size
     m_CurrentViaType    = VIA_THROUGH;  /* via type (BLIND, TROUGHT ...), bits 1 and 2 (not 0 and 1)*/
     m_CurrentTrackWidth = 170;          // current track width
-    for( ii = 0; ii < HIST0RY_NUMBER; ii++ )
+    for( ii = 0; ii < HISTORY_NUMBER; ii++ )
     {
-        m_TrackWidhtHistory[ii] = 0;    // Last HIST0RY_NUMBER used track widths
-        m_ViaSizeHistory[ii]    = 0;    // Last HIST0RY_NUMBER used via sizes
+        m_TrackWidthHistory[ii] = 0;    // Last HISTORY_NUMBER used track widths
+        m_ViaSizeHistory[ii]    = 0;    // Last HISTORY_NUMBER used via sizes
     }
 
     m_DrawSegmentWidth = 100;               // current graphic line width (not EDGE layer)

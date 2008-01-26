@@ -452,12 +452,12 @@ void WinEDA_PcbFrame::SetToolbars()
             else
                 format += wxT( " %.3f" );
             
-            for( ii = 0; ii < HIST0RY_NUMBER; ii++ )
+            for( ii = 0; ii < HISTORY_NUMBER; ii++ )
             {
-                if( g_DesignSettings.m_TrackWidhtHistory[ii] == 0 )
+                if( g_DesignSettings.m_TrackWidthHistory[ii] == 0 )
                     break;                                                  // Fin de liste
                 double value = To_User_Unit( g_UnitMetric,
-                                             g_DesignSettings.m_TrackWidhtHistory[ii],
+                                             g_DesignSettings.m_TrackWidthHistory[ii],
                                              PCB_INTERNAL_UNIT );
 
                 if( g_UnitMetric == INCHES )
@@ -467,7 +467,7 @@ void WinEDA_PcbFrame::SetToolbars()
                 
                 m_SelTrackWidthBox->Append( msg );
                 
-                if( g_DesignSettings.m_TrackWidhtHistory[ii] ==
+                if( g_DesignSettings.m_TrackWidthHistory[ii] ==
                         g_DesignSettings.m_CurrentTrackWidth )
                     m_SelTrackWidthBox->SetSelection( ii );
             }
@@ -484,7 +484,7 @@ void WinEDA_PcbFrame::SetToolbars()
             else
                 format += wxT( " %.3f" );
             
-            for( ii = 0; ii < HIST0RY_NUMBER; ii++ )
+            for( ii = 0; ii < HISTORY_NUMBER; ii++ )
             {
                 if( g_DesignSettings.m_ViaSizeHistory[ii] == 0 )
                     break;                                                  // Fin de liste
