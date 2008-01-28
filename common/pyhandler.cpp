@@ -140,7 +140,7 @@ void PyHandler::DoInitModules()
 
     for ( unsigned int i = 0; i < m_ModuleRegistry.size(); i ++ )
     {
-        detail::init_module( m_ModuleRegistry[i].name.fn_str(), &InitPyModules );
+        detail::init_module( m_ModuleRegistry[i].name.mb_str(), &InitPyModules );
     }
 }
 
@@ -244,14 +244,14 @@ bool PyHandler::RunScript( const wxString & name )
     object ns = module.attr( "__dict__" );
     bool ret = true;
 
-    FILE * file = fopen( name.fn_str(), "r" );
+    FILE * file = fopen( name.mb_str(), "r" );
 
     wxPyBlock_t blocked = wxPyBeginBlockThreads();
 
     if ( !file )
     {
     	// do something
-    	std::cout << "Unable to Load " << name.fn_str()  << "\n";
+    	std::cout << "Unable to Load " << name.mb_str()  << "\n";
     	ret = false;
     }
     else
@@ -265,7 +265,7 @@ bool PyHandler::RunScript( const wxString & name )
         try
         {
             ns["currentScript"] = Convert( name );
-            handle<> ignored( PyRun_File( file, name.fn_str(), Py_file_input,  ns.ptr(), ns.ptr() ) );
+            handle<> ignored( PyRun_File( file, name.mb_str(), Py_file_input,  ns.ptr(), ns.ptr() ) );
         }
         catch ( error_already_set )
         {
@@ -286,7 +286,7 @@ bool PyHandler::RunSimpleString( const wxString & code )
     wxPyBlock_t blocked = wxPyBeginBlockThreads();
 	try
 	{
-    	PyRun_SimpleString( code.fn_str() );
+    	PyRun_SimpleString( code.mb_str() );
 	}
 	catch ( error_already_set )
 	{
@@ -346,7 +346,7 @@ void PyHandler::TriggerEvent( const wxString & key, const object & param )
         }
         catch (error_already_set)
         {
-            std::cout << "Error in event " << key.fn_str() << " callback" << std::endl;
+            std::cout << "Error in event " << key.mb_str() << " callback" << std::endl;
             PyErr_Print();
         }
     }
@@ -378,6 +378,6 @@ void PyHandler::UnRegisterCallback( const wxString & key, const object & callbac
 
 wxString PyHandler::MakeStr( const object & objStr ) { return wxString( extract<const char *>( objStr ), wxConvLocal ); }
 
-object PyHandler::Convert( const wxString & wxStr ) { return str( std::string( wxStr.fn_str() ).c_str() ); }
+object PyHandler::Convert( const wxString & wxStr ) { return str( std::string( wxStr.mb_str() ).c_str() ); }
 
 // vim: set tabstop=4 :

@@ -183,6 +183,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent,
     WinEDA_BasePcbFrame( father, parent, PCB_FRAME, title, pos, size, style )
 {
     m_FrameName                = wxT( "PcbFrame" );
+    m_AboutTitle               = g_PcbnewAboutTitle;
     m_Draw_Axis                = TRUE;          // TRUE pour avoir les axes dessines
     m_Draw_Grid                = g_ShowGrid;    // TRUE pour avoir la grille dessinee
     m_Draw_Sheet_Ref           = TRUE;          // TRUE pour avoir le cartouche dessine

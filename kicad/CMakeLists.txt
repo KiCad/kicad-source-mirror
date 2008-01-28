@@ -13,9 +13,6 @@ SET(KICAD_SRCS
 	treeprj_datas.cpp
 	treeprj_frame.cpp)
 
-SET(KICAD_EXTRA_SRCS
-	../share/infospgm.cpp)
-
 IF(WIN32)
 	IF(MINGW)
 		# resource compilation for mingw (http://www.cmake.org/Bug/view.php?id=4068)

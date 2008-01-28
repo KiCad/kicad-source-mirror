@@ -34,6 +34,7 @@ WinEDA_MainFrame::WinEDA_MainFrame( WinEDA_App* eda_app,
     wxSize   clientsize;
 
     m_FrameName         = wxT( "KicadFrame" );
+    m_AboutTitle        = g_KicadAboutTitle;
     m_VToolBar          = NULL;
     m_LeftWin           = NULL;
     m_BottomWin         = NULL;
@@ -392,7 +393,6 @@ void WinEDA_MainFrame::ClearMsg()
 {
     m_DialogWin->Clear();
 }
-
 
 #ifdef KICAD_PYTHON
 void WinEDA_MainFrame::OnRefreshPy()

@@ -2422,6 +2422,9 @@ public:
 
 class CONNECT : public ELEM
 {
+public:
+    CONNECT( ELEM* parent ) :
+        ELEM( T_connect, parent ) {}
 };
 
 

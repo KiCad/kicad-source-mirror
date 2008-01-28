@@ -554,7 +554,13 @@ char*       to_point( char* Text );
 /****************/
 /* infospgm.cpp */
 /****************/
-void        Print_Kicad_Infos( wxWindow* frame );
+extern      wxString g_KicadAboutTitle;
+extern      wxString g_CvpcbAboutTitle;
+extern      wxString g_EeschemaAboutTitle;
+extern      wxString g_PcbnewAboutTitle;
+extern      wxString g_GerbviewAboutTitle;
+
+void        Print_Kicad_Infos( wxWindow* frame, const wxString& title );
 
 /**************/
 /* common.cpp */

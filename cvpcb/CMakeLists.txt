@@ -54,7 +54,6 @@ SET(CVPCB_EXTRA_SRCS
 
 	../share/drawframe.cpp
 	../share/drawpanel.cpp
-	../share/infospgm.cpp
 	../share/zoom.cpp)
 
 IF(WIN32)

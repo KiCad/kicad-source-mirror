@@ -31,6 +31,7 @@ SET(COMMON_SRCS
 	toolbars.cpp
 	trigo.cpp
 	worksheet.cpp
-	wxwineda.cpp)
+	wxwineda.cpp
+	../share/infospgm.cpp)
 
 ADD_LIBRARY(common ${COMMON_SRCS})

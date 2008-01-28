@@ -25,8 +25,12 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.4.6 FATAL_ERROR)
 # Path to local CMake modules
 SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 
+# Command line option to enable or disable building minizip.  Minizip
+# is building is enabled by defaut.  Use -DKICAD_MINZIP=OFF to disable
+# building minizip.
+OPTION(KICAD_MINIZIP "enable/disable building minizip (default ON)" ON)
 # Comment this out if you don't want to build minizip.
-SET(KICAD_MINIZIP ON CACHE BOOL "Build minizip?")
+#SET(KICAD_MINIZIP ON CACHE BOOL "Build minizip?")
 
 # Comment this out if you don't want to build with Python support.
 # SET(KICAD_PYTHON ON CACHE BOOL "Build with Python support?")

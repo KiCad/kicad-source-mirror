@@ -29,7 +29,7 @@ SET(GERBVIEW_SRCS
 #	pcbtexte.cpp
 #	process_config.cpp
 	readgerb.cpp
-	reglage.cpp
+    reglage.cpp
 	rs274d.cpp
 	rs274x.cpp
 	select_layers_to_pcb.cpp
@@ -54,7 +54,6 @@ SET(GERBVIEW_EXTRA_SRCS
 
 	../share/drawframe.cpp
 	../share/drawpanel.cpp
-	../share/infospgm.cpp
 	../share/setpage.cpp
 	../share/wxprint.cpp
 	../share/zoom.cpp)

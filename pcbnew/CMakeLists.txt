@@ -4,7 +4,7 @@ FIND_PACKAGE(Boost)
 
 INCLUDE_DIRECTORIES(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${Boost_INCLUDE_DIRS}
+    ${Boost_INCLUDE_DIR}
     bitmaps
     ../3d-viewer
     ../polygon)
@@ -145,7 +145,6 @@ SET(PCBNEW_SRCS
 SET(PCBNEW_EXTRA_SRCS
     ../share/drawframe.cpp
     ../share/drawpanel.cpp
-    ../share/infospgm.cpp
     ../share/setpage.cpp
     ../share/wxprint.cpp
     ../share/zoom.cpp)

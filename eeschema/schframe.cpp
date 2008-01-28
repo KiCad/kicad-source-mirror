@@ -120,6 +120,7 @@ WinEDA_SchematicFrame::	WinEDA_SchematicFrame(wxWindow * father, WinEDA_App *par
 					WinEDA_DrawFrame(father, SCHEMATIC_FRAME, parent, title, pos, size, style)
 {
 	m_FrameName = wxT("SchematicFrame");
+    m_AboutTitle = g_EeschemaAboutTitle;
 	m_Draw_Axis = FALSE;			// TRUE to show axis
 	m_Draw_Grid = g_ShowGrid;			// TRUE to show a grid
 	m_Draw_Sheet_Ref = TRUE;		// TRUE to show sheet references

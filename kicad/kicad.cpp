@@ -63,8 +63,8 @@ WinEDA_PrjFrame* WinEDA_MainFrame::GetTree() const  { return m_LeftWin;         
 
 void WinEDA_MainFrame::AddFastLaunchPy( object & button )
 {
-    wxButton * btn;
-    bool success = wxPyConvertSwigPtr( button.ptr(), (void**)&btn, _T("wxButton"));
+    wxBitmapButton * btn;
+    bool success = wxPyConvertSwigPtr( button.ptr(), (void**)&btn, _T("wxBitmapButton"));
     if ( !success ) return;
 
     Py_INCREF( button.ptr() );

@@ -128,6 +128,7 @@ WinEDA_GerberFrame::WinEDA_GerberFrame(wxWindow * father, WinEDA_App *parent,
 					WinEDA_BasePcbFrame(father, parent, GERBER_FRAME, title, pos, size, style)
 {
 	m_FrameName = wxT("GerberFrame");
+    m_AboutTitle = g_GerbviewAboutTitle;
 	m_Draw_Axis = TRUE;			// TRUE pour avoir les axes dessines
 	m_Draw_Grid = TRUE;			// TRUE pour avoir la axes dessinee
 	m_Draw_Sheet_Ref = FALSE;	// TRUE pour avoir le cartouche dessiné
@@ -313,4 +314,3 @@ wxSize size;
 
 	return(bestzoom);
 }
-

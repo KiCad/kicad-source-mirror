@@ -3,7 +3,10 @@ IF(ZLIB_FOUND)
 	MESSAGE(STATUS "Check for installed ZLIB -- found")
 ELSE(ZLIB_FOUND)
 	MESSAGE(STATUS "Check for installed zlib -- not found")
-	MESSAGE(FATAL_ERROR "zlib was not found - it is required to build KiCad")
+    IF (NOT MINGW)
+	     MESSAGE(FATAL_ERROR
+                 "zlib was not found - it is required to build KiCad")
+    ENDIF (NOT MINGW)
 ENDIF(ZLIB_FOUND)
 
 SET(MINIZIP_SRCS

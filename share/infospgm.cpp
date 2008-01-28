@@ -14,36 +14,23 @@
 // Import:
 extern wxString g_Main_Title;
 
-// Local
-#ifdef GERBVIEW
-static wxString MsgInfos(wxT("** GERBVIEW  (jul 2001 .. 2008) **"));
-#else
-#ifdef PCBNEW
-static wxString MsgInfos(wxT("** PCBNEW  (sept 1992 .. 2008) **"));
-#endif
-#endif
-
-#ifdef CVPCB
-static wxString MsgInfos(wxT("** CVPCB  (sept 1992 .. 2008) **"));
-#endif
-
-#ifdef KICAD
-static wxString MsgInfos(wxT("** KICAD  (jul 2000 .. 2008) **"));
-#endif
-
-#ifdef EESCHEMA
-static wxString MsgInfos(wxT("** EESCHEMA  (sept 1994 .. 2008) **"));
-#endif
+/* Program title strings used in about dialog.  They are kept hear to make
+ * it easy to update the copyright dates. */
+wxString g_KicadAboutTitle = wxT("** KICAD  (jul 2000 .. 2008) **");
+wxString g_CvpcbAboutTitle = wxT("** CVPCB  (sept 1992 .. 2008) **");
+wxString g_EeschemaAboutTitle = wxT("** EESCHEMA  (sept 1994 .. 2008) **");
+wxString g_PcbnewAboutTitle = wxT("** PCBNEW  (sept 1992 .. 2008) **");
+wxString g_GerbviewAboutTitle = wxT("** GERBVIEW  (jul 2001 .. 2008) **");
 
 // Routines Locales
 
 /*******************************************/
-void Print_Kicad_Infos(wxWindow * frame)
+void Print_Kicad_Infos(wxWindow * frame, const wxString& title)
 /*******************************************/
 {
-wxString AboutCaption = wxT("About ");
+    wxString AboutCaption = wxT("About ");
+    wxString Msg = title;
 
-wxString Msg = MsgInfos;
 	Msg << wxT("\n\n") << _("Build Version:") << wxT("\n") ;
 
 	Msg << g_Main_Title << wxT(" ") << GetBuildVersion();

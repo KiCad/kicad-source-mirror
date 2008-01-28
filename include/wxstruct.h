@@ -146,6 +146,7 @@ public:
     bool            m_FrameIsActive;
     wxString        m_FrameName;    // name used for writting and reading setup
                                     // It is "SchematicFrame", "PcbFrame" ....
+    wxString        m_AboutTitle;   // Name of program displayed in About.
 
 public:
 
