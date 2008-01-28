@@ -5,6 +5,17 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2008-Jan-27 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++all:
+    I got a patch from Mr. Wayne Stambaugh which makes it possible to compile
+    infospgm.cpp once and link the same *.o file multiple times.   
+    Jean-Pierre, if you not yet using CMake, you should edit your make.include
+    so that infospgm.cpp is only compiled once for everything, not once per
+    program.  Wayne is a competent developer who contacted me about contributing.
+    I consider him a welcome addition to the developers, Dick.
+
+
 2008-Jan-25 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew:
