@@ -23,7 +23,6 @@
 #include "Global_Options_Pad.xpm"
 #include "Delete_Pad.xpm"
 #include "Export_Options_Pad.xpm"
-#include "Width_Segment.xpm"
 #include "Select_Layer_Pair.xpm"
 
 /*************************************************************************/

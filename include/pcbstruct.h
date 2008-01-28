@@ -79,35 +79,36 @@
 /*************************************/
 /* constantes de gestion des couches */
 /*************************************/
-#define CUIVRE_LAYER            (1<<COPPER_LAYER_N)     ///< bit mask for copper layer 
-#define LAYER_2                 (1<<LAYER_N_2)          ///< bit mask for layer 2
-#define LAYER_3                 (1<<LAYER_N_3)          ///< bit mask for layer 3
-#define LAYER_4                 (1<<LAYER_N_4)          ///< bit mask for layer 4
-#define LAYER_5                 (1<<LAYER_N_5)          ///< bit mask for layer 5
-#define LAYER_6                 (1<<LAYER_N_6)          ///< bit mask for layer 6
-#define LAYER_7                 (1<<LAYER_N_7)          ///< bit mask for layer 7
-#define LAYER_8                 (1<<LAYER_N_8)          ///< bit mask for layer 8
-#define LAYER_9                 (1<<LAYER_N_9)          ///< bit mask for layer 9
-#define LAYER_10                (1<<LAYER_N_10)         ///< bit mask for layer 10
-#define LAYER_11                (1<<LAYER_N_11)         ///< bit mask for layer 11
-#define LAYER_12                (1<<LAYER_N_12)         ///< bit mask for layer 12
-#define LAYER_13                (1<<LAYER_N_13)         ///< bit mask for layer 13
-#define LAYER_14                (1<<LAYER_N_14)         ///< bit mask for layer 14
-#define LAYER_15                (1<<LAYER_N_15)         ///< bit mask for layer 15
-#define CMP_LAYER               (1<<LAYER_CMP_N)        ///< bit mask for component layer
-#define ADHESIVE_LAYER_CU       (1<<ADHESIVE_N_CU)
-#define ADHESIVE_LAYER_CMP      (1<<ADHESIVE_N_CMP)
-#define SOLDERPASTE_LAYER_CU    (1<<SOLDERPASTE_N_CU)
-#define SOLDERPASTE_LAYER_CMP   (1<<SOLDERPASTE_N_CMP)
-#define SILKSCREEN_LAYER_CU     (1<<SILKSCREEN_N_CU)
-#define SILKSCREEN_LAYER_CMP    (1<<SILKSCREEN_N_CMP)
-#define SOLDERMASK_LAYER_CU     (1<<SOLDERMASK_N_CU)
-#define SOLDERMASK_LAYER_CMP    (1<<SOLDERMASK_N_CMP)
-#define DRAW_LAYER              (1<<DRAW_N)
-#define COMMENT_LAYER           (1<<COMMENT_N)
-#define ECO1_LAYER              (1<<ECO1_N)
-#define ECO2_LAYER              (1<<ECO2_N)
-#define EDGE_LAYER              (1<<EDGE_N)
+#define CUIVRE_LAYER            (1 << COPPER_LAYER_N)       ///< bit mask for copper layer
+#define LAYER_2                 (1 << LAYER_N_2)            ///< bit mask for layer 2
+#define LAYER_3                 (1 << LAYER_N_3)            ///< bit mask for layer 3
+#define LAYER_4                 (1 << LAYER_N_4)            ///< bit mask for layer 4
+#define LAYER_5                 (1 << LAYER_N_5)            ///< bit mask for layer 5
+#define LAYER_6                 (1 << LAYER_N_6)            ///< bit mask for layer 6
+#define LAYER_7                 (1 << LAYER_N_7)            ///< bit mask for layer 7
+#define LAYER_8                 (1 << LAYER_N_8)            ///< bit mask for layer 8
+#define LAYER_9                 (1 << LAYER_N_9)            ///< bit mask for layer 9
+#define LAYER_10                (1 << LAYER_N_10)           ///< bit mask for layer 10
+#define LAYER_11                (1 << LAYER_N_11)           ///< bit mask for layer 11
+#define LAYER_12                (1 << LAYER_N_12)           ///< bit mask for layer 12
+#define LAYER_13                (1 << LAYER_N_13)           ///< bit mask for layer 13
+#define LAYER_14                (1 << LAYER_N_14)           ///< bit mask for layer 14
+#define LAYER_15                (1 << LAYER_N_15)           ///< bit mask for layer 15
+#define CMP_LAYER               (1 << LAYER_CMP_N)          ///< bit mask for component layer
+#define ADHESIVE_LAYER_CU       (1 << ADHESIVE_N_CU)
+#define ADHESIVE_LAYER_CMP      (1 << ADHESIVE_N_CMP)
+#define SOLDERPASTE_LAYER_CU    (1 << SOLDERPASTE_N_CU)
+#define SOLDERPASTE_LAYER_CMP   (1 << SOLDERPASTE_N_CMP)
+#define SILKSCREEN_LAYER_CU     (1 << SILKSCREEN_N_CU)
+#define SILKSCREEN_LAYER_CMP    (1 << SILKSCREEN_N_CMP)
+#define SOLDERMASK_LAYER_CU     (1 << SOLDERMASK_N_CU)
+#define SOLDERMASK_LAYER_CMP    (1 << SOLDERMASK_N_CMP)
+#define DRAW_LAYER              (1 << DRAW_N)
+#define COMMENT_LAYER           (1 << COMMENT_N)
+#define ECO1_LAYER              (1 << ECO1_N)
+#define ECO2_LAYER              (1 << ECO2_N)
+#define EDGE_LAYER              (1 << EDGE_N)
+
 //      extra bits              0xE0000000
 /* masques generaux : */
 #define ALL_LAYERS              0x1FFFFFFF
@@ -133,6 +134,7 @@ enum Track_Shapes {
 class EQUIPOT;
 class MARKER;
 struct CHEVELU;
+
 //class Ki_PageDescr;
 //class DrawBlockStruct;
 
@@ -150,13 +152,15 @@ class EDA_BoardDesignSettings
 public:
     int    m_CopperLayerCount;                  // Number of copper layers for this design
     int    m_ViaDrill;                          // via drill (for the entire board)
+    int    m_ViaDrillCustomValue;               // via drill for vias which must have a defined drill value
     int    m_MicroViaDrill;                     // micro via drill (for the entire board)
     int    m_CurrentViaSize;                    // Current via size
     int    m_CurrentMicroViaSize;               // Current micro via size
     bool   m_MicroViasAllowed;                  // true to allow micro vias
     int    m_ViaSizeHistory[HISTORY_NUMBER];    // Last HISTORY_NUMBER used via sizes
-    int    m_CurrentViaType;                    // via type (BLIND, TROUGHT ...), bits 1 and 2 (not 0 and 1)
+    int    m_CurrentViaType;                    // via type (VIA_BLIND_BURIED, VIA_TROUGHT VIA_MICROVIA)
     int    m_CurrentTrackWidth;                 // current track width
+    bool   m_UseConnectedTrackWidth;            // if true, when creating a new track starting on an existing track, use this track width
     int    m_TrackWidthHistory[HISTORY_NUMBER]; // Last HISTORY_NUMBER used track widths
     int    m_DrawSegmentWidth;                  // current graphic line width (not EDGE layer)
     int    m_EdgeSegmentWidth;                  // current graphic line width (EDGE layer only)
@@ -165,7 +169,7 @@ public:
     int    m_TrackClearence;                    // track to track and track to pads clearance
     int    m_ZoneClearence;                     // zone to track and zone to pads clearance
     int    m_MaskMargin;                        // Solder mask margin
-    
+
     // Color options for screen display of the Printed Board:
     int    m_PcbGridColor;                      // Grid color
     int    m_LayerColor[32];                    // Layer colors (tracks and graphic items)
@@ -174,16 +178,16 @@ public:
     int    m_ModuleTextCUColor;                 // Text module color for modules on the COPPER layer
     int    m_ModuleTextNOVColor;                // Text module color for "invisible" texts (must be BLACK if really not displayed)
     int    m_AnchorColor;                       // Anchor color for modules and texts
-    
+
     int    m_PadCUColor;                        // Pad color for the COPPER side of the pad
     int    m_PadCMPColor;                       // Pad color for the COMPONENT side of the pad
     // Pad color for the pads of both sides is m_PadCUColor OR m_PadCMPColor (in terms of colors)
-    
+
     int    m_RatsnestColor;                     // Ratsnest color
 
 public:
     EDA_BoardDesignSettings();
-    
+
     /**
      * Function GetVisibleLayers
      * returns a bit-map of all the layers that are visible.
@@ -212,13 +216,13 @@ public:
 public:
     PCB_SCREEN( int idscreen );
     ~PCB_SCREEN();
-    
+
     PCB_SCREEN* Next() { return (PCB_SCREEN*) Pnext; }
     void        Init();
     void        SetNextZoom();
     void        SetPreviousZoom();
     void        SetLastZoom();
-    
+
     /**
      * Function GetCurItem
      * returns the currently selected BOARD_ITEM, overriding BASE_SCREEN::GetCurItem().
@@ -232,17 +236,17 @@ public:
      * It is mainly used to connect BGA to the first inner layer
      * And it is allowed from an external layer to the first inner layer
      */
-    bool IsMicroViaAcceptable(void);
+    bool IsMicroViaAcceptable( void );
 };
 
 /**********************************/
 /* Module (Footprint) description */
 /**********************************/
 
-#include "class_pad.h"       // class for pads
-#include "class_edge_mod.h" // Class for  footprint graphic elements
-#include "class_text_mod.h" // Class for  footprint fields
-#include "class_module.h"   // Class for the footprint
+#include "class_pad.h"          // class for pads
+#include "class_edge_mod.h"     // Class for  footprint graphic elements
+#include "class_text_mod.h"     // Class for  footprint fields
+#include "class_module.h"       // Class for the footprint
 #include "class_equipot.h"
 
 
@@ -271,7 +275,7 @@ public:
     int  DisplayModText;
     bool DisplayPcbTrackFill;   /* FALSE = sketch , TRUE = filled */
     bool DisplayTrackIsol;
-    
+
     int  m_DisplayViaMode;      /* 0 do not show via hole,
                                  * 1 show via hole for non default value
                                  * 2 show all via hole */

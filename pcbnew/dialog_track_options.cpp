@@ -399,7 +399,7 @@ void WinEDA_PcbTracksDialog::SetDisplayValue()
                           Internal_Unit );
     PutValueInLocalUnits( *m_OptViaDrill, g_DesignSettings.m_ViaDrill, Internal_Unit );
     PutValueInLocalUnits( *m_MicroViaDrillCtrl, g_DesignSettings.m_MicroViaDrill, Internal_Unit );
-    PutValueInLocalUnits( *m_OptCustomViaDrill, g_ViaHoleLastValue, Internal_Unit );
+    PutValueInLocalUnits( *m_OptCustomViaDrill, g_DesignSettings.m_ViaDrillCustomValue, Internal_Unit );
     PutValueInLocalUnits( *m_OptTrackWidth, g_DesignSettings.m_CurrentTrackWidth, Internal_Unit );
     PutValueInLocalUnits( *m_OptTrackClearance, g_DesignSettings.m_TrackClearence, Internal_Unit );
     PutValueInLocalUnits( *m_OptMaskMargin, g_DesignSettings.m_MaskMargin, Internal_Unit );
@@ -431,7 +431,7 @@ void WinEDA_PcbTracksDialog::AcceptPcbOptions( wxCommandEvent& event )
         ReturnValueFromTextCtrl( *m_MicroViaDrillCtrl, m_Parent->m_InternalUnits );
     g_DesignSettings.m_ViaDrill =
         ReturnValueFromTextCtrl( *m_OptViaDrill, m_Parent->m_InternalUnits );
-    g_ViaHoleLastValue =
+    g_DesignSettings.m_ViaDrillCustomValue =
         ReturnValueFromTextCtrl( *m_OptCustomViaDrill, m_Parent->m_InternalUnits );
     g_DesignSettings.m_MicroViasAllowed = m_AllowMicroViaCtrl->IsChecked();
 

@@ -62,7 +62,7 @@ IF(WIN32)
 	IF(MINGW)
 		# resource compilation for mingw (http://www.cmake.org/Bug/view.php?id=4068)
 		ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gerbview_rc.o
-			COMMAND windres.exe -I ${CMAKE_CURRENT_SOURCE_DIR}
+			COMMAND windres.exe -I ${CMAKE_CURRENT_SOURCE_DIR} -I ${wxWidgets_ROOT_DIR}/include
 					    -i ${CMAKE_CURRENT_SOURCE_DIR}/gerbview.rc
 					    -o ${CMAKE_CURRENT_BINARY_DIR}/gerbview_rc.o)
 		SET(GERBVIEW_RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/gerbview_rc.o)

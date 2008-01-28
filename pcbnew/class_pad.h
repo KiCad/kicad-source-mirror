@@ -11,9 +11,9 @@ class Pcb3D_GLCanvas;
 class D_PAD : public BOARD_ITEM
 {
 private:
-    int     m_NetCode;              // Net number for fast comparisons
+    int m_NetCode;              // Net number for fast comparisons
 
-    
+
 public:
     wxPoint m_Pos;                  // pad Position on board
 
@@ -27,7 +27,7 @@ public:
 
     wxString m_Netname;             /* Net Name */
 
-    int     m_Masque_Layer;         // Bitwise layer :1= copper layer, 15= cmp,
+    int      m_Masque_Layer;        // Bitwise layer :1= copper layer, 15= cmp,
                                     // 2..14 = internal layers
                                     // 16 .. 31 = technical layers
 
@@ -37,7 +37,19 @@ public:
     wxSize  m_Drill;                // Drill diam (drill shape = PAD_CIRCLE) or drill size(shape = OVAL)
                                     // for drill shape = PAD_CIRCLE, drill diam = m_Drill.x
 
-    wxSize  m_Offset;               // Offset de la forme (pastilles excentrees)
+    wxSize  m_Offset;  /*This parameter is usefull only for oblong pads (it can be used for other
+                         * shapes, but without any interest).
+                         * this is the offset between the pad hole and the pad shape (you must
+                         * understand here pad shape = copper area around the hole)
+                         * Most of cases, the hole is the centre of the shape (m_Offset = 0).
+                         * But some board designers use oblong pads with a hole moved to one of the
+                         * oblong pad shape ends.
+                         * In all cases the pad position is the pad hole.
+                         * The physical shape position (used to draw it for instance) is pad
+                         * position (m_Pos) + m_Offset.
+                         * D_PAD::ReturnShapePos() returns the physical shape position according to
+                         * the offset and the pad rotation.*/
+
     wxSize  m_Size;                 // X and Y size ( relative to orient 0)
 
     wxSize  m_DeltaSize;            // delta sur formes rectangle -> trapezes
@@ -53,6 +65,9 @@ public:
 
     int     m_physical_connexion;   // variable used in rastnest computations
                                     // handle block number in track connection
+
+	int     m_zone_connexion;   	// variable used in rastnest computations
+                                    // handle block number in zone connection
 
 public:
     D_PAD( MODULE* parent );
@@ -72,58 +87,59 @@ public:
     {
         return m_Pos;
     }
+
+
     void SetPosition( const wxPoint& aPos )
     {
         m_Pos = aPos;
     }
-    
-    
+
+
     /* remove from linked list */
     void            UnLink();
 
     /* Reading and writing data on files */
     int             ReadDescr( FILE* File, int* LineNum = NULL );
-    
+
     /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.brd" format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
-     */ 
-    bool Save( FILE* aFile ) const;
-    
+     */
+    bool            Save( FILE* aFile ) const;
 
-    
+
     /* drawing functions */
     void            Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode );
     void            Draw3D( Pcb3D_GLCanvas* glcanvas );
 
     // others
     void            SetPadName( const wxString& name );     // Change pad name
-    wxString        ReturnStringPadName();            // Return pad name as string in a wxString
+    wxString        ReturnStringPadName();                  // Return pad name as string in a wxString
     void            ReturnStringPadName( wxString& text );  // Return pad name as string in a buffer
-    void            ComputeRayon();                   // compute m_Rayon, rayon du cercle exinscrit
-    const wxPoint   ReturnShapePos();                 // retourne la position
+    void            ComputeRayon();                         // compute m_Rayon, rayon du cercle exinscrit
+    const wxPoint   ReturnShapePos();                       // retourne la position
 
-    
+
     /**
      * Function GetNet
      * @return int - the netcode
      */
     int GetNet() const { return m_NetCode; }
     void SetNet( int aNetCode ) { m_NetCode = aNetCode; }
-     
-    
+
+
     /**
      * Function Display_Infos
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
      * Is virtual from EDA_BaseStruct.
      * @param frame A WinEDA_DrawFrame in which to print status information.
-     */ 
+     */
     void            Display_Infos( WinEDA_DrawFrame* frame );
 
-    
+
     /**
      * Function IsOnLayer
      * tests to see if this object is on the given layer.  Is virtual so
@@ -132,9 +148,9 @@ public:
      * @param aLayer The layer to test for.
      * @return bool - true if on given layer, else false.
      */
-    bool IsOnLayer( int aLayer ) const;
+    bool            IsOnLayer( int aLayer ) const;
 
-    
+
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.
@@ -152,17 +168,18 @@ public:
     {
         return wxT( "PAD" );
     }
-    
-    
+
+
     /**
      * Function Compare
      * compares two pads and return 0 if they are equal.
      * @return int - <0 if left less than right, 0 if equal, >0 if left greater than right.
      */
-    static int Compare( const D_PAD* padref, const D_PAD* padcmp ); 
+    static int Compare( const D_PAD* padref, const D_PAD* padcmp );
 
 
 #if defined (DEBUG)
+
     /**
      * Function Show
      * is used to output the object tree, currently for debugging only.

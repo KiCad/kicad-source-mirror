@@ -47,7 +47,6 @@
 #include "Select_W_Layer.xpm"
 #include "Width_Track.xpm"
 #include "Width_Vias.xpm"
-#include "Width_Segment.xpm"
 #include "Width_Net.xpm"
 #include "Width_Track_Via.xpm"
 #include "Select_Layer_Pair.xpm"
@@ -71,6 +70,16 @@ static wxMenu* Append_Track_Width_List()
     double   value;
 
     trackwidth_menu = new wxMenu;
+
+	trackwidth_menu->Append( ID_POPUP_PCB_SELECT_AUTO_WIDTH,
+							 _( "Auto Width" ),
+							 _(
+								 "Use the track width when starting on a track, otherwise the current track width" ),
+							 TRUE );
+
+	if( g_DesignSettings.m_UseConnectedTrackWidth )
+		trackwidth_menu->Check( ID_POPUP_PCB_SELECT_AUTO_WIDTH, TRUE );
+
     for( ii = 0; (ii < HISTORY_NUMBER) && (ii < TRACK_HISTORY_NUMBER_MAX); ii++ )
     {
         if( g_DesignSettings.m_TrackWidthHistory[ii] == 0 )
@@ -84,7 +93,9 @@ static wxMenu* Append_Track_Width_List()
             msg.Printf( _( "Track %.3f" ), value );
 
         trackwidth_menu->Append( ID_POPUP_PCB_SELECT_WIDTH1 + ii, msg, wxEmptyString, TRUE );
-        if( g_DesignSettings.m_TrackWidthHistory[ii] == g_DesignSettings.m_CurrentTrackWidth )
+ 
+		if( (g_DesignSettings.m_TrackWidthHistory[ii] == g_DesignSettings.m_CurrentTrackWidth)
+           && ! g_DesignSettings.m_UseConnectedTrackWidth )
             trackwidth_menu->Check( ID_POPUP_PCB_SELECT_WIDTH1 + ii, TRUE );
     }
 
@@ -172,12 +183,12 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     // printf( "cursor=(%d, %d) select=(%d,%d)\n", cursorPos.x, cursorPos.y, selectPos.x, selectPos.y );
 
     /*  We can reselect another item only if there are no item being edited
-      * because ALL moving functions use GetCurItem(), therefore GetCurItem()
-      * must return the same item during moving. We know an item is moving
-      * if( item && (item->m_Flags != 0)) is true and after calling
-      * PcbGeneralLocateAndDisplay(), GetCurItem() is any arbitrary BOARD_ITEM,
-      * not the current item being edited. In such case we cannot call
-      * PcbGeneralLocateAndDisplay().
+     * because ALL moving functions use GetCurItem(), therefore GetCurItem()
+     * must return the same item during moving. We know an item is moving
+     * if( item && (item->m_Flags != 0)) is true and after calling
+     * PcbGeneralLocateAndDisplay(), GetCurItem() is any arbitrary BOARD_ITEM,
+     * not the current item being edited. In such case we cannot call
+     * PcbGeneralLocateAndDisplay().
      */
     if( !item || (item->m_Flags == 0) )
     {
@@ -329,7 +340,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                 wxT( "WinEDA_PcbFrame::OnRightClick() Error: illegal DrawType %d" ),
                 item->Type() );
             DisplayError( this, msg );
-			SetCurItem(NULL);
+            SetCurItem( NULL );
             break;
 
         default:
@@ -337,9 +348,10 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                 wxT( "WinEDA_PcbFrame::OnRightClick() Error: unknown DrawType %d" ),
                 item->Type() );
             DisplayError( this, msg );
-			// Attempt to clear error (but should no occurs )
-			if ( item->Type() >= MAX_STRUCT_TYPE_ID )
-				SetCurItem(NULL);
+
+            // Attempt to clear error (but should no occurs )
+            if( item->Type() >= MAX_STRUCT_TYPE_ID )
+                SetCurItem( NULL );
             break;
         }
 
@@ -509,21 +521,26 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
                                        ID_POPUP_PCB_VIA_EDITING, _( "Edit Via" ), edit_xpm );
             ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_TO_DEFAULT,
                           _( "Set via hole to Default" ), apply_xpm );
-            ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_TO_VALUE, _(
-                              "Set via hole to alt value" ), options_new_pad_xpm );
-            ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_ENTER_VALUE,
-                          _( "Set the via hole alt value" ), edit_xpm );
+			msg = _( "Set via hole to a specific value. This specfic value is currently" );
+			msg << wxT(" ") << ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_ViaDrillCustomValue, m_InternalUnits );
+            ADD_MENUITEM_WITH_HELP( via_mnu, ID_POPUP_PCB_VIA_HOLE_TO_VALUE,
+								_( "Set via hole to alt value" ), msg,
+								options_new_pad_xpm );
+			msg = _( "Set alt via hole value. This value is currently" );
+			msg  << wxT(" ") << ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_ViaDrillCustomValue, m_InternalUnits );
+            ADD_MENUITEM_WITH_HELP( via_mnu, ID_POPUP_PCB_VIA_HOLE_ENTER_VALUE,
+                          _( "Set the via hole alt value" ), msg, edit_xpm );
             ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_EXPORT, _(
                               "Export Via hole to alt value" ), Export_Options_Pad_xpm );
             ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_EXPORT_TO_OTHERS,
                           _( "Export via hole to others id vias" ), global_options_pad_xpm );
             ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_RESET_TO_DEFAULT,
                           _( "Set ALL via holes to default" ), apply_xpm );
-            if( ! Track->IsDrillDefault() )
+            if( !Track->IsDrillDefault() )
             {
                 via_mnu->Enable( ID_POPUP_PCB_VIA_HOLE_EXPORT, FALSE );
             }
-            if( g_ViaHoleLastValue <= 0 )
+            if( g_DesignSettings.m_ViaDrillCustomValue <= 0 )
                 via_mnu->Enable( ID_POPUP_PCB_VIA_HOLE_TO_VALUE, FALSE );
         }
         else
@@ -563,24 +580,27 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         }
         msg = AddHotkeyName( _( "Place Via" ), s_Board_Editor_Hokeys_Descr, HK_ADD_VIA );
         PopMenu->Append( ID_POPUP_PCB_PLACE_VIA, msg );
-		// See if we can place a Micro Via (4 or more layers, and start from an external layer):
-		if ( GetScreen()->IsMicroViaAcceptable() )
-		{
-			msg = AddHotkeyName( _( "Place Micro Via" ), s_Board_Editor_Hokeys_Descr, HK_ADD_MICROVIA );
-			PopMenu->Append( ID_POPUP_PCB_PLACE_MICROVIA, msg );
-		}
+
+        // See if we can place a Micro Via (4 or more layers, and start from an external layer):
+        if( GetScreen()->IsMicroViaAcceptable() )
+        {
+            msg = AddHotkeyName( _(
+                                     "Place Micro Via" ), s_Board_Editor_Hokeys_Descr,
+                                 HK_ADD_MICROVIA );
+            PopMenu->Append( ID_POPUP_PCB_PLACE_MICROVIA, msg );
+        }
     }
 
     // track Width control :
-    wxMenu* track_mnu = new wxMenu;
-    ADD_MENUITEM_WITH_SUBMENU( PopMenu, track_mnu,
-                               ID_POPUP_PCB_EDIT_TRACK_MNU, _( "Change Width" ), width_track_xpm );
-    ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACKSEG,
-                  Track->Type()==TYPEVIA ? _( "Edit Via" ) : _(
-                      "Edit Segment" ), width_segment_xpm );
-
-    if( !flags )
+    wxMenu* track_mnu;
+    if( !flags )    // track Width control :
     {
+		track_mnu = new wxMenu;
+ 		ADD_MENUITEM_WITH_SUBMENU( PopMenu, track_mnu,
+								   ID_POPUP_PCB_EDIT_TRACK_MNU, _( "Change Width" ), width_track_xpm );
+		ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACKSEG,
+                 Track->Type()==TYPEVIA ? _( "Edit Via" ) : _( "Edit Segment" ), width_segment_xpm );
+    
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACK,
                       _( "Edit Track" ), width_track_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_NET,
@@ -644,19 +664,19 @@ void WinEDA_PcbFrame::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu
 {
     if( edge_zone->m_Flags )
     {
-		if( (edge_zone->m_Flags & IN_EDIT ) )
-			ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_PLACE_ZONE_CORNER,
-						  _( "Place Corner" ), apply_xpm );
-		else
-			ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_PLACE_ZONE_OUTLINES,
-						  _( "Place Zone" ), apply_xpm );
+        if( (edge_zone->m_Flags & IN_EDIT ) )
+            ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_PLACE_ZONE_CORNER,
+                          _( "Place Corner" ), apply_xpm );
+        else
+            ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_PLACE_ZONE_OUTLINES,
+                          _( "Place Zone" ), apply_xpm );
     }
     else
     {
-		wxMenu * zones_menu = new wxMenu();
-		ADD_MENUITEM_WITH_SUBMENU( aPopMenu, zones_menu,
-                               -1, _( "Zones" ), add_zone_xpm );
-        int index;
+        wxMenu* zones_menu = new wxMenu();
+        ADD_MENUITEM_WITH_SUBMENU( aPopMenu, zones_menu,
+                                   -1, _( "Zones" ), add_zone_xpm );
+        int     index;
         if( ( index = edge_zone->HitTestForCorner( GetScreen()->RefPos( true ) ) ) >= 0 )
         {
             ADD_MENUITEM( zones_menu, ID_POPUP_PCB_MOVE_ZONE_CORNER,
@@ -688,10 +708,10 @@ void WinEDA_PcbFrame::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu
                       _( "Edit Zone Params" ), edit_xpm );
 
         zones_menu->AppendSeparator();
-		if ( index >= 0 && edge_zone->m_Poly->IsCutoutContour( edge_zone->m_CornerSelection ) )
-			ADD_MENUITEM( zones_menu, ID_POPUP_PCB_DELETE_ZONE_CUTOUT,
-						  _( "Delete Cutout" ), delete_xpm );
-			
+        if( index >= 0 && edge_zone->m_Poly->IsCutoutContour( edge_zone->m_CornerSelection ) )
+            ADD_MENUITEM( zones_menu, ID_POPUP_PCB_DELETE_ZONE_CUTOUT,
+                          _( "Delete Cutout" ), delete_xpm );
+
         ADD_MENUITEM( zones_menu, ID_POPUP_PCB_DELETE_ZONE_CONTAINER,
                       _( "Delete Zone Outline" ), delete_xpm );
     }

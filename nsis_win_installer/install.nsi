@@ -17,8 +17,8 @@
 
 ; General Product Description Definitions
 !define PRODUCT_NAME "KiCad"
-!define PRODUCT_VERSION "2007.07.09"
-!define PRODUCT_WEB_SITE "http://www.lis.inpg.fr/realise_au_lis/kicad/"
+!define PRODUCT_VERSION "2008.01.25"
+!define PRODUCT_WEB_SITE "http://iut-tice.ujf-grenoble.fr/kicad/"
 !define COMPANY_NAME ""
 !define TRADE_MARKS ""
 !define COPYRIGHT "Jean-Pierre Charras"

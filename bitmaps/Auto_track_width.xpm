@@ -1,0 +1,39 @@
+/* XPM */
+#ifndef XPMMAIN
+extern const char *auto_track_width_xpm[];
+
+#else
+const char * auto_track_width_xpm[] = {
+"16 16 14 1",
+" 	c None",
+",	c #008080",
+".	c #00E000",
+"+	c #006100",
+"@	c #004400",
+"#	c #007800",
+"$	c #007B00",
+"%	c #004000",
+"&	c #007C00",
+"*	c #006500",
+"=	c #007A00",
+"-	c #004600",
+"x	c #FF2D2D",
+"o	c #0000FF",
+"                ",
+"........+       ",
+".........+      ",
+"      @..#      ",
+"       $.%  o o ",
+"       &..*  o  ",
+"    xxxx..=  o  ",
+"   x xxx..-  o  ",
+"  x x   ........",
+" x x     .......",
+"x x   ,      o  ",
+"x x ,,       o  ",
+"x x,,,,,,,,,,o  ",
+"x x ,,       o  ",
+"x x   ,     o o ",
+"x x             "};
+
+#endif

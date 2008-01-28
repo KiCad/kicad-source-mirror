@@ -43,10 +43,10 @@ void WinEDA_PcbFrame::Via_Edit_Control( wxDC* DC, int command_type, SEGVIA* via 
         DrawPanel->MouseToCursorSchema();
 
     case ID_POPUP_PCB_VIA_HOLE_TO_VALUE:        // Set the drill via to custom
-        if( (g_ViaHoleLastValue > 0) && (g_ViaHoleLastValue < via->m_Width) )
+        if( (g_DesignSettings.m_ViaDrillCustomValue > 0) && (g_DesignSettings.m_ViaDrillCustomValue < via->m_Width) )
         {
             via->Draw( DrawPanel, DC, GR_XOR );
-            via->SetDrillValue( g_ViaHoleLastValue );
+            via->SetDrillValue( g_DesignSettings.m_ViaDrillCustomValue );
             via->Draw( DrawPanel, DC, GR_OR );
             GetScreen()->SetModify();
         }
@@ -57,12 +57,12 @@ void WinEDA_PcbFrame::Via_Edit_Control( wxDC* DC, int command_type, SEGVIA* via 
 
     case ID_POPUP_PCB_VIA_HOLE_EXPORT:      // Export the current drill value as the new custom value
         if( via->GetDrillValue() > 0 )
-            g_ViaHoleLastValue = via->GetDrillValue();
+            g_DesignSettings.m_ViaDrillCustomValue = via->GetDrillValue();
         break;
 
     case ID_POPUP_PCB_VIA_HOLE_EXPORT_TO_OTHERS:    // Export the current drill value to via which héave the same size
         if( via->GetDrillValue() > 0 )
-            g_ViaHoleLastValue = via->GetDrillValue();
+            g_DesignSettings.m_ViaDrillCustomValue = via->GetDrillValue();
         via_struct = m_Pcb->m_Track;
         for( ; via_struct != NULL; via_struct = (TRACK*) via_struct->Pnext )
         {

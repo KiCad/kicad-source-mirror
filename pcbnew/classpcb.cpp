@@ -127,7 +127,7 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
 // Default values for designing boards
 {
     int ii;
-    
+
     static const int default_layer_color[32] = {
         GREEN,     LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
         LIGHTGRAY, LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
@@ -146,11 +146,16 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
         LIGHTGRAY
     };
 
-    m_CopperLayerCount = 2;             // Default design is a double sided board
-    m_ViaDrill = 250;                   // via drill (for the entire board)
-    m_CurrentViaSize    = 450;          // Current via size
-    m_CurrentViaType    = VIA_THROUGH;  /* via type (BLIND, TROUGHT ...), bits 1 and 2 (not 0 and 1)*/
-    m_CurrentTrackWidth = 170;          // current track width
+    m_CopperLayerCount = 2;                         // Default design is a double sided board
+    m_ViaDrill = 250;                               // defualt via drill (for the entire board)
+    m_ViaDrillCustomValue = 250;                    // via drill for vias which must have a defined drill value
+    m_CurrentViaSize    = 450;                      // Current via size
+    m_CurrentViaType    = VIA_THROUGH;              // via type (VIA_BLIND_BURIED, VIA_TROUGHT VIA_MICROVIA)
+    m_CurrentTrackWidth = 170;                      // current track width
+    m_UseConnectedTrackWidth = false;				// if true, when creating a new track starting on an existing track, use this track width 
+    m_MicroViaDrill = 50;                           // micro via drill (for the entire board)
+    m_CurrentMicroViaSize = 150;                    // Current micro via size
+    m_MicroViasAllowed    = false;                  // true to allow micro vias
     for( ii = 0; ii < HISTORY_NUMBER; ii++ )
     {
         m_TrackWidthHistory[ii] = 0;    // Last HISTORY_NUMBER used track widths

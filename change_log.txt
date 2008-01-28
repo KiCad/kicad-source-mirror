@@ -1,60 +1,3 @@
-Can somebody please come to my rescue on this one:
-
-This was posted to the developer's list.   It would be nice to get an 
-apology or at least a link to the posting from which he launches such an attack:
-
-
-
-
-Dick, enough of this whining. The article on gnu.org is more than an opinion
-piece - unless
-you really don't know what/who gnu.org is. While I and others here do appreciate
-contributions made by all involved, your contributions do not entitle you to the
-rest of the
-code base. The GPL license is not revocable. You can take your lines of the
-code (and only
-just what you wrote) and do what you want, but you can't take Jean Pierre's
-code, even if
-you have modified it, without violating the GPL.
-
-I'm hereby asking Jean Pierre if he could please make it clear to this list if
-he has ANY
-intent of turning this package away from GPL for Dick or anyone else. I think
-all involved
-should know here and now if this is going to remain an open GPL project or not.
-I don't
-think anyone else here is interested in seeing kicad become a proprietary
-package.
-
-If Dick thinks he can just take the entire code base as his, I'm sure that FSF
-would help
-with the legal costs of stopping him. (To donate to FSF see
-http://www.fsf.org/associate/support_freedom/donate )
-
-FSF has stepped up to the plate before and stopped people from appropriating GPL
-software
-for their own ends. The cost of IP litigation is not cheap, so I would recommend
-Dick to
-talk to an IP attorney before doing something stupid.
-
-
-----------------------------------------------------------------
-Karl Schmidt EMail Karl@...
-Transtronics, Inc. WEB http://xtronics.com
-3209 West 9th Street Ph (785) 841-3089
-Lawrence, KS 66049 FAX (785) 841-0434
-
-A clear conscience is usually the sign of a bad memory.
-
-----------------------------------------------------------------
-
-
-
-
-
-
-
-
 
 
 Change Log for Kicad
@@ -62,6 +5,16 @@ Started 2007-June-11
 
 Please add newer entries at the top, list the date and your name with
 email address.
+
+2008-Jan-28 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+	- Better criteria to find starting poind in zone filling: the filling alg. uses
+	pads, vias and track ends to find where start the filling.
+	- Added a tool + option in popup menu in track mode (select track width):
+	when creating a track, if activated: if we starts on an existing track,
+	the new track takes the width of the existing track
+
 
 
 2008-Jan-27 UPDATE   Dick Hollenbeck <dick@softplc.com>

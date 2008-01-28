@@ -84,6 +84,8 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_SELECT_LAYER_PAIR:
     case ID_POPUP_PCB_SELECT_NO_CU_LAYER:
     case ID_POPUP_PCB_SELECT_WIDTH:
+	case ID_POPUP_PCB_SELECT_AUTO_WIDTH:
+	case ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH:
     case ID_POPUP_PCB_SELECT_WIDTH1:
     case ID_POPUP_PCB_SELECT_WIDTH2:
     case ID_POPUP_PCB_SELECT_WIDTH3:
@@ -339,7 +341,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         GetScreen()->SetModify();
         break;
 
-    case ID_POPUP_PCB_EDIT_NET:
+      case ID_POPUP_PCB_EDIT_NET:
         if( GetCurItem() == NULL )
             break;
         Edit_Net_Width( &dc, ( (TRACK*) GetCurItem() )->GetNet() );
@@ -833,7 +835,8 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         DisplayTrackSettings();
         m_SelTrackWidthBox_Changed = FALSE;
         m_SelViaSizeBox_Changed    = FALSE;
-    }
+		g_DesignSettings.m_UseConnectedTrackWidth = false;
+	}
         break;
 
     case ID_POPUP_PCB_SELECT_WIDTH1:
@@ -845,11 +848,21 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_SELECT_WIDTH7:
     case ID_POPUP_PCB_SELECT_WIDTH8:
         DrawPanel->MouseToCursorSchema();
+		g_DesignSettings.m_UseConnectedTrackWidth = false;
         {
             int ii = id - ID_POPUP_PCB_SELECT_WIDTH1;
             g_DesignSettings.m_CurrentTrackWidth = g_DesignSettings.m_TrackWidthHistory[ii];
             DisplayTrackSettings();
         }
+        break;
+
+	case ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH:
+		g_DesignSettings.m_UseConnectedTrackWidth = not g_DesignSettings.m_UseConnectedTrackWidth;
+		break;
+			
+	case ID_POPUP_PCB_SELECT_AUTO_WIDTH:
+        DrawPanel->MouseToCursorSchema();
+		g_DesignSettings.m_UseConnectedTrackWidth = true;
         break;
 
     case ID_POPUP_PCB_SELECT_VIASIZE:

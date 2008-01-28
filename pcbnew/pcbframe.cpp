@@ -114,6 +114,7 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_TOOL( ID_GET_NETLIST, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_DRC_CONTROL, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, WinEDA_PcbFrame::Process_Special_Functions )
+    EVT_TOOL( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_KICAD_CHOICEBOX( ID_TOOLBARH_PCB_SELECT_LAYER,
                          WinEDA_PcbFrame::Process_Special_Functions )
     EVT_KICAD_CHOICEBOX( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
@@ -442,6 +443,8 @@ void WinEDA_PcbFrame::SetToolbars()
     if( m_AuxiliaryToolBar )
     {
         wxString msg;
+        m_AuxiliaryToolBar->ToggleTool( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH,
+                                      g_DesignSettings.m_UseConnectedTrackWidth );
         if( m_SelTrackWidthBox && m_SelTrackWidthBox_Changed )
         {
             m_SelTrackWidthBox_Changed = FALSE;

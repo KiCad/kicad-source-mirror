@@ -44,7 +44,7 @@ static void Exit_Editrack( WinEDA_DrawPanel* Panel, wxDC* DC )
         ShowNewTrackWhenMovingCursor( Panel, DC, FALSE );
         if( g_HightLigt_Status )
             frame->Hight_Light( DC );
-        
+
         g_HightLigth_NetCode = OldNetCodeSurbrillance;
         if( OldEtatSurbrillance )
             frame->Hight_Light( DC );
@@ -59,7 +59,7 @@ static void Exit_Editrack( WinEDA_DrawPanel* Panel, wxDC* DC )
             delete track;
         }
     }
-    
+
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
     frame->SetCurItem( NULL );
@@ -73,7 +73,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
 /*
  *  Routine d'initialisation d'un trace de piste et/ou de mise en place d'un
  *  nouveau point piste
- * 
+ *
  *  Si pas de piste en cours de trace:
  *      - Recherche de netname de la nouvelle piste ( pad de depart out netname
  *       de la piste si depart sur une ancienne piste
@@ -84,58 +84,69 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
  *      - si DRC OK : addition d'un nouveau point piste
  */
 {
-    D_PAD*          pt_pad      = NULL;
-    TRACK*          adr_buf     = NULL, * Track;
+    D_PAD*          pt_pad = NULL;
+    TRACK*          TrackOnStartPoint = NULL, * Track;
     int             masquelayer = g_TabOneLayerMask[GetScreen()->m_Active_Layer];
     EDA_BaseStruct* LockPoint;
     wxPoint         pos = GetScreen()->m_Curseur;
+    static int      InitialTrackWidthValue; /* first track segment width.
+                                            * used when we are in the auto tack width mode */
 
     DrawPanel->ManageCurseur = ShowNewTrackWhenMovingCursor;
     DrawPanel->ForceCloseManageCurseur = Exit_Editrack;
 
-    if( track == NULL )  /* debut reel du trace */
+    if( track == NULL )  /* Starting a new track  */
     {
-        /* effacement surbrillance ancienne */
+        /* undrw old hightlight */
         OldNetCodeSurbrillance = g_HightLigth_NetCode;
         OldEtatSurbrillance    = g_HightLigt_Status;
 
         if( g_HightLigt_Status )
             Hight_Light( DC );
 
-        g_FirstTrackSegment = g_CurrentTrackSegment = new TRACK( m_Pcb );
+        InitialTrackWidthValue = -1;        // Set to "no value"
+        g_FirstTrackSegment    = g_CurrentTrackSegment = new TRACK( m_Pcb );
         g_CurrentTrackSegment->m_Flags = IS_NEW;
         g_TrackSegmentCount  = 1;
         g_HightLigth_NetCode = 0;
 
-        /* Localisation de la pastille de reference de la piste: */
+        /* Search for a pad at starting point of the new track: */
         LockPoint = LocateLockPoint( m_Pcb, pos, masquelayer );
 
-        if( LockPoint )
+        if( LockPoint ) // An item (pad or track) is found
         {
             if( LockPoint->Type() == TYPEPAD )
             {
                 pt_pad = (D_PAD*) LockPoint;
-                
-                /* le debut de la piste est remis sur le centre du pad */
+
+                /* A pad is found: put the starting point on pad centre */
                 pos = pt_pad->m_Pos;
                 g_HightLigth_NetCode = pt_pad->GetNet();
             }
-            else /* le point d'accrochage est un segment */
+            else /* A track segment is found */
             {
-                adr_buf = (TRACK*) LockPoint;
-                g_HightLigth_NetCode = adr_buf->GetNet();
-                CreateLockPoint( &pos.x, &pos.y, adr_buf, NULL );
+                TrackOnStartPoint    = (TRACK*) LockPoint;
+                g_HightLigth_NetCode = TrackOnStartPoint->GetNet();
+                CreateLockPoint( &pos.x, &pos.y, TrackOnStartPoint, NULL );
             }
         }
 
         build_ratsnest_pad( LockPoint, wxPoint( 0, 0 ), TRUE );
         Hight_Light( DC );
 
-        g_CurrentTrackSegment->m_Flags   = IS_NEW;
+        g_CurrentTrackSegment->m_Flags = IS_NEW;
         g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer );
-        g_CurrentTrackSegment->m_Width   = g_DesignSettings.m_CurrentTrackWidth;
-        g_CurrentTrackSegment->m_Start   = pos;
-        g_CurrentTrackSegment->m_End     = g_CurrentTrackSegment->m_Start;
+        g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentTrackWidth;
+        if( g_DesignSettings.m_UseConnectedTrackWidth )
+        {
+            if( TrackOnStartPoint && TrackOnStartPoint->Type() == TYPETRACK )
+            {
+                InitialTrackWidthValue = TrackOnStartPoint->m_Width;
+                g_CurrentTrackSegment->m_Width = InitialTrackWidthValue;
+            }
+        }
+        g_CurrentTrackSegment->m_Start = pos;
+        g_CurrentTrackSegment->m_End   = g_CurrentTrackSegment->m_Start;
         g_CurrentTrackSegment->SetNet( g_HightLigth_NetCode );
         if( pt_pad )
         {
@@ -143,10 +154,10 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
             g_CurrentTrackSegment->SetState( BEGIN_ONPAD, ON );
         }
         else
-            g_CurrentTrackSegment->start = adr_buf;
+            g_CurrentTrackSegment->start = TrackOnStartPoint;
 
         if( g_TwoSegmentTrackBuild )
-        {   
+        {
             // Create 2 segments
             g_CurrentTrackSegment = g_CurrentTrackSegment->Copy();
             g_TrackSegmentCount++;
@@ -159,7 +170,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
         g_CurrentTrackSegment->Display_Infos( this );
         SetCurItem( g_CurrentTrackSegment );
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
-        
+
         if( Drc_On )
         {
             if( BAD_DRC == m_drc->Drc( g_CurrentTrackSegment, m_Pcb->m_Track ) )
@@ -175,7 +186,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
         {
             if( BAD_DRC == m_drc->Drc( g_CurrentTrackSegment, m_Pcb->m_Track ) )
                 return NULL;
-            
+
             if( g_TwoSegmentTrackBuild     // We must handle 2 segments
                && g_CurrentTrackSegment->Back() )
             {
@@ -220,7 +231,10 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
             g_TrackSegmentCount++;
             g_CurrentTrackSegment->m_Start = g_CurrentTrackSegment->m_End;
             g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer );
-            g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentTrackWidth;
+            if( !g_DesignSettings.m_UseConnectedTrackWidth )
+            {
+                g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentTrackWidth;
+            }
             /* Show the new position */
             ShowNewTrackWhenMovingCursor( DrawPanel, DC, FALSE );
         }
@@ -238,7 +252,7 @@ int WinEDA_PcbFrame::Add_45_degrees_Segment( wxDC* DC, TRACK* pt_segm )
 
 /* rectifie un virage a 90 et le modifie par 2 coudes a 45
  *  n'opere que sur des segments horizontaux ou verticaux.
- * 
+ *
  *  entree : pointeur sur le segment qui vient d'etre trace
  *          On suppose que le segment precedent est celui qui a ete
  *          precedement trace
@@ -279,7 +293,7 @@ int WinEDA_PcbFrame::Add_45_degrees_Segment( wxDC* DC, TRACK* pt_segm )
     // les segments doivent etre de longueur suffisante:
     if( MAX( abs( dx0 ), abs( dy0 ) ) < (pas_45 * 2) )
         return 0;
-    
+
     if( MAX( abs( dx1 ), abs( dy1 ) ) < (pas_45 * 2) )
         return 0;
 
@@ -382,7 +396,7 @@ void WinEDA_PcbFrame::End_Route( TRACK* track, wxDC* DC )
     if( track == NULL )
         return;
 
-    if( Drc_On && BAD_DRC==m_drc->Drc( g_CurrentTrackSegment, m_Pcb->m_Track) )
+    if( Drc_On && BAD_DRC==m_drc->Drc( g_CurrentTrackSegment, m_Pcb->m_Track ) )
         return;
 
     /* Sauvegarde des coord du point terminal de la piste */
@@ -512,15 +526,17 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
 
     /* dessin de la nouvelle piste : mise a jour du point d'arrivee */
     g_CurrentTrackSegment->SetLayer( screen->m_Active_Layer );
-    g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentTrackWidth;
+    if( ! g_DesignSettings.m_UseConnectedTrackWidth )
+		g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentTrackWidth;
     if( g_TwoSegmentTrackBuild )
     {
         TRACK* previous_track = (TRACK*) g_CurrentTrackSegment->Pback;
         if( previous_track && (previous_track->Type() == TYPETRACK) )
         {
             previous_track->SetLayer( screen->m_Active_Layer );
-            previous_track->m_Width = g_DesignSettings.m_CurrentTrackWidth;
-        }
+			if( ! g_DesignSettings.m_UseConnectedTrackWidth )
+				previous_track->m_Width = g_DesignSettings.m_CurrentTrackWidth;
+		}
     }
 
     if( Track_45_Only )
@@ -713,10 +729,10 @@ TRACK* DeleteNullTrackSegments( BOARD* pcb, TRACK* track, int* segmcount )
  *  return a pointer on the first segment (start of track list)
  */
 {
-    TRACK*          firsttrack = track;
-    TRACK*          oldtrack;
-    int             nn = 0;
-    BOARD_ITEM*     LockPoint;
+    TRACK*      firsttrack = track;
+    TRACK*      oldtrack;
+    int         nn = 0;
+    BOARD_ITEM* LockPoint;
 
     if( track == 0 )
         return NULL;
@@ -742,7 +758,7 @@ TRACK* DeleteNullTrackSegments( BOARD* pcb, TRACK* track, int* segmcount )
         *segmcount = nn;
 
     if( nn == 0 )
-        return NULL;            // all the new track segments have been deleted
+        return NULL; // all the new track segments have been deleted
 
 
     // we must set the pointers on connected items and the connection status
@@ -802,7 +818,7 @@ void EnsureEndTrackOnPad( D_PAD* Pad )
 
     TRACK* lasttrack = g_CurrentTrackSegment;
     if( !g_CurrentTrackSegment->IsNull() )
-    { 
+    {
         /* Must create a new segment, from track end to pad center */
         g_CurrentTrackSegment = lasttrack->Copy();
         g_TrackSegmentCount++;
@@ -810,7 +826,7 @@ void EnsureEndTrackOnPad( D_PAD* Pad )
         g_CurrentTrackSegment->Pback = lasttrack;
         lasttrack->end = g_CurrentTrackSegment;
     }
-    
+
     g_CurrentTrackSegment->m_End = Pad->m_Pos;
     g_CurrentTrackSegment->SetState( END_ONPAD, OFF );
 

@@ -35,7 +35,6 @@
 #include "mw_Add_Line.xpm"
 #include "mw_Add_Gap.xpm"
 #include "mw_toolbar.xpm"
-#include "Add_Tracks.xpm"
 #include "Show_Zone.xpm"
 #include "net_hightlight.xpm"
 #include "PcbOffset.xpm"
@@ -282,7 +281,9 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
                         _( "auto zoom" ) );
 
     m_HToolBar->AddSeparator();
-    msg = AddHotkeyName( _( "Find components and texts" ), s_Board_Editor_Hokeys_Descr, HK_FIND_ITEM );
+    msg = AddHotkeyName( _(
+                             "Find components and texts" ), s_Board_Editor_Hokeys_Descr,
+                         HK_FIND_ITEM );
     m_HToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, BITMAP( find_xpm ),
                          msg );
 
@@ -526,6 +527,12 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
 /****************************************************/
 
 /* Create auxiliary horizontal toolbar
+ * displays:
+ * existing track width choice
+ * selection for auto track width
+ * existing via size choice
+ * grid size choice
+ * zoom level choice
  */
 {
     int      ii;
@@ -543,6 +550,13 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
                                                           -1 ), wxSize( LISTBOX_WIDTH + 20, -1 ) );
         m_AuxiliaryToolBar->AddControl( m_SelTrackWidthBox );
         m_SelTrackWidthBox_Changed = TRUE;
+
+        m_AuxiliaryToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH,
+                                     wxEmptyString,
+                                     BITMAP( auto_track_width_xpm ),
+                                     _(
+                                         "Auto track width: when starting on an existing track use its width\notherwise, use current width setting" ),
+                                     wxITEM_CHECK );
 
         m_AuxiliaryToolBar->AddSeparator();
         m_SelViaSizeBox = new WinEDAChoiceBox( m_AuxiliaryToolBar,
@@ -610,28 +624,29 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
 WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
 /**************************************************************************/
 {
-    int  ii, jj, ll;
-	unsigned lenght = 0;
-    bool rebuild = FALSE;
-    long current_mask_layer;
+    int      ii, jj, ll;
+    unsigned lenght  = 0;
+    bool     rebuild = FALSE;
+    long     current_mask_layer;
 
     if( m_SelLayerBox == NULL )
     {
         if( parent == NULL )
             return NULL;
-        
+
         m_SelLayerBox = new WinEDAChoiceBox( parent, ID_TOOLBARH_PCB_SELECT_LAYER,
-                                            
-                                wxPoint( -1, -1 ),
-#if defined(__UNIX__)                  
-                                // Width enough for the longest string: "Component (Page Down)"
-                                // Maybe that string is too long?
-                                wxSize( 230, -1 )     
+
+                                             wxPoint( -1, -1 ),
+#if defined (__UNIX__)
+
+                                             // Width enough for the longest string: "Component (Page Down)"
+                                             // Maybe that string is too long?
+                                             wxSize( 230, -1 )
 #else
-                                wxSize( LISTBOX_WIDTH+40, -1 )
+                                             wxSize( LISTBOX_WIDTH + 40, -1 )
 #endif
-                              );
-        
+                                             );
+
         parent->AddControl( m_SelLayerBox );
     }
 
@@ -654,8 +669,8 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
         m_SelLayerBox->Clear();
         for( ii = 0, jj = 0; ii <= EDGE_N; ii++ )
         {
-        // List to append hotkeys in layer box selection
-        static int HK_SwitchLayer[EDGE_N+1] = {
+            // List to append hotkeys in layer box selection
+            static int HK_SwitchLayer[EDGE_N + 1] = {
                 HK_SWITCH_LAYER_TO_COPPER,
                 HK_SWITCH_LAYER_TO_INNER1,
                 HK_SWITCH_LAYER_TO_INNER2,
@@ -672,7 +687,7 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
                 HK_SWITCH_LAYER_TO_INNER13,
                 HK_SWITCH_LAYER_TO_INNER14,
                 HK_SWITCH_LAYER_TO_COMPONENT
-        };
+            };
 
             if( (g_TabOneLayerMask[ii] & Masque_Layer) )
             {
@@ -680,10 +695,11 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
                 msg = AddHotkeyName( msg, s_Board_Editor_Hokeys_Descr, HK_SwitchLayer[ii] );
                 m_SelLayerBox->Append( msg );
                 m_SelLayerBox->SetClientData( jj, (void*) ii );
-				lenght = max(lenght, msg.Len() );
+                lenght = max( lenght, msg.Len() );
                 jj++;
             }
         }
+
 // Test me:
 //		int lchar = m_SelLayerBox->GetFont().GetPointSize();
 //		m_SelLayerBox->SetSize(wxSize(lenght * lchar,-1));

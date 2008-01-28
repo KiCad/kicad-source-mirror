@@ -1,5 +1,9 @@
 /* XPM */ 
-static const char * width_segment_xpm[] = {
+#ifndef XPMMAIN
+extern const char *width_segment_xpm[];
+
+#else
+const char * width_segment_xpm[] = {
 "16 16 3 1",
 " 	c None",
 "!	c black",
@@ -20,3 +24,4 @@ static const char * width_segment_xpm[] = {
 "   !            ",
 "   !            ",
 "                "};
+#endif

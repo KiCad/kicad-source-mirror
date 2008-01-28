@@ -294,8 +294,6 @@ eda_global wxString g_ViaType_Name[4]
 
 #endif
 ;
-eda_global int g_ViaHoleLastValue;  // Last value for non default value via hole
-
 /* couleurs des autres items des empreintes */
 #if defined MAIN
 int                    g_PadCMPColor = RED;

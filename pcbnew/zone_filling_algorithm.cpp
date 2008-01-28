@@ -134,7 +134,7 @@ int ZONE_CONTAINER::Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose )
         TraceLignePcb( xi, yi, xf, yf, -1, HOLE | CELL_is_EDGE, WRITE_CELL );
     }
 
-    /* Create a starting point to create the zone filling */
+    /* Create a starting point to create the zone filling, from pads */
     LISTE_PAD* pad;
     int        cells_count = 0;
     for( ii = 0, pad = frame->m_Pcb->m_Pads; ii < frame->m_Pcb->m_NbPads; ii++, pad++ )
@@ -142,6 +142,42 @@ int ZONE_CONTAINER::Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose )
 		if ( ! (*pad)->IsOnLayer( GetLayer() ) ) continue;
 		if ( (*pad)->GetNet() != GetNet() ) continue;
         wxPoint pos = (*pad)->m_Pos;
+        if( m_Poly->TestPointInside( pos.x, pos.y ) )
+        {
+			pos -= Pcb->m_BoundaryBox.m_Pos;
+			ZoneStartFill.x = ( pos.x + (g_GridRoutingSize / 2) ) / g_GridRoutingSize;
+
+            ZoneStartFill.y = ( pos.y + (g_GridRoutingSize / 2) ) / g_GridRoutingSize;
+			BoardCell cell = GetCell( ZoneStartFill.y, ZoneStartFill.x, BOTTOM );
+			if ( (cell & CELL_is_EDGE) == 0 )
+			{
+				OrCell( ZoneStartFill.y, ZoneStartFill.x, BOTTOM, CELL_is_ZONE );
+				cells_count++;
+			}
+        }
+    }
+
+    /* Create a starting point to create the zone filling, from vias and tracks */
+    TRACK* track;
+    for( track = frame->m_Pcb->m_Track; track != NULL; track = track->Next() )
+    {
+		if ( ! track->IsOnLayer( GetLayer() ) ) continue;
+		if ( track->GetNet() != GetNet() ) continue;
+        wxPoint pos = track->m_Start;
+        if( m_Poly->TestPointInside( pos.x, pos.y ) )
+        {
+			pos -= Pcb->m_BoundaryBox.m_Pos;
+			ZoneStartFill.x = ( pos.x + (g_GridRoutingSize / 2) ) / g_GridRoutingSize;
+
+            ZoneStartFill.y = ( pos.y + (g_GridRoutingSize / 2) ) / g_GridRoutingSize;
+			BoardCell cell = GetCell( ZoneStartFill.y, ZoneStartFill.x, BOTTOM );
+			if ( (cell & CELL_is_EDGE) == 0 )
+			{
+				OrCell( ZoneStartFill.y, ZoneStartFill.x, BOTTOM, CELL_is_ZONE );
+				cells_count++;
+			}
+        }
+        pos = track->m_End;
         if( m_Poly->TestPointInside( pos.x, pos.y ) )
         {
 			pos -= Pcb->m_BoundaryBox.m_Pos;
