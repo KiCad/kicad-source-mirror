@@ -69,7 +69,6 @@ OBJECTS = eeschema.o\
 		plot.o libalias.o \
 		plotps.o netform.o \
 		delsheet.o \
-		infospgm.o \
 		delete.o dialog_build_BOM.o \
 		erc.o\
 		dialog_erc.o\
@@ -184,6 +183,4 @@ dialog_eeschema_config.o: dialog_eeschema_config.cpp dialog_eeschema_config.h $(
 
 libedit.o: libedit.cpp $(DEPEND)
 
-infospgm.o: ../share/infospgm.cpp $(DEPEND)
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 

@@ -32,6 +32,6 @@ SET(COMMON_SRCS
 	trigo.cpp
 	worksheet.cpp
 	wxwineda.cpp
-	../share/infospgm.cpp)
+	infospgm.cpp)
 
 ADD_LIBRARY(common ${COMMON_SRCS})

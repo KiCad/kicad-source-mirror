@@ -109,7 +109,6 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		dragsegm.o\
 		autoplac.o\
 		files.o\
-		infospgm.o\
 		router.o\
 		controle.o\
 		tool_modedit.o\
@@ -212,9 +211,6 @@ automove.o: automove.cpp autorout.h $(COMMON)
 loadcmp.o: loadcmp.cpp $(COMMON)
 
 zoom.o: ../share/zoom.cpp $(COMMON)
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
-
-infospgm.o: ../share/infospgm.cpp $(COMMON)
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 affiche.o: affiche.cpp $(COMMON)

@@ -34,7 +34,7 @@ OBJECTS = $(TARGET).o \
 			ioascii.o \
 			menucfg.o \
 			cfg.o listlib.o \
-			infospgm.o autosel.o \
+			autosel.o \
 			setvisu.o\
 			dialog_display_options.o\
 			zoom.o \
@@ -136,9 +136,6 @@ listlib.o: listlib.cpp $(DEPEND)
 cfg.o: cfg.cpp cfg.h $(DEPEND)
 
 menucfg.o: menucfg.cpp dialog_cvpcb_config.cpp dialog_cvpcb_config.h $(DEPEND)
-
-infospgm.o: ../share/infospgm.cpp $(DEPEND)
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 autosel.o: autosel.cpp $(DEPEND)
 

@@ -47,7 +47,6 @@ OBJECTS= \
 		rs274x.o\
 		dcode.o\
 		undelete.o\
-		infospgm.o \
 		files.o\
 		block.o\
 		controle.o\
@@ -125,9 +124,6 @@ surbrill.o: surbrill.cpp $(COMMON)
 pcbtexte.o: pcbtexte.cpp $(COMMON)
 
 zoom.o: ../share/zoom.cpp $(COMMON)
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
-
-infospgm.o: ../share/infospgm.cpp $(COMMON)
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 affiche.o: affiche.cpp $(COMMON)

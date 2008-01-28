@@ -7,7 +7,6 @@ OBJECTS = kicad.o\
 		treeprj_frame.o\
 		treeprj_datas.o\
 		buildmnu.o\
-		infospgm.o\
 		mainframe.o\
 		prjconfig.o\
 		preferences.o\
@@ -29,5 +28,3 @@ mainframe.o: mainframe.cpp $(DEPEND) kicad.h
 
 buildmnu.o: buildmnu.cpp $(DEPEND) kicad.h
 
-infospgm.o: ../share/infospgm.cpp $(DEPEND)
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
