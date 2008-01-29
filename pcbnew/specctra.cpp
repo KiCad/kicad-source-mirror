@@ -57,7 +57,7 @@
 
 // To build the DSN beautifier and unit tester, simply uncomment this and then
 // use CMake's makefile to build target "specctra_test".
-#define STANDALONE        // define "stand alone, i.e. unit testing"
+//#define STANDALONE        // define "stand alone, i.e. unit testing"
 
 
 #if defined(STANDALONE)
