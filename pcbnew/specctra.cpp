@@ -55,6 +55,8 @@
 #include <wx/ffile.h>
 
 
+// To build the DSN beautifier and unit tester, simply uncomment this and then
+// use CMake's makefile to build target "specctra_test".
 //#define STANDALONE        // define "stand alone, i.e. unit testing"
 
 
@@ -861,24 +863,32 @@ void SPECCTRA_DB::doWINDOW( WINDOW* growth ) throw( IOError )
         switch( tok )
         {
         case T_rect:
-            growth->rectangle = new RECTANGLE( growth );
-            doRECTANGLE( growth->rectangle );
+            if( growth->shape )
+                unexpected( tok );
+            growth->shape = new RECTANGLE( growth );
+            doRECTANGLE( (RECTANGLE*) growth->shape );
             break;
             
         case T_circle:
-            growth->circle = new CIRCLE( growth );
-            doCIRCLE( growth->circle );
+            if( growth->shape )
+                unexpected( tok );
+            growth->shape = new CIRCLE( growth );
+            doCIRCLE( (CIRCLE*) growth->shape );
             break;
             
         case T_path:
         case T_polygon:
-            growth->path = new PATH( growth, tok );
-            doPATH( growth->path );
+            if( growth->shape )
+                unexpected( tok );
+            growth->shape = new PATH( growth, tok );
+            doPATH( (PATH*) growth->shape );
             break;
             
         case T_qarc:
-            growth->qarc = new QARC( growth );
-            doQARC( growth->qarc );
+            if( growth->shape )
+                unexpected( tok );
+            growth->shape = new QARC( growth );
+            doQARC( (QARC*) growth->shape );
             break;
             
         default:
@@ -3353,18 +3363,19 @@ int SPECCTRA_DB::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
     return total;
 }
 
+// factor out a common GetQuoteChar
 
-const char* SPECCTRA_DB::GetQuoteChar( const char* wrapee ) 
+const char* OUTPUTFORMATTER::GetQuoteChar( const char* wrapee, const char* quote_char ) 
 {
     // I include '#' so a symbol is not confused with a comment.  We intend
     // to wrap any symbol starting with a '#'.
     // Our LEXER class handles comments, and comments appear to be an extension
     // to the SPECCTRA DSN specification. 
     if( *wrapee == '#' )
-        return quote_char.c_str();
+        return quote_char;
 
     if( strlen(wrapee)==0 )
-        return quote_char.c_str();
+        return quote_char;
         
     bool    isNumber = true;
     
@@ -3373,16 +3384,22 @@ const char* SPECCTRA_DB::GetQuoteChar( const char* wrapee )
         // if the string to be wrapped (wrapee) has a delimiter in it, 
         // return the quote_char so caller wraps the wrapee.
         if( strchr( "\t ()", *wrapee ) )
-            return quote_char.c_str();
+            return quote_char;
         
         if( !strchr( "01234567890.-+", *wrapee ) )
             isNumber = false;
     }
     
     if( isNumber )
-        return quote_char.c_str();
+        return quote_char;
     
     return "";      // can use an unwrapped string.
+}
+
+
+const char* SPECCTRA_DB::GetQuoteChar( const char* wrapee ) 
+{
+    return OUTPUTFORMATTER::GetQuoteChar( wrapee, quote_char.c_str() ); 
 }
 
 
@@ -3438,6 +3455,8 @@ PCB* SPECCTRA_DB::MakePCB()
     
     pcb->structure = new STRUCTURE( pcb );
     pcb->structure->boundary = new BOUNDARY( pcb->structure );
+    pcb->structure->via = new VIA( pcb->structure );
+    pcb->structure->rules = new RULE( pcb->structure, T_rule );
     
     pcb->placement = new PLACEMENT( pcb );
     
@@ -3448,6 +3467,87 @@ PCB* SPECCTRA_DB::MakePCB()
     pcb->wiring = new WIRING( pcb );
 
     return pcb;
+}
+
+
+//-----<STRINGFORMATTER>----------------------------------------------------
+
+const char* STRINGFORMATTER::GetQuoteChar( const char* wrapee ) 
+{
+    // for what we are using STRINGFORMATTER for at this time, we can return the nul string
+    // always.
+    
+    return "";
+//    return OUTPUTFORMATTER::GetQuoteChar( const char* wrapee, "\"" ); 
+}
+
+int STRINGFORMATTER::vprint( const char* fmt,  va_list ap )
+{
+    int ret = vsnprintf( &buffer[0], buffer.size(), fmt, ap );
+    if( ret >= (int) buffer.size() )
+    {
+        buffer.reserve( ret+200 );
+        ret = vsnprintf( &buffer[0], buffer.size(), fmt, ap );
+    }
+    
+    if( ret > 0 )
+        mystring.append( (const char*) &buffer[0] );
+    
+    return ret;
+}    
+
+
+int STRINGFORMATTER::sprint( const char* fmt, ... )
+{
+    va_list     args;
+
+    va_start( args, fmt );
+    int ret = vprint( fmt, args);
+    va_end( args );
+    
+    return ret;
+}    
+
+
+int STRINGFORMATTER::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
+{
+    va_list     args;
+
+    va_start( args, fmt );
+    
+    int result = 0;
+    int total  = 0;
+    
+    for( int i=0; i<nestLevel;  ++i )
+    {
+        result = sprint( "%*c", NESTWIDTH, ' ' );
+        if( result < 0 )
+            break;
+        
+        total += result;
+    }
+    
+    if( result<0 || (result=vprint( fmt, args ))<0 )
+    {
+        throw IOError( _("Error writing to STRINGFORMATTER") );
+    }
+    
+    va_end( args );
+    
+    total += result;
+    return total;
+}
+
+
+void STRINGFORMATTER::StripUseless()
+{
+    for( std::string::iterator i=mystring.begin();  i!=mystring.end();  )
+    {
+        if( isspace( *i ) || *i==')' || *i=='(' )
+            mystring.erase(i);
+        else
+            ++i;
+    }
 }
 
 
@@ -3500,8 +3600,40 @@ int ELEM_HOLDER::FindElem( DSN_T aType, int instanceNum )
 }
 
 
-//-----<PARSER>-----------------------------------------------------------
+//-----<PADSTACK>---------------------------------------------------------
 
+int PADSTACK::Compare( PADSTACK* lhs, PADSTACK* rhs )
+{
+    if( !lhs->hash.size() )
+        lhs->hash = lhs->makeHash();
+    
+    if( !rhs->hash.size() )
+        rhs->hash = rhs->makeHash();
+    
+    int result = lhs->hash.compare( rhs->hash );
+    return result;
+}
+
+
+//-----<IMAGE>------------------------------------------------------------
+
+int IMAGE::Compare( IMAGE* lhs, IMAGE* rhs )
+{
+    if( !lhs->hash.size() )
+        lhs->hash = lhs->makeHash();
+    
+    if( !rhs->hash.size() )
+        rhs->hash = rhs->makeHash();
+
+    int result = lhs->hash.compare( rhs->hash );
+    
+    // printf("\"%s\"  \"%s\" ret=%d\n", lhs->hash.c_str(), rhs->hash.c_str(), result );
+    
+    return result;
+}
+
+
+//-----<PARSER>-----------------------------------------------------------
 
 PARSER::PARSER( ELEM* aParent ) :
     ELEM( T_parser, aParent )

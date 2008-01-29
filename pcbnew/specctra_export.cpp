@@ -234,14 +234,43 @@ static QARC* makeArc( const POINT& aStart, const POINT& aEnd,
     qarc->SetLayerId( aLayerName.c_str() );
     return qarc;
 }
-                         
 
-/**
- * Function makePADSTACKs
- * makes all the PADSTACKs, and marks each D_PAD with the index into the 
- * LIBRARY::padstacks list that it matches.
- */
-static void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads, LIBRARY* aLibrary )
+
+IMAGE* SPECCTRA_DB::makeIMAGE( MODULE* aModule )
+{
+    TYPE_COLLECTOR  items;
+    
+    static const KICAD_T scanPADs[] = { TYPEPAD, EOT };
+    
+    PADSTACKS&  padstacks = pcb->library->padstacks;
+
+    // get all the MODULE's pads.        
+    items.Collect( aModule, scanPADs );
+
+    IMAGE*  image = new IMAGE( 0 );
+    
+    image->image_id = CONV_TO_UTF8( aModule->m_LibRef );
+        
+    // collate all the pads, and make a component.
+    for( int p=0;  p<items.GetCount();  ++p )
+    {
+        D_PAD* pad = (D_PAD*) items[p];
+
+        PADSTACK*   padstack = &padstacks[pad->m_logical_connexion];
+        
+        PIN*    pin = new PIN(image);
+        image->pins.push_back( pin );
+        
+        pin->padstack_id = padstack->padstack_id;
+        pin->pin_id      = CONV_TO_UTF8( pad->ReturnStringPadName() );
+        pin->SetVertex( mapPt( pad->m_Pos0 ) );
+    }
+    
+    return image;
+}    
+
+
+void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
 {
     char    name[80];       // padstack name builder
     
@@ -251,7 +280,6 @@ static void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads, LIBRARY* aLibra
     }
 
     D_PAD*  old_pad = NULL;
-    int     padstackNdx = 0;
 
 #define COPPER_LAYERS    2      // top and bottom
 
@@ -262,7 +290,7 @@ static void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads, LIBRARY* aLibra
     // within a pad's padstack.  this is usually correct, but not rigorous.  We could do
     // better if there was actually a "layer type" field within Kicad which would
     // hold one of:  T_signal, T_power, T_mixed, T_jumper
-    // See page bottom of page 74 of the SECCTRA Design Language Reference, May 2000.
+    // See bottom of page 74 of the SECCTRA Design Language Reference, May 2000.
     
     std::string layerId[COPPER_LAYERS] = {
         CONV_TO_UTF8(aBoard->GetLayerName( LAYER_CMP_N )),
@@ -270,8 +298,9 @@ static void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads, LIBRARY* aLibra
     };
     
 #if 1
-    // late breaking news, we can use "signal" as the layer name and report the 
-    // padstack as a single layer.
+// Late breaking news: we can use the reserved layer name "signal" and report the 
+    // padstack as a single layer. See <reserved_layer_name> in the spec. 
+    // But this probably gives problems for a "power" layer or power pin, we'll see.
     reportedLayers = 1;
     layerId[0] = "signal";
 #endif
@@ -280,8 +309,6 @@ static void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads, LIBRARY* aLibra
     {
         D_PAD*  pad = (D_PAD*) aPads[i];
 
-        pad->m_logical_connexion = padstackNdx;
-        
         bool doLayer[COPPER_LAYERS] =  { 
             pad->IsOnLayer( LAYER_CMP_N ),
             pad->IsOnLayer( COPPER_LAYER_N ) 
@@ -289,6 +316,10 @@ static void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads, LIBRARY* aLibra
         
         if( old_pad && 0==D_PAD::Compare( old_pad, pad ) )
         {
+            // padstacks.size()-1 is the index of the matching padstack in LIBRARY::padstacks
+            pad->m_logical_connexion = pcb->library->padstacks.size()-1;
+            
+            // this is the same as the last pad, so do not add it to the padstack list.
             continue;
         }
 
@@ -296,6 +327,9 @@ static void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads, LIBRARY* aLibra
         // an "image->keepout" later.  No copper pad here, it is probably a hole.        
         if( !doLayer[0] && !doLayer[1] )
         {
+            // padstacks.size()-1 is the index of the matching padstack in LIBRARY::padstacks
+            pad->m_logical_connexion = pcb->library->padstacks.size()-1;
+            
             continue;
         }
 
@@ -305,11 +339,11 @@ static void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads, LIBRARY* aLibra
         
         old_pad = pad;
 
-        // this is the index into the library->padstacks, be careful.
-        pad->m_logical_connexion = padstackNdx++;
-
-        PADSTACK*   padstack = new PADSTACK( aLibrary );
-        aLibrary->AddPadstack( padstack );
+        PADSTACK*   padstack = new PADSTACK( pcb->library );
+        pcb->library->AddPadstack( padstack );
+        
+        // padstacks.size()-1 is the index of the matching padstack in LIBRARY::padstacks
+        pad->m_logical_connexion = pcb->library->padstacks.size()-1;
         
         // paddOfset is the offset of copper shape relative to hole position, 
         // and pad->m_Pos is hole position. All shapes must be shifted by
@@ -331,12 +365,10 @@ static void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads, LIBRARY* aLibra
                 {
                     if( doLayer[layer] )
                     {
-                        CIRCLE*     circle;
                         SHAPE*      shape = new SHAPE( padstack );
-                        
                         padstack->Append( shape );
     
-                        circle = new CIRCLE( shape );
+                        CIRCLE*     circle = new CIRCLE( shape );
                         shape->SetShape( circle );
                         
                         circle->SetLayerId( layerId[layer].c_str() );
@@ -347,7 +379,6 @@ static void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads, LIBRARY* aLibra
                 }
                 
                 snprintf( name, sizeof(name), "Round%dPad_%.6g_mil", coppers, scale(pad->m_Size.x) );
-                
                 name[ sizeof(name)-1 ] = 0;
 
                 // @todo verify that all pad names are unique, there is a chance that 
@@ -536,9 +567,13 @@ static void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads, LIBRARY* aLibra
     int defaultViaSize = aBoard->m_BoardSettings->m_CurrentViaSize;
     if( defaultViaSize )
     {
-        PADSTACK*   padstack = new PADSTACK( aLibrary );
-        aLibrary->AddPadstack( padstack );
-        padstackNdx++;      // remember this index, it is the default via
+        PADSTACK*   padstack = new PADSTACK( pcb->library );
+        pcb->library->AddPadstack( padstack );
+
+        // remember this index, it is the default via and also the start of the 
+        // vias within the padstack list.  Before this index are the pads.
+        // At this index and later are the vias.
+        pcb->library->SetViaStartIndex( pcb->library->padstacks.size()-1 );
         
         SHAPE*      shape = new SHAPE( padstack );
         padstack->Append( shape );
@@ -560,9 +595,8 @@ static void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads, LIBRARY* aLibra
         if( viaSize == defaultViaSize )
             continue;
         
-        PADSTACK*   padstack = new PADSTACK( aLibrary );
-        aLibrary->AddPadstack( padstack );
-        padstackNdx++;      // remember this index, it is the default via
+        PADSTACK*   padstack = new PADSTACK( pcb->library );
+        pcb->library->AddPadstack( padstack );
         
         SHAPE*      shape = new SHAPE( padstack );
         padstack->Append( shape );
@@ -574,10 +608,6 @@ static void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads, LIBRARY* aLibra
 
         snprintf( name, sizeof(name),  "Via_%.6g_mil", scale(viaSize) ); 
         name[ sizeof(name)-1 ] = 0;
-        
-        // @todo verify that all pad names are unique, there is a chance that 
-        // D_PAD::Compare() could say two pads are different, yet they get the same
-        // name here. If so, blend in the padNdx into the name.
         
         padstack->SetPadstackId( name );
     }
@@ -592,7 +622,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
     if( !pcb )
         pcb = SPECCTRA_DB::MakePCB();
-
 
     //  DSN Images (=Kicad MODULES and pads) must be presented from the
     //  top view.  So we temporarily flip any modules which are on the back
@@ -661,8 +690,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 rect->layer_id = "pcb";
                 
                 // opposite corners
-                rect->point0 = ppairs[0].p1;
-                rect->point1 = ppairs[2].p1;
+                rect->SetCorners( ppairs[0].p1, ppairs[2].p1 );
                 
                 boundary->rectangle = rect;
             }
@@ -763,54 +791,60 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
     // but in that case they are WINDOWs within the COPPER_PLANEs.
 
     
-    //-----<build the padstack list here, no output>------------------------
+    //-----<build the initial padstack list>--------------------------------
     {
-        static const KICAD_T scanPADs[] = { TYPEPAD, EOT };
-
         TYPE_COLLECTOR  pads;
-
-        // get all the D_PADs into pads.        
+        static const KICAD_T scanPADs[] = { TYPEPAD, EOT };
+    
+        // get all the D_PADs into 'pads'.        
         pads.Collect( aBoard, scanPADs );
 
-        makePADSTACKs( aBoard, pads, pcb->library );
-
+        makePADSTACKs( aBoard, pads );
         
 #if 0 && defined(DEBUG)
         for( int p=0;  p<pads.GetCount();  ++p )
             pads[p]->Show( 0, std::cout );
 #endif    
     }
-    
-    //-----<via_descriptor>-------------------------------------------------
-    {
-        // Output the vias in the padstack list here, by name
-    }
+
     
     //-----<build the images>----------------------------------------------
     {
-/*        
         static const KICAD_T scanMODULEs[] = { TYPEMODULE, EOT };
-        
         items.Collect( aBoard, scanMODULEs );
-
+        
         for( int m=0;  m<items.GetCount();  ++m )
         {
             MODULE* module = (MODULE*) items[m];
             
-            // collate all the pads, and make a component.
-            for( int p=0;  p<pads.GetCount();  ++p )
+            IMAGE*  image  = makeIMAGE( module );
+
+            if( pcb->library->LookupIMAGE( image ) )
             {
-                D_PAD* pad = (D_PAD*) pads[p];
-                
-                D(pad->Show( 0, std::cout );)
-                
-                // lookup and maybe add this pad to the padstack.
-                wxString padName = lookupPad( pcb->library->padstacks, pad ); 
+                delete image;
             }
         }
-*/        
     }
     
+    
+    //-----<via_descriptor>-------------------------------------------------
+    {
+        // Output the vias in the padstack list here, by name
+        VIA*        vias = pcb->structure->via;
+        PADSTACKS&  padstacks = pcb->library->padstacks;
+        int         viaNdx = pcb->library->via_start_index;
+
+        if( viaNdx != -1 )
+        {
+            for(  ; viaNdx < (int)padstacks.size();  ++viaNdx )
+            {
+                vias->AppendVia( padstacks[viaNdx].padstack_id.c_str() );
+            }
+        }
+    }
+
+    
+    //-----<restore MODULEs>------------------------------------------------
     
     //  DSN Images (=Kicad MODULES and pads) must be presented from the
     //  top view.  Restore those that were flipped.
@@ -822,6 +856,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             module->flag = 0;
         }
     }
+    
 }
 
     

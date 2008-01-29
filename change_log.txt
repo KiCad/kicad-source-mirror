@@ -1,5 +1,4 @@
 
-
 Change Log for Kicad
 Started 2007-June-11
 
@@ -14,7 +13,6 @@ email address.
 	- Added a tool + option in popup menu in track mode (select track width):
 	when creating a track, if activated: if we starts on an existing track,
 	the new track takes the width of the existing track
-
 
 
 2008-Jan-27 UPDATE   Dick Hollenbeck <dick@softplc.com>

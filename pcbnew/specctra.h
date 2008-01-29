@@ -32,6 +32,8 @@
 #include "fctsys.h"
 #include "dsn.h"
 
+class TYPE_COLLECTOR;           // outside the DSN namespace
+
 
 
 /**
@@ -101,9 +103,86 @@ public:
      *   if the wrapee does not need to be wrapped.
      */
     virtual const char* GetQuoteChar( const char* wrapee ) = 0;
-};
- 
 
+    virtual ~OUTPUTFORMATTER() {}
+
+    /**
+     * Function GetQuoteChar
+     * factor may be used by derived classes to perform quote character selection.
+     * @param wrapee A string that might need wrapping on each end.
+     * @param quote_char A single character C string which hold the current quote character.
+     * @return const char* - the quote_char as a single character string, or ""
+     *   if the wrapee does not need to be wrapped.
+     */
+    static const char* GetQuoteChar( const char* wrapee, const char* quote_char ); 
+};
+
+
+/**
+ * Class STRINGFORMATTER
+ * implements OUTPUTFORMATTER to a memory buffer.  After Print()ing the
+ * string is available through GetString()
+*/ 
+class STRINGFORMATTER : public OUTPUTFORMATTER
+{
+    std::vector<char>       buffer;
+    std::string             mystring;
+    
+    int sprint( const char* fmt, ... );
+    int vprint( const char* fmt,  va_list ap );
+
+public:
+
+    /**
+     * Constructor STRINGFORMATTER
+     * reserves space in the buffer
+     */
+    STRINGFORMATTER( int aReserve = 300 ) :
+        buffer( aReserve, '\0' )
+    {
+    }
+
+    
+    /**
+     * Function Clear
+     * clears the buffer and empties the internal string.
+     */
+    void Clear()
+    {
+        mystring.clear();
+    }
+
+    /**
+     * Function StripUseless
+     * removes whitespace, '(', and ')' from the mystring.
+     */
+    void StripUseless();
+
+    /*    
+    const char* c_str()
+    {
+        return mystring.c_str(); 
+    }
+    */
+
+    std::string GetString()
+    {
+        return mystring;
+    }
+    
+    
+    //-----<OUTPUTFORMATTER>------------------------------------------------    
+    int PRINTF_FUNC Print( int nestLevel, const char* fmt, ... ) throw( IOError );
+    const char* GetQuoteChar( const char* wrapee );
+    //-----</OUTPUTFORMATTER>-----------------------------------------------    
+};
+
+
+/**
+ * Class POINT
+ * is a holder for a point in the SPECCTRA DSN coordinate system.  It can also
+ * be used to hold a distance (vector really) from some origin.
+ */
 struct POINT
 {
     double  x;
@@ -136,14 +215,23 @@ struct POINT
     POINT& operator=( const POINT& other )
     {
         x = other.x;
-        if( x == -0.0 )     // correct -0.0 so output looks nice.
-            x = 0.0;
         y = other.y;
-        if( y == -0.0 )
-            y = 0.0;
         return *this;        
     }
 
+    /**
+     * Function FixNegativeZero
+     * will change negative zero to positive zero in the IEEE floating point
+     * storage format.  Basically turns off the sign bit if the mantiss and exponent
+     * would say the value is zero.
+     */
+    void FixNegativeZero()
+    {
+        if( x == -0.0 )
+            x = 0.0;
+        if( y == -0.0 )
+            y = 0.0;
+    }
     
     /**
      * Function Format
@@ -196,10 +284,33 @@ typedef std::vector<PROPERTY>       PROPERTIES;
 class ELEM
 {
     friend class SPECCTRA_DB;
+
+
     
 protected:    
     DSN_T           type;
     ELEM*           parent;
+
+
+    /**
+     * Function makeHash
+     * returns a string which uniquely represents this ELEM amoung other
+     * ELEMs of the same derived class as "this" one.
+     * It is not useable for all derived classes, only those which plan for
+     * it by implementing a FormatContents() function that captures all info
+     * which will be used in the subsequent string compare.  THIS SHOULD 
+     * NORMALLY EXCLUDE THE TYPENAME, AND INSTANCE NAME OR ID AS WELL.
+     */
+    std::string makeHash()
+    {
+        STRINGFORMATTER sf;
+        
+        FormatContents( &sf, 0 );
+        sf.StripUseless();
+        
+        return sf.GetString();
+    }
+
     
 public:
 
@@ -207,7 +318,7 @@ public:
     
     virtual ~ELEM();
     
-    DSN_T   Type() { return type; }
+    DSN_T   Type() const { return type; }
 
     
     /**
@@ -216,7 +327,7 @@ public:
      * to check for section specific overrides.
      * @return DSN_T - one of the allowed values to &lt;unit_descriptor&gt;
      */
-    virtual DSN_T   GetUnits()
+    virtual DSN_T   GetUnits() const
     {
         if( parent )
             return parent->GetUnits();
@@ -324,14 +435,14 @@ public:
         kids.insert( kids.begin()+aIndex, aElem );
     }
     
-    ELEM*   At( int aIndex )
+    ELEM*   At( int aIndex ) const
     {
         // we have varying sized objects and are using polymorphism, so we
         // must return a pointer not a reference.
-        return &kids[aIndex];
+        return (ELEM*) &kids[aIndex];
     }
     
-    ELEM* operator[]( int aIndex )
+    ELEM* operator[]( int aIndex ) const
     {
         return At( aIndex );
     }
@@ -408,7 +519,7 @@ public:
                        LEXER::GetTokenText(units), value ); 
     }
     
-    DSN_T   GetUnits()
+    DSN_T   GetUnits() const
     {
         return units;
     }
@@ -439,7 +550,10 @@ public:
     void SetCorners( const POINT& aPoint0, const POINT& aPoint1 )
     {
         point0 = aPoint0;
+        point0.FixNegativeZero();        
+        
         point1 = aPoint1;
+        point1.FixNegativeZero();        
     }
     
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
@@ -581,7 +695,6 @@ public:
         out->Print( nestLevel, ")\n" );
     }
 };
-
 typedef boost::ptr_vector<LAYER_RULE>   LAYER_RULES;
 
 
@@ -780,15 +893,21 @@ public:
     }
     void SetStart( const POINT& aStart )
     {
-        vertex[0] = aStart;    
+        vertex[0] = aStart;
+        // no -0.0 on the printouts!
+        vertex[0].FixNegativeZero();
     }
     void SetEnd( const POINT& aEnd )
     {
         vertex[1] = aEnd;
+        // no -0.0 on the printouts!
+        vertex[1].FixNegativeZero();
     }
     void SetCenter( const POINT& aCenter )
     {
         vertex[2] = aCenter;
+        // no -0.0 on the printouts!
+        vertex[2].FixNegativeZero();
     }
 };
 
@@ -797,49 +916,53 @@ class WINDOW : public ELEM
 {
     friend class SPECCTRA_DB;
 
-    //----- only one of these is used, like a union -----
+protected:    
+    /*  shape holds one of these
     PATH*           path;           ///< used for both path and polygon
     RECTANGLE*      rectangle;
     CIRCLE*         circle;
     QARC*           qarc;
-    //---------------------------------------------------
-
+    */
+    ELEM*       shape;
+    
 public:
     
-    WINDOW( ELEM* aParent ) :
-        ELEM( T_window, aParent )
+    WINDOW( ELEM* aParent, DSN_T aType = T_window ) :
+        ELEM( aType, aParent )
     {
-        path = 0;
-        rectangle = 0;
-        circle = 0;
-        qarc = 0;
+        shape = 0;
     }
     
     ~WINDOW()
     {
-        delete path;
-        delete rectangle;
-        delete circle;
-        delete qarc;
+        delete shape;
     }
-    
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
-    {
-        // these are mutually exclusive
-        if( rectangle )
-            rectangle->Format( out, nestLevel );
-        
-        else if( path )
-            path->Format( out, nestLevel );
-        
-        else if( circle )
-            circle->Format( out, nestLevel );
 
-        else if( qarc )
-            qarc->Format( out, nestLevel );
+    void SetShape( ELEM* aShape )
+    {
+        delete shape;
+        shape = aShape;
+        
+        if( aShape )
+        {
+            wxASSERT(aShape->Type()==T_rect || aShape->Type()==T_circle 
+                     || aShape->Type()==T_qarc || aShape->Type()==T_path 
+                     || aShape->Type()==T_polygon);
+            
+            aShape->SetParent( this );            
+        }
+    }
+
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        out->Print( nestLevel, "(%s ", LEXER::GetTokenText( Type() ) );
+        
+        if( shape )
+            shape->Format( out, 0 );
+        
+        out->Print( 0, ")\n" );
     }
 };
-
 typedef boost::ptr_vector<WINDOW>   WINDOWS;
 
 
@@ -955,6 +1078,11 @@ public:
     VIA( ELEM* aParent ) :
         ELEM( T_via, aParent )
     {
+    }
+
+    void AppendVia( const char* aViaName )
+    {
+        padstacks.push_back( aViaName );
     }
     
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
@@ -1217,13 +1345,13 @@ public:
                layer_weight );
     }
 };
+typedef boost::ptr_vector<LAYER_PAIR>  LAYER_PAIRS;
 
 
 class LAYER_NOISE_WEIGHT : public ELEM
 {
     friend class SPECCTRA_DB;
     
-    typedef boost::ptr_vector<LAYER_PAIR>  LAYER_PAIRS;
     LAYER_PAIRS     layer_pairs;
     
 public:
@@ -1542,7 +1670,7 @@ public:
             i->Format( out, nestLevel );
     }
     
-    DSN_T   GetUnits()
+    DSN_T   GetUnits() const
     {
         if( unit )
             return unit->GetUnits();
@@ -1693,7 +1821,7 @@ public:
             i->Format( out, nestLevel );
     }
     
-    DSN_T   GetUnits()
+    DSN_T   GetUnits() const
     {
         if( unit )
             return unit->GetUnits();
@@ -1710,7 +1838,7 @@ public:
  * elements contains, i.e. in its "shape" field.  This class also implements
  * the "(outline ...)" element as a dual personality.
  */
-class SHAPE : public ELEM
+class SHAPE : public WINDOW
 {
     friend class SPECCTRA_DB;
 
@@ -1722,38 +1850,18 @@ class SHAPE : public ELEM
         <polygon_descriptor> |
         <path_descriptor> |
         <qarc_descriptor> ]
+    ELEM*           shape;      // inherited from WINDOW
     */
-    ELEM*           shape;
-    
+
     WINDOWS         windows;
     
 public:
     SHAPE( ELEM* aParent, DSN_T aType = T_shape ) :
-        ELEM( aType, aParent )
+        WINDOW( aParent, aType )
     {
         connect = T_on;
-        shape = 0;
-    }
-    ~SHAPE()
-    {
-        delete shape;
     }
 
-    void SetShape( ELEM* aShape )
-    {
-        delete shape;
-        shape = aShape;
-        
-        if( aShape )
-        {
-            wxASSERT(aShape->Type()==T_rect || aShape->Type()==T_circle 
-                     || aShape->Type()==T_qarc || aShape->Type()==T_path 
-                     || aShape->Type()==T_polygon);
-            
-            aShape->SetParent( this );            
-        }
-    }
-    
     void SetConnect( DSN_T aConnect )
     {
         connect = aConnect;
@@ -1808,6 +1916,12 @@ public:
         isRotated = (aRotation != 0.0);
     }
     
+    void SetVertex( const POINT& aPoint )
+    {
+        vertex = aPoint;
+        vertex.FixNegativeZero();        
+    }
+    
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         const char* quote = out->GetQuoteChar( padstack_id.c_str() );
@@ -1829,6 +1943,8 @@ public:
 class IMAGE : public ELEM_HOLDER
 {
     friend class SPECCTRA_DB;
+    
+    std::string     hash;       ///< a hash string used by Compare(), not Format()ed/exported.
     
     std::string     image_id;
     DSN_T           side;
@@ -1864,42 +1980,53 @@ public:
         delete place_rules;
     }
 
-    
+    /**
+     * Function Compare
+     * compares two objects of this type and returns <0, 0, or >0.
+     */
+    static int Compare( IMAGE* lhs, IMAGE* rhs );
+
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         const char* quote = out->GetQuoteChar( image_id.c_str() );
         
         out->Print( nestLevel, "(%s %s%s%s", LEXER::GetTokenText( Type() ),
                                 quote, image_id.c_str(), quote );
+        
+        FormatContents( out, nestLevel+1 );
 
+        out->Print( nestLevel, ")\n" );
+    }
+
+    // this is here for makeHash()
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
         if( side != T_both )
             out->Print( 0, " (side %s)", LEXER::GetTokenText( side ) );
         
         out->Print( 0, "\n");
         
         if( unit )
-            unit->Format( out, nestLevel+1 );
+            unit->Format( out, nestLevel );
 
         // format the kids, which in this class are the shapes
-        ELEM_HOLDER::FormatContents( out, nestLevel+1 );
+        ELEM_HOLDER::FormatContents( out, nestLevel );
     
         for( PINS::iterator i=pins.begin();  i!=pins.end();  ++i )
-            i->Format( out, nestLevel+1 );
+            i->Format( out, nestLevel );
 
         if( rules )
-            rules->Format( out, nestLevel+1 );
+            rules->Format( out, nestLevel );
         
         if( place_rules )
-            place_rules->Format( out, nestLevel+1 );
+            place_rules->Format( out, nestLevel );
 
         for( KEEPOUTS::iterator i=keepouts.begin();  i!=keepouts.end();  ++i )
-            i->Format( out, nestLevel+1 );
-        
-        out->Print( nestLevel, ")\n" );
+            i->Format( out, nestLevel );
     }
     
     
-    DSN_T   GetUnits()
+    DSN_T   GetUnits() const
     {
         if( unit )
             return unit->GetUnits();
@@ -1907,12 +2034,20 @@ public:
         return ELEM::GetUnits();
     }
 };
+typedef boost::ptr_vector<IMAGE>    IMAGES;
 
 
+/**
+ * Class PADSTACK
+ * holds either a via or a pad definition.
+ */
 class PADSTACK : public ELEM_HOLDER
 {
     friend class SPECCTRA_DB;
 
+    std::string     hash;       ///< a hash string used by Compare(), not Format()ed/exported.
+    
+    
     std::string     padstack_id;    
     UNIT_RES*       unit;
 
@@ -1942,6 +2077,13 @@ public:
         delete rules;
     }
 
+    
+    /**
+     * Function Compare
+     * compares two objects of this type and returns <0, 0, or >0.
+     */
+    static int Compare( PADSTACK* lhs, PADSTACK* rhs );
+
     void SetPadstackId( const char* aPadstackId )
     {
         padstack_id = aPadstackId;
@@ -1954,11 +2096,20 @@ public:
         out->Print( nestLevel, "(%s %s%s%s\n", LEXER::GetTokenText( Type() ),
                                 quote, padstack_id.c_str(), quote );
 
+        FormatContents( out, nestLevel+1 );
+        
+        out->Print( nestLevel, ")\n" );
+    }
+
+    
+    // this factored out for use by Compare()
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
         if( unit )
-            unit->Format( out, nestLevel+1 );
+            unit->Format( out, nestLevel );
 
         // format the kids, which in this class are the shapes
-        ELEM_HOLDER::FormatContents( out, nestLevel+1 );
+        ELEM_HOLDER::FormatContents( out, nestLevel );
 
         out->Print( nestLevel+1, "%s", "" );
         
@@ -1982,12 +2133,11 @@ public:
         out->Print( 0, "\n" );
         
         if( rules )
-            rules->Format( out, nestLevel+1 );
-        
-        out->Print( nestLevel, ")\n" );
+            rules->Format( out, nestLevel );
     }
+
     
-    DSN_T   GetUnits()
+    DSN_T   GetUnits() const
     {
         if( unit )
             return unit->GetUnits();
@@ -2007,24 +2157,67 @@ typedef boost::ptr_vector<PADSTACK> PADSTACKS;
 class LIBRARY : public ELEM
 {
     friend class SPECCTRA_DB;
-
-    UNIT_RES*       unit;
     
-    typedef boost::ptr_vector<IMAGE>    IMAGES;
+    UNIT_RES*       unit;
     IMAGES          images;
-
     PADSTACKS       padstacks;
 
+    /// The start of the vias within the padstacks, which trail the pads.
+    /// This field is not Format()ed.
+    int             via_start_index;    
+    
 public:
 
     LIBRARY( ELEM* aParent, DSN_T aType = T_library ) :
         ELEM( aType, aParent )
     {
         unit = 0;
+        via_start_index = -1;       // 0 or greater means there is at least one via 
     }
     ~LIBRARY()
     {
         delete unit;
+    }
+
+    void AddPadstack( PADSTACK* aPadstack )
+    {
+        padstacks.push_back( aPadstack );
+    }
+
+    void SetViaStartIndex( int aIndex )
+    {
+        via_start_index = aIndex;
+    }
+    int GetViaStartIndex()
+    {
+        return via_start_index;
+    }
+
+    int FindIMAGE( IMAGE* aImage )
+    {
+        for( unsigned i=0;  i<images.size();  ++i )
+        {
+            if( 0 == IMAGE::Compare( aImage, &images[i] ) )
+                return (int) i;
+        }
+        return -1;
+    }
+    
+    void AppendIMAGE( IMAGE* aImage )
+    {
+        aImage->SetParent( this );
+        images.push_back( aImage );
+    }
+    
+    bool LookupIMAGE( IMAGE* aImage )
+    {
+        int ndx = FindIMAGE( aImage );
+        if( ndx == -1 )
+        {
+            AppendIMAGE( aImage );
+            return false;
+        }
+        return true;
     }
     
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
@@ -2039,17 +2232,12 @@ public:
             i->Format( out, nestLevel );
     }
     
-    DSN_T   GetUnits()
+    DSN_T   GetUnits() const
     {
         if( unit )
             return unit->GetUnits();
         
         return ELEM::GetUnits();
-    }
-    
-    void AddPadstack( PADSTACK* aPadstack )
-    {
-        padstacks.push_back( aPadstack );
     }
 };
 
@@ -2422,6 +2610,8 @@ public:
 
 class CONNECT : public ELEM
 {
+    // @todo not completed.
+    
 public:
     CONNECT( ELEM* parent ) :
         ELEM( T_connect, parent ) {}
@@ -2695,7 +2885,7 @@ public:
             i->Format( out, nestLevel );
     }
 
-    DSN_T   GetUnits()
+    DSN_T   GetUnits() const
     {
         if( unit )
             return unit->GetUnits();
@@ -2780,7 +2970,7 @@ public:
         out->Print( nestLevel, ")\n" ); 
     }
     
-    DSN_T   GetUnits()
+    DSN_T   GetUnits() const
     {
         if( unit )
             return unit->GetUnits();
@@ -3179,6 +3369,8 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     wxString    filename;
     
     std::string quote_char;
+
+    STRINGFORMATTER sf;
     
     
     /**
@@ -3321,6 +3513,22 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     void doSUPPLY_PIN( SUPPLY_PIN* growth ) throw( IOError );    
 
     
+    /**
+     * Function makeIMAGE
+     * allocates an IMAGE on the heap and creates all the PINs according
+     * to the PADs in the MODULE.
+     */
+    IMAGE* makeIMAGE( MODULE* aModule );
+
+    
+    /**
+     * Function makePADSTACKs
+     * makes all the PADSTACKs, and marks each D_PAD with the index into the 
+     * LIBRARY::padstacks list that it matches.
+     */
+    void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads );
+    
+    
 public:
 
     SPECCTRA_DB()
@@ -3332,7 +3540,7 @@ public:
         quote_char += '"';
     }
 
-    ~SPECCTRA_DB()
+    virtual ~SPECCTRA_DB()
     {
         delete lexer;
         delete pcb;
