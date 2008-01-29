@@ -90,6 +90,28 @@ your path by running it from a command prompt. Linux users then go to next step.
 
 -----------------------------------------------------------------------------
 
+5)  Install zlib [and build it if on windows].
+If on windows, download http://www.zlib.net/zlib123.zip or a newer version.
+Start msys so you have a bash shell. Decide where your zlib build directory
+will be. It must be where you can access it from within the msys environment,
+such as home/<user>. Edit your msys/1.0/etc/fstab file if needed to provide 
+access to this build directory from msys. Unzip the zlib123.zip file into this 
+build directory. Change directories into there, and then:
+    ./configure (CHANGES NEEDED!!!)
+    make
+    make install
+
+
+If linux, use your package manager to install zlib pre-built binaries.
+
+Note (JP Charras):
+	Under Linux, zlib is usually installed.
+	if not found by wxWidget installation, wxWidgets creates an alternate zlib
+	Under Windows, zlib is not installed, so my cmake buld try to use the wxWidgets zlib build.
+	So, under windows kicad build should work without zlib install.
+
+-----------------------------------------------------------------------------
+
 6)  Install CMAKE.
 If windows, download the installation binary for windows from cmake.org.  
 Install that and choose to add cmake to your path during installation.  You
