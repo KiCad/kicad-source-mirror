@@ -616,49 +616,6 @@ public:
 };
 
 
-#if 0
-class PLACE_RULE : public RULE
-{
-    friend class SPECCTRA_DB;
-    
-    DSN_T       object_type;
-    DSN_T       image_type;
-    
-    /*  T_spacing, T_permit_orient, T_permit_side & T_opposite_side are
-        all stored in the kids list.
-    */
-    
-public:
-
-    PLACE_RULE( ELEM* aParent ) :
-        RULE( aParent, T_place_rule )
-    {
-        object_type = T_NONE;
-        image_type  = T_NONE;
-    }
-
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
-    {
-        if( object_type != T_NONE )
-        {
-            if( object_type == T_pcb )
-                out->Print( nestLevel, "(object_type %s", 
-                                         LEXER::GetTokenText( object_type ) );
-            else
-                out->Print( nestLevel, "(object_type image_set %s",
-                                         LEXER::GetTokenText( object_type ) );
-            
-            if( image_type != T_NONE )
-                out->Print( 0, " (image_type %s)", LEXER::GetTokenText( image_type ) );
-            out->Print( 0, ")\n" ); 
-        }
-        
-        RULE::FormatContents( out, nestLevel );
-    }
-};
-#endif
-
-
 class LAYER_RULE : public ELEM
 {
     friend class SPECCTRA_DB;
@@ -1680,6 +1637,10 @@ public:
 };
 
 
+/**
+ * Class PLACE
+ * implements the &lt;placement_reference&gt; in the specctra dsn spec.
+ */
 class PLACE : public ELEM
 {
     friend class SPECCTRA_DB;
@@ -1688,7 +1649,6 @@ class PLACE : public ELEM
     
     DSN_T           side;
     
-    bool            isRotated;
     double          rotation;
     
     bool            hasVertex;
@@ -1718,7 +1678,9 @@ public:
         ELEM( T_place, aParent )
     {
         side = T_front;
-        isRotated = false;
+        
+        rotation = 0.0;
+        
         hasVertex = false;
         
         mirror = T_NONE;
@@ -1740,26 +1702,31 @@ public:
     void SetVertex( const POINT& aVertex )
     {
         vertex = aVertex;
+        vertex.FixNegativeZero();
         hasVertex = true;
     }
 
     void SetRotation( double aRotation )
     {
         rotation = aRotation;
-        isRotated = (aRotation != 0.0);
     }
     
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError );
 };
+typedef boost::ptr_vector<PLACE>    PLACES;
 
 
+/**
+ * Class COMPONENT
+ * implements the &lt;component_descriptor&gt; in the specctra dsn spec.
+ */
 class COMPONENT : public ELEM
 {
     friend class SPECCTRA_DB;
+
+//    std::string     hash;       ///< a hash string used by Compare(), not Format()ed/exported.
     
     std::string     image_id;
-    
-    typedef boost::ptr_vector<PLACE>    PLACES;
     PLACES          places;
     
 public:
@@ -1768,16 +1735,34 @@ public:
     {
     }
     
+    const std::string& GetImageId() const  { return image_id; }
+    void SetImageId( const std::string& aImageId ) 
+    {
+        image_id = aImageId;
+    }
+
+    
+    /**
+     * Function Compare
+     * compares two objects of this type and returns <0, 0, or >0.
+     */
+//    static int Compare( IMAGE* lhs, IMAGE* rhs );
+    
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         const char* quote = out->GetQuoteChar( image_id.c_str() );
         out->Print( nestLevel, "(%s %s%s%s\n", LEXER::GetTokenText( Type() ),
                                 quote, image_id.c_str(), quote );
-
-        for( PLACES::iterator i=places.begin();  i!=places.end();  ++i )
-            i->Format( out, nestLevel+1 );
         
+        FormatContents( out, nestLevel+1 );
+
         out->Print( nestLevel, ")\n" );
+    }
+
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        for( PLACES::iterator i=places.begin();  i!=places.end();  ++i )
+            i->Format( out, nestLevel );
     }
 };
 
@@ -1804,6 +1789,27 @@ public:
     ~PLACEMENT()
     {
         delete unit;
+    }
+
+    /**
+     * Function LookupCOMPONENT
+     * looks up a COMPONENT by name.  If the name is not found, a new
+     * COMPONENT is added to the components container.  At any time the
+     * names in the component container should remain unique.
+     * @return COMPONENT* - an existing or new
+     */
+    COMPONENT* LookupCOMPONENT( const std::string& imageName )
+    {
+        for( unsigned i=0; i<components.size();  ++i )
+        {
+            if( 0 == components[i].GetImageId().compare( imageName ) )
+                return &components[i];
+        }
+        
+        COMPONENT* added = new COMPONENT(this);
+        components.push_back( added );
+        added->SetImageId( imageName );
+        return added;
     }
     
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
@@ -2111,7 +2117,7 @@ public:
         // format the kids, which in this class are the shapes
         ELEM_HOLDER::FormatContents( out, nestLevel );
 
-        out->Print( nestLevel+1, "%s", "" );
+        out->Print( nestLevel, "%s", "" );
         
         // spec for <attach_descriptor> says default is on, so
         // print the off condition to override this.        
@@ -2193,6 +2199,12 @@ public:
         return via_start_index;
     }
 
+    
+    /**
+     * Function FindIMAGE
+     * searches this LIBRARY for an image which matches the argument.
+     * @return int - if found the index into the images list, else -1.
+     */
     int FindIMAGE( IMAGE* aImage )
     {
         for( unsigned i=0;  i<images.size();  ++i )
@@ -2202,22 +2214,35 @@ public:
         }
         return -1;
     }
+
     
+    /**
+     * Function AppendIMAGE
+     * adds the image to the image list.
+     */
     void AppendIMAGE( IMAGE* aImage )
     {
         aImage->SetParent( this );
         images.push_back( aImage );
     }
-    
-    bool LookupIMAGE( IMAGE* aImage )
+
+    /**
+     * Function LookupIMAGE
+     * will add the image only if one exactly like it does not alread exist
+     * in the image list.
+     * @return IMAGE* - the IMAGE which is registered in the LIBRARY that
+     *           matches the argument, and it will be either the argument or
+     *           a previous image which is a duplicate.
+     */
+    IMAGE* LookupIMAGE( IMAGE* aImage )
     {
         int ndx = FindIMAGE( aImage );
         if( ndx == -1 )
         {
             AppendIMAGE( aImage );
-            return false;
+            return aImage;
         }
-        return true;
+        return &images[ndx];
     }
     
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )

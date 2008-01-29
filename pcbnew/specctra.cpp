@@ -57,7 +57,7 @@
 
 // To build the DSN beautifier and unit tester, simply uncomment this and then
 // use CMake's makefile to build target "specctra_test".
-//#define STANDALONE        // define "stand alone, i.e. unit testing"
+#define STANDALONE        // define "stand alone, i.e. unit testing"
 
 
 #if defined(STANDALONE)
@@ -1707,6 +1707,10 @@ void SPECCTRA_DB::doPLACE( PLACE* growth ) throw( IOError )
 
     while( (tok = nextTok()) != T_RIGHT )
     {
+        if( tok != T_LEFT )
+            expecting( T_LEFT );
+        
+        tok = nextTok();
         switch( tok )
         {
         case T_mirror:
@@ -1772,7 +1776,9 @@ void SPECCTRA_DB::doPLACE( PLACE* growth ) throw( IOError )
         case T_pn:
             if( growth->part_number.size() )
                 unexpected( tok );
+            needSYMBOL();
             growth->part_number = lexer->CurText();
+            needRIGHT();
             break;
             
         default:
@@ -3633,6 +3639,22 @@ int IMAGE::Compare( IMAGE* lhs, IMAGE* rhs )
 }
 
 
+//-----<COMPONENT>--------------------------------------------------------
+
+/*
+int COMPONENT::Compare( COMPONENT* lhs, COMPONENT* rhs )
+{
+    if( !lhs->hash.size() )
+        lhs->hash = lhs->makeHash();
+    
+    if( !rhs->hash.size() )
+        rhs->hash = rhs->makeHash();
+
+    int result = lhs->hash.compare( rhs->hash );
+    return result;
+}
+*/
+
 //-----<PARSER>-----------------------------------------------------------
 
 PARSER::PARSER( ELEM* aParent ) :
@@ -3688,8 +3710,7 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     
     const char* quote = out->GetQuoteChar( component_id.c_str() );
 
-    if( place_rules || properties.size() || lock_type!=T_NONE || rules 
-        || region || part_number.size() )
+    if( place_rules || properties.size() || rules || region )
     {
         useMultiLine = true;
         
@@ -3714,17 +3735,19 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     
         out->Print( 0, " %.6g", rotation );
     }
+
+    out->Print( 0, " " );
     
     if( mirror != T_NONE )
-        out->Print( 0, " (mirror %s)", LEXER::GetTokenText( mirror ) );
+        out->Print( 0, "(mirror %s)", LEXER::GetTokenText( mirror ) );
                    
     if( status != T_NONE )
-        out->Print( 0, " (status %s)", LEXER::GetTokenText( status ) );
+        out->Print( 0, "(status %s)", LEXER::GetTokenText( status ) );
     
     if( logical_part.size() )
     {
         quote = out->GetQuoteChar( logical_part.c_str() );
-        out->Print( 0, " (logical_part %s%s%s)", 
+        out->Print( 0, "(logical_part %s%s%s)", 
                    quote, logical_part.c_str(), quote );
     }
 
@@ -3764,7 +3787,20 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
         }
     }
     else
-        out->Print( 0, ")\n" );
+    {
+        if( lock_type != T_NONE )
+            out->Print( 0, "(lock_type %s)", 
+                       LEXER::GetTokenText(lock_type) );
+
+        if( part_number.size() )
+        {
+            const char* quote = out->GetQuoteChar( part_number.c_str() );
+            out->Print( 0, "(PN %s%s%s)",
+                       quote, part_number.c_str(), quote );
+        }
+    }
+            
+    out->Print( 0, ")\n" );
 }
 
 

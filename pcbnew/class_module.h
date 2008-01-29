@@ -180,13 +180,21 @@ public:
 
     /**
      * Function GetReference
-     * @return wxString - the reference designator text.
+     * @return const wxString& - the reference designator text.
      */
     const wxString& GetReference()
     {
         return m_Reference->m_Text;
     }
 
+    /**
+     * Function GetValue
+     * @return const wxString& - the value text.
+     */
+    const wxString& GetValue()
+    {
+        return m_Value->m_Text;
+    }
 
     /**
      * Function Visit

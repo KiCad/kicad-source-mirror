@@ -617,7 +617,8 @@ public:
     /**
      * Function SetSpaceInQuotedTokens
      * changes the setting controlling whether a space in a quoted string is
-     * a terminator
+     * a terminator.
+     * @param val If true, means 
      */
     bool SetSpaceInQuotedTokens( bool val )
     {

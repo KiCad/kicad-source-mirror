@@ -76,11 +76,11 @@ void WinEDA_PcbFrame::ExportToSPECCTRA( wxCommandEvent& event )
         // if an exception is thrown by FromBOARD or ExportPCB(), then 
         // ~SPECCTRA_DB() will close the file.
     } 
-    catch ( IOError ioe )
+    catch( IOError ioe )
     {
         ok = false;
         
-        // display no messages until we flip back the modules below.
+        // copy the error string to safe place, ioe is in this scope only.
         errorText = ioe.errorText;
     }
 
@@ -112,6 +112,11 @@ static inline void swap( POINT_PAIR& pair )
 }
 
 
+/**
+ * Function scale
+ * converts a distance from kicad units to our reported specctra dsn units:
+ * 1/10000 inches (deci-mils) to mils.  So the factor of 10 comes in.
+ */
 static inline double scale( int kicadDist )
 {
     return kicadDist/10.0;
@@ -139,6 +144,7 @@ static POINT mapPt( const wxPoint& pt )
     POINT ret;
     ret.x = mapX( pt.x );
     ret.y = mapY( pt.y );
+    ret.FixNegativeZero();
     return ret;
 }
 
@@ -238,32 +244,55 @@ static QARC* makeArc( const POINT& aStart, const POINT& aEnd,
 
 IMAGE* SPECCTRA_DB::makeIMAGE( MODULE* aModule )
 {
-    TYPE_COLLECTOR  items;
-    
-    static const KICAD_T scanPADs[] = { TYPEPAD, EOT };
-    
     PADSTACKS&  padstacks = pcb->library->padstacks;
 
+    TYPE_COLLECTOR  pads;
+    static const KICAD_T scanPADs[] = { TYPEPAD, EOT };
+    
     // get all the MODULE's pads.        
-    items.Collect( aModule, scanPADs );
+    pads.Collect( aModule, scanPADs );
 
-    IMAGE*  image = new IMAGE( 0 );
+    IMAGE*  image = new IMAGE(0);
     
     image->image_id = CONV_TO_UTF8( aModule->m_LibRef );
         
-    // collate all the pads, and make a component.
-    for( int p=0;  p<items.GetCount();  ++p )
+    // from the pads, and make an IMAGE using collated padstacks.
+    for( int p=0;  p<pads.GetCount();  ++p )
     {
-        D_PAD* pad = (D_PAD*) items[p];
+        D_PAD* pad = (D_PAD*) pads[p];
 
-        PADSTACK*   padstack = &padstacks[pad->m_logical_connexion];
-        
-        PIN*    pin = new PIN(image);
-        image->pins.push_back( pin );
-        
-        pin->padstack_id = padstack->padstack_id;
-        pin->pin_id      = CONV_TO_UTF8( pad->ReturnStringPadName() );
-        pin->SetVertex( mapPt( pad->m_Pos0 ) );
+        // see if this pad is a through hole with no copper on its perimeter
+        if( !pad->IsOnLayer( LAYER_CMP_N ) && !pad->IsOnLayer( COPPER_LAYER_N ) )
+        {
+            if( pad->m_Drill.x!=0 )
+            {
+                KEEPOUT* keepout = new KEEPOUT(image, T_keepout);
+                image->keepouts.push_back( keepout );
+                
+                WINDOW* window = new WINDOW(keepout);
+                keepout->windows.push_back( window );
+                
+                CIRCLE* circle = new CIRCLE(window);
+                window->SetShape( circle );
+                
+                circle->SetDiameter( scale(pad->m_Drill.x) );
+                circle->SetVertex( POINT( mapPt( pad->m_Pos0 ) ) );
+                circle->layer_id = "signal";
+                
+                // ?? the keepout is not affecting the power layers? 
+            }
+        }
+        else
+        {
+            PADSTACK*   padstack = &padstacks[pad->m_logical_connexion];
+            
+            PIN*    pin = new PIN(image);
+            image->pins.push_back( pin );
+            
+            pin->padstack_id = padstack->padstack_id;
+            pin->pin_id      = CONV_TO_UTF8( pad->ReturnStringPadName() );
+            pin->SetVertex( mapPt( pad->m_Pos0 ) );
+        }
     }
     
     return image;
@@ -562,7 +591,8 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
         }
     }
 
-    //  unique pads are now in the padstack.  next we add the via's which may be used.
+    // unique pads are now in the padstack list.  
+    // next we add the via's which may be used.
 
     int defaultViaSize = aBoard->m_BoardSettings->m_CurrentViaSize;
     if( defaultViaSize )
@@ -636,6 +666,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         }
     }
     
+    // a space in a quoted token is NOT a terminator, true establishes this.
+    pcb->parser->space_in_quoted_tokens = true;
     
     //-----<unit_descriptor> & <resolution_descriptor>--------------------
     {    
@@ -648,7 +680,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
     //-----<boundary_descriptor>------------------------------------------
     {
         // get all the DRAWSEGMENTS into 'items', then look for layer == EDGE_N,
-        // and those segments comprize the board's perimeter.
+        // and those segments comprise the board's perimeter.
         static const KICAD_T  scanDRAWSEGMENTS[] = { TYPEDRAWSEGMENT, EOT };
         items.Collect( aBoard, scanDRAWSEGMENTS );
     
@@ -725,8 +757,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             bottomRight.x = aBoard->m_BoundaryBox.GetRight();
             bottomRight.y = aBoard->m_BoundaryBox.GetBottom();
             
-            rect->point0 = mapPt( aBoard->m_BoundaryBox.GetOrigin() );
-            rect->point1 = mapPt( bottomRight );
+            rect->SetCorners( mapPt( aBoard->m_BoundaryBox.GetOrigin() ),
+                              mapPt( bottomRight ) );
             
             boundary->rectangle = rect;
             
@@ -808,7 +840,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
     }
 
     
-    //-----<build the images>----------------------------------------------
+    //-----<build the images and components>---------------------------------
     {
         static const KICAD_T scanMODULEs[] = { TYPEMODULE, EOT };
         items.Collect( aBoard, scanMODULEs );
@@ -819,10 +851,29 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             
             IMAGE*  image  = makeIMAGE( module );
 
-            if( pcb->library->LookupIMAGE( image ) )
+            IMAGE*  registered = pcb->library->LookupIMAGE( image );  
+            if( registered != image )
             {
+                // If our new 'image' is not a unique IMAGE, delete it.
+                // In either case, 'registered' is the one we'll work with henceforth.
                 delete image;
             }
+
+            const std::string& imageId = registered->image_id;
+            
+            COMPONENT* comp = pcb->placement->LookupCOMPONENT( imageId );
+            
+            PLACE* place = new PLACE( comp );
+            comp->places.push_back( place );
+            
+            place->SetRotation( module->m_Orient/10.0 );
+            place->SetVertex( mapPt( module->m_Pos ) );
+            place->component_id = CONV_TO_UTF8( module->GetReference() );
+            place->part_number  = CONV_TO_UTF8( module->GetValue() ); 
+            
+            // module is flipped from bottom side, set side to T_back
+            if( module->flag )      
+                place->side = T_back;
         }
     }
     
@@ -843,6 +894,44 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         }
     }
 
+    
+    //-----<create the nets>------------------------------------------------
+    {
+        NETWORK*    network = pcb->network;
+        static const KICAD_T scanNETs[] = { PCB_EQUIPOT_STRUCT_TYPE, EOT };
+
+        items.Collect( aBoard, scanNETs );
+        
+        PIN_REF emptypin(0);
+        
+        for( int i=0;  i<items.GetCount();  ++i )
+        {
+            EQUIPOT*   kinet = (EQUIPOT*)items[i];
+
+            NET* net = new NET( network );
+            network->nets.push_back( net );
+            
+            net->net_id = CONV_TO_UTF8( kinet->m_Netname );
+            net->net_number = kinet->GetNet();
+            
+            D_PAD**  ppad = kinet->m_PadzoneStart;
+            for(   ; ppad < kinet->m_PadzoneEnd;   ++ppad )
+            {
+                D_PAD* pad = *ppad;
+
+                wxASSERT( pad->Type() == TYPEPAD );
+                
+                // push on an empty one, then fill it via 'pin_ref'
+                net->pins.push_back( emptypin );
+                PIN_REF* pin_ref = &net->pins.back();
+                
+                pin_ref->SetParent( net );
+                pin_ref->component_id = CONV_TO_UTF8( ((MODULE*)pad->m_Parent)->GetReference() );;
+                pin_ref->pin_id = CONV_TO_UTF8( pad->ReturnStringPadName() );               
+            }
+        }
+    }
+    
     
     //-----<restore MODULEs>------------------------------------------------
     
