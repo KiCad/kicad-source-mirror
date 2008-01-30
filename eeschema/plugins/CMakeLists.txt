@@ -1,5 +1,5 @@
 IF(UNIX)
-	ADD_DEFINITIONS(-D__UNIX__)
+    ADD_DEFINITIONS(-D__UNIX__)
 ENDIF(UNIX)
 
 ADD_EXECUTABLE(netlist_form_pads-pcb netlist_form_pads-pcb.cpp)

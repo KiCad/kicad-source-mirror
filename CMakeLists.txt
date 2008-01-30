@@ -46,42 +46,50 @@ SET(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
 
 # Locations for install targets.
 IF(UNIX)
-	IF(APPLE)
-	ELSE(APPLE)
-	# Like all variables, CMAKE_INSTALL_PREFIX can be over-ridden on the command line.
-	SET(CMAKE_INSTALL_PREFIX /usr/local CACHE PATH "")
-	# When used later, "bin" and others with no leading / is relative to CMAKE_INSTALL_PREFIX.
-	SET(KICAD_BIN bin CACHE PATH "Location of KiCad binaries.")
-	SET(KICAD_PLUGINS lib/kicad/plugins CACHE PATH "Location of KiCad plugins.")
-	SET(KICAD_DOCS share/doc/kicad CACHE PATH "Location of KiCad documentation files.")
-	SET(KICAD_DATA share/kicad CACHE PATH "Location of KiCad data files.")
-	SET(KICAD_MODULES ${KICAD_DATA}/modules)
-	SET(KICAD_LIBRARY ${KICAD_DATA}/library)
-	SET(KICAD_INTERNAT ${KICAD_DATA}/internat)
-	SET(KICAD_TEMPLATE ${KICAD_DATA}/template)
-	ENDIF(APPLE)
+    IF(APPLE)
+    ELSE(APPLE)
+        # Like all variables, CMAKE_INSTALL_PREFIX can be over-ridden on the command line.
+        SET(CMAKE_INSTALL_PREFIX /usr/local CACHE PATH "")
+        # When used later, "bin" and others with no leading / is relative to CMAKE_INSTALL_PREFIX.
+        SET(KICAD_BIN bin CACHE PATH "Location of KiCad binaries.")
+        SET(KICAD_PLUGINS lib/kicad/plugins CACHE PATH "Location of KiCad plugins.")
+        SET(KICAD_DOCS share/doc/kicad CACHE PATH "Location of KiCad documentation files.")
+        SET(KICAD_DATA share/kicad CACHE PATH "Location of KiCad data files.")
+        SET(KICAD_MODULES ${KICAD_DATA}/modules)
+        SET(KICAD_LIBRARY ${KICAD_DATA}/library)
+        SET(KICAD_INTERNAT ${KICAD_DATA}/internat)
+        SET(KICAD_TEMPLATE ${KICAD_DATA}/template)
+    ENDIF(APPLE)
 ENDIF(UNIX)
 
 IF(WIN32)
-	# Like all variables, CMAKE_INSTALL_PREFIX can be over-ridden on the command line.
-	SET(CMAKE_INSTALL_PREFIX c:/kicad CACHE PATH "")
-	# When used later, "winexe" and others with no leading / is relative to CMAKE_INSTALL_PREFIX.
-	SET(KICAD_BIN winexe CACHE PATH "Location of KiCad binaries.")
-	SET(KICAD_PLUGINS ${KICAD_BIN}/plugins)
-	SET(KICAD_DOCS help)
-	SET(KICAD_MODULES modules)
-	SET(KICAD_LIBRARY library)
-	SET(KICAD_INTERNAT internat)
-	SET(KICAD_TEMPLATE template)
+    # Like all variables, CMAKE_INSTALL_PREFIX can be over-ridden on the command line.
+    SET(CMAKE_INSTALL_PREFIX c:/kicad CACHE PATH "")
+    # When used later, "winexe" and others with no leading / is relative to CMAKE_INSTALL_PREFIX.
+    SET(KICAD_BIN winexe CACHE PATH "Location of KiCad binaries.")
+    SET(KICAD_PLUGINS ${KICAD_BIN}/plugins)
+    SET(KICAD_DOCS help)
+    SET(KICAD_MODULES modules)
+    SET(KICAD_LIBRARY library)
+    SET(KICAD_INTERNAT internat)
+    SET(KICAD_TEMPLATE template)
 ENDIF(WIN32)
 
 FIND_PACKAGE(OpenGL)
 IF(OPENGL_FOUND)
-	MESSAGE(STATUS "Check for installed OpenGL -- found")
+    MESSAGE(STATUS "Check for installed OpenGL -- found")
 ELSE(OPENGL_FOUND)
-	MESSAGE(STATUS "Check for installed OpenGL -- not found")
-	MESSAGE(FATAL_ERROR "OpenGL was not found - it is required to build KiCad")
+    MESSAGE(STATUS "Check for installed OpenGL -- not found")
+    MESSAGE(FATAL_ERROR "OpenGL was not found - it is required to build KiCad")
 ENDIF(OPENGL_FOUND)
+
+FIND_PACKAGE(Boost)
+IF(Boost_FOUND)
+    MESSAGE(STATUS "Check for installed Boost -- found")
+ELSE(Boost_FOUND)
+    MESSAGE(STATUS "Check for installed Boost -- not found")
+    MESSAGE(FATAL_ERROR "Boost was not found - it is required to build KiCad")
+ENDIF(Boost_FOUND)
 
 # Here you can define what libraries of wxWidgets you need for your
 # application. You can figure out what libraries you need here;
@@ -89,10 +97,10 @@ ENDIF(OPENGL_FOUND)
 SET(wxWidgets_USE_LIBS base core adv gl html net)
 FIND_PACKAGE(wxWidgetsCVS)
 IF(wxWidgets_FOUND)
-	MESSAGE(STATUS "Check for installed wxWidgets -- found")
+    MESSAGE(STATUS "Check for installed wxWidgets -- found")
 ELSE(wxWidgets_FOUND)
-	MESSAGE(STATUS "Check for installed wxWidgets -- not found")
-	MESSAGE(FATAL_ERROR "wxWidgets was not found - it is required to build KiCad")
+    MESSAGE(STATUS "Check for installed wxWidgets -- not found")
+    MESSAGE(FATAL_ERROR "wxWidgets was not found - it is required to build KiCad")
 ENDIF(wxWidgets_FOUND)
 
 # Include wxWidgets macros.
@@ -100,8 +108,8 @@ INCLUDE(${wxWidgets_USE_FILE})
 
 # Include paths.
 INCLUDE_DIRECTORIES(
-	${CMAKE_CURRENT_SOURCE_DIR}/include
-	${CMAKE_CURRENT_SOURCE_DIR}/share)
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/share)
 
 # CMake will look in these dirs for nested 'CMakeLists.txt' files.
 # Binaries.

@@ -1,7 +1,5 @@
 ADD_DEFINITIONS(-DPCBNEW)
 
-FIND_PACKAGE(Boost)
-
 INCLUDE_DIRECTORIES(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Boost_INCLUDE_DIR}
@@ -172,7 +170,7 @@ ADD_EXECUTABLE(dsntest EXCLUDE_FROM_ALL dsn.cpp)
 TARGET_LINK_LIBRARIES(dsntest common ${wxWidgets_LIBRARIES})
 
 # This one gets made only when testing.
-ADD_EXECUTABLE(specctra_test EXCLUDE_FROM_ALL specctra.cpp dsn.cpp )
+ADD_EXECUTABLE(specctra_test EXCLUDE_FROM_ALL specctra.cpp dsn.cpp)
 TARGET_LINK_LIBRARIES(specctra_test common ${wxWidgets_LIBRARIES})
 
 
