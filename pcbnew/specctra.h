@@ -938,13 +938,15 @@ protected:
     RULE*           place_rules;
     
     WINDOWS         windows;
-    
-    //----- only one of these is used, like a union -----
-    PATH*           path;           ///< used for both path and polygon
-    RECTANGLE*      rectangle;
-    CIRCLE*         circle;
-    QARC*           qarc;
-    //---------------------------------------------------
+
+    /*  <shape_descriptor >::=
+        [<rectangle_descriptor> |
+        <circle_descriptor> |
+        <polygon_descriptor> |
+        <path_descriptor> |
+        <qarc_descriptor> ]
+    */
+    ELEM*           shape;
     
 public:
 
@@ -958,11 +960,7 @@ public:
     {
         rules = 0;
         place_rules = 0;
-
-        path = 0;
-        rectangle = 0;
-        circle = 0;
-        qarc = 0;
+        shape = 0;
         
         sequence_number = -1;
     }
@@ -971,13 +969,24 @@ public:
     {
         delete rules;
         delete place_rules;
-
-        delete path;
-        delete rectangle;
-        delete circle;
-        delete qarc;
+        delete shape;
     }
     
+    void SetShape( ELEM* aShape )
+    {
+        delete shape;
+        shape = aShape;
+        
+        if( aShape )
+        {
+            wxASSERT(aShape->Type()==T_rect || aShape->Type()==T_circle 
+                     || aShape->Type()==T_qarc || aShape->Type()==T_path 
+                     || aShape->Type()==T_polygon);
+            
+            aShape->SetParent( this );            
+        }
+    }
+
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
@@ -991,19 +1000,9 @@ public:
         if( sequence_number != -1 )
             out->Print( nestLevel+1, "(sequence_number %d)\n", sequence_number );
         
-        // these are mutually exclusive
-        if( rectangle )
-            rectangle->Format( out, nestLevel+1 );
+        if( shape )
+            shape->Format( out, nestLevel+1 );
         
-        else if( path )
-            path->Format( out, nestLevel+1 );
-        
-        else if( circle )
-            circle->Format( out, nestLevel+1 );
-
-        else if( qarc )
-            qarc->Format( out, nestLevel+1 );
-
         if( rules )
             rules->Format( out, nestLevel+1 );
         
@@ -2295,9 +2294,19 @@ public:
         // only print the newline if there is a nest level, and make
         // the quotes unconditional on this one.
         const char* newline = nestLevel ? "\n" : "";
-        
+
+#if 0        
         return out->Print( nestLevel, "\"%s\"-\"%s\"%s", 
                 component_id.c_str(), pin_id.c_str(), newline );
+#else
+        const char* cquote = out->GetQuoteChar( component_id.c_str() );
+        const char* pquote = out->GetQuoteChar( pin_id.c_str() );
+        
+        return out->Print( nestLevel, "%s%s%s-%s%s%s%s", 
+                cquote, component_id.c_str(), cquote, 
+                pquote, pin_id.c_str(), pquote, 
+                newline );
+#endif
     }
 };
 typedef std::vector<PIN_REF>   PIN_REFS;
@@ -3588,7 +3597,6 @@ public:
      */
     static PCB* MakePCB();
 
-    
     /**
      * Function SetPCB
      * deletes any existing PCB and replaces it with the given one.
@@ -3598,7 +3606,13 @@ public:
         delete pcb;
         pcb = aPcb;
     }
+    PCB*  GetPCB()  { return pcb; }
 
+    void SetFILE( FILE* aFile ) 
+    {
+        fp = aFile;
+    }
+    
     /**
      * Function SetSESSION
      * deletes any existing SESSION and replaces it with the given one.

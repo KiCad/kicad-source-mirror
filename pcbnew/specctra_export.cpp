@@ -264,16 +264,13 @@ IMAGE* SPECCTRA_DB::makeIMAGE( MODULE* aModule )
         // see if this pad is a through hole with no copper on its perimeter
         if( !pad->IsOnLayer( LAYER_CMP_N ) && !pad->IsOnLayer( COPPER_LAYER_N ) )
         {
-            if( pad->m_Drill.x!=0 )
+            if( pad->m_Drill.x != 0 )
             {
                 KEEPOUT* keepout = new KEEPOUT(image, T_keepout);
                 image->keepouts.push_back( keepout );
                 
-                WINDOW* window = new WINDOW(keepout);
-                keepout->windows.push_back( window );
-                
-                CIRCLE* circle = new CIRCLE(window);
-                window->SetShape( circle );
+                CIRCLE* circle = new CIRCLE(keepout);
+                keepout->SetShape( circle );
                 
                 circle->SetDiameter( scale(pad->m_Drill.x) );
                 circle->SetVertex( POINT( mapPt( pad->m_Pos0 ) ) );
@@ -801,7 +798,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             COPPER_PLANE*   plane = new COPPER_PLANE( pcb->structure );
             PATH*           polygon = new PATH( plane, T_polygon );
 
-            plane->path = polygon;
+            plane->SetShape( polygon );
             plane->name = CONV_TO_UTF8( item->m_Netname );
             
             polygon->layer_id = CONV_TO_UTF8( layerName );
@@ -869,7 +866,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             place->SetRotation( module->m_Orient/10.0 );
             place->SetVertex( mapPt( module->m_Pos ) );
             place->component_id = CONV_TO_UTF8( module->GetReference() );
-            place->part_number  = CONV_TO_UTF8( module->GetValue() ); 
+            
+            /* not supported by freerouting.com yet.
+            place->part_number  = CONV_TO_UTF8( module->GetValue() );
+            */
             
             // module is flipped from bottom side, set side to T_back
             if( module->flag )      
@@ -906,7 +906,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         
         for( int i=0;  i<items.GetCount();  ++i )
         {
-            EQUIPOT*   kinet = (EQUIPOT*)items[i];
+            EQUIPOT*   kinet = (EQUIPOT*) items[i];
+            
+            if( kinet->GetNet() == 0 )
+                continue;
 
             NET* net = new NET( network );
             network->nets.push_back( net );
@@ -931,7 +934,23 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             }
         }
     }
-    
+
+
+    //-----<create the wires from tracks>-----------------------------------
+    {
+        // export all of them for now, later we'll decide what controls we need
+        // on this.
+        static KICAD_T scanTRACKs[] = { TYPETRACK, TYPEVIA, EOT };
+        
+        items.Collect( aBoard, scanTRACKs );
+        
+        for( int i=0;  i<items.GetCount();  ++i )
+        {
+            TRACK*  torv  = (TRACK*) items[i];  // torv == track or via
+            
+            
+        }
+    }
     
     //-----<restore MODULEs>------------------------------------------------
     

@@ -774,7 +774,7 @@ void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth ) throw( IOError )
 {
     DSN_T   tok = nextTok();
     
-    if( tok==T_SYMBOL || tok==T_STRING )
+    if( isSymbol(tok) )
     {
         growth->name = lexer->CurText();
         tok = nextTok();
@@ -789,7 +789,6 @@ void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth ) throw( IOError )
             expecting( T_LEFT );
         
         tok = nextTok();
-        
         switch( tok )
         {
         case T_sequence_number:
@@ -814,24 +813,32 @@ void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth ) throw( IOError )
             break;
             
         case T_rect:
-            growth->rectangle = new RECTANGLE( growth );
-            doRECTANGLE( growth->rectangle );
+            if( growth->shape )
+                unexpected( tok );
+            growth->shape = new RECTANGLE( growth );
+            doRECTANGLE( (RECTANGLE*) growth->shape );
             break;
             
         case T_circle:
-            growth->circle = new CIRCLE( growth );
-            doCIRCLE( growth->circle );
+            if( growth->shape )
+                unexpected( tok );
+            growth->shape = new CIRCLE( growth );
+            doCIRCLE( (CIRCLE*) growth->shape );
             break;
             
         case T_path:
         case T_polygon:
-            growth->path = new PATH( growth, tok );
-            doPATH( growth->path );
+            if( growth->shape )
+                unexpected( tok );
+            growth->shape = new PATH( growth, tok );
+            doPATH( (PATH*) growth->shape );
             break;
             
         case T_qarc:
-            growth->qarc = new QARC( growth );
-            doQARC( growth->qarc );
+            if( growth->shape )
+                unexpected( tok );
+            growth->shape = new QARC( growth );
+            doQARC( (QARC*) growth->shape );
             break;
             
         case T_window:
@@ -3699,8 +3706,9 @@ void PARSER::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOErro
         
     if( !via_rotate_first )
         out->Print( nestLevel, "(via_rotate_first off)\n" );
-    
-    out->Print( nestLevel, "(case_sensitive %s)\n", case_sensitive ? "on" : "off" );
+
+    if( case_sensitive )    
+        out->Print( nestLevel, "(case_sensitive %s)\n", case_sensitive ? "on" : "off" );
 }
 
 
@@ -3736,19 +3744,26 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
         out->Print( 0, " %.6g", rotation );
     }
 
-    out->Print( 0, " " );
+    const char* space = " ";    // one space, as c string.
     
     if( mirror != T_NONE )
-        out->Print( 0, "(mirror %s)", LEXER::GetTokenText( mirror ) );
+    {
+        out->Print( 0, "%s(mirror %s)", space, LEXER::GetTokenText( mirror ) );
+        space = "";
+    }
                    
     if( status != T_NONE )
-        out->Print( 0, "(status %s)", LEXER::GetTokenText( status ) );
+    {
+        out->Print( 0, "%s(status %s)", space, LEXER::GetTokenText( status ) );
+        space = "";
+    }
     
     if( logical_part.size() )
     {
         quote = out->GetQuoteChar( logical_part.c_str() );
-        out->Print( 0, "(logical_part %s%s%s)", 
+        out->Print( 0, "%s(logical_part %s%s%s)", space, 
                    quote, logical_part.c_str(), quote );
+        space = "";
     }
 
     if( useMultiLine )
@@ -3789,13 +3804,16 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     else
     {
         if( lock_type != T_NONE )
-            out->Print( 0, "(lock_type %s)", 
+        {
+            out->Print( 0, "%s(lock_type %s)", space, 
                        LEXER::GetTokenText(lock_type) );
+            space = "";
+        }
 
         if( part_number.size() )
         {
             const char* quote = out->GetQuoteChar( part_number.c_str() );
-            out->Print( 0, "(PN %s%s%s)",
+            out->Print( 0, "%s(PN %s%s%s)", space,
                        quote, part_number.c_str(), quote );
         }
     }
@@ -3823,6 +3841,11 @@ int main( int argc, char** argv )
 
     SPECCTRA_DB     db;
     bool            failed = false;
+
+    if( argc == 2 )
+    {
+        filename = CONV_FROM_UTF8( argv[1] );
+    }
     
     try 
     {
@@ -3831,18 +3854,22 @@ int main( int argc, char** argv )
     } 
     catch( IOError ioe )
     {
-        printf( "%s\n", CONV_TO_UTF8(ioe.errorText) );
+        fprintf( stderr, "%s\n", CONV_TO_UTF8(ioe.errorText) );
         failed = true;
     }
 
     if( !failed )    
-        printf("loaded OK\n");
-
+        fprintf( stderr, "loaded OK\n" );
 
     // export what we read in, making this test program basically a beautifier
 //    db.ExportSESSION( wxT("/tmp/export.ses") );
-    db.ExportPCB( wxT("/tmp/export.dsn") ); 
-    
+//    db.ExportPCB( wxT("/tmp/export.dsn") );
+
+    DSN::PCB* pcb = db.GetPCB();
+
+    // hose the beautified DSN file to stdout.
+    db.SetFILE( stdout );    
+    pcb->Format( &db, 0 );
 }
 
 #endif
