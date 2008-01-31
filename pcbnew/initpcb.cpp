@@ -145,8 +145,6 @@ bool WinEDA_BasePcbFrame::Clear_Pcb( bool query )
     m_Pcb->m_Zone = NULL;
     m_Pcb->m_NbSegmZone = 0;
     
-    DelLimitesZone( NULL, FALSE );
-
 	m_Pcb->DeleteMARKERs();
 	m_Pcb->DeleteZONEOutlines();
 
@@ -222,7 +220,6 @@ void WinEDA_PcbFrame::Erase_Zones( bool query )
         m_Pcb->m_NbSegmZone = 0;
     }
     
-    DelLimitesZone( NULL, FALSE );
 	m_Pcb->DeleteZONEOutlines();
 
     GetScreen()->SetModify();

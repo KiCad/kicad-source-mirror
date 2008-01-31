@@ -65,8 +65,7 @@ ZONE_CONTAINER* BOARD::InsertArea( int netcode, int iarea, int layer, int x, int
     else
         m_ZoneDescriptorList.push_back( new_area );
 
-    new_area->m_Poly->Start( layer, 1, 10 * NM_PER_MIL, x, y,
-                             hatch );
+    new_area->m_Poly->Start( layer, x, y, hatch );
     return new_area;
 }
 
@@ -744,7 +743,7 @@ int BOARD::CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combi
                 if( i==0 )
                 {
                     area_ref->m_Poly->Start( area_ref->GetLayer(
-                                                ), 0, 0, x, y, area_ref->m_Poly->GetHatchStyle() );
+                                                ), x, y, area_ref->m_Poly->GetHatchStyle() );
                 }
                 else
                     area_ref->m_Poly->AppendCorner( x, y );
@@ -997,17 +996,39 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
 
 /**
  * Function doEdgeZoneDrc
- * tests the current EDGE_ZONE segment and returns the result and displays the error
- * in the status panel only if one exists.
+ * tests a segment in ZONE_CONTAINER * aArea:
  *      Test Edge inside other areas
  *      Test Edge too close other areas
- * @param aEdge The current segment to test.
+ * @param aArea The current area.
+ * @param aCornerIndex The first corner of the segment to test.
  * @return bool - false if DRC error  or true if OK
  */
 
-bool DRC::doEdgeZoneDrc( const EDGE_ZONE* aEdge )
+bool DRC::doEdgeZoneDrc( ZONE_CONTAINER * aArea, int aCornerIndex )
 {
     wxString str;
+	
+	wxPoint start = aArea->GetCornerPosition(aCornerIndex);
+	wxPoint end;
+	// Search the end point of the edge starting at aCornerIndex
+	if( aArea->m_Poly->corner[aCornerIndex].end_contour == FALSE &&
+		aCornerIndex < (aArea->GetNumCorners() - 1) )
+	{
+		end = aArea->GetCornerPosition(aCornerIndex+1);
+	}
+	else	// aCornerIndex is the last corner of an outline.
+			// the corresponding end point of the segment is the first corner of the outline
+	{
+		int ii = aCornerIndex-1;
+		end = aArea->GetCornerPosition(ii);
+		while ( ii >= 0 )
+		{
+			if ( aArea->m_Poly->corner[ii].end_contour )
+				break;
+			end = aArea->GetCornerPosition(ii);
+			ii--;
+		}
+	}
 
     // iterate through all areas
     for( int ia2 = 0; ia2 < m_pcb->GetAreaCount(); ia2++ )
@@ -1015,20 +1036,20 @@ bool DRC::doEdgeZoneDrc( const EDGE_ZONE* aEdge )
         ZONE_CONTAINER* Area_To_Test = m_pcb->GetArea( ia2 );
 
         // test for same layer
-        if( Area_To_Test->GetLayer() != aEdge->GetLayer() )
+        if( Area_To_Test->GetLayer() != aArea->GetLayer() )
             continue;
 
         // Test for same net
-        if( (aEdge->GetNet() == Area_To_Test->GetNet()) && (aEdge->GetNet() > 0) )
+        if( (aArea->GetNet() == Area_To_Test->GetNet()) && (aArea->GetNet() > 0) )
             continue;
 
         // test for ending line inside Area_To_Test
-        int x = aEdge->m_End.x;
-        int y = aEdge->m_End.y;
+        int x = end.x;
+        int y = end.y;
         if( Area_To_Test->m_Poly->TestPointInside( x, y ) )
         {
             // COPPERAREA_COPPERAREA error: corner inside copper area
-            m_currentMarker = fillMarker( aEdge, wxPoint( x, y ),
+            m_currentMarker = fillMarker( aArea, wxPoint( x, y ),
                                           COPPERAREA_INSIDE_COPPERAREA,
                                           m_currentMarker );
             return false;
@@ -1036,10 +1057,10 @@ bool DRC::doEdgeZoneDrc( const EDGE_ZONE* aEdge )
 
         // now test spacing between areas
         int astyle = CPolyLine::STRAIGHT;
-        int ax1    = aEdge->m_Start.x;
-        int ay1    = aEdge->m_Start.y;
-        int ax2    = aEdge->m_End.x;
-        int ay2    = aEdge->m_End.y;
+        int ax1    = start.x;
+        int ay1    = start.y;
+        int ax2    = end.x;
+        int ay2    = end.y;
         for( int icont2 = 0; icont2 < Area_To_Test->m_Poly->GetNumContours(); icont2++ )
         {
             int ic_start2 = Area_To_Test->m_Poly->GetContourStart( icont2 );
@@ -1070,7 +1091,7 @@ bool DRC::doEdgeZoneDrc( const EDGE_ZONE* aEdge )
                 if( d < g_DesignSettings.m_ZoneClearence )
                 {
                     // COPPERAREA_COPPERAREA error : edge intersect or too close
-                    m_currentMarker = fillMarker( aEdge, wxPoint( x, y ),
+                    m_currentMarker = fillMarker( aArea, wxPoint( x, y ),
                                                   COPPERAREA_CLOSE_TO_COPPERAREA,
                                                   m_currentMarker );
                    return false;

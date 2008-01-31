@@ -22,7 +22,7 @@ using namespace std;
 CPolyLine::CPolyLine()
 { 
 	m_HatchStyle = 0;
-	m_sel_box = 0;
+	m_Width = 0;
 	utility = 0;
 	m_gpc_poly = new gpc_polygon;
 	m_gpc_poly->num_contours = 0;
@@ -72,7 +72,7 @@ int CPolyLine::NormalizeWithGpc( std::vector<CPolyLine*> * pa, bool bRetainArcs 
 					int x = to_int(((m_gpc_poly->contour)[ic].vertex)[i].x);
 					int y = to_int(((m_gpc_poly->contour)[ic].vertex)[i].y);
 					if( i==0 )
-						Start( m_layer, m_Width, m_sel_box, x, y, m_HatchStyle );
+						Start( m_layer, x, y, m_HatchStyle );
 					else
 						AppendCorner( x, y, STRAIGHT, FALSE );
 				}
@@ -89,7 +89,7 @@ int CPolyLine::NormalizeWithGpc( std::vector<CPolyLine*> * pa, bool bRetainArcs 
 					int x = to_int(((m_gpc_poly->contour)[ic].vertex)[i].x);
 					int y = to_int(((m_gpc_poly->contour)[ic].vertex)[i].y);
 					if( i==0 )
-						poly->Start( m_layer, m_Width, m_sel_box, x, y, m_HatchStyle );
+						poly->Start( m_layer, x, y, m_HatchStyle );
 					else
 						poly->AppendCorner( x, y, STRAIGHT, FALSE );
 				}
@@ -199,10 +199,7 @@ void CPolyLine::ClipPhpPolygon( int php_op, CPolyLine * poly )
 		do
 		{
 			vertex * v = p->getFirst();
-			Start( m_layer, m_Width, m_sel_box,
-				to_int(v->X()*DENOM),
-				to_int(v->Y()*DENOM),
-				m_HatchStyle );
+			Start( m_layer, to_int(v->X()*DENOM), to_int(v->Y()*DENOM), m_HatchStyle );
 			do
 			{
 				vertex * n = v->Next();
@@ -606,12 +603,9 @@ int CPolyLine::RestoreArcs( std::vector<CArc> * arc_array, std::vector<CPolyLine
 //	id.i = index to area
 //	ptr = pointer to net
 //
-void CPolyLine::Start( int layer, int w, int sel_box, int x, int y, 
-					  int hatch )
+void CPolyLine::Start( int layer, int x, int y, int hatch )
 {
 	m_layer = layer;
-	m_Width = w;
-	m_sel_box = sel_box;
 	m_HatchStyle = hatch;
 	CPolyPt poly_pt( x, y );
 	poly_pt.end_contour = FALSE;
@@ -1002,7 +996,7 @@ void CPolyLine::Hatch()
 
 	int layer = m_layer;
 	
-//	if( /*m_dlist && */GetClosed() )
+	if( GetClosed() )	// If not closed, the poly is beeing created and not finalised. Not not hatch
 	{
 		enum {
 			MAXPTS = 100,
@@ -1082,7 +1076,7 @@ void CPolyLine::Hatch()
 				{
 					double x, y, x2, y2;
 					int ok;
-					if( corner[ic].end_contour )
+					if( corner[ic].end_contour || (ic == (int)(corner.size()-1)) )
 					{
 						ok = FindLineSegmentIntersection( a, slope, 
 								corner[ic].x, corner[ic].y,
@@ -1396,7 +1390,7 @@ CPolyLine * CPolyLine::MakePolylineForPad( int type, int x, int y, int w, int l,
 	}
 	if( type == PAD_ROUND )
 	{
-		poly->Start( 0, 0, 0, x-dx, y, 0 );
+		poly->Start( 0, x-dx, y, 0 );
 		poly->AppendCorner( x, y+dy, ARC_CW, 0 );
 		poly->AppendCorner( x+dx, y, ARC_CW, 0 );
 		poly->AppendCorner( x, y-dy, ARC_CW, 0 );

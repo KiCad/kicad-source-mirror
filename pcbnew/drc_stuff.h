@@ -373,7 +373,7 @@ private:
      * @param fillMe A MARKER* which is to be filled in, or NULL if one is to
      *         first be allocated, then filled.
      */
-	MARKER* fillMarker( const EDGE_ZONE * aEdge, const wxPoint & aPos, int aErrorCode, MARKER* fillMe );
+	MARKER* fillMarker( const ZONE_CONTAINER * aArea, const wxPoint & aPos, int aErrorCode, MARKER* fillMe );
 
     //-----<categorical group tests>-----------------------------------------
 
@@ -413,14 +413,15 @@ private:
 
 	/**
 	 * Function doEdgeZoneDrc
-	 * tests the current EDGE_ZONE segment:
+	 * tests a segment in ZONE_CONTAINER * aArea:
 	 *      Test Edge inside other areas
 	 *      Test Edge too close other areas
-	 * @param aEdge The current segment to test.
+	 * @param aArea The current area.
+	 * @param aCornerIndex The first corner of the segment to test.
 	 * @return bool - false if DRC error  or true if OK
 	 */
 
-	bool doEdgeZoneDrc( const EDGE_ZONE* aEdge );
+	bool doEdgeZoneDrc( ZONE_CONTAINER * aArea, int aCornerIndex );
 
     //-----<single tests>----------------------------------------------
 
@@ -496,14 +497,15 @@ public:
 
 	/**
 	 * Function Drc
-	 * tests the current EDGE_ZONE segment and returns the result and displays the error
+	 * tests the outline segment starting at CornerIndex and returns the result and displays the error
 	 * in the status panel only if one exists.
 	 *      Test Edge inside other areas
 	 *      Test Edge too close other areas
-	 * @param aEdge The current segment to test.
+	 * @param aEdge The areaparent which contains the corner.
+	 * @param CornerIndex The starting point of the segment to test.
 	 * @return int - BAD_DRC (1) if DRC error  or OK_DRC (0) if OK
 	 */
-	int Drc( const EDGE_ZONE*  aEdge );
+	int Drc( ZONE_CONTAINER * aArea, int CornerIndex  );
 
     /**
      * Function DrcBlind

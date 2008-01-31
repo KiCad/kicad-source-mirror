@@ -73,6 +73,19 @@ public:
     void    Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                   const wxPoint& offset, int draw_mode );
 
+
+    /**
+     * Function DrawWhileCreateOutline
+     * Draws the zone outline when ir is created.
+	 * The moving edges are in XOR graphic mode, old segment in draw_mode graphic mode (usually GR_OR)
+	 * The closing edge has its owm shape
+     * @param panel = current Draw Panel
+     * @param DC = current Device Context
+     * @param draw_mode = draw mode: OR, XOR ..
+     */
+    void    DrawWhileCreateOutline( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode = GR_OR );
+
+
     int GetNet( void ) const
     {
         return m_NetCode;
@@ -158,73 +171,36 @@ public:
     {
         return wxT( "ZONE_CONTAINER" );
     }
+	
+	/** Acces to m_Poly parameters
+	*/
+	
+	int GetNumCorners(void)
+	{
+		return m_Poly->GetNumCorners();
+	}
+	
+	void RemoveAllContours(void)
+	{
+		m_Poly->RemoveAllContours();
+	}
+	
+	wxPoint GetCornerPosition(int aCornerIndex)
+	{
+		return wxPoint(m_Poly->GetX(aCornerIndex), m_Poly->GetY(aCornerIndex));
+	}
+	
+	void SetCornerPosition(int aCornerIndex, wxPoint new_pos)
+	{
+		m_Poly->SetX(aCornerIndex, new_pos.x);
+		m_Poly->SetY(aCornerIndex, new_pos.y);
+	}
+	
+	void AppendCorner( wxPoint position )
+	{
+		m_Poly->AppendCorner( position.x, position.y );
+	}
 };
 
-
-/*******************/
-/* class EDGE_ZONE */
-/*******************/
-
-/* Classe used temporary to create a zone outline.
- *
- * TODO: remove this class and use only the ZONE_CONTAINER::m_Poly
- * to create outlines
- */
-class EDGE_ZONE : public DRAWSEGMENT
-{
-private:
-    int m_NetCode;
-
-public:
-    EDGE_ZONE( BOARD * StructFather );
-
-    ~EDGE_ZONE();
-
-    EDGE_ZONE* Next()
-    {
-        return (EDGE_ZONE*) Pnext;
-    }
-
-    EDGE_ZONE* Back()
-    {
-        return (EDGE_ZONE*) Pback;
-    }
-
-    int GetNet( void ) const
-    {
-        return m_NetCode;
-    }
-    void SetNet( int anet_code )
-    {
-        m_NetCode = anet_code;
-    }
-
-    /**
-     * Function Display_Infos
-     * has knowledge about the frame and how and where to put status information
-     * about this object into the frame's message panel.
-     * Is virtual from EDA_BaseStruct.
-     * @param frame A WinEDA_BasePcbFrame in which to print status information.
-     */
-    void    Display_Infos( WinEDA_DrawFrame* frame );
-
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
-    bool    Save( FILE* aFile ) const;
-    
-    /**
-     * Function GetClass
-     * returns the class name.
-     * @return wxString
-     */
-    wxString GetClass() const
-    {
-        return wxT( "EDGE_ZONE" );
-    }
-};
 
 #endif  // #ifndef CLASS_ZONE_H

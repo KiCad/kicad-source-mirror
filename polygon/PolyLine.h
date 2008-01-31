@@ -69,8 +69,7 @@ public:
 	~CPolyLine();
 
 	// functions for modifying polyline
-	void Start( int layer, int w, int sel_box, int x, int y,
-		int hatch );
+	void Start( int layer, int x, int y, int hatch );
 	void AppendCorner( int x, int y, int style = STRAIGHT, bool bDraw=TRUE );
 	void InsertCorner( int ic, int x, int y );
 	void DeleteCorner( int ic, bool bDraw=TRUE );
@@ -138,8 +137,7 @@ public:
 
 private:
 	int m_layer;	// layer to draw on
-	int m_Width;		// line width
-	int m_sel_box;	// corner selection box width/2
+	int m_Width;	// lines width when drawing. Provided but not really used
 	int utility;
 public:
 	std::vector <CPolyPt> corner;	// array of points for corners

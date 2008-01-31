@@ -35,7 +35,6 @@ class MODULE;
 class TRACK;
 class SEGZONE;
 class SEGVIA;
-class EDGE_ZONE;
 class D_PAD;
 class TEXTE_MODULE;
 class MIREPCB;
@@ -268,13 +267,6 @@ public:
     void                        Block_Duplicate( wxDC* DC );
 
 
-    /**
-     * Function DelLimitesZone
-     * deletes the limits of a zone.
-     * @param DC A wxDC to draw onto.
-     * @param Redraw If true, means redraw the pcb without the zone limits
-     */
-    void                        DelLimitesZone( wxDC* DC, bool Redraw );
 
     // layerhandling:
     // (See pcbnew/sel_layer.cpp for description of why null_layer parameter is provided)
@@ -487,14 +479,21 @@ public:
      */
     void                Delete_Zone_Fill( wxDC* DC, SEGZONE* Track, long aTimestamp = 0 );
 
-    EDGE_ZONE*          Del_LastSegmEdgeZone( wxDC* DC );
+
+
+	/** Function Delete_LastCreatedCorner
+	 * Used only while creating a new zone outline
+	 * Remove and delete the current outline segment in progress
+	 * @return 0 if no corner in list, or corner number
+	 */
+	int Delete_LastCreatedCorner( wxDC* DC);
 
     /**
      * Function Begin_Zone
      * initiates a zone edge creation process,
      * or terminates the current zone edge and creates a new zone edge stub
      */
-    EDGE_ZONE*          Begin_Zone( wxDC* DC );
+    int          Begin_Zone( wxDC* DC );
 
     /**
      * Function End_Zone

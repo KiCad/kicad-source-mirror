@@ -196,7 +196,12 @@ int ZONE_CONTAINER::Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose )
     if( cells_count == 0 )
     {
         if( verbose )
-            DisplayError( frame, _( "No pads or starting point found to fill this zone outline" ) );
+		{
+			msg = _( "No pads or starting point found to fill this zone outline" );
+			msg << wxT("\n");
+			msg << MenuText( frame->m_Pcb );
+            DisplayError( frame, msg );
+		}
         error_level = 2;
         goto end_of_zone_fill;
     }

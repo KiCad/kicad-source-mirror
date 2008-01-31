@@ -39,7 +39,10 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             switch( DrawStruct->Type() )
             {
             case TYPEZONE_CONTAINER:
-                End_Move_Zone_Corner_Or_Outlines( DC, (ZONE_CONTAINER *) DrawStruct );
+				if ( (DrawStruct->m_Flags & IS_NEW) )
+					Begin_Zone( DC );
+                else
+					End_Move_Zone_Corner_Or_Outlines( DC, (ZONE_CONTAINER *) DrawStruct );
                 exit = true;
                 break;
 
@@ -220,13 +223,19 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     case ID_PCB_ZONES_BUTT:
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
-            GetScreen()->SetCurItem( DrawStruct = Begin_Zone( DC ) );
+			if ( Begin_Zone( DC ) )
+			{
+				DrawStruct = m_Pcb->m_CurrentZoneContour;
+				GetScreen()->SetCurItem( DrawStruct );
+			}
         }
         else if( DrawStruct
-                && (DrawStruct->Type() == TYPEEDGEZONE)
+                && (DrawStruct->Type() == TYPEZONE_CONTAINER)
                 && (DrawStruct->m_Flags & IS_NEW) )
         {
-            GetScreen()->SetCurItem( DrawStruct = Begin_Zone( DC ) );
+			Begin_Zone( DC );
+			DrawStruct = m_Pcb->m_CurrentZoneContour;
+            GetScreen()->SetCurItem( DrawStruct );
         }
         else
             DisplayError( this, wxT( "Edit: zone internal error" ) );

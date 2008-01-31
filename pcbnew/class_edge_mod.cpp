@@ -298,70 +298,9 @@ void EDGE_MODULE::Display_Infos( WinEDA_DrawFrame* frame )
 }
 
 
-#if 0  // replaced by Save()
-/*****************************************/
-int EDGE_MODULE::WriteDescr( FILE* File )
-/*****************************************/
-
-/* Write one EDGE_MODULE description
- *  File must be opened.
- */
-{
-    int NbLigne = 0, ii, * ptr;
-
-    switch( m_Shape )
-    {
-    case S_SEGMENT:
-        fprintf( File, "DS %d %d %d %d %d %d\n",
-                 m_Start0.x, m_Start0.y,
-                 m_End0.x, m_End0.y,
-                 m_Width, m_Layer );
-        NbLigne++;
-        break;
-
-    case S_CIRCLE:
-        fprintf( File, "DC %d %d %d %d %d %d\n",
-                 m_Start0.x, m_Start0.y,
-                 m_End0.x, m_End0.y,
-                 m_Width, m_Layer );
-        NbLigne++;
-        break;
-
-    case S_ARC:
-        fprintf( File, "DA %d %d %d %d %d %d %d\n",
-                 m_Start0.x, m_Start0.y,
-                 m_End0.x, m_End0.y,
-                 m_Angle,
-                 m_Width, m_Layer );
-        NbLigne++;
-        break;
-
-    case S_POLYGON:
-        fprintf( File, "DP %d %d %d %d %d %d %d\n",
-                 m_Start0.x, m_Start0.y,
-                 m_End0.x, m_End0.y,
-                 m_PolyCount,
-                 m_Width, m_Layer );
-        NbLigne++;
-        for( ii = 0, ptr = m_PolyList; ii < m_PolyCount; ii++ )
-        {
-            fprintf( File, "Dl %d %d\n",
-                    *ptr, *(ptr + 1) );
-            NbLigne++; ptr += 2;
-        }
-
-        break;
-
-    default:
-        DisplayError( NULL, wxT( "Type Edge Module inconnu" ) );
-        break;
-    }
-
-    return NbLigne;
-}
-#endif
-
+/*******************************************/
 bool EDGE_MODULE::Save( FILE* aFile ) const
+/*******************************************/
 {
     int ret = -1;
 
@@ -514,12 +453,15 @@ int EDGE_MODULE::ReadDescr( char* Line, FILE* File,
         break;
     }
 
-    // Controle d'epaisseur raisonnable:
+    // Check for a reasonnable width:
     if( m_Width <= 1 )
         m_Width = 1;
     if( m_Width > MAX_WIDTH )
         m_Width = MAX_WIDTH;
 
+	// Check for a reasonnable layer:
+	if ( (m_Layer < FIRST_NON_COPPER_LAYER) || (m_Layer > LAST_NON_COPPER_LAYER) )
+		m_Layer = SILKSCREEN_N_CMP;
     return error;
 }
 

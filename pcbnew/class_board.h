@@ -45,7 +45,7 @@ public:
     CHEVELU*        m_Ratsnest;                 // Rastnest list
     CHEVELU*        m_LocalRatsnest;            // Rastnest list used while moving a footprint
 
-    EDGE_ZONE*      m_CurrentLimitZone;         /* zone contour currently in progress */
+    ZONE_CONTAINER* m_CurrentZoneContour;     	// zone contour currently in progress
 
     BOARD( EDA_BaseStruct* StructFather, WinEDA_BasePcbFrame* frame );
     ~BOARD();

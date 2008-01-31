@@ -157,22 +157,23 @@ int DRC::Drc( TRACK* aRefSegm, TRACK* aList )
 }
 
 
-/*********************************************/
-int DRC::Drc( const EDGE_ZONE*  aEdge )
-/*********************************************/
+/**************************************************************/
+int DRC::Drc( ZONE_CONTAINER * aArea, int CornerIndex )
+/*************************************************************/
 /**
  * Function Drc
- * tests the current EDGE_ZONE segment and returns the result and displays the error
+ * tests the outline segment starting at CornerIndex and returns the result and displays the error
  * in the status panel only if one exists.
  *      Test Edge inside other areas
  *      Test Edge too close other areas
- * @param aEdge The current segment to test.
+ * @param aEdge The areaparent which contains the corner.
+ * @param CornerIndex The starting point of the segment to test.
  * @return int - BAD_DRC (1) if DRC error  or OK_DRC (0) if OK
  */
 {
     updatePointers();
     
-    if( ! doEdgeZoneDrc( aEdge ) )
+    if( ! doEdgeZoneDrc( aArea, CornerIndex ) )
     {
         wxASSERT( m_currentMarker );
         m_currentMarker->Display_Infos( m_mainWindow );
@@ -461,9 +462,10 @@ MARKER* DRC::fillMarker( ZONE_CONTAINER * aArea, int aErrorCode, MARKER* fillMe 
     return fillMe;
 }
 
-MARKER* DRC::fillMarker( const EDGE_ZONE * aEdge, const wxPoint & aPos, int aErrorCode, MARKER* fillMe )
+
+MARKER* DRC::fillMarker( const ZONE_CONTAINER * aArea, const wxPoint & aPos, int aErrorCode, MARKER* fillMe )
 {
-    wxString    textA = aEdge->MenuText( m_pcb );
+    wxString    textA = aArea->MenuText( m_pcb );
 
     wxPoint posA = aPos;
 

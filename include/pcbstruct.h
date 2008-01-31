@@ -109,6 +109,9 @@
 #define ECO2_LAYER              (1 << ECO2_N)
 #define EDGE_LAYER              (1 << EDGE_N)
 
+#define FIRST_NON_COPPER_LAYER  ADHESIVE_N_CU
+#define LAST_NON_COPPER_LAYER  EDGE_N
+
 //      extra bits              0xE0000000
 /* masques generaux : */
 #define ALL_LAYERS              0x1FFFFFFF

@@ -36,7 +36,7 @@ BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
     m_Pads             = NULL;          // pointeur liste d'acces aux pads
     m_Ratsnest         = NULL;          // pointeur liste rats
     m_LocalRatsnest    = NULL;          // pointeur liste rats local
-    m_CurrentLimitZone = NULL;          // pointeur liste des EDEGE_ZONES
+    m_CurrentZoneContour = NULL;        // This ZONE_CONTAINER handle the zone contour cuurently in progress
                                         // de determination des contours de zone
 }
 
@@ -61,9 +61,6 @@ BOARD::~BOARD()
     m_Zone->DeleteStructList();
     m_Zone = 0;
     
-    m_CurrentLimitZone->DeleteStructList();
-    m_CurrentLimitZone = 0;
-    
     MyFree( m_Pads );
     m_Pads = 0;
     
@@ -75,6 +72,9 @@ BOARD::~BOARD()
 
     DeleteMARKERs();
 	DeleteZONEOutlines();
+	
+	delete m_CurrentZoneContour;
+	m_CurrentZoneContour = NULL;
 }
 
 
@@ -588,9 +588,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
             ++p;
             break;
             
-        case TYPEEDGEZONE:
-            result = IterateForward( m_CurrentLimitZone, inspector, testData, p );
-            ++p;
+        case TYPEZONE_UNUSED:	// Unused type
             break;            
             
         default:        // catch EOT or ANY OTHER type here and return.

@@ -267,7 +267,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         SetToolID( id, wxCURSOR_PENCIL, _( "Add Zones" ) );
         if( !DisplayOpt.DisplayZones )
             DisplayInfo( this, _( "Warning: Display Zone is OFF!!!" ) );
-        DelLimitesZone( &dc, TRUE );
         if( !g_HightLigt_Status && (g_HightLigth_NetCode > 0 ) )
             Hight_Light( &dc );
         break;
@@ -821,7 +820,8 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
         if( GetCurItem() && (GetCurItem()->m_Flags & IS_NEW) )
         {
-            SetCurItem( Del_LastSegmEdgeZone( &dc ) );
+            if ( Delete_LastCreatedCorner( &dc ) == 0)	// No more segment in outline, 
+				SetCurItem(NULL);
         }
         break;
 

@@ -277,25 +277,23 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
         case TYPEZONE:      // Item used to fill a zone
             ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_ZONE,
-                          _( "Delete Zone" ), delete_xpm );
-            break;
-
-        case TYPEEDGEZONE:      // Graphic Item used to create a new zone outline
-            if( flags & IS_NEW )
-            {
-                ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_STOP_CURRENT_EDGE_ZONE,
-                              _( "End edge zone" ), apply_xpm );
-            }
-            ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_ZONE_LAST_CREATED_CORNER,
-                          _( "Delete Current Edge" ), delete_xpm );
+                          _( "Delete Zone Filling" ), delete_xpm );
             break;
 
         case TYPEZONE_CONTAINER:    // Item used to handle a zone area (outlines, holes ...)
+           if( flags & IS_NEW )
+            {
+                ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_STOP_CURRENT_EDGE_ZONE,
+                              _( "Close Zone Outline" ), apply_xpm );
+				ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_ZONE_LAST_CREATED_CORNER,
+							  _( "Delete Last Corner" ), delete_xpm );
+            }
+			else
             createPopUpMenuForZones( (ZONE_CONTAINER*) item, aPopMenu );
             break;
 
         case TYPETEXTE:
-            createPopUpMenuForTexts( (TEXTE_PCB*) item, aPopMenu );
+ 				createPopUpMenuForTexts( (TEXTE_PCB*) item, aPopMenu );
             break;
 
         case TYPETRACK:

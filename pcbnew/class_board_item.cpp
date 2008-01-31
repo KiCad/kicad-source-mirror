@@ -89,8 +89,9 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         break;
 
     case TYPEEDGEMODULE:
+	{
         text << _( "Graphic" ) << wxT( " " );
-        const wxChar* cp;
+        wxString cp;
 
         switch( ( (EDGE_MODULE*) item )->m_Shape )
         {
@@ -126,10 +127,12 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
             cp = wxT( "??EDGE??" );       break;
         }
 
-        text << *cp << _( " of " )
+        text << cp;
+        text << wxT( " (" ) << ReturnPcbLayerName( ((EDGE_MODULE*) item )->m_Layer ).Trim() << wxT( ")" );
+		text << _( " of " )
              << ( (MODULE*) GetParent() )->GetReference();
         break;
-
+	}
     case TYPETRACK:
         // deleting tracks requires all the information we can get to 
         // disambiguate all the crap under the cursor!
@@ -239,8 +242,8 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
             ;
         break;
 
-    case TYPEEDGEZONE:
-        text << _( "Edge Zone" ) << _( " on " ) << ReturnPcbLayerName( item->GetLayer() ).Trim();  // @todo: extend text
+    case TYPEZONE_UNUSED:
+        text << wxT( "Unused" );
         break;
 
     default:
@@ -318,8 +321,8 @@ const char** BOARD_ITEM::MenuIcon() const
         xpm = add_mires_xpm;
         break;
 
-    case TYPEEDGEZONE:
-        xpm = show_mod_edge_xpm;    // @todo: pcb edge xpm
+    case TYPEZONE_UNUSED:
+        xpm = 0;    // unused
         break;
 
     default:

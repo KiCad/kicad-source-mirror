@@ -176,18 +176,10 @@ void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
     if( g_HightLigt_Status )
         DrawHightLight( DC, g_HightLigth_NetCode );
 
-    EDGE_ZONE* segment;
-    for( segment = m_Pcb->m_CurrentLimitZone; segment; segment = segment->Next() )
-    {
-        if( segment->m_Flags & IS_MOVED )
-            continue;
-        
-        Trace_DrawSegmentPcb( DrawPanel, DC, segment, mode );
-    }
 
-	for( unsigned ii = 0; ii < m_Pcb->m_ZoneDescriptorList.size(); ii++ )
+	for( unsigned ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
 	{
-		ZONE_CONTAINER* edge_zone =  m_Pcb->m_ZoneDescriptorList[ii];
+		ZONE_CONTAINER* edge_zone =  m_Pcb->GetArea(ii);
 		edge_zone->Draw( DrawPanel, DC, wxPoint(0,0), mode);
 	}
 
