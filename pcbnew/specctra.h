@@ -1782,7 +1782,7 @@ public:
         ELEM( T_placement, aParent )
     {
         unit = 0;
-        flip_style = T_mirror_first;
+        flip_style = T_NONE;
     }
 
     ~PLACEMENT()
@@ -2711,43 +2711,52 @@ public:
             aShape->SetParent( this );            
         }
     }
-    
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
+        out->Print( nestLevel, "(%s ", LEXER::GetTokenText( Type() ) );
+    
         if( shape )
-            shape->Format( out, nestLevel );
+            shape->Format( out, 0 );
         
         if( net_id.size() )
         {
             const char* quote = out->GetQuoteChar( net_id.c_str() );
-            out->Print( nestLevel, "(net %s%s%s)\n", 
+            out->Print( 0, "(net %s%s%s)", 
                        quote, net_id.c_str(), quote );
         }
         
         if( turret >= 0 )
-            out->Print( nestLevel, "(turrent %d)\n", turret );
+            out->Print( 0, "(turrent %d)", turret );
 
         if( type != T_NONE )
-            out->Print( nestLevel, "(type %s)\n", LEXER::GetTokenText( type ) );
+            out->Print( 0, "(type %s)", LEXER::GetTokenText( type ) );
         
         if( attr != T_NONE )
-            out->Print( nestLevel, "(attr %s)\n", LEXER::GetTokenText( attr ) );
+            out->Print( 0, "(attr %s)", LEXER::GetTokenText( attr ) );
         
         if( shield.size() )
         {
             const char* quote = out->GetQuoteChar( shield.c_str() );
-            out->Print( nestLevel, "(shield %s%s%s)\n", 
+            out->Print( 0, "(shield %s%s%s)", 
                        quote, shield.c_str(), quote );
         }
         
-        for( WINDOWS::iterator i=windows.begin();  i!=windows.end();  ++i )
-            i->Format( out, nestLevel );
+        if( windows.size() )
+        {
+            out->Print( 0, "\n" );
+            
+            for( WINDOWS::iterator i=windows.begin();  i!=windows.end();  ++i )
+                i->Format( out, nestLevel+1 );
+        }
 
         if( connect )
-            connect->Format( out, nestLevel );
+            connect->Format( out, 0 );
         
         if( supply )
-            out->Print( nestLevel, "(supply)\n" );
+            out->Print( 0, "(supply)" );
+        
+        out->Print( 0, ")\n" );
     }
 };
 typedef boost::ptr_vector<WIRE>     WIRES;
@@ -3407,8 +3416,13 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
 
     STRINGFORMATTER sf;
 
-    // FromBOARD() uses this
-    STRINGS         layerIds;
+    STRINGS         layerIds;       ///< indexed by PCB layer number
+
+    /// maps BOARD layer number to PCB layer numbers
+    std::vector<int>    kicadLayer2pcb;       
+
+    /// maps PCB layer number to BOARD layer numbers
+    std::vector<int>    pcbLayer2kicad;       
     
     
     /**

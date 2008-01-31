@@ -215,9 +215,8 @@ static int Pad_list_Sort_by_Shapes( const void* refptr, const void* objptr )
 
 
 
-/*********************************************************************/
+/*
 static int Track_list_Sort_by_Netcode( const void* o1, const void* o2 )
-/*********************************************************************/
 {
     TRACK*  t1 = *(TRACK**) o1;
     TRACK*  t2 = *(TRACK**) o2;
@@ -232,6 +231,7 @@ static int Track_list_Sort_by_Netcode( const void* o1, const void* o2 )
 
     return diff;    // zero here
 }
+*/
 
 
 /**
@@ -327,13 +327,11 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
 
     D_PAD*  old_pad = NULL;
 
-#define COPPER_LAYERS    2      // top and bottom
-
     for( int i=0;  i<aPads.GetCount();  ++i )
     {
         D_PAD*  pad = (D_PAD*) aPads[i];
 
-        bool doLayer[COPPER_LAYERS] =  { 
+        bool doLayer[2] =  {                    // top and bottom layers only 
             pad->IsOnLayer( LAYER_CMP_N ),
             pad->IsOnLayer( COPPER_LAYER_N ) 
         };
@@ -373,8 +371,11 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
         POINT       padOffset( scale(pad->m_Offset.x), -scale(pad->m_Offset.y) );
 
         
-        // for now, we will report only one layer for the pads.  SMD pads are reported on the
-        // top layer, and through hole are reported on <reserved_layer_name> "signal"        
+        // For now, we will report only one layer for the pads.  SMD pads are reported on the
+        // top layer, and through hole are reported on <reserved_layer_name> "signal".
+        // We could do better if there was actually a "layer type" field within 
+        // Kicad which would hold one of:  T_signal, T_power, T_mixed, T_jumper
+        // See bottom of page 74 of the SECCTRA Design Language Reference, May 2000.        
         int         reportedLayers = 1;     // how many layers are reported.
         
         doLayer[0] = true;
@@ -681,12 +682,19 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         int layerCount = aBoard->GetCopperLayerCount();
 
         layerIds.clear();
+        pcbLayer2kicad.resize( layerCount );
+        kicadLayer2pcb.resize( LAYER_CMP_N+1 );
         
-        for( int ndx=layerCount-1;  ndx >= 0;  --ndx )
+        for( int kiNdx=layerCount-1, pcbNdx=0;  kiNdx >= 0;  --kiNdx, ++pcbNdx )
         {
+            int kilayer = kiNdx>0 && kiNdx==layerCount-1 ? LAYER_CMP_N : kiNdx;
+
+            // establish bi-directional mapping between kicad's BOARD layer and PCB layer            
+            pcbLayer2kicad[pcbNdx]  = kilayer;
+            kicadLayer2pcb[kilayer] = pcbNdx; 
+            
             // save the specctra layer name in SPECCTRA_DB::layerIds for later.
-            layerIds.push_back( CONV_TO_UTF8( 
-                 aBoard->GetLayerName( ndx>0 && ndx==layerCount-1 ? LAYER_CMP_N : ndx )));
+            layerIds.push_back( CONV_TO_UTF8( aBoard->GetLayerName( kilayer ) ) );
 
             LAYER*      layer = new LAYER( pcb->structure );
             pcb->structure->layers.push_back( layer );
@@ -699,10 +707,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
     
     // for now, report on only the top and bottom layers with respect to the copper
-    // within a pad's padstack.  this is usually correct, but not rigorous.  We could do
-    // better if there was actually a "layer type" field within Kicad which would
-    // hold one of:  T_signal, T_power, T_mixed, T_jumper
-    // See bottom of page 74 of the SECCTRA Design Language Reference, May 2000.
+    // within a pad's padstack.  this is usually correct, but not rigorous. 
 
     // a space in a quoted token is NOT a terminator, true establishes this.
     pcb->parser->space_in_quoted_tokens = true;
@@ -805,7 +810,49 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
     }
 
     
-    //-----<zone containers become planes>--------------------------------------------
+    //-----<rules>--------------------------------------------------------
+    {
+        // put out these rules, the user can then edit them with a text editor
+        char    rule[80];       // padstack name builder
+        
+        int     curTrackWidth = aBoard->m_BoardSettings->m_CurrentTrackWidth;
+        int     curTrackClear = aBoard->m_BoardSettings->m_TrackClearence;
+        double  clearance = scale(curTrackClear);
+        STRINGS& rules = pcb->structure->rules->rules;
+        
+        sprintf( rule, "(width %.6g)", scale( curTrackWidth ) );
+        rules.push_back( rule );
+        
+        sprintf( rule, "(clearance %.6g)", clearance );
+        rules.push_back( rule );
+        
+        sprintf( rule, "(clearance %.6g (type pad_to_turn_gap))", clearance ); 
+        rules.push_back( rule );
+        
+        sprintf( rule, "(clearance %.6g (type smd_to_turn_gap))", clearance );
+        rules.push_back( rule );
+        
+        sprintf( rule, "(clearance %.6g (type via_via))", clearance );
+        rules.push_back( rule );
+        
+        sprintf( rule, "(clearance %.6g (type via_smd))", clearance );
+        rules.push_back( rule );
+        
+        sprintf( rule, "(clearance %.6g (type via_pin))", clearance );
+        rules.push_back( rule );
+        
+        sprintf( rule, "(clearance %.6g (type pin_pin))", clearance );
+        rules.push_back( rule );
+        
+        sprintf( rule, "(clearance %.6g (type smd_pin))", clearance );
+        rules.push_back( rule );
+        
+        sprintf( rule, "(clearance %.6g (type smd_smd))", clearance );        
+        rules.push_back( rule );
+    }
+    
+    
+    //-----<zone containers become planes>--------------------------------
     {
         static const KICAD_T  scanZONEs[] = { TYPEZONE_CONTAINER, EOT };
         items.Collect( aBoard, scanZONEs );
@@ -958,75 +1005,71 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
     //-----<create the wires from tracks>-----------------------------------
     {
-#if 0        
         // export all of them for now, later we'll decide what controls we need
         // on this.
-        static KICAD_T scanTRACKs[] = { TYPETRACK, TYPEVIA, EOT };
+        static KICAD_T scanTRACKs[] = { TYPETRACK, EOT };
         
         items.Collect( aBoard, scanTRACKs );
 
+/*        
         if( items.GetCount() )
             qsort( (void*) items.BasePtr(), items.GetCount(), 
                   sizeof(TRACK*), Track_list_Sort_by_Netcode );
+*/                  
 
-        WIRING* wiring = pcb->wiring;
-        WIRE*   wire;
+        std::string netname;    
+        WIRING*     wiring = pcb->wiring;
+        PATH*       path = 0;
 
-        int     old_netcode = -1; 
-        int     old_width = -1; 
-        int     old_layer = -1;        
+        int old_netcode = -1; 
+        int old_width = -1; 
+        int old_layer = -1;        
 
         for( int i=0;  i<items.GetCount();  ++i )
         {
-            TRACK*  track = (TRACK*) items[i];  // torv == track or via
+            TRACK*  track = (TRACK*) items[i];
             
             if( track->GetNet() == 0 )
                 continue;
-            
-            if( old_netcode != track->GetNet() )
-            {
-                old_netcode = track->GetNet();
-                
-                EQUIPOT* equipot = aBoard->FindNet( track->GetNet() );
-                wxASSERT( equipot );
-                
-                wire = new WIRE( wiring );
-                wiring->wires.push_back( wire );
-            
-                wire->net_id = CONV_TO_UTF8( equipot->m_Netname );
-            }
 
-            if( old_width != track->m_Width )
+            if( old_netcode != track->GetNet()
+            ||  old_width   != track->m_Width 
+            ||  old_layer   != track->GetLayer()
+            ||  (path && path->points.back() != mapPt(track->m_Start) ) 
+              ) 
             {
-                old_width = track->m_Width;
-                wire = new WIRE( wiring );
-                wiring.wires.push_back( wire );
+                old_width   = track->m_Width;
+                old_layer   = track->GetLayer();
 
-                wire->net_id = CONV_TO_UTF8( equipot->m_NetName );
-            }
-    
-            if( (track->Type() == TYPETRACK) || (track->Type() == TYPEZONE) )
-            {
-                if( old_layer != track->GetLayer() )
+                if( old_netcode != track->GetNet() )
                 {
-                    old_layer = track->GetLayer();
-                    fprintf( file, "LAYER %s\n",
-                            CONV_TO_UTF8( GenCAD_Layer_Name[track->GetLayer() & 0x1F] ) );
+                    old_netcode = track->GetNet();
+                    EQUIPOT* equipot = aBoard->FindNet( track->GetNet() );
+                    wxASSERT( equipot );
+                    netname = CONV_TO_UTF8( equipot->m_Netname );
                 }
-    
-                fprintf( file, "LINE %d %d %d %d\n",
-                        mapXto( track->m_Start.x ), mapYto( track->m_Start.y ),
-                        mapXto( track->m_End.x ), mapYto( track->m_End.y ) );
+
+                WIRE* wire = new WIRE( wiring );
+                wiring->wires.push_back( wire );
+                wire->net_id = netname; 
+                
+                int kiLayer  = track->GetLayer();
+                int pcbLayer = kicadLayer2pcb[kiLayer];
+                    
+                path = new PATH( wire );
+                wire->SetShape( path );
+                
+                path->layer_id = layerIds[pcbLayer];
+                path->aperture_width = scale( old_width );
+
+                path->AppendPoint( mapPt( track->m_Start ) );
             }
-            if( track->Type() == TYPEVIA )
-            {
-                fprintf( file, "VIA viapad%d %d %d ALL %d via%d\n",
-                         track->m_Width,
-                         mapXto( track->m_Start.x ), mapYto( track->m_Start.y ),
-                         g_DesignSettings.m_ViaDrill, vianum++ );
-            }
+            
+            path->AppendPoint( mapPt( track->m_End ) );
         }
-#endif        
+        
+        // @todo vias here.
+        
     }
     
     //-----<restore MODULEs>------------------------------------------------
