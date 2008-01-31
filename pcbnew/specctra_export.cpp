@@ -214,6 +214,26 @@ static int Pad_list_Sort_by_Shapes( const void* refptr, const void* objptr )
 }
 
 
+
+/*********************************************************************/
+static int Track_list_Sort_by_Netcode( const void* o1, const void* o2 )
+/*********************************************************************/
+{
+    TRACK*  t1 = *(TRACK**) o1;
+    TRACK*  t2 = *(TRACK**) o2;
+    int     diff;
+    
+    if( (diff = t1->GetNet() - t2->GetNet()) )
+        return diff;
+    if( (diff = t1->m_Width - t2->m_Width) )
+        return diff;
+    if( (diff = t1->GetLayer() - t2->GetLayer()) )
+        return diff;
+
+    return diff;    // zero here
+}
+
+
 /**
  * Function makePath
  * creates a PATH element with a single straight line, a pair of vertices.
@@ -309,28 +329,6 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
 
 #define COPPER_LAYERS    2      // top and bottom
 
-    int reportedLayers = COPPER_LAYERS;     // how many layers are reported.
-
-    
-    // for now, report on only the top and bottom layers with respect to the copper
-    // within a pad's padstack.  this is usually correct, but not rigorous.  We could do
-    // better if there was actually a "layer type" field within Kicad which would
-    // hold one of:  T_signal, T_power, T_mixed, T_jumper
-    // See bottom of page 74 of the SECCTRA Design Language Reference, May 2000.
-    
-    std::string layerId[COPPER_LAYERS] = {
-        CONV_TO_UTF8(aBoard->GetLayerName( LAYER_CMP_N )),
-        CONV_TO_UTF8(aBoard->GetLayerName( COPPER_LAYER_N )), 
-    };
-    
-#if 1
-// Late breaking news: we can use the reserved layer name "signal" and report the 
-    // padstack as a single layer. See <reserved_layer_name> in the spec. 
-    // But this probably gives problems for a "power" layer or power pin, we'll see.
-    reportedLayers = 1;
-    layerId[0] = "signal";
-#endif
-    
     for( int i=0;  i<aPads.GetCount();  ++i )
     {
         D_PAD*  pad = (D_PAD*) aPads[i];
@@ -359,10 +357,6 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
             continue;
         }
 
-#if 1   // late breaking news..... see above        
-        doLayer[0] = true;
-#endif        
-        
         old_pad = pad;
 
         PADSTACK*   padstack = new PADSTACK( pcb->library );
@@ -378,7 +372,17 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
         // Note that the y correction here is set negative.
         POINT       padOffset( scale(pad->m_Offset.x), -scale(pad->m_Offset.y) );
 
-        int         coppers = 0;
+        
+        // for now, we will report only one layer for the pads.  SMD pads are reported on the
+        // top layer, and through hole are reported on <reserved_layer_name> "signal"        
+        int         reportedLayers = 1;     // how many layers are reported.
+        
+        doLayer[0] = true;
+        
+        const char* layerName = ( pad->m_Attribut == PAD_SMD ) ? 
+                                    layerIds[0].c_str() : "signal"; 
+
+        int         coppers = 0;        // will always be one for now
         
         switch( pad->m_PadShape )
         {
@@ -397,7 +401,7 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
                         CIRCLE*     circle = new CIRCLE( shape );
                         shape->SetShape( circle );
                         
-                        circle->SetLayerId( layerId[layer].c_str() );
+                        circle->SetLayerId( layerName );
                         circle->SetDiameter( diameter );
                         circle->SetVertex( padOffset );
                         ++coppers;
@@ -436,7 +440,7 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
                         RECTANGLE*  rect = new RECTANGLE( shape );
                         shape->SetShape( rect );
                         
-                        rect->SetLayerId( layerId[layer].c_str() );
+                        rect->SetLayerId( layerName );
                         rect->SetCorners( lowerLeft, upperRight );
                         ++coppers;
                     }
@@ -479,7 +483,7 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
                             path = makePath( 
                                     POINT( -dr + padOffset.x, padOffset.y - radius ),     // aStart
                                     POINT(  dr + padOffset.x, padOffset.y - radius ),     // aEnd
-                                    layerId[layer] );
+                                    layerName );
                             shape->SetShape( path );
                             
                             shape = new SHAPE( padstack );
@@ -489,7 +493,7 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
                                     POINT(  dr + padOffset.x, padOffset.y - radius),      // aStart
                                     POINT(  dr + padOffset.x, padOffset.y + radius),      // aEnd
                                     POINT(  dr + padOffset.x, padOffset.y ),              // aCenter
-                                    layerId[layer] );
+                                    layerName );
                             shape->SetShape( qarc );
     
                             shape = new SHAPE( padstack );
@@ -497,7 +501,7 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
                             path = makePath( 
                                     POINT(  dr + padOffset.x, padOffset.y + radius ),     // aStart
                                     POINT( -dr + padOffset.x, padOffset.y + radius ),     // aEnd
-                                    layerId[layer] );
+                                    layerName );
                             shape->SetShape( path );
     
                             shape = new SHAPE( padstack );
@@ -507,7 +511,7 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
                                     POINT( -dr + padOffset.x, padOffset.y + radius),      // aStart
                                     POINT( -dr + padOffset.x, padOffset.y - radius),      // aEnd
                                     POINT( -dr + padOffset.x, padOffset.y ),              // aCenter
-                                    layerId[layer] );
+                                    layerName );
                             shape->SetShape( qarc );
                             ++coppers;
                         }
@@ -534,7 +538,7 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
                             path = makePath( 
                                     POINT( -radius + padOffset.x, padOffset.y - dr ),   // aStart
                                     POINT( -radius + padOffset.x, padOffset.y + dr ),   // aEnd
-                                    layerId[layer] );
+                                    layerName );
                             shape->SetShape( path );
     
                             shape = new SHAPE( padstack );
@@ -544,7 +548,7 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
                                     POINT( -radius + padOffset.x, padOffset.y + dr ),   // aStart
                                     POINT(  radius + padOffset.x, padOffset.y + dr),    // aEnd
                                     POINT(  padOffset.x, padOffset.y +dr ),             // aCenter
-                                    layerId[layer] );
+                                    layerName );
                             shape->SetShape( qarc );
     
                             shape = new SHAPE( padstack );
@@ -552,7 +556,7 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
                             path = makePath( 
                                     POINT(  radius + padOffset.x, padOffset.y + dr ),   // aStart
                                     POINT(  radius + padOffset.x, padOffset.y - dr ),   // aEnd
-                                    layerId[layer] );
+                                    layerName );
                             shape->SetShape( path );
     
                             shape = new SHAPE( padstack );
@@ -562,7 +566,7 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
                                     POINT(  radius + padOffset.x, padOffset.y - dr),    // aStart
                                     POINT( -radius + padOffset.x, padOffset.y - dr),    // aEnd
                                     POINT( padOffset.x, padOffset.y - dr ),             // aCenter
-                                    layerId[layer] );
+                                    layerName );
                             shape->SetShape( qarc );
                             ++coppers;
                         }
@@ -607,7 +611,7 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
 
         CIRCLE*     circle = new CIRCLE( shape );
         shape->SetShape( circle );
-        circle->SetLayerId( layerId[0].c_str() ); 
+        circle->SetLayerId( "signal" ); 
         circle->SetDiameter( scale(defaultViaSize) );
 
         padstack->SetPadstackId( "Via_Default" );
@@ -630,7 +634,7 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
 
         CIRCLE*     circle = new CIRCLE( shape );
         shape->SetShape( circle );
-        circle->SetLayerId( layerId[0].c_str() ); 
+        circle->SetLayerId( "signal" ); 
         circle->SetDiameter( scale(viaSize) );
 
         snprintf( name, sizeof(name),  "Via_%.6g_mil", scale(viaSize) ); 
@@ -662,7 +666,44 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             module->flag = 1;
         }
     }
+
     
+    // Since none of these statements cause any immediate output, the order
+    // of them is somewhat flexible.  The outputting to disk is done at the
+    // end.  We start by gathering all the layer information from the board.
+    
+
+    //-----<layer_descriptor>-----------------------------------------------
+    {
+        // specctra wants top physical layer first, then going down to the 
+        // bottom most physical layer in physical sequence.
+        // @question : why does Kicad not display layers in that order?
+        int layerCount = aBoard->GetCopperLayerCount();
+
+        layerIds.clear();
+        
+        for( int ndx=layerCount-1;  ndx >= 0;  --ndx )
+        {
+            // save the specctra layer name in SPECCTRA_DB::layerIds for later.
+            layerIds.push_back( CONV_TO_UTF8( 
+                 aBoard->GetLayerName( ndx>0 && ndx==layerCount-1 ? LAYER_CMP_N : ndx )));
+
+            LAYER*      layer = new LAYER( pcb->structure );
+            pcb->structure->layers.push_back( layer );
+            
+            layer->name = layerIds.back();
+            
+            // layer->type =  @todo need this, the export would be better.
+        }
+    }
+
+    
+    // for now, report on only the top and bottom layers with respect to the copper
+    // within a pad's padstack.  this is usually correct, but not rigorous.  We could do
+    // better if there was actually a "layer type" field within Kicad which would
+    // hold one of:  T_signal, T_power, T_mixed, T_jumper
+    // See bottom of page 74 of the SECCTRA Design Language Reference, May 2000.
+
     // a space in a quoted token is NOT a terminator, true establishes this.
     pcb->parser->space_in_quoted_tokens = true;
     
@@ -764,27 +805,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
     }
 
     
-    //-----<layer_descriptor>-----------------------------------------------
-    {
-        // specctra wants top physical layer first, then going down to the 
-        // bottom most physical layer in physical sequence.
-        // @question : why does Kicad not display layers in that order?
-        int layerCount = aBoard->GetCopperLayerCount();
-        
-        for( int ndx=layerCount-1;  ndx >= 0;  --ndx )
-        {
-            wxString    layerName = aBoard->GetLayerName( ndx>0 && ndx==layerCount-1 ? LAYER_CMP_N : ndx );
-            LAYER*      layer = new LAYER( pcb->structure );
-            
-            layer->name = CONV_TO_UTF8( layerName );
-            
-            // layer->type =  @todo need this, the export would be better.
-            
-            pcb->structure->layers.push_back( layer );
-        }
-    }
-
-    
     //-----<zone containers become planes>--------------------------------------------
     {
         static const KICAD_T  scanZONEs[] = { TYPEZONE_CONTAINER, EOT };
@@ -794,13 +814,13 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         {
             ZONE_CONTAINER* item = (ZONE_CONTAINER*) items[i];
 
-            wxString        layerName = aBoard->GetLayerName( item->GetLayer() );
             COPPER_PLANE*   plane = new COPPER_PLANE( pcb->structure );
             PATH*           polygon = new PATH( plane, T_polygon );
-
             plane->SetShape( polygon );
-            plane->name = CONV_TO_UTF8( item->m_Netname );
             
+            plane->name = CONV_TO_UTF8( item->m_Netname );
+
+            wxString        layerName = aBoard->GetLayerName( item->GetLayer() );
             polygon->layer_id = CONV_TO_UTF8( layerName );
             
             int count = item->m_Poly->corner.size();
@@ -938,18 +958,75 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
     //-----<create the wires from tracks>-----------------------------------
     {
+#if 0        
         // export all of them for now, later we'll decide what controls we need
         // on this.
         static KICAD_T scanTRACKs[] = { TYPETRACK, TYPEVIA, EOT };
         
         items.Collect( aBoard, scanTRACKs );
-        
+
+        if( items.GetCount() )
+            qsort( (void*) items.BasePtr(), items.GetCount(), 
+                  sizeof(TRACK*), Track_list_Sort_by_Netcode );
+
+        WIRING* wiring = pcb->wiring;
+        WIRE*   wire;
+
+        int     old_netcode = -1; 
+        int     old_width = -1; 
+        int     old_layer = -1;        
+
         for( int i=0;  i<items.GetCount();  ++i )
         {
-            TRACK*  torv  = (TRACK*) items[i];  // torv == track or via
+            TRACK*  track = (TRACK*) items[i];  // torv == track or via
             
+            if( track->GetNet() == 0 )
+                continue;
             
+            if( old_netcode != track->GetNet() )
+            {
+                old_netcode = track->GetNet();
+                
+                EQUIPOT* equipot = aBoard->FindNet( track->GetNet() );
+                wxASSERT( equipot );
+                
+                wire = new WIRE( wiring );
+                wiring->wires.push_back( wire );
+            
+                wire->net_id = CONV_TO_UTF8( equipot->m_Netname );
+            }
+
+            if( old_width != track->m_Width )
+            {
+                old_width = track->m_Width;
+                wire = new WIRE( wiring );
+                wiring.wires.push_back( wire );
+
+                wire->net_id = CONV_TO_UTF8( equipot->m_NetName );
+            }
+    
+            if( (track->Type() == TYPETRACK) || (track->Type() == TYPEZONE) )
+            {
+                if( old_layer != track->GetLayer() )
+                {
+                    old_layer = track->GetLayer();
+                    fprintf( file, "LAYER %s\n",
+                            CONV_TO_UTF8( GenCAD_Layer_Name[track->GetLayer() & 0x1F] ) );
+                }
+    
+                fprintf( file, "LINE %d %d %d %d\n",
+                        mapXto( track->m_Start.x ), mapYto( track->m_Start.y ),
+                        mapXto( track->m_End.x ), mapYto( track->m_End.y ) );
+            }
+            if( track->Type() == TYPEVIA )
+            {
+                fprintf( file, "VIA viapad%d %d %d ALL %d via%d\n",
+                         track->m_Width,
+                         mapXto( track->m_Start.x ), mapYto( track->m_Start.y ),
+                         g_DesignSettings.m_ViaDrill, vianum++ );
+            }
         }
+#endif        
     }
     
     //-----<restore MODULEs>------------------------------------------------
@@ -964,7 +1041,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             module->flag = 0;
         }
     }
-    
 }
 
     

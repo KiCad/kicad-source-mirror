@@ -1782,7 +1782,7 @@ public:
         ELEM( T_placement, aParent )
     {
         unit = 0;
-        flip_style = T_NONE;
+        flip_style = T_mirror_first;
     }
 
     ~PLACEMENT()
@@ -2660,12 +2660,14 @@ class WIRE : public ELEM
 {
     friend class SPECCTRA_DB;
 
-    //----- only one of these is used, like a union -----
-    PATH*           path;           ///< used for both path and polygon
-    RECTANGLE*      rectangle;
-    CIRCLE*         circle;
-    QARC*           qarc;
-    //---------------------------------------------------
+    /*  <shape_descriptor >::=
+        [<rectangle_descriptor> |
+        <circle_descriptor> |
+        <polygon_descriptor> |
+        <path_descriptor> |
+        <qarc_descriptor> ]
+    */
+    ELEM*           shape;
     
     std::string     net_id;
     int             turret;
@@ -2680,10 +2682,7 @@ public:
     WIRE( ELEM* aParent ) :
         ELEM( T_wire, aParent )
     {
-        path = 0;
-        rectangle = 0;
-        circle = 0;
-        qarc = 0;
+        shape = 0;
         connect = 0;
         
         turret = -1;
@@ -2694,27 +2693,29 @@ public:
     
     ~WIRE()
     {
-        delete path;
-        delete rectangle;
-        delete circle;
-        delete qarc;
+        delete shape;
         delete connect;
     }
 
+    void SetShape( ELEM* aShape )
+    {
+        delete shape;
+        shape = aShape;
+        
+        if( aShape )
+        {
+            wxASSERT(aShape->Type()==T_rect || aShape->Type()==T_circle 
+                     || aShape->Type()==T_qarc || aShape->Type()==T_path 
+                     || aShape->Type()==T_polygon);
+            
+            aShape->SetParent( this );            
+        }
+    }
+    
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
-        // these are mutually exclusive
-        if( rectangle )
-            rectangle->Format( out, nestLevel );
-        
-        else if( path )
-            path->Format( out, nestLevel );
-        
-        else if( circle )
-            circle->Format( out, nestLevel );
-
-        else if( qarc )
-            qarc->Format( out, nestLevel );
+        if( shape )
+            shape->Format( out, nestLevel );
         
         if( net_id.size() )
         {
@@ -3392,19 +3393,22 @@ public:
  */
 class SPECCTRA_DB : public OUTPUTFORMATTER
 {
-    LEXER*      lexer;
+    LEXER*          lexer;
     
-    PCB*        pcb;
+    PCB*            pcb;
 
-    SESSION*    session;    
+    SESSION*        session;    
 
-    FILE*       fp;
+    FILE*           fp;
 
-    wxString    filename;
+    wxString        filename;
     
-    std::string quote_char;
+    std::string     quote_char;
 
     STRINGFORMATTER sf;
+
+    // FromBOARD() uses this
+    STRINGS         layerIds;
     
     
     /**

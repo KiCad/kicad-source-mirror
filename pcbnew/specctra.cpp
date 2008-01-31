@@ -2702,36 +2702,32 @@ void SPECCTRA_DB::doWIRE( WIRE* growth ) throw( IOError )
         switch( tok )
         {
         case T_rect:
-        case T_circle:
-        case T_path:
-        case T_polygon:
-        case T_qarc:
-            if( growth->rectangle || growth->circle || growth->path || growth->qarc )
+            if( growth->shape )
                 unexpected( tok );
-        default: ;
-        }
-        
-        switch( tok )
-        {
-        case T_rect:
-            growth->rectangle = new RECTANGLE( growth );
-            doRECTANGLE( growth->rectangle );
+            growth->shape = new RECTANGLE( growth );
+            doRECTANGLE( (RECTANGLE*) growth->shape );
             break;
             
         case T_circle:
-            growth->circle = new CIRCLE( growth );
-            doCIRCLE( growth->circle );
+            if( growth->shape )
+                unexpected( tok );
+            growth->shape = new CIRCLE( growth );
+            doCIRCLE( (CIRCLE*) growth->shape );
             break;
         
         case T_path:
         case T_polygon:
-            growth->path = new PATH( growth, tok );
-            doPATH( growth->path );
+            if( growth->shape )
+                unexpected( tok );
+            growth->shape = new PATH( growth, tok );
+            doPATH( (PATH*) growth->shape );
             break;
             
         case T_qarc:
-            growth->qarc = new QARC( growth );
-            doQARC( growth->qarc );
+            if( growth->shape )
+                unexpected( tok );
+            growth->shape = new QARC( growth );
+            doQARC( (QARC*) growth->shape );
             break;
 
         case T_net:
@@ -3472,6 +3468,7 @@ PCB* SPECCTRA_DB::MakePCB()
     pcb->structure->rules = new RULE( pcb->structure, T_rule );
     
     pcb->placement = new PLACEMENT( pcb );
+    pcb->placement->flip_style = T_mirror_first;
     
     pcb->library = new LIBRARY( pcb );
     
