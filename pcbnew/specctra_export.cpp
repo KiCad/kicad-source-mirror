@@ -891,9 +891,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             }
             else
             {
-#if 0           // PCBNEW user's edges are rarely this clean, let the router figure 
-                // out the mess by using code at #else below.             
+#if 1 
                 PATH*  path = new PATH( boundary );
+                boundary->paths.push_back( path );
                 
                 path->layer_id = "pcb";
                 for( unsigned i=0; i<ppairs.size();  ++i )
@@ -902,8 +902,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                     // otherwise it will.
                     path->points.push_back( ppairs[i].start );
                 }
-                
-                boundary->paths.push_back( path );
 #else   
                 for( unsigned i=0;  i<ppairs.size();  ++i )
                 {
