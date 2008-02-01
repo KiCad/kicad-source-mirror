@@ -695,19 +695,19 @@ public:
         
         const char* quote = out->GetQuoteChar( layer_id.c_str() );
         
-        const int RIGHTMARGIN = 80;        
+        const int RIGHTMARGIN = 70;        
         int perLine = out->Print( nestLevel, "(%s %s%s%s %.6g", 
                                LEXER::GetTokenText( Type() ),
                                quote, layer_id.c_str(), quote, 
                                aperture_width );
 
+        int wrapNest = MAX( nestLevel+1, 6 );
         for( unsigned i=0;  i<points.size();  ++i )
         {
             if( perLine > RIGHTMARGIN )
             {
                 out->Print( 0, "\n" );
-                perLine = out->Print( nestLevel+1, "%s", "" );
-                newline = "\n";
+                perLine = out->Print( wrapNest, "%s", "" );
             }
             else
                 perLine += out->Print( 0, "  " );
@@ -717,11 +717,10 @@ public:
 
         if( aperture_type == T_square )
         {
-            out->Print( 0, "\n" );
-            out->Print( nestLevel+1, "(aperture_type square))\n" );
+            out->Print( 0, "(aperture_type square)" );
         }
-        else
-            out->Print( 0, ")%s", newline ); 
+        
+        out->Print( 0, ")%s", newline ); 
     }
 };
 typedef boost::ptr_vector<PATH> PATHS;

@@ -42,7 +42,7 @@
     Wide use is made of boost::ptr_vector<> and std::vector<> template classes.
     If the contained object is small, then std::vector tends to be used.
     If the contained object is large, variable size, or would require writing
-    an assignment operator() or copy constructore, then boost::ptr_vector
+    an assignment operator() or copy constructor, then boost::ptr_vector
     cannot be beat.
 */    
 

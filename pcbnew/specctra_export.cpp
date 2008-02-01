@@ -73,6 +73,9 @@ void WinEDA_PcbFrame::ExportToSPECCTRA( wxCommandEvent& event )
     SPECCTRA_DB     db;
     bool            ok = true;
     wxString        errorText;
+
+    BASE_SCREEN*    screen = GetScreen();
+    bool            wasModified = screen->IsModify() && !screen->IsSave();
     
     db.SetPCB( SPECCTRA_DB::MakePCB() );
 
@@ -92,6 +95,12 @@ void WinEDA_PcbFrame::ExportToSPECCTRA( wxCommandEvent& event )
         errorText = ioe.errorText;
     }
 
+    // The two calls below to BOARD::Change_Side_Module(), both set the 
+    // modified flag, yet their actions cancel each other out, so it should 
+    // be ok to clear the modify flag.
+    if( !wasModified )
+        screen->ClrModify();
+    
     if( ok )
     {
         // @todo display a message saying the export is complete.
@@ -105,8 +114,8 @@ namespace DSN {
 
 struct POINT_PAIR
 {
-    POINT       p1;         ///< start
-    POINT       p2;         ///< end
+    POINT       start;
+    POINT       end;
     BOARD_ITEM* item;       ///< the item which has these points, TRACK or DRAWSEGMENT
 };
 typedef std::vector<POINT_PAIR>     POINT_PAIRS; 
@@ -114,9 +123,9 @@ typedef std::vector<POINT_PAIR>     POINT_PAIRS;
 
 static inline void swap( POINT_PAIR& pair )
 {
-    POINT temp = pair.p1;
-    pair.p1 = pair.p2;
-    pair.p2 = temp;
+    POINT temp = pair.start;
+    pair.start = pair.end;
+    pair.end   = temp;
 }
 
 
@@ -158,29 +167,77 @@ static POINT mapPt( const wxPoint& pt )
 
 
 /**
+ * Function findPOINT
+ * searches the list of POINT_PAIRS for a matching end to the given POINT.
+ * @return int - 0 if no match, or + one based index of a POINT_PAIR with a matching ".start",
+ *              or a - one based index of a POINT_PAIR with a matching ".end".
+ */
+static int findPOINT( const POINT& pt, const POINT_PAIR source[], int count )
+{
+    for( int i=0;  i<count;  ++i )
+    {
+        if( pt == source[i].start )
+        {
+            return +( i + 1 ); 
+        }
+        
+        if( pt == source[i].end )
+        {
+            return -( i + 1 ); 
+        }
+    }
+    
+    return 0;
+}
+
+
+/**
  * Function swapEnds
  * will swap ends of any POINT_PAIR in the POINT_PAIRS list in order to
  * make the consecutive POINT_PAIRs be "connected" at their ends.
  */
 static void swapEnds( POINT_PAIRS& aList )
 {
-    POINT   temp;
-    
-    if( aList.size() <= 1 )
+    if( !aList.size() )
         return;
     
-    for( unsigned i=0;  i<aList.size();  ++i )
-    {
-        if( aList[i].p1 == aList[i+1].p1 )
-            swap( aList[i] ); 
+    // do an extraction sort based on matching ends here.
+    POINT_PAIRS sorted;
+    POINT_PAIRS source( aList );
 
-        else if( aList[i].p1 == aList[i+1].p2 )
+    // try and start the search using a POINT which has at least one match elsewhere.
+    if( findPOINT( source.begin()->start, &source[1], source.size()-1 ) != 0 )
+        swap( *source.begin() );        // swap start and end of first PAIR
+    
+    while( source.size() )
+    {
+        sorted.push_back( *source.begin() );
+        source.erase( source.begin() );
+
+        // keep looping through the source list looking for a match to the end of the last sorted.        
+        int result;
+        while( (result = findPOINT( sorted.back().end, &source[0], source.size() ) ) != 0 )
         {
-            swap( aList[i] );
-            swap( aList[i+1] );
-            ++i;    // skip next one, we swapped i+1 here
+            int ndx = ABS(result)-1; 
+            sorted.push_back( source[ ndx ] );
+            source.erase( source.begin()+ndx );
+            
+            if( result < 0 )
+                swap( sorted.back() );
         }
     }
+        
+#if 1 && defined(DEBUG)
+    printf( "swapEnds():\n" );
+    for( unsigned i=0;  i<sorted.size();  ++i )
+    {
+        printf( "(%.6g,%.6g)  (%.6g,%.6g)\n", 
+               sorted[i].start.x, sorted[i].start.y, 
+               sorted[i].end.x,   sorted[i].end.y );
+    }
+#endif
+    
+    aList = sorted;
 }
 
 
@@ -197,15 +254,15 @@ static bool isRectangle( POINT_PAIRS& aList )
         for( unsigned i=0;  i<aList.size();  ++i )
         {
             if( i < aList.size()-1 )
-                if( aList[i].p2 != aList[i+1].p1 )
+                if( aList[i].end != aList[i+1].start )
                     return false;
             
-            if( aList[i].p1.x != aList[i].p2.x 
-            &&  aList[i].p1.y != aList[i].p2.y )
+            if( aList[i].start.x != aList[i].end.x 
+            &&  aList[i].start.y != aList[i].end.y )
                 return false;
         }
         
-        return ( aList[0].p1 == aList[3].p2 );
+        return ( aList[0].start == aList[3].end );
     }
     return false;
 }
@@ -316,7 +373,11 @@ IMAGE* SPECCTRA_DB::makeIMAGE( MODULE* aModule )
             
             pin->padstack_id = padstack->padstack_id;
             pin->pin_id      = CONV_TO_UTF8( pad->ReturnStringPadName() );
-            pin->SetVertex( mapPt( pad->m_Pos0 ) );
+            
+            // copper shape's position is hole position + offset
+            wxPoint pos = pad->m_Pos0 + pad->m_Offset;
+            
+            pin->SetVertex( mapPt( pos )  );
         }
     }
     
@@ -421,14 +482,6 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
         // padstacks.size()-1 is the index of the matching padstack in LIBRARY::padstacks
         pad->m_logical_connexion = pcb->library->padstacks.size()-1;
         
-        // paddOfset is the offset of copper shape relative to hole position, 
-        // and pad->m_Pos is hole position. All shapes must be shifted by
-        // this distance, normally (0,0).
-        
-        // Note that the y correction here is set negative.
-        POINT       padOffset( scale(pad->m_Offset.x), -scale(pad->m_Offset.y) );
-
-        
         // For now, we will report only one layer for the pads.  SMD pads are reported on the
         // top layer, and through hole are reported on <reserved_layer_name> "signal".
         // We could do better if there was actually a "layer type" field within 
@@ -462,7 +515,6 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
                         
                         circle->SetLayerId( layerName );
                         circle->SetDiameter( diameter );
-                        circle->SetVertex( padOffset );
                         ++coppers;
                     }
                 }
@@ -485,9 +537,6 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
                 
                 POINT   lowerLeft( -dx, -dy );
                 POINT   upperRight( dx, dy );
-
-                lowerLeft  += padOffset;
-                upperRight += padOffset;
 
                 for( int layer=0;  layer<reportedLayers;  ++layer )
                 {
@@ -540,38 +589,55 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
                             shape = new SHAPE( padstack );
                             padstack->Append( shape );
                             path = makePath( 
-                                    POINT( -dr + padOffset.x, padOffset.y - radius ),     // aStart
-                                    POINT(  dr + padOffset.x, padOffset.y - radius ),     // aEnd
+                                    POINT( -dr, -radius ),      // aStart
+                                    POINT(  dr, -radius ),      // aEnd
                                     layerName );
                             shape->SetShape( path );
                             
                             shape = new SHAPE( padstack );
                             padstack->Append( shape );
-                            // @todo: this 1/2 circle arc needs to be split into two quarter circle arcs 
                             qarc = makeArc( 
-                                    POINT(  dr + padOffset.x, padOffset.y - radius),      // aStart
-                                    POINT(  dr + padOffset.x, padOffset.y + radius),      // aEnd
-                                    POINT(  dr + padOffset.x, padOffset.y ),              // aCenter
+                                    POINT(  dr, -radius),       // aStart
+                                    POINT(  dr, 0.0 ),          // aEnd
+                                    POINT(  dr, 0.0 ),          // aCenter
+                                    layerName );
+                            shape->SetShape( qarc );
+    
+                            shape = new SHAPE( padstack );
+                            padstack->Append( shape );
+                            qarc = makeArc( 
+                                    POINT(  dr, 0.0),           // aStart
+                                    POINT(  dr, radius),        // aEnd
+                                    POINT(  dr, 0.0 ),          // aCenter
                                     layerName );
                             shape->SetShape( qarc );
     
                             shape = new SHAPE( padstack );
                             padstack->Append( shape );
                             path = makePath( 
-                                    POINT(  dr + padOffset.x, padOffset.y + radius ),     // aStart
-                                    POINT( -dr + padOffset.x, padOffset.y + radius ),     // aEnd
+                                    POINT(  dr,  radius ),      // aStart
+                                    POINT( -dr,  radius ),      // aEnd
                                     layerName );
                             shape->SetShape( path );
     
                             shape = new SHAPE( padstack );
                             padstack->Append( shape );
-                            // @todo: this 1/2 circle arc needs to be split into two quarter circle arcs 
                             qarc = makeArc( 
-                                    POINT( -dr + padOffset.x, padOffset.y + radius),      // aStart
-                                    POINT( -dr + padOffset.x, padOffset.y - radius),      // aEnd
-                                    POINT( -dr + padOffset.x, padOffset.y ),              // aCenter
+                                    POINT( -dr, radius),        // aStart
+                                    POINT( -dr, 0.0),           // aEnd
+                                    POINT( -dr, 0.0 ),          // aCenter
                                     layerName );
                             shape->SetShape( qarc );
+                            
+                            shape = new SHAPE( padstack );
+                            padstack->Append( shape );
+                            qarc = makeArc( 
+                                    POINT( -dr, 0.0),           // aStart
+                                    POINT( -dr, -radius),       // aEnd
+                                    POINT( -dr, 0.0 ),          // aCenter
+                                    layerName );
+                            shape->SetShape( qarc );
+                            
                             ++coppers;
                         }
                     }
@@ -595,38 +661,55 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
                             shape = new SHAPE( padstack );
                             padstack->Append( shape );
                             path = makePath( 
-                                    POINT( -radius + padOffset.x, padOffset.y - dr ),   // aStart
-                                    POINT( -radius + padOffset.x, padOffset.y + dr ),   // aEnd
+                                    POINT( -radius, -dr ),      // aStart
+                                    POINT( -radius,  dr ),      // aEnd
                                     layerName );
                             shape->SetShape( path );
     
                             shape = new SHAPE( padstack );
                             padstack->Append( shape );
-                            // @todo: this 1/2 circle arc needs to be split into two quarter circle arcs 
                             qarc = makeArc( 
-                                    POINT( -radius + padOffset.x, padOffset.y + dr ),   // aStart
-                                    POINT(  radius + padOffset.x, padOffset.y + dr),    // aEnd
-                                    POINT(  padOffset.x, padOffset.y +dr ),             // aCenter
+                                    POINT( -radius, dr ),       // aStart
+                                    POINT(  0.0,    dy ),       // aEnd
+                                    POINT(  0.0,    dr ),       // aCenter
+                                    layerName );
+                            shape->SetShape( qarc );
+    
+                            shape = new SHAPE( padstack );
+                            padstack->Append( shape );
+                            qarc = makeArc( 
+                                    POINT(  0.0,    dy ),       // aStart
+                                    POINT(  radius, dr),        // aEnd
+                                    POINT(  0.0,    dr ),       // aCenter
                                     layerName );
                             shape->SetShape( qarc );
     
                             shape = new SHAPE( padstack );
                             padstack->Append( shape );
                             path = makePath( 
-                                    POINT(  radius + padOffset.x, padOffset.y + dr ),   // aStart
-                                    POINT(  radius + padOffset.x, padOffset.y - dr ),   // aEnd
+                                    POINT(  radius,  dr ),      // aStart
+                                    POINT(  radius, -dr ),      // aEnd
                                     layerName );
                             shape->SetShape( path );
     
                             shape = new SHAPE( padstack );
                             padstack->Append( shape );
-                            // @todo: this 1/2 circle arc needs to be split into two quarter circle arcs 
                             qarc = makeArc( 
-                                    POINT(  radius + padOffset.x, padOffset.y - dr),    // aStart
-                                    POINT( -radius + padOffset.x, padOffset.y - dr),    // aEnd
-                                    POINT( padOffset.x, padOffset.y - dr ),             // aCenter
+                                    POINT( radius, -dr ),       // aStart
+                                    POINT( 0.0,    -dy ),       // aEnd
+                                    POINT( 0.0,    -dr ),       // aCenter
                                     layerName );
                             shape->SetShape( qarc );
+                            
+                            shape = new SHAPE( padstack );
+                            padstack->Append( shape );
+                            qarc = makeArc( 
+                                    POINT(  0.0,    -dy ),      // aStart
+                                    POINT( -radius, -dr ),      // aEnd
+                                    POINT( 0.0,     -dr ),      // aCenter
+                                    layerName );
+                            shape->SetShape( qarc );
+                            
                             ++coppers;
                         }
                     }
@@ -774,8 +857,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             
             if( item->GetLayer() == EDGE_N )
             {
-                pair.p1 = mapPt( item->m_Start );
-                pair.p2 = mapPt( item->m_End );
+                pair.start = mapPt( item->m_Start );
+                pair.end = mapPt( item->m_End );
                 pair.item = item;
                 ppairs.push_back( pair );
                 haveEdges = true;
@@ -802,12 +885,14 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 rect->layer_id = "pcb";
                 
                 // opposite corners
-                rect->SetCorners( ppairs[0].p1, ppairs[2].p1 );
+                rect->SetCorners( ppairs[0].start, ppairs[2].start );
                 
                 boundary->rectangle = rect;
             }
             else
             {
+#if 0           // PCBNEW user's edges are rarely this clean, let the router figure 
+                // out the mess by using code at #else below.             
                 PATH*  path = new PATH( boundary );
                 
                 path->layer_id = "pcb";
@@ -815,10 +900,21 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 {
                     // unless its a closed polygon, this probably won't work,
                     // otherwise it will.
-                    path->points.push_back( ppairs[i].p1 );
+                    path->points.push_back( ppairs[i].start );
                 }
                 
                 boundary->paths.push_back( path );
+#else   
+                for( unsigned i=0;  i<ppairs.size();  ++i )
+                {
+                    PATH*  path = new PATH( boundary );
+                    boundary->paths.push_back( path );
+                    
+                    path->layer_id = "pcb";
+                    path->points.push_back( ppairs[i].start );
+                    path->points.push_back( ppairs[i].end );
+                }
+#endif
             }
     
             pcb->structure->SetBOUNDARY( boundary );
@@ -960,6 +1056,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 delete image;
             }
 
+            // @todo: this only works if the user has not modified the MODULE within the PCB
+            // and made it different from what is in the PCBNEW library.  Need to test
+            // each image for uniqueness, not just based on name as is done here:
+            
             COMPONENT* comp = pcb->placement->LookupCOMPONENT( registered->image_id );
             
             PLACE* place = new PLACE( comp );
@@ -968,8 +1068,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             place->SetRotation( module->m_Orient/10.0 );
             place->SetVertex( mapPt( module->m_Pos ) );
             place->component_id = CONV_TO_UTF8( module->GetReference() );
-            
-            // not supported by freerouting.net yet:
             place->part_number  = CONV_TO_UTF8( module->GetValue() );
             
             // module is flipped from bottom side, set side to T_back
