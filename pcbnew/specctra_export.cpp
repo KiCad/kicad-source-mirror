@@ -36,6 +36,8 @@
 #include "collectors.h"
 #include "wxPcbStruct.h"        // Change_Side_Module()
 #include "pcbstruct.h"          // HISTORY_NUMBER
+#include "autorout.h"           // NET_CODES_OK
+
 
 using namespace DSN;
 
@@ -61,6 +63,12 @@ void WinEDA_PcbFrame::ExportToSPECCTRA( wxCommandEvent& event )
     if( fullFileName == wxEmptyString )
         return;
 
+    // prepare the EQUIPOTs
+    if( !( m_Pcb->m_Status_Pcb & NET_CODES_OK ) )
+    {
+        //m_Pcb->m_Status_Pcb &= ~(LISTE_PAD_OK);
+        recalcule_pad_net_code();
+    }
     
     SPECCTRA_DB     db;
     bool            ok = true;
@@ -314,6 +322,56 @@ IMAGE* SPECCTRA_DB::makeIMAGE( MODULE* aModule )
     
     return image;
 }    
+
+
+PADSTACK* SPECCTRA_DB::makeVia( const SEGVIA* aVia )
+{
+    char        name[48];
+    PADSTACK*   padstack = new PADSTACK( pcb->library );
+    
+    SHAPE*      shape = new SHAPE( padstack );
+    padstack->Append( shape );
+
+    // @todo: handle the aVia->Shape() differently for each type of via: MICROVIA, etc.
+    
+    CIRCLE*     circle = new CIRCLE( shape );
+    shape->SetShape( circle );
+
+    double      dsnDiameter = scale( aVia->m_Width );     
+    circle->SetDiameter( dsnDiameter );
+
+    circle->SetLayerId( "signal" ); 
+    
+    snprintf( name, sizeof(name),  "Via_%.6g_mil", dsnDiameter ); 
+    name[ sizeof(name)-1 ] = 0;
+    padstack->SetPadstackId( name );
+    
+    return padstack;
+}        
+
+
+PADSTACK* SPECCTRA_DB::makeVia( int aCopperDiameter )
+{
+    char        name[48];
+    PADSTACK*   padstack = new PADSTACK( pcb->library );
+    
+    SHAPE*      shape = new SHAPE( padstack );
+    padstack->Append( shape );
+
+    CIRCLE*     circle = new CIRCLE( shape );
+    shape->SetShape( circle );
+
+    double      dsnDiameter = scale(aCopperDiameter);     
+    circle->SetDiameter( dsnDiameter );
+
+    circle->SetLayerId( "signal" ); 
+    
+    snprintf( name, sizeof(name),  "Via_%.6g_mil", dsnDiameter ); 
+    name[ sizeof(name)-1 ] = 0;
+    padstack->SetPadstackId( name );
+    
+    return padstack;
+}        
 
 
 void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
@@ -599,7 +657,7 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
     int defaultViaSize = aBoard->m_BoardSettings->m_CurrentViaSize;
     if( defaultViaSize )
     {
-        PADSTACK*   padstack = new PADSTACK( pcb->library );
+        PADSTACK*   padstack = makeVia( defaultViaSize );
         pcb->library->AddPadstack( padstack );
 
         // remember this index, it is the default via and also the start of the 
@@ -607,15 +665,7 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
         // At this index and later are the vias.
         pcb->library->SetViaStartIndex( pcb->library->padstacks.size()-1 );
         
-        SHAPE*      shape = new SHAPE( padstack );
-        padstack->Append( shape );
-
-        CIRCLE*     circle = new CIRCLE( shape );
-        shape->SetShape( circle );
-        circle->SetLayerId( "signal" ); 
-        circle->SetDiameter( scale(defaultViaSize) );
-
-        padstack->SetPadstackId( "Via_Default" );
+        // padstack->SetPadstackId( "Via_Default" );  I like the padstack_id with the size in it.
     }
 
     for( int i=0;  i<HISTORY_NUMBER;  ++i )
@@ -627,21 +677,8 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
         if( viaSize == defaultViaSize )
             continue;
         
-        PADSTACK*   padstack = new PADSTACK( pcb->library );
+        PADSTACK*   padstack = makeVia( viaSize ); 
         pcb->library->AddPadstack( padstack );
-        
-        SHAPE*      shape = new SHAPE( padstack );
-        padstack->Append( shape );
-
-        CIRCLE*     circle = new CIRCLE( shape );
-        shape->SetShape( circle );
-        circle->SetLayerId( "signal" ); 
-        circle->SetDiameter( scale(viaSize) );
-
-        snprintf( name, sizeof(name),  "Via_%.6g_mil", scale(viaSize) ); 
-        name[ sizeof(name)-1 ] = 0;
-        
-        padstack->SetPadstackId( name );
     }
 }
 
@@ -923,9 +960,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 delete image;
             }
 
-            const std::string& imageId = registered->image_id;
-            
-            COMPONENT* comp = pcb->placement->LookupCOMPONENT( imageId );
+            COMPONENT* comp = pcb->placement->LookupCOMPONENT( registered->image_id );
             
             PLACE* place = new PLACE( comp );
             comp->places.push_back( place );
@@ -934,9 +969,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             place->SetVertex( mapPt( module->m_Pos ) );
             place->component_id = CONV_TO_UTF8( module->GetReference() );
             
-            /* not supported by freerouting.com yet.
+            // not supported by freerouting.net yet:
             place->part_number  = CONV_TO_UTF8( module->GetValue() );
-            */
             
             // module is flipped from bottom side, set side to T_back
             if( module->flag )      
@@ -944,23 +978,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         }
     }
     
-    
-    //-----<via_descriptor>-------------------------------------------------
-    {
-        // Output the vias in the padstack list here, by name
-        VIA*        vias = pcb->structure->via;
-        PADSTACKS&  padstacks = pcb->library->padstacks;
-        int         viaNdx = pcb->library->via_start_index;
-
-        if( viaNdx != -1 )
-        {
-            for(  ; viaNdx < (int)padstacks.size();  ++viaNdx )
-            {
-                vias->AppendVia( padstacks[viaNdx].padstack_id.c_str() );
-            }
-        }
-    }
-
     
     //-----<create the nets>------------------------------------------------
     {
@@ -1007,7 +1024,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
     {
         // export all of them for now, later we'll decide what controls we need
         // on this.
-        static KICAD_T scanTRACKs[] = { TYPETRACK, EOT };
+        static const KICAD_T scanTRACKs[] = { TYPETRACK, EOT };
         
         items.Collect( aBoard, scanTRACKs );
 
@@ -1051,7 +1068,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
                 WIRE* wire = new WIRE( wiring );
                 wiring->wires.push_back( wire );
-                wire->net_id = netname; 
+                wire->net_id = netname;
+                
+                wire->wire_type = T_protect;  // @todo, this should be configurable
                 
                 int kiLayer  = track->GetLayer();
                 int pcbLayer = kicadLayer2pcb[kiLayer];
@@ -1067,10 +1086,63 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             
             path->AppendPoint( mapPt( track->m_End ) );
         }
-        
-        // @todo vias here.
-        
     }
+    
+    
+    //-----<export the existing real instantiated vias>---------------------
+    {
+        // export all of them for now, later we'll decide what controls we need
+        // on this.
+        static const KICAD_T scanVIAs[] = { TYPEVIA, EOT };
+        
+        items.Collect( aBoard, scanVIAs );
+        
+        for( int i=0;  i<items.GetCount();  ++i )
+        {
+            SEGVIA* via = (SEGVIA*) items[i];
+            wxASSERT( via->Type() == TYPEVIA );
+           
+            PADSTACK* padstack = makeVia( via );
+            PADSTACK* registered = pcb->library->LookupVia( padstack );
+            if( padstack != registered )
+            {
+                delete padstack;
+            }
+
+            WIRE_VIA* dsnVia = new WIRE_VIA( pcb->wiring );
+            pcb->wiring->wire_vias.push_back( dsnVia );
+            
+            dsnVia->padstack_id = registered->padstack_id;
+            dsnVia->vertexes.push_back( mapPt( via->GetPosition() ) );
+            
+            int netcode = via->GetNet();
+            EQUIPOT* equipot = aBoard->FindNet( netcode );
+            wxASSERT( equipot );
+            
+            dsnVia->net_id = CONV_TO_UTF8( equipot->m_Netname );
+            
+            dsnVia->via_type = T_protect;     // @todo, this should be configurable
+        }
+    }
+    
+    
+    //-----<via_descriptor>-------------------------------------------------
+    {
+        // Output the vias in the padstack list here, by name.  This must
+        // be done after exporting existing vias as WIRE_VIAs.
+        VIA*        vias = pcb->structure->via;
+        PADSTACKS&  padstacks = pcb->library->padstacks;
+        int         viaNdx = pcb->library->via_start_index;
+
+        if( viaNdx != -1 )
+        {
+            for(  ; viaNdx < (int)padstacks.size();  ++viaNdx )
+            {
+                vias->AppendVia( padstacks[viaNdx].padstack_id.c_str() );
+            }
+        }
+    }
+
     
     //-----<restore MODULEs>------------------------------------------------
     

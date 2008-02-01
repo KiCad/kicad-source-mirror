@@ -18,8 +18,11 @@ class BOARD : public BOARD_ITEM
     friend class WinEDA_PcbFrame;
     
 private:
-    std::vector<MARKER*> m_markers;             ///< MARKERs for clearance problems, owned by pointer                                                 
-	std::vector<ZONE_CONTAINER*> m_ZoneDescriptorList; 	///< edge zone descriptors, owned by pointer                                                 
+    typedef std::vector<MARKER*>  MARKERS;      // @todo: switch to boost:ptr_vector, and change ~BOARD()
+    MARKERS         m_markers;                  ///< MARKERs for clearance problems, owned by pointer
+    
+    typedef std::vector<ZONE_CONTAINER*>  ZONE_CONTAINERS;  // @todo: switch to boost::ptr_vector, and change ~BOARD()
+    ZONE_CONTAINERS m_ZoneDescriptorList; 	   ///< edge zone descriptors, owned by pointer
 
 public:
     WinEDA_BasePcbFrame*    m_PcbFrame;         // Window de visualisation

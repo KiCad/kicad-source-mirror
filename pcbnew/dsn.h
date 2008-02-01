@@ -298,6 +298,7 @@ enum DSN_T {
     T_plane,
     T_pn,
     T_point,
+    T_polyline_path,
     T_polygon,
     T_position,
     T_positive_diagonal,

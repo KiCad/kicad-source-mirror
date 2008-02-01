@@ -2227,8 +2227,8 @@ public:
 
     /**
      * Function LookupIMAGE
-     * will add the image only if one exactly like it does not alread exist
-     * in the image list.
+     * will add the image only if one exactly like it does not already exist
+     * in the image container.
      * @return IMAGE* - the IMAGE which is registered in the LIBRARY that
      *           matches the argument, and it will be either the argument or
      *           a previous image which is a duplicate.
@@ -2242,6 +2242,53 @@ public:
             return aImage;
         }
         return &images[ndx];
+    }
+
+    /**
+     * Function FindVia
+     * searches this LIBRARY for a via which matches the argument.
+     * @return int - if found the index into the padstack list, else -1.
+     */
+    int FindVia( PADSTACK* aVia )
+    {
+        if( via_start_index > -1 )
+        {
+            for( unsigned i=via_start_index;  i<padstacks.size();  ++i )
+            {
+                if( 0 == PADSTACK::Compare( aVia, &padstacks[i] ) )
+                    return (int) i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Function AppendPADSTACK
+     * adds the padstack to the padstack container.
+     */
+    void AppendPADSTACK( PADSTACK* aPadstack )
+    {
+        aPadstack->SetParent( this );
+        padstacks.push_back( aPadstack );
+    }
+    
+    /**
+     * Function LookupVia
+     * will add the via only if one exactly like it does not already exist
+     * in the padstack container.
+     * @return PADSTACK* - the PADSTACK which is registered in the LIBRARY that
+     *           matches the argument, and it will be either the argument or
+     *           a previous padstack which is a duplicate.
+     */
+    PADSTACK* LookupVia( PADSTACK* aVia )
+    {
+        int ndx = FindVia( aVia );
+        if( ndx == -1 )
+        {
+            AppendPADSTACK( aVia );
+            return aVia;
+        }
+        return &padstacks[ndx];
     }
     
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
@@ -2671,7 +2718,7 @@ class WIRE : public ELEM
     
     std::string     net_id;
     int             turret;
-    DSN_T           type;
+    DSN_T           wire_type;
     DSN_T           attr;
     std::string     shield;
     WINDOWS         windows;
@@ -2686,7 +2733,7 @@ public:
         connect = 0;
         
         turret = -1;
-        type = T_NONE;
+        wire_type = T_NONE;
         attr = T_NONE;
         supply = false;
     }
@@ -2729,8 +2776,8 @@ public:
         if( turret >= 0 )
             out->Print( 0, "(turrent %d)", turret );
 
-        if( type != T_NONE )
-            out->Print( 0, "(type %s)", LEXER::GetTokenText( type ) );
+        if( wire_type != T_NONE )
+            out->Print( 0, "(type %s)", LEXER::GetTokenText( wire_type ) );
         
         if( attr != T_NONE )
             out->Print( 0, "(attr %s)", LEXER::GetTokenText( attr ) );
@@ -2774,7 +2821,7 @@ class WIRE_VIA : public ELEM
     POINTS          vertexes;
     std::string     net_id;
     int             via_number;
-    DSN_T           type;
+    DSN_T           via_type;
     DSN_T           attr;
     std::string     virtual_pin_name;
     STRINGS         contact_layers;
@@ -2786,7 +2833,7 @@ public:
         ELEM( T_via, aParent )
     {
         via_number = -1;
-        type = T_NONE;
+        via_type = T_NONE;
         attr = T_NONE;
         supply = false;
     }
@@ -2813,7 +2860,7 @@ public:
             perLine += out->Print( 0, "%.6g %.6g", i->x, i->y ); 
         }
         
-        if( net_id.size() || via_number!=-1 || type!=T_NONE || attr!=T_NONE || supply)
+        if( net_id.size() || via_number!=-1 || via_type!=T_NONE || attr!=T_NONE || supply)
             out->Print( 0, " " );
         
         if( net_id.size() )
@@ -2837,14 +2884,14 @@ public:
             perLine += out->Print( 0, "(via_number %d)", via_number );
         }
         
-        if( type != T_NONE )
+        if( via_type != T_NONE )
         {
             if( perLine > RIGHTMARGIN )
             {
                 out->Print( 0, "\n" );
                 perLine = out->Print( nestLevel+1, "%s", "" );
             }
-            perLine += out->Print( 0, "(type %s)", LEXER::GetTokenText( type ) );
+            perLine += out->Print( 0, "(type %s)", LEXER::GetTokenText( via_type ) );
         }
         
         if( attr != T_NONE )
@@ -3579,7 +3626,25 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
      * LIBRARY::padstacks list that it matches.
      */
     void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads );
+
     
+    /**
+     * Function makeVia
+     * makes a round through hole PADSTACK using the given Kicad diameter in deci-mils.
+     * @param aCopperDiameter The diameter of the copper pad.
+     * @return PADSTACK* - The padstack, which is on the heap only, user must save
+     *  or delete it.
+     */
+    PADSTACK* makeVia( int aCopperDiameter );
+    
+    /**
+     * Function makeVia
+     * makes any kind of PADSTACK using the given Kicad SEGVIA.
+     * @param aVia The SEGVIA to build the padstack from.
+     * @return PADSTACK* - The padstack, which is on the heap only, user must save
+     *  or delete it.
+     */
+    PADSTACK* makeVia( const SEGVIA* aVia );
     
 public:
 

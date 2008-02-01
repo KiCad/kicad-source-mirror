@@ -306,6 +306,7 @@ const static KEYWORD tokens[] = {
     TOKDEF(plane),
     TOKDEF(pn),
     TOKDEF(point),
+    TOKDEF(polyline_path),      // used by freerouting.com
     TOKDEF(polygon),
     TOKDEF(position),
     TOKDEF(positive_diagonal),

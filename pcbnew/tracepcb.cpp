@@ -177,7 +177,7 @@ void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
         DrawHightLight( DC, g_HightLigth_NetCode );
 
 
-	for( unsigned ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
+	for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
 	{
 		ZONE_CONTAINER* edge_zone =  m_Pcb->GetArea(ii);
 		edge_zone->Draw( DrawPanel, DC, wxPoint(0,0), mode);

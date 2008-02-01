@@ -944,11 +944,10 @@ void BOARD::Show( int nestLevel, std::ostream& os )
         p->Show( nestLevel+2, os );
     NestedSpace( nestLevel+1, os ) << "</zones>\n";
 
-    NestedSpace( nestLevel+1, os ) << "<zoneedges>\n";
-    p = m_CurrentLimitZone;
-    for( ; p; p = p->Next() )
-        p->Show( nestLevel+2, os );
-    NestedSpace( nestLevel+1, os ) << "</zoneedges>\n";
+    NestedSpace( nestLevel+1, os ) << "<zone_container>\n";
+    for( ZONE_CONTAINERS::iterator i=m_ZoneDescriptorList.begin();  i!=m_ZoneDescriptorList.end();  ++i )
+        (*i)->Show( nestLevel+2, os );
+    NestedSpace( nestLevel+1, os ) << "</zone_container>\n";
     
     p = (BOARD_ITEM*) m_Son;
     for( ; p;  p = p->Next() )

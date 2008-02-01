@@ -826,6 +826,8 @@ void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth ) throw( IOError )
             doCIRCLE( (CIRCLE*) growth->shape );
             break;
             
+        case T_polyline_path:
+            tok = T_path;
         case T_path:
         case T_polygon:
             if( growth->shape )
@@ -883,6 +885,8 @@ void SPECCTRA_DB::doWINDOW( WINDOW* growth ) throw( IOError )
             doCIRCLE( (CIRCLE*) growth->shape );
             break;
             
+        case T_polyline_path:
+            tok = T_path;
         case T_path:
         case T_polygon:
             if( growth->shape )
@@ -2002,6 +2006,8 @@ void SPECCTRA_DB::doSHAPE( SHAPE* growth ) throw( IOError )
         tok = nextTok();
         switch( tok )
         {
+        case T_polyline_path:
+            tok = T_path;
         case T_rect:
         case T_circle:
         case T_path:
@@ -2714,7 +2720,9 @@ void SPECCTRA_DB::doWIRE( WIRE* growth ) throw( IOError )
             growth->shape = new CIRCLE( growth );
             doCIRCLE( (CIRCLE*) growth->shape );
             break;
-        
+
+        case T_polyline_path:
+            tok = T_path;
         case T_path:
         case T_polygon:
             if( growth->shape )
@@ -2747,7 +2755,7 @@ void SPECCTRA_DB::doWIRE( WIRE* growth ) throw( IOError )
             tok = nextTok();
             if( tok!=T_fix && tok!=T_route && tok!=T_normal && tok!=T_protect )
                 expecting( "fix|route|normal|protect" );
-            growth->type = tok;
+            growth->wire_type = tok;
             needRIGHT();
             break;
 
@@ -2854,7 +2862,7 @@ void SPECCTRA_DB::doWIRE_VIA( WIRE_VIA* growth ) throw( IOError )
             tok = nextTok();
             if( tok!=T_fix && tok!=T_route && tok!=T_normal && tok!=T_protect )
                 expecting( "fix|route|normal|protect" );
-            growth->type = tok;
+            growth->via_type = tok;
             needRIGHT();
             break;
             
@@ -3468,7 +3476,7 @@ PCB* SPECCTRA_DB::MakePCB()
     pcb->structure->rules = new RULE( pcb->structure, T_rule );
     
     pcb->placement = new PLACEMENT( pcb );
-    pcb->placement->flip_style = T_mirror_first;
+    //pcb->placement->flip_style = T_mirror_first;   
     
     pcb->library = new LIBRARY( pcb );
     
