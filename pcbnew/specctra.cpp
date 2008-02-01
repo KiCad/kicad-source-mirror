@@ -3398,9 +3398,13 @@ const char* OUTPUTFORMATTER::GetQuoteChar( const char* wrapee, const char* quote
     
     for(  ; *wrapee;  ++wrapee )
     {
+        static const char quoteThese[] = "\t ()"
+            "%"     // per Alfons of freerouting.net, he does not like this unquoted as of 1-Feb-2008
+            ;
+        
         // if the string to be wrapped (wrapee) has a delimiter in it, 
         // return the quote_char so caller wraps the wrapee.
-        if( strchr( "\t ()", *wrapee ) )
+        if( strchr( quoteThese, *wrapee ) )
             return quote_char;
         
         if( !strchr( "01234567890.-+", *wrapee ) )
@@ -3561,7 +3565,7 @@ void STRINGFORMATTER::StripUseless()
 {
     for( std::string::iterator i=mystring.begin();  i!=mystring.end();  )
     {
-        if( isspace( *i ) || *i==')' || *i=='(' )
+        if( isspace( *i ) || *i==')' || *i=='(' || *i=='"' )
             mystring.erase(i);
         else
             ++i;
