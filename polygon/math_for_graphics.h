@@ -55,8 +55,11 @@ public:
 };
 
 // math stuff for graphics
-BOOL Quadratic( double a, double b, double c, double *x1, double *x2 );
+#if 0
 void DrawArc( CDC * pDC, int shape, int xxi, int yyi, int xxf, int yyf, BOOL bMeta=FALSE );
+#endif
+
+BOOL Quadratic( double a, double b, double c, double *x1, double *x2 );
 void RotatePoint( CPoint *p, int angle, CPoint org );
 void RotateRect( CRect *r, int angle, CPoint org );
 int TestLineHit( int xi, int yi, int xf, int yf, int x, int y, double dist );

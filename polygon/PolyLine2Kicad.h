@@ -10,25 +10,15 @@
 //
 // When used for copper areas, the first contour is the outer edge 
 // of the area, subsequent ones are "holes" in the copper.
-//
-// If a CDisplayList pointer is provided, the polyline can draw itself 
 
 #ifndef POLYLINE2KICAD_H
 #define POLYLINE2KICAD_H
 
 #define PCBU_PER_MIL 10
-#define MAX_LAYERS 32
 #define NM_PER_MIL 10 // 25400
 
 
 #include "pad_shapes.h"
-
-
-#define LAY_SELECTION  0
-#define LAY_TOP_COPPER 0
-
-#define CDC wxDC
-class wxDC;
 
 
 class CRect {

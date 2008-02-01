@@ -1038,25 +1038,8 @@ void CPolyLine::Hatch()
 			min_a = (int)(min_y - slope*min_x);
 		}
 		min_a = (min_a/spacing)*spacing;
-		int offset = 0;
-		if( layer < (LAY_TOP_COPPER+2) )
-			offset = 0;
-		else if( layer < (LAY_TOP_COPPER+4) )
-			offset = spacing/2;
-		else if( layer < (LAY_TOP_COPPER+6) )
-			offset = spacing/4;
-		else if( layer < (LAY_TOP_COPPER+8) )
-			offset = 3*spacing/4;
-		else if( layer < (LAY_TOP_COPPER+10) )
-			offset = 1*spacing/8;
-		else if( layer < (LAY_TOP_COPPER+12) )
-			offset = 3*spacing/8;
-		else if( layer < (LAY_TOP_COPPER+14) )
-			offset = 5*spacing/8;
-		else if( layer < (LAY_TOP_COPPER+16) )
-			offset = 7*spacing/8;
-		else
-			wxASSERT(0);
+		// calculate an offset depending on layer number, for a better display of hatches on a multilayer board
+		int offset =  (layer * 7) / 8;
 		min_a += offset;
 
 		// now calculate and draw hatch lines

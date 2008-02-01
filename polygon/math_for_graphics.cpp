@@ -241,7 +241,7 @@ int MakeEllipseFromArc( int xi, int yi, int xf, int yf, int style, EllipseKH * e
 		yyf = yf;
 	}
 	// find center and radii of ellipse
-	double xo, yo;
+	double xo=0, yo=0;
 	if( xxf > xxi && yyf > yyi )
 	{
 		xo = xxf;
@@ -1281,7 +1281,7 @@ int GetClearanceBetweenSegments( int x1i, int y1i, int x1f, int y1f, int style1,
 	EllipseKH el1;
 	EllipseKH el2;
 	bool bArcs;
-	int xi, yi, xf, yf;
+	int xi=0, yi=0, xf=0, yf=0;
 	if( style2 == CPolyLine::STRAIGHT )
 	{
 		// style1 = arc, style2 = straight
@@ -1601,7 +1601,7 @@ int GetArcIntersections( EllipseKH * el1, EllipseKH * el2,
 	double yr = el2->yrad*yscale;
 	// now test NSTEPS positions in arc, moving clockwise (ie. decreasing theta)
 	double step = M_PI/((NSTEPS-1)*2.0);
-	double d_prev, th_prev;
+	double d_prev=0, th_prev;
 	double th_interp;
 	double th1;
 	int n = 0;
@@ -1676,7 +1676,7 @@ double GetArcClearance( EllipseKH * el1, EllipseKH * el2,
 	double th_start2 = el2->theta1;
 	double th_end2 = el2->theta2;
 	double dmin = DBL_MAX;
-	double xmin, ymin, thmin, thmin2;
+	double xmin=0, ymin=0, thmin=0, thmin2=0;
 
 	int nsteps = NSTEPS;
 	int nsteps2 = NSTEPS;

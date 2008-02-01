@@ -154,9 +154,9 @@ void WinEDA_PcbFrame::Delete_Zone_Fill( wxDC* DC, SEGZONE* aZone, long aTimestam
 
 /*******************************************************/
 int WinEDA_PcbFrame::Delete_LastCreatedCorner( wxDC* DC )
-/*****************************************************************************/
+/*******************************************************/
 
-/** Used only while creating a new zone outline
+/** Used **only** while creating a new zone outline
  * Remove and delete the current outline segment in progress
  * @return 0 if no corner in list, or corner number
  * if no corner in list, close the outline creation
@@ -170,13 +170,13 @@ int WinEDA_PcbFrame::Delete_LastCreatedCorner( wxDC* DC )
     if( zone->GetNumCorners() == 0 )
         return 0;
 
-    zone->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+    zone->DrawWhileCreateOutline( DrawPanel, DC, GR_XOR );
 
-    if( zone->GetNumCorners() > 1 )
+    if( zone->GetNumCorners() > 2 )
     {
         zone->m_Poly->DeleteCorner( zone->GetNumCorners() - 1 );
-        if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
+		if ( DrawPanel->ManageCurseur )
+			DrawPanel->ManageCurseur(DrawPanel, DC, false);
     }
     else
     {
@@ -184,6 +184,7 @@ int WinEDA_PcbFrame::Delete_LastCreatedCorner( wxDC* DC )
         DrawPanel->ForceCloseManageCurseur = NULL;
         SetCurItem( NULL );
         zone->RemoveAllContours();
+		zone->m_Flags = 0;
     }
     return zone->GetNumCorners();
 }
@@ -542,7 +543,10 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
         if( zone->GetCornerPosition( ii - 1 ) != zone->GetCornerPosition( ii ) )
         {
             if( Drc_On && m_drc->Drc( zone, ii - 1 ) == OK_DRC )  // Ok, we can add a new corner
+			{
                 zone->AppendCorner( GetScreen()->m_Curseur );
+				SetCurItem( zone ); 	// calls Display_Infos().
+			}
         }
     }
 

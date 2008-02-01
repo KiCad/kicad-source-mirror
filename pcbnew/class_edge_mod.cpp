@@ -460,7 +460,10 @@ int EDGE_MODULE::ReadDescr( char* Line, FILE* File,
         m_Width = MAX_WIDTH;
 
 	// Check for a reasonnable layer:
-	if ( (m_Layer < FIRST_NON_COPPER_LAYER) || (m_Layer > LAST_NON_COPPER_LAYER) )
+	// m_Layer must be >= FIRST_NON_COPPER_LAYER, but because microwave footprints
+	// can use the copper layers m_Layer < FIRST_NON_COPPER_LAYER is allowed.
+	// @todo: changes use of EDGE_MODULE these footprints and allows only m_Layer >= FIRST_NON_COPPER_LAYER
+	if ( (m_Layer < 0) || (m_Layer > LAST_NON_COPPER_LAYER) )
 		m_Layer = SILKSCREEN_N_CMP;
     return error;
 }
