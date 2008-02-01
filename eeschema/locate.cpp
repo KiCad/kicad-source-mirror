@@ -351,7 +351,7 @@ bool SnapPoint2( const wxPoint& PosRef, int SearchMask,
 
             switch( STRUCT->m_Orient )
             {
-            case 0:             /* HORIZONTAL */
+            case 0:             /* HORIZONTAL Left justified */
                 x2 += dx; y2 -= dy;
                 break;
 
@@ -359,12 +359,12 @@ bool SnapPoint2( const wxPoint& PosRef, int SearchMask,
                 x2 -= dy; y2 -= dx;
                 break;
 
-            case 2:             /* horizontal inverse */
-                x2 -= dx; y2 += dy;
+            case 2:             /* horizontal  Right justified  */
+                x2 -= dx; y2 -= dy;
                 break;
 
             case 3:             /* vertical DOWN */
-                x2 += dy; y2 += dx;
+                x2 -= dy; y2 += dx;
                 break;
             }
 
@@ -571,7 +571,7 @@ bool DrawStructInBox( int x1, int y1, int x2, int y2,
 
         switch( STRUCT->m_Orient )
         {
-        case 0:             /* HORIZONTAL */
+        case 0:             /* HORIZONTAL  Left justified */
             xt2 += dx; yt2 -= dy;
             break;
 
@@ -579,12 +579,12 @@ bool DrawStructInBox( int x1, int y1, int x2, int y2,
             xt2 -= dy; yt2 -= dx;
             break;
 
-        case 2:             /* horizontal inverse */
-            xt2 -= dx; yt2 += dy;
+        case 2:             /* horizontal  Right justified  */
+            xt2 -= dx; yt2 -= dy;
             break;
 
         case 3:             /* vertical DOWN */
-            xt2 += dy; yt2 += dx;
+            xt2 -= dy; yt2 += dx;
             break;
         }
 

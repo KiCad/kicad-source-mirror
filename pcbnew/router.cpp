@@ -14,13 +14,13 @@
 
 #include "protos.h"
 
-#define ROUTER
-
 #define PSCALE 1
 
 /* routines internes */
+#ifdef ROUTER
 static void Out_Pads( BOARD* Pcb, FILE* outfile );
 static int  GenEdges( BOARD* Pcb, FILE* outfile );
+#endif
 static void GenExistantTracks( BOARD* Pcb, FILE* outfile, int current_net_code, int type );
 static void ReturnNbViasAndTracks( BOARD* Pcb, int netcode, int* nb_vias, int* nb_tracks );
 
@@ -143,7 +143,7 @@ void WinEDA_PcbFrame::GlobalRoute( wxDC* DC )
 
 
 /************************************************/
-static void Out_Pads( BOARD* Pcb, FILE* outfile )
+void Out_Pads( BOARD* Pcb, FILE* outfile )
 /************************************************/
 {
     D_PAD*     pt_pad;
@@ -314,7 +314,7 @@ static void Out_Pads( BOARD* Pcb, FILE* outfile )
 
 
 /**************************************************************************/
-static void ReturnNbViasAndTracks( BOARD* Pcb, int netcode, int* nb_vias,
+void ReturnNbViasAndTracks( BOARD* Pcb, int netcode, int* nb_vias,
                                    int* nb_tracks )
 /**************************************************************************/
 
@@ -345,7 +345,7 @@ static void ReturnNbViasAndTracks( BOARD* Pcb, int netcode, int* nb_vias,
 
 
 /*************************************************************/
-static void GenExistantTracks( BOARD* Pcb, FILE* outfile,
+void GenExistantTracks( BOARD* Pcb, FILE* outfile,
                                int current_net_code, int type )
 /*************************************************************/
 /* generation des pistes existantes */
@@ -429,7 +429,7 @@ static void GenExistantTracks( BOARD* Pcb, FILE* outfile,
 
 
 /***********************************************/
-static int GenEdges( BOARD* Pcb, FILE* outfile )
+int GenEdges( BOARD* Pcb, FILE* outfile )
 /***********************************************/
 
 /* Generation des contours (edges).

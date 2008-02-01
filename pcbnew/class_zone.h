@@ -147,7 +147,14 @@ public:
     void    Move( const wxPoint& offset );
 
     /**
-     * Function Move
+     * Function MoveEdge
+     * Move the outline Edge. m_CornerSelection is the start point of the outline edge
+     * @param offset = moving vector
+     */
+    void    MoveEdge( const wxPoint& offset );
+
+    /**
+     * Function Rotate
      * Move the outlines
      * @param centre = rot centre
      * @param angle = in 0.1 degree

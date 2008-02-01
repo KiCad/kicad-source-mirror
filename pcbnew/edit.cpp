@@ -68,13 +68,14 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_STOP_CURRENT_EDGE_ZONE:
     case ID_POPUP_PCB_DELETE_ZONE_LAST_CREATED_CORNER:
     case ID_POPUP_PCB_FILL_ALL_ZONES:
-	case ID_POPUP_PCB_PLACE_ZONE_CORNER:
-	case ID_POPUP_PCB_PLACE_ZONE_OUTLINES:
+    case ID_POPUP_PCB_PLACE_ZONE_CORNER:
+    case ID_POPUP_PCB_PLACE_ZONE_OUTLINES:
     case ID_POPUP_PCB_EDIT_ZONE_PARAMS:
     case ID_POPUP_PCB_DELETE_ZONE:
-	case ID_POPUP_PCB_MOVE_ZONE_CORNER:
-	case ID_POPUP_PCB_MOVE_ZONE_OUTLINES:
-	case ID_POPUP_PCB_ADD_ZONE_CORNER:
+    case ID_POPUP_PCB_MOVE_ZONE_CORNER:
+    case ID_POPUP_PCB_DRAG_ZONE_OUTLINE_SEGMENT:
+    case ID_POPUP_PCB_MOVE_ZONE_OUTLINES:
+    case ID_POPUP_PCB_ADD_ZONE_CORNER:
     case ID_POPUP_PCB_DELETE_TRACKSEG:
     case ID_POPUP_PCB_DELETE_TRACK:
     case ID_POPUP_PCB_DELETE_TRACKNET:
@@ -84,8 +85,8 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_SELECT_LAYER_PAIR:
     case ID_POPUP_PCB_SELECT_NO_CU_LAYER:
     case ID_POPUP_PCB_SELECT_WIDTH:
-	case ID_POPUP_PCB_SELECT_AUTO_WIDTH:
-	case ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH:
+    case ID_POPUP_PCB_SELECT_AUTO_WIDTH:
+    case ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH:
     case ID_POPUP_PCB_SELECT_WIDTH1:
     case ID_POPUP_PCB_SELECT_WIDTH2:
     case ID_POPUP_PCB_SELECT_WIDTH3:
@@ -340,7 +341,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         GetScreen()->SetModify();
         break;
 
-      case ID_POPUP_PCB_EDIT_NET:
+    case ID_POPUP_PCB_EDIT_NET:
         if( GetCurItem() == NULL )
             break;
         Edit_Net_Width( &dc, ( (TRACK*) GetCurItem() )->GetNet() );
@@ -379,8 +380,9 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_PLACE_MICROVIA:
-		if ( ! GetScreen()->IsMicroViaAcceptable() )
-			break;
+        if( !GetScreen()->IsMicroViaAcceptable() )
+            break;
+
     case ID_POPUP_PCB_PLACE_VIA:
         DrawPanel->MouseToCursorSchema();
         if( GetCurItem()->m_Flags & IS_DRAGGED )
@@ -389,17 +391,17 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         }
         else
         {
-			int v_type = g_DesignSettings.m_CurrentViaType;
-			if ( id == ID_POPUP_PCB_PLACE_MICROVIA )
-				g_DesignSettings.m_CurrentViaType = VIA_MICROVIA;	// place micro via and switch layer
+            int v_type = g_DesignSettings.m_CurrentViaType;
+            if( id == ID_POPUP_PCB_PLACE_MICROVIA )
+                g_DesignSettings.m_CurrentViaType = VIA_MICROVIA; // place micro via and switch layer
             Other_Layer_Route( (TRACK*) GetCurItem(), &dc );
-			g_DesignSettings.m_CurrentViaType = v_type;
+            g_DesignSettings.m_CurrentViaType = v_type;
             if( DisplayOpt.ContrastModeDisplay )
                 GetScreen()->SetRefreshReq();
         }
         break;
 
-	case ID_POPUP_PCB_DELETE_TRACKSEG:
+    case ID_POPUP_PCB_DELETE_TRACKSEG:
         if( GetCurItem() == NULL )
             break;
         DrawPanel->MouseToCursorSchema();
@@ -460,73 +462,82 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_EDIT_ZONE_PARAMS:
         Edit_Zone_Params( &dc, (ZONE_CONTAINER*) GetCurItem() );
-        SetCurItem( NULL );	// Outlines can have changed
+        SetCurItem( NULL ); // Outlines can have changed
         break;
 
-	case ID_POPUP_PCB_ZONE_ADD_SIMILAR_ZONE:
+    case ID_POPUP_PCB_ZONE_ADD_SIMILAR_ZONE:
         DrawPanel->MouseToCursorSchema();
         Add_Similar_Zone( &dc, (ZONE_CONTAINER*) GetCurItem() );
-		break;
+        break;
 
-	case ID_POPUP_PCB_ZONE_ADD_CUTOUT_ZONE:
+    case ID_POPUP_PCB_ZONE_ADD_CUTOUT_ZONE:
         DrawPanel->MouseToCursorSchema();
         Add_Zone_Cutout( &dc, (ZONE_CONTAINER*) GetCurItem() );
-		break;
+        break;
 
     case ID_POPUP_PCB_DELETE_ZONE_CONTAINER:
-	case ID_POPUP_PCB_DELETE_ZONE_CUTOUT:
+    case ID_POPUP_PCB_DELETE_ZONE_CUTOUT:
         DrawPanel->MouseToCursorSchema();
-		Delete_Zone_Contour( &dc, (ZONE_CONTAINER*)GetCurItem() );
-        SetCurItem( NULL );
-		break;
-
-	case ID_POPUP_PCB_DELETE_ZONE_CORNER:
-		Remove_Zone_Corner( &dc, (ZONE_CONTAINER*)GetCurItem() );
+        Delete_Zone_Contour( &dc, (ZONE_CONTAINER*) GetCurItem() );
         SetCurItem( NULL );
         break;
-	
-	case ID_POPUP_PCB_MOVE_ZONE_CORNER:
-	{
-        DrawPanel->MouseToCursorSchema();
-		ZONE_CONTAINER * zone_cont = (ZONE_CONTAINER*)GetCurItem();
-		Start_Move_Zone_Corner(&dc, zone_cont, zone_cont->m_CornerSelection, false);
-        break;
-	}
 
-	case ID_POPUP_PCB_MOVE_ZONE_OUTLINES:
-	{
-        DrawPanel->MouseToCursorSchema();
-		ZONE_CONTAINER * zone_cont = (ZONE_CONTAINER*)GetCurItem();
-		Start_Move_Zone_Outlines(&dc, zone_cont);
+    case ID_POPUP_PCB_DELETE_ZONE_CORNER:
+        Remove_Zone_Corner( &dc, (ZONE_CONTAINER*) GetCurItem() );
+        SetCurItem( NULL );
         break;
-	}
 
-	case ID_POPUP_PCB_ADD_ZONE_CORNER:
-	{
+    case ID_POPUP_PCB_MOVE_ZONE_CORNER:
+    {
         DrawPanel->MouseToCursorSchema();
-		ZONE_CONTAINER * zone_cont = (ZONE_CONTAINER*)GetCurItem();
-		wxPoint pos = GetScreen()->m_Curseur;
-		/* add corner between zone_cont->m_CornerSelection
-		 * and zone_cont->m_CornerSelection+1
-		 * and start move the new corner
-		 */
-		zone_cont->Draw(DrawPanel, &dc, wxPoint(0,0), GR_XOR);
-		zone_cont->m_Poly->InsertCorner( zone_cont->m_CornerSelection, pos.x, pos.y );
-		zone_cont->m_CornerSelection++;
-		zone_cont->Draw(DrawPanel, &dc, wxPoint(0,0), GR_XOR);
-		Start_Move_Zone_Corner(&dc, zone_cont, zone_cont->m_CornerSelection, true);
+        ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
+        Start_Move_Zone_Corner( &dc, zone_cont, zone_cont->m_CornerSelection, false );
         break;
-	}
+    }
 
-	case ID_POPUP_PCB_PLACE_ZONE_OUTLINES:
-	case ID_POPUP_PCB_PLACE_ZONE_CORNER:
-	{
+    case ID_POPUP_PCB_DRAG_ZONE_OUTLINE_SEGMENT:
+    {
         DrawPanel->MouseToCursorSchema();
-		ZONE_CONTAINER * zone_cont = (ZONE_CONTAINER*)GetCurItem();
-		End_Move_Zone_Corner_Or_Outlines(&dc, zone_cont);
+        ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
+        Start_Move_Zone_Drag_Outline_Edge( &dc, zone_cont, zone_cont->m_CornerSelection );
         break;
-	}
-	
+    }
+
+    case ID_POPUP_PCB_MOVE_ZONE_OUTLINES:
+    {
+        DrawPanel->MouseToCursorSchema();
+        ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
+        Start_Move_Zone_Outlines( &dc, zone_cont );
+        break;
+    }
+
+    case ID_POPUP_PCB_ADD_ZONE_CORNER:
+    {
+        DrawPanel->MouseToCursorSchema();
+        ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
+        wxPoint         pos = GetScreen()->m_Curseur;
+
+        /* add corner between zone_cont->m_CornerSelection
+         * and zone_cont->m_CornerSelection+1
+         * and start move the new corner
+         */
+        zone_cont->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), GR_XOR );
+        zone_cont->m_Poly->InsertCorner( zone_cont->m_CornerSelection, pos.x, pos.y );
+        zone_cont->m_CornerSelection++;
+        zone_cont->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), GR_XOR );
+        Start_Move_Zone_Corner( &dc, zone_cont, zone_cont->m_CornerSelection, true );
+        break;
+    }
+
+    case ID_POPUP_PCB_PLACE_ZONE_OUTLINES:
+    case ID_POPUP_PCB_PLACE_ZONE_CORNER:
+    {
+        DrawPanel->MouseToCursorSchema();
+        ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
+        End_Move_Zone_Corner_Or_Outlines( &dc, zone_cont );
+        break;
+    }
+
     case ID_POPUP_PCB_FILL_ALL_ZONES:
         DrawPanel->MouseToCursorSchema();
         Fill_All_Zones( &dc );
@@ -534,7 +545,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_FILL_ZONE:
         DrawPanel->MouseToCursorSchema();
-        Fill_Zone( &dc, (ZONE_CONTAINER*)GetCurItem() );
+        Fill_Zone( &dc, (ZONE_CONTAINER*) GetCurItem() );
         break;
 
     case ID_PCB_DELETE_ITEM_BUTT:
@@ -811,8 +822,8 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
         if( GetCurItem() && (GetCurItem()->m_Flags & IS_NEW) )
         {
-            if ( End_Zone( &dc ) )
-				SetCurItem( NULL );
+            if( End_Zone( &dc ) )
+                SetCurItem( NULL );
         }
         break;
 
@@ -820,8 +831,8 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
         if( GetCurItem() && (GetCurItem()->m_Flags & IS_NEW) )
         {
-            if ( Delete_LastCreatedCorner( &dc ) == 0)	// No more segment in outline, 
-				SetCurItem(NULL);
+            if( Delete_LastCreatedCorner( &dc ) == 0 )  // No more segment in outline,
+                SetCurItem( NULL );
         }
         break;
 
@@ -835,8 +846,8 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         DisplayTrackSettings();
         m_SelTrackWidthBox_Changed = FALSE;
         m_SelViaSizeBox_Changed    = FALSE;
-		g_DesignSettings.m_UseConnectedTrackWidth = false;
-	}
+        g_DesignSettings.m_UseConnectedTrackWidth = false;
+    }
         break;
 
     case ID_POPUP_PCB_SELECT_WIDTH1:
@@ -848,7 +859,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_SELECT_WIDTH7:
     case ID_POPUP_PCB_SELECT_WIDTH8:
         DrawPanel->MouseToCursorSchema();
-		g_DesignSettings.m_UseConnectedTrackWidth = false;
+        g_DesignSettings.m_UseConnectedTrackWidth = false;
         {
             int ii = id - ID_POPUP_PCB_SELECT_WIDTH1;
             g_DesignSettings.m_CurrentTrackWidth = g_DesignSettings.m_TrackWidthHistory[ii];
@@ -856,13 +867,13 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         }
         break;
 
-	case ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH:
-		g_DesignSettings.m_UseConnectedTrackWidth = not g_DesignSettings.m_UseConnectedTrackWidth;
-		break;
-			
-	case ID_POPUP_PCB_SELECT_AUTO_WIDTH:
+    case ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH:
+        g_DesignSettings.m_UseConnectedTrackWidth = not g_DesignSettings.m_UseConnectedTrackWidth;
+        break;
+
+    case ID_POPUP_PCB_SELECT_AUTO_WIDTH:
         DrawPanel->MouseToCursorSchema();
-		g_DesignSettings.m_UseConnectedTrackWidth = true;
+        g_DesignSettings.m_UseConnectedTrackWidth = true;
         break;
 
     case ID_POPUP_PCB_SELECT_VIASIZE:
@@ -1132,15 +1143,15 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
                 GetScreen()->m_Route_Layer_TOP    = preslayer;
                 GetScreen()->m_Route_Layer_BOTTOM = layer;
                 GetScreen()->m_Active_Layer = preslayer;
-                
+
                 if( Other_Layer_Route( (TRACK*) GetScreen()->GetCurItem(), DC ) )
                 {
                     if( DisplayOpt.ContrastModeDisplay )
                         GetScreen()->SetRefreshReq();
                 }
-                
+
                 // if the via was allowed by DRC, then the layer swap has already
-                // been done by Other_Layer_Route(). if via not allowed, then 
+                // been done by Other_Layer_Route(). if via not allowed, then
                 // return now so assignment to m_Active_Layer below doesn't happen.
                 return;
             }

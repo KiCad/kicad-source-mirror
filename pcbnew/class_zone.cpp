@@ -564,7 +564,7 @@ void ZONE_CONTAINER::Display_Infos( WinEDA_DrawFrame* frame )
 }
 
 
-/* Geometric transformations: */
+/* Geometric transforms: */
 
 /**
  * Function Move
@@ -575,16 +575,40 @@ void ZONE_CONTAINER::Move( const wxPoint& offset )
 {
     for( unsigned ii = 0; ii < m_Poly->corner.size(); ii++ )
     {
-        m_Poly->corner[ii].x += offset.x;
-        m_Poly->corner[ii].y += offset.y;
+        SetCornerPosition(ii,  GetCornerPosition(ii) + offset);
     }
+
+    m_Poly->Hatch();
+}
+
+/**
+ * Function MoveEdge
+ * Move the outline Edge. m_CornerSelection is the start point of the outline edge
+ * @param offset = moving vector
+ */
+void ZONE_CONTAINER::MoveEdge( const wxPoint& offset )
+{
+	int ii = m_CornerSelection;
+
+	// Move the start point of the selected edge:
+    SetCornerPosition(ii,  GetCornerPosition(ii) + offset);
+
+	// Move the end point of the selected edge:
+	if ( m_Poly->corner[ii].end_contour || ii == GetNumCorners() - 1)
+	{
+		int icont = m_Poly->GetContour( ii );
+		ii = m_Poly->GetContourStart( icont );
+	}
+	else
+		ii++;
+    SetCornerPosition(ii,  GetCornerPosition(ii) + offset);
 
     m_Poly->Hatch();
 }
 
 
 /**
- * Function Move
+ * Function Rotate
  * Move the outlines
  * @param centre = rot centre
  * @param angle = in 0.1 degree

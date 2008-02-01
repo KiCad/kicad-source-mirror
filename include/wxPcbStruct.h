@@ -561,6 +561,14 @@ public:
                                                 bool            IsNewCorner );
 
     /**
+     * Function Start_Move_Zone_Corner
+     * Prepares a drag edge in an existing zone outline,
+     */
+    void                Start_Move_Zone_Drag_Outline_Edge( wxDC*           DC,
+                                                ZONE_CONTAINER* zone_container,
+                                                int             corner_id );
+
+	/**
 	 * Function End_Move_Zone_Corner_Or_Outlines
 	 * Terminates a move corner in a zone outline, or a move zone outlines
 	 * @param DC = current Device Context (can be NULL)

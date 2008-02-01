@@ -50,6 +50,7 @@
 #include "Width_Net.xpm"
 #include "Width_Track_Via.xpm"
 #include "Select_Layer_Pair.xpm"
+#include "Drag_Outline_Segment.xpm"
 
 #include "Flag.xpm"
 
@@ -660,7 +661,13 @@ void WinEDA_PcbFrame::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu
 /* Create the wxMenuitem list for zone outlines editing and zone filling
  */
 {
-    if( edge_zone->m_Flags )
+
+    if( edge_zone->m_Flags == IS_DRAGGED)
+    {
+        ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_PLACE_DRAGGED_ZONE_OUTLINE_SEGMENT,
+                          _( "Place Edge Outline" ), apply_xpm );
+    }
+    else if( edge_zone->m_Flags )
     {
         if( (edge_zone->m_Flags & IN_EDIT ) )
             ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_PLACE_ZONE_CORNER,
@@ -686,6 +693,8 @@ void WinEDA_PcbFrame::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu
         {
             ADD_MENUITEM( zones_menu, ID_POPUP_PCB_ADD_ZONE_CORNER,
                           _( "Create Corner" ), Add_Corner_xpm );
+            ADD_MENUITEM( zones_menu, ID_POPUP_PCB_DRAG_ZONE_OUTLINE_SEGMENT,
+                          _( "Drag Outline Segment" ), drag_outline_segment_xpm );
         }
 
         zones_menu->AppendSeparator();
