@@ -3469,6 +3469,8 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
 
     /// maps PCB layer number to BOARD layer numbers
     std::vector<int>    pcbLayer2kicad;       
+
+    static const KICAD_T scanPADs[];
     
     
     /**

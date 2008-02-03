@@ -3563,12 +3563,16 @@ int STRINGFORMATTER::Print( int nestLevel, const char* fmt, ... ) throw( IOError
 
 void STRINGFORMATTER::StripUseless()
 {
-    for( std::string::iterator i=mystring.begin();  i!=mystring.end();  )
+    std::string  copy = mystring;
+    
+    mystring.clear();
+    
+    for( std::string::iterator i=copy.begin();  i!=copy.end();  ++i )
     {
-        if( isspace( *i ) || *i==')' || *i=='(' || *i=='"' )
-            mystring.erase(i);
-        else
-            ++i;
+        if( !isspace( *i ) && *i!=')' && *i!='(' && *i!='"' )
+        {
+            mystring += *i;
+        }
     }
 }
 

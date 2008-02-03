@@ -121,6 +121,9 @@ struct POINT_PAIR
 typedef std::vector<POINT_PAIR>     POINT_PAIRS; 
 
 
+const KICAD_T SPECCTRA_DB::scanPADs[] = { TYPEPAD, EOT };
+
+
 static inline void swap( POINT_PAIR& pair )
 {
     POINT temp = pair.start;
@@ -332,7 +335,6 @@ IMAGE* SPECCTRA_DB::makeIMAGE( MODULE* aModule )
     PADSTACKS&  padstacks = pcb->library->padstacks;
 
     TYPE_COLLECTOR  pads;
-    static const KICAD_T scanPADs[] = { TYPEPAD, EOT };
     
     // get all the MODULE's pads.        
     pads.Collect( aModule, scanPADs );
@@ -772,6 +774,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
     POINT_PAIRS             ppairs;
     POINT_PAIR              pair;
 
+    static const KICAD_T    scanMODULEs[] = { TYPEMODULE, EOT };
+    
+    
     if( !pcb )
         pcb = SPECCTRA_DB::MakePCB();
 
@@ -1021,7 +1026,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
     //-----<build the initial padstack list>--------------------------------
     {
         TYPE_COLLECTOR  pads;
-        static const KICAD_T scanPADs[] = { TYPEPAD, EOT };
     
         // get all the D_PADs into 'pads'.        
         pads.Collect( aBoard, scanPADs );
@@ -1037,7 +1041,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
     
     //-----<build the images and components>---------------------------------
     {
-        static const KICAD_T scanMODULEs[] = { TYPEMODULE, EOT };
         items.Collect( aBoard, scanMODULEs );
         
         for( int m=0;  m<items.GetCount();  ++m )
@@ -1077,16 +1080,21 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
     
     //-----<create the nets>------------------------------------------------
     {
-        NETWORK*    network = pcb->network;
+        NETWORK*        network = pcb->network;
+        TYPE_COLLECTOR  nets;
+        TYPE_COLLECTOR  pads;
+        
         static const KICAD_T scanNETs[] = { PCB_EQUIPOT_STRUCT_TYPE, EOT };
 
-        items.Collect( aBoard, scanNETs );
+        nets.Collect( aBoard, scanNETs );
+        
+        items.Collect( aBoard, scanMODULEs );
         
         PIN_REF emptypin(0);
         
-        for( int i=0;  i<items.GetCount();  ++i )
+        for( int n=0;  n<nets.GetCount();  ++n )
         {
-            EQUIPOT*   kinet = (EQUIPOT*) items[i];
+            EQUIPOT*   kinet = (EQUIPOT*) nets[n];
             
             if( kinet->GetNet() == 0 )
                 continue;
@@ -1096,21 +1104,28 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             
             net->net_id = CONV_TO_UTF8( kinet->m_Netname );
             net->net_number = kinet->GetNet();
-            
-            D_PAD**  ppad = kinet->m_PadzoneStart;
-            for(   ; ppad < kinet->m_PadzoneEnd;   ++ppad )
-            {
-                D_PAD* pad = *ppad;
 
-                wxASSERT( pad->Type() == TYPEPAD );
+            for( int m=0;  m<items.GetCount();  ++m )
+            {
+                MODULE* module = (MODULE*) items[m];
+
+                pads.Collect( module, scanPADs );
                 
-                // push on an empty one, then fill it via 'pin_ref'
-                net->pins.push_back( emptypin );
-                PIN_REF* pin_ref = &net->pins.back();
-                
-                pin_ref->SetParent( net );
-                pin_ref->component_id = CONV_TO_UTF8( ((MODULE*)pad->m_Parent)->GetReference() );;
-                pin_ref->pin_id = CONV_TO_UTF8( pad->ReturnStringPadName() );               
+                for( int p=0;  p<pads.GetCount();  ++p )
+                {
+                    D_PAD* pad = (D_PAD*) pads[p];
+                    
+                    if( pad->GetNet() == kinet->GetNet() )
+                    {
+                        // push on an empty one, then fill it via 'pin_ref'
+                        net->pins.push_back( emptypin );
+                        PIN_REF* pin_ref = &net->pins.back();
+                        
+                        pin_ref->SetParent( net );
+                        pin_ref->component_id = CONV_TO_UTF8( module->GetReference() );
+                        pin_ref->pin_id = CONV_TO_UTF8( pad->ReturnStringPadName() );
+                    }
+                }
             }
         }
     }

@@ -5,43 +5,50 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Feb-3 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+    specctra_export.cpp was not exporting the nets correctly.  beautification
+    of a few modules.
+    
+
 2008-Feb-1 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew:
-  SPECCTRA export now exports pads with offset OK, exports oval pads OK,
-  and tries to do less with pcb edges that are not a connected set of lines,
-  putting the burden back on the PCBNEW user to have clean perimeter lines.
-  Discovered that freerouter does not support oval pads yet, asked 
-  for enhancement.  Discovered a small problem if you modify a PAD in
-  the MODULE editor but do not replicate that change throughout all module
-  instances in the board.  Is on my @todo list.  Otherwise it is getting pretty 
-  good now.  Most boards load into freerouter, except mine, which if exported
-  with part numbers, hangs the freerouter!  I may be away for a few days doing
-  billable work, after which I will begin the 2 imports, *.dsn and *.ses.
+    SPECCTRA export now exports pads with offset OK, exports oval pads OK,
+    and tries to do less with pcb edges that are not a connected set of lines,
+    putting the burden back on the PCBNEW user to have clean perimeter lines.
+    Discovered that freerouter does not support oval pads yet, asked 
+    for enhancement.  Discovered a small problem if you modify a PAD in
+    the MODULE editor but do not replicate that change throughout all module
+    instances in the board.  Is on my @todo list.  Otherwise it is getting pretty 
+    good now.  Most boards load into freerouter, except mine, which if exported
+    with part numbers, hangs the freerouter!  I may be away for a few days doing
+    billable work, after which I will begin the 2 imports, *.dsn and *.ses.
   
 
 2008-Jan-31 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:
-	remove the old EDGEZONE class.
-	A ZONE_CONTAINER class is used instead to handle the creation of a new zone outline
-	
+    remove the old EDGEZONE class.
+    A ZONE_CONTAINER class is used instead to handle the creation of a new zone outline
+    
 
 2008-Jan-29 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew:
-  SPECCTRA export does most items now, except existing tracks.  Soon will
-  need testing.
+    SPECCTRA export does most items now, except existing tracks.  Soon will
+    need testing.
 
 
 2008-Jan-28 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:
-	- Better criteria to find starting poind in zone filling: the filling alg. uses
-	pads, vias and track ends to find where start the filling.
-	- Added a tool + option in popup menu in track mode (select track width):
-	when creating a track, if activated: if we starts on an existing track,
-	the new track takes the width of the existing track
+    - Better criteria to find starting poind in zone filling: the filling alg. uses
+    pads, vias and track ends to find where start the filling.
+    - Added a tool + option in popup menu in track mode (select track width):
+    when creating a track, if activated: if we starts on an existing track,
+    the new track takes the width of the existing track
 
 
 2008-Jan-27 UPDATE   Dick Hollenbeck <dick@softplc.com>
