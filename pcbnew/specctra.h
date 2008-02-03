@@ -1943,10 +1943,11 @@ public:
     }
 };
 
-
+class LIBRARY;
 class IMAGE : public ELEM_HOLDER
 {
     friend class SPECCTRA_DB;
+    friend class LIBRARY;
     
     std::string     hash;       ///< a hash string used by Compare(), not Format()ed/exported.
     
@@ -1967,6 +1968,8 @@ class IMAGE : public ELEM_HOLDER
 
     KEEPOUTS        keepouts;
     
+    int             duplicated;     ///< no. times this image_id is duplicated     
+    
 public:
     
     IMAGE( ELEM* aParent ) :
@@ -1976,6 +1979,7 @@ public:
         unit = 0;
         rules = 0;
         place_rules = 0;
+        duplicated = 0;
     }
     ~IMAGE()
     {
@@ -1990,12 +1994,30 @@ public:
      */
     static int Compare( IMAGE* lhs, IMAGE* rhs );
 
+    std::string GetImageId()
+    {
+        if( duplicated )
+        {
+            char    buf[32];
+            
+            std::string ret = image_id;
+            ret += "::";
+            sprintf( buf, "%d", duplicated );
+            ret += buf;
+            return ret;
+        }
+        
+        return image_id;
+    }
+    
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
-        const char* quote = out->GetQuoteChar( image_id.c_str() );
+        std::string imageId = GetImageId();
+        
+        const char* quote = out->GetQuoteChar( imageId.c_str() );
         
         out->Print( nestLevel, "(%s %s%s%s", LEXER::GetTokenText( Type() ),
-                                quote, image_id.c_str(), quote );
+                                quote, imageId.c_str(), quote );
         
         FormatContents( out, nestLevel+1 );
 
@@ -2205,11 +2227,22 @@ public:
      */
     int FindIMAGE( IMAGE* aImage )
     {
-        for( unsigned i=0;  i<images.size();  ++i )
+        unsigned i;
+        for( i=0;  i<images.size();  ++i )
         {
             if( 0 == IMAGE::Compare( aImage, &images[i] ) )
                 return (int) i;
         }
+
+        // There is no match to the IMAGE contents, but now generate a unique
+        // name for it.
+        int dups = 1;        
+        for( i=0;  i<images.size();  ++i )
+        {
+            if( 0 == aImage->image_id.compare( images[i].image_id ) )
+                aImage->duplicated = dups++;
+        }
+        
         return -1;
     }
 

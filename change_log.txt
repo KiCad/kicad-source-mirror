@@ -8,24 +8,15 @@ email address.
 2008-Feb-3 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew
-    specctra_export.cpp was not exporting the nets correctly.  beautification
-    of a few modules.
+  * specctra_export.cpp was not exporting the nets correctly, now fixed.  
+  * Had a problem with an isolated pad modification on a single module instance 
+    in the context of several unmodified instances of same module, now fixed.  
+  * Fixed oval pads to make freerouting.net happy.  
+    See: http://www.freerouting.net/usren/viewtopic.php?f=3&t=317#p408
+    Done with specctra export for now, will think about adding controls (by dialog)
+    on the export later.
+  * Beautification of a few modules.  
     
-
-2008-Feb-1 UPDATE   Dick Hollenbeck <dick@softplc.com>
-================================================================================
-+pcbnew:
-    SPECCTRA export now exports pads with offset OK, exports oval pads OK,
-    and tries to do less with pcb edges that are not a connected set of lines,
-    putting the burden back on the PCBNEW user to have clean perimeter lines.
-    Discovered that freerouter does not support oval pads yet, asked 
-    for enhancement.  Discovered a small problem if you modify a PAD in
-    the MODULE editor but do not replicate that change throughout all module
-    instances in the board.  Is on my @todo list.  Otherwise it is getting pretty 
-    good now.  Most boards load into freerouter, except mine, which if exported
-    with part numbers, hangs the freerouter!  I may be away for a few days doing
-    billable work, after which I will begin the 2 imports, *.dsn and *.ses.
-  
 
 2008-Jan-31 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================

@@ -230,7 +230,7 @@ static void swapEnds( POINT_PAIRS& aList )
         }
     }
         
-#if 1 && defined(DEBUG)
+#if 0 && defined(DEBUG)
     printf( "swapEnds():\n" );
     for( unsigned i=0;  i<sorted.size();  ++i )
     {
@@ -317,6 +317,7 @@ static PATH* makePath( const POINT& aStart, const POINT& aEnd, const std::string
 }
 
 
+/*
 static QARC* makeArc( const POINT& aStart, const POINT& aEnd, 
                      const POINT& aCenter, const std::string& aLayerName ) 
 {
@@ -328,6 +329,7 @@ static QARC* makeArc( const POINT& aStart, const POINT& aEnd,
     qarc->SetLayerId( aLayerName.c_str() );
     return qarc;
 }
+*/
 
 
 IMAGE* SPECCTRA_DB::makeIMAGE( MODULE* aModule )
@@ -582,10 +584,10 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
                     {
                         if( doLayer[layer] )
                         {
-                            // each oval is 2 lines and 4 (quarter circle) qarcs
-        
                             SHAPE*  shape;
                             PATH*   path;
+#if 0                            
+                            // each oval is 2 lines and 4 (quarter circle) qarcs
                             QARC*   qarc;
                             
                             shape = new SHAPE( padstack );
@@ -639,6 +641,14 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
                                     POINT( -dr, 0.0 ),          // aCenter
                                     layerName );
                             shape->SetShape( qarc );
+#else
+                            // see http://www.freerouting.net/usren/viewtopic.php?f=3&t=317#p408
+                            shape = new SHAPE( padstack );
+                            padstack->Append( shape );
+                            path = makePath( POINT(-dr, 0.0), POINT(dr, 0.0), layerName );
+                            shape->SetShape( path );
+                            path->aperture_width = 2.0 * radius; 
+#endif
                             
                             ++coppers;
                         }
@@ -654,10 +664,10 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
                     {
                         if( doLayer[layer] )
                         {
-                            // each oval is 2 lines and 2 qarcs
-        
                             SHAPE*  shape;
                             PATH*   path;
+#if 0                            
+                            // each oval is 2 lines and 2 qarcs
                             QARC*   qarc;
                             
                             shape = new SHAPE( padstack );
@@ -711,6 +721,14 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
                                     POINT( 0.0,     -dr ),      // aCenter
                                     layerName );
                             shape->SetShape( qarc );
+#else
+                            // see http://www.freerouting.net/usren/viewtopic.php?f=3&t=317#p408
+                            shape = new SHAPE( padstack );
+                            padstack->Append( shape );
+                            path = makePath( POINT(0.0, -dr), POINT(0.0, dr), layerName );
+                            shape->SetShape( path );
+                            path->aperture_width = 2.0 * radius; 
+#endif
                             
                             ++coppers;
                         }
@@ -1061,7 +1079,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             // and made it different from what is in the PCBNEW library.  Need to test
             // each image for uniqueness, not just based on name as is done here:
             
-            COMPONENT* comp = pcb->placement->LookupCOMPONENT( registered->image_id );
+            COMPONENT* comp = pcb->placement->LookupCOMPONENT( registered->GetImageId() );
             
             PLACE* place = new PLACE( comp );
             comp->places.push_back( place );
@@ -1130,6 +1148,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         }
     }
 
+#if 1  // do existing wires and vias
 
     //-----<create the wires from tracks>-----------------------------------
     {
@@ -1236,6 +1255,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         }
     }
     
+#endif  // do existing wires and vias    
     
     //-----<via_descriptor>-------------------------------------------------
     {
