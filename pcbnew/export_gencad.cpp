@@ -459,7 +459,9 @@ void CreateSignalsSection( FILE* file, BOARD* pcb )
             continue;
 
         msg = wxT( "\nSIGNAL " ) + equipot->m_Netname;
-        fputs( CONV_TO_UTF8( msg ), file ); fputs( "\n", file );
+        
+        fputs( CONV_TO_UTF8( msg ), file ); 
+        fputs( "\n", file );
 
         for( module = pcb->m_Modules; module != NULL; module = (MODULE*) module->Pnext )
         {
@@ -468,10 +470,13 @@ void CreateSignalsSection( FILE* file, BOARD* pcb )
                 wxString padname;
                 if( pad->GetNet() != equipot->GetNet() )
                     continue;
+                
                 pad->ReturnStringPadName( padname );
                 msg.Printf( wxT( "NODE %s %.4s" ),
                            module->m_Reference->m_Text.GetData(), padname.GetData() );
-                fputs( CONV_TO_UTF8( msg ), file ); fputs( "\n", file );
+                
+                fputs( CONV_TO_UTF8( msg ), file ); 
+                fputs( "\n", file );
             }
         }
     }

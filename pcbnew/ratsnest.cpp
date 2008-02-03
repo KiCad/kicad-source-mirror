@@ -247,6 +247,7 @@ static int gen_rats_block_to_block( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
                 // we memorise the "best" current values for merging
                 current_num_block = curr_pad->m_logical_connexion;
                 dist_min = current_dist;
+                
                 pt_liste_pad_tmp    = pt_liste_pad_aux;
                 pt_liste_pad_block1 = pt_liste_pad;
             }
@@ -482,8 +483,10 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
     DisplayRastnestInProgress = TRUE;
     g_pt_chevelu = m_Pcb->m_Ratsnest;
     pt_liste_pad = pt_start_liste = m_Pcb->m_Pads;
+    
     pt_liste_pad_limite = pt_start_liste + m_Pcb->m_NbPads;
     current_net_code    = 1; // 1er net_code a analyser (net_code = 0 -> no connect)
+    
     equipot = m_Pcb->m_Equipots;
     noconn  = 0;
 
@@ -491,12 +494,14 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
     {
         pt_deb_liste_ch = g_pt_chevelu;
         pad = *pt_liste_pad;
+        
         /* Skip the not connected pads */
         if( pad->GetNet() == 0 )
         {
             pt_liste_pad++; pt_start_liste = pt_liste_pad;
             continue;
         }
+        
         /* Search the end of pad list des pads for the current net */
         num_block = pad->m_logical_connexion;
         nbpads    = 0;
@@ -504,9 +509,11 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
         {
             if( pt_end_liste >= pt_liste_pad_limite )
                 break;
+            
             pad = *pt_end_liste;
             if( pad->GetNet() != current_net_code )
                 break;
+            
             nbpads++;
             if( num_block < pad->m_logical_connexion )
                 num_block = pad->m_logical_connexion;
@@ -560,6 +567,7 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
     // erase the ratsnest displayed on screen if needed
     CHEVELU* Chevelu = (CHEVELU*) m_Pcb->m_Ratsnest;
     GRSetDrawMode( DC, GR_XOR );
+    
     for( ii = m_Pcb->GetNumRatsnests(); ii > 0; ii--, Chevelu++ )
     {
         if( !g_Show_Ratsnest )
@@ -725,7 +733,8 @@ static int tst_rats_pad_to_pad( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
 
     for( chevelu = start_rat_list; chevelu < end_rat_list; chevelu++ )
     {
-        pad_start = chevelu->pad_start; pad_end = chevelu->pad_end;
+        pad_start = chevelu->pad_start; 
+        pad_end   = chevelu->pad_end;
 
         /* Update the block if the 2 pads are not connected : a new block is created
          */
@@ -1118,6 +1127,7 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
         pad_ref = pt_liste_ref[ii];
         if( pad_ref->GetNet() == current_net_code )
             continue;
+        
         current_net_code = pad_ref->GetNet();
 
         pt_liste_generale = m_Pcb->m_Pads;
@@ -1132,7 +1142,10 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
 
             pad_externe->m_logical_connexion  = 0;
             pad_externe->m_physical_connexion = 0;
-            *pt_liste_pad = pad_externe; pt_liste_pad++;
+            
+            *pt_liste_pad = pad_externe; 
+            pt_liste_pad++;
+            
             nb_pads_externes++;
         }
     }
@@ -1145,13 +1158,15 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
      *  this is the same as general ratsnest, but considers onluy tje currant footprint pads
 	* it is therefore not time consumming, and it is made onlu once
 	*/
-    local_liste_chevelu = (CHEVELU*) (pt_liste_pad); // buffer chevelu a la suite de la liste des pads
+    local_liste_chevelu = (CHEVELU*) pt_liste_pad; // buffer chevelu a la suite de la liste des pads
     nb_local_chevelu    = 0;
     pt_liste_ref = (LISTE_PAD*) adr_lowmem;
 
     g_pt_chevelu = local_liste_chevelu;
     pt_liste_pad = pt_start_liste = (LISTE_PAD*) adr_lowmem;
+    
     pt_liste_pad_limite = pt_liste_pad + nb_pads_ref;
+    
     current_net_code    = (*pt_liste_pad)->GetNet();
 
     for( ; pt_liste_pad < pt_liste_pad_limite; )
@@ -1255,6 +1270,7 @@ calcul_chevelu_ext:
                 local_chevelu->SetNet( pad_ref->GetNet() );
                 local_chevelu->dist   = distance;
                 local_chevelu->status = 0;
+                
                 increment = 1;
             }
         }
