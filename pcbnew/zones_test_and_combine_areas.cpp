@@ -738,8 +738,8 @@ int BOARD::CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combi
             // external contour, replace this poly
             for( int i = 0; i<union_gpc->contour[ic].num_vertices; i++ )
             {
-                int x = ( (union_gpc->contour)[ic].vertex )[i].x;
-                int y = ( (union_gpc->contour)[ic].vertex )[i].y;
+                int x = (int) ( (union_gpc->contour)[ic].vertex )[i].x;
+                int y = (int) ( (union_gpc->contour)[ic].vertex )[i].y;
                 if( i==0 )
                 {
                     area_ref->m_Poly->Start( area_ref->GetLayer(
@@ -761,8 +761,8 @@ int BOARD::CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combi
             // hole
             for( int i = 0; i<union_gpc->contour[ic].num_vertices; i++ )
             {
-                int x = ( (union_gpc->contour)[ic].vertex )[i].x;
-                int y = ( (union_gpc->contour)[ic].vertex )[i].y;
+                int x = (int) ( (union_gpc->contour)[ic].vertex )[i].x;
+                int y = (int) ( (union_gpc->contour)[ic].vertex )[i].y;
                 area_ref->m_Poly->AppendCorner( x, y );
             }
 

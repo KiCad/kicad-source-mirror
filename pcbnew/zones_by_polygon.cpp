@@ -33,7 +33,7 @@ using namespace std;
 
 #include "protos.h"
 
-bool verbose = false;       // false if zone outline diags mst not be shown
+bool verbose = false;       // false if zone outline diags must not be shown
 
 // Outline creation:
 static void Abort_Zone_Create_Outline( WinEDA_DrawPanel* Panel, wxDC* DC );
