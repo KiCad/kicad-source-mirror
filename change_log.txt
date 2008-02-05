@@ -8,9 +8,9 @@ email address.
 2008-Feb-4 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew
-    specctra_export.cpp now supports blind/buried/microvias.  Changed (fixed?) how
-    modules are displayed on back of board.  Needs testing with various angles
-    of rotation.
+    specctra_export.cpp now supports blind/buried/microvias. Fixed how modules
+    are displayed on back of board. Added a circle keepout for each copper-less
+    through hole.
     
 
 2008-Feb-3 UPDATE   Dick Hollenbeck <dick@softplc.com>

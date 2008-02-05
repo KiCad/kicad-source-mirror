@@ -316,22 +316,17 @@ IMAGE* SPECCTRA_DB::makeIMAGE( MODULE* aModule )
         D_PAD* pad = (D_PAD*) pads[p];
 
         // see if this pad is a through hole with no copper on its perimeter
-        if( !pad->IsOnLayer( LAYER_CMP_N ) && !pad->IsOnLayer( COPPER_LAYER_N ) )
+        if( pad->m_PadShape==PAD_CIRCLE &&  pad->m_Drill.x >= pad->m_Size.x )
         {
-            if( pad->m_Drill.x != 0 )
-            {
-                KEEPOUT* keepout = new KEEPOUT(image, T_keepout);
-                image->keepouts.push_back( keepout );
-                
-                CIRCLE* circle = new CIRCLE(keepout);
-                keepout->SetShape( circle );
-                
-                circle->SetDiameter( scale(pad->m_Drill.x) );
-                circle->SetVertex( POINT( mapPt( pad->m_Pos0 ) ) );
-                circle->layer_id = "signal";
-                
-                // ?? the keepout is not affecting the power layers? 
-            }
+            KEEPOUT* keepout = new KEEPOUT(image, T_keepout);
+            image->keepouts.push_back( keepout );
+            
+            CIRCLE* circle = new CIRCLE(keepout);
+            keepout->SetShape( circle );
+            
+            circle->SetDiameter( scale(pad->m_Drill.x) );
+            circle->SetVertex( mapPt( pad->m_Pos0 ) );
+            circle->layer_id = "signal";
         }
         else
         {
@@ -471,7 +466,8 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
 
         // if pad has no copper presence, then it will be made into
         // an "image->keepout" later.  No copper pad here, it is probably a hole.        
-        if( !doLayer[0] && !doLayer[1] )
+        if( (!doLayer[0] && !doLayer[1])  
+           ||  (pad->m_PadShape==PAD_CIRCLE &&  pad->m_Drill.x >= pad->m_Size.x) )
         {
             // padstacks.size()-1 is the index of the matching padstack in LIBRARY::padstacks
             pad->m_logical_connexion = pcb->library->padstacks.size()-1;

@@ -988,30 +988,49 @@ public:
 
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
-        out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
+        const char* newline = "\n";
+        
+        out->Print( nestLevel, "(%s", LEXER::GetTokenText( Type() ) );
 
         if( name.size() )
         {
             const char* quote = out->GetQuoteChar( name.c_str() );
-            out->Print( nestLevel+1, "%s%s%s\n", quote, name.c_str(), quote );
+            out->Print( 0, " %s%s%s", quote, name.c_str(), quote );
         }
 
         if( sequence_number != -1 )
-            out->Print( nestLevel+1, "(sequence_number %d)\n", sequence_number );
+            out->Print( 0, " (sequence_number %d)", sequence_number );
         
         if( shape )
-            shape->Format( out, nestLevel+1 );
+        {
+            out->Print( 0, " " );
+            shape->Format( out, 0 );
+        }
         
         if( rules )
+        {
+            out->Print( 0, "%s", newline );
+            newline = "";
             rules->Format( out, nestLevel+1 );
+        }
         
         if( place_rules )
+        {
+            out->Print( 0, "%s", newline );
+            newline = "";
             place_rules->Format( out, nestLevel+1 );
+        }
 
-        for( WINDOWS::iterator i=windows.begin();  i!=windows.end();  ++i )
-            i->Format( out, nestLevel+1 );
+        if( windows.size() )
+        {
+            out->Print( 0, "%s", newline );
+            newline = "";
+            
+            for( WINDOWS::iterator i=windows.begin();  i!=windows.end();  ++i )
+                i->Format( out, nestLevel+1 );
+        }
         
-        out->Print( nestLevel, ")\n" ); 
+        out->Print( 0, ")\n" ); 
     }
 };
 typedef boost::ptr_vector<KEEPOUT>  KEEPOUTS;
