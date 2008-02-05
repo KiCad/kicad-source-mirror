@@ -3480,7 +3480,6 @@ PCB* SPECCTRA_DB::MakePCB()
     pcb->structure->rules = new RULE( pcb->structure, T_rule );
     
     pcb->placement = new PLACEMENT( pcb );
-    //pcb->placement->flip_style = T_mirror_first;   
     
     pcb->library = new LIBRARY( pcb );
     

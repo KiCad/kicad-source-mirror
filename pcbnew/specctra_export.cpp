@@ -282,26 +282,6 @@ static int Pad_list_Sort_by_Shapes( const void* refptr, const void* objptr )
 }
 
 
-
-/*
-static int Track_list_Sort_by_Netcode( const void* o1, const void* o2 )
-{
-    TRACK*  t1 = *(TRACK**) o1;
-    TRACK*  t2 = *(TRACK**) o2;
-    int     diff;
-    
-    if( (diff = t1->GetNet() - t2->GetNet()) )
-        return diff;
-    if( (diff = t1->m_Width - t2->m_Width) )
-        return diff;
-    if( (diff = t1->GetLayer() - t2->GetLayer()) )
-        return diff;
-
-    return diff;    // zero here
-}
-*/
-
-
 /**
  * Function makePath
  * creates a PATH element with a single straight line, a pair of vertices.
@@ -315,21 +295,6 @@ static PATH* makePath( const POINT& aStart, const POINT& aEnd, const std::string
     path->SetLayerId( aLayerName.c_str() );
     return path;
 }
-
-
-/*
-static QARC* makeArc( const POINT& aStart, const POINT& aEnd, 
-                     const POINT& aCenter, const std::string& aLayerName ) 
-{
-    QARC*   qarc = new QARC(0);
-    
-    qarc->SetStart( aStart );
-    qarc->SetEnd( aEnd );
-    qarc->SetCenter( aCenter );
-    qarc->SetLayerId( aLayerName.c_str() );
-    return qarc;
-}
-*/
 
 
 IMAGE* SPECCTRA_DB::makeIMAGE( MODULE* aModule )
@@ -391,25 +356,61 @@ IMAGE* SPECCTRA_DB::makeIMAGE( MODULE* aModule )
 
 PADSTACK* SPECCTRA_DB::makeVia( const SEGVIA* aVia )
 {
+    CIRCLE*     circle;
+    SHAPE*      shape;
+    double      dsnDiameter;
     char        name[48];
+    
     PADSTACK*   padstack = new PADSTACK( pcb->library );
     
-    SHAPE*      shape = new SHAPE( padstack );
-    padstack->Append( shape );
+    switch( aVia->Shape() )
+    {
+    case VIA_THROUGH:
+        shape = new SHAPE( padstack );
+        padstack->Append( shape );
 
-    // @todo: handle the aVia->Shape() differently for each type of via: MICROVIA, etc.
+        circle = new CIRCLE( shape );
+        shape->SetShape( circle );
     
-    CIRCLE*     circle = new CIRCLE( shape );
-    shape->SetShape( circle );
-
-    double      dsnDiameter = scale( aVia->m_Width );     
-    circle->SetDiameter( dsnDiameter );
-
-    circle->SetLayerId( "signal" ); 
+        dsnDiameter = scale( aVia->m_Width );     
+        circle->SetDiameter( dsnDiameter );
     
-    snprintf( name, sizeof(name),  "Via_%.6g_mil", dsnDiameter ); 
-    name[ sizeof(name)-1 ] = 0;
-    padstack->SetPadstackId( name );
+        circle->SetLayerId( "signal" ); 
+        
+        snprintf( name, sizeof(name),  "Via_%.6g_mil", dsnDiameter ); 
+        name[ sizeof(name)-1 ] = 0;
+        padstack->SetPadstackId( name );
+        break;
+       
+    case VIA_BLIND_BURIED:
+    case VIA_MICROVIA:
+        int topLayer;
+        int botLayer;
+        aVia->ReturnLayerPair( &topLayer, &botLayer );
+        topLayer = kicadLayer2pcb[topLayer];
+        botLayer = kicadLayer2pcb[botLayer];
+        if( topLayer > botLayer )
+            EXCHG( topLayer, botLayer );
+
+        dsnDiameter = scale( aVia->m_Width );     
+        
+        for( int layer=topLayer;  layer<=botLayer;  ++layer )
+        {
+            shape = new SHAPE( padstack );
+            padstack->Append( shape );
+    
+            circle = new CIRCLE( shape );
+            shape->SetShape( circle );
+        
+            circle->SetDiameter( dsnDiameter );
+            circle->SetLayerId( layerIds[layer].c_str() ); 
+        }
+        
+        snprintf( name, sizeof(name),  "Via[%d-%d]_%.6g_mil", topLayer, botLayer, dsnDiameter ); 
+        name[ sizeof(name)-1 ] = 0;
+        padstack->SetPadstackId( name );
+        break;
+    }
     
     return padstack;
 }        
@@ -586,70 +587,12 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
                         {
                             SHAPE*  shape;
                             PATH*   path;
-#if 0                            
-                            // each oval is 2 lines and 4 (quarter circle) qarcs
-                            QARC*   qarc;
-                            
-                            shape = new SHAPE( padstack );
-                            padstack->Append( shape );
-                            path = makePath( 
-                                    POINT( -dr, -radius ),      // aStart
-                                    POINT(  dr, -radius ),      // aEnd
-                                    layerName );
-                            shape->SetShape( path );
-                            
-                            shape = new SHAPE( padstack );
-                            padstack->Append( shape );
-                            qarc = makeArc( 
-                                    POINT(  dr, -radius),       // aStart
-                                    POINT(  dr, 0.0 ),          // aEnd
-                                    POINT(  dr, 0.0 ),          // aCenter
-                                    layerName );
-                            shape->SetShape( qarc );
-    
-                            shape = new SHAPE( padstack );
-                            padstack->Append( shape );
-                            qarc = makeArc( 
-                                    POINT(  dr, 0.0),           // aStart
-                                    POINT(  dr, radius),        // aEnd
-                                    POINT(  dr, 0.0 ),          // aCenter
-                                    layerName );
-                            shape->SetShape( qarc );
-    
-                            shape = new SHAPE( padstack );
-                            padstack->Append( shape );
-                            path = makePath( 
-                                    POINT(  dr,  radius ),      // aStart
-                                    POINT( -dr,  radius ),      // aEnd
-                                    layerName );
-                            shape->SetShape( path );
-    
-                            shape = new SHAPE( padstack );
-                            padstack->Append( shape );
-                            qarc = makeArc( 
-                                    POINT( -dr, radius),        // aStart
-                                    POINT( -dr, 0.0),           // aEnd
-                                    POINT( -dr, 0.0 ),          // aCenter
-                                    layerName );
-                            shape->SetShape( qarc );
-                            
-                            shape = new SHAPE( padstack );
-                            padstack->Append( shape );
-                            qarc = makeArc( 
-                                    POINT( -dr, 0.0),           // aStart
-                                    POINT( -dr, -radius),       // aEnd
-                                    POINT( -dr, 0.0 ),          // aCenter
-                                    layerName );
-                            shape->SetShape( qarc );
-#else
                             // see http://www.freerouting.net/usren/viewtopic.php?f=3&t=317#p408
                             shape = new SHAPE( padstack );
                             padstack->Append( shape );
                             path = makePath( POINT(-dr, 0.0), POINT(dr, 0.0), layerName );
                             shape->SetShape( path );
                             path->aperture_width = 2.0 * radius; 
-#endif
-                            
                             ++coppers;
                         }
                     }
@@ -666,70 +609,12 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
                         {
                             SHAPE*  shape;
                             PATH*   path;
-#if 0                            
-                            // each oval is 2 lines and 2 qarcs
-                            QARC*   qarc;
-                            
-                            shape = new SHAPE( padstack );
-                            padstack->Append( shape );
-                            path = makePath( 
-                                    POINT( -radius, -dr ),      // aStart
-                                    POINT( -radius,  dr ),      // aEnd
-                                    layerName );
-                            shape->SetShape( path );
-    
-                            shape = new SHAPE( padstack );
-                            padstack->Append( shape );
-                            qarc = makeArc( 
-                                    POINT( -radius, dr ),       // aStart
-                                    POINT(  0.0,    dy ),       // aEnd
-                                    POINT(  0.0,    dr ),       // aCenter
-                                    layerName );
-                            shape->SetShape( qarc );
-    
-                            shape = new SHAPE( padstack );
-                            padstack->Append( shape );
-                            qarc = makeArc( 
-                                    POINT(  0.0,    dy ),       // aStart
-                                    POINT(  radius, dr),        // aEnd
-                                    POINT(  0.0,    dr ),       // aCenter
-                                    layerName );
-                            shape->SetShape( qarc );
-    
-                            shape = new SHAPE( padstack );
-                            padstack->Append( shape );
-                            path = makePath( 
-                                    POINT(  radius,  dr ),      // aStart
-                                    POINT(  radius, -dr ),      // aEnd
-                                    layerName );
-                            shape->SetShape( path );
-    
-                            shape = new SHAPE( padstack );
-                            padstack->Append( shape );
-                            qarc = makeArc( 
-                                    POINT( radius, -dr ),       // aStart
-                                    POINT( 0.0,    -dy ),       // aEnd
-                                    POINT( 0.0,    -dr ),       // aCenter
-                                    layerName );
-                            shape->SetShape( qarc );
-                            
-                            shape = new SHAPE( padstack );
-                            padstack->Append( shape );
-                            qarc = makeArc( 
-                                    POINT(  0.0,    -dy ),      // aStart
-                                    POINT( -radius, -dr ),      // aEnd
-                                    POINT( 0.0,     -dr ),      // aCenter
-                                    layerName );
-                            shape->SetShape( qarc );
-#else
                             // see http://www.freerouting.net/usren/viewtopic.php?f=3&t=317#p408
                             shape = new SHAPE( padstack );
                             padstack->Append( shape );
                             path = makePath( POINT(0.0, -dr), POINT(0.0, dr), layerName );
                             shape->SetShape( path );
                             path->aperture_width = 2.0 * radius; 
-#endif
-                            
                             ++coppers;
                         }
                     }
@@ -811,6 +696,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         }
     }
 
+    //pcb->placement->flip_style = T_rotate_first;   
     
     // Since none of these statements cause any immediate output, the order
     // of them is somewhat flexible.  The outputting to disk is done at the
@@ -843,6 +729,13 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             pcb->structure->layers.push_back( layer );
             
             layer->name = layerIds.back();
+            
+            layer->properties.push_back( PROPERTY() );
+            PROPERTY* property = &layer->properties.back();
+            property->name = "index";
+            char temp[32];
+            sprintf( temp, "%d", pcbNdx );
+            property->value = temp; 
             
             // layer->type =  @todo need this, the export would be better.
         }
@@ -914,7 +807,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             }
             else
             {
-#if 1 
                 PATH*  path = new PATH( boundary );
                 boundary->paths.push_back( path );
                 
@@ -925,17 +817,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                     // otherwise it will.
                     path->points.push_back( ppairs[i].start );
                 }
-#else   
-                for( unsigned i=0;  i<ppairs.size();  ++i )
-                {
-                    PATH*  path = new PATH( boundary );
-                    boundary->paths.push_back( path );
-                    
-                    path->layer_id = "pcb";
-                    path->points.push_back( ppairs[i].start );
-                    path->points.push_back( ppairs[i].end );
-                }
-#endif
             }
     
             pcb->structure->SetBOUNDARY( boundary );
@@ -1090,8 +971,16 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             place->part_number  = CONV_TO_UTF8( module->GetValue() );
             
             // module is flipped from bottom side, set side to T_back
-            if( module->flag )      
+            if( module->flag )
+            {
+                int angle = 1800 - module->m_Orient;
+                
+                NORMALIZE_ANGLE_POS(angle);
+                
+                place->SetRotation( angle/10.0 );
+                
                 place->side = T_back;
+            }
         }
     }
     
@@ -1200,7 +1089,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 wiring->wires.push_back( wire );
                 wire->net_id = netname;
                 
-                wire->wire_type = T_protect;  // @todo, this should be configurable
+                wire->wire_type = T_normal;  // @todo, this should be configurable
                 
                 int kiLayer  = track->GetLayer();
                 int pcbLayer = kicadLayer2pcb[kiLayer];
@@ -1251,7 +1140,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             
             dsnVia->net_id = CONV_TO_UTF8( equipot->m_Netname );
             
-            dsnVia->via_type = T_protect;     // @todo, this should be configurable
+            dsnVia->via_type = T_normal;     // @todo, this should be configurable
         }
     }
     
@@ -1291,4 +1180,3 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
     
 }       // namespace DSN
-

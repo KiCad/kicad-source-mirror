@@ -263,7 +263,7 @@ void WinEDA_BasePcbFrame::ProcessItemSelection( wxCommandEvent& event )
         BOARD_ITEM* item = (*m_Collector)[itemNdx];
         DrawPanel->m_AbortRequest = false;
 
-#if defined (DEBUG) && 0
+#if 0 && defined (DEBUG)
         item->Show( 0, std::cout );
 #endif
 
@@ -282,7 +282,7 @@ void WinEDA_BasePcbFrame::SetCurItem( BOARD_ITEM* aItem )
     {
         aItem->Display_Infos( this );
         
-#if defined(DEBUG)
+#if 0 && defined(DEBUG)
     aItem->Show( 0, std::cout );
 #endif
         
@@ -294,7 +294,7 @@ void WinEDA_BasePcbFrame::SetCurItem( BOARD_ITEM* aItem )
         //MsgPanel->EraseMsgBox();
         m_Pcb->Display_Infos( this );       // show the BOARD stuff
         
-#if defined(DEBUG)
+#if 0 && defined(DEBUG)
         std::cout << "SetCurItem(NULL)\n";
 #endif
 
