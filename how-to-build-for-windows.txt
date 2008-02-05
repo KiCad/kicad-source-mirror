@@ -1,0 +1,159 @@
+--== How to build kicad using CMAKE ==--
+First Written: 19-Dec-2007
+Last Revised: 06-Jan-2008
+
+Kicad needs wxWidgets, the multi platform G.U.I.
+
+Perform these steps in sequence. (Platform specific details are given in
+sections below.)
+
+
+1)  Install "msys" and "mingw".
+2)  Install wxWidgets and build it.
+3)  Install zlib and build it.
+4)  Install CMAKE
+5)  Install Boost C++ Template Libraries (*.hpp files)
+6)  Install the kicad source tree.
+7)  Use cmake to build the kicad makefiles.
+8) Use make to build and install kicad.
+9) Making a "Debug" build.
+
+
+===== Step Details ====================================================
+
+1)  Install "msys" and "mingw".
+Get msys and mingw here: http://mingw.org/
+msys sets up a development environment that allows the bash shell to run.
+mingw is a set of tools that run on windows or under msys.  You will need
+at least the following mingw packages: make, gcc, g++, binutils, autoconf and
+automake.
+
+-----------------------------------------------------------------------------
+
+4)  Install wxWidgets and build it.
+Download http://www.wxwidgets.org/.
+Start msys so you have a bash shell.  Decide where your wxWidgets build directory
+will be.  It must be where you can access it from within the msys environment, 
+such as home/<user>.   Edit your msys/1.0/etc/fstab file if needed to provide 
+access to this build directory from msys.  (Note that if you want you can build
+a "debug" version of the wxWidgets library at this point, instead of the release
+version, or in addition to the the release version.)
+Unzip the wmMWS zip file into the build directory.  Change directories into there,
+and then:
+
+    mkdir build-release
+    mkdir build-debug
+
+-- release
+    cd build-release
+    ../configure --enable-unicode --enable-monolithic --disable-shared --with-msw --with-opengl
+    make
+    make install
+
+-- debug
+    cd build-debug
+    ../confgiure --enable-unicode --enable-monolithic --enable-debug --enable-debug_gdb --disable-shared --with-msw --with-opengl
+    make
+    make install
+
+I think the default is to install into /usr/local/wxMSW-2.8.7.  You can probably
+pass --prefix=<wxInstallDir> to configure above to change where "make install"
+puts everything.  We will refer to <wxInstallDir> again below.  Without the
+--prefix=<wxInstallDir> passed to configure, <wxInstallDir> will likely be
+    /usr/local/wxMSW-2.8.7
+
+Verify that wx-config is in your path.  Modify your PATH environment variable
+if need be so you can run wx-config from a command prompt.  You may have to 
+restart your msys shell, depending on how you modify your PATH.
+
+
+-----------------------------------------------------------------------------
+
+5)  Install zlib and build it.
+If on windows, download http://www.zlib.net/ or a newer version.
+Start msys so you have a bash shell. Decide where your zlib build directory
+will be. It must be where you can access it from within the msys environment,
+such as home/<user>. Edit your msys/1.0/etc/fstab file if needed to provide 
+access to this build directory from msys. Unzip the zlib123.zip file into this 
+build directory. Change directories into there, and then:
+    ./configure (CHANGES NEEDED!!!)
+    make
+    make install
+
+Note (JP Charras):
+	Under Linux, zlib is usually installed.
+	if not found by wxWidget installation, wxWidgets creates an alternate zlib
+	Under Windows, zlib is not installed, so my cmake buld try to use the wxWidgets zlib build.
+	So, under windows kicad build should work without zlib install.
+
+-----------------------------------------------------------------------------
+
+6)  Install CMAKE.
+If windows, download the installation binary for windows from cmake.org.  
+Install that and choose to add cmake to your path during installation.  You
+will have to restart and command shells for the new path to take effect.
+Verify that cmake is in your path by trying to run it from a command prompt.
+
+
+If linux, use your package manager to install cmake. You should get cmake 2.4.7
+or later. If only an older one is available in your package repository, build
+2.4.7 from source. Verify that cmake is in your path by trying to run it from a
+command prompt.
+
+
+7)  Install Boost C++ Libraries
+If windows, well I'm guessing, so somebody please try these two options and
+correct this text please according to which ever is easier:
+(optionA) Go to http://sourceforge.net/project/showfiles.php?group_id=7586
+and download boost_1_34_1.zip or later and unzip it so as to put the files 
+into C:\Program Files\boost\boost_1_34_1
+(optionB) 
+Go to http://www.boost-consulting.com/products/free
+and download the http://www.boost-consulting.com/boost_1_34_1_setup.exe
+file and run it.
+
+-----------------------------------------------------------------------------
+
+8)  Install the kicad source tree.
+You can use the subversion repository or a tar file for this.  See the wiki. 
+
+-----------------------------------------------------------------------------
+
+9)  Use cmake to create the kicad makefiles.
+Go into your msys shell and cd to kicad source directory.
+
+Run CMakeSetup.exe and set source and binary paths.
+
+CMakeSetup.exe will try and find the boost header files and will often fail.  If it
+fails, you will have to point it to directory, where boost c++ is installed.
+
+You can safely turn minizip building to OFF, but if you want to build it with zlib,
+then under msys cd to zlib source dir, ./cofigure && make & make install.
+(I had to copy zconf.h and zlib.h to {kcad_source_dir}/kicad/minizip).
+
+So everything in CMakeSetup.exe is set, then press Configure. If all is OK, then
+press OK, otherwise try to resolve reported errors.
+
+-----------------------------------------------------------------------------
+
+10)  Use make to build and install kicad.
+You compile Kicad here.
+
+run cmake . (yes it is cmake space dot)
+
+It will generate makefiles
+
+run make
+
+run make install
+
+You are now done.
+
+-----------------------------------------------------------------------------
+
+Note: that it is easy to build only a specific binary such as pcbnew alone:
+    make pcbnew
+
+-----------------------------------------------------------------------------
+
+End of CMAKE related building.
