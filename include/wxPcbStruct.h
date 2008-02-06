@@ -385,8 +385,26 @@ public:
      * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
      * specification.
      */
-    void                ExportToSPECCTRA( wxCommandEvent& event );
+    void                ExportToSpecctra( wxCommandEvent& event );
 
+    /**
+     * Function ImportSpecctraSession
+     * will import a specctra *.ses file and use it to relocate MODULEs and 
+     * to replace all vias and tracks in an existing and loaded BOARD.
+     * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
+     * specification.
+     */
+    void                ImportSpecctraSession( wxCommandEvent& event );
+
+    /**
+     * Function ImportSpecctraDesign
+     * will import a specctra *.dsn file and use it to replace an entire BOARD. 
+     * The new board will not have any graphics, only components, tracks and vias.
+     * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
+     * specification.
+     */
+    void                ImportSpecctraDesign( wxCommandEvent& event );
+    
     /* Fonctions specifiques */
     MODULE*             ListAndSelectModuleName();
     void                Liste_Equipot( wxCommandEvent& event );

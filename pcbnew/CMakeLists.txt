@@ -121,6 +121,7 @@ SET(PCBNEW_SRCS
     solve.cpp
     specctra.cpp
     specctra_export.cpp
+    specctra_import.cpp
     surbrill.cpp
     swap_layers.cpp
     tool_modedit.cpp

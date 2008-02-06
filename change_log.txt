@@ -5,6 +5,12 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Feb-6 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+    started specctra imports of *.ses and *.dsn, by adding menus to File | Import.
+
+
 2008-Feb-4 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew

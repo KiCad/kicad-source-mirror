@@ -43,7 +43,7 @@ using namespace DSN;
 
 
 // see wxPcbStruct.h
-void WinEDA_PcbFrame::ExportToSPECCTRA( wxCommandEvent& event )
+void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
 {
     wxString        fullFileName = GetScreen()->m_FileName;
     wxString        std_ext = wxT( ".dsn" );
@@ -103,7 +103,7 @@ void WinEDA_PcbFrame::ExportToSPECCTRA( wxCommandEvent& event )
     
     if( ok )
     {
-        // @todo display a message saying the export is complete.
+        Affiche_Message( wxString( _("BOARD exported OK.")) );        
     }
     else
         DisplayError( this, errorText );

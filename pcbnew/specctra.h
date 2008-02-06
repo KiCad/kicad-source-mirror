@@ -3806,13 +3806,8 @@ public:
      * the BOARD given to this function must have all the MODULEs on the component
      * side of the BOARD.
      *
-     * See void WinEDA_PcbFrame::ExportToSPECCTRA( wxCommandEvent& event )
+     * See void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
      * for how this can be done before calling this function.  
-     * @todo
-     * I would have liked to put the flipping logic into the ExportToSPECCTRA()
-     * function directly, but for some strange reason, 
-     * void Change_Side_Module( MODULE* Module, wxDC* DC ) is a member of 
-     * of class WinEDA_BasePcbFrame rather than class BOARD.
      *
      * @param aBoard The BOARD to convert to a PCB.
      */

@@ -116,6 +116,25 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
 		ADD_MENUITEM_WITH_HELP_AND_SUBMENU(m_FilesMenu, submenuexport,
 			ID_GEN_EXPORT_FILE, _("E&xport"), _("Export board"), export_xpm);
 
+                
+        //-----<Add import menu>-----------------------------------------------
+        // no separator, keep it next to Import
+		wxMenu * submenuImport = new wxMenu();
+
+		item = new wxMenuItem(submenuImport, ID_GEN_IMPORT_SPECCTRA_SESSION,
+			_("&Specctra Session"), _("Import a routed \"Specctra Session\" (*.ses) file") );
+	    item->SetBitmap(export_xpm);    // @todo need better bitmap
+		submenuImport->Append(item);
+        
+		item = new wxMenuItem(submenuImport, ID_GEN_IMPORT_SPECCTRA_DESIGN,
+			_("&Specctra Design"), _("Import a \"Specctra Design\" (*.dsn) file") );
+	    item->SetBitmap(export_xpm);    // @todo need better bitmap
+		submenuImport->Append(item);
+
+		ADD_MENUITEM_WITH_HELP_AND_SUBMENU(m_FilesMenu, submenuImport,
+			ID_GEN_IMPORT_FILE, _("Import"), _("Import files"), export_xpm);
+        //-----</Add import menu>----------------------------------------------
+        
 		// Add archive footprints menu
 		m_FilesMenu->AppendSeparator();
 		wxMenu * submenuarchive = new wxMenu();
