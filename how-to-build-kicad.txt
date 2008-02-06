@@ -124,6 +124,7 @@ or later. If only an older one is available in your package repository, build
 2.4.7 from source. Verify that cmake is in your path by trying to run it from a
 command prompt.
 
+-----------------------------------------------------------------------------
 
 7)  Install Boost C++ Libraries
 If windows, well I'm guessing, so somebody please try these two options and
