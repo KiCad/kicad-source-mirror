@@ -5,6 +5,12 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Feb-7 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+    specctra import of *.ses, done by end of today probably.
+
+
 2008-Feb-6 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew
@@ -17,27 +23,27 @@ email address.
     specctra_export.cpp now supports blind/buried/microvias. Fixed how modules
     are displayed on back of board. Added a circle keepout for each copper-less
     through hole.
-    
+
 
 2008-Feb-3 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew
-  * specctra_export.cpp was not exporting the nets correctly, now fixed.  
-  * Had a problem with an isolated pad modification on a single module instance 
-    in the context of several unmodified instances of same module, now fixed.  
-  * Fixed oval pads to make freerouting.net happy.  
+  * specctra_export.cpp was not exporting the nets correctly, now fixed.
+  * Had a problem with an isolated pad modification on a single module instance
+    in the context of several unmodified instances of same module, now fixed.
+  * Fixed oval pads to make freerouting.net happy.
     See: http://www.freerouting.net/usren/viewtopic.php?f=3&t=317#p408
     Done with specctra export for now, will think about adding controls (by dialog)
     on the export later.
-  * Beautification of a few modules.  
-    
+  * Beautification of a few modules.
+
 
 2008-Jan-31 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:
     remove the old EDGEZONE class.
     A ZONE_CONTAINER class is used instead to handle the creation of a new zone outline
-    
+
 
 2008-Jan-29 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
@@ -60,7 +66,7 @@ email address.
 ================================================================================
 +all:
     I got a patch from Mr. Wayne Stambaugh which makes it possible to compile
-    infospgm.cpp once and link the same *.o file multiple times.   
+    infospgm.cpp once and link the same *.o file multiple times.
     Jean-Pierre, if you not yet using CMake, you should edit your make.include
     so that infospgm.cpp is only compiled once for everything, not once per
     program.  Wayne is a competent developer who contacted me about contributing.
@@ -75,7 +81,7 @@ email address.
     See page bottom of page 74 of the SECCTRA Design Language Reference, May 2000.
   * HISTORY_NUMBER was spelt with a zero.
   * Width was spelt as Widht
-    
+
 
 2008-Jan-25 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
@@ -90,9 +96,9 @@ email address.
     in Dimensions/track and via menu, and placed by ctrl v.
     They are intended to connect small pitch BGA pins to the inner layer, and can be drilled by laser
     if the hole diameter is small < 0.2mm. A laser can only drill a hole between 2 adjacent layers ).
-    
+
     ** Currently use buried via for tests only, not for production **.
-    
+
 
 2008-Jan-24 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
@@ -102,9 +108,9 @@ email address.
   * added COLLECTOR::BasePtr(), which is used in qsort.  Could have used
   * std::sort() instead.
   * Wrote D_PAD::Compare()
-  * updated todo.txt  
+  * updated todo.txt
 
-  
+
 2008-Jan-24 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:
@@ -126,7 +132,7 @@ email address.
     Plot option in GERBER format Plot (Exclude Edge Pcb layer) modification:
     - the default is OFF (like odl pcbnew versions)
     - this setup is now save in config (is persistant)
-    
+
     In Zone creation, now delete last created corner works.
 
 2008-Jan-22 UPDATE   Dick Hollenbeck <dick@softplc.com>
@@ -154,14 +160,14 @@ email address.
     menubarpcb.cpp, and pcbframe.cpp. After dsn export, I intend to add an
     import, and a session file feedback merge. See the revised
     how-to-build-kicad.txt for the new boost c++ libraries requirement.
-    
-    
+
+
 2008-Jan-21 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +eeschema:
     labels and texts display changed when rotated 180 degres:
     horizontal text are now right justified insteed of 180 degree rotated, and are readable.
-    
+
 +pcbnew:
     bug 1874663 solved (edit a pad netname does not work very well)
 
@@ -177,7 +183,7 @@ email address.
 +all:
     filtering small mouse moves ( < 5 pixels) when clicking.
     Starting a wire or a track is now more easily because these small moves do not start a block commnad.
-    
+
 +pcbnew:
     rework of drill filles creation (excellon and reports)
     needed to have a clean implantation of buried vias and mainly microvia
@@ -239,7 +245,7 @@ email address.
     has commented out code that I tested as part of a possible new scheme to support
     custom layer names per project.
   * More specctra dsn import export work.
-  
+
 
 2008-jan-05 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
@@ -277,7 +283,7 @@ email address.
 2007-Dec-23 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +all
-  * Because of the discussion 4 months ago about using Boost::Python, and 
+  * Because of the discussion 4 months ago about using Boost::Python, and
     because of an excellent boost::ptr_vector class, I want to make some of the
     boost libraries be necessary for building Kicad.  These would be:
     1) boost pointer container library (immediately)
@@ -289,7 +295,7 @@ email address.
         fixed this.
     2) boost::python when building python in.
   * Added FIND_PACKAGE(Boost) to CMakeLists.txt
-        
+
 
 2007-Dec-22 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
@@ -313,7 +319,7 @@ email address.
 +pcbnew:
     some changes about zones: enhanced dialog, and files reorganisation
 
-    
+
 2007-Dec-14 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew
@@ -341,11 +347,11 @@ email address.
     pcbnew/zones.cpp, see:
     http://tech.groups.yahoo.com/group/kicad-users/message/2993
 
-    
+
 2007-Dec-11 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +all
-  * Fixed hotkey table for '+' and '-' bug.  The lookup table in 
+  * Fixed hotkey table for '+' and '-' bug.  The lookup table in
     common/hotkeys_basic.cpp had bad entries for + and -.  These hotkeys
     were not working on Linux.
   * Added polygon directory to Doxyfile.
@@ -370,13 +376,13 @@ email address.
 +pcbnew
     Very minor bug in drill map : inaccurate via shapes (I believe EXCELLON drill file has no problems)
 
-    
+
 2007-Dec-06 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +all
     Solved zoom key command problems (under linux and windows)
     (seen http://sourceforge.net/tracker/index.php?func=detail&aid=1844960&group_id=145591&atid=762476)
-    
+
 +pcbnew
     solved bug when loading a footprint in modedit: invisible text attribute was lost (trunk and tag)
 
@@ -387,7 +393,7 @@ email address.
     added the D() macro to fctsys.h to ease conditional debug printf()s.
     worked on http://sourceforge.net/tracker/index.php?func=detail&aid=1844960&group_id=145591&atid=762476
     but could not resolve it in 1/2 day.
-    
+
 
 2007-Dec-4 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
@@ -395,8 +401,8 @@ email address.
   * drc.cpp and dialog_drc.cpp update.
     Added double click support on a MARKER or unconnected DRC_ITEM in the listboxes.
     On Linux, it sometimes pops up the menu from PcbGeneralLocateAndDisplay()
-    for some reason after repositioning the cursor.  That is not intended, but 
-    after several attempts to work around it, I realized it is not so bad to 
+    for some reason after repositioning the cursor.  That is not intended, but
+    after several attempts to work around it, I realized it is not so bad to
     have this happen.
   * Added right click popup menus to the list boxes.  User must first select
     the item he wants to go to, as the right click does not change the selection.
@@ -404,7 +410,7 @@ email address.
     out of pcbnew/find.cpp
     Done now, its ready for folks to start using it and testing it.
 
-    
+
 2007-Dec-02 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +eeschema:
@@ -416,7 +422,7 @@ email address.
 ================================================================================
 +pcbnew
     drc.cpp and dialog_drc.cpp intermediate update.
-    
+
 
 2007-Nov-30 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
@@ -425,12 +431,12 @@ email address.
   * added classes DRC, REPORT_ISSUE, DRC_ITEM and rearranged drc.cpp entirely
     to comprize the DRC class.  The result has finer granularity of functions
     and each is fairly well documented in English, see drc_stuff.h.
-    Keeping old stuff commented out at bottom of drc.cpp until some more usage 
+    Keeping old stuff commented out at bottom of drc.cpp until some more usage
     and testing is done.
   * Made the DRC dialog modeless, so it can sit off to the side while the MARKER
     are inspected one by one.
 
-    
+
 2007-Nov-29 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:
@@ -444,7 +450,7 @@ email address.
   * Moved BOARD's MARKERs from m_Drawings to vector<MARKER*> m_markers so
     they can be easily deleted and navigated to from the drc dialog.
   * deprecated the MARKER::Unlink() function.
-  * Added 
+  * Added
         BOARD::Add( BOARD_ITEM*, int )
         BOARD::GetMARKER(int)
         BOARD::Delete( BOARD_ITEM* )
@@ -454,7 +460,7 @@ email address.
   * Revised BOARD::Visit() to know about BOARD::m_markers.
   * Revised pcbnew/find.cpp to know about BOARD::m_markers.
   * removed wxYield() from drc.cpp
-        
+
 
 2007-Nov-26 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================

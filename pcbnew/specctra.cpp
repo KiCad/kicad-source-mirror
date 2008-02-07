@@ -4,47 +4,47 @@
  *
  * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2007 Kicad Developers, see change_log.txt for contributors.
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html 
- * or you may search the http://www.gnu.org website for the version 2 license, 
- * or you may write to the Free Software Foundation, Inc., 
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
- 
-/*  This source file implements export and import capabilities to the 
+
+/*  This source file implements export and import capabilities to the
     specctra dsn file format.  The grammar for that file format is documented
     fairly well.  There are classes for each major type of descriptor in the
     spec.
-    
-    Since there are so many classes in here, it may be helpful to generate 
+
+    Since there are so many classes in here, it may be helpful to generate
     the Doxygen directory:
-    
+
     $ cd <kicadSourceRoot>
     $ doxygen
-    
+
     Then you can view the html documentation in the <kicadSourceRoot>/doxygen
     directory.  The main class in this file is SPECCTRA_DB and its main
     functions are LoadPCB(), LoadSESSION(), and ExportPCB().
-    
+
     Wide use is made of boost::ptr_vector<> and std::vector<> template classes.
     If the contained object is small, then std::vector tends to be used.
     If the contained object is large, variable size, or would require writing
     an assignment operator() or copy constructor, then boost::ptr_vector
     cannot be beat.
-*/    
+*/
 
 
 #include <cstdarg>
@@ -70,7 +70,7 @@
 
 namespace DSN {
 
-#define NESTWIDTH           2   ///< how many spaces per nestLevel    
+#define NESTWIDTH           2   ///< how many spaces per nestLevel
 
 
 
@@ -84,7 +84,7 @@ void SPECCTRA_DB::ThrowIOError( const wxChar* fmt, ... ) throw( IOError )
     va_start( args, fmt );
     errText.PrintfV( fmt, args );
     va_end( args );
-    
+
     throw IOError( errText );
 }
 
@@ -93,28 +93,28 @@ void SPECCTRA_DB::expecting( DSN_T aTok ) throw( IOError )
 {
     wxString    errText( _("Expecting") );
     errText << wxT(" ") << LEXER::GetTokenString( aTok );
-    lexer->ThrowIOError( errText, lexer->CurOffset() ); 
+    lexer->ThrowIOError( errText, lexer->CurOffset() );
 }
 
 void SPECCTRA_DB::expecting( const char* text ) throw( IOError )
 {
     wxString    errText( _("Expecting") );
     errText << wxT(" '") << CONV_FROM_UTF8(text) << wxT("'");
-    lexer->ThrowIOError( errText, lexer->CurOffset() ); 
+    lexer->ThrowIOError( errText, lexer->CurOffset() );
 }
 
 void SPECCTRA_DB::unexpected( DSN_T aTok ) throw( IOError )
 {
     wxString    errText( _("Unexpected") );
     errText << wxT(" ") << LEXER::GetTokenString( aTok );
-    lexer->ThrowIOError( errText, lexer->CurOffset() ); 
+    lexer->ThrowIOError( errText, lexer->CurOffset() );
 }
 
 void SPECCTRA_DB::unexpected( const char* text ) throw( IOError )
 {
     wxString    errText( _("Unexpected") );
     errText << wxT(" '") << CONV_FROM_UTF8(text) << wxT("'");
-    lexer->ThrowIOError( errText, lexer->CurOffset() ); 
+    lexer->ThrowIOError( errText, lexer->CurOffset() );
 }
 
 
@@ -130,7 +130,7 @@ bool SPECCTRA_DB::isSymbol( DSN_T aTok )
     // if aTok is >= 0, then it might be a coincidental match to a keyword.
     return aTok==T_SYMBOL || aTok==T_STRING || aTok>=0;
 }
-    
+
 
 void SPECCTRA_DB::needLEFT() throw( IOError )
 {
@@ -157,22 +157,22 @@ void SPECCTRA_DB::needSYMBOL() throw( IOError )
 void SPECCTRA_DB::readCOMPnPIN( std::string* component_id, std::string* pin_id ) throw( IOError )
 {
     DSN_T tok;
-    
-    static const char pin_def[] = "<pin_reference>::=<component_id>-<pin_id>"; 
-    
+
+    static const char pin_def[] = "<pin_reference>::=<component_id>-<pin_id>";
+
     if( !isSymbol( lexer->CurTok() ) )
         expecting( pin_def );
 
     // case for:  A12-14, i.e. no wrapping quotes.  This should be a single
-    // token, so split it.    
+    // token, so split it.
     if( lexer->CurTok() != T_STRING )
     {
         const char* toktext = lexer->CurText();
         const char* dash    = strchr( toktext, '-' );
-        
+
         if( !dash )
             expecting( pin_def );
-        
+
         while( toktext != dash )
             *component_id += *toktext++;
 
@@ -181,7 +181,7 @@ void SPECCTRA_DB::readCOMPnPIN( std::string* component_id, std::string* pin_id )
         while( *toktext )
             *pin_id += *toktext++;
     }
-    
+
     // quoted string:  "U12"-"14" or "U12"-14,  3 tokens in either case
     else
     {
@@ -190,7 +190,7 @@ void SPECCTRA_DB::readCOMPnPIN( std::string* component_id, std::string* pin_id )
         tok = nextTok();
         if( tok!=T_DASH )
             expecting( pin_def );
-        
+
         nextTok();          // accept anything after the dash.
         *pin_id = lexer->CurText();
     }
@@ -200,18 +200,18 @@ void SPECCTRA_DB::readCOMPnPIN( std::string* component_id, std::string* pin_id )
 void SPECCTRA_DB::readTIME( time_t* time_stamp ) throw( IOError )
 {
     DSN_T tok;
-    
+
     struct tm   mytime;
-    
-    static const char time_toks[] = "<month> <day> <hour> : <minute> : <second> <year>"; 
+
+    static const char time_toks[] = "<month> <day> <hour> : <minute> : <second> <year>";
 
     static const char* months[] = {  // index 0 = Jan
-        "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", NULL
     };
-    
+
     needSYMBOL();       // month
-    
+
     const char* ptok = lexer->CurText();
 
     mytime.tm_mon = 0;      // remains if we don't find a month match.
@@ -223,18 +223,18 @@ void SPECCTRA_DB::readTIME( time_t* time_stamp ) throw( IOError )
             break;
         }
     }
-    
+
     tok = nextTok();    // day
     if( tok != T_NUMBER )
         expecting( time_toks );
     mytime.tm_mday = atoi( lexer->CurText() );
-    
+
     tok = nextTok();    // hour
     if( tok != T_NUMBER )
         expecting( time_toks );
     mytime.tm_hour = atoi( lexer->CurText() );
 
-    // : colon    
+    // : colon
     needSYMBOL();
     if( *lexer->CurText() != ':' || strlen( lexer->CurText() )!=1 )
         expecting( time_toks );
@@ -243,8 +243,8 @@ void SPECCTRA_DB::readTIME( time_t* time_stamp ) throw( IOError )
     if( tok != T_NUMBER )
         expecting( time_toks );
     mytime.tm_min = atoi( lexer->CurText() );
-    
-    // : colon    
+
+    // : colon
     needSYMBOL();
     if( *lexer->CurText() != ':' || strlen( lexer->CurText() )!=1 )
         expecting( time_toks );
@@ -253,42 +253,42 @@ void SPECCTRA_DB::readTIME( time_t* time_stamp ) throw( IOError )
     if( tok != T_NUMBER )
         expecting( time_toks );
     mytime.tm_sec = atoi( lexer->CurText() );
-    
+
     tok = nextTok();    // year
     if( tok != T_NUMBER )
         expecting( time_toks );
     mytime.tm_year = atoi( lexer->CurText() ) - 1900;
-    
-    *time_stamp = mktime( &mytime ); 
+
+    *time_stamp = mktime( &mytime );
 }
 
 
 void SPECCTRA_DB::LoadPCB( const wxString& filename ) throw( IOError )
 {
     wxFFile     file;
-    
+
     FILE*       fp = wxFopen( filename, wxT("r") );
-    
+
     if( !fp )
     {
-        ThrowIOError( _("Unable to open file \"%s\""), filename.GetData() );  
+        ThrowIOError( _("Unable to open file \"%s\""), filename.GetData() );
     }
 
     file.Attach( fp );      // "exception safe" way to close the file.
-    
-    delete lexer;  
+
+    delete lexer;
     lexer = 0;
-    
+
     lexer = new LEXER( file.fp(), filename );
 
     if( nextTok() != T_LEFT )
         expecting( T_LEFT );
-    
+
     if( nextTok() != T_pcb )
         expecting( T_pcb );
 
     SetPCB( new PCB() );
-    
+
     doPCB( pcb );
 }
 
@@ -296,29 +296,29 @@ void SPECCTRA_DB::LoadPCB( const wxString& filename ) throw( IOError )
 void SPECCTRA_DB::LoadSESSION( const wxString& filename ) throw( IOError )
 {
     wxFFile     file;
-    
+
     FILE*       fp = wxFopen( filename, wxT("r") );
-    
+
     if( !fp )
     {
-        ThrowIOError( _("Unable to open file \"%s\""), filename.GetData() );  
+        ThrowIOError( _("Unable to open file \"%s\""), filename.GetData() );
     }
 
     file.Attach( fp );      // "exception safe" way to close the file.
-    
-    delete lexer;  
+
+    delete lexer;
     lexer = 0;
-    
+
     lexer = new LEXER( file.fp(), filename );
 
     if( nextTok() != T_LEFT )
         expecting( T_LEFT );
-    
+
     if( nextTok() != T_session )
         expecting( T_session );
 
     SetSESSION( new SESSION() );
-    
+
     doSESSION( session );
 }
 
@@ -349,15 +349,15 @@ void SPECCTRA_DB::doPCB( PCB* growth ) throw( IOError )
           [<color_descriptor> ]
         )
     */
-    
+
     needSYMBOL();
-    growth->pcbname = lexer->CurText();    
-    
+    growth->pcbname = lexer->CurText();
+
     while( (tok = nextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
@@ -367,21 +367,21 @@ void SPECCTRA_DB::doPCB( PCB* growth ) throw( IOError )
             growth->parser = new PARSER( growth );
             doPARSER( growth->parser );
             break;
-            
+
         case T_unit:
             if( growth->unit )
                 unexpected( tok );
             growth->unit = new UNIT_RES( growth, tok );
             doUNIT( growth->unit );
             break;
-            
+
         case T_resolution:
             if( growth->resolution )
                 unexpected( tok );
             growth->resolution = new UNIT_RES( growth, tok );
             doRESOLUTION( growth->resolution );
             break;
-            
+
         case T_structure:
             if( growth->structure )
                 unexpected( tok );
@@ -395,14 +395,14 @@ void SPECCTRA_DB::doPCB( PCB* growth ) throw( IOError )
             growth->placement = new PLACEMENT( growth );
             doPLACEMENT( growth->placement );
             break;
-            
+
         case T_library:
             if( growth->library )
                 unexpected( tok );
             growth->library = new LIBRARY( growth );
             doLIBRARY( growth->library );
             break;
-            
+
         case T_network:
             if( growth->network )
                 unexpected( tok );
@@ -416,12 +416,12 @@ void SPECCTRA_DB::doPCB( PCB* growth ) throw( IOError )
             growth->wiring = new WIRING( growth );
             doWIRING( growth->wiring );
             break;
-            
+
         default:
             unexpected( lexer->CurText() );
         }
     }
-    
+
     tok = nextTok();
     if( tok != T_EOF )
         expecting( T_EOF );
@@ -431,7 +431,7 @@ void SPECCTRA_DB::doPCB( PCB* growth ) throw( IOError )
 void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IOError )
 {
     DSN_T   tok;
-    
+
     /*  <parser_descriptor >::=
         (parser
           [(string_quote <quote_char >)]
@@ -447,12 +447,12 @@ void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IOError )
           [(via_rotate_first [on | off])]
         )
     */
-    
+
     while( (tok = nextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
@@ -462,29 +462,29 @@ void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IOError )
                 expecting( T_QUOTE_DEF );
             lexer->SetStringDelimiter( (unsigned char) *lexer->CurText() );
             growth->string_quote = *lexer->CurText();
-            quote_char = lexer->CurText(); 
-            needRIGHT();        
+            quote_char = lexer->CurText();
+            needRIGHT();
             break;
-            
+
         case T_space_in_quoted_tokens:
             tok = nextTok();
             if( tok!=T_on && tok!=T_off )
                 expecting( "on|off" );
             lexer->SetSpaceInQuotedTokens( tok==T_on );
             growth->space_in_quoted_tokens = (tok==T_on);
-            needRIGHT();        
+            needRIGHT();
             break;
-            
+
         case T_host_cad:
             needSYMBOL();
             growth->host_cad = lexer->CurText();
-            needRIGHT();        
+            needRIGHT();
             break;
-            
+
         case T_host_version:
             needSYMBOL();
             growth->host_version = lexer->CurText();
-            needRIGHT();        
+            needRIGHT();
             break;
 
         case T_constant:
@@ -492,7 +492,7 @@ void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IOError )
             growth->const_id1 = lexer->CurText();
             needSYMBOL();
             growth->const_id2 = lexer->CurText();
-            needRIGHT();        
+            needRIGHT();
             break;
 
         case T_write_resolution:   // [(writee_resolution {<character> <positive_integer >})]
@@ -532,15 +532,15 @@ void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IOError )
             if( tok != T_testpoint )
                 expecting( T_testpoint );
             growth->routes_include_testpoint = true;
-            needRIGHT();        
+            needRIGHT();
             break;
-            
+
         case T_case_sensitive:
             tok = nextTok();
             if( tok!=T_on && tok!=T_off )
                 expecting( "on|off" );
             growth->case_sensitive = (tok==T_on);
-            needRIGHT();        
+            needRIGHT();
             break;
 
         case T_via_rotate_first:    // [(via_rotate_first [on | off])]
@@ -548,14 +548,14 @@ void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IOError )
             if( tok!=T_on && tok!=T_off )
                 expecting( "on|off" );
             growth->via_rotate_first = (tok==T_on);
-            needRIGHT();        
+            needRIGHT();
             break;
 
         case T_generated_by_freeroute:
             growth->generated_by_freeroute = true;
-            needRIGHT();        
+            needRIGHT();
             break;
-            
+
         default:
             unexpected( lexer->CurText() );
         }
@@ -579,13 +579,13 @@ void SPECCTRA_DB::doRESOLUTION( UNIT_RES* growth ) throw(IOError)
     default:
         expecting( "inch|mil|cm|mm|um" );
     }
-    
+
     tok = nextTok();
     if( tok != T_NUMBER )
         expecting( T_NUMBER );
 
     growth->value = atoi( lexer->CurText() );
-    
+
     needRIGHT();
 }
 
@@ -606,7 +606,7 @@ void SPECCTRA_DB::doUNIT( UNIT_RES* growth ) throw(IOError)
     default:
         expecting( "inch|mil|cm|mm|um" );
     }
-    
+
     needRIGHT();
 }
 
@@ -618,7 +618,7 @@ void SPECCTRA_DB::doLAYER_PAIR( LAYER_PAIR* growth ) throw( IOError )
 
     needSYMBOL();
     growth->layer_id1 = lexer->CurText();
-    
+
     if( nextTok() != T_NUMBER )
         expecting( T_NUMBER );
     growth->layer_weight = strtod( lexer->CurText(), 0 );
@@ -630,15 +630,15 @@ void SPECCTRA_DB::doLAYER_PAIR( LAYER_PAIR* growth ) throw( IOError )
 void SPECCTRA_DB::doLAYER_NOISE_WEIGHT( LAYER_NOISE_WEIGHT* growth ) throw( IOError )
 {
     DSN_T   tok;
-    
+
     while( (tok = nextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         if( nextTok() != T_layer_pair )
             expecting( T_layer_pair );
-        
+
         LAYER_PAIR* layer_pair = new LAYER_PAIR( growth );
         growth->layer_pairs.push_back( layer_pair );
         doLAYER_PAIR( layer_pair );
@@ -649,12 +649,12 @@ void SPECCTRA_DB::doLAYER_NOISE_WEIGHT( LAYER_NOISE_WEIGHT* growth ) throw( IOEr
 void SPECCTRA_DB::doSTRUCTURE( STRUCTURE* growth ) throw(IOError)
 {
     DSN_T   tok;
-    
+
     while( (tok = nextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
@@ -664,7 +664,7 @@ void SPECCTRA_DB::doSTRUCTURE( STRUCTURE* growth ) throw(IOError)
             growth->unit = new UNIT_RES( growth, tok );
             doUNIT( growth->unit );
             break;
-            
+
         case T_resolution:
             if( growth->unit )
                 unexpected( tok );
@@ -675,16 +675,16 @@ void SPECCTRA_DB::doSTRUCTURE( STRUCTURE* growth ) throw(IOError)
         case T_layer_noise_weight:
             growth->layer_noise_weight = new LAYER_NOISE_WEIGHT( growth );
             doLAYER_NOISE_WEIGHT( growth->layer_noise_weight );
-            break;            
-            
+            break;
+
         case T_place_boundary:
-L_place:            
+L_place:
             if( growth->place_boundary )
                 unexpected( tok );
             growth->place_boundary = new BOUNDARY( growth, T_place_boundary );
             doBOUNDARY( growth->place_boundary );
             break;
-            
+
         case T_boundary:
             if( growth->boundary )
             {
@@ -709,10 +709,10 @@ L_place:
             growth->regions.push_back( region );
             doREGION( region );
             break;
-            
+
         case T_snap_angle:
             STRINGPROP* stringprop;
-            stringprop = new STRINGPROP( growth, T_snap_angle ); 
+            stringprop = new STRINGPROP( growth, T_snap_angle );
             growth->Append( stringprop );
             doSTRINGPROP( stringprop );
             break;
@@ -721,7 +721,7 @@ L_place:
             growth->via = new VIA( growth );
             doVIA( growth->via );
             break;
-            
+
         case T_control:
             growth->control = new CONTROL( growth );
             doCONTROL( growth->control );
@@ -742,8 +742,8 @@ L_place:
         case T_place_rule:
             growth->place_rules = new RULE( growth, T_place_rule );
             doRULE( growth->place_rules );
-            break;            
-            
+            break;
+
         case T_keepout:
         case T_place_keepout:
         case T_via_keepout:
@@ -762,7 +762,7 @@ L_place:
             growth->grids.push_back( grid );
             doGRID( grid );
             break;
-            
+
         default:
             unexpected( lexer->CurText() );
         }
@@ -773,21 +773,21 @@ L_place:
 void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth ) throw( IOError )
 {
     DSN_T   tok = nextTok();
-    
+
     if( isSymbol(tok) )
     {
         growth->name = lexer->CurText();
         tok = nextTok();
     }
-    
-    if( tok!=T_LEFT )    
+
+    if( tok!=T_LEFT )
         expecting( T_LEFT );
 
     while( tok != T_RIGHT )
     {
         if( tok!=T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
@@ -797,35 +797,35 @@ void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth ) throw( IOError )
             growth->sequence_number = atoi( lexer->CurText() );
             needRIGHT();
             break;
-            
+
         case T_rule:
             if( growth->rules )
                 unexpected( tok );
             growth->rules = new RULE( growth, T_rule );
             doRULE( growth->rules );
             break;
-            
+
         case T_place_rule:
             if( growth->place_rules )
                 unexpected( tok );
             growth->place_rules = new RULE( growth, T_place_rule );
             doRULE( growth->place_rules );
             break;
-            
+
         case T_rect:
             if( growth->shape )
                 unexpected( tok );
             growth->shape = new RECTANGLE( growth );
             doRECTANGLE( (RECTANGLE*) growth->shape );
             break;
-            
+
         case T_circle:
             if( growth->shape )
                 unexpected( tok );
             growth->shape = new CIRCLE( growth );
             doCIRCLE( (CIRCLE*) growth->shape );
             break;
-            
+
         case T_polyline_path:
             tok = T_path;
         case T_path:
@@ -835,14 +835,14 @@ void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth ) throw( IOError )
             growth->shape = new PATH( growth, tok );
             doPATH( (PATH*) growth->shape );
             break;
-            
+
         case T_qarc:
             if( growth->shape )
                 unexpected( tok );
             growth->shape = new QARC( growth );
             doQARC( (QARC*) growth->shape );
             break;
-            
+
         case T_window:
             WINDOW* window;
             window = new WINDOW( growth );
@@ -853,7 +853,7 @@ void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth ) throw( IOError )
         default:
             unexpected( lexer->CurText() );
         }
-        
+
         tok = nextTok();
     }
 }
@@ -862,12 +862,12 @@ void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth ) throw( IOError )
 void SPECCTRA_DB::doWINDOW( WINDOW* growth ) throw( IOError )
 {
     DSN_T   tok = nextTok();
-    
+
     while( tok != T_RIGHT )
     {
         if( tok!=T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
@@ -877,14 +877,14 @@ void SPECCTRA_DB::doWINDOW( WINDOW* growth ) throw( IOError )
             growth->shape = new RECTANGLE( growth );
             doRECTANGLE( (RECTANGLE*) growth->shape );
             break;
-            
+
         case T_circle:
             if( growth->shape )
                 unexpected( tok );
             growth->shape = new CIRCLE( growth );
             doCIRCLE( (CIRCLE*) growth->shape );
             break;
-            
+
         case T_polyline_path:
             tok = T_path;
         case T_path:
@@ -894,18 +894,18 @@ void SPECCTRA_DB::doWINDOW( WINDOW* growth ) throw( IOError )
             growth->shape = new PATH( growth, tok );
             doPATH( (PATH*) growth->shape );
             break;
-            
+
         case T_qarc:
             if( growth->shape )
                 unexpected( tok );
             growth->shape = new QARC( growth );
             doQARC( (QARC*) growth->shape );
             break;
-            
+
         default:
             unexpected( lexer->CurText() );
         }
-        
+
         tok = nextTok();
     }
 }
@@ -914,16 +914,16 @@ void SPECCTRA_DB::doWINDOW( WINDOW* growth ) throw( IOError )
 void SPECCTRA_DB::doBOUNDARY( BOUNDARY* growth ) throw( IOError )
 {
     DSN_T   tok = nextTok();
-    
+
     if( tok != T_LEFT )
         expecting( T_LEFT );
-        
+
     tok = nextTok();
     if( tok == T_rect )
     {
         if( growth->paths.size() )
             unexpected( "rect when path already encountered" );
-    
+
         growth->rectangle = new RECTANGLE( growth );
         doRECTANGLE( growth->rectangle );
         needRIGHT();
@@ -937,10 +937,10 @@ void SPECCTRA_DB::doBOUNDARY( BOUNDARY* growth ) throw( IOError )
         {
             if( tok != T_path )
                 expecting( T_path );
-                    
+
             PATH* path = new PATH( growth, T_path ) ;
             growth->paths.push_back( path );
-            
+
             doPATH( path );
 
             tok = nextTok();
@@ -950,7 +950,7 @@ void SPECCTRA_DB::doBOUNDARY( BOUNDARY* growth ) throw( IOError )
             if( tok != T_LEFT )
                 expecting(T_LEFT);
 
-            tok = nextTok();            
+            tok = nextTok();
         }
     }
     else
@@ -964,43 +964,43 @@ void SPECCTRA_DB::doPATH( PATH* growth ) throw( IOError )
 
     if( !isSymbol( tok ) )
         expecting( "layer_id" );
-    
+
     growth->layer_id = lexer->CurText();
 
     if( nextTok() != T_NUMBER )
         expecting( "aperture_width" );
-    
+
     growth->aperture_width = strtod( lexer->CurText(), NULL );
 
     POINT   ptTemp;
-    
+
     tok = nextTok();
-    
+
     do
     {
         if( tok != T_NUMBER )
             expecting( T_NUMBER );
         ptTemp.x = strtod( lexer->CurText(), NULL );
-    
+
         if( nextTok() != T_NUMBER )
             expecting( T_NUMBER );
         ptTemp.y = strtod( lexer->CurText(), NULL );
-        
+
         growth->points.push_back( ptTemp );
-           
+
     } while( (tok = nextTok())!=T_RIGHT && tok!=T_LEFT );
-    
+
     if( tok == T_LEFT )
     {
         if( nextTok() != T_aperture_type )
             expecting( T_aperture_type );
-        
+
         tok = nextTok();
         if( tok!=T_round && tok!=T_square )
             expecting( "round|square" );
 
         growth->aperture_type = tok;
-        
+
         needRIGHT();
     }
 }
@@ -1010,7 +1010,7 @@ void SPECCTRA_DB::doRECTANGLE( RECTANGLE* growth ) throw( IOError )
 {
     needSYMBOL();
     growth->layer_id = lexer->CurText();
-    
+
     if( nextTok() != T_NUMBER )
         expecting( T_NUMBER );
     growth->point0.x = strtod( lexer->CurText(), NULL );
@@ -1034,23 +1034,23 @@ void SPECCTRA_DB::doRECTANGLE( RECTANGLE* growth ) throw( IOError )
 void SPECCTRA_DB::doCIRCLE( CIRCLE* growth ) throw( IOError )
 {
     DSN_T   tok;
-    
+
     needSYMBOL();
     growth->layer_id = lexer->CurText();
-    
+
     if( nextTok() != T_NUMBER )
         expecting( T_NUMBER );
     growth->diameter = strtod( lexer->CurText(), 0 );
-    
+
     tok = nextTok();
     if( tok == T_NUMBER )
     {
         growth->vertex.x = strtod( lexer->CurText(), 0 );
-        
+
         if( nextTok() != T_NUMBER )
             expecting( T_NUMBER );
         growth->vertex.y = strtod( lexer->CurText(), 0 );
-        
+
         tok = nextTok();
     }
 
@@ -1063,23 +1063,23 @@ void SPECCTRA_DB::doQARC( QARC* growth ) throw( IOError )
 {
     needSYMBOL();
     growth->layer_id = lexer->CurText();
-    
+
     if( nextTok() != T_NUMBER )
         expecting( T_NUMBER );
     growth->aperture_width = strtod( lexer->CurText(), 0 );
-    
+
     for( int i=0;  i<3;  ++i )
     {
         if( nextTok() != T_NUMBER )
             expecting( T_NUMBER );
         growth->vertex[i].x = strtod( lexer->CurText(), 0 );
-        
+
         if( nextTok() != T_NUMBER )
             expecting( T_NUMBER );
         growth->vertex[i].y = strtod( lexer->CurText(), 0 );
     }
 
-    needRIGHT();    
+    needRIGHT();
 }
 
 
@@ -1094,32 +1094,32 @@ void SPECCTRA_DB::doSTRINGPROP( STRINGPROP* growth ) throw( IOError )
 void SPECCTRA_DB::doTOKPROP( TOKPROP* growth ) throw( IOError )
 {
     DSN_T   tok = nextTok();
-    
+
     if( tok<0 )
         unexpected( lexer->CurText() );
 
     growth->value = tok;
 
-    needRIGHT();    
+    needRIGHT();
 }
 
 
 void SPECCTRA_DB::doVIA( VIA* growth ) throw( IOError )
 {
     DSN_T   tok;
-    
+
     while( (tok = nextTok()) != T_RIGHT )
     {
         if( tok == T_LEFT )
         {
             if( nextTok() != T_spare )
                 expecting( T_spare );
-            
+
             while( (tok = nextTok()) != T_RIGHT )
             {
                 if( !isSymbol( tok ) )
                     expecting( T_SYMBOL );
-                
+
                 growth->spares.push_back( lexer->CurText() );
             }
         }
@@ -1136,7 +1136,7 @@ void SPECCTRA_DB::doVIA( VIA* growth ) throw( IOError )
 void SPECCTRA_DB::doCONTROL( CONTROL* growth ) throw( IOError )
 {
     DSN_T   tok;
-    
+
     while( (tok = nextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
@@ -1152,7 +1152,7 @@ void SPECCTRA_DB::doCONTROL( CONTROL* growth ) throw( IOError )
             growth->via_at_smd = (tok==T_on);
             needRIGHT();
             break;
-            
+
         case T_off_grid:
         case T_route_to_fanout_only:
         case T_force_to_terminal_point:
@@ -1172,7 +1172,7 @@ void SPECCTRA_DB::doCONTROL( CONTROL* growth ) throw( IOError )
             growth->Append( tokprop );
             doTOKPROP( tokprop );
             break;
-            
+
         default:
             unexpected( lexer->CurText() );
         }
@@ -1189,16 +1189,16 @@ void SPECCTRA_DB::doPROPERTIES( PROPERTIES* growth ) throw( IOError )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         needSYMBOL();
         property.name = lexer->CurText();
 
-        needSYMBOL();        
+        needSYMBOL();
         property.value = lexer->CurText();
-        
+
         growth->push_back( property );
 
-        needRIGHT();        
+        needRIGHT();
     }
 }
 
@@ -1206,12 +1206,12 @@ void SPECCTRA_DB::doPROPERTIES( PROPERTIES* growth ) throw( IOError )
 void SPECCTRA_DB::doLAYER( LAYER* growth ) throw( IOError )
 {
     DSN_T   tok = nextTok();
-    
+
     if( !isSymbol(tok) )
         expecting(T_SYMBOL);
 
     growth->name = lexer->CurText();
-    
+
     while( (tok = nextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
@@ -1233,11 +1233,11 @@ void SPECCTRA_DB::doLAYER( LAYER* growth ) throw( IOError )
             growth->rules = new RULE( growth, T_rule );
             doRULE( growth->rules );
             break;
-            
+
         case T_property:
             doPROPERTIES( &growth->properties );
             break;
-            
+
         case T_direction:
             tok = nextTok();
             switch( tok )
@@ -1281,9 +1281,9 @@ void SPECCTRA_DB::doLAYER( LAYER* growth ) throw( IOError )
                 growth->cost = tok;
                 break;
             case T_NUMBER:
-                // store as negative so we can differentiate between 
+                // store as negative so we can differentiate between
                 // DSN_T (positive) and T_NUMBER (negative)
-                growth->cost = -atoi( lexer->CurText() );   
+                growth->cost = -atoi( lexer->CurText() );
                 break;
             default:
                 expecting( "forbidden|high|medium|low|free|<positive_integer>|-1" );
@@ -1293,15 +1293,15 @@ void SPECCTRA_DB::doLAYER( LAYER* growth ) throw( IOError )
             {
                 if( nextTok() != T_type )
                     unexpected( lexer->CurText() );
-                
+
                 tok = nextTok();
                 if( tok!=T_length && tok!=T_way )
                     expecting( "length|way" );
-                
+
                 growth->cost_type = tok;
                 if( nextTok()!=T_RIGHT )
                     expecting(T_RIGHT);
-                
+
                 tok = nextTok();
             }
             if( tok!=T_RIGHT )
@@ -1313,13 +1313,13 @@ void SPECCTRA_DB::doLAYER( LAYER* growth ) throw( IOError )
             {
                 if( !isSymbol(tok) )
                     expecting( T_SYMBOL );
-                
+
                 growth->use_net.push_back( lexer->CurText() );
             }
             break;
-            
+
         default:
-            unexpected( lexer->CurText() );            
+            unexpected( lexer->CurText() );
         }
     }
 }
@@ -1334,10 +1334,10 @@ void SPECCTRA_DB::doRULE( RULE* growth ) throw( IOError )
     while( bracketNesting!=0 && tok!=T_EOF )
     {
         tok = nextTok();
-        
+
         if( tok==T_LEFT)
             ++bracketNesting;
-        
+
         else if( tok==T_RIGHT )
             --bracketNesting;
 
@@ -1348,9 +1348,9 @@ void SPECCTRA_DB::doRULE( RULE* growth ) throw( IOError )
 
             if( tok==T_STRING )
                 builder += quote_char;
-            
+
             builder += lexer->CurText();
-            
+
             if( tok==T_STRING )
                 builder += quote_char;
         }
@@ -1364,7 +1364,7 @@ void SPECCTRA_DB::doRULE( RULE* growth ) throw( IOError )
            builder.clear();
         }
     }
-    
+
     if( tok==T_EOF )
         unexpected( T_EOF );
 }
@@ -1380,32 +1380,32 @@ void SPECCTRA_DB::doPLACE_RULE( PLACE_RULE* growth, bool expect_object_type ) th
          <opposite_side_descriptor> ]}
          )
     */
-    
+
     DSN_T   tok = nextTok();
-    
+
     if( tok!=T_LEFT )
         expecting( T_LEFT );
-    
+
     tok = nextTok();
     if( tok==T_object_type )
     {
         if( !expect_object_type )
             unexpected( tok );
-        
+
         /*  [(object_type
               [pcb |
               image_set [large | small | discrete | capacitor | resistor]
               [(image_type [smd | pin])]]
             )]
         */
-        
+
         tok = nextTok();
         switch( tok )
         {
         case T_pcb:
             growth->object_type = tok;
             break;
-            
+
         case T_image_set:
             tok = nextTok();
             switch( tok )
@@ -1421,35 +1421,35 @@ void SPECCTRA_DB::doPLACE_RULE( PLACE_RULE* growth, bool expect_object_type ) th
                 unexpected( lexer->CurText() );
             }
             break;
-            
+
         default:
             unexpected( lexer->CurText() );
         }
-        
+
         tok = nextTok();
         if( tok == T_LEFT )
         {
             tok = nextTok();
             if( tok != T_image_type )
                 expecting( T_image_type );
-            
+
             tok = nextTok();
             if( tok!=T_smd && tok!=T_pin )
                 expecting( "smd|pin" );
-            
+
             needRIGHT();
-            
+
             tok = nextTok();
         }
-        
+
         if( tok != T_RIGHT )
             expecting( T_RIGHT );
-        
+
         tok = nextTok();
     }
 
-    /*  {[<spacing_descriptor> | 
-        <permit_orient_descriptor> | 
+    /*  {[<spacing_descriptor> |
+        <permit_orient_descriptor> |
         <permit_side_descriptor> | <opposite_side_descriptor> ]}
     */
     doRULE( growth );
@@ -1460,7 +1460,7 @@ void SPECCTRA_DB::doPLACE_RULE( PLACE_RULE* growth, bool expect_object_type ) th
 void SPECCTRA_DB::doREGION( REGION* growth ) throw( IOError )
 {
     DSN_T tok = nextTok();
-    
+
     if( isSymbol(tok) )
     {
         growth->region_id = lexer->CurText();
@@ -1481,36 +1481,36 @@ void SPECCTRA_DB::doREGION( REGION* growth ) throw( IOError )
             growth->rectangle = new RECTANGLE( growth );
             doRECTANGLE( growth->rectangle );
             break;
-            
+
         case T_polygon:
             if( growth->polygon )
                 unexpected( tok );
             growth->polygon = new PATH( growth, T_polygon );
             doPATH( growth->polygon );
             break;
-            
+
         case T_region_net:
         case T_region_class:
             STRINGPROP* stringprop;
             stringprop = new STRINGPROP( growth, tok );
             growth->Append( stringprop );
             doSTRINGPROP( stringprop );
-            break;            
+            break;
 
         case T_region_class_class:
             CLASS_CLASS* class_class;
             class_class = new CLASS_CLASS( growth, tok );
             growth->Append( class_class );
-            doCLASS_CLASS( class_class ); 
+            doCLASS_CLASS( class_class );
             break;
-            
+
         case T_rule:
             if( growth->rules )
                 unexpected( tok );
             growth->rules = new RULE( growth, T_rule );
             doRULE( growth->rules );
             break;
-            
+
         default:
             unexpected( lexer->CurText() );
         }
@@ -1529,10 +1529,10 @@ void SPECCTRA_DB::doREGION( REGION* growth ) throw( IOError )
 void SPECCTRA_DB::doCLASS_CLASS( CLASS_CLASS* growth ) throw( IOError )
 {
     DSN_T   tok = nextTok();
-    
+
     if( tok != T_LEFT )
         expecting( T_LEFT );
-    
+
     while( (tok = nextTok()) != T_RIGHT )
     {
         switch( tok )
@@ -1543,7 +1543,7 @@ void SPECCTRA_DB::doCLASS_CLASS( CLASS_CLASS* growth ) throw( IOError )
             growth->classes = new CLASSES( growth );
             doCLASSES( growth->classes );
             break;
-            
+
         case T_rule:
             // only T_class_class takes a T_rule
             if( growth->Type() == T_region_class_class )
@@ -1553,7 +1553,7 @@ void SPECCTRA_DB::doCLASS_CLASS( CLASS_CLASS* growth ) throw( IOError )
             growth->Append( rule );
             doRULE( rule );
             break;
-            
+
         case T_layer_rule:
             // only T_class_class takes a T_layer_rule
             if( growth->Type() == T_region_class_class )
@@ -1563,8 +1563,8 @@ void SPECCTRA_DB::doCLASS_CLASS( CLASS_CLASS* growth ) throw( IOError )
             growth->Append( layer_rule );
             doLAYER_RULE( layer_rule );
             break;
-            
-        default:            
+
+        default:
             unexpected( tok );
         }
     }
@@ -1576,20 +1576,20 @@ void SPECCTRA_DB::doCLASSES( CLASSES* growth ) throw( IOError )
     DSN_T   tok = nextTok();
 
     // require at least 2 class_ids
-    
+
     if( !isSymbol( tok ) )
         expecting( "class_id" );
-    
+
     growth->class_ids.push_back( lexer->CurText() );
-    
+
     do
     {
         tok = nextTok();
         if( !isSymbol( tok ) )
             expecting( "class_id" );
-        
+
         growth->class_ids.push_back( lexer->CurText() );
-        
+
     } while( (tok = nextTok()) != T_RIGHT );
 }
 
@@ -1597,7 +1597,7 @@ void SPECCTRA_DB::doCLASSES( CLASSES* growth ) throw( IOError )
 void SPECCTRA_DB::doGRID( GRID* growth ) throw( IOError )
 {
     DSN_T   tok = nextTok();
-    
+
     switch( tok )
     {
     case T_via:
@@ -1629,12 +1629,12 @@ void SPECCTRA_DB::doGRID( GRID* growth ) throw( IOError )
                 {
                     if( growth->grid_type == T_place )
                         unexpected( tok );
-                    
+
                     if( nextTok() != T_NUMBER )
                         expecting( T_NUMBER );
-                    
+
                     growth->offset = strtod( lexer->CurText(), 0 );
-                    
+
                     if( nextTok() != T_RIGHT )
                         expecting(T_RIGHT);
                 }
@@ -1662,24 +1662,24 @@ void SPECCTRA_DB::doGRID( GRID* growth ) throw( IOError )
 void SPECCTRA_DB::doLAYER_RULE( LAYER_RULE* growth ) throw( IOError )
 {
     DSN_T   tok;
-    
+
     needSYMBOL();
-    
+
     do
     {
         growth->layer_ids.push_back( lexer->CurText() );
-        
+
     }  while( isSymbol(tok = nextTok()) );
- 
+
     if( tok != T_LEFT )
         expecting( T_LEFT );
-    
+
     if( nextTok() != T_rule )
         expecting( T_rule );
-    
+
     growth->rule = new RULE( growth, T_rule );
     doRULE( growth->rule );
-    
+
     needRIGHT();
 }
 
@@ -1687,30 +1687,30 @@ void SPECCTRA_DB::doLAYER_RULE( LAYER_RULE* growth ) throw( IOError )
 void SPECCTRA_DB::doPLACE( PLACE* growth ) throw( IOError )
 {
     DSN_T   tok = nextTok();
-    
+
     if( !isSymbol( tok ) )
         expecting( "component_id" );
-    
-    growth->component_id = lexer->CurText();    
-    
+
+    growth->component_id = lexer->CurText();
+
     tok = nextTok();
     if( tok == T_NUMBER )
     {
         POINT   point;
-        
+
         point.x = strtod( lexer->CurText(), 0 );
-        
+
         if( nextTok() != T_NUMBER )
             expecting( T_NUMBER );
         point.y = strtod( lexer->CurText(), 0 );
-        
+
         growth->SetVertex( point );
-        
+
         tok = nextTok();
         if( tok!=T_front && tok!=T_back )
             expecting( "front|back" );
         growth->side = tok;
-        
+
         if( nextTok() != T_NUMBER )
             expecting( "rotation" );
         growth->SetRotation( strtod( lexer->CurText(), 0)  );
@@ -1720,7 +1720,7 @@ void SPECCTRA_DB::doPLACE( PLACE* growth ) throw( IOError )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
@@ -1731,7 +1731,7 @@ void SPECCTRA_DB::doPLACE( PLACE* growth ) throw( IOError )
             else
                 expecting("x|y|xy|off");
             break;
-           
+
         case T_status:
             tok = nextTok();
             if( tok==T_added || tok==T_deleted || tok==T_substituted )
@@ -1739,7 +1739,7 @@ void SPECCTRA_DB::doPLACE( PLACE* growth ) throw( IOError )
             else
                 expecting("added|deleted|substituted");
             break;
-            
+
         case T_logical_part:
             if( growth->logical_part.size() )
                 unexpected( tok );
@@ -1748,20 +1748,20 @@ void SPECCTRA_DB::doPLACE( PLACE* growth ) throw( IOError )
                 expecting( "logical_part_id");
             growth->logical_part = lexer->CurText();
             break;
-            
+
         case T_place_rule:
             if( growth->place_rules )
                 unexpected( tok );
             growth->place_rules = new RULE( growth, T_place_rule );
             doRULE( growth->place_rules );
             break;
-            
+
         case T_property:
             if( growth->properties.size() )
                 unexpected( tok );
             doPROPERTIES( &growth->properties );
             break;
-            
+
         case T_lock_type:
             tok = nextTok();
             if( tok==T_position || tok==T_gate || tok==T_subgate || tok==T_pin )
@@ -1791,7 +1791,7 @@ void SPECCTRA_DB::doPLACE( PLACE* growth ) throw( IOError )
             growth->part_number = lexer->CurText();
             needRIGHT();
             break;
-            
+
         default:
             unexpected( tok );
         }
@@ -1802,7 +1802,7 @@ void SPECCTRA_DB::doPLACE( PLACE* growth ) throw( IOError )
 void SPECCTRA_DB::doCOMPONENT( COMPONENT* growth ) throw( IOError )
 {
     DSN_T   tok = nextTok();
-    
+
     if( !isSymbol( tok ) )
         expecting( "image_id" );
     growth->image_id = lexer->CurText();
@@ -1811,7 +1811,7 @@ void SPECCTRA_DB::doCOMPONENT( COMPONENT* growth ) throw( IOError )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
@@ -1821,7 +1821,7 @@ void SPECCTRA_DB::doCOMPONENT( COMPONENT* growth ) throw( IOError )
             growth->places.push_back( place );
             doPLACE( place );
             break;
-            
+
         default:
             unexpected(tok);
         }
@@ -1832,9 +1832,9 @@ void SPECCTRA_DB::doCOMPONENT( COMPONENT* growth ) throw( IOError )
 void SPECCTRA_DB::doPLACEMENT( PLACEMENT* growth ) throw( IOError )
 {
     DSN_T   tok;
-    
+
     needLEFT();
-    
+
     tok = nextTok();
     if( tok==T_unit || tok==T_resolution )
     {
@@ -1843,21 +1843,21 @@ void SPECCTRA_DB::doPLACEMENT( PLACEMENT* growth ) throw( IOError )
             doRESOLUTION( growth->unit );
         else
             doUNIT( growth->unit );
-        
+
         if( nextTok() != T_LEFT )
             expecting( T_LEFT );
         tok = nextTok();
     }
-    
+
     if( tok == T_place_control )
     {
         if( nextTok() != T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         if( tok != T_flip_style )
             expecting( T_flip_style );
-        
+
         tok = nextTok();
         if( tok==T_mirror_first || tok==T_rotate_first )
             growth->flip_style = tok;
@@ -1866,7 +1866,7 @@ void SPECCTRA_DB::doPLACEMENT( PLACEMENT* growth ) throw( IOError )
 
         needRIGHT();
         needRIGHT();
-        needLEFT();        
+        needLEFT();
         tok = nextTok();
     }
 
@@ -1875,15 +1875,15 @@ void SPECCTRA_DB::doPLACEMENT( PLACEMENT* growth ) throw( IOError )
         COMPONENT* component = new COMPONENT( growth );
         growth->components.push_back( component );
         doCOMPONENT( component );
-        
+
         tok = nextTok();
         if( tok == T_RIGHT )
             return;
 
-        else if( tok == T_LEFT )        
+        else if( tok == T_LEFT )
             tok = nextTok();
     }
-    
+
     unexpected( lexer->CurText() );
 }
 
@@ -1905,18 +1905,18 @@ void SPECCTRA_DB::doPADSTACK( PADSTACK* growth ) throw( IOError )
         [(absolute [on | off])]
         [(rule <clearance_descriptor> )])
     */
-    
+
     // padstack_id may be a number
     if( !isSymbol( tok ) && tok!=T_NUMBER )
         expecting( "padstack_id" );
-    
+
     growth->padstack_id = lexer->CurText();
-    
+
     while( (tok = nextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
@@ -1942,7 +1942,7 @@ void SPECCTRA_DB::doPADSTACK( PADSTACK* growth ) throw( IOError )
             growth->absolute = tok;
             needRIGHT();
             break;
-            
+
         case T_shape:
             SHAPE* shape;
             shape = new SHAPE( growth );
@@ -1960,27 +1960,27 @@ void SPECCTRA_DB::doPADSTACK( PADSTACK* growth ) throw( IOError )
             {
                 if( nextTok() != T_use_via )
                     expecting( T_use_via );
-                
+
                 needSYMBOL();
                 growth->via_id = lexer->CurText();
 
                 needRIGHT();
-                needRIGHT();                
+                needRIGHT();
             }
             break;
-            
+
         /*
         case T_via_site:        not supported
             break;
-        */            
-            
+        */
+
         case T_rule:
             if( growth->rules )
                 unexpected( tok );
             growth->rules = new RULE( growth, T_rule );
             doRULE( growth->rules );
             break;
-            
+
         default:
             unexpected( lexer->CurText() );
         }
@@ -1997,12 +1997,12 @@ void SPECCTRA_DB::doSHAPE( SHAPE* growth ) throw( IOError )
          [(connect [on | off])]
          [{<window_descriptor> }])
     */
-    
+
     while( (tok = nextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
@@ -2013,7 +2013,7 @@ void SPECCTRA_DB::doSHAPE( SHAPE* growth ) throw( IOError )
         case T_path:
         case T_polygon:
         case T_qarc:
-L_done_that:    
+L_done_that:
             if( growth->shape )
                 unexpected( tok );
             break;
@@ -2025,25 +2025,25 @@ L_done_that:
                 goto L_done_that;
             }
         }
-        
+
         switch( tok )
         {
         case T_rect:
             growth->shape = new RECTANGLE( growth );
             doRECTANGLE( (RECTANGLE*) growth->shape );
             break;
-            
+
         case T_circle:
             growth->shape = new CIRCLE( growth );
             doCIRCLE( (CIRCLE*)growth->shape );
             break;
-        
+
         case T_path:
         case T_polygon:
             growth->shape = new PATH( growth, tok );
             doPATH( (PATH*)growth->shape );
             break;
-            
+
         case T_qarc:
             growth->shape = new QARC( growth );
             doQARC( (QARC*)growth->shape );
@@ -2063,7 +2063,7 @@ L_done_that:
             growth->windows.push_back( window );
             doWINDOW( window );
             break;
-            
+
         default:
             unexpected( lexer->CurText() );
         }
@@ -2094,14 +2094,14 @@ void SPECCTRA_DB::doIMAGE( IMAGE* growth ) throw( IOError )
 
     if( !isSymbol( tok ) )
         expecting( "image_id" );
-    
+
     growth->image_id = lexer->CurText();
-    
+
     while( (tok = nextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
@@ -2133,7 +2133,7 @@ void SPECCTRA_DB::doIMAGE( IMAGE* growth ) throw( IOError )
             growth->pins.push_back( pin );
             doPIN( pin );
             break;
-            
+
         case T_rule:
             if( growth->rules )
                 unexpected( tok );
@@ -2159,7 +2159,7 @@ void SPECCTRA_DB::doIMAGE( IMAGE* growth ) throw( IOError )
             growth->keepouts.push_back( keepout );
             doKEEPOUT( keepout );
             break;
-            
+
         default:
             unexpected( lexer->CurText() );
         }
@@ -2179,23 +2179,23 @@ void SPECCTRA_DB::doPIN( PIN* growth ) throw( IOError )
     // a padstack_id may be a number
     if( !isSymbol( tok ) && tok!=T_NUMBER )
         expecting( "padstack_id" );
-    
+
     growth->padstack_id = lexer->CurText();
-    
+
     tok = nextTok();
     if( tok == T_LEFT )
     {
         tok = nextTok();
         if( tok != T_rotate )
             expecting( T_rotate );
-        
+
         if( nextTok() != T_NUMBER )
             expecting( T_NUMBER );
         growth->SetRotation( strtod( lexer->CurText(), 0 ) );
         needRIGHT();
         tok = nextTok();
     }
-    
+
     if( !isSymbol(tok) && tok!=T_NUMBER )
         expecting( "pin_id" );
 
@@ -2204,7 +2204,7 @@ void SPECCTRA_DB::doPIN( PIN* growth ) throw( IOError )
     if( nextTok() != T_NUMBER )
         expecting( T_NUMBER );
     growth->vertex.x = strtod( lexer->CurText(), 0 );
-    
+
     if( nextTok() != T_NUMBER )
         expecting( T_NUMBER );
     growth->vertex.y = strtod( lexer->CurText(), 0 );
@@ -2231,12 +2231,12 @@ void SPECCTRA_DB::doLIBRARY( LIBRARY* growth ) throw( IOError )
            [{<image_image_descriptor> }]
         )
     */
-    
+
     while( (tok = nextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
@@ -2246,7 +2246,7 @@ void SPECCTRA_DB::doLIBRARY( LIBRARY* growth ) throw( IOError )
             growth->unit = new UNIT_RES( growth, tok );
             doUNIT( growth->unit );
             break;
-            
+
         case T_padstack:
             PADSTACK* padstack;
             padstack = new PADSTACK( growth );
@@ -2260,7 +2260,7 @@ void SPECCTRA_DB::doLIBRARY( LIBRARY* growth ) throw( IOError )
             growth->images.push_back( image );
             doIMAGE( image );
             break;
-            
+
         default:
             unexpected( lexer->CurText() );
         }
@@ -2295,14 +2295,14 @@ void SPECCTRA_DB::doNET( NET* growth ) throw( IOError )
 
     if( !isSymbol( tok ) )
         expecting( "net_id" );
-    
+
     growth->net_id = lexer->CurText();
-    
+
     while( (tok = nextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
@@ -2325,7 +2325,7 @@ void SPECCTRA_DB::doNET( NET* growth ) throw( IOError )
                 PIN_REF     empty( growth );
                 while( (tok = nextTok()) != T_RIGHT )
                 {
-                    // copy the empty one, then fill its copy later thru pin_ref.                
+                    // copy the empty one, then fill its copy later thru pin_ref.
                     growth->pins.push_back( empty );
 
                     PIN_REF* pin_ref = &growth->pins.back();
@@ -2341,7 +2341,7 @@ void SPECCTRA_DB::doNET( NET* growth ) throw( IOError )
             growth->comp_order = new COMP_ORDER( growth );
             doCOMP_ORDER( growth->comp_order );
             break;
-            
+
         case T_type:
             tok = nextTok();
             if( tok!=T_fix && tok!=T_normal )
@@ -2350,7 +2350,7 @@ void SPECCTRA_DB::doNET( NET* growth ) throw( IOError )
             needRIGHT();
             break;
 
-/* @todo            
+/* @todo
         case T_circuit:
             break;
 */
@@ -2361,14 +2361,14 @@ void SPECCTRA_DB::doNET( NET* growth ) throw( IOError )
             growth->rules = new RULE( growth, T_rule );
             doRULE( growth->rules );
             break;
-            
+
         case T_layer_rule:
             LAYER_RULE* layer_rule;
             layer_rule = new LAYER_RULE( growth );
             growth->layer_rules.push_back( layer_rule );
             doLAYER_RULE( layer_rule );
             break;
-            
+
         case T_fromto:
             FROMTO* fromto;
             fromto = new FROMTO( growth );
@@ -2396,7 +2396,7 @@ void SPECCTRA_DB::doTOPOLOGY( TOPOLOGY* growth ) throw( IOError )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
@@ -2406,7 +2406,7 @@ void SPECCTRA_DB::doTOPOLOGY( TOPOLOGY* growth ) throw( IOError )
             growth->fromtos.push_back( fromto );
             doFROMTO( fromto );
             break;
-        
+
         case T_comp_order:
             COMP_ORDER*  comp_order;
             comp_order = new COMP_ORDER( growth );
@@ -2436,7 +2436,7 @@ void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IOError )
     */
 
     needSYMBOL();
-    
+
     growth->class_id = lexer->CurText();
 
     // do net_ids, do not support <composite_name_list>s at this time
@@ -2444,13 +2444,13 @@ void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IOError )
     {
         growth->net_ids.push_back( lexer->CurText() );
     }
-    
-    
+
+
     while( tok != T_RIGHT )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
@@ -2460,54 +2460,54 @@ void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IOError )
             growth->rules = new RULE( growth, T_rule );
             doRULE( growth->rules );
             break;
-            
+
         case T_layer_rule:
             LAYER_RULE* layer_rule;
             layer_rule = new LAYER_RULE( growth );
             growth->layer_rules.push_back( layer_rule );
             doLAYER_RULE( layer_rule );
             break;
-            
+
         case T_topology:
             if( growth->topology )
                 unexpected( tok );
             growth->topology = new TOPOLOGY( growth );
             doTOPOLOGY( growth->topology );
             break;
-            
+
         default:    // handle all the circuit_descriptor here as strings
             {
                 std::string     builder;
                 int             bracketNesting = 1; // we already saw the opening T_LEFT
                 DSN_T           tok = T_NONE;
-            
+
                 builder += '(';
                 builder += lexer->CurText();
-                
+
                 while( bracketNesting!=0 && tok!=T_EOF )
                 {
                     tok = nextTok();
-                    
+
                     if( tok==T_LEFT)
                         ++bracketNesting;
-                    
+
                     else if( tok==T_RIGHT )
                         --bracketNesting;
-            
+
                     if( bracketNesting >= 1 )
                     {
                         if( lexer->PrevTok() != T_LEFT && tok!=T_RIGHT )
                             builder += ' ';
-            
+
                         if( tok==T_STRING )
                             builder += quote_char;
-                        
+
                         builder += lexer->CurText();
-                        
+
                         if( tok==T_STRING )
                             builder += quote_char;
                     }
-            
+
                     // When the nested rule is closed with a T_RIGHT and we are back down
                     // to bracketNesting == 0, then save the builder and break;
                     if( bracketNesting == 0 )
@@ -2517,14 +2517,14 @@ void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IOError )
                        break;
                     }
                 }
-                
+
                 if( tok==T_EOF )
                     unexpected( T_EOF );
             }                                   // scope bracket
         }                                       // switch
-        
+
         tok = nextTok();
-        
+
     } // while
 }
 
@@ -2549,7 +2549,7 @@ void SPECCTRA_DB::doNETWORK( NETWORK* growth ) throw( IOError )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
@@ -2559,7 +2559,7 @@ void SPECCTRA_DB::doNETWORK( NETWORK* growth ) throw( IOError )
             growth->nets.push_back( net );
             doNET( net );
             break;
-        
+
         case T_class:
             CLASS*  myclass;
             myclass = new CLASS( growth );
@@ -2586,7 +2586,7 @@ void SPECCTRA_DB::doCOMP_ORDER( COMP_ORDER* growth ) throw( IOError )
     {
         growth->placement_ids.push_back( lexer->CurText() );
     }
-    
+
     if( tok != T_RIGHT )
         expecting( T_RIGHT );
 }
@@ -2608,20 +2608,20 @@ void SPECCTRA_DB::doFROMTO( FROMTO* growth ) throw( IOError )
         )}
     */
 
-    
+
     // read the first two grammar items in as 2 single tokens, i.e. do not
     // split apart the <pin_reference>s into 3 separate tokens.  Do this by
     // turning off the string delimiter in the lexer.
-    
+
     int old = lexer->SetStringDelimiter( 0 );
-    
+
     if( !isSymbol(nextTok() ) )
     {
         lexer->SetStringDelimiter( old );
         expecting( T_SYMBOL );
     }
     growth->fromText = lexer->CurText();
-    
+
     if( !isSymbol(nextTok() ) )
     {
         lexer->SetStringDelimiter( old );
@@ -2630,12 +2630,12 @@ void SPECCTRA_DB::doFROMTO( FROMTO* growth ) throw( IOError )
     growth->toText = lexer->CurText();
 
     lexer->SetStringDelimiter( old );
-    
+
     while( (tok = nextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
@@ -2646,7 +2646,7 @@ void SPECCTRA_DB::doFROMTO( FROMTO* growth ) throw( IOError )
             growth->fromto_type = tok;
             needRIGHT();
             break;
-        
+
         case T_rule:
             if( growth->rules )
                 unexpected( tok );
@@ -2668,9 +2668,9 @@ void SPECCTRA_DB::doFROMTO( FROMTO* growth ) throw( IOError )
             growth->net_id = lexer->CurText();
             needRIGHT();
             break;
-            
+
         // circuit descriptor not supported at this time
-            
+
         default:
             unexpected( lexer->CurText() );
         }
@@ -2713,7 +2713,7 @@ void SPECCTRA_DB::doWIRE( WIRE* growth ) throw( IOError )
             growth->shape = new RECTANGLE( growth );
             doRECTANGLE( (RECTANGLE*) growth->shape );
             break;
-            
+
         case T_circle:
             if( growth->shape )
                 unexpected( tok );
@@ -2730,7 +2730,7 @@ void SPECCTRA_DB::doWIRE( WIRE* growth ) throw( IOError )
             growth->shape = new PATH( growth, tok );
             doPATH( (PATH*) growth->shape );
             break;
-            
+
         case T_qarc:
             if( growth->shape )
                 unexpected( tok );
@@ -2743,14 +2743,14 @@ void SPECCTRA_DB::doWIRE( WIRE* growth ) throw( IOError )
             growth->net_id = lexer->CurText();
             needRIGHT();
             break;
-            
+
         case T_turret:
             if( nextTok() != T_NUMBER )
                 expecting( T_NUMBER );
             growth->turret = atoi( lexer->CurText() );
             needRIGHT();
             break;
-            
+
         case T_type:
             tok = nextTok();
             if( tok!=T_fix && tok!=T_route && tok!=T_normal && tok!=T_protect )
@@ -2772,28 +2772,28 @@ void SPECCTRA_DB::doWIRE( WIRE* growth ) throw( IOError )
             growth->shield = lexer->CurText();
             needRIGHT();
             break;
-            
+
         case T_window:
             WINDOW* window;
             window = new WINDOW( growth );
             growth->windows.push_back( window );
             doWINDOW( window );
             break;
-            
+
         case T_connect:
             if( growth->connect )
                 unexpected( tok );
-/* @todo            
+/* @todo
             growth->connect = new CONNECT( growth );
             doCONNECT( growth->connect );
-*/            
+*/
             break;
-            
+
         case T_supply:
             growth->supply = true;
             needRIGHT();
             break;
-            
+
         default:
             unexpected( lexer->CurText() );
         }
@@ -2805,7 +2805,7 @@ void SPECCTRA_DB::doWIRE_VIA( WIRE_VIA* growth ) throw( IOError )
 {
     DSN_T   tok;
     POINT   point;
-    
+
     /*  <wire_via_descriptor >::=
         (via
            <padstack_id > {<vertex> }
@@ -2828,12 +2828,12 @@ void SPECCTRA_DB::doWIRE_VIA( WIRE_VIA* growth ) throw( IOError )
     while( (tok = nextTok()) == T_NUMBER )
     {
         point.x = strtod( lexer->CurText(), 0 );
-        
+
         if( nextTok() != T_NUMBER )
             expecting( "vertex.y" );
-        
+
         point.y = strtod( lexer->CurText(), 0 );
-        
+
         growth->vertexes.push_back( point );
     }
 
@@ -2841,7 +2841,7 @@ void SPECCTRA_DB::doWIRE_VIA( WIRE_VIA* growth ) throw( IOError )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
@@ -2850,14 +2850,14 @@ void SPECCTRA_DB::doWIRE_VIA( WIRE_VIA* growth ) throw( IOError )
             growth->net_id = lexer->CurText();
             needRIGHT();
             break;
-            
+
         case T_via_number:
             if( nextTok() != T_NUMBER )
                 expecting( "<via#>" );
             growth->via_number = atoi( lexer->CurText() );
             needRIGHT();
             break;
-            
+
         case T_type:
             tok = nextTok();
             if( tok!=T_fix && tok!=T_route && tok!=T_normal && tok!=T_protect )
@@ -2865,7 +2865,7 @@ void SPECCTRA_DB::doWIRE_VIA( WIRE_VIA* growth ) throw( IOError )
             growth->via_type = tok;
             needRIGHT();
             break;
-            
+
         case T_attr:
             tok = nextTok();
             if( tok!=T_test && tok!=T_fanout && tok!=T_jumper && tok!=T_virtual_pin )
@@ -2878,7 +2878,7 @@ void SPECCTRA_DB::doWIRE_VIA( WIRE_VIA* growth ) throw( IOError )
             }
             needRIGHT();
             break;
-            
+
         case T_contact:
             needSYMBOL();
             tok = T_SYMBOL;
@@ -2890,16 +2890,16 @@ void SPECCTRA_DB::doWIRE_VIA( WIRE_VIA* growth ) throw( IOError )
             if( tok != T_RIGHT )
                 expecting( T_RIGHT );
             break;
-            
+
         case T_supply:
             growth->supply = true;
             needRIGHT();
             break;
-            
+
         default:
             unexpected( lexer->CurText() );
         }
-        
+
         tok = nextTok();
     }
 }
@@ -2922,7 +2922,7 @@ void SPECCTRA_DB::doWIRING( WIRING* growth ) throw( IOError )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
@@ -2932,14 +2932,14 @@ void SPECCTRA_DB::doWIRING( WIRING* growth ) throw( IOError )
             growth->unit = new UNIT_RES( growth, tok );
             doUNIT( growth->unit );
             break;
-            
+
         case T_resolution:
             if( growth->unit )
                 unexpected( tok );
             growth->unit = new UNIT_RES( growth, tok );
             doRESOLUTION( growth->unit );
             break;
-            
+
         case T_wire:
             WIRE* wire;
             wire = new WIRE( growth );
@@ -2953,7 +2953,7 @@ void SPECCTRA_DB::doWIRING( WIRING* growth ) throw( IOError )
             growth->wire_vias.push_back( wire_via );
             doWIRE_VIA( wire_via );
             break;
-            
+
         default:
             unexpected( lexer->CurText() );
         }
@@ -2969,15 +2969,15 @@ void SPECCTRA_DB::doANCESTOR( ANCESTOR* growth ) throw( IOError )
           (ancestor <file_path_name> (created_time <time_stamp> )
           [(comment <comment_string> )])
     */
-    
+
     needSYMBOL();
     growth->filename = lexer->CurText();
-    
+
     while( (tok = nextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
@@ -2985,13 +2985,13 @@ void SPECCTRA_DB::doANCESTOR( ANCESTOR* growth ) throw( IOError )
             readTIME( &growth->time_stamp );
             needRIGHT();
             break;
-            
+
         case T_comment:
             needSYMBOL();
             growth->comment = lexer->CurText();
             needRIGHT();
             break;
-            
+
         default:
             unexpected( lexer->CurText() );
         }
@@ -3006,12 +3006,12 @@ void SPECCTRA_DB::doHISTORY( HISTORY* growth ) throw( IOError )
     /*  <history_descriptor >::=
         (history [{<ancestor_file_descriptor> }] <self_descriptor> )
     */
-    
+
     while( (tok = nextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
@@ -3021,33 +3021,33 @@ void SPECCTRA_DB::doHISTORY( HISTORY* growth ) throw( IOError )
             growth->ancestors.push_back( ancestor );
             doANCESTOR( ancestor );
             break;
-            
+
         case T_self:
             while( (tok = nextTok()) != T_RIGHT )
             {
                 if( tok != T_LEFT )
                     expecting( T_LEFT );
 
-                tok = nextTok();                
+                tok = nextTok();
                 switch( tok )
                 {
                 case T_created_time:
                     readTIME( &growth->time_stamp );
                     needRIGHT();
                     break;
-                
+
                 case T_comment:
                     needSYMBOL();
                     growth->comments.push_back( lexer->CurText() );
                     needRIGHT();
                     break;
-                    
+
                 default:
                     unexpected( lexer->CurText() );
                 }
             }
             break;
-            
+
         default:
             unexpected( lexer->CurText() );
         }
@@ -3072,7 +3072,7 @@ void SPECCTRA_DB::doSESSION( SESSION* growth ) throw( IOError )
           [<route_descriptor> ]
         )
     */
-    
+
     needSYMBOL();
     growth->session_id = lexer->CurText();
 
@@ -3080,7 +3080,7 @@ void SPECCTRA_DB::doSESSION( SESSION* growth ) throw( IOError )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
@@ -3089,28 +3089,28 @@ void SPECCTRA_DB::doSESSION( SESSION* growth ) throw( IOError )
             growth->base_design = lexer->CurText();
             needRIGHT();
             break;
-            
+
         case T_history:
             if( growth->history )
                 unexpected( tok );
             growth->history = new HISTORY( growth );
             doHISTORY( growth->history );
             break;
-            
+
         case T_structure:
             if( growth->structure )
                 unexpected( tok );
             growth->structure = new STRUCTURE( growth );
             doSTRUCTURE( growth->structure );
             break;
-            
+
         case T_placement:
             if( growth->placement )
                 unexpected( tok );
             growth->placement = new PLACEMENT( growth );
             doPLACEMENT( growth->placement );
             break;
-            
+
         case T_was_is:
             if( growth->was_is )
                 unexpected( tok );
@@ -3124,7 +3124,7 @@ void SPECCTRA_DB::doSESSION( SESSION* growth ) throw( IOError )
             growth->route = new ROUTE( growth );
             doROUTE( growth->route );
             break;
-            
+
         default:
             unexpected( lexer->CurText() );
         }
@@ -3145,27 +3145,27 @@ void SPECCTRA_DB::doWAS_IS( WAS_IS* growth ) throw( IOError )
     // none of the pins is ok too
     while( (tok = nextTok()) != T_RIGHT )
     {
-                
+
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
         case T_pins:
-            // copy the empty one, then fill its copy later thru pin_pair.                
+            // copy the empty one, then fill its copy later thru pin_pair.
             growth->pin_pairs.push_back( empty );
             pin_pair= &growth->pin_pairs.back();
-            
+
             needSYMBOL();       // readCOMPnPIN() expects 1st token to have been read
             readCOMPnPIN( &pin_pair->was.component_id, &pin_pair->was.pin_id );
-            
+
             needSYMBOL();       // readCOMPnPIN() expects 1st token to have been read
             readCOMPnPIN( &pin_pair->is.component_id, &pin_pair->is.pin_id );
-            
+
             needRIGHT();
             break;
-            
+
         default:
             unexpected( lexer->CurText() );
         }
@@ -3192,7 +3192,7 @@ void SPECCTRA_DB::doROUTE( ROUTE* growth ) throw( IOError )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
@@ -3223,20 +3223,20 @@ void SPECCTRA_DB::doROUTE( ROUTE* growth ) throw( IOError )
             growth->library = new LIBRARY( growth, tok );
             doLIBRARY( growth->library );
             break;
-                    
+
         case T_network_out:
             while( (tok = nextTok()) != T_RIGHT )
             {
                 if( tok != T_LEFT )
                     expecting( T_LEFT );
-                
+
                 tok = nextTok();
                 if( tok != T_net )      // it is class NET_OUT, but token T_net
                     unexpected( lexer->CurText() );
-                
+
                 NET_OUT*    net_out;
                 net_out = new NET_OUT( growth );
-                
+
                 growth->net_outs.push_back( net_out );
                 doNET_OUT( net_out );
             }
@@ -3262,15 +3262,15 @@ void SPECCTRA_DB::doNET_OUT( NET_OUT* growth ) throw( IOError )
           {[<supply_pin_descriptor> ]}
         )
     */
-    
+
     needSYMBOL();
     growth->net_id = lexer->CurText();
-    
+
     while( (tok = nextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
             expecting( T_LEFT );
-        
+
         tok = nextTok();
         switch( tok )
         {
@@ -3302,7 +3302,7 @@ void SPECCTRA_DB::doNET_OUT( NET_OUT* growth ) throw( IOError )
             growth->wire_vias.push_back( wire_via );
             doWIRE_VIA( wire_via );
             break;
-                    
+
         case T_supply_pin:
             SUPPLY_PIN* supply_pin;
             supply_pin = new SUPPLY_PIN( growth );
@@ -3325,18 +3325,18 @@ void SPECCTRA_DB::doSUPPLY_PIN( SUPPLY_PIN* growth ) throw( IOError )
     /*  <supply_pin_descriptor >::=
         (supply_pin {<pin_reference> } [(net <net_id >)])
     */
-    
+
     needSYMBOL();
     growth->net_id = lexer->CurText();
-    
+
     while( (tok = nextTok()) != T_RIGHT )
     {
         if( isSymbol(tok) )
         {
             growth->pin_refs.push_back( empty );
-            
+
             PIN_REF*    pin_ref = &growth->pin_refs.back();
-            
+
             readCOMPnPIN( &pin_ref->component_id, &pin_ref->pin_id );
         }
         else if( tok == T_LEFT )
@@ -3358,92 +3358,92 @@ int SPECCTRA_DB::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
     va_list     args;
 
     va_start( args, fmt );
-    
+
     int result = 0;
     int total  = 0;
-    
+
     for( int i=0; i<nestLevel;  ++i )
     {
         result = fprintf( fp, "%*c", NESTWIDTH, ' ' );
         if( result < 0 )
             break;
-        
+
         total += result;
     }
-    
+
     if( result<0 || (result=vfprintf( fp, fmt, args ))<0 )
         ThrowIOError( _("System file error writing to file \"%s\""), filename.GetData() );
-    
+
     va_end( args );
-    
+
     total += result;
     return total;
 }
 
 // factor out a common GetQuoteChar
 
-const char* OUTPUTFORMATTER::GetQuoteChar( const char* wrapee, const char* quote_char ) 
+const char* OUTPUTFORMATTER::GetQuoteChar( const char* wrapee, const char* quote_char )
 {
     // I include '#' so a symbol is not confused with a comment.  We intend
     // to wrap any symbol starting with a '#'.
     // Our LEXER class handles comments, and comments appear to be an extension
-    // to the SPECCTRA DSN specification. 
+    // to the SPECCTRA DSN specification.
     if( *wrapee == '#' )
         return quote_char;
 
     if( strlen(wrapee)==0 )
         return quote_char;
-        
+
     bool    isNumber = true;
-    
+
     for(  ; *wrapee;  ++wrapee )
     {
         static const char quoteThese[] = "\t ()"
             "%"     // per Alfons of freerouting.net, he does not like this unquoted as of 1-Feb-2008
             ;
-        
-        // if the string to be wrapped (wrapee) has a delimiter in it, 
+
+        // if the string to be wrapped (wrapee) has a delimiter in it,
         // return the quote_char so caller wraps the wrapee.
         if( strchr( quoteThese, *wrapee ) )
             return quote_char;
-        
+
         if( !strchr( "01234567890.-+", *wrapee ) )
             isNumber = false;
     }
-    
+
     if( isNumber )
         return quote_char;
-    
+
     return "";      // can use an unwrapped string.
 }
 
 
-const char* SPECCTRA_DB::GetQuoteChar( const char* wrapee ) 
+const char* SPECCTRA_DB::GetQuoteChar( const char* wrapee )
 {
-    return OUTPUTFORMATTER::GetQuoteChar( wrapee, quote_char.c_str() ); 
+    return OUTPUTFORMATTER::GetQuoteChar( wrapee, quote_char.c_str() );
 }
 
 
 void SPECCTRA_DB::ExportPCB( wxString filename, bool aNameChange ) throw( IOError )
 {
     fp = wxFopen( filename, wxT("w") );
-    
+
     if( !fp )
     {
-        ThrowIOError( _("Unable to open file \"%s\""), filename.GetData() );  
+        ThrowIOError( _("Unable to open file \"%s\""), filename.GetData() );
     }
 
     if( pcb )
     {
         if( aNameChange )
-            pcb->pcbname = CONV_TO_UTF8(filename); 
-        
+            pcb->pcbname = CONV_TO_UTF8(filename);
+
         pcb->Format( this, 0 );
     }
 
     // if an exception is thrown by Format, then ~SPECCTRA_DB() will close
     // the file.
-    
+
     fclose( fp );
     fp = 0;
 }
@@ -3452,15 +3452,15 @@ void SPECCTRA_DB::ExportPCB( wxString filename, bool aNameChange ) throw( IOErro
 void SPECCTRA_DB::ExportSESSION( wxString filename )
 {
     fp = wxFopen( filename, wxT("w") );
-    
+
     if( !fp )
     {
-        ThrowIOError( _("Unable to open file \"%s\""), filename.GetData() );  
+        ThrowIOError( _("Unable to open file \"%s\""), filename.GetData() );
     }
 
     if( session )
-        session->Format( this, 0 );    
-    
+        session->Format( this, 0 );
+
     fclose( fp );
     fp = 0;
 }
@@ -3469,22 +3469,22 @@ void SPECCTRA_DB::ExportSESSION( wxString filename )
 PCB* SPECCTRA_DB::MakePCB()
 {
     PCB*    pcb = new PCB();
-    
+
     pcb->parser = new PARSER( pcb );
     pcb->resolution = new UNIT_RES( pcb, T_resolution );
     pcb->unit = new UNIT_RES( pcb, T_unit );
-    
+
     pcb->structure = new STRUCTURE( pcb );
     pcb->structure->boundary = new BOUNDARY( pcb->structure );
     pcb->structure->via = new VIA( pcb->structure );
     pcb->structure->rules = new RULE( pcb->structure, T_rule );
-    
+
     pcb->placement = new PLACEMENT( pcb );
-    
+
     pcb->library = new LIBRARY( pcb );
-    
+
     pcb->network = new NETWORK( pcb );
-    
+
     pcb->wiring = new WIRING( pcb );
 
     return pcb;
@@ -3493,13 +3493,13 @@ PCB* SPECCTRA_DB::MakePCB()
 
 //-----<STRINGFORMATTER>----------------------------------------------------
 
-const char* STRINGFORMATTER::GetQuoteChar( const char* wrapee ) 
+const char* STRINGFORMATTER::GetQuoteChar( const char* wrapee )
 {
     // for what we are using STRINGFORMATTER for at this time, we can return the nul string
     // always.
-    
+
     return "";
-//    return OUTPUTFORMATTER::GetQuoteChar( const char* wrapee, "\"" ); 
+//    return OUTPUTFORMATTER::GetQuoteChar( const char* wrapee, "\"" );
 }
 
 int STRINGFORMATTER::vprint( const char* fmt,  va_list ap )
@@ -3510,12 +3510,12 @@ int STRINGFORMATTER::vprint( const char* fmt,  va_list ap )
         buffer.reserve( ret+200 );
         ret = vsnprintf( &buffer[0], buffer.size(), fmt, ap );
     }
-    
+
     if( ret > 0 )
         mystring.append( (const char*) &buffer[0] );
-    
+
     return ret;
-}    
+}
 
 
 int STRINGFORMATTER::sprint( const char* fmt, ... )
@@ -3525,9 +3525,9 @@ int STRINGFORMATTER::sprint( const char* fmt, ... )
     va_start( args, fmt );
     int ret = vprint( fmt, args);
     va_end( args );
-    
+
     return ret;
-}    
+}
 
 
 int STRINGFORMATTER::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
@@ -3535,26 +3535,26 @@ int STRINGFORMATTER::Print( int nestLevel, const char* fmt, ... ) throw( IOError
     va_list     args;
 
     va_start( args, fmt );
-    
+
     int result = 0;
     int total  = 0;
-    
+
     for( int i=0; i<nestLevel;  ++i )
     {
         result = sprint( "%*c", NESTWIDTH, ' ' );
         if( result < 0 )
             break;
-        
+
         total += result;
     }
-    
+
     if( result<0 || (result=vprint( fmt, args ))<0 )
     {
         throw IOError( _("Error writing to STRINGFORMATTER") );
     }
-    
+
     va_end( args );
-    
+
     total += result;
     return total;
 }
@@ -3563,9 +3563,9 @@ int STRINGFORMATTER::Print( int nestLevel, const char* fmt, ... ) throw( IOError
 void STRINGFORMATTER::StripUseless()
 {
     std::string  copy = mystring;
-    
+
     mystring.clear();
-    
+
     for( std::string::iterator i=copy.begin();  i!=copy.end();  ++i )
     {
         if( !isspace( *i ) && *i!=')' && *i!='(' && *i!='"' )
@@ -3590,13 +3590,22 @@ ELEM::~ELEM()
 }
 
 
+UNIT_RES* ELEM::GetUnits() const
+{
+    if( parent )
+        return parent->GetUnits();
+
+    return &UNIT_RES::Default;
+}
+
+
 void ELEM::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
 {
-    out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) ); 
+    out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
 
     FormatContents( out, nestLevel+1 );
-    
-    out->Print( nestLevel, ")\n" ); 
+
+    out->Print( nestLevel, ")\n" );
 }
 
 
@@ -3624,6 +3633,10 @@ int ELEM_HOLDER::FindElem( DSN_T aType, int instanceNum )
     return -1;
 }
 
+//-----<UNIT_RES>---------------------------------------------------------
+
+UNIT_RES UNIT_RES::Default( NULL, T_resolution );
+
 
 //-----<PADSTACK>---------------------------------------------------------
 
@@ -3631,10 +3644,10 @@ int PADSTACK::Compare( PADSTACK* lhs, PADSTACK* rhs )
 {
     if( !lhs->hash.size() )
         lhs->hash = lhs->makeHash();
-    
+
     if( !rhs->hash.size() )
         rhs->hash = rhs->makeHash();
-    
+
     int result = lhs->hash.compare( rhs->hash );
     return result;
 }
@@ -3646,14 +3659,14 @@ int IMAGE::Compare( IMAGE* lhs, IMAGE* rhs )
 {
     if( !lhs->hash.size() )
         lhs->hash = lhs->makeHash();
-    
+
     if( !rhs->hash.size() )
         rhs->hash = rhs->makeHash();
 
     int result = lhs->hash.compare( rhs->hash );
-    
+
     // printf("\"%s\"  \"%s\" ret=%d\n", lhs->hash.c_str(), rhs->hash.c_str(), result );
-    
+
     return result;
 }
 
@@ -3665,7 +3678,7 @@ int COMPONENT::Compare( COMPONENT* lhs, COMPONENT* rhs )
 {
     if( !lhs->hash.size() )
         lhs->hash = lhs->makeHash();
-    
+
     if( !rhs->hash.size() )
         rhs->hash = rhs->makeHash();
 
@@ -3689,7 +3702,7 @@ PARSER::PARSER( ELEM* aParent ) :
     routes_include_image_conductor = false;
     via_rotate_first = true;
     generated_by_freeroute = false;
-    
+
     host_cad = "Kicad's PCBNEW";
     host_version = CONV_TO_UTF8(g_BuildVersion);
 }
@@ -3699,11 +3712,11 @@ void PARSER::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOErro
 {
     out->Print( nestLevel, "(string_quote %c)\n", string_quote );
     out->Print( nestLevel, "(space_in_quoted_tokens %s)\n", space_in_quoted_tokens ? "on" : "off" );
-    out->Print( nestLevel, "(host_cad \"%s\")\n", host_cad.c_str() ); 
+    out->Print( nestLevel, "(host_cad \"%s\")\n", host_cad.c_str() );
     out->Print( nestLevel, "(host_version \"%s\")\n", host_version.c_str() );
-    
+
     if( const_id1.length()>0 || const_id2.length()>0 )
-        out->Print( nestLevel, "(constant %c%s%c %c%s%c)\n", 
+        out->Print( nestLevel, "(constant %c%s%c %c%s%c)\n",
             string_quote, const_id1.c_str(), string_quote,
             string_quote, const_id2.c_str(), string_quote );
 
@@ -3712,14 +3725,14 @@ void PARSER::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOErro
                    routes_include_testpoint ? " testpoint" : "",
                    routes_include_guides ? " guides" : "",
                    routes_include_image_conductor ? " image_conductor" : "");
-    
+
     if( wires_include_testpoint )
         out->Print( nestLevel, "(wires_include testpoint)\n" );
-        
+
     if( !via_rotate_first )
         out->Print( nestLevel, "(via_rotate_first off)\n" );
 
-    if( case_sensitive )    
+    if( case_sensitive )
         out->Print( nestLevel, "(case_sensitive %s)\n", case_sensitive ? "on" : "off" );
 }
 
@@ -3727,22 +3740,22 @@ void PARSER::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOErro
 void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
 {
     bool        useMultiLine;
-    
+
     const char* quote = out->GetQuoteChar( component_id.c_str() );
 
     if( place_rules || properties.size() || rules || region )
     {
         useMultiLine = true;
-        
+
         out->Print( nestLevel, "(%s %s%s%s\n", LEXER::GetTokenText( Type() ),
                                 quote, component_id.c_str(), quote );
-    
+
         out->Print( nestLevel+1, "%s", "" );
     }
     else
     {
         useMultiLine = false;
-        
+
         out->Print( nestLevel, "(%s %s%s%s", LEXER::GetTokenText( Type() ),
                                 quote, component_id.c_str(), quote );
     }
@@ -3750,30 +3763,30 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     if( hasVertex )
     {
         out->Print( 0, " %.6g %.6g", vertex.x, vertex.y );
-    
+
         out->Print( 0, " %s", LEXER::GetTokenText( side ) );
-    
+
         out->Print( 0, " %.6g", rotation );
     }
 
     const char* space = " ";    // one space, as c string.
-    
+
     if( mirror != T_NONE )
     {
         out->Print( 0, "%s(mirror %s)", space, LEXER::GetTokenText( mirror ) );
         space = "";
     }
-                   
+
     if( status != T_NONE )
     {
         out->Print( 0, "%s(status %s)", space, LEXER::GetTokenText( status ) );
         space = "";
     }
-    
+
     if( logical_part.size() )
     {
         quote = out->GetQuoteChar( logical_part.c_str() );
-        out->Print( 0, "%s(logical_part %s%s%s)", space, 
+        out->Print( 0, "%s(logical_part %s%s%s)", space,
                    quote, logical_part.c_str(), quote );
         space = "";
     }
@@ -3785,11 +3798,11 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
         {
             place_rules->Format( out, nestLevel+1 );
         }
-        
+
         if( properties.size() )
         {
             out->Print( nestLevel+1, "(property \n" );
-            
+
             for( PROPERTIES::const_iterator i = properties.begin();
                 i != properties.end();  ++i )
             {
@@ -3798,14 +3811,14 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
             out->Print( nestLevel+1, ")\n" );
         }
         if( lock_type != T_NONE )
-            out->Print( nestLevel+1, "(lock_type %s)\n", 
+            out->Print( nestLevel+1, "(lock_type %s)\n",
                        LEXER::GetTokenText(lock_type) );
         if( rules )
             rules->Format( out, nestLevel+1 );
-        
+
         if( region )
             region->Format( out, nestLevel+1 );
-        
+
         if( part_number.size() )
         {
             const char* quote = out->GetQuoteChar( part_number.c_str() );
@@ -3817,7 +3830,7 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         if( lock_type != T_NONE )
         {
-            out->Print( 0, "%s(lock_type %s)", space, 
+            out->Print( 0, "%s(lock_type %s)", space,
                        LEXER::GetTokenText(lock_type) );
             space = "";
         }
@@ -3829,7 +3842,7 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
                        quote, part_number.c_str(), quote );
         }
     }
-            
+
     out->Print( 0, ")\n" );
 }
 
@@ -3854,25 +3867,25 @@ int main( int argc, char** argv )
     SPECCTRA_DB     db;
     bool            failed = false;
 
-    setlocale( LC_NUMERIC, "C" );    // Switch the locale to standard C 
-    
+    setlocale( LC_NUMERIC, "C" );    // Switch the locale to standard C
+
     if( argc == 2 )
     {
         filename = CONV_FROM_UTF8( argv[1] );
     }
-    
-    try 
+
+    try
     {
         db.LoadPCB( filename );
 //        db.LoadSESSION( filename );
-    } 
+    }
     catch( IOError ioe )
     {
         fprintf( stderr, "%s\n", CONV_TO_UTF8(ioe.errorText) );
         failed = true;
     }
 
-    if( !failed )    
+    if( !failed )
         fprintf( stderr, "loaded OK\n" );
 
     // export what we read in, making this test program basically a beautifier
@@ -3882,10 +3895,10 @@ int main( int argc, char** argv )
     DSN::PCB* pcb = db.GetPCB();
 
     // hose the beautified DSN file to stdout.
-    db.SetFILE( stdout );    
+    db.SetFILE( stdout );
     pcb->Format( &db, 0 );
-    
-    setlocale( LC_NUMERIC, "" );      // revert to the current  locale
+
+    setlocale( LC_NUMERIC, "" );      // revert to the current locale
 }
 
 #endif
