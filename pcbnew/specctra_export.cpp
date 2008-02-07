@@ -72,6 +72,8 @@ void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
     
     db.SetPCB( SPECCTRA_DB::MakePCB() );
 
+    setlocale( LC_NUMERIC, "C" );    // Switch the locale to standard C 
+    
     try 
     {    
         db.FromBOARD( m_Pcb );
@@ -88,6 +90,8 @@ void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
         errorText = ioe.errorText;
     }
 
+    setlocale( LC_NUMERIC, "" );      // revert to the current  locale
+    
     // The two calls below to BOARD::Change_Side_Module(), both set the 
     // modified flag, yet their actions cancel each other out, so it should 
     // be ok to clear the modify flag.

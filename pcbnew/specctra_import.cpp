@@ -75,6 +75,8 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
     
     SPECCTRA_DB     db;
 
+    setlocale( LC_NUMERIC, "C" );    // Switch the locale to standard C 
+    
     try 
     {    
         db.LoadSESSION( fileName );
@@ -82,9 +84,12 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
     }
     catch( IOError ioe )
     {
+        setlocale( LC_NUMERIC, "" );    // Switch the locale to standard C 
         DisplayError( this, ioe.errorText );
         return;
     }
+
+    setlocale( LC_NUMERIC, "" );    // Switch the locale to standard C 
     
     m_SelTrackWidthBox_Changed = TRUE;
     m_SelViaSizeBox_Changed    = TRUE;
@@ -100,21 +105,30 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
 
 
 namespace DSN {
+    
+
+static wxPoint mapPt( const POINT& aPoint, double aResolution )
+{
+    wxPoint ret;
+
+    // the factor of 10.0 is used to convert mils to deci-mils, the units
+    // used within Kicad.    
+    ret.x = (int)  (10.0 * aPoint.x / aResolution);
+    ret.y = (int) -(10.0 * aPoint.y / aResolution);
+    
+    return ret;
+}
+    
 
 // no UI code in this function, throw exception to report problems to the 
 // UI handler: void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
 
 void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
 {
-    wxASSERT( session );
+    //wxASSERT( session );
 
-    // delete all the old tracks and vias
-    aBoard->m_Track->DeleteStructList();
-    aBoard->m_Track = NULL;
-    aBoard->m_NbSegmTrack = 0;
-
-	aBoard->DeleteMARKERs();
-
+    if( !session )
+        ThrowIOError( _("Session file is missing the \"session\" section") );
     
     if( !session->placement )
         ThrowIOError( _("Session file is missing the \"placement\" section") );
@@ -125,12 +139,61 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
     if( !session->route->library )
         ThrowIOError( _("Session file is missing the \"library_out\" section") );
     
-    
-    // Walk the PLACEMENT object's components list.
+    // delete all the old tracks and vias
+    aBoard->m_Track->DeleteStructList();
+    aBoard->m_Track = NULL;
+    aBoard->m_NbSegmTrack = 0;
+
+	aBoard->DeleteMARKERs();
+
+    // Walk the PLACEMENT object's COMPONENTs list, and for each PLACE within
+    // each COMPONENT, reposition and re-orient each component and put on 
+    // correct side of the board.
     COMPONENTS& components = session->placement->components;
-    for( COMPONENTS::iterator i=components.begin();  i!=components.end();  ++i )
+    for( COMPONENTS::iterator comp=components.begin();  comp!=components.end();  ++comp )
     {
-        // reposition and re-orient each component and put on correct side of the board.
+        PLACES& places = comp->places;
+        for( unsigned i=0; i<places.size();  ++i )
+        {
+            PLACE* place = &places[i];  // '&' even though places[] holds a pointer!
+            
+            wxString reference = CONV_FROM_UTF8( place->component_id.c_str() );
+            MODULE* module = aBoard->FindModuleByReference( reference );
+            if( !module )
+            {
+                wxString errorMsg;
+                errorMsg.Printf( 
+                   _("Session file has reference to non-existing component \"%s\""), 
+                   reference.GetData() );
+                ThrowIOError( errorMsg );
+            }
+            
+            if( !place->hasVertex )
+                continue;
+            
+            double resolution = 100; //place->GetResolution();
+            
+            wxPoint newPos = mapPt( place->vertex, resolution );
+            module->SetPosition( newPos );
+            
+            if( place->side == T_front )
+            {
+                // convert from degrees to tenths of degrees used in Kicad.
+                int orientation = (int) (place->rotation * 10.0);
+                module->SetOrientation( orientation ); 
+                
+                if( module->GetLayer() != CMP_N )
+                    aBoard->Change_Side_Module( module, 0 );
+            }
+            else if( place->side == T_back )
+            {
+                int orientation = (int) (-place->rotation * 10.0 - 1800);
+                module->SetOrientation( orientation );
+                
+                if( module->GetLayer() != COPPER_LAYER_N )
+                    aBoard->Change_Side_Module( module, 0 );
+            }
+        }
     }
 
     // Walk the NET_OUTs and create tracks and vias anew.    

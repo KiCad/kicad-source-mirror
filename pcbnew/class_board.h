@@ -204,6 +204,17 @@ public:
     EQUIPOT* FindNet( const wxString & aNetname ) const;
 
     /**
+     * Function FindModuleByReference
+     * searches for a MODULE within this board with the given
+     * reference designator.  Finds only the first one, if there
+     * is more than one such MODULE.
+     * @param aReference The reference designator of the MODULE to find.
+     * @return MODULE* - If found, the MODULE having the given reference
+     *  designator, else NULL.
+     */
+    MODULE* FindModuleByReference( const wxString& aReference ) const;
+    
+    /**
      * Function ReturnSortedNetnamesList
      * searches for a net with the given netcode.
      * @param aNames An array string to fill with net names.

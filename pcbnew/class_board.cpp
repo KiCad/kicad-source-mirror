@@ -726,7 +726,37 @@ EQUIPOT* BOARD::FindNet( const wxString & aNetname ) const
 }
 
 
+MODULE* BOARD::FindModuleByReference( const wxString& aReference ) const
+{
+    struct FindModule : public INSPECTOR
+    {
+        MODULE*  found;
+        FindModule() : found(0)  {}
 
+        // implement interface INSPECTOR
+        SEARCH_RESULT Inspect( EDA_BaseStruct* item, const void* data )
+        {
+            MODULE*         module = (MODULE*) item;
+            const wxString& ref = *(const wxString*) data;
+
+            if( ref == module->GetReference() )
+            {
+                found = module;
+                return SEARCH_QUIT;
+            }
+            return SEARCH_CONTINUE;
+        }
+    } inspector;
+
+    // search only for MODULES
+    static const KICAD_T scanTypes[] = { TYPEMODULE, EOT };
+
+    // visit this BOARD with the above inspector
+    BOARD* nonconstMe = (BOARD*) this;
+    nonconstMe->Visit( &inspector, &aReference, scanTypes );
+    
+    return inspector.found;
+}
 
 
 /* Two sort functions used in BOARD::ReturnSortedNetnamesList */

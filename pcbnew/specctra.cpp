@@ -3854,6 +3854,8 @@ int main( int argc, char** argv )
     SPECCTRA_DB     db;
     bool            failed = false;
 
+    setlocale( LC_NUMERIC, "C" );    // Switch the locale to standard C 
+    
     if( argc == 2 )
     {
         filename = CONV_FROM_UTF8( argv[1] );
@@ -3882,6 +3884,8 @@ int main( int argc, char** argv )
     // hose the beautified DSN file to stdout.
     db.SetFILE( stdout );    
     pcb->Format( &db, 0 );
+    
+    setlocale( LC_NUMERIC, "" );      // revert to the current  locale
 }
 
 #endif
