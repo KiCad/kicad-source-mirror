@@ -63,13 +63,6 @@ void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
     if( fullFileName == wxEmptyString )
         return;
 
-    // prepare the EQUIPOTs
-    if( !( m_Pcb->m_Status_Pcb & NET_CODES_OK ) )
-    {
-        //m_Pcb->m_Status_Pcb &= ~(LISTE_PAD_OK);
-        recalcule_pad_net_code();
-    }
-    
     SPECCTRA_DB     db;
     bool            ok = true;
     wxString        errorText;
@@ -172,8 +165,8 @@ static POINT mapPt( const wxPoint& pt )
 /**
  * Function findPOINT
  * searches the list of POINT_PAIRS for a matching end to the given POINT.
- * @return int - 0 if no match, or + one based index of a POINT_PAIR with a matching ".start",
- *              or a - one based index of a POINT_PAIR with a matching ".end".
+ * @return int - 0 if no match, or positive one based index of a POINT_PAIR with a matching ".start",
+ *              or a negated one based index of a POINT_PAIR with a matching ".end".
  */
 static int findPOINT( const POINT& pt, const POINT_PAIR source[], int count )
 {

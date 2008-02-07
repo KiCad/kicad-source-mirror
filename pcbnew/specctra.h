@@ -1782,6 +1782,7 @@ public:
             i->Format( out, nestLevel );
     }
 };
+typedef boost::ptr_vector<COMPONENT> COMPONENTS;
 
 
 class PLACEMENT : public ELEM
@@ -1792,7 +1793,6 @@ class PLACEMENT : public ELEM
     
     DSN_T       flip_style;
     
-    typedef boost::ptr_vector<COMPONENT> COMPONENTS;
     COMPONENTS  components;
     
 public:    
@@ -3812,6 +3812,17 @@ public:
      * @param aBoard The BOARD to convert to a PCB.
      */
     void FromBOARD( BOARD* aBoard );
+
+    
+    /**
+     * Function FromSESSION
+     * adds the entire SESSION info to a BOARD but does not write it out.  The
+     * the BOARD given to this function will have all its tracks and via's replaced,
+     * and all its components are subject to being moved.
+     *
+     * @param aBoard The BOARD to merge the SESSION information into.
+     */
+    void FromSESSION( BOARD* aBoard ) throw( IOError ); 
     
     
     /**

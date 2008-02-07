@@ -119,7 +119,7 @@ bool WinEDA_BasePcbFrame::Clear_Pcb( bool query )
 
     if( query && GetScreen()->IsModify() )
     {
-        if( m_Pcb->m_Drawings ||m_Pcb->m_Modules
+        if( m_Pcb->m_Drawings || m_Pcb->m_Modules
             || m_Pcb->m_Track || m_Pcb->m_Zone )
         {
             if( !IsOK( this, _( "Current Board will be lost ?" ) ) )
