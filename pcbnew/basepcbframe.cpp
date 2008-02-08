@@ -41,7 +41,7 @@ WinEDA_BasePcbFrame::WinEDA_BasePcbFrame( wxWindow*       father,
                                           const wxString& title,
                                           const wxPoint&  pos,
                                           const wxSize&   size,
-										  long style) :
+                                          long style) :
     WinEDA_DrawFrame( father, idtype, parent, title, pos, size, style )
 {
     m_InternalUnits = 10000;        // Internal unit = 1/10000 inch
@@ -103,9 +103,9 @@ void WinEDA_BasePcbFrame::CursorGoto(  const wxPoint& aPos )
     // factored out of pcbnew/find.cpp
 
     PCB_SCREEN* screen = GetScreen();
-    
+
     wxClientDC dc( DrawPanel );
-    
+
     /* Il y a peut-etre necessite de recadrer le dessin: */
     if( !DrawPanel->IsPointOnDisplay( aPos ) )
     {
@@ -159,10 +159,10 @@ void WinEDA_BasePcbFrame::Show3D_Frame( wxCommandEvent& event )
         DisplayInfo( this, _( "3D Frame already opened" ) );
         return;
     }
-	
+
 #ifdef CVPCB
     m_Draw3DFrame = new WinEDA3D_DrawFrame( this, m_Parent, _( "3D Viewer" ),
-	KICAD_DEFAULT_3D_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
+    KICAD_DEFAULT_3D_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
 #else
     m_Draw3DFrame = new WinEDA3D_DrawFrame( this, m_Parent, _( "3D Viewer" ) );
 #endif
@@ -277,23 +277,23 @@ void WinEDA_BasePcbFrame::SetCurItem( BOARD_ITEM* aItem )
 /*****************************************************************/
 {
     m_CurrentScreen->SetCurItem( aItem );
-    
+
     if( aItem )
     {
         aItem->Display_Infos( this );
-        
-#if 0 && defined(DEBUG)
+
+#if 1 && defined(DEBUG)
     aItem->Show( 0, std::cout );
 #endif
-        
+
     }
     else
     {
         // we can use either of these two:
-        
+
         //MsgPanel->EraseMsgBox();
         m_Pcb->Display_Infos( this );       // show the BOARD stuff
-        
+
 #if 0 && defined(DEBUG)
         std::cout << "SetCurItem(NULL)\n";
 #endif

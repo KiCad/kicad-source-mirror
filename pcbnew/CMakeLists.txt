@@ -39,7 +39,7 @@ SET(PCBNEW_SRCS
     collectors.cpp
     connect.cpp
     controle.cpp
-    copy_track.cpp
+#   copy_track.cpp
     cotation.cpp
     cross-probing.cpp
     deltrack.cpp
@@ -74,7 +74,7 @@ SET(PCBNEW_SRCS
     files.cpp
     find.cpp
     gen_drill_report_files.cpp
-    gen_holes_and_tools_lists_for_drill.cpp 
+    gen_holes_and_tools_lists_for_drill.cpp
     gen_modules_placefile.cpp
     gendrill.cpp
     globaleditpad.cpp

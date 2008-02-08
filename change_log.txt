@@ -8,7 +8,10 @@ email address.
 2008-Feb-7 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew
-    specctra import of *.ses, done by end of today probably.
+    specctra import of *.ses, did tracks and components.
+    renamed copy_track.cpp to copy_track.cpp.notused
+    removed copy_track.cpp from pcbnew/CMakeLists.txt
+    added setlocale() around import and export for float text style.
 
 
 2008-Feb-6 UPDATE   Dick Hollenbeck <dick@softplc.com>

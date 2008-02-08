@@ -701,27 +701,17 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         // specctra wants top physical layer first, then going down to the
         // bottom most physical layer in physical sequence.
         // @question : why does Kicad not display layers in that order?
+
+        buildLayerMaps( aBoard );
+
         int layerCount = aBoard->GetCopperLayerCount();
 
-        layerIds.clear();
-        pcbLayer2kicad.resize( layerCount );
-        kicadLayer2pcb.resize( LAYER_CMP_N+1 );
-
-        for( int kiNdx=layerCount-1, pcbNdx=0;  kiNdx >= 0;  --kiNdx, ++pcbNdx )
+        for( int pcbNdx=0;  pcbNdx<layerCount; ++pcbNdx )
         {
-            int kilayer = kiNdx>0 && kiNdx==layerCount-1 ? LAYER_CMP_N : kiNdx;
-
-            // establish bi-directional mapping between kicad's BOARD layer and PCB layer
-            pcbLayer2kicad[pcbNdx]  = kilayer;
-            kicadLayer2pcb[kilayer] = pcbNdx;
-
-            // save the specctra layer name in SPECCTRA_DB::layerIds for later.
-            layerIds.push_back( CONV_TO_UTF8( aBoard->GetLayerName( kilayer ) ) );
-
             LAYER*      layer = new LAYER( pcb->structure );
             pcb->structure->layers.push_back( layer );
 
-            layer->name = layerIds.back();
+            layer->name = layerIds[pcbNdx];
 
             layer->properties.push_back( PROPERTY() );
             PROPERTY* property = &layer->properties.back();

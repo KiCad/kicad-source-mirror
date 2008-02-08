@@ -3345,6 +3345,14 @@ public:
 //        delete test_points;
     }
 
+    UNIT_RES*  GetUnits() const
+    {
+        if( resolution )
+            return resolution;
+
+        return ELEM::GetUnits();
+    }
+
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         if( resolution )
@@ -3521,8 +3529,27 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     /// maps PCB layer number to BOARD layer numbers
     std::vector<int>    pcbLayer2kicad;
 
+    /// used during FromSESSION() only, memory for it is not owned here.
+    UNIT_RES*       routeResolution;
+
+    /// a copy to avoid passing as an argument, memory for it is not owned here.
+    BOARD*          sessionBoard;
+
     static const KICAD_T scanPADs[];
 
+    /**
+     * Function buildLayerMaps
+     * creates a few data translation structures for layer name and number
+     * mapping between the DSN::PCB structure and the kicad BOARD structure.
+     * @param aBoard The BOARD to create the maps for.
+     */
+    void buildLayerMaps( BOARD* aBoard );
+
+    /**
+     * Function findLayerName
+     * returns the PCB layer index for a given layer name
+     */
+    int findLayerName( const std::string& aLayerName ) const;
 
     /**
      * Function nextTok
@@ -3697,6 +3724,17 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
      *  or delete it.
      */
     PADSTACK* makeVia( const SEGVIA* aVia );
+
+
+    //-----<FromSESSION>-----------------------------------------------------
+
+    /**
+     * Function makeTRACK
+     * creates a TRACK form the PATH and BOARD info.
+     */
+    TRACK* makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) throw( IOError );
+
+    //-----</FromSESSION>----------------------------------------------------
 
 public:
 

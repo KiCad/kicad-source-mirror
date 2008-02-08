@@ -110,32 +110,29 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
 
 namespace DSN {
 
-
-static wxPoint mapPt( const POINT& aPoint, UNIT_RES* aResolution )
+static int scale( double distance, UNIT_RES* aResolution )
 {
-    wxPoint ret;
-
     double  resValue = aResolution->GetValue();
 
-    double  factor;     // multiply this times units to get mils for Kicad.
+    double  factor;     // multiply this times session value to get mils for Kicad.
 
     switch( aResolution->GetEngUnits() )
     {
     default:
     case T_inch:
-        factor = 0.001;
+        factor = 1000.0;
         break;
     case T_mil:
         factor = 1.0;
         break;
     case T_cm:
-        factor = 2.54/1000.0;
+        factor = 1000.0/2.54;
         break;
     case T_mm:
-        factor = 25.4/1000.0;
+        factor = 1000.0/25.4;
         break;
     case T_um:
-        factor = 25.4;
+        factor = 1.0/25.4;
         break;
     }
 
@@ -143,10 +140,38 @@ static wxPoint mapPt( const POINT& aPoint, UNIT_RES* aResolution )
     // used within Kicad.
     factor *= 10.0;
 
-    ret.x = (int)  (factor * aPoint.x / resValue);
-    ret.y = (int) -(factor * aPoint.y / resValue);  // negate y coord
+    return (int)  round(factor * distance / resValue);
+}
+
+static wxPoint mapPt( const POINT& aPoint, UNIT_RES* aResolution )
+{
+    wxPoint ret(  scale( aPoint.x, aResolution ),
+                 -scale( aPoint.y, aResolution ));    // negate y
 
     return ret;
+}
+
+
+TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) throw( IOError )
+{
+    int layerNdx = findLayerName( aPath->layer_id );
+
+    if( layerNdx == -1 )
+    {
+        wxString layerName = CONV_FROM_UTF8( aPath->layer_id.c_str() );
+        ThrowIOError( _("Session file uses invalid layer id \"%s\""),
+                        layerName.GetData() );
+    }
+
+    TRACK* track = new TRACK( sessionBoard );
+
+    track->m_Start   = mapPt( aPath->points[aPointIndex+0], routeResolution );
+    track->m_End     = mapPt( aPath->points[aPointIndex+1], routeResolution );
+    track->SetLayer( pcbLayer2kicad[layerNdx] );
+    track->m_Width   = scale( aPath->aperture_width, routeResolution );
+    track->SetNet( aNetcode );
+
+    return track;
 }
 
 
@@ -155,7 +180,7 @@ static wxPoint mapPt( const POINT& aPoint, UNIT_RES* aResolution )
 
 void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
 {
-    //wxASSERT( session );
+    sessionBoard = aBoard;      // not owned here
 
     if( !session )
         ThrowIOError( _("Session file is missing the \"session\" section") );
@@ -175,6 +200,8 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
     aBoard->m_NbSegmTrack = 0;
 
     aBoard->DeleteMARKERs();
+
+    buildLayerMaps( aBoard );
 
     // Walk the PLACEMENT object's COMPONENTs list, and for each PLACE within
     // each COMPONENT, reposition and re-orient each component and put on
@@ -235,13 +262,53 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
         }
     }
 
+    routeResolution = session->route->GetUnits();
+
     // Walk the NET_OUTs and create tracks and vias anew.
     NET_OUTS& net_outs = session->route->net_outs;
-    for( NET_OUTS::iterator i=net_outs.begin();  i!=net_outs.end();  ++i )
+    for( NET_OUTS::iterator net=net_outs.begin();  net!=net_outs.end();  ++net )
     {
-        // create a track or via and position it.
+        wxString netName( CONV_FROM_UTF8( net->net_id.c_str() ) );
 
+        EQUIPOT* equipot = aBoard->FindNet( netName );
+        if( !equipot )
+        {
+            ThrowIOError( _("Session file uses invalid net::net_id \"%s\""),
+                         netName.GetData() );
+        }
 
+        WIRES& wires = net->wires;
+        for( unsigned i=0;  i<wires.size();  ++i )
+        {
+            WIRE*   wire  = &wires[i];
+            DSN_T   shape = wire->shape->Type();
+
+            if( shape != T_path )
+            {
+                wxString netId = CONV_FROM_UTF8( wire->net_id.c_str() );
+                ThrowIOError(
+                    _("Unsupported wire shape: \"%s\" for net: \"%s\""),
+                    LEXER::GetTokenString(shape).GetData(),
+                    netId.GetData()
+                    );
+            }
+
+            PATH*   path = (PATH*) wire->shape;
+            for( unsigned pt=0;  pt<path->points.size()-1;  ++pt )
+            {
+                TRACK* track = makeTRACK( path, pt, equipot->GetNet() );
+
+                TRACK* insertAid = track->GetBestInsertPoint( aBoard );
+                track->Insert( aBoard, insertAid );
+            }
+        }
+
+        WIRE_VIAS& wire_vias = net->wire_vias;
+        for( unsigned i=0;  i<wire_vias.size();  ++i )
+        {
+            // WIRE_VIA* wire_via = &wire_vias[i];
+
+        }
     }
 }
 
