@@ -434,7 +434,8 @@ PADSTACK* SPECCTRA_DB::makeVia( int aCopperDiameter )
 
 void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
 {
-    char    name[80];       // padstack name builder
+    char        name[80];                           // padstack name builder
+    std::string uniqifier;
 
     if( aPads.GetCount() )
     {
@@ -466,9 +467,7 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
         if( (!doLayer[0] && !doLayer[1])
            ||  (pad->m_PadShape==PAD_CIRCLE &&  pad->m_Drill.x >= pad->m_Size.x) )
         {
-            // padstacks.size()-1 is the index of the matching padstack in LIBRARY::padstacks
-            pad->m_logical_connexion = pcb->library->padstacks.size()-1;
-
+            // pad->m_logical_connexion = pcb->library->padstacks.size()-1;
             continue;
         }
 
@@ -480,19 +479,49 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
         // padstacks.size()-1 is the index of the matching padstack in LIBRARY::padstacks
         pad->m_logical_connexion = pcb->library->padstacks.size()-1;
 
-        // For now, we will report only one layer for the pads.  SMD pads are reported on the
-        // top layer, and through hole are reported on <reserved_layer_name> "signal".
-        // We could do better if there was actually a "layer type" field within
-        // Kicad which would hold one of:  T_signal, T_power, T_mixed, T_jumper
-        // See bottom of page 74 of the SECCTRA Design Language Reference, May 2000.
-        int         reportedLayers = 1;     // how many layers are reported.
+        /*  Through hole pads are reported on the <reserved_layer_name>
+            "signal". Reporting through hole pads on the special
+            "signal" layer may have problems when power layers are in the layer
+            stack. See bottom of page 74 of the SECCTRA Design Language
+            Reference, May 2000. We could do better if there was actually a
+            "layer type" field within Kicad which would hold one of: T_signal,
+            T_power, T_mixed, T_jumper.
 
-        doLayer[0] = true;
+            PAD_SMD and PAD_CONN are reported on each layer for which
+            they are present.
+        */
 
-        const char* layerName = ( pad->m_Attribut == PAD_SMD ) ?
-                                    layerIds[0].c_str() : "signal";
+        int         reportedLayers;                     // how many layers are reported.
+        const char* layerName[NB_COPPER_LAYERS];
 
-        int         coppers = 0;        // will always be one for now
+        static const char signal[] = "signal";
+
+        if( pad->m_Attribut==PAD_SMD || pad->m_Attribut==PAD_CONN )
+        {
+            reportedLayers = 0;
+
+            uniqifier = '[';
+
+            if( doLayer[0] )
+            {
+                layerName[reportedLayers++] = layerIds[0].c_str();
+                uniqifier += 'T';   // T for top, could have used a layer index here alternatively
+            }
+            if( doLayer[1] )
+            {
+                int pcbLayerNdx = kicadLayer2pcb[COPPER_LAYER_N];
+                layerName[reportedLayers++] = layerIds[ pcbLayerNdx ].c_str();
+                uniqifier += 'B';   // B for bottom
+            }
+
+            uniqifier += ']';
+        }
+        else
+        {
+            reportedLayers = 1;
+            layerName[0] = signal;
+            uniqifier = "[A]";        // A for all
+        }
 
         switch( pad->m_PadShape )
         {
@@ -501,23 +530,20 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
             {
                 double  diameter = scale(pad->m_Size.x);
 
-                for( int layer=0;  layer<reportedLayers;  ++layer )
+                for( int ndx=0;  ndx<reportedLayers;  ++ndx )
                 {
-                    if( doLayer[layer] )
-                    {
-                        SHAPE*      shape = new SHAPE( padstack );
-                        padstack->Append( shape );
+                    SHAPE*      shape = new SHAPE( padstack );
+                    padstack->Append( shape );
 
-                        CIRCLE*     circle = new CIRCLE( shape );
-                        shape->SetShape( circle );
+                    CIRCLE*     circle = new CIRCLE( shape );
+                    shape->SetShape( circle );
 
-                        circle->SetLayerId( layerName );
-                        circle->SetDiameter( diameter );
-                        ++coppers;
-                    }
+                    circle->SetLayerId( layerName[ndx] );
+                    circle->SetDiameter( diameter );
                 }
 
-                snprintf( name, sizeof(name), "Round%dPad_%.6g_mil", coppers, scale(pad->m_Size.x) );
+                snprintf( name, sizeof(name), "Round%sPad_%.6g_mil",
+                         uniqifier.c_str(), scale(pad->m_Size.x) );
                 name[ sizeof(name)-1 ] = 0;
 
                 // @todo verify that all pad names are unique, there is a chance that
@@ -536,24 +562,20 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
                 POINT   lowerLeft( -dx, -dy );
                 POINT   upperRight( dx, dy );
 
-                for( int layer=0;  layer<reportedLayers;  ++layer )
+                for( int ndx=0;  ndx<reportedLayers;  ++ndx )
                 {
-                    if( doLayer[layer] )
-                    {
-                        SHAPE*      shape = new SHAPE( padstack );
-                        padstack->Append( shape );
+                    SHAPE*      shape = new SHAPE( padstack );
+                    padstack->Append( shape );
 
-                        RECTANGLE*  rect = new RECTANGLE( shape );
-                        shape->SetShape( rect );
+                    RECTANGLE*  rect = new RECTANGLE( shape );
+                    shape->SetShape( rect );
 
-                        rect->SetLayerId( layerName );
-                        rect->SetCorners( lowerLeft, upperRight );
-                        ++coppers;
-                    }
+                    rect->SetLayerId( layerName[ndx] );
+                    rect->SetCorners( lowerLeft, upperRight );
                 }
 
-                snprintf( name, sizeof(name),  "Rect%dPad_%.6gx%.6g_mil",
-                         coppers, scale(pad->m_Size.x), scale(pad->m_Size.y)  );
+                snprintf( name, sizeof(name),  "Rect%sPad_%.6gx%.6g_mil",
+                         uniqifier.c_str(), scale(pad->m_Size.x), scale(pad->m_Size.y)  );
                 name[ sizeof(name)-1 ] = 0;
 
                 // @todo verify that all pad names are unique, there is a chance that
@@ -574,20 +596,16 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
                 {
                     double  radius = dy;
 
-                    for( int layer=0;  layer<reportedLayers;  ++layer )
+                    for( int ndx=0;  ndx<reportedLayers;  ++ndx )
                     {
-                        if( doLayer[layer] )
-                        {
-                            SHAPE*  shape;
-                            PATH*   path;
-                            // see http://www.freerouting.net/usren/viewtopic.php?f=3&t=317#p408
-                            shape = new SHAPE( padstack );
-                            padstack->Append( shape );
-                            path = makePath( POINT(-dr, 0.0), POINT(dr, 0.0), layerName );
-                            shape->SetShape( path );
-                            path->aperture_width = 2.0 * radius;
-                            ++coppers;
-                        }
+                        SHAPE*  shape;
+                        PATH*   path;
+                        // see http://www.freerouting.net/usren/viewtopic.php?f=3&t=317#p408
+                        shape = new SHAPE( padstack );
+                        padstack->Append( shape );
+                        path = makePath( POINT(-dr, 0.0), POINT(dr, 0.0), layerName[ndx] );
+                        shape->SetShape( path );
+                        path->aperture_width = 2.0 * radius;
                     }
                 }
                 else        // oval is vertical
@@ -596,25 +614,21 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
 
                     dr = -dr;
 
-                    for( int layer=0;  layer<reportedLayers;  ++layer )
+                    for( int ndx=0;  ndx<reportedLayers;  ++ndx )
                     {
-                        if( doLayer[layer] )
-                        {
-                            SHAPE*  shape;
-                            PATH*   path;
-                            // see http://www.freerouting.net/usren/viewtopic.php?f=3&t=317#p408
-                            shape = new SHAPE( padstack );
-                            padstack->Append( shape );
-                            path = makePath( POINT(0.0, -dr), POINT(0.0, dr), layerName );
-                            shape->SetShape( path );
-                            path->aperture_width = 2.0 * radius;
-                            ++coppers;
-                        }
+                        SHAPE*  shape;
+                        PATH*   path;
+                        // see http://www.freerouting.net/usren/viewtopic.php?f=3&t=317#p408
+                        shape = new SHAPE( padstack );
+                        padstack->Append( shape );
+                        path = makePath( POINT(0.0, -dr), POINT(0.0, dr), layerName[ndx] );
+                        shape->SetShape( path );
+                        path->aperture_width = 2.0 * radius;
                     }
                 }
 
-                snprintf( name, sizeof(name),  "Oval%dPad_%.6gx%.6g_mil",
-                         coppers, scale(pad->m_Size.x), scale(pad->m_Size.y)  );
+                snprintf( name, sizeof(name),  "Oval%sPad_%.6gx%.6g_mil",
+                         uniqifier.c_str(), scale(pad->m_Size.x), scale(pad->m_Size.y)  );
                 name[ sizeof(name)-1 ] = 0;
 
                 // @todo verify that all pad names are unique, there is a chance that
