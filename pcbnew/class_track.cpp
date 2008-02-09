@@ -62,7 +62,7 @@ wxString TRACK::ShowWidth()
 /***************************/
 {
     wxString msg;
-	
+
     valeur_param( m_Width, msg );
 
     return msg;
@@ -125,16 +125,18 @@ TRACK* TRACK::Copy() const
  * calculate the drill value for vias (m-Drill if > 0, or default drill value for the board
  * @return real drill_value
 */
-int TRACK::GetDrillValue(void)
+int TRACK::GetDrillValue() const
 {
-	if ( Type() != TYPEVIA ) return 0;
+    if ( Type() != TYPEVIA )
+        return 0;
 
-	if ( m_Drill >= 0 ) return m_Drill;
-	
-	if ( m_Shape == VIA_MICROVIA )
-		return g_DesignSettings.m_MicroViaDrill;
+    if ( m_Drill >= 0 )
+        return m_Drill;
 
-	return g_DesignSettings.m_ViaDrill;
+    if ( m_Shape == VIA_MICROVIA )
+        return g_DesignSettings.m_MicroViaDrill;
+
+    return g_DesignSettings.m_ViaDrill;
 }
 
 
@@ -441,7 +443,7 @@ TRACK* TRACK::GetBestInsertPoint( BOARD* Pcb )
     /* Traitement du debut de liste */
     if( track == NULL )
         return NULL;                    /* No tracks ! */
-    
+
     if( GetNet() < track->GetNet() )    /* no net code or net code = 0 (track not connected) */
         return NULL;
 
@@ -449,7 +451,7 @@ TRACK* TRACK::GetBestInsertPoint( BOARD* Pcb )
     {
         if( NextTrack->GetNet() > this->GetNet() )
             break;
-        
+
         track = NextTrack;
     }
 
@@ -614,7 +616,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
         if( rayon > (4 * zoom) )
         {
             int drill_rayon = GetDrillValue() / 2;
-			int inner_rayon = rayon - (2 * zoom);
+            int inner_rayon = rayon - (2 * zoom);
             GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
                       inner_rayon, color );
 
@@ -622,7 +624,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
             if( DisplayOpt.m_DisplayViaMode != VIA_HOLE_NOT_SHOW )
             {
                 if( (DisplayOpt.m_DisplayViaMode == ALL_VIA_HOLE_SHOW) || 	// Display all drill holes requested
-					( (drill_rayon > 0 ) && ! IsDrillDefault() ) ) 			// Or Display non default holes requested
+                    ( (drill_rayon > 0 ) && ! IsDrillDefault() ) ) 			// Or Display non default holes requested
                 {
                    if( drill_rayon < inner_rayon ) // We can show the via hole
                     {
@@ -635,53 +637,53 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
             if( DisplayOpt.DisplayTrackIsol )
                 GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
                           rayon + g_DesignSettings.m_TrackClearence, color );
-			// for Micro Vias, draw a partial cross :
-			// X on component layer, or + on copper layer
-			// (so we can see 2 superimposed microvias ):
-			if ( Shape() == VIA_MICROVIA )
-			{
-				int ax, ay, bx, by;
-				if ( IsOnLayer(COPPER_LAYER_N) )
-				{
-					ax = rayon; ay = 0;
-					bx = drill_rayon; by = 0;
-				}
-				else 
-				{
-					ax = ay = (rayon * 707) / 1000;
-					bx = by = (drill_rayon * 707) / 1000;
-				}
-				/* lines | or \ */
-				GRLine( &panel->m_ClipBox, DC, m_Start.x - ax , m_Start.y - ay,
-						m_Start.x - bx , m_Start.y - by, 0, color );
-				GRLine( &panel->m_ClipBox, DC, m_Start.x + bx , m_Start.y + by,
-						m_Start.x + ax , m_Start.y + ay, 0, color );
-				/* lines - or / */
-				GRLine( &panel->m_ClipBox, DC, m_Start.x + ay, m_Start.y - ax ,
-						m_Start.x + by, m_Start.y - bx, 0, color );
-				GRLine( &panel->m_ClipBox, DC, m_Start.x - by, m_Start.y + bx ,
-						m_Start.x - ay, m_Start.y + ax, 0, color );
-			}
-			// for Buried Vias, draw a partial line :
-			// orient depending on layer pair
-			// (so we can see superimposed buried vias ):
-			if ( Shape() == VIA_BLIND_BURIED )
-			{
-				int ax = 0, ay = rayon, bx = 0, by = drill_rayon;
-				int layer_top, layer_bottom ;
-				((SEGVIA*)this)->ReturnLayerPair(&layer_top, &layer_bottom);
-				/* lines for the top layer */
-				RotatePoint( &ax, &ay, layer_top * 3600 / g_DesignSettings.m_CopperLayerCount);
-				RotatePoint( &bx, &by, layer_top * 3600 / g_DesignSettings.m_CopperLayerCount);
-				GRLine( &panel->m_ClipBox, DC, m_Start.x - ax , m_Start.y - ay,
-						m_Start.x - bx , m_Start.y - by, 0, color );
-				/* lines for the bottom layer */
-				ax = 0; ay = rayon; bx = 0; by = drill_rayon;
-				RotatePoint( &ax, &ay, layer_bottom * 3600 / g_DesignSettings.m_CopperLayerCount);
-				RotatePoint( &bx, &by, layer_bottom * 3600 / g_DesignSettings.m_CopperLayerCount);
-				GRLine( &panel->m_ClipBox, DC, m_Start.x - ax , m_Start.y - ay,
-						m_Start.x - bx , m_Start.y - by, 0, color );
-			}
+            // for Micro Vias, draw a partial cross :
+            // X on component layer, or + on copper layer
+            // (so we can see 2 superimposed microvias ):
+            if ( Shape() == VIA_MICROVIA )
+            {
+                int ax, ay, bx, by;
+                if ( IsOnLayer(COPPER_LAYER_N) )
+                {
+                    ax = rayon; ay = 0;
+                    bx = drill_rayon; by = 0;
+                }
+                else
+                {
+                    ax = ay = (rayon * 707) / 1000;
+                    bx = by = (drill_rayon * 707) / 1000;
+                }
+                /* lines | or \ */
+                GRLine( &panel->m_ClipBox, DC, m_Start.x - ax , m_Start.y - ay,
+                        m_Start.x - bx , m_Start.y - by, 0, color );
+                GRLine( &panel->m_ClipBox, DC, m_Start.x + bx , m_Start.y + by,
+                        m_Start.x + ax , m_Start.y + ay, 0, color );
+                /* lines - or / */
+                GRLine( &panel->m_ClipBox, DC, m_Start.x + ay, m_Start.y - ax ,
+                        m_Start.x + by, m_Start.y - bx, 0, color );
+                GRLine( &panel->m_ClipBox, DC, m_Start.x - by, m_Start.y + bx ,
+                        m_Start.x - ay, m_Start.y + ax, 0, color );
+            }
+            // for Buried Vias, draw a partial line :
+            // orient depending on layer pair
+            // (so we can see superimposed buried vias ):
+            if ( Shape() == VIA_BLIND_BURIED )
+            {
+                int ax = 0, ay = rayon, bx = 0, by = drill_rayon;
+                int layer_top, layer_bottom ;
+                ((SEGVIA*)this)->ReturnLayerPair(&layer_top, &layer_bottom);
+                /* lines for the top layer */
+                RotatePoint( &ax, &ay, layer_top * 3600 / g_DesignSettings.m_CopperLayerCount);
+                RotatePoint( &bx, &by, layer_top * 3600 / g_DesignSettings.m_CopperLayerCount);
+                GRLine( &panel->m_ClipBox, DC, m_Start.x - ax , m_Start.y - ay,
+                        m_Start.x - bx , m_Start.y - by, 0, color );
+                /* lines for the bottom layer */
+                ax = 0; ay = rayon; bx = 0; by = drill_rayon;
+                RotatePoint( &ax, &ay, layer_bottom * 3600 / g_DesignSettings.m_CopperLayerCount);
+                RotatePoint( &bx, &by, layer_bottom * 3600 / g_DesignSettings.m_CopperLayerCount);
+                GRLine( &panel->m_ClipBox, DC, m_Start.x - ax , m_Start.y - ay,
+                        m_Start.x - bx , m_Start.y - by, 0, color );
+            }
         }
         return;
     }
@@ -909,11 +911,11 @@ bool TRACK::HitTest( const wxPoint& ref_pos )
  */
  bool    TRACK::HitTest( EDA_Rect& refArea )
 {
-	if( refArea.Inside( m_Start ) )
-		return true;
-	if( refArea.Inside( m_End ) )
-		return true;
-	return false;
+    if( refArea.Inside( m_Start ) )
+        return true;
+    if( refArea.Inside( m_End ) )
+        return true;
+    return false;
 }
 
 

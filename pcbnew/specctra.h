@@ -2091,7 +2091,6 @@ class PADSTACK : public ELEM_HOLDER
 
     std::string     hash;       ///< a hash string used by Compare(), not Format()ed/exported.
 
-
     std::string     padstack_id;
     UNIT_RES*       unit;
 
@@ -2121,6 +2120,10 @@ public:
         delete rules;
     }
 
+    const std::string& GetPadstackId()
+    {
+        return padstack_id;
+    }
 
     /**
      * Function Compare
@@ -2339,6 +2342,22 @@ public:
             return aVia;
         }
         return &padstacks[ndx];
+    }
+
+    /**
+     * Function FindPADSTACK
+     * searches the padstack container by name.
+     * @return PADSTACK* - The PADSTACK with a matching name if it exists, else NULL.
+     */
+    PADSTACK* FindPADSTACK( const std::string& aPadstackId )
+    {
+        for( unsigned i=0;  i<padstacks.size();  ++i )
+        {
+            PADSTACK* ps = &padstacks[i];
+            if( 0 == ps->GetPadstackId().compare( aPadstackId ) )
+                return ps;
+        }
+        return NULL;
     }
 
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
@@ -2886,6 +2905,11 @@ public:
         via_type = T_NONE;
         attr = T_NONE;
         supply = false;
+    }
+
+    const std::string& GetPadstackId()
+    {
+        return padstack_id;
     }
 
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
@@ -3711,10 +3735,11 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
      * Function makeVia
      * makes a round through hole PADSTACK using the given Kicad diameter in deci-mils.
      * @param aCopperDiameter The diameter of the copper pad.
+     * @param aDrillDiameter The drill diameter, used on re-import of the session file.
      * @return PADSTACK* - The padstack, which is on the heap only, user must save
      *  or delete it.
      */
-    PADSTACK* makeVia( int aCopperDiameter );
+    PADSTACK* makeVia( int aCopperDiameter, int aDrillDiameter );
 
     /**
      * Function makeVia
@@ -3733,6 +3758,9 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
      * creates a TRACK form the PATH and BOARD info.
      */
     TRACK* makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) throw( IOError );
+
+
+    SEGVIA* makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNetCode );
 
     //-----</FromSESSION>----------------------------------------------------
 
@@ -3848,7 +3876,7 @@ public:
      *
      * @param aBoard The BOARD to convert to a PCB.
      */
-    void FromBOARD( BOARD* aBoard );
+    void FromBOARD( BOARD* aBoard ) throw( IOError );
 
 
     /**

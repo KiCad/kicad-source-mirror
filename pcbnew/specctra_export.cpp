@@ -37,6 +37,7 @@
 #include "wxPcbStruct.h"        // Change_Side_Module()
 #include "pcbstruct.h"          // HISTORY_NUMBER
 #include "autorout.h"           // NET_CODES_OK
+#include <set>                  // std::set
 
 
 using namespace DSN;
@@ -103,7 +104,11 @@ void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
         Affiche_Message( wxString( _("BOARD exported OK.")) );
     }
     else
+    {
+        errorText += '\n';
+        errorText += _("Unable to export, please fix and try again.");
         DisplayError( this, errorText );
+    }
 }
 
 
@@ -268,6 +273,17 @@ static bool isRectangle( POINT_PAIRS& aList )
 }
 
 
+/**
+ * Function isKeepout
+ * decides if the pad is a copper less through hole which needs to be made into
+ * a round keepout.
+ */
+static bool isKeepout( D_PAD* aPad )
+{
+    return aPad->m_PadShape==PAD_CIRCLE &&  aPad->m_Drill.x >= aPad->m_Size.x;
+}
+
+
 /**************************************************************************/
 static int Pad_list_Sort_by_Shapes( const void* refptr, const void* objptr )
 /**************************************************************************/
@@ -313,7 +329,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( MODULE* aModule )
         D_PAD* pad = (D_PAD*) pads[p];
 
         // see if this pad is a through hole with no copper on its perimeter
-        if( pad->m_PadShape==PAD_CIRCLE &&  pad->m_Drill.x >= pad->m_Size.x )
+        if( isKeepout( pad ) )
         {
             KEEPOUT* keepout = new KEEPOUT(image, T_keepout);
             image->keepouts.push_back( keepout );
@@ -369,7 +385,9 @@ PADSTACK* SPECCTRA_DB::makeVia( const SEGVIA* aVia )
 
         circle->SetLayerId( "signal" );
 
-        snprintf( name, sizeof(name),  "Via_%.6g_mil", dsnDiameter );
+        snprintf( name, sizeof(name),  "Via_%.6g:%.6g_mil", dsnDiameter,
+                 // encode the drill value in the name for later import
+                 scale( aVia->GetDrillValue() ) );
         name[ sizeof(name)-1 ] = 0;
         padstack->SetPadstackId( name );
         break;
@@ -398,7 +416,11 @@ PADSTACK* SPECCTRA_DB::makeVia( const SEGVIA* aVia )
             circle->SetLayerId( layerIds[layer].c_str() );
         }
 
-        snprintf( name, sizeof(name),  "Via[%d-%d]_%.6g_mil", topLayer, botLayer, dsnDiameter );
+        snprintf( name, sizeof(name),  "Via[%d-%d]_%.6g:%.6g_mil",
+                 topLayer, botLayer, dsnDiameter,
+                 // encode the drill value in the name for later import
+                 scale( aVia->GetDrillValue() )
+                 );
         name[ sizeof(name)-1 ] = 0;
         padstack->SetPadstackId( name );
         break;
@@ -408,7 +430,7 @@ PADSTACK* SPECCTRA_DB::makeVia( const SEGVIA* aVia )
 }
 
 
-PADSTACK* SPECCTRA_DB::makeVia( int aCopperDiameter )
+PADSTACK* SPECCTRA_DB::makeVia( int aCopperDiameter, int aDrillDiameter )
 {
     char        name[48];
     PADSTACK*   padstack = new PADSTACK( pcb->library );
@@ -424,12 +446,28 @@ PADSTACK* SPECCTRA_DB::makeVia( int aCopperDiameter )
 
     circle->SetLayerId( "signal" );
 
-    snprintf( name, sizeof(name),  "Via_%.6g_mil", dsnDiameter );
+    snprintf( name, sizeof(name),  "Via_%.6g:%.6g_mil", dsnDiameter,
+                 // encode the drill value in the name for later import
+                 scale( aDrillDiameter ) );
     name[ sizeof(name)-1 ] = 0;
     padstack->SetPadstackId( name );
 
     return padstack;
 }
+
+
+/**
+ * Struct ltWX
+ * is used secretly by the std:set<> class below.   See STRINGSET typedef.
+ */
+struct ltWX
+{
+    // a "less than" test on two wxStrings, by pointer.
+    bool operator()( const wxString* s1, const wxString* s2) const
+    {
+        return s1->Cmp( *s2 ) < 0;  // case specific wxString compare
+    }
+};
 
 
 void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
@@ -464,10 +502,8 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
 
         // if pad has no copper presence, then it will be made into
         // an "image->keepout" later.  No copper pad here, it is probably a hole.
-        if( (!doLayer[0] && !doLayer[1])
-           ||  (pad->m_PadShape==PAD_CIRCLE &&  pad->m_Drill.x >= pad->m_Size.x) )
+        if( (!doLayer[0] && !doLayer[1]) || isKeepout( pad ) )
         {
-            // pad->m_logical_connexion = pcb->library->padstacks.size()-1;
             continue;
         }
 
@@ -491,7 +527,7 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
             they are present.
         */
 
-        int         reportedLayers;                     // how many layers are reported.
+        int         reportedLayers;                 // how many in reported padstack
         const char* layerName[NB_COPPER_LAYERS];
 
         static const char signal[] = "signal";
@@ -652,7 +688,7 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
     int defaultViaSize = aBoard->m_BoardSettings->m_CurrentViaSize;
     if( defaultViaSize )
     {
-        PADSTACK*   padstack = makeVia( defaultViaSize );
+        PADSTACK*   padstack = makeVia( defaultViaSize, g_DesignSettings.m_ViaDrill );
         pcb->library->AddPadstack( padstack );
 
         // remember this index, it is the default via and also the start of the
@@ -672,13 +708,13 @@ void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
         if( viaSize == defaultViaSize )
             continue;
 
-        PADSTACK*   padstack = makeVia( viaSize );
+        PADSTACK*   padstack = makeVia( viaSize, g_DesignSettings.m_ViaDrill );
         pcb->library->AddPadstack( padstack );
     }
 }
 
 
-void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
+void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 {
     TYPE_COLLECTOR          items;
     POINT_PAIRS             ppairs;
@@ -686,6 +722,36 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
     static const KICAD_T    scanMODULEs[] = { TYPEMODULE, EOT };
 
+    // Not all boards are exportable.  Check that all reference Ids are unique.
+    // Unless they are unique, we cannot import the session file which comes
+    // back to us later from the router.
+    {
+        items.Collect( aBoard, scanMODULEs );
+
+        typedef std::set<const wxString*, ltWX>  STRINGSET;
+        typedef std::pair<STRINGSET::iterator, bool> PAIR;
+
+        STRINGSET references;  // holds unique component references
+
+        for( int i=0;  i<items.GetCount();  ++i )
+        {
+            MODULE* module = (MODULE*) items[i];
+
+            if( module->GetReference() == wxEmptyString )
+            {
+                ThrowIOError( _("Component with value of \"%s\" has empty reference id."),
+                                module->GetValue().GetData() );
+            }
+
+            // if we cannot insert OK, that means the reference has been seen before.
+            PAIR pair = references.insert( &module->GetReference() );
+            if( !pair.second )      // insert failed
+            {
+                ThrowIOError( _("Multiple components have identical reference IDs of \"%s\"."),
+                      module->GetReference().GetData() );
+            }
+        }
+    }
 
     if( !pcb )
         pcb = SPECCTRA_DB::MakePCB();
@@ -702,8 +768,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             module->flag = 1;
         }
     }
-
-    //pcb->placement->flip_style = T_rotate_first;
 
     // Since none of these statements cause any immediate output, the order
     // of them is somewhat flexible.  The outputting to disk is done at the
@@ -845,7 +909,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
     //-----<rules>--------------------------------------------------------
     {
         // put out these rules, the user can then edit them with a text editor
-        char    rule[80];       // padstack name builder
+        char    rule[80];
 
         int     curTrackWidth = aBoard->m_BoardSettings->m_CurrentTrackWidth;
         int     curTrackClear = aBoard->m_BoardSettings->m_TrackClearence;
@@ -879,7 +943,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         sprintf( rule, "(clearance %.6g (type smd_pin))", clearance );
         rules.push_back( rule );
 
-        sprintf( rule, "(clearance %.6g (type smd_smd))", clearance );
+        sprintf( rule, "(clearance %.6g (type smd_smd))", clearance/4 );
         rules.push_back( rule );
     }
 
@@ -905,8 +969,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             int count = item->m_Poly->corner.size();
             for( int j=0; j<count; ++j )
             {
-                wxPoint   point( item->m_Poly->corner[j].x, item->m_Poly->corner[j].y );
-
+                wxPoint   point( item->m_Poly->corner[j].x,
+                                 item->m_Poly->corner[j].y );
                 polygon->points.push_back( mapPt(point) );
             }
 
@@ -1044,12 +1108,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
         items.Collect( aBoard, scanTRACKs );
 
-/*
-        if( items.GetCount() )
-            qsort( (void*) items.BasePtr(), items.GetCount(),
-                  sizeof(TRACK*), Track_list_Sort_by_Netcode );
-*/
-
         std::string netname;
         WIRING*     wiring = pcb->wiring;
         PATH*       path = 0;
@@ -1105,7 +1163,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
     }
 
 
-    //-----<export the existing real instantiated vias>---------------------
+    //-----<export the existing real BOARD instantiated vias>-----------------
     {
         // export all of them for now, later we'll decide what controls we need
         // on this.

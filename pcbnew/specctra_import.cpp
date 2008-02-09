@@ -90,6 +90,12 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
     catch( IOError ioe )
     {
         setlocale( LC_NUMERIC, "" );    // revert to the current locale
+
+        ioe.errorText += '\n';
+        ioe.errorText += _("BOARD may be corrupted, do not save it.");
+        ioe.errorText += '\n';
+        ioe.errorText += _("Fix problem and try again.");
+
         DisplayError( this, ioe.errorText );
         return;
     }
@@ -173,6 +179,76 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
 
     return track;
 }
+
+
+SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNetCode )
+{
+    SEGVIA* via = 0;
+    SHAPE*  shape;
+
+    int     shapeCount = aPadstack->Length();
+    int     drillDiam = -1;
+    int     viaDiam = 400;
+
+    // @todo this needs a lot of work yet, it is not complete yet.
+
+
+    // The drill diameter is encoded in the padstack name if PCBNEW did the DSN export.
+    // It is in mils and is after the colon and before the last '_'
+    int     drillStartNdx = aPadstack->padstack_id.find( ':' );
+
+    if( drillStartNdx != -1 )
+    {
+        int drillEndNdx = aPadstack->padstack_id.rfind( '_' );
+        if( drillEndNdx != -1 )
+        {
+            std::string drillDiam( aPadstack->padstack_id, drillStartNdx, drillEndNdx-drillStartNdx-1 );
+            drillDiam = atoi( drillDiam.c_str() );
+        }
+    }
+
+    if( shapeCount == 0 )
+    {
+    }
+    else if( shapeCount == 1 )
+    {
+        shape = (SHAPE*) (*aPadstack)[0];
+        if( shape->shape->Type() == T_circle )
+        {
+            CIRCLE* circle = (CIRCLE*) shape->shape;
+            viaDiam = scale( circle->diameter, routeResolution );
+
+            via = new SEGVIA( sessionBoard );
+            via->SetPosition( mapPt( aPoint, routeResolution ) );
+            via->SetDrillValue( drillDiam );
+            via->m_Shape = VIA_THROUGH;
+            via->m_Width = viaDiam;
+            via->SetLayerPair( CMP_N, COPPER_LAYER_N );
+        }
+    }
+    else if( shapeCount == sessionBoard->GetCopperLayerCount() )
+    {
+        shape = (SHAPE*) (*aPadstack)[0];
+        if( shape->shape->Type() == T_circle )
+        {
+            CIRCLE* circle = (CIRCLE*) shape->shape;
+            viaDiam = scale( circle->diameter, routeResolution );
+
+            via = new SEGVIA( sessionBoard );
+            via->SetPosition( mapPt( aPoint, routeResolution ) );
+            via->SetDrillValue( drillDiam );
+            via->m_Shape = VIA_THROUGH;
+            via->m_Width = viaDiam;
+            via->SetLayerPair( CMP_N, COPPER_LAYER_N );
+        }
+    }
+
+    if( via )
+        via->SetNet( aNetCode );
+
+    return via;
+}
+
 
 
 // no UI code in this function, throw exception to report problems to the
@@ -268,14 +344,20 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
     NET_OUTS& net_outs = session->route->net_outs;
     for( NET_OUTS::iterator net=net_outs.begin();  net!=net_outs.end();  ++net )
     {
-        wxString netName( CONV_FROM_UTF8( net->net_id.c_str() ) );
+        int         netCode = 0;
 
-        EQUIPOT* equipot = aBoard->FindNet( netName );
-        if( !equipot )
+        // page 143 of spec says wire's net_id is optional
+        if( net->net_id.size() )
         {
-            ThrowIOError( _("Session file uses invalid net::net_id \"%s\""),
-                         netName.GetData() );
+            wxString netName = CONV_FROM_UTF8( net->net_id.c_str() );
+
+            EQUIPOT* equipot = aBoard->FindNet( netName );
+            if( equipot )
+                netCode = equipot->GetNet();
+
+            // else netCode remains 0
         }
+
 
         WIRES& wires = net->wires;
         for( unsigned i=0;  i<wires.size();  ++i )
@@ -296,7 +378,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
             PATH*   path = (PATH*) wire->shape;
             for( unsigned pt=0;  pt<path->points.size()-1;  ++pt )
             {
-                TRACK* track = makeTRACK( path, pt, equipot->GetNet() );
+                TRACK* track = makeTRACK( path, pt, netCode );
 
                 TRACK* insertAid = track->GetBestInsertPoint( aBoard );
                 track->Insert( aBoard, insertAid );
@@ -304,10 +386,48 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
         }
 
         WIRE_VIAS& wire_vias = net->wire_vias;
+        LIBRARY& library = *session->route->library;
         for( unsigned i=0;  i<wire_vias.size();  ++i )
         {
-            // WIRE_VIA* wire_via = &wire_vias[i];
+            int         netCode = 0;
 
+            // page 144 of spec says wire_via's net_id is optional
+            if( net->net_id.size() )
+            {
+                wxString netName = CONV_FROM_UTF8( net->net_id.c_str() );
+
+                EQUIPOT* equipot = aBoard->FindNet( netName );
+                if( equipot )
+                    netCode = equipot->GetNet();
+
+                // else netCode remains 0
+            }
+
+            WIRE_VIA* wire_via = &wire_vias[i];
+
+            // example: (via Via_15:8_mil 149000 -71000 )
+
+            PADSTACK* padstack = library.FindPADSTACK( wire_via->GetPadstackId() );
+            if( !padstack )
+            {
+                // Could use a STRINGFORMATTER here and convert the entire
+                // wire_via to text and put that text into the exception.
+                wxString psid( CONV_FROM_UTF8( wire_via->GetPadstackId().c_str() ) );
+
+                ThrowIOError( _("A wire_via references a missing padstack \"%s\""),
+                             psid.GetData() );
+            }
+
+            for( unsigned v=0;  v<wire_via->vertexes.size();  ++v )
+            {
+                SEGVIA* via = makeVIA( padstack, wire_via->vertexes[v], netCode );
+
+                if( !via )
+                    ThrowIOError( _("Unable to make a via") );
+
+                TRACK* insertAid = via->GetBestInsertPoint( aBoard );
+                via->Insert( aBoard, insertAid );
+            }
         }
     }
 }

@@ -25,7 +25,7 @@ public:
     int         m_Shape;            // vias: shape and type, Track = shape..
 
 protected:
-	int         m_Drill;            // for vias: via drill (- 1 for default value)
+    int         m_Drill;            // for vias: via drill (- 1 for default value)
 
 public:
     BOARD_ITEM* start;              // pointers to a connected item (pad or track)
@@ -148,32 +148,32 @@ public:
 
     /* divers */
     int Shape() const { return m_Shape & 0xFF; }
-	
-	/**
+
+    /**
      * Function SetDrillValue
-	 * Set the drill value for vias
-	 * @param drill_value = new drill value
-	*/
-	void SetDrillValue(int drill_value) { m_Drill = drill_value; }
+     * Set the drill value for vias
+     * @param drill_value = new drill value
+    */
+    void SetDrillValue(int drill_value) { m_Drill = drill_value; }
 
-	/**
+    /**
      * Function SetDrillDefault
-	 * Set the drill value for vias at default value (-1)
-	*/
-	void SetDrillDefault(void) { m_Drill = -1; }
-	
-	/**
-     * Function IsDrillDefault
-	 * @return true if the drill value is default value (-1)
-	*/
-	bool IsDrillDefault(void) { return m_Drill < 0; }
+     * Set the drill value for vias at default value (-1)
+    */
+    void SetDrillDefault(void) { m_Drill = -1; }
 
-	/**
+    /**
+     * Function IsDrillDefault
+     * @return true if the drill value is default value (-1)
+    */
+    bool IsDrillDefault(void) { return m_Drill < 0; }
+
+    /**
      * Function GetDrillValue
-	 * calculate the drill value for vias (m-Drill if > 0, or default drill value for the board
-	 * @return real drill_value
-	*/
-	int GetDrillValue(void);
+     * calculate the drill value for vias (m-Drill if > 0, or default drill value for the board
+     * @return real drill_value
+    */
+    int GetDrillValue() const;
 
     /**
      * Function ReturnMaskLayer

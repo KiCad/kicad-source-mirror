@@ -5,6 +5,21 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+2008-Feb-7 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+    added "const" to SEGVIA::GetDrillValue() const;
+    added GetDrillValue() to DRC instead of accessing SEGVIA::m_Drill directly.
+    changed specctra_export so it aborts if all reference designators are not
+    unique.  Unless they are unique we cannot import the routed session.  A
+    good example is the xylinx board which now fails to export.
+    first rough work on SEGVIA::makeVIA() but needs much more work.  Simple
+    session files with vias at least import.  Now encode drill diameter in
+    padstack name for later session import.
+    updated todo.txt file.
+
+
 2008-Feb-7 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew
