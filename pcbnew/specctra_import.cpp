@@ -146,7 +146,8 @@ static int scale( double distance, UNIT_RES* aResolution )
     // used within Kicad.
     factor *= 10.0;
 
-    return (int)  round(factor * distance / resValue);
+    int ret = (int)  round(factor * distance / resValue);
+    return ret;
 }
 
 static wxPoint mapPt( const POINT& aPoint, UNIT_RES* aResolution )
@@ -202,8 +203,15 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
         int drillEndNdx = aPadstack->padstack_id.rfind( '_' );
         if( drillEndNdx != -1 )
         {
-            std::string drillDiam( aPadstack->padstack_id, drillStartNdx, drillEndNdx-drillStartNdx-1 );
-            drillDiam = atoi( drillDiam.c_str() );
+            std::string diamTxt( aPadstack->padstack_id, drillStartNdx+1, drillEndNdx-drillStartNdx-1 );
+            const char* sdiamTxt = diamTxt.c_str();
+            double drillMils = strtod( sdiamTxt, 0 );
+
+            // drillMils is not in the session units, but actual mils so we don't use scale()
+            drillDiam = drillMils * 10;
+
+            if( drillDiam == g_DesignSettings.m_ViaDrill )      // default
+                drillDiam = -1;         // import as default
         }
     }
 
@@ -312,7 +320,6 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
             {
                 // convert from degrees to tenths of degrees used in Kicad.
                 int orientation = (int) (place->rotation * 10.0);
-
                 if( module->GetLayer() != CMP_N )
                 {
                     // module is on copper layer (back)
@@ -332,8 +339,8 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
             }
             else
             {
-                // as I write this, the LEXER *is* catching this, so we should never see below:
-                wxFAIL_MSG( wxT("DSN::LEXER did not catch an illegal side := 'back|front'") );
+                // as I write this, the PARSER *is* catching this, so we should never see below:
+                wxFAIL_MSG( wxT("DSN::PARSER did not catch an illegal side := 'back|front'") );
             }
         }
     }

@@ -913,7 +913,12 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 
         int     curTrackWidth = aBoard->m_BoardSettings->m_CurrentTrackWidth;
         int     curTrackClear = aBoard->m_BoardSettings->m_TrackClearence;
-        double  clearance = scale(curTrackClear);
+
+        // The +5 is to give freerouter a little extra room, this is 0.5 mils.
+        // If we export without this, then on import freerouter violates our
+        // DRC checks with track to via spacing.
+        double  clearance = scale(curTrackClear+5);
+
         STRINGS& rules = pcb->structure->rules->rules;
 
         sprintf( rule, "(width %.6g)", scale( curTrackWidth ) );
@@ -943,7 +948,11 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         sprintf( rule, "(clearance %.6g (type smd_pin))", clearance );
         rules.push_back( rule );
 
-        sprintf( rule, "(clearance %.6g (type smd_smd))", clearance/4 );
+        // well, the user is going to text edit these in the DSN file anyway,
+        // at least until we have an export dialog.
+        clearance = scale(curTrackClear)/4;
+
+        sprintf( rule, "(clearance %.6g (type smd_smd))", clearance );
         rules.push_back( rule );
     }
 
