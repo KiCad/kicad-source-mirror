@@ -353,38 +353,22 @@ IMAGE* SPECCTRA_DB::makeIMAGE( MODULE* aModule )
             pin->padstack_id = padstack->padstack_id;
             pin->pin_id      = CONV_TO_UTF8( pad->ReturnStringPadName() );
 
-#if 0
-            if( pad->m_Orient )
-            {
-                int angle = pad->m_Orient - aModule->m_Orient;   // tenths of degrees
-                NORMALIZE_ANGLE_POS(angle);
-                pin->SetRotation( angle / 10.0 );
-            }
-#else
-{
+            wxPoint pos( pad->m_Pos0 );
+            wxPoint offset( pad->m_Offset.x, pad->m_Offset.y );
+
             int angle = pad->m_Orient - aModule->m_Orient;   // tenths of degrees
             if( angle )
             {
                 NORMALIZE_ANGLE_POS(angle);
                 pin->SetRotation( angle / 10.0 );
-            }
-}
-#endif
 
-            wxPoint pos;
+                if( pad->m_Offset.x || pad->m_Offset.y )
+                {
+                    RotatePoint( &offset, angle );
+                }
+            }
 
-            int angle = pad->m_Orient - aModule->m_Orient;   // tenths of degrees
-            if( angle && (pad->m_Offset.x || pad->m_Offset.y) )
-            {
-                wxPoint offset( pad->m_Offset.x, pad->m_Offset.y );
-                RotatePoint( &offset, angle );
-                pos = pad->m_Pos0 + offset;
-            }
-            else
-            {
-                // copper shape's position is hole position + offset
-                pos = pad->m_Pos0 + pad->m_Offset;
-            }
+            pos += offset;
 
             pin->SetVertex( mapPt( pos )  );
         }
