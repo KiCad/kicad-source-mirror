@@ -22,11 +22,11 @@ static wxArrayString s_PowerNameList;
 void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 /**********************************************************************************/
 
-/* Traite les commandes declenchée par le bouton gauche de la souris,
- *  quand un outil est deja selectionné
+/* Traite les commandes declenchï¿½e par le bouton gauche de la souris,
+ *  quand un outil est deja selectionnï¿½
  */
 {
-    EDA_BaseStruct* DrawStruct = m_CurrentScreen->GetCurItem();
+	EDA_BaseStruct* DrawStruct = GetScreen()->GetCurItem();
 
     if( (m_ID_current_state == 0) || ( DrawStruct && DrawStruct->m_Flags ) )
     {
@@ -39,6 +39,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             {
             case DRAW_LABEL_STRUCT_TYPE:
             case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
+			case DRAW_HIER_LABEL_STRUCT_TYPE:
             case DRAW_TEXT_STRUCT_TYPE:
             case DRAW_SHEETLABEL_STRUCT_TYPE:
             case DRAW_SHEET_STRUCT_TYPE:
@@ -47,8 +48,8 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             case DRAW_LIB_ITEM_STRUCT_TYPE:
             case DRAW_PART_TEXT_STRUCT_TYPE:
                 DrawStruct->Place( this, DC );
-                m_CurrentScreen->SetCurItem( NULL );
-                TestDanglingEnds( m_CurrentScreen->EEDrawList, DC );
+				GetScreen()->SetCurItem( NULL );
+				TestDanglingEnds( GetScreen()->EEDrawList, DC );
                 return;
 
             case SCREEN_STRUCT_TYPE:
@@ -91,14 +92,14 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             InstallNextScreen( (DrawSheetStruct*) DrawStruct );
         }
         else
-            InstallPreviousScreen();
+            InstallPreviousSheet();
         break;
 
     case ID_NOCONN_BUTT:
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
             g_ItemToRepeat = CreateNewNoConnectStruct( DC );
-            m_CurrentScreen->SetCurItem( g_ItemToRepeat );
+			GetScreen()->SetCurItem( g_ItemToRepeat );
             DrawPanel->m_AutoPAN_Request = TRUE;
         }
         else
@@ -106,14 +107,14 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             DrawStruct->Place( this, DC );
             DrawPanel->m_AutoPAN_Request = FALSE;
         }
-        TestDanglingEnds( m_CurrentScreen->EEDrawList, DC );
+		TestDanglingEnds( GetScreen()->EEDrawList, DC );
         break;
 
     case ID_JUNCTION_BUTT:
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
-            g_ItemToRepeat = CreateNewJunctionStruct( DC, m_CurrentScreen->m_Curseur, TRUE );
-            m_CurrentScreen->SetCurItem( g_ItemToRepeat );
+			g_ItemToRepeat = CreateNewJunctionStruct( DC, GetScreen()->m_Curseur, TRUE );
+			GetScreen()->SetCurItem( g_ItemToRepeat );
             DrawPanel->m_AutoPAN_Request = TRUE;
         }
         else
@@ -121,7 +122,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             DrawStruct->Place( this, DC );
             DrawPanel->m_AutoPAN_Request = FALSE;
         }
-        TestDanglingEnds( m_CurrentScreen->EEDrawList, DC );
+		TestDanglingEnds( GetScreen()->EEDrawList, DC );
         break;
 
     case ID_WIRETOBUS_ENTRY_BUTT:
@@ -132,23 +133,23 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 CreateBusEntry( DC,
                                 (m_ID_current_state == ID_WIRETOBUS_ENTRY_BUTT) ?
                                 WIRE_TO_BUS : BUS_TO_BUS );
-            m_CurrentScreen->SetCurItem( DrawStruct );
+			GetScreen()->SetCurItem( DrawStruct );
             DrawPanel->m_AutoPAN_Request = TRUE;
         }
         else
         {
             DrawStruct->Place( this, DC );
-            m_CurrentScreen->SetCurItem( NULL );
-            TestDanglingEnds( m_CurrentScreen->EEDrawList, DC );
+			GetScreen()->SetCurItem( NULL );
+			TestDanglingEnds( GetScreen()->EEDrawList, DC );
             DrawPanel->m_AutoPAN_Request = FALSE;
         }
         break;
 
     case ID_SCHEMATIC_DELETE_ITEM_BUTT:
         LocateAndDeleteItem( this, DC );
-        m_CurrentScreen->SetModify();
-        m_CurrentScreen->SetCurItem( NULL );
-        TestDanglingEnds( m_CurrentScreen->EEDrawList, DC );
+		GetScreen()->SetModify();
+		GetScreen()->SetCurItem( NULL );
+		TestDanglingEnds( GetScreen()->EEDrawList, DC );
         break;
 
     case ID_WIRE_BUTT:
@@ -169,7 +170,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     case ID_TEXT_COMMENT_BUTT:
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
-            m_CurrentScreen->SetCurItem( CreateNewText( DC, LAYER_NOTES ) );
+			GetScreen()->SetCurItem( CreateNewText( DC, LAYER_NOTES ) );
             DrawPanel->m_AutoPAN_Request = TRUE;
         }
         else
@@ -182,42 +183,59 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     case ID_LABEL_BUTT:
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
-            m_CurrentScreen->SetCurItem( CreateNewText( DC, LAYER_LOCLABEL ) );
+			GetScreen()->SetCurItem( CreateNewText( DC, LAYER_LOCLABEL ) );
             DrawPanel->m_AutoPAN_Request = TRUE;
         }
         else
         {
             DrawStruct->Place( this, DC );
             DrawPanel->m_AutoPAN_Request = FALSE;
-            TestDanglingEnds( m_CurrentScreen->EEDrawList, DC );
+			TestDanglingEnds( GetScreen()->EEDrawList, DC );
         }
         break;
 
     case ID_GLABEL_BUTT:
+	case ID_HIERLABEL_BUTT:
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
-            m_CurrentScreen->SetCurItem( CreateNewText( DC, LAYER_GLOBLABEL ) );
+			if(m_ID_current_state == ID_GLABEL_BUTT)
+				GetScreen()->SetCurItem( CreateNewText( DC, LAYER_GLOBLABEL ) );
+			if(m_ID_current_state == ID_HIERLABEL_BUTT)
+				GetScreen()->SetCurItem( CreateNewText( DC, LAYER_HIERLABEL ) );
             DrawPanel->m_AutoPAN_Request = TRUE;
         }
         else
         {
             DrawStruct->Place( this, DC );
             DrawPanel->m_AutoPAN_Request = FALSE;
-            TestDanglingEnds( m_CurrentScreen->EEDrawList, DC );
+			TestDanglingEnds( GetScreen()->EEDrawList, DC );
         }
         break;
+	
+		if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
+		{
+			GetScreen()->SetCurItem( CreateNewText( DC, LAYER_HIERLABEL ) );
+			DrawPanel->m_AutoPAN_Request = TRUE;
+		}
+		else
+		{
+			DrawStruct->Place( this, DC );
+			DrawPanel->m_AutoPAN_Request = FALSE;
+			TestDanglingEnds( GetScreen()->EEDrawList, DC );
+		}
+		break;
 
     case ID_SHEET_SYMBOL_BUTT:
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
-            m_CurrentScreen->SetCurItem( CreateSheet( DC ) );
+			GetScreen()->SetCurItem( CreateSheet( DC ) );
             DrawPanel->m_AutoPAN_Request = TRUE;
         }
         else
         {
             DrawStruct->Place( this, DC );
             DrawPanel->m_AutoPAN_Request = FALSE;
-            TestDanglingEnds( m_CurrentScreen->EEDrawList, DC );
+			TestDanglingEnds( GetScreen()->EEDrawList, DC );
         }
         break;
 
@@ -233,24 +251,24 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
            && (DrawStruct->m_Flags == 0) )
         {
             if( m_ID_current_state == ID_IMPORT_GLABEL_BUTT )
-                m_CurrentScreen->SetCurItem(
+				GetScreen()->SetCurItem(
                          Import_PinSheet( (DrawSheetStruct*) DrawStruct, DC ) );
             else
-                m_CurrentScreen->SetCurItem(
+				GetScreen()->SetCurItem(
                     Create_PinSheet( (DrawSheetStruct*) DrawStruct, DC ) );
         }
         else if( (DrawStruct->Type() == DRAW_SHEETLABEL_STRUCT_TYPE)
                 && (DrawStruct->m_Flags != 0) )
         {
             DrawStruct->Place( this, DC );
-            TestDanglingEnds( m_CurrentScreen->EEDrawList, DC );
+			TestDanglingEnds( GetScreen()->EEDrawList, DC );
         }
         break;
 
     case ID_COMPONENT_BUTT:
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
-            m_CurrentScreen->SetCurItem( Load_Component( DC, wxEmptyString,
+			GetScreen()->SetCurItem( Load_Component( DC, wxEmptyString,
                                                          s_CmpNameList, TRUE ) );
             DrawPanel->m_AutoPAN_Request = TRUE;
         }
@@ -258,14 +276,14 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             DrawStruct->Place( this, DC );
             DrawPanel->m_AutoPAN_Request = FALSE;
-            TestDanglingEnds( m_CurrentScreen->EEDrawList, DC );
+			TestDanglingEnds( GetScreen()->EEDrawList, DC );
         }
         break;
 
     case ID_PLACE_POWER_BUTT:
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
-            m_CurrentScreen->SetCurItem(
+			GetScreen()->SetCurItem(
                 Load_Component( DC, wxT( "power" ), s_PowerNameList, FALSE ) );
             DrawPanel->m_AutoPAN_Request = TRUE;
         }
@@ -273,7 +291,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             DrawStruct->Place( this, DC );
             DrawPanel->m_AutoPAN_Request = FALSE;
-            TestDanglingEnds( m_CurrentScreen->EEDrawList, DC );
+			TestDanglingEnds( GetScreen()->EEDrawList, DC );
         }
         break;
 
@@ -294,14 +312,14 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 void WinEDA_SchematicFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 /***************************************************************************/
 
-/* Appelé sur un double click:
- *  pour un élément editable (textes, composant):
+/* Appelï¿½ sur un double click:
+ *  pour un ï¿½lï¿½ment editable (textes, composant):
  *      appel de l'editeur correspondant.
  *  pour une connexion en cours:
  *      termine la connexion
  */
 {
-    EDA_BaseStruct* DrawStruct = m_CurrentScreen->GetCurItem();
+	EDA_BaseStruct* DrawStruct = GetScreen()->GetCurItem();
     wxPoint         pos = GetPosition();
 
     switch( m_ID_current_state )
@@ -315,7 +333,7 @@ void WinEDA_SchematicFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags != 0) )
             break;
 
-        // Element localisé
+        // Element localisï¿½
         switch( DrawStruct->Type() )
         {
         case DRAW_SHEET_STRUCT_TYPE:
@@ -330,6 +348,7 @@ void WinEDA_SchematicFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         case DRAW_TEXT_STRUCT_TYPE:
         case DRAW_LABEL_STRUCT_TYPE:
         case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
+		case DRAW_HIER_LABEL_STRUCT_TYPE:
             EditSchematicText( (DrawTextStruct*) DrawStruct, DC );
             break;
 

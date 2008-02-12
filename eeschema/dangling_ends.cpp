@@ -98,7 +98,7 @@ void WinEDA_SchematicFrame::TestDanglingEnds( EDA_BaseStruct* DrawList, wxDC* DC
         for( DanglingItem = ItemList; DanglingItem != NULL; DanglingItem = nextitem )
         {
             nextitem = DanglingItem->m_Pnext;
-            delete DanglingItem;
+            SAFE_DELETE( DanglingItem );
         }
 
     ItemList = RebuildEndList( DrawList );
@@ -109,6 +109,7 @@ void WinEDA_SchematicFrame::TestDanglingEnds( EDA_BaseStruct* DrawList, wxDC* DC
         switch( DrawItem->Type() )
         {
         case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
+		case DRAW_HIER_LABEL_STRUCT_TYPE:
         case DRAW_LABEL_STRUCT_TYPE:
                 #undef STRUCT
                 #define STRUCT ( (DrawLabelStruct*) DrawItem )
@@ -146,7 +147,7 @@ LibDrawPin* WinEDA_SchematicFrame::LocatePinEnd( EDA_BaseStruct* DrawList,
                                                  const wxPoint&  pos )
 /********************************************************************/
 
-/* Teste si le point de coordonnées pos est sur l'extrémité d'une PIN
+/* Teste si le point de coordonnï¿½es pos est sur l'extrï¿½mitï¿½ d'une PIN
  *  retourne un pointeur sur la pin
  *  NULL sinon
  */
@@ -280,7 +281,7 @@ wxPoint ReturnPinPhysicalPosition( LibDrawPin*             Pin,
                                    EDA_SchComponentStruct* DrawLibItem )
 /****************************************************/
 
-/* Retourne la position physique de la pin, qui dépend de l'orientation
+/* Retourne la position physique de la pin, qui dï¿½pend de l'orientation
  *  du composant */
 {
     wxPoint PinPos = Pin->m_Pos;
@@ -316,8 +317,9 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
             break;
 
         case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
+		case DRAW_HIER_LABEL_STRUCT_TYPE:
                 #undef STRUCT
-                #define STRUCT ( (DrawGlobalLabelStruct*) DrawItem )
+                #define STRUCT ( (DrawLabelStruct*) DrawItem )
             item = new DanglingEndHandle( LABEL_END );
 
             item->m_Item = DrawItem;

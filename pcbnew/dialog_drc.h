@@ -24,6 +24,8 @@
 
 ////@begin includes
 #include "wx/notebook.h"
+#include "wxPcbStruct.h"
+#include "drc_stuff.h"
 ////@end includes
 
 

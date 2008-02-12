@@ -116,24 +116,28 @@ DrawPickedStruct * PickedItem, *PickedList = NULL;
 	for(DelStruct = GetScreen()->EEDrawList; DelStruct != NULL; DelStruct=DelStruct->Pnext)
 		DelStruct->m_Flags = 0;
 
-	BreakSegmentOnJunction( GetScreen() );
+	BreakSegmentOnJunction( (SCH_SCREEN*)GetScreen() );
 	DelStruct = GetScreen()->EEDrawList;
 	
 	/* Locate all the wires, bus or junction under the mouse cursor, and put them in a list
 		of items to delete
 	*/
+	SCH_SCREEN* screen = (SCH_SCREEN*)GetScreen(); 
+	EDA_BaseStruct* savedEEDrawList = screen->EEDrawList;
 	while ( DelStruct &&
-			(DelStruct = PickStruct(GetScreen()->m_Curseur,
-				DelStruct, JUNCTIONITEM|WIREITEM|BUSITEM)) != NULL )
+			(DelStruct = PickStruct(screen->m_Curseur,
+				screen, JUNCTIONITEM|WIREITEM|BUSITEM)) != NULL )
 	{
+		
 		DelStruct->m_Flags = SELECTEDNODE|STRUCT_DELETED;
 		/* Put this structure in the picked list: */
 		PickedItem = new DrawPickedStruct(DelStruct);
 		PickedItem->Pnext = PickedList;
 		PickedList = PickedItem;
 		DelStruct=DelStruct->Pnext;
+		screen->EEDrawList = DelStruct; 
 	}
-
+	GetScreen()->EEDrawList = savedEEDrawList; 
 	 /* Mark all wires, junctions, .. connected to one of the item to delete
 	*/
 	if ( DeleteFullConnection )
@@ -224,7 +228,7 @@ DrawPickedStruct * PickedItem, *PickedList = NULL;
 			if ( DelStruct->Type() != DRAW_LABEL_STRUCT_TYPE ) continue;
 			GetScreen()->m_Curseur = ((DrawTextStruct*)DelStruct)->m_Pos;
 			EDA_BaseStruct * TstStruct =
-				PickStruct(GetScreen()->m_Curseur, GetScreen()->EEDrawList,WIREITEM|BUSITEM);
+				PickStruct(GetScreen()->m_Curseur, GetScreen(),WIREITEM|BUSITEM);
 			if ( TstStruct && TstStruct->m_Flags & STRUCT_DELETED )
 			{
 				DelStruct->m_Flags |= STRUCT_DELETED;
@@ -267,33 +271,33 @@ bool LocateAndDeleteItem(WinEDA_SchematicFrame * frame, wxDC * DC)
 */
 {
 EDA_BaseStruct * DelStruct;
-SCH_SCREEN * screen = frame->GetScreen();
+SCH_SCREEN * screen = (SCH_SCREEN*)(frame->GetScreen());
 bool item_deleted = FALSE;
 	
 	DelStruct = PickStruct(screen->m_Curseur,
-			screen->EEDrawList, MARKERITEM);
+			screen, MARKERITEM);
 	if( DelStruct == NULL ) DelStruct = PickStruct(screen->m_Curseur,
-			screen->EEDrawList, JUNCTIONITEM);
+			screen, JUNCTIONITEM);
 	if( DelStruct == NULL ) DelStruct = PickStruct(screen->m_Curseur,
-			screen->EEDrawList, NOCONNECTITEM);
+			screen, NOCONNECTITEM);
 	if( DelStruct == NULL ) DelStruct = PickStruct(screen->m_Curseur,
-			screen->EEDrawList, RACCORDITEM);
+			screen, RACCORDITEM);
 	if( DelStruct == NULL ) DelStruct = PickStruct(screen->m_Curseur,
-			screen->EEDrawList, WIREITEM|BUSITEM);
+			screen, WIREITEM|BUSITEM);
 	if( DelStruct == NULL ) DelStruct = PickStruct(screen->m_Curseur,
-			screen->EEDrawList, DRAWITEM);
+			screen, DRAWITEM);
 	if( DelStruct == NULL ) DelStruct = PickStruct(screen->m_Curseur,
-			screen->EEDrawList, TEXTITEM|LABELITEM);
+			screen, TEXTITEM|LABELITEM);
 	if( DelStruct == NULL ) DelStruct = PickStruct(screen->m_Curseur,
-			screen->EEDrawList, LIBITEM);
+			screen, LIBITEM);
 	if( DelStruct == NULL ) DelStruct = PickStruct(screen->m_Curseur,
-			screen->EEDrawList, SHEETITEM);
+			screen, SHEETITEM);
 
 	if (DelStruct)
 	{
 		g_ItemToRepeat = NULL;
 		DeleteStruct(frame->DrawPanel, DC, DelStruct);
-		frame->TestDanglingEnds(frame->m_CurrentScreen->EEDrawList, DC);
+		frame->TestDanglingEnds(frame->GetScreen()->EEDrawList, DC);
 		frame->GetScreen()->SetModify();
 		item_deleted = TRUE;
 	}
@@ -331,6 +335,7 @@ DrawSheetLabelStruct* SheetLabel, *NextLabel;
 	if (DrawStruct->Type() == DRAW_SHEETLABEL_STRUCT_TYPE)
 	{	/* Cette stucture est rattachee a une feuille, et n'est pas
 		accessible par la liste globale directement */
+		//this structure has a sheet attached, which we must find.
 		DrawList = Screen->EEDrawList;
 		for ( ; DrawList != NULL; DrawList = DrawList->Pnext )
 		{
@@ -342,7 +347,7 @@ DrawSheetLabelStruct* SheetLabel, *NextLabel;
 			{
 				((DrawSheetStruct *) DrawList)->m_Label =
 							(DrawSheetLabelStruct *)SheetLabel->Pnext;
-				delete DrawStruct;
+				SAFE_DELETE( DrawStruct );
 				return;
 			}
 			else while( SheetLabel->Pnext )/* Examen de la liste dependante */
@@ -351,7 +356,7 @@ DrawSheetLabelStruct* SheetLabel, *NextLabel;
 				if( NextLabel == (DrawSheetLabelStruct*) DrawStruct )
 				{
 					SheetLabel->Pnext = (EDA_BaseStruct *)NextLabel->Pnext;
-					delete DrawStruct;
+					SAFE_DELETE( DrawStruct );
 					return;
 				}
 				SheetLabel = NextLabel;
@@ -359,7 +364,6 @@ DrawSheetLabelStruct* SheetLabel, *NextLabel;
 		}
 		return;
 	}
-
 
 	if (DrawStruct->Type() == DRAW_PICK_ITEM_STRUCT_TYPE)
 	{
@@ -369,7 +373,7 @@ DrawSheetLabelStruct* SheetLabel, *NextLabel;
 			if (PickedList->m_PickedStruct == Screen->EEDrawList)
 			{
 				Screen->EEDrawList = Screen->EEDrawList->Pnext;
-				delete DrawStruct;
+				SAFE_DELETE( DrawStruct );
 			}
 			else
 			{
@@ -379,7 +383,7 @@ DrawSheetLabelStruct* SheetLabel, *NextLabel;
 					if (DrawList->Pnext == PickedList->m_PickedStruct)
 					{
 						DrawList->Pnext = DrawList->Pnext->Pnext;
-						delete DrawStruct;
+						SAFE_DELETE( DrawStruct );
 						return;
 					}
 					DrawList = DrawList->Pnext;
@@ -393,7 +397,7 @@ DrawSheetLabelStruct* SheetLabel, *NextLabel;
 		if (DrawStruct == Screen->EEDrawList)
 		{
 			Screen->EEDrawList = DrawStruct->Pnext;
-			delete DrawStruct;
+			SAFE_DELETE( DrawStruct );
 		}
 		else
 		{
@@ -403,7 +407,7 @@ DrawSheetLabelStruct* SheetLabel, *NextLabel;
 				if (DrawList->Pnext == DrawStruct)
 				{
 					DrawList->Pnext = DrawStruct->Pnext;
-					delete DrawStruct;
+					SAFE_DELETE( DrawStruct );
 					return;
 				}
 				DrawList = DrawList->Pnext;
@@ -423,7 +427,7 @@ SCH_SCREEN * screen;
 EDA_BaseStruct * DrawStruct, * NextStruct;
 DrawMarkerStruct * Marker;
 
-	EDA_ScreenList ScreenList(NULL);
+	EDA_ScreenList ScreenList;
 	for ( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
 	{
 		for ( DrawStruct = screen->EEDrawList; DrawStruct != NULL; DrawStruct = NextStruct)
@@ -471,7 +475,7 @@ LibEDA_BaseStruct *PreviousDrawItem;
 		if( LibEntry->m_Drawings == DrawItem )
 		{
 			LibEntry->m_Drawings = DrawItem->Next();
-			delete DrawItem;
+			SAFE_DELETE( DrawItem );
 		}
 
 		else	/* Cas des autres items */
@@ -480,7 +484,7 @@ LibEDA_BaseStruct *PreviousDrawItem;
 			if(PreviousDrawItem->Pnext == DrawItem)
 			{
 				PreviousDrawItem->Pnext = DrawItem->Pnext;
-				delete DrawItem; break;
+				SAFE_DELETE( DrawItem ); break;
 			}
 			PreviousDrawItem = PreviousDrawItem->Next();
 		}
@@ -488,7 +492,7 @@ LibEDA_BaseStruct *PreviousDrawItem;
 
 	else /* Structure non reliee a un composant */
 	{
-		delete DrawItem;
+		SAFE_DELETE( DrawItem );
 	}
 }
 

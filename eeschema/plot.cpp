@@ -379,7 +379,7 @@ int orient, color = -1;
 	}
 
 	SetCurrentLineWidth(-1);
-
+	//not sure what to do here in terms of plotting components that may have multiple REFERENCE entries. 
 	if( !IsMulti || (FieldNumber != REFERENCE) )
 	{
 		PlotGraphicText( g_PlotFormat, wxPoint(px, py), color, Field->m_Text,
@@ -520,6 +520,7 @@ int HalfSize;
 	switch ( Struct->Type() )
 		{
 		case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
+		case DRAW_HIER_LABEL_STRUCT_TYPE:
 		case DRAW_LABEL_STRUCT_TYPE:
 		case DRAW_TEXT_STRUCT_TYPE:
 			Text = ((DrawTextStruct*)Struct)->m_Text;
@@ -529,8 +530,9 @@ int HalfSize;
 			pX = ((DrawTextStruct*)Struct)->m_Pos.x;
 			pY = ((DrawTextStruct*)Struct)->m_Pos.y;
 			offset = TXTMARGE;
-			if ( Struct->Type() == DRAW_GLOBAL_LABEL_STRUCT_TYPE)
-				offset += Size.x;	// We must also draw the Glabel graphic symbol
+			if ( Struct->Type() == DRAW_GLOBAL_LABEL_STRUCT_TYPE ||
+			   	 Struct->Type() == DRAW_HIER_LABEL_STRUCT_TYPE )
+				offset += Size.x;	// We must draw the Glabel graphic symbol
 			if ( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
 				color = ReturnLayerColor(((DrawTextStruct*)Struct)->m_Layer);
 			break;
@@ -545,7 +547,8 @@ int HalfSize;
 	switch(Orient)
 		{
 		case 0:		/* Orientation horiz normale */
-			if( Struct->Type() == DRAW_GLOBAL_LABEL_STRUCT_TYPE )
+			if( Struct->Type() == DRAW_GLOBAL_LABEL_STRUCT_TYPE ||
+			  	Struct->Type() == DRAW_HIER_LABEL_STRUCT_TYPE )
 				PlotGraphicText(g_PlotFormat, wxPoint(pX - offset, pY),
 						color, Text, TEXT_ORIENT_HORIZ, Size,
 						GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER);
@@ -556,7 +559,8 @@ int HalfSize;
 			break;
 
 		case 1:		/* Orientation vert UP */
-			if( Struct->Type() == DRAW_GLOBAL_LABEL_STRUCT_TYPE )
+			if( Struct->Type() == DRAW_GLOBAL_LABEL_STRUCT_TYPE ||
+				Struct->Type() == DRAW_HIER_LABEL_STRUCT_TYPE )
 				PlotGraphicText(g_PlotFormat, wxPoint(pX, pY + offset),
 						color, Text, TEXT_ORIENT_VERT, Size,
 						GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP);
@@ -567,7 +571,8 @@ int HalfSize;
 			break;
 
 		case 2:		/* Horiz Orientation - Right justified */
-			if( Struct->Type() == DRAW_GLOBAL_LABEL_STRUCT_TYPE)
+			if( Struct->Type() == DRAW_GLOBAL_LABEL_STRUCT_TYPE ||
+				Struct->Type() == DRAW_HIER_LABEL_STRUCT_TYPE )
 				PlotGraphicText(g_PlotFormat, wxPoint(pX + offset, pY),
 						color, Text, TEXT_ORIENT_HORIZ, Size,
 						GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
@@ -578,7 +583,8 @@ int HalfSize;
 			break;
 
 		case 3:		/* Orientation vert BOTTOM */
-			if( Struct->Type() == DRAW_GLOBAL_LABEL_STRUCT_TYPE)
+			if( Struct->Type() == DRAW_GLOBAL_LABEL_STRUCT_TYPE ||
+				Struct->Type() == DRAW_HIER_LABEL_STRUCT_TYPE )
 				PlotGraphicText(g_PlotFormat, wxPoint(pX, pY - offset),
 						color, Text, TEXT_ORIENT_VERT, Size,
 						GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM);
@@ -590,7 +596,8 @@ int HalfSize;
 		}
 
 	/* Trace du symbole associe au label global */
-	if( Struct->Type() == DRAW_GLOBAL_LABEL_STRUCT_TYPE)
+	if( Struct->Type() == DRAW_GLOBAL_LABEL_STRUCT_TYPE ||
+		Struct->Type() == DRAW_HIER_LABEL_STRUCT_TYPE )
 	{
 		int jj, imax;
 		HalfSize = Size.x / 2;

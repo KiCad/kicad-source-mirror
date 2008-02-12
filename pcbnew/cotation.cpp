@@ -231,7 +231,7 @@ COTATION* WinEDA_PcbFrame::Begin_Cotation( COTATION* Cotation, wxDC* DC )
         Cotation = new COTATION( m_Pcb );
         Cotation->m_Flags = IS_NEW;
 
-        Cotation->SetLayer( GetScreen()->m_Active_Layer );
+        Cotation->SetLayer( ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
         Cotation->m_Width = g_DesignSettings.m_DrawSegmentWidth;
         Cotation->m_Text->m_Width = Cotation->m_Width;
 

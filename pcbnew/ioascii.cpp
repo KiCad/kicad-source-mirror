@@ -619,7 +619,7 @@ bool WriteSheetDescr( BASE_SCREEN* screen, FILE* File )
  * @param File = an openen FILE to write info
 */
 {
-    Ki_PageDescr* sheet = screen->m_CurrentSheet;
+    Ki_PageDescr* sheet = screen->m_CurrentSheetDesc;
 
     fprintf( File, "$SHEETDESCR\n" );
     fprintf( File, "Sheet %s %d %d\n",
@@ -659,7 +659,7 @@ static bool ReadSheetDescr( BASE_SCREEN* screen, FILE* File, int* LineNum )
             {
                 if( stricmp( CONV_TO_UTF8( sheet->m_Name ), text ) == 0 )
                 {
-                    screen->m_CurrentSheet = sheet;
+                    screen->m_CurrentSheetDesc = sheet;
                     if( sheet == &g_Sheet_user )
                     {
                         text = strtok( NULL, " \t\n\r" );

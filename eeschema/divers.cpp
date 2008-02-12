@@ -14,28 +14,6 @@
 #include "protos.h"
 
 
-/**********************************************************/
-SCH_SCREEN * CreateNewScreen(WinEDA_DrawFrame * frame_source,
-		SCH_SCREEN * OldScreen, int TimeStamp)
-/**********************************************************/
-/* Routine de creation ( par allocation memoire ) d'un nouvel ecran
-	cet ecran est en chainage arriere avec OldScreen
-	la valeur TimeStamp est attribuee au parametre NewScreen->TimeStamp
-*/
-{
-SCH_SCREEN * NewScreen;
-
-	NewScreen = new SCH_SCREEN(NULL, frame_source, SCHEMATIC_FRAME);
-
-	NewScreen->SetRefreshReq();
-	if(OldScreen) NewScreen->m_Company = OldScreen->m_Company;
-	NewScreen->m_TimeStamp = TimeStamp;
-
-	NewScreen->Pback = OldScreen;
-
-	return(NewScreen);
-}
-
 /**************************************/
 void SetFlagModify(BASE_SCREEN * Window)
 /**************************************/

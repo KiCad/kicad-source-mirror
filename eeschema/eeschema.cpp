@@ -24,10 +24,6 @@
 #include "bitmaps.h"
 #include "eda_dde.h"
 
-
-/* Routines locales */
-static void CreateScreens();
-
 // Global variables
 wxString    g_Main_Title( wxT( "EESchema" ) );
 
@@ -60,8 +56,6 @@ bool WinEDA_App::OnInit()
 
     if( argc > 1 )
         FFileName = argv[1];
-
-    CreateScreens();
 
     /* init EESCHEMA */
     GetSettings();                                  // read current setup
@@ -106,25 +100,3 @@ bool WinEDA_App::OnInit()
     return TRUE;
 }
 
-
-/******************************/
-static void CreateScreens()
-/******************************/
-
-/*
- *  Fonction d'init des écrans utilisés dans EESchema:
- */
-{
-    /* creation des ecrans Sch , Lib  */
-
-    if( ScreenSch == NULL )
-        ScreenSch = new SCH_SCREEN( SCHEMATIC_FRAME );
-    ScreenSch->m_FileName = g_DefaultSchematicFileName;
-    ScreenSch->m_Date = GenDate();
-    ActiveScreen = ScreenSch;
-
-    if( ScreenLib == NULL )
-        ScreenLib = new SCH_SCREEN( LIBEDITOR_FRAME );
-    ScreenLib->SetZoom( 4 );
-    ScreenLib->m_UndoRedoCountMax = 10;
-}

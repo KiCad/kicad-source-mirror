@@ -209,7 +209,7 @@ wxString msg;
 			if( m_FilesMenu->FindItem(ID_LOAD_FILE_1 + ii) )
 				{
 				item = m_FilesMenu->Remove(ID_LOAD_FILE_1 + ii);
-				if ( item ) delete item;
+				if ( item ){ SAFE_DELETE( item );}
 				}
 			}
 		for ( ii = 0; ii < max_file; ii++ )

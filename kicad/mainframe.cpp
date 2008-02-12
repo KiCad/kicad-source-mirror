@@ -135,6 +135,9 @@ void WinEDA_MainFrame::PrintMsg( const wxString& text )
 {
     m_DialogWin->SetFont( *g_StdFont );
     m_DialogWin->AppendText( text );
+#ifdef DEBUG
+	printf("%s\n", (const char*)text.mb_str() ); 
+#endif
 }
 
 

@@ -433,10 +433,10 @@ wxString msg;
 			break;
 		}
 
-	if ( m_Parent->m_CurrentScreen )
+	if ( m_Parent->GetScreen() )
 	{
-		if ( setgrid ) m_Parent->m_CurrentScreen->SetGrid(grid);
-		m_Parent->m_CurrentScreen->SetRefreshReq();
+		if ( setgrid ) m_Parent->GetScreen()->SetGrid(grid);
+		m_Parent->GetScreen()->SetRefreshReq();
 	}
 }
 

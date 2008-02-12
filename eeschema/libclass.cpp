@@ -41,7 +41,7 @@ void FreeLibraryEntry( LibCmpEntry* Entry )
 /* Used by PQFreeFunc() to delete all entries
  */
 {
-    delete Entry;
+	SAFE_DELETE( Entry );
 }
 
 
@@ -197,7 +197,7 @@ EDA_LibComponentStruct::~EDA_LibComponentStruct()
     while( field )
     {
         TempField = field; field = (LibDrawField*) field->Pnext;
-        delete TempField;
+		SAFE_DELETE( TempField );
     }
 
     /* suppression des elements dependants */
@@ -205,7 +205,7 @@ EDA_LibComponentStruct::~EDA_LibComponentStruct()
     while( DrawItem )
     {
         NextDrawItem = DrawItem->Next();
-        delete DrawItem;
+		SAFE_DELETE( DrawItem );
         DrawItem = NextDrawItem;
     }
 }

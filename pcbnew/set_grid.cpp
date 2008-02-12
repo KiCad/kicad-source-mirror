@@ -84,7 +84,7 @@ wxString msg;
 PCB_SCREEN * screen;
 	
 	m_Parent = parent;
-	screen = m_Parent->GetScreen();	
+	screen = (PCB_SCREEN*)(m_Parent->GetScreen());	
 
 	g_UserGrid = screen->m_UserGrid;
 	g_UserGrid_Unit = screen->m_UserGridUnit;

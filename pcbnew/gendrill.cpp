@@ -44,7 +44,7 @@ static int                     s_Zeros_Format = DECIMAL_FORMAT;
 static DrillPrecision          s_Precision( 2, 4 );
 
 static bool                    DrillOriginIsAuxAxis;    // Axis selection (main / auxiliary) for Drill Origin coordinates
-static wxPoint                 File_Drill_Offset;       /* Offset des coord de percage pour le fichier généré */
+static wxPoint                 File_Drill_Offset;       /* Offset des coord de percage pour le fichier gï¿½nï¿½rï¿½ */
 static bool                    Minimal = false;
 static bool                    Mirror  = true;
 
@@ -629,7 +629,7 @@ void WinEDA_DrillFrame::Write_Excellon_Header( FILE* aFile )
 /* Print the DRILL file header. The full header is:
  * M48
  * ;DRILL file {PCBNEW (2007-11-29-b)} date 17/1/2008-21:02:35
- * ;FORMAT={2:4 / absolute / Pouces / Suppression zeros de tête}
+ * ;FORMAT={2:4 / absolute / Pouces / Suppression zeros de tï¿½te}
  * R,T
  * VER,1
  * FMAT,2
@@ -748,7 +748,7 @@ void WinEDA_DrillFrame::GenDrillMap( const wxString aFileName,
     GenDrillMapFile( m_Parent->m_Pcb,
                      dest,
                      FullFileName,
-                     m_Parent->m_CurrentScreen->m_CurrentSheet->m_Size,
+                     m_Parent->m_CurrentScreen->m_CurrentSheetDesc->m_Size,
                      s_HoleListBuffer,
                      s_ToolListBuffer,
                      s_Unit_Drill_is_Inch,

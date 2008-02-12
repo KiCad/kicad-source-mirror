@@ -61,8 +61,8 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
     m_HTOOL_current_state = 0;
     m_Draw_Axis           = FALSE;          // TRUE pour avoir les axes dessines
     m_Draw_Grid           = FALSE;          // TRUE pour avoir la axes dessinee
-    m_Draw_Sheet_Ref      = FALSE;          // TRUE pour avoir le cartouche dessiné
-    m_Print_Sheet_Ref     = TRUE;           // TRUE pour avoir le cartouche imprimé
+    m_Draw_Sheet_Ref      = FALSE;          // TRUE pour avoir le cartouche dessinï¿½
+    m_Print_Sheet_Ref     = TRUE;           // TRUE pour avoir le cartouche imprimï¿½
     m_Draw_Auxiliary_Axis = FALSE;          // TRUE pour avoir les axes auxiliares dessines
     m_UnitType = INTERNAL_UNIT_TYPE;        // Internal unit = inch
 
@@ -266,10 +266,10 @@ void WinEDA_DrawFrame::OnSelectGrid( wxCommandEvent& event )
     if( id < 0 )
         return;
 
-    m_CurrentScreen->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
-    wxSize grid = m_CurrentScreen->GetGrid();
-    m_CurrentScreen->SetGrid( g_GridList[id] );
-    wxSize newgrid = m_CurrentScreen->GetGrid();
+	GetScreen()->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
+	wxSize grid = GetScreen()->GetGrid();
+	GetScreen()->SetGrid( g_GridList[id] );
+	wxSize newgrid = GetScreen()->GetGrid();
     if( newgrid.x != grid.x || newgrid.y != grid.y )
         Recadre_Trace( FALSE );
 }
@@ -326,10 +326,10 @@ void WinEDA_DrawFrame::OnSelectZoom( wxCommandEvent& event )  // fonction virtue
         int zoom = 1 << id;
         if( zoom > m_ZoomMaxValue )
             zoom = m_ZoomMaxValue;
-        if( m_CurrentScreen->GetZoom() == zoom )
+		if( GetScreen()->GetZoom() == zoom )
             return;
-        m_CurrentScreen->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
-        m_CurrentScreen->SetZoom( zoom );
+		GetScreen()->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
+		GetScreen()->SetZoom( zoom );
         Recadre_Trace( FALSE );
     }
 }
@@ -339,7 +339,7 @@ int WinEDA_DrawFrame::GetZoom(void)
 /***********************************/
 /* Return the current zoom level */
 {
-	return m_CurrentScreen->GetZoom();
+	return GetScreen()->GetZoom();
 }
 
 
@@ -581,18 +581,18 @@ void WinEDA_DrawFrame::OnZoom( int zoom_type )
 /* Fonction de traitement du zoom
  *  Modifie le facteur de zoom et reaffiche l'ecran
  *  Pour les commandes par menu Popup ou par le clavier, le curseur est
- *  replacé au centre de l'ecran
+ *  replacï¿½ au centre de l'ecran
  */
 {
-   if( DrawPanel == NULL )
-        return;
+	if( DrawPanel == NULL )
+		return;
 
     bool    move_mouse_cursor = FALSE;
     int     x, y;
     wxPoint old_pos;
 
     DrawPanel->GetViewStart( &x, &y );
-    old_pos = m_CurrentScreen->m_Curseur;
+	old_pos = GetScreen()->m_Curseur;
 
     switch( zoom_type )
     {
@@ -603,9 +603,9 @@ void WinEDA_DrawFrame::OnZoom( int zoom_type )
 
     case ID_ZOOM_PLUS_BUTT:
         if( zoom_type == ID_ZOOM_PLUS_BUTT )
-            m_CurrentScreen->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
+			GetScreen()->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
 
-        m_CurrentScreen->SetPreviousZoom();
+		GetScreen()->SetPreviousZoom();
         
         Recadre_Trace( move_mouse_cursor );
         break;
@@ -617,8 +617,8 @@ void WinEDA_DrawFrame::OnZoom( int zoom_type )
 
     case ID_ZOOM_MOINS_BUTT:
         if( zoom_type == ID_ZOOM_MOINS_BUTT )
-            m_CurrentScreen->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
-        m_CurrentScreen->SetNextZoom();
+			GetScreen()->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
+		GetScreen()->SetNextZoom();
         Recadre_Trace( move_mouse_cursor );
         break;
 
@@ -673,7 +673,7 @@ void WinEDA_DrawFrame::OnPanning( int direction )
 /* Fonction de traitement du zoom
  *  Modifie le facteur de zoom et reaffiche l'ecran
  *  Pour les commandes par menu Popup ou par le clavier, le curseur est
- *  replacé au centre de l'ecran
+ *  replacï¿½ au centre de l'ecran
  */
 {
     if( DrawPanel == NULL )
@@ -759,15 +759,15 @@ void WinEDA_DrawFrame::AdjustScrollBars()
     wxSize  draw_size, panel_size;
     wxSize  scrollbar_number;
     wxPoint scrollbar_pos;
-    int     zoom = m_CurrentScreen->GetZoom();
+	int     zoom = GetScreen()->GetZoom();
     int     xUnit, yUnit;
 
-    if( m_CurrentScreen == NULL )
+	if( GetScreen() == NULL )
         return;
     if( DrawPanel == NULL )
         return;
 
-    draw_size = m_CurrentScreen->ReturnPageSize();
+	draw_size = GetScreen()->ReturnPageSize();
 
     // La zone d'affichage est reglee a une taille double de la feuille de travail:
     draw_size.x *= 2; draw_size.y *= 2;
@@ -780,20 +780,20 @@ void WinEDA_DrawFrame::AdjustScrollBars()
     draw_size.y  += panel_size.y / 2;
 
 
-    if( m_CurrentScreen->m_Center )
+	if( GetScreen()->m_Center )
     {
-        m_CurrentScreen->m_DrawOrg.x = -draw_size.x / 2;
-        m_CurrentScreen->m_DrawOrg.y = -draw_size.y / 2;
+		GetScreen()->m_DrawOrg.x = -draw_size.x / 2;
+		GetScreen()->m_DrawOrg.y = -draw_size.y / 2;
     }
     else
     {
-        m_CurrentScreen->m_DrawOrg.x = -panel_size.x / 2;
-        m_CurrentScreen->m_DrawOrg.y = -panel_size.y / 2;
+		GetScreen()->m_DrawOrg.x = -panel_size.x / 2;
+		GetScreen()->m_DrawOrg.y = -panel_size.y / 2;
     }
 
     // DrawOrg est rendu multiple du zoom min :
-    m_CurrentScreen->m_DrawOrg.x -= m_CurrentScreen->m_DrawOrg.x % 256;
-    m_CurrentScreen->m_DrawOrg.y -= m_CurrentScreen->m_DrawOrg.y % 256;
+	GetScreen()->m_DrawOrg.x -= GetScreen()->m_DrawOrg.x % 256;
+	GetScreen()->m_DrawOrg.y -= GetScreen()->m_DrawOrg.y % 256;
 
     // Calcul du nombre de scrolls  (en unites de scrool )
     scrollbar_number.x = draw_size.x / (DrawPanel->m_Scroll_unit * zoom);
@@ -808,10 +808,10 @@ void WinEDA_DrawFrame::AdjustScrollBars()
     xUnit *= zoom; yUnit *= zoom;
 
     // Calcul de la position, curseur place au centre d'ecran
-    scrollbar_pos = m_CurrentScreen->m_Curseur;
+	scrollbar_pos = GetScreen()->m_Curseur;
 
-    scrollbar_pos.x -= m_CurrentScreen->m_DrawOrg.x;
-    scrollbar_pos.y -= m_CurrentScreen->m_DrawOrg.y;
+	scrollbar_pos.x -= GetScreen()->m_DrawOrg.x;
+	scrollbar_pos.y -= GetScreen()->m_DrawOrg.y;
 
     scrollbar_pos.x -= panel_size.x / 2;
     scrollbar_pos.y -= panel_size.y / 2;
@@ -823,15 +823,15 @@ void WinEDA_DrawFrame::AdjustScrollBars()
 
     scrollbar_pos.x /= xUnit;
     scrollbar_pos.y /= yUnit;
-    m_CurrentScreen->m_ScrollbarPos    = scrollbar_pos;
-    m_CurrentScreen->m_ScrollbarNumber = scrollbar_number;
+	GetScreen()->m_ScrollbarPos    = scrollbar_pos;
+	GetScreen()->m_ScrollbarNumber = scrollbar_number;
 
     DrawPanel->SetScrollbars( DrawPanel->m_Scroll_unit,
                               DrawPanel->m_Scroll_unit,
-                              m_CurrentScreen->m_ScrollbarNumber.x,
-                              m_CurrentScreen->m_ScrollbarNumber.y,
-                              m_CurrentScreen->m_ScrollbarPos.x,
-                              m_CurrentScreen->m_ScrollbarPos.y, TRUE );
+							  GetScreen()->m_ScrollbarNumber.x,
+							GetScreen()->m_ScrollbarNumber.y,
+							GetScreen()->m_ScrollbarPos.x,
+							GetScreen()->m_ScrollbarPos.y, TRUE );
 }
 
 
@@ -839,8 +839,8 @@ void WinEDA_DrawFrame::AdjustScrollBars()
 void WinEDA_DrawFrame::SetDrawBgColor( int color_num )
 /****************************************************/
 
-/* met a jour la couleur de fond pour les tracés
- *  seules les couleurs BLACK ou WHITE sont autorisées
+/* met a jour la couleur de fond pour les tracï¿½s
+ *  seules les couleurs BLACK ou WHITE sont autorisï¿½es
  *  le parametre XorMode est mis a jour selon la couleur du fond
  */
 {

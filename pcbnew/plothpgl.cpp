@@ -39,8 +39,8 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer )
     scale_y = Scale_Y * SCALE_HPGL;
 
     // calcul en unites internes des dimensions de la feuille ( connues en 1/1000 pouce )
-    SheetSize.x = m_CurrentScreen->m_CurrentSheet->m_Size.x * U_PCB;
-    SheetSize.y = m_CurrentScreen->m_CurrentSheet->m_Size.y * U_PCB;
+    SheetSize.x = m_CurrentScreen->m_CurrentSheetDesc->m_Size.x * U_PCB;
+    SheetSize.y = m_CurrentScreen->m_CurrentSheetDesc->m_Size.y * U_PCB;
 
     g_PlotOffset.x = 0;
     g_PlotOffset.y = (int) (SheetSize.y * scale_y);

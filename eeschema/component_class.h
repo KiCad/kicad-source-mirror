@@ -11,10 +11,11 @@
 
 #include "macros.h"
 #include "base_struct.h"
-
+#include <wx/arrstr.h>
+#include "class_screen.h"
+#include <wx/dynarray.h>
 
 /* Definition de la representation du composant */
-#define NUMBER_OF_FIELDS 12 /* Nombre de champs de texte affectes au composant */
 enum  NumFieldType {
     REFERENCE = 0,          /* Champ Reference of part, i.e. "IC21" */
     VALUE,                  /* Champ Value of part, i.e. "3.3K" */
@@ -27,7 +28,8 @@ enum  NumFieldType {
     FIELD5,
     FIELD6,
     FIELD7,
-    FIELD8
+    FIELD8, 
+	NUMBER_OF_FIELDS  		/* Nombre de champs de texte affectes au composant */
 };
 
 
@@ -64,7 +66,7 @@ public:
 
 /* the class DrawPartStruct describes a basic virtual component
  *  Not used directly:
- *  used classes are EDA_SchComponentStruct (the "classic" schematic component
+ *  used classes are EDA_SchComponentStruct (the "classic" schematic component, below)
  *  and the Pseudo component DrawSheetStruct
  */
 class DrawPartStruct : public EDA_BaseStruct
@@ -83,26 +85,25 @@ public:
     {
         return wxT( "DrawPart" );
     }
-
-    
-    /**
-     * Function GetReference
-     * returns a reference to the Reference
-     */
-    const wxString& GetReference() { return m_Field[REFERENCE].m_Text; }
 };
 
-
+WX_DECLARE_OBJARRAY(DrawSheetList, ArrayOfSheetLists); 
 /* the class EDA_SchComponentStruct describes a real component */
 class EDA_SchComponentStruct : public DrawPartStruct
 {
 public:
-    int   m_RefIdNumber;        /* reference count: for U1, R2 .. it is the 1 or 2 value */
     int   m_Multi;              /* In multi unit chip - which unit to draw. */
-    int   m_FlagControlMulti;
-    int   m_Convert;            /* Gestion des mutiples representations (ex: conversion De Morgan) */
+    //int   m_FlagControlMulti;
+	ArrayOfSheetLists  m_UsedOnSheets; 
+    int   m_Convert;            /* Gestion (management) des mutiples representations (ex: conversion De Morgan) */
     int   m_Transform[2][2];    /* The rotation/mirror transformation matrix. */
     bool* m_PinIsDangling;      // liste des indicateurs de pin non connectee
+
+	wxArrayString m_Paths; // /sheet1/C102, /sh2/sh1/U32 etc.
+	wxArrayString m_References; // C102, U32 etc.
+	wxString	  m_PrefixString; 	//C, R, U, Q etc - the first character which typically indicates what the component is.
+								//determined, upon placement, from the library component.
+								//determined, upon file load, by the first non-digits in the reference fields.
 
 public:
     EDA_SchComponentStruct( const wxPoint& pos = wxPoint( 0, 0 ) );
@@ -142,7 +143,13 @@ public:
     void                    SwapData( EDA_SchComponentStruct* copyitem );
 
     virtual void            Place( WinEDA_DrawFrame* frame, wxDC* DC );
-    
+
+	
+	//returns a unique ID, in the form of a path.
+	wxString 		GetPath( DrawSheetList* sheet); 
+	const wxString 	GetRef( DrawSheetList* sheet ); 
+	void 			SetRef( DrawSheetList* sheet, wxString ref ); 
+	void			ClearRefs(); 
 #if defined(DEBUG)    
     /**
      * Function Show

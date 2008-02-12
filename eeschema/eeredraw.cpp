@@ -35,7 +35,7 @@ char marq_bitmap[]=
 char marqERC_bitmap[]=
 	{
 	8, 8, 0, 0,	/* Dimensions x et y , offsets x et y du bitmap de marqueurs*/
-	-1,			/* Color: -1 = couleur non précisée */
+	-1,			/* Color: -1 = couleur non prï¿½cisï¿½e */
 	1,1,1,1,1,0,0,0,
 	1,1,1,0,1,0,0,0,
 	1,1,1,1,0,0,0,0,
@@ -129,18 +129,18 @@ wxString title;
 void WinEDA_DrawPanel::PrintPage(wxDC * DC, bool Print_Sheet_Ref, int PrintMask)
 /*******************************************************************************/
 {
-BASE_SCREEN * screen, * oldscreen = m_Parent->GetScreen();
+BASE_SCREEN * screen; // * oldscreen = m_Parent->GetScreen();
 
 	wxBeginBusyCursor();
 		
 
-	screen = m_Parent->m_CurrentScreen = ActiveScreen;
+	ActiveScreen = screen = m_Parent->GetScreen();
 	RedrawStructList(this,DC, screen->EEDrawList, GR_COPY);
 
 	if ( Print_Sheet_Ref )
 		m_Parent->TraceWorkSheet(DC, screen, g_DrawMinimunLineWidth );
 
-	m_Parent->m_CurrentScreen = oldscreen;
+	//m_Parent->m_CurrentSheet->m_s = oldscreen;
 	wxEndBusyCursor();
 }
 
@@ -223,7 +223,7 @@ void DrawMarkerStruct::Draw(WinEDA_DrawPanel * panel,wxDC * DC, const wxPoint & 
 		int DrawMode, int Color)
 /****************************************************************************************/
 {
-#define WAR 1	// utilisé aussi dans erc.cpp
+#define WAR 1	// utilisï¿½ aussi dans erc.cpp
 
 	if( m_Type == MARQ_ERC )
 		{
@@ -300,23 +300,23 @@ int width = MAX(m_Width, g_DrawMinimunLineWidth);
 	GRSetDrawMode(DC, DrawMode);
 
 	if( (m_Layer == LAYER_BUS) && (zoom <= 16) )
-		{
+	{
 		width *= 3;
-		}
+	}
 
 		GRMoveTo(m_Points[0], m_Points[1]);
 	if( m_Layer == LAYER_NOTES)
-		{
+	{
 		for (i = 1; i < m_NumOfPoints; i++)
 			GRDashedLineTo(&panel->m_ClipBox, DC, m_Points[i * 2] + offset.x,
 							m_Points[i * 2 + 1] + offset.y, width, color);
-		}
+	}
 	else
-		{
+	{
 		for (i = 1; i < m_NumOfPoints; i++)
 			GRLineTo(&panel->m_ClipBox, DC, m_Points[i * 2] + offset.x, m_Points[i * 2 + 1] + offset.y,
 				width, color);
-		}
+	}
 }
 
 /*****************************************************************************
@@ -420,19 +420,11 @@ int width = g_DrawMinimunLineWidth;
 			}
 
 		case DRAW_LABEL_STRUCT_TYPE:
+		case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
+		case DRAW_HIER_LABEL_STRUCT_TYPE:
 			{
 			DrawLabelStruct * Struct;
 			Struct = (DrawLabelStruct * ) DrawStruct;
-			Struct->m_Pos.x += dx; Struct->m_Pos.y += dy;
-			Struct->Draw(panel, DC, wxPoint(0,0),DrawMode,g_GhostColor);
-			Struct->m_Pos.x -= dx; Struct->m_Pos.y -= dy;
-			break;
-			}
-
-		case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-			{
-			DrawGlobalLabelStruct * Struct;
-			Struct = (DrawGlobalLabelStruct * ) DrawStruct;
 			Struct->m_Pos.x += dx; Struct->m_Pos.y += dy;
 			Struct->Draw(panel, DC, wxPoint(0,0),DrawMode,g_GhostColor);
 			Struct->m_Pos.x -= dx; Struct->m_Pos.y -= dy;

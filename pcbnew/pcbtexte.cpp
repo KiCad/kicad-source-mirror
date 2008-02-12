@@ -349,7 +349,7 @@ TEXTE_PCB* WinEDA_PcbFrame::Create_Texte_Pcb( wxDC* DC )
 
     /* Mise a jour des caracteristiques */
     TextePcb->m_Flags  = IS_NEW;
-    TextePcb->SetLayer( GetScreen()->m_Active_Layer );
+    TextePcb->SetLayer( ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
     TextePcb->m_Miroir = 1;
     if( TextePcb->GetLayer() == COPPER_LAYER_N )
         TextePcb->m_Miroir = 0;

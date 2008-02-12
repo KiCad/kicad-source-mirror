@@ -115,7 +115,7 @@ public:
     static bool ShowToolTips();
 
 	void PrintSVGDoc(wxCommandEvent& event);
-	bool DrawPage(const wxString & FullFileName);
+	bool DrawPage(const wxString & FullFileName, BASE_SCREEN* screen);
 	wxString ReturnFullFileName();
 
 ////@begin WinEDA_PrintSVGFrame member variables

@@ -46,24 +46,16 @@
 ////@end XPM images
 
 
-/* Structures pour memo et liste des elements */
-typedef struct ListLabel
-{
-	int m_LabelType;
-	void * m_Label;
-	int m_SheetNumber;
-} ListLabel;
-
-
 /* fonctions locales */
 static int GenListeGLabels( ListLabel * List );
-static int ListTriComposantByRef(EDA_SchComponentStruct **Objet1,
-									EDA_SchComponentStruct **Objet2);
-static int ListTriComposantByVal(EDA_SchComponentStruct **Objet1,
-									EDA_SchComponentStruct **Objet2);
+int GenListeCmp( ListComponent * List );
+static int ListTriComposantByRef(ListComponent *Objet1,
+								 ListComponent *Objet2);
+static int ListTriComposantByVal(ListComponent *Objet1,
+								 ListComponent *Objet2);
 static int ListTriGLabelBySheet(ListLabel *Objet1, ListLabel *Objet2);
 static int ListTriGLabelByVal(ListLabel *Objet1, ListLabel *Objet2);
-static void DeleteSubCmp( EDA_BaseStruct ** List , int NbItems);
+static void DeleteSubCmp( ListComponent * List , int NbItems);
 
 static int PrintListeGLabel( FILE *f, ListLabel *List, int NbItems);
 
@@ -552,12 +544,14 @@ wxString mask, filename;
 	else
 		s_ExportSeparatorSymbol = s_ExportSeparator[0];
 
-	m_ListFileName = ScreenSch->m_FileName;
+	m_ListFileName = g_RootSheet->m_s->m_FileName; 
 	ChangeFileNameExt(m_ListFileName, EXT_LIST);
+	//need to get rid of the path. 
+	m_ListFileName = m_ListFileName.AfterLast('/'); 
 	mask = wxT("*");
 	mask += EXT_LIST;
 
-	filename = EDA_FileSelector(_("Bill of material:"),
+	filename = EDA_FileSelector(_("Bill of materials:"),
 					wxEmptyString,	/* Chemin par defaut (ici dir courante) */
 					m_ListFileName,	/* nom fichier par defaut, et resultat */
 					EXT_LIST,		/* extension par defaut */
@@ -600,7 +594,7 @@ void WinEDA_Build_BOM_Frame::CreateExportList(const wxString & FullFileName)
  */
 {
 FILE *f;
-EDA_BaseStruct ** List;
+ListComponent * List;
 int NbItems;
 wxString msg;
 	
@@ -616,8 +610,7 @@ wxString msg;
 	NbItems = GenListeCmp( NULL );
 	if( NbItems )
 	{
-		List = (EDA_BaseStruct **)
-				MyZMalloc( NbItems * sizeof(EDA_BaseStruct **) );
+		List = (ListComponent*)MyZMalloc( NbItems * sizeof(ListComponent) );
 		if( List == NULL )
 		{
 			fclose( f );
@@ -627,7 +620,7 @@ wxString msg;
 		GenListeCmp( List );
 
 		/*  sort component list */
-		qsort( List, NbItems, sizeof( EDA_BaseStruct * ),
+		qsort( List, NbItems, sizeof( ListComponent ),
 				(int(*)(const void*, const void*))ListTriComposantByRef );
 
 //		if( ! s_ListWithSubCmponents )
@@ -654,7 +647,7 @@ void WinEDA_Build_BOM_Frame::GenereListeOfItems(const wxString & FullFileName)
  */
 {
 FILE *f;
-EDA_BaseStruct ** List;
+ListComponent * List;
 ListLabel * ListOfLabels;
 int NbItems;
 char Line[1024];
@@ -672,8 +665,8 @@ wxString msg;
 	NbItems = GenListeCmp( NULL );
 	if( NbItems )
 	{
-		List = ( EDA_BaseStruct **)
-				MyZMalloc( NbItems * sizeof(EDA_BaseStruct **) );
+		List = ( ListComponent *)
+				MyZMalloc( NbItems * sizeof(ListComponent) );
 		if( List == NULL )
 		{
 			fclose( f );
@@ -681,6 +674,10 @@ wxString msg;
 		}
 
 		GenListeCmp( List );
+		
+		for(int i=0; i<NbItems; i++){
+			printf("found component: %s\n", List[i].m_Ref); 
+		}
 
 		/* generation du fichier listing */
 		DateAndTime(Line);
@@ -689,9 +686,12 @@ wxString msg;
 
 		/* Tri et impression de la liste des composants */
 
-		qsort( List, NbItems, sizeof( EDA_BaseStruct * ),
+		qsort( List, NbItems, sizeof( ListComponent ),
 				(int(*)(const void*, const void*))ListTriComposantByRef );
-
+		printf("sorted by reference:\n"); 
+		for(int i=0; i<NbItems; i++){
+			printf("found component: %s\n", List[i].m_Ref); 
+		}
 //		if( ! s_ListWithSubCmponents )
 		if( ! m_ListSubCmpItems->GetValue() )
 			DeleteSubCmp(List, NbItems);
@@ -705,7 +705,7 @@ wxString msg;
 //		if( s_ListByValue )
 		if( m_ListCmpbyValItems->GetValue() )
 		{
-			qsort( List, NbItems, sizeof( EDA_BaseStruct * ),
+			qsort( List, NbItems, sizeof( ListComponent ),
 					(int(*)(const void*, const void*))ListTriComposantByVal );
 			PrintListeCmpByVal(f, List, NbItems);
 		}
@@ -720,6 +720,7 @@ wxString msg;
 	if( NbItems )
 	{
 		ListOfLabels = (ListLabel *) MyZMalloc( NbItems * sizeof(ListLabel) );
+		memset((void*)ListOfLabels, 0, NbItems * sizeof(ListLabel)); 
 		if( ListOfLabels == NULL )
 		{
 			fclose( f );
@@ -761,26 +762,31 @@ wxString msg;
 
 
 /****************************************/
-int GenListeCmp( EDA_BaseStruct ** List )
+int GenListeCmp( ListComponent * List )
 /****************************************/
 /* Routine de generation de la liste des elements utiles du dessin
  * Si List == NULL: comptage des elements
  * Sinon remplissage de la liste
  * Initialise "FlagControlMulti" a SheetNumber pour la sortie des listes
  * et m_Father comme pointeur sur la sheet d'appartenance
+ * 
+ * routine for generating a list of the used components. 
+ * if List == null, just returns the count. if not, fills the list.
+ * goes through the sheets, not the screens, so that we account for 
+ * multiple instances of a given screen. 
  */
 {
 int ItemCount = 0;
 EDA_BaseStruct *DrawList;
 EDA_SchComponentStruct *DrawLibItem;
-BASE_SCREEN * screen;
+DrawSheetList * sheet;
 
-	/* Build the screen list */
-	EDA_ScreenList ScreenList(NULL);
+	/* Build the sheet (not screen) list */
+	EDA_SheetList SheetList(NULL);
 
-	for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
+	for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
 	{
-		DrawList = screen->EEDrawList;
+		DrawList = sheet->LastDrawList();
 		while( DrawList )
 		{
 			switch( DrawList->Type() )
@@ -788,11 +794,14 @@ BASE_SCREEN * screen;
 			case DRAW_LIB_ITEM_STRUCT_TYPE :
 				ItemCount++;
 				DrawLibItem = (EDA_SchComponentStruct *) DrawList;
-				DrawLibItem->m_FlagControlMulti = screen->m_SheetNumber;
-				DrawLibItem->m_Parent = screen;
+				DrawLibItem->m_Parent = sheet->LastScreen();
 				if( List )
 				{
-					*List = DrawList;
+					(*List).m_Comp = DrawLibItem;
+					(*List).m_SheetList = *sheet;
+					strncpy(&((*List).m_Ref[0]), 
+								CONV_TO_UTF8(DrawLibItem->GetRef(sheet)), 
+								sizeof((*List).m_Ref)); 
 					List++;
 				}
 				break;
@@ -818,24 +827,27 @@ static int GenListeGLabels( ListLabel * List )
 int ItemCount = 0;
 EDA_BaseStruct *DrawList;
 DrawSheetLabelStruct *SheetLabel;
-BASE_SCREEN * screen;
+DrawSheetList * sheet;
 
 	/* Build the screen list */
-	EDA_ScreenList ScreenList(NULL);
+	EDA_SheetList SheetList(NULL);
 
-	for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
+	for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
 	{
-		DrawList = screen->EEDrawList;
-		while( DrawList )
+		DrawList = sheet->LastDrawList();
+		wxString path = sheet->Path(); 
+		while(DrawList )
 		{
 			switch( DrawList->Type() )
 			{
+			case DRAW_HIER_LABEL_STRUCT_TYPE:
 			case DRAW_GLOBAL_LABEL_STRUCT_TYPE :
 				ItemCount++;
 				if( List )
 				{
-					List->m_LabelType = DRAW_GLOBAL_LABEL_STRUCT_TYPE;
-					List->m_SheetNumber = screen->m_SheetNumber;
+					List->m_LabelType = DrawList->Type();
+					snprintf(List->m_SheetPath, sizeof(List->m_SheetPath), 
+							 "%s", CONV_TO_UTF8(path));
 					List->m_Label = DrawList;
 					List++;
 				}
@@ -850,7 +862,8 @@ BASE_SCREEN * screen;
 						if( List )
 						{
 							List->m_LabelType = DRAW_SHEETLABEL_STRUCT_TYPE;
-							List->m_SheetNumber = screen->m_SheetNumber;
+							snprintf(List->m_SheetPath, sizeof(List->m_SheetPath), 
+									 "%s", CONV_TO_UTF8(path));
 							List->m_Label = SheetLabel;
 							List++;
 						}
@@ -871,8 +884,8 @@ BASE_SCREEN * screen;
 
 
 /**********************************************************/
-static int ListTriComposantByVal(EDA_SchComponentStruct **Objet1,
-							EDA_SchComponentStruct **Objet2)
+static int ListTriComposantByVal(ListComponent *Objet1,
+								 ListComponent *Objet2)
 /**********************************************************/
 /* Routine de comparaison pour le tri du Tableau par qsort()
  * Les composants sont tries
@@ -884,27 +897,31 @@ static int ListTriComposantByVal(EDA_SchComponentStruct **Objet1,
 int ii;
 const wxString * Text1, *Text2;
 
-	if( ( *Objet1 == NULL ) && ( *Objet2 == NULL ) )
+	if( ( Objet1 == NULL ) && ( Objet2 == NULL ) )
 		return( 0 );
-	if( *Objet1 == NULL )
+	if( Objet1 == NULL )
 		return( -1 );
-	if( *Objet2 == NULL )
+	if( Objet2 == NULL )
+		return( 1 );
+	if( ( Objet1->m_Comp == NULL ) && ( Objet2->m_Comp == NULL ) )
+		return( 0 );
+	if( Objet1->m_Comp == NULL )
+		return( -1 );
+	if( Objet2->m_Comp == NULL )
 		return( 1 );
 
-	Text1 = &(*Objet1)->m_Field[VALUE].m_Text;
-	Text2 = &(*Objet2)->m_Field[VALUE].m_Text;
+	Text1 = &(Objet1->m_Comp->m_Field[VALUE].m_Text);
+	Text2 = &(Objet2->m_Comp->m_Field[VALUE].m_Text);
 	ii = Text1->CmpNoCase(*Text2);
 
 	if( ii == 0 )
 	{
-		Text1 = &(*Objet1)->m_Field[REFERENCE].m_Text;
-		Text2 = &(*Objet2)->m_Field[REFERENCE].m_Text;
-		ii = Text1->CmpNoCase(*Text2);
+		ii = strcmp(Objet1->m_Ref, Objet2->m_Ref); 
 	}
 
 	if( ii == 0 )
 	{
-		ii = (*Objet1)->m_Multi - (*Objet2)->m_Multi;
+		ii = Objet1->m_Comp->m_Multi - Objet2->m_Comp->m_Multi;
 	}
 
 	return( ii );
@@ -912,8 +929,8 @@ const wxString * Text1, *Text2;
 
 
 /**********************************************************/
-static int ListTriComposantByRef(EDA_SchComponentStruct **Objet1,
-							EDA_SchComponentStruct **Objet2)
+static int ListTriComposantByRef(ListComponent *Objet1,
+								 ListComponent *Objet2)
 /**********************************************************/
 /* Routine de comparaison pour le tri du Tableau par qsort()
  * Les composants sont tries
@@ -925,27 +942,30 @@ static int ListTriComposantByRef(EDA_SchComponentStruct **Objet1,
 int ii;
 const wxString * Text1, *Text2;
 
-	if( ( *Objet1 == NULL ) && ( *Objet2 == NULL ) )
+	if( ( Objet1 == NULL ) && ( Objet2 == NULL ) )
 		return( 0 );
-	if( *Objet1 == NULL )
+	if( Objet1 == NULL )
 		return( -1 );
-	if( *Objet2 == NULL )
+	if( Objet2 == NULL )
+		return( 1 );
+	
+	if( ( Objet1->m_Comp == NULL ) && ( Objet2->m_Comp == NULL ) )
+		return( 0 );
+	if( Objet1->m_Comp == NULL )
+		return( -1 );
+	if( Objet2->m_Comp == NULL )
 		return( 1 );
 
-	Text1 = &(*Objet1)->m_Field[REFERENCE].m_Text;
-	Text2 = &(*Objet2)->m_Field[REFERENCE].m_Text;
-	ii = Text1->CmpNoCase(*Text2);
+	ii = strcmp(Objet1->m_Ref, Objet2->m_Ref); 
 
-	if( ii == 0 )
-	{
-		Text1 = &(*Objet1)->m_Field[VALUE].m_Text;
-		Text2 = &(*Objet2)->m_Field[VALUE].m_Text;
+	if( ii == 0 ){
+		Text1 = &( Objet1->m_Comp->m_Field[VALUE].m_Text );
+		Text2 = &( Objet2->m_Comp->m_Field[VALUE].m_Text );
 		ii = Text1->CmpNoCase(*Text2);
 	}
 
-	if( ii == 0 )
-	{
-		ii = (*Objet1)->m_Multi - (*Objet2)->m_Multi;
+	if( ii == 0 ){
+		ii = Objet1->m_Comp->m_Multi - Objet2->m_Comp->m_Multi;
 	}
 
 	return( ii );
@@ -978,7 +998,7 @@ const wxString * Text1, *Text2;
 
 	if( ii == 0 )
 	{
-		ii = Objet1->m_SheetNumber - Objet2->m_SheetNumber;
+		ii = strcmp(Objet1->m_SheetPath, Objet2->m_SheetPath); 
 	}
 
 	return( ii );
@@ -997,7 +1017,8 @@ static int ListTriGLabelBySheet(ListLabel *Objet1, ListLabel *Objet2)
 int ii;
 const wxString * Text1, *Text2;
 
-	ii = Objet1->m_SheetNumber - Objet2->m_SheetNumber;
+	
+	ii = strcmp(Objet1->m_SheetPath, Objet2->m_SheetPath); 
 
 	if( ii == 0 )
 	{
@@ -1019,7 +1040,7 @@ const wxString * Text1, *Text2;
 
 
 /**************************************************************/
-static void DeleteSubCmp( EDA_BaseStruct ** List, int NbItems )
+static void DeleteSubCmp( ListComponent * List, int NbItems )
 /**************************************************************/
 /* Supprime les sous-composants, c'est a dire les descriptions redonnantes des
  * boitiers multiples
@@ -1028,21 +1049,24 @@ static void DeleteSubCmp( EDA_BaseStruct ** List, int NbItems )
 {
 int ii;
 EDA_SchComponentStruct * LibItem;
-const wxString * OldName = NULL;
+wxString OldName;
 
 	for( ii = 0; ii < NbItems; ii++ )
 	{
-		LibItem = (EDA_SchComponentStruct *) List[ii];
+		LibItem = List[ii].m_Comp;
 		if( LibItem == NULL )
 			continue;
-		if( OldName )
+		if( !OldName.IsEmpty() )
 		{
-			if( OldName->CmpNoCase( LibItem->m_Field[REFERENCE].m_Text ) == 0 )
+			if( strcmp(OldName.mb_str(), List[ii].m_Ref ) == 0 )
 			{
-				List[ii] = NULL;
+				List[ii].m_Comp = NULL;
+				List[ii].m_SheetList.Clear();
+				List[ii].m_Ref[0] = 0; 
+				
 			}
 		}
-		OldName = &LibItem->m_Field[REFERENCE].m_Text;
+		OldName.Printf(_("%s"), List[ii].m_Ref );
 	}
 }
 
@@ -1088,7 +1112,7 @@ wxCheckBox * FieldCtrl = FieldListCtrl[0];
 
 
 /*********************************************************************************************/
-int WinEDA_Build_BOM_Frame::PrintListeCmpByRef( FILE * f, EDA_BaseStruct ** List, int NbItems,
+int WinEDA_Build_BOM_Frame::PrintListeCmpByRef( FILE * f, ListComponent * List, int NbItems,
 	bool CompactForm )
 /*********************************************************************************************/
 /* Print the B.O.M sorted by reference
@@ -1103,7 +1127,7 @@ wxString msg;
 	
 	if( CompactForm )
 	{
-		fprintf( f, "ref%cvalue%csheet number%csheet name%cfootprint",
+		fprintf( f, "ref%cvalue%csheet path%csheet name%cfootprint",
 			s_ExportSeparatorSymbol, s_ExportSeparatorSymbol,
 			s_ExportSeparatorSymbol, s_ExportSeparatorSymbol );
 		wxCheckBox * FieldListCtrl[FIELD8 - FIELD1 + 1] = {
@@ -1140,7 +1164,7 @@ wxString msg;
 
 	for( ii = 0; ii < NbItems; ii++ )
 	{
-		DrawList = List[ii];
+		DrawList = List[ii].m_Comp;
 
 		if( DrawList == NULL )
 			continue;
@@ -1148,7 +1172,7 @@ wxString msg;
 			continue;
 
 		DrawLibItem = (EDA_SchComponentStruct *) DrawList;
-		if( DrawLibItem->m_Field[REFERENCE].m_Text[0] == '#' )
+		if( List[ii].m_Ref[0] == '#' )
 			continue;
 
 		Multi = 0;
@@ -1160,7 +1184,7 @@ wxString msg;
 		if( ( Multi > 1 ) && m_ListSubCmpItems->GetValue() )
 			 Unit = DrawLibItem->m_Multi + 'A' - 1;
 
-		sprintf( NameCmp,"%s", CONV_TO_UTF8(DrawLibItem->m_Field[REFERENCE].m_Text) );
+		sprintf( NameCmp,"%s", List[ii].m_Ref );
 		if( ! CompactForm || Unit != ' ' )
 			sprintf( NameCmp + strlen(NameCmp), "%c", Unit );
 
@@ -1174,17 +1198,19 @@ wxString msg;
 //		if( s_ListWithSubCmponents )
 		if( m_ListSubCmpItems->GetValue() )
 		{
-			DrawSheetStruct * sheet = (DrawSheetStruct *)(DrawLibItem->m_Parent);
+			SCH_SCREEN * screen = (SCH_SCREEN *)(DrawLibItem->m_Parent);
 			wxString sheetname;
-			if( sheet && sheet->Type() == DRAW_SHEET_STRUCT_TYPE )
-				sheetname = sheet->m_SheetName;
+			if( screen && screen->Type() == SCREEN_STRUCT_TYPE )
+				sheetname = screen->m_FileName;
 			else
-				sheetname = _("Root");
+				sheetname = _("?");
 			if( CompactForm ) 
-				fprintf(f, "%c%d;%s", s_ExportSeparatorSymbol, DrawLibItem->m_FlagControlMulti,
+				fprintf(f, "%c%s;%s", s_ExportSeparatorSymbol, 	
+					CONV_TO_UTF8(List[ii].m_SheetList.Path()),
 					CONV_TO_UTF8(sheetname));
 			else
-				fprintf(f, "   (Sheet %.2d: \"%s\")", DrawLibItem->m_FlagControlMulti,
+				fprintf(f, "   (Sheet %s: \"%s\")",
+					CONV_TO_UTF8(List[ii].m_SheetList.Path()),
 					CONV_TO_UTF8(sheetname));
 		}
 
@@ -1201,7 +1227,7 @@ wxString msg;
 }
 
 /*********************************************************************************************/
-int WinEDA_Build_BOM_Frame::PrintListeCmpByVal( FILE * f, EDA_BaseStruct ** List, int NbItems )
+int WinEDA_Build_BOM_Frame::PrintListeCmpByVal( FILE * f, ListComponent * List, int NbItems )
 /**********************************************************************************************/
 {
 int ii, Multi;
@@ -1220,7 +1246,7 @@ wxString msg;
 
 	for( ii = 0; ii < NbItems; ii++ )
 	{
-		DrawList = List[ii];
+		DrawList = List[ii].m_Comp;
 
 		if( DrawList == NULL )
 			continue;
@@ -1228,7 +1254,7 @@ wxString msg;
 			continue;
 
 		DrawLibItem = (EDA_SchComponentStruct *) DrawList;
-		if( DrawLibItem->m_Field[REFERENCE].m_Text[0] == '#' )
+		if( List[ii].m_Ref[0] == '#' )
 			continue;
 
 		Multi = 0;
@@ -1237,18 +1263,17 @@ wxString msg;
 		if( Entry )
 			Multi = Entry->m_UnitCount;
 //		if( ( Multi > 1 ) && s_ListWithSubCmponents )
-		if( ( Multi > 1 ) && m_ListSubCmpItems->GetValue() )
+		if( ( Multi > 1 ) && m_ListSubCmpItems->GetValue() ){
 			 Unit = DrawLibItem->m_Multi + 'A' - 1;
-		msg = DrawLibItem->m_Field[REFERENCE].m_Text;
-		msg.Append(Unit);
-
-		fprintf( f, "| %-12s %-10s",
-					CONV_TO_UTF8(DrawLibItem->m_Field[VALUE].m_Text),
-					CONV_TO_UTF8(msg) );
+		}
+		fprintf( f, "| %-12s %-10s%c",
+					  CONV_TO_UTF8(DrawLibItem->m_Field[VALUE].m_Text),
+					  List[ii].m_Ref, Unit);
+								
 //		if( s_ListWithSubCmponents )
 		if( m_ListSubCmpItems->GetValue() )
 		{
-			fprintf(f, "   (Sheet %.2d)", DrawLibItem->m_FlagControlMulti);
+			fprintf(f, "   (Sheet %s)", CONV_TO_UTF8(List[ii].m_SheetList.Path()) );
 		}
 
 		PrintFieldData(f, DrawLibItem);
@@ -1265,24 +1290,31 @@ wxString msg;
 static int PrintListeGLabel( FILE *f, ListLabel *List, int NbItems)
 /******************************************************************/
 {
-int ii, jj;
-DrawGlobalLabelStruct *DrawTextItem;
-DrawSheetLabelStruct * DrawSheetLabel;
-ListLabel * LabelItem;
-wxString msg;
-	
+	int ii, jj;
+	DrawLabelStruct *DrawTextItem;
+	DrawSheetLabelStruct * DrawSheetLabel;
+	ListLabel * LabelItem;
+	wxString msg;
+	char str[64]; 
+		
 	for( ii = 0; ii < NbItems; ii++ )
 	{
 		LabelItem = & List[ii];
 
 		switch( LabelItem->m_LabelType )
 		{
-		case DRAW_GLOBAL_LABEL_STRUCT_TYPE :
-			DrawTextItem = (DrawGlobalLabelStruct *)(LabelItem->m_Label);
+		case DRAW_HIER_LABEL_STRUCT_TYPE:
+		case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
+			DrawTextItem = (DrawLabelStruct *)(LabelItem->m_Label);
+			if(LabelItem->m_LabelType == DRAW_HIER_LABEL_STRUCT_TYPE)
+				strncpy(str, "Hierarchal", sizeof(str)); 
+			else
+				strncpy(str, "Global    ", sizeof(str));
 			msg.Printf(
-                        _("> %-28.28s Global        (Sheet %.2d) pos: %3.3f, %3.3f\n"),
+                        _("> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n"),
 						DrawTextItem->m_Text.GetData(),
-						LabelItem->m_SheetNumber,
+						str,
+						LabelItem->m_SheetPath,
 						(float)DrawTextItem->m_Pos.x / 1000,
 						(float)DrawTextItem->m_Pos.y / 1000);
 				
@@ -1299,10 +1331,10 @@ wxString msg;
 					jj = 4;
 				wxString labtype = CONV_FROM_UTF8(SheetLabelType[jj]);
 				msg.Printf(
-                        _("> %-28.28s Sheet %-7.7s (Sheet %.2d) pos: %3.3f, %3.3f\n"),
+                        _("> %-28.28s Sheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n"),
 						DrawSheetLabel->m_Text.GetData(),
 						labtype.GetData(),
-						LabelItem->m_SheetNumber,
+						LabelItem->m_SheetPath,
 						(float)DrawSheetLabel->m_Pos.x / 1000,
 						(float)DrawSheetLabel->m_Pos.y / 1000);
 				fprintf(f, CONV_TO_UTF8(msg));

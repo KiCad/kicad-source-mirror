@@ -44,7 +44,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
     {
         if( g_TrackSegmentCount > 0 )
         {
-            int previous_layer = GetScreen()->m_Active_Layer;
+            int previous_layer = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
 
             // effacement de la piste en cours
             ShowNewTrackWhenMovingCursor( DrawPanel, DC, FALSE );
@@ -85,7 +85,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
 
             // Rectification couche active qui a pu changer si une via
             // a ete effacee
-            GetScreen()->m_Active_Layer = previous_layer;
+            ((PCB_SCREEN*)GetScreen())->m_Active_Layer = previous_layer;
 
             Affiche_Status_Box();
             if( g_TwoSegmentTrackBuild )   // We must have 2 segments or more, or 0

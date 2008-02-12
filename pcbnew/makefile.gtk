@@ -3,6 +3,8 @@
 
 include ../libs.linux
 
+BOOST_LIB = /usr/include/boost
+
 # Additional compiler flags
 CPPFLAGS +=
 

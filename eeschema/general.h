@@ -72,6 +72,7 @@ typedef enum {
 	LAYER_JUNCTION,
 	LAYER_LOCLABEL,
 	LAYER_GLOBLABEL,
+ 	LAYER_HIERLABEL,
 	LAYER_PINFUN,
 	LAYER_PINNUM,
 	LAYER_PINNAM,
@@ -147,7 +148,7 @@ extern int g_HVLines;
 eda_global int g_PlotPSColorOpt;	// True = plot postcript color (see plotps.cpp)
 
 
-// Gestion de diverses variables, options... devant etre mémorisées mais
+// Gestion de diverses variables, options... devant etre mï¿½morisï¿½es mais
 // Remises a 0 lors d'un rechargement de projetc
 struct EESchemaVariables
 {
@@ -164,7 +165,7 @@ eda_global int g_PrintFillMask;	/* pour les options "FILL",
 eda_global wxString g_CurrentViewLibraryName;			/* nom de la librairie en cours d'examen */
 eda_global wxString g_CurrentViewComponentName;		/* nom du le composant en cours d'examen */
 eda_global int g_ViewConvert;						/* Vue normal / convert */
-eda_global int g_ViewUnit;						/* unité a afficher (A, B ..) */
+eda_global int g_ViewUnit;						/* unitï¿½ a afficher (A, B ..) */
 
 /* Variables globales pour Schematic Edit */
 eda_global int g_DefaultTextLabelSize
@@ -218,7 +219,8 @@ struct HPGL_Pen_Descr_Struct
 eda_global HPGL_Pen_Descr_Struct g_HPGL_Pen_Descr;
 
 /* Ecrans usuels */
-eda_global SCH_SCREEN * ScreenSch;
+//eda_global SCH_SCREEN * ScreenSch;
+eda_global DrawSheetStruct* g_RootSheet; 
 eda_global SCH_SCREEN * ScreenLib;
 
 	/*************************************/
@@ -253,7 +255,7 @@ eda_global wxString g_NetListerCommandLine;	// ligne de commande pour l'appel au
 eda_global LayerStruct g_LayerDescr;		/* couleurs des couches  */
 
 eda_global bool g_EditPinByPinIsOn	/* bool: TRUE si edition des pins pin a pin au lieu */
-#ifdef MAIN						/* de l'edition simultanée des pins de meme coordonnées */
+#ifdef MAIN						/* de l'edition simultanï¿½e des pins de meme coordonnï¿½es */
  = FALSE
 #endif
 ;

@@ -35,7 +35,7 @@ MODULE* ReturnModule( BOARD* pcb, const wxString& reference )
  *  Recherche d'un module par sa reference
  *  Retourne:
  *      un pointeur sur le module
- *      Null si pas localisé
+ *      Null si pas localisï¿½
  */
 {
     MODULE* Module = pcb->m_Modules;
@@ -165,7 +165,7 @@ D_PAD* Locate_Pad_Connecte( BOARD* Pcb, TRACK* ptr_piste, int extr )
  *       pointeur NULL si pastille non trouvee
  *       num_empr = numero d'empreinte du pad
  * 
- *  la priorité est donnée a la couche active
+ *  la prioritï¿½ est donnï¿½e a la couche active
  */
 
 D_PAD* Locate_Any_Pad( BOARD* Pcb, int typeloc, bool OnlyCurrentLayer )
@@ -240,9 +240,11 @@ D_PAD* Locate_Pads( MODULE* module, const wxPoint& ref_pos, int masque_layer )
 /**
  * Function Locate_Prefered_Module
  * locates a footprint by its bounding rectangle.  If several footprints
- * are possible, then the priority is: on the active layer, then smallest.
+ * are possible, then the priority is: the closest on the active layer, then closest.
  * The current mouse or cursor coordinates are grabbed from the active window
  * to performe hit-testing.
+ * distance is calculated via manhattan distance from the center of the bounding rectangle
+ * to the cursor postition. 
  *
  * @param Pcb The BOARD to search within.
  * @param typeloc Flag bits, tuning the search, see pcbnew.h
@@ -287,26 +289,33 @@ MODULE* Locate_Prefered_Module( BOARD* Pcb, int typeloc )
         /* Localisation: test des dimensions minimales, choix du meilleur candidat */
 
         /* calcul des dimensions du cadre :*/
-        lx = pt_module->m_BoundaryBox.GetWidth();
-        ly = pt_module->m_BoundaryBox.GetHeight();
+		int offx = pt_module->m_BoundaryBox.m_Size.x/2 + 
+				pt_module->m_BoundaryBox.m_Pos.x + 
+				pt_module->m_Pos.x; 
+		int offy = pt_module->m_BoundaryBox.m_Size.y/2 
+				+ pt_module->m_BoundaryBox.m_Pos.y
+				+ pt_module->m_Pos.y; 
+		//off x & offy point to the middle of the box. 
+		int dist = abs(ref_pos.x - offx) + abs(ref_pos.y - offy); 
+		lx = pt_module->m_BoundaryBox.GetWidth();
+		ly = pt_module->m_BoundaryBox.GetHeight();
+		//int dist = MIN(lx, ly);  // to pick the smallest module (kinda screwy with same-sized modules -- this is bad!)
         
-        if( ( (PCB_SCREEN*) ActiveScreen )->m_Active_Layer == layer )
-        {
-            if( MIN( lx, ly ) <= min_dim )
-            {
+        if( ( (PCB_SCREEN*) ActiveScreen )->m_Active_Layer == layer ){
+            if( dist <= min_dim ){
                 /* meilleure empreinte localisee sur couche active */
                 module  = pt_module; 
-                min_dim = MIN( lx, ly );
+                min_dim = dist;
             }
         }
         else if( !(typeloc & MATCH_LAYER)
             && ( !(typeloc & VISIBLE_ONLY) || IsModuleLayerVisible( layer ) ) )
         {
-            if( MIN( lx, ly ) <= alt_min_dim )
+            if( dist <= alt_min_dim )
             {
                 /* meilleure empreinte localisee sur autres couches */
                 Altmodule   = pt_module;
-                alt_min_dim = MIN( lx, ly );
+                alt_min_dim = dist;
             }
         }
     }

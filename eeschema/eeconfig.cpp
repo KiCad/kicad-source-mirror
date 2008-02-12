@@ -52,7 +52,7 @@ wxString FullFileName;
 		case ID_CONFIG_READ:
 		{
 			wxString mask( wxT("*") ); mask += g_Prj_Config_Filename_ext;
-			FullFileName = ScreenSch->m_FileName;
+			FullFileName = g_RootSheet->m_s->m_FileName;
 			ChangeFileNameExt( FullFileName, g_Prj_Config_Filename_ext );
 			
 			FullFileName = EDA_FileSelector(_("Read config file"),
@@ -142,7 +142,7 @@ wxString FullFileName;
 bool IsRead = TRUE;
 wxArrayString liblist_tmp = g_LibName_List;
 	
-	if ( CfgFileName.IsEmpty() ) FullFileName = ScreenSch->m_FileName;
+	if ( CfgFileName.IsEmpty() ) FullFileName = g_RootSheet->m_s->m_FileName;
 	else FullFileName = CfgFileName;
 	g_LibName_List.Clear();
 	
@@ -185,7 +185,7 @@ wxString FullFileName;
 wxString mask( wxT("*") );
 	
 	mask += g_Prj_Config_Filename_ext;
-	FullFileName = ScreenSch->m_FileName.AfterLast('/') /*ConfigFileName*/;
+	FullFileName = g_RootSheet->m_s->m_FileName.AfterLast('/') /*ConfigFileName*/;
 	ChangeFileNameExt( FullFileName, g_Prj_Config_Filename_ext );
 
 	path = wxGetCwd();

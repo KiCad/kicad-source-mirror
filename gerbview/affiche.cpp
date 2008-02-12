@@ -66,7 +66,8 @@ void Affiche_Infos_Piste( WinEDA_BasePcbFrame* frame, TRACK* pt_piste )
 {
     int      d_index, ii = -1;
     D_CODE*  pt_D_code;
-    int      layer = frame->GetScreen()->m_Active_Layer;
+	
+    int      layer = ((PCB_SCREEN*)(frame->GetScreen()))->m_Active_Layer; 
     wxString msg;
 
     frame->MsgPanel->EraseMsgBox();

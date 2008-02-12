@@ -20,7 +20,7 @@ OBJECTS = eeschema.o\
 		cross-probing.o\
 		setpage.o\
 		cmpclass.o\
-		class_hierarchy_sheet.o\
+		class_drawsheet.o\
 		class_text-label.o\
 		component_class.o\
 		libclass.o\

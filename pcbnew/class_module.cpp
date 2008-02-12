@@ -142,6 +142,7 @@ void MODULE::Copy( MODULE* Module )
     m_CntRot90      = Module->m_CntRot90;
     m_CntRot180     = Module->m_CntRot180;
     m_LastEdit_Time = Module->m_LastEdit_Time;
+	m_Path 			= Module->m_Path; //is this correct behavior?
     m_TimeStamp     = GetTimeStamp();
 
     /* Copy des structures auxiliaires: Reference et value */
@@ -387,7 +388,7 @@ bool MODULE::Save( FILE* aFile ) const
     }
 
     fprintf( aFile, "Sc %8.8lX\n", m_TimeStamp );
-
+	fprintf( aFile, "AR %s\n", CONV_TO_UTF8(m_Path) );
     fprintf( aFile, "Op %X %X 0\n", m_CntRot90, m_CntRot180 );
 
     // attributes
@@ -637,6 +638,7 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
         case 'S':
             sscanf( PtLine, " %lX", &m_TimeStamp );
             break;
+			
 
         case 'O':       /* (Op)tions de placement auto */
             itmp1 = itmp2 = 0;
@@ -655,11 +657,19 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
             m_CntRot90 |= itmp1 << 4;
             break;
 
-        case 'A':       /* At = (At)tributs du module */
-            if( strstr( PtLine, "SMD" ) )
-                m_Attributs |= MOD_CMS;
-            if( strstr( PtLine, "VIRTUAL" ) )
-                m_Attributs |= MOD_VIRTUAL;
+        case 'A':  
+			if(Line[1] == 't'){
+				/* At = (At)tributs du module */
+				if( strstr( PtLine, "SMD" ) )
+					m_Attributs |= MOD_CMS;
+				if( strstr( PtLine, "VIRTUAL" ) )
+					m_Attributs |= MOD_VIRTUAL;
+			}
+			if(Line[1] == 'R'){
+				//alternate reference, e.g. /478C2408/478AD1B6
+				sscanf( PtLine, " %s", BufLine );
+				m_Path = CONV_FROM_UTF8(BufLine); 
+			}
             break;
 
         case 'T':    /* lecture des textes modules */
@@ -1046,7 +1056,7 @@ void MODULE::Display_Infos( WinEDA_DrawFrame* frame )
     Affiche_1_Parametre( frame, pos, m_Reference->m_Text, m_Value->m_Text, DARKCYAN );
 
     /* Affiche signature temporelle ou date de modif (en edition de modules) */
-    pos += 14;
+    pos += 6;
     if( flag ) // Affichage date de modification (utile en Module Editor)
     {
         strcpy( Line, ctime( &m_LastEdit_Time ) );
@@ -1062,10 +1072,10 @@ void MODULE::Display_Infos( WinEDA_DrawFrame* frame )
     else
     {
         msg.Printf( wxT( "%8.8lX" ), m_TimeStamp );
-        Affiche_1_Parametre( frame, pos, _( "TimeStamp" ), msg, BROWN );
+        Affiche_1_Parametre( frame, pos, _( "Netlist path" ), /*msg*/m_Path, BROWN );
     }
 
-    pos += 6;
+    pos += 12;
     Affiche_1_Parametre( frame, pos, _( "Layer" ), ReturnPcbLayerName( m_Layer ), RED );
 
     pos += 6;

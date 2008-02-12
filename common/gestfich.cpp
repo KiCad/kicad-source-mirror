@@ -505,7 +505,7 @@ void SetRealLibraryPath( const wxString& shortlibname )
  *  Sinon g_UserLibDirBuffer = /usr/share/kicad/shortlibname/
  * 
  *  Remarque:
- *  Les \ sont remplacés par / (a la mode Unix)
+ *  Les \ sont remplacï¿½s par / (a la mode Unix)
  */
 {
     bool PathFound = FALSE;
@@ -545,7 +545,7 @@ wxString ReturnKicadDatasPath()
  *  Sinon retourne /usr/share/kicad/
  * 
  *  Remarque:
- *  Les \ sont remplacés par / (a la mode Unix)
+ *  Les \ sont remplacï¿½s par / (a la mode Unix)
  */
 {
     bool     PathFound = FALSE;

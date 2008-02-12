@@ -67,25 +67,25 @@ FINAL = 1
 
 
 # turn on/OFF debugging for all executables, only tested without KICAD_PYTHON
-DEBUG = 0
+DEBUG = 1
 
 
 # common CPPFLAGS to all components, further CPPFLAGS customization in 
 # directory specific makefile.gtk files.
 ifeq ($(DEBUG), 1)
 WXXFLAGS := $(shell wx-config --debug --cxxflags) 
-CPPFLAGS = -Wall -g3 -ggdb3 ${WXXFLAGS} -fno-strict-aliasing -DDEBUG
+CPPFLAGS = -Wall -g3 -ggdb3 ${WXXFLAGS} -fno-strict-aliasing -DDEBUG -D_UNICODE
 LDFLAGS = -g3 -ggdb3 #-v
 else
 WXXFLAGS := $(shell wx-config --cxxflags) 
-CPPFLAGS = -Wall -O2 ${WXXFLAGS} -fno-strict-aliasing
+CPPFLAGS = -Wall -O2 ${WXXFLAGS} -fno-strict-aliasing -D_UNICODE
 LDFLAGS = -s #-v
 endif
 
 
 # a command line define which affects pcbnew only, causing it to match current layer 
 ifdef USE_MATCH_LAYER
-CPPFLAGS += -DUSE_MATCH_LAYER
+CPPFLAGS += -DUSE_MATCH_LAYER 
 endif
 
 
@@ -164,7 +164,7 @@ endif
 endif
 
 
-# attention à l'ordre des libairies
+# attention ï¿½ l'ordre des libairies
 LIBS = -L/usr/local/lib -L/usr/X11R6/lib\
 	$(EXTRALIBS) $(WXSYSLIB)\
 	$(LIBSTDC) $(PYLIBS)

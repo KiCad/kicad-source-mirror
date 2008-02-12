@@ -98,11 +98,10 @@ EDA_LibComponentStruct *LibEntry = NULL;
 
 	ScreenLib->ClrModify();
 	CurrentDrawItem = NULL;
-	// Effacement ancien composant affiché
+	// Effacement ancien composant affichï¿½
 	if( CurrentLibEntry)
 	{
-		delete CurrentLibEntry;
-		CurrentLibEntry = NULL;
+		SAFE_DELETE( CurrentLibEntry ) ;
 	}
 
 	/* Chargement du composant */
@@ -159,7 +158,7 @@ const wxChar * CmpName, *RootName = NULL;
 		CurrentAliasName = CmpName;
 		}
 
-	if( CurrentLibEntry) delete CurrentLibEntry;
+	if( CurrentLibEntry){ SAFE_DELETE( CurrentLibEntry ) ;}
 
 	CurrentLibEntry = CopyLibEntryStruct(this, LibEntry);
 	CurrentUnit = 1; CurrentConvert = 1;
@@ -180,7 +179,7 @@ void WinEDA_LibeditFrame::RedrawActiveWindow(wxDC * DC, bool EraseBg)
 /*********************************************************************/
 /* Routine generale d'affichage a l'ecran du "PartLib" en cours d'edition */
 {
-	if( m_CurrentScreen == NULL ) return;
+	if( GetScreen() == NULL ) return;
 
 	ActiveScreen = GetScreen();
 
@@ -209,7 +208,7 @@ void WinEDA_LibeditFrame::RedrawActiveWindow(wxDC * DC, bool EraseBg)
 		DrawPanel->ManageCurseur(DrawPanel, DC, FALSE); // reaffichage lie au curseur
 	}
 
-	m_CurrentScreen->ClrRefreshReq();
+	GetScreen()->ClrRefreshReq();
 	DisplayLibInfos();
 	Affiche_Status_Box();
 }
@@ -260,7 +259,7 @@ void WinEDA_LibeditFrame::DisplayCmpDoc(const wxString & Name)
 /**************************************************************/
 /*
 Affiche la documentation du composant selectionne
-Utilisée lors de l'affichage de la liste des composants en librairie
+Utilisï¿½e lors de l'affichage de la liste des composants en librairie
 */
 {
 LibCmpEntry * CmpEntry;
@@ -400,8 +399,8 @@ int diag;
 		NewStruct->m_Prefix.m_Text = wxT("U");
 	NewStruct->m_Prefix.m_Text.MakeUpper();
 
-	// Effacement ancien composant affiché
-	if( CurrentLibEntry) delete CurrentLibEntry;
+	// Effacement ancien composant affichï¿½
+	if( CurrentLibEntry){ SAFE_DELETE( CurrentLibEntry );}
 	CurrentLibEntry = NewStruct;
 	CurrentUnit = 1;
 	CurrentConvert = 1;
@@ -460,7 +459,7 @@ EDA_LibCmpAliasStruct * AliasEntry;
 
 		/* Effacement memoire pour cet alias */
 		PQDelete( &Library->m_Entries, (void*) Entry );
-		delete Entry;
+		SAFE_DELETE( Entry );
 		if( Library->m_NumOfParts > 0 ) CurrentLib->m_NumOfParts --;
 		return;
 	}
@@ -469,7 +468,7 @@ EDA_LibCmpAliasStruct * AliasEntry;
 	if( Entry->m_AliasList.GetCount() == 0) // Trivial case: no alias, we can safety delete e=this entry
 	{
 		PQDelete( &Library->m_Entries, Entry );
-		delete Entry;
+		SAFE_DELETE( Entry );
 		if( Library->m_NumOfParts > 0 ) Library->m_NumOfParts --;
 		return;
 	}

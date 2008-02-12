@@ -29,8 +29,8 @@ void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )
 
     if( g_DesignSettings.m_CopperLayerCount > 1 )
     {
-        Route_Layer_TOP    = GetScreen()->m_Route_Layer_TOP;
-        Route_Layer_BOTTOM = GetScreen()->m_Route_Layer_BOTTOM;
+        Route_Layer_TOP    = ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP;
+        Route_Layer_BOTTOM = ((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM;
     }
     else
     {

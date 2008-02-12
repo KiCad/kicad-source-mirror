@@ -113,20 +113,19 @@ EDA_SchComponentStruct* LocateSmallestComponent( SCH_SCREEN* Screen )
  */
 /***********************************************************************/
 EDA_BaseStruct* PickStruct( const wxPoint& refpos,
-                            EDA_BaseStruct* DrawList, int SearchMask )
+                           BASE_SCREEN* screen, int SearchMask)
 /************************************************************************/
 
 /* Search an item at pos pos
  */
 {
     bool Snapped;
-    int  zoom = ActiveScreen->GetZoom();
-
-    if( DrawList == NULL )
-        return NULL;
+	EDA_BaseStruct* DrawList = screen->EEDrawList; 
+	if( screen==NULL || DrawList == NULL )
+		return NULL;
 
     if( ( Snapped = SnapPoint2( refpos, SearchMask,
-                                DrawList, NULL, zoom ) ) != FALSE )
+                                DrawList, NULL, screen->GetZoom() ) ) != FALSE )
     {
         return LastSnappedStruct;
     }
@@ -136,7 +135,7 @@ EDA_BaseStruct* PickStruct( const wxPoint& refpos,
 
 /***********************************************************************/
 EDA_BaseStruct* PickStruct( EDA_Rect& block,
-                            EDA_BaseStruct* DrawList, int SearchMask )
+                            BASE_SCREEN* screen, int SearchMask )
 /************************************************************************/
 
 /* Search items in block
@@ -155,7 +154,11 @@ EDA_BaseStruct* PickStruct( EDA_Rect& block,
         EXCHG( x, OrigX );
     if( y < OrigY )
         EXCHG( y, OrigY );
-
+	
+	EDA_BaseStruct* DrawList = screen->EEDrawList; 
+		if( screen==NULL || DrawList == NULL )
+			return NULL;
+	
     for( DrawStruct = DrawList; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext )
     {
         if( DrawStructInBox( OrigX, OrigY, x, y, DrawStruct ) )
@@ -173,7 +176,7 @@ EDA_BaseStruct* PickStruct( EDA_Rect& block,
         /* Only one item was picked - convert to scalar form (no list): */
         PickedItem = PickedList;
         PickedList = (DrawPickedStruct*) PickedList->m_PickedStruct;
-        delete PickedItem;
+		SAFE_DELETE( PickedItem ) ;
     }
 
     if( PickedList != NULL )
@@ -377,8 +380,9 @@ bool SnapPoint2( const wxPoint& PosRef, int SearchMask,
 
 
         case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
+		case DRAW_HIER_LABEL_STRUCT_TYPE:
             #undef  STRUCT
-            #define STRUCT ( (DrawGlobalLabelStruct*) DrawList )
+            #define STRUCT ( (DrawLabelStruct*) DrawList )
             if( !(SearchMask & LABELITEM) )
                 break;
             dx = STRUCT->m_Size.x * ( STRUCT->GetLength() + 1 );        /* longueur */
@@ -592,9 +596,10 @@ bool DrawStructInBox( int x1, int y1, int x2, int y2,
             return TRUE;
         break;
 
+	case DRAW_HIER_LABEL_STRUCT_TYPE:
     case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
         #undef STRUCT
-        #define STRUCT ( (DrawGlobalLabelStruct*) DrawStruct )
+        #define STRUCT ( (DrawLabelStruct*) DrawStruct )
         dx  = STRUCT->m_Size.x * ( STRUCT->GetLength() + 1);    /* longueur totale */
         dy  = STRUCT->m_Size.y / 2;                             /* Demi hauteur */
         xt1 = xt2 = STRUCT->m_Pos.x;

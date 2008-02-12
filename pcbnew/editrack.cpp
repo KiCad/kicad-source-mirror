@@ -86,7 +86,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
 {
     D_PAD*          pt_pad = NULL;
     TRACK*          TrackOnStartPoint = NULL, * Track;
-    int             masquelayer = g_TabOneLayerMask[GetScreen()->m_Active_Layer];
+    int             masquelayer = g_TabOneLayerMask[((PCB_SCREEN*)GetScreen())->m_Active_Layer];
     EDA_BaseStruct* LockPoint;
     wxPoint         pos = GetScreen()->m_Curseur;
     static int      InitialTrackWidthValue; /* first track segment width.
@@ -135,7 +135,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
         Hight_Light( DC );
 
         g_CurrentTrackSegment->m_Flags = IS_NEW;
-        g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer );
+        g_CurrentTrackSegment->SetLayer( ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
         g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentTrackWidth;
         if( g_DesignSettings.m_UseConnectedTrackWidth )
         {
@@ -230,7 +230,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
             g_CurrentTrackSegment->m_Flags = IS_NEW;
             g_TrackSegmentCount++;
             g_CurrentTrackSegment->m_Start = g_CurrentTrackSegment->m_End;
-            g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer );
+            g_CurrentTrackSegment->SetLayer( ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
             if( !g_DesignSettings.m_UseConnectedTrackWidth )
             {
                 g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentTrackWidth;
@@ -387,7 +387,7 @@ void WinEDA_PcbFrame::End_Route( TRACK* track, wxDC* DC )
  *  Routine de fin de trace d'une piste (succession de segments)
  */
 {
-    int             masquelayer = g_TabOneLayerMask[GetScreen()->m_Active_Layer];
+    int             masquelayer = g_TabOneLayerMask[((PCB_SCREEN*)GetScreen())->m_Active_Layer];
     wxPoint         pos;
     EDA_BaseStruct* LockPoint;
     TRACK*          adr_buf;

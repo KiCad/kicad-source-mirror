@@ -85,7 +85,7 @@ public:
     virtual bool    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
     virtual void    ReCreateMenuBar();
 
-    PCB_SCREEN* GetScreen() { return (PCB_SCREEN*) m_CurrentScreen; }
+    virtual BASE_SCREEN* GetScreen() { return (BASE_SCREEN*) m_CurrentScreen; }
     int             BestZoom();
 
     void            Show3D_Frame( wxCommandEvent& event );
@@ -725,6 +725,7 @@ public:
     int             BestZoom(); // Retourne le meilleur zoom
     void            OnSelectOptionToolbar( wxCommandEvent& event );
     void            OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
+	PCB_SCREEN*		GetPCBScreen(){ return (PCB_SCREEN*)GetScreen(); }
 
     EDA_BaseStruct* GerberGeneralLocateAndDisplay();
     EDA_BaseStruct* Locate( int typeloc );

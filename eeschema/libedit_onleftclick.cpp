@@ -52,21 +52,21 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         }
         else
         {
-            DrawEntry = LocatePin( m_CurrentScreen->m_MousePosition, CurrentLibEntry,
+			DrawEntry = LocatePin( GetScreen()->m_MousePosition, CurrentLibEntry,
                                    CurrentUnit, CurrentConvert );
             if( DrawEntry == NULL )
             {
-                DrawEntry = LocateDrawItem( GetScreen(), GetScreen()->m_MousePosition,
+				DrawEntry = LocateDrawItem( (SCH_SCREEN*)GetScreen(), GetScreen()->m_MousePosition,
                                             CurrentLibEntry, CurrentUnit,
                                             CurrentConvert, LOCATE_ALL_DRAW_ITEM );
             }
 
             if( DrawEntry == NULL )
-                DrawEntry = LocatePin( m_CurrentScreen->m_Curseur, CurrentLibEntry,
+				DrawEntry = LocatePin( GetScreen()->m_Curseur, CurrentLibEntry,
                                        CurrentUnit, CurrentConvert );
             if( DrawEntry == NULL )
             {
-                DrawEntry = LocateDrawItem( GetScreen(), GetScreen()->m_Curseur,
+				DrawEntry = LocateDrawItem( (SCH_SCREEN*)GetScreen(), GetScreen()->m_Curseur,
                                             CurrentLibEntry, CurrentUnit,
                                             CurrentConvert, LOCATE_ALL_DRAW_ITEM );
             }
@@ -124,21 +124,23 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             break;
 
         case ID_LIBEDIT_DELETE_ITEM_BUTT:
-            DrawEntry = LocatePin( m_CurrentScreen->m_MousePosition, CurrentLibEntry,
+			DrawEntry = LocatePin( GetScreen()->m_MousePosition, CurrentLibEntry,
                                    CurrentUnit, CurrentConvert );
             if( DrawEntry == NULL )
             {
-                DrawEntry = LocateDrawItem( GetScreen(), m_CurrentScreen->m_MousePosition,
+				DrawEntry = LocateDrawItem( (SCH_SCREEN*)GetScreen(),
+											 GetScreen()->m_MousePosition,
                                             CurrentLibEntry, CurrentUnit,
                                             CurrentConvert, LOCATE_ALL_DRAW_ITEM );
             }
 
             if( DrawEntry == NULL )
-                DrawEntry = LocatePin( m_CurrentScreen->m_Curseur, CurrentLibEntry,
+				DrawEntry = LocatePin( GetScreen()->m_Curseur, CurrentLibEntry,
                                        CurrentUnit, CurrentConvert );
             if( DrawEntry == NULL )
             {
-                DrawEntry = LocateDrawItem( GetScreen(), m_CurrentScreen->m_Curseur,
+				DrawEntry = LocateDrawItem( (SCH_SCREEN*)GetScreen(), 
+											 GetScreen()->m_Curseur,
                                             CurrentLibEntry, CurrentUnit,
                                             CurrentConvert, LOCATE_ALL_DRAW_ITEM );
             }
@@ -154,7 +156,7 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             else
                 DeleteOneLibraryDrawStruct( DrawPanel, DC, CurrentLibEntry, DrawEntry, TRUE );
             DrawEntry = NULL;
-            m_CurrentScreen->SetModify();
+			GetScreen()->SetModify();
             break;
 
         case ID_LIBEDIT_ANCHOR_ITEM_BUTT:
@@ -177,8 +179,8 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 /*************************************************************************/
 
-/* Appelé sur un double click:
- *  pour un élément editable (textes, composant):
+/* Appelï¿½ sur un double click:
+ *  pour un ï¿½lï¿½ment editable (textes, composant):
  *      appel de l'editeur correspondant.
  *  pour une connexion en cours:
  *      termine la connexion
@@ -193,23 +195,23 @@ void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
     if( !m_ID_current_state    // Simple localisation des elements
        || (DrawEntry == NULL) || (DrawEntry->m_Flags == 0) )
     {
-        DrawEntry = LocatePin( m_CurrentScreen->m_MousePosition, CurrentLibEntry,
+		DrawEntry = LocatePin( GetScreen()->m_MousePosition, CurrentLibEntry,
                                CurrentUnit, CurrentConvert );
         if( DrawEntry == NULL )
-            DrawEntry = LocatePin( m_CurrentScreen->m_Curseur, CurrentLibEntry,
+			DrawEntry = LocatePin( GetScreen()->m_Curseur, CurrentLibEntry,
                                    CurrentUnit, CurrentConvert );
         if( DrawEntry == NULL )
         {
-            DrawEntry = CurrentDrawItem = LocateDrawItem( (SCH_SCREEN*) m_CurrentScreen,
-                                                         m_CurrentScreen->m_MousePosition,
+			DrawEntry = CurrentDrawItem = LocateDrawItem( (SCH_SCREEN*) GetScreen(),
+														 GetScreen()->m_MousePosition,
                                                          CurrentLibEntry, CurrentUnit,
                                                          CurrentConvert,
                                                          LOCATE_ALL_DRAW_ITEM );
         }
         if( DrawEntry == NULL )
         {
-            DrawEntry = CurrentDrawItem = LocateDrawItem( (SCH_SCREEN*) m_CurrentScreen,
-                                                         m_CurrentScreen->m_Curseur,
+			DrawEntry = CurrentDrawItem = LocateDrawItem( (SCH_SCREEN*) GetScreen(),
+														 GetScreen()->m_Curseur,
                                                          CurrentLibEntry, CurrentUnit,
                                                          CurrentConvert,
                                                          LOCATE_ALL_DRAW_ITEM );
@@ -247,7 +249,7 @@ void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
     switch( DrawEntry->Type() )
     {
     case  COMPONENT_PIN_DRAW_TYPE:
-        if( DrawEntry->m_Flags == 0 )       // Item localisé et non en edition: placement commande move
+        if( DrawEntry->m_Flags == 0 )       // Item localisï¿½ et non en edition: placement commande move
         {
             InstallPineditFrame( this, DC, pos );
         }

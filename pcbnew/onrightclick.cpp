@@ -581,7 +581,7 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         PopMenu->Append( ID_POPUP_PCB_PLACE_VIA, msg );
 
         // See if we can place a Micro Via (4 or more layers, and start from an external layer):
-        if( GetScreen()->IsMicroViaAcceptable() )
+        if( ((PCB_SCREEN*)GetScreen())->IsMicroViaAcceptable() )
         {
             msg = AddHotkeyName( _(
                                      "Place Micro Via" ), s_Board_Editor_Hokeys_Descr,

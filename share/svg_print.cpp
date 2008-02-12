@@ -287,7 +287,7 @@ wxString WinEDA_PrintSVGFrame::ReturnFullFileName()
 {
 wxString name, ext;
 
-	name = m_Parent->m_CurrentScreen->m_FileName;
+	name = m_Parent->GetScreen()->m_FileName;
 	ChangeFileNameExt(name, wxT(".svg"));
 	return name;
 }
@@ -330,11 +330,12 @@ wxString msg;
 	SetPenWidth();
 
 
-BASE_SCREEN * screen = m_Parent->m_CurrentScreen;
+BASE_SCREEN * screen = m_Parent->GetScreen();
 BASE_SCREEN *oldscreen = screen;
-
+#ifndef EESCHEMA
 	if( Select_PrintAll )
 		while ( screen->Pback ) screen = (BASE_SCREEN *) screen->Pback;
+#endif
 
 	if ( (m_Parent->m_Ident == PCB_FRAME) || (m_Parent->m_Ident == GERBER_FRAME) )
 	{
@@ -350,16 +351,15 @@ BASE_SCREEN *oldscreen = screen;
 #ifdef EESCHEMA
 	if ( Select_PrintAll && m_Parent->m_Ident == SCHEMATIC_FRAME )
 	{
-	EDA_ScreenList ScreenList(NULL);
-
+		EDA_ScreenList ScreenList;
 		for ( SCH_SCREEN * schscreen = ScreenList.GetFirst(); schscreen != NULL;
 				schscreen = ScreenList.GetNext() )
 		{
 		/* Create all files *.svg */
-			m_Parent->m_CurrentScreen = (BASE_SCREEN *)schscreen;
-			ActiveScreen = screen;
-		wxString FullFileName = ReturnFullFileName();
-			bool success = DrawPage(FullFileName);
+			((WinEDA_SchematicFrame*)m_Parent)->SetScreen(schscreen); 
+			wxString FullFileName = schscreen->m_FileName; 
+			ChangeFileNameExt(FullFileName, wxT(".svg"));
+			bool success = DrawPage(FullFileName, schscreen);
 			msg = _("Create file ") + FullFileName;
 			if ( ! success ) msg += _(" error");
 			msg += wxT("\n");
@@ -369,11 +369,12 @@ BASE_SCREEN *oldscreen = screen;
 	else
 #endif
 	{
-		ActiveScreen = screen;
-	wxString FullFileName = m_FileNameCtrl->GetValue();
-		if ( FullFileName.IsEmpty() )
-			FullFileName = ReturnFullFileName();
-		bool success = DrawPage(FullFileName);
+		wxString FullFileName = m_FileNameCtrl->GetValue();
+		if ( FullFileName.IsEmpty() ){
+			FullFileName = screen->m_FileName;
+			ChangeFileNameExt(FullFileName, wxT(".svg"));
+		}
+		bool success = DrawPage(FullFileName, screen);
 		msg = _("Create file ") + FullFileName;
 		if ( ! success ) msg += _(" error");
 			msg += wxT("\n");
@@ -383,7 +384,7 @@ BASE_SCREEN *oldscreen = screen;
 }
 
 /*****************************************************************/
-bool WinEDA_PrintSVGFrame::DrawPage(const wxString & FullFileName)
+bool WinEDA_PrintSVGFrame::DrawPage(const wxString & FullFileName, BASE_SCREEN* screen)
 /*****************************************************************/
 /*
 	Routine effective d'impression
@@ -397,16 +398,16 @@ float dpi;
 bool success = TRUE;
 
 	/* modification des cadrages et reglages locaux */
-	tmp_startvisu = ActiveScreen->m_StartVisu;
-	tmpzoom = ActiveScreen->GetZoom();
-	old_org = ActiveScreen->m_DrawOrg;
-	ActiveScreen->m_DrawOrg.x = ActiveScreen->m_DrawOrg.y = 0;
-	ActiveScreen->m_StartVisu.x = ActiveScreen->m_StartVisu.y = 0;
-	SheetSize = ActiveScreen->m_CurrentSheet->m_Size;	// size in 1/1000 inch
+	tmp_startvisu = screen->m_StartVisu;
+	tmpzoom = screen->GetZoom();
+	old_org = screen->m_DrawOrg;
+	screen->m_DrawOrg.x = screen->m_DrawOrg.y = 0;
+	screen->m_StartVisu.x = screen->m_StartVisu.y = 0;
+	SheetSize = screen->m_CurrentSheetDesc->m_Size;	// size in 1/1000 inch
 	SheetSize.x *= m_Parent->m_InternalUnits / 1000;
 	SheetSize.y *= m_Parent->m_InternalUnits / 1000;	// size in pixels
 
-	ActiveScreen->SetZoom(1);
+	screen->SetZoom(1);
 	dpi = (float)SheetSize.x * 25.4  /m_ImageXSize_mm;
 
 	WinEDA_DrawPanel * panel = m_Parent->DrawPanel;
@@ -443,9 +444,9 @@ wxSVGFileDC dc(FullFileName, SheetSize.x, SheetSize.y, dpi) ;
 	GRForceBlackPen(FALSE);
 	SetPenMinWidth(1);
 
-	ActiveScreen->m_StartVisu = tmp_startvisu;
-	ActiveScreen->m_DrawOrg = old_org;
-	ActiveScreen->SetZoom(tmpzoom);
+	screen->m_StartVisu = tmp_startvisu;
+	screen->m_DrawOrg = old_org;
+	screen->SetZoom(tmpzoom);
 
 	return success;
 }

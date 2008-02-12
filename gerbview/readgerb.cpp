@@ -53,8 +53,8 @@
  *  D_CODES:
  *
  *  D01 ... D9 = codes d'action:
- *  D01			= activation de lumiere (baisser de plume) lors du déplacement
- *  D02			= extinction de lumiere (lever de plume) lors du déplacement
+ *  D01			= activation de lumiere (baisser de plume) lors du dï¿½placement
+ *  D02			= extinction de lumiere (lever de plume) lors du dï¿½placement
  *  D03			= Flash
  *  D09			= VAPE Flash
  *  D51			= precede par G54 -> Select VAPE
@@ -91,11 +91,11 @@
  *
  *  Representation interne:
  *
- *  Les lignes sont représentées par des TRACKS standards
- *  Les Flash  sont représentées par des DRAWSEGMENTS
+ *  Les lignes sont reprï¿½sentï¿½es par des TRACKS standards
+ *  Les Flash  sont reprï¿½sentï¿½es par des DRAWSEGMENTS
  *      - ronds ou ovales: DRAWSEGMENTS
  *      - rectangles: DRAWSEGMENTS
- *  la reference aux D-CODES est placée dans le membre GetNet()
+ *  la reference aux D-CODES est placï¿½e dans le membre GetNet()
  */
 
 
@@ -126,7 +126,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
     wxPoint       pos;
     int           error = 0;
 
-    layer = GetScreen()->m_Active_Layer;
+    layer = GetPCBScreen()->m_Active_Layer;
 
     if( g_GERBER_Descr_List[layer] == NULL )
     {

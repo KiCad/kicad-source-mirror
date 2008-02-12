@@ -437,7 +437,7 @@ void WinEDA_DrawPanel::SetBoundaryBox()
  */
 {
     BASE_SCREEN* Screen = GetScreen();;
-
+	if(!Screen) return; 
     wxPoint      org;
     int          ii, jj;
 
@@ -795,6 +795,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
     static WinEDA_DrawPanel* LastPanel;
     static bool              IgnoreNextLeftButtonRelease = false;
 
+	if(!screen) return; 
     #define MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND 5        /* Adjust value to filter mouse deplacement before
                                                               * consider the drag mouse is really a drag command, not just a movement while click
                                                               */

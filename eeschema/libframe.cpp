@@ -53,7 +53,7 @@ EVT_MENU_RANGE( ID_POPUP_START_RANGE, ID_POPUP_END_RANGE,
 EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
                 WinEDA_LibeditFrame::Process_Special_Functions )
 
-// PopUp Menus pour Zooms traités dans drawpanel.cpp
+// PopUp Menus pour Zooms traitï¿½s dans drawpanel.cpp
 
 
 END_EVENT_TABLE()
@@ -90,7 +90,7 @@ WinEDA_LibeditFrame::~WinEDA_LibeditFrame()
 /**********************************************/
 {
     m_Parent->m_LibeditFrame = NULL;
-    m_CurrentScreen = ScreenSch;
+    //m_CurrentScreen = ScreenSch; humm, is this needed?
 }
 
 
@@ -100,14 +100,14 @@ void WinEDA_LibeditFrame::OnCloseWindow( wxCloseEvent& Event )
 {
     LibraryStruct* Lib;
 
-    if( m_CurrentScreen->IsModify() )
+	if( GetScreen()->IsModify() )
     {
         if( !IsOK( this, _( "Component was modified!\nDiscard changes?" ) ) )
         {
             Event.Veto(); return;
         }
         else
-            m_CurrentScreen->ClrModify();
+			GetScreen()->ClrModify();
     }
 
     for( Lib = g_LibraryList; Lib != NULL; Lib = Lib->m_Pnext )
@@ -261,8 +261,8 @@ int WinEDA_LibeditFrame::BestZoom()
     }
     else
     {
-        dx = m_CurrentScreen->m_CurrentSheet->m_Size.x;
-        dy = m_CurrentScreen->m_CurrentSheet->m_Size.y;
+		dx = GetScreen()->m_CurrentSheetDesc->m_Size.x;
+		dy = GetScreen()->m_CurrentSheetDesc->m_Size.y;
     }
 
     size    = DrawPanel->GetClientSize();
@@ -275,12 +275,12 @@ int WinEDA_LibeditFrame::BestZoom()
 
     if( CurrentLibEntry )
     {
-        m_CurrentScreen->m_Curseur = BoundaryBox.Centre();
+		GetScreen()->m_Curseur = BoundaryBox.Centre();
     }
     else
     {
-        m_CurrentScreen->m_Curseur.x = 0;
-        m_CurrentScreen->m_Curseur.y = 0;
+		GetScreen()->m_Curseur.x = 0;
+		GetScreen()->m_Curseur.y = 0;
     }
 
     return bestzoom;
@@ -303,7 +303,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
     wxGetMousePosition( &pos.x, &pos.y );
     pos.y += 20;
 
-    switch( id )   // Arret de la commande de déplacement en cours
+    switch( id )   // Arret de la commande de dï¿½placement en cours
     {
     case ID_POPUP_LIBEDIT_END_CREATE_ITEM:
     case ID_POPUP_LIBEDIT_PIN_EDIT:
@@ -339,7 +339,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
     switch( id )
     {
     case ID_LIBEDIT_SAVE_CURRENT_LIB:
-        if( m_CurrentScreen->IsModify() )
+		if( GetScreen()->IsModify() )
         {
             if( IsOK( this, _( "Include last component changes?" ) ) )
                 SaveOnePartInMemory();
@@ -608,7 +608,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         }
 
         CurrentDrawItem = NULL;
-        m_CurrentScreen->SetModify();
+		GetScreen()->SetModify();
         DrawPanel->CursorOn( &dc );
         break;
 

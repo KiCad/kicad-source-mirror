@@ -24,8 +24,9 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, bool use_
 
 static void WriteGENERICListOfNets( FILE* f, ObjetNetListStruct* ObjNet );
 static void AddPinToComponentPinList( EDA_SchComponentStruct* Component,
+									  DrawSheetList* 		  sheet, 
                                       LibDrawPin*             PinEntry );
-static void FindOthersUnits( EDA_SchComponentStruct* Component );
+static void FindOthersUnits( EDA_SchComponentStruct* Component, DrawSheetList* Sheet_in);
 static int  SortPinsByNum( ObjetNetListStruct** Pin1, ObjetNetListStruct** Pin2 );
 static void EraseDuplicatePins( ObjetNetListStruct** TabPin, int NbrPin );
 
@@ -91,7 +92,7 @@ void WriteNetList( WinEDA_SchematicFrame* frame, const wxString& FileNameNL,
 
 /****************************************************************************/
 static EDA_SchComponentStruct* FindNextComponentAndCreatPinList(
-    EDA_BaseStruct* DrawList )
+		EDA_BaseStruct* DrawList, DrawSheetList* sheet)
 /****************************************************************************/
 
 /*	Find a "suitable" component from the DrawList
@@ -116,8 +117,18 @@ static EDA_SchComponentStruct* FindNextComponentAndCreatPinList(
         Component = (EDA_SchComponentStruct*) DrawList;
 
         /* already tested ? : */
-        if( Component->m_FlagControlMulti == 1 )
-            continue;                                      /* yes */
+		bool found = false; 
+		for(unsigned int i =0; i<Component->m_UsedOnSheets.GetCount(); i++){
+			if( Component->m_UsedOnSheets.Item(i) == *sheet ){
+				found = true; 
+				break; 
+			}
+		}
+		if( found ) continue; 
+        //if( Component->m_FlagControlMulti == 1 )
+        //    continue;                                      /* yes */
+		// removed because with multiple instances of one schematic 
+		// (several sheets pointing to 1 screen), this will be erroneously be toggled. 
 
         Entry = FindLibPart( Component->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
         if( Entry  == NULL )
@@ -125,11 +136,12 @@ static EDA_SchComponentStruct* FindNextComponentAndCreatPinList(
 
         /* Power symbol and other component which have the reference starting by
          *  "#" are not included in netlist (pseudo components) */
-        if( Component->m_Field[REFERENCE].m_Text[0] == '#' )
+		wxString str = Component->GetRef(sheet); 
+        if( str[0] == '#' )
             continue;
 
         /* Create the pin table for this component */
-        int ii = sizeof(ObjetNetListStruct) * MAXPIN;
+        int ii = sizeof(ObjetNetListStruct*) * MAXPIN;
         if( s_SortedComponentPinList == NULL )
             s_SortedComponentPinList = (ObjetNetListStruct**) MyMalloc( ii );
         memset( s_SortedComponentPinList, 0, ii );
@@ -146,14 +158,15 @@ static EDA_SchComponentStruct* FindNextComponentAndCreatPinList(
                && (DEntry->m_Convert != Component->m_Convert) )
                 continue;
             {
-                AddPinToComponentPinList( Component, (LibDrawPin*) DEntry );
+                AddPinToComponentPinList( Component, sheet, (LibDrawPin*) DEntry );
             }
         }
 
-        Component->m_FlagControlMulti = 1;
-
+        //Component->m_FlagControlMulti = 1;
+		Component->m_UsedOnSheets.Add(*sheet); 
+				
         if( Entry->m_UnitCount > 1 )
-            FindOthersUnits( Component );
+            FindOthersUnits( Component, sheet);
 
         /* Tri sur le numero de Pin de TabListePin */
         qsort( s_SortedComponentPinList, s_SortedPinCount, sizeof(ObjetNetListStruct*),
@@ -195,9 +208,9 @@ static wxString ReturnPinNetName( ObjetNetListStruct* Pin,
         {
             if( g_TabObjNet[jj].GetNet() != netcode )
                 continue;
-            if( ( g_TabObjNet[jj].m_Type != NET_GLOBLABEL)
+            if( ( g_TabObjNet[jj].m_Type != NET_HIERLABEL)
                && ( g_TabObjNet[jj].m_Type != NET_LABEL)
-               && ( g_TabObjNet[jj].m_Type != NET_PINLABEL) )
+				&& ( g_TabObjNet[jj].m_Type != NET_PINLABEL) )
                 continue;
 
             NetName = *g_TabObjNet[jj].m_Label;
@@ -206,8 +219,11 @@ static wxString ReturnPinNetName( ObjetNetListStruct* Pin,
 
         if( !NetName.IsEmpty() )
         {
-            if( g_TabObjNet[jj].m_Type != NET_PINLABEL )
-                NetName << wxT( "_" ) << g_TabObjNet[jj].m_SheetNumber;
+            if( g_TabObjNet[jj].m_Type != NET_PINLABEL ){
+				NetName = g_TabObjNet[jj].m_SheetList.PathHumanReadable()
+							+ NetName;
+			}
+                //NetName << wxT("_") << g_TabObjNet[jj].m_SheetList.PathHumanReadable();
         }
         else
         {
@@ -217,7 +233,6 @@ static wxString ReturnPinNetName( ObjetNetListStruct* Pin,
     return NetName;
 }
 
-
 /***********************************************************************/
 void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame,
                             const wxString&        FullFileName )
@@ -225,10 +240,11 @@ void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame,
 
 /* Create a generic netlist, and call an external netlister
  *  to change the netlist syntax and create the file
+ * -- does this still work? 
  */
 {
     wxString                Line, FootprintName;
-    BASE_SCREEN*            CurrScreen;
+	DrawSheetList* 		sheet;
     EDA_BaseStruct*         DrawList;
     EDA_SchComponentStruct* Component;
     wxString                netname;
@@ -250,12 +266,14 @@ void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame,
 
     /* Create netlist module section */
     fprintf( tmpfile, "$BeginComponentList\n" );
-    EDA_ScreenList ScreenList( NULL );
-    for( CurrScreen = ScreenList.GetFirst(); CurrScreen != NULL; CurrScreen = ScreenList.GetNext() )
-    {
-        for( DrawList = CurrScreen->EEDrawList; DrawList != NULL; DrawList = DrawList->Pnext )
-        {
-            DrawList = Component = FindNextComponentAndCreatPinList( DrawList );
+	EDA_SheetList SheetList( NULL );
+
+	for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
+	{
+		for( DrawList = sheet->LastDrawList(); DrawList != NULL; DrawList = DrawList->Pnext )
+		{
+            DrawList = Component = FindNextComponentAndCreatPinList( DrawList, sheet );
+ 
             if( Component == NULL )
                 break;                      // No component left
 
@@ -269,7 +287,7 @@ void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame,
             fprintf( tmpfile, "\n$BeginComponent\n" );
             fprintf( tmpfile, "TimeStamp=%8.8lX\n", Component->m_TimeStamp );
             fprintf( tmpfile, "Footprint=%s\n", CONV_TO_UTF8( FootprintName ) );
-            Line = wxT( "Reference=" ) + Component->m_Field[REFERENCE].m_Text + wxT( "\n" );
+            Line = wxT( "Reference=" ) + Component->GetPath(sheet) + wxT( "\n" );
             Line.Replace( wxT( " " ), wxT( "_" ) );
             fprintf( tmpfile, CONV_TO_UTF8( Line ) );
 
@@ -337,7 +355,7 @@ static void ClearUsedFlags( WinEDA_SchematicFrame* frame )
     SCH_SCREEN*     screen;
     EDA_BaseStruct* DrawList;
 
-    EDA_ScreenList ScreenList( NULL );
+    EDA_ScreenList ScreenList;
 
     for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
     {
@@ -347,7 +365,8 @@ static void ClearUsedFlags( WinEDA_SchematicFrame* frame )
             if( DrawList->Type() == DRAW_LIB_ITEM_STRUCT_TYPE )
             {
                 EDA_SchComponentStruct* Component = (EDA_SchComponentStruct*) DrawList;
-                Component->m_FlagControlMulti = 0;
+                //Component->m_FlagControlMulti = 0;
+				Component->m_UsedOnSheets.Clear(); 
             }
             DrawList = DrawList->Pnext;
         }
@@ -365,14 +384,14 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
  *      les nodes sont identifies par le netname
  *  sinon	les nodes sont identifies par le netnumber
  * 
- *  tous les textes graphiques commençant par [.-+]pspice ou  [.-+]gnucap
- *  sont considérés comme des commandes a placer dans la netliste
+ *  tous les textes graphiques commenï¿½ant par [.-+]pspice ou  [.-+]gnucap
+ *  sont considï¿½rï¿½s comme des commandes a placer dans la netliste
  *      [.-]pspice ou gnucap sont en debut
  +pspice et +gnucap sont en fin de netliste
  */
 {
     char                    Line[1024];
-    SCH_SCREEN*             screen;
+    DrawSheetList* 		sheet;
     EDA_BaseStruct*         DrawList;
     EDA_SchComponentStruct* Component;
     int ii, nbitems;
@@ -389,11 +408,11 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
     /* Create text list starting by [.-]pspice , or [.-]gnucap (simulator commands) */
     /* and create text list starting by [+]pspice , or [+]gnucap (simulator commands) */
     bufnum[BUFYPOS_LEN] = 0;
-    EDA_ScreenList ScreenList( NULL );
+    EDA_SheetList SheetList( NULL );
 
-    for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
+    for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
-        for( DrawList = screen->EEDrawList; DrawList != NULL; DrawList = DrawList->Pnext )
+        for( DrawList = sheet->LastDrawList(); DrawList != NULL; DrawList = DrawList->Pnext )
         {
             wxChar ident;
             if( DrawList->Type() != DRAW_TEXT_STRUCT_TYPE )
@@ -444,15 +463,15 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
 
     /* Create component list */
     ClearUsedFlags( frame );  /* Reset the flags FlagControlMulti in all schematic files*/
-    for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
+    for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
-        for( DrawList = screen->EEDrawList; DrawList != NULL; DrawList = DrawList->Pnext )
+        for( DrawList = sheet->LastDrawList(); DrawList != NULL; DrawList = DrawList->Pnext )
         {
-            DrawList = Component = FindNextComponentAndCreatPinList( DrawList );
+            DrawList = Component = FindNextComponentAndCreatPinList( DrawList, sheet );
             if( Component == NULL )
                 break;
 
-            fprintf( f, "%s ", CONV_TO_UTF8( Component->m_Field[REFERENCE].m_Text ) );
+            fprintf( f, "%s ", CONV_TO_UTF8( Component->GetRef( sheet ) ) );
 
             // Write pin list:
             for( ii = 0; ii < s_SortedPinCount; ii++ )
@@ -514,11 +533,11 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
 {
     wxString Line, FootprintName;
     char Buf[256];
-    SCH_SCREEN* CurrScreen;
+    DrawSheetList* sheet;
     EDA_BaseStruct* DrawList;
     EDA_SchComponentStruct* Component;
     int ii;
-    EDA_SchComponentStruct** CmpList = NULL;
+	ListComponent* CmpList = NULL;
     int CmpListCount = 0, CmpListSize = 1000;
 
     DateAndTime( Buf );
@@ -528,16 +547,16 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
         fprintf( f, "( { %s created  %s }\n", NETLIST_HEAD_STRING, Buf );
 
 
-    /* Create netlist module section */
+    	/* Create netlist module section */
     ClearUsedFlags( frame );  /* Reset the flags FlagControlMulti in all schematic files*/
 
-    EDA_ScreenList ScreenList( NULL );
+    EDA_SheetList SheetList( NULL );
 
-    for( CurrScreen = ScreenList.GetFirst(); CurrScreen != NULL; CurrScreen = ScreenList.GetNext() )
+    for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
-        for( DrawList = CurrScreen->EEDrawList; DrawList != NULL; DrawList = DrawList->Pnext )
+        for( DrawList = sheet->LastDrawList(); DrawList != NULL; DrawList = DrawList->Pnext )
         {
-            DrawList = Component = FindNextComponentAndCreatPinList( DrawList );
+            DrawList = Component = FindNextComponentAndCreatPinList( DrawList, sheet);
             if( Component == NULL )
                 break;
 
@@ -548,20 +567,19 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
             {
                 if( Entry->m_FootprintList.GetCount() != 0 )   /* Put in list */
                 {
-                    if( CmpList == NULL )
-                        CmpList = (EDA_SchComponentStruct**) MyZMalloc( sizeof(
-                                                                            EDA_SchComponentStruct
-                                                                            *) * CmpListSize );
+                    if( CmpList == NULL ){
+						CmpList = (ListComponent*) 
+								MyZMalloc( sizeof(ListComponent) * CmpListSize );
+					}
                     if( CmpListCount >= CmpListSize )
                     {
                         CmpListSize += 1000;
-                        CmpList = (EDA_SchComponentStruct**) realloc(
+						CmpList = (ListComponent*) realloc(
                             CmpList,
-                            sizeof(
-                                EDA_SchComponentStruct*)
-                            * CmpListSize );
+							sizeof(ListComponent) * CmpListSize );
                     }
-                    CmpList[CmpListCount] = Component;
+                    CmpList[CmpListCount].m_Comp = Component;
+					strcpy(CmpList[CmpListCount].m_Ref, Component->GetRef( sheet ).mb_str()); 
                     CmpListCount++;
                 }
             }
@@ -574,10 +592,9 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
             else
                 FootprintName = wxT( "$noname" );
 
-            Line = Component->m_Field[REFERENCE].m_Text;
-            Line.Replace( wxT( " " ), wxT( "_" ) );
-            fprintf( f, " ( %8.8lX %s",
-                    Component->m_TimeStamp,
+            Line = Component->GetRef(sheet); 
+            fprintf( f, " ( %s %s",
+                    CONV_TO_UTF8(Component->GetPath(sheet)),
                     CONV_TO_UTF8( FootprintName ) );
             fprintf( f, "  %s", CONV_TO_UTF8( Line ) );
 
@@ -622,11 +639,16 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
         EDA_LibComponentStruct* Entry;
         for( ii = 0; ii < CmpListCount; ii++ )
         {
-            Component = CmpList[ii];
+            Component = CmpList[ii].m_Comp;
             Entry = FindLibPart( Component->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
-            Line  = Component->m_Field[REFERENCE].m_Text;
-            Line.Replace( wxT( " " ), wxT( "_" ) );
-            fprintf( f, "$component %s\n", CONV_TO_UTF8( Line ) );
+			//Line.Printf(_("%s"), CmpList[ii].m_Ref);
+            //Line.Replace( wxT( " " ), wxT( "_" ) );
+			unsigned int i; 
+			for(i=0; i<sizeof(CmpList[ii].m_Ref) && CmpList[ii].m_Ref[i]; i++){
+				if(CmpList[ii].m_Ref[i] == ' ')
+					CmpList[ii].m_Ref[i] = '_'; 
+			}
+            fprintf( f, "$component %s\n", CmpList[ii].m_Ref );
             /* Write the footprint list */
             for( unsigned int jj = 0; jj < Entry->m_FootprintList.GetCount(); jj++ )
             {
@@ -652,7 +674,8 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
 
 
 /*************************************************************************************/
-static void AddPinToComponentPinList( EDA_SchComponentStruct* Component, LibDrawPin* Pin )
+static void AddPinToComponentPinList( EDA_SchComponentStruct* Component, 
+									  DrawSheetList* sheetlist, LibDrawPin* Pin )
 /*************************************************************************************/
 
 /* Add a new pin description in the pin list s_SortedComponentPinList
@@ -669,6 +692,8 @@ static void AddPinToComponentPinList( EDA_SchComponentStruct* Component, LibDraw
             continue;
         if( g_TabObjNet[ii].m_Link != Component )
             continue;
+		if( g_TabObjNet[ii].m_SheetList != *sheetlist )
+			continue; 
         if( g_TabObjNet[ii].m_PinNum != Pin->m_PinNum )
             continue;
         {
@@ -716,7 +741,7 @@ static void EraseDuplicatePins( ObjetNetListStruct** TabPin, int NbrPin )
 
 
 /**********************************************************************/
-static void FindOthersUnits( EDA_SchComponentStruct* Component )
+static void FindOthersUnits( EDA_SchComponentStruct* Component_in, DrawSheetList* Sheet_in)
 /**********************************************************************/
 
 /* Recherche les autres parts du boitier auquel appartient la part Component,
@@ -728,13 +753,15 @@ static void FindOthersUnits( EDA_SchComponentStruct* Component )
     EDA_SchComponentStruct* Component2;
     EDA_LibComponentStruct* Entry;
     LibEDA_BaseStruct* DEntry;
-    SCH_SCREEN* screen;
+    DrawSheetList* sheet;
+	wxString str; 
 
-    EDA_ScreenList ScreenList( NULL );
-
-    for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
+    EDA_SheetList SheetList( NULL );
+	unsigned int i; 
+	bool found; 
+    for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
-        DrawList = screen->EEDrawList;
+        DrawList = sheet->LastDrawList();
         while( DrawList )
         {
             switch( DrawList->Type() )
@@ -742,17 +769,24 @@ static void FindOthersUnits( EDA_SchComponentStruct* Component )
             case DRAW_LIB_ITEM_STRUCT_TYPE:
                 Component2 = (EDA_SchComponentStruct*) DrawList;
 
-                if( Component2->m_FlagControlMulti == 1 )
-                    break;
-
-                if( Component2->m_Field[REFERENCE].m_Text.CmpNoCase(
-                        Component->m_Field[REFERENCE].m_Text ) != 0 )
+				found = false; 
+				for( i =0; i<Component2->m_UsedOnSheets.GetCount(); i++){
+					if( Component2->m_UsedOnSheets.Item(i) == *Sheet_in ){
+						found = true; 
+					}
+				}
+				if( found ) break; 
+                //if( Component2->m_FlagControlMulti == 1 ) //has it been used? (on this sheet?)
+                //    break;
+				str = Component2->GetRef(sheet); 
+                if( str.CmpNoCase( Component_in->GetRef(Sheet_in) ) != 0 )
                     break;
 
                 Entry = FindLibPart( Component2->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
                 if( Entry  == NULL )
                     break;
-                if( Component2->m_Field[REFERENCE].m_Text[0] == '#' )
+				
+                if( str[0] == '#' )
                     break;
 
                 if( Entry->m_Drawings != NULL )
@@ -769,11 +803,12 @@ static void FindOthersUnits( EDA_SchComponentStruct* Component )
                            && (DEntry->m_Convert != Component2->m_Convert) )
                             continue;
                         {
-                            AddPinToComponentPinList( Component2, (LibDrawPin*) DEntry );
+                            AddPinToComponentPinList( Component2, sheet, (LibDrawPin*) DEntry );
                         }
                     }
                 }
-                Component2->m_FlagControlMulti = 1;
+				Component2->m_UsedOnSheets.Add(*Sheet_in); 
+                //Component2->m_FlagControlMulti = 1; //mark it as used.. 
                 break;
 
             default:
@@ -794,12 +829,12 @@ static int SortPinsByNum( ObjetNetListStruct** Pin1, ObjetNetListStruct** Pin2 )
  *  du tableau des pins s_SortedComponentPinList par qsort()
  */
 {
-    ObjetNetListStruct* Obj1, * Obj2;
+	ObjetNetListStruct* Obj1, * Obj2;
     int Num1, Num2;
     char Line[5];
 
-    Obj1    = *Pin1; Obj2 = *Pin2;
-    Num1    = Obj1->m_PinNum; Num2 = Obj2->m_PinNum;
+	Obj1    = *Pin1; Obj2 = *Pin2;
+	Num1    = Obj1->m_PinNum; Num2 = Obj2->m_PinNum;
     Line[4] = 0; memcpy( Line, &Num1, 4 ); Num1 = atoi( Line );
     memcpy( Line, &Num2, 4 ); Num2 = atoi( Line );
     return Num1 - Num2;
@@ -832,7 +867,7 @@ static void WriteGENERICListOfNets( FILE* f, ObjetNetListStruct* ObjNet )
             {
                 if( ObjNet[jj].GetNet() != NetCode )
                     continue;
-                if( ( ObjNet[jj].m_Type != NET_GLOBLABEL)
+                if( ( ObjNet[jj].m_Type != NET_HIERLABEL)
                    && ( ObjNet[jj].m_Type != NET_LABEL)
                    && ( ObjNet[jj].m_Type != NET_PINLABEL) )
                     continue;
@@ -845,8 +880,13 @@ static void WriteGENERICListOfNets( FILE* f, ObjetNetListStruct* ObjNet )
             if( !NetName.IsEmpty() )
             {
                 NetcodeName += NetName;
-                if( g_TabObjNet[jj].m_Type != NET_PINLABEL )  // usual net name, add it the sheet number
-                    NetcodeName << wxT( "_" ) << g_TabObjNet[jj].m_SheetNumber;
+                if( g_TabObjNet[jj].m_Type != NET_PINLABEL ){  
+					// usual net name, add in the sheet path
+					NetcodeName = g_TabObjNet[jj].m_SheetList.PathHumanReadable()
+							+ NetcodeName;
+					//NetcodeName << wxT("_") << 
+					//		g_TabObjNet[jj].m_SheetList.PathHumanReadable();
+				}
             }
             NetcodeName += wxT( "\"" );
             LastNetCode  = NetCode;
@@ -856,7 +896,7 @@ static void WriteGENERICListOfNets( FILE* f, ObjetNetListStruct* ObjNet )
             continue;
 
         Cmp    = (EDA_SchComponentStruct*) ObjNet[ii].m_Link;
-        CmpRef = Cmp->m_Field[REFERENCE].m_Text;
+		CmpRef = Cmp->GetRef(&ObjNet[ii].m_SheetList); //is this correct? 
         if( CmpRef.StartsWith( wxT( "#" ) ) )
             continue;                                   // Pseudo component (Like Power symbol)
 
@@ -919,7 +959,7 @@ static void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
     wxString msg;
     wxString FootprintName;
     char Line[1024];
-    BASE_SCREEN* CurrScreen;
+    DrawSheetList* sheet;
     EDA_BaseStruct* DrawList;
     EDA_SchComponentStruct* Component;
     wxString Title = g_Main_Title + wxT( " " ) + GetBuildVersion();
@@ -933,13 +973,13 @@ static void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
 
     /* Create netlist module section */
     ClearUsedFlags( frame );  /* Reset the flags FlagControlMulti in all schematic files*/
-    EDA_ScreenList ScreenList( NULL );
+    EDA_SheetList SheetList( NULL );
 
-    for( CurrScreen = ScreenList.GetFirst(); CurrScreen != NULL; CurrScreen = ScreenList.GetNext() )
+    for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
-        for( DrawList = CurrScreen->EEDrawList; DrawList != NULL; DrawList = DrawList->Pnext )
+        for( DrawList = sheet->LastDrawList(); DrawList != NULL; DrawList = DrawList->Pnext )
         {
-            DrawList = Component = FindNextComponentAndCreatPinList( DrawList );
+            DrawList = Component = FindNextComponentAndCreatPinList( DrawList, sheet);
             if( Component == NULL )
                 break;
 
@@ -951,8 +991,7 @@ static void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
             else
                 FootprintName = wxT( "$noname" );
 
-            msg = Component->m_Field[REFERENCE].m_Text;
-            msg.Replace( wxT( " " ), wxT( "_" ) );
+            msg = Component->GetRef(sheet);
             fprintf( f, "%s     ", CONV_TO_UTF8( StartCmpDesc ) );
             fprintf( f, "%s", CONV_TO_UTF8( msg ) );
 
@@ -1007,7 +1046,7 @@ static void WriteListOfNetsCADSTAR( FILE* f, ObjetNetListStruct* ObjNet )
             {
                 if( ObjNet[jj].GetNet() != NetCode )
                     continue;
-                if( ( ObjNet[jj].m_Type != NET_GLOBLABEL)
+                if( ( ObjNet[jj].m_Type != NET_HIERLABEL)
                    && ( ObjNet[jj].m_Type != NET_LABEL)
                    && ( ObjNet[jj].m_Type != NET_PINLABEL) )
                     continue;
@@ -1019,8 +1058,12 @@ static void WriteListOfNetsCADSTAR( FILE* f, ObjetNetListStruct* ObjNet )
             if( !NetName.IsEmpty() )
             {
                 NetcodeName += NetName;
-                if( g_TabObjNet[jj].m_Type != NET_PINLABEL )
-                    NetcodeName << wxT( "_" ) << g_TabObjNet[jj].m_SheetNumber;
+                if( g_TabObjNet[jj].m_Type != NET_PINLABEL ){
+					NetcodeName = g_TabObjNet[jj].m_SheetList.PathHumanReadable()
+							+ NetcodeName;
+					//NetcodeName << wxT("_") << 
+					//		g_TabObjNet[jj].m_SheetList.PathHumanReadable();
+				}
             }
             else  // this net has no name: create a default name $<net number>
                 NetcodeName << wxT( "$" ) << NetCode;
@@ -1037,8 +1080,8 @@ static void WriteListOfNetsCADSTAR( FILE* f, ObjetNetListStruct* ObjNet )
             continue;
 
         Cmp = (EDA_SchComponentStruct*) ObjNet[ii].m_Link;
-
-        if( Cmp->m_Field[REFERENCE].m_Text[0] == '#' )
+		wxString refstr = Cmp->GetRef(&(ObjNet[ii].m_SheetList)); 
+        if( refstr[0] == '#' )
             continue; // Pseudo composant (symboles d'alims)
 
         switch( print_ter )
@@ -1051,7 +1094,7 @@ static void WriteListOfNetsCADSTAR( FILE* f, ObjetNetListStruct* ObjNet )
             str_pinnum = CONV_FROM_UTF8( buf );
             InitNetDescLine.Printf( wxT( "\n%s   %s   %.4s     %s" ),
                                    InitNetDesc.GetData(),
-                                   Cmp->m_Field[REFERENCE].m_Text.GetData(),
+                                   refstr.GetData(),
                                    str_pinnum.GetData(), NetcodeName.GetData() );
         }
             print_ter++;
@@ -1061,14 +1104,14 @@ static void WriteListOfNetsCADSTAR( FILE* f, ObjetNetListStruct* ObjNet )
             fprintf( f, "%s\n", CONV_TO_UTF8( InitNetDescLine ) );
             fprintf( f, "%s       %s   %.4s\n",
                      CONV_TO_UTF8( StartNetDesc ),
-                     CONV_TO_UTF8( Cmp->m_Field[REFERENCE].m_Text ),
+                     CONV_TO_UTF8( refstr ),
                      (char*) &ObjNet[ii].m_PinNum );
             print_ter++;
             break;
 
         default:
             fprintf( f, "            %s   %.4s\n",
-                     CONV_TO_UTF8( Cmp->m_Field[REFERENCE].m_Text ),
+                     CONV_TO_UTF8( refstr ),
                      (char*) &ObjNet[ii].m_PinNum );
             break;
         }
@@ -1085,7 +1128,9 @@ static void WriteListOfNetsCADSTAR( FILE* f, ObjetNetListStruct* ObjNet )
                 continue;
             EDA_SchComponentStruct* tstcmp =
                 (EDA_SchComponentStruct*) ObjNet[jj].m_Link;
-            if( Cmp->m_Field[REFERENCE].m_Text != tstcmp->m_Field[REFERENCE].m_Text )
+			wxString p = Cmp->GetPath( &( ObjNet[ii].m_SheetList ) ); 
+			wxString tstp = tstcmp->GetPath( &( ObjNet[jj].m_SheetList ) ); 
+			if( p.Cmp(tstp) != 0 )
                 continue;
 
             if( ObjNet[jj].m_PinNum == ObjNet[ii].m_PinNum )

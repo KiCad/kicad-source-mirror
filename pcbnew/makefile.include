@@ -101,7 +101,6 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		work.o queue.o \
 		board.o dist.o graphpcb.o \
 		undelete.o \
-		copy_track.o\
 		move_or_drag_track.o\
 		ioascii.o \
 		mirepcb.o xchgmod.o\
@@ -120,7 +119,11 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		modedit.o\
 		export_gencad.o\
 		hotkeys.o \
-        collectors.o
+        collectors.o \
+		specctra.cpp \
+		specctra_import.cpp \
+		specctra_export.cpp
+		
 
 
 PolyLine.o: ../polygon/PolyLine.cpp ../polygon/PolyLine.h $(COMMON)

@@ -58,7 +58,7 @@ public:
     WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id, const wxPoint& pos, const wxSize& size );
     ~WinEDA_DrawPanel() { }
     /****************************/
-    BASE_SCREEN* GetScreen() { return m_Parent->m_CurrentScreen; }
+    virtual BASE_SCREEN* GetScreen() { return m_Parent->GetScreen(); }
 
     void    PrepareGraphicContext( wxDC* DC );
     wxPoint CalcAbsolutePosition( const wxPoint& rel_pos );
@@ -104,7 +104,7 @@ public:
     void    CursorOff( wxDC* DC );                          // remove the grid cursor from the display
     void    CursorOn( wxDC* DC );                           // display the grid cursor
 
-    DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE() 
 };
 
 /**************************/
@@ -196,8 +196,8 @@ public:
     DrawBlockStruct BlockLocate;    /* Bock description for block commands */
 
     /* Page description */
-    Ki_PageDescr*   m_CurrentSheet;
-    int             m_SheetNumber, m_NumberOfSheet;/* gestion hierarchie: numero de sousfeuille
+    Ki_PageDescr*   m_CurrentSheetDesc;
+    int             m_ScreenNumber, m_NumberOfScreen;/* gestion hierarchie: numero de sousfeuille
                                                     *  et nombre de feuilles. Root: SheetNumber = 1 */
     wxString        m_FileName;
     wxString        m_Title;            /* titre de la feuille */

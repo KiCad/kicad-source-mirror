@@ -340,7 +340,7 @@ COMMON_GLOBL int g_GridColor
 #endif
 ;
 
-/* Current used screen: */
+/* Current used screen: (not used in eeshema)*/
 COMMON_GLOBL BASE_SCREEN* ActiveScreen;
 
 

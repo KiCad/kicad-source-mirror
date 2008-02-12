@@ -71,7 +71,7 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame(wxWindow * father, WinEDA_App *parent,
 	if ( m_Semaphore ) SetWindowStyle( GetWindowStyle() | wxSTAY_ON_TOP);
 		
 	m_CurrentScreen = new SCH_SCREEN(VIEWER_FRAME);
-	m_CurrentScreen->SetZoom(16);
+	GetScreen()->SetZoom(16);
 
 	if ( Library == NULL )
 	{
@@ -108,7 +108,7 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame(wxWindow * father, WinEDA_App *parent,
 
 WinEDA_ViewlibFrame::~WinEDA_ViewlibFrame()
 {
-	delete m_CurrentScreen;
+	SAFE_DELETE( m_CurrentScreen );
 	m_Parent->m_ViewlibFrame = NULL;
 }
 
@@ -185,8 +185,8 @@ EDA_LibComponentStruct * CurrentLibEntry = NULL;
 	if( CurrentLibEntry == NULL )
 		{
 		bestzoom = 16;
-		m_CurrentScreen->m_Curseur.x = 0;
-		m_CurrentScreen->m_Curseur.y = 0;
+		GetScreen()->m_Curseur.x = 0;
+		GetScreen()->m_Curseur.y = 0;
 		return(bestzoom);
 		}
 
@@ -205,8 +205,8 @@ EDA_LibComponentStruct * CurrentLibEntry = NULL;
 		if(bestzoom > ii ) break;
 		}
 
-	m_CurrentScreen->m_Curseur = BoundaryBox.Centre();
-	m_CurrentScreen->m_Curseur.y = - m_CurrentScreen->m_Curseur.y;
+		GetScreen()->m_Curseur = BoundaryBox.Centre();
+		GetScreen()->m_Curseur.y = -( GetScreen()->m_Curseur.y );
 
 	return(bestzoom);
 }
@@ -236,8 +236,8 @@ bool found = FALSE;
 
 	free (ListNames);
 
-	/* Librairie courante peut etre non retrouvée en liste
-		(peut etre effacée lors d'une modification de configuration) */
+	/* Librairie courante peut etre non retrouvï¿½e en liste
+		(peut etre effacï¿½e lors d'une modification de configuration) */
 	if ( ! found )
 	{
 		g_CurrentViewLibraryName.Empty();
@@ -262,7 +262,7 @@ LibraryStruct *Library = FindLibrary(g_CurrentViewLibraryName.GetData());
 	ii = 0;
 	g_CurrentViewComponentName.Empty();
 	g_ViewConvert = 1;						/* Vue normal / convert */
-	g_ViewUnit = 1;						/* unité a afficher (A, B ..) */
+	g_ViewUnit = 1;						/* unitï¿½ a afficher (A, B ..) */
 	if ( Library )
 		LibEntry = (EDA_LibComponentStruct *) PQFirst(&Library->m_Entries, FALSE);
 	while( LibEntry )

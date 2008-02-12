@@ -117,7 +117,7 @@ public:
 ////@end WinEDA_SheetPropertiesFrame member variables
 
 	WinEDA_SchematicFrame * m_Parent;
-	DrawSheetStruct * m_CurrentSheet;
+	DrawSheetStruct*  m_CurrentSheet;
 };
 
 #endif

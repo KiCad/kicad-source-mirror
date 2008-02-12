@@ -193,7 +193,7 @@ void DrawLibEntry( WinEDA_DrawPanel* panel, wxDC* DC,
                          Field->m_HJustify, Field->m_VJustify, LineWidth );
     }
 
-    // Tracé de l'ancre
+    // Tracï¿½ de l'ancre
     int len = 3 * panel->GetZoom();
     GRLine( &panel->m_ClipBox, DC, posX, posY - len, posX, posY + len, 0, color );
     GRLine( &panel->m_ClipBox, DC, posX - len, posY, posX + len, posY, 0, color );
@@ -212,7 +212,7 @@ void EDA_SchComponentStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     bool dummy = FALSE;
 
     if( ( Entry = FindLibPart( m_ChipName.GetData(), wxEmptyString, FIND_ROOT ) ) == NULL )
-    {   /* composant non trouvé, on affiche un composant "dummy" */
+    {   /* composant non trouvï¿½, on affiche un composant "dummy" */
         dummy = TRUE;
         if( DummyCmp == NULL )
             CreateDummyCmp();
@@ -587,8 +587,8 @@ void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
             LibDrawPin* Pin = (LibDrawPin*) DEntry;
             if( Pin->m_Attributs & PINNOTDRAW )
             {
-                if( (ActiveScreen->m_Type == SCHEMATIC_FRAME)
-                   && !g_ShowAllPins )
+                if( /*(GetScreen()->m_Type == SCHEMATIC_FRAME )
+                   &&*/ !g_ShowAllPins )
                     break;
             }
             

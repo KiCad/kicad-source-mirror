@@ -65,6 +65,7 @@ public:
 
     unsigned long m_Link;               // variable temporaire ( pour editions, ...)
     long          m_LastEdit_Time;      // Date de la derniere modification du module (gestion de librairies)
+	wxString		 m_Path; 
 
     wxString      m_Doc;                // Texte de description du module
     wxString      m_KeyWord;            // Liste des mots cles relatifs au module

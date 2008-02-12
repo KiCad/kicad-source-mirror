@@ -294,7 +294,7 @@ int DrawMode = g_XorMode;
 			new WinEDA_bodytext_PropertiesFrame(this);
 	frame->ShowModal(); frame->Destroy();
 
-	m_CurrentScreen->SetModify();
+	GetScreen()->SetModify();
 
 	/* Affichage nouveau texte */
 	if( ((LibDrawText*)DrawItem)->m_Text && DC)
@@ -328,7 +328,7 @@ LibDrawText * DrawItem = (LibDrawText *) CurrentDrawItem;
 			DrawItem->m_Horiz = TEXT_ORIENT_VERT;
 	else DrawItem->m_Horiz = TEXT_ORIENT_HORIZ;
 
-	m_CurrentScreen->SetModify();
+	GetScreen()->SetModify();
 
 	/* Redraw item with new orient */
 	if ( DrawPanel->ManageCurseur == NULL)

@@ -114,7 +114,7 @@ void WinEDA_LibeditFrame::LoadOneSymbol( wxDC* DC )
         }
 
         SuppressDuplicateDrawItem( CurrentLibEntry );
-        m_CurrentScreen->SetModify();
+		GetScreen()->SetModify();
 
         // Move (and place ) the new draw items:
         HandleBlockBegin( DC, -1, GetScreen()->m_Curseur );
@@ -434,14 +434,14 @@ void WinEDA_LibeditFrame::PlaceAncre()
     EDA_LibComponentStruct* LibEntry;
     LibEDA_BaseStruct* DrawEntry;
 
-    dx = -m_CurrentScreen->m_Curseur.x;
-    dy = m_CurrentScreen->m_Curseur.y;
+	dx = -( GetScreen()->m_Curseur.x );
+	dy = GetScreen()->m_Curseur.y;
 
     LibEntry = CurrentLibEntry;
     if( LibEntry == NULL )
         return;
 
-    m_CurrentScreen->SetModify();
+	GetScreen()->SetModify();
 
     LibEntry->m_Name.m_Pos.x   += dx; LibEntry->m_Name.m_Pos.y += dy;
     LibEntry->m_Prefix.m_Pos.x += dx; LibEntry->m_Prefix.m_Pos.y += dy;
@@ -510,7 +510,7 @@ void WinEDA_LibeditFrame::PlaceAncre()
     }
 
     /* Redraw the symbol */
-    m_CurrentScreen->m_Curseur.x = m_CurrentScreen->m_Curseur.y = 0;
+	GetScreen()->m_Curseur.x = GetScreen()->m_Curseur.y = 0;
     Recadre_Trace( TRUE );
-    m_CurrentScreen->SetRefreshReq();
+	GetScreen()->SetRefreshReq();
 }

@@ -36,9 +36,13 @@ class MODULEtoLOAD : public EDA_BaseStruct
 public:
     wxString m_LibName;
     wxString m_CmpName;
+	wxString m_Path; 
 
 public:
-    MODULEtoLOAD( const wxString& libname, const wxString& cmpname, int timestamp );
+    MODULEtoLOAD( const wxString& libname, 
+				  const wxString& cmpname, 
+	  			  int timestamp, 
+				  const wxString& path);
     ~MODULEtoLOAD() { };
     MODULEtoLOAD* Next() { return (MODULEtoLOAD*) Pnext; }
 };
@@ -333,7 +337,8 @@ MODULE* WinEDA_NetlistFrame::ReadNetModule( char* Text, int* UseFichCmp,
     if( Error > 0 )
         return NULL;
 
-    TextTimeStamp.ToULong( &TimeStamp, 16 );
+	wxString LocalTimeStamp = TextTimeStamp.AfterLast('/'); 
+    LocalTimeStamp.ToULong( &TimeStamp, 16 );
 
     /* Tst si composant deja charge */
     Module = (MODULE*) m_Parent->m_Pcb->m_Modules;
@@ -343,8 +348,9 @@ MODULE* WinEDA_NetlistFrame::ReadNetModule( char* Text, int* UseFichCmp,
         NextModule = (MODULE*) Module->Pnext;
         if( m_Select_By_Timestamp->GetSelection()  == 1 ) /* Reconnaissance par signature temporelle */
         {
-            if( TimeStamp == Module->m_TimeStamp )
-                Found = TRUE;
+            //if( TimeStamp == Module->m_TimeStamp )
+			if(TextTimeStamp.CmpNoCase(Module->m_Path))
+            	Found = TRUE;
         }
         else    /* Reconnaissance par Reference */
         {
@@ -414,7 +420,7 @@ MODULE* WinEDA_NetlistFrame::ReadNetModule( char* Text, int* UseFichCmp,
 
 
         if( TstOnly == TESTONLY )
-            AddToList( NameLibCmp, TextCmpName, TimeStamp );
+			AddToList( NameLibCmp, TextCmpName, TimeStamp, TextTimeStamp );
         else
         {
             wxString msg;
@@ -433,6 +439,9 @@ MODULE* WinEDA_NetlistFrame::ReadNetModule( char* Text, int* UseFichCmp,
     Module->m_Reference->m_Text = TextCmpName;
     Module->m_Value->m_Text = TextValeur;
     Module->m_TimeStamp = TimeStamp;
+	Module->m_Path = TextTimeStamp; 
+	printf("in ReadNetModule() m_Path = %s\n", 
+		   CONV_TO_UTF8(Module->m_Path) ); 
 
     return Module;  /* composant trouve */
 }
@@ -556,9 +565,9 @@ void WinEDA_NetlistFrame::ModulesControle( wxCommandEvent& event )
 /***************************************************************/
 
 /* donne la liste :
- *  1 - des empreintes doublées sur le PCB
+ *  1 - des empreintes doublï¿½es sur le PCB
  *  2 - des empreintes manquantes par rapport a la netliste
- *  3 - des empreintes supplémentaires par rapport a la netliste
+ *  3 - des empreintes supplï¿½mentaires par rapport a la netliste
  */
 #define MAX_LEN_TXT 32
 {
@@ -662,7 +671,7 @@ int WinEDA_NetlistFrame::BuildListeNetModules( wxCommandEvent& event, wxArrayStr
 
 /*
  *  charge en BufName la liste des noms des modules de la netliste,
- *  retourne le nombre des modules cités dans la netliste
+ *  retourne le nombre des modules citï¿½s dans la netliste
  */
 {
     int  textlen;
@@ -884,7 +893,7 @@ void WinEDA_NetlistFrame::Set_NetlisteName( wxCommandEvent& event )
 
 /***********************************************************************************/
 void WinEDA_NetlistFrame::AddToList( const wxString& NameLibCmp, const wxString& CmpName,
-                                     int TimeStamp )
+                                     int TimeStamp, const wxString& path)
 /************************************************************************************/
 
 /* Fontion copiant en memoire de travail les caracteristiques
@@ -893,7 +902,7 @@ void WinEDA_NetlistFrame::AddToList( const wxString& NameLibCmp, const wxString&
 {
     MODULEtoLOAD* NewMod;
 
-    NewMod = new MODULEtoLOAD( NameLibCmp, CmpName, TimeStamp );
+    NewMod = new MODULEtoLOAD( NameLibCmp, CmpName, TimeStamp, path );
     NewMod->Pnext = s_ModuleToLoad_List;
     s_ModuleToLoad_List = NewMod;
     s_NbNewModules++;
@@ -921,7 +930,7 @@ void WinEDA_NetlistFrame::LoadListeModules( wxDC* DC )
     SortListModulesToLoadByLibname( s_NbNewModules );
     ref = cmp = s_ModuleToLoad_List;
 
-    // Calcul de la coordonnée de placement des modules:
+    // Calcul de la coordonnï¿½e de placement des modules:
     if( m_Parent->SetBoardBoundaryBoxFromEdgesOnly() )
     {
         m_Parent->m_CurrentScreen->m_Curseur.x = m_Parent->m_Pcb->m_BoundaryBox.GetRight() + 5000;
@@ -953,6 +962,7 @@ void WinEDA_NetlistFrame::LoadListeModules( wxDC* DC )
              *  si module charge */
             Module->m_Reference->m_Text = cmp->m_CmpName;
             Module->m_TimeStamp = cmp->m_TimeStamp;
+			Module->m_Path = cmp->m_Path;
         }
         else
         {
@@ -966,6 +976,7 @@ void WinEDA_NetlistFrame::LoadListeModules( wxDC* DC )
             Module = newmodule;
             Module->m_Reference->m_Text = cmp->m_CmpName;
             Module->m_TimeStamp = cmp->m_TimeStamp;
+			Module->m_Path = cmp->m_Path;
         }
     }
 
@@ -1022,10 +1033,11 @@ void SortListModulesToLoadByLibname( int NbModules )
 
 /*****************************************************************************/
 MODULEtoLOAD::MODULEtoLOAD( const wxString& libname, const wxString& cmpname,
-                            int timestamp ) : EDA_BaseStruct( TYPE_NOT_INIT )
+                            int timestamp, const wxString& path ) : EDA_BaseStruct( TYPE_NOT_INIT )
 /*****************************************************************************/
 {
     m_LibName   = libname;
     m_CmpName   = cmpname;
     m_TimeStamp = timestamp;
+	m_Path 		= path;
 }

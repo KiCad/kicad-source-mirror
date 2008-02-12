@@ -493,7 +493,7 @@ bool CreateHeaderInfoData( FILE* file, WinEDA_PcbFrame* frame )
  */
 {
     wxString    msg;
-    PCB_SCREEN* screen = frame->GetScreen();
+	PCB_SCREEN* screen = (PCB_SCREEN*)(frame->GetScreen());
 
     fputs( "$HEADER\n", file );
     fputs( "GENCAD 1.4\n", file );

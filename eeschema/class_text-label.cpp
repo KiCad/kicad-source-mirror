@@ -18,6 +18,7 @@
 /* class DrawTextStruct */
 /* class DrawLabelStruct */
 /* class DrawGlobalLabelStruct */
+/* class DrawHierLabelStruct */
 /************************/
 
 /**************************************************************************/
@@ -47,8 +48,12 @@ DrawTextStruct* DrawTextStruct::GenCopy()
         break;
 
     case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-        newitem = new DrawGlobalLabelStruct( m_Pos, m_Text );
+        newitem = new DrawGlobalLabelStruct(m_Pos, m_Text );
         break;
+
+	case DRAW_HIER_LABEL_STRUCT_TYPE:
+		newitem = new DrawHierLabelStruct(m_Pos, m_Text );
+		break;
 
     case DRAW_LABEL_STRUCT_TYPE:
         newitem = new DrawLabelStruct( m_Pos, m_Text );
@@ -102,8 +107,7 @@ void DrawTextStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
         /* restore new values */
         SwapData( (DrawTextStruct*) g_ItemToUndoCopy );
 
-        delete g_ItemToUndoCopy;
-        g_ItemToUndoCopy = NULL;
+        SAFE_DELETE( g_ItemToUndoCopy );
     }
 
     EDA_BaseStruct::Place( frame, DC );
@@ -121,15 +125,24 @@ DrawLabelStruct::DrawLabelStruct( const wxPoint& pos, const wxString& text ) :
 
 
 /***********************************************************************************/
-DrawGlobalLabelStruct::DrawGlobalLabelStruct( const wxPoint& pos, const wxString& text ) :
+DrawGlobalLabelStruct::DrawGlobalLabelStruct(const wxPoint& pos, const wxString& text) :
     DrawTextStruct( pos, text, DRAW_GLOBAL_LABEL_STRUCT_TYPE )
 /***********************************************************************************/
 {
-    m_Layer      = LAYER_GLOBLABEL;
-    m_Shape      = NET_INPUT;
+	m_Layer      = LAYER_GLOBLABEL;
+    m_Shape      = NET_BIDI;
     m_IsDangling = TRUE;
 }
 
+/***********************************************************************************/
+DrawHierLabelStruct::DrawHierLabelStruct(const wxPoint& pos, const wxString& text) :
+		DrawTextStruct( pos, text, DRAW_HIER_LABEL_STRUCT_TYPE )
+/***********************************************************************************/
+{
+	m_Layer      = LAYER_HIERLABEL;
+	m_Shape      = NET_INPUT;
+	m_IsDangling = TRUE;
+}
 
 /*******************************************************************************************/
 void DrawTextStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
@@ -201,10 +214,9 @@ void DrawLabelStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& of
 
 
 /*******************************************************************************************/
-void DrawGlobalLabelStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
+void DrawHierLabelStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                                   int DrawMode, int Color )
 /******************************************************************************************/
-
 /* Texts type Global Label  have 4 directions, and the Text origin is the graphic icon
  */
 {
@@ -214,46 +226,45 @@ void DrawGlobalLabelStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoi
     wxSize Size  = m_Size;
     int    width = MAX( m_Width, g_DrawMinimunLineWidth );
 
-    if( Color >= 0 )
-        color = Color;
-    else
-        color = ReturnLayerColor( m_Layer );
+	if( Color >= 0 )
+		color = Color;
+	else
+		color = ReturnLayerColor( m_Layer );
 
-    GRSetDrawMode( DC, DrawMode );
+	GRSetDrawMode( DC, DrawMode );
 
-    HalfSize = Size.x / 2; ii = Size.x + TXTMARGE;
+	HalfSize = Size.x / 2; ii = Size.x + TXTMARGE;
 
-    switch( m_Orient )
-    {
-    case 0:         /* Orientation horiz normale */
-        DrawGraphicText( panel, DC,
-                         wxPoint( m_Pos.x - ii + offset.x, m_Pos.y + offset.y ), color,
-                         m_Text, TEXT_ORIENT_HORIZ, Size,
-                         GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER, width );
-        break;
+	switch( m_Orient )
+	{
+		case 0:         /* Orientation horiz normale */
+			DrawGraphicText( panel, DC,
+							wxPoint( m_Pos.x - ii + offset.x, m_Pos.y + offset.y ), color,
+							m_Text, TEXT_ORIENT_HORIZ, Size,
+		   					GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER, width );
+			break;
 
-    case 1:         /* Orientation vert UP */
-        DrawGraphicText( panel, DC,
-                         wxPoint( m_Pos.x + offset.x, m_Pos.y + ii + offset.y ), color,
-                         m_Text, TEXT_ORIENT_VERT, Size,
-                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP, width );
-        break;
+		case 1:         /* Orientation vert UP */
+			DrawGraphicText( panel, DC,
+								 wxPoint( m_Pos.x + offset.x, m_Pos.y + ii + offset.y ), color,
+										  m_Text, TEXT_ORIENT_VERT, Size,
+			GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP, width );
+			break;
 
-    case 2:         /* Orientation horiz inverse */
-        DrawGraphicText( panel, DC,
-                         wxPoint( m_Pos.x + ii + offset.x, m_Pos.y + offset.y ), color,
-                         m_Text, TEXT_ORIENT_HORIZ, Size,
-                         GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
-        break;
+		case 2:         /* Orientation horiz inverse */
+			DrawGraphicText( panel, DC,
+							wxPoint( m_Pos.x + ii + offset.x, m_Pos.y + offset.y ), color,
+							m_Text, TEXT_ORIENT_HORIZ, Size,
+							GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+			break;
 
-    case 3:         /* Orientation vert BOTTOM */
-        DrawGraphicText( panel, DC,
-                         wxPoint( m_Pos.x + offset.x, m_Pos.y - ii + offset.y ), color,
-                         m_Text, TEXT_ORIENT_VERT, Size,
-                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM, width );
-        break;
-    }
-
+		case 3:         /* Orientation vert BOTTOM */
+			DrawGraphicText( panel, DC,
+							wxPoint( m_Pos.x + offset.x, m_Pos.y - ii + offset.y ), color,
+							m_Text, TEXT_ORIENT_VERT, Size,
+			 				GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM, width );
+			break;
+	}
 
     Template = TemplateShape[m_Shape][m_Orient];
 
@@ -270,4 +281,75 @@ void DrawGlobalLabelStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoi
 
     if( m_IsDangling )
         DrawDanglingSymbol( panel, DC, m_Pos + offset, color );
+}
+/*******************************************************************************************/
+void DrawGlobalLabelStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
+								int DrawMode, int Color )
+/******************************************************************************************/
+/* Texts type Global Label  have 4 directions, and the Text origin is the graphic icon
+ */
+	//should reimplement this with a custom global shape??
+	//it is the same as Hierarchal sheet. 
+{
+	int*   Template;
+	int    Poly[20];
+	int    ii, jj, imax, color, HalfSize;
+	wxSize Size  = m_Size;
+	int    width = MAX( m_Width, g_DrawMinimunLineWidth );
+
+	if( Color >= 0 )
+		color = Color;
+	else
+		color = ReturnLayerColor( m_Layer );
+
+	GRSetDrawMode( DC, DrawMode );
+
+	HalfSize = Size.x / 2; ii = Size.x + TXTMARGE;
+
+	switch( m_Orient )
+	{
+		case 0:         /* Orientation horiz normale */
+			DrawGraphicText( panel, DC,
+							wxPoint( m_Pos.x - ii + offset.x, m_Pos.y + offset.y ), color,
+							m_Text, TEXT_ORIENT_HORIZ, Size,
+		   					GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER, width );
+			break;
+
+		case 1:         /* Orientation vert UP */
+			DrawGraphicText( panel, DC,
+								 wxPoint( m_Pos.x + offset.x, m_Pos.y + ii + offset.y ), color,
+										  m_Text, TEXT_ORIENT_VERT, Size,
+			GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP, width );
+			break;
+
+		case 2:         /* Orientation horiz inverse */
+			DrawGraphicText( panel, DC,
+							wxPoint( m_Pos.x + ii + offset.x, m_Pos.y + offset.y ), color,
+							m_Text, TEXT_ORIENT_HORIZ, Size,
+							GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+			break;
+
+		case 3:         /* Orientation vert BOTTOM */
+			DrawGraphicText( panel, DC,
+							wxPoint( m_Pos.x + offset.x, m_Pos.y - ii + offset.y ), color,
+							m_Text, TEXT_ORIENT_VERT, Size,
+			 				GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM, width );
+			break;
+	}
+
+	Template = TemplateShape[m_Shape][m_Orient];
+
+	imax = *Template; Template++;
+	for( ii = 0, jj = 0; ii < imax; ii++ )
+	{
+		Poly[jj] = ( HalfSize * (*Template) ) + m_Pos.x + offset.x;
+		jj++; Template++;
+		Poly[jj] = ( HalfSize * (*Template) ) + m_Pos.y + offset.y;
+		jj++; Template++;
+	}
+
+	GRPoly( &panel->m_ClipBox, DC, imax, Poly, 0, width, color, color );
+
+	if( m_IsDangling )
+		DrawDanglingSymbol( panel, DC, m_Pos + offset, color );
 }

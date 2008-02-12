@@ -609,7 +609,7 @@ int SaveOneLibrary( wxWindow* frame, const wxString& FullFileName, LibraryStruct
     Library->m_Modified = 0;
 
     /* Creation de l'entete de la librairie */
-    Library->m_TimeStamp = GetTimeStamp();
+	Library->m_TimeStamp = GetTimeStamp();
     Library->WriteHeader( SaveFile );
     fprintf( SaveDocFile, "%s  Date: %s\n", DOCFILE_IDENT,
             DateAndTime( Line ) );

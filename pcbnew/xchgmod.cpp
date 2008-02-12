@@ -515,7 +515,7 @@ MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
 
 /*
  *  Remplace le module OldModule par le module NewModule (en conservant position, orientation..)
- *  OldModule est supprimé de la memoire.
+ *  OldModule est supprimï¿½ de la memoire.
  */
 {
     wxPoint oldpos;/* memorisation temporaire pos curseur */
@@ -553,6 +553,7 @@ MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
 
     /* Mise a jour des autres parametres */
     NewModule->m_TimeStamp = OldModule->m_TimeStamp;
+	NewModule->m_Path = OldModule->m_Path;
 
     /* mise a jour des netnames ( lorsque c'est possible) */
     pt_pad = NewModule->m_Pads;
@@ -651,6 +652,7 @@ bool WinEDA_PcbFrame::RecreateCmpFileFromBoard()
     {
         fprintf( FichCmp, "\nBeginCmp\n" );
         fprintf( FichCmp, "TimeStamp = %8.8lX\n", Module->m_TimeStamp );
+		fprintf( FichCmp, "Path = %s\n", CONV_TO_UTF8(Module->m_Path) );
         fprintf( FichCmp, "Reference = %s;\n",
                  !Module->m_Reference->m_Text.IsEmpty() ?
                  CONV_TO_UTF8( Module->m_Reference->m_Text ) : "[NoRef]" );

@@ -200,7 +200,7 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
 
     if( GetScreen() )
     {
-        layer = GetScreen()->m_Active_Layer;
+        layer = GetPCBScreen()->m_Active_Layer;
         gerber_layer = g_GERBER_Descr_List[layer];
     }
 
@@ -313,7 +313,7 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
 
     m_SelLayerBox = new WinEDAChoiceBox( m_HToolBar, ID_TOOLBARH_PCB_SELECT_LAYER,
                                          wxDefaultPosition, wxSize( 150, -1 ), choices );
-    m_SelLayerBox->SetSelection( GetScreen()->m_Active_Layer );
+    m_SelLayerBox->SetSelection( GetPCBScreen()->m_Active_Layer );
     m_HToolBar->AddControl( m_SelLayerBox );
 
     m_HToolBar->AddSeparator();

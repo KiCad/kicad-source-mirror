@@ -27,15 +27,15 @@ static int TriListEntry(EDA_LibComponentStruct **Objet1,
 bool LibArchive(wxWindow * frame, const wxString & ArchFullFileName)
 /*******************************************************************/
 /*
-Creation du fichier librairie contenant tous les composants utilisés dans
+Creation du fichier librairie contenant tous les composants utilisï¿½s dans
 le projet en cours
-retourne  TRUE si fichier créé
+retourne  TRUE si fichier crï¿½ï¿½
 */
 {
 wxString DocFileName, msg;
 char Line[256];
 FILE *ArchiveFile, *DocFile;
-EDA_BaseStruct ** ListStruct;
+ListComponent * List;
 EDA_LibComponentStruct ** ListEntry, *Entry;
 int ii, NbItems;
 const wxChar * Text;
@@ -45,12 +45,11 @@ const wxChar * Text;
 	NbItems = GenListeCmp(NULL );	// Comptage des composants
 	if ( NbItems == 0 ) return FALSE;
 
-	ListStruct = (EDA_BaseStruct **)
-			MyZMalloc( NbItems * sizeof(EDA_BaseStruct **) );
-	if (ListStruct == NULL ) return FALSE;
+	List = (ListComponent *) MyZMalloc( NbItems * sizeof( ListComponent ) );
+	if (List == NULL ) return FALSE;
 
 	/* Calcul de la liste des composants */
-	GenListeCmp(ListStruct);
+	GenListeCmp(List);
 
 	/* Calcul de la liste des Entrees de librairie
 		et Remplacement des alias par les composants "Root" */
@@ -60,12 +59,12 @@ const wxChar * Text;
 
 	for ( ii = 0; ii < NbItems; ii++ )
 	{
-		Text = ( (EDA_SchComponentStruct*)ListStruct[ii])->m_ChipName.GetData();
+		Text = List[ii].m_Comp->m_ChipName.GetData();
 		Entry = FindLibPart(Text, wxEmptyString, FIND_ROOT);
-		ListEntry[ii] = Entry;	// = NULL si Composant non trouvé en librairie
+		ListEntry[ii] = Entry;	// = NULL si Composant non trouvï¿½ en librairie
 	}
 
-	MyFree(ListStruct);
+	MyFree(List);
 
 	qsort( ListEntry, NbItems, sizeof(EDA_LibComponentStruct *),
 			(int(*)(const void*, const void*))TriListEntry);
@@ -95,7 +94,7 @@ const wxChar * Text;
 	/* Generation des elements */
 	for ( ii = 0; ii < NbItems; ii++ )
 	{
-		if ( ListEntry[ii] == NULL )	// Composant non trouvé en librairie
+		if ( ListEntry[ii] == NULL )	// Composant non trouvï¿½ en librairie
 		{
 		continue;
 			}

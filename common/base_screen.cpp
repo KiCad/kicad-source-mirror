@@ -49,7 +49,7 @@ BASE_SCREEN::~BASE_SCREEN()
 void BASE_SCREEN::InitDatas()
 /*******************************/
 {
-    m_SheetNumber = m_NumberOfSheet = 1;    /* gestion hierarchie: Root: SheetNumber = 1 */
+    m_ScreenNumber = m_NumberOfScreen = 1;    /* gestion hierarchie: Root: ScreenNumber = 1 */
     m_Zoom            = 32;
     m_Grid            = wxSize( 50, 50 );   /* pas de la grille */
     m_UserGrid        = g_UserGrid;         /* pas de la grille "utilisateur" */
@@ -63,18 +63,18 @@ void BASE_SCREEN::InitDatas()
     {
     case SCHEMATIC_FRAME:
         m_Center = FALSE;
-        m_CurrentSheet = &g_Sheet_A4;
+        m_CurrentSheetDesc = &g_Sheet_A4;
         break;
 
     default:
     case CVPCB_DISPLAY_FRAME:
     case MODULE_EDITOR_FRAME:
     case PCB_FRAME:
-        m_CurrentSheet = &g_Sheet_A4;
+        m_CurrentSheetDesc = &g_Sheet_A4;
         break;
 
     case GERBER_FRAME:
-        m_CurrentSheet = &g_Sheet_GERBER;
+        m_CurrentSheetDesc = &g_Sheet_GERBER;
         break;
     }
 
@@ -158,15 +158,15 @@ wxSize BASE_SCREEN::ReturnPageSize()
     {
     default:
     case SCHEMATIC_FRAME:
-        PageSize = m_CurrentSheet->m_Size;
+        PageSize = m_CurrentSheetDesc->m_Size;
         break;
 
     case GERBER_FRAME:
     case CVPCB_DISPLAY_FRAME:
     case MODULE_EDITOR_FRAME:
     case PCB_FRAME:
-        PageSize.x = m_CurrentSheet->m_Size.x * (PCB_INTERNAL_UNIT / 1000);
-        PageSize.y = m_CurrentSheet->m_Size.y * (PCB_INTERNAL_UNIT / 1000);
+        PageSize.x = m_CurrentSheetDesc->m_Size.x * (PCB_INTERNAL_UNIT / 1000);
+        PageSize.y = m_CurrentSheetDesc->m_Size.y * (PCB_INTERNAL_UNIT / 1000);
         break;
     }
 

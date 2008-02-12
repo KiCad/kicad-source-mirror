@@ -38,7 +38,7 @@ EDA_BaseStruct* WinEDA_GerberFrame::Locate( int typeloc )
 /*************************************************************/
 
 /* Fonction de localisation generale
- *  Affiche les caract de la stucture localisée et retourne un pointeur
+ *  Affiche les caract de la stucture localisï¿½e et retourne un pointeur
  *  sur celle-ci
  */
 {
@@ -48,7 +48,7 @@ EDA_BaseStruct* WinEDA_GerberFrame::Locate( int typeloc )
     int          layer;
 
     /* Localistion des pistes et vias, avec priorite aux vias */
-    layer = GetScreen()->m_Active_Layer;
+    layer = GetPCBScreen()->m_Active_Layer;
     Track = Locate_Pistes( m_Pcb->m_Track, -1, typeloc );
     if( Track != NULL )
     {
@@ -80,7 +80,7 @@ EDA_BaseStruct* WinEDA_GerberFrame::Locate( int typeloc )
     }
 
     if( ( TrackLocate = Locate_Zone( (TRACK*) m_Pcb->m_Zone,
-                                    GetScreen()->m_Active_Layer, typeloc ) ) != NULL )
+                                    GetPCBScreen()->m_Active_Layer, typeloc ) ) != NULL )
     {
         TrackLocate->Display_Infos( this ); 
         return TrackLocate;

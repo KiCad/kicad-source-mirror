@@ -15,16 +15,16 @@
 
 /* Routines locales */
 static void PropageNetCode( int OldNetCode, int NewNetCode, int IsBus );
-static void SheetLabelConnection( ObjetNetListStruct* SheetLabel );
+static void SheetLabelConnect( ObjetNetListStruct* SheetLabel );
 static int  ListeObjetConnection( WinEDA_SchematicFrame* frame,
-                                  SCH_SCREEN* screen,
+                                  DrawSheetList* sheetlist,
                                   ObjetNetListStruct* ObjNet );
 static int  ConvertBusToMembers( ObjetNetListStruct* ObjNet );
-static void PointToPointConnect( ObjetNetListStruct* RefObj, int IsBus,
+static void PointToPointConnect( ObjetNetListStruct* Ref, int IsBus,
                                  int start );
 static void SegmentToPointConnect( ObjetNetListStruct* Jonction, int IsBus,
                                    int start );
-static void LabelConnection( ObjetNetListStruct* Label );
+static void LabelConnect( ObjetNetListStruct* Label );
 static int  TriNetCode( const void* o1, const void* o2 );
 static void ConnectBusLabels( ObjetNetListStruct* Label, int NbItems );
 static void SetUnconnectedFlag( ObjetNetListStruct* ObjNet, int NbItems );
@@ -37,7 +37,7 @@ static int s_PassNumber;
 
 
 #if defined(DEBUG)
-
+#include <iostream>
 const char* ShowType( NetObjetType aType )
 {
     const char* ret;
@@ -48,9 +48,11 @@ const char* ShowType( NetObjetType aType )
     case NET_BUS:                   ret = "bus";                break;
     case NET_JONCTION:              ret = "junction";           break;
     case NET_LABEL:                 ret = "label";              break;
-    case NET_GLOBLABEL:             ret = "glabel";             break;
+    case NET_HIERLABEL:             ret = "hierlabel";          break;
+	case NET_GLOBLABEL:             ret = "glabel";             break;
     case NET_BUSLABELMEMBER:        ret = "buslblmember";       break;
-    case NET_GLOBBUSLABELMEMBER:    ret = "gbuslblmember";      break;
+    case NET_HIERBUSLABELMEMBER:    ret = "hierbuslblmember";   break;
+	case NET_GLOBBUSLABELMEMBER:    ret = "gbuslblmember";      break;
     case NET_SHEETBUSLABELMEMBER:   ret = "sbuslblmember";      break;
     case NET_SHEETLABEL:            ret = "sheetlabel";         break;
     case NET_PINLABEL:              ret = "pinlabel";           break;
@@ -64,10 +66,11 @@ const char* ShowType( NetObjetType aType )
 
 void ObjetNetListStruct::Show( std::ostream& out, int ndx )
 {
+	wxString path = m_SheetList.PathHumanReadable(); 
     out << "<netItem ndx=\"" << ndx << '"' << 
             " type=\"" << ShowType(m_Type) << '"' <<
             " netCode=\"" << GetNet() << '"' <<
-            " sheet=\"" << m_SheetNumber << '"' <<
+            " sheet=\"" << CONV_TO_UTF8(path) << '"' <<
             ">\n";
 
     out << " <start " << m_Start << "/> <end " << m_End << "/>\n";
@@ -117,15 +120,18 @@ void FreeTabNetList( ObjetNetListStruct* TabNetItems, int NbrNetItems )
         case NET_JONCTION:
         case NET_BUS:
         case NET_LABEL:
-        case NET_GLOBLABEL:
+        case NET_HIERLABEL:
+		case NET_GLOBLABEL:
         case NET_PINLABEL:
         case NET_NOCONNECT:
             break;
 
-        case NET_GLOBBUSLABELMEMBER:
+        case NET_HIERBUSLABELMEMBER:
+		case NET_GLOBBUSLABELMEMBER:
         case NET_SHEETBUSLABELMEMBER:
         case NET_BUSLABELMEMBER:
-            delete TabNetItems[i].m_Label;
+			SAFE_DELETE( TabNetItems[i].m_Label ); 
+			//see the note in ConvertBustToMembers
             break;
         }
     }
@@ -137,16 +143,15 @@ void FreeTabNetList( ObjetNetListStruct* TabNetItems, int NbrNetItems )
 /*****************************************************/
 void* WinEDA_SchematicFrame::BuildNetListBase()
 /*****************************************************/
-
 /* Routine qui construit le tableau des elements connectes du projet
  *  met a jour:
  *      g_TabObjNet
  *      g_NbrObjNet
  */
 {
-    int                 NetNumber, SheetNumber;
+    int                 NetNumber;
     int                 i, istart, NetCode;
-    SCH_SCREEN*         screen;
+	DrawSheetList*		sheet; 
     wxString            msg;
     wxBusyCursor        Busy;
 
@@ -156,22 +161,19 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
     MsgPanel->EraseMsgBox();
     Affiche_1_Parametre( this, 1, _( "List" ), wxEmptyString, LIGHTRED );
 
-    /* Build the screen list */
-    EDA_ScreenList ScreenList( NULL );
-
+    /* Build the sheet (not screen) list (flattened)*/
+    EDA_SheetList SheetListList( NULL );
+	i=0; 
     /* 1ere passe : Comptage du nombre d'objet de Net */
     g_NbrObjNet = 0;
     g_TabObjNet = NULL; /* Init pour le 1er passage dans ListeObjetConnection */
 
-    /* Update the sheet number, sheet count and date and count nelist items */
-    ScreenSch->SetModify();
-    int kk = 1;
-    for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
+    /* count nelist items */
+    g_RootSheet->m_s->SetModify();
+
+    for( sheet = SheetListList.GetFirst(); sheet != NULL; sheet = SheetListList.GetNext() )
     {
-        screen->m_SheetNumber   = kk++;
-        screen->m_NumberOfSheet = ScreenList.GetCount();
-        screen->m_Date = GenDate();
-        g_NbrObjNet   += ListeObjetConnection( this, screen, NULL );
+        g_NbrObjNet   += ListeObjetConnection( this, sheet, NULL );
     }
 
     if( g_NbrObjNet == 0 )
@@ -186,15 +188,16 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
         return NULL;
 
     /* 2eme passe : Remplissage des champs des structures des objets de Net */
+	/* second pass: fill the fields of the structures in the Net */
 
     s_PassNumber++;
     Affiche_1_Parametre( this, 1, _( "List" ), wxEmptyString, RED );
     
-    screen = ScreenList.GetFirst(); 
+    sheet = SheetListList.GetFirst(); 
     for( ObjetNetListStruct* tabObjNet = g_TabObjNet; 
-        screen != NULL; screen = ScreenList.GetNext() )
+        sheet != NULL; sheet = SheetListList.GetNext() )
     {
-        tabObjNet += ListeObjetConnection( this, screen, tabObjNet );
+        tabObjNet += ListeObjetConnection( this, sheet, tabObjNet );
     }
 
     Affiche_1_Parametre( this, -1, wxEmptyString, _( "Done" ), RED );
@@ -209,14 +212,14 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
 
     Affiche_1_Parametre( this, 18, _( "Conn" ), wxEmptyString, CYAN );
 
-    SheetNumber = g_TabObjNet[0].m_SheetNumber;
+    sheet = &(g_TabObjNet[0].m_SheetList);
     LastNetCode = LastBusNetCode = 1;
     
     for( i = istart = 0;  i<g_NbrObjNet;  i++ )
     {
-        if( g_TabObjNet[i].m_SheetNumber != SheetNumber )
+		if( g_TabObjNet[i].m_SheetList != *sheet )
         {
-            SheetNumber = g_TabObjNet[i].m_SheetNumber; 
+			sheet = &(g_TabObjNet[i].m_SheetList); 
             istart = i;
         }
 
@@ -227,7 +230,7 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
         case NET_SHEETLABEL:
         case NET_NOCONNECT:
             if( g_TabObjNet[i].GetNet() != 0 )
-                break;                                      /* Deja connecte */
+                break;                               /* Deja connecte */
 
         case NET_SEGMENT:
             /* Controle des connexions type point a point ( Sans BUS ) */
@@ -258,7 +261,8 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
             break;
 
         case NET_LABEL:
-        case NET_GLOBLABEL:
+        case NET_HIERLABEL:
+		case NET_GLOBLABEL:
             /* Controle des connexions type jonction ( Sans BUS ) */
             if( g_TabObjNet[i].GetNet() == 0 )
             {
@@ -283,7 +287,8 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
             break;
 
         case NET_BUSLABELMEMBER:
-        case NET_GLOBBUSLABELMEMBER:
+        case NET_HIERBUSLABELMEMBER:
+		case NET_GLOBBUSLABELMEMBER:
             /* Controle des connexions semblables a des sur BUS */
             if( g_TabObjNet[i].GetNet() == 0 )
             {
@@ -297,7 +302,7 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
 
    
 #if 0 && defined(DEBUG)
-    std::cout << "after sheet local\n";
+    std::cout << "\n\nafter sheet local\n\n";
     dumpNetTable();
 #endif    
 
@@ -323,20 +328,22 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
             break;
 
         case NET_LABEL:
-        case NET_GLOBLABEL:
+		case NET_GLOBLABEL:
         case NET_PINLABEL:
         case NET_BUSLABELMEMBER:
-        case NET_GLOBBUSLABELMEMBER:
-            LabelConnection( g_TabObjNet + i );
+		case NET_GLOBBUSLABELMEMBER:
+            LabelConnect( g_TabObjNet + i );
             break;
 
         case NET_SHEETBUSLABELMEMBER:
+		case NET_HIERLABEL:
+		case NET_HIERBUSLABELMEMBER:
             break;
         }
     }
 
 #if 0 && defined(DEBUG)
-    std::cout << "after sheet global\n";
+    std::cout << "\n\nafter sheet global\n\n";
     dumpNetTable();
 #endif    
     
@@ -349,7 +356,7 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
     {
         if( g_TabObjNet[i].m_Type == NET_SHEETLABEL
          || g_TabObjNet[i].m_Type == NET_SHEETBUSLABELMEMBER )
-            SheetLabelConnection( g_TabObjNet + i );
+            SheetLabelConnect( g_TabObjNet + i );
     }
     
     /* Tri du Tableau des objets de Net par NetCode */
@@ -388,7 +395,7 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
 /*************************************************************
  * Routine qui connecte les sous feuilles par les sheetLabels  *
  **************************************************************/
-static void SheetLabelConnection( ObjetNetListStruct* SheetLabel )
+static void SheetLabelConnect( ObjetNetListStruct* SheetLabel )
 {
     int i;
     ObjetNetListStruct* ObjetNet;
@@ -402,18 +409,18 @@ static void SheetLabelConnection( ObjetNetListStruct* SheetLabel )
      *      pour regroupement des NetCodes */
     for( i = 0, ObjetNet = g_TabObjNet; i < g_NbrObjNet; i++ )
     {
-        if( ObjetNet[i].m_SheetNumber != SheetLabel->m_NumInclude )
-            continue;
+		if( ObjetNet[i].m_SheetList != SheetLabel->m_SheetListInclude )
+            continue; //use SheetInclude, not the sheet!! 
         
-        if( (ObjetNet[i].m_Type != NET_GLOBLABEL )
-           && (ObjetNet[i].m_Type != NET_GLOBBUSLABELMEMBER ) )
+        if( (ObjetNet[i].m_Type != NET_HIERLABEL )
+           && (ObjetNet[i].m_Type != NET_HIERBUSLABELMEMBER ) )
             continue;
             
         if( ObjetNet[i].GetNet() == SheetLabel->GetNet() )
-            continue;
+            continue; //already connected. 
         
         if( ObjetNet[i].m_Label->CmpNoCase( *SheetLabel->m_Label ) != 0 )
-            continue;
+            continue; //different names.
 
         /* Propagation du Netcode a tous les Objets de meme NetCode */
         if( ObjetNet[i].GetNet() )
@@ -425,32 +432,35 @@ static void SheetLabelConnection( ObjetNetListStruct* SheetLabel )
 
 
 /*****************************************************************************/
-static int ListeObjetConnection( WinEDA_SchematicFrame* frame, SCH_SCREEN* screen,
+static int ListeObjetConnection( WinEDA_SchematicFrame* frame, DrawSheetList* sheetlist,
                                  ObjetNetListStruct* ObjNet )
 /*****************************************************************************/
 
 /* Routine generant la liste des objets relatifs aux connection
  *  entree:
- *      screen: pointeur sur l'ecran a traiter
+ *      sheetlist: pointer to a sheetlist. 
  *      ObjNet:
  *          si NULL: la routine compte seulement le nombre des objets
  *          sinon: pointe le tableau a remplir
  */
 {
-    int                     ii, NbrItem = 0, NumSheet;
+    int                     ii, NbrItem = 0;
     EDA_BaseStruct*         DrawList;
     EDA_SchComponentStruct* DrawLibItem;
     int                     TransMat[2][2], PartX, PartY, x2, y2;
     EDA_LibComponentStruct* Entry;
     LibEDA_BaseStruct*      DEntry;
     DrawSheetLabelStruct*   SheetLabel;
-    int                     NumInclude;
-
-    NumSheet = screen->m_SheetNumber;
+	DrawSheetList			list; 
     
-    DrawList = screen->EEDrawList;
+    DrawList = sheetlist->LastScreen()->EEDrawList;
     for( ; DrawList;  DrawList = DrawList->Pnext )
     {
+		if( ObjNet ){
+			ObjNet[NbrItem].m_SheetList = *sheetlist;
+			ObjNet[NbrItem].m_SheetListInclude  = *sheetlist; 
+					//used for DrawSheetLabels
+		}
         switch( DrawList->Type() )
         {
         case DRAW_SEGMENT_STRUCT_TYPE:
@@ -463,8 +473,6 @@ static int ListeObjetConnection( WinEDA_SchematicFrame* frame, SCH_SCREEN* scree
                     break;
 
                 ObjNet[NbrItem].m_Comp        = STRUCT;
-                ObjNet[NbrItem].m_Screen      = screen;
-                ObjNet[NbrItem].m_SheetNumber = NumSheet;
                 ObjNet[NbrItem].m_Start       = STRUCT->m_Start;
                 ObjNet[NbrItem].m_End         = STRUCT->m_End;
                 
@@ -486,9 +494,7 @@ static int ListeObjetConnection( WinEDA_SchematicFrame* frame, SCH_SCREEN* scree
             if( ObjNet )
             {
                 ObjNet[NbrItem].m_Comp        = STRUCT;
-                ObjNet[NbrItem].m_Screen      = screen;
                 ObjNet[NbrItem].m_Type        = NET_JONCTION;
-                ObjNet[NbrItem].m_SheetNumber = NumSheet;
                 ObjNet[NbrItem].m_Start       = STRUCT->m_Pos;
                 ObjNet[NbrItem].m_End         = ObjNet[NbrItem].m_Start;
             }
@@ -501,9 +507,7 @@ static int ListeObjetConnection( WinEDA_SchematicFrame* frame, SCH_SCREEN* scree
             if( ObjNet )
             {
                 ObjNet[NbrItem].m_Comp        = STRUCT;
-                ObjNet[NbrItem].m_Screen      = screen;
                 ObjNet[NbrItem].m_Type        = NET_NOCONNECT;
-                ObjNet[NbrItem].m_SheetNumber = NumSheet;
                 ObjNet[NbrItem].m_Start       = STRUCT->m_Pos;
                 ObjNet[NbrItem].m_End         = ObjNet[NbrItem].m_Start;
             }
@@ -517,14 +521,14 @@ static int ListeObjetConnection( WinEDA_SchematicFrame* frame, SCH_SCREEN* scree
             if( ObjNet )
             {
                 ObjNet[NbrItem].m_Comp   = STRUCT;
-                ObjNet[NbrItem].m_Screen = screen;
                 ObjNet[NbrItem].m_Type   = NET_LABEL;
                 
                 if( STRUCT->m_Layer ==  LAYER_GLOBLABEL )
                     ObjNet[NbrItem].m_Type = NET_GLOBLABEL;
+				if( STRUCT->m_Layer ==  LAYER_HIERLABEL )
+					ObjNet[NbrItem].m_Type = NET_HIERLABEL;
                 
                 ObjNet[NbrItem].m_Label = &STRUCT->m_Text;
-                ObjNet[NbrItem].m_SheetNumber = NumSheet;
                 ObjNet[NbrItem].m_Start = STRUCT->m_Pos;
                 ObjNet[NbrItem].m_End   = ObjNet[NbrItem].m_Start;
                 
@@ -536,20 +540,21 @@ static int ListeObjetConnection( WinEDA_SchematicFrame* frame, SCH_SCREEN* scree
             break;
 
         case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
+		case DRAW_HIER_LABEL_STRUCT_TYPE:
             #undef STRUCT
-            #define STRUCT ( (DrawGlobalLabelStruct*) DrawList )
+            #define STRUCT ( (DrawLabelStruct*) DrawList )
             ii = IsBusLabel( STRUCT->m_Text );
             if( ObjNet )
             {
                 ObjNet[NbrItem].m_Comp   = STRUCT;
-                ObjNet[NbrItem].m_Screen = screen;
                 ObjNet[NbrItem].m_Type   = NET_LABEL;
                 
                 if( STRUCT->m_Layer ==  LAYER_GLOBLABEL )
                     ObjNet[NbrItem].m_Type = NET_GLOBLABEL;
+				if( STRUCT->m_Layer ==  LAYER_HIERLABEL )
+					ObjNet[NbrItem].m_Type = NET_HIERLABEL;
                 
                 ObjNet[NbrItem].m_Label = &STRUCT->m_Text;
-                ObjNet[NbrItem].m_SheetNumber = NumSheet;
                 ObjNet[NbrItem].m_Start = STRUCT->m_Pos;
                 ObjNet[NbrItem].m_End   = ObjNet[NbrItem].m_Start;
                 
@@ -601,13 +606,12 @@ static int ListeObjetConnection( WinEDA_SchematicFrame* frame, SCH_SCREEN* scree
                 if( ObjNet )
                 {
                     ObjNet[NbrItem].m_Comp   = DEntry;
+					ObjNet[NbrItem].m_SheetList  	= *sheetlist;
                     ObjNet[NbrItem].m_Type   = NET_PIN;
                     ObjNet[NbrItem].m_Link   = DrawLibItem;
-                    ObjNet[NbrItem].m_Screen = screen;
                     ObjNet[NbrItem].m_ElectricalType = Pin->m_PinType;
                     ObjNet[NbrItem].m_PinNum      = Pin->m_PinNum;
                     ObjNet[NbrItem].m_Label       = &Pin->m_PinName;
-                    ObjNet[NbrItem].m_SheetNumber = NumSheet;
                     ObjNet[NbrItem].m_Start.x     = x2;
                     ObjNet[NbrItem].m_Start.y     = y2;
                     ObjNet[NbrItem].m_End         = ObjNet[NbrItem].m_Start;
@@ -621,9 +625,8 @@ static int ListeObjetConnection( WinEDA_SchematicFrame* frame, SCH_SCREEN* scree
                     if( ObjNet )
                     {
                         ObjNet[NbrItem].m_Comp        = NULL;
+						ObjNet[NbrItem].m_SheetList  	  = *sheetlist;
                         ObjNet[NbrItem].m_Type        = NET_PINLABEL;
-                        ObjNet[NbrItem].m_Screen      = screen;
-                        ObjNet[NbrItem].m_SheetNumber = NumSheet;
                         ObjNet[NbrItem].m_Label       = &Pin->m_PinName;
                         ObjNet[NbrItem].m_Start.x     = x2;
                         ObjNet[NbrItem].m_Start.y     = y2;
@@ -645,8 +648,8 @@ static int ListeObjetConnection( WinEDA_SchematicFrame* frame, SCH_SCREEN* scree
         case DRAW_SHEET_STRUCT_TYPE:
             #undef STRUCT
             #define STRUCT ( (DrawSheetStruct*) DrawList )
-            NumInclude = STRUCT->m_SheetNumber;
-
+			list = *sheetlist; 
+			list.Push(STRUCT); 
             SheetLabel = STRUCT->m_Label;
             for( ; SheetLabel != NULL;
                  SheetLabel = (DrawSheetLabelStruct*) SheetLabel->Pnext )
@@ -654,16 +657,15 @@ static int ListeObjetConnection( WinEDA_SchematicFrame* frame, SCH_SCREEN* scree
                 ii = IsBusLabel( SheetLabel->m_Text );
                 if( ObjNet )
                 {
-                    ObjNet[NbrItem].m_Comp   = SheetLabel;
-                    ObjNet[NbrItem].m_Link   = DrawList;
-                    ObjNet[NbrItem].m_Type   = NET_SHEETLABEL;
-                    ObjNet[NbrItem].m_Screen = screen;
+                    ObjNet[NbrItem].m_Comp  	= SheetLabel;
+					ObjNet[NbrItem].m_SheetList  	= *sheetlist;
+                    ObjNet[NbrItem].m_Link   	= DrawList;
+                    ObjNet[NbrItem].m_Type   	= NET_SHEETLABEL;
                     ObjNet[NbrItem].m_ElectricalType = SheetLabel->m_Shape;
-                    ObjNet[NbrItem].m_Label = &SheetLabel->m_Text;
-                    ObjNet[NbrItem].m_SheetNumber = NumSheet;
-                    ObjNet[NbrItem].m_NumInclude  = NumInclude;
-                    ObjNet[NbrItem].m_Start = SheetLabel->m_Pos;
-                    ObjNet[NbrItem].m_End   = ObjNet[NbrItem].m_Start;
+                    ObjNet[NbrItem].m_Label 	= &SheetLabel->m_Text;
+                    ObjNet[NbrItem].m_SheetListInclude  = list;
+                    ObjNet[NbrItem].m_Start 	= SheetLabel->m_Pos;
+                    ObjNet[NbrItem].m_End   	= ObjNet[NbrItem].m_Start;
                     
                     /* Si c'est un Bus, eclatement en Label */
                     if( ii )
@@ -712,7 +714,7 @@ static void ConnectBusLabels( ObjetNetListStruct* Label, int NbItems )
     {
         if( (Label->m_Type == NET_SHEETBUSLABELMEMBER)
            || (Label->m_Type == NET_BUSLABELMEMBER)
-           || (Label->m_Type == NET_GLOBBUSLABELMEMBER) )
+           || (Label->m_Type == NET_HIERBUSLABELMEMBER) )
         {
             if( Label->GetNet() == 0 )
             {
@@ -724,7 +726,7 @@ static void ConnectBusLabels( ObjetNetListStruct* Label, int NbItems )
             {
                 if( (LabelInTst->m_Type == NET_SHEETBUSLABELMEMBER)
                    || (LabelInTst->m_Type == NET_BUSLABELMEMBER)
-                   || (LabelInTst->m_Type == NET_GLOBBUSLABELMEMBER) )
+                   || (LabelInTst->m_Type == NET_HIERBUSLABELMEMBER) )
                 {
                     if( LabelInTst->m_BusNetCode != Label->m_BusNetCode )
                         continue;
@@ -741,8 +743,6 @@ static void ConnectBusLabels( ObjetNetListStruct* Label, int NbItems )
         }
     }
 }
-
-
 /**************************************************/
 int IsBusLabel( const wxString& LabelDrawList )
 /**************************************************/
@@ -830,8 +830,10 @@ static int ConvertBusToMembers( ObjetNetListStruct* BusLabel )
     int NumItem, BusMember;
     wxString BufLine;
 
-    if( BusLabel->m_Type == NET_GLOBLABEL )
-        BusLabel->m_Type = NET_GLOBBUSLABELMEMBER;
+    if( BusLabel->m_Type == NET_HIERLABEL )
+        BusLabel->m_Type = NET_HIERBUSLABELMEMBER;
+	else if( BusLabel->m_Type == NET_GLOBLABEL )
+		BusLabel->m_Type = NET_GLOBBUSLABELMEMBER;
     else if( BusLabel->m_Type == NET_SHEETLABEL )
         BusLabel->m_Type = NET_SHEETBUSLABELMEMBER;
     else
@@ -881,6 +883,9 @@ static void PropageNetCode( int OldNetCode, int NewNetCode, int IsBus )
 
     if( OldNetCode == NewNetCode )
         return;
+#ifdef DEBUG
+	//printf("replacing net %d with %d\n", OldNetCode,NewNetCode); 
+#endif
 
     if( IsBus == 0 )    /* Propagation du NetCode */
     {
@@ -922,7 +927,7 @@ static void PointToPointConnect( ObjetNetListStruct* Ref, int IsBus, int start )
  * 
  *  L'objet Ref doit avoir un NetCode valide.
  * 
- *  La liste des objets est supposee classe par NumSheet Croissants,
+ *  La liste des objets est supposee classe par SheetPath Croissants,
  *  et la recherche se fait a partir de l'element start, 1er element
  *  de la feuille de schema
  *  ( il ne peut y avoir connexion physique entre elements de differentes sheets)
@@ -936,15 +941,17 @@ static void PointToPointConnect( ObjetNetListStruct* Ref, int IsBus, int start )
         netCode = Ref->GetNet();
         for( i = start; i < g_NbrObjNet; i++ )
         {
-            if( netTable[i].m_SheetNumber > Ref->m_SheetNumber )
-                break;
-
+			
+			if( netTable[i].m_SheetList != Ref->m_SheetList ) //used to be >  (why?)
+                continue;
+			
             switch( netTable[i].m_Type )
             {
             case NET_SEGMENT:
             case NET_PIN:
             case NET_LABEL:
-            case NET_GLOBLABEL:
+            case NET_HIERLABEL:
+			case NET_GLOBLABEL:
             case NET_SHEETLABEL:
             case NET_PINLABEL:
             case NET_JONCTION:
@@ -964,7 +971,8 @@ static void PointToPointConnect( ObjetNetListStruct* Ref, int IsBus, int start )
             case NET_BUS:
             case NET_BUSLABELMEMBER:
             case NET_SHEETBUSLABELMEMBER:
-            case NET_GLOBBUSLABELMEMBER:
+            case NET_HIERBUSLABELMEMBER:
+			case NET_GLOBBUSLABELMEMBER:
                 break;
             }
         }
@@ -975,15 +983,16 @@ static void PointToPointConnect( ObjetNetListStruct* Ref, int IsBus, int start )
         netCode = Ref->m_BusNetCode;
         for( i = start;   i<g_NbrObjNet;   i++ )
         {
-            if( netTable[i].m_SheetNumber > Ref->m_SheetNumber )
-                break;
+            if( netTable[i].m_SheetList != Ref->m_SheetList )
+                continue;
 
             switch( netTable[i].m_Type )
             {
             case NET_SEGMENT:
             case NET_PIN:
             case NET_LABEL:
-            case NET_GLOBLABEL:
+            case NET_HIERLABEL:
+			case NET_GLOBLABEL:
             case NET_SHEETLABEL:
             case NET_PINLABEL:
             case NET_NOCONNECT:
@@ -992,7 +1001,8 @@ static void PointToPointConnect( ObjetNetListStruct* Ref, int IsBus, int start )
             case NET_BUS:
             case NET_BUSLABELMEMBER:
             case NET_SHEETBUSLABELMEMBER:
-            case NET_GLOBBUSLABELMEMBER:
+            case NET_HIERBUSLABELMEMBER:
+			case NET_GLOBBUSLABELMEMBER:
             case NET_JONCTION:
                 if( Ref->m_Start == netTable[i].m_Start
                  || Ref->m_Start == netTable[i].m_End 
@@ -1031,8 +1041,8 @@ static void SegmentToPointConnect( ObjetNetListStruct* Jonction,
 
     for( i = start; i < g_NbrObjNet; i++ )
     {
-        if( Segment[i].m_SheetNumber > Jonction->m_SheetNumber )
-            break;
+        if( Segment[i].m_SheetList != Jonction->m_SheetList )
+            continue;
 
         if( IsBus == 0 )
         {
@@ -1074,7 +1084,7 @@ static void SegmentToPointConnect( ObjetNetListStruct* Jonction,
 /*****************************************************************
  * Function which connects the groups of object which have the same label
  *******************************************************************/
-static void LabelConnection( ObjetNetListStruct* LabelRef )
+static void LabelConnect( ObjetNetListStruct* LabelRef )
 {
     if( LabelRef->GetNet() == 0 )
         return;
@@ -1086,13 +1096,18 @@ static void LabelConnection( ObjetNetListStruct* LabelRef )
         if( netTable[i].GetNet() == LabelRef->GetNet() )
             continue;
 
-        if( netTable[i].m_SheetNumber != LabelRef->m_SheetNumber )
+		if( netTable[i].m_SheetList != LabelRef->m_SheetList )
         {
-            if( netTable[i].m_Type != NET_PINLABEL )
+            if( netTable[i].m_Type != NET_PINLABEL 
+				&& netTable[i].m_Type != NET_GLOBLABEL
+				&& netTable[i].m_Type != NET_GLOBBUSLABELMEMBER) 
                 continue;
         }
-
-        if( netTable[i].m_Type == NET_LABEL
+		//regular labels are sheet-local; 
+		//NET_HIERLABEL are used to connect sheets. 
+		//there are no true global labels yet, 
+		//though I've (tried) to implement them in this file.
+		if( netTable[i].m_Type == NET_LABEL
          || netTable[i].m_Type == NET_GLOBLABEL
          || netTable[i].m_Type == NET_BUSLABELMEMBER
          || netTable[i].m_Type == NET_GLOBBUSLABELMEMBER
@@ -1100,10 +1115,7 @@ static void LabelConnection( ObjetNetListStruct* LabelRef )
         {
             if( netTable[i].m_Label->CmpNoCase( *LabelRef->m_Label ) != 0 )
                 continue;
-
-            /* Ici 2 labels identiques */
-
-            /* Propagation du Netcode a tous les Objets de meme NetCode */
+            // Propagation du Netcode a tous les Objets de meme NetCode 
             if( netTable[i].GetNet() )
                 PropageNetCode( netTable[i].GetNet(), LabelRef->GetNet(), 0 );
             else
@@ -1111,7 +1123,6 @@ static void LabelConnection( ObjetNetListStruct* LabelRef )
         }
     }
 }
-
 
 /****************************************************************************/
 static int TriNetCode( const void* o1, const void* o2 )
@@ -1127,7 +1138,6 @@ static int TriNetCode( const void* o1, const void* o2 )
     return Objet1->GetNet() - Objet2->GetNet();
 }
 
-
 /*****************************************************************************/
 static int TriBySheet( const void* o1, const void* o2 )
 /*****************************************************************************/
@@ -1138,10 +1148,8 @@ static int TriBySheet( const void* o1, const void* o2 )
 {
     ObjetNetListStruct* Objet1 = (ObjetNetListStruct*) o1; 
     ObjetNetListStruct* Objet2 = (ObjetNetListStruct*) o2;
-    
-    return Objet1->m_SheetNumber - Objet2->m_SheetNumber;
+	return Objet1->m_SheetList.Cmp(Objet2->m_SheetList); 
 }
-
 
 /**********************************************************************/
 static void SetUnconnectedFlag( ObjetNetListStruct* ListObj, int NbItems )
@@ -1202,13 +1210,15 @@ static void SetUnconnectedFlag( ObjetNetListStruct* ListObj, int NbItems )
             {
             case NET_SEGMENT:
             case NET_LABEL:
-            case NET_GLOBLABEL:
+            case NET_HIERLABEL:
+			case NET_GLOBLABEL:
             case NET_SHEETLABEL:
             case NET_PINLABEL:
             case NET_BUS:
             case NET_BUSLABELMEMBER:
             case NET_SHEETBUSLABELMEMBER:
-            case NET_GLOBBUSLABELMEMBER:
+            case NET_HIERBUSLABELMEMBER:
+			case NET_GLOBBUSLABELMEMBER:
             case NET_JONCTION:
                 break;
 

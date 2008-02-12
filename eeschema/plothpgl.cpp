@@ -477,9 +477,9 @@ void WinEDA_PlotHPGLFrame::ReturnSheetDims( BASE_SCREEN * screen,
 {
 Ki_PageDescr * PlotSheet;
 
-	if( screen == NULL ) screen = ActiveScreen;
+	if( screen == NULL ) screen = m_Parent->GetScreen();
 
-	PlotSheet = screen->m_CurrentSheet;
+	PlotSheet = screen->m_CurrentSheetDesc;
 
 	SheetSize = PlotSheet->m_Size;
 	SheetOffset = PlotSheet->m_Offset;
@@ -499,10 +499,10 @@ int margin;
 	g_PlotFormat = PLOT_FORMAT_HPGL;
 
 	/* Build the screen list */
-	EDA_ScreenList ScreenList(NULL);
+	EDA_ScreenList ScreenList;
 
 	if ( Select_PlotAll == TRUE ) screen = ScreenList.GetFirst();
-	else screen = ActiveScreen;
+	else screen = m_Parent->GetScreen();
 	for ( ; screen != NULL; screen = ScreenList.GetNext() )
 	{
 		ReturnSheetDims(screen, SheetSize, SheetOffset);
@@ -511,7 +511,7 @@ int margin;
 		g_PlotScaleY = Scale_Y * SCALE_HPGL ;
 
 		margin = 400;	// Margin in mils
-		PlotSheet = screen->m_CurrentSheet;
+		PlotSheet = screen->m_CurrentSheetDesc;
 		g_PlotScaleX = g_PlotScaleX * (SheetSize.x - 2 * margin)/ PlotSheet->m_Size.x;
 		g_PlotScaleY = g_PlotScaleY * (SheetSize.y - 2 * margin) / PlotSheet->m_Size.y;
 
@@ -636,6 +636,7 @@ wxString msg;
 			case DRAW_TEXT_STRUCT_TYPE :
 			case DRAW_LABEL_STRUCT_TYPE :
 			case DRAW_GLOBAL_LABEL_STRUCT_TYPE :
+			case DRAW_HIER_LABEL_STRUCT_TYPE :
 				PlotTextStruct(DrawList);
 				break;
 

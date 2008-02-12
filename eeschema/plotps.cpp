@@ -328,13 +328,13 @@ wxPoint plot_offset;
 	g_PlotFormat = PLOT_FORMAT_POST;
 
 	/* Build the screen list */
-	EDA_ScreenList ScreenList(NULL);
+	EDA_ScreenList ScreenList;
 
 	if ( AllPages == TRUE ) screen = ScreenList.GetFirst();
 	else screen = ActiveScreen;
 	for ( ; screen != NULL; screen = ScreenList.GetNext() )
 	{
-		PlotSheet = screen->m_CurrentSheet;
+		PlotSheet = screen->m_CurrentSheetDesc;
 		RealSheet = &g_Sheet_A4;
 		if ( pagesize == PAGE_SIZE_AUTO ) RealSheet = PlotSheet;
 		else if ( pagesize == PAGE_SIZE_A )	RealSheet = &g_Sheet_A;
@@ -472,6 +472,7 @@ wxPoint StartPos, EndPos;
 			case DRAW_TEXT_STRUCT_TYPE :
 			case DRAW_LABEL_STRUCT_TYPE :
 			case DRAW_GLOBAL_LABEL_STRUCT_TYPE :
+			case DRAW_HIER_LABEL_STRUCT_TYPE :
 				PlotTextStruct(DrawList);
 				break;
 

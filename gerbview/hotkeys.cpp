@@ -137,13 +137,13 @@ void WinEDA_GerberFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_SWITCH_LAYER_TO_PREVIOUS:
-        if( GetScreen()->m_Active_Layer > 0 )
-            GetScreen()->m_Active_Layer--;
+        if( ((PCB_SCREEN*)GetScreen())->m_Active_Layer > 0 )
+            ((PCB_SCREEN*)GetScreen())->m_Active_Layer--;
         break;
 
     case HK_SWITCH_LAYER_TO_NEXT:
-        if( GetScreen()->m_Active_Layer < 31 )
-            GetScreen()->m_Active_Layer++;
+        if( ((PCB_SCREEN*)GetScreen())->m_Active_Layer < 31 )
+            ((PCB_SCREEN*)GetScreen())->m_Active_Layer++;
         break;
     }
 }

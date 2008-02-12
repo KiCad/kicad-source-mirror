@@ -292,12 +292,21 @@ void WinEDA_SheetPropertiesFrame::SheetPropertiesAccept( wxCommandEvent& event )
     {
         m_CurrentSheet->m_FileName = FileName;
 
-        if( wxFileExists( FileName ) )   /* do we reload the data from the existing file */
+        if( wxFileExists( FileName ) )//do we reload the data from the existing file
         {
             msg.Printf( _( "A file named %s exists, load it ?" ), FileName.GetData() );
             if( IsOK( this, msg ) )
             {
-                m_Parent->LoadOneSheet( m_CurrentSheet, FileName );
+				//LoadOneSheet clears the EEDrawList, 
+				//we do not need to delete & recreate the SCH_SCREEN obj
+				m_CurrentSheet->m_FileName = FileName;
+				if( m_CurrentSheet->m_s ){
+					m_CurrentSheet->m_s->m_RefCount--; 
+					if( m_CurrentSheet->m_s->m_RefCount == 0)
+						SAFE_DELETE(m_CurrentSheet->m_s); 
+				}
+				m_CurrentSheet->m_s = NULL; //so that we reload..
+				m_CurrentSheet->Load(m_Parent); 
             }
         }
     }
@@ -355,15 +364,19 @@ DrawSheetStruct* WinEDA_SchematicFrame::CreateSheet( wxDC* DC )
 {
     g_ItemToRepeat = NULL;
 
-    DrawSheetStruct* Sheet = new DrawSheetStruct( m_CurrentScreen->m_Curseur );
+	DrawSheetStruct* Sheet = new DrawSheetStruct( GetScreen()->m_Curseur );
 
     Sheet->m_Flags     = IS_NEW | IS_RESIZED;
-    Sheet->m_TimeStamp = GetTimeStamp();
-    Sheet->m_Parent    = m_CurrentScreen;
+	Sheet->m_TimeStamp = GetTimeStamp();
+    Sheet->m_Parent    = GetScreen();
+	Sheet->m_s 		   = NULL; 
     s_SheetMindx = SHEET_MIN_WIDTH;
     s_SheetMindy = SHEET_MIN_HEIGHT;
 
-    m_CurrentScreen->SetCurItem( Sheet );
+	//need to check if this is being added to the EEDrawList. 
+	//also need to update the heirarchy, if we are adding 
+	// a sheet to a screen that already has multiple instances (!)
+	GetScreen()->SetCurItem( Sheet ); 
 
     DrawPanel->ManageCurseur = DeplaceSheet;
     DrawPanel->ForceCloseManageCurseur = ExitSheet;
@@ -424,7 +437,7 @@ void WinEDA_SchematicFrame::StartMoveSheet( DrawSheetStruct* Sheet, wxDC* DC )
         return;
 
     DrawPanel->CursorOff( DC );
-    m_CurrentScreen->m_Curseur = Sheet->m_Pos;
+    GetScreen()->m_Curseur = Sheet->m_Pos;
     DrawPanel->MouseToCursorSchema();
 
     s_OldPos = Sheet->m_Pos;
@@ -438,14 +451,14 @@ void WinEDA_SchematicFrame::StartMoveSheet( DrawSheetStruct* Sheet, wxDC* DC )
 
 
 /********************************************************/
-/*** 	Routine de deplacement Sheet, lie au curseur.	*/
+/*	Routine de deplacement (move) Sheet, lie au curseur.*/
 /*  Appele par GeneralControle grace a  ManageCurseur.  */
 /********************************************************/
 static void DeplaceSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
     wxPoint               move_vector;
     DrawSheetLabelStruct* SheetLabel;
-    BASE_SCREEN*          screen = panel->m_Parent->m_CurrentScreen;
+	BASE_SCREEN*          screen = panel->m_Parent->GetScreen();
 
     DrawSheetStruct*      Sheet = (DrawSheetStruct*)
                                   screen->GetCurItem();
@@ -479,41 +492,13 @@ static void DeplaceSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 }
 
 
-/****************************************************************/
-void DrawSheetStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
-/****************************************************************/
-{
-    /* Placement en liste des structures si nouveau composant:*/
-    if( m_Flags & IS_NEW )
-    {
-        if( !( (WinEDA_SchematicFrame*) frame )->EditSheet( this, DC ) )
-        {
-            frame->m_CurrentScreen->SetCurItem( NULL );
-            frame->DrawPanel->ManageCurseur = NULL;
-            frame->DrawPanel->ForceCloseManageCurseur = NULL;
-            RedrawOneStruct( frame->DrawPanel, DC, this, g_XorMode );
-            delete this;
-            return;
-        }
-
-
-        if( wxFileExists( m_FileName ) )
-        {
-            ( (WinEDA_SchematicFrame*) frame )->LoadOneSheet(
-                this, m_FileName );
-        }
-    }
-
-    EDA_BaseStruct::Place( frame, DC );
-}
-
 
 /****************************************/
 /*  Routine de sortie du Menu de Sheet  */
 /****************************************/
 static void ExitSheet( WinEDA_DrawPanel* Panel, wxDC* DC )
 {
-    SCH_SCREEN*      Screen = (SCH_SCREEN*) Panel->m_Parent->m_CurrentScreen;
+    SCH_SCREEN*      Screen = (SCH_SCREEN*) Panel->m_Parent->GetScreen();
     DrawSheetStruct* Sheet  = (DrawSheetStruct*) Screen->GetCurItem();
 
     if( Sheet == NULL )
@@ -523,7 +508,7 @@ static void ExitSheet( WinEDA_DrawPanel* Panel, wxDC* DC )
     if( Sheet->m_Flags & IS_NEW ) /* Nouveau Placement en cours, on l'efface */
     {
         RedrawOneStruct( Panel, DC, Sheet, g_XorMode );
-        delete Sheet;
+		SAFE_DELETE( Sheet );
     }
     else if( Sheet->m_Flags & IS_RESIZED )/* resize en cours: on l'annule */
     {
@@ -536,7 +521,7 @@ static void ExitSheet( WinEDA_DrawPanel* Panel, wxDC* DC )
     else if( Sheet->m_Flags & IS_MOVED )/* move en cours: on l'annule */
     {
         wxPoint curspos = Screen->m_Curseur;
-        Panel->m_Parent->m_CurrentScreen->m_Curseur = s_OldPos;
+		Panel->m_Parent->GetScreen()->m_Curseur = s_OldPos;
         DeplaceSheet( Panel, DC, TRUE );
         RedrawOneStruct( Panel, DC, Sheet, GR_DEFAULT_DRAWMODE );
         Sheet->m_Flags    = 0;
@@ -550,46 +535,6 @@ static void ExitSheet( WinEDA_DrawPanel* Panel, wxDC* DC )
     Panel->ForceCloseManageCurseur = NULL;
 }
 
-
-/********************************************************************/
-void DrawSheetStruct::CleanupSheet( WinEDA_SchematicFrame* frame, wxDC* DC )
-/********************************************************************/
-
-/* Delete pinsheets which are not corresponding to a Global label
- *  if DC != NULL, redraw Sheet
- */
-{
-    DrawSheetLabelStruct* Pinsheet, * NextPinsheet;
-
-    if( !IsOK( frame, _( "Ok to cleanup this sheet" ) ) )
-        return;
-
-    Pinsheet = m_Label;
-    while( Pinsheet )
-    {
-        /* Search Glabel corresponding to this Pinsheet */
-
-        EDA_BaseStruct*        DrawStruct = EEDrawList;
-        DrawGlobalLabelStruct* GLabel = NULL;
-        for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext )
-        {
-            if( DrawStruct->Type() != DRAW_GLOBAL_LABEL_STRUCT_TYPE )
-                continue;
-            GLabel = (DrawGlobalLabelStruct*) DrawStruct;
-            if( Pinsheet->m_Text.CmpNoCase( GLabel->m_Text ) == 0 )
-                break; // Found!
-            GLabel = NULL;
-        }
-
-        NextPinsheet = (DrawSheetLabelStruct*) Pinsheet->Pnext;
-        if( GLabel == NULL )   // Glabel not found: delete pinsheet
-        {
-            frame->GetScreen()->SetModify();
-            frame->DeleteSheetLabel( DC, Pinsheet );
-        }
-        Pinsheet = NextPinsheet;
-    }
-}
 
 
 /*!
@@ -609,5 +554,4 @@ void WinEDA_SheetPropertiesFrame::OnCancelClick( wxCommandEvent& event )
 void WinEDA_SheetPropertiesFrame::OnOkClick( wxCommandEvent& event )
 {
     SheetPropertiesAccept( event );
-    EndModal( 1 );
 }

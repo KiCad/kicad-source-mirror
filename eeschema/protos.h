@@ -1,4 +1,4 @@
-/*****************************************/
+//*****************************************/
 /* prototypage des fonctions de EESchema */
 /*****************************************/
 void FreeLibraryEntry(LibCmpEntry * Entry);
@@ -10,11 +10,9 @@ LibEDA_BaseStruct * LocatePin(const wxPoint & RefPos,
 
 const wxString& ReturnDefaultFieldName( int aFieldNdx );
 
-
 /***************/
 /* FILE_IO.CPP */
 /***************/
-void SaveProject(WinEDA_SchematicFrame * frame);
 
 
 /****************/
@@ -125,9 +123,9 @@ EDA_SchComponentStruct * LocateSmallestComponent( SCH_SCREEN * Screen );
 /* Recherche du plus petit (en surface) composant pointe par la souris */
 
 EDA_BaseStruct * PickStruct(EDA_Rect & block,
-		EDA_BaseStruct *DrawList, int SearchMask );
+		BASE_SCREEN* screen, int SearchMask );
 EDA_BaseStruct * PickStruct(const wxPoint & refpos,
-		EDA_BaseStruct *DrawList, int SearchMask );
+		BASE_SCREEN* screen, int SearchMask);
 /* 2 functions EDA_BaseStruct * PickStruct:
 	Search in  block, or Serach at location pos
 
@@ -188,6 +186,7 @@ int distance(int dx, int dy, int spot_cX, int spot_cY, int seuil);
 			 segment horizontal
 			 segment vertical
 			 segment quelconque */
+
 
 /***************/
 /* EEREDRAW.CPP */
@@ -303,7 +302,7 @@ void ReAnnotatePowerSymbolsOnly();
 
 void InstallAnnotateFrame(WinEDA_SchematicFrame * parent, wxPoint &pos);
 int CheckAnnotate(WinEDA_SchematicFrame * frame, bool OneSheetOnly);
-				/* Retourne le nombre de composants non annotes ou erronés
+				/* Retourne le nombre de composants non annotes ou erronï¿½s
 					Si OneSheetOnly : recherche sur le schema courant
 					else: recherche sur toute la hierarchie */
 
@@ -328,7 +327,6 @@ void PlotTextStruct(EDA_BaseStruct *Struct);
 /* DELSHEET.CPP */
 /***************/
 void DeleteSubHierarchy(DrawSheetStruct * Sheet, bool confirm_deletion);
-void ClearDrawList(EDA_BaseStruct *DrawList, bool confirm_deletion); /* free the draw list DrawList and the subhierarchies */
 bool ClearProjectDrawList(SCH_SCREEN * FirstWindow, bool confirm_deletion);
 /* free the draw list screen->EEDrawList and the subhierarchies
 	clear the screen datas (filenames ..)
@@ -411,7 +409,8 @@ bool LibArchive(wxWindow * frame, const wxString & ArchFullFileName);
 	/* GENLISTE.CPP */
 	/***************/
 void InstallToolsFrame(WinEDA_DrawFrame *parent, wxPoint &pos);
-int GenListeCmp( EDA_BaseStruct ** List );
+struct ListComponent; 
+int GenListeCmp( ListComponent * List );
 
 	/**************/
 	/* CLEANUP.CPP */

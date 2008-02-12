@@ -56,6 +56,7 @@ static void AddMenusForPinSheet( wxMenu* PopMenu, DrawSheetLabelStruct* PinSheet
 static void AddMenusForText( wxMenu* PopMenu, DrawTextStruct* Text );
 static void AddMenusForLabel( wxMenu* PopMenu, DrawLabelStruct* Label );
 static void AddMenusForGLabel( wxMenu* PopMenu, DrawGlobalLabelStruct* GLabel );
+static void AddMenusForHLabel( wxMenu* PopMenu, DrawHierLabelStruct* GLabel );
 static void AddMenusForComponent( wxMenu* PopMenu, EDA_SchComponentStruct* Component );
 static void AddMenusForComponentField( wxMenu* PopMenu, PartTextStruct* Field );
 static void AddMenusForJunction( wxMenu* PopMenu, DrawJunctionStruct* Junction,
@@ -82,13 +83,13 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
                                           wxMenu*        PopMenu )
 /*****************************************************************/
 
-/* Prepare le menu PullUp affiché par un click sur le bouton droit
+/* Prepare le menu PullUp affichï¿½ par un click sur le bouton droit
  *  de la souris.
- *  Ce menu est ensuite complété par la liste des commandes de ZOOM
+ *  Ce menu est ensuite complï¿½tï¿½ par la liste des commandes de ZOOM
  */
 {
-    EDA_BaseStruct* DrawStruct  = m_CurrentScreen->GetCurItem();
-    bool            BlockActive = (m_CurrentScreen->BlockLocate.m_Command != BLOCK_IDLE);
+	EDA_BaseStruct* DrawStruct  = GetScreen()->GetCurItem();
+	bool BlockActive = (GetScreen()->BlockLocate.m_Command != BLOCK_IDLE);
 
 
     DrawPanel->m_CanStartBlock = -1;    // Ne pas engager un debut de bloc sur validation menu
@@ -108,7 +109,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
         {
             DrawSheetLabelStruct* slabel;
             slabel = LocateSheetLabel( (DrawSheetStruct*) DrawStruct,
-                                      m_CurrentScreen->m_Curseur );
+										GetScreen()->m_Curseur );
             if( slabel )
                 DrawStruct = slabel;
         }
@@ -138,7 +139,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
 
     if( DrawStruct == NULL )
     {
-        if( m_CurrentScreen != ScreenSch )
+        if( GetSheet()->Last() != g_RootSheet )
         {
             ADD_MENUITEM( PopMenu, ID_POPUP_SCH_LEAVE_SHEET, _( "Leave Sheet" ), leave_sheet_xpm );
             PopMenu->AppendSeparator();
@@ -146,7 +147,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
         return true;
     }
 
-    m_CurrentScreen->SetCurItem( DrawStruct );
+	GetScreen()->SetCurItem( DrawStruct );
 
     int  flags  = DrawStruct->m_Flags;
     bool is_new = (flags & IS_NEW) ? TRUE : FALSE;
@@ -190,6 +191,10 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
     case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
         AddMenusForGLabel( PopMenu, (DrawGlobalLabelStruct*) DrawStruct );
         break;
+		
+	case DRAW_HIER_LABEL_STRUCT_TYPE:
+		AddMenusForHLabel( PopMenu, (DrawHierLabelStruct*) DrawStruct );
+        break;
 
     case DRAW_PART_TEXT_STRUCT_TYPE:
     {
@@ -198,7 +203,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
             break;
 
         // Many fields are inside a component. If this is the case, add the component menu
-        EDA_SchComponentStruct* Component = LocateSmallestComponent( GetScreen() );
+        EDA_SchComponentStruct* Component = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
         if( Component )
         {
             PopMenu->AppendSeparator();
@@ -378,6 +383,28 @@ void AddMenusForGLabel( wxMenu* PopMenu, DrawGlobalLabelStruct* GLabel )
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, menu_change_type,
                                ID_POPUP_SCH_CHANGE_TYPE_TEXT, _( "Change Type" ), gl_change_xpm );
 }
+/*******************************************************************/
+void AddMenusForHLabel( wxMenu* PopMenu, DrawHierLabelStruct* HLabel )
+/*******************************************************************/
+/* Add menu commands for a hierarchal Label
+ */
+{
+    wxMenu* menu_change_type = new wxMenu;
+
+    if( !HLabel->m_Flags )
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST, _( "Move Hlabel" ), move_text_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT, _( "Rotate HLabel  (R)" ), rotate_glabel_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_TEXT, _( "Edit HLabel" ), edit_text_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Hlabel" ), delete_text_xpm );
+
+    // add menu change type text (to label, glabel, text):
+    ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_LABEL,
+                  _( "Change to Label" ), glabel2label_xpm );
+    ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT,
+                  _( "Change to Text" ), glabel2text_xpm );
+    ADD_MENUITEM_WITH_SUBMENU( PopMenu, menu_change_type,
+                               ID_POPUP_SCH_CHANGE_TYPE_TEXT, _( "Change Type" ), gl_change_xpm );
+}
 
 
 /*****************************************************************/
@@ -442,14 +469,14 @@ void AddMenusForJunction( wxMenu* PopMenu, DrawJunctionStruct* Junction,
 
     if( !is_new )
     {
-        if( PickStruct( frame->GetScreen()->m_Curseur, frame->GetScreen()->EEDrawList,
+        if( PickStruct( frame->GetScreen()->m_Curseur, frame->GetScreen(),
                         WIREITEM | BUSITEM | EXCLUDE_WIRE_BUS_ENDPOINTS ) )
             ADD_MENUITEM( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Wire" ), break_line_xpm );
     }
 
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "delete junction" ), delete_xpm );
 
-    if( PickStruct( frame->GetScreen()->m_Curseur, frame->GetScreen()->EEDrawList,
+    if( PickStruct( frame->GetScreen()->m_Curseur, frame->GetScreen(),
                     WIREITEM | BUSITEM ) )
     {
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_NODE, _( "Delete node" ), delete_node_xpm );
@@ -482,7 +509,7 @@ void AddMenusForWire( wxMenu* PopMenu, EDA_DrawLineStruct* Wire,
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_CONNECTION, _(
                       "Delete connection" ), delete_connection_xpm );
 
-    if( PickStruct( frame->GetScreen()->m_Curseur, frame->GetScreen()->EEDrawList,
+    if( PickStruct( frame->GetScreen()->m_Curseur, frame->GetScreen(),
                     WIREITEM | BUSITEM | EXCLUDE_WIRE_BUS_ENDPOINTS ) )
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Wire" ), break_line_xpm );
 

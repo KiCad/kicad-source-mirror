@@ -114,7 +114,7 @@ BEGIN_EVENT_TABLE(WinEDA_GerberFrame, wxFrame)
 				WinEDA_GerberFrame::OnSelectOptionToolbar)
 
 
-	// PopUp Menu traités dans drawpanel.cpp
+	// PopUp Menu traitï¿½s dans drawpanel.cpp
 
 END_EVENT_TABLE()
 
@@ -131,7 +131,7 @@ WinEDA_GerberFrame::WinEDA_GerberFrame(wxWindow * father, WinEDA_App *parent,
     m_AboutTitle = g_GerbviewAboutTitle;
 	m_Draw_Axis = TRUE;			// TRUE pour avoir les axes dessines
 	m_Draw_Grid = TRUE;			// TRUE pour avoir la axes dessinee
-	m_Draw_Sheet_Ref = FALSE;	// TRUE pour avoir le cartouche dessiné
+	m_Draw_Sheet_Ref = FALSE;	// TRUE pour avoir le cartouche dessinï¿½
 	m_Ident = GERBER_FRAME;
 	m_ZoomMaxValue = 1024;
 	if ( DrawPanel ) DrawPanel->m_Block_Enable = TRUE;
@@ -189,7 +189,7 @@ PCB_SCREEN * screen;
 		}
 
 	/* Reselection de l'ecran de base,
-		pour les evenements de refresh générés par wxWindows */
+		pour les evenements de refresh gï¿½nï¿½rï¿½s par wxWindows */
 	m_CurrentScreen = ActiveScreen = ScreenPcb;
 
 	SaveSettings();
@@ -203,7 +203,7 @@ void WinEDA_GerberFrame::SetToolbars()
  * Set the tools state for the toolbars, accordint to display options
  */
 {
-int layer = GetScreen()->m_Active_Layer;
+int layer = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
 GERBER_Descr * Gerber_layer_descr	= g_GERBER_Descr_List[layer];
 
 	if( m_HToolBar == NULL ) return;
@@ -231,9 +231,9 @@ GERBER_Descr * Gerber_layer_descr	= g_GERBER_Descr_List[layer];
 	}
 
 
-	if ( m_SelLayerBox->GetSelection() != GetScreen()->m_Active_Layer )
+	if ( m_SelLayerBox->GetSelection() != ((PCB_SCREEN*)GetScreen())->m_Active_Layer )
 	{
-		m_SelLayerBox->SetSelection( GetScreen()->m_Active_Layer );
+		m_SelLayerBox->SetSelection( ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
 	}
 
 	if ( Gerber_layer_descr )

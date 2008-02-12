@@ -121,7 +121,7 @@ public:
 /*******************************************************/
 void WinEDA_DrawFrame::ToPrinter(wxCommandEvent& event)
 /*******************************************************/
-/* Prepare les structures de données de gestion de l'impression
+/* Prepare les structures de donnï¿½es de gestion de l'impression
 et affiche la fenetre de dialogue de gestion de l'impression des feuilles
 */
 {
@@ -283,7 +283,7 @@ wxString WinEDA_PrintFrame::BuildPrintTitle()
 {
 wxString name, ext;
 
-	wxFileName::SplitPath(m_Parent->m_CurrentScreen->m_FileName,
+	wxFileName::SplitPath(m_Parent->GetScreen()->m_FileName,
 		(wxString*) NULL, & name, & ext);
 	name += wxT("-") + ext;
 	return name;
@@ -452,12 +452,12 @@ wxString msg;
 
 
 #ifdef EESCHEMA
-BASE_SCREEN * screen = m_Parent->m_CurrentScreen;
+BASE_SCREEN * screen = m_Parent->GetScreen();
 BASE_SCREEN *oldscreen = screen;
 
 	if( s_OptionPrintPage == 1 )
 	{
-	EDA_ScreenList ScreenList(NULL);
+	EDA_ScreenList ScreenList;
 		screen = ScreenList.GetScreen(page -1);
 	}
 
@@ -507,7 +507,7 @@ int ii = 1;
 #ifdef EESCHEMA
 	if( s_OptionPrintPage == 1 )
 	{
-	EDA_ScreenList ScreenList(NULL);
+	EDA_ScreenList ScreenList;
 		ii = ScreenList.GetCount();
 	}
 #endif
@@ -536,7 +536,7 @@ bool EDA_Printout::HasPage(int pageNum)
 #ifdef EESCHEMA
 int PageCount;
 
-	EDA_ScreenList ScreenList(NULL);
+	EDA_ScreenList ScreenList;
 	PageCount = ScreenList.GetCount();
 	if( PageCount >= pageNum ) return TRUE;
 
@@ -592,7 +592,7 @@ wxDC * dc = GetDC();
 	ActiveScreen->m_DrawOrg.x = ActiveScreen->m_DrawOrg.y = 0;
 	ActiveScreen->m_StartVisu.x = ActiveScreen->m_StartVisu.y = 0;
 
-	SheetSize = ActiveScreen->m_CurrentSheet->m_Size;	// size in 1/1000 inch
+	SheetSize = ActiveScreen->m_CurrentSheetDesc->m_Size;	// size in 1/1000 inch
 	SheetSize.x *= m_Parent->m_InternalUnits / 1000;
 	SheetSize.y *= m_Parent->m_InternalUnits / 1000;	// size in pixels
 

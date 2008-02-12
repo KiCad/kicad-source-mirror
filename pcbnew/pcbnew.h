@@ -131,7 +131,7 @@ eda_global bool g_Raccord_45_Auto
 eda_global bool g_ShowIsolDuringCreateTrack; /* Show clearance while track creation */
 
 /*********************************/
-/* Displa otions for board items */
+/* Display options for board items */
 /*********************************/
 
 eda_global DISPLAY_OPTIONS DisplayOpt;

@@ -178,11 +178,11 @@ EDA_SchComponentStruct* WinEDA_SchematicFrame::Load_Component( wxDC* DC,
     DrawPanel->ManageCurseur = ShowWhileMoving;
     DrawPanel->ForceCloseManageCurseur = ExitPlaceCmp;
 
-    DrawLibItem = new EDA_SchComponentStruct( m_CurrentScreen->m_Curseur );
+    DrawLibItem = new EDA_SchComponentStruct( GetScreen()->m_Curseur );
     DrawLibItem->m_Multi     = 1;/* Selection de l'unite 1 dans le boitier */
     DrawLibItem->m_Convert   = 1;
     DrawLibItem->m_ChipName  = Name;
-    DrawLibItem->m_TimeStamp = GetTimeStamp();
+	DrawLibItem->m_TimeStamp = GetTimeStamp();
     DrawLibItem->m_Flags = IS_NEW | IS_MOVED;
 
     /* Init champ Valeur */
@@ -209,7 +209,7 @@ EDA_SchComponentStruct* WinEDA_SchematicFrame::Load_Component( wxDC* DC,
         Entry->m_Prefix.m_Pos.y + DrawLibItem->m_Pos.y;
     DrawLibItem->m_Field[REFERENCE].m_Orient    = Entry->m_Prefix.m_Orient;
     DrawLibItem->m_Field[REFERENCE].m_Size      = Entry->m_Prefix.m_Size;
-    DrawLibItem->m_Field[REFERENCE].m_Text      = msg;
+	DrawLibItem->m_PrefixString = Entry->m_Prefix.m_Text;
     DrawLibItem->m_Field[REFERENCE].m_Attributs = Entry->m_Prefix.m_Attributs;
     DrawLibItem->m_Field[REFERENCE].m_HJustify  = Entry->m_Prefix.m_HJustify;
     DrawLibItem->m_Field[REFERENCE].m_VJustify  = Entry->m_Prefix.m_VJustify;
@@ -253,14 +253,14 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     wxPoint move_vector;
 
     EDA_SchComponentStruct* DrawLibItem = (EDA_SchComponentStruct*)
-                                          panel->m_Parent->m_CurrentScreen->GetCurItem();
+			panel->m_Parent->GetScreen()->GetCurItem();
 
     /* Effacement du composant */
     if( erase )
         DrawStructsInGhost( panel, DC, DrawLibItem, 0, 0 );
 
-    move_vector.x = panel->m_Parent->m_CurrentScreen->m_Curseur.x - DrawLibItem->m_Pos.x;
-    move_vector.y = panel->m_Parent->m_CurrentScreen->m_Curseur.y - DrawLibItem->m_Pos.y;
+	move_vector.x = panel->m_Parent->GetScreen()->m_Curseur.x - DrawLibItem->m_Pos.x;
+	move_vector.y = panel->m_Parent->GetScreen()->m_Curseur.y - DrawLibItem->m_Pos.y;
     MoveOneStruct( DrawLibItem, move_vector );
 
     DrawStructsInGhost( panel, DC, DrawLibItem, 0, 0 );
@@ -301,7 +301,7 @@ void WinEDA_SchematicFrame::CmpRotationMiroir(
         DrawPanel->CursorOn( DC );
     }
 
-    TestDanglingEnds( m_CurrentScreen->EEDrawList, DC );
+	TestDanglingEnds( GetScreen()->EEDrawList, DC );
     GetScreen()->SetModify();
 }
 
@@ -314,12 +314,12 @@ static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC )
  */
 {
     EDA_SchComponentStruct* DrawLibItem = (EDA_SchComponentStruct*)
-                                          Panel->m_Parent->m_CurrentScreen->GetCurItem();
+			Panel->m_Parent->GetScreen()->GetCurItem();
 
     if( DrawLibItem->m_Flags & IS_NEW )    /* Nouveau Placement en cours, on l'efface */
     {
         DrawStructsInGhost( Panel, DC, DrawLibItem, 0, 0 );
-        delete DrawLibItem;
+		SAFE_DELETE( DrawLibItem );
     }
     else if( DrawLibItem )   /* Deplacement ancien composant en cours */
     {
@@ -338,7 +338,7 @@ static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC )
     DrawLibItem->m_Flags = 0;
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
-    Panel->m_Parent->m_CurrentScreen->SetCurItem( NULL );
+	Panel->m_Parent->GetScreen()->SetCurItem( NULL );
 }
 
 
@@ -385,7 +385,7 @@ void WinEDA_SchematicFrame::SelPartUnit( EDA_SchComponentStruct* DrawComponent,
     else
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
-    TestDanglingEnds( m_CurrentScreen->EEDrawList, DC );
+	TestDanglingEnds( GetScreen()->EEDrawList, DC );
     GetScreen()->SetModify();
 }
 
@@ -426,7 +426,7 @@ void WinEDA_SchematicFrame::ConvertPart( EDA_SchComponentStruct* DrawComponent,
     else
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
-    TestDanglingEnds( m_CurrentScreen->EEDrawList, DC );
+	TestDanglingEnds( GetScreen()->EEDrawList, DC );
     GetScreen()->SetModify();
 }
 
@@ -471,18 +471,19 @@ void WinEDA_SchematicFrame::StartMovePart( EDA_SchComponentStruct* Component,
 
     if( Component->m_Flags == 0 )
     {
-        if( g_ItemToUndoCopy )
-            delete g_ItemToUndoCopy;
+        if( g_ItemToUndoCopy ){
+			SAFE_DELETE( g_ItemToUndoCopy );
+		}
         g_ItemToUndoCopy = Component->GenCopy();
     }
 
     DrawPanel->CursorOff( DC );
-    m_CurrentScreen->m_Curseur = Component->m_Pos;
+	GetScreen()->m_Curseur = Component->m_Pos;
     DrawPanel->MouseToCursorSchema();
 
     DrawPanel->ManageCurseur = ShowWhileMoving;
     DrawPanel->ForceCloseManageCurseur = ExitPlaceCmp;
-    m_CurrentScreen->SetCurItem( Component );
+	GetScreen()->SetCurItem( Component );
     OldPos = Component->m_Pos;
     memcpy( OldTransMat, Component->m_Transform, sizeof(OldTransMat) );
 

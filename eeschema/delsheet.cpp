@@ -37,37 +37,40 @@ wxString msg;
 		}
 
 	/* effacement du sous schema correspondant */
-	if( FirstSheet->IsModify() && confirm_deletion )
+	if( FirstSheet->m_s->IsModify() && confirm_deletion )
 	{
 		msg.Printf( _("Sheet %s (file %s) modified. Save it?"),
 					FirstSheet->m_SheetName.GetData(),
 					FirstSheet->m_FileName.GetData());
 		if( IsOK(NULL, msg) )
 		{
-			frame->SaveEEFile(FirstSheet, FILE_SAVE_AS);
+			frame->SaveEEFile(FirstSheet->m_s, FILE_SAVE_AS);
 		}
 	}
 
 	/* free the sub hierarchy */
-	EEDrawList = FirstSheet->EEDrawList;
-	while (EEDrawList != NULL)
-	{
-		DrawStruct = EEDrawList;
-		EEDrawList = EEDrawList->Pnext;
-		if( DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE)
+	if(FirstSheet->m_s){
+		EEDrawList = FirstSheet->m_s->EEDrawList;
+		while (EEDrawList != NULL)
 		{
-			DeleteSubHierarchy((DrawSheetStruct *) DrawStruct, confirm_deletion);
+			DrawStruct = EEDrawList;
+			EEDrawList = EEDrawList->Pnext;
+			if( DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE)
+			{
+				DeleteSubHierarchy((DrawSheetStruct *) DrawStruct, confirm_deletion);
+			}
 		}
+		/* Effacement des elements de la feuille courante */
+		FirstSheet->m_s->FreeDrawList();
 	}
-
-	/* Effacement des elements de la feuille courante */
-	FirstSheet->FreeDrawList();
 }
 
 /*********************************************************************/
-void ClearDrawList(EDA_BaseStruct *DrawList, bool confirm_deletion)
+//void ClearDrawList(EDA_BaseStruct *DrawList, bool confirm_deletion)
 /********************************************************************/
 /* free the draw list DrawList and the subhierarchies */
+//this is redundant -- use FreeDrawList, a member of SCH_SCREEN
+/*
 {
 EDA_BaseStruct *DrawStruct;
 
@@ -84,7 +87,7 @@ EDA_BaseStruct *DrawStruct;
 		delete DrawStruct;
 	}
 }
-
+*/
 /********************************************************************/
 bool ClearProjectDrawList(SCH_SCREEN * screen, bool confirm_deletion)
 /********************************************************************/
@@ -94,11 +97,10 @@ bool ClearProjectDrawList(SCH_SCREEN * screen, bool confirm_deletion)
 {
 	if ( screen == NULL ) return(TRUE);
 
-	ClearDrawList(screen->EEDrawList, confirm_deletion);
-	screen->EEDrawList = NULL;
+	screen->FreeDrawList();
 
 	/* Clear the  screen datas */
-	screen->m_SheetNumber = screen->m_NumberOfSheet = 1;
+	screen->m_ScreenNumber = screen->m_NumberOfScreen = 1;
 	screen->m_Title.Empty();
 	screen->m_Revision.Empty();
 	screen->m_Company.Empty();

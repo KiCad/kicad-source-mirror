@@ -329,7 +329,7 @@ void WinEDA_ZoneFrame::CreateControls()
 		}
 		else
 		{
-			if( m_Parent->GetScreen()->m_Active_Layer == layer_number )
+			if( ((PCB_SCREEN*)(m_Parent->GetScreen()))->m_Active_Layer == layer_number )
 				m_LayerSelectionCtrl->SetSelection( ii );
 		}
     }

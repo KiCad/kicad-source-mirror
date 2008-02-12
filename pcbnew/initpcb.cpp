@@ -186,7 +186,7 @@ bool WinEDA_BasePcbFrame::Clear_Pcb( bool query )
     SetCurItem( NULL );
 
     /* Init parametres de gestion */
-    GetScreen()->Init();
+    ((PCB_SCREEN*)GetScreen())->Init();
 
     g_HightLigt_Status = 0;
 

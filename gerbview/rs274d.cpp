@@ -56,8 +56,8 @@
  *  D_CODES:
  * 
  *  D01 ... D9 = codes d'action:
- *  D01			= activation de lumiere (baisser de plume) lors du déplacement
- *  D02			= extinction de lumiere (lever de plume) lors du déplacement
+ *  D01			= activation de lumiere (baisser de plume) lors du dï¿½placement
+ *  D02			= extinction de lumiere (lever de plume) lors du dï¿½placement
  *  D03			= Flash
  *  D09			= VAPE Flash
  *  D51			= precede par G54 -> Select VAPE
@@ -106,8 +106,8 @@ static void Append_1_Flash_ROND_GERBER( int Dcode_tool,
     track = new TRACK( frame->m_Pcb );
 
     track->Insert( frame->m_Pcb, NULL );
-
-    track->SetLayer( frame->GetScreen()->m_Active_Layer );
+	
+    track->SetLayer( frame->GetPCBScreen()->m_Active_Layer );
     track->m_Width = diametre;
     track->m_Start = track->m_End = pos;
     NEGATE( track->m_Start.y );
@@ -140,7 +140,7 @@ static void Append_1_Flash_GERBER( int Dcode_index,
 
     track->Insert( frame->m_Pcb, NULL );
 
-    track->SetLayer( frame->GetScreen()->m_Active_Layer );
+    track->SetLayer( frame->GetPCBScreen()->m_Active_Layer );
     track->m_Width = width;
     track->m_Start = track->m_End = pos;
     NEGATE( track->m_Start.y );
@@ -150,7 +150,7 @@ static void Append_1_Flash_GERBER( int Dcode_index,
     if( forme == PAD_OVAL )
         track->m_Shape = S_SPOT_OVALE;
     else
-        track->m_Shape = S_SPOT_RECT; // donc rectangle ou carré
+        track->m_Shape = S_SPOT_RECT; // donc rectangle ou carrï¿½
 
     len >>= 1;
     if( size.x > size.y )  // ovale / rect horizontal
@@ -181,7 +181,7 @@ static void Append_1_Line_GERBER( int Dcode_index,
 
     track->Insert( frame->m_Pcb, NULL );
 
-    track->SetLayer( frame->GetScreen()->m_Active_Layer );
+    track->SetLayer( frame->GetPCBScreen()->m_Active_Layer );
     track->m_Width = largeur;
     track->m_Start = startpoint;
     NEGATE( track->m_Start.y );
@@ -203,10 +203,10 @@ static void Append_1_SEG_ARC_GERBER( int Dcode_index,
 
 /* creation d'un arc:
  *  si multiquadrant == TRUE arc de 0 a 360 degres
- *      et rel_center est la coordonnée du centre relativement au startpoint
+ *      et rel_center est la coordonnï¿½e du centre relativement au startpoint
  * 
- *  si multiquadrant == FALSE arc de 0 à 90 entierement contenu dans le meme quadrant
- *      et rel_center est la coordonnée du centre relativement au startpoint,
+ *  si multiquadrant == FALSE arc de 0 ï¿½ 90 entierement contenu dans le meme quadrant
+ *      et rel_center est la coordonnï¿½e du centre relativement au startpoint,
  *      mais en VALEUR ABSOLUE et le signe des valeurs x et y de rel_center doit
  *      etre deduit de cette limite de 90 degres
  * 
@@ -220,7 +220,7 @@ static void Append_1_SEG_ARC_GERBER( int Dcode_index,
     track->Insert( frame->m_Pcb, NULL );
 
     track->m_Shape = S_ARC;
-    track->SetLayer( frame->GetScreen()->m_Active_Layer );
+    track->SetLayer( frame->GetPCBScreen()->m_Active_Layer );
     track->m_Width = largeur;
 
     if( multiquadrant )
@@ -294,10 +294,10 @@ static void Append_1_SEG_ARC_GERBER( int Dcode_index,
 
 
 /**************************************************/
-/* Routines utilisées en lecture de ficher gerber */
+/* Routines utilisï¿½es en lecture de ficher gerber */
 /**************************************************/
 
-/* ces routines lisent la chaine de texte pointée par Text.
+/* ces routines lisent la chaine de texte pointï¿½e par Text.
  *  Apres appel, Text pointe le debut de la sequence non lue
  */
 
@@ -436,7 +436,7 @@ wxPoint GERBER_Descr::ReadIJCoord( char*& Text )
 /************************************************/
 
 /* Retourne la coord type InnJnn courante pointee par Text (InnnnJmmmm)
- *  Ces coordonnées sont relatives, donc si une coord est absente, sa valeur
+ *  Ces coordonnï¿½es sont relatives, donc si une coord est absente, sa valeur
  *  par defaut est 0
  */
 {
@@ -741,7 +741,7 @@ bool GERBER_Descr::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
 
             edge_poly->Insert( frame->m_Pcb, last );
 
-            edge_poly->SetLayer( frame->GetScreen()->m_Active_Layer );
+            edge_poly->SetLayer( frame->GetPCBScreen()->m_Active_Layer );
             edge_poly->m_Width = 1;
             edge_poly->m_Start = m_PreviousPos;
             NEGATE( edge_poly->m_Start.y );
@@ -850,7 +850,7 @@ bool GERBER_Descr::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
                                        PAD_RECT );
                 break;
 
-            default:        // Special (Macro) : Non implanté
+            default:        // Special (Macro) : Non implantï¿½
                 break;
             }
 

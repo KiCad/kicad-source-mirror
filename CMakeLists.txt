@@ -11,6 +11,7 @@
 #
 # CMAKE_VERBOSE_MAKEFILE ON/OFF (OPTIONAL)
 #   Turns ON/OFF verbose build messages.
+# 	you can also pass VERBOSE=1 to make for the same effect.
 #
 # CMAKE_INSTALL_PREFIX (OPTIONAL)
 #   

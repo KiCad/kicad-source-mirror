@@ -29,15 +29,15 @@ enum id_libedit {
 /* Variables locales */
 extern int CurrentUnit;
 
-/* Classe de la frame des propriétés d'un composant en librairie */
+/* Classe de la frame des propriï¿½tï¿½s d'un composant en librairie */
 
-/* Cette classe genere une fenetre type NoteBook, pour l'edition des propriétés
+/* Cette classe genere une fenetre type NoteBook, pour l'edition des propriï¿½tï¿½s
  *  d'un composant le librairie.
- *  On peut éditer:
+ *  On peut ï¿½diter:
  *  Texte dimensions et justification de tous les champs (Ref, Val, et autres champs)
  *  Documentation et mots clefs
  *  Nombre de part par boitier
- *  et autres propriérés générales
+ *  et autres propriï¿½rï¿½s gï¿½nï¿½rales
  */
 
 #include "dialog_edit_component_in_lib.cpp"
@@ -653,7 +653,7 @@ void WinEDA_PartPropertiesFrame::PartPropertiesAccept( wxCommandEvent& event )
         Close(); return;
     }
 
-    m_Parent->m_CurrentScreen->SetModify();
+	m_Parent->GetScreen()->SetModify();
     m_Parent->SaveCopyInUndoList( CurrentLibEntry );
 
     CopyPanelFieldToData();
@@ -761,7 +761,7 @@ void WinEDA_PartPropertiesFrame::PartPropertiesAccept( wxCommandEvent& event )
                 {
                     if( ii < FIELD1 || Field->m_Name.IsEmpty() )
                     {
-                        delete Field;
+						SAFE_DELETE( Field );
                         if( previousField )
                             previousField->Pnext = NextField;
                         else
@@ -1056,8 +1056,8 @@ bool WinEDA_PartPropertiesFrame::ChangeNbUnitsPerPackage( int MaxUnit )
 bool WinEDA_PartPropertiesFrame::SetUnsetConvert()
 /*****************************************************/
 
-/* crée ou efface (selon option AsConvert) les éléments
- *  de la représentation convertie d'un composant
+/* crï¿½e ou efface (selon option AsConvert) les ï¿½lï¿½ments
+ *  de la reprï¿½sentation convertie d'un composant
  */
 {
     int FlagDel = 0;
@@ -1096,7 +1096,7 @@ bool WinEDA_PartPropertiesFrame::SetUnsetConvert()
     }
     else               /* Representation convertie a supprimer */
     {
-        /* Traitement des elements à supprimer */
+        /* Traitement des elements ï¿½ supprimer */
         if( CurrentLibEntry )
             DrawItem = CurrentLibEntry->m_Drawings;
         for( ; DrawItem != NULL; DrawItem = NextDrawItem )

@@ -32,7 +32,7 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
 {
     MODULE*     Module;
-    PCB_SCREEN* screen = GetScreen();
+	PCB_SCREEN* screen = (PCB_SCREEN*)GetScreen();
 
     if( !m_Pcb || !screen )
         return;
@@ -72,7 +72,7 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 /* Draw the BOARD, and others elements : axis, grid ..
  */
 {
-    PCB_SCREEN* Screen = GetScreen();
+	PCB_SCREEN* Screen = (PCB_SCREEN*)GetScreen();
 
     if( !m_Pcb || !Screen )
         return;

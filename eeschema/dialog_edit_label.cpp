@@ -67,6 +67,10 @@ wxString msg;
 		case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
 			SetTitle(_("Global Label properties"));
 			break;
+			
+		case DRAW_HIER_LABEL_STRUCT_TYPE:
+			SetTitle(_("Hierarchal Label properties"));
+			break;
 
 		case DRAW_LABEL_STRUCT_TYPE:
 			SetTitle(_("Label properties"));
@@ -155,7 +159,7 @@ void WinEDA_LabelPropertiesFrame::CreateControls()
     m_TextShapeStrings.Add(_("Bidi"));
     m_TextShapeStrings.Add(_("TriState"));
     m_TextShapeStrings.Add(_("Passive"));
-    m_TextShape = new wxRadioBox( itemDialog1, ID_RADIOBOX1, _("Glabel Shape:"), wxDefaultPosition, wxDefaultSize, m_TextShapeStrings, 1, wxRA_SPECIFY_COLS );
+    m_TextShape = new wxRadioBox( itemDialog1, ID_RADIOBOX1, _("label Shape:"), wxDefaultPosition, wxDefaultSize, m_TextShapeStrings, 1, wxRA_SPECIFY_COLS );
     m_TextShape->SetSelection(0);
     m_TextShape->Show(false);
     itemBoxSizer6->Add(m_TextShape, 0, wxALIGN_TOP|wxALL, 5);
@@ -185,7 +189,8 @@ void WinEDA_LabelPropertiesFrame::CreateControls()
     m_TextShape->SetValidator( wxGenericValidator(& m_CurrentText->m_Shape) );
 ////@end WinEDA_LabelPropertiesFrame content construction
 
-    if (m_CurrentText->Type() == DRAW_GLOBAL_LABEL_STRUCT_TYPE )
+    if (m_CurrentText->Type() == DRAW_GLOBAL_LABEL_STRUCT_TYPE  ||
+		m_CurrentText->Type() == DRAW_HIER_LABEL_STRUCT_TYPE)
         m_TextShape->Show(true);
 }
 

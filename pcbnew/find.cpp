@@ -42,7 +42,7 @@ void WinEDA_PcbFrame::InstallFindFrame( const wxPoint& pos, wxDC* DC )
 void WinEDA_PcbFindFrame::FindItem( wxCommandEvent& event )
 /********************************************************/
 {
-    PCB_SCREEN* screen = m_Parent->GetScreen();
+	PCB_SCREEN* screen = (PCB_SCREEN*)(m_Parent->GetScreen());
     wxPoint     locate_pos;
     wxString    msg;
     bool        FindMarker = FALSE;

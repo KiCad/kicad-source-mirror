@@ -539,7 +539,7 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
     g_NetFormat = CurrPage->m_IdNetType;
 
     /* Calculate the netlist filename */
-    FullFileName = ScreenSch->m_FileName;
+    FullFileName = g_RootSheet->m_s->m_FileName;
 
     switch( g_NetFormat )
     {
@@ -558,7 +558,7 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
 
     Mask = wxT( "*" ) + FileExt + wxT( "*" );
     ChangeFileNameExt( FullFileName, FileExt );
-
+	FullFileName = FullFileName.AfterLast('/'); 
     FullFileName = EDA_FileSelector( _( "Netlist files:" ),
                                      wxEmptyString, /* Defaut path */
                                      FullFileName,  /* Defaut filename */
@@ -581,7 +581,7 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
     }
 
     /* Cleanup the entire hierarchy */
-    EDA_ScreenList ScreenList( NULL );
+	EDA_ScreenList ScreenList;
     for( SCH_SCREEN* screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
     {
         bool ModifyWires;
@@ -649,7 +649,7 @@ void WinEDA_NetlistFrame::RunSimulator( wxCommandEvent& event )
     CommandLine = g_SimulatorCommandLine.AfterFirst( ' ' );
 
     /* Calculate the netlist filename */
-    NetlistFullFileName = ScreenSch->m_FileName;
+    NetlistFullFileName = g_RootSheet->m_s->m_FileName;
     ChangeFileNameExt( NetlistFullFileName, wxT( ".cir" ) );
     AddDelimiterString( NetlistFullFileName );
     CommandLine += wxT( " " ) + NetlistFullFileName;

@@ -266,7 +266,7 @@ public:
 #include "class_zone.h"
 
 
-class DISPLAY_OPTIONS
+class DISPLAY_OPTIONS 
 {
 public:
     bool DisplayPadFill;

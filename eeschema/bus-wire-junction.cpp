@@ -140,8 +140,8 @@ void WinEDA_SchematicFrame::BeginSegment( wxDC* DC, int type )
     if( !newsegment )  /* first point : Create first wire ou bus */
     {
         s_ConnexionStartPoint = cursorpos;
-        s_OldWiresList = GetScreen()->ExtractWires( TRUE );
-        GetScreen()->SchematicCleanUp( NULL );
+		s_OldWiresList = ((SCH_SCREEN*)GetScreen())->ExtractWires( TRUE );
+		((SCH_SCREEN*)GetScreen())->SchematicCleanUp( NULL );
 
         switch( type )
         {
@@ -191,8 +191,8 @@ void WinEDA_SchematicFrame::BeginSegment( wxDC* DC, int type )
 
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 
-        /* Creation du segment suivant ou fin de tracé si point sur pin, jonction ...*/
-        if( IsTerminalPoint( GetScreen(), cursorpos, oldsegment->m_Layer ) )
+        /* Creation du segment suivant ou fin de tracï¿½ si point sur pin, jonction ...*/
+		if( IsTerminalPoint( (SCH_SCREEN*)GetScreen(), cursorpos, oldsegment->m_Layer ) )
         {
             EndSegment( DC ); return;
         }
@@ -299,7 +299,7 @@ void WinEDA_SchematicFrame::EndSegment( wxDC* DC )
         alt_end_point = lastsegment->m_Start;
     }
 
-    GetScreen()->SchematicCleanUp( NULL );
+	((SCH_SCREEN*)GetScreen())->SchematicCleanUp( NULL );
 
     /* clear flags and find last segment entered, for repeat function */
     segment = (EDA_DrawLineStruct*) GetScreen()->EEDrawList;
@@ -519,7 +519,7 @@ void WinEDA_SchematicFrame::DeleteCurrentSegment( wxDC* DC )
         Segment_in_Ghost( DrawPanel, DC, FALSE ); /* Effacement du trace en cours */
     }
 
-    EraseStruct( GetScreen()->GetCurItem(), GetScreen() );
+	EraseStruct( GetScreen()->GetCurItem(), (SCH_SCREEN*)GetScreen() );
     DrawPanel->ManageCurseur = NULL;
     GetScreen()->SetCurItem( NULL );
 }
@@ -662,6 +662,16 @@ void WinEDA_SchematicFrame::RepeatDrawItem( wxDC* DC )
         break;
 
 
+	case DRAW_HIER_LABEL_STRUCT_TYPE:
+		    #undef STRUCT
+            #define STRUCT ( (DrawHierLabelStruct*) g_ItemToRepeat )
+        g_ItemToRepeat = STRUCT->GenCopy();
+        STRUCT->m_Pos += g_RepeatStep;
+        new_pos = STRUCT->m_Pos;
+        /*** Increment du numero de label ***/
+        IncrementLabelMember( STRUCT->m_Text );
+        break;
+		
     case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
             #undef STRUCT
             #define STRUCT ( (DrawGlobalLabelStruct*) g_ItemToRepeat )
@@ -695,11 +705,11 @@ void WinEDA_SchematicFrame::RepeatDrawItem( wxDC* DC )
 
         // Create the duplicate component, position = mouse cursor
         g_ItemToRepeat = STRUCT->GenCopy();
-        new_pos.x           = m_CurrentScreen->m_Curseur.x - STRUCT->m_Pos.x;
-        new_pos.y           = m_CurrentScreen->m_Curseur.y - STRUCT->m_Pos.y;
-        STRUCT->m_Pos       = m_CurrentScreen->m_Curseur;
+        new_pos.x           = GetScreen()->m_Curseur.x - STRUCT->m_Pos.x;
+		new_pos.y           = GetScreen()->m_Curseur.y - STRUCT->m_Pos.y;
+		STRUCT->m_Pos       = GetScreen()->m_Curseur;
         STRUCT->m_Flags     = IS_NEW;
-        STRUCT->m_TimeStamp = GetTimeStamp();
+		STRUCT->m_TimeStamp = GetTimeStamp();
         for( int ii = 0; ii < NUMBER_OF_FIELDS; ii++ )
         {
             STRUCT->m_Field[ii].m_Pos += new_pos;
@@ -770,10 +780,10 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
  *  - type WIRE, si il y a
  *      - une jonction
  *      - ou une pin
- *      - ou une extrémité unique de fil
+ *      - ou une extrï¿½mitï¿½ unique de fil
  * 
  *  - type BUS, si il y a
- *      - ou une extrémité unique de BUS
+ *      - ou une extrï¿½mitï¿½ unique de BUS
  */
 {
     EDA_BaseStruct*         item;
@@ -785,7 +795,7 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
     switch( layer )
     {
     case LAYER_BUS:
-        item = PickStruct( pos, screen->EEDrawList, BUSITEM );
+        item = PickStruct( pos, screen, BUSITEM );
         if( item )
             return TRUE;
         pinsheet = LocateAnyPinSheet( pos, screen->EEDrawList );
@@ -798,13 +808,13 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
         break;
 
     case LAYER_NOTES:
-        item = PickStruct( pos, screen->EEDrawList, DRAWITEM );
+        item = PickStruct( pos, screen, DRAWITEM );
         if( item )
             return TRUE;
         break;
 
     case LAYER_WIRE:
-        item = PickStruct( pos, screen->EEDrawList, RACCORDITEM | JUNCTIONITEM );
+        item = PickStruct( pos, screen, RACCORDITEM | JUNCTIONITEM );
         if( item )
             return TRUE;
 
@@ -820,17 +830,17 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
                 return TRUE;
         }
 
-        item = PickStruct( pos, screen->EEDrawList, WIREITEM );
+        item = PickStruct( pos, screen, WIREITEM );
         if( item )
             return TRUE;
 
-        item = PickStruct( pos, screen->EEDrawList, LABELITEM );
+        item = PickStruct( pos, screen, LABELITEM );
         if( item && (item->Type() != DRAW_TEXT_STRUCT_TYPE)
            && ( ( (DrawGlobalLabelStruct*) item )->m_Pos.x == pos.x )
            && ( ( (DrawGlobalLabelStruct*) item )->m_Pos.y == pos.y ) )
             return TRUE;
 
-        pinsheet = LocateAnyPinSheet( pos, screen->EEDrawList );
+        pinsheet = LocateAnyPinSheet( pos, screen );
         if( pinsheet && !IsBusLabel( pinsheet->m_Text ) )
         {
             itempos = pinsheet->m_Pos;
@@ -861,14 +871,14 @@ bool IsJunctionNeeded( WinEDA_SchematicFrame* frame, wxPoint& pos )
  *  - a pin is on location pos
  */
 {
-    if( PickStruct( pos, frame->GetScreen()->EEDrawList, JUNCTIONITEM ) )
+    if( PickStruct( pos, frame->GetScreen(), JUNCTIONITEM ) )
         return FALSE;
 
-    if( PickStruct( pos, frame->GetScreen()->EEDrawList, WIREITEM | EXCLUDE_WIRE_BUS_ENDPOINTS ) )
+    if( PickStruct( pos, frame->GetScreen(), WIREITEM | EXCLUDE_WIRE_BUS_ENDPOINTS ) )
     {
-        if( PickStruct( pos, frame->GetScreen()->EEDrawList, WIREITEM | WIRE_BUS_ENDPOINTS_ONLY ) )
+        if( PickStruct( pos, frame->GetScreen(), WIREITEM | WIRE_BUS_ENDPOINTS_ONLY ) )
             return TRUE;
-        if( frame->LocatePinEnd( frame->GetScreen()->EEDrawList, pos ) )
+        if( frame->LocatePinEnd( frame->GetScreen(), pos ) )
             return TRUE;
     }
 

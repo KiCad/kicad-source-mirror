@@ -31,18 +31,18 @@ static void SaveLayers(FILE *f);
 *****************************************************************************/
 bool WinEDA_SchematicFrame::SaveEEFile(SCH_SCREEN *screen, int FileSave)
 {
-wxString msg;
-wxString Name, BakName;
-const wxChar **LibNames;
-const char * layer, *width;
-int ii, shape;
-bool Failed = FALSE;
-EDA_BaseStruct *Phead;
-Ki_PageDescr * PlotSheet;
-FILE *f;
-wxString dirbuf;
+	wxString msg;
+	wxString Name, BakName;
+	const wxChar **LibNames;
+	const char * layer, *width;
+	int ii, shape;
+	bool Failed = FALSE;
+	EDA_BaseStruct *Phead;
+	Ki_PageDescr * PlotSheet;
+	FILE *f;
+	wxString dirbuf;
 
-	if ( screen == NULL ) screen = (SCH_SCREEN*) ActiveScreen;
+	if ( screen == NULL ) screen = (SCH_SCREEN*)GetScreen();
 
 	/* If no name exists in the window yet - save as new. */
 	if( screen->m_FileName.IsEmpty() ) FileSave = FILE_SAVE_NEW;
@@ -58,8 +58,7 @@ wxString dirbuf;
 			{
 				ChangeFileNameExt(BakName, wxT(".bak"));
 				wxRemoveFile(BakName);	/* delete Old .bak file */
-				if( ! wxRenameFile(Name, BakName) )
-				{
+				if( ! wxRenameFile(Name, BakName) ){
 					DisplayError(this, wxT("Warning: unable to rename old file"), 10);
 				}
 			}
@@ -69,8 +68,8 @@ wxString dirbuf;
 		{
 			wxString mask = wxT("*") + g_SchExtBuffer;
 			Name = EDA_FileSelector(_("Schematic files:"),
-					wxEmptyString,					/* Chemin par defaut */
-					screen->m_FileName,				/* nom fichier par defaut, et resultat */
+					wxEmptyString,			/* Chemin par defaut */
+					screen->m_FileName,		/* nom fichier par defaut, et resultat */
 					g_SchExtBuffer,		/* extension par defaut */
 					mask,				/* Masque d'affichage */
 					this,
@@ -122,11 +121,11 @@ wxString dirbuf;
 	SaveLayers(f);
 	/* Sauvegarde des dimensions du schema, des textes du cartouche.. */
 	
-	PlotSheet = screen->m_CurrentSheet;
+	PlotSheet = screen->m_CurrentSheetDesc;
 	fprintf(f,"$Descr %s %d %d\n",CONV_TO_UTF8(PlotSheet->m_Name),
 			PlotSheet->m_Size.x, PlotSheet->m_Size.y);
 
-	fprintf(f,"Sheet %d %d\n",screen->m_SheetNumber, screen->m_NumberOfSheet);
+	fprintf(f,"Sheet %d %d\n",screen->m_ScreenNumber, screen->m_NumberOfScreen);
 	fprintf(f,"Title \"%s\"\n",CONV_TO_UTF8(screen->m_Title));
 	fprintf(f,"Date \"%s\"\n",CONV_TO_UTF8(screen->m_Date));
 	fprintf(f,"Rev \"%s\"\n",CONV_TO_UTF8(screen->m_Revision));
@@ -258,12 +257,23 @@ wxString dirbuf;
 					Failed = TRUE;
 				break;
 
-
 			case DRAW_GLOBAL_LABEL_STRUCT_TYPE: /* Its a Global label item. */
 				#undef STRUCT
 				#define STRUCT ((DrawGlobalLabelStruct *) Phead)
 				shape = STRUCT->m_Shape;
-			if (fprintf(f, "Text GLabel %-4d %-4d %-4d %-4d %s\n%s\n",
+				if (fprintf(f, "Text GLabel %-4d %-4d %-4d %-4d %s\n%s\n",
+						STRUCT->m_Pos.x, STRUCT->m_Pos.y,
+						STRUCT->m_Orient,	STRUCT->m_Size.x,
+						SheetLabelType[shape],
+						CONV_TO_UTF8(STRUCT->m_Text)) == EOF)
+					Failed = TRUE;
+				break;
+				
+			case DRAW_HIER_LABEL_STRUCT_TYPE: /* Its a Global label item. */
+				#undef STRUCT
+				#define STRUCT ((DrawHierLabelStruct *) Phead)
+				shape = STRUCT->m_Shape;
+				if (fprintf(f, "Text HLabel %-4d %-4d %-4d %-4d %s\n%s\n",
 						STRUCT->m_Pos.x, STRUCT->m_Pos.y,
 						STRUCT->m_Orient,	STRUCT->m_Size.x,
 						SheetLabelType[shape],
@@ -322,18 +332,27 @@ int ii, Failed = FALSE;
 char Name1[256], Name2[256];
 int hjustify, vjustify;
 
-	strcpy(Name1, CONV_TO_UTF8(LibItemStruct->m_Field[REFERENCE].m_Text));
-	for (ii = 0; ii < (int)strlen(Name1); ii++)
-	if (Name1[ii] <= ' ') Name1[ii] = '~'; 
-
+	//this is redundant with the AR entries below, but it makes the 
+	//files backwards-compatible. 
+	if(LibItemStruct->m_References.GetCount() > 0)
+		strncpy(Name1, CONV_TO_UTF8(LibItemStruct->m_References[0]), sizeof(Name1));
+	else{
+		if(LibItemStruct->m_Field[REFERENCE].m_Text.IsEmpty())
+			strncpy(Name1, CONV_TO_UTF8(LibItemStruct->m_PrefixString),sizeof(Name1));
+		else
+			strncpy(Name1, CONV_TO_UTF8(LibItemStruct->m_Field[REFERENCE].m_Text),sizeof(Name1));
+	}
+	for (ii = 0; ii < (int)strlen(Name1); ii++){
+		if (Name1[ii] <= ' ') Name1[ii] = '~'; 
+	}
 	if ( ! LibItemStruct->m_ChipName.IsEmpty() )
 	{
-		strcpy(Name2, CONV_TO_UTF8(LibItemStruct->m_ChipName));
+		strncpy(Name2, CONV_TO_UTF8(LibItemStruct->m_ChipName),sizeof(Name2));
 		for (ii = 0; ii < (int)strlen(Name2); ii++)
-		if (Name2[ii] <= ' ') Name2[ii] = '~';
+			if (Name2[ii] <= ' ') Name2[ii] = '~';
 	}
 
-	else  strcpy(Name2, NULL_STRING);
+	else  strncpy(Name2, NULL_STRING,sizeof(Name2));
 
 	fprintf(f, "$Comp\n");
 
@@ -355,10 +374,28 @@ int hjustify, vjustify;
 	/* Sortie de la position */
 	if(fprintf(f, "P %d %d\n",
 					 LibItemStruct->m_Pos.x, LibItemStruct->m_Pos.y) == EOF)
-		{
+	{
 		Failed = TRUE; return(Failed);
+	}
+	unsigned int i; 
+	for(i=0; i< LibItemStruct->m_References.GetCount(); i++){
+		/*format:
+		AR Path="/140/2" Ref="C99"
+		where 140 is the uid of the contianing sheet 
+		and 2 is the timestamp of this component. 
+		(timestamps are actually 8 hex chars)
+		Ref is the conventional component reference for this 'path'
+		*/
+		/*printf("AR Path=\"%s\" Ref=\"%s\" \n",
+				CONV_TO_UTF8( LibItemStruct->m_Paths[i]), 
+							  CONV_TO_UTF8( LibItemStruct->m_References[i] ) ); */
+		if( fprintf(f, "AR Path=\"%s\" Ref=\"%s\" \n",
+				CONV_TO_UTF8( LibItemStruct->m_Paths[i]), 
+				CONV_TO_UTF8( LibItemStruct->m_References[i] ) ) == EOF )
+		{
+			Failed = TRUE; break;
 		}
-
+	}
 	for( ii = 0; ii < NUMBER_OF_FIELDS; ii++ )
 	{
 		PartTextStruct * field = & LibItemStruct->m_Field[ii];
@@ -437,11 +474,15 @@ DrawSheetLabelStruct * SheetLabel;
 
 	if (fprintf(f, "S %-4d %-4d %-4d %-4d\n",
 					SheetStruct->m_Pos.x,SheetStruct->m_Pos.y,
-					SheetStruct->m_Size.x,SheetStruct->m_Size.y) == EOF)
-		{
+					SheetStruct->m_Size.x,SheetStruct->m_Size.y) == EOF){
 		Failed = TRUE; return(Failed);
-		}
+	}
 
+	//save the unique timestamp, like other shematic parts. 
+	if( fprintf(f, "U %8.8lX\n", SheetStruct->m_TimeStamp)  == EOF ){
+		Failed = TRUE; return(Failed);
+	}
+		
 	/* Generation de la liste des 2 textes (sheetname et filename) */
 	if ( ! SheetStruct->m_SheetName.IsEmpty())
 	{

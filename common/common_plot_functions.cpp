@@ -80,7 +80,7 @@ void PlotWorkSheet(int format_plot, BASE_SCREEN * screen)
 */
 {
 #define WSTEXTSIZE 50	// Text size in mils
-Ki_PageDescr * Sheet = screen->m_CurrentSheet;
+Ki_PageDescr * Sheet = screen->m_CurrentSheetDesc;
 int ii, jj, xg , yg, ipas, gxpas, gypas;
 wxSize PageSize;
 wxPoint pos, ref;
@@ -234,11 +234,11 @@ int UpperLimit = VARIABLE_BLOCK_START_POSITION;
 				break;
 
 			case WS_SIZESHEET:
-				msg += screen->m_CurrentSheet->m_Name;
+				msg += screen->m_CurrentSheetDesc->m_Name;
 				break;
 
 			case WS_IDENTSHEET:
-				msg << screen->m_SheetNumber << wxT("/") << screen->m_NumberOfSheet;
+				msg << screen->m_ScreenNumber << wxT("/") << screen->m_NumberOfScreen;
 				break;
 
 			case WS_COMPANY_NAME:

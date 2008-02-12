@@ -35,10 +35,10 @@ static void ExitMoveField(WinEDA_DrawPanel * Panel, wxDC * DC)
 	if(CurrentDrawItem == NULL) return;
 
 	wxPoint curpos;
-	curpos = Panel->m_Parent->m_CurrentScreen->m_Curseur;
-	Panel->m_Parent->m_CurrentScreen->m_Curseur = StartCursor;
+	curpos = Panel->m_Parent->GetScreen()->m_Curseur;
+	Panel->m_Parent->GetScreen()->m_Curseur = StartCursor;
 	ShowMoveField(Panel, DC, TRUE);
-	Panel->m_Parent->m_CurrentScreen->m_Curseur = curpos;
+	Panel->m_Parent->GetScreen()->m_Curseur = curpos;
 	CurrentDrawItem->m_Flags = 0;
 
 	CurrentDrawItem = NULL;
@@ -61,13 +61,13 @@ wxPoint startPos;
 	startPos.x = LastTextPosition.x;
 	startPos.y = -LastTextPosition.y;
 	DrawPanel->CursorOff(DC);
-	m_CurrentScreen->m_Curseur = startPos;
+	GetScreen()->m_Curseur = startPos;
 	DrawPanel->MouseToCursorSchema();
 
 	DrawPanel->ManageCurseur = ShowMoveField;
 	DrawPanel->ForceCloseManageCurseur = ExitMoveField;
 	DrawPanel->ManageCurseur(DrawPanel, DC, TRUE);
-	StartCursor = m_CurrentScreen->m_Curseur;
+	StartCursor = GetScreen()->m_Curseur;
 
 	DrawPanel->CursorOn(DC);
 }
@@ -165,7 +165,7 @@ int LineWidth = MAX(Field->m_Width, g_DrawMinimunLineWidth);
 
 	DrawPanel->CursorOn(DC);
 
-	m_CurrentScreen->SetModify();
+	GetScreen()->SetModify();
 	DrawPanel->ManageCurseur = NULL;
 	DrawPanel->ForceCloseManageCurseur = NULL;
 	CurrentDrawItem = NULL;
@@ -228,7 +228,7 @@ int LineWidth = MAX(Field->m_Width, g_DrawMinimunLineWidth);
 					Field->m_Size,
 					Field->m_HJustify, Field->m_VJustify, LineWidth);
 
-	m_CurrentScreen->SetModify();
+	GetScreen()->SetModify();
 
 	if ( Field->m_FieldId == VALUE ) ReCreateHToolbar();
 }
@@ -245,7 +245,7 @@ int color;
 
 	if( Field == NULL) return;
 
-	m_CurrentScreen->SetModify();
+	GetScreen()->SetModify();
 	switch (Field->m_FieldId)
 		{
 		case REFERENCE:
@@ -312,8 +312,8 @@ int hjustify, vjustify;
 	else if ( vjustify == GR_TEXT_VJUSTIFY_BOTTOM ) y0 += dy;
 	x1 = x0 + dx; y1 = y0 + dy;
 
-	if( (m_CurrentScreen->m_Curseur.x >= x0) && ( m_CurrentScreen->m_Curseur.x <= x1) &&
-		(m_CurrentScreen->m_Curseur.y >= y0) && ( m_CurrentScreen->m_Curseur.y <= y1) )
+	if( (GetScreen()->m_Curseur.x >= x0) && ( GetScreen()->m_Curseur.x <= x1) &&
+			(GetScreen()->m_Curseur.y >= y0) && ( GetScreen()->m_Curseur.y <= y1) )
 		return &LibEntry->m_Name;
 
 	/* Localisation du Prefix */
@@ -329,8 +329,8 @@ int hjustify, vjustify;
 	else if ( vjustify == GR_TEXT_VJUSTIFY_BOTTOM ) y0 -= dy;
 	x1 = x0 + dx; y1 = y0 + dy;
 
-	if( (m_CurrentScreen->m_Curseur.x >= x0) && ( m_CurrentScreen->m_Curseur.x <= x1) &&
-		(m_CurrentScreen->m_Curseur.y >= y0) && ( m_CurrentScreen->m_Curseur.y <= y1) )
+	if( (GetScreen()->m_Curseur.x >= x0) && ( GetScreen()->m_Curseur.x <= x1) &&
+		(GetScreen()->m_Curseur.y >= y0) && ( GetScreen()->m_Curseur.y <= y1) )
 		return &LibEntry->m_Prefix;
 
 	/* Localisation des autres fields */
@@ -349,8 +349,8 @@ int hjustify, vjustify;
 		if ( vjustify == GR_TEXT_VJUSTIFY_CENTER ) y0 -= dy/2;
 		else if ( vjustify == GR_TEXT_VJUSTIFY_BOTTOM ) y0 -= dy; 
 		x1 = x0 + dx; y1 = y0 + dy;
-		if( (m_CurrentScreen->m_Curseur.x >= x0) && ( m_CurrentScreen->m_Curseur.x <= x1) &&
-			(m_CurrentScreen->m_Curseur.y >= y0) && ( m_CurrentScreen->m_Curseur.y <= y1) )
+		if( (GetScreen()->m_Curseur.x >= x0) && ( GetScreen()->m_Curseur.x <= x1) &&
+			(GetScreen()->m_Curseur.y >= y0) && ( GetScreen()->m_Curseur.y <= y1) )
 			return(Field);
 		}
 
@@ -367,16 +367,16 @@ LibEDA_BaseStruct* WinEDA_LibeditFrame::LocateItemUsingCursor()
 
 	if ( (DrawEntry == NULL) || (DrawEntry->m_Flags == 0) )
 	{ 	// Simple localisation des elements
-		DrawEntry = LocatePin(m_CurrentScreen->m_Curseur, CurrentLibEntry, CurrentUnit, CurrentConvert);
+		DrawEntry = LocatePin(GetScreen()->m_Curseur, CurrentLibEntry, CurrentUnit, CurrentConvert);
 		if ( DrawEntry == NULL )
 		{
-			DrawEntry = CurrentDrawItem = LocateDrawItem(GetScreen(), 
+			DrawEntry = CurrentDrawItem = LocateDrawItem((SCH_SCREEN*)GetScreen(), 
 					GetScreen()->m_MousePosition,CurrentLibEntry,CurrentUnit,
 					CurrentConvert,LOCATE_ALL_DRAW_ITEM);
 		}
 		if ( DrawEntry == NULL )
 		{
-			DrawEntry = CurrentDrawItem = LocateDrawItem(GetScreen(), GetScreen()->m_Curseur, CurrentLibEntry,CurrentUnit,
+			DrawEntry = CurrentDrawItem = LocateDrawItem((SCH_SCREEN*)GetScreen(), GetScreen()->m_Curseur, CurrentLibEntry,CurrentUnit,
 					CurrentConvert,LOCATE_ALL_DRAW_ITEM);
 		}
 		if ( DrawEntry == NULL )

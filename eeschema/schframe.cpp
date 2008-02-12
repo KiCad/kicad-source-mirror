@@ -95,6 +95,7 @@ BEGIN_EVENT_TABLE(WinEDA_SchematicFrame, wxFrame)
 
 	EVT_TOOL_RCLICKED(ID_LABEL_BUTT, WinEDA_SchematicFrame::ToolOnRightClick)
 	EVT_TOOL_RCLICKED(ID_GLABEL_BUTT, WinEDA_SchematicFrame::ToolOnRightClick)
+	EVT_TOOL_RCLICKED(ID_HIERLABEL_BUTT, WinEDA_SchematicFrame::ToolOnRightClick)
 
 	EVT_MENU_RANGE(ID_POPUP_START_RANGE, ID_POPUP_END_RANGE,
 			WinEDA_SchematicFrame::Process_Special_Functions )
@@ -115,7 +116,7 @@ END_EVENT_TABLE()
 	/* Constructor */
 	/****************/
 
-WinEDA_SchematicFrame::	WinEDA_SchematicFrame(wxWindow * father, WinEDA_App *parent,
+WinEDA_SchematicFrame::WinEDA_SchematicFrame(wxWindow * father, WinEDA_App *parent,
 					const wxString & title, const wxPoint& pos, const wxSize& size, long style) :
 					WinEDA_DrawFrame(father, SCHEMATIC_FRAME, parent, title, pos, size, style)
 {
@@ -124,7 +125,10 @@ WinEDA_SchematicFrame::	WinEDA_SchematicFrame(wxWindow * father, WinEDA_App *par
 	m_Draw_Axis = FALSE;			// TRUE to show axis
 	m_Draw_Grid = g_ShowGrid;			// TRUE to show a grid
 	m_Draw_Sheet_Ref = TRUE;		// TRUE to show sheet references
+	m_CurrentSheet = new DrawSheetList(); 
 
+	CreateScreens(); 
+	
 	// Give an icon
 	#ifdef __WINDOWS__
 	SetIcon(wxICON(a_icon_eeschema));
@@ -132,7 +136,6 @@ WinEDA_SchematicFrame::	WinEDA_SchematicFrame(wxWindow * father, WinEDA_App *par
 	SetIcon(wxICON(icon_eeschema));
 	#endif
 
-	m_CurrentScreen = ScreenSch;
 	g_ItemToRepeat = NULL;
 	/* Get config */
 	GetSettings();
@@ -156,28 +159,79 @@ WinEDA_SchematicFrame::	WinEDA_SchematicFrame(wxWindow * father, WinEDA_App *par
 WinEDA_SchematicFrame::~WinEDA_SchematicFrame()
 {
 	m_Parent->m_SchematicFrame = NULL;
-	m_CurrentScreen = ScreenSch;
+	SAFE_DELETE( g_RootSheet ); 
+	SAFE_DELETE( m_CurrentSheet ); //a DrawSheetList, on the heap.
+	m_CurrentSheet = NULL;
+}
+	/***************/
+	/* utility functions */
+	/***************/
+DrawSheetList* WinEDA_SchematicFrame::GetSheet()
+{ 
+	return m_CurrentSheet; 
+}
+BASE_SCREEN* WinEDA_SchematicFrame::GetScreen()
+{ 
+	return m_CurrentSheet->LastScreen(); 
+}
+void WinEDA_SchematicFrame::SetScreen(SCH_SCREEN* screen)
+{
+	//find it in the hierarchy, and set it.
+	//there is ambiguity in this function (there may be several 
+	//instances of a given sheet, but irregardless it is useful
+	//for printing etc. 
+	DrawSheetList sheetlist; 
+	if(g_RootSheet->LocatePathOfScreen(screen, &sheetlist)){
+		*m_CurrentSheet = sheetlist; 
+		m_CurrentSheet->UpdateAllScreenReferences(); 
+	}
+}
+wxString WinEDA_SchematicFrame::GetScreenDesc()
+{
+	wxString s = m_CurrentSheet->PathHumanReadable();
+	return s; 
+}
+/******************************/
+void WinEDA_SchematicFrame::CreateScreens()
+/******************************/
+{
+	/* creation des ecrans Sch , Lib  */
+	if( g_RootSheet == NULL ){
+		g_RootSheet = new DrawSheetStruct(); 
+	}
+	if( g_RootSheet->m_s == NULL ){
+		g_RootSheet->m_s = new SCH_SCREEN( SCHEMATIC_FRAME );
+		g_RootSheet->m_s->m_RefCount++; 
+	}
+	g_RootSheet->m_s->m_FileName = g_DefaultSchematicFileName;
+	g_RootSheet->m_s->m_Date = GenDate();
+	m_CurrentSheet->Clear(); 
+	m_CurrentSheet->Push(g_RootSheet); 
+
+	if( ScreenLib == NULL )
+		ScreenLib = new SCH_SCREEN( LIBEDITOR_FRAME );
+	ScreenLib->SetZoom( 4 );
+	ScreenLib->m_UndoRedoCountMax = 10;
 }
 
 /**************************************************************/
 void WinEDA_SchematicFrame::OnCloseWindow(wxCloseEvent & Event)
 /**************************************************************/
 {
-SCH_SCREEN * screen;
+	DrawSheetList* sheet; 
 
 	if ( m_Parent->m_LibeditFrame )	// Can close component editor ?
 	{
 		if ( ! m_Parent->m_LibeditFrame->Close() ) return;
 	}
 
-	screen = ScreenSch ;
-	while( screen )
-	{
-		if(screen->IsModify()) break;
-		screen = (SCH_SCREEN*)screen->Pnext;
+	EDA_SheetList sheets( g_RootSheet ); 
+
+	for(sheet = sheets.GetFirst(); sheet != NULL; sheet = sheets.GetNext() ){
+		if(sheet->LastScreen() && sheet->LastScreen()->IsModify()) break;
 	}
 
-	if ( screen )
+	if ( sheet )
 	{
 	unsigned ii;
 		wxMessageDialog dialog(this, _("Schematic modified, Save before exit ?"),
@@ -194,25 +248,24 @@ SCH_SCREEN * screen;
 
 			case wxID_OK:
 			case wxID_YES:
-				SaveProject(this);
+				SaveProject();
 				break;
 		}
 	}
 
-	screen = ScreenSch ;
-	while( screen )	// Clear "flag modify" to avoid alert messages when closing sub sheets
-	{
-		screen->ClrModify();
-		screen = (SCH_SCREEN*)screen->Pnext;
+	for(sheet = sheets.GetFirst(); sheet != NULL; sheet = sheets.GetNext() ){
+		if(sheet->LastScreen()){
+			sheet->LastScreen()->ClrModify();
+		}
 	}
 
-	if ( ! ScreenSch->m_FileName.IsEmpty() && (ScreenSch->EEDrawList != NULL) )
-			SetLastProject(ScreenSch->m_FileName);
+	if ( ! GetScreen()->m_FileName.IsEmpty() && (GetScreen()->EEDrawList != NULL) )
+		SetLastProject(GetScreen()->m_FileName);
 
-	ClearProjectDrawList(ScreenSch, TRUE);
+	ClearProjectDrawList(g_RootSheet->m_s, TRUE);
 
 	/* allof sub sheets are deleted, only the main sheet is useable */
-	m_CurrentScreen = ActiveScreen = ScreenSch;
+	m_CurrentSheet->Clear(); 
 
 	SaveSettings();
 
@@ -231,7 +284,7 @@ void WinEDA_SchematicFrame::SetToolbars()
 {
 	if( m_HToolBar )
 	{
-		if ( m_CurrentScreen->BlockLocate.m_Command == BLOCK_MOVE )
+		if ( GetScreen() && GetScreen()->BlockLocate.m_Command == BLOCK_MOVE )
 			{
 			m_HToolBar->EnableTool(wxID_CUT,TRUE);
 			m_HToolBar->EnableTool(wxID_COPY,TRUE);
@@ -246,7 +299,7 @@ void WinEDA_SchematicFrame::SetToolbars()
 		else m_HToolBar->EnableTool(wxID_PASTE,FALSE);
 
 		wxMenuBar * menuBar = GetMenuBar();
-		if ( GetScreen()->m_RedoList )
+		if ( GetScreen() && GetScreen()->m_RedoList )
 		{
 			m_HToolBar->EnableTool(ID_SCHEMATIC_REDO,TRUE);
 			menuBar->Enable(ID_SCHEMATIC_REDO,TRUE);
@@ -256,7 +309,7 @@ void WinEDA_SchematicFrame::SetToolbars()
 			m_HToolBar->EnableTool(ID_SCHEMATIC_REDO,FALSE);
 			menuBar->Enable(ID_SCHEMATIC_REDO,FALSE);
 		}
-		if ( GetScreen()->m_UndoList )
+		if ( GetScreen() && GetScreen()->m_UndoList )
 		{
 			m_HToolBar->EnableTool(ID_SCHEMATIC_UNDO,TRUE);
 			menuBar->Enable(ID_SCHEMATIC_UNDO,TRUE);
@@ -300,17 +353,17 @@ int dx, dy, ii,jj ;
 int bestzoom;
 wxSize size;
 
-	dx = m_CurrentScreen->m_CurrentSheet->m_Size.x;
-	dy = m_CurrentScreen->m_CurrentSheet->m_Size.y;
+	dx = GetScreen()->m_CurrentSheetDesc->m_Size.x;
+	dy = GetScreen()->m_CurrentSheetDesc->m_Size.y;
 
 	size =  DrawPanel->GetClientSize();
 	ii = dx / size.x;
 	jj = dy / size.y;
 	bestzoom = MAX(ii, jj) + 1;
 
-	m_CurrentScreen->SetZoom(ii);
-	m_CurrentScreen->m_Curseur.x =  dx / 2;
-	m_CurrentScreen->m_Curseur.y =  dy / 2;
+	GetScreen()->SetZoom(ii);
+	GetScreen()->m_Curseur.x =  dx / 2;
+	GetScreen()->m_Curseur.y =  dy / 2;
 
 	return(bestzoom);
 }

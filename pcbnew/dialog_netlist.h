@@ -123,7 +123,10 @@ public:
     int ReadListeModules(const wxString * RefCmp, long TimeStamp, wxString & NameModule);
     int SetPadNetName( char * Line, MODULE * Module);
     MODULE * ReadNetModule( char * Text, int * UseFichCmp, int TstOnly);
-    void AddToList(const wxString & NameLibCmp, const wxString & NameCmp,int TimeStamp );
+    void AddToList(const wxString & NameLibCmp, 
+				   const wxString & NameCmp,
+	   			   int TimeStamp, 
+		  		   const wxString& path);
     void LoadListeModules(wxDC *DC);
 
 ////@begin WinEDA_NetlistFrame member variables

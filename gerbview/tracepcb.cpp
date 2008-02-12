@@ -64,7 +64,7 @@ void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 /* Trace le PCB, et les elements complementaires ( axes, grille .. )
  */
 {
-    PCB_SCREEN* screen = GetScreen();
+    PCB_SCREEN* screen = (PCB_SCREEN*)GetScreen();
 
     if( !m_Pcb )
         return;

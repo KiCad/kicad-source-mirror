@@ -179,7 +179,7 @@ void WinEDA_CleaningOptionsFrame::CreateControls()
     itemBoxSizer9->Add(itemButton10, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
     // Set validators
-    m_CleanViasOpt->SetValidator( wxGenericValidator(& s_CleanVias) );
+    m_CleanViasOpt->SetValidator( wxGenericValidator(& s_CleanVias ) );
     m_MergetSegmOpt->SetValidator( wxGenericValidator(& s_MergeSegments) );
     m_DeleteunconnectedOpt->SetValidator( wxGenericValidator(& s_DeleteUnconnectedSegm) );
 ////@end WinEDA_CleaningOptionsFrame content construction

@@ -202,6 +202,10 @@ void WinEDA_SchematicFrame::ReCreateVToolbar()
     m_VToolBar->AddTool( ID_GLABEL_BUTT, wxEmptyString,
                          BITMAP( add_glabel_xpm ),
                          _( "Add global label" ), wxITEM_CHECK );
+	
+	m_VToolBar->AddTool( ID_HIERLABEL_BUTT, wxEmptyString,
+						 BITMAP( add_glabel_xpm ),
+								 _( "Add hierarchal label" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_JUNCTION_BUTT, wxEmptyString,
                          BITMAP( add_junction_xpm ),
@@ -214,7 +218,7 @@ void WinEDA_SchematicFrame::ReCreateVToolbar()
 
     m_VToolBar->AddTool( ID_IMPORT_GLABEL_BUTT, wxEmptyString,
                          BITMAP( import_glabel_xpm ),
-                         _( "import glabel from sheet & create pinsheet" ), wxITEM_CHECK );
+                         _( "import hierarchal label from sheet & create pinsheet" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_SHEET_LABEL_BUTT, wxEmptyString,
                          BITMAP( add_hierar_pin_xpm ),

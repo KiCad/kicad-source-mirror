@@ -102,7 +102,7 @@ void WinEDA_BasePcbFrame::CursorGoto(  const wxPoint& aPos )
 {
     // factored out of pcbnew/find.cpp
 
-    PCB_SCREEN* screen = GetScreen();
+	PCB_SCREEN* screen = (PCB_SCREEN*)GetScreen();
 
     wxClientDC dc( DrawPanel );
 
@@ -201,7 +201,7 @@ void WinEDA_BasePcbFrame::SwitchLayer( wxDC* DC, int layer )
 
 // Note: virtual, overridden in WinEDA_PcbFrame;
 {
-    int preslayer = GetScreen()->m_Active_Layer;
+    int preslayer = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
 
     // Check if the specified layer matches the present layer
     if( layer == preslayer )
@@ -241,7 +241,7 @@ void WinEDA_BasePcbFrame::SwitchLayer( wxDC* DC, int layer )
     // and a non-copper layer, or vice-versa?
     // ...
 
-    GetScreen()->m_Active_Layer = layer;
+    ((PCB_SCREEN*)GetScreen())->m_Active_Layer = layer;
 
     if( DisplayOpt.ContrastModeDisplay )
         GetScreen()->SetRefreshReq();
@@ -315,7 +315,7 @@ GENERAL_COLLECTORS_GUIDE WinEDA_BasePcbFrame::GetCollectorsGuide()
 /****************************************************************/
 {
     GENERAL_COLLECTORS_GUIDE guide( m_Pcb->m_BoardSettings->GetVisibleLayers(),
-                                    GetScreen()->m_Active_Layer );
+                                    ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
 
     // account for the globals
     guide.SetIgnoreMTextsMarkedNoShow( g_ModuleTextNOVColor & ITEM_NOT_SHOW );

@@ -35,7 +35,7 @@ bool WinEDA_LibeditFrame::OnRightClick(const wxPoint& MousePos, wxMenu * PopMenu
 /********************************************************************************/
 {
 LibEDA_BaseStruct* DrawEntry = LocateItemUsingCursor();
-bool BlockActive = (m_CurrentScreen->BlockLocate.m_Command !=  BLOCK_IDLE);
+bool BlockActive = (GetScreen()->BlockLocate.m_Command !=  BLOCK_IDLE);
 
 	if ( CurrentLibEntry == NULL ) return true;
 

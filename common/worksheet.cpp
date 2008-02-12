@@ -21,7 +21,7 @@ void WinEDA_DrawFrame::TraceWorkSheet(wxDC * DC, BASE_SCREEN * screen, int line_
 {
 	if ( ! m_Draw_Sheet_Ref ) return;
 
-Ki_PageDescr * Sheet = screen->m_CurrentSheet;
+Ki_PageDescr * Sheet = screen->m_CurrentSheetDesc;
 int ii, jj, xg , yg, ipas, gxpas, gypas;
 wxPoint pos;
 int refx, refy,Color;
@@ -179,10 +179,8 @@ int width = line_width;
 
 			case WS_IDENTSHEET:
 				if(WsItem->m_Legende) msg = WsItem->m_Legende;
-				   msg << screen->m_SheetNumber << wxT("/") <<
-									screen->m_NumberOfSheet;
 				DrawGraphicText(DrawPanel, DC, pos, Color,
-					msg, TEXT_ORIENT_HORIZ, size,
+					GetScreenDesc(), TEXT_ORIENT_HORIZ, size,
 					GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width);
 				break;
 
@@ -272,4 +270,13 @@ int width = line_width;
 
 		}
 	}
+}
+/*********************************************************************/
+wxString WinEDA_DrawFrame::GetScreenDesc()
+/*********************************************************************/
+{
+	wxString msg;
+	msg << GetScreen()->m_ScreenNumber << wxT("/") <<
+			GetScreen()->m_NumberOfScreen;
+	return msg; 
 }

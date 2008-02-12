@@ -150,7 +150,7 @@ static void ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC )
     if( SheetLabel->m_Flags & IS_NEW )
     {     /* Nouveau Placement en cours, on l'efface */
         RedrawOneStruct( Panel, DC, SheetLabel, g_XorMode );
-        delete SheetLabel;
+		SAFE_DELETE( SheetLabel );
     }
     else
     {
@@ -354,23 +354,23 @@ DrawSheetLabelStruct* WinEDA_SchematicFrame::Import_PinSheet( DrawSheetStruct* S
  *  de la feuille de sous hierarchie correspondante
  */
 {
-    EDA_BaseStruct*        DrawStruct;
-    DrawSheetLabelStruct*  NewSheetLabel, * SheetLabel = NULL;
-    DrawGlobalLabelStruct* GLabel = NULL;
+    EDA_BaseStruct*     	DrawStruct;
+    DrawSheetLabelStruct* 	NewSheetLabel, * SheetLabel = NULL;
+    DrawHierLabelStruct* 	HLabel = NULL;
 
-    DrawStruct = Sheet->EEDrawList;
-    GLabel = NULL;
+    DrawStruct = Sheet->m_s->EEDrawList;
+    HLabel = NULL;
     for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext )
     {
-        if( DrawStruct->Type() != DRAW_GLOBAL_LABEL_STRUCT_TYPE )
+        if( DrawStruct->Type() != DRAW_HIER_LABEL_STRUCT_TYPE )
             continue;
-        GLabel = (DrawGlobalLabelStruct*) DrawStruct;
+        HLabel = (DrawHierLabelStruct*) DrawStruct;
 
         /* Ici un G-Label a ete trouve: y a t-il un SheetLabel correspondant */
         SheetLabel = Sheet->m_Label;
         for( ; SheetLabel != NULL; SheetLabel = (DrawSheetLabelStruct*) SheetLabel->Pnext )
         {
-            if( SheetLabel->m_Text.CmpNoCase( GLabel->m_Text ) == 0 )
+            if( SheetLabel->m_Text.CmpNoCase( HLabel->m_Text ) == 0 )
             {
                 break;
             }
@@ -381,20 +381,20 @@ DrawSheetLabelStruct* WinEDA_SchematicFrame::Import_PinSheet( DrawSheetStruct* S
             break;
     }
 
-    if( (GLabel == NULL ) || SheetLabel )
+    if( (HLabel == NULL ) || SheetLabel )
     {
-        DisplayError( this, _( "No New Global Label found" ), 10 );
+        DisplayError( this, _( "No New Hierarchal Label found" ), 10 );
         return NULL;
     }
 
-    /* Ici G-Label n'a pas de SheetLabel corresp, on va le creer */
+    /* Ici H-Label n'a pas de SheetLabel corresp, on va le creer */
 
     GetScreen()->SetModify();
     /* Creation en memoire */
-    NewSheetLabel = new DrawSheetLabelStruct( Sheet, wxPoint( 0, 0 ), GLabel->m_Text );
+    NewSheetLabel = new DrawSheetLabelStruct( Sheet, wxPoint( 0, 0 ), HLabel->m_Text );
     NewSheetLabel->m_Flags = IS_NEW;
     NewSheetLabel->m_Size  = NetSheetTextSize;
-    CurrentTypeLabel = NewSheetLabel->m_Shape = GLabel->m_Shape;
+    CurrentTypeLabel = NewSheetLabel->m_Shape = HLabel->m_Shape;
 
     GetScreen()->SetCurItem( NewSheetLabel );
     DrawPanel->ManageCurseur = Move_PinSheet;

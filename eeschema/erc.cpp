@@ -51,7 +51,7 @@ int WriteFichierERC = FALSE;
  *  PIN_OPENEMITTER, PIN_NC
  */
 #define OK  0
-#define WAR 1   // utilisé aussi dans eeredraw
+#define WAR 1   // utilisï¿½ aussi dans eeredraw
 #define ERR 2
 #define UNC 3
 
@@ -185,7 +185,7 @@ void WinEDA_ErcFrame::ReBuildMatrixPanel()
 
     text_height = text->GetRect().GetHeight();
     bitmap_size = MAX( bitmap_size, text_height );
-    delete text;
+	SAFE_DELETE( text );
 
     // compute the Y pos interval:
     BoxMatrixMinSize.y = ( bitmap_size * (PIN_NMAX + 1) ) + 5;
@@ -313,7 +313,7 @@ void WinEDA_ErcFrame::TestErc( wxCommandEvent& event )
     g_EESchemaVar.NbWarningErc = 0;
 
     /* Cleanup the entire hierarchy */
-    EDA_ScreenList ScreenList( NULL );
+    EDA_ScreenList ScreenList;
 
     for( SCH_SCREEN* Screen = ScreenList.GetFirst(); Screen != NULL; Screen = ScreenList.GetNext() )
     {
@@ -358,10 +358,12 @@ void WinEDA_ErcFrame::TestErc( wxCommandEvent& event )
         case NET_LABEL:
         case NET_BUSLABELMEMBER:
         case NET_PINLABEL:
+		case NET_GLOBLABEL: //not sure how to handle global labels -- they should be treated like other nets (just global!0
+		case NET_GLOBBUSLABELMEMBER:
             break;
 
-        case NET_GLOBLABEL:
-        case NET_GLOBBUSLABELMEMBER:
+        case NET_HIERLABEL:
+        case NET_HIERBUSLABELMEMBER:
         case NET_SHEETLABEL:
         case NET_SHEETBUSLABELMEMBER:
             TestLabel( m_Parent->DrawPanel, &dc, NetItemRef, StartNet );
@@ -398,7 +400,7 @@ void WinEDA_ErcFrame::TestErc( wxCommandEvent& event )
     if( WriteFichierERC == TRUE )
     {
         wxString ErcFullFileName;
-        ErcFullFileName = ScreenSch->m_FileName;
+        ErcFullFileName = g_RootSheet->m_s->m_FileName; 
         ChangeFileNameExt( ErcFullFileName, wxT( ".erc" ) );
         ErcFullFileName = EDA_FileSelector( _( "ERC file:" ),
                                             wxEmptyString,      /* Chemin par defaut */
@@ -542,7 +544,7 @@ static void Diagnose( WinEDA_DrawPanel* panel, wxDC* DC,
 
     Marker->m_Type      = MARQ_ERC;
     Marker->m_MarkFlags = WAR;
-    screen = NetItemRef->m_Screen;
+    screen = NetItemRef->m_SheetList.LastScreen();
     Marker->Pnext      = screen->EEDrawList;
     screen->EEDrawList = Marker;
     g_EESchemaVar.NbErrorErc++;
@@ -550,14 +552,14 @@ static void Diagnose( WinEDA_DrawPanel* panel, wxDC* DC,
 
     if( MinConn < 0 )   // Traitement des erreurs sur labels
     {
-        if( (NetItemRef->m_Type == NET_GLOBLABEL)
-           || (NetItemRef->m_Type == NET_GLOBBUSLABELMEMBER) )
+        if( (NetItemRef->m_Type == NET_HIERLABEL)
+           || (NetItemRef->m_Type == NET_HIERBUSLABELMEMBER) )
         {
-            Marker->m_Comment.Printf( _( "Warning GLabel %s not connected to SheetLabel" ),
+            Marker->m_Comment.Printf( _( "Warning HLabel %s not connected to SheetLabel" ),
                                      NetItemRef->m_Label->GetData() );
         }
         else
-            Marker->m_Comment.Printf( _( "Warning SheetLabel %s not connected to GLabel" ),
+            Marker->m_Comment.Printf( _( "Warning SheetLabel %s not connected to HLabel" ),
                                      NetItemRef->m_Label->GetData() );
 
         if( screen == panel->GetScreen() )
@@ -656,7 +658,7 @@ static void TestOthersItems( WinEDA_DrawPanel* panel, wxDC* DC,
            || (NetItemRef->GetNet() != NetItemTst->GetNet()) )    // fin de net
         {                                                           /* Fin de netcode trouve: Tst connexion minimum */
             if( (*MinConnexion < NET_NC )
-               && (local_minconn < NET_NC ) )                       /* pin non connectée ou non pilotee */
+               && (local_minconn < NET_NC ) )                       /* pin non connectï¿½e ou non pilotee */
             {
                 Diagnose( panel, DC, NetItemRef, NULL, local_minconn, WAR );
                 *MinConnexion = DRV;   // inhibition autres messages de ce type pour ce net
@@ -670,11 +672,13 @@ static void TestOthersItems( WinEDA_DrawPanel* panel, wxDC* DC,
         case NET_BUS:
         case NET_JONCTION:
         case NET_LABEL:
-        case NET_GLOBLABEL:
+        case NET_HIERLABEL:
         case NET_BUSLABELMEMBER:
-        case NET_GLOBBUSLABELMEMBER:
+        case NET_HIERBUSLABELMEMBER:
         case NET_SHEETBUSLABELMEMBER:
         case NET_SHEETLABEL:
+		case NET_GLOBLABEL:
+		case NET_GLOBBUSLABELMEMBER:
         case NET_PINLABEL:
             break;
 
@@ -719,7 +723,7 @@ static bool WriteDiagnosticERC( const wxString& FullFileName )
     DrawMarkerStruct* Marker;
     char Line[256];
     static FILE*      OutErc;
-    DrawSheetStruct*  Sheet;
+    DrawSheetList*  Sheet;
     wxString          msg;
 
     if( ( OutErc = wxFopen( FullFileName, wxT( "wt" ) ) ) == NULL )
@@ -730,19 +734,20 @@ static bool WriteDiagnosticERC( const wxString& FullFileName )
     
     fprintf( OutErc, "%s (%s)\n", CONV_TO_UTF8( msg ), Line );
 
-    EDA_ScreenList ScreenList( NULL );
+    EDA_SheetList SheetList( NULL );
 
-    for( SCH_SCREEN* Screen = ScreenList.GetFirst(); Screen != NULL; Screen = ScreenList.GetNext() )
+    for( Sheet = SheetList.GetFirst(); Sheet != NULL; Sheet = SheetList.GetNext() )
     {
-        Sheet = (DrawSheetStruct*) Screen;
-        
-        msg.Printf( _( "\n***** Sheet %d (%s)\n" ),
-                   Sheet->m_SheetNumber,
-                   Screen == ScreenSch ? _( "Root" ) : Sheet->m_SheetName.GetData() );
+		if(Sheet->Last() == g_RootSheet){
+        	msg.Printf( _( "\n***** Sheet Root\n" ) ); 
+		}else{
+			wxString str = Sheet->Path(); 
+			msg.Printf( _("\n***** Sheet %s\n"), str.GetData() );
+		}
         
         fprintf( OutErc, "%s", CONV_TO_UTF8( msg ) );
 
-        DrawStruct = Screen->EEDrawList;
+		DrawStruct = Sheet->LastDrawList();
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext )
         {
             if( DrawStruct->Type() != DRAW_MARKER_STRUCT_TYPE )
@@ -770,7 +775,18 @@ static bool WriteDiagnosticERC( const wxString& FullFileName )
     return TRUE;
 }
 
-
+bool TestLabel_( ObjetNetListStruct* a, ObjetNetListStruct* b )
+{
+	int at = a->m_Type; 
+	int bt = b->m_Type; 
+	if(    (at == NET_HIERLABEL || at == NET_HIERBUSLABELMEMBER)
+		 &&(bt == NET_SHEETLABEL || bt == NET_SHEETBUSLABELMEMBER) ){
+		 if( a->m_SheetList == b->m_SheetListInclude ){
+			return true; //connected!
+		 }
+	}
+	return false; //these two are unconnected
+}
 /***********************************************************************/
 void TestLabel( WinEDA_DrawPanel* panel, wxDC* DC,
                 ObjetNetListStruct* NetItemRef, ObjetNetListStruct* StartNet )
@@ -799,66 +815,16 @@ void TestLabel( WinEDA_DrawPanel* panel, wxDC* DC,
            || ( NetItemRef->GetNet() != NetItemTst->GetNet() ) )
         {           
             /* Fin de netcode trouve */
-            if( erc )
-            {       
+            if( erc ){
                 /* GLabel ou SheetLabel orphelin */
                 Diagnose( panel, DC, NetItemRef, NULL, -1, WAR );
             }
             return;
         }
-
-        if( (NetItemRef->m_Type == NET_GLOBLABEL)
-           || (NetItemRef->m_Type == NET_GLOBBUSLABELMEMBER) )
-        {
-            switch( NetItemTst->m_Type )
-            {
-            case NET_SEGMENT:
-            case NET_BUS:
-            case NET_JONCTION:
-            case NET_LABEL:
-            case NET_GLOBLABEL:
-            case NET_BUSLABELMEMBER:
-            case NET_GLOBBUSLABELMEMBER:
-            case NET_PINLABEL:
-            case NET_NOCONNECT:
-            case NET_PIN:
-                break;
-
-            case NET_SHEETBUSLABELMEMBER:
-            case NET_SHEETLABEL:
-                /* Tst si le GLabel est bien dans la bonne sousfeuille */
-                if( NetItemRef->m_SheetNumber == NetItemTst->m_NumInclude )
-                {
-                    erc = 0;
-                }
-                break;
-            }
-        }
-        else
-        {
-            switch( NetItemTst->m_Type )
-            {
-            case NET_SEGMENT:
-            case NET_BUS:
-            case NET_JONCTION:
-            case NET_LABEL:
-            case NET_BUSLABELMEMBER:
-            case NET_SHEETBUSLABELMEMBER:
-            case NET_SHEETLABEL:
-            case NET_PINLABEL:
-            case NET_NOCONNECT:
-            case NET_PIN:
-                break;
-
-            case NET_GLOBLABEL:
-            case NET_GLOBBUSLABELMEMBER:
-                /* Tst si le GLabel est bien dans la bonne sous-feuille */
-                if( NetItemTst->m_SheetNumber == NetItemRef->m_NumInclude )
-                {
-                    erc = 0;
-                }
-                break;
-            }
-        }
+		if(TestLabel_(NetItemRef, NetItemTst))
+			erc = 0; 
+		//same thing, different order. 
+		if(TestLabel_(NetItemTst, NetItemRef))
+			erc = 0; 
     }
 }

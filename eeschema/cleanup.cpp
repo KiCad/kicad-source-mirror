@@ -106,6 +106,7 @@ void BreakSegmentOnJunction( SCH_SCREEN* Screen )
         case DRAW_NOCONNECT_STRUCT_TYPE:
         case DRAW_LABEL_STRUCT_TYPE:
         case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
+		case DRAW_HIER_LABEL_STRUCT_TYPE:
         case DRAW_LIB_ITEM_STRUCT_TYPE:
         case DRAW_PICK_ITEM_STRUCT_TYPE:
         case DRAW_POLYLINE_STRUCT_TYPE:

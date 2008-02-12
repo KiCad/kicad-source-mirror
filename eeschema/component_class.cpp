@@ -16,7 +16,8 @@
 
 #include "macros.h"
 
-
+#include <wx/arrimpl.cpp>
+WX_DEFINE_OBJARRAY(ArrayOfSheetLists);
 /***************************/
 /* class DrawPartStruct	*/
 /* class EDA_SchComponentStruct */
@@ -88,7 +89,72 @@ const wxString& EDA_SchComponentStruct::ReturnFieldName( int aFieldNdx ) const
     return m_Field[aFieldNdx].m_Name;
 }
 
+/************************************/
+wxString EDA_SchComponentStruct::GetPath(DrawSheetList* sheet)
+/************************************/
+{
+	wxString str; 
+	str.Printf(_("%8.8lX"), m_TimeStamp );
+	return sheet->Path() + str; 
+}
 
+/************************************/
+const wxString EDA_SchComponentStruct::GetRef( DrawSheetList* sheet )
+/************************************/
+{
+	wxString path = GetPath( sheet ); 
+	unsigned int i; 
+	for(i=0; i<m_Paths.GetCount(); i++){
+		if( m_Paths[i].Cmp(path) == 0 ){
+			/*printf("GetRef path: %s ref: %s\n", 
+					CONV_TO_UTF8(m_Paths[i]), 
+					CONV_TO_UTF8(m_References[i])); */
+			return m_References[i]; 
+		}
+	}
+	return m_PrefixString; 
+}
+
+/************************************/
+void EDA_SchComponentStruct::SetRef( DrawSheetList* sheet, wxString ref )
+/************************************/
+{
+	//check to see if it is already there before inserting it
+	wxString path = GetPath( sheet ); 
+	printf("SetRef path: %s ref: %s\n", 
+		   CONV_TO_UTF8(path), 
+			CONV_TO_UTF8(ref)); 
+	unsigned int i; 
+	bool notInArray = true; 
+	for(i=0; i<m_Paths.GetCount(); i++){
+		if(m_Paths[i].Cmp(path) == 0){
+			//just update the reference text, not the timestamp.
+			m_References.RemoveAt(i); 
+			m_References.Insert(ref, i); 
+			notInArray = false; 
+		}
+	}
+	if(notInArray){
+		m_References.Add(ref); 
+		m_Paths.Add(path); 
+	}
+	if(m_Field[REFERENCE].m_Text.IsEmpty() || 
+		( abs(m_Field[REFERENCE].m_Pos.x - m_Pos.x) + 
+			abs(m_Field[REFERENCE].m_Pos.y - m_Pos.y) > 1000)) {
+		//move it to a reasonable position..
+		m_Field[REFERENCE].m_Pos = m_Pos; 
+	}
+	m_Field[REFERENCE].m_Text = ref; //for drawing. 
+}
+
+/************************************/
+void EDA_SchComponentStruct::ClearRefs()
+/************************************/
+{
+	m_Paths.Empty(); 
+	m_References.Empty(); 
+}
+	
 const wxString& EDA_SchComponentStruct::GetFieldValue( int aFieldNdx ) const
 {
    // avoid unnecessarily copying wxStrings.
@@ -109,8 +175,8 @@ EDA_SchComponentStruct::EDA_SchComponentStruct( const wxPoint& pos ) :
     int ii;
 
     m_Multi = 0;    /* In multi unit chip - which unit to draw. */
-    m_RefIdNumber      = 0;
-    m_FlagControlMulti = 0;
+    //m_FlagControlMulti = 0;
+	m_UsedOnSheets.Clear(); 
     m_Convert = 0;  /* Gestion des mutiples representations (conversion De Morgan) */
     
     /* The rotation/mirror transformation matrix. pos normal*/
@@ -132,6 +198,8 @@ EDA_SchComponentStruct::EDA_SchComponentStruct( const wxPoint& pos ) :
     m_Field[REFERENCE].m_Layer = LAYER_REFERENCEPART;
 
     m_PinIsDangling = NULL;
+	
+	m_PrefixString = wxString(_("U")); 
 }
 
 
@@ -183,8 +251,6 @@ EDA_Rect EDA_SchComponentStruct::GetBoundaryBox()
     BoundaryBox.Offset( m_Pos );
     return BoundaryBox;
 }
-
-
 /**************************************************************************/
 void PartTextStruct::SwapData( PartTextStruct* copyitem )
 /**************************************************************************/
@@ -250,8 +316,7 @@ void EDA_SchComponentStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
         /* restore new values */
         SwapData( (EDA_SchComponentStruct*) g_ItemToUndoCopy );
         
-        delete g_ItemToUndoCopy;
-        g_ItemToUndoCopy = NULL;
+        SAFE_DELETE( g_ItemToUndoCopy );
     }
 
     EDA_BaseStruct::Place( frame, DC );
@@ -265,13 +330,13 @@ void EDA_SchComponentStruct::ClearAnnotation()
 /* Suppress annotation ( i.i IC23 changed to IC? and part reset to 1)
  */
 {
-    m_RefIdNumber = 0;
-
-    while( isdigit( m_Field[REFERENCE].m_Text.Last() ) )
-        m_Field[REFERENCE].m_Text.RemoveLast();
-
-    if( m_Field[REFERENCE].m_Text.Last() != '?' )
-        m_Field[REFERENCE].m_Text.Append( '?' );
+	wxString defRef = m_PrefixString; 
+	defRef.Append( _("?") ); 
+	m_References.Empty(); 
+	unsigned int i; 
+	for(i=0; i< m_Paths.GetCount(); i++){
+		m_References.Add(defRef); 
+	}
 
     EDA_LibComponentStruct* Entry;
     Entry = FindLibPart( m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
@@ -291,7 +356,8 @@ EDA_SchComponentStruct* EDA_SchComponentStruct::GenCopy()
 
     new_item->m_Multi    = m_Multi;
     new_item->m_ChipName = m_ChipName;
-    new_item->m_FlagControlMulti = m_FlagControlMulti;
+    //new_item->m_FlagControlMulti = m_FlagControlMulti;
+	new_item->m_UsedOnSheets = m_UsedOnSheets; 
     new_item->m_Convert = m_Convert;
     new_item->m_Transform[0][0] = m_Transform[0][0];
     new_item->m_Transform[0][1] = m_Transform[0][1];
@@ -522,9 +588,9 @@ int EDA_SchComponentStruct::GetRotationMiroir()
 wxPoint EDA_SchComponentStruct::GetScreenCoord( const wxPoint& coord )
 /***********************************************************************/
 
-/* Renvoie la coordonnée du point coord, en fonction de l'orientation
+/* Renvoie la coordonnï¿½e du point coord, en fonction de l'orientation
  *  du composant (rotation, miroir).
- *  Les coord sont toujours relatives à l'ancre (coord 0,0) du composant
+ *  Les coord sont toujours relatives ï¿½ l'ancre (coord 0,0) du composant
  */
 {
     wxPoint screenpos;
@@ -548,7 +614,7 @@ void EDA_SchComponentStruct::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-        " ref=\""           << GetReference().mb_str() << '"' <<
+		" ref=\""      		<< ReturnFieldName(0) << '"' <<
         " chipName=\""      << m_ChipName.mb_str() << '"' <<
         m_Pos <<
         " layer=\""         << m_Layer      << '"' <<

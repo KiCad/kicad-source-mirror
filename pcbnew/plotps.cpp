@@ -38,7 +38,7 @@ void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer )
     wxSize        BoardSize;
     wxPoint       BoardCenter;
     bool          Center = FALSE;
-    Ki_PageDescr* currentsheet = m_CurrentScreen->m_CurrentSheet;
+    Ki_PageDescr* currentsheet = m_CurrentScreen->m_CurrentSheetDesc;
     double        scale_format; // Facteur correctif pour conversion forlat Ax->A4
     double        scale_x, scale_y;
     int           PlotMarge_in_mils = 0;

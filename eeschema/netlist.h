@@ -39,10 +39,12 @@ enum NetObjetType {      /* Type des objets de Net */
     NET_JONCTION,
     NET_LABEL,
     NET_GLOBLABEL,
+	NET_HIERLABEL, //on a screen to indicate connection to a higher-level sheet
+ 	NET_SHEETLABEL, //on a drawscreen element to indicate connection to a lower-level sheet.
     NET_BUSLABELMEMBER,
     NET_GLOBBUSLABELMEMBER,
+	NET_HIERBUSLABELMEMBER,
     NET_SHEETBUSLABELMEMBER,
-    NET_SHEETLABEL,
     NET_PINLABEL,
     NET_PIN,
     NET_NOCONNECT
@@ -60,22 +62,21 @@ enum  IsConnectType {   /* Valeur du Flag de connection */
 class ObjetNetListStruct
 {
 public:
-    EDA_BaseStruct* m_Comp;             /* Pointeur sur la definition de l'objet */
-    void*           m_Link;             /* Pour SheetLabelStruct: Pointeur sur la feuille de hierarchie
-                                         *  Pour les Pins: pointeur sur le composant */
-    int             m_Flag;             /* flag pour calculs internes */
-    SCH_SCREEN*     m_Screen;           /* Ecran d'appartenance */
+    EDA_BaseStruct* m_Comp;      /* Pointeur sur la definition de l'objet */
+    void*           m_Link;      /* Pour SheetLabelStruct: Pointeur sur la feuille de hierarchie
+                                  *  Pour les Pins: pointeur sur le composant */
+    int             m_Flag;       /* flag pour calculs internes */
+    DrawSheetList   m_SheetList;
     NetObjetType    m_Type;
-    int             m_ElectricalType;   /* Pour Pins et sheet labels: type electrique */
+    int             m_ElectricalType;/* Pour Pins et sheet labels: type electrique */
 private:
-    int             m_NetCode;          /* pour elements simples */
+    int             m_NetCode;       /* pour elements simples */
 public:
-    int             m_BusNetCode;       /* pour connexions type bus */
-    int             m_Member;           /* pour les labels type BUSWIRE ( labels de bus eclate )
+    int             m_BusNetCode;    /* pour connexions type bus */
+    int             m_Member;        /* pour les labels type BUSWIRE ( labels de bus eclate )
                                          *  numero de membre */
     IsConnectType   m_FlagOfConnection;
-    int             m_SheetNumber;  /* Sheet number for this item */
-    int             m_NumInclude;   /* Numero de sous schema correpondant a la sheet (Gestion des GLabels et Pin Sheet)*/
+    DrawSheetList   m_SheetListInclude;   /* sheet that the hierarchal label connects to.*/
     long            m_PinNum;       /* numero de pin( 4 octets -> 4 codes ascii) */
     const wxString* m_Label;        /* Tous types Labels:pointeur sur la wxString definissant le label */
     wxPoint         m_Start, m_End;
@@ -89,8 +90,22 @@ public:
     int GetNet() const { return m_NetCode; }
 };
 
+/* Structures pour memo et liste des elements */
+typedef struct ListLabel
+{
+	int m_LabelType;
+	void * m_Label;
+	char m_SheetPath[32];
+} ListLabel;
+typedef struct ListComponent
+{
+	EDA_SchComponentStruct * m_Comp;
+	char m_Ref[32]; 
+	  //have to store it here since the object refrerences will be duplicated.
+	DrawSheetList m_SheetList; //composed of UIDs
+} ListComponent;
 
-/* Structure decrivant 1 composant de la schematique (pour annotation ) */
+/* Structure decrivant 1 composant de la schematique (pour *annotation* ) */
 struct CmpListStruct
 {
 public:
@@ -98,14 +113,15 @@ public:
     int                     m_NbParts;          /* Nombre de parts par boitier */
     bool                    m_PartsLocked;      // For multi part components: True if the part cannot be changed
     int                     m_Unit;             /* Numero de part */
-    int                     m_Sheet;            /* Numero de hierarchie */
-    unsigned long           m_TimeStamp;        /* Signature temporelle */
+    DrawSheetList 	        m_SheetList;
+    unsigned long           m_TimeStamp;              /* unique identification number */
     int                     m_IsNew;            /* != 0 pour composants non annotes */
     char                    m_TextValue[32];    /* Valeur */
     char                    m_TextRef[32];      /* Reference ( hors numero ) */
     int                     m_NumRef;           /* Numero de reference */
     int                     m_Flag;             /* flag pour calculs internes */
     wxPoint                 m_Pos;              /* position components */
+	char					m_Path[128]; 		// the 'path' of the object in the sheet hierarchy. 
 };
 
 

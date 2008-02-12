@@ -91,19 +91,19 @@ void WinEDA_PcbFrame::PrepareLayerIndicator()
                previous_Route_Layer_BOTTOM_color, previous_via_color;
 
     /* get colors, and redraw bitmap button only on changes */
-    active_layer_color = g_DesignSettings.m_LayerColor[GetScreen()->m_Active_Layer];
+    active_layer_color = g_DesignSettings.m_LayerColor[((PCB_SCREEN*)GetScreen())->m_Active_Layer];
     if( previous_active_layer_color != active_layer_color )
     {
         previous_active_layer_color = active_layer_color;
         change = TRUE;
     }
-    Route_Layer_TOP_color = g_DesignSettings.m_LayerColor[GetScreen()->m_Route_Layer_TOP];
+    Route_Layer_TOP_color = g_DesignSettings.m_LayerColor[((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP];
     if( previous_Route_Layer_TOP_color != Route_Layer_TOP_color )
     {
         previous_Route_Layer_TOP_color = Route_Layer_TOP_color;
         change = TRUE;
     }
-    Route_Layer_BOTTOM_color = g_DesignSettings.m_LayerColor[GetScreen()->m_Route_Layer_BOTTOM];
+    Route_Layer_BOTTOM_color = g_DesignSettings.m_LayerColor[((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM];
     if( previous_Route_Layer_BOTTOM_color != Route_Layer_BOTTOM_color )
     {
         previous_Route_Layer_BOTTOM_color = Route_Layer_BOTTOM_color;
@@ -714,7 +714,7 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
     ll = m_SelLayerBox->GetChoice();
     for( ii = 0; ii < jj; ii++ )
     {
-        if( (int) ( (size_t) m_SelLayerBox->GetClientData( ii ) ) == GetScreen()->m_Active_Layer )
+        if( (int) ( (size_t) m_SelLayerBox->GetClientData( ii ) ) == ((PCB_SCREEN*)GetScreen())->m_Active_Layer )
         {
             if( ii != ll )
                 m_SelLayerBox->SetSelection( ii );

@@ -58,7 +58,7 @@
 
 /* Fonctions locales */
 static int  ReadPartDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Window );
-static int  ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Window );
+static int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Window);
 static int  ReadSchemaDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Window );
 static void LoadLayers( FILE* f, int* linecnt );
 
@@ -71,7 +71,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
 /************************************************************************************************/
 
 /* Routine to load an EESchema file.
- *  Returns TRUE if file has been loaded (at list partially.)
+ *  Returns TRUE if file has been loaded (at least partially.)
  */
 {
     char                 Line[1024], * SLine;
@@ -105,7 +105,8 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
         return FALSE;
     }
 
-    MsgDiag = _( "Loading " ) + FullFileName;
+	screen->m_FileName = FullFileName; 
+	MsgDiag = _( "Loading " ) + screen->m_FileName;
     PrintMsg( MsgDiag );
 
     if( fgets( Line, 1024 - 1, f ) == NULL
@@ -184,7 +185,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
                     wxT( "EESchema file Segment struct error at line %d, aborted" ),
                     LineCount );
                 Failed = TRUE;
-                delete SegmentStruct;
+				SAFE_DELETE( SegmentStruct ) ;
                 break;
             }
 
@@ -200,7 +201,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
             if( sscanf( SLine, "%s %s", Name1, Name2 ) != 2  )
             {
                 MsgDiag.Printf(
-                    wxT( "EESchema file Raccord struct error at line %d, aborted" ),
+                    wxT( "EESchema file record struct error at line %d, aborted" ),
                     LineCount );
                 Failed = TRUE;
                 break;
@@ -220,7 +221,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
                     wxT( "EESchema file Raccord struct error at line %d, aborted" ),
                     LineCount );
                 Failed = TRUE;
-                delete RaccordStruct;
+				SAFE_DELETE( RaccordStruct ) ;
                 break;
             }
 
@@ -264,7 +265,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
                         wxT( "EESchema file polyline struct error at line %d, aborted" ),
                         LineCount );
                     Failed = TRUE;
-                    delete  PolylineStruct;
+					SAFE_DELETE( PolylineStruct )  ;
                     break;
                 }
             }
@@ -286,7 +287,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
                     wxT( "EESchema file connection struct error at line %d, aborted" ),
                     LineCount );
                 Failed = TRUE;
-                delete ConnectionStruct;
+				SAFE_DELETE( ConnectionStruct ) ;
             }
             else
             {
@@ -380,10 +381,26 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
                     TextStruct->m_Orient = orient;
                     Struct = (EDA_BaseStruct*) TextStruct;
                 }
-                else if( Name1[0] == 'G' )
+				else if( Name1[0] == 'G')
                 {
                     DrawGlobalLabelStruct* TextStruct =
-                        new DrawGlobalLabelStruct( pos, CONV_FROM_UTF8( text ) );
+                        new DrawGlobalLabelStruct(pos, CONV_FROM_UTF8( text ) );
+                    Struct = (EDA_BaseStruct*) TextStruct;
+                    TextStruct->m_Size.x = TextStruct->m_Size.y = size;
+                    TextStruct->m_Orient = orient;
+                    if( stricmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
+                        TextStruct->m_Shape = NET_OUTPUT;
+                    if( stricmp( Name2, SheetLabelType[NET_BIDI] ) == 0 )
+                        TextStruct->m_Shape = NET_BIDI;
+                    if( stricmp( Name2, SheetLabelType[NET_TRISTATE] ) == 0 )
+                        TextStruct->m_Shape = NET_TRISTATE;
+                    if( stricmp( Name2, SheetLabelType[NET_UNSPECIFIED] ) == 0 )
+                        TextStruct->m_Shape = NET_UNSPECIFIED;
+                }
+				else if( Name1[0] == 'H')
+                {
+                    DrawHierLabelStruct* TextStruct =
+                        new DrawHierLabelStruct(pos, CONV_FROM_UTF8( text ) );
                     Struct = (EDA_BaseStruct*) TextStruct;
                     TextStruct->m_Size.x = TextStruct->m_Size.y = size;
                     TextStruct->m_Orient = orient;
@@ -448,6 +465,9 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
 
     TestDanglingEnds( screen->EEDrawList, NULL );
 
+	MsgDiag = _( "Done Loading " ) +  screen->m_FileName;
+	PrintMsg( MsgDiag );
+	
     return TRUE;    /* Although it may be that file is only partially loaded. */
 }
 
@@ -509,10 +529,29 @@ static int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
 
     if( strcmp( Name2, NULL_STRING ) != 0 )
     {
-        for( ii = 0; ii < (int) strlen( Name2 ); ii++ )
+		bool isDigit = false; 
+        for( ii = 0; ii < (int) strlen( Name2 ); ii++ ){
             if( Name2[ii] == '~' )
                 Name2[ii] = ' ';
-
+			//get RefBase from this, too. store in Name1. 
+			if(Name2[ii] >= '0' && Name2[ii] <= '9'){
+				isDigit = true;
+				Name1[ii] = 0;  //null-terminate.
+			}
+			if(!isDigit){
+				Name1[ii] = Name2[ii]; 
+			}
+		}
+		Name1[ii] = 0; //just in case
+		int jj; 
+		for(jj=0; jj<ii && Name1[jj] == ' '; jj++); 
+		if(jj == ii){
+			//blank string.
+			LibItemStruct->m_PrefixString = wxT("U"); 
+		}else{
+			LibItemStruct->m_PrefixString = CONV_FROM_UTF8(&Name1[jj]); 
+			//printf("prefix: %s\n", CONV_TO_UTF8(LibItemStruct->m_PrefixString)); 
+		}
         if( !newfmt )
             LibItemStruct->m_Field[REFERENCE].m_Text = CONV_FROM_UTF8( Name2 );
     }
@@ -527,6 +566,8 @@ static int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
      *  "P " = position
      *  "U " = Num Unit, et Conversion
      *  "Fn" = Champs ( n = 0.. = numero de champ )
+	 *	"Ar" = AlternateReference, in the case of multiple sheets
+	 *			referring to one schematic file.
      */
 
     /* Lecture des champs */
@@ -537,6 +578,7 @@ static int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
             return TRUE;
         if( (Line[0] != 'F' )
            && (Line[0] != 'P' )
+		   && (Line[0] != 'A' )
            && (Line[0] != 'U' ) )
             break;
 
@@ -552,7 +594,32 @@ static int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
             sscanf( Line + 1, "%d %d",
                     &LibItemStruct->m_Pos.x, &LibItemStruct->m_Pos.y );
         }
-
+		if( Line[0] == 'A' && Line[1] == 'R' )
+		{
+			/*format:
+			AR Path="/9086AF6E/67452AA0" Ref="C99"
+			where 9086AF6E is the unique timestamp of the containing sheet
+			and 67452AA0 is the timestamp of this component.
+			C99 is the reference given this path.
+			*/
+			int i=2; 
+			while(i<256 && Line[i] != '"'){ i++; } i++; 
+			//copy the path.
+			int j = 0; 
+			while(i<256 && Line[i] != '"'){Name1[j] = Line[i]; i++; j++;} i++;
+			Name1[j] = 0; 
+			wxString path = CONV_FROM_UTF8(Name1);
+			//i should be one after the closing quote, match the next opening quote
+			while(i<256 && Line[i] != '"'){ i++; } i++; 
+			j = 0; 
+			while(i<256 && Line[i] != '"'){Name1[j] = Line[i]; i++; j++;} i++;
+			Name1[j] = 0; 
+			wxString ref = CONV_FROM_UTF8(Name1);
+			
+			LibItemStruct->m_Paths.Add(path); 
+			LibItemStruct->m_References.Add(ref); 
+			LibItemStruct->m_Field[REFERENCE].m_Text = ref; 
+		}
         if( Line[0] == 'F' )
         {
             char FieldUserName[1024];
@@ -695,6 +762,7 @@ static int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
     {
         LibItemStruct->Pnext = Window->EEDrawList;
         Window->EEDrawList   = (EDA_BaseStruct*) LibItemStruct;
+		LibItemStruct->m_Parent = Window; 
     }
 
     return Failed;   /* Fin lecture 1 composant */
@@ -717,8 +785,12 @@ static int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Wi
     char*                 ptcar;
 
     SheetStruct = new DrawSheetStruct();
-    SheetStruct->m_TimeStamp = GetTimeStamp();
-    SheetStruct->m_Parent    = Window;
+	SheetStruct->m_TimeStamp = GetTimeStamp(); 
+	//sheets are added to the EEDrawList like other schematic components. 
+	//however, in order to preserve the heirarchy (through m_Parent pointers), 
+	//a duplicate of the sheet is added to m_SubSheet array. 
+	//must be a duplicate, references just work for a two-layer structure.
+	//this is accomplished through the Sync() function.
 
     if( Line[0] == '$' )   /* Ligne doit etre "$Sheet" */
     {
@@ -749,6 +821,12 @@ static int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Wi
         LineCount++;
         if( fgets( Line, 256 - 1, f ) == NULL )
             return TRUE;
+		if( Line[0] == 'U' ){
+			sscanf( Line + 1, "%lX", &(SheetStruct->m_TimeStamp) ); 
+			if(SheetStruct->m_TimeStamp == 0) //zero is not unique! 
+				SheetStruct->m_TimeStamp = GetTimeStamp(); 
+			continue; 
+		}
         if( Line[0] != 'F' )
             break;
         sscanf( Line + 1, "%d", &fieldref );
@@ -804,6 +882,7 @@ static int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Wi
             else
             {
                 SheetStruct->m_FileName     = CONV_FROM_UTF8( Name1 );
+				//printf("in ReadSheetDescr : SheetStruct->m_FileName = %s \n", Name1); 
                 SheetStruct->m_FileNameSize = size;
             }
         }
@@ -865,13 +944,12 @@ static int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Wi
             LineCount );
         Failed = TRUE;
     }
-
-    if( !Failed )
-    {
-        SheetStruct->Pnext = Window->EEDrawList;
-        Window->EEDrawList = (EDA_BaseStruct*) SheetStruct;
-    }
-
+	if( !Failed )
+	{
+		SheetStruct->Pnext = Window->EEDrawList;
+		Window->EEDrawList   = (EDA_BaseStruct*)SheetStruct;
+		SheetStruct->m_Parent = Window; 
+	}
     return Failed;   /* Fin lecture 1 composant */
 }
 
@@ -918,7 +996,7 @@ static int ReadSchemaDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* W
     }
 
     /* Ajuste ecran */
-    Window->m_CurrentSheet = wsheet;
+    Window->m_CurrentSheetDesc = wsheet;
 
     /* Recheche suite et fin de descr */
     for( ; ; )
@@ -930,7 +1008,7 @@ static int ReadSchemaDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* W
 
         if( strnicmp( Line, "Sheet", 2 ) == 0 )
             sscanf( Line + 5, " %d %d",
-                    &Window->m_SheetNumber, &Window->m_NumberOfSheet );
+                    &Window->m_ScreenNumber, &Window->m_NumberOfScreen );
 
         if( strnicmp( Line, "Title", 2 ) == 0 )
         {

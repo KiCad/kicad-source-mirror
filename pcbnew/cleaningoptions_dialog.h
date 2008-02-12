@@ -51,7 +51,14 @@
 #define SYMBOL_WINEDA_CLEANINGOPTIONSFRAME_POSITION wxDefaultPosition
 ////@end control identifiers
 
+class WinEDA_PcbFrame; 
 
+/*declared in clean.cpp: 
+extern static bool s_CleanVias;
+extern static bool s_MergeSegments;
+extern static bool s_DeleteUnconnectedSegm;
+void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC ); 
+//end clean.cpp */
 /*!
  * WinEDA_CleaningOptionsFrame class declaration
  */

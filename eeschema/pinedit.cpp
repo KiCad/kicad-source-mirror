@@ -54,7 +54,7 @@ static int 	LastPinType = PIN_INPUT,
 /*************************************************************************/
 void WinEDA_PinPropertiesFrame::PinPropertiesAccept(wxCommandEvent& event)
 /*************************************************************************/
-/* Met a jour les differents parametres pour le composant en cours d'édition
+/* Met a jour les differents parametres pour le composant en cours d'ï¿½dition
 */
 {
 wxString msg;
@@ -282,7 +282,7 @@ wxPoint startPos;
  	startPos.x = OldPos.x;
  	startPos.y = -OldPos.y;
  	DrawPanel->CursorOff(DC);
- 	m_CurrentScreen->m_Curseur = startPos;
+	GetScreen()->m_Curseur = startPos;
  	DrawPanel->MouseToCursorSchema();
 
 	CurrentPin->Display_Infos_DrawEntry(this);
@@ -785,7 +785,7 @@ bool selected = (MasterPin->m_Selected & IS_SELECTED) != 0;
 /************************************************************************/
 void WinEDA_LibeditFrame::RepeatPinItem(wxDC * DC, LibDrawPin * SourcePin)
 /************************************************************************/
-/* Creation d'une nouvelle pin par copie de la précédente ( fct REPEAT) */
+/* Creation d'une nouvelle pin par copie de la prï¿½cï¿½dente ( fct REPEAT) */
 {
 LibDrawPin * Pin;
 wxString msg;

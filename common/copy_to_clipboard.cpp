@@ -40,7 +40,7 @@ void WinEDA_DrawFrame::CopyToClipboard(wxCommandEvent& event)
 
 	if(  event.GetId() == ID_GEN_COPY_BLOCK_TO_CLIPBOARD )
 	{
-		if (m_CurrentScreen->BlockLocate.m_Command != BLOCK_IDLE)
+		if (GetScreen()->BlockLocate.m_Command != BLOCK_IDLE)
 			DrawPanel->SetCursor(wxCursor(DrawPanel->m_PanelCursor = DrawPanel->m_PanelDefaultCursor) );
 
 		if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )

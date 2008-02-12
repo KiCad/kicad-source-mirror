@@ -33,6 +33,7 @@
 ////@begin includes
 ////@end includes
 
+#include "wxstruct.h"
 #include "dialog_drc.h"
 
 ////@begin XPM images

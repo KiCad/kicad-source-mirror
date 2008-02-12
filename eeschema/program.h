@@ -239,7 +239,7 @@ class DrawTextStruct : public EDA_BaseStruct, public EDA_TextStruct
 public:
     int  m_Layer;
     int  m_Shape;
-    bool m_IsDangling;          // TRUE si non connecté
+    bool m_IsDangling;          // TRUE si non connectï¿½
 
 public:
     DrawTextStruct( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString,
@@ -280,8 +280,8 @@ public:
 class DrawGlobalLabelStruct : public DrawTextStruct
 {
 public:
-    DrawGlobalLabelStruct( const wxPoint& pos = wxPoint( 0, 0 ),
-                           const wxString& text = wxEmptyString );
+    DrawGlobalLabelStruct(const wxPoint& pos = wxPoint( 0, 0 ),
+                           const wxString& text = wxEmptyString);
     ~DrawGlobalLabelStruct() { }
     virtual void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode,
                           int Color = -1 );
@@ -291,7 +291,20 @@ public:
         return wxT( "DrawGlobalLabel" );
     }
 };
+class DrawHierLabelStruct : public DrawTextStruct
+{
+public:
+    DrawHierLabelStruct(const wxPoint& pos = wxPoint( 0, 0 ),
+                           const wxString& text = wxEmptyString);
+    ~DrawHierLabelStruct() { }
+    virtual void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode,
+                          int Color = -1 );
 
+    virtual wxString GetClass() const
+    {
+        return wxT( "DrawHierLabel" );
+    }
+};
 
 #define MAX_LAYERS 44
 class LayerStruct

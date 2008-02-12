@@ -207,7 +207,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_SWITCH_LAYER_TO_PREVIOUS:
-        ll = GetScreen()->m_Active_Layer;
+        ll = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
         if( (ll <= COPPER_LAYER_N) || (ll > CMP_N) )
             break;
         if( m_Pcb->m_BoardSettings->m_CopperLayerCount < 2 )  // Single layer
@@ -220,7 +220,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_SWITCH_LAYER_TO_NEXT:
-        ll = GetScreen()->m_Active_Layer;
+        ll = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
         if( (ll < COPPER_LAYER_N) || (ll >= CMP_N) )
             break;
         if( m_Pcb->m_BoardSettings->m_CopperLayerCount < 2 )  // Single layer
@@ -305,7 +305,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_BACK_SPACE:
-        if( m_ID_current_state == ID_TRACK_BUTT && GetScreen()->m_Active_Layer <= CMP_N )
+        if( m_ID_current_state == ID_TRACK_BUTT && ((PCB_SCREEN*)GetScreen())->m_Active_Layer <= CMP_N )
         {
             if( ItemFree )
             {
@@ -396,7 +396,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
             return;
 
 		// place micro via and switch layer
-		if ( GetScreen()->IsMicroViaAcceptable() )
+		if ( ((PCB_SCREEN*)GetScreen())->IsMicroViaAcceptable() )
 		{
 			int v_type = g_DesignSettings.m_CurrentViaType;
 			g_DesignSettings.m_CurrentViaType = VIA_MICROVIA;
@@ -604,7 +604,7 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* DC, EDA_BaseStruct* DrawStruct )
     switch( m_ID_current_state )
     {
     case ID_TRACK_BUTT:
-        if( GetScreen()->m_Active_Layer > CMP_N )
+        if( ((PCB_SCREEN*)GetScreen())->m_Active_Layer > CMP_N )
             return FALSE;
         if( ItemFree )
         {

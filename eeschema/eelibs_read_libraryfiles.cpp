@@ -91,9 +91,9 @@ LibraryStruct* LoadLibraryName( WinEDA_DrawFrame* frame,
         ChangeFileNameExt( FullFileName, DOC_EXT );
         LoadDocLib( frame, FullFileName, NewLib->m_Name );
     }
-    else
-        delete NewLib;
-
+    else{
+		SAFE_DELETE( NewLib );
+	}
     fclose( f );
     return NewLib;
 }
@@ -237,7 +237,7 @@ void FreeCmpLibrary( wxWindow* frame, const wxString& LibName )
         TempLib->m_Pnext = TempLib->m_Pnext->m_Pnext;
     }
 
-    delete Lib;
+	SAFE_DELETE( Lib );
 
     /* The removed librairy can be the current library in libedit.
       * If so, clear the current library in libedit */
@@ -483,7 +483,7 @@ EDA_LibComponentStruct* Read_Component_Definition( WinEDA_DrawFrame* frame, char
             Msg.Printf( wxT( " Error at line %d of library \n\"%s\",\nlibrary not loaded" ), 
                        *LineNum, currentLibraryName.GetData() );
             DisplayError( frame, Msg );
-            delete LibEntry;
+			SAFE_DELETE( LibEntry );
             return NULL;
         }
     }
@@ -604,7 +604,7 @@ static LibEDA_BaseStruct* GetDrawEntry( WinEDA_DrawFrame* frame, FILE* f, char* 
             if( !Error )
             {                                                   /* Convert '~' to spaces. */
                 Text->m_Text = CONV_FROM_UTF8( Buffer );
-                Text->m_Text.Replace( wxT( "~" ), wxT( " " ) ); // Les espaces sont restitués
+                Text->m_Text.Replace( wxT( "~" ), wxT( " " ) ); // Les espaces sont restituï¿½s
             }
         }
             break;
@@ -780,7 +780,7 @@ static LibEDA_BaseStruct* GetDrawEntry( WinEDA_DrawFrame* frame, FILE* f, char* 
             MsgLine.Printf( wxT( "Error in %c DRAW command in line %d, aborted." ),
                             Line[0], *LineNum );
             DisplayError( frame, MsgLine );
-            delete New;
+			SAFE_DELETE( New );
 
             /* FLush till end of draw: */
             do  {
@@ -1119,8 +1119,8 @@ static int SortItemsFct( const void* ref, const void* item );
 void EDA_LibComponentStruct::SortDrawItems()
 /*******************************************/
 
-/* Trie les éléments graphiques d'un composant lib pour améliorer
- *  le tracé:
+/* Trie les ï¿½lï¿½ments graphiques d'un composant lib pour amï¿½liorer
+ *  le tracï¿½:
  *  items remplis en premier, pins en dernier
  *  En cas de superposition d'items, c'est plus lisible
  */

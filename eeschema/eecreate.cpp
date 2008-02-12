@@ -27,6 +27,7 @@ void WinEDA_SchematicFrame::BeginSegment( wxDC* DC, int type )
 /* Routine de Trace de segments ( WIRES, BUS ) pour lesquels chaque segment
  *  est une structure.
  */
+// NOT USED!!!@!@!
 {
     DrawSegmentStruct* oldsegment, * newsegment;
     wxPoint            pos = GetScreen()->m_Curseur;
@@ -84,7 +85,7 @@ void WinEDA_SchematicFrame::BeginSegment( wxDC* DC, int type )
         GetScreen()->ManageCurseur( DrawPanel, DC, FALSE );
         oldsegment->m_EndIsDangling = FALSE;
 
-        /* Creation du segment suivant ou fin de tracé si point sur pin, jonction ...*/
+        /* Creation du segment suivant ou fin de tracï¿½ si point sur pin, jonction ...*/
         if( IsTerminalPoint( GetScreen(), oldsegment->m_End, oldsegment->m_Layer ) )
         {
             EndSegment( DC ); return;
@@ -385,21 +386,10 @@ void WinEDA_SchematicFrame::RepeatDrawItem( wxDC* DC )
 
 
     case DRAW_LABEL_STRUCT_TYPE:
+	case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
+	case DRAW_HIER_LABEL_STRUCT_TYPE:
             #undef STRUCT
             #define STRUCT ( (DrawLabelStruct*) g_ItemToRepeat )
-        g_ItemToRepeat   = STRUCT->GenCopy();
-        STRUCT->m_Pos.x += g_RepeatStep.x; ox = STRUCT->m_Pos.x;
-        STRUCT->m_Pos.y += g_RepeatStep.y; oy = STRUCT->m_Pos.y;
-        /*** Increment du numero de label ***/
-        strcpy( Line, STRUCT->GetText() );
-        IncrementLabelMember( Line );
-        STRUCT->m_Text = Line;
-        break;
-
-
-    case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-            #undef STRUCT
-            #define STRUCT ( (DrawGlobalLabelStruct*) g_ItemToRepeat )
         g_ItemToRepeat   = STRUCT->GenCopy();
         STRUCT->m_Pos.x += g_RepeatStep.x; ox = STRUCT->m_Pos.x;
         STRUCT->m_Pos.y += g_RepeatStep.y; oy = STRUCT->m_Pos.y;
@@ -479,10 +469,10 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
  *  - type WIRE, si il y a
  *      - une jonction
  *      - ou une pin
- *      - ou une extrémité unique de fil
+ *      - ou une extrï¿½mitï¿½ unique de fil
  * 
  *  - type BUS, si il y a
- *      - ou une extrémité unique de BUS
+ *      - ou une extrï¿½mitï¿½ unique de BUS
  */
 {
     EDA_BaseStruct*       item;

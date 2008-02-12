@@ -88,7 +88,10 @@ void WinEDA_ComponentPropertiesFrame::InitBuffers()
     for( ii = REFERENCE; ii < NUMBER_OF_FIELDS; ii++ )
     {
         m_FieldName[ii]  = m_Cmp->ReturnFieldName( ii );
-        m_FieldText[ii]  = m_Cmp->m_Field[ii].m_Text;
+		if(ii == REFERENCE)
+			m_FieldText[ii] = m_Cmp->GetRef(m_Parent->GetSheet()); 
+		else
+        	m_FieldText[ii]  = m_Cmp->m_Field[ii].m_Text;
         m_FieldSize[ii]  = m_Cmp->m_Field[ii].m_Size.x;
         m_FieldFlags[ii] =
             (m_Cmp->m_Field[ii].m_Attributs & TEXT_NO_VISIBLE) ? 0 : 1;
@@ -115,8 +118,9 @@ void WinEDA_ComponentPropertiesFrame::CopyDataToPanelField()
 {
     int fieldId = m_CurrentFieldId;
 
-    for( int ii = FIELD1; ii < NUMBER_OF_FIELDS; ii++ )
+    for( int ii = FIELD1; ii < NUMBER_OF_FIELDS; ii++ ){
         m_FieldSelection->SetString( ii, m_FieldName[ii] );
+	}
 
     if( fieldId == VALUE && m_LibEntry && m_LibEntry->m_Options == ENTRY_POWER )
         m_FieldTextCtrl->Enable( FALSE );
@@ -343,7 +347,7 @@ void WinEDA_ComponentPropertiesFrame::ComponentPropertiesAccept( wxCommandEvent&
         (m_ConvertButt->GetValue() == TRUE) ?
         m_Cmp->m_Convert = 2 : m_Cmp->m_Convert = 1;
 
-    //Mise a jour de la selection de l'élément dans le boitier
+    //Mise a jour de la selection de l'ï¿½lï¿½ment dans le boitier
     if( m_Cmp->m_Multi )
         m_Cmp->m_Multi = m_SelectUnit->GetSelection() + 1;
 
@@ -382,13 +386,13 @@ void WinEDA_ComponentPropertiesFrame::ComponentPropertiesAccept( wxCommandEvent&
     }
 
 
-    // Mise a jour des textes
+    // Mise a jour des textes (update the texts)
     for( int ii = REFERENCE; ii < NUMBER_OF_FIELDS; ii++ )
     {
         if( ii == REFERENCE )   // la reference ne peut etre vide
         {
             if( !m_FieldText[ii].IsEmpty() )
-                m_Cmp->m_Field[ii].m_Text = m_FieldText[ii];
+				m_Cmp->SetRef(m_Parent->GetSheet(), m_FieldText[ii]);
         }
         else if( ii == VALUE )  // la valeur ne peut etre vide et ne peut etre change sur un POWER
         {
@@ -421,10 +425,10 @@ void WinEDA_ComponentPropertiesFrame::ComponentPropertiesAccept( wxCommandEvent&
         m_Cmp->m_Field[ii].m_Pos.y += cmp_pos.y;
     }
 
-    m_Parent->m_CurrentScreen->SetModify();
+	m_Parent->GetScreen()->SetModify();
 
     RedrawOneStruct( m_Parent->DrawPanel, &dc, m_Cmp, GR_DEFAULT_DRAWMODE );
-    m_Parent->TestDanglingEnds( m_Parent->m_CurrentScreen->EEDrawList, &dc );
+	m_Parent->TestDanglingEnds( m_Parent->GetScreen()->EEDrawList, &dc );
 
     EndModal( 0 );
 }
@@ -454,7 +458,7 @@ void WinEDA_SchematicFrame::StartMoveCmpField( PartTextStruct* Field, wxDC* DC )
     int     x1, y1;
     EDA_SchComponentStruct* Cmp = (EDA_SchComponentStruct*) CurrentField->m_Parent;
 
-    delete g_ItemToUndoCopy;
+	SAFE_DELETE( g_ItemToUndoCopy );
     g_ItemToUndoCopy = Cmp->GenCopy();
 
     pos = Cmp->m_Pos;
@@ -476,7 +480,7 @@ void WinEDA_SchematicFrame::StartMoveCmpField( PartTextStruct* Field, wxDC* DC )
     newpos.y = pos.y + Cmp->m_Transform[0][1] * x1 + Cmp->m_Transform[1][1] * y1;
 
     DrawPanel->CursorOff( DC );
-    m_CurrentScreen->m_Curseur = newpos;
+	GetScreen()->m_Curseur = newpos;
     DrawPanel->MouseToCursorSchema();
 
     OldPos    = Field->m_Pos;
@@ -561,6 +565,9 @@ void WinEDA_SchematicFrame::EditCmpFieldText( PartTextStruct* Field, wxDC* DC )
             Field->m_Size.x = Field->m_Size.y = TextFieldSize;
         }
         Field->m_Text = newtext;
+		if( FieldNumber == REFERENCE ){
+			Cmp->SetRef(GetSheet(), newtext); 
+		}
     }
     else    /* Nouveau texte NULL */
     {
@@ -580,7 +587,7 @@ void WinEDA_SchematicFrame::EditCmpFieldText( PartTextStruct* Field, wxDC* DC )
 
     DrawTextField( DrawPanel, DC, Field, flag, g_XorMode );
     Cmp->Display_Infos( this );
-    m_CurrentScreen->SetModify();
+	GetScreen()->SetModify();
 }
 
 
@@ -633,7 +640,7 @@ static void AbortMoveCmpField( WinEDA_DrawPanel* Panel, wxDC* DC )
         DrawTextField( Panel, DC, CurrentField, Multiflag, GR_DEFAULT_DRAWMODE );
     }
     CurrentField = NULL;
-    delete g_ItemToUndoCopy; g_ItemToUndoCopy = NULL;
+	SAFE_DELETE( g_ItemToUndoCopy );
 }
 
 
@@ -725,7 +732,6 @@ void WinEDA_SchematicFrame::EditComponentReference( EDA_SchComponentStruct* Cmp,
 /**************************************************************************************************/
 /* Edit the component text reference*/
 {
-    wxString msg;
     EDA_LibComponentStruct* Entry;
     int      flag = 0;
 
@@ -739,19 +745,18 @@ void WinEDA_SchematicFrame::EditComponentReference( EDA_SchComponentStruct* Cmp,
     if( Entry->m_UnitCount > 1 )
         flag = 1;
 
-    PartTextStruct* TextField = &Cmp->m_Field[REFERENCE];
+	wxString ref = Cmp->GetRef(GetSheet());
+    Get_Message( _( "Reference" ), ref, this );
 
-    msg = TextField->m_Text;
-    Get_Message( _( "Reference" ), msg, this );
-
-    if( !msg.IsEmpty() ) // New text entered
+    if( !ref.IsEmpty() ) // New text entered
     {
         /* save old cmp in undo list if not already in edit, or moving ... */
         if( Cmp->m_Flags == 0 )
             SaveCopyInUndoList( Cmp, IS_CHANGED );
+		Cmp->SetRef(GetSheet(), ref); 
 
         DrawTextField( DrawPanel, DC, &Cmp->m_Field[REFERENCE], flag, g_XorMode );
-        TextField->m_Text = msg;
+		Cmp->SetRef(GetSheet(), ref );
         DrawTextField( DrawPanel, DC, &Cmp->m_Field[REFERENCE], flag,
                        Cmp->m_Flags ? g_XorMode : GR_DEFAULT_DRAWMODE );
         GetScreen()->SetModify();
@@ -794,7 +799,7 @@ void WinEDA_SchematicFrame::EditComponentValue( EDA_SchComponentStruct* Cmp, wxD
         TextField->m_Text = msg;
         DrawTextField( DrawPanel, DC, &Cmp->m_Field[VALUE], flag,
                        Cmp->m_Flags ? g_XorMode : GR_DEFAULT_DRAWMODE );
-        m_CurrentScreen->SetModify();
+		GetScreen()->SetModify();
     }
 
     Cmp->Display_Infos( this );
@@ -848,7 +853,7 @@ void WinEDA_SchematicFrame::EditComponentFootprint( EDA_SchComponentStruct* Cmp,
 	
 	DrawTextField( DrawPanel, DC, &Cmp->m_Field[FOOTPRINT], flag,
 				   Cmp->m_Flags ? g_XorMode : GR_DEFAULT_DRAWMODE );
-	m_CurrentScreen->SetModify();
+	GetScreen()->SetModify();
    
     Cmp->Display_Infos( this );
 }
@@ -896,7 +901,7 @@ void WinEDA_ComponentPropertiesFrame::SetInitCmp( wxCommandEvent& event )
 
     m_Cmp->SetRotationMiroir( CMP_NORMAL );
 
-    m_Parent->m_CurrentScreen->SetModify();
+	m_Parent->GetScreen()->SetModify();
 
     RedrawOneStruct( m_Parent->DrawPanel, &dc, m_Cmp, GR_DEFAULT_DRAWMODE );
     EndModal( 1 );

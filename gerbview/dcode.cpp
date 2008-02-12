@@ -55,8 +55,8 @@ Outils et D_CODES
 	D_CODES:
 
 	D01 ... D9 = codes d'action:
-	D01			= activation de lumiere (baisser de plume) lors du déplacement
-	D02			= extinction de lumiere (lever de plume) lors du déplacement
+	D01			= activation de lumiere (baisser de plume) lors du dï¿½placement
+	D02			= extinction de lumiere (lever de plume) lors du dï¿½placement
 	D03			= Flash
 	D09			= VAPE Flash
 
@@ -107,7 +107,7 @@ void GERBER_Descr::ResetDefaultValues()
 	m_ImageNegative = FALSE;	// TRUE = Negative image
 	m_GerbMetric = FALSE;		// FALSE = Inches, TRUE = metric
 	m_Relative = FALSE;			// FALSE = absolute Coord, RUE = relative Coord
-	m_NoTrailingZeros = FALSE;	// True: zeros a droite supprimés
+	m_NoTrailingZeros = FALSE;	// True: zeros a droite supprimï¿½s
 	m_MirorA = FALSE;			// True: miror / axe A (X)
 	m_MirorB = FALSE;			// True: miror / axe B (Y)
 	m_As_DCode = FALSE;			// TRUE = DCodes in file (FALSE = no DCode->
@@ -158,7 +158,7 @@ int ii, jj;
 void GERBER_Descr::InitToolTable()
 /******************************/
 /* Creation du tableau des MAX_TOOLS DCodes utilisables, si il n'existe pas,
-et Init des DCodes à une valeur raisonnable
+et Init des DCodes ï¿½ une valeur raisonnable
 */
 {
 int count;
@@ -237,7 +237,7 @@ char Line[2000];
 wxString msg;
 D_CODE * pt_Dcode;
 FILE * dest;
-int layer = GetScreen()->m_Active_Layer;
+int layer = GetPCBScreen()->m_Active_Layer;
 D_CODE ** ListeDCode;
 
 
@@ -369,7 +369,7 @@ D_CODE * pt_Dcode;	/* Pointeur sur le D code*/
 			track->m_End = track->m_Start;	// m_Start = m_End = Spot center
 			switch (pt_Dcode->m_Shape)
 				 {
-				case GERB_LINE :	// ne devrait pas etre utilisé ici
+				case GERB_LINE :	// ne devrait pas etre utilisï¿½ ici
 				case GERB_CIRCLE :		/* spot rond (for GERBER)*/
 					track->m_Shape = S_SPOT_CIRCLE;
 					break ;
@@ -430,7 +430,7 @@ D_CODE * pt_D_code ;
 wxString Line;
 WinEDA_TextFrame * List;
 int scale = 10000;
-int curr_layer = GetScreen()->m_Active_Layer;
+int curr_layer = GetPCBScreen()->m_Active_Layer;
 int layer;
 GERBER_Descr * DcodeList;
 
@@ -471,7 +471,7 @@ GERBER_Descr * DcodeList;
 	if (ii < 0) return;
 
 #if 0
-	// Mise en surbrillance des éléments correspondant au DCode sélectionné
+	// Mise en surbrillance des ï¿½lï¿½ments correspondant au DCode sï¿½lectionnï¿½
 	if(Etat_Surbrillance) Hight_Light(DrawPanel, DC);
 	net_code_Surbrillance = (GetScreen()->m_Active_Layer<< 16) + ii;
 	Hight_Light(DrawPanel, DC);

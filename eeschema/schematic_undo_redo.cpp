@@ -90,6 +90,7 @@ void SwapData( EDA_BaseStruct* Item )
 
     case DRAW_LABEL_STRUCT_TYPE:
     case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
+	case DRAW_HIER_LABEL_STRUCT_TYPE:
     case DRAW_TEXT_STRUCT_TYPE:
         #undef SOURCE
         #undef DEST
@@ -285,7 +286,7 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy,
     GetScreen()->AddItemToUndoList( NewList );
 
     /* Clear redo list, because after new save there is no redo to do */
-    GetScreen()->ClearUndoORRedoList( GetScreen()->m_RedoList );
+	((SCH_SCREEN*)GetScreen())->ClearUndoORRedoList( GetScreen()->m_RedoList );
     GetScreen()->m_RedoList = NULL;
 }
 
@@ -361,7 +362,7 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( DrawPickedStruct* List )
             while( PickedList )
             {
                 item = PickedList->m_Image;
-                GetScreen()->RemoveFromDrawList( item );
+				((SCH_SCREEN*)GetScreen())->RemoveFromDrawList( item );
                 item->m_Flags = IS_DELETED;
                 PickedList->m_PickedStruct = item;
                 PickedList->m_Flags = IS_DELETED;
@@ -371,7 +372,7 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( DrawPickedStruct* List )
         else
         {
             FirstItem = List->m_Image;
-            GetScreen()->RemoveFromDrawList( FirstItem );
+			((SCH_SCREEN*)GetScreen())->RemoveFromDrawList( FirstItem );
             FirstItem->m_Flags = IS_DELETED;
             List->m_Son = FirstItem;
         }
@@ -406,7 +407,7 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( DrawPickedStruct* List )
 
     case IS_WIRE_IMAGE:
         /* Exchange the current wires and the oild wires */
-        List->m_Son = GetScreen()->ExtractWires( FALSE );
+		List->m_Son = ((SCH_SCREEN*)GetScreen())->ExtractWires( FALSE );
         while( FirstItem )
         {
             EDA_BaseStruct* nextitem = FirstItem->Pnext;
@@ -436,7 +437,7 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( DrawPickedStruct* List )
 
             case IS_NEW:
                 item = PickedList->m_Image;
-                GetScreen()->RemoveFromDrawList( item );
+                ((SCH_SCREEN*)GetScreen())->RemoveFromDrawList( item );
                 item->m_Flags = IS_DELETED;
                 PickedList->m_PickedStruct = item;
                 PickedList->m_Flags = IS_DELETED;
@@ -516,7 +517,7 @@ void SCH_SCREEN::ClearUndoORRedoList( EDA_BaseStruct* List )
         FirstItem = List->m_Son;
         CmdType   = List->m_Flags;
 
-        delete List;
+		SAFE_DELETE( List );
 
         if( FirstItem == NULL )
             continue;
@@ -541,18 +542,22 @@ void SCH_SCREEN::ClearUndoORRedoList( EDA_BaseStruct* List )
                         {
                             if( (item->m_Flags & IS_NEW) == 0 )
                             {
+								printf("schematic undo_redo.cpp: undo_redo with a DRAW_SHEET_STRUCT_TYPE, checkme!!\n"); 
+								/*
                                 sheet->EEDrawList = NULL;
                                 sheet->m_UndoList = NULL;
                                 sheet->m_RedoList = NULL;
+								*/
                             }
                         }
                     }
-                    if( (item->m_Flags & IS_NEW) == 0 )
-                        delete item;
+                    if( (item->m_Flags & IS_NEW) == 0 ){
+						SAFE_DELETE( item );
+					}
                 }
                 DrawPickedStruct* wrapper = PickedList;
                 PickedList = PickedList->Next();
-                delete            wrapper;
+				SAFE_DELETE( wrapper );
             }
         }
         else    // This is a single item: deleted copy
@@ -578,14 +583,18 @@ void SCH_SCREEN::ClearUndoORRedoList( EDA_BaseStruct* List )
                     {
                         if( (FirstItem->m_Flags & IS_NEW) == 0 )
                         {
+							printf("schematic undo_redo.cpp undo_redo with a DRAW_SHEET_STRUCT_TYPE, checkme!!\n"); 
+							/*
                             sheet->EEDrawList = NULL;
                             sheet->m_UndoList = NULL;
                             sheet->m_RedoList = NULL;
+							*/
                         }
                     }
                 }
-                if( (FirstItem->m_Flags & IS_NEW) == 0 )
-                    delete FirstItem;
+                if( (FirstItem->m_Flags & IS_NEW) == 0 ){
+					SAFE_DELETE( FirstItem );
+				}
             }
         }
     }

@@ -29,7 +29,7 @@ void WinEDA_DrawFrame::TraceWorkSheet(wxDC * DC, BASE_SCREEN * screen)
 {
 	if ( ! m_Draw_Sheet_Ref ) return;
 
-Ki_PageDescr * Sheet = screen->m_CurrentSheet;
+Ki_PageDescr * Sheet = screen->m_CurrentSheetDesc;
 int ii, jj, xg , yg, ipas, gxpas, gypas;
 wxPoint pos;
 int refx, refy,Color;
@@ -185,8 +185,7 @@ int UpperLimit = VARIABLE_BLOCK_START_POSITION;
 
 			case WS_IDENTSHEET:
 				if(WsItem->m_Legende) msg = WsItem->m_Legende;
-				   msg << screen->m_SheetNumber << wxT("/") <<
-									screen->m_NumberOfSheet;
+				msg = GetScreenDesc(); 
 				DrawGraphicText(DrawPanel, DC, pos, Color,
 					msg, TEXT_ORIENT_HORIZ, size,
 					GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);

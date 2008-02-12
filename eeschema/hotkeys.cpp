@@ -145,14 +145,14 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
  *  Commands are case insensitive
  */
 {
-    bool ItemInEdit = m_CurrentScreen->GetCurItem()
-                   && m_CurrentScreen->GetCurItem()->m_Flags;
+    bool ItemInEdit = GetScreen()->GetCurItem()
+			&& GetScreen()->GetCurItem()->m_Flags;
     bool RefreshToolBar = FALSE; // We must refresh tool bar when the undo/redo tool state is modified
 
     if( hotkey == 0 )
         return;
 
-    wxPoint MousePos = m_CurrentScreen->m_MousePosition;
+	wxPoint MousePos = GetScreen()->m_MousePosition;
 
     // Remap the control key Ctrl A (0x01) to GR_KB_CTRL + 'A' (easier to handle...)
     if( (hotkey & GR_KB_CTRL) != 0 )
@@ -179,7 +179,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_RESET_LOCAL_COORD:         /* Reset the relative coord */
-        m_CurrentScreen->m_O_Curseur = m_CurrentScreen->m_Curseur;
+		GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
         break;
 
     case HK_ZOOM_IN:
@@ -217,9 +217,9 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         if( ItemInEdit )
             break;
         RefreshToolBar = LocateAndDeleteItem( this, DC );
-        m_CurrentScreen->SetModify();
-        m_CurrentScreen->SetCurItem( NULL );
-        TestDanglingEnds( m_CurrentScreen->EEDrawList, DC );
+		GetScreen()->SetModify();
+		GetScreen()->SetCurItem( NULL );
+		TestDanglingEnds( GetScreen()->EEDrawList, DC );
         break;
 
     case HK_REPEAT_LAST:
@@ -276,11 +276,11 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         if( DrawStruct == NULL )
         {
             DrawStruct = PickStruct( GetScreen()->m_Curseur,
-                                     GetScreen()->EEDrawList, LIBITEM | TEXTITEM | LABELITEM );
+                                     GetScreen(), LIBITEM | TEXTITEM | LABELITEM );
             if( DrawStruct == NULL )
                 break;
             if( DrawStruct->Type() == DRAW_LIB_ITEM_STRUCT_TYPE )
-                DrawStruct = LocateSmallestComponent( GetScreen() );
+                DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
             if( DrawStruct == NULL )
                 break;
         }
@@ -301,6 +301,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         case DRAW_TEXT_STRUCT_TYPE:
         case DRAW_LABEL_STRUCT_TYPE:
         case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
+		case DRAW_HIER_LABEL_STRUCT_TYPE:
             if( DrawStruct->m_Flags == 0 )
             {
                 SaveCopyInUndoList( DrawStruct, IS_CHANGED );
@@ -317,7 +318,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case HK_MIRROR_Y_COMPONENT:     // Mirror Y (Component)
         if( DrawStruct == NULL )
-            DrawStruct = LocateSmallestComponent( GetScreen() );
+			DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
         if( DrawStruct )
         {
             if( DrawStruct->m_Flags == 0 )
@@ -332,7 +333,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case HK_MIRROR_X_COMPONENT:     // Mirror X (Component)
         if( DrawStruct == NULL )
-            DrawStruct = LocateSmallestComponent( GetScreen() );
+			DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
         if( DrawStruct )
         {
             if( DrawStruct->m_Flags == 0 )
@@ -347,7 +348,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case HK_ORIENT_NORMAL_COMPONENT:        // Orient 0, no mirror (Component)
         if( DrawStruct == NULL )
-            DrawStruct = LocateSmallestComponent( GetScreen() );
+			DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
         if( DrawStruct )
         {
             if( DrawStruct->m_Flags == 0 )
@@ -357,7 +358,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
             }
             CmpRotationMiroir(
                 (EDA_SchComponentStruct*) DrawStruct, DC, CMP_NORMAL );
-            TestDanglingEnds( m_CurrentScreen->EEDrawList, DC );
+			TestDanglingEnds( (SCH_SCREEN*)GetScreen()->EEDrawList, DC );
         }
         break;
 
@@ -366,10 +367,10 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         if( ItemInEdit )
             break;
         if( DrawStruct == NULL )
-            DrawStruct = LocateSmallestComponent( GetScreen() );
+			DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
         if( DrawStruct && (DrawStruct->m_Flags ==0) )
         {
-            m_CurrentScreen->SetCurItem( DrawStruct );
+			((SCH_SCREEN*)GetScreen())->SetCurItem( DrawStruct );
 			wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED, HK_Descr->m_IdMenuEvent );
 
 			wxPostEvent( this, event );
@@ -379,7 +380,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
 		if( ItemInEdit )
             break;
 		if( DrawStruct == NULL )
-            DrawStruct = LocateSmallestComponent( GetScreen() );
+			DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
 		if(DrawStruct)
 		{
 			EditComponentValue(
@@ -391,7 +392,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
 		if( ItemInEdit )
             break;
 		if( DrawStruct == NULL )
-            DrawStruct = LocateSmallestComponent( GetScreen() );
+			DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
 		if(DrawStruct)
 		{
 			EditComponentFootprint(
@@ -414,14 +415,14 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
  *  Commands are case insensitive
  */
 {
-    bool ItemInEdit = m_CurrentScreen->GetCurItem()
-                   && m_CurrentScreen->GetCurItem()->m_Flags;
+	bool ItemInEdit = GetScreen()->GetCurItem()
+			&& GetScreen()->GetCurItem()->m_Flags;
     bool RefreshToolBar = FALSE; // We must refresh tool bar when the undo/redo tool state is modified
 
     if( hotkey == 0 )
         return;
 
-    wxPoint MousePos = m_CurrentScreen->m_MousePosition;
+	wxPoint MousePos = GetScreen()->m_MousePosition;
 	
 	LibEDA_BaseStruct* DrawEntry = LocateItemUsingCursor();
 
@@ -448,7 +449,7 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_RESET_LOCAL_COORD:         /* Reset the relative coord */
-        m_CurrentScreen->m_O_Curseur = m_CurrentScreen->m_Curseur;
+		GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
         break;
 
     case HK_ZOOM_IN:

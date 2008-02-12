@@ -20,6 +20,9 @@
 
 #include <vector>
 
+#ifndef SAFE_DELETE
+#define SAFE_DELETE(p) delete (p); (p) = NULL; 
+#endif
 
 #define INTERNAL_UNIT_TYPE      0        // Internal unit = inch
 
@@ -72,6 +75,7 @@ class DrawGlobalLabelStruct;
 class DrawTextStruct;
 class EDA_DrawLineStruct;
 class DrawSheetStruct;
+class DrawSheetList;
 class DrawSheetLabelStruct;
 class EDA_SchComponentStruct;
 class LibDrawField;
@@ -230,7 +234,8 @@ public:
 
     ~WinEDA_DrawFrame();
 
-    BASE_SCREEN* GetScreen() { return m_CurrentScreen; }
+    virtual BASE_SCREEN* GetScreen() { return m_CurrentScreen; }
+	virtual wxString	 GetScreenDesc(); 
 
     void            OnMenuOpen( wxMenuEvent& event );
     void            OnMouseEvent( wxMouseEvent& event );
@@ -337,6 +342,7 @@ class WinEDA_SchematicFrame : public WinEDA_DrawFrame
 {
 public:
     WinEDAChoiceBox* m_SelPartBox;
+	DrawSheetList*	 m_CurrentSheet; //which sheet we are presently working on.
 private:
     wxMenu*          m_FilesMenu;
 
@@ -355,6 +361,7 @@ public:
 
     void                                    RedrawActiveWindow( wxDC* DC, bool EraseBg );
 
+	void									CreateScreens(); 
     void                                    ReCreateHToolbar();
     void                                    ReCreateVToolbar();
     void                                    ReCreateOptToolbar();
@@ -364,7 +371,10 @@ public:
                                                       int             hotkey,
                                                       EDA_BaseStruct* DrawStruct );
 
-    SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) m_CurrentScreen; }
+	DrawSheetList* 							GetSheet();
+    virtual BASE_SCREEN* 					GetScreen(); 
+	virtual void							SetScreen(SCH_SCREEN* screen); 
+	virtual wxString 						GetScreenDesc(); 
 
     void                                    InstallConfigFrame( const wxPoint& pos );
 
@@ -395,18 +405,19 @@ public:
     void*                   BuildNetListBase();
 
     // FUnctions used for hierarchy handling
-    void                    InstallPreviousScreen();
+    void                    InstallPreviousSheet();
     void                    InstallNextScreen( DrawSheetStruct* Sheet );
 
     void                    ToPlot_PS( wxCommandEvent& event );
     void                    ToPlot_HPGL( wxCommandEvent& event );
     void                    ToPostProcess( wxCommandEvent& event );
 
-    void                    Save_File( wxCommandEvent& event );
-    int                     LoadOneEEProject( const wxString& FileName, bool IsNew );
-    bool                    LoadOneEEFile( SCH_SCREEN* screen, const wxString& FullFileName );
-    bool                    SaveEEFile( SCH_SCREEN* screen, int FileSave );
-    bool                    LoadOneSheet( SCH_SCREEN* screen, const wxString& FullFileName );
+	void                    Save_File( wxCommandEvent& event );
+	void					SaveProject(); 
+	int                     LoadOneEEProject( const wxString& FileName, bool IsNew );
+	bool                    LoadOneEEFile(SCH_SCREEN* screen, const wxString& FullFileName );
+	bool                    SaveEEFile( SCH_SCREEN* screen, int FileSave );
+	SCH_SCREEN *			CreateNewScreen(SCH_SCREEN * OldScreen, int TimeStamp); 
 
     // General search:
 
@@ -571,7 +582,7 @@ public:
     void                SetToolbars();
     void                OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
 
-    SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) m_CurrentScreen; }
+    virtual BASE_SCREEN* GetScreen() { return (BASE_SCREEN*) m_CurrentScreen; }
     void                OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
 
 private:
@@ -681,7 +692,7 @@ public:
     void    ClickOnLibList( wxCommandEvent& event );
     void    ClickOnCmpList( wxCommandEvent& event );
 
-    SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) m_CurrentScreen; }
+    virtual BASE_SCREEN* GetScreen() { return (BASE_SCREEN*) m_CurrentScreen; }
 
 private:
     void    SelectCurrentLibrary();

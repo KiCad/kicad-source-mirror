@@ -380,8 +380,8 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_PLACE_MICROVIA:
-        if( !GetScreen()->IsMicroViaAcceptable() )
-            break;
+		if ( ! ((PCB_SCREEN*)GetScreen())->IsMicroViaAcceptable() )
+			break;
 
     case ID_POPUP_PCB_PLACE_VIA:
         DrawPanel->MouseToCursorSchema();
@@ -397,7 +397,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             Other_Layer_Route( (TRACK*) GetCurItem(), &dc );
             g_DesignSettings.m_CurrentViaType = v_type;
             if( DisplayOpt.ContrastModeDisplay )
-                GetScreen()->SetRefreshReq();
+                ((PCB_SCREEN*)GetScreen())->SetRefreshReq();
         }
         break;
 
@@ -705,9 +705,9 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_LAYER:
-        itmp = SelectLayer( GetScreen()->m_Active_Layer, -1, -1 );
+        itmp = SelectLayer( ((PCB_SCREEN*)GetScreen())->m_Active_Layer, -1, -1 );
         if( itmp >= 0 )
-            GetScreen()->m_Active_Layer = itmp;
+            ((PCB_SCREEN*)GetScreen())->m_Active_Layer = itmp;
         DrawPanel->MouseToCursorSchema();
         break;
 
@@ -716,16 +716,16 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_NO_CU_LAYER:
-        itmp = SelectLayer( GetScreen()->m_Active_Layer, FIRST_NO_COPPER_LAYER, -1 );
+        itmp = SelectLayer( ((PCB_SCREEN*)GetScreen())->m_Active_Layer, FIRST_NO_COPPER_LAYER, -1 );
         if( itmp >= 0 )
-            GetScreen()->m_Active_Layer = itmp;
+            ((PCB_SCREEN*)GetScreen())->m_Active_Layer = itmp;
         DrawPanel->MouseToCursorSchema();
         break;
 
     case ID_POPUP_PCB_SELECT_CU_LAYER:
-        itmp = SelectLayer( GetScreen()->m_Active_Layer, -1, LAST_COPPER_LAYER );
+        itmp = SelectLayer( ((PCB_SCREEN*)GetScreen())->m_Active_Layer, -1, LAST_COPPER_LAYER );
         if( itmp >= 0 )
-            GetScreen()->m_Active_Layer = itmp;
+            ((PCB_SCREEN*)GetScreen())->m_Active_Layer = itmp;
         break;
 
     case ID_POPUP_PCB_SELECT_LAYER_PAIR:
@@ -735,7 +735,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_TOOLBARH_PCB_SELECT_LAYER:
         itmp = m_SelLayerBox->GetChoice();
-        GetScreen()->m_Active_Layer = (int) ( (size_t) m_SelLayerBox->GetClientData( itmp ) );
+        ((PCB_SCREEN*)GetScreen())->m_Active_Layer = (int) ( (size_t) m_SelLayerBox->GetClientData( itmp ) );
         if( DisplayOpt.ContrastModeDisplay )
             DrawPanel->Refresh( TRUE );
         break;
@@ -1087,7 +1087,7 @@ void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
 void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
 /*****************************************************************/
 {
-    int preslayer = GetScreen()->m_Active_Layer;
+    int preslayer = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
 
     // Check if the specified layer matches the present layer
     if( layer == preslayer )
@@ -1140,9 +1140,9 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
                 // Want to set the routing layers so that it switches properly -
                 // see the implementation of Other_Layer_Route - the working
                 // layer is used to 'start' the via and set the layer masks appropriately.
-                GetScreen()->m_Route_Layer_TOP    = preslayer;
-                GetScreen()->m_Route_Layer_BOTTOM = layer;
-                GetScreen()->m_Active_Layer = preslayer;
+                ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP    = preslayer;
+                ((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM = layer;
+                ((PCB_SCREEN*)GetScreen())->m_Active_Layer = preslayer;
 
                 if( Other_Layer_Route( (TRACK*) GetScreen()->GetCurItem(), DC ) )
                 {
@@ -1163,7 +1163,7 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
     // and a non-copper layer, or vice-versa?
     // ...
 
-    GetScreen()->m_Active_Layer = layer;
+    ((PCB_SCREEN*)GetScreen())->m_Active_Layer = layer;
 
     if( DisplayOpt.ContrastModeDisplay )
         GetScreen()->SetRefreshReq();

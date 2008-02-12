@@ -35,7 +35,7 @@ void EDA_SchComponentStruct::Display_Infos( WinEDA_DrawFrame* frame )
     frame->MsgPanel->EraseMsgBox();
 
     Affiche_1_Parametre( frame, 1, _( "Ref" ),
-                         m_Field[REFERENCE].m_Text, DARKCYAN );
+    	GetRef(((WinEDA_SchematicFrame*)frame)->GetSheet()), DARKCYAN );
 
     if( Entry && Entry->m_Options == ENTRY_POWER )
         msg = _( "Pwr Symb" );

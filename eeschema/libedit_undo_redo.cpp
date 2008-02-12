@@ -33,7 +33,7 @@ EDA_LibComponentStruct * CopyItem;
 	while ( GetScreen()->m_RedoList )
 	{
 		item = GetScreen()->m_RedoList->Pnext;
-		delete GetScreen()->m_RedoList;
+		delete (GetScreen()->m_RedoList);
 		GetScreen()->m_RedoList = item;
 	}
 }

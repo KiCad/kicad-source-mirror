@@ -277,7 +277,7 @@ class wxSVGFileDC : public wxDC
         void SetFont(const wxFont& font) ;
 
         void SetLogicalFunction(int  WXUNUSED(function))
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetLogicalFunction Call implemented")); return ; };
+            { /*wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetLogicalFunction Call implemented")); */ return ; };
 
         void SetLogicalScale( double x, double y ) ;
 

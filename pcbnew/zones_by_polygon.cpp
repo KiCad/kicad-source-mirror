@@ -510,12 +510,12 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
 
             if( diag ==  ZONE_ABORT )
                 return 0;
-
-            GetScreen()->m_Active_Layer = s_Zone_Layer; // Set by the dialog frame
+			
+			((PCB_SCREEN*)GetScreen())->m_Active_Layer = s_Zone_Layer;	// Set by the dialog frame
         }
         else                                            /* Start a new contour: init zone params (net and layer) from an existing zone */
         {
-            GetScreen()->m_Active_Layer = s_Zone_Layer = s_CurrentZone->GetLayer();
+			((PCB_SCREEN*)GetScreen())->m_Active_Layer = s_Zone_Layer = s_CurrentZone->GetLayer();
             s_Zone_Hatching = s_CurrentZone->m_Poly->GetHatchStyle();
         }
 

@@ -131,8 +131,8 @@ public:
 ////@end WinEDA_Build_BOM_Frame member function declarations
 	void GenereListeOfItems(const wxString & FullFileName);
 	void CreateExportList(const wxString & FullFileName);
-	int PrintListeCmpByRef( FILE * f, EDA_BaseStruct ** List, int NbItems, bool CompactForm = FALSE );
-	int PrintListeCmpByVal( FILE *f, EDA_BaseStruct **List, int NbItems);
+	int PrintListeCmpByRef( FILE * f, ListComponent * List, int NbItems, bool CompactForm = FALSE );
+	int PrintListeCmpByVal( FILE *f, ListComponent * List, int NbItems);
 	void PrintFieldData(FILE * f, EDA_SchComponentStruct * DrawLibItem, bool CompactForm = FALSE);
 	void SavePreferences();
 

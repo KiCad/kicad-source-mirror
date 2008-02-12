@@ -165,10 +165,10 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
 
     if( track == NULL )
     {
-        if( GetScreen()->m_Active_Layer != GetScreen()->m_Route_Layer_TOP )
-            GetScreen()->m_Active_Layer = GetScreen()->m_Route_Layer_TOP;
+        if( ((PCB_SCREEN*)GetScreen())->m_Active_Layer != ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP )
+            ((PCB_SCREEN*)GetScreen())->m_Active_Layer = ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP;
         else
-            GetScreen()->m_Active_Layer = GetScreen()->m_Route_Layer_BOTTOM;
+            ((PCB_SCREEN*)GetScreen())->m_Active_Layer = ((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM;
         Affiche_Status_Box();
         SetToolbars();
         return true;
@@ -214,32 +214,32 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
     Via->m_Width   = g_DesignSettings.m_CurrentViaSize;
     Via->SetNet( g_HightLigth_NetCode );
     Via->m_Start   = Via->m_End = g_CurrentTrackSegment->m_End;
-    int old_layer = GetScreen()->m_Active_Layer;
+    int old_layer = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
 
     //swap the layers.
-    if( GetScreen()->m_Active_Layer != GetScreen()->m_Route_Layer_TOP )
-        GetScreen()->m_Active_Layer = GetScreen()->m_Route_Layer_TOP;
+    if( ((PCB_SCREEN*)GetScreen())->m_Active_Layer != ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP )
+        ((PCB_SCREEN*)GetScreen())->m_Active_Layer = ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP;
     else
-        GetScreen()->m_Active_Layer = GetScreen()->m_Route_Layer_BOTTOM;
+        ((PCB_SCREEN*)GetScreen())->m_Active_Layer = ((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM;
 
     /* Adjust the via layer pair */
     switch ( Via->Shape() )
 	{
 		case VIA_BLIND_BURIED:
-			Via->SetLayerPair( old_layer, GetScreen()->m_Active_Layer );
+			Via->SetLayerPair( old_layer, ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
 			break;
 	
 		case VIA_MICROVIA:	// from external to the near neghbour inner layer
 			if ( old_layer == COPPER_LAYER_N )
-				GetScreen()->m_Active_Layer = LAYER_N_2;
+				((PCB_SCREEN*)GetScreen())->m_Active_Layer = LAYER_N_2;
 			else if ( old_layer == LAYER_CMP_N )
-				GetScreen()->m_Active_Layer = m_Pcb->m_BoardSettings->m_CopperLayerCount - 2;
+				((PCB_SCREEN*)GetScreen())->m_Active_Layer = m_Pcb->m_BoardSettings->m_CopperLayerCount - 2;
 			else if ( old_layer == LAYER_N_2 )
-				GetScreen()->m_Active_Layer = COPPER_LAYER_N;
+				((PCB_SCREEN*)GetScreen())->m_Active_Layer = COPPER_LAYER_N;
 			else if ( old_layer == m_Pcb->m_BoardSettings->m_CopperLayerCount - 2 )
-				GetScreen()->m_Active_Layer = LAYER_CMP_N;
+				((PCB_SCREEN*)GetScreen())->m_Active_Layer = LAYER_CMP_N;
 			// else error 
-			Via->SetLayerPair( old_layer, GetScreen()->m_Active_Layer );
+			Via->SetLayerPair( old_layer, ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
 			Via->m_Width   = g_DesignSettings.m_CurrentMicroViaSize;
 			break;
 
@@ -254,7 +254,7 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
         /* DRC fault: the Via cannot be placed here ... */
         delete Via;
 
-        GetScreen()->m_Active_Layer = old_layer;
+        ((PCB_SCREEN*)GetScreen())->m_Active_Layer = old_layer;
         
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 
@@ -286,7 +286,7 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
                                                              *  from the last entered segment, with the current width, flags, netcode, etc... values
                                                              *  layer, start and end point are not correct, and will be modified next */
 
-    g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer ); // set the layer to the new value
+    g_CurrentTrackSegment->SetLayer( ((PCB_SCREEN*)GetScreen())->m_Active_Layer ); // set the layer to the new value
 
     /* the start point is the via position,
      *  and the end point is the cursor which also is on the via (will change when moving mouse)
@@ -331,7 +331,7 @@ void WinEDA_PcbFrame::Affiche_Status_Net( wxDC* DC )
  */
 {
     TRACK* pt_segm;
-    int    masquelayer = g_TabOneLayerMask[GetScreen()->m_Active_Layer];
+    int    masquelayer = g_TabOneLayerMask[((PCB_SCREEN*)GetScreen())->m_Active_Layer];
 
     pt_segm = Locate_Pistes( m_Pcb->m_Track, masquelayer, CURSEUR_OFF_GRILLE );
     if( pt_segm == NULL )

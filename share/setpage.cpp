@@ -116,7 +116,7 @@ WinEDA_SetPageFrame::WinEDA_SetPageFrame( WinEDA_DrawFrame* parent, wxWindowID i
     wxString msg;
 
     m_ParentDrawFrame = parent;
-    m_Screen = m_ParentDrawFrame->m_CurrentScreen;
+    m_Screen = m_ParentDrawFrame->GetScreen();
     m_Modified = FALSE;
     m_SelectedSheet = NULL;
     m_CurrentSelection = 0;
@@ -124,10 +124,10 @@ WinEDA_SetPageFrame::WinEDA_SetPageFrame( WinEDA_DrawFrame* parent, wxWindowID i
     Create(parent, id, caption, pos, size, style);
     // Init display value for sheet User size
     wxString format = m_TextSheetCount->GetLabel();
-    msg.Printf(format, m_Screen->m_NumberOfSheet);
+    msg.Printf(format, m_Screen->m_NumberOfScreen);
     m_TextSheetCount->SetLabel(msg);
     format = m_TextSheetNumber->GetLabel();
-    msg.Printf(format, m_Screen->m_SheetNumber);
+    msg.Printf(format, m_Screen->m_ScreenNumber);
     m_TextSheetNumber->SetLabel(msg);
     if( g_UnitMetric )
     {
@@ -560,7 +560,7 @@ void WinEDA_SetPageFrame::SavePageSettings(wxCommandEvent& event)
         ii = 0;
 
     m_SelectedSheet = SheetList[ii];
-    m_Screen->m_CurrentSheet = m_SelectedSheet;
+    m_Screen->m_CurrentSheetDesc = m_SelectedSheet;
 
     if( g_UnitMetric )
     {
@@ -589,7 +589,7 @@ void WinEDA_SetPageFrame::SavePageSettings(wxCommandEvent& event)
     /* Exports settings to other sheets if requested: */
     SCH_SCREEN * screen;
     /* Build the screen list */
-    EDA_ScreenList ScreenList(NULL);
+    EDA_ScreenList ScreenList;
     /* Update the datas */
     for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
     {
@@ -638,7 +638,7 @@ void WinEDA_SetPageFrame::SearchPageSizeSelection()
     for( ii = 0; ii < NB_ITEMS; ii++ )
     {
         sheet = SheetList[ii];
-        if( m_ParentDrawFrame->m_CurrentScreen->m_CurrentSheet == sheet )
+        if( m_ParentDrawFrame->GetScreen()->m_CurrentSheetDesc == sheet )
             m_CurrentSelection = ii;
     }
 }

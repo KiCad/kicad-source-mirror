@@ -12,7 +12,7 @@ static bool SortByPosition = true;
 #include "protos.h"
 
 /* Local Functions*/
-static int  ListeComposants( CmpListStruct* BaseListeCmp, SCH_SCREEN* screen, int NumSheet );
+static int  ListeComposants( CmpListStruct* BaseListeCmp, DrawSheetList* sheet );
 static int  AnnotTriComposant( const void* o1, const void* o2 );
 static void BreakReference( CmpListStruct* BaseListeCmp, int NbOfCmp );
 static void ReAnnotateComponents( CmpListStruct* BaseListeCmp, int NbOfCmp );
@@ -34,17 +34,17 @@ void ReAnnotatePowerSymbolsOnly( void )
  *  PWR with id 12 is named PWR12 in global annotation and PWR012 by the Power annotation
  */
 {
-    /* Build the screen list */
-    EDA_ScreenList ScreenList( NULL );
+    /* Build the screen list (screen, not sheet) */
+    EDA_SheetList SheetList( NULL );
 
-    /* Update the sheet number, sheet count and date */
-    ScreenList.UpdateSheetNumberAndDate();
+    /* Update the screen number, sheet count and date */
+    //ScreenList.UpdateScreenNumberAndDate();
 
-    SCH_SCREEN* screen;
+    DrawSheetList* sheet;
     int         CmpNumber = 1;
-    for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
+    for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext())
     {
-        EDA_BaseStruct* DrawList = screen->EEDrawList;
+        EDA_BaseStruct* DrawList = sheet->LastDrawList();
         for( ; DrawList != NULL; DrawList = DrawList->Pnext )
         {
             if( DrawList->Type() != DRAW_LIB_ITEM_STRUCT_TYPE )
@@ -54,15 +54,31 @@ void ReAnnotatePowerSymbolsOnly( void )
                 FindLibPart( DrawLibItem->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
             if( (Entry == NULL) || (Entry->m_Options != ENTRY_POWER) )
                 continue;
-            DrawLibItem->ClearAnnotation();
-            DrawLibItem->m_RefIdNumber = CmpNumber;
-            DrawLibItem->m_Field[REFERENCE].m_Text.RemoveLast();    // Remove the '?'
-            DrawLibItem->m_Field[REFERENCE].m_Text << wxT( "0" ) << CmpNumber;
+            //DrawLibItem->ClearAnnotation(sheet); this clears all annotation :(
+			wxString refstr = DrawLibItem->m_PrefixString; 
+			//str will be "C?" or so after the ClearAnnotation call.
+			while(refstr.Last() == '?')
+				refstr.RemoveLast(); 
+			if(!refstr.StartsWith(wxT("#")))
+				refstr = wxT("#") + refstr; 
+			refstr << wxT( "0" ) << CmpNumber;
+            DrawLibItem->SetRef(sheet, refstr);
             CmpNumber++;
         }
     }
 }
-
+/***********************************************************************/
+CmpListStruct* AllocateCmpListStrct(int numcomponents )
+/***********************************************************************/
+{
+	int ii = numcomponents * sizeof(CmpListStruct); 
+	CmpListStruct* list = (CmpListStruct*) MyZMalloc( ii );
+	//fill this memory with zeros. 
+	char* cptr = (char*)list; 
+	for(int i=0; i<ii; i++)
+		*cptr++ = 0; 
+	return list; 
+}
 
 /***********************************************************************/
 void InstallAnnotateFrame( WinEDA_SchematicFrame* parent, wxPoint& pos )
@@ -84,12 +100,12 @@ void WinEDA_AnnotateFrame::AnnotateComponents( wxCommandEvent& event )
 /******************************************************************/
 
 /** Function WinEDA_AnnotateFrame::AnnotateComponents
- *  Compute the annotation of the components for the whole projeect, or the current sheet only.
+ *  Compute the annotation of the components for the whole project, or the current sheet only.
  *  All the components or the new ones only will be annotated.
  */
 {
-    int            NbSheet, ii, NbOfCmp;
-    SCH_SCREEN*    screen;
+    int            ii, NbOfCmp;
+    DrawSheetList*    sheet;
     CmpListStruct* BaseListeCmp;
 
     wxBusyCursor   dummy;
@@ -104,47 +120,36 @@ void WinEDA_AnnotateFrame::AnnotateComponents( wxCommandEvent& event )
         return;
 
 
-    /* Build the screen list */
-    EDA_ScreenList ScreenList( NULL );
+    /* Build the sheet list */
+	EDA_SheetList SheetList( g_RootSheet );
 
-    NbSheet = ScreenList.GetCount();
-
-    /* Update the sheet number, sheet count and date */
-    ScreenSch->SetModify();
-    ScreenList.UpdateSheetNumberAndDate();
+    /* Update the sheet number */
+	ii = 0; 
 
     /* First pass: Component counting */
-    screen = (SCH_SCREEN*) m_Parent->m_CurrentScreen;
-    if( AnnotProject == true )
-    {
+	sheet = m_Parent->GetSheet(); 
+    if( AnnotProject == true ){
         NbOfCmp = 0;
-        for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
-        {
-            NbOfCmp += ListeComposants( NULL, screen, screen->m_SheetNumber );
-        }
+        for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
+            NbOfCmp += ListeComposants( NULL, sheet );
     }
     else
-        NbOfCmp = ListeComposants( NULL, screen, screen->m_SheetNumber );
+        NbOfCmp = ListeComposants( NULL, sheet );
 
     if( NbOfCmp == 0 )
         return;
 
-    ii = sizeof(CmpListStruct) * NbOfCmp;
-    BaseListeCmp = (CmpListStruct*) MyZMalloc( ii );
+	BaseListeCmp = AllocateCmpListStrct(NbOfCmp); 
 
     /* Second pass : Int data tables */
-    screen = (SCH_SCREEN*) m_Parent->m_CurrentScreen;
     if( AnnotProject == true )
-    {
+	{
         ii = 0;
-        for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
-        {
-            ii += ListeComposants( BaseListeCmp + ii,
-                                   screen, screen->m_SheetNumber );
-        }
+		for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
+            ii += ListeComposants( BaseListeCmp + ii, sheet);
     }
     else
-        ii = ListeComposants( BaseListeCmp, screen, screen->m_SheetNumber );
+        ii = ListeComposants( BaseListeCmp, sheet);
 
     if( ii != NbOfCmp )
         DisplayError( this, wxT( "Internal error in AnnotateComponents()" ) );
@@ -177,33 +182,23 @@ void WinEDA_AnnotateFrame::DeleteAnnotation( wxCommandEvent& event )
  *  Update sheet number and number of sheets
  */
 {
-    int                     NbSheet;
-    SCH_SCREEN*             screen;
-    EDA_SchComponentStruct* DrawLibItem;
+    DrawSheetStruct* 		sheet; 
+    //EDA_SchComponentStruct* DrawLibItem;
 
-    if( !IsOK( this, _( "Previous Annotation will be deleted. Continue ?" ) ) )
-    {
-        m_Abort = true; return;
-    }
-
+    if( !IsOK( this, _( "Previous Annotation will be deleted. Continue ?" ) ) ){
+        m_Abort = true; 
+		return;
+	}
     AnnotProject = (m_AnnotProjetCtrl->GetSelection() == 0) ? true : FALSE;
     m_Abort = FALSE;
 
-    /* Build the screen list */
-    EDA_ScreenList ScreenList( NULL );
-
-    NbSheet = ScreenList.GetCount();
-
-    /* Update the sheet number, sheet count and date */
-    ScreenList.UpdateSheetNumberAndDate();
-
-    ScreenSch->SetModify();
-
     if( AnnotProject == true )
-        screen = ScreenList.GetFirst();
+        sheet = g_RootSheet;
     else
-        screen = (SCH_SCREEN*) m_Parent->m_CurrentScreen;
+		sheet = m_Parent->GetSheet()->Last();
 
+	sheet->DeleteAnnotation( AnnotProject ); 
+	/*
     for( ; screen != NULL; screen = ScreenList.GetNext() )
     {
         EDA_BaseStruct* DrawList = screen->EEDrawList;
@@ -219,26 +214,26 @@ void WinEDA_AnnotateFrame::DeleteAnnotation( wxCommandEvent& event )
         if( !AnnotProject )
             break;
     }
-
+*/
+	g_RootSheet->m_s->SetModify();
     m_Parent->DrawPanel->Refresh( true );
-    EndModal( 0 );
+    //EndModal( 0 );
 }
 
 
 /************************************************************************************/
-int ListeComposants( CmpListStruct* BaseListeCmp, SCH_SCREEN* screen, int NumSheet )
+int ListeComposants( CmpListStruct* BaseListeCmp, DrawSheetList* sheet)
 /***********************************************************************************/
 
-/*	if BaseListeCmp == NULL : Components counting
+/*	if BaseListeCmp == NULL : count components
  *  else update data table BaseListeCmp
  */
 {
     int                     NbrCmp   = 0;
-    EDA_BaseStruct*         DrawList = screen->EEDrawList;
+    EDA_BaseStruct*         DrawList = sheet->LastDrawList();
     EDA_SchComponentStruct* DrawLibItem;
     EDA_LibComponentStruct* Entry;
 
-    DrawList = screen->EEDrawList;
     for(  ; DrawList;   DrawList = DrawList->Pnext )
     {
         switch( DrawList->Type() )
@@ -248,6 +243,7 @@ int ListeComposants( CmpListStruct* BaseListeCmp, SCH_SCREEN* screen, int NumShe
         case DRAW_TEXT_STRUCT_TYPE:
         case DRAW_LABEL_STRUCT_TYPE:
         case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
+		case DRAW_HIER_LABEL_STRUCT_TYPE:
             break;
 
         case DRAW_LIB_ITEM_STRUCT_TYPE:
@@ -266,16 +262,16 @@ int ListeComposants( CmpListStruct* BaseListeCmp, SCH_SCREEN* screen, int NumShe
             BaseListeCmp[NbrCmp].m_NbParts     = Entry->m_UnitCount;
             BaseListeCmp[NbrCmp].m_Unit        = DrawLibItem->m_Multi;
             BaseListeCmp[NbrCmp].m_PartsLocked = Entry->m_UnitSelectionLocked;
-            BaseListeCmp[NbrCmp].m_Sheet       = NumSheet;
+			BaseListeCmp[NbrCmp].m_SheetList   = *sheet; 
             BaseListeCmp[NbrCmp].m_IsNew       = FALSE;
             BaseListeCmp[NbrCmp].m_Pos = DrawLibItem->m_Pos;
             BaseListeCmp[NbrCmp].m_TimeStamp = DrawLibItem->m_TimeStamp;
 
-            if( DrawLibItem->m_Field[REFERENCE].m_Text.IsEmpty() )
-                DrawLibItem->m_Field[REFERENCE].m_Text = wxT( "DefRef?" );
+            if( DrawLibItem->GetRef(sheet).IsEmpty() )
+                DrawLibItem->SetRef( sheet, wxT( "DefRef?" ) ); 
 
             strncpy( BaseListeCmp[NbrCmp].m_TextRef,
-                     CONV_TO_UTF8( DrawLibItem->m_Field[REFERENCE].m_Text ), 32 );
+					 CONV_TO_UTF8(DrawLibItem->GetRef(sheet)), 32 );
 
             BaseListeCmp[NbrCmp].m_NumRef = -1;
 
@@ -326,7 +322,7 @@ int AnnotTriComposant( const void* o1, const void* o2 )
     if( SortByPosition == true )
     {
         if( ii == 0 )
-            ii = Objet1->m_Sheet - Objet2->m_Sheet;
+			ii = Objet1->m_SheetList.Cmp(Objet2->m_SheetList);
         if( ii == 0 )
             ii = Objet1->m_Pos.x - Objet2->m_Pos.x;
         if( ii == 0 )
@@ -339,7 +335,7 @@ int AnnotTriComposant( const void* o1, const void* o2 )
         if( ii == 0 )
             ii = Objet1->m_Unit - Objet2->m_Unit;
         if( ii == 0 )
-            ii = Objet1->m_Sheet - Objet2->m_Sheet;
+			ii = Objet1->m_SheetList.Cmp(Objet2->m_SheetList);
         if( ii == 0 )
             ii = Objet1->m_Pos.x - Objet2->m_Pos.x;
         if( ii == 0 )
@@ -375,11 +371,8 @@ static void ReAnnotateComponents( CmpListStruct* BaseListeCmp, int NbOfCmp )
         else
             sprintf( Text + strlen( Text ), "%d", BaseListeCmp[ii].m_NumRef );
 
-        DrawLibItem->m_Field[REFERENCE].m_Text = CONV_FROM_UTF8( Text );
+		DrawLibItem->SetRef(&(BaseListeCmp[ii].m_SheetList), CONV_FROM_UTF8( Text ) ); 
         DrawLibItem->m_Multi = BaseListeCmp[ii].m_Unit;
-        DrawLibItem->m_RefIdNumber = BaseListeCmp[ii].m_NumRef;
-        if( DrawLibItem->m_RefIdNumber < 0 )
-            DrawLibItem->m_RefIdNumber = 0;
     }
 }
 
@@ -432,6 +425,9 @@ void BreakReference( CmpListStruct* BaseListeCmp, int NbOfCmp )
                 break;
             }
         }
+		/*printf("BreakReference(): %s number found: %d\n", 
+			   BaseListeCmp[ii].m_TextRef, 
+	  			BaseListeCmp[ii].m_NumRef); */
     }
 }
 
@@ -618,33 +614,26 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool OneSheetOnly )
  *                       false = search in whole hierarchy (usual search).
  */
 {
-    int            NbSheet, ii, NumSheet = 1, error, NbOfCmp;
-    SCH_SCREEN*    screen;
+    int            ii, error, NbOfCmp;
+	DrawSheetList* sheet; 
     CmpListStruct* ListeCmp = NULL;
     wxString       Buff;
     wxString       msg, cmpref;
 
     /* build the screen list */
-    EDA_ScreenList ScreenList( NULL );
+    EDA_SheetList SheetList( NULL );
 
-    NbSheet = ScreenList.GetCount();
-
-    /* Update the sheet number, sheet count and date */
-    ScreenSch->SetModify();
-    ScreenList.UpdateSheetNumberAndDate();
+    g_RootSheet->m_s->SetModify();
+	ii = 0; 
 
     /* first pass : count composents */
-    screen = (SCH_SCREEN*) frame->m_CurrentScreen;
-    if( !OneSheetOnly )
-    {
+    if( !OneSheetOnly ){
         NbOfCmp = 0;
-        for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
-        {
-            NbOfCmp += ListeComposants( NULL, screen, NumSheet );
-        }
+        for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
+            NbOfCmp += ListeComposants( NULL, sheet );
     }
     else
-        NbOfCmp = ListeComposants( NULL, screen, NumSheet );
+		NbOfCmp = ListeComposants( NULL, frame->GetSheet() );
 
     if( NbOfCmp == 0 )
     {
@@ -654,24 +643,19 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool OneSheetOnly )
 
 
     /* Second pass : create the list of components */
-    ii = sizeof(CmpListStruct) * NbOfCmp;
-    ListeCmp = (CmpListStruct*) MyZMalloc( ii );
+	ListeCmp = AllocateCmpListStrct(NbOfCmp); 
 
-    if( OneSheetOnly == 0 )
-    {
-        ii     = 0;
-        screen = ScreenSch;
-        for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
-        {
-            ii += ListeComposants( ListeCmp + ii, screen, NumSheet );
-        }
+	printf("CheckAnnotate() listing all components:\n"); 
+    if( !OneSheetOnly ){
+        ii = 0;
+        for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
+            ii += ListeComposants( ListeCmp + ii, sheet );
     }
     else
-    {
-        screen = (SCH_SCREEN*) frame->m_CurrentScreen;
-        ListeComposants( ListeCmp, screen, NumSheet );
-    }
-
+		ListeComposants( ListeCmp, frame->GetSheet() );
+	
+	printf("CheckAnnotate() done:\n"); 
+	
     qsort( ListeCmp, NbOfCmp, sizeof(CmpListStruct), AnnotTriComposant );
 
     /* Break full components reference in name (prefix) and number: example: IC1 become IC, and 1 */
@@ -782,7 +766,7 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool OneSheetOnly )
             error++;
         }
 
-        /* Error if values are différent between units, for the same reference */
+        /* Error if values are diffï¿½rent between units, for the same reference */
         if( stricmp( ListeCmp[ii].m_TextValue, ListeCmp[ii + 1].m_TextValue ) != 0 )
         {
             wxString nextcmpref, cmpvalue, nextcmpvalue;
