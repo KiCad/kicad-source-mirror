@@ -37,6 +37,8 @@
 #include "wxPcbStruct.h"        // Change_Side_Module()
 #include "pcbstruct.h"          // HISTORY_NUMBER
 #include "autorout.h"           // NET_CODES_OK
+
+#include "trigo.h"              // RotatePoint()
 #include <set>                  // std::set
 
 
@@ -351,8 +353,38 @@ IMAGE* SPECCTRA_DB::makeIMAGE( MODULE* aModule )
             pin->padstack_id = padstack->padstack_id;
             pin->pin_id      = CONV_TO_UTF8( pad->ReturnStringPadName() );
 
-            // copper shape's position is hole position + offset
-            wxPoint pos = pad->m_Pos0 + pad->m_Offset;
+#if 0
+            if( pad->m_Orient )
+            {
+                int angle = pad->m_Orient - aModule->m_Orient;   // tenths of degrees
+                NORMALIZE_ANGLE_POS(angle);
+                pin->SetRotation( angle / 10.0 );
+            }
+#else
+{
+            int angle = pad->m_Orient - aModule->m_Orient;   // tenths of degrees
+            if( angle )
+            {
+                NORMALIZE_ANGLE_POS(angle);
+                pin->SetRotation( angle / 10.0 );
+            }
+}
+#endif
+
+            wxPoint pos;
+
+            int angle = pad->m_Orient - aModule->m_Orient;   // tenths of degrees
+            if( angle && (pad->m_Offset.x || pad->m_Offset.y) )
+            {
+                wxPoint offset( pad->m_Offset.x, pad->m_Offset.y );
+                RotatePoint( &offset, angle );
+                pos = pad->m_Pos0 + offset;
+            }
+            else
+            {
+                // copper shape's position is hole position + offset
+                pos = pad->m_Pos0 + pad->m_Offset;
+            }
 
             pin->SetVertex( mapPt( pos )  );
         }
@@ -385,8 +417,8 @@ PADSTACK* SPECCTRA_DB::makeVia( const SEGVIA* aVia )
 
         circle->SetLayerId( "signal" );
 
-        snprintf( name, sizeof(name),  "Via_%.6g:%.6g_mil", dsnDiameter,
-                 // encode the drill value in the name for later import
+        snprintf( name, sizeof(name),  "Via[A]%.6g:%.6g_mil", dsnDiameter,
+                 // encode the drill value into the name for later import
                  scale( aVia->GetDrillValue() ) );
         name[ sizeof(name)-1 ] = 0;
         padstack->SetPadstackId( name );
@@ -418,7 +450,7 @@ PADSTACK* SPECCTRA_DB::makeVia( const SEGVIA* aVia )
 
         snprintf( name, sizeof(name),  "Via[%d-%d]_%.6g:%.6g_mil",
                  topLayer, botLayer, dsnDiameter,
-                 // encode the drill value in the name for later import
+                 // encode the drill value into the name for later import
                  scale( aVia->GetDrillValue() )
                  );
         name[ sizeof(name)-1 ] = 0;
@@ -446,8 +478,8 @@ PADSTACK* SPECCTRA_DB::makeVia( int aCopperDiameter, int aDrillDiameter )
 
     circle->SetLayerId( "signal" );
 
-    snprintf( name, sizeof(name),  "Via_%.6g:%.6g_mil", dsnDiameter,
-                 // encode the drill value in the name for later import
+    snprintf( name, sizeof(name),  "Via[A]%.6g:%.6g_mil", dsnDiameter,
+                 // encode the drill value into the name for later import
                  scale( aDrillDiameter ) );
     name[ sizeof(name)-1 ] = 0;
     padstack->SetPadstackId( name );

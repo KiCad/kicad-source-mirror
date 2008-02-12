@@ -6,6 +6,21 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2008-Feb-11 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+  * Added case TYPETRACK, TYPEVIA, and TYPEMODULE support to Board::Add() so
+    that we can over time hide more of the storage architecture of a BOARD and
+    isolate those dependencies in fewer places.
+  * Fixed some pad orientation issues in specctra_export.
+  * Added VIA_MICROVIA & VIA_BLIND_BURIED support to SPECCTRA::makeVIA().
+  * Commented out the specctra design import menu choice for now, don't have
+    time or need for this import.
+  * Specctra export adds 1/2 mil to clearance rules for freerouter so that
+    the routed board clears our DRC checker OK.
+  * Session import seems done now.
+
+
 2008-Feb-7 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew

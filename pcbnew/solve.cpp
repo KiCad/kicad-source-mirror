@@ -312,7 +312,7 @@ int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
  *      coord destination (row,col)
  *      net_code
  *      pointeur sur le chevelu de reference
- * 
+ *
  *  Retourne :
  *      SUCCESS si route trouvee
  *      TRIVIAL_SUCCESS si pads connectes par superposition ( pas de piste a tirer)
@@ -722,10 +722,10 @@ static long bit[8][9] = { /* OT=Otherside */
  *  La recherche se fait en sens inverse du routage,
  *   c.a.d du point d'arrivee (target) vers le point de depart (source)
  *      du routeur.
- * 
+ *
  *  target_side = cote (TOP / BOTTOM) de depart
  *  mask_layer_source = masque des couches d'arrivee
- * 
+ *
  *  Retourne:
  *      0 si erreur
  *      > 0 si Ok
@@ -983,7 +983,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
                 NewTrack->Insert( pcb, g_CurrentTrackSegment );
 
                 g_CurrentTrackSegment->m_Start = pt_cur_ch->pad_end->GetPosition();
-                
+
                 NewTrack->m_Start = g_CurrentTrackSegment->m_End;
 
                 g_CurrentTrackSegment = NewTrack;
@@ -1065,10 +1065,10 @@ static void Place_Piste_en_Buffer( WinEDA_PcbFrame* pcbframe, wxDC* DC )
         NewTrack->Insert( pcbframe->m_Pcb, g_CurrentTrackSegment );
 
         NewTrack->m_End   = pt_cur_ch->pad_start->GetPosition();
-        
+
         NewTrack->m_Start = g_CurrentTrackSegment->m_End;
 
-        g_CurrentTrackSegment = NewTrack; 
+        g_CurrentTrackSegment = NewTrack;
         g_TrackSegmentCount++;
     }
 
@@ -1082,8 +1082,7 @@ static void Place_Piste_en_Buffer( WinEDA_PcbFrame* pcbframe, wxDC* DC )
         g_CurrentTrackSegment->SetState( END_ONPAD, ON );
 
     /* recherche de la zone de rangement et insertion de la nouvelle piste */
-    pt_track = g_FirstTrackSegment->GetBestInsertPoint( pcbframe->m_Pcb );
-    g_FirstTrackSegment->Insert( pcbframe->m_Pcb, pt_track );
+    pcbframe->m_Pcb->Add( g_FirstTrackSegment );
 
     Trace_Une_Piste( panel, DC, g_FirstTrackSegment, g_TrackSegmentCount, GR_OR );
 

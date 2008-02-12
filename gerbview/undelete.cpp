@@ -20,7 +20,8 @@ void WinEDA_GerberFrame::UnDeleteItem( wxDC* DC )
 /* Restitution d'un element (MODULE ou TRACK ) Efface
  */
 {
-    EDA_BaseStruct* PtStruct, * PtNext;
+    BOARD_ITEM*     item;
+    BOARD_ITEM*     next;
     TRACK*          pt_track;
     int             net_code;
 
@@ -28,25 +29,25 @@ void WinEDA_GerberFrame::UnDeleteItem( wxDC* DC )
         return;
 
     g_UnDeleteStackPtr--;
-    PtStruct = g_UnDeleteStack[g_UnDeleteStackPtr];
-    if( PtStruct == NULL )
+    item = g_UnDeleteStack[g_UnDeleteStackPtr];
+    if( item == NULL )
         return;                     // Ne devrait pas se produire
 
-    switch( PtStruct->Type() )
+    switch( item->Type() )
     {
     case TYPEVIA:
     case TYPETRACK:
-        for( ; PtStruct != NULL; PtStruct = PtNext )
+        for( ; item; item = next )
         {
-            PtNext = PtStruct->Pnext;
-            PtStruct->SetState( DELETED, OFF );     /* Effacement du bit DELETED */
-            Trace_Segment( DrawPanel, DC, (TRACK*) PtStruct, GR_OR );
+            next = item->Next();
+            item->SetState( DELETED, OFF );     /* Effacement du bit DELETED */
+            Trace_Segment( DrawPanel, DC, (TRACK*) item, GR_OR );
         }
 
-        PtStruct = g_UnDeleteStack[g_UnDeleteStackPtr];
-        net_code = ( (TRACK*) PtStruct )->GetNet();
-        pt_track = ( (TRACK*) PtStruct )->GetBestInsertPoint( m_Pcb );
-        ( (TRACK*) PtStruct )->Insert( m_Pcb, pt_track );
+        item = g_UnDeleteStack[g_UnDeleteStackPtr];
+        net_code = ((TRACK*) item)->GetNet();
+
+        m_Pcb->Add( item );
 
         g_UnDeleteStack[g_UnDeleteStackPtr] = NULL;
         break;
@@ -97,7 +98,7 @@ BOARD_ITEM* SaveItemEfface( BOARD_ITEM* PtItem, int nbitems )
         {
             NextS = PtStruct->Next();
             ( (TRACK*) PtStruct )->UnLink();
-            
+
             PtStruct->SetState( DELETED, ON );
             if( nbitems <= 1 )
                 NextS = NULL;                       /* fin de chaine */

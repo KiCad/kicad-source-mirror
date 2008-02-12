@@ -3760,7 +3760,12 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     TRACK* makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) throw( IOError );
 
 
-    SEGVIA* makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNetCode );
+    /**
+     * Function makeVIA
+     * instantiates a Kicad SEGVIA on the heap and initializes it with internal
+     * values consistent with the given PADSTACK, POINT, and netcode.
+     */
+    SEGVIA* makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNetCode ) throw( IOError );
 
     //-----</FromSESSION>----------------------------------------------------
 

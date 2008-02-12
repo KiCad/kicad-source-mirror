@@ -387,7 +387,6 @@ void WinEDA_PcbFrame::End_Route( TRACK* track, wxDC* DC )
  *  Routine de fin de trace d'une piste (succession de segments)
  */
 {
-    TRACK*          pt_track;
     int             masquelayer = g_TabOneLayerMask[GetScreen()->m_Active_Layer];
     wxPoint         pos;
     EDA_BaseStruct* LockPoint;
@@ -453,11 +452,8 @@ void WinEDA_PcbFrame::End_Route( TRACK* track, wxDC* DC )
     /* Test if no segment left. Can happend on a double click on the start point */
     if( g_FirstTrackSegment != NULL )
     {
-        /* Put new track in buffer: search the best insertion poinr */
-        pt_track = g_FirstTrackSegment->GetBestInsertPoint( m_Pcb );
-
-        /* Uut track in linked list */
-        g_FirstTrackSegment->Insert( m_Pcb, pt_track );
+        // Put new track in board
+        m_Pcb->Add( g_FirstTrackSegment );
 
         trace_ratsnest_pad( DC );
         Trace_Une_Piste( DrawPanel, DC, g_FirstTrackSegment, g_TrackSegmentCount, GR_OR );
@@ -466,7 +462,8 @@ void WinEDA_PcbFrame::End_Route( TRACK* track, wxDC* DC )
         TRACK* ptr = g_FirstTrackSegment; int ii;
         for( ii = 0; (ptr != NULL) && (ii < g_TrackSegmentCount); ii++ )
         {
-            ptr->m_Flags = 0; ptr = ptr->Next();
+            ptr->m_Flags = 0;
+            ptr = ptr->Next();
         }
 
         /* Delete the old track, if exists */
@@ -527,16 +524,16 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
     /* dessin de la nouvelle piste : mise a jour du point d'arrivee */
     g_CurrentTrackSegment->SetLayer( screen->m_Active_Layer );
     if( ! g_DesignSettings.m_UseConnectedTrackWidth )
-		g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentTrackWidth;
+        g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentTrackWidth;
     if( g_TwoSegmentTrackBuild )
     {
         TRACK* previous_track = (TRACK*) g_CurrentTrackSegment->Pback;
         if( previous_track && (previous_track->Type() == TYPETRACK) )
         {
             previous_track->SetLayer( screen->m_Active_Layer );
-			if( ! g_DesignSettings.m_UseConnectedTrackWidth )
-				previous_track->m_Width = g_DesignSettings.m_CurrentTrackWidth;
-		}
+            if( ! g_DesignSettings.m_UseConnectedTrackWidth )
+                previous_track->m_Width = g_DesignSettings.m_CurrentTrackWidth;
+        }
     }
 
     if( Track_45_Only )

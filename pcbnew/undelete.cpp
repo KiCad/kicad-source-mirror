@@ -21,33 +21,33 @@ void WinEDA_PcbFrame::UnDeleteItem( wxDC* DC )
 /* Restitution d'un element (MODULE ou TRACK ) Efface
  */
 {
-    BOARD_ITEM* PtStruct, * PtNext;
-    TRACK*          pt_track;
+    BOARD_ITEM*     item;
+    BOARD_ITEM*     next;
     int             net_code;
 
     if( !g_UnDeleteStackPtr )
         return;
 
     g_UnDeleteStackPtr--;
-    PtStruct = g_UnDeleteStack[g_UnDeleteStackPtr];
-    if( PtStruct == NULL )
+    item = g_UnDeleteStack[g_UnDeleteStackPtr];
+    if( item == NULL )
         return;                     // Ne devrait pas se produire
 
-    switch( PtStruct->Type() )
+    switch( item->Type() )
     {
     case TYPEVIA:
     case TYPETRACK:
-        for( ; PtStruct != NULL; PtStruct = PtNext )
+        for( ; item; item = next )
         {
-            PtNext = PtStruct->Next();
-            PtStruct->SetState( DELETED, OFF );     /* Effacement du bit DELETED */
-            ( (TRACK*) PtStruct )->Draw( DrawPanel, DC, GR_OR );
+            next = item->Next();
+            item->SetState( DELETED, OFF );     /* Effacement du bit DELETED */
+            ((TRACK*) item)->Draw( DrawPanel, DC, GR_OR );
         }
 
-        PtStruct = g_UnDeleteStack[g_UnDeleteStackPtr];
-        net_code = ( (TRACK*) PtStruct )->GetNet();
-        pt_track = ( (TRACK*) PtStruct )->GetBestInsertPoint( m_Pcb );
-        ( (TRACK*) PtStruct )->Insert( m_Pcb, pt_track );
+        item = g_UnDeleteStack[g_UnDeleteStackPtr];
+        net_code = ((TRACK*) item)->GetNet();
+
+        m_Pcb->Add( item );
         g_UnDeleteStack[g_UnDeleteStackPtr] = NULL;
 
         test_1_net_connexion( DC, net_code );
@@ -61,18 +61,14 @@ void WinEDA_PcbFrame::UnDeleteItem( wxDC* DC )
 
         /* Reinsertion du module dans la liste chainee des modules,
          *  en debut de chaine */
-        PtStruct->Pback = m_Pcb;
-        PtNext = m_Pcb->m_Modules;
-        PtStruct->Pnext = PtNext;
-        if( PtNext )
-            PtNext->Pback = PtStruct;
-        m_Pcb->m_Modules = (MODULE*) PtStruct;
+        m_Pcb->Add( item );
+
         g_UnDeleteStack[g_UnDeleteStackPtr] = NULL;
 
-        ( (MODULE*) PtStruct )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+        ((MODULE*) item)->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
 
-        PtStruct->SetState( DELETED, OFF );     /* Creal DELETED flag */
-        PtStruct->m_Flags   = 0;
+        item->SetState( DELETED, OFF );     /* Creal DELETED flag */
+        item->m_Flags   = 0;
         m_Pcb->m_Status_Pcb = 0;
         build_liste_pads();
         ReCompile_Ratsnest_After_Changes( DC );
@@ -124,11 +120,11 @@ BOARD_ITEM* WinEDA_PcbFrame::SaveItemEfface( BOARD_ITEM* PtItem, int nbitems )
         {
             NextS = PtStruct->Next();
             ( (TRACK*) PtStruct )->UnLink();
-            
+
             PtStruct->SetState( DELETED, ON );
             if( nbitems <= 1 )
                 NextS = NULL;                       /* fin de chaine */
-            
+
             PtStruct->Pnext = NextS;
             PtStruct->Pback = Back; Back = PtStruct;
             if( NextS == NULL )

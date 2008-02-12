@@ -16,11 +16,11 @@ class EDA_BoardDesignSettings;
 class BOARD : public BOARD_ITEM
 {
     friend class WinEDA_PcbFrame;
-    
+
 private:
     typedef std::vector<MARKER*>  MARKERS;      // @todo: switch to boost:ptr_vector, and change ~BOARD()
     MARKERS         m_markers;                  ///< MARKERs for clearance problems, owned by pointer
-    
+
     typedef std::vector<ZONE_CONTAINER*>  ZONE_CONTAINERS;  // @todo: switch to boost::ptr_vector, and change ~BOARD()
     ZONE_CONTAINERS m_ZoneDescriptorList; 	   ///< edge zone descriptors, owned by pointer
 
@@ -60,7 +60,7 @@ public:
      * @return const wxPoint& of (0,0)
      */
     wxPoint& GetPosition();
-    
+
     /* supprime du chainage la structure Struct */
     void    UnLink();
 
@@ -68,9 +68,11 @@ public:
      * Function Add
      * adds the given item to this BOARD and takes ownership of its memory.
      * @param aBoardItem The item to add to this board.
-     * @param aControl An int which can vary how the item is added. 
+     * @param aControl An int which can vary how the item is added.
      */
     void    Add( BOARD_ITEM* aBoardItem, int aControl = 0 );
+#define ADD_APPEND      1   ///< aControl flag for Add( aControl ), appends not inserts
+
 
     /**
      * Function Delete
@@ -90,17 +92,17 @@ public:
      * Function DeleteZONEOutlines
      * deletes ALL zone outlines from the board.
      */
-	void    DeleteZONEOutlines();
+    void    DeleteZONEOutlines();
 
-    
+
     /**
      * Function DeleteMARKER
      * deletes one MARKER from the board.
      * @param aIndex The index of the marker to delete.
      */
     void    DeleteMARKER( int aIndex );
-    
-    
+
+
     /**
      * Function GetMARKER
      * returns the MARKER at a given index.
@@ -114,7 +116,7 @@ public:
         return NULL;
     }
 
-    
+
     /**
      * Function GetMARKERCount
      * @return int - The number of MARKERS.
@@ -129,7 +131,7 @@ public:
      * @return int - The number of copper layers in the BOARD.
      */
     int GetCopperLayerCount() const;
-    
+
     /**
      * Function GetLayerName
      * returns the name of the requested layer.  Hopefully layer names will
@@ -138,13 +140,13 @@ public:
      * @param aLayerIndex A layer index, like COPPER_LAYER_N, etc.
      * @return wxString - the layer name.
      */
-    wxString GetLayerName( int aLayerIndex ) const; 
-    
+    wxString GetLayerName( int aLayerIndex ) const;
+
     /* Routines de calcul des nombres de segments pistes et zones */
     int     GetNumSegmTrack();
     int     GetNumSegmZone();
     int     GetNumNoconnect();    // retourne le nombre de connexions manquantes
-    
+
     /**
      * Function GetNumRatsnests
      * @return int - The number of rats
@@ -153,23 +155,23 @@ public:
     {
         return m_NbLinks;
     }
-    
+
     int     GetNumNodes();        // retourne le nombre de pads a netcode > 0
 
     // Calcul du rectangle d'encadrement:
     bool    ComputeBoundaryBox();
 
-    
+
     /**
      * Function Display_Infos
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
      * Is virtual from EDA_BaseStruct.
      * @param frame A WinEDA_DrawFrame in which to print status information.
-     */ 
+     */
     void    Display_Infos( WinEDA_DrawFrame* frame );
-    
-    
+
+
     /**
      * Function Visit
      * may be re-implemented for each derived class in order to handle
@@ -178,12 +180,12 @@ public:
      * to do so on lists of such data.
      * @param inspector An INSPECTOR instance to use in the inspection.
      * @param testData Arbitrary data used by the inspector.
-     * @param scanTypes Which KICAD_T types are of interest and the order 
+     * @param scanTypes Which KICAD_T types are of interest and the order
      *  is significant too, terminated by EOT.
      * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
      *  else SCAN_CONTINUE, and determined by the inspector.
      */
-    SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData, 
+    SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
         const KICAD_T scanTypes[] );
 
 
@@ -213,7 +215,7 @@ public:
      *  designator, else NULL.
      */
     MODULE* FindModuleByReference( const wxString& aReference ) const;
-    
+
     /**
      * Function ReturnSortedNetnamesList
      * searches for a net with the given netcode.
@@ -221,11 +223,11 @@ public:
      * @param aSort_Type : NO_SORT = no sort, ALPHA_SORT = sort by alphabetic order, PAD_CNT_SORT = sort by active pads count.
      * @return int - net names count.
      */
-	enum netname_sort_type {
-		NO_SORT,
-		ALPHA_SORT,
-		PAD_CNT_SORT
-	};
+    enum netname_sort_type {
+        NO_SORT,
+        ALPHA_SORT,
+        PAD_CNT_SORT
+    };
     int ReturnSortedNetnamesList( wxArrayString & aNames, const int aSort_Type);
 
 
@@ -234,10 +236,10 @@ public:
      * writes the data structures for this object out to a FILE in "*.brd" format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
-     */ 
+     */
     bool Save( FILE* aFile ) const;
-    
-    
+
+
     /**
      * Function GetClass
      * returns the class name.
@@ -252,41 +254,41 @@ public:
     /**
      * Function Show
      * is used to output the object tree, currently for debugging only.
-     * @param nestLevel An aid to prettier tree indenting, and is the level 
+     * @param nestLevel An aid to prettier tree indenting, and is the level
      *  of nesting of this object within the overall tree.
      * @param os The ostream& to output to.
      */
     void Show( int nestLevel, std::ostream& os );
-    
+
 #endif
 
-	/**************************/
-	/* footprint operations : */
-	/**************************/
-	void Change_Side_Module( MODULE* Module, wxDC* DC );
+    /**************************/
+    /* footprint operations : */
+    /**************************/
+    void Change_Side_Module( MODULE* Module, wxDC* DC );
 
-	/*************************/
-	/* Copper Areas handling */
-	/*************************/
-	
-	/**
-	 * Function RedrawAreasOutlines
-	 * Redraw all areas outlines on layer aLayer ( redraw all if aLayer < 0 )
-	 */
-	void RedrawAreasOutlines(WinEDA_DrawPanel* panel, wxDC * aDC, int aDrawMode, int aLayer);
-	
-	/**
-	 * Function SetAreasNetCodesFromNetNames
-	 * Set the .m_NetCode member of all copper areas, according to the area Net Name
-	 * The SetNetCodesFromNetNames is an equivalent to net name, for fas comparisons.
-	 * However the Netcode is an arbitrary equyivalence, it must be set after each netlist read
-	 * or net change
-	 * Must be called after pad netcodes are calculated
-	 * @return : error count
-	 */
-	int SetAreasNetCodesFromNetNames(void);
+    /*************************/
+    /* Copper Areas handling */
+    /*************************/
 
-	/**
+    /**
+     * Function RedrawAreasOutlines
+     * Redraw all areas outlines on layer aLayer ( redraw all if aLayer < 0 )
+     */
+    void RedrawAreasOutlines(WinEDA_DrawPanel* panel, wxDC * aDC, int aDrawMode, int aLayer);
+
+    /**
+     * Function SetAreasNetCodesFromNetNames
+     * Set the .m_NetCode member of all copper areas, according to the area Net Name
+     * The SetNetCodesFromNetNames is an equivalent to net name, for fas comparisons.
+     * However the Netcode is an arbitrary equyivalence, it must be set after each netlist read
+     * or net change
+     * Must be called after pad netcodes are calculated
+     * @return : error count
+     */
+    int SetAreasNetCodesFromNetNames(void);
+
+    /**
      * Function GetArea
      * returns the Area (Zone Container) at a given index.
      * @param index The array type index into a collection of ZONE_CONTAINER *.
@@ -299,7 +301,7 @@ public:
         return NULL;
     }
 
-	/**
+    /**
      * Function GetAreaIndex
      * returns the Area Index  for the given Zone Container.
      * @param  aArea :The ZONE_CONTAINER to find.
@@ -308,13 +310,13 @@ public:
     int GetAreaIndex( const ZONE_CONTAINER* aArea) const
     {
         for( int ii = 0; ii < GetAreaCount(); ii++ )	// Search for aArea in list
-		{
+        {
             if ( aArea == GetArea( ii ) )	// Found !
-				return ii;
-		}
+                return ii;
+        }
         return -1;
     }
-    
+
     /**
      * Function GetAreaCount
      * @return int - The number of Areas or ZONE_CONTAINER.
@@ -324,132 +326,132 @@ public:
         return (int) m_ZoneDescriptorList.size();
     }
 
-	/* Functions used in test, merge and cut outlines */
-	/**
-	  * Function AddArea
-	  * add empty copper area to net
-	  * @return pointer to the new area
-	 */
-	ZONE_CONTAINER* AddArea( int netcode, int layer, int x, int y, int hatch );
+    /* Functions used in test, merge and cut outlines */
+    /**
+      * Function AddArea
+      * add empty copper area to net
+      * @return pointer to the new area
+     */
+    ZONE_CONTAINER* AddArea( int netcode, int layer, int x, int y, int hatch );
 
-	/**
-	 * remove copper area from net
-	 * @param  area = area to remove
-	 * @return 0
-	 */
-	int RemoveArea( ZONE_CONTAINER* area_to_remove );
+    /**
+     * remove copper area from net
+     * @param  area = area to remove
+     * @return 0
+     */
+    int RemoveArea( ZONE_CONTAINER* area_to_remove );
 
-	/**
-	 * Function InsertArea
-	  * add empty copper area to net, inserting after m_ZoneDescriptorList[iarea]
-	 * @return pointer to the new area
-	 */
-	ZONE_CONTAINER* InsertArea( int netcode, int iarea, int layer, int x, int y, int hatch );
+    /**
+     * Function InsertArea
+      * add empty copper area to net, inserting after m_ZoneDescriptorList[iarea]
+     * @return pointer to the new area
+     */
+    ZONE_CONTAINER* InsertArea( int netcode, int iarea, int layer, int x, int y, int hatch );
 
-	/**
-	 Function CompleteArea
-	 * complete copper area contour by adding a line from last to first corner
-	 * if there is only 1 or 2 corners, remove (delete) the area
-	 * @param area_to_complete = area to complete or remove
-	 * @param style = style of last corner
-	 * @return 1 if Ok, 0 if area removed
-	*/
-	int CompleteArea( ZONE_CONTAINER* area_to_complete, int style );
+    /**
+     Function CompleteArea
+     * complete copper area contour by adding a line from last to first corner
+     * if there is only 1 or 2 corners, remove (delete) the area
+     * @param area_to_complete = area to complete or remove
+     * @param style = style of last corner
+     * @return 1 if Ok, 0 if area removed
+    */
+    int CompleteArea( ZONE_CONTAINER* area_to_complete, int style );
 
-	/**
-	 * Function TestAreaPolygon
-	 * Test an area for self-intersection.
-	 *
-	 * @param CurrArea = copper area to test
-	 * @return :
-	 * -1 if arcs intersect other sides
-	 *  0 if no intersecting sides
-	 *  1 if intersecting sides, but no intersecting arcs
-	 * Also sets utility2 flag of area with return value
-	 */
-	int TestAreaPolygon( ZONE_CONTAINER* CurrArea );
+    /**
+     * Function TestAreaPolygon
+     * Test an area for self-intersection.
+     *
+     * @param CurrArea = copper area to test
+     * @return :
+     * -1 if arcs intersect other sides
+     *  0 if no intersecting sides
+     *  1 if intersecting sides, but no intersecting arcs
+     * Also sets utility2 flag of area with return value
+     */
+    int TestAreaPolygon( ZONE_CONTAINER* CurrArea );
 
-	/**
-	 * Function ClipAreaPolygon
-	 * Process an area that has been modified, by clipping its polygon against itself.
-	 * This may change the number and order of copper areas in the net.
-	 * @param bMessageBoxInt == TRUE, shows message when clipping occurs.
-	 * @param  bMessageBoxArc == TRUE, shows message when clipping can't be done due to arcs.
-	 * @return:
-	 *	-1 if arcs intersect other sides, so polygon can't be clipped
-	 *	 0 if no intersecting sides
-	 *	 1 if intersecting sides
-	 * Also sets areas->utility1 flags if areas are modified
-	*/
-	int ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
-								bool bMessageBoxArc, bool bMessageBoxInt, bool bRetainArcs = TRUE );
+    /**
+     * Function ClipAreaPolygon
+     * Process an area that has been modified, by clipping its polygon against itself.
+     * This may change the number and order of copper areas in the net.
+     * @param bMessageBoxInt == TRUE, shows message when clipping occurs.
+     * @param  bMessageBoxArc == TRUE, shows message when clipping can't be done due to arcs.
+     * @return:
+     *	-1 if arcs intersect other sides, so polygon can't be clipped
+     *	 0 if no intersecting sides
+     *	 1 if intersecting sides
+     * Also sets areas->utility1 flags if areas are modified
+    */
+    int ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
+                                bool bMessageBoxArc, bool bMessageBoxInt, bool bRetainArcs = TRUE );
 
-	/**
-	 * Process an area that has been modified, by clipping its polygon against
-	 * itself and the polygons for any other areas on the same net.
-	 * This may change the number and order of copper areas in the net.
-	 * @param modified_area = area to test
-	 * @param bMessageBox : if TRUE, shows message boxes when clipping occurs.
-	 * @return :
-	 * -1 if arcs intersect other sides, so polygon can't be clipped
-	 *  0 if no intersecting sides
-	 *  1 if intersecting sides, polygon clipped
-	 */
-	int AreaPolygonModified( ZONE_CONTAINER* modified_area,
-									bool            bMessageBoxArc,
-									bool            bMessageBoxInt );
+    /**
+     * Process an area that has been modified, by clipping its polygon against
+     * itself and the polygons for any other areas on the same net.
+     * This may change the number and order of copper areas in the net.
+     * @param modified_area = area to test
+     * @param bMessageBox : if TRUE, shows message boxes when clipping occurs.
+     * @return :
+     * -1 if arcs intersect other sides, so polygon can't be clipped
+     *  0 if no intersecting sides
+     *  1 if intersecting sides, polygon clipped
+     */
+    int AreaPolygonModified( ZONE_CONTAINER* modified_area,
+                                    bool            bMessageBoxArc,
+                                    bool            bMessageBoxInt );
 
-	/**
-	 * Function CombineAllAreasInNet
-	  * Checks all copper areas in net for intersections, combining them if found
-	  * @param aNetCode = net to consider
-	  * @param bMessageBox : if true display warning message box
-	  * @param bUseUtility : if true, don't check areas if both utility flags are 0
-	  * Sets utility flag = 1 for any areas modified
-	  * If an area has self-intersecting arcs, doesn't try to combine it
-	 */
-	int CombineAllAreasInNet( int aNetCode, bool bMessageBox, bool bUseUtility );
+    /**
+     * Function CombineAllAreasInNet
+      * Checks all copper areas in net for intersections, combining them if found
+      * @param aNetCode = net to consider
+      * @param bMessageBox : if true display warning message box
+      * @param bUseUtility : if true, don't check areas if both utility flags are 0
+      * Sets utility flag = 1 for any areas modified
+      * If an area has self-intersecting arcs, doesn't try to combine it
+     */
+    int CombineAllAreasInNet( int aNetCode, bool bMessageBox, bool bUseUtility );
 
-	/**
-	  * Function TestAreaIntersections
-	  * Check for intersection of a given copper area with other areas in same net
-	  * @param area_to_test = area to compare to all other areas in the same net
-	 */
-	bool TestAreaIntersections( ZONE_CONTAINER* area_to_test );
+    /**
+      * Function TestAreaIntersections
+      * Check for intersection of a given copper area with other areas in same net
+      * @param area_to_test = area to compare to all other areas in the same net
+     */
+    bool TestAreaIntersections( ZONE_CONTAINER* area_to_test );
 
-	/**
-	  * Function TestAreaIntersection
-	  * Test for intersection of 2 copper areas
-	  * area_to_test must be after area_ref in m_ZoneDescriptorList
-	  * @param area_ref = area reference
-	  * @param area_to_test = area to compare for intersection calculations
-	  * @return : 0 if no intersection
-	  *         1 if intersection
-	  *         2 if arcs intersect
-	 */
-	int TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_test );
+    /**
+      * Function TestAreaIntersection
+      * Test for intersection of 2 copper areas
+      * area_to_test must be after area_ref in m_ZoneDescriptorList
+      * @param area_ref = area reference
+      * @param area_to_test = area to compare for intersection calculations
+      * @return : 0 if no intersection
+      *         1 if intersection
+      *         2 if arcs intersect
+     */
+    int TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_test );
 
-	/**
-	  * Function CombineAreas
-	  * If possible, combine 2 copper areas
-	  * area_ref must be BEFORE area_to_combine
-	  * area_to_combine will be deleted, if areas are combined
-	  * @return : 0 if no intersection
-	  *         1 if intersection
-	  *         2 if arcs intersect
-	 */
-	int CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combine );
+    /**
+      * Function CombineAreas
+      * If possible, combine 2 copper areas
+      * area_ref must be BEFORE area_to_combine
+      * area_to_combine will be deleted, if areas are combined
+      * @return : 0 if no intersection
+      *         1 if intersection
+      *         2 if arcs intersect
+     */
+    int CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combine );
 
-	/**
-	 * Function Test_Drc_Areas_Outlines_To_Areas_Outlines
-	 * Test Areas outlines for DRC:
-	 *      Test areas inside other areas
-	 *      Test areas too close 
-	 * @param aArea_To_Examine: area to compare with other areas. if NULL: all areas are compared tp all others
-	 * @param aCreate_Markers: if true create DRC markers. False: do not creates anything
-	 * @return errors count
-	*/
-	int Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_Examine,bool aCreate_Markers );
+    /**
+     * Function Test_Drc_Areas_Outlines_To_Areas_Outlines
+     * Test Areas outlines for DRC:
+     *      Test areas inside other areas
+     *      Test areas too close
+     * @param aArea_To_Examine: area to compare with other areas. if NULL: all areas are compared tp all others
+     * @param aCreate_Markers: if true create DRC markers. False: do not creates anything
+     * @return errors count
+    */
+    int Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_Examine,bool aCreate_Markers );
 };
 
 #endif		// #ifndef CLASS_BOARD_H

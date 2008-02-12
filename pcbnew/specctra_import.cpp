@@ -150,6 +150,14 @@ static int scale( double distance, UNIT_RES* aResolution )
     return ret;
 }
 
+
+/**
+ * Function mapPt
+ * translates a point from the Specctra Session format coordinate system
+ * to the Kicad coordinate system.
+ * @param aPoint The session point to translate
+ * @return wxPoint - The Kicad coordinate system point.
+ */
 static wxPoint mapPt( const POINT& aPoint, UNIT_RES* aResolution )
 {
     wxPoint ret(  scale( aPoint.x, aResolution ),
@@ -182,16 +190,14 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
 }
 
 
-SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNetCode )
+SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNetCode ) throw( IOError )
 {
     SEGVIA* via = 0;
     SHAPE*  shape;
 
     int     shapeCount = aPadstack->Length();
     int     drillDiam = -1;
-    int     viaDiam = 400;
-
-    // @todo this needs a lot of work yet, it is not complete yet.
+    int     copperLayerCount = sessionBoard->GetCopperLayerCount();
 
 
     // The drill diameter is encoded in the padstack name if PCBNEW did the DSN export.
@@ -200,15 +206,16 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
 
     if( drillStartNdx != -1 )
     {
+        ++drillStartNdx;    // skip over the ':'
         int drillEndNdx = aPadstack->padstack_id.rfind( '_' );
         if( drillEndNdx != -1 )
         {
-            std::string diamTxt( aPadstack->padstack_id, drillStartNdx+1, drillEndNdx-drillStartNdx-1 );
+            std::string diamTxt( aPadstack->padstack_id, drillStartNdx, drillEndNdx-drillStartNdx );
             const char* sdiamTxt = diamTxt.c_str();
             double drillMils = strtod( sdiamTxt, 0 );
 
             // drillMils is not in the session units, but actual mils so we don't use scale()
-            drillDiam = drillMils * 10;
+            drillDiam = (int) (drillMils * 10);
 
             if( drillDiam == g_DesignSettings.m_ViaDrill )      // default
                 drillDiam = -1;         // import as default
@@ -217,38 +224,94 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
 
     if( shapeCount == 0 )
     {
+        ThrowIOError( _( "Session via padstack has no shapes") );
     }
     else if( shapeCount == 1 )
     {
         shape = (SHAPE*) (*aPadstack)[0];
-        if( shape->shape->Type() == T_circle )
-        {
-            CIRCLE* circle = (CIRCLE*) shape->shape;
-            viaDiam = scale( circle->diameter, routeResolution );
+        DSN_T type = shape->shape->Type();
+        if( type != T_circle )
+            ThrowIOError( _( "Unsupported via shape: \"%s\""),
+                     LEXER::GetTokenString( type ).GetData() );
 
-            via = new SEGVIA( sessionBoard );
-            via->SetPosition( mapPt( aPoint, routeResolution ) );
-            via->SetDrillValue( drillDiam );
-            via->m_Shape = VIA_THROUGH;
-            via->m_Width = viaDiam;
-            via->SetLayerPair( CMP_N, COPPER_LAYER_N );
-        }
+        CIRCLE* circle = (CIRCLE*) shape->shape;
+        int viaDiam = scale( circle->diameter, routeResolution );
+
+        via = new SEGVIA( sessionBoard );
+        via->SetPosition( mapPt( aPoint, routeResolution ) );
+        via->SetDrillValue( drillDiam );
+        via->m_Shape = VIA_THROUGH;
+        via->m_Width = viaDiam;
+        via->SetLayerPair( CMP_N, COPPER_LAYER_N );
     }
-    else if( shapeCount == sessionBoard->GetCopperLayerCount() )
+    else if( shapeCount == copperLayerCount )
     {
         shape = (SHAPE*) (*aPadstack)[0];
-        if( shape->shape->Type() == T_circle )
-        {
-            CIRCLE* circle = (CIRCLE*) shape->shape;
-            viaDiam = scale( circle->diameter, routeResolution );
+        DSN_T type = shape->shape->Type();
+        if( type != T_circle )
+            ThrowIOError( _( "Unsupported via shape: \"%s\""),
+                     LEXER::GetTokenString( type ).GetData() );
 
-            via = new SEGVIA( sessionBoard );
-            via->SetPosition( mapPt( aPoint, routeResolution ) );
-            via->SetDrillValue( drillDiam );
-            via->m_Shape = VIA_THROUGH;
-            via->m_Width = viaDiam;
-            via->SetLayerPair( CMP_N, COPPER_LAYER_N );
+        CIRCLE* circle = (CIRCLE*) shape->shape;
+        int viaDiam = scale( circle->diameter, routeResolution );
+
+        via = new SEGVIA( sessionBoard );
+        via->SetPosition( mapPt( aPoint, routeResolution ) );
+        via->SetDrillValue( drillDiam );
+        via->m_Shape = VIA_THROUGH;
+        via->m_Width = viaDiam;
+        via->SetLayerPair( CMP_N, COPPER_LAYER_N );
+    }
+    else    // VIA_MICROVIA or VIA_BLIND_BURIED
+    {
+        int topLayerNdx = -1;
+        int botLayerNdx = 7000;
+        int viaDiam = -1;
+
+        for( int i=0; i<shapeCount;  ++i )
+        {
+            shape = (SHAPE*) (*aPadstack)[i];
+            DSN_T type = shape->shape->Type();
+            if( type != T_circle )
+                ThrowIOError( _( "Unsupported via shape: \"%s\""),
+                         LEXER::GetTokenString( type ).GetData() );
+
+            CIRCLE* circle = (CIRCLE*) shape->shape;
+
+            int layerNdx = findLayerName( circle->layer_id );
+            if( layerNdx == -1 )
+            {
+                wxString layerName = CONV_FROM_UTF8( circle->layer_id.c_str() );
+                ThrowIOError( _("Session file uses invalid layer id \"%s\""),
+                                layerName.GetData() );
+            }
+
+            if( layerNdx > topLayerNdx )
+                topLayerNdx = layerNdx;
+
+            if( layerNdx < botLayerNdx )
+                botLayerNdx = layerNdx;
+
+            if( viaDiam == -1 )
+                viaDiam = scale( circle->diameter, routeResolution );
         }
+
+        via = new SEGVIA( sessionBoard );
+        via->SetPosition( mapPt( aPoint, routeResolution ) );
+        via->SetDrillValue( drillDiam );
+
+        if( (topLayerNdx==0 && botLayerNdx==1)
+         || (topLayerNdx==copperLayerCount-2 && botLayerNdx==copperLayerCount-1))
+            via->m_Shape = VIA_MICROVIA;
+        else
+            via->m_Shape = VIA_BLIND_BURIED;
+
+        via->m_Width = viaDiam;
+
+        topLayerNdx = pcbLayer2kicad[topLayerNdx];
+        botLayerNdx = pcbLayer2kicad[botLayerNdx];
+
+        via->SetLayerPair( topLayerNdx, botLayerNdx );
     }
 
     if( via )
@@ -365,7 +428,6 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
             // else netCode remains 0
         }
 
-
         WIRES& wires = net->wires;
         for( unsigned i=0;  i<wires.size();  ++i )
         {
@@ -386,9 +448,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
             for( unsigned pt=0;  pt<path->points.size()-1;  ++pt )
             {
                 TRACK* track = makeTRACK( path, pt, netCode );
-
-                TRACK* insertAid = track->GetBestInsertPoint( aBoard );
-                track->Insert( aBoard, insertAid );
+                aBoard->Add( track );
             }
         }
 
@@ -428,12 +488,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
             for( unsigned v=0;  v<wire_via->vertexes.size();  ++v )
             {
                 SEGVIA* via = makeVIA( padstack, wire_via->vertexes[v], netCode );
-
-                if( !via )
-                    ThrowIOError( _("Unable to make a via") );
-
-                TRACK* insertAid = via->GetBestInsertPoint( aBoard );
-                via->Insert( aBoard, insertAid );
+                aBoard->Add( via );
             }
         }
     }
