@@ -118,7 +118,8 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
         fclose( f );
         return FALSE;
     }
-
+	//get the file version here. 
+	char version = Line[9 + sizeof(SCHEMATIC_HEAD_STRING)]; 
     LineCount++;
     if( fgets( Line, 1024 - 1, f ) == NULL || strncmp( Line, "LIBS:", 5 ) != 0 )
     {
@@ -381,7 +382,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
                     TextStruct->m_Orient = orient;
                     Struct = (EDA_BaseStruct*) TextStruct;
                 }
-				else if( Name1[0] == 'G')
+				else if( Name1[0] == 'G' && version > '1')
                 {
                     DrawGlobalLabelStruct* TextStruct =
                         new DrawGlobalLabelStruct(pos, CONV_FROM_UTF8( text ) );
@@ -397,8 +398,8 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
                     if( stricmp( Name2, SheetLabelType[NET_UNSPECIFIED] ) == 0 )
                         TextStruct->m_Shape = NET_UNSPECIFIED;
                 }
-				else if( Name1[0] == 'H')
-                {
+				else if( (Name1[0] == 'H') || (Name1[0] == 'G' && version == '1'))
+                { //in sschematic file version 1, glabels were actually hierarchal labels. 
                     DrawHierLabelStruct* TextStruct =
                         new DrawHierLabelStruct(pos, CONV_FROM_UTF8( text ) );
                     Struct = (EDA_BaseStruct*) TextStruct;

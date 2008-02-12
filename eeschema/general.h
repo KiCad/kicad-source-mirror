@@ -11,7 +11,7 @@
 #define ul unsigned long
 
 /* Entete des fichiers schematique */
-#define EESCHEMA_VERSION 1
+#define EESCHEMA_VERSION 2
 
 #define SCHEMATIC_HEAD_STRING "Schematic File Version"
 #define EESCHEMA_FILE_STAMP  "EESchema"
