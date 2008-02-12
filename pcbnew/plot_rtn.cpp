@@ -217,9 +217,18 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
         trace_ref = Sel_Texte_Reference; // les 2 autorisations de tracer sont donnees
 
         TEXTE_MODULE* text      = Module->m_Reference;
-        int           textLayer = text->GetLayer();
+        unsigned      textLayer = text->GetLayer();
 
-        wxASSERT( (unsigned) textLayer < 32 );
+        if( textLayer >= 32 )
+        {
+            wxString errMsg;
+
+            errMsg.Printf(
+              _("Your BOARD has a bad layer number of %u for module\n %s's \"reference\" text."),
+              textLayer, Module->GetReference().GetData() );
+            DisplayError( this, errMsg );
+            goto exit;
+        }
 
         if( ( (1 << textLayer) & masque_layer ) == 0 )
             trace_ref = FALSE;
@@ -230,7 +239,16 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
         text      = Module->m_Value;
         textLayer = text->GetLayer();
 
-        wxASSERT( (unsigned) textLayer < 32 );
+        if( textLayer > 32 )
+        {
+            wxString errMsg;
+
+            errMsg.Printf(
+              _("Your BOARD has a bad layer number of %u for module\n %s's \"value\" text."),
+              textLayer, Module->GetReference().GetData() );
+            DisplayError( this, errMsg );
+            goto exit;
+        }
 
         if( ( (1 << textLayer) & masque_layer ) == 0 )
             trace_val = FALSE;
@@ -265,14 +283,31 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
                 continue;
             if( (pt_texte->m_NoShow) && !Sel_Texte_Invisible )
                 continue;
-            if( (g_TabOneLayerMask[pt_texte->GetLayer()] & masque_layer) == 0 )
+
+            textLayer = pt_texte->GetLayer();
+            if( textLayer >= 32 )
+            {
+                wxString errMsg;
+
+                errMsg.Printf(
+                  _("Your BOARD has a bad layer number of %u for module\n %s's \"module text\" text of %s."),
+                  textLayer, Module->GetReference().GetData(), pt_texte->m_Text.GetData() );
+                DisplayError( this, errMsg );
+                goto exit;
+            }
+
+            if( !( (1<<textLayer) & masque_layer ) )
                 continue;
+
             PlotTextModule( pt_texte );
             nb_items++;
             msg.Printf( wxT( "%d" ), nb_items );
             Affiche_1_Parametre( this, 64, wxEmptyString, msg, LIGHTBLUE );
         }
     }
+
+exit:
+    ;
 }
 
 
@@ -590,10 +625,10 @@ void Plot_1_texte( int format_plot, const wxString& Text, int angle,
         ptcar = graphic_fonte_shape[code];  /* ptcar pointe la description
                                              *  du caractere a dessiner */
 
-        plume = 'U'; 
-        ox = sx; 
+        plume = 'U';
+        ox = sx;
         oy = sy;
-        
+
         RotatePoint( &ox, &oy, cX, cY, angle );
         fx = ox; fy = oy;
 
