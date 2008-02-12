@@ -1098,16 +1098,16 @@ static void LabelConnect( ObjetNetListStruct* LabelRef )
 
 		if( netTable[i].m_SheetList != LabelRef->m_SheetList )
         {
-            if( netTable[i].m_Type != NET_LABEL // (***)
-			    && netTable[i].m_Type != NET_PINLABEL 
+            if( netTable[i].m_Type != NET_PINLABEL 
 				&& netTable[i].m_Type != NET_GLOBLABEL
-				&& netTable[i].m_Type != NET_GLOBBUSLABELMEMBER) 
+				&& netTable[i].m_Type != NET_GLOBBUSLABELMEMBER
+			    /*netTable[i].m_Type != NET_LABEL (***)*/ ) 
                 continue;
         }
 		//regular labels are sheet-local; 
 		//NET_HIERLABEL are used to connect sheets. 
-		//NET_LABEL can be either sheet-local or global. 
-		//historically, it was global, so we must implement that (***)
+		//NET_LABEL is sheet-local (***)
+		//NET_GLOBLABEL is global. 
 		if( netTable[i].m_Type == NET_LABEL
          || netTable[i].m_Type == NET_GLOBLABEL
          || netTable[i].m_Type == NET_BUSLABELMEMBER
