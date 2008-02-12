@@ -34,10 +34,16 @@ wxString msg;
 		menuBar = new wxMenuBar();
 			
 		m_FilesMenu = new wxMenu;
+		// Menu File:
+		wxMenuItem *item = new wxMenuItem(m_FilesMenu, ID_NEW_PROJECT,
+						_("&New"),
+						_("New schematic") );
+	    item->SetBitmap(new_xpm);
+		m_FilesMenu->Append(item);
 
-		wxMenuItem *item = new wxMenuItem(m_FilesMenu, ID_LOAD_PROJECT,
-						_("&Load Schematic Project"),
-						_("Load a schematic project (Schematic, libraries...)") );
+		item = new wxMenuItem(m_FilesMenu, ID_LOAD_PROJECT,
+						_("&Open"),
+						_("Open a schematic") );
 	    item->SetBitmap(open_xpm);
 		m_FilesMenu->Append(item);
 
@@ -49,8 +55,8 @@ wxString msg;
 
 		m_FilesMenu->AppendSeparator();
 		item = new wxMenuItem(m_FilesMenu,ID_SAVE_PROJECT,
-					 _("&Save Schematic Project"),
-					 _("Save all") );
+					 _("&Save"),
+					 _("Save schematic project") );
 	    item->SetBitmap(save_project_xpm);
 		m_FilesMenu->Append(item);
 
