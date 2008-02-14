@@ -40,7 +40,9 @@
 
 #include "trigo.h"              // RotatePoint()
 #include <set>                  // std::set
+#include <map>                  // std::map
 
+#include <boost/utility.hpp>    // boost::addressof()
 
 using namespace DSN;
 
@@ -286,15 +288,15 @@ static bool isKeepout( D_PAD* aPad )
 }
 
 
-/**************************************************************************/
+/*
 static int Pad_list_Sort_by_Shapes( const void* refptr, const void* objptr )
-/**************************************************************************/
 {
     const D_PAD* padref = *(D_PAD**)refptr;
     const D_PAD* padcmp = *(D_PAD**)objptr;
 
     return D_PAD::Compare( padref, padcmp );
 }
+*/
 
 
 /**
@@ -312,11 +314,221 @@ static PATH* makePath( const POINT& aStart, const POINT& aEnd, const std::string
 }
 
 
-IMAGE* SPECCTRA_DB::makeIMAGE( MODULE* aModule )
+/**
+ * Struct wxString_less_than_
+ * is used the std:set<> and std::map<> instantiations below.
+ * See STRINGSET typedef and PINMAP typedef below.
+ */
+struct wxString_less_than
 {
-    PADSTACKS&  padstacks = pcb->library->padstacks;
+    // a "less than" test on two wxStrings, by pointer.
+    bool operator()( const wxString& s1, const wxString& s2) const
+    {
+        return s1.Cmp( s2 ) < 0;  // case specific wxString compare
+    }
+};
 
+
+/**
+ * Function makePADSTACK
+ * creates a PADSTACK which matches the given pad.  Only pads which do not
+ * satisfy the function isKeepout() should be passed to this function.
+ * @param aPad The D_PAD which needs to be made into a PADSTACK.
+ * @return PADSTACK* - The created padstack, including its padstack_id.
+ */
+PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
+{
+    char        name[80];                   // padstack name builder
+    std::string uniqifier;
+
+    bool doLayer[2] =  {                    // top and bottom layers only
+        aPad->IsOnLayer( LAYER_CMP_N ),
+        aPad->IsOnLayer( COPPER_LAYER_N )
+    };
+
+    // caller must do this screen before calling here.
+    wxASSERT( !isKeepout( aPad ) );
+
+    wxASSERT( doLayer[0] || doLayer[1] );
+
+    PADSTACK*   padstack = new PADSTACK();
+
+    int         reportedLayers = 0;              // how many in reported padstack
+    const char* layerName[NB_COPPER_LAYERS];
+
+    if( aPad->m_Attribut==PAD_SMD || aPad->m_Attribut==PAD_CONN )
+    {
+        // PAD_SMD and PAD_CONN are reported on each layer for which
+        // they are present.
+        uniqifier = '[';
+
+        if( doLayer[0] )
+        {
+            layerName[reportedLayers++] = layerIds[0].c_str();
+            uniqifier += 'T';   // T for top, could have used a layer index here alternatively
+        }
+        if( doLayer[1] )
+        {
+            int pcbLayerNdx = kicadLayer2pcb[COPPER_LAYER_N];
+            layerName[reportedLayers++] = layerIds[ pcbLayerNdx ].c_str();
+            uniqifier += 'B';   // B for bottom
+        }
+
+        uniqifier += ']';
+    }
+
+    else        // through hole pad
+    {
+#if 0
+        /*  Through hole pads are reported on the <reserved_layer_name>
+            "signal". Reporting through hole pads on the special
+            "signal" layer may have problems when power layers are in the layer
+            stack. See bottom of page 74 of the SECCTRA Design Language
+            Reference, May 2000. We could do better if there was actually a
+            "layer type" field within Kicad which would hold one of: T_signal,
+            T_power, T_mixed, T_jumper.
+        */
+
+        reportedLayers = 1;
+        layerName[0] = signal;
+        uniqifier = "[A]";        // A for all
+
+#else
+        // Through hole pads are reported on *all* copper layers.
+        int copperLayers = aBoard->GetCopperLayerCount();
+
+        for( int layer=0;  layer<copperLayers;  ++layer )
+        {
+            layerName[reportedLayers++] = layerIds[layer].c_str();
+        }
+        uniqifier = "[A]";        // A for all
+#endif
+    }
+
+    switch( aPad->m_PadShape )
+    {
+    default:
+    case PAD_CIRCLE:
+        {
+            double  diameter = scale(aPad->m_Size.x);
+
+            for( int ndx=0;  ndx<reportedLayers;  ++ndx )
+            {
+                SHAPE*      shape = new SHAPE( padstack );
+                padstack->Append( shape );
+
+                CIRCLE*     circle = new CIRCLE( shape );
+                shape->SetShape( circle );
+
+                circle->SetLayerId( layerName[ndx] );
+                circle->SetDiameter( diameter );
+            }
+
+            snprintf( name, sizeof(name), "Round%sPad_%.6g_mil",
+                     uniqifier.c_str(), scale(aPad->m_Size.x) );
+            name[ sizeof(name)-1 ] = 0;
+            padstack->SetPadstackId( name );
+        }
+        break;
+
+    case PAD_RECT:
+        {
+            double dx = scale( aPad->m_Size.x ) / 2.0;
+            double dy = scale( aPad->m_Size.y ) / 2.0;
+
+            POINT   lowerLeft( -dx, -dy );
+            POINT   upperRight( dx, dy );
+
+            for( int ndx=0;  ndx<reportedLayers;  ++ndx )
+            {
+                SHAPE*      shape = new SHAPE( padstack );
+                padstack->Append( shape );
+
+                RECTANGLE*  rect = new RECTANGLE( shape );
+                shape->SetShape( rect );
+
+                rect->SetLayerId( layerName[ndx] );
+                rect->SetCorners( lowerLeft, upperRight );
+            }
+
+            snprintf( name, sizeof(name),  "Rect%sPad_%.6gx%.6g_mil",
+                     uniqifier.c_str(), scale(aPad->m_Size.x), scale(aPad->m_Size.y)  );
+            name[ sizeof(name)-1 ] = 0;
+
+            padstack->SetPadstackId( name );
+        }
+        break;
+
+    case PAD_OVAL:
+        {
+            double dx = scale( aPad->m_Size.x ) / 2.0;
+            double dy = scale( aPad->m_Size.y ) / 2.0;
+            double dr = dx - dy;
+
+            if( dr >= 0 )       // oval is horizontal
+            {
+                double  radius = dy;
+
+                for( int ndx=0;  ndx<reportedLayers;  ++ndx )
+                {
+                    SHAPE*  shape;
+                    PATH*   path;
+                    // see http://www.freerouting.net/usren/viewtopic.php?f=3&t=317#p408
+                    shape = new SHAPE( padstack );
+                    padstack->Append( shape );
+                    path = makePath( POINT(-dr, 0.0), POINT(dr, 0.0), layerName[ndx] );
+                    shape->SetShape( path );
+                    path->aperture_width = 2.0 * radius;
+                }
+            }
+            else        // oval is vertical
+            {
+                double  radius = dx;
+
+                dr = -dr;
+
+                for( int ndx=0;  ndx<reportedLayers;  ++ndx )
+                {
+                    SHAPE*  shape;
+                    PATH*   path;
+                    // see http://www.freerouting.net/usren/viewtopic.php?f=3&t=317#p408
+                    shape = new SHAPE( padstack );
+                    padstack->Append( shape );
+                    path = makePath( POINT(0.0, -dr), POINT(0.0, dr), layerName[ndx] );
+                    shape->SetShape( path );
+                    path->aperture_width = 2.0 * radius;
+                }
+            }
+
+            snprintf( name, sizeof(name),  "Oval%sPad_%.6gx%.6g_mil",
+                     uniqifier.c_str(), scale(aPad->m_Size.x), scale(aPad->m_Size.y)  );
+            name[ sizeof(name)-1 ] = 0;
+
+            padstack->SetPadstackId( name );
+        }
+        break;
+
+/*
+    case PAD_TRAPEZOID:
+        break;
+*/
+    }
+
+    return padstack;
+}
+
+
+/// data type used to ensure unique-ness of pin names
+typedef std::map<wxString, int, wxString_less_than> PINMAP;
+typedef std::pair<const wxString, int> PINMAP_PAIR;
+
+
+IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
+{
+    PINMAP          pinmap;
     TYPE_COLLECTOR  pads;
+    wxString        padName;
+
 
     // get all the MODULE's pads.
     pads.Collect( aModule, scanPADs );
@@ -333,25 +545,64 @@ IMAGE* SPECCTRA_DB::makeIMAGE( MODULE* aModule )
         // see if this pad is a through hole with no copper on its perimeter
         if( isKeepout( pad ) )
         {
-            KEEPOUT* keepout = new KEEPOUT(image, T_keepout);
-            image->keepouts.push_back( keepout );
+            double  diameter = scale( pad->m_Drill.x );
+            POINT   vertex   = mapPt( pad->m_Pos0 );
 
-            CIRCLE* circle = new CIRCLE(keepout);
-            keepout->SetShape( circle );
+            int layerCount = aBoard->GetCopperLayerCount();
+            for( int layer=0;  layer<layerCount;  ++layer )
+            {
+                KEEPOUT* keepout = new KEEPOUT(image, T_keepout);
+                image->keepouts.push_back( keepout );
 
-            circle->SetDiameter( scale(pad->m_Drill.x) );
-            circle->SetVertex( mapPt( pad->m_Pos0 ) );
-            circle->layer_id = "signal";
+                CIRCLE*     circle = new CIRCLE( keepout );
+                keepout->SetShape( circle );
+
+                circle->SetDiameter( diameter );
+                circle->SetVertex( vertex );
+                circle->SetLayerId( layerIds[layer].c_str() );
+            }
         }
         else
         {
-            PADSTACK*   padstack = &padstacks[pad->m_logical_connexion];
+            PADSTACK*   padstack = makePADSTACK( aBoard, pad );
+
+            PADSTACKSET::iterator iter = padstackset.find( *padstack );
+            if( iter != padstackset.end() )
+            {
+                // padstack is a duplicate, delete it and use the original
+                delete padstack;
+                padstack = (PADSTACK*) *iter.base();    // folk lore, becareful here
+            }
+            else
+            {
+                padstackset.insert( padstack );
+            }
 
             PIN*    pin = new PIN(image);
+
+            padName = pad->ReturnStringPadName();
+            pin->pin_id  = CONV_TO_UTF8( padName );
+
+            if( padName!=wxEmptyString && pinmap.find( padName )==pinmap.end() )
+            {
+                pinmap[ padName ] = 0;
+            }
+            else
+            {
+                char buf[32];
+
+                int duplicates = ++pinmap[ padName ];
+
+                sprintf( buf, "@%d", duplicates );
+
+                pin->pin_id += buf;      // append "@1" or "@2", etc. to pin name
+            }
+
+            pin->kiNetCode = pad->GetNet();
+
             image->pins.push_back( pin );
 
             pin->padstack_id = padstack->padstack_id;
-            pin->pin_id      = CONV_TO_UTF8( pad->ReturnStringPadName() );
 
             wxPoint pos( pad->m_Pos0 );
             wxPoint offset( pad->m_Offset.x, pad->m_Offset.y );
@@ -378,93 +629,31 @@ IMAGE* SPECCTRA_DB::makeIMAGE( MODULE* aModule )
 }
 
 
-PADSTACK* SPECCTRA_DB::makeVia( const SEGVIA* aVia )
-{
-    CIRCLE*     circle;
-    SHAPE*      shape;
-    double      dsnDiameter;
-    char        name[48];
-
-    PADSTACK*   padstack = new PADSTACK( pcb->library );
-
-    switch( aVia->Shape() )
-    {
-    case VIA_THROUGH:
-        shape = new SHAPE( padstack );
-        padstack->Append( shape );
-
-        circle = new CIRCLE( shape );
-        shape->SetShape( circle );
-
-        dsnDiameter = scale( aVia->m_Width );
-        circle->SetDiameter( dsnDiameter );
-
-        circle->SetLayerId( "signal" );
-
-        snprintf( name, sizeof(name),  "Via[A]%.6g:%.6g_mil", dsnDiameter,
-                 // encode the drill value into the name for later import
-                 scale( aVia->GetDrillValue() ) );
-        name[ sizeof(name)-1 ] = 0;
-        padstack->SetPadstackId( name );
-        break;
-
-    case VIA_BLIND_BURIED:
-    case VIA_MICROVIA:
-        int topLayer;
-        int botLayer;
-        aVia->ReturnLayerPair( &topLayer, &botLayer );
-        topLayer = kicadLayer2pcb[topLayer];
-        botLayer = kicadLayer2pcb[botLayer];
-        if( topLayer > botLayer )
-            EXCHG( topLayer, botLayer );
-
-        dsnDiameter = scale( aVia->m_Width );
-
-        for( int layer=topLayer;  layer<=botLayer;  ++layer )
-        {
-            shape = new SHAPE( padstack );
-            padstack->Append( shape );
-
-            circle = new CIRCLE( shape );
-            shape->SetShape( circle );
-
-            circle->SetDiameter( dsnDiameter );
-            circle->SetLayerId( layerIds[layer].c_str() );
-        }
-
-        snprintf( name, sizeof(name),  "Via[%d-%d]_%.6g:%.6g_mil",
-                 topLayer, botLayer, dsnDiameter,
-                 // encode the drill value into the name for later import
-                 scale( aVia->GetDrillValue() )
-                 );
-        name[ sizeof(name)-1 ] = 0;
-        padstack->SetPadstackId( name );
-        break;
-    }
-
-    return padstack;
-}
-
-
-PADSTACK* SPECCTRA_DB::makeVia( int aCopperDiameter, int aDrillDiameter )
+PADSTACK* SPECCTRA_DB::makeVia( int aCopperDiameter, int aDrillDiameter,
+                               int aTopLayer, int aBotLayer )
 {
     char        name[48];
-    PADSTACK*   padstack = new PADSTACK( pcb->library );
-
-    SHAPE*      shape = new SHAPE( padstack );
-    padstack->Append( shape );
-
-    CIRCLE*     circle = new CIRCLE( shape );
-    shape->SetShape( circle );
+    PADSTACK*   padstack = new PADSTACK();
 
     double      dsnDiameter = scale(aCopperDiameter);
-    circle->SetDiameter( dsnDiameter );
 
-    circle->SetLayerId( "signal" );
+    for( int layer=aTopLayer;  layer<=aBotLayer;  ++layer )
+    {
+        SHAPE* shape = new SHAPE( padstack );
+        padstack->Append( shape );
 
-    snprintf( name, sizeof(name),  "Via[A]%.6g:%.6g_mil", dsnDiameter,
-                 // encode the drill value into the name for later import
-                 scale( aDrillDiameter ) );
+        CIRCLE* circle = new CIRCLE( shape );
+        shape->SetShape( circle );
+
+        circle->SetDiameter( dsnDiameter );
+        circle->SetLayerId( layerIds[layer].c_str() );
+    }
+
+    snprintf( name, sizeof(name),  "Via[%d-%d]_%.6g:%.6g_mil",
+             aTopLayer, aBotLayer, dsnDiameter,
+             // encode the drill value into the name for later import
+             scale( aDrillDiameter )
+             );
     name[ sizeof(name)-1 ] = 0;
     padstack->SetPadstackId( name );
 
@@ -472,262 +661,32 @@ PADSTACK* SPECCTRA_DB::makeVia( int aCopperDiameter, int aDrillDiameter )
 }
 
 
-/**
- * Struct ltWX
- * is used secretly by the std:set<> class below.   See STRINGSET typedef.
- */
-struct ltWX
+PADSTACK* SPECCTRA_DB::makeVia( const SEGVIA* aVia )
 {
-    // a "less than" test on two wxStrings, by pointer.
-    bool operator()( const wxString* s1, const wxString* s2) const
-    {
-        return s1->Cmp( *s2 ) < 0;  // case specific wxString compare
-    }
-};
+    int     topLayer;
+    int     botLayer;
+
+    aVia->ReturnLayerPair( &topLayer, &botLayer );
+
+    topLayer = kicadLayer2pcb[topLayer];
+    botLayer = kicadLayer2pcb[botLayer];
+
+    if( topLayer > botLayer )
+        EXCHG( topLayer, botLayer );
+
+    return makeVia( aVia->m_Width, aVia->GetDrillValue(), topLayer, botLayer );
+}
 
 
+#if 0
 void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
 {
-    char        name[80];                           // padstack name builder
-    std::string uniqifier;
-
-    if( aPads.GetCount() )
-    {
-        qsort( (void*) aPads.BasePtr(), aPads.GetCount(), sizeof(D_PAD*), Pad_list_Sort_by_Shapes );
-    }
-
-    D_PAD*  old_pad = NULL;
-
-    for( int i=0;  i<aPads.GetCount();  ++i )
-    {
-        D_PAD*  pad = (D_PAD*) aPads[i];
-
-        bool doLayer[2] =  {                    // top and bottom layers only
-            pad->IsOnLayer( LAYER_CMP_N ),
-            pad->IsOnLayer( COPPER_LAYER_N )
-        };
-
-        if( old_pad && 0==D_PAD::Compare( old_pad, pad ) )
-        {
-            // padstacks.size()-1 is the index of the matching padstack in LIBRARY::padstacks
-            pad->m_logical_connexion = pcb->library->padstacks.size()-1;
-
-            // this is the same as the last pad, so do not add it to the padstack list.
-            continue;
-        }
-
-        // if pad has no copper presence, then it will be made into
-        // an "image->keepout" later.  No copper pad here, it is probably a hole.
-        if( (!doLayer[0] && !doLayer[1]) || isKeepout( pad ) )
-        {
-            continue;
-        }
-
-        old_pad = pad;
-
-        PADSTACK*   padstack = new PADSTACK( pcb->library );
-        pcb->library->AddPadstack( padstack );
-
-        // padstacks.size()-1 is the index of the matching padstack in LIBRARY::padstacks
-        pad->m_logical_connexion = pcb->library->padstacks.size()-1;
-
-        /*  Through hole pads are reported on the <reserved_layer_name>
-            "signal". Reporting through hole pads on the special
-            "signal" layer may have problems when power layers are in the layer
-            stack. See bottom of page 74 of the SECCTRA Design Language
-            Reference, May 2000. We could do better if there was actually a
-            "layer type" field within Kicad which would hold one of: T_signal,
-            T_power, T_mixed, T_jumper.
-
-            PAD_SMD and PAD_CONN are reported on each layer for which
-            they are present.
-        */
-
-        int         reportedLayers;                 // how many in reported padstack
-        const char* layerName[NB_COPPER_LAYERS];
-
-        static const char signal[] = "signal";
-
-        if( pad->m_Attribut==PAD_SMD || pad->m_Attribut==PAD_CONN )
-        {
-            reportedLayers = 0;
-
-            uniqifier = '[';
-
-            if( doLayer[0] )
-            {
-                layerName[reportedLayers++] = layerIds[0].c_str();
-                uniqifier += 'T';   // T for top, could have used a layer index here alternatively
-            }
-            if( doLayer[1] )
-            {
-                int pcbLayerNdx = kicadLayer2pcb[COPPER_LAYER_N];
-                layerName[reportedLayers++] = layerIds[ pcbLayerNdx ].c_str();
-                uniqifier += 'B';   // B for bottom
-            }
-
-            uniqifier += ']';
-        }
-        else
-        {
-            reportedLayers = 1;
-            layerName[0] = signal;
-            uniqifier = "[A]";        // A for all
-        }
-
-        switch( pad->m_PadShape )
-        {
-        default:
-        case PAD_CIRCLE:
-            {
-                double  diameter = scale(pad->m_Size.x);
-
-                for( int ndx=0;  ndx<reportedLayers;  ++ndx )
-                {
-                    SHAPE*      shape = new SHAPE( padstack );
-                    padstack->Append( shape );
-
-                    CIRCLE*     circle = new CIRCLE( shape );
-                    shape->SetShape( circle );
-
-                    circle->SetLayerId( layerName[ndx] );
-                    circle->SetDiameter( diameter );
-                }
-
-                snprintf( name, sizeof(name), "Round%sPad_%.6g_mil",
-                         uniqifier.c_str(), scale(pad->m_Size.x) );
-                name[ sizeof(name)-1 ] = 0;
-
-                // @todo verify that all pad names are unique, there is a chance that
-                // D_PAD::Compare() could say two pads are different, yet the get the same
-                // name here. If so, blend in the padNdx into the name.
-
-                padstack->SetPadstackId( name );
-            }
-            break;
-
-        case PAD_RECT:
-            {
-                double dx = scale( pad->m_Size.x ) / 2.0;
-                double dy = scale( pad->m_Size.y ) / 2.0;
-
-                POINT   lowerLeft( -dx, -dy );
-                POINT   upperRight( dx, dy );
-
-                for( int ndx=0;  ndx<reportedLayers;  ++ndx )
-                {
-                    SHAPE*      shape = new SHAPE( padstack );
-                    padstack->Append( shape );
-
-                    RECTANGLE*  rect = new RECTANGLE( shape );
-                    shape->SetShape( rect );
-
-                    rect->SetLayerId( layerName[ndx] );
-                    rect->SetCorners( lowerLeft, upperRight );
-                }
-
-                snprintf( name, sizeof(name),  "Rect%sPad_%.6gx%.6g_mil",
-                         uniqifier.c_str(), scale(pad->m_Size.x), scale(pad->m_Size.y)  );
-                name[ sizeof(name)-1 ] = 0;
-
-                // @todo verify that all pad names are unique, there is a chance that
-                // D_PAD::Compare() could say two pads are different, yet they get the same
-                // name here. If so, blend in the padNdx into the name.
-
-                padstack->SetPadstackId( name );
-            }
-            break;
-
-        case PAD_OVAL:
-            {
-                double dx = scale( pad->m_Size.x ) / 2.0;
-                double dy = scale( pad->m_Size.y ) / 2.0;
-                double dr = dx - dy;
-
-                if( dr >= 0 )       // oval is horizontal
-                {
-                    double  radius = dy;
-
-                    for( int ndx=0;  ndx<reportedLayers;  ++ndx )
-                    {
-                        SHAPE*  shape;
-                        PATH*   path;
-                        // see http://www.freerouting.net/usren/viewtopic.php?f=3&t=317#p408
-                        shape = new SHAPE( padstack );
-                        padstack->Append( shape );
-                        path = makePath( POINT(-dr, 0.0), POINT(dr, 0.0), layerName[ndx] );
-                        shape->SetShape( path );
-                        path->aperture_width = 2.0 * radius;
-                    }
-                }
-                else        // oval is vertical
-                {
-                    double  radius = dx;
-
-                    dr = -dr;
-
-                    for( int ndx=0;  ndx<reportedLayers;  ++ndx )
-                    {
-                        SHAPE*  shape;
-                        PATH*   path;
-                        // see http://www.freerouting.net/usren/viewtopic.php?f=3&t=317#p408
-                        shape = new SHAPE( padstack );
-                        padstack->Append( shape );
-                        path = makePath( POINT(0.0, -dr), POINT(0.0, dr), layerName[ndx] );
-                        shape->SetShape( path );
-                        path->aperture_width = 2.0 * radius;
-                    }
-                }
-
-                snprintf( name, sizeof(name),  "Oval%sPad_%.6gx%.6g_mil",
-                         uniqifier.c_str(), scale(pad->m_Size.x), scale(pad->m_Size.y)  );
-                name[ sizeof(name)-1 ] = 0;
-
-                // @todo verify that all pad names are unique, there is a chance that
-                // D_PAD::Compare() could say two pads are different, yet they get the same
-                // name here. If so, blend in the padNdx into the name.
-
-                padstack->SetPadstackId( name );
-            }
-            break;
-
-/*
-        case PAD_TRAPEZOID:
-            break;
-*/
-        }
-    }
-
-    // unique pads are now in the padstack list.
-    // next we add the via's which may be used.
-
-    int defaultViaSize = aBoard->m_BoardSettings->m_CurrentViaSize;
-    if( defaultViaSize )
-    {
-        PADSTACK*   padstack = makeVia( defaultViaSize, g_DesignSettings.m_ViaDrill );
-        pcb->library->AddPadstack( padstack );
-
-        // remember this index, it is the default via and also the start of the
-        // vias within the padstack list.  Before this index are the pads.
-        // At this index and later are the vias.
-        pcb->library->SetViaStartIndex( pcb->library->padstacks.size()-1 );
-
-        // padstack->SetPadstackId( "Via_Default" );  I like the padstack_id with the size in it.
-    }
-
-    for( int i=0;  i<HISTORY_NUMBER;  ++i )
-    {
-        int viaSize = aBoard->m_BoardSettings->m_ViaSizeHistory[i];
-        if( !viaSize )
-            break;
-
-        if( viaSize == defaultViaSize )
-            continue;
-
-        PADSTACK*   padstack = makeVia( viaSize, g_DesignSettings.m_ViaDrill );
-        pcb->library->AddPadstack( padstack );
-    }
 }
+#endif
+
+
+typedef std::set<wxString, wxString_less_than>  STRINGSET;
+typedef std::pair<STRINGSET::iterator, bool> STRINGSET_PAIR;
 
 
 void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
@@ -740,14 +699,15 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 
     // Not all boards are exportable.  Check that all reference Ids are unique.
     // Unless they are unique, we cannot import the session file which comes
-    // back to us later from the router.
+    // back to us later from the router.  Also check that all pad names within
+    // a part are unique, otherwise Electra and Freerouter will not draw the
+    // pads properly.
     {
+        TYPE_COLLECTOR  padItems;
+
         items.Collect( aBoard, scanMODULEs );
 
-        typedef std::set<const wxString*, ltWX>  STRINGSET;
-        typedef std::pair<STRINGSET::iterator, bool> PAIR;
-
-        STRINGSET references;  // holds unique component references
+        STRINGSET       refs;       // holds module reference designators
 
         for( int i=0;  i<items.GetCount();  ++i )
         {
@@ -760,8 +720,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             }
 
             // if we cannot insert OK, that means the reference has been seen before.
-            PAIR pair = references.insert( &module->GetReference() );
-            if( !pair.second )      // insert failed
+            STRINGSET_PAIR refpair = refs.insert( module->GetReference() );
+            if( !refpair.second )      // insert failed
             {
                 ThrowIOError( _("Multiple components have identical reference IDs of \"%s\"."),
                       module->GetReference().GetData() );
@@ -784,11 +744,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             module->flag = 1;
         }
     }
-
-    // Since none of these statements cause any immediate output, the order
-    // of them is somewhat flexible.  The outputting to disk is done at the
-    // end.  We start by gathering all the layer information from the board.
-
 
     //-----<layer_descriptor>-----------------------------------------------
     {
@@ -817,10 +772,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             // layer->type =  @todo need this, the export would be better.
         }
     }
-
-
-    // for now, report on only the top and bottom layers with respect to the copper
-    // within a pad's padstack.  this is usually correct, but not rigorous.
 
     // a space in a quoted token is NOT a terminator, true establishes this.
     pcb->parser->space_in_quoted_tokens = true;
@@ -1004,49 +955,78 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
     }
 
     // keepouts could go here, there are none in Kicad at this time.
-    // although COPPER_PLANEs probably will need them for the thru holes, etc.
-    // but in that case they are WINDOWs within the COPPER_PLANEs.
 
-
-    //-----<build the initial padstack list>--------------------------------
+    //-----<build the images, components, and netlist>-----------------------
     {
-        TYPE_COLLECTOR  pads;
+        // find the highest numbered netCode within the board.
+        int highestNetCode = -1;
+        for( EQUIPOT* equipot = aBoard->m_Equipots;  equipot;  equipot = equipot->Next() )
+            highestNetCode = MAX( highestNetCode, equipot->GetNet() );
 
-        // get all the D_PADs into 'pads'.
-        pads.Collect( aBoard, scanPADs );
+        deleteNETs();
 
-        makePADSTACKs( aBoard, pads );
+        // expand the net vector to highestNetCode+1, setting empty to NULL
+        nets.resize( highestNetCode+1, NULL );
 
-#if 0 && defined(DEBUG)
-        for( int p=0;  p<pads.GetCount();  ++p )
-            pads[p]->Show( 0, std::cout );
-#endif
-    }
+        // skip netcode = 0
+        for( unsigned i=1;  i<nets.size();  ++i )
+            nets[i] = new NET( pcb->network );
 
+        for( EQUIPOT* equipot = aBoard->m_Equipots;  equipot;  equipot = equipot->Next() )
+        {
+            int netcode = equipot->GetNet();
+            if( netcode > 0 )
+                nets[ netcode ]->net_id = CONV_TO_UTF8( equipot->m_Netname );
+        }
 
-    //-----<build the images and components>---------------------------------
-    {
         items.Collect( aBoard, scanMODULEs );
+
+        padstackset.clear();
 
         for( int m=0;  m<items.GetCount();  ++m )
         {
             MODULE* module = (MODULE*) items[m];
 
-            IMAGE*  image  = makeIMAGE( module );
+            IMAGE*  image  = makeIMAGE( aBoard, module );
+
+            // create a net list entry for all the actual pins in the image
+            // for the current module.  location of this code is critical
+            // because we fabricated some pin names to ensure unique-ness
+            // of pin names within a module, do not move this code.  The
+            // exported netlist will have some fabricated pin names in it.
+            // If you don't like fabricated pin names, then make sure all pads
+            // within your MODULEs are uniquely named!
+
+            PIN_REF empty( pcb->network );
+            for( unsigned p=0;  p<image->pins.size();  ++p )
+            {
+                PIN* pin = &image->pins[p];
+
+                int netcode = pin->kiNetCode;
+                if( netcode > 0 )
+                {
+                    NET* net = nets[netcode];
+
+                    net->pins.push_back( empty );
+
+                    PIN_REF& pin_ref = net->pins.back();
+
+                    pin_ref.component_id = CONV_TO_UTF8( module->GetReference() );
+                    pin_ref.pin_id = pin->pin_id;
+                }
+            }
+
 
             IMAGE*  registered = pcb->library->LookupIMAGE( image );
             if( registered != image )
             {
                 // If our new 'image' is not a unique IMAGE, delete it.
-                // In either case, 'registered' is the one we'll work with henceforth.
+                // and use the registered one, known as 'image' after this.
                 delete image;
+                image = registered;
             }
 
-            // @todo: this only works if the user has not modified the MODULE within the PCB
-            // and made it different from what is in the PCBNEW library.  Need to test
-            // each image for uniqueness, not just based on name as is done here:
-
-            COMPONENT* comp = pcb->placement->LookupCOMPONENT( registered->GetImageId() );
+            COMPONENT* comp = pcb->placement->LookupCOMPONENT( image->GetImageId() );
 
             PLACE* place = new PLACE( comp );
             comp->places.push_back( place );
@@ -1060,68 +1040,72 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             if( module->flag )
             {
                 int angle = 1800 - module->m_Orient;
-
                 NORMALIZE_ANGLE_POS(angle);
-
                 place->SetRotation( angle/10.0 );
 
                 place->side = T_back;
             }
         }
-    }
 
-
-    //-----<create the nets>------------------------------------------------
-    {
-        NETWORK*        network = pcb->network;
-        TYPE_COLLECTOR  nets;
-        TYPE_COLLECTOR  pads;
-
-        static const KICAD_T scanNETs[] = { PCB_EQUIPOT_STRUCT_TYPE, EOT };
-
-        nets.Collect( aBoard, scanNETs );
-
-        items.Collect( aBoard, scanMODULEs );
-
-        PIN_REF emptypin(0);
-
-        for( int n=0;  n<nets.GetCount();  ++n )
+        // copy the SPECCTRA_DB::padstackset to the LIBRARY.  Since we are
+        // removing, do not increment the iterator
+        for( PADSTACKSET::iterator i=padstackset.begin();  i!=padstackset.end();
+                                   i=padstackset.begin() )
         {
-            EQUIPOT*   kinet = (EQUIPOT*) nets[n];
+            PADSTACKSET::auto_type ps = padstackset.release( i );
+            PADSTACK* padstack = ps.release();
 
-            if( kinet->GetNet() == 0 )
-                continue;
+            pcb->library->AddPadstack( padstack );
+        }
 
-            NET* net = new NET( network );
-            network->nets.push_back( net );
-
-            net->net_id = CONV_TO_UTF8( kinet->m_Netname );
-            net->net_number = kinet->GetNet();
-
-            for( int m=0;  m<items.GetCount();  ++m )
+        // copy our SPECCTRA_DB::nets to the pcb->network
+        for( unsigned n=1;  n<nets.size();  ++n )
+        {
+            NET* net = nets[n];
+            if( net->pins.size() )
             {
-                MODULE* module = (MODULE*) items[m];
-
-                pads.Collect( module, scanPADs );
-
-                for( int p=0;  p<pads.GetCount();  ++p )
-                {
-                    D_PAD* pad = (D_PAD*) pads[p];
-
-                    if( pad->GetNet() == kinet->GetNet() )
-                    {
-                        // push on an empty one, then fill it via 'pin_ref'
-                        net->pins.push_back( emptypin );
-                        PIN_REF* pin_ref = &net->pins.back();
-
-                        pin_ref->SetParent( net );
-                        pin_ref->component_id = CONV_TO_UTF8( module->GetReference() );
-                        pin_ref->pin_id = CONV_TO_UTF8( pad->ReturnStringPadName() );
-                    }
-                }
+                // give ownership to pcb->network
+                pcb->network->nets.push_back( net );
+                nets[n] = 0;
             }
         }
     }
+
+
+    //-----< output the vias >-----------------------------------------------
+    {
+        // ASSUME:  unique pads are now in the padstack list!  i.e. this code
+        // must follow the initial padstack construction code.
+        // Next we add the via's which may be used.
+
+        int defaultViaSize = aBoard->m_BoardSettings->m_CurrentViaSize;
+        if( defaultViaSize )
+        {
+            PADSTACK*   padstack = makeVia( defaultViaSize, g_DesignSettings.m_ViaDrill,
+                                           0, aBoard->GetCopperLayerCount()-1 );
+            pcb->library->AddPadstack( padstack );
+
+            // remember this index, it is the default via and also the start of the
+            // vias within the padstack list.  Before this index are the pads.
+            // At this index and later are the vias.
+            pcb->library->SetViaStartIndex( pcb->library->padstacks.size()-1 );
+        }
+
+        for( int i=0;  i<HISTORY_NUMBER;  ++i )
+        {
+            int viaSize = aBoard->m_BoardSettings->m_ViaSizeHistory[i];
+            if( !viaSize )
+                break;
+
+            if( viaSize == defaultViaSize )
+                continue;
+
+            PADSTACK*   padstack = makeVia( viaSize, g_DesignSettings.m_ViaDrill,
+                                           0, aBoard->GetCopperLayerCount()-1 );
+            pcb->library->AddPadstack( padstack );
+        }
+    }
+
 
 #if 1  // do existing wires and vias
 

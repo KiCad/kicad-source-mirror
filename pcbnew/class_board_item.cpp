@@ -27,7 +27,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
     wxString          text, msg;
     const BOARD_ITEM* item = this;
     EQUIPOT*          net;
-	D_PAD * pad;
+    D_PAD * pad;
 
     switch( item->Type() )
     {
@@ -42,17 +42,17 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         break;
 
     case TYPEPAD:
-		pad = (D_PAD *) this;
+        pad = (D_PAD *) this;
         text << _( "Pad" ) << wxT( " \"" ) << pad->ReturnStringPadName()
-				<< wxT( "\" (" );
-		if ( (pad->m_Masque_Layer & ALL_CU_LAYERS) == ALL_CU_LAYERS )
-			text << _("all copper layers");
-		else if( (pad->m_Masque_Layer & CUIVRE_LAYER) == CUIVRE_LAYER )
-			text << _("copper layer");
-		else if( (pad->m_Masque_Layer & CMP_LAYER) == CMP_LAYER )
-			text << _("cmp layer");
-		else text << _("???");
-		text << _( ") of " ) << ( (MODULE*) GetParent() )->GetReference();
+                << wxT( "\" (" );
+        if ( (pad->m_Masque_Layer & ALL_CU_LAYERS) == ALL_CU_LAYERS )
+            text << _("all copper layers");
+        else if( (pad->m_Masque_Layer & CUIVRE_LAYER) == CUIVRE_LAYER )
+            text << _("copper layer");
+        else if( (pad->m_Masque_Layer & CMP_LAYER) == CMP_LAYER )
+            text << _("cmp layer");
+        else text << _("???");
+        text << _( ") of " ) << ( (MODULE*) GetParent() )->GetReference();
         break;
 
     case TYPEDRAWSEGMENT:
@@ -89,7 +89,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         break;
 
     case TYPEEDGEMODULE:
-	{
+    {
         text << _( "Graphic" ) << wxT( " " );
         wxString cp;
 
@@ -129,23 +129,23 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
 
         text << cp;
         text << wxT( " (" ) << ReturnPcbLayerName( ((EDGE_MODULE*) item )->m_Layer ).Trim() << wxT( ")" );
-		text << _( " of " )
+        text << _( " of " )
              << ( (MODULE*) GetParent() )->GetReference();
         break;
-	}
+    }
     case TYPETRACK:
-        // deleting tracks requires all the information we can get to 
+        // deleting tracks requires all the information we can get to
         // disambiguate all the crap under the cursor!
         {
             wxString txt;
-            
+
             text << _( "Track" ) << wxT( " " ) << ((TRACK*)item)->ShowWidth();
             net = aPcb->FindNet( ((TRACK*)item)->GetNet() );
             if( net )
             {
                 text << wxT( " [" ) << net->m_Netname << wxT( "]" );
             }
-            text << _( " on " ) << ReturnPcbLayerName( item->GetLayer() ).Trim() 
+            text << _( " on " ) << ReturnPcbLayerName( item->GetLayer() ).Trim()
                  << wxT("  ") << _("Net:") << ((TRACK*)item)->GetNet()
                  << wxT("  ") << _("Length:") << valeur_param( (int) ((TRACK*)item)->GetLength(), txt );
         }
@@ -153,36 +153,36 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
 
     case TYPEZONE_CONTAINER:
         text = _( "Zone Outline" );
-		{
-		ZONE_CONTAINER* area = (ZONE_CONTAINER*) this;
-		int ncont = area->m_Poly->GetContour(area->m_CornerSelection);
-		if ( ncont ) text << wxT(" ") << _("(Cutout)");
-		}
-		text << wxT( " " );
+        {
+        ZONE_CONTAINER* area = (ZONE_CONTAINER*) this;
+        int ncont = area->m_Poly->GetContour(area->m_CornerSelection);
+        if ( ncont ) text << wxT(" ") << _("(Cutout)");
+        }
+        text << wxT( " " );
         {
             wxString TimeStampText;
             TimeStampText.Printf( wxT( "(%8.8X)" ), item->m_TimeStamp );
             text << TimeStampText;
         }
-		if ( ((ZONE_CONTAINER*) item)->GetNet() >= 0 )
-		{
-			net = aPcb->FindNet( ( (ZONE_CONTAINER*) item )->GetNet() );
-			if( net )
-			{
-				text << wxT( " [" ) << net->m_Netname << wxT( "]" );
-			}
-		}
-		else	// A netcode < 0 is an error flag (Netname not found or area not initialised)
-		{
-			text << wxT( " [" ) << ( (ZONE_CONTAINER*) item )->m_Netname << wxT( "]" );
-			text << wxT(" <") << _("Not Found") << wxT(">");
-		}
+        if ( ((ZONE_CONTAINER*) item)->GetNet() >= 0 )
+        {
+            net = aPcb->FindNet( ( (ZONE_CONTAINER*) item )->GetNet() );
+            if( net )
+            {
+                text << wxT( " [" ) << net->m_Netname << wxT( "]" );
+            }
+        }
+        else	// A netcode < 0 is an error flag (Netname not found or area not initialised)
+        {
+            text << wxT( " [" ) << ( (ZONE_CONTAINER*) item )->m_Netname << wxT( "]" );
+            text << wxT(" <") << _("Not Found") << wxT(">");
+        }
         text << _( " on " ) << ReturnPcbLayerName( item->GetLayer() ).Trim();
-		break;
+        break;
 
-	case TYPEZONE:
-		text = _( "Zone" );
-		text << wxT( " " );
+    case TYPEZONE:
+        text = _( "Zone" );
+        text << wxT( " " );
         {
             wxString TimeStampText;
             TimeStampText.Printf( wxT( "(%8.8X)" ), item->m_TimeStamp );
@@ -200,34 +200,35 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         {
             SEGVIA* via = (SEGVIA*) item;
             text << _( "Via" ) << wxT( " " ) << via->ShowWidth();
-            
-            int shape = via->Shape(); 
+
+            int shape = via->Shape();
             if( shape == VIA_BLIND_BURIED )
                 text << wxT(" ") << _( "Blind/Buried" );
             else if( shape == VIA_MICROVIA )
                 text << wxT(" ") << _("Micro Via");
             // else say nothing about normal (through) vias
-            
+
             net = aPcb->FindNet( via->GetNet() );
             if( net )
             {
                 text << wxT( " [" ) << net->m_Netname << wxT( "]" );
             }
-            
+            text << wxChar(' ') << _("Net:") << via->GetNet();
+
             if( shape != VIA_THROUGH )
             {
                 // say which layers, only two for now
                 int topLayer;
                 int botLayer;
                 via->ReturnLayerPair( &topLayer, &botLayer );
-                text << _( " on " ) << ReturnPcbLayerName( topLayer).Trim() << wxT(" <-> ") 
+                text << _( " on " ) << ReturnPcbLayerName( topLayer).Trim() << wxT(" <-> ")
                     << ReturnPcbLayerName( botLayer ).Trim();
             }
         }
         break;
 
     case TYPEMARKER:
-        text << _( "Marker" ) << wxT( " @(" ) << ((MARKER*)item)->GetPos().x 
+        text << _( "Marker" ) << wxT( " @(" ) << ((MARKER*)item)->GetPos().x
              << wxT(",") << ((MARKER*)item)->GetPos().y << wxT(")");
         break;
 
@@ -236,7 +237,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         break;
 
     case TYPEMIRE:
-		valeur_param( ((MIREPCB*)item)->m_Size, msg );
+        valeur_param( ((MIREPCB*)item)->m_Size, msg );
         text << _( "Target" ) << _( " on " ) << ReturnPcbLayerName( item->GetLayer() ).Trim()
             << wxT( " " ) << _( "size" ) << wxT( " " ) << msg
             ;

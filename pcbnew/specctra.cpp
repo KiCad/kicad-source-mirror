@@ -76,6 +76,7 @@ namespace DSN {
 
 //-----<SPECCTRA_DB>-------------------------------------------------
 
+#if !defined(STANDALONE)
 
 void SPECCTRA_DB::buildLayerMaps( BOARD* aBoard )
 {
@@ -100,6 +101,7 @@ void SPECCTRA_DB::buildLayerMaps( BOARD* aBoard )
         layerIds.push_back( CONV_TO_UTF8( aBoard->GetLayerName( kilayer ) ) );
     }
 }
+#endif
 
 
 int SPECCTRA_DB::findLayerName( const std::string& aLayerName ) const
@@ -183,13 +185,21 @@ void SPECCTRA_DB::needRIGHT() throw( IOError )
         expecting( T_RIGHT );
 }
 
-void SPECCTRA_DB::needSYMBOL() throw( IOError )
+DSN_T SPECCTRA_DB::needSYMBOL() throw( IOError )
 {
     DSN_T tok = nextTok();
     if( !isSymbol( tok ) )
         expecting( T_SYMBOL );
+    return tok;
 }
 
+DSN_T SPECCTRA_DB::needSYMBOLorNUMBER() throw( IOError )
+{
+    DSN_T tok = nextTok();
+    if( !isSymbol( tok ) && tok!=T_NUMBER )
+        expecting( "symbol|number" );
+    return tok;
+}
 
 void SPECCTRA_DB::readCOMPnPIN( std::string* component_id, std::string* pin_id ) throw( IOError )
 {
@@ -467,7 +477,9 @@ void SPECCTRA_DB::doPCB( PCB* growth ) throw( IOError )
 
 void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IOError )
 {
-    DSN_T   tok;
+    DSN_T       tok;
+    std::string const1;
+    std::string const2;
 
     /*  <parser_descriptor >::=
         (parser
@@ -519,17 +531,19 @@ void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IOError )
             break;
 
         case T_host_version:
-            needSYMBOL();
+            needSYMBOLorNUMBER();
             growth->host_version = lexer->CurText();
             needRIGHT();
             break;
 
         case T_constant:
-            needSYMBOL();
-            growth->const_id1 = lexer->CurText();
-            needSYMBOL();
-            growth->const_id2 = lexer->CurText();
+            needSYMBOLorNUMBER();
+            const1 = lexer->CurText();
+            needSYMBOLorNUMBER();
+            const2 = lexer->CurText();
             needRIGHT();
+            growth->constants.push_back( const1 );
+            growth->constants.push_back( const2 );
             break;
 
         case T_write_resolution:   // [(writee_resolution {<character> <positive_integer >})]
@@ -710,6 +724,8 @@ void SPECCTRA_DB::doSTRUCTURE( STRUCTURE* growth ) throw(IOError)
             break;
 
         case T_layer_noise_weight:
+            if( growth->layer_noise_weight )
+                unexpected( tok );
             growth->layer_noise_weight = new LAYER_NOISE_WEIGHT( growth );
             doLAYER_NOISE_WEIGHT( growth->layer_noise_weight );
             break;
@@ -755,11 +771,15 @@ L_place:
             break;
 
         case T_via:
+            if( growth->via )
+                unexpected( tok );
             growth->via = new VIA( growth );
             doVIA( growth->via );
             break;
 
         case T_control:
+            if( growth->control )
+                unexpected( tok );
             growth->control = new CONTROL( growth );
             doCONTROL( growth->control );
             break;
@@ -772,11 +792,15 @@ L_place:
             break;
 
         case T_rule:
+            if( growth->rules )
+                unexpected( tok );
             growth->rules = new RULE( growth, T_rule );
             doRULE( growth->rules );
             break;
 
         case T_place_rule:
+            if( growth->place_rules )
+                unexpected( tok );
             growth->place_rules = new RULE( growth, T_place_rule );
             doRULE( growth->place_rules );
             break;
@@ -2219,35 +2243,35 @@ void SPECCTRA_DB::doPIN( PIN* growth ) throw( IOError )
 
     growth->padstack_id = lexer->CurText();
 
-    tok = nextTok();
-    if( tok == T_LEFT )
+    while( (tok = nextTok()) != T_RIGHT )
     {
-        tok = nextTok();
-        if( tok != T_rotate )
-            expecting( T_rotate );
+        if( tok == T_LEFT )
+        {
+            tok = nextTok();
+            if( tok != T_rotate )
+                expecting( T_rotate );
 
-        if( nextTok() != T_NUMBER )
-            expecting( T_NUMBER );
-        growth->SetRotation( strtod( lexer->CurText(), 0 ) );
-        needRIGHT();
-        tok = nextTok();
+            if( nextTok() != T_NUMBER )
+                expecting( T_NUMBER );
+            growth->SetRotation( strtod( lexer->CurText(), 0 ) );
+            needRIGHT();
+        }
+        else
+        {
+            if( !isSymbol(tok) && tok!=T_NUMBER )
+                expecting( "pin_id" );
+
+            growth->pin_id = lexer->CurText();
+
+            if( nextTok() != T_NUMBER )
+                expecting( T_NUMBER );
+            growth->vertex.x = strtod( lexer->CurText(), 0 );
+
+            if( nextTok() != T_NUMBER )
+                expecting( T_NUMBER );
+            growth->vertex.y = strtod( lexer->CurText(), 0 );
+        }
     }
-
-    if( !isSymbol(tok) && tok!=T_NUMBER )
-        expecting( "pin_id" );
-
-    growth->pin_id = lexer->CurText();
-
-    if( nextTok() != T_NUMBER )
-        expecting( T_NUMBER );
-    growth->vertex.x = strtod( lexer->CurText(), 0 );
-
-    if( nextTok() != T_NUMBER )
-        expecting( T_NUMBER );
-    growth->vertex.y = strtod( lexer->CurText(), 0 );
-
-    if( nextTok() != T_RIGHT )
-        unexpected( lexer->CurText() );
 }
 
 
@@ -2286,8 +2310,8 @@ void SPECCTRA_DB::doLIBRARY( LIBRARY* growth ) throw( IOError )
 
         case T_padstack:
             PADSTACK* padstack;
-            padstack = new PADSTACK( growth );
-            growth->padstacks.push_back( padstack );
+            padstack = new PADSTACK();
+            growth->AddPadstack( padstack );
             doPADSTACK( padstack );
             break;
 
@@ -2307,7 +2331,8 @@ void SPECCTRA_DB::doLIBRARY( LIBRARY* growth ) throw( IOError )
 
 void SPECCTRA_DB::doNET( NET* growth ) throw( IOError )
 {
-    DSN_T   tok = nextTok();
+    DSN_T       tok = nextTok();
+    PIN_REFS*   pin_refs;
 
     /*  <net_descriptor >::=
         (net <net_id >
@@ -2358,14 +2383,38 @@ void SPECCTRA_DB::doNET( NET* growth ) throw( IOError )
         case T_pins:
         case T_order:
             growth->pins_type = tok;
+            pin_refs = &growth->pins;
+            goto L_pins;
+
+        case T_expose:
+            pin_refs = &growth->expose;
+            goto L_pins;
+
+        case T_noexpose:
+            pin_refs = &growth->noexpose;
+            goto L_pins;
+
+        case T_source:
+            pin_refs = &growth->source;
+            goto L_pins;
+
+        case T_load:
+            pin_refs = &growth->load;
+            goto L_pins;
+
+        case T_terminator:
+            pin_refs = &growth->terminator;
+            //goto L_pins;
+
+L_pins:
             {
                 PIN_REF     empty( growth );
                 while( (tok = nextTok()) != T_RIGHT )
                 {
                     // copy the empty one, then fill its copy later thru pin_ref.
-                    growth->pins.push_back( empty );
+                    pin_refs->push_back( empty );
 
-                    PIN_REF* pin_ref = &growth->pins.back();
+                    PIN_REF* pin_ref = &pin_refs->back();
 
                     readCOMPnPIN( &pin_ref->component_id, &pin_ref->pin_id );
                 }
@@ -3431,7 +3480,7 @@ const char* OUTPUTFORMATTER::GetQuoteChar( const char* wrapee, const char* quote
     if( strlen(wrapee)==0 )
         return quote_char;
 
-    bool    isNumber = true;
+//    bool    isNumber = true;
 
     for(  ; *wrapee;  ++wrapee )
     {
@@ -3444,12 +3493,12 @@ const char* OUTPUTFORMATTER::GetQuoteChar( const char* wrapee, const char* quote
         if( strchr( quoteThese, *wrapee ) )
             return quote_char;
 
-        if( !strchr( "01234567890.-+", *wrapee ) )
-            isNumber = false;
+//        if( !strchr( "01234567890.-+", *wrapee ) )
+//            isNumber = false;
     }
 
-    if( isNumber )
-        return quote_char;
+//    if( isNumber )
+//        return quote_char;
 
     return "";      // can use an unwrapped string.
 }
@@ -3670,6 +3719,11 @@ int ELEM_HOLDER::FindElem( DSN_T aType, int instanceNum )
     return -1;
 }
 
+
+// a reasonably small memory price to pay for improved performance
+STRINGFORMATTER  ELEM::sf;
+
+
 //-----<UNIT_RES>---------------------------------------------------------
 
 UNIT_RES UNIT_RES::Default( NULL, T_resolution );
@@ -3679,6 +3733,8 @@ UNIT_RES UNIT_RES::Default( NULL, T_resolution );
 
 int PADSTACK::Compare( PADSTACK* lhs, PADSTACK* rhs )
 {
+    // printf( "PADSTACK::Compare( %p, %p)\n", lhs, rhs );
+
     if( !lhs->hash.size() )
         lhs->hash = lhs->makeHash();
 
@@ -3725,7 +3781,6 @@ int COMPONENT::Compare( COMPONENT* lhs, COMPONENT* rhs )
 */
 
 //-----<PARSER>-----------------------------------------------------------
-
 PARSER::PARSER( ELEM* aParent ) :
     ELEM( T_parser, aParent )
 {
@@ -3752,10 +3807,17 @@ void PARSER::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOErro
     out->Print( nestLevel, "(host_cad \"%s\")\n", host_cad.c_str() );
     out->Print( nestLevel, "(host_version \"%s\")\n", host_version.c_str() );
 
-    if( const_id1.length()>0 || const_id2.length()>0 )
-        out->Print( nestLevel, "(constant %c%s%c %c%s%c)\n",
-            string_quote, const_id1.c_str(), string_quote,
-            string_quote, const_id2.c_str(), string_quote );
+    for( STRINGS::iterator i=constants.begin();  i!=constants.end();  )
+    {
+        const std::string& s1 = *i++;
+        const std::string& s2 = *i++;
+
+        const char* q1 = out->GetQuoteChar( s1.c_str() );
+        const char* q2 = out->GetQuoteChar( s2.c_str() );
+        out->Print( nestLevel, "(constant %s%s%s %s%s%s)\n",
+            q1, s1.c_str(), q1,
+            q2, s2.c_str(), q2 );
+    }
 
     if( routes_include_testpoint || routes_include_guides || routes_include_image_conductor )
         out->Print( nestLevel, "(routes_include%s%s%s)\n",

@@ -29,6 +29,10 @@
 //  see http://www.boost.org/libs/ptr_container/doc/ptr_sequence_adapter.html
 #include <boost/ptr_container/ptr_vector.hpp>
 
+//  see http://www.boost.org/libs/ptr_container/doc/ptr_set.html
+#include <boost/ptr_container/ptr_set.hpp>
+#include <boost/noncopyable.hpp>
+
 #include "fctsys.h"
 #include "dsn.h"
 
@@ -303,13 +307,15 @@ protected:
      */
     std::string makeHash()
     {
-        STRINGFORMATTER sf;
-
+        sf.Clear();
         FormatContents( &sf, 0 );
         sf.StripUseless();
 
         return sf.GetString();
     }
+
+    // avoid creating this for every compare, make static.
+    static STRINGFORMATTER  sf;
 
 
 public:
@@ -466,8 +472,8 @@ class PARSER : public ELEM
     bool        via_rotate_first;
     bool        generated_by_freeroute;
 
-    std::string const_id1;
-    std::string const_id2;
+    /// This holds pairs of strings, one pair for each constant definition
+    STRINGS     constants;
 
     std::string host_cad;
     std::string host_version;
@@ -1924,12 +1930,16 @@ class PIN : public ELEM
     std::string     pin_id;
     POINT           vertex;
 
+    int             kiNetCode;      ///< kicad netcode
+
+
 public:
     PIN( ELEM* aParent ) :
         ELEM( T_pin, aParent )
     {
         rotation = 0.0;
         isRotated = false;
+        kiNetCode = 0;
     }
 
     void SetRotation( double aRotation )
@@ -1960,6 +1970,8 @@ public:
                    vertex.x, vertex.y );
     }
 };
+typedef boost::ptr_vector<PIN>  PINS;
+
 
 class LIBRARY;
 class IMAGE : public ELEM_HOLDER
@@ -1978,7 +1990,6 @@ class IMAGE : public ELEM_HOLDER
         the kids list.
     */
 
-    typedef boost::ptr_vector<PIN>  PINS;
     PINS            pins;
 
     RULE*           rules;
@@ -2085,7 +2096,7 @@ typedef boost::ptr_vector<IMAGE>    IMAGES;
  * Class PADSTACK
  * holds either a via or a pad definition.
  */
-class PADSTACK : public ELEM_HOLDER
+class PADSTACK : public ELEM_HOLDER, private boost::noncopyable
 {
     friend class SPECCTRA_DB;
 
@@ -2105,8 +2116,14 @@ class PADSTACK : public ELEM_HOLDER
 
 public:
 
-    PADSTACK( ELEM* aParent ) :
-        ELEM_HOLDER( T_padstack, aParent )
+    /**
+     * Constructor PADSTACK()
+     * cannot take ELEM* aParent because PADSTACKSET confuses this with a
+     * copy constructor and causes havoc.  Instead set parent with
+     * LIBRARY::AddPadstack()
+     */
+    PADSTACK() :
+        ELEM_HOLDER( T_padstack, NULL )
     {
         unit = 0;
         rotate = T_on;
@@ -2130,6 +2147,7 @@ public:
      * compares two objects of this type and returns <0, 0, or >0.
      */
     static int Compare( PADSTACK* lhs, PADSTACK* rhs );
+
 
     void SetPadstackId( const char* aPadstackId )
     {
@@ -2194,6 +2212,15 @@ public:
 };
 typedef boost::ptr_vector<PADSTACK> PADSTACKS;
 
+/**
+ * Function operator<()
+ * is used by the PADSTACKSET boost::ptr_set below
+ */
+inline bool operator<( const PADSTACK& lhs, const PADSTACK& rhs )
+{
+    return PADSTACK::Compare( (PADSTACK*) &lhs, (PADSTACK*) &rhs ) < 0;
+}
+
 
 /**
  * Class LIBRARY
@@ -2228,6 +2255,7 @@ public:
 
     void AddPadstack( PADSTACK* aPadstack )
     {
+        aPadstack->SetParent( this );
         padstacks.push_back( aPadstack );
     }
 
@@ -2537,9 +2565,14 @@ class NET : public ELEM
     bool            unassigned;
     int             net_number;
 
-    DSN_T           pins_type;      ///< T_pins | T_order
-
+    DSN_T           pins_type;      ///< T_pins | T_order, type of field 'pins' below
     PIN_REFS        pins;
+
+    PIN_REFS        expose;
+    PIN_REFS        noexpose;
+    PIN_REFS        source;
+    PIN_REFS        load;
+    PIN_REFS        terminator;
 
     DSN_T           type;           ///< T_fix | T_normal
 
@@ -3525,6 +3558,9 @@ public:
 };
 
 
+typedef boost::ptr_set<PADSTACK>    PADSTACKSET;
+
+
 /**
  * Class SPECCTRA_DB
  * holds a DSN data tree, usually coming from a DSN file.
@@ -3560,6 +3596,12 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     BOARD*          sessionBoard;
 
     static const KICAD_T scanPADs[];
+
+    PADSTACKSET     padstackset;
+
+    /// we don't want ownership here permanently, so we don't use boost::ptr_vector
+    std::vector<NET*>   nets;
+
 
     /**
      * Function buildLayerMaps
@@ -3612,9 +3654,20 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
      * calls nextTok() and then verifies that the token read in
      * satisfies bool isSymbol().
      * If not, an IOError is thrown.
+     * @return DSN_T - the actual token read in.
      * @throw IOError, if the next token does not satisfy isSymbol()
      */
-    void needSYMBOL() throw( IOError );
+    DSN_T needSYMBOL() throw( IOError );
+
+    /**
+     * Function needSYMBOLorNUMBER
+     * calls nextTok() and then verifies that the token read in
+     * satisfies bool isSymbol() or tok==T_NUMBER.
+     * If not, an IOError is thrown.
+     * @return DSN_T - the actual token read in.
+     * @throw IOError, if the next token does not satisfy the above test
+     */
+    DSN_T needSYMBOLorNUMBER() throw( IOError );
 
     /**
      * Function readCOMPnPIN
@@ -3718,28 +3771,35 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     /**
      * Function makeIMAGE
      * allocates an IMAGE on the heap and creates all the PINs according
-     * to the PADs in the MODULE.
+     * to the D_PADs in the MODULE.
+     * @param aBoard The owner of the MODULE.
+     * @param aModule The MODULE from which to build the IMAGE.
+     * @return IMAGE* - not tested for duplication yet.
      */
-    IMAGE* makeIMAGE( MODULE* aModule );
+    IMAGE* makeIMAGE( BOARD* aBoard, MODULE* aModule );
 
 
     /**
-     * Function makePADSTACKs
-     * makes all the PADSTACKs, and marks each D_PAD with the index into the
-     * LIBRARY::padstacks list that it matches.
+     * Function makePADSTACK
+     * creates a PADSTACK which matches the given pad.  Only pads which do not
+     * satisfy the function isKeepout() should be passed to this function.
+     * @param aPad The D_PAD which needs to be made into a PADSTACK.
+     * @return PADSTACK* - The created padstack, including its padstack_id.
      */
-    void makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads );
-
+    PADSTACK* makePADSTACK( BOARD* aBoard, D_PAD* aPad );
 
     /**
      * Function makeVia
      * makes a round through hole PADSTACK using the given Kicad diameter in deci-mils.
      * @param aCopperDiameter The diameter of the copper pad.
      * @param aDrillDiameter The drill diameter, used on re-import of the session file.
+     * @param aTopLayer The DSN::PCB top most layer index.
+     * @param aBotLayer The DSN::PCB bottom most layer index.
      * @return PADSTACK* - The padstack, which is on the heap only, user must save
      *  or delete it.
      */
-    PADSTACK* makeVia( int aCopperDiameter, int aDrillDiameter );
+    PADSTACK* makeVia( int aCopperDiameter, int aDrillDiameter,
+                               int aTopLayer, int aBotLayer );
 
     /**
      * Function makeVia
@@ -3749,6 +3809,19 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
      *  or delete it.
      */
     PADSTACK* makeVia( const SEGVIA* aVia );
+
+
+    /**
+     * Function deleteNETs
+     * deletes all the NETs that may be in here.
+     */
+    void deleteNETs()
+    {
+        for( unsigned n=0;  n<nets.size();  ++n )
+            delete nets[n];
+
+        nets.clear();
+    }
 
 
     //-----<FromSESSION>-----------------------------------------------------
@@ -3785,6 +3858,8 @@ public:
         delete lexer;
         delete pcb;
         delete session;
+
+        deleteNETs();
 
         if( fp )
             fclose( fp );
