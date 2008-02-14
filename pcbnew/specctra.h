@@ -31,7 +31,6 @@
 
 //  see http://www.boost.org/libs/ptr_container/doc/ptr_set.html
 #include <boost/ptr_container/ptr_set.hpp>
-#include <boost/noncopyable.hpp>
 
 #include "fctsys.h"
 #include "dsn.h"
@@ -2096,7 +2095,7 @@ typedef boost::ptr_vector<IMAGE>    IMAGES;
  * Class PADSTACK
  * holds either a via or a pad definition.
  */
-class PADSTACK : public ELEM_HOLDER, private boost::noncopyable
+class PADSTACK : public ELEM_HOLDER
 {
     friend class SPECCTRA_DB;
 
