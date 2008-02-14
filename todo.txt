@@ -57,9 +57,6 @@ Use the collector classes in eeschema.
 asked by: dick
 ================================================================================
 specctra:
-no blank pin numbers.
-check that pin numbers are unique within a part, combine all such pins
-into common padstack.
 prompt for board boundary control, copper areas, tracks and vias, via per net, fixed vs. normal.
 do write up.
 

@@ -279,7 +279,7 @@ static bool isRectangle( POINT_PAIRS& aList )
 
 /**
  * Function isKeepout
- * decides if the pad is a copper less through hole which needs to be made into
+ * decides if the pad is a copper-less through hole which needs to be made into
  * a round keepout.
  */
 static bool isKeepout( D_PAD* aPad )
@@ -520,7 +520,6 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
 
 /// data type used to ensure unique-ness of pin names
 typedef std::map<wxString, int, wxString_less_than> PINMAP;
-typedef std::pair<const wxString, int> PINMAP_PAIR;
 
 
 IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
@@ -571,7 +570,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
             {
                 // padstack is a duplicate, delete it and use the original
                 delete padstack;
-                padstack = (PADSTACK*) *iter.base();    // folk lore, becareful here
+                padstack = (PADSTACK*) *iter.base();    // folk lore, be careful here
             }
             else
             {
@@ -676,13 +675,6 @@ PADSTACK* SPECCTRA_DB::makeVia( const SEGVIA* aVia )
 
     return makeVia( aVia->m_Width, aVia->GetDrillValue(), topLayer, botLayer );
 }
-
-
-#if 0
-void SPECCTRA_DB::makePADSTACKs( BOARD* aBoard, TYPE_COLLECTOR& aPads )
-{
-}
-#endif
 
 
 typedef std::set<wxString, wxString_less_than>  STRINGSET;
