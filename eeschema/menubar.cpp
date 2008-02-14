@@ -73,12 +73,12 @@ wxString msg;
 	    item->SetBitmap(save_as_xpm);
 		m_FilesMenu->Append(item);
 
-		/* Plot Menu */
 		item = new wxMenuItem(m_FilesMenu, ID_GEN_PRINT,
 					_("P&rint"), _("Print on current printer") );
 	    item->SetBitmap(print_button);
 		m_FilesMenu->Append(item);
 
+		/* Plot Submenu */
 		wxMenu *choice_plot_fmt = new wxMenu;
 		item = new wxMenuItem(choice_plot_fmt, ID_GEN_PLOT_PS,
 			_("Plot PostScript"), _("Plotting in PostScript format") );
@@ -139,6 +139,15 @@ wxString msg;
 	    item->SetBitmap(redo_xpm);
 		editMenu->Append(item);
 
+		// Place Menu
+		wxMenu *placeMenu = new wxMenu;
+		placeMenu->Append(ID_COMPONENT_BUTT, _("&Component"), _("Place the component"), wxITEM_NORMAL);
+		placeMenu->Append(ID_PLACE_POWER_BUTT, _("&Power port"), _("Place the power port"), wxITEM_NORMAL); //TODO: Unify the ID names!
+		placeMenu->Append(ID_WIRE_BUTT, _("&Wire"), _("Place the wire"), wxITEM_NORMAL);
+		placeMenu->Append(ID_BUS_BUTT, _("&Bus"), _("Place the bus"), wxITEM_NORMAL);
+		placeMenu->Append(ID_WIRETOBUS_ENTRY_BUTT, _("&Wire to bus entry"), _("Place the wire to bus entry"), wxITEM_NORMAL);
+		placeMenu->Append(ID_BUSTOBUS_ENTRY_BUTT, _("&Bus to bus entry"), _("Place the bus to bus entry"), wxITEM_NORMAL);
+
 		// Menu Configuration:
 		wxMenu * configmenu = new wxMenu;
 		item = new wxMenuItem(configmenu, ID_CONFIG_REQ,
@@ -193,6 +202,7 @@ wxString msg;
 
 		menuBar->Append(m_FilesMenu, _("&File") );
 		menuBar->Append(editMenu, _("&Edit") );
+		menuBar->Append(placeMenu, _("&Place") );
 		menuBar->Append(configmenu, _("&Preferences") );
 		menuBar->Append(helpMenu, _("&Help") );
 
