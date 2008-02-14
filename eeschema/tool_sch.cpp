@@ -167,20 +167,20 @@ void WinEDA_SchematicFrame::ReCreateVToolbar()
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_COMPONENT_BUTT, wxEmptyString,
                          BITMAP( add_component_xpm ),
-                         _( "Add components" ), wxITEM_CHECK );
+                         _( "Place the component" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_PLACE_POWER_BUTT, wxEmptyString,
                          BITMAP( add_power_xpm ),
-                         _( "Add powers" ), wxITEM_CHECK );
+                         _( "Place the power port" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_WIRE_BUTT, wxEmptyString,
                          BITMAP( add_line_xpm ),
-                         _( "Add wires" ), wxITEM_CHECK );
+                         _( "Place the wire" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_BUS_BUTT, wxEmptyString,
                          BITMAP( add_bus_xpm ),
-                         _( "Add bus" ), wxITEM_CHECK );
+                         _( "Place the bus" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_WIRETOBUS_ENTRY_BUTT, wxEmptyString,
                          BITMAP( add_line2bus_xpm ),
@@ -205,7 +205,7 @@ void WinEDA_SchematicFrame::ReCreateVToolbar()
 	
 	m_VToolBar->AddTool( ID_HIERLABEL_BUTT, wxEmptyString,
 						 BITMAP( add_glabel_xpm ),
-								 _( "Add hierarchal label" ), wxITEM_CHECK );
+								 _( "Add hierarchical label" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_JUNCTION_BUTT, wxEmptyString,
                          BITMAP( add_junction_xpm ),
@@ -218,7 +218,7 @@ void WinEDA_SchematicFrame::ReCreateVToolbar()
 
     m_VToolBar->AddTool( ID_IMPORT_GLABEL_BUTT, wxEmptyString,
                          BITMAP( import_glabel_xpm ),
-                         _( "import hierarchal label from sheet & create pinsheet" ), wxITEM_CHECK );
+                         _( "Import hierarchical label from sheet & create pinsheet" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_SHEET_LABEL_BUTT, wxEmptyString,
                          BITMAP( add_hierar_pin_xpm ),

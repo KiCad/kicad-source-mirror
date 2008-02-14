@@ -18,6 +18,14 @@
 #include "id.h"
 #include "hotkeys.h"
 
+/* Specific bitmaps */
+#include "Add_Power.xpm"
+#include "add_bus.xpm"
+#include "Add_Line2Bus.xpm"
+#include "Add_Bus2Bus.xpm"
+#include "add_hierar_symbol.xpm"
+#include "add_hierar_pin.xpm"
+#include "Import_GLabel.xpm"
 
 /************************************************/
 void WinEDA_SchematicFrame::ReCreateMenuBar()
@@ -139,14 +147,184 @@ wxString msg;
 	    item->SetBitmap(redo_xpm);
 		editMenu->Append(item);
 
-		// Place Menu
-		wxMenu *placeMenu = new wxMenu;
-		placeMenu->Append(ID_COMPONENT_BUTT, _("&Component"), _("Place the component"), wxITEM_NORMAL);
-		placeMenu->Append(ID_PLACE_POWER_BUTT, _("&Power port"), _("Place the power port"), wxITEM_NORMAL); //TODO: Unify the ID names!
-		placeMenu->Append(ID_WIRE_BUTT, _("&Wire"), _("Place the wire"), wxITEM_NORMAL);
-		placeMenu->Append(ID_BUS_BUTT, _("&Bus"), _("Place the bus"), wxITEM_NORMAL);
-		placeMenu->Append(ID_WIRETOBUS_ENTRY_BUTT, _("&Wire to bus entry"), _("Place the wire to bus entry"), wxITEM_NORMAL);
-		placeMenu->Append(ID_BUSTOBUS_ENTRY_BUTT, _("&Bus to bus entry"), _("Place the bus to bus entry"), wxITEM_NORMAL);
+            editMenu->AppendSeparator();
+            
+            item = new wxMenuItem(
+                    editMenu,
+                    ID_SCHEMATIC_DELETE_ITEM_BUTT,
+                    _("Delete"),
+	            _("Delete items"),
+		    wxITEM_NORMAL
+            );
+            item->SetBitmap(delete_body_xpm);
+            editMenu->Append(item);
+
+            // Place Menu
+            //TODO: Unify the ID names!
+	    wxMenu *placeMenu = new wxMenu;
+
+            item = new wxMenuItem(
+                    placeMenu,
+                    ID_COMPONENT_BUTT,
+                    _("&Component"),
+		    _("Place the component")
+            );
+            item->SetBitmap(add_component_xpm);
+            placeMenu->Append(item);
+
+            item = new wxMenuItem(
+                    placeMenu,
+                    ID_PLACE_POWER_BUTT,
+                    _("&Power port"),
+                    _("Place the power port"),
+		    wxITEM_NORMAL
+            );
+            item->SetBitmap(add_power_xpm);
+            placeMenu->Append(item);
+
+            item = new wxMenuItem(
+                    placeMenu,
+                    ID_WIRE_BUTT,
+		    _("&Wire"),
+		    _("Place the wire"),
+		    wxITEM_NORMAL
+            );
+            item->SetBitmap(add_line_xpm);
+            placeMenu->Append(item);
+
+            item = new wxMenuItem(
+                    placeMenu,
+                    ID_BUS_BUTT,
+		    _("&Bus"),
+		    _("Place the bus"),
+		    wxITEM_NORMAL
+            );
+            item->SetBitmap(add_bus_xpm);
+            placeMenu->Append(item);
+
+            item = new wxMenuItem(
+                    placeMenu,
+                    ID_WIRETOBUS_ENTRY_BUTT,
+		    _("W&ire to bus entry"),
+		    _("Place the wire to bus entry"),                    
+		    wxITEM_NORMAL
+            );
+            item->SetBitmap(add_line2bus_xpm);
+            placeMenu->Append(item);
+
+            item = new wxMenuItem(
+                    placeMenu,
+                    ID_BUSTOBUS_ENTRY_BUTT,
+		    _("B&us to bus entry"),
+		    _("Place the bus to bus entry"),
+		    wxITEM_NORMAL
+            );
+            item->SetBitmap(add_bus2bus_xpm);
+            placeMenu->Append(item);
+
+            item = new wxMenuItem(
+                    placeMenu,
+                    ID_NOCONN_BUTT,
+		    _("No connect flag"),
+                    _("Place the no connect flag"),
+		    wxITEM_NORMAL
+            );
+            item->SetBitmap(noconn_button);
+            placeMenu->Append(item);
+
+            item = new wxMenuItem(
+                    placeMenu,
+                    ID_LABEL_BUTT,
+		    _("Net name"),
+                    _("Place the Net name"),
+		    wxITEM_NORMAL
+            );
+            item->SetBitmap(add_line_label_xpm);
+            placeMenu->Append(item);
+
+            item = new wxMenuItem(
+                    placeMenu,
+                    ID_GLABEL_BUTT,
+		    _("Global label"),
+		    _("Place the global label"),                    
+		    wxITEM_NORMAL
+            );
+            item->SetBitmap(add_glabel_xpm);
+            placeMenu->Append(item);
+
+            item = new wxMenuItem(
+                    placeMenu,
+                    ID_HIERLABEL_BUTT,
+		    _("Hierarchical label"),
+		    _("Place the hierarchical label"),
+		    wxITEM_NORMAL
+            );
+            item->SetBitmap(add_glabel_xpm);
+            placeMenu->Append(item);
+
+            item = new wxMenuItem(
+                    placeMenu,
+                    ID_JUNCTION_BUTT,
+		    _("Junction"),
+		    _("Place the junction"),
+		    wxITEM_NORMAL
+            );
+            item->SetBitmap(add_junction_xpm);
+            placeMenu->Append(item);
+
+            placeMenu->AppendSeparator();
+            
+            item = new wxMenuItem(
+                    placeMenu,
+                    ID_SHEET_SYMBOL_BUTT,
+		    _("Hierarchical sheet"),
+		    _("Place the hierarchical sheet"),
+		    wxITEM_NORMAL
+            );
+            item->SetBitmap(add_hierar_symbol_xpm);
+            placeMenu->Append(item);
+
+            item = new wxMenuItem(
+                    placeMenu,
+                    ID_IMPORT_GLABEL_BUTT,
+                    _("Imported hierarchical label"),
+	            _("Place the pinsheet (imported hierarchical label from sheet)"),
+		    wxITEM_NORMAL
+            );
+            item->SetBitmap(import_glabel_xpm);
+            placeMenu->Append(item);
+
+            item = new wxMenuItem(
+                    placeMenu,
+                    ID_SHEET_LABEL_BUTT,
+		    _("Hierarchical pin to sheet"),
+		    _("Place the hierarchical pin to sheet"),
+		    wxITEM_NORMAL
+            );
+            item->SetBitmap(add_hierar_pin_xpm);
+            placeMenu->Append(item);
+
+            placeMenu->AppendSeparator();
+            
+            item = new wxMenuItem(
+                    placeMenu,
+                    ID_LINE_COMMENT_BUTT,
+		    _("Graphic line or poligon"),
+		    _("Place the Graphic line or poligon"),
+		    wxITEM_NORMAL
+            );
+            item->SetBitmap(add_dashed_line_xpm);
+            placeMenu->Append(item);
+
+            item = new wxMenuItem(
+                    placeMenu,
+                    ID_TEXT_COMMENT_BUTT,
+		    _("Graphic text (comment)"),
+		    _("Place the Graphic text (comment)"),
+		    wxITEM_NORMAL
+            );
+            item->SetBitmap(add_text_xpm);
+            placeMenu->Append(item);
 
 		// Menu Configuration:
 		wxMenu * configmenu = new wxMenu;
