@@ -97,6 +97,11 @@ void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
 
     setlocale( LC_NUMERIC, "" );      // revert to the current locale
 
+    // this is called in FromBOARD() too, but if it throws an exception, that call
+    // does not happen, so call it again just in case here.
+    db.RevertMODULEs( m_Pcb );
+
+
     // The two calls below to BOARD::Change_Side_Module(), both set the
     // modified flag, yet their actions cancel each other out, so it should
     // be ok to clear the modify flag.
@@ -727,15 +732,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
     //  DSN Images (=Kicad MODULES and pads) must be presented from the
     //  top view.  So we temporarily flip any modules which are on the back
     //  side of the board to the front, and record this in the MODULE's flag field.
-    for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
-    {
-        module->flag = 0;
-        if( module->GetLayer() == COPPER_LAYER_N )
-        {
-            aBoard->Change_Side_Module( module, NULL );
-            module->flag = 1;
-        }
-    }
+    flipMODULEs( aBoard );
 
     //-----<layer_descriptor>-----------------------------------------------
     {
@@ -1220,7 +1217,32 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
     }
 
 
-    //-----<restore MODULEs>------------------------------------------------
+    //-----<flip modules back>----------------------------------------------
+
+    RevertMODULEs( aBoard );
+}
+
+
+void SPECCTRA_DB::flipMODULEs( BOARD* aBoard )
+{
+    for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
+    {
+        module->flag = 0;
+        if( module->GetLayer() == COPPER_LAYER_N )
+        {
+            aBoard->Change_Side_Module( module, NULL );
+            module->flag = 1;
+        }
+    }
+
+    modulesAreFlipped = true;
+}
+
+
+void SPECCTRA_DB::RevertMODULEs( BOARD* aBoard )
+{
+    if( !modulesAreFlipped )
+        return;
 
     //  DSN Images (=Kicad MODULES and pads) must be presented from the
     //  top view.  Restore those that were flipped.
@@ -1232,6 +1254,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             module->flag = 0;
         }
     }
+
+    modulesAreFlipped = false;
 }
 
 

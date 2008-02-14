@@ -3578,6 +3578,8 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
 
     std::string     quote_char;
 
+    bool            modulesAreFlipped;
+
     STRINGFORMATTER sf;
 
     STRINGS         layerIds;       ///< indexed by PCB layer number
@@ -3822,6 +3824,11 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
         nets.clear();
     }
 
+    /**
+     * Function flipMODULEs
+     * flips the modules which are on the back side of the board to the front.
+     */
+    void flipMODULEs( BOARD* aBoard );
 
     //-----<FromSESSION>-----------------------------------------------------
 
@@ -3850,6 +3857,7 @@ public:
         session = 0;
         fp    = 0;
         quote_char += '"';
+        modulesAreFlipped = false;
     }
 
     virtual ~SPECCTRA_DB()
@@ -3957,7 +3965,6 @@ public:
      */
     void FromBOARD( BOARD* aBoard ) throw( IOError );
 
-
     /**
      * Function FromSESSION
      * adds the entire SESSION info to a BOARD but does not write it out.  The
@@ -3968,7 +3975,6 @@ public:
      */
     void FromSESSION( BOARD* aBoard ) throw( IOError );
 
-
     /**
      * Function ExportSESSION
      * writes the internal SESSION instance out as a SPECTRA DSN format file.
@@ -3976,6 +3982,12 @@ public:
      * @param aFilename The file to save to.
      */
     void ExportSESSION( wxString aFilename );
+
+    /**
+     * Function RevertMODULEs
+     * flips the modules which were on the back side of the board back to the back.
+     */
+    void RevertMODULEs( BOARD* aBoard );
 };
 
 
