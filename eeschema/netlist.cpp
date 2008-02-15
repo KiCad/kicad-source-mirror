@@ -12,6 +12,7 @@
 #include "netlist.h" /* Definitions generales liees au calcul de netliste */
 #include "protos.h"
 
+//#define NETLIST_DEBUG
 
 /* Routines locales */
 static void PropageNetCode( int OldNetCode, int NewNetCode, int IsBus );
@@ -301,7 +302,7 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
     }
 
    
-#if 0 && defined(DEBUG)
+#if defined(NETLIST_DEBUG) && defined(DEBUG)
     std::cout << "\n\nafter sheet local\n\n";
     dumpNetTable();
 #endif    
@@ -342,7 +343,7 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
         }
     }
 
-#if 0 && defined(DEBUG)
+#if defined(NETLIST_DEBUG) && defined(DEBUG)
     std::cout << "\n\nafter sheet global\n\n";
     dumpNetTable();
 #endif    
@@ -363,7 +364,7 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
     qsort( g_TabObjNet, g_NbrObjNet, sizeof(ObjetNetListStruct), TriNetCode );
 
     
-#if 0 && defined(DEBUG)
+#if defined(NETLIST_DEBUG) && defined(DEBUG)
     std::cout << "after qsort()\n";
     dumpNetTable();
 #endif    
@@ -549,8 +550,8 @@ static int ListeObjetConnection( WinEDA_SchematicFrame* frame, DrawSheetList* sh
                 ObjNet[NbrItem].m_Comp   = STRUCT;
                 ObjNet[NbrItem].m_Type   = NET_LABEL;
                 
-                if( STRUCT->m_Layer ==  LAYER_GLOBLABEL )
-                    ObjNet[NbrItem].m_Type = NET_GLOBLABEL;
+                if( STRUCT->m_Layer ==  LAYER_GLOBLABEL ) //this is not the simplest way of doing it
+                    ObjNet[NbrItem].m_Type = NET_GLOBLABEL;// (look at the case statement above). 
 				if( STRUCT->m_Layer ==  LAYER_HIERLABEL )
 					ObjNet[NbrItem].m_Type = NET_HIERLABEL;
                 
@@ -851,7 +852,7 @@ static int ConvertBusToMembers( ObjetNetListStruct* BusLabel )
 
     for( BusMember++; BusMember <= LastNumWireBus; BusMember++ )
     {
-        *(BusLabel + 1) = *BusLabel; 
+        *(BusLabel + 1) = *BusLabel; //copy constructor.
         BusLabel++; 
         NumItem++;
         
@@ -883,8 +884,8 @@ static void PropageNetCode( int OldNetCode, int NewNetCode, int IsBus )
 
     if( OldNetCode == NewNetCode )
         return;
-#ifdef DEBUG
-	//printf("replacing net %d with %d\n", OldNetCode,NewNetCode); 
+#if defined(NETLIST_DEBUG) && defined(DEBUG)
+	printf("replacing net %d with %d\n", OldNetCode,NewNetCode); 
 #endif
 
     if( IsBus == 0 )    /* Propagation du NetCode */
@@ -942,7 +943,7 @@ static void PointToPointConnect( ObjetNetListStruct* Ref, int IsBus, int start )
         for( i = start; i < g_NbrObjNet; i++ )
         {
 			
-			if( netTable[i].m_SheetList != Ref->m_SheetList ) //used to be >  (why?)
+			if( netTable[i].m_SheetList != Ref->m_SheetList ) //used to be > (why?)
                 continue;
 			
             switch( netTable[i].m_Type )
@@ -1095,14 +1096,17 @@ static void LabelConnect( ObjetNetListStruct* LabelRef )
     {
         if( netTable[i].GetNet() == LabelRef->GetNet() )
             continue;
-
 		if( netTable[i].m_SheetList != LabelRef->m_SheetList )
         {
-            if( netTable[i].m_Type != NET_PINLABEL 
+            if( (netTable[i].m_Type != NET_PINLABEL 
 				&& netTable[i].m_Type != NET_GLOBLABEL
-				&& netTable[i].m_Type != NET_GLOBBUSLABELMEMBER
-			    /*netTable[i].m_Type != NET_LABEL (***)*/ ) 
+				&& netTable[i].m_Type != NET_GLOBBUSLABELMEMBER) ) 
                 continue;
+			if( (netTable[i].m_Type == NET_GLOBLABEL 
+			 	|| netTable[i].m_Type == NET_GLOBBUSLABELMEMBER) 
+			  	&& netTable[i].m_Type != LabelRef->m_Type)
+				//global labels only connect other global labels.
+				continue; 
         }
 		//regular labels are sheet-local; 
 		//NET_HIERLABEL are used to connect sheets. 
@@ -1110,8 +1114,10 @@ static void LabelConnect( ObjetNetListStruct* LabelRef )
 		//NET_GLOBLABEL is global. 
 		if( netTable[i].m_Type == NET_LABEL
          || netTable[i].m_Type == NET_GLOBLABEL
+		 || netTable[i].m_Type == NET_HIERLABEL
          || netTable[i].m_Type == NET_BUSLABELMEMBER
          || netTable[i].m_Type == NET_GLOBBUSLABELMEMBER
+		 || netTable[i].m_Type == NET_HIERBUSLABELMEMBER
          || netTable[i].m_Type == NET_PINLABEL )
         {
             if( netTable[i].m_Label->CmpNoCase( *LabelRef->m_Label ) != 0 )

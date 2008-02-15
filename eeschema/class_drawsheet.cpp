@@ -167,7 +167,7 @@ void DrawSheetStruct::CleanupSheet( WinEDA_SchematicFrame* frame, wxDC* DC )
 	Pinsheet = m_Label;
 	while( Pinsheet )
 	{
-		/* Search Glabel corresponding to this Pinsheet */
+		/* Search Hlabel corresponding to this Pinsheet */
 
 		EDA_BaseStruct*        DrawStruct = m_s->EEDrawList;
 		DrawHierLabelStruct* HLabel = NULL;
