@@ -160,12 +160,11 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         //TODO: Unify the ID names!
         wxMenu* placeMenu = new wxMenu;
 
-        item = new wxMenuItem(
-            placeMenu,
-            ID_COMPONENT_BUTT,
-            _( "&Component" ),
-            _( "Place the component" )
-            );
+            item = new wxMenuItem(
+                    placeMenu,
+                    ID_COMPONENT_BUTT,
+                    _("&Component"),
+					_("Place a component") );
         item->SetBitmap( add_component_xpm );
         placeMenu->Append( item );
 

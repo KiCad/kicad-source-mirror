@@ -353,9 +353,9 @@ bool DrawSheetStruct::Load(WinEDA_SchematicFrame* frame)
 			//do not need to load the sub-sheets - this has already been done.
 		}else{
 			m_s = new SCH_SCREEN(SCHEMATIC_FRAME); 
+			m_s->m_RefCount++; 
 			if(!frame->LoadOneEEFile(m_s, m_FileName))
 				return false;
-			m_s->m_RefCount++; 
 			EDA_BaseStruct* bs = m_s->EEDrawList; 
 			while(bs){
 				if(bs->Type() ==  DRAW_SHEET_STRUCT_TYPE){

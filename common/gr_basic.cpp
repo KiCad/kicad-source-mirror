@@ -62,6 +62,7 @@ static inline int USCALE( us arg, us num, us den )
 
 static int inline ZoomValue( int value_to_zoom ) {
     int zoom = GET_ZOOM;
+	if( !zoom ) return 0; 
 
     if( value_to_zoom >= 0 )
         return ( value_to_zoom + (zoom >> 1 ) ) / zoom;

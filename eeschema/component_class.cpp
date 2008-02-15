@@ -112,6 +112,15 @@ const wxString EDA_SchComponentStruct::GetRef( DrawSheetList* sheet )
 			return m_References[i]; 
 		}
 	}
+	//if it was not found in m_Paths array, then see if it is in
+	// m_Field[REFERENCE] -- if so, use this as a default for this path.
+	// this will happen if we load a version 1 schematic file. 
+	// it will also mean that multiple instances of the same sheet by default
+	// all have the same component references, but perhaps this is best. 
+	if( !m_Field[REFERENCE].m_Text.IsEmpty() ){
+		SetRef( sheet, m_Field[REFERENCE].m_Text ); 
+		return m_Field[REFERENCE].m_Text; 
+	}
 	return m_PrefixString; 
 }
 
@@ -143,6 +152,8 @@ void EDA_SchComponentStruct::SetRef( DrawSheetList* sheet, wxString ref )
 			abs(m_Field[REFERENCE].m_Pos.y - m_Pos.y) > 1000)) {
 		//move it to a reasonable position..
 		m_Field[REFERENCE].m_Pos = m_Pos; 
+		m_Field[REFERENCE].m_Pos.x += 50; //a slight offset..
+		m_Field[REFERENCE].m_Pos.y += 50; 
 	}
 	m_Field[REFERENCE].m_Text = ref; //for drawing. 
 }

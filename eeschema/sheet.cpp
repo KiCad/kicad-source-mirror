@@ -159,7 +159,7 @@ void WinEDA_SheetPropertiesFrame::CreateControls()
     itemBoxSizer3->Add( itemBoxSizer4, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
     wxStaticText* itemStaticText5 = new wxStaticText( itemDialog1, wxID_STATIC, _(
-                                                          "Filename:" ), wxDefaultPosition,
+                                                          "Filename (will be created upon save if it does not already exist):" ), wxDefaultPosition,
                                                       wxDefaultSize, 0 );
     itemBoxSizer4->Add( itemStaticText5,
                         0,
@@ -294,12 +294,9 @@ void WinEDA_SheetPropertiesFrame::SheetPropertiesAccept( wxCommandEvent& event )
 
         if( wxFileExists( FileName ) )//do we reload the data from the existing file
         {
-            msg.Printf( _( "A file named %s exists, load it ?" ), FileName.GetData() );
+            msg.Printf( _( "A file named %s exists, load it (otherwise overwrite it)?" ), FileName.GetData() );
             if( IsOK( this, msg ) )
             {
-				//LoadOneSheet clears the EEDrawList, 
-				//we do not need to delete & recreate the SCH_SCREEN obj
-				m_CurrentSheet->m_FileName = FileName;
 				if( m_CurrentSheet->m_s ){
 					m_CurrentSheet->m_s->m_RefCount--; 
 					if( m_CurrentSheet->m_s->m_RefCount == 0)
@@ -308,7 +305,14 @@ void WinEDA_SheetPropertiesFrame::SheetPropertiesAccept( wxCommandEvent& event )
 				m_CurrentSheet->m_s = NULL; //so that we reload..
 				m_CurrentSheet->Load(m_Parent); 
             }
-        }
+        }else{
+			//just make a new screen if needed. 
+			if( !m_CurrentSheet->m_s ){
+				m_CurrentSheet->m_s = new SCH_SCREEN(SCHEMATIC_FRAME); 
+				m_CurrentSheet->m_s->m_RefCount++; //be careful with these
+				m_CurrentSheet->m_s->m_FileName = FileName; 
+			}
+		}
     }
 
     msg = m_FileNameSize->GetValue();

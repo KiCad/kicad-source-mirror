@@ -201,6 +201,8 @@ EDA_SchComponentStruct* WinEDA_SchematicFrame::Load_Component( wxDC* DC,
     if( msg.IsEmpty() )
         msg = wxT( "U" );
     msg += wxT( "?" );
+	//update the reference -- just the prefix for now. 
+	DrawLibItem->SetRef(GetSheet(), msg ); 
 
     /* Init champ Reference */
     DrawLibItem->m_Field[REFERENCE].m_Pos.x =
