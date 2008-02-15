@@ -1,5 +1,9 @@
 /* XPM */ 
-static const char * add_hierar_symbol_xpm[] = {
+#ifndef XPMMAIN
+extern const char *add_hierarchical_subsheet_xpm[];
+
+#else
+const char * add_hierarchical_subsheet_xpm[] = {
 "16 16 35 1",
 " 	c None",
 "!	c black",
@@ -52,3 +56,4 @@ static const char * add_hierar_symbol_xpm[] = {
 "!#)!!!!!!!!!!)A!",
 "!###B@@@CCAAAAD!",
 " !!!!!!!!!!!!!! "};
+#endif

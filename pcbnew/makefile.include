@@ -8,16 +8,13 @@ EXTRACPPFLAGS += -DPCBNEW  -fno-strict-aliasing -I./ -Ibitmaps -I../include -I..
 
 LIBVIEWER3D = ../3d-viewer/3d-viewer.a
 
-ZONE_FILES = zones_by_polygon.o
-#ZONE_FILES = zones.o
+ZONE_FILES = zones_by_polygon.o zones_test_and_combine_areas.o zone_filling_algorithm.o
 
-SPECCTRA_TOOLS = specctra.o specctra_export.o dsn.o
+SPECCTRA_TOOLS = specctra.o specctra_export.o dsn.o specctra_import.o
 
 OBJECTS=	$(TARGET).o classpcb.o\
 		$(ZONE_FILES)\
 		$(SPECCTRA_TOOLS)\
-		zones_test_and_combine_areas.o\
-		zone_filling_algorithm.o\
 		lay2plot.o\
 		modedit_undo_redo.o\
 		block_module_editor.o\
@@ -119,10 +116,7 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		modedit.o\
 		export_gencad.o\
 		hotkeys.o \
-        collectors.o \
-		specctra.cpp \
-		specctra_import.cpp \
-		specctra_export.cpp
+        collectors.o
 		
 
 
@@ -300,8 +294,6 @@ zones_by_polygon.o: zones_by_polygon.cpp dialog_zones_by_polygon.cpp dialog_zone
 undelete.o: undelete.cpp $(COMMON)
 
 move_or_drag_track.o: move_or_drag_track.cpp $(COMMON)
-
-copy_track.o: copy_track.cpp $(COMMON)
 
 ioascii.o: ioascii.cpp $(COMMON)
 

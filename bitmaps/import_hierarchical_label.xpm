@@ -1,5 +1,9 @@
 /* XPM */
-static const char * import_glabel_xpm[] = {
+#ifndef XPMMAIN
+extern const char *import_hierarchical_label_xpm[];
+
+#else
+const char * import_hierarchical_label_xpm[] = {
 "16 16 92 2",
 "  	c None",
 ". 	c #000000",
@@ -109,3 +113,4 @@ static const char * import_glabel_xpm[] = {
 "        . Y 5 Z n n n n ` 5 5 . ",
 "        . . . . . . . . . . . . ",
 "                                "};
+#endif

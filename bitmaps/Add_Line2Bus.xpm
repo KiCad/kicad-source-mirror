@@ -1,5 +1,9 @@
 /* XPM */ 
-static const char * add_line2bus_xpm[] = {
+#ifndef XPMMAIN
+extern const char *add_line2bus_xpm[];
+
+#else
+const char * add_line2bus_xpm[] = {
 "16 16 31 1",
 " 	c None",
 "!	c black",
@@ -48,3 +52,4 @@ static const char * add_line2bus_xpm[] = {
 " ##61&          ",
 " ##9&           ",
 " #@&            "};
+#endif

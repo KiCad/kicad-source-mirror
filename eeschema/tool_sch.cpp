@@ -21,17 +21,10 @@
 #include "cvpcb.xpm"
 #include "Hierarchy_Nav.xpm"
 #include "Hierarchy_cursor.xpm"
-#include "Add_Power.xpm"
-#include "Lines90.xpm"
-#include "Hidden_Pin.xpm"
-#include "Add_Bus2Bus.xpm"
-#include "Add_Line2Bus.xpm"
-#include "add_bus.xpm"
 #include "library_browse.xpm"
 #include "libedit.xpm"
-#include "add_hierar_pin.xpm"
-#include "add_hierar_symbol.xpm"
-#include "Import_GLabel.xpm"
+#include "Lines90.xpm"
+#include "Hidden_Pin.xpm"
 
 #include "id.h"
 
@@ -201,24 +194,27 @@ void WinEDA_SchematicFrame::ReCreateVToolbar()
 
     m_VToolBar->AddTool( ID_GLABEL_BUTT, wxEmptyString,
                          BITMAP( add_glabel_xpm ),
-                         _( "Add global label" ), wxITEM_CHECK );
+                         _( "Add global label.\nWarning: all global labels with the same name are connected in whole hierarchy" ),
+						 wxITEM_CHECK );
 	
-	m_VToolBar->AddTool( ID_HIERLABEL_BUTT, wxEmptyString,
-						 BITMAP( add_glabel_xpm ),
-								 _( "Add hierarchical label" ), wxITEM_CHECK );
-
     m_VToolBar->AddTool( ID_JUNCTION_BUTT, wxEmptyString,
                          BITMAP( add_junction_xpm ),
                          _( "Add junction" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
+	m_VToolBar->AddTool( ID_HIERLABEL_BUTT, wxEmptyString,
+						 BITMAP( add_hierarchical_label_xpm ),
+								 _( "Add a hierarchical label. This label will be seen as a pin sheet in the sheet symbol" ),
+								 wxITEM_CHECK );
+
     m_VToolBar->AddTool( ID_SHEET_SYMBOL_BUTT, wxEmptyString,
-                         BITMAP( add_hierar_symbol_xpm ),
-                         _( "Add hierarchical symbol (sheet)" ), wxITEM_CHECK );
+                         BITMAP( add_hierarchical_subsheet_xpm ),
+                         _( "Add hierarchical sheet" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_IMPORT_GLABEL_BUTT, wxEmptyString,
-                         BITMAP( import_glabel_xpm ),
-                         _( "Import hierarchical label from sheet & create pinsheet" ), wxITEM_CHECK );
+                         BITMAP( import_hierarchical_label_xpm ),
+                         _( "Import hierarchical label from sheet and create the corresponding pin sheet" ),
+						 wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_SHEET_LABEL_BUTT, wxEmptyString,
                          BITMAP( add_hierar_pin_xpm ),

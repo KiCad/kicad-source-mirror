@@ -1,5 +1,9 @@
 /* XPM */
-static const char * add_hierar_pin_xpm[] = {
+#ifndef XPMMAIN
+extern const char *add_hierar_pin_xpm[];
+
+#else
+const char * add_hierar_pin_xpm[] = {
 "16 16 37 1",
 " 	c None",
 "!	c black",
@@ -54,3 +58,4 @@ static const char * add_hierar_pin_xpm[] = {
 "!#)!!!!!!!!!!)D!",
 "!EEEEEEEEEEEEEF!",
 " !!!!!!!!!!!!!! "};
+#endif

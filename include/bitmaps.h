@@ -49,6 +49,15 @@
 	#include "../bitmaps/Add_GLabel.xpm"
 	#include "../bitmaps/Add_Junction.xpm"
 
+	#include "../bitmaps/Add_Power.xpm"
+	#include "../bitmaps/Add_Bus2Bus.xpm"
+	#include "../bitmaps/Add_Line2Bus.xpm"
+	#include "../bitmaps/add_bus.xpm"
+	#include "../bitmaps/add_hierarchical_label.xpm"
+	#include "../bitmaps/add_hierar_pin.xpm"
+	#include "../bitmaps/add_hierar_subsheet.xpm"
+	#include "../bitmaps/import_hierarchical_label.xpm"
+
 	#include "../bitmaps/general_deletions.xpm"
 	#include "../bitmaps/Delete_Text.xpm"
 	#include "../bitmaps/Delete_Cotation.xpm"

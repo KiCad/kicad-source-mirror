@@ -1,5 +1,9 @@
 /* XPM */
-static const char * add_bus2bus_xpm[] = {
+#ifndef XPMMAIN
+extern const char *add_bus2bus_xpm[];
+
+#else
+const char * add_bus2bus_xpm[] = {
 "16 16 38 1",
 " 	c None",
 ".	c #AFAFFF",
@@ -55,3 +59,4 @@ static const char * add_bus2bus_xpm[] = {
 " ..&67          ",
 " ..89           ",
 " .}+            "};
+#endif

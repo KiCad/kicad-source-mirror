@@ -1,5 +1,9 @@
 /* XPM */
-static const char * add_power_xpm[] = {
+#ifndef XPMMAIN
+extern const char *add_power_xpm[];
+
+#else
+const char * add_power_xpm[] = {
 "16 16 26 1",
 " 	c None",
 ".	c #D72D2D",
@@ -43,3 +47,4 @@ static const char * add_power_xpm[] = {
 "      ),/>>     ",
 "       <>>      ",
 "                "};
+#endif
