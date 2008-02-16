@@ -110,12 +110,20 @@ static PARAM_CFG_SETCOLOR ColorLayerLLabelCfg
     BLACK                                           /* Default  value */
 );
 
+static PARAM_CFG_SETCOLOR ColorLayerHierarLabelCfg
+(
+    INSETUP,
+    wxT( "ColorHlab" ),                             /* Ident String */
+    &g_LayerDescr.LayerColor[LAYER_HIERLABEL],      /* Parameter address */
+    BROWN                                           /* Default  value */
+);
+
 static PARAM_CFG_SETCOLOR ColorLayerGLabelCfg
 (
     INSETUP,
-    wxT( "ColorGlab" ),                             /* Ident String */
+    wxT( "ColorGbllab" ),                             /* Ident String */
     &g_LayerDescr.LayerColor[LAYER_GLOBLABEL],      /* Parameter address */
-    BROWN                                           /* Default  value */
+    RED                                             /* Default  value */
 );
 
 static PARAM_CFG_SETCOLOR ColorLayerPinFunCfg
@@ -485,6 +493,7 @@ PARAM_CFG_BASE* ParamCfgList[] =
     &ColorLayerBusCfg,
     &ColorLayerJunctionCfg,
     &ColorLayerLLabelCfg,
+	&ColorLayerHierarLabelCfg,
     &ColorLayerGLabelCfg,
     &ColorLayerPinFunCfg,
     &ColorLayerPinNumCfg,

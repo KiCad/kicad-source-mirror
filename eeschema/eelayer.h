@@ -17,7 +17,7 @@ class wxStdDialogButtonSizer;
 
 
 // Specify how many elements are contained within laytool_list[]
-const int NB_BUTT = 23; // Includes an element associated with the grid
+const int NB_BUTT = 24; // Includes an element associated with the grid
 
 // Specify how many elements are contained within laytool_index[]
 const int BUTTON_GROUPS = 5;
@@ -59,7 +59,6 @@ struct ColorButton
     int*            m_Color;
     int             m_Id;
     wxBitmapButton* m_Button;
-//  int             m_State;    // (Commented out until when it is actually used.)
 };
 
 struct ButtonIndex
@@ -187,10 +186,15 @@ static ColorButton Layer_SheetName_Item =
 
 static ColorButton Layer_SheetLabel_Item =
 {
-    _( "SheetLabel" ),              // Title
+    _( "SheetLabel (Pin Sheet)" ),  // Title
     ADR( LAYER_SHEETLABEL )         // Adr of optional parameter
 };
 
+static ColorButton Layer_HierarchicalLabel_Item =
+{
+    _( "Hierarchical Label" ),       // Title
+    ADR( LAYER_HIERLABEL )           // Adr of optional parameter
+};
 
 static ColorButton Layer_Erc_Warning_Item =
 {
@@ -235,6 +239,7 @@ static ColorButton* laytool_list[NB_BUTT] = {
     &Layer_SheetFileName_Item,
     &Layer_SheetName_Item,
     &Layer_SheetLabel_Item,
+	&Layer_HierarchicalLabel_Item,
 
     &Layer_Erc_Warning_Item,
     &Layer_Erc_Error_Item,
@@ -258,19 +263,19 @@ static ButtonIndex MsgDevice_Item =
 static ButtonIndex Msg_Sheets =
 {
     _( "Sheets" ),                  // Title
-    19                              // Index to first bitmap button in group
+    20                              // Index to first bitmap button in group
 };
 
 static ButtonIndex Msg_ErcMarck =
 {
     _( "Erc Mark" ),                // Title
-    21                              // Index to first bitmap button in group
+    22                              // Index to first bitmap button in group
 };
 
 static ButtonIndex Msg_Other =
 {
     _( "Other" ),                   // Title
-    22                              // Index to first bitmap button in group
+    23                              // Index to first bitmap button in group
 };
 
 
