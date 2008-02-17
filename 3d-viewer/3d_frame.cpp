@@ -26,7 +26,7 @@
 
 
 BEGIN_EVENT_TABLE(WinEDA3D_DrawFrame, wxFrame)
-	EVT_TOOL_RANGE(ID_ZOOM_PLUS_BUTT, ID_ZOOM_PAGE_BUTT,
+	EVT_TOOL_RANGE(ID_ZOOM_IN_BUTT, ID_ZOOM_PAGE_BUTT,
 			WinEDA3D_DrawFrame::Process_Zoom)
 	EVT_TOOL_RANGE(ID_START_COMMAND_3D, ID_END_COMMAND_3D,
 			WinEDA3D_DrawFrame::Process_Special_Functions)
@@ -164,13 +164,13 @@ int ii;
 		trackball(g_Parm_3D_Visu.m_Quat, 0.0, 0.0, 0.0, 0.0 );
 		break;
 
-		case ID_ZOOM_PLUS_BUTT:
+		case ID_ZOOM_IN_BUTT:
 			g_Parm_3D_Visu.m_Zoom /= 1.2;
 			if ( g_Parm_3D_Visu.m_Zoom <= 0.01)
 				g_Parm_3D_Visu.m_Zoom = 0.01;
 			break;
 
-		case ID_ZOOM_MOINS_BUTT:
+		case ID_ZOOM_OUT_BUTT:
 			g_Parm_3D_Visu.m_Zoom *= 1.2;
 			break;
 

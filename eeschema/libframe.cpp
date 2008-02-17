@@ -27,7 +27,7 @@ BEGIN_EVENT_TABLE( WinEDA_LibeditFrame, wxFrame )
 COMMON_EVENTS_DRAWFRAME EVT_CLOSE( WinEDA_LibeditFrame::OnCloseWindow )
 EVT_SIZE( WinEDA_LibeditFrame::OnSize )
 
-EVT_TOOL_RANGE( ID_ZOOM_PLUS_BUTT, ID_ZOOM_PAGE_BUTT,
+EVT_TOOL_RANGE( ID_ZOOM_IN_BUTT, ID_ZOOM_PAGE_BUTT,
                 WinEDA_LibeditFrame::Process_Zoom )
 
 // Tools et boutons de Libedit:

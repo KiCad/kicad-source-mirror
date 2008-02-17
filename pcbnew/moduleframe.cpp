@@ -29,7 +29,7 @@ EVT_SIZE( WinEDA_ModuleEditFrame::OnSize )
 EVT_KICAD_CHOICEBOX( ID_ON_ZOOM_SELECT, WinEDA_PcbFrame::OnSelectZoom )
 EVT_KICAD_CHOICEBOX( ID_ON_GRID_SELECT, WinEDA_PcbFrame::OnSelectGrid )
 
-EVT_TOOL_RANGE( ID_ZOOM_PLUS_BUTT, ID_ZOOM_PAGE_BUTT,
+EVT_TOOL_RANGE( ID_ZOOM_IN_BUTT, ID_ZOOM_PAGE_BUTT,
                 WinEDA_ModuleEditFrame::Process_Zoom )
 
 EVT_TOOL( ID_LIBEDIT_SELECT_CURRENT_LIB, WinEDA_ModuleEditFrame::Process_Special_Functions )

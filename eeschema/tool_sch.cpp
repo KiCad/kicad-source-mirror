@@ -99,11 +99,11 @@ void WinEDA_SchematicFrame::ReCreateHToolbar()
 
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( _( "zoom +" ), s_Schematic_Hokeys_Descr, HK_ZOOM_IN );
-    m_HToolBar->AddTool( ID_ZOOM_PLUS_BUTT, wxEmptyString, BITMAP( zoom_in_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_IN_BUTT, wxEmptyString, BITMAP( zoom_in_xpm ),
                          msg );
 
     msg = AddHotkeyName( _( "zoom -" ), s_Schematic_Hokeys_Descr, HK_ZOOM_OUT );
-    m_HToolBar->AddTool( ID_ZOOM_MOINS_BUTT, wxEmptyString, BITMAP( zoom_out_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_OUT_BUTT, wxEmptyString, BITMAP( zoom_out_xpm ),
                          msg );
 
     msg = AddHotkeyName( _( "redraw" ), s_Schematic_Hokeys_Descr, HK_ZOOM_REDRAW );
@@ -177,57 +177,57 @@ void WinEDA_SchematicFrame::ReCreateVToolbar()
 
     m_VToolBar->AddTool( ID_WIRETOBUS_ENTRY_BUTT, wxEmptyString,
                          BITMAP( add_line2bus_xpm ),
-                         _( "Add wire to bus entry" ), wxITEM_CHECK );
+                         _( "Place the wire to bus entry" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_BUSTOBUS_ENTRY_BUTT, wxEmptyString,
                          BITMAP( add_bus2bus_xpm ),
-                         _( "Add bus to bus entry" ), wxITEM_CHECK );
+                         _( "Place the bus to bus entry" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_NOCONN_BUTT, wxEmptyString,
                          BITMAP( noconn_button ),
-                         _( "Add no connect flag" ), wxITEM_CHECK );
+                         _( "Place the no connect flag" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_LABEL_BUTT, wxEmptyString,
                          BITMAP( add_line_label_xpm ),
-                         _( "Add wire or bus label" ), wxITEM_CHECK );
+                         _( "Place the net name" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_GLABEL_BUTT, wxEmptyString,
                          BITMAP( add_glabel_xpm ),
-                         _( "Add global label.\nWarning: all global labels with the same name are connected in whole hierarchy" ),
+                         _( "Place the global label.\nWarning: all global labels with the same name are connected in whole hierarchy" ),
 						 wxITEM_CHECK );
 	
     m_VToolBar->AddTool( ID_JUNCTION_BUTT, wxEmptyString,
                          BITMAP( add_junction_xpm ),
-                         _( "Add junction" ), wxITEM_CHECK );
+                         _( "Place the junction" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
 	m_VToolBar->AddTool( ID_HIERLABEL_BUTT, wxEmptyString,
 						 BITMAP( add_hierarchical_label_xpm ),
-								 _( "Add a hierarchical label. This label will be seen as a pin sheet in the sheet symbol" ),
+								 _( "Place the hierarchical label. This label will be seen as a pin sheet in the sheet symbol" ),
 								 wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_SHEET_SYMBOL_BUTT, wxEmptyString,
                          BITMAP( add_hierarchical_subsheet_xpm ),
-                         _( "Add hierarchical sheet" ), wxITEM_CHECK );
+                         _( "Place the hierarchical sheet" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_IMPORT_GLABEL_BUTT, wxEmptyString,
                          BITMAP( import_hierarchical_label_xpm ),
-                         _( "Import hierarchical label from sheet and create the corresponding pin sheet" ),
+                         _( "Place the pin sheet (imported hierarchical label from sheet)" ),
 						 wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_SHEET_LABEL_BUTT, wxEmptyString,
                          BITMAP( add_hierar_pin_xpm ),
-                         _( "Add hierachical pin to sheet" ), wxITEM_CHECK );
+                         _( "Place the hierachical pin to sheet" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_LINE_COMMENT_BUTT, wxEmptyString,
                          BITMAP( add_dashed_line_xpm ),
-                         _( "Add graphic line or polygon" ), wxITEM_CHECK );
+                         _( "Place the graphic line or polygon" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_TEXT_COMMENT_BUTT, wxEmptyString,
                          BITMAP( add_text_xpm ),
-                         _( "Add graphic text (comment)" ), wxITEM_CHECK );
+                         _( "Place the graphic text (comment)" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_SCHEMATIC_DELETE_ITEM_BUTT, wxEmptyString,

@@ -291,12 +291,12 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         break;
 
     case EDA_ZOOM_IN_FROM_MOUSE:
-        OnZoom( ID_ZOOM_PLUS_KEY );
+        OnZoom( ID_ZOOM_IN_KEY );
         oldpos = curpos = GetScreen()->m_Curseur;
         break;
 
     case EDA_ZOOM_OUT_FROM_MOUSE:
-        OnZoom( ID_ZOOM_MOINS_KEY );
+        OnZoom( ID_ZOOM_OUT_KEY );
         oldpos = curpos = GetScreen()->m_Curseur;
         break;
 

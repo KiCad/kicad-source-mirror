@@ -106,11 +106,11 @@ void WinEDA_GerberFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_ZOOM_IN:
-        OnZoom( ID_ZOOM_PLUS_KEY );
+        OnZoom( ID_ZOOM_IN_KEY );
         break;
 
     case HK_ZOOM_OUT:
-        OnZoom( ID_ZOOM_MOINS_KEY );
+        OnZoom( ID_ZOOM_OUT_KEY );
         break;
 
     case HK_ZOOM_REDRAW:

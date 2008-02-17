@@ -596,13 +596,13 @@ void WinEDA_DrawFrame::OnZoom( int zoom_type )
 
     switch( zoom_type )
     {
-    case ID_POPUP_ZOOM_PLUS:
-    case ID_ZOOM_PLUS_KEY:
+    case ID_POPUP_ZOOM_IN:
+    case ID_ZOOM_IN_KEY:
         move_mouse_cursor = TRUE;
         // fall thru
 
-    case ID_ZOOM_PLUS_BUTT:
-        if( zoom_type == ID_ZOOM_PLUS_BUTT )
+    case ID_ZOOM_IN_BUTT:
+        if( zoom_type == ID_ZOOM_IN_BUTT )
 			GetScreen()->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
 
 		GetScreen()->SetPreviousZoom();
@@ -610,13 +610,13 @@ void WinEDA_DrawFrame::OnZoom( int zoom_type )
         Recadre_Trace( move_mouse_cursor );
         break;
 
-    case ID_POPUP_ZOOM_MOINS:
-    case ID_ZOOM_MOINS_KEY:
+    case ID_POPUP_ZOOM_OUT:
+    case ID_ZOOM_OUT_KEY:
         move_mouse_cursor = TRUE;
         // fall thru
 
-    case ID_ZOOM_MOINS_BUTT:
-        if( zoom_type == ID_ZOOM_MOINS_BUTT )
+    case ID_ZOOM_OUT_BUTT:
+        if( zoom_type == ID_ZOOM_OUT_BUTT )
 			GetScreen()->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
 		GetScreen()->SetNextZoom();
         Recadre_Trace( move_mouse_cursor );

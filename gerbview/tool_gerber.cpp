@@ -269,14 +269,14 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
 
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( _( "zoom +" ), s_Gerbview_Hokeys_Descr, HK_ZOOM_IN );
-    m_HToolBar->AddTool( ID_ZOOM_PLUS_BUTT, BITMAP( zoom_in_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_IN_BUTT, BITMAP( zoom_in_xpm ),
                          wxNullBitmap,
                          FALSE,
                          -1, -1, (wxObject*) NULL,
                          msg );
 
     msg = AddHotkeyName( _( "zoom -" ), s_Gerbview_Hokeys_Descr, HK_ZOOM_OUT );
-    m_HToolBar->AddTool( ID_ZOOM_MOINS_BUTT, BITMAP( zoom_out_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_OUT_BUTT, BITMAP( zoom_out_xpm ),
                          wxNullBitmap,
                          FALSE,
                          -1, -1, (wxObject*) NULL,

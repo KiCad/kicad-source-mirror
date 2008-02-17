@@ -270,12 +270,12 @@ void WinEDA_DrawFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels 
         break;
 
     case EDA_ZOOM_IN_FROM_MOUSE:
-        OnZoom( ID_ZOOM_PLUS_KEY );
+        OnZoom( ID_ZOOM_IN_KEY );
 		curpos = screen->m_Curseur;
         break;
 
     case EDA_ZOOM_OUT_FROM_MOUSE:
-        OnZoom( ID_ZOOM_MOINS_KEY );
+        OnZoom( ID_ZOOM_OUT_KEY );
 		curpos = screen->m_Curseur;
         break;
 

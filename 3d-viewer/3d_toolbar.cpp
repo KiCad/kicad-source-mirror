@@ -40,10 +40,10 @@ void WinEDA3D_DrawFrame::ReCreateHToolbar()
 #endif
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_ZOOM_PLUS_BUTT, wxEmptyString, BITMAP( zoom_in_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_IN_BUTT, wxEmptyString, BITMAP( zoom_in_xpm ),
                         _( "zoom + (F1)" ) );
 
-    m_HToolBar->AddTool( ID_ZOOM_MOINS_BUTT, wxEmptyString, BITMAP( zoom_out_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_OUT_BUTT, wxEmptyString, BITMAP( zoom_out_xpm ),
                         _( "zoom - (F2)" ) );
 
     m_HToolBar->AddTool( ID_ZOOM_REDRAW_BUTT, wxEmptyString, BITMAP( repaint_xpm ),

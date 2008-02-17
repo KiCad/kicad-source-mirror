@@ -22,7 +22,7 @@ BEGIN_EVENT_TABLE( WinEDA_DisplayFrame, wxFrame )
 
 COMMON_EVENTS_DRAWFRAME EVT_CLOSE( WinEDA_DisplayFrame::OnCloseWindow )
 EVT_SIZE( WinEDA_DrawFrame::OnSize )
-EVT_TOOL_RANGE( ID_ZOOM_PLUS_BUTT, ID_ZOOM_PAGE_BUTT,
+EVT_TOOL_RANGE( ID_ZOOM_IN_BUTT, ID_ZOOM_PAGE_BUTT,
                 WinEDA_DisplayFrame::Process_Zoom )
 EVT_TOOL( ID_OPTIONS_SETUP, WinEDA_DisplayFrame::InstallOptionsDisplay )
 EVT_TOOL( ID_CVPCB_SHOW3D_FRAME, WinEDA_BasePcbFrame::Show3D_Frame )
@@ -120,10 +120,10 @@ void WinEDA_DisplayFrame::ReCreateHToolbar()
 
     m_HToolBar->AddSeparator();
 
-    m_HToolBar->AddTool( ID_ZOOM_PLUS_BUTT, wxEmptyString, BITMAP( zoom_in_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_IN_BUTT, wxEmptyString, BITMAP( zoom_in_xpm ),
                         _( "zoom + (F1)" ) );
 
-    m_HToolBar->AddTool( ID_ZOOM_MOINS_BUTT, wxEmptyString, BITMAP( zoom_out_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_OUT_BUTT, wxEmptyString, BITMAP( zoom_out_xpm ),
                         _( "zoom - (F2)" ) );
 
     m_HToolBar->AddTool( ID_ZOOM_REDRAW_BUTT, wxEmptyString, BITMAP( repaint_xpm ),
@@ -195,13 +195,13 @@ void WinEDA_DisplayFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         switch( g_KeyPressed )
         {
         case WXK_F1:
-            OnZoom( ID_ZOOM_PLUS_KEY );
+            OnZoom( ID_ZOOM_IN_KEY );
             flagcurseur = 2;
             curpos = m_CurrentScreen->m_Curseur;
             break;
 
         case WXK_F2:
-            OnZoom( ID_ZOOM_MOINS_KEY );
+            OnZoom( ID_ZOOM_OUT_KEY );
             flagcurseur = 2;
             curpos = m_CurrentScreen->m_Curseur;
             break;

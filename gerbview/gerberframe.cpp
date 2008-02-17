@@ -27,7 +27,7 @@ BEGIN_EVENT_TABLE(WinEDA_GerberFrame, wxFrame)
 	EVT_CLOSE(WinEDA_GerberFrame::OnCloseWindow)
 	EVT_SIZE(WinEDA_GerberFrame::OnSize)
 
-	EVT_TOOL_RANGE(ID_ZOOM_PLUS_BUTT, ID_ZOOM_PAGE_BUTT,
+	EVT_TOOL_RANGE(ID_ZOOM_IN_BUTT, ID_ZOOM_PAGE_BUTT,
 			WinEDA_GerberFrame::Process_Zoom)
 
 	EVT_TOOL(ID_LOAD_FILE, WinEDA_GerberFrame::Files_io)

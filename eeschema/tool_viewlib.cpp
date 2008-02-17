@@ -65,11 +65,11 @@ bool asdeMorgan = FALSE, state;
 					_("Display next part"));
 
 		m_HToolBar->AddSeparator();
-		m_HToolBar->AddTool(ID_ZOOM_PLUS_BUTT, wxEmptyString,
+		m_HToolBar->AddTool(ID_ZOOM_IN_BUTT, wxEmptyString,
 					BITMAP(zoom_in_xpm),
 					_("zoom + (F1)"));
 
-		m_HToolBar->AddTool(ID_ZOOM_MOINS_BUTT, wxEmptyString,
+		m_HToolBar->AddTool(ID_ZOOM_OUT_BUTT, wxEmptyString,
 					BITMAP(zoom_out_xpm),
 					_("zoom - (F2)"));
 

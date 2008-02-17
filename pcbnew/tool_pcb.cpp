@@ -266,11 +266,11 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
 
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( _( "zoom +" ), s_Board_Editor_Hokeys_Descr, HK_ZOOM_IN );
-    m_HToolBar->AddTool( ID_ZOOM_PLUS_BUTT, wxEmptyString, BITMAP( zoom_in_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_IN_BUTT, wxEmptyString, BITMAP( zoom_in_xpm ),
                          msg );
 
     msg = AddHotkeyName( _( "zoom -" ), s_Board_Editor_Hokeys_Descr, HK_ZOOM_OUT );
-    m_HToolBar->AddTool( ID_ZOOM_MOINS_BUTT, wxEmptyString, BITMAP( zoom_out_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_OUT_BUTT, wxEmptyString, BITMAP( zoom_out_xpm ),
                          msg );
 
     msg = AddHotkeyName( _( "redraw" ), s_Board_Editor_Hokeys_Descr, HK_ZOOM_REDRAW );

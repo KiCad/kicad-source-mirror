@@ -154,8 +154,8 @@ void WinEDA_DrawPanel::Process_Popup_Zoom( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_POPUP_ZOOM_PLUS:
-    case ID_POPUP_ZOOM_MOINS:
+    case ID_POPUP_ZOOM_IN:
+    case ID_POPUP_ZOOM_OUT:
     case ID_POPUP_ZOOM_CENTER:
     case ID_POPUP_ZOOM_AUTO:
     case ID_POPUP_ZOOM_REDRAW:
@@ -357,8 +357,8 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
 
 
     ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_CENTER, _( "Center" ), zoom_center_xpm );
-    ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_PLUS, _( "Zoom +" ), zoom_in_xpm );
-    ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_MOINS, _( "Zoom -" ), zoom_out_xpm );
+    ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_IN, _( "Zoom in" ), zoom_in_xpm );
+    ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_OUT, _( "Zoom out" ), zoom_out_xpm );
 
     wxMenu* zoom_choice = new wxMenu;
     ADD_MENUITEM_WITH_SUBMENU( MasterMenu, zoom_choice,
@@ -461,8 +461,8 @@ void WinEDA_DrawFrame::Process_Zoom( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_ZOOM_PLUS_BUTT:
-    case ID_ZOOM_MOINS_BUTT:
+    case ID_ZOOM_IN_BUTT:
+    case ID_ZOOM_OUT_BUTT:
     case ID_ZOOM_REDRAW_BUTT:
     case ID_ZOOM_PAGE_BUTT:
         OnZoom( id );
