@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-02-12 23:36+0300\n"
+"PO-Revision-Date: 2008-02-16 15:31+0300\n"
 "Last-Translator: Igor Plyatov <plyatov@mail.ru>\n"
 "Language-Team: russian\n"
 "MIME-Version: 1.0\n"
@@ -30,9 +30,9 @@ msgstr "Doc файл"
 #: /home/plyatov/Projects/Programming/kicad-svn/common/eda_doc.cpp:144
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/librairi.cpp:203
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/files.cpp:57
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:250
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:258
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:699
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:252
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:260
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:706
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/dcode.cpp:260
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/readgerb.cpp:145
 msgid " not found"
@@ -117,8 +117,8 @@ msgstr "Цвета"
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/muonde.cpp:352
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/sheetlab.cpp:97
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.cpp:255
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:122
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:134
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:123
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:135
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit_onrightclick.cpp:48
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit_onrightclick.cpp:63
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.cpp:329
@@ -130,7 +130,7 @@ msgstr "Цвета"
 msgid "Cancel"
 msgstr "Отмена"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/common/basicframe.cpp:216
+#: /home/plyatov/Projects/Programming/kicad-svn/common/basicframe.cpp:219
 #, c-format
 msgid "Help file %s not found"
 msgstr "Файл справки %s не найден"
@@ -617,12 +617,12 @@ msgid "Block Mirror"
 msgstr "Зеркалирование блока"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/common/confirm.cpp:84
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:603
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:605
 msgid "Warning"
 msgstr "Внимание"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/common/confirm.cpp:88
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:606
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:608
 msgid "Error"
 msgstr "Ошибка"
 
@@ -633,7 +633,7 @@ msgstr "Информация:"
 #: /home/plyatov/Projects/Programming/kicad-svn/common/confirm.cpp:119
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:273
 #: /home/plyatov/Projects/Programming/kicad-svn/cvpcb/cvframe.cpp:178
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schframe.cpp:184
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schframe.cpp:238
 msgid "Confirmation"
 msgstr "Подтверждение"
 
@@ -803,23 +803,23 @@ msgstr "Изменить все модули?"
 msgid "Change module %s (%s)  "
 msgstr "Изменить модуль %s (%s)"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/xchgmod.cpp:614
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/xchgmod.cpp:615
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/automove.cpp:208
 msgid "No Modules!"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/xchgmod.cpp:626
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/xchgmod.cpp:627
 msgid "Cmp files:"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/xchgmod.cpp:642
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/xchgmod.cpp:643
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/gendrill.cpp:323
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/gendrill.cpp:789
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/plotps.cpp:51
 msgid "Unable to create file "
 msgstr "Не удалось создать файл "
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:429
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:430
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_erc.cpp:237
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_component_in_schematic.cpp:201
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_component_in_lib.cpp:166
@@ -827,135 +827,135 @@ msgstr "Не удалось создать файл "
 msgid "Options"
 msgstr "Параметры"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:439
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:440
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_track_options.cpp:290
 #, fuzzy
 msgid "Clearance"
 msgstr "Isolation"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:444
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:445
 msgid "In the clearance units, enter the clearance distance"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:447
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:448
 #, fuzzy
 msgid "Create Report File"
 msgstr "Создать временный файл"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:454
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:455
 #, fuzzy
 msgid "Enable writing report to this file"
 msgstr "Не удается создать файл NetList"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:459
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:460
 #, fuzzy
 msgid "Enter the report filename"
 msgstr "Создать временный файл"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:462
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:463
 msgid "..."
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:464
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:465
 msgid "Pick a filename interactively"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:467
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:468
 #, fuzzy
 msgid "Include Tests For:"
 msgstr "Включая зоны"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:471
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:472
 msgid "Pad to pad"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:474
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:475
 msgid "Include tests for clearances between pad to pads"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:477
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:478
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/onrightclick.cpp:683
 #, fuzzy
 msgid "Zones"
 msgstr "Zone"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:480
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:481
 msgid "Include zones in clearance or unconnected tests"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:483
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:484
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_drc_item.cpp:39
 #, fuzzy
 msgid "Unconnected pads"
 msgstr "не найдено"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:486
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:487
 #, fuzzy
 msgid "Find unconnected pads"
 msgstr "Включая зоны"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:492
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:493
 msgid "Start DRC"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:494
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:495
 #, fuzzy
 msgid "Start the Design Rule Checker"
 msgstr "Проверка правил проектирования платы"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:498
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:499
 #, fuzzy
 msgid "List Unconnected"
 msgstr "Liste Non Conn."
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:500
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:501
 #, fuzzy
 msgid "List unconnected pads or tracks"
 msgstr "Удалить неподключенные дорожки"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:504
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:505
 #, fuzzy
 msgid "Delete All Markers"
 msgstr "Effacer Marqueurs"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:506
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:507
 #, fuzzy
 msgid "Delete every marker"
 msgstr "Effacer Marqueur"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:510
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:511
 #, fuzzy
 msgid "Delete Current Marker"
 msgstr "Удалить текущий слой"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:512
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:513
 msgid "Delete the marker selected in the listBox below"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:516
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:517
 #, fuzzy
 msgid "Error Messages:"
 msgstr "Сообщения :"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:526
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:527
 msgid "MARKERs, double click any to go there in PCB, right click for popup menu"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:528
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:529
 #, fuzzy
 msgid "Distance Problem Markers"
 msgstr "Effacer Marqueurs"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:532
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:533
 msgid "A list of unconnected pads, right click for popup menu"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:534
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:535
 #, fuzzy
 msgid "Unconnected"
 msgstr "не найдено"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:545
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:546
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_initpcb.cpp:164
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/exporttogerber.cpp:155
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_zones_by_polygon.cpp:205
@@ -976,12 +976,12 @@ msgstr "не найдено"
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist_control.cpp:375
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/sheet.cpp:216
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/symbtext.cpp:178
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:179
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:183
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_erc.cpp:218
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/annotate_dialog.cpp:154
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_options.cpp:278
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/plothpgl.cpp:274
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:350
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:342
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_component_in_schematic.cpp:232
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_component_in_lib.cpp:214
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_create_component.cpp:200
@@ -989,7 +989,7 @@ msgstr "не найдено"
 msgid "&Cancel"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:549
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:550
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_initpcb.cpp:161
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/exporttogerber.cpp:152
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/set_grid.cpp:171
@@ -1007,9 +1007,9 @@ msgstr ""
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit-dialog.cpp:308
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/sheet.cpp:221
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/symbtext.cpp:174
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:174
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:178
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_options.cpp:274
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:346
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:338
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_component_in_schematic.cpp:240
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_component_in_lib.cpp:218
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_create_component.cpp:195
@@ -1017,19 +1017,19 @@ msgstr ""
 msgid "&OK"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:658
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:736
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:659
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:737
 #, fuzzy, c-format
 msgid "Report file \"%s\" created"
 msgstr "Ошибка при создании"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:660
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:738
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:661
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:739
 #, fuzzy
 msgid "Disk File Report Completed"
 msgstr "Отчет о сверловке:"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:766
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.cpp:767
 #, fuzzy
 msgid "DRC Report file"
 msgstr "Sauver fichier <%s>"
@@ -1095,7 +1095,7 @@ msgstr "Propriétés des textes PCB"
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_cmp_graphic_properties.cpp:188
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/affiche.cpp:188
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/affiche.cpp:52
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/affiche.cpp:113
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/affiche.cpp:114
 msgid "Width"
 msgstr "Ширина"
 
@@ -1115,7 +1115,7 @@ msgstr "Orientation"
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:243
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:289
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/muonde.cpp:360
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:306
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:311
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_options.cpp:229
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_component_in_schematic.cpp:180
 msgid "Normal"
@@ -1375,7 +1375,7 @@ msgid "Pad Settings"
 msgstr "Caract pads"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/modedit.cpp:406
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:299
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:300
 msgid "Add Drawing"
 msgstr "Добавить графическую линию"
 
@@ -1388,35 +1388,35 @@ msgstr "Place Ancre"
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/modedit.cpp:424
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/edit.cpp:552
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libframe.cpp:579
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:455
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:458
 msgid "Delete item"
 msgstr "Удалить элемент"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra.cpp:131
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra.cpp:138
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra.cpp:133
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra.cpp:140
 msgid "Expecting"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra.cpp:145
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra.cpp:152
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra.cpp:147
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra.cpp:154
 #, fuzzy
 msgid "Unexpected"
 msgstr "Non specifié"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra.cpp:311
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra.cpp:341
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra.cpp:3470
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra.cpp:3495
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra.cpp:321
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra.cpp:351
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra.cpp:3519
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra.cpp:3544
 #, fuzzy, c-format
 msgid "Unable to open file \"%s\""
 msgstr "Ne peut pas réouvrir fichier <%s>"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra.cpp:3412
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra.cpp:3461
 #, c-format
 msgid "System file error writing to file \"%s\""
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra.cpp:3590
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra.cpp:3639
 msgid "Error writing to STRINGFORMATTER"
 msgstr ""
 
@@ -1500,82 +1500,82 @@ msgstr "Inclure pistes autoroutées"
 msgid "Include Locked Tracks"
 msgstr "Inclure pistes verrouillées"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:96
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:100
 #, fuzzy, c-format
 msgid "Netlist file %s not found"
 msgstr "Netliste <%s> non trouvée"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:147
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:151
 #, fuzzy
 msgid "Read Netlist "
 msgstr "Lire Netliste"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:383
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:389
 #, fuzzy, c-format
 msgid "Cmp %s: Mismatch! module is [%s] and netlist said [%s]\n"
 msgstr "Composant [%s] err: module est <%s> et netliste dit <%s>\n"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:421
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:427
 #, fuzzy, c-format
 msgid "Component [%s] not found"
 msgstr " fichier %s non trouvé"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:488
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:497
 #, fuzzy, c-format
 msgid "Module [%s]: Pad [%s] not found"
 msgstr "Module [%s]: Pad [%s] non trouvé"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:515
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:524
 #, fuzzy
 msgid "No Modules"
 msgstr "Pas de Modules"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:530
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:539
 #, fuzzy
 msgid "Components"
 msgstr "Tous les composants"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:578
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:587
 #, fuzzy
 msgid "No modules"
 msgstr "Pas de Modules"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:588
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:597
 #, fuzzy
 msgid "No modules in NetList"
 msgstr "Pas de modules en Netliste"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:591
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:600
 #, fuzzy
 msgid "Check Modules"
 msgstr "Controle Modules"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:594
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:603
 #, fuzzy
 msgid "Duplicates"
 msgstr "Doubles"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:612
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:621
 #, fuzzy
 msgid "Lack:"
 msgstr "Manque:"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:634
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:643
 #, fuzzy
 msgid "Not in Netlist:"
 msgstr "Pas en Netliste:"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:782
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:791
 #, fuzzy, c-format
 msgid "File <%s> not found, use Netlist for lib module selection"
 msgstr "Fichier <%s> non trouvé, Netliste utilisée pour selection modules en lib."
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:868
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:877
 #, fuzzy
 msgid "Netlist Selection:"
 msgstr "Sélection de la netliste"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:945
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/netlist.cpp:954
 #, fuzzy, c-format
 msgid "Component [%s]: footprint <%s> not found"
 msgstr "Компонент %s: Посадочное место %s не найдено в библиотеках"
@@ -1659,16 +1659,16 @@ msgstr "Filtre pour nets:"
 msgid "List Nets"
 msgstr "Liste équipots"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_module.cpp:1059
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_module.cpp:1069
 msgid "Last Change"
 msgstr "Последнее изменение"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_module.cpp:1065
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_edge_mod.cpp:289
-msgid "TimeStamp"
-msgstr ""
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_module.cpp:1075
+#, fuzzy
+msgid "Netlist path"
+msgstr "Netlist: "
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_module.cpp:1069
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_module.cpp:1079
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_drawsegment.cpp:175
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_text_mod.cpp:369
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_text_mod.cpp:373
@@ -1678,22 +1678,22 @@ msgstr ""
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:235
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_pad.cpp:970
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_pcb_text.cpp:177
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/affiche.cpp:109
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/affiche.cpp:110
 msgid "Layer"
 msgstr "Слой"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_module.cpp:1080
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_module.cpp:1090
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/affiche.cpp:52
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board.cpp:434
 msgid "Pads"
 msgstr "Ножки"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_module.cpp:1088
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_module.cpp:1098
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_track.cpp:818
 msgid "Stat"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_module.cpp:1092
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_module.cpp:1102
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_text_mod.cpp:383
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:246
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_pad.cpp:1012
@@ -1703,7 +1703,7 @@ msgstr ""
 msgid "Orient"
 msgstr "Ориентировать"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_module.cpp:1095
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_module.cpp:1105
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_text_mod.cpp:350
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_edge_mod.cpp:285
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_pad.cpp:881
@@ -1711,15 +1711,15 @@ msgstr "Ориентировать"
 msgid "Module"
 msgstr "Модуль"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_module.cpp:1098
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_module.cpp:1108
 msgid "3D-Shape"
 msgstr "3D-форма"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_module.cpp:1102
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_module.cpp:1112
 msgid "Doc:  "
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_module.cpp:1103
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_module.cpp:1113
 msgid "KeyW: "
 msgstr ""
 
@@ -1728,7 +1728,7 @@ msgstr ""
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_track.cpp:778
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_zone.cpp:526
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_marker.cpp:133
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/affiche.cpp:93
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/affiche.cpp:94
 msgid "Type"
 msgstr "Тип"
 
@@ -2229,9 +2229,9 @@ msgstr "Ref."
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_text_mod.cpp:345
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board_item.cpp:79
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_edge_mod.cpp:286
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/component_class.cpp:55
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:784
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:159
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/component_class.cpp:56
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:789
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:158
 msgid "Value"
 msgstr "Значение"
 
@@ -2481,7 +2481,7 @@ msgstr ""
 #: /home/plyatov/Projects/Programming/kicad-svn/share/dialog_print.cpp:167
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_cmp_graphic_properties.cpp:151
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist_control.cpp:228
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:285
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:277
 msgid "Options:"
 msgstr "Параметры:"
 
@@ -2669,15 +2669,15 @@ msgstr "Exporter Module"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:101
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_lib.cpp:150
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:131
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:90
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:136
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:83
 msgid "Undo last edition"
 msgstr "Отменить последнее действие"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:103
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_lib.cpp:152
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:138
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:93
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:143
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:86
 msgid "Redo the last undo command"
 msgstr "Вернуть последнее изменение"
 
@@ -2694,7 +2694,7 @@ msgstr "Imprimer Module"
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:115
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:268
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_lib.cpp:170
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:108
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:101
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:271
 msgid "zoom +"
 msgstr "Масштаб +"
@@ -2702,7 +2702,7 @@ msgstr "Масштаб +"
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:119
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:272
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_lib.cpp:174
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:112
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:105
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:278
 msgid "zoom -"
 msgstr "Масштаб -"
@@ -2710,7 +2710,7 @@ msgstr "Масштаб -"
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:123
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:276
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_lib.cpp:178
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:116
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:109
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:285
 msgid "redraw"
 msgstr "Обновить"
@@ -2719,7 +2719,7 @@ msgstr "Обновить"
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:281
 #: /home/plyatov/Projects/Programming/kicad-svn/3d-viewer/3d_toolbar.cpp:53
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_lib.cpp:184
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:121
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:114
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:296
 msgid "auto zoom"
 msgstr "авто масштаб"
@@ -2736,7 +2736,6 @@ msgstr "Addition de \"pins\""
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:168
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:434
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:226
 msgid "Add graphic line or polygon"
 msgstr ""
 
@@ -2755,7 +2754,7 @@ msgstr "Addition de graphiques (Arc de Cercle)"
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:180
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/edit.cpp:290
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libframe.cpp:503
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:315
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:320
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:385
 msgid "Add Text"
 msgstr "Добавить текст"
@@ -2763,6 +2762,7 @@ msgstr "Добавить текст"
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/tool_modedit.cpp:190
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:460
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_lib.cpp:93
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:153
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:235
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:393
 msgid "Delete items"
@@ -2934,12 +2934,12 @@ msgid "Display Polar Coords"
 msgstr "Affichage coord Polaires"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:391
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schframe.cpp:275
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schframe.cpp:328
 msgid "Grid not show"
 msgstr "Не показывать сетку"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/pcbframe.cpp:391
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schframe.cpp:275
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schframe.cpp:328
 msgid "Show Grid"
 msgstr "Показать сетку"
 
@@ -3107,6 +3107,7 @@ msgstr ""
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_zones_by_polygon.cpp:229
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board_item.cpp:149
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board_item.cpp:216
 #, fuzzy
 msgid "Net:"
 msgstr "Цепь"
@@ -3409,24 +3410,24 @@ msgstr ""
 msgid "Copper area has a non existent net name"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra_export.cpp:57
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra_export.cpp:59
 msgid "Specctra DSN file:"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra_export.cpp:106
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra_export.cpp:113
 msgid "BOARD exported OK."
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra_export.cpp:111
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra_export.cpp:118
 msgid "Unable to export, please fix and try again."
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra_export.cpp:758
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra_export.cpp:715
 #, c-format
 msgid "Component with value of \"%s\" has empty reference id."
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra_export.cpp:766
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/specctra_export.cpp:723
 #, c-format
 msgid "Multiple components have identical reference IDs of \"%s\"."
 msgstr ""
@@ -3462,7 +3463,7 @@ msgstr "Via %.3f"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/onrightclick.cpp:162
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/modedit_onclick.cpp:206
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:126
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:127
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit_onrightclick.cpp:53
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/onrightclick.cpp:42
 msgid "End Tool"
@@ -3661,7 +3662,7 @@ msgstr ""
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/onrightclick.cpp:484
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/modedit_onclick.cpp:216
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:587
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:614
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit_onrightclick.cpp:237
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/onrightclick.cpp:51
 msgid "Cancel Block"
@@ -3675,7 +3676,7 @@ msgstr "Масштаб блока (протягивание средней кн�
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/onrightclick.cpp:489
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/modedit_onclick.cpp:221
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:595
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:622
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit_onrightclick.cpp:245
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/onrightclick.cpp:54
 msgid "Place Block"
@@ -3683,7 +3684,7 @@ msgstr "Разместить блок"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/onrightclick.cpp:491
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/modedit_onclick.cpp:223
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:604
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:631
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit_onrightclick.cpp:251
 msgid "Copy Block (shift + drag mouse)"
 msgstr "Копировать блок (SHIFT+протяг. мышью)"
@@ -3830,6 +3831,7 @@ msgstr "Editer TOUTES Pistes (pas les vias)"
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/onrightclick.cpp:799
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/onrightclick.cpp:896
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_netlist.cpp:143
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:152
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_lib.cpp:239
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_lib.cpp:320
 #, fuzzy
@@ -3979,7 +3981,7 @@ msgid "Rotate  +"
 msgstr "Вращать +"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/onrightclick.cpp:756
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:301
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:306
 msgid "Rotate -"
 msgstr "Вращать -"
 
@@ -3992,7 +3994,7 @@ msgstr "Переворот"
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/onrightclick.cpp:795
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/onrightclick.cpp:892
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/modedit_onclick.cpp:316
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:313
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:318
 msgid "Edit"
 msgstr "Правка"
 
@@ -4298,9 +4300,9 @@ msgid "Net"
 msgstr "Цепь"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board_item.cpp:40
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/component_class.cpp:56
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:826
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:300
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/component_class.cpp:57
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:831
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:292
 msgid "Footprint"
 msgstr "Псадочное место"
 
@@ -4343,8 +4345,8 @@ msgstr "Addition de graphiques (Arc de Cercle)"
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board_item.cpp:148
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board_item.cpp:180
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board_item.cpp:196
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board_item.cpp:223
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board_item.cpp:240
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board_item.cpp:224
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board_item.cpp:241
 #, fuzzy
 msgid " on "
 msgstr "Trouvé "
@@ -4356,10 +4358,10 @@ msgstr "Texte Pcb"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board_item.cpp:75
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_netlist.cpp:135
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:745
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:320
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:749
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:325
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_create_component.cpp:164
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:153
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:152
 msgid "Reference"
 msgstr "Ссылка"
 
@@ -4399,23 +4401,23 @@ msgstr "Via enterrée"
 msgid "Micro Via"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board_item.cpp:230
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board_item.cpp:231
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_marker.cpp:133
 #, fuzzy
 msgid "Marker"
 msgstr "Chercher Marqueur"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board_item.cpp:235
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board_item.cpp:236
 #, fuzzy
 msgid "Dimension"
 msgstr "&Dimensions"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board_item.cpp:240
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board_item.cpp:241
 #, fuzzy
 msgid "Target"
 msgstr "Texte"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board_item.cpp:241
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board_item.cpp:242
 #, fuzzy
 msgid "size"
 msgstr "Размер"
@@ -4495,7 +4497,7 @@ msgid "SMD"
 msgstr ""
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_pad_edit.cpp:207
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:210
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:214
 #, fuzzy
 msgid "Conn"
 msgstr "Conn"
@@ -4621,7 +4623,7 @@ msgid "Save Board"
 msgstr "Сохранить плату"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:244
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:65
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:58
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:232
 msgid "page settings (size, texts)"
 msgstr "настройка страницы (размер, надписи)"
@@ -4631,19 +4633,19 @@ msgid "Open Module Editor"
 msgstr "Открыть редактор модулей"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:251
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:81
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:74
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:243
 msgid "Cut selected item"
 msgstr "Вырезать текущий элемент"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:255
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:84
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:77
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:248
 msgid "Copy selected item"
 msgstr "Копировать текущий элемент"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:257
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:87
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:80
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:254
 msgid "Paste"
 msgstr "Вставить"
@@ -4663,7 +4665,7 @@ msgid "Plot (HPGL, PostScript, or GERBER format)"
 msgstr "Чертить (HPGL, PostScript, или Gerber формат)"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:285
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:125
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:118
 msgid "Find components and texts"
 msgstr ""
 
@@ -4783,7 +4785,7 @@ msgstr "Масштаб "
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/tool_pcb.cpp:598
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.cpp:223
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/set_color.h:414
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:210
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:214
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/set_color.h:324
 msgid "Grid"
 msgstr "Сетка"
@@ -4811,7 +4813,7 @@ msgid "Change module(s)"
 msgstr "Изменить модуль(и)"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:193
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:354
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:359
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_component_in_lib.cpp:203
 msgid "Doc"
 msgstr ""
@@ -4829,7 +4831,7 @@ msgid "Add Field"
 msgstr "Добавить поле"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_edit_module.cpp:222
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:269
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:274
 msgid "Edit Field"
 msgstr "Правка поля"
 
@@ -5156,6 +5158,10 @@ msgstr "Показывать границы страницы"
 msgid "Seg"
 msgstr "Seg"
 
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_edge_mod.cpp:289
+msgid "TimeStamp"
+msgstr ""
+
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_edge_mod.cpp:291
 #, fuzzy
 msgid "Mod Layer"
@@ -5421,7 +5427,7 @@ msgid "Connect"
 msgstr "Connect"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/class_board.cpp:459
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:116
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:115
 #, fuzzy
 msgid "NoConn"
 msgstr "Non Conn"
@@ -5518,8 +5524,8 @@ msgid "Footprint name:"
 msgstr "Equipot"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/modules.cpp:282
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:229
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:317
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:231
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:322
 #, fuzzy
 msgid "Value "
 msgstr "Valeur"
@@ -5644,19 +5650,19 @@ msgid "Save current board as.."
 msgstr "Сохранить тукущую плату как ..."
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:88
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:78
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:80
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:88
 msgid "P&rint"
 msgstr "Печать"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:88
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:78
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:80
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:88
 msgid "Print on current printer"
 msgstr "Печать на текущем принтере"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:93
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:108
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:111
 msgid "&Plot"
 msgstr "Чертить (&P)"
 
@@ -5740,7 +5746,7 @@ msgstr "Архивировать или добавить посадочные м
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:160
 #: /home/plyatov/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:125
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:111
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:115
 #: /home/plyatov/Projects/Programming/kicad-svn/kicad/buildmnu.cpp:130
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:93
 msgid "E&xit"
@@ -5751,18 +5757,18 @@ msgid "Quit pcbnew"
 msgstr ""
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:178
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:145
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:326
 msgid "&Libs and Dir"
 msgstr "Библиотеки и папки (&L)"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:179
 #: /home/plyatov/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:140
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:146
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:327
 msgid "Setting Libraries, Directories and others..."
 msgstr "Установка библиотек, папок и др. ..."
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:183
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:151
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:332
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:108
 msgid "&Colors"
 msgstr "Цвета (&C)"
@@ -5789,23 +5795,23 @@ msgid "Select what items are displayed"
 msgstr "Выбор отображаемых элементов"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:204
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:169
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:350
 msgid "&Save preferences"
 msgstr "Сохранить настройки (&S)"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:205
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:170
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:351
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:123
 msgid "Save application preferences"
 msgstr "Сохранить настройки приложения"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:209
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:173
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:354
 msgid "&Read preferences"
 msgstr "Загрузить настройки (&R)"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:210
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:174
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:355
 msgid "Read application preferences"
 msgstr "Загрузить настройки приложения"
 
@@ -5930,7 +5936,7 @@ msgstr "Permutation de couches"
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:296
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/menubarmodedit.cpp:60
 #: /home/plyatov/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:158
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:184
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:365
 #: /home/plyatov/Projects/Programming/kicad-svn/kicad/buildmnu.cpp:198
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:149
 msgid "&Contents"
@@ -5944,7 +5950,7 @@ msgstr "Открыть руководство pcbnew"
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:300
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/menubarmodedit.cpp:64
 #: /home/plyatov/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:162
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:189
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:370
 #: /home/plyatov/Projects/Programming/kicad-svn/kicad/buildmnu.cpp:203
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:151
 msgid "&About"
@@ -5953,7 +5959,7 @@ msgstr "&О программе"
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:300
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/menubarmodedit.cpp:64
 #: /home/plyatov/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:163
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:189
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:370
 #: /home/plyatov/Projects/Programming/kicad-svn/kicad/buildmnu.cpp:203
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:152
 msgid "About this application"
@@ -5974,7 +5980,7 @@ msgstr "Visualisation en 3D"
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:312
 #: /home/plyatov/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:167
 #: /home/plyatov/Projects/Programming/kicad-svn/3d-viewer/3d_toolbar.cpp:111
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:194
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:375
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:154
 msgid "&File"
 msgstr "&Файл"
@@ -5982,7 +5988,7 @@ msgstr "&Файл"
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:313
 #: /home/plyatov/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:168
 #: /home/plyatov/Projects/Programming/kicad-svn/3d-viewer/3d_toolbar.cpp:119
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:196
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:378
 #: /home/plyatov/Projects/Programming/kicad-svn/kicad/buildmnu.cpp:210
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:155
 msgid "&Preferences"
@@ -6013,7 +6019,7 @@ msgstr "&3D Visu"
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/menubarpcb.cpp:318
 #: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/menubarmodedit.cpp:78
 #: /home/plyatov/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:169
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:197
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:379
 #: /home/plyatov/Projects/Programming/kicad-svn/kicad/buildmnu.cpp:211
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:159
 msgid "&Help"
@@ -6357,7 +6363,6 @@ msgid "Create &File"
 msgstr "Создать файл (&F)"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/share/svg_print.cpp:226
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/sheet.cpp:162
 msgid "Filename:"
 msgstr "Имя файла:"
 
@@ -6366,12 +6371,12 @@ msgid "Messages:"
 msgstr "Сообщения :"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/share/svg_print.cpp:363
-#: /home/plyatov/Projects/Programming/kicad-svn/share/svg_print.cpp:377
+#: /home/plyatov/Projects/Programming/kicad-svn/share/svg_print.cpp:378
 msgid "Create file "
 msgstr "Создать файл"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/share/svg_print.cpp:364
-#: /home/plyatov/Projects/Programming/kicad-svn/share/svg_print.cpp:378
+#: /home/plyatov/Projects/Programming/kicad-svn/share/svg_print.cpp:379
 msgid " error"
 msgstr " ошибка"
 
@@ -6780,7 +6785,7 @@ msgid "Display pad number"
 msgstr "Показать номер ножки"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/cvpcb/dialog_display_options.cpp:195
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:354
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:346
 msgid "&Apply"
 msgstr ""
 
@@ -6845,7 +6850,7 @@ msgid "Display the full footprint list (without filtering)"
 msgstr "Показать полный список посадочных мест (без фильтрации)"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/cvpcb/tool_cvpcb.cpp:112
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:45
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:47
 msgid "&Open"
 msgstr "Открыть \t&O"
 
@@ -7000,87 +7005,96 @@ msgid ""
 "Continue?"
 msgstr "Текущий элемент не сохранен. Продолжить?"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:113
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:390
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:112
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:389
 msgid "Component \""
 msgstr "Компонент \""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:113
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:112
 #, fuzzy
 msgid "\" not found."
 msgstr "  не найдено"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:235
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:234
 msgid "Modify Library File \""
 msgstr "Изменить файл библиотеки \""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:235
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:234
 msgid "\"?"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:244
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:243
 msgid "Error while saving Library File \""
 msgstr "Ошибка записи в файл библиотеки \""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:244
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:391
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:243
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:390
 msgid "\"."
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:250
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:249
 msgid "Library File \""
 msgstr "Файл библиотеки \""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:252
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:251
 msgid "Document File \""
 msgstr "Файл документа \""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:305
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:304
 msgid "No Active Library"
 msgstr "Нет активной библиотеки"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:321
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:320
 #, c-format
 msgid "Select Component (%d items)"
 msgstr "Выбор компонента (%d позиций)"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:344
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:343
 msgid "Component not found"
 msgstr "Компонент не найден"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:348
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:347
 msgid "Delete component \""
 msgstr "Удалить компонент \""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:349
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:348
 msgid "\" from library \""
 msgstr "\" из библиотеки \""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:373
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:372
 msgid "Clear old component from screen (changes will be lost)?"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:391
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:390
 msgid "\" exists in library \""
 msgstr "\" уже существует в библиотеке \""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:558
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:557
 msgid "No component to Save."
 msgstr "Нет компонента для сохранения."
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:565
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:564
 msgid "No Library specified."
 msgstr "Не указана библиотека."
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:576
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:575
 #, c-format
 msgid "Component \"%s\" exists. Change it?"
 msgstr "Компонент\"%s\" существует. Изменить его?"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:615
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit.cpp:614
 #, c-format
 msgid "Component %s saved in %s"
 msgstr "Компонент %s сохранен в %s"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/class_drawsheet.cpp:164
+msgid "Ok to cleanup this sheet"
+msgstr "Ok для очистки этого листа"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/class_drawsheet.cpp:572
+#, c-format
+msgid "%8.8lX/"
+msgstr ""
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_cmp_graphic_properties.cpp:155
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit-dialog.cpp:258
@@ -7120,12 +7134,12 @@ msgid "not found"
 msgstr "не найдено"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/hotkeys.cpp:249
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:339
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:344
 msgid "Add Component"
 msgstr "Добавить компонент"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/hotkeys.cpp:271
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:291
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:292
 msgid "Add Wire"
 msgstr "Добавить проводник"
 
@@ -7156,25 +7170,25 @@ msgstr "Invisible"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit-dialog.cpp:288
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/affiche.cpp:111
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:142
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:146
 msgid "Right"
 msgstr "Вправо"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit-dialog.cpp:289
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/affiche.cpp:108
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:144
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:148
 msgid "Left"
 msgstr "Влево"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit-dialog.cpp:290
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/affiche.cpp:102
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:143
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:147
 msgid "Up"
 msgstr "Вверх"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit-dialog.cpp:291
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/affiche.cpp:105
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:145
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:149
 msgid "Down"
 msgstr "Вниз"
 
@@ -7224,19 +7238,19 @@ msgid "Pin Shape:"
 msgstr "Forme Pin:"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit-dialog.cpp:331
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:153
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:157
 #, fuzzy
 msgid "Input"
 msgstr "Entrée"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit-dialog.cpp:332
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:154
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:158
 #, fuzzy
 msgid "Output"
 msgstr "Sortie"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit-dialog.cpp:333
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:155
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:159
 #, fuzzy
 msgid "Bidi"
 msgstr "Bidi"
@@ -7247,7 +7261,7 @@ msgid "3 States"
 msgstr "3 Etats"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/pinedit-dialog.cpp:335
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:157
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:161
 #, fuzzy
 msgid "Passive"
 msgstr "Passive"
@@ -7286,79 +7300,78 @@ msgstr "Type électrique:"
 msgid "Annotation Required!"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:403
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:405
 msgid "ERC file:"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:556
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:558
 #, c-format
-msgid "Warning GLabel %s not connected to SheetLabel"
+msgid "Warning HLabel %s not connected to SheetLabel"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:560
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:562
 #, c-format
-msgid "Warning SheetLabel %s not connected to GLabel"
+msgid "Warning SheetLabel %s not connected to HLabel"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:574
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:576
 #, c-format
 msgid "Warning Pin %s Unconnected"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:583
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:585
 #, c-format
 msgid "Warning Pin %s not driven (Net %d)"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:593
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:595
 msgid "Warning More than 1 Pin connected to UnConnect symbol"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:612
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:614
 #, c-format
 msgid "%s: Pin %s connected to Pin %s (net %d)"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:729
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:733
 msgid "ERC control"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:739
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:742
+msgid ""
+"\n"
+"***** Sheet Root\n"
+msgstr ""
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:745
 #, c-format
 msgid ""
 "\n"
-"***** Sheet %d (%s)\n"
+"***** Sheet %s\n"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:741
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/hierarch.cpp:134
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:1182
-msgid "Root"
-msgstr "Корень"
-
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:757
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:762
 #, c-format
 msgid "ERC: %s (X= %2.3f inches, Y= %2.3f inches\n"
 msgstr "ERC: %s (X= %2.3f дюймов, Y= %2.3f дюймов\n"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:766
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/erc.cpp:771
 #, c-format
 msgid ""
 "\n"
 " >> Errors ERC: %d\n"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/component_class.cpp:54
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/component_class.cpp:55
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/affiche.cpp:37
 msgid "Ref"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/component_class.cpp:57
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:172
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/component_class.cpp:58
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:171
 msgid "Sheet"
 msgstr "Лист"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/component_class.cpp:58
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/component_class.cpp:59
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/component_class.cpp:60
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/component_class.cpp:61
@@ -7366,147 +7379,163 @@ msgstr "Лист"
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/component_class.cpp:63
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/component_class.cpp:64
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/component_class.cpp:65
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:1126
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/component_class.cpp:66
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:1150
 msgid "Field"
 msgstr "Поле"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/save_schemas.cpp:71
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eeload.cpp:59
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/files-io.cpp:65
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/component_class.cpp:97
+#, c-format
+msgid "%8.8lX"
+msgstr ""
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/component_class.cpp:213
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_create_component.cpp:168
+#, fuzzy
+msgid "U"
+msgstr "U"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/component_class.cpp:345
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:1206
+msgid "?"
+msgstr ""
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/save_schemas.cpp:70
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/files-io.cpp:122
 msgid "Schematic files:"
 msgstr "Файлы схем:"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/save_schemas.cpp:94
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netform.cpp:55
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netform.cpp:243
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/save_schemas.cpp:93
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netform.cpp:56
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netform.cpp:259
 msgid "Failed to create file "
 msgstr "Не удалось создать файл "
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/save_schemas.cpp:99
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/save_schemas.cpp:98
 msgid "Save file "
 msgstr "Сохранить файл "
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/save_schemas.cpp:115
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/save_schemas.cpp:298
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/save_schemas.cpp:114
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/save_schemas.cpp:308
 msgid "File write operation failed."
 msgstr "Операция записи файла не удалась."
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eeschema.cpp:57
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eeschema.cpp:53
 msgid "Eeschema is already running, Continue?"
 msgstr "Eeschema уже запущена. Продолжить?"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:157
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:191
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:271
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:163
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:195
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:263
 msgid "List"
 msgstr "Список"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:179
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:182
 #, fuzzy
 msgid "No component"
 msgstr "Pas de composants"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:200
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:305
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:343
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:364
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:379
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:204
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:311
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:351
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:372
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:387
 #, fuzzy
 msgid "Done"
 msgstr "Fini"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:203
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:207
 #, fuzzy
 msgid "NbItems"
 msgstr "NbItems"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:310
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:316
 #, fuzzy
 msgid "Labels"
 msgstr "Labels"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:346
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:354
 #, fuzzy
 msgid "Hierar."
 msgstr "Hiérar."
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:367
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:375
 #, fuzzy
 msgid "Sorting"
 msgstr "Tri"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:808
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/netlist.cpp:809
 #, fuzzy
 msgid "Bad Bus Label: "
 msgstr "Addition de labels sur fils ou bus"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:221
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:223
 #, fuzzy
 msgid "Pin "
 msgstr "Propriétés des Pins"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:225
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:227
 #, fuzzy
 msgid "Ref "
 msgstr "Ref"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:233
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:235
 #, fuzzy
 msgid "Field "
 msgstr "Поле"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:243
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:247
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:245
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:249
 #, fuzzy
 msgid " Found"
 msgstr "Trouvé "
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:378
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:382
 #, fuzzy, c-format
 msgid "Marker %d found in %s"
 msgstr "Marqueur trouvé en "
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:384
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:388
 #, fuzzy
 msgid "Marker Not Found"
 msgstr "Marqueur non trouvé"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:613
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:620
 #, fuzzy
 msgid " Found in "
 msgstr "Trouvé en "
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:625
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:632
 #, fuzzy
 msgid " Not Found"
 msgstr " Non trouvé"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:657
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:664
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/selpart.cpp:39
 #, fuzzy
 msgid "No libraries are loaded"
 msgstr "Pas de librairies chargées"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:684
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:749
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:765
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:691
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:756
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:772
 #, fuzzy
 msgid "Found "
 msgstr "Trouvé "
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:686
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:750
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:766
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:693
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:757
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:773
 #, fuzzy
 msgid " in lib "
 msgstr " en libr. "
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:697
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:704
 #, fuzzy
 msgid " found only in cache"
 msgstr "trouvé seulement en cache"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:700
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:707
 #, fuzzy
 msgid ""
 "\n"
@@ -7515,37 +7544,10 @@ msgstr ""
 "\n"
 "Explorer toutes les Librairies?"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:706
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/find.cpp:713
 #, fuzzy
 msgid "Nothing found"
 msgstr " Rien trouvé"
-
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eeload.cpp:46
-#, fuzzy
-msgid "Clear Schematic Hierarchy (modified!)?"
-msgstr "Effacer la hiérarchie schématique (modifiée!)?"
-
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eeload.cpp:107
-msgid ""
-"Ready\n"
-"Working dir: \n"
-msgstr ""
-"Готово\n"
-"Рабочая папка: \n"
-
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eeload.cpp:153
-#, fuzzy, c-format
-msgid "File %s not found (new project ?)"
-msgstr " fichier %s non trouvé (nouveau projet ?)"
-
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eeload.cpp:206
-msgid "The sheet hierarchy has an infinite loop, halting recursive loads. file: "
-msgstr ""
-
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eeload.cpp:218
-#, fuzzy
-msgid "No FileName in SubSheet"
-msgstr "Pas de Nom de Fichier dans la sous-feuille"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/selpart.cpp:45
 #, fuzzy
@@ -7557,61 +7559,61 @@ msgstr "Sélection librairie"
 msgid "Select component (%d items)"
 msgstr "Selection composant (%d items)"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:195
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:199
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_lib.cpp:554
 #, fuzzy
 msgid "Field to edit"
 msgstr "Pas de champ a éditer"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:201
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:205
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_lib.cpp:508
 #, fuzzy
 msgid "Field Name:"
 msgstr "Имя поля"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:211
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:215
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_lib.cpp:518
 #, fuzzy
 msgid "Field Text:"
 msgstr "Типы файлов:"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:219
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:223
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_lib.cpp:524
 #, fuzzy
 msgid "Pos"
 msgstr "Pos"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:326
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:330
 #, fuzzy
 msgid "No Component Name!"
 msgstr "Pas de nom de composant!"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:332
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:336
 #, fuzzy, c-format
 msgid "Component [%s] not found!"
 msgstr " fichier %s non trouvé"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:449
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:453
 #, fuzzy
 msgid "No Field to move"
 msgstr "Pas de champ a déplacer"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:512
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:516
 #, fuzzy
 msgid "No Field To Edit"
 msgstr "Pas de champ a éditer"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:526
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:530
 msgid ""
 "Part is a POWER, value cannot be modified!\n"
 "You must create a new power"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:569
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:576
 msgid "Reference needed !, No change"
 msgstr "Требуется обозначение! Не изменено"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:573
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_schematic.cpp:580
 msgid "Value needed !, No change"
 msgstr "Требуется значение! Не изменено"
 
@@ -7843,51 +7845,56 @@ msgstr "Якорь"
 msgid "Export"
 msgstr "Экспорт"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:283
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:284
 msgid "Push/Pop Hierarchy"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:287
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:288
 msgid "Add NoConnect Flag"
 msgstr "Добавить флаг Нет Соединения"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:295
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:296
 msgid "Add Bus"
 msgstr "Добавить шину"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:303
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:304
 msgid "Add Junction"
 msgstr "Добавить соединение"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:307
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:308
 msgid "Add Label"
 msgstr "Добавить метку"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:311
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:312
 msgid "Add Global label"
 msgstr "Добавить глобальную метку"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:319
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:316
+#, fuzzy
+msgid "Add Hierarchal label"
+msgstr "Добавить глобальную метку"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:324
 msgid "Add Wire to Bus Entry"
 msgstr "Добавить ввод проводника в шину"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:323
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:328
 msgid "Add Bus to Bus entry"
 msgstr "Добавить ввод шины в шину"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:327
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:332
 msgid "Add Sheet"
 msgstr "Добавить лист"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:331
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:336
 msgid "Add PinSheet"
 msgstr "Добавить вывод для листа"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:335
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:340
 msgid "Import PinSheet"
 msgstr "Импортировать вывод для листа"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:343
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schedit.cpp:348
 msgid "Add Power"
 msgstr "Добавить питание"
 
@@ -7901,8 +7908,9 @@ msgstr "Propriétés des Pins de Hierarchie"
 msgid "PinSheet Shape:"
 msgstr "Forme Pin de hiérarchie:"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/sheetlab.cpp:386
-msgid "No New Global Label found"
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/sheetlab.cpp:387
+#, fuzzy
+msgid "No New Hierarchal Label found"
 msgstr "Новая глобальная метка не найдена"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/lib_export.cpp:39
@@ -7971,7 +7979,7 @@ msgid "PinName"
 msgstr "Имя вывода"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/affiche.cpp:80
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:141
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:140
 msgid "PinNum"
 msgstr "Номер вывода"
 
@@ -7994,12 +8002,12 @@ msgid "Lengh"
 msgstr "Длина"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/affiche.cpp:172
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:339
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:344
 msgid "Unit"
 msgstr ""
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/affiche.cpp:182
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:326
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:331
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_component_in_schematic.cpp:190
 msgid "Convert"
 msgstr ""
@@ -8007,6 +8015,10 @@ msgstr ""
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/affiche.cpp:187
 msgid "default"
 msgstr "по умолчанию"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/sheet.cpp:162
+msgid "Filename (will be created upon save if it does not already exist):"
+msgstr ""
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/sheet.cpp:174
 msgid "Sheetname:"
@@ -8017,30 +8029,35 @@ msgid "No Filename! Aborted"
 msgstr "Нет имени файла! Отменено"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/sheet.cpp:297
-#, c-format
-msgid "A file named %s exists, load it ?"
+#, fuzzy, c-format
+msgid "A file named %s exists, load it (otherwise overwrite it)?"
 msgstr "Файл с именем %s существует. Загрузить его?"
-
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/sheet.cpp:564
-msgid "Ok to cleanup this sheet"
-msgstr "Ok для очистки этого листа"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/load_one_schematic_file.cpp:103
 msgid "Failed to open "
 msgstr "Не удалось открыть "
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/load_one_schematic_file.cpp:108
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/load_one_schematic_file.cpp:109
 msgid "Loading "
 msgstr "Загрузка "
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/load_one_schematic_file.cpp:115
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/load_one_schematic_file.cpp:124
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/load_one_schematic_file.cpp:116
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/load_one_schematic_file.cpp:126
 msgid " is NOT EESchema file"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/hierarch.cpp:123
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/load_one_schematic_file.cpp:469
+#, fuzzy
+msgid "Done Loading "
+msgstr "Загрузка "
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/hierarch.cpp:121
 msgid "Navigator"
 msgstr "Навигатор"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/hierarch.cpp:132
+msgid "Root"
+msgstr "Корень"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/symbtext.cpp:130
 msgid " Text : "
@@ -8067,44 +8084,49 @@ msgstr "Propriétés du Label Global"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:72
 #, fuzzy
+msgid "Hierarchal Label properties"
+msgstr "Propriétés du Label Global"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:76
+#, fuzzy
 msgid "Label properties"
 msgstr "Propriétés du label"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:76
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:80
 #, fuzzy
 msgid "Text properties"
 msgstr "Propriétés du texte"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:132
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:136
 #, fuzzy
 msgid "Text "
 msgstr "Texte"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:146
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:150
 #, fuzzy
 msgid "Text Orient:"
 msgstr "Orient:"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:156
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:160
 msgid "TriState"
 msgstr "ТриСостояния"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:158
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:162
 #, fuzzy
-msgid "Glabel Shape:"
+msgid "label Shape:"
 msgstr "Forme GLabel:"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:166
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_label.cpp:170
 #, fuzzy
 msgid "Size "
 msgstr "Taille "
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libarch.cpp:80
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libarch.cpp:79
 #, fuzzy
 msgid "Failed to create archive lib file "
 msgstr "Сбой формирования имени временного файла"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libarch.cpp:87
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libarch.cpp:86
 #, fuzzy
 msgid "Failed to create doc lib file "
 msgstr "Сбой формирования имени временного файла"
@@ -8322,293 +8344,314 @@ msgstr "Аннотация\t&A"
 msgid "&Del Annotate"
 msgstr "Удалить аннотацию\t&D"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:143
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:144
 msgid "Leave Sheet"
 msgstr "Покинуть лист"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:159
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:160
 msgid "delete noconn"
 msgstr "удалить 'неподключено'"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:169
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:170
 msgid "Move bus entry"
 msgstr "Переместить вход в шину"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:171
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:172
 msgid "set bus entry /"
 msgstr "установить вход в шину /"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:173
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:174
 msgid "set bus entry \\"
 msgstr "установить вход в шину \\"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:175
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:176
 msgid "delete bus entry"
 msgstr "удалить вход в шину"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:179
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:180
 msgid "delete Marker"
 msgstr "удалить маркер"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:229
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:234
 msgid "End drawing"
 msgstr "Закончить черчение"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:231
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:236
 msgid "Delete drawing"
 msgstr "Удалить начерченное"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:267
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:272
 msgid "Move Field"
 msgstr "Переместить поле"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:268
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:273
 msgid "Rotate Field"
 msgstr "Повернуть поле"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:288
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:293
 #, fuzzy
 msgid "Move Component"
 msgstr "Переместить компонент (M)"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:291
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:296
 #, fuzzy
 msgid "Drag Component"
 msgstr "Компонент"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:298
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:303
 msgid "Rotate +"
 msgstr "Вращать +"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:302
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:307
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_component_in_schematic.cpp:181
 #, fuzzy
 msgid "Mirror --"
 msgstr "Miroir--"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:304
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:309
 #, fuzzy
 msgid "Mirror ||"
 msgstr "Miroir |"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:310
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:315
 msgid "Orient Component"
 msgstr "Ориент. компонента"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:322
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:327
 #, fuzzy
 msgid "Footprint "
 msgstr "Посадочное место:"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:333
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:338
 #, c-format
 msgid "Unit %d %c"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:344
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:349
 msgid "Edit Component"
 msgstr "Правка компонента"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:348
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:353
 msgid "Copy Component"
 msgstr "Копировать компонент"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:349
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:354
 msgid "Delete Component"
 msgstr "Удалить компонент"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:368
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:373
 msgid "Move Glabel"
 msgstr "Переместить Glabel"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:369
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:374
 msgid "Rotate GLabel  (R)"
 msgstr "Вращать Glabel (R)"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:370
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:375
 msgid "Edit GLabel"
 msgstr "Правка GLabel"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:371
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:376
 msgid "Delete Glabel"
 msgstr "Удалить GLabel"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:375
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:425
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:380
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:402
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:452
 msgid "Change to Label"
 msgstr "Изменить на метку"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:377
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:402
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:382
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:404
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:429
 msgid "Change to Text"
 msgstr "Изменить на текст"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:379
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:404
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:429
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:384
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:406
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:431
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:456
 msgid "Change Type"
 msgstr "Изменить тип"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:393
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:395
+#, fuzzy
+msgid "Move Hlabel"
+msgstr "Переместить Glabel"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:396
+#, fuzzy
+msgid "Rotate HLabel  (R)"
+msgstr "Вращать метку (R)"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:397
+#, fuzzy
+msgid "Edit HLabel"
+msgstr "Править метку"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:398
+#, fuzzy
+msgid "Delete Hlabel"
+msgstr "Удалить GLabel"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:420
 msgid "Move Label"
 msgstr "Переместить метку"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:394
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:421
 msgid "Rotate Label  (R)"
 msgstr "Вращать метку (R)"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:395
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:422
 msgid "Edit Label"
 msgstr "Править метку"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:396
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:423
 msgid "Delete Label"
 msgstr "Удалить метку"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:400
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:427
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:454
 msgid "Change to Glabel"
 msgstr "Изменить на Glabel"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:418
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:445
 msgid "Move Text"
 msgstr "Переместить текст"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:419
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:446
 msgid "Rotate Text (R)"
 msgstr "Вращать текст (R)"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:420
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:447
 msgid "Edit Text"
 msgstr "Править текст"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:421
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:448
 msgid "Delete Text"
 msgstr "Удалить текст"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:447
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:487
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:474
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:514
 msgid "Break Wire"
 msgstr "Разорвать провод"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:450
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:477
 msgid "delete junction"
 msgstr "удалить соединение"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:455
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:481
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:482
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:508
 msgid "Delete node"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:457
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:483
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:484
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:510
 msgid "Delete connection"
 msgstr "Удалить соединение"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:474
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:501
 msgid "End Wire"
 msgstr "Закончить провод"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:476
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:503
 msgid "Delete Wire"
 msgstr "Удалить провод"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:491
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:523
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:208
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:518
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:550
 msgid "Add junction"
 msgstr "Добавить соединение"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:492
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:524
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:519
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:551
 msgid "Add label"
 msgstr "Добавить метку"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:497
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:529
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:204
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:524
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:556
 msgid "Add global label"
 msgstr "Добавить глобальн. метку"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:513
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:540
 msgid "End Bus"
 msgstr "Закончиь шину"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:516
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:543
 msgid "Delete Bus"
 msgstr "Удалить шину"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:520
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:547
 msgid "Break Bus"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:542
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:569
 msgid "Enter Sheet"
 msgstr "Войти в лист"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:544
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:571
 msgid "Move Sheet"
 msgstr "Переместить лист"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:549
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:576
 msgid "Place Sheet"
 msgstr "Расположить лист"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:553
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:580
 msgid "Edit Sheet"
 msgstr "Править лист"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:554
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:581
 msgid "Resize Sheet"
 msgstr "Масштабировать лист"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:557
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:584
 msgid "Cleanup PinSheets"
 msgstr "Подчистка PinSheets"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:558
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:585
 msgid "Delete Sheet"
 msgstr "Удалить лист"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:571
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:598
 msgid "Move PinSheet"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:573
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:600
 msgid "Edit PinSheet"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:576
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:603
 msgid "Delete PinSheet"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:593
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:620
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit_onrightclick.cpp:241
 msgid "Win. Zoom (Midd butt drag mouse)"
 msgstr "Масштабир. окна (протяг. средн. кн. мыши)"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:601
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:628
 msgid "Other block commands"
 msgstr "Другие блочные команды"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:602
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:629
 msgid "Save Block"
 msgstr "Сохранить блок"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:606
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:633
 msgid "Drag Block (ctrl + drag mouse)"
 msgstr "Перенести блок (CTRL+протягивание мышью)"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:608
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:635
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/libedit_onrightclick.cpp:254
 msgid "Del. Block (shift+ctrl + drag mouse)"
 msgstr "Удалить блок (SHIFT+CTRL+протяг. мышью)"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:610
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:637
 msgid "Mirror Block ||"
 msgstr "Зеркалировать блок ||"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:614
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/onrightclick.cpp:641
 msgid "Copy to Clipboard"
 msgstr "Скопировать в буфер"
 
@@ -8796,230 +8839,372 @@ msgstr ""
 msgid "Plot  "
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:39
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:41
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:63
 msgid "&New"
 msgstr "&Новый"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:40
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:42
 #, fuzzy
 msgid "New schematic"
 msgstr "Печать схемы"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:46
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:48
 #, fuzzy
 msgid "Open a schematic"
 msgstr "Печать схемы"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:51
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:53
 msgid "&Reload the current sheet"
 msgstr "Перезагрузить текущий лист (&R)"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:52
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:55
 msgid "Load or reload a schematic file from file into the current sheet"
 msgstr "Загрузить или перезагрузить схему из файла на текущую страницу"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:58
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:61
 #, fuzzy
 msgid "&Save"
 msgstr "Сохранить как\t&S"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:59
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:61
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:62
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:54
 msgid "Save schematic project"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:65
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:68
 msgid "Save &Current sheet"
 msgstr "Сохранить текущий лист (&C)"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:66
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:69
 msgid "Save current sheet only"
 msgstr "Сохранить только текущий лист"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:71
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:74
 msgid "Save Current sheet &as.."
 msgstr "Сохранить текущий лист как ... (&a)"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:72
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:75
 msgid "Save current sheet as.."
 msgstr "Сохранить текущий лист как ..."
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:84
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:87
 msgid "Plot PostScript"
 msgstr "Чертить PostScript"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:84
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:87
 msgid "Plotting in PostScript format"
 msgstr "Черчение в формате PostScript"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:89
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:92
 msgid "Plot HPGL"
 msgstr "Чертить HPGL"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:89
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:92
 msgid "Plotting in HPGL format"
 msgstr "Черчение в формате HPGL"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:94
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:97
 msgid "Plot SVG"
 msgstr "Чертить SVG"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:94
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:97
 msgid "Plotting in SVG format"
 msgstr "Черчение в формате SVG"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:101
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:104
 msgid "Plot to Clipboard"
 msgstr "Чертить в буфер обмена"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:101
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:104
 msgid "Export drawings to clipboard"
 msgstr "Экспорт схемы в буфер обмена"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:108
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:112
 msgid "Plot HPGL, PostScript, SVG"
 msgstr "Чертить HPGL, PostScript, SVG"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:111
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:115
 msgid "Quit Eeschema"
 msgstr "Выход из Eeschema"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:128
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:133
 msgid "&Undo\t"
 msgstr "Отменить\t"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:135
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:140
 msgid "&Redo\t"
 msgstr "Вернуть\t"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:152
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:166
+msgid "&Component"
+msgstr "Компонент \t &C"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:167
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:163
+msgid "Place the component"
+msgstr "Разместить компонент"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:174
+msgid "&Power port"
+msgstr "Порт питания\t&P"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:175
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:167
+msgid "Place the power port"
+msgstr "Разместить порт питания"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:184
+msgid "&Wire"
+msgstr "Проводник\t&W"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:185
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:172
+msgid "Place the wire"
+msgstr "Разместить проводник"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:194
+#, fuzzy
+msgid "&Bus"
+msgstr "Fin Bus"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:195
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:176
+#, fuzzy
+msgid "Place the bus"
+msgstr "Поместить ячейки"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:204
+#, fuzzy
+msgid "W&ire to bus entry"
+msgstr "Добавить ввод проводника в шину"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:205
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:180
+#, fuzzy
+msgid "Place the wire to bus entry"
+msgstr "удалить вход в шину"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:214
+#, fuzzy
+msgid "B&us to bus entry"
+msgstr "Добавить ввод шины в шину"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:215
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:184
+#, fuzzy
+msgid "Place the bus to bus entry"
+msgstr "удалить вход в шину"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:224
+#, fuzzy
+msgid "No connect flag"
+msgstr "Добавить флаг Нет Соединения"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:225
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:189
+#, fuzzy
+msgid "Place the no connect flag"
+msgstr "Удалить неподключенные дорожки"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:234
+#, fuzzy
+msgid "Net name"
+msgstr "NetName"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:235
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:193
+#, fuzzy
+msgid "Place the net name"
+msgstr "Расположить лист"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:242
+#, fuzzy
+msgid "Global label"
+msgstr "Добавить глобальную метку"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:243
+msgid "Place the global label. Warning: all global labels with the same name are connected in whole hierarchy"
+msgstr ""
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:252
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:85
+#, fuzzy
+msgid "Junction"
+msgstr "Effacer jonction"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:253
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:202
+#, fuzzy
+msgid "Place the junction"
+msgstr "удалить соединение"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:264
+msgid "Hierarchical label"
+msgstr ""
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:265
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:207
+msgid "Place the hierarchical label. This label will be seen as a pin sheet in the sheet symbol"
+msgstr ""
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:274
+#, fuzzy
+msgid "Hierarchical sheet"
+msgstr "Иерархия выводов по Листу"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:275
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:212
+msgid "Place the hierarchical sheet"
+msgstr ""
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:284
+msgid "Imported hierarchical label"
+msgstr ""
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:285
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:216
+msgid "Place the pin sheet (imported hierarchical label from sheet)"
+msgstr ""
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:294
+#, fuzzy
+msgid "Hierarchical pin to sheet"
+msgstr "Иерархия выводов по Листу"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:295
+msgid "Place the hierarchical pin to sheet"
+msgstr ""
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:306
+msgid "Graphic line or poligon"
+msgstr ""
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:307
+msgid "Place the graphic line or poligon"
+msgstr ""
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:316
+#, fuzzy
+msgid "Graphic text (comment)"
+msgstr "Графические свойства текста"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:317
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:230
+msgid "Place the graphic text (comment)"
+msgstr ""
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:333
 msgid "Setting colors..."
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:158
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:339
 #: /home/plyatov/Projects/Programming/kicad-svn/gerbview/tool_gerber.cpp:110
 msgid "&Options"
 msgstr "Параметры (&O)"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:159
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:340
 msgid "Select general options..."
 msgstr "Выбор общих параметров"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:184
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:365
 msgid "Open the eeschema manual"
 msgstr "Открыть руководство eeschema"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:195
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:376
 msgid "&Edit"
 msgstr "&Правка"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/files-io.cpp:57
-msgid "Clear SubHierarchy ?"
-msgstr ""
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/menubar.cpp:377
+msgid "&Place"
+msgstr "Разместить\t&P"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:55
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/files-io.cpp:112
+#, fuzzy
+msgid "Clear Schematic Hierarchy (modified!)?"
+msgstr "Effacer la hiérarchie schématique (modifiée!)?"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/files-io.cpp:170
+msgid ""
+"Ready\n"
+"Working dir: \n"
+msgstr ""
+"Готово\n"
+"Рабочая папка: \n"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/files-io.cpp:216
+#, fuzzy, c-format
+msgid "File %s not found (new project ?)"
+msgstr " fichier %s non trouvé (nouveau projet ?)"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:48
 msgid "New schematic project"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:58
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:51
 msgid "Open schematic project"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:69
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:62
 msgid "go to library editor"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:72
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:65
 msgid "go to library browse"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:76
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:69
 msgid "Schematic Hierarchy Navigator"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:98
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:91
 msgid "Print schematic"
 msgstr "Печать схемы"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:102
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:95
 msgid "Run Cvpcb"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:105
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:98
 msgid "Run Pcbnew"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:129
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:122
 msgid "Netlist generation"
 msgstr "Генерация списка цепей"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:132
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:125
 msgid "Schematic Annotation"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:135
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:128
 msgid "Schematic Electric Rules Check"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:138
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:131
 msgid "Bill of material and/or Crossreferences"
 msgstr "Биль материалов и/или перекрестных ссылок"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:165
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:158
 msgid "Hierarchy Push/Pop"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:170
-msgid "Add components"
-msgstr ""
-
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:174
-msgid "Add powers"
-msgstr ""
-
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:179
-msgid "Add wires"
-msgstr ""
-
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:183
-msgid "Add bus"
-msgstr ""
-
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:187
-msgid "Add wire to bus entry"
-msgstr ""
-
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:191
-msgid "Add bus to bus entry"
-msgstr ""
-
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:196
-msgid "Add no connect flag"
-msgstr ""
-
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:200
-msgid "Add wire or bus label"
-msgstr ""
-
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:213
-msgid "Add hierarchical symbol (sheet)"
-msgstr ""
-
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:217
-msgid "import glabel from sheet & create pinsheet"
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:197
+msgid ""
+"Place the global label.\n"
+"Warning: all global labels with the same name are connected in whole hierarchy"
 msgstr ""
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:221
-msgid "Add hierachical pin to sheet"
+msgid "Place the hierachical pin to sheet"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:230
-msgid "Add graphic text (comment)"
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:226
+msgid "Place the graphic line or polygon"
 msgstr ""
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/tool_sch.cpp:274
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schframe.cpp:285
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schframe.cpp:338
 msgid "Show Hidden Pins"
 msgstr ""
 
@@ -9027,115 +9212,116 @@ msgstr ""
 msgid "HV orientation for Wires and Bus"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:246
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:238
 msgid "List items:"
 msgstr "Перечень элементов:"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:250
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:242
 msgid "Components by Reference"
 msgstr "Компоненты по обозначению"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:254
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:246
 msgid "Sub Components (i.e. U2A, U2B ...)"
 msgstr "Суб компоненты (т.е. U2A, U2B..)"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:258
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:250
 msgid "Components by Value"
 msgstr "Компоненты по Значению"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:262
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:254
 msgid "Hierachy Pins by Name"
 msgstr "Иерархия выводов по Имени"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:266
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:258
 msgid "Hierachy Pins by Sheets"
 msgstr "Иерархия выводов по Листу"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:272
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:264
 msgid "Text for spreadsheet import"
 msgstr "Текст для импорта в эл. таблицу"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:273
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:265
 msgid "Output format:"
 msgstr "Выходной формат:"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:278
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:270
 msgid "Tab"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:279
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:271
 msgid ";"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:280
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:272
 msgid ","
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:281
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:273
 msgid "Field separator for spreadsheet import:"
 msgstr "Разделитель полей для импорта в эл. таблицу:"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:289
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:281
 msgid "Launch list browser"
 msgstr "Запустить просмотрщик списков"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:296
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:288
 msgid "Fields to add:"
 msgstr "Добавлять поля:"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:304
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:296
 msgid "Field 1"
 msgstr "Поле 1"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:308
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:300
 msgid "Field 2"
 msgstr "Поле 2"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:312
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:304
 msgid "Field 3"
 msgstr "Поле 3"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:316
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:308
 msgid "Field 4"
 msgstr "Поле 4"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:320
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:312
 msgid "Field 5"
 msgstr "Поле 5"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:324
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:316
 msgid "Field 6"
 msgstr "Поле 6"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:328
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:320
 msgid "Field 7"
 msgstr "Поле 7"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:332
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:324
 msgid "Field 8"
 msgstr "Поле 8"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:338
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:330
 msgid "Create &List"
 msgstr "Создать список"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:560
-msgid "Bill of material:"
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:554
+#, fuzzy
+msgid "Bill of materials:"
 msgstr "Перечень материалов:"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:610
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:666
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:604
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:659
 msgid "Failed to open file "
 msgstr "Не удалось открыть файл "
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:738
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:739
 #, c-format
 msgid ""
 "\n"
 "#Glob labels ( order = Sheet Number ) count = %d\n"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:749
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:750
 #, c-format
 msgid ""
 "\n"
@@ -9143,29 +9329,34 @@ msgid ""
 "\n"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:756
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:757
 msgid ""
 "\n"
 "#End List\n"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:1134
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:1069
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:1158
 msgid ""
 "\n"
 "#Cmp ( order = Reference )"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:1137
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:1217
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:1161
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:1243
 msgid " (with SubCmp)"
 msgstr " (с СубКомп)"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:1197
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:1258
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:1223
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:1283
 msgid "#End Cmp\n"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:1214
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:1240
 msgid ""
 "\n"
 "#Cmp ( order = Value )"
@@ -9173,17 +9364,17 @@ msgstr ""
 "\n"
 "#Cmp ( порядок = Значение )"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:1283
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:1314
 #, c-format
-msgid "> %-28.28s Global        (Sheet %.2d) pos: %3.3f, %3.3f\n"
+msgid "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:1302
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:1334
 #, c-format
-msgid "> %-28.28s Sheet %-7.7s (Sheet %.2d) pos: %3.3f, %3.3f\n"
+msgid "> %-28.28s Sheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:1316
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_build_BOM.cpp:1348
 msgid "#End labels\n"
 msgstr ""
 
@@ -9398,7 +9589,7 @@ msgstr "Texte visible"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_edit_component_in_schematic.cpp:225
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/edit_component_in_lib.cpp:484
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:165
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:164
 #, fuzzy
 msgid "Fields"
 msgstr "Поля"
@@ -9592,21 +9783,21 @@ msgstr "Ok pour effacer la LISTE des Alias"
 msgid "New FootprintFilter:"
 msgstr "Nouveau Circuit Imprimé"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schframe.cpp:183
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schframe.cpp:237
 msgid "Schematic modified, Save before exit ?"
 msgstr "Схема изменена. Сохранить при выходе? "
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schframe.cpp:285
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schframe.cpp:338
 #, fuzzy
 msgid "No show Hidden Pins"
 msgstr "N'affichage pas les pins invisibles"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schframe.cpp:288
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schframe.cpp:341
 #, fuzzy
 msgid "Draw lines at any direction"
 msgstr "Tracer traits de direction  quelconque"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schframe.cpp:289
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/schframe.cpp:342
 #, fuzzy
 msgid "Draw lines H, V or 45 deg only"
 msgstr "Tracer traits H, V ou 45 deg seulement"
@@ -9812,43 +10003,43 @@ msgstr "Выберите элементы"
 msgid "Mirror Block (ctrl + drag mouse)"
 msgstr "Зеркалировать блок (CTRL + протяг. мышью)"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/annotate.cpp:184
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/annotate.cpp:188
 msgid "Previous Annotation will be deleted. Continue ?"
 msgstr "Предыдущее аннотирование будет удалено. Продолжить?"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/annotate.cpp:695
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/annotate.cpp:679
 #, c-format
 msgid "item not annotated: %s%s"
 msgstr "элемент не аннотирован: %s%s"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/annotate.cpp:699
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/annotate.cpp:683
 #, c-format
 msgid "( unit %d)"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/annotate.cpp:715
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/annotate.cpp:699
 #, c-format
 msgid "Error item %s%s"
 msgstr "Ошибка элемента %s%s"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/annotate.cpp:717
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/annotate.cpp:701
 #, c-format
 msgid " unit %d and no more than %d parts"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/annotate.cpp:750
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/annotate.cpp:773
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/annotate.cpp:734
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/annotate.cpp:757
 #, c-format
 msgid "Multiple item %s%s"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/annotate.cpp:755
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/annotate.cpp:777
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/annotate.cpp:739
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/annotate.cpp:761
 #, c-format
 msgid " (unit %d)"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/annotate.cpp:793
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/annotate.cpp:777
 #, c-format
 msgid "Diff values for %s%d%c (%s) and %s%d%c (%s)"
 msgstr ""
@@ -9878,15 +10069,10 @@ msgstr "Ошибка: Корневой элемент <%s> не найден"
 msgid "Current Part: <%s>"
 msgstr "Текущий элемент: <%s>"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/symbdraw.cpp:795
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/symbdraw.cpp:793
 #, fuzzy, c-format
 msgid "Arc %.1f deg"
 msgstr "Arc %.1f deg"
-
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_create_component.cpp:168
-#, fuzzy
-msgid "U"
-msgstr "U"
 
 #: /home/plyatov/Projects/Programming/kicad-svn/eeschema/dialog_create_component.cpp:211
 msgid "&1"
@@ -10501,11 +10687,11 @@ msgstr ""
 "Готово\n"
 "Рабочая папка: %s\n"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/kicad/mainframe.cpp:331
+#: /home/plyatov/Projects/Programming/kicad-svn/kicad/mainframe.cpp:334
 msgid "Execute Python Script:"
 msgstr "Выполнить скрипт Python:"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/kicad/mainframe.cpp:354
+#: /home/plyatov/Projects/Programming/kicad-svn/kicad/mainframe.cpp:357
 msgid "Load file:"
 msgstr "Загрузить файл:"
 
@@ -10627,19 +10813,19 @@ msgstr "GerbView уже запущен. Продолжить?"
 msgid "Layer "
 msgstr "Слой"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/affiche.cpp:96
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/affiche.cpp:97
 msgid "Tool"
 msgstr "Инструмент"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/affiche.cpp:101
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/affiche.cpp:102
 msgid "D CODE"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/affiche.cpp:103
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/affiche.cpp:104
 msgid "D type"
 msgstr "D тип"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/affiche.cpp:104
+#: /home/plyatov/Projects/Programming/kicad-svn/gerbview/affiche.cpp:105
 msgid "????"
 msgstr ""
 
@@ -10930,7 +11116,7 @@ msgstr "Параметры очистки"
 msgid "Export to Gerber"
 msgstr "&Экспорт в pcbnew"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.h:63
+#: /home/plyatov/Projects/Programming/kicad-svn/pcbnew/dialog_drc.h:65
 msgid "DRC Control"
 msgstr "Контроль DRC"
 
@@ -11113,102 +11299,102 @@ msgstr "Графические свойства элементов"
 msgid "EESchema Colors"
 msgstr "EESchema Erc"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:74
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:73
 #, fuzzy
 msgid "Wire"
 msgstr "Каркас"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:80
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:79
 #, fuzzy
 msgid "Bus"
 msgstr "Fin Bus"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:86
-#, fuzzy
-msgid "Junction"
-msgstr "Effacer jonction"
-
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:92
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:91
 #, fuzzy
 msgid "Label"
 msgstr "Метка"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:98
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:97
 msgid "GlobLabel"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:104
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:103
 #, fuzzy
 msgid "Netname"
 msgstr "NetName"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:110
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:109
 #, fuzzy
 msgid "Notes"
 msgstr "Примечания"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:123
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:122
 #, fuzzy
 msgid "Body"
 msgstr "Тело"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:129
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:128
 #, fuzzy
 msgid "Body Bg"
 msgstr "Пер.план/Фон"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:135
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:134
 #, fuzzy
 msgid "Pin"
 msgstr "Propriétés des Pins"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:147
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:146
 msgid "PinNam"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:178
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:177
 msgid "Sheetfile"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:184
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:183
 msgid "SheetName"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:190
-msgid "SheetLabel"
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:189
+#, fuzzy
+msgid "SheetLabel (Pin Sheet)"
+msgstr "Item dans &feuille"
+
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:195
+msgid "Hierarchical Label"
 msgstr ""
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:197
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:201
 #, fuzzy
 msgid "Erc Warning"
 msgstr "%s: Предупреждение: Невозможно %s"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:203
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:207
 #, fuzzy
 msgid "Erc Error"
 msgstr "Erreur en création "
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:248
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:253
 #, fuzzy
 msgid "General"
 msgstr "Общие"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:254
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:259
 #, fuzzy
 msgid "Device"
 msgstr "Устройство"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:260
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:265
 #, fuzzy
 msgid "Sheets"
 msgstr "Nombre de feuille&: %d"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:266
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:271
 #, fuzzy
 msgid "Erc Mark"
 msgstr "Petite marque"
 
-#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:272
+#: /home/plyatov/Projects/Programming/kicad-svn/eeschema/eelayer.h:277
 #, fuzzy
 msgid "Other"
 msgstr "Прочее"
