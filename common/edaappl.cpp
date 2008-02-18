@@ -475,6 +475,10 @@ void WinEDA_App::SetLanguageIdentifier( int menu_id )
         m_LanguageId = wxLANGUAGE_CATALAN;
         break;
 
+    case ID_LANGUAGE_CHINESE_SIMPLIFIED:
+        m_LanguageId = wxLANGUAGE_CHINESE_SIMPLIFIED;
+        break;
+
     default:
         m_LanguageId = wxLANGUAGE_DEFAULT;
         break;
@@ -559,9 +563,15 @@ wxMenu* WinEDA_App::SetLanguageList( wxMenu* MasterMenu )
                                _( "Catalan" ), wxEmptyString, wxITEM_CHECK );
         SETBITMAPS( lang_catalan_xpm );
         m_Language_Menu->Append( item );
+
+        item = new wxMenuItem( m_Language_Menu, ID_LANGUAGE_CHINESE_SIMPLIFIED,
+                               _( "Chinese simplified" ), wxEmptyString, wxITEM_CHECK );
+        //SETBITMAPS( lang_chinese_simplified_xpm );
+        m_Language_Menu->Append( item );
     }
 
     m_Language_Menu->Check( ID_LANGUAGE_CATALAN, FALSE );
+    m_Language_Menu->Check( ID_LANGUAGE_CHINESE_SIMPLIFIED, FALSE );
     m_Language_Menu->Check( ID_LANGUAGE_KOREAN, FALSE );
     m_Language_Menu->Check( ID_LANGUAGE_RUSSIAN, FALSE );
     m_Language_Menu->Check( ID_LANGUAGE_POLISH, FALSE );
@@ -579,6 +589,10 @@ wxMenu* WinEDA_App::SetLanguageList( wxMenu* MasterMenu )
     {
     case wxLANGUAGE_CATALAN:
         m_Language_Menu->Check( ID_LANGUAGE_CATALAN, TRUE );
+        break;
+
+    case wxLANGUAGE_CHINESE_SIMPLIFIED:
+        m_Language_Menu->Check( ID_LANGUAGE_CHINESE_SIMPLIFIED, TRUE );
         break;
 
     case wxLANGUAGE_KOREAN:
