@@ -573,7 +573,7 @@ wxString mask, filename;
 		CreateExportList(m_ListFileName);
 
 	EndModal( 1 );
-	
+
 //  if( s_BrowsList )
 	if( m_GetListBrowser->GetValue() )
 	{
@@ -581,6 +581,7 @@ wxString mask, filename;
 		AddDelimiterString(filename);
 		ExecuteFile(this, editorname, filename);
 	}
+
 }
 
 
@@ -1042,23 +1043,23 @@ const wxString * Text1, *Text2;
 /**************************************************************/
 static void DeleteSubCmp( ListComponent * List, int NbItems )
 /**************************************************************/
-/* Supprime les sous-composants, c'est a dire les descriptions redonnantes des
- * boitiers multiples
- * La liste des composant doit etre triee par reference et par num d'unite
+/* Remove sub components from the list, when multiples parts per package are found in this list
+ * The component list **MUST** be sorted by reference and by unit number
  */
 {
 int ii;
 EDA_SchComponentStruct * LibItem;
-wxString OldName;
+wxString OldName, CurrName;
 
 	for( ii = 0; ii < NbItems; ii++ )
 	{
 		LibItem = List[ii].m_Comp;
 		if( LibItem == NULL )
 			continue;
+		CurrName = CONV_FROM_UTF8(List[ii].m_Ref);
 		if( !OldName.IsEmpty() )
 		{
-			if( strcmp(OldName.mb_str(), List[ii].m_Ref ) == 0 )
+			if( OldName == CurrName )	// CurrName is a subpart of OldName: remove it
 			{
 				List[ii].m_Comp = NULL;
 				List[ii].m_SheetList.Clear();
@@ -1066,7 +1067,7 @@ wxString OldName;
 				
 			}
 		}
-		OldName.Printf(_("%s"), List[ii].m_Ref );
+		OldName = CurrName;
 	}
 }
 
