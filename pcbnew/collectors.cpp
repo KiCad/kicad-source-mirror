@@ -93,11 +93,12 @@ const KICAD_T GENERAL_COLLECTOR::PadsOrModules[] = {
 };
 
 
-const KICAD_T GENERAL_COLLECTOR::PadsOrTracks[] = {
+const KICAD_T GENERAL_COLLECTOR::PadsTracksOrZones[] = {
     TYPEPAD,
     TYPEVIA,
     TYPETRACK,
     TYPEZONE,
+    TYPEZONE_CONTAINER,
     EOT
 };
 
@@ -368,20 +369,20 @@ void GENERAL_COLLECTOR::Collect( BOARD_ITEM* aItem, const KICAD_T aScanList[],
 // see collectors.h
 SEARCH_RESULT TYPE_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* testData )
 {
-    // The Vist() function only visits the testItem if its type was in the 
+    // The Vist() function only visits the testItem if its type was in the
     // the scanList, so therefore we can collect anything given to us here.
     Append( testItem );
-    
+
     return SEARCH_CONTINUE;     // always when collecting
 }
 
 void TYPE_COLLECTOR::Collect( BOARD_ITEM* aBoard, const KICAD_T aScanList[] )
 {
     Empty();        // empty any existing collection
-    
+
     // visit the board with the INSPECTOR (me).
     aBoard->Visit(      this,       // INSPECTOR* inspector
-                        NULL,       // const void* testData, 
+                        NULL,       // const void* testData,
                         aScanList );
 }
 

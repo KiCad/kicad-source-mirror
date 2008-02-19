@@ -331,7 +331,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
 
 
     // if PAD_SMD pad and high contrast mode
-    if( m_Attribut==PAD_SMD && DisplayOpt.ContrastModeDisplay )
+    if( (m_Attribut==PAD_SMD || m_Attribut==PAD_CONN) && DisplayOpt.ContrastModeDisplay )
     {
         // when routing tracks
         if( frame && frame->m_ID_current_state == ID_TRACK_BUTT )

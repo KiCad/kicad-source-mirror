@@ -92,22 +92,22 @@ int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
 {
     if( g_HightLigt_Status )
         Hight_Light( DC );
-    
+
     // use this scheme because of pad is higher priority than tracks in the
     // search, and finding a pad, instead of a track on a pad,
     // allows us to fire a message to eescema.
 
     GENERAL_COLLECTORS_GUIDE guide = GetCollectorsGuide();
 
-    
+
     // optionally, modify the "guide" here as needed using its member functions
-    
-    
-    m_Collector->Collect( m_Pcb, GENERAL_COLLECTOR::PadsOrTracks, 
+
+
+    m_Collector->Collect( m_Pcb, GENERAL_COLLECTOR::PadsTracksOrZones,
                          GetScreen()->RefPos( true ), guide );
 
     BOARD_ITEM* item = (*m_Collector)[0];
-    
+
     if( item )
     {
         switch( item->Type() )
@@ -117,7 +117,7 @@ int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
             Hight_Light( DC );
             SendMessageToEESCHEMA( item );
             return g_HightLigth_NetCode;
-            
+
         case TYPETRACK:
         case TYPEVIA:
         case TYPEZONE:
@@ -126,13 +126,18 @@ int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
             g_HightLigth_NetCode = ((TRACK*)item)->GetNet();
             Hight_Light( DC );
             return g_HightLigth_NetCode;
-            
+
+        case TYPEZONE_CONTAINER:
+            g_HightLigth_NetCode = ((ZONE_CONTAINER*)item)->GetNet();
+            Hight_Light( DC );
+            return g_HightLigth_NetCode;
+
         default:
             ;   // until somebody changes GENERAL_COLLECTOR::PadsOrTracks,
                 // this should not happen.
         }
     }
-    
+
     return -1;      // HitTest() failed.
 }
 
@@ -158,28 +163,35 @@ void WinEDA_PcbFrame::DrawHightLight( wxDC* DC, int NetCode )
 /* Turn On or OFF the HightLight for trcak and pads with the netcode "NetCode'
  */
 {
-    TRACK*  pts;
-    MODULE* Module;
-
     if( g_HightLigt_Status )
         draw_mode = GR_SURBRILL | GR_OR;
     else
         draw_mode = GR_AND | GR_SURBRILL;
 
-    Module = m_Pcb->m_Modules;
-
     /* Redraw pads */
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( MODULE* module = m_Pcb->m_Modules;  module;   module = module->Next() )
     {
-        Pad_Surbrillance( DrawPanel, DC, Module, NetCode );
+        Pad_Surbrillance( DrawPanel, DC, module, NetCode );
     }
 
     /* Redraw track and vias: */
-    for( pts = m_Pcb->m_Track; pts != NULL; pts = (TRACK*) pts->Pnext )
+    for( TRACK* pts = m_Pcb->m_Track;   pts;   pts = pts->Next() )
     {
         if( pts->GetNet() == NetCode )
         {
             pts->Draw( DrawPanel, DC, draw_mode );
+        }
+    }
+
+    wxPoint zero(0,0);  // construct outside loop for speed
+
+    // Redraw ZONE_CONTAINERS
+    BOARD::ZONE_CONTAINERS& zones = m_Pcb->m_ZoneDescriptorList;
+    for( BOARD::ZONE_CONTAINERS::iterator zc = zones.begin();  zc!=zones.end();  ++zc )
+    {
+        if( (*zc)->GetNet() == NetCode )
+        {
+            (*zc)->Draw( DrawPanel, DC, zero, draw_mode );
         }
     }
 }
@@ -193,12 +205,14 @@ static void Pad_Surbrillance( WinEDA_DrawPanel* panel,
 {
     D_PAD* pt_pad;
 
+    wxPoint zero(0,0);  // construct outside loop for speed
+
     /* trace des pastilles */
     for( pt_pad = Module->m_Pads; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
     {
         if( pt_pad->GetNet() == NetCode )
         {
-            pt_pad->Draw( panel, DC, wxPoint( 0, 0 ), draw_mode );
+            pt_pad->Draw( panel, DC, zero, draw_mode );
         }
     }
 }

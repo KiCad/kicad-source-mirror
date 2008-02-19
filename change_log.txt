@@ -5,6 +5,13 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Feb-19 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+    Add ZONE_CONTAINER support to the ID_PCB_HIGHLIGHT_BUTT tool and
+    WinEDA_PcbFrame::DrawHightLight()
+
+
 2008-Feb-18 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew
