@@ -39,7 +39,7 @@ SET(PCBNEW_SRCS
     collectors.cpp
     connect.cpp
     controle.cpp
-#   copy_track.cpp
+#   copy_track.cpp <-- not used
     cotation.cpp
     cross-probing.cpp
     deltrack.cpp
@@ -47,6 +47,7 @@ SET(PCBNEW_SRCS
 #   dialog_drc.cpp
     dialog_edit_mod_text.cpp
 #   dialog_edit_module.cpp
+#   dialog_gendrill.cpp
     dialog_general_options.cpp
 #   dialog_graphic_items_options.cpp
 #   dialog_initpcb.cpp
@@ -56,10 +57,10 @@ SET(PCBNEW_SRCS
 #   dialog_track_options.cpp
 #   dialog_zones_by_polygon.cpp
     dist.cpp
-#   docedit.cpp <-- not used
     dragsegm.cpp
     drc.cpp
     dsn.cpp
+#   dupltrac.cpp <-- not used
     edgemod.cpp
     edit.cpp
     editedge.cpp
@@ -67,7 +68,6 @@ SET(PCBNEW_SRCS
     editpads.cpp
     editrack.cpp
     editrack-part2.cpp
-#   editrout.cpp <-- not used
     edit_track_width.cpp
     edtxtmod.cpp
     export_gencad.cpp
@@ -138,7 +138,6 @@ SET(PCBNEW_SRCS
     xchgmod.cpp
     zone_filling_algorithm.cpp
     zones_by_polygon.cpp
-#   zones.cpp
     zones_test_and_combine_areas.cpp)
 
 SET(PCBNEW_EXTRA_SRCS
