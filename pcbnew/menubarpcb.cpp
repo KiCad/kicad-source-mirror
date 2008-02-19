@@ -123,7 +123,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
 
         item = new wxMenuItem(submenuImport, ID_GEN_IMPORT_SPECCTRA_SESSION,
             _("&Specctra Session"), _("Import a routed \"Specctra Session\" (*.ses) file") );
-        item->SetBitmap(export_xpm);    // @todo need better bitmap
+        item->SetBitmap(import_xpm);    // @todo need better bitmap
         submenuImport->Append(item);
 
         /* would be implemented in WinEDA_PcbFrame::ImportSpecctraDesign() in specctra_import.cpp
@@ -134,7 +134,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
         */
 
         ADD_MENUITEM_WITH_HELP_AND_SUBMENU(m_FilesMenu, submenuImport,
-            ID_GEN_IMPORT_FILE, _("Import"), _("Import files"), export_xpm);
+            ID_GEN_IMPORT_FILE, _("Import"), _("Import files"), import_xpm);
         //-----</Add import menu>----------------------------------------------
 
         // Add archive footprints menu
