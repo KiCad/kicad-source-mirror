@@ -9,7 +9,7 @@
  *  - Chargement modules et nouvelles connexions
  *  - Test des modules (modules manquants ou en trop
  *  - Recalcul du chevelu
- * 
+ *
  *  Remarque importante:
  *  Lors de la lecture de la netliste pour Chargement modules
  *  et nouvelles connexions, l'identification des modules peut se faire selon
@@ -36,13 +36,13 @@ class MODULEtoLOAD : public EDA_BaseStruct
 public:
     wxString m_LibName;
     wxString m_CmpName;
-	wxString m_Path; 
+    wxString m_Path;
 
 public:
-    MODULEtoLOAD( const wxString& libname, 
-				  const wxString& cmpname, 
-	  			  int timestamp, 
-				  const wxString& path);
+    MODULEtoLOAD( const wxString& libname,
+                  const wxString& cmpname,
+                  int timestamp,
+                  const wxString& path);
     ~MODULEtoLOAD() { };
     MODULEtoLOAD* Next() { return (MODULEtoLOAD*) Pnext; }
 };
@@ -115,7 +115,7 @@ void WinEDA_NetlistFrame::ReadPcbNetlist( wxCommandEvent& event )
 
 /* mise a jour des empreintes :
  *  corrige les Net Names, les textes, les "TIME STAMP"
- * 
+ *
  *  Analyse les lignes:
  # EESchema Netlist Version 1.0 generee le  18/5/2005-12:30:22
  *  (
@@ -134,7 +134,8 @@ void WinEDA_NetlistFrame::ReadPcbNetlist( wxCommandEvent& event )
     int      LineNum, State, Comment;
     MODULE*  Module = NULL;
     D_PAD*   PtPad;
-    char     Line[256], * Text;
+    char     Line[256];
+    char*    Text;
     int      UseFichCmp = 1;
     wxString msg;
 
@@ -177,6 +178,7 @@ void WinEDA_NetlistFrame::ReadPcbNetlist( wxCommandEvent& event )
 
         if( *Text == '(' )
             State++;
+
         if( *Text == ')' )
             State--;
 
@@ -287,7 +289,7 @@ MODULE* WinEDA_NetlistFrame::ReadNetModule( char* Text, int* UseFichCmp,
 
 /* charge la description d'une empreinte ,netliste type PCBNEW
  *  et met a jour le module correspondant
- * 
+ *
  *  Si TstOnly == 0 si le module n'existe pas, il est charge
  *  Si TstOnly != 0 si le module n'existe pas, il est ajoute a la liste des
  *      modules a charger
@@ -295,7 +297,7 @@ MODULE* WinEDA_NetlistFrame::ReadNetModule( char* Text, int* UseFichCmp,
  * UseFichCmp est un flag
  *          si != 0, le fichier des composants .CMP sera utilise
  *          est remis a 0 si le fichier n'existe pas
- * 
+ *
  *  Analyse les lignes type:
  *  ( 40C08647 $noname R20 4,7K {Lib=R}
  *  (    1 VCC )
@@ -317,18 +319,22 @@ MODULE* WinEDA_NetlistFrame::ReadNetModule( char* Text, int* UseFichCmp,
     strcpy( Line, Text );
 
     TextValeur = wxT( "~" );
+
     if( ( text = strtok( Line, " ()\t\n" ) ) == NULL )
         Error = 1;
     else
         TextTimeStamp = CONV_FROM_UTF8( text );
+
     if( ( text = strtok( NULL, " ()\t\n" ) ) == NULL )
         Error = 1;
     else
         TextNameLibMod = CONV_FROM_UTF8( text );
+
     if( ( text = strtok( NULL, " ()\t\n" ) ) == NULL )
         Error = 1;
     else
         TextCmpName = CONV_FROM_UTF8( text );
+
     if( ( text = strtok( NULL, " ()\t\n" ) ) == NULL )
         Error = -1;
     else
@@ -337,7 +343,7 @@ MODULE* WinEDA_NetlistFrame::ReadNetModule( char* Text, int* UseFichCmp,
     if( Error > 0 )
         return NULL;
 
-	wxString LocalTimeStamp = TextTimeStamp.AfterLast('/'); 
+    wxString LocalTimeStamp = TextTimeStamp.AfterLast('/');
     LocalTimeStamp.ToULong( &TimeStamp, 16 );
 
     /* Tst si composant deja charge */
@@ -349,8 +355,8 @@ MODULE* WinEDA_NetlistFrame::ReadNetModule( char* Text, int* UseFichCmp,
         if( m_Select_By_Timestamp->GetSelection()  == 1 ) /* Reconnaissance par signature temporelle */
         {
             //if( TimeStamp == Module->m_TimeStamp )
-			if(TextTimeStamp.CmpNoCase(Module->m_Path))
-            	Found = TRUE;
+            if(TextTimeStamp.CmpNoCase(Module->m_Path))
+                Found = TRUE;
         }
         else    /* Reconnaissance par Reference */
         {
@@ -420,7 +426,7 @@ MODULE* WinEDA_NetlistFrame::ReadNetModule( char* Text, int* UseFichCmp,
 
 
         if( TstOnly == TESTONLY )
-			AddToList( NameLibCmp, TextCmpName, TimeStamp, TextTimeStamp );
+            AddToList( NameLibCmp, TextCmpName, TimeStamp, TextTimeStamp );
         else
         {
             wxString msg;
@@ -439,9 +445,12 @@ MODULE* WinEDA_NetlistFrame::ReadNetModule( char* Text, int* UseFichCmp,
     Module->m_Reference->m_Text = TextCmpName;
     Module->m_Value->m_Text = TextValeur;
     Module->m_TimeStamp = TimeStamp;
-	Module->m_Path = TextTimeStamp; 
-	printf("in ReadNetModule() m_Path = %s\n", 
-		   CONV_TO_UTF8(Module->m_Path) ); 
+    Module->m_Path = TextTimeStamp;
+
+#if defined(DEBUG)
+    printf("in ReadNetModule() m_Path = %s\n",
+           CONV_TO_UTF8(Module->m_Path) );
+#endif
 
     return Module;  /* composant trouve */
 }
@@ -745,30 +754,30 @@ int WinEDA_NetlistFrame::ReadListeModules( const wxString* RefCmp, long TimeStam
  *      1 et le nom module dans NameModule
  *      -1 si module non trouve en fichier
  *  sinon 0;
- * 
+ *
  *  parametres d'appel:
  *      RefCmp		(NULL si selection par TimeStamp)
  *      TimeStamp	(signature temporelle si elle existe, NULL sinon)
  *      pointeur sur le buffer recevant le nom du module
- * 
+ *
  *  Exemple de fichier:
- * 
+ *
  *  Cmp-Mod V01 Genere par PcbNew le 29/10/2003-13:11:6
- * 
+ *
  *  BeginCmp
  *  TimeStamp = 322D3011;
  *  Reference = BUS1;
  *  ValeurCmp = BUSPC;
  *  IdModule  = BUS_PC;
  *  EndCmp
- * 
+ *
  *  BeginCmp
  *  TimeStamp = 32307DE2;
  *  Reference = C1;
  *  ValeurCmp = 47uF;
  *  IdModule  = CP6;
  *  EndCmp
- * 
+ *
  */
 {
     wxString CmpFullFileName;
@@ -962,7 +971,7 @@ void WinEDA_NetlistFrame::LoadListeModules( wxDC* DC )
              *  si module charge */
             Module->m_Reference->m_Text = cmp->m_CmpName;
             Module->m_TimeStamp = cmp->m_TimeStamp;
-			Module->m_Path = cmp->m_Path;
+            Module->m_Path = cmp->m_Path;
         }
         else
         {
@@ -976,7 +985,7 @@ void WinEDA_NetlistFrame::LoadListeModules( wxDC* DC )
             Module = newmodule;
             Module->m_Reference->m_Text = cmp->m_CmpName;
             Module->m_TimeStamp = cmp->m_TimeStamp;
-			Module->m_Path = cmp->m_Path;
+            Module->m_Path = cmp->m_Path;
         }
     }
 
@@ -1039,5 +1048,5 @@ MODULEtoLOAD::MODULEtoLOAD( const wxString& libname, const wxString& cmpname,
     m_LibName   = libname;
     m_CmpName   = cmpname;
     m_TimeStamp = timestamp;
-	m_Path 		= path;
+    m_Path 		= path;
 }
