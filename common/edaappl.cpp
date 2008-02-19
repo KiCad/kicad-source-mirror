@@ -118,8 +118,8 @@ void WinEDA_App::InitEDA_Appl( const wxString& name )
 
     /* Init kicad environment
      * the environment variable KICAD (if exists) gives the kicad path:
-	 * something like set KICAD=d:\kicad
-	*/
+     * something like set KICAD=d:\kicad
+    */
     m_Env_Defined = wxGetEnv( wxT( "KICAD" ), &m_KicadEnv );
     if( m_Env_Defined )    // ensure m_KicadEnv ends by "/"
     {
@@ -214,7 +214,7 @@ bool WinEDA_App::SetBinDir()
   if (str == NULL) return false;
   char *native_str = NULL;
   int len = CFStringGetMaximumSizeForEncoding(CFStringGetLength(str),
-					      kCFStringEncodingUTF8) + 1;
+                          kCFStringEncodingUTF8) + 1;
   native_str = new char[len];
   CFStringGetCString(str, native_str, len, kCFStringEncodingUTF8);
   m_BinDir = CONV_FROM_UTF8(native_str);
@@ -222,7 +222,7 @@ bool WinEDA_App::SetBinDir()
 
 #elif defined(__UNIX__)
 
-  // Under Linux, if argv[0] doesn't the complete path to the executable, 
+  // Under Linux, if argv[0] doesn't the complete path to the executable,
   // it's necessary to obtain it using "which <filename>".
   FILE*    ftmp;
 
@@ -270,7 +270,8 @@ void WinEDA_App::GetSettings()
     wxString Line, Ident;
     unsigned ii;
 
-    m_HelpSize.x = 500; m_HelpSize.y = 400;
+    m_HelpSize.x = 500;
+    m_HelpSize.y = 400;
 
     if( m_EDA_CommonConfig )
     {
@@ -285,8 +286,11 @@ void WinEDA_App::GetSettings()
 
     for( ii = 0; ii < 10; ii++ )
     {
-        Ident = wxT( "LastProject" ); if( ii )
+        Ident = wxT( "LastProject" );
+
+        if( ii )
             Ident << ii;
+
         if( m_EDA_Config->Read( Ident, &Line ) )
             m_LastProject.Add( Line );
     }
@@ -299,6 +303,7 @@ void WinEDA_App::GetSettings()
     Line = m_EDA_Config->Read( wxT( "SdtFontType" ), wxEmptyString );
     if( !Line.IsEmpty() )
         g_StdFont->SetFaceName( Line );
+
     ii = m_EDA_Config->Read( wxT( "SdtFontStyle" ), wxFONTFAMILY_ROMAN );
     g_StdFont->SetStyle( ii );
     ii = m_EDA_Config->Read( wxT( "SdtFontWeight" ), wxNORMAL );
@@ -309,6 +314,7 @@ void WinEDA_App::GetSettings()
     Line = m_EDA_Config->Read( wxT( "MsgFontType" ), wxEmptyString );
     if( !Line.IsEmpty() )
         g_MsgFont->SetFaceName( Line );
+
     ii = m_EDA_Config->Read( wxT( "MsgFontStyle" ), wxFONTFAMILY_ROMAN );
     g_MsgFont->SetStyle( ii );
     ii = m_EDA_Config->Read( wxT( "MsgFontWeight" ), wxNORMAL );
@@ -318,6 +324,7 @@ void WinEDA_App::GetSettings()
     Line = m_EDA_Config->Read( wxT( "DialogFontType" ), wxEmptyString );
     if( !Line.IsEmpty() )
         g_DialogFont->SetFaceName( Line );
+
     ii = m_EDA_Config->Read( wxT( "DialogFontStyle" ), wxFONTFAMILY_ROMAN );
     g_DialogFont->SetStyle( ii );
     ii = m_EDA_Config->Read( wxT( "DialogFontWeight" ), wxNORMAL );
@@ -342,7 +349,6 @@ void WinEDA_App::SaveSettings()
 /**********************************/
 {
     unsigned int ii;
-
 
     if( m_EDA_Config == NULL )
         return;
