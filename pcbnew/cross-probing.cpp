@@ -51,9 +51,9 @@ void RemoteCommand(  const char* cmdline )
         module = ReturnModule( frame->m_Pcb, modName );
 
         if( module )
-            msg.Printf( _( "Module %s found" ), modName.GetData() );
+            msg.Printf( _( "%s found" ), modName.GetData() );
         else
-            msg.Printf( _( "Module %s not found"), modName.GetData() );
+            msg.Printf( _( "%s not found"), modName.GetData() );
 
         frame->Affiche_Message( msg );
         if( module )
@@ -106,9 +106,9 @@ void RemoteCommand(  const char* cmdline )
         }
 
         if( module == NULL )
-            msg.Printf( _( "Module %s not found" ), modName.GetData() );
+            msg.Printf( _( "%s not found" ), modName.GetData() );
         else if( pad == NULL )
-            msg.Printf( _( "Pin %s (module %s) not found" ), pinName.GetData(), modName.GetData() );
+            msg.Printf( _( "%s pin %s not found" ), modName.GetData(), pinName.GetData() );
         else
             msg.Printf( _( "%s pin %s found" ), modName.GetData(), pinName.GetData() );
 
