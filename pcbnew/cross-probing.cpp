@@ -30,6 +30,7 @@ void RemoteCommand(  const char* cmdline )
 {
     char             line[1024];
     wxString         msg;
+    wxString         modName;
     char*            idcmd;
     char*            text;
     MODULE*          module = 0;
@@ -39,17 +40,20 @@ void RemoteCommand(  const char* cmdline )
 
     idcmd = strtok( line, " \n\r" );
     text  = strtok( NULL, " \n\r" );
-    if( (idcmd == NULL) || (text == NULL) )
+
+    if( !idcmd || !text )
         return;
 
     if( strcmp( idcmd, "$PART:" ) == 0 )
     {
-        msg = CONV_FROM_UTF8( text );
+        modName = CONV_FROM_UTF8( text );
 
-        module = ReturnModule( frame->m_Pcb, msg );
+        module = ReturnModule( frame->m_Pcb, modName );
 
-        msg.Printf( _( "Locate module %s %s" ), msg.GetData(),
-                   module ? wxT( "Ok" ) : wxT( "not found" ) );
+        if( module )
+            msg.Printf( _( "Module %s found" ), modName.GetData() );
+        else
+            msg.Printf( _( "Module %s not found"), modName.GetData() );
 
         frame->Affiche_Message( msg );
         if( module )
@@ -63,9 +67,9 @@ void RemoteCommand(  const char* cmdline )
         }
     }
 
-    if( idcmd && strcmp( idcmd, "$PIN:" ) == 0 )
+    else if( strcmp( idcmd, "$PIN:" ) == 0 )
     {
-        wxString pinName, modName;
+        wxString pinName;
         D_PAD*   pad     = NULL;
         int      netcode = -1;
 
@@ -80,6 +84,7 @@ void RemoteCommand(  const char* cmdline )
         frame->DrawPanel->PrepareGraphicContext( &dc );
 
         modName = CONV_FROM_UTF8( text );
+
         module  = ReturnModule( frame->m_Pcb, modName );
         if( module )
             pad = ReturnPad( module, pinName );
@@ -101,11 +106,11 @@ void RemoteCommand(  const char* cmdline )
         }
 
         if( module == NULL )
-            msg.Printf( _( "module %s not found" ), text );
+            msg.Printf( _( "Module %s not found" ), modName.GetData() );
         else if( pad == NULL )
             msg.Printf( _( "Pin %s (module %s) not found" ), pinName.GetData(), modName.GetData() );
         else
-            msg.Printf( _( "Locate Pin %s (module %s)" ), pinName.GetData(), modName.GetData() );
+            msg.Printf( _( "%s pin %s found" ), modName.GetData(), pinName.GetData() );
 
         frame->Affiche_Message( msg );
     }

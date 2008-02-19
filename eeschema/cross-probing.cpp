@@ -106,13 +106,12 @@ void WinEDA_SchematicFrame::SendMessageToPCBNEW( EDA_BaseStruct*         objectT
     {
     case DRAW_PART_TEXT_STRUCT_TYPE:
     case COMPONENT_FIELD_DRAW_TYPE:
-    {
-//        PartTextStruct* Field = (PartTextStruct*) objectToSync;
-        if( LibItem == NULL )
-            break;
-        sprintf( Line, "$PART: %s", CONV_TO_UTF8( LibItem->m_Field[REFERENCE].m_Text ) );
-        SendCommand( MSG_TO_PCB, Line );
-    }
+        {
+            if( LibItem == NULL )
+                break;
+            sprintf( Line, "$PART: %s", CONV_TO_UTF8( LibItem->m_Field[REFERENCE].m_Text ) );
+            SendCommand( MSG_TO_PCB, Line );
+        }
         break;
 
     case DRAW_LIB_ITEM_STRUCT_TYPE:
@@ -124,6 +123,7 @@ void WinEDA_SchematicFrame::SendMessageToPCBNEW( EDA_BaseStruct*         objectT
     case COMPONENT_PIN_DRAW_TYPE:
         if( LibItem == NULL )
             break;
+
         Pin = (LibDrawPin*) objectToSync;
         if( Pin->m_PinNum )
         {

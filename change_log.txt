@@ -8,9 +8,16 @@ email address.
 2008-Feb-18 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew
-    Start to use BOARD::GetLayerName() in anticipation of configurable layer
-    names per board.  Comment out a printf() which will lock up pcbnew when
+  * Start to use BOARD::GetLayerName() in anticipation of configurable layer
+    names per board.
+  * Comment out a printf() which will lock up pcbnew when
     it is run under kicad project manager and the interprocess fifo gets filled.
+  * Cross probe was not showing the not found message properly.  wxString was
+    being used for two purposes, input and Printf() destination.
++gerbview
+    Now loads all gerber files given on the command line, not just one.  The
+    first file is loaded into layer 1 (index 0), the second one is loaded
+    into layer 2 (index 1) etc.
 
 
 2008-Feb-18 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>

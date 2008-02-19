@@ -93,7 +93,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindComponentAndItem(
 
     sheet = SheetList.GetFirst();
     if( !Find_in_hierarchy )
-		sheet = m_CurrentSheet;
+        sheet = m_CurrentSheet;
 
     for( ; sheet != NULL; sheet = SheetList.GetNext() )
     {
@@ -115,7 +115,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindComponentAndItem(
                     case 0:             // Find component only
                         NotFound = FALSE;
                         pos = pSch->m_Pos;
-                        break; 
+                        break;
 
                     case 1:                 // find a pin
                         pos = pSch->m_Pos;  // temporary: will be changed if the pin is found
@@ -154,8 +154,8 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindComponentAndItem(
         {
             sheet->LastScreen()->SetZoom( GetScreen()->GetZoom() );
             *m_CurrentSheet = *sheet;
-			ActiveScreen = m_CurrentSheet->LastScreen(); 
-			m_CurrentSheet->UpdateAllScreenReferences(); 
+            ActiveScreen = m_CurrentSheet->LastScreen();
+            m_CurrentSheet->UpdateAllScreenReferences();
             DoCenterAndRedraw   = TRUE;
         }
         wxPoint delta;
@@ -180,13 +180,13 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindComponentAndItem(
         curpos.y -= GetScreen()->m_StartVisu.y;
 
         /* Il y a peut-etre necessite de recadrer le dessin: */
-		#define MARGIN 30
+        #define MARGIN 30
         if( (curpos.x <= MARGIN) || (curpos.x >= DrawAreaSize.x - MARGIN)
            || (curpos.y <= MARGIN) || (curpos.y >= DrawAreaSize.y - MARGIN) )
         {
             DoCenterAndRedraw = true;;
         }
-		#undef MARGIN
+        #undef MARGIN
 
         if ( DoCenterAndRedraw )
             Recadre_Trace( mouseWarp );
@@ -242,11 +242,11 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindComponentAndItem(
         {
             if( !msg_item.IsEmpty() )
                 msg += wxT( " " ) + msg_item;
-            msg += _( " Found" );
+            msg += _( " found" );
         }
         else
         {
-            msg += _( " Found" );
+            msg += _( " found" );
             if( !msg_item.IsEmpty() )
             {
                 msg += wxT( " but " ) + msg_item + _( " not found" );
@@ -341,8 +341,8 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindMarker( int SearchType )
         {
             sheet->LastScreen()->SetZoom( GetScreen()->GetZoom() );
             *m_CurrentSheet = *sheet;
-			ActiveScreen = m_CurrentSheet->LastScreen(); 
-			m_CurrentSheet->UpdateAllScreenReferences(); 
+            ActiveScreen = m_CurrentSheet->LastScreen();
+            m_CurrentSheet->UpdateAllScreenReferences();
             DoCenterAndRedraw   = TRUE;
         }
 
@@ -352,18 +352,18 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindMarker( int SearchType )
 
         // calcul des coord curseur avec origine = screen
         DrawPanel->GetViewStart( &m_CurrentSheet->LastScreen()->m_StartVisu.x,
-								  &m_CurrentSheet->LastScreen()->m_StartVisu.y );
-		curpos.x -= m_CurrentSheet->LastScreen()->m_StartVisu.x;
-		curpos.y -= m_CurrentSheet->LastScreen()->m_StartVisu.y;
+                                  &m_CurrentSheet->LastScreen()->m_StartVisu.y );
+        curpos.x -= m_CurrentSheet->LastScreen()->m_StartVisu.x;
+        curpos.y -= m_CurrentSheet->LastScreen()->m_StartVisu.y;
 
         // reposition the window if the chosen marker is off screen.
-		#define MARGIN 30
+        #define MARGIN 30
         if( (curpos.x <= MARGIN) || (curpos.x >= DrawAreaSize.x - MARGIN)
            || (curpos.y <= MARGIN) || (curpos.y >= DrawAreaSize.y - MARGIN) )
         {
             DoCenterAndRedraw = true;;
         }
-		#undef MARGIN
+        #undef MARGIN
 
         if( DoCenterAndRedraw )
             Recadre_Trace( TRUE );
@@ -372,13 +372,13 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindMarker( int SearchType )
             wxClientDC dc( DrawPanel );
 
             DrawPanel->PrepareGraphicContext( &dc );
-			EXCHG( old_cursor_position, sheet->LastScreen()->m_Curseur );
+            EXCHG( old_cursor_position, sheet->LastScreen()->m_Curseur );
             DrawPanel->CursorOff( &dc );
             GRMouseWarp( DrawPanel, curpos );
-			EXCHG( old_cursor_position, sheet->LastScreen()->m_Curseur );
+            EXCHG( old_cursor_position, sheet->LastScreen()->m_Curseur );
             DrawPanel->CursorOn( &dc );
         }
-		wxString path = sheet->Path(); 
+        wxString path = sheet->Path();
         msg.Printf( _( "Marker %d found in %s" ), s_MarkerCount, path.GetData() );
         Affiche_Message( msg );
     }
@@ -465,11 +465,11 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
 
     Sheet = SheetList.GetFirst();
     if( !Find_in_hierarchy )
-		Sheet = m_CurrentSheet;
+        Sheet = m_CurrentSheet;
 
-	for( ; Sheet != NULL; Sheet = SheetList.GetNext() )
+    for( ; Sheet != NULL; Sheet = SheetList.GetNext() )
     {
-		DrawList = Sheet->LastDrawList();
+        DrawList = Sheet->LastDrawList();
         while( DrawList )
         {
             switch( DrawList->Type() )
@@ -492,7 +492,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
 
             case DRAW_LABEL_STRUCT_TYPE:
             case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-			case DRAW_HIER_LABEL_STRUCT_TYPE:
+            case DRAW_HIER_LABEL_STRUCT_TYPE:
             case DRAW_TEXT_STRUCT_TYPE:
                 DrawTextStruct * pDraw;
                 pDraw = (DrawTextStruct*) DrawList;
@@ -509,9 +509,9 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
 
             if( NotFound == FALSE )             /* Item found ! */
             {
-				if( FirstSheet == NULL )       /* First Item found */
+                if( FirstSheet == NULL )       /* First Item found */
                 {
-					FirstSheet = Sheet;
+                    FirstSheet = Sheet;
                     firstpos    = pos;
                     FirstStruct = DrawList;
                 }
@@ -540,10 +540,10 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
             break;
     }
 
-	if( NotFound && FirstSheet )
+    if( NotFound && FirstSheet )
     {
         NotFound = FALSE;
-		Sheet   = FirstSheet;
+        Sheet   = FirstSheet;
         Struct   = FirstStruct;
         pos = firstpos;
         s_ItemsCount = 1;
@@ -551,12 +551,12 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
 
     if( NotFound == FALSE )
     {
-		if( Sheet != GetSheet() )
+        if( Sheet != GetSheet() )
         {
             Sheet->LastScreen()->SetZoom( GetScreen()->GetZoom() );
-			*m_CurrentSheet = *Sheet;
-			ActiveScreen = m_CurrentSheet->LastScreen(); 
-			m_CurrentSheet->UpdateAllScreenReferences(); 
+            *m_CurrentSheet = *Sheet;
+            ActiveScreen = m_CurrentSheet->LastScreen();
+            m_CurrentSheet->UpdateAllScreenReferences();
             DoCenterAndRedraw   = TRUE;
         }
 
@@ -577,21 +577,21 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
             pos.y = jj + pSch->m_Pos.y;
         }
 
-		old_cursor_position = Sheet->LastScreen()->m_Curseur;
-		Sheet->LastScreen()->m_Curseur   = pos;
+        old_cursor_position = Sheet->LastScreen()->m_Curseur;
+        Sheet->LastScreen()->m_Curseur   = pos;
 
         curpos = DrawPanel->CursorScreenPosition();
 
         DrawPanel->GetViewStart(
-				&( GetScreen()->m_StartVisu.x ),
-				&( GetScreen()->m_StartVisu.y ));
+                &( GetScreen()->m_StartVisu.x ),
+                &( GetScreen()->m_StartVisu.y ));
 
         // calcul des coord curseur avec origine = screen
-		curpos.x -= m_CurrentSheet->LastScreen()->m_StartVisu.x;
-		curpos.y -= m_CurrentSheet->LastScreen()->m_StartVisu.y;
+        curpos.x -= m_CurrentSheet->LastScreen()->m_StartVisu.x;
+        curpos.y -= m_CurrentSheet->LastScreen()->m_StartVisu.y;
 
         /* Il y a peut-etre necessite de recadrer le dessin: */
-		#define MARGIN 30
+        #define MARGIN 30
         if( (curpos.x <= MARGIN) || (curpos.x >= DrawAreaSize.x - MARGIN)
            || (curpos.y <= MARGIN) || (curpos.y >= DrawAreaSize.y - MARGIN) )
         {
@@ -606,7 +606,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
 
             DrawPanel->PrepareGraphicContext( &dc );
 
-			EXCHG( old_cursor_position, Sheet->LastScreen()->m_Curseur );
+            EXCHG( old_cursor_position, Sheet->LastScreen()->m_Curseur );
             DrawPanel->CursorOff( &dc );
 
             if( mouseWarp )
@@ -617,7 +617,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
             DrawPanel->CursorOn( &dc );
         }
 
-		msg = WildText + _( " Found in " ) + Sheet->Last()->m_SheetName;
+        msg = WildText + _( " Found in " ) + Sheet->Last()->m_SheetName;
         Affiche_Message( msg );
     }
     else
