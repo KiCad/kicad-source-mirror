@@ -28,7 +28,7 @@
 /* class EDGE_MODULE ( contour de module ) */
 /******************************************/
 
-EDGE_MODULE::EDGE_MODULE( MODULE* parent ) : 
+EDGE_MODULE::EDGE_MODULE( MODULE* parent ) :
     BOARD_ITEM( parent, TYPEEDGEMODULE )
 {
     m_Width     = 0;
@@ -164,10 +164,10 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     zoom = screen->GetZoom();
 
     type_trace = m_Shape;
-    
-    ux0 = m_Start.x - offset.x; 
+
+    ux0 = m_Start.x - offset.x;
     uy0 = m_Start.y - offset.y;
-    
+
     dx  = m_End.x - offset.x;
     dy  = m_End.y - offset.y;
 
@@ -269,7 +269,7 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
-// see class_edge_mod.h     
+// see class_edge_mod.h
 void EDGE_MODULE::Display_Infos( WinEDA_DrawFrame* frame )
 {
     wxString bufcar;
@@ -277,7 +277,11 @@ void EDGE_MODULE::Display_Infos( WinEDA_DrawFrame* frame )
     MODULE* module = (MODULE*) m_Parent;
     if( !module )
         return;
-    
+
+    BOARD* board = (BOARD*) module->m_Parent;
+    if( !board )
+        return;
+
     frame->MsgPanel->EraseMsgBox();
 
     Affiche_1_Parametre( frame, 1, _( "Seg" ), wxEmptyString, DARKCYAN );
@@ -288,10 +292,9 @@ void EDGE_MODULE::Display_Infos( WinEDA_DrawFrame* frame )
 
     Affiche_1_Parametre( frame, 24, _( "TimeStamp" ), bufcar, BROWN );
 
-    Affiche_1_Parametre( frame, 34, _( "Mod Layer" ), ReturnPcbLayerName( module->GetLayer() ), RED );
+    Affiche_1_Parametre( frame, 34, _( "Mod Layer" ), board->GetLayerName( module->GetLayer() ), RED );
 
-    Affiche_1_Parametre( frame, 44, _( "Seg Layer" ),
-                         ReturnPcbLayerName( module->GetLayer() ), RED );
+    Affiche_1_Parametre( frame, 44, _( "Seg Layer" ), board->GetLayerName( module->GetLayer() ), RED );
 
     valeur_param( m_Width, bufcar );
     Affiche_1_Parametre( frame, 54, _( "Width" ), bufcar, BLUE );
@@ -334,7 +337,7 @@ bool EDGE_MODULE::Save( FILE* aFile ) const
                  m_End0.x, m_End0.y,
                  m_PolyCount,
                  m_Width, m_Layer );
-        
+
         int*    pInt;
         pInt = m_PolyList;
         for( int i=0;  i<m_PolyCount;  ++i, pInt+=2 )
@@ -343,16 +346,16 @@ bool EDGE_MODULE::Save( FILE* aFile ) const
 
     default:
         // future: throw an exception here
-#if defined(DEBUG)        
+#if defined(DEBUG)
         printf( "EDGE_MODULE::Save(): unexpected m_Shape: %d\n", m_Shape );
-#endif        
+#endif
         break;
     }
 
     return (ret > 5);
 }
-    
-    
+
+
 
 
 /****************************************************************/
@@ -368,7 +371,7 @@ int EDGE_MODULE::ReadDescr( char* Line, FILE* File,
  *  - Segment (line)
  *  - Arc
  *  - Polygon
- * 
+ *
  */
 {
     int  ii, * ptr;
@@ -459,12 +462,12 @@ int EDGE_MODULE::ReadDescr( char* Line, FILE* File,
     if( m_Width > MAX_WIDTH )
         m_Width = MAX_WIDTH;
 
-	// Check for a reasonnable layer:
-	// m_Layer must be >= FIRST_NON_COPPER_LAYER, but because microwave footprints
-	// can use the copper layers m_Layer < FIRST_NON_COPPER_LAYER is allowed.
-	// @todo: changes use of EDGE_MODULE these footprints and allows only m_Layer >= FIRST_NON_COPPER_LAYER
-	if ( (m_Layer < 0) || (m_Layer > LAST_NON_COPPER_LAYER) )
-		m_Layer = SILKSCREEN_N_CMP;
+    // Check for a reasonnable layer:
+    // m_Layer must be >= FIRST_NON_COPPER_LAYER, but because microwave footprints
+    // can use the copper layers m_Layer < FIRST_NON_COPPER_LAYER is allowed.
+    // @todo: changes use of EDGE_MODULE these footprints and allows only m_Layer >= FIRST_NON_COPPER_LAYER
+    if ( (m_Layer < 0) || (m_Layer > LAST_NON_COPPER_LAYER) )
+        m_Layer = SILKSCREEN_N_CMP;
     return error;
 }
 
@@ -479,23 +482,23 @@ bool EDGE_MODULE::HitTest( const wxPoint& ref_pos )
 {
     int             uxf, uyf;
     int             rayon, dist;
-    int             dx, dy, spot_cX, spot_cY;    
+    int             dx, dy, spot_cX, spot_cY;
     int             ux0, uy0;
 
-    ux0 = m_Start.x; 
+    ux0 = m_Start.x;
     uy0 = m_Start.y;
-    
-    uxf = m_End.x; 
+
+    uxf = m_End.x;
     uyf = m_End.y;
 
     switch( m_Shape )
     {
     case S_SEGMENT:
         /* recalcul des coordonnees avec ux0,uy0 = origine des coord. */
-        spot_cX = ref_pos.x - ux0; 
+        spot_cX = ref_pos.x - ux0;
         spot_cY = ref_pos.y - uy0;
-        
-        dx = uxf - ux0; 
+
+        dx = uxf - ux0;
         dy = uyf - uy0;
         if( DistanceTest( m_Width/2, dx, dy, spot_cX, spot_cY ) )
             return true;
@@ -522,7 +525,7 @@ bool EDGE_MODULE::HitTest( const wxPoint& ref_pos )
 
         if( endAngle > 3600 )
         {
-            stAngle  -= 3600; 
+            stAngle  -= 3600;
             endAngle -= 3600;
         }
 
@@ -532,7 +535,7 @@ bool EDGE_MODULE::HitTest( const wxPoint& ref_pos )
         break;
     }
 
-    return false;       // an unknown m_Shape also returns false    
+    return false;       // an unknown m_Shape also returns false
 }
 
 
@@ -540,14 +543,14 @@ bool EDGE_MODULE::HitTest( const wxPoint& ref_pos )
 /**
  * Function Show
  * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level 
+ * @param nestLevel An aid to prettier tree indenting, and is the level
  *          of nesting of this object within the overall tree.
  * @param os The ostream& to output to.
  */
 void EDGE_MODULE::Show( int nestLevel, std::ostream& os )
 {
     const char* cp;
-    
+
     switch( m_Shape )
     {
     case S_SEGMENT:     cp = "line";        break;
@@ -561,14 +564,14 @@ void EDGE_MODULE::Show( int nestLevel, std::ostream& os )
     case S_POLYGON:     cp = "polygon";     break;
     default:            cp = "??EDGE??";    break;
     }
-    
+
     // for now, make it look like XML:
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << 
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
         " type=\"" << cp << "\">";
-    
+
     os << " <start" << m_Start0 << "/>";
     os << " <end" << m_End0 << "/>";
- 
+
     os << " </" << GetClass().Lower().mb_str() << ">\n";
 }
 

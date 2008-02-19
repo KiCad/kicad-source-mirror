@@ -748,8 +748,9 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
 // see class_track.h
 void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
 {
-    wxString msg;
-    int      text_pos;
+    wxString    msg;
+    int         text_pos;
+    BOARD*      board = ((WinEDA_PcbFrame*)frame)->m_Pcb;
 
 #ifdef RATSNET_DEBUG
     DbgDisplayTrackInfos( this );
@@ -779,11 +780,12 @@ void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
 
     /* Display NetName pour les segments de piste type cuivre */
     text_pos += 15;
+
     if(  Type() == TYPETRACK
          || Type() == TYPEZONE
          || Type() == TYPEVIA )
     {
-        EQUIPOT* equipot = ( (WinEDA_PcbFrame*) frame )->m_Pcb->FindNet( GetNet() );
+        EQUIPOT* equipot = board->FindNet( GetNet() );
 
         if( equipot )
             msg = equipot->m_Netname;
@@ -824,11 +826,11 @@ void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
         int     top_layer, bottom_layer;
 
         Via->ReturnLayerPair( &top_layer, &bottom_layer );
-        msg = ReturnPcbLayerName( top_layer, TRUE ) + wxT( "/" )
-              + ReturnPcbLayerName( bottom_layer, TRUE );
+        msg = board->GetLayerName( top_layer ) + wxT( "/" )
+              + board->GetLayerName( bottom_layer );
     }
     else
-        msg = ReturnPcbLayerName( m_Layer );
+        msg = board->GetLayerName( m_Layer );
 
     text_pos += 5;
     Affiche_1_Parametre( frame, text_pos, _( "Layer" ), msg, BROWN );
@@ -978,13 +980,18 @@ void SEGVIA::Show( int nestLevel, std::ostream& os )
 
     int         topLayer;
     int         botLayer;
+    BOARD*      board = (BOARD*) m_Parent;
+
 
     ReturnLayerPair( &topLayer, &botLayer );
 
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-    " type=\"" << cp << '"' <<
-    " layers=\"" << ReturnPcbLayerName( topLayer ).Trim().mb_str() << ","
-                                 << ReturnPcbLayerName( botLayer ).Trim().mb_str() << '"' <<
+    " type=\"" << cp << '"';
+
+    if( board )
+        os << " layers=\"" << board->GetLayerName( topLayer ).Trim().mb_str() << ","
+                                 << board->GetLayerName( botLayer ).Trim().mb_str() << '"';
+    os <<
     " width=\"" << m_Width << '"' <<
     " drill=\"" << GetDrillValue() << '"' <<
     " netcode=\"" << GetNet() << "\">" <<

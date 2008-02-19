@@ -58,7 +58,7 @@ void MODULE::DrawAncre( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset
 /*************************************************/
 
 /* Constructeur de la classe MODULE */
-MODULE::MODULE( BOARD* parent ) : 
+MODULE::MODULE( BOARD* parent ) :
     BOARD_ITEM( parent, TYPEMODULE )
 {
     m_Pads         = NULL;
@@ -142,7 +142,7 @@ void MODULE::Copy( MODULE* Module )
     m_CntRot90      = Module->m_CntRot90;
     m_CntRot180     = Module->m_CntRot180;
     m_LastEdit_Time = Module->m_LastEdit_Time;
-	m_Path 			= Module->m_Path; //is this correct behavior?
+    m_Path 			= Module->m_Path; //is this correct behavior?
     m_TimeStamp     = GetTimeStamp();
 
     /* Copy des structures auxiliaires: Reference et value */
@@ -210,9 +210,9 @@ void MODULE::Copy( MODULE* Module )
 
     /* Copy des elements complementaires Drawings 3D */
     m_3D_Drawings->Copy( Module->m_3D_Drawings );
-    
+
     Struct3D_Master* Struct3D, * NewStruct3D, * CurrStruct3D;
-    
+
     Struct3D     = (Struct3D_Master*) Module->m_3D_Drawings->Pnext;
     CurrStruct3D = m_3D_Drawings;
     for( ; Struct3D != NULL; Struct3D = (Struct3D_Master*) Struct3D->Pnext )
@@ -350,10 +350,10 @@ bool MODULE::Save( FILE* aFile ) const
 {
     char            statusTxt[8];
     BOARD_ITEM*     item;
-    
+
     if( GetState( DELETED ) )
         return true;
-    
+
     bool rc = false;
 
     fprintf( aFile, "$MODULE %s\n", CONV_TO_UTF8( m_LibRef ) );
@@ -364,7 +364,7 @@ bool MODULE::Save( FILE* aFile ) const
         statusTxt[0] = 'F';
     else
         statusTxt[0] = '~';
-    
+
     if( m_ModuleStatus & MODULE_is_PLACED )
         statusTxt[1] = 'P';
     else
@@ -388,7 +388,7 @@ bool MODULE::Save( FILE* aFile ) const
     }
 
     fprintf( aFile, "Sc %8.8lX\n", m_TimeStamp );
-	fprintf( aFile, "AR %s\n", CONV_TO_UTF8(m_Path) );
+    fprintf( aFile, "AR %s\n", CONV_TO_UTF8(m_Path) );
     fprintf( aFile, "Op %X %X 0\n", m_CntRot90, m_CntRot180 );
 
     // attributes
@@ -405,7 +405,7 @@ bool MODULE::Save( FILE* aFile ) const
     // save reference
     if( !m_Reference->Save( aFile ) )
         goto out;
-    
+
     // save value
     if( !m_Value->Save( aFile ) )
         goto out;
@@ -422,9 +422,9 @@ bool MODULE::Save( FILE* aFile ) const
             break;
 
         default:
-#if defined(DEBUG)            
+#if defined(DEBUG)
             printf( "MODULE::Save() ignoring type %d\n", item->Type() );
-#endif            
+#endif
             break;
         }
     }
@@ -438,12 +438,12 @@ bool MODULE::Save( FILE* aFile ) const
     Write_3D_Descr( aFile );
 
     fprintf( aFile, "$EndMODULE  %s\n", CONV_TO_UTF8( m_LibRef ) );
-    
+
     rc = true;
-out:    
+out:
     return rc;
 }
-    
+
 
 /***************************************/
 int MODULE::Write_3D_Descr( FILE* File ) const
@@ -638,7 +638,7 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
         case 'S':
             sscanf( PtLine, " %lX", &m_TimeStamp );
             break;
-			
+
 
         case 'O':       /* (Op)tions de placement auto */
             itmp1 = itmp2 = 0;
@@ -657,19 +657,19 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
             m_CntRot90 |= itmp1 << 4;
             break;
 
-        case 'A':  
-			if(Line[1] == 't'){
-				/* At = (At)tributs du module */
-				if( strstr( PtLine, "SMD" ) )
-					m_Attributs |= MOD_CMS;
-				if( strstr( PtLine, "VIRTUAL" ) )
-					m_Attributs |= MOD_VIRTUAL;
-			}
-			if(Line[1] == 'R'){
-				//alternate reference, e.g. /478C2408/478AD1B6
-				sscanf( PtLine, " %s", BufLine );
-				m_Path = CONV_FROM_UTF8(BufLine); 
-			}
+        case 'A':
+            if(Line[1] == 't'){
+                /* At = (At)tributs du module */
+                if( strstr( PtLine, "SMD" ) )
+                    m_Attributs |= MOD_CMS;
+                if( strstr( PtLine, "VIRTUAL" ) )
+                    m_Attributs |= MOD_VIRTUAL;
+            }
+            if(Line[1] == 'R'){
+                //alternate reference, e.g. /478C2408/478AD1B6
+                sscanf( PtLine, " %s", BufLine );
+                m_Path = CONV_FROM_UTF8(BufLine);
+            }
             break;
 
         case 'T':    /* lecture des textes modules */
@@ -718,8 +718,8 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
             else if( layer == CMP_N )
                 layer = SILKSCREEN_N_CMP;
 
-            DrawText->SetLayer( layer );            
-            
+            DrawText->SetLayer( layer );
+
             /* calcul de la position vraie */
             DrawText->SetDrawCoord();
             /* Lecture de la chaine "text" */
@@ -781,22 +781,22 @@ void MODULE::SetPosition( const wxPoint& newpos )
     int deltaY = newpos.y - m_Pos.y;
 
     /* deplacement de l'ancre */
-    m_Pos.x += deltaX; 
+    m_Pos.x += deltaX;
     m_Pos.y += deltaY;
 
     /* deplacement de la reference */
-    m_Reference->m_Pos.x += deltaX; 
+    m_Reference->m_Pos.x += deltaX;
     m_Reference->m_Pos.y += deltaY;
 
     /* deplacement de la Valeur */
-    m_Value->m_Pos.x += deltaX; 
+    m_Value->m_Pos.x += deltaX;
     m_Value->m_Pos.y += deltaY;
 
     /* deplacement des pastilles */
     D_PAD*          pad = m_Pads;
     for( ; pad != NULL; pad = (D_PAD*) pad->Pnext )
     {
-        pad->m_Pos.x += deltaX; 
+        pad->m_Pos.x += deltaX;
         pad->m_Pos.y += deltaY;
     }
 
@@ -816,7 +816,7 @@ void MODULE::SetPosition( const wxPoint& newpos )
         case TYPETEXTEMODULE:
         {
             TEXTE_MODULE* pt_texte = (TEXTE_MODULE*) PtStruct;
-            pt_texte->m_Pos.x += deltaX; 
+            pt_texte->m_Pos.x += deltaX;
             pt_texte->m_Pos.y += deltaY;
             break;
         }
@@ -1048,6 +1048,7 @@ void MODULE::Display_Infos( WinEDA_DrawFrame* frame )
     int      pos;
     bool     flag = FALSE;
     wxString msg;
+    BOARD*   board = (BOARD*) m_Parent;
 
     frame->MsgPanel->EraseMsgBox();    /* Effacement de la zone message */
     if( frame->m_Ident != PCB_FRAME )
@@ -1076,14 +1077,15 @@ void MODULE::Display_Infos( WinEDA_DrawFrame* frame )
     }
 
     pos += 12;
-    Affiche_1_Parametre( frame, pos, _( "Layer" ), ReturnPcbLayerName( m_Layer ), RED );
+    Affiche_1_Parametre( frame, pos, _( "Layer" ), board->GetLayerName( m_Layer ), RED );
 
     pos += 6;
     EDA_BaseStruct* PtStruct = m_Pads;
     nbpad = 0;
     while( PtStruct )
     {
-        nbpad++; PtStruct = PtStruct->Pnext;
+        nbpad++;
+        PtStruct = PtStruct->Pnext;
     }
 
     msg.Printf( wxT( "%d" ), nbpad );
@@ -1126,22 +1128,22 @@ bool MODULE::HitTest( const wxPoint& refPos )
     /* Calcul des coord souris dans le repere module */
     int spot_cX = refPos.x - m_Pos.x;
     int spot_cY = refPos.y - m_Pos.y;
-    
+
     RotatePoint( &spot_cX, &spot_cY, -m_Orient );
 
     /* la souris est-elle dans ce rectangle : */
     if( m_BoundaryBox.Inside( spot_cX, spot_cY ) )
         return true;
 
-/* no    
+/* no
     // The GENERAL_COLLECTOR needs these two tests in order to find a MODULE
     // when the user clicks on its text.  Keep these 2, needed in OnRightClick().
     if( m_Reference->HitTest( refPos ) )
         return true;
-    
+
     if( m_Value->HitTest( refPos ) )
         return true;
-*/    
+*/
     return false;
 }
 
@@ -1171,18 +1173,18 @@ bool    MODULE::HitTest( EDA_Rect& refArea )
 }
 
 
-// see class_module.h     
-SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData, 
+// see class_module.h
+SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
     const KICAD_T scanTypes[] )
 {
     KICAD_T         stype;
     SEARCH_RESULT   result = SEARCH_CONTINUE;
     const KICAD_T*  p = scanTypes;
     bool            done = false;
-    
+
 #if 0 && defined(DEBUG)
     std::cout <<  GetClass().mb_str() << ' ';
-#endif    
+#endif
 
     while( !done )
     {
@@ -1193,23 +1195,23 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
             result = inspector->Inspect( this, testData );  // inspect me
             ++p;
             break;
-            
+
         case TYPEPAD:
             result = IterateForward( m_Pads, inspector, testData, p );
             ++p;
             break;
-            
+
         case TYPETEXTEMODULE:
             result = inspector->Inspect( m_Reference, testData );
             if( result == SEARCH_QUIT )
                 break;
-                
+
             result = inspector->Inspect( m_Value, testData );
             if( result == SEARCH_QUIT )
                 break;
 
             // m_Drawings can hold TYPETEXTMODULE also, so fall thru
-            
+
         case TYPEEDGEMODULE:
             result = IterateForward( m_Drawings, inspector, testData, p );
             // skip over any types handled in the above call.
@@ -1225,17 +1227,17 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
                 break;
             }
             break;
-                
+
         default:
             done = true;
             break;
         }
-        
+
         if( result == SEARCH_QUIT )
             break;
     }
 
-    return result;    
+    return result;
 }
 
 
@@ -1243,24 +1245,26 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
 /**
  * Function Show
  * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level 
+ * @param nestLevel An aid to prettier tree indenting, and is the level
  *          of nesting of this object within the overall tree.
  * @param os The ostream& to output to.
  */
 void MODULE::Show( int nestLevel, std::ostream& os )
 {
+    BOARD*  board = (BOARD*) m_Parent;
+
     // for now, make it look like XML, expand on this later.
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-        " ref=\"" << m_Reference->m_Text.mb_str() << '"' << 
+        " ref=\"" << m_Reference->m_Text.mb_str() << '"' <<
         " value=\"" << m_Value->m_Text.mb_str()     << '"' <<
-        " layer=\"" << ReturnPcbLayerName(m_Layer,true).mb_str() << '"' <<
+        " layer=\"" << board->GetLayerName(m_Layer).mb_str() << '"' <<
         ">\n";
 
-    NestedSpace( nestLevel+1, os ) <<  
+    NestedSpace( nestLevel+1, os ) <<
         "<boundingBox" << m_BoundaryBox.m_Pos << m_BoundaryBox.m_Size << "/>\n";
 
-    NestedSpace( nestLevel+1, os ) << "<orientation tenths=\"" << m_Orient << "\"/>\n";   
-        
+    NestedSpace( nestLevel+1, os ) << "<orientation tenths=\"" << m_Orient << "\"/>\n";
+
     EDA_BaseStruct* p;
 
     NestedSpace( nestLevel+1, os ) << "<mpads>\n";
@@ -1268,19 +1272,19 @@ void MODULE::Show( int nestLevel, std::ostream& os )
     for( ; p; p = p->Pnext )
         p->Show( nestLevel+2, os );
     NestedSpace( nestLevel+1, os ) << "</mpads>\n";
-    
+
     NestedSpace( nestLevel+1, os ) << "<mdrawings>\n";
     p = m_Drawings;
     for( ; p; p = p->Pnext )
         p->Show( nestLevel+2, os );
     NestedSpace( nestLevel+1, os ) << "</mdrawings>\n";
-    
+
     p = m_Son;
     for( ; p;  p = p->Pnext )
     {
         p->Show( nestLevel+1, os );
     }
-    
+
     NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
 

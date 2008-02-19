@@ -241,8 +241,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
     WinEDA_BasePcbFrame* frame = NULL;
     wxPoint              shape_pos;
 
-    PCB_SCREEN*          screen = panel ? 
-                                    (PCB_SCREEN*) panel->m_Parent->m_CurrentScreen : 
+    PCB_SCREEN*          screen = panel ?
+                                    (PCB_SCREEN*) panel->m_Parent->m_CurrentScreen :
                                     (PCB_SCREEN*) ActiveScreen;
 
     if ( panel )    // Use current frame setting
@@ -263,7 +263,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
 
     if( m_Masque_Layer & CMP_LAYER )
         color = g_PadCMPColor;
-    
+
     if( m_Masque_Layer & CUIVRE_LAYER )
         color |= g_PadCUColor;
 
@@ -330,40 +330,40 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
     }
 
 
-    // if PAD_SMD pad and high contrast mode    
+    // if PAD_SMD pad and high contrast mode
     if( m_Attribut==PAD_SMD && DisplayOpt.ContrastModeDisplay )
     {
-        // when routing tracks 
+        // when routing tracks
         if( frame && frame->m_ID_current_state == ID_TRACK_BUTT )
         {
             int routeTop = screen->m_Route_Layer_TOP;
             int routeBot = screen->m_Route_Layer_BOTTOM;
-            
-            // if routing between copper and component layers, 
-            // or the current layer is one of said 2 external copper layers, 
-            // then highlight only the current layer. 
-            if( ((1<<routeTop) | (1<<routeBot)) == (CUIVRE_LAYER | CMP_LAYER) 
-             || ((1<<screen->m_Active_Layer) & (CUIVRE_LAYER | CMP_LAYER)) ) 
+
+            // if routing between copper and component layers,
+            // or the current layer is one of said 2 external copper layers,
+            // then highlight only the current layer.
+            if( ((1<<routeTop) | (1<<routeBot)) == (CUIVRE_LAYER | CMP_LAYER)
+             || ((1<<screen->m_Active_Layer) & (CUIVRE_LAYER | CMP_LAYER)) )
             {
                 if( !IsOnLayer( screen->m_Active_Layer ) )
                 {
                     color &= ~MASKCOLOR;
                     color |= DARKDARKGRAY;
-                }       
+                }
             }
-            
+
             // else routing between an internal signal layer and some other layer.
-            // grey out all PAD_SMD pads not on current or the single selected 
+            // grey out all PAD_SMD pads not on current or the single selected
             // external layer.
-            else if( !IsOnLayer( screen->m_Active_Layer )  
-                  && !IsOnLayer( routeTop ) 
-                  && !IsOnLayer( routeBot ) ) 
+            else if( !IsOnLayer( screen->m_Active_Layer )
+                  && !IsOnLayer( routeTop )
+                  && !IsOnLayer( routeBot ) )
             {
                 color &= ~MASKCOLOR;
                 color |= DARKDARKGRAY;
             }
         }
-        
+
         // when not edting tracks, show PAD_SMD components not on active layer as greyed out
         else
         {
@@ -371,7 +371,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
             {
                 color &= ~MASKCOLOR;
                 color |= DARKDARKGRAY;
-            }       
+            }
         }
     }
 
@@ -382,7 +382,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
         else
             color |= HIGHT_LIGHT_FLAG;
     }
-    
+
     if( color & HIGHT_LIGHT_FLAG )
         color = ColorRefs[color & MASKCOLOR].m_LightColor;
 
@@ -401,7 +401,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
     dy = dy0 = m_Size.y >> 1; /* demi dim  dx et dy */
 
     angle = m_Orient;
-    
+
     bool DisplayIsol = DisplayOpt.DisplayPadIsol;
     if( ( m_Masque_Layer & ALL_CU_LAYERS ) == 0 )
         DisplayIsol = FALSE;
@@ -430,13 +430,13 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
         /* calcul de l'entraxe de l'ellipse */
         if( dx > dy )       /* ellipse horizontale */
         {
-            delta_cx = dx - dy; 
+            delta_cx = dx - dy;
             delta_cy = 0;
             rotdx    = m_Size.y;
         }
         else                /* ellipse verticale */
         {
-            delta_cx = 0; 
+            delta_cx = 0;
             delta_cy = dy - dx;
             rotdx    = m_Size.x;
         }
@@ -459,7 +459,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
         if( DisplayIsol )
         {
             rotdx = rotdx + g_DesignSettings.m_TrackClearence + g_DesignSettings.m_TrackClearence;
-            
+
             GRCSegm( &panel->m_ClipBox, DC, ux0 + delta_cx, uy0 + delta_cy,
                      ux0 - delta_cx, uy0 - delta_cy,
                      rotdx, color );
@@ -496,9 +496,9 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
 
         if( DisplayIsol )
         {
-            dx += g_DesignSettings.m_TrackClearence; 
+            dx += g_DesignSettings.m_TrackClearence;
             dy += g_DesignSettings.m_TrackClearence;
-            
+
             coord[0].x = -dx - ddy;
             coord[0].y = dy + ddx;
 
@@ -536,7 +536,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
     if( fillpad && hole )
     {
         color = g_IsPrinting ? WHITE : BLACK; // ou DARKGRAY;
-        
+
         if( draw_mode != GR_XOR )
             GRSetDrawMode( DC, GR_COPY );
         else
@@ -552,7 +552,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
         case PAD_OVAL:
             dx = m_Drill.x >> 1;
             dy = m_Drill.y >> 1;            /* demi dim  dx et dy */
-            
+
             /* calcul de l'entraxe de l'ellipse */
             if( m_Drill.x > m_Drill.y )     /* ellipse horizontale */
             {
@@ -583,7 +583,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int 
     {
         dx0 = MIN( dx0, dy0 );
         int nc_color = BLUE;
-        
+
         if( m_Masque_Layer & CMP_LAYER ) /* Trace forme \ */
             GRLine( &panel->m_ClipBox, DC, cx0 - dx0, cy0 - dx0,
                     cx0 + dx0, cy0 + dx0, 0, nc_color );
@@ -741,7 +741,7 @@ int D_PAD::ReadDescr( FILE* File, int* LineNum )
             int netcode;
             nn = sscanf( PtLine, "%d", &netcode );
             SetNet( netcode );
-            
+
             /* Lecture du netname */
             ReadDelimitedText( BufLine, PtLine, sizeof(BufLine) );
             m_Netname = CONV_FROM_UTF8( StrPurge( BufLine ) );
@@ -799,7 +799,7 @@ bool D_PAD::Save( FILE* aFile ) const
     fprintf( aFile, "Sh \"%.4s\" %c %d %d %d %d %d\n",
              m_Padname, cshape, m_Size.x, m_Size.y,
              m_DeltaSize.x, m_DeltaSize.y, m_Orient );
-    
+
     fprintf( aFile, "Dr %d %d %d", m_Drill.x, m_Offset.x, m_Offset.y );
     if( m_DrillShape == PAD_OVAL )
     {
@@ -840,7 +840,7 @@ bool D_PAD::Save( FILE* aFile ) const
         goto out;
 
     rc = true;
-    
+
 out:
     return rc;
 }
@@ -853,7 +853,7 @@ void D_PAD::Display_Infos( WinEDA_DrawFrame* frame )
 /* Affiche en bas d'ecran les caract de la pastille demandee */
 {
     int      ii;
-    MODULE*  Module;
+    MODULE*  module;
     wxString Line;
     int      pos = 1;
 
@@ -874,10 +874,10 @@ void D_PAD::Display_Infos( WinEDA_DrawFrame* frame )
     frame->MsgPanel->EraseMsgBox();
 
     /* Recherche du module correspondant */
-    Module = (MODULE*) m_Parent;
-    if( Module )
+    module = (MODULE*) m_Parent;
+    if( module )
     {
-        wxString msg = Module->m_Reference->m_Text;
+        wxString msg = module->GetReference();
         Affiche_1_Parametre( frame, pos, _( "Module" ), msg, DARKCYAN );
         ReturnStringPadName( Line );
         pos += 8;
@@ -894,6 +894,7 @@ void D_PAD::Display_Infos( WinEDA_DrawFrame* frame )
 #endif
 
     wxString LayerInfo;
+
     ii = 0;
     if( m_Masque_Layer & CUIVRE_LAYER )
         ii = 2;
@@ -1002,7 +1003,7 @@ void D_PAD::Display_Infos( WinEDA_DrawFrame* frame )
     }
 
 
-    int module_orient = Module ? Module->m_Orient : 0;
+    int module_orient = module ? module->m_Orient : 0;
     if( module_orient )
         Line.Printf( wxT( "%3.1f(+%3.1f)" ),
                      (float) (m_Orient - module_orient) / 10, (float) module_orient / 10 );
@@ -1076,7 +1077,7 @@ bool D_PAD::HitTest( const wxPoint& ref_pos )
 
 
 /************************************************************/
-int D_PAD::Compare( const D_PAD* padref, const D_PAD* padcmp ) 
+int D_PAD::Compare( const D_PAD* padref, const D_PAD* padcmp )
 /************************************************************/
 {
     int          diff;
@@ -1096,7 +1097,7 @@ int D_PAD::Compare( const D_PAD* padref, const D_PAD* padcmp )
     if( (diff = padref->m_DeltaSize.y - padcmp->m_DeltaSize.y) )
         return diff;
 
-    // @todo check if export_gencad still works:    
+    // @todo check if export_gencad still works:
     // specctra_export needs this, but maybe export_gencad does not.  added on Jan 24 2008 by Dick.
     if( (diff = padref->m_Masque_Layer - padcmp->m_Masque_Layer) )
         return diff;
