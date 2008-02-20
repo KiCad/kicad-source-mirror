@@ -30,6 +30,7 @@
 #include "fctsys.h"
 #include "common.h"
 #include "wxstruct.h"
+#include "macros.h"
 
 
 // Path list for online help
@@ -91,12 +92,12 @@ wxString MakeReducedFileName( const wxString& fullfilename,
  * @param  fullfilename = full filename
  * @param  default_path = default path
  * @param  default_ext = default extension
- * 
+ *
  * @return  the "reduced" filename, i.e.:
  *  without path if it is default_path
  *  wiht ./ if the path is the current path
  *  without extension if extension is default_ext
- * 
+ *
  *  the new flename is in unix like notation ('/' as path separator)
  */
 {
@@ -113,7 +114,7 @@ wxString MakeReducedFileName( const wxString& fullfilename,
     path.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
 
 #ifdef __WINDOWS__
-	// names are case insensitive under windows
+    // names are case insensitive under windows
     path.MakeLower();
     Cwd.MakeLower();
     ext.MakeLower();
@@ -169,13 +170,13 @@ wxString MakeFileName( const wxString& dir,
 
     if( !dir.IsEmpty() )
     {
-		if( !wxIsAbsolutePath( shortname ) )
-		{
-			if( ! shortname.StartsWith(wxT("./")) && ! shortname.StartsWith(wxT("../")) )
-			{ /* no absolute path in shortname, add dir to shortname */
-				fullfilename = dir;
-			}
-		}
+        if( !wxIsAbsolutePath( shortname ) )
+        {
+            if( ! shortname.StartsWith(wxT("./")) && ! shortname.StartsWith(wxT("../")) )
+            { /* no absolute path in shortname, add dir to shortname */
+                fullfilename = dir;
+            }
+        }
     }
 
     fullfilename += shortname;	// Add shortname to dir or use shortname only
@@ -306,6 +307,17 @@ wxString EDA_FileSelector( const wxString& Title,                   /* Dialog ti
 
     wxSetWorkingDirectory( defaultpath );
 
+#if 0 && defined(DEBUG)
+    printf("defaultpath=\"%s\" defaultname=\"%s\" Ext=\"%s\" Mask=\"%s\" flag=%d keep_working_directory=%d\n",
+           CONV_TO_UTF8(defaultpath),
+           CONV_TO_UTF8(defaultname),
+           CONV_TO_UTF8(Ext),
+           CONV_TO_UTF8(Mask),
+           flag,
+           keep_working_directory
+           );
+#endif
+
     fullfilename = wxFileSelector( wxString( Title ),
                                    defaultpath,
                                    defaultname,
@@ -333,16 +345,16 @@ wxString FindKicadHelpPath()
  *  else from one of s_HelpPathList
  *  typically c:\kicad\help or /usr/local/kicad/help or /usr/share/doc/kicad
  *  (must have kicad in path name)
- * 
+ *
  *  xx = iso639-1 language id (2 letters (generic) or 4 letters):
  *  fr = french (or fr_FR)
  *  en = English (or en_GB or en_US ...)
  *  de = deutch
  *  es = spanish
  *  pt = portuguese (or pt_BR ...)
- * 
+ *
  *  default = en (if not found = fr)
- * 
+ *
  */
 {
     wxString FullPath, LangFullPath, tmp;
@@ -423,7 +435,7 @@ wxString FindKicadFile( const wxString& shortname )
  *  and return full file name if found or shortname
  *  kicad binary path is
  *  kicad/winexe or kicad/linux
- * 
+ *
  *  kicad binary path is found from:
  *  BinDir
  *  or environment variable KICAD
@@ -503,7 +515,7 @@ void SetRealLibraryPath( const wxString& shortlibname )
  *      g_UserLibDirBuffer = <KICAD>/shortlibname;
  *  Sinon g_UserLibDirBuffer = <Chemin des binaires>../shortlibname/
  *  Sinon g_UserLibDirBuffer = /usr/share/kicad/shortlibname/
- * 
+ *
  *  Remarque:
  *  Les \ sont remplac�s par / (a la mode Unix)
  */
@@ -543,7 +555,7 @@ wxString ReturnKicadDatasPath()
  *      retourne <KICAD>/;
  *  Sinon retourne <Chemin des binaires>/ (si "kicad" est dans le nom du chemin)
  *  Sinon retourne /usr/share/kicad/
- * 
+ *
  *  Remarque:
  *  Les \ sont remplac�s par / (a la mode Unix)
  */
@@ -672,7 +684,7 @@ void OpenPDF( const wxString& file )
         {
             AddDelimiterString( filename );
             command.Empty();
-            
+
             const static wxString tries[] =
             {
                 wxT( "/usr/bin/evince" ),
@@ -681,12 +693,12 @@ void OpenPDF( const wxString& file )
                 wxT( "/usr/bin/gpdf" ),
                 wxT( "" ),
             };
-            
+
             for( int i = 0; ; i++ )
             {
                 if( tries[i].IsEmpty() )
                     break;
-                
+
                 if( wxFileExists( tries[i] ) )
                 {
                     command = tries[i] + wxT( " " ) + filename;
