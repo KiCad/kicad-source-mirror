@@ -298,17 +298,6 @@ static bool isKeepout( D_PAD* aPad )
 }
 
 
-/*
-static int Pad_list_Sort_by_Shapes( const void* refptr, const void* objptr )
-{
-    const D_PAD* padref = *(D_PAD**)refptr;
-    const D_PAD* padcmp = *(D_PAD**)objptr;
-
-    return D_PAD::Compare( padref, padcmp );
-}
-*/
-
-
 /**
  * Function makePath
  * creates a PATH element with a single straight line, a pair of vertices.
@@ -325,13 +314,13 @@ static PATH* makePath( const POINT& aStart, const POINT& aEnd, const std::string
 
 
 /**
- * Struct wxString_less_than_
- * is used the std:set<> and std::map<> instantiations below.
+ * Struct wxString_less_than
+ * is used by the std:set<> and std::map<> instantiations below.
  * See STRINGSET typedef and PINMAP typedef below.
  */
 struct wxString_less_than
 {
-    // a "less than" test on two wxStrings, by pointer.
+    // a "less than" test on two wxStrings
     bool operator()( const wxString& s1, const wxString& s2) const
     {
         return s1.Cmp( s2 ) < 0;  // case specific wxString compare
@@ -356,15 +345,15 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
         aPad->IsOnLayer( COPPER_LAYER_N )
     };
 
-    // caller must do this screen before calling here.
+    // caller must do these checks before calling here.
     wxASSERT( !isKeepout( aPad ) );
-
     wxASSERT( doLayer[0] || doLayer[1] );
 
     PADSTACK*   padstack = new PADSTACK();
 
     int         reportedLayers = 0;              // how many in reported padstack
     const char* layerName[NB_COPPER_LAYERS];
+
 
     if( aPad->m_Attribut==PAD_SMD || aPad->m_Attribut==PAD_CONN )
     {
@@ -400,7 +389,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
         */
 
         reportedLayers = 1;
-        layerName[0] = signal;
+        layerName[0] = "signal";
         uniqifier = "[A]";        // A for all
 
 #else
@@ -413,6 +402,23 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
         }
         uniqifier = "[A]";        // A for all
 #endif
+    }
+
+    POINT   dsnOffset;
+
+    if( aPad->m_Offset.x || aPad->m_Offset.y )
+    {
+        char offsetTxt[32];
+
+        wxPoint offset( aPad->m_Offset.x, aPad->m_Offset.y );
+
+        dsnOffset = mapPt( offset );
+
+        // using '(' or ')' would cause padstack name to be quote wrapped,
+        // so use other brackets, and {} locks freerouter.
+        sprintf( offsetTxt, "[%.6g,%.6g]", dsnOffset.x, dsnOffset.y );
+
+        uniqifier += offsetTxt;
     }
 
     switch( aPad->m_PadShape )
@@ -432,11 +438,13 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
 
                 circle->SetLayerId( layerName[ndx] );
                 circle->SetDiameter( diameter );
+                circle->SetVertex( dsnOffset );
             }
 
             snprintf( name, sizeof(name), "Round%sPad_%.6g_mil",
                      uniqifier.c_str(), scale(aPad->m_Size.x) );
             name[ sizeof(name)-1 ] = 0;
+
             padstack->SetPadstackId( name );
         }
         break;
@@ -448,6 +456,9 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
 
             POINT   lowerLeft( -dx, -dy );
             POINT   upperRight( dx, dy );
+
+            lowerLeft  += dsnOffset;
+            upperRight += dsnOffset;
 
             for( int ndx=0;  ndx<reportedLayers;  ++ndx )
             {
@@ -471,43 +482,42 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
 
     case PAD_OVAL:
         {
-            double dx = scale( aPad->m_Size.x ) / 2.0;
-            double dy = scale( aPad->m_Size.y ) / 2.0;
-            double dr = dx - dy;
+            double  dx = scale( aPad->m_Size.x ) / 2.0;
+            double  dy = scale( aPad->m_Size.y ) / 2.0;
+            double  dr = dx - dy;
+            double  radius;
+            POINT   start;
+            POINT   stop;
 
             if( dr >= 0 )       // oval is horizontal
             {
-                double  radius = dy;
+                radius = dy;
 
-                for( int ndx=0;  ndx<reportedLayers;  ++ndx )
-                {
-                    SHAPE*  shape;
-                    PATH*   path;
-                    // see http://www.freerouting.net/usren/viewtopic.php?f=3&t=317#p408
-                    shape = new SHAPE( padstack );
-                    padstack->Append( shape );
-                    path = makePath( POINT(-dr, 0.0), POINT(dr, 0.0), layerName[ndx] );
-                    shape->SetShape( path );
-                    path->aperture_width = 2.0 * radius;
-                }
+                start = POINT( -dr, 0.0 );
+                stop  = POINT(  dr, 0.0 );
             }
             else        // oval is vertical
             {
-                double  radius = dx;
-
+                radius = dx;
                 dr = -dr;
 
-                for( int ndx=0;  ndx<reportedLayers;  ++ndx )
-                {
-                    SHAPE*  shape;
-                    PATH*   path;
-                    // see http://www.freerouting.net/usren/viewtopic.php?f=3&t=317#p408
-                    shape = new SHAPE( padstack );
-                    padstack->Append( shape );
-                    path = makePath( POINT(0.0, -dr), POINT(0.0, dr), layerName[ndx] );
-                    shape->SetShape( path );
-                    path->aperture_width = 2.0 * radius;
-                }
+                start = POINT( 0.0, -dr );
+                stop  = POINT( 0.0,  dr );
+            }
+
+            start += dsnOffset;
+            stop  += dsnOffset;
+
+            for( int ndx=0;  ndx<reportedLayers;  ++ndx )
+            {
+                SHAPE*  shape;
+                PATH*   path;
+                // see http://www.freerouting.net/usren/viewtopic.php?f=3&t=317#p408
+                shape = new SHAPE( padstack );
+                padstack->Append( shape );
+                path = makePath( start, stop, layerName[ndx] );
+                shape->SetShape( path );
+                path->aperture_width = 2.0 * radius;
             }
 
             snprintf( name, sizeof(name),  "Oval%sPad_%.6gx%.6g_mil",
@@ -563,7 +573,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
                 KEEPOUT* keepout = new KEEPOUT(image, T_keepout);
                 image->keepouts.push_back( keepout );
 
-                CIRCLE*     circle = new CIRCLE( keepout );
+                CIRCLE*  circle = new CIRCLE( keepout );
                 keepout->SetShape( circle );
 
                 circle->SetDiameter( diameter );
@@ -580,7 +590,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
             {
                 // padstack is a duplicate, delete it and use the original
                 delete padstack;
-                padstack = (PADSTACK*) *iter.base();    // folk lore, be careful here
+                padstack = (PADSTACK*) *iter.base();    // folklore, be careful here
             }
             else
             {
@@ -596,7 +606,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
             {
                 pinmap[ padName ] = 0;
             }
-            else
+            else    // pad name is a duplicate within this module
             {
                 char buf[32];
 
@@ -613,22 +623,14 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
 
             pin->padstack_id = padstack->padstack_id;
 
-            wxPoint pos( pad->m_Pos0 );
-            wxPoint offset( pad->m_Offset.x, pad->m_Offset.y );
-
             int angle = pad->m_Orient - aModule->m_Orient;   // tenths of degrees
             if( angle )
             {
                 NORMALIZE_ANGLE_POS(angle);
                 pin->SetRotation( angle / 10.0 );
-
-                if( pad->m_Offset.x || pad->m_Offset.y )
-                {
-                    RotatePoint( &offset, angle );
-                }
             }
 
-            pos += offset;
+            wxPoint pos( pad->m_Pos0 );
 
             pin->SetVertex( mapPt( pos )  );
         }

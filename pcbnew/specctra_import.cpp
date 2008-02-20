@@ -72,13 +72,14 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
     name += sessionExt;
 
     fullFileName = EDA_FileSelector( _( "Merge Specctra Session file:" ),
-                          path,
-                          name,             // name.ext without path!
-                          sessionExt,
-                          mask,
-                          this,
-                          wxFD_OPEN,
-                          FALSE );
+                            path,
+                            name,
+                            sessionExt,
+                            mask,
+                            this,
+                            wxFD_OPEN,
+                            FALSE
+                            );
 
     if( fullFileName == wxEmptyString )
         return;
