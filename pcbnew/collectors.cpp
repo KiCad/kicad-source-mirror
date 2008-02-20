@@ -76,6 +76,7 @@ const KICAD_T GENERAL_COLLECTOR::AllButZones[] = {
     TYPEPAD,
     TYPETEXTEMODULE,
     TYPEMODULE,
+    TYPEZONE_CONTAINER,         // if it is visible on screen, it should be selectable
     EOT
 };
 

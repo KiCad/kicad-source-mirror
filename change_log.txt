@@ -9,7 +9,12 @@ email address.
 ================================================================================
 +pcbnew
     Add ZONE_CONTAINER support to the ID_PCB_HIGHLIGHT_BUTT tool and
-    WinEDA_PcbFrame::DrawHightLight()
+    WinEDA_PcbFrame::DrawHightLight().  Added TYPEZONE_CONTAINER to
+    GENERAL_COLLECTOR::AllButZones[] so that containers are editable even
+    when the "Show Zones" toggle is off.  This came from using the software
+    and realizing that if something is visible (zone containers remain visible
+    even when Show Zones is off) then it should be selectable.  Otherwise it is
+    confusing and frustrating.
 
 
 2008-Feb-18 UPDATE   Dick Hollenbeck <dick@softplc.com>
