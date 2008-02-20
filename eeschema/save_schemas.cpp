@@ -269,7 +269,7 @@ bool WinEDA_SchematicFrame::SaveEEFile(SCH_SCREEN *screen, int FileSave)
 					Failed = TRUE;
 				break;
 				
-			case DRAW_HIER_LABEL_STRUCT_TYPE: /* Its a Global label item. */
+			case DRAW_HIER_LABEL_STRUCT_TYPE: /* Its a Hierarchical label item. */
 				#undef STRUCT
 				#define STRUCT ((DrawHierLabelStruct *) Phead)
 				shape = STRUCT->m_Shape;

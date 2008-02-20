@@ -321,6 +321,7 @@ static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC )
     if( DrawLibItem->m_Flags & IS_NEW )    /* Nouveau Placement en cours, on l'efface */
     {
         DrawStructsInGhost( Panel, DC, DrawLibItem, 0, 0 );
+		DrawLibItem->m_Flags = 0;
 		SAFE_DELETE( DrawLibItem );
     }
     else if( DrawLibItem )   /* Deplacement ancien composant en cours */
@@ -335,9 +336,9 @@ static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC )
 
         memcpy( DrawLibItem->m_Transform, OldTransMat, sizeof(OldTransMat) );
         DrawLibItem->Draw( Panel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+		DrawLibItem->m_Flags = 0;
     }
 
-    DrawLibItem->m_Flags = 0;
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
 	Panel->m_Parent->GetScreen()->SetCurItem( NULL );

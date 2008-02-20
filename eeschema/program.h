@@ -14,6 +14,7 @@
 
 #include "component_class.h"
 #include "class_screen.h"
+#include "class_text-label.h"
 
 #define DRAWJUNCTION_SIZE  16       /* Rayon du symbole connexion */
 #define DRAWMARKER_SIZE    16       /* Rayon du symbole marqueur */
@@ -234,77 +235,6 @@ public:
 };
 
 
-class DrawTextStruct : public EDA_BaseStruct, public EDA_TextStruct
-{
-public:
-    int  m_Layer;
-    int  m_Shape;
-    bool m_IsDangling;          // TRUE si non connect�
-
-public:
-    DrawTextStruct( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString,
-                    KICAD_T aType = DRAW_TEXT_STRUCT_TYPE );
-    ~DrawTextStruct() { }
-
-    virtual wxString GetClass() const
-    {
-        return wxT( "DrawText" );
-    }
-
-
-    DrawTextStruct* GenCopy();
-    virtual void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode,
-                          int Color = -1 );
-
-    void            SwapData( DrawTextStruct* copyitem );
-
-    virtual void    Place( WinEDA_DrawFrame* frame, wxDC* DC );
-};
-
-
-class DrawLabelStruct : public DrawTextStruct
-{
-public:
-    DrawLabelStruct( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString );
-    ~DrawLabelStruct() { }
-    virtual void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode,
-                          int Color = -1 );
-
-    virtual wxString GetClass() const
-    {
-        return wxT( "DrawLabel" );
-    }
-};
-
-
-class DrawGlobalLabelStruct : public DrawTextStruct
-{
-public:
-    DrawGlobalLabelStruct(const wxPoint& pos = wxPoint( 0, 0 ),
-                           const wxString& text = wxEmptyString);
-    ~DrawGlobalLabelStruct() { }
-    virtual void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode,
-                          int Color = -1 );
-
-    virtual wxString GetClass() const
-    {
-        return wxT( "DrawGlobalLabel" );
-    }
-};
-class DrawHierLabelStruct : public DrawTextStruct
-{
-public:
-    DrawHierLabelStruct(const wxPoint& pos = wxPoint( 0, 0 ),
-                           const wxString& text = wxEmptyString);
-    ~DrawHierLabelStruct() { }
-    virtual void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode,
-                          int Color = -1 );
-
-    virtual wxString GetClass() const
-    {
-        return wxT( "DrawHierLabel" );
-    }
-};
 
 #define MAX_LAYERS 44
 class LayerStruct

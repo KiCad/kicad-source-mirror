@@ -47,6 +47,7 @@
 #include "Lang_Ko.xpm"
 #include "Lang_Ru.xpm"
 #include "Lang_Catalan.xpm"
+#include "Lang_chinese.xpm"
 #endif
 
 
@@ -572,7 +573,7 @@ wxMenu* WinEDA_App::SetLanguageList( wxMenu* MasterMenu )
 
         item = new wxMenuItem( m_Language_Menu, ID_LANGUAGE_CHINESE_SIMPLIFIED,
                                _( "Chinese simplified" ), wxEmptyString, wxITEM_CHECK );
-        //SETBITMAPS( lang_chinese_simplified_xpm );
+        SETBITMAPS( lang_chinese_xpm );
         m_Language_Menu->Append( item );
     }
 

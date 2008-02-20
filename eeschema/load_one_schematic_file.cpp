@@ -389,6 +389,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
                     Struct = (EDA_BaseStruct*) TextStruct;
                     TextStruct->m_Size.x = TextStruct->m_Size.y = size;
                     TextStruct->m_Orient = orient;
+					TextStruct->m_Shape = NET_INPUT;
                     if( stricmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
                         TextStruct->m_Shape = NET_OUTPUT;
                     if( stricmp( Name2, SheetLabelType[NET_BIDI] ) == 0 )
@@ -399,12 +400,13 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
                         TextStruct->m_Shape = NET_UNSPECIFIED;
                 }
 				else if( (Name1[0] == 'H') || (Name1[0] == 'G' && version == '1'))
-                { //in sschematic file version 1, glabels were actually hierarchal labels. 
+                { //in schematic file version 1, glabels were actually hierarchal labels. 
                     DrawHierLabelStruct* TextStruct =
                         new DrawHierLabelStruct(pos, CONV_FROM_UTF8( text ) );
                     Struct = (EDA_BaseStruct*) TextStruct;
                     TextStruct->m_Size.x = TextStruct->m_Size.y = size;
                     TextStruct->m_Orient = orient;
+ 					TextStruct->m_Shape = NET_INPUT;
                     if( stricmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
                         TextStruct->m_Shape = NET_OUTPUT;
                     if( stricmp( Name2, SheetLabelType[NET_BIDI] ) == 0 )
