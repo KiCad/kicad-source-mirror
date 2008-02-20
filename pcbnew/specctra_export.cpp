@@ -51,16 +51,21 @@ using namespace DSN;
 void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
 {
     wxString        fullFileName = GetScreen()->m_FileName;
-    wxString        std_ext = wxT( ".dsn" );
-    wxString        mask    = wxT( "*" ) + std_ext;
+    wxString        path;
+    wxString        name;
+    wxString        ext;
 
-    ChangeFileNameExt( fullFileName, std_ext );
+    wxString        dsn_ext = wxT( ".dsn" );
+    wxString        mask    = wxT( "*" ) + dsn_ext;
+
+    wxFileName::SplitPath( fullFileName, &path, &name, &ext );
+    name += dsn_ext;
 
     fullFileName = EDA_FileSelector( _( "Specctra DSN file:" ),
-                                     wxEmptyString,     /* Chemin par defaut */
-                                     fullFileName,      /* nom fichier par defaut */
-                                     std_ext,           /* extension par defaut */
-                                     mask,              /* Masque d'affichage */
+                                     path,
+                                     name,      // name.ext without path!
+                                     dsn_ext,
+                                     mask,
                                      this,
                                      wxFD_SAVE,
                                      FALSE

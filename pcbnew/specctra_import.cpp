@@ -60,22 +60,27 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
     }
 */
 
+    wxString fullFileName = GetScreen()->m_FileName;
+    wxString path;
+    wxString name;
+    wxString ext;
+
     wxString sessionExt( wxT( ".ses" ) );
-    wxString fileName = GetScreen()->m_FileName;
     wxString mask = wxT( "*" ) + sessionExt;
 
-    ChangeFileNameExt( fileName, sessionExt );
+    wxFileName::SplitPath( fullFileName, &path, &name, &ext );
+    name += sessionExt;
 
-    fileName = EDA_FileSelector( _( "Merge Specctra Session file:" ),
-                          wxEmptyString,
-                          fileName,
+    fullFileName = EDA_FileSelector( _( "Merge Specctra Session file:" ),
+                          path,
+                          name,             // name.ext without path!
                           sessionExt,
                           mask,
                           this,
                           wxFD_OPEN,
                           FALSE );
 
-    if( fileName == wxEmptyString )
+    if( fullFileName == wxEmptyString )
         return;
 
     SPECCTRA_DB     db;
@@ -84,7 +89,7 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
 
     try
     {
-        db.LoadSESSION( fileName );
+        db.LoadSESSION( fullFileName );
         db.FromSESSION( m_Pcb );
     }
     catch( IOError ioe )
