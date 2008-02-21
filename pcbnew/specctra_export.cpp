@@ -1054,11 +1054,21 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             pcb->library->AddPadstack( padstack );
         }
 
+        D(std::string component = "U1";)
+
         // copy our SPECCTRA_DB::nets to the pcb->network
         for( unsigned n=1;  n<nets.size();  ++n )
         {
             NET* net = nets[n];
-            if( net->pins.size() )
+            if( net->pins.size()
+
+#if defined(DEBUG)
+                // experimenting with exporting a subset of all the nets
+                // and with incremental, iterative autorouting.
+                &&  net->FindPIN_REF( component ) >= 0
+#endif
+
+              )
             {
                 // give ownership to pcb->network
                 pcb->network->nets.push_back( net );
@@ -1149,7 +1159,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
                 wiring->wires.push_back( wire );
                 wire->net_id = netname;
 
-                wire->wire_type = T_normal;  // @todo, this should be configurable
+                wire->wire_type = T_protect;  // @todo, this should be configurable
 
                 int kiLayer  = track->GetLayer();
                 int pcbLayer = kicadLayer2pcb[kiLayer];
@@ -1181,6 +1191,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             SEGVIA* via = (SEGVIA*) items[i];
             wxASSERT( via->Type() == TYPEVIA );
 
+            int netcode = via->GetNet();
+            if( netcode == 0 )
+                continue;
+
             PADSTACK* padstack = makeVia( via );
             PADSTACK* registered = pcb->library->LookupVia( padstack );
             if( padstack != registered )
@@ -1194,13 +1208,12 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             dsnVia->padstack_id = registered->padstack_id;
             dsnVia->vertexes.push_back( mapPt( via->GetPosition() ) );
 
-            int netcode = via->GetNet();
             EQUIPOT* equipot = aBoard->FindNet( netcode );
             wxASSERT( equipot );
 
             dsnVia->net_id = CONV_TO_UTF8( equipot->m_Netname );
 
-            dsnVia->via_type = T_normal;     // @todo, this should be configurable
+            dsnVia->via_type = T_protect;     // @todo, this should be configurable
         }
     }
 

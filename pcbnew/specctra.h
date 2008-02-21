@@ -2413,19 +2413,16 @@ public:
  * Class PIN_REF
  * corresponds to the &lt;pin_reference&gt; definition in the specctra dsn spec.
  */
-class PIN_REF : public ELEM
+struct PIN_REF : public ELEM
 {
-    friend class SPECCTRA_DB;
-
     std::string     component_id;
     std::string     pin_id;
-
-public:
 
     PIN_REF( ELEM* aParent ) :
         ELEM( T_pin, aParent )
     {
     }
+
 
     /**
      * Function FormatIt
@@ -2606,6 +2603,18 @@ public:
         delete rules;
         delete comp_order;
     }
+
+
+    int FindPIN_REF( const std::string& aComponent )
+    {
+        for( unsigned i=0;  i<pins.size();  ++i )
+        {
+            if( 0 == aComponent.compare( pins[i].component_id ) )
+                return int(i);
+        }
+        return -1;
+    }
+
 
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
