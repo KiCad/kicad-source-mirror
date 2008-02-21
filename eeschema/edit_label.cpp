@@ -117,7 +117,7 @@ void WinEDA_SchematicFrame::EditSchematicText( DrawTextStruct* TextStruct,
                                                wxDC*           DC )
 /*************************************************************************/
 
-/* Edit the properties of the text (Label, Gloab label, graphic text).. )
+/* Edit the properties of the text (Label, Global label, graphic text).. )
  *  pointed by "TextStruct"
  */
 {
@@ -330,7 +330,7 @@ void WinEDA_SchematicFrame::ConvertTextType( DrawTextStruct* Text,
 /*****************************************************************************/
 
 /* Routine to change a text type to an other one (GraphicText, label or Glabel).
- * A new test, label or global label is created from the old text.
+ * A new test, label or hierarchical or global label is created from the old text.
  * the old text is deleted
  */
 {
@@ -389,10 +389,10 @@ void WinEDA_SchematicFrame::ConvertTextType( DrawTextStruct* Text,
     {
         DrawPanel->ForceCloseManageCurseur( DrawPanel, DC );
     }
-    if( (flags & IS_NEW) == 0 )    // Delete old text and save it in undo list
+    if( (flags & IS_NEW) == 0 )    // Remove old text from current list and save it in undo list
     {
         Text->m_Flags = 0;
-        DeleteStruct( DrawPanel, DC, Text );
+        DeleteStruct( DrawPanel, DC, Text );    // old text is really saved in undo list
 		GetScreen()->SetCurItem( NULL );
         g_ItemToRepeat = NULL;
     }

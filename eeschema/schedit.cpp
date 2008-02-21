@@ -42,6 +42,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_EDIT_TEXT:
     case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_LABEL:
     case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_GLABEL:
+    case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL:
     case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT:
     case ID_POPUP_SCH_SET_SHAPE_TEXT:
     case ID_POPUP_SCH_ROTATE_TEXT:
@@ -395,6 +396,12 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
                         &dc, DRAW_GLOBAL_LABEL_STRUCT_TYPE );
         break;
 
+    case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL:
+        DrawPanel->MouseToCursorSchema();
+		ConvertTextType( (DrawTextStruct*) GetScreen()->GetCurItem(),
+                        &dc, DRAW_HIER_LABEL_STRUCT_TYPE );
+        break;
+
     case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT:
         DrawPanel->MouseToCursorSchema();
 		ConvertTextType( (DrawTextStruct*) GetScreen()->GetCurItem(),
@@ -403,7 +410,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_SET_SHAPE_TEXT:
 
-        // Non utilis�
+        // Not used
         break;
 
     case ID_POPUP_SCH_ROTATE_FIELD:

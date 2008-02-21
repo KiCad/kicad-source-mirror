@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-02-20 20:29+0100\n"
+"PO-Revision-Date: 2008-02-21 07:51+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -3633,9 +3633,8 @@ msgid "Apply"
 msgstr "Appliquer"
 
 #: pcbnew/specctra_import.cpp:74
-#, fuzzy
 msgid "Merge Specctra Session file:"
-msgstr "Fichier Specctra DSN"
+msgstr "Fichier Specctra Session à Fusionner:"
 
 #: pcbnew/specctra_import.cpp:100
 msgid "BOARD may be corrupted, do not save it."
@@ -3643,17 +3642,17 @@ msgstr "Le PCB peut être corrompu. Ne pas le sauver"
 
 #: pcbnew/specctra_import.cpp:102
 msgid "Fix problem and try again."
-msgstr ""
+msgstr "Fixer le problème et recommencer."
 
 #: pcbnew/specctra_import.cpp:116
 msgid "Session file imported and merged OK."
-msgstr ""
+msgstr "Fichier Session importé et fusionné correctement."
 
 #: pcbnew/specctra_import.cpp:182
 #: pcbnew/specctra_import.cpp:290
 #, c-format
 msgid "Session file uses invalid layer id \"%s\""
-msgstr ""
+msgstr "Le Fichier Session utilise une couche invalide n° \"%s\""
 
 #: pcbnew/specctra_import.cpp:232
 msgid "Session via padstack has no shapes"
@@ -4434,9 +4433,8 @@ msgid "Last Change"
 msgstr "Last Change"
 
 #: pcbnew/class_module.cpp:1076
-#, fuzzy
 msgid "Netlist path"
-msgstr "Netliste: "
+msgstr "Chemin Netliste "
 
 #: pcbnew/class_module.cpp:1110
 msgid "3D-Shape"
@@ -4575,14 +4573,14 @@ msgid "%s not found"
 msgstr "%s  non trouvé"
 
 #: pcbnew/cross-probing.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "%s pin %s not found"
-msgstr " fichier %s non trouvé"
+msgstr "%s pin %s non trouvée"
 
 #: pcbnew/cross-probing.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid "%s pin %s found"
-msgstr "  non trouvé"
+msgstr "%s pin %s trouvée"
 
 #: pcbnew/specctra_export.cpp:64
 msgid "Specctra DSN file:"
@@ -4604,7 +4602,7 @@ msgstr "Le composant avec valeur \"%s\" a une référence vide."
 #: pcbnew/specctra_export.cpp:728
 #, c-format
 msgid "Multiple components have identical reference IDs of \"%s\"."
-msgstr ""
+msgstr "Multiple composants ont une reference identique  \"%s\"."
 
 #: pcbnew/class_drawsegment.cpp:161
 msgid "Shape"
@@ -5607,9 +5605,9 @@ msgid "Warning HLabel %s not connected to SheetLabel"
 msgstr "Attention HLabel %s non connecté a SheetLabel"
 
 #: eeschema/erc.cpp:562
-#, fuzzy, c-format
+#, c-format
 msgid "Warning SheetLabel %s not connected to HLabel"
-msgstr "Warning SheetLabel %s non connecté a GLabel"
+msgstr "Warning SheetLabel %s non connecté a HLabel"
 
 #: eeschema/erc.cpp:576
 #, c-format
@@ -5645,22 +5643,21 @@ msgid "ERC control"
 msgstr "Controle ERC"
 
 #: eeschema/erc.cpp:742
-#, fuzzy
 msgid ""
 "\n"
 "***** Sheet Root\n"
 msgstr ""
 "\n"
-"***** feuille %d (%s)\n"
+"***** Feuillet Racine\n"
 
 #: eeschema/erc.cpp:745
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "***** Sheet %s\n"
 msgstr ""
 "\n"
-"***** feuille %d (%s)\n"
+"***** Feuille %s\n"
 
 #: eeschema/erc.cpp:762
 #, c-format
@@ -6119,14 +6116,14 @@ msgstr ""
 "#Cmp ( ordre = Valeur )"
 
 #: eeschema/dialog_build_BOM.cpp:1315
-#, fuzzy, c-format
+#, c-format
 msgid "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n"
-msgstr "> %-28.28s Global        (feuille %.2d) pos: %3.3f, %3.3f\n"
+msgstr "> %-28.28s %s        (Feuille %s) pos: %3.3f, %3.3f\n"
 
 #: eeschema/dialog_build_BOM.cpp:1335
-#, fuzzy, c-format
+#, c-format
 msgid "> %-28.28s Sheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n"
-msgstr "> %-28.28s Sheet %-7.7s (feuille %.2d) pos: %3.3f, %3.3f\n"
+msgstr "> %-28.28s Sheet %-7.7s (Feuillet %s) pos: %3.3f, %3.3f\n"
 
 #: eeschema/dialog_build_BOM.cpp:1349
 msgid "#End labels\n"
@@ -6834,7 +6831,7 @@ msgstr "Visualisateur des librairies"
 
 #: eeschema/sheet.cpp:162
 msgid "Filename (will be created upon save if it does not already exist):"
-msgstr ""
+msgstr "Nom Fichier (sera crée à la sauvegarde si il n'existe pas déjà):"
 
 #: eeschema/sheet.cpp:174
 msgid "Sheetname:"
@@ -7099,26 +7096,22 @@ msgid "Place the bus to bus entry"
 msgstr "Addition d'entrées de bus (type bus vers bus)"
 
 #: eeschema/menubar.cpp:254
-#, fuzzy
 msgid "No connect flag"
-msgstr "Addition de symboles de non connexion"
+msgstr "Symbole de Non Connexion"
 
 #: eeschema/menubar.cpp:255
 #: eeschema/tool_sch.cpp:189
-#, fuzzy
 msgid "Place the no connect flag"
-msgstr "Addition de symboles de non connexion"
+msgstr "Placer le symbole de non connexion"
 
 #: eeschema/menubar.cpp:264
-#, fuzzy
 msgid "Net name"
-msgstr "NetName"
+msgstr "Net Name"
 
 #: eeschema/menubar.cpp:265
 #: eeschema/tool_sch.cpp:193
-#, fuzzy
 msgid "Place the net name"
-msgstr "Place Feuille"
+msgstr "Placer le nom de net"
 
 #: eeschema/menubar.cpp:272
 msgid "Global label"
@@ -7126,7 +7119,7 @@ msgstr "Label Global"
 
 #: eeschema/menubar.cpp:273
 msgid "Place the global label. Warning: all global labels with the same name are connected in whole hierarchy"
-msgstr ""
+msgstr "Placerun label global. Attention: tous les labels globaux avec le même nom sont connectés dans toute la hierarchie"
 
 #: eeschema/menubar.cpp:282
 #: eeschema/eelayer.h:85
@@ -7215,9 +7208,8 @@ msgid "&Edit"
 msgstr "&Editer"
 
 #: eeschema/menubar.cpp:407
-#, fuzzy
 msgid "&View"
-msgstr "&ViewLogic"
+msgstr "&Voir"
 
 #: eeschema/menubar.cpp:408
 msgid "&Place"
@@ -10562,7 +10554,6 @@ msgid "SheetLabel (Pin Sheet)"
 msgstr "Supprimer Connecteur de hiérarchie"
 
 #: eeschema/eelayer.h:195
-#, fuzzy
 msgid "Hierarchical Label"
 msgstr "Label Hiérarchique"
 

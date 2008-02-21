@@ -5,6 +5,21 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Feb-21 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema
+	added : full text conversion between text, label, global label and hierarchical label
+	some problems fixed:
+	- annotation incorrectly cleared.
+	- reference not copied in component copy.
+	- incorrect redo when changing the chip name in component edition
+	
+	bugs not fixed
+	- undo/redo problems when changing a text type between text, label, global label and hierarchical label
+	- incorrect annotation in complex hierarchy with multi parts per package (duplicates created).
+	
+
+
 2008-Feb-20 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +eeschema

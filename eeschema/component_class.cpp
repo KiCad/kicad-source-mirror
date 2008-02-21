@@ -17,7 +17,7 @@
 #include "macros.h"
 
 #include <wx/arrimpl.cpp>
-WX_DEFINE_OBJARRAY(ArrayOfSheetLists);
+WX_DEFINE_OBJARRAY( ArrayOfSheetLists );
 /***************************/
 /* class DrawPartStruct	*/
 /* class EDA_SchComponentStruct */
@@ -28,8 +28,8 @@ DrawPartStruct::DrawPartStruct( KICAD_T struct_type, const wxPoint& pos ) :
     EDA_BaseStruct( struct_type )
 /***********************************************************************************/
 {
-    m_Layer = 0;
-    m_Pos = pos;
+    m_Layer     = 0;
+    m_Pos       = pos;
     m_TimeStamp = 0;
 }
 
@@ -52,128 +52,145 @@ const wxString& ReturnDefaultFieldName( int aFieldNdx )
 {
     // avoid unnecessarily copying wxStrings at runtime.
     static const wxString FieldDefaultNameList[] = {
-        _( "Ref" ),             /* Reference of part, i.e. "IC21" */
-        _( "Value" ),           /* Value of part, i.e. "3.3K" */
-        _( "Footprint" ),       /* Footprint, used by cvpcb or pcbnew, i.e. "16DIP300" */
-        _( "Sheet" ),           /* for components which are a schematic file, schematic file name, i.e. "cnt16.sch" */
-        wxString(_( "Field" ))+wxT("1"),
-        wxString(_( "Field" ))+wxT("2"),
-        wxString(_( "Field" ))+wxT("3"),
-        wxString(_( "Field" ))+wxT("4"),
-        wxString(_( "Field" ))+wxT("5"),
-        wxString(_( "Field" ))+wxT("6"),
-        wxString(_( "Field" ))+wxT("7"),
-        wxString(_( "Field" ))+wxT("8"),
+        _( "Ref" ),                             /* Reference of part, i.e. "IC21" */
+        _( "Value" ),                           /* Value of part, i.e. "3.3K" */
+        _( "Footprint" ),                       /* Footprint, used by cvpcb or pcbnew, i.e. "16DIP300" */
+        _( "Sheet" ),                           /* for components which are a schematic file, schematic file name, i.e. "cnt16.sch" */
+        wxString( _( "Field" ) ) + wxT( "1" ),
+        wxString( _( "Field" ) ) + wxT( "2" ),
+        wxString( _( "Field" ) ) + wxT( "3" ),
+        wxString( _( "Field" ) ) + wxT( "4" ),
+        wxString( _( "Field" ) ) + wxT( "5" ),
+        wxString( _( "Field" ) ) + wxT( "6" ),
+        wxString( _( "Field" ) ) + wxT( "7" ),
+        wxString( _( "Field" ) ) + wxT( "8" ),
         wxT( "badFieldNdx!" )               // error, and "sentinel" value
     };
-    
+
     if( (unsigned) aFieldNdx > FIELD8 )     // catches < 0 also
-        aFieldNdx = FIELD8+1;               // return the sentinel text
-    
+        aFieldNdx = FIELD8 + 1;             // return the sentinel text
+
     return FieldDefaultNameList[aFieldNdx];
 }
 
 
 /****************************************************************/
-const wxString& EDA_SchComponentStruct::ReturnFieldName( int aFieldNdx ) const  
+const wxString& EDA_SchComponentStruct::ReturnFieldName( int aFieldNdx ) const
 /****************************************************************/
 
 /* Return the Field name from its index (REFERENCE, VALUE ..)
  */
 {
     // avoid unnecessarily copying wxStrings.
-    
+
     if( aFieldNdx < FIELD1  ||  m_Field[aFieldNdx].m_Name.IsEmpty() )
         return ReturnDefaultFieldName( aFieldNdx );
-    
+
     return m_Field[aFieldNdx].m_Name;
 }
 
-/************************************/
-wxString EDA_SchComponentStruct::GetPath(DrawSheetList* sheet)
-/************************************/
+
+/****************************************************************/
+wxString EDA_SchComponentStruct::GetPath( DrawSheetList* sheet )
+/****************************************************************/
 {
-	wxString str; 
-	str.Printf(_("%8.8lX"), m_TimeStamp );
-	return sheet->Path() + str; 
+    wxString str;
+
+    str.Printf( wxT( "%8.8lX" ), m_TimeStamp );
+    return sheet->Path() + str;
 }
 
-/************************************/
+
+/********************************************************************/
 const wxString EDA_SchComponentStruct::GetRef( DrawSheetList* sheet )
-/************************************/
+/********************************************************************/
 {
-	wxString path = GetPath( sheet ); 
-	unsigned int i; 
-	for(i=0; i<m_Paths.GetCount(); i++){
-		if( m_Paths[i].Cmp(path) == 0 ){
-			/*printf("GetRef path: %s ref: %s\n", 
-					CONV_TO_UTF8(m_Paths[i]), 
-					CONV_TO_UTF8(m_References[i])); */
-			return m_References[i]; 
-		}
-	}
-	//if it was not found in m_Paths array, then see if it is in
-	// m_Field[REFERENCE] -- if so, use this as a default for this path.
-	// this will happen if we load a version 1 schematic file. 
-	// it will also mean that multiple instances of the same sheet by default
-	// all have the same component references, but perhaps this is best. 
-	if( !m_Field[REFERENCE].m_Text.IsEmpty() ){
-		SetRef( sheet, m_Field[REFERENCE].m_Text ); 
-		return m_Field[REFERENCE].m_Text; 
-	}
-	return m_PrefixString; 
+    wxString     path = GetPath( sheet );
+    unsigned int i;
+
+    for( i = 0; i<m_Paths.GetCount(); i++ )
+    {
+        if( m_Paths[i].Cmp( path ) == 0 )
+        {
+            /*printf("GetRef path: %s ref: %s\n",
+             *     CONV_TO_UTF8(m_Paths[i]),
+             *     CONV_TO_UTF8(m_References[i])); */
+            return m_References[i];
+        }
+    }
+
+    //if it was not found in m_Paths array, then see if it is in
+    // m_Field[REFERENCE] -- if so, use this as a default for this path.
+    // this will happen if we load a version 1 schematic file.
+    // it will also mean that multiple instances of the same sheet by default
+    // all have the same component references, but perhaps this is best.
+    if( !m_Field[REFERENCE].m_Text.IsEmpty() )
+    {
+        SetRef( sheet, m_Field[REFERENCE].m_Text );
+        return m_Field[REFERENCE].m_Text;
+    }
+    return m_PrefixString;
 }
 
-/************************************/
+
+/***********************************************************************/
 void EDA_SchComponentStruct::SetRef( DrawSheetList* sheet, wxString ref )
-/************************************/
+/***********************************************************************/
 {
-	//check to see if it is already there before inserting it
-	wxString path = GetPath( sheet ); 
-	printf("SetRef path: %s ref: %s\n", 
-		   CONV_TO_UTF8(path), 
-			CONV_TO_UTF8(ref)); 
-	unsigned int i; 
-	bool notInArray = true; 
-	for(i=0; i<m_Paths.GetCount(); i++){
-		if(m_Paths[i].Cmp(path) == 0){
-			//just update the reference text, not the timestamp.
-			m_References.RemoveAt(i); 
-			m_References.Insert(ref, i); 
-			notInArray = false; 
-		}
-	}
-	if(notInArray){
-		m_References.Add(ref); 
-		m_Paths.Add(path); 
-	}
-	if(m_Field[REFERENCE].m_Text.IsEmpty() || 
-		( abs(m_Field[REFERENCE].m_Pos.x - m_Pos.x) + 
-			abs(m_Field[REFERENCE].m_Pos.y - m_Pos.y) > 1000)) {
-		//move it to a reasonable position..
-		m_Field[REFERENCE].m_Pos = m_Pos; 
-		m_Field[REFERENCE].m_Pos.x += 50; //a slight offset..
-		m_Field[REFERENCE].m_Pos.y += 50; 
-	}
-	m_Field[REFERENCE].m_Text = ref; //for drawing. 
+    //check to see if it is already there before inserting it
+    wxString path = GetPath( sheet );
+
+    printf( "SetRef path: %s ref: %s\n",
+           CONV_TO_UTF8( path ),
+           CONV_TO_UTF8( ref ) );
+    unsigned int i;
+    bool         notInArray = true;
+    for( i = 0; i<m_Paths.GetCount(); i++ )
+    {
+        if( m_Paths[i].Cmp( path ) == 0 )
+        {
+            //just update the reference text, not the timestamp.
+            m_References.RemoveAt( i );
+            m_References.Insert( ref, i );
+            notInArray = false;
+        }
+    }
+
+    if( notInArray )
+    {
+        m_References.Add( ref );
+        m_Paths.Add( path );
+    }
+    if( m_Field[REFERENCE].m_Text.IsEmpty()
+       || ( abs( m_Field[REFERENCE].m_Pos.x - m_Pos.x ) +
+            abs( m_Field[REFERENCE].m_Pos.y - m_Pos.y ) > 1000) )
+    {
+        //move it to a reasonable position..
+        m_Field[REFERENCE].m_Pos    = m_Pos;
+        m_Field[REFERENCE].m_Pos.x += 50; //a slight offset..
+        m_Field[REFERENCE].m_Pos.y += 50;
+    }
+    m_Field[REFERENCE].m_Text = ref; //for drawing.
 }
 
-/************************************/
+
+/**************************************/
 void EDA_SchComponentStruct::ClearRefs()
-/************************************/
+/**************************************/
 {
-	m_Paths.Empty(); 
-	m_References.Empty(); 
+    m_Paths.Empty();
+    m_References.Empty();
 }
-	
+
+
 const wxString& EDA_SchComponentStruct::GetFieldValue( int aFieldNdx ) const
 {
-   // avoid unnecessarily copying wxStrings.
-   static const wxString myEmpty = wxEmptyString;
-    
-   if( (unsigned) aFieldNdx > FIELD8  ||  m_Field[aFieldNdx].m_Text.IsEmpty() )
+    // avoid unnecessarily copying wxStrings.
+    static const wxString myEmpty = wxEmptyString;
+
+    if( (unsigned) aFieldNdx > FIELD8  ||  m_Field[aFieldNdx].m_Text.IsEmpty() )
         return myEmpty;
-    
+
     return m_Field[aFieldNdx].m_Text;
 }
 
@@ -186,10 +203,11 @@ EDA_SchComponentStruct::EDA_SchComponentStruct( const wxPoint& pos ) :
     int ii;
 
     m_Multi = 0;    /* In multi unit chip - which unit to draw. */
+
     //m_FlagControlMulti = 0;
-	m_UsedOnSheets.Clear(); 
+    m_UsedOnSheets.Clear();
     m_Convert = 0;  /* Gestion des mutiples representations (conversion De Morgan) */
-    
+
     /* The rotation/mirror transformation matrix. pos normal*/
     m_Transform[0][0] = 1;
     m_Transform[0][1] = 0;
@@ -209,14 +227,14 @@ EDA_SchComponentStruct::EDA_SchComponentStruct( const wxPoint& pos ) :
     m_Field[REFERENCE].m_Layer = LAYER_REFERENCEPART;
 
     m_PinIsDangling = NULL;
-	
-	m_PrefixString = wxString(_("U")); 
+
+    m_PrefixString = wxString( _( "U" ) );
 }
 
 
-/**********************************************************************/
+/************************************************/
 EDA_Rect EDA_SchComponentStruct::GetBoundaryBox()
-/**********************************************************************/
+/************************************************/
 {
     EDA_LibComponentStruct* Entry = FindLibPart( m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
     EDA_Rect BoundaryBox;
@@ -230,7 +248,7 @@ EDA_Rect EDA_SchComponentStruct::GetBoundaryBox()
 
         // We must reverse Y values, because matrix orientation
         // suppose Y axis normal for the library items coordinates,
-        // m_Transform reverse Y values, but BoundaryBox ais already reversed!
+        // m_Transform reverse Y values, but BoundaryBox is already reversed!
         y0 = -BoundaryBox.GetY();
         ym = -BoundaryBox.GetBottom();
     }
@@ -254,7 +272,7 @@ EDA_Rect EDA_SchComponentStruct::GetBoundaryBox()
         EXCHG( x2, x1 );
     if( y2 < y1 )
         EXCHG( y2, y1 );
-    
+
     BoundaryBox.SetX( x1 ); BoundaryBox.SetY( y1 );
     BoundaryBox.SetWidth( x2 - x1 );
     BoundaryBox.SetHeight( y2 - y1 );
@@ -262,6 +280,8 @@ EDA_Rect EDA_SchComponentStruct::GetBoundaryBox()
     BoundaryBox.Offset( m_Pos );
     return BoundaryBox;
 }
+
+
 /**************************************************************************/
 void PartTextStruct::SwapData( PartTextStruct* copyitem )
 /**************************************************************************/
@@ -295,6 +315,7 @@ void EDA_SchComponentStruct::SwapData( EDA_SchComponentStruct* copyitem )
  *  swap data between this and copyitem
  */
 {
+	EXCHG( m_ChipName, copyitem->m_ChipName );
     EXCHG( m_Pos, copyitem->m_Pos );
     EXCHG( m_Multi, copyitem->m_Multi );
     EXCHG( m_Convert, copyitem->m_Convert );
@@ -320,13 +341,13 @@ void EDA_SchComponentStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
     {
         /* restore old values and save new ones */
         SwapData( (EDA_SchComponentStruct*) g_ItemToUndoCopy );
-        
+
         /* save in undo list */
         ( (WinEDA_SchematicFrame*) frame )->SaveCopyInUndoList( this, IS_CHANGED );
-        
+
         /* restore new values */
         SwapData( (EDA_SchComponentStruct*) g_ItemToUndoCopy );
-        
+
         SAFE_DELETE( g_ItemToUndoCopy );
     }
 
@@ -341,14 +362,20 @@ void EDA_SchComponentStruct::ClearAnnotation()
 /* Suppress annotation ( i.i IC23 changed to IC? and part reset to 1)
  */
 {
-	wxString defRef = m_PrefixString; 
-	defRef.Append( _("?") ); 
-	m_References.Empty(); 
-	unsigned int i; 
-	for(i=0; i< m_Paths.GetCount(); i++){
-		m_References.Add(defRef); 
-	}
+    wxString defRef = m_PrefixString;
 
+    while( defRef.Last() == '?' )
+        defRef.RemoveLast();
+
+    defRef.Append( wxT( "?" ) );
+    m_References.Empty();
+    unsigned int            i;
+    for( i = 0; i< m_Paths.GetCount(); i++ )
+    {
+        m_References.Add( defRef );
+    }
+
+    m_Field[REFERENCE].m_Text = defRef; //for drawing.
     EDA_LibComponentStruct* Entry;
     Entry = FindLibPart( m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
 
@@ -367,8 +394,10 @@ EDA_SchComponentStruct* EDA_SchComponentStruct::GenCopy()
 
     new_item->m_Multi    = m_Multi;
     new_item->m_ChipName = m_ChipName;
+	new_item->m_PrefixString = m_PrefixString;
+
     //new_item->m_FlagControlMulti = m_FlagControlMulti;
-	new_item->m_UsedOnSheets = m_UsedOnSheets; 
+    new_item->m_UsedOnSheets = m_UsedOnSheets;
     new_item->m_Convert = m_Convert;
     new_item->m_Transform[0][0] = m_Transform[0][0];
     new_item->m_Transform[0][1] = m_Transform[0][1];
@@ -499,15 +528,15 @@ void EDA_SchComponentStruct::SetRotationMiroir( int type_rotate )
     }
 
     if( Transform )
-    {/* The new matrix transform is the old matrix transform modified by the
-      *  requested transformation, which is the TempMat transform (rot, mirror ..)
-      *  in order to have (in term of matrix transform):
-      *     transform coord = new_m_Transform * coord
-      *  where transform coord is the coord modified by new_m_Transform from the initial
-      *  value coord.
-      *  new_m_Transform is computed (from old_m_Transform and TempMat) to have:
-      *     transform coord = old_m_Transform * coord * TempMat
-      */
+    { /* The new matrix transform is the old matrix transform modified by the
+       *  requested transformation, which is the TempMat transform (rot, mirror ..)
+       *  in order to have (in term of matrix transform):
+       *     transform coord = new_m_Transform * coord
+       *  where transform coord is the coord modified by new_m_Transform from the initial
+       *  value coord.
+       *  new_m_Transform is computed (from old_m_Transform and TempMat) to have:
+       *     transform coord = old_m_Transform * coord * TempMat
+       */
         int NewMatrix[2][2];
 
         NewMatrix[0][0] = m_Transform[0][0] * TempMat[0][0] +
@@ -612,12 +641,12 @@ wxPoint EDA_SchComponentStruct::GetScreenCoord( const wxPoint& coord )
 }
 
 
+#if defined (DEBUG)
 
-#if defined(DEBUG)
 /**
  * Function Show
  * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level 
+ * @param nestLevel An aid to prettier tree indenting, and is the level
  *          of nesting of this object within the overall tree.
  * @param os The ostream& to output to.
  */
@@ -625,35 +654,36 @@ void EDA_SchComponentStruct::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-		" ref=\""      		<< ReturnFieldName(0) << '"' <<
-        " chipName=\""      << m_ChipName.mb_str() << '"' <<
-        m_Pos <<
-        " layer=\""         << m_Layer      << '"' <<
-        "/>\n";
+    " ref=\"" << ReturnFieldName( 0 ) << '"' <<
+    " chipName=\"" << m_ChipName.mb_str() << '"' <<
+    m_Pos <<
+    " layer=\"" << m_Layer << '"' <<
+    "/>\n";
 
-    // skip the reference, it's been output already.        
-    for( int i=1;  i<NUMBER_OF_FIELDS;  ++i )
+    // skip the reference, it's been output already.
+    for( int i = 1;  i<NUMBER_OF_FIELDS;  ++i )
     {
         wxString value = GetFieldValue( i );
-        
+
         if( !value.IsEmpty() )
         {
-            NestedSpace( nestLevel+1, os ) << "<field" <<
-                " name=\""  << ReturnFieldName(i).mb_str() << '"' <<
-                " value=\"" << value.mb_str() << "\"/>\n";
+            NestedSpace( nestLevel + 1, os ) << "<field" <<
+            " name=\"" << ReturnFieldName( i ).mb_str() << '"' <<
+            " value=\"" << value.mb_str() << "\"/>\n";
         }
-    }        
-        
+    }
+
     NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
+
+
 #endif
-
-
 
 
 /***************************************************************************/
 PartTextStruct::PartTextStruct( const wxPoint& pos, const wxString& text ) :
-    EDA_BaseStruct( DRAW_PART_TEXT_STRUCT_TYPE ), EDA_TextStruct( text )
+    EDA_BaseStruct( DRAW_PART_TEXT_STRUCT_TYPE )
+    , EDA_TextStruct( text )
 /***************************************************************************/
 {
     m_Pos     = pos;
@@ -708,7 +738,7 @@ EDA_Rect PartTextStruct::GetBoundaryBox()
 /* return
  *  EDA_Rect contains the real (user coordinates) boundary box for a text field,
  *  according to the component position, rotation, mirror ...
- * 
+ *
  */
 {
     EDA_Rect BoundaryBox;
