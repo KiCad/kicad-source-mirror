@@ -376,12 +376,12 @@ void AddMenusForGLabel( wxMenu* PopMenu, DrawGlobalLabelStruct* GLabel )
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Glabel" ), delete_text_xpm );
 
     // add menu change type text (to label, glabel, text):
+    ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL,
+                  _( "Change to Hierarchical Label" ), label2glabel_xpm );
     ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_LABEL,
                   _( "Change to Label" ), glabel2label_xpm );
     ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT,
                   _( "Change to Text" ), glabel2text_xpm );
-    ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL,
-                  _( "Change to Hierarchical Label" ), label2glabel_xpm );
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, menu_change_type,
                                ID_POPUP_SCH_CHANGE_TYPE_TEXT, _( "Change Type" ), gl_change_xpm );
 }
@@ -427,12 +427,12 @@ void AddMenusForLabel( wxMenu* PopMenu, DrawLabelStruct* Label )
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Label" ), delete_text_xpm );
 
     // add menu change type text (to label, glabel, text):
-    ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_GLABEL,
-                  _( "Change to Global label" ), label2glabel_xpm );
-    ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT,
-                  _( "Change to Text" ), label2text_xpm );
     ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL,
                   _( "Change to Hierarchical Label" ), label2glabel_xpm );
+    ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT,
+                  _( "Change to Text" ), label2text_xpm );
+    ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_GLABEL,
+                  _( "Change to Global label" ), label2glabel_xpm );
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, menu_change_type,
                                ID_POPUP_SCH_CHANGE_TYPE_TEXT, _( "Change Type" ), gl_change_xpm );
 }
