@@ -14,8 +14,7 @@ email address.
 	- reference not copied in component copy.
 	- incorrect redo when changing the chip name in component edition
 	
-	bugs not fixed
-	- undo/redo problems when changing a text type between text, label, global label and hierarchical label
+	bugs not fixed:
 	- incorrect annotation in complex hierarchy with multi parts per package (duplicates created).
 	
 

@@ -396,7 +396,8 @@ void WinEDA_SchematicFrame::ConvertTextType( DrawTextStruct* Text,
 		GetScreen()->SetCurItem( NULL );
         g_ItemToRepeat = NULL;
     }
-    GetScreen()->SetCurItem( newtext );
+
+    GetScreen()->SetCurItem( NULL );
 
 	SAFE_DELETE( g_ItemToUndoCopy );
 
@@ -412,11 +413,15 @@ void WinEDA_SchematicFrame::ConvertTextType( DrawTextStruct* Text,
         SaveCopyInUndoList( newtext, IS_NEW );
     }
     else
+	{
+		GetScreen()->SetCurItem( newtext );
         newtext->m_Flags = IS_NEW;
+	}
 
 
     if( (flags & IS_MOVED) != 0 )
     {
+		GetScreen()->SetCurItem( newtext );
         StartMoveTexte( newtext, DC );
     }
 
