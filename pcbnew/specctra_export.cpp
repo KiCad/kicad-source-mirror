@@ -545,21 +545,21 @@ typedef std::map<wxString, int, wxString_less_than> PINMAP;
 IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
 {
     PINMAP          pinmap;
-    TYPE_COLLECTOR  pads;
+    TYPE_COLLECTOR  moduleItems;
     wxString        padName;
 
 
     // get all the MODULE's pads.
-    pads.Collect( aModule, scanPADs );
+    moduleItems.Collect( aModule, scanPADs );
 
     IMAGE*  image = new IMAGE(0);
 
     image->image_id = CONV_TO_UTF8( aModule->m_LibRef );
 
     // from the pads, and make an IMAGE using collated padstacks.
-    for( int p=0;  p<pads.GetCount();  ++p )
+    for( int p=0;  p<moduleItems.GetCount();  ++p )
     {
-        D_PAD* pad = (D_PAD*) pads[p];
+        D_PAD* pad = (D_PAD*) moduleItems[p];
 
         // see if this pad is a through hole with no copper on its perimeter
         if( isKeepout( pad ) )
@@ -633,6 +633,67 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
             wxPoint pos( pad->m_Pos0 );
 
             pin->SetVertex( mapPt( pos )  );
+        }
+    }
+
+    static const KICAD_T scanEDGEs[] = { TYPEEDGEMODULE, EOT };
+
+    // get all the MODULE's EDGE_MODULEs and convert those to DSN outlines.
+    moduleItems.Collect( aModule, scanEDGEs );
+
+    for( int i=0;  i<moduleItems.GetCount();  ++i )
+    {
+        EDGE_MODULE*    graphic = (EDGE_MODULE*) moduleItems[i];
+        SHAPE*          outline;
+        PATH*           path;
+
+        switch( graphic->m_Shape )
+        {
+        case S_SEGMENT:
+            outline = new SHAPE( image, T_outline );
+            image->Append( outline );
+            path = new PATH( outline );
+            outline->SetShape( path );
+            path->SetAperture( scale( graphic->m_Width ) );
+            path->SetLayerId( "signal" );
+            path->AppendPoint( mapPt( graphic->m_Start0 ) );
+            path->AppendPoint( mapPt( graphic->m_End0 ) );
+            break;
+
+        case S_CIRCLE:
+            {
+                // this is best done by 4 QARC's but freerouter does not yet support QARCs.
+                // for now, support by using line segments.
+
+                outline = new SHAPE( image, T_outline );
+                image->Append( outline );
+                path = new PATH( outline );
+                outline->SetShape( path );
+                path->SetAperture( scale( graphic->m_Width ) );
+                path->SetLayerId( "signal" );
+
+                double  radius = hypot( scale( graphic->m_Start.x - graphic->m_End.x ),
+                                        scale( graphic->m_Start.y - graphic->m_End.y ) );
+
+                POINT   offset = mapPt( graphic->m_Start0 );
+
+                // better if evenly divisible into 360
+                const int DEGREE_INTERVAL = 18;         // 18 means 20 line segments
+
+                for( double radians = 0.0;  radians < 2*M_PI;  radians += DEGREE_INTERVAL * M_PI / 180.0 )
+                {
+                    POINT   point(  radius*cos( radians ), radius*sin( radians )  );
+                    point += offset;
+                    path->AppendPoint( point );
+                }
+            }
+            break;
+
+        case S_RECT:
+        case S_ARC:
+        default:
+            D( printf("makeIMAGE(): unsupported shape %s\n", EDGE_MODULE::ShowShape(graphic->m_Shape) );)
+            continue;
         }
     }
 

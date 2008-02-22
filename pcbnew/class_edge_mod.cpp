@@ -540,18 +540,13 @@ bool EDGE_MODULE::HitTest( const wxPoint& ref_pos )
 
 
 #if defined(DEBUG)
-/**
- * Function Show
- * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level
- *          of nesting of this object within the overall tree.
- * @param os The ostream& to output to.
- */
-void EDGE_MODULE::Show( int nestLevel, std::ostream& os )
+
+
+const char* EDGE_MODULE::ShowShape( int aShape )
 {
     const char* cp;
 
-    switch( m_Shape )
+    switch( aShape )
     {
     case S_SEGMENT:     cp = "line";        break;
     case S_RECT:        cp = "rect";        break;
@@ -564,6 +559,21 @@ void EDGE_MODULE::Show( int nestLevel, std::ostream& os )
     case S_POLYGON:     cp = "polygon";     break;
     default:            cp = "??EDGE??";    break;
     }
+
+    return cp;
+}
+
+
+/**
+ * Function Show
+ * is used to output the object tree, currently for debugging only.
+ * @param nestLevel An aid to prettier tree indenting, and is the level
+ *          of nesting of this object within the overall tree.
+ * @param os The ostream& to output to.
+ */
+void EDGE_MODULE::Show( int nestLevel, std::ostream& os )
+{
+    const char* cp = ShowShape( m_Shape );
 
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<

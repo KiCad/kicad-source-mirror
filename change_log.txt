@@ -5,18 +5,26 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+2008-Feb-22 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+    specctra_export.cpp: added DSN 'outline' support from EDGE_MODULEs.
+    lines and circles, not arcs.
+    factored out EDGE_MODULE::ShowShape() from EDGE_MODULE::Show().
+
+
 2008-Feb-21 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +eeschema
-	added : full text conversion between text, label, global label and hierarchical label
-	some problems fixed:
-	- annotation incorrectly cleared.
-	- reference not copied in component copy.
-	- incorrect redo when changing the chip name in component edition
-	
-	bugs not fixed:
-	- incorrect annotation in complex hierarchy with multi parts per package (duplicates created).
-	
+    added : full text conversion between text, label, global label and hierarchical label
+    some problems fixed:
+    - annotation incorrectly cleared.
+    - reference not copied in component copy.
+    - incorrect redo when changing the chip name in component edition
+
+    bugs not fixed:
+    - incorrect annotation in complex hierarchy with multi parts per package (duplicates created).
 
 
 2008-Feb-20 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
@@ -24,8 +32,8 @@ email address.
 +eeschema
     Fixed bug in getpart.cpp:
     eeschema crashed when aborting a new component place command
-	Global Symbols now have their shapes
-	Bad global label shape fixed when reading a schematic file
+    Global Symbols now have their shapes
+    Bad global label shape fixed when reading a schematic file
 
 
 2008-Feb-20 UPDATE   Dick Hollenbeck <dick@softplc.com>

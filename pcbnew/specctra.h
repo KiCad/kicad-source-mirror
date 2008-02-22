@@ -693,6 +693,11 @@ public:
         layer_id = aLayerId;
     }
 
+    void SetAperture( double aWidth )
+    {
+        aperture_width = aWidth;
+    }
+
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         const char* newline = nestLevel ? "\n" : "";
@@ -1883,6 +1888,11 @@ class SHAPE : public WINDOW
     WINDOWS         windows;
 
 public:
+
+    /**
+     * Constructor SHAPE
+     * alternatively takes a DSN_T aType of T_outline
+     */
     SHAPE( ELEM* aParent, DSN_T aType = T_shape ) :
         WINDOW( aParent, aType )
     {
