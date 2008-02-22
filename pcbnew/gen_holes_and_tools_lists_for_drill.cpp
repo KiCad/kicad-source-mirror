@@ -6,6 +6,7 @@
 
 using namespace std;
 
+#include <algorithm> // sort
 #include <vector>
 
 #include "common.h"

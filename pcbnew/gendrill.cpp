@@ -130,11 +130,13 @@ void WinEDA_DrillFrame::InitDisplayParams( void )
         for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
         {
             if( pad->m_DrillShape == PAD_CIRCLE )
+            {
                 if( pad->m_Drill.x != 0 )
                     m_PadsHoleCount++;
                 else
                 if( MIN( pad->m_Drill.x, pad->m_Drill.y ) != 0 )
                     m_PadsHoleCount++;
+            }
         }
     }
 
