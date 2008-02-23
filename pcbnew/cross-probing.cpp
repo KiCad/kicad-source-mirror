@@ -64,6 +64,7 @@ void RemoteCommand(  const char* cmdline )
             frame->DrawPanel->CursorOff( &dc );
             frame->GetScreen()->m_Curseur = module->GetPosition();
             frame->DrawPanel->CursorOn( &dc );
+            frame->SetCurItem( module );
         }
     }
 
@@ -108,9 +109,15 @@ void RemoteCommand(  const char* cmdline )
         if( module == NULL )
             msg.Printf( _( "%s not found" ), modName.GetData() );
         else if( pad == NULL )
+        {
             msg.Printf( _( "%s pin %s not found" ), modName.GetData(), pinName.GetData() );
+            frame->SetCurItem( module );
+        }
         else
+        {
             msg.Printf( _( "%s pin %s found" ), modName.GetData(), pinName.GetData() );
+            frame->SetCurItem( pad );
+        }
 
         frame->Affiche_Message( msg );
     }
