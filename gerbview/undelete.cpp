@@ -22,7 +22,6 @@ void WinEDA_GerberFrame::UnDeleteItem( wxDC* DC )
 {
     BOARD_ITEM*     item;
     BOARD_ITEM*     next;
-    TRACK*          pt_track;
     int             net_code;
 
     if( !g_UnDeleteStackPtr )
