@@ -32,7 +32,7 @@ static void Exit_Move_Pad( WinEDA_DrawPanel* Panel, wxDC* DC )
     D_PAD* pad = s_CurrentSelectedPad;
 
     Panel->ManageCurseur = NULL;
-    Panel->ForceCloseManageCurseur = NULL;.
+    Panel->ForceCloseManageCurseur = NULL;
     if( pad == NULL )
         return;
 
