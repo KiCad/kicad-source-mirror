@@ -66,7 +66,8 @@
  * information held is the board coordinate and the MenuText for each item.
  * Also held is the type of error by number and the location of the MARKER.
  * A function is provided to translate that number into text.
- * Some errors involve only one item (item with an incorrect param) so m_AsSecondItem is set to false in this case
+ * Some errors involve only one item (item with an incorrect param) so
+ * m_hasSecondItem is set to false in this case.
  */
 class DRC_ITEM
 {
@@ -77,7 +78,7 @@ protected:
     wxString m_BText;           ///< text for the second BOARD_ITEM
     wxPoint  m_APos;            ///< the location of the first (or main ) BOARD_ITEM
     wxPoint  m_BPos;            ///< the location of the second BOARD_ITEM
-	bool m_AsSecondItem;		///< true when 2 items create a DRC error, false if only one item
+    bool     m_hasSecondItem;   ///< true when 2 items create a DRC error, false if only one item
 
 
 public:
@@ -97,7 +98,7 @@ public:
                  aPos, bPos );
     }
 
-	DRC_ITEM( int aErrorCode, const wxPoint& aIssuePos,
+    DRC_ITEM( int aErrorCode, const wxPoint& aIssuePos,
               const wxString& aText, const wxPoint& aPos )
     {
         SetData( aErrorCode, aIssuePos, aText, aPos );
@@ -106,12 +107,12 @@ public:
 
     void SetData( int aErrorCode, const wxPoint& aIssuePos,
                   const wxString& aText, const wxPoint& aPos )
-	{
+    {
         SetData( aErrorCode, aIssuePos,
                  aText, aText,
                  aPos, aPos );
-		m_AsSecondItem = false;
-	}
+        m_hasSecondItem = false;
+    }
 
     void SetData( int aErrorCode, const wxPoint& aIssuePos,
                   const wxString& aText, const wxString& bText,
@@ -123,10 +124,12 @@ public:
         m_BText = bText;
         m_APos  = aPos;
         m_BPos  = bPos;
-		m_AsSecondItem = true;
+        m_hasSecondItem = true;
     }
 
-	bool AsSecondItem(void) const { return m_AsSecondItem; }
+    bool HasSecondItem() const { return m_hasSecondItem; }
+
+
     /**
      * Function ShowHtml
      * translates this object into a fragment of HTML suitable for the
@@ -137,13 +140,23 @@ public:
     {
         wxString ret;
 
-        // an html fragment for the entire message in the listbox.  feel free
-        // to add color if you want:
-        ret.Printf( _( "ErrType(%d): <b>%s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>" ),
-                   m_ErrorCode,
-                   GetErrorText().GetData(),
-                   ShowCoord( m_APos ).GetData(), m_AText.GetData(),
-                   ShowCoord( m_BPos ).GetData(), m_BText.GetData() );
+        if( m_hasSecondItem )
+        {
+            // an html fragment for the entire message in the listbox.  feel free
+            // to add color if you want:
+            ret.Printf( _( "ErrType(%d): <b>%s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>" ),
+                       m_ErrorCode,
+                       GetErrorText().GetData(),
+                       ShowCoord( m_APos ).GetData(), m_AText.GetData(),
+                       ShowCoord( m_BPos ).GetData(), m_BText.GetData() );
+        }
+        else
+        {
+            ret.Printf( _( "ErrType(%d): <b>%s</b><ul><li> %s: %s </li></ul>" ),
+                       m_ErrorCode,
+                       GetErrorText().GetData(),
+                       ShowCoord( m_APos ).GetData(), m_AText.GetData() );
+        }
 
         return ret;
     }
@@ -159,11 +172,21 @@ public:
     {
         wxString ret;
 
-        ret.Printf( wxT( "ErrType(%d): %s\n    %s: %s\n    %s: %s\n" ),
-                   m_ErrorCode,
-                   GetErrorText().GetData(),
-                   ShowCoord( m_APos ).GetData(), m_AText.GetData(),
-                   ShowCoord( m_BPos ).GetData(), m_BText.GetData() );
+        if( m_hasSecondItem )
+        {
+            ret.Printf( wxT( "ErrType(%d): %s\n    %s: %s\n    %s: %s\n" ),
+                       m_ErrorCode,
+                       GetErrorText().GetData(),
+                       ShowCoord( m_APos ).GetData(), m_AText.GetData(),
+                       ShowCoord( m_BPos ).GetData(), m_BText.GetData() );
+        }
+        else
+        {
+            ret.Printf( wxT( "ErrType(%d): %s\n    %s: %s\n" ),
+                       m_ErrorCode,
+                       GetErrorText().GetData(),
+                       ShowCoord( m_APos ).GetData(), m_AText.GetData() );
+        }
 
         return ret;
     }
@@ -359,7 +382,7 @@ private:
 
     MARKER* fillMarker( D_PAD* aPad, D_PAD* bPad, int aErrorCode, MARKER* fillMe );
 
-	MARKER* fillMarker( ZONE_CONTAINER * aArea, int aErrorCode, MARKER* fillMe );
+    MARKER* fillMarker( ZONE_CONTAINER * aArea, int aErrorCode, MARKER* fillMe );
 
     /**
      * Function fillMarker
@@ -373,7 +396,7 @@ private:
      * @param fillMe A MARKER* which is to be filled in, or NULL if one is to
      *         first be allocated, then filled.
      */
-	MARKER* fillMarker( const ZONE_CONTAINER * aArea, const wxPoint & aPos, int aErrorCode, MARKER* fillMe );
+    MARKER* fillMarker( const ZONE_CONTAINER * aArea, const wxPoint & aPos, int aErrorCode, MARKER* fillMe );
 
     //-----<categorical group tests>-----------------------------------------
 
@@ -411,17 +434,17 @@ private:
     bool    doTrackDrc( TRACK* aRefSeg, TRACK* aStart );
 
 
-	/**
-	 * Function doEdgeZoneDrc
-	 * tests a segment in ZONE_CONTAINER * aArea:
-	 *      Test Edge inside other areas
-	 *      Test Edge too close other areas
-	 * @param aArea The current area.
-	 * @param aCornerIndex The first corner of the segment to test.
-	 * @return bool - false if DRC error  or true if OK
-	 */
+    /**
+     * Function doEdgeZoneDrc
+     * tests a segment in ZONE_CONTAINER * aArea:
+     *      Test Edge inside other areas
+     *      Test Edge too close other areas
+     * @param aArea The current area.
+     * @param aCornerIndex The first corner of the segment to test.
+     * @return bool - false if DRC error  or true if OK
+     */
 
-	bool doEdgeZoneDrc( ZONE_CONTAINER * aArea, int aCornerIndex );
+    bool doEdgeZoneDrc( ZONE_CONTAINER * aArea, int aCornerIndex );
 
     //-----<single tests>----------------------------------------------
 
@@ -495,17 +518,17 @@ public:
      */
     int Drc( TRACK* aRefSeg, TRACK* aList );
 
-	/**
-	 * Function Drc
-	 * tests the outline segment starting at CornerIndex and returns the result and displays the error
-	 * in the status panel only if one exists.
-	 *      Test Edge inside other areas
-	 *      Test Edge too close other areas
-	 * @param aEdge The areaparent which contains the corner.
-	 * @param CornerIndex The starting point of the segment to test.
-	 * @return int - BAD_DRC (1) if DRC error  or OK_DRC (0) if OK
-	 */
-	int Drc( ZONE_CONTAINER * aArea, int CornerIndex  );
+    /**
+     * Function Drc
+     * tests the outline segment starting at CornerIndex and returns the result and displays the error
+     * in the status panel only if one exists.
+     *      Test Edge inside other areas
+     *      Test Edge too close other areas
+     * @param aEdge The areaparent which contains the corner.
+     * @param CornerIndex The starting point of the segment to test.
+     * @return int - BAD_DRC (1) if DRC error  or OK_DRC (0) if OK
+     */
+    int Drc( ZONE_CONTAINER * aArea, int CornerIndex  );
 
     /**
      * Function DrcBlind
