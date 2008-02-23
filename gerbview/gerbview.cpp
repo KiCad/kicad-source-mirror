@@ -70,7 +70,8 @@ bool WinEDA_App::OnInit()
 
             wxString path = wxPathOnly( fileName );
 
-            wxSetWorkingDirectory( path );
+            if( path != wxEmptyString )
+                wxSetWorkingDirectory( path );
 
             Read_Config();
 

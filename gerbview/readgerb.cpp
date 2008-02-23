@@ -149,7 +149,9 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
 
     gerber_layer->m_FileName = GERBER_FullFileName;
 
-    wxSetWorkingDirectory( wxPathOnly( GERBER_FullFileName ) );
+    wxString path = wxPathOnly( GERBER_FullFileName );
+    if( path != wxEmptyString )
+        wxSetWorkingDirectory( path );
 
     wxBusyCursor show_wait;
     setlocale( LC_NUMERIC, "C" );
