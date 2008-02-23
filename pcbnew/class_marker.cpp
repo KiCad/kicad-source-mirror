@@ -44,7 +44,7 @@ void MARKER::init()
     m_Type   = 0;
     m_Color  = RED;
     m_Bitmap = Default_MarkerBitmap;
-	m_Size.x = Default_MarkerBitmap[0]; 
+    m_Size.x = Default_MarkerBitmap[0];
     m_Size.y = Default_MarkerBitmap[1];
 }
 
@@ -56,25 +56,25 @@ MARKER::MARKER( BOARD_ITEM* StructFather ) :
 }
 
 
-MARKER::MARKER( int aErrorCode, const wxPoint& aMarkerPos, 
-               const wxString& aText, const wxPoint& aPos, 
+MARKER::MARKER( int aErrorCode, const wxPoint& aMarkerPos,
+               const wxString& aText, const wxPoint& aPos,
                const wxString& bText, const wxPoint& bPos ) :
     BOARD_ITEM( NULL, TYPEMARKER )  // parent set during BOARD::Add()
 {
     init();
 
-    SetData( aErrorCode, aMarkerPos, 
+    SetData( aErrorCode, aMarkerPos,
          aText, aPos,
          bText, bPos );
 }
 
-MARKER::MARKER( int aErrorCode, const wxPoint& aMarkerPos, 
+MARKER::MARKER( int aErrorCode, const wxPoint& aMarkerPos,
            const wxString& aText, const wxPoint& aPos ) :
     BOARD_ITEM( NULL, TYPEMARKER )  // parent set during BOARD::Add()
 {
     init();
 
-    SetData( aErrorCode, aMarkerPos, 
+    SetData( aErrorCode, aMarkerPos,
          aText, aPos );
 }
 
@@ -88,25 +88,25 @@ MARKER::~MARKER()
 }
 
 
-void MARKER::SetData( int aErrorCode, const wxPoint& aMarkerPos, 
-         const wxString& aText, const wxPoint& aPos, 
+void MARKER::SetData( int aErrorCode, const wxPoint& aMarkerPos,
+         const wxString& aText, const wxPoint& aPos,
          const wxString& bText, const wxPoint& bPos )
 {
-    m_drc.SetData( aErrorCode, aMarkerPos, 
+    m_drc.SetData( aErrorCode, aMarkerPos,
              aText, bText,
              aPos, bPos );
-    
+
     // @todo: switch on error code to set error code specific color, and possibly bitmap.
     m_Color = WHITE;
 }
 
 
-void MARKER::SetData( int aErrorCode, const wxPoint& aMarkerPos, 
+void MARKER::SetData( int aErrorCode, const wxPoint& aMarkerPos,
          const wxString& aText, const wxPoint& aPos )
 {
-    m_drc.SetData( aErrorCode, aMarkerPos, 
+    m_drc.SetData( aErrorCode, aMarkerPos,
              aText, aPos );
-    
+
     // @todo: switch on error code to set error code specific color, and possibly bitmap.
     m_Color = WHITE;
 }
@@ -128,24 +128,24 @@ void MARKER::Display_Infos( WinEDA_DrawFrame* frame )
     frame->MsgPanel->EraseMsgBox();
 
     const DRC_ITEM& rpt = m_drc;
-    
+
     text_pos = 1;
     Affiche_1_Parametre( frame, text_pos, _( "Type" ), _("Marker"), DARKCYAN );
 
     wxString errorTxt;
-    
+
     errorTxt << _("ErrType") << wxT("(") << rpt.GetErrorCode() << wxT(")-  ") << rpt.GetErrorText() << wxT(":");
-    
+
     text_pos = 5;
     Affiche_1_Parametre( frame, text_pos, errorTxt, wxEmptyString, RED );
 
     wxString txtA;
     txtA << DRC_ITEM::ShowCoord( rpt.GetPointA() ) << wxT(": ") << rpt.GetTextA();
-    
+
     wxString txtB;
-	if ( rpt.AsSecondItem() )
-		txtB << DRC_ITEM::ShowCoord( rpt.GetPointB() ) << wxT(": ") << rpt.GetTextB();     
-    
+    if ( rpt.HasSecondItem() )
+        txtB << DRC_ITEM::ShowCoord( rpt.GetPointB() ) << wxT(": ") << rpt.GetTextB();
+
     text_pos = 25;
     Affiche_1_Parametre( frame, text_pos, txtA, txtB, DARKBROWN );
 }
@@ -157,23 +157,23 @@ bool MARKER::HitTest( const wxPoint& refPos )
 {
     // the MARKER is 12 pixels by 12 pixels, but is not resized with zoom, so
     // as zoom changes, the effective real size (in user units) of the MARKER changes.
-   
+
     wxSize TrueSize = m_Size;
-	if ( ActiveScreen )
-	{
-		TrueSize.x *= ActiveScreen->GetZoom();
-		TrueSize.y *= ActiveScreen->GetZoom();
-	}
+    if ( ActiveScreen )
+    {
+        TrueSize.x *= ActiveScreen->GetZoom();
+        TrueSize.y *= ActiveScreen->GetZoom();
+    }
 
     wxPoint pos = GetPosition();
-    
+
     int dx = refPos.x - pos.x;
     int dy = refPos.y - pos.y;
-	
-	/* is refPos in the box: Marker size to right an bottom,
-	or size/2 to left or top */
+
+    /* is refPos in the box: Marker size to right an bottom,
+    or size/2 to left or top */
     if( dx <= TrueSize.x  && dy <= TrueSize.y &&
-		dx >= -TrueSize.x/2  && dy >= -TrueSize.y/2 )
+        dx >= -TrueSize.x/2  && dy >= -TrueSize.y/2 )
         return true;
     else
         return false;
@@ -201,11 +201,11 @@ void MARKER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int DrawMode )
 
     GRSetDrawMode( DC, DrawMode );
 
-    px = GRMapX( GetPosition().x ); 
+    px = GRMapX( GetPosition().x );
     py = GRMapY( GetPosition().y );
 
     /* Get the bitmap size */
-    m_Size.x = *(pt_bitmap++); 
+    m_Size.x = *(pt_bitmap++);
     m_Size.y = *(pt_bitmap++);
 
     /* Draw the bitmap */

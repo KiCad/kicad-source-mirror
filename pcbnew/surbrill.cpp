@@ -53,7 +53,10 @@ void WinEDA_PcbFrame::Liste_Equipot( wxCommandEvent& event )
         List->Append( Line );
     }
 
-    ii = List->ShowModal(); List->Destroy();
+    ii = List->ShowModal();
+
+    List->Destroy();
+
     if( ii < 0 )
         return;
 
@@ -64,6 +67,7 @@ void WinEDA_PcbFrame::Liste_Equipot( wxCommandEvent& event )
         /* calcul adr relative du nom de la pastille reference de la piste */
         if( !WildCompareString( msg, Equipot->m_Netname, FALSE ) )
             continue;
+
         if( ii == jj )
         {
             ii = Equipot->GetNet();
@@ -78,6 +82,7 @@ void WinEDA_PcbFrame::Liste_Equipot( wxCommandEvent& event )
 
     if( g_HightLigt_Status )
         Hight_Light( &dc );
+
     g_HightLigth_NetCode = ii;
     Hight_Light( &dc );
 }
@@ -95,7 +100,7 @@ int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
 
     // use this scheme because of pad is higher priority than tracks in the
     // search, and finding a pad, instead of a track on a pad,
-    // allows us to fire a message to eescema.
+    // allows us to fire a message to eeschema.
 
     GENERAL_COLLECTORS_GUIDE guide = GetCollectorsGuide();
 
@@ -168,6 +173,29 @@ void WinEDA_PcbFrame::DrawHightLight( wxDC* DC, int NetCode )
     else
         draw_mode = GR_AND | GR_SURBRILL;
 
+#if 0   // does not unhighlight properly
+    // redraw the zones with the NetCode
+    for( SEGZONE* zone = m_Pcb->m_Zone;   zone;   zone = zone->Next() )
+    {
+        if( zone->GetNet() == NetCode )
+        {
+            zone->Draw( DrawPanel, DC, draw_mode );
+        }
+    }
+#endif
+
+    wxPoint zero(0,0);  // construct outside loop for speed
+
+    // Redraw ZONE_CONTAINERS
+    BOARD::ZONE_CONTAINERS& zones = m_Pcb->m_ZoneDescriptorList;
+    for( BOARD::ZONE_CONTAINERS::iterator zc = zones.begin();  zc!=zones.end();  ++zc )
+    {
+        if( (*zc)->GetNet() == NetCode )
+        {
+            (*zc)->Draw( DrawPanel, DC, zero, draw_mode );
+        }
+    }
+
     /* Redraw pads */
     for( MODULE* module = m_Pcb->m_Modules;  module;   module = module->Next() )
     {
@@ -180,18 +208,6 @@ void WinEDA_PcbFrame::DrawHightLight( wxDC* DC, int NetCode )
         if( pts->GetNet() == NetCode )
         {
             pts->Draw( DrawPanel, DC, draw_mode );
-        }
-    }
-
-    wxPoint zero(0,0);  // construct outside loop for speed
-
-    // Redraw ZONE_CONTAINERS
-    BOARD::ZONE_CONTAINERS& zones = m_Pcb->m_ZoneDescriptorList;
-    for( BOARD::ZONE_CONTAINERS::iterator zc = zones.begin();  zc!=zones.end();  ++zc )
-    {
-        if( (*zc)->GetNet() == NetCode )
-        {
-            (*zc)->Draw( DrawPanel, DC, zero, draw_mode );
         }
     }
 }

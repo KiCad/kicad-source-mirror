@@ -43,7 +43,7 @@
 /**
  * Class DRC_LIST_MARKERS
  * is an implementation of the interface named DRC_ITEM_LIST which uses
- * a BOARD instance to fulfill the interface.  No ownership is taken of the 
+ * a BOARD instance to fulfill the interface.  No ownership is taken of the
  * BOARD.
  */
 class DRC_LIST_MARKERS : public DRC_ITEM_LIST
@@ -61,15 +61,15 @@ public:
     ~DRC_LIST_MARKERS() {}
     */
 
-    
+
     //-----<Interface DRC_ITEM_LIST>---------------------------------------
-    
+
     void            DeleteAllItems()
     {
         m_board->DeleteMARKERs();
     }
 
-    
+
     const DRC_ITEM* GetItem( int aIndex )
     {
         const MARKER* marker = m_board->GetMARKER( aIndex );
@@ -83,7 +83,7 @@ public:
         m_board->DeleteMARKER( aIndex );
     }
 
-    
+
     /**
      * Function GetCount
      * returns the number of items in the list.
@@ -92,7 +92,7 @@ public:
     {
         return m_board->GetMARKERCount();
     }
-    
+
     //-----</Interface DRC_ITEM_LIST>--------------------------------------
 
 };
@@ -101,7 +101,7 @@ public:
 /**
  * Class DRC_LIST_UNCONNECTED
  * is an implementation of the interface named DRC_ITEM_LIST which uses
- * a vector of pointers to DRC_ITEMs to fulfill the interface.  No ownership is taken of the 
+ * a vector of pointers to DRC_ITEMs to fulfill the interface.  No ownership is taken of the
  * vector, which will reside in class DRC
  */
 class DRC_LIST_UNCONNECTED : public DRC_ITEM_LIST
@@ -119,21 +119,21 @@ public:
     ~DRC_LIST_UNCONNECTED() {}
     */
 
-    
+
     //-----<Interface DRC_ITEM_LIST>---------------------------------------
-    
+
     void            DeleteAllItems()
     {
         if( m_vector )
         {
             for( unsigned i=0; i<m_vector->size();  ++i )
                 delete (*m_vector)[i];
-            
+
             m_vector->clear();
         }
     }
 
-    
+
     const DRC_ITEM* GetItem( int aIndex )
     {
         if( m_vector &&  (unsigned)aIndex < m_vector->size() )
@@ -153,7 +153,7 @@ public:
         }
     }
 
-    
+
     /**
      * Function GetCount
      * returns the number of items in the list.
@@ -166,7 +166,7 @@ public:
         }
         return 0;
     }
-    
+
     //-----</Interface DRC_ITEM_LIST>--------------------------------------
 
 };
@@ -176,7 +176,7 @@ public:
 /**
  * Class DRCLISTBOX
  * is used to display a DRC_ITEM_LIST.
- */ 
+ */
 class DRCLISTBOX : public wxHtmlListBox
 {
 private:
@@ -191,16 +191,16 @@ public:
         m_list = 0;
     }
 
-    
+
     ~DRCLISTBOX()
     {
         delete m_list;  // I own it, I destroy it.
     }
-    
+
 
     /**
      * Function SetList
-     * sets the DRC_ITEM_LIST for this listbox.  Ownership of the DRC_ITEM_LIST is 
+     * sets the DRC_ITEM_LIST for this listbox.  Ownership of the DRC_ITEM_LIST is
      * transfered to this DRCLISTBOX.
      * @param aList The DRC_ITEM_LIST* containing the DRC_ITEMs which will be
      *  displayed in the wxHtmlListBox
@@ -208,7 +208,7 @@ public:
     void SetList( DRC_ITEM_LIST* aList )
     {
         delete m_list;
-        
+
         m_list = aList;
         SetItemCount( aList->GetCount() );
         Refresh();
@@ -227,8 +227,8 @@ public:
         }
         return NULL;
     }
-    
-    
+
+
     /**
      * Function OnGetItem
      * returns the html text associated with the DRC_ITEM given by index 'n'.
@@ -257,8 +257,8 @@ public:
     {
         return OnGetItem( n );
     }
-    
-    
+
+
     /**
      * Function DeleteElement
      * will delete one of the items in the list.
@@ -268,20 +268,20 @@ public:
     {
         if( m_list )
         {
-            int selection = GetSelection(); 
+            int selection = GetSelection();
 
             m_list->DeleteItem( aIndex );
             int count = m_list->GetCount();
             SetItemCount( count );
 
-            // if old selection >= new count            
+            // if old selection >= new count
             if( selection >= count )
                 SetSelection( count-1 );    // -1 is "no selection"
             Refresh();
         }
     }
 
-    
+
     /**
      * Function DeleteAllItems
      * deletes all items in the list.
@@ -342,7 +342,7 @@ BEGIN_EVENT_TABLE( DrcDialog, wxDialog )
     EVT_MENU( ID_POPUP_UNCONNECTED_B, DrcDialog::OnPopupMenu )
     EVT_MENU( ID_POPUP_MARKERS_A, DrcDialog::OnPopupMenu )
     EVT_MENU( ID_POPUP_MARKERS_B, DrcDialog::OnPopupMenu )
-    
+
 END_EVENT_TABLE()
 
 /*!
@@ -353,7 +353,7 @@ DrcDialog::DrcDialog( )
 {
 }
 
-DrcDialog::DrcDialog( DRC* aTester, WinEDA_PcbFrame* parent, 
+DrcDialog::DrcDialog( DRC* aTester, WinEDA_PcbFrame* parent,
                                   wxWindowID id,
                                   const wxString& caption,
                                   const wxPoint& pos,
@@ -361,7 +361,7 @@ DrcDialog::DrcDialog( DRC* aTester, WinEDA_PcbFrame* parent,
                                   long style )
 {
     m_tester = aTester;
-    
+
     m_Parent = parent;
 
     Create(parent, id, caption, pos, size, style);
@@ -609,7 +609,7 @@ wxIcon DrcDialog::GetIconResource( const wxString& name )
 void DrcDialog::OnStartdrcClick( wxCommandEvent& event )
 {
     wxString reportName;
-    
+
     if( m_CreateRptCtrl->IsChecked() )      // Create a file rpt
     {
         reportName = m_RptFilenameCtrl->GetValue();
@@ -625,16 +625,16 @@ void DrcDialog::OnStartdrcClick( wxCommandEvent& event )
 
     g_DesignSettings.m_TrackClearence =
         ReturnValueFromTextCtrl( *m_SetClearance, m_Parent->m_InternalUnits );
-    
+
     m_tester->SetSettings( m_Pad2PadTestCtrl->IsChecked(),
-                        m_UnconnectedTestCtrl->IsChecked(),                       
+                        m_UnconnectedTestCtrl->IsChecked(),
                         m_ZonesTestCtrl->IsChecked(),
                         reportName, m_CreateRptCtrl->IsChecked() );
 
     DelDRCMarkers();
 
     wxBeginBusyCursor();
-    
+
     // run all the tests, with no UI at this time.
     m_tester->RunTests();
 
@@ -643,30 +643,30 @@ void DrcDialog::OnStartdrcClick( wxCommandEvent& event )
 #else
     m_Notebook->SetSelection(0);        // display the 1at tab "... Markers..."
 #endif
-    
-    
-    // Generate the report 
+
+
+    // Generate the report
     if( !reportName.IsEmpty() )
     {
         FILE* fp = wxFopen( reportName, wxT( "w" ) );
-        
+
         writeReport( fp );
 
         fclose(fp);
 
         wxString msg;
-        
+
         msg.Printf( _( "Report file \"%s\" created" ), reportName.GetData() );
-        
+
         wxString caption( _("Disk File Report Completed") );
-        
+
         wxMessageDialog popupWindow( this, msg, caption );
-        
+
         popupWindow.ShowModal();
     }
-    
+
     wxEndBusyCursor();
-    
+
     RedrawDrawPanel();
 }
 
@@ -689,7 +689,7 @@ void DrcDialog::OnDeleteAllClick( wxCommandEvent& event )
 void DrcDialog::OnListUnconnectedClick( wxCommandEvent& event )
 {
     wxString reportName;
-    
+
     if( m_CreateRptCtrl->IsChecked() )      // Create a file rpt
     {
         reportName = m_RptFilenameCtrl->GetValue();
@@ -705,16 +705,16 @@ void DrcDialog::OnListUnconnectedClick( wxCommandEvent& event )
 
     g_DesignSettings.m_TrackClearence =
         ReturnValueFromTextCtrl( *m_SetClearance, m_Parent->m_InternalUnits );
-    
+
     m_tester->SetSettings( m_Pad2PadTestCtrl->IsChecked(),
-                        m_UnconnectedTestCtrl->IsChecked(),                       
+                        m_UnconnectedTestCtrl->IsChecked(),
                         m_ZonesTestCtrl->IsChecked(),
                         reportName, m_CreateRptCtrl->IsChecked() );
 
-    DelDRCMarkers();    
+    DelDRCMarkers();
 
     wxBeginBusyCursor();
-    
+
     m_tester->ListUnconnectedPads();
 
 #if wxCHECK_VERSION( 2, 8, 0 )
@@ -722,30 +722,30 @@ void DrcDialog::OnListUnconnectedClick( wxCommandEvent& event )
 #else
     m_Notebook->SetSelection(1);        // display the 2nd tab "Unconnected..."
 #endif
-    
-    // Generate the report 
+
+    // Generate the report
     if( !reportName.IsEmpty() )
     {
         FILE* fp = wxFopen( reportName, wxT( "w" ) );
-        
+
         writeReport( fp );
 
         fclose(fp);
 
         wxString msg;
-        
+
         msg.Printf( _( "Report file \"%s\" created" ), reportName.GetData() );
-        
+
         wxString caption( _("Disk File Report Completed") );
-        
+
         wxMessageDialog popupWindow( this, msg, caption );
-        
+
         popupWindow.ShowModal();
     }
-    
+
     wxEndBusyCursor();
 
-    /* there is currently nothing visible on the DrawPanel for unconnected pads    
+    /* there is currently nothing visible on the DrawPanel for unconnected pads
     RedrawDrawPanel();
     */
 }
@@ -837,14 +837,14 @@ void DrcDialog::OnReportCheckBoxClicked( wxCommandEvent& event )
 void DrcDialog::OnInitDialog( wxInitDialogEvent& event )
 {
     wxCommandEvent junk;
-    
-    // Set the initial "enabled" status of the browse button and the text 
-    // field for report name    
+
+    // Set the initial "enabled" status of the browse button and the text
+    // field for report name
     OnReportCheckBoxClicked( junk );
 
     m_SetClearance->SetFocus();
 
-    // deselect the existing text, seems SetFocus() wants to emulate 
+    // deselect the existing text, seems SetFocus() wants to emulate
     // Microsoft and select all text, which is not desireable here.
     m_SetClearance->SetSelection(0,0);
 
@@ -861,7 +861,7 @@ void DrcDialog::OnLeftDClickClearance( wxMouseEvent& event )
     event.Skip();
 
     // I am assuming that the double click actually changed the selected item.
-    // please verify this.    
+    // please verify this.
     int selection = m_ClearanceListBox->GetSelection();
 
     if( selection != wxNOT_FOUND )
@@ -873,16 +873,16 @@ void DrcDialog::OnLeftDClickClearance( wxMouseEvent& event )
         {
             /*
             // after the goto, process a button OK command later.
-            wxCommandEvent  cmd( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ); 
+            wxCommandEvent  cmd( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK );
             ::wxPostEvent( GetEventHandler(), cmd );
             */
-            
+
             m_Parent->CursorGoto( item->GetPosition() );
-            
-            // turn control over to m_Parent, hide this DrcDialog window, 
+
+            // turn control over to m_Parent, hide this DrcDialog window,
             // no destruction so we can preserve listbox cursor
-            Hide();    
-            
+            Hide();
+
             event.StopPropagation();    // still get the popup window.
         }
     }
@@ -892,11 +892,11 @@ void DrcDialog::OnLeftDClickClearance( wxMouseEvent& event )
 void DrcDialog::OnPopupMenu( wxCommandEvent& event )
 {
     int source = event.GetId();
-    
+
     const DRC_ITEM* item = 0;
     wxPoint         pos;
-    
-    int selection; 
+
+    int selection;
 
     switch( source )
     {
@@ -940,20 +940,23 @@ void DrcDialog::OnRightUpUnconnected( wxMouseEvent& event )
     event.Skip();
 
     // popup menu to go to either of the items listed in the DRC_ITEM.
-    
+
     int selection = m_UnconnectedListBox->GetSelection();
-    
+
     if( selection != wxNOT_FOUND )
     {
         wxMenu          menu;
         wxMenuItem*     mItem;
         const DRC_ITEM* dItem = m_UnconnectedListBox->GetItem( selection );
-        
+
         mItem = new wxMenuItem( &menu, ID_POPUP_UNCONNECTED_A,  dItem->GetTextA() );
         menu.Append( mItem );
-        
-        mItem = new wxMenuItem( &menu, ID_POPUP_UNCONNECTED_B,  dItem->GetTextB() );
-        menu.Append( mItem );
+
+        if( dItem->HasSecondItem() )
+        {
+            mItem = new wxMenuItem( &menu, ID_POPUP_UNCONNECTED_B,  dItem->GetTextB() );
+            menu.Append( mItem );
+        }
 
         PopupMenu( &menu );
     }
@@ -969,20 +972,23 @@ void DrcDialog::OnRightUpClearance( wxMouseEvent& event )
     event.Skip();
 
     // popup menu to go to either of the items listed in the DRC_ITEM.
-    
+
     int selection = m_ClearanceListBox->GetSelection();
-    
+
     if( selection != wxNOT_FOUND )
     {
         wxMenu          menu;
         wxMenuItem*     mItem;
         const DRC_ITEM* dItem = m_ClearanceListBox->GetItem( selection );
-        
+
         mItem = new wxMenuItem( &menu, ID_POPUP_MARKERS_A,  dItem->GetTextA() );
         menu.Append( mItem );
-        
-        mItem = new wxMenuItem( &menu, ID_POPUP_MARKERS_B,  dItem->GetTextB() );
-        menu.Append( mItem );
+
+        if( dItem->HasSecondItem() )
+        {
+            mItem = new wxMenuItem( &menu, ID_POPUP_MARKERS_B,  dItem->GetTextB() );
+            menu.Append( mItem );
+        }
 
         PopupMenu( &menu );
     }
@@ -998,23 +1004,23 @@ void DrcDialog::OnLeftDClickUnconnected( wxMouseEvent& event )
     event.Skip();
 
     // I am assuming that the double click actually changed the selected item.
-    // please verify this.    
+    // please verify this.
     int selection = m_UnconnectedListBox->GetSelection();
 
     if( selection != wxNOT_FOUND )
     {
-        // Find the selected DRC_ITEM in the listbox, position cursor there, 
+        // Find the selected DRC_ITEM in the listbox, position cursor there,
         // at the first of the two pads.
         // Then hide the dialog.
         const DRC_ITEM* item = m_UnconnectedListBox->GetItem( selection );
         if( item )
         {
             m_Parent->CursorGoto( item->GetPosition() );
-            
+
             Hide();
-            
+
             // intermittently, still get the popup window, even with this.
-            event.StopPropagation();    
+            event.StopPropagation();
         }
     }
 }
@@ -1023,26 +1029,26 @@ void DrcDialog::OnLeftDClickUnconnected( wxMouseEvent& event )
 void DrcDialog::OnMarkerSelectionEvent( wxCommandEvent& event )
 {
     int selection = event.GetSelection();
-    
+
     if( selection != wxNOT_FOUND )
     {
         // until a MARKER is selected, this button is not enabled.
         m_DeleteCurrentMarkerButton->Enable(true);
     }
-    
+
     event.Skip();
 }
 
 void DrcDialog::OnUnconnectedSelectionEvent( wxCommandEvent& event )
 {
     int selection = event.GetSelection();
-    
+
     if( selection != wxNOT_FOUND )
     {
         // until a MARKER is selected, this button is not enabled.
         m_DeleteCurrentMarkerButton->Enable(true);
     }
-    
+
     event.Skip();
 }
 
@@ -1070,23 +1076,23 @@ void DrcDialog::writeReport( FILE* fp )
             CONV_TO_UTF8( m_Parent->GetScreen()->m_FileName ) );
 
     wxDateTime now = wxDateTime::Now();
-    
-    fprintf( fp, "** Created on %s **\n", CONV_TO_UTF8(now.Format( wxT("%F %T"))) ); 
+
+    fprintf( fp, "** Created on %s **\n", CONV_TO_UTF8(now.Format( wxT("%F %T"))) );
 
     count = m_ClearanceListBox->GetItemCount();
 
     fprintf( fp, "\n** Found %d DRC errors **\n", count );
-    
+
     for( int i=0;  i<count;  ++i )
         fprintf( fp, m_ClearanceListBox->GetItem(i)->ShowReport().mb_str() );
 
     count = m_UnconnectedListBox->GetItemCount();
 
     fprintf( fp, "\n** Found %d unconnected pads **\n", count );
-    
+
     for( int i=0;  i<count;  ++i )
         fprintf( fp, m_UnconnectedListBox->GetItem(i)->ShowReport().mb_str() );
-    
+
     fprintf( fp, "\n** End of Report **\n" );
 }
 
@@ -1106,25 +1112,25 @@ void DrcDialog::OnDeleteOneClick( wxCommandEvent& event )
         if( selectedIndex != wxNOT_FOUND )
         {
             m_ClearanceListBox->DeleteItem( selectedIndex );
-            
+
             // redraw the pcb
             RedrawDrawPanel();
         }
     }
-    
+
     else if( curTab == 1 )
     {
         selectedIndex = m_UnconnectedListBox->GetSelection();
         if( selectedIndex != wxNOT_FOUND )
         {
             m_UnconnectedListBox->DeleteItem( selectedIndex );
-            
-            /* these unconnected DRC_ITEMs are not currently visible on the pcb 
+
+            /* these unconnected DRC_ITEMs are not currently visible on the pcb
             RedrawDrawPanel();
             */
         }
     }
-    
+
 //    event.Skip();
 }
 

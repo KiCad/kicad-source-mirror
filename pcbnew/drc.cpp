@@ -510,11 +510,16 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart )
         // This test seems necessary since the dialog box that displays the
         // desired via hole size and width does not enforce a hole size smaller
         // than the via's diameter.
-        if( !aRefSeg->GetDrillValue() > aRefSeg->m_Width )
+        if( aRefSeg->GetDrillValue() > aRefSeg->m_Width )
         {
+#if 0       // a temporary way to fix a bad board here, change for your values
+            if( aRefSeg->GetDrillValue()==120 && aRefSeg->m_Width==100 )
+                aRefSeg->m_Width = 180;
+#else
             m_currentMarker = fillMarker( aRefSeg, NULL,
                                 DRCE_VIA_HOLE_BIGGER, m_currentMarker );
             return false;
+#endif
         }
 
         // For microvias: test if they are blindvias and only between 2 layers

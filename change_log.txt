@@ -9,9 +9,12 @@ email address.
 2008-Feb-22 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew
-    specctra_export.cpp: added DSN 'outline' support from EDGE_MODULEs.
+  * specctra_export.cpp: added DSN 'outline' support from EDGE_MODULEs.
     lines and circles, not arcs.
-    factored out EDGE_MODULE::ShowShape() from EDGE_MODULE::Show().
+  * factored out EDGE_MODULE::ShowShape() from EDGE_MODULE::Show().
+  * drc.cpp changed AsSecondItem to HasSecondItem and test it in generating
+    the file report and when making the popup menu in the dialog_drc and
+    when generating the html list item.
 
 
 2008-Feb-21 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>

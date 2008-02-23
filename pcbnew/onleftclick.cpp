@@ -26,23 +26,23 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
  */
 {
     BOARD_ITEM* DrawStruct = GetCurItem();
-	bool exit = false;
+    bool exit = false;
 
     if( (m_ID_current_state == 0) || ( DrawStruct && DrawStruct->m_Flags ) )
     {
         DrawPanel->m_AutoPAN_Request = FALSE;
         if( DrawStruct && DrawStruct->m_Flags ) // "POPUP" in progress
         {
-			DrawPanel->m_IgnoreMouseEvents = TRUE;
-			DrawPanel->CursorOff( DC );
+            DrawPanel->m_IgnoreMouseEvents = TRUE;
+            DrawPanel->CursorOff( DC );
 
             switch( DrawStruct->Type() )
             {
             case TYPEZONE_CONTAINER:
-				if ( (DrawStruct->m_Flags & IS_NEW) )
-					Begin_Zone( DC );
+                if ( (DrawStruct->m_Flags & IS_NEW) )
+                    Begin_Zone( DC );
                 else
-					End_Move_Zone_Corner_Or_Outlines( DC, (ZONE_CONTAINER *) DrawStruct );
+                    End_Move_Zone_Corner_Or_Outlines( DC, (ZONE_CONTAINER *) DrawStruct );
                 exit = true;
                 break;
 
@@ -95,23 +95,23 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                          wxT( "WinEDA_PcbFrame::OnLeftClick() err: DrawType %d m_Flags != 0" ), DrawStruct->Type() );
                     exit = true;
                 }
-				break;
+                break;
             }
 
-			DrawPanel->m_IgnoreMouseEvents = FALSE;
-			DrawPanel->CursorOn( DC );
-			if ( exit ) return;
+            DrawPanel->m_IgnoreMouseEvents = FALSE;
+            DrawPanel->CursorOn( DC );
+            if ( exit ) return;
         }
-        
+
         else if( !wxGetKeyState(WXK_SHIFT) && !wxGetKeyState(WXK_ALT) &&
                 !wxGetKeyState(WXK_CONTROL) )
         {
             DrawStruct = PcbGeneralLocateAndDisplay();
             if( DrawStruct )
                 SendMessageToEESCHEMA( DrawStruct );
-        }            
+        }
     }
-       
+
     switch( m_ID_current_state )
     {
     case ID_MAIN_MENUBAR:
@@ -130,19 +130,19 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         break;
 
     case ID_PCB_HIGHLIGHT_BUTT:
-    {
-        int netcode = Select_High_Light( DC );
-        if( netcode < 0 )
-            m_Pcb->Display_Infos( this );
-        else
-            Affiche_Infos_Equipot( netcode, this );
-    }
+        {
+            int netcode = Select_High_Light( DC );
+            if( netcode < 0 )
+                m_Pcb->Display_Infos( this );
+            else
+                Affiche_Infos_Equipot( netcode, this );
+        }
         break;
 
     case ID_PCB_SHOW_1_RATSNEST_BUTT:
         DrawStruct = PcbGeneralLocateAndDisplay();
         Show_1_Ratsnest( DrawStruct, DC );
-        
+
         if( DrawStruct )
             SendMessageToEESCHEMA( DrawStruct );
         break;
@@ -171,14 +171,14 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         if( m_ID_current_state == ID_PCB_ARC_BUTT )
             shape = S_ARC;
 
-		if( ((PCB_SCREEN*)GetScreen())->m_Active_Layer <= LAST_COPPER_LAYER )
+        if( ((PCB_SCREEN*)GetScreen())->m_Active_Layer <= LAST_COPPER_LAYER )
         {
             DisplayError( this, _( "Graphic not authorized on Copper layers" ) );
             break;
         }
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
-            DrawStruct = Begin_DrawSegment( NULL, shape, DC ); 
+            DrawStruct = Begin_DrawSegment( NULL, shape, DC );
             SetCurItem( DrawStruct );
             DrawPanel->m_AutoPAN_Request = TRUE;
         }
@@ -194,7 +194,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     }
 
     case ID_TRACK_BUTT:
-		if( ((PCB_SCREEN*)GetScreen())->m_Active_Layer > LAST_COPPER_LAYER )
+        if( ((PCB_SCREEN*)GetScreen())->m_Active_Layer > LAST_COPPER_LAYER )
         {
             DisplayError( this, _( "Tracks on Copper layers only " ) );
             break;
@@ -223,18 +223,18 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     case ID_PCB_ZONES_BUTT:
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
-			if ( Begin_Zone( DC ) )
-			{
-				DrawStruct = m_Pcb->m_CurrentZoneContour;
-				GetScreen()->SetCurItem( DrawStruct );
-			}
+            if ( Begin_Zone( DC ) )
+            {
+                DrawStruct = m_Pcb->m_CurrentZoneContour;
+                GetScreen()->SetCurItem( DrawStruct );
+            }
         }
         else if( DrawStruct
                 && (DrawStruct->Type() == TYPEZONE_CONTAINER)
                 && (DrawStruct->m_Flags & IS_NEW) )
         {
-			Begin_Zone( DC );
-			DrawStruct = m_Pcb->m_CurrentZoneContour;
+            Begin_Zone( DC );
+            DrawStruct = m_Pcb->m_CurrentZoneContour;
             GetScreen()->SetCurItem( DrawStruct );
         }
         else
@@ -261,7 +261,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
             DrawPanel->MouseToCursorSchema();
-            DrawStruct = Load_Module_From_Library( wxEmptyString, DC );             
+            DrawStruct = Load_Module_From_Library( wxEmptyString, DC );
             SetCurItem( DrawStruct );
             if( DrawStruct )
                 StartMove_Module( (MODULE*) DrawStruct, DC );
@@ -276,7 +276,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         break;
 
     case ID_PCB_COTATION_BUTT:
-		if( ((PCB_SCREEN*)GetScreen())->m_Active_Layer <= LAST_COPPER_LAYER )
+        if( ((PCB_SCREEN*)GetScreen())->m_Active_Layer <= LAST_COPPER_LAYER )
         {
             DisplayError( this, _( "Cotation not authorized on Copper layers" ) );
             break;
@@ -291,7 +291,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 && (DrawStruct->Type() == TYPECOTATION)
                 && (DrawStruct->m_Flags & IS_NEW) )
         {
-            DrawStruct = Begin_Cotation( (COTATION*) DrawStruct, DC ); 
+            DrawStruct = Begin_Cotation( (COTATION*) DrawStruct, DC );
             SetCurItem( DrawStruct );
             DrawPanel->m_AutoPAN_Request = TRUE;
         }
@@ -331,7 +331,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 /********************************************************************************/
 
-/* handle the double click on the mouse left button 
+/* handle the double click on the mouse left button
  */
 {
     BOARD_ITEM*     DrawStruct = GetCurItem();
@@ -416,10 +416,10 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 
     case ID_PCB_ZONES_BUTT:
         if ( End_Zone( DC ) )
-		{
-			DrawPanel->m_AutoPAN_Request = FALSE;
-			SetCurItem( NULL );
-		}
+        {
+            DrawPanel->m_AutoPAN_Request = FALSE;
+            SetCurItem( NULL );
+        }
         break;
 
     case ID_LINE_COMMENT_BUTT:
