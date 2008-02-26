@@ -111,6 +111,34 @@ TRACK* Locate_Via( BOARD* Pcb, const wxPoint& pos, int layer )
 }
 
 
+/*******************************************************************/
+TRACK* Locate_Via_Area( BOARD* Pcb, const wxPoint& pos, int layer )
+/*******************************************************************/
+
+/*
+ * Like Locate_Via, but finds any via covering the cursor position
+ */
+{
+    TRACK* Track;
+
+    for( Track = Pcb->m_Track; Track != NULL; Track = Track->Next() )
+    {
+        if( Track->Type() != TYPEVIA )
+            continue;
+        if(!Track->HitTest(pos))
+            continue;
+        if( Track->GetState( BUSY | DELETED ) )
+            continue;
+        if( layer < 0 )
+            return Track;
+        if( Track->IsOnLayer( layer ) )
+            return Track;
+    }
+
+    return NULL;
+}
+
+
 /********************************************************************/
 D_PAD* Locate_Pad_Connecte( BOARD* Pcb, TRACK* ptr_piste, int extr )
 /********************************************************************/

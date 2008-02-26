@@ -18,7 +18,7 @@
 static void     Exit_Editrack( WinEDA_DrawPanel* panel, wxDC* DC );
 void            ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel,
                                               wxDC* DC, bool erase );
-static void     ComputeBreakPoint( TRACK* track, int n );
+static void     ComputeBreakPoint( TRACK* track, int n, wxPoint end );
 static TRACK*   DeleteNullTrackSegments( BOARD* pcb, TRACK* track, int* segmcount );
 static void     EnsureEndTrackOnPad( D_PAD* Pad );
 
@@ -493,6 +493,120 @@ void WinEDA_PcbFrame::End_Route( TRACK* track, wxDC* DC )
     SetCurItem( NULL );
 }
 
+/*
+ * PushTrack detecs if the mouse is pointing into a conflicting track.
+ * In this case, it tries to push the new track out of the conflicting track's
+ * clearance zone. This gives us a cheap mechanism for drawing tracks that
+ * tightly follow others, independent of grid settings.
+ *
+ * KNOWN BUGS:
+ * - we do the same sort of search and calculation up to three times:
+ *   1) we search for magnetic hits (in controle.cpp)
+ *   2) we check if there's a DRC violation in the making (also controle.cpp)
+ *   3) we try to fix the DRC violation (here)
+ * - if we have a magnetic hit and a DRC violation at the same time, we choose
+ *   the magnetic hit instead of solving the violation
+ * - should locate conflicting tracks also when we're crossing over them
+ * - we obviously shouldn't access functions through "extern" or have #includes
+ *   in the middle of the file
+ */
+
+#include "trigo.h"
+
+extern bool Project(wxPoint &res, wxPoint on_grid, const TRACK *track);
+
+
+TRACK *LocateIntrusion(TRACK *start, int net, int width)
+{
+    int layer = ((PCB_SCREEN *) ActiveScreen)->m_Active_Layer;
+    int layer_mask = g_TabOneLayerMask[layer];
+    wxPoint ref = ActiveScreen->RefPos(1);
+    TRACK *track, *found = NULL;
+
+    for (track = start; track; track = track->Next()) {
+	int dist;
+	wxPoint pos, vec;
+	int64_t tmp;
+
+	/* Locate_Pistes */
+	if (track->GetState(BUSY | DELETED))
+	    continue;
+	if (!(g_TabOneLayerMask[track->GetLayer()] & layer_mask))
+	    continue;
+	if (track->GetNet() == net)
+	    continue;
+	if (track->Type() == TYPEVIA)
+	    continue;
+
+	/* TRACK::HitTest */
+	dist = width/2 + track->m_Width/2 + g_DesignSettings.m_TrackClearence;
+	pos = ref-track->m_Start;
+	vec = track->m_End-track->m_Start;
+	if (!DistanceTest(dist, vec.x, vec.y, pos.x, pos.y))
+	    continue;
+	found = track;
+
+	/* prefer intrusions from the side, not the end */
+	tmp = (int64_t) pos.x*vec.x + (int64_t) pos.y*vec.y;
+	if (tmp >= 0 && tmp <= (int64_t) vec.x*vec.x + (int64_t) vec.y*vec.y)
+	    break;
+    }
+    return found;
+}
+
+
+
+static void PushTrack(WinEDA_DrawPanel *panel)
+{
+    BOARD *pcb = ((WinEDA_BasePcbFrame *) (panel->m_Parent))->m_Pcb;
+    wxPoint cursor = ActiveScreen->m_Curseur;
+    wxPoint cv, vec, n;
+    TRACK *track = g_CurrentTrackSegment;
+    TRACK *other;
+    int64_t det;
+    int dist;
+    double f;
+
+    other = LocateIntrusion(pcb->m_Track, track->GetNet(), track->m_Width);
+
+    /* are we currently pointing into a conflicting trace ? */
+    if (!other)
+	return;
+    if (other->GetNet() == track->GetNet())
+	return;
+
+    cv = cursor-other->m_Start;
+    vec = other->m_End-other->m_Start;
+
+    det = (int64_t) cv.x*vec.y - (int64_t) cv.y*vec.x;
+
+    /* cursor is right at the center of the old track */
+    if (!det)
+	return;
+
+    dist = (track->m_Width+1)/2 + (other->m_Width+1)/2 +
+      g_DesignSettings.m_TrackClearence+2;
+	/*
+         * DRC wants >, so +1.
+         * We may have a quantization error of 1/sqrt(2), so +1 again.
+         */
+
+    /* Vector "n" is perpendicular to "other", pointing towards the cursor. */
+    if (det > 0) {
+	n.x = vec.y;
+	n.y = -vec.x;
+    }
+    else {
+	n.x = -vec.y;
+	n.y = vec.x;
+    }
+    f = dist/hypot(n.x, n.y);
+    n.x = (int) round(f*n.x);
+    n.y = (int) round(f*n.y);
+
+    Project(track->m_End, cursor, other);
+    track->m_End += n;
+}
 
 /****************************************************************************/
 void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
@@ -538,8 +652,13 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
 
     if( Track_45_Only )
     {
-        if( g_TwoSegmentTrackBuild )
-            ComputeBreakPoint( g_CurrentTrackSegment, g_TrackSegmentCount );
+        if( g_TwoSegmentTrackBuild ) {
+	    g_CurrentTrackSegment->m_End = ActiveScreen->m_Curseur;
+	    if (Drc_On)
+		PushTrack(panel);
+            ComputeBreakPoint( g_CurrentTrackSegment, g_TrackSegmentCount,
+	       g_CurrentTrackSegment->m_End);
+	}
         else
         {
             /* Calcul de l'extremite de la piste pour orientations permises:
@@ -625,7 +744,7 @@ void Calcule_Coord_Extremite_45( int ox, int oy, int* fx, int* fy )
 
 
 /********************************************************/
-void ComputeBreakPoint( TRACK* track, int SegmentCount )
+void ComputeBreakPoint( TRACK* track, int SegmentCount, wxPoint end )
 /********************************************************/
 
 /**
@@ -646,8 +765,8 @@ void ComputeBreakPoint( TRACK* track, int SegmentCount )
     SegmentCount--;
     if( track )
     {
-        iDx = ActiveScreen->m_Curseur.x - track->m_Start.x;
-        iDy = ActiveScreen->m_Curseur.y - track->m_Start.y;
+        iDx = end.x - track->m_Start.x;
+        iDy = end.y - track->m_Start.y;
 
         iDx = abs( iDx );
         iDy = abs( iDy );
@@ -680,10 +799,10 @@ void ComputeBreakPoint( TRACK* track, int SegmentCount )
         break;
 
     case 0:
-        if( (ActiveScreen->m_Curseur.x - track->m_Start.x) < 0 )
-            track->m_End.x = ActiveScreen->m_Curseur.x + iDy;
+        if( (end.x - track->m_Start.x) < 0 )
+            track->m_End.x = end.x + iDy;
         else
-            track->m_End.x = ActiveScreen->m_Curseur.x - iDy;
+            track->m_End.x = end.x - iDy;
         track->m_End.y = track->m_Start.y;
         break;
 
@@ -691,19 +810,19 @@ void ComputeBreakPoint( TRACK* track, int SegmentCount )
         iDx = MIN( iDx, iDy );
         iDy = iDx;
         /* recalcul des signes de deltax et deltay */
-        if( (ActiveScreen->m_Curseur.x - track->m_Start.x) < 0 )
+        if( (end.x - track->m_Start.x) < 0 )
             iDx = -iDx;
-        if( (ActiveScreen->m_Curseur.y - track->m_Start.y) < 0 )
+        if( (end.y - track->m_Start.y) < 0 )
             iDy = -iDy;
         track->m_End.x = track->m_Start.x + iDx;
         track->m_End.y = track->m_Start.y + iDy;
         break;
 
     case 90:
-        if( (ActiveScreen->m_Curseur.y - track->m_Start.y) < 0 )
-            track->m_End.y = ActiveScreen->m_Curseur.y + iDx;
+        if( (end.y - track->m_Start.y) < 0 )
+            track->m_End.y = end.y + iDx;
         else
-            track->m_End.y = ActiveScreen->m_Curseur.y - iDx;
+            track->m_End.y = end.y - iDx;
         track->m_End.x = track->m_Start.x;
         break;
     }
@@ -711,10 +830,10 @@ void ComputeBreakPoint( TRACK* track, int SegmentCount )
     if( track )
     {
         if( track->IsNull() )
-            track->m_End = ActiveScreen->m_Curseur;
+            track->m_End = end;
         NewTrack->m_Start = track->m_End;
     }
-    NewTrack->m_End = ActiveScreen->m_Curseur;
+    NewTrack->m_End = end;
 }
 
 

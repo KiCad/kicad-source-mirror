@@ -890,10 +890,8 @@ bool TRACK::HitTest( const wxPoint& ref_pos )
 
     if( Type() == TYPEVIA )   /* VIA rencontree */
     {
-        if( (abs( spot_cX ) <= l_piste ) && (abs( spot_cY ) <=l_piste) )
-            return true;
-        else
-            return false;
+        return (int64_t) spot_cX*spot_cX + (int64_t) spot_cY*spot_cY <=
+	  (int64_t) l_piste*l_piste;
     }
     else
     {

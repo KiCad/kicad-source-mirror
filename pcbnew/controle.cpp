@@ -219,6 +219,152 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 }
 
 
+/*
+ * "Join" finds the point where b0+x*(b1-b0) intersects with a0+y*(a1-a0).
+ * If that point would be outside of a0-a1, the respective endpoint is used.
+ * Join returns the point in "res" and "true" if a suitable point was found,
+ * "false" if both lines are parallel.
+ */
+static bool Join( wxPoint& res, wxPoint a0, wxPoint a1, wxPoint b0, wxPoint b1 )
+{
+    int64_t denom;
+    double  t;
+
+    a1 -= a0;
+    b1 -= b0;
+    b0 -= a0;
+
+    denom = (int64_t) b1.y*a1.x - (int64_t) b1.x*a1.y;
+    if (!denom)
+        return false; // parallel
+
+    t = ((int64_t) b1.y*b0.x - (int64_t) b1.x*b0.y)/(double) denom;
+
+    t = min( max( t, 0.0 ), 1.0 );
+
+    res.x = (int) round(a0.x+t*a1.x);
+    res.y = (int) round(a0.y+t*a1.y);
+
+    return true;
+}
+
+
+/*
+ * "Project" finds the projection of a grid point on a track. This is the point
+ * from where we want to draw new orthogonal tracks when starting on a track.
+ */
+bool Project( wxPoint& res, wxPoint on_grid, const TRACK* track )
+{
+    wxPoint vec;
+    double  t;
+
+    if( track->m_Start == track->m_End )
+        return false;
+
+    vec = track->m_End-track->m_Start;
+
+    t = (int64_t) (on_grid.x-track->m_Start.x)*vec.x +
+        (int64_t) (on_grid.y-track->m_Start.y)*vec.y;
+
+    t /= (int64_t) vec.x*vec.x + (int64_t) vec.y*vec.y;
+    t = min( max( t, 0.0 ), 1.0 );
+
+    res.x = (int) round( track->m_Start.x + t*vec.x );
+    res.y = (int) round( track->m_Start.y + t*vec.y );
+
+    return true;
+}
+
+
+static bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame,
+                       int m_ID_current_state, wxSize grid, wxPoint on_grid, wxPoint& curpos )
+{
+    const D_PAD* pad;
+    const TRACK* curr = NULL;
+    const TRACK* via, * track;
+    int          layer, layer_mask;
+
+    bool         sometimes = g_MagneticPadOption != capture_always && Drc_On;
+
+    curr = g_CurrentTrackSegment;
+    if( frame->GetCurItem() != curr )
+        curr = NULL;
+
+    switch( g_MagneticPadOption )
+    {
+    case capture_cursor_in_track_tool:
+        if( m_ID_current_state != ID_TRACK_BUTT )
+            return false;
+        break;
+
+    case capture_always:
+        break;
+
+    case no_effect:
+    default:
+        return false;
+    }
+
+    pad = Locate_Any_Pad( m_Pcb, CURSEUR_OFF_GRILLE, TRUE );
+    if( pad )
+    {
+        if( curr && curr->GetNet() != pad->GetNet() && sometimes )
+            return false;
+        curpos = pad->m_Pos;
+        return true;
+    }
+
+    layer = ( (PCB_SCREEN*) ActiveScreen )->m_Active_Layer;
+
+    via = Locate_Via_Area( m_Pcb, curpos, layer );
+    if( via )
+    {
+        if( curr && curr->GetNet() != via->GetNet() && sometimes )
+            return false;
+        curpos = via->m_Start;
+        return true;
+    }
+
+    layer_mask = g_TabOneLayerMask[layer];
+
+    if( !curr )
+    {
+        track = Locate_Pistes( m_Pcb->m_Track, layer_mask, CURSEUR_OFF_GRILLE );
+        if( !track || track->Type() != TYPETRACK )
+            return false;
+
+        return Project( curpos, on_grid, track );
+    }
+
+    /*
+     * In two segment mode, ignore the final segment if it's inside a grid
+     * square.
+     */
+    if( g_TwoSegmentTrackBuild && curr->Pback
+        && curr->m_Start.x - grid.x < curr->m_End.x
+        && curr->m_Start.x + grid.x > curr->m_End.x
+        && curr->m_Start.y - grid.y < curr->m_End.y
+        && curr->m_Start.y + grid.y > curr->m_End.y )
+        curr = curr->Back();
+
+    track = Locate_Pistes( m_Pcb->m_Track, layer_mask, CURSEUR_OFF_GRILLE );
+    for( ; track; track = track->Next() )
+    {
+        if( track->Type() != TYPETRACK )
+            continue;
+
+        if( curr->GetNet() != track->GetNet() && sometimes )
+            continue;
+
+        if( Join( curpos, track->m_Start, track->m_End,
+               curr->m_Start, curr->m_End ) )
+            return true;
+    }
+
+    return false;
+}
+
+
 /****************************************************************/
 void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 /*****************************************************************/
@@ -232,7 +378,7 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
     // Save the board after the time out :
     int CurrentTime = time( NULL );
-    
+
     if( !GetScreen()->IsModify() || GetScreen()->IsSave() )
     {
         /* If no change, reset the time out */
@@ -262,7 +408,7 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
     delta.x = (int) round( (double) GetScreen()->GetGrid().x / zoom );
     delta.y = (int) round( (double) GetScreen()->GetGrid().y / zoom );
-    
+
     if( delta.x <= 0 )
         delta.x = 1;
     if( delta.y <= 0 )
@@ -341,7 +487,6 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
      * But if the tool DELETE is active the cursor is left off grid
      * this is better to reach items to delete off grid
      */
-    D_PAD* pad;
     bool   keep_on_grid = TRUE;
     if( m_ID_current_state == ID_PCB_DELETE_ITEM_BUTT )
         keep_on_grid = FALSE;
@@ -354,34 +499,27 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     if( DrawStruct && DrawStruct->m_Flags )
         keep_on_grid = TRUE;
 
-    switch( g_MagneticPadOption )
-    {
-    case capture_cursor_in_track_tool:
-    case capture_always:
-        pad = Locate_Any_Pad( m_Pcb, CURSEUR_OFF_GRILLE, TRUE );
-        if( (m_ID_current_state != ID_TRACK_BUTT )
-           && (g_MagneticPadOption == capture_cursor_in_track_tool) )
-            pad = NULL;
-            
-        if( keep_on_grid )
-        {
-            if( pad )  // Put cursor on the pad
-                GetScreen()->m_Curseur = curpos = pad->m_Pos;
-            else
-                // Put cursor on grid
-                PutOnGrid( &GetScreen()->m_Curseur );
-        }
-        break;
+    if (keep_on_grid) {
+    wxPoint on_grid = curpos;
 
-    case no_effect:
-    default:
+    PutOnGrid(&on_grid);
+    if (Magnetize(m_Pcb, (WinEDA_PcbFrame *) this, m_ID_current_state,
+      GetScreen()->GetGrid(), on_grid, curpos))
+        GetScreen()->m_Curseur = curpos;
+    else {
+        extern TRACK *LocateIntrusion(TRACK *start, int net, int width);
 
-        // If we are not in delete function, put cursor on grid
-        if( keep_on_grid )
-        {
-            PutOnGrid( &GetScreen()->m_Curseur );
-        }
-        break;
+        /*
+         * If there's an intrusion and DRC is active, we pass the cursor
+         * "as is", and let ShowNewTrackWhenMovingCursor figure our what to
+         * do.
+         */
+        if (!Drc_On || !g_CurrentTrackSegment ||
+          g_CurrentTrackSegment != this->GetCurItem() ||
+          !LocateIntrusion(m_Pcb->m_Track, g_CurrentTrackSegment->GetNet(),
+          g_CurrentTrackSegment->m_Width))
+            GetScreen()->m_Curseur = on_grid;
+    }
     }
 
     if( oldpos != GetScreen()->m_Curseur )
