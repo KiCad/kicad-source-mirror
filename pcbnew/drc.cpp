@@ -685,7 +685,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart )
 
                 if( !checkMarginToCircle( x0, y0, w_dist, dx ) )
                 {
-                    m_currentMarker = fillMarker( aRefSeg, track,
+                    m_currentMarker = fillMarker( track, aRefSeg,
                                         DRCE_VIA_NEAR_TRACK, m_currentMarker );
                     return false;
                 }
@@ -693,10 +693,10 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart )
             continue;
         }
 
-        /* We compute x0,y0, xf,yf = starting and ending point coordinates for the segment to test
-         * in the new axis : the new X axis is the reference segment
-         * We must translate and rotate the segment to test
-        */
+        /* We compute x0,y0, xf,yf = starting and ending point coordinates for
+         * the segment to test in the new axis : the new X axis is the
+         * reference segment.  We must translate and rotate the segment to test
+         */
         x0 = track->m_Start.x - org_X;
         y0 = track->m_Start.y - org_Y;
 
