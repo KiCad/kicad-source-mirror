@@ -300,7 +300,7 @@ void InstallNetlistFrame(WinEDA_SchematicFrame *parent, wxPoint &pos);
 /***************/
 void ReAnnotatePowerSymbolsOnly();
 
-void InstallAnnotateFrame(WinEDA_SchematicFrame * parent, wxPoint &pos);
+void InstallAnnotateFrame(WinEDA_SchematicFrame * parent);
 int CheckAnnotate(WinEDA_SchematicFrame * frame, bool OneSheetOnly);
 				/* Retourne le nombre de composants non annotes ou erron�s
 					Si OneSheetOnly : recherche sur le schema courant

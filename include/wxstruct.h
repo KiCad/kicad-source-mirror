@@ -438,6 +438,7 @@ public:
 
 private:
     void                    Process_Move_Item( EDA_BaseStruct* DrawStruct, wxDC* DC );
+    void OnAnnotate ( wxCommandEvent& event );
 
     // Bus Entry
     DrawBusEntryStruct*     CreateBusEntry( wxDC* DC, int entry_type );

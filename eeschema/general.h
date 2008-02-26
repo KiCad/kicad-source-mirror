@@ -2,6 +2,9 @@
 	/*	GENERAL.H :  declarations communes */
 	/***************************************/
 
+#ifndef _GENERAL_H_
+#define _GENERAL_H_
+
 #ifndef eda_global
 #define eda_global extern
 #endif
@@ -267,3 +270,5 @@ eda_global int g_PlotPSMinimunLineWidth;	/* Minimum line (in EESCHEMA units) wid
 /* Config keys */
 #define MINI_DRAW_LINE_WIDTH_KEY wxT("MinimunDrawLineWidth")
 #define MINI_PLOTPS_LINE_WIDTH_KEY wxT("MinimunPlotPSLineWidth")
+
+#endif   // _GENERAL_H_

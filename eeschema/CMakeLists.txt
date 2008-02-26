@@ -7,7 +7,7 @@ INCLUDE_DIRECTORIES(
 SET(EESCHEMA_SRCS
     affiche.cpp
     annotate.cpp
-#   annotate_dialog.cpp
+    annotate_dialog.cpp
     block.cpp
     block_libedit.cpp
     busentry.cpp
