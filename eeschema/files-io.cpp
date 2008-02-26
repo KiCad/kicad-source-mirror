@@ -63,7 +63,7 @@ void WinEDA_SchematicFrame::Save_File( wxCommandEvent& event )
         mask = wxT( "*" ) + g_SchExtBuffer;
         FullFileName = EDA_FileSelector( _( "Schematic files:" ),
                                          wxEmptyString,         //default path
-                                         sheet->m_s->m_FileName,// default filename 
+                                         sheet->m_AssociatedScreen->m_FileName,// default filename 
                                          g_SchExtBuffer,        // extension par defaut
                                          mask,                  // Masque d'affichage
                                          this,
@@ -111,8 +111,8 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNe
 	{
 		if( !IsOK( this, _( "Clear Schematic Hierarchy (modified!)?" ) ) )
 			return FALSE;
-		if( g_RootSheet->m_s->m_FileName != g_DefaultSchematicFileName )
-			SetLastProject( g_RootSheet->m_s->m_FileName );
+		if( g_RootSheet->m_AssociatedScreen->m_FileName != g_DefaultSchematicFileName )
+			SetLastProject( g_RootSheet->m_AssociatedScreen->m_FileName );
 	}
 
 	FullFileName = FileName;
@@ -146,7 +146,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNe
 	memset( &g_EESchemaVar, 0, sizeof(g_EESchemaVar) );
 
 	GetScreen()->ClrModify();
-	//m_CurrentSheet->m_s->Pnext = NULL; should be by default
+	//m_CurrentSheet->m_AssociatedScreen->Pnext = NULL; should be by default
 
 	if( IsNew )
 	{
@@ -190,7 +190,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNe
     // Loading the project library cache
 	wxString       FullLibName;
 	wxString       shortfilename;
-	wxSplitPath( g_RootSheet->m_s->m_FileName, NULL, &shortfilename, NULL );
+	wxSplitPath( g_RootSheet->m_AssociatedScreen->m_FileName, NULL, &shortfilename, NULL );
 	FullLibName << wxT( "." ) << STRING_DIR_SEP << shortfilename << wxT( ".cache" ) <<
 			g_LibExtBuffer;
 	if( wxFileExists( FullLibName ) )
@@ -211,16 +211,16 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNe
 		LibCacheExist = TRUE;
 	}
 
-	if( !wxFileExists( g_RootSheet->m_s->m_FileName ) && !LibCacheExist )   // Nouveau projet prpbablement
+	if( !wxFileExists( g_RootSheet->m_AssociatedScreen->m_FileName ) && !LibCacheExist )   // Nouveau projet prpbablement
 	{
 		msg.Printf( _( "File %s not found (new project ?)" ),
-					g_RootSheet->m_s->m_FileName.GetData() );
+					g_RootSheet->m_AssociatedScreen->m_FileName.GetData() );
 		DisplayInfo( this, msg, 20 );
 		return -1;
 	}
 
 	//load the project.
-	SAFE_DELETE(g_RootSheet->m_s); 
+	SAFE_DELETE(g_RootSheet->m_AssociatedScreen); 
 	if(!g_RootSheet->Load(this))
 		return 0;
 

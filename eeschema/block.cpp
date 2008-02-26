@@ -832,12 +832,12 @@ static EDA_BaseStruct* CopyStruct( WinEDA_DrawPanel* panel, wxDC* DC, BASE_SCREE
             case DRAW_SHEET_STRUCT_TYPE:
             {
 				//DuplicateStruct calls GenCopy, which should handle 
-				//m_s and m_sRefCount properly. 
+				//m_AssociatedScreen and m_sRefCount properly. 
                 DrawSheetStruct* sheet = (DrawSheetStruct*) Struct;
                 sheet->m_TimeStamp = GetTimeStamp();
-				//sheet->m_s->m_UndoList  = NULL;
-				//sheet->m_s->m_RedoList  = NULL;
-				//keep m_s pointer & associated.
+				//sheet->m_AssociatedScreen->m_UndoList  = NULL;
+				//sheet->m_AssociatedScreen->m_RedoList  = NULL;
+				//keep m_AssociatedScreen pointer & associated.
                 //sheet->m_Son = NULL; m_son is involved in undo and redo.
                 break;
             }

@@ -539,7 +539,7 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
     g_NetFormat = CurrPage->m_IdNetType;
 
     /* Calculate the netlist filename */
-    FullFileName = g_RootSheet->m_s->m_FileName;
+    FullFileName = g_RootSheet->m_AssociatedScreen->m_FileName;
 
     switch( g_NetFormat )
     {
@@ -649,7 +649,7 @@ void WinEDA_NetlistFrame::RunSimulator( wxCommandEvent& event )
     CommandLine = g_SimulatorCommandLine.AfterFirst( ' ' );
 
     /* Calculate the netlist filename */
-    NetlistFullFileName = g_RootSheet->m_s->m_FileName;
+    NetlistFullFileName = g_RootSheet->m_AssociatedScreen->m_FileName;
     ChangeFileNameExt( NetlistFullFileName, wxT( ".cir" ) );
     AddDelimiterString( NetlistFullFileName );
     CommandLine += wxT( " " ) + NetlistFullFileName;

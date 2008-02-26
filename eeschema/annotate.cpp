@@ -34,9 +34,6 @@ void ReAnnotatePowerSymbolsOnly( void )
     /* Build the screen list (screen, not sheet) */
     EDA_SheetList SheetList( NULL );
 
-    /* Update the screen number, sheet count and date */
-
-    //ScreenList.UpdateScreenNumberAndDate();
 
     DrawSheetList* sheet;
     int            CmpNumber = 1;
@@ -161,7 +158,7 @@ void DeleteAnnotation( WinEDA_SchematicFrame* parent, bool annotateSchematic )
 
     sheet->DeleteAnnotation( annotateSchematic );
 
-    g_RootSheet->m_s->SetModify();
+    g_RootSheet->m_AssociatedScreen->SetModify();
     parent->DrawPanel->Refresh( true );
 }
 
@@ -192,10 +189,11 @@ void AnnotateComponents( WinEDA_SchematicFrame* parent,
     /* Build the sheet list */
     EDA_SheetList SheetList( g_RootSheet );
 
-    /* Update the sheet number */
-    ii = 0;
+    /* Update the screen number, sheet count and date */
+    SheetList.UpdateSheetNumberAndDate();
 
     /* First pass: Component counting */
+    ii = 0;
     sheet = parent->GetSheet();
     if( annotateSchematic )
     {
@@ -595,7 +593,7 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
     /* build the screen list */
     EDA_SheetList  SheetList( NULL );
 
-    g_RootSheet->m_s->SetModify();
+    g_RootSheet->m_AssociatedScreen->SetModify();
     ii = 0;
 
     /* first pass : count composents */

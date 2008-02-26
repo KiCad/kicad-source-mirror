@@ -63,9 +63,9 @@ static std::vector<HOLE_INFO>  s_HoleListBuffer;
 #include "dialog_gendrill.cpp"   //  Dialog box for drill file generation
 
 
-/**********************************************/
+/************************************************/
 void WinEDA_DrillFrame::InitDisplayParams( void )
-/**********************************************/
+/************************************************/
 
 /* some param values initialisation before display dialog window
  */
@@ -121,8 +121,6 @@ void WinEDA_DrillFrame::InitDisplayParams( void )
     m_MicroViasDrillSizer->Enable( m_MicroViasCount );
     m_MicroViaDrillValue->Enable( m_MicroViasCount );
 
-    /* Display statistics */
-
     // Pads holes cound:
     m_PadsHoleCount = 0;
     for( MODULE* module = m_Parent->m_Pcb->m_Modules; module != NULL; module = module->Next() )
@@ -133,10 +131,10 @@ void WinEDA_DrillFrame::InitDisplayParams( void )
             {
                 if( pad->m_Drill.x != 0 )
                     m_PadsHoleCount++;
-                else
+            }
+            else
                 if( MIN( pad->m_Drill.x, pad->m_Drill.y ) != 0 )
                     m_PadsHoleCount++;
-            }
         }
     }
 

@@ -65,7 +65,9 @@ OBJECTS = eeschema.o\
 		savelib.o symbtext.o \
 		symbdraw.o \
 		hierarch.o files-io.o \
-		annotate.o plothpgl.o \
+		annotate.o\
+		annotate_dialog.o\
+		plothpgl.o \
 		plot.o libalias.o \
 		plotps.o netform.o \
 		delsheet.o \
@@ -110,7 +112,9 @@ find.o:find.cpp dialog_find.cpp dialog_find.h $(DEPEND)
 
 eeconfig.o: eeconfig.cpp eeconfig.h $(DEPEND)
 
-annotate.o: annotate.cpp annotate_dialog.cpp annotate_dialog.h $(DEPEND) netlist.h
+annotate.o: annotate.cpp annotate_dialog.h $(DEPEND) netlist.h
+
+annotate_dialog.o: annotate_dialog.cpp annotate_dialog.h $(DEPEND) netlist.h
 
 netlist.o: netlist.cpp $(DEPEND) netlist.h
 

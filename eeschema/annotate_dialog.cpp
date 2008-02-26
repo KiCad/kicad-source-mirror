@@ -258,7 +258,7 @@ void WinEDA_AnnotateFrame::OnClear( wxCommandEvent& event )
 
     message += _( "\n\nThis operation will clear the existing annotation " \
                   "and cannot be undone." );
-    response = wxMessageBox( message, _( "" ),
+    response = wxMessageBox( message, wxT( "" ),
                              wxICON_EXCLAMATION | wxOK | wxCANCEL );
     if (response == wxCANCEL)
         return;
@@ -283,7 +283,7 @@ void WinEDA_AnnotateFrame::OnApply( wxCommandEvent& event )
 
     message += _( "\n\nThis operation will change the current annotation and " \
                   "cannot be undone." );
-    response = wxMessageBox( message, _( "" ),
+    response = wxMessageBox( message, wxT( "" ),
                              wxICON_EXCLAMATION | wxOK | wxCANCEL );
     if (response == wxCANCEL)
         return;

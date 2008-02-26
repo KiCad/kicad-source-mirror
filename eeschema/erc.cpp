@@ -400,7 +400,7 @@ void WinEDA_ErcFrame::TestErc( wxCommandEvent& event )
     if( WriteFichierERC == TRUE )
     {
         wxString ErcFullFileName;
-        ErcFullFileName = g_RootSheet->m_s->m_FileName; 
+        ErcFullFileName = g_RootSheet->m_AssociatedScreen->m_FileName; 
         ChangeFileNameExt( ErcFullFileName, wxT( ".erc" ) );
         ErcFullFileName = EDA_FileSelector( _( "ERC file:" ),
                                             wxEmptyString,      /* Chemin par defaut */

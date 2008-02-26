@@ -544,7 +544,7 @@ wxString mask, filename;
 	else
 		s_ExportSeparatorSymbol = s_ExportSeparator[0];
 
-	m_ListFileName = g_RootSheet->m_s->m_FileName; 
+	m_ListFileName = g_RootSheet->m_AssociatedScreen->m_FileName; 
 	ChangeFileNameExt(m_ListFileName, EXT_LIST);
 	//need to get rid of the path. 
 	m_ListFileName = m_ListFileName.AfterLast('/'); 

@@ -5,6 +5,23 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Feb-26 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema
+	changed in class DrawSheetStruct m_s member name to m_AssociatedScreen
+	some others minor problems solved.
+	some files "uncrustified"
+	Major problem in undo/redo when a sheet is deleted not yet solved
+	Only for a complex hierarchy, could lost data.
+	When a sheet is deleted by block delete. it is put in undo list.
+	It is really deleted after 10 changes (when the undo list is full).
+	At this time, the associated data is also deleted.
+	If an other (not deleted) sheet shares the same data, this data is lost.
+	Need work to solve this problem and keep the undo/redo feature.
+
+
+
+
 2008-Feb-25 UPDATE   Wayne Stambaugh <stambaughw{at}verizon{dot}net>
 ================================================================================
 +eeschema

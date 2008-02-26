@@ -20,7 +20,7 @@ void SetStructFather( EDA_BaseStruct* Struct, BASE_SCREEN* Screen )
     case DRAW_TEXT_STRUCT_TYPE:
     case DRAW_LABEL_STRUCT_TYPE:
     case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-	case DRAW_HIER_LABEL_STRUCT_TYPE:
+    case DRAW_HIER_LABEL_STRUCT_TYPE:
     case DRAW_LIB_ITEM_STRUCT_TYPE:
     case DRAW_SEGMENT_STRUCT_TYPE:
     case DRAW_BUSENTRY_STRUCT_TYPE:
@@ -51,9 +51,9 @@ void EDA_BaseStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
 {
     if( m_Flags & IS_NEW )
     {
-		SCH_SCREEN* screen = (SCH_SCREEN*)frame->GetScreen();
-		if(!screen->CheckIfOnDrawList(this)) //don't want a loop! 
-			screen->AddToDrawList(this); 
+        SCH_SCREEN* screen = (SCH_SCREEN*) frame->GetScreen();
+        if( !screen->CheckIfOnDrawList( this ) )  //don't want a loop!
+            screen->AddToDrawList( this );
         g_ItemToRepeat = this;
         if( frame->m_Ident == SCHEMATIC_FRAME )
             ( (WinEDA_SchematicFrame*) frame )->SaveCopyInUndoList( this, IS_NEW );
@@ -80,7 +80,7 @@ void EDA_BaseStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
 static int table_zoom[] = { 1, 2, 4, 8, 16, 32, 64, 128, 0 }; /* Valeurs standards du zoom */
 
 /* Constructeur de SCREEN */
-SCH_SCREEN::SCH_SCREEN( int screentype, KICAD_T aType ) : 
+SCH_SCREEN::SCH_SCREEN( int screentype, KICAD_T aType ) :
     BASE_SCREEN( screentype, aType )
 {
     EEDrawList = NULL;                  /* Schematic items list */
@@ -89,9 +89,9 @@ SCH_SCREEN::SCH_SCREEN( int screentype, KICAD_T aType ) :
     SetZoomList( table_zoom );
     SetGridList( g_GridList );
     m_UndoRedoCountMax = 10;
-	m_RefCount = 0; 
-	m_ScreenNumber = 1; 
-	m_NumberOfScreen = 1; 
+    m_RefCount       = 0;
+    m_ScreenNumber   = 1;
+    m_NumberOfScreen = 1;
 }
 
 
@@ -117,9 +117,10 @@ void SCH_SCREEN::FreeDrawList()
     {
         DrawStruct = EEDrawList;
         EEDrawList = EEDrawList->Pnext;
-        SAFE_DELETE(DrawStruct);
+        SAFE_DELETE( DrawStruct );
     }
-	EEDrawList = NULL;
+
+    EEDrawList = NULL;
 }
 
 
@@ -147,25 +148,33 @@ void SCH_SCREEN::RemoveFromDrawList( EDA_BaseStruct* DrawStruct )
         }
     }
 }
+
+
 /**************************************************************/
 bool SCH_SCREEN::CheckIfOnDrawList( EDA_BaseStruct* st )
 /**************************************************************/
 {
-	EDA_BaseStruct* DrawList = EEDrawList; 
-	while( DrawList ){
-		if( DrawList == st)
-			return true; 
-		DrawList = DrawList->Pnext; 
-	}
-	return false; 
+    EDA_BaseStruct* DrawList = EEDrawList;
+
+    while( DrawList )
+    {
+        if( DrawList == st )
+            return true;
+        DrawList = DrawList->Pnext;
+    }
+
+    return false;
 }
+
+
 /**************************************************************/
 void SCH_SCREEN::AddToDrawList( EDA_BaseStruct* st )
 /**************************************************************/
 { //simple function to add to the head of the drawlist.
-	st->Pnext = EEDrawList; 
-	EEDrawList = st; 
+    st->Pnext  = EEDrawList;
+    EEDrawList = st;
 }
+
 
 /*********************************************************************/
 /* Class EDA_ScreenList to handle the list of screens in a hierarchy */
@@ -176,18 +185,19 @@ SCH_SCREEN* EDA_ScreenList::GetFirst()
 /*****************************************/
 {
     m_Index = 0;
-	if(m_List.GetCount() > 0)
-		return m_List[0]; 
-	return NULL;
+    if( m_List.GetCount() > 0 )
+        return m_List[0];
+    return NULL;
 }
+
 
 /*****************************************/
 SCH_SCREEN* EDA_ScreenList::GetNext()
 /*****************************************/
 {
-	if( m_Index < m_List.GetCount() )
+    if( m_Index < m_List.GetCount() )
         m_Index++;
-	return GetScreen(m_Index); 
+    return GetScreen( m_Index );
 }
 
 
@@ -198,58 +208,59 @@ SCH_SCREEN* EDA_ScreenList::GetScreen( unsigned int index )
 /* return the m_List[index] item
  */
 {
-	if( index < m_List.GetCount() )
-		return m_List[index];
-	return NULL;
+    if( index < m_List.GetCount() )
+        return m_List[index];
+    return NULL;
 }
+
+
 /************************************************/
 void EDA_ScreenList::AddScreenToList( SCH_SCREEN* testscreen )
 /************************************************/
 {
-	if(testscreen == NULL) return; 
-	for(unsigned int i=0; i< m_List.GetCount(); i++){
-		if(m_List[i] == testscreen)
-			return; 
-	}
-	m_List.Add(testscreen); 
+    if( testscreen == NULL )
+        return;
+    for( unsigned int i = 0; i< m_List.GetCount(); i++ )
+    {
+        if( m_List[i] == testscreen )
+            return;
+    }
+
+    m_List.Add( testscreen );
 #ifdef DEBUG
-	printf("EDA_ScreenList::AddScreenToList adding %s\n", (const char*)testscreen->m_FileName.mb_str()); 
+    printf( "EDA_ScreenList::AddScreenToList adding %s\n",
+        (const char*) testscreen->m_FileName.mb_str(
+            ) );
 #endif
 }
-/************************************************/
-void EDA_ScreenList::UpdateScreenNumberAndDate( )
-/************************************************/
-{
-	SCH_SCREEN* screen; 
-	
-	wxString date = GenDate(); 
-	for(int i=0; i<(int)m_List.GetCount(); i++){
-		screen = m_List[i]; 
-		screen->m_ScreenNumber = i; 
-		screen->m_NumberOfScreen = m_List.GetCount();
-		screen->m_Date = date; 
-	}
-}
+
+
 /************************************************************************/
-void EDA_ScreenList::BuildScreenList(EDA_BaseStruct* s)
+void EDA_ScreenList::BuildScreenList( EDA_BaseStruct* s )
 /************************************************************************/
 {
-	if(s && s->Type() == DRAW_SHEET_STRUCT_TYPE){
-		DrawSheetStruct* ds = (DrawSheetStruct*)s; 
-		s = ds->m_s; 
-	}
-	if(s && s->Type() == SCREEN_STRUCT_TYPE){
-		SCH_SCREEN* screen = (SCH_SCREEN*)s;
-		AddScreenToList(screen); 
-		EDA_BaseStruct* strct = screen->EEDrawList; 
-		while(strct){
-			if(strct->Type() == DRAW_SHEET_STRUCT_TYPE){
-				BuildScreenList(strct); 
-			}
-			strct = strct->Pnext; 
-		}
-	}
+    if( s && s->Type() == DRAW_SHEET_STRUCT_TYPE )
+    {
+        DrawSheetStruct* ds = (DrawSheetStruct*) s;
+        s = ds->m_AssociatedScreen;
+    }
+    if( s && s->Type() == SCREEN_STRUCT_TYPE )
+    {
+        SCH_SCREEN*     screen = (SCH_SCREEN*) s;
+        AddScreenToList( screen );
+        EDA_BaseStruct* strct = screen->EEDrawList;
+        while( strct )
+        {
+            if( strct->Type() == DRAW_SHEET_STRUCT_TYPE )
+            {
+                BuildScreenList( strct );
+            }
+            strct = strct->Pnext;
+        }
+    }
 }
+
+
 /*********************************************************************/
 /* Class EDA_SheetList to handle the list of Sheets in a hierarchy */
 /*********************************************************************/
@@ -258,58 +269,109 @@ void EDA_ScreenList::BuildScreenList(EDA_BaseStruct* s)
 DrawSheetList* EDA_SheetList::GetFirst()
 /*****************************************/
 {
-	m_index = 0;
-	if(m_count > 0)
-		return &( m_List[0] ); 
-	return NULL;
+    m_index = 0;
+    if( m_count > 0 )
+        return &( m_List[0] );
+    return NULL;
 }
+
 
 /*****************************************/
 DrawSheetList* EDA_SheetList::GetNext()
 /*****************************************/
 {
-	if( m_index < m_count )
-		m_index++;
-	return GetSheet(m_index); 
+    if( m_index < m_count )
+        m_index++;
+    return GetSheet( m_index );
 }
 
+
 /************************************************/
-DrawSheetList* EDA_SheetList::GetSheet(int index )
+DrawSheetList* EDA_SheetList::GetSheet( int index )
 /************************************************/
+
 /* return the m_List[index] item
  */
 {
-	if( index < m_count )
-		return &(m_List[index]);
-	return NULL;
+    if( index < m_count )
+        return &(m_List[index]);
+    return NULL;
 }
 
+
 /************************************************************************/
-void EDA_SheetList::BuildSheetList(DrawSheetStruct* sheet)
+void EDA_SheetList::BuildSheetList( DrawSheetStruct* sheet )
 /************************************************************************/
 {
-	if(m_List == NULL){
-		int count = sheet->CountSheets(); 
-		m_count = count; 
-		m_index = 0; 
-		if(m_List) free(m_List); m_List = NULL; 
-		count *=  sizeof(DrawSheetList); 
-		m_List = (DrawSheetList*)MyZMalloc(count); 
-		memset((void*)m_List, 0, count);
-		m_currList.Clear(); 
-	}
-	m_currList.Push(sheet); 
-	m_List[m_index] = m_currList; 
-	m_index++; 
-	if(sheet->m_s != NULL){
-		EDA_BaseStruct* strct = m_currList.LastDrawList();
-		while(strct){
-			if(strct->Type() == DRAW_SHEET_STRUCT_TYPE){
-				DrawSheetStruct* sht = (DrawSheetStruct*)strct; 
-				BuildSheetList(sht); 
+    if( m_List == NULL )
+    {
+        int count = sheet->CountSheets();
+        m_count = count;
+        m_index = 0;
+        if( m_List )
+            free( m_List );m_List = NULL;
+        count *= sizeof(DrawSheetList);
+        m_List = (DrawSheetList*) MyZMalloc( count );
+        memset( (void*) m_List, 0, count );
+        m_currList.Clear();
+    }
+    m_currList.Push( sheet );
+    m_List[m_index] = m_currList;
+    m_index++;
+    if( sheet->m_AssociatedScreen != NULL )
+    {
+        EDA_BaseStruct* strct = m_currList.LastDrawList();
+        while( strct )
+        {
+            if( strct->Type() == DRAW_SHEET_STRUCT_TYPE )
+            {
+                DrawSheetStruct* sht = (DrawSheetStruct*) strct;
+                BuildSheetList( sht );
+            }
+            strct = strct->Pnext;
+        }
+    }
+    m_currList.Pop();
+}
+
+
+/************************************************/
+void EDA_SheetList::UpdateSheetNumberAndDate()
+/************************************************/
+
+/* Set a sheet number, the sheet count for sheets in the whoçle schematic
+ * and update the date in all srceens
+ */
+{
+    wxString date = GenDate();
+    int      sheet_count = 1, sheet_number = 2;	// sheet 1 is the root sheet
+
+    for( int ii = 0; ii<(int) m_count; ii++ )
+    {
+        DrawSheetList* sheetlist = GetSheet( ii );
+        sheet_count += sheetlist->m_numSheets;
+    }
+
+    for( int ii = 0; ii<(int) m_count; ii++ )
+    {
+        DrawSheetList* sheetlist = GetSheet( ii );
+		// Read all sheets in path, but not the root sheet (jj = 1)
+        for( int jj = 1; jj < sheetlist->m_numSheets; jj++ )
+        {
+            DrawSheetStruct* sheet = sheetlist->m_sheets[jj];
+            sheet->m_SheetNumber    = sheet_number++;
+            sheet->m_NumberOfSheets = m_count;
+            SCH_SCREEN*      screen = sheet->m_AssociatedScreen;
+            if( screen != NULL )
+			{
+				screen->m_NumberOfScreen = sheet_count;
+                screen->m_Date = date;
 			}
-			strct = strct->Pnext;
-		}
-	}
-	m_currList.Pop(); 
+        }
+    }
+
+	g_RootSheet->m_AssociatedScreen->m_Date = date;
+	g_RootSheet->m_AssociatedScreen->m_NumberOfScreen = sheet_count;
+	g_RootSheet->m_SheetNumber = 1;
+	g_RootSheet->m_NumberOfSheets = m_count;
 }

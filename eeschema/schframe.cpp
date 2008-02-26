@@ -215,22 +215,22 @@ wxString WinEDA_SchematicFrame::GetScreenDesc()
 }
 
 
-/******************************/
+/*******************************************/
 void WinEDA_SchematicFrame::CreateScreens()
-/******************************/
+/*******************************************/
 {
     /* creation des ecrans Sch , Lib  */
     if( g_RootSheet == NULL )
     {
         g_RootSheet = new DrawSheetStruct();
     }
-    if( g_RootSheet->m_s == NULL )
+    if( g_RootSheet->m_AssociatedScreen == NULL )
     {
-        g_RootSheet->m_s = new SCH_SCREEN( SCHEMATIC_FRAME );
-        g_RootSheet->m_s->m_RefCount++;
+        g_RootSheet->m_AssociatedScreen = new SCH_SCREEN( SCHEMATIC_FRAME );
+        g_RootSheet->m_AssociatedScreen->m_RefCount++;
     }
-    g_RootSheet->m_s->m_FileName = g_DefaultSchematicFileName;
-    g_RootSheet->m_s->m_Date = GenDate();
+    g_RootSheet->m_AssociatedScreen->m_FileName = g_DefaultSchematicFileName;
+    g_RootSheet->m_AssociatedScreen->m_Date = GenDate();
     m_CurrentSheet->Clear();
     m_CurrentSheet->Push( g_RootSheet );
 
@@ -294,10 +294,11 @@ void WinEDA_SchematicFrame::OnCloseWindow( wxCloseEvent& Event )
         }
     }
 
-    if( !GetScreen()->m_FileName.IsEmpty() && (GetScreen()->EEDrawList != NULL) )
-        SetLastProject( GetScreen()->m_FileName );
+    if( !g_RootSheet->m_AssociatedScreen->m_FileName.IsEmpty() &&
+		(g_RootSheet->m_AssociatedScreen->EEDrawList != NULL) )
+        SetLastProject( g_RootSheet->m_AssociatedScreen->m_FileName );
 
-    ClearProjectDrawList( g_RootSheet->m_s, TRUE );
+    ClearProjectDrawList( g_RootSheet->m_AssociatedScreen, TRUE );
 
     /* allof sub sheets are deleted, only the main sheet is useable */
     m_CurrentSheet->Clear();

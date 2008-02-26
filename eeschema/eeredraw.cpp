@@ -129,7 +129,7 @@ wxString title;
 void WinEDA_DrawPanel::PrintPage(wxDC * DC, bool Print_Sheet_Ref, int PrintMask)
 /*******************************************************************************/
 {
-BASE_SCREEN * screen; // * oldscreen = m_Parent->GetScreen();
+BASE_SCREEN * screen;
 
 	wxBeginBusyCursor();
 		
@@ -140,7 +140,6 @@ BASE_SCREEN * screen; // * oldscreen = m_Parent->GetScreen();
 	if ( Print_Sheet_Ref )
 		m_Parent->TraceWorkSheet(DC, screen, g_DrawMinimunLineWidth );
 
-	//m_Parent->m_CurrentSheet->m_s = oldscreen;
 	wxEndBusyCursor();
 }
 

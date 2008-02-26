@@ -656,6 +656,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         {
             EditField( &dc, (LibDrawField*) CurrentDrawItem );
         }
+		DrawPanel->MouseToCursorSchema();
         DrawPanel->CursorOn( &dc );
         break;
 
@@ -725,7 +726,6 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
     }
 
-    DrawPanel->MouseToCursorSchema();
     DrawPanel->m_IgnoreMouseEvents = FALSE;
 
     if( m_ID_current_state == 0 )

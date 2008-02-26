@@ -140,9 +140,7 @@ void EDA_SchComponentStruct::SetRef( DrawSheetList* sheet, wxString ref )
     //check to see if it is already there before inserting it
     wxString path = GetPath( sheet );
 
-    printf( "SetRef path: %s ref: %s\n",
-           CONV_TO_UTF8( path ),
-           CONV_TO_UTF8( ref ) );
+    // printf( "SetRef path: %s ref: %s\n", CONV_TO_UTF8( path ), CONV_TO_UTF8( ref ) ); // Debug
     unsigned int i;
     bool         notInArray = true;
     for( i = 0; i<m_Paths.GetCount(); i++ )

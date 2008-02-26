@@ -209,7 +209,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_TO_PCB:
     {
         wxString Line;
-        if( g_RootSheet->m_s->m_FileName != wxEmptyString )
+        if( g_RootSheet->m_AssociatedScreen->m_FileName != wxEmptyString )
         {
             Line = GetScreen()->m_FileName;
             AddDelimiterString( Line );
@@ -224,9 +224,9 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_TO_CVPCB:
     {
         wxString Line;
-        if( g_RootSheet->m_s->m_FileName != wxEmptyString )
+        if( g_RootSheet->m_AssociatedScreen->m_FileName != wxEmptyString )
         {
-            Line = g_RootSheet->m_s->m_FileName;
+            Line = g_RootSheet->m_AssociatedScreen->m_FileName;
             AddDelimiterString( Line );
             ChangeFileNameExt( Line, wxEmptyString );
             ExecuteFile( this, CVPCB_EXE, Line );

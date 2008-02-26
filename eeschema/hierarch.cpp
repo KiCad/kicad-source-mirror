@@ -273,7 +273,7 @@ void WinEDA_SchematicFrame::InstallNextScreen(DrawSheetStruct * Sheet)
 /* Routine d'installation de l'ecran correspondant au symbole Sheet pointe
 	par la souris
 	have to be careful here because the DrawSheetStructs within the EEDrawList
-	don't actually have a valid m_s (on purpose -- you need the m_SubSheet hierarchy
+	don't actually have a valid m_AssociatedScreen (on purpose -- you need the m_SubSheet hierarchy
 	to maintain path info (well, this is but one way to maintain path info..)
 */
 {
@@ -297,11 +297,10 @@ static void UpdateScreenFromSheet(WinEDA_SchematicFrame * frame)
 
 {
 	SCH_SCREEN * NewScreen;
-	//SCH_SCREEN * oldscreen = frame->GetScreen(); what is oldscreen used for?
 
 	NewScreen = frame->m_CurrentSheet->LastScreen(); 
 	if(!NewScreen)
-		NewScreen = g_RootSheet->m_s;
+		NewScreen = g_RootSheet->m_AssociatedScreen;
 	
 	// Reinit des parametres d'affichage du nouvel ecran
 	// assumes m_CurrentSheet has already been updated.

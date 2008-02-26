@@ -28,8 +28,8 @@ enum  NumFieldType {
     FIELD5,
     FIELD6,
     FIELD7,
-    FIELD8, 
-	NUMBER_OF_FIELDS  		/* Nombre de champs de texte affectes au composant */
+    FIELD8,
+    NUMBER_OF_FIELDS        /* Nombre de champs de texte affectes au composant */
 };
 
 
@@ -37,7 +37,8 @@ enum  NumFieldType {
  *  component fields are texts attached to the component (not the graphic texts)
  *  There are 2 major fields : Reference and Value
  */
-class PartTextStruct :  public EDA_BaseStruct, public EDA_TextStruct
+class PartTextStruct :  public EDA_BaseStruct
+    , public EDA_TextStruct
 {
 public:
     int      m_Layer;
@@ -48,7 +49,7 @@ public:
 public:
     PartTextStruct( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString );
     ~PartTextStruct();
-    
+
     virtual wxString GetClass() const
     {
         return wxT( "PartText" );
@@ -78,37 +79,38 @@ public:
     wxPoint        m_Pos;       /* Exact position of part. */
 
 public:
-    DrawPartStruct( KICAD_T struct_type, const wxPoint &pos );
+    DrawPartStruct( KICAD_T struct_type, const wxPoint& pos );
     ~DrawPartStruct();
-    
+
     virtual wxString GetClass() const
     {
         return wxT( "DrawPart" );
     }
 };
 
-WX_DECLARE_OBJARRAY(DrawSheetList, ArrayOfSheetLists); 
+WX_DECLARE_OBJARRAY( DrawSheetList, ArrayOfSheetLists );
 /* the class EDA_SchComponentStruct describes a real component */
 class EDA_SchComponentStruct : public DrawPartStruct
 {
 public:
-    int   m_Multi;              /* In multi unit chip - which unit to draw. */
-    //int   m_FlagControlMulti;
-	ArrayOfSheetLists  m_UsedOnSheets; 
-    int   m_Convert;            /* Gestion (management) des mutiples representations (ex: conversion De Morgan) */
-    int   m_Transform[2][2];    /* The rotation/mirror transformation matrix. */
-    bool* m_PinIsDangling;      // liste des indicateurs de pin non connectee
+    int m_Multi;              /* In multi unit chip - which unit to draw. */
 
-	wxArrayString m_Paths; // /sheet1/C102, /sh2/sh1/U32 etc.
-	wxArrayString m_References; // C102, U32 etc.
-	wxString	  m_PrefixString; 	//C, R, U, Q etc - the first character which typically indicates what the component is.
-								//determined, upon placement, from the library component.
-								//determined, upon file load, by the first non-digits in the reference fields.
+    //int   m_FlagControlMulti;
+    ArrayOfSheetLists m_UsedOnSheets;
+    int m_Convert;                      /* Gestion (management) des mutiples representations (ex: conversion De Morgan) */
+    int m_Transform[2][2];              /* The rotation/mirror transformation matrix. */
+    bool*             m_PinIsDangling;  // liste des indicateurs de pin non connectee
+
+    wxArrayString     m_Paths;          // /sheet1/C102, /sh2/sh1/U32 etc.
+    wxArrayString     m_References;     // C102, U32 etc.
+    wxString          m_PrefixString;   /*C, R, U, Q etc - the first character which typically indicates what the component is.
+                                         * determined, upon placement, from the library component.
+                                         * determined, upon file load, by the first non-digits in the reference fields. */
 
 public:
     EDA_SchComponentStruct( const wxPoint& pos = wxPoint( 0, 0 ) );
     ~EDA_SchComponentStruct( void ) { }
-    
+
     virtual wxString GetClass() const
     {
         return wxT( "EDA_SchComponent" );
@@ -124,7 +126,7 @@ public:
     EDA_Rect                GetBoundaryBox();
 
     const wxString&         ReturnFieldName( int aFieldNdx ) const;
-    
+
 
     /**
      * Function GetFieldValue
@@ -134,32 +136,35 @@ public:
      */
     const wxString&         GetFieldValue( int aFieldNdx ) const;
 
-    
+
     virtual void            Draw( WinEDA_DrawPanel* panel,
-                                  wxDC* DC,
-                                  const wxPoint& offset,
-                                  int draw_mode,
-                                  int Color = -1 );
+                                  wxDC*             DC,
+                                  const wxPoint&    offset,
+                                  int               draw_mode,
+                                  int               Color = -1 );
     void                    SwapData( EDA_SchComponentStruct* copyitem );
 
     virtual void            Place( WinEDA_DrawFrame* frame, wxDC* DC );
 
-	
-	//returns a unique ID, in the form of a path.
-	wxString 		GetPath( DrawSheetList* sheet); 
-	const wxString 	GetRef( DrawSheetList* sheet ); 
-	void 			SetRef( DrawSheetList* sheet, wxString ref ); 
-	void			ClearRefs(); 
-#if defined(DEBUG)    
+
+    //returns a unique ID, in the form of a path.
+    wxString                GetPath( DrawSheetList* sheet );
+    const wxString          GetRef( DrawSheetList* sheet );
+    void                    SetRef( DrawSheetList* sheet, wxString ref );
+    void                    ClearRefs();
+
+#if defined (DEBUG)
+
     /**
      * Function Show
      * is used to output the object tree, currently for debugging only.
-     * @param nestLevel An aid to prettier tree indenting, and is the level 
+     * @param nestLevel An aid to prettier tree indenting, and is the level
      *          of nesting of this object within the overall tree.
      * @param os The ostream& to output to.
      */
-    void Show( int nestLevel, std::ostream& os );
-#endif    
+    void                    Show( int nestLevel, std::ostream& os );
+
+#endif
 };
 
 

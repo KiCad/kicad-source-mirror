@@ -358,8 +358,8 @@ DrawSheetLabelStruct* WinEDA_SchematicFrame::Import_PinSheet( DrawSheetStruct* S
     DrawSheetLabelStruct* 	NewSheetLabel, * SheetLabel = NULL;
     DrawHierLabelStruct* 	HLabel = NULL;
 
-	if(!Sheet->m_s) return NULL; 
-    DrawStruct = Sheet->m_s->EEDrawList;
+	if(!Sheet->m_AssociatedScreen) return NULL; 
+    DrawStruct = Sheet->m_AssociatedScreen->EEDrawList;
     HLabel = NULL;
     for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext )
     {

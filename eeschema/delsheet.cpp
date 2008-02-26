@@ -37,20 +37,20 @@ wxString msg;
 		}
 
 	/* effacement du sous schema correspondant */
-	if( FirstSheet->m_s->IsModify() && confirm_deletion )
+	if( FirstSheet->m_AssociatedScreen->IsModify() && confirm_deletion )
 	{
 		msg.Printf( _("Sheet %s (file %s) modified. Save it?"),
 					FirstSheet->m_SheetName.GetData(),
 					FirstSheet->m_FileName.GetData());
 		if( IsOK(NULL, msg) )
 		{
-			frame->SaveEEFile(FirstSheet->m_s, FILE_SAVE_AS);
+			frame->SaveEEFile(FirstSheet->m_AssociatedScreen, FILE_SAVE_AS);
 		}
 	}
 
 	/* free the sub hierarchy */
-	if(FirstSheet->m_s){
-		EEDrawList = FirstSheet->m_s->EEDrawList;
+	if(FirstSheet->m_AssociatedScreen){
+		EEDrawList = FirstSheet->m_AssociatedScreen->EEDrawList;
 		while (EEDrawList != NULL)
 		{
 			DrawStruct = EEDrawList;
@@ -61,7 +61,7 @@ wxString msg;
 			}
 		}
 		/* Effacement des elements de la feuille courante */
-		FirstSheet->m_s->FreeDrawList();
+		FirstSheet->m_AssociatedScreen->FreeDrawList();
 	}
 }
 
