@@ -40,8 +40,8 @@ OPTION(KICAD_MINIZIP "enable/disable building minizip (default ON)" ON)
 # Comment this out if you don't want to build with Python support.
 # OPTION(KICAD_PYTHON "enable/disable building with Python support (default OFF)")
 
-# Set debugging flags for GCC only.
-IF( CMAKE_COMPILER_IS_GCC )
+# Set flags for GNU compilers.
+IF(CMAKE_COMPILER_IS_GNUCXX)
     # Set default flags for Release build.
     SET(CMAKE_C_FLAGS_RELEASE "-Wall -O2 -DNDEBUG")
     SET(CMAKE_CXX_FLAGS_RELEASE "-Wall -O2 -DNDEBUG")
@@ -50,7 +50,7 @@ IF( CMAKE_COMPILER_IS_GCC )
     # Set default flags for Debug build.
     SET(CMAKE_C_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
     SET(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
-ENDIF( CMAKE_COMPILER_IS_GCC )
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 # Locations for install targets.
 IF(UNIX)

@@ -12,7 +12,7 @@ SET(EESCHEMA_SRCS
     block_libedit.cpp
     busentry.cpp
     bus-wire-junction.cpp
-	class_drawsheet.cpp
+    class_drawsheet.cpp
     class_screen.cpp
     class_text-label.cpp
     cleanup.cpp
