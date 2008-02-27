@@ -224,6 +224,8 @@ MODULE* Load_Module_From_Library( WinEDA_DrawFrame* frame, wxDC* DC );
 /* EDITRACK.C : */
 /****************/
 
+TRACK*  LocateIntrusion( TRACK* start, int net, int width );
+
 void    ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel,
                                       wxDC* DC, bool erase );
 
@@ -385,6 +387,7 @@ TRACK*          CreateLockPoint( int* pX, int* pY, TRACK* ptsegm, TRACK* refsegm
 /* CONTROLE.CPP */
 /****************/
 void RemoteCommand( const char* cmdline );
+bool Project( wxPoint& res, wxPoint on_grid, const TRACK* track );
 
 
 /***************/

@@ -499,27 +499,27 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     if( DrawStruct && DrawStruct->m_Flags )
         keep_on_grid = TRUE;
 
-    if (keep_on_grid) {
-    wxPoint on_grid = curpos;
+    if( keep_on_grid )
+    {
+        wxPoint on_grid = curpos;
 
-    PutOnGrid(&on_grid);
-    if (Magnetize(m_Pcb, (WinEDA_PcbFrame *) this, m_ID_current_state,
-      GetScreen()->GetGrid(), on_grid, curpos))
-        GetScreen()->m_Curseur = curpos;
-    else {
-        extern TRACK *LocateIntrusion(TRACK *start, int net, int width);
-
-        /*
-         * If there's an intrusion and DRC is active, we pass the cursor
-         * "as is", and let ShowNewTrackWhenMovingCursor figure our what to
-         * do.
-         */
-        if (!Drc_On || !g_CurrentTrackSegment ||
-          g_CurrentTrackSegment != this->GetCurItem() ||
-          !LocateIntrusion(m_Pcb->m_Track, g_CurrentTrackSegment->GetNet(),
-          g_CurrentTrackSegment->m_Width))
-            GetScreen()->m_Curseur = on_grid;
-    }
+        PutOnGrid( &on_grid );
+        if( Magnetize(m_Pcb, (WinEDA_PcbFrame *) this, m_ID_current_state,
+                        GetScreen()->GetGrid(), on_grid, curpos) )
+            GetScreen()->m_Curseur = curpos;
+        else
+        {
+            /*
+             * If there's an intrusion and DRC is active, we pass the cursor
+             * "as is", and let ShowNewTrackWhenMovingCursor figure our what to
+             * do.
+             */
+            if(  !Drc_On || !g_CurrentTrackSegment
+              || g_CurrentTrackSegment != this->GetCurItem()
+              || !LocateIntrusion(m_Pcb->m_Track, g_CurrentTrackSegment->GetNet(),
+                        g_CurrentTrackSegment->m_Width ) )
+                GetScreen()->m_Curseur = on_grid;
+        }
     }
 
     if( oldpos != GetScreen()->m_Curseur )
