@@ -13,6 +13,8 @@
 
 #include "protos.h"
 
+#include "schframe.h"
+
 /* Format des fichiers: Voir EELOAD.CC */
 
 /* Fonctions externes */

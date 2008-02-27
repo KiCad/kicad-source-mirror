@@ -13,6 +13,8 @@
 
 #include "protos.h"
 
+#include "schframe.h"
+
 
 /********************************************************************************/
 static int CountConnectedItems(WinEDA_SchematicFrame * frame,

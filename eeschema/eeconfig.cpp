@@ -15,6 +15,8 @@
 
 #include "id.h"
 
+#include "schframe.h"
+
 /* Variables locales */
 
 

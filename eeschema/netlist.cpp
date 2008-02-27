@@ -12,6 +12,8 @@
 #include "netlist.h" /* Definitions generales liees au calcul de netliste */
 #include "protos.h"
 
+#include "schframe.h"
+
 //#define NETLIST_DEBUG
 
 /* Routines locales */

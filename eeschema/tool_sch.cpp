@@ -13,6 +13,8 @@
 #include "protos.h"
 #include "hotkeys.h"
 
+#include "schframe.h"
+
 #define BITMAP wxBitmap
 
 #include "bitmaps.h" /* general bitmaps */

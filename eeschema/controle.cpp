@@ -17,6 +17,8 @@
 
 #include "protos.h"
 
+#include "schframe.h"
+
 /**************************************************************/
 EDA_BaseStruct* WinEDA_SchematicFrame::
 SchematicGeneralLocateAndDisplay( bool IncludePin )

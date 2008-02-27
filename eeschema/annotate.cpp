@@ -9,8 +9,11 @@
 #include "netlist.h"
 #include "protos.h"
 
+#include "schframe.h"
+
 /* Local Functions*/
-static int  ListeComposants( CmpListStruct* BaseListeCmp, DrawSheetList* sheet );
+static int  ListeComposants( CmpListStruct* BaseListeCmp,
+                             DrawSheetList* sheet );
 static void BreakReference( CmpListStruct* BaseListeCmp, int NbOfCmp );
 static void ReAnnotateComponents( CmpListStruct* BaseListeCmp, int NbOfCmp );
 static void ComputeReferenceNumber( CmpListStruct* BaseListeCmp, int NbOfCmp );

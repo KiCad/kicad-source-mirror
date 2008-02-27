@@ -14,6 +14,8 @@
 
 #include "protos.h"
 
+#include "schframe.h"
+
 
 /* Fonctions exportees */
 

@@ -14,6 +14,8 @@
 
 #include "id.h"
 
+#include "schframe.h"
+
 /* Format des fichiers:
  *  - entete:
  *  EESchema Schematic File Version n

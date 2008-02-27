@@ -22,40 +22,14 @@
 #include "netlist.h"
 #include "protos.h"
 
+#include "schframe.h"
+#include "netlist_control.h"
+
 // ID for configuration:
 #define CUSTOM_NETLIST_TITLE   wxT( "CustomNetlistTitle" )
 #define CUSTOM_NETLIST_COMMAND wxT( "CustomNetlistCommand" )
 
 /* Loacl variable */
-
-/* Event id for notebook page buttons: */
-enum id_netlist {
-    ID_CREATE_NETLIST = 1550,
-    ID_CURRENT_FORMAT_IS_DEFAULT,
-    ID_RUN_SIMULATOR,
-    ID_SETUP_PLUGIN,
-    ID_VALIDATE_PLUGIN,
-    ID_DELETE_PLUGIN,
-    ID_NETLIST_NOTEBOOK
-};
-
-/* panel (notebook page) identifiers */
-enum panel_netlist_index {
-    PANELPCBNEW = 0,    /* Handle Netlist format Pcbnew */
-    PANELORCADPCB2,     /* Handle Netlist format OracdPcb2 */
-    PANELCADSTAR,       /* Handle Netlist format CadStar */
-    PANELSPICE,         /* Handle Netlist format Pspice */
-    PANELCUSTOMBASE     /* First auxiliary panel (custom netlists).
-                         * others use PANELCUSTOMBASE+1, PANELCUSTOMBASE+2.. */
-};
-
-/* Values returned when the netlist dialog is demiss */
-enum gen_netlist_diag {
-    NET_OK,
-    NET_ABORT,
-    NET_PLUGIN_CHANGE
-};
-
 
 /****************************************************/
 wxString ReturnUserNetlistTypeName( bool first_item )
@@ -87,63 +61,6 @@ wxString ReturnUserNetlistTypeName( bool first_item )
 }
 
 
-/************************/
-/* Class declarations : */
-/************************/
-
-/* wxPanels for creating the NoteBook pages for each netlist format:
- */
-class EDA_NoteBookPage : public wxPanel
-{
-public:
-    int               m_IdNetType;
-    wxCheckBox*       m_IsCurrentFormat;
-    WinEDA_EnterText* m_CommandStringCtrl;
-    WinEDA_EnterText* m_TitleStringCtrl;
-    wxButton*         m_ButtonCancel;
-    wxBoxSizer*       m_LeftBoxSizer;
-    wxBoxSizer*       m_RightBoxSizer;
-    wxBoxSizer*       m_RightOptionsBoxSizer;
-    wxBoxSizer*       m_LowBoxSizer;
-
-    EDA_NoteBookPage( wxNotebook* parent, const wxString& title,
-                      int id_NetType, int idCheckBox, int idCreateFile );
-    ~EDA_NoteBookPage() { };
-};
-
-
-/* Dialog frame for creating netlists */
-class WinEDA_NetlistFrame : public wxDialog
-{
-public:
-    WinEDA_SchematicFrame* m_Parent;
-    wxNotebook*            m_NoteBook;
-    EDA_NoteBookPage*      m_PanelNetType[4 + CUSTOMPANEL_COUNTMAX];
-
-    wxRadioBox*            m_UseNetNamesInNetlist;
-
-public:
-
-    // Constructor and destructor
-    WinEDA_NetlistFrame( WinEDA_SchematicFrame* parent, wxPoint& pos );
-    ~WinEDA_NetlistFrame() { };
-
-private:
-    void    InstallCustomPages();
-    void    InstallPageSpice();
-    void    GenNetlist( wxCommandEvent& event );
-    void    RunSimulator( wxCommandEvent& event );
-    void    NetlistUpdateOpt();
-    void    OnCancelClick( wxCommandEvent& event );
-    void    SelectNetlistType( wxCommandEvent& event );
-    void    SetupPluginData( wxCommandEvent& event );
-    void    DeletePluginPanel( wxCommandEvent& event );
-    void    ValidatePluginPanel( wxCommandEvent& event );
-
-    void WriteCurrentNetlistSetup( void );
-
-    DECLARE_EVENT_TABLE()
-};
 
 BEGIN_EVENT_TABLE( WinEDA_NetlistFrame, wxDialog )
 EVT_BUTTON( wxID_CANCEL, WinEDA_NetlistFrame::OnCancelClick )
@@ -155,29 +72,6 @@ EVT_CHECKBOX( ID_CURRENT_FORMAT_IS_DEFAULT, WinEDA_NetlistFrame::SelectNetlistTy
 EVT_BUTTON( ID_RUN_SIMULATOR, WinEDA_NetlistFrame::RunSimulator )
 END_EVENT_TABLE()
 
-
-/*********************************************************************/
-void InstallNetlistFrame( WinEDA_SchematicFrame* parent, wxPoint& pos )
-/*********************************************************************/
-
-/* Installator for the netlist generation dialog box
- */
-{
-    int ii;
-	
-	if ( g_NetFormat <  NET_TYPE_PCBNEW )
-		g_NetFormat = NET_TYPE_PCBNEW;
-
-    do
-    {
-        WinEDA_NetlistFrame* frame = new WinEDA_NetlistFrame( parent, pos );
-
-        ii = frame->ShowModal();
-        frame->Destroy();
-    } while( ii == NET_PLUGIN_CHANGE );
-
-    // If a plugin is removed or added, rebuild and reopen the new dialog
-}
 
 
 /*******************************/
@@ -271,8 +165,8 @@ EDA_NoteBookPage::EDA_NoteBookPage( wxNotebook* parent, const wxString& title,
 
 
 /*************************************************************************************/
-WinEDA_NetlistFrame::WinEDA_NetlistFrame( WinEDA_SchematicFrame* parent, wxPoint& framepos ) :
-    wxDialog( parent, -1, _( "Netlist" ), framepos,
+WinEDA_NetlistFrame::WinEDA_NetlistFrame( WinEDA_SchematicFrame* parent ) :
+    wxDialog( parent, -1, _( "Netlist" ), wxDefaultPosition,
               wxDefaultSize, DIALOG_STYLE | MAYBE_RESIZE_BORDER )
 /*************************************************************************************/
 
@@ -289,8 +183,7 @@ WinEDA_NetlistFrame::WinEDA_NetlistFrame( WinEDA_SchematicFrame* parent, wxPoint
         m_PanelNetType[ii] = NULL;
     }
 
-    if( framepos == wxDefaultPosition )
-        Centre();
+    Centre();
 
     wxBoxSizer* GeneralBoxSizer = new wxBoxSizer( wxVERTICAL );
     SetSizer( GeneralBoxSizer );

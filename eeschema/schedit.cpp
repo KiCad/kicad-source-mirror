@@ -15,17 +15,19 @@
 
 #include "protos.h"
 
-/*****************************************************************************/
-void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
-/*****************************************************************************/
+#include "schframe.h"
 
-/* Traite les selections d'outils et les commandes appelees du menu POPUP
- */
+
+/*****************************************************************************
+ *
+ * Traite les selections d'outils et les commandes appelees du menu POPUP
+ *
+ *****************************************************************************/
+void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 {
     int        id = event.GetId();
     wxPoint    pos;
     wxClientDC dc( DrawPanel );
-    wxPoint    defaultpos( -1, -1 );
 
     DrawPanel->PrepareGraphicContext( &dc );
 
@@ -36,84 +38,6 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     // If needed, stop the current command and deselect current tool
     switch( id )
     {
-    case ID_POPUP_SCH_ENTRY_SELECT_SLASH:       // Do nothing:
-    case ID_POPUP_SCH_ENTRY_SELECT_ANTISLASH:
-    case ID_POPUP_END_LINE:
-    case ID_POPUP_SCH_EDIT_TEXT:
-    case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_LABEL:
-    case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_GLABEL:
-    case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL:
-    case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT:
-    case ID_POPUP_SCH_SET_SHAPE_TEXT:
-    case ID_POPUP_SCH_ROTATE_TEXT:
-    case ID_POPUP_SCH_EDIT_SHEET:
-    case ID_POPUP_SCH_CLEANUP_SHEET:
-    case ID_POPUP_SCH_END_SHEET:
-    case ID_POPUP_SCH_RESIZE_SHEET:
-    case ID_POPUP_SCH_EDIT_PINSHEET:
-    case ID_POPUP_SCH_MOVE_PINSHEET:
-    case ID_POPUP_SCH_MOVE_ITEM_REQUEST:
-    case ID_POPUP_SCH_MOVE_CMP_REQUEST:
-    case ID_POPUP_SCH_DRAG_CMP_REQUEST:
-    case ID_POPUP_SCH_EDIT_CMP:
-    case ID_POPUP_SCH_MIROR_X_CMP:
-    case ID_POPUP_SCH_MIROR_Y_CMP:
-    case ID_POPUP_SCH_ROTATE_CMP_CLOCKWISE:
-    case ID_POPUP_SCH_ROTATE_CMP_COUNTERCLOCKWISE:
-    case ID_POPUP_SCH_ORIENT_NORMAL_CMP:
-    case ID_POPUP_SCH_INIT_CMP:
-    case ID_POPUP_SCH_DISPLAYDOC_CMP:
-    case ID_POPUP_SCH_EDIT_VALUE_CMP:
-    case ID_POPUP_SCH_EDIT_REF_CMP:
-    case ID_POPUP_SCH_EDIT_FOOTPRINT_CMP:
-    case ID_POPUP_SCH_EDIT_CONVERT_CMP:
-    case ID_POPUP_SCH_SELECT_UNIT_CMP:
-    case ID_POPUP_SCH_SELECT_UNIT1:
-    case ID_POPUP_SCH_SELECT_UNIT2:
-    case ID_POPUP_SCH_SELECT_UNIT3:
-    case ID_POPUP_SCH_SELECT_UNIT4:
-    case ID_POPUP_SCH_SELECT_UNIT5:
-    case ID_POPUP_SCH_SELECT_UNIT6:
-    case ID_POPUP_SCH_SELECT_UNIT7:
-    case ID_POPUP_SCH_SELECT_UNIT8:
-    case ID_POPUP_SCH_SELECT_UNIT9:
-    case ID_POPUP_SCH_SELECT_UNIT10:
-    case ID_POPUP_SCH_SELECT_UNIT11:
-    case ID_POPUP_SCH_SELECT_UNIT12:
-    case ID_POPUP_SCH_SELECT_UNIT13:
-    case ID_POPUP_SCH_SELECT_UNIT14:
-    case ID_POPUP_SCH_SELECT_UNIT15:
-    case ID_POPUP_SCH_SELECT_UNIT16:
-    case ID_POPUP_SCH_SELECT_UNIT17:
-    case ID_POPUP_SCH_SELECT_UNIT18:
-    case ID_POPUP_SCH_SELECT_UNIT19:
-    case ID_POPUP_SCH_SELECT_UNIT20:
-    case ID_POPUP_SCH_SELECT_UNIT21:
-    case ID_POPUP_SCH_SELECT_UNIT22:
-    case ID_POPUP_SCH_SELECT_UNIT23:
-    case ID_POPUP_SCH_SELECT_UNIT24:
-    case ID_POPUP_SCH_SELECT_UNIT25:
-    case ID_POPUP_SCH_SELECT_UNIT26:
-    case ID_POPUP_SCH_ROTATE_FIELD:
-    case ID_POPUP_SCH_EDIT_FIELD:
-    case ID_POPUP_DELETE_BLOCK:
-    case ID_POPUP_PLACE_BLOCK:
-    case ID_POPUP_ZOOM_BLOCK:
-    case ID_POPUP_DRAG_BLOCK:
-    case ID_POPUP_COPY_BLOCK:
-    case ID_POPUP_ROTATE_BLOCK:
-    case ID_POPUP_MIRROR_X_BLOCK:
-    case ID_POPUP_MIRROR_Y_BLOCK:
-    case ID_POPUP_SCH_DELETE_NODE:
-    case ID_POPUP_SCH_DELETE_CONNECTION:
-    case wxID_CUT:
-    case wxID_COPY:
-    case ID_POPUP_SCH_ENTER_SHEET:
-    case ID_POPUP_SCH_LEAVE_SHEET:
-    case ID_POPUP_SCH_ADD_JUNCTION:
-    case ID_POPUP_SCH_ADD_LABEL:
-        break;          // Do nothing:
-
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
         if( GetScreen()->BlockLocate.m_Command != BLOCK_IDLE )
             DrawPanel->SetCursor( wxCursor( DrawPanel->m_PanelCursor =
@@ -156,100 +80,6 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 
     switch( id )    // Command execution:
     {
-    case ID_EXIT:
-        Close( TRUE );
-        break;
-
-    case ID_NEW_PROJECT:     /* New EED Project */
-        LoadOneEEProject( wxEmptyString, TRUE );
-        break;
-
-    case ID_LOAD_PROJECT:
-        LoadOneEEProject( wxEmptyString, FALSE );
-        break;
-
-    case ID_LOAD_ONE_SHEET:
-
-        //how is this different from above?
-        //LoadOneSheet( GetSheet(), wxEmptyString );
-        break;
-
-    case ID_LOAD_FILE_1:
-    case ID_LOAD_FILE_2:
-    case ID_LOAD_FILE_3:
-    case ID_LOAD_FILE_4:
-    case ID_LOAD_FILE_5:
-    case ID_LOAD_FILE_6:
-    case ID_LOAD_FILE_7:
-    case ID_LOAD_FILE_8:
-    case ID_LOAD_FILE_9:
-    case ID_LOAD_FILE_10:
-        LoadOneEEProject( GetLastProject( id - ID_LOAD_FILE_1 ).GetData(
-                ), FALSE );
-        break;
-
-    case ID_TO_LIBRARY:
-        if( m_Parent->m_LibeditFrame )
-        {
-            m_Parent->m_LibeditFrame->Show( TRUE );
-        }
-        else
-        {
-            m_Parent->m_LibeditFrame =
-                new WinEDA_LibeditFrame( m_Parent->m_SchematicFrame,
-                                         m_Parent,
-                                         wxT( "Library Editor" ),
-                                         wxPoint( -1, -1 ),
-                                         wxSize( 600, 400 ) );
-            ActiveScreen = ScreenLib;
-            m_Parent->m_LibeditFrame->AdjustScrollBars();
-        }
-        break;
-
-    case ID_TO_PCB:
-    {
-        wxString Line;
-        if( g_RootSheet->m_AssociatedScreen->m_FileName != wxEmptyString )
-        {
-            Line = GetScreen()->m_FileName;
-            AddDelimiterString( Line );
-            ChangeFileNameExt( Line, wxEmptyString );
-            ExecuteFile( this, PCBNEW_EXE, Line );
-        }
-        else
-            ExecuteFile( this, PCBNEW_EXE );
-        break;
-    }
-
-    case ID_TO_CVPCB:
-    {
-        wxString Line;
-        if( g_RootSheet->m_AssociatedScreen->m_FileName != wxEmptyString )
-        {
-            Line = g_RootSheet->m_AssociatedScreen->m_FileName;
-            AddDelimiterString( Line );
-            ChangeFileNameExt( Line, wxEmptyString );
-            ExecuteFile( this, CVPCB_EXE, Line );
-        }
-        else
-            ExecuteFile( this, CVPCB_EXE );
-        break;
-    }
-
-    case ID_TO_LIBVIEW:
-        if( m_Parent->m_ViewlibFrame )
-        {
-            m_Parent->m_ViewlibFrame->Show( TRUE );
-        }
-        else
-        {
-            m_Parent->m_ViewlibFrame =
-                new WinEDA_ViewlibFrame( m_Parent->m_SchematicFrame,
-                                         m_Parent );
-            m_Parent->m_ViewlibFrame->AdjustScrollBars();
-        }
-        break;
-
     case ID_HIERARCHY:
         InstallHierarchyFrame( &dc, pos );
         g_ItemToRepeat = NULL;
@@ -262,25 +92,8 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         g_ItemToRepeat = NULL;
         break;
 
-
     case wxID_PASTE:
         HandleBlockBegin( &dc, BLOCK_PASTE, GetScreen()->m_Curseur );
-        break;
-
-    case ID_GET_ERC:
-        InstallErcFrame( this, defaultpos );
-        break;
-
-    case ID_GET_NETLIST:
-        InstallNetlistFrame( this, defaultpos );
-        break;
-
-    case ID_GET_TOOLS:
-        InstallToolsFrame( this, defaultpos );
-        break;
-
-    case ID_FIND_ITEMS:
-        InstallFindFrame( this, pos );
         break;
 
     case ID_HIERARCHY_PUSH_POP_BUTT:
@@ -814,8 +627,6 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         if( GetSchematicFromRedoList() )
             DrawPanel->Refresh( TRUE );
         break;
-
-
 
     default:        // Log error:
         DisplayError( this,

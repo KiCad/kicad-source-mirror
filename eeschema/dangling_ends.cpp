@@ -12,6 +12,9 @@
 #include "netlist.h" /* Definitions generales liees au calcul de netliste */
 #include "protos.h"
 
+#include "schframe.h"
+
+
 enum End_Type {
     UNKNOWN = 0,
     WIRE_START_END,

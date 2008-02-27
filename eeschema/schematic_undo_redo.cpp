@@ -13,6 +13,8 @@
 
 #include "protos.h"
 
+#include "schframe.h"
+
 /* Functions to undo and redo edit commands.
  *  commmands to undo are in CurrentScreen->m_UndoList
  *  commmands to redo are in CurrentScreen->m_RedoList

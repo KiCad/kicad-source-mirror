@@ -15,6 +15,8 @@
 #include "libcmp.h"
 #include "general.h"
 
+#include "schframe.h"
+
 /* Variables Locales */
 static int      s_ItemsCount, s_MarkerCount;
 static wxString s_OldStringFound;
@@ -23,17 +25,6 @@ static wxString s_OldStringFound;
 
 
 #include "protos.h"
-
-
-/**************************************************************/
-void InstallFindFrame( WinEDA_SchematicFrame* parent, wxPoint& pos )
-/**************************************************************/
-{
-    parent->DrawPanel->m_IgnoreMouseEvents = TRUE;
-    WinEDA_FindFrame* frame = new WinEDA_FindFrame( parent );
-    frame->ShowModal(); frame->Destroy();
-    parent->DrawPanel->m_IgnoreMouseEvents = FALSE;
-}
 
 
 /**************************************************************/

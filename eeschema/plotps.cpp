@@ -36,6 +36,8 @@
 #include "plot_common.h"
 #include "protos.h"
 
+#include "schframe.h"
+
 #include "wx/defs.h"
 
 // coeff de conversion dim en 1 mil -> dim en unite PS:

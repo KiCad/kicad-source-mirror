@@ -40,6 +40,8 @@
 
 #include "id.h"
 
+#include "schframe.h"
+
 #include "dialog_eeschema_config.h"
 
 ////@begin XPM images

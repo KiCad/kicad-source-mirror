@@ -39,6 +39,8 @@
 
 #include "protos.h"
 
+#include "schframe.h"
+
 /* Routines Locales */
 static void ExitSheet( WinEDA_DrawPanel* Panel, wxDC* DC );
 static void DeplaceSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );

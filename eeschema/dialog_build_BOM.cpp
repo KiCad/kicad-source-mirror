@@ -127,14 +127,6 @@ BEGIN_EVENT_TABLE( WinEDA_Build_BOM_Frame, wxDialog )
 
 END_EVENT_TABLE()
 
-/***************************************************************/
-void InstallToolsFrame(WinEDA_DrawFrame *parent, wxPoint & pos)
-/***************************************************************/
-{
-	WinEDA_Build_BOM_Frame * frame = new WinEDA_Build_BOM_Frame(parent);
-	frame->ShowModal();
-	frame->Destroy();
-}
 
 /*!
  * WinEDA_Build_BOM_Frame constructors

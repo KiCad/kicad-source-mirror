@@ -14,6 +14,7 @@
 #include "id.h"
 
 #include "protos.h"
+#include "schframe.h"
 
 
 /************************/

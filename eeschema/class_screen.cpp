@@ -8,6 +8,8 @@
 #include "general.h"
 
 #include "protos.h"
+#include "schframe.h"
+
 
 /******************************************************************/
 void SetStructFather( EDA_BaseStruct* Struct, BASE_SCREEN* Screen )

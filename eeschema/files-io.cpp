@@ -13,6 +13,8 @@
 #include "protos.h"
 #include "id.h"
 
+#include "schframe.h"
+
 /* Fonctions locales */
 
 

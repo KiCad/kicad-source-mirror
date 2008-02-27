@@ -20,6 +20,8 @@
 
 #include "bitmaps.h"
 
+#include "schframe.h"
+
 #include "Enter_Sheet.xpm"
 #include "Leave_Sheet.xpm"
 #include "Delete_Sheet.xpm"

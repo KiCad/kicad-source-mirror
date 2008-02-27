@@ -15,9 +15,12 @@
 #include "protos.h"
 
 #include "macros.h"
+#include "schframe.h"
 
 #include <wx/arrimpl.cpp>
+
 WX_DEFINE_OBJARRAY( ArrayOfSheetLists );
+
 /***************************/
 /* class DrawPartStruct	*/
 /* class EDA_SchComponentStruct */

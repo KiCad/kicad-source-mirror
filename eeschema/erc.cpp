@@ -12,6 +12,7 @@
 
 #include "protos.h"
 
+#include "schframe.h"
 
 #include "../bitmaps/ercgreen.xpm"
 #include "../bitmaps/ercwarn.xpm"
@@ -144,18 +145,6 @@ static int MinimalReq[PIN_NMAX][PIN_NMAX] =
 /* NC*/  {   NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC }
 };
 
-
-/*************************************************************/
-void InstallErcFrame( WinEDA_SchematicFrame* parent, wxPoint& pos )
-/*************************************************************/
-
-/* Install function  for the ERC dialog frame
- */
-{
-    WinEDA_ErcFrame* frame = new WinEDA_ErcFrame( parent );
-
-    frame->ShowModal(); frame->Destroy();
-}
 
 
 /*********************************************/

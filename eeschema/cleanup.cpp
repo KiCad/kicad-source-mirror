@@ -12,6 +12,7 @@
 #include "netlist.h"
 #include "macros.h"
 #include "protos.h"
+#include "schframe.h"
 
 
 /* Routines locales */

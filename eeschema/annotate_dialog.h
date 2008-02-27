@@ -99,8 +99,11 @@ public:
     WinEDA_SchematicFrame* m_Parent;
 
 private:
+    void CloseDialog( void );
+
     void OnClear( wxCommandEvent& event );
     void OnApply( wxCommandEvent& event );
+    void OnCancel( wxCommandEvent& event );
 
     wxRadioButton* m_rbEntireSchematic;
     wxRadioButton* m_rbSortByPosition;

@@ -17,6 +17,8 @@
 
 #include "protos.h"
 
+#include "schframe.h"
+
 /* How to add a new hotkey:
  *  add a new id in the enum hotkey_id_commnand like MY_NEW_ID_FUNCTION (see hotkeys.h).
  *  add a new Ki_HotkeyInfo entry like:

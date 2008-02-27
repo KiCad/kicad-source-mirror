@@ -12,6 +12,8 @@
 
 #include "protos.h"
 
+#include "schframe.h"
+
 
 /* Routines Locales */
 static void Show_Polyline_in_Ghost( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );

@@ -13,6 +13,8 @@
 
 #include "protos.h"
 
+#include "schframe.h"
+
 
 char marq_bitmap[]=
 	{

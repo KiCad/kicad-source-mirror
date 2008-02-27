@@ -13,6 +13,8 @@
 
 #include "protos.h"
 
+#include "schframe.h"
+
 
 /***********************************************************/
 void DrawSheetStruct::Display_Infos( WinEDA_DrawFrame* frame )

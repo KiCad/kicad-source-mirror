@@ -16,8 +16,14 @@
 #include "bitmaps.h"
 #include "protos.h"
 #include "id.h"
+#include "netlist.h"
+#include "schframe.h"
 
 #include "annotate_dialog.h"
+#include "dialog_build_BOM.h"
+#include "dialog_erc.h"
+#include "dialog_find.h"
+#include "netlist_control.h"
 
 
 /*******************************/
@@ -32,11 +38,15 @@ BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, wxFrame )
     EVT_CLOSE( WinEDA_SchematicFrame::OnCloseWindow )
     EVT_SIZE( WinEDA_SchematicFrame::OnSize )
 
-    EVT_MENU_RANGE( ID_LOAD_PROJECT, ID_LOAD_FILE_10,
-                    WinEDA_SchematicFrame::Process_Special_Functions )
+    EVT_MENU( ID_NEW_PROJECT, WinEDA_SchematicFrame::OnNewProject )
+    EVT_MENU( ID_LOAD_PROJECT, WinEDA_SchematicFrame::OnLoadProject )
 
-    EVT_TOOL( ID_NEW_PROJECT, WinEDA_SchematicFrame::Process_Special_Functions )
-    EVT_TOOL( ID_LOAD_PROJECT, WinEDA_SchematicFrame::Process_Special_Functions )
+    EVT_MENU_RANGE( ID_LOAD_FILE_1, ID_LOAD_FILE_10,
+                    WinEDA_SchematicFrame::OnLoadFile )
+
+    EVT_TOOL( ID_NEW_PROJECT, WinEDA_SchematicFrame::OnNewProject )
+    EVT_TOOL( ID_LOAD_PROJECT, WinEDA_SchematicFrame::OnLoadProject )
+
     EVT_TOOL_RANGE( ID_SCHEMATIC_MAIN_TOOLBAR_START,
                     ID_SCHEMATIC_MAIN_TOOLBAR_END,
                     WinEDA_SchematicFrame::Process_Special_Functions )
@@ -54,7 +64,7 @@ BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, wxFrame )
     EVT_MENU( ID_GEN_PLOT_SVG, WinEDA_DrawFrame::SVG_Print )
     EVT_MENU( ID_GEN_COPY_SHEET_TO_CLIPBOARD, WinEDA_DrawFrame::CopyToClipboard )
     EVT_MENU( ID_GEN_COPY_BLOCK_TO_CLIPBOARD, WinEDA_DrawFrame::CopyToClipboard )
-    EVT_MENU( ID_EXIT, WinEDA_SchematicFrame::Process_Special_Functions )
+    EVT_MENU( ID_EXIT, WinEDA_SchematicFrame::OnExit )
 
     EVT_MENU_RANGE( ID_CONFIG_AND_PREFERENCES_START,
                     ID_CONFIG_AND_PREFERENCES_END,
@@ -68,14 +78,11 @@ BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, wxFrame )
     EVT_TOOL_RANGE( ID_ZOOM_IN_BUTT, ID_ZOOM_PAGE_BUTT,
                     WinEDA_SchematicFrame::Process_Zoom )
 
-    EVT_TOOL( ID_NEW_PROJECT, WinEDA_SchematicFrame::Process_Special_Functions )
-    EVT_TOOL( ID_LOAD_PROJECT, WinEDA_SchematicFrame::Process_Special_Functions )
+    EVT_TOOL( ID_TO_LIBRARY, WinEDA_SchematicFrame::OnOpenLibraryEditor )
+    EVT_TOOL( ID_TO_LIBVIEW, WinEDA_SchematicFrame::OnOpenLibraryViewer )
 
-    EVT_TOOL( ID_TO_LIBRARY, WinEDA_SchematicFrame::Process_Special_Functions )
-    EVT_TOOL( ID_TO_LIBVIEW, WinEDA_SchematicFrame::Process_Special_Functions )
-
-    EVT_TOOL( ID_TO_PCB, WinEDA_SchematicFrame::Process_Special_Functions )
-    EVT_TOOL( ID_TO_CVPCB, WinEDA_SchematicFrame::Process_Special_Functions )
+    EVT_TOOL( ID_TO_PCB, WinEDA_SchematicFrame::OnOpenPcbnew )
+    EVT_TOOL( ID_TO_CVPCB, WinEDA_SchematicFrame::OnOpenCvpcb )
 
     EVT_TOOL( ID_SHEET_SET, WinEDA_DrawFrame::Process_PageSettings )
     EVT_TOOL( ID_HIERARCHY, WinEDA_SchematicFrame::Process_Special_Functions )
@@ -85,8 +92,10 @@ BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, wxFrame )
     EVT_TOOL( ID_UNDO_BUTT, WinEDA_SchematicFrame::Process_Special_Functions )
     EVT_TOOL( ID_GET_ANNOTATE, WinEDA_SchematicFrame::OnAnnotate )
     EVT_TOOL( ID_GEN_PRINT, WinEDA_SchematicFrame::ToPrinter )
-    EVT_TOOL_RANGE( ID_GET_ERC, ID_FIND_ITEMS,
-                    WinEDA_SchematicFrame::Process_Special_Functions )
+    EVT_TOOL( ID_GET_ERC, WinEDA_SchematicFrame::OnErc )
+    EVT_TOOL( ID_GET_NETLIST, WinEDA_SchematicFrame::OnCreateNetlist )
+    EVT_TOOL( ID_GET_TOOLS, WinEDA_SchematicFrame::OnCreateBillOfMaterials )
+    EVT_TOOL( ID_FIND_ITEMS, WinEDA_SchematicFrame::OnFindItems )
 
     EVT_MENU( ID_GENERAL_HELP, WinEDA_DrawFrame::GetKicadHelp )
     EVT_MENU( ID_KICAD_ABOUT, WinEDA_DrawFrame::GetKicadAbout )
@@ -145,17 +154,16 @@ WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow* father,
     g_ItemToRepeat = NULL;
     /* Get config */
     GetSettings();
-    g_DrawMinimunLineWidth   = m_Parent->m_EDA_Config->Read(
-                                   MINI_DRAW_LINE_WIDTH_KEY,
-                                   (long) 0 );
-    g_PlotPSMinimunLineWidth = m_Parent->m_EDA_Config->Read(
-                                   MINI_PLOTPS_LINE_WIDTH_KEY,
-                                   (long) 4 );
+    g_DrawMinimunLineWidth =
+        m_Parent->m_EDA_Config->Read( MINI_DRAW_LINE_WIDTH_KEY, (long) 0 );
+    g_PlotPSMinimunLineWidth =
+        m_Parent->m_EDA_Config->Read( MINI_PLOTPS_LINE_WIDTH_KEY, (long) 4 );
 
-    /****/
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+
     if( DrawPanel )
         DrawPanel->m_Block_Enable = TRUE;
+
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateVToolbar();
@@ -215,9 +223,7 @@ wxString WinEDA_SchematicFrame::GetScreenDesc()
 }
 
 
-/*******************************************/
 void WinEDA_SchematicFrame::CreateScreens()
-/*******************************************/
 {
     /* creation des ecrans Sch , Lib  */
     if( g_RootSheet == NULL )
@@ -243,7 +249,6 @@ void WinEDA_SchematicFrame::CreateScreens()
 
 /**************************************************************/
 void WinEDA_SchematicFrame::OnCloseWindow( wxCloseEvent& Event )
-/**************************************************************/
 {
     DrawSheetList* sheet;
 
@@ -295,7 +300,7 @@ void WinEDA_SchematicFrame::OnCloseWindow( wxCloseEvent& Event )
     }
 
     if( !g_RootSheet->m_AssociatedScreen->m_FileName.IsEmpty() &&
-		(g_RootSheet->m_AssociatedScreen->EEDrawList != NULL) )
+        (g_RootSheet->m_AssociatedScreen->EEDrawList != NULL) )
         SetLastProject( g_RootSheet->m_AssociatedScreen->m_FileName );
 
     ClearProjectDrawList( g_RootSheet->m_AssociatedScreen, TRUE );
@@ -314,12 +319,12 @@ void WinEDA_SchematicFrame::OnCloseWindow( wxCloseEvent& Event )
 }
 
 
-/********************************************/
+/*****************************************************************************
+ *
+ * Enable or disable some tools according to current conditions
+ *
+ *****************************************************************************/
 void WinEDA_SchematicFrame::SetToolbars()
-/********************************************/
-
-/* Enable or disable some tools according to current conditions
- */
 {
     if( m_HToolBar )
     {
@@ -389,9 +394,7 @@ void WinEDA_SchematicFrame::SetToolbars()
 }
 
 
-/******************************************/
 int WinEDA_SchematicFrame::BestZoom()
-/******************************************/
 {
     int    dx, dy, ii, jj;
     int    bestzoom;
@@ -417,4 +420,130 @@ void WinEDA_SchematicFrame::OnAnnotate( wxCommandEvent& event )
     WinEDA_AnnotateFrame* dlg = new WinEDA_AnnotateFrame( this );
     dlg->ShowModal();
     dlg->Destroy();
+}
+
+void WinEDA_SchematicFrame::OnErc( wxCommandEvent& event )
+{
+    WinEDA_ErcFrame* dlg = new WinEDA_ErcFrame( this );
+    dlg->ShowModal();
+    dlg->Destroy();
+}
+
+void WinEDA_SchematicFrame::OnCreateNetlist( wxCommandEvent& event )
+{
+    int i;
+
+    if ( g_NetFormat <  NET_TYPE_PCBNEW )
+        g_NetFormat = NET_TYPE_PCBNEW;
+
+    do
+    {
+        WinEDA_NetlistFrame* dlg = new WinEDA_NetlistFrame( this );
+        i = dlg->ShowModal();
+        dlg->Destroy();
+    } while( i == NET_PLUGIN_CHANGE );
+    // If a plugin is removed or added, rebuild and reopen the new dialog
+}
+
+void WinEDA_SchematicFrame::OnCreateBillOfMaterials( wxCommandEvent & )
+{
+    WinEDA_Build_BOM_Frame* dlg = new WinEDA_Build_BOM_Frame( this );
+    dlg->ShowModal();
+    dlg->Destroy();
+}
+
+void WinEDA_SchematicFrame::OnFindItems( wxCommandEvent& event )
+{
+    this->DrawPanel->m_IgnoreMouseEvents = TRUE;
+    WinEDA_FindFrame* dlg = new WinEDA_FindFrame( this );
+    dlg->ShowModal();
+    dlg->Destroy();
+    this->DrawPanel->m_IgnoreMouseEvents = FALSE;
+}
+
+void WinEDA_SchematicFrame::OnLoadFile( wxCommandEvent& event )
+{
+    int i = event.GetId() - ID_LOAD_FILE_1;
+
+    LoadOneEEProject( GetLastProject( i ).GetData( ), false );
+    SetToolbars();
+}
+
+void WinEDA_SchematicFrame::OnNewProject( wxCommandEvent& event )
+{
+    LoadOneEEProject( wxEmptyString, true );
+}
+
+void WinEDA_SchematicFrame::OnLoadProject( wxCommandEvent& event )
+{
+    LoadOneEEProject( wxEmptyString, false );
+}
+
+void WinEDA_SchematicFrame::OnOpenPcbnew( wxCommandEvent& event )
+{
+    wxString Line;
+
+    if( g_RootSheet->m_AssociatedScreen->m_FileName != wxEmptyString )
+    {
+        Line = GetScreen()->m_FileName;
+        AddDelimiterString( Line );
+        ChangeFileNameExt( Line, wxEmptyString );
+        ExecuteFile( this, PCBNEW_EXE, Line );
+    }
+    else
+        ExecuteFile( this, PCBNEW_EXE );
+}
+
+void WinEDA_SchematicFrame::OnOpenCvpcb( wxCommandEvent& event )
+{
+    wxString Line;
+
+    if( g_RootSheet->m_AssociatedScreen->m_FileName != wxEmptyString )
+    {
+        Line = g_RootSheet->m_AssociatedScreen->m_FileName;
+        AddDelimiterString( Line );
+        ChangeFileNameExt( Line, wxEmptyString );
+        ExecuteFile( this, CVPCB_EXE, Line );
+    }
+    else
+        ExecuteFile( this, CVPCB_EXE );
+}
+
+void WinEDA_SchematicFrame::OnOpenLibraryViewer( wxCommandEvent& event )
+{
+    if( m_Parent->m_ViewlibFrame )
+    {
+        m_Parent->m_ViewlibFrame->Show( TRUE );
+    }
+    else
+    {
+        m_Parent->m_ViewlibFrame =
+            new WinEDA_ViewlibFrame( m_Parent->m_SchematicFrame,
+                                     m_Parent );
+        m_Parent->m_ViewlibFrame->AdjustScrollBars();
+    }
+}
+
+void WinEDA_SchematicFrame::OnOpenLibraryEditor( wxCommandEvent& event )
+{
+    if( m_Parent->m_LibeditFrame )
+    {
+        m_Parent->m_LibeditFrame->Show( TRUE );
+    }
+    else
+    {
+        m_Parent->m_LibeditFrame =
+            new WinEDA_LibeditFrame( m_Parent->m_SchematicFrame,
+                                     m_Parent,
+                                     wxT( "Library Editor" ),
+                                     wxPoint( -1, -1 ),
+                                     wxSize( 600, 400 ) );
+        ActiveScreen = ScreenLib;
+        m_Parent->m_LibeditFrame->AdjustScrollBars();
+    }
+}
+
+void WinEDA_SchematicFrame::OnExit( wxCommandEvent& event )
+{
+    Close( true );
 }

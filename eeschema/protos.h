@@ -293,14 +293,12 @@ void SuppressDuplicateDrawItem(EDA_LibComponentStruct * LibEntry);
 /* NETLIST.CPP */
 /**************/
 int IsBusLabel(const wxString & LabelDrawList);
-void InstallNetlistFrame(WinEDA_SchematicFrame *parent, wxPoint &pos);
 
 /***************/
 /* ANNOTATE.CPP */
 /***************/
 void ReAnnotatePowerSymbolsOnly();
 
-void InstallAnnotateFrame(WinEDA_SchematicFrame * parent);
 int CheckAnnotate(WinEDA_SchematicFrame * frame, bool OneSheetOnly);
 				/* Retourne le nombre de composants non annotes ou erron�s
 					Si OneSheetOnly : recherche sur le schema courant
@@ -354,12 +352,6 @@ void DeleteOneLibraryDrawStruct(WinEDA_DrawPanel * panel,
 		 	Affiche (si != 0 Efface le graphique correspondant de l'ecran) */
 
 
-/**********/
-/* ERC.CPP */
-/**********/
-void InstallErcFrame(WinEDA_SchematicFrame *parent, wxPoint & pos);
-
-
 /**************/
 /* GETPART.CPP */
 /**************/
@@ -408,7 +400,6 @@ bool LibArchive(wxWindow * frame, const wxString & ArchFullFileName);
 	/***************/
 	/* GENLISTE.CPP */
 	/***************/
-void InstallToolsFrame(WinEDA_DrawFrame *parent, wxPoint &pos);
 struct ListComponent; 
 int GenListeCmp( ListComponent * List );
 
@@ -445,12 +436,6 @@ bool BuildAliasData(LibraryStruct * Lib, EDA_LibComponentStruct * component);
 	/* Create the alias data for the lib component to edit */
 int LocateAlias( const wxArrayString & AliasData, const wxString & Name);
 	/* Return an index in alias data list ( -1 if not found ) */
-
-
-/************/
-/* FIND.CPP */
-/************/
-void InstallFindFrame(WinEDA_SchematicFrame *parent, wxPoint &pos);
 
 
 /***************/

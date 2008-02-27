@@ -13,6 +13,7 @@
 
 #include "protos.h"
 
+#include "schframe.h"
 
 /* Routines locales */
 static void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& FullFileName );

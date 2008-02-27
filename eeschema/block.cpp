@@ -13,6 +13,8 @@
 
 #include "protos.h"
 
+#include "schframe.h"
+
 /* Variables Locales */
 
 /* Fonctions exportees */

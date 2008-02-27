@@ -23,6 +23,8 @@
 #include "protos.h"
 #include "bitmaps.h"
 #include "eda_dde.h"
+#include "schframe.h"
+
 
 // Global variables
 wxString    g_Main_Title( wxT( "EESchema" ) );

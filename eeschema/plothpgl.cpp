@@ -41,6 +41,8 @@
 
 #include "protos.h"
 
+#include "schframe.h"
+
 /* coeff de conversion dim en 1 mil -> dim en unite HPGL: */
 #define SCALE_HPGL 1.02041
 

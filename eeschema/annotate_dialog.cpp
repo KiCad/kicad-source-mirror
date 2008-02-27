@@ -28,6 +28,8 @@
 #include "wx/wx.h"
 #endif
 
+#include "../include/wxstruct.h"
+#include "schframe.h"
 #include "annotate_dialog.h"
 
 extern void DeleteAnnotation( WinEDA_SchematicFrame* parent,
@@ -51,6 +53,7 @@ IMPLEMENT_DYNAMIC_CLASS( WinEDA_AnnotateFrame, wxDialog )
 BEGIN_EVENT_TABLE( WinEDA_AnnotateFrame, wxDialog )
     EVT_BUTTON( wxID_CLEAR, WinEDA_AnnotateFrame::OnClear )
     EVT_BUTTON( wxID_APPLY, WinEDA_AnnotateFrame::OnApply )
+    EVT_BUTTON( wxID_CANCEL, WinEDA_AnnotateFrame::OnCancel )
 END_EVENT_TABLE()
 
 /*!
@@ -156,20 +159,27 @@ void WinEDA_AnnotateFrame::CreateControls()
     wxBoxSizer* sizerAnnotateItems = new wxBoxSizer( wxVERTICAL );
     m_rbEntireSchematic =
         new wxRadioButton( this, ID_ENTIRE_SCHEMATIC,
-                           _( "Annotate the entire schematic" ),
+                           _( "Annotate the &entire schematic" ),
                            wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
     wxRadioButton* rbCurrentPage =
         new wxRadioButton( this, ID_CURRENT_PAGE,
-                           _( "Annotate the current page only" ) );
+                           _( "Annotate the current &page only" ) );
     m_rbEntireSchematic->SetValue( true );
     m_cbResetAnnotation = new wxCheckBox( this, ID_RESET_ANNOTATION,
-                                          _( "Reset existing annotation" ) );
+                                          _( "&Reset existing annotation" ) );
 
     sizerAnnotateItems->Add( m_rbEntireSchematic, flagsRadioButtonSpacing );
     sizerAnnotateItems->Add( rbCurrentPage, flagsRadioButtonSpacing );
     sizerAnnotateItems->Add( m_cbResetAnnotation, flagsRadioButtonSpacing );
     sizerAnnotate->Add( sizerAnnotateItems, flagsRadioButtonSizerSpacing );
     sizerTop->Add( sizerAnnotate, flagsGroupSizerSpacing );
+    /* This is an ugly hack to make sure the focus is set correctly so the
+     * escape key closes the dialog without requiring one of the controls
+     * to be activated by the user first.  This problem only occurs on the
+     * GTK version of wxWidgets */
+#ifdef __WXGTK__
+    m_rbEntireSchematic->SetFocus( );
+#endif
 
     /* Annotation sort order sizers, label, and radio buttons. */
     wxBoxSizer* sizerSort = new wxBoxSizer( wxVERTICAL );
@@ -180,13 +190,13 @@ void WinEDA_AnnotateFrame::CreateControls()
     wxBoxSizer* sizerSortItems = new wxBoxSizer( wxVERTICAL );
     m_rbSortByPosition = new wxRadioButton( this,
                                             ID_SORT_BY_POSITION,
-                                            _( "Sort components by position" ),
+                                            _( "Sort components by p&osition" ),
                                             wxDefaultPosition,
                                             wxDefaultSize,
                                             wxRB_GROUP );
     wxRadioButton* rbSortByValue =
         new wxRadioButton( this, ID_SORT_BY_VALUE,
-                           _( "Sort components by value" ) );
+                           _( "Sort components by &value" ) );
     sizerSortItems->Add( m_rbSortByPosition, flagsRadioButtonSpacing );
     sizerSortItems->Add( rbSortByValue, flagsRadioButtonSpacing );
     sizerSort->Add( sizerSortItems, flagsRadioButtonSizerSpacing );
@@ -194,7 +204,7 @@ void WinEDA_AnnotateFrame::CreateControls()
 
     /* Standard dialog buttons and sizer. */
     wxBoxSizer* sizerDialogButtons = new wxBoxSizer( wxHORIZONTAL );
-    wxButton* btnClose = new wxButton( this, wxID_CANCEL, _( "Close" ) );
+    wxButton* btnClose = new wxButton( this, wxID_CANCEL );
     /* TODO: Check if there is any existing annotation and enable/disable
      *       the clear button accordingly.  Probably should also enable/
      *       disable new components radio button if all of the components
@@ -269,7 +279,6 @@ void WinEDA_AnnotateFrame::OnClear( wxCommandEvent& event )
 void WinEDA_AnnotateFrame::OnApply( wxCommandEvent& event )
 {
     int response;
-    wxButton* btn;
     wxString message;
 
     if( GetResetItems() )
@@ -290,6 +299,17 @@ void WinEDA_AnnotateFrame::OnApply( wxCommandEvent& event )
     AnnotateComponents( m_Parent, GetLevel(), GetSortOrder(),
                         GetResetItems() );
     m_btnClear->Enable();
+}
+
+void WinEDA_AnnotateFrame::OnCancel( wxCommandEvent& event )
+{
+    if( IsModal() )
+        EndModal( wxID_CANCEL );
+    else
+    {
+        SetReturnCode( wxID_CANCEL );
+        this->Show( false );
+    }
 }
 
 bool WinEDA_AnnotateFrame::GetLevel( void )

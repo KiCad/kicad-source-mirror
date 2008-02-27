@@ -13,6 +13,8 @@
 
 #include "protos.h"
 
+#include "schframe.h"
+
 /* Fonctions locales */
 static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 static void ExitMoveTexte( WinEDA_DrawPanel* panel, wxDC* DC );

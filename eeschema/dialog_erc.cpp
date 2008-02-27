@@ -37,6 +37,7 @@
 #include "netlist.h"
 
 #include "protos.h"
+#include "schframe.h"
 
 #include "dialog_erc.h"
 

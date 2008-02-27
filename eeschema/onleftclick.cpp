@@ -15,6 +15,8 @@
 
 #include "protos.h"
 
+#include "schframe.h"
+
 static wxArrayString s_CmpNameList;
 static wxArrayString s_PowerNameList;
 
