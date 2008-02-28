@@ -728,9 +728,9 @@ static bool WriteDiagnosticERC( const wxString& FullFileName )
     for( Sheet = SheetList.GetFirst(); Sheet != NULL; Sheet = SheetList.GetNext() )
     {
 		if(Sheet->Last() == g_RootSheet){
-        	msg.Printf( _( "\n***** Sheet Root\n" ) ); 
+        	msg.Printf( _( "\n***** Sheet / (Root) \n" ) ); 
 		}else{
-			wxString str = Sheet->Path(); 
+			wxString str = Sheet->PathHumanReadable(); 
 			msg.Printf( _("\n***** Sheet %s\n"), str.GetData() );
 		}
         

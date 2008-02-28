@@ -5,7 +5,7 @@ include ../libs.linux
 
 
 # Additional compiler flags
-CPPFLAGS +=
+CPPFLAGS += 
 
 TARGET = eeschema
 
