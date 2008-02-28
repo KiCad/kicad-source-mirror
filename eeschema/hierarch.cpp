@@ -23,7 +23,7 @@
 #include "../bitmaps/treensel.xpm"
 
 
-static void UpdateScreenFromSheet(WinEDA_SchematicFrame * frame);
+static bool UpdateScreenFromSheet(WinEDA_SchematicFrame * frame);
 
 enum {
 	ID_TREECTRL_HIERARCHY = 1600
@@ -37,8 +37,8 @@ class WinEDA_HierFrame;
 class TreeItemData: public wxTreeItemData
 {
 public:
-	DrawSheetList m_SheetList;
-	TreeItemData(DrawSheetList sheet) :wxTreeItemData()
+	DrawSheetPath m_SheetList;
+	TreeItemData(DrawSheetPath sheet) :wxTreeItemData()
 	{
 		m_SheetList = sheet;
 	}
@@ -92,7 +92,7 @@ private:
 
 public:
 	WinEDA_HierFrame(WinEDA_SchematicFrame *parent, wxDC * DC, const wxPoint& pos);
-	void BuildSheetList(DrawSheetList * list, wxTreeItemId * previousmenu);
+	void BuildSheetList(DrawSheetPath * list, wxTreeItemId * previousmenu);
 	~WinEDA_HierFrame();
 
 	void OnSelect(wxTreeEvent& event);
@@ -133,7 +133,7 @@ WinEDA_HierFrame::WinEDA_HierFrame(WinEDA_SchematicFrame *parent, wxDC * DC,
 
 	cellule = m_Tree->AddRoot(_("Root"), 0, 1);
 	m_Tree->SetItemBold(cellule, TRUE);
-	DrawSheetList list; 
+	DrawSheetPath list; 
 	list.Push(g_RootSheet); 
 	m_Tree->SetItemData( cellule, new TreeItemData(list) );
 
@@ -179,7 +179,7 @@ void  WinEDA_HierFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 }
 
 /********************************************************************/
-void WinEDA_HierFrame::BuildSheetList(DrawSheetList* list,
+void WinEDA_HierFrame::BuildSheetList(DrawSheetPath* list,
 						wxTreeItemId * previousmenu)
 /********************************************************************/
 /* Routine de creation de l'arbre de navigation dans la hierarchy
@@ -235,11 +235,12 @@ wxTreeItemId menu;
 /***************************************************/
 void WinEDA_HierFrame::OnSelect(wxTreeEvent& event)
 /***************************************************/
-/* appelee sur un double-click de la souris pour la selection d'un item:
-	Selectionne et affiche l'ecran demand�
+/* Called on a double-click on a tree item:
+	Open the selected sheet, and display the corresponding screen
 */
 {
 	wxTreeItemId ItemSel = m_Tree->GetSelection();
+	
 	*(m_Parent->m_CurrentSheet) = 
 			((TreeItemData*)(m_Tree->GetItemData(ItemSel)))->m_SheetList; 
 	wxString path = m_Parent->m_CurrentSheet->PathHumanReadable(); 
@@ -259,7 +260,7 @@ void WinEDA_SchematicFrame::InstallPreviousSheet()
 	g_ItemToRepeat = NULL;
 	MsgPanel->EraseMsgBox();
 	//make a copy for testing purposes. 
-	DrawSheetList listtemp = *m_CurrentSheet; 
+	DrawSheetPath listtemp = *m_CurrentSheet; 
 	listtemp.Pop(); 
 	if ( listtemp.LastScreen() == NULL ){
 		DisplayError( this, wxT("InstallPreviousScreen() Error: Sheet not found"));
@@ -290,7 +291,7 @@ void WinEDA_SchematicFrame::InstallNextScreen(DrawSheetStruct * Sheet)
 }
 
 /**************************************************************/
-static void UpdateScreenFromSheet(WinEDA_SchematicFrame * frame)
+static bool UpdateScreenFromSheet(WinEDA_SchematicFrame * frame)
 /**************************************************************/
 
 /* Recherche et installe de l'ecran relatif au sheet symbole Sheet.
@@ -302,7 +303,10 @@ static void UpdateScreenFromSheet(WinEDA_SchematicFrame * frame)
 
 	NewScreen = frame->m_CurrentSheet->LastScreen(); 
 	if(!NewScreen)
-		NewScreen = g_RootSheet->m_AssociatedScreen;
+	{
+		DisplayError(frame, wxT("Screen not found for this sheet"));
+		return false;
+	}
 	
 	// Reinit des parametres d'affichage du nouvel ecran
 	// assumes m_CurrentSheet has already been updated.
@@ -325,6 +329,6 @@ static void UpdateScreenFromSheet(WinEDA_SchematicFrame * frame)
 		frame->DrawPanel->MouseToCursorSchema();
 	}
 	ActiveScreen = frame->m_CurrentSheet->LastScreen(); 
-	return;
+	return true;
 }
 

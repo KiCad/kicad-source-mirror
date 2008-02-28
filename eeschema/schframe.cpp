@@ -140,7 +140,7 @@ WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow* father,
     m_Draw_Axis      = FALSE;           // TRUE to show axis
     m_Draw_Grid      = g_ShowGrid;      // TRUE to show a grid
     m_Draw_Sheet_Ref = TRUE;            // TRUE to show sheet references
-    m_CurrentSheet   = new DrawSheetList();
+    m_CurrentSheet   = new DrawSheetPath();
 
     CreateScreens();
 
@@ -179,7 +179,7 @@ WinEDA_SchematicFrame::~WinEDA_SchematicFrame()
 {
     m_Parent->m_SchematicFrame = NULL;
     SAFE_DELETE( g_RootSheet );
-    SAFE_DELETE( m_CurrentSheet ); //a DrawSheetList, on the heap.
+    SAFE_DELETE( m_CurrentSheet ); //a DrawSheetPath, on the heap.
     m_CurrentSheet = NULL;
 }
 
@@ -187,7 +187,7 @@ WinEDA_SchematicFrame::~WinEDA_SchematicFrame()
 /***************/
 /* utility functions */
 /***************/
-DrawSheetList* WinEDA_SchematicFrame::GetSheet()
+DrawSheetPath* WinEDA_SchematicFrame::GetSheet()
 {
     return m_CurrentSheet;
 }
@@ -205,7 +205,7 @@ void WinEDA_SchematicFrame::SetScreen( SCH_SCREEN* screen )
     //there is ambiguity in this function (there may be several
     //instances of a given sheet, but irregardless it is useful
     //for printing etc.
-    DrawSheetList sheetlist;
+    DrawSheetPath sheetlist;
 
     if( g_RootSheet->LocatePathOfScreen( screen, &sheetlist ) )
     {
@@ -250,7 +250,7 @@ void WinEDA_SchematicFrame::CreateScreens()
 /**************************************************************/
 void WinEDA_SchematicFrame::OnCloseWindow( wxCloseEvent& Event )
 {
-    DrawSheetList* sheet;
+    DrawSheetPath* sheet;
 
     if( m_Parent->m_LibeditFrame ) // Can close component editor ?
     {
@@ -400,18 +400,18 @@ int WinEDA_SchematicFrame::BestZoom()
     int    bestzoom;
     wxSize size;
 
-    dx = GetScreen()->m_CurrentSheetDesc->m_Size.x;
-    dy = GetScreen()->m_CurrentSheetDesc->m_Size.y;
+	dx = GetScreen()->m_CurrentSheetDesc->m_Size.x;
+	dy = GetScreen()->m_CurrentSheetDesc->m_Size.y;
 
-    size     = DrawPanel->GetClientSize();
-    ii       = dx / size.x;
-    jj       = dy / size.y;
-    bestzoom = MAX( ii, jj ) + 1;
+	size     = DrawPanel->GetClientSize();
+	ii       = dx / size.x;
+	jj       = dy / size.y;
+	bestzoom = MAX( ii, jj ) + 1;
 
-    GetScreen()->SetZoom( ii );
-    GetScreen()->m_Curseur.x = dx / 2;
-    GetScreen()->m_Curseur.y = dy / 2;
-
+	GetScreen()->SetZoom( ii );
+	GetScreen()->m_Curseur.x = dx / 2;
+	GetScreen()->m_Curseur.y = dy / 2;
+	
     return bestzoom;
 }
 

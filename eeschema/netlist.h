@@ -66,7 +66,7 @@ public:
     void*           m_Link;      /* Pour SheetLabelStruct: Pointeur sur la feuille de hierarchie
                                   *  Pour les Pins: pointeur sur le composant */
     int             m_Flag;       /* flag pour calculs internes */
-    DrawSheetList   m_SheetList;
+    DrawSheetPath   m_SheetList;
     NetObjetType    m_Type;
     int             m_ElectricalType;/* Pour Pins et sheet labels: type electrique */
 private:
@@ -76,7 +76,7 @@ public:
     int             m_Member;        /* pour les labels type BUSWIRE ( labels de bus eclate )
                                          *  numero de membre */
     IsConnectType   m_FlagOfConnection;
-    DrawSheetList   m_SheetListInclude;   /* sheet that the hierarchal label connects to.*/
+    DrawSheetPath   m_SheetListInclude;   /* sheet that the hierarchal label connects to.*/
     long            m_PinNum;       /* numero de pin( 4 octets -> 4 codes ascii) */
     const wxString* m_Label;        /* Tous types Labels:pointeur sur la wxString definissant le label */
     wxPoint         m_Start, m_End;
@@ -102,7 +102,7 @@ typedef struct ListComponent
 	EDA_SchComponentStruct * m_Comp;
 	char m_Ref[32]; 
 	  //have to store it here since the object refrerences will be duplicated.
-	DrawSheetList m_SheetList; //composed of UIDs
+	DrawSheetPath m_SheetList; //composed of UIDs
 } ListComponent;
 
 /* Structure decrivant 1 composant de la schematique (pour *annotation* ) */
@@ -113,7 +113,7 @@ public:
     int                     m_NbParts;          /* Nombre de parts par boitier */
     bool                    m_PartsLocked;      // For multi part components: True if the part cannot be changed
     int                     m_Unit;             /* Numero de part */
-    DrawSheetList 	        m_SheetList;
+    DrawSheetPath 	        m_SheetList;
     unsigned long           m_TimeStamp;              /* unique identification number */
     int                     m_IsNew;            /* != 0 pour composants non annotes */
     char                    m_TextValue[32];    /* Valeur */

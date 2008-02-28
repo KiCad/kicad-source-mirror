@@ -773,7 +773,7 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM );
 
     /* Trace des textes : FileName */
-    Text = Struct->m_FileName;
+    Text = Struct->GetFileName();
     size = wxSize( Struct->m_FileNameSize, Struct->m_FileNameSize );
     if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
         SetColorMapPS( ReturnLayerColor( LAYER_SHEETFILENAME ) );

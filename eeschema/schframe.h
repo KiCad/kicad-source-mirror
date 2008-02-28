@@ -16,7 +16,7 @@ class WinEDA_SchematicFrame : public WinEDA_DrawFrame
 {
 public:
     WinEDAChoiceBox* m_SelPartBox;
-    DrawSheetList*   m_CurrentSheet; //which sheet we are presently working on.
+    DrawSheetPath*   m_CurrentSheet; //which sheet we are presently working on.
 private:
     wxMenu*          m_FilesMenu;
 
@@ -45,7 +45,7 @@ public:
                    int hotkey,
                    EDA_BaseStruct* DrawStruct );
 
-    DrawSheetList* GetSheet();
+    DrawSheetPath* GetSheet();
     virtual BASE_SCREEN* GetScreen();
     virtual void SetScreen(SCH_SCREEN* screen);
     virtual wxString GetScreenDesc();
@@ -168,6 +168,11 @@ private:
 
 public:
     bool EditSheet( DrawSheetStruct* Sheet, wxDC* DC );
+	/** Function UpdateSheetNumberAndDate
+	 * Set a sheet number, the sheet count for sheets in the whole schematic
+	 * and update the date in all screens
+	 */
+    void UpdateSheetNumberAndDate();
 
 private:
     void StartMoveSheet( DrawSheetStruct* sheet, wxDC* DC );

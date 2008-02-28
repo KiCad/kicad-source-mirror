@@ -13,15 +13,57 @@
 
 /* Local Functions*/
 static int  ListeComposants( CmpListStruct* BaseListeCmp,
-                             DrawSheetList* sheet );
+                             DrawSheetPath* sheet );
 static void BreakReference( CmpListStruct* BaseListeCmp, int NbOfCmp );
 static void ReAnnotateComponents( CmpListStruct* BaseListeCmp, int NbOfCmp );
 static void ComputeReferenceNumber( CmpListStruct* BaseListeCmp, int NbOfCmp );
-int GetLastReferenceNumber( CmpListStruct* Objet,
-                            CmpListStruct* BaseListeCmp,
-                            int NbOfCmp );
+int         GetLastReferenceNumber( CmpListStruct* Objet,
+                                    CmpListStruct*         BaseListeCmp,
+                                    int                    NbOfCmp );
 static int  ExistUnit( CmpListStruct* Objet, int Unit,
                        CmpListStruct* BaseListeCmp, int NbOfCmp );
+
+
+/************************************************/
+void WinEDA_SchematicFrame::UpdateSheetNumberAndDate()
+/************************************************/
+
+/* Set a sheet number, the sheet count for sheets in the whole schematic
+ * and update the date in all screens
+ */
+{
+    wxString       date = GenDate();
+    int            sheet_number = 1; // sheet 1 is the root sheet
+    DrawSheetPath* sheetpath;
+
+    /* Build the sheet list */
+    EDA_SheetList  SheetList( g_RootSheet );
+    int            sheet_count = SheetList.GetCount();
+
+    for( sheetpath = SheetList.GetFirst();
+        sheetpath != NULL;
+        sheetpath = SheetList.GetNext() )
+    {
+        // Read all sheets in path, but not the root sheet (jj = 1)
+        for( int jj = 1; jj < sheetpath->m_numSheets; jj++ )
+        {
+            DrawSheetStruct* sheet = sheetpath->m_sheets[jj];
+            sheet->m_SheetNumber    = sheet_number++;
+            sheet->m_NumberOfSheets = sheet_count;
+            SCH_SCREEN*      screen = sheet->m_AssociatedScreen;
+            if( screen != NULL )
+            {
+                screen->m_NumberOfScreen = sheet_count;
+                screen->m_Date = date;
+            }
+        }
+    }
+
+    g_RootSheet->m_AssociatedScreen->m_Date = date;
+    g_RootSheet->m_AssociatedScreen->m_NumberOfScreen = sheet_count;
+    g_RootSheet->m_SheetNumber    = 1;
+    g_RootSheet->m_NumberOfSheets = sheet_count;
+}
 
 
 /*****************************************************************************
@@ -35,15 +77,15 @@ static int  ExistUnit( CmpListStruct* Objet, int Unit,
 void ReAnnotatePowerSymbolsOnly( void )
 {
     /* Build the screen list (screen, not sheet) */
-    EDA_SheetList SheetList( NULL );
+    EDA_SheetList  SheetList( NULL );
 
 
-    DrawSheetList* sheet;
+    DrawSheetPath* sheet;
     int            CmpNumber = 1;
 
     for( sheet = SheetList.GetFirst();
-         sheet != NULL;
-         sheet = SheetList.GetNext() )
+        sheet != NULL;
+        sheet = SheetList.GetNext() )
     {
         EDA_BaseStruct* DrawList = sheet->LastDrawList();
         for( ; DrawList != NULL; DrawList = DrawList->Pnext )
@@ -97,7 +139,7 @@ int AnnotateByPosition( const void* o1, const void* o2 )
     CmpListStruct* item1 = (CmpListStruct*) o1;
     CmpListStruct* item2 = (CmpListStruct*) o2;
 
-    int ii = strnicmp( item1->m_TextRef, item2->m_TextRef, 32 );
+    int            ii = strnicmp( item1->m_TextRef, item2->m_TextRef, 32 );
 
     if( ii == 0 )
         ii = item1->m_SheetList.Cmp( item2->m_SheetList );
@@ -113,20 +155,20 @@ int AnnotateByPosition( const void* o1, const void* o2 )
 
 
 /*****************************************************************************
- * qsort function to annotate items by value
- *  Components are sorted
- *      by reference
- *      if same reference: by value
- *          if same value: by unit number
- *              if same unit number, by sheet
- *                  if same sheet, by time stamp
- *****************************************************************************/
+* qsort function to annotate items by value
+*  Components are sorted
+*      by reference
+*      if same reference: by value
+*          if same value: by unit number
+*              if same unit number, by sheet
+*                  if same sheet, by time stamp
+*****************************************************************************/
 int AnnotateByValue( const void* o1, const void* o2 )
 {
     CmpListStruct* item1 = (CmpListStruct*) o1;
     CmpListStruct* item2 = (CmpListStruct*) o2;
 
-    int ii = strnicmp( item1->m_TextRef, item2->m_TextRef, 32 );
+    int            ii = strnicmp( item1->m_TextRef, item2->m_TextRef, 32 );
 
     if( ii == 0 )
         ii = strnicmp( item1->m_TextValue, item2->m_TextValue, 32 );
@@ -167,43 +209,43 @@ void DeleteAnnotation( WinEDA_SchematicFrame* parent, bool annotateSchematic )
 
 
 /*****************************************************************************
- * AnnotateComponents:
- *
- *  Compute the annotation of the components for the whole project, or the
- *  current sheet only.  All the components or the new ones only will be
- *  annotated.
- *****************************************************************************/
+* AnnotateComponents:
+*
+*  Compute the annotation of the components for the whole project, or the
+*  current sheet only.  All the components or the new ones only will be
+*  annotated.
+*****************************************************************************/
 void AnnotateComponents( WinEDA_SchematicFrame* parent,
-                         bool annotateSchematic,
-                         bool sortByPosition,
-                         bool resetAnnotation )
+                         bool                   annotateSchematic,
+                         bool                   sortByPosition,
+                         bool                   resetAnnotation )
 {
     int            ii, NbOfCmp;
-    DrawSheetList* sheet;
+    DrawSheetPath* sheet;
     CmpListStruct* BaseListeCmp;
 
     wxBusyCursor   dummy;
 
     /* If it is an annotation for all the components, reset previous
-       annotation: */
+      * annotation: */
     if( resetAnnotation )
         DeleteAnnotation( parent, annotateSchematic );
 
     /* Build the sheet list */
     EDA_SheetList SheetList( g_RootSheet );
 
-    /* Update the screen number, sheet count and date */
-    SheetList.UpdateSheetNumberAndDate();
+    /* Update the sheet number, sheet count and date */
+    parent->UpdateSheetNumberAndDate();
 
     /* First pass: Component counting */
-    ii = 0;
+    ii    = 0;
     sheet = parent->GetSheet();
     if( annotateSchematic )
     {
         NbOfCmp = 0;
         for( sheet = SheetList.GetFirst();
-             sheet != NULL;
-             sheet = SheetList.GetNext() )
+            sheet != NULL;
+            sheet = SheetList.GetNext() )
             NbOfCmp += ListeComposants( NULL, sheet );
     }
     else
@@ -219,8 +261,8 @@ void AnnotateComponents( WinEDA_SchematicFrame* parent,
     {
         ii = 0;
         for( sheet = SheetList.GetFirst();
-             sheet != NULL;
-             sheet = SheetList.GetNext() )
+            sheet != NULL;
+            sheet = SheetList.GetNext() )
             ii += ListeComposants( BaseListeCmp + ii, sheet );
     }
     else
@@ -230,15 +272,15 @@ void AnnotateComponents( WinEDA_SchematicFrame* parent,
         DisplayError( parent, wxT( "Internal error in AnnotateComponents()" ) );
 
     /* Break full components reference in name (prefix) and number:
-       example: IC1 become IC, and 1 */
+      * example: IC1 become IC, and 1 */
     BreakReference( BaseListeCmp, NbOfCmp );
 
-    if ( sortByPosition )
+    if( sortByPosition )
         qsort( BaseListeCmp, NbOfCmp, sizeof(CmpListStruct),
-               ( int( * ) ( const void*, const void* ) )AnnotateByValue );
+            ( int( * ) ( const void*, const void* ) )AnnotateByValue );
     else
         qsort( BaseListeCmp, NbOfCmp, sizeof(CmpListStruct),
-               ( int( * ) ( const void*, const void* ) )AnnotateByPosition );
+            ( int( * ) ( const void*, const void* ) )AnnotateByPosition );
 
     /* Recalculate reference numbers */
     ComputeReferenceNumber( BaseListeCmp, NbOfCmp );
@@ -254,10 +296,10 @@ void AnnotateComponents( WinEDA_SchematicFrame* parent,
 
 
 /*****************************************************************************
- * if BaseListeCmp == NULL : count components
- *  else update data table BaseListeCmp
- *****************************************************************************/
-int ListeComposants( CmpListStruct* BaseListeCmp, DrawSheetList* sheet )
+* if BaseListeCmp == NULL : count components
+*  else update data table BaseListeCmp
+*****************************************************************************/
+int ListeComposants( CmpListStruct* BaseListeCmp, DrawSheetPath* sheet )
 {
     int                     NbrCmp   = 0;
     EDA_BaseStruct*         DrawList = sheet->LastDrawList();
@@ -270,8 +312,8 @@ int ListeComposants( CmpListStruct* BaseListeCmp, DrawSheetList* sheet )
         {
             DrawLibItem = (EDA_SchComponentStruct*) DrawList;
             Entry = FindLibPart( DrawLibItem->m_ChipName.GetData(),
-                                 wxEmptyString,
-                                 FIND_ROOT );
+                wxEmptyString,
+                FIND_ROOT );
             if( Entry == NULL )
                 continue;
 
@@ -294,7 +336,7 @@ int ListeComposants( CmpListStruct* BaseListeCmp, DrawSheetList* sheet )
                 DrawLibItem->SetRef( sheet, wxT( "DefRef?" ) );
 
             strncpy( BaseListeCmp[NbrCmp].m_TextRef,
-                     CONV_TO_UTF8( DrawLibItem->GetRef( sheet ) ), 32 );
+                CONV_TO_UTF8( DrawLibItem->GetRef( sheet ) ), 32 );
 
             BaseListeCmp[NbrCmp].m_NumRef = -1;
 
@@ -302,7 +344,7 @@ int ListeComposants( CmpListStruct* BaseListeCmp, DrawSheetList* sheet )
                 DrawLibItem->m_Field[VALUE].m_Text = wxT( "~" );
 
             strncpy( BaseListeCmp[NbrCmp].m_TextValue,
-                     CONV_TO_UTF8( DrawLibItem->m_Field[VALUE].m_Text ), 32 );
+                CONV_TO_UTF8( DrawLibItem->m_Field[VALUE].m_Text ), 32 );
             NbrCmp++;
         }
     }
@@ -312,9 +354,9 @@ int ListeComposants( CmpListStruct* BaseListeCmp, DrawSheetList* sheet )
 
 
 /*****************************************************************************
- * Update the reference component for the schematic project (or the current
- * sheet)
- *****************************************************************************/
+* Update the reference component for the schematic project (or the current
+* sheet)
+*****************************************************************************/
 static void ReAnnotateComponents( CmpListStruct* BaseListeCmp, int NbOfCmp )
 {
     int   ii;
@@ -333,21 +375,21 @@ static void ReAnnotateComponents( CmpListStruct* BaseListeCmp, int NbOfCmp )
             sprintf( Text + strlen( Text ), "%d", BaseListeCmp[ii].m_NumRef );
 
         DrawLibItem->SetRef( &(BaseListeCmp[ii].m_SheetList),
-                             CONV_FROM_UTF8( Text ) );
+            CONV_FROM_UTF8( Text ) );
         DrawLibItem->m_Multi = BaseListeCmp[ii].m_Unit;
     }
 }
 
 
 /*****************************************************************************
- * Split component reference designators into a name (prefix) and number.
- * Example: IC1 becomes IC and 1 in the .m_NumRef member.
- * For multi part per package components not already annotated, set .m_Unit
- * to a max value (0x7FFFFFFF).
- *
- * @param BaseListeCmp = list of component
- * @param NbOfCmp   = item count in the list
- *****************************************************************************/
+* Split component reference designators into a name (prefix) and number.
+* Example: IC1 becomes IC and 1 in the .m_NumRef member.
+* For multi part per package components not already annotated, set .m_Unit
+* to a max value (0x7FFFFFFF).
+*
+* @param BaseListeCmp = list of component
+* @param NbOfCmp   = item count in the list
+*****************************************************************************/
 void BreakReference( CmpListStruct* BaseListeCmp, int NbOfCmp )
 {
     int   ii, ll;
@@ -388,17 +430,17 @@ void BreakReference( CmpListStruct* BaseListeCmp, int NbOfCmp )
             }
         }
 
-        wxLogDebug( wxT("BreakReference(): %s number found: %d\n" ),
-                    BaseListeCmp[ii].m_TextRef,
-                    BaseListeCmp[ii].m_NumRef );
+        wxLogDebug( wxT( "BreakReference(): %s number found: %d\n" ),
+            BaseListeCmp[ii].m_TextRef,
+            BaseListeCmp[ii].m_NumRef );
     }
 }
 
 
 /*****************************************************************************
- * Compute the reference number for components without reference number
- *  Compute .m_NumRef member
- *****************************************************************************/
+* Compute the reference number for components without reference number
+*  Compute .m_NumRef member
+*****************************************************************************/
 static void ComputeReferenceNumber( CmpListStruct* BaseListeCmp, int NbOfCmp )
 {
     int            ii, jj, LastReferenceNumber, NumberOfUnits, Unit;
@@ -429,8 +471,8 @@ static void ComputeReferenceNumber( CmpListStruct* BaseListeCmp, int NbOfCmp )
         {
             RefText = BaseListeCmp[ii].m_TextRef;
             LastReferenceNumber = GetLastReferenceNumber( BaseListeCmp + ii,
-                                                          BaseListeCmp,
-                                                          NbOfCmp );
+                BaseListeCmp,
+                NbOfCmp );
         }
 
         /* Annotation of one part per package components (trivial case)*/
@@ -448,7 +490,7 @@ static void ComputeReferenceNumber( CmpListStruct* BaseListeCmp, int NbOfCmp )
         }
 
         /* Annotation of multi-part components ( n parts per package )
-           (complex case) */
+          * (complex case) */
         ValText = BaseListeCmp[ii].m_TextValue;
         NumberOfUnits = BaseListeCmp[ii].m_NbParts;
 
@@ -486,10 +528,11 @@ static void ComputeReferenceNumber( CmpListStruct* BaseListeCmp, int NbOfCmp )
                 {
                     continue;
                 }
+
                 /* Component without reference number found, annotate it if
-                   possible */
-                if( !BaseListeCmp[jj].m_PartsLocked ||
-                    (BaseListeCmp[jj].m_Unit == Unit) )
+                  * possible */
+                if( !BaseListeCmp[jj].m_PartsLocked
+                   || (BaseListeCmp[jj].m_Unit == Unit) )
                 {
                     BaseListeCmp[jj].m_NumRef = BaseListeCmp[ii].m_NumRef;
                     BaseListeCmp[jj].m_Unit   = Unit;
@@ -504,17 +547,17 @@ static void ComputeReferenceNumber( CmpListStruct* BaseListeCmp, int NbOfCmp )
 
 
 /*****************************************************************************
- * Search the last used (greatest) reference number in the component list
- * for the prefix reference given by Objet
- * The component list must be sorted.
- *
- * @param Objet = reference item ( Objet->m_TextRef is the search pattern)
- * @param BaseListeCmp = list of items
- * @param NbOfCmp = items count in list of items
- *****************************************************************************/
+* Search the last used (greatest) reference number in the component list
+* for the prefix reference given by Objet
+* The component list must be sorted.
+*
+* @param Objet = reference item ( Objet->m_TextRef is the search pattern)
+* @param BaseListeCmp = list of items
+* @param NbOfCmp = items count in list of items
+*****************************************************************************/
 int GetLastReferenceNumber( CmpListStruct* Objet,
                             CmpListStruct* BaseListeCmp,
-                            int NbOfCmp )
+                            int            NbOfCmp )
 {
     CmpListStruct* LastObjet  = BaseListeCmp + NbOfCmp;
     int            LastNumber = 0;
@@ -535,13 +578,13 @@ int GetLastReferenceNumber( CmpListStruct* Objet,
 
 
 /*****************************************************************************
- * TODO: Translate this to english/
- * Recherche dans la liste triee des composants, pour les composants
- *  multiples s'il existe pour le composant de reference Objet,
- *  une unite de numero Unit
- *      Retourne index dans BaseListeCmp si oui
- *      retourne -1 si non
- *****************************************************************************/
+* TODO: Translate this to english/
+* Recherche dans la liste triee des composants, pour les composants
+*  multiples s'il existe pour le composant de reference Objet,
+*  une unite de numero Unit
+*      Retourne index dans BaseListeCmp si oui
+*      retourne -1 si non
+*****************************************************************************/
 static int ExistUnit( CmpListStruct* Objet, int Unit,
                       CmpListStruct* BaseListeCmp, int NbOfCmp )
 {
@@ -577,18 +620,18 @@ static int ExistUnit( CmpListStruct* Objet, int Unit,
 
 
 /*****************************************************************************
- *
- * Function CheckAnnotate
- * @return component count ( which are not annotated or have the same
- *  reference (duplicates))
- * @param oneSheetOnly : true = search is made only in the current sheet
- *                       false = search in whole hierarchy (usual search).
- *
- *****************************************************************************/
+*
+* Function CheckAnnotate
+* @return component count ( which are not annotated or have the same
+*  reference (duplicates))
+* @param oneSheetOnly : true = search is made only in the current sheet
+*                       false = search in whole hierarchy (usual search).
+*
+*****************************************************************************/
 int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
 {
     int            ii, error, NbOfCmp;
-    DrawSheetList* sheet;
+    DrawSheetPath* sheet;
     CmpListStruct* ListeCmp = NULL;
     wxString       Buff;
     wxString       msg, cmpref;
@@ -604,8 +647,8 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
     {
         NbOfCmp = 0;
         for( sheet = SheetList.GetFirst();
-             sheet != NULL;
-             sheet = SheetList.GetNext() )
+            sheet != NULL;
+            sheet = SheetList.GetNext() )
             NbOfCmp += ListeComposants( NULL, sheet );
     }
     else
@@ -626,8 +669,8 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
     {
         ii = 0;
         for( sheet = SheetList.GetFirst();
-             sheet != NULL;
-             sheet = SheetList.GetNext() )
+            sheet != NULL;
+            sheet = SheetList.GetNext() )
             ii += ListeComposants( ListeCmp + ii, sheet );
     }
     else
@@ -638,7 +681,7 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
     qsort( ListeCmp, NbOfCmp, sizeof(CmpListStruct), AnnotateByValue );
 
     /* Break full components reference in name (prefix) and number: example:
-       IC1 become IC, and 1 */
+      * IC1 become IC, and 1 */
     BreakReference( ListeCmp, NbOfCmp );
 
     /* count not yet annotated items */
@@ -657,7 +700,7 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
 
             cmpref = CONV_FROM_UTF8( ListeCmp[ii].m_TextRef );
             msg.Printf( _( "item not annotated: %s%s" ),
-                        cmpref.GetData(), Buff.GetData() );
+                cmpref.GetData(), Buff.GetData() );
 
             if( (ListeCmp[ii].m_Unit > 0) && (ListeCmp[ii].m_Unit < 0x7FFFFFFF) )
             {
@@ -679,10 +722,10 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
 
             cmpref = CONV_FROM_UTF8( ListeCmp[ii].m_TextRef );
             msg.Printf( _( "Error item %s%s" ), cmpref.GetData(),
-                        Buff.GetData() );
+                Buff.GetData() );
 
             Buff.Printf( _( " unit %d and no more than %d parts" ),
-                         ListeCmp[ii].m_Unit, ListeCmp[ii].m_NbParts );
+                ListeCmp[ii].m_Unit, ListeCmp[ii].m_NbParts );
             msg << Buff;
             DisplayError( frame, msg );
             error++;
@@ -700,8 +743,8 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
         Buff.Empty();
 
         if( (stricmp( ListeCmp[ii].m_TextRef,
-                      ListeCmp[ii + 1].m_TextRef ) != 0)||
-            ( ListeCmp[ii].m_NumRef != ListeCmp[ii + 1].m_NumRef ) )
+                 ListeCmp[ii + 1].m_TextRef ) != 0)
+           || ( ListeCmp[ii].m_NumRef != ListeCmp[ii + 1].m_NumRef ) )
             continue;
 
         /* Same reference found */
@@ -716,7 +759,7 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
 
             cmpref = CONV_FROM_UTF8( ListeCmp[ii].m_TextRef );
             msg.Printf( _( "Multiple item %s%s" ),
-                        cmpref.GetData(), Buff.GetData() );
+                cmpref.GetData(), Buff.GetData() );
 
             if( (ListeCmp[ii].m_Unit > 0) && (ListeCmp[ii].m_Unit < 0x7FFFFFFF) )
             {
@@ -739,7 +782,7 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
 
             cmpref = CONV_FROM_UTF8( ListeCmp[ii].m_TextRef );
             msg.Printf( _( "Multiple item %s%s" ),
-                        cmpref.GetData(), Buff.GetData() );
+                cmpref.GetData(), Buff.GetData() );
 
             if( (ListeCmp[ii].m_Unit > 0) && (ListeCmp[ii].m_Unit < 0x7FFFFFFF) )
             {
@@ -753,7 +796,7 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
 
         /* Error if values are different between units, for the same reference */
         if( stricmp( ListeCmp[ii].m_TextValue,
-                     ListeCmp[ii + 1].m_TextValue ) != 0 )
+                ListeCmp[ii + 1].m_TextValue ) != 0 )
         {
             wxString nextcmpref, cmpvalue, nextcmpvalue;
             cmpref       = CONV_FROM_UTF8( ListeCmp[ii].m_TextRef );
@@ -761,13 +804,13 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
             cmpvalue     = CONV_FROM_UTF8( ListeCmp[ii].m_TextValue );
             nextcmpvalue = CONV_FROM_UTF8( ListeCmp[ii + 1].m_TextValue );
             msg.Printf( _( "Diff values for %s%d%c (%s) and %s%d%c (%s)" ),
-                        cmpref.GetData(),
-                        ListeCmp[ii].m_NumRef,
-                        ListeCmp[ii].m_Unit + 'A' - 1,
-                        cmpvalue.GetData(), nextcmpref.GetData(),
-                        ListeCmp[ii + 1].m_NumRef,
-                        ListeCmp[ii + 1].m_Unit + 'A' - 1,
-                        nextcmpvalue.GetData() );
+                cmpref.GetData(),
+                ListeCmp[ii].m_NumRef,
+                ListeCmp[ii].m_Unit + 'A' - 1,
+                cmpvalue.GetData(), nextcmpref.GetData(),
+                ListeCmp[ii + 1].m_NumRef,
+                ListeCmp[ii + 1].m_Unit + 'A' - 1,
+                nextcmpvalue.GetData() );
 
             DisplayError( frame, msg );
             error++;

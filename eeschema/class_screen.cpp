@@ -268,7 +268,7 @@ void EDA_ScreenList::BuildScreenList( EDA_BaseStruct* s )
 /*********************************************************************/
 
 /*****************************************/
-DrawSheetList* EDA_SheetList::GetFirst()
+DrawSheetPath* EDA_SheetList::GetFirst()
 /*****************************************/
 {
     m_index = 0;
@@ -279,7 +279,7 @@ DrawSheetList* EDA_SheetList::GetFirst()
 
 
 /*****************************************/
-DrawSheetList* EDA_SheetList::GetNext()
+DrawSheetPath* EDA_SheetList::GetNext()
 /*****************************************/
 {
     if( m_index < m_count )
@@ -289,7 +289,7 @@ DrawSheetList* EDA_SheetList::GetNext()
 
 
 /************************************************/
-DrawSheetList* EDA_SheetList::GetSheet( int index )
+DrawSheetPath* EDA_SheetList::GetSheet( int index )
 /************************************************/
 
 /* return the m_List[index] item
@@ -312,8 +312,8 @@ void EDA_SheetList::BuildSheetList( DrawSheetStruct* sheet )
         m_index = 0;
         if( m_List )
             free( m_List );m_List = NULL;
-        count *= sizeof(DrawSheetList);
-        m_List = (DrawSheetList*) MyZMalloc( count );
+        count *= sizeof(DrawSheetPath);
+        m_List = (DrawSheetPath*) MyZMalloc( count );
         memset( (void*) m_List, 0, count );
         m_currList.Clear();
     }
@@ -336,44 +336,3 @@ void EDA_SheetList::BuildSheetList( DrawSheetStruct* sheet )
     m_currList.Pop();
 }
 
-
-/************************************************/
-void EDA_SheetList::UpdateSheetNumberAndDate()
-/************************************************/
-
-/* Set a sheet number, the sheet count for sheets in the whoçle schematic
- * and update the date in all srceens
- */
-{
-    wxString date = GenDate();
-    int      sheet_count = 1, sheet_number = 2;	// sheet 1 is the root sheet
-
-    for( int ii = 0; ii<(int) m_count; ii++ )
-    {
-        DrawSheetList* sheetlist = GetSheet( ii );
-        sheet_count += sheetlist->m_numSheets;
-    }
-
-    for( int ii = 0; ii<(int) m_count; ii++ )
-    {
-        DrawSheetList* sheetlist = GetSheet( ii );
-		// Read all sheets in path, but not the root sheet (jj = 1)
-        for( int jj = 1; jj < sheetlist->m_numSheets; jj++ )
-        {
-            DrawSheetStruct* sheet = sheetlist->m_sheets[jj];
-            sheet->m_SheetNumber    = sheet_number++;
-            sheet->m_NumberOfSheets = m_count;
-            SCH_SCREEN*      screen = sheet->m_AssociatedScreen;
-            if( screen != NULL )
-			{
-				screen->m_NumberOfScreen = sheet_count;
-                screen->m_Date = date;
-			}
-        }
-    }
-
-	g_RootSheet->m_AssociatedScreen->m_Date = date;
-	g_RootSheet->m_AssociatedScreen->m_NumberOfScreen = sheet_count;
-	g_RootSheet->m_SheetNumber = 1;
-	g_RootSheet->m_NumberOfSheets = m_count;
-}

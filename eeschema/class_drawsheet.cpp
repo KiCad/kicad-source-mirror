@@ -43,10 +43,11 @@ DrawSheetStruct::DrawSheetStruct( const wxPoint& pos ) :
     m_NbLabel = 0;
     m_Layer   = LAYER_SHEET;
     m_Pos = pos;
+	m_TimeStamp = GetTimeStamp();
     m_SheetNameSize = m_FileNameSize = 60;
     m_AssociatedScreen = NULL;
-    m_SheetName = wxT( "Root" );
-    m_FileName  = wxT( " " );
+    m_SheetName.Printf( wxT("Sheet%8.8lX"), m_TimeStamp);
+    m_FileName.Printf( wxT("file%8.8lX.sch"), m_TimeStamp);
 	m_SheetNumber = 1;
     m_NumberOfSheets = 1;
 
@@ -351,7 +352,7 @@ bool DrawSheetStruct::SearchHierarchy( wxString filename, SCH_SCREEN** screen )
 
 
 /*******************************************************************************/
-bool DrawSheetStruct::LocatePathOfScreen( SCH_SCREEN* screen, DrawSheetList* list )
+bool DrawSheetStruct::LocatePathOfScreen( SCH_SCREEN* screen, DrawSheetPath* list )
 /*******************************************************************************/
 {
     //search the existing hierarchy for an instance of screen "FileName".
@@ -386,6 +387,8 @@ bool DrawSheetStruct::LocatePathOfScreen( SCH_SCREEN* screen, DrawSheetList* lis
 bool DrawSheetStruct::Load( WinEDA_SchematicFrame* frame )
 /*******************************************************************************/
 {
+	bool success = true;
+
     if( !m_AssociatedScreen )
     {
         SCH_SCREEN* screen = NULL;
@@ -401,22 +404,24 @@ bool DrawSheetStruct::Load( WinEDA_SchematicFrame* frame )
         {
             m_AssociatedScreen = new SCH_SCREEN( SCHEMATIC_FRAME );
             m_AssociatedScreen->m_RefCount++;
-            if( !frame->LoadOneEEFile( m_AssociatedScreen, m_FileName ) )
-                return false;
-            EDA_BaseStruct* bs = m_AssociatedScreen->EEDrawList;
-            while( bs )
-            {
-                if( bs->Type() ==  DRAW_SHEET_STRUCT_TYPE )
-                {
-                    DrawSheetStruct* ss = (DrawSheetStruct*) bs;
-                    if( !ss->Load( frame ) )
-                        return false;
-                }
-                bs = bs->Pnext;
-            }
+            success = frame->LoadOneEEFile( m_AssociatedScreen, m_FileName);
+			if ( success )
+			{
+				EDA_BaseStruct* bs = m_AssociatedScreen->EEDrawList;
+				while( bs )
+				{
+					if( bs->Type() ==  DRAW_SHEET_STRUCT_TYPE )
+					{
+						DrawSheetStruct* sheetstruct = (DrawSheetStruct*) bs;
+						if( !sheetstruct->Load( frame ) )
+							success = false;
+					}
+					bs = bs->Pnext;
+				}
+			}
         }
     }
-    return true;
+    return success;
 }
 
 
@@ -441,6 +446,21 @@ int DrawSheetStruct::CountSheets()
     return count;
 }
 
+
+/******************************************/
+wxString DrawSheetStruct::GetFileName(void)
+/******************************************/
+{
+	return m_FileName;
+}
+
+
+/************************************************************/
+void DrawSheetStruct::SetFileName(const wxString & aFilename)
+/************************************************************/
+{
+	m_FileName = aFilename;
+}
 
 /************************/
 /* DrawSheetLabelStruct */
@@ -571,7 +591,7 @@ void DrawSheetLabelStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoin
 /* class to handle a series of sheets *********/
 /* a 'path' so to speak.. *********************/
 /**********************************************/
-DrawSheetList::DrawSheetList()
+DrawSheetPath::DrawSheetPath()
 {
     for( int i = 0; i<DSLSZ; i++ )
         m_sheets[i] = NULL;
@@ -580,7 +600,7 @@ DrawSheetList::DrawSheetList()
 }
 
 
-int DrawSheetList::Cmp( DrawSheetList& d )
+int DrawSheetPath::Cmp( DrawSheetPath& d )
 {
     if( m_numSheets > d.m_numSheets )
         return 1;
@@ -600,7 +620,7 @@ int DrawSheetList::Cmp( DrawSheetList& d )
 }
 
 
-DrawSheetStruct* DrawSheetList::Last()
+DrawSheetStruct* DrawSheetPath::Last()
 {
     if( m_numSheets )
         return m_sheets[m_numSheets - 1];
@@ -608,7 +628,7 @@ DrawSheetStruct* DrawSheetList::Last()
 }
 
 
-SCH_SCREEN* DrawSheetList::LastScreen()
+SCH_SCREEN* DrawSheetPath::LastScreen()
 {
     if( m_numSheets )
         return m_sheets[m_numSheets - 1]->m_AssociatedScreen;
@@ -616,7 +636,7 @@ SCH_SCREEN* DrawSheetList::LastScreen()
 }
 
 
-EDA_BaseStruct* DrawSheetList::LastDrawList()
+EDA_BaseStruct* DrawSheetPath::LastDrawList()
 {
     if( m_numSheets && m_sheets[m_numSheets - 1]->m_AssociatedScreen )
         return m_sheets[m_numSheets - 1]->m_AssociatedScreen->EEDrawList;
@@ -624,8 +644,9 @@ EDA_BaseStruct* DrawSheetList::LastDrawList()
 }
 
 
-void DrawSheetList::Push( DrawSheetStruct* sheet )
+void DrawSheetPath::Push( DrawSheetStruct* sheet )
 {
+	wxASSERT( m_numSheets <= DSLSZ );
     if( m_numSheets < DSLSZ )
     {
         m_sheets[m_numSheets] = sheet;
@@ -634,7 +655,7 @@ void DrawSheetList::Push( DrawSheetStruct* sheet )
 }
 
 
-DrawSheetStruct* DrawSheetList::Pop()
+DrawSheetStruct* DrawSheetPath::Pop()
 {
     if( m_numSheets > 0 )
     {
@@ -645,7 +666,7 @@ DrawSheetStruct* DrawSheetList::Pop()
 }
 
 
-wxString DrawSheetList::Path()
+wxString DrawSheetPath::Path()
 {
     wxString s, t;
 
@@ -664,7 +685,7 @@ wxString DrawSheetList::Path()
 }
 
 
-wxString DrawSheetList::PathHumanReadable()
+wxString DrawSheetPath::PathHumanReadable()
 {
     wxString s, t;
 
@@ -680,7 +701,7 @@ wxString DrawSheetList::PathHumanReadable()
 }
 
 
-void DrawSheetList::UpdateAllScreenReferences()
+void DrawSheetPath::UpdateAllScreenReferences()
 {
     EDA_BaseStruct* t = LastDrawList();
 
@@ -698,7 +719,7 @@ void DrawSheetList::UpdateAllScreenReferences()
 }
 
 
-bool DrawSheetList::operator=( const DrawSheetList& d1 )
+bool DrawSheetPath::operator=( const DrawSheetPath& d1 )
 {
     m_numSheets = d1.m_numSheets;
     int i;
@@ -716,7 +737,7 @@ bool DrawSheetList::operator=( const DrawSheetList& d1 )
 }
 
 
-bool DrawSheetList::operator==( const DrawSheetList& d1 )
+bool DrawSheetPath::operator==( const DrawSheetPath& d1 )
 {
     if( m_numSheets != d1.m_numSheets )
         return false;
@@ -730,7 +751,7 @@ bool DrawSheetList::operator==( const DrawSheetList& d1 )
 }
 
 
-bool DrawSheetList::operator!=( const DrawSheetList& d1 )
+bool DrawSheetPath::operator!=( const DrawSheetPath& d1 )
 {
     if( m_numSheets != d1.m_numSheets )
         return true;

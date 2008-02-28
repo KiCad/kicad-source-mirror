@@ -88,7 +88,7 @@ public:
     }
 };
 
-WX_DECLARE_OBJARRAY( DrawSheetList, ArrayOfSheetLists );
+WX_DECLARE_OBJARRAY( DrawSheetPath, ArrayOfSheetLists );
 /* the class EDA_SchComponentStruct describes a real component */
 class EDA_SchComponentStruct : public DrawPartStruct
 {
@@ -148,9 +148,9 @@ public:
 
 
     //returns a unique ID, in the form of a path.
-    wxString                GetPath( DrawSheetList* sheet );
-    const wxString          GetRef( DrawSheetList* sheet );
-    void                    SetRef( DrawSheetList* sheet, wxString ref );
+    wxString                GetPath( DrawSheetPath* sheet );
+    const wxString          GetRef( DrawSheetPath* sheet );
+    void                    SetRef( DrawSheetPath* sheet, wxString ref );
     void                    ClearRefs();
 
 #if defined (DEBUG)

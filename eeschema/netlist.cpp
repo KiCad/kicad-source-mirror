@@ -20,7 +20,7 @@
 static void PropageNetCode( int OldNetCode, int NewNetCode, int IsBus );
 static void SheetLabelConnect( ObjetNetListStruct* SheetLabel );
 static int  ListeObjetConnection( WinEDA_SchematicFrame* frame,
-                                  DrawSheetList* sheetlist,
+                                  DrawSheetPath* sheetlist,
                                   ObjetNetListStruct* ObjNet );
 static int  ConvertBusToMembers( ObjetNetListStruct* ObjNet );
 static void PointToPointConnect( ObjetNetListStruct* Ref, int IsBus,
@@ -154,7 +154,7 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
 {
     int                 NetNumber;
     int                 i, istart, NetCode;
-	DrawSheetList*		sheet; 
+	DrawSheetPath*		sheet; 
     wxString            msg;
     wxBusyCursor        Busy;
 
@@ -435,7 +435,7 @@ static void SheetLabelConnect( ObjetNetListStruct* SheetLabel )
 
 
 /*****************************************************************************/
-static int ListeObjetConnection( WinEDA_SchematicFrame* frame, DrawSheetList* sheetlist,
+static int ListeObjetConnection( WinEDA_SchematicFrame* frame, DrawSheetPath* sheetlist,
                                  ObjetNetListStruct* ObjNet )
 /*****************************************************************************/
 
@@ -454,7 +454,7 @@ static int ListeObjetConnection( WinEDA_SchematicFrame* frame, DrawSheetList* sh
     EDA_LibComponentStruct* Entry;
     LibEDA_BaseStruct*      DEntry;
     DrawSheetLabelStruct*   SheetLabel;
-	DrawSheetList			list; 
+	DrawSheetPath			list; 
     
     DrawList = sheetlist->LastScreen()->EEDrawList;
     for( ; DrawList;  DrawList = DrawList->Pnext )

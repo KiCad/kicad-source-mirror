@@ -55,8 +55,8 @@ public:
 };
 
 
-class DrawSheetLabelStruct : public EDA_BaseStruct
-    , public EDA_TextStruct
+class DrawSheetLabelStruct : public EDA_BaseStruct,
+    public EDA_TextStruct
 {
 public:
     int  m_Layer;
@@ -87,8 +87,8 @@ public:
 
 
 /* class DrawSheetStruct
-This class is the sheet symbol placed in a schematic, and is the entry point for a sub schematic
-*/
+  * This class is the sheet symbol placed in a schematic, and is the entry point for a sub schematic
+ */
 WX_DEFINE_ARRAY( DrawSheetStruct *, SheetGrowArray );
 
 class DrawSheetStruct : public EDA_BaseStruct /*public SCH_SCREEN*/    /* Gestion de la hierarchie */
@@ -96,20 +96,22 @@ class DrawSheetStruct : public EDA_BaseStruct /*public SCH_SCREEN*/    /* Gestio
 public:
     wxString              m_SheetName;  //this is equivalent to C101 for components:
     // it is stored in F0 ... of the file.
+private:
     wxString              m_FileName;   //also in SCH_SCREEN (redundant),
                                         //but need it here for loading after
                                         //reading the sheet description from file.
-    int                   m_SheetNameSize;
+public:
+    int                   m_SheetNameSize;	// Size (height) of the text, used to draw the name
 
-    int                   m_FileNameSize;
+    int                   m_FileNameSize;	// Size (height) of the text, used to draw the name
     wxPoint               m_Pos;
     wxSize                m_Size;           /* Position and Size of sheet symbol */
     int                   m_Layer;
     DrawSheetLabelStruct* m_Label;          /* Points de connection, linked list.*/
     int                   m_NbLabel;        /* Nombre de points de connexion */
-    SCH_SCREEN*           m_AssociatedScreen;	/* Associated Screen which handle the physical data
-In complex hierarchies we can have many DrawSheetStruct using the same data
-*/
+    SCH_SCREEN*           m_AssociatedScreen;   /* Associated Screen which handle the physical data
+                                                  * In complex hierarchies we can have many DrawSheetStruct using the same data
+                                                 */
     int                   m_SheetNumber;    // sheet number (used for info)
     int                   m_NumberOfSheets; // Sheets count in the whole schematic (used for info)
 
@@ -133,8 +135,10 @@ public:
     int                 ComponentCount();
     bool                Load( WinEDA_SchematicFrame* frame );
     bool                SearchHierarchy( wxString filename, SCH_SCREEN** screen );
-    bool                LocatePathOfScreen( SCH_SCREEN* screen, DrawSheetList* list );
+    bool                LocatePathOfScreen( SCH_SCREEN* screen, DrawSheetPath* list );
     int                 CountSheets();
+	wxString			GetFileName(void);
+	void				SetFileName(const wxString & aFilename);
 
     //void 		RemoveSheet(DrawSheetStruct* sheet);
     //to remove a sheet, just delete it
@@ -147,16 +151,16 @@ public:
 /* a 'path' so to speak.. *********************/
 /**********************************************/
 #define DSLSZ 32
-class DrawSheetList
+class DrawSheetPath
 {
 public:
     int m_numSheets;
     DrawSheetStruct* m_sheets[DSLSZ];
 
-    DrawSheetList();
-    ~DrawSheetList() { };
+    DrawSheetPath();
+    ~DrawSheetPath() { };
     void                Clear() { m_numSheets = 0; }
-    int                 Cmp( DrawSheetList& d );
+    int                 Cmp( DrawSheetPath& d );
     DrawSheetStruct*    Last();
     SCH_SCREEN*         LastScreen();
     EDA_BaseStruct*     LastDrawList();
@@ -166,11 +170,11 @@ public:
     wxString            PathHumanReadable();
     void                UpdateAllScreenReferences();
 
-    bool operator       =( const DrawSheetList& d1 );
+    bool operator       =( const DrawSheetPath& d1 );
 
-    bool operator       ==( const DrawSheetList& d1 );
+    bool operator       ==( const DrawSheetPath& d1 );
 
-    bool operator       !=( const DrawSheetList& d1 );
+    bool operator       !=( const DrawSheetPath& d1 );
 };
 
 
@@ -179,14 +183,16 @@ public:
 /*******************************************************/
 
 // sheets are not unique - can have many sheets with the same
-// filename and the same SCH_SHEET reference.
+// filename and the same SCH_SCREEN reference.
 class EDA_SheetList
 {
 private:
-    DrawSheetList* m_List;
-    int            m_count;
+    DrawSheetPath* m_List;
+    int            m_count;     /* Number of sheets included in hierarchy,
+                                  * starting at the given sheet in constructor . the given sheet is counted
+                                 */
     int            m_index;
-    DrawSheetList  m_currList;
+    DrawSheetPath  m_currList;
 
 public:
     EDA_SheetList( DrawSheetStruct* sheet )
@@ -211,10 +217,9 @@ public:
 
 
     int GetCount() { return m_count; }
-    DrawSheetList*  GetFirst();
-    DrawSheetList*  GetNext();
-    DrawSheetList*  GetSheet( int index );
-    void            UpdateSheetNumberAndDate();       // Update the date displayed in the sheet count
+    DrawSheetPath*  GetFirst();
+    DrawSheetPath*  GetNext();
+    DrawSheetPath*  GetSheet( int index );
 
 private:
     void            BuildSheetList( DrawSheetStruct* sheet );
@@ -242,9 +247,9 @@ public:
 
     ~EDA_ScreenList() { }
     int GetCount() { return m_List.GetCount(); }
-    SCH_SCREEN*     GetFirst();
-    SCH_SCREEN*     GetNext();
-    SCH_SCREEN*     GetScreen( unsigned int index );
+    SCH_SCREEN* GetFirst();
+    SCH_SCREEN* GetNext();
+    SCH_SCREEN* GetScreen( unsigned int index );
 
 private:
     void            AddScreenToList( SCH_SCREEN* testscreen );

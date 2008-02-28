@@ -25,9 +25,9 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, bool use_
 
 static void WriteGENERICListOfNets( FILE* f, ObjetNetListStruct* ObjNet );
 static void AddPinToComponentPinList( EDA_SchComponentStruct* Component,
-									  DrawSheetList* 		  sheet, 
+									  DrawSheetPath* 		  sheet, 
                                       LibDrawPin*             PinEntry );
-static void FindOthersUnits( EDA_SchComponentStruct* Component, DrawSheetList* Sheet_in);
+static void FindOthersUnits( EDA_SchComponentStruct* Component, DrawSheetPath* Sheet_in);
 static int  SortPinsByNum( ObjetNetListStruct** Pin1, ObjetNetListStruct** Pin2 );
 static void EraseDuplicatePins( ObjetNetListStruct** TabPin, int NbrPin );
 
@@ -93,7 +93,7 @@ void WriteNetList( WinEDA_SchematicFrame* frame, const wxString& FileNameNL,
 
 /****************************************************************************/
 static EDA_SchComponentStruct* FindNextComponentAndCreatPinList(
-		EDA_BaseStruct* DrawList, DrawSheetList* sheet)
+		EDA_BaseStruct* DrawList, DrawSheetPath* sheet)
 /****************************************************************************/
 
 /*	Find a "suitable" component from the DrawList
@@ -245,7 +245,7 @@ void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame,
  */
 {
     wxString                Line, FootprintName;
-	DrawSheetList* 		sheet;
+	DrawSheetPath* 		sheet;
     EDA_BaseStruct*         DrawList;
     EDA_SchComponentStruct* Component;
     wxString                netname;
@@ -392,7 +392,7 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
  */
 {
     char                    Line[1024];
-    DrawSheetList* 		sheet;
+    DrawSheetPath* 		sheet;
     EDA_BaseStruct*         DrawList;
     EDA_SchComponentStruct* Component;
     int ii, nbitems;
@@ -534,7 +534,7 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
 {
     wxString Line, FootprintName;
     char Buf[256];
-    DrawSheetList* sheet;
+    DrawSheetPath* sheet;
     EDA_BaseStruct* DrawList;
     EDA_SchComponentStruct* Component;
     int ii;
@@ -676,7 +676,7 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
 
 /*************************************************************************************/
 static void AddPinToComponentPinList( EDA_SchComponentStruct* Component, 
-									  DrawSheetList* sheetlist, LibDrawPin* Pin )
+									  DrawSheetPath* sheetlist, LibDrawPin* Pin )
 /*************************************************************************************/
 
 /* Add a new pin description in the pin list s_SortedComponentPinList
@@ -742,7 +742,7 @@ static void EraseDuplicatePins( ObjetNetListStruct** TabPin, int NbrPin )
 
 
 /**********************************************************************/
-static void FindOthersUnits( EDA_SchComponentStruct* Component_in, DrawSheetList* Sheet_in)
+static void FindOthersUnits( EDA_SchComponentStruct* Component_in, DrawSheetPath* Sheet_in)
 /**********************************************************************/
 
 /* Recherche les autres parts du boitier auquel appartient la part Component,
@@ -754,7 +754,7 @@ static void FindOthersUnits( EDA_SchComponentStruct* Component_in, DrawSheetList
     EDA_SchComponentStruct* Component2;
     EDA_LibComponentStruct* Entry;
     LibEDA_BaseStruct* DEntry;
-    DrawSheetList* sheet;
+    DrawSheetPath* sheet;
 	wxString str; 
 
     EDA_SheetList SheetList( NULL );
@@ -960,7 +960,7 @@ static void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
     wxString msg;
     wxString FootprintName;
     char Line[1024];
-    DrawSheetList* sheet;
+    DrawSheetPath* sheet;
     EDA_BaseStruct* DrawList;
     EDA_SchComponentStruct* Component;
     wxString Title = g_Main_Title + wxT( " " ) + GetBuildVersion();

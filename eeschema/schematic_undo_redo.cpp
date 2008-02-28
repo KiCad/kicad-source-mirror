@@ -533,8 +533,11 @@ void SCH_SCREEN::ClearUndoORRedoList( EDA_BaseStruct* List )
                 item = PickedList->m_PickedStruct;
                 if( item )
                 {
+#if 0
                     if( item->Type() == DRAW_SHEET_STRUCT_TYPE )
                     {
+                                printf(
+                                    "schematic undo_redo.cpp: undo_redo with a DRAW_SHEET_STRUCT_TYPE, checkme!!\n" );
                         DrawSheetStruct* sheet = (DrawSheetStruct*) item;
                         /* Delete sub hierarchy if the sheet must be deleted */
                         if( (sheet->m_Flags & IS_DELETED) != 0 )
@@ -544,8 +547,6 @@ void SCH_SCREEN::ClearUndoORRedoList( EDA_BaseStruct* List )
                         {
                             if( (item->m_Flags & IS_NEW) == 0 )
                             {
-                                printf(
-                                    "schematic undo_redo.cpp: undo_redo with a DRAW_SHEET_STRUCT_TYPE, checkme!!\n" );
 
                                 /*
                                   * sheet->EEDrawList = NULL;
@@ -555,6 +556,7 @@ void SCH_SCREEN::ClearUndoORRedoList( EDA_BaseStruct* List )
                             }
                         }
                     }
+#endif
                     if( (item->m_Flags & IS_NEW) == 0 )
                     {
                         SAFE_DELETE( item );
@@ -578,6 +580,7 @@ void SCH_SCREEN::ClearUndoORRedoList( EDA_BaseStruct* List )
             }
             else
             {
+#if 0
                 if( FirstItem->Type() == DRAW_SHEET_STRUCT_TYPE )
                 {
                     DrawSheetStruct* sheet = (DrawSheetStruct*) FirstItem;
@@ -599,6 +602,7 @@ void SCH_SCREEN::ClearUndoORRedoList( EDA_BaseStruct* List )
                         }
                     }
                 }
+#endif
                 if( (FirstItem->m_Flags & IS_NEW) == 0 )
                 {
                     SAFE_DELETE( FirstItem );

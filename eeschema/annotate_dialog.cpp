@@ -208,7 +208,7 @@ void WinEDA_AnnotateFrame::CreateControls()
     /* TODO: Check if there is any existing annotation and enable/disable
      *       the clear button accordingly.  Probably should also enable/
      *       disable new components radio button if all of the components
-     *       are already annotated.  Some low level work on the DrawSheetList
+     *       are already annotated.  Some low level work on the DrawSheetPath
      *       class will need to be done to accomadate this.
      */
     m_btnClear = new wxButton( this, wxID_CLEAR );

@@ -772,7 +772,7 @@ int GenListeCmp( ListComponent * List )
 int ItemCount = 0;
 EDA_BaseStruct *DrawList;
 EDA_SchComponentStruct *DrawLibItem;
-DrawSheetList * sheet;
+DrawSheetPath * sheet;
 
 	/* Build the sheet (not screen) list */
 	EDA_SheetList SheetList(NULL);
@@ -820,7 +820,7 @@ static int GenListeGLabels( ListLabel * List )
 int ItemCount = 0;
 EDA_BaseStruct *DrawList;
 DrawSheetLabelStruct *SheetLabel;
-DrawSheetList * sheet;
+DrawSheetPath * sheet;
 
 	/* Build the screen list */
 	EDA_SheetList SheetList(NULL);

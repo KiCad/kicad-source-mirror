@@ -712,7 +712,7 @@ static bool WriteDiagnosticERC( const wxString& FullFileName )
     DrawMarkerStruct* Marker;
     char Line[256];
     static FILE*      OutErc;
-    DrawSheetList*  Sheet;
+    DrawSheetPath*  Sheet;
     wxString          msg;
 
     if( ( OutErc = wxFopen( FullFileName, wxT( "wt" ) ) ) == NULL )

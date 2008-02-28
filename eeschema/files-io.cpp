@@ -141,7 +141,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNe
 	
 	wxSetWorkingDirectory( wxPathOnly( FullFileName ) );
 	GetScreen()->m_FileName = FullFileName;
-	g_RootSheet->m_FileName = FullFileName;
+	g_RootSheet->SetFileName(FullFileName);
 	Affiche_Message( wxEmptyString );
 	MsgPanel->EraseMsgBox();
 
@@ -223,14 +223,13 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNe
 
 	//load the project.
 	SAFE_DELETE(g_RootSheet->m_AssociatedScreen); 
-	if(!g_RootSheet->Load(this))
-		return 0;
+	bool diag = g_RootSheet->Load(this);
 
 	/* Reaffichage ecran de base (ROOT) si necessaire */
 	ActiveScreen = GetScreen(); 
 	Zoom_Automatique( FALSE );
 	DrawPanel->Refresh( TRUE );
-	return 1;
+	return diag;
 }
 /**********************************************************/
 SCH_SCREEN * WinEDA_SchematicFrame::CreateNewScreen(

@@ -70,7 +70,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindComponentAndItem(
  * @param mouseWarp If true, then move the mouse cursor to the item.
  */
 {
-    DrawSheetList*          sheet, * SheetWithComponentFound = NULL;
+    DrawSheetPath*          sheet, * SheetWithComponentFound = NULL;
     EDA_BaseStruct*         DrawList  = NULL;
     EDA_SchComponentStruct* Component = NULL;
     wxSize                  DrawAreaSize = DrawPanel->GetClientSize();
@@ -266,7 +266,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindMarker( int SearchType )
  *  SearchType = 0: search the first marker, else search next marker
  */
 {
-    DrawSheetList*  sheet, * FirstSheet = NULL;
+    DrawSheetPath*  sheet, * FirstSheet = NULL;
     EDA_BaseStruct*   DrawList, * FirstStruct = NULL, * Struct = NULL;
     DrawMarkerStruct* Marker = NULL;
     int StartCount;
@@ -420,7 +420,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
  * @param mouseWarp If true, then move the mouse cursor to the item.
  */
 {
-    DrawSheetList*     Sheet, * FirstSheet = NULL;
+    DrawSheetPath*     Sheet, * FirstSheet = NULL;
     EDA_BaseStruct* DrawList = NULL, * FirstStruct = NULL, * Struct = NULL;
     int             StartCount, ii, jj;
     bool            NotFound;

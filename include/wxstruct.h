@@ -75,7 +75,7 @@ class DrawGlobalLabelStruct;
 class DrawTextStruct;
 class EDA_DrawLineStruct;
 class DrawSheetStruct;
-class DrawSheetList;
+class DrawSheetPath;
 class DrawSheetLabelStruct;
 class EDA_SchComponentStruct;
 class LibDrawField;

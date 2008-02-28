@@ -98,6 +98,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
         return FALSE;
 
     screen->SetCurItem( NULL );
+	screen->m_FileName = FullFileName; 
 
     LineCount = 1;
     if( ( f = wxFopen( FullFileName, wxT( "rt" ) ) ) == NULL )
@@ -107,7 +108,6 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
         return FALSE;
     }
 
-	screen->m_FileName = FullFileName; 
 	MsgDiag = _( "Loading " ) + screen->m_FileName;
     PrintMsg( MsgDiag );
 
@@ -886,7 +886,7 @@ static int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Wi
             }
             else
             {
-                SheetStruct->m_FileName     = CONV_FROM_UTF8( Name1 );
+                SheetStruct->SetFileName(CONV_FROM_UTF8( Name1 ));
 				//printf("in ReadSheetDescr : SheetStruct->m_FileName = %s \n", Name1); 
                 SheetStruct->m_FileNameSize = size;
             }

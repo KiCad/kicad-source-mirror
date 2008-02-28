@@ -42,7 +42,7 @@ wxString msg;
 	{
 		msg.Printf( _("Sheet %s (file %s) modified. Save it?"),
 					FirstSheet->m_SheetName.GetData(),
-					FirstSheet->m_FileName.GetData());
+					FirstSheet->GetFileName().GetData());
 		if( IsOK(NULL, msg) )
 		{
 			frame->SaveEEFile(FirstSheet->m_AssociatedScreen, FILE_SAVE_AS);

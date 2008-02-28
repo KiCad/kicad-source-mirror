@@ -94,7 +94,7 @@ const wxString& EDA_SchComponentStruct::ReturnFieldName( int aFieldNdx ) const
 
 
 /****************************************************************/
-wxString EDA_SchComponentStruct::GetPath( DrawSheetList* sheet )
+wxString EDA_SchComponentStruct::GetPath( DrawSheetPath* sheet )
 /****************************************************************/
 {
     wxString str;
@@ -105,7 +105,7 @@ wxString EDA_SchComponentStruct::GetPath( DrawSheetList* sheet )
 
 
 /********************************************************************/
-const wxString EDA_SchComponentStruct::GetRef( DrawSheetList* sheet )
+const wxString EDA_SchComponentStruct::GetRef( DrawSheetPath* sheet )
 /********************************************************************/
 {
     wxString     path = GetPath( sheet );
@@ -137,7 +137,7 @@ const wxString EDA_SchComponentStruct::GetRef( DrawSheetList* sheet )
 
 
 /***********************************************************************/
-void EDA_SchComponentStruct::SetRef( DrawSheetList* sheet, wxString ref )
+void EDA_SchComponentStruct::SetRef( DrawSheetPath* sheet, wxString ref )
 /***********************************************************************/
 {
     //check to see if it is already there before inserting it

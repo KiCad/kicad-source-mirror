@@ -495,10 +495,10 @@ DrawSheetLabelStruct * SheetLabel;
 		}
 	}
 
-	if( ! SheetStruct->m_FileName.IsEmpty())
+	if( ! SheetStruct->GetFileName().IsEmpty())
 	{
 		if(fprintf(f,"F1 \"%s\" %d\n",
-				CONV_TO_UTF8(SheetStruct->m_FileName),
+				CONV_TO_UTF8(SheetStruct->GetFileName()),
 				SheetStruct->m_FileNameSize) == EOF)
 		{
 			Failed = TRUE; return(Failed);
