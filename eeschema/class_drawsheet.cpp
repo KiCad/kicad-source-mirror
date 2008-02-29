@@ -43,14 +43,13 @@ DrawSheetStruct::DrawSheetStruct( const wxPoint& pos ) :
     m_NbLabel = 0;
     m_Layer   = LAYER_SHEET;
     m_Pos = pos;
-	m_TimeStamp = GetTimeStamp();
-    m_SheetNameSize = m_FileNameSize = 60;
+    m_TimeStamp        = GetTimeStamp();
+    m_SheetNameSize    = m_FileNameSize = 60;
     m_AssociatedScreen = NULL;
-    m_SheetName.Printf( wxT("Sheet%8.8lX"), m_TimeStamp);
-    m_FileName.Printf( wxT("file%8.8lX.sch"), m_TimeStamp);
-	m_SheetNumber = 1;
+    m_SheetName.Printf( wxT( "Sheet%8.8lX" ), m_TimeStamp );
+    m_FileName.Printf( wxT( "file%8.8lX.sch" ), m_TimeStamp );
+    m_SheetNumber    = 1;
     m_NumberOfSheets = 1;
-
 }
 
 
@@ -336,7 +335,8 @@ bool DrawSheetStruct::SearchHierarchy( wxString filename, SCH_SCREEN** screen )
             if( strct->Type() == DRAW_SHEET_STRUCT_TYPE )
             {
                 DrawSheetStruct* ss = (DrawSheetStruct*) strct;
-                if( ss->m_AssociatedScreen && ss->m_AssociatedScreen->m_FileName.CmpNoCase( filename ) == 0 )
+                if( ss->m_AssociatedScreen &&
+                    ss->m_AssociatedScreen->m_FileName.CmpNoCase( filename ) == 0 )
                 {
                     *screen = ss->m_AssociatedScreen;
                     return true;
@@ -387,7 +387,7 @@ bool DrawSheetStruct::LocatePathOfScreen( SCH_SCREEN* screen, DrawSheetPath* lis
 bool DrawSheetStruct::Load( WinEDA_SchematicFrame* frame )
 /*******************************************************************************/
 {
-	bool success = true;
+    bool success = true;
 
     if( !m_AssociatedScreen )
     {
@@ -404,21 +404,21 @@ bool DrawSheetStruct::Load( WinEDA_SchematicFrame* frame )
         {
             m_AssociatedScreen = new SCH_SCREEN( SCHEMATIC_FRAME );
             m_AssociatedScreen->m_RefCount++;
-            success = frame->LoadOneEEFile( m_AssociatedScreen, m_FileName);
-			if ( success )
-			{
-				EDA_BaseStruct* bs = m_AssociatedScreen->EEDrawList;
-				while( bs )
-				{
-					if( bs->Type() ==  DRAW_SHEET_STRUCT_TYPE )
-					{
-						DrawSheetStruct* sheetstruct = (DrawSheetStruct*) bs;
-						if( !sheetstruct->Load( frame ) )
-							success = false;
-					}
-					bs = bs->Pnext;
-				}
-			}
+            success = frame->LoadOneEEFile( m_AssociatedScreen, m_FileName );
+            if( success )
+            {
+                EDA_BaseStruct* bs = m_AssociatedScreen->EEDrawList;
+                while( bs )
+                {
+                    if( bs->Type() ==  DRAW_SHEET_STRUCT_TYPE )
+                    {
+                        DrawSheetStruct* sheetstruct = (DrawSheetStruct*) bs;
+                        if( !sheetstruct->Load( frame ) )
+                            success = false;
+                    }
+                    bs = bs->Pnext;
+                }
+            }
         }
     }
     return success;
@@ -448,19 +448,115 @@ int DrawSheetStruct::CountSheets()
 
 
 /******************************************/
-wxString DrawSheetStruct::GetFileName(void)
+wxString DrawSheetStruct::GetFileName( void )
 /******************************************/
 {
-	return m_FileName;
+    return m_FileName;
 }
 
 
 /************************************************************/
-void DrawSheetStruct::SetFileName(const wxString & aFilename)
+void DrawSheetStruct::SetFileName( const wxString& aFilename )
 /************************************************************/
 {
-	m_FileName = aFilename;
+    m_FileName = aFilename;
 }
+
+
+/** Function ChangeFileName
+ * Set a new filename and manage data and associated screen
+ * The main difficulty is the filename change in a complex hierarchy.
+ * - if new filename is not already used: change to the new name (and if an existing file is found, load it on request)
+ * - if new filename is already used (a complex hierarchy) : add the sheet to the complex hierarchy.
+ */
+
+bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame * aFrame, const wxString& aFileName )
+{
+    if( (GetFileName() == aFileName) && m_AssociatedScreen )
+        return true;
+
+    SCH_SCREEN* Screen_to_use = NULL;
+	wxString msg;
+	bool LoadFromFile = false;
+
+
+    if( g_RootSheet->SearchHierarchy( aFileName, &Screen_to_use ) ) //do we reload the data from the existing hierarchy
+    {
+        msg.Printf( _(
+                       "A Sub Hierarchy named %s exists, Use it (The data in this sheet will be replaced)?" ),
+                   aFileName.GetData() );
+        if( ! IsOK( NULL, msg ) )
+		{
+			DisplayInfo(NULL, _("Sheet Filename Renaming Aborted"));
+			return false;
+		}
+    }
+
+    else if( wxFileExists( aFileName ) )         //do we reload the data from an existing file
+    {
+        msg.Printf( _(
+                       "A file named %s exists, load it (otherwise keep current sheet data if possible)?" ),
+                   aFileName.GetData() );
+        if( IsOK( NULL, msg ) )
+		{
+			LoadFromFile = true;
+			m_AssociatedScreen->m_RefCount--;                                       //be careful with these
+			if( m_AssociatedScreen->m_RefCount == 0 )
+				SAFE_DELETE( m_AssociatedScreen );
+			m_AssociatedScreen = NULL;         //will be created later
+		}
+    }
+
+	// if an associated screen exists, shared between this sheet and others sheets, what we do ?
+    if( m_AssociatedScreen && ( m_AssociatedScreen->m_RefCount > 1 ))
+	{
+        msg = _("This sheet uses shared data in a complex hierarchy" ) ;
+		msg << wxT("\n");
+		msg << _("Do we convert it in a simple hierarchical sheet (otherwise delete current sheet data)");
+        if( IsOK( NULL, msg ) )
+		{
+			LoadFromFile = true;
+			wxString oldfilename = m_AssociatedScreen->m_FileName;
+			m_AssociatedScreen->m_FileName = aFileName;
+			aFrame->SaveEEFile( m_AssociatedScreen, FILE_SAVE_AS );
+			m_AssociatedScreen->m_FileName = oldfilename;
+		}
+		m_AssociatedScreen->m_RefCount--;  //be careful with these
+		m_AssociatedScreen = NULL;         //will be created later
+	}
+
+	
+    SetFileName( aFileName );
+
+	// if we use new data (from file or from internal hierarchy), delete the current sheet data
+	if( m_AssociatedScreen && (LoadFromFile || Screen_to_use) )
+	{
+		m_AssociatedScreen->m_RefCount--;
+		if( m_AssociatedScreen->m_RefCount == 0 )
+			SAFE_DELETE( m_AssociatedScreen );
+		m_AssociatedScreen = NULL;         //so that we reload..
+	}
+
+    if ( LoadFromFile )
+		Load( aFrame );
+	else if ( Screen_to_use )
+	{
+		m_AssociatedScreen = Screen_to_use;
+		m_AssociatedScreen->m_RefCount++;
+	}
+
+
+	//just make a new screen if needed.
+	if( !m_AssociatedScreen )
+	{
+		m_AssociatedScreen = new SCH_SCREEN( SCHEMATIC_FRAME );
+		m_AssociatedScreen->m_RefCount++;         //be careful with these
+	}
+	m_AssociatedScreen->m_FileName = aFileName;
+
+    return true;
+}
+
 
 /************************/
 /* DrawSheetLabelStruct */
@@ -646,7 +742,7 @@ EDA_BaseStruct* DrawSheetPath::LastDrawList()
 
 void DrawSheetPath::Push( DrawSheetStruct* sheet )
 {
-	wxASSERT( m_numSheets <= DSLSZ );
+    wxASSERT( m_numSheets <= DSLSZ );
     if( m_numSheets < DSLSZ )
     {
         m_sheets[m_numSheets] = sheet;

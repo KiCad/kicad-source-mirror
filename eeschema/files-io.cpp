@@ -257,21 +257,19 @@ SCH_SCREEN * WinEDA_SchematicFrame::CreateNewScreen(
 void WinEDA_SchematicFrame::SaveProject( )
 /****************************************************/
 
-/* Sauvegarde toutes les feuilles du projet
- *  et cr�e une librairie archive des composants, de nom <root_name>.chche.lib
+/* Saves the entire project and creates an archive for components
+ *  the library archive name is <root_name>.cache.lib
  */
 {
-    SCH_SCREEN* screen_tmp, *screen;
+    SCH_SCREEN* screen;
     wxString    LibArchiveFileName;
-
-	screen_tmp = (SCH_SCREEN*)GetScreen(); //save...
 
     EDA_ScreenList ScreenList;
 
     for( screen = ScreenList.GetFirst(); screen != NULL;
 			screen = ScreenList.GetNext() )
     {
-		printf("SaveEEFile, %s\n", (const char*)screen->m_FileName.mb_str() ); 
+		printf("SaveEEFile, %s\n", CONV_TO_UTF8(screen->m_FileName) ); 
         SaveEEFile( screen, FILE_SAVE_AS );
     }
 

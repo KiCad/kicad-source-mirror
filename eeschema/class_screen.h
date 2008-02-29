@@ -138,7 +138,8 @@ public:
     bool                LocatePathOfScreen( SCH_SCREEN* screen, DrawSheetPath* list );
     int                 CountSheets();
 	wxString			GetFileName(void);
-	void				SetFileName(const wxString & aFilename);
+	void				SetFileName(const wxString & aFilename);	// Set a new filename without changing anything else
+	bool				ChangeFileName(WinEDA_SchematicFrame * aFrame, const wxString & aFileName);	// Set a new filename and manage data and associated screen
 
     //void 		RemoveSheet(DrawSheetStruct* sheet);
     //to remove a sheet, just delete it
