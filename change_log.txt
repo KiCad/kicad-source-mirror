@@ -11,6 +11,10 @@ email address.
 	Renaming the sheet filename now works in simple and complex hierarchies.
 	Use carefully because this can change the whole schematic structure.
 
++all
+	Display filename and full sheet name ("sheet path") in sheet reference
+	the full sheet name has no meanning in pcbnew.
+
 
 2008-Feb-28 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================

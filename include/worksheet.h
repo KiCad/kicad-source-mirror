@@ -18,8 +18,8 @@
 seront soustraires de cette origine
 */
 #define BLOCK_OX	4200
-#define BLOCK_LICENCE_X BLOCK_OX - SIZETEXT
-#define BLOCK_LICENCE_Y SIZETEXT
+#define BLOCK_KICAD_VERSION_X BLOCK_OX - SIZETEXT
+#define BLOCK_KICAD_VERSION_Y SIZETEXT
 #define BLOCK_REV_X 820
 #define BLOCK_REV_Y (SIZETEXT*3)
 #define BLOCK_DATE_X BLOCK_OX - (SIZETEXT*15)
@@ -30,13 +30,17 @@ seront soustraires de cette origine
 #define BLOCK_SIZE_SHEET_Y (SIZETEXT*3)
 #define BLOCK_TITLE_X BLOCK_OX - SIZETEXT
 #define BLOCK_TITLE_Y (SIZETEXT*5)
+#define BLOCK_FULLSHEETNAME_X BLOCK_OX - SIZETEXT
+#define BLOCK_FULLSHEETNAME_Y (SIZETEXT * 7)
+#define BLOCK_FILENAME_X BLOCK_OX - SIZETEXT
+#define BLOCK_FILENAME_Y (SIZETEXT * 9)
 #define BLOCK_COMMENT_X BLOCK_OX - SIZETEXT
-#define VARIABLE_BLOCK_START_POSITION (SIZETEXT * 6)
-#define BLOCK_COMPANY_Y (SIZETEXT*7)
-#define BLOCK_COMMENT1_Y (SIZETEXT*9)
-#define BLOCK_COMMENT2_Y (SIZETEXT*11)
-#define BLOCK_COMMENT3_Y (SIZETEXT*13)
-#define BLOCK_COMMENT4_Y (SIZETEXT*15)
+#define VARIABLE_BLOCK_START_POSITION (SIZETEXT * 10)
+#define BLOCK_COMPANY_Y (SIZETEXT*11)
+#define BLOCK_COMMENT1_Y (SIZETEXT*13)
+#define BLOCK_COMMENT2_Y (SIZETEXT*15)
+#define BLOCK_COMMENT3_Y (SIZETEXT*17)
+#define BLOCK_COMMENT4_Y (SIZETEXT*19)
 
 struct Ki_WorkSheetData
 {
@@ -54,10 +58,12 @@ enum TypeKi_WorkSheetData
 {
 	WS_DATE,
 	WS_REV,
-	WS_LICENCE,
+	WS_KICAD_VERSION,
 	WS_SIZESHEET,
 	WS_IDENTSHEET,
 	WS_TITLE,
+	WS_FILENAME,
+	WS_FULLSHEETNAME,
 	WS_COMPANY_NAME,
 	WS_COMMENT1,
 	WS_COMMENT2,
@@ -74,12 +80,15 @@ extern Ki_WorkSheetData WS_Revision;
 extern Ki_WorkSheetData WS_Licence;
 extern Ki_WorkSheetData WS_SizeSheet;
 extern Ki_WorkSheetData WS_IdentSheet;
+extern Ki_WorkSheetData WS_FullSheetName;
+extern Ki_WorkSheetData WS_SheetFilename;
 extern Ki_WorkSheetData WS_Title;
 extern Ki_WorkSheetData WS_Company;
 extern Ki_WorkSheetData WS_Comment1;
 extern Ki_WorkSheetData WS_Comment2;
 extern Ki_WorkSheetData WS_Comment3;
 extern Ki_WorkSheetData WS_Comment4;
+extern Ki_WorkSheetData WS_SeparatorLine;
 extern Ki_WorkSheetData WS_MostLeftLine;
 extern Ki_WorkSheetData WS_MostUpperLine;
 extern Ki_WorkSheetData WS_Segm3;
@@ -101,9 +110,9 @@ Ki_WorkSheetData WS_Date =
 
 Ki_WorkSheetData WS_Licence =
 	{
-	WS_LICENCE,
+	WS_KICAD_VERSION,
 	&WS_Revision,
-	BLOCK_LICENCE_X, BLOCK_LICENCE_Y,
+	BLOCK_KICAD_VERSION_X, BLOCK_KICAD_VERSION_Y,
 	0,0,
 	NULL, NULL
 	};
@@ -132,16 +141,34 @@ Ki_WorkSheetData WS_IdentSheet =
 	&WS_Title,
 	BLOCK_ID_SHEET_X, BLOCK_ID_SHEET_Y,
 	0,0,
-	wxT("Sheet: "),NULL
+	wxT("Id: "),NULL
 	};
 
 Ki_WorkSheetData WS_Title =
 	{
 	WS_TITLE,
-	&WS_Company,
+	&WS_SheetFilename,
 	BLOCK_TITLE_X, BLOCK_TITLE_Y,
 	0,0,
 	wxT("Title: "),NULL
+	};
+
+Ki_WorkSheetData WS_SheetFilename =
+	{
+	WS_FILENAME,
+	&WS_FullSheetName,
+	BLOCK_FILENAME_X, BLOCK_FILENAME_Y,
+	0,0,
+	wxT("File: "),NULL
+	};
+
+Ki_WorkSheetData WS_FullSheetName =
+	{
+	WS_FULLSHEETNAME,
+	&WS_Company,
+	BLOCK_FULLSHEETNAME_X, BLOCK_FULLSHEETNAME_Y,
+	0,0,
+	wxT("Sheet: "),NULL
 	};
 
 Ki_WorkSheetData WS_Company =
@@ -192,9 +219,18 @@ Ki_WorkSheetData WS_Comment4 =
 Ki_WorkSheetData WS_MostLeftLine =   /* segment vertical gauche */
 	{
 	WS_LEFT_SEGMENT,
-	&WS_MostUpperLine,
+	&WS_SeparatorLine,
 	BLOCK_OX, SIZETEXT * 16,
 	BLOCK_OX, 0,
+	NULL,NULL
+	};
+
+Ki_WorkSheetData WS_SeparatorLine =	/* horizontal segment between filename and comments*/
+	{
+	WS_SEGMENT,
+	&WS_MostUpperLine,
+	BLOCK_OX, VARIABLE_BLOCK_START_POSITION,
+	0, VARIABLE_BLOCK_START_POSITION,
 	NULL,NULL
 	};
 

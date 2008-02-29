@@ -159,7 +159,7 @@ int width = line_width;
 					GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width);
 				break;
 
-			case WS_LICENCE:
+			case WS_KICAD_VERSION:
 				if(WsItem->m_Legende) msg = WsItem->m_Legende;
 				msg += g_ProductName + g_Main_Title;
 				msg += wxT(" ") + GetBuildVersion();
@@ -179,10 +179,32 @@ int width = line_width;
 
 			case WS_IDENTSHEET:
 				if(WsItem->m_Legende) msg = WsItem->m_Legende;
+				msg << screen->m_ScreenNumber << wxT("/") << screen->m_NumberOfScreen; 
 				DrawGraphicText(DrawPanel, DC, pos, Color,
-					GetScreenDesc(), TEXT_ORIENT_HORIZ, size,
+					msg, TEXT_ORIENT_HORIZ, size,
 					GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width);
 				break;
+
+			case WS_FILENAME:
+			{
+				wxString fname, fext;
+				wxFileName::SplitPath(screen->m_FileName, (wxString*)NULL, &fname, &fext);
+				if(WsItem->m_Legende) msg = WsItem->m_Legende;
+				msg << fname << wxT(".") << fext; 
+				DrawGraphicText(DrawPanel, DC, pos, Color,
+					msg, TEXT_ORIENT_HORIZ, size,
+					GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width);
+			}
+				break;
+
+			case WS_FULLSHEETNAME:
+				if(WsItem->m_Legende) msg = WsItem->m_Legende;
+				msg += GetScreenDesc(); 
+				DrawGraphicText(DrawPanel, DC, pos, Color,
+					msg, TEXT_ORIENT_HORIZ, size,
+					GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width);
+				break;
+
 
 			case WS_COMPANY_NAME:
 				if(WsItem->m_Legende) msg = WsItem->m_Legende;
