@@ -167,7 +167,7 @@ static int scale( double distance, UNIT_RES* aResolution )
 static wxPoint mapPt( const POINT& aPoint, UNIT_RES* aResolution )
 {
     wxPoint ret(  scale( aPoint.x, aResolution ),
-                 -scale( aPoint.y, aResolution ));    // negate y
+                 -scale( aPoint.y, aResolution ) );    // negate y
 
     return ret;
 }
@@ -347,15 +347,18 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
     if( !session->route->library )
         ThrowIOError( _("Session file is missing the \"library_out\" section") );
 
+#if 1
     // delete all the old tracks and vias
     aBoard->m_Track->DeleteStructList();
     aBoard->m_Track = NULL;
     aBoard->m_NbSegmTrack = 0;
+#endif
 
     aBoard->DeleteMARKERs();
 
     buildLayerMaps( aBoard );
 
+#if 1
     // Walk the PLACEMENT object's COMPONENTs list, and for each PLACE within
     // each COMPONENT, reposition and re-orient each component and put on
     // correct side of the board.
@@ -413,6 +416,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
             }
         }
     }
+#endif
 
     routeResolution = session->route->GetUnits();
 
@@ -430,8 +434,10 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
             EQUIPOT* equipot = aBoard->FindNet( netName );
             if( equipot )
                 netCode = equipot->GetNet();
-
-            // else netCode remains 0
+            else  // else netCode remains 0
+            {
+                // int breakhere = 1;
+            }
         }
 
         WIRES& wires = net->wires;
@@ -442,19 +448,36 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
 
             if( shape != T_path )
             {
+                /*  shape == T_polygon is expected from freerouter if you have
+                    a zone on a non "power" type layer, i.e. a T_signal layer
+                    and the design does a round trip back in as session here.
+                    We kept our own zones in the BOARD, so ignore this so called
+                    'wire'.
+
                 wxString netId = CONV_FROM_UTF8( wire->net_id.c_str() );
                 ThrowIOError(
                     _("Unsupported wire shape: \"%s\" for net: \"%s\""),
                     LEXER::GetTokenString(shape).GetData(),
                     netId.GetData()
                     );
+                */
             }
-
-            PATH*   path = (PATH*) wire->shape;
-            for( unsigned pt=0;  pt<path->points.size()-1;  ++pt )
+            else
             {
-                TRACK* track = makeTRACK( path, pt, netCode );
-                aBoard->Add( track );
+                PATH*   path = (PATH*) wire->shape;
+                for( unsigned pt=0;  pt<path->points.size()-1;  ++pt )
+                {
+                    /* a debugging aid, may come in handy
+                    if( path->points[pt].x == 547800
+                    &&  path->points[pt].y == -380250 )
+                    {
+                        int breakhere = 1;
+                    }
+                    */
+
+                    TRACK* track = makeTRACK( path, pt, netCode );
+                    aBoard->Add( track );
+                }
             }
         }
 

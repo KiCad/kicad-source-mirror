@@ -84,6 +84,11 @@ void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
 
     setlocale( LC_NUMERIC, "C" );    // Switch the locale to standard C
 
+    //  DSN Images (=Kicad MODULES and pads) must be presented from the
+    //  top view.  So we temporarily flip any modules which are on the back
+    //  side of the board to the front, and record this in the MODULE's flag field.
+    db.FlipMODULEs( m_Pcb );
+
     try
     {
         db.FromBOARD( m_Pcb );
@@ -102,8 +107,7 @@ void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
 
     setlocale( LC_NUMERIC, "" );      // revert to the current locale
 
-    // this is called in FromBOARD() too, but if it throws an exception, that call
-    // does not happen, so call it again just in case here.
+    // done assuredly, even if an exception was thrown and caught.
     db.RevertMODULEs( m_Pcb );
 
 
@@ -538,7 +542,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
 }
 
 
-/// data type used to ensure unique-ness of pin names
+/// data type used to ensure unique-ness of pin names, holding (wxString and int)
 typedef std::map<wxString, int, wxString_less_than> PINMAP;
 
 
@@ -672,19 +676,26 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
                 path->SetAperture( scale( graphic->m_Width ) );
                 path->SetLayerId( "signal" );
 
-                double  radius = hypot( scale( graphic->m_Start.x - graphic->m_End.x ),
-                                        scale( graphic->m_Start.y - graphic->m_End.y ) );
+                // Do the math using Kicad units, that way we stay out of the
+                // scientific notation range of floating point numbers in the
+                // DSN file.   We do not parse scientific notation in our own
+                // lexer/beautifier, and the spec is not clear that this is
+                // required.  Fixed point floats are all that should be needed.
 
-                POINT   offset = mapPt( graphic->m_Start0 );
+                double  radius = hypot( double( graphic->m_Start.x - graphic->m_End.x ),
+                                        double( graphic->m_Start.y - graphic->m_End.y ) );
 
                 // better if evenly divisible into 360
                 const int DEGREE_INTERVAL = 18;         // 18 means 20 line segments
 
                 for( double radians = 0.0;  radians < 2*M_PI;  radians += DEGREE_INTERVAL * M_PI / 180.0 )
                 {
-                    POINT   point(  radius*cos( radians ), radius*sin( radians )  );
-                    point += offset;
-                    path->AppendPoint( point );
+                    wxPoint   point( int( radius * cos( radians ) ),
+                                     int( radius * sin( radians ) ) );
+
+                    point += graphic->m_Start0;     // an offset
+
+                    path->AppendPoint( mapPt(point) );
                 }
             }
             break;
@@ -749,8 +760,7 @@ PADSTACK* SPECCTRA_DB::makeVia( const SEGVIA* aVia )
     return makeVia( aVia->m_Width, aVia->GetDrillValue(), topLayer, botLayer );
 }
 
-
-typedef std::set<wxString, wxString_less_than>  STRINGSET;
+typedef std::set<std::string>  STRINGSET;
 typedef std::pair<STRINGSET::iterator, bool> STRINGSET_PAIR;
 
 
@@ -785,7 +795,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             }
 
             // if we cannot insert OK, that means the reference has been seen before.
-            STRINGSET_PAIR refpair = refs.insert( module->GetReference() );
+            STRINGSET_PAIR refpair = refs.insert( CONV_TO_UTF8( module->GetReference() ) );
             if( !refpair.second )      // insert failed
             {
                 ThrowIOError( _("Multiple components have identical reference IDs of \"%s\"."),
@@ -796,11 +806,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 
     if( !pcb )
         pcb = SPECCTRA_DB::MakePCB();
-
-    //  DSN Images (=Kicad MODULES and pads) must be presented from the
-    //  top view.  So we temporarily flip any modules which are on the back
-    //  side of the board to the front, and record this in the MODULE's flag field.
-    flipMODULEs( aBoard );
 
     //-----<layer_descriptor>-----------------------------------------------
     {
@@ -938,10 +943,11 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         int     curTrackWidth = aBoard->m_BoardSettings->m_CurrentTrackWidth;
         int     curTrackClear = aBoard->m_BoardSettings->m_TrackClearence;
 
-        // The +5 is to give freerouter a little extra room, this is 0.5 mils.
+        // The +1 is to give freerouter a little extra room, this is 0.1 mils.
         // If we export without this, then on import freerouter violates our
-        // DRC checks with track to via spacing.
-        double  clearance = scale(curTrackClear+5);
+        // DRC checks with track to via spacing, although this could be a
+        // result of > testing vs. >= testing in PCBNEW's DRC.
+        double  clearance = scale(curTrackClear+1);
 
         STRINGS& rules = pcb->structure->rules->rules;
 
@@ -996,15 +1002,14 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 
             plane->name = CONV_TO_UTF8( item->m_Netname );
 
-            wxString        layerName = aBoard->GetLayerName( item->GetLayer() );
-            polygon->layer_id = CONV_TO_UTF8( layerName );
+            polygon->layer_id = layerIds[ kicadLayer2pcb[ item->GetLayer() ] ];
 
             int count = item->m_Poly->corner.size();
             for( int j=0; j<count; ++j )
             {
                 wxPoint   point( item->m_Poly->corner[j].x,
                                  item->m_Poly->corner[j].y );
-                polygon->points.push_back( mapPt(point) );
+                polygon->AppendPoint( mapPt(point) );
             }
 
             pcb->structure->planes.push_back( plane );
@@ -1015,6 +1020,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 
     //-----<build the images, components, and netlist>-----------------------
     {
+        PIN_REF     empty( pcb->network );
+        std::string componentId;
+
         // find the highest numbered netCode within the board.
         int highestNetCode = -1;
         for( EQUIPOT* equipot = aBoard->m_Equipots;  equipot;  equipot = equipot->Next() )
@@ -1046,15 +1054,17 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 
             IMAGE*  image  = makeIMAGE( aBoard, module );
 
+            componentId = CONV_TO_UTF8( module->GetReference() );
+
             // create a net list entry for all the actual pins in the image
             // for the current module.  location of this code is critical
             // because we fabricated some pin names to ensure unique-ness
-            // of pin names within a module, do not move this code.  The
+            // of pin names within a module, do not move this code because
+            // the life of this 'IMAGE* image' is not necessarily long.  The
             // exported netlist will have some fabricated pin names in it.
             // If you don't like fabricated pin names, then make sure all pads
             // within your MODULEs are uniquely named!
 
-            PIN_REF empty( pcb->network );
             for( unsigned p=0;  p<image->pins.size();  ++p )
             {
                 PIN* pin = &image->pins[p];
@@ -1068,7 +1078,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 
                     PIN_REF& pin_ref = net->pins.back();
 
-                    pin_ref.component_id = CONV_TO_UTF8( module->GetReference() );
+                    pin_ref.component_id = componentId;
                     pin_ref.pin_id = pin->pin_id;
                 }
             }
@@ -1090,7 +1100,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 
             place->SetRotation( module->m_Orient/10.0 );
             place->SetVertex( mapPt( module->m_Pos ) );
-            place->component_id = CONV_TO_UTF8( module->GetReference() );
+            place->component_id = componentId;
             place->part_number  = CONV_TO_UTF8( module->GetValue() );
 
             // module is flipped from bottom side, set side to T_back
@@ -1115,21 +1125,11 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             pcb->library->AddPadstack( padstack );
         }
 
-        D(std::string component = "U1";)
-
         // copy our SPECCTRA_DB::nets to the pcb->network
         for( unsigned n=1;  n<nets.size();  ++n )
         {
             NET* net = nets[n];
-            if( net->pins.size()
-
-#if defined(DEBUG)
-                // experimenting with exporting a subset of all the nets
-                // and with incremental, iterative autorouting.
-                &&  net->FindPIN_REF( component ) >= 0
-#endif
-
-              )
+            if( net->pins.size() )
             {
                 // give ownership to pcb->network
                 pcb->network->nets.push_back( net );
@@ -1146,7 +1146,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         // Next we add the via's which may be used.
 
         int defaultViaSize = aBoard->m_BoardSettings->m_CurrentViaSize;
+
+        /* I need at least one via for the (class...) scope below
         if( defaultViaSize )
+        */
         {
             PADSTACK*   padstack = makeVia( defaultViaSize, g_DesignSettings.m_ViaDrill,
                                            0, aBoard->GetCopperLayerCount()-1 );
@@ -1196,10 +1199,12 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         {
             TRACK*  track = (TRACK*) items[i];
 
-            if( track->GetNet() == 0 )
+            int     netcode = track->GetNet();
+
+            if( netcode == 0 )
                 continue;
 
-            if( old_netcode != track->GetNet()
+            if( old_netcode != netcode
             ||  old_width   != track->m_Width
             ||  old_layer   != track->GetLayer()
             ||  (path && path->points.back() != mapPt(track->m_Start) )
@@ -1208,10 +1213,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
                 old_width   = track->m_Width;
                 old_layer   = track->GetLayer();
 
-                if( old_netcode != track->GetNet() )
+                if( old_netcode != netcode )
                 {
-                    old_netcode = track->GetNet();
-                    EQUIPOT* equipot = aBoard->FindNet( track->GetNet() );
+                    old_netcode = netcode;
+                    EQUIPOT* equipot = aBoard->FindNet( netcode );
                     wxASSERT( equipot );
                     netname = CONV_TO_UTF8( equipot->m_Netname );
                 }
@@ -1290,21 +1295,65 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 
         if( viaNdx != -1 )
         {
+#if 1
             for(  ; viaNdx < (int)padstacks.size();  ++viaNdx )
             {
                 vias->AppendVia( padstacks[viaNdx].padstack_id.c_str() );
             }
+#else
+            // output only the default via.   Then use class_descriptors to
+            // override the default.  No, this causes free router not to
+            // output the unmentioned vias into the session file.
+            vias->AppendVia( padstacks[viaNdx].padstack_id.c_str() );
+#endif
         }
     }
 
 
-    //-----<flip modules back>----------------------------------------------
+    //-----<output a default class with all nets and the via and track size>--
+    {
+        char        text[80];
+        STRINGSET   netIds;       // sort the net names in here
 
-    RevertMODULEs( aBoard );
+        CLASS*  clazz = new CLASS( pcb->network );
+        pcb->network->classes.push_back( clazz );
+
+        // freerouter creates a class named 'default' anyway, and if we
+        // try and use that, we end up with two 'default' via rules so use
+        // something else as the name of our default class.   Someday we may support
+        // additional classes.  Until then the user can text edit the exported
+        // DSN file and use this class as a template, copying it and giving the
+        // copy a different class_id and splitting out some of the nets.
+        clazz->class_id = "kicad_default";
+
+        // Insert all the net_ids into the set.  They are unique, but even if
+        // they were not the duplicated name is not our error, but the BOARD's.
+        // A duplicate would be removed here.
+        NETS& nets = pcb->network->nets;
+        for( NETS::iterator i=nets.begin();  i!=nets.end();  ++i )
+            netIds.insert( i->net_id );
+
+        // netIds is now sorted, put them into clazz->net_ids
+        for( STRINGSET::iterator i=netIds.begin();  i!=netIds.end();  ++i )
+            clazz->net_ids.push_back( *i );
+
+        // output the via and track dimensions, the whole reason for this scope.
+        int     curTrackWidth = aBoard->m_BoardSettings->m_CurrentTrackWidth;
+
+        clazz->rules = new RULE( clazz, T_rule );
+
+        sprintf( text, "(width %.6g)", scale( curTrackWidth ) );
+        clazz->rules->rules.push_back( text );
+
+        int         viaNdx = pcb->library->via_start_index;
+
+        sprintf( text, "(use_via %s)", pcb->library->padstacks[viaNdx].padstack_id.c_str() );
+        clazz->circuit.push_back( text );
+    }
 }
 
 
-void SPECCTRA_DB::flipMODULEs( BOARD* aBoard )
+void SPECCTRA_DB::FlipMODULEs( BOARD* aBoard )
 {
     for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
     {

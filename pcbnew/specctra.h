@@ -225,8 +225,8 @@ struct POINT
     /**
      * Function FixNegativeZero
      * will change negative zero to positive zero in the IEEE floating point
-     * storage format.  Basically turns off the sign bit if the mantiss and exponent
-     * would say the value is zero.
+     * storage format.  Basically turns off the sign bit if the mantissa and
+     * exponent say the value is otherwise zero.
      */
     void FixNegativeZero()
     {
@@ -536,7 +536,7 @@ class RECTANGLE : public ELEM
 
     std::string     layer_id;
 
-    POINT           point0;
+    POINT           point0;         ///< one of two opposite corners
     POINT           point1;
 
 public:
@@ -882,11 +882,12 @@ class WINDOW : public ELEM
     friend class SPECCTRA_DB;
 
 protected:
-    /*  shape holds one of these
-    PATH*           path;           ///< used for both path and polygon
-    RECTANGLE*      rectangle;
-    CIRCLE*         circle;
-    QARC*           qarc;
+    /*  <shape_descriptor >::=
+        [<rectangle_descriptor> |
+        <circle_descriptor> |
+        <polygon_descriptor> |
+        <path_descriptor> |
+        <qarc_descriptor> ]
     */
     ELEM*       shape;
 
@@ -2561,6 +2562,7 @@ public:
             out->Print( 0, "\n" );
     }
 };
+typedef boost::ptr_vector<COMP_ORDER>   COMP_ORDERS;
 
 
 class NET : public ELEM
@@ -2677,6 +2679,7 @@ public:
         out->Print( nestLevel, ")\n" );
     }
 };
+typedef boost::ptr_vector<NET>  NETS;
 
 
 class TOPOLOGY : public ELEM
@@ -2685,7 +2688,6 @@ class TOPOLOGY : public ELEM
 
     FROMTOS         fromtos;
 
-    typedef boost::ptr_vector<COMP_ORDER>   COMP_ORDERS;
     COMP_ORDERS     comp_orders;
 
 public:
@@ -2739,35 +2741,45 @@ public:
 
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
-        const int RIGHTMARGIN = 80;
-
         const char* quote = out->GetQuoteChar( class_id.c_str() );
 
         int perLine = out->Print( nestLevel, "(%s %s%s%s",
                               LEXER::GetTokenText( Type() ),
                               quote, class_id.c_str(), quote );
 
+        const int RIGHTMARGIN = 72;
+
         for( STRINGS::iterator i=net_ids.begin();  i!=net_ids.end();  ++i )
         {
+            const char* space = " ";
             if( perLine > RIGHTMARGIN )
             {
                 out->Print( 0, "\n" );
                 perLine = out->Print( nestLevel+1, "%s", "" );
+                space = ""; // no space at first net_id of the line
             }
 
             quote = out->GetQuoteChar( i->c_str() );
-            perLine += out->Print( 0, " %s%s%s", quote, i->c_str(), quote );
+            perLine += out->Print( 0, "%s%s%s%s", space, quote, i->c_str(), quote );
         }
 
         bool newLine = false;
-        if( circuit.size() || layer_rules.size() || topology )
+        if( circuit.size() || rules || layer_rules.size() || topology )
         {
             out->Print( 0, "\n" );
             newLine = true;
         }
 
-        for( STRINGS::iterator i=circuit.begin();  i!=circuit.end();  ++i )
-            out->Print( nestLevel+1, "%s\n", i->c_str() );
+        if( circuit.size() )
+        {
+            out->Print( nestLevel+1, "(circuit\n" );
+            for( STRINGS::iterator i=circuit.begin();  i!=circuit.end();  ++i )
+                out->Print( nestLevel+2, "%s\n", i->c_str() );
+            out->Print( nestLevel+1, ")\n" );
+        }
+
+        if( rules )
+            rules->Format( out, nestLevel+1 );
 
         for( LAYER_RULES::iterator i=layer_rules.begin();  i!=layer_rules.end();  ++i )
             i->Format( out, nestLevel+1 );
@@ -2778,16 +2790,14 @@ public:
         out->Print( newLine ? nestLevel : 0, ")\n" );
     }
 };
+typedef boost::ptr_vector<CLASS> CLASSLIST;
 
 
 class NETWORK : public ELEM
 {
     friend class SPECCTRA_DB;
 
-    typedef boost::ptr_vector<NET>  NETS;
     NETS        nets;
-
-    typedef boost::ptr_vector<CLASS> CLASSLIST;
     CLASSLIST   classes;
 
 
@@ -3637,6 +3647,7 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
      */
     int findLayerName( const std::string& aLayerName ) const;
 
+
     /**
      * Function nextTok
      * returns the next token from the lexer.
@@ -3843,12 +3854,6 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
         nets.clear();
     }
 
-    /**
-     * Function flipMODULEs
-     * flips the modules which are on the back side of the board to the front.
-     */
-    void flipMODULEs( BOARD* aBoard );
-
     //-----<FromSESSION>-----------------------------------------------------
 
     /**
@@ -4001,6 +4006,12 @@ public:
      * @param aFilename The file to save to.
      */
     void ExportSESSION( wxString aFilename );
+
+    /**
+     * Function FlipMODULEs
+     * flips the modules which are on the back side of the board to the front.
+     */
+    void FlipMODULEs( BOARD* aBoard );
 
     /**
      * Function RevertMODULEs

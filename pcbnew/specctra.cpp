@@ -1251,10 +1251,10 @@ void SPECCTRA_DB::doPROPERTIES( PROPERTIES* growth ) throw( IOError )
         if( tok != T_LEFT )
             expecting( T_LEFT );
 
-        needSYMBOL();
+        needSYMBOLorNUMBER();
         property.name = lexer->CurText();
 
-        needSYMBOL();
+        needSYMBOLorNUMBER();
         property.value = lexer->CurText();
 
         growth->push_back( property );
@@ -1848,7 +1848,7 @@ void SPECCTRA_DB::doPLACE( PLACE* growth ) throw( IOError )
         case T_pn:
             if( growth->part_number.size() )
                 unexpected( tok );
-            needSYMBOL();
+            needSYMBOLorNUMBER();
             growth->part_number = lexer->CurText();
             needRIGHT();
             break;
@@ -2561,7 +2561,7 @@ void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IOError )
             doTOPOLOGY( growth->topology );
             break;
 
-        default:    // handle all the circuit_descriptor here as strings
+        case T_circuit:  // handle all the circuit_descriptor here as strings
             {
                 std::string     builder;
                 int             bracketNesting = 1; // we already saw the opening T_LEFT
@@ -2607,6 +2607,10 @@ void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IOError )
                 if( tok==T_EOF )
                     unexpected( T_EOF );
             }                                   // scope bracket
+            break;
+
+        default:
+                unexpected( lexer->CurText() );
         }                                       // switch
 
         tok = nextTok();
@@ -3486,6 +3490,7 @@ const char* OUTPUTFORMATTER::GetQuoteChar( const char* wrapee, const char* quote
     {
         static const char quoteThese[] = "\t ()"
             "%"     // per Alfons of freerouting.net, he does not like this unquoted as of 1-Feb-2008
+            "{}"    // guessing that these are problems too
             ;
 
         // if the string to be wrapped (wrapee) has a delimiter in it,
