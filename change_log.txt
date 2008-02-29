@@ -10,6 +10,8 @@ email address.
 +eeschema
 	Renaming the sheet filename now works in simple and complex hierarchies.
 	Use carefully because this can change the whole schematic structure.
+	Gen Bom List now works in unicode build version
+	(label list generation crashed eeschema in unicode build version)
 
 +all
 	Display filename and full sheet name ("sheet path") in sheet reference

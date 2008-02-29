@@ -728,9 +728,8 @@ void WinEDA_Build_BOM_Frame::GenereListeOfItems( const wxString& FullFileName )
     NbItems = GenListeCmp( NULL );
     if( NbItems )
     {
-        List = (ListComponent*)
-               MyZMalloc( NbItems * sizeof(ListComponent) );
-        if( List == NULL )
+        List = (ListComponent*) MyZMalloc( NbItems * sizeof(ListComponent) );
+        if( List == NULL )	// Error memory alloc
         {
             fclose( f );
             return;
@@ -784,12 +783,10 @@ void WinEDA_Build_BOM_Frame::GenereListeOfItems( const wxString& FullFileName )
     /***************************************/
     /* Generation liste des Labels globaux */
     /***************************************/
-
     NbItems = GenListeGLabels( NULL );
     if( NbItems )
     {
         ListOfLabels = (ListLabel*) MyZMalloc( NbItems * sizeof(ListLabel) );
-        memset( (void*) ListOfLabels, 0, NbItems * sizeof(ListLabel) );
         if( ListOfLabels == NULL )
         {
             fclose( f );
@@ -806,7 +803,7 @@ void WinEDA_Build_BOM_Frame::GenereListeOfItems( const wxString& FullFileName )
             qsort( ListOfLabels, NbItems, sizeof( ListLabel ),
                    ( int( * ) ( const void*, const void* ) )ListTriGLabelBySheet );
 
-            msg.Printf( _( "\n#Glob labels ( order = Sheet Number ) count = %d\n" ), NbItems );
+            msg.Printf( _( "\n#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = %d\n" ), NbItems );
             fprintf( f, "%s", CONV_TO_UTF8( msg ) );
             PrintListeGLabel( f, ListOfLabels, NbItems );
         }
@@ -817,7 +814,7 @@ void WinEDA_Build_BOM_Frame::GenereListeOfItems( const wxString& FullFileName )
             qsort( ListOfLabels, NbItems, sizeof( ListLabel ),
                    ( int( * ) ( const void*, const void* ) )ListTriGLabelByVal );
 
-            msg.Printf( _( "\n#Glob labels ( order = Alphab. ) count = %d\n\n" ), NbItems );
+            msg.Printf( _( "\n#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = %d\n\n" ), NbItems );
             fprintf( f, "%s", CONV_TO_UTF8( msg ) );
             PrintListeGLabel( f, ListOfLabels, NbItems );
         }
@@ -1383,8 +1380,8 @@ static int PrintListeGLabel( FILE* f, ListLabel* List, int NbItems )
     DrawLabelStruct* DrawTextItem;
     DrawSheetLabelStruct* DrawSheetLabel;
     ListLabel* LabelItem;
-    wxString msg;
-    char str[64];
+    wxString msg, sheetpath;
+    wxString labeltype;
 
     for( ii = 0; ii < NbItems; ii++ )
     {
@@ -1396,14 +1393,15 @@ static int PrintListeGLabel( FILE* f, ListLabel* List, int NbItems )
         case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
             DrawTextItem = (DrawLabelStruct*) (LabelItem->m_Label);
             if( LabelItem->m_LabelType == DRAW_HIER_LABEL_STRUCT_TYPE )
-                strncpy( str, "Hierarchical", sizeof(str) );
+                labeltype = wxT("Hierarchical");
             else
-                strncpy( str, "Global      ", sizeof(str) );
+                labeltype = wxT("Global      ");
+			sheetpath = CONV_FROM_UTF8(LabelItem->m_SheetPath);
             msg.Printf(
                 _( "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n" ),
                 DrawTextItem->m_Text.GetData(),
-                str,
-                LabelItem->m_SheetPath,
+                labeltype.GetData(),
+                sheetpath.GetData(),
                 (float) DrawTextItem->m_Pos.x / 1000,
                 (float) DrawTextItem->m_Pos.y / 1000 );
 
@@ -1420,7 +1418,7 @@ static int PrintListeGLabel( FILE* f, ListLabel* List, int NbItems )
                 jj = 4;
             wxString labtype = CONV_FROM_UTF8( SheetLabelType[jj] );
             msg.Printf(
-                _( "> %-28.28s Sheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n" ),
+                _( "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n" ),
                 DrawSheetLabel->m_Text.GetData(),
                 labtype.GetData(),
                 LabelItem->m_SheetPath,
