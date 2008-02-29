@@ -531,8 +531,8 @@ TRACK* LocateIntrusion( TRACK* start, int net, int width )
             found = track;
 
             /* prefer intrusions from the side, not the end */
-            int64_t tmp = (int64_t) pos.x * vec.x + (int64_t) pos.y * vec.y;
-            if( tmp >= 0 && tmp <= (int64_t) vec.x * vec.x + (int64_t) vec.y * vec.y )
+            double tmp = (double) pos.x * vec.x + (double) pos.y * vec.y;
+            if( tmp >= 0 && tmp <= (double) vec.x * vec.x + (double) vec.y * vec.y )
                 break;
         }
     }
@@ -564,7 +564,7 @@ static void PushTrack( WinEDA_DrawPanel* panel )
     wxPoint cv, vec, n;
     TRACK*  track = g_CurrentTrackSegment;
     TRACK*  other;
-    int64_t det;
+    double  det;
     int     dist;
     double  f;
 
@@ -580,7 +580,7 @@ static void PushTrack( WinEDA_DrawPanel* panel )
     cv  = cursor - other->m_Start;
     vec = other->m_End - other->m_Start;
 
-    det = (int64_t) cv.x * vec.y - (int64_t) cv.y * vec.x;
+    det = (double) cv.x * vec.y - (double) cv.y * vec.x;
 
     /* cursor is right at the center of the old track */
     if( !det )
@@ -605,7 +605,7 @@ static void PushTrack( WinEDA_DrawPanel* panel )
         n.x = -vec.y;
         n.y = vec.x;
     }
-    f   = dist / hypot( n.x, n.y );
+    f   = dist / hypot( double(n.x), double(n.y) );
     n.x = (int) round( f * n.x );
     n.y = (int) round( f * n.y );
 

@@ -506,6 +506,15 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
             PADSTACK* padstack = library.FindPADSTACK( wire_via->GetPadstackId() );
             if( !padstack )
             {
+                // Dick  Feb 29, 2008:
+                // Freerouter has a bug where it will not round trip all vias.
+                // Vias which have a (use_via) element will be round tripped.
+                // Vias which do not, don't come back in in the session library,
+                // even though they may be actually used in the pre-routed,
+                // protected wire_vias. So until that is fixed, create the
+                // padstack from its name as a work around.
+
+
                 // Could use a STRINGFORMATTER here and convert the entire
                 // wire_via to text and put that text into the exception.
                 wxString psid( CONV_FROM_UTF8( wire_via->GetPadstackId().c_str() ) );

@@ -233,20 +233,20 @@ static bool Join( wxPoint* res, wxPoint a0, wxPoint a1, wxPoint b0, wxPoint b1 )
         http://www.gekkou.co.uk/blogs/monologues/2007/12/13/1197586800000.html
     */
 
-    int64_t denom;
+    double  denom;
     double  t;
 
     a1 -= a0;
     b1 -= b0;
     b0 -= a0;
 
-    denom = (int64_t) b1.y * a1.x - (int64_t) b1.x * a1.y;
+    denom = (double) b1.y * a1.x - (double) b1.x * a1.y;
     if( !denom )
     {
         return false;       // parallel
     }
 
-    t = ((int64_t) b1.y * b0.x - (int64_t) b1.x * b0.y ) / (double) denom;
+    t = ((double) b1.y * b0.x - (double) b1.x * b0.y ) / denom;
 
     t = min( max( t, 0.0 ), 1.0 );
 
@@ -271,14 +271,14 @@ bool Project( wxPoint* res, wxPoint on_grid, const TRACK* track )
 
     vec = track->m_End-track->m_Start;
 
-    t = (int64_t) (on_grid.x-track->m_Start.x)*vec.x +
-        (int64_t) (on_grid.y-track->m_Start.y)*vec.y;
+    t = double( on_grid.x - track->m_Start.x ) * vec.x +
+        double( on_grid.y - track->m_Start.y ) * vec.y;
 
-    t /= (int64_t) vec.x*vec.x + (int64_t) vec.y*vec.y;
+    t /= (double) vec.x * vec.x + (double) vec.y * vec.y;
     t = min( max( t, 0.0 ), 1.0 );
 
-    res->x = (int) round( track->m_Start.x + t*vec.x );
-    res->y = (int) round( track->m_Start.y + t*vec.y );
+    res->x = (int) round( track->m_Start.x + t * vec.x );
+    res->y = (int) round( track->m_Start.y + t * vec.y );
 
     return true;
 }
