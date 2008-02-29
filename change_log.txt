@@ -5,23 +5,28 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Feb-29 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+    controle.cpp: fixed the magnetic track if tracks are parallel.
+
+
 2008-Feb-29 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +eeschema
-	Renaming the sheet filename now works in simple and complex hierarchies.
-	Use carefully because this can change the whole schematic structure.
-	Gen Bom List now works in unicode build version
-	(label list generation crashed eeschema in unicode build version)
-
+    Renaming the sheet filename now works in simple and complex hierarchies.
+    Use carefully because this can change the whole schematic structure.
+    Gen Bom List now works in unicode build version
+    (label list generation crashed eeschema in unicode build version)
 +all
-	Display filename and full sheet name ("sheet path") in sheet reference
-	the full sheet name has no meanning in pcbnew.
+    Display filename and full sheet name ("sheet path") in sheet reference
+    the full sheet name has no meanning in pcbnew.
 
 
 2008-Feb-28 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +eeschema
-	Fixed: problem which could crash eeschema when a sub schematic file in a hierarchy was not found.
+    Fixed: problem which could crash eeschema when a sub schematic file in a hierarchy was not found.
 
 
 2008-Feb-27 UPDATE  Wayne Stambaugh <stambaughw{at}verizon{dot}net>
@@ -40,18 +45,16 @@ email address.
 2008-Feb-26 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +eeschema
-	changed in class DrawSheetStruct m_s member name to m_AssociatedScreen
-	some others minor problems solved.
-	some files "uncrustified"
-	Major problem in undo/redo when a sheet is deleted not yet solved
-	Only for a complex hierarchy, could lost data.
-	When a sheet is deleted by block delete. it is put in undo list.
-	It is really deleted after 10 changes (when the undo list is full).
-	At this time, the associated data is also deleted.
-	If an other (not deleted) sheet shares the same data, this data is lost.
-	Need work to solve this problem and keep the undo/redo feature.
-
-
+    changed in class DrawSheetStruct m_s member name to m_AssociatedScreen
+    some others minor problems solved.
+    some files "uncrustified"
+    Major problem in undo/redo when a sheet is deleted not yet solved
+    Only for a complex hierarchy, could lost data.
+    When a sheet is deleted by block delete. it is put in undo list.
+    It is really deleted after 10 changes (when the undo list is full).
+    At this time, the associated data is also deleted.
+    If an other (not deleted) sheet shares the same data, this data is lost.
+    Need work to solve this problem and keep the undo/redo feature.
 
 
 2008-Feb-25 UPDATE   Wayne Stambaugh <stambaughw{at}verizon{dot}net>

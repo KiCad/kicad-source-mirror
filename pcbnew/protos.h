@@ -387,7 +387,7 @@ TRACK*          CreateLockPoint( int* pX, int* pY, TRACK* ptsegm, TRACK* refsegm
 /* CONTROLE.CPP */
 /****************/
 void RemoteCommand( const char* cmdline );
-bool Project( wxPoint& res, wxPoint on_grid, const TRACK* track );
+bool Project( wxPoint* res, wxPoint on_grid, const TRACK* track );
 
 
 /***************/

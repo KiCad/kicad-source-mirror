@@ -219,14 +219,20 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 }
 
 
-/*
- * "Join" finds the point where b0+x*(b1-b0) intersects with a0+y*(a1-a0).
+/**
+ * Function Join
+ * finds the point where b0+x*(b1-b0) intersects with a0+y*(a1-a0).
  * If that point would be outside of a0-a1, the respective endpoint is used.
  * Join returns the point in "res" and "true" if a suitable point was found,
  * "false" if both lines are parallel.
  */
-static bool Join( wxPoint& res, wxPoint a0, wxPoint a1, wxPoint b0, wxPoint b1 )
+static bool Join( wxPoint* res, wxPoint a0, wxPoint a1, wxPoint b0, wxPoint b1 )
 {
+    /* References:
+        http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
+        http://www.gekkou.co.uk/blogs/monologues/2007/12/13/1197586800000.html
+    */
+
     int64_t denom;
     double  t;
 
@@ -234,16 +240,18 @@ static bool Join( wxPoint& res, wxPoint a0, wxPoint a1, wxPoint b0, wxPoint b1 )
     b1 -= b0;
     b0 -= a0;
 
-    denom = (int64_t) b1.y*a1.x - (int64_t) b1.x*a1.y;
-    if (!denom)
-        return false; // parallel
+    denom = (int64_t) b1.y * a1.x - (int64_t) b1.x * a1.y;
+    if( !denom )
+    {
+        return false;       // parallel
+    }
 
-    t = ((int64_t) b1.y*b0.x - (int64_t) b1.x*b0.y)/(double) denom;
+    t = ((int64_t) b1.y * b0.x - (int64_t) b1.x * b0.y ) / (double) denom;
 
     t = min( max( t, 0.0 ), 1.0 );
 
-    res.x = (int) round(a0.x+t*a1.x);
-    res.y = (int) round(a0.y+t*a1.y);
+    res->x = (int) round( a0.x + t * a1.x );
+    res->y = (int) round( a0.y + t * a1.y );
 
     return true;
 }
@@ -253,7 +261,7 @@ static bool Join( wxPoint& res, wxPoint a0, wxPoint a1, wxPoint b0, wxPoint b1 )
  * "Project" finds the projection of a grid point on a track. This is the point
  * from where we want to draw new orthogonal tracks when starting on a track.
  */
-bool Project( wxPoint& res, wxPoint on_grid, const TRACK* track )
+bool Project( wxPoint* res, wxPoint on_grid, const TRACK* track )
 {
     wxPoint vec;
     double  t;
@@ -269,31 +277,40 @@ bool Project( wxPoint& res, wxPoint on_grid, const TRACK* track )
     t /= (int64_t) vec.x*vec.x + (int64_t) vec.y*vec.y;
     t = min( max( t, 0.0 ), 1.0 );
 
-    res.x = (int) round( track->m_Start.x + t*vec.x );
-    res.y = (int) round( track->m_Start.y + t*vec.y );
+    res->x = (int) round( track->m_Start.x + t*vec.x );
+    res->y = (int) round( track->m_Start.y + t*vec.y );
 
     return true;
 }
 
 
+/**
+ * Function Magnetize
+ * tests to see if there are any magnetic items within near reach of the given
+ * "curpos".  If yes, then curpos is adjusted appropriately according to that
+ * near magnetic item and true is returned.
+ * @param curpos The initial position, and what to adjust if a change is needed.
+ */
 static bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame,
-                       int m_ID_current_state, wxSize grid, wxPoint on_grid, wxPoint& curpos )
+                       int aCurrentTool, wxSize grid, wxPoint on_grid, wxPoint* curpos )
 {
-    const D_PAD* pad;
-    const TRACK* curr = NULL;
-    const TRACK* via, * track;
-    int          layer, layer_mask;
+    D_PAD*  pad;
+    TRACK*  curr = g_CurrentTrackSegment;
+    TRACK*  via;
+    TRACK*  track;
+    int     layer, layer_mask;
 
-    bool         sometimes = g_MagneticPadOption != capture_always && Drc_On;
+    bool    doCheckNet = g_MagneticPadOption != capture_always && Drc_On;
 
-    curr = g_CurrentTrackSegment;
     if( frame->GetCurItem() != curr )
+    {
         curr = NULL;
+    }
 
     switch( g_MagneticPadOption )
     {
     case capture_cursor_in_track_tool:
-        if( m_ID_current_state != ID_TRACK_BUTT )
+        if( aCurrentTool != ID_TRACK_BUTT )
             return false;
         break;
 
@@ -308,20 +325,22 @@ static bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame,
     pad = Locate_Any_Pad( m_Pcb, CURSEUR_OFF_GRILLE, TRUE );
     if( pad )
     {
-        if( curr && curr->GetNet() != pad->GetNet() && sometimes )
+        if( doCheckNet && curr && curr->GetNet() != pad->GetNet() )
             return false;
-        curpos = pad->m_Pos;
+
+        *curpos = pad->m_Pos;
         return true;
     }
 
     layer = ( (PCB_SCREEN*) ActiveScreen )->m_Active_Layer;
 
-    via = Locate_Via_Area( m_Pcb, curpos, layer );
+    via = Locate_Via_Area( m_Pcb, *curpos, layer );
     if( via )
     {
-        if( curr && curr->GetNet() != via->GetNet() && sometimes )
+        if( doCheckNet && curr && curr->GetNet() != via->GetNet() )
             return false;
-        curpos = via->m_Start;
+
+        *curpos = via->m_Start;
         return true;
     }
 
@@ -340,25 +359,57 @@ static bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame,
      * In two segment mode, ignore the final segment if it's inside a grid
      * square.
      */
-    if( g_TwoSegmentTrackBuild && curr->Pback
+    if( g_TwoSegmentTrackBuild && curr->Back()
         && curr->m_Start.x - grid.x < curr->m_End.x
         && curr->m_Start.x + grid.x > curr->m_End.x
         && curr->m_Start.y - grid.y < curr->m_End.y
         && curr->m_Start.y + grid.y > curr->m_End.y )
+    {
         curr = curr->Back();
+    }
 
-    track = Locate_Pistes( m_Pcb->m_Track, layer_mask, CURSEUR_OFF_GRILLE );
-    for( ; track; track = track->Next() )
+    for( track = m_Pcb->m_Track;  track;  track = track->Next() )
     {
         if( track->Type() != TYPETRACK )
             continue;
 
-        if( curr->GetNet() != track->GetNet() && sometimes )
+        if( doCheckNet && curr->GetNet() != track->GetNet() )
             continue;
 
-        if( Join( curpos, track->m_Start, track->m_End,
-               curr->m_Start, curr->m_End ) )
+        if( (g_DesignSettings.m_LayerColor[track->GetLayer()] & ITEM_NOT_SHOW) )
+            continue;
+
+        if( !track->IsOnLayer( layer ) )
+            continue;
+
+        // @todo, this should be a track overlap test, not a mouse on track test.
+        // The former would consider the new track's width.
+        if( !track->HitTest( *curpos ) )
+            continue;
+
+        if( Join( curpos, track->m_Start, track->m_End, curr->m_Start, curr->m_End ) )
+        {
             return true;
+        }
+
+        if( aCurrentTool == ID_TRACK_BUTT )
+        {
+            // At this point we have a drawing mouse on a track, we are drawing
+            // a new track and that new track is parallel to the track the
+            // mouse is on. Find the nearest end point of the track under mouse
+            // to the mouse and return that.
+            double distStart = hypot( double( curpos->x - track->m_Start.x ),
+                                      double( curpos->y - track->m_Start.y ));
+
+            double distEnd   = hypot( double( curpos->x - track->m_End.x ),
+                                      double( curpos->y - track->m_End.y ));
+
+            if( distStart < distEnd )
+                *curpos = track->m_Start;
+            else
+                *curpos = track->m_End;
+            return true;
+        }
     }
 
     return false;
@@ -505,20 +556,21 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
         PutOnGrid( &on_grid );
         if( Magnetize(m_Pcb, (WinEDA_PcbFrame *) this, m_ID_current_state,
-                        GetScreen()->GetGrid(), on_grid, curpos) )
+                        GetScreen()->GetGrid(), on_grid, &curpos) )
+        {
             GetScreen()->m_Curseur = curpos;
+        }
         else
         {
-            /*
-             * If there's an intrusion and DRC is active, we pass the cursor
-             * "as is", and let ShowNewTrackWhenMovingCursor figure our what to
-             * do.
-             */
+            // If there's no intrusion and DRC is active, we pass the cursor
+            // "as is", and let ShowNewTrackWhenMovingCursor figure out what to do.
             if(  !Drc_On || !g_CurrentTrackSegment
               || g_CurrentTrackSegment != this->GetCurItem()
-              || !LocateIntrusion(m_Pcb->m_Track, g_CurrentTrackSegment->GetNet(),
+              || !LocateIntrusion( m_Pcb->m_Track, g_CurrentTrackSegment->GetNet(),
                         g_CurrentTrackSegment->m_Width ) )
+            {
                 GetScreen()->m_Curseur = on_grid;
+            }
         }
     }
 

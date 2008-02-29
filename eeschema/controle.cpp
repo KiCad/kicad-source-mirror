@@ -55,22 +55,22 @@ SchematicGeneralLocateAndDisplay( bool IncludePin )
     /* Cross probing to pcbnew if a pin or a component is found */
     switch( DrawStruct->Type() )
     {
-	case DRAW_PART_TEXT_STRUCT_TYPE:
+    case DRAW_PART_TEXT_STRUCT_TYPE:
     case COMPONENT_FIELD_DRAW_TYPE:
         LibItem = (EDA_SchComponentStruct*) DrawStruct->m_Parent;
-		SendMessageToPCBNEW( DrawStruct,LibItem );
+        SendMessageToPCBNEW( DrawStruct,LibItem );
         break;
 
     case DRAW_LIB_ITEM_STRUCT_TYPE:
-		Pin = LocateAnyPin( GetScreen()->EEDrawList, GetScreen()->m_Curseur, &LibItem );
+        Pin = LocateAnyPin( GetScreen()->EEDrawList, GetScreen()->m_Curseur, &LibItem );
         if( Pin )
             break; // Priority is probing a pin first
         LibItem = (EDA_SchComponentStruct*) DrawStruct;
-		SendMessageToPCBNEW( DrawStruct, LibItem );
+        SendMessageToPCBNEW( DrawStruct, LibItem );
         break;
 
     default:
-		Pin = LocateAnyPin( GetScreen()->EEDrawList, GetScreen()->m_Curseur, &LibItem );
+        Pin = LocateAnyPin( GetScreen()->EEDrawList, GetScreen()->m_Curseur, &LibItem );
         break;
 
     case COMPONENT_PIN_DRAW_TYPE:
@@ -89,7 +89,7 @@ SchematicGeneralLocateAndDisplay( bool IncludePin )
                                  CYAN );
 
         // Cross probing:2 - pin found, and send a locate pin command to pcbnew (hightlight net)
-		SendMessageToPCBNEW( Pin, LibItem );
+        SendMessageToPCBNEW( Pin, LibItem );
     }
     return DrawStruct;
 }
@@ -156,7 +156,7 @@ SchematicGeneralLocateAndDisplay( const wxPoint& refpoint, bool IncludePin )
                              WIREITEM | BUSITEM | RACCORDITEM );
     if( DrawStruct )    // Search for a pin
     {
-		Pin = LocateAnyPin( m_CurrentSheet->LastDrawList(), refpoint, &LibItem );
+        Pin = LocateAnyPin( m_CurrentSheet->LastDrawList(), refpoint, &LibItem );
         if( Pin )
         {
             Pin->Display_Infos( this );
@@ -182,7 +182,7 @@ SchematicGeneralLocateAndDisplay( const wxPoint& refpoint, bool IncludePin )
     }
 
     /* search for a pin */
-	Pin = LocateAnyPin( m_CurrentSheet->LastDrawList(), refpoint, &LibItem );
+    Pin = LocateAnyPin( m_CurrentSheet->LastDrawList(), refpoint, &LibItem );
     if( Pin )
     {
         Pin->Display_Infos( this );
@@ -230,16 +230,16 @@ void WinEDA_DrawFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels 
 /***********************************************************************/
 {
     wxSize  delta;
-	SCH_SCREEN* screen = (SCH_SCREEN*)GetScreen(); 
-	int     zoom = screen->GetZoom();
+    SCH_SCREEN* screen = (SCH_SCREEN*)GetScreen();
+    int     zoom = screen->GetZoom();
     wxPoint curpos, oldpos;
     int     hotkey = 0;
 
-	curpos = screen->m_MousePosition;
-	oldpos = screen->m_Curseur;
+    curpos = screen->m_MousePosition;
+    oldpos = screen->m_Curseur;
 
-	delta.x = screen->GetGrid().x / zoom;
-	delta.y = screen->GetGrid().y / zoom;
+    delta.x = screen->GetGrid().x / zoom;
+    delta.y = screen->GetGrid().y / zoom;
 
     if( delta.x <= 0 )
         delta.x = 1;
@@ -253,37 +253,37 @@ void WinEDA_DrawFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels 
 
     case EDA_PANNING_UP_KEY:
         OnZoom( ID_ZOOM_PANNING_UP );
-		curpos = screen->m_Curseur;
+        curpos = screen->m_Curseur;
         break;
 
     case EDA_PANNING_DOWN_KEY:
         OnZoom( ID_ZOOM_PANNING_DOWN );
-		curpos = screen->m_Curseur;
+        curpos = screen->m_Curseur;
         break;
 
     case EDA_PANNING_LEFT_KEY:
         OnZoom( ID_ZOOM_PANNING_LEFT );
-		curpos = screen->m_Curseur;
+        curpos = screen->m_Curseur;
         break;
 
     case EDA_PANNING_RIGHT_KEY:
         OnZoom( ID_ZOOM_PANNING_RIGHT );
-		curpos = screen->m_Curseur;
+        curpos = screen->m_Curseur;
         break;
 
     case EDA_ZOOM_IN_FROM_MOUSE:
         OnZoom( ID_ZOOM_IN_KEY );
-		curpos = screen->m_Curseur;
+        curpos = screen->m_Curseur;
         break;
 
     case EDA_ZOOM_OUT_FROM_MOUSE:
         OnZoom( ID_ZOOM_OUT_KEY );
-		curpos = screen->m_Curseur;
+        curpos = screen->m_Curseur;
         break;
 
     case EDA_ZOOM_CENTER_FROM_MOUSE:
         OnZoom( ID_ZOOM_CENTER_KEY );
-		curpos = screen->m_Curseur;
+        curpos = screen->m_Curseur;
         break;
 
     case WXK_NUMPAD8:       /* Deplacement curseur vers le haut */
@@ -294,6 +294,7 @@ void WinEDA_DrawFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels 
 
     case WXK_NUMPAD2:       /* Deplacement curseur vers le bas */
     case WXK_DOWN:
+        D(printf("DOWN\n");)
         MousePositionInPixels.y += delta.y;
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
@@ -316,22 +317,22 @@ void WinEDA_DrawFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels 
     }
 
     /* Recalcul de la position du curseur schema */
-	screen->m_Curseur = curpos;
+    screen->m_Curseur = curpos;
 
     /* Placement sur la grille generale */
-	PutOnGrid( &(screen->m_Curseur) );
+    PutOnGrid( &(screen->m_Curseur) );
 
-	if( screen->IsRefreshReq() )
+    if( screen->IsRefreshReq() )
     {
         RedrawActiveWindow( DC, TRUE );
     }
 
-	if( oldpos != screen->m_Curseur )
+    if( oldpos != screen->m_Curseur )
     {
-		curpos = screen->m_Curseur;
+        curpos = screen->m_Curseur;
         screen->m_Curseur = oldpos;
         DrawPanel->CursorOff( DC );
-		GetScreen()->m_Curseur = curpos;
+        GetScreen()->m_Curseur = curpos;
         DrawPanel->CursorOn( DC );
 
         if( DrawPanel->ManageCurseur )
@@ -342,9 +343,9 @@ void WinEDA_DrawFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels 
 
     if( hotkey )
     {
-		if( screen->GetCurItem()
-				  && screen->GetCurItem()->m_Flags )
-			OnHotKey( DC, hotkey, screen->GetCurItem() );
+        if( screen->GetCurItem()
+                  && screen->GetCurItem()->m_Flags )
+            OnHotKey( DC, hotkey, screen->GetCurItem() );
         else
             OnHotKey( DC, hotkey, NULL );
     }

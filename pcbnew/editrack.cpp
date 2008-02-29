@@ -500,44 +500,41 @@ void WinEDA_PcbFrame::End_Route( TRACK* track, wxDC* DC )
 
 TRACK* LocateIntrusion( TRACK* start, int net, int width )
 {
-    int     layer      = ( (PCB_SCREEN*) ActiveScreen )->m_Active_Layer;
-    int     layer_mask = g_TabOneLayerMask[layer];
-    wxPoint ref = ActiveScreen->RefPos( 1 );
-    TRACK*  track, * found = NULL;
+    int     layer = ( (PCB_SCREEN*) ActiveScreen )->m_Active_Layer;
 
-    for( track = start; track; track = track->Next() )
+    wxPoint ref = ActiveScreen->RefPos( true );
+
+    TRACK*  found = NULL;
+
+    for( TRACK* track = start;  track;  track = track->Next() )
     {
-        int     dist;
-        wxPoint pos, vec;
-        int64_t tmp;
+        if( track->Type() == TYPETRACK )    // skip vias
+        {
+            if( track->GetState( BUSY | DELETED ) )
+                continue;
 
-        /* Locate_Pistes */
-        if( track->GetState( BUSY | DELETED ) )
-            continue;
+            if( layer != track->GetLayer() )
+                continue;
 
-        if( !(g_TabOneLayerMask[track->GetLayer()] & layer_mask) )
-            continue;
+            if( track->GetNet() == net )
+                continue;
 
-        if( track->GetNet() == net )
-            continue;
+            /* TRACK::HitTest */
+            int dist = width / 2 + track->m_Width / 2 + g_DesignSettings.m_TrackClearence;
 
-        if( track->Type() == TYPEVIA )
-            continue;
+            wxPoint pos  = ref - track->m_Start;
+            wxPoint vec  = track->m_End - track->m_Start;
 
-        /* TRACK::HitTest */
-        dist = width / 2 + track->m_Width / 2 + g_DesignSettings.m_TrackClearence;
-        pos  = ref - track->m_Start;
-        vec  = track->m_End - track->m_Start;
+            if( !DistanceTest( dist, vec.x, vec.y, pos.x, pos.y ) )
+                continue;
 
-        if( !DistanceTest( dist, vec.x, vec.y, pos.x, pos.y ) )
-            continue;
+            found = track;
 
-        found = track;
-
-        /* prefer intrusions from the side, not the end */
-        tmp = (int64_t) pos.x * vec.x + (int64_t) pos.y * vec.y;
-        if( tmp >= 0 && tmp <= (int64_t) vec.x * vec.x + (int64_t) vec.y * vec.y )
-            break;
+            /* prefer intrusions from the side, not the end */
+            int64_t tmp = (int64_t) pos.x * vec.x + (int64_t) pos.y * vec.y;
+            if( tmp >= 0 && tmp <= (int64_t) vec.x * vec.x + (int64_t) vec.y * vec.y )
+                break;
+        }
     }
 
     return found;
@@ -612,7 +609,7 @@ static void PushTrack( WinEDA_DrawPanel* panel )
     n.x = (int) round( f * n.x );
     n.y = (int) round( f * n.y );
 
-    Project( track->m_End, cursor, other );
+    Project( &track->m_End, cursor, other );
     track->m_End += n;
 }
 
