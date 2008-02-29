@@ -229,7 +229,7 @@ int UpperLimit = VARIABLE_BLOCK_START_POSITION;
 				msg += screen->m_Revision;
 				break;
 
-			case WS_LICENCE:
+			case WS_KICAD_VERSION:
 				msg += g_ProductName;
 				break;
 
@@ -239,6 +239,18 @@ int UpperLimit = VARIABLE_BLOCK_START_POSITION;
 
 			case WS_IDENTSHEET:
 				msg << screen->m_ScreenNumber << wxT("/") << screen->m_NumberOfScreen;
+				break;
+
+			case WS_FILENAME:
+			{
+				wxString fname, fext;
+				wxFileName::SplitPath(screen->m_FileName, (wxString*)NULL, &fname, &fext);
+				msg << fname << wxT(".") << fext; 
+			}
+				break;
+
+			case WS_FULLSHEETNAME:
+//				msg += GetScreenDesc(); 
 				break;
 
 			case WS_COMPANY_NAME:

@@ -95,7 +95,7 @@ typedef struct ListLabel
 {
 	int m_LabelType;
 	void * m_Label;
-	char m_SheetPath[32];
+	char m_SheetPath[64];
 } ListLabel;
 typedef struct ListComponent
 {
