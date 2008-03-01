@@ -640,6 +640,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
         }
     }
 
+#if 1   // enable image (outline) scopes.
     static const KICAD_T scanEDGEs[] = { TYPEEDGEMODULE, EOT };
 
     // get all the MODULE's EDGE_MODULEs and convert those to DSN outlines.
@@ -707,6 +708,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
             continue;
         }
     }
+#endif
 
     return image;
 }

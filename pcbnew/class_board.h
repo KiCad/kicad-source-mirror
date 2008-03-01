@@ -8,6 +8,19 @@
 class ZONE_CONTAINER;
 class EDA_BoardDesignSettings;
 
+
+/**
+ * Enum LAYER_T
+ * gives the allowed types of layers, same as Specctra DSN spec.
+ */
+enum LAYER_T
+{
+    LT_SIGNAL,
+    LT_POWER,
+    LT_MIXED,
+};
+
+
 /***********************************************/
 /* class BOARD : handle datas to build a board */
 /***********************************************/
@@ -134,13 +147,44 @@ public:
 
     /**
      * Function GetLayerName
-     * returns the name of the requested layer.  Hopefully layer names will
-     * be stored in the BOARD.  This function anticipates that.
+     * returns the name of the copper layer given by aLayerIndex.
      *
      * @param aLayerIndex A layer index, like COPPER_LAYER_N, etc.
      * @return wxString - the layer name.
      */
     wxString GetLayerName( int aLayerIndex ) const;
+
+    /**
+     * Function SetLayerName
+     * changes the name of the layer given by aLayerIndex.
+     *
+     * @param aLayerIndex A layer index, like COPPER_LAYER_N, etc.
+     * @param aLayerName The new layer name
+     * @return bool - true if aLayerName was legal and unique amoung other
+     *   layer names at other layer indices and aLayerIndex was within range, else false.
+     */
+    bool SetLayerName( int aLayerIndex, const wxString& aLayerName );
+
+    /**
+     * Function GetLayerType
+     * returns the type of the copper layer given by aLayerIndex.
+     *
+     * @param aLayerIndex A layer index, like COPPER_LAYER_N, etc.
+     * @return LAYER_T - the layer type, or LAYER_T(-1) if the
+     *  index was out of range.
+     */
+    LAYER_T GetLayerType( int aLayerIndex ) const;
+
+    /**
+     * Function SetLayerName
+     * changes the name of the layer given by aLayerIndex.
+     *
+     * @param aLayerIndex A layer index, like COPPER_LAYER_N, etc.
+     * @param aLayerType The new layer type.
+     * @return bool - true if aLayerType was legal and aLayerIndex was within range, else false.
+     */
+    bool SetLayerType( int aLayerIndex, LAYER_T aLayerType );
+
 
     /* Routines de calcul des nombres de segments pistes et zones */
     int     GetNumSegmTrack();

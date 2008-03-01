@@ -5,6 +5,26 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Mar-1 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+
+    Changed ioascii.cpp to save and load board specific layer names, for DEBUG
+    build only. I want to add class LAYER, see below. Added
+    BOARD::SetLayerName(), BOARD::SetLayerType(), and BOARD::GetLayerType().
+    Will add a UI for editing those soon as soon class LAYER is stable. The
+    BOARD::SetLayerXXXX( int layerNdx, VALUE ) functions would simply route to
+    LAYER::SetXXXX( VALUE ). Then layer specific global variables would migrate
+    to the BOARD::LAYER[]s.
+
+    Jean-Pierre please have a look at pcbstruct.h's class LAYER which is just a
+    prototype for now.  EDA_BoardDesignSettings::m_LayerColor would go away,
+    and then I would add ptr_vector<LAYER> to EDA_BoardDesignSettings or BOARD.
+    Whether EDA_BoardDesignSettings or BOARD I don't have a strong preference.
+    I understand this is a bunch of work, and there are tricks needed to handle
+    adding and deleting the number of layers....
+
+
 2008-Feb-29 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew

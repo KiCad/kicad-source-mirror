@@ -92,14 +92,14 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( FILE* File,
     int             ii = 0;
     char            line1[256];
     char            line2[256];
-    
+
     TRACK* NewTrack;
 
     while( GetLine( File, line1, LineNum ) )
     {
         int             makeType;
         unsigned long   timeStamp;
-        
+
         if( line1[0] == '$' )
         {
             return ii;      /* end of segmentlist: OK */
@@ -108,10 +108,10 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( FILE* File,
         // Read the 2nd line to determine the exact type, one of:
         // TYPETRACK, TYPEVIA, or TYPEZONE.  The type field in 2nd line
         // differentiates between TYPETRACK and TYPEVIA.  With virtual
-        // functions in use, it is critical to instantiate the TYPEVIA exactly.        
+        // functions in use, it is critical to instantiate the TYPEVIA exactly.
         if( GetLine( File, line2, LineNum ) == NULL )
             break;
-        
+
         if( line2[0] == '$' )
             break;
 
@@ -123,7 +123,7 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( FILE* File,
             makeType = TYPEVIA;
         else
             makeType = StructType;
-        
+
         switch( makeType )
         {
         default:
@@ -141,9 +141,9 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( FILE* File,
         }
 
         NewTrack->Insert( m_Pcb, PtSegm );
-        
+
         PtSegm = NewTrack;
-        
+
         PtSegm->m_TimeStamp = timeStamp;
 
         int arg_count = sscanf( line1 + 2, " %d %d %d %d %d %d %d", &shape,
@@ -156,11 +156,11 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( FILE* File,
 
         if( arg_count < 7 || drill <= 0 )
             PtSegm->SetDrillDefault();
-		else
+        else
             PtSegm->SetDrillValue(drill);
 
         PtSegm->SetLayer( layer );
-        PtSegm->SetNet( net_code ); 
+        PtSegm->SetNet( net_code );
         PtSegm->SetState( flags, ON );
     }
 
@@ -291,7 +291,7 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             data = strtok( NULL, " =\n\r" );
             if( data )
                 gy = atoi( data );
-            m_Auxiliary_Axis_Position.x = gx; 
+            m_Auxiliary_Axis_Position.x = gx;
             m_Auxiliary_Axis_Position.y = gy;
             continue;
         }
@@ -301,6 +301,18 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             int tmp;
             sscanf( data, "%d", &tmp );
             m_Pcb->m_BoardSettings->m_CopperLayerCount = tmp;
+            continue;
+        }
+
+        const int LAYERKEYZ = sizeof("Layer[")-1;
+
+        if( strncmp( Line, "Layer[", LAYERKEYZ ) == 0 )
+        {
+            const char* cp = Line + LAYERKEYZ;
+            int layer = atoi(cp);
+
+            wxString layerName = CONV_FROM_UTF8( data );
+            m_Pcb->SetLayerName( layer, layerName );
             continue;
         }
 
@@ -359,7 +371,7 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             }
             else
                 continue;
-            
+
             data = strtok( NULL, " =\n\r" );
             if( data )
             {
@@ -368,7 +380,7 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             }
             else
                 g_UserGrid.y = g_UserGrid.x;
-            
+
             GetScreen()->m_UserGrid = g_UserGrid;
             data = strtok( NULL, " =\n\r" );
             if( data )
@@ -489,76 +501,92 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
 
 #ifdef PCBNEW
 /***************************************************************/
-static int WriteSetup( FILE* File, WinEDA_BasePcbFrame* frame )
+static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame
+#if defined(DEBUG)
+    , BOARD* aBoard
+#endif
+                      )
 /***************************************************************/
 {
     char text[1024];
     int  ii, jj;
 
-    fprintf( File, "$SETUP\n" );
+    fprintf( aFile, "$SETUP\n" );
     sprintf( text, "InternalUnit %f INCH\n", 1.0 / PCB_INTERNAL_UNIT );
-    fprintf( File, text );
+    fprintf( aFile, text );
 
-    if( frame->GetScreen()->m_UserGridIsON )
+    if( aFrame->GetScreen()->m_UserGridIsON )
         ii = jj = -1;
     else
     {
-        ii = frame->GetScreen()->GetGrid().x;
-        jj = frame->GetScreen()->GetGrid().y;
+        ii = aFrame->GetScreen()->GetGrid().x;
+        jj = aFrame->GetScreen()->GetGrid().y;
     }
-    
+
     sprintf( text, "GridSize %d %d\n", ii, jj );
-    fprintf( File, text );
+    fprintf( aFile, text );
 
     sprintf( text, "UserGridSize %lf %lf %s\n",
-             frame->GetScreen()->m_UserGrid.x, frame->GetScreen()->m_UserGrid.y,
+             aFrame->GetScreen()->m_UserGrid.x, aFrame->GetScreen()->m_UserGrid.y,
              ( g_UserGrid_Unit == 0 ) ? "INCH" : "mm" );
-    fprintf( File, text );
+    fprintf( aFile, text );
 
-    fprintf( File, "ZoneGridSize %d\n", g_GridRoutingSize );
+    fprintf( aFile, "ZoneGridSize %d\n", g_GridRoutingSize );
 
-    fprintf( File, "Layers %d\n", g_DesignSettings.m_CopperLayerCount );
-    fprintf( File, "TrackWidth %d\n", g_DesignSettings.m_CurrentTrackWidth );
+
+#if defined(DEBUG)
+    fprintf( aFile, "Layers %d\n", aBoard->GetCopperLayerCount() );
+    for( int layer=0;  layer<aBoard->GetCopperLayerCount();  ++layer )
+    {
+        fprintf( aFile, "Layer[%d] %s\n", layer, CONV_TO_UTF8( aBoard->GetLayerName(layer) ) );
+    }
+
+#else
+    fprintf( aFile, "Layers %d\n", g_DesignSettings.m_CopperLayerCount );
+#endif
+
+    fprintf( aFile, "TrackWidth %d\n", g_DesignSettings.m_CurrentTrackWidth );
     for( ii = 0; ii < HISTORY_NUMBER; ii++ )
     {
         if( g_DesignSettings.m_TrackWidthHistory[ii] == 0 )
             break;
-        fprintf( File, "TrackWidthHistory %d\n",
+        fprintf( aFile, "TrackWidthHistory %d\n",
                  g_DesignSettings.m_TrackWidthHistory[ii] );
     }
 
-    fprintf( File, "TrackClearence %d\n", g_DesignSettings.m_TrackClearence );
-    fprintf( File, "ZoneClearence %d\n", g_DesignSettings.m_ZoneClearence );
+    fprintf( aFile, "TrackClearence %d\n", g_DesignSettings.m_TrackClearence );
+    fprintf( aFile, "ZoneClearence %d\n", g_DesignSettings.m_ZoneClearence );
 
-    fprintf( File, "DrawSegmWidth %d\n", g_DesignSettings.m_DrawSegmentWidth );
-    fprintf( File, "EdgeSegmWidth %d\n", g_DesignSettings.m_EdgeSegmentWidth );
-    fprintf( File, "ViaSize %d\n", g_DesignSettings.m_CurrentViaSize );
-    fprintf( File, "ViaDrill %d\n", g_DesignSettings.m_ViaDrill );
+    fprintf( aFile, "DrawSegmWidth %d\n", g_DesignSettings.m_DrawSegmentWidth );
+    fprintf( aFile, "EdgeSegmWidth %d\n", g_DesignSettings.m_EdgeSegmentWidth );
+    fprintf( aFile, "ViaSize %d\n", g_DesignSettings.m_CurrentViaSize );
+    fprintf( aFile, "ViaDrill %d\n", g_DesignSettings.m_ViaDrill );
+
     for( ii = 0; ii < HISTORY_NUMBER; ii++ )
     {
         if( g_DesignSettings.m_ViaSizeHistory[ii] == 0 )
             break;
-        fprintf( File, "ViaSizeHistory %d\n", g_DesignSettings.m_ViaSizeHistory[ii] );
+        fprintf( aFile, "ViaSizeHistory %d\n", g_DesignSettings.m_ViaSizeHistory[ii] );
     }
 
-	fprintf( File, "MicroViaSize %d\n", g_DesignSettings.m_CurrentMicroViaSize);
-	fprintf( File, "MicroViaDrill %d\n", g_DesignSettings.m_MicroViaDrill);
-    fprintf( File, "MicroViasAllowed %d\n", g_DesignSettings.m_MicroViasAllowed);
+    fprintf( aFile, "MicroViaSize %d\n", g_DesignSettings.m_CurrentMicroViaSize);
+    fprintf( aFile, "MicroViaDrill %d\n", g_DesignSettings.m_MicroViaDrill);
+    fprintf( aFile, "MicroViasAllowed %d\n", g_DesignSettings.m_MicroViasAllowed);
 
-    fprintf( File, "TextPcbWidth %d\n", g_DesignSettings.m_PcbTextWidth );
-    fprintf( File, "TextPcbSize %d %d\n",
+    fprintf( aFile, "TextPcbWidth %d\n", g_DesignSettings.m_PcbTextWidth );
+    fprintf( aFile, "TextPcbSize %d %d\n",
              g_DesignSettings.m_PcbTextSize.x, g_DesignSettings.m_PcbTextSize.y );
-    
-    fprintf( File, "EdgeModWidth %d\n", ModuleSegmentWidth );
-    fprintf( File, "TextModSize %d %d\n", ModuleTextSize.x, ModuleTextSize.y );
-    fprintf( File, "TextModWidth %d\n", ModuleTextWidth );
-    fprintf( File, "PadSize %d %d\n", g_Pad_Master.m_Size.x, g_Pad_Master.m_Size.y );
-    fprintf( File, "PadDrill %d\n", g_Pad_Master.m_Drill.x );
 
-    fprintf( File, "AuxiliaryAxisOrg %d %d\n",
-             frame->m_Auxiliary_Axis_Position.x, frame->m_Auxiliary_Axis_Position.y );
-    
-    fprintf( File, "$EndSETUP\n\n" );
+    fprintf( aFile, "EdgeModWidth %d\n", ModuleSegmentWidth );
+    fprintf( aFile, "TextModSize %d %d\n", ModuleTextSize.x, ModuleTextSize.y );
+    fprintf( aFile, "TextModWidth %d\n", ModuleTextWidth );
+    fprintf( aFile, "PadSize %d %d\n", g_Pad_Master.m_Size.x, g_Pad_Master.m_Size.y );
+    fprintf( aFile, "PadDrill %d\n", g_Pad_Master.m_Drill.x );
+
+    fprintf( aFile, "AuxiliaryAxisOrg %d %d\n",
+             aFrame->m_Auxiliary_Axis_Position.x, aFrame->m_Auxiliary_Axis_Position.y );
+
+    fprintf( aFile, "$EndSETUP\n\n" );
     return 1;
 }
 
@@ -841,11 +869,11 @@ int WinEDA_PcbFrame::ReadPcbFile( wxDC* DC, FILE* File, bool Append )
 
         if( strnicmp( Line, "$CZONE_OUTLINE", 7 ) == 0 )
         {
-			ZONE_CONTAINER * zone_descr = new ZONE_CONTAINER(m_Pcb);
-			zone_descr->ReadDescr( File, &LineNum );
-			m_Pcb->Add(zone_descr);
+            ZONE_CONTAINER * zone_descr = new ZONE_CONTAINER(m_Pcb);
+            zone_descr->ReadDescr( File, &LineNum );
+            m_Pcb->Add(zone_descr);
             continue;
-		}
+        }
 
         if( strnicmp( Line, "$MODULE", 7 ) == 0 )
         {
@@ -991,9 +1019,9 @@ int WinEDA_PcbFrame::ReadPcbFile( wxDC* DC, FILE* File, bool Append )
     setlocale( LC_NUMERIC, "" );      // revert to the current  locale
 
     Affiche_Message( wxEmptyString );
-	
-	BestZoom();
-	DrawPanel->ReDraw(DC, true);
+
+    BestZoom();
+    DrawPanel->ReDraw(DC, true);
 
 #ifdef PCBNEW
     Compile_Ratsnest( DC, TRUE );
@@ -1015,32 +1043,36 @@ int WinEDA_PcbFrame::SavePcbFormatAscii( FILE* aFile )
 {
     bool    rc;
     char    line[256];
-    
+
     m_Pcb->m_Status_Pcb &= ~CONNEXION_OK;
 
     wxBeginBusyCursor();
-    
+
     // Switch the locale to standard C (needed to print floating point numbers like 1.3)
     setlocale( LC_NUMERIC, "C" );
-    
+
     /* Ecriture de l'entete PCB : */
     fprintf( aFile, "PCBNEW-BOARD Version %d date %s\n\n", g_CurrentVersionPCB,
             DateAndTime( line ) );
 
     WriteGeneralDescrPcb( aFile );
     WriteSheetDescr( m_CurrentScreen, aFile );
-    WriteSetup( aFile, this );
+    WriteSetup( aFile, this
+#if defined(DEBUG)
+        , m_Pcb
+#endif
+               );
 
     rc = m_Pcb->Save( aFile );
-    
+
     setlocale( LC_NUMERIC, "" );      // revert to the current locale
     wxEndBusyCursor();
-    
+
     if( !rc )
         DisplayError( this, wxT( "Unable to save PCB file" ) );
     else
         Affiche_Message( wxEmptyString );
-    
+
     return rc;
 }
 

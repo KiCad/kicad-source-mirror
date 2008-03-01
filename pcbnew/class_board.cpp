@@ -84,6 +84,27 @@ wxString BOARD::GetLayerName( int aLayerIndex ) const
 }
 
 
+bool BOARD::SetLayerName( int aLayerIndex, const wxString& aLayerName )
+{
+    // a dummy temporarily.
+    D(printf("SetLayerName( %d, %s )\n", aLayerIndex, CONV_TO_UTF8(aLayerName) );)
+    return true;
+}
+
+
+LAYER_T BOARD::GetLayerType( int aLayerIndex ) const
+{
+    return LT_SIGNAL;
+}
+
+
+bool BOARD::SetLayerType( int aLayerIndex, LAYER_T aLayerType )
+{
+    // a dummy temporarily.
+    return true;
+}
+
+
 int BOARD::GetCopperLayerCount() const
 {
     return m_BoardSettings->m_CopperLayerCount;
@@ -624,7 +645,8 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
 }
 
 
-/*  now using PcbGeneralLocateAndDisplay()
+/*  now using PcbGeneralLocateAndDisplay(), but this remains a useful example
+    of how the INSPECTOR can be used in a lightweight way.
 // see pcbstruct.h
 BOARD_ITEM* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
 {
@@ -993,13 +1015,13 @@ void BOARD::Show( int nestLevel, std::ostream& os )
     for( ; p; p = p->Next() )
         p->Show( nestLevel+2, os );
     NestedSpace( nestLevel+1, os ) << "</zones>\n";
-	/*
+    /*
     NestedSpace( nestLevel+1, os ) << "<zone_container>\n";
     for( ZONE_CONTAINERS::iterator i=m_ZoneDescriptorList.begin();  i!=m_ZoneDescriptorList.end();  ++i )
         (*i)->Show( nestLevel+2, os );
     NestedSpace( nestLevel+1, os ) << "</zone_container>\n";
-	*/
-    
+    */
+
     p = (BOARD_ITEM*) m_Son;
     for( ; p;  p = p->Next() )
     {
