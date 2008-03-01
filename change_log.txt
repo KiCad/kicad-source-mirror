@@ -19,7 +19,7 @@ email address.
 
     Jean-Pierre please have a look at pcbstruct.h's class LAYER which is just a
     prototype for now.  EDA_BoardDesignSettings::m_LayerColor would go away,
-    and then I would add ptr_vector<LAYER> to EDA_BoardDesignSettings or BOARD.
+    and then I would add LAYER[] to EDA_BoardDesignSettings or BOARD.
     Whether EDA_BoardDesignSettings or BOARD I don't have a strong preference.
     I understand this is a bunch of work, and there are tricks needed to handle
     adding and deleting the number of layers....
