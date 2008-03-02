@@ -8,7 +8,7 @@ Title=Kicad Help (russian version):
 [FILES]
 eeschema/eeschema.html
 pcbnew/pcbnew_ru.html
-cvpcb/cvpcb_ru.html
-kicad/kicadru_.html
+cvpcb/cvpcb.html
+kicad/kicad.html
 gerbview/gerbview.html
 file_formats/file_formats.html

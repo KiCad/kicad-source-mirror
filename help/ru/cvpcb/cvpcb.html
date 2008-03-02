@@ -1,0 +1,734 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 2.3  (Linux)">
+	<META NAME="AUTHOR" CONTENT="IUT">
+	<META NAME="CREATED" CONTENT="19960127;12470000">
+	<META NAME="CHANGED" CONTENT="20061203;16302400">
+	<META NAME="SDFOOTNOTE" CONTENT=";;;;P">
+	<META NAME="SDENDNOTE" CONTENT="ARABIC">
+	<STYLE TYPE="text/css">
+	<!--
+		@page { size: 21cm 29.7cm; margin-left: 1.5cm; margin-right: 1.5cm; margin-top: 1.25cm; margin-bottom: 1.25cm }
+		P { margin-bottom: 0.21cm; color: #000000; widows: 2; orphans: 2; page-break-before: auto }
+		P.western { font-family: "Arial", sans-serif; font-size: 12pt; so-language: fr-FR }
+		P.cjk { font-family: "Times New Roman", serif; font-size: 10pt }
+		H1 { margin-left: 1.25cm; text-indent: -1.25cm; margin-top: 0.3cm; margin-bottom: 0.2cm; color: #800000; line-height: 100%; text-align: justify; widows: 2; orphans: 2; text-decoration: none; page-break-before: auto }
+		H1.western { font-family: "Arial", sans-serif; font-size: 14pt; so-language: fr-FR; font-weight: bold }
+		H1.cjk { font-family: "Times New Roman", serif; font-size: 12pt; font-weight: bold }
+		H2 { margin-left: 2.5cm; text-indent: -1.25cm; margin-top: 0.2cm; margin-bottom: 0.2cm; color: #008000; line-height: 100%; text-align: justify; widows: 2; orphans: 2; page-break-before: auto }
+		H2.western { font-family: "Arial", sans-serif; font-size: 14pt; so-language: fr-FR; font-weight: bold }
+		H2.cjk { font-family: "Times New Roman", serif; font-size: 12pt; font-weight: bold }
+		H3 { margin-left: 3.75cm; text-indent: -1.25cm; margin-top: 0.1cm; margin-bottom: 0.1cm; color: #000080; line-height: 100%; widows: 2; orphans: 2; page-break-before: auto; page-break-after: avoid }
+		H3.western { font-family: "Arial", sans-serif; font-size: 14pt; so-language: fr-FR; font-weight: bold }
+		H3.cjk { font-family: "Times New Roman", serif; font-size: 12pt; font-weight: bold }
+		TD P { margin-bottom: 0.21cm; color: #000000; widows: 2; orphans: 2; page-break-before: auto }
+		TD P.western { font-family: "Arial", sans-serif; font-size: 12pt; so-language: fr-FR }
+		TD P.cjk { font-family: "Times New Roman", serif; font-size: 10pt }
+		DD { margin-left: 1cm; color: #000000; widows: 2; orphans: 2; page-break-before: auto }
+		DD.western { font-family: "Arial", sans-serif; font-size: 12pt; so-language: fr-FR }
+		DD.cjk { font-family: "Times New Roman", serif; font-size: 10pt }
+		DT { color: #000000; widows: 2; orphans: 2; page-break-before: auto }
+		DT.western { font-family: "Arial", sans-serif; font-size: 12pt; so-language: fr-FR }
+		DT.cjk { font-family: "Times New Roman", serif; font-size: 10pt }
+		A:link { color: #000080; text-decoration: underline }
+		A:visited { color: #800000; text-decoration: underline }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-GB" TEXT="#000000" LINK="#000080" VLINK="#800000" DIR="LTR">
+<DIV TYPE=HEADER>
+	<P LANG="fr-FR" STYLE="margin-bottom: 0cm"><I><B>Cvpcb.</B></I></P>
+</DIV>
+<DIV ID="Оглавление1" DIR="LTR">
+	<DIV ID="Table des mati&egrave;res1_Head" DIR="LTR">
+		<P LANG="fr-FR" STYLE="margin-top: 0.42cm; page-break-after: avoid">
+		<FONT FACE="Albany, sans-serif"><FONT SIZE=4 STYLE="font-size: 16pt"><B>Headings</B></FONT></FONT></P>
+	</DIV>
+	<P LANG="fr-FR" STYLE="margin-bottom: 0cm"><A HREF="#1.Purpose|outline">1
+	- Purpose</A></P>
+	<P LANG="fr-FR" STYLE="margin-bottom: 0cm"><A HREF="#2.General characteristics|outline">2
+	- General characteristics</A></P>
+	<P LANG="fr-FR" STYLE="margin-left: 0.5cm; margin-bottom: 0cm"><A HREF="#2.1.Characteristics|outline">2.1
+	- Characteristics</A></P>
+	<P LANG="fr-FR" STYLE="margin-left: 0.5cm; margin-bottom: 0cm"><A HREF="#2.2.Input netlist format|outline">2.2
+	- Input netlist format</A></P>
+	<P LANG="fr-FR" STYLE="margin-left: 0.5cm; margin-bottom: 0cm"><A HREF="#2.3.Output Netlist|outline">2.3
+	- Output Netlist</A></P>
+	<P LANG="fr-FR" STYLE="margin-bottom: 0cm"><A HREF="#3.Invoking Cvpcb|outline">3
+	- Invoking Cvpcb</A></P>
+	<P LANG="fr-FR" STYLE="margin-bottom: 0cm"><A HREF="#4.CVPCB Commands|outline">4
+	- CVPCB Commands</A></P>
+	<P LANG="fr-FR" STYLE="margin-left: 0.5cm; margin-bottom: 0cm"><A HREF="#4.1.Main screen|outline">4.1
+	- Main screen</A></P>
+	<P LANG="fr-FR" STYLE="margin-left: 0.5cm; margin-bottom: 0cm"><A HREF="#4.2.Main Screen Toolbar |outline">4.2
+	- Main Screen Toolbar </A>
+	</P>
+	<P LANG="fr-FR" STYLE="margin-left: 0.5cm; margin-bottom: 0cm"><A HREF="#4.3.CVPCB Configuration |outline">4.3
+	- CVPCB Configuration </A>
+	</P>
+	<P LANG="fr-FR" STYLE="margin-left: 1cm; margin-bottom: 0cm"><A HREF="#4.3.1.General screen|outline">4.3.1
+	- General screen</A></P>
+	<P LANG="fr-FR" STYLE="margin-left: 1cm; margin-bottom: 0cm"><A HREF="#4.3.2.Netlist Format|outline">4.3.2
+	- Netlist Format</A></P>
+	<P LANG="fr-FR" STYLE="margin-left: 1cm; margin-bottom: 0cm"><A HREF="#4.3.3.Footprint Library selection |outline">4.3.3
+	- Footprint Library selection </A>
+	</P>
+	<P LANG="fr-FR" STYLE="margin-left: 1cm; margin-bottom: 0cm"><A HREF="#4.3.4.Selecting the equivalence files|outline">4.3.4
+	- Selecting the equivalence files</A></P>
+	<P LANG="fr-FR" STYLE="margin-left: 0.5cm; margin-bottom: 0cm"><A HREF="#4.4.Selecting library path and default extensions |outline">4.4
+	- Selecting library path and default extensions </A>
+	</P>
+	<P LANG="fr-FR" STYLE="margin-left: 0.5cm; margin-bottom: 0cm"><A HREF="#4.5.Viewing the current footprint|outline">4.5
+	- Viewing the current footprint</A></P>
+	<P LANG="fr-FR" STYLE="margin-left: 1cm; margin-bottom: 0cm"><A HREF="#4.5.1.Display|outline">4.5.1
+	- Display</A></P>
+	<P LANG="fr-FR" STYLE="margin-left: 1cm; margin-bottom: 0cm"><A HREF="#4.5.2.Keyboard Commands|outline">4.5.2
+	- Keyboard Commands</A></P>
+	<P LANG="fr-FR" STYLE="margin-left: 1cm; margin-bottom: 0cm"><A HREF="#4.5.3.Pop Up Menu|outline">4.5.3
+	- Pop Up Menu</A></P>
+	<P LANG="fr-FR" STYLE="margin-left: 1cm; margin-bottom: 0cm"><A HREF="#4.5.4. 3D Display|outline">4.5.4
+	-  3D Display</A></P>
+	<P LANG="fr-FR" STYLE="margin-bottom: 0cm"><A HREF="#5.Associating components with footprints|outline">5
+	- Associating components with footprints</A></P>
+	<P LANG="fr-FR" STYLE="margin-left: 0.5cm; margin-bottom: 0cm"><A HREF="#5.1.Principle|outline">5.1
+	- Principle</A></P>
+	<P LANG="fr-FR" STYLE="margin-left: 0.5cm; margin-bottom: 0cm"><A HREF="#5.2.Assignment|outline">5.2
+	- Assignment</A></P>
+	<P LANG="fr-FR" STYLE="margin-left: 0.5cm; margin-bottom: 0cm"><A HREF="#5.3.Changing an existing assignment|outline">5.3
+	- Changing an existing assignment</A></P>
+	<P LANG="fr-FR" STYLE="margin-left: 0.5cm; margin-bottom: 0cm"><A HREF="#5.4.Filtering the footprint list:|outline">5.4
+	- Filtering the footprint list:</A></P>
+	<P LANG="fr-FR" STYLE="margin-bottom: 0cm"><A HREF="#6.Equivalence files|outline">6
+	- Equivalence files</A></P>
+	<P LANG="fr-FR" STYLE="margin-left: 0.5cm; margin-bottom: 0cm"><A HREF="#6.1.Purpose|outline">6.1
+	- Purpose</A></P>
+	<P LANG="fr-FR" STYLE="margin-left: 0.5cm; margin-bottom: 0cm"><A HREF="#6.2.Format|outline">6.2
+	- Format</A></P>
+	<P LANG="fr-FR" STYLE="margin-bottom: 0cm"><A HREF="#7.Back- annotation file|outline">7
+	- Back- annotation file</A></P>
+</DIV>
+<DL>
+	<DT LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0.5cm"><BR><BR>
+	</DT></DL>
+<H1 LANG="fr-FR" CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 1cm; text-indent: 0cm">
+<A NAME="1.Purpose|outline"></A><FONT COLOR="#800000"><FONT FACE="Arial"><FONT SIZE=4>1 - Purpose</SPAN></FONT></FONT></FONT></H1>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><B>CVPCB</B>
+allows you to assign each <I><B>component</B></I> that appears in the
+netlist created by the Schematic program to the name of the <I><B>footprint</B></I>
+which will represent it on a printed circuit board, and adds this
+information to the netlist. </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">Generally
+the netlist does not specify which <I><B>footprint</B></I> (i.e. the
+physical appearance of the component) the printed circuit software
+(<B>PCBNEW</B>) will have to display to create the general drawing of
+the card. </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">Components
+can be assigned to their corresponding footprints manually. You can
+create <I>Equivalence files</I>, which are look-up tables associating
+each component with its footprint. <FONT FACE="Arial, sans-serif">When
+equivalence files are available, automatic assignment is possible.</FONT></SPAN></P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">The
+list of the footprints available for the PCB software is contained in
+one or more <I>FOOTPRINT libraries.</I> </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">This
+interactive approach is much simpler than directly placing the
+assignments on the schematic, because as well as allowing automatic
+assignment, <B>CVPCB</B>, allows you to see the list of the
+footprints available, and to display them on the screen.</SPAN></P>
+<H1 LANG="fr-FR" CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 1cm; text-indent: 0cm"><A NAME="2.General characteristics|outline"></A>
+<FONT COLOR="#800000"><FONT FACE="Arial"><FONT SIZE=4>2 - General
+characteristics</SPAN></FONT></FONT></FONT></H1>
+<H2 LANG="fr-FR" CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 2cm; text-indent: 0cm"><A NAME="2.1.Characteristics|outline"></A>
+<FONT COLOR="#008000"><FONT FACE="Arial"><FONT SIZE=4>2.1 - Characteristics</SPAN></FONT></FONT></FONT></H2>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">Interactive
+assignment of components with footprints or automatic assignment via
+equivalence files. </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">Generation
+(if necessary) of back- annotation files of this assignment to the
+schematic. </SPAN>
+</P>
+<H2 LANG="fr-FR" CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 2cm; text-indent: 0cm"><A NAME="2.2.Input netlist format|outline"></A>
+<FONT COLOR="#008000"><FONT FACE="Arial"><FONT SIZE=4>2.2 - Input
+netlist format</SPAN></FONT></FONT></FONT></H2>
+<UL>
+	<LI><P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><B>EESchema</B>
+	(without footprint references). </SPAN>
+	</P>
+	<LI><P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><B>VIEW
+	LOGIC</B> WIRELIST. </SPAN>
+	</P>
+	<LI><P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><B>VIEW
+	LOGIC</B> NETLIST * (.NET+.PKG)</SPAN></P>
+</UL>
+<H2 LANG="fr-FR" CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 2cm; text-indent: 0cm"><A NAME="2.3.Output Netlist|outline"></A>
+<FONT COLOR="#008000"><FONT FACE="Arial"><FONT SIZE=4>2.3 - Output
+Netlist</SPAN></FONT></FONT></FONT></H2>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">Two
+files are generated for <I><B>Pcbnew</B></I>:</SPAN></P>
+<UL>
+	<LI><P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">The
+	enhanced <B>Netlist</B> file (with footprint references)</SPAN></P>
+	<LI><P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">An
+	auxiliary component assignment file . (<B>.CMP</B>).</SPAN></P>
+</UL>
+<H1 LANG="fr-FR" CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 1cm; text-indent: 0cm"><A NAME="3.Invoking Cvpcb|outline"></A>
+<FONT COLOR="#800000"><FONT FACE="Arial"><FONT SIZE=4><B>3 - Invoking
+Cvpcb</SPAN></B></FONT></FONT></FONT></H1>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><B>cvpcb</B>
+(the file is then selected in CVPCB, via the file menu) or <B>cvpcb
+&lt;filename&gt;</B><I><B>,</B></I> (<I><B>filename</B></I><I> </I>being
+the name of the netlist file to be processed, from the schematic tool
+<B>Eeschema).</B> </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">The
+name of the file can be given with or without extension. </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">The
+extensions will if necessary be supplied by the defined in <B>cvpcb
+</B>configuration<B>.</B> </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">The
+two generated files will have the same name (with different
+extensions). </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">The
+standard extension of the file to be processed is <B>.net.</B> </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">The
+standard extension of the generated netlist file is <B>.net,</B> and
+will replace the old .net. </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">The
+standard extension of the file assigning components to the
+corresponding footprints (also generated by <B>CVPCB</B>) is <B>.cmp</B>.
+</SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">These
+standard extensions can be modified by changing <B>Cvpcb</B>
+configuration.</SPAN></P>
+<H1 LANG="fr-FR" CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 1cm; text-indent: 0cm"><A NAME="4.CVPCB Commands|outline"></A>
+<FONT COLOR="#800000"><FONT FACE="Arial"><FONT SIZE=4>4 - CVPCB
+Commands</SPAN></FONT></FONT></FONT></H1>
+<H2 LANG="fr-FR" CLASS="western" ALIGN=JUSTIFY STYLE="margin-left: 2cm; text-indent: 0cm"><A NAME="4.1.Main screen|outline"></A>
+<FONT COLOR="#008000"><FONT FACE="Arial"><FONT SIZE=4>4.1 - Main
+screen</SPAN></FONT></FONT></FONT></H2>
+<P LANG="fr-FR" CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0cm; line-height: 150%">
+<SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_maab4014.png" NAME="Graphic15" ALIGN=BOTTOM WIDTH=561 HEIGHT=493 BORDER=0></SPAN></P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><SPAN STYLE="font-style: normal"><B>The
+</B></SPAN><I><B>Component </B></I>window (on the left) displays the
+list of components appearing in the Netlist read. </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><SPAN STYLE="font-style: normal"><B>The
+</B></SPAN><I><B>footprint</B></I> window (on the right) displays the
+list of footprints contained in the libraries read. </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><SPAN STYLE="font-style: normal"><B>The
+</B></SPAN><I><B>component</B></I> window is empty if no file is
+loaded, and the <I><B>footprint</B></I> window can be also empty if
+no footprint libraries are found.</SPAN></P>
+<H2 LANG="fr-FR" CLASS="western"><A NAME="4.2.Main Screen Toolbar |outline"></A>
+4.2 - Main Screen Toolbar </SPAN>
+</H2>
+<P LANG="fr-FR" CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0cm">
+<SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_1b76db63.png" NAME="Image32" ALIGN=BOTTOM WIDTH=308 HEIGHT=27 BORDER=0></SPAN></P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">The
+various functions are: </SPAN>
+</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0>
+	<COL WIDTH=29*>
+	<COL WIDTH=227*>
+	<TR VALIGN=TOP>
+		<TD WIDTH=11%>
+			<P LANG="fr-FR" CLASS="western" ALIGN=CENTER><SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_m7ad16255.png" NAME="Image33" ALIGN=MIDDLE WIDTH=19 HEIGHT=21 BORDER=0></SPAN></P>
+		</TD>
+		<TD WIDTH=89%>
+			<P LANG="fr-FR" CLASS="western" STYLE="margin-left: 1.25cm"><SPAN STYLE="background: transparent">Select
+			the Netlist file to be processed.</SPAN></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=11%>
+			<P LANG="fr-FR" CLASS="western" ALIGN=CENTER><SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_6818c805.png" NAME="Graphic8" ALIGN=MIDDLE WIDTH=20 HEIGHT=20 BORDER=0></SPAN></P>
+		</TD>
+		<TD WIDTH=89%>
+			<P LANG="fr-FR" CLASS="western" STYLE="margin-left: 1.25cm"><SPAN STYLE="background: transparent">Create
+			the assignment (stuff) file .CMP and the .NET file, the modified,
+			expanded Netlist .</SPAN></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=11%>
+			<P LANG="fr-FR" CLASS="western" ALIGN=CENTER><SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_m577c9b2d.png" NAME="Graphic9" ALIGN=MIDDLE WIDTH=21 HEIGHT=21 BORDER=0></SPAN></P>
+		</TD>
+		<TD WIDTH=89%>
+			<P LANG="fr-FR" CLASS="western" STYLE="margin-left: 1.25cm"><SPAN STYLE="background: transparent">Invoke
+			the CVPCB configuration menu.</SPAN></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=11%>
+			<P LANG="fr-FR" CLASS="western" ALIGN=CENTER><SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_m64f95031.gif" NAME="Image34" ALIGN=MIDDLE WIDTH=21 HEIGHT=20 BORDER=0></SPAN></P>
+		</TD>
+		<TD WIDTH=89%>
+			<P LANG="fr-FR" CLASS="western" STYLE="margin-left: 1.25cm"><SPAN STYLE="background: transparent">Display
+			the current footprint (i.e. whose name is highlighted in the
+			footprint window).</SPAN></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=11%>
+			<P LANG="fr-FR" CLASS="western" ALIGN=CENTER><SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_m7211a9fc.png" NAME="Graphic7" WIDTH=21 HEIGHT=21 BORDER=0></SPAN></P>
+		</TD>
+		<TD WIDTH=89%>
+			<P LANG="fr-FR" CLASS="western" ALIGN=LEFT STYLE="margin-left: 1.25cm">
+			<SPAN STYLE="background: transparent">Automatically assign
+			components/footprints starting from the equivalence files.<BR>Using
+			this order obviously assumes that these files are available.</SPAN></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=11%>
+			<P LANG="fr-FR" CLASS="western" ALIGN=CENTER><SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_10907a97.png" NAME="Graphic11" ALIGN=MIDDLE WIDTH=20 HEIGHT=21 BORDER=0></SPAN></P>
+		</TD>
+		<TD WIDTH=89%>
+			<P LANG="fr-FR" CLASS="western" ALIGN=LEFT STYLE="margin-left: 1.25cm">
+			<SPAN STYLE="background: transparent">Automatically run through
+			the components towards the beginning of the list until the first
+			component not yet assigned a footprint.</SPAN></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=11%>
+			<P LANG="fr-FR" CLASS="western" ALIGN=CENTER><SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_m34e24679.png" NAME="Graphic12" ALIGN=MIDDLE WIDTH=22 HEIGHT=21 BORDER=0></SPAN></P>
+		</TD>
+		<TD WIDTH=89%>
+			<P LANG="fr-FR" CLASS="western" ALIGN=LEFT STYLE="margin-left: 1.25cm">
+			<SPAN STYLE="background: transparent">Automatically run through
+			the components towards the end of the list until the first
+			component not yet assigned a footprint.</SPAN></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=11%>
+			<P LANG="fr-FR" CLASS="western" ALIGN=CENTER><SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_16d1daed.png" NAME="Image35" ALIGN=MIDDLE WIDTH=21 HEIGHT=19 BORDER=0></SPAN></P>
+		</TD>
+		<TD WIDTH=89%>
+			<P LANG="fr-FR" CLASS="western" ALIGN=LEFT STYLE="margin-left: 1.25cm">
+			<SPAN STYLE="background: transparent">Delete all assignments.</SPAN></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=11%>
+			<P LANG="fr-FR" CLASS="western" ALIGN=CENTER><SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_5ec697a9.png" NAME="Image36" ALIGN=MIDDLE WIDTH=21 HEIGHT=20 BORDER=0></SPAN></P>
+		</TD>
+		<TD WIDTH=89%>
+			<P LANG="fr-FR" CLASS="western" ALIGN=LEFT STYLE="margin-left: 1.25cm">
+			<SPAN STYLE="background: transparent">Generate footprint
+			assignment back-annotation file.</SPAN></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=11%>
+			<P LANG="fr-FR" CLASS="western" ALIGN=CENTER><SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_753ddb29.png" NAME="Image6" ALIGN=BOTTOM WIDTH=21 HEIGHT=21 BORDER=0></SPAN></P>
+		</TD>
+		<TD WIDTH=89%>
+			<P LANG="fr-FR" CLASS="western" ALIGN=LEFT STYLE="margin-left: 1.25cm">
+			<SPAN STYLE="background: transparent">Go to footprint
+			documentation.</SPAN></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=11%>
+			<P LANG="fr-FR" CLASS="western" ALIGN=CENTER><SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_66ed9576.png" NAME="Image9" ALIGN=BOTTOM WIDTH=41 HEIGHT=22 BORDER=0></SPAN></P>
+		</TD>
+		<TD WIDTH=89%>
+			<P LANG="fr-FR" CLASS="western" ALIGN=LEFT STYLE="margin-bottom: 0cm">
+			<SPAN STYLE="background: transparent">Allows or  forbids the
+			footprint filtering to display the list of footprints</SPAN></P>
+			<P LANG="fr-FR" CLASS="western" ALIGN=LEFT><SPAN STYLE="background: transparent">When
+			the footprint filtering is allowed, the list of footprints shows
+			only the autorized footprints for the current selected component.</SPAN></P>
+		</TD>
+	</TR>
+</TABLE>
+<H2 LANG="fr-FR" CLASS="western"><A NAME="4.3.CVPCB Configuration |outline"></A>
+4.3 - CVPCB Configuration </SPAN>
+</H2>
+<H3 LANG="fr-FR" CLASS="western"><A NAME="4.3.1.General screen|outline"></A>
+4.3.1 - General screen</SPAN></H3>
+<P LANG="fr-FR" CLASS="western" ALIGN=LEFT STYLE="margin-left: 1.25cm; margin-bottom: 0cm">
+<FONT FACE="Arial"><FONT SIZE=3><SPAN STYLE="background: transparent">Invoking
+the configuration menu displays the following screen:</SPAN></FONT></FONT></P>
+<P LANG="fr-FR" CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0cm; line-height: 150%; page-break-before: auto; page-break-after: auto">
+<SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_15f50cc9.png" NAME="Image37" ALIGN=BOTTOM WIDTH=560 HEIGHT=373 BORDER=0></SPAN></P>
+<H3 LANG="fr-FR" CLASS="western"><A NAME="4.3.2.Netlist Format|outline"></A>
+4.3.2 - Netlist Format</SPAN></H3>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">The
+options are: </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><FONT COLOR="#800000"><I><B>PcbNew:</B></I></FONT>
+</SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">Read
+the netlist file generated by Eeschema, enhance it and generate the
+.cmp file.</SPAN></P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><FONT COLOR="#800000"><I><B>ViewLogic
+Wirelist:</B></I></FONT> </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">Accept
+standard format Viewlogic “Wirelist” (extension .wir) and
+generate a netlist file in PcbNew format (and the file .cmp) </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><FONT COLOR="#800000"><I><B>ViewLogicNet
+&amp; Pkg:</B></I></FONT> </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">Accept
+the standard Viewlogic format netlist (.net) associated with the
+component file (.pkg) and generate a netlist file in Pcbnew format
+(and the .cmp file).</SPAN></P>
+<H3 LANG="fr-FR" CLASS="western"><A NAME="4.3.3.Footprint Library selection |outline"></A>
+4.3.3 - Footprint Library selection </SPAN>
+</H3>
+<P LANG="fr-FR" CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0cm; line-height: 150%; page-break-inside: avoid; page-break-after: avoid">
+<SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_m355bf6ae.png" NAME="Image7" ALIGN=MIDDLE WIDTH=206 HEIGHT=233 BORDER=0></SPAN></P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">To
+select a file with the mouse:</SPAN></P>
+<UL>
+	<LI><P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><B>Del</B>
+	removes this name from the list. </SPAN>
+	</P>
+	<LI><P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><B>Add</B>
+	adds a new name to the list, <B>after the</B> selected name </SPAN>
+	</P>
+	<LI><P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><B>Ins</B>
+	adds a new name to the list, <B>before the</B> selected name.</SPAN></P>
+</UL>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><I><B>Note:</B></I>
+</SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">Any
+modification of this list also affects <I><B>pcbnew</B></I>. </SPAN>
+</P>
+<H3 LANG="fr-FR" CLASS="western"><A NAME="4.3.4.Selecting the equivalence files|outline"></A>
+4.3.4 - Selecting the equivalence files</SPAN></H3>
+<P LANG="fr-FR" CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0cm; line-height: 150%">
+<SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_m68f5886e.png" NAME="Graphic2" ALIGN=MIDDLE WIDTH=212 HEIGHT=234 BORDER=0></SPAN></P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">To
+select with the mouse a file name.</SPAN></P>
+<UL>
+	<LI><P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><B>Del</B>
+	removes this name of the list. </SPAN>
+	</P>
+	<LI><P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><B>Add</B>
+	adds a new name to the list, <B>after the</B> selected name </SPAN>
+	</P>
+	<LI><P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><B>Ins</B>
+	adds a new name to the list, <B>before the</B> selected name</SPAN></P>
+</UL>
+<H2 LANG="fr-FR" CLASS="western"><A NAME="4.4.Selecting library path and default extensions |outline"></A>
+4.4 - Selecting library path and default extensions </SPAN>
+</H2>
+<P LANG="fr-FR" CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0cm; line-height: 150%">
+<SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_m465458b7.gif" NAME="Image38" ALIGN=BOTTOM WIDTH=331 HEIGHT=75 BORDER=0></SPAN></P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">Lib
+Dir is the default path of the footprint file (<B>.mod</B>) and of
+the equivalence (<B>.equ)</B> files.</SPAN></P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><FONT FACE="Arial">If
+this field is left empty, the default path used will be
+</FONT><FONT FACE="Arial"><I><B>kicad/modules.</B></I></FONT></SPAN></P>
+<H2 LANG="fr-FR" CLASS="western"><A NAME="4.5.Viewing the current footprint|outline"></A>
+4.5 - Viewing the current footprint</SPAN></H2>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">The
+Visu command allows display of the current footprint, i.e. the one
+that appears highlighted on the central line of the <I>footprint</I>
+window. </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">The
+various footprints can be displayed by clicking on the desired
+footprint (in the list of the footprints), as long as this window is
+in displayed. </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">One
+can also display the 3D view (if it has been created and assigned to
+the footprint)</SPAN></P>
+<P LANG="fr-FR" CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0cm; line-height: 150%; page-break-inside: auto; page-break-after: auto">
+<SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_m35d91fcb.png" NAME="Image39" ALIGN=BOTTOM WIDTH=547 HEIGHT=464 BORDER=0></SPAN></P>
+<H3 LANG="fr-FR" CLASS="western"><A NAME="4.5.1.Display|outline"></A>4.5.1 - Display</SPAN></H3>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">The
+co-ordinates of the cursor are displayed at the bottom of the screen
+: </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">Absolute
+co-ordinates (X nnnn Y nnnn) and relative co-ordinates (dx nnnn dy
+nnnn) </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">The
+relative co-ordinates are zeroed by the space bar. </SPAN>
+</P>
+<H3 LANG="fr-FR" CLASS="western"><A NAME="4.5.2.Keyboard Commands|outline"></A>
+4.5.2 - Keyboard Commands</SPAN></H3>
+<DL>
+	<DD>
+	<TABLE WIDTH=491 BORDER=1 CELLPADDING=4 CELLSPACING=0>
+		<COL WIDTH=114>
+		<COL WIDTH=358>
+		<TR VALIGN=TOP>
+			<TD WIDTH=114>
+				<P LANG="fr-FR" CLASS="western" ALIGN=LEFT><FONT FACE="Arial"><FONT SIZE=3><B><SPAN STYLE="background: transparent">F1</SPAN></B></FONT></FONT></P>
+			</TD>
+			<TD WIDTH=358>
+				<P LANG="fr-FR" CLASS="western"><FONT FACE="Arial"><FONT SIZE=3><SPAN STYLE="background: transparent">Zoom
+				In</SPAN></FONT></FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=114>
+				<P LANG="fr-FR" CLASS="western" ALIGN=LEFT><FONT FACE="Arial"><FONT SIZE=3><B><SPAN STYLE="background: transparent">F2</SPAN></B></FONT></FONT></P>
+			</TD>
+			<TD WIDTH=358>
+				<P LANG="fr-FR" CLASS="western"><FONT FACE="Arial"><FONT SIZE=3><SPAN STYLE="background: transparent">Zoom
+				Out</SPAN></FONT></FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=114>
+				<P LANG="fr-FR" CLASS="western" ALIGN=LEFT><FONT FACE="Arial"><FONT SIZE=3><B><SPAN STYLE="background: transparent">F3</SPAN></B></FONT></FONT></P>
+			</TD>
+			<TD WIDTH=358>
+				<P LANG="fr-FR" CLASS="western"><FONT FACE="Arial"><FONT SIZE=3><SPAN STYLE="background: transparent">Refresh
+				Display</SPAN></FONT></FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=114>
+				<P LANG="fr-FR" CLASS="western" ALIGN=LEFT><FONT FACE="Arial"><FONT SIZE=3><SPAN STYLE="background: transparent">&lt;<B>space
+				bar&gt;</B>:</SPAN></FONT></FONT></P>
+			</TD>
+			<TD WIDTH=358>
+				<P LANG="fr-FR" CLASS="western"><FONT FACE="Arial"><FONT SIZE=3><SPAN STYLE="background: transparent">Zero
+				relative co-ordinates.</SPAN></FONT></FONT></P>
+			</TD>
+		</TR>
+	</TABLE>
+	<DD LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0.5cm"><BR><BR>
+	</DD></DL>
+<H3 LANG="fr-FR" CLASS="western">
+<A NAME="4.5.3.Pop Up Menu|outline"></A>4.5.3 - Pop Up Menu</SPAN></H3>
+<P LANG="fr-FR" CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0cm; line-height: 150%">
+<SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_2bb79e55.png" NAME="Image8" ALIGN=BOTTOM WIDTH=135 HEIGHT=157 BORDER=0></SPAN></P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm; line-height: 150%">
+<SPAN STYLE="background: transparent">Displayed by right-clicking the
+mouse:</SPAN></P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0>
+	<COL WIDTH=113*>
+	<COL WIDTH=143*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TD WIDTH=44%>
+				<DL>
+					<DD LANG="fr-FR" CLASS="western" STYLE="text-align: left"><FONT COLOR="#800000"><FONT FACE="Arial"><FONT SIZE=3><B><SPAN STYLE="background: transparent">Zoom
+					Selection (Select Zoom)</SPAN></B></FONT></FONT></FONT></DD></DL>
+			</TD>
+			<TD WIDTH=56%>
+				<DL>
+					<DD LANG="fr-FR" CLASS="western" STYLE="text-align: left"><FONT FACE="Arial"><FONT SIZE=3><SPAN STYLE="background: transparent">Direct
+					selection of the display zoom .</SPAN></FONT></FONT></DD></DL>
+			</TD>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=44%>
+				<DL>
+					<DD LANG="fr-FR" CLASS="western" STYLE="text-align: left"><FONT COLOR="#800000"><B><SPAN STYLE="background: transparent">Grid
+					Selection (Grid Select)</SPAN></B></FONT></DD></DL>
+			</TD>
+			<TD WIDTH=56%>
+				<DL>
+					<DD LANG="fr-FR" CLASS="western" STYLE="text-align: left"><SPAN STYLE="background: transparent">Direct
+					selection of the grid. </SPAN>
+					</DD></DL>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P LANG="fr-FR" CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0cm; line-height: 150%"><A NAME="_Ref411866944"></A>
+<FONT COLOR="#000080"><FONT FACE="Arial"><B><SPAN STYLE="background: transparent">4.5.4
+- Toolbar</SPAN></B></FONT></FONT></P>
+<P LANG="fr-FR" CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0cm">
+<SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_m7e427ed3.png" NAME="Image1" ALIGN=BOTTOM WIDTH=145 HEIGHT=24 BORDER=0></SPAN></P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><BR>
+</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=3 CELLSPACING=0>
+	<COL WIDTH=47*>
+	<COL WIDTH=209*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TD WIDTH=18%>
+				<P LANG="fr-FR" CLASS="western"><SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_m1f2a82d2.png" NAME="Image2" ALIGN=BOTTOM WIDTH=21 HEIGHT=21 BORDER=0></SPAN></P>
+			</TD>
+			<TD WIDTH=82%>
+				<P LANG="fr-FR" CLASS="western" ALIGN=CENTER><FONT FACE="Arial"><FONT SIZE=3><SPAN STYLE="background: transparent">Display
+				Options</SPAN></FONT></FONT></P>
+			</TD>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=18%>
+				<P LANG="fr-FR" CLASS="western"><SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_5c0e6601.png" NAME="Image3" ALIGN=BOTTOM WIDTH=83 HEIGHT=21 BORDER=0></SPAN></P>
+			</TD>
+			<TD WIDTH=82%>
+				<P LANG="fr-FR" CLASS="western" ALIGN=CENTER><FONT FACE="Arial"><FONT SIZE=3><SPAN STYLE="background: transparent">Zoom
+				Level</SPAN></FONT></FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=18%>
+				<P LANG="fr-FR" CLASS="western"><SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_m710c0eda.png" NAME="Image4" ALIGN=BOTTOM WIDTH=22 HEIGHT=19 BORDER=0></SPAN></P>
+			</TD>
+			<TD WIDTH=82%>
+				<P LANG="fr-FR" CLASS="western" ALIGN=CENTER><FONT FACE="Arial"><FONT SIZE=3><SPAN STYLE="background: transparent">3D
+				Display</SPAN></FONT></FONT></P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<H3 LANG="fr-FR" CLASS="western"><A NAME="4.5.4. 3D Display|outline"></A>
+4.5.4 -  <FONT COLOR="#000080"><FONT FACE="Arial">3D Display</FONT></FONT></SPAN></H3>
+<P LANG="fr-FR" CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0cm">
+<SPAN STYLE="background: transparent"><IMG SRC="cvpcb_html_6eae571a.png" NAME="Image5" ALIGN=BOTTOM WIDTH=414 HEIGHT=350 BORDER=0></SPAN></P>
+<H1 LANG="fr-FR" CLASS="western"><A NAME="5.Associating components with footprints|outline"></A>
+5 - Associating components with footprints</SPAN></H1>
+<H2 LANG="fr-FR" CLASS="western"><A NAME="5.1.Principle|outline"></A>5.1 - Principle</SPAN></H2>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">In
+the footprint window double-click on the name of the desired
+<B>footprint</B> (This name is <B>highlighted)</B>, to assign it the
+<B>component</B> whose name is <B>highlighted on the central line</B>
+of the component window. </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">The
+next component in the list is selected:</SPAN></P>
+<UL>
+	<LI><P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">Automatically
+	after an assignment.</SPAN></P>
+	<LI><P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">Manually
+	using the mouse or cursor keys.</SPAN></P>
+</UL>
+<H2 LANG="fr-FR" CLASS="western"><A NAME="5.2.Assignment|outline"></A>
+5.2 - Assignment</SPAN></H2>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">Double-
+click the <B>left mouse button </B>on the desired <B>footprint</B> </SPAN>
+</P>
+<H2 LANG="fr-FR" CLASS="western"><A NAME="5.3.Changing an existing assignment|outline"></A>
+5.3 - Changing an existing assignment</SPAN></H2>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">This
+is done like a new assignment: </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">Double-click
+the <B>left mouse button</B> on the new desired <B>footprint</B> </SPAN>
+</P>
+<H2 LANG="fr-FR" CLASS="western"><A NAME="5.4.Filtering the footprint list:|outline"></A>
+5.4 - Filtering the footprint list:</H2>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm">If the
+selected component has an allowed footprint list, the displayed
+footprint list in Cvpcb is filtered according to this list.</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm; page-break-before: auto; page-break-after: avoid">
+Without filtering:</P>
+<P LANG="fr-FR" CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0cm; line-height: 150%">
+<IMG SRC="cvpcb_html_3ad74e38.png" NAME="Image10" ALIGN=BOTTOM WIDTH=551 HEIGHT=446 BORDER=0></P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm; page-break-before: auto; page-break-after: avoid">
+With filtering:</P>
+<P LANG="fr-FR" CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0cm">
+<IMG SRC="cvpcb_html_46963029.png" NAME="Image11" ALIGN=BOTTOM WIDTH=550 HEIGHT=447 BORDER=0></P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm; page-break-before: auto; page-break-after: avoid">
+Under Eeschema, the allowed footprint list was:</P>
+<P LANG="fr-FR" CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0cm; line-height: 150%">
+<IMG SRC="cvpcb_html_m7717e802.png" NAME="Image12" ALIGN=BOTTOM WIDTH=474 HEIGHT=366 BORDER=0></P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm">The icone
+<IMG SRC="cvpcb_html_66ed9576.png" NAME="Image13" ALIGN=BOTTOM WIDTH=41 HEIGHT=22 BORDER=0>
+allows or .forbids the filtering</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm">When the
+filtering is not allowed, the full footprint list is shown.</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H1 LANG="fr-FR" CLASS="western"><A NAME="6.Equivalence files|outline"></A>
+6 - Equivalence files</SPAN></H1>
+<H2 LANG="fr-FR" CLASS="western"><A NAME="6.1.Purpose|outline"></A>6.1 - Purpose</SPAN></H2>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">These
+files allow automatic assignment. </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">They
+give the name of the corresponding footprint according to the name
+(value) of the component. </SPAN>
+</P>
+<H2 LANG="fr-FR" CLASS="western"><A NAME="6.2.Format|outline"></A>6.2 - Format</SPAN></H2>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">They
+consist of a line for each component. </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">Each
+line has the following structure: </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><B>'component
+name' 'footprint name'</B> </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">Each
+name being framed by the letter '<B>,</B> the 2 names being separated
+by one or more spaces. </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><I>Example:</I>
+</SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">If
+the U3 component is circuit 14011 and its footprint is 14DIP300, the
+line is: </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">“14011”
+“14DIP300”</SPAN></P>
+<H1 LANG="fr-FR" CLASS="western"><A NAME="7.Back- annotation file|outline"></A>
+7 - Back- annotation file</SPAN></H1>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">This
+a file can be used for back- annotation of a schematic but is not
+used by PCBNEW. </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">It
+consists of a line for each component, giving the name of the
+footprint according to its reference. </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent"><B>Example:</B>
+</SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">If
+the <B>U3</B> component was assigned the footprint14DIP300, the
+generated line is </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">comp
+“U3” = footprint “14DIP300”</SPAN></P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><SPAN STYLE="background: transparent">The
+file created has the root name of the CVPCB input file, with
+extension <I><B>.stf</B></I>, and is placed in the same folder as the
+generated netlist. </SPAN>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P LANG="fr-FR" CLASS="western" STYLE="margin-bottom: 0cm"><BR>
+</P>
+<DIV TYPE=FOOTER>
+	<P LANG="fr-FR" ALIGN=RIGHT STYLE="margin-right: 0.64cm; margin-bottom: 0cm">
+	<SPAN ID="Cadre1" DIR="LTR" STYLE="float: right; width: 0.67cm; height: 0.04cm; border: none; padding: 0cm; background: #ffffff">
+		<P LANG="fr-FR" STYLE="margin-bottom: 0cm"><SDFIELD TYPE=PAGE SUBTYPE=RANDOM FORMAT=PAGE>10</SDFIELD><BR CLEAR=RIGHT>
+		</P>
+	</SPAN>Page  <SDFIELD TYPE=PAGE SUBTYPE=RANDOM FORMAT=PAGE>10</SDFIELD>
+	/ <SDFIELD TYPE=DOCSTAT SUBTYPE=PAGE FORMAT=PAGE>10</SDFIELD></P>
+</DIV>
+</BODY>
+</HTML>

@@ -10,7 +10,7 @@
 <UL>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Kicad">
-			<param name="Local" value="kicad/kicad_ru.html">
+			<param name="Local" value="kicad/kicad.html">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Eeschema">
@@ -22,7 +22,7 @@
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Cvpcb">
-			<param name="Local" value="cvpcb/cvpcb_ru.html">
+			<param name="Local" value="cvpcb/cvpcb.html">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Gerbview">
