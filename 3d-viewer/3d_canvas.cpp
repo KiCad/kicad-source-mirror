@@ -283,14 +283,25 @@ void Pcb3D_GLCanvas::OnMouseEvent( wxMouseEvent& event )
 
     if( event.Dragging() )
     {
-        /* drag in progress, simulate trackball */
-        trackball( spin_quat,
-                   (2.0 * g_Parm_3D_Visu.m_Beginx - size.x) / size.x,
-                   (size.y - 2.0 * g_Parm_3D_Visu.m_Beginy) / size.y,
-                   (     2.0 * event.GetX() - size.x) / size.x,
-                   ( size.y - 2.0 * event.GetY() ) / size.y );
+        if( event.LeftIsDown() )
+        {
+            /* drag in progress, simulate trackball */
+            trackball( spin_quat,
+                       (2.0 * g_Parm_3D_Visu.m_Beginx - size.x) / size.x,
+                       (size.y - 2.0 * g_Parm_3D_Visu.m_Beginy) / size.y,
+                       (     2.0 * event.GetX() - size.x) / size.x,
+                       ( size.y - 2.0 * event.GetY() ) / size.y );
 
-        add_quats( spin_quat, g_Parm_3D_Visu.m_Quat, g_Parm_3D_Visu.m_Quat );
+            add_quats( spin_quat, g_Parm_3D_Visu.m_Quat, g_Parm_3D_Visu.m_Quat );
+        }
+        else if( event.MiddleIsDown() )
+        {
+            /* middle button drag -> pan */
+            /* Current zoom and an additional factor are taken into account for the amount of panning. */
+            const float PAN_FACTOR = 8.0 * g_Parm_3D_Visu.m_Zoom;
+            g_Draw3d_dx -= PAN_FACTOR * ( g_Parm_3D_Visu.m_Beginx - event.GetX() ) / size.x;
+            g_Draw3d_dy -= PAN_FACTOR * (event.GetY() - g_Parm_3D_Visu.m_Beginy) / size.y;
+        }
 
         /* orientation has changed, redraw mesh */
         DisplayStatus();
