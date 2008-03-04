@@ -310,13 +310,10 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
             if( ItemFree )
             {
                 // no track is currently being edited - select a segment and remove it.
-
                 // @todo: possibly? pass the HK command code to PcbGeneralLocateAndDisplay() so it can restrict its search to specific item types.
-
                 // @todo: use PcbGeneralLocateAndDisplay() everywhere in this source file.
 
                 DrawStruct = PcbGeneralLocateAndDisplay();
-
                 // don't let backspace delete modules!!
                 if( DrawStruct && (DrawStruct->Type() == TYPETRACK
                                    || DrawStruct->Type() == TYPEVIA) )

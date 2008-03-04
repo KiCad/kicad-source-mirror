@@ -307,23 +307,29 @@ static bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame,
         curr = NULL;
     }
 
-    switch( g_MagneticPadOption )
-    {
-    case capture_cursor_in_track_tool:
-        if( aCurrentTool != ID_TRACK_BUTT )
-            return false;
-        break;
-
-    case capture_always:
-        break;
-
-    case no_effect:
-    default:
-        return false;
-    }
+	bool pad_ok = false; 
+	if( g_MagneticPadOption == capture_always )
+		pad_ok = true; 
+	
+	
+	bool track_ok = false; 
+	if( g_MagneticTrackOption == capture_always )
+		track_ok = true; 
+	
+	if( aCurrentTool == ID_TRACK_BUTT )
+	{
+		int q = capture_cursor_in_track_tool; 
+		if( g_MagneticPadOption == q )
+			pad_ok = true; 
+		if( g_MagneticTrackOption == q )
+			track_ok = true; 
+	}
+	
+    if(!pad_ok && !track_ok) //then nothing magnetic to do
+		return false; 
 
     pad = Locate_Any_Pad( m_Pcb, CURSEUR_OFF_GRILLE, TRUE );
-    if( pad )
+    if( pad && pad_ok)
     {
         if( doCheckNet && curr && curr->GetNet() != pad->GetNet() )
             return false;
@@ -335,7 +341,7 @@ static bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame,
     layer = ( (PCB_SCREEN*) ActiveScreen )->m_Active_Layer;
 
     via = Locate_Via_Area( m_Pcb, *curpos, layer );
-    if( via )
+    if( via && track_ok) //vias are part of tracks...?
     {
         if( doCheckNet && curr && curr->GetNet() != via->GetNet() )
             return false;
@@ -346,7 +352,7 @@ static bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame,
 
     layer_mask = g_TabOneLayerMask[layer];
 
-    if( !curr )
+    if( !curr && track_ok)
     {
         track = Locate_Pistes( m_Pcb->m_Track, layer_mask, CURSEUR_OFF_GRILLE );
         if( !track || track->Type() != TYPETRACK )
@@ -359,7 +365,7 @@ static bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame,
      * In two segment mode, ignore the final segment if it's inside a grid
      * square.
      */
-    if( g_TwoSegmentTrackBuild && curr->Back()
+    if( curr && g_TwoSegmentTrackBuild && curr->Back()
         && curr->m_Start.x - grid.x < curr->m_End.x
         && curr->m_Start.x + grid.x > curr->m_End.x
         && curr->m_Start.y - grid.y < curr->m_End.y
@@ -368,7 +374,7 @@ static bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame,
         curr = curr->Back();
     }
 
-    for( track = m_Pcb->m_Track;  track;  track = track->Next() )
+    for( track = m_Pcb->m_Track;  track && track_ok;  track = track->Next() )
     {
         if( track->Type() != TYPETRACK )
             continue;

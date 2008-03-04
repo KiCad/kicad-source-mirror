@@ -489,6 +489,7 @@ public:
     void                Attribut_net( wxDC* DC, int net_code, bool Flag_On );
     void                Start_MoveOneNodeOrSegment( TRACK* track, wxDC* DC, int command );
     bool                PlaceDraggedTrackSegment( TRACK* Track, wxDC* DC );
+	bool				MergeCollinearTracks( TRACK* track, wxDC* DC, int end ); 
     void                Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC );
     void                SwitchLayer( wxDC* DC, int layer );
     int                 Add_45_degrees_Segment( wxDC* DC, TRACK* pt_segm );

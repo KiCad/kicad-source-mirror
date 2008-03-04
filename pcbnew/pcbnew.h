@@ -256,7 +256,7 @@ eda_global bool g_TwoSegmentTrackBuild  // FALSE = 1 segment build, TRUE = 2 45 
 #endif
 ;
 
-/* How to handle magnetic pads: feature to move the pcb cursor on a pad center */
+/* How to handle magnetic pads & tracks: feature to move the pcb cursor on a pad center / track length */
 enum MagneticPadOptionValues {
     no_effect,
     capture_cursor_in_track_tool,
@@ -264,6 +264,11 @@ enum MagneticPadOptionValues {
 };
 
 eda_global int g_MagneticPadOption
+#ifdef MAIN
+= capture_cursor_in_track_tool
+#endif
+;
+eda_global int g_MagneticTrackOption
 #ifdef MAIN
 = capture_cursor_in_track_tool
 #endif
