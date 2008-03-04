@@ -8,13 +8,15 @@ email address.
 2008-Mar-3 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew
-    Completed transision to BOARD::GetLayerName() and away from ReturnPcbLayerName().
+  * Completed transision to BOARD::GetLayerName() and away from ReturnPcbLayerName().
     LayerNames and LAYER_T are saved int the *.brd file and may be edited
     there with a text editor until the UI is in place to edit them in PCBNEW.
     To understand the strategy, see BOARD::GetLayerName() in class_board.cpp
     and see WinEDA_BasePcbFrame::ReadSetup().  I will be adding "Board" menu
     item to Preferences, but there is more to come before the UI gets done:
     net classes.
+  * Clear_Pcb() now deletes the existing BOARD() and new's a new BOARD() so that
+    the default BOARD::m_Layer[] values can be set in the new BOARD's constructor.
 
 
 2008-mars-03 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
