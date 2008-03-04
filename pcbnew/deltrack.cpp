@@ -31,12 +31,10 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
 
     if( Track == NULL )
         return NULL;
-    
+
     if( Track->GetState(DELETED) )
     {
-#if defined(DEBUG)        
-        printf("WinEDA_PcbFrame::Delete_Segment(): bug deleted already deleted TRACK\n");
-#endif        
+        D(printf("WinEDA_PcbFrame::Delete_Segment(): bug deleted already deleted TRACK\n");)
         return NULL;
     }
 
@@ -56,7 +54,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
             g_TrackSegmentCount--;
 
             if( g_TwoSegmentTrackBuild )
-            {   
+            {
                 // g_CurrentTrackSegment->Pback must not be a via, or we want delete also the via
                 if( (g_TrackSegmentCount >= 2)
                    && (g_CurrentTrackSegment->Type() != TYPEVIA)
@@ -120,7 +118,13 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
 
 
     current_net_code = Track->GetNet();
+
+#if 0 && !defined(DEBUG)
     Track->Draw( DrawPanel, DC, GR_XOR );
+#else
+    // just redraw the whole drawing so there are no XOR remnants at track intersections.
+    DrawPanel->Refresh( TRUE );
+#endif
 
     SaveItemEfface( Track, 1 );
     GetScreen()->SetModify();
@@ -204,7 +208,7 @@ void WinEDA_PcbFrame::Supprime_Une_Piste( wxDC* DC, TRACK* pt_segm )
     if( nb_segm ) /* Il y a nb_segm segments de piste a effacer */
     {
         Trace_Une_Piste( DrawPanel, DC, pt_track, nb_segm, GR_XOR | GR_SURBRILL );
-        
+
         /* Effacement flag BUSY */
         Struct = pt_track;;
         for(  ii=0;  ii<nb_segm;  ii++, Struct = (TRACK*) Struct->Pnext )

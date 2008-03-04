@@ -833,6 +833,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             case LT_SIGNAL:     layerType = T_signal;       break;
             case LT_POWER:      layerType = T_power;        break;
             case LT_MIXED:      layerType = T_mixed;        break;
+            case LT_JUMPER:     layerType = T_jumper;       break;
             }
 
             layer->layer_type = layerType;
