@@ -77,7 +77,15 @@ void Trace_Pads_Only( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* Module, int ox,
 
 TRACK*          Locate_Via( BOARD* Pcb, const wxPoint& pos, int layer = -1 );
 
-TRACK*          Locate_Via_Area( BOARD* Pcb, const wxPoint& pos, int layer = -1 );
+/**
+ * Function Locate_Via_Area
+ * finds the first SEGVIA which covers the given aPos with a matching layer.
+ * @param aStart The starting TRACK or SEGVIA in the BOARD's list.
+ * @param aPos The wxPoint to HitTest() against.
+ * @param aLayer The layer to match, pass -1 for a don't care.
+ * @return TRACK* - actually a SEGVIA* if found, else NULL.
+ */
+TRACK*          Locate_Via_Area( TRACK* aStart, const wxPoint& aPos, int aLayer = -1 );
 
 TRACK*          Fast_Locate_Via( TRACK* start_adr, TRACK* end_adr,
                                  const wxPoint& pos, int masquelayer );

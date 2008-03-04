@@ -42,51 +42,47 @@ TRACK* Locate_Via( BOARD* Pcb, const wxPoint& pos, int layer )
  *          (TRACK*) adresse de la via
  */
 {
-    TRACK* Track;
+    TRACK* track;
 
-    for( Track = Pcb->m_Track; Track != NULL; Track = Track->Next() )
+    for( track = Pcb->m_Track;  track; track = track->Next() )
     {
-        if( Track->Type() != TYPEVIA )
+        if( track->Type() != TYPEVIA )
             continue;
-        if( Track->m_Start != pos )
+        if( track->m_Start != pos )
             continue;
-        if( Track->GetState( BUSY | DELETED ) )
+        if( track->GetState( BUSY | DELETED ) )
             continue;
         if( layer < 0 )
-            return Track;
-        if( Track->IsOnLayer( layer ) )
-            return Track;
+            break;
+        if( track->IsOnLayer( layer ) )
+            break;
     }
 
-    return NULL;
+    return track;
 }
 
 
 /*******************************************************************/
-TRACK* Locate_Via_Area( BOARD* Pcb, const wxPoint& pos, int layer )
+TRACK* Locate_Via_Area( TRACK* aStart, const wxPoint& pos, int layer )
 /*******************************************************************/
-
-/*
- * Like Locate_Via, but finds any via covering the cursor position
- */
 {
-    TRACK* Track;
+    TRACK* track;
 
-    for( Track = Pcb->m_Track; Track != NULL; Track = Track->Next() )
+    for( track = aStart;   track;  track = track->Next() )
     {
-        if( Track->Type() != TYPEVIA )
+        if( track->Type() != TYPEVIA )
             continue;
-        if(!Track->HitTest(pos))
+        if( !track->HitTest(pos) )
             continue;
-        if( Track->GetState( BUSY | DELETED ) )
+        if( track->GetState( BUSY | DELETED ) )
             continue;
         if( layer < 0 )
-            return Track;
-        if( Track->IsOnLayer( layer ) )
-            return Track;
+            break;
+        if( track->IsOnLayer( layer ) )
+            break;
     }
 
-    return NULL;
+    return track;
 }
 
 

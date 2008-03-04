@@ -221,10 +221,10 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 
 /**
  * Function Join
- * finds the point where b0+x*(b1-b0) intersects with a0+y*(a1-a0).
- * If that point would be outside of a0-a1, the respective endpoint is used.
+ * finds the point where line segment (b1,b0) intersects with segment (a1,a0).
+ * If that point would be outside of (a0,a1), the respective endpoint is used.
  * Join returns the point in "res" and "true" if a suitable point was found,
- * "false" if both lines are parallel.
+ * "false" if both lines are parallel or if the length of either segment is zero.
  */
 static bool Join( wxPoint* res, wxPoint a0, wxPoint a1, wxPoint b0, wxPoint b1 )
 {
@@ -236,8 +236,16 @@ static bool Join( wxPoint* res, wxPoint a0, wxPoint a1, wxPoint b0, wxPoint b1 )
     double  denom;
     double  t;
 
+    // if either segment is zero length
+    if( a1.x==a0.x && a1.y==a0.y )
+        return false;
+
+    if( b1.x==b0.x && b1.y==b0.y )
+        return false;
+
     a1 -= a0;
     b1 -= b0;
+
     b0 -= a0;
 
     denom = (double) b1.y * a1.x - (double) b1.x * a1.y;
@@ -290,131 +298,177 @@ bool Project( wxPoint* res, wxPoint on_grid, const TRACK* track )
  * "curpos".  If yes, then curpos is adjusted appropriately according to that
  * near magnetic item and true is returned.
  * @param curpos The initial position, and what to adjust if a change is needed.
+ * @return bool - true if the position was adjusted magnetically, else false.
  */
 static bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame,
                        int aCurrentTool, wxSize grid, wxPoint on_grid, wxPoint* curpos )
 {
-    D_PAD*  pad;
-    TRACK*  curr = g_CurrentTrackSegment;
-    TRACK*  via;
-    TRACK*  track;
-    int     layer, layer_mask;
-
     bool    doCheckNet = g_MagneticPadOption != capture_always && Drc_On;
+    bool    doTrack = false;
+    bool    doPad = false;
+    bool    amMovingVia = false;
 
-    if( frame->GetCurItem() != curr )
+    TRACK*      currTrack = g_CurrentTrackSegment;
+    BOARD_ITEM* currItem  = frame->GetCurItem();
+
+    // D( printf( "currTrack=%p currItem=%p currTrack->Type()=%d currItem->Type()=%d\n",  currTrack, currItem, currTrack ? currTrack->Type() : 0, currItem ? currItem->Type() : 0 ); )
+
+    if( !currTrack && currItem && currItem->Type()==TYPEVIA && currItem->m_Flags )
     {
-        curr = NULL;
+        // moving a VIA
+        currTrack = (TRACK*) currItem;
+        amMovingVia = true;
+
+        return false;   // comment this return out and play with it.
+    }
+    else if( currItem != currTrack )
+    {
+        currTrack = NULL;
     }
 
-	bool pad_ok = false; 
-	if( g_MagneticPadOption == capture_always )
-		pad_ok = true; 
-	
-	
-	bool track_ok = false; 
-	if( g_MagneticTrackOption == capture_always )
-		track_ok = true; 
-	
-	if( aCurrentTool == ID_TRACK_BUTT )
-	{
-		int q = capture_cursor_in_track_tool; 
-		if( g_MagneticPadOption == q )
-			pad_ok = true; 
-		if( g_MagneticTrackOption == q )
-			track_ok = true; 
-	}
-	
-    if(!pad_ok && !track_ok) //then nothing magnetic to do
-		return false; 
 
-    pad = Locate_Any_Pad( m_Pcb, CURSEUR_OFF_GRILLE, TRUE );
-    if( pad && pad_ok)
+    if( g_MagneticPadOption == capture_always )
+        doPad = true;
+
+    if( g_MagneticTrackOption == capture_always )
+        doTrack = true;
+
+    if( aCurrentTool == ID_TRACK_BUTT || amMovingVia )
     {
-        if( doCheckNet && curr && curr->GetNet() != pad->GetNet() )
-            return false;
+        int q = capture_cursor_in_track_tool;
 
-        *curpos = pad->m_Pos;
-        return true;
+        if( g_MagneticPadOption == q )
+            doPad = true;
+
+        if( g_MagneticTrackOption == q )
+            doTrack = true;
     }
 
-    layer = ( (PCB_SCREEN*) ActiveScreen )->m_Active_Layer;
+    D(printf("doPad=%d doTrack=%d aCurrentTool=%d amMovingVia=%d\n", doPad, doTrack, aCurrentTool, amMovingVia );)
 
-    via = Locate_Via_Area( m_Pcb, *curpos, layer );
-    if( via && track_ok) //vias are part of tracks...?
+    //  The search precedence order is pads, then tracks/vias
+
+    if( doPad )
     {
-        if( doCheckNet && curr && curr->GetNet() != via->GetNet() )
-            return false;
-
-        *curpos = via->m_Start;
-        return true;
-    }
-
-    layer_mask = g_TabOneLayerMask[layer];
-
-    if( !curr && track_ok)
-    {
-        track = Locate_Pistes( m_Pcb->m_Track, layer_mask, CURSEUR_OFF_GRILLE );
-        if( !track || track->Type() != TYPETRACK )
-            return false;
-
-        return Project( curpos, on_grid, track );
-    }
-
-    /*
-     * In two segment mode, ignore the final segment if it's inside a grid
-     * square.
-     */
-    if( curr && g_TwoSegmentTrackBuild && curr->Back()
-        && curr->m_Start.x - grid.x < curr->m_End.x
-        && curr->m_Start.x + grid.x > curr->m_End.x
-        && curr->m_Start.y - grid.y < curr->m_End.y
-        && curr->m_Start.y + grid.y > curr->m_End.y )
-    {
-        curr = curr->Back();
-    }
-
-    for( track = m_Pcb->m_Track;  track && track_ok;  track = track->Next() )
-    {
-        if( track->Type() != TYPETRACK )
-            continue;
-
-        if( doCheckNet && curr->GetNet() != track->GetNet() )
-            continue;
-
-        if( (g_DesignSettings.m_LayerColor[track->GetLayer()] & ITEM_NOT_SHOW) )
-            continue;
-
-        if( !track->IsOnLayer( layer ) )
-            continue;
-
-        // @todo, this should be a track overlap test, not a mouse on track test.
-        // The former would consider the new track's width.
-        if( !track->HitTest( *curpos ) )
-            continue;
-
-        if( Join( curpos, track->m_Start, track->m_End, curr->m_Start, curr->m_End ) )
+        D_PAD* pad = Locate_Any_Pad( m_Pcb, CURSEUR_OFF_GRILLE, TRUE );
+        if( pad )
         {
+            if( doCheckNet && currTrack && currTrack->GetNet() != pad->GetNet() )
+                return false;
+
+            *curpos = pad->m_Pos;
             return true;
         }
+    }
 
-        if( aCurrentTool == ID_TRACK_BUTT )
+    // after pads, only track & via tests remain, skip them if not desired
+    if( doTrack )
+    {
+        int     layer = ( (PCB_SCREEN*) ActiveScreen )->m_Active_Layer;
+
+        for( TRACK* via = m_Pcb->m_Track;
+             via && (via = Locate_Via_Area( via, *curpos, layer )) != NULL;
+             via = via->Next() )
         {
-            // At this point we have a drawing mouse on a track, we are drawing
-            // a new track and that new track is parallel to the track the
-            // mouse is on. Find the nearest end point of the track under mouse
-            // to the mouse and return that.
-            double distStart = hypot( double( curpos->x - track->m_Start.x ),
-                                      double( curpos->y - track->m_Start.y ));
+            if( via != currTrack )   // a via cannot influence itself
+            {
+                if( doCheckNet && currTrack && currTrack->GetNet() != via->GetNet() )
+                    return false;
 
-            double distEnd   = hypot( double( curpos->x - track->m_End.x ),
-                                      double( curpos->y - track->m_End.y ));
-
-            if( distStart < distEnd )
-                *curpos = track->m_Start;
+                *curpos = via->m_Start;
+                D(printf("via hit\n");)
+                return true;
+            }
             else
-                *curpos = track->m_End;
-            return true;
+            {
+                D( printf( "skipping self\n" ); )
+            }
+        }
+
+        if( !currTrack )
+        {
+            int layer_mask = g_TabOneLayerMask[layer];
+
+            TRACK* track = Locate_Pistes( m_Pcb->m_Track, layer_mask, CURSEUR_OFF_GRILLE );
+            if( !track || track->Type() != TYPETRACK )
+                return false;
+
+            D( printf( "Project\n" ); )
+            return Project( curpos, on_grid, track );
+        }
+
+        /*
+         * In two segment mode, ignore the final segment if it's inside a grid
+         * square.
+         */
+        if( !amMovingVia && currTrack && g_TwoSegmentTrackBuild && currTrack->Back()
+            && currTrack->m_Start.x - grid.x < currTrack->m_End.x
+            && currTrack->m_Start.x + grid.x > currTrack->m_End.x
+            && currTrack->m_Start.y - grid.y < currTrack->m_End.y
+            && currTrack->m_Start.y + grid.y > currTrack->m_End.y )
+        {
+            currTrack = currTrack->Back();
+        }
+
+
+        for( TRACK* track = m_Pcb->m_Track;  track;  track = track->Next() )
+        {
+            if( track->Type() != TYPETRACK )
+                continue;
+
+            if( doCheckNet && currTrack && currTrack->GetNet() != track->GetNet() )
+                continue;
+
+            if( (g_DesignSettings.m_LayerColor[track->GetLayer()] & ITEM_NOT_SHOW) )
+                continue;
+
+            // omit the layer check if moving a via
+            if( !amMovingVia && !track->IsOnLayer( layer ) )
+                continue;
+
+            if( !track->HitTest( *curpos ) )
+                continue;
+
+            if( Join( curpos, track->m_Start, track->m_End, currTrack->m_Start, currTrack->m_End ) )
+            {
+                D(printf( "join currTrack->Type()=%d\n", currTrack->Type() );)
+                return true;
+            }
+
+            if( aCurrentTool == ID_TRACK_BUTT || amMovingVia )
+            {
+                // At this point we have a drawing mouse on a track, we are drawing
+                // a new track and that new track is parallel to the track the
+                // mouse is on. Find the nearest end point of the track under mouse
+                // to the mouse and return that.
+                double distStart = hypot( double( curpos->x - track->m_Start.x ),
+                                          double( curpos->y - track->m_Start.y ));
+
+                double distEnd   = hypot( double( curpos->x - track->m_End.x ),
+                                          double( curpos->y - track->m_End.y ));
+
+                // if track not via, or if its a via dragging but not with its adjacent track
+                if( currTrack->Type() != TYPEVIA
+                    || ( currTrack->m_Start!=track->m_Start && currTrack->m_Start!=track->m_End ))
+                {
+                    if( distStart <= currTrack->m_Width/2 )
+                    {
+                        D(printf("nearest end is start\n");)
+                        *curpos = track->m_Start;
+                        return true;
+                    }
+
+                    if( distEnd <= currTrack->m_Width/2 )
+                    {
+                        D(printf("nearest end is end\n");)
+                        *curpos = track->m_End;
+                        return true;
+                    }
+
+                    // @todo otherwise confine curpos such that it stays centered
+                    // within "track"
+                }
+            }
         }
     }
 
