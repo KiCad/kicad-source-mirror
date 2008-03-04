@@ -40,15 +40,15 @@ public:
 
 private:
     void    Sel_Layer( wxCommandEvent& event );
-	void    OnCancelClick( wxCommandEvent& event );
+    void    OnCancelClick( wxCommandEvent& event );
 
     DECLARE_EVENT_TABLE()
 };
 
 /* Table des evenements pour WinEDA_SelLayerFrame */
 BEGIN_EVENT_TABLE( WinEDA_SelLayerFrame, wxDialog )
-	EVT_BUTTON( wxID_OK, WinEDA_SelLayerFrame::Sel_Layer )
-	EVT_BUTTON( wxID_CANCEL, WinEDA_SelLayerFrame::OnCancelClick )
+    EVT_BUTTON( wxID_OK, WinEDA_SelLayerFrame::Sel_Layer )
+    EVT_BUTTON( wxID_CANCEL, WinEDA_SelLayerFrame::OnCancelClick )
     EVT_RADIOBOX( ID_LAYER_SELECT, WinEDA_SelLayerFrame::Sel_Layer )
 END_EVENT_TABLE()
 
@@ -101,6 +101,7 @@ WinEDA_SelLayerFrame::WinEDA_SelLayerFrame( WinEDA_BasePcbFrame* parent,
  * to the right of that radiobox.
  */
 {
+    BOARD*    board = parent->m_Pcb;
     wxButton* Button;
     int       ii;
     wxString  LayerList[NB_LAYERS + 1]; // One extra element for "(Deselect)" radiobutton
@@ -123,7 +124,7 @@ WinEDA_SelLayerFrame::WinEDA_SelLayerFrame( WinEDA_BasePcbFrame* parent,
             if( (max_layer >= 0) && (max_layer < ii) )
                 break;
 
-            LayerList[LayerCount] = ReturnPcbLayerName( ii );
+            LayerList[LayerCount] = board->GetLayerName( ii );
             if( ii == default_layer )
                 LayerSelect = LayerCount;
 
@@ -207,8 +208,8 @@ public:
     ~WinEDA_SelLayerPairFrame() { };
 
 private:
-	void    OnOkClick( wxCommandEvent& event );
-	void    OnCancelClick( wxCommandEvent& event );
+    void    OnOkClick( wxCommandEvent& event );
+    void    OnCancelClick( wxCommandEvent& event );
 
     DECLARE_EVENT_TABLE()
 };
@@ -216,8 +217,8 @@ private:
 
 /* Table des evenements pour WinEDA_SelLayerPairFrame */
 BEGIN_EVENT_TABLE( WinEDA_SelLayerPairFrame, wxDialog )
-	EVT_BUTTON( wxID_OK, WinEDA_SelLayerPairFrame::OnOkClick )
-	EVT_BUTTON( wxID_CANCEL, WinEDA_SelLayerPairFrame::OnCancelClick )
+    EVT_BUTTON( wxID_OK, WinEDA_SelLayerPairFrame::OnOkClick )
+    EVT_BUTTON( wxID_CANCEL, WinEDA_SelLayerPairFrame::OnCancelClick )
 END_EVENT_TABLE()
 
 
@@ -249,8 +250,8 @@ void WinEDA_BasePcbFrame::SelectLayerPair()
     DrawPanel->MouseToCursorSchema();
     SetToolbars();
 
-    // if user changed colors and we are in high contrast mode, then redraw 
-    // because the PAD_SMD pads may change color.     
+    // if user changed colors and we are in high contrast mode, then redraw
+    // because the PAD_SMD pads may change color.
     if( result >= 0  &&  DisplayOpt.ContrastModeDisplay )
     {
         ReDrawPanel();
@@ -264,6 +265,7 @@ WinEDA_SelLayerPairFrame::WinEDA_SelLayerPairFrame( WinEDA_BasePcbFrame* parent 
               wxSize( 470, 250 ), DIALOG_STYLE )
 /*******************************************************************************/
 {
+    BOARD*    board = parent->m_Pcb;
     wxButton* Button;
     int       ii, LayerCount;
     wxString  LayerList[NB_COPPER_LAYERS];
@@ -281,7 +283,7 @@ WinEDA_SelLayerPairFrame::WinEDA_SelLayerPairFrame( WinEDA_BasePcbFrame* parent 
         m_LayerId[ii] = 0;
         if( (g_TabOneLayerMask[ii] & Masque_Layer) )
         {
-            LayerList[LayerCount] = ReturnPcbLayerName( ii );
+            LayerList[LayerCount] = board->GetLayerName( ii );
             if( ii == screen->m_Route_Layer_TOP )
                 LayerTopSelect = LayerCount;
             if( ii == screen->m_Route_Layer_BOTTOM )

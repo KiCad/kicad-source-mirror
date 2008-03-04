@@ -41,21 +41,21 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
     m_Orient = 0;                               /* en 1/10 degre */
     m_Miroir = 1;                               // Mode normal (pas de miroir)
     m_Unused = 0;
-    
+
     SetLayer( SILKSCREEN_N_CMP );
     if( Module && (Module->Type() == TYPEMODULE) )
     {
         m_Pos   = Module->m_Pos;
 
         int moduleLayer = Module->GetLayer();
-        
+
         if( moduleLayer == COPPER_LAYER_N )
             SetLayer( SILKSCREEN_N_CU );
         else if( moduleLayer == CMP_N )
             SetLayer( SILKSCREEN_N_CMP );
-        else 
+        else
             SetLayer( moduleLayer );
-        
+
         if(  moduleLayer == SILKSCREEN_N_CU
           || moduleLayer == ADHESIVE_N_CU
           || moduleLayer == COPPER_LAYER_N )
@@ -75,20 +75,20 @@ bool TEXTE_MODULE::Save( FILE* aFile ) const
 {
     MODULE* parent = (MODULE*) GetParent();
     int     orient = m_Orient;
-    
+
     if( parent )
         orient += parent->m_Orient;
-    
+
     int ret = fprintf( aFile, "T%d %d %d %d %d %d %d %c %c %d \"%.16s\"\n",
             m_Type,
             m_Pos0.x, m_Pos0.y,
             m_Size.y, m_Size.x,
-            orient, 
+            orient,
             m_Width,
             m_Miroir ? 'N' : 'M', m_NoShow ? 'I' : 'V',
             GetLayer(),
             CONV_TO_UTF8( m_Text ) );
-    
+
     return  (ret > 20);
 }
 
@@ -209,11 +209,11 @@ bool TEXTE_MODULE::HitTest( const wxPoint& posref )
 
     /* le point de reference est tourn�de - angle
      *  pour se ramener a un rectangle de reference horizontal */
-    mX = posref.x - m_Pos.x; 
+    mX = posref.x - m_Pos.x;
     mY = posref.y - m_Pos.y;
-    
+
     RotatePoint( &mX, &mY, -angle );
-    
+
     /* le point de reference est-il dans ce rectangle */
     if( ( abs( mX ) <= abs( dx ) ) && ( abs( mY ) <= abs( dy ) ) )
     {
@@ -257,7 +257,7 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, wxPoint offset, int 
     orient = GetDrawRotation();
     miroir = m_Miroir & 1; // = 0 si vu en miroir
     width  = m_Width;
-    
+
     if( (frame->m_DisplayModText == FILAIRE) || ( (width / zoom) < L_MIN_DESSIN ) )
         width = 0;
     else if( frame->m_DisplayModText == SKETCH )
@@ -281,7 +281,7 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, wxPoint offset, int 
 
     if( Module && Module->GetLayer() == COPPER_LAYER_N )
         color = g_ModuleTextCUColor;
-    
+
     else if( Module && Module->GetLayer() == CMP_N )
         color = g_ModuleTextCMPColor;
 
@@ -290,7 +290,7 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, wxPoint offset, int 
 
     if( m_NoShow )
         color = g_ModuleTextNOVColor;
-    
+
     if( (color & ITEM_NOT_SHOW) != 0 )
         return;
 
@@ -330,20 +330,25 @@ int TEXTE_MODULE::GetDrawRotation()
 }
 
 
-// see class_text_mod.h 
-void TEXTE_MODULE::Display_Infos( WinEDA_DrawFrame* frame )  
+// see class_text_mod.h
+void TEXTE_MODULE::Display_Infos( WinEDA_DrawFrame* frame )
 {
     wxString msg, Line;
     int      ii;
-    
+
     MODULE* module = (MODULE*) m_Parent;
-    
+
+    wxASSERT( module );
+
     if( !module )
         return;
 
-    static const wxString text_type_msg[3] = { 
+    BOARD*  board = (BOARD*) module->m_Parent;
+    wxASSERT( board );
+
+    static const wxString text_type_msg[3] = {
         _( "Ref." ), _( "Value" ), _( "Text" ) };
-    
+
     frame->MsgPanel->EraseMsgBox();
 
     Line = module->m_Reference->m_Text;
@@ -352,10 +357,10 @@ void TEXTE_MODULE::Display_Infos( WinEDA_DrawFrame* frame )
     Line = m_Text;
     Affiche_1_Parametre( frame, 10, _( "Text" ), Line, YELLOW );
 
-    ii = m_Type; 
+    ii = m_Type;
     if( ii > 2 )
         ii = 2;
-    
+
     Affiche_1_Parametre( frame, 20, _( "Type" ), text_type_msg[ii], DARKGREEN );
 
     Affiche_1_Parametre( frame, 25, _( "Display" ), wxEmptyString, DARKGREEN );
@@ -366,7 +371,7 @@ void TEXTE_MODULE::Display_Infos( WinEDA_DrawFrame* frame )
 
     ii = m_Layer;
     if( ii < NB_LAYERS )
-        Affiche_1_Parametre( frame, 28, _( "Layer" ), ReturnPcbLayerName( ii ), DARKGREEN );
+        Affiche_1_Parametre( frame, 28, _( "Layer" ), board->GetLayerName( ii ), DARKGREEN );
     else
     {
         msg.Printf( wxT( "%d" ), ii );
@@ -376,7 +381,7 @@ void TEXTE_MODULE::Display_Infos( WinEDA_DrawFrame* frame )
     msg = wxT( " Yes" );
     if( m_Miroir & 1 )
         msg = wxT( " No" );
-    
+
     Affiche_1_Parametre( frame, 36, _( "Mirror" ), msg, DARKGREEN );
 
     msg.Printf( wxT( "%.1f" ), (float) m_Orient / 10 );
@@ -402,27 +407,27 @@ bool TEXTE_MODULE::IsOnLayer( int aLayer ) const
     /* test the parent, which is a MODULE */
     if( aLayer == GetParent()->GetLayer() )
         return true;
-    
+
     if( aLayer == COPPER_LAYER_N )
     {
         if( m_Layer==ADHESIVE_N_CU || m_Layer==SILKSCREEN_N_CU )
             return true;
     }
-    
+
     else if( aLayer == CMP_N )
     {
         if( m_Layer==ADHESIVE_N_CMP || m_Layer==SILKSCREEN_N_CMP )
             return true;
     }
-    
+
     return false;
 }
 
-    
+
 /* see class_text_mod.h
 bool TEXTE_MODULE::IsOnOneOfTheseLayers( int aLayerMask ) const
 {
-    
+
 }
 */
 
@@ -431,7 +436,7 @@ bool TEXTE_MODULE::IsOnOneOfTheseLayers( int aLayerMask ) const
 /**
  * Function Show
  * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level 
+ * @param nestLevel An aid to prettier tree indenting, and is the level
  *          of nesting of this object within the overall tree.
  * @param os The ostream& to output to.
  */
@@ -439,8 +444,8 @@ void TEXTE_MODULE::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-        " string=\"" << m_Text.mb_str() << "\"/>\n"; 
-    
+        " string=\"" << m_Text.mb_str() << "\"/>\n";
+
 //    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
 #endif

@@ -66,6 +66,13 @@ WinEDA_BasePcbFrame::~WinEDA_BasePcbFrame( void )
 }
 
 
+void WinEDA_BasePcbFrame::SetBOARD( BOARD* aBoard )
+{
+    delete m_Pcb;
+    m_Pcb = aBoard;
+}
+
+
 /**************************************/
 int WinEDA_BasePcbFrame::BestZoom( void )
 /**************************************/
@@ -102,7 +109,7 @@ void WinEDA_BasePcbFrame::CursorGoto(  const wxPoint& aPos )
 {
     // factored out of pcbnew/find.cpp
 
-	PCB_SCREEN* screen = (PCB_SCREEN*)GetScreen();
+    PCB_SCREEN* screen = (PCB_SCREEN*)GetScreen();
 
     wxClientDC dc( DrawPanel );
 

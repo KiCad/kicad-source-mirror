@@ -74,6 +74,14 @@ public:
 
     ~WinEDA_BasePcbFrame();
 
+    /**
+     * Function SetBOARD
+     * sets the m_Pcb member in such as way as to ensure deleting any previous
+     * BOARD.
+     * @param aBoard The BOARD to put into the frame.
+     */
+    void                SetBOARD( BOARD* aBoard );
+
     // General
     virtual void    OnCloseWindow( wxCloseEvent& Event ) = 0;
     virtual void    Process_Special_Functions( wxCommandEvent& event ) = 0;
@@ -378,7 +386,7 @@ public:
     bool                RecreateCmpFileFromBoard();
 
     void                ExportToGenCAD( wxCommandEvent& event );
-    
+
     /**
      * Function ExporttoSPECCTRA
      * will export the current BOARD to a specctra dsn file.  See
@@ -389,7 +397,7 @@ public:
 
     /**
      * Function ImportSpecctraSession
-     * will import a specctra *.ses file and use it to relocate MODULEs and 
+     * will import a specctra *.ses file and use it to relocate MODULEs and
      * to replace all vias and tracks in an existing and loaded BOARD.
      * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
      * specification.
@@ -398,13 +406,13 @@ public:
 
     /**
      * Function ImportSpecctraDesign
-     * will import a specctra *.dsn file and use it to replace an entire BOARD. 
+     * will import a specctra *.dsn file and use it to replace an entire BOARD.
      * The new board will not have any graphics, only components, tracks and vias.
      * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
      * specification.
      */
     void                ImportSpecctraDesign( wxCommandEvent& event );
-    
+
     /* Fonctions specifiques */
     MODULE*             ListAndSelectModuleName();
     void                Liste_Equipot( wxCommandEvent& event );
@@ -499,12 +507,12 @@ public:
 
 
 
-	/** Function Delete_LastCreatedCorner
-	 * Used only while creating a new zone outline
-	 * Remove and delete the current outline segment in progress
-	 * @return 0 if no corner in list, or corner number
-	 */
-	int Delete_LastCreatedCorner( wxDC* DC);
+    /** Function Delete_LastCreatedCorner
+     * Used only while creating a new zone outline
+     * Remove and delete the current outline segment in progress
+     * @return 0 if no corner in list, or corner number
+     */
+    int Delete_LastCreatedCorner( wxDC* DC);
 
     /**
      * Function Begin_Zone
@@ -517,7 +525,7 @@ public:
      * Function End_Zone
      * terminates (if no DRC error ) the zone edge creation process
      * @param DC = current Device Context
-	 * @return true if Ok, false if DRC error
+     * @return true if Ok, false if DRC error
      */
     bool                End_Zone( wxDC* DC );
 
@@ -586,11 +594,11 @@ public:
                                                 ZONE_CONTAINER* zone_container,
                                                 int             corner_id );
 
-	/**
-	 * Function End_Move_Zone_Corner_Or_Outlines
-	 * Terminates a move corner in a zone outline, or a move zone outlines
-	 * @param DC = current Device Context (can be NULL)
-	 * @param zone_container: the given zone
+    /**
+     * Function End_Move_Zone_Corner_Or_Outlines
+     * Terminates a move corner in a zone outline, or a move zone outlines
+     * @param DC = current Device Context (can be NULL)
+     * @param zone_container: the given zone
      */
     void                End_Move_Zone_Corner_Or_Outlines( wxDC* DC, ZONE_CONTAINER* zone_container );
 
@@ -612,13 +620,13 @@ public:
      */
     void                Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_container );
 
-	/**
-	 * Function Start_Move_Zone_Outlines
-	 * Initialise parametres to move an existing zone outlines.
+    /**
+     * Function Start_Move_Zone_Outlines
+     * Initialise parametres to move an existing zone outlines.
      * @param DC = current Device Context (can be NULL)
-	 * @param zone_container: the given zone to move
-	 */
-	void 				Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_container );
+     * @param zone_container: the given zone to move
+     */
+    void 				Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_container );
 
    // Target handling
     MIREPCB*            Create_Mire( wxDC* DC );
@@ -725,7 +733,7 @@ public:
     int             BestZoom(); // Retourne le meilleur zoom
     void            OnSelectOptionToolbar( wxCommandEvent& event );
     void            OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
-	PCB_SCREEN*		GetPCBScreen(){ return (PCB_SCREEN*)GetScreen(); }
+    PCB_SCREEN*		GetPCBScreen(){ return (PCB_SCREEN*)GetScreen(); }
 
     EDA_BaseStruct* GerberGeneralLocateAndDisplay();
     EDA_BaseStruct* Locate( int typeloc );

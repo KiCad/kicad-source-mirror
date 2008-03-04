@@ -20,33 +20,33 @@
 
 BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
 
-    COMMON_EVENTS_DRAWFRAME 
+    COMMON_EVENTS_DRAWFRAME
     EVT_SOCKET( ID_EDA_SOCKET_EVENT_SERV, WinEDA_PcbFrame::OnSockRequestServer )
     EVT_SOCKET( ID_EDA_SOCKET_EVENT, WinEDA_PcbFrame::OnSockRequest )
-    
+
     EVT_KICAD_CHOICEBOX( ID_ON_ZOOM_SELECT, WinEDA_PcbFrame::OnSelectZoom )
     EVT_KICAD_CHOICEBOX( ID_ON_GRID_SELECT, WinEDA_PcbFrame::OnSelectGrid )
-    
+
     EVT_CLOSE( WinEDA_PcbFrame::OnCloseWindow )
     EVT_SIZE( WinEDA_PcbFrame::OnSize )
-    
+
     EVT_TOOL_RANGE( ID_ZOOM_IN_BUTT, ID_ZOOM_PAGE_BUTT,
                     WinEDA_PcbFrame::Process_Zoom )
-    
+
     EVT_TOOL( ID_LOAD_FILE, WinEDA_PcbFrame::Files_io )
     EVT_TOOL( ID_MENU_READ_LAST_SAVED_VERSION_BOARD, WinEDA_PcbFrame::Files_io )
     EVT_TOOL( ID_MENU_RECOVER_BOARD, WinEDA_PcbFrame::Files_io )
     EVT_TOOL( ID_NEW_BOARD, WinEDA_PcbFrame::Files_io )
     EVT_TOOL( ID_SAVE_BOARD, WinEDA_PcbFrame::Files_io )
     EVT_TOOL( ID_OPEN_MODULE_EDITOR, WinEDA_PcbFrame::Process_Special_Functions )
-    
+
     EVT_MENU_RANGE( ID_PREFERENCES_FONT_INFOSCREEN, ID_PREFERENCES_FONT_END,
                     WinEDA_DrawFrame::ProcessFontPreferences )
-    
+
     // Menu Files:
-    
+
     EVT_MENU( ID_MAIN_MENUBAR, WinEDA_PcbFrame::Process_Special_Functions )
-    
+
     EVT_MENU( ID_MENU_LOAD_FILE, WinEDA_PcbFrame::Files_io )
     EVT_MENU( ID_MENU_NEW_BOARD, WinEDA_PcbFrame::Files_io )
     EVT_MENU( ID_MENU_SAVE_BOARD, WinEDA_PcbFrame::Files_io )
@@ -55,22 +55,22 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_MENU( ID_GEN_PLOT, WinEDA_PcbFrame::ToPlotter )
     EVT_MENU_RANGE( ID_LOAD_FILE_1, ID_LOAD_FILE_10,
                     WinEDA_PcbFrame::Files_io )
-    
+
     EVT_MENU( ID_GEN_EXPORT_SPECCTRA, WinEDA_PcbFrame::ExportToSpecctra )
     EVT_MENU( ID_GEN_EXPORT_FILE_GENCADFORMAT, WinEDA_PcbFrame::ExportToGenCAD )
     EVT_MENU( ID_GEN_EXPORT_FILE_MODULE_REPORT, WinEDA_PcbFrame::GenModuleReport )
-    
+
     EVT_MENU( ID_GEN_IMPORT_SPECCTRA_SESSION, WinEDA_PcbFrame::ImportSpecctraSession )
     EVT_MENU( ID_GEN_IMPORT_SPECCTRA_DESIGN, WinEDA_PcbFrame::ImportSpecctraDesign )
 
     EVT_MENU( ID_MENU_ARCHIVE_NEW_MODULES, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_MENU( ID_MENU_ARCHIVE_ALL_MODULES, WinEDA_PcbFrame::Process_Special_Functions )
-    
+
     EVT_MENU( ID_EXIT, WinEDA_PcbFrame::Process_Special_Functions )
-    
+
     // menu Config
-	EVT_MENU_RANGE(ID_CONFIG_AND_PREFERENCES_START, ID_CONFIG_AND_PREFERENCES_END,
-		WinEDA_PcbFrame::Process_Config)
+    EVT_MENU_RANGE(ID_CONFIG_AND_PREFERENCES_START, ID_CONFIG_AND_PREFERENCES_END,
+        WinEDA_PcbFrame::Process_Config)
 
     EVT_MENU( ID_COLORS_SETUP, WinEDA_PcbFrame::Process_Config )
     EVT_MENU( ID_OPTIONS_SETUP, WinEDA_PcbFrame::Process_Config )
@@ -81,29 +81,29 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_MENU( ID_CONFIG_SAVE, WinEDA_PcbFrame::Process_Config )
     EVT_MENU( ID_CONFIG_READ, WinEDA_PcbFrame::Process_Config )
 
-	EVT_MENU( ID_PCB_USER_GRID_SETUP, WinEDA_PcbFrame::Process_Special_Functions )
-    
+    EVT_MENU( ID_PCB_USER_GRID_SETUP, WinEDA_PcbFrame::Process_Special_Functions )
+
     EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,
                     WinEDA_DrawFrame::SetLanguage )
-    
+
     // menu Postprocess
     EVT_MENU( ID_PCB_GEN_POS_MODULES_FILE, WinEDA_PcbFrame::GenModulesPosition )
     EVT_MENU( ID_PCB_GEN_DRILL_FILE, WinEDA_PcbFrame::InstallDrillFrame )
     EVT_MENU( ID_PCB_GEN_CMP_FILE, WinEDA_PcbFrame::Files_io )
-    
+
     // menu Miscellaneous
     EVT_MENU( ID_MENU_LIST_NETS, WinEDA_PcbFrame::Liste_Equipot )
     EVT_MENU( ID_PCB_GLOBAL_DELETE, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_MENU( ID_MENU_PCB_CLEAN, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_MENU( ID_MENU_PCB_SWAP_LAYERS, WinEDA_PcbFrame::Process_Special_Functions )
-    
+
     // Menu Help
     EVT_MENU( ID_GENERAL_HELP, WinEDA_DrawFrame::GetKicadHelp )
     EVT_MENU( ID_KICAD_ABOUT, WinEDA_DrawFrame::GetKicadAbout )
-    
+
     // Menu 3D Frame
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, WinEDA_PcbFrame::Show3D_Frame )
-    
+
     // Horizontal toolbar
     EVT_TOOL( ID_TO_LIBRARY, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_SHEET_SET, WinEDA_DrawFrame::Process_PageSettings )
@@ -126,11 +126,11 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
                          WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_TOOLBARH_PCB_AUTOPLACE, WinEDA_PcbFrame::AutoPlace )
     EVT_TOOL( ID_TOOLBARH_PCB_AUTOROUTE, WinEDA_PcbFrame::AutoPlace )
-    
+
     // Option toolbar
     EVT_TOOL_RANGE( ID_TB_OPTIONS_START, ID_TB_OPTIONS_END,
                     WinEDA_PcbFrame::OnSelectOptionToolbar )
-    
+
     // Vertical toolbar:
     EVT_TOOL( ID_NO_SELECT_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_PCB_HIGHLIGHT_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
@@ -146,24 +146,24 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_TOOL( ID_PCB_DELETE_ITEM_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_PCB_SHOW_1_RATSNEST_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_PCB_PLACE_OFFSET_COORD_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
-    
+
     EVT_TOOL_RANGE( ID_PCB_MUWAVE_START_CMD, ID_PCB_MUWAVE_END_CMD,
                     WinEDA_PcbFrame::ProcessMuWaveFunctions )
-    
+
     EVT_TOOL_RCLICKED( ID_TRACK_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
     EVT_TOOL_RCLICKED( ID_PCB_CIRCLE_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
     EVT_TOOL_RCLICKED( ID_PCB_ARC_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
     EVT_TOOL_RCLICKED( ID_TEXT_COMMENT_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
     EVT_TOOL_RCLICKED( ID_LINE_COMMENT_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
     EVT_TOOL_RCLICKED( ID_PCB_COTATION_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
-    
+
     EVT_MENU_RANGE( ID_POPUP_PCB_AUTOPLACE_START_RANGE,
                     ID_POPUP_PCB_AUTOPLACE_END_RANGE,
                     WinEDA_PcbFrame::AutoPlace )
-    
+
     EVT_MENU_RANGE( ID_POPUP_PCB_START_RANGE, ID_POPUP_PCB_END_RANGE,
                     WinEDA_PcbFrame::Process_Special_Functions )
-    
+
     // Annulation de commande en cours
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
                     WinEDA_PcbFrame::Process_Special_Functions )
@@ -183,7 +183,7 @@ END_EVENT_TABLE()
 WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent,
                                   const wxString& title,
                                   const wxPoint& pos, const wxSize& size,
-								  long style) :
+                                  long style) :
     WinEDA_BasePcbFrame( father, parent, PCB_FRAME, title, pos, size, style )
 {
     m_FrameName                = wxT( "PcbFrame" );
@@ -200,7 +200,9 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent,
     m_SelViaSizeBox_Changed    = FALSE;
 
     m_drc = new DRC( this );        // these 2 objects point to each other
-    
+
+    SetBOARD( new BOARD( NULL, this ) );
+
     m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
     m_DisplayPadFill = DisplayOpt.DisplayPadFill;
     m_DisplayPadNum  = DisplayOpt.DisplayPadNum;
@@ -221,7 +223,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent,
     if( m_Parent && m_Parent->m_EDA_Config )
     {
         long SizeX, SizeY;
-        
+
         if( m_Parent->m_EDA_Config->Read( wxT( "PcbEditGrid_X" ), &SizeX )
            && m_Parent->m_EDA_Config->Read( wxT( "PcbEditGrid_Y" ), &SizeY ) )
         {
@@ -247,6 +249,7 @@ WinEDA_PcbFrame::~WinEDA_PcbFrame()
     m_Parent->m_PcbFrame = NULL;
     m_CurrentScreen = ScreenPcb;
     delete m_drc;
+    delete m_Pcb;
 }
 
 
@@ -382,7 +385,7 @@ void WinEDA_PcbFrame::SetToolbars()
                                       DisplayOpt.DisplayPolarCood );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_POLAR_COORD,
                                            DisplayOpt.DisplayPolarCood ?
-                                           _( "Polar Coords not show" ) : 
+                                           _( "Polar Coords not show" ) :
                                            _( "Display Polar Coords" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID,
@@ -396,27 +399,27 @@ void WinEDA_PcbFrame::SetToolbars()
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_RATSNEST,
                                       g_Show_Ratsnest );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_RATSNEST,
-              g_Show_Ratsnest ? 
+              g_Show_Ratsnest ?
               _( "General ratsnest not show" ) : _( "Show General ratsnest" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST,
                                       g_Show_Module_Ratsnest );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST,
-            g_Show_Module_Ratsnest ? 
-                _( "Module ratsnest not show" ) : 
+            g_Show_Module_Ratsnest ?
+                _( "Module ratsnest not show" ) :
                 _( "Show Module ratsnest" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_AUTO_DEL_TRACK,
                                       g_AutoDeleteOldTrack );
-        
+
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_AUTO_DEL_TRACK,
             g_AutoDeleteOldTrack ?
-                _( "Disable Auto Delete old Track" ) : 
+                _( "Disable Auto Delete old Track" ) :
                 _( "Enable Auto Delete old Track" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_ZONES,
                                       DisplayOpt.DisplayZones );
-        
+
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_ZONES,
                                            DisplayOpt.DisplayZones ?
                                            _( "Do not Show Zones" ) : _( "Show Zones" ) );
@@ -431,7 +434,7 @@ void WinEDA_PcbFrame::SetToolbars()
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
                                       !m_DisplayPcbTrackFill );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
-                                           m_DisplayPcbTrackFill ? 
+                                           m_DisplayPcbTrackFill ?
                                            _( "Show Tracks Sketch mode" ) :
                                            _( "Show Tracks filled mode" ) );
 
@@ -453,12 +456,12 @@ void WinEDA_PcbFrame::SetToolbars()
             m_SelTrackWidthBox_Changed = FALSE;
             m_SelTrackWidthBox->Clear();
             wxString format = _( "Track" );
-            
+
             if( g_UnitMetric == INCHES )
                 format += wxT( " %.1f" );
             else
                 format += wxT( " %.3f" );
-            
+
             for( ii = 0; ii < HISTORY_NUMBER; ii++ )
             {
                 if( g_DesignSettings.m_TrackWidthHistory[ii] == 0 )
@@ -471,9 +474,9 @@ void WinEDA_PcbFrame::SetToolbars()
                     msg.Printf( format.GetData(), value * 1000 );
                 else
                     msg.Printf( format.GetData(), value );
-                
+
                 m_SelTrackWidthBox->Append( msg );
-                
+
                 if( g_DesignSettings.m_TrackWidthHistory[ii] ==
                         g_DesignSettings.m_CurrentTrackWidth )
                     m_SelTrackWidthBox->SetSelection( ii );
@@ -485,17 +488,17 @@ void WinEDA_PcbFrame::SetToolbars()
             m_SelViaSizeBox_Changed = FALSE;
             m_SelViaSizeBox->Clear();
             wxString format = _( "Via" );
-            
+
             if( g_UnitMetric == INCHES )
                 format += wxT( " %.1f" );
             else
                 format += wxT( " %.3f" );
-            
+
             for( ii = 0; ii < HISTORY_NUMBER; ii++ )
             {
                 if( g_DesignSettings.m_ViaSizeHistory[ii] == 0 )
                     break;                                                  // Fin de liste
-                
+
                 double value = To_User_Unit( g_UnitMetric,
                                              g_DesignSettings.m_ViaSizeHistory[ii],
                                              PCB_INTERNAL_UNIT );
@@ -504,7 +507,7 @@ void WinEDA_PcbFrame::SetToolbars()
                     msg.Printf( format.GetData(), value * 1000 );
                 else
                     msg.Printf( format.GetData(), value );
-                
+
                 m_SelViaSizeBox->Append( msg );
                 if( g_DesignSettings.m_ViaSizeHistory[ii] == g_DesignSettings.m_CurrentViaSize )
                     m_SelViaSizeBox->SetSelection( ii );
@@ -516,7 +519,7 @@ void WinEDA_PcbFrame::SetToolbars()
             int old_choice = m_SelZoomBox->GetChoice();
             int new_choice = 1;
             int zoom;
-            
+
             for( jj = 1, zoom = 1; zoom <= m_ZoomMaxValue; zoom <<= 1, jj++ )
             {
                 if( m_CurrentScreen && (m_CurrentScreen->GetZoom() == zoom) )
@@ -531,7 +534,7 @@ void WinEDA_PcbFrame::SetToolbars()
         if( m_SelGridBox && m_CurrentScreen )
         {
             int kk = m_SelGridBox->GetChoice();
-            
+
             for( ii = 0; g_GridList[ii].x > 0; ii++ )
             {
                 if( !m_CurrentScreen->m_UserGridIsON

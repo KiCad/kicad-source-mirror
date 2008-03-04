@@ -38,6 +38,12 @@ BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
     m_LocalRatsnest    = NULL;          // pointeur liste rats local
     m_CurrentZoneContour = NULL;        // This ZONE_CONTAINER handle the zone contour cuurently in progress
                                         // de determination des contours de zone
+
+    for( int layer=0; layer<NB_COPPER_LAYERS;  ++layer )
+    {
+        m_Layer[layer].m_Name = ReturnPcbLayerName( layer );
+        m_Layer[layer].m_Type = LT_SIGNAL;
+    }
 }
 
 
@@ -80,28 +86,96 @@ BOARD::~BOARD()
 
 wxString BOARD::GetLayerName( int aLayerIndex ) const
 {
+    // copper layer names are stored in the BOARD.
+    if( (unsigned) aLayerIndex < (unsigned) GetCopperLayerCount() )
+    {
+        // default names were set in BOARD::BOARD() but they may be
+        // over-ridden by BOARD::SetLayerName()
+        return m_Layer[aLayerIndex].m_Name;
+    }
+
     return ReturnPcbLayerName( aLayerIndex, true );
 }
 
 
 bool BOARD::SetLayerName( int aLayerIndex, const wxString& aLayerName )
 {
-    // a dummy temporarily.
-    D(printf("SetLayerName( %d, %s )\n", aLayerIndex, CONV_TO_UTF8(aLayerName) );)
-    return true;
+    if( (unsigned) aLayerIndex < (unsigned) GetCopperLayerCount() )
+    {
+        if( aLayerName == wxEmptyString  || aLayerName.Len() > 20 )
+            return false;
+
+        // no quote chars in the name allowed
+        if( aLayerName.Find( wxChar('"') ) != wxNOT_FOUND )
+            return false;
+
+        // ensure unique-ness of layer names
+        for( int layer=0;  layer<GetCopperLayerCount();  ++layer )
+        {
+            if( layer!=aLayerIndex && aLayerName == m_Layer[layer].m_Name )
+                return false;
+        }
+
+        m_Layer[aLayerIndex].m_Name = aLayerName;
+
+        // replace any spaces with underscores
+        m_Layer[aLayerIndex].m_Name.Replace( wxT(" "), wxT("_") );
+
+        return true;
+    }
+
+    return false;
 }
 
 
 LAYER_T BOARD::GetLayerType( int aLayerIndex ) const
 {
+    if( (unsigned) aLayerIndex < (unsigned) GetCopperLayerCount() )
+        return m_Layer[aLayerIndex].m_Type;
     return LT_SIGNAL;
 }
 
 
 bool BOARD::SetLayerType( int aLayerIndex, LAYER_T aLayerType )
 {
-    // a dummy temporarily.
-    return true;
+    if( (unsigned) aLayerIndex < (unsigned) GetCopperLayerCount() )
+    {
+        m_Layer[aLayerIndex].m_Type = aLayerType;
+        return true;
+    }
+    return false;
+}
+
+
+const char* LAYER::ShowType( LAYER_T aType )
+{
+    const char* cp;
+
+    switch( aType )
+    {
+    default:
+    case LT_SIGNAL:     cp = "signal";      break;
+    case LT_POWER:      cp = "power";       break;
+    case LT_MIXED:      cp = "mixed";       break;
+    case LT_JUMPER:     cp = "jumper";      break;
+    }
+
+    return cp;
+}
+
+
+LAYER_T LAYER::ParseType( const char* aType )
+{
+    if( strcmp( aType, "signal" ) == 0 )
+        return LT_SIGNAL;
+    else if( strcmp( aType, "power" ) == 0 )
+        return LT_POWER;
+    else if( strcmp( aType, "mixed" ) == 0 )
+        return LT_MIXED;
+    else if( strcmp( aType, "jumper" ) == 0 )
+        return LT_JUMPER;
+    else
+        return LAYER_T(-1);
 }
 
 

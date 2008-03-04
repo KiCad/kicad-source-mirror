@@ -826,6 +826,17 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 
             layer->name = layerIds[pcbNdx];
 
+            DSN_T layerType;
+            switch( aBoard->GetLayerType( pcbLayer2kicad[pcbNdx] ) )
+            {
+            default:
+            case LT_SIGNAL:     layerType = T_signal;       break;
+            case LT_POWER:      layerType = T_power;        break;
+            case LT_MIXED:      layerType = T_mixed;        break;
+            }
+
+            layer->layer_type = layerType;
+
             layer->properties.push_back( PROPERTY() );
             PROPERTY* property = &layer->properties.back();
             property->name = "index";

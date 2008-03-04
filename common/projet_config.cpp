@@ -125,8 +125,8 @@ void WinEDA_App::WriteProjectConfig( const wxString& local_config_filename,
         switch( pt_cfg->m_Type )
         {
         case PARAM_INT:
-                #undef PTCFG
-                #define PTCFG ( (PARAM_CFG_INT*) pt_cfg )
+            #undef PTCFG
+            #define PTCFG ( (PARAM_CFG_INT*) pt_cfg )
             if( PTCFG->m_Pt_param == NULL )
                 break;
 
@@ -319,7 +319,8 @@ bool WinEDA_App::ReadProjectConfig( const wxString& local_config_filename,
         {
             #undef PTCFG
             #define PTCFG ( (PARAM_CFG_DOUBLE*) pt_cfg )
-            double ftmp = 0; wxString msg;
+            double ftmp = 0;
+            wxString msg;
             if( pt_cfg->m_Setup )
                 msg = m_EDA_Config->Read( pt_cfg->m_Ident, wxT( "" ) );
             else

@@ -65,7 +65,7 @@ public:
 
     unsigned long m_Link;               // variable temporaire ( pour editions, ...)
     long          m_LastEdit_Time;      // Date de la derniere modification du module (gestion de librairies)
-	wxString		 m_Path; 
+    wxString		 m_Path;
 
     wxString      m_Doc;                // Texte de description du module
     wxString      m_KeyWord;            // Liste des mots cles relatifs au module
@@ -196,6 +196,17 @@ public:
     {
         return m_Value->m_Text;
     }
+
+
+    /**
+     * Function FindPadByName
+     * returns a D_PAD* with a matching name.  Note that names may not be
+     * unique, depending on how the foot print was created.
+     * @param
+     * @return D_PAD* - The first matching name is returned, or NULL if not found.
+     */
+    D_PAD* FindPadByName( const wxString& aPadName ) const;
+
 
     /**
      * Function Visit

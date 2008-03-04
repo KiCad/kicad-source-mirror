@@ -71,6 +71,8 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( WinEDA_BasePcbFrame* parent ) :
               wxDefaultSize, wxDEFAULT_DIALOG_STYLE|MAYBE_RESIZE_BORDER )
 /*************************************************************************/
 {
+    BOARD*  board = parent->m_Pcb;
+
     OuterBoxSizer = NULL;
     MainBoxSizer = NULL;
     FlexColumnBoxSizer = NULL;
@@ -154,7 +156,8 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( WinEDA_BasePcbFrame* parent ) :
         }
 
         // Provide a text string to identify this layer (with trailing spaces within that string being purged)
-        label = new wxStaticText( this, wxID_STATIC, ReturnPcbLayerName( ii ).Trim(), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+        label = new wxStaticText( this, wxID_STATIC, board->GetLayerName( ii ),
+                                 wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
         FlexColumnBoxSizer->Add(label, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxBOTTOM, 5);
 
         // Provide a button for this layer (which will invoke a child dialog box)
@@ -177,11 +180,11 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( WinEDA_BasePcbFrame* parent ) :
         // strings to be truncated after different layers are selected.)
         if( ii == 0 )
         {
-            text = new wxStaticText( this, item_ID, ReturnPcbLayerName( 0 ), wxDefaultPosition, wxDefaultSize, 0 );
+            text = new wxStaticText( this, item_ID, board->GetLayerName( 0 ), wxDefaultPosition, wxDefaultSize, 0 );
             goodSize = text->GetSize();
             for( int jj = 1; jj < NB_LAYERS; jj++ )
             {
-                text->SetLabel( ReturnPcbLayerName( jj ) );
+                text->SetLabel( board->GetLayerName( jj ) );
                 if( goodSize.x < text->GetSize().x )
                     goodSize.x = text->GetSize().x;
             }
@@ -252,7 +255,7 @@ void WinEDA_SwapLayerFrame::Sel_Layer( wxCommandEvent& event )
     if( (jj < 0) || (jj > NB_LAYERS) )
         jj = LAYER_NO_CHANGE; // (Defaults to "No Change".)
     jj = m_Parent->SelectLayer( jj, -1, -1, true );
- 
+
     if( (jj < 0) || (jj > NB_LAYERS) )
         return;
 
@@ -280,7 +283,7 @@ void WinEDA_SwapLayerFrame::Sel_Layer( wxCommandEvent& event )
         }
         else
         {
-            layer_list[ii]->SetLabel( ReturnPcbLayerName( jj ) );
+            layer_list[ii]->SetLabel( m_Parent->m_Pcb->GetLayerName( jj ) );
             // Change the text color to fushia (to highlight
             // that this layer *is* being swapped)
             layer_list[ii]->SetForegroundColour( wxColour(255, 0, 128) );

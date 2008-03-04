@@ -22,12 +22,12 @@ static int status_cotation; /*  = 0 : pas de cotation en cours
 /*
  *  Les routines generent une cotation de la forme
  *  - cote usuelle:
- * 
+ *
  |			 |
  |	dist	 |
  |<---------->|
  |			 |
- * 
+ *
  */
 
 #define MAX_CHAR 40     /* longueur maxi de la cotation */
@@ -135,10 +135,10 @@ WinEDA_CotationPropertiesFrame::WinEDA_CotationPropertiesFrame( WinEDA_PcbFrame*
     m_SelLayerBox = new WinEDAChoiceBox( this, ID_TEXTPCB_SELECT_LAYER,
                                          wxDefaultPosition, wxDefaultSize );
     LeftBoxSizer->Add( m_SelLayerBox, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
-    int ii;
-    for( ii = FIRST_NO_COPPER_LAYER; ii < NB_LAYERS; ii++ )
+
+    for( int layer = FIRST_NO_COPPER_LAYER;  layer<NB_LAYERS;  layer++ )
     {
-        m_SelLayerBox->Append( ReturnPcbLayerName( ii ) );
+        m_SelLayerBox->Append( parent->m_Pcb->GetLayerName( layer ) );
     }
 
     m_SelLayerBox->SetSelection( Cotation->GetLayer() - FIRST_NO_COPPER_LAYER );
@@ -174,8 +174,8 @@ void WinEDA_CotationPropertiesFrame::OnOkClick( wxCommandEvent& event )
     CurrentCotation->m_Text->m_Width = CurrentCotation->m_Width =
                                            m_TxtWidthCtrl->GetValue();
     CurrentCotation->m_Text->m_Miroir = (m_Mirror->GetSelection() == 0) ? 1 : 0;
-    
-    CurrentCotation->SetLayer( m_SelLayerBox->GetChoice() + FIRST_NO_COPPER_LAYER ); 
+
+    CurrentCotation->SetLayer( m_SelLayerBox->GetChoice() + FIRST_NO_COPPER_LAYER );
     CurrentCotation->m_Text->SetLayer( m_SelLayerBox->GetChoice() + FIRST_NO_COPPER_LAYER );
 
     CurrentCotation->m_Text->CreateDrawData();
@@ -213,7 +213,7 @@ static void Exit_EditCotation( WinEDA_DrawPanel* Panel, wxDC* DC )
     status_cotation      = 0;
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
-    ((WinEDA_PcbFrame*)Panel->m_Parent)->SetCurItem(NULL);    
+    ((WinEDA_PcbFrame*)Panel->m_Parent)->SetCurItem(NULL);
 }
 
 

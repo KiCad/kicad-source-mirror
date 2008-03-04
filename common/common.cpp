@@ -265,8 +265,6 @@ void MyFree( void* pt_mem )
 }
 
 
-
-
 /**************************************************************/
 wxString ReturnPcbLayerName( int layer_number, bool omitSpacePadding )
 /**************************************************************/
@@ -276,32 +274,11 @@ wxString ReturnPcbLayerName( int layer_number, bool omitSpacePadding )
  *  (not internatinalized, no space)
  */
 {
-
-#if 1 && defined(DEBUG)
-
-    // Dick: this code is working fine, but we have no place to store the layer names yet.
-
     const unsigned LAYER_LIMIT = 29;
 
-    // @todo: these layer names should be configurable on a per project basis.
-    // In anticipation of that enhancement, here is a different strategy for
-    // deriving the file names from the "configured" layer names.
-    // The main idea is to use a single array of names, and then remove
-    // spaces on the fly from the names when writing to disk.
+    // These are only default layer names.  For PCBNEW, the copper names
+    // may be over-ridden in the BOARD file *.brd.
 
-
-#if 1   // my specific layer names
-    static const wxString layer_name_list[] = {
-        _( "H2 Bottom" ), _( "Power" ),     _( "V2 Signal" ), _( "H1 Signal" ),
-        _( "Ground" ),    _( "Inner L5" ),  _( "Inner L6" ),  _( "Inner L7" ),
-        _( "Inner L8" ),  _( "Inner L9" ),  _( "Inner L10" ), _( "Inner L11" ),
-        _( "Inner L12" ), _( "Inner L13" ), _( "Inner L14" ), _( "Component" ),
-        _( "Adhes Cop" ), _( "Adhes Cmp" ), _( "SoldP Cop" ), _( "SoldP Cmp" ),
-        _( "SilkS Cop" ), _( "SilkS Cmp" ), _( "Mask Cop" ),  _( "Mask Cmp" ),
-        _( "Drawings " ), _( "Comments" ),  _( "Eco1" ),      _( "Eco2" ),
-        _( "Edges Pcb" ), _( "BAD INDEX" ),
-    };
-#else
     static const wxString layer_name_list[] = {
         _( "Copper   " ), _( "Inner L1 " ), _( "Inner L2 " ), _( "Inner L3 " ),
         _( "Inner L4 " ), _( "Inner L5 " ), _( "Inner L6 " ), _( "Inner L7 " ),
@@ -312,8 +289,6 @@ wxString ReturnPcbLayerName( int layer_number, bool omitSpacePadding )
         _( "Drawings " ), _( "Comments " ), _( "Eco1     " ), _( "Eco2     " ),
         _( "Edges Pcb" ), _( "BAD INDEX" ),
     };
-
-#endif
 
     if( (unsigned) layer_number > LAYER_LIMIT )
         layer_number = LAYER_LIMIT;
@@ -332,42 +307,6 @@ wxString ReturnPcbLayerName( int layer_number, bool omitSpacePadding )
     }
     else
         return *p;
-
-#else   // long standing established code:
-
-    static const wxString layer_name_list[] = {
-        _( "Copper   " ), _( "Inner L1 " ), _( "Inner L2 " ), _( "Inner L3 " ),
-        _( "Inner L4 " ), _( "Inner L5 " ), _( "Inner L6 " ), _( "Inner L7 " ),
-        _( "Inner L8 " ), _( "Inner L9 " ), _( "Inner L10" ), _( "Inner L11" ),
-        _( "Inner L12" ), _( "Inner L13" ), _( "Inner L14" ), _( "Component" ),
-        _( "Adhes Cop" ), _( "Adhes Cmp" ), _( "SoldP Cop" ), _( "SoldP Cmp" ),
-        _( "SilkS Cop" ), _( "SilkS Cmp" ), _( "Mask Cop " ), _( "Mask Cmp " ),
-        _( "Drawings " ), _( "Comments " ), _( "Eco1     " ), _( "Eco2     " ),
-        _( "Edges Pcb" ), _( "---      " ), _( "---      " ), _( "---      " )
-    };
-
-
-    // Same as layer_name_list, without space, not internationalized
-    static const wxString layer_name_list_for_filename[] = {
-        wxT( "Copper" ),   wxT( "InnerL1" ),  wxT( "InnerL2" ),  wxT( "InnerL3" ),
-        wxT( "InnerL4" ),  wxT( "InnerL5" ),  wxT( "InnerL6" ),  wxT( "InnerL7" ),
-        wxT( "InnerL8" ),  wxT( "InnerL9" ),  wxT( "InnerL10" ), wxT( "InnerL11" ),
-        wxT( "InnerL12" ), wxT( "InnerL13" ), wxT( "InnerL14" ), wxT( "Component" ),
-        wxT( "AdhesCop" ), wxT( "AdhesCmp" ), wxT( "SoldPCop" ), wxT( "SoldPCmp" ),
-        wxT( "SilkSCop" ), wxT( "SilkSCmp" ), wxT( "MaskCop" ),  wxT( "MaskCmp" ),
-        wxT( "Drawings" ), wxT( "Comments" ), wxT( "Eco1" ),     wxT( "Eco2" ),
-        wxT( "EdgesPcb" ), wxT( "---" ),      wxT( "---" ),      wxT( "---" )
-    };
-
-
-    if( (unsigned) layer_number >= 31u )
-        layer_number = 31;
-
-    return omitSpacePadding  ?
-        layer_name_list_for_filename[layer_number] :
-        layer_name_list[layer_number];
-#endif
-
 }
 
 

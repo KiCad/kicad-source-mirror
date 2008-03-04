@@ -18,14 +18,49 @@ enum LAYER_T
     LT_SIGNAL,
     LT_POWER,
     LT_MIXED,
+    LT_JUMPER,
 };
 
 
-/***********************************************/
-/* class BOARD : handle datas to build a board */
-/***********************************************/
+/**
+ * Struct LAYER
+ * holds information pertinent to a layer of a BOARD.
+ */
+struct LAYER
+{
+    /** The name of the layer, there should be no spaces in this name. */
+    wxString    m_Name;
+
+    /** The type of the layer */
+    LAYER_T     m_Type;
+
+//    int         m_Color;
+//    bool        m_Visible;      // ? use flags in m_Color instead ?
 
 
+    /**
+     * Function ShowType
+     * converts a LAYER_T enum to a const char*
+     * @param aType The LAYER_T to convert
+     * @return const char* - The string representation of the layer type.
+     */
+    static const char* ShowType( LAYER_T aType );
+
+    /**
+     * Function ParseType
+     * converts a string to a LAYER_T
+     * @param aType The const char* to convert
+     * @return LAYER_T - The binary representation of the layer type, or
+     *   LAYER_T(-1) if the string is invalid
+     */
+    static LAYER_T ParseType( const char* aType );
+};
+
+
+/**
+ * Class BOARD
+ * holds information pertinent to a PCBNEW printed circuit board.
+ */
 class BOARD : public BOARD_ITEM
 {
     friend class WinEDA_PcbFrame;
@@ -36,6 +71,8 @@ private:
 
     typedef std::vector<ZONE_CONTAINER*>  ZONE_CONTAINERS;  // @todo: switch to boost::ptr_vector, and change ~BOARD()
     ZONE_CONTAINERS m_ZoneDescriptorList; 	   ///< edge zone descriptors, owned by pointer
+
+    LAYER           m_Layer[NB_COPPER_LAYERS];
 
 public:
     WinEDA_BasePcbFrame*    m_PcbFrame;         // Window de visualisation
@@ -293,6 +330,7 @@ public:
     {
         return wxT( "BOARD" );
     }
+
 
 #if defined(DEBUG)
     /**

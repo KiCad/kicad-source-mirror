@@ -492,7 +492,7 @@ static ColorButton* laytool_list[] = {
 
     &VIA_THROUGH_Butt,
     &VIA_BLIND_BURIED_Butt,
-	&MICRO_VIA_Butt,
+    &MICRO_VIA_Butt,
     &Ratsnest_Butt,
     &Pad_Cu_Butt,
     &Pad_Cmp_Butt,
@@ -526,7 +526,7 @@ private:
     DECLARE_DYNAMIC_CLASS( WinEDA_SetColorsFrame )
     DECLARE_EVENT_TABLE()
 
-    WinEDA_DrawFrame*       m_Parent;
+    WinEDA_PcbFrame*        m_Parent;
     wxBoxSizer*             OuterBoxSizer;
     wxBoxSizer*             MainBoxSizer;
     wxFlexGridSizer*        FlexColumnBoxSizer;
@@ -566,7 +566,7 @@ private:
 public:
     // Constructors and destructor
     WinEDA_SetColorsFrame();
-    WinEDA_SetColorsFrame( WinEDA_DrawFrame* parent, const wxPoint& framepos );
+    WinEDA_SetColorsFrame( WinEDA_PcbFrame* parent, const wxPoint& framepos );
     ~WinEDA_SetColorsFrame();
 };
 

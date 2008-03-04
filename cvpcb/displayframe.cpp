@@ -51,7 +51,7 @@ WinEDA_DisplayFrame::WinEDA_DisplayFrame( wxWindow* father, WinEDA_App* parent,
     #endif
     SetTitle( title );
 
-    m_Pcb = new             BOARD( NULL, this );
+    m_Pcb = new BOARD( NULL, this );
 
     m_CurrentScreen = new   PCB_SCREEN( CVPCB_DISPLAY_FRAME );
 

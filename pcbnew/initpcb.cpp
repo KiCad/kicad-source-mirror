@@ -127,26 +127,9 @@ bool WinEDA_BasePcbFrame::Clear_Pcb( bool query )
         }
     }
 
-    /* Suppression des listes chainees */
-    m_Pcb->m_Equipots->DeleteStructList();
-    m_Pcb->m_Equipots = NULL;
-
-    m_Pcb->m_Drawings->DeleteStructList();
-    m_Pcb->m_Drawings = NULL;
-
-    m_Pcb->m_Modules->DeleteStructList();
-    m_Pcb->m_Modules = NULL;
-
-    m_Pcb->m_Track->DeleteStructList();
-    m_Pcb->m_Track = NULL;
-    m_Pcb->m_NbSegmTrack = 0;
-
-    m_Pcb->m_Zone->DeleteStructList();
-    m_Pcb->m_Zone = NULL;
-    m_Pcb->m_NbSegmZone = 0;
-    
-	m_Pcb->DeleteMARKERs();
-	m_Pcb->DeleteZONEOutlines();
+    // delete the old BOARD and create a new BOARD so that the default
+    // layer names are put into the BOARD.
+    SetBOARD( new BOARD( NULL, this ) );
 
     for( ; g_UnDeleteStackPtr != 0; )
     {
@@ -159,30 +142,6 @@ bool WinEDA_BasePcbFrame::Clear_Pcb( bool query )
     memset( buf_work, 0, BUFMEMSIZE );
     adr_lowmem = adr_max = buf_work;
 
-    if( m_Pcb->m_Pads )
-    {
-        MyFree( m_Pcb->m_Pads );
-        m_Pcb->m_Pads = NULL;
-    }
-    if( m_Pcb->m_Ratsnest )
-        MyFree( m_Pcb->m_Ratsnest );
-    if( m_Pcb->m_LocalRatsnest )
-        MyFree( m_Pcb->m_LocalRatsnest );
-    m_Pcb->m_Ratsnest      = NULL;
-    m_Pcb->m_LocalRatsnest = NULL;
-
-    /* remise a 0 ou a une valeur initiale des variables de la structure */
-    m_Pcb->m_BoundaryBox.SetOrigin( wxPoint( 0, 0 ) );
-    m_Pcb->m_BoundaryBox.SetSize( wxSize( 0, 0 ) );
-    m_Pcb->m_Status_Pcb = 0;
-    m_Pcb->m_NbLoclinks = 0;
-    m_Pcb->m_NbLinks    = 0;
-    m_Pcb->m_NbPads      = 0;
-    m_Pcb->m_NbNets      = 0;
-    m_Pcb->m_NbNodes     = 0;
-    m_Pcb->m_NbNoconnect = 0;
-    m_Pcb->m_NbSegmTrack = 0;
-    m_Pcb->m_NbSegmZone  = 0;
     SetCurItem( NULL );
 
     /* Init parametres de gestion */
@@ -219,8 +178,8 @@ void WinEDA_PcbFrame::Erase_Zones( bool query )
         m_Pcb->m_Zone = NULL;
         m_Pcb->m_NbSegmZone = 0;
     }
-    
-	m_Pcb->DeleteZONEOutlines();
+
+    m_Pcb->DeleteZONEOutlines();
 
     GetScreen()->SetModify();
 }
@@ -291,10 +250,10 @@ void WinEDA_PcbFrame::Erase_Pistes( wxDC * DC, int masque_type, bool query )
     for( pt_segm = m_Pcb->m_Track; pt_segm != NULL; pt_segm = (TRACK*) PtNext )
     {
         PtNext = (TRACK*) pt_segm->Pnext;
-        
+
         if( pt_segm->GetState( SEGM_FIXE | SEGM_AR ) & masque_type )
             continue;
-        
+
         pt_segm->DeleteStructure();
     }
 

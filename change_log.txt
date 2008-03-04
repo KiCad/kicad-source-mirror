@@ -5,16 +5,27 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Mar-3 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+    Completed transision to BOARD::GetLayerName() and away from ReturnPcbLayerName().
+    LayerNames and LAYER_T are saved int the *.brd file and may be edited
+    there with a text editor until the UI is in place to edit them in PCBNEW.
+    To understand the strategy, see BOARD::GetLayerName() in class_board.cpp
+    and see WinEDA_BasePcbFrame::ReadSetup().  I will be adding "Board" menu
+    item to Preferences, but there is more to come before the UI gets done:
+    net classes.
+
 
 2008-mars-03 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 3d display:
-	Added Jonas Diemer's patch (enhanced movings from mouse and tools)
+    Added Jonas Diemer's patch (enhanced movings from mouse and tools)
+
 
 2008-Mar-1 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew
-
     Changed ioascii.cpp to save and load board specific layer names, for DEBUG
     build only. I want to add class LAYER, see below. Added
     BOARD::SetLayerName(), BOARD::SetLayerType(), and BOARD::GetLayerType().

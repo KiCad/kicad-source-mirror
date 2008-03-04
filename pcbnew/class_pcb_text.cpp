@@ -119,26 +119,26 @@ bool TEXTE_PCB::Save( FILE* aFile ) const
 
     if( m_Text.IsEmpty() )
         return true;
-    
+
     bool rc = false;
-    
+
     if( fprintf( aFile, "$TEXTPCB\n" ) != sizeof("$TEXTPCB\n")-1 )
         goto out;
-    
+
     fprintf( aFile, "Te \"%s\"\n", CONV_TO_UTF8( m_Text ) );
     fprintf( aFile, "Po %d %d %d %d %d %d\n",
              m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, m_Width, m_Orient );
     fprintf( aFile, "De %d %d %lX %d\n", m_Layer, m_Miroir, m_TimeStamp, 0 );
-    
+
     if( fprintf( aFile, "$EndTEXTPCB\n" ) != sizeof("$EndTEXTPCB\n")-1 )
         goto out;
-    
+
     rc = true;
-out:    
+out:
     return rc;
 }
-    
-    
+
+
 
 
 /**********************************************************************/
@@ -167,15 +167,18 @@ void TEXTE_PCB::Display_Infos( WinEDA_DrawFrame* frame )
 {
     wxString msg;
 
+    BOARD*   board = (BOARD*) m_Parent;
+    wxASSERT( board );
+
     frame->MsgPanel->EraseMsgBox();
 
     if( m_Parent && m_Parent->Type() == TYPECOTATION )
         Affiche_1_Parametre( frame, 1, _( "COTATION" ), m_Text, DARKGREEN );
     else
         Affiche_1_Parametre( frame, 1, _( "PCB Text" ), m_Text, DARKGREEN );
-    
+
     Affiche_1_Parametre( frame, 28, _( "Layer" ),
-                         ReturnPcbLayerName( m_Layer ),
+                         board->GetLayerName( m_Layer ),
                          g_DesignSettings.m_LayerColor[m_Layer] & MASKCOLOR );
 
     Affiche_1_Parametre( frame, 36, _( "Mirror" ), wxEmptyString, GREEN );
@@ -203,7 +206,7 @@ void TEXTE_PCB::Display_Infos( WinEDA_DrawFrame* frame )
 /**
  * Function Show
  * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level 
+ * @param nestLevel An aid to prettier tree indenting, and is the level
  *          of nesting of this object within the overall tree.
  * @param os The ostream& to output to.
  */
@@ -211,8 +214,8 @@ void TEXTE_PCB::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-        " string=\"" << m_Text.mb_str() << "\"/>\n"; 
-    
+        " string=\"" << m_Text.mb_str() << "\"/>\n";
+
 //    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
 

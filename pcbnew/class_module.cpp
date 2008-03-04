@@ -1135,15 +1135,6 @@ bool MODULE::HitTest( const wxPoint& refPos )
     if( m_BoundaryBox.Inside( spot_cX, spot_cY ) )
         return true;
 
-/* no
-    // The GENERAL_COLLECTOR needs these two tests in order to find a MODULE
-    // when the user clicks on its text.  Keep these 2, needed in OnRightClick().
-    if( m_Reference->HitTest( refPos ) )
-        return true;
-
-    if( m_Value->HitTest( refPos ) )
-        return true;
-*/
     return false;
 }
 
@@ -1170,6 +1161,25 @@ bool    MODULE::HitTest( EDA_Rect& refArea )
         is_out_of_box = true;
 
     return is_out_of_box ? false : true;
+}
+
+
+D_PAD* MODULE::FindPadByName( const wxString& aPadName ) const
+{
+    wxString buf;
+
+    for(  D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
+    {
+        pad->ReturnStringPadName( buf );
+#if 1
+        if( buf.CmpNoCase( aPadName ) == 0 )    // why case insensitive?
+#else
+        if( buf == aPadName )
+#endif
+            return pad;
+    }
+
+    return NULL;
 }
 
 

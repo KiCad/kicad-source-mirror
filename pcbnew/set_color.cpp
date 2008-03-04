@@ -51,7 +51,7 @@ END_EVENT_TABLE()
 
 
 /*****************************************************/
-void DisplayColorSetupFrame( WinEDA_DrawFrame* parent,
+void DisplayColorSetupFrame( WinEDA_PcbFrame* parent,
                              const wxPoint&    framepos )
 /*****************************************************/
 {
@@ -72,7 +72,7 @@ WinEDA_SetColorsFrame::WinEDA_SetColorsFrame()
 
 
 // Standard Constructor
-WinEDA_SetColorsFrame::WinEDA_SetColorsFrame( WinEDA_DrawFrame* parent,
+WinEDA_SetColorsFrame::WinEDA_SetColorsFrame( WinEDA_PcbFrame* parent,
                                               const wxPoint& framepos )
 {
     m_Parent = parent;
@@ -225,7 +225,7 @@ void WinEDA_SetColorsFrame::CreateControls()
             if( laytool_list[lyr]->m_Title == wxT( "*" ) )
                 msg = g_ViaType_Name[laytool_list[lyr]->m_LayerNumber];
             else
-                msg = ReturnPcbLayerName( laytool_list[lyr]->m_LayerNumber );
+                msg = m_Parent->m_Pcb->GetLayerName( laytool_list[lyr]->m_LayerNumber );
         }
         else
             msg = wxGetTranslation( laytool_list[lyr]->m_Title.GetData() );

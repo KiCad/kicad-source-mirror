@@ -308,11 +308,25 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
 
         if( strncmp( Line, "Layer[", LAYERKEYZ ) == 0 )
         {
-            const char* cp = Line + LAYERKEYZ;
+            // parse:
+            // Layer[n]  "a Layer name" <LAYER_T>
+
+            char* cp = Line + LAYERKEYZ;
             int layer = atoi(cp);
 
-            wxString layerName = CONV_FROM_UTF8( data );
-            m_Pcb->SetLayerName( layer, layerName );
+            if( data )
+            {
+                wxString layerName = CONV_FROM_UTF8( data );
+                m_Pcb->SetLayerName( layer, layerName );
+
+                data = strtok( NULL, " " );
+
+                if( data )
+                {
+                    LAYER_T type = LAYER::ParseType( data );
+                    m_Pcb->SetLayerType( layer, type );
+                }
+            }
             continue;
         }
 
@@ -500,13 +514,9 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
 
 
 #ifdef PCBNEW
-/***************************************************************/
-static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame
-#if defined(DEBUG)
-    , BOARD* aBoard
-#endif
-                      )
-/***************************************************************/
+/******************************************************************************/
+static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
+/******************************************************************************/
 {
     char text[1024];
     int  ii, jj;
@@ -533,17 +543,13 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame
 
     fprintf( aFile, "ZoneGridSize %d\n", g_GridRoutingSize );
 
-
-#if defined(DEBUG)
     fprintf( aFile, "Layers %d\n", aBoard->GetCopperLayerCount() );
     for( int layer=0;  layer<aBoard->GetCopperLayerCount();  ++layer )
     {
-        fprintf( aFile, "Layer[%d] %s\n", layer, CONV_TO_UTF8( aBoard->GetLayerName(layer) ) );
+        fprintf( aFile, "Layer[%d] %s %s\n", layer,
+                CONV_TO_UTF8( aBoard->GetLayerName(layer) ),
+                LAYER::ShowType( aBoard->GetLayerType( layer ) ) );
     }
-
-#else
-    fprintf( aFile, "Layers %d\n", g_DesignSettings.m_CopperLayerCount );
-#endif
 
     fprintf( aFile, "TrackWidth %d\n", g_DesignSettings.m_CurrentTrackWidth );
     for( ii = 0; ii < HISTORY_NUMBER; ii++ )
@@ -1057,11 +1063,7 @@ int WinEDA_PcbFrame::SavePcbFormatAscii( FILE* aFile )
 
     WriteGeneralDescrPcb( aFile );
     WriteSheetDescr( m_CurrentScreen, aFile );
-    WriteSetup( aFile, this
-#if defined(DEBUG)
-        , m_Pcb
-#endif
-               );
+    WriteSetup( aFile, this, m_Pcb );
 
     rc = m_Pcb->Save( aFile );
 

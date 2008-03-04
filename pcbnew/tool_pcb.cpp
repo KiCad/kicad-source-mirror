@@ -691,7 +691,7 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
 
             if( (g_TabOneLayerMask[ii] & Masque_Layer) )
             {
-                wxString msg = ReturnPcbLayerName( ii, false );
+                wxString msg = m_Pcb->GetLayerName( ii );
                 msg = AddHotkeyName( msg, s_Board_Editor_Hokeys_Descr, HK_SwitchLayer[ii] );
                 m_SelLayerBox->Append( msg );
                 m_SelLayerBox->SetClientData( jj, (void*) ii );

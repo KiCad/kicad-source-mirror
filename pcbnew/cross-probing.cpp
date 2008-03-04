@@ -48,7 +48,7 @@ void RemoteCommand(  const char* cmdline )
     {
         modName = CONV_FROM_UTF8( text );
 
-        module = ReturnModule( frame->m_Pcb, modName );
+        module = frame->m_Pcb->FindModuleByReference( modName );
 
         if( module )
             msg.Printf( _( "%s found" ), modName.GetData() );
@@ -86,9 +86,9 @@ void RemoteCommand(  const char* cmdline )
 
         modName = CONV_FROM_UTF8( text );
 
-        module  = ReturnModule( frame->m_Pcb, modName );
+        module  = frame->m_Pcb->FindModuleByReference( modName );
         if( module )
-            pad = ReturnPad( module, pinName );
+            pad = module->FindPadByName( pinName );
 
         if( pad )
             netcode = pad->GetNet();

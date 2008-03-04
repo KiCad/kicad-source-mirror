@@ -75,7 +75,6 @@ bool WinEDA_App::OnInit()
     wxString Title = g_Main_Title + wxT( " " ) + GetBuildVersion();
     m_PcbFrame->SetTitle( Title );
     ActiveScreen      = ScreenPcb;
-    m_PcbFrame->m_Pcb = new BOARD( NULL, m_PcbFrame );
 
     SetTopWindow( m_PcbFrame );
     m_PcbFrame->Show( TRUE );

@@ -248,7 +248,7 @@ void ZONE_CONTAINER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& off
     if( DC == NULL )
         return;
 
-	wxPoint seg_start, seg_end;
+    wxPoint seg_start, seg_end;
     int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
     int color = g_DesignSettings.m_LayerColor[m_Layer];
 
@@ -319,9 +319,9 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( WinEDA_DrawPanel* panel, wxDC* DC, 
  * @param draw_mode = draw mode: OR, XOR ..
  */
 {
-	int current_gr_mode = draw_mode;
-	bool is_close_segment = false;
-	wxPoint seg_start, seg_end;
+    int current_gr_mode = draw_mode;
+    bool is_close_segment = false;
+    wxPoint seg_start, seg_end;
 
     if( DC == NULL )
         return;
@@ -339,7 +339,7 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( WinEDA_DrawPanel* panel, wxDC* DC, 
 
 
     // draw the lines
-	wxPoint start_contour_pos = GetCornerPosition(0);
+    wxPoint start_contour_pos = GetCornerPosition(0);
     for( int ic = 0; ic < GetNumCorners(); ic++ )
     {
         int xi = GetCornerPosition(ic).x;
@@ -347,27 +347,27 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( WinEDA_DrawPanel* panel, wxDC* DC, 
         int xf, yf;
         if( m_Poly->corner[ic].end_contour == FALSE && ic < GetNumCorners() - 1 )
         {
-			is_close_segment = false;
+            is_close_segment = false;
             xf = GetCornerPosition(ic + 1).x;
             yf = GetCornerPosition(ic + 1).y;
-			if ( (m_Poly->corner[ic + 1].end_contour) || (ic == GetNumCorners() - 2) )
-				current_gr_mode = GR_XOR;
-			else
-				current_gr_mode = draw_mode;
+            if ( (m_Poly->corner[ic + 1].end_contour) || (ic == GetNumCorners() - 2) )
+                current_gr_mode = GR_XOR;
+            else
+                current_gr_mode = draw_mode;
         }
         else
         {
-			is_close_segment = true;
-			current_gr_mode = GR_XOR;
+            is_close_segment = true;
+            current_gr_mode = GR_XOR;
             xf = start_contour_pos.x;
             yf = start_contour_pos.y;
             start_contour_pos = GetCornerPosition(ic + 1);
         }
-		GRSetDrawMode( DC, current_gr_mode );
-		if ( is_close_segment )
-			GRLine( &panel->m_ClipBox, DC, xi, yi, xf, yf, 0, WHITE );
-		else
-			GRLine( &panel->m_ClipBox, DC, xi, yi, xf, yf, 0, color );
+        GRSetDrawMode( DC, current_gr_mode );
+        if ( is_close_segment )
+            GRLine( &panel->m_ClipBox, DC, xi, yi, xf, yf, 0, WHITE );
+        else
+            GRLine( &panel->m_ClipBox, DC, xi, yi, xf, yf, 0, color );
     }
 }
 
@@ -514,6 +514,10 @@ void ZONE_CONTAINER::Display_Infos( WinEDA_DrawFrame* frame )
     wxString msg;
     int      text_pos;
 
+    BOARD*   board = (BOARD*) m_Parent;
+
+    wxASSERT( board );
+
     frame->MsgPanel->EraseMsgBox();
 
     msg = _( "Zone Outline" );
@@ -551,7 +555,7 @@ void ZONE_CONTAINER::Display_Infos( WinEDA_DrawFrame* frame )
     Affiche_1_Parametre( frame, text_pos, _( "NetCode" ), msg, RED );
 
     text_pos += 8;
-    msg = ReturnPcbLayerName( m_Layer );
+    msg = board->GetLayerName( m_Layer );
     Affiche_1_Parametre( frame, text_pos, _( "Layer" ), msg, BROWN );
 
     text_pos += 8;
@@ -588,19 +592,19 @@ void ZONE_CONTAINER::Move( const wxPoint& offset )
  */
 void ZONE_CONTAINER::MoveEdge( const wxPoint& offset )
 {
-	int ii = m_CornerSelection;
+    int ii = m_CornerSelection;
 
-	// Move the start point of the selected edge:
+    // Move the start point of the selected edge:
     SetCornerPosition(ii,  GetCornerPosition(ii) + offset);
 
-	// Move the end point of the selected edge:
-	if ( m_Poly->corner[ii].end_contour || ii == GetNumCorners() - 1)
-	{
-		int icont = m_Poly->GetContour( ii );
-		ii = m_Poly->GetContourStart( icont );
-	}
-	else
-		ii++;
+    // Move the end point of the selected edge:
+    if ( m_Poly->corner[ii].end_contour || ii == GetNumCorners() - 1)
+    {
+        int icont = m_Poly->GetContour( ii );
+        ii = m_Poly->GetContourStart( icont );
+    }
+    else
+        ii++;
     SetCornerPosition(ii,  GetCornerPosition(ii) + offset);
 
     m_Poly->Hatch();

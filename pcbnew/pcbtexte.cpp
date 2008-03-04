@@ -89,9 +89,12 @@ WinEDA_TextPCBPropertiesFrame::WinEDA_TextPCBPropertiesFrame( WinEDA_PcbFrame* p
               DIALOG_STYLE )
 /************************************************************************************/
 {
-    wxButton* Button;
+    wxButton*   Button;
+    BOARD*      board = parent->m_Pcb;
 
     m_Parent = parent;
+
+
     SetFont( *g_DialogFont );
     m_DC = DC;
     Centre();
@@ -139,16 +142,17 @@ WinEDA_TextPCBPropertiesFrame::WinEDA_TextPCBPropertiesFrame( WinEDA_PcbFrame* p
                                          wxDefaultPosition, wxDefaultSize );
     MiddleBoxSizer->Add( m_SelLayerBox, 0, wxGROW | wxALL, 5 );
 
-    int ii;
-    for( ii = 0; ii < NB_LAYERS; ii++ )
+    for( int layer=0; layer<NB_LAYERS;  ++layer )
     {
-        m_SelLayerBox->Append( ReturnPcbLayerName( ii ) );
+        m_SelLayerBox->Append( board->GetLayerName( layer ) );
     }
 
     m_SelLayerBox->SetSelection( TextPCB->GetLayer() );
 
 
-    wxString orient_msg[4] = { wxT( "0" ), wxT( "90" ), wxT( "180" ), wxT( "-90" ) };
+    static const wxString orient_msg[4] = {
+        wxT( "0" ), wxT( "90" ), wxT( "180" ), wxT( "-90" ) };
+
     m_Orient = new wxRadioBox( this, -1, _( "Orientation" ),
                                wxDefaultPosition, wxSize( -1, -1 ), 4, orient_msg,
                                1, wxRA_SPECIFY_COLS );

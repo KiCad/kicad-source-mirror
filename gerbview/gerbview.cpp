@@ -55,8 +55,6 @@ bool WinEDA_App::OnInit()
     SetTopWindow( m_GerberFrame );
     m_GerberFrame->Show( TRUE );
 
-    m_GerberFrame->m_Pcb = new  BOARD( NULL, m_GerberFrame );
-
     m_GerberFrame->Zoom_Automatique( TRUE );
 
     if( argc > 1 )

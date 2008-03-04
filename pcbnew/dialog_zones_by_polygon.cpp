@@ -68,7 +68,7 @@ WinEDA_ZoneFrame::WinEDA_ZoneFrame()
 
 
 WinEDA_ZoneFrame::WinEDA_ZoneFrame( WinEDA_PcbFrame* parent,
-									ZONE_CONTAINER * zone_container,
+                                    ZONE_CONTAINER * zone_container,
                                     wxWindowID       id,
                                     const wxString&  caption,
                                     const wxPoint&   pos,
@@ -76,14 +76,14 @@ WinEDA_ZoneFrame::WinEDA_ZoneFrame( WinEDA_PcbFrame* parent,
                                     long             style )
 {
     m_Parent = parent;
-	m_Zone_Container = zone_container;
-	if( m_Parent->m_Parent->m_EDA_Config )
+    m_Zone_Container = zone_container;
+    if( m_Parent->m_Parent->m_EDA_Config )
     {
         m_NetSorting = m_Parent->m_Parent->m_EDA_Config->Read( ZONE_NET_SORT_OPTION_KEY, (long) BOARD::PAD_CNT_SORT );
-	}
+    }
 
     Create( parent, id, caption, pos, size, style );
-	SetReturnCode(ZONE_ABORT);	// Will be changed on buttons click
+    SetReturnCode(ZONE_ABORT);	// Will be changed on buttons click
 }
 
 
@@ -110,7 +110,7 @@ bool WinEDA_ZoneFrame::Create( wxWindow*       parent,
     m_ListNetNameSelection = NULL;
     m_LayerSelectionCtrl = NULL;
 ////@end WinEDA_ZoneFrame member initialisation
-	
+
 ////@begin WinEDA_ZoneFrame creation
     SetExtraStyle(wxWS_EX_BLOCK_EVENTS);
     wxDialog::Create( parent, id, caption, pos, size, style );
@@ -133,6 +133,8 @@ bool WinEDA_ZoneFrame::Create( wxWindow*       parent,
 
 void WinEDA_ZoneFrame::CreateControls()
 {
+    BOARD*  board = m_Parent->m_Pcb;
+
     SetFont( *g_DialogFont );
 
 ////@begin WinEDA_ZoneFrame content construction
@@ -244,8 +246,8 @@ void WinEDA_ZoneFrame::CreateControls()
     m_NetSortingOption->SetValidator( wxGenericValidator(& m_NetSorting) );
 ////@end WinEDA_ZoneFrame content construction
 
-	// Initialise options
-	wxString title = _( "Zone clearance value:" ) + ReturnUnitSymbol( g_UnitMetric );
+    // Initialise options
+    wxString title = _( "Zone clearance value:" ) + ReturnUnitSymbol( g_UnitMetric );
     m_ClearanceValueTitle->SetLabel( title );
 
     title = _( "Grid :" ) + ReturnUnitSymbol( g_UnitMetric );;
@@ -280,89 +282,97 @@ void WinEDA_ZoneFrame::CreateControls()
     {
         case ZONE_CONTAINER::PAD_NOT_IN_ZONE:		// Pads are not covered
             m_FillOpt->SetSelection( 2 );
-			break;
-		case ZONE_CONTAINER::THERMAL_PAD:			// Use thermal relief for pads
+            break;
+        case ZONE_CONTAINER::THERMAL_PAD:			// Use thermal relief for pads
             m_FillOpt->SetSelection( 1 );
-			break;
-		case ZONE_CONTAINER::PAD_IN_ZONE:			// pads are covered by copper
+            break;
+        case ZONE_CONTAINER::PAD_IN_ZONE:			// pads are covered by copper
             m_FillOpt->SetSelection( 0 );
-			break;
-    }		
+            break;
+    }
 
-	if ( m_Zone_Container )
-		s_Zone_Hatching = m_Zone_Container->m_Poly->GetHatchStyle();
-	else
+    if ( m_Zone_Container )
+        s_Zone_Hatching = m_Zone_Container->m_Poly->GetHatchStyle();
+    else
         s_Zone_Hatching = m_Parent->m_Parent->m_EDA_Config->Read( ZONE_NET_OUTLINES_HATCH_OPTION_KEY,
-			(long) CPolyLine::DIAGONAL_EDGE );
+            (long) CPolyLine::DIAGONAL_EDGE );
 
     switch( s_Zone_Hatching )
     {
-		case CPolyLine::NO_HATCH:
-			m_OutlineAppearanceCtrl->SetSelection(0);
-			break;
+        case CPolyLine::NO_HATCH:
+            m_OutlineAppearanceCtrl->SetSelection(0);
+            break;
 
-		case CPolyLine::DIAGONAL_EDGE:
-			m_OutlineAppearanceCtrl->SetSelection(1);
-			break;
+        case CPolyLine::DIAGONAL_EDGE:
+            m_OutlineAppearanceCtrl->SetSelection(1);
+            break;
 
-		case CPolyLine::DIAGONAL_FULL:
-		   m_OutlineAppearanceCtrl->SetSelection(2);
-			break;
-	}
+        case CPolyLine::DIAGONAL_FULL:
+           m_OutlineAppearanceCtrl->SetSelection(2);
+            break;
+    }
 
-    int           layer_cnt = g_DesignSettings.m_CopperLayerCount;
-    for( int ii = 0; ii < g_DesignSettings.m_CopperLayerCount; ii++ )
+    int layer_cnt = board->GetCopperLayerCount();
+    for( int ii = 0; ii < board->GetCopperLayerCount(); ii++ )
     {
         wxString msg;
         int      layer_number = COPPER_LAYER_N;
+
         if( layer_cnt == 0 || ii < layer_cnt - 1 )
             layer_number = ii;
-        else  if( ii == layer_cnt - 1 )
+        else if( ii == layer_cnt - 1 )
             layer_number = LAYER_CMP_N;
+
         m_LayerId[ii] = layer_number;
-        msg = ReturnPcbLayerName( layer_number ).Trim();
+
+        msg = board->GetLayerName( layer_number ).Trim();
         m_LayerSelectionCtrl->InsertItems( 1, &msg, ii );
-		if ( m_Zone_Container )
-		{
-			if( m_Zone_Container->GetLayer() == layer_number )
-				m_LayerSelectionCtrl->SetSelection( ii );
-		}
-		else
-		{
-			if( ((PCB_SCREEN*)(m_Parent->GetScreen()))->m_Active_Layer == layer_number )
-				m_LayerSelectionCtrl->SetSelection( ii );
-		}
+
+        if( m_Zone_Container )
+        {
+            if( m_Zone_Container->GetLayer() == layer_number )
+                m_LayerSelectionCtrl->SetSelection( ii );
+        }
+        else
+        {
+            if( ((PCB_SCREEN*)(m_Parent->GetScreen()))->m_Active_Layer == layer_number )
+                m_LayerSelectionCtrl->SetSelection( ii );
+        }
     }
 
-	m_NetSortingOption->SetSelection(m_NetSorting == BOARD::ALPHA_SORT ? 0 : 1 );
-	wxString NetNameFilter;
-	if( m_Parent->m_Parent->m_EDA_Config )
+    m_NetSortingOption->SetSelection(m_NetSorting == BOARD::ALPHA_SORT ? 0 : 1 );
+
+    wxString NetNameFilter;
+    if( m_Parent->m_Parent->m_EDA_Config )
     {
-	    NetNameFilter = m_Parent->m_Parent->m_EDA_Config->Read( ZONE_NET_FILTER_STRING_KEY, wxT("N_0*") );
-	}
-	m_NetNameFilter->SetValue(NetNameFilter);
+        NetNameFilter = m_Parent->m_Parent->m_EDA_Config->Read( ZONE_NET_FILTER_STRING_KEY, wxT("N_0*") );
+    }
+
+    m_NetNameFilter->SetValue(NetNameFilter);
     wxArrayString ListNetName;
     m_Parent->m_Pcb->ReturnSortedNetnamesList( ListNetName,
-		m_NetSorting == 0	? BOARD::ALPHA_SORT : BOARD::PAD_CNT_SORT );
-	if ( m_NetSorting != 0 )
-	{
-		wxString Filter  = m_NetNameFilter->GetValue();
-		for (unsigned ii = 0; ii < ListNetName.GetCount(); ii ++ )
-		{
-			if (  ListNetName[ii].Matches(Filter.GetData() ) )
-			{
-				ListNetName. RemoveAt(ii);
-				ii--;
-			}
-		}
-	}
-	
+        m_NetSorting == 0	? BOARD::ALPHA_SORT : BOARD::PAD_CNT_SORT );
+
+    if ( m_NetSorting != 0 )
+    {
+        wxString Filter  = m_NetNameFilter->GetValue();
+        for( unsigned ii = 0; ii < ListNetName.GetCount(); ii++ )
+        {
+            if( ListNetName[ii].Matches(Filter.GetData() ) )
+            {
+                ListNetName. RemoveAt(ii);
+                ii--;
+            }
+        }
+    }
+
     m_ListNetNameSelection->InsertItems( ListNetName, 0 );
 
     // Select net:
-	int net_select = g_HightLigth_NetCode;
-	if ( m_Zone_Container )
-		net_select = m_Zone_Container->GetNet();
+    int net_select = g_HightLigth_NetCode;
+    if( m_Zone_Container )
+        net_select = m_Zone_Container->GetNet();
+
     if( net_select > 0 )
     {
         EQUIPOT* equipot = m_Parent->m_Pcb->FindNet( net_select );
@@ -468,8 +478,8 @@ bool WinEDA_ZoneFrame::AcceptOptions(bool aPromptForErrors)
 
     if( m_Parent->m_Parent->m_EDA_Config )
     {
-		m_Parent->m_Parent->m_EDA_Config->Write( ZONE_NET_OUTLINES_HATCH_OPTION_KEY, (long)s_Zone_Hatching);
-	}	
+        m_Parent->m_Parent->m_EDA_Config->Write( ZONE_NET_OUTLINES_HATCH_OPTION_KEY, (long)s_Zone_Hatching);
+    }
 
     switch( m_GridCtrl->GetSelection() )
     {
@@ -481,7 +491,7 @@ bool WinEDA_ZoneFrame::AcceptOptions(bool aPromptForErrors)
         g_GridRoutingSize = 50;
         break;
 
-	default:
+    default:
     case 2:
         g_GridRoutingSize = 100;
         break;
@@ -521,7 +531,7 @@ bool WinEDA_ZoneFrame::AcceptOptions(bool aPromptForErrors)
     /* Search net_code for this net */
     EQUIPOT* net;
     s_NetcodeSelection = 0;
-    for( net = m_Parent->m_Pcb->m_Equipots; net;  net = net->Next() )
+    for( net = m_Parent->m_Pcb->m_Equipots;   net;  net = net->Next() )
     {
         if( net->m_Netname == net_name )
         {
@@ -529,8 +539,8 @@ bool WinEDA_ZoneFrame::AcceptOptions(bool aPromptForErrors)
             break;
         }
     }
-	
-	return true;
+
+    return true;
 }
 
 
@@ -541,29 +551,28 @@ bool WinEDA_ZoneFrame::AcceptOptions(bool aPromptForErrors)
 void WinEDA_ZoneFrame::OnNetSortingOptionSelected( wxCommandEvent& event )
 {
     wxArrayString ListNetName;
-	m_NetSorting = m_NetSortingOption->GetSelection();
+    m_NetSorting = m_NetSortingOption->GetSelection();
     m_Parent->m_Pcb->ReturnSortedNetnamesList( ListNetName,
-		m_NetSorting == 0 ? BOARD::ALPHA_SORT : BOARD::PAD_CNT_SORT );
-	if ( m_NetSorting != 0 )
-	{
-		wxString Filter  = m_NetNameFilter->GetValue();
-		for (unsigned ii = 0; ii < ListNetName.GetCount(); ii ++ )
-		{
-			if (  ListNetName[ii].Matches(Filter.GetData() ) )
-			{
-				ListNetName. RemoveAt(ii);
-				ii--;
-			}
-		}
-	}
-	m_ListNetNameSelection->Clear();
+        m_NetSorting == 0 ? BOARD::ALPHA_SORT : BOARD::PAD_CNT_SORT );
+    if ( m_NetSorting != 0 )
+    {
+        wxString Filter  = m_NetNameFilter->GetValue();
+        for (unsigned ii = 0; ii < ListNetName.GetCount(); ii ++ )
+        {
+            if (  ListNetName[ii].Matches(Filter.GetData() ) )
+            {
+                ListNetName. RemoveAt(ii);
+                ii--;
+            }
+        }
+    }
+    m_ListNetNameSelection->Clear();
     m_ListNetNameSelection->InsertItems( ListNetName, 0 );
     if( m_Parent->m_Parent->m_EDA_Config )
     {
         m_Parent->m_Parent->m_EDA_Config->Write( ZONE_NET_SORT_OPTION_KEY, (long) m_NetSorting );
         m_Parent->m_Parent->m_EDA_Config->Write( ZONE_NET_FILTER_STRING_KEY, m_NetNameFilter->GetValue() );
-	}	
-
+    }
 }
 
 
@@ -573,7 +582,7 @@ void WinEDA_ZoneFrame::OnNetSortingOptionSelected( wxCommandEvent& event )
 
 void WinEDA_ZoneFrame::OnOkClick( wxCommandEvent& event )
 {
-	if ( AcceptOptions(true) )
-		EndModal( ZONE_OK );
+    if ( AcceptOptions(true) )
+        EndModal( ZONE_OK );
 }
 

@@ -150,6 +150,9 @@ void DRAWSEGMENT::Display_Infos( WinEDA_DrawFrame* frame )
     int      itype;
     wxString msg;
 
+    BOARD*   board = (BOARD*) m_Parent;
+    wxASSERT( board );
+
     frame->MsgPanel->EraseMsgBox();
 
     itype = m_Type & 0x0F;
@@ -173,7 +176,7 @@ void DRAWSEGMENT::Display_Infos( WinEDA_DrawFrame* frame )
         Affiche_1_Parametre( frame, -1, wxEmptyString, _( "Segment" ), RED );
 
     Affiche_1_Parametre( frame, 48, _( "Layer" ),
-                         ReturnPcbLayerName( m_Layer ), BROWN );
+                         board->GetLayerName( m_Layer ), BROWN );
 
     valeur_param( (unsigned) m_Width, msg );
     Affiche_1_Parametre( frame, 60, _( "Width" ), msg, DARKCYAN );

@@ -156,6 +156,7 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
     m_MicroViaDrill = 50;                           // micro via drill (for the entire board)
     m_CurrentMicroViaSize = 150;                    // Current micro via size
     m_MicroViasAllowed    = false;                  // true to allow micro vias
+
     for( ii = 0; ii < HISTORY_NUMBER; ii++ )
     {
         m_TrackWidthHistory[ii] = 0;    // Last HISTORY_NUMBER used track widths
@@ -171,6 +172,7 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
     m_MaskMargin = 150;                     // Solder mask margin
     /* Color options for screen display of the Printed Board: */
     m_PcbGridColor = DARKGRAY;              // Grid color
+
     for( ii = 0; ii < 32; ii++ )
         m_LayerColor[ii] = default_layer_color[ii];
 
@@ -179,6 +181,7 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
     m_ViaColor[VIA_MICROVIA]     = CYAN;
     m_ViaColor[VIA_BLIND_BURIED] = BROWN;
     m_ViaColor[VIA_THROUGH] = WHITE;
+
     m_ModuleTextCMPColor    = LIGHTGRAY;    // Text module color for modules on the COMPONENT layer
     m_ModuleTextCUColor  = MAGENTA;         // Text module color for modules on the COPPER layer
     m_ModuleTextNOVColor = DARKGRAY;        // Text module color for "invisible" texts (must be BLACK if really not displayed)

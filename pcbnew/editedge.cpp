@@ -174,7 +174,7 @@ void WinEDA_PcbFrame::Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC 
         return;
     }
 
-    wxString msg = _( "Delete Layer " ) + ReturnPcbLayerName( layer );
+    wxString msg = _( "Delete Layer " ) + m_Pcb->GetLayerName( layer );
     if( !IsOK( this, msg ) )
         return;
 

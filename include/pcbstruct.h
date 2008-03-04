@@ -148,38 +148,6 @@ struct CHEVELU;
 /* Class to handle a board */
 #include "class_board.h"
 
-
-/**
- * Class LAYER
- * holds information pertinent to a layer of a BOARD.
- */
-class LAYER
-{
-    wxString    m_Name;
-    LAYER_T     m_Type;
-    int         m_Color;
-    bool        m_Visible;      // ? use flags in m_Color instead ?
-
-public:
-    bool   SetName( const wxString& aLayerName );
-
-    const wxString& GetName();
-
-    bool SetType( LAYER_T aLayerType );
-
-    LAYER_T GetType();
-
-    int GetColor()  { return m_Color; }
-
-    void SetColor( int aColor )  { m_Color = aColor; }
-
-    bool IsVisible();
-
-    void SetVisible( bool isVisible );
-};
-
-
-
 // Class for handle current printed board design settings
 #define HISTORY_NUMBER 8
 class EDA_BoardDesignSettings
@@ -207,7 +175,9 @@ public:
 
     // Color options for screen display of the Printed Board:
     int    m_PcbGridColor;                      // Grid color
+
     int    m_LayerColor[32];                    // Layer colors (tracks and graphic items)
+
     int    m_ViaColor[4];                       // Via color (depending on is type)
     int    m_ModuleTextCMPColor;                // Text module color for modules on the COMPONENT layer
     int    m_ModuleTextCUColor;                 // Text module color for modules on the COPPER layer

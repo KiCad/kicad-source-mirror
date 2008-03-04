@@ -13,10 +13,11 @@
 #include "wx/statline.h"
 
 /* Variables locales */
-#define LAYER_UNSELECTED NB_LAYERS
-static int ButtonTable[32];      // Indexes buttons to Gerber layers
-static int LayerLookUpTable[32]; // Indexes Gerber layers to PCB file layers
-wxStaticText* layer_list[32];    // Indexes text strings to buttons
+#define LAYER_UNSELECTED            NB_LAYERS
+
+static int      ButtonTable[32];        // Indexes buttons to Gerber layers
+static int      LayerLookUpTable[32];   // Indexes Gerber layers to PCB file layers
+wxStaticText*   layer_list[32];         // Indexes text strings to buttons
 
 enum swap_layer_id {
     ID_WINEDA_SWAPLAYERFRAME = 1800,
@@ -75,12 +76,13 @@ int * InstallDialogLayerPairChoice(WinEDA_GerberFrame * parent)
  */
 {
     WinEDA_SwapLayerFrame * frame = new WinEDA_SwapLayerFrame(parent);
-        int ii = frame->ShowModal();
-        frame->Destroy();
-        if( ii >= 0 )
-            return LayerLookUpTable;
-        else
-            return NULL;
+
+    int ii = frame->ShowModal();
+    frame->Destroy();
+    if( ii >= 0 )
+        return LayerLookUpTable;
+    else
+        return NULL;
 }
 
 
@@ -138,7 +140,6 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame(WinEDA_GerberFrame *parent) :
     int pcb_layer_number = 0;
     for( nb_items = 0, ii = 0; ii < 32; ii++ )
     {
-
         if( g_GERBER_Descr_List[ii] == NULL )
             continue;
 
@@ -353,8 +354,8 @@ void WinEDA_SwapLayerFrame::OnCancelClick(wxCommandEvent& event)
 void WinEDA_SwapLayerFrame::OnOkClick(wxCommandEvent& event)
 /*********************************************************/
 {
-int ii;
-bool AsCmpLayer = false;
+    int ii;
+    bool AsCmpLayer = false;
 
     /* Compute the number of copper layers
      * this is the max layer number + 1 (if some internal layers exist)

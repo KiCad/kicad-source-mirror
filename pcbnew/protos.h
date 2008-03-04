@@ -71,11 +71,7 @@ void Trace_Pads_Only( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* Module, int ox,
 /* LOCATE.CPP : */
 /****************/
 
-MODULE*         ReturnModule( BOARD* Pcb, const wxString& name );
-
 /* Recherche d'une empreinte par son nom */
-
-D_PAD*          ReturnPad( MODULE* Module, const wxString& name );
 
 /* Recherche d'un pad par son nom, pour le module Module */
 
@@ -417,7 +413,7 @@ MODULE* ListAndSelectModuleName( COMMAND* Cmd );
 /*****************/
 /* SET_COLOR.CPP */
 /*****************/
-void DisplayColorSetupFrame( WinEDA_DrawFrame* parent,
+void DisplayColorSetupFrame( WinEDA_PcbFrame* parent,
                              const wxPoint&    framepos );
 
 
