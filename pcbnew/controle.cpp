@@ -372,12 +372,12 @@ static bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame,
         {
             if( via != currTrack )   // a via cannot influence itself
             {
-                if( doCheckNet && currTrack && currTrack->GetNet() != via->GetNet() )
-                    return false;
-
-                *curpos = via->m_Start;
-                D(printf("via hit\n");)
-                return true;
+                if( !doCheckNet || !currTrack || currTrack->GetNet() == via->GetNet() )
+                {
+                    *curpos = via->m_Start;
+                    D(printf("via hit\n");)
+                    return true;
+                }
             }
             else
             {
