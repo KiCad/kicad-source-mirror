@@ -36,15 +36,13 @@
 // Path list for online help
 static wxString    s_HelpPathList[] = {
 #ifdef __WINDOWS__
-    wxT( "c:/kicad/help/" ),
-    wxT( "d:/kicad/help/" ),
-    wxT( "c:/Program Files/kicad/help/" ),
+    wxT( "c:/kicad/doc/help/" ),
+    wxT( "d:/kicad/doc/help/" ),
+    wxT( "c:/Program Files/kicad/doc/help/" ),
 #else
-    wxT( "/usr/share/doc/kicad/" ),
-    wxT( "/usr/local/share/doc/kicad/" ),
-    wxT( "/usr/local/kicad/share/doc/kicad/" ),
-    wxT( "/usr/local/kicad/help/" ),
     wxT( "/usr/share/doc/kicad/help" ),
+    wxT( "/usr/local/share/doc/kicad/help" ),
+    wxT( "/usr/local/kicad/share/doc/kicad/help" ),
 #endif
     wxT( "end_list" )  // End of list symbol, do not change
 };
@@ -338,12 +336,12 @@ wxString EDA_FileSelector( const wxString& Title,                   /* Dialog ti
 wxString FindKicadHelpPath()
 /********************************************************/
 /** Function FindKicadHelpPath
- * Find an absolute path for kicad/help (or kicad/help/<language>)
- *  Find path kicad/help/xx/ ou kicad/help/:
+ * Find an absolute path for KiCad "help" (or "help/<language>")
+ *  Find path kicad/docs/help/xx/ or kicad/docs/help/:
  *  from BinDir
  *  else from environment variable KICAD
  *  else from one of s_HelpPathList
- *  typically c:\kicad\help or /usr/local/kicad/help or /usr/share/doc/kicad
+ *  typically c:\kicad\docs\help or /usr/local/kicad/docs/help or /usr/share/doc/kicad/help
  *  (must have kicad in path name)
  *
  *  xx = iso639-1 language id (2 letters (generic) or 4 letters):
