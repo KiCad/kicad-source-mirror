@@ -309,7 +309,7 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
         if( strncmp( Line, "Layer[", LAYERKEYZ ) == 0 )
         {
             // parse:
-            // Layer[n]  "a Layer name" <LAYER_T>
+            // Layer[n]  <a_Layer_name_with_no_spaces> <LAYER_T>
 
             char* cp = Line + LAYERKEYZ;
             int layer = atoi(cp);
@@ -320,7 +320,6 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
                 m_Pcb->SetLayerName( layer, layerName );
 
                 data = strtok( NULL, " " );
-
                 if( data )
                 {
                     LAYER_T type = LAYER::ParseType( data );
