@@ -68,6 +68,13 @@ public:
     }
 
 
+    /**
+     * Function GetBoundingBox
+     * returns the bounding box of this TRACK
+     */
+    EDA_Rect GetBoundingBox() const;
+
+
     /* supprime du chainage la structure Struct */
     void    UnLink();
 

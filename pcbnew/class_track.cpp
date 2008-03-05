@@ -205,6 +205,26 @@ int TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
 }
 
 
+EDA_Rect TRACK::GetBoundingBox() const
+{
+    int radius = m_Width/2;     // end of track is round, this is its radius
+
+    int ymax = MAX( m_Start.y, m_End.y );
+    int xmax = MAX( m_Start.x, m_End.x );
+
+    int ymin = MIN( m_Start.y, m_End.y );
+    int xmin = MIN( m_Start.x, m_End.x );
+
+    ymax += radius;
+    xmax += radius;
+
+    ymin -= radius;
+    xmin -= radius;
+
+    return EDA_Rect( wxPoint( xmin, ymin ), wxSize( xmax-xmin, ymax-ymin ) );
+}
+
+
 // see class_track.h
 // SEGVIA and SEGZONE inherit this version
 SEARCH_RESULT TRACK::Visit( INSPECTOR* inspector, const void* testData,
@@ -868,6 +888,7 @@ void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
  */
 bool TRACK::HitTest( const wxPoint& ref_pos )
 {
+#if 0
     int l_piste;          /* demi-largeur de la piste */
     int dx, dy, spot_cX, spot_cY;
     int ux0, uy0;
@@ -898,6 +919,30 @@ bool TRACK::HitTest( const wxPoint& ref_pos )
         if( DistanceTest( l_piste, dx, dy, spot_cX, spot_cY ) )
             return true;
     }
+#else
+
+    int radius = m_Width >> 1;
+
+    // (dx, dy) is a vector from m_Start to m_End (an origin of m_Start)
+    int dx = m_End.x - m_Start.x;
+    int dy = m_End.y - m_Start.y;
+
+    // (spot_cX, spot_cY) is a vector from m_Start to ref_pos (an origin of m_Start)
+    int spot_cX = ref_pos.x - m_Start.x;
+    int spot_cY = ref_pos.y - m_Start.y;
+
+    if( Type() == TYPEVIA )   /* VIA rencontree */
+    {
+        return (double) spot_cX * spot_cX + (double) spot_cY * spot_cY <=
+                (double) radius * radius;
+    }
+    else
+    {
+        if( DistanceTest( radius, dx, dy, spot_cX, spot_cY ) )
+            return true;
+    }
+
+#endif
 
     return false;
 }
