@@ -16,16 +16,16 @@ See http://poedit.sourceforge.net.
 Contact me for more details.
 
 == Installation from release archive ==
-kicad-{year}-{month}-{day}.zip - archive with statically linked KiCad for Windows XP and 2000 (not Windows 98).
+kicad-{year}{month}{day}.zip - archive with statically linked KiCad for Windows XP and 2000 (not Windows 98).
 or
-kicad-{year}-{month}-{day}.tar.bz2 - archive with statically linked KiCad for Linux.
+kicad-{year}{month}{day}.tar.bz2 - archive with statically linked KiCad for Linux.
 
 Untar or unzip KiCad archive (this create the KiCad tree in the current directory).
 
 === Under Windows: ===
 Goto C:\ or D:\ (or other prefered directory).
 Examples are for an install on C:\.
-Unzip archive kicad-{year}-{month}-{day}.zip
+Unzip archive kicad-{year}{month}{day}.zip
 You must have created c:\kicad.
 Windows executables are in c:\kicad\winexe.
 The main program is kicad.exe and from it you can run other programs
@@ -36,44 +36,52 @@ I suggest you create a shortcut to c:\kicad\winexe\kicad.exe
 You do must have libc.so.6 (KiCad doesn't work with libc.so.5)
 You must have the "root" rights.
 goto /usr/local
-Untar kicad-{year}-{month}-{day}.tar.bz2 by command
- tar -jxf kicad-{year}-{month}-{day}.tar.bz2.
-(It is possible to unzip KiCad.zip: unzip KiCad.zip,
-and goto /usr/local/kicad/linux and run chmod 755 *)
-The main program is /usr/local/kicad/linux/kicad
-If you use KDE, then you can copy the shortcut /usr/local/kicad/linux/kicad.desktop
+Untar kicad-{year}{month}{day}.tar.bz2 by command
+ tar -xjpf kicad-{year}{month}{day}.tar.bz2.
+The main program is /usr/local/bin/kicad
+If you use KDE, then you can copy the shortcut /usr/local/share/kicad/kicad.desktop
 in <user home directory>/Desktop and use it to run kicad.
 
 == 3D modeler wings3D: ==
 (Usefull only if you plan to create 3D shapes for Printed board modules)
-Archive and doc files (Linux and windows ) are in ../kicad/wing3d
 goto www.wings3d.org to have more details.
 Pcbnew use the exported files in wrml (.wrl) format from wings3d (not the native .wings format).
 
 == Documentation: ==
-Currenty not only in french.
-"On line" in html format.
-Source files (200 sheets) are in OpenOffice.org (www.openoffice.org) format.
-Can be read, printed and/or modified with OpenOffice.org Writer.
-See files in kicad/help/doc_src/*
+Currenty in different languages.
+Interactive help in HTML format.
 
-KiCad tree:
-kicad/winexe: windows (XP et 2000 compatible) binaries.
-kicad/linux: linux  binaries (Mandrake 9.2 and 10.0 tested,
-	probably work fine for distributions who have an recent libc)
-kicad/library: libraries for schematic
-kicad/library/doc: documentation files for schematic components (.pdf)
-	(readable from schematic if you have acrobat ou Xpdf)
-kicad/modules: module libraries for printed boards.
+Source files (200 sheets) are in OpenOffice.org (www.openoffice.org) format and
+can be obtained from kicad-doc-x.y.tar.bz2 archive (in doc_src directory).
+Can be read, printed and/or modified with OpenOffice.org Writer.
+
+== Windows KiCad tree: ==
+kicad/bin - binaries (executable files).
+kicad/doc/ - Various documentation.
+kicad/doc/help - Interactive help.
+kicad/share/demos - demos of schematic and printed boards.
+kicad/share/internat - dictionaries for interface localization.
+kicad/share/library - libraries for schematic.
+kicad/share/modules - module libraries for printed boards.
+kicad/share/modules/packages3d - many 3D shapes (.wrl and .wings
+    format) for existing modules.
 	files *.mod are the libraries,
 	and files *.brd are printed board you can see with pcbnew
 	files *.brd show the existing modules (and 3D shapes) in libraries. 
-kicad/modules/packages3d: many 3D shapes (.wrl et .wings format) for existing modules
 
-kicad/demos: Usefull...
-kicad/internat: dictionnaires des langues (actuellement anglais->francais) pour les menus
-kicad/help: On line help (in french)
-kicad/help/doc_src: Documentation (in french) (source doc, 200 sheets) under OpenOffice.
+== Linux KiCad tree: ==
+/usr/local/bin - binaries (executable files).
+/usr/local/share/doc/kicad/ - Various documentation.
+/usr/local/share/doc/kicad/help - Interactive help.
+/usr/local/share/kicad/demos - demos of schematic and printed boards.
+/usr/local/share/kicad/internat - dictionaries for interface localization.
+/usr/local/share/kicad/library - libraries for schematic.
+/usr/local/share/kicad/modules - module libraries for printed boards.
+/usr/local/share/kicad/modules/packages3d - many 3D shapes (.wrl and .wings
+    format) for existing modules.
+	files *.mod are the libraries,
+	and files *.brd are printed board you can see with pcbnew
+	files *.brd show the existing modules (and 3D shapes) in libraries. 
 
 Warning:
 Do not change the KiCad tree, or the location of binary files,

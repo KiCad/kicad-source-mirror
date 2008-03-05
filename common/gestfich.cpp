@@ -36,13 +36,14 @@
 // Path list for online help
 static wxString    s_HelpPathList[] = {
 #ifdef __WINDOWS__
-    wxT( "c:/kicad/doc/help/" ),
-    wxT( "d:/kicad/doc/help/" ),
-    wxT( "c:/Program Files/kicad/doc/help/" ),
+    wxT( "c:/kicad/doc/help" ),
+    wxT( "d:/kicad/doc/help" ),
+    wxT( "c:/Program Files/kicad/doc/help" ),
+    wxT( "d:/Program Files/kicad/doc/help" ),
 #else
     wxT( "/usr/share/doc/kicad/help" ),
     wxT( "/usr/local/share/doc/kicad/help" ),
-    wxT( "/usr/local/kicad/share/doc/kicad/help" ),
+    wxT( "/usr/local/kicad/share/doc/kicad/" ), // TODO: must be removed
 #endif
     wxT( "end_list" )  // End of list symbol, do not change
 };
@@ -50,14 +51,19 @@ static wxString    s_HelpPathList[] = {
 // Path list for kicad data files
 static wxString    s_KicadDataPathList[] = {
 #ifdef __WINDOWS__
-    wxT( "c:/kicad/" ),
-    wxT( "d:/kicad/" ),
-    wxT( "c:/Program Files/kicad/" ),
+    wxT( "c:/kicad/" ), // TODO: must be removed
+    wxT( "d:/kicad/" ), // TODO: must be removed
+    wxT( "c:/kicad/share/" ),
+    wxT( "d:/kicad/share/" ),
+    wxT( "c:/Program Files/kicad/" ), // TODO: must be removed
+    wxT( "d:/Program Files/kicad/" ), // TODO: must be removed
+    wxT( "c:/Program Files/kicad/share" ),
+    wxT( "d:/Program Files/kicad/share" ),
 #else
     wxT( "/usr/share/kicad/" ),
     wxT( "/usr/local/share/kicad/" ),
-    wxT( "/usr/local/kicad/share/kicad/" ),
-    wxT( "/usr/local/kicad/" ),
+    wxT( "/usr/local/kicad/share/kicad/" ), // TODO: must be removed
+    wxT( "/usr/local/kicad/" ), // TODO: must be removed
 #endif
     wxT( "end_list" )  // End of list symbol, do not change
 };
@@ -65,14 +71,20 @@ static wxString    s_KicadDataPathList[] = {
 // Path list for kicad binary files
 static wxString    s_KicadBinaryPathList[] = {
 #ifdef __WINDOWS__
-    wxT( "c:/kicad/winexe/" ),
-    wxT( "d:/kicad/winexe/" ),
+    wxT( "c:/kicad/bin/" ),
+    wxT( "d:/kicad/bin/" ),
+    wxT( "c:/kicad/winexe/" ), // TODO: must be removed
+    wxT( "d:/kicad/winexe/" ), // TODO: must be removed
+    wxT( "c:/Program Files/kicad/bin" ),
+    wxT( "d:/Program Files/kicad/bin" ),
+    wxT( "c:/Program Files/kicad/winexe" ), // TODO: must be removed
+    wxT( "d:/Program Files/kicad/winexe" ), // TODO: must be removed
 #else
     wxT( "/usr/bin/" ),
     wxT( "/usr/local/bin/" ),
     wxT( "/usr/local/kicad/bin/" ),
-    wxT( "/usr/local/kicad/linux/" ),
-    wxT( "/usr/local/kicad/linux-non_unicode/" ),
+    wxT( "/usr/local/kicad/linux/" ), // TODO: must be removed
+    wxT( "/usr/local/kicad/linux-non_unicode/" ), // TODO: must be removed
 #endif
     wxT( "end_list" )  // End of list symbol, do not change
 };
@@ -337,11 +349,11 @@ wxString FindKicadHelpPath()
 /********************************************************/
 /** Function FindKicadHelpPath
  * Find an absolute path for KiCad "help" (or "help/<language>")
- *  Find path kicad/docs/help/xx/ or kicad/docs/help/:
+ *  Find path kicad/doc/help/xx/ or kicad/doc/help/:
  *  from BinDir
  *  else from environment variable KICAD
  *  else from one of s_HelpPathList
- *  typically c:\kicad\docs\help or /usr/local/kicad/docs/help or /usr/share/doc/kicad/help
+ *  typically c:\kicad\doc\help or /usr/local/kicad/doc/help or /usr/share/doc/kicad/help
  *  (must have kicad in path name)
  *
  *  xx = iso639-1 language id (2 letters (generic) or 4 letters):

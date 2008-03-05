@@ -53,17 +53,16 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 # Locations for install targets.
+SET(KICAD_BIN bin CACHE PATH "Location of KiCad binaries.")
+
 IF(UNIX)
     IF(APPLE)
     ELSE(APPLE)
         # Like all variables, CMAKE_INSTALL_PREFIX can be over-ridden on the command line.
         SET(CMAKE_INSTALL_PREFIX /usr/local CACHE PATH "")
         # When used later, "bin" and others with no leading / is relative to CMAKE_INSTALL_PREFIX.
-        SET(KICAD_BIN bin CACHE PATH "Location of KiCad binaries.")
         SET(KICAD_PLUGINS lib/kicad/plugins CACHE PATH "Location of KiCad plugins.")
         SET(KICAD_DATA share/kicad CACHE PATH "Location of KiCad data files.")
-        SET(KICAD_INTERNAT ${KICAD_DATA}/internat)
-        SET(KICAD_TEMPLATE ${KICAD_DATA}/template)
     ENDIF(APPLE)
 ENDIF(UNIX)
 
@@ -71,11 +70,13 @@ IF(WIN32)
     # Like all variables, CMAKE_INSTALL_PREFIX can be over-ridden on the command line.
     SET(CMAKE_INSTALL_PREFIX c:/kicad CACHE PATH "")
     # When used later, "winexe" and others with no leading / is relative to CMAKE_INSTALL_PREFIX.
-    SET(KICAD_BIN winexe CACHE PATH "Location of KiCad binaries.")
     SET(KICAD_PLUGINS ${KICAD_BIN}/plugins)
-    SET(KICAD_INTERNAT internat)
-    SET(KICAD_TEMPLATE template)
+    SET(KICAD_DATA share CACHE PATH "Location of KiCad data files.")
 ENDIF(WIN32)
+
+SET(KICAD_DEMOS ${KICAD_DATA}/demos)
+SET(KICAD_INTERNAT ${KICAD_DATA}/internat)
+SET(KICAD_TEMPLATE ${KICAD_DATA}/template)
 
 FIND_PACKAGE(OpenGL)
 IF(OPENGL_FOUND)
@@ -124,5 +125,7 @@ ADD_SUBDIRECTORY(kicad)
 ADD_SUBDIRECTORY(pcbnew)
 ADD_SUBDIRECTORY(polygon)
 # Resources.
+ADD_SUBDIRECTORY(demos)
 ADD_SUBDIRECTORY(internat)
 ADD_SUBDIRECTORY(template)
+
