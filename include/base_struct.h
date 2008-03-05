@@ -50,7 +50,7 @@ enum KICAD_T {
     DRAW_TEXT_STRUCT_TYPE,
     DRAW_LABEL_STRUCT_TYPE,
     DRAW_GLOBAL_LABEL_STRUCT_TYPE,
-	DRAW_HIER_LABEL_STRUCT_TYPE,
+    DRAW_HIER_LABEL_STRUCT_TYPE,
     DRAW_LIB_ITEM_STRUCT_TYPE,
     DRAW_PICK_ITEM_STRUCT_TYPE,
     DRAW_SEGMENT_STRUCT_TYPE,
@@ -256,13 +256,13 @@ public:
         return false;   // derived classes should override this function
     }
 
-	/**
-	 * Function HitTest (overlayed)
-	 * tests if the given EDA_Rect intersect this object.
-	 * For now, an ending point must be inside this rect.
-	 * @param refArea : the given EDA_Rect
-	 * @return bool - true if a hit, else false
-	 */
+    /**
+     * Function HitTest (overlayed)
+     * tests if the given EDA_Rect intersect this object.
+     * For now, an ending point must be inside this rect.
+     * @param refArea : the given EDA_Rect
+     * @return bool - true if a hit, else false
+     */
     virtual bool    HitTest( EDA_Rect& refArea )
     {
         return false;   // derived classes should override this function
@@ -337,7 +337,7 @@ public:
      */
     void AddToChain( EDA_BaseStruct* laststruct );
 
-    
+
 #if defined (DEBUG)
 
     /**
@@ -435,13 +435,13 @@ public:
     /**
      * Function HitTest (overlayed)
      * tests if the given EDA_Rect intersect this object.
-	 * For now, the anchor must be inside this rect.
+     * For now, the anchor must be inside this rect.
      * @param refArea : the given EDA_Rect
      * @return bool - true if a hit, else false
      */
     bool    HitTest( EDA_Rect& refArea );
 
-	/**
+    /**
      * Function Len_Size
      * Return the text lenght in internal units
      */
@@ -484,7 +484,7 @@ public:
     /**
      * Function GetPosition
      * returns the position of this object.
-     * @return wxPoint& - The position of this object, non-const so it 
+     * @return wxPoint& - The position of this object, non-const so it
      *          can be changed
      */
     virtual wxPoint& GetPosition() = 0;
@@ -615,6 +615,9 @@ public:
 
 public:
     EDA_Rect() { };
+    EDA_Rect( const wxPoint& aPos, const wxSize& aSize ) :
+        m_Pos( aPos ), m_Size( aSize )
+    {}
 
     wxPoint Centre()
     {
@@ -651,6 +654,11 @@ public:
         m_Size.x = pos.x - m_Pos.x; m_Size.y = pos.y - m_Pos.y;
     }
 
+    /**
+     * Function operator(wxRect)
+     * overloads the cast operator to return a wxRect
+     */
+    operator wxRect() const { return wxRect( m_Pos, m_Size ); }
 
     EDA_Rect& Inflate( wxCoord dx, wxCoord dy );
 };
