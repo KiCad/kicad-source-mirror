@@ -73,7 +73,7 @@ WinEDA_DrillFrame::WinEDA_DrillFrame( WinEDA_PcbFrame* parent, wxWindowID id,
     const wxString& caption, const wxPoint& pos, const wxSize& size, long style )
 {
     m_Parent = parent;
-    SetFont( *g_DialogFont );
+    //SetFont( *g_DialogFont );
 
     SetReturnCode( 1 );
     Init();

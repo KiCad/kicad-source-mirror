@@ -286,65 +286,65 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
     {
         Build_Holes_List( m_Parent->m_Pcb, s_HoleListBuffer, s_ToolListBuffer,
                           layer1, layer2, gen_through_holes ? false : true );
-        if( s_ToolListBuffer.size() == 0 )  // No holes !
-            continue;
-
-        FullFileName = m_Parent->m_CurrentScreen->m_FileName;
-        layer_extend.Empty();
-        if( !gen_through_holes )
-        {
-            if( layer1 == COPPER_LAYER_N )
-                layer_extend << wxT( "-copper" );
-            else
-                layer_extend << wxT( "-inner" ) << layer1;
-            if( layer2 == LAYER_CMP_N )
-                layer_extend << wxT( "-cmp" );
-            else
-                layer_extend << wxT( "-inner" ) << layer2;
-        }
-        layer_extend << Ext;
-        ChangeFileNameExt( FullFileName, layer_extend );
-
-        FullFileName = EDA_FileSelector( _( "Drill file" ),
-                                         wxEmptyString, /* Chemin par defaut */
-                                         FullFileName,  /* nom fichier par defaut */
-                                         Ext,           /* extension par defaut */
-                                         Mask,          /* Masque d'affichage */
-                                         this,
-                                         wxFD_SAVE,
-                                         TRUE
-                                         );
-
-        if( FullFileName != wxEmptyString )
-        {
-            dest = wxFopen( FullFileName, wxT( "w" ) );
-            if( dest == 0 )
-            {
-                msg = _( "Unable to create file " ) + FullFileName;
-                DisplayError( this, msg );
-                EndModal( 0 );
-                return;
-            }
-
-            Create_Drill_File_EXCELLON( s_HoleListBuffer, s_ToolListBuffer );
-        }
-
-        switch( m_Choice_Drill_Map->GetSelection() )
-        {
-        case 0:
-            break;
-
-        case 1:
-            GenDrillMap( FullFileName, s_HoleListBuffer, s_ToolListBuffer, PLOT_FORMAT_HPGL );
-            break;
-
-        case 2:
-            GenDrillMap( FullFileName, s_HoleListBuffer, s_ToolListBuffer, PLOT_FORMAT_POST );
-            break;
-        }
-
-        if(  !ExistsBuriedVias )
-            break;
+        if( s_ToolListBuffer.size() > 0 ) //holes?
+		{
+			FullFileName = m_Parent->m_CurrentScreen->m_FileName;
+			layer_extend.Empty();
+			if( !gen_through_holes )
+			{
+				if( layer1 == COPPER_LAYER_N )
+					layer_extend << wxT( "-copper" );
+				else
+					layer_extend << wxT( "-inner" ) << layer1;
+				if( layer2 == LAYER_CMP_N )
+					layer_extend << wxT( "-cmp" );
+				else
+					layer_extend << wxT( "-inner" ) << layer2;
+			}
+			layer_extend << Ext;
+			ChangeFileNameExt( FullFileName, layer_extend );
+	
+			FullFileName = EDA_FileSelector( _( "Drill file" ),
+											wxEmptyString, /* Chemin par defaut */
+											FullFileName,  /* nom fichier par defaut */
+											Ext,           /* extension par defaut */
+											Mask,          /* Masque d'affichage */
+											this,
+											wxFD_SAVE,
+											TRUE
+											);
+	
+			if( FullFileName != wxEmptyString )
+			{
+				dest = wxFopen( FullFileName, wxT( "w" ) );
+				if( dest == 0 )
+				{
+					msg = _( "Unable to create file " ) + FullFileName;
+					DisplayError( this, msg );
+					EndModal( 0 );
+					return;
+				}
+	
+				Create_Drill_File_EXCELLON( s_HoleListBuffer, s_ToolListBuffer );
+			}
+	
+			switch( m_Choice_Drill_Map->GetSelection() )
+			{
+			case 0:
+				break;
+	
+			case 1:
+				GenDrillMap( FullFileName, s_HoleListBuffer, s_ToolListBuffer, PLOT_FORMAT_HPGL );
+				break;
+	
+			case 2:
+				GenDrillMap( FullFileName, s_HoleListBuffer, s_ToolListBuffer, PLOT_FORMAT_POST );
+				break;
+			}
+	
+			if(  !ExistsBuriedVias )
+				break;
+		}
         if(  gen_through_holes )
             layer2 = layer1 + 1;
         else
