@@ -344,7 +344,7 @@ static bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame,
             doTrack = true;
     }
 
-    D(printf("doPad=%d doTrack=%d aCurrentTool=%d amMovingVia=%d\n", doPad, doTrack, aCurrentTool, amMovingVia );)
+    // D(printf("doPad=%d doTrack=%d aCurrentTool=%d amMovingVia=%d\n", doPad, doTrack, aCurrentTool, amMovingVia );)
 
     //  The search precedence order is pads, then tracks/vias
 
