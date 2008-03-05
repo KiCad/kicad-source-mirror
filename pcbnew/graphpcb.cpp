@@ -251,7 +251,6 @@ void TraceSegmentPcb( BOARD* Pcb, TRACK* pt_segm, int color, int marge, int op_l
 {
     int demi_pas, demi_largeur;
     int ux0, uy0, ux1, uy1;
-    int layer = pt_segm->GetLayer();
 
 
     demi_pas     = g_GridRoutingSize / 2;
@@ -262,16 +261,31 @@ void TraceSegmentPcb( BOARD* Pcb, TRACK* pt_segm, int color, int marge, int op_l
     ux1 = pt_segm->m_End.x - Pcb->m_BoundaryBox.m_Pos.x;
     uy1 = pt_segm->m_End.y - Pcb->m_BoundaryBox.m_Pos.y;
 
-    if( color == VIA_IMPOSSIBLE )
-        layer = -1;
-
     /* Test si VIA (cercle plein a tracer) */
     if( pt_segm->Type() == TYPEVIA )
     {
-        TraceFilledCercle( Pcb, pt_segm->m_Start.x, pt_segm->m_Start.y, demi_largeur,
-                           0x0000FFFF, color, op_logique );
+		int mask_layer = 0;
+		if ( pt_segm->IsOnLayer(Route_Layer_BOTTOM) )
+			mask_layer = 1 << Route_Layer_BOTTOM;
+		if ( pt_segm->IsOnLayer(Route_Layer_TOP) )
+		{
+			if ( mask_layer == 0 )
+				mask_layer = 1 << Route_Layer_TOP;
+			else mask_layer = -1;
+		}
+	
+		if( color == VIA_IMPOSSIBLE )
+			mask_layer = -1;
+
+		if ( mask_layer )
+			TraceFilledCercle( Pcb, pt_segm->m_Start.x, pt_segm->m_Start.y, demi_largeur,
+                           mask_layer, color, op_logique );
         return;
     }
+
+    int layer = pt_segm->GetLayer();
+    if( color == VIA_IMPOSSIBLE )
+        layer = -1;
 
     /* Le segment est ici un segment de droite ou un cercle ou un arc: */
     if( pt_segm->m_Shape == S_CIRCLE )

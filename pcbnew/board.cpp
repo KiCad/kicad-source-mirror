@@ -288,7 +288,7 @@ void PlaceCells( BOARD* Pcb, int net_code, int flag )
             dx = PtText->Pitch() * PtText->GetLength();
             dy = PtText->m_Size.y + PtText->m_Width;
 
-            /* Calcul du rectangle d'encadrement */
+            /* Put bounding box (rectangle) on matrix */
             dx  /= 2; dy /= 2;    /* dx et dy = demi dimensionx X et Y */
             ux1  = ux0 + dx; uy1 = uy0 + dy;
             ux0 -= dx; uy0 -= dy;
@@ -309,17 +309,18 @@ void PlaceCells( BOARD* Pcb, int net_code, int flag )
         }
     }
 
-    /* Placement des PISTES */
+    /* Put tracks and vias on matrix */
     pt_segm = Pcb->m_Track;
     for( ; pt_segm != NULL; pt_segm = (TRACK*) pt_segm->Pnext )
     {
         if( net_code == pt_segm->GetNet() )
             continue;
-        TraceSegmentPcb( Pcb, pt_segm, HOLE, marge, WRITE_CELL );
-        TraceSegmentPcb( Pcb, pt_segm, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
+				
+		TraceSegmentPcb( Pcb, pt_segm, HOLE, marge, WRITE_CELL );
+		TraceSegmentPcb( Pcb, pt_segm, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
     }
 
-    /* Placement des ZONES */
+    /* Put zone filling on matrix */
     pt_segm = (TRACK*) Pcb->m_Zone;
     for( ; pt_segm != NULL; pt_segm = (TRACK*) pt_segm->Pnext )
     {
