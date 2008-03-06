@@ -36,13 +36,13 @@
 // Path list for online help
 static wxString    s_HelpPathList[] = {
 #ifdef __WINDOWS__
-    wxT( "c:/kicad/doc/help" ),
-    wxT( "d:/kicad/doc/help" ),
-    wxT( "c:/Program Files/kicad/doc/help" ),
-    wxT( "d:/Program Files/kicad/doc/help" ),
+    wxT( "c:/kicad/doc/help/" ),
+    wxT( "d:/kicad/doc/help/" ),
+    wxT( "c:/Program Files/kicad/doc/help/" ),
+    wxT( "d:/Program Files/kicad/doc/help/" ),
 #else
-    wxT( "/usr/share/doc/kicad/help" ),
-    wxT( "/usr/local/share/doc/kicad/help" ),
+    wxT( "/usr/share/doc/kicad/help/" ),
+    wxT( "/usr/local/share/doc/kicad/help/" ),
     wxT( "/usr/local/kicad/share/doc/kicad/" ), // TODO: must be removed
 #endif
     wxT( "end_list" )  // End of list symbol, do not change
@@ -57,8 +57,8 @@ static wxString    s_KicadDataPathList[] = {
     wxT( "d:/kicad/share/" ),
     wxT( "c:/Program Files/kicad/" ), // TODO: must be removed
     wxT( "d:/Program Files/kicad/" ), // TODO: must be removed
-    wxT( "c:/Program Files/kicad/share" ),
-    wxT( "d:/Program Files/kicad/share" ),
+    wxT( "c:/Program Files/kicad/share/" ),
+    wxT( "d:/Program Files/kicad/share/" ),
 #else
     wxT( "/usr/share/kicad/" ),
     wxT( "/usr/local/share/kicad/" ),
@@ -75,10 +75,10 @@ static wxString    s_KicadBinaryPathList[] = {
     wxT( "d:/kicad/bin/" ),
     wxT( "c:/kicad/winexe/" ), // TODO: must be removed
     wxT( "d:/kicad/winexe/" ), // TODO: must be removed
-    wxT( "c:/Program Files/kicad/bin" ),
-    wxT( "d:/Program Files/kicad/bin" ),
-    wxT( "c:/Program Files/kicad/winexe" ), // TODO: must be removed
-    wxT( "d:/Program Files/kicad/winexe" ), // TODO: must be removed
+    wxT( "c:/Program Files/kicad/bin/" ),
+    wxT( "d:/Program Files/kicad/bin/" ),
+    wxT( "c:/Program Files/kicad/winexe/" ), // TODO: must be removed
+    wxT( "d:/Program Files/kicad/winexe/" ), // TODO: must be removed
 #else
     wxT( "/usr/bin/" ),
     wxT( "/usr/local/bin/" ),
@@ -353,7 +353,8 @@ wxString FindKicadHelpPath()
  *  from BinDir
  *  else from environment variable KICAD
  *  else from one of s_HelpPathList
- *  typically c:\kicad\doc\help or /usr/local/kicad/doc/help or /usr/share/doc/kicad/help
+ *  typically c:\kicad\doc\help or /usr/share/doc/kicad/help
+ *            or /usr/local/share/doc/kicad/help
  *  (must have kicad in path name)
  *
  *  xx = iso639-1 language id (2 letters (generic) or 4 letters):
@@ -370,15 +371,14 @@ wxString FindKicadHelpPath()
     wxString FullPath, LangFullPath, tmp;
     wxString LocaleString;
     bool     PathFound = FALSE;
-
     /* find kicad/help/ */
     tmp = g_EDA_Appl->m_BinDir;
     if( tmp.Last() == '/' )
         tmp.RemoveLast();
-    FullPath     = tmp.BeforeLast( '/' ); // Idem cd ..
+    FullPath     = tmp.BeforeLast( '/' ); // cd ..
     FullPath    += wxT( "/help/" );
     LocaleString = g_EDA_Appl->m_Locale->GetCanonicalName();
-
+	
     wxString path_tmp = FullPath;
 #ifdef __WINDOWS__
     path_tmp.MakeLower();
@@ -397,9 +397,7 @@ wxString FindKicadHelpPath()
             PathFound = TRUE;
     }
 
-    /* find kicad/help/ from default path list:
-     *  /usr/local/kicad/help or c:/kicad/help
-     *  (see s_HelpPathList) */
+    /* find kicad/help/ from "s_HelpPathList" */
     int ii = 0;
     while( !PathFound )
     {
@@ -410,11 +408,9 @@ wxString FindKicadHelpPath()
             PathFound = TRUE;
     }
 
-
     if( PathFound )
     {
         LangFullPath = FullPath + LocaleString + UNIX_STRING_DIR_SEP;
-
         if( wxDirExists( LangFullPath ) )
             return LangFullPath;
 
