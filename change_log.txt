@@ -11,10 +11,10 @@ email address.
     Eliminated bug "help files not found!".
 
 
-2008-Mar-3 UPDATE   Dick Hollenbeck <dick@softplc.com>
+2008-Mar-5 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew
-	Solved problem in fill zone calculations when using buried or blind vias (like micro vias)
+    Solved problem in fill zone calculations when using buried or blind vias (like micro vias)
 
 
 2008-Feb-18 UPDATE Igor Plyatov <plyatov@mail.ru>
@@ -34,7 +34,7 @@ email address.
 ================================================================================
 +pcbnew
   * Completed transision to BOARD::GetLayerName() and away from ReturnPcbLayerName().
-    LayerNames and LAYER_T are saved int the *.brd file and may be edited
+    LayerNames and LAYER_T are saved in the *.brd file and may be edited
     there with a text editor until the UI is in place to edit them in PCBNEW.
     To understand the strategy, see BOARD::GetLayerName() in class_board.cpp
     and see WinEDA_BasePcbFrame::ReadSetup().  I will be adding "Board" menu
