@@ -957,11 +957,11 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         int     curTrackWidth = aBoard->m_BoardSettings->m_CurrentTrackWidth;
         int     curTrackClear = aBoard->m_BoardSettings->m_TrackClearence;
 
-        // The +1 is to give freerouter a little extra room, this is 0.1 mils.
+        // The +5 is to give freerouter a little extra room, this is 0.5 mils.
         // If we export without this, then on import freerouter violates our
         // DRC checks with track to via spacing, although this could be a
         // result of > testing vs. >= testing in PCBNEW's DRC.
-        double  clearance = scale(curTrackClear+1);
+        double  clearance = scale(curTrackClear+5);
 
         STRINGS& rules = pcb->structure->rules->rules;
 
