@@ -78,6 +78,7 @@ SET(PCBNEW_SRCS
     gen_modules_placefile.cpp
     gendrill.cpp
     globaleditpad.cpp
+	gpcb_exchange.cpp
     graphpcb.cpp
     hotkeys.cpp
     initpcb.cpp

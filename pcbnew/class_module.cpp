@@ -765,15 +765,15 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
         }
     }
 
-    /* Recalcul de l'encadrement */
+    /* Recalculate the bounding box */
     Set_Rectangle_Encadrement();
     return 0;
 }
 
 
-/****************************************************/
+/*************************************************/
 void MODULE::SetPosition( const wxPoint& newpos )
-/****************************************************/
+/*************************************************/
 
 // replace le module en position newpos
 {

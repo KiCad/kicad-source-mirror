@@ -65,7 +65,7 @@ public:
 
     unsigned long m_Link;               // variable temporaire ( pour editions, ...)
     long          m_LastEdit_Time;      // Date de la derniere modification du module (gestion de librairies)
-    wxString		 m_Path;
+    wxString	  m_Path;
 
     wxString      m_Doc;                // Texte de description du module
     wxString      m_KeyWord;            // Liste des mots cles relatifs au module
@@ -142,6 +142,14 @@ public:
 
     int     Write_3D_Descr( FILE* File ) const;
     int     ReadDescr( FILE* File, int* LineNum = NULL );
+	/**
+	 * Function Read_GPCB_Descr
+	 * Read a footprint description in GPCB format
+	 * @param CmpFullFileName = Full file name (there is one footprint per file.
+	 * this is also the footprint name
+     * @return bool - true if success reading else false.
+	 */ 
+	bool	Read_GPCB_Descr(const wxString & CmpFullFileName);
     int     Read_3D_Descr( FILE* File, int* LineNum = NULL );
 
     /* drawing functions */

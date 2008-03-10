@@ -43,13 +43,15 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
     wxString CmpFullFileName;
     FILE*    dest;
     MODULE*  module = NULL;
+	bool Footprint_Is_GPCB_Format = false;
+	wxString mask = wxT("*.*;"); mask += EXT_CMP_MASK;
 
     /* Lecture Fichier module */
     CmpFullFileName = EDA_FileSelector( _( "Import Module:" ),
                                         wxEmptyString,  /* Chemin par defaut */
                                         wxEmptyString,  /* nom fichier par defaut */
-                                        EXT_CMP,        /* extension par defaut */
-                                        EXT_CMP_MASK,   /* Masque d'affichage */
+                                        wxEmptyString,  /* extension par defaut */
+                                        mask,		    /* Masque d'affichage */
                                         this,
                                         wxFD_OPEN,
                                         TRUE
@@ -70,21 +72,38 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
     GetLine( dest, Line, &NbLine );
     if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
     {
-        DisplayError( this, _( "Not a module file" ) );
-        return NULL;
+		if( strnicmp( Line, "Element", 7 ) == 0 )
+			Footprint_Is_GPCB_Format = true;
+		else
+		{
+			fclose( dest );
+			DisplayError( this, _( "Not a module file" ) );
+			return NULL;
+		}
     }
 
     /* Lecture du fichier: recherche du debut de la descr module */
-    while( GetLine( dest, Line, &NbLine ) != NULL )
-    {
-        if( strnicmp( Line, "$MODULE", 7 ) == 0 )
-            break;
-    }
+	if ( ! Footprint_Is_GPCB_Format )
+	{
+		while( GetLine( dest, Line, &NbLine ) != NULL )
+		{
+			if( strnicmp( Line, "$MODULE", 7 ) == 0 )
+				break;
+		}
+	}
 
     module = new MODULE( m_Pcb );
 
-    module->ReadDescr( dest, &NbLine );
-    fclose( dest );
+	if ( Footprint_Is_GPCB_Format )
+	{
+		fclose( dest );
+		module->Read_GPCB_Descr(CmpFullFileName);
+	}
+	else
+	{
+		module->ReadDescr( dest, &NbLine );
+		fclose( dest );
+	}
 
     /* Mise a jour du chainage */
     if( m_Pcb->m_Modules )

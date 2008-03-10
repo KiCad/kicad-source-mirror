@@ -373,21 +373,3 @@ char* strupper( char* Text )
     return Text;
 }
 
-
-#if 0
-/********************************/
-char* strlower( char* text )
-/********************************/
-{
-    char* start = text;
-
-    while( *text )
-    {
-        if( *text >= 'A' && *text <= 'Z' )
-            *text -= 'A' - 'a';
-        text++;
-    }
-
-    return start;
-}
-#endif

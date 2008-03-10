@@ -95,7 +95,23 @@ public:
     void    Process_Special_Functions( wxCommandEvent& event );
     wxPoint CursorRealPosition( const wxPoint& ScreenPos );
     wxPoint CursorScreenPosition();
-    wxPoint GetScreenCenterRealPosition();
+
+	/** Function ConvertPcbUnitsToPixelsUnits
+	 * Convert pos and size of the given EDA_Rect to pos and size in pixels,
+	 * relative to the current draw area (origin 0,0 is the left top visible corner draw area)
+	 * according to the current scrool and zoom
+	 * @param aRect = the given rect
+	*/
+    void    ConvertPcbUnitsToPixelsUnits( EDA_Rect & aRect);
+	/** Function ConvertPcbUnitsToPixelsUnits
+	 * Convert a given wxPoint position (in internal units) to the pos in pixels,
+	 * relative to the current draw area (origin 0,0 is the left top visible corner draw area)
+	 * according to the current scrool and zoom
+	 * @param aPosition = the given position
+	*/
+    void    ConvertPcbUnitsToPixelsUnits( wxPoint & aPosition);
+
+    wxPoint GetScreenCenterRealPosition( void );
     void    MouseToCursorSchema();
     void    MouseTo( const wxPoint& Mouse );
 

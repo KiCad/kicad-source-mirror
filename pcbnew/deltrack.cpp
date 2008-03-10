@@ -32,9 +32,9 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
     if( Track == NULL )
         return NULL;
 
-    if( Track->GetState(DELETED) )
+    if( Track->GetState( DELETED ) )
     {
-        D(printf("WinEDA_PcbFrame::Delete_Segment(): bug deleted already deleted TRACK\n");)
+        D( printf( "WinEDA_PcbFrame::Delete_Segment(): bug deleted already deleted TRACK\n" ); )
         return NULL;
     }
 
@@ -42,7 +42,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
     {
         if( g_TrackSegmentCount > 0 )
         {
-            int previous_layer = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
+            int previous_layer = ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
 
             // effacement de la piste en cours
             ShowNewTrackWhenMovingCursor( DrawPanel, DC, FALSE );
@@ -83,7 +83,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
 
             // Rectification couche active qui a pu changer si une via
             // a ete effacee
-            ((PCB_SCREEN*)GetScreen())->m_Active_Layer = previous_layer;
+            ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = previous_layer;
 
             Affiche_Status_Box();
             if( g_TwoSegmentTrackBuild )   // We must have 2 segments or more, or 0
@@ -126,41 +126,19 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
 #else
 
     // redraw the area where the track was
+    // this rectangle is correct
+    EDA_Rect dirty = Track->GetBoundingBox();
 
-    // this rectangle is corrrect
-    EDA_Rect    dirty = Track->GetBoundingBox();
+    // Convert the rect coordinates and size in pixels (make a draw clip box):
+    DrawPanel->ConvertPcbUnitsToPixelsUnits( dirty );
 
-    D(printf( "dirty m_Pos=(%d, %d) m_Size=(%d, %d)\n",
-             dirty.m_Pos.x, dirty.m_Pos.y, dirty.m_Size.x, dirty.m_Size.y );)
-
-    int zoom = GetZoom();
-
-    wxPoint drwOrig = GetScreen()->m_DrawOrg;
-
-    dirty.m_Pos.x = (dirty.m_Pos.x - drwOrig.x) / zoom;
-    dirty.m_Pos.y = (dirty.m_Pos.y - drwOrig.y) / zoom;
-
-    dirty.m_Size.x = (dirty.m_Size.x  - drwOrig.x) / zoom;
-    dirty.m_Size.y = (dirty.m_Size.y  - drwOrig.y) / zoom;
-
-    D(printf( "dirty scaled zoom=%d m_Pos=(%d, %d) m_Size=(%d, %d) drwOrig=(%d, %d)\n",
-             zoom,
-             dirty.m_Pos.x, dirty.m_Pos.y, dirty.m_Size.x, dirty.m_Size.y,
-             drwOrig.x, drwOrig.y );)
+    // Ensure the last line and column are in the dirty rectangle after truncatures
+    dirty.m_Size.x += 1; dirty.m_Size.y += 1;
 
     // pass wxRect() via EDA_Rect::operator wxRect() overload
     wxRect dirtyR = dirty;
 
-    D(printf( "dirtyR m_Pos=(%d, %d) m_Size=(%d, %d)\n",
-             dirtyR.x, dirtyR.y, dirtyR.width, dirtyR.height );)
-
-/*  The calculation for dirtyR is either wrong or the handling of the clipping
-    rect in OnPaint() is wrong.  Enable this line instead of the Refresh() below,
-    then try deleting a track segment.
     DrawPanel->RefreshRect( dirtyR, TRUE );
-*/
-
-    DrawPanel->Refresh( TRUE );
 
 #endif
 
@@ -241,7 +219,7 @@ void WinEDA_PcbFrame::Supprime_Une_Piste( wxDC* DC, TRACK* pt_segm )
         return;
 
     pt_track = Marque_Une_Piste( this, DC, pt_segm,
-                                 &nb_segm, GR_OR | GR_SURBRILL );
+        &nb_segm, GR_OR | GR_SURBRILL );
 
     if( nb_segm ) /* Il y a nb_segm segments de piste a effacer */
     {
@@ -249,7 +227,7 @@ void WinEDA_PcbFrame::Supprime_Une_Piste( wxDC* DC, TRACK* pt_segm )
 
         /* Effacement flag BUSY */
         Struct = pt_track;;
-        for(  ii=0;  ii<nb_segm;  ii++, Struct = (TRACK*) Struct->Pnext )
+        for(  ii = 0;  ii<nb_segm;  ii++, Struct = (TRACK*) Struct->Pnext )
         {
             Struct->SetState( BUSY, OFF );
         }

@@ -116,7 +116,8 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		modedit.o\
 		export_gencad.o\
 		hotkeys.o \
-        collectors.o
+        collectors.o\
+		gpcb_exchange.o
 
 
 PolyLine.o: ../polygon/PolyLine.cpp ../polygon/PolyLine.h $(COMMON)
