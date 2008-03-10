@@ -218,10 +218,10 @@ EDA_Rect TRACK::GetBoundingBox() const
 
     if( Type() == TYPEVIA )
     {
-        // because vias are sometimes drawn larger than their m_Width would
-        // provide, erasing them using a dirty rect must also compensate for
-        // possibility (that the via is larger than its m_Width would provide).
-        // because it is cheap to return a larger BoundingBox, do it so that
+        // Because vias are sometimes drawn larger than their m_Width would
+        // provide, erasing them using a dirty rect must also compensate for this
+        // possibility (that the via is larger on screen than its m_Width would provide).
+        // Because it is cheap to return a larger BoundingBox, do it so that
         // the via gets erased properly.  Do not divide width by 2 for this reason.
         radius = m_Width;
 
