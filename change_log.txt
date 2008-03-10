@@ -16,6 +16,10 @@ email address.
 	WinEDA_DrawPanel::ConvertPcbUnitsToPixelsUnits( EDA_Rect& aRect ) can be used to convert a bouding box to a clip box
 	(see example in deltrack.cpp)
 
++eeschema:
+	restored: missing lines in schedit.cpp (problems in a lot of commands)
+
+
 2008-Mar-06 UPDATE Igor Plyatov <plyatov@mail.ru>
 ================================================================================
 +help
