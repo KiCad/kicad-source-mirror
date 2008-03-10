@@ -130,15 +130,16 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
     EDA_Rect dirty = Track->GetBoundingBox();
 
     // Convert the rect coordinates and size in pixels (make a draw clip box):
-    DrawPanel->ConvertPcbUnitsToPixelsUnits( dirty );
+    DrawPanel->ConvertPcbUnitsToPixelsUnits( &dirty );
 
+    /*  now that TRACK::GetBoundingBox() returns a [,) type of rectangle, and
+        rounds up the track radius, let's see if this is really needed.
     // Ensure the last line and column are in the dirty rectangle after truncatures
     dirty.m_Size.x += 1; dirty.m_Size.y += 1;
+    */
 
     // pass wxRect() via EDA_Rect::operator wxRect() overload
-    wxRect dirtyR = dirty;
-
-    DrawPanel->RefreshRect( dirtyR, TRUE );
+    DrawPanel->RefreshRect( dirty, TRUE );
 
 #endif
 

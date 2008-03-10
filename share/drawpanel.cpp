@@ -267,52 +267,50 @@ bool WinEDA_DrawPanel::IsPointOnDisplay( wxPoint ref_pos )
 
 
 /************************************************************************/
-void WinEDA_DrawPanel::ConvertPcbUnitsToPixelsUnits( EDA_Rect& aRect )
+void WinEDA_DrawPanel::ConvertPcbUnitsToPixelsUnits( EDA_Rect* aRect )
 /************************************************************************/
-
-/** Function ConvertPcbUnitsToPixelsUnits
- * Convert pos and size off the given EDA_Rect to pos and size in pixels,
- * relative to the current draw area (origin 0,0 is the left top visible corner draw area)
- * according to the current scrool and zoom
- * @param aRect = the given rect
- */
 {
     // Calculate the draw area origin in internal units:
-    wxPoint pos = aRect.GetPosition();
+    wxPoint pos = aRect->GetPosition();
 
-    ConvertPcbUnitsToPixelsUnits( pos );
-	aRect.SetOrigin( pos );             // rect origin in pixel units
-    aRect.m_Size.x /= GetZoom();
-    aRect.m_Size.y /= GetZoom();          // size in pixel units
+    ConvertPcbUnitsToPixelsUnits( &pos );
+
+    aRect->SetOrigin( pos );                // rect origin in pixel units
+
+    aRect->m_Size.x /= GetZoom();
+    aRect->m_Size.y /= GetZoom();           // size in pixel units
 }
 
 
 /***************************************************************************/
-void WinEDA_DrawPanel::ConvertPcbUnitsToPixelsUnits( wxPoint& aPosition )
+void WinEDA_DrawPanel::ConvertPcbUnitsToPixelsUnits( wxPoint* aPosition )
 /***************************************************************************/
-
-/** Function ConvertPcbUnitsToPixelsUnits
- * Convert a given wxPoint position  (in internal units) to the pos in pixels,
- * relative to the current draw area (origin 0,0 is the left top visible corner draw area)
- * according to the current scrool and zoom
- * @param aPosition = the given position
- */
 {
     // Calculate the draw area origin in internal units:
     wxPoint drwOrig;
     int     x_axis_scale, y_axis_scale;
 
-    GetViewStart( &drwOrig.x, &drwOrig.y );                         // Origin in scrool units;
+    // Origin in scroll units;
+    GetViewStart( &drwOrig.x, &drwOrig.y );
     GetScrollPixelsPerUnit( &x_axis_scale, &y_axis_scale );
-    drwOrig.x *= x_axis_scale; drwOrig.y *= y_axis_scale;           // Origin in pixels units;
-    drwOrig.x *= GetZoom(); drwOrig.y *= GetZoom();                 // Origin in internal units;
 
-    drwOrig += GetScreen()->m_DrawOrg;                              // Real origin, according to the "plot" origin
+    // Origin in pixels units
+    drwOrig.x *= x_axis_scale;
+    drwOrig.y *= y_axis_scale;
 
-    aPosition -= drwOrig;                                           // position in internal units, relative to the visible draw area origin
+    // Origin in internal units
+    drwOrig.x *= GetZoom();
+    drwOrig.y *= GetZoom();
 
-    aPosition.x /= GetZoom();
-    aPosition.y /= GetZoom(); // position in pixels, relative to the visible draw area origin
+    // Real origin, according to the "plot" origin
+    drwOrig += GetScreen()->m_DrawOrg;
+
+    // position in internal units, relative to the visible draw area origin
+    *aPosition -= drwOrig;
+
+    // position in pixels, relative to the visible draw area origin
+    aPosition->x /= GetZoom();
+    aPosition->y /= GetZoom();
 }
 
 
@@ -546,17 +544,13 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
 
     org = m_ClipBox.GetOrigin();
 
-    static int counter;
-
     wxRegion   upd = GetUpdateRegion(); // get the update rect list
 
-    ++counter;
-
+    // get the union of all rectangles in the update region, 'upd'
     PaintClipBox = upd.GetBox();
 
-#if 1 && defined (DEBUG)
-    printf( "PaintClipBox[%d]=(%d, %d, %d, %d) org=(%d, %d) m_ClipBox=(%d, %d, %d, %d)\n",
-        counter,
+#if 0 && defined (DEBUG)
+    printf( "PaintClipBox=(%d, %d, %d, %d) org=(%d, %d) m_ClipBox=(%d, %d, %d, %d)\n",
         PaintClipBox.x,
         PaintClipBox.y,
         PaintClipBox.width,
@@ -583,9 +577,8 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
 #endif
 
 
-#if 1 // && defined(DEBUG)
-    printf( "PaintClipBox[%d]=(%d, %d, %d, %d) org=(%d, %d) m_ClipBox=(%d, %d, %d, %d)\n",
-        counter,
+#if 0 && defined(DEBUG)
+    printf( "PaintClipBox=(%d, %d, %d, %d) org=(%d, %d) m_ClipBox=(%d, %d, %d, %d)\n",
         PaintClipBox.x,
         PaintClipBox.y,
         PaintClipBox.width,
@@ -599,9 +592,12 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
 
     PaintClipBox = m_ClipBox;
 
-    wxDCClipper* dcclip = new wxDCClipper( paintDC, PaintClipBox );
-    ReDraw( &paintDC, TRUE );
-    delete dcclip;
+    // call ~wxDCClipper() before ~wxPaintDC()
+    {
+        wxDCClipper dcclip( paintDC, PaintClipBox );
+
+        ReDraw( &paintDC, TRUE );
+    }
 
     m_ClipBox = tmp;
     event.Skip();

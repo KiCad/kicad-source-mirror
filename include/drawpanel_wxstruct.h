@@ -96,20 +96,23 @@ public:
     wxPoint CursorRealPosition( const wxPoint& ScreenPos );
     wxPoint CursorScreenPosition();
 
-	/** Function ConvertPcbUnitsToPixelsUnits
-	 * Convert pos and size of the given EDA_Rect to pos and size in pixels,
-	 * relative to the current draw area (origin 0,0 is the left top visible corner draw area)
-	 * according to the current scrool and zoom
-	 * @param aRect = the given rect
-	*/
-    void    ConvertPcbUnitsToPixelsUnits( EDA_Rect & aRect);
-	/** Function ConvertPcbUnitsToPixelsUnits
-	 * Convert a given wxPoint position (in internal units) to the pos in pixels,
-	 * relative to the current draw area (origin 0,0 is the left top visible corner draw area)
-	 * according to the current scrool and zoom
-	 * @param aPosition = the given position
-	*/
-    void    ConvertPcbUnitsToPixelsUnits( wxPoint & aPosition);
+    /**
+     * Function ConvertPcbUnitsToPixelsUnits
+     * converts pos and size of the given EDA_Rect to pos and size in pixels,
+     * relative to the current draw area (origin 0,0 is the left top visible
+     * corner of draw area) according to the current scroll and zoom.
+     * @param aRect = the rectangle to convert
+     */
+    void    ConvertPcbUnitsToPixelsUnits( EDA_Rect* aRect );
+
+    /**
+     * Function ConvertPcbUnitsToPixelsUnits
+     * converts a given wxPoint position (in internal units) to units of pixels,
+     * relative to the current draw area (origin 0,0 is the left top visible
+     * corner of draw area) according to the current scroll and zoom.
+     * @param aPosition = the position to convert
+    */
+    void    ConvertPcbUnitsToPixelsUnits( wxPoint* aPosition );
 
     wxPoint GetScreenCenterRealPosition( void );
     void    MouseToCursorSchema();
@@ -120,7 +123,7 @@ public:
     void    CursorOff( wxDC* DC );                          // remove the grid cursor from the display
     void    CursorOn( wxDC* DC );                           // display the grid cursor
 
-    DECLARE_EVENT_TABLE() 
+    DECLARE_EVENT_TABLE()
 };
 
 /**************************/
@@ -195,7 +198,7 @@ public:
     wxSize          m_ScrollbarNumber;          /* Valeur effective des Nombres de Scrool
                                                  * c.a.d taille en unites de scroll de la surface totale affichable */
     wxPoint         m_StartVisu;                // Coord absolues du 1er pixel visualis�a l'ecran (en nombre de pixels)
-    
+
     wxSize          m_SizeVisu;         /* taille en pixels de l'ecran (fenetre de visu
                                          * Utile pour recadrer les affichages lors de la
                                          * navigation dans la hierarchie */
@@ -271,16 +274,16 @@ public:
     int     IsRefreshReq() { return m_FlagRefreshReq & 1;  }
     int     IsSave() { return m_FlagSave & 1;  }
 
-    
+
     /**
      * Function SetCurItem
-     * sets the currently selected object, m_CurrentItem.  
+     * sets the currently selected object, m_CurrentItem.
      * @param current Any object derived from EDA_BaseStruct
      */
     void SetCurItem( EDA_BaseStruct* current ) {  m_CurrentItem = current; }
     EDA_BaseStruct* GetCurItem() const {  return m_CurrentItem; }
 
-    
+
     /* fonctions relatives au zoom */
     int     GetZoom();                /* retourne le coeff de zoom */
     void    SetZoom( int coeff );           /* ajuste le coeff de zoom a coeff */
@@ -299,20 +302,20 @@ public:
     void    SetFirstGrid();               /* ajuste la grille au mini*/
     void    SetLastGrid();                /* ajuste la grille au max */
 
-    
+
     /**
      * Function RefPos
      * returns the reference position, coming from either the mouse position or the
      * the cursor position.
      * @param useMouse If true, return mouse position, else cursor's.
-     * @return wxPoint - The reference point, either the mouse position or 
+     * @return wxPoint - The reference point, either the mouse position or
      *   the cursor position.
      */
     wxPoint RefPos( bool useMouse )
     {
         return useMouse ? m_MousePosition : m_Curseur;
     }
-    
+
 
     /**
      * Function GetClass
@@ -323,18 +326,18 @@ public:
     {
         return wxT( "BASE_SCREEN" );
     }
-    
+
 #if defined(DEBUG)
     /**
      * Function Show
      * is used to output the object tree, currently for debugging only.
-     * @param nestLevel An aid to prettier tree indenting, and is the level 
+     * @param nestLevel An aid to prettier tree indenting, and is the level
      *          of nesting of this object within the overall tree.
      * @param os The ostream& to output to.
      */
     void Show( int nestLevel, std::ostream& os );
 #endif
-    
+
 };
 
 

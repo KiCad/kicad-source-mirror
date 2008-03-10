@@ -207,7 +207,8 @@ int TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
 
 EDA_Rect TRACK::GetBoundingBox() const
 {
-    int radius = m_Width/2;     // end of track is round, this is its radius
+    // end of track is round, this is its radius, rounded up
+    int radius = ( m_Width+1 )/2;
 
     int ymax = MAX( m_Start.y, m_End.y );
     int xmax = MAX( m_Start.x, m_End.x );
@@ -221,7 +222,8 @@ EDA_Rect TRACK::GetBoundingBox() const
     ymin -= radius;
     xmin -= radius;
 
-    return EDA_Rect( wxPoint( xmin, ymin ), wxSize( xmax-xmin, ymax-ymin ) );
+    // return a rectangle which is [pos,dim) in nature.  therefore the +1
+    return EDA_Rect( wxPoint( xmin, ymin ), wxSize( xmax-xmin+1, ymax-ymin+1 ) );
 }
 
 

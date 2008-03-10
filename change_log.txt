@@ -5,19 +5,36 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Mar-10 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+  * Improved some comments on new functions.
+  * Changed
+    void    ConvertPcbUnitsToPixelsUnits( EDA_Rect& aRect ); to
+    void    ConvertPcbUnitsToPixelsUnits( EDA_Rect* aRect );
+    which I prefer because it is clearer to the human reader of the calling
+    context that the passed argument is to be modified.  References as function
+    arguments are fine, but if they are to be modified, passing by pointer
+    gives human reader a clearer picture when looking at the calling context.
+  * TRACK::GetBoundingBox() now (1) rounds up the radius, and (2) returns a bounding
+    box which is [pos,dim) in nature, [inclusive, exclusive).
+  * Changed from "new wxDCClip()" to use an automatic wxDCClip() variable in
+    drawpanel.cpp
+  * Removed a printf() from "release" build of drawpanel.cpp
+
+
 2008-Mar-10 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew
-	Pcbnew can import footprints in gpcb format in Nelib format only
-	Pcbnew automatically recognizes pcbnew or gpcb format when importing a footprint.
-		Due to differences between pcbnew and gpcb,
-		only gpcb newlib files containing only one footprint (one element) are useables.
-	Dirty rectangle calculation debugged.
-	WinEDA_DrawPanel::ConvertPcbUnitsToPixelsUnits( EDA_Rect& aRect ) can be used to convert a bouding box to a clip box
-	(see example in deltrack.cpp)
-
+    Pcbnew can import footprints in gpcb format in Nelib format only
+    Pcbnew automatically recognizes pcbnew or gpcb format when importing a footprint.
+        Due to differences between pcbnew and gpcb,
+        only gpcb newlib files containing only one footprint (one element) are useables.
+    Dirty rectangle calculation debugged.
+    WinEDA_DrawPanel::ConvertPcbUnitsToPixelsUnits( EDA_Rect& aRect ) can be used to convert a bouding box to a clip box
+    (see example in deltrack.cpp)
 +eeschema:
-	restored: missing lines in schedit.cpp (problems in a lot of commands)
+    restored: missing lines in schedit.cpp (problems in a lot of commands)
 
 
 2008-Mar-06 UPDATE Igor Plyatov <plyatov@mail.ru>

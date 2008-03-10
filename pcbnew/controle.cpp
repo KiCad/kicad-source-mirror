@@ -375,13 +375,13 @@ static bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame,
                 if( !doCheckNet || !currTrack || currTrack->GetNet() == via->GetNet() )
                 {
                     *curpos = via->m_Start;
-                    D(printf("via hit\n");)
+                    // D(printf("via hit\n");)
                     return true;
                 }
             }
             else
             {
-                D( printf( "skipping self\n" ); )
+                // D( printf( "skipping self\n" ); )
             }
         }
 
@@ -393,7 +393,7 @@ static bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame,
             if( !track || track->Type() != TYPETRACK )
                 return false;
 
-            D( printf( "Project\n" ); )
+            // D( printf( "Project\n" ); )
             return Project( curpos, on_grid, track );
         }
 
@@ -431,7 +431,7 @@ static bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame,
 
             if( Join( curpos, track->m_Start, track->m_End, currTrack->m_Start, currTrack->m_End ) )
             {
-                D(printf( "join currTrack->Type()=%d\n", currTrack->Type() );)
+                // D(printf( "join currTrack->Type()=%d\n", currTrack->Type() );)
                 return true;
             }
 
@@ -453,14 +453,14 @@ static bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame,
                 {
                     if( distStart <= currTrack->m_Width/2 )
                     {
-                        D(printf("nearest end is start\n");)
+                        // D(printf("nearest end is start\n");)
                         *curpos = track->m_Start;
                         return true;
                     }
 
                     if( distEnd <= currTrack->m_Width/2 )
                     {
-                        D(printf("nearest end is end\n");)
+                        // D(printf("nearest end is end\n");)
                         *curpos = track->m_End;
                         return true;
                     }
