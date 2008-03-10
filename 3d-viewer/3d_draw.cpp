@@ -43,6 +43,10 @@ static void Draw3D_FilledSegmentWithHole( double startx,
                                           double holey,
                                           double holeradius,
                                           double zpos );
+static void Draw3D_ArcSegment(double startx, double starty,
+				double endx, double endy,double width, double zpos);
+static void Draw3D_CircleSegment(double startx, double starty,
+				double endx, double endy,double width, double zpos);
 
 
 /******************************************/
@@ -321,7 +325,18 @@ void Pcb3D_GLCanvas::Draw3D_DrawSegment( DRAWSEGMENT* segment )
         {
             glNormal3f( 0.0, 0.0, (layer == COPPER_LAYER_N) ? -1.0 : 1.0 );
             zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
-            Draw3D_FilledSegment( x, -y, xf, -yf, w, zpos );
+ 			switch( segment->m_Shape )
+			{
+				case S_ARC:
+					Draw3D_ArcSegment( x, -y, xf, -yf, w, zpos);
+					break;
+				case S_CIRCLE:
+					Draw3D_CircleSegment( x, -y, xf, -yf, w, zpos);
+					break;
+				default :
+					Draw3D_FilledSegment( x, -y, xf, -yf, w, zpos);
+					break;
+			}
         }
     }
     else
@@ -882,4 +897,52 @@ static void Draw3D_FilledSegmentWithHole( double startx,
     glVertex3f( firstxin, firstyin, zpos );
     glVertex3f( firstx, firsty, zpos );
     glEnd();
+}
+
+/********************************************************/
+static void Draw3D_ArcSegment(double startx, double starty,
+				double endx, double endy,double width, double zpos)
+{
+int ii, slice = 36;
+double x, y, hole, rayon;
+int angle;
+
+	angle = static_cast<int>(atan2( startx - endx, starty - endy) * 1800 / M_PI) + 900;
+	rayon = hypot(startx - endx, starty - endy) + ( width / 2);
+	hole = rayon - width;
+	
+	glBegin(GL_QUAD_STRIP);
+	for ( ii = 0; ii <= slice / 4; ii++ )
+	{
+		x = hole; y = 0.0;
+		RotatePoint(&x, &y, angle + (ii * 3600 / slice));
+		glVertex3f( x + startx, y + starty, zpos);
+		x = rayon; y = 0.0;
+		RotatePoint(&x, &y, angle + (ii * 3600 / slice));
+		glVertex3f( x + startx , y + starty, zpos);
+	}
+	glEnd();
+}
+
+/********************************************************/
+static void Draw3D_CircleSegment(double startx, double starty,
+				double endx, double endy,double width, double zpos)
+{
+int ii, slice = 36;
+double x, y, hole, rayon;
+
+	rayon = hypot(startx - endx, starty - endy) + ( width / 2);
+	hole = rayon - width;
+	
+	glBegin(GL_QUAD_STRIP);
+	for ( ii = 0; ii <= slice; ii++ )
+	{
+		x = hole; y = 0.0;
+		RotatePoint(&x, &y, ii * 3600 / slice);
+		glVertex3f( x + startx, y + starty, zpos);
+		x = rayon; y = 0.0;
+		RotatePoint(&x, &y, ii * 3600 / slice);
+		glVertex3f( x + startx , y + starty, zpos);
+	}
+	glEnd();
 }
