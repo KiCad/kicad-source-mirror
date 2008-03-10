@@ -24,6 +24,8 @@ email address.
   * Added WinEDA_DrawPanel::PostDirtyRect()
   * Renamed Supprime_Une_Piste() to Remove_One_Track() and it now uses
     PostDirtyRect().
+  * void WinEDA_PcbFrame::Delete_net( wxDC* DC, TRACK* Track ) now redraws
+    the screen after a net deletion.
 
 
 2008-Mar-10 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>

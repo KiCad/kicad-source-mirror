@@ -149,33 +149,34 @@ void WinEDA_PcbFrame::Delete_Track( wxDC* DC, TRACK* Track )
 void WinEDA_PcbFrame::Delete_net( wxDC* DC, TRACK* Track )
 /********************************************************/
 {
-    TRACK* pt_segm, * pt_start;
-    int    ii;
-    int    net_code_delete;
-
-    pt_segm = Track;
-
-    if( pt_segm == NULL )
+    if( Track == NULL )
         return;
 
     if( IsOK( this, _( "Delete NET ?" ) ) )
     {
-        net_code_delete = pt_segm->GetNet();
+        int    net_code_delete = Track->GetNet();
+
         /* Recherche du debut de la zone des pistes du net_code courant */
-        pt_start = m_Pcb->m_Track->GetStartNetCode( net_code_delete );
+        TRACK* trackList = m_Pcb->m_Track->GetStartNetCode( net_code_delete );
 
         /* Decompte du nombre de segments de la sous-chaine */
-        pt_segm = pt_start;
-        for( ii = 0; pt_segm != NULL; pt_segm = (TRACK*) pt_segm->Pnext )
+
+        int    ii;
+        TRACK* segm = trackList;
+        for( ii = 0;  segm; segm = segm->Next(), ++ii )
         {
-            if( pt_segm->GetNet() != net_code_delete )
+            if( segm->GetNet() != net_code_delete )
                 break;
-            ii++;
+
+            // This works ok, but sometimes leaves stuff on screen.  I think
+            // the erase rectangle is not large enough always.
+            // DrawPanel->PostDirtyRect( segm->GetBoundingBox() );
         }
 
-        Trace_Une_Piste( DrawPanel, DC, pt_start, ii, GR_XOR );
+        // Do this instead of PostDirtyRect() for now
+        DrawPanel->Refresh( TRUE );
 
-        SaveItemEfface( pt_start, ii );
+        SaveItemEfface( trackList, ii );
         GetScreen()->SetModify();
         test_1_net_connexion( DC, net_code_delete );
         m_Pcb->Display_Infos( this );

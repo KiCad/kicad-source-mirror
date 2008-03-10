@@ -271,8 +271,9 @@ void WinEDA_DrawPanel::PostDirtyRect( EDA_Rect aRect )
     // Convert the rect coordinates and size to pixels (make a draw clip box):
     ConvertPcbUnitsToPixelsUnits( &aRect );
 
-    // Ensure the last line and column are in the dirty rectangle after truncations.
-    // The pcb units have finer granularity than the pixels, so this can happen.
+    // Ensure the rectangle is large enough after truncations.
+    // The pcb units have finer granularity than the pixels, so it can happen
+    // that the rectangle is not large enough for the erase portion.
     aRect.m_Size.x += 1;
     aRect.m_Size.y += 1;
 
@@ -538,6 +539,7 @@ void WinEDA_DrawPanel::EraseScreen( wxDC* DC )
 /*********************************************/
 {
     GRSetDrawMode( DC, GR_COPY );
+
     GRSFilledRect( &m_ClipBox, DC, m_ClipBox.GetX(), m_ClipBox.GetY(),
         m_ClipBox.GetRight(), m_ClipBox.GetBottom(),
         g_DrawBgColor, g_DrawBgColor );
