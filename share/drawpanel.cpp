@@ -266,6 +266,21 @@ bool WinEDA_DrawPanel::IsPointOnDisplay( wxPoint ref_pos )
 }
 
 
+void WinEDA_DrawPanel::PostDirtyRect( EDA_Rect aRect )
+{
+    // Convert the rect coordinates and size to pixels (make a draw clip box):
+    ConvertPcbUnitsToPixelsUnits( &aRect );
+
+    // Ensure the last line and column are in the dirty rectangle after truncations.
+    // The pcb units have finer granularity than the pixels, so this can happen.
+    aRect.m_Size.x += 1;
+    aRect.m_Size.y += 1;
+
+    // pass wxRect() via EDA_Rect::operator wxRect() overload
+    RefreshRect( aRect, TRUE );
+}
+
+
 /************************************************************************/
 void WinEDA_DrawPanel::ConvertPcbUnitsToPixelsUnits( EDA_Rect* aRect )
 /************************************************************************/

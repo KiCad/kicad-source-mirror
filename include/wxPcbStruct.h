@@ -476,7 +476,7 @@ public:
     TRACK*              Delete_Segment( wxDC* DC, TRACK* Track );
     void                Delete_Track( wxDC* DC, TRACK* Track );
     void                Delete_net( wxDC* DC, TRACK* Track );
-    void                Supprime_Une_Piste( wxDC* DC, TRACK* pt_segm );
+    void                Remove_One_Track( wxDC* DC, TRACK* pt_segm );
     bool                Resize_Pistes_Vias( wxDC* DC, bool Track, bool Via );
     void                Edit_Net_Width( wxDC* DC, int Netcode );
     void                Edit_Track_Width( wxDC* DC, TRACK* Track );
@@ -489,7 +489,7 @@ public:
     void                Attribut_net( wxDC* DC, int net_code, bool Flag_On );
     void                Start_MoveOneNodeOrSegment( TRACK* track, wxDC* DC, int command );
     bool                PlaceDraggedTrackSegment( TRACK* Track, wxDC* DC );
-	bool				MergeCollinearTracks( TRACK* track, wxDC* DC, int end ); 
+    bool				MergeCollinearTracks( TRACK* track, wxDC* DC, int end );
     void                Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC );
     void                SwitchLayer( wxDC* DC, int layer );
     int                 Add_45_degrees_Segment( wxDC* DC, TRACK* pt_segm );

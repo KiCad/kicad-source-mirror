@@ -8,7 +8,7 @@ email address.
 2008-Mar-10 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew
-  * Improved some comments on new functions.
+  * Improved some comments on new functions dirty area functions
   * Changed
     void    ConvertPcbUnitsToPixelsUnits( EDA_Rect& aRect ); to
     void    ConvertPcbUnitsToPixelsUnits( EDA_Rect* aRect );
@@ -21,6 +21,9 @@ email address.
   * Changed from "new wxDCClip()" to use an automatic wxDCClip() variable in
     drawpanel.cpp
   * Removed a printf() from "release" build of drawpanel.cpp
+  * Added WinEDA_DrawPanel::PostDirtyRect()
+  * Renamed Supprime_Une_Piste() to Remove_One_Track() and it now uses
+    PostDirtyRect().
 
 
 2008-Mar-10 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>

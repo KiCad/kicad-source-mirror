@@ -119,29 +119,8 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
 
     current_net_code = Track->GetNet();
 
-#if 0
-
-    Track->Draw( DrawPanel, DC, GR_XOR );
-
-#else
-
     // redraw the area where the track was
-    // this rectangle is correct
-    EDA_Rect dirty = Track->GetBoundingBox();
-
-    // Convert the rect coordinates and size in pixels (make a draw clip box):
-    DrawPanel->ConvertPcbUnitsToPixelsUnits( &dirty );
-
-    /*  now that TRACK::GetBoundingBox() returns a [,) type of rectangle, and
-        rounds up the track radius, let's see if this is really needed.
-    // Ensure the last line and column are in the dirty rectangle after truncatures
-    dirty.m_Size.x += 1; dirty.m_Size.y += 1;
-    */
-
-    // pass wxRect() via EDA_Rect::operator wxRect() overload
-    DrawPanel->RefreshRect( dirty, TRUE );
-
-#endif
+    DrawPanel->PostDirtyRect( Track->GetBoundingBox() );
 
     SaveItemEfface( Track, 1 );
     GetScreen()->SetModify();
@@ -159,7 +138,7 @@ void WinEDA_PcbFrame::Delete_Track( wxDC* DC, TRACK* Track )
     if( Track != NULL )
     {
         int current_net_code = Track->GetNet();
-        Supprime_Une_Piste( DC, Track );
+        Remove_One_Track( DC, Track );
         GetScreen()->SetModify();
         test_1_net_connexion( DC, current_net_code );
     }
@@ -205,7 +184,7 @@ void WinEDA_PcbFrame::Delete_net( wxDC* DC, TRACK* Track )
 
 
 /********************************************************************/
-void WinEDA_PcbFrame::Supprime_Une_Piste( wxDC* DC, TRACK* pt_segm )
+void WinEDA_PcbFrame::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
 /********************************************************************/
 
 /* Routine de suppression de 1 piste:
@@ -213,26 +192,25 @@ void WinEDA_PcbFrame::Supprime_Une_Piste( wxDC* DC, TRACK* pt_segm )
  *  jusqu'a un pad ou un point de jonction de plus de 2 segments
  */
 {
-    TRACK* pt_track, * Struct;
-    int    ii, nb_segm;
+    TRACK*  trackList;
+    int     nb_segm;
 
     if( pt_segm == NULL )
         return;
 
-    pt_track = Marque_Une_Piste( this, DC, pt_segm,
-        &nb_segm, GR_OR | GR_SURBRILL );
+    trackList = Marque_Une_Piste( this, DC, pt_segm, &nb_segm, 0 );
 
     if( nb_segm ) /* Il y a nb_segm segments de piste a effacer */
     {
-        Trace_Une_Piste( DrawPanel, DC, pt_track, nb_segm, GR_XOR | GR_SURBRILL );
-
-        /* Effacement flag BUSY */
-        Struct = pt_track;;
-        for(  ii = 0;  ii<nb_segm;  ii++, Struct = (TRACK*) Struct->Pnext )
+        TRACK*  t;
+        int     ii;
+        for( t = trackList, ii=0;  ii<nb_segm;  ii++, t = t->Next() )
         {
-            Struct->SetState( BUSY, OFF );
+            t->SetState( BUSY, OFF );
+
+            DrawPanel->PostDirtyRect( t->GetBoundingBox() );
         }
 
-        SaveItemEfface( pt_track, nb_segm );
+        SaveItemEfface( trackList, nb_segm );
     }
 }

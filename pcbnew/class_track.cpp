@@ -210,11 +210,37 @@ EDA_Rect TRACK::GetBoundingBox() const
     // end of track is round, this is its radius, rounded up
     int radius = ( m_Width+1 )/2;
 
-    int ymax = MAX( m_Start.y, m_End.y );
-    int xmax = MAX( m_Start.x, m_End.x );
+    int ymax;
+    int xmax;
 
-    int ymin = MIN( m_Start.y, m_End.y );
-    int xmin = MIN( m_Start.x, m_End.x );
+    int ymin;
+    int xmin;
+
+    if( Type() == TYPEVIA )
+    {
+        // because vias are sometimes drawn larger than their m_Width would
+        // provide, erasing them using a dirty rect must also compensate for
+        // possibility (that the via is larger than its m_Width would provide).
+        // because it is cheap to return a larger BoundingBox, do it so that
+        // the via gets erased properly.  Do not divide width by 2 for this reason.
+        radius = m_Width;
+
+        ymax = m_Start.y;
+        xmax = m_Start.x;
+
+        ymin = m_Start.y;
+        xmin = m_Start.x;
+    }
+    else
+    {
+        radius = ( m_Width+1 )/2;
+
+        ymax = MAX( m_Start.y, m_End.y );
+        xmax = MAX( m_Start.x, m_End.x );
+
+        ymin = MIN( m_Start.y, m_End.y );
+        xmin = MIN( m_Start.x, m_End.x );
+    }
 
     ymax += radius;
     xmax += radius;
@@ -890,39 +916,6 @@ void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
  */
 bool TRACK::HitTest( const wxPoint& ref_pos )
 {
-#if 0
-    int l_piste;          /* demi-largeur de la piste */
-    int dx, dy, spot_cX, spot_cY;
-    int ux0, uy0;
-
-    /* calcul des coordonnees du segment teste */
-    l_piste = m_Width >> 1;  /* l_piste = demi largeur piste */
-
-    ux0 = m_Start.x;
-    uy0 = m_Start.y;         /* coord de depart */
-
-    dx = m_End.x;
-    dy = m_End.y;            /* coord d'arrivee */
-
-    /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
-    dx -= ux0;
-    dy -= uy0;
-
-    spot_cX = ref_pos.x - ux0;
-    spot_cY = ref_pos.y - uy0;
-
-    if( Type() == TYPEVIA )   /* VIA rencontree */
-    {
-        return (double) spot_cX * spot_cX + (double) spot_cY * spot_cY <=
-                (double) l_piste * l_piste;
-    }
-    else
-    {
-        if( DistanceTest( l_piste, dx, dy, spot_cX, spot_cY ) )
-            return true;
-    }
-#else
-
     int radius = m_Width >> 1;
 
     // (dx, dy) is a vector from m_Start to m_End (an origin of m_Start)
@@ -943,8 +936,6 @@ bool TRACK::HitTest( const wxPoint& ref_pos )
         if( DistanceTest( radius, dx, dy, spot_cX, spot_cY ) )
             return true;
     }
-
-#endif
 
     return false;
 }

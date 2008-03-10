@@ -110,17 +110,23 @@ TRACK* Marque_Une_Piste( WinEDA_BasePcbFrame* frame, wxDC* DC,
         int layer;
         if( Segm->RefTrack->Type() != TYPEVIA )
             continue;
+
         if( Segm->RefTrack == pt_segm )
             continue;
+
         Segm->RefTrack->SetState( BUSY, ON );
+
         masque_layer = Segm->RefTrack->ReturnMaskLayer();
+
         Track = Fast_Locate_Piste( frame->m_Pcb->m_Track, NULL,
                                    Segm->RefTrack->m_Start,
                                    masque_layer );
         if( Track == NULL )
             continue;
+
         /* Test des connexions: si via utile: suppression marquage */
         layer = Track->GetLayer();
+
         while( ( Track = Fast_Locate_Piste( (TRACK*) Track->Pnext, NULL,
                                            Segm->RefTrack->m_Start,
                                            masque_layer ) ) != NULL )
@@ -136,7 +142,8 @@ TRACK* Marque_Une_Piste( WinEDA_BasePcbFrame* frame, wxDC* DC,
     /* liberation memoire */
     for( Segm = ListSegm; Segm != NULL; Segm = NextSegm )
     {
-        NextSegm = Segm->Pnext; delete Segm;
+        NextSegm = Segm->Pnext;
+        delete Segm;
     }
 
     ListSegm = NULL;
@@ -144,10 +151,12 @@ TRACK* Marque_Une_Piste( WinEDA_BasePcbFrame* frame, wxDC* DC,
     /* Reclassement des segments marques en une chaine */
     FirstTrack = frame->m_Pcb->m_Track; NbSegmBusy = 0;
     for( ; FirstTrack != NULL; FirstTrack = (TRACK*) FirstTrack->Pnext )
-    {       /* recherche du debut de la liste des segments marques a BUSY */
+    {
+        /* recherche du debut de la liste des segments marques a BUSY */
         if( FirstTrack->GetState( BUSY ) )
         {
-            NbSegmBusy = 1; break;
+            NbSegmBusy = 1;
+            break;
         }
     }
 
@@ -182,7 +191,7 @@ static void Marque_Chaine_segments( BOARD* Pcb, wxPoint ref_pos, int masque_laye
  *  routine utilisee par Supprime_1_Piste()
  *  Positionne le bit BUSY dans la chaine de segments commencant
  *  au point ox, oy sur la couche layer
- * 
+ *
  *  Les vias sont mises en liste des segments traites mais ne sont pas
  *  marquees.
  */

@@ -97,6 +97,18 @@ public:
     wxPoint CursorScreenPosition();
 
     /**
+     * Function PostDirtyRect
+     * appends the given rectangle in pcb units to the DrawPanel's invalid
+     * region list so that very soon (but not immediately), this rectangle
+     * along with any other recently posted rectangles is redrawn.  Conversion
+     * to pixels is done in here.
+     * @param aRect The rectangle to append, it must be orthogonal
+     *   (vertical and horizontal edges only), and it must be [,) in nature, i.e.
+     *   [pos, dim) == [inclusive, exclusive)
+     */
+    void    PostDirtyRect( EDA_Rect aRect );
+
+    /**
      * Function ConvertPcbUnitsToPixelsUnits
      * converts pos and size of the given EDA_Rect to pos and size in pixels,
      * relative to the current draw area (origin 0,0 is the left top visible
