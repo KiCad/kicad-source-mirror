@@ -1,12 +1,14 @@
 # List of variables that may be set from command line:
 #
-# CMAKE_BUILD_TYPE Release/Debug (REQUIRED)
-#   Choose build type: Release/Debug
+# Choose a build type: Release/Debug
+#SET(CMAKE_BUILD_TYPE Release)
+#SET(CMAKE_BUILD_TYPE Debug)
 #
-# wxWidgets_USE_DEBUG ON/OFF (REQUIRED)
+#
+#SET(wxWidgets_USE_DEBUG ON)
 #   Should be set to ON only when CMAKE_BUILD_TYPE=Debug.
 #
-# wxWidgets_USE_STATIC ON/OFF (OPTIONAL)
+#SET(wxWidgets_USE_STATIC ON)
 #
 #
 # CMAKE_VERBOSE_MAKEFILE ON/OFF (OPTIONAL)
