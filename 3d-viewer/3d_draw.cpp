@@ -325,7 +325,7 @@ void Pcb3D_GLCanvas::Draw3D_DrawSegment( DRAWSEGMENT* segment )
         {
             glNormal3f( 0.0, 0.0, (layer == COPPER_LAYER_N) ? -1.0 : 1.0 );
             zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
- 			switch( segment->m_Shape )
+  			switch( segment->m_Shape )
 			{
 				case S_ARC:
 					Draw3D_ArcSegment( x, -y, xf, -yf, w, zpos);
@@ -430,7 +430,8 @@ void MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
 void EDGE_MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
 /***************************************************/
 {
-    int    ux0, uy0, dx, dy, rayon, StAngle, EndAngle;
+	wxString s;
+    int    dx, dy;
     double scale, x, y, fx, fy, w, zpos;
     int    color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[m_Layer];
 
@@ -441,34 +442,47 @@ void EDGE_MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
     glNormal3f( 0.0, 0.0, (m_Layer == COPPER_LAYER_N) ? -1.0 : 1.0 );
     scale = g_Parm_3D_Visu.m_BoardScale;
 
-    ux0  = m_Start.x;
-    uy0  = m_Start.y;
     dx   = m_End.x;
     dy   = m_End.y;
     zpos = g_Parm_3D_Visu.m_LayerZcoord[m_Layer];
     w    = m_Width * g_Parm_3D_Visu.m_BoardScale;
+    x  = m_Start.x * g_Parm_3D_Visu.m_BoardScale;
+    y  = m_Start.y * g_Parm_3D_Visu.m_BoardScale;
+    fx = dx * g_Parm_3D_Visu.m_BoardScale;
+    fy = dy * g_Parm_3D_Visu.m_BoardScale;
 
-    switch( m_Shape )
+
+	switch( m_Shape )
     {
     case S_SEGMENT:
-        x  = m_Start.x * g_Parm_3D_Visu.m_BoardScale;
-        y  = m_Start.y * g_Parm_3D_Visu.m_BoardScale;
-        fx = dx * g_Parm_3D_Visu.m_BoardScale;
-        fy = dy * g_Parm_3D_Visu.m_BoardScale;
         Draw3D_FilledSegment( x, -y, fx, -fy, w, zpos );
+#if 0
+		s.Printf("Draw FilledSegment: %g, %g, %g, %g, %g, %g\n",x,-y,fx,-fy,w,zpos);
+		printf( CONV_TO_UTF8( s ) );
+#endif
         break;
 
     case S_CIRCLE:
-        rayon = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
-        /* TO DO */
+		Draw3D_CircleSegment( x, -y, fx, -fy, w, zpos);
+#if 0
+		s.Printf("Draw Circle: %g, %g, %g, %g, %g, %g\n",x,-y,fx,-fy,w,zpos);
+		printf( CONV_TO_UTF8( s ) );
+#endif
         break;
 
     case S_ARC:
-        rayon    = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
-        StAngle  = (int) ArcTangente( dy - uy0, dx - ux0 );
-        EndAngle = StAngle + m_Angle;
-        /* TO DO */
-        break;
+		Draw3D_ArcSegment( x, -y, fx, -fy, w, zpos);
+#if 0
+		s.Printf("Draw Arc: %g, %g, %g, %g, %g, %g\n",x,-y,fx,-fy,w,zpos);
+		printf( CONV_TO_UTF8( s ) );
+#endif
+		break;
+
+	default:
+		s.Printf(wxT("Error: Shape nr %d not implemented!\n"), m_Shape);
+		printf( CONV_TO_UTF8( s ) );
+	
+		break;
     }
 }
 
