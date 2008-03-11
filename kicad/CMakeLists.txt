@@ -1,8 +1,8 @@
-ADD_DEFINITIONS(-DKICAD)
+add_definitions(-DKICAD)
 
-INCLUDE_DIRECTORIES(bitmaps)
+include_directories(bitmaps)
 
-SET(KICAD_SRCS
+set(KICAD_SRCS
     buildmnu.cpp
     commandframe.cpp
     files-io.cpp
@@ -13,28 +13,28 @@ SET(KICAD_SRCS
     treeprj_datas.cpp
     treeprj_frame.cpp)
 
-IF(WIN32)
-    IF(MINGW)
+if(WIN32)
+    if(MINGW)
         # resource compilation for mingw (http://www.cmake.org/Bug/view.php?id=4068)
-        ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/kicad_rc.o
+        add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/kicad_rc.o
             COMMAND windres.exe -I ${CMAKE_CURRENT_SOURCE_DIR} -I ${wxWidgets_ROOT_DIR}/include
                         -i ${CMAKE_CURRENT_SOURCE_DIR}/kicad.rc
                         -o ${CMAKE_CURRENT_BINARY_DIR}/kicad_rc.o)
-        SET(KICAD_RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/kicad_rc.o)
-    ELSE(MINGW)
-        SET(KICAD_RESOURCES kicad.rc)
-    ENDIF(MINGW)
-ENDIF(WIN32)
-IF(APPLE)
-    SET(KICAD_RESOURCES kicad.r)
-ENDIF(APPLE)
+        set(KICAD_RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/kicad_rc.o)
+    else(MINGW)
+        set(KICAD_RESOURCES kicad.rc)
+    endif(MINGW)
+endif(WIN32)
+if(APPLE)
+    set(KICAD_RESOURCES kicad.r)
+endif(APPLE)
 
-ADD_EXECUTABLE(kicad WIN32 MACOSX_BUNDLE ${KICAD_SRCS} ${KICAD_EXTRA_SRCS} ${KICAD_RESOURCES})
+add_executable(kicad WIN32 MACOSX_BUNDLE ${KICAD_SRCS} ${KICAD_EXTRA_SRCS} ${KICAD_RESOURCES})
 
-TARGET_LINK_LIBRARIES(kicad common ${wxWidgets_LIBRARIES})
+target_link_libraries(kicad common ${wxWidgets_LIBRARIES})
 
-INSTALL(TARGETS kicad RUNTIME DESTINATION ${KICAD_BIN} COMPONENT binary)
+install(TARGETS kicad RUNTIME DESTINATION ${KICAD_BIN} COMPONENT binary)
 
-IF(KICAD_MINIZIP)
-    ADD_SUBDIRECTORY(minizip)
-ENDIF(KICAD_MINIZIP)
+if(KICAD_MINIZIP)
+    add_subdirectory(minizip)
+endif(KICAD_MINIZIP)

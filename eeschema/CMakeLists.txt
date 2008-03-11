@@ -1,10 +1,10 @@
-ADD_DEFINITIONS(-DEESCHEMA)
+add_definitions(-DEESCHEMA)
 
-INCLUDE_DIRECTORIES(
+include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     bitmaps)
 
-SET(EESCHEMA_SRCS
+set(EESCHEMA_SRCS
     affiche.cpp
     annotate.cpp
     annotate_dialog.cpp
@@ -94,7 +94,7 @@ SET(EESCHEMA_SRCS
     viewlib_frame.cpp
     viewlibs.cpp)
 
-SET(EESCHEMA_EXTRA_SRCS
+set(EESCHEMA_EXTRA_SRCS
     ../share/drawframe.cpp
     ../share/drawpanel.cpp
     ../share/setpage.cpp
@@ -102,26 +102,26 @@ SET(EESCHEMA_EXTRA_SRCS
     ../share/wxprint.cpp
     ../share/zoom.cpp)
 
-IF(WIN32)
-    IF(MINGW)
+if(WIN32)
+    if(MINGW)
         # resource compilation for mingw (http://www.cmake.org/Bug/view.php?id=4068)
-        ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/eeschema_rc.o
+        add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/eeschema_rc.o
             COMMAND windres.exe -I ${CMAKE_CURRENT_SOURCE_DIR} -I ${wxWidgets_ROOT_DIR}/include
                         -i ${CMAKE_CURRENT_SOURCE_DIR}/eeschema.rc
                         -o ${CMAKE_CURRENT_BINARY_DIR}/eeschema_rc.o)
-        SET(EESCHEMA_RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/eeschema_rc.o)
-    ELSE(MINGW)
-        SET(EESCHEMA_RESOURCES eeschema.rc)
-    ENDIF(MINGW)
-ENDIF(WIN32)
-IF(APPLE)
-    SET(EESCHEMA_RESOURCES eeschema.r)
-ENDIF(APPLE)
+        set(EESCHEMA_RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/eeschema_rc.o)
+    else(MINGW)
+        set(EESCHEMA_RESOURCES eeschema.rc)
+    endif(MINGW)
+endif(WIN32)
+if(APPLE)
+    set(EESCHEMA_RESOURCES eeschema.r)
+endif(APPLE)
 
-ADD_EXECUTABLE(eeschema WIN32 MACOSX_BUNDLE ${EESCHEMA_SRCS} ${EESCHEMA_EXTRA_SRCS} ${EESCHEMA_RESOURCES})
+add_executable(eeschema WIN32 MACOSX_BUNDLE ${EESCHEMA_SRCS} ${EESCHEMA_EXTRA_SRCS} ${EESCHEMA_RESOURCES})
 
-TARGET_LINK_LIBRARIES(eeschema common ${wxWidgets_LIBRARIES})
+target_link_libraries(eeschema common ${wxWidgets_LIBRARIES})
 
-INSTALL(TARGETS eeschema RUNTIME DESTINATION ${KICAD_BIN} COMPONENT binary)
+install(TARGETS eeschema RUNTIME DESTINATION ${KICAD_BIN} COMPONENT binary)
 
-ADD_SUBDIRECTORY(plugins)
+add_subdirectory(plugins)

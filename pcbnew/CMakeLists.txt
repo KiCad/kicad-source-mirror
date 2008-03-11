@@ -1,6 +1,6 @@
-ADD_DEFINITIONS(-DPCBNEW)
+add_definitions(-DPCBNEW)
 
-INCLUDE_DIRECTORIES(
+include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Boost_INCLUDE_DIR}
     bitmaps
@@ -8,7 +8,7 @@ INCLUDE_DIRECTORIES(
     ../polygon)
 
 # Many of the commented out ones are nested in *.cpp files for dialogs
-SET(PCBNEW_SRCS
+set(PCBNEW_SRCS
     affiche.cpp
     attribut.cpp
     automove.cpp
@@ -78,7 +78,7 @@ SET(PCBNEW_SRCS
     gen_modules_placefile.cpp
     gendrill.cpp
     globaleditpad.cpp
-	gpcb_exchange.cpp
+    gpcb_exchange.cpp
     graphpcb.cpp
     hotkeys.cpp
     initpcb.cpp
@@ -141,40 +141,40 @@ SET(PCBNEW_SRCS
     zones_by_polygon.cpp
     zones_test_and_combine_areas.cpp)
 
-SET(PCBNEW_EXTRA_SRCS
+set(PCBNEW_EXTRA_SRCS
     ../share/drawframe.cpp
     ../share/drawpanel.cpp
     ../share/setpage.cpp
     ../share/wxprint.cpp
     ../share/zoom.cpp)
 
-IF(WIN32)
-    IF(MINGW)
+if(WIN32)
+    if(MINGW)
         # resource compilation for mingw (http://www.cmake.org/Bug/view.php?id=4068)
-        ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_rc.o
+        add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_rc.o
             COMMAND windres.exe -I ${CMAKE_CURRENT_SOURCE_DIR} -I ${wxWidgets_ROOT_DIR}/include
                         -i ${CMAKE_CURRENT_SOURCE_DIR}/pcbnew.rc
                         -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_rc.o)
-        SET(PCBNEW_RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_rc.o)
-    ELSE(MINGW)
-        SET(PCBNEW_RESOURCES pcbnew.rc)
-    ENDIF(MINGW)
-ENDIF(WIN32)
-IF(APPLE)
-    SET(PCBNEW_RESOURCES pcbnew.r)
-ENDIF(APPLE)
+        set(PCBNEW_RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_rc.o)
+    else(MINGW)
+        set(PCBNEW_RESOURCES pcbnew.rc)
+    endif(MINGW)
+endif(WIN32)
+if(APPLE)
+    set(PCBNEW_RESOURCES pcbnew.r)
+endif(APPLE)
 
-ADD_EXECUTABLE(pcbnew WIN32 MACOSX_BUNDLE ${PCBNEW_SRCS} ${PCBNEW_EXTRA_SRCS} ${PCBNEW_RESOURCES})
-
-# This one gets made only when testing.
-ADD_EXECUTABLE(dsntest EXCLUDE_FROM_ALL dsn.cpp)
-TARGET_LINK_LIBRARIES(dsntest common ${wxWidgets_LIBRARIES})
+add_executable(pcbnew WIN32 MACOSX_BUNDLE ${PCBNEW_SRCS} ${PCBNEW_EXTRA_SRCS} ${PCBNEW_RESOURCES})
 
 # This one gets made only when testing.
-ADD_EXECUTABLE(specctra_test EXCLUDE_FROM_ALL specctra.cpp dsn.cpp)
-TARGET_LINK_LIBRARIES(specctra_test common ${wxWidgets_LIBRARIES})
+add_executable(dsntest EXCLUDE_FROM_ALL dsn.cpp)
+target_link_libraries(dsntest common ${wxWidgets_LIBRARIES})
+
+# This one gets made only when testing.
+add_executable(specctra_test EXCLUDE_FROM_ALL specctra.cpp dsn.cpp)
+target_link_libraries(specctra_test common ${wxWidgets_LIBRARIES})
 
 
-TARGET_LINK_LIBRARIES(pcbnew common 3d-viewer polygon ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES})
+target_link_libraries(pcbnew common 3d-viewer polygon ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES})
 
-INSTALL(TARGETS pcbnew RUNTIME DESTINATION ${KICAD_BIN} COMPONENT binary)
+install(TARGETS pcbnew RUNTIME DESTINATION ${KICAD_BIN} COMPONENT binary)

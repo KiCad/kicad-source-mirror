@@ -1,13 +1,13 @@
-ADD_DEFINITIONS(-DCVPCB)
+add_definitions(-DCVPCB)
 
-INCLUDE_DIRECTORIES(
+include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     bitmaps
     ../3d-viewer
     ../pcbnew
     ../polygon)
 
-SET(CVPCB_SRCS
+set(CVPCB_SRCS
     autosel.cpp
     cfg.cpp
     class_cvpcb.cpp
@@ -33,7 +33,7 @@ SET(CVPCB_SRCS
     viewlogi.cpp
     writenetlistpcbnew.cpp)
 
-SET(CVPCB_EXTRA_SRCS
+set(CVPCB_EXTRA_SRCS
     ../pcbnew/basepcbframe.cpp
     ../pcbnew/class_board.cpp
     ../pcbnew/class_cotation.cpp
@@ -56,24 +56,24 @@ SET(CVPCB_EXTRA_SRCS
     ../share/drawpanel.cpp
     ../share/zoom.cpp)
 
-IF(WIN32)
-    IF(MINGW)
+if(WIN32)
+    if(MINGW)
         # resource compilation for mingw (http://www.cmake.org/Bug/view.php?id=4068)
-        ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/cvpcb_rc.o
+        add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/cvpcb_rc.o
             COMMAND windres.exe -I ${CMAKE_CURRENT_SOURCE_DIR} -I ${wxWidgets_ROOT_DIR}/include
                         -i ${CMAKE_CURRENT_SOURCE_DIR}/cvpcb.rc
                         -o ${CMAKE_CURRENT_BINARY_DIR}/cvpcb_rc.o)
-        SET(CVPCB_RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/cvpcb_rc.o)
-    ELSE(MINGW)
-        SET(CVPCB_RESOURCES cvpcb.rc)
-    ENDIF(MINGW)
-ENDIF(WIN32)
-IF(APPLE)
-    SET(CVPCB_RESOURCES cvpcb.r)
-ENDIF(APPLE)
+        set(CVPCB_RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/cvpcb_rc.o)
+    else(MINGW)
+        set(CVPCB_RESOURCES cvpcb.rc)
+    endif(MINGW)
+endif(WIN32)
+if(APPLE)
+    set(CVPCB_RESOURCES cvpcb.r)
+endif(APPLE)
 
-ADD_EXECUTABLE(cvpcb WIN32 MACOSX_BUNDLE ${CVPCB_SRCS} ${CVPCB_EXTRA_SRCS} ${CVPCB_RESOURCES})
+add_executable(cvpcb WIN32 MACOSX_BUNDLE ${CVPCB_SRCS} ${CVPCB_EXTRA_SRCS} ${CVPCB_RESOURCES})
 
-TARGET_LINK_LIBRARIES(cvpcb common 3d-viewer polygon ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES})
+target_link_libraries(cvpcb common 3d-viewer polygon ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES})
 
-INSTALL(TARGETS cvpcb RUNTIME DESTINATION ${KICAD_BIN} COMPONENT binary)
+install(TARGETS cvpcb RUNTIME DESTINATION ${KICAD_BIN} COMPONENT binary)

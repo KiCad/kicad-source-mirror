@@ -1,13 +1,13 @@
-ADD_DEFINITIONS(-DGERBVIEW -DPCBNEW)
+add_definitions(-DGERBVIEW -DPCBNEW)
 
-INCLUDE_DIRECTORIES(
+include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ../3d-viewer
     ../cvpcb
     ../pcbnew
     ../polygon)
 
-SET(GERBVIEW_SRCS
+set(GERBVIEW_SRCS
     affiche.cpp
     block.cpp
     controle.cpp
@@ -39,7 +39,7 @@ SET(GERBVIEW_SRCS
     trpiste.cpp
     undelete.cpp)
 
-SET(GERBVIEW_EXTRA_SRCS
+set(GERBVIEW_EXTRA_SRCS
     ../pcbnew/basepcbframe.cpp
     ../pcbnew/class_board.cpp
     ../pcbnew/class_drawsegment.cpp
@@ -58,24 +58,24 @@ SET(GERBVIEW_EXTRA_SRCS
     ../share/wxprint.cpp
     ../share/zoom.cpp)
 
-IF(WIN32)
-    IF(MINGW)
+if(WIN32)
+    if(MINGW)
         # resource compilation for mingw (http://www.cmake.org/Bug/view.php?id=4068)
-        ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gerbview_rc.o
+        add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gerbview_rc.o
             COMMAND windres.exe -I ${CMAKE_CURRENT_SOURCE_DIR} -I ${wxWidgets_ROOT_DIR}/include
                         -i ${CMAKE_CURRENT_SOURCE_DIR}/gerbview.rc
                         -o ${CMAKE_CURRENT_BINARY_DIR}/gerbview_rc.o)
-        SET(GERBVIEW_RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/gerbview_rc.o)
-    ELSE(MINGW)
-        SET(GERBVIEW_RESOURCES gerbview.rc)
-    ENDIF(MINGW)
-ENDIF(WIN32)
-IF(APPLE)
-    SET(GERBVIEW_RESOURCES gerbview.r)
-ENDIF(APPLE)
+        set(GERBVIEW_RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/gerbview_rc.o)
+    else(MINGW)
+        set(GERBVIEW_RESOURCES gerbview.rc)
+    endif(MINGW)
+endif(WIN32)
+if(APPLE)
+    set(GERBVIEW_RESOURCES gerbview.r)
+endif(APPLE)
 
-ADD_EXECUTABLE(gerbview WIN32 MACOSX_BUNDLE ${GERBVIEW_SRCS} ${GERBVIEW_EXTRA_SRCS} ${GERBVIEW_RESOURCES})
+add_executable(gerbview WIN32 MACOSX_BUNDLE ${GERBVIEW_SRCS} ${GERBVIEW_EXTRA_SRCS} ${GERBVIEW_RESOURCES})
 
-TARGET_LINK_LIBRARIES(gerbview common 3d-viewer polygon ${wxWidgets_LIBRARIES})
+target_link_libraries(gerbview common 3d-viewer polygon ${wxWidgets_LIBRARIES})
 
-INSTALL(TARGETS gerbview RUNTIME DESTINATION ${KICAD_BIN} COMPONENT binary)
+install(TARGETS gerbview RUNTIME DESTINATION ${KICAD_BIN} COMPONENT binary)

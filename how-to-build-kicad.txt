@@ -1,6 +1,6 @@
 --== How to build kicad using CMAKE ==--
 First Written: 19-Dec-2007
-Last Revised: 06-Jan-2008
+Last Revised: 11-Mar-2008
 
 
 Kicad needs wxWidgets, the multi platform G.U.I.
@@ -157,9 +157,9 @@ You can use the subversion repository or a tar file for this.  See the wiki.
 If windows, go into your msys shell.  Linux and windows users both then make 
 two "out of source" build directories:
     cd <kicadSource>
-    mkdir -p Build/Release
-    mkdir Build/Debug
-    cd Build/Release
+    mkdir -p build/release
+    mkdir build/debug
+    cd build/release
 
 On either cmake command line shown below, you can optionally include
     -DCMAKE_INSTALL_PREFIX=<finallInstallDir>
@@ -191,7 +191,7 @@ So point your Boost_INCLUDE_DIR:PATH= variable to a directory above the
 You compile Kicad here.  You will only need to do step 8) again when one of the 
 CMakeLists.txt files change.  If windows, you must be in your msys shell.
 On either platform then:
-    cd <kicadSource>/Build/Release
+    cd <kicadSource>/build/release
     make
     [sudo] make install
 
@@ -201,7 +201,7 @@ You are now done unless you want to make a Debug build.
 
 11) Making a "Debug" build.
 
-    cd <kicadSource>/Build/Debug
+    cd <kicadSource>/build/debug
 
 On either cmake command line shown below, you can optionally include
 -DCMAKE_INSTALL_PREFIX=<finallInstallDir> before the final ../../ argument. Although

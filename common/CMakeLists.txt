@@ -1,6 +1,6 @@
-INCLUDE_DIRECTORIES(bitmaps)
+include_directories(bitmaps)
 
-SET(COMMON_SRCS
+set(COMMON_SRCS
     base_screen.cpp
     base_struct.cpp
     basicframe.cpp
@@ -34,4 +34,4 @@ SET(COMMON_SRCS
     worksheet.cpp
     wxwineda.cpp)
 
-ADD_LIBRARY(common ${COMMON_SRCS})
+add_library(common ${COMMON_SRCS})
