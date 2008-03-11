@@ -167,7 +167,14 @@ void TEXTE_PCB::Display_Infos( WinEDA_DrawFrame* frame )
 {
     wxString msg;
 
-    BOARD*   board = (BOARD*) m_Parent;
+    BOARD*      board;
+    BOARD_ITEM* parent = (BOARD_ITEM*) m_Parent;
+    wxASSERT( parent );
+
+    if( parent->Type() == TYPECOTATION )
+        board = (BOARD*) parent->m_Parent;
+    else
+        board = (BOARD*) parent;
     wxASSERT( board );
 
     frame->MsgPanel->EraseMsgBox();
