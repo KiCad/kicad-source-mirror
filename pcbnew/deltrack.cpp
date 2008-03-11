@@ -168,13 +168,8 @@ void WinEDA_PcbFrame::Delete_net( wxDC* DC, TRACK* Track )
             if( segm->GetNet() != net_code_delete )
                 break;
 
-            // This works ok, but sometimes leaves stuff on screen.  I think
-            // the erase rectangle is not large enough always.
-            // DrawPanel->PostDirtyRect( segm->GetBoundingBox() );
+            DrawPanel->PostDirtyRect( segm->GetBoundingBox() );
         }
-
-        // Do this instead of PostDirtyRect() for now
-        DrawPanel->Refresh( TRUE );
 
         SaveItemEfface( trackList, ii );
         GetScreen()->SetModify();

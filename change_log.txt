@@ -26,6 +26,7 @@ email address.
     PostDirtyRect().
   * void WinEDA_PcbFrame::Delete_net( wxDC* DC, TRACK* Track ) now redraws
     the screen after a net deletion.
+  * eeschema/dialog_find.cpp: set the initial keyboard focus to the text control
 
 
 2008-Mar-10 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>

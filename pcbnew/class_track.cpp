@@ -42,6 +42,20 @@ void DbgDisplayTrackInfos( TRACK* track )
 
 #endif
 
+/**
+ * Function ShowClearance
+ * tests to see if the clearance border is drawn on the given track.
+ * @return bool - true if should draw clearance, else false.
+ */
+static bool ShowClearance( const TRACK* aTrack )
+{
+    // maybe return true for (for tracks and vias, not for zone segments
+    return ( DisplayOpt.DisplayTrackIsol && ( aTrack->GetLayer() <= LAST_COPPER_LAYER )
+       && ( aTrack->Type() == TYPETRACK || aTrack->Type() == TYPEVIA) );
+}
+
+
+
 /**********************************************************/
 TRACK::TRACK( BOARD_ITEM* StructFather, KICAD_T idtype ) :
     BOARD_ITEM( StructFather, idtype )
@@ -242,6 +256,12 @@ EDA_Rect TRACK::GetBoundingBox() const
         xmin = MIN( m_Start.x, m_End.x );
     }
 
+    if( ShowClearance( this ) )
+    {
+        // + 1 is for the clearance line itself.
+        radius += g_DesignSettings.m_TrackClearence + 1;
+    }
+
     ymax += radius;
     xmax += radius;
 
@@ -249,7 +269,9 @@ EDA_Rect TRACK::GetBoundingBox() const
     xmin -= radius;
 
     // return a rectangle which is [pos,dim) in nature.  therefore the +1
-    return EDA_Rect( wxPoint( xmin, ymin ), wxSize( xmax-xmin+1, ymax-ymin+1 ) );
+    EDA_Rect ret( wxPoint( xmin, ymin ), wxSize( xmax-xmin+1, ymax-ymin+1 ) );
+
+    return ret;
 }
 
 
@@ -783,8 +805,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
     }
 
     /* Shows clearance (for tracks and vias, not for zone segments */
-    if( DisplayOpt.DisplayTrackIsol && ( m_Layer <= LAST_COPPER_LAYER )
-       && ( Type() == TYPETRACK || Type() == TYPEVIA) )
+    if( ShowClearance( this ) )
     {
         GRCSegm( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
                  m_End.x, m_End.y,

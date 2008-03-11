@@ -274,8 +274,9 @@ void WinEDA_DrawPanel::PostDirtyRect( EDA_Rect aRect )
     // Ensure the rectangle is large enough after truncations.
     // The pcb units have finer granularity than the pixels, so it can happen
     // that the rectangle is not large enough for the erase portion.
-    aRect.m_Size.x += 1;
-    aRect.m_Size.y += 1;
+
+    aRect.m_Size.x += 2;  // += 1 is not enough!
+    aRect.m_Size.y += 2;
 
     // pass wxRect() via EDA_Rect::operator wxRect() overload
     RefreshRect( aRect, TRUE );
