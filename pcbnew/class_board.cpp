@@ -41,7 +41,7 @@ BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
 
     for( int layer=0; layer<NB_COPPER_LAYERS;  ++layer )
     {
-        m_Layer[layer].m_Name = ReturnPcbLayerName( layer );
+        m_Layer[layer].m_Name = ReturnPcbLayerName( layer, true );
         m_Layer[layer].m_Type = LT_SIGNAL;
     }
 }
