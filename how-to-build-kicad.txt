@@ -1,6 +1,6 @@
 --== How to build kicad using CMAKE ==--
 First Written: 19-Dec-2007
-Last Revised: 11-Mar-2008
+Last Revised: 12-Mar-2008
 
 
 Kicad needs wxWidgets, the multi platform G.U.I.
@@ -20,6 +20,7 @@ sections below.)
 9)  Use cmake to build the kicad makefiles.
 10) Use make to build and install kicad.
 11) Making a "Debug" build.
+12) Variables for fine-tuning the build process.
 
 
 ===== Step Details ====================================================
@@ -87,7 +88,6 @@ development versions of the wxWidgets packages which include the C++ headers. An
 alternative is to build static libaries from source. Verify that wx-config is in
 your path by running it from a command prompt. Linux users then go to next step.
 
-
 -----------------------------------------------------------------------------
 
 5)  Install zlib [and build it if on windows].
@@ -144,7 +144,6 @@ incompatibilities that exist between boost 1.34.1 and gcc 4.2. So in this case,
 instead of installing boost using your package manager, you should use the svn
 HEAD copy which overcomes the gcc 4.2 incompatibility, specifically with
 <boost/ptr_container/ptr_vector.hpp>.
-
 
 -----------------------------------------------------------------------------
 
@@ -216,6 +215,34 @@ If linux, run instead the following command:
 
 Make the Debug binaries:
     make
+
+-----------------------------------------------------------------------------
+
+12) Variables for fine-tuning the build process.
+
+These should be set from command line:
+
+ CMAKE_BUILD_TYPE Release/Debug (REQUIRED)
+   Choose build type: Release/Debug.
+
+ wxWidgets_USE_DEBUG ON/OFF (REQUIRED)
+   Should be set to ON only when CMAKE_BUILD_TYPE=Debug.
+
+ wxWidgets_USE_STATIC ON/OFF (OPTIONAL)
+   
+
+ CMAKE_VERBOSE_MAKEFILE ON/OFF (OPTIONAL)
+   Turns ON/OFF verbose build messages.
+   You can also pass VERBOSE=1 to make for the same effect.
+
+ CMAKE_INSTALL_PREFIX (OPTIONAL)
+   
+
+ KICAD_MINIZIP ON/OFF
+   
+
+ KICAD_PYTHON ON/OFF
+   
 
 -----------------------------------------------------------------------------
 

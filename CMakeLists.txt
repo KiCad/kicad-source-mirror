@@ -1,28 +1,3 @@
-# List of variables that may be set from command line:
-#
-# CMAKE_BUILD_TYPE Release/Debug (REQUIRED)
-#   Choose build type: Release/Debug
-#
-# wxWidgets_USE_DEBUG ON/OFF (REQUIRED)
-#   Should be set to ON only when CMAKE_BUILD_TYPE=Debug.
-#
-# wxWidgets_USE_STATIC ON/OFF (OPTIONAL)
-#   
-#
-# CMAKE_VERBOSE_MAKEFILE ON/OFF (OPTIONAL)
-#   Turns ON/OFF verbose build messages.
-#   You can also pass VERBOSE=1 to make for the same effect.
-#
-# CMAKE_INSTALL_PREFIX (OPTIONAL)
-#   
-#
-# KICAD_MINIZIP ON/OFF
-#   
-#
-# KICAD_PYTHON ON/OFF
-#   
-#
-
 # Our project is called 'kicad'. This is what it will be called in
 # our makefiles.
 project(kicad)
