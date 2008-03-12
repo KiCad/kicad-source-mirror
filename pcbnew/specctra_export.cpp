@@ -292,13 +292,22 @@ static bool isRectangle( POINT_PAIRS& aList )
 
 
 /**
- * Function isKeepout
+ * Function isRoundKeepout
  * decides if the pad is a copper-less through hole which needs to be made into
  * a round keepout.
  */
-static bool isKeepout( D_PAD* aPad )
+static bool isRoundKeepout( D_PAD* aPad )
 {
-    return aPad->m_PadShape==PAD_CIRCLE &&  aPad->m_Drill.x >= aPad->m_Size.x;
+    if( aPad->m_PadShape==PAD_CIRCLE )
+    {
+        if( aPad->m_Drill.x >= aPad->m_Size.x )
+            return true;
+
+        if( (aPad->m_Masque_Layer & ALL_CU_LAYERS) == 0 )
+            return true;
+    }
+
+    return false;
 }
 
 
@@ -344,20 +353,13 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
     char        name[80];                   // padstack name builder
     std::string uniqifier;
 
-    bool doLayer[2] =  {                    // top and bottom layers only
-        aPad->IsOnLayer( LAYER_CMP_N ),
-        aPad->IsOnLayer( COPPER_LAYER_N )
-    };
-
     // caller must do these checks before calling here.
-    wxASSERT( !isKeepout( aPad ) );
-    wxASSERT( doLayer[0] || doLayer[1] );
+    wxASSERT( !isRoundKeepout( aPad ) );
 
     PADSTACK*   padstack = new PADSTACK();
 
     int         reportedLayers = 0;              // how many in reported padstack
     const char* layerName[NB_COPPER_LAYERS];
-
 
     if( aPad->m_Attribut==PAD_SMD || aPad->m_Attribut==PAD_CONN )
     {
@@ -365,12 +367,12 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
         // they are present.
         uniqifier = '[';
 
-        if( doLayer[0] )
+        if( aPad->IsOnLayer( LAYER_CMP_N ) )
         {
             layerName[reportedLayers++] = layerIds[0].c_str();
             uniqifier += 'T';   // T for top, could have used a layer index here alternatively
         }
-        if( doLayer[1] )
+        if( aPad->IsOnLayer( COPPER_LAYER_N ) )
         {
             int pcbLayerNdx = kicadLayer2pcb[COPPER_LAYER_N];
             layerName[reportedLayers++] = layerIds[ pcbLayerNdx ].c_str();
@@ -382,30 +384,37 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
 
     else        // through hole pad
     {
-#if 0
-        /*  Through hole pads are reported on the <reserved_layer_name>
-            "signal". Reporting through hole pads on the special
-            "signal" layer may have problems when power layers are in the layer
-            stack. See bottom of page 74 of the SECCTRA Design Language
-            Reference, May 2000. We could do better if there was actually a
-            "layer type" field within Kicad which would hold one of: T_signal,
-            T_power, T_mixed, T_jumper.
-        */
+        uniqifier = '[';
 
-        reportedLayers = 1;
-        layerName[0] = "signal";
-        uniqifier = "[A]";        // A for all
-
-#else
-        // Through hole pads are reported on *all* copper layers.
-        int copperLayers = aBoard->GetCopperLayerCount();
-
-        for( int layer=0;  layer<copperLayers;  ++layer )
+        bool onAllCopperLayers = false;
+        if( (aPad->m_Masque_Layer & ALL_CU_LAYERS) == ALL_CU_LAYERS )
         {
-            layerName[reportedLayers++] = layerIds[layer].c_str();
+            onAllCopperLayers = true;
+            uniqifier += 'A';               // A for all layers
         }
-        uniqifier = "[A]";        // A for all
-#endif
+
+        const int copperCount = aBoard->GetCopperLayerCount();
+        for( int layer=0;  layer<copperCount;  ++layer )
+        {
+            int kilayer = pcbLayer2kicad[layer];
+
+            if( onAllCopperLayers || aPad->IsOnLayer( kilayer ) )
+            {
+                layerName[reportedLayers++] = layerIds[layer].c_str();
+
+                if( !onAllCopperLayers )
+                {
+                    if( layer == 0 )
+                        uniqifier += 'T';
+                    else if( layer == copperCount-1 )
+                        uniqifier += 'B';
+                    else
+                        uniqifier += char('0' + layer);  // layer index char
+                }
+            }
+        }
+
+        uniqifier += ']';
     }
 
     POINT   dsnOffset;
@@ -566,7 +575,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
         D_PAD* pad = (D_PAD*) moduleItems[p];
 
         // see if this pad is a through hole with no copper on its perimeter
-        if( isKeepout( pad ) )
+        if( isRoundKeepout( pad ) )
         {
             double  diameter = scale( pad->m_Drill.x );
             POINT   vertex   = mapPt( pad->m_Pos0 );
@@ -585,6 +594,9 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
                 circle->SetLayerId( layerIds[layer].c_str() );
             }
         }
+
+        // else if() could there be a square keepout here?
+
         else
         {
             PADSTACK*   padstack = makePADSTACK( aBoard, pad );
