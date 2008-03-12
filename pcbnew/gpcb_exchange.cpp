@@ -198,16 +198,16 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
     iprmcnt++;
     m_Doc = params[iprmcnt];
 
-    // Read pcb-name (unused )
+    // Read pcb-name (reference )
     iprmcnt++;
+    m_Reference->m_Text = params[iprmcnt];
 
     // Read value
     iprmcnt++;
     m_Value->m_Text = params[iprmcnt];
 
-    iprmcnt++;
-
     // Read other infos
+    iprmcnt++;
     for( int ii = 0; ii < 6; ii++ )
     {
         if( iprmcnt < icnt_max )

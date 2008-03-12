@@ -24,7 +24,7 @@
 
 #define OLD_EXT     wxT( ".bak" )
 #define FILETMP_EXT wxT( ".$$$" )
-
+#define EXPORT_IMPORT_LASTPATH_KEY wxT("import_last_path")
 
 /* Fonctions locales */
 static bool CreateDocLibrary( const wxString& LibName );
@@ -33,9 +33,15 @@ static bool CreateDocLibrary( const wxString& LibName );
 MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
 /*********************************************************/
 
-/*
- *  Importation de modules Hors librairie
- *  Lit 1 fichier type Empreinte et place le module sur PCB
+/**
+ * Function Import_Module
+ * Read a file containing only one footprint.
+ * Used to import (after exporting) a footprint
+ * Exported files  have the standart ext .emp
+ * This is the same format as .mod files but restricted to only one footprint
+ * The import function can also read gpcb footprint file, in Newlib format
+ * (One footprint per file, Newlib files have no special ext.)
+ * @param DC = Current Device Context (can be NULL)
  */
 {
     int      NbLine = 0;
@@ -45,10 +51,15 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
     MODULE*  module = NULL;
 	bool Footprint_Is_GPCB_Format = false;
 	wxString mask = wxT("*.*;"); mask += EXT_CMP_MASK;
+	wxString LastOpenedPathForLoading;
+    wxConfig*          Config = m_Parent->m_EDA_Config;
 
+    if( Config )
+        Config->Read( EXPORT_IMPORT_LASTPATH_KEY, &LastOpenedPathForLoading );
+	
     /* Lecture Fichier module */
     CmpFullFileName = EDA_FileSelector( _( "Import Module:" ),
-                                        wxEmptyString,  /* Chemin par defaut */
+                                        LastOpenedPathForLoading,  /* Chemin par defaut */
                                         wxEmptyString,  /* nom fichier par defaut */
                                         wxEmptyString,  /* extension par defaut */
                                         mask,		    /* Masque d'affichage */
@@ -67,8 +78,14 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
         DisplayError( this, msg );
         return NULL;
     }
-
-    /* Lecture Entete */
+	
+	if( Config )	// Save file path
+	{
+		LastOpenedPathForLoading = wxPathOnly( CmpFullFileName );
+        Config->Write( EXPORT_IMPORT_LASTPATH_KEY, LastOpenedPathForLoading );
+	}
+	
+    /* Read header and test file type */
     GetLine( dest, Line, &NbLine );
     if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
     {
@@ -82,7 +99,7 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
 		}
     }
 
-    /* Lecture du fichier: recherche du debut de la descr module */
+    /* Read file: Search the description starting line (skip lib header)*/
 	if ( ! Footprint_Is_GPCB_Format )
 	{
 		while( GetLine( dest, Line, &NbLine ) != NULL )
@@ -105,7 +122,7 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
 		fclose( dest );
 	}
 
-    /* Mise a jour du chainage */
+    /* Insert footprint in list*/
     if( m_Pcb->m_Modules )
     {
         m_Pcb->m_Modules->Pback = module;
@@ -114,7 +131,7 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
     module->Pback    = m_Pcb;
     m_Pcb->m_Modules = module;
 
-    /* Affichage des caracteristiques : */
+    /* Display info : */
     module->Display_Infos( this );
     Place_Module( module, DC );
     m_Pcb->m_Status_Pcb = 0;
@@ -127,15 +144,23 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
 /************************************************************************/
 void WinEDA_ModuleEditFrame::Export_Module( MODULE* ptmod, bool createlib )
 /************************************************************************/
-
-/*
- *  Genere 1 fichier type Empreinte a partir de la description du module sur PCB
+/**
+ * Function Export_Module
+ * Create a file containing only one footprint.
+ * Used to export a footprint
+ * Exported files  have the standart ext .emp
+ * This is the same format as .mod files but restricted to only one footprint
+ * So Create a new lib (which will contains one module) and export a footprint is basically the same thing
+ * @param DC = Current Device Context (can be NULL)
+ * @param createlib : true = use default lib path to create lib
+ *                    false = use current path or last used path to export footprint
  */
 {
     wxString FullFileName, Mask( wxT( "*" ) );
     char     Line[1025];
     FILE*    dest;
     wxString msg, path;
+    wxConfig*          Config = m_Parent->m_EDA_Config;
 
     if( ptmod == NULL )
         return;
@@ -148,6 +173,9 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* ptmod, bool createlib )
 
     if( createlib )
         path = g_RealLibDirBuffer;
+	else if( Config )
+        Config->Read( EXPORT_IMPORT_LASTPATH_KEY, &path );
+
     FullFileName = EDA_FileSelector( createlib ? _( "Create lib" ) : _( "Export Module:" ),
                                      path,                                  /* Chemin par defaut */
                                      FullFileName,                          /* nom fichier par defaut */
@@ -161,7 +189,7 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* ptmod, bool createlib )
     if( FullFileName.IsEmpty() )
         return;
 
-    if( createlib  && wxFileExists( FullFileName ) )
+    if( wxFileExists( FullFileName ) )
     {
         msg.Printf( _( "File %s exists, OK to replace ?" ),
                    FullFileName.GetData() );
@@ -176,6 +204,12 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* ptmod, bool createlib )
         DisplayError( this, msg );
         return;
     }
+
+	if( ! createlib && Config )	// Save file path
+	{
+		path = wxPathOnly( FullFileName );
+        Config->Write( EXPORT_IMPORT_LASTPATH_KEY, path );
+	}
 
     fprintf( dest, "%s  %s\n", ENTETE_LIBRAIRIE, DateAndTime( Line ) );
     fputs( "$INDEX\n", dest );

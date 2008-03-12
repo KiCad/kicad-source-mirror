@@ -3,11 +3,11 @@
 typedef struct PointTag
 {
 	double X,Y;
-} Point;
+} PointT;
 
 typedef struct EllipseTag
 {
-	Point Center;			/* ellipse center	 */
+	PointT Center;			/* ellipse center	 */
 //	double MaxRad,MinRad;	 /* major and minor axis */
 //	double Phi;				/* major axis rotation  */
 	double xrad, yrad;		// radii on x and y

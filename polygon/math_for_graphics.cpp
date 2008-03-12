@@ -454,7 +454,7 @@ int FindLineSegmentIntersection( double a, double b, int xi, int yi, int xf, int
 								double * x1, double * y1, double * x2, double * y2,
 								double * dist )
 {
-	double xx, yy;
+	double xx = 0, yy = 0;	//Init made to avoid C compil "uninitialized" warning
 	bool bVert = false;
 	if( b > DBL_MAX/10.0 )
 		bVert = true;
@@ -531,7 +531,7 @@ int FindLineSegmentIntersection( double a, double b, int xi, int yi, int xf, int
 				yyf = yf;
 			}
 			// find center and radii of ellipse
-			double xo, yo, rx, ry;
+			double xo = xxf, yo = yyi, rx, ry;		// Init made to avoid C compil warnings
 			if( xxf > xxi && yyf > yyi )
 			{
 				xo = xxf;
@@ -1337,7 +1337,7 @@ int GetClearanceBetweenSegments( int x1i, int y1i, int x1f, int y1f, int style1,
 	double s_start2 = th1;
 	double s_end2 = th2;
 	double dmin = DBL_MAX;
-	double xmin, ymin, smin, smin2;
+	double xmin = 0, ymin = 0, smin = 0, smin2 = 0;		// Init made to avoid C compil warnings
 
 	int nsteps = NSTEPS;
 	int nsteps2 = NSTEPS;
