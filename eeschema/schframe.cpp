@@ -481,11 +481,10 @@ void WinEDA_SchematicFrame::OnLoadProject( wxCommandEvent& event )
 
 void WinEDA_SchematicFrame::OnOpenPcbnew( wxCommandEvent& event )
 {
-    wxString Line;
+    wxString Line = g_RootSheet->m_AssociatedScreen->m_FileName;
 
-    if( g_RootSheet->m_AssociatedScreen->m_FileName != wxEmptyString )
+    if( Line != wxEmptyString )
     {
-        Line = GetScreen()->m_FileName;
         AddDelimiterString( Line );
         ChangeFileNameExt( Line, wxEmptyString );
         ExecuteFile( this, PCBNEW_EXE, Line );
@@ -496,11 +495,10 @@ void WinEDA_SchematicFrame::OnOpenPcbnew( wxCommandEvent& event )
 
 void WinEDA_SchematicFrame::OnOpenCvpcb( wxCommandEvent& event )
 {
-    wxString Line;
+    wxString Line = g_RootSheet->m_AssociatedScreen->m_FileName;
 
-    if( g_RootSheet->m_AssociatedScreen->m_FileName != wxEmptyString )
+    if( Line != wxEmptyString )
     {
-        Line = g_RootSheet->m_AssociatedScreen->m_FileName;
         AddDelimiterString( Line );
         ChangeFileNameExt( Line, wxEmptyString );
         ExecuteFile( this, CVPCB_EXE, Line );
