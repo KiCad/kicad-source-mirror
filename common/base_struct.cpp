@@ -119,7 +119,7 @@ void EDA_BaseStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
 
 
 // see base_struct.h
-SEARCH_RESULT EDA_BaseStruct::IterateForward( EDA_BaseStruct* listStart, 
+SEARCH_RESULT EDA_BaseStruct::IterateForward( EDA_BaseStruct* listStart,
     INSPECTOR* inspector, const void* testData, const KICAD_T scanTypes[] )
 {
     EDA_BaseStruct* p = listStart;
@@ -135,7 +135,7 @@ SEARCH_RESULT EDA_BaseStruct::IterateForward( EDA_BaseStruct* listStart,
 
 // see base_struct.h
 // many classes inherit this method, be careful:
-SEARCH_RESULT EDA_BaseStruct::Visit( INSPECTOR* inspector, const void* testData, 
+SEARCH_RESULT EDA_BaseStruct::Visit( INSPECTOR* inspector, const void* testData,
         const KICAD_T scanTypes[] )
 {
     KICAD_T     stype;
@@ -143,7 +143,7 @@ SEARCH_RESULT EDA_BaseStruct::Visit( INSPECTOR* inspector, const void* testData,
 #if 0 && defined(DEBUG)
     std::cout <<  GetClass().mb_str() << ' ';
 #endif
-    
+
     for( const KICAD_T* p = scanTypes;  (stype=*p) != EOT;   ++p )
     {
         // If caller wants to inspect my type
@@ -156,7 +156,7 @@ SEARCH_RESULT EDA_BaseStruct::Visit( INSPECTOR* inspector, const void* testData,
         }
     }
 
-    return SEARCH_CONTINUE;    
+    return SEARCH_CONTINUE;
 }
 
 
@@ -179,15 +179,15 @@ std::ostream& operator<<( std::ostream& out, const wxPoint& pt )
 /**
  * Function Show
  * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level 
+ * @param nestLevel An aid to prettier tree indenting, and is the level
  *          of nesting of this object within the overall tree.
  * @param os The ostream& to output to.
  */
 void EDA_BaseStruct::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML:
-	wxString s = GetClass();
-	s = s + wxT(" ");  
+    wxString s = GetClass();
+    s = s + wxT(" ");
     NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << ">\n";
 
     /*
@@ -198,12 +198,12 @@ void EDA_BaseStruct::Show( int nestLevel, std::ostream& os )
     }
     */
     NestedSpace( nestLevel+1, os ) << "Need ::Show() override\n";
-    
+
     NestedSpace( nestLevel, os ) << "</" << s.Lower().mb_str() << ">\n";
 }
 
-    
-/** 
+
+/**
  * Function NestedSpace
  * outputs nested space for pretty indenting.
  * @param nestLevel The nest count
@@ -285,14 +285,14 @@ bool EDA_TextStruct::HitTest( const wxPoint& posref )
     dy = m_Size.y / 2;
 
     /* Is the ref point inside the text area ?  */
-    spot_cX = posref.x - m_Pos.x; 
+    spot_cX = posref.x - m_Pos.x;
     spot_cY = posref.y - m_Pos.y;
-    
+
     RotatePoint( &spot_cX, &spot_cY, -m_Orient );
-    
+
     if( ( abs( spot_cX ) <= abs( dx ) ) && ( abs( spot_cY ) <= abs( dy ) ) )
         return true;
-    
+
     return false;
 }
 
@@ -306,9 +306,9 @@ bool EDA_TextStruct::HitTest( const wxPoint& posref )
 bool    EDA_TextStruct::HitTest( EDA_Rect& refArea )
 /*********************************************************/
 {
-	if( refArea.Inside( m_Pos ) )
-		return true;
-	return false;
+    if( refArea.Inside( m_Pos ) )
+        return true;
+    return false;
 }
 
 /*******************************/
@@ -344,7 +344,7 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
     if( m_TextDrawings == NULL ) /* pointeur sur la liste des segments de dessin */
         CreateDrawData();
-    
+
     if( m_TextDrawings == NULL )
         return;
 
@@ -352,7 +352,7 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     width = m_Width / zoom;
     if( display_mode == FILAIRE )
         width = 0;
-    
+
     /* choix de la couleur du texte : */
     if( draw_mode != -1 )
         GRSetDrawMode( DC, draw_mode );
@@ -374,15 +374,15 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         {
             int anchor_size = 2 * zoom;
             anchor_color &= MASKCOLOR;
-            
+
             /* calcul de la position du texte */
             int cX = m_Pos.x - offset.x;
             int cY = m_Pos.y - offset.y;
-            
+
             /* trace ancre du texte */
             GRLine( &panel->m_ClipBox, DC, cX - anchor_size, cY,
                     cX + anchor_size, cY, 0, anchor_color );
-            
+
             GRLine( &panel->m_ClipBox, DC, cX, cY - anchor_size,
                     cX, cY + anchor_size, 0, anchor_color );
         }
@@ -392,7 +392,7 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
             nbpoints = m_TextDrawings[jj];
             if( nbpoints > 50 )
                 nbpoints = 50;
-            
+
             for( kk = 0, ll = 0; (kk < nbpoints) && (ii < m_TextDrawingsSize); kk++ )
             {
                 coord[ll++] = m_TextDrawings[ii++] + offset.x + m_Pos.x;
@@ -550,13 +550,13 @@ void EDA_TextStruct::CreateDrawData()
     m_ZoomLevelDrawable = m_Size.x / 3;
     dx  = (espacement * nbchar) / 2;
     dy  = size_v / 2;    /* Decalage du debut du texte / centre */
-    
-    ux0 = cX - dx; 
+
+    ux0 = cX - dx;
     uy0 = cY;
-    
-    dx += cX; 
+
+    dx += cX;
     dy = cY;
-    
+
     RotatePoint( &ux0, &uy0, cX, cY, m_Orient );
     RotatePoint( &dx, &dy, cX, cY, m_Orient );
 
@@ -593,9 +593,9 @@ void EDA_TextStruct::CreateDrawData()
                         coord = (int*) realloc( coord, coord_count_max * sizeof(int) );
                     }
                     coord[jj] = nbpoints;
-                    jj = ii++; 
+                    jj = ii++;
                 }
-                plume = f_cod; 
+                plume = f_cod;
                 nbpoints = 0;
                 break;
 
@@ -612,20 +612,20 @@ void EDA_TextStruct::CreateDrawData()
                 f_cod = *ptcar;
                 k2    = f_cod;  /* trace sur axe H */
                 k2    = (k2 * size_h) / 9;
-                
-                dx    = k2 + ox; 
+
+                dx    = k2 + ox;
                 dy    = k1 + oy;
-                
+
                 RotatePoint( &dx, &dy, cX, cY, m_Orient );
                 if( ii >= coord_count_max )
                 {
                     coord_count_max *= 2;
                     coord = (int*) realloc( coord, coord_count_max * sizeof(int) );
                 }
-                
-                coord[ii++] = dx;  
+
+                coord[ii++] = dx;
                 coord[ii++] = dy;
-                
+
                 nbpoints++;
                 break;
             }
@@ -636,7 +636,7 @@ void EDA_TextStruct::CreateDrawData()
 
         /* end boucle for = end trace de 1 caractere */
 
-        ptr++; 
+        ptr++;
         ox += espacement;
     }
 
@@ -680,20 +680,37 @@ bool EDA_Rect::Inside( const wxPoint& point )
 
     if( size.x < 0 )
     {
-        size.x = -size.x; 
+        size.x = -size.x;
         rel_posx += size.x;
     }
 
     if( size.y < 0 )
     {
-        size.y = -size.y; 
+        size.y = -size.y;
         rel_posy += size.y;
     }
-    
+
     return (rel_posx >= 0) && (rel_posy >= 0)
            && ( rel_posy <= size.y)
            && ( rel_posx <= size.x)
     ;
+}
+
+
+bool EDA_Rect::Intersects( const EDA_Rect aRect ) const
+{
+    // this logic taken from wxWidgets' geometry.cpp file:
+
+    int left   = MAX( m_Pos.x , aRect.m_Pos.x );
+    int right  = MIN( m_Pos.x+m_Size.x, aRect.m_Pos.x+aRect.m_Size.x );
+    int top    = MAX( m_Pos.y , aRect.m_Pos.y );
+    int bottom = MIN( m_Pos.y+m_Size.y, aRect.m_Pos.y + aRect.m_Size.y );
+
+    if( left < right && top < bottom )
+    {
+        return true;
+    }
+    return false;
 }
 
 
