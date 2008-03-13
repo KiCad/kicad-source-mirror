@@ -1039,6 +1039,17 @@ void MODULE::SetRectangleExinscrit()
 }
 
 
+/**
+ * Function GetBoundingBox
+* returns the bounding box of this Footprint
+ */
+EDA_Rect MODULE::GetBoundingBox()
+{
+	
+	SetRectangleExinscrit();
+	return m_RealBoundaryBox;
+}
+
 /*******************************************************/
 void MODULE::Display_Infos( WinEDA_DrawFrame* frame )
 /*******************************************************/

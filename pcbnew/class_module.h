@@ -84,6 +84,11 @@ public:
 
     void    SetRectangleExinscrit(); /* mise a jour du rect d'encadrement
                                      *   et de la surface en coord reelles */
+    /**
+     * Function GetBoundingBox
+     * returns the bounding box of this Footprint
+     */
+    EDA_Rect GetBoundingBox();
 
     /**
      * Function GetPosition

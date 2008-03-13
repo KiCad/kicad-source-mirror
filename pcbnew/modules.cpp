@@ -262,10 +262,12 @@ void Montre_Position_Empreinte( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 bool WinEDA_PcbFrame::Delete_Module( MODULE* module, wxDC* DC )
 /**************************************************************/
 
-/*
- *  Commande Delete Module :
- *  Suppression d'une empreinte
- *  les pointeurs divers sont mis a jour
+/**
+ *  Function Delete Module
+ *  Remove a footprint from m_Modules linked list and put it in undelete buffer
+ *  The net rastenes and pad list are recalcualed
+ * @param module = footprint to delete
+ * @param DC = currentDevice Context. if NULL: do not redraw new ratsnets and dirty rectange
  */
 {
     EDA_BaseStruct* PtBack, * PtNext;
@@ -288,13 +290,11 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module, wxDC* DC )
 
     m_CurrentScreen->SetModify();
 
-    /* Erase rastnest if needed */
+    /* Erase rastnest if needed
+	 * Dirty rectangle is not used here because usually using a XOR draw mode gives good results (very few artefacts) for ratsnest
+	 */
     if( g_Show_Ratsnest )
         DrawGeneralRatsnest( DC );
-
-    /* Effacement du module a l'ecran */
-    if( DC )
-        module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
 
     /* Suppression du chainage */
     PtBack = module->Pback;
@@ -316,6 +316,9 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module, wxDC* DC )
     m_Pcb->m_Status_Pcb = 0;
     build_liste_pads();
     ReCompile_Ratsnest_After_Changes( DC );
+    // redraw the area where the module was
+    if ( DC )
+		DrawPanel->PostDirtyRect( module->GetBoundingBox() );
     return TRUE;
 }
 
