@@ -5,6 +5,12 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Mar-13 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew
+	Dirty rect used in footprint rotation, flip and delete.
+	Better calculation of the footprint dirty rect.
+
 
 2008-Mar-13 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================

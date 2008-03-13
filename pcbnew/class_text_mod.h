@@ -53,6 +53,11 @@ public:
     int     GetLength();          /* text length */
     int     Pitch();              /* retourne le pas entre 2 caracteres */
     int     GetDrawRotation();    // Return text rotation for drawings and plotting
+	
+	/** Function GetTextRect
+	 * @return an EDA_Rect which gives the position and size of the text area (for the O orient text and footprint)
+	 */
+	EDA_Rect GetTextRect(void);
 
     void    SetDrawCoord();       // mise a jour des coordonn�s absolues de trac�			
                                         // a partir des coord relatives

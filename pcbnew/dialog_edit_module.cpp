@@ -500,9 +500,6 @@ void WinEDA_ModulePropertiesFrame::OnOkClick( wxCommandEvent& event )
     if( m_DC )
         m_Parent->DrawPanel->CursorOff( m_DC );
 
-    if( m_DC )
-        m_CurrentModule->Draw( m_Parent->DrawPanel, m_DC, wxPoint( 0, 0 ), GR_XOR );
-
     if( m_OrientValue )
     {
         long orient = 0; wxString msg = m_OrientValue->GetValue();

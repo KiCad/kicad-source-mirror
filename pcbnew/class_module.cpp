@@ -267,20 +267,22 @@ void MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                    const wxPoint& offset, int draw_mode )
 /**********************************************************/
 
-/* Dessin d'une empreinte sur l'ecran actif:
- *  Entree :
- *      Module: pointeur sur le module
- *      ox, oy = offset de trace
- *      draw_mode = mode de trace ( GR_OR, GR_XOR, GR_AND)
- *  Utilise par ailleur:
- *      Description des parametres de l'empreinte calcules par caract() ;
+/** Function Draw
+ *  Draws the footprint to the current Device Context
+ *  @param panel = The active Draw Panel (used to know the clip box)
+ *  @param DC = current Device Context
+ *  @param offset = draw offset (usually wxPoint(0,0)
+ *  @param draw_mode =  GR_OR, GR_XOR, GR_AND
  */
 {
     D_PAD*          pt_pad;
     EDA_BaseStruct* PtStruct;
     TEXTE_MODULE*   PtTexte;
+	
+	if ( (m_Flags & DO_NOT_DRAW) )
+		return;
 
-    /* trace des pastilles */
+    /* Draw pads */
     pt_pad = m_Pads;
     for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
     {
@@ -289,10 +291,10 @@ void MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         pt_pad->Draw( panel, DC, offset, draw_mode );
     }
 
-    /* Impression de l'ancre du module */
+    /* Draws foootprint anchor */
     DrawAncre( panel, DC, offset, DIM_ANCRE_MODULE, draw_mode );
 
-    /* impression des graphismes */
+    /* Draw graphic items */
     if( !(m_Reference->m_Flags & IS_MOVED) )
         m_Reference->Draw( panel, DC, offset, draw_mode );
     if( !(m_Value->m_Flags & IS_MOVED) )
@@ -326,10 +328,17 @@ void MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 void MODULE::DrawEdgesOnly( WinEDA_DrawPanel* panel, wxDC* DC,
                             const wxPoint& offset, int draw_mode )
 /**************************************************************/
+/** Function DrawEdgesOnly
+ *  Draws the footprint edges only to the current Device Context
+ *  @param panel = The active Draw Panel (used to know the clip box)
+ *  @param DC = current Device Context
+ *  @param offset = draw offset (usually wxPoint(0,0)
+ *  @param draw_mode =  GR_OR, GR_XOR, GR_AND
+ */
 {
     EDA_BaseStruct* PtStruct;
 
-    /* impression des graphismes */
+    /* Draw graphic items */
     PtStruct = m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
@@ -1041,13 +1050,55 @@ void MODULE::SetRectangleExinscrit()
 
 /**
  * Function GetBoundingBox
-* returns the bounding box of this Footprint
+ * returns the full bounding box of this Footprint, including texts
  */
 EDA_Rect MODULE::GetBoundingBox()
 {
-	
+	// Calculate area without text fielsd:
 	SetRectangleExinscrit();
-	return m_RealBoundaryBox;
+	EDA_Rect area = m_RealBoundaryBox;
+
+	area.Normalize();
+	// Calculate extended area including text field:
+    EDGE_MODULE* EdgeMod = (EDGE_MODULE*) m_Drawings;
+	TEXTE_MODULE* text;
+	EDA_Rect text_area;
+	wxPoint textstart, textend;
+	wxPoint modstart = area.GetOrigin();
+	wxPoint modend = area.GetEnd();
+    for( int ii = 0 ; ; ii++ )
+    {
+		if ( ii == 0 )
+			text = m_Reference;
+		else if ( ii == 1 )
+			text = m_Value;
+		else
+		{
+			if ( EdgeMod == NULL ) break;
+			text = (TEXTE_MODULE*) EdgeMod;
+			EdgeMod = (EDGE_MODULE*) EdgeMod->Pnext;
+			if( text->Type() != TYPETEXTEMODULE )
+				continue;
+		}
+		text_area = text->GetTextRect();
+		textstart = text_area.GetOrigin();
+		textend = text_area.GetEnd();
+		int angle = text->GetDrawRotation();
+		RotatePoint( &textstart, text->m_Pos, angle);
+		RotatePoint( &textend, text->m_Pos, angle);
+		modstart.x = min( modstart.x, textstart.x);
+		modstart.x = min( modstart.x, textend.x);
+		modstart.y = min( modstart.y, textstart.y);
+		modstart.y = min( modstart.y, textend.y);
+		modend.x = max( modend.x, textstart.x);
+		modend.x = max( modend.x, textend.x);
+		modend.y = max( modend.y, textstart.y);
+		modend.y = max( modend.y, textend.y);
+	}
+	
+	area.SetOrigin(modstart);
+	area.SetEnd(modend);
+	return area;
 }
 
 /*******************************************************/

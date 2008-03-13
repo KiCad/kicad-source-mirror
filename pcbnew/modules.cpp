@@ -126,7 +126,13 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
     DrawPanel->m_AutoPAN_Request = TRUE;
 
     // effacement module a l'ecran:
-    module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+    if ( DC )
+	{
+		int tmp = module->m_Flags;
+		module->m_Flags |= DO_NOT_DRAW;
+		DrawPanel->PostDirtyRect( module->GetBoundingBox() );
+		module->m_Flags = tmp;
+	}
 
     // Reaffichage
     DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
@@ -250,8 +256,7 @@ void Montre_Position_Empreinte( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     }
 
     /* Redessine le module a la nouvelle place */
-    g_Offset_Module.x = module->m_Pos.x - panel->m_Parent->m_CurrentScreen->m_Curseur.x;
-    g_Offset_Module.y = module->m_Pos.y - panel->m_Parent->m_CurrentScreen->m_Curseur.y;
+    g_Offset_Module = module->m_Pos - panel->m_Parent->m_CurrentScreen->m_Curseur;
     DrawModuleOutlines( panel, DC, module );
 
     Dessine_Segments_Dragges( panel, DC );
@@ -333,7 +338,7 @@ void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
  * The mirroring is made from X axis
  * if a footprint is not on copper or component layer it is not flipped
  * (it could be on an adhesive layer, not supported at this time)
- * @param Module the footprint to fli^p
+ * @param Module the footprint to flip
  * @param  DC Current Device Context. if NULL, no redraw
  */
 {
@@ -353,7 +358,12 @@ void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
     {
         m_Status_Pcb &= ~( LISTE_CHEVELU_OK | CONNEXION_OK);
         if( DC && m_PcbFrame )
-            Module->Draw( m_PcbFrame->DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+		{
+			int tmp = Module->m_Flags;
+			Module->m_Flags |= DO_NOT_DRAW;
+			m_PcbFrame->DrawPanel->PostDirtyRect( Module->GetBoundingBox() );
+			Module->m_Flags = tmp;
+		}
 
         /* Effacement chevelu general si necessaire */
         if( DC && g_Show_Ratsnest )
@@ -709,7 +719,11 @@ void WinEDA_BasePcbFrame::Rotate_Module( wxDC* DC, MODULE* module,
     {
         if( DC )
         {
-            module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+			int tmp = module->m_Flags;
+			module->m_Flags |= DO_NOT_DRAW;
+			DrawPanel->PostDirtyRect( module->GetBoundingBox() );
+			module->m_Flags = tmp;
+
             /* Reaffichage chevelu general si necessaire */
             if( g_Show_Ratsnest )
                 DrawGeneralRatsnest( DC );

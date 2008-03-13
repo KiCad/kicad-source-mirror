@@ -167,7 +167,7 @@ public:
 #define STRUCT_DELETED  (1 << 13)           ///< Bit flag de Status pour structures effacee
 #define CANDIDATE       (1 << 14)           ///< flag indiquant que la structure est connectee
 #define SKIP_STRUCT     (1 << 15)           ///< flag indiquant que la structure ne doit pas etre traitee
-
+#define DO_NOT_DRAW     (1 << 16)           ///< Used to disable draw function
 
     unsigned long m_TimeStamp;          // Time stamp used for logical links
     int           m_Selected;           /* Used by block commands, and selective editing */

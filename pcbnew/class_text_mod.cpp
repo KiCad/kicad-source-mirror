@@ -194,6 +194,31 @@ void TEXTE_MODULE:: SetLocalCoord()
 
 
 /* locate functions */
+
+/** Function GetTextRect
+ * @return an EDA_Rect which gives the position and size of the text area (for the O orient  footprint)
+ */
+EDA_Rect TEXTE_MODULE::GetTextRect(void)
+{
+	EDA_Rect area;
+	
+    int  dx, dy;
+    dx = ( m_Size.x * GetLength() ) / 2;
+    dx = (dx * 10) / 9 ; /* letter size = 10/9 */
+	dx +=  m_Width / 2;
+    dy = ( m_Size.y + m_Width ) / 2;
+	
+	wxPoint Org = m_Pos;	// This is the position of the centre of the area
+	Org.x -= dx;
+	Org.y -= dy;
+	area.SetOrigin( Org);
+	area.SetHeight(2 * dy);
+	area.SetWidth(2 * dx);
+	area.Normalize();
+	
+	return area;
+}
+
 bool TEXTE_MODULE::HitTest( const wxPoint& posref )
 {
     int     mX, mY, dx, dy;
@@ -204,8 +229,9 @@ bool TEXTE_MODULE::HitTest( const wxPoint& posref )
         angle += Module->m_Orient;
 
     dx = ( m_Size.x * GetLength() ) / 2;
-    dy = m_Size.y / 2;
-    dx = ( (dx * 10) / 9 ) + m_Width; /* Facteur de forme des lettres : 10/9 */
+    dx = (dx * 10) / 9; /* Facteur de forme des lettres : 10/9 */
+	dx +=  m_Width / 2;
+    dy = ( m_Size.y + m_Width ) / 2;
 
     /* le point de reference est tourn�de - angle
      *  pour se ramener a un rectangle de reference horizontal */
