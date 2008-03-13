@@ -655,6 +655,13 @@ public:
     }
 
     /**
+     * Function Intersects
+     * @return bool - true if the argument rectangle intersects this rectangle.
+     */
+    bool Intersects( const EDA_Rect aRect ) const;
+
+
+    /**
      * Function operator(wxRect)
      * overloads the cast operator to return a wxRect
      */
