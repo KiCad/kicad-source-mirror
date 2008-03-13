@@ -5,11 +5,21 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+2008-Mar-13 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++all
+    Added bool EDA_Rect::Intersects().
++eeschema
+    Added provisionary calls to eeschema/eeredraw.cpp for
+    if( panel->m_ClipBox.Intersects( item->GetBoundingBox() ) )
+
+
 2008-Mar-11 UPDATE   Per Uddén <p.udden@telia.com>
 ================================================================================
 +3d-viewer
   * Fix TODO: Add S_ARC and S_CIRCLE shape render to board edge and module edge.
-	Ex. Now is a board with arcs at corners showing correctly. 
+    Ex. Now is a board with arcs at corners showing correctly.
 
 
 2008-Mar-10 UPDATE   Dick Hollenbeck <dick@softplc.com>

@@ -158,24 +158,14 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int PrintMask 
 void RedrawStructList( WinEDA_DrawPanel* panel, wxDC* DC,
                        EDA_BaseStruct* Structs, int DrawMode, int Color )
 {
-
-#if 0
-    // enable this when we have virtual GetBoundingBox():
-    wxRegion    upd = panel->GetUpdateRegion(); // get the update rect list
-
-    // get the union of all rectangles in the update region, 'upd'
-    wxRect      dirtyRects = upd.GetBox();
-
-    EDA_Rect boxtest;
-#endif
-
-
     while( Structs )
     {
         if( Structs->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
         {
             EDA_BaseStruct* item = ( (DrawPickedStruct*) Structs )->m_PickedStruct;
-//            if( dirtyRects.Intersects( item->GetBoundingBox() ) )
+
+// uncomment line below when there is a virtual EDA_BaseStruct::GetBoundingBox()
+       //   if( panel->m_ClipBox.Intersects( item->GetBoundingBox() ) )
             {
                 RedrawOneStruct( panel, DC, item, DrawMode, Color );
             }
@@ -184,7 +174,8 @@ void RedrawStructList( WinEDA_DrawPanel* panel, wxDC* DC,
         {
             if( !(Structs->m_Flags & IS_MOVED) )
             {
-//                if( dirtyRects.Intersects( Structs->GetBoundingBox() ) )
+// uncomment line below when there is a virtual EDA_BaseStruct::GetBoundingBox()
+        //      if( panel->m_ClipBox.Intersects( Structs->GetBoundingBox() ) )
                     RedrawOneStruct( panel, DC, Structs, DrawMode, Color );
             }
         }
