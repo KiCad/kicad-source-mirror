@@ -478,6 +478,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
             DrawPanel->MouseToCursorSchema();
             if( GetScreen()->GetCurItem()->m_Flags == 0 )
                 SaveCopyInUndoList( GetScreen()->GetCurItem(), IS_CHANGED );
+
             CmpRotationMiroir(
                 (EDA_SchComponentStruct*) GetScreen()->GetCurItem(),
                 &dc, option );
@@ -497,6 +498,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
                                                              GetScreen() ) );
         if( GetScreen()->GetCurItem() == NULL )
             break;
+
         EditComponentValue(
             (EDA_SchComponentStruct*) GetScreen()->GetCurItem(), &dc );
         break;
@@ -510,6 +512,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
                                                              GetScreen() ) );
         if( GetScreen()->GetCurItem() == NULL )
             break;
+
         EditComponentReference(
             (EDA_SchComponentStruct*) GetScreen()->GetCurItem(), &dc );
         break;

@@ -932,7 +932,8 @@ void DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, EDA_BaseStruct* DrawStruct
 
 
     if( DrawStruct->Type() == DRAW_SHEETLABEL_STRUCT_TYPE )
-    {   /* Cette stucture est rattachee a une feuille, et n'est pas
+    {
+        /* Cette stucture est rattachee a une feuille, et n'est pas
          *  accessible par la liste globale directement */
         frame->SaveCopyInUndoList( ( (DrawSheetLabelStruct*) DrawStruct )->m_Parent, IS_CHANGED );
         frame->DeleteSheetLabel( DC, (DrawSheetLabelStruct*) DrawStruct );
@@ -961,7 +962,14 @@ void DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, EDA_BaseStruct* DrawStruct
     {
         screen->RemoveFromDrawList( DrawStruct );
 
-        RedrawOneStruct( panel, DC, DrawStruct, g_XorMode );
+        if( DrawStruct->Type() == DRAW_SEGMENT_STRUCT_TYPE )
+        {
+            D( printf("PostDirtyRect()\n"); )
+            panel->PostDirtyRect( ((EDA_DrawLineStruct*)DrawStruct)->GetBoundingBox() );
+        }
+        else
+            RedrawOneStruct( panel, DC, DrawStruct, g_XorMode );
+
         /* Unlink the structure */
         DrawStruct->Pnext = DrawStruct->Pback = NULL;   // Only one struct -> no link
         if( DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE )

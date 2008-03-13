@@ -101,16 +101,17 @@ bool       DiagErcTableInit; // go to TRUE after DiagErc init
  */
 static int DefaultDiagErc[PIN_NMAX][PIN_NMAX] =
 { /*       I,   O,   Bi,  3S, Pas, UnS,PwrI,PwrO,  OC,  OE,  NC */
-/* I */  { OK,  OK,  OK,  OK,  OK,  WAR, OK,  OK,  OK,  OK,  WAR },
-/* O */  { OK,  ERR, OK,  WAR, OK,  WAR, OK,  ERR, ERR, ERR, WAR },
-/* Bi*/  { OK,  OK,  OK,  OK,  OK,  WAR, OK,  WAR, OK,  WAR, WAR },
-/* 3S*/  { OK,  WAR, OK,  OK,  OK,  WAR, WAR, ERR, WAR, WAR, WAR },
-/*Pas*/  { OK,  OK,  OK,  OK,  OK,  WAR, OK,  OK,  OK,  OK,  WAR },
+/* I */
+    { OK, OK, OK, OK, OK, WAR, OK, OK, OK, OK, WAR },
+/* O */ { OK, ERR, OK, WAR, OK, WAR, OK, ERR, ERR, ERR, WAR },
+/* Bi*/ { OK, OK, OK, OK, OK, WAR, OK, WAR, OK, WAR, WAR },
+/* 3S*/ { OK, WAR, OK, OK, OK, WAR, WAR, ERR, WAR, WAR, WAR },
+/*Pas*/ { OK, OK, OK, OK, OK, WAR, OK, OK, OK, OK, WAR },
 /*UnS */ { WAR, WAR, WAR, WAR, WAR, WAR, WAR, WAR, WAR, WAR, WAR },
-/*PwrI*/ { OK,  OK,  OK,  WAR, OK,  WAR, OK,  OK,  OK,  OK,  ERR },
-/*PwrO*/ { OK,  ERR, WAR, ERR, OK,  WAR, OK,  ERR, ERR, ERR, WAR },
-/* OC */ { OK,  ERR, OK,  WAR, OK,  WAR, OK,  ERR, OK,  OK,  WAR },
-/* OE */ { OK,  ERR, WAR, WAR, OK,  WAR, OK,  ERR, OK,  OK,  WAR },
+/*PwrI*/ { OK, OK, OK, WAR, OK, WAR, OK, OK, OK, OK, ERR },
+/*PwrO*/ { OK, ERR, WAR, ERR, OK, WAR, OK, ERR, ERR, ERR, WAR },
+/* OC */ { OK, ERR, OK, WAR, OK, WAR, OK, ERR, OK, OK, WAR },
+/* OE */ { OK, ERR, WAR, WAR, OK, WAR, OK, ERR, OK, OK, WAR },
 /* NC */ { WAR, WAR, WAR, WAR, WAR, WAR, WAR, WAR, WAR, WAR, WAR }
 };
 
@@ -124,27 +125,27 @@ static int DefaultDiagErc[PIN_NMAX][PIN_NMAX] =
 /* Look up table which gives the minimal drive for a pair of connected pins on a net
  *  Initial state of a net is NOC (No Connection)
  *  Can be updated to NET_NC, or NOD (Not Driven) or DRV (DRIven)
- * 
+ *
  *  Can be updated to NET_NC only if the previous state is NOC
- * 
+ *
  *  Nets are OK when their final state is NET_NC or DRV
  *  Nets with the state NOD have no source signal
  */
 static int MinimalReq[PIN_NMAX][PIN_NMAX] =
 {         /* In, Out,  Bi,  3S, Pas, UnS,PwrI,PwrO,  OC,  OE,  NC */
-/* In*/  {   NOD, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
-/*Out*/  {   DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, NOC },
-/* Bi*/  {   DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
-/* 3S*/  {   DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
-/*Pas*/  {   DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
-/*UnS*/  {   DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
+/* In*/
+    {   NOD, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
+/*Out*/ {   DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, NOC },
+/* Bi*/ {   DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
+/* 3S*/ {   DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
+/*Pas*/ {   DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
+/*UnS*/ {   DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
 /*PwrI*/ {   NOD, DRV, NOD, NOD, NOD, NOD, NOD, DRV, NOD, NOD, NOC },
 /*PwrO*/ {   DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, NOC },
-/* OC*/  {   DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
-/* OE*/  {   DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
-/* NC*/  {   NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC }
+/* OC*/ {   DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
+/* OE*/ {   DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
+/* NC*/ {   NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC }
 };
-
 
 
 /*********************************************/
@@ -174,7 +175,7 @@ void WinEDA_ErcFrame::ReBuildMatrixPanel()
 
     text_height = text->GetRect().GetHeight();
     bitmap_size = MAX( bitmap_size, text_height );
-	SAFE_DELETE( text );
+    SAFE_DELETE( text );
 
     // compute the Y pos interval:
     BoxMatrixMinSize.y = ( bitmap_size * (PIN_NMAX + 1) ) + 5;
@@ -273,7 +274,7 @@ void WinEDA_ErcFrame::TestErc( wxCommandEvent& event )
     ObjetNetListStruct* OldItem;
     ObjetNetListStruct* StartNet;
     ObjetNetListStruct* Lim;
-    
+
     int NetNbItems, MinConn;
 
     if( !DiagErcTableInit )
@@ -324,19 +325,19 @@ void WinEDA_ErcFrame::TestErc( wxCommandEvent& event )
     for( NetItemRef = g_TabObjNet;  NetItemRef < Lim;   NetItemRef++ )
         NetItemRef->m_FlagOfConnection = (IsConnectType) 0;
 
-    NetNbItems = 0; 
-    MinConn = NOC;
-    
+    NetNbItems = 0;
+    MinConn    = NOC;
+
     StartNet = OldItem = NetItemRef = g_TabObjNet;
-    
+
     for( ; NetItemRef < Lim; NetItemRef++ )
     {
         /* Tst changement de net */
         if( OldItem->GetNet() != NetItemRef->GetNet() )
         {
-            MinConn = NOC; 
-            NetNbItems = 0; 
-            StartNet = NetItemRef;
+            MinConn    = NOC;
+            NetNbItems = 0;
+            StartNet   = NetItemRef;
         }
 
         switch( NetItemRef->m_Type )
@@ -347,8 +348,8 @@ void WinEDA_ErcFrame::TestErc( wxCommandEvent& event )
         case NET_LABEL:
         case NET_BUSLABELMEMBER:
         case NET_PINLABEL:
-		case NET_GLOBLABEL: //not sure how to handle global labels -- they should be treated like other nets (just global!0
-		case NET_GLOBBUSLABELMEMBER:
+        case NET_GLOBLABEL: //not sure how to handle global labels -- they should be treated like other nets (just global!0
+        case NET_GLOBBUSLABELMEMBER:
             break;
 
         case NET_HIERLABEL:
@@ -366,7 +367,7 @@ void WinEDA_ErcFrame::TestErc( wxCommandEvent& event )
 
         case NET_PIN:
             TestOthersItems( m_Parent->DrawPanel, &dc,
-                             NetItemRef, StartNet, &NetNbItems, &MinConn );
+                NetItemRef, StartNet, &NetNbItems, &MinConn );
             break;
         }
 
@@ -389,17 +390,18 @@ void WinEDA_ErcFrame::TestErc( wxCommandEvent& event )
     if( WriteFichierERC == TRUE )
     {
         wxString ErcFullFileName;
-        ErcFullFileName = g_RootSheet->m_AssociatedScreen->m_FileName; 
+        ErcFullFileName = g_RootSheet->m_AssociatedScreen->m_FileName;
         ChangeFileNameExt( ErcFullFileName, wxT( ".erc" ) );
+
         ErcFullFileName = EDA_FileSelector( _( "ERC file:" ),
-                                            wxEmptyString,      /* Chemin par defaut */
-                                            ErcFullFileName,    /* nom fichier par defaut */
-                                            wxT( ".erc" ),      /* extension par defaut */
-                                            wxT( "*.erc" ),     /* Masque d'affichage */
-                                            this,
-                                            wxFD_SAVE,
-                                            TRUE
-                                            );
+            wxEmptyString,                                      /* Chemin par defaut */
+            ErcFullFileName,                                    /* nom fichier par defaut */
+            wxT( ".erc" ),                                      /* extension par defaut */
+            wxT( "*.erc" ),                                     /* Masque d'affichage */
+            this,
+            wxFD_SAVE,
+            TRUE
+            );
         if( ErcFullFileName.IsEmpty() )
             return;
 
@@ -434,6 +436,7 @@ void WinEDA_ErcFrame::DelERCMarkers( wxCommandEvent& event )
     {
         if( DrawStruct->Type() != DRAW_MARKER_STRUCT_TYPE )
             continue;
+
         /* Marqueur trouve */
         Marker = (DrawMarkerStruct*) DrawStruct;
         if( Marker->m_Type == MARQ_ERC )
@@ -466,7 +469,7 @@ void WinEDA_ErcFrame::ChangeErrorLevel( wxCommandEvent& event )
 {
     int             id, level, ii, x, y;
     wxBitmapButton* Butt;
-    const char**          new_bitmap_xpm = NULL;
+    const char**    new_bitmap_xpm = NULL;
     wxPoint         pos;
 
     id   = event.GetId();
@@ -545,11 +548,11 @@ static void Diagnose( WinEDA_DrawPanel* panel, wxDC* DC,
            || (NetItemRef->m_Type == NET_HIERBUSLABELMEMBER) )
         {
             Marker->m_Comment.Printf( _( "Warning HLabel %s not connected to SheetLabel" ),
-                                     NetItemRef->m_Label->GetData() );
+                NetItemRef->m_Label->GetData() );
         }
         else
             Marker->m_Comment.Printf( _( "Warning SheetLabel %s not connected to HLabel" ),
-                                     NetItemRef->m_Label->GetData() );
+                NetItemRef->m_Label->GetData() );
 
         if( screen == panel->GetScreen() )
             RedrawOneStruct( panel, DC, Marker, GR_COPY );
@@ -573,6 +576,7 @@ static void Diagnose( WinEDA_DrawPanel* panel, wxDC* DC,
             Marker->m_Comment.Printf(
                 _( "Warning Pin %s not driven (Net %d)" ),
                 MsgPinElectricType[ii], NetItemRef->GetNet() );
+
             if( screen == panel->GetScreen() )
                 RedrawOneStruct( panel, DC, Marker, GR_COPY );
             return;
@@ -582,6 +586,7 @@ static void Diagnose( WinEDA_DrawPanel* panel, wxDC* DC,
         {
             Marker->m_Comment.Printf(
                 _( "Warning More than 1 Pin connected to UnConnect symbol" ) );
+
             if( screen == panel->GetScreen() )
                 RedrawOneStruct( panel, DC, Marker, GR_COPY );
             return;
@@ -600,10 +605,10 @@ static void Diagnose( WinEDA_DrawPanel* panel, wxDC* DC,
         }
 
         Marker->m_Comment.Printf( _(
-                                      "%s: Pin %s connected to Pin %s (net %d)" ),
-                                  DiagLevel.GetData(),
-                                  MsgPinElectricType[ii],
-                                  MsgPinElectricType[jj], NetItemRef->GetNet() );
+                "%s: Pin %s connected to Pin %s (net %d)" ),
+            DiagLevel.GetData(),
+            MsgPinElectricType[ii],
+            MsgPinElectricType[jj], NetItemRef->GetNet() );
 
         if( screen == panel->GetScreen() )
             RedrawOneStruct( panel, DC, Marker, GR_COPY );
@@ -625,12 +630,12 @@ static void TestOthersItems( WinEDA_DrawPanel* panel, wxDC* DC,
 {
     ObjetNetListStruct* NetItemTst;
     ObjetNetListStruct* Lim;
-    
+
     int ref_elect_type, jj, erc = OK, local_minconn;
 
     /* Analyse de la table des connexions : */
     Lim = g_TabObjNet + g_NbrObjNet;    // pointe la fin de la liste
-    
+
     ref_elect_type = NetItemRef->m_ElectricalType;
 
     NetItemTst    = netstart;
@@ -644,7 +649,7 @@ static void TestOthersItems( WinEDA_DrawPanel* panel, wxDC* DC,
 
         /* Est - on toujours dans le meme net ? */
         if( (NetItemTst >= Lim)                                     // fin de liste (donc fin de net)
-           || (NetItemRef->GetNet() != NetItemTst->GetNet()) )    // fin de net
+           || ( NetItemRef->GetNet() != NetItemTst->GetNet() ) )    // fin de net
         {                                                           /* Fin de netcode trouve: Tst connexion minimum */
             if( (*MinConnexion < NET_NC )
                && (local_minconn < NET_NC ) )                       /* pin non connect�e ou non pilotee */
@@ -666,8 +671,8 @@ static void TestOthersItems( WinEDA_DrawPanel* panel, wxDC* DC,
         case NET_HIERBUSLABELMEMBER:
         case NET_SHEETBUSLABELMEMBER:
         case NET_SHEETLABEL:
-		case NET_GLOBLABEL:
-		case NET_GLOBBUSLABELMEMBER:
+        case NET_GLOBLABEL:
+        case NET_GLOBBUSLABELMEMBER:
         case NET_PINLABEL:
             break;
 
@@ -681,7 +686,7 @@ static void TestOthersItems( WinEDA_DrawPanel* panel, wxDC* DC,
 
             if( NetItemTst <= NetItemRef )
                 break;
-            
+
             *NetNbItems += 1;
             if( erc == OK )         // 1 marqueur par pin maxi
             {
@@ -712,7 +717,7 @@ static bool WriteDiagnosticERC( const wxString& FullFileName )
     DrawMarkerStruct* Marker;
     char Line[256];
     static FILE*      OutErc;
-    DrawSheetPath*  Sheet;
+    DrawSheetPath*    Sheet;
     wxString          msg;
 
     if( ( OutErc = wxFopen( FullFileName, wxT( "wt" ) ) ) == NULL )
@@ -720,23 +725,26 @@ static bool WriteDiagnosticERC( const wxString& FullFileName )
 
     DateAndTime( Line );
     msg = _( "ERC control" );
-    
+
     fprintf( OutErc, "%s (%s)\n", CONV_TO_UTF8( msg ), Line );
 
     EDA_SheetList SheetList( NULL );
 
     for( Sheet = SheetList.GetFirst(); Sheet != NULL; Sheet = SheetList.GetNext() )
     {
-		if(Sheet->Last() == g_RootSheet){
-        	msg.Printf( _( "\n***** Sheet / (Root) \n" ) ); 
-		}else{
-			wxString str = Sheet->PathHumanReadable(); 
-			msg.Printf( _("\n***** Sheet %s\n"), str.GetData() );
-		}
-        
+        if( Sheet->Last() == g_RootSheet )
+        {
+            msg.Printf( _( "\n***** Sheet / (Root) \n" ) );
+        }
+        else
+        {
+            wxString str = Sheet->PathHumanReadable();
+            msg.Printf( _( "\n***** Sheet %s\n" ), str.GetData() );
+        }
+
         fprintf( OutErc, "%s", CONV_TO_UTF8( msg ) );
 
-		DrawStruct = Sheet->LastDrawList();
+        DrawStruct = Sheet->LastDrawList();
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext )
         {
             if( DrawStruct->Type() != DRAW_MARKER_STRUCT_TYPE )
@@ -746,13 +754,13 @@ static bool WriteDiagnosticERC( const wxString& FullFileName )
             Marker = (DrawMarkerStruct*) DrawStruct;
             if( Marker->m_Type != MARQ_ERC )
                 continue;
-            
+
             /* Write diag marqueur */
             msg.Printf( _( "ERC: %s (X= %2.3f inches, Y= %2.3f inches\n" ),
-                        Marker->GetComment().GetData(),
-                        (float) Marker->m_Pos.x / 1000,
-                        (float) Marker->m_Pos.y / 1000 );
-            
+                Marker->GetComment().GetData(),
+                (float) Marker->m_Pos.x / 1000,
+                (float) Marker->m_Pos.y / 1000 );
+
             fprintf( OutErc, "%s", CONV_TO_UTF8( msg ) );
         }
     }
@@ -764,18 +772,24 @@ static bool WriteDiagnosticERC( const wxString& FullFileName )
     return TRUE;
 }
 
+
 bool TestLabel_( ObjetNetListStruct* a, ObjetNetListStruct* b )
 {
-	int at = a->m_Type; 
-	int bt = b->m_Type; 
-	if(    (at == NET_HIERLABEL || at == NET_HIERBUSLABELMEMBER)
-		 &&(bt == NET_SHEETLABEL || bt == NET_SHEETBUSLABELMEMBER) ){
-		 if( a->m_SheetList == b->m_SheetListInclude ){
-			return true; //connected!
-		 }
-	}
-	return false; //these two are unconnected
+    int at = a->m_Type;
+    int bt = b->m_Type;
+
+    if( (at == NET_HIERLABEL || at == NET_HIERBUSLABELMEMBER)
+       &&(bt == NET_SHEETLABEL || bt == NET_SHEETBUSLABELMEMBER) )
+    {
+        if( a->m_SheetList == b->m_SheetListInclude )
+        {
+            return true; //connected!
+        }
+    }
+    return false; //these two are unconnected
 }
+
+
 /***********************************************************************/
 void TestLabel( WinEDA_DrawPanel* panel, wxDC* DC,
                 ObjetNetListStruct* NetItemRef, ObjetNetListStruct* StartNet )
@@ -802,18 +816,20 @@ void TestLabel( WinEDA_DrawPanel* panel, wxDC* DC,
         /* Est - on toujours dans le meme net ? */
         if( ( NetItemTst ==  Lim )
            || ( NetItemRef->GetNet() != NetItemTst->GetNet() ) )
-        {           
+        {
             /* Fin de netcode trouve */
-            if( erc ){
+            if( erc )
+            {
                 /* GLabel ou SheetLabel orphelin */
                 Diagnose( panel, DC, NetItemRef, NULL, -1, WAR );
             }
             return;
         }
-		if(TestLabel_(NetItemRef, NetItemTst))
-			erc = 0; 
-		//same thing, different order. 
-		if(TestLabel_(NetItemTst, NetItemRef))
-			erc = 0; 
+        if( TestLabel_( NetItemRef, NetItemTst ) )
+            erc = 0;
+
+        //same thing, different order.
+        if( TestLabel_( NetItemTst, NetItemRef ) )
+            erc = 0;
     }
 }

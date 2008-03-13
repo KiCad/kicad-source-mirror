@@ -147,14 +147,14 @@ wxString DrawMarkerStruct::GetComment()
 /**
  * Function Show
  * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level 
+ * @param nestLevel An aid to prettier tree indenting, and is the level
  *          of nesting of this object within the overall tree.
  * @param os The ostream& to output to.
  */
 void DrawMarkerStruct::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML:
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<  m_Pos 
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<  m_Pos
         << "/>\n";
 }
 #endif
@@ -222,22 +222,41 @@ bool EDA_DrawLineStruct::IsOneEndPointAt( const wxPoint& pos )
 /**
  * Function Show
  * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level 
+ * @param nestLevel An aid to prettier tree indenting, and is the level
  *          of nesting of this object within the overall tree.
  * @param os The ostream& to output to.
  */
 void EDA_DrawLineStruct::Show( int nestLevel, std::ostream& os )
 {
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << 
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
         " layer=\""             << m_Layer      << '"' <<
         " width=\""             << m_Width      << '"' <<
-        " startIsDangling=\""   << m_StartIsDangling  << '"' << 
-        " endIsDangling=\""     << m_EndIsDangling  << '"' << ">" <<  
+        " startIsDangling=\""   << m_StartIsDangling  << '"' <<
+        " endIsDangling=\""     << m_EndIsDangling  << '"' << ">" <<
         " <start"               << m_Start      << "/>" <<
         " <end"                 << m_End        << "/>" <<
         "</" << GetClass().Lower().mb_str() << ">\n";
 }
 #endif
+
+
+
+EDA_Rect EDA_DrawLineStruct::GetBoundingBox() const
+{
+    int width = 25;
+
+    int xmin = MIN( m_Start.x, m_End.x ) - width;
+    int ymin = MIN( m_Start.y, m_End.y ) - width;
+
+    int xmax = MAX( m_Start.x, m_End.x ) + width;
+    int ymax = MAX( m_Start.y, m_End.y ) + width;
+
+    // return a rectangle which is [pos,dim) in nature.  therefore the +1
+    EDA_Rect ret( wxPoint( xmin, ymin ), wxSize( xmax-xmin+1, ymax-ymin+1 ) );
+
+    return ret;
+}
+
 
 
 /****************************/

@@ -76,7 +76,7 @@ public:
 public:
     EDA_DrawLineStruct( const wxPoint& pos, int layer );
     ~EDA_DrawLineStruct() { }
-    
+
     virtual wxString GetClass() const
     {
         return wxT( "EDA_DrawLine" );
@@ -92,19 +92,25 @@ public:
     }
 
 
+    /**
+     * Function GetBoundingBox
+     * returns the bounding box of this TRACK
+     */
+    EDA_Rect GetBoundingBox() const;
+
     virtual void Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode,
                        int Color = -1 );
-    
-#if defined(DEBUG)    
+
+#if defined(DEBUG)
     /**
      * Function Show
      * is used to output the object tree, currently for debugging only.
-     * @param nestLevel An aid to prettier tree indenting, and is the level 
+     * @param nestLevel An aid to prettier tree indenting, and is the level
      *          of nesting of this object within the overall tree.
      * @param os The ostream& to output to.
      */
     void Show( int nestLevel, std::ostream& os );
-#endif    
+#endif
 };
 
 
@@ -129,16 +135,16 @@ public:
     wxString            GetComment();
     virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                               int draw_mode, int Color = -1 );
-#if defined(DEBUG)    
+#if defined(DEBUG)
     /**
      * Function Show
      * is used to output the object tree, currently for debugging only.
-     * @param nestLevel An aid to prettier tree indenting, and is the level 
+     * @param nestLevel An aid to prettier tree indenting, and is the level
      *          of nesting of this object within the overall tree.
      * @param os The ostream& to output to.
      */
     void Show( int nestLevel, std::ostream& os );
-#endif    
+#endif
 };
 
 
@@ -177,7 +183,7 @@ public:
 public:
     DrawBusEntryStruct( const wxPoint& pos, int shape, int id );
     ~DrawBusEntryStruct() { }
-    
+
     virtual wxString GetClass() const
     {
         return wxT( "DrawBusEntry" );
@@ -201,7 +207,7 @@ public:
 public:
     DrawPolylineStruct( int layer );
     ~DrawPolylineStruct();
-    
+
     virtual wxString GetClass() const
     {
         return wxT( "DrawPolyline" );
@@ -222,7 +228,7 @@ public:
 public:
     DrawJunctionStruct( const wxPoint& pos );
     ~DrawJunctionStruct() { }
-    
+
     virtual wxString GetClass() const
     {
         return wxT( "DrawJunction" );
