@@ -413,7 +413,13 @@ public:
      */
     void                ImportSpecctraDesign( wxCommandEvent& event );
 
-    /* Fonctions specifiques */
+	/**
+     * Function Access_to_External_Tool
+	 * Run an external tool (like freeroute )
+	*/
+	void Access_to_External_Tool( wxCommandEvent& event );
+
+	/* Fonctions specifiques */
     MODULE*             ListAndSelectModuleName();
     void                Liste_Equipot( wxCommandEvent& event );
     void                Swap_Layers( wxCommandEvent& event );

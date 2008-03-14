@@ -126,6 +126,7 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
                          WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_TOOLBARH_PCB_AUTOPLACE, WinEDA_PcbFrame::AutoPlace )
     EVT_TOOL( ID_TOOLBARH_PCB_AUTOROUTE, WinEDA_PcbFrame::AutoPlace )
+    EVT_TOOL( ID_TOOLBARH_PCB_FREEROUTE_ACCESS, WinEDA_PcbFrame::Access_to_External_Tool )
 
     // Option toolbar
     EVT_TOOL_RANGE( ID_TB_OPTIONS_START, ID_TB_OPTIONS_END,

@@ -47,6 +47,7 @@ set(PCBNEW_SRCS
 #   dialog_drc.cpp
     dialog_edit_mod_text.cpp
 #   dialog_edit_module.cpp
+	dialog_freeroute_exchange.cpp
 #   dialog_gendrill.cpp
     dialog_general_options.cpp
 #   dialog_graphic_items_options.cpp

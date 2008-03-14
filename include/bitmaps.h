@@ -11,6 +11,7 @@
 	#include "../bitmaps/new_txt.xpm"
 	#include "../bitmaps/directory.xpm"
 	#include "../bitmaps/icon_python_small.xpm"
+	#include "../bitmaps/Web_support.xpm"
 
 	#include "../bitmaps/Fonts.xpm"
 

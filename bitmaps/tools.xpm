@@ -5,27 +5,27 @@ extern const char *tools_xpm[];
 #else
 const char *tools_xpm[] = {
 /* columns rows colors const chars-per-pixel */
-"16 15 3 1",
-"- c Blue",
-"X c Gray100",
-" c None",
-
-/* pixels */
-"XXXXXXX  XXXXXXX",
-"XXXXXXX  XXXXXXX",
-"X-----X  XXXXXXX",
-"X-----X  X-----X",
-"XXXXXXX  X-----X",
-"XXXXXXX  XXXXXXX",
-"X-----X  XXXXXXX",
-"X-----X  XXXXXXX",
-"XXXXXXX  XXXXXXX",
-"XXXXXXX  X-----X",
-"XXXXXXX  X-----X",
-"X-----X  XXXXXXX",
-"X-----X  XXXXXXX",
-"XXXXXXX  X-----X",
-"XXXXXXX  XXXXXXX"
-};
+"16 16 5 1",
+" 	c None",
+".	c #000000",
+"+	c #FFFFFF",
+"@	c #BFE5FF",
+"#	c #696969",
+"............... ",
+".+++++++++++++. ",
+".@#@..@....@#@. ",
+".+++++++++++++. ",
+".@#@..@..@@@#@. ",
+".+++++++++++++. ",
+".@#@..@....@#@. ",
+".+++++++++++++. ",
+".@#@..@...@@#@. ",
+".+++++++++++++. ",
+".@#@..@....@#@. ",
+".+++++++++++++. ",
+".@#@..@..@..#@. ",
+".+++++++++++++. ",
+"............... ",
+"                "};
 #endif
 

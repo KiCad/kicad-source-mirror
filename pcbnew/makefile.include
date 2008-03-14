@@ -16,6 +16,7 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		$(ZONE_FILES)\
 		$(SPECCTRA_TOOLS)\
 		lay2plot.o\
+		dialog_freeroute_exchange.o\
 		modedit_undo_redo.o\
 		block_module_editor.o\
 		onrightclick.o\
