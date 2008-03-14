@@ -21,7 +21,7 @@
 #include <vector>
 
 #ifndef SAFE_DELETE
-#define SAFE_DELETE(p) delete (p); (p) = NULL; 
+#define SAFE_DELETE(p) delete (p); (p) = NULL; //C++ guarantees that operator delete checks its argument for null-ness
 #endif
 
 #define INTERNAL_UNIT_TYPE      0        // Internal unit = inch

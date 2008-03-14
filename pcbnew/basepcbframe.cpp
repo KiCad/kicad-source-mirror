@@ -68,7 +68,8 @@ WinEDA_BasePcbFrame::~WinEDA_BasePcbFrame( void )
 
 void WinEDA_BasePcbFrame::SetBOARD( BOARD* aBoard )
 {
-    delete m_Pcb;
+    if(m_Pcb != g_ModuleEditor_Pcb) 
+		delete m_Pcb;
     m_Pcb = aBoard;
 }
 

@@ -250,7 +250,7 @@ WinEDA_PcbFrame::~WinEDA_PcbFrame()
     m_Parent->m_PcbFrame = NULL;
     m_CurrentScreen = ScreenPcb;
     delete m_drc;
-    delete m_Pcb;
+    if(m_Pcb != g_ModuleEditor_Pcb) delete m_Pcb;
 }
 
 

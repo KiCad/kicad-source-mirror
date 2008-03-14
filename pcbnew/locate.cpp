@@ -382,7 +382,7 @@ TRACK* Locate_Piste_Connectee( TRACK* PtRefSegm, TRACK* pt_base,
             if( PtSegmN == PtRefSegm )
                 goto suite;
 
-            /* max_dist is the max distance between 2 tack ends which ensure a copper continuty */
+            /* max_dist is the max distance between 2 track ends which ensure a copper continuty */
             max_dist = (PtSegmN->m_Width + PtRefSegm->m_Width)/2;
 
             if( IsPointsAreNear(pos_ref, PtSegmN->m_Start, max_dist) )
