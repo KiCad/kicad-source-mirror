@@ -210,6 +210,8 @@
           <string name="id-suffix">""</string>
           <long name="use-xrc">0</long>
           <long name="working-mode">0</long>
+          <string name="variable-0">"m_FreeRouteSetupChanged|bool|FreeRouteSetupChanged|false|2|0|Flag set to true if Freeroute config changed"</string>
+          <string name="event-handler-0">"wxEVT_CLOSE_WINDOW|OnCloseWindow|NONE||"</string>
           <string name="proxy-Id name">"ID_DIALOG_FREEROUTE_EXCHANGE"</string>
           <long name="proxy-Id value">10000</long>
           <string name="proxy-Class">"dialog_freeroute_exchange"</string>
@@ -240,6 +242,7 @@
           <bool name="proxy-wxDEFAULT_DIALOG_STYLE">0</bool>
           <bool name="proxy-wxCAPTION">1</bool>
           <bool name="proxy-wxRESIZE_BORDER">1</bool>
+          <bool name="proxy-wxTHICK_FRAME">1</bool>
           <bool name="proxy-wxSYSTEM_MENU">1</bool>
           <bool name="proxy-wxSTAY_ON_TOP">0</bool>
           <bool name="proxy-wxDIALOG_NO_PARENT">0</bool>
@@ -300,7 +303,7 @@
               <string name="proxy-Orientation">"Vertical"</string>
               <string name="proxy-Member variable name">""</string>
               <string name="proxy-AlignH">"Centre"</string>
-              <string name="proxy-AlignV">"Centre"</string>
+              <string name="proxy-AlignV">"Expand"</string>
               <long name="proxy-Stretch factor">0</long>
               <long name="proxy-Border">5</long>
               <bool name="proxy-wxLEFT">1</bool>
@@ -595,7 +598,7 @@
               <string name="proxy-Member variable name">""</string>
               <string name="proxy-AlignH">"Centre"</string>
               <string name="proxy-AlignV">"Expand"</string>
-              <long name="proxy-Stretch factor">0</long>
+              <long name="proxy-Stretch factor">1</long>
               <long name="proxy-Border">5</long>
               <bool name="proxy-wxLEFT">1</bool>
               <bool name="proxy-wxRIGHT">1</bool>
@@ -743,7 +746,7 @@
                 <string name="proxy-Custom ctor arguments">""</string>
               </document>
               <document>
-                <string name="title">"wxTextCtrl: ID_TEXTCTRL1"</string>
+                <string name="title">"wxTextCtrl: ID_TEXT_EDIT_FR_URL"</string>
                 <string name="type">"dialog-control-document"</string>
                 <string name="filename">""</string>
                 <string name="icon-name">"textctrl"</string>
@@ -753,7 +756,8 @@
                 <long name="locked">0</long>
                 <string name="created">"14/3/2008"</string>
                 <string name="proxy-type">"wbTextCtrlProxy"</string>
-                <string name="proxy-Id name">"ID_TEXTCTRL1"</string>
+                <string name="event-handler-0">"wxEVT_COMMAND_TEXT_UPDATED|OnTextEditFrUrlUpdated|NONE||dialog_freeroute_exchange"</string>
+                <string name="proxy-Id name">"ID_TEXT_EDIT_FR_URL"</string>
                 <long name="proxy-Id value">10005</long>
                 <string name="proxy-Name">""</string>
                 <string name="proxy-Class">"wxTextCtrl"</string>
@@ -895,7 +899,7 @@
                 <string name="proxy-Custom ctor arguments">""</string>
               </document>
               <document>
-                <string name="title">"wxTextCtrl: ID_TEXTCTRL"</string>
+                <string name="title">"wxTextCtrl: ID_TEXT_EDIT_FR_CMD"</string>
                 <string name="type">"dialog-control-document"</string>
                 <string name="filename">""</string>
                 <string name="icon-name">"textctrl"</string>
@@ -905,7 +909,8 @@
                 <long name="locked">0</long>
                 <string name="created">"14/3/2008"</string>
                 <string name="proxy-type">"wbTextCtrlProxy"</string>
-                <string name="proxy-Id name">"ID_TEXTCTRL"</string>
+                <string name="event-handler-0">"wxEVT_COMMAND_TEXT_UPDATED|OnTextEditFrCmdUpdated|NONE||dialog_freeroute_exchange"</string>
+                <string name="proxy-Id name">"ID_TEXT_EDIT_FR_CMD"</string>
                 <long name="proxy-Id value">10006</long>
                 <string name="proxy-Name">""</string>
                 <string name="proxy-Class">"wxTextCtrl"</string>
