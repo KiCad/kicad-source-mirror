@@ -573,7 +573,7 @@ void trace_1_pastille_RONDE_POST( wxPoint centre, int diametre, int modetrace )
 
     if( modetrace == FILLED )
     {
-        fprintf( dest, "%d setlinewidth\n", g_PlotLine_Width );
+		SetCurrentLineWidthPS(0);
         rayon = diam.x / 2;
         if( rayon < 1 )
             rayon = 1;
@@ -588,7 +588,7 @@ void trace_1_pastille_RONDE_POST( wxPoint centre, int diametre, int modetrace )
             rayon = 1;
         if( rayon < w )
             w = rayon;
-        fprintf( dest, "%d setlinewidth\n", w );
+		SetCurrentLineWidthPS(w);
         fprintf( dest, "newpath %d %d %d 0 360 arc stroke\n",
                  centre.x, centre.y, rayon );
     }

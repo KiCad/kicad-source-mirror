@@ -9,6 +9,8 @@ email address.
 ================================================================================
 +pcbnew
 	Added a tool to the upper toolbar which gives and easy access to freeroute
+	Solved a bug in plot postscript format when drawing oblong pads:
+		Bad oblong pad size after drawing a round pad
 
 
 2008-Mar-13 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
