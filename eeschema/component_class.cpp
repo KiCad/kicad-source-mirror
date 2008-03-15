@@ -234,7 +234,7 @@ EDA_SchComponentStruct::EDA_SchComponentStruct( const wxPoint& pos ) :
 
 
 /************************************************/
-EDA_Rect EDA_SchComponentStruct::GetBoundaryBox()
+EDA_Rect EDA_SchComponentStruct::GetBoundaryBox() const
 /************************************************/
 {
     EDA_LibComponentStruct* Entry = FindLibPart( m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
@@ -733,7 +733,7 @@ bool PartTextStruct::IsVoid()
 
 
 /********************************************/
-EDA_Rect PartTextStruct::GetBoundaryBox()
+EDA_Rect PartTextStruct::GetBoundaryBox() const
 /********************************************/
 
 /* return

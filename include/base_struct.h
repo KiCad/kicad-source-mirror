@@ -1,5 +1,5 @@
 /*********************************************************************/
-/*	base_struct.h :  Basic classes for most kicad item descriptions  */
+/*  base_struct.h :  Basic classes for most kicad item descriptions  */
 /*********************************************************************/
 
 #ifndef BASE_STRUCT_H
@@ -122,6 +122,78 @@ public:
      */
     SEARCH_RESULT virtual Inspect( EDA_BaseStruct * testItem,
                                    const void* testData ) = 0;
+};
+
+
+
+/**
+ * Class EDA_Rect
+ * handles the component boundary box.
+ * This class is similar to wxRect, but some wxRect functions are very curious,
+ * so I prefer this suitable class
+ */
+class EDA_Rect
+{
+public:
+    wxPoint m_Pos;      // Rectangle Origin
+    wxSize  m_Size;     // Rectangle Size
+
+public:
+    EDA_Rect() { };
+
+    EDA_Rect( const wxPoint& aPos, const wxSize& aSize ) :
+            m_Pos( aPos ), m_Size( aSize )
+    {}
+
+    wxPoint Centre()
+    {
+        return wxPoint( m_Pos.x + (m_Size.x >> 1), m_Pos.y + (m_Size.y >> 1) );
+    }
+
+
+    void    Normalize();                    // Ensure the height and width are >= 0
+    bool    Inside( const wxPoint& point ); // Return TRUE if point is in Rect
+
+    bool Inside( int x, int y ) { return Inside( wxPoint( x, y ) ); }
+    wxSize GetSize() { return m_Size; }
+    int GetX() { return m_Pos.x; }
+    int GetY() { return m_Pos.y; }
+    wxPoint GetOrigin() { return m_Pos; }
+    wxPoint GetPosition() { return m_Pos; }
+    wxPoint GetEnd() { return wxPoint( GetRight(), GetBottom() ); }
+    int GetWidth() { return m_Size.x; }
+    int GetHeight() { return m_Size.y; }
+    int GetRight() { return m_Pos.x + m_Size.x; }
+    int GetBottom() { return m_Pos.y + m_Size.y; }
+    void SetOrigin( const wxPoint& pos ) { m_Pos = pos; }
+    void SetOrigin( int x, int y ) { m_Pos.x = x; m_Pos.y = y; }
+    void SetSize( const wxSize& size ) { m_Size = size; }
+    void SetSize( int w, int h ) { m_Size.x = w; m_Size.y = h; }
+    void Offset( int dx, int dy ) { m_Pos.x += dx; m_Pos.y += dy; }
+    void Offset( const wxPoint& offset ) { m_Pos.x += offset.x; m_Pos.y += offset.y; }
+    void SetX( int val ) { m_Pos.x = val; }
+    void SetY( int val ) { m_Pos.y = val; }
+    void SetWidth( int val ) { m_Size.x = val; }
+    void SetHeight( int val ) { m_Size.y = val; }
+    void SetEnd( const wxPoint& pos )
+    {
+        m_Size.x = pos.x - m_Pos.x; m_Size.y = pos.y - m_Pos.y;
+    }
+
+    /**
+     * Function Intersects
+     * @return bool - true if the argument rectangle intersects this rectangle.
+     */
+    bool Intersects( const EDA_Rect aRect ) const;
+
+
+    /**
+     * Function operator(wxRect)
+     * overloads the cast operator to return a wxRect
+     */
+    operator wxRect() const { return wxRect( m_Pos, m_Size ); }
+
+    EDA_Rect& Inflate( wxCoord dx, wxCoord dy );
 };
 
 
@@ -268,6 +340,19 @@ public:
         return false;   // derived classes should override this function
     }
 
+    /**
+     * Function GetBoundingBox
+     * returns the orthogonal, bounding box of this object for display purposes.
+     * This box should be an enclosing perimeter for visible components of this
+     * object, and the units should be in the pcb or schematic coordinate system.
+     * It is OK to overestimate the size by a few counts.
+     */
+    virtual EDA_Rect GetBoundingBox()
+    {
+        // return a zero-sized box per default. derived classes should override this
+        EDA_Rect ret( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
+        return ret;
+    }
 
     /**
      * Function IterateForward
@@ -414,7 +499,7 @@ public:
     virtual ~EDA_TextStruct();
     void    CreateDrawData();
 
-    int     GetLength() { return m_Text.Length(); };
+    int     GetLength() const { return m_Text.Length(); };
 
     /** Function Pitch()
      * @return distance between 2 caracteres
@@ -598,76 +683,6 @@ public:
     void DeleteWrapperList();
 
     DrawPickedStruct* Next() { return (DrawPickedStruct*) Pnext; }
-};
-
-
-/**
- * Class EDA_Rect
- * handles the component boundary box.
- * This class is similar to wxRect, but some wxRect functions are very curious,
- * so I prefer this suitable class
- */
-class EDA_Rect
-{
-public:
-    wxPoint m_Pos;      // Rectangle Origin
-    wxSize  m_Size;     // Rectangle Size
-
-public:
-    EDA_Rect() { };
-    EDA_Rect( const wxPoint& aPos, const wxSize& aSize ) :
-        m_Pos( aPos ), m_Size( aSize )
-    {}
-
-    wxPoint Centre()
-    {
-        return wxPoint( m_Pos.x + (m_Size.x >> 1), m_Pos.y + (m_Size.y >> 1) );
-    }
-
-
-    void    Normalize();                    // Ensure the height and width are >= 0
-    bool    Inside( const wxPoint& point ); // Return TRUE if point is in Rect
-
-    bool Inside( int x, int y ) { return Inside( wxPoint( x, y ) ); }
-    wxSize GetSize() { return m_Size; }
-    int GetX() { return m_Pos.x; }
-    int GetY() { return m_Pos.y; }
-    wxPoint GetOrigin() { return m_Pos; }
-    wxPoint GetPosition() { return m_Pos; }
-    wxPoint GetEnd() { return wxPoint( GetRight(), GetBottom() ); }
-    int GetWidth() { return m_Size.x; }
-    int GetHeight() { return m_Size.y; }
-    int GetRight() { return m_Pos.x + m_Size.x; }
-    int GetBottom() { return m_Pos.y + m_Size.y; }
-    void SetOrigin( const wxPoint& pos ) { m_Pos = pos; }
-    void SetOrigin( int x, int y ) { m_Pos.x = x; m_Pos.y = y; }
-    void SetSize( const wxSize& size ) { m_Size = size; }
-    void SetSize( int w, int h ) { m_Size.x = w; m_Size.y = h; }
-    void Offset( int dx, int dy ) { m_Pos.x += dx; m_Pos.y += dy; }
-    void Offset( const wxPoint& offset ) { m_Pos.x += offset.x; m_Pos.y += offset.y; }
-    void SetX( int val ) { m_Pos.x = val; }
-    void SetY( int val ) { m_Pos.y = val; }
-    void SetWidth( int val ) { m_Size.x = val; }
-    void SetHeight( int val ) { m_Size.y = val; }
-    void SetEnd( const wxPoint& pos )
-    {
-        m_Size.x = pos.x - m_Pos.x; m_Size.y = pos.y - m_Pos.y;
-    }
-
-    /**
-     * Function Intersects
-     * @return bool - true if the argument rectangle intersects this rectangle.
-     */
-    bool Intersects( const EDA_Rect aRect ) const;
-
-
-    /**
-     * Function operator(wxRect)
-     * overloads the cast operator to return a wxRect
-     */
-    operator wxRect() const { return wxRect( m_Pos, m_Size ); }
-
-    EDA_Rect& Inflate( wxCoord dx, wxCoord dy );
 };
 
 #endif /* BASE_STRUCT_H */

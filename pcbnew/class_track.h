@@ -67,12 +67,7 @@ public:
         return m_Start;  // it had to be start or end.
     }
 
-
-    /**
-     * Function GetBoundingBox
-     * returns the bounding box of this TRACK
-     */
-    EDA_Rect GetBoundingBox() const;
+    EDA_Rect GetBoundingBox();
 
 
     /* supprime du chainage la structure Struct */

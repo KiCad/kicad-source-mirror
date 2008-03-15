@@ -59,7 +59,7 @@ public:
     void        PartTextCopy( PartTextStruct* target );
     void        Place( WinEDA_DrawFrame* frame, wxDC* DC );
 
-    EDA_Rect    GetBoundaryBox();
+    EDA_Rect    GetBoundaryBox() const;
     bool        IsVoid();
     void        SwapData( PartTextStruct* copyitem );
 };
@@ -123,7 +123,8 @@ public:
     wxPoint                 GetScreenCoord( const wxPoint& coord );
     void                    Display_Infos( WinEDA_DrawFrame* frame );
     void                    ClearAnnotation();
-    EDA_Rect                GetBoundaryBox();
+    EDA_Rect                GetBoundaryBox() const;
+    EDA_Rect                GetBoundingBox();
 
     const wxString&         ReturnFieldName( int aFieldNdx ) const;
 

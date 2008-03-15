@@ -91,12 +91,7 @@ public:
         return m_Start == m_End;
     }
 
-
-    /**
-     * Function GetBoundingBox
-     * returns the bounding box of this TRACK
-     */
-    EDA_Rect GetBoundingBox() const;
+    EDA_Rect GetBoundingBox();
 
     virtual void Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode,
                        int Color = -1 );
@@ -234,6 +229,7 @@ public:
         return wxT( "DrawJunction" );
     }
 
+    EDA_Rect GetBoundingBox();
 
     DrawJunctionStruct* GenCopy();
     virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
