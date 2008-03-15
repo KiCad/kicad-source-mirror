@@ -42,13 +42,13 @@ void MODULE::DrawAncre( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset
     if( (g_AnchorColor & ITEM_NOT_SHOW) == 0 )
     {
         GRLine( &panel->m_ClipBox, DC,
-                m_Pos.x - offset.x - anchor_size, m_Pos.y - offset.y,
-                m_Pos.x - offset.x + anchor_size, m_Pos.y - offset.y,
-                0, g_AnchorColor );
+            m_Pos.x - offset.x - anchor_size, m_Pos.y - offset.y,
+            m_Pos.x - offset.x + anchor_size, m_Pos.y - offset.y,
+            0, g_AnchorColor );
         GRLine( &panel->m_ClipBox, DC,
-                m_Pos.x - offset.x, m_Pos.y - offset.y - anchor_size,
-                m_Pos.x - offset.x, m_Pos.y - offset.y + anchor_size,
-                0, g_AnchorColor );
+            m_Pos.x - offset.x, m_Pos.y - offset.y - anchor_size,
+            m_Pos.x - offset.x, m_Pos.y - offset.y + anchor_size,
+            0, g_AnchorColor );
     }
 }
 
@@ -107,7 +107,7 @@ MODULE::~MODULE()
     {
         NextStruct = Struct->Pnext;
 
-        switch( (Struct->Type()) )
+        switch( ( Struct->Type() ) )
         {
         case TYPEEDGEMODULE:
             delete (EDGE_MODULE*) Struct;
@@ -142,7 +142,7 @@ void MODULE::Copy( MODULE* Module )
     m_CntRot90      = Module->m_CntRot90;
     m_CntRot180     = Module->m_CntRot180;
     m_LastEdit_Time = Module->m_LastEdit_Time;
-    m_Path 			= Module->m_Path; //is this correct behavior?
+    m_Path          = Module->m_Path; //is this correct behavior?
     m_TimeStamp     = GetTimeStamp();
 
     /* Copy des structures auxiliaires: Reference et value */
@@ -170,8 +170,8 @@ void MODULE::Copy( MODULE* Module )
     }
 
     /* Copy des structures auxiliaires: Drawings */
-    BOARD_ITEM*  OldStruct = Module->m_Drawings;
-    BOARD_ITEM*  NewStruct, * LastStruct = NULL;
+    BOARD_ITEM* OldStruct = Module->m_Drawings;
+    BOARD_ITEM* NewStruct, * LastStruct = NULL;
     for( ; OldStruct; OldStruct = OldStruct->Next() )
     {
         NewStruct = NULL;
@@ -278,9 +278,9 @@ void MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     D_PAD*          pt_pad;
     EDA_BaseStruct* PtStruct;
     TEXTE_MODULE*   PtTexte;
-	
-	if ( (m_Flags & DO_NOT_DRAW) )
-		return;
+
+    if( (m_Flags & DO_NOT_DRAW) )
+        return;
 
     /* Draw pads */
     pt_pad = m_Pads;
@@ -328,6 +328,7 @@ void MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 void MODULE::DrawEdgesOnly( WinEDA_DrawPanel* panel, wxDC* DC,
                             const wxPoint& offset, int draw_mode )
 /**************************************************************/
+
 /** Function DrawEdgesOnly
  *  Draws the footprint edges only to the current Device Context
  *  @param panel = The active Draw Panel (used to know the clip box)
@@ -357,8 +358,8 @@ void MODULE::DrawEdgesOnly( WinEDA_DrawPanel* panel, wxDC* DC,
 
 bool MODULE::Save( FILE* aFile ) const
 {
-    char            statusTxt[8];
-    BOARD_ITEM*     item;
+    char        statusTxt[8];
+    BOARD_ITEM* item;
 
     if( GetState( DELETED ) )
         return true;
@@ -380,9 +381,9 @@ bool MODULE::Save( FILE* aFile ) const
         statusTxt[1] = '~';
 
     fprintf( aFile, "Po %d %d %d %d %8.8lX %8.8lX %s\n",
-             m_Pos.x, m_Pos.y,
-             m_Orient, m_Layer, m_LastEdit_Time,
-             m_TimeStamp, statusTxt );
+        m_Pos.x, m_Pos.y,
+        m_Orient, m_Layer, m_LastEdit_Time,
+        m_TimeStamp, statusTxt );
 
     fprintf( aFile, "Li %s\n", CONV_TO_UTF8( m_LibRef ) );
 
@@ -397,7 +398,7 @@ bool MODULE::Save( FILE* aFile ) const
     }
 
     fprintf( aFile, "Sc %8.8lX\n", m_TimeStamp );
-    fprintf( aFile, "AR %s\n", CONV_TO_UTF8(m_Path) );
+    fprintf( aFile, "AR %s\n", CONV_TO_UTF8( m_Path ) );
     fprintf( aFile, "Op %X %X 0\n", m_CntRot90, m_CntRot180 );
 
     // attributes
@@ -420,7 +421,7 @@ bool MODULE::Save( FILE* aFile ) const
         goto out;
 
     // save drawing elements
-    for( item=m_Drawings;  item;  item=item->Next() )
+    for( item = m_Drawings;  item;  item = item->Next() )
     {
         switch( item->Type() )
         {
@@ -431,7 +432,7 @@ bool MODULE::Save( FILE* aFile ) const
             break;
 
         default:
-#if defined(DEBUG)
+#if defined (DEBUG)
             printf( "MODULE::Save() ignoring type %d\n", item->Type() );
 #endif
             break;
@@ -439,7 +440,7 @@ bool MODULE::Save( FILE* aFile ) const
     }
 
     // save the pads
-    for( item=m_Pads;  item;  item=item->Next() )
+    for( item = m_Pads;  item;  item = item->Next() )
         if( !item->Save( aFile ) )
             goto out;
 
@@ -473,21 +474,21 @@ int MODULE::Write_3D_Descr( FILE* File ) const
             fprintf( File, "Na \"%s\"\n", CONV_TO_UTF8( Struct3D->m_Shape3DName ) );
 
             sprintf( buf, "Sc %lf %lf %lf\n",
-                     Struct3D->m_MatScale.x,
-                     Struct3D->m_MatScale.y,
-                     Struct3D->m_MatScale.z );
+                Struct3D->m_MatScale.x,
+                Struct3D->m_MatScale.y,
+                Struct3D->m_MatScale.z );
             fprintf( File, to_point( buf ) );
 
             sprintf( buf, "Of %lf %lf %lf\n",
-                     Struct3D->m_MatPosition.x,
-                     Struct3D->m_MatPosition.y,
-                     Struct3D->m_MatPosition.z );
+                Struct3D->m_MatPosition.x,
+                Struct3D->m_MatPosition.y,
+                Struct3D->m_MatPosition.z );
             fprintf( File, to_point( buf ) );
 
             sprintf( buf, "Ro %lf %lf %lf\n",
-                     Struct3D->m_MatRotation.x,
-                     Struct3D->m_MatRotation.y,
-                     Struct3D->m_MatRotation.z );
+                Struct3D->m_MatRotation.x,
+                Struct3D->m_MatRotation.y,
+                Struct3D->m_MatRotation.z );
             fprintf( File, to_point( buf ) );
 
             fprintf( File, "$EndSHAPE3D\n" );
@@ -541,23 +542,23 @@ int MODULE::Read_3D_Descr( FILE* File, int* LineNum )
 
         case 'S':       // Scale
             sscanf( text, "%lf %lf %lf\n",
-                    &Struct3D->m_MatScale.x,
-                    &Struct3D->m_MatScale.y,
-                    &Struct3D->m_MatScale.z );
+                &Struct3D->m_MatScale.x,
+                &Struct3D->m_MatScale.y,
+                &Struct3D->m_MatScale.z );
             break;
 
         case 'O':       // Offset
             sscanf( text, "%lf %lf %lf\n",
-                    &Struct3D->m_MatPosition.x,
-                    &Struct3D->m_MatPosition.y,
-                    &Struct3D->m_MatPosition.z );
+                &Struct3D->m_MatPosition.x,
+                &Struct3D->m_MatPosition.y,
+                &Struct3D->m_MatPosition.z );
             break;
 
         case 'R':       // Rotation
             sscanf( text, "%lf %lf %lf\n",
-                    &Struct3D->m_MatRotation.x,
-                    &Struct3D->m_MatRotation.y,
-                    &Struct3D->m_MatRotation.z );
+                &Struct3D->m_MatRotation.x,
+                &Struct3D->m_MatRotation.y,
+                &Struct3D->m_MatRotation.z );
             break;
 
         default:
@@ -627,13 +628,13 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
         case 'P':
             memset( BufCar1, 0, sizeof(BufCar1) );
             sscanf( PtLine, "%d %d %d %d %lX %lX %s",
-                    &m_Pos.x, &m_Pos.y,
-                    &m_Orient, &m_Layer,
-                    &m_LastEdit_Time, &m_TimeStamp, BufCar1 );
+                &m_Pos.x, &m_Pos.y,
+                &m_Orient, &m_Layer,
+                &m_LastEdit_Time, &m_TimeStamp, BufCar1 );
 
             m_ModuleStatus = 0;
             if( BufCar1[0] == 'F' )
-                SetLocked(true);
+                SetLocked( true );
             if( BufCar1[1] == 'P' )
                 m_ModuleStatus |= MODULE_is_PLACED;
             break;
@@ -667,17 +668,19 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
             break;
 
         case 'A':
-            if(Line[1] == 't'){
+            if( Line[1] == 't' )
+            {
                 /* At = (At)tributs du module */
                 if( strstr( PtLine, "SMD" ) )
                     m_Attributs |= MOD_CMS;
                 if( strstr( PtLine, "VIRTUAL" ) )
                     m_Attributs |= MOD_VIRTUAL;
             }
-            if(Line[1] == 'R'){
+            if( Line[1] == 'R' )
+            {
                 //alternate reference, e.g. /478C2408/478AD1B6
                 sscanf( PtLine, " %s", BufLine );
-                m_Path = CONV_FROM_UTF8(BufLine);
+                m_Path = CONV_FROM_UTF8( BufLine );
             }
             break;
 
@@ -705,11 +708,11 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
 
             int layer;
             sscanf( Line + 1, "%d %d %d %d %d %d %d %s %s %d",
-                    &itmp1,
-                    &DrawText->m_Pos0.x, &DrawText->m_Pos0.y,
-                    &DrawText->m_Size.y, &DrawText->m_Size.x,
-                    &DrawText->m_Orient, &DrawText->m_Width,
-                    BufCar1, BufCar2, &layer );
+                &itmp1,
+                &DrawText->m_Pos0.x, &DrawText->m_Pos0.y,
+                &DrawText->m_Size.y, &DrawText->m_Size.x,
+                &DrawText->m_Orient, &DrawText->m_Width,
+                BufCar1, BufCar2, &layer );
 
             DrawText->m_Type    = itmp1;
             DrawText->m_Orient -= m_Orient;     // m_Orient texte relative au module
@@ -1054,52 +1057,30 @@ void MODULE::SetRectangleExinscrit()
  */
 EDA_Rect MODULE::GetBoundingBox()
 {
-	// Calculate area without text fielsd:
-	SetRectangleExinscrit();
-	EDA_Rect area = m_RealBoundaryBox;
+    // Calculate area without text fields:
+    SetRectangleExinscrit();
+    EDA_Rect      area = m_RealBoundaryBox;
 
-	area.Normalize();
-	// Calculate extended area including text field:
+    // Calculate extended area including text field:
+    EDA_Rect      text_area;
+    text_area = m_Reference->GetBoundingBox();
+    area.Merge( text_area );
+
+    text_area = m_Value->GetBoundingBox();
+    area.Merge( text_area );
+
     EDGE_MODULE* EdgeMod = (EDGE_MODULE*) m_Drawings;
-	TEXTE_MODULE* text;
-	EDA_Rect text_area;
-	wxPoint textstart, textend;
-	wxPoint modstart = area.GetOrigin();
-	wxPoint modend = area.GetEnd();
-    for( int ii = 0 ; ; ii++ )
+    for( ; EdgeMod != NULL; EdgeMod = (EDGE_MODULE*) EdgeMod->Pnext )
     {
-		if ( ii == 0 )
-			text = m_Reference;
-		else if ( ii == 1 )
-			text = m_Value;
-		else
-		{
-			if ( EdgeMod == NULL ) break;
-			text = (TEXTE_MODULE*) EdgeMod;
-			EdgeMod = (EDGE_MODULE*) EdgeMod->Pnext;
-			if( text->Type() != TYPETEXTEMODULE )
-				continue;
-		}
-		text_area = text->GetTextRect();
-		textstart = text_area.GetOrigin();
-		textend = text_area.GetEnd();
-		int angle = text->GetDrawRotation();
-		RotatePoint( &textstart, text->m_Pos, angle);
-		RotatePoint( &textend, text->m_Pos, angle);
-		modstart.x = min( modstart.x, textstart.x);
-		modstart.x = min( modstart.x, textend.x);
-		modstart.y = min( modstart.y, textstart.y);
-		modstart.y = min( modstart.y, textend.y);
-		modend.x = max( modend.x, textstart.x);
-		modend.x = max( modend.x, textend.x);
-		modend.y = max( modend.y, textstart.y);
-		modend.y = max( modend.y, textend.y);
-	}
-	
-	area.SetOrigin(modstart);
-	area.SetEnd(modend);
-	return area;
+        if( EdgeMod->Type() != TYPETEXTEMODULE )
+            continue;
+        text_area = ((TEXTE_MODULE*)EdgeMod)->GetBoundingBox();
+        area.Merge( text_area );
+    }
+
+    return area;
 }
+
 
 /*******************************************************/
 void MODULE::Display_Infos( WinEDA_DrawFrame* frame )
@@ -1135,7 +1116,7 @@ void MODULE::Display_Infos( WinEDA_DrawFrame* frame )
     else
     {
         msg.Printf( wxT( "%8.8lX" ), m_TimeStamp );
-        Affiche_1_Parametre( frame, pos, _( "Netlist path" ), /*msg*/m_Path, BROWN );
+        Affiche_1_Parametre( frame, pos, _( "Netlist path" ), /*msg*/ m_Path, BROWN );
     }
 
     pos += 12;
@@ -1170,7 +1151,7 @@ void MODULE::Display_Infos( WinEDA_DrawFrame* frame )
 
     pos += 9;
     Affiche_1_Parametre( frame, pos, _( "3D-Shape" ),
-                         m_3D_Drawings->m_Shape3DName, RED );
+        m_3D_Drawings->m_Shape3DName, RED );
 
     pos += 14;
     wxString doc     = _( "Doc:  " ) + m_Doc;
@@ -1207,7 +1188,7 @@ bool MODULE::HitTest( const wxPoint& refPos )
  * @param refArea : the given EDA_Rect
  * @return bool - true if a hit, else false
  */
-bool    MODULE::HitTest( EDA_Rect& refArea )
+bool MODULE::HitTest( EDA_Rect& refArea )
 {
     bool is_out_of_box = false;
 
@@ -1230,7 +1211,7 @@ D_PAD* MODULE::FindPadByName( const wxString& aPadName ) const
 {
     wxString buf;
 
-    for(  D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
+    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
         pad->ReturnStringPadName( buf );
 #if 1
@@ -1238,6 +1219,7 @@ D_PAD* MODULE::FindPadByName( const wxString& aPadName ) const
 #else
         if( buf == aPadName )
 #endif
+
             return pad;
     }
 
@@ -1247,20 +1229,21 @@ D_PAD* MODULE::FindPadByName( const wxString& aPadName ) const
 
 // see class_module.h
 SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
-    const KICAD_T scanTypes[] )
+                             const KICAD_T scanTypes[] )
 {
-    KICAD_T         stype;
-    SEARCH_RESULT   result = SEARCH_CONTINUE;
-    const KICAD_T*  p = scanTypes;
-    bool            done = false;
+    KICAD_T        stype;
+    SEARCH_RESULT  result = SEARCH_CONTINUE;
+    const KICAD_T* p    = scanTypes;
+    bool           done = false;
 
-#if 0 && defined(DEBUG)
-    std::cout <<  GetClass().mb_str() << ' ';
+#if 0 && defined (DEBUG)
+    std::cout << GetClass().mb_str() << ' ';
 #endif
 
     while( !done )
     {
         stype = *p;
+
         switch( stype )
         {
         case TYPEMODULE:
@@ -1286,18 +1269,23 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
 
         case TYPEEDGEMODULE:
             result = IterateForward( m_Drawings, inspector, testData, p );
+
             // skip over any types handled in the above call.
-            for(;;)
+            for( ; ; )
             {
                 switch( stype = *++p )
                 {
                 case TYPETEXTEMODULE:
                 case TYPEEDGEMODULE:
                     continue;
-                default: ;
+
+                default:
+                    ;
                 }
+
                 break;
             }
+
             break;
 
         default:
@@ -1313,7 +1301,8 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
 }
 
 
-#if defined(DEBUG)
+#if defined (DEBUG)
+
 /**
  * Function Show
  * is used to output the object tree, currently for debugging only.
@@ -1323,41 +1312,44 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
  */
 void MODULE::Show( int nestLevel, std::ostream& os )
 {
-    BOARD*  board = (BOARD*) m_Parent;
+    BOARD* board = (BOARD*) m_Parent;
 
     // for now, make it look like XML, expand on this later.
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-        " ref=\"" << m_Reference->m_Text.mb_str() << '"' <<
-        " value=\"" << m_Value->m_Text.mb_str()     << '"' <<
-        " layer=\"" << board->GetLayerName(m_Layer).mb_str() << '"' <<
-        ">\n";
+    " ref=\"" << m_Reference->m_Text.mb_str() << '"' <<
+    " value=\"" << m_Value->m_Text.mb_str() << '"' <<
+    " layer=\"" << board->GetLayerName( m_Layer ).mb_str() << '"' <<
+    ">\n";
 
-    NestedSpace( nestLevel+1, os ) <<
-        "<boundingBox" << m_BoundaryBox.m_Pos << m_BoundaryBox.m_Size << "/>\n";
+    NestedSpace( nestLevel + 1, os ) <<
+    "<boundingBox" << m_BoundaryBox.m_Pos << m_BoundaryBox.m_Size << "/>\n";
 
-    NestedSpace( nestLevel+1, os ) << "<orientation tenths=\"" << m_Orient << "\"/>\n";
+    NestedSpace( nestLevel + 1, os ) << "<orientation tenths=\"" << m_Orient << "\"/>\n";
 
     EDA_BaseStruct* p;
 
-    NestedSpace( nestLevel+1, os ) << "<mpads>\n";
+    NestedSpace( nestLevel + 1, os ) << "<mpads>\n";
     p = m_Pads;
     for( ; p; p = p->Pnext )
-        p->Show( nestLevel+2, os );
-    NestedSpace( nestLevel+1, os ) << "</mpads>\n";
+        p->Show( nestLevel + 2, os );
 
-    NestedSpace( nestLevel+1, os ) << "<mdrawings>\n";
+    NestedSpace( nestLevel + 1, os ) << "</mpads>\n";
+
+    NestedSpace( nestLevel + 1, os ) << "<mdrawings>\n";
     p = m_Drawings;
     for( ; p; p = p->Pnext )
-        p->Show( nestLevel+2, os );
-    NestedSpace( nestLevel+1, os ) << "</mdrawings>\n";
+        p->Show( nestLevel + 2, os );
+
+    NestedSpace( nestLevel + 1, os ) << "</mdrawings>\n";
 
     p = m_Son;
     for( ; p;  p = p->Pnext )
     {
-        p->Show( nestLevel+1, os );
+        p->Show( nestLevel + 1, os );
     }
 
     NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
+
 
 #endif

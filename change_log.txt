@@ -7,6 +7,17 @@ email address.
 
 2008-Mar-14 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
+	some code cleaning and comment translations.
+	added:
+	/** EDA_Rect::Merge( EDA_Rect & aRect )
+	 * Modify Position and Size of this in order to contains the given rect
+	 * mainly used to calculate bouding boxes
+	 * @param aRect = given rect to merge with this
+	 */
+
+
+2008-Mar-14 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
 +pcbnew
 	Added a tool to the upper toolbar which gives and easy access to freeroute
 	Solved a bug in plot postscript format when drawing oblong pads:

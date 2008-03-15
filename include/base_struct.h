@@ -194,12 +194,20 @@ public:
     operator wxRect() const { return wxRect( m_Pos, m_Size ); }
 
     EDA_Rect& Inflate( wxCoord dx, wxCoord dy );
+	
+	/** Function Merge
+	 * Modify Position and Size of this in order to contain the given rect
+	 * mainly used to calculate bounding boxes
+	 * @param aRect = given rect to merge with this
+	*/
+	void Merge( EDA_Rect & aRect );
+
 };
 
 
-/********************************************************************/
-/* Classes de base: servent a deriver les classes reellement utiles */
-/********************************************************************/
+/******************************************************/
+/* Basic Classes : used classes are derived from them */
+/******************************************************/
 
 /** class EDA_BaseStruct
  * Basic class, not directly used.

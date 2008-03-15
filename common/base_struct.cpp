@@ -9,6 +9,7 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "trigo.h"
+#include "macros.h"
 #include "common.h"
 #include "wxstruct.h"
 #include "base_struct.h"
@@ -98,8 +99,8 @@ void EDA_BaseStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& off
     wxString msg, name;
 
     msg.Printf( wxT(
-                    "EDA_BaseStruct::Draw() error. Method for struct type %d used but not implemented (" ),
-                Type() );
+            "EDA_BaseStruct::Draw() error. Method for struct type %d used but not implemented (" ),
+        Type() );
     msg += GetClass() + wxT( ")\n" );
     printf( CONV_TO_UTF8( msg ) );
 }
@@ -115,14 +116,19 @@ void EDA_BaseStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
  */
 {
 }
+
+
 #endif
 
 
 // see base_struct.h
 SEARCH_RESULT EDA_BaseStruct::IterateForward( EDA_BaseStruct* listStart,
-    INSPECTOR* inspector, const void* testData, const KICAD_T scanTypes[] )
+                                              INSPECTOR* inspector,
+                                              const void* testData,
+                                              const KICAD_T scanTypes[] )
 {
     EDA_BaseStruct* p = listStart;
+
     for( ; p; p = p->Pnext )
     {
         if( SEARCH_QUIT == p->Visit( inspector, testData, scanTypes ) )
@@ -136,15 +142,15 @@ SEARCH_RESULT EDA_BaseStruct::IterateForward( EDA_BaseStruct* listStart,
 // see base_struct.h
 // many classes inherit this method, be careful:
 SEARCH_RESULT EDA_BaseStruct::Visit( INSPECTOR* inspector, const void* testData,
-        const KICAD_T scanTypes[] )
+                                     const KICAD_T scanTypes[] )
 {
-    KICAD_T     stype;
+    KICAD_T stype;
 
-#if 0 && defined(DEBUG)
-    std::cout <<  GetClass().mb_str() << ' ';
+#if 0 && defined (DEBUG)
+    std::cout << GetClass().mb_str() << ' ';
 #endif
 
-    for( const KICAD_T* p = scanTypes;  (stype=*p) != EOT;   ++p )
+    for( const KICAD_T* p = scanTypes;  (stype = *p) != EOT;   ++p )
     {
         // If caller wants to inspect my type
         if( stype == Type() )
@@ -160,13 +166,15 @@ SEARCH_RESULT EDA_BaseStruct::Visit( INSPECTOR* inspector, const void* testData,
 }
 
 
-#if defined(DEBUG)
+#if defined (DEBUG)
+
 // A function that should have been in wxWidgets
 std::ostream& operator<<( std::ostream& out, const wxSize& size )
 {
     out << " width=\"" << size.GetWidth() << "\" height=\"" << size.GetHeight() << "\"";
     return out;
 }
+
 
 // A function that should have been in wxWidgets
 std::ostream& operator<<( std::ostream& out, const wxPoint& pt )
@@ -187,17 +195,18 @@ void EDA_BaseStruct::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML:
     wxString s = GetClass();
-    s = s + wxT(" ");
+
+    s = s + wxT( " " );
     NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << ">\n";
 
     /*
-    EDA_BaseStruct* kid = m_Son;
-    for( ; kid;  kid = kid->Pnext )
-    {
-        kid->Show( nestLevel+1, os );
-    }
-    */
-    NestedSpace( nestLevel+1, os ) << "Need ::Show() override\n";
+      * EDA_BaseStruct* kid = m_Son;
+      * for( ; kid;  kid = kid->Pnext )
+      * {
+      * kid->Show( nestLevel+1, os );
+      * }
+     */
+    NestedSpace( nestLevel + 1, os ) << "Need ::Show() override\n";
 
     NestedSpace( nestLevel, os ) << "</" << s.Lower().mb_str() << ">\n";
 }
@@ -212,13 +221,14 @@ void EDA_BaseStruct::Show( int nestLevel, std::ostream& os )
  **/
 std::ostream& EDA_BaseStruct::NestedSpace( int nestLevel, std::ostream& os )
 {
-    for( int i=0; i<nestLevel; ++i )
-        os << "  ";      // number of spaces here controls indent per nest level
+    for( int i = 0; i<nestLevel; ++i )
+        os << "  "; // number of spaces here controls indent per nest level
+
     return os;
 }
 
-#endif
 
+#endif
 
 
 /**************************************************/
@@ -296,6 +306,7 @@ bool EDA_TextStruct::HitTest( const wxPoint& posref )
     return false;
 }
 
+
 /**
  * Function HitTest (overlayed)
  * tests if the given EDA_Rect intersect this object.
@@ -303,13 +314,14 @@ bool EDA_TextStruct::HitTest( const wxPoint& posref )
  * @return bool - true if a hit, else false
  */
 /*********************************************************/
-bool    EDA_TextStruct::HitTest( EDA_Rect& refArea )
+bool EDA_TextStruct::HitTest( EDA_Rect& refArea )
 /*********************************************************/
 {
     if( refArea.Inside( m_Pos ) )
         return true;
     return false;
 }
+
 
 /*******************************/
 int EDA_TextStruct::Pitch()
@@ -342,7 +354,7 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     int ii, jj, kk, ll, nbpoints;
     int width;
 
-    if( m_TextDrawings == NULL ) /* pointeur sur la liste des segments de dessin */
+    if( m_TextDrawings == NULL )  /* pointeur sur la liste des segments de dessin */
         CreateDrawData();
 
     if( m_TextDrawings == NULL )
@@ -361,11 +373,11 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     if( zoom > m_ZoomLevelDrawable )
     {
         GRLine( &panel->m_ClipBox, DC,
-                m_TextDrawings[1] + offset.x + m_Pos.x,
-                m_TextDrawings[2] + offset.y + m_Pos.y,
-                m_TextDrawings[3] + offset.x + m_Pos.x,
-                m_TextDrawings[4] + offset.y + m_Pos.y,
-                width, color );
+            m_TextDrawings[1] + offset.x + m_Pos.x,
+            m_TextDrawings[2] + offset.y + m_Pos.y,
+            m_TextDrawings[3] + offset.x + m_Pos.x,
+            m_TextDrawings[4] + offset.y + m_Pos.y,
+            width, color );
     }
     else
     {
@@ -381,10 +393,10 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
             /* trace ancre du texte */
             GRLine( &panel->m_ClipBox, DC, cX - anchor_size, cY,
-                    cX + anchor_size, cY, 0, anchor_color );
+                cX + anchor_size, cY, 0, anchor_color );
 
             GRLine( &panel->m_ClipBox, DC, cX, cY - anchor_size,
-                    cX, cY + anchor_size, 0, anchor_color );
+                cX, cY + anchor_size, 0, anchor_color );
         }
         jj = 5; ii = jj + 1;
         while( ii < m_TextDrawingsSize )
@@ -407,15 +419,15 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                 {
                     if( display_mode == SKETCH )
                         GRCSegm( &panel->m_ClipBox, DC,
-                                 coord[ll], coord[ll + 1],
-                                 coord[ll + 2], coord[ll + 3],
-                                 m_Width, color );
+                            coord[ll], coord[ll + 1],
+                            coord[ll + 2], coord[ll + 3],
+                            m_Width, color );
 
                     else
                         GRFillCSegm( &panel->m_ClipBox, DC,
-                                     coord[ll], coord[ll + 1],
-                                     coord[ll + 2], coord[ll + 3],
-                                     m_Width, color );
+                            coord[ll], coord[ll + 1],
+                            coord[ll + 2], coord[ll + 3],
+                            m_Width, color );
                 }
             }
             else
@@ -548,14 +560,14 @@ void EDA_TextStruct::CreateDrawData()
     /* lorsque les chars sont trop petits pour etre dessines,
      *  le texte est symbolise par une barre */
     m_ZoomLevelDrawable = m_Size.x / 3;
-    dx  = (espacement * nbchar) / 2;
-    dy  = size_v / 2;    /* Decalage du debut du texte / centre */
+    dx = (espacement * nbchar) / 2;
+    dy = size_v / 2;    /* Decalage du debut du texte / centre */
 
     ux0 = cX - dx;
     uy0 = cY;
 
     dx += cX;
-    dy = cY;
+    dy  = cY;
 
     RotatePoint( &ux0, &uy0, cX, cY, m_Orient );
     RotatePoint( &dx, &dy, cX, cY, m_Orient );
@@ -595,7 +607,7 @@ void EDA_TextStruct::CreateDrawData()
                     coord[jj] = nbpoints;
                     jj = ii++;
                 }
-                plume = f_cod;
+                plume    = f_cod;
                 nbpoints = 0;
                 break;
 
@@ -613,8 +625,8 @@ void EDA_TextStruct::CreateDrawData()
                 k2    = f_cod;  /* trace sur axe H */
                 k2    = (k2 * size_h) / 9;
 
-                dx    = k2 + ox;
-                dy    = k1 + oy;
+                dx = k2 + ox;
+                dy = k1 + oy;
 
                 RotatePoint( &dx, &dy, cX, cY, m_Orient );
                 if( ii >= coord_count_max )
@@ -680,13 +692,13 @@ bool EDA_Rect::Inside( const wxPoint& point )
 
     if( size.x < 0 )
     {
-        size.x = -size.x;
+        size.x    = -size.x;
         rel_posx += size.x;
     }
 
     if( size.y < 0 )
     {
-        size.y = -size.y;
+        size.y    = -size.y;
         rel_posy += size.y;
     }
 
@@ -701,10 +713,10 @@ bool EDA_Rect::Intersects( const EDA_Rect aRect ) const
 {
     // this logic taken from wxWidgets' geometry.cpp file:
 
-    int left   = MAX( m_Pos.x , aRect.m_Pos.x );
-    int right  = MIN( m_Pos.x+m_Size.x, aRect.m_Pos.x+aRect.m_Size.x );
-    int top    = MAX( m_Pos.y , aRect.m_Pos.y );
-    int bottom = MIN( m_Pos.y+m_Size.y, aRect.m_Pos.y + aRect.m_Size.y );
+    int left   = MAX( m_Pos.x, aRect.m_Pos.x );
+    int right  = MIN( m_Pos.x + m_Size.x, aRect.m_Pos.x + aRect.m_Size.x );
+    int top    = MAX( m_Pos.y, aRect.m_Pos.y );
+    int bottom = MIN( m_Pos.y + m_Size.y, aRect.m_Pos.y + aRect.m_Size.y );
 
     if( left < right && top < bottom )
     {
@@ -750,6 +762,28 @@ EDA_Rect& EDA_Rect::Inflate( wxCoord dx, wxCoord dy )
 }
 
 
+/** Function Merge
+ * Modify Position and Size of this in order to contain the given rect
+ * mainly used to calculate bounding boxes
+ * @param aRect = given rect to merge with this
+ */
+void EDA_Rect::Merge( EDA_Rect& aRect )
+{
+    Normalize();        // ensure width and height >= 0
+    EDA_Rect rect = aRect;
+    rect.Normalize();   // ensure width and height >= 0
+    wxPoint end      = GetEnd();
+    wxPoint rect_end = rect.GetEnd();
+
+	// Change origin and size in order to contain the given rect
+	m_Pos.x = MIN( m_Pos.x, rect.m_Pos.x );
+    m_Pos.y = MIN( m_Pos.y, rect.m_Pos.y );
+    end.x = MAX( end.x, rect_end.x );
+    end.y = MAX( end.y, rect_end.y );
+    SetEnd( end );
+}
+
+
 /**************************/
 /* class DrawPickedStruct */
 /**************************/
@@ -791,4 +825,3 @@ void DrawPickedStruct::DeleteWrapperList()
         delete wrapp_struct;
     }
 }
-

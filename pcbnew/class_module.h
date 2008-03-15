@@ -158,6 +158,13 @@ public:
     int     Read_3D_Descr( FILE* File, int* LineNum = NULL );
 
     /* drawing functions */
+	/** Function Draw
+	 * Draw the text accordint to the footprint pos and orient
+	 * @param panel = draw panel, Used to know the clip box
+	 * @param DC = Current Device Context
+	 * @param offset = draw offset (usually wxPoint(0,0)
+	 * @param draw_mode = GR_OR, GR_XOR..
+	 */
     void    Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                   const wxPoint& offset, int draw_mode );
     void    Draw3D( Pcb3D_GLCanvas* glcanvas );

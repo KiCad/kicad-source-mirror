@@ -101,11 +101,12 @@ void TEXTE_MODULE::Copy( TEXTE_MODULE* source )      // copy structure
     m_Pos   = source->m_Pos;
     SetLayer( source->GetLayer() );
 
-    m_Miroir = source->m_Miroir;        // vue normale / miroir
+    m_Miroir = source->m_Miroir;        // Show normal / mirror
     m_NoShow = source->m_NoShow;        // 0: visible 1: invisible
-    m_Type   = source->m_Type;          // 0: ref,1: val, autre = 2..255
-    m_Orient = source->m_Orient;        // orientation en 1/10 degre
-    m_Pos0   = source->m_Pos0;          // coord du debut du texte /ancre, orient 0
+    m_Type   = source->m_Type;          // 0: ref,1: val, others = 2..255
+    m_Orient = source->m_Orient;        // orientation in 1/10 deg
+    m_Pos0   = source->m_Pos0;          // text coordinates relatives to the footprint ancre, orient 0
+										// Text coordinate ref point is the text centre
 
     m_Size  = source->m_Size;
     m_Width = source->m_Width;
@@ -114,8 +115,8 @@ void TEXTE_MODULE::Copy( TEXTE_MODULE* source )      // copy structure
 }
 
 
-/* supprime du chainage la structure Struct
- *  les structures arrieres et avant sont chainees directement
+/* Remove this from the linked list
+ * Update Pback and Pnext pointers
  */
 void TEXTE_MODULE::UnLink()
 {
@@ -156,7 +157,7 @@ void TEXTE_MODULE:: SetWidth( int new_width )
 }
 
 
-// mise a jour des coordonn�s absolues pour affichage
+// Update draw ccordinates
 void TEXTE_MODULE:: SetDrawCoord()
 {
     MODULE* Module = (MODULE*) m_Parent;
@@ -175,7 +176,7 @@ void TEXTE_MODULE:: SetDrawCoord()
 }
 
 
-// mise a jour des coordonn�s relatives au module
+// Update "local" cooedinates (coordinates relatives to the footprint anchor point)
 void TEXTE_MODULE:: SetLocalCoord()
 {
     MODULE* Module = (MODULE*) m_Parent;
@@ -219,45 +220,62 @@ EDA_Rect TEXTE_MODULE::GetTextRect(void)
 	return area;
 }
 
-bool TEXTE_MODULE::HitTest( const wxPoint& posref )
+/**
+ * Function HitTest
+ * tests if the given wxPoint is within the bounds of this object.
+ * @param refPos A wxPoint to test
+ * @return bool - true if a hit, else false
+ */
+bool TEXTE_MODULE::HitTest( const wxPoint& refPos )
 {
-    int     mX, mY, dx, dy;
-    MODULE* Module = (MODULE*) m_Parent;
-    int     angle  = m_Orient;
+    wxPoint rel_pos;
+	EDA_Rect area = GetTextRect();
+	
+    /* Rotate refPos to - angle
+     * to test if refPos is within area (which is relative to an horizontal text)
+	*/
+    rel_pos = refPos;
+    RotatePoint( &rel_pos, m_Pos, - GetDrawRotation() );
 
-    if( Module )
-        angle += Module->m_Orient;
-
-    dx = ( m_Size.x * GetLength() ) / 2;
-    dx = (dx * 10) / 9; /* Facteur de forme des lettres : 10/9 */
-	dx +=  m_Width / 2;
-    dy = ( m_Size.y + m_Width ) / 2;
-
-    /* le point de reference est tourn�de - angle
-     *  pour se ramener a un rectangle de reference horizontal */
-    mX = posref.x - m_Pos.x;
-    mY = posref.y - m_Pos.y;
-
-    RotatePoint( &mX, &mY, -angle );
-
-    /* le point de reference est-il dans ce rectangle */
-    if( ( abs( mX ) <= abs( dx ) ) && ( abs( mY ) <= abs( dy ) ) )
-    {
+    if( area.Inside(rel_pos) )
         return true;
-    }
+
     return false;
 }
 
+/**
+ * Function GetBoundingBox
+ * returns the bounding box of this Text (according to text and footprint orientation)
+ */
+EDA_Rect TEXTE_MODULE::GetBoundingBox()
+{
+	// Calculate area without text fielsd:
+	EDA_Rect text_area;
+	int angle = GetDrawRotation();
+	wxPoint textstart, textend;
+
+	text_area = GetTextRect();
+	textstart = text_area.GetOrigin();
+	textend = text_area.GetEnd();
+	RotatePoint( &textstart, m_Pos, angle);
+	RotatePoint( &textend, m_Pos, angle);
+	
+	text_area.SetOrigin(textstart);
+	text_area.SetEnd(textend);
+	text_area.Normalize();
+	return text_area;
+}
 
 /******************************************************************************************/
 void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, wxPoint offset, int draw_mode )
 /******************************************************************************************/
 
-/* trace 1 texte de module
- *  Utilise la police definie dans grfonte.h
- *  (Se reporter a ce fichier pour les explications complementaires)
- *  offset = offset de trace ( reference au centre du texte)
- *  draw_mode = GR_OR, GR_XOR..
+/** Function Draw
+ * Draw the text accordint to the footprint pos and orient
+ * @param panel = draw panel, Used to know the clip box
+ * @param DC = Current Device Context
+ * @param offset = draw offset (usually wxPoint(0,0)
+ * @param draw_mode = GR_OR, GR_XOR..
  */
 {
     int                  zoom;

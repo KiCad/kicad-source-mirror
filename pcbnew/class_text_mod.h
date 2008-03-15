@@ -16,15 +16,17 @@
 class TEXTE_MODULE : public BOARD_ITEM
 {
 public:
-    wxPoint  m_Pos;         // Real coord
+    wxPoint  m_Pos;         // Real (physical)coord
     int      m_Width;
-    wxPoint  m_Pos0;        // coord du debut du texte /ancre, orient 0
+    wxPoint  m_Pos0;        // text coordinates relatives to the footprint ancre, orient 0
+							// Text coordinate ref point is the text centre
     char     m_Unused;      // unused (reserved for future extensions)
-    char     m_Miroir;      // vue normale / miroir
+    char     m_Miroir;      // Show normal / mirror
     char     m_NoShow;      // 0: visible 1: invisible  (bool)
-    char     m_Type;        // 0: ref,1: val, autre = 2..255
-    int      m_Orient;      // orientation en 1/10 degre
-    wxSize   m_Size;        // dimensions (en X et Y) du texte
+    char     m_Type;        // 0: ref,1: val, others = 2..255
+    int      m_Orient;      // orientation in 1/10 deg relative to the footprint
+							// Physical orient is m_Orient + m_Parent->m_Orient
+    wxSize   m_Size;        // text size
     wxString m_Text;
 
 public:
@@ -55,9 +57,15 @@ public:
     int     GetDrawRotation();    // Return text rotation for drawings and plotting
 	
 	/** Function GetTextRect
-	 * @return an EDA_Rect which gives the position and size of the text area (for the O orient text and footprint)
+	 * @return an EDA_Rect which gives the position and size of the text area (for the 0 orient text and footprint)
 	 */
 	EDA_Rect GetTextRect(void);
+
+    /**
+     * Function GetBoundingBox
+     * returns the bounding box of this Text (according to text and footprint orientation)
+     */
+    EDA_Rect GetBoundingBox();
 
     void    SetDrawCoord();       // mise a jour des coordonn�s absolues de trac�			
                                         // a partir des coord relatives
