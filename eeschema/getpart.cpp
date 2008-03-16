@@ -184,7 +184,7 @@ EDA_SchComponentStruct* WinEDA_SchematicFrame::Load_Component( wxDC* DC,
     DrawLibItem->m_Multi     = 1;/* Selection de l'unite 1 dans le boitier */
     DrawLibItem->m_Convert   = 1;
     DrawLibItem->m_ChipName  = Name;
-	DrawLibItem->m_TimeStamp = GetTimeStamp();
+    DrawLibItem->m_TimeStamp = GetTimeStamp();
     DrawLibItem->m_Flags = IS_NEW | IS_MOVED;
 
     /* Init champ Valeur */
@@ -203,8 +203,9 @@ EDA_SchComponentStruct* WinEDA_SchematicFrame::Load_Component( wxDC* DC,
     if( msg.IsEmpty() )
         msg = wxT( "U" );
     msg += wxT( "?" );
-	//update the reference -- just the prefix for now. 
-	DrawLibItem->SetRef(GetSheet(), msg ); 
+
+    //update the reference -- just the prefix for now.
+    DrawLibItem->SetRef(GetSheet(), msg );
 
     /* Init champ Reference */
     DrawLibItem->m_Field[REFERENCE].m_Pos.x =
@@ -213,7 +214,7 @@ EDA_SchComponentStruct* WinEDA_SchematicFrame::Load_Component( wxDC* DC,
         Entry->m_Prefix.m_Pos.y + DrawLibItem->m_Pos.y;
     DrawLibItem->m_Field[REFERENCE].m_Orient    = Entry->m_Prefix.m_Orient;
     DrawLibItem->m_Field[REFERENCE].m_Size      = Entry->m_Prefix.m_Size;
-	DrawLibItem->m_PrefixString = Entry->m_Prefix.m_Text;
+    DrawLibItem->m_PrefixString = Entry->m_Prefix.m_Text;
     DrawLibItem->m_Field[REFERENCE].m_Attributs = Entry->m_Prefix.m_Attributs;
     DrawLibItem->m_Field[REFERENCE].m_HJustify  = Entry->m_Prefix.m_HJustify;
     DrawLibItem->m_Field[REFERENCE].m_VJustify  = Entry->m_Prefix.m_VJustify;
@@ -239,8 +240,8 @@ EDA_SchComponentStruct* WinEDA_SchematicFrame::Load_Component( wxDC* DC,
         DrawLibItem->m_Field[ii].m_VJustify = Field->m_VJustify;
     }
 
-    /* Trace du composant */
     DrawStructsInGhost( DrawPanel, DC, DrawLibItem, 0, 0 );
+
     MsgPanel->EraseMsgBox();
     DrawLibItem->Display_Infos( this );
 
@@ -257,14 +258,16 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     wxPoint move_vector;
 
     EDA_SchComponentStruct* DrawLibItem = (EDA_SchComponentStruct*)
-			panel->m_Parent->GetScreen()->GetCurItem();
+            panel->m_Parent->GetScreen()->GetCurItem();
 
     /* Effacement du composant */
     if( erase )
+    {
         DrawStructsInGhost( panel, DC, DrawLibItem, 0, 0 );
+    }
 
-	move_vector.x = panel->m_Parent->GetScreen()->m_Curseur.x - DrawLibItem->m_Pos.x;
-	move_vector.y = panel->m_Parent->GetScreen()->m_Curseur.y - DrawLibItem->m_Pos.y;
+    move_vector.x = panel->m_Parent->GetScreen()->m_Curseur.x - DrawLibItem->m_Pos.x;
+    move_vector.y = panel->m_Parent->GetScreen()->m_Curseur.y - DrawLibItem->m_Pos.y;
     MoveOneStruct( DrawLibItem, move_vector );
 
     DrawStructsInGhost( panel, DC, DrawLibItem, 0, 0 );
@@ -305,7 +308,7 @@ void WinEDA_SchematicFrame::CmpRotationMiroir(
         DrawPanel->CursorOn( DC );
     }
 
-	TestDanglingEnds( GetScreen()->EEDrawList, DC );
+    TestDanglingEnds( GetScreen()->EEDrawList, DC );
     GetScreen()->SetModify();
 }
 
@@ -318,18 +321,16 @@ static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC )
  */
 {
     EDA_SchComponentStruct* DrawLibItem = (EDA_SchComponentStruct*)
-			Panel->m_Parent->GetScreen()->GetCurItem();
+            Panel->m_Parent->GetScreen()->GetCurItem();
 
     if( DrawLibItem->m_Flags & IS_NEW )    /* Nouveau Placement en cours, on l'efface */
     {
-        DrawStructsInGhost( Panel, DC, DrawLibItem, 0, 0 );
-		DrawLibItem->m_Flags = 0;
-		SAFE_DELETE( DrawLibItem );
+        DrawLibItem->m_Flags = 0;
+        SAFE_DELETE( DrawLibItem );
     }
     else if( DrawLibItem )   /* Deplacement ancien composant en cours */
     {
         wxPoint move_vector;
-        DrawStructsInGhost( Panel, DC, DrawLibItem, 0, 0 );
 
         move_vector.x = OldPos.x - DrawLibItem->m_Pos.x;
         move_vector.y = OldPos.y - DrawLibItem->m_Pos.y;
@@ -337,13 +338,16 @@ static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC )
         MoveOneStruct( DrawLibItem, move_vector );
 
         memcpy( DrawLibItem->m_Transform, OldTransMat, sizeof(OldTransMat) );
-        DrawLibItem->Draw( Panel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-		DrawLibItem->m_Flags = 0;
+
+        DrawLibItem->m_Flags = 0;
     }
+
+    D(printf("refresh\n");)
+    Panel->Refresh( TRUE );
 
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
-	Panel->m_Parent->GetScreen()->SetCurItem( NULL );
+    Panel->m_Parent->GetScreen()->SetCurItem( NULL );
 }
 
 
@@ -390,7 +394,7 @@ void WinEDA_SchematicFrame::SelPartUnit( EDA_SchComponentStruct* DrawComponent,
     else
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
-	TestDanglingEnds( GetScreen()->EEDrawList, DC );
+    TestDanglingEnds( GetScreen()->EEDrawList, DC );
     GetScreen()->SetModify();
 }
 
@@ -431,7 +435,7 @@ void WinEDA_SchematicFrame::ConvertPart( EDA_SchComponentStruct* DrawComponent,
     else
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
-	TestDanglingEnds( GetScreen()->EEDrawList, DC );
+    TestDanglingEnds( GetScreen()->EEDrawList, DC );
     GetScreen()->SetModify();
 }
 
@@ -477,24 +481,41 @@ void WinEDA_SchematicFrame::StartMovePart( EDA_SchComponentStruct* Component,
     if( Component->m_Flags == 0 )
     {
         if( g_ItemToUndoCopy ){
-			SAFE_DELETE( g_ItemToUndoCopy );
-		}
+            SAFE_DELETE( g_ItemToUndoCopy );
+        }
         g_ItemToUndoCopy = Component->GenCopy();
     }
 
     DrawPanel->CursorOff( DC );
-	GetScreen()->m_Curseur = Component->m_Pos;
+    GetScreen()->m_Curseur = Component->m_Pos;
     DrawPanel->MouseToCursorSchema();
 
     DrawPanel->ManageCurseur = ShowWhileMoving;
     DrawPanel->ForceCloseManageCurseur = ExitPlaceCmp;
-	GetScreen()->SetCurItem( Component );
+    GetScreen()->SetCurItem( Component );
     OldPos = Component->m_Pos;
     memcpy( OldTransMat, Component->m_Transform, sizeof(OldTransMat) );
 
+#if 1
+    // switch from normal mode to xor mode for the duration of the move, first
+    // by erasing fully any "normal drawing mode" primitives with the PostDirtyRect(),
+    // then by drawing the first time in xor mode so that subsequent xor
+    // drawing modes will fully erase this first copy.
+
+    Component->m_Flags |= IS_MOVED; // omit redrawing the component, erase only
+    DrawPanel->PostDirtyRect( Component->GetBoundingBox() );
+
+    DrawStructsInGhost( DrawPanel, DC, Component, 0, 0 );
+
+#else
+
     RedrawOneStruct( DrawPanel, DC, Component, g_XorMode );
+
     Component->m_Flags |= IS_MOVED;
+
     DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+#endif
+
     DrawPanel->m_AutoPAN_Request = TRUE;
 
     DrawPanel->CursorOn( DC );

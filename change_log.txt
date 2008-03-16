@@ -5,30 +5,43 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Mar-14 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++eeschema
+  * cleaned up some xor artifacts, see eeschema/getpart.cpp's comment:
+    // switch from normal mode to xor mode for the duration of the move, first
+    // by erasing fully any "normal drawing mode" primitives with the PostDirtyRect(),
+    // then by drawing the first time in xor mode so that subsequent xor
+    // drawing will fully erase this first copy and then the previous copy.
+  * redraw the entire screen at end of a component move.
+  * added many calls to Refresh() to eeschema/onleftclick.cpp and in such cases
+    I now pass a NULL DC to TestDanglingEnds()
+
+
 2008-Mar-14 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
-	some code cleaning and comment translations.
-	added:
-	/** EDA_Rect::Merge( EDA_Rect & aRect )
-	 * Modify Position and Size of this in order to contains the given rect
-	 * mainly used to calculate bouding boxes
-	 * @param aRect = given rect to merge with this
-	 */
+    some code cleaning and comment translations.
+    added:
+    /** EDA_Rect::Merge( EDA_Rect & aRect )
+     * Modify Position and Size of this in order to contains the given rect
+     * mainly used to calculate bouding boxes
+     * @param aRect = given rect to merge with this
+     */
 
 
 2008-Mar-14 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew
-	Added a tool to the upper toolbar which gives and easy access to freeroute
-	Solved a bug in plot postscript format when drawing oblong pads:
-		Bad oblong pad size after drawing a round pad
+    Added a tool to the upper toolbar which gives and easy access to freeroute
+    Solved a bug in plot postscript format when drawing oblong pads:
+        Bad oblong pad size after drawing a round pad
 
 
 2008-Mar-13 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew
-	Dirty rect used in footprint rotation, flip and delete.
-	Better calculation of the footprint dirty rect.
+    Dirty rect used in footprint rotation, flip and delete.
+    Better calculation of the footprint dirty rect.
 
 
 2008-Mar-13 UPDATE   Dick Hollenbeck <dick@softplc.com>

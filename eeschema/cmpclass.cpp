@@ -272,32 +272,23 @@ EDA_Rect DrawJunctionStruct::GetBoundingBox()
 EDA_Rect EDA_SchComponentStruct::GetBoundingBox()
 {
     const int PADDING = 40;
-    int                xmin, xmax, ymin, ymax;
 
     // This gives a reasonable approximation (but some things are missing so...
     EDA_Rect ret = GetBoundaryBox();
-    xmin = ret.m_Pos.x;
-    ymin = ret.m_Pos.y;
-    xmax = ret.m_Pos.x + ret.m_Size.x;
-    ymax = ret.m_Pos.y + ret.m_Size.y;
 
     // Include BoundingBoxes of fields
     for( int i = REFERENCE; i < NUMBER_OF_FIELDS; i++ )
     {
-        EDA_Rect box = m_Field[i].GetBoundaryBox();
-        xmin = MIN( xmin, box.m_Pos.x);
-        ymin = MIN( ymin, box.m_Pos.y);
-        xmax = MAX( xmax, box.m_Pos.x + box.m_Size.x);
-        ymax = MAX( ymax, box.m_Pos.y + box.m_Size.y);
+        ret.Merge( m_Field[i].GetBoundaryBox() );
     }
 
     // ... add padding TODO: improve this
-    ret.m_Pos.x = xmin - PADDING;
-    ret.m_Pos.y = ymin - PADDING;
-    ret.m_Size.x = xmax - xmin + 2*PADDING;
-    ret.m_Size.y = ymax - ymin + 2*PADDING;
+    ret.m_Pos.x -= PADDING;
+    ret.m_Pos.y -= PADDING;
+    ret.m_Size.x += 2*PADDING;
+    ret.m_Size.y += 2*PADDING;
 
-    D( printf("final box: %d,%d, %d,%d\n", ret.m_Pos.x, ret.m_Pos.y, ret.m_Size.x, ret.m_Size.y); )
+//     D( printf("final box: %d,%d, %d,%d\n", ret.m_Pos.x, ret.m_Pos.y, ret.m_Size.x, ret.m_Size.y); )
     return ret;
 }
 

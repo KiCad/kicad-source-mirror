@@ -200,7 +200,7 @@ public:
 	 * mainly used to calculate bounding boxes
 	 * @param aRect = given rect to merge with this
 	*/
-	void Merge( EDA_Rect & aRect );
+	void Merge( const EDA_Rect & aRect );
 
 };
 

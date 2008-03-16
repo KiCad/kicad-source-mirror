@@ -767,7 +767,7 @@ EDA_Rect& EDA_Rect::Inflate( wxCoord dx, wxCoord dy )
  * mainly used to calculate bounding boxes
  * @param aRect = given rect to merge with this
  */
-void EDA_Rect::Merge( EDA_Rect& aRect )
+void EDA_Rect::Merge( const EDA_Rect& aRect )
 {
     Normalize();        // ensure width and height >= 0
     EDA_Rect rect = aRect;
@@ -775,8 +775,8 @@ void EDA_Rect::Merge( EDA_Rect& aRect )
     wxPoint end      = GetEnd();
     wxPoint rect_end = rect.GetEnd();
 
-	// Change origin and size in order to contain the given rect
-	m_Pos.x = MIN( m_Pos.x, rect.m_Pos.x );
+    // Change origin and size in order to contain the given rect
+    m_Pos.x = MIN( m_Pos.x, rect.m_Pos.x );
     m_Pos.y = MIN( m_Pos.y, rect.m_Pos.y );
     end.x = MAX( end.x, rect_end.x );
     end.y = MAX( end.y, rect_end.y );
