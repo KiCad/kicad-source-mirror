@@ -1,167 +1,172 @@
-/*****************************/
-/***** English version *******/
-/*****************************/
+KiCad installation
+==================
 
-KiCad binaries exists for Linux and Windows (XP, 2000).
-Files (schematic, boards, libraries) created on both systems are totally compatible.
+   KiCad consists of 3 packages:
 
-== Used language: ==
-Doc files are in french, but KiCad user interface is internationalized:
-User interface is in English for most countries.
-User interface is in you native language only if you run KiCad from a localized version of you operation system.
-It is easy to add a new translation with poedit.
-KiCad can use this translation without any change.
-'poedit' is used to create the french (and many other) translations.
-See http://poedit.sourceforge.net.
-Contact me for more details.
+kicad         - KiCad programs and core files.
+kicad-doc     - Documentation and interactive help (optional package).
+kicad-library - KiCad schematic, pcb & 3D-model libraries (optional package).
 
-== Installation from release archive ==
-kicad-{year}{month}{day}.zip - archive with statically linked KiCad for Windows XP and 2000 (not Windows 98).
-or
-kicad-{year}{month}{day}.tar.bz2 - archive with statically linked KiCad for Linux.
+Installation from binary packages
+=================================
 
-Untar or unzip KiCad archive (this create the KiCad tree in the current directory).
+   KiCad binary packages exist for Linux and Windows (XP, 2000).
 
-=== Under Windows: ===
-Goto C:\ or D:\ (or other prefered directory).
-Examples are for an install on C:\.
-Unzip archive kicad-{year}{month}{day}.zip
-You must have created c:\kicad.
-Windows executables are in c:\kicad\winexe.
-The main program is kicad.exe and from it you can run other programs
-(schematic editor - eeschema, pcb editor - pcbnew, utilities: cvpcb and gerbview).
-I suggest you create a shortcut to c:\kicad\winexe\kicad.exe
+   Data files (schematic, boards, libraries) are compatible with all platforms.
 
-=== Under Linux: ===
-You do must have libc.so.6 (KiCad doesn't work with libc.so.5)
-You must have the "root" rights.
-goto /usr/local
-Untar kicad-{year}{month}{day}.tar.bz2 by command
- tar -xjpf kicad-{year}{month}{day}.tar.bz2.
-The main program is /usr/local/bin/kicad
-If you use KDE, then you can copy the shortcut /usr/local/share/kicad/kicad.desktop
-in <user home directory>/Desktop and use it to run kicad.
+*.zip  - KiCad packages for Windows.
+*.tbz2 - KiCad for Linux.
 
-== 3D modeler wings3D: ==
-(Usefull only if you plan to create 3D shapes for Printed board modules)
-goto www.wings3d.org to have more details.
-Pcbnew use the exported files in wrml (.wrl) format from wings3d (not the native .wings format).
+Installation from binary packages for Windows
+=============================================
 
-== Documentation: ==
-Currenty in different languages.
-Interactive help in HTML format.
+   KiCad can be installed in 'C:\kicad', 'D:\kicad', 'C:\Program files\kicad',
+'D:\Program files\kicad'.
 
-Source files (200 sheets) are in OpenOffice.org (www.openoffice.org) format and
-can be obtained from kicad-doc-x.y.tar.bz2 archive (in doc_src directory).
-Can be read, printed and/or modified with OpenOffice.org Writer.
+   For example, for an installation in the folder 'C:\kicad', unzip KiCad
+packages:
 
-== Windows KiCad tree: ==
-kicad/bin - binaries (executable files).
-kicad/doc/ - Various documentation.
-kicad/doc/help - Interactive help.
-kicad/share/demos - demos of schematic and printed boards.
-kicad/share/internat - dictionaries for interface localization.
-kicad/share/library - libraries for schematic.
-kicad/share/modules - module libraries for printed boards.
-kicad/share/modules/packages3d - many 3D shapes (.wrl and .wings
-    format) for existing modules.
-	files *.mod are the libraries,
-	and files *.brd are printed board you can see with pcbnew
-	files *.brd show the existing modules (and 3D shapes) in libraries. 
+  kicad-{version}.zip
+  kicad-doc-{version}.zip
+  kicad-library-{version}.zip
 
-== Linux KiCad tree: ==
-/usr/local/bin - binaries (executable files).
-/usr/local/share/doc/kicad/ - Various documentation.
-/usr/local/share/doc/kicad/help - Interactive help.
-/usr/local/share/kicad/demos - demos of schematic and printed boards.
-/usr/local/share/kicad/internat - dictionaries for interface localization.
-/usr/local/share/kicad/library - libraries for schematic.
-/usr/local/share/kicad/modules - module libraries for printed boards.
-/usr/local/share/kicad/modules/packages3d - many 3D shapes (.wrl and .wings
-    format) for existing modules.
-	files *.mod are the libraries,
-	and files *.brd are printed board you can see with pcbnew
-	files *.brd show the existing modules (and 3D shapes) in libraries. 
+to the folder 'C:\kicad'.
+
+   The main program is the project manager (kicad.exe) and from it you can run
+the other programs (schematic editor - eeschema, pcb editor - pcbnew,
+utilities: cvpcb and gerbview).
+
+   You can create a shortcut to 'C:\kicad\bin\kicad.exe'.
+
+Installation from binary packages for Linux
+===========================================
+
+   KiCad can be installed in '/usr' or '/usr/local'.
+
+   You must have "root" access for installation.
+
+    cd /
+    tar -xjf kicad-{version}.tbz2
+    tar -xjf kicad-doc-{version}.tbz2
+    tar -xjf kicad-library-{version}.tbz2
+
+   The main program is '/usr/bin/kicad'.
+
+Windows KiCad tree:
+===================
+
+kicad/bin                      - Binaries (executable files).
+kicad/doc                      - Various documentation.
+kicad/doc/help                 - Interactive help.
+kicad/share/demos              - Sample schematics and printed boards.
+kicad/share/internat           - Interface localization files.
+kicad/share/library            - Libraries for schematic.
+kicad/share/modules            - Module libraries for printed boards.
+kicad/share/modules/packages3d - 3D component models (.wrl and .wings format).
+
+   Files '*.mod' are libraries, and files '*.brd' are printed boards you can
+view with pcbnew.
+   Files *.brd show the existing modules (and 3D shapes) in libraries. 
+
+Linux KiCad tree:
+=================
+
+/usr/bin                            - Binaries (executable files).
+/usr/share/doc/kicad/               - Various documentation.
+/usr/share/doc/kicad/help           - Interactive help.
+/usr/share/kicad/demos              - Sample schematics and printed boards.
+/usr/share/kicad/internat           - Dictionaries for interface localization.
+/usr/share/kicad/library            - Interface localization files.
+/usr/share/kicad/modules            - Module libraries for printed boards.
+/usr/share/kicad/modules/packages3d - 3D component models (.wrl and .wings format).
+
+   Files '*.mod' are the libraries, and files '*.brd' are printed boards you can
+view with pcbnew.
+   Files *.brd show the existing modules (and 3D shapes) in libraries. 
 
 Warning:
 Do not change the KiCad tree, or the location of binary files,
-or KiCad will **not** be able to found other KiCad files (configuration, libraries...)
+else KiCad will not be able to find its required files (configuration,
+libraries, etc.).
 
 
-/*******************************/
-/***** version Francaise *******/
-/*******************************/
+Installation from source code
+=============================
 
-Les executable kicad existent pour Linux et Windows (XP, 2000)
-Les fichiers crees (Schematique, circuits imprimes, librairies) sous ces 2 systemes sont
-totalement compatibles.
+   Some dependencies must be satisfied for the correct installation of KiCad:
+   
+wxWidgets           >= 2.6.3.3       http://www.wxwidgets.org/
+CMake               >= 2.4.6         http://www.cmake.org/
+Boost C++ Libraries                  http://www.boost.org/
+OpenGL
+  Linux:   Mesa 3D Graphics Library  http://www.mesa3d.org/
+  Windows: built-in
+Zlib Compression Library             http://www.zlib.net/
 
-Installation a partir des archives
-(toutes les 2 contiennent **tous** les executables):
-kicad.zip
-ou
-kicad.tgz (s'il est disponible)
+   In source-tree-build are mostly unwanted, so make a subdir called "build" and
+change to it.
 
-Le decompactage cree le repertoire kicad (et ses sous repertoires) a partir
-du repertoire courant.
+   Call cmake with the path to KiCad. E.g., when your build-folder is "build"
+within source-tree, type "cmake ../".
 
-**Sous Windows:
-se placer dans C:\ (ou D:\ ou tout disque et repertoire de son choix)
-On supposera ici que l'on s'est plac� dans c:\
-Decompacter kicad.zip
-Cr�er un raccourci vers c:\kicad\winexe\kicad.exe
-On pourra alors lancer le gestionnaire de projets kicad.exe
+   Now your system get checked if it is able compiling KiCad and cmake generates
+the Makefiles.
 
-Sous Linux
-On se placera de pr�f�rence en /usr/local
-Il faudra sans doute aussi etre "root"
-Decompacter kicad.tgz ou kicad.zip
-  - kicad.tgz: faire tar zxvf <chemin de kicad.tgz>/kicad.tgz
-  - kicad.zip (unzip <chemin de kicad.tgz>/kicad.zip). Il faudra alors dans ce
-    cas rendre executable kicad, cvpcb, eeschema, gerbview et pcbnew:
-	se placer dans /usr/local/kicad/linux et faire la commande chmod 755 nom_fichier
-	pour ces 5 fichiers.
-On lancera kicad par /usr/local/kicad/linux/kicad
-Sous KDE on pourra copier /usr/local/kicad/linux/kicad.desktop sur le bureau
-de KDE comme raccourci.
+   After calling cmake just type "make" and build begins.
 
-Installation du modeleur 3D wings3D pour cr�er les formes 3D des modules du PCB:
-Il est fourni dans ..kicad/wings3d pour Windows et Linux.
-Se reporter au site du cr�ateur pour tous d�tails (www.wings3d.org)
-Se reporter aussi a la doc de pcbnew pour la g�n�ration des fichiers 3d
+   It is easy to build only a specific binary such as pcbnew alone:
+    make pcbnew
+    
+   After "make" type "make install" and install begins.
 
-Documentation:
-L'impression de la documentation (environ 200 pages) peut se faire
-sous OpenOffice (www.openoffice.org) (magnifique logiciel libre de traitement de texte).
+   You may install to a temporary-root with
+    make install DESTDIR=<temproot>
 
-Principaux repertoires de kicad:
-kicad/winexe: executables sous windows (teste sous XP et 2000)
-kicad/linux: executables sous linux (testes sous Mandrake 9.2 et 10.0)
-kicad/library: fichiers libraires de composants schematiques
-kicad/library/doc: fichiers documentation des composants schematiques (.pdf)
-	(accessibles directement de la schematique si l'on a install� acrobat ou Xpdf)
-kicad/modules: fichiers de composants (modules) pour le circuit imprim�
-kicad/modules/packages3d: fichiers de formes 3D des modules
+   If you want to uninstall KiCad again type "make uninstall" from within the
+build directory.
 
-kicad/demos: C'est toujours utile...
-kicad/internat: dictionnaires des langues (actuellement anglais->francais) pour les menus
-kicad/help: fichiers d'aides en ligne
-kicad/help/doc_src: fichiers d'aides (doc source, 200 pages) sous OpenOffice,
-	a lire avant de se plaindre.
+Important parameters to cmake
+==============================
 
+-DCMAKE_BUILD_TYPE=<buildtype>
+<buildtype> may current one of "Debug" and "Release".
 
-Complements:
--En cas de difficult�:
-Un probl�me peut surgir pour kicad lors de la recherche des fichiers utiles
-comme fichiers de config, librairies, dictionnaire anglais->fran�ais, docs...
-Sous Windows:
-	La recherche se fait l� ou sont lus les executables.
-	Il ne faut donc pas recopier les executables ailleurs que l� ou ils sont.
-	Toutefois, si cela ne marche pas, kicad cherche le repertoire c:\kicad
-Sous linux:
-	La recherche se fait sur /usr/local/kicad (installation conseill�e),
-	ou dans le chemin des executables si /usr/local/kicad n'est pas trouv�.
+-DCMAKE_INSTALL_PREFIX=<prefix>
+Default to "/usr/local".
 
-Uniquement en cas d'installation non standard (et en cas de difficult�),
-definir la variable d'environnement kicad = <chemin de kicad>
-ex: kicad=/usr/local/cao/kicad
+-DwxWidgets_ROOT_DIR=<wxInstallDir>
+Required for Windows platform.
+
+-DwxWidgets_USE_DEBUG=ON
+Can be used only with -DCMAKE_BUILD_TYPE=Debug
+
+-DwxWidgets_USE_STATIC=ON
+For building statically linked executables. Can be used only if wxWidgets
+configured and builded with "--enable-monolithic --disable-shared" parameters.
+
+-DwxWidgets_USE_STATIC=OFF
+For building dinamically linked executables. Can be used only if wxWidgets
+configured and builded with "--disable-monolithic --enable-shared" parameters.
+
+-DKICAD_MINIZIP=ON
+Build the "minizip" executable. Use OFF to disable it building.
+
+-DKICAD_PYTHON=ON
+Build the KiCad with Python support.
+
+-DCMAKE_CXX_FLAGS=<some extra flags>
+Extra flags for the c++ compiler for your system required.
+
+-DCMAKE_VERBOSE_MAKEFILE=ON
+When more output is wanted use this cmake parameter or call "make VERBOSE=1".
+
+Extra cflags and linker flags
+=============================
+
+   If you require extra flags for compiler and linker you may give them via
+environment variables
+  "CXXFLAGS" (c++ compiler)
+  "LDFLAGS"  (for linker)
+  "CFLAGS"   (for c-compiler, not needed in kdesvn build)
+
+eg., it may usefull on 64bit systems "-m64" to CXXFLAGS and LDFLAGS.
