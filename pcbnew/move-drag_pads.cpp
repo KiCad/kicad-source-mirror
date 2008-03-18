@@ -272,17 +272,13 @@ void WinEDA_BasePcbFrame::DeletePad( D_PAD* Pad, wxDC* DC )
 
     m_Pcb->m_Status_Pcb = 0;
 
-    if( DC )
-        Pad->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
-
     Pad->DeleteStructure();
 
-    /* Redessin du module */
-    if( DC )
-        Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+    DrawPanel->PostDirtyRect( Module->GetBoundingBox() );
+
     Module->Set_Rectangle_Encadrement();
+
     GetScreen()->SetModify();
-    return;
 }
 
 
