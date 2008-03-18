@@ -128,6 +128,7 @@
         <long name="locked">0</long>
         <string name="template-name">""</string>
         <bool name="dirty">1</bool>
+        <long name="makefile-last-written">0</long>
         <string name="Compiler name">""</string>
         <string name="Build mode">"Debug"</string>
         <string name="Unicode mode">"ANSI"</string>
@@ -169,6 +170,8 @@
         <string name="wxWidgets build command">"%AUTO%"</string>
         <string name="wxWidgets clean command">"%AUTO%"</string>
         <string name="PATH variable">"%AUTO%"</string>
+        <bool name="Suppress source rules">0</bool>
+        <bool name="Enable makefile generation">1</bool>
       </document>
     </document>
   </data>
@@ -242,7 +245,6 @@
           <bool name="proxy-wxDEFAULT_DIALOG_STYLE">0</bool>
           <bool name="proxy-wxCAPTION">1</bool>
           <bool name="proxy-wxRESIZE_BORDER">1</bool>
-          <bool name="proxy-wxTHICK_FRAME">1</bool>
           <bool name="proxy-wxSYSTEM_MENU">1</bool>
           <bool name="proxy-wxSTAY_ON_TOP">0</bool>
           <bool name="proxy-wxDIALOG_NO_PARENT">0</bool>
@@ -336,10 +338,10 @@
                 <string name="proxy-Implementation filename">""</string>
                 <string name="proxy-Header filename">""</string>
                 <string name="proxy-Member variable name">""</string>
-                <string name="proxy-Label">"Create Export Dsn File"</string>
+                <string name="proxy-Label">"Export a Specctra Design (*.dsn) File"</string>
                 <bool name="proxy-Default">0</bool>
-                <string name="proxy-Help text">"Create an export DNS file to freeroute"</string>
-                <string name="proxy-Tooltip text">""</string>
+                <string name="proxy-Help text">""</string>
+                <string name="proxy-Tooltip text">"Export a Specctra DSN file (to FreeRouter)"</string>
                 <string name="proxy-Data variable">""</string>
                 <string name="proxy-Data validator">""</string>
                 <string name="proxy-Data source">""</string>
@@ -403,10 +405,10 @@
                 <string name="proxy-Implementation filename">""</string>
                 <string name="proxy-Header filename">""</string>
                 <string name="proxy-Member variable name">""</string>
-                <string name="proxy-Label">"Connect to FreeROUTE"</string>
+                <string name="proxy-Label">"Launch FreeRouter via Browser"</string>
                 <bool name="proxy-Default">0</bool>
-                <string name="proxy-Help text">"Run the WEb Based Freeroute Router"</string>
-                <string name="proxy-Tooltip text">""</string>
+                <string name="proxy-Help text">""</string>
+                <string name="proxy-Tooltip text">"User your browser's Java Web Start function to run FreeRouter via Internet"</string>
                 <string name="proxy-Data variable">""</string>
                 <string name="proxy-Data validator">""</string>
                 <string name="proxy-Data source">""</string>
@@ -470,10 +472,10 @@
                 <string name="proxy-Implementation filename">""</string>
                 <string name="proxy-Header filename">""</string>
                 <string name="proxy-Member variable name">""</string>
-                <string name="proxy-Label">"Read Design File"</string>
+                <string name="proxy-Label">"Back Import the Specctra Session (*.ses) File"</string>
                 <bool name="proxy-Default">0</bool>
-                <string name="proxy-Help text">"Read the design file created by freeroute"</string>
-                <string name="proxy-Tooltip text">""</string>
+                <string name="proxy-Help text">""</string>
+                <string name="proxy-Tooltip text">"Merge a session file created by FreeRouter with the current board."</string>
                 <string name="proxy-Data variable">""</string>
                 <string name="proxy-Data validator">""</string>
                 <string name="proxy-Data source">""</string>
@@ -540,7 +542,7 @@
                 <string name="proxy-Label">"&amp;Close"</string>
                 <bool name="proxy-Default">0</bool>
                 <string name="proxy-Help text">""</string>
-                <string name="proxy-Tooltip text">""</string>
+                <string name="proxy-Tooltip text">"Close this dialog window"</string>
                 <string name="proxy-Data variable">""</string>
                 <string name="proxy-Data validator">""</string>
                 <string name="proxy-Data source">""</string>
@@ -630,10 +632,10 @@
                 <string name="proxy-Implementation filename">""</string>
                 <string name="proxy-Header filename">""</string>
                 <string name="proxy-Member variable name">""</string>
-                <string name="proxy-Label">"Access to FreeROUTE Web Site"</string>
+                <string name="proxy-Label">"Visit the FreeRouting.net Website with your Browser"</string>
                 <bool name="proxy-Default">0</bool>
-                <string name="proxy-Help text">"Run the WEb Based Freeroute Router"</string>
-                <string name="proxy-Tooltip text">""</string>
+                <string name="proxy-Help text">""</string>
+                <string name="proxy-Tooltip text">"Launch your browser and go to the FreeRouting.net website"</string>
                 <string name="proxy-Data variable">""</string>
                 <string name="proxy-Data validator">""</string>
                 <string name="proxy-Data source">""</string>
@@ -696,7 +698,7 @@
                 <string name="proxy-Implementation filename">""</string>
                 <string name="proxy-Header filename">""</string>
                 <string name="proxy-Member variable name">""</string>
-                <string name="proxy-Label">"FreeRoute URL"</string>
+                <string name="proxy-Label">"FreeRouting.net URL"</string>
                 <long name="proxy-Wrapping width">-1</long>
                 <string name="proxy-Help text">""</string>
                 <string name="proxy-Tooltip text">""</string>
@@ -770,7 +772,7 @@
                 <string name="proxy-Initial value">""</string>
                 <long name="proxy-Max length">0</long>
                 <string name="proxy-Help text">""</string>
-                <string name="proxy-Tooltip text">""</string>
+                <string name="proxy-Tooltip text">"The URL of the FreeRouting.net website"</string>
                 <string name="proxy-Background colour">""</string>
                 <string name="proxy-Foreground colour">""</string>
                 <string name="proxy-Font">""</string>
@@ -816,7 +818,7 @@
                 <long name="proxy-Height">-1</long>
                 <string name="proxy-AlignH">"Expand"</string>
                 <string name="proxy-AlignV">"Centre"</string>
-                <long name="proxy-Stretch factor">0</long>
+                <long name="proxy-Stretch factor">1</long>
                 <long name="proxy-Border">5</long>
                 <bool name="proxy-wxLEFT">1</bool>
                 <bool name="proxy-wxRIGHT">1</bool>
@@ -849,7 +851,7 @@
                 <string name="proxy-Implementation filename">""</string>
                 <string name="proxy-Header filename">""</string>
                 <string name="proxy-Member variable name">""</string>
-                <string name="proxy-Label">"FreeRoute Command"</string>
+                <string name="proxy-Label">"FreeRouting.net Command"</string>
                 <long name="proxy-Wrapping width">-1</long>
                 <string name="proxy-Help text">""</string>
                 <string name="proxy-Tooltip text">""</string>
@@ -923,7 +925,7 @@
                 <string name="proxy-Initial value">""</string>
                 <long name="proxy-Max length">0</long>
                 <string name="proxy-Help text">""</string>
-                <string name="proxy-Tooltip text">""</string>
+                <string name="proxy-Tooltip text">"The URL of the JNLP file which Java Web Start uses to launch the FreeRouter"</string>
                 <string name="proxy-Background colour">""</string>
                 <string name="proxy-Foreground colour">""</string>
                 <string name="proxy-Font">""</string>
@@ -969,7 +971,7 @@
                 <long name="proxy-Height">-1</long>
                 <string name="proxy-AlignH">"Expand"</string>
                 <string name="proxy-AlignV">"Centre"</string>
-                <long name="proxy-Stretch factor">0</long>
+                <long name="proxy-Stretch factor">1</long>
                 <long name="proxy-Border">5</long>
                 <bool name="proxy-wxLEFT">1</bool>
                 <bool name="proxy-wxRIGHT">1</bool>
