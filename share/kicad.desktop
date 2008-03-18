@@ -1,0 +1,14 @@
+[Desktop Entry]
+Encoding=UTF-8
+GenericName[en]=KiCad - project manager
+GenericName[ru]=KiCad - менеджер проектов
+Comment[en]=Electrical schematic and PCB design suite
+Comment[ru]=Комплекс для разработки электрических схем и печатных плат
+MimeType=text/pro
+Name=KiCad
+Exec=kicad
+Icon=kicad
+Type=Application
+Terminal=false
+Categories=Scientific;
+
