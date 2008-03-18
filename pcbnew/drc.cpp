@@ -197,7 +197,7 @@ void DRC::RunTests()
     testTracks();
 
     // test zone clearances to other zones, pads, tracks, and vias
-    testZones(m_doZonesTest);
+    testZones( m_doZonesTest );
 
     // find and gather unconnected pads.
     if( m_doUnconnectedTest )
@@ -251,33 +251,35 @@ void DRC::testTracks()
 
 void DRC::testPad2Pad()
 {
-    LISTE_PAD* pad_list_start = CreateSortedPadListByXCoord( m_pcb );
-    LISTE_PAD* pad_list_limit = &pad_list_start[m_pcb->m_NbPads];
-    LISTE_PAD* ppad;
+    std::vector<D_PAD*> sortedPads;
+
+    CreateSortedPadListByXCoord( m_pcb, &sortedPads );
 
     // find the max size of the pads (used to stop the test)
     int  max_size = 0;
-    for( ppad = pad_list_start;  ppad<pad_list_limit;  ppad++ )
+
+    for( unsigned i=0;  i<sortedPads.size();  ++i )
     {
-        D_PAD* pad = *ppad;
+        D_PAD* pad = sortedPads[i];
+
         if( pad->m_Rayon > max_size )
             max_size = pad->m_Rayon;
     }
 
     // Test the pads
-    for( ppad = pad_list_start;  ppad<pad_list_limit;  ppad++ )
-    {
-        D_PAD* pad = *ppad;
+    D_PAD** listEnd = &sortedPads[ sortedPads.size() ];
 
-        if( !doPadToPadsDrc( pad, ppad, pad_list_limit, max_size ) )
+    for( unsigned i=0;  i<sortedPads.size();  ++i )
+    {
+        D_PAD* pad = sortedPads[i];
+
+        if( !doPadToPadsDrc( pad, &sortedPads[i], listEnd, max_size ) )
         {
             wxASSERT( m_currentMarker );
             m_pcb->Add( m_currentMarker );
             m_currentMarker = 0;
         }
     }
-
-    free( pad_list_start );
 }
 
 

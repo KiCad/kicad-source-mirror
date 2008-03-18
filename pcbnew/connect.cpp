@@ -542,20 +542,15 @@ static int SortPadsByXCoord( const void* pt_ref, const void* pt_comp )
 }
 
 
-/****************************************************/
-LISTE_PAD* CreateSortedPadListByXCoord( BOARD* pcb )
-/****************************************************/
-
-/* Create a sorted list of pointers to pads.
- *  This list is sorted by X ccordinate value.
- *  The list must be freed by user
- */
+/*****************************************************************************/
+void CreateSortedPadListByXCoord( BOARD* aBoard, std::vector<D_PAD*>* aVector )
+/*****************************************************************************/
 {
-    LISTE_PAD* pad_list = (LISTE_PAD*) MyMalloc( pcb->m_NbPads * sizeof(D_PAD*) );
+    aVector->resize( aBoard->m_NbPads );
 
-    memcpy( pad_list, pcb->m_Pads, pcb->m_NbPads * sizeof( D_PAD*) );
-    qsort( pad_list, pcb->m_NbPads, sizeof( D_PAD*), SortPadsByXCoord );
-    return pad_list;
+    memcpy( &(*aVector)[0], aBoard->m_Pads, aBoard->m_NbPads * sizeof( D_PAD*) );
+
+    qsort( &(*aVector)[0], aBoard->m_NbPads, sizeof( D_PAD*), SortPadsByXCoord );
 }
 
 
@@ -570,14 +565,14 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
  * We search a connection between a track segment and a pad: if found : this segment  netcode is set to the pad netcode
  */
 {
-    TRACK*      pt_piste,
-    * pt_next;
-    int         a_color;
-    char        new_passe_request = 1, flag;
-    LISTE_PAD*  pt_mem;
-    BOARD_ITEM* PtStruct;
-    int         masque_layer;
-    wxString    msg;
+    TRACK*          pt_piste;
+    TRACK*          pt_next;
+    int             a_color;
+    char            new_passe_request = 1, flag;
+    std::vector<D_PAD*> sortedPads;
+    BOARD_ITEM*     PtStruct;
+    int             masque_layer;
+    wxString        msg;
 
     if( m_Pcb->m_NbPads == 0 )
         return;
@@ -595,7 +590,7 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
     /**************************************************************/
     /* Pass 1: search the connections between track ends and pads */
     /**************************************************************/
-    pt_mem = CreateSortedPadListByXCoord( m_Pcb );
+    CreateSortedPadListByXCoord( m_Pcb, &sortedPads );
 
     if( affiche )
         Affiche_1_Parametre( this, -1, wxEmptyString, wxT( "Conn Pads" ), a_color );
@@ -619,7 +614,7 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
 
         /* Search for a pad on the segment starting point */
         pt_piste->start = SuperFast_Locate_Pad_Connecte( m_Pcb,
-                                                         pt_mem,
+                                                         &sortedPads[0],
                                                          pt_piste->m_Start.x,
                                                          pt_piste->m_Start.y,
                                                          masque_layer );
@@ -631,7 +626,7 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
 
         /* Search for a pad on the segment ending point */
         pt_piste->end = SuperFast_Locate_Pad_Connecte( m_Pcb,
-                                                       pt_mem,
+                                                       &sortedPads[0],
                                                        pt_piste->m_End.x,
                                                        pt_piste->m_End.y,
                                                        masque_layer );
@@ -643,7 +638,6 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
         }
     }
 
-    MyFree( pt_mem );
 
     /*****************************************************/
     /* Pass 2: search the connections between track ends */

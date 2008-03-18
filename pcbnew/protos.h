@@ -5,10 +5,26 @@
 #ifndef PROTO_H
 #define PROTO_H
 
+
+#include <vector>
+
 /***************/
 /* PAD_CONNECT.CPP */
 /***************/
-LISTE_PAD* CreateSortedPadListByXCoord( BOARD* pcb );
+
+class D_PAD;
+
+/**
+ * Function CreateSortedPadListByXCoord
+ * first empties then fills the vector with all pads and sorts them by
+ * increasing x coordinate.  The vector only holds pointers to the pads and
+ * those pointers are only references to pads which are owned by the BOARD
+ * through other links.
+ * @param aBoard Which board to gather pads from.
+ * @param aVector Where to put the pad pointers.
+ */
+void CreateSortedPadListByXCoord( BOARD* aBoard, std::vector<D_PAD*>* aVector );
+
 
 /* Create a sorted list of pointers to pads.
  * This list is sorted by X ccordinate value.

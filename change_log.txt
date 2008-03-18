@@ -5,6 +5,17 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+2008-Mar-17 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+  * Fixed a crashing bug which occured when you run the module editor, select
+    "Update module in current board" and then run the DRC checker after that.
+  * Changed to void CreateSortedPadListByXCoord( BOARD* aBoard, std::vector<D_PAD*>* aVector )
+    So caller can safely forget to delete the array of pad pointers and the vector's
+    destructor handles this automatically.
+
+
 2008-Mar-14 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +eeschema
