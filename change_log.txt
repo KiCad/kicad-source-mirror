@@ -5,6 +5,12 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Mar-18 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew
+    MODULE::GetBoundingBox() takes in account the clearence around the pads
+    (the clearence limit shape around pads (when shown) was not always erased )
+
 
 2008-Mar-17 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
@@ -35,8 +41,8 @@ email address.
     some code cleaning and comment translations.
     added:
     /** EDA_Rect::Merge( EDA_Rect & aRect )
-     * Modify Position and Size of this in order to contains the given rect
-     * mainly used to calculate bouding boxes
+     * Modify Position and Size of this in order to contain the given rect
+     * mainly used to calculate bounding boxes
      * @param aRect = given rect to merge with this
      */
 

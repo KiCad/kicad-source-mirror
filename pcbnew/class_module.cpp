@@ -1054,6 +1054,7 @@ void MODULE::SetRectangleExinscrit()
 /**
  * Function GetBoundingBox
  * returns the full bounding box of this Footprint, including texts
+ * Mainly used to redraw the screen area occuped by the footprint
  */
 EDA_Rect MODULE::GetBoundingBox()
 {
@@ -1077,6 +1078,10 @@ EDA_Rect MODULE::GetBoundingBox()
         text_area = ((TEXTE_MODULE*)EdgeMod)->GetBoundingBox();
         area.Merge( text_area );
     }
+
+	// Add the Clearence shape size: (shape around the pads when the clearence is shown
+	// Not optimized, but the draw cost is small (perhaps smaller than optimization)
+	area.Inflate(g_DesignSettings.m_TrackClearence, g_DesignSettings.m_TrackClearence);
 
     return area;
 }

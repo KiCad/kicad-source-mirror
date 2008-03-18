@@ -68,7 +68,7 @@ and then:
 
 -- debug
     cd build-debug
-    ../confgiure --enable-unicode --enable-monolithic --enable-debug --enable-debug_gdb --disable-shared --with-msw --with-opengl
+    ../configure --enable-unicode --enable-monolithic --enable-debug --enable-debug_gdb --disable-shared --with-msw --with-opengl
     make
     make install
 

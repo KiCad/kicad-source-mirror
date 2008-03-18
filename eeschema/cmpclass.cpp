@@ -282,13 +282,9 @@ EDA_Rect EDA_SchComponentStruct::GetBoundingBox()
         ret.Merge( m_Field[i].GetBoundaryBox() );
     }
 
-    // ... add padding TODO: improve this
-    ret.m_Pos.x -= PADDING;
-    ret.m_Pos.y -= PADDING;
-    ret.m_Size.x += 2*PADDING;
-    ret.m_Size.y += 2*PADDING;
+    // ... add padding
+    ret.Inflate(PADDING, PADDING);
 
-//     D( printf("final box: %d,%d, %d,%d\n", ret.m_Pos.x, ret.m_Pos.y, ret.m_Size.x, ret.m_Size.y); )
     return ret;
 }
 

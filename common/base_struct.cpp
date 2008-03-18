@@ -123,9 +123,9 @@ void EDA_BaseStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
 
 // see base_struct.h
 SEARCH_RESULT EDA_BaseStruct::IterateForward( EDA_BaseStruct* listStart,
-                                              INSPECTOR* inspector,
-                                              const void* testData,
-                                              const KICAD_T scanTypes[] )
+                                              INSPECTOR*      inspector,
+                                              const void*     testData,
+                                              const KICAD_T   scanTypes[] )
 {
     EDA_BaseStruct* p = listStart;
 
@@ -200,11 +200,11 @@ void EDA_BaseStruct::Show( int nestLevel, std::ostream& os )
     NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << ">\n";
 
     /*
-      * EDA_BaseStruct* kid = m_Son;
-      * for( ; kid;  kid = kid->Pnext )
-      * {
-      * kid->Show( nestLevel+1, os );
-      * }
+     * EDA_BaseStruct* kid = m_Son;
+     * for( ; kid;  kid = kid->Pnext )
+     * {
+     * kid->Show( nestLevel+1, os );
+     * }
      */
     NestedSpace( nestLevel + 1, os ) << "Need ::Show() override\n";
 
@@ -729,33 +729,76 @@ bool EDA_Rect::Intersects( const EDA_Rect aRect ) const
 /**************************************************/
 EDA_Rect& EDA_Rect::Inflate( wxCoord dx, wxCoord dy )
 /**************************************************/
+
+/** Function Inflate
+ * Inflate "this": move each horizontal edge by dx and each vertical edge by dy
+ * toward rect outside
+ * if dx and/or dy is negative, move toward rect inside (deflate)
+ * Works for positive and negative rect size
+ *
+ */
 {
-    if( -2 * dx > m_Size.x )
+    if( m_Size.x >= 0 )
     {
-        // Don't allow deflate to eat more width than we have,
-        // a well-defined rectangle cannot have negative width.
-        m_Pos.x += m_Size.x / 2;
-        m_Size.x = 0;
+        if( m_Size.x < -2 * dx )
+        {
+            // Don't allow deflate to eat more width than we have,
+            m_Pos.x += m_Size.x / 2;
+            m_Size.x = 0;
+        }
+        else
+        {
+            // The inflate is valid.
+            m_Pos.x  -= dx;
+            m_Size.x += 2 * dx;
+        }
     }
-    else
+    else    // size.x < 0:
     {
-        // The inflate is valid.
-        m_Pos.x  -= dx;
-        m_Size.x += 2 * dx;
+        if( m_Size.x > -2 * dx )
+        {
+            // Don't allow deflate to eat more width than we have,
+            m_Pos.x -= m_Size.x / 2;
+            m_Size.x = 0;
+        }
+        else
+        {
+            // The inflate is valid.
+            m_Pos.x  += dx;
+            m_Size.x -= 2 * dx; // m_Size.x <0: inflate when dx > 0
+        }
     }
 
-    if( -2 * dy > m_Size.y )
+
+    if( m_Size.y >= 0 )
     {
-        // Don't allow deflate to eat more height than we have,
-        // a well-defined rectangle cannot have negative height.
-        m_Pos.y += m_Size.y / 2;
-        m_Size.y = 0;
+        if( m_Size.y < -2 * dy )
+        {
+            // Don't allow deflate to eat more height than we have,
+            m_Pos.y += m_Size.y / 2;
+            m_Size.y = 0;
+        }
+        else
+        {
+            // The inflate is valid.
+            m_Pos.y  -= dy;
+            m_Size.y += 2 * dy;
+        }
     }
-    else
+    else    // size.y < 0:
     {
-        // The inflate is valid.
-        m_Pos.y  -= dy;
-        m_Size.y += 2 * dy;
+        if( m_Size.y > 2 * dy )
+        {
+            // Don't allow deflate to eat more height than we have,
+            m_Pos.y -= m_Size.y / 2;
+            m_Size.y = 0;
+        }
+        else
+        {
+            // The inflate is valid.
+            m_Pos.y  += dy;
+            m_Size.y -= 2 * dy; // m_Size.y <0: inflate when dy > 0
+        }
     }
 
     return *this;
@@ -772,14 +815,14 @@ void EDA_Rect::Merge( const EDA_Rect& aRect )
     Normalize();        // ensure width and height >= 0
     EDA_Rect rect = aRect;
     rect.Normalize();   // ensure width and height >= 0
-    wxPoint end      = GetEnd();
-    wxPoint rect_end = rect.GetEnd();
+    wxPoint  end      = GetEnd();
+    wxPoint  rect_end = rect.GetEnd();
 
     // Change origin and size in order to contain the given rect
     m_Pos.x = MIN( m_Pos.x, rect.m_Pos.x );
     m_Pos.y = MIN( m_Pos.y, rect.m_Pos.y );
-    end.x = MAX( end.x, rect_end.x );
-    end.y = MAX( end.y, rect_end.y );
+    end.x   = MAX( end.x, rect_end.x );
+    end.y   = MAX( end.y, rect_end.y );
     SetEnd( end );
 }
 
