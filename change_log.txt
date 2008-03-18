@@ -14,6 +14,7 @@ email address.
   * Changed to void CreateSortedPadListByXCoord( BOARD* aBoard, std::vector<D_PAD*>* aVector )
     So caller can safely forget to delete the array of pad pointers and the vector's
     destructor handles this automatically.
+  * Delete pad from within PCBNEW, not module editor, now uses PostDirtyRect()
 
 
 2008-Mar-14 UPDATE   Dick Hollenbeck <dick@softplc.com>
