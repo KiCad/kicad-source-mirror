@@ -38,7 +38,7 @@ if(UNIX)
         # When used later, "bin" and others with no leading / is relative to CMAKE_INSTALL_PREFIX.
         set(KICAD_PLUGINS lib/kicad/plugins CACHE PATH "Location of KiCad plugins.")
         set(KICAD_DATA share/kicad CACHE PATH "Location of KiCad data files.")
-        SET(KICAD_DOCS share/doc/kicad CACHE PATH "Location of KiCad documentation files.")
+        set(KICAD_DOCS share/doc/kicad CACHE PATH "Location of KiCad documentation files.")
     endif(APPLE)
 endif(UNIX)
 
@@ -48,7 +48,7 @@ if(WIN32)
     # When used later, "winexe" and others with no leading / is relative to CMAKE_INSTALL_PREFIX.
     set(KICAD_PLUGINS ${KICAD_BIN}/plugins)
     set(KICAD_DATA share CACHE PATH "Location of KiCad data files.")
-    SET(KICAD_DOCS doc)
+    set(KICAD_DOCS doc)
 endif(WIN32)
 
 set(KICAD_DEMOS ${KICAD_DATA}/demos)
@@ -108,7 +108,8 @@ add_subdirectory(template)
 
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/install.txt DESTINATION ${KICAD_DOCS} COMPONENT resources)
 if(UNIX)
-    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/share/kicad.desktop DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications COMPONENT resources)
-    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/bitmaps/kicad.png DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps COMPONENT resources)
+    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/share/kicad.desktop
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications COMPONENT resources)
+    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/bitmaps/kicad.png
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps COMPONENT resources)
 endif(UNIX)
-
