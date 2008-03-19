@@ -42,7 +42,7 @@
 #define ID_GOTO_FREEROUTE_WEB_SITE 10004
 #define ID_TEXT_EDIT_FR_URL 10005
 #define ID_TEXT_EDIT_FR_CMD 10006
-#define SYMBOL_DIALOG_FREEROUTE_EXCHANGE_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX|wxTAB_TRAVERSAL
+#define SYMBOL_DIALOG_FREEROUTE_EXCHANGE_STYLE wxCAPTION|wxRESIZE_BORDER|wxCLOSE_BOX|wxTAB_TRAVERSAL
 #define SYMBOL_DIALOG_FREEROUTE_EXCHANGE_TITLE _("dialog_freeroute_exchange")
 #define SYMBOL_DIALOG_FREEROUTE_EXCHANGE_IDNAME ID_DIALOG_FREEROUTE_EXCHANGE
 #define SYMBOL_DIALOG_FREEROUTE_EXCHANGE_SIZE wxSize(400, 300)
@@ -78,6 +78,9 @@ public:
 
 ////@begin dialog_freeroute_exchange event handler declarations
 
+    /// wxEVT_INIT_DIALOG event handler for ID_DIALOG_FREEROUTE_EXCHANGE
+    void OnInitDialog( wxInitDialogEvent& event );
+
     /// wxEVT_CLOSE_WINDOW event handler for ID_DIALOG_FREEROUTE_EXCHANGE
     void OnCloseWindow( wxCloseEvent& event );
 
@@ -90,8 +93,8 @@ public:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_IMPORT_FREEROUTE_DSN_FILE
     void OnImportFreerouteDsnFileClick( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CLOSE
-    void OnCloseClick( wxCommandEvent& event );
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
+    void OnCancelClick( wxCommandEvent& event );
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_GOTO_FREEROUTE_WEB_SITE
     void OnGotoFreerouteWebSiteClick( wxCommandEvent& event );

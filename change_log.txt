@@ -18,7 +18,7 @@ email address.
 ================================================================================
 +pcbnew
     refined the dialog_freeroute_exchange.pjd file, adding tooltips, wording
-    changes, and added this comment also:
+    changes, wxID_CANCEL so ESC key closes, and added this comment also:
     // @todo:
     // 1) add freeroute.jnlp to the Kicad project
     // 2) change this next C++ line simply run $ "javaws freeroute.jnlp" as a system
