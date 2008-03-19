@@ -36,12 +36,13 @@
 
 ////@begin control identifiers
 #define ID_DIALOG_FREEROUTE_EXCHANGE 10000
-#define ID_CREATE_EXPORT_DSN_FILE 10001
-#define ID_RUN_FREEROUTE 10002
-#define ID_IMPORT_FREEROUTE_DSN_FILE 10003
-#define ID_GOTO_FREEROUTE_WEB_SITE 10004
-#define ID_TEXT_EDIT_FR_URL 10005
-#define ID_TEXT_EDIT_FR_CMD 10006
+#define ID_PANEL1 10001
+#define ID_BUTTON4 10002
+#define ID_BUTTON5 10003
+#define ID_BUTTON6 10004
+#define ID_BUTTON7 10005
+#define ID_TEXTCTRL2 10006
+#define ID_TEXTCTRL3 10013
 #define SYMBOL_DIALOG_FREEROUTE_EXCHANGE_STYLE wxCAPTION|wxRESIZE_BORDER|wxCLOSE_BOX|wxTAB_TRAVERSAL
 #define SYMBOL_DIALOG_FREEROUTE_EXCHANGE_TITLE _("dialog_freeroute_exchange")
 #define SYMBOL_DIALOG_FREEROUTE_EXCHANGE_IDNAME ID_DIALOG_FREEROUTE_EXCHANGE
@@ -84,26 +85,26 @@ public:
     /// wxEVT_CLOSE_WINDOW event handler for ID_DIALOG_FREEROUTE_EXCHANGE
     void OnCloseWindow( wxCloseEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_CREATE_EXPORT_DSN_FILE
-    void OnCreateExportDsnFileClick( wxCommandEvent& event );
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON4
+    void OnButton4Click( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RUN_FREEROUTE
-    void OnRunFreerouteClick( wxCommandEvent& event );
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON5
+    void OnButton5Click( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_IMPORT_FREEROUTE_DSN_FILE
-    void OnImportFreerouteDsnFileClick( wxCommandEvent& event );
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON6
+    void OnButton6Click( wxCommandEvent& event );
+
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON7
+    void OnButton7Click( wxCommandEvent& event );
+
+    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL2
+    void OnTextEditFrUrlUpdated( wxCommandEvent& event );
+
+    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL3
+    void OnTextEditFrCmdUpdated( wxCommandEvent& event );
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
     void OnCancelClick( wxCommandEvent& event );
-
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_GOTO_FREEROUTE_WEB_SITE
-    void OnGotoFreerouteWebSiteClick( wxCommandEvent& event );
-
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXT_EDIT_FR_URL
-    void OnTextEditFrUrlUpdated( wxCommandEvent& event );
-
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXT_EDIT_FR_CMD
-    void OnTextEditFrCmdUpdated( wxCommandEvent& event );
 
 ////@end dialog_freeroute_exchange event handler declarations
 
@@ -123,6 +124,7 @@ public:
     static bool ShowToolTips();
 
 ////@begin dialog_freeroute_exchange member variables
+    wxButton* m_ExportDSN;
     wxTextCtrl* m_FreerouteURLName;
     wxTextCtrl* m_FreerouteURLCommandString;
 private:
