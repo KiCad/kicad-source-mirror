@@ -346,14 +346,14 @@
               <bool name="proxy-wxWS_EX_VALIDATE_RECURSIVELY">0</bool>
               <bool name="proxy-wxWS_EX_BLOCK_EVENTS">0</bool>
               <string name="proxy-Custom styles">""</string>
-              <bool name="proxy-Fit to content">1</bool>
+              <bool name="proxy-Fit to content">0</bool>
               <long name="proxy-X">-1</long>
               <long name="proxy-Y">-1</long>
               <long name="proxy-Width">-1</long>
               <long name="proxy-Height">-1</long>
-              <string name="proxy-AlignH">"Centre"</string>
+              <string name="proxy-AlignH">"Expand"</string>
               <string name="proxy-AlignV">"Centre"</string>
-              <long name="proxy-Stretch factor">0</long>
+              <long name="proxy-Stretch factor">1</long>
               <long name="proxy-Border">5</long>
               <bool name="proxy-wxLEFT">1</bool>
               <bool name="proxy-wxRIGHT">1</bool>
@@ -381,7 +381,7 @@
                 <string name="proxy-Member variable name">""</string>
                 <string name="proxy-AlignH">"Centre"</string>
                 <string name="proxy-AlignV">"Centre"</string>
-                <long name="proxy-Stretch factor">0</long>
+                <long name="proxy-Stretch factor">1</long>
                 <long name="proxy-Border">5</long>
                 <bool name="proxy-wxLEFT">1</bool>
                 <bool name="proxy-wxRIGHT">1</bool>
