@@ -24,8 +24,6 @@
 
 ////@begin includes
 #include "wx/notebook.h"
-#include "wxPcbStruct.h"
-#include "drc_stuff.h"
 ////@end includes
 
 
@@ -64,7 +62,7 @@ class wxStdDialogButtonSizer;
 #define SYMBOL_DRCDIALOG_STYLE wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX
 #define SYMBOL_DRCDIALOG_TITLE _("DRC Control")
 #define SYMBOL_DRCDIALOG_IDNAME ID_DIALOG
-#define SYMBOL_DRCDIALOG_SIZE wxSize(400, 300)
+#define SYMBOL_DRCDIALOG_SIZE wxSize(450, 300)
 #define SYMBOL_DRCDIALOG_POSITION wxDefaultPosition
 ////@end control identifiers
 
@@ -160,7 +158,6 @@ public:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
     void OnOkClick( wxCommandEvent& event );
 
-    
 ////@end DrcDialog event handler declarations
 
 ////@begin DrcDialog member function declarations
