@@ -107,6 +107,8 @@ add_subdirectory(internat)
 add_subdirectory(template)
 
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/install.txt DESTINATION ${KICAD_DOCS} COMPONENT resources)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/freeroute.jnlp DESTINATION ${KICAD_BIN} COMPONENT resources)
+
 if(UNIX)
     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/share/kicad.desktop
         DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications COMPONENT resources)

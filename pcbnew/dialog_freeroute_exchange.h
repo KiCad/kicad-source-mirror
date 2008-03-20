@@ -42,7 +42,6 @@
 #define ID_BUTTON6 10004
 #define ID_BUTTON7 10005
 #define ID_TEXTCTRL2 10006
-#define ID_TEXTCTRL3 10013
 #define SYMBOL_DIALOG_FREEROUTE_EXCHANGE_STYLE wxCAPTION|wxRESIZE_BORDER|wxCLOSE_BOX|wxTAB_TRAVERSAL
 #define SYMBOL_DIALOG_FREEROUTE_EXCHANGE_TITLE _("dialog_freeroute_exchange")
 #define SYMBOL_DIALOG_FREEROUTE_EXCHANGE_IDNAME ID_DIALOG_FREEROUTE_EXCHANGE
@@ -100,9 +99,6 @@ public:
     /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL2
     void OnTextEditFrUrlUpdated( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL3
-    void OnTextEditFrCmdUpdated( wxCommandEvent& event );
-
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
     void OnCancelClick( wxCommandEvent& event );
 
@@ -126,7 +122,6 @@ public:
 ////@begin dialog_freeroute_exchange member variables
     wxButton* m_ExportDSN;
     wxTextCtrl* m_FreerouteURLName;
-    wxTextCtrl* m_FreerouteURLCommandString;
 private:
     bool m_FreeRouteSetupChanged; // Flag set to true if Freeroute config changed
 ////@end dialog_freeroute_exchange member variables
