@@ -23,7 +23,7 @@ email address.
     We are currently using XORing for dragging a single object and using full
     redraws for dragging a block.  I suppose this can be an experiment for a
     week or so.  I would not expect that dragging a block of labels with no
-    other object to work currently.
+    other object to work currently (i.e. *visually* correctly).
 
 
 2008-Mar-19 UPDATE Igor Plyatov <plyatov@mail.ru>
