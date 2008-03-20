@@ -42,7 +42,7 @@ SchematicGeneralLocateAndDisplay( bool IncludePin )
     wxString                msg;
     wxPoint                 mouse_position = GetScreen()->m_MousePosition;
     LibDrawPin*             Pin     = NULL;
-    EDA_SchComponentStruct* LibItem = NULL;
+    SCH_COMPONENT* LibItem = NULL;
 
     DrawStruct = SchematicGeneralLocateAndDisplay( mouse_position, IncludePin );
     if( !DrawStruct && ( mouse_position != GetScreen()->m_Curseur) )
@@ -57,15 +57,15 @@ SchematicGeneralLocateAndDisplay( bool IncludePin )
     {
     case DRAW_PART_TEXT_STRUCT_TYPE:
     case COMPONENT_FIELD_DRAW_TYPE:
-        LibItem = (EDA_SchComponentStruct*) DrawStruct->m_Parent;
+        LibItem = (SCH_COMPONENT*) DrawStruct->m_Parent;
         SendMessageToPCBNEW( DrawStruct,LibItem );
         break;
 
-    case DRAW_LIB_ITEM_STRUCT_TYPE:
+    case TYPE_SCH_COMPONENT:
         Pin = LocateAnyPin( GetScreen()->EEDrawList, GetScreen()->m_Curseur, &LibItem );
         if( Pin )
             break; // Priority is probing a pin first
-        LibItem = (EDA_SchComponentStruct*) DrawStruct;
+        LibItem = (SCH_COMPONENT*) DrawStruct;
         SendMessageToPCBNEW( DrawStruct, LibItem );
         break;
 
@@ -118,7 +118,7 @@ SchematicGeneralLocateAndDisplay( const wxPoint& refpoint, bool IncludePin )
 {
     EDA_BaseStruct*         DrawStruct;
     LibDrawPin*             Pin;
-    EDA_SchComponentStruct* LibItem;
+    SCH_COMPONENT* LibItem;
     wxString Text;
     wxString msg;
     int      ii;
@@ -175,7 +175,7 @@ SchematicGeneralLocateAndDisplay( const wxPoint& refpoint, bool IncludePin )
     if( DrawStruct )
     {
         PartTextStruct* Field = (PartTextStruct*) DrawStruct;
-        LibItem = (EDA_SchComponentStruct*) Field->m_Parent;
+        LibItem = (SCH_COMPONENT*) Field->m_Parent;
         LibItem->Display_Infos( this );
 
         return DrawStruct;
@@ -199,7 +199,7 @@ SchematicGeneralLocateAndDisplay( const wxPoint& refpoint, bool IncludePin )
     if( DrawStruct )
     {
         DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
-        LibItem    = (EDA_SchComponentStruct*) DrawStruct;
+        LibItem    = (SCH_COMPONENT*) DrawStruct;
         LibItem->Display_Infos( this );
         return DrawStruct;
     }

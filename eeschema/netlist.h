@@ -26,7 +26,7 @@ typedef enum {
                          * NET_TYPE_CUSTOM1+CUSTOMPANEL_COUNTMAX-1
                          * is the last id for user netlist format
                          */
-	NET_TYPE_CUSTOM_MAX = NET_TYPE_CUSTOM1+CUSTOMPANEL_COUNTMAX-1
+    NET_TYPE_CUSTOM_MAX = NET_TYPE_CUSTOM1+CUSTOMPANEL_COUNTMAX-1
 } TypeNetForm;
 
 
@@ -39,11 +39,11 @@ enum NetObjetType {      /* Type des objets de Net */
     NET_JONCTION,
     NET_LABEL,
     NET_GLOBLABEL,
-	NET_HIERLABEL, //on a screen to indicate connection to a higher-level sheet
- 	NET_SHEETLABEL, //on a drawscreen element to indicate connection to a lower-level sheet.
+    NET_HIERLABEL, //on a screen to indicate connection to a higher-level sheet
+    NET_SHEETLABEL, //on a drawscreen element to indicate connection to a lower-level sheet.
     NET_BUSLABELMEMBER,
     NET_GLOBBUSLABELMEMBER,
-	NET_HIERBUSLABELMEMBER,
+    NET_HIERBUSLABELMEMBER,
     NET_SHEETBUSLABELMEMBER,
     NET_PINLABEL,
     NET_PIN,
@@ -93,23 +93,23 @@ public:
 /* Structures pour memo et liste des elements */
 typedef struct ListLabel
 {
-	int m_LabelType;
-	void * m_Label;
-	char m_SheetPath[64];
+    int m_LabelType;
+    void * m_Label;
+    char m_SheetPath[64];
 } ListLabel;
 typedef struct ListComponent
 {
-	EDA_SchComponentStruct * m_Comp;
-	char m_Ref[32]; 
-	  //have to store it here since the object refrerences will be duplicated.
-	DrawSheetPath m_SheetList; //composed of UIDs
+    SCH_COMPONENT * m_Comp;
+    char m_Ref[32];
+      //have to store it here since the object refrerences will be duplicated.
+    DrawSheetPath m_SheetList; //composed of UIDs
 } ListComponent;
 
 /* Structure decrivant 1 composant de la schematique (pour *annotation* ) */
 struct CmpListStruct
 {
 public:
-    EDA_SchComponentStruct* m_Cmp;              /* Pointeur sur le composant */
+    SCH_COMPONENT* m_Cmp;              /* Pointeur sur le composant */
     int                     m_NbParts;          /* Nombre de parts par boitier */
     bool                    m_PartsLocked;      // For multi part components: True if the part cannot be changed
     int                     m_Unit;             /* Numero de part */
@@ -121,7 +121,7 @@ public:
     int                     m_NumRef;           /* Numero de reference */
     int                     m_Flag;             /* flag pour calculs internes */
     wxPoint                 m_Pos;              /* position components */
-	char					m_Path[128]; 		// the 'path' of the object in the sheet hierarchy. 
+    char					m_Path[128]; 		// the 'path' of the object in the sheet hierarchy.
 };
 
 

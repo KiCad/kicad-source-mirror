@@ -31,14 +31,14 @@ static bool SnapPoint2( const wxPoint& PosRef, int SearchMask,
 
 
 /*********************************************************************/
-EDA_SchComponentStruct* LocateSmallestComponent( SCH_SCREEN* Screen )
+SCH_COMPONENT* LocateSmallestComponent( SCH_SCREEN* Screen )
 /*********************************************************************/
 
 /* Search the smaller (considering its area) component under the mouse cursor or the pcb cursor
  *  If more than 1 component is found, a pointer to the smaller component is returned
  */
 {
-    EDA_SchComponentStruct* DrawLibItem = NULL, * LastDrawLibItem = NULL;
+    SCH_COMPONENT* DrawLibItem = NULL, * LastDrawLibItem = NULL;
     EDA_BaseStruct*         DrawList;
     EDA_Rect BoundaryBox;
     float    sizeref = 0, sizecurr;
@@ -54,7 +54,7 @@ EDA_SchComponentStruct* LocateSmallestComponent( SCH_SCREEN* Screen )
                              DrawList, NULL, Screen->GetZoom() ) ) == FALSE )
                 break;
         }
-        DrawLibItem = (EDA_SchComponentStruct*) LastSnappedStruct;
+        DrawLibItem = (SCH_COMPONENT*) LastSnappedStruct;
         DrawList    = DrawLibItem->Pnext;
         if( LastDrawLibItem == NULL )  // First time a component is located
         {
@@ -93,23 +93,23 @@ EDA_SchComponentStruct* LocateSmallestComponent( SCH_SCREEN* Screen )
  *  SEARCH_PINITEM
  *  SHEETLABELITEM
  *  FIELDCMPITEM
- * 
+ *
  *  if EXCLUDE_WIRE_BUS_ENDPOINTS is set, in wire ou bus search and locate,
  *  start and end points are not included in search
  *  if WIRE_BUS_ENDPOINTS_ONLY is set, in wire ou bus search and locate,
  *  only start and end points are included in search
- * 
- * 
+ *
+ *
  *  Return:
  *      -Bloc search:
  *          pointeur sur liste de pointeurs de structures si Plusieurs
  *                  structures selectionnees.
  *          pointeur sur la structure si 1 seule
- * 
+ *
  *      Positon serach:
  *          pointeur sur la structure.
  *      Si pas de structures selectionnees: retourne NULL
- * 
+ *
  */
 /***********************************************************************/
 EDA_BaseStruct* PickStruct( const wxPoint& refpos,
@@ -120,9 +120,9 @@ EDA_BaseStruct* PickStruct( const wxPoint& refpos,
  */
 {
     bool Snapped;
-	EDA_BaseStruct* DrawList = screen->EEDrawList; 
-	if( screen==NULL || DrawList == NULL )
-		return NULL;
+    EDA_BaseStruct* DrawList = screen->EEDrawList;
+    if( screen==NULL || DrawList == NULL )
+        return NULL;
 
     if( ( Snapped = SnapPoint2( refpos, SearchMask,
                                 DrawList, NULL, screen->GetZoom() ) ) != FALSE )
@@ -154,11 +154,11 @@ EDA_BaseStruct* PickStruct( EDA_Rect& block,
         EXCHG( x, OrigX );
     if( y < OrigY )
         EXCHG( y, OrigY );
-	
-	EDA_BaseStruct* DrawList = screen->EEDrawList; 
-		if( screen==NULL || DrawList == NULL )
-			return NULL;
-	
+
+    EDA_BaseStruct* DrawList = screen->EEDrawList;
+        if( screen==NULL || DrawList == NULL )
+            return NULL;
+
     for( DrawStruct = DrawList; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext )
     {
         if( DrawStructInBox( OrigX, OrigY, x, y, DrawStruct ) )
@@ -176,7 +176,7 @@ EDA_BaseStruct* PickStruct( EDA_Rect& block,
         /* Only one item was picked - convert to scalar form (no list): */
         PickedItem = PickedList;
         PickedList = (DrawPickedStruct*) PickedList->m_PickedStruct;
-		SAFE_DELETE( PickedItem ) ;
+        SAFE_DELETE( PickedItem ) ;
     }
 
     if( PickedList != NULL )
@@ -225,7 +225,7 @@ bool SnapPoint2( const wxPoint& PosRef, int SearchMask,
             #define STRUCT ( (DrawPolylineStruct*) DrawList )
             if( !( SearchMask & (DRAWITEM | WIREITEM | BUSITEM) ) )
                 break;
-            
+
             Points = STRUCT->m_Points;
             NumOfPoints2 = STRUCT->m_NumOfPoints * 2;
             for( i = 0; i < NumOfPoints2 - 2; i += 2 )
@@ -341,10 +341,10 @@ bool SnapPoint2( const wxPoint& PosRef, int SearchMask,
             }
             break;
 
-        case DRAW_LABEL_STRUCT_TYPE:
-        case DRAW_TEXT_STRUCT_TYPE:
+        case TYPE_SCH_LABEL:
+        case TYPE_SCH_TEXT:
             #undef  STRUCT
-            #define STRUCT ( (DrawTextStruct*) DrawList )
+            #define STRUCT ( (SCH_TEXT*) DrawList )
             if( !( SearchMask & (TEXTITEM | LABELITEM) ) )
                 break;
             dx = STRUCT->m_Size.x * STRUCT->GetLength();
@@ -379,10 +379,10 @@ bool SnapPoint2( const wxPoint& PosRef, int SearchMask,
             break;
 
 
-        case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-		case DRAW_HIER_LABEL_STRUCT_TYPE:
+        case TYPE_SCH_GLOBALLABEL:
+        case TYPE_SCH_HIERLABEL:
             #undef  STRUCT
-            #define STRUCT ( (DrawLabelStruct*) DrawList )
+            #define STRUCT ( (SCH_LABEL*) DrawList )
             if( !(SearchMask & LABELITEM) )
                 break;
             dx = STRUCT->m_Size.x * ( STRUCT->GetLength() + 1 );        /* longueur */
@@ -416,14 +416,14 @@ bool SnapPoint2( const wxPoint& PosRef, int SearchMask,
             }
             break;
 
-        case DRAW_LIB_ITEM_STRUCT_TYPE:
+        case TYPE_SCH_COMPONENT:
             if( !( SearchMask & (LIBITEM | FIELDCMPITEM) ) )
                 break;
 
             if( SearchMask & FIELDCMPITEM )
             {
                 PartTextStruct*         Field;
-                EDA_SchComponentStruct* DrawLibItem = (EDA_SchComponentStruct*) DrawList;
+                SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) DrawList;
                 for( i = REFERENCE; i < NUMBER_OF_FIELDS; i++ )
                 {
                     Field = &DrawLibItem->m_Field[i];
@@ -442,7 +442,7 @@ bool SnapPoint2( const wxPoint& PosRef, int SearchMask,
             else
             {
                 #undef  STRUCT
-                #define STRUCT ( (EDA_SchComponentStruct*) DrawList )
+                #define STRUCT ( (SCH_COMPONENT*) DrawList )
                 EDA_Rect BoundaryBox = STRUCT->GetBoundaryBox();
                 if( BoundaryBox.Inside( x, y ) )
                 {
@@ -564,10 +564,10 @@ bool DrawStructInBox( int x1, int y1, int x2, int y2,
             return TRUE;
         break;
 
-    case DRAW_LABEL_STRUCT_TYPE:
-    case DRAW_TEXT_STRUCT_TYPE:
+    case TYPE_SCH_LABEL:
+    case TYPE_SCH_TEXT:
         #undef STRUCT
-        #define STRUCT ( (DrawTextStruct*) DrawStruct )
+        #define STRUCT ( (SCH_TEXT*) DrawStruct )
         dx  = STRUCT->m_Size.x * STRUCT->GetLength();
         dy  = STRUCT->m_Size.y;
         xt1 = xt2 = STRUCT->m_Pos.x;
@@ -596,10 +596,10 @@ bool DrawStructInBox( int x1, int y1, int x2, int y2,
             return TRUE;
         break;
 
-	case DRAW_HIER_LABEL_STRUCT_TYPE:
-    case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
+    case TYPE_SCH_HIERLABEL:
+    case TYPE_SCH_GLOBALLABEL:
         #undef STRUCT
-        #define STRUCT ( (DrawLabelStruct*) DrawStruct )
+        #define STRUCT ( (SCH_LABEL*) DrawStruct )
         dx  = STRUCT->m_Size.x * ( STRUCT->GetLength() + 1);    /* longueur totale */
         dy  = STRUCT->m_Size.y / 2;                             /* Demi hauteur */
         xt1 = xt2 = STRUCT->m_Pos.x;
@@ -628,10 +628,10 @@ bool DrawStructInBox( int x1, int y1, int x2, int y2,
             return TRUE;
         break;
 
-    case DRAW_LIB_ITEM_STRUCT_TYPE:
+    case TYPE_SCH_COMPONENT:
     {
         #undef STRUCT
-        #define STRUCT ( (EDA_SchComponentStruct*) DrawStruct )
+        #define STRUCT ( (SCH_COMPONENT*) DrawStruct )
         EDA_Rect BoundaryBox = STRUCT->GetBoundaryBox();
         xt1 = BoundaryBox.GetX();
         yt1 = BoundaryBox.GetY();
@@ -682,7 +682,7 @@ static bool IsBox1InBox2( int StartX1, int StartY1, int EndX1, int EndY1,
 /* Routine detectant que le rectangle 1 (Box1) et le rectangle 2 (Box2) se
  *  recouvrent.
  *  Retourne TRUE ou FALSE.
- * 
+ *
  *  On Considere ici qu'il y a recouvrement si l'un au moins des coins
  *  d'un 'Box' est compris dans l'autre
  */
@@ -744,7 +744,7 @@ static bool IsPointInBox( int pX, int pY,
 
 /* Routine detectant que le point pX,pY est dans le rectangle (Box)
  *  Retourne TRUE ou FALSE.
- * 
+ *
  */
 {
     if( BoxX1 > BoxX2 )
@@ -1043,7 +1043,7 @@ int distance( int dx, int dy, int spot_cX, int spot_cY, int seuil )
 
 /*******************************************************************/
 LibDrawPin* LocatePinByNumber( const wxString & ePin_Number,
-                             EDA_SchComponentStruct* eComponent )
+                             SCH_COMPONENT* eComponent )
 /*******************************************************************/
 
 /** Find a PIN in a component
@@ -1053,11 +1053,11 @@ LibDrawPin* LocatePinByNumber( const wxString & ePin_Number,
  */
 {
     LibEDA_BaseStruct* DrawItem;
-	EDA_LibComponentStruct* Entry;
+    EDA_LibComponentStruct* Entry;
     LibDrawPin* Pin;
-	int Unit, Convert;
+    int Unit, Convert;
 
-	Entry = FindLibPart(eComponent->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+    Entry = FindLibPart(eComponent->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
     if( Entry == NULL )
         return NULL;
 
@@ -1067,8 +1067,8 @@ LibDrawPin* LocatePinByNumber( const wxString & ePin_Number,
         return NULL;
     }
 
-	Unit = eComponent->m_Multi;
-	Convert = eComponent->m_Convert;
+    Unit = eComponent->m_Multi;
+    Convert = eComponent->m_Convert;
 
     DrawItem = Entry->m_Drawings;
     for( ; DrawItem != NULL; DrawItem = DrawItem->Next() )
@@ -1082,10 +1082,10 @@ LibDrawPin* LocatePinByNumber( const wxString & ePin_Number,
 
             if( Convert && DrawItem->m_Convert && (DrawItem->m_Convert != Convert) )
                 continue;
-			wxString pNumber;
-			Pin->ReturnPinStringNum( pNumber );
+            wxString pNumber;
+            Pin->ReturnPinStringNum( pNumber );
             if ( ePin_Number == pNumber )
-				return Pin;
+                return Pin;
         }
     }
 
@@ -1096,7 +1096,7 @@ LibDrawPin* LocatePinByNumber( const wxString & ePin_Number,
 /*******************************************************************/
 LibEDA_BaseStruct* LocatePin( const wxPoint& RefPos,
                               EDA_LibComponentStruct* Entry,
-                              int Unit, int convert, EDA_SchComponentStruct* DrawLibItem )
+                              int Unit, int convert, SCH_COMPONENT* DrawLibItem )
 /*******************************************************************/
 
 /* Routine de localisation d'une PIN de la PartLib pointee par Entry
@@ -1198,19 +1198,19 @@ DrawSheetLabelStruct* LocateSheetLabel( DrawSheetStruct* Sheet, const wxPoint& p
 
 /**************************************************************************/
 LibDrawPin* LocateAnyPin( EDA_BaseStruct* DrawList, const wxPoint& RefPos,
-                          EDA_SchComponentStruct** libpart )
+                          SCH_COMPONENT** libpart )
 /**************************************************************************/
 {
     EDA_BaseStruct* DrawStruct;
     EDA_LibComponentStruct* Entry;
-    EDA_SchComponentStruct* LibItem = NULL;
+    SCH_COMPONENT* LibItem = NULL;
     LibDrawPin* Pin = NULL;
 
     for( DrawStruct = DrawList; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext )
     {
-        if( DrawStruct->Type() != DRAW_LIB_ITEM_STRUCT_TYPE )
+        if( DrawStruct->Type() != TYPE_SCH_COMPONENT )
             continue;
-        LibItem = (EDA_SchComponentStruct*) DrawStruct;
+        LibItem = (SCH_COMPONENT*) DrawStruct;
         Entry   = FindLibPart( LibItem->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
         if( Entry == NULL )
             continue;

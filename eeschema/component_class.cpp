@@ -22,27 +22,8 @@
 WX_DEFINE_OBJARRAY( ArrayOfSheetLists );
 
 /***************************/
-/* class DrawPartStruct	*/
-/* class EDA_SchComponentStruct */
+/* class SCH_COMPONENT */
 /***************************/
-
-/***********************************************************************************/
-DrawPartStruct::DrawPartStruct( KICAD_T struct_type, const wxPoint& pos ) :
-    EDA_BaseStruct( struct_type )
-/***********************************************************************************/
-{
-    m_Layer     = 0;
-    m_Pos       = pos;
-    m_TimeStamp = 0;
-}
-
-
-/************************************/
-DrawPartStruct::~DrawPartStruct()
-/************************************/
-{
-}
-
 
 /****************************************************************/
 const wxString& ReturnDefaultFieldName( int aFieldNdx )
@@ -78,7 +59,7 @@ const wxString& ReturnDefaultFieldName( int aFieldNdx )
 
 
 /****************************************************************/
-const wxString& EDA_SchComponentStruct::ReturnFieldName( int aFieldNdx ) const
+const wxString& SCH_COMPONENT::ReturnFieldName( int aFieldNdx ) const
 /****************************************************************/
 
 /* Return the Field name from its index (REFERENCE, VALUE ..)
@@ -94,7 +75,7 @@ const wxString& EDA_SchComponentStruct::ReturnFieldName( int aFieldNdx ) const
 
 
 /****************************************************************/
-wxString EDA_SchComponentStruct::GetPath( DrawSheetPath* sheet )
+wxString SCH_COMPONENT::GetPath( DrawSheetPath* sheet )
 /****************************************************************/
 {
     wxString str;
@@ -105,7 +86,7 @@ wxString EDA_SchComponentStruct::GetPath( DrawSheetPath* sheet )
 
 
 /********************************************************************/
-const wxString EDA_SchComponentStruct::GetRef( DrawSheetPath* sheet )
+const wxString SCH_COMPONENT::GetRef( DrawSheetPath* sheet )
 /********************************************************************/
 {
     wxString     path = GetPath( sheet );
@@ -137,7 +118,7 @@ const wxString EDA_SchComponentStruct::GetRef( DrawSheetPath* sheet )
 
 
 /***********************************************************************/
-void EDA_SchComponentStruct::SetRef( DrawSheetPath* sheet, wxString ref )
+void SCH_COMPONENT::SetRef( DrawSheetPath* sheet, wxString ref )
 /***********************************************************************/
 {
     //check to see if it is already there before inserting it
@@ -176,7 +157,7 @@ void EDA_SchComponentStruct::SetRef( DrawSheetPath* sheet, wxString ref )
 
 
 /**************************************/
-void EDA_SchComponentStruct::ClearRefs()
+void SCH_COMPONENT::ClearRefs()
 /**************************************/
 {
     m_Paths.Empty();
@@ -184,7 +165,7 @@ void EDA_SchComponentStruct::ClearRefs()
 }
 
 
-const wxString& EDA_SchComponentStruct::GetFieldValue( int aFieldNdx ) const
+const wxString& SCH_COMPONENT::GetFieldValue( int aFieldNdx ) const
 {
     // avoid unnecessarily copying wxStrings.
     static const wxString myEmpty = wxEmptyString;
@@ -197,13 +178,15 @@ const wxString& EDA_SchComponentStruct::GetFieldValue( int aFieldNdx ) const
 
 
 /*******************************************************************/
-EDA_SchComponentStruct::EDA_SchComponentStruct( const wxPoint& pos ) :
-    DrawPartStruct( DRAW_LIB_ITEM_STRUCT_TYPE, pos )
+SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos ) :
+    SCH_ITEM( NULL,  TYPE_SCH_COMPONENT )
 /*******************************************************************/
 {
     int ii;
 
     m_Multi = 0;    /* In multi unit chip - which unit to draw. */
+
+    m_Pos = aPos;
 
     //m_FlagControlMulti = 0;
     m_UsedOnSheets.Clear();
@@ -234,7 +217,7 @@ EDA_SchComponentStruct::EDA_SchComponentStruct( const wxPoint& pos ) :
 
 
 /************************************************/
-EDA_Rect EDA_SchComponentStruct::GetBoundaryBox() const
+EDA_Rect SCH_COMPONENT::GetBoundaryBox() const
 /************************************************/
 {
     EDA_LibComponentStruct* Entry = FindLibPart( m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
@@ -309,14 +292,14 @@ void PartTextStruct::SwapData( PartTextStruct* copyitem )
 
 
 /**************************************************************************/
-void EDA_SchComponentStruct::SwapData( EDA_SchComponentStruct* copyitem )
+void SCH_COMPONENT::SwapData( SCH_COMPONENT* copyitem )
 /**************************************************************************/
 
 /* Used if undo / redo command:
  *  swap data between this and copyitem
  */
 {
-	EXCHG( m_ChipName, copyitem->m_ChipName );
+    EXCHG( m_ChipName, copyitem->m_ChipName );
     EXCHG( m_Pos, copyitem->m_Pos );
     EXCHG( m_Multi, copyitem->m_Multi );
     EXCHG( m_Convert, copyitem->m_Convert );
@@ -332,7 +315,7 @@ void EDA_SchComponentStruct::SwapData( EDA_SchComponentStruct* copyitem )
 
 
 /***********************************************************************/
-void EDA_SchComponentStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
+void SCH_COMPONENT::Place( WinEDA_DrawFrame* frame, wxDC* DC )
 /***********************************************************************/
 {
     /* save old text in undo list */
@@ -341,13 +324,13 @@ void EDA_SchComponentStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
        && ( (m_Flags & IS_NEW) == 0 ) )
     {
         /* restore old values and save new ones */
-        SwapData( (EDA_SchComponentStruct*) g_ItemToUndoCopy );
+        SwapData( (SCH_COMPONENT*) g_ItemToUndoCopy );
 
         /* save in undo list */
         ( (WinEDA_SchematicFrame*) frame )->SaveCopyInUndoList( this, IS_CHANGED );
 
         /* restore new values */
-        SwapData( (EDA_SchComponentStruct*) g_ItemToUndoCopy );
+        SwapData( (SCH_COMPONENT*) g_ItemToUndoCopy );
 
         SAFE_DELETE( g_ItemToUndoCopy );
     }
@@ -357,7 +340,7 @@ void EDA_SchComponentStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
 
 
 /***************************************************/
-void EDA_SchComponentStruct::ClearAnnotation()
+void SCH_COMPONENT::ClearAnnotation()
 /***************************************************/
 
 /* Suppress annotation ( i.i IC23 changed to IC? and part reset to 1)
@@ -386,16 +369,16 @@ void EDA_SchComponentStruct::ClearAnnotation()
 
 
 /**************************************************************/
-EDA_SchComponentStruct* EDA_SchComponentStruct::GenCopy()
+SCH_COMPONENT* SCH_COMPONENT::GenCopy()
 /**************************************************************/
 {
-    EDA_SchComponentStruct* new_item = new EDA_SchComponentStruct( m_Pos );
+    SCH_COMPONENT* new_item = new SCH_COMPONENT( m_Pos );
 
     int ii;
 
     new_item->m_Multi    = m_Multi;
     new_item->m_ChipName = m_ChipName;
-	new_item->m_PrefixString = m_PrefixString;
+    new_item->m_PrefixString = m_PrefixString;
 
     //new_item->m_FlagControlMulti = m_FlagControlMulti;
     new_item->m_UsedOnSheets = m_UsedOnSheets;
@@ -418,7 +401,7 @@ EDA_SchComponentStruct* EDA_SchComponentStruct::GenCopy()
 
 
 /*****************************************************************/
-void EDA_SchComponentStruct::SetRotationMiroir( int type_rotate )
+void SCH_COMPONENT::SetRotationMiroir( int type_rotate )
 /******************************************************************/
 
 /* Compute the new matrix transform for a schematic component
@@ -561,7 +544,7 @@ void EDA_SchComponentStruct::SetRotationMiroir( int type_rotate )
 
 
 /****************************************************/
-int EDA_SchComponentStruct::GetRotationMiroir()
+int SCH_COMPONENT::GetRotationMiroir()
 /****************************************************/
 {
     int  type_rotate = CMP_ORIENT_0;
@@ -626,7 +609,7 @@ int EDA_SchComponentStruct::GetRotationMiroir()
 
 
 /***********************************************************************/
-wxPoint EDA_SchComponentStruct::GetScreenCoord( const wxPoint& coord )
+wxPoint SCH_COMPONENT::GetScreenCoord( const wxPoint& coord )
 /***********************************************************************/
 
 /* Renvoie la coordonn�e du point coord, en fonction de l'orientation
@@ -651,7 +634,7 @@ wxPoint EDA_SchComponentStruct::GetScreenCoord( const wxPoint& coord )
  *          of nesting of this object within the overall tree.
  * @param os The ostream& to output to.
  */
-void EDA_SchComponentStruct::Show( int nestLevel, std::ostream& os )
+void SCH_COMPONENT::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
@@ -748,7 +731,7 @@ EDA_Rect PartTextStruct::GetBoundaryBox() const
     int      orient;
     int      dx, dy, x1, y1, x2, y2;
 
-    EDA_SchComponentStruct* DrawLibItem = (EDA_SchComponentStruct*) m_Parent;
+    SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) m_Parent;
 
     orient = m_Orient;
     wxPoint pos = DrawLibItem->m_Pos;

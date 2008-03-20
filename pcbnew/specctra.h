@@ -934,7 +934,7 @@ typedef boost::ptr_vector<WINDOW>   WINDOWS;
 
 /**
  * Class KEEPOUT
- * is used for <keepout_descriptor> and <plane_descriptor>.
+ * is used for &lt;keepout_descriptor&gt; and &lt;plane_descriptor&gt;.
  */
 class KEEPOUT : public ELEM
 {

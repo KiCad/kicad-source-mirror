@@ -805,8 +805,9 @@ EDA_Rect& EDA_Rect::Inflate( wxCoord dx, wxCoord dy )
 }
 
 
-/** Function Merge
- * Modify Position and Size of this in order to contain the given rect
+/**
+ * Function Merge
+ * modifies Position and Size of this in order to contain the given rect
  * mainly used to calculate bounding boxes
  * @param aRect = given rect to merge with this
  */
@@ -840,7 +841,7 @@ void EDA_Rect::Merge( const EDA_Rect& aRect )
 
 /*******************************************************************/
 DrawPickedStruct::DrawPickedStruct( EDA_BaseStruct* pickedstruct ) :
-    EDA_BaseStruct( DRAW_PICK_ITEM_STRUCT_TYPE )
+    SCH_ITEM( NULL, DRAW_PICK_ITEM_STRUCT_TYPE )
 /*******************************************************************/
 {
     m_PickedStruct = pickedstruct;
@@ -849,6 +850,41 @@ DrawPickedStruct::DrawPickedStruct( EDA_BaseStruct* pickedstruct ) :
 
 DrawPickedStruct::~DrawPickedStruct()
 {
+}
+
+#if defined(DEBUG)
+void DrawPickedStruct::Show( int nestLevel, std::ostream& os )
+{
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << "/>\n";
+}
+#endif
+
+
+EDA_Rect DrawPickedStruct::GetBoundingBox()
+{
+    if( m_PickedStruct )
+        return m_PickedStruct->GetBoundingBox();
+    else
+    {
+        return EDA_Rect();      // empty rectangle
+    }
+}
+
+
+EDA_Rect DrawPickedStruct::GetBoundingBoxUnion()
+{
+    EDA_Rect    ret;
+
+    DrawPickedStruct*   cur = this;
+    EDA_BaseStruct*     item;
+    while( cur && (item = cur->m_PickedStruct) != NULL )
+    {
+        ret.Merge( item->GetBoundingBox() );
+
+        cur = cur->Next();
+    }
+
+    return ret;
 }
 
 

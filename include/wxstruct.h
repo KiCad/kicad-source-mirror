@@ -71,13 +71,13 @@ class EDA_LibComponentStruct;
 class LibEDA_BaseStruct;
 class EDA_BaseStruct;
 class DrawBusEntryStruct;
-class DrawGlobalLabelStruct;
-class DrawTextStruct;
+class SCH_GLOBALLABEL;
+class SCH_TEXT;
 class EDA_DrawLineStruct;
 class DrawSheetStruct;
 class DrawSheetPath;
 class DrawSheetLabelStruct;
-class EDA_SchComponentStruct;
+class SCH_COMPONENT;
 class LibDrawField;
 class PartTextStruct;
 class LibDrawPin;
@@ -158,7 +158,7 @@ public:
     WinEDA_BasicFrame( wxWindow* father, int idtype, WinEDA_App* parent,
                        const wxString& title,
                        const wxPoint& pos, const wxSize& size,
-					   long style = KICAD_DEFAULT_DRAWFRAME_STYLE);
+                       long style = KICAD_DEFAULT_DRAWFRAME_STYLE);
 #ifdef KICAD_PYTHON
     WinEDA_BasicFrame( const WinEDA_BasicFrame& ) { }   // Should throw!!
     WinEDA_BasicFrame() { }                             // Should throw!!
@@ -230,12 +230,12 @@ public:
     WinEDA_DrawFrame( wxWindow* father, int idtype, WinEDA_App* parent,
                       const wxString& title,
                       const wxPoint& pos, const wxSize& size,
-					  long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+                      long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~WinEDA_DrawFrame();
 
     virtual BASE_SCREEN* GetScreen() { return m_CurrentScreen; }
-	virtual wxString	 GetScreenDesc(); 
+    virtual wxString	 GetScreenDesc();
 
     void            OnMenuOpen( wxMenuEvent& event );
     void            OnMouseEvent( wxMouseEvent& event );
@@ -279,7 +279,7 @@ public:
     virtual int     BestZoom() = 0;
 
     /* Return the current zoom level */
-	int             GetZoom(void);
+    int             GetZoom(void);
 
     void            ToPrinter( wxCommandEvent& event );
     void            SVG_Print( wxCommandEvent& event );
@@ -353,7 +353,7 @@ public:
     WinEDA_LibeditFrame( wxWindow* father, WinEDA_App* parent,
                          const wxString& title,
                          const wxPoint& pos, const wxSize& size,
-						 long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+                         long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~WinEDA_LibeditFrame();
 
@@ -422,7 +422,7 @@ private:
     void                RotateSymbolText( wxDC* DC );
     void                DeleteDrawPoly( wxDC* DC );
     LibDrawField*       LocateField( EDA_LibComponentStruct* LibEntry );
-	LibEDA_BaseStruct* LocateItemUsingCursor(); 
+    LibEDA_BaseStruct* LocateItemUsingCursor();
     void                RotateField( wxDC* DC, LibDrawField* Field );
     void                PlaceField( wxDC* DC, LibDrawField* Field );
     void                EditField( wxDC* DC, LibDrawField* Field );
@@ -540,10 +540,10 @@ struct MsgItem
 class WinEDA_MsgPanel : public wxPanel
 {
 protected:
-    std::vector<MsgItem>    m_Items;    
+    std::vector<MsgItem>    m_Items;
 
     void showItem( wxDC& dc, const MsgItem& aItem );
-    
+
 public:
     WinEDA_DrawFrame* m_Parent;
     int m_BgColor;          // couleur de fond

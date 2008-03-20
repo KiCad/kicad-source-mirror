@@ -845,7 +845,7 @@ int GenListeCmp( ListComponent* List )
 {
     int                     ItemCount = 0;
     EDA_BaseStruct*         DrawList;
-    EDA_SchComponentStruct* DrawLibItem;
+    SCH_COMPONENT* DrawLibItem;
     DrawSheetPath*          sheet;
 
     /* Build the sheet (not screen) list */
@@ -858,9 +858,9 @@ int GenListeCmp( ListComponent* List )
         {
             switch( DrawList->Type() )
             {
-            case DRAW_LIB_ITEM_STRUCT_TYPE:
+            case TYPE_SCH_COMPONENT:
                 ItemCount++;
-                DrawLibItem = (EDA_SchComponentStruct*) DrawList;
+                DrawLibItem = (SCH_COMPONENT*) DrawList;
                 DrawLibItem->m_Parent = sheet->LastScreen();
                 if( List )
                 {
@@ -910,8 +910,8 @@ static int GenListeGLabels( ListLabel* List )
         {
             switch( DrawList->Type() )
             {
-            case DRAW_HIER_LABEL_STRUCT_TYPE:
-            case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
+            case TYPE_SCH_HIERLABEL:
+            case TYPE_SCH_GLOBALLABEL:
                 ItemCount++;
                 if( List )
                 {
@@ -1063,12 +1063,12 @@ static int ListTriGLabelByVal( ListLabel* Objet1, ListLabel* Objet2 )
     if( Objet1->m_LabelType == DRAW_SHEETLABEL_STRUCT_TYPE )
         Text1 = &( (DrawSheetLabelStruct*) Objet1->m_Label )->m_Text;
     else
-        Text1 = &( (DrawTextStruct*) Objet1->m_Label )->m_Text;
+        Text1 = &( (SCH_TEXT*) Objet1->m_Label )->m_Text;
 
     if( Objet2->m_LabelType == DRAW_SHEETLABEL_STRUCT_TYPE )
         Text2 = &( (DrawSheetLabelStruct*) Objet2->m_Label )->m_Text;
     else
-        Text2 = &( (DrawTextStruct*) Objet2->m_Label )->m_Text;
+        Text2 = &( (SCH_TEXT*) Objet2->m_Label )->m_Text;
 
     ii = Text1->CmpNoCase( *Text2 );
 
@@ -1102,12 +1102,12 @@ static int ListTriGLabelBySheet( ListLabel* Objet1, ListLabel* Objet2 )
         if( Objet1->m_LabelType == DRAW_SHEETLABEL_STRUCT_TYPE )
             Text1 = &( (DrawSheetLabelStruct*) Objet1->m_Label )->m_Text;
         else
-            Text1 = &( (DrawTextStruct*) Objet1->m_Label )->m_Text;
+            Text1 = &( (SCH_TEXT*) Objet1->m_Label )->m_Text;
 
         if( Objet2->m_LabelType == DRAW_SHEETLABEL_STRUCT_TYPE )
             Text2 = &( (DrawSheetLabelStruct*) Objet2->m_Label )->m_Text;
         else
-            Text2 = &( (DrawTextStruct*) Objet2->m_Label )->m_Text;
+            Text2 = &( (SCH_TEXT*) Objet2->m_Label )->m_Text;
 
         ii = Text1->CmpNoCase( *Text2 );
     }
@@ -1125,7 +1125,7 @@ static void DeleteSubCmp( ListComponent* List, int NbItems )
  */
 {
     int ii;
-    EDA_SchComponentStruct* LibItem;
+    SCH_COMPONENT* LibItem;
     wxString OldName, CurrName;
 
     for( ii = 0; ii < NbItems; ii++ )
@@ -1149,7 +1149,7 @@ static void DeleteSubCmp( ListComponent* List, int NbItems )
 
 
 /*******************************************************************************************/
-void WinEDA_Build_BOM_Frame::PrintFieldData( FILE* f, EDA_SchComponentStruct* DrawLibItem,
+void WinEDA_Build_BOM_Frame::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
                                              bool CompactForm )
 /*******************************************************************************************/
 {
@@ -1198,7 +1198,7 @@ int WinEDA_Build_BOM_Frame::PrintListeCmpByRef( FILE* f, ListComponent* List, in
 {
     int ii, Multi, Unit;
     EDA_BaseStruct* DrawList;
-    EDA_SchComponentStruct* DrawLibItem;
+    SCH_COMPONENT* DrawLibItem;
     EDA_LibComponentStruct* Entry;
     char NameCmp[80];
     wxString msg;
@@ -1254,10 +1254,10 @@ int WinEDA_Build_BOM_Frame::PrintListeCmpByRef( FILE* f, ListComponent* List, in
 
         if( DrawList == NULL )
             continue;
-        if( DrawList->Type() != DRAW_LIB_ITEM_STRUCT_TYPE )
+        if( DrawList->Type() != TYPE_SCH_COMPONENT )
             continue;
 
-        DrawLibItem = (EDA_SchComponentStruct*) DrawList;
+        DrawLibItem = (SCH_COMPONENT*) DrawList;
         if( List[ii].m_Ref[0] == '#' )
             continue;
 
@@ -1313,7 +1313,7 @@ int WinEDA_Build_BOM_Frame::PrintListeCmpByVal( FILE* f, ListComponent* List, in
     int ii, Multi;
     wxChar Unit;
     EDA_BaseStruct* DrawList;
-    EDA_SchComponentStruct* DrawLibItem;
+    SCH_COMPONENT* DrawLibItem;
     EDA_LibComponentStruct* Entry;
     wxString msg;
 
@@ -1331,10 +1331,10 @@ int WinEDA_Build_BOM_Frame::PrintListeCmpByVal( FILE* f, ListComponent* List, in
 
         if( DrawList == NULL )
             continue;
-        if( DrawList->Type() != DRAW_LIB_ITEM_STRUCT_TYPE )
+        if( DrawList->Type() != TYPE_SCH_COMPONENT )
             continue;
 
-        DrawLibItem = (EDA_SchComponentStruct*) DrawList;
+        DrawLibItem = (SCH_COMPONENT*) DrawList;
         if( List[ii].m_Ref[0] == '#' )
             continue;
 
@@ -1354,10 +1354,10 @@ int WinEDA_Build_BOM_Frame::PrintListeCmpByVal( FILE* f, ListComponent* List, in
                  List[ii].m_Ref, Unit );
 
 //		if( s_ListWithSubCmponents )
-		// print the sheet path
+        // print the sheet path
         if( m_ListSubCmpItems->GetValue() )
         {
-			msg = List[ii].m_SheetList.PathHumanReadable();
+            msg = List[ii].m_SheetList.PathHumanReadable();
             fprintf( f, "   (Sheet %s)", CONV_TO_UTF8( msg ) );
         }
 
@@ -1377,7 +1377,7 @@ static int PrintListeGLabel( FILE* f, ListLabel* List, int NbItems )
 /******************************************************************/
 {
     int ii, jj;
-    DrawLabelStruct* DrawTextItem;
+    SCH_LABEL* DrawTextItem;
     DrawSheetLabelStruct* DrawSheetLabel;
     ListLabel* LabelItem;
     wxString msg, sheetpath;
@@ -1389,14 +1389,14 @@ static int PrintListeGLabel( FILE* f, ListLabel* List, int NbItems )
 
         switch( LabelItem->m_LabelType )
         {
-        case DRAW_HIER_LABEL_STRUCT_TYPE:
-        case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-            DrawTextItem = (DrawLabelStruct*) (LabelItem->m_Label);
-            if( LabelItem->m_LabelType == DRAW_HIER_LABEL_STRUCT_TYPE )
+        case TYPE_SCH_HIERLABEL:
+        case TYPE_SCH_GLOBALLABEL:
+            DrawTextItem = (SCH_LABEL*) (LabelItem->m_Label);
+            if( LabelItem->m_LabelType == TYPE_SCH_HIERLABEL )
                 labeltype = wxT("Hierarchical");
             else
                 labeltype = wxT("Global      ");
-			sheetpath = CONV_FROM_UTF8(LabelItem->m_SheetPath);
+            sheetpath = CONV_FROM_UTF8(LabelItem->m_SheetPath);
             msg.Printf(
                 _( "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n" ),
                 DrawTextItem->m_Text.GetData(),

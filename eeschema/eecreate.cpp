@@ -376,9 +376,9 @@ void WinEDA_SchematicFrame::RepeatDrawItem( wxDC* DC )
         STRUCT->m_Pos.y += g_RepeatStep.y; oy = STRUCT->m_Pos.y;
         break;
 
-    case DRAW_TEXT_STRUCT_TYPE:
+    case TYPE_SCH_TEXT:
             #undef STRUCT
-            #define STRUCT ( (DrawTextStruct*) g_ItemToRepeat )
+            #define STRUCT ( (SCH_TEXT*) g_ItemToRepeat )
         g_ItemToRepeat   = STRUCT->GenCopy();
         STRUCT->m_Pos.x += g_RepeatStep.x; ox = STRUCT->m_Pos.x;
         STRUCT->m_Pos.y += g_RepeatStep.y; oy = STRUCT->m_Pos.y;
@@ -389,11 +389,11 @@ void WinEDA_SchematicFrame::RepeatDrawItem( wxDC* DC )
         break;
 
 
-    case DRAW_LABEL_STRUCT_TYPE:
-	case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-	case DRAW_HIER_LABEL_STRUCT_TYPE:
+    case TYPE_SCH_LABEL:
+    case TYPE_SCH_GLOBALLABEL:
+    case TYPE_SCH_HIERLABEL:
             #undef STRUCT
-            #define STRUCT ( (DrawLabelStruct*) g_ItemToRepeat )
+            #define STRUCT ( (SCH_LABEL*) g_ItemToRepeat )
         g_ItemToRepeat   = STRUCT->GenCopy();
         STRUCT->m_Pos.x += g_RepeatStep.x; ox = STRUCT->m_Pos.x;
         STRUCT->m_Pos.y += g_RepeatStep.y; oy = STRUCT->m_Pos.y;
@@ -474,7 +474,7 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
  *      - une jonction
  *      - ou une pin
  *      - ou une extr�mit� unique de fil
- * 
+ *
  *  - type BUS, si il y a
  *      - ou une extr�mit� unique de BUS
  */
@@ -528,9 +528,9 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
             return TRUE;
 
         item = PickStruct( screen, LABELITEM );
-        if( item && (item->Type() != DRAW_TEXT_STRUCT_TYPE)
-           && ( ( (DrawGlobalLabelStruct*) item )->m_Pos.x == pos.x )
-           && ( ( (DrawGlobalLabelStruct*) item )->m_Pos.y == pos.y ) )
+        if( item && (item->Type() != TYPE_SCH_TEXT)
+           && ( ( (SCH_GLOBALLABEL*) item )->m_Pos.x == pos.x )
+           && ( ( (SCH_GLOBALLABEL*) item )->m_Pos.y == pos.y ) )
             return TRUE;
 
         pinsheet = LocateAnyPinSheet( pos, screen->EEDrawList );

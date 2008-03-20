@@ -27,7 +27,7 @@ void DrawSheetStruct::Display_Infos( WinEDA_DrawFrame* frame )
 
 
 /***************************************************************/
-void EDA_SchComponentStruct::Display_Infos( WinEDA_DrawFrame* frame )
+void SCH_COMPONENT::Display_Infos( WinEDA_DrawFrame* frame )
 /***************************************************************/
 {
     EDA_LibComponentStruct* Entry = FindLibPart( m_ChipName.GetData(), wxEmptyString, FIND_ROOT );;
@@ -37,7 +37,7 @@ void EDA_SchComponentStruct::Display_Infos( WinEDA_DrawFrame* frame )
     frame->MsgPanel->EraseMsgBox();
 
     Affiche_1_Parametre( frame, 1, _( "Ref" ),
-    	GetRef(((WinEDA_SchematicFrame*)frame)->GetSheet()), DARKCYAN );
+        GetRef(((WinEDA_SchematicFrame*)frame)->GetSheet()), DARKCYAN );
 
     if( Entry && Entry->m_Options == ENTRY_POWER )
         msg = _( "Pwr Symb" );

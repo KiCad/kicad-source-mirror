@@ -71,7 +71,7 @@ public:
 
     /* Cross probing with pcbnew */
     void SendMessageToPCBNEW( EDA_BaseStruct* objectToSync,
-                              EDA_SchComponentStruct* LibItem );
+                              SCH_COMPONENT* LibItem );
 
     /* netlist generation */
     void* BuildNetListBase();
@@ -144,10 +144,10 @@ private:
 
     // Text ,label, glabel
     EDA_BaseStruct* CreateNewText( wxDC* DC, int type );
-    void EditSchematicText( DrawTextStruct* TextStruct, wxDC* DC );
-    void ChangeTextOrient( DrawTextStruct* TextStruct, wxDC* DC );
-    void StartMoveTexte( DrawTextStruct* TextStruct, wxDC* DC );
-    void ConvertTextType( DrawTextStruct* Text, wxDC* DC, int newtype );
+    void EditSchematicText( SCH_TEXT* TextStruct, wxDC* DC );
+    void ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC );
+    void StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC );
+    void ConvertTextType( SCH_TEXT* Text, wxDC* DC, int newtype );
 
     // Wire, Bus
     void BeginSegment( wxDC* DC, int type );
@@ -168,10 +168,10 @@ private:
 
 public:
     bool EditSheet( DrawSheetStruct* Sheet, wxDC* DC );
-	/** Function UpdateSheetNumberAndDate
-	 * Set a sheet number, the sheet count for sheets in the whole schematic
-	 * and update the date in all screens
-	 */
+    /** Function UpdateSheetNumberAndDate
+     * Set a sheet number, the sheet count for sheets in the whole schematic
+     * and update the date in all screens
+     */
     void UpdateSheetNumberAndDate();
 
 private:
@@ -188,25 +188,25 @@ public:
 private:
 
     // Component
-    EDA_SchComponentStruct* Load_Component( wxDC*           DC,
+    SCH_COMPONENT* Load_Component( wxDC*           DC,
                                             const wxString& libname,
                                             wxArrayString&  List,
                                             bool            UseLibBrowser );
-    void StartMovePart( EDA_SchComponentStruct* DrawLibItem, wxDC* DC );
+    void StartMovePart( SCH_COMPONENT* DrawLibItem, wxDC* DC );
 
 public:
-    void CmpRotationMiroir( EDA_SchComponentStruct* DrawComponent,
+    void CmpRotationMiroir( SCH_COMPONENT* DrawComponent,
                             wxDC* DC, int type_rotate );
 
 private:
-    void SelPartUnit( EDA_SchComponentStruct* DrawComponent,
+    void SelPartUnit( SCH_COMPONENT* DrawComponent,
                       int unit, wxDC* DC );
-    void ConvertPart( EDA_SchComponentStruct* DrawComponent, wxDC* DC );
-    void SetInitCmp( EDA_SchComponentStruct* DrawComponent, wxDC* DC );
-    void EditComponentReference( EDA_SchComponentStruct* DrawLibItem,
+    void ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC );
+    void SetInitCmp( SCH_COMPONENT* DrawComponent, wxDC* DC );
+    void EditComponentReference( SCH_COMPONENT* DrawLibItem,
                                  wxDC* DC );
-    void EditComponentValue( EDA_SchComponentStruct* DrawLibItem, wxDC* DC );
-    void EditComponentFootprint( EDA_SchComponentStruct* DrawLibItem,
+    void EditComponentValue( SCH_COMPONENT* DrawLibItem, wxDC* DC );
+    void EditComponentFootprint( SCH_COMPONENT* DrawLibItem,
                                  wxDC* DC );
     void StartMoveCmpField( PartTextStruct* Field, wxDC* DC );
     void EditCmpFieldText( PartTextStruct* Field, wxDC* DC );

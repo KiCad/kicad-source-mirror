@@ -90,10 +90,10 @@ void ReAnnotatePowerSymbolsOnly( void )
         EDA_BaseStruct* DrawList = sheet->LastDrawList();
         for( ; DrawList != NULL; DrawList = DrawList->Pnext )
         {
-            if( DrawList->Type() != DRAW_LIB_ITEM_STRUCT_TYPE )
+            if( DrawList->Type() != TYPE_SCH_COMPONENT )
                 continue;
-            EDA_SchComponentStruct* DrawLibItem =
-                (EDA_SchComponentStruct*) DrawList;
+            SCH_COMPONENT* DrawLibItem =
+                (SCH_COMPONENT*) DrawList;
             EDA_LibComponentStruct* Entry =
                 FindLibPart(
                     DrawLibItem->m_ChipName.GetData(), wxEmptyString,
@@ -303,14 +303,14 @@ int ListeComposants( CmpListStruct* BaseListeCmp, DrawSheetPath* sheet )
 {
     int                     NbrCmp   = 0;
     EDA_BaseStruct*         DrawList = sheet->LastDrawList();
-    EDA_SchComponentStruct* DrawLibItem;
+    SCH_COMPONENT* DrawLibItem;
     EDA_LibComponentStruct* Entry;
 
     for(  ; DrawList;   DrawList = DrawList->Pnext )
     {
-        if( DrawList->Type() == DRAW_LIB_ITEM_STRUCT_TYPE )
+        if( DrawList->Type() == TYPE_SCH_COMPONENT )
         {
-            DrawLibItem = (EDA_SchComponentStruct*) DrawList;
+            DrawLibItem = (SCH_COMPONENT*) DrawList;
             Entry = FindLibPart( DrawLibItem->m_ChipName.GetData(),
                 wxEmptyString,
                 FIND_ROOT );
@@ -361,7 +361,7 @@ static void ReAnnotateComponents( CmpListStruct* BaseListeCmp, int NbOfCmp )
 {
     int   ii;
     char* Text;
-    EDA_SchComponentStruct* DrawLibItem;
+    SCH_COMPONENT* DrawLibItem;
 
     /* Reattribution des numeros */
     for( ii = 0; ii < NbOfCmp; ii++ )

@@ -16,7 +16,7 @@
 
 /* Variables locales : */
 static void PlotSheetLabelStruct( DrawSheetLabelStruct* Struct );
-static void PlotTextField( EDA_SchComponentStruct* DrawLibItem,
+static void PlotTextField( SCH_COMPONENT* DrawLibItem,
                            int FieldNumber, int IsMulti, int DrawMode );
 static void PlotPinSymbol( int posX, int posY, int len, int orient, int Shape );
 
@@ -164,7 +164,7 @@ void PlotNoConnectStruct( DrawNoConnectStruct* Struct )
 
 
 /*************************************************/
-void PlotLibPart( EDA_SchComponentStruct* DrawLibItem )
+void PlotLibPart( SCH_COMPONENT* DrawLibItem )
 /*************************************************/
 /* Genere le trace d'un composant */
 {
@@ -342,7 +342,7 @@ void PlotLibPart( EDA_SchComponentStruct* DrawLibItem )
 
 
 /*************************************************************/
-static void PlotTextField( EDA_SchComponentStruct* DrawLibItem,
+static void PlotTextField( SCH_COMPONENT* DrawLibItem,
                            int FieldNumber, int IsMulti, int DrawMode )
 /**************************************************************/
 
@@ -553,22 +553,22 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
 
     switch( Struct->Type() )
     {
-    case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-    case DRAW_HIER_LABEL_STRUCT_TYPE:
-    case DRAW_LABEL_STRUCT_TYPE:
-    case DRAW_TEXT_STRUCT_TYPE:
-        Text   = ( (DrawTextStruct*) Struct )->m_Text;
-        Size   = ( (DrawTextStruct*) Struct )->m_Size;
-        Orient = ( (DrawTextStruct*) Struct )->m_Orient;
-        Shape  = ( (DrawTextStruct*) Struct )->m_Shape;
-        pX     = ( (DrawTextStruct*) Struct )->m_Pos.x;
-        pY     = ( (DrawTextStruct*) Struct )->m_Pos.y;
+    case TYPE_SCH_GLOBALLABEL:
+    case TYPE_SCH_HIERLABEL:
+    case TYPE_SCH_LABEL:
+    case TYPE_SCH_TEXT:
+        Text   = ( (SCH_TEXT*) Struct )->m_Text;
+        Size   = ( (SCH_TEXT*) Struct )->m_Size;
+        Orient = ( (SCH_TEXT*) Struct )->m_Orient;
+        Shape  = ( (SCH_TEXT*) Struct )->m_Shape;
+        pX     = ( (SCH_TEXT*) Struct )->m_Pos.x;
+        pY     = ( (SCH_TEXT*) Struct )->m_Pos.y;
         offset = TXTMARGE;
-        if( Struct->Type() == DRAW_GLOBAL_LABEL_STRUCT_TYPE
-            || Struct->Type() == DRAW_HIER_LABEL_STRUCT_TYPE )
+        if( Struct->Type() == TYPE_SCH_GLOBALLABEL
+            || Struct->Type() == TYPE_SCH_HIERLABEL )
             offset += Size.x;       // We must draw the Glabel graphic symbol
         if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
-            color = ReturnLayerColor( ( (DrawTextStruct*) Struct )->m_Layer );
+            color = ReturnLayerColor( ( (SCH_TEXT*) Struct )->m_Layer );
         break;
 
     default:
@@ -580,31 +580,31 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
 
     SetCurrentLineWidth( -1 );
 
-	if ( Struct->Type() == DRAW_GLOBAL_LABEL_STRUCT_TYPE )
-	{
-        offset =  ( (DrawGlobalLabelStruct*) Struct )->m_Width;
-		switch( Shape )
-		{
-		case NET_INPUT:
-		case NET_BIDI:
-		case NET_TRISTATE:
-			offset += Size.x/2;
-			break;
+    if ( Struct->Type() == TYPE_SCH_GLOBALLABEL )
+    {
+        offset =  ( (SCH_GLOBALLABEL*) Struct )->m_Width;
+        switch( Shape )
+        {
+        case NET_INPUT:
+        case NET_BIDI:
+        case NET_TRISTATE:
+            offset += Size.x/2;
+            break;
 
-		case NET_OUTPUT:
-			offset += TXTMARGE;
-			break;
+        case NET_OUTPUT:
+            offset += TXTMARGE;
+            break;
 
-		default:
-			break;
-		}
-	}
+        default:
+            break;
+        }
+    }
 
 
     switch( Orient )
     {
     case 0:         /* Orientation horiz normale */
-        if( Struct->Type() == DRAW_GLOBAL_LABEL_STRUCT_TYPE || Struct->Type() == DRAW_HIER_LABEL_STRUCT_TYPE )
+        if( Struct->Type() == TYPE_SCH_GLOBALLABEL || Struct->Type() == TYPE_SCH_HIERLABEL )
             PlotGraphicText( g_PlotFormat, wxPoint( pX - offset, pY ),
                              color, Text, TEXT_ORIENT_HORIZ, Size,
                              GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER );
@@ -615,7 +615,7 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
         break;
 
     case 1:         /* Orientation vert UP */
-        if( Struct->Type() == DRAW_GLOBAL_LABEL_STRUCT_TYPE || Struct->Type() == DRAW_HIER_LABEL_STRUCT_TYPE )
+        if( Struct->Type() == TYPE_SCH_GLOBALLABEL || Struct->Type() == TYPE_SCH_HIERLABEL )
             PlotGraphicText( g_PlotFormat, wxPoint( pX, pY + offset ),
                              color, Text, TEXT_ORIENT_VERT, Size,
                              GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP );
@@ -626,7 +626,7 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
         break;
 
     case 2:         /* Horiz Orientation - Right justified */
-        if( Struct->Type() == DRAW_GLOBAL_LABEL_STRUCT_TYPE || Struct->Type() == DRAW_HIER_LABEL_STRUCT_TYPE )
+        if( Struct->Type() == TYPE_SCH_GLOBALLABEL || Struct->Type() == TYPE_SCH_HIERLABEL )
             PlotGraphicText( g_PlotFormat, wxPoint( pX + offset, pY ),
                              color, Text, TEXT_ORIENT_HORIZ, Size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER );
@@ -637,7 +637,7 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
         break;
 
     case 3:         /* Orientation vert BOTTOM */
-        if( Struct->Type() == DRAW_GLOBAL_LABEL_STRUCT_TYPE || Struct->Type() == DRAW_HIER_LABEL_STRUCT_TYPE )
+        if( Struct->Type() == TYPE_SCH_GLOBALLABEL || Struct->Type() == TYPE_SCH_HIERLABEL )
             PlotGraphicText( g_PlotFormat, wxPoint( pX, pY - offset ),
                              color, Text, TEXT_ORIENT_VERT, Size,
                              GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM );
@@ -649,14 +649,14 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
     }
 
     /* Draw graphic symbol for global or hierachical labels */
-    if( Struct->Type() == DRAW_GLOBAL_LABEL_STRUCT_TYPE )
+    if( Struct->Type() == TYPE_SCH_GLOBALLABEL )
     {
-        ( (DrawGlobalLabelStruct*) Struct )->CreateGraphicShape( Poly, wxPoint(pX, pY) );
+        ( (SCH_GLOBALLABEL*) Struct )->CreateGraphicShape( Poly, wxPoint(pX, pY) );
         PlotPoly( Poly[0], Poly + 1, NOFILL );
     }
-    if( Struct->Type() == DRAW_HIER_LABEL_STRUCT_TYPE )
+    if( Struct->Type() == TYPE_SCH_HIERLABEL )
     {
-        ( (DrawHierLabelStruct*) Struct )->CreateGraphicShape( Poly, wxPoint(pX, pY) );
+        ( (SCH_HIERLABEL*) Struct )->CreateGraphicShape( Poly, wxPoint(pX, pY) );
         PlotPoly( Poly[0], Poly + 1, NOFILL );
     }
 }

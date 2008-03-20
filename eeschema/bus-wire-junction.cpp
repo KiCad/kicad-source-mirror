@@ -36,7 +36,7 @@ EDA_BaseStruct* SCH_SCREEN::ExtractWires( bool CreateCopy )
  *  If an abord command is made, old wires must be put in EEDrawList, and copies must be deleted
  *  This is because previously stored undo commands can handle pointers on wires or bus,
  *  and we do not delete wires or bus, we must put they in undo list.
- * 
+ *
  *  Because cleanup delete and/or modify bus and wires, the more easy is to put all wires in undo list
  *  and use a new copy of wires for cleanup
  */
@@ -142,8 +142,8 @@ void WinEDA_SchematicFrame::BeginSegment( wxDC* DC, int type )
     if( !newsegment )  /* first point : Create first wire ou bus */
     {
         s_ConnexionStartPoint = cursorpos;
-		s_OldWiresList = ((SCH_SCREEN*)GetScreen())->ExtractWires( TRUE );
-		((SCH_SCREEN*)GetScreen())->SchematicCleanUp( NULL );
+        s_OldWiresList = ((SCH_SCREEN*)GetScreen())->ExtractWires( TRUE );
+        ((SCH_SCREEN*)GetScreen())->SchematicCleanUp( NULL );
 
         switch( type )
         {
@@ -194,7 +194,7 @@ void WinEDA_SchematicFrame::BeginSegment( wxDC* DC, int type )
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 
         /* Creation du segment suivant ou fin de trac� si point sur pin, jonction ...*/
-		if( IsTerminalPoint( (SCH_SCREEN*)GetScreen(), cursorpos, oldsegment->m_Layer ) )
+        if( IsTerminalPoint( (SCH_SCREEN*)GetScreen(), cursorpos, oldsegment->m_Layer ) )
         {
             EndSegment( DC ); return;
         }
@@ -301,7 +301,7 @@ void WinEDA_SchematicFrame::EndSegment( wxDC* DC )
         alt_end_point = lastsegment->m_Start;
     }
 
-	((SCH_SCREEN*)GetScreen())->SchematicCleanUp( NULL );
+    ((SCH_SCREEN*)GetScreen())->SchematicCleanUp( NULL );
 
     /* clear flags and find last segment entered, for repeat function */
     segment = (EDA_DrawLineStruct*) GetScreen()->EEDrawList;
@@ -521,7 +521,7 @@ void WinEDA_SchematicFrame::DeleteCurrentSegment( wxDC* DC )
         Segment_in_Ghost( DrawPanel, DC, FALSE ); /* Effacement du trace en cours */
     }
 
-	EraseStruct( GetScreen()->GetCurItem(), (SCH_SCREEN*)GetScreen() );
+    EraseStruct( GetScreen()->GetCurItem(), (SCH_SCREEN*)GetScreen() );
     DrawPanel->ManageCurseur = NULL;
     GetScreen()->SetCurItem( NULL );
 }
@@ -642,9 +642,9 @@ void WinEDA_SchematicFrame::RepeatDrawItem( wxDC* DC )
         new_pos = STRUCT->m_Pos;
         break;
 
-    case DRAW_TEXT_STRUCT_TYPE:
+    case TYPE_SCH_TEXT:
             #undef STRUCT
-            #define STRUCT ( (DrawTextStruct*) g_ItemToRepeat )
+            #define STRUCT ( (SCH_TEXT*) g_ItemToRepeat )
         g_ItemToRepeat = STRUCT->GenCopy();
         STRUCT->m_Pos += g_RepeatStep;
         new_pos = STRUCT->m_Pos;
@@ -653,9 +653,9 @@ void WinEDA_SchematicFrame::RepeatDrawItem( wxDC* DC )
         break;
 
 
-    case DRAW_LABEL_STRUCT_TYPE:
+    case TYPE_SCH_LABEL:
             #undef STRUCT
-            #define STRUCT ( (DrawLabelStruct*) g_ItemToRepeat )
+            #define STRUCT ( (SCH_LABEL*) g_ItemToRepeat )
         g_ItemToRepeat = STRUCT->GenCopy();
         STRUCT->m_Pos += g_RepeatStep;
         new_pos = STRUCT->m_Pos;
@@ -664,19 +664,19 @@ void WinEDA_SchematicFrame::RepeatDrawItem( wxDC* DC )
         break;
 
 
-	case DRAW_HIER_LABEL_STRUCT_TYPE:
-		    #undef STRUCT
-            #define STRUCT ( (DrawHierLabelStruct*) g_ItemToRepeat )
+    case TYPE_SCH_HIERLABEL:
+            #undef STRUCT
+            #define STRUCT ( (SCH_HIERLABEL*) g_ItemToRepeat )
         g_ItemToRepeat = STRUCT->GenCopy();
         STRUCT->m_Pos += g_RepeatStep;
         new_pos = STRUCT->m_Pos;
         /*** Increment du numero de label ***/
         IncrementLabelMember( STRUCT->m_Text );
         break;
-		
-    case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
+
+    case TYPE_SCH_GLOBALLABEL:
             #undef STRUCT
-            #define STRUCT ( (DrawGlobalLabelStruct*) g_ItemToRepeat )
+            #define STRUCT ( (SCH_GLOBALLABEL*) g_ItemToRepeat )
         g_ItemToRepeat = STRUCT->GenCopy();
         STRUCT->m_Pos += g_RepeatStep;
         new_pos = STRUCT->m_Pos;
@@ -701,17 +701,17 @@ void WinEDA_SchematicFrame::RepeatDrawItem( wxDC* DC )
         new_pos = STRUCT->m_Pos;
         break;
 
-    case DRAW_LIB_ITEM_STRUCT_TYPE:     // In repeat command the new component is put in move mode
+    case TYPE_SCH_COMPONENT:     // In repeat command the new component is put in move mode
             #undef STRUCT
-            #define STRUCT ( (EDA_SchComponentStruct*) g_ItemToRepeat )
+            #define STRUCT ( (SCH_COMPONENT*) g_ItemToRepeat )
 
         // Create the duplicate component, position = mouse cursor
         g_ItemToRepeat = STRUCT->GenCopy();
         new_pos.x           = GetScreen()->m_Curseur.x - STRUCT->m_Pos.x;
-		new_pos.y           = GetScreen()->m_Curseur.y - STRUCT->m_Pos.y;
-		STRUCT->m_Pos       = GetScreen()->m_Curseur;
+        new_pos.y           = GetScreen()->m_Curseur.y - STRUCT->m_Pos.y;
+        STRUCT->m_Pos       = GetScreen()->m_Curseur;
         STRUCT->m_Flags     = IS_NEW;
-		STRUCT->m_TimeStamp = GetTimeStamp();
+        STRUCT->m_TimeStamp = GetTimeStamp();
         for( int ii = 0; ii < NUMBER_OF_FIELDS; ii++ )
         {
             STRUCT->m_Field[ii].m_Pos += new_pos;
@@ -783,14 +783,14 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
  *      - une jonction
  *      - ou une pin
  *      - ou une extr�mit� unique de fil
- * 
+ *
  *  - type BUS, si il y a
  *      - ou une extr�mit� unique de BUS
  */
 {
     EDA_BaseStruct*         item;
     LibDrawPin*             pin;
-    EDA_SchComponentStruct* LibItem = NULL;
+    SCH_COMPONENT* LibItem = NULL;
     DrawSheetLabelStruct*   pinsheet;
     wxPoint itempos;
 
@@ -837,9 +837,9 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
             return TRUE;
 
         item = PickStruct( pos, screen, LABELITEM );
-        if( item && (item->Type() != DRAW_TEXT_STRUCT_TYPE)
-           && ( ( (DrawGlobalLabelStruct*) item )->m_Pos.x == pos.x )
-           && ( ( (DrawGlobalLabelStruct*) item )->m_Pos.y == pos.y ) )
+        if( item && (item->Type() != TYPE_SCH_TEXT)
+           && ( ( (SCH_GLOBALLABEL*) item )->m_Pos.x == pos.x )
+           && ( ( (SCH_GLOBALLABEL*) item )->m_Pos.y == pos.y ) )
             return TRUE;
 
         pinsheet = LocateAnyPinSheet( pos, screen );

@@ -39,15 +39,15 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             switch( DrawStruct->Type() )
             {
-            case DRAW_LABEL_STRUCT_TYPE:
-            case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-            case DRAW_HIER_LABEL_STRUCT_TYPE:
-            case DRAW_TEXT_STRUCT_TYPE:
+            case TYPE_SCH_LABEL:
+            case TYPE_SCH_GLOBALLABEL:
+            case TYPE_SCH_HIERLABEL:
+            case TYPE_SCH_TEXT:
             case DRAW_SHEETLABEL_STRUCT_TYPE:
             case DRAW_SHEET_STRUCT_TYPE:
             case DRAW_BUSENTRY_STRUCT_TYPE:
             case DRAW_JUNCTION_STRUCT_TYPE:
-            case DRAW_LIB_ITEM_STRUCT_TYPE:
+            case TYPE_SCH_COMPONENT:
             case DRAW_PART_TEXT_STRUCT_TYPE:
                 DrawStruct->Place( this, DC );
                 GetScreen()->SetCurItem( NULL );
@@ -354,16 +354,16 @@ void WinEDA_SchematicFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             InstallNextScreen( (DrawSheetStruct*) DrawStruct );
             break;
 
-        case DRAW_LIB_ITEM_STRUCT_TYPE:
-            InstallCmpeditFrame( this, pos, (EDA_SchComponentStruct*) DrawStruct );
+        case TYPE_SCH_COMPONENT:
+            InstallCmpeditFrame( this, pos, (SCH_COMPONENT*) DrawStruct );
             DrawPanel->MouseToCursorSchema();
             break;
 
-        case DRAW_TEXT_STRUCT_TYPE:
-        case DRAW_LABEL_STRUCT_TYPE:
-        case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-        case DRAW_HIER_LABEL_STRUCT_TYPE:
-            EditSchematicText( (DrawTextStruct*) DrawStruct, DC );
+        case TYPE_SCH_TEXT:
+        case TYPE_SCH_LABEL:
+        case TYPE_SCH_GLOBALLABEL:
+        case TYPE_SCH_HIERLABEL:
+            EditSchematicText( (SCH_TEXT*) DrawStruct, DC );
             break;
 
         case DRAW_PART_TEXT_STRUCT_TYPE:

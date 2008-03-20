@@ -459,22 +459,22 @@ void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
         break;
     }
 
-    case DRAW_TEXT_STRUCT_TYPE:
+    case TYPE_SCH_TEXT:
     {
-        DrawTextStruct* Struct;
-        Struct = (DrawTextStruct*) DrawStruct;
+        SCH_TEXT* Struct;
+        Struct = (SCH_TEXT*) DrawStruct;
         Struct->m_Pos.x += dx; Struct->m_Pos.y += dy;
         Struct->Draw( panel, DC, wxPoint( 0, 0 ), DrawMode, g_GhostColor );
         Struct->m_Pos.x -= dx; Struct->m_Pos.y -= dy;
         break;
     }
 
-    case DRAW_LABEL_STRUCT_TYPE:
-    case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-    case DRAW_HIER_LABEL_STRUCT_TYPE:
+    case TYPE_SCH_LABEL:
+    case TYPE_SCH_GLOBALLABEL:
+    case TYPE_SCH_HIERLABEL:
     {
-        DrawLabelStruct* Struct;
-        Struct = (DrawLabelStruct*) DrawStruct;
+        SCH_LABEL* Struct;
+        Struct = (SCH_LABEL*) DrawStruct;
         Struct->m_Pos.x += dx; Struct->m_Pos.y += dy;
         Struct->Draw( panel, DC, wxPoint( 0, 0 ), DrawMode, g_GhostColor );
         Struct->m_Pos.x -= dx; Struct->m_Pos.y -= dy;
@@ -491,11 +491,11 @@ void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
         break;
     }
 
-    case DRAW_LIB_ITEM_STRUCT_TYPE:
+    case TYPE_SCH_COMPONENT:
     {
         EDA_LibComponentStruct* LibEntry;
-        EDA_SchComponentStruct* Struct;
-        Struct   = (EDA_SchComponentStruct*) DrawStruct;
+        SCH_COMPONENT* Struct;
+        Struct   = (SCH_COMPONENT*) DrawStruct;
         LibEntry = FindLibPart( Struct->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
         if( LibEntry == NULL )
             break;

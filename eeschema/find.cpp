@@ -72,7 +72,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindComponentAndItem(
 {
     DrawSheetPath*          sheet, * SheetWithComponentFound = NULL;
     EDA_BaseStruct*         DrawList  = NULL;
-    EDA_SchComponentStruct* Component = NULL;
+    SCH_COMPONENT* Component = NULL;
     wxSize                  DrawAreaSize = DrawPanel->GetClientSize();
     wxPoint                 pos, curpos;
     bool                    DoCenterAndRedraw = FALSE;
@@ -91,10 +91,10 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindComponentAndItem(
         DrawList = sheet->LastDrawList();
         for( ; (DrawList != NULL) && (NotFound == true); DrawList = DrawList->Pnext )
         {
-            if( DrawList->Type() == DRAW_LIB_ITEM_STRUCT_TYPE )
+            if( DrawList->Type() == TYPE_SCH_COMPONENT )
             {
-                EDA_SchComponentStruct* pSch;
-                pSch = (EDA_SchComponentStruct*) DrawList;
+                SCH_COMPONENT* pSch;
+                pSch = (SCH_COMPONENT*) DrawList;
                 if( component_reference.CmpNoCase( pSch->GetRef(sheet) ) == 0 )
                 {
                     Component = pSch;
@@ -465,9 +465,9 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
         {
             switch( DrawList->Type() )
             {
-            case DRAW_LIB_ITEM_STRUCT_TYPE:
-                EDA_SchComponentStruct * pSch;
-                pSch = (EDA_SchComponentStruct*) DrawList;
+            case TYPE_SCH_COMPONENT:
+                SCH_COMPONENT * pSch;
+                pSch = (SCH_COMPONENT*) DrawList;
                 if( WildCompareString( WildText, pSch->GetRef(Sheet), FALSE ) )
                 {
                     NotFound = FALSE;
@@ -481,12 +481,12 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
                 }
                 break;
 
-            case DRAW_LABEL_STRUCT_TYPE:
-            case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-            case DRAW_HIER_LABEL_STRUCT_TYPE:
-            case DRAW_TEXT_STRUCT_TYPE:
-                DrawTextStruct * pDraw;
-                pDraw = (DrawTextStruct*) DrawList;
+            case TYPE_SCH_LABEL:
+            case TYPE_SCH_GLOBALLABEL:
+            case TYPE_SCH_HIERLABEL:
+            case TYPE_SCH_TEXT:
+                SCH_TEXT * pDraw;
+                pDraw = (SCH_TEXT*) DrawList;
                 if( WildCompareString( WildText, pDraw->m_Text, FALSE ) )
                 {
                     NotFound = FALSE;
@@ -551,12 +551,12 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
             DoCenterAndRedraw   = TRUE;
         }
 
-        /* the struct is a DRAW_LIB_ITEM_STRUCT_TYPE type,
+        /* the struct is a TYPE_SCH_COMPONENT type,
          * coordinates must be computed according to its orientation matrix
          */
-        if( Struct->Type() == DRAW_LIB_ITEM_STRUCT_TYPE )
+        if( Struct->Type() == TYPE_SCH_COMPONENT )
         {
-            EDA_SchComponentStruct* pSch = (EDA_SchComponentStruct*) Struct;
+            SCH_COMPONENT* pSch = (SCH_COMPONENT*) Struct;
 
             pos.x -= pSch->m_Pos.x;
             pos.y -= pSch->m_Pos.y;

@@ -55,11 +55,11 @@ static void AddMenusForBus( wxMenu* PopMenu, EDA_DrawLineStruct* Bus,
                             WinEDA_SchematicFrame* frame );
 static void AddMenusForHierchicalSheet( wxMenu* PopMenu, DrawSheetStruct* Sheet );
 static void AddMenusForPinSheet( wxMenu* PopMenu, DrawSheetLabelStruct* PinSheet );
-static void AddMenusForText( wxMenu* PopMenu, DrawTextStruct* Text );
-static void AddMenusForLabel( wxMenu* PopMenu, DrawLabelStruct* Label );
-static void AddMenusForGLabel( wxMenu* PopMenu, DrawGlobalLabelStruct* GLabel );
-static void AddMenusForHLabel( wxMenu* PopMenu, DrawHierLabelStruct* GLabel );
-static void AddMenusForComponent( wxMenu* PopMenu, EDA_SchComponentStruct* Component );
+static void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text );
+static void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label );
+static void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel );
+static void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* GLabel );
+static void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component );
 static void AddMenusForComponentField( wxMenu* PopMenu, PartTextStruct* Field );
 static void AddMenusForJunction( wxMenu* PopMenu, DrawJunctionStruct* Junction,
                                  WinEDA_SchematicFrame* frame );
@@ -90,20 +90,20 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
  *  Ce menu est ensuite compl�t� par la liste des commandes de ZOOM
  */
 {
-	EDA_BaseStruct* DrawStruct  = GetScreen()->GetCurItem();
-	bool BlockActive = (GetScreen()->BlockLocate.m_Command != BLOCK_IDLE);
+    EDA_BaseStruct* DrawStruct  = GetScreen()->GetCurItem();
+    bool BlockActive = (GetScreen()->BlockLocate.m_Command != BLOCK_IDLE);
 
 
     DrawPanel->m_CanStartBlock = -1;    // Ne pas engager un debut de bloc sur validation menu
 
     if( BlockActive )
-	{
-		AddMenusForBlock( PopMenu, this );
+    {
+        AddMenusForBlock( PopMenu, this );
         PopMenu->AppendSeparator();
-		return true;
-	}
+        return true;
+    }
 
-		// Simple localisation des elements si possible
+        // Simple localisation des elements si possible
     if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
     {
         DrawStruct = SchematicGeneralLocateAndDisplay( FALSE );
@@ -111,7 +111,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
         {
             DrawSheetLabelStruct* slabel;
             slabel = LocateSheetLabel( (DrawSheetStruct*) DrawStruct,
-										GetScreen()->m_Curseur );
+                                        GetScreen()->m_Curseur );
             if( slabel )
                 DrawStruct = slabel;
         }
@@ -134,8 +134,8 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
     {
         if( DrawStruct && DrawStruct->m_Flags )
         {
-			ADD_MENUITEM( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel" ), cancel_xpm );
-			PopMenu->AppendSeparator();
+            ADD_MENUITEM( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel" ), cancel_xpm );
+            PopMenu->AppendSeparator();
         }
     }
 
@@ -149,7 +149,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
         return true;
     }
 
-	GetScreen()->SetCurItem( DrawStruct );
+    GetScreen()->SetCurItem( DrawStruct );
 
     int  flags  = DrawStruct->m_Flags;
     bool is_new = (flags & IS_NEW) ? TRUE : FALSE;
@@ -182,20 +182,20 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "delete Marker" ), delete_xpm );
         break;
 
-    case DRAW_TEXT_STRUCT_TYPE:
-        AddMenusForText( PopMenu, (DrawTextStruct*) DrawStruct );
+    case TYPE_SCH_TEXT:
+        AddMenusForText( PopMenu, (SCH_TEXT*) DrawStruct );
         break;
 
-    case DRAW_LABEL_STRUCT_TYPE:
-        AddMenusForLabel( PopMenu, (DrawLabelStruct*) DrawStruct );
+    case TYPE_SCH_LABEL:
+        AddMenusForLabel( PopMenu, (SCH_LABEL*) DrawStruct );
         break;
 
-    case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-        AddMenusForGLabel( PopMenu, (DrawGlobalLabelStruct*) DrawStruct );
+    case TYPE_SCH_GLOBALLABEL:
+        AddMenusForGLabel( PopMenu, (SCH_GLOBALLABEL*) DrawStruct );
         break;
-		
-	case DRAW_HIER_LABEL_STRUCT_TYPE:
-		AddMenusForHLabel( PopMenu, (DrawHierLabelStruct*) DrawStruct );
+
+    case TYPE_SCH_HIERLABEL:
+        AddMenusForHLabel( PopMenu, (SCH_HIERLABEL*) DrawStruct );
         break;
 
     case DRAW_PART_TEXT_STRUCT_TYPE:
@@ -205,17 +205,17 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
             break;
 
         // Many fields are inside a component. If this is the case, add the component menu
-        EDA_SchComponentStruct* Component = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
+        SCH_COMPONENT* Component = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
         if( Component )
         {
             PopMenu->AppendSeparator();
-            AddMenusForComponent( PopMenu, (EDA_SchComponentStruct*) DrawStruct );
+            AddMenusForComponent( PopMenu, (SCH_COMPONENT*) DrawStruct );
         }
     }
         break;
 
-    case DRAW_LIB_ITEM_STRUCT_TYPE:
-        AddMenusForComponent( PopMenu, (EDA_SchComponentStruct*) DrawStruct );
+    case TYPE_SCH_COMPONENT:
+        AddMenusForComponent( PopMenu, (SCH_COMPONENT*) DrawStruct );
         break;
 
     case DRAW_SEGMENT_STRUCT_TYPE:
@@ -259,7 +259,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
     }
 
     PopMenu->AppendSeparator();
-	return true;
+    return true;
 }
 
 
@@ -278,7 +278,7 @@ void AddMenusForComponentField( wxMenu* PopMenu, PartTextStruct* Field )
 
 
 /**************************************************************************/
-void AddMenusForComponent( wxMenu* PopMenu, EDA_SchComponentStruct* Component )
+void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
 /**************************************************************************/
 
 /* Add menu commands for a component
@@ -321,13 +321,13 @@ void AddMenusForComponent( wxMenu* PopMenu, EDA_SchComponentStruct* Component )
 
     if( LibEntry && LibEntry->m_Options != ENTRY_POWER )
     {
-		msg = AddHotkeyName( _( "Value " ), s_Schematic_Hokeys_Descr, HK_EDIT_COMPONENT_VALUE );
-		ADD_MENUITEM( editmenu, ID_POPUP_SCH_EDIT_VALUE_CMP, msg, edit_comp_value_xpm );
-		
+        msg = AddHotkeyName( _( "Value " ), s_Schematic_Hokeys_Descr, HK_EDIT_COMPONENT_VALUE );
+        ADD_MENUITEM( editmenu, ID_POPUP_SCH_EDIT_VALUE_CMP, msg, edit_comp_value_xpm );
+
         ADD_MENUITEM( editmenu, ID_POPUP_SCH_EDIT_REF_CMP, _( "Reference" ), edit_comp_ref_xpm );
-		
-		msg = AddHotkeyName( _( "Footprint " ), s_Schematic_Hokeys_Descr, HK_EDIT_COMPONENT_FOOTPRINT );
-		ADD_MENUITEM( editmenu, ID_POPUP_SCH_EDIT_FOOTPRINT_CMP, msg, edit_comp_footprint_xpm );
+
+        msg = AddHotkeyName( _( "Footprint " ), s_Schematic_Hokeys_Descr, HK_EDIT_COMPONENT_FOOTPRINT );
+        ADD_MENUITEM( editmenu, ID_POPUP_SCH_EDIT_FOOTPRINT_CMP, msg, edit_comp_footprint_xpm );
     }
     if( LibEntry && (LookForConvertPart( LibEntry ) >= 2) )
         editmenu->Append( ID_POPUP_SCH_EDIT_CONVERT_CMP, _( "Convert" ) );
@@ -363,7 +363,7 @@ void AddMenusForComponent( wxMenu* PopMenu, EDA_SchComponentStruct* Component )
 
 
 /*******************************************************************/
-void AddMenusForGLabel( wxMenu* PopMenu, DrawGlobalLabelStruct* GLabel )
+void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel )
 /*******************************************************************/
 
 /* Add menu commands for a Global Label
@@ -388,7 +388,7 @@ void AddMenusForGLabel( wxMenu* PopMenu, DrawGlobalLabelStruct* GLabel )
                                ID_POPUP_SCH_CHANGE_TYPE_TEXT, _( "Change Type" ), gl_change_xpm );
 }
 /*******************************************************************/
-void AddMenusForHLabel( wxMenu* PopMenu, DrawHierLabelStruct* HLabel )
+void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* HLabel )
 /*******************************************************************/
 /* Add menu commands for a hierarchal Label
  */
@@ -414,7 +414,7 @@ void AddMenusForHLabel( wxMenu* PopMenu, DrawHierLabelStruct* HLabel )
 
 
 /*****************************************************************/
-void AddMenusForLabel( wxMenu* PopMenu, DrawLabelStruct* Label )
+void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label )
 /*****************************************************************/
 
 /* Add menu commands for a Label
@@ -441,7 +441,7 @@ void AddMenusForLabel( wxMenu* PopMenu, DrawLabelStruct* Label )
 
 
 /*****************************************************************/
-void AddMenusForText( wxMenu* PopMenu, DrawTextStruct* Text )
+void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text )
 /*****************************************************************/
 
 /* Add menu commands for a Text (a comment)

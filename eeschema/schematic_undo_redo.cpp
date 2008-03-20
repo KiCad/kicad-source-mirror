@@ -90,22 +90,22 @@ void SwapData( EDA_BaseStruct* Item )
         EXCHG( SOURCE->m_Pos, DEST->m_Pos );
         break;
 
-    case DRAW_LABEL_STRUCT_TYPE:
-    case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-    case DRAW_HIER_LABEL_STRUCT_TYPE:
-    case DRAW_TEXT_STRUCT_TYPE:
+    case TYPE_SCH_LABEL:
+    case TYPE_SCH_GLOBALLABEL:
+    case TYPE_SCH_HIERLABEL:
+    case TYPE_SCH_TEXT:
         #undef SOURCE
         #undef DEST
-        #define SOURCE ( (DrawTextStruct*) Item )
-        #define DEST   ( (DrawTextStruct*) image )
+        #define SOURCE ( (SCH_TEXT*) Item )
+        #define DEST   ( (SCH_TEXT*) image )
         DEST->SwapData( SOURCE );
         break;
 
-    case DRAW_LIB_ITEM_STRUCT_TYPE:
+    case TYPE_SCH_COMPONENT:
         #undef SOURCE
         #undef DEST
-        #define SOURCE ( (EDA_SchComponentStruct*) Item )
-        #define DEST   ( (EDA_SchComponentStruct*) image )
+        #define SOURCE ( (SCH_COMPONENT*) Item )
+        #define DEST   ( (SCH_COMPONENT*) image )
         DEST->SwapData( SOURCE );
         break;
 

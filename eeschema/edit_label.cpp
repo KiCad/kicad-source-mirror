@@ -69,7 +69,7 @@ void WinEDA_LabelPropertiesFrame::TextPropertiesAccept( wxCommandEvent& event )
 
 
 /********************************************************************************/
-void WinEDA_SchematicFrame::StartMoveTexte( DrawTextStruct* TextStruct, wxDC* DC )
+void WinEDA_SchematicFrame::StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC )
 /********************************************************************************/
 {
     if( TextStruct == NULL )
@@ -87,10 +87,10 @@ void WinEDA_SchematicFrame::StartMoveTexte( DrawTextStruct* TextStruct, wxDC* DC
 
     switch( TextStruct->Type() )
     {
-    case DRAW_LABEL_STRUCT_TYPE:
-    case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-	case DRAW_HIER_LABEL_STRUCT_TYPE:
-    case DRAW_TEXT_STRUCT_TYPE:
+    case TYPE_SCH_LABEL:
+    case TYPE_SCH_GLOBALLABEL:
+    case TYPE_SCH_HIERLABEL:
+    case TYPE_SCH_TEXT:
         ItemInitialPosition = TextStruct->m_Pos;
         OldSize   = TextStruct->m_Size;
         OldOrient = TextStruct->m_Orient;
@@ -101,13 +101,13 @@ void WinEDA_SchematicFrame::StartMoveTexte( DrawTextStruct* TextStruct, wxDC* DC
     }
 
     DrawPanel->CursorOff( DC );
-	GetScreen()->m_Curseur = ItemInitialPosition;
+    GetScreen()->m_Curseur = ItemInitialPosition;
     DrawPanel->MouseToCursorSchema();
 
     GetScreen()->SetModify();
     DrawPanel->ManageCurseur = ShowWhileMoving;
     DrawPanel->ForceCloseManageCurseur = ExitMoveTexte;
-	GetScreen()->SetCurItem( TextStruct );
+    GetScreen()->SetCurItem( TextStruct );
     DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
 
     DrawPanel->CursorOn( DC );
@@ -115,7 +115,7 @@ void WinEDA_SchematicFrame::StartMoveTexte( DrawTextStruct* TextStruct, wxDC* DC
 
 
 /*************************************************************************/
-void WinEDA_SchematicFrame::EditSchematicText( DrawTextStruct* TextStruct,
+void WinEDA_SchematicFrame::EditSchematicText( SCH_TEXT* TextStruct,
                                                wxDC*           DC )
 /*************************************************************************/
 
@@ -140,11 +140,11 @@ void WinEDA_SchematicFrame::EditSchematicText( DrawTextStruct* TextStruct,
 
 
 /***********************************************************************************/
-void WinEDA_SchematicFrame::ChangeTextOrient( DrawTextStruct* TextStruct, wxDC* DC )
+void WinEDA_SchematicFrame::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
 /***********************************************************************************/
 {
     if( TextStruct == NULL )
-        TextStruct = (DrawTextStruct*) PickStruct( GetScreen()->m_Curseur,
+        TextStruct = (SCH_TEXT*) PickStruct( GetScreen()->m_Curseur,
                                                    GetScreen(), TEXTITEM | LABELITEM );
     if( TextStruct == NULL )
         return;
@@ -160,10 +160,10 @@ void WinEDA_SchematicFrame::ChangeTextOrient( DrawTextStruct* TextStruct, wxDC* 
     /* Rotation du texte */
     switch( TextStruct->Type() )
     {
-    case DRAW_LABEL_STRUCT_TYPE:
-    case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-	case DRAW_HIER_LABEL_STRUCT_TYPE:
-    case DRAW_TEXT_STRUCT_TYPE:
+    case TYPE_SCH_LABEL:
+    case TYPE_SCH_GLOBALLABEL:
+    case TYPE_SCH_HIERLABEL:
+    case TYPE_SCH_TEXT:
         TextStruct->m_Orient++;
         TextStruct->m_Orient &= 3;
         break;
@@ -187,28 +187,28 @@ EDA_BaseStruct* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
 /* Routine to create new text struct (GraphicText, label or Glabel).
  */
 {
-    DrawTextStruct* NewText = NULL;
+    SCH_TEXT* NewText = NULL;
 
     g_ItemToRepeat = NULL;
 
     switch( type )
     {
     case LAYER_NOTES:
-		NewText = new DrawTextStruct( GetScreen()->m_Curseur );
+        NewText = new SCH_TEXT( GetScreen()->m_Curseur );
         break;
 
     case LAYER_LOCLABEL:
-		NewText = new DrawLabelStruct( GetScreen()->m_Curseur );
+        NewText = new SCH_LABEL( GetScreen()->m_Curseur );
         break;
 
-	case LAYER_HIERLABEL:
-		NewText = new DrawHierLabelStruct(GetScreen()->m_Curseur );
+    case LAYER_HIERLABEL:
+        NewText = new SCH_HIERLABEL(GetScreen()->m_Curseur );
         NewText->m_Shape  = s_DefaultShapeGLabel;
         NewText->m_Orient = s_DefaultOrientGLabel;
         break;
-		
+
     case LAYER_GLOBLABEL:
-		NewText = new DrawGlobalLabelStruct(GetScreen()->m_Curseur );
+        NewText = new SCH_GLOBALLABEL(GetScreen()->m_Curseur );
         NewText->m_Shape  = s_DefaultShapeGLabel;
         NewText->m_Orient = s_DefaultOrientGLabel;
         break;
@@ -226,11 +226,11 @@ EDA_BaseStruct* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
 
     if( NewText->m_Text.IsEmpty() )
     {
-		SAFE_DELETE( NewText );
+        SAFE_DELETE( NewText );
         return NULL;
     }
 
-	if( type == LAYER_GLOBLABEL  || type == LAYER_HIERLABEL)
+    if( type == LAYER_GLOBLABEL  || type == LAYER_HIERLABEL)
     {
         s_DefaultShapeGLabel  = NewText->m_Shape;
         s_DefaultOrientGLabel = NewText->m_Orient;
@@ -240,7 +240,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
     DrawPanel->ManageCurseur = ShowWhileMoving;
     DrawPanel->ForceCloseManageCurseur = ExitMoveTexte;
 
-	GetScreen()->SetCurItem( NewText );
+    GetScreen()->SetCurItem( NewText );
 
     return NewText;
 }
@@ -260,11 +260,11 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     /* redraw the text */
     switch( TextStruct->Type() )
     {
-    case DRAW_LABEL_STRUCT_TYPE:
-    case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-	case DRAW_HIER_LABEL_STRUCT_TYPE:
-    case DRAW_TEXT_STRUCT_TYPE:
-        ( (DrawTextStruct*) TextStruct )->m_Pos = panel->GetScreen()->m_Curseur;
+    case TYPE_SCH_LABEL:
+    case TYPE_SCH_GLOBALLABEL:
+    case TYPE_SCH_HIERLABEL:
+    case TYPE_SCH_TEXT:
+        ( (SCH_TEXT*) TextStruct )->m_Pos = panel->GetScreen()->m_Curseur;
         break;
 
     default:
@@ -297,19 +297,19 @@ static void ExitMoveTexte( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     if( Struct->m_Flags & IS_NEW )
     {
-		SAFE_DELETE( Struct );
+        SAFE_DELETE( Struct );
         screen->SetCurItem( NULL );
     }
     else    /* this was a move command on an "old" text: restore its old settings. */
     {
         switch( Struct->Type() )
         {
-        case DRAW_LABEL_STRUCT_TYPE:
-        case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-		case DRAW_HIER_LABEL_STRUCT_TYPE:
-        case DRAW_TEXT_STRUCT_TYPE:
+        case TYPE_SCH_LABEL:
+        case TYPE_SCH_GLOBALLABEL:
+        case TYPE_SCH_HIERLABEL:
+        case TYPE_SCH_TEXT:
         {
-            DrawTextStruct* Text = (DrawTextStruct*) Struct;
+            SCH_TEXT* Text = (SCH_TEXT*) Struct;
             Text->m_Pos    = ItemInitialPosition;
             Text->m_Size   = OldSize;
             Text->m_Orient = OldOrient;
@@ -327,7 +327,7 @@ static void ExitMoveTexte( WinEDA_DrawPanel* Panel, wxDC* DC )
 
 
 /*****************************************************************************/
-void WinEDA_SchematicFrame::ConvertTextType( DrawTextStruct* Text,
+void WinEDA_SchematicFrame::ConvertTextType( SCH_TEXT* Text,
                                              wxDC* DC, int newtype )
 /*****************************************************************************/
 
@@ -339,22 +339,22 @@ void WinEDA_SchematicFrame::ConvertTextType( DrawTextStruct* Text,
     if( Text == NULL )
         return;
 
-    DrawTextStruct* newtext;
+    SCH_TEXT* newtext;
 
     switch( newtype )
     {
-    case DRAW_LABEL_STRUCT_TYPE:
-        newtext = new DrawLabelStruct( Text->m_Pos, Text->m_Text );
+    case TYPE_SCH_LABEL:
+        newtext = new SCH_LABEL( Text->m_Pos, Text->m_Text );
         break;
 
-    case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-        newtext = new DrawGlobalLabelStruct(Text->m_Pos, Text->m_Text );
+    case TYPE_SCH_GLOBALLABEL:
+        newtext = new SCH_GLOBALLABEL(Text->m_Pos, Text->m_Text );
         break;
-	case DRAW_HIER_LABEL_STRUCT_TYPE:
-		newtext = new DrawHierLabelStruct(Text->m_Pos, Text->m_Text );
-		break;
-    case DRAW_TEXT_STRUCT_TYPE:
-        newtext = new DrawTextStruct( Text->m_Pos, Text->m_Text );
+    case TYPE_SCH_HIERLABEL:
+        newtext = new SCH_HIERLABEL(Text->m_Pos, Text->m_Text );
+        break;
+    case TYPE_SCH_TEXT:
+        newtext = new SCH_TEXT( Text->m_Pos, Text->m_Text );
         break;
 
     default:
@@ -395,13 +395,13 @@ void WinEDA_SchematicFrame::ConvertTextType( DrawTextStruct* Text,
     {
         Text->m_Flags = 0;
         DeleteStruct( DrawPanel, DC, Text );    // old text is really saved in undo list
-		GetScreen()->SetCurItem( NULL );
+        GetScreen()->SetCurItem( NULL );
         g_ItemToRepeat = NULL;
     }
 
     GetScreen()->SetCurItem( NULL );
 
-	SAFE_DELETE( g_ItemToUndoCopy );
+    SAFE_DELETE( g_ItemToUndoCopy );
 
     DrawPanel->CursorOff( DC );   // Erase schematic cursor
 
@@ -415,15 +415,15 @@ void WinEDA_SchematicFrame::ConvertTextType( DrawTextStruct* Text,
         SaveCopyInUndoList( newtext, IS_NEW );
     }
     else
-	{
-		GetScreen()->SetCurItem( newtext );
+    {
+        GetScreen()->SetCurItem( newtext );
         newtext->m_Flags = IS_NEW;
-	}
+    }
 
 
     if( (flags & IS_MOVED) != 0 )
     {
-		GetScreen()->SetCurItem( newtext );
+        GetScreen()->SetCurItem( newtext );
         StartMoveTexte( newtext, DC );
     }
 

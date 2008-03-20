@@ -269,7 +269,7 @@ EDA_Rect DrawJunctionStruct::GetBoundingBox()
 };
 
 
-EDA_Rect EDA_SchComponentStruct::GetBoundingBox()
+EDA_Rect SCH_COMPONENT::GetBoundingBox()
 {
     const int PADDING = 40;
 

@@ -47,7 +47,7 @@ DanglingEndHandle* ItemList;
 
 static void         TestWireForDangling( EDA_DrawLineStruct* DrawRef,
                                          WinEDA_SchematicFrame* frame, wxDC* DC );
-void                TestLabelForDangling( DrawTextStruct* label,
+void                TestLabelForDangling( SCH_TEXT* label,
                                           WinEDA_SchematicFrame* frame, wxDC* DC );
 DanglingEndHandle*  RebuildEndList( EDA_BaseStruct* DrawList );
 
@@ -111,11 +111,11 @@ void WinEDA_SchematicFrame::TestDanglingEnds( EDA_BaseStruct* DrawList, wxDC* DC
     {
         switch( DrawItem->Type() )
         {
-        case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-		case DRAW_HIER_LABEL_STRUCT_TYPE:
-        case DRAW_LABEL_STRUCT_TYPE:
+        case TYPE_SCH_GLOBALLABEL:
+        case TYPE_SCH_HIERLABEL:
+        case TYPE_SCH_LABEL:
                 #undef STRUCT
-                #define STRUCT ( (DrawLabelStruct*) DrawItem )
+                #define STRUCT ( (SCH_LABEL*) DrawItem )
             TestLabelForDangling( STRUCT, this, DC );
             break;
             break;
@@ -155,7 +155,7 @@ LibDrawPin* WinEDA_SchematicFrame::LocatePinEnd( EDA_BaseStruct* DrawList,
  *  NULL sinon
  */
 {
-    EDA_SchComponentStruct* DrawLibItem;
+    SCH_COMPONENT* DrawLibItem;
     LibDrawPin* Pin;
     wxPoint pinpos;
 
@@ -223,7 +223,7 @@ void TestWireForDangling( EDA_DrawLineStruct* DrawRef,
 
 
 /********************************************************/
-void TestLabelForDangling( DrawTextStruct* label,
+void TestLabelForDangling( SCH_TEXT* label,
                            WinEDA_SchematicFrame* frame, wxDC* DC )
 /********************************************************/
 {
@@ -281,7 +281,7 @@ void TestLabelForDangling( DrawTextStruct* label,
 
 /****************************************************/
 wxPoint ReturnPinPhysicalPosition( LibDrawPin*             Pin,
-                                   EDA_SchComponentStruct* DrawLibItem )
+                                   SCH_COMPONENT* DrawLibItem )
 /****************************************************/
 
 /* Retourne la position physique de la pin, qui d�pend de l'orientation
@@ -316,13 +316,13 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
     {
         switch( DrawItem->Type() )
         {
-        case DRAW_LABEL_STRUCT_TYPE:
+        case TYPE_SCH_LABEL:
             break;
 
-        case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-		case DRAW_HIER_LABEL_STRUCT_TYPE:
+        case TYPE_SCH_GLOBALLABEL:
+        case TYPE_SCH_HIERLABEL:
                 #undef STRUCT
-                #define STRUCT ( (DrawLabelStruct*) DrawItem )
+                #define STRUCT ( (SCH_LABEL*) DrawItem )
             item = new DanglingEndHandle( LABEL_END );
 
             item->m_Item = DrawItem;
@@ -395,15 +395,15 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
             lastitem = item;
             break;
 
-        case DRAW_LIB_ITEM_STRUCT_TYPE:
+        case TYPE_SCH_COMPONENT:
         {
             #undef STRUCT
-            #define STRUCT ( (EDA_SchComponentStruct*) DrawItem )
+            #define STRUCT ( (SCH_COMPONENT*) DrawItem )
             EDA_LibComponentStruct* Entry;
             Entry = FindLibPart( STRUCT->m_ChipName, wxEmptyString, FIND_ROOT );
             if( Entry == NULL )
                 break;
-            
+
             LibEDA_BaseStruct* DrawLibItem = Entry->m_Drawings;
             for( ; DrawLibItem != NULL; DrawLibItem = DrawLibItem->Next() )
             {
@@ -455,7 +455,7 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
 
             break;
         }
-        
+
         default:
             ;
         }

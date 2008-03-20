@@ -105,14 +105,14 @@ void BreakSegmentOnJunction( SCH_SCREEN* Screen )
 
         case DRAW_SEGMENT_STRUCT_TYPE:
         case DRAW_NOCONNECT_STRUCT_TYPE:
-        case DRAW_LABEL_STRUCT_TYPE:
-        case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-		case DRAW_HIER_LABEL_STRUCT_TYPE:
-        case DRAW_LIB_ITEM_STRUCT_TYPE:
+        case TYPE_SCH_LABEL:
+        case TYPE_SCH_GLOBALLABEL:
+        case TYPE_SCH_HIERLABEL:
+        case TYPE_SCH_COMPONENT:
         case DRAW_PICK_ITEM_STRUCT_TYPE:
         case DRAW_POLYLINE_STRUCT_TYPE:
         case DRAW_MARKER_STRUCT_TYPE:
-        case DRAW_TEXT_STRUCT_TYPE:
+        case TYPE_SCH_TEXT:
         case DRAW_SHEET_STRUCT_TYPE:
         case DRAW_SHEETLABEL_STRUCT_TYPE:
             break;

@@ -18,15 +18,15 @@
 
 
 /************************/
-/* class DrawTextStruct */
-/* class DrawLabelStruct */
-/* class DrawGlobalLabelStruct */
-/* class DrawHierLabelStruct */
+/* class SCH_TEXT */
+/* class SCH_LABEL */
+/* class SCH_GLOBALLABEL */
+/* class SCH_HIERLABEL */
 /************************/
 
 /**************************************************************************/
-DrawTextStruct::DrawTextStruct( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
-    EDA_BaseStruct( aType )
+SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
+    SCH_ITEM( NULL, aType )
     , EDA_TextStruct( text )
 /**************************************************************************/
 {
@@ -38,28 +38,28 @@ DrawTextStruct::DrawTextStruct( const wxPoint& pos, const wxString& text, KICAD_
 
 
 /*********************************************/
-DrawTextStruct* DrawTextStruct::GenCopy()
+SCH_TEXT* SCH_TEXT::GenCopy()
 /*********************************************/
 {
-    DrawTextStruct* newitem;
+    SCH_TEXT* newitem;
 
     switch( Type() )
     {
     default:
-    case DRAW_TEXT_STRUCT_TYPE:
-        newitem = new DrawTextStruct( m_Pos, m_Text );
+    case TYPE_SCH_TEXT:
+        newitem = new SCH_TEXT( m_Pos, m_Text );
         break;
 
-    case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-        newitem = new DrawGlobalLabelStruct( m_Pos, m_Text );
+    case TYPE_SCH_GLOBALLABEL:
+        newitem = new SCH_GLOBALLABEL( m_Pos, m_Text );
         break;
 
-    case DRAW_HIER_LABEL_STRUCT_TYPE:
-        newitem = new DrawHierLabelStruct( m_Pos, m_Text );
+    case TYPE_SCH_HIERLABEL:
+        newitem = new SCH_HIERLABEL( m_Pos, m_Text );
         break;
 
-    case DRAW_LABEL_STRUCT_TYPE:
-        newitem = new DrawLabelStruct( m_Pos, m_Text );
+    case TYPE_SCH_LABEL:
+        newitem = new SCH_LABEL( m_Pos, m_Text );
         break;
     }
 
@@ -77,7 +77,7 @@ DrawTextStruct* DrawTextStruct::GenCopy()
 
 
 /********************************************************/
-void DrawTextStruct::SwapData( DrawTextStruct* copyitem )
+void SCH_TEXT::SwapData( SCH_TEXT* copyitem )
 /********************************************************/
 {
     EXCHG( m_Text, copyitem->m_Text );
@@ -95,20 +95,20 @@ void DrawTextStruct::SwapData( DrawTextStruct* copyitem )
 
 
 /***************************************************************/
-void DrawTextStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
+void SCH_TEXT::Place( WinEDA_DrawFrame* frame, wxDC* DC )
 /***************************************************************/
 {
     /* save old text in undo list */
     if( g_ItemToUndoCopy && ( (m_Flags & IS_NEW) == 0 ) )
     {
         /* restore old values and save new ones */
-        SwapData( (DrawTextStruct*) g_ItemToUndoCopy );
+        SwapData( (SCH_TEXT*) g_ItemToUndoCopy );
 
         /* save in undo list */
         ( (WinEDA_SchematicFrame*) frame )->SaveCopyInUndoList( this, IS_CHANGED );
 
         /* restore new values */
-        SwapData( (DrawTextStruct*) g_ItemToUndoCopy );
+        SwapData( (SCH_TEXT*) g_ItemToUndoCopy );
 
         SAFE_DELETE( g_ItemToUndoCopy );
     }
@@ -118,8 +118,8 @@ void DrawTextStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
 
 
 /****************************************************************************/
-DrawLabelStruct::DrawLabelStruct( const wxPoint& pos, const wxString& text ) :
-    DrawTextStruct( pos, text, DRAW_LABEL_STRUCT_TYPE )
+SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text ) :
+    SCH_TEXT( pos, text, TYPE_SCH_LABEL )
 /****************************************************************************/
 {
     m_Layer      = LAYER_LOCLABEL;
@@ -129,8 +129,8 @@ DrawLabelStruct::DrawLabelStruct( const wxPoint& pos, const wxString& text ) :
 
 
 /***********************************************************************************/
-DrawGlobalLabelStruct::DrawGlobalLabelStruct( const wxPoint& pos, const wxString& text ) :
-    DrawTextStruct( pos, text, DRAW_GLOBAL_LABEL_STRUCT_TYPE )
+SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text ) :
+    SCH_TEXT( pos, text, TYPE_SCH_GLOBALLABEL )
 /***********************************************************************************/
 {
     m_Layer      = LAYER_GLOBLABEL;
@@ -140,8 +140,8 @@ DrawGlobalLabelStruct::DrawGlobalLabelStruct( const wxPoint& pos, const wxString
 
 
 /***********************************************************************************/
-DrawHierLabelStruct::DrawHierLabelStruct( const wxPoint& pos, const wxString& text ) :
-    DrawTextStruct( pos, text, DRAW_HIER_LABEL_STRUCT_TYPE )
+SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text ) :
+    SCH_TEXT( pos, text, TYPE_SCH_HIERLABEL )
 /***********************************************************************************/
 {
     m_Layer      = LAYER_HIERLABEL;
@@ -151,7 +151,7 @@ DrawHierLabelStruct::DrawHierLabelStruct( const wxPoint& pos, const wxString& te
 
 
 /*******************************************************************************************/
-void DrawTextStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
+void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                            int DrawMode, int Color )
 /*******************************************************************************************/
 
@@ -211,16 +211,16 @@ void DrawTextStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& off
 
 
 /*********************************************************************************************/
-void DrawLabelStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
+void SCH_LABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                             int DrawMode, int Color )
 /*********************************************************************************************/
 {
-    DrawTextStruct::Draw( panel, DC, offset, DrawMode, Color );
+    SCH_TEXT::Draw( panel, DC, offset, DrawMode, Color );
 }
 
 
 /*******************************************************************************************/
-void DrawHierLabelStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
+void SCH_HIERLABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                                 int DrawMode, int Color )
 /******************************************************************************************/
 
@@ -288,7 +288,7 @@ void DrawHierLabelStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint
  * format list is
  * corner_count, x0, y0, ... xn, yn
  */
-void DrawHierLabelStruct::CreateGraphicShape( int* corner_list, const wxPoint& Pos )
+void SCH_HIERLABEL::CreateGraphicShape( int* corner_list, const wxPoint& Pos )
 {
     int* Template = TemplateShape[m_Shape][m_Orient];
     int  HalfSize = m_Size.x / 2;
@@ -307,7 +307,7 @@ void DrawHierLabelStruct::CreateGraphicShape( int* corner_list, const wxPoint& P
 
 
 /*******************************************************************************************/
-void DrawGlobalLabelStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& draw_offset,
+void SCH_GLOBALLABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& draw_offset,
                                   int DrawMode, int Color )
 /******************************************************************************************/
 
@@ -338,9 +338,9 @@ void DrawGlobalLabelStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoi
         offset += HalfSize;
         break;
 
-	case NET_OUTPUT:
-		offset += TXTMARGE;
-		break;
+    case NET_OUTPUT:
+        offset += TXTMARGE;
+        break;
 
     default:
         break;
@@ -392,7 +392,7 @@ void DrawGlobalLabelStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoi
  * format list is
  * <corner_count>, x0, y0, ... xn, yn
  */
-void DrawGlobalLabelStruct::CreateGraphicShape( int* corner_list, const wxPoint& Pos )
+void SCH_GLOBALLABEL::CreateGraphicShape( int* corner_list, const wxPoint& Pos )
 {
     int HalfSize = m_Size.x / 2;
     int     width = MAX( m_Width, g_DrawMinimunLineWidth );

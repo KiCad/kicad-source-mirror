@@ -153,7 +153,7 @@ static void ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC )
     if( SheetLabel->m_Flags & IS_NEW )
     {     /* Nouveau Placement en cours, on l'efface */
         RedrawOneStruct( Panel, DC, SheetLabel, g_XorMode );
-		SAFE_DELETE( SheetLabel );
+        SAFE_DELETE( SheetLabel );
     }
     else
     {
@@ -359,16 +359,16 @@ DrawSheetLabelStruct* WinEDA_SchematicFrame::Import_PinSheet( DrawSheetStruct* S
 {
     EDA_BaseStruct*     	DrawStruct;
     DrawSheetLabelStruct* 	NewSheetLabel, * SheetLabel = NULL;
-    DrawHierLabelStruct* 	HLabel = NULL;
+    SCH_HIERLABEL* 	HLabel = NULL;
 
-	if(!Sheet->m_AssociatedScreen) return NULL; 
+    if(!Sheet->m_AssociatedScreen) return NULL;
     DrawStruct = Sheet->m_AssociatedScreen->EEDrawList;
     HLabel = NULL;
     for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext )
     {
-        if( DrawStruct->Type() != DRAW_HIER_LABEL_STRUCT_TYPE )
+        if( DrawStruct->Type() != TYPE_SCH_HIERLABEL )
             continue;
-        HLabel = (DrawHierLabelStruct*) DrawStruct;
+        HLabel = (SCH_HIERLABEL*) DrawStruct;
 
         /* Ici un G-Label a ete trouve: y a t-il un SheetLabel correspondant */
         SheetLabel = Sheet->m_Label;

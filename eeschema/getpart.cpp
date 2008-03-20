@@ -59,7 +59,7 @@ wxString SelectFromLibBrowser( WinEDA_DrawFrame* parent )
 
 
 /**************************************************************************/
-EDA_SchComponentStruct* WinEDA_SchematicFrame::Load_Component( wxDC* DC,
+SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC* DC,
                                                                const wxString& libname,
                                                                wxArrayString& HistoryList,
                                                                bool UseLibBrowser )
@@ -73,7 +73,7 @@ EDA_SchComponentStruct* WinEDA_SchematicFrame::Load_Component( wxDC* DC,
     int                     ii, CmpCount = 0;
     LibDrawField*           Field;
     EDA_LibComponentStruct* Entry = NULL;
-    EDA_SchComponentStruct* DrawLibItem = NULL;
+    SCH_COMPONENT* DrawLibItem = NULL;
     LibraryStruct*          Library = NULL;
     wxString                Name, keys, msg;
     bool                    AllowWildSeach = TRUE;
@@ -180,7 +180,7 @@ EDA_SchComponentStruct* WinEDA_SchematicFrame::Load_Component( wxDC* DC,
     DrawPanel->ManageCurseur = ShowWhileMoving;
     DrawPanel->ForceCloseManageCurseur = ExitPlaceCmp;
 
-    DrawLibItem = new EDA_SchComponentStruct( GetScreen()->m_Curseur );
+    DrawLibItem = new SCH_COMPONENT( GetScreen()->m_Curseur );
     DrawLibItem->m_Multi     = 1;/* Selection de l'unite 1 dans le boitier */
     DrawLibItem->m_Convert   = 1;
     DrawLibItem->m_ChipName  = Name;
@@ -257,7 +257,7 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
     wxPoint move_vector;
 
-    EDA_SchComponentStruct* DrawLibItem = (EDA_SchComponentStruct*)
+    SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*)
             panel->m_Parent->GetScreen()->GetCurItem();
 
     /* Effacement du composant */
@@ -276,7 +276,7 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 
 /**************************************************************************/
 void WinEDA_SchematicFrame::CmpRotationMiroir(
-    EDA_SchComponentStruct* DrawComponent, wxDC* DC, int type_rotate )
+    SCH_COMPONENT* DrawComponent, wxDC* DC, int type_rotate )
 /**************************************************************************/
 
 /* Routine permettant les rotations et les miroirs d'un composant
@@ -293,7 +293,9 @@ void WinEDA_SchematicFrame::CmpRotationMiroir(
         if( DrawComponent->m_Flags )
             DrawStructsInGhost( DrawPanel, DC, DrawComponent, 0, 0 );
         else
-            DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
+        {
+            DrawPanel->PostDirtyRect( DrawComponent->GetBoundingBox());
+        }
     }
 
     DrawComponent->SetRotationMiroir( type_rotate );
@@ -320,7 +322,7 @@ static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC )
 /* Routine de sortie de la fonction de placement de composant
  */
 {
-    EDA_SchComponentStruct* DrawLibItem = (EDA_SchComponentStruct*)
+    SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*)
             Panel->m_Parent->GetScreen()->GetCurItem();
 
     if( DrawLibItem->m_Flags & IS_NEW )    /* Nouveau Placement en cours, on l'efface */
@@ -352,7 +354,7 @@ static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC )
 
 
 /************************************************************************/
-void WinEDA_SchematicFrame::SelPartUnit( EDA_SchComponentStruct* DrawComponent,
+void WinEDA_SchematicFrame::SelPartUnit( SCH_COMPONENT* DrawComponent,
                                          int unit, wxDC* DC )
 /************************************************************************/
 /* Selection de l'unite dans les boitiers a multiples Parts */
@@ -400,7 +402,7 @@ void WinEDA_SchematicFrame::SelPartUnit( EDA_SchComponentStruct* DrawComponent,
 
 
 /************************************************************************/
-void WinEDA_SchematicFrame::ConvertPart( EDA_SchComponentStruct* DrawComponent,
+void WinEDA_SchematicFrame::ConvertPart( SCH_COMPONENT* DrawComponent,
                                          wxDC*                   DC )
 /************************************************************************/
 {
@@ -469,13 +471,13 @@ int LookForConvertPart( EDA_LibComponentStruct* LibEntry )
 
 
 /***********************************************************************************/
-void WinEDA_SchematicFrame::StartMovePart( EDA_SchComponentStruct* Component,
+void WinEDA_SchematicFrame::StartMovePart( SCH_COMPONENT* Component,
                                            wxDC*                   DC )
 /***********************************************************************************/
 {
     if( Component == NULL )
         return;
-    if( Component->Type() != DRAW_LIB_ITEM_STRUCT_TYPE )
+    if( Component->Type() != TYPE_SCH_COMPONENT )
         return;
 
     if( Component->m_Flags == 0 )

@@ -65,35 +65,21 @@ public:
 };
 
 
-/* the class DrawPartStruct describes a basic virtual component
- *  Not used directly:
- *  used classes are EDA_SchComponentStruct (the "classic" schematic component, below)
- *  and the Pseudo component DrawSheetStruct
- */
-class DrawPartStruct : public EDA_BaseStruct
-{
-public:
-    int            m_Layer;
-    wxString       m_ChipName;  /* Key to look for in the library, i.e. "74LS00". */
-    PartTextStruct m_Field[NUMBER_OF_FIELDS];
-    wxPoint        m_Pos;       /* Exact position of part. */
-
-public:
-    DrawPartStruct( KICAD_T struct_type, const wxPoint& pos );
-    ~DrawPartStruct();
-
-    virtual wxString GetClass() const
-    {
-        return wxT( "DrawPart" );
-    }
-};
-
 WX_DECLARE_OBJARRAY( DrawSheetPath, ArrayOfSheetLists );
-/* the class EDA_SchComponentStruct describes a real component */
-class EDA_SchComponentStruct : public DrawPartStruct
+
+/**
+ * Class SCH_COMPONENT
+ * describes a real schematic component
+ */
+class SCH_COMPONENT : public SCH_ITEM
 {
 public:
     int m_Multi;              /* In multi unit chip - which unit to draw. */
+
+    wxPoint           m_Pos;
+
+    wxString          m_ChipName;  /* Key to look for in the library, i.e. "74LS00". */
+    PartTextStruct    m_Field[NUMBER_OF_FIELDS];
 
     //int   m_FlagControlMulti;
     ArrayOfSheetLists m_UsedOnSheets;
@@ -108,16 +94,16 @@ public:
                                          * determined, upon file load, by the first non-digits in the reference fields. */
 
 public:
-    EDA_SchComponentStruct( const wxPoint& pos = wxPoint( 0, 0 ) );
-    ~EDA_SchComponentStruct( void ) { }
+    SCH_COMPONENT( const wxPoint& pos = wxPoint( 0, 0 ) );
+    ~SCH_COMPONENT() { }
 
     virtual wxString GetClass() const
     {
-        return wxT( "EDA_SchComponent" );
+        return wxT( "SCH_COMPONENT" );
     }
 
 
-    EDA_SchComponentStruct* GenCopy();
+    SCH_COMPONENT*          GenCopy();
     void                    SetRotationMiroir( int type );
     int                     GetRotationMiroir();
     wxPoint                 GetScreenCoord( const wxPoint& coord );
@@ -143,7 +129,7 @@ public:
                                   const wxPoint&    offset,
                                   int               draw_mode,
                                   int               Color = -1 );
-    void                    SwapData( EDA_SchComponentStruct* copyitem );
+    void                    SwapData( SCH_COMPONENT* copyitem );
 
     virtual void            Place( WinEDA_DrawFrame* frame, wxDC* DC );
 

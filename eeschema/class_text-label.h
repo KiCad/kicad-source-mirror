@@ -76,7 +76,7 @@ int*        TemplateShape[5][4] =
 extern int* TemplateShape[5][4];
 #endif
 
-class DrawTextStruct : public EDA_BaseStruct
+class SCH_TEXT : public SCH_ITEM
     , public EDA_TextStruct
 {
 public:
@@ -85,31 +85,31 @@ public:
     bool m_IsDangling;          // TRUE si non connect�
 
 public:
-    DrawTextStruct( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString,
-                    KICAD_T aType = DRAW_TEXT_STRUCT_TYPE );
-    ~DrawTextStruct() { }
+    SCH_TEXT( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString,
+                    KICAD_T aType = TYPE_SCH_TEXT );
+    ~SCH_TEXT() { }
 
     virtual wxString GetClass() const
     {
-        return wxT( "DrawText" );
+        return wxT( "SCH_TEXT" );
     }
 
 
-    DrawTextStruct* GenCopy();
+    SCH_TEXT*       GenCopy();
     virtual void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode,
                           int Color = -1 );
 
-    void            SwapData( DrawTextStruct* copyitem );
+    void            SwapData( SCH_TEXT* copyitem );
 
     virtual void    Place( WinEDA_DrawFrame* frame, wxDC* DC );
 };
 
 
-class DrawLabelStruct : public DrawTextStruct
+class SCH_LABEL : public SCH_TEXT
 {
 public:
-    DrawLabelStruct( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString );
-    ~DrawLabelStruct() { }
+    SCH_LABEL( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString );
+    ~SCH_LABEL() { }
     virtual void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode,
                           int Color = -1 );
 
@@ -120,12 +120,12 @@ public:
 };
 
 
-class DrawGlobalLabelStruct : public DrawTextStruct
+class SCH_GLOBALLABEL : public SCH_TEXT
 {
 public:
-    DrawGlobalLabelStruct( const wxPoint& pos = wxPoint( 0, 0 ),
+    SCH_GLOBALLABEL( const wxPoint& pos = wxPoint( 0, 0 ),
                            const wxString& text = wxEmptyString );
-    ~DrawGlobalLabelStruct() { }
+    ~SCH_GLOBALLABEL() { }
     virtual void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode,
                           int Color = -1 );
 
@@ -138,21 +138,21 @@ public:
     /** function CreateGraphicShape
       * Calculates the graphic shape (a polygon) associated to the text
       * @param corner_list = coordinates list fill with polygon corners ooordinates (size > 20)
-	  * @param Pos = Postion of the shape
-	  * format list is
-	  * <corner_count>, x0, y0, ... xn, yn
+      * @param Pos = Postion of the shape
+      * format list is
+      * <corner_count>, x0, y0, ... xn, yn
      */
     void CreateGraphicShape( int* corner_list, const wxPoint & Pos );
 };
 
 
 
-class DrawHierLabelStruct : public DrawTextStruct
+class SCH_HIERLABEL : public SCH_TEXT
 {
 public:
-    DrawHierLabelStruct( const wxPoint& pos = wxPoint( 0, 0 ),
+    SCH_HIERLABEL( const wxPoint& pos = wxPoint( 0, 0 ),
                          const wxString& text = wxEmptyString );
-    ~DrawHierLabelStruct() { }
+    ~SCH_HIERLABEL() { }
     virtual void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode,
                           int Color = -1 );
 
@@ -165,9 +165,9 @@ public:
     /** function CreateGraphicShape
       * Calculates the graphic shape (a polygon) associated to the text
       * @param corner_list = coordinates list fill with polygon corners ooordinates (size >= 14)
-	  * @param Pos = Postion of the shape
-	  * format list is
-	  * <corner_count>, x0, y0, ... xn, yn
+      * @param Pos = Postion of the shape
+      * format list is
+      * <corner_count>, x0, y0, ... xn, yn
       */
     void CreateGraphicShape( int* corner_list, const wxPoint & Pos );
 };

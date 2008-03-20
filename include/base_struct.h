@@ -47,11 +47,11 @@ enum KICAD_T {
     // Draw Items in schematic
     DRAW_POLYLINE_STRUCT_TYPE,
     DRAW_JUNCTION_STRUCT_TYPE,
-    DRAW_TEXT_STRUCT_TYPE,
-    DRAW_LABEL_STRUCT_TYPE,
-    DRAW_GLOBAL_LABEL_STRUCT_TYPE,
-    DRAW_HIER_LABEL_STRUCT_TYPE,
-    DRAW_LIB_ITEM_STRUCT_TYPE,
+    TYPE_SCH_TEXT,
+    TYPE_SCH_LABEL,
+    TYPE_SCH_GLOBALLABEL,
+    TYPE_SCH_HIERLABEL,
+    TYPE_SCH_COMPONENT,
     DRAW_PICK_ITEM_STRUCT_TYPE,
     DRAW_SEGMENT_STRUCT_TYPE,
     DRAW_BUSENTRY_STRUCT_TYPE,
@@ -194,13 +194,13 @@ public:
     operator wxRect() const { return wxRect( m_Pos, m_Size ); }
 
     EDA_Rect& Inflate( wxCoord dx, wxCoord dy );
-	
-	/** Function Merge
-	 * Modify Position and Size of this in order to contain the given rect
-	 * mainly used to calculate bounding boxes
-	 * @param aRect = given rect to merge with this
-	*/
-	void Merge( const EDA_Rect & aRect );
+
+    /** Function Merge
+     * Modify Position and Size of this in order to contain the given rect
+     * mainly used to calculate bounding boxes
+     * @param aRect = given rect to merge with this
+    */
+    void Merge( const EDA_Rect & aRect );
 
 };
 
@@ -357,6 +357,10 @@ public:
      */
     virtual EDA_Rect GetBoundingBox()
     {
+#if defined (DEBUG)
+        printf("Missing GetBoundingBox() -> no good! :-)\n");
+        Show( 0, std::cout ); // tell me which classes still need GetBoundingBox support
+#endif
         // return a zero-sized box per default. derived classes should override this
         EDA_Rect ret( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
         return ret;
@@ -668,18 +672,44 @@ public:
 };
 
 
-/**************************/
-/* class DrawPickedStruct */
-/**************************/
-
-/* Class to hold structures picked by pick events (like block selection)
- *  This class has only one useful member: .m_PickedStruct, used as a link.
- *  It does not describe really an item.
- *  It is used to create a linked list of selected items (in block selection).
- *  Each DrawPickedStruct item has is member: .m_PickedStruct pointing the
- *  real selected item
+/**
+ * Class SCH_ITEM
+ * is a base class for any item which can be embedded within the SCHEMATIC
+ * container class, and therefore instances of derived classes should only be
+ * found in EESCHEMA or other programs that use class SCHEMATIC and its contents.
+ * The corresponding class in PCBNEW is BOARD_ITEM.
  */
-class DrawPickedStruct : public EDA_BaseStruct
+class SCH_ITEM : public EDA_BaseStruct
+{
+protected:
+    int            m_Layer;
+
+
+public:
+    SCH_ITEM( EDA_BaseStruct* aParent,  KICAD_T aType ) :
+        EDA_BaseStruct( aParent, aType ),
+        m_Layer( 0 )
+    {
+    }
+
+    ~SCH_ITEM(){}
+
+    virtual wxString GetClass() const
+    {
+        return wxT( "SCH_ITEM" );
+    }
+};
+
+
+/**
+ * Class DrawPickedStruct
+ * holds structures picked by pick events (like block selection).
+ * This class has only one useful member: .m_PickedStruct, used as a link.
+ * It is used to create a linked list of selected items (in block selection).
+ * Each DrawPickedStruct item has is member: .m_PickedStruct pointing the
+ * real selected item.
+ */
+class DrawPickedStruct : public SCH_ITEM
 {
 public:
     EDA_BaseStruct* m_PickedStruct;
@@ -691,6 +721,22 @@ public:
     void DeleteWrapperList();
 
     DrawPickedStruct* Next() { return (DrawPickedStruct*) Pnext; }
+
+    EDA_Rect GetBoundingBox();
+
+    /**
+     * Function GetBoundingBoxUnion
+     * returns the union of all the BoundingBox rectangles of all held items
+     * in the picklist whose list head is this DrawPickedStruct.
+     * @return EDA_Rect - The combined, composite, bounding box.
+     */
+    EDA_Rect GetBoundingBoxUnion();
+
+    wxString GetClass() const { return wxT( "DrawPickedStruct" ); }
+
+#if defined(DEBUG)
+    void Show( int nestLevel, std::ostream& os );
+#endif
 };
 
 #endif /* BASE_STRUCT_H */

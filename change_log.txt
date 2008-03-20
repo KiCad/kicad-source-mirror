@@ -5,6 +5,27 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Mar-19 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++eeschema
+    Renamed some classes and their corresponding KICAD_T types so they are both
+    simpler, shorter and more closely match each other: the type and the classname.
+    Wedged a class SCH_ITEM underneath most eeschema drawable items, and this
+    class came from DrawPartStruct which was largely disfunctional.  Eeschema
+    now more closely matches what we have in pcbnew with the BOARD_ITEM base class.
+    The corresponding class in eeschema is now SCH_ITEM.  Put in some of Jonas'
+    patch for the dragging of a block.  Needs testing, especially dragging
+    text since there is no GetBoundingBox() for that yet.  As an interrim solution
+    we could make SCH_ITEM::GetBoundingBox() return a HUGE rectangle so that any class
+    not implementing GetBoundingBox() in eeschema will get properly re-drawn,
+    in theory.
+
+    We are currently using XORing for dragging a single object and using full
+    redraws for dragging a block.  I suppose this can be an experiment for a
+    week or so.  I would not expect that dragging a block of labels with no
+    other object to work currently.
+
+
 2008-Mar-19 UPDATE Igor Plyatov <plyatov@mail.ru>
 ================================================================================
   * Support for Gnome/KDE menu added.

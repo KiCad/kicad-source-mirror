@@ -280,10 +280,10 @@ void WinEDA_SchematicFrame::DeleteConnection( wxDC* DC, bool DeleteFullConnectio
             if( DelStruct->m_Flags & STRUCT_DELETED )
                 continue;
 
-            if( DelStruct->Type() != DRAW_LABEL_STRUCT_TYPE )
+            if( DelStruct->Type() != TYPE_SCH_LABEL )
                 continue;
 
-            GetScreen()->m_Curseur = ( (DrawTextStruct*) DelStruct )->m_Pos;
+            GetScreen()->m_Curseur = ( (SCH_TEXT*) DelStruct )->m_Pos;
             EDA_BaseStruct* TstStruct =
                 PickStruct( GetScreen()->m_Curseur, GetScreen(), WIREITEM | BUSITEM );
 

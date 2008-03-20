@@ -98,7 +98,7 @@ Ki_HotkeyInfo* s_Schematic_Hotkey_List[] = {
     &HkDelete,          &HkInsert,           &HkMove2Drag,
     &HkMoveComponent,   &HkDragComponent,    &HkAddComponent,
     &HkRotateComponent, &HkMirrorXComponent, &HkMirrorYComponent, &HkOrientNormalComponent,
-	&HkEditComponentValue, &HkEditComponentFootprint,
+    &HkEditComponentValue, &HkEditComponentFootprint,
     &HkBeginWire,
     NULL
 };
@@ -107,9 +107,9 @@ Ki_HotkeyInfo* s_Schematic_Hotkey_List[] = {
 Ki_HotkeyInfo* s_LibEdit_Hotkey_List[] =
 {
     &HkInsertPin,
-	&HkEditPin,
-	&HkMovePin,
- 	&HkDeletePin,
+    &HkEditPin,
+    &HkMovePin,
+    &HkDeletePin,
     NULL
 };
 
@@ -148,13 +148,13 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
  */
 {
     bool ItemInEdit = GetScreen()->GetCurItem()
-			&& GetScreen()->GetCurItem()->m_Flags;
+            && GetScreen()->GetCurItem()->m_Flags;
     bool RefreshToolBar = FALSE; // We must refresh tool bar when the undo/redo tool state is modified
 
     if( hotkey == 0 )
         return;
 
-	wxPoint MousePos = GetScreen()->m_MousePosition;
+    wxPoint MousePos = GetScreen()->m_MousePosition;
 
     // Remap the control key Ctrl A (0x01) to GR_KB_CTRL + 'A' (easier to handle...)
     if( (hotkey & GR_KB_CTRL) != 0 )
@@ -169,7 +169,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         HK_Descr = GetDescriptorFromHotkey( hotkey, s_Schematic_Hotkey_List );
     if( HK_Descr == NULL ) return;
 
-	switch( HK_Descr->m_Idcommand )
+    switch( HK_Descr->m_Idcommand )
     {
     default:
     case HK_NOT_FOUND:
@@ -181,7 +181,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_RESET_LOCAL_COORD:         /* Reset the relative coord */
-		GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
+        GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
         break;
 
     case HK_ZOOM_IN:
@@ -219,9 +219,9 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         if( ItemInEdit )
             break;
         RefreshToolBar = LocateAndDeleteItem( this, DC );
-		GetScreen()->SetModify();
-		GetScreen()->SetCurItem( NULL );
-		TestDanglingEnds( GetScreen()->EEDrawList, DC );
+        GetScreen()->SetModify();
+        GetScreen()->SetCurItem( NULL );
+        TestDanglingEnds( GetScreen()->EEDrawList, DC );
         break;
 
     case HK_REPEAT_LAST:
@@ -281,7 +281,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
                                      GetScreen(), LIBITEM | TEXTITEM | LABELITEM );
             if( DrawStruct == NULL )
                 break;
-            if( DrawStruct->Type() == DRAW_LIB_ITEM_STRUCT_TYPE )
+            if( DrawStruct->Type() == TYPE_SCH_COMPONENT )
                 DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
             if( DrawStruct == NULL )
                 break;
@@ -289,7 +289,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
 
         switch( DrawStruct->Type() )
         {
-        case DRAW_LIB_ITEM_STRUCT_TYPE:
+        case TYPE_SCH_COMPONENT:
             if( DrawStruct->m_Flags == 0 )
             {
                 SaveCopyInUndoList( DrawStruct, IS_CHANGED );
@@ -297,19 +297,19 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
             }
 
             CmpRotationMiroir(
-                (EDA_SchComponentStruct*) DrawStruct, DC, CMP_ROTATE_COUNTERCLOCKWISE );
+                (SCH_COMPONENT*) DrawStruct, DC, CMP_ROTATE_COUNTERCLOCKWISE );
             break;
 
-        case DRAW_TEXT_STRUCT_TYPE:
-        case DRAW_LABEL_STRUCT_TYPE:
-        case DRAW_GLOBAL_LABEL_STRUCT_TYPE:
-		case DRAW_HIER_LABEL_STRUCT_TYPE:
+        case TYPE_SCH_TEXT:
+        case TYPE_SCH_LABEL:
+        case TYPE_SCH_GLOBALLABEL:
+        case TYPE_SCH_HIERLABEL:
             if( DrawStruct->m_Flags == 0 )
             {
                 SaveCopyInUndoList( DrawStruct, IS_CHANGED );
                 RefreshToolBar = TRUE;
             }
-            ChangeTextOrient( (DrawTextStruct*) DrawStruct, DC );
+            ChangeTextOrient( (SCH_TEXT*) DrawStruct, DC );
             break;
 
         default:
@@ -320,7 +320,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case HK_MIRROR_Y_COMPONENT:     // Mirror Y (Component)
         if( DrawStruct == NULL )
-			DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
+            DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
         if( DrawStruct )
         {
             if( DrawStruct->m_Flags == 0 )
@@ -329,13 +329,13 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
                 RefreshToolBar = TRUE;
             }
             CmpRotationMiroir(
-                (EDA_SchComponentStruct*) DrawStruct, DC, CMP_MIROIR_Y );
+                (SCH_COMPONENT*) DrawStruct, DC, CMP_MIROIR_Y );
         }
         break;
 
     case HK_MIRROR_X_COMPONENT:     // Mirror X (Component)
         if( DrawStruct == NULL )
-			DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
+            DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
         if( DrawStruct )
         {
             if( DrawStruct->m_Flags == 0 )
@@ -344,13 +344,13 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
                 RefreshToolBar = TRUE;
             }
             CmpRotationMiroir(
-                (EDA_SchComponentStruct*) DrawStruct, DC, CMP_MIROIR_X );
+                (SCH_COMPONENT*) DrawStruct, DC, CMP_MIROIR_X );
         }
         break;
 
     case HK_ORIENT_NORMAL_COMPONENT:        // Orient 0, no mirror (Component)
         if( DrawStruct == NULL )
-			DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
+            DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
         if( DrawStruct )
         {
             if( DrawStruct->m_Flags == 0 )
@@ -359,8 +359,8 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
                 RefreshToolBar = TRUE;
             }
             CmpRotationMiroir(
-                (EDA_SchComponentStruct*) DrawStruct, DC, CMP_NORMAL );
-			TestDanglingEnds( (SCH_SCREEN*)GetScreen()->EEDrawList, DC );
+                (SCH_COMPONENT*) DrawStruct, DC, CMP_NORMAL );
+            TestDanglingEnds( (SCH_SCREEN*)GetScreen()->EEDrawList, DC );
         }
         break;
 
@@ -369,37 +369,37 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         if( ItemInEdit )
             break;
         if( DrawStruct == NULL )
-			DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
+            DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
         if( DrawStruct && (DrawStruct->m_Flags ==0) )
         {
-			((SCH_SCREEN*)GetScreen())->SetCurItem( DrawStruct );
-			wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED, HK_Descr->m_IdMenuEvent );
+            ((SCH_SCREEN*)GetScreen())->SetCurItem( DrawStruct );
+            wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED, HK_Descr->m_IdMenuEvent );
 
-			wxPostEvent( this, event );
+            wxPostEvent( this, event );
         }
         break;
-	case HK_EDIT_COMPONENT_VALUE:
-		if( ItemInEdit )
+    case HK_EDIT_COMPONENT_VALUE:
+        if( ItemInEdit )
             break;
-		if( DrawStruct == NULL )
-			DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
-		if(DrawStruct)
-		{
-			EditComponentValue(
-				(EDA_SchComponentStruct*) DrawStruct, DC );
-		}
+        if( DrawStruct == NULL )
+            DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
+        if(DrawStruct)
+        {
+            EditComponentValue(
+                (SCH_COMPONENT*) DrawStruct, DC );
+        }
         break;
-		
-	case HK_EDIT_COMPONENT_FOOTPRINT:
-		if( ItemInEdit )
+
+    case HK_EDIT_COMPONENT_FOOTPRINT:
+        if( ItemInEdit )
             break;
-		if( DrawStruct == NULL )
-			DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
-		if(DrawStruct)
-		{
-			EditComponentFootprint(
-				(EDA_SchComponentStruct*) DrawStruct, DC );
-		}
+        if( DrawStruct == NULL )
+            DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
+        if(DrawStruct)
+        {
+            EditComponentFootprint(
+                (SCH_COMPONENT*) DrawStruct, DC );
+        }
         break;
     }
 
@@ -417,16 +417,16 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
  *  Commands are case insensitive
  */
 {
-	bool ItemInEdit = GetScreen()->GetCurItem()
-			&& GetScreen()->GetCurItem()->m_Flags;
+    bool ItemInEdit = GetScreen()->GetCurItem()
+            && GetScreen()->GetCurItem()->m_Flags;
     bool RefreshToolBar = FALSE; // We must refresh tool bar when the undo/redo tool state is modified
 
     if( hotkey == 0 )
         return;
 
-	wxPoint MousePos = GetScreen()->m_MousePosition;
-	
-	LibEDA_BaseStruct* DrawEntry = LocateItemUsingCursor();
+    wxPoint MousePos = GetScreen()->m_MousePosition;
+
+    LibEDA_BaseStruct* DrawEntry = LocateItemUsingCursor();
 
     // Remap the control key Ctrl A (0x01) to GR_KB_CTRL + 'A' (easier to handle...)
     if( (hotkey & GR_KB_CTRL) != 0 )
@@ -451,7 +451,7 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_RESET_LOCAL_COORD:         /* Reset the relative coord */
-		GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
+        GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
         break;
 
     case HK_ZOOM_IN:
@@ -490,36 +490,36 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
         else
             wxBell();
         break;
-	case HK_EDIT_PIN:
-		if(DrawEntry)
-			CurrentDrawItem = DrawEntry; 
-		if(CurrentDrawItem)
-		{
-			if(CurrentDrawItem->Type() == COMPONENT_PIN_DRAW_TYPE)
-				InstallPineditFrame( this, DC, MousePos );
-		}
-		break;
-	case HK_DELETE_PIN:
-		if(DrawEntry)
-			CurrentDrawItem = DrawEntry; 
-		if(CurrentDrawItem)
-		{
-			wxCommandEvent evt; 
-			evt.SetId(ID_POPUP_LIBEDIT_DELETE_ITEM); 
-			Process_Special_Functions(evt); 
-		}
-		break;
-	case HK_MOVE_PIN:
-		if(DrawEntry)
-			CurrentDrawItem = DrawEntry; 
-		if(CurrentDrawItem)
-		{
-			wxCommandEvent evt; 
-			evt.SetId(ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST); 
-			Process_Special_Functions(evt); 
-		}
-		break;
-	}
+    case HK_EDIT_PIN:
+        if(DrawEntry)
+            CurrentDrawItem = DrawEntry;
+        if(CurrentDrawItem)
+        {
+            if(CurrentDrawItem->Type() == COMPONENT_PIN_DRAW_TYPE)
+                InstallPineditFrame( this, DC, MousePos );
+        }
+        break;
+    case HK_DELETE_PIN:
+        if(DrawEntry)
+            CurrentDrawItem = DrawEntry;
+        if(CurrentDrawItem)
+        {
+            wxCommandEvent evt;
+            evt.SetId(ID_POPUP_LIBEDIT_DELETE_ITEM);
+            Process_Special_Functions(evt);
+        }
+        break;
+    case HK_MOVE_PIN:
+        if(DrawEntry)
+            CurrentDrawItem = DrawEntry;
+        if(CurrentDrawItem)
+        {
+            wxCommandEvent evt;
+            evt.SetId(ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST);
+            Process_Special_Functions(evt);
+        }
+        break;
+    }
     if( RefreshToolBar )
         SetToolbars();
 }

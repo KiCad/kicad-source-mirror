@@ -184,12 +184,12 @@ void DrawSheetStruct::CleanupSheet( WinEDA_SchematicFrame* frame, wxDC* DC )
         /* Search Hlabel corresponding to this Pinsheet */
 
         EDA_BaseStruct*      DrawStruct = m_AssociatedScreen->EEDrawList;
-        DrawHierLabelStruct* HLabel = NULL;
+        SCH_HIERLABEL* HLabel = NULL;
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext )
         {
-            if( DrawStruct->Type() != DRAW_HIER_LABEL_STRUCT_TYPE )
+            if( DrawStruct->Type() != TYPE_SCH_HIERLABEL )
                 continue;
-            HLabel = (DrawHierLabelStruct*) DrawStruct;
+            HLabel = (SCH_HIERLABEL*) DrawStruct;
             if( Pinsheet->m_Text.CmpNoCase( HLabel->m_Text ) == 0 )
                 break; // Found!
             HLabel = NULL;
@@ -282,9 +282,9 @@ void DrawSheetStruct::DeleteAnnotation( bool recurse )
     EDA_BaseStruct* comp = m_AssociatedScreen->EEDrawList;
     for( ; comp; comp = comp->Pnext )
     {
-        if( comp->Type() == DRAW_LIB_ITEM_STRUCT_TYPE )
+        if( comp->Type() == TYPE_SCH_COMPONENT )
         {
-            ( (EDA_SchComponentStruct*) comp )->ClearAnnotation();
+            ( (SCH_COMPONENT*) comp )->ClearAnnotation();
         }
     }
 }
@@ -305,9 +305,9 @@ int DrawSheetStruct::ComponentCount()
         EDA_BaseStruct* bs;
         for( bs = m_AssociatedScreen->EEDrawList; bs != NULL; bs = bs->Pnext )
         {
-            if( bs->Type() == DRAW_LIB_ITEM_STRUCT_TYPE )
+            if( bs->Type() == TYPE_SCH_COMPONENT )
             {
-                DrawPartStruct* Cmp = (DrawPartStruct*) bs;
+                SCH_COMPONENT* Cmp = (SCH_COMPONENT*) bs;
                 if( Cmp->m_Field[VALUE].m_Text.GetChar( 0 ) != '#' )
                     n++;
             }
@@ -476,8 +476,8 @@ bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame * aFrame, const wxSt
         return true;
 
     SCH_SCREEN* Screen_to_use = NULL;
-	wxString msg;
-	bool LoadFromFile = false;
+    wxString msg;
+    bool LoadFromFile = false;
 
 
     if( g_RootSheet->SearchHierarchy( aFileName, &Screen_to_use ) ) //do we reload the data from the existing hierarchy
@@ -486,10 +486,10 @@ bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame * aFrame, const wxSt
                        "A Sub Hierarchy named %s exists, Use it (The data in this sheet will be replaced)?" ),
                    aFileName.GetData() );
         if( ! IsOK( NULL, msg ) )
-		{
-			DisplayInfo(NULL, _("Sheet Filename Renaming Aborted"));
-			return false;
-		}
+        {
+            DisplayInfo(NULL, _("Sheet Filename Renaming Aborted"));
+            return false;
+        }
     }
 
     else if( wxFileExists( aFileName ) )         //do we reload the data from an existing file
@@ -498,61 +498,61 @@ bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame * aFrame, const wxSt
                        "A file named %s exists, load it (otherwise keep current sheet data if possible)?" ),
                    aFileName.GetData() );
         if( IsOK( NULL, msg ) )
-		{
-			LoadFromFile = true;
-			m_AssociatedScreen->m_RefCount--;                                       //be careful with these
-			if( m_AssociatedScreen->m_RefCount == 0 )
-				SAFE_DELETE( m_AssociatedScreen );
-			m_AssociatedScreen = NULL;         //will be created later
-		}
+        {
+            LoadFromFile = true;
+            m_AssociatedScreen->m_RefCount--;                                       //be careful with these
+            if( m_AssociatedScreen->m_RefCount == 0 )
+                SAFE_DELETE( m_AssociatedScreen );
+            m_AssociatedScreen = NULL;         //will be created later
+        }
     }
 
-	// if an associated screen exists, shared between this sheet and others sheets, what we do ?
+    // if an associated screen exists, shared between this sheet and others sheets, what we do ?
     if( m_AssociatedScreen && ( m_AssociatedScreen->m_RefCount > 1 ))
-	{
+    {
         msg = _("This sheet uses shared data in a complex hierarchy" ) ;
-		msg << wxT("\n");
-		msg << _("Do we convert it in a simple hierarchical sheet (otherwise delete current sheet data)");
+        msg << wxT("\n");
+        msg << _("Do we convert it in a simple hierarchical sheet (otherwise delete current sheet data)");
         if( IsOK( NULL, msg ) )
-		{
-			LoadFromFile = true;
-			wxString oldfilename = m_AssociatedScreen->m_FileName;
-			m_AssociatedScreen->m_FileName = aFileName;
-			aFrame->SaveEEFile( m_AssociatedScreen, FILE_SAVE_AS );
-			m_AssociatedScreen->m_FileName = oldfilename;
-		}
-		m_AssociatedScreen->m_RefCount--;  //be careful with these
-		m_AssociatedScreen = NULL;         //will be created later
-	}
+        {
+            LoadFromFile = true;
+            wxString oldfilename = m_AssociatedScreen->m_FileName;
+            m_AssociatedScreen->m_FileName = aFileName;
+            aFrame->SaveEEFile( m_AssociatedScreen, FILE_SAVE_AS );
+            m_AssociatedScreen->m_FileName = oldfilename;
+        }
+        m_AssociatedScreen->m_RefCount--;  //be careful with these
+        m_AssociatedScreen = NULL;         //will be created later
+    }
 
-	
+
     SetFileName( aFileName );
 
-	// if we use new data (from file or from internal hierarchy), delete the current sheet data
-	if( m_AssociatedScreen && (LoadFromFile || Screen_to_use) )
-	{
-		m_AssociatedScreen->m_RefCount--;
-		if( m_AssociatedScreen->m_RefCount == 0 )
-			SAFE_DELETE( m_AssociatedScreen );
-		m_AssociatedScreen = NULL;         //so that we reload..
-	}
+    // if we use new data (from file or from internal hierarchy), delete the current sheet data
+    if( m_AssociatedScreen && (LoadFromFile || Screen_to_use) )
+    {
+        m_AssociatedScreen->m_RefCount--;
+        if( m_AssociatedScreen->m_RefCount == 0 )
+            SAFE_DELETE( m_AssociatedScreen );
+        m_AssociatedScreen = NULL;         //so that we reload..
+    }
 
     if ( LoadFromFile )
-		Load( aFrame );
-	else if ( Screen_to_use )
-	{
-		m_AssociatedScreen = Screen_to_use;
-		m_AssociatedScreen->m_RefCount++;
-	}
+        Load( aFrame );
+    else if ( Screen_to_use )
+    {
+        m_AssociatedScreen = Screen_to_use;
+        m_AssociatedScreen->m_RefCount++;
+    }
 
 
-	//just make a new screen if needed.
-	if( !m_AssociatedScreen )
-	{
-		m_AssociatedScreen = new SCH_SCREEN( SCHEMATIC_FRAME );
-		m_AssociatedScreen->m_RefCount++;         //be careful with these
-	}
-	m_AssociatedScreen->m_FileName = aFileName;
+    //just make a new screen if needed.
+    if( !m_AssociatedScreen )
+    {
+        m_AssociatedScreen = new SCH_SCREEN( SCHEMATIC_FRAME );
+        m_AssociatedScreen->m_RefCount++;         //be careful with these
+    }
+    m_AssociatedScreen->m_FileName = aFileName;
 
     return true;
 }
@@ -803,9 +803,9 @@ void DrawSheetPath::UpdateAllScreenReferences()
 
     while( t )
     {
-        if( t->Type() == DRAW_LIB_ITEM_STRUCT_TYPE )
+        if( t->Type() == TYPE_SCH_COMPONENT )
         {
-            EDA_SchComponentStruct* d = (EDA_SchComponentStruct*) t;
+            SCH_COMPONENT* d = (SCH_COMPONENT*) t;
             d->m_Field[REFERENCE].m_Text = d->GetRef( this );
         }
         t = t->Pnext;

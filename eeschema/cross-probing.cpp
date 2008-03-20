@@ -86,7 +86,7 @@ void RemoteCommand( const char* cmdline )
 
 /*****************************************************************************/
 void WinEDA_SchematicFrame::SendMessageToPCBNEW( EDA_BaseStruct*         objectToSync,
-                                                 EDA_SchComponentStruct* LibItem )
+                                                 SCH_COMPONENT* LibItem )
 /*****************************************************************************/
 
 /** Send a remote command to eeschema via a socket,
@@ -116,8 +116,8 @@ void WinEDA_SchematicFrame::SendMessageToPCBNEW( EDA_BaseStruct*         objectT
         }
         break;
 
-    case DRAW_LIB_ITEM_STRUCT_TYPE:
-        LibItem = (EDA_SchComponentStruct*) objectToSync;
+    case TYPE_SCH_COMPONENT:
+        LibItem = (SCH_COMPONENT*) objectToSync;
         sprintf( Line, "$PART: %s", CONV_TO_UTF8( LibItem->m_Field[REFERENCE].m_Text ) );
         SendCommand( MSG_TO_PCB, Line );
         break;
