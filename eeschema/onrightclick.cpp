@@ -91,7 +91,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
  */
 {
     EDA_BaseStruct* DrawStruct  = GetScreen()->GetCurItem();
-    bool BlockActive = (GetScreen()->BlockLocate.m_Command != BLOCK_IDLE);
+    bool            BlockActive = (GetScreen()->BlockLocate.m_Command != BLOCK_IDLE);
 
 
     DrawPanel->m_CanStartBlock = -1;    // Ne pas engager un debut de bloc sur validation menu
@@ -103,7 +103,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
         return true;
     }
 
-        // Simple localisation des elements si possible
+    // Simple localisation des elements si possible
     if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
     {
         DrawStruct = SchematicGeneralLocateAndDisplay( FALSE );
@@ -111,7 +111,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
         {
             DrawSheetLabelStruct* slabel;
             slabel = LocateSheetLabel( (DrawSheetStruct*) DrawStruct,
-                                        GetScreen()->m_Curseur );
+                                      GetScreen()->m_Curseur );
             if( slabel )
                 DrawStruct = slabel;
         }
@@ -205,11 +205,11 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
             break;
 
         // Many fields are inside a component. If this is the case, add the component menu
-        SCH_COMPONENT* Component = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
+        SCH_COMPONENT* Component = LocateSmallestComponent( (SCH_SCREEN*) GetScreen() );
         if( Component )
         {
             PopMenu->AppendSeparator();
-            AddMenusForComponent( PopMenu, (SCH_COMPONENT*) DrawStruct );
+            AddMenusForComponent( PopMenu, Component );
         }
     }
         break;
@@ -284,6 +284,12 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
 /* Add menu commands for a component
  */
 {
+    if( Component->Type() != TYPE_SCH_COMPONENT )
+    {
+        wxASSERT( 0 );
+        return;
+    }
+
     wxString msg;
 
     EDA_LibComponentStruct* LibEntry;
@@ -326,7 +332,9 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
 
         ADD_MENUITEM( editmenu, ID_POPUP_SCH_EDIT_REF_CMP, _( "Reference" ), edit_comp_ref_xpm );
 
-        msg = AddHotkeyName( _( "Footprint " ), s_Schematic_Hokeys_Descr, HK_EDIT_COMPONENT_FOOTPRINT );
+        msg = AddHotkeyName( _(
+                                 "Footprint " ), s_Schematic_Hokeys_Descr,
+                             HK_EDIT_COMPONENT_FOOTPRINT );
         ADD_MENUITEM( editmenu, ID_POPUP_SCH_EDIT_FOOTPRINT_CMP, msg, edit_comp_footprint_xpm );
     }
     if( LibEntry && (LookForConvertPart( LibEntry ) >= 2) )
@@ -387,9 +395,12 @@ void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel )
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, menu_change_type,
                                ID_POPUP_SCH_CHANGE_TYPE_TEXT, _( "Change Type" ), gl_change_xpm );
 }
+
+
 /*******************************************************************/
 void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* HLabel )
 /*******************************************************************/
+
 /* Add menu commands for a hierarchal Label
  */
 {
