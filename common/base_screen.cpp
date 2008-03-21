@@ -16,7 +16,7 @@
 /*******************************************************/
 /* Class BASE_SCREEN: classe de gestion d'un affichage */
 /*******************************************************/
-BASE_SCREEN::BASE_SCREEN( int idscreen, KICAD_T aType ) : 
+BASE_SCREEN::BASE_SCREEN( int idscreen, KICAD_T aType ) :
     EDA_BaseStruct( aType )
 {
     EEDrawList = NULL;   /* Schematic items list */
@@ -37,10 +37,10 @@ BASE_SCREEN::~BASE_SCREEN()
 {
     if( m_ZoomList )
         free( m_ZoomList );
-    
+
     if( m_GridList )
         free( m_GridList );
-    
+
     ClearUndoRedoList();
 }
 
@@ -92,7 +92,7 @@ void BASE_SCREEN::InitDatas()
     }
 
     // DrawOrg est rendu multiple du zoom min :
-    m_DrawOrg.x -= m_DrawOrg.x % 256; 
+    m_DrawOrg.x -= m_DrawOrg.x % 256;
     m_DrawOrg.y -= m_DrawOrg.y % 256;
 
     m_O_Curseur = m_Curseur;
@@ -113,7 +113,7 @@ wxPoint BASE_SCREEN::CursorRealPosition( const wxPoint& ScreenPos )
     wxPoint curpos;
 
 //    D(printf("curpos=%d,%d GetZoom=%d, mDrawOrg=%d,%d\n", curpos.x, curpos.y, GetZoom(), m_DrawOrg.x, m_DrawOrg.y );)
-    
+
     curpos.x = ScreenPos.x * GetZoom();
     curpos.y = ScreenPos.y * GetZoom();
 
@@ -174,28 +174,30 @@ wxSize BASE_SCREEN::ReturnPageSize()
 }
 
 
-/********************************************/
-void BASE_SCREEN::SetZoomList( int* zoomlist )
-/********************************************/
+/**************************************************/
+void BASE_SCREEN::SetZoomList( const int* zoomlist )
+/**************************************************/
 
 /* init liste des zoom (NULL terminated)
  */
 {
-    int ii, nbitems, * zoom;
+    int         nbitems;
+    const int*  zoom;
 
-    // Decompte des items
+    // get list length
     for( nbitems = 1, zoom = zoomlist;  ; zoom++, nbitems++ )
     {
         if( *zoom == 0 )
             break;
     }
 
-    // Init liste
+    // resize our list
     if( m_ZoomList )
         free( m_ZoomList );
-    
-    m_ZoomList = (int*) MyZMalloc( nbitems * sizeof( int) );
 
+    m_ZoomList = (int*) MyZMalloc( nbitems * sizeof(int) );
+
+    int ii;
     for( ii = 0, zoom = zoomlist; ii < nbitems; zoom++, ii++ )
     {
         m_ZoomList[ii] = *zoom;
@@ -212,10 +214,9 @@ void BASE_SCREEN::SetFirstZoom()
 }
 
 
-/****************************/
-int BASE_SCREEN::GetZoom()
-/****************************/
-/* retourne le coeff de zoom */
+/******************************/
+int BASE_SCREEN::GetZoom() const
+/******************************/
 {
     return m_Zoom;
 }
@@ -564,23 +565,23 @@ EDA_BaseStruct* BASE_SCREEN::GetItemFromRedoList()
 /**
  * Function Show
  * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level 
+ * @param nestLevel An aid to prettier tree indenting, and is the level
  *          of nesting of this object within the overall tree.
  * @param os The ostream& to output to.
  */
 void BASE_SCREEN::Show( int nestLevel, std::ostream& os )
 {
     EDA_BaseStruct* item = EEDrawList;
-    
+
     // for now, make it look like XML, expand on this later.
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
         ">\n";
-    
+
     for(  ; item;  item = item->Next() )
     {
         item->Show( nestLevel+1, os );
     }
-    
+
     NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
 #endif
