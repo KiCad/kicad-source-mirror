@@ -14,23 +14,26 @@
 
 #include "protos.h"
 
-#define PLOT_DEFAULT_MARGE 300  // mils
+#define PLOT_DEFAULT_MARGE 300      // mils
 
 /* Keywords to r/w options in config */
-#define EDGELAYER_GERBER_OPT_KEY wxT( "EdgeLayerGerberOpt" )
-#define PLOT_XFINESCALE_ADJ_KEY  wxT( "PlotXFineScaleAdj" )
-#define PLOT_YFINESCALE_ADJ_KEY  wxT( "PlotYFineScaleAdj" )
+#define OPTKEY_EDGELAYER_GERBER     wxT( "EdgeLayerGerberOpt" )
+#define OPTKEY_XFINESCALE_ADJ       wxT( "PlotXFineScaleAdj" )
+#define OPTKEY_YFINESCALE_ADJ       wxT( "PlotYFineScaleAdj" )
+#define OPTKEY_LAYERBASE            wxT( "PlotLayer_%d" )
+#define OPTKEY_PADS_ON_SILKSCREEN   wxT( "PlotPadsOnSilkscreen" )
+#define OPTKEY_ALWAYS_PRINT_PADS    wxT( "PlotAlwaysPads" )
+#define OPTKEY_OUTPUT_FORMAT        wxT( "PlotOutputFormat" )
 
-// variables locale :
+
 static long s_SelectedLayers = CUIVRE_LAYER | CMP_LAYER |
                                SILKSCREEN_LAYER_CMP | SILKSCREEN_LAYER_CU;
+
 static bool s_PlotOriginIsAuxAxis = FALSE;
 
-// Routines Locales
 
 enum id_plotps {
-    ID_CLOSE_PLOT = 8020,
-    ID_DRILL_SHAPE_OPT,
+    ID_DRILL_SHAPE_OPT = 8020,
     ID_SCALE_OPT,
     ID_ROTATE_OPT,
     ID_MIROR_OPT,
@@ -61,8 +64,8 @@ class WinEDA_PlotFrame : public wxDialog
 {
 public:
     WinEDA_BasePcbFrame*    m_Parent;
-    wxButton*               m_MergePlotButton;
-    wxCheckBox*             m_BoxSelecLayer[32];
+    wxButton*               m_PlotButton;           // button with initial focus
+    wxCheckBox*             m_BoxSelectLayer[32];
     wxRadioBox*             m_PlotFormatOpt;
     wxRadioBox*             m_Choice_Plot_Offset;
     wxRadioBox*             m_Drill_Shape_Opt;
@@ -104,7 +107,7 @@ private:
 
 BEGIN_EVENT_TABLE( WinEDA_PlotFrame, wxDialog )
     EVT_CLOSE( WinEDA_PlotFrame::OnClose )
-    EVT_BUTTON( ID_CLOSE_PLOT, WinEDA_PlotFrame::OnQuit )
+    EVT_BUTTON( wxID_CANCEL, WinEDA_PlotFrame::OnQuit )
     EVT_BUTTON( ID_EXEC_PLOT, WinEDA_PlotFrame::Plot )
     EVT_BUTTON( ID_SAVE_OPT_PLOT, WinEDA_PlotFrame::SaveOptPlot )
     EVT_BUTTON( ID_CREATE_DRILL_FILE, WinEDA_PlotFrame::CreateDrillFile )
@@ -122,12 +125,14 @@ WinEDA_PlotFrame::WinEDA_PlotFrame( WinEDA_BasePcbFrame* parent ) :
               wxDEFAULT_DIALOG_STYLE )
 /********************************************************************/
 {
-    wxButton* Button;
-    int       ii;
+    wxButton* button;
 
     m_Parent = parent;
 
     BOARD* board = parent->m_Pcb;
+
+    wxConfig* config = m_Parent->m_Parent->m_EDA_Config;  //  Current config used by application
+
 
     SetFont( *g_DialogFont );
     Centre();
@@ -162,29 +167,33 @@ WinEDA_PlotFrame::WinEDA_PlotFrame( WinEDA_BasePcbFrame* parent ) :
     m_PlotFormatOpt = new wxRadioBox( this, ID_SEL_PLOT_FORMAT,
                                       _( "Plot Format" ), wxDefaultPosition, wxSize( -1, -1 ),
                                       4, fmtmsg, 1, wxRA_SPECIFY_COLS );
-
     MidRightBoxSizer->Add( m_PlotFormatOpt, 0, wxGROW | wxALL, 5 );
 
-    switch( m_PlotFormat )
+    if( config && config->Read( OPTKEY_OUTPUT_FORMAT, &m_PlotFormat ) )
+        m_PlotFormatOpt->SetSelection( m_PlotFormat );
+    else
     {
-    case PLOT_FORMAT_HPGL:
-        m_PlotFormatOpt->SetSelection( 0 );
-        break;
+        switch( m_PlotFormat )
+        {
+        case PLOT_FORMAT_HPGL:
+            m_PlotFormatOpt->SetSelection( 0 );
+            break;
 
-    case PLOT_FORMAT_GERBER:
-        m_PlotFormatOpt->SetSelection( 1 );
-        break;
+        case PLOT_FORMAT_GERBER:
+            m_PlotFormatOpt->SetSelection( 1 );
+            break;
 
-    default: // ( PLOT_FORMAT_POST or PLOT_FORMAT_POST_A4 )
-        // As m_PlotFormat is never set to a value of PLOT_FORMAT_POST_A4,
-        // use the value of g_ForcePlotPS_On_A4 to determine whether the
-        // "Postscript" or "Postscipt A4" radiobutton had been selected
-        // previously (and thus which button should be reselected now).
-        if( g_ForcePlotPS_On_A4 )
-            m_PlotFormatOpt->SetSelection( 3 );
-        else
-            m_PlotFormatOpt->SetSelection( 2 );
-        break;
+        default: // ( PLOT_FORMAT_POST or PLOT_FORMAT_POST_A4 )
+            // As m_PlotFormat is never set to a value of PLOT_FORMAT_POST_A4,
+            // use the value of g_ForcePlotPS_On_A4 to determine whether the
+            // "Postscript" or "Postscipt A4" radiobutton had been selected
+            // previously (and thus which button should be reselected now).
+            if( g_ForcePlotPS_On_A4 )
+                m_PlotFormatOpt->SetSelection( 3 );
+            else
+                m_PlotFormatOpt->SetSelection( 2 );
+            break;
+        }
     }
 
     // Creation des menus d'option du format GERBER
@@ -193,35 +202,35 @@ WinEDA_PlotFrame::WinEDA_PlotFrame( WinEDA_BasePcbFrame* parent ) :
                                                   UNITS_MILS );
 
     // Creation des menus d'option du format HPGL
-    m_HPGLPenSizeOpt = new      WinEDA_ValueCtrl( this, _( "Pen Size" ),
+    m_HPGLPenSizeOpt = new      WinEDA_ValueCtrl( this, _( "Pen size" ),
                                                   g_HPGL_Pen_Diam, g_UnitMetric, MidRightBoxSizer,
                                                   UNITS_MILS );
 
     // unites standards = cm  pour vitesse plume en HPGL
-    m_HPGLPenSpeedOpt = new     WinEDA_ValueCtrl( this, _( "Pen Speed (cm/s)" ),
+    m_HPGLPenSpeedOpt = new     WinEDA_ValueCtrl( this, _( "Pen speed (cm/s)" ),
                                                   g_HPGL_Pen_Speed, CENTIMETRE, MidRightBoxSizer,
                                                   1 );
 
     m_HPGLPenSpeedOpt->SetToolTip( _( "Set pen speed in cm/s" ) );
 
-    m_HPGLPenOverlayOpt = new   WinEDA_ValueCtrl( this, _( "Pen Ovr" ),
+    m_HPGLPenOverlayOpt = new   WinEDA_ValueCtrl( this, _( "Pen ovr" ),
                                                   g_HPGL_Pen_Recouvrement, g_UnitMetric,
                                                   MidRightBoxSizer, UNITS_MILS );
 
     m_HPGLPenOverlayOpt->SetToolTip( _( "Set plot overlay for filling" ) );
 
-    m_LinesWidth = new          WinEDA_ValueCtrl( this, _( "Lines Width" ),
+    m_LinesWidth = new          WinEDA_ValueCtrl( this, _( "Lines width" ),
                                                   g_PlotLine_Width, g_UnitMetric, MidRightBoxSizer,
                                                   PCB_INTERNAL_UNIT );
 
-    m_LinesWidth->SetToolTip( _( "Set width for lines in Line plot mode" ) );
+    m_LinesWidth->SetToolTip( _( "Set width for lines in line plot mode" ) );
 
     // Create the right column commands
     static const wxString choice_plot_offset_msg[] =
     {  _( "Absolute" ), _( "Auxiliary axis" )  };
 
     m_Choice_Plot_Offset = new wxRadioBox( this, ID_SEL_PLOT_OFFSET_OPTION,
-                                           _( "Plot Origin" ),
+                                           _( "Plot origin" ),
                                            wxDefaultPosition, wxSize( -1, -1 ),
                                            2, choice_plot_offset_msg, 1, wxRA_SPECIFY_COLS );
 
@@ -231,87 +240,98 @@ WinEDA_PlotFrame::WinEDA_PlotFrame( WinEDA_BasePcbFrame* parent ) :
     /* Add a spacer for a better look */
     RightBoxSizer->Add( 5, 5, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 20 );
 
-    /* Create the command buttons */
-    Button = new    wxButton( this, ID_EXEC_PLOT, _( "Plot" ) );
-
-    Button->SetForegroundColour( *wxRED );
-    RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
-
-    Button = new    wxButton( this, ID_CLOSE_PLOT, _( "Close" ) );
-
-    Button->SetForegroundColour( *wxBLUE );
-    RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
-
-    Button = new    wxButton( this, ID_SAVE_OPT_PLOT, _( "Save options" ) );
-
-    Button->SetForegroundColour( wxColour( 0, 80, 0 ) );
-    RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
-
-    Button = new    wxButton( this, ID_CREATE_DRILL_FILE, _( "Create Drill File" ) );
-
-    Button->SetForegroundColour( wxColour( 0, 80, 80 ) );
-    RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
-
     // Create scale adjust option
     m_XScaleAdjust = m_YScaleAdjust = 1.0;
-    if( m_Parent->m_Parent->m_EDA_Config )
+    if( config )
     {
-        m_Parent->m_Parent->m_EDA_Config->Read( EDGELAYER_GERBER_OPT_KEY, &g_Exclude_Edges_Pcb );
-        m_Parent->m_Parent->m_EDA_Config->Read( PLOT_XFINESCALE_ADJ_KEY, &m_XScaleAdjust );
-        m_Parent->m_Parent->m_EDA_Config->Read( PLOT_XFINESCALE_ADJ_KEY, &m_YScaleAdjust );
+        config->Read( OPTKEY_EDGELAYER_GERBER,  &g_Exclude_Edges_Pcb );
+        config->Read( OPTKEY_XFINESCALE_ADJ,    &m_XScaleAdjust );
+        config->Read( OPTKEY_XFINESCALE_ADJ,    &m_YScaleAdjust );
     }
-    m_FineAdjustXscaleOpt = new WinEDA_DFloatValueCtrl( this, _(
-                                                            "X Scale Adjust" ), m_XScaleAdjust,
-                                                        RightBoxSizer );
 
+    m_FineAdjustXscaleOpt = new WinEDA_DFloatValueCtrl( this,
+                               _( "X scale adjust" ), m_XScaleAdjust,
+                               RightBoxSizer );
     m_FineAdjustXscaleOpt->SetToolTip( _( "Set X scale adjust for exact scale plotting" ) );
-    m_FineAdjustYscaleOpt = new WinEDA_DFloatValueCtrl( this, _(
-                                                            "Y Scale Adjust" ), m_YScaleAdjust,
-                                                        RightBoxSizer );
 
+    m_FineAdjustYscaleOpt = new WinEDA_DFloatValueCtrl( this,
+                               _("Y scale adjust" ), m_YScaleAdjust,
+                               RightBoxSizer );
     m_FineAdjustYscaleOpt->SetToolTip( _( "Set Y scale adjust for exact scale plotting" ) );
 
-    m_Plot_PS_Negative = new    wxCheckBox( this, -1, _( "Plot Negative" ) );
-
+    m_Plot_PS_Negative = new    wxCheckBox( this, -1, _( "Plot negative" ) );
     m_Plot_PS_Negative->SetValue( g_Plot_PS_Negative );
     RightBoxSizer->Add( m_Plot_PS_Negative, 0, wxGROW | wxALL, 5 );
 
+
+    /* Create the command buttons */
+    m_PlotButton = new    wxButton( this, ID_EXEC_PLOT, _( "Plot" ) );
+    m_PlotButton->SetForegroundColour( *wxRED );
+    RightBoxSizer->Add( m_PlotButton, 0, wxGROW | wxALL, 5 );
+
+    button = new    wxButton( this, ID_SAVE_OPT_PLOT, _( "Save Options" ) );
+    button->SetForegroundColour( wxColour( 0, 80, 0 ) );
+    RightBoxSizer->Add( button, 0, wxGROW | wxALL, 5 );
+
+    button = new    wxButton( this, ID_CREATE_DRILL_FILE, _( "Create Drill File" ) );
+    button->SetForegroundColour( wxColour( 0, 80, 80 ) );
+    RightBoxSizer->Add( button, 0, wxGROW | wxALL, 5 );
+
+    button = new    wxButton( this, wxID_CANCEL, _( "Close" ) );
+    button->SetForegroundColour( *wxBLUE );
+    RightBoxSizer->Add( button, 0, wxGROW | wxALL, 5 );
+
+
     // Creation de la liste des layers
+    wxBoxSizer* OneColumnLayerBoxSizer = new wxBoxSizer( wxVERTICAL );
+    LayersBoxSizer->Add( OneColumnLayerBoxSizer, 0, wxGROW | wxALL, 5 );
+
     int         mask = 1;
-    wxBoxSizer* OneColonLayerBoxSizer = new wxBoxSizer( wxVERTICAL );
-
-    LayersBoxSizer->Add( OneColonLayerBoxSizer, 0, wxGROW | wxALL, 5 );
-
-    for( ii = 0; ii < NB_LAYERS; ii++, mask <<= 1 )
+    for( int layer=0; layer<NB_LAYERS; layer++, mask <<= 1 )
     {
-        if( ii == 16 )
+        if( layer == 16 )
         {
-            OneColonLayerBoxSizer = new wxBoxSizer( wxVERTICAL );
-
-            LayersBoxSizer->Add( OneColonLayerBoxSizer, 0, wxGROW | wxALL, 5 );
+            OneColumnLayerBoxSizer = new wxBoxSizer( wxVERTICAL );
+            LayersBoxSizer->Add( OneColumnLayerBoxSizer, 0, wxGROW | wxALL, 5 );
         }
 
-        m_BoxSelecLayer[ii] = new       wxCheckBox( this, -1, board->GetLayerName (ii) );
+        m_BoxSelectLayer[layer] = new  wxCheckBox( this, -1, board->GetLayerName(layer) );
 
         if( mask & s_SelectedLayers )
-            m_BoxSelecLayer[ii]->SetValue( true );
-        OneColonLayerBoxSizer->Add( m_BoxSelecLayer[ii], 0, wxGROW | wxALL, 1 );
+            m_BoxSelectLayer[layer]->SetValue( true );
+
+        OneColumnLayerBoxSizer->Add( m_BoxSelectLayer[layer], 0, wxGROW | wxALL, 1 );
+    }
+
+    if( config )
+    {
+        wxString    layerKey;
+
+        for( int layer=0;  layer<NB_LAYERS;  ++layer )
+        {
+            bool option;
+
+            layerKey.Printf( OPTKEY_LAYERBASE, layer );
+
+            if( config->Read( layerKey, &option ) )
+                m_BoxSelectLayer[layer]->SetValue( option );
+        }
     }
 
     // Option for excluding contents of "Edges Pcb" layer
 
     m_Exclude_Edges_Pcb = new wxCheckBox( this,
-                                         ID_EXCLUDE_EDGES_PCB, _( "Exclude Edges Pcb Layer" ) );
+                                         ID_EXCLUDE_EDGES_PCB, _( "Exclude Edges_Pcb layer" ) );
 
     m_Exclude_Edges_Pcb->SetValue( g_Exclude_Edges_Pcb );
     m_Exclude_Edges_Pcb->SetToolTip(
-        _( "Exclude contents of Edges Pcb layer from all other layers" ) );
+        _( "Exclude contents of Edges_Pcb layer from all other layers" ) );
     LeftBoxSizer->Add( m_Exclude_Edges_Pcb, 0, wxGROW | wxALL, 1 );
 
     // Option d'impression du cartouche:
     if( m_Parent->m_Print_Sheet_Ref )
     {
-        m_Plot_Sheet_Ref = new wxCheckBox( this, ID_PRINT_REF, _( "Print Sheet Ref" ) );
+        m_Plot_Sheet_Ref = new wxCheckBox( this, ID_PRINT_REF, _( "Print sheet ref" ) );
 
         m_Plot_Sheet_Ref->SetValue( Plot_Sheet_Ref );
         LeftBoxSizer->Add( m_Plot_Sheet_Ref, 0, wxGROW | wxALL, 1 );
@@ -320,56 +340,57 @@ WinEDA_PlotFrame::WinEDA_PlotFrame( WinEDA_BasePcbFrame* parent ) :
         Plot_Sheet_Ref = false;
 
     // Option d'impression des pads sur toutes les couches
-    m_Plot_Pads_on_Silkscreen = new wxCheckBox( this,
-                                               ID_PRINT_PAD_ON_SILKSCREEN, _(
-                                                   "Print Pads on Silkscreen" ) );
-
+    m_Plot_Pads_on_Silkscreen = new wxCheckBox( this, ID_PRINT_PAD_ON_SILKSCREEN,
+                                               _( "Print pads on silkscreen" ) );
+    if( config )
+        config->Read( OPTKEY_PADS_ON_SILKSCREEN, &PlotPadsOnSilkLayer );
     m_Plot_Pads_on_Silkscreen->SetValue( PlotPadsOnSilkLayer );
     m_Plot_Pads_on_Silkscreen->SetToolTip(
-        _( "Enable/disable print/plot pads on Silkscreen layers" ) );
+        _( "Enable/disable print/plot pads on silkscreen layers" ) );
     LeftBoxSizer->Add( m_Plot_Pads_on_Silkscreen, 0, wxGROW | wxALL, 1 );
 
     m_Force_Plot_Pads = new wxCheckBox( this, ID_FORCE_PRINT_PAD,
-                                       _( "Always Print Pads" ) );
-
+                                       _( "Always print pads" ) );
+    if( config )
+        config->Read( OPTKEY_ALWAYS_PRINT_PADS, &Plot_Pads_All_Layers );
     m_Force_Plot_Pads->SetValue( Plot_Pads_All_Layers );
     m_Force_Plot_Pads->SetToolTip( _( "Force print/plot pads on ALL layers" ) );
     LeftBoxSizer->Add( m_Force_Plot_Pads, 0, wxGROW | wxALL, 1 );
 
     // Options d'impression des textes modules
-    m_Plot_Text_Value = new wxCheckBox( this, ID_PRINT_VALUE, _( "Print Module Value" ) );
+    m_Plot_Text_Value = new wxCheckBox( this, ID_PRINT_VALUE, _( "Print module value" ) );
 
     m_Plot_Text_Value->SetValue( Sel_Texte_Valeur );
     m_Plot_Text_Value->SetToolTip(
-        _( "Enable/disable print/plot module value on Silkscreen layers" ) );
+        _( "Enable/disable print/plot module value on silkscreen layers" ) );
     LeftBoxSizer->Add( m_Plot_Text_Value, 0, wxGROW | wxALL, 1 );
 
-    m_Plot_Text_Ref = new wxCheckBox( this, ID_PRINT_REF, _( "Print Module Reference" ) );
+    m_Plot_Text_Ref = new wxCheckBox( this, ID_PRINT_REF, _( "Print module reference" ) );
 
     m_Plot_Text_Ref->SetValue( Sel_Texte_Reference );
     m_Plot_Text_Ref->SetToolTip(
-        _( "Enable/disable print/plot module reference on Silkscreen layers" ) );
+        _( "Enable/disable print/plot module reference on silkscreen layers" ) );
     LeftBoxSizer->Add( m_Plot_Text_Ref, 0, wxGROW | wxALL, 1 );
 
     m_Plot_Text_Div = new wxCheckBox( this, ID_PRINT_MODULE_TEXTS,
-                                     _( "Print other Module texts" ) );
+                                     _( "Print other module texts" ) );
 
     m_Plot_Text_Div->SetValue( Sel_Texte_Divers );
     m_Plot_Text_Div->SetToolTip(
-        _( "Enable/disable print/plot module field texts on Silkscreen layers" ) );
+        _( "Enable/disable print/plot module field texts on silkscreen layers" ) );
     LeftBoxSizer->Add( m_Plot_Text_Div, 0, wxGROW | wxALL, 1 );
 
     m_Plot_Invisible_Text = new wxCheckBox( this,
                                            ID_FORCE_PRINT_INVISIBLE_TEXT, _(
-                                               "Force Print Invisible Texts" ) );
+                                               "Force print invisible texts" ) );
 
     m_Plot_Invisible_Text->SetValue( Sel_Texte_Invisible );
     m_Plot_Invisible_Text->SetToolTip(
-        _( "Force print/plot module invisible texts on Silkscreen layers" ) );
+        _( "Force print/plot module invisible texts on silkscreen layers" ) );
     LeftBoxSizer->Add( m_Plot_Invisible_Text, 0, wxGROW | wxALL, 1 );
 
 
-    static const wxString drillmsg[3] = { _( "No Drill mark" ), _( "Small mark" ), _( "Real Drill" ) };
+    static const wxString drillmsg[3] = { _( "No drill mark" ), _( "Small mark" ), _( "Real drill" ) };
     m_Drill_Shape_Opt = new wxRadioBox( this, ID_DRILL_SHAPE_OPT,
                                         _( "Pads Drill Opt" ), wxDefaultPosition, wxSize( -1, -1 ),
                                         3, drillmsg, 1, wxRA_SPECIFY_COLS );
@@ -388,6 +409,7 @@ WinEDA_PlotFrame::WinEDA_PlotFrame( WinEDA_BasePcbFrame* parent ) :
     MidLeftBoxSizer->Add( m_Scale_Opt, 0, wxGROW | wxALL, 5 );
 
     static const wxString list_opt3[3] = { _( "Line" ), _( "Filled" ), _( "Sketch" ) };
+
     m_PlotModeOpt = new wxRadioBox( this, ID_PLOT_MODE_OPT, _( "Plot Mode" ),
                                     wxDefaultPosition, wxDefaultSize,
                                     3, list_opt3, 1 );
@@ -396,13 +418,13 @@ WinEDA_PlotFrame::WinEDA_PlotFrame( WinEDA_BasePcbFrame* parent ) :
     MidLeftBoxSizer->Add( m_PlotModeOpt, 0, wxGROW | wxALL, 5 );
 
     m_PlotMirorOpt = new wxCheckBox( this, ID_MIROR_OPT,
-                                    _( "Plot Mirror" ) );
+                                    _( "Plot mirror" ) );
 
     m_PlotMirorOpt->SetValue( Plot_Set_MIROIR );
     MidLeftBoxSizer->Add( m_PlotMirorOpt, 0, wxGROW | wxALL, 5 );
 
     m_PlotNoViaOnMaskOpt = new wxCheckBox( this, ID_MASKVIA_OPT,
-                                          _( "Vias on Mask" ) );
+                                          _( "Vias on mask" ) );
 
     m_PlotNoViaOnMaskOpt->SetValue( g_DrawViaOnMaskLayer );
     m_PlotNoViaOnMaskOpt->SetToolTip(
@@ -422,6 +444,9 @@ WinEDA_PlotFrame::WinEDA_PlotFrame( WinEDA_BasePcbFrame* parent ) :
 
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
+
+    // without this line, the ESC key does not work
+    m_PlotButton->SetFocus();
 }
 
 
@@ -582,11 +607,24 @@ void WinEDA_PlotFrame::SaveOptPlot( wxCommandEvent& event )
     m_XScaleAdjust = m_FineAdjustXscaleOpt->GetValue();
     m_YScaleAdjust = m_FineAdjustYscaleOpt->GetValue();
 
-    if( m_Parent->m_Parent->m_EDA_Config )
+    wxConfig* config = m_Parent->m_Parent->m_EDA_Config;
+    if( config)
     {
-        m_Parent->m_Parent->m_EDA_Config->Write( EDGELAYER_GERBER_OPT_KEY, g_Exclude_Edges_Pcb );
-        m_Parent->m_Parent->m_EDA_Config->Write( PLOT_XFINESCALE_ADJ_KEY, m_XScaleAdjust );
-        m_Parent->m_Parent->m_EDA_Config->Write( PLOT_YFINESCALE_ADJ_KEY, m_YScaleAdjust );
+        config->Write( OPTKEY_EDGELAYER_GERBER, g_Exclude_Edges_Pcb );
+        config->Write( OPTKEY_XFINESCALE_ADJ, m_XScaleAdjust );
+        config->Write( OPTKEY_YFINESCALE_ADJ, m_YScaleAdjust );
+        config->Write( OPTKEY_PADS_ON_SILKSCREEN, PlotPadsOnSilkLayer );
+        config->Write( OPTKEY_ALWAYS_PRINT_PADS, Plot_Pads_All_Layers );
+
+        m_PlotFormat = m_PlotFormatOpt->GetSelection();
+        config->Write( OPTKEY_OUTPUT_FORMAT, m_PlotFormat );
+
+        wxString layerKey;
+        for( int layer=0;  layer<NB_LAYERS;  ++layer )
+        {
+            layerKey.Printf( OPTKEY_LAYERBASE, layer );
+            config->Write( layerKey, m_BoxSelectLayer[layer]->IsChecked() );
+        }
     }
 
     g_Plot_PS_Negative = m_Plot_PS_Negative->GetValue();
@@ -650,7 +688,7 @@ void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
 
     for( layer_to_plot = 0; layer_to_plot < NB_LAYERS; layer_to_plot++, mask <<= 1 )
     {
-        if( m_BoxSelecLayer[layer_to_plot]->GetValue() )
+        if( m_BoxSelectLayer[layer_to_plot]->GetValue() )
         {
             s_SelectedLayers |= mask;
 
@@ -674,7 +712,7 @@ void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
         }
     }
 
-//	Close(true);
+//  Close(true);
 }
 
 
@@ -684,5 +722,6 @@ void WinEDA_BasePcbFrame::ToPlotter( wxCommandEvent& event )
 {
     WinEDA_PlotFrame* frame = new WinEDA_PlotFrame( this );
 
-    frame->ShowModal(); frame->Destroy();
+    frame->ShowModal();
+    frame->Destroy();
 }

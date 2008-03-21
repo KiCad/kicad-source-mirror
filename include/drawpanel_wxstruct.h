@@ -296,16 +296,32 @@ public:
     EDA_BaseStruct* GetCurItem() const {  return m_CurrentItem; }
 
 
-    /* fonctions relatives au zoom */
-    int     GetZoom();                /* retourne le coeff de zoom */
-    void    SetZoom( int coeff );           /* ajuste le coeff de zoom a coeff */
-    void    SetZoomList( int* zoomlist );   /* init liste des zoom (NULL terminated) */
+    //----<zoom stuff>----------------------------------------------------------
+    /**
+     * Function GetZoom
+     * returns the current zoom factor
+     */
+    int     GetZoom() const;
+
+    /**
+     * Function SetZoom
+     * adjusts the current zoom factor
+     */
+    void    SetZoom( int coeff );
+
+    /**
+     * Function SetZoomList
+     * sets the list of zoom factors.
+     * @param aZoomList An array of zoom factors in ascending order, zero terminated
+     */
+    void    SetZoomList( const int* zoomlist );
+
     void    SetNextZoom();            /* ajuste le prochain coeff de zoom */
     void    SetPreviousZoom();        /* ajuste le precedent coeff de zoom */
     void    SetFirstZoom();           /* ajuste le coeff de zoom a 1*/
     void    SetLastZoom();            /* ajuste le coeff de zoom au max */
 
-    /* fonctions relatives a la grille */
+    //----<grid stuff>----------------------------------------------------------
     wxSize  GetGrid();                    /* retourne la grille */
     void    SetGrid( const wxSize& size );
     void    SetGridList( wxSize* sizelist );    /* init liste des grilles (NULL terminated) */

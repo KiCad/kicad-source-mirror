@@ -5,11 +5,21 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Mar-21 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+    pcbplot.cpp now saves the selected layers as wxConfig options,
+    i.e. retentitively.  The ESC key now works in that dialog.
+    Make upper/lower case conformat to UIpolicies.txt
+    Put buttons at bottom, "Close" as bottom button.
+
+
 2008-Mar-21 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +eeschema
-	Removed an very old bug in onrightclick.cpp which crashes eeschema when right clicking in a field inside a component.
-	Old code should never works, but ...
+    Removed an very old bug in onrightclick.cpp which crashes eeschema when
+    right clicking in a field inside a component.
+    Old code should never works,	but ...
 
 
 2008-Mar-20 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
@@ -19,6 +29,7 @@ email address.
     If possible (i.e. if freeroute.jnlp is found in kicad binary directory) javaws is called insteed of the default browser)
     So @todo removed
 
+>>>>>>> .r920
 2008-Mar-19 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +eeschema

@@ -36,7 +36,8 @@ void EDA_BaseStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
 /* Constructeur de SCREEN */
 PCB_SCREEN::PCB_SCREEN( int idscreen ) : BASE_SCREEN( TYPESCREEN )
 {
-    int zoom_list[] = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 0 };
+    // a zero terminated list
+    static const int zoom_list[] = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 0 };
 
     m_Type = idscreen;
     SetGridList( g_GridList );
