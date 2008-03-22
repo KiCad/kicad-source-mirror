@@ -592,7 +592,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
         if( !GetCurItem() || GetCurItem()->Type() != TYPEMODULE )
             break;
-        if( Delete_Module( (MODULE*) GetCurItem(), &dc ) )
+        if( Delete_Module( (MODULE*) GetCurItem(), &dc, true ) )
         {
             SetCurItem( NULL );
         }
@@ -1023,7 +1023,7 @@ void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
     switch( Item->Type() )
     {
     case TYPEMODULE:
-        Delete_Module( (MODULE*) Item, DC );
+        Delete_Module( (MODULE*) Item, DC, true );
         break;
 
     case TYPECOTATION:

@@ -263,9 +263,9 @@ void Montre_Position_Empreinte( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 }
 
 
-/**************************************************************/
-bool WinEDA_PcbFrame::Delete_Module( MODULE* module, wxDC* DC )
-/**************************************************************/
+/*****************************************************************************************/
+bool WinEDA_PcbFrame::Delete_Module( MODULE* module, wxDC* DC, bool aAskBeforeDeleting )
+/******************************************************************************************/
 
 /**
  *  Function Delete Module
@@ -273,6 +273,7 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module, wxDC* DC )
  *  The net rastenes and pad list are recalcualed
  * @param module = footprint to delete
  * @param DC = currentDevice Context. if NULL: do not redraw new ratsnets and dirty rectange
+ * @param aPromptBeforeDeleting : if true: ask for confirmation before deleting
  */
 {
     EDA_BaseStruct* PtBack, * PtNext;
@@ -285,12 +286,15 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module, wxDC* DC )
     /* Confirmation de l'effacement */
     module->Display_Infos( this );
 
-    msg << _( "Delete Module" ) << wxT( " " ) << module->m_Reference->m_Text
-        << wxT( "  (" ) << _( "Value " ) << module->m_Value->m_Text
-        << wxT( ") ?" );
-    if( !IsOK( this, msg ) )
+    if ( aAskBeforeDeleting )
     {
-        return FALSE;
+        msg << _( "Delete Module" ) << wxT( " " ) << module->m_Reference->m_Text
+            << wxT( "  (" ) << _( "Value " ) << module->m_Value->m_Text
+            << wxT( ") ?" );
+        if( !IsOK( this, msg ) )
+        {
+            return FALSE;
+        }
     }
 
     m_CurrentScreen->SetModify();
@@ -332,7 +336,7 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module, wxDC* DC )
 void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
 /****************************************************************************/
 
-/** 
+/**
  * Function Change_Side_Module
  * Filp a footprint (switch layer from component or component to copper)
  * The mirroring is made from X axis
@@ -483,7 +487,7 @@ void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
             pt_texte->m_Miroir = 1;
             NEGATE_AND_NORMALIZE_ANGLE_POS( pt_texte->m_Orient );
 
-            pt_texte->SetLayer( Module->GetLayer() ); 
+            pt_texte->SetLayer( Module->GetLayer() );
             pt_texte->SetLayer( ChangeSideNumLayer( pt_texte->GetLayer() ) );
 
             if( Module->GetLayer() == COPPER_LAYER_N )
@@ -517,7 +521,7 @@ void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
         if( DC && m_PcbFrame )
         {
             Module->Draw( m_PcbFrame->DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
-            
+
             /* affichage chevelu general si necessaire */
             m_PcbFrame->ReCompile_Ratsnest_After_Changes( DC );
         }
@@ -753,7 +757,7 @@ void WinEDA_BasePcbFrame::Rotate_Module( wxDC* DC, MODULE* module,
         if( !(module->m_Flags & IS_MOVED) ) /* Rotation simple */
         {
             module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
-            
+
             /* Reaffichage chevelu general si necessaire */
             ReCompile_Ratsnest_After_Changes( DC );
         }

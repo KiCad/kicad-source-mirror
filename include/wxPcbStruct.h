@@ -441,7 +441,7 @@ public:
 
     // Footprint edition (see also WinEDA_BasePcbFrame)
     void                StartMove_Module( MODULE* module, wxDC* DC );
-    bool                Delete_Module( MODULE* module, wxDC* DC );
+    bool                Delete_Module( MODULE* module, wxDC* DC, bool aAskBeforeDeleting );
 
     // loading modules: see WinEDA_BasePcbFrame
 

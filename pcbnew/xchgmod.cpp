@@ -196,7 +196,7 @@ int WinEDA_ExchangeModuleFrame::Maj_ListeCmp(
 /*
  *  Met a jour le fichier name.CMP (s'il existe) apres un echange de module
  *  (par la commande changeMod), si les modules sont geres par ce fichier
- * 
+ *
  *  Si ShowError != 0 affiche message d'erreur si le fichier .cmp n'est pas
  *  trouve.
  *  Retoure 1 si erreur
@@ -211,10 +211,7 @@ int WinEDA_ExchangeModuleFrame::Maj_ListeCmp(
         return 0;                           /* pas de changement de nom */
 
     /* Calcul nom fichier CMP par changement de l'extension du nom netliste */
-    if( NetNameBuffer == wxEmptyString )
-        FileNameCmp = m_Parent->m_CurrentScreen->m_FileName;
-    else
-        FileNameCmp = NetNameBuffer;
+    FileNameCmp = m_Parent->m_CurrentScreen->m_FileName;
     ChangeFileNameExt( FileNameCmp, NetCmpExtBuffer );
 
     // Modification du fichier .cmp correcpondant
@@ -617,10 +614,7 @@ bool WinEDA_PcbFrame::RecreateCmpFileFromBoard()
     }
 
     /* Calcul nom fichier CMP par changement de l'extension du nom netliste */
-    if( NetNameBuffer == wxEmptyString )
-        FullFileNameCmp = m_CurrentScreen->m_FileName;
-    else
-        FullFileNameCmp = NetNameBuffer;
+    FullFileNameCmp = m_CurrentScreen->m_FileName;
     ChangeFileNameExt( FullFileNameCmp, NetCmpExtBuffer );
 
     mask = wxT( "*" ) + NetCmpExtBuffer;

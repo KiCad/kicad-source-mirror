@@ -99,8 +99,8 @@ public:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_PRINT_EXECUTE
     void OnPrintExecuteClick( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CLOSE
-    void OnCloseClick( wxCommandEvent& event );
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
+    void OnCancelClick( wxCommandEvent& event );
 
 ////@end WinEDA_PrintFrame event handler declarations
 
@@ -142,6 +142,7 @@ public:
     wxRadioBox* m_ColorOption;
     wxRadioBox* m_PagesOptionPcb;
     wxRadioBox* m_PagesOptionEeschema;
+    wxButton* m_CloseButton;
 ////@end WinEDA_PrintFrame member variables
 
 	WinEDA_DrawFrame * m_Parent;

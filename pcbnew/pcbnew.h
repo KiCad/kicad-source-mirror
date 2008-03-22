@@ -169,8 +169,7 @@ eda_global wxString g_SaveFileName      // File Name for periodic saving
 ( wxT( "$savepcb" ) )
 #endif
 ;
-eda_global wxString NetNameBuffer;      // Netlist file extension
-eda_global wxString NetExtBuffer
+eda_global wxString NetExtBuffer       // Netlist file extension
 #ifdef MAIN
 ( wxT( ".net" ) )
 #endif

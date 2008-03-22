@@ -298,7 +298,9 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
 
     if( !Component->m_Flags )
     {
-        msg = AddHotkeyName( _( "Move Component" ), s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT );
+        msg = _( "Move Component" );
+        msg << wxT(" ") << Component->GetFieldValue( REFERENCE );
+        msg = AddHotkeyName( msg, s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_CMP_REQUEST,
                       msg, move_xpm );
         msg = AddHotkeyName( _( "Drag Component" ), s_Schematic_Hokeys_Descr, HK_DRAG_COMPONENT );
