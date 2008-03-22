@@ -90,7 +90,29 @@ public:
     WinEDA_ValueCtrl*       m_HPGLPenOverlayOpt;
     WinEDA_DFloatValueCtrl* m_FineAdjustXscaleOpt, * m_FineAdjustYscaleOpt;
     double m_XScaleAdjust, m_YScaleAdjust;
-    int    m_PlotFormat;
+
+    bool    useA4()
+    {
+        return m_PlotFormatOpt->GetSelection() == 3;
+    }
+
+
+    /**
+     * Function getFormat
+     * returns one of the values from the PlotFormat enum.  If the 4th
+     * radio button is selected, map this back to postscript.
+     */
+    PlotFormat getFormat()
+    {
+        int radioNdx = m_PlotFormatOpt->GetSelection();
+
+        // change the A4 to the simple postscript, according to the PlotFormat enum
+        if( radioNdx == 3 )
+            radioNdx = 2;
+
+        return PlotFormat( radioNdx );
+    }
+
 
 public:
     WinEDA_PlotFrame( WinEDA_BasePcbFrame * parent );
@@ -137,7 +159,6 @@ WinEDA_PlotFrame::WinEDA_PlotFrame( WinEDA_BasePcbFrame* parent ) :
     SetFont( *g_DialogFont );
     Centre();
 
-    m_PlotFormat     = format_plot;
     m_Plot_Sheet_Ref = NULL;
 
     wxBoxSizer* MainBoxSizer = new      wxBoxSizer( wxHORIZONTAL );
@@ -169,32 +190,15 @@ WinEDA_PlotFrame::WinEDA_PlotFrame( WinEDA_BasePcbFrame* parent ) :
                                       4, fmtmsg, 1, wxRA_SPECIFY_COLS );
     MidRightBoxSizer->Add( m_PlotFormatOpt, 0, wxGROW | wxALL, 5 );
 
-    if( config && config->Read( OPTKEY_OUTPUT_FORMAT, &m_PlotFormat ) )
-        m_PlotFormatOpt->SetSelection( m_PlotFormat );
-    else
+    int myFormatIndex = format_plot;
+
+    if( config )
     {
-        switch( m_PlotFormat )
-        {
-        case PLOT_FORMAT_HPGL:
-            m_PlotFormatOpt->SetSelection( 0 );
-            break;
-
-        case PLOT_FORMAT_GERBER:
-            m_PlotFormatOpt->SetSelection( 1 );
-            break;
-
-        default: // ( PLOT_FORMAT_POST or PLOT_FORMAT_POST_A4 )
-            // As m_PlotFormat is never set to a value of PLOT_FORMAT_POST_A4,
-            // use the value of g_ForcePlotPS_On_A4 to determine whether the
-            // "Postscript" or "Postscipt A4" radiobutton had been selected
-            // previously (and thus which button should be reselected now).
-            if( g_ForcePlotPS_On_A4 )
-                m_PlotFormatOpt->SetSelection( 3 );
-            else
-                m_PlotFormatOpt->SetSelection( 2 );
-            break;
-        }
+        config->Read( OPTKEY_OUTPUT_FORMAT, &myFormatIndex );
     }
+
+    m_PlotFormatOpt->SetSelection( myFormatIndex );
+
 
     // Creation des menus d'option du format GERBER
     m_GerbSpotSizeMinOpt = new  WinEDA_ValueCtrl( this, _( "Spot min" ),
@@ -490,18 +494,10 @@ void WinEDA_PlotFrame::SetCommands( wxCommandEvent& event )
 /* active ou désactive les différents menus d'option selon le standard choisi
  */
 {
-    int format;
-
-    static const int format_list[] = {
-        PLOT_FORMAT_HPGL, PLOT_FORMAT_GERBER,
-        PLOT_FORMAT_POST, PLOT_FORMAT_POST_A4
-    };
-
-    format = format_list[m_PlotFormatOpt->GetSelection()];
+    int format = getFormat();
 
     switch( format  )
     {
-    case PLOT_FORMAT_POST_A4:
     case PLOT_FORMAT_POST:
     default:
         m_Drill_Shape_Opt->Enable( true );
@@ -519,8 +515,6 @@ void WinEDA_PlotFrame::SetCommands( wxCommandEvent& event )
         m_Scale_Opt->Enable( true );
         m_FineAdjustXscaleOpt->Enable( true );
         m_FineAdjustYscaleOpt->Enable( true );
-        m_PlotFormat = PLOT_FORMAT_POST;
-        g_ForcePlotPS_On_A4 = (format == PLOT_FORMAT_POST_A4);
         m_Plot_PS_Negative->Enable( true );
         break;
 
@@ -540,7 +534,6 @@ void WinEDA_PlotFrame::SetCommands( wxCommandEvent& event )
         m_Scale_Opt->Enable( false );
         m_FineAdjustXscaleOpt->Enable( false );
         m_FineAdjustYscaleOpt->Enable( false );
-        m_PlotFormat = PLOT_FORMAT_GERBER;
         m_Plot_PS_Negative->Enable( false );
         break;
 
@@ -560,12 +553,11 @@ void WinEDA_PlotFrame::SetCommands( wxCommandEvent& event )
         m_Scale_Opt->Enable( true );
         m_FineAdjustXscaleOpt->Enable( false );
         m_FineAdjustYscaleOpt->Enable( false );
-        m_PlotFormat = PLOT_FORMAT_HPGL;
         m_Plot_PS_Negative->Enable( false );
         break;
     }
 
-    format_plot = m_PlotFormat;
+    format_plot = format;
 }
 
 
@@ -616,8 +608,8 @@ void WinEDA_PlotFrame::SaveOptPlot( wxCommandEvent& event )
         config->Write( OPTKEY_PADS_ON_SILKSCREEN, PlotPadsOnSilkLayer );
         config->Write( OPTKEY_ALWAYS_PRINT_PADS, Plot_Pads_All_Layers );
 
-        m_PlotFormat = m_PlotFormatOpt->GetSelection();
-        config->Write( OPTKEY_OUTPUT_FORMAT, m_PlotFormat );
+        int formatNdx = m_PlotFormatOpt->GetSelection();
+        config->Write( OPTKEY_OUTPUT_FORMAT, formatNdx );
 
         wxString layerKey;
         for( int layer=0;  layer<NB_LAYERS;  ++layer )
@@ -668,12 +660,15 @@ void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
     BaseFileName = m_Parent->GetScreen()->m_FileName;
     ChangeFileNameExt( BaseFileName, wxT( "-" ) );
 
-    switch( m_PlotFormat )
+    int format = getFormat();
+
+    switch( format )
     {
     case PLOT_FORMAT_POST:
         ext = wxT( ".ps" );
         break;
 
+    default:
     case PLOT_FORMAT_GERBER:
         ext = wxT( ".pho" );
         break;
@@ -695,12 +690,13 @@ void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
             // Calcul du nom du fichier
             FullFileName = BaseFileName + board->GetLayerName( layer_to_plot ) + ext;
 
-            switch( m_PlotFormat )
+            switch( format )
             {
             case PLOT_FORMAT_POST:
-                m_Parent->Genere_PS( FullFileName, layer_to_plot );
+                m_Parent->Genere_PS( FullFileName, layer_to_plot, useA4() );
                 break;
 
+            default:
             case PLOT_FORMAT_GERBER:
                 m_Parent->Genere_GERBER( FullFileName, layer_to_plot, s_PlotOriginIsAuxAxis );
                 break;

@@ -258,7 +258,7 @@ public:
     void                        Genere_GERBER( const wxString& FullFileName, int Layer,
                                                bool PlotOriginIsAuxAxis );
     void                        Genere_HPGL( const wxString& FullFileName, int Layer );
-    void                        Genere_PS( const wxString& FullFileName, int Layer );
+    void                        Genere_PS( const wxString& FullFileName, int Layer, bool useA4 );
     void                        Plot_Layer_HPGL( FILE* File, int masque_layer,
                                                  int garde, int tracevia, int modetrace );
     void                        Plot_Layer_GERBER( FILE* File, int masque_layer,
@@ -413,13 +413,13 @@ public:
      */
     void                ImportSpecctraDesign( wxCommandEvent& event );
 
-	/**
+    /**
      * Function Access_to_External_Tool
-	 * Run an external tool (like freeroute )
-	*/
-	void Access_to_External_Tool( wxCommandEvent& event );
+     * Run an external tool (like freeroute )
+    */
+    void Access_to_External_Tool( wxCommandEvent& event );
 
-	/* Fonctions specifiques */
+    /* Fonctions specifiques */
     MODULE*             ListAndSelectModuleName();
     void                Liste_Equipot( wxCommandEvent& event );
     void                Swap_Layers( wxCommandEvent& event );

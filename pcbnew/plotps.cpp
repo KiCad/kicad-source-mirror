@@ -25,7 +25,7 @@ const int            DRILL_MARK = 1;
 
 
 /****************************************************************************/
-void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer )
+void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer, bool useA4 )
 /****************************************************************************/
 
 /* Genere un fichier POSTSCRIPT (*.ps) de trace du circuit, couche layer
@@ -59,6 +59,7 @@ void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer )
 
     if( g_PlotScaleOpt != 1 )
         Center = TRUE; // Echelle != 1 donc trace centree du PCB
+
     modetrace    = Plot_Mode;
     scale_format = 1.0;
 
@@ -69,7 +70,8 @@ void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer )
     // calcul en unites internes des dimensions des feuilles ( connues en 1/1000 pouce )
     PcbSheetSize.x = currentsheet->m_Size.x * U_PCB;
     PcbSheetSize.y = currentsheet->m_Size.y * U_PCB;
-    if( g_ForcePlotPS_On_A4 )
+
+    if( useA4 )
     {
         SheetPS      = &g_Sheet_A4;
         PaperSize.x  = g_Sheet_A4.m_Size.x * U_PCB;
@@ -168,9 +170,9 @@ void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer )
         SetColorMapPS( WHITE );
     }
 
-	// Specify that the contents of the "Edges Pcb" layer are to be plotted
-	// in addition to the contents of the currently specified layer.
-	int layer_mask = g_TabOneLayerMask[Layer] | EDGE_LAYER;
+    // Specify that the contents of the "Edges Pcb" layer are to be plotted
+    // in addition to the contents of the currently specified layer.
+    int layer_mask = g_TabOneLayerMask[Layer] | EDGE_LAYER;
 
     switch( Layer )
     {
@@ -464,7 +466,7 @@ static void PrintDrillMark( BOARD* Pcb )
         if( g_DrillShapeOpt == DRILL_MARK )
             diam.x = diam.y = SMALL_DRILL;
         else
-			diam.x = diam.y = pts->GetDrillValue();
+            diam.x = diam.y = pts->GetDrillValue();
 
         trace_1_pastille_RONDE_POST( pos, diam.x, FILLED );
     }
@@ -573,7 +575,7 @@ void trace_1_pastille_RONDE_POST( wxPoint centre, int diametre, int modetrace )
 
     if( modetrace == FILLED )
     {
-		SetCurrentLineWidthPS(0);
+        SetCurrentLineWidthPS(0);
         rayon = diam.x / 2;
         if( rayon < 1 )
             rayon = 1;
@@ -588,7 +590,7 @@ void trace_1_pastille_RONDE_POST( wxPoint centre, int diametre, int modetrace )
             rayon = 1;
         if( rayon < w )
             w = rayon;
-		SetCurrentLineWidthPS(w);
+        SetCurrentLineWidthPS(w);
         fprintf( dest, "newpath %d %d %d 0 360 arc stroke\n",
                  centre.x, centre.y, rayon );
     }

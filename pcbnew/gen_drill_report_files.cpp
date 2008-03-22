@@ -158,7 +158,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName, w
 
     TextWidth = 50;     // Set Drill Symbols width in 1/10000 mils
 
-    if( format == PLOT_FORMAT_POST )
+    if( IsPostScript( format ) )
     {
         sprintf( line, "%d setlinewidth\n", TextWidth );
         fputs( line, aFile );
@@ -429,7 +429,7 @@ void PlotDrillSymbol( const wxPoint& position, int diametre, int aShapeId, int f
 
     x0 = position.x; y0 = position.y;
     FctPlume = Move_Plume_HPGL;
-    if( format == PLOT_FORMAT_POST )
+    if( IsPostScript( format ) )
         FctPlume = LineTo_PS;
 
     switch( aShapeId )
@@ -444,7 +444,7 @@ void PlotDrillSymbol( const wxPoint& position, int diametre, int aShapeId, int f
     case 1:     /* Cercle */
         if( format == PLOT_FORMAT_HPGL )
             trace_1_pastille_RONDE_HPGL( wxPoint( x0, y0 ), diametre, FILAIRE );
-        if( format == PLOT_FORMAT_POST )
+        if( IsPostScript( format ) )
             trace_1_pastille_RONDE_POST( wxPoint( x0, y0 ), diametre, FILAIRE );
         break;
 
@@ -462,7 +462,7 @@ void PlotDrillSymbol( const wxPoint& position, int diametre, int aShapeId, int f
         FctPlume( wxPoint( x0 - rayon, y0 + rayon ), 'D' );
         if( format == PLOT_FORMAT_HPGL )
             trace_1_pastille_RONDE_HPGL( wxPoint( x0, y0 ), diametre, FILAIRE );
-        if( format == PLOT_FORMAT_POST )
+        if( IsPostScript( format ) )
             trace_1_pastille_RONDE_POST( wxPoint( x0, y0 ), diametre, FILAIRE );
         break;
 
@@ -471,7 +471,7 @@ void PlotDrillSymbol( const wxPoint& position, int diametre, int aShapeId, int f
         FctPlume( wxPoint( x0 + rayon, y0 ), 'D' );
         if( format == PLOT_FORMAT_HPGL )
             trace_1_pastille_RONDE_HPGL( wxPoint( x0, y0 ), diametre, FILAIRE );
-        if( format == PLOT_FORMAT_POST )
+        if( IsPostScript( format ) )
             trace_1_pastille_RONDE_POST( wxPoint( x0, y0 ), diametre, FILAIRE );
         break;
 
@@ -480,7 +480,7 @@ void PlotDrillSymbol( const wxPoint& position, int diametre, int aShapeId, int f
         FctPlume( wxPoint( x0, y0 + rayon ), 'D' );
         if( format == PLOT_FORMAT_HPGL )
             trace_1_pastille_RONDE_HPGL( wxPoint( x0, y0 ), diametre, FILAIRE );
-        if( format == PLOT_FORMAT_POST )
+        if( IsPostScript( format ) )
             trace_1_pastille_RONDE_POST( wxPoint( x0, y0 ), diametre, FILAIRE );
         break;
 
@@ -489,7 +489,7 @@ void PlotDrillSymbol( const wxPoint& position, int diametre, int aShapeId, int f
             trace_1_pad_TRAPEZE_HPGL( wxPoint( x0, y0 ), wxSize( rayon, rayon ), wxSize( 0,
                                                                                          0 ), 0,
                                       FILAIRE );
-        if( format == PLOT_FORMAT_POST )
+        if( IsPostScript( format ) )
             trace_1_pad_TRAPEZE_POST( wxPoint( x0, y0 ), wxSize( rayon, rayon ), wxSize( 0,
                                                                                          0 ), 0,
                                       FILAIRE );
@@ -500,7 +500,7 @@ void PlotDrillSymbol( const wxPoint& position, int diametre, int aShapeId, int f
             trace_1_pad_TRAPEZE_HPGL( wxPoint( x0, y0 ), wxSize( rayon, rayon ), wxSize( 0,
                                                                                          0 ), 450,
                                       FILAIRE );
-        if( format == PLOT_FORMAT_POST )
+        if( IsPostScript( format ) )
             trace_1_pad_TRAPEZE_POST( wxPoint( x0, y0 ), wxSize( rayon, rayon ), wxSize( 0,
                                                                                          0 ), 450,
                                       FILAIRE );
@@ -515,7 +515,7 @@ void PlotDrillSymbol( const wxPoint& position, int diametre, int aShapeId, int f
             trace_1_pad_TRAPEZE_HPGL( wxPoint( x0, y0 ), wxSize( rayon, rayon ), wxSize( 0,
                                                                                          0 ), 0,
                                       FILAIRE );
-        if( format == PLOT_FORMAT_POST )
+        if( IsPostScript( format ) )
             trace_1_pad_TRAPEZE_POST( wxPoint( x0, y0 ), wxSize( rayon, rayon ), wxSize( 0,
                                                                                          0 ), 0,
                                       FILAIRE );
@@ -530,7 +530,7 @@ void PlotDrillSymbol( const wxPoint& position, int diametre, int aShapeId, int f
             trace_1_pad_TRAPEZE_HPGL( wxPoint( x0, y0 ), wxSize( rayon, rayon ), wxSize( 0,
                                                                                          0 ), 450,
                                       FILAIRE );
-        if( format == PLOT_FORMAT_POST )
+        if( IsPostScript( format ) )
             trace_1_pad_TRAPEZE_POST( wxPoint( x0, y0 ), wxSize( rayon, rayon ), wxSize( 0,
                                                                                          0 ), 450,
                                       FILAIRE );
@@ -543,7 +543,7 @@ void PlotDrillSymbol( const wxPoint& position, int diametre, int aShapeId, int f
             trace_1_pad_TRAPEZE_HPGL( wxPoint( x0, y0 ), wxSize( rayon, rayon ), wxSize( 0,
                                                                                          0 ), 0,
                                       FILAIRE );
-        if( format == PLOT_FORMAT_POST )
+        if( IsPostScript( format ) )
             trace_1_pad_TRAPEZE_POST( wxPoint( x0, y0 ), wxSize( rayon, rayon ), wxSize( 0,
                                                                                          0 ), 0,
                                       FILAIRE );
@@ -556,7 +556,7 @@ void PlotDrillSymbol( const wxPoint& position, int diametre, int aShapeId, int f
             trace_1_pad_TRAPEZE_HPGL( wxPoint( x0, y0 ), wxSize( rayon, rayon ), wxSize( 0,
                                                                                          0 ), 450,
                                       FILAIRE );
-        if( format == PLOT_FORMAT_POST )
+        if( IsPostScript( format ) )
             trace_1_pad_TRAPEZE_POST( wxPoint( x0, y0 ), wxSize( rayon, rayon ), wxSize( 0,
                                                                                          0 ), 450,
                                       FILAIRE );
@@ -569,7 +569,7 @@ void PlotDrillSymbol( const wxPoint& position, int diametre, int aShapeId, int f
             trace_1_pad_TRAPEZE_HPGL( wxPoint( x0, y0 ), wxSize( rayon, rayon ), wxSize( 0,
                                                                                          0 ), 450,
                                       FILAIRE );
-        if( format == PLOT_FORMAT_POST )
+        if( IsPostScript( format ) )
             trace_1_pad_TRAPEZE_POST( wxPoint( x0, y0 ), wxSize( rayon, rayon ), wxSize( 0,
                                                                                          0 ), 450,
                                       FILAIRE );
@@ -578,7 +578,7 @@ void PlotDrillSymbol( const wxPoint& position, int diametre, int aShapeId, int f
     default:
         if( format == PLOT_FORMAT_HPGL )
             trace_1_pastille_RONDE_HPGL( wxPoint( x0, y0 ), diametre, FILAIRE );
-        if( format == PLOT_FORMAT_POST )
+        if( IsPostScript( format ) )
             trace_1_pastille_RONDE_POST( wxPoint( x0, y0 ), diametre, FILAIRE );
         break;
     }
@@ -654,21 +654,21 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb, const wxString& aBoardFilenam
         TotalHoleCount = 0;
 
         if( gen_through_holes )
-		{
+        {
             sprintf( line, "Drill report for through holes :\n" );
-		}
+        }
         else
-		{
-			if ( layer1 == COPPER_LAYER_N )	// First partial hole list
-			{
-				sprintf( line, "Drill report for buried and blind vias :\n\n");
-				fputs( line, aFile );
-			}
-				
+        {
+            if ( layer1 == COPPER_LAYER_N )	// First partial hole list
+            {
+                sprintf( line, "Drill report for buried and blind vias :\n\n");
+                fputs( line, aFile );
+            }
+
             sprintf( line, "Drill report for holes from layer %s to layer %s\n",
-			CONV_TO_UTF8 (aPcb->GetLayerName(layer1) ),
-			CONV_TO_UTF8 (aPcb->GetLayerName(layer2) ) );
-		}
+            CONV_TO_UTF8 (aPcb->GetLayerName(layer1) ),
+            CONV_TO_UTF8 (aPcb->GetLayerName(layer2) ) );
+        }
 
         fputs( line, aFile );
 

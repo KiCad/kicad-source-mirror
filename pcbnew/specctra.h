@@ -2707,6 +2707,10 @@ public:
 };
 
 
+/**
+ * Class CLASS
+ * corresponds to the &lt;class_descriptor&gt; in the specctra spec.
+ */
 class CLASS : public ELEM
 {
     friend class SPECCTRA_DB;

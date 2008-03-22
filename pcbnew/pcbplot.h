@@ -1,6 +1,6 @@
-		/************/
-		/* pcbplot.h*/
-		/************/
+        /************/
+        /* pcbplot.h*/
+        /************/
 
 #ifndef PCBPLOT_H
 #define PCBPLOT_H
@@ -60,9 +60,9 @@ eda_global bool PlotPadsOnSilkLayer	/* Plot pads sur couche serigraphie */
 #endif
 ;
 eda_global bool Plot_Pads_All_Layers;	/* Plot pads meme n'appartenant pas a la
-										couche ( utile pour serigraphie) */
+                                        couche ( utile pour serigraphie) */
 
-	/* Variables utiles */
+    /* Variables utiles */
 
 eda_global FILE * dest;
 
@@ -90,19 +90,18 @@ eda_global wxPoint g_PlotOffset;	/* Offset de trace modifies par l'echelle */
 eda_global int nb_plot_erreur ;
 eda_global int nb_items;		/* utilise pour decompter les objets traces */
 eda_global int g_PlotLine_Width; /* Largeur du trait en mode filaire (utilise en serigraphie,
-							 pour traces en mode sketch et filaire) */
+                             pour traces en mode sketch et filaire) */
 eda_global int format_plot;  /* numero de code du format de sortie  */
 eda_global int g_PlotOrient;  /* numero de code de l'orientation du trace ( voir
-							defines precedents):
-							0 = normal
-							PLOT_MIROIR = MIROIR
-							*/
+                            defines precedents):
+                            0 = normal
+                            PLOT_MIROIR = MIROIR
+                            */
 eda_global int g_PlotScaleOpt		// 0 = automatique, >=1 echelle specifiee
 #ifdef MAIN
 = 1
 #endif
 ;
-eda_global bool g_ForcePlotPS_On_A4;	// Force la selection de la feuille A4 pour le plot POSTSCRIPT
 
 eda_global int g_DrillShapeOpt
 #ifdef MAIN
@@ -111,9 +110,9 @@ eda_global int g_DrillShapeOpt
 ;
 
 
-	/*************************************/
-	/* Constantes utiles en trace GERBER */
-	/*************************************/
+    /*************************************/
+    /* Constantes utiles en trace GERBER */
+    /*************************************/
 
 /* codes de type de forme d'outils */
 #define GERB_CIRCLE 1
@@ -123,34 +122,34 @@ eda_global int g_DrillShapeOpt
 #define GERB_DONUT 5
 
 /* liste des D_CODES en fonction de leur numero d'ordre (numero d'outil)
-	(l'ordre 0 n'est pas utilise) ;
-	Tools have D_CODES >= 10
-	D_CODES <= 9 are used for commands only:
-		D01 ... D9 = command codes for photo plotting:
-		D01			= Light on
-		D02			= Light off
-		D03			= Flash
-		D04 .. D08	= ?
-		D09			= VAPE Flash
+    (l'ordre 0 n'est pas utilise) ;
+    Tools have D_CODES >= 10
+    D_CODES <= 9 are used for commands only:
+        D01 ... D9 = command codes for photo plotting:
+        D01			= Light on
+        D02			= Light off
+        D03			= Flash
+        D04 .. D08	= ?
+        D09			= VAPE Flash
 */
 
 
-	/* Routines generales de trace : */
+    /* Routines generales de trace : */
 
 
 /* PLOT_RTN.CC */
 void PlotTextePcb( TEXTE_PCB * pt_texte,int format_plot,int masque_layer);
-		/* Trace 1 Texte type PCB , c.a.d autre que les textes sur modules,
-		prepare les parametres de trace de Plot_1_texte */
+        /* Trace 1 Texte type PCB , c.a.d autre que les textes sur modules,
+        prepare les parametres de trace de Plot_1_texte */
 void PlotArc(int format_plot, wxPoint centre, int start_angle,int end_angle,
-					int rayon,int width);
+                    int rayon,int width);
 void PlotCircle(int format_plot,int width, wxPoint centre, int rayon);
 void PlotPolygon(int format_plot, bool filled, int nbpoints, int * coord);
 void Plot_1_texte( int format_plot,
-						const wxString & Text, int t_orient,
-						int width, int ox,int oy,int size_h,int size_v,
-						bool centreX = TRUE, bool centreY = TRUE);
-			/* Routine de base de trace de 1 chaine de caracteres */
+                        const wxString & Text, int t_orient,
+                        int width, int ox,int oy,int size_h,int size_v,
+                        bool centreX = TRUE, bool centreY = TRUE);
+            /* Routine de base de trace de 1 chaine de caracteres */
 
 void PlotDrawSegment( DRAWSEGMENT* PtSegm, int format_plot,int masque_layer );
 
@@ -165,17 +164,17 @@ void PlotGERBERLine(wxPoint start, wxPoint end, int hauteur);
 void PlotCircle_GERBER( wxPoint centre, int rayon, int width);
 void PlotPolygon_GERBER(int nb_segm, int * coord, bool fill);
 void trace_1_contour_GERBER(wxPoint pos, wxSize size, wxSize delta,
-										int penwidth, int orient);
-	/* Trace 1 contour rectangulaire ou trapezoidal d'orientation quelconque
-		 donne par son centre, ses dimensions,
-		 ses variations, l'epaisseur du trait et son orientation orient */
+                                        int penwidth, int orient);
+    /* Trace 1 contour rectangulaire ou trapezoidal d'orientation quelconque
+         donne par son centre, ses dimensions,
+         ses variations, l'epaisseur du trait et son orientation orient */
 
 /* PLOTHPGL.CC */
 void trace_1_segment_HPGL(int pos_X0,int pos_Y0,int pos_X1,int pos_Y1,
-							int hauteur);
+                            int hauteur);
 
 void trace_1_pad_TRAPEZE_HPGL(wxPoint padpos, wxSize size,wxSize delta,
-						int orient,int modetrace);
+                        int orient,int modetrace);
 
 void trace_1_pastille_RONDE_HPGL(wxPoint padpos, int diametre,int modetrace) ;
 void trace_1_pastille_OVALE_HPGL(wxPoint padpos, wxSize size, int orient, int modetrace);
@@ -187,11 +186,11 @@ void PlotRectangularPad_HPGL(wxPoint padpos, wxSize padsize, int orient,int mode
 void trace_1_pastille_OVALE_POST(wxPoint centre, wxSize size, int orient, int modetrace);
 void trace_1_pastille_RONDE_POST(wxPoint centre, int diametre, int modetrace);
 void trace_1_pad_rectangulaire_POST(wxPoint centre, wxSize size,int orient,
-										int modetrace);
+                                        int modetrace);
 void trace_1_contour_POST(wxPoint centre, wxSize size, wxSize delta,
-										int dim_trait, int orient);
+                                        int dim_trait, int orient);
 void trace_1_pad_TRAPEZE_POST(wxPoint centre, wxSize size, wxSize delta,
-							int orient,int modetrace);
+                            int orient,int modetrace);
 
 
 #endif	/* #define PCBPLOT_H */

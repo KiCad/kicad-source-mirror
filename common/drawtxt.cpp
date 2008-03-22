@@ -62,7 +62,7 @@ void DrawGraphicText( WinEDA_DrawPanel* panel, wxDC* DC,
         width = -width;
         sketch_mode = TRUE;
     }
-    kk = 0; 
+    kk = 0;
     ptr = 0;   /* ptr = text index */
 
     nbchar = Text.Len();
@@ -70,7 +70,7 @@ void DrawGraphicText( WinEDA_DrawPanel* panel, wxDC* DC,
         return;
 
     espacement = (10 * size_h ) / 9;    // this is the pitch between chars
-    ox = cX = Pos.x; 
+    ox = cX = Pos.x;
     oy = cY = Pos.y;
 
     /* Do not draw the text if out of draw area! */
@@ -79,15 +79,15 @@ void DrawGraphicText( WinEDA_DrawPanel* panel, wxDC* DC,
         int xm, ym, ll, xc, yc;
         int textsize = ABS( espacement );
         ll = (textsize * nbchar) / zoom;
-        
+
         xc = GRMapX( cX );
         yc = GRMapY( cY );
-        
+
         x0 = panel->m_ClipBox.GetX() - ll;
         y0 = panel->m_ClipBox.GetY() - ll;
         xm = panel->m_ClipBox.GetRight() + ll;
         ym = panel->m_ClipBox.GetBottom() + ll;
-        
+
         if( xc < x0 )
             return;
         if( yc < y0 )
@@ -165,10 +165,10 @@ void DrawGraphicText( WinEDA_DrawPanel* panel, wxDC* DC,
             break;
         }
     }
-    
-    cX += ux0; 
+
+    cX += ux0;
     cY += uy0;
-    
+
     ox = cX - dx;
     oy = cY + dy;
 
@@ -180,15 +180,15 @@ void DrawGraphicText( WinEDA_DrawPanel* panel, wxDC* DC,
         dx = (espacement * nbchar) / 2;
         dy = size_v / 2;                /* Decalage du debut du texte / centre */
 
-        ux0 = cX - dx; 
+        ux0 = cX - dx;
         uy0 = cY;
-        
-        dx += cX; 
+
+        dx += cX;
         dy = cY;
-        
+
         RotatePoint( &ux0, &uy0, cX, cY, orient );
         RotatePoint( &dx, &dy, cX, cY, orient );
-        
+
         GRLine( &panel->m_ClipBox, DC, ux0, uy0, dx, dy, width, gcolor );
 
         return;
@@ -197,21 +197,21 @@ void DrawGraphicText( WinEDA_DrawPanel* panel, wxDC* DC,
 #if 0
     dx  = (espacement * nbchar) / 2;
     dy  = size_v / 2;/* Decalage du debut du texte / centre */
-    
-    ux0 = cX - dx; 
+
+    ux0 = cX - dx;
     uy0 = cY;
-    
-    dx += cX; 
+
+    dx += cX;
     dy = cY;
-    
+
     RotatePoint( &ux0, &uy0, cX, cY, orient );
     RotatePoint( &dx, &dy, cX, cY, orient );
-    
+
     DC->SetTextForeground( wxColour(
                               ColorRefs[gcolor].r,
                               ColorRefs[gcolor].g,
                               ColorRefs[gcolor].b ) );
-    
+
     DC->DrawRotatedText( Text, GRMapX( ux0 ), GRMapY( uy0 ), (double) orient / 10.0 );
     return;
 #endif
@@ -256,24 +256,24 @@ void DrawGraphicText( WinEDA_DrawPanel* panel, wxDC* DC,
                 break;
 
             case 'D':
-                plume = f_cod; 
+                plume = f_cod;
                 break;
 
             default:
                 {
                     k1 = f_cod;     /* trace sur axe V */
                     k1 = -( (k1 * size_v) / 9 );
-                    
+
                     ptcar++;
                     f_cod = *ptcar;
-                    
+
                     k2    = f_cod;  /* trace sur axe H */
                     k2    = (k2 * size_h) / 9;
                     dx    = k2 + ox; dy = k1 + oy;
-                    
+
                     RotatePoint( &dx, &dy, cX, cY, orient );
                     coord[ii++] = dx;
-                    coord[ii++] = dy; 
+                    coord[ii++] = dy;
                     break;
                 }
             }
@@ -326,7 +326,7 @@ void PlotGraphicText( int format_plot, const wxPoint& Pos, int gcolor,
         return;
     }
 
-    if( (gcolor >= 0) && (format_plot == PLOT_FORMAT_POST) )
+    if( gcolor >= 0 &&  IsPostScript( format_plot ) )
         SetColorMapPS( gcolor );
 
     size_h = Size.x;
@@ -336,14 +336,14 @@ void PlotGraphicText( int format_plot, const wxPoint& Pos, int gcolor,
     if( size_v == 0 )
         size_v = DEFAULT_SIZE_TEXT;
 
-    kk = 0; 
+    kk = 0;
     ptr = 0; /* ptr = text index */
 
     /* calcul de la position du debut des textes: ox et oy */
     nbchar = Text.Len();
 
     espacement = (10 * size_h ) / 9;
-    ox = cX = Pos.x; 
+    ox = cX = Pos.x;
     oy = cY = Pos.y;
 
     /* Calcul du cadrage du texte */
@@ -412,11 +412,11 @@ void PlotGraphicText( int format_plot, const wxPoint& Pos, int gcolor,
             break;
         }
     }
-    
-    cX += ux0; 
+
+    cX += ux0;
     cY += uy0;   /* cX, cY = coord du centre du texte */
-    
-    ox  = -dx; 
+
+    ox  = -dx;
     oy = +dy;    /* ox, oy = coord debut texte, relativement au centre */
 
     FctPlume( wxPoint( 0, 0 ), 'Z' );
@@ -446,17 +446,17 @@ void PlotGraphicText( int format_plot, const wxPoint& Pos, int gcolor,
                 k1 = -(k1 * size_v) / 9;
                 ptcar++;
                 f_cod = *ptcar;
-                
+
                 k2    = f_cod;  /* trace sur axe H */
                 k2    = (k2 * size_h) / 9;
-                
-                dx    = k2 + ox; 
+
+                dx    = k2 + ox;
                 dy = k1 + oy;
-                
+
                 RotatePoint( &dx, &dy, orient );
                 FctPlume( wxPoint( cX + dx, cY + dy ), plume );
-                
-                x0 = k2; 
+
+                x0 = k2;
                 y0 = k1;
                 break;
             }

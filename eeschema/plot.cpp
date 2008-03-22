@@ -54,7 +54,6 @@ void Move_Plume( wxPoint pos, int plume )
         break;
 
     case PLOT_FORMAT_POST:
-    case PLOT_FORMAT_POST_A4:
         LineTo_PS( pos, plume );
         break;
     }
@@ -69,7 +68,6 @@ void SetCurrentLineWidth( int width )
         break;
 
     case PLOT_FORMAT_POST:
-    case PLOT_FORMAT_POST_A4:
         SetCurrentLineWidthPS( width );
         break;
     }

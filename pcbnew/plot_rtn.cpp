@@ -33,7 +33,6 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
     wxPoint         pos, shape_pos;
     wxSize          size;
     bool            trace_val, trace_ref;
-    MODULE*         Module;
     D_PAD*          pt_pad;
     TEXTE_MODULE*   pt_texte;
     EDA_BaseStruct* PtStruct;
@@ -87,8 +86,8 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
     {
         nb_items = 0;
         Affiche_1_Parametre( this, 56, wxT( "Pads" ), wxEmptyString, GREEN );
-        Module = m_Pcb->m_Modules;
-        for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+
+        for( MODULE* Module = m_Pcb->m_Modules;  Module;  Module = Module->Next() )
         {
             pt_pad = (D_PAD*) Module->m_Pads;
             for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
@@ -121,7 +120,6 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
                         trace_1_pastille_RONDE_POST( pos, size.x, FILAIRE );
                         break;
                     }
-
                     break;
 
                 case PAD_OVAL:
@@ -144,7 +142,6 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
                                                      pt_pad->m_Orient, FILAIRE );
                         break;
                     }
-
                     break;
 
                 case PAD_TRAPEZOID:
@@ -172,7 +169,6 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
                                                   FILAIRE );
                         break;
                     }
-
                     break;
                 }
 
@@ -196,7 +192,6 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
                                                         (int) pt_pad->m_Orient, FILAIRE );
                         break;
                     }
-
                     break;
                 }
 
@@ -209,8 +204,7 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
     /* Trace Textes MODULES */
     nb_items = 0; Affiche_1_Parametre( this, 64, wxT( "TxtMod" ), wxEmptyString, LIGHTBLUE );
 
-    Module = m_Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( MODULE* Module = m_Pcb->m_Modules;  Module;  Module = Module->Next() )
     {
         /* Analyse des autorisations de trace pour les textes VALEUR et REF */
         trace_val = Sel_Texte_Valeur;
@@ -831,7 +825,7 @@ void PlotArc( int format_plot, wxPoint centre, int start_angle, int end_angle,
     if( Plot_Mode == FILAIRE )
         epaisseur = g_PlotLine_Width;
 
-    if( format_plot == PLOT_FORMAT_POST )
+    if( IsPostScript( format_plot ) )
     {
         PlotArcPS( centre, start_angle, end_angle, rayon, epaisseur );
         return;
