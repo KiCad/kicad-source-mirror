@@ -46,7 +46,7 @@ class wxBoxSizer;
 #define ID_PLOT_PS_CURRENT_EXECUTE 10003
 #define ID_PLOT_PS_ALL_EXECUTE 10004
 #define ID_TEXTCTRL 10006
-#define SYMBOL_WINEDA_PLOTPSFRAME_STYLE wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|MAYBE_RESIZE_BORDER
+#define SYMBOL_WINEDA_PLOTPSFRAME_STYLE wxDEFAULT_DIALOG_STYLE|wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|wxTAB_TRAVERSAL|MAYBE_RESIZE_BORDER
 #define SYMBOL_WINEDA_PLOTPSFRAME_TITLE _("EESchema Plot PS")
 #define SYMBOL_WINEDA_PLOTPSFRAME_IDNAME ID_DIALOG
 #define SYMBOL_WINEDA_PLOTPSFRAME_SIZE wxSize(400, 300)
@@ -83,14 +83,17 @@ public:
 
 ////@begin WinEDA_PlotPSFrame event handler declarations
 
+    /// wxEVT_INIT_DIALOG event handler for ID_DIALOG
+    void OnInitDialog( wxInitDialogEvent& event );
+
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_PLOT_PS_CURRENT_EXECUTE
     void OnPlotPsCurrentExecuteClick( wxCommandEvent& event );
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_PLOT_PS_ALL_EXECUTE
     void OnPlotPsAllExecuteClick( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CLOSE
-    void OnCloseClick( wxCommandEvent& event );
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
+    void OnCancelClick( wxCommandEvent& event );
 
 ////@end WinEDA_PlotPSFrame event handler declarations
 
