@@ -63,8 +63,6 @@ void SetCurrentLineWidthPS( int width )
 /* Set the Current line width (in 1/1000 inch) for the next plot
  */
 {
-    D(printf( "PlotOutputFile = %p\n", PlotOutputFile );)
-
     int pen_width;
 
     if( width > 0 )
@@ -90,8 +88,6 @@ void SetColorMapPS( int color )
  * color = color index in ColorRefs[]
  */
 {
-    D(printf( "PlotOutputFile = %p\n", PlotOutputFile );)
-
     char Line[1024];
 
     sprintf( Line, "%.3f %.3f %.3f setrgbcolor\n",
@@ -110,8 +106,6 @@ void PlotFilledSegmentPS( wxPoint start, wxPoint end, int width )
 /* Plot 1 segment like a track segment
  */
 {
-    D(printf( "PlotOutputFile = %p\n", PlotOutputFile );)
-
     UserToDeviceCoordinate( start );
     UserToDeviceCoordinate( end );
 
@@ -124,8 +118,6 @@ void PlotFilledSegmentPS( wxPoint start, wxPoint end, int width )
 void PlotCircle_PS( wxPoint pos, int diametre, int width )
 /******************************************************/
 {
-    D(printf( "PlotOutputFile = %p\n", PlotOutputFile );)
-
     int  rayon;
     char Line[256];
 
@@ -149,8 +141,6 @@ void PlotArcPS( wxPoint centre, int StAngle, int EndAngle, int rayon, int width 
  * StAngle, EndAngle = start and end arc in 0.1 degree
  */
 {
-    D(printf( "PlotOutputFile = %p\n", PlotOutputFile );)
-
     char Line[256];
 
     if( rayon <= 0 )
@@ -185,8 +175,6 @@ void PlotPolyPS( int nb_segm, int* coord, int fill, int width )
  * @param  width = line width
  */
 {
-    D(printf( "PlotOutputFile = %p\n", PlotOutputFile );)
-
     int     ii;
     wxPoint pos;
 
@@ -224,8 +212,6 @@ void LineTo_PS( wxPoint pos, int plume )
 /* Routine to draw to a new position
  */
 {
-    D(printf( "PlotOutputFile = %p\n", PlotOutputFile );)
-
     if( plume == 'Z' )
         return;
 
@@ -288,9 +274,6 @@ void PrintHeaderPS( FILE* file, const wxString& Creator,
     time_t       time1970 = time( NULL );
 
     PlotOutputFile = file;
-
-    D(printf( "PrintHeaderPS PlotOutputFile = %p\n", PlotOutputFile );)
-
 
     fputs( "%!PS-Adobe-3.0\n", PlotOutputFile );    // Print header
 
@@ -398,8 +381,6 @@ void PrintHeaderPS( FILE* file, const wxString& Creator,
 bool CloseFilePS( FILE* plot_file )
 /******************************************/
 {
-    D(printf( "CloseFilePS\n" );)
-
     fputs( "showpage\n", plot_file );
     fputs( "grestore\n", plot_file );
     fputs( "%%EOF\n", plot_file );
