@@ -89,6 +89,7 @@ eda_global FILE*     lib_module;
 
 /* nom des fichiers a traiter */
 eda_global wxString  FFileName;
+eda_global wxString  NetNameBuffer;
 
 /* Types de netliste: */
 #define TYPE_NON_SPECIFIE  0
