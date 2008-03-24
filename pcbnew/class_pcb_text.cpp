@@ -93,6 +93,9 @@ int TEXTE_PCB::ReadTextePcbDescr( FILE* File, int* LineNum )
             sscanf( Line + 2, " %d %d %d %d %d %d",
                     &m_Pos.x, &m_Pos.y, &m_Size.x, &m_Size.y,
                     &m_Width, &m_Orient );
+            // Ensure the text has minimal size to see this text on screen:
+            if ( m_Size.x < 5 ) m_Size.x = 5;
+            if ( m_Size.y < 5 ) m_Size.y = 5;
             continue;
         }
         if( strncmp( Line, "De", 2 ) == 0 )

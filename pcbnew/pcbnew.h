@@ -27,7 +27,11 @@
 #define END   1
 
 #define DIM_ANCRE_MODULE 3  /* Anchor size (footprint centre) */
-#define DIM_ANCRE_TEXTE  2  /* nchor size (Text centre) */
+#define DIM_ANCRE_TEXTE  2  /* Anchor size (Text centre) */
+
+#define TEXTS_MIN_SIZE 50   // Min size in pcbnew units value (50 * 0.0001 mils)
+#define TEXTS_MAX_SIZE 100000   // Min size in pcbnew units value (1 inch) )
+#define TEXTS_MAX_WIDTH 5000   // Max width in pcbnew units value (0.5 inches)
 
 /* Used in Zoom menu */
 #define ZOOM_PLUS   -1

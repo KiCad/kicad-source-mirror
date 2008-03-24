@@ -23,8 +23,6 @@
 #include "3d_struct.h"
 #include "protos.h"
 
-#define MAX_WIDTH 10000     // Epaisseur (en 1/10000 ") max raisonnable des traits, textes...
-
 /*********************************************************************************/
 void MODULE::DrawAncre( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                         int dim_ancre, int draw_mode )
@@ -738,11 +736,16 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
             ReadDelimitedText( BufLine, Line, sizeof(BufLine) );
             DrawText->m_Text = CONV_FROM_UTF8( BufLine );
 
-            // Controle d'epaisseur raisonnable:
+            // Test for a reasonnable width:
             if( DrawText->m_Width <= 1 )
                 DrawText->m_Width = 1;
-            if( DrawText->m_Width > MAX_WIDTH )
-                DrawText->m_Width = MAX_WIDTH;
+            if( DrawText->m_Width > TEXTS_MAX_WIDTH )
+                DrawText->m_Width = TEXTS_MAX_WIDTH;
+            // Test for a reasonnable size:
+            if ( DrawText->m_Size.x < TEXTS_MIN_SIZE )
+                DrawText->m_Size.x = TEXTS_MIN_SIZE;
+            if ( DrawText->m_Size.y < TEXTS_MIN_SIZE )
+                DrawText->m_Size.y = TEXTS_MIN_SIZE;
             break;
 
         case 'D':    /* lecture du contour */

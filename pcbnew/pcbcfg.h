@@ -92,7 +92,7 @@ static PARAM_CFG_INT MicroViaDiametreCfg
     wxT( "MViaDia" ),                               /* Keyword */
     &g_DesignSettings.m_CurrentMicroViaSize,        /* Parameter address */
     200,                                            /* Default value */
-    0, 1000                                       /* Valeurs extremes */
+    0, 1000                                         /* Valeurs extremes */
 );
 
 static PARAM_CFG_INT MicroViaDrillCfg
@@ -100,7 +100,7 @@ static PARAM_CFG_INT MicroViaDrillCfg
     wxT( "MViaDrl" ),                           /* Keyword */
     &g_DesignSettings.m_MicroViaDrill,          /* Parameter address */
     80,                                         /* Default value */
-    0, 800                                     /* Valeurs extremes */
+    0, 800                                      /* Valeurs extremes */
 );
 
 static PARAM_CFG_INT ViaShowHoleCfg
@@ -257,18 +257,18 @@ static PARAM_CFG_BOOL SegmPcb45Cfg  // Force 45 degrees for segments
 
 static PARAM_CFG_INT TextePcbDimVCfg
 (
-    wxT( "TxtPcbV" ),                               /* Keyword */
-    &g_DesignSettings.m_PcbTextSize.y,              /* Parameter address */
-    600,                                            /* Default value */
-    10, 2000                                        /* Valeurs extremes */
+    wxT( "TxtPcbV" ),                                                       /* Keyword */
+    &g_DesignSettings.m_PcbTextSize.y,                                      /* Parameter address */
+    600,                                                                    /* Default value */
+    TEXTS_MIN_SIZE, TEXTS_MAX_SIZE                                          /* Valeurs extremes */
 );
 
 static PARAM_CFG_INT TextePcbDimHCfg
 (
-    wxT( "TxtPcbH" ),                               /* Keyword */
-    &g_DesignSettings.m_PcbTextSize.x,              /* Parameter address */
-    600,                                            /* Default value */
-    10, 2000                                        /* Valeurs extremes */
+    wxT( "TxtPcbH" ),                                                       /* Keyword */
+    &g_DesignSettings.m_PcbTextSize.x,                                      /* Parameter address */
+    600,                                                                    /* Default value */
+    TEXTS_MIN_SIZE, TEXTS_MAX_SIZE                                          /* Valeurs extremes */
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer0Cfg   // CU Layer Color
@@ -553,10 +553,10 @@ static PARAM_CFG_SETCOLOR VisibleTxtModCfg
 
 static PARAM_CFG_INT TexteModDimVCfg
 (
-    wxT( "TxtModV" ),       /* Keyword */
-    &ModuleTextSize.y,      /* Parameter address */
-    500,                    /* Default value */
-    1, 20000                /* Valeurs extremes */
+    wxT( "TxtModV" ),                               /* Keyword */
+    &ModuleTextSize.y,                              /* Parameter address */
+    500,                                            /* Default value */
+    TEXTS_MIN_SIZE, TEXTS_MAX_SIZE                  /* Valeurs extremes */
 );
 
 static PARAM_CFG_INT TexteModDimHCfg
@@ -564,7 +564,7 @@ static PARAM_CFG_INT TexteModDimHCfg
     wxT( "TxtModH" ),               /* Keyword */
     &ModuleTextSize.x,              /* Parameter address */
     500,                            /* Default value */
-    1, 20000                        /* Valeurs extremes */
+    TEXTS_MIN_SIZE, TEXTS_MAX_SIZE  /* Valeurs extremes */
 );
 
 static PARAM_CFG_INT TexteModWidthCfg
@@ -572,7 +572,7 @@ static PARAM_CFG_INT TexteModWidthCfg
     wxT( "TxtModW" ),               /* Keyword */
     &ModuleTextWidth,               /* Parameter address */
     100,                            /* Default value */
-    1, 10000                        /* Valeurs extremes */
+    1, TEXTS_MAX_WIDTH              /* Valeurs extremes */
 );
 
 static PARAM_CFG_SETCOLOR ColorAncreModCfg

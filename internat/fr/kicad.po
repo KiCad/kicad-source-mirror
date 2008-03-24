@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-03-22 20:45+0100\n"
-"PO-Revision-Date: 2008-03-22 21:33+0100\n"
+"POT-Creation-Date: 2008-03-23 20:53+0100\n"
+"PO-Revision-Date: 2008-03-23 21:06+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -156,12 +156,10 @@ msgid "Spot min"
 msgstr "Spot min"
 
 #: pcbnew/pcbplot.cpp:209
-#, fuzzy
 msgid "Pen size"
 msgstr "Diam plume"
 
 #: pcbnew/pcbplot.cpp:214
-#, fuzzy
 msgid "Pen speed (cm/s)"
 msgstr "Vitesse plume (cm/s)"
 
@@ -170,7 +168,6 @@ msgid "Set pen speed in cm/s"
 msgstr "Ajuster Vitesse plume en centimetres par seconde"
 
 #: pcbnew/pcbplot.cpp:220
-#, fuzzy
 msgid "Pen ovr"
 msgstr "Recouvrement"
 
@@ -179,12 +176,10 @@ msgid "Set plot overlay for filling"
 msgstr "Ajuste recouvrement des tracés pour les remplissages"
 
 #: pcbnew/pcbplot.cpp:226
-#, fuzzy
 msgid "Lines width"
 msgstr "Epaiss. lignes"
 
 #: pcbnew/pcbplot.cpp:230
-#, fuzzy
 msgid "Set width for lines in line plot mode"
 msgstr "Ajuster l'épaisseur des traits en Mode tracé filaire"
 
@@ -197,12 +192,10 @@ msgid "Auxiliary axis"
 msgstr "Axe Auxiliaire"
 
 #: pcbnew/pcbplot.cpp:237
-#, fuzzy
 msgid "Plot origin"
 msgstr "Origine des coord de tracé"
 
 #: pcbnew/pcbplot.cpp:257
-#, fuzzy
 msgid "X scale adjust"
 msgstr "Ajustage Echelle X"
 
@@ -211,7 +204,6 @@ msgid "Set X scale adjust for exact scale plotting"
 msgstr "Ajuster échelle X pour traçage à l'échelle exacte"
 
 #: pcbnew/pcbplot.cpp:262
-#, fuzzy
 msgid "Y scale adjust"
 msgstr "Ajustage Echelle Y"
 
@@ -220,12 +212,10 @@ msgid "Set Y scale adjust for exact scale plotting"
 msgstr "Ajuster échelle Y pour traçage à l'échelle exacte"
 
 #: pcbnew/pcbplot.cpp:266
-#, fuzzy
 msgid "Plot negative"
 msgstr "Tracé en Negatif"
 
 #: pcbnew/pcbplot.cpp:276
-#, fuzzy
 msgid "Save Options"
 msgstr "Sauver options"
 
@@ -238,32 +228,26 @@ msgid "Close"
 msgstr "Fermer"
 
 #: pcbnew/pcbplot.cpp:328
-#, fuzzy
 msgid "Exclude Edges_Pcb layer"
 msgstr "Exclure Couche Contours PCB"
 
 #: pcbnew/pcbplot.cpp:332
-#, fuzzy
 msgid "Exclude contents of Edges_Pcb layer from all other layers"
 msgstr "Exclure les tracés contour PCB des autres couches"
 
 #: pcbnew/pcbplot.cpp:338
-#, fuzzy
 msgid "Print sheet ref"
 msgstr "Imprimer cartouche"
 
 #: pcbnew/pcbplot.cpp:348
-#, fuzzy
 msgid "Print pads on silkscreen"
 msgstr "Pads sur Sérigraphie"
 
 #: pcbnew/pcbplot.cpp:353
-#, fuzzy
 msgid "Enable/disable print/plot pads on silkscreen layers"
 msgstr "Active/désactive tracé des pastilles sur les couches de sérigraphie"
 
 #: pcbnew/pcbplot.cpp:357
-#, fuzzy
 msgid "Always print pads"
 msgstr "Toujour tracer pads"
 
@@ -272,47 +256,38 @@ msgid "Force print/plot pads on ALL layers"
 msgstr "Force le tracé des pastilles sur TOUTES les couches"
 
 #: pcbnew/pcbplot.cpp:365
-#, fuzzy
 msgid "Print module value"
 msgstr "Imprimer Valeur Module"
 
 #: pcbnew/pcbplot.cpp:369
-#, fuzzy
 msgid "Enable/disable print/plot module value on silkscreen layers"
 msgstr "Active/désactive le tracé des textes valeurs des modules sur couches de sérigraphie"
 
 #: pcbnew/pcbplot.cpp:372
-#, fuzzy
 msgid "Print module reference"
 msgstr "Imprimer Référence Module"
 
 #: pcbnew/pcbplot.cpp:376
-#, fuzzy
 msgid "Enable/disable print/plot module reference on silkscreen layers"
 msgstr "Active/désactive le tracé des textes référence des modules sur couches de sérigraphie"
 
 #: pcbnew/pcbplot.cpp:380
-#, fuzzy
 msgid "Print other module texts"
 msgstr "Imprimer autres textes  module"
 
 #: pcbnew/pcbplot.cpp:384
-#, fuzzy
 msgid "Enable/disable print/plot module field texts on silkscreen layers"
 msgstr "Active/désactive le tracé des textes des champs des modules sur couches de sérigraphie"
 
 #: pcbnew/pcbplot.cpp:389
-#, fuzzy
 msgid "Force print invisible texts"
 msgstr "Force tracé textes invisibles"
 
 #: pcbnew/pcbplot.cpp:393
-#, fuzzy
 msgid "Force print/plot module invisible texts on silkscreen layers"
 msgstr "Force le tracé des textes invisibles sur couches de sérigraphie"
 
 #: pcbnew/pcbplot.cpp:397
-#, fuzzy
 msgid "No drill mark"
 msgstr "Pas de marque"
 
@@ -321,7 +296,6 @@ msgid "Small mark"
 msgstr "Petite marque"
 
 #: pcbnew/pcbplot.cpp:397
-#, fuzzy
 msgid "Real drill"
 msgstr "Perçage réel"
 
@@ -370,12 +344,10 @@ msgid "Plot Mode"
 msgstr "Mode de Tracé"
 
 #: pcbnew/pcbplot.cpp:425
-#, fuzzy
 msgid "Plot mirror"
 msgstr "Tracé Miroir"
 
 #: pcbnew/pcbplot.cpp:431
-#, fuzzy
 msgid "Vias on mask"
 msgstr "Vias sur masque"
 
@@ -1498,47 +1470,44 @@ msgid "Display Warnings"
 msgstr "Affiche warnings"
 
 #: pcbnew/dialog_netlist.cpp:200
-#, fuzzy
 msgid "Remove Extra Footprints"
-msgstr "Sel et Dépl.t module"
+msgstr "Supprimer empreintes suppl."
 
 #: pcbnew/dialog_netlist.cpp:203
 msgid ""
 "Remove footprints found on the Board but not in netlist\n"
 "Note: only not locked footprints will be removed"
 msgstr ""
+"Supprimer lse empreintes trouvées sur le C.I. mais non en netliste\n"
+"Note: seuls les empreintes non verrouillées seront supprimées"
 
 #: pcbnew/dialog_netlist.cpp:211
-#, fuzzy
 msgid "Browse Netlist Files"
-msgstr "&Examen Fichiers"
+msgstr "Examen Fichiers Netlistes"
 
 #: pcbnew/dialog_netlist.cpp:215
-#, fuzzy
 msgid "Read Current Netlist"
-msgstr "Lire Netliste"
+msgstr "Lire Netliste Courante"
 
 #: pcbnew/dialog_netlist.cpp:219
-#, fuzzy
 msgid "Footprints Test"
-msgstr "Empreinte: "
+msgstr "Test Empreintes"
 
 #: pcbnew/dialog_netlist.cpp:221
 msgid "Read the current neltist file and list missing and extra footprints"
-msgstr ""
+msgstr "Lire la netliste courante et lister les empreintes manquantes et supplémentaires"
 
 #: pcbnew/dialog_netlist.cpp:225
 msgid "Rebuild Board Connectivity"
-msgstr ""
+msgstr "Recalculer les connexions du C.I."
 
 #: pcbnew/dialog_netlist.cpp:227
 msgid "Rebuild the full ratsnest (usefull after a manual pad netname edition)"
-msgstr ""
+msgstr "Recalculer le chevelu complet ( utile après une edition manuelle de nom de net sur pad)"
 
 #: pcbnew/dialog_netlist.cpp:231
-#, fuzzy
 msgid "Netlist File:"
-msgstr "Fichiers Netlist:"
+msgstr "Fichier Netliste:"
 
 #: pcbnew/dialog_netlist.cpp:248
 msgid "&Close"
@@ -3293,9 +3262,8 @@ msgid "Read Netlist "
 msgstr "Lire Netliste"
 
 #: pcbnew/netlist.cpp:347
-#, fuzzy
 msgid "Ok to delete footprints not in netlist ?"
-msgstr "Ok pour effacer la LISTE des filtres de modules"
+msgstr "Ok pour effacer les empreintes non en netliste"
 
 #: pcbnew/netlist.cpp:497
 #, c-format
@@ -4256,7 +4224,7 @@ msgstr "Forme via inconnue: \"%s\""
 
 #: pcbnew/specctra_import.cpp:339
 msgid "Session file is missing the \"session\" section"
-msgstr ""
+msgstr "Session file is missing the \"session\" section"
 
 #: pcbnew/specctra_import.cpp:342
 msgid "Session file is missing the \"placement\" section"
@@ -4273,7 +4241,7 @@ msgstr ""
 #: pcbnew/specctra_import.cpp:378
 #, c-format
 msgid "Session file has 'reference' to non-existent component \"%s\""
-msgstr ""
+msgstr "Le fichier Session a une 'reference' a un composant non existant \"%s\""
 
 #: pcbnew/specctra_import.cpp:522
 #, c-format
@@ -4642,7 +4610,7 @@ msgstr "Erreur. Vous devez choisir une équipotentielle"
 #: pcbnew/dialog_freeroute_exchange.cpp:187
 #: pcbnew/_dialog_freeroute_exchange.cpp:177
 msgid "Export a Specctra Design (*.dsn) File"
-msgstr ""
+msgstr "Exporter un fichier de conception Specctra (*.dsn)"
 
 #: pcbnew/dialog_freeroute_exchange.cpp:189
 #: pcbnew/_dialog_freeroute_exchange.cpp:179
@@ -4656,7 +4624,7 @@ msgstr "Lancer FreeRouter via Java Web Start"
 
 #: pcbnew/dialog_freeroute_exchange.cpp:194
 msgid "Use Java Web Start function to run FreeRouter via Internet (or your Browser if not found)"
-msgstr ""
+msgstr "Utiliser Java Web Start function pour lancer FreeRouter via Internet (ou votre Navigateur si non trouvé)"
 
 #: pcbnew/dialog_freeroute_exchange.cpp:197
 #: pcbnew/_dialog_freeroute_exchange.cpp:187
@@ -5179,9 +5147,8 @@ msgid "Place the pin sheet (imported hierarchical label from sheet)"
 msgstr "Placer la pin hiérarchique ( Importer un label hiérarchique vers la feuille)"
 
 #: eeschema/tool_sch.cpp:223
-#, fuzzy
 msgid "Place the hierachical pin to sheet"
-msgstr "Addition de pins de hierarchie dans les symboles de hierarchie"
+msgstr "Place une pin de hierarchie dans la feuille"
 
 #: eeschema/tool_sch.cpp:228
 msgid "Place the graphic line or polygon"
@@ -6487,9 +6454,8 @@ msgid "Imported hierarchical label"
 msgstr "Importer label hiérarchique"
 
 #: eeschema/menubar.cpp:326
-#, fuzzy
 msgid "Hierarchical pin to sheet"
-msgstr "Addition de pins de hierarchie dans les symboles de hierarchie"
+msgstr "Ppins de hierarchie vers feuille"
 
 #: eeschema/menubar.cpp:327
 msgid "Place the hierarchical pin to sheet"
@@ -7028,12 +6994,11 @@ msgstr "Ok pour nettoyer cette feuille"
 #: eeschema/class_drawsheet.cpp:486
 #, c-format
 msgid "A Sub Hierarchy named %s exists, Use it (The data in this sheet will be replaced)?"
-msgstr ""
+msgstr "Une sous  Hiérarchie nommée %s existe, L'utiliser (Les données de cette page seront remplacées)?"
 
 #: eeschema/class_drawsheet.cpp:490
-#, fuzzy
 msgid "Sheet Filename Renaming Aborted"
-msgstr "Pas de Nom de Fichier! Abandon"
+msgstr " Renommage de Fichier de Feuille Abandonné"
 
 #: eeschema/class_drawsheet.cpp:498
 #, c-format
@@ -7046,7 +7011,7 @@ msgstr "Cette feuille utilise des données partagées dans une hiérarchie compl
 
 #: eeschema/class_drawsheet.cpp:515
 msgid "Do we convert it in a simple hierarchical sheet (otherwise delete current sheet data)"
-msgstr ""
+msgstr "Doit on la convertir en une feuille de hiérarchie simple (autrement supprimer les données courantes)"
 
 #: eeschema/class_drawsheet.cpp:776
 #, c-format
@@ -7377,23 +7342,23 @@ msgid "Failed to open file "
 msgstr "Erreur ouverture "
 
 #: eeschema/dialog_build_BOM.cpp:806
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = %d\n"
 msgstr ""
 "\n"
-"#Glob labels ( ordre = Numéro de feuiller ) nombre = %d\n"
+"#Labels globaux, hiérarchiques et pins de feuille ( ordre = Numéro de feuiller ) nombre = %d\n"
 
 #: eeschema/dialog_build_BOM.cpp:817
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = %d\n"
 "\n"
 msgstr ""
 "\n"
-"#Glob labels ( ordre = Alphab. ) nombre = %d\n"
+"##Labels globaux, hiérarchiques et pins de feuille ( ordre = Alphab. ) nombre = %d\n"
 
 #: eeschema/dialog_build_BOM.cpp:824
 msgid ""
@@ -7435,9 +7400,9 @@ msgid "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n"
 msgstr "> %-28.28s %s        (Feuille %s) pos: %3.3f, %3.3f\n"
 
 #: eeschema/dialog_build_BOM.cpp:1421
-#, fuzzy, c-format
+#, c-format
 msgid "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n"
-msgstr "> %-28.28s Sheet %-7.7s (Feuillet %s) pos: %3.3f, %3.3f\n"
+msgstr "> %-28.28s PinSheet %-7.7s (Feuillet %s) pos: %3.3f, %3.3f\n"
 
 #: eeschema/dialog_build_BOM.cpp:1436
 msgid "#End labels\n"
@@ -7759,12 +7724,8 @@ msgid "No Filename! Aborted"
 msgstr "Pas de Nom de Fichier! Abandon"
 
 #: eeschema/sheet.cpp:305
-#, fuzzy
 msgid "Changing a Filename can change all the schematic structure and cannot be undone"
-msgstr ""
-"\n"
-"\n"
-"Cette opération changera l'annotation actuelle et ne pourra être annulée."
+msgstr "Cette opération changera l'annotation actuelle et ne pourra être annulée."
 
 #: eeschema/sheet.cpp:307
 msgid "Ok to continue renaming?"
@@ -9772,9 +9733,8 @@ msgid "Color Print:"
 msgstr "Impression Couleurs:"
 
 #: share/dialog_print.cpp:190
-#, fuzzy
 msgid "1 Page per Layer"
-msgstr "1 page par couche"
+msgstr "1 Page par couche"
 
 #: share/dialog_print.cpp:191
 msgid "Single Page"
@@ -9912,9 +9872,8 @@ msgid "DRC Control"
 msgstr "Controle ERC"
 
 #: pcbnew/dialog_netlist.h:54
-#, fuzzy
 msgid "Netlist Dialog"
-msgstr "Fichiers Netlist "
+msgstr "Dialogue Netliste"
 
 #: pcbnew/dialog_zones_by_polygon.h:53
 msgid "Fill Zones Options"

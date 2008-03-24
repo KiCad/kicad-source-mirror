@@ -559,7 +559,7 @@ void EDA_TextStruct::CreateDrawData()
 
     /* lorsque les chars sont trop petits pour etre dessines,
      *  le texte est symbolise par une barre */
-    m_ZoomLevelDrawable = m_Size.x / 3;
+    m_ZoomLevelDrawable = MAX( ABS(m_Size.x), ABS(m_Size.y) ) / 3;
     dx = (espacement * nbchar) / 2;
     dy = size_v / 2;    /* Decalage du debut du texte / centre */
 

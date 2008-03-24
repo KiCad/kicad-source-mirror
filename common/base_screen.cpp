@@ -1,6 +1,6 @@
-/******************************************************************/
-/* drawpanel.cpp - fonctions des classes du type WinEDA_DrawPanel */
-/******************************************************************/
+/***************************************************************/
+/* base_screen.cpp - fonctions des classes du type BASE_SCREEN */
+/***************************************************************/
 
 #ifdef __GNUG__
 #pragma implementation
@@ -49,17 +49,17 @@ BASE_SCREEN::~BASE_SCREEN()
 void BASE_SCREEN::InitDatas()
 /*******************************/
 {
-    m_ScreenNumber = m_NumberOfScreen = 1;    /* gestion hierarchie: Root: ScreenNumber = 1 */
+    m_ScreenNumber = m_NumberOfScreen = 1;    /* Hierarchy: Root: ScreenNumber = 1 */
     m_Zoom            = 32;
-    m_Grid            = wxSize( 50, 50 );   /* pas de la grille */
-    m_UserGrid        = g_UserGrid;         /* pas de la grille "utilisateur" */
+    m_Grid            = wxSize( 50, 50 );   /* Default grid size */
+    m_UserGrid        = g_UserGrid;         /* User Default grid size */
     m_UserGridIsON    = FALSE;
     m_UserGridUnit    = g_UserGrid_Unit;
     m_Diviseur_Grille = 1;
     m_Center          = TRUE;
 
-    /* offsets pour tracer le circuit sur l'ecran */
-    switch( m_Type ) // Init taille sheet par defaut
+    /* Init draw offset and default page size */
+    switch( m_Type )
     {
     case SCHEMATIC_FRAME:
         m_Center = FALSE;
@@ -100,9 +100,9 @@ void BASE_SCREEN::InitDatas()
     SetCurItem( NULL );
 
     /* indicateurs divers */
-    m_FlagRefreshReq = 0;               /* indique que l'ecran doit redessine */
-    m_FlagModified   = 0;               // indique modif du PCB,utilise pour eviter une sortie sans sauvegarde
-    m_FlagSave = 1;                     // indique sauvegarde auto faite
+    m_FlagRefreshReq = 0;               /* Redraw screen requste flag */
+    m_FlagModified   = 0;               // Set when any change is made on borad
+    m_FlagSave = 1;                     // Used in auto save: set when an auto save is made
 }
 
 
@@ -148,8 +148,8 @@ int BASE_SCREEN::GetInternalUnits()
 wxSize BASE_SCREEN::ReturnPageSize()
 /*****************************************/
 
-/* Retourne en unites internes la taille de la feuille de dessin
- *  (la taille de la feuille est connue en 1/1000 ")
+/* Return in internal units the page size
+ *  Note: the page size is handled in 1/1000 ", not in internal units
  */
 {
     wxSize PageSize;
@@ -208,7 +208,6 @@ void BASE_SCREEN::SetZoomList( const int* zoomlist )
 /***********************************/
 void BASE_SCREEN::SetFirstZoom()
 /***********************************/
-/* ajuste le coeff de zoom a 1*/
 {
     m_Zoom = 1;
 }
@@ -225,7 +224,6 @@ int BASE_SCREEN::GetZoom() const
 /***********************************/
 void BASE_SCREEN::SetZoom( int coeff )
 /***********************************/
-/* ajuste le coeff de zoom a coeff */
 {
     m_Zoom = coeff;
     if( m_Zoom < 1 )

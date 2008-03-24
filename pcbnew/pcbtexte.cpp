@@ -202,6 +202,17 @@ void WinEDA_TextPCBPropertiesFrame::OnCancelClick( wxCommandEvent& WXUNUSED (eve
 void WinEDA_TextPCBPropertiesFrame::OnOkClick( wxCommandEvent& event )
 /**************************************************************************************/
 {
+   // test for acceptable values for parameters:
+     wxSize newsize = m_TxtSizeCtrl->GetValue();
+    if ( newsize.x < TEXTS_MIN_SIZE )
+        newsize.x = TEXTS_MIN_SIZE;
+    if ( newsize.y < TEXTS_MIN_SIZE )
+        newsize.y = TEXTS_MIN_SIZE;
+    if ( newsize.x > TEXTS_MAX_WIDTH )
+        newsize.x = TEXTS_MAX_WIDTH;
+    if ( newsize.y > TEXTS_MAX_WIDTH )
+        newsize.y = TEXTS_MAX_WIDTH;
+
     if( m_DC )     // Effacement ancien texte
     {
         CurrentTextPCB->Draw( m_Parent->DrawPanel, m_DC, wxPoint( 0, 0 ), GR_XOR );
@@ -212,12 +223,18 @@ void WinEDA_TextPCBPropertiesFrame::OnOkClick( wxCommandEvent& event )
         CurrentTextPCB->m_Text = m_Name->GetValue();
     }
     CurrentTextPCB->m_Pos    = m_TxtPosCtrl->GetValue();
-    CurrentTextPCB->m_Size   = m_TxtSizeCtrl->GetValue();
+    CurrentTextPCB->m_Size   = newsize;
+
     CurrentTextPCB->m_Width  = m_TxtWidthCtlr->GetValue();
+    // test for acceptable values for parameters:
+    if ( CurrentTextPCB->m_Width > TEXTS_MAX_WIDTH)
+        CurrentTextPCB->m_Width = TEXTS_MAX_WIDTH;
+
     CurrentTextPCB->m_Miroir = (m_Mirror->GetSelection() == 0) ? 1 : 0;
     CurrentTextPCB->m_Orient = m_Orient->GetSelection() * 900;
     CurrentTextPCB->SetLayer( m_SelLayerBox->GetChoice() );
     CurrentTextPCB->CreateDrawData();
+
     if( m_DC )     // Affichage nouveau texte
     {
         /* Redessin du Texte */
