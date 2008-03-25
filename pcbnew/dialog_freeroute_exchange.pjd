@@ -128,6 +128,7 @@
         <long name="locked">0</long>
         <string name="template-name">""</string>
         <bool name="dirty">1</bool>
+        <long name="makefile-last-written">0</long>
         <string name="Compiler name">""</string>
         <string name="Build mode">"Debug"</string>
         <string name="Unicode mode">"ANSI"</string>
@@ -169,6 +170,8 @@
         <string name="wxWidgets build command">"%AUTO%"</string>
         <string name="wxWidgets clean command">"%AUTO%"</string>
         <string name="PATH variable">"%AUTO%"</string>
+        <bool name="Suppress source rules">0</bool>
+        <bool name="Enable makefile generation">1</bool>
       </document>
     </document>
   </data>
@@ -647,7 +650,7 @@
                   <string name="proxy-Static box class">"wxStaticBox"</string>
                   <string name="proxy-Orientation">"Vertical"</string>
                   <string name="proxy-AlignH">"Centre"</string>
-                  <string name="proxy-AlignV">"Centre"</string>
+                  <string name="proxy-AlignV">"Expand"</string>
                   <long name="proxy-Stretch factor">1</long>
                   <long name="proxy-Border">5</long>
                   <bool name="proxy-wxLEFT">1</bool>
