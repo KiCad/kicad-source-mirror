@@ -115,7 +115,7 @@ public:
 
     virtual wxString GetClass() const
     {
-        return wxT( "DrawLabel" );
+        return wxT( "SCH_LABEL" );
     }
 };
 
@@ -131,7 +131,7 @@ public:
 
     virtual wxString GetClass() const
     {
-        return wxT( "DrawGlobalLabel" );
+        return wxT( "SCH_GLOBALLABEL" );
     }
 
 
@@ -158,7 +158,7 @@ public:
 
     virtual wxString GetClass() const
     {
-        return wxT( "DrawHierLabel" );
+        return wxT( "SCH_HIERLABEL" );
     }
 
 
