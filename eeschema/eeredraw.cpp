@@ -52,11 +52,10 @@ char marqERC_bitmap[] =
 static EDA_BaseStruct* HighLightStruct = NULL;
 
 /************************************************************/
-void  DrawDanglingSymbol( WinEDA_DrawPanel* panel, wxDC* DC,
+void DrawDanglingSymbol( WinEDA_DrawPanel* panel, wxDC* DC,
                           const wxPoint& pos, int Color )
 /************************************************************/
 {
-#define DANGLING_SYMBOL_SIZE 12
     if( !g_IsPrinting )   // Draw but do not print the Dangling Symbol */
     {
         GRRect( &panel->m_ClipBox, DC,

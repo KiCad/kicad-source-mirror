@@ -37,6 +37,7 @@
 //#define GR_DEFAULT_DRAWMODE GR_COPY
 #define GR_DEFAULT_DRAWMODE GR_COPY
 
+#define DANGLING_SYMBOL_SIZE 12
 
 /* Message de presentation */
 extern wxString g_Main_Title;
