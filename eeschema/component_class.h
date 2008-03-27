@@ -52,7 +52,7 @@ public:
 
     virtual wxString GetClass() const
     {
-        return wxT( "PartText" );
+        return wxT( "PartTextStruct" );
     }
 
 

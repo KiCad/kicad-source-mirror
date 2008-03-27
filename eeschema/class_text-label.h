@@ -82,7 +82,7 @@ class SCH_TEXT : public SCH_ITEM
 public:
     int  m_Layer;
     int  m_Shape;
-    bool m_IsDangling;          // TRUE si non connect�
+    bool m_IsDangling;          // TRUE if not connected
 
 public:
     SCH_TEXT( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString,
@@ -102,6 +102,7 @@ public:
     void            SwapData( SCH_TEXT* copyitem );
 
     virtual void    Place( WinEDA_DrawFrame* frame, wxDC* DC );
+    EDA_Rect        GetBoundingBox();
 };
 
 

@@ -467,3 +467,54 @@ void SCH_GLOBALLABEL::CreateGraphicShape( int* corner_list, const wxPoint& Pos )
 
     corner_list[12] = corner_list[0]; corner_list[13] = corner_list[1]; // closing
 }
+
+
+EDA_Rect SCH_TEXT::GetBoundingBox()
+{
+    int x, y, dx, dy, dangle, length, height;
+
+    x = m_Pos.x;
+    y = m_Pos.y;
+    length = ( Pitch() * GetLength() );
+    height  = m_Size.y;
+
+    if( m_IsDangling )
+        dangle = DANGLING_SYMBOL_SIZE;
+    else
+        dangle = 0;
+
+    switch( m_Orient ) // respect orientation
+    {
+        case 0: /* Horiz Normal Orientation (left justified) */
+            dx = 2*dangle + length;
+            dy = -2*dangle - height - TXTMARGE;
+            x -= dangle;
+            y += dangle;
+            break;
+
+        case 1: /* Vert Orientation UP */
+            dx = -2*dangle - height - TXTMARGE;
+            dy = -2*dangle - length;
+            x += dangle;
+            y += dangle;
+            break;
+
+        case 2: /* Horiz Orientation - Right justified */
+            dx = -2*dangle - length;
+            dy = -2*dangle - height - TXTMARGE;
+            x += dangle;
+            y += dangle;
+            break;
+
+        case 3: /*  Vert Orientation BOTTOM */
+            dx = -2*dangle - height - TXTMARGE;
+            dy = 2*dangle + length;
+            x += dangle;
+            y -= dangle;
+            break;
+    }
+
+    EDA_Rect box(wxPoint(x,y), wxSize(dx,dy) );
+    box.Normalize();
+    return box;
+}

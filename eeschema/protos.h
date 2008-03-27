@@ -191,7 +191,7 @@ int distance(int dx, int dy, int spot_cX, int spot_cY, int seuil);
 /***************/
 /* EEREDRAW.CPP */
 /***************/
-void  DrawDanglingSymbol(WinEDA_DrawPanel * panel,wxDC * DC,
+void DrawDanglingSymbol(WinEDA_DrawPanel * panel,wxDC * DC,
             const wxPoint & pos, int Color);
 
 void Draw_Marqueur(WinEDA_DrawPanel * panel, wxDC * DC,
