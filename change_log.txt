@@ -9,6 +9,9 @@ email address.
 ================================================================================
 +eeschema
     Solved: eeschema crashes when create a new sheet, using the default filename and enter it.
+    Solved: eeschema crashes when delete a sheet label (pin sheet), undo this and move the label.
+    (bad value (not updated) for the DrawSheetLabelStruct.m_Parent member after redo command in sheet edit).
+
 +all:
     Added comments in gestfich.cpp to explain the default paths used by kicad to find help files and lib files
 

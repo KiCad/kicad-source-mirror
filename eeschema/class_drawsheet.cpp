@@ -105,7 +105,7 @@ DrawSheetStruct* DrawSheetStruct::GenCopy()
     {
         Slabel = newitem->m_Label = label->GenCopy();
         Slabel->m_Parent = newitem;
-        label = (DrawSheetLabelStruct*) label->Pnext;
+        label = label->Next();
     }
 
     while( label )
@@ -113,7 +113,7 @@ DrawSheetStruct* DrawSheetStruct::GenCopy()
         Slabel->Pnext = label->GenCopy();
         Slabel = (DrawSheetLabelStruct*) Slabel->Pnext;
         Slabel->m_Parent = newitem;
-        label = (DrawSheetLabelStruct*) label->Pnext;
+        label = label->Next();
     }
 
     /* don't copy screen data - just reference it. */
@@ -140,6 +140,21 @@ void DrawSheetStruct::SwapData( DrawSheetStruct* copyitem )
     EXCHG( m_FileNameSize, copyitem->m_FileNameSize );
     EXCHG( m_Label, copyitem->m_Label );
     EXCHG( m_NbLabel, copyitem->m_NbLabel );
+
+    // Ensure sheet labels have their .m_Parent member poiuntin really on their parent, after swapping.
+    DrawSheetLabelStruct * label = m_Label;
+    while( label )
+    {
+        label->m_Parent = this;
+        label = label->Next();
+    }
+    label = copyitem->m_Label;
+    while( label )
+    {
+        label->m_Parent = copyitem;
+        label = label->Next();
+    }
+
 }
 
 
