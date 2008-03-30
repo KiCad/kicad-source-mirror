@@ -311,6 +311,7 @@ EDA_Rect SCH_HIERLABEL::GetBoundingBox()
 
     x = m_Pos.x;
     y = m_Pos.y;
+    dx = dy = 0;
 
     height  = m_Size.y + 2*TXTMARGE;
     length = ( Pitch() * GetLength() ) + height + 2*DANGLING_SYMBOL_SIZE; // add height for triangular shapes
@@ -520,6 +521,7 @@ EDA_Rect SCH_GLOBALLABEL::GetBoundingBox()
 
     x = m_Pos.x;
     y = m_Pos.y;
+    dx = dy = 0;
 
     height  = m_Size.y + 2*TXTMARGE;
     length = ( Pitch() * GetLength() ) + 2* height + 2*DANGLING_SYMBOL_SIZE; // add 2*height for triangular shapes (bidirectional)
@@ -569,6 +571,7 @@ EDA_Rect SCH_TEXT::GetBoundingBox()
     y = m_Pos.y;
     length = ( Pitch() * GetLength() );
     height  = m_Size.y;
+    dx = dy = 0;
 
     switch( m_Orient ) // respect orientation
     {
