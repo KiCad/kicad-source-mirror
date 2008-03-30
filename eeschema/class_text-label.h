@@ -144,6 +144,8 @@ public:
       * <corner_count>, x0, y0, ... xn, yn
      */
     void CreateGraphicShape( int* corner_list, const wxPoint & Pos );
+
+    EDA_Rect        GetBoundingBox();
 };
 
 
@@ -171,6 +173,8 @@ public:
       * <corner_count>, x0, y0, ... xn, yn
       */
     void CreateGraphicShape( int* corner_list, const wxPoint & Pos );
+
+    EDA_Rect        GetBoundingBox();
 };
 
 #endif /* CLASS_TEXT_LABEL_H */

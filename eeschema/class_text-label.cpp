@@ -305,6 +305,56 @@ void SCH_HIERLABEL::CreateGraphicShape( int* corner_list, const wxPoint& Pos )
     }
 }
 
+EDA_Rect SCH_HIERLABEL::GetBoundingBox()
+{
+    int x, y, dx, dy, dangle, length, height;
+
+    x = m_Pos.x;
+    y = m_Pos.y;
+
+    if( m_IsDangling )
+        dangle = DANGLING_SYMBOL_SIZE;
+    else
+        dangle = 0;
+
+    height  = m_Size.y + 2*TXTMARGE;
+    length = ( Pitch() * GetLength() ) + height + 2*dangle; // add height for triangular shapes
+
+    switch( m_Orient ) // respect orientation
+    {
+        case 0: /* Horiz Normal Orientation (left justified) */
+            dx = -length;
+            dy = height;
+            x += dangle;
+            y -= height/2;
+            break;
+
+            case 1: /* Vert Orientation UP */
+                dx = height;
+                dy = length;
+                x -= height/2;
+                y -= dangle;
+                break;
+
+                case 2: /* Horiz Orientation - Right justified */
+                    dx = length;
+                    dy = height;
+                    x -= dangle;
+                    y -= height/2;
+                    break;
+
+                    case 3: /*  Vert Orientation BOTTOM */
+                        dx = height;
+                        dy = -length;
+                        x -= height/2;
+                        y += dangle;
+                        break;
+    }
+
+    EDA_Rect box(wxPoint(x,y), wxSize(dx,dy) );
+    box.Normalize();
+    return box;
+}
 
 /*******************************************************************************************/
 void SCH_GLOBALLABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& draw_offset,
@@ -466,6 +516,58 @@ void SCH_GLOBALLABEL::CreateGraphicShape( int* corner_list, const wxPoint& Pos )
     }
 
     corner_list[12] = corner_list[0]; corner_list[13] = corner_list[1]; // closing
+}
+
+
+EDA_Rect SCH_GLOBALLABEL::GetBoundingBox()
+{
+    int x, y, dx, dy, dangle, length, height;
+
+    x = m_Pos.x;
+    y = m_Pos.y;
+
+    if( m_IsDangling )
+        dangle = DANGLING_SYMBOL_SIZE;
+    else
+        dangle = 0;
+
+    height  = m_Size.y + 2*TXTMARGE;
+    length = ( Pitch() * GetLength() ) + 2* height + 2*dangle; // add 2*height for triangular shapes (bidirectional)
+
+    switch( m_Orient ) // respect orientation
+    {
+        case 0: /* Horiz Normal Orientation (left justified) */
+            dx = -length;
+            dy = height;
+            x += dangle;
+            y -= height/2;
+            break;
+
+            case 1: /* Vert Orientation UP */
+                dx = height;
+                dy = length;
+                x -= height/2;
+                y -= dangle;
+                break;
+
+                case 2: /* Horiz Orientation - Right justified */
+                    dx = length;
+                    dy = height;
+                    x -= dangle;
+                    y -= height/2;
+                    break;
+
+                    case 3: /*  Vert Orientation BOTTOM */
+                        dx = height;
+                        dy = -length;
+                        x -= height/2;
+                        y += dangle;
+                        break;
+    }
+
+    EDA_Rect box(wxPoint(x,y), wxSize(dx,dy) );
+    box.Normalize();
+    return box;
 }
 
 
