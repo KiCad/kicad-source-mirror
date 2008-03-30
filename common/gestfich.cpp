@@ -32,6 +32,37 @@
 #include "wxstruct.h"
 #include "macros.h"
 
+/* List of default paths used to locate help files and kicad library files.
+ *
+ * Under windows, kicad search its files from the binary path file (first argument when running "main")
+ * So for a standard install, default paths are not mandatory, but they exist, just in case.
+ * kicad is often installed in c:/Program Files/kicad or c:/kicad (or d: or e: ... )
+ * and the directory "share" has no meaning under windows.
+ *
+ * Under linux, the problem is more complex.
+ * In fact there are 3 cases:
+ * 1 - When released in a distribution:
+ * binaries are in /usr/bin, kicad libs in /usr/share/kicad/ and doc in /usr/share/doc/kicad/
+ * 2 - When compiled by an user:
+ * binaries also can be  in /usr/local/bin, kicad libs in /usr/local/share/kicad/ and doc in /usr/local/share/doc/kicad/
+ * 3 - When in an "universal tarball" or build for a server:
+ * all files are in /usr/local/kicad
+ * This is mandatory when kicad is installed on a server (in a school for instance) because one can export /usr/local/kicad
+ * and obviously the others paths cannot be used
+ * (cannot be mounted by the client, because they are already used).
+ *
+ * in cases 1 and 2 kicad files cannot be found from the binary path.
+ * in case 3 kicad files can be found from the binary path only if this is a kicad binary file which is launched.
+ *     But if an user creates a symbolic link to the actual binary file to run kicad, the binary path is not good
+ *     and the defaults paths must be used
+ *
+ * Note:
+ * kicad uses first the bin path lo locace kicad tree.
+ * if not found kicad uses the environment variable KICAD to find its files
+ * and at last kicad uses the default paths.
+ * So we can export (linux and windows) the variable KICAD:
+ *  like export KICAD=/my_path/kicad if /my_path/kicad is not a default path
+ */
 
 // Path list for online help
 static wxString    s_HelpPathList[] = {
@@ -43,29 +74,28 @@ static wxString    s_HelpPathList[] = {
 #else
     wxT( "/usr/share/doc/kicad/help/" ),
     wxT( "/usr/local/share/doc/kicad/help/" ),
-    wxT( "/usr/local/kicad/share/doc/kicad/" ), // TODO: must be removed
+    wxT( "/usr/local/kicad/" ),                 // default install for "universal tarballs" and build for a server
 #endif
-    wxT( "end_list" )  // End of list symbol, do not change
+    wxT( "end_list" )                           // End of list symbol, do not change
 };
 
 // Path list for kicad data files
 static wxString    s_KicadDataPathList[] = {
 #ifdef __WINDOWS__
-    wxT( "c:/kicad/" ), // TODO: must be removed
-    wxT( "d:/kicad/" ), // TODO: must be removed
+    wxT( "c:/kicad/" ),
+    wxT( "d:/kicad/" ),
     wxT( "c:/kicad/share/" ),
     wxT( "d:/kicad/share/" ),
-    wxT( "c:/Program Files/kicad/" ), // TODO: must be removed
-    wxT( "d:/Program Files/kicad/" ), // TODO: must be removed
+    wxT( "c:/Program Files/kicad/" ),
+    wxT( "d:/Program Files/kicad/" ),
     wxT( "c:/Program Files/kicad/share/" ),
     wxT( "d:/Program Files/kicad/share/" ),
 #else
     wxT( "/usr/share/kicad/" ),
     wxT( "/usr/local/share/kicad/" ),
-    wxT( "/usr/local/kicad/share/kicad/" ), // TODO: must be removed
-    wxT( "/usr/local/kicad/" ), // TODO: must be removed
+    wxT( "/usr/local/kicad/" ),             // default install for "universal tarballs" and build for a server
 #endif
-    wxT( "end_list" )  // End of list symbol, do not change
+    wxT( "end_list" )                       // End of list symbol, do not change
 };
 
 // Path list for kicad binary files
@@ -73,20 +103,20 @@ static wxString    s_KicadBinaryPathList[] = {
 #ifdef __WINDOWS__
     wxT( "c:/kicad/bin/" ),
     wxT( "d:/kicad/bin/" ),
-    wxT( "c:/kicad/winexe/" ), // TODO: must be removed
-    wxT( "d:/kicad/winexe/" ), // TODO: must be removed
+    wxT( "c:/kicad/winexe/" ),              // TODO: must be removed
+    wxT( "d:/kicad/winexe/" ),              // TODO: must be removed
     wxT( "c:/Program Files/kicad/bin/" ),
     wxT( "d:/Program Files/kicad/bin/" ),
-    wxT( "c:/Program Files/kicad/winexe/" ), // TODO: must be removed
-    wxT( "d:/Program Files/kicad/winexe/" ), // TODO: must be removed
+    wxT( "c:/Program Files/kicad/winexe/" ),    // TODO: must be removed
+    wxT( "d:/Program Files/kicad/winexe/" ),    // TODO: must be removed
 #else
     wxT( "/usr/bin/" ),
     wxT( "/usr/local/bin/" ),
     wxT( "/usr/local/kicad/bin/" ),
-    wxT( "/usr/local/kicad/linux/" ), // TODO: must be removed
-    wxT( "/usr/local/kicad/linux-non_unicode/" ), // TODO: must be removed
+    wxT( "/usr/local/kicad/linux/" ),               // TODO: must be removed
+    wxT( "/usr/local/kicad/linux-non_unicode/" ),   // TODO: must be removed
 #endif
-    wxT( "end_list" )  // End of list symbol, do not change
+    wxT( "end_list" )                               // End of list symbol, do not change
 };
 extern WinEDA_App* g_EDA_Appl;
 
@@ -124,6 +154,7 @@ wxString MakeReducedFileName( const wxString& fullfilename,
     path.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
 
 #ifdef __WINDOWS__
+
     // names are case insensitive under windows
     path.MakeLower();
     Cwd.MakeLower();
@@ -182,14 +213,14 @@ wxString MakeFileName( const wxString& dir,
     {
         if( !wxIsAbsolutePath( shortname ) )
         {
-            if( ! shortname.StartsWith(wxT("./")) && ! shortname.StartsWith(wxT("../")) )
+            if( !shortname.StartsWith( wxT( "./" ) ) && !shortname.StartsWith( wxT( "../" ) ) )
             { /* no absolute path in shortname, add dir to shortname */
                 fullfilename = dir;
             }
         }
     }
 
-    fullfilename += shortname;	// Add shortname to dir or use shortname only
+    fullfilename += shortname;  // Add shortname to dir or use shortname only
 
     fullfilename.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
 
@@ -207,7 +238,7 @@ wxString MakeFileName( const wxString& dir,
             fullfilename += ext;
             break;
         }
-        if( fullfilename.GetChar( ii ) == '.' ) /* extension exists, do nothing */
+        if( fullfilename.GetChar( ii ) == '.' )  /* extension exists, do nothing */
             break;
     }
 
@@ -317,25 +348,26 @@ wxString EDA_FileSelector( const wxString& Title,                   /* Dialog ti
 
     wxSetWorkingDirectory( defaultpath );
 
-#if 0 && defined(DEBUG)
-    printf("defaultpath=\"%s\" defaultname=\"%s\" Ext=\"%s\" Mask=\"%s\" flag=%d keep_working_directory=%d\n",
-           CONV_TO_UTF8(defaultpath),
-           CONV_TO_UTF8(defaultname),
-           CONV_TO_UTF8(Ext),
-           CONV_TO_UTF8(Mask),
-           flag,
-           keep_working_directory
-           );
+#if 0 && defined (DEBUG)
+    printf(
+        "defaultpath=\"%s\" defaultname=\"%s\" Ext=\"%s\" Mask=\"%s\" flag=%d keep_working_directory=%d\n",
+        CONV_TO_UTF8( defaultpath ),
+        CONV_TO_UTF8( defaultname ),
+        CONV_TO_UTF8( Ext ),
+        CONV_TO_UTF8( Mask ),
+        flag,
+        keep_working_directory
+        );
 #endif
 
     fullfilename = wxFileSelector( wxString( Title ),
-                                   defaultpath,
-                                   defaultname,
-                                   Ext,
-                                   Mask,
-                                   flag,/* open mode wxFD_OPEN, wxFD_SAVE .. */
-                                   Frame,
-                                   Pos.x, Pos.y );
+        defaultpath,
+        defaultname,
+        Ext,
+        Mask,
+        flag,                           /* open mode wxFD_OPEN, wxFD_SAVE .. */
+        Frame,
+        Pos.x, Pos.y );
 
     if( keep_working_directory )
         wxSetWorkingDirectory( curr_cwd );
@@ -347,6 +379,7 @@ wxString EDA_FileSelector( const wxString& Title,                   /* Dialog ti
 /********************************************************/
 wxString FindKicadHelpPath()
 /********************************************************/
+
 /** Function FindKicadHelpPath
  * Find an absolute path for KiCad "help" (or "help/<language>")
  *  Find path kicad/doc/help/xx/ or kicad/doc/help/:
@@ -371,6 +404,7 @@ wxString FindKicadHelpPath()
     wxString FullPath, LangFullPath, tmp;
     wxString LocaleString;
     bool     PathFound = FALSE;
+
     /* find kicad/help/ */
     tmp = g_EDA_Appl->m_BinDir;
     if( tmp.Last() == '/' )
@@ -378,7 +412,7 @@ wxString FindKicadHelpPath()
     FullPath     = tmp.BeforeLast( '/' ); // cd ..
     FullPath    += wxT( "/help/" );
     LocaleString = g_EDA_Appl->m_Locale->GetCanonicalName();
-	
+
     wxString path_tmp = FullPath;
 #ifdef __WINDOWS__
     path_tmp.MakeLower();
@@ -576,7 +610,7 @@ wxString ReturnKicadDatasPath()
     }
     else    // Chemin cherche par le chemin des executables
     {
-            // le chemin est bindir../
+        // le chemin est bindir../
         wxString tmp = g_EDA_Appl->m_BinDir;
 #ifdef __WINDOWS__
         tmp.MakeLower();
@@ -643,14 +677,14 @@ wxString GetEditorName()
         mask += wxT( ".exe" );
 #endif
         editorname = EDA_FileSelector( _( "Prefered Editor:" ),
-                                       wxEmptyString,   /* Default path */
-                                       wxEmptyString,   /* default filename */
-                                       wxEmptyString,   /* default filename extension */
-                                       mask,            /* filter for filename list */
-                                       NULL,            /* parent frame */
-                                       wxFD_OPEN,       /* wxFD_SAVE, wxFD_OPEN ..*/
-                                       TRUE             /* true = keep the current path */
-                                       );
+            wxEmptyString,                              /* Default path */
+            wxEmptyString,                              /* default filename */
+            wxEmptyString,                              /* default filename extension */
+            mask,                                       /* filter for filename list */
+            NULL,                                       /* parent frame */
+            wxFD_OPEN,                                  /* wxFD_SAVE, wxFD_OPEN ..*/
+            TRUE                                        /* true = keep the current path */
+            );
     }
 
     if( ( !editorname.IsEmpty() ) && g_EDA_Appl->m_EDA_CommonConfig )

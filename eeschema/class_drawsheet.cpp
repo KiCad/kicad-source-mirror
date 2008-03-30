@@ -372,8 +372,8 @@ bool DrawSheetStruct::LocatePathOfScreen( SCH_SCREEN* screen, DrawSheetPath* lis
 {
     //search the existing hierarchy for an instance of screen "FileName".
     //don't bother looking at the root sheet - it must be unique,
-    //no other references to its m_s otherwise there would be loops
-    //in the heirarchy.
+    //no other references to its m_AssociatedScreen otherwise there would be loops
+    //in the hierarchy.
     //search the existing hierarchy for an instance of screen "FileName".
     if( m_AssociatedScreen )
     {
@@ -482,7 +482,7 @@ void DrawSheetStruct::SetFileName( const wxString& aFilename )
  * Set a new filename and manage data and associated screen
  * The main difficulty is the filename change in a complex hierarchy.
  * - if new filename is not already used: change to the new name (and if an existing file is found, load it on request)
- * - if new filename is already used (a complex hierarchy) : reference the sheet. 
+ * - if new filename is already used (a complex hierarchy) : reference the sheet.
  */
 
 bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame * aFrame, const wxString& aFileName )
