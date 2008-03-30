@@ -160,6 +160,7 @@ public:
     DrawNoConnectStruct*    GenCopy();
     virtual void            Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                                   int draw_mode, int Color = -1 );
+    EDA_Rect            GetBoundingBox();
 };
 
 
@@ -189,6 +190,7 @@ public:
     wxPoint             m_End(); // retourne la coord de fin du raccord
     virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                               int draw_mode, int Color = -1 );
+    EDA_Rect            GetBoundingBox();
 };
 
 class DrawPolylineStruct  : public EDA_BaseStruct /* Polyligne (serie de segments) */

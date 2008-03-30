@@ -263,7 +263,7 @@ void DrawNoConnectStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint
 /*************************************************************************/
 /* DRaw the "No Connect" symbol.. */
 {
-#define DELTA (DRAWNOCONNECT_SIZE / 2)
+    const int DELTA = (DRAWNOCONNECT_SIZE / 2);
     int pX, pY, color;
     int width = g_DrawMinimunLineWidth;
 
@@ -277,6 +277,15 @@ void DrawNoConnectStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint
 
     GRLine( &panel->m_ClipBox, DC, pX - DELTA, pY - DELTA, pX + DELTA, pY + DELTA, width, color );
     GRLine( &panel->m_ClipBox, DC, pX + DELTA, pY - DELTA, pX - DELTA, pY + DELTA, width, color );
+}
+
+
+EDA_Rect DrawNoConnectStruct::GetBoundingBox()
+{
+    const int DELTA = (DRAWNOCONNECT_SIZE / 2);
+    EDA_Rect box( wxPoint(m_Pos.x-DELTA,m_Pos.y-DELTA), wxSize(2*DELTA,2*DELTA) );
+    box.Normalize();
+    return box;
 }
 
 
@@ -305,6 +314,15 @@ void DrawBusEntryStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint&
         m_End().x + offset.x, m_End().y + offset.y, width, color );
 }
 
+
+EDA_Rect DrawBusEntryStruct::GetBoundingBox()
+{
+    int dx = m_Pos.x - m_End().x;
+    int dy = m_Pos.y - m_End().y;
+    EDA_Rect box( wxPoint(m_Pos.x,m_Pos.y), wxSize(dx,dy) );
+    box.Normalize();
+    return box;
+}
 
 /*****************************************************************************
 * Routine to redraw polyline struct.										 *

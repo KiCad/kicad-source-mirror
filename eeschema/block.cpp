@@ -959,19 +959,7 @@ void DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, EDA_BaseStruct* DrawStruct
     {
         screen->RemoveFromDrawList( DrawStruct );
 
-        switch( DrawStruct->Type() )
-        {
-        case DRAW_SEGMENT_STRUCT_TYPE:
-        case DRAW_JUNCTION_STRUCT_TYPE:
-        case TYPE_SCH_COMPONENT:
-            panel->PostDirtyRect( DrawStruct->GetBoundingBox() );
-            break;
-
-        // other classes do not yet have GetBoundingBox() implementations
-        default:
-            D( DrawStruct->Show( 0, std::cout ); )    // tell me which classes still need GetBoundingBox support
-            RedrawOneStruct( panel, DC, DrawStruct, g_XorMode );
-        }
+        panel->PostDirtyRect( DrawStruct->GetBoundingBox() );
 
         /* Unlink the structure */
         DrawStruct->Pnext = DrawStruct->Pback = NULL;   // Only one struct -> no link
