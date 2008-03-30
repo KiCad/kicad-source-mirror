@@ -467,7 +467,7 @@ void DrawSheetStruct::SetFileName( const wxString& aFilename )
  * Set a new filename and manage data and associated screen
  * The main difficulty is the filename change in a complex hierarchy.
  * - if new filename is not already used: change to the new name (and if an existing file is found, load it on request)
- * - if new filename is already used (a complex hierarchy) : add the sheet to the complex hierarchy.
+ * - if new filename is already used (a complex hierarchy) : reference the sheet. 
  */
 
 bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame * aFrame, const wxString& aFileName )
@@ -482,14 +482,17 @@ bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame * aFrame, const wxSt
 
     if( g_RootSheet->SearchHierarchy( aFileName, &Screen_to_use ) ) //do we reload the data from the existing hierarchy
     {
-        msg.Printf( _(
-                       "A Sub Hierarchy named %s exists, Use it (The data in this sheet will be replaced)?" ),
-                   aFileName.GetData() );
-        if( ! IsOK( NULL, msg ) )
-        {
-            DisplayInfo(NULL, _("Sheet Filename Renaming Aborted"));
-            return false;
-        }
+		if(m_AssociatedScreen) //upon initial load, this will be null.
+		{
+			msg.Printf( _(
+						"A Sub Hierarchy named %s exists, Use it (The data in this sheet will be replaced)?" ),
+					aFileName.GetData() );
+			if( ! IsOK( NULL, msg ) )
+			{
+				DisplayInfo(NULL, _("Sheet Filename Renaming Aborted"));
+				return false;
+			}
+		}
     }
 
     else if( wxFileExists( aFileName ) )         //do we reload the data from an existing file

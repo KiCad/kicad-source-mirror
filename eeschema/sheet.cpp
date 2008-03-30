@@ -300,13 +300,14 @@ void WinEDA_SheetPropertiesFrame::SheetPropertiesAccept( wxCommandEvent& event )
     }
 
     ChangeFileNameExt( FileName, g_SchExtBuffer );
-	if ( (FileName != m_CurrentSheet->GetFileName()) && m_CurrentSheet->m_AssociatedScreen )
+	if ( (FileName != m_CurrentSheet->GetFileName()) )
 	{
         msg = _("Changing a Filename can change all the schematic structure and cannot be undone" );
 		msg << wxT("\n");
 		msg << _("Ok to continue renaming?");
-        if( IsOK( NULL, msg) )
-		{
+        if( m_CurrentSheet->m_AssociatedScreen == 0 || IsOK( NULL, msg) )
+		{ //do not prompt on a new sheet. in fact, we should not allow a sheet to be created 
+		 //without a valid associated filename to be read from.
 			m_Parent->GetScreen()->ClearUndoRedoList();
 			m_CurrentSheet->ChangeFileName(m_Parent, FileName);
 		}
