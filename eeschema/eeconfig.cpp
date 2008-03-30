@@ -46,6 +46,7 @@ void WinEDA_SchematicFrame::Process_Config( wxCommandEvent& event )
 
     case ID_OPTIONS_SETUP:
         DisplayOptionFrame( this, pos );
+        DrawPanel->Refresh(TRUE);   // Redraw, because grid settings may have changed.
         break;
 
     case ID_CONFIG_SAVE:
