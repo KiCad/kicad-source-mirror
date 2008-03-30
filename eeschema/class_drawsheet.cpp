@@ -262,6 +262,20 @@ void DrawSheetStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& of
     }
 }
 
+EDA_Rect DrawSheetStruct::GetBoundingBox(){
+    int dx, dy;
+    // Determine length of texts
+    wxString Text1 = wxT( "Sheet: " ) + m_SheetName;
+    wxString Text2 = wxT( "File: " ) + m_FileName;
+    int textlen1 = 10 * Text1.Len() * m_SheetNameSize / 9;
+    int textlen2 = 10 * Text2.Len() * m_FileNameSize / 9;
+    textlen1 = MAX(textlen1, textlen2);
+    dx = MAX(m_Size.x, textlen1 );
+    dy = m_Size.y+m_SheetNameSize+m_FileNameSize+16;
+
+    EDA_Rect box(wxPoint(m_Pos.x,m_Pos.y-m_SheetNameSize-8), wxSize(dx,dy) );
+    return box;
+}
 
 /**************************************************************************************/
 void DrawSheetStruct::DeleteAnnotation( bool recurse )

@@ -130,6 +130,7 @@ public:
     void                CleanupSheet( WinEDA_SchematicFrame* frame, wxDC* DC );
     virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                               int draw_mode, int Color = -1 );
+    EDA_Rect            GetBoundingBox();
     void                SwapData( DrawSheetStruct* copyitem );
     void                DeleteAnnotation( bool recurse );
     int                 ComponentCount();
@@ -137,9 +138,9 @@ public:
     bool                SearchHierarchy( wxString filename, SCH_SCREEN** screen );
     bool                LocatePathOfScreen( SCH_SCREEN* screen, DrawSheetPath* list );
     int                 CountSheets();
-	wxString			GetFileName(void);
-	void				SetFileName(const wxString & aFilename);	// Set a new filename without changing anything else
-	bool				ChangeFileName(WinEDA_SchematicFrame * aFrame, const wxString & aFileName);	// Set a new filename and manage data and associated screen
+    wxString            GetFileName(void);
+    void                SetFileName(const wxString & aFilename); // Set a new filename without changing anything else
+    bool                ChangeFileName(WinEDA_SchematicFrame * aFrame, const wxString & aFileName); // Set a new filename and manage data and associated screen
 
     //void 		RemoveSheet(DrawSheetStruct* sheet);
     //to remove a sheet, just delete it
