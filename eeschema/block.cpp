@@ -135,6 +135,7 @@ void WinEDA_SchematicFrame::HandleBlockPlace( wxDC* DC )
 
         MoveStruct( DrawPanel, DC, block->m_BlockDrawStruct );
         block->m_BlockDrawStruct = NULL;
+        DrawPanel->Refresh( TRUE );
         break;
 
     case BLOCK_COPY:                /* Copy */
