@@ -257,7 +257,8 @@ void DrawSheetStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& of
     SheetLabelStruct = m_Label;
     while( SheetLabelStruct != NULL )
     {
-        SheetLabelStruct->Draw( panel, DC, offset, DrawMode, Color );
+        if ( !(SheetLabelStruct->m_Flags & IS_MOVED) )
+            SheetLabelStruct->Draw( panel, DC, offset, DrawMode, Color );
         SheetLabelStruct = (DrawSheetLabelStruct*) (SheetLabelStruct->Pnext);
     }
 }
