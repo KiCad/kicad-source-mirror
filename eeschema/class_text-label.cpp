@@ -307,48 +307,43 @@ void SCH_HIERLABEL::CreateGraphicShape( int* corner_list, const wxPoint& Pos )
 
 EDA_Rect SCH_HIERLABEL::GetBoundingBox()
 {
-    int x, y, dx, dy, dangle, length, height;
+    int x, y, dx, dy, length, height;
 
     x = m_Pos.x;
     y = m_Pos.y;
 
-    if( m_IsDangling )
-        dangle = DANGLING_SYMBOL_SIZE;
-    else
-        dangle = 0;
-
     height  = m_Size.y + 2*TXTMARGE;
-    length = ( Pitch() * GetLength() ) + height + 2*dangle; // add height for triangular shapes
+    length = ( Pitch() * GetLength() ) + height + 2*DANGLING_SYMBOL_SIZE; // add height for triangular shapes
 
     switch( m_Orient ) // respect orientation
     {
         case 0: /* Horiz Normal Orientation (left justified) */
             dx = -length;
             dy = height;
-            x += dangle;
+            x += DANGLING_SYMBOL_SIZE;
             y -= height/2;
             break;
 
-            case 1: /* Vert Orientation UP */
-                dx = height;
-                dy = length;
-                x -= height/2;
-                y -= dangle;
-                break;
+        case 1: /* Vert Orientation UP */
+            dx = height;
+            dy = length;
+            x -= height/2;
+            y -= DANGLING_SYMBOL_SIZE;
+            break;
 
-                case 2: /* Horiz Orientation - Right justified */
-                    dx = length;
-                    dy = height;
-                    x -= dangle;
-                    y -= height/2;
-                    break;
+        case 2: /* Horiz Orientation - Right justified */
+            dx = length;
+            dy = height;
+            x -= DANGLING_SYMBOL_SIZE;
+            y -= height/2;
+            break;
 
-                    case 3: /*  Vert Orientation BOTTOM */
-                        dx = height;
-                        dy = -length;
-                        x -= height/2;
-                        y += dangle;
-                        break;
+        case 3: /*  Vert Orientation BOTTOM */
+            dx = height;
+            dy = -length;
+            x -= height/2;
+            y += DANGLING_SYMBOL_SIZE;
+            break;
     }
 
     EDA_Rect box(wxPoint(x,y), wxSize(dx,dy) );
@@ -521,48 +516,43 @@ void SCH_GLOBALLABEL::CreateGraphicShape( int* corner_list, const wxPoint& Pos )
 
 EDA_Rect SCH_GLOBALLABEL::GetBoundingBox()
 {
-    int x, y, dx, dy, dangle, length, height;
+    int x, y, dx, dy, length, height;
 
     x = m_Pos.x;
     y = m_Pos.y;
 
-    if( m_IsDangling )
-        dangle = DANGLING_SYMBOL_SIZE;
-    else
-        dangle = 0;
-
     height  = m_Size.y + 2*TXTMARGE;
-    length = ( Pitch() * GetLength() ) + 2* height + 2*dangle; // add 2*height for triangular shapes (bidirectional)
+    length = ( Pitch() * GetLength() ) + 2* height + 2*DANGLING_SYMBOL_SIZE; // add 2*height for triangular shapes (bidirectional)
 
     switch( m_Orient ) // respect orientation
     {
         case 0: /* Horiz Normal Orientation (left justified) */
             dx = -length;
             dy = height;
-            x += dangle;
+            x += DANGLING_SYMBOL_SIZE;
             y -= height/2;
             break;
 
-            case 1: /* Vert Orientation UP */
-                dx = height;
-                dy = length;
-                x -= height/2;
-                y -= dangle;
-                break;
+        case 1: /* Vert Orientation UP */
+            dx = height;
+            dy = length;
+            x -= height/2;
+            y -= DANGLING_SYMBOL_SIZE;
+            break;
 
-                case 2: /* Horiz Orientation - Right justified */
-                    dx = length;
-                    dy = height;
-                    x -= dangle;
-                    y -= height/2;
-                    break;
+        case 2: /* Horiz Orientation - Right justified */
+            dx = length;
+            dy = height;
+            x -= DANGLING_SYMBOL_SIZE;
+            y -= height/2;
+            break;
 
-                    case 3: /*  Vert Orientation BOTTOM */
-                        dx = height;
-                        dy = -length;
-                        x -= height/2;
-                        y += dangle;
-                        break;
+        case 3: /*  Vert Orientation BOTTOM */
+            dx = height;
+            dy = -length;
+            x -= height/2;
+            y += DANGLING_SYMBOL_SIZE;
+            break;
     }
 
     EDA_Rect box(wxPoint(x,y), wxSize(dx,dy) );
@@ -573,46 +563,41 @@ EDA_Rect SCH_GLOBALLABEL::GetBoundingBox()
 
 EDA_Rect SCH_TEXT::GetBoundingBox()
 {
-    int x, y, dx, dy, dangle, length, height;
+    int x, y, dx, dy, length, height;
 
     x = m_Pos.x;
     y = m_Pos.y;
     length = ( Pitch() * GetLength() );
     height  = m_Size.y;
 
-    if( m_IsDangling )
-        dangle = DANGLING_SYMBOL_SIZE;
-    else
-        dangle = 0;
-
     switch( m_Orient ) // respect orientation
     {
         case 0: /* Horiz Normal Orientation (left justified) */
-            dx = 2*dangle + length;
-            dy = -2*dangle - height - TXTMARGE;
-            x -= dangle;
-            y += dangle;
+            dx = 2*DANGLING_SYMBOL_SIZE + length;
+            dy = -2*DANGLING_SYMBOL_SIZE - height - TXTMARGE;
+            x -= DANGLING_SYMBOL_SIZE;
+            y += DANGLING_SYMBOL_SIZE;
             break;
 
         case 1: /* Vert Orientation UP */
-            dx = -2*dangle - height - TXTMARGE;
-            dy = -2*dangle - length;
-            x += dangle;
-            y += dangle;
+            dx = -2*DANGLING_SYMBOL_SIZE - height - TXTMARGE;
+            dy = -2*DANGLING_SYMBOL_SIZE - length;
+            x += DANGLING_SYMBOL_SIZE;
+            y += DANGLING_SYMBOL_SIZE;
             break;
 
         case 2: /* Horiz Orientation - Right justified */
-            dx = -2*dangle - length;
-            dy = -2*dangle - height - TXTMARGE;
-            x += dangle;
-            y += dangle;
+            dx = -2*DANGLING_SYMBOL_SIZE - length;
+            dy = -2*DANGLING_SYMBOL_SIZE - height - TXTMARGE;
+            x += DANGLING_SYMBOL_SIZE;
+            y += DANGLING_SYMBOL_SIZE;
             break;
 
         case 3: /*  Vert Orientation BOTTOM */
-            dx = -2*dangle - height - TXTMARGE;
-            dy = 2*dangle + length;
-            x += dangle;
-            y -= dangle;
+            dx = -2*DANGLING_SYMBOL_SIZE - height - TXTMARGE;
+            dy = 2*DANGLING_SYMBOL_SIZE + length;
+            x += DANGLING_SYMBOL_SIZE;
+            y -= DANGLING_SYMBOL_SIZE;
             break;
     }
 
