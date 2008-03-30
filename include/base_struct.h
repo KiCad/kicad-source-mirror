@@ -358,7 +358,7 @@ public:
     virtual EDA_Rect GetBoundingBox()
     {
 #if defined (DEBUG)
-        printf("Missing GetBoundingBox() -> no good! :-)\n");
+        printf("Missing GetBoundingBox()\n");
         Show( 0, std::cout ); // tell me which classes still need GetBoundingBox support
 #endif
         // return a zero-sized box per default. derived classes should override this
