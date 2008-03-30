@@ -343,7 +343,7 @@ void WinEDA_SchematicFrame::EndSegment( wxDC* DC )
         {
         case DRAW_JUNCTION_STRUCT_TYPE:
         case DRAW_SEGMENT_STRUCT_TYPE:
-            RedrawOneStruct( DrawPanel, DC, item, GR_DEFAULT_DRAWMODE );
+            DrawPanel->PostDirtyRect(item->GetBoundingBox());
             break;
 
         default:
