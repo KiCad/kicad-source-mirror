@@ -76,6 +76,7 @@ endif(APPLE)
 
 add_executable(gerbview WIN32 MACOSX_BUNDLE ${GERBVIEW_SRCS} ${GERBVIEW_EXTRA_SRCS} ${GERBVIEW_RESOURCES})
 
-target_link_libraries(gerbview common 3d-viewer polygon ${wxWidgets_LIBRARIES})
+target_link_libraries(gerbview 3d-viewer common polygon ${wxWidgets_LIBRARIES})
 
-install(TARGETS gerbview RUNTIME DESTINATION ${KICAD_BIN} COMPONENT binary)
+install(TARGETS gerbview RUNTIME DESTINATION ${KICAD_BIN}
+    COMPONENT binary)

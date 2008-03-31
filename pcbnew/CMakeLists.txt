@@ -167,6 +167,12 @@ endif(APPLE)
 
 add_executable(pcbnew WIN32 MACOSX_BUNDLE ${PCBNEW_SRCS} ${PCBNEW_EXTRA_SRCS} ${PCBNEW_RESOURCES})
 
+target_link_libraries(pcbnew 3d-viewer common polygon ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES})
+
+install(TARGETS pcbnew RUNTIME DESTINATION ${KICAD_BIN}
+    COMPONENT binary)
+
+
 # This one gets made only when testing.
 add_executable(dsntest EXCLUDE_FROM_ALL dsn.cpp)
 target_link_libraries(dsntest common ${wxWidgets_LIBRARIES})
@@ -174,8 +180,3 @@ target_link_libraries(dsntest common ${wxWidgets_LIBRARIES})
 # This one gets made only when testing.
 add_executable(specctra_test EXCLUDE_FROM_ALL specctra.cpp dsn.cpp)
 target_link_libraries(specctra_test common ${wxWidgets_LIBRARIES})
-
-
-target_link_libraries(pcbnew common 3d-viewer polygon ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES})
-
-install(TARGETS pcbnew RUNTIME DESTINATION ${KICAD_BIN} COMPONENT binary)

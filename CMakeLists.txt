@@ -1,10 +1,8 @@
-# Our project is called 'kicad'. This is what it will be called in
-# our makefiles.
 project(kicad)
 
 cmake_minimum_required(VERSION 2.4.6 FATAL_ERROR)
 
-# Path to local CMake modules
+# Path to local CMake modules.
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 
 # Command line option to enable or disable building minizip. Minizip
@@ -15,7 +13,7 @@ option(KICAD_MINIZIP "enable/disable building minizip (default ON)" ON)
 # Comment this out if you don't want to build with Python support.
 # OPTION(KICAD_PYTHON "enable/disable building with Python support (default OFF)")
 
-# Set flags for GNU compilers.
+# Set flags for GCC.
 if(CMAKE_COMPILER_IS_GNUCXX)
     # Set default flags for Release build.
     set(CMAKE_C_FLAGS_RELEASE "-Wall -O2 -DNDEBUG")
@@ -35,7 +33,7 @@ if(UNIX)
     else(APPLE)
         # Like all variables, CMAKE_INSTALL_PREFIX can be over-ridden on the command line.
         set(CMAKE_INSTALL_PREFIX /usr/local CACHE PATH "")
-        # When used later, "bin" and others with no leading / is relative to CMAKE_INSTALL_PREFIX.
+        # Everything without leading / is relative to CMAKE_INSTALL_PREFIX.
         set(KICAD_PLUGINS lib/kicad/plugins CACHE PATH "Location of KiCad plugins.")
         set(KICAD_DATA share/kicad CACHE PATH "Location of KiCad data files.")
         set(KICAD_DOCS share/doc/kicad CACHE PATH "Location of KiCad documentation files.")
@@ -45,15 +43,18 @@ endif(UNIX)
 if(WIN32)
     # Like all variables, CMAKE_INSTALL_PREFIX can be over-ridden on the command line.
     set(CMAKE_INSTALL_PREFIX c:/kicad CACHE PATH "")
-    # When used later, "winexe" and others with no leading / is relative to CMAKE_INSTALL_PREFIX.
-    set(KICAD_PLUGINS ${KICAD_BIN}/plugins)
+    # Everything without leading / is relative to CMAKE_INSTALL_PREFIX.
+    set(KICAD_PLUGINS ${KICAD_BIN}/plugins CACHE PATH "Location of KiCad plugins.")
     set(KICAD_DATA share CACHE PATH "Location of KiCad data files.")
-    set(KICAD_DOCS doc)
+    set(KICAD_DOCS doc CACHE PATH "Location of KiCad documentation files.")
 endif(WIN32)
 
-set(KICAD_DEMOS ${KICAD_DATA}/demos)
-set(KICAD_INTERNAT ${KICAD_DATA}/internat)
-set(KICAD_TEMPLATE ${KICAD_DATA}/template)
+set(KICAD_DEMOS ${KICAD_DATA}/demos CACHE PATH "Location of KiCad demo files.")
+set(KICAD_INTERNAT ${KICAD_DATA}/internat CACHE PATH "Location of KiCad i18n files.")
+set(KICAD_TEMPLATE ${KICAD_DATA}/template CACHE PATH "Location of KiCad template files.")
+
+mark_as_advanced(KICAD_BIN KICAD_PLUGINS KICAD_DATA KICAD_DOCS
+    KICAD_DEMOS KICAD_INTERNAT KICAD_TEMPLATE)
 
 find_package(OpenGL)
 if(OPENGL_FOUND)
@@ -93,8 +94,8 @@ include_directories(
 
 # CMake will look in these dirs for nested 'CMakeLists.txt' files.
 # Binaries.
-add_subdirectory(common)
 add_subdirectory(3d-viewer)
+add_subdirectory(common)
 add_subdirectory(cvpcb)
 add_subdirectory(eeschema)
 add_subdirectory(gerbview)
@@ -106,12 +107,16 @@ add_subdirectory(demos)
 add_subdirectory(internat)
 add_subdirectory(template)
 
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/install.txt DESTINATION ${KICAD_DOCS} COMPONENT resources)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/freeroute.jnlp DESTINATION ${KICAD_BIN} COMPONENT resources)
+install(FILES install.txt DESTINATION ${KICAD_DOCS}
+    COMPONENT resources)
+install(FILES freeroute.jnlp DESTINATION ${KICAD_BIN}
+    COMPONENT resources)
 
 if(UNIX)
-    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/share/kicad.desktop
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications COMPONENT resources)
-    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/bitmaps/kicad.png
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps COMPONENT resources)
+    install(FILES share/kicad.desktop
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications
+        COMPONENT resources)
+    install(FILES bitmaps/kicad.png
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps
+        COMPONENT resources)
 endif(UNIX)

@@ -122,6 +122,7 @@ add_executable(eeschema WIN32 MACOSX_BUNDLE ${EESCHEMA_SRCS} ${EESCHEMA_EXTRA_SR
 
 target_link_libraries(eeschema common ${wxWidgets_LIBRARIES})
 
-install(TARGETS eeschema RUNTIME DESTINATION ${KICAD_BIN} COMPONENT binary)
+install(TARGETS eeschema RUNTIME DESTINATION ${KICAD_BIN}
+    COMPONENT binary)
 
 add_subdirectory(plugins)

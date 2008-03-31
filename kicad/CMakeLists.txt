@@ -33,7 +33,8 @@ add_executable(kicad WIN32 MACOSX_BUNDLE ${KICAD_SRCS} ${KICAD_EXTRA_SRCS} ${KIC
 
 target_link_libraries(kicad common ${wxWidgets_LIBRARIES})
 
-install(TARGETS kicad RUNTIME DESTINATION ${KICAD_BIN} COMPONENT binary)
+install(TARGETS kicad RUNTIME DESTINATION ${KICAD_BIN}
+    COMPONENT binary)
 
 if(KICAD_MINIZIP)
     add_subdirectory(minizip)
