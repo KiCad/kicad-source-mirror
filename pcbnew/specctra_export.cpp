@@ -983,6 +983,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         sprintf( rule, "(clearance %.6g)", clearance );
         rules.push_back( rule );
 
+        /* see: http://www.freerouting.net/usren/viewtopic.php?f=5&t=339#p474
         sprintf( rule, "(clearance %.6g (type pad_to_turn_gap))", clearance );
         rules.push_back( rule );
 
@@ -1003,6 +1004,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 
         sprintf( rule, "(clearance %.6g (type smd_pin))", clearance );
         rules.push_back( rule );
+        */
 
         // well, the user is going to text edit these in the DSN file anyway,
         // at least until we have an export dialog.
