@@ -192,6 +192,8 @@ public:
 
 class WinEDA_DrawFrame : public WinEDA_BasicFrame
 {
+
+
 public:
     WinEDA_DrawPanel* DrawPanel;            // Draw area
     WinEDA_MsgPanel*  MsgPanel;             // Zone d'affichage de caracteristiques
@@ -541,8 +543,12 @@ class WinEDA_MsgPanel : public wxPanel
 {
 protected:
     std::vector<MsgItem>    m_Items;
+    int                     m_last_x;       ///< the last used x coordinate
 
-    void showItem( wxDC& dc, const MsgItem& aItem );
+
+    void    showItem( wxDC& dc, const MsgItem& aItem );
+
+    void    erase( wxDC* DC );
 
 public:
     WinEDA_DrawFrame* m_Parent;
@@ -556,7 +562,6 @@ public:
 
     void    OnPaint( wxPaintEvent& event );
     void    EraseMsgBox();
-    void    EraseMsgBox( wxDC* DC );
     void    Affiche_1_Parametre( int pos_X, const wxString& texte_H,
                                  const wxString& texte_L, int color );
 

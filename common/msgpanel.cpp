@@ -29,12 +29,12 @@ WinEDA_MsgPanel::WinEDA_MsgPanel( WinEDA_DrawFrame* parent, int id,
 {
     m_Parent = parent;
     SetFont( *g_MsgFont );
+    m_last_x = 0;
 }
 
 
 WinEDA_MsgPanel::~WinEDA_MsgPanel()
 {
-    m_Items.clear();
 }
 
 
@@ -44,18 +44,18 @@ void WinEDA_MsgPanel::OnPaint( wxPaintEvent& event )
 {
     wxPaintDC dc( this );
 
-    //EraseMsgBox( &dc );
+    erase( &dc );
 
     dc.SetBackground( *wxBLACK_BRUSH );
     dc.SetBackgroundMode( wxSOLID );
 
     dc.SetTextBackground( GetBackgroundColour() );
-    
+
     dc.SetFont( *g_MsgFont );
-    
+
     for( unsigned i=0;  i<m_Items.size();  ++i )
         showItem( dc, m_Items[i] );
-    
+
     event.Skip();
 }
 
@@ -77,44 +77,41 @@ void WinEDA_MsgPanel::Affiche_1_Parametre( int pos_X, const wxString& texte_H,
  *  color = couleur d'affichage
  */
 {
-    static int old_pos_X;
-    wxPoint    pos;
-    wxSize     FontSizeInPixels, DrawSize;
+    wxPoint     pos;
+    wxSize      drawSize = GetClientSize();
 
-    wxClientDC dc( this );
 
-    DrawSize = GetClientSize();
+    // Get size of the font
+    wxSize      fontSizeInPixels;
+    {
+        wxClientDC dc( this );
 
-    dc.SetBackground( *wxBLACK_BRUSH );
-    dc.SetBackgroundMode( wxSOLID );
+        dc.SetFont( *g_MsgFont );
+        dc.GetTextExtent( wxT( "W" ), &fontSizeInPixels.x, &fontSizeInPixels.y );
 
-    dc.SetTextBackground( GetBackgroundColour() );
-    
-    dc.SetFont( *g_MsgFont );
-    dc.GetTextExtent( wxT( "W" ), &FontSizeInPixels.x, &FontSizeInPixels.y );
-
+    }   // destroy wxClientDC ASAP
 
     if( pos_X >= 0 )
     {
-        old_pos_X = pos.x = pos_X * (FontSizeInPixels.x + 2);
+        m_last_x = pos.x = pos_X * (fontSizeInPixels.x + 2);
     }
     else
-        pos.x = old_pos_X;
+        pos.x = m_last_x;
 
     MsgItem item;
-    
+
     item.m_X = pos.x;
-    
-    item.m_UpperY = (DrawSize.y / 2) - FontSizeInPixels.y;
-    item.m_LowerY = DrawSize.y - FontSizeInPixels.y;
-    
+
+    item.m_UpperY = (drawSize.y / 2) - fontSizeInPixels.y;
+    item.m_LowerY = drawSize.y - fontSizeInPixels.y;
+
     item.m_UpperText = texte_H;
     item.m_LowerText = texte_L;
     item.m_Color = color;
-    
+
     int ndx;
 
-    // update the vector, which is sorted by m_X    
+    // update the vector, which is sorted by m_X
     int limit = m_Items.size();
     for( ndx=0;  ndx<limit;  ++ndx )
     {
@@ -124,31 +121,31 @@ void WinEDA_MsgPanel::Affiche_1_Parametre( int pos_X, const wxString& texte_H,
             m_Items[ndx] = item;
             break;
         }
-        
+
         if( m_Items[ndx].m_X > item.m_X )
         {
             m_Items.insert( m_Items.begin()+ndx, item );
             break;
         }
     }
-    
+
     if( ndx==limit )        // mutually exclusive with two above if tests
     {
         m_Items.push_back( item );
     }
-    
-    showItem( dc, item );
+
+    Refresh();
 }
 
 
 void WinEDA_MsgPanel::showItem( wxDC& dc, const MsgItem& aItem )
 {
     int color = aItem.m_Color;
-    
+
     if( color >= 0 )
     {
         color &= MASKCOLOR;
-        dc.SetTextForeground( wxColour( ColorRefs[color].m_Red, 
+        dc.SetTextForeground( wxColour( ColorRefs[color].m_Red,
                                         ColorRefs[color].m_Green,
                                         ColorRefs[color].m_Blue ) );
     }
@@ -157,7 +154,7 @@ void WinEDA_MsgPanel::showItem( wxDC& dc, const MsgItem& aItem )
     {
         dc.DrawText( aItem.m_UpperText.GetData(), aItem.m_X, aItem.m_UpperY );
     }
-    
+
     if( !aItem.m_LowerText.IsEmpty() )
     {
         dc.DrawText( aItem.m_LowerText.GetData(), aItem.m_X, aItem.m_LowerY );
@@ -168,39 +165,34 @@ void WinEDA_MsgPanel::showItem( wxDC& dc, const MsgItem& aItem )
 /****************************************/
 void WinEDA_MsgPanel::EraseMsgBox()
 /****************************************/
-
-/* Effacement de la fenetre d'affichage des messages de bas d'ecran
- */
 {
-    wxClientDC dc( this );
-
-    EraseMsgBox( &dc );
+   m_Items.clear();
+   m_last_x = 0;
+   Refresh();
 }
 
 
 /*******************************************/
-void WinEDA_MsgPanel::EraseMsgBox( wxDC* DC )
+void WinEDA_MsgPanel::erase( wxDC* DC )
 /*******************************************/
 {
-    wxSize  size;
-    wxColor color;
     wxPen   pen;
     wxBrush brush;
 
-    size  = GetClientSize();
-    color = GetBackgroundColour();
-    
+    wxSize  size  = GetClientSize();
+    wxColor color = GetBackgroundColour();
+
     pen.SetColour( color );
+
     brush.SetColour( color );
     brush.SetStyle( wxSOLID );
-    
+
     DC->SetPen( pen );
     DC->SetBrush( brush );
 
     DC->DrawRectangle( 0, 0, size.x, size.y );
+
     DC->SetBrush( wxNullBrush );
     DC->SetPen( wxNullPen );
-    
-    m_Items.clear();
 }
 
