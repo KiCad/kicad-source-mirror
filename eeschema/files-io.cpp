@@ -269,7 +269,7 @@ void WinEDA_SchematicFrame::SaveProject( )
     for( screen = ScreenList.GetFirst(); screen != NULL;
             screen = ScreenList.GetNext() )
     {
-        printf("SaveEEFile, %s\n", CONV_TO_UTF8(screen->m_FileName) );
+        D(printf("SaveEEFile, %s\n", CONV_TO_UTF8(screen->m_FileName) );)
         SaveEEFile( screen, FILE_SAVE_AS );
     }
 
