@@ -18,14 +18,14 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
  */
 {
     int        id = event.GetId();
-    wxClientDC dc( DrawPanel );
     wxString   msg;
 
-    DrawPanel->PrepareGraphicContext( &dc );
 
     // If an edition is in progress, stop it
     if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
     {
+        wxClientDC dc( DrawPanel );
+        DrawPanel->PrepareGraphicContext( &dc );
         DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
     }
     SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
@@ -35,7 +35,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
     case ID_MENU_LOAD_FILE:
     case ID_LOAD_FILE:
         Clear_Pcb(TRUE );
-        LoadOnePcbFile( wxEmptyString, &dc, FALSE );
+        LoadOnePcbFile( wxEmptyString,FALSE );
         ReCreateAuxiliaryToolbar();
         break;
 
@@ -65,7 +65,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
                 break;
         }
         Clear_Pcb( TRUE );
-        LoadOnePcbFile( filename, &dc, FALSE );
+        LoadOnePcbFile( filename, FALSE );
         GetScreen()->m_FileName = oldfilename;
         SetTitle( GetScreen()->m_FileName );
         ReCreateAuxiliaryToolbar();
@@ -74,7 +74,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
 
     case ID_MENU_APPEND_FILE:
     case ID_APPEND_FILE:
-        LoadOnePcbFile( wxEmptyString, &dc, TRUE );
+        LoadOnePcbFile( wxEmptyString, TRUE );
         break;
 
     case ID_MENU_NEW_BOARD:
@@ -98,7 +98,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
         Clear_Pcb(TRUE );
         wxSetWorkingDirectory( wxPathOnly( GetLastProject( id - ID_LOAD_FILE_1 ) ) );
         LoadOnePcbFile( GetLastProject( id - ID_LOAD_FILE_1 ).GetData(),
-                        &dc, FALSE );
+                        FALSE );
         ReCreateAuxiliaryToolbar();
         break;
 
@@ -121,9 +121,9 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
 }
 
 
-/*****************************************************************************************/
-int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, wxDC * DC, bool Append )
-/******************************************************************************************/
+/*******************************************************************************/
+int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
+/*******************************************************************************/
 
 /**
  *  Read a board file
@@ -200,7 +200,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, wxDC * DC, bo
     // Reload the corresponding configuration file:
     wxSetWorkingDirectory( wxPathOnly( GetScreen()->m_FileName ) );
     if( Append )
-        ReadPcbFile( DC, source, TRUE );
+        ReadPcbFile( source, TRUE );
     else
     {
         Read_Config( GetScreen()->m_FileName );
@@ -211,7 +211,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, wxDC * DC, bo
         m_DisplayModEdge = DisplayOpt.DisplayModEdge;
         m_DisplayPadFill = DisplayOpt.DisplayPadFill;
 
-        ReadPcbFile( DC, source, FALSE );
+        ReadPcbFile( source, FALSE );
     }
 
     fclose( source );
@@ -229,6 +229,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, wxDC * DC, bo
     build_liste_pads();
 
     m_Pcb->Display_Infos( this );
+    DrawPanel->Refresh( true);
 
 	/* reset the auto save timer */
     g_SaveTime = time( NULL );

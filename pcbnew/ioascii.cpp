@@ -771,7 +771,7 @@ static bool ReadSheetDescr( BASE_SCREEN* screen, FILE* File, int* LineNum )
 
 
 /********************************************************************/
-int WinEDA_PcbFrame::ReadPcbFile( wxDC* DC, FILE* File, bool Append )
+int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
 /********************************************************************/
 
 /** ReadPcbFile
@@ -1026,10 +1026,9 @@ int WinEDA_PcbFrame::ReadPcbFile( wxDC* DC, FILE* File, bool Append )
     Affiche_Message( wxEmptyString );
 
     BestZoom();
-    DrawPanel->ReDraw(DC, true);
 
 #ifdef PCBNEW
-    Compile_Ratsnest( DC, TRUE );
+    Compile_Ratsnest( NULL, TRUE );
 #endif
     return 1;
 }

@@ -89,10 +89,7 @@ bool WinEDA_App::OnInit()
     /* Load file specified in the command line. */
     if( !FFileName.IsEmpty() )
     {
-        wxClientDC dc( m_PcbFrame->DrawPanel );
-
-        m_PcbFrame->DrawPanel->PrepareGraphicContext( &dc );
-        m_PcbFrame->LoadOnePcbFile( FFileName, &dc, FALSE );
+        m_PcbFrame->LoadOnePcbFile( FFileName, FALSE );
     }
 
     return TRUE;

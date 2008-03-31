@@ -378,8 +378,8 @@ public:
     void                ToPostProcess( wxCommandEvent& event );
 
     void                Files_io( wxCommandEvent& event );
-    int                 LoadOnePcbFile( const wxString& FileName, wxDC* DC, bool Append );
-    int                 ReadPcbFile( wxDC* DC, FILE* File, bool Append );
+    int                 LoadOnePcbFile( const wxString& FileName, bool Append );
+    int                 ReadPcbFile( FILE* File, bool Append );
     bool                SavePcbFile( const wxString& FileName );
     int                 SavePcbFormatAscii( FILE* File );
     bool                WriteGeneralDescrPcb( FILE* File );
