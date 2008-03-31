@@ -191,8 +191,5 @@ void WinEDA_MsgPanel::erase( wxDC* DC )
     DC->SetBrush( brush );
 
     DC->DrawRectangle( 0, 0, size.x, size.y );
-
-    DC->SetBrush( wxNullBrush );
-    DC->SetPen( wxNullPen );
 }
 
