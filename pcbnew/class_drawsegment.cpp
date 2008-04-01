@@ -144,6 +144,106 @@ bool DRAWSEGMENT::ReadDrawSegmentDescr( FILE* File, int* LineNum )
 }
 
 
+void DRAWSEGMENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                      int draw_mode, const wxPoint& notUsed )
+{
+    int ux0, uy0, dx, dy;
+    int l_piste;
+    int color, mode;
+    int zoom;
+    int rayon;
+
+    color = g_DesignSettings.m_LayerColor[GetLayer()];
+    if( color & ITEM_NOT_SHOW )
+        return;
+
+    if( panel )
+        zoom = panel->GetZoom();
+    else
+        zoom = ActiveScreen->GetZoom();
+
+    GRSetDrawMode( DC, draw_mode );
+    l_piste = m_Width >> 1;  /* l_piste = demi largeur piste */
+
+    /* coord de depart */
+    ux0 = m_Start.x;
+    uy0 = m_Start.y;
+
+    /* coord d'arrivee */
+    dx = m_End.x;
+    dy = m_End.y;
+
+    mode = DisplayOpt.DisplayDrawItems;
+    if( m_Flags & FORCE_SKETCH )
+        mode = SKETCH;
+    if( l_piste < (L_MIN_DESSIN * zoom) )
+        mode = FILAIRE;
+
+    switch( m_Shape )
+    {
+    case S_CIRCLE:
+        rayon = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
+        if( mode == FILAIRE )
+        {
+            GRCircle( &panel->m_ClipBox, DC, ux0, uy0, rayon, color );
+        }
+        else if( mode == SKETCH )
+        {
+            GRCircle( &panel->m_ClipBox, DC, ux0, uy0, rayon - l_piste, color );
+            GRCircle( &panel->m_ClipBox, DC, ux0, uy0, rayon + l_piste, color );
+        }
+        else
+        {
+            GRCircle( &panel->m_ClipBox, DC, ux0, uy0, rayon, m_Width, color );
+        }
+        break;
+
+    case S_ARC:
+        {
+            int StAngle, EndAngle;
+            rayon    = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
+            StAngle  = (int) ArcTangente( dy - uy0, dx - ux0 );
+            EndAngle = StAngle + m_Angle;
+
+            if( StAngle > EndAngle )
+                EXCHG( StAngle, EndAngle );
+
+            if( mode == FILAIRE )
+                GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle, rayon, color );
+
+            else if( mode == SKETCH )
+            {
+                GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
+                       rayon - l_piste, color );
+                GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
+                       rayon + l_piste, color );
+            }
+            else
+            {
+                GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
+                       rayon, m_Width, color );
+            }
+        }
+        break;
+
+    default:
+        if( mode == FILAIRE )
+            GRLine( &panel->m_ClipBox, DC, ux0, uy0, dx, dy, 0, color );
+        else if( mode == SKETCH )
+        {
+            GRCSegm( &panel->m_ClipBox, DC, ux0, uy0, dx, dy,
+                     m_Width, color );
+        }
+        else
+        {
+            GRFillCSegm( &panel->m_ClipBox, DC, ux0, uy0, dx, dy,
+                         m_Width, color );
+        }
+        break;
+    }
+}
+
+
 // see pcbstruct.h
 void DRAWSEGMENT::Display_Infos( WinEDA_DrawFrame* frame )
 {

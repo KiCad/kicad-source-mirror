@@ -221,103 +221,10 @@ void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mo
 void Trace_DrawSegmentPcb( WinEDA_DrawPanel* panel, wxDC* DC,
                            DRAWSEGMENT* PtDrawSegment, int draw_mode )
 /**************************************************************************/
-
-/* Affichage d'un segment type drawing PCB:
- *  Entree : ox, oy = offset de trace
- *  draw_mode = mode de trace ( GR_OR, GR_XOR, GrAND)
- *      Les contours sont de differents type:
- *      segment
- *      cercle
- *      arc
- */
 {
-    int ux0, uy0, dx, dy;
-    int l_piste;
-    int color, mode;
-    int zoom = panel->GetZoom();
-    int rayon;
+    // @todo Replace all calls to Trace_DrawSegmentPcb() with this call:
 
-    color = g_DesignSettings.m_LayerColor[PtDrawSegment->GetLayer()];
-    if( color & ITEM_NOT_SHOW )
-        return;
-
-    GRSetDrawMode( DC, draw_mode );
-    l_piste = PtDrawSegment->m_Width >> 1;  /* l_piste = demi largeur piste */
-
-    /* coord de depart */
-    ux0 = PtDrawSegment->m_Start.x;
-    uy0 = PtDrawSegment->m_Start.y;
-    
-    /* coord d'arrivee */
-    dx = PtDrawSegment->m_End.x;
-    dy = PtDrawSegment->m_End.y;
-
-    mode = DisplayOpt.DisplayPcbTrackFill ? FILLED : SKETCH;
-    
-    if( PtDrawSegment->m_Flags & FORCE_SKETCH )
-        mode = SKETCH;
-    
-    if( l_piste < (L_MIN_DESSIN * zoom) )
-        mode = FILAIRE;
-
-    switch( PtDrawSegment->m_Shape )
-    {
-    case S_CIRCLE:
-        rayon = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
-        if( mode == FILAIRE )
-        {
-            GRCircle( &panel->m_ClipBox, DC, ux0, uy0, rayon, 0, color );
-        }
-        else if( mode == SKETCH )
-        {
-            GRCircle( &panel->m_ClipBox, DC, ux0, uy0, rayon - l_piste, 0, color );
-            GRCircle( &panel->m_ClipBox, DC, ux0, uy0, rayon + l_piste, 0, color );
-        }
-        else
-        {
-            GRCircle( &panel->m_ClipBox, DC, ux0, uy0, rayon, PtDrawSegment->m_Width, color );
-        }
-        break;
-
-    case S_ARC:
-    {
-        int StAngle, EndAngle;
-        rayon    = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
-        StAngle  = (int) ArcTangente( dy - uy0, dx - ux0 );
-        EndAngle = StAngle + PtDrawSegment->m_Angle;
-        if( mode == FILAIRE )
-            GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle, rayon, 0, color );
-        else if( mode == SKETCH )
-        {
-            GRArc( &panel->m_ClipBox, DC, ux0, uy0, 0, StAngle, EndAngle,
-                   rayon - l_piste, color );
-            GRArc( &panel->m_ClipBox, DC, ux0, uy0, 0, StAngle, EndAngle,
-                   rayon + l_piste, color );
-        }
-        else
-        {
-            GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
-                   rayon, PtDrawSegment->m_Width, color );
-        }
-    }
-        break;
-
-
-    default:
-        if( mode == FILAIRE )
-            GRLine( &panel->m_ClipBox, DC, ux0, uy0, dx, dy, 0, color );
-        else if( mode == SKETCH )
-        {
-            GRCSegm( &panel->m_ClipBox, DC, ux0, uy0, dx, dy,
-                     PtDrawSegment->m_Width, color );
-        }
-        else
-        {
-            GRFillCSegm( &panel->m_ClipBox, DC, ux0, uy0, dx, dy,
-                         PtDrawSegment->m_Width, color );
-        }
-        break;
-    }
+    PtDrawSegment->Draw( panel, DC, draw_mode );
 }
 
 

@@ -252,6 +252,13 @@ public:
      */
     void    Display_Infos( WinEDA_DrawFrame* frame );
 
+    void Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                      int aDrawMode, const wxPoint& offset = ZeroOffset )
+    {
+        // void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
+        // goes here.
+    }
+
 
     /**
      * Function Visit

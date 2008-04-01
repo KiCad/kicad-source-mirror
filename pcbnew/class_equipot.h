@@ -33,13 +33,13 @@ public:
     /**
      * Function GetPosition
      * returns the position of this object.
-     * @return wxPoint& - The position of this object, non-const so it 
+     * @return wxPoint& - The position of this object, non-const so it
      *          can be changed
      * A dummy to satisfy pure virtual BOARD::GetPosition()
      */
     wxPoint& GetPosition();
-    
-    
+
+
     /* Effacement memoire de la structure */
     void  UnLink();
 
@@ -51,18 +51,25 @@ public:
      * writes the data structures for this object out to a FILE in "*.brd" format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
-     */ 
+     */
     bool Save( FILE* aFile ) const;
-    
-    
+
+
+    void Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                      int aDrawMode, const wxPoint& offset = ZeroOffset )
+    {
+        // @todo we actually could show a NET, simply show all the tracks and pads
+    }
+
+
     /**
      * Function GetNet
      * @return int - the netcode
      */
     int GetNet() const { return m_NetCode; }
     void SetNet( int aNetCode ) { m_NetCode = aNetCode; }
-	
-    
+
+
     /**
      * Function GetClass
      * returns the class name.
@@ -73,17 +80,17 @@ public:
         return wxT("NET");
     }
 
-    
+
 #if defined(DEBUG)
     /**
      * Function Show
      * is used to output the object tree, currently for debugging only.
-     * @param nestLevel An aid to prettier tree indenting, and is the level 
+     * @param nestLevel An aid to prettier tree indenting, and is the level
      *          of nesting of this object within the overall tree.
      * @param os The ostream& to output to.
      */
     virtual void Show( int nestLevel, std::ostream& os );
 #endif
-    
+
 };
 

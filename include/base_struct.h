@@ -612,9 +612,7 @@ public:
      * BOARD_ITEMs which have their own color information.
      */
     virtual void Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                      int aDrawMode, const wxPoint& offset = ZeroOffset )
-    {
-    }
+                      int aDrawMode, const wxPoint& offset = ZeroOffset ) = 0;
 
 
     /**

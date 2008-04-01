@@ -503,12 +503,11 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
         switch( PtStruct->Type() )
         {
         case TYPEDRAWSEGMENT:
-                #undef STRUCT
-                #define STRUCT ( (DRAWSEGMENT*) PtStruct )
-            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
+            if( (g_TabOneLayerMask[PtStruct->GetLayer()] & masque_layer) == 0 )
                 break;
             if( ! PtStruct->HitTest( GetScreen()->BlockLocate ) )
                 break;
+
             /* l'element est ici bon a etre efface */
             Trace_DrawSegmentPcb( DrawPanel, DC, (DRAWSEGMENT*) PtStruct, GR_XOR );
             PtStruct->DeleteStructure();
@@ -526,7 +525,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
             break;
 
         case TYPEMIRE:
-            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
+            if( (g_TabOneLayerMask[PtStruct->GetLayer()] & masque_layer) == 0 )
                 break;
             if( ! PtStruct->HitTest( GetScreen()->BlockLocate ) )
                 break;
@@ -535,7 +534,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
             break;
 
         case TYPECOTATION:
-            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
+            if( (g_TabOneLayerMask[PtStruct->GetLayer()] & masque_layer) == 0 )
                 break;
             if( ! PtStruct->HitTest( GetScreen()->BlockLocate ) )
                 break;

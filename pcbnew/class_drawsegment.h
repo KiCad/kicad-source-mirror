@@ -49,6 +49,9 @@ public:
     void    Copy( DRAWSEGMENT* source );
 
 
+    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                      int aDrawMode, const wxPoint& offset = ZeroOffset );
+
     /**
      * Function Display_Infos
      * has knowledge about the frame and how and where to put status information
@@ -86,11 +89,11 @@ public:
         return wxT( "DRAWSEGMENT" );
     }
 
-    
-#if defined(DEBUG)    
+
+#if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os );
-#endif    
-    
+#endif
+
 };
 
 

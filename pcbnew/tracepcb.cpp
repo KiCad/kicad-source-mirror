@@ -101,6 +101,12 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 #define DRAW_CUR_LAYER_LAST     1
 
 
+/* should make the function below this one:
+void BOARD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                  int aDrawMode, const wxPoint& offset = ZeroOffset );
+*/
+
+
 /****************************************************/
 void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
 /****************************************************/
@@ -149,11 +155,8 @@ void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
         case TYPECOTATION:
         case TYPETEXTE:
         case TYPEMIRE:
+        case TYPEDRAWSEGMENT:
             item->Draw( DrawPanel, DC, mode );
-            break;
-
-       case TYPEDRAWSEGMENT:
-            Trace_DrawSegmentPcb( DrawPanel, DC, (DRAWSEGMENT*) item, mode );
             break;
 
        default:
