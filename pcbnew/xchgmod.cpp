@@ -492,12 +492,12 @@ MODULE* WinEDA_ExchangeModuleFrame::Change_1_Module( MODULE* PtModule,
     m_WinMsg->WriteText( wxT( "Ok\n" ) );
 
     /* Effacement a l'ecran de l'ancien module */
-    PtModule->Draw( m_Parent->DrawPanel, m_DC, wxPoint( 0, 0 ), GR_XOR );
+    PtModule->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
 
     m_Parent->Exchange_Module( this, PtModule, NewModule );
 
     /* Affichage du nouveau module */
-    NewModule->Draw( m_Parent->DrawPanel, m_DC, wxPoint( 0, 0 ), GR_OR );
+    NewModule->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
 
     Maj_ListeCmp( NewModule->m_Reference->m_Text, oldnamecmp, namecmp, ShowError );
 
@@ -550,7 +550,7 @@ MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
 
     /* Mise a jour des autres parametres */
     NewModule->m_TimeStamp = OldModule->m_TimeStamp;
-	NewModule->m_Path = OldModule->m_Path;
+    NewModule->m_Path = OldModule->m_Path;
 
     /* mise a jour des netnames ( lorsque c'est possible) */
     pt_pad = NewModule->m_Pads;
@@ -646,7 +646,7 @@ bool WinEDA_PcbFrame::RecreateCmpFileFromBoard()
     {
         fprintf( FichCmp, "\nBeginCmp\n" );
         fprintf( FichCmp, "TimeStamp = %8.8lX\n", Module->m_TimeStamp );
-		fprintf( FichCmp, "Path = %s\n", CONV_TO_UTF8(Module->m_Path) );
+        fprintf( FichCmp, "Path = %s\n", CONV_TO_UTF8(Module->m_Path) );
         fprintf( FichCmp, "Reference = %s;\n",
                  !Module->m_Reference->m_Text.IsEmpty() ?
                  CONV_TO_UTF8( Module->m_Reference->m_Text ) : "[NoRef]" );

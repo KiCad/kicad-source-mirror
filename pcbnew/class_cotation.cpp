@@ -69,7 +69,7 @@ wxString COTATION:: GetText( void )
 /* Reutun the dimension text
 */
 {
-	return m_Text->m_Text;
+    return m_Text->m_Text;
 }
 
 
@@ -123,7 +123,7 @@ bool COTATION::ReadCotationDescr( FILE* File, int* LineNum )
         if( Line[0] == 'G' )
         {
             int layer;
-            
+
             sscanf( Line + 2, " %d %d %lX", &m_Shape, &layer, &m_TimeStamp );
 
             /* Mise a jour des param .layer des sous structures */
@@ -234,22 +234,22 @@ void COTATION::Move(const wxPoint& offset)
  * @param offset : moving vector
  */
 {
-	m_Pos += offset;
-	m_Text->m_Pos += offset;
-	Barre_ox    += offset.x; Barre_oy += offset.y;
-	Barre_fx    += offset.x; Barre_fy += offset.y;
-	TraitG_ox   += offset.x; TraitG_oy += offset.y;
-	TraitG_fx   += offset.x; TraitG_fy += offset.y;
-	TraitD_ox   += offset.x; TraitD_oy += offset.y;
-	TraitD_fx   += offset.x; TraitD_fy += offset.y;
-	FlecheG1_ox += offset.x; FlecheG1_oy += offset.y;
-	FlecheG1_fx += offset.x; FlecheG1_fy += offset.y;
-	FlecheG2_ox += offset.x; FlecheG2_oy += offset.y;
-	FlecheG2_fx += offset.x; FlecheG2_fy += offset.y;
-	FlecheD1_ox += offset.x; FlecheD1_oy += offset.y;
-	FlecheD1_fx += offset.x; FlecheD1_fy += offset.y;
-	FlecheD2_ox += offset.x; FlecheD2_oy += offset.y;
-	FlecheD2_fx += offset.x; FlecheD2_fy += offset.y;
+    m_Pos += offset;
+    m_Text->m_Pos += offset;
+    Barre_ox    += offset.x; Barre_oy += offset.y;
+    Barre_fx    += offset.x; Barre_fy += offset.y;
+    TraitG_ox   += offset.x; TraitG_oy += offset.y;
+    TraitG_fx   += offset.x; TraitG_fy += offset.y;
+    TraitD_ox   += offset.x; TraitD_oy += offset.y;
+    TraitD_fx   += offset.x; TraitD_fy += offset.y;
+    FlecheG1_ox += offset.x; FlecheG1_oy += offset.y;
+    FlecheG1_fx += offset.x; FlecheG1_fy += offset.y;
+    FlecheG2_ox += offset.x; FlecheG2_oy += offset.y;
+    FlecheG2_fx += offset.x; FlecheG2_fy += offset.y;
+    FlecheD1_ox += offset.x; FlecheD1_oy += offset.y;
+    FlecheD1_fx += offset.x; FlecheD1_fy += offset.y;
+    FlecheD2_ox += offset.x; FlecheD2_oy += offset.y;
+    FlecheD2_fx += offset.x; FlecheD2_fy += offset.y;
 }
 
 
@@ -262,30 +262,30 @@ void COTATION::Rotate(const wxPoint& centre, int angle)
  * @param angle : Rotation angle in 0.1 degrees
  */
 {
-	RotatePoint( &m_Pos, centre, 900 );
+    RotatePoint( &m_Pos, centre, 900 );
 
-	RotatePoint( &m_Text->m_Pos, centre, 900 );
-	m_Text->m_Orient += 900;
-	if( m_Text->m_Orient >= 3600 )
-		m_Text->m_Orient -= 3600;
-	if( (m_Text->m_Orient > 900)
-	   && (m_Text->m_Orient <2700) )
-		m_Text->m_Orient -= 1800;
+    RotatePoint( &m_Text->m_Pos, centre, 900 );
+    m_Text->m_Orient += 900;
+    if( m_Text->m_Orient >= 3600 )
+        m_Text->m_Orient -= 3600;
+    if( (m_Text->m_Orient > 900)
+       && (m_Text->m_Orient <2700) )
+        m_Text->m_Orient -= 1800;
 
-	RotatePoint( &Barre_ox, &Barre_oy, centre.x, centre.y, 900 );
-	RotatePoint( &Barre_fx, &Barre_fy, centre.x, centre.y, 900 );
-	RotatePoint( &TraitG_ox, &TraitG_oy, centre.x, centre.y, 900 );
-	RotatePoint( &TraitG_fx, &TraitG_fy, centre.x, centre.y, 900 );
-	RotatePoint( &TraitD_ox, &TraitD_oy, centre.x, centre.y, 900 );
-	RotatePoint( &TraitD_fx, &TraitD_fy, centre.x, centre.y, 900 );
-	RotatePoint( &FlecheG1_ox, &FlecheG1_oy, centre.x, centre.y, 900 );
-	RotatePoint( &FlecheG1_fx, &FlecheG1_fy, centre.x, centre.y, 900 );
-	RotatePoint( &FlecheG2_ox, &FlecheG2_oy, centre.x, centre.y, 900 );
-	RotatePoint( &FlecheG2_fx, &FlecheG2_fy, centre.x, centre.y, 900 );
-	RotatePoint( &FlecheD1_ox, &FlecheD1_oy, centre.x, centre.y, 900 );
-	RotatePoint( &FlecheD1_fx, &FlecheD1_fy, centre.x, centre.y, 900 );
-	RotatePoint( &FlecheD2_ox, &FlecheD2_oy, centre.x, centre.y, 900 );
-	RotatePoint( &FlecheD2_fx, &FlecheD2_fy, centre.x, centre.y, 900 );
+    RotatePoint( &Barre_ox, &Barre_oy, centre.x, centre.y, 900 );
+    RotatePoint( &Barre_fx, &Barre_fy, centre.x, centre.y, 900 );
+    RotatePoint( &TraitG_ox, &TraitG_oy, centre.x, centre.y, 900 );
+    RotatePoint( &TraitG_fx, &TraitG_fy, centre.x, centre.y, 900 );
+    RotatePoint( &TraitD_ox, &TraitD_oy, centre.x, centre.y, 900 );
+    RotatePoint( &TraitD_fx, &TraitD_fy, centre.x, centre.y, 900 );
+    RotatePoint( &FlecheG1_ox, &FlecheG1_oy, centre.x, centre.y, 900 );
+    RotatePoint( &FlecheG1_fx, &FlecheG1_fy, centre.x, centre.y, 900 );
+    RotatePoint( &FlecheG2_ox, &FlecheG2_oy, centre.x, centre.y, 900 );
+    RotatePoint( &FlecheG2_fx, &FlecheG2_fy, centre.x, centre.y, 900 );
+    RotatePoint( &FlecheD1_ox, &FlecheD1_oy, centre.x, centre.y, 900 );
+    RotatePoint( &FlecheD1_fx, &FlecheD1_fy, centre.x, centre.y, 900 );
+    RotatePoint( &FlecheD2_ox, &FlecheD2_oy, centre.x, centre.y, 900 );
+    RotatePoint( &FlecheD2_fx, &FlecheD2_fy, centre.x, centre.y, 900 );
 }
 
 
@@ -302,28 +302,28 @@ void COTATION::Mirror(const wxPoint& axis_pos)
 {
 #define INVERT( pos )       (pos) = axis_pos.y - ( (pos) - axis_pos.y )
 #define INVERT_ANGLE( phi ) (phi) = -(phi)
-	INVERT( m_Pos.y );
-	INVERT( m_Text->m_Pos.y );
-	INVERT_ANGLE( m_Text->m_Orient );
-	if( m_Text->m_Orient >= 3600 )
-		m_Text->m_Orient -= 3600;
-	if( (m_Text->m_Orient > 900) && (m_Text->m_Orient <2700) )
-		m_Text->m_Orient -= 1800;
+    INVERT( m_Pos.y );
+    INVERT( m_Text->m_Pos.y );
+    INVERT_ANGLE( m_Text->m_Orient );
+    if( m_Text->m_Orient >= 3600 )
+        m_Text->m_Orient -= 3600;
+    if( (m_Text->m_Orient > 900) && (m_Text->m_Orient <2700) )
+        m_Text->m_Orient -= 1800;
 
-	INVERT( Barre_oy );
-	INVERT( Barre_fy );
-	INVERT( TraitG_oy );
-	INVERT( TraitG_fy );
-	INVERT( TraitD_oy );
-	INVERT( TraitD_fy );
-	INVERT( FlecheG1_oy );
-	INVERT( FlecheG1_fy );
-	INVERT( FlecheG2_oy );
-	INVERT( FlecheG2_fy );
-	INVERT( FlecheD1_oy );
-	INVERT( FlecheD1_fy );
-	INVERT( FlecheD2_oy );
-	INVERT( FlecheD2_fy );
+    INVERT( Barre_oy );
+    INVERT( Barre_fy );
+    INVERT( TraitG_oy );
+    INVERT( TraitG_fy );
+    INVERT( TraitD_oy );
+    INVERT( TraitD_fy );
+    INVERT( FlecheG1_oy );
+    INVERT( FlecheG1_fy );
+    INVERT( FlecheG2_oy );
+    INVERT( FlecheG2_fy );
+    INVERT( FlecheD1_oy );
+    INVERT( FlecheD1_fy );
+    INVERT( FlecheD2_oy );
+    INVERT( FlecheD2_fy );
 }
 
 /****************************************/
@@ -334,7 +334,7 @@ bool COTATION::Save( FILE* aFile ) const
         return true;
 
     bool rc = false;
-    
+
     if( fprintf( aFile, "$COTATION\n" ) != sizeof("$COTATION\n")-1 )
         goto out;
 
@@ -384,19 +384,19 @@ bool COTATION::Save( FILE* aFile ) const
 
     if( fprintf( aFile, "$EndCOTATION\n" ) != sizeof("$EndCOTATION\n")-1 )
         goto out;
-    
+
     rc = true;
-    
+
 out:
     return rc;
 }
-    
-    
+
+
 
 
 /************************************************************************/
 void COTATION::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                     const wxPoint& offset, int mode_color )
+                     int mode_color, const wxPoint& offset )
 /************************************************************************/
 
 /* impression de 1 cotation : serie de n segments + 1 texte
@@ -408,7 +408,7 @@ void COTATION::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     ox = offset.x;
     oy = offset.y;
 
-    m_Text->Draw( panel, DC, offset, mode_color );
+    m_Text->Draw( panel, DC, mode_color, offset );
 
     gcolor = g_DesignSettings.m_LayerColor[m_Layer];
     if( (gcolor & ITEM_NOT_SHOW) != 0 )
@@ -416,7 +416,7 @@ void COTATION::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
     GRSetDrawMode( DC, mode_color );
     typeaff = DisplayOpt.DisplayDrawItems;
-    
+
     width   = m_Width;
     if( width / zoom < 2 )
         typeaff = FILAIRE;
@@ -513,95 +513,95 @@ bool COTATION::HitTest( const wxPoint& ref_pos )
     }
 
     /* Localisation des SEGMENTS ?) */
-    ux0 = Barre_ox; 
+    ux0 = Barre_ox;
     uy0 = Barre_oy;
-    
+
     /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
-    dx = Barre_fx - ux0; 
+    dx = Barre_fx - ux0;
     dy = Barre_fy - uy0;
-    
-    spot_cX = ref_pos.x - ux0; 
+
+    spot_cX = ref_pos.x - ux0;
     spot_cY = ref_pos.y - uy0;
 
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
 
-    ux0 = TraitG_ox; 
+    ux0 = TraitG_ox;
     uy0 = TraitG_oy;
-    
+
     /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
-    dx = TraitG_fx - ux0; 
+    dx = TraitG_fx - ux0;
     dy = TraitG_fy - uy0;
-    
-    spot_cX = ref_pos.x - ux0; 
+
+    spot_cX = ref_pos.x - ux0;
     spot_cY = ref_pos.y - uy0;
 
     /* detection : */
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
 
-    ux0 = TraitD_ox; 
+    ux0 = TraitD_ox;
     uy0 = TraitD_oy;
-    
+
     /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
-    dx = TraitD_fx - ux0; 
+    dx = TraitD_fx - ux0;
     dy = TraitD_fy - uy0;
-    
-    spot_cX = ref_pos.x - ux0; 
+
+    spot_cX = ref_pos.x - ux0;
     spot_cY = ref_pos.y - uy0;
 
     /* detection : */
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
 
-    ux0 = FlecheD1_ox; 
+    ux0 = FlecheD1_ox;
     uy0 = FlecheD1_oy;
-    
+
     /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
-    dx = FlecheD1_fx - ux0; 
+    dx = FlecheD1_fx - ux0;
     dy = FlecheD1_fy - uy0;
-    
-    spot_cX = ref_pos.x - ux0; 
+
+    spot_cX = ref_pos.x - ux0;
     spot_cY = ref_pos.y - uy0;
 
     /* detection : */
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
 
-    ux0 = FlecheD2_ox; 
+    ux0 = FlecheD2_ox;
     uy0 = FlecheD2_oy;
-    
+
     /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
-    dx = FlecheD2_fx - ux0; 
+    dx = FlecheD2_fx - ux0;
     dy = FlecheD2_fy - uy0;
-    
-    spot_cX = ref_pos.x - ux0; 
+
+    spot_cX = ref_pos.x - ux0;
     spot_cY = ref_pos.y - uy0;
 
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
 
-    ux0 = FlecheG1_ox; 
+    ux0 = FlecheG1_ox;
     uy0 = FlecheG1_oy;
-    
+
     /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
-    dx = FlecheG1_fx - ux0; 
+    dx = FlecheG1_fx - ux0;
     dy = FlecheG1_fy - uy0;
-    
-    spot_cX = ref_pos.x - ux0; 
+
+    spot_cX = ref_pos.x - ux0;
     spot_cY = ref_pos.y - uy0;
 
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
 
-    ux0 = FlecheG2_ox; 
+    ux0 = FlecheG2_ox;
     uy0 = FlecheG2_oy;
-    
+
     /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
-    dx = FlecheG2_fx - ux0; 
+    dx = FlecheG2_fx - ux0;
     dy = FlecheG2_fy - uy0;
-    
-    spot_cX = ref_pos.x - ux0; 
+
+    spot_cX = ref_pos.x - ux0;
     spot_cY = ref_pos.y - uy0;
 
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
@@ -618,7 +618,7 @@ bool COTATION::HitTest( const wxPoint& ref_pos )
  */
 bool    COTATION::HitTest( EDA_Rect& refArea )
 {
-	if( refArea.Inside( m_Pos ) )
-		return true;
-	return false;
+    if( refArea.Inside( m_Pos ) )
+        return true;
+    return false;
 }

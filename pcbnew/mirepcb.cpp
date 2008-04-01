@@ -143,13 +143,13 @@ void WinEDA_MirePropertiesFrame::OnOkClick( wxCommandEvent& event )
 /* Met a jour les differents parametres pour le composant en cours d'édition
  */
 {
-    m_MirePcb->Draw( m_Parent->DrawPanel, m_DC, wxPoint( 0, 0 ), GR_XOR );
+    m_MirePcb->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
 
     m_MirePcb->m_Width = m_MireWidthCtrl->GetValue();
     MireDefaultSize    = m_MirePcb->m_Size = m_MireSizeCtrl->GetValue();
     m_MirePcb->m_Shape = m_MireShape->GetSelection() ? 1 : 0;
 
-    m_MirePcb->Draw( m_Parent->DrawPanel, m_DC, wxPoint( 0, 0 ), GR_OR );
+    m_MirePcb->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
 
     m_Parent->GetScreen()->SetModify();
     EndModal( 1 );
@@ -163,8 +163,8 @@ void WinEDA_PcbFrame::Delete_Mire( MIREPCB* MirePcb, wxDC* DC )
     if( MirePcb == NULL )
         return;
 
-    MirePcb->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
-    MirePcb ->DeleteStructure();
+    MirePcb->Draw( DrawPanel, DC, GR_XOR );
+    MirePcb->DeleteStructure();
 }
 
 
@@ -181,11 +181,11 @@ static void Exit_EditMire( WinEDA_DrawPanel* Panel, wxDC* DC )
     if( MirePcb )
     {
         /* Effacement de la mire */
-        MirePcb->Draw( Panel, DC, wxPoint( 0, 0 ), GR_XOR );
+        MirePcb->Draw( Panel, DC, GR_XOR );
 
         if( MirePcb->m_Flags & IS_NEW )
         {
-            MirePcb->Draw( Panel, DC, wxPoint( 0, 0 ), GR_XOR );
+            MirePcb->Draw( Panel, DC, GR_XOR );
             MirePcb ->DeleteStructure();
             MirePcb = NULL;
         }
@@ -193,7 +193,7 @@ static void Exit_EditMire( WinEDA_DrawPanel* Panel, wxDC* DC )
         {
             MirePcb->m_Pos   = OldPos;
             MirePcb->m_Flags = 0;
-            MirePcb->Draw( Panel, DC, wxPoint( 0, 0 ), GR_OR );
+            MirePcb->Draw( Panel, DC, GR_OR );
         }
     }
 }
@@ -250,7 +250,7 @@ void WinEDA_PcbFrame::Place_Mire( MIREPCB* MirePcb, wxDC* DC )
     if( MirePcb == NULL )
         return;
 
-    MirePcb->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+    MirePcb->Draw( DrawPanel, DC, GR_OR );
 
     MirePcb->m_Flags = 0;
     DrawPanel->ManageCurseur = NULL;
@@ -273,10 +273,10 @@ static void Montre_Position_Mire( WinEDA_DrawPanel* panel, wxDC* DC, bool erase 
 
     /* efface ancienne position */
     if( erase )
-        MirePcb->Draw( panel, DC, wxPoint( 0, 0 ), GR_XOR );
+        MirePcb->Draw( panel, DC, GR_XOR );
 
     MirePcb->m_Pos = screen->m_Curseur;
 
     // Reaffichage
-    MirePcb->Draw( panel, DC, wxPoint( 0, 0 ), GR_XOR );
+    MirePcb->Draw( panel, DC, GR_XOR );
 }

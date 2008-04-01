@@ -550,7 +550,6 @@ void WinEDA_DrawPanel::EraseScreen( wxDC* DC )
 /***************************************************/
 void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
 /***************************************************/
-#if 1   // new code without multiple calls to ReDraw()
 {
     wxPaintDC paintDC( this );
     EDA_Rect  tmp;
@@ -620,72 +619,6 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
     m_ClipBox = tmp;
     event.Skip();
 }
-
-
-#else   // old code
-
-{
-    wxPaintDC  paintDC( this );
-    EDA_Rect   tmp;
-    wxRect     PaintClipBox;
-    wxPoint    org;
-
-    static int counter;
-
-    ++counter;
-
-
-    PrepareGraphicContext( &paintDC );
-    tmp = m_ClipBox;
-
-    org = m_ClipBox.GetOrigin();
-
-    wxRegionIterator upd( GetUpdateRegion() ); // get the update rect list
-
-    while( upd )
-    {
-        PaintClipBox = upd.GetRect();
-        upd++;
-
-        PaintClipBox.x += org.x;
-        PaintClipBox.y += org.y;
-
-#if 0
-        printf( "PaintClipBox[%d]=(%d, %d, %d, %d)\n",
-            counter,
-            PaintClipBox.x,
-            PaintClipBox.y,
-            PaintClipBox.width,
-            PaintClipBox.height );
-#endif
-
-#ifdef WX_ZOOM
-        m_ClipBox.m_Pos.x = PaintClipBox.x * GetZoom();
-
-        m_ClipBox.m_Pos.y = PaintClipBox.y * GetZoom();
-
-        m_ClipBox.m_Size.x = PaintClipBox.m_Size.x * GetZoom();
-
-        m_ClipBox.m_Size.y = PaintClipBox.m_Size.y * GetZoom();
-
-        PaintClipBox = m_ClipBox;
-#else
-        m_ClipBox.SetX( PaintClipBox.GetX() );
-        m_ClipBox.SetY( PaintClipBox.GetY() );
-        m_ClipBox.SetWidth( PaintClipBox.GetWidth() );
-        m_ClipBox.SetHeight( PaintClipBox.GetHeight() );
-#endif
-
-        wxDCClipper* dcclip = new wxDCClipper( paintDC, PaintClipBox );
-        ReDraw( &paintDC, TRUE );
-        delete dcclip;
-    }
-
-    m_ClipBox = tmp;
-    event.Skip();
-}
-
-#endif
 
 
 /****************************************************/

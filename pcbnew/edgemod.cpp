@@ -39,7 +39,7 @@ void WinEDA_ModuleEditFrame::Start_Move_EdgeMod( EDGE_MODULE* Edge, wxDC* DC )
 {
     if( Edge == NULL )
         return;
-    Edge->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+    Edge->Draw( DrawPanel, DC, GR_XOR );
     Edge->m_Flags |= IS_MOVED;
     MoveVector.x   = MoveVector.y = 0;
     CursorInitialPosition    = GetScreen()->m_Curseur;
@@ -70,7 +70,7 @@ void WinEDA_ModuleEditFrame::Place_EdgeMod( EDGE_MODULE* Edge, wxDC* DC )
     Edge->m_End0.x   -= MoveVector.x;
     Edge->m_End0.y   -= MoveVector.y;
 
-    Edge->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+    Edge->Draw( DrawPanel, DC, GR_OR );
     Edge->m_Flags = 0;
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
@@ -96,13 +96,13 @@ static void Move_Segment( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 
     if( erase )
     {
-        Edge->Draw( panel, DC, MoveVector, GR_XOR );
+        Edge->Draw( panel, DC, GR_XOR, MoveVector );
     }
 
     MoveVector.x = -(screen->m_Curseur.x - CursorInitialPosition.x);
     MoveVector.y = -(screen->m_Curseur.y - CursorInitialPosition.y);
 
-    Edge->Draw( panel, DC, MoveVector, GR_XOR );
+    Edge->Draw( panel, DC, GR_XOR, MoveVector );
 
     Module->Set_Rectangle_Encadrement();
 }
@@ -125,7 +125,7 @@ static void ShowEdgeModule( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 
     //	if( erase )
     {
-        Edge->Draw( panel, DC, wxPoint( 0, 0 ), GR_XOR );
+        Edge->Draw( panel, DC, GR_XOR );
     }
 
     Edge->m_End = screen->m_Curseur;
@@ -136,7 +136,7 @@ static void ShowEdgeModule( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     RotatePoint( (int*) &Edge->m_End0.x,
                 (int*) &Edge->m_End0.y, -Module->m_Orient );
 
-    Edge->Draw( panel, DC, wxPoint( 0, 0 ), GR_XOR );
+    Edge->Draw( panel, DC, GR_XOR );
 
     Module->Set_Rectangle_Encadrement();
 }
@@ -193,17 +193,17 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Layer( EDGE_MODULE* Edge, wxDC* DC )
         new_layer = Edge->GetLayer();
 
 
-	/* Ask for the new layer */
+    /* Ask for the new layer */
     new_layer = SelectLayer( new_layer, FIRST_COPPER_LAYER, LAST_NO_COPPER_LAYER );
     if( new_layer < 0 )
         return;
 
-	if ( new_layer >= FIRST_COPPER_LAYER && new_layer <= LAST_COPPER_LAYER )
-	/* an edge is put on a copper layer, and it is very dangerous. a confirmation is requested */
-	{
-		if ( ! IsOK(this, _("The graphic item will be on a copper layer.It is very dangerous. Are you sure") ) )
-			return;
-	}
+    if ( new_layer >= FIRST_COPPER_LAYER && new_layer <= LAST_COPPER_LAYER )
+    /* an edge is put on a copper layer, and it is very dangerous. a confirmation is requested */
+    {
+        if ( ! IsOK(this, _("The graphic item will be on a copper layer.It is very dangerous. Are you sure") ) )
+            return;
+    }
 
     SaveCopyInUndoList( Module );
 
@@ -283,7 +283,7 @@ void WinEDA_ModuleEditFrame::Delete_Edge_Module( EDGE_MODULE* Edge, wxDC* DC )
     }
 
     MODULE* Module = (MODULE*) Edge->m_Parent;
-    Edge->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+    Edge->Draw( DrawPanel, DC, GR_XOR );
 
     /* suppression d'un segment */
     Edge ->DeleteStructure();
@@ -306,15 +306,15 @@ static void Exit_EditEdge_Module( WinEDA_DrawPanel* Panel, wxDC* DC )
         if( Edge->m_Flags & IS_NEW )                        /* effacement du nouveau contour */
         {
             MODULE* Module = (MODULE*) Edge->m_Parent;
-            Edge->Draw( Panel, DC, MoveVector, GR_XOR );
+            Edge->Draw( Panel, DC, GR_XOR, MoveVector );
             Edge ->DeleteStructure();
             Module->Set_Rectangle_Encadrement();
         }
         else
         {
-            Edge->Draw( Panel, DC, MoveVector, GR_XOR );
+            Edge->Draw( Panel, DC, GR_XOR, MoveVector );
             Edge->m_Flags = 0;
-            Edge->Draw( Panel, DC, wxPoint( 0, 0 ), GR_OR );
+            Edge->Draw( Panel, DC, GR_OR );
         }
     }
     Panel->ManageCurseur = NULL;
@@ -390,7 +390,7 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
             if( (Edge->m_Start0.x) != (Edge->m_End0.x)
                || (Edge->m_Start0.y) != (Edge->m_End0.y) )
             {
-                Edge->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+                Edge->Draw( DrawPanel, DC, GR_OR );
                 EDGE_MODULE* newedge = new EDGE_MODULE( Module );
                 newedge->Copy( Edge );
                 newedge->AddToChain( Edge );

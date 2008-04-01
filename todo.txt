@@ -74,3 +74,12 @@ edges editable.
 2) final solution: get rid of requirement for tracks buried within a zone.
 Reivew the GEDA source code and other sources to gather ideas before doing 2).
 
+
+2008-Mar-31 Assigned To:
+asked by: Dick Hollenbeck
+================================================================================
+EESCHEMA:
+Derive all eeschema classes from SCH_ITEM, not EDA_BaseStruct.
+Move the virtual EDA_BaseStruct::Draw() function into SCH_ITEM, so that
+there is no EDA_BaseStruct::Draw() function.
+Make the KICAD_T spelling mimic the class names.

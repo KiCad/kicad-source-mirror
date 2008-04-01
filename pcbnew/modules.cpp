@@ -47,7 +47,7 @@ void Show_Pads_On_Off( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* module )
     pt_pad = module->m_Pads;
     for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
     {
-        pt_pad->Draw( panel, DC, g_Offset_Module, GR_XOR );
+        pt_pad->Draw( panel, DC, GR_XOR, g_Offset_Module );
     }
 
     DisplayOpt.DisplayPadFill = pad_fill_tmp;
@@ -127,12 +127,12 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
 
     // effacement module a l'ecran:
     if ( DC )
-	{
-		int tmp = module->m_Flags;
-		module->m_Flags |= DO_NOT_DRAW;
-		DrawPanel->PostDirtyRect( module->GetBoundingBox() );
-		module->m_Flags = tmp;
-	}
+    {
+        int tmp = module->m_Flags;
+        module->m_Flags |= DO_NOT_DRAW;
+        DrawPanel->PostDirtyRect( module->GetBoundingBox() );
+        module->m_Flags = tmp;
+    }
 
     // Reaffichage
     DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
@@ -200,7 +200,7 @@ void Exit_Module( WinEDA_DrawPanel* Panel, wxDC* DC )
             pcbframe->Rotate_Module( NULL, module, ModuleInitOrient, FALSE );
         if( ModuleInitLayer != module->GetLayer() )
             pcbframe->m_Pcb->Change_Side_Module( module, NULL );
-        module->Draw( Panel, DC, wxPoint( 0, 0 ), GR_OR );
+        module->Draw( Panel, DC, GR_OR );
     }
     g_Drag_Pistes_On     = FALSE;
     Panel->ManageCurseur = NULL;
@@ -300,8 +300,8 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module, wxDC* DC, bool aAskBeforeDe
     m_CurrentScreen->SetModify();
 
     /* Erase rastnest if needed
-	 * Dirty rectangle is not used here because usually using a XOR draw mode gives good results (very few artefacts) for ratsnest
-	 */
+     * Dirty rectangle is not used here because usually using a XOR draw mode gives good results (very few artefacts) for ratsnest
+     */
     if( g_Show_Ratsnest )
         DrawGeneralRatsnest( DC );
 
@@ -327,7 +327,7 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module, wxDC* DC, bool aAskBeforeDe
     ReCompile_Ratsnest_After_Changes( DC );
     // redraw the area where the module was
     if ( DC )
-		DrawPanel->PostDirtyRect( module->GetBoundingBox() );
+        DrawPanel->PostDirtyRect( module->GetBoundingBox() );
     return TRUE;
 }
 
@@ -362,12 +362,12 @@ void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
     {
         m_Status_Pcb &= ~( LISTE_CHEVELU_OK | CONNEXION_OK);
         if( DC && m_PcbFrame )
-		{
-			int tmp = Module->m_Flags;
-			Module->m_Flags |= DO_NOT_DRAW;
-			m_PcbFrame->DrawPanel->PostDirtyRect( Module->GetBoundingBox() );
-			Module->m_Flags = tmp;
-		}
+        {
+            int tmp = Module->m_Flags;
+            Module->m_Flags |= DO_NOT_DRAW;
+            m_PcbFrame->DrawPanel->PostDirtyRect( Module->GetBoundingBox() );
+            Module->m_Flags = tmp;
+        }
 
         /* Effacement chevelu general si necessaire */
         if( DC && g_Show_Ratsnest )
@@ -514,13 +514,13 @@ void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
     Module->Set_Rectangle_Encadrement();
 
     if ( m_PcbFrame )
-		Module->Display_Infos( m_PcbFrame );
+        Module->Display_Infos( m_PcbFrame );
 
     if( !(Module->m_Flags & IS_MOVED) ) /* Inversion simple */
     {
         if( DC && m_PcbFrame )
         {
-            Module->Draw( m_PcbFrame->DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+            Module->Draw( m_PcbFrame->DrawPanel, DC, GR_OR );
 
             /* affichage chevelu general si necessaire */
             m_PcbFrame->ReCompile_Ratsnest_After_Changes( DC );
@@ -671,7 +671,7 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module, wxDC* DC )
 
     module->SetPosition( newpos );
     if( DC )
-        module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+        module->Draw( DrawPanel, DC, GR_OR );
 
     /* Tracage des segments dragges et liberation memoire */
     if( g_DragSegmentList )
@@ -723,10 +723,10 @@ void WinEDA_BasePcbFrame::Rotate_Module( wxDC* DC, MODULE* module,
     {
         if( DC )
         {
-			int tmp = module->m_Flags;
-			module->m_Flags |= DO_NOT_DRAW;
-			DrawPanel->PostDirtyRect( module->GetBoundingBox() );
-			module->m_Flags = tmp;
+            int tmp = module->m_Flags;
+            module->m_Flags |= DO_NOT_DRAW;
+            DrawPanel->PostDirtyRect( module->GetBoundingBox() );
+            module->m_Flags = tmp;
 
             /* Reaffichage chevelu general si necessaire */
             if( g_Show_Ratsnest )
@@ -756,7 +756,7 @@ void WinEDA_BasePcbFrame::Rotate_Module( wxDC* DC, MODULE* module,
     {
         if( !(module->m_Flags & IS_MOVED) ) /* Rotation simple */
         {
-            module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+            module->Draw( DrawPanel, DC, GR_OR );
 
             /* Reaffichage chevelu general si necessaire */
             ReCompile_Ratsnest_After_Changes( DC );
@@ -792,7 +792,7 @@ void DrawModuleOutlines( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* module )
         pt_pad = module->m_Pads;
         for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
         {
-            pt_pad->Draw( panel, DC, g_Offset_Module, GR_XOR );
+            pt_pad->Draw( panel, DC, GR_XOR, g_Offset_Module );
         }
 
         DisplayOpt.DisplayPadFill = pad_fill_tmp;

@@ -3,7 +3,7 @@
 /***************************************/
 
 #ifndef CLASS_MARKER_H
-#define CLASS_MARKER_H 
+#define CLASS_MARKER_H
 
 #include "base_struct.h"
 
@@ -18,9 +18,9 @@ protected:
     wxSize   m_Size;                ///< Size of the graphic symbol
 
     DRC_ITEM m_drc;
-    
+
     void     init();
-    
+
 public:
 
     MARKER( BOARD_ITEM* StructFather );
@@ -34,8 +34,8 @@ public:
      * @param bText Text describing the second of the two conflicting objects
      * @param bPos The position of the second of two objects
      */
-    MARKER( int aErrorCode, const wxPoint& aMarkerPos, 
-           const wxString& aText, const wxPoint& aPos, 
+    MARKER( int aErrorCode, const wxPoint& aMarkerPos,
+           const wxString& aText, const wxPoint& aPos,
            const wxString& bText, const wxPoint& bPos );
      /**
      * Constructor
@@ -44,14 +44,14 @@ public:
      * @param aText Text describing the object
      * @param aPos The position of the object
      */
-    MARKER( int aErrorCode, const wxPoint& aMarkerPos, 
+    MARKER( int aErrorCode, const wxPoint& aMarkerPos,
            const wxString& aText, const wxPoint& aPos );
-     
 
-	~MARKER();
-    
+
+    ~MARKER();
+
     void    UnLink();
-    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int DrawMode );
+    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int DrawMode, const wxPoint& offset = ZeroOffset );
 
 
     /**
@@ -63,7 +63,7 @@ public:
         return (wxPoint&) m_drc.GetPosition();
     }
 
-    
+
     /**
      * Function GetPos
      * returns the position of this MARKER, const.
@@ -73,7 +73,7 @@ public:
         return m_drc.GetPosition();
     }
 
-    
+
     /**
      * Function SetData
      * fills in all the reportable data associated with a MARKER.
@@ -84,10 +84,10 @@ public:
      * @param bText Text describing the second of the two conflicting objects
      * @param bPos The position of the second of two objects
      */
-    void SetData( int aErrorCode, const wxPoint& aMarkerPos, 
-             const wxString& aText, const wxPoint& aPos, 
+    void SetData( int aErrorCode, const wxPoint& aMarkerPos,
+             const wxString& aText, const wxPoint& aPos,
              const wxString& bText, const wxPoint& bPos );
-    
+
     /**
      * Function SetData
      * fills in all the reportable data associated with a MARKER.
@@ -96,10 +96,10 @@ public:
      * @param aText Text describing the object
      * @param aPos The position of the object
      */
-    void SetData( int aErrorCode, const wxPoint& aMarkerPos, 
+    void SetData( int aErrorCode, const wxPoint& aMarkerPos,
              const wxString& aText, const wxPoint& aPos );
-    
-    
+
+
     /**
      * Function GetReporter
      * returns the DRC_ITEM held within this MARKER so that its
@@ -111,30 +111,30 @@ public:
         return m_drc;
     }
 
-    
+
     /**
      * Function Display_Infos
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
      * @param frame A WinEDA_DrawFrame in which to print status information.
-     */ 
+     */
     void    Display_Infos( WinEDA_DrawFrame* frame );
 
-    
+
     /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.brd" format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
-     */ 
+     */
     bool Save( FILE* aFile ) const
     {
         // not implemented, this is here to satisfy BOARD_ITEM::Save()
         // "pure" virtual-ness
         return true;
     }
-    
-    
+
+
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.

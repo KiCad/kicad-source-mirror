@@ -425,8 +425,8 @@ void WinEDA_TextModPropertiesFrame::TextModPropertiesAccept( wxCommandEvent& eve
     m_Parent->SaveCopyInUndoList( m_Parent->m_Pcb->m_Modules );
     if( m_DC )     // Effacement ancien texte
     {
-        m_CurrentTextMod->Draw( m_Parent->DrawPanel, m_DC,
-            (m_CurrentTextMod->m_Flags & IS_MOVED) ? MoveVector : wxPoint( 0, 0 ), GR_XOR );
+        m_CurrentTextMod->Draw( m_Parent->DrawPanel, m_DC, GR_XOR,
+            (m_CurrentTextMod->m_Flags & IS_MOVED) ? MoveVector : wxPoint( 0, 0 ) );
     }
     m_CurrentTextMod->m_Text = m_Name->GetValue();
 
@@ -465,8 +465,8 @@ void WinEDA_TextModPropertiesFrame::TextModPropertiesAccept( wxCommandEvent& eve
     m_CurrentTextMod->SetDrawCoord();
     if( m_DC )     // Display new text
     {
-        m_CurrentTextMod->Draw( m_Parent->DrawPanel, m_DC,
-            (m_CurrentTextMod->m_Flags & IS_MOVED) ? MoveVector : wxPoint( 0, 0 ), GR_XOR );
+        m_CurrentTextMod->Draw( m_Parent->DrawPanel, m_DC, GR_XOR,
+            (m_CurrentTextMod->m_Flags & IS_MOVED) ? MoveVector : wxPoint( 0, 0 ) );
     }
     m_Parent->GetScreen()->SetModify();
     ( (MODULE*) m_CurrentTextMod->m_Parent )->m_LastEdit_Time = time( NULL );

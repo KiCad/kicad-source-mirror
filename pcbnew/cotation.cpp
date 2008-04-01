@@ -162,7 +162,7 @@ void WinEDA_CotationPropertiesFrame::OnOkClick( wxCommandEvent& event )
 {
     if( m_DC )     // Effacement ancien texte
     {
-        CurrentCotation->Draw( m_Parent->DrawPanel, m_DC, wxPoint( 0, 0 ), GR_XOR );
+        CurrentCotation->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
     }
 
     if( m_Name->GetValue() != wxEmptyString )
@@ -183,7 +183,7 @@ void WinEDA_CotationPropertiesFrame::OnOkClick( wxCommandEvent& event )
     if( m_DC )     // Affichage nouveau texte
     {
         /* Redessin du Texte */
-        CurrentCotation->Draw( m_Parent->DrawPanel, m_DC, wxPoint( 0, 0 ), GR_OR );
+        CurrentCotation->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
     }
 
     m_Parent->m_CurrentScreen->SetModify();
@@ -201,12 +201,12 @@ static void Exit_EditCotation( WinEDA_DrawPanel* Panel, wxDC* DC )
     {
         if( Cotation->m_Flags & IS_NEW )
         {
-            Cotation->Draw( Panel, DC, wxPoint( 0, 0 ), GR_XOR );
+            Cotation->Draw( Panel, DC, GR_XOR );
             Cotation->DeleteStructure();
         }
         else
         {
-            Cotation->Draw( Panel, DC, wxPoint( 0, 0 ), GR_OR );
+            Cotation->Draw( Panel, DC, GR_OR );
         }
     }
 
@@ -262,7 +262,7 @@ COTATION* WinEDA_PcbFrame::Begin_Cotation( COTATION* Cotation, wxDC* DC )
 
         Ajuste_Details_Cotation( Cotation );
 
-        Cotation->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+        Cotation->Draw( DrawPanel, DC, GR_XOR );
 
         DrawPanel->ManageCurseur = Montre_Position_New_Cotation;
         DrawPanel->ForceCloseManageCurseur = Exit_EditCotation;
@@ -276,7 +276,7 @@ COTATION* WinEDA_PcbFrame::Begin_Cotation( COTATION* Cotation, wxDC* DC )
         return Cotation;
     }
 
-    Cotation->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+    Cotation->Draw( DrawPanel, DC, GR_OR );
     Cotation->m_Flags = 0;
 
     /* Insertion de la structure dans le Chainage .Drawings du PCB */
@@ -309,7 +309,7 @@ static void Montre_Position_New_Cotation( WinEDA_DrawPanel* panel, wxDC* DC, boo
     /* efface ancienne position */
     if( erase )
     {
-        Cotation->Draw( panel, DC, wxPoint( 0, 0 ), GR_XOR );
+        Cotation->Draw( panel, DC, GR_XOR );
     }
 
     Cotation->SetLayer( screen->m_Active_Layer );
@@ -345,7 +345,7 @@ static void Montre_Position_New_Cotation( WinEDA_DrawPanel* panel, wxDC* DC, boo
         Ajuste_Details_Cotation( Cotation );
     }
 
-    Cotation->Draw( panel, DC, wxPoint( 0, 0 ), GR_XOR );
+    Cotation->Draw( panel, DC, GR_XOR );
 }
 
 
@@ -372,7 +372,7 @@ void WinEDA_PcbFrame::Delete_Cotation( COTATION* Cotation, wxDC* DC )
         return;
 
     if( DC )
-        Cotation->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+        Cotation->Draw( DrawPanel, DC, GR_XOR );
     Cotation->DeleteStructure();
     m_CurrentScreen->SetModify();
 }

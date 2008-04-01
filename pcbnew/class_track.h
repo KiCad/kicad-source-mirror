@@ -146,7 +146,7 @@ public:
 
 
     /* Display on screen: */
-    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode );
+    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& offset = ZeroOffset );
 
     /* divers */
     int Shape() const { return m_Shape & 0xFF; }

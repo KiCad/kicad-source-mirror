@@ -165,10 +165,10 @@ public:
      * @param panel = draw panel, Used to know the clip box
      * @param DC = Current Device Context
      * @param offset = draw offset (usually wxPoint(0,0)
-     * @param draw_mode = GR_OR, GR_XOR..
+     * @param aDrawMode = GR_OR, GR_XOR..
      */
-    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                  const wxPoint& offset, int draw_mode );
+    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& offset = ZeroOffset );
+
     void    Draw3D( Pcb3D_GLCanvas* glcanvas );
     void    DrawEdgesOnly( WinEDA_DrawPanel* panel, wxDC* DC,
                            const wxPoint& offset, int draw_mode );

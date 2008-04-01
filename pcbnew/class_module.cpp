@@ -262,7 +262,7 @@ void MODULE::UnLink()
 
 /**********************************************************/
 void MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                   const wxPoint& offset, int draw_mode )
+                   int draw_mode, const wxPoint& offset )
 /**********************************************************/
 
 /** Function Draw
@@ -273,46 +273,38 @@ void MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
  *  @param draw_mode =  GR_OR, GR_XOR, GR_AND
  */
 {
-    D_PAD*          pt_pad;
-    EDA_BaseStruct* PtStruct;
-    TEXTE_MODULE*   PtTexte;
-
     if( (m_Flags & DO_NOT_DRAW) )
         return;
 
     /* Draw pads */
-    pt_pad = m_Pads;
+    D_PAD*  pt_pad = m_Pads;
     for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
     {
         if( pt_pad->m_Flags & IS_MOVED )
             continue;
-        pt_pad->Draw( panel, DC, offset, draw_mode );
+        pt_pad->Draw( panel, DC, draw_mode, offset );
     }
 
-    /* Draws foootprint anchor */
+    // Draws foootprint anchor
     DrawAncre( panel, DC, offset, DIM_ANCRE_MODULE, draw_mode );
 
     /* Draw graphic items */
     if( !(m_Reference->m_Flags & IS_MOVED) )
-        m_Reference->Draw( panel, DC, offset, draw_mode );
-    if( !(m_Value->m_Flags & IS_MOVED) )
-        m_Value->Draw( panel, DC, offset, draw_mode );
+        m_Reference->Draw( panel, DC, draw_mode, offset );
 
-    PtStruct = m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    if( !(m_Value->m_Flags & IS_MOVED) )
+        m_Value->Draw( panel, DC, draw_mode, offset );
+
+    for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
     {
-        if( PtStruct->m_Flags & IS_MOVED )
+        if( item->m_Flags & IS_MOVED )
             continue;
 
-        switch( PtStruct->Type() )
+        switch( item->Type() )
         {
         case TYPETEXTEMODULE:
-            PtTexte = (TEXTE_MODULE*) PtStruct;
-            PtTexte->Draw( panel, DC, offset, draw_mode );
-            break;
-
         case TYPEEDGEMODULE:
-            ( (EDGE_MODULE*) PtStruct )->Draw( panel, DC, offset, draw_mode );
+            item->Draw( panel, DC, draw_mode, offset );
             break;
 
         default:
@@ -335,16 +327,12 @@ void MODULE::DrawEdgesOnly( WinEDA_DrawPanel* panel, wxDC* DC,
  *  @param draw_mode =  GR_OR, GR_XOR, GR_AND
  */
 {
-    EDA_BaseStruct* PtStruct;
-
-    /* Draw graphic items */
-    PtStruct = m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
     {
-        switch( PtStruct->Type() )
+        switch( item->Type() )
         {
         case TYPEEDGEMODULE:
-            ( (EDGE_MODULE*) PtStruct )->Draw( panel, DC, offset, draw_mode );
+            item->Draw( panel, DC, draw_mode, offset );
             break;
 
         default:
@@ -1082,9 +1070,9 @@ EDA_Rect MODULE::GetBoundingBox()
         area.Merge( text_area );
     }
 
-	// Add the Clearence shape size: (shape around the pads when the clearence is shown
-	// Not optimized, but the draw cost is small (perhaps smaller than optimization)
-	area.Inflate(g_DesignSettings.m_TrackClearence, g_DesignSettings.m_TrackClearence);
+    // Add the Clearence shape size: (shape around the pads when the clearence is shown
+    // Not optimized, but the draw cost is small (perhaps smaller than optimization)
+    area.Inflate(g_DesignSettings.m_TrackClearence, g_DesignSettings.m_TrackClearence);
 
     return area;
 }

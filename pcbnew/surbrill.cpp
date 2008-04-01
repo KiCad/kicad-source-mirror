@@ -184,15 +184,13 @@ void WinEDA_PcbFrame::DrawHightLight( wxDC* DC, int NetCode )
     }
 #endif
 
-    wxPoint zero(0,0);  // construct outside loop for speed
-
     // Redraw ZONE_CONTAINERS
     BOARD::ZONE_CONTAINERS& zones = m_Pcb->m_ZoneDescriptorList;
     for( BOARD::ZONE_CONTAINERS::iterator zc = zones.begin();  zc!=zones.end();  ++zc )
     {
         if( (*zc)->GetNet() == NetCode )
         {
-            (*zc)->Draw( DrawPanel, DC, zero, draw_mode );
+            (*zc)->Draw( DrawPanel, DC, draw_mode );
         }
     }
 
@@ -221,14 +219,12 @@ static void Pad_Surbrillance( WinEDA_DrawPanel* panel,
 {
     D_PAD* pt_pad;
 
-    wxPoint zero(0,0);  // construct outside loop for speed
-
     /* trace des pastilles */
     for( pt_pad = Module->m_Pads; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
     {
         if( pt_pad->GetNet() == NetCode )
         {
-            pt_pad->Draw( panel, DC, zero, draw_mode );
+            pt_pad->Draw( panel, DC, draw_mode );
         }
     }
 }

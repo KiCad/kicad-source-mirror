@@ -136,14 +136,14 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
  *  - Extremites Mself.m_Start et Mself.m_End
  *  - Contrainte: m_Start.x = m_End.x ( self verticale )
  *          ou	  m_Start.y = m_End.y ( self horizontale )
- * 
+ *
  *  On doit determiner:
  *      Mself.nbrin = nombre de segments perpendiculaires a la direction
  *              ( le serpention aura nbrin + 1 demicercles + 2 1/4 de cercle)
  *      Mself.lbrin = longueur d'un brin
  *      Mself.rayon = rayon des parties arrondies du serpentin
  *      Mself.delta = segments raccord entre extremites et le serpention lui meme
- * 
+ *
  *  Les equations sont
  *      Mself.m_Size.x = 2*Mself.rayon + Mself.lbrin
  *      Mself.m_Size.y  = 2*Mself.delta + 2*Mself.nbrin*Mself.rayon
@@ -151,13 +151,13 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
  + (Mself.nbrin-2) * Mself.lbrin //longueur des brins sauf 1er et dernier
  + (Mself.nbrin+1) * ( PI * Mself.rayon) // longueur des arrondis
  + Mself.lbrin/2 - Melf.rayon*2) // longueur du 1er et dernier brin
- * 
+ *
  *  Les contraintes sont:
  *      nbrin >= 2
  *      Mself.rayon < Mself.m_Size.x
  *      Mself.m_Size.y = Mself.rayon*4 + 2*Mself.raccord
  *      Mself.lbrin > Mself.rayon *2
- * 
+ *
  *  Le calcul est conduit de la facon suivante:
  *  Initialement:
  *      nbrin = 2
@@ -165,7 +165,7 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
  *  puis:
  *      on augmente le nombre de brins jusqu'a la longueur desiree
  *      ( le rayon est diminue si necessaire )
- * 
+ *
  */
 {
     EDGE_MODULE* PtSegm, * LastSegm, * FirstSegm, * newedge;
@@ -285,7 +285,7 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     Module->m_Attributs = MOD_VIRTUAL | MOD_CMS;
     Module->m_Flags = 0;
 
-    Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+    Module->Draw( DrawPanel, DC, GR_XOR );
 
     /* Generation des elements speciaux: drawsegments */
     LastSegm = (EDGE_MODULE*) Module->m_Drawings;
@@ -472,7 +472,7 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
 
     Module->Set_Rectangle_Encadrement();
 
-    Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+    Module->Draw( DrawPanel, DC, GR_OR );
 
     return Module;
 }

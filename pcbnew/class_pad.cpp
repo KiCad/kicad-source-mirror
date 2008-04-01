@@ -218,7 +218,7 @@ void D_PAD::UnLink()
 
 
 /*******************************************************************************************/
-void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode )
+void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoint& offset )
 /*******************************************************************************************/
 
 /** Draw a pad:

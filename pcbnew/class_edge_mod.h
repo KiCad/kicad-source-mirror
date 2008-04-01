@@ -60,10 +60,10 @@ public:
     void    SetDrawCoord();
 
     /* drawing functions */
-    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                  int draw_mode );
-    void    Draw3D( Pcb3D_GLCanvas* glcanvas );
+    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                 int aDrawMode, const wxPoint& offset = ZeroOffset );
 
+    void    Draw3D( Pcb3D_GLCanvas* glcanvas );
 
     /**
      * Function Display_Infos

@@ -94,7 +94,7 @@ void WinEDA_DisplayFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     if( Module )
     {
-        Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_COPY );
+        Module->Draw( DrawPanel, DC, GR_COPY );
         Module->Display_Infos( this );
     }
 

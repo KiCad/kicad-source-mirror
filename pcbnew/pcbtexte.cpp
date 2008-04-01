@@ -215,7 +215,7 @@ void WinEDA_TextPCBPropertiesFrame::OnOkClick( wxCommandEvent& event )
 
     if( m_DC )     // Effacement ancien texte
     {
-        CurrentTextPCB->Draw( m_Parent->DrawPanel, m_DC, wxPoint( 0, 0 ), GR_XOR );
+        CurrentTextPCB->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
     }
 
     if( !m_Name->GetValue().IsEmpty() )
@@ -238,7 +238,7 @@ void WinEDA_TextPCBPropertiesFrame::OnOkClick( wxCommandEvent& event )
     if( m_DC )     // Affichage nouveau texte
     {
         /* Redessin du Texte */
-        CurrentTextPCB->Draw( m_Parent->DrawPanel, m_DC, wxPoint( 0, 0 ), GR_OR );
+        CurrentTextPCB->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
     }
     m_Parent->m_CurrentScreen->SetModify();
     EndModal( 1 );
@@ -260,9 +260,9 @@ void Exit_Texte_Pcb( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     if( TextePcb )
     {
-        TextePcb->Draw( Panel, DC, wxPoint( 0, 0 ), GR_XOR );
+        TextePcb->Draw( Panel, DC, GR_XOR );
         TextePcb->m_Pos = old_pos;
-        TextePcb->Draw( Panel, DC, wxPoint( 0, 0 ), GR_OR );
+        TextePcb->Draw( Panel, DC, GR_OR );
         TextePcb->m_Flags = 0;
     }
 
@@ -284,7 +284,7 @@ void WinEDA_PcbFrame::Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
         return;
 
     TextePcb->CreateDrawData();
-    TextePcb->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+    TextePcb->Draw( DrawPanel, DC, GR_OR );
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
     SetCurItem( NULL );
@@ -303,7 +303,7 @@ void WinEDA_PcbFrame::StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC )
     if( TextePcb == NULL )
         return;
     old_pos = TextePcb->m_Pos;
-    TextePcb->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+    TextePcb->Draw( DrawPanel, DC, GR_XOR );
     TextePcb->m_Flags |= IS_MOVED;
     TextePcb->Display_Infos( this );
     DrawPanel->ManageCurseur = Move_Texte_Pcb;
@@ -327,12 +327,12 @@ static void Move_Texte_Pcb( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     /* effacement du texte : */
 
     if( erase )
-        TextePcb->Draw( panel, DC, wxPoint( 0, 0 ), GR_XOR );
+        TextePcb->Draw( panel, DC, GR_XOR );
 
     TextePcb->m_Pos = panel->m_Parent->m_CurrentScreen->m_Curseur;
 
     /* Redessin du Texte */
-    TextePcb->Draw( panel, DC, wxPoint( 0, 0 ), GR_XOR );
+    TextePcb->Draw( panel, DC, GR_XOR );
 }
 
 
@@ -343,7 +343,7 @@ void WinEDA_PcbFrame::Delete_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     if( TextePcb == NULL )
         return;
 
-    TextePcb->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+    TextePcb->Draw( DrawPanel, DC, GR_XOR );
 
     /* Suppression du texte en Memoire*/
     TextePcb ->DeleteStructure();
@@ -403,7 +403,7 @@ void WinEDA_PcbFrame::Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
         return;
 
     /* effacement du texte : */
-    TextePcb->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+    TextePcb->Draw( DrawPanel, DC, GR_XOR );
 
 
     TextePcb->m_Orient += angle;
@@ -415,7 +415,7 @@ void WinEDA_PcbFrame::Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     TextePcb->CreateDrawData();
 
     /* Redessin du Texte */
-    TextePcb->Draw( DrawPanel, DC, wxPoint( 0, 0 ), drawmode );
+    TextePcb->Draw( DrawPanel, DC, drawmode );
     TextePcb->Display_Infos( this );
 
     m_CurrentScreen->SetModify();

@@ -380,8 +380,8 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_PLACE_MICROVIA:
-		if ( ! ((PCB_SCREEN*)GetScreen())->IsMicroViaAcceptable() )
-			break;
+        if ( ! ((PCB_SCREEN*)GetScreen())->IsMicroViaAcceptable() )
+            break;
 
     case ID_POPUP_PCB_PLACE_VIA:
         DrawPanel->MouseToCursorSchema();
@@ -521,10 +521,10 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
          * and zone_cont->m_CornerSelection+1
          * and start move the new corner
          */
-        zone_cont->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), GR_XOR );
+        zone_cont->Draw( DrawPanel, &dc, GR_XOR );
         zone_cont->m_Poly->InsertCorner( zone_cont->m_CornerSelection, pos.x, pos.y );
         zone_cont->m_CornerSelection++;
-        zone_cont->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), GR_XOR );
+        zone_cont->Draw( DrawPanel, &dc, GR_XOR );
         Start_Move_Zone_Corner( &dc, zone_cont, zone_cont->m_CornerSelection, true );
         break;
     }

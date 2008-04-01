@@ -106,7 +106,7 @@ void TEXTE_MODULE::Copy( TEXTE_MODULE* source )      // copy structure
     m_Type   = source->m_Type;          // 0: ref,1: val, others = 2..255
     m_Orient = source->m_Orient;        // orientation in 1/10 deg
     m_Pos0   = source->m_Pos0;          // text coordinates relatives to the footprint ancre, orient 0
-										// Text coordinate ref point is the text centre
+                                        // Text coordinate ref point is the text centre
 
     m_Size  = source->m_Size;
     m_Width = source->m_Width;
@@ -201,23 +201,23 @@ void TEXTE_MODULE:: SetLocalCoord()
  */
 EDA_Rect TEXTE_MODULE::GetTextRect(void)
 {
-	EDA_Rect area;
-	
+    EDA_Rect area;
+
     int  dx, dy;
     dx = ( m_Size.x * GetLength() ) / 2;
     dx = (dx * 10) / 9 ; /* letter size = 10/9 */
-	dx +=  m_Width / 2;
+    dx +=  m_Width / 2;
     dy = ( m_Size.y + m_Width ) / 2;
-	
-	wxPoint Org = m_Pos;	// This is the position of the centre of the area
-	Org.x -= dx;
-	Org.y -= dy;
-	area.SetOrigin( Org);
-	area.SetHeight(2 * dy);
-	area.SetWidth(2 * dx);
-	area.Normalize();
-	
-	return area;
+
+    wxPoint Org = m_Pos;	// This is the position of the centre of the area
+    Org.x -= dx;
+    Org.y -= dy;
+    area.SetOrigin( Org);
+    area.SetHeight(2 * dy);
+    area.SetWidth(2 * dx);
+    area.Normalize();
+
+    return area;
 }
 
 /**
@@ -229,11 +229,11 @@ EDA_Rect TEXTE_MODULE::GetTextRect(void)
 bool TEXTE_MODULE::HitTest( const wxPoint& refPos )
 {
     wxPoint rel_pos;
-	EDA_Rect area = GetTextRect();
-	
+    EDA_Rect area = GetTextRect();
+
     /* Rotate refPos to - angle
      * to test if refPos is within area (which is relative to an horizontal text)
-	*/
+    */
     rel_pos = refPos;
     RotatePoint( &rel_pos, m_Pos, - GetDrawRotation() );
 
@@ -249,25 +249,25 @@ bool TEXTE_MODULE::HitTest( const wxPoint& refPos )
  */
 EDA_Rect TEXTE_MODULE::GetBoundingBox()
 {
-	// Calculate area without text fielsd:
-	EDA_Rect text_area;
-	int angle = GetDrawRotation();
-	wxPoint textstart, textend;
+    // Calculate area without text fielsd:
+    EDA_Rect text_area;
+    int angle = GetDrawRotation();
+    wxPoint textstart, textend;
 
-	text_area = GetTextRect();
-	textstart = text_area.GetOrigin();
-	textend = text_area.GetEnd();
-	RotatePoint( &textstart, m_Pos, angle);
-	RotatePoint( &textend, m_Pos, angle);
-	
-	text_area.SetOrigin(textstart);
-	text_area.SetEnd(textend);
-	text_area.Normalize();
-	return text_area;
+    text_area = GetTextRect();
+    textstart = text_area.GetOrigin();
+    textend = text_area.GetEnd();
+    RotatePoint( &textstart, m_Pos, angle);
+    RotatePoint( &textend, m_Pos, angle);
+
+    text_area.SetOrigin(textstart);
+    text_area.SetEnd(textend);
+    text_area.Normalize();
+    return text_area;
 }
 
 /******************************************************************************************/
-void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, wxPoint offset, int draw_mode )
+void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,  const wxPoint& offset )
 /******************************************************************************************/
 
 /** Function Draw

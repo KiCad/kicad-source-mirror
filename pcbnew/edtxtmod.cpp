@@ -56,7 +56,7 @@ TEXTE_MODULE* WinEDA_BasePcbFrame::CreateTextModule( MODULE* Module, wxDC* DC )
     InstallTextModOptionsFrame( Text, NULL, wxPoint( -1, -1 ) );
 
     Text->m_Flags = 0;
-    Text->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+    Text->Draw( DrawPanel, DC, GR_OR );
 
     Text->Display_Infos( this );
 
@@ -74,14 +74,14 @@ void WinEDA_BasePcbFrame::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
 
     MODULE* module = (MODULE*) Text->m_Parent;
 
-    Text->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+    Text->Draw( DrawPanel, DC, GR_XOR );
 
     Text->m_Orient += 900;
     while( Text->m_Orient >= 1800 )
         Text->m_Orient -= 1800;
 
     /* Redessin du Texte */
-    Text->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+    Text->Draw( DrawPanel, DC, GR_XOR );
 
     Text->Display_Infos( this );
 
@@ -107,7 +107,7 @@ void WinEDA_BasePcbFrame::DeleteTextModule( TEXTE_MODULE* Text, wxDC* DC )
 
     if( Text->m_Type == TEXT_is_DIVERS )
     {
-        Text->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+        Text->Draw( DrawPanel, DC, GR_XOR );
 
         /* liberation de la memoire : */
         Text ->DeleteStructure();
@@ -137,10 +137,10 @@ static void ExitTextModule( WinEDA_DrawPanel* Panel, wxDC* DC )
         return;
 
     Module = (MODULE*) Text->m_Parent;
-    Text->Draw( Panel, DC, MoveVector, GR_XOR );
+    Text->Draw( Panel, DC, GR_XOR, MoveVector );
 
     /* Redessin du Texte */
-    Text->Draw( Panel, DC, wxPoint( 0, 0 ), GR_OR );
+    Text->Draw( Panel, DC, GR_OR );
 
     Text->m_Flags   = 0;
     Module->m_Flags = 0;
@@ -205,7 +205,7 @@ void WinEDA_BasePcbFrame::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
             GetScreen()->SetModify();
 
             /* Redessin du Texte */
-            Text->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+            Text->Draw( DrawPanel, DC, GR_OR );
         }
     }
 
@@ -229,11 +229,11 @@ static void Show_MoveTexte_Module( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
     /* effacement du texte : */
 
     if( erase )
-        Text->Draw( panel, DC, MoveVector, GR_XOR );
+        Text->Draw( panel, DC, GR_XOR, MoveVector );
 
     MoveVector.x = -(screen->m_Curseur.x - CursorInitialPosition.x);
     MoveVector.y = -(screen->m_Curseur.y - CursorInitialPosition.y);
 
     /* Redessin du Texte */
-    Text->Draw( panel, DC, MoveVector, GR_XOR );
+    Text->Draw( panel, DC, GR_XOR, MoveVector );
 }

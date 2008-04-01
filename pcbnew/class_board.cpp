@@ -7,6 +7,12 @@
 #include "pcbnew.h"
 
 
+/* This is an odd place for this, but cvpcb won't link if it is
+   in class_board_item.cpp like I first tried it.
+*/
+wxPoint  BOARD_ITEM::ZeroOffset(0,0);
+
+
 /*****************/
 /* Class BOARD: */
 /*****************/
@@ -1037,7 +1043,7 @@ void BOARD::RedrawAreasOutlines(WinEDA_DrawPanel* panel, wxDC * aDC, int aDrawMo
     {
         ZONE_CONTAINER* edge_zone = GetArea(ii);
         if( (aLayer < 0) || (aLayer == edge_zone->GetLayer()) )
-            edge_zone->Draw( panel, aDC, wxPoint( 0, 0 ), aDrawMode );
+            edge_zone->Draw( panel, aDC, aDrawMode );
     }
 }
 

@@ -182,7 +182,7 @@ bool MARKER::HitTest( const wxPoint& refPos )
 
 
 /**********************************************************************/
-void MARKER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int DrawMode )
+void MARKER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int DrawMode, const wxPoint& offset )
 /**********************************************************************/
 
 /*

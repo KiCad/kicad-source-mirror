@@ -69,21 +69,21 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
         case TYPECOTATION:
             if( (g_TabOneLayerMask[ PtStruct->GetLayer()] & printmasklayer) == 0 )
                 break;
-            ( (COTATION*) PtStruct )->Draw( this, DC, wxPoint( 0, 0 ), drawmode );
+            ( (COTATION*) PtStruct )->Draw( this, DC, drawmode );
             break;
 
         case TYPETEXTE:
         {
             if( (g_TabOneLayerMask[ PtStruct->GetLayer()] & printmasklayer) == 0 )
                 break;
-            ( (TEXTE_PCB*) PtStruct )->Draw( this, DC, wxPoint( 0, 0 ), drawmode );
+            ( (TEXTE_PCB*) PtStruct )->Draw( this, DC, drawmode );
             break;
         }
 
         case TYPEMIRE:
             if( (g_TabOneLayerMask[ PtStruct->GetLayer()] & printmasklayer) == 0 )
                 break;
-            ( (MIREPCB*) PtStruct )->Draw( this, DC, wxPoint( 0, 0 ), drawmode );
+            ( (MIREPCB*) PtStruct )->Draw( this, DC, drawmode );
             break;
 
         case TYPEMARKER:       /* Trace des marqueurs */
@@ -170,7 +170,7 @@ static void Plot_Module( WinEDA_DrawPanel* panel, wxDC* DC,
     {
         if( (pt_pad->m_Masque_Layer & masklayer ) == 0 )
             continue;
-        pt_pad->Draw( panel, DC, wxPoint( 0, 0 ), draw_mode );
+        pt_pad->Draw( panel, DC, draw_mode );
     }
 
     /* draw footprint graphic shapes */
@@ -180,7 +180,7 @@ static void Plot_Module( WinEDA_DrawPanel* panel, wxDC* DC,
         mlayer = SILKSCREEN_LAYER_CU;
     else if( Module->GetLayer() == CMP_N )
         mlayer = SILKSCREEN_LAYER_CMP;
-    
+
     if( mlayer & masklayer )
     {
         /* Analyse des autorisations de trace pour les textes VALEUR et REF */
@@ -192,9 +192,9 @@ static void Plot_Module( WinEDA_DrawPanel* panel, wxDC* DC,
             trace_val = FALSE;
 
         if( trace_ref )
-            Module->m_Reference->Draw( panel, DC, wxPoint( 0, 0 ), draw_mode );
+            Module->m_Reference->Draw( panel, DC, draw_mode );
         if( trace_val )
-            Module->m_Value->Draw( panel, DC, wxPoint( 0, 0 ), draw_mode );
+            Module->m_Value->Draw( panel, DC, draw_mode );
     }
 
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
@@ -206,7 +206,7 @@ static void Plot_Module( WinEDA_DrawPanel* panel, wxDC* DC,
                 break;
 
             TextMod = (TEXTE_MODULE*) PtStruct;
-            TextMod->Draw( panel, DC, wxPoint( 0, 0 ), draw_mode );
+            TextMod->Draw( panel, DC, draw_mode );
             break;
 
         case TYPEEDGEMODULE:
@@ -214,7 +214,7 @@ static void Plot_Module( WinEDA_DrawPanel* panel, wxDC* DC,
             EDGE_MODULE* edge = (EDGE_MODULE*) PtStruct;
             if( (g_TabOneLayerMask[edge->GetLayer()] & masklayer ) == 0 )
                 break;
-            edge->Draw( panel, DC, wxPoint( 0, 0 ), draw_mode );
+            edge->Draw( panel, DC, draw_mode );
             break;
         }
 

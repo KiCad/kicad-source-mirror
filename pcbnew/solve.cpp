@@ -254,8 +254,8 @@ int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
 
         /* Affiche Liaison */
         GRLine( &DrawPanel->m_ClipBox, DC, segm_oX, segm_oY, segm_fX, segm_fY, 0, WHITE | GR_XOR );
-        pt_cur_ch->pad_start->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR | GR_SURBRILL );
-        pt_cur_ch->pad_end->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR | GR_SURBRILL );
+        pt_cur_ch->pad_start->Draw( DrawPanel, DC, GR_OR | GR_SURBRILL );
+        pt_cur_ch->pad_end->Draw( DrawPanel, DC, GR_OR | GR_SURBRILL );
 
         success = Route_1_Trace( this, DC, two_sides, row_source, col_source,
                                  row_target, col_target, pt_cur_ch );
@@ -288,8 +288,8 @@ int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
         Affiche_1_Parametre( this, 72, wxT( "NoConn" ), msg, LIGHTCYAN );
 
         /* Effacement des affichages de routage sur l'ecran */
-        pt_cur_ch->pad_start->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_AND );
-        pt_cur_ch->pad_end->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_AND );
+        pt_cur_ch->pad_start->Draw( DrawPanel, DC, GR_AND );
+        pt_cur_ch->pad_end->Draw( DrawPanel, DC, GR_AND );
 
         if( stop )
             break;

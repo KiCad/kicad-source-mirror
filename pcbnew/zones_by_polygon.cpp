@@ -260,7 +260,7 @@ void WinEDA_PcbFrame::Start_Move_Zone_Drag_Outline_Edge( wxDC*           DC,
  */
 {
     zone_container->m_Flags  = IS_DRAGGED;
-	zone_container->m_CornerSelection = corner_id;
+    zone_container->m_CornerSelection = corner_id;
     DrawPanel->ManageCurseur = Show_Zone_Corner_Or_Outline_While_Move_Mouse;
     DrawPanel->ForceCloseManageCurseur = Abort_Zone_Move_Corner_Or_Outlines;
     s_CursorLastPosition = s_CornerInitialPosition  = GetScreen()->m_Curseur;
@@ -312,7 +312,7 @@ void WinEDA_PcbFrame::End_Move_Zone_Corner_Or_Outlines( wxDC* DC, ZONE_CONTAINER
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
     if( DC )
-        zone_container->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+        zone_container->Draw( DrawPanel, DC, GR_OR );
     GetScreen()->SetModify();
     s_AddCutoutToCurrentZone = false;
     s_CurrentZone = NULL;
@@ -353,7 +353,7 @@ void WinEDA_PcbFrame::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_contain
 
     if( zone_container->m_Poly->GetNumCorners() <= 3 )
     {
-        zone_container->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+        zone_container->Draw( DrawPanel, DC, GR_XOR );
         Delete_Zone_Fill( DC, NULL, zone_container->m_TimeStamp );
         m_Pcb->Delete( zone_container );
         return;
@@ -392,7 +392,7 @@ void Abort_Zone_Move_Corner_Or_Outlines( WinEDA_DrawPanel* Panel, wxDC* DC )
     WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) Panel->m_Parent;
     ZONE_CONTAINER*  zone_container = (ZONE_CONTAINER*) pcbframe->GetCurItem();
 
-    zone_container->Draw( Panel, DC, wxPoint( 0, 0 ), GR_XOR );
+    zone_container->Draw( Panel, DC, GR_XOR );
 
     if( zone_container->m_Flags == IS_MOVED )
     {
@@ -418,7 +418,7 @@ void Abort_Zone_Move_Corner_Or_Outlines( WinEDA_DrawPanel* Panel, wxDC* DC )
             zone_container->m_Poly->MoveCorner( zone_container->m_CornerSelection, pos.x, pos.y );
         }
     }
-    zone_container->Draw( Panel, DC, wxPoint( 0, 0 ), GR_XOR );
+    zone_container->Draw( Panel, DC, GR_XOR );
 
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
@@ -441,7 +441,7 @@ void Show_Zone_Corner_Or_Outline_While_Move_Mouse( WinEDA_DrawPanel* Panel, wxDC
 
     if( erase )    /* Undraw edge in old position*/
     {
-        zone->Draw( Panel, DC, wxPoint( 0, 0 ), GR_XOR );
+        zone->Draw( Panel, DC, GR_XOR );
     }
 
     wxPoint          pos = pcbframe->GetScreen()->m_Curseur;
@@ -462,7 +462,7 @@ void Show_Zone_Corner_Or_Outline_While_Move_Mouse( WinEDA_DrawPanel* Panel, wxDC
     else
         zone->m_Poly->MoveCorner( zone->m_CornerSelection, pos.x, pos.y );
 
-    zone->Draw( Panel, DC, wxPoint( 0, 0 ), GR_XOR );
+    zone->Draw( Panel, DC, GR_XOR );
 }
 
 
@@ -510,12 +510,12 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
 
             if( diag ==  ZONE_ABORT )
                 return 0;
-			
-			((PCB_SCREEN*)GetScreen())->m_Active_Layer = s_Zone_Layer;	// Set by the dialog frame
+
+            ((PCB_SCREEN*)GetScreen())->m_Active_Layer = s_Zone_Layer;	// Set by the dialog frame
         }
         else                                            /* Start a new contour: init zone params (net and layer) from an existing zone */
         {
-			((PCB_SCREEN*)GetScreen())->m_Active_Layer = s_Zone_Layer = s_CurrentZone->GetLayer();
+            ((PCB_SCREEN*)GetScreen())->m_Active_Layer = s_Zone_Layer = s_CurrentZone->GetLayer();
             s_Zone_Hatching = s_CurrentZone->m_Poly->GetHatchStyle();
         }
 
@@ -737,7 +737,7 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
     for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* edge_zone = m_Pcb->GetArea( ii );
-        edge_zone->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+        edge_zone->Draw( DrawPanel, DC, GR_XOR );
     }
 
     zone_container->SetLayer( s_Zone_Layer );
@@ -777,7 +777,7 @@ void WinEDA_PcbFrame::Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_contai
     int ncont = zone_container->m_Poly->GetContour( zone_container->m_CornerSelection );
 
     if( DC )
-        zone_container->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+        zone_container->Draw( DrawPanel, DC, GR_XOR );
 
     Delete_Zone_Fill( DC, NULL, zone_container->m_TimeStamp );  // Remove fill segments
 
@@ -788,7 +788,7 @@ void WinEDA_PcbFrame::Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_contai
     {
         zone_container->m_Poly->RemoveContour( ncont );
         if( DC )
-            zone_container->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+            zone_container->Draw( DrawPanel, DC, GR_OR );
     }
     GetScreen()->SetModify();
 }

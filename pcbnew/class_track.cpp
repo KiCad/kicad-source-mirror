@@ -626,7 +626,7 @@ bool TRACK::Save( FILE* aFile ) const
 
 
 /*********************************************************************/
-void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
+void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoint& notUsed )
 /*********************************************************************/
 
 /** Draws the segment.

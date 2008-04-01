@@ -238,11 +238,11 @@ void WinEDA_ModulePropertiesFrame::BuildPanelModuleProperties( bool FullOptions 
         PropLeftSizer->Add( m_LayerCtrl, 0, wxGROW | wxALL, 5 );
 
         bool     select = FALSE;
-        
+
         wxString orient_list[5] = {
             _( "Normal" ), wxT( "+ 90.0" ), wxT( "- 90.0" ), wxT( "180.0" ), _( "User" )
         };
-        
+
         m_OrientCtrl = new wxRadioBox( m_PanelProperties, ID_LISTBOX_ORIENT_SELECT, _( "Orient" ),
                                        wxDefaultPosition, wxSize( -1, -1 ), 5, orient_list, 1 );
         PropLeftSizer->Add( m_OrientCtrl, 0, wxGROW | wxALL, 5 );
@@ -588,7 +588,7 @@ void WinEDA_ModulePropertiesFrame::OnOkClick( wxCommandEvent& event )
     EndModal( 1 );
 
     if( m_DC )
-        m_CurrentModule->Draw( m_Parent->DrawPanel, m_DC, wxPoint( 0, 0 ), GR_OR );
+        m_CurrentModule->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
     if( m_DC )
         m_Parent->DrawPanel->CursorOn( m_DC );
 }

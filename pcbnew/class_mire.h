@@ -23,16 +23,16 @@ public:
     {
         return m_Pos;
     }
-    
-    
+
+
     /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.brd" format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
-     */ 
+     */
     bool Save( FILE* aFile ) const;
-    
+
     bool    ReadMirePcbDescr( FILE* File, int* LineNum );
 
     /* supprime du chainage la structure Struct */
@@ -40,9 +40,9 @@ public:
 
     void    Copy( MIREPCB* source );
 
-    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int mode_color );
+    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& offset = ZeroOffset );
 
-    
+
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.
@@ -54,7 +54,7 @@ public:
     /**
      * Function HitTest (overlayed)
      * tests if the given EDA_Rect intersect this object.
-	 * For now, the anchor must be inside this rect.
+     * For now, the anchor must be inside this rect.
      * @param refArea : the given EDA_Rect
      * @return bool - true if a hit, else false
      */

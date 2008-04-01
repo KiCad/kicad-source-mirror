@@ -101,30 +101,30 @@ bool MIREPCB::Save( FILE* aFile ) const
         return true;
 
     bool rc = false;
-    
+
     if( fprintf( aFile, "$MIREPCB\n" ) != sizeof("$MIREPCB\n")-1 )
         goto out;
-    
+
     fprintf( aFile, "Po %X %d %d %d %d %d %8.8lX\n",
              m_Shape, m_Layer,
              m_Pos.x, m_Pos.y,
              m_Size, m_Width, m_TimeStamp );
-    
+
     if( fprintf( aFile, "$EndMIREPCB\n" ) != sizeof("$EndMIREPCB\n")-1 )
         goto out;
-    
+
     rc = true;
 
-out:    
+out:
     return rc;
 }
-    
-    
+
+
 
 
 /**********************************************************/
 void MIREPCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                    const wxPoint& offset, int mode_color )
+                    int mode_color, const wxPoint& offset )
 /**********************************************************/
 
 /* Affichage de 1 mire : 2 segments + 1 cercle
@@ -226,8 +226,8 @@ bool MIREPCB::HitTest( const wxPoint& refPos )
  */
 bool    MIREPCB::HitTest( EDA_Rect& refArea )
 {
-	if( refArea.Inside( m_Pos ) )
-		return true;
-	return false;
+    if( refArea.Inside( m_Pos ) )
+        return true;
+    return false;
 }
 

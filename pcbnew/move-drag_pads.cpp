@@ -36,10 +36,10 @@ static void Exit_Move_Pad( WinEDA_DrawPanel* Panel, wxDC* DC )
     if( pad == NULL )
         return;
 
-    pad->Draw( Panel, DC, wxPoint( 0, 0 ), GR_XOR );
+    pad->Draw( Panel, DC, GR_XOR );
     pad->m_Flags = 0;
     pad->m_Pos   = Pad_OldPos;
-    pad->Draw( Panel, DC, wxPoint( 0, 0 ), GR_XOR );
+    pad->Draw( Panel, DC, GR_XOR );
     /* Pad Move en cours : remise a l'etat d'origine */
     if( g_Drag_Pistes_On )
     {
@@ -72,9 +72,10 @@ static void Show_Pad_Move( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     D_PAD*       pad    = s_CurrentSelectedPad;
 
     if( erase )
-        pad->Draw( panel, DC, wxPoint( 0, 0 ), GR_XOR );
+        pad->Draw( panel, DC, GR_XOR );
+
     pad->m_Pos = screen->m_Curseur;
-    pad->Draw( panel, DC, wxPoint( 0, 0 ), GR_XOR );
+    pad->Draw( panel, DC, GR_XOR );
 
     if( !g_Drag_Pistes_On )
         return;
@@ -141,7 +142,7 @@ void WinEDA_BasePcbFrame::Import_Pad_Settings( D_PAD* pt_pad, wxDC* DC )
  */
 {
     if( DC )
-        pt_pad->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+        pt_pad->Draw( DrawPanel, DC, GR_XOR );
 
     pt_pad->m_PadShape     = g_Pad_Master.m_PadShape;
     pt_pad->m_Masque_Layer = g_Pad_Master.m_Masque_Layer;
@@ -178,7 +179,7 @@ void WinEDA_BasePcbFrame::Import_Pad_Settings( D_PAD* pt_pad, wxDC* DC )
     pt_pad->ComputeRayon();
 
     if( DC )
-        pt_pad->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+        pt_pad->Draw( DrawPanel, DC, GR_XOR );
     ( (MODULE*) pt_pad->m_Parent )->m_LastEdit_Time = time( NULL );
 }
 
@@ -247,7 +248,7 @@ void WinEDA_BasePcbFrame::AddPad( MODULE* Module, wxDC* DC )
     /* Redessin du module */
     Module->Set_Rectangle_Encadrement();
     Pad->Display_Infos( this );
-    Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+    Module->Draw( DrawPanel, DC, GR_OR );
 }
 
 
@@ -301,9 +302,9 @@ void WinEDA_BasePcbFrame::StartMovePad( D_PAD* Pad, wxDC* DC )
     DrawPanel->ForceCloseManageCurseur = Exit_Move_Pad;
 
     /* Draw the pad  (SKETCH mode) */
-    Pad->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+    Pad->Draw( DrawPanel, DC, GR_XOR );
     Pad->m_Flags |= IS_MOVED;
-    Pad->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+    Pad->Draw( DrawPanel, DC, GR_XOR );
 
     /* Build the list of track segments to drag if the command is a drag pad*/
     if( g_Drag_Pistes_On )
@@ -329,7 +330,7 @@ void WinEDA_BasePcbFrame::PlacePad( D_PAD* Pad, wxDC* DC )
     Module = (MODULE*) Pad->m_Parent;
 
     /* Placement du pad */
-    Pad->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+    Pad->Draw( DrawPanel, DC, GR_XOR );
 
     /* Save old module */
     Pad->m_Pos = Pad_OldPos; SaveCopyInUndoList( m_Pcb->m_Modules );
@@ -345,7 +346,7 @@ void WinEDA_BasePcbFrame::PlacePad( D_PAD* Pad, wxDC* DC )
 
     Pad->m_Flags = 0;
 
-    Pad->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+    Pad->Draw( DrawPanel, DC, GR_OR );
 
     Module->Set_Rectangle_Encadrement();
     Module->m_LastEdit_Time = time( NULL );
@@ -386,7 +387,7 @@ void WinEDA_BasePcbFrame::RotatePad( D_PAD* Pad, wxDC* DC )
 
     GetScreen()->SetModify();
 
-    Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+    Module->Draw( DrawPanel, DC, GR_XOR );
 
     EXCHG( Pad->m_Size.x, Pad->m_Size.y );
     EXCHG( Pad->m_Drill.x, Pad->m_Drill.y );
@@ -400,5 +401,5 @@ void WinEDA_BasePcbFrame::RotatePad( D_PAD* Pad, wxDC* DC )
     Module->Set_Rectangle_Encadrement();
 
     Pad->Display_Infos( this );
-    Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+    Module->Draw( DrawPanel, DC, GR_OR );
 }

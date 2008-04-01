@@ -10,6 +10,10 @@ email address.
 +all
     Tweaked class MsgPanel so that the screen drawing only happens from
     its OnPaint() function.
++pcbnew
+    Added virtual BOARD_ITEM::Draw() and forced all BOARD_ITEM derived classes
+    to implement it so that all these functions are also virtual.
+    Made the offset argument default to the new wxPoint BOARD_ITEM::ZeroOffset
 
 
 2008-Mar-30 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>

@@ -287,7 +287,7 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( wxDC* DC, bool PlaceModulesHorsPcb )
 
         PutOnGrid( &m_CurrentScreen->m_Curseur );
 
-        Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+        Module->Draw( DrawPanel, DC, GR_XOR );
         Place_Module( Module, DC );   /* positionne Module et recalcule cadre */
 
         current.x += Module->m_RealBoundaryBox.GetWidth() + pas_grille;
@@ -309,7 +309,7 @@ void WinEDA_PcbFrame::FixeModule( MODULE* Module, bool Fixe )
     if( Module )    /* Traitement du module */
     {
         Module->SetLocked( Fixe );
-        
+
         Module->Display_Infos( this );
         GetScreen()->SetModify();
     }
@@ -354,9 +354,9 @@ void WinEDA_PcbFrame::ReOrientModules( const wxString& ModuleMask,
         if( WildCompareString( ModuleMask, Module->m_Reference->m_Text, FALSE ) )
         {
             m_CurrentScreen->SetModify();
-            Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+            Module->Draw( DrawPanel, DC, GR_XOR );
             Rotate_Module( NULL, Module, Orient, FALSE );
-            Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+            Module->Draw( DrawPanel, DC, GR_OR );
         }
     }
 }

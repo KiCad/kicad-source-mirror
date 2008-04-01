@@ -574,6 +574,11 @@ public:
     }
 
 
+    /**
+     * A value of wxPoint(0,0) which can be passed to the Draw() functions.
+     */
+    static wxPoint  ZeroOffset;
+
     BOARD_ITEM* Next() const { return (BOARD_ITEM*) Pnext; }
     BOARD_ITEM* Back() const { return (BOARD_ITEM*) Pback; }
     BOARD_ITEM* GetParent() const { return (BOARD_ITEM*) m_Parent; }
@@ -598,6 +603,18 @@ public:
      * @param aLayer The layer number.
      */
     void  SetLayer( int aLayer )  { m_Layer = aLayer; }
+
+
+    /**
+     * Function Draw
+     * overrides Draw() from EDA_BaseStruct in order to make it virtual
+     * without the default color argument, which is more appropriate for
+     * BOARD_ITEMs which have their own color information.
+     */
+    virtual void Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                      int aDrawMode, const wxPoint& offset = ZeroOffset )
+    {
+    }
 
 
     /**

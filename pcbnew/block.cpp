@@ -79,12 +79,12 @@ static bool InstallBlockCmdFrame( WinEDA_BasePcbFrame* parent,
 
     parent->DrawPanel->m_IgnoreMouseEvents = TRUE;
     WinEDA_ExecBlockCmdFrame* frame = new WinEDA_ExecBlockCmdFrame( parent, title );
-    
-    nocmd = frame->ShowModal(); 
+
+    nocmd = frame->ShowModal();
     frame->Destroy();
-    
+
     parent->GetScreen()->m_Curseur = oldpos;
-    
+
     parent->DrawPanel->MouseToCursorSchema();
     parent->DrawPanel->m_IgnoreMouseEvents = FALSE;
 
@@ -117,7 +117,7 @@ WinEDA_ExecBlockCmdFrame::WinEDA_ExecBlockCmdFrame( WinEDA_BasePcbFrame* parent,
     fgSizer1 = new wxFlexGridSizer( 1, 1, 0, 0 );
     fgSizer1->SetFlexibleDirection( wxBOTH );
     fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	
+
     // Selection des options :
     m_Include_Modules = new wxCheckBox( this, -1, _( "Include Modules" ), wxDefaultPosition, wxDefaultSize, 0 );
     m_Include_Modules->SetValue( Block_Include_Modules );
@@ -403,7 +403,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool era
     int          Color;
     BASE_SCREEN* screen = panel->GetScreen();
 
-    Color = YELLOW; 
+    Color = YELLOW;
     GRSetDrawMode( DC, g_XorMode );
 
     /* Effacement ancien cadre */
@@ -463,11 +463,11 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
         {
             NextS = module->Next();
             if( module->HitTest( GetScreen()->BlockLocate ) )
-			{
-				module->m_Flags = 0;
-				module->DeleteStructure();
-				m_Pcb->m_Status_Pcb = 0;
-			}
+            {
+                module->m_Flags = 0;
+                module->DeleteStructure();
+                m_Pcb->m_Status_Pcb = 0;
+            }
         }
     }
 
@@ -480,7 +480,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
         {
             NextS = pt_segm->Next();
             if( pt_segm->HitTest( GetScreen()->BlockLocate ) )
-            {       
+            {
                 /* la piste est ici bonne a etre efface */
                 pt_segm->DeleteStructure();
             }
@@ -491,7 +491,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
     masque_layer = EDGE_LAYER;
     if( Block_Include_Draw_Items )
         masque_layer = ALL_LAYERS;
-    
+
     if( !Block_Include_Edges_Items )
         masque_layer &= ~EDGE_LAYER;
 
@@ -520,14 +520,12 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
             if( ! PtStruct->HitTest( GetScreen()->BlockLocate ) )
                 break;
             /* le texte est ici bon a etre efface */
-            ( (TEXTE_PCB*) PtStruct )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+            PtStruct->Draw( DrawPanel, DC, GR_XOR );
             /* Suppression du texte en Memoire*/
             PtStruct->DeleteStructure();
             break;
 
         case TYPEMIRE:
-                #undef STRUCT
-                #define STRUCT ( (MIREPCB*) PtStruct )
             if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
             if( ! PtStruct->HitTest( GetScreen()->BlockLocate ) )
@@ -537,8 +535,6 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
             break;
 
         case TYPECOTATION:
-                #undef STRUCT
-                #define STRUCT ( (COTATION*) PtStruct )
             if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
             if( ! PtStruct->HitTest( GetScreen()->BlockLocate ) )
@@ -561,29 +557,29 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
         {
             NextSegZ = pt_segm->Next();
             if( pt_segm->HitTest( GetScreen()->BlockLocate ) )
-            {    
+            {
                 pt_segm->DeleteStructure();
             }
         }
-		
-		for ( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
-		{
+
+        for ( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
+        {
             if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->BlockLocate ) )
-			{
-				m_Pcb->Delete(m_Pcb->GetArea(ii));
-				ii--;	// because the current data was removed, ii points actually the next data
-			}
-		}
+            {
+                m_Pcb->Delete(m_Pcb->GetArea(ii));
+                ii--;	// because the current data was removed, ii points actually the next data
+            }
+        }
     }
 
     DrawPanel->Refresh( TRUE );
     if( g_Show_Ratsnest )
         Compile_Ratsnest( DC, TRUE );
-	else
-	{
-	    m_Pcb->m_Status_Pcb = 0;        /* we need (later) a full ratnest computation */
-		build_liste_pads();
-	}
+    else
+    {
+        m_Pcb->m_Status_Pcb = 0;        /* we need (later) a full ratnest computation */
+        build_liste_pads();
+    }
 
 }
 
@@ -666,19 +662,19 @@ void WinEDA_BasePcbFrame::Block_Rotate( wxDC* DC )
         while( track )
         {
             if( track->HitTest( GetScreen()->BlockLocate ) )
-            { 
+            {
                 RotatePoint( &track->m_Start, centre, 900 );
                 RotatePoint( &track->m_End, centre, 900 );
             }
             track = track->Next();
         }
-		for ( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
-		{
+        for ( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
+        {
             if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->BlockLocate ) )
-			{
-				m_Pcb->GetArea(ii)->Rotate(centre, 900);
-			}
-		}
+            {
+                m_Pcb->GetArea(ii)->Rotate(centre, 900);
+            }
+        }
     }
 
     masque_layer = EDGE_LAYER;
@@ -848,14 +844,14 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
             }
             track = (TRACK*) track->Pnext;
         }
-		for ( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
-		{
+        for ( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
+        {
             if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->BlockLocate ) )
-			{
-				m_Pcb->GetArea(ii)->Mirror( wxPoint(0, centerY) );
+            {
+                m_Pcb->GetArea(ii)->Mirror( wxPoint(0, centerY) );
                 m_Pcb->GetArea(ii)->SetLayer( ChangeSideNumLayer( m_Pcb->GetArea(ii)->GetLayer() ) );
-			}
-		}
+            }
+        }
     }
 
     masque_layer = EDGE_LAYER;
@@ -925,7 +921,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
                 break;
             /* l'element est ici bon a etre modifie */
 
-			STRUCT->Mirror( wxPoint(0, centerY) );
+            STRUCT->Mirror( wxPoint(0, centerY) );
             STRUCT->SetLayer( ChangeSideNumLayer( STRUCT->GetLayer() ) );
             break;
 
@@ -1018,13 +1014,13 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
             }
             track = (TRACK*) track->Pnext;
         }
-		for ( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
-		{
+        for ( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
+        {
             if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->BlockLocate ) )
-			{
-				m_Pcb->GetArea(ii)->Move( MoveVector );
-			}
-		}
+            {
+                m_Pcb->GetArea(ii)->Move( MoveVector );
+            }
+        }
     }
 
     masque_layer = EDGE_LAYER;
@@ -1046,7 +1042,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
             if( ! PtStruct->HitTest( GetScreen()->BlockLocate ) )
                 break;
             /* l'element est ici bon a etre efface */
-			STRUCT->m_Start += MoveVector;
+            STRUCT->m_Start += MoveVector;
             STRUCT->m_End   += MoveVector;
             break;
 
@@ -1081,7 +1077,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
             if( ! PtStruct->HitTest( GetScreen()->BlockLocate ) )
                 break;
             /* l'element est ici bon a etre efface */
-			( (COTATION*) PtStruct )->Move( wxPoint(MoveVector) );
+            ( (COTATION*) PtStruct )->Move( wxPoint(MoveVector) );
             break;
 
         default:
@@ -1107,7 +1103,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
     EDA_BaseStruct* PtStruct;
     int masque_layer;
     wxPoint oldpos;
-	wxPoint MoveVector = GetScreen()->BlockLocate.m_MoveVector;
+    wxPoint MoveVector = GetScreen()->BlockLocate.m_MoveVector;
 
     oldpos = GetScreen()->m_Curseur;
     DrawPanel->ManageCurseur = NULL;
@@ -1124,7 +1120,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
     if( Block_Include_Modules )
     {
         bool Show_Ratsnest_tmp = g_Show_Ratsnest;
-		g_Show_Ratsnest = false;
+        g_Show_Ratsnest = false;
         module = m_Pcb->m_Modules;
         oldpos = GetScreen()->m_Curseur;
 
@@ -1143,7 +1139,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
             new_module->Pback = m_Pcb;
             m_Pcb->m_Modules->Pback = new_module;
             m_Pcb->m_Modules = new_module;
-			GetScreen()->m_Curseur = module->m_Pos + MoveVector;
+            GetScreen()->m_Curseur = module->m_Pos + MoveVector;
             Place_Module( new_module, DC );
         }
 
@@ -1160,7 +1156,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
         {
             next_track = track->Next();
             if( track->HitTest( GetScreen()->BlockLocate ) )
-            {   
+            {
                 /* la piste est ici bonne a etre deplacee */
                 m_Pcb->m_Status_Pcb = 0;
                 new_track = track->Copy();
@@ -1181,7 +1177,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
         while( segzone )
         {
             if( segzone->HitTest( GetScreen()->BlockLocate ) )
-            {  
+            {
                 new_segzone = (SEGZONE*) segzone->Copy();
                 new_segzone->Insert( m_Pcb, NULL );
                 new_segzone->m_Start += MoveVector;
@@ -1191,19 +1187,19 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
             segzone = segzone->Next();
         }
 
-		unsigned imax = m_Pcb->GetAreaCount();
-		for ( unsigned ii = 0; ii < imax; ii++ )
-		{
+        unsigned imax = m_Pcb->GetAreaCount();
+        for ( unsigned ii = 0; ii < imax; ii++ )
+        {
             if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->BlockLocate ) )
-			{
-				ZONE_CONTAINER * new_zone = new ZONE_CONTAINER(m_Pcb);
-				new_zone->Copy( m_Pcb->GetArea(ii) );
-				new_zone->m_TimeStamp = GetTimeStamp();
-				new_zone->Move( MoveVector );
-				m_Pcb->Add(new_zone);
-				new_zone->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
-			}
-		}
+            {
+                ZONE_CONTAINER * new_zone = new ZONE_CONTAINER(m_Pcb);
+                new_zone->Copy( m_Pcb->GetArea(ii) );
+                new_zone->m_TimeStamp = GetTimeStamp();
+                new_zone->Move( MoveVector );
+                m_Pcb->Add(new_zone);
+                new_zone->Draw( DrawPanel, DC, GR_OR );
+            }
+        }
     }
 
     masque_layer = EDGE_LAYER;
@@ -1225,11 +1221,11 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
                 break;
             if( ! PtStruct->HitTest( GetScreen()->BlockLocate ) )
                 break;
-            
+
             /* l'element est ici bon a etre copie */
             DRAWSEGMENT* new_drawsegment = new DRAWSEGMENT( m_Pcb );
             new_drawsegment->Copy( STRUCT );
-            
+
             new_drawsegment->Pnext   = m_Pcb->m_Drawings;
             new_drawsegment->Pback   = m_Pcb;
             m_Pcb->m_Drawings->Pback = new_drawsegment;
@@ -1257,7 +1253,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
             m_Pcb->m_Drawings = new_pcbtext;
             /* Redessin du Texte */
             new_pcbtext->m_Pos += MoveVector;
-            new_pcbtext->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+            new_pcbtext->Draw( DrawPanel, DC, GR_OR );
             break;
         }
 
@@ -1277,7 +1273,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
             m_Pcb->m_Drawings->Pback = new_mire;
             m_Pcb->m_Drawings  = new_mire;
             new_mire->m_Pos += MoveVector;
-            new_mire->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+            new_mire->Draw( DrawPanel, DC, GR_OR );
             break;
         }
 
@@ -1296,8 +1292,8 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
             new_cotation->Pback      = m_Pcb;
             m_Pcb->m_Drawings->Pback = new_cotation;
             m_Pcb->m_Drawings      = new_cotation;
-			new_cotation->Move( MoveVector );
-            new_cotation->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+            new_cotation->Move( MoveVector );
+            new_cotation->Draw( DrawPanel, DC, GR_OR );
             break;
         }
 

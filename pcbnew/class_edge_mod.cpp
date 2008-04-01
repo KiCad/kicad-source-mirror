@@ -127,7 +127,7 @@ void EDGE_MODULE::SetDrawCoord()
 
 /********************************************************************************/
 void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                        const wxPoint& offset, int draw_mode )
+                        int draw_mode, const wxPoint& offset )
 /********************************************************************************/
 
 /* Affichage d'un segment contour de module :

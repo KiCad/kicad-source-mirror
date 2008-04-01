@@ -86,7 +86,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveBasicShape( wxDC* DC,
     }
 
     if( DC )
-        Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+        Module->Draw( DrawPanel, DC, GR_OR );
     return Module;
 }
 
@@ -102,12 +102,12 @@ static void Exit_Muonde( WinEDA_DrawFrame* frame, wxDC* DC )
     {
         if( Module->m_Flags & IS_NEW )
         {
-            Module->Draw( frame->DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+            Module->Draw( frame->DrawPanel, DC, GR_XOR );
             Module ->DeleteStructure();
         }
         else
         {
-            Module->Draw( frame->DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+            Module->Draw( frame->DrawPanel, DC, GR_XOR );
         }
     }
 
@@ -273,7 +273,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent( wxDC* DC, int shape_type )
     }
 
     Module->Set_Rectangle_Encadrement();
-    Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+    Module->Draw( DrawPanel, DC, GR_OR );
     DrawPanel->MouseToCursorSchema();
     m_Pcb->m_Status_Pcb = 0;
     m_CurrentScreen->SetModify();
@@ -404,13 +404,13 @@ void WinEDA_SetParamShapeFrame::ReadDataShapeDescr( wxCommandEvent& event )
  *  Unit=MM
  *  XScale=271.501
  *  YScale=1.00133
- * 
+ *
  *  $COORD
  *  0                      0.6112600148417837
  *  0.001851851851851852   0.6104800531118608
  *  ....
  *  $ENDCOORD
- * 
+ *
  *  Each line is the X Y coord (normalised units from 0 to 1)
  */
 {
@@ -644,7 +644,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWavePolygonShape( wxDC* DC )
     PolyEdges = NULL;
 
     Module->Set_Rectangle_Encadrement();
-    Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+    Module->Draw( DrawPanel, DC, GR_OR );
     m_Pcb->m_Status_Pcb = 0;
     m_CurrentScreen->SetModify();
     return Module;
@@ -685,7 +685,7 @@ void WinEDA_PcbFrame::Edit_Gap( wxDC* DC, MODULE* Module )
     }
 
     /* Effacement du module: */
-    Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+    Module->Draw( DrawPanel, DC, GR_XOR );
 
     /* Calcul de la dimension actuelle */
     gap_size = next_pad->m_Pos0.x - pad->m_Pos0.x - pad->m_Size.x;
@@ -728,5 +728,5 @@ void WinEDA_PcbFrame::Edit_Gap( wxDC* DC, MODULE* Module )
     RotatePoint( &(next_pad->m_Pos.x), &(next_pad->m_Pos.y),
                  Module->m_Pos.x, Module->m_Pos.y, Module->m_Orient );
 
-    Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+    Module->Draw( DrawPanel, DC, GR_OR );
 }

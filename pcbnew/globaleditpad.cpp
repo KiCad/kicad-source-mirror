@@ -266,7 +266,7 @@ void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* Pad, wxDC* DC )
         Module->Display_Infos( this );
 
         /* Effacement du module */
-        Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+        Module->Draw( DrawPanel, DC, GR_XOR );
 
         pt_pad = (D_PAD*) Module->m_Pads;
         for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
@@ -345,7 +345,7 @@ void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* Pad, wxDC* DC )
         }
 
         Module->Set_Rectangle_Encadrement();
-        Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+        Module->Draw( DrawPanel, DC, GR_OR );
     }
 
     GetScreen()->SetModify();

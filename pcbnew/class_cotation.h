@@ -32,8 +32,8 @@ public:
     {
         return m_Pos;
     }
-    
-    
+
+
     bool    ReadCotationDescr( FILE* File, int* LineNum );
 
     /**
@@ -41,9 +41,9 @@ public:
      * writes the data structures for this object out to a FILE in "*.brd" format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
-     */ 
+     */
     bool Save( FILE* aFile ) const;
-    
+
     /* supprime du chainage la structure Struct */
     void    UnLink();
 
@@ -53,29 +53,30 @@ public:
 
     void    Copy( COTATION* source );
 
-    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int mode_color );
-	
-	/**
-	 * Function Move
-	 * @param offset : moving vector
-	 */
-	void    Move(const wxPoint& offset);
+    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                  int aColorMode, const wxPoint& offset = ZeroOffset );
 
-	/**
-	 * Function Rotate
-	 * @param offset : Rotation point
-	 * @param angle : Rotation angle in 0.1 degrees
-	 */
-	void    Rotate(const wxPoint& centre, int angle);
+    /**
+     * Function Move
+     * @param offset : moving vector
+     */
+    void    Move(const wxPoint& offset);
 
-	/**
-	 * Function Mirror
-	 * Mirror the Dimension , relative to a given horizontal axis
-	 * the text is not mirrored. only its position (and angle) is mirrored
-	 * the layer is not changed
-	 * @param axis_pos : vertical axis position
-	 */
-	void    Mirror(const wxPoint& axis_pos);
+    /**
+     * Function Rotate
+     * @param offset : Rotation point
+     * @param angle : Rotation angle in 0.1 degrees
+     */
+    void    Rotate(const wxPoint& centre, int angle);
+
+    /**
+     * Function Mirror
+     * Mirror the Dimension , relative to a given horizontal axis
+     * the text is not mirrored. only its position (and angle) is mirrored
+     * the layer is not changed
+     * @param axis_pos : vertical axis position
+     */
+    void    Mirror(const wxPoint& axis_pos);
 
     /**
      * Function Display_Infos
@@ -83,9 +84,9 @@ public:
      * about this object into the frame's message panel.
      * Is virtual from EDA_BaseStruct.
      * @param frame A WinEDA_DrawFrame in which to print status information.
-     */ 
+     */
     void    Display_Infos( WinEDA_DrawFrame* frame );
-    
+
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.
@@ -93,17 +94,17 @@ public:
      * @return bool - true if a hit, else false
      */
     bool    HitTest( const wxPoint& ref_pos );
-    
+
     /**
      * Function HitTest (overlayed)
      * tests if the given EDA_Rect intersect this object.
-	 * For now, the anchor must be inside this rect.
+     * For now, the anchor must be inside this rect.
      * @param refArea : the given EDA_Rect
      * @return bool - true if a hit, else false
      */
     bool    HitTest( EDA_Rect& refArea );
 
-    
+
     /**
      * Function GetClass
      * returns the class name.

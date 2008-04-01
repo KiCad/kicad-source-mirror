@@ -65,7 +65,7 @@ void WinEDA_PcbFrame::UnDeleteItem( wxDC* DC )
 
         g_UnDeleteStack[g_UnDeleteStackPtr] = NULL;
 
-        ((MODULE*) item)->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+        ((MODULE*) item)->Draw( DrawPanel, DC, GR_OR );
 
         item->SetState( DELETED, OFF );     /* Creal DELETED flag */
         item->m_Flags   = 0;

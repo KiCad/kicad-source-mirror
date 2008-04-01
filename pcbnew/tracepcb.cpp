@@ -32,7 +32,7 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
 {
     MODULE*     Module;
-	PCB_SCREEN* screen = (PCB_SCREEN*)GetScreen();
+    PCB_SCREEN* screen = (PCB_SCREEN*)GetScreen();
 
     if( !m_Pcb || !screen )
         return;
@@ -46,11 +46,11 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     DrawPanel->DrawBackGround( DC );
     TraceWorkSheet( DC, screen, 0 );
 
-	/* Redraw the footprint */
+    /* Redraw the footprint */
     Module = (MODULE*) m_Pcb->m_Modules;
     for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
     {
-        Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+        Module->Draw( DrawPanel, DC, GR_OR );
     }
 
     Affiche_Status_Box();
@@ -72,7 +72,7 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 /* Draw the BOARD, and others elements : axis, grid ..
  */
 {
-	PCB_SCREEN* Screen = (PCB_SCREEN*)GetScreen();
+    PCB_SCREEN* Screen = (PCB_SCREEN*)GetScreen();
 
     if( !m_Pcb || !Screen )
         return;
@@ -87,13 +87,18 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     Trace_Pcb( DC, GR_OR );
     TraceWorkSheet( DC, GetScreen(), 0 );
+
     Affiche_Status_Box();
 
-	if( DrawPanel->ManageCurseur )
-		DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
-    /* Redraw the cursor */
-	DrawPanel->Trace_Curseur( DC );
+    if( DrawPanel->ManageCurseur )
+        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+
+    // Redraw the cursor
+    DrawPanel->Trace_Curseur( DC );
 }
+
+
+#define DRAW_CUR_LAYER_LAST     1
 
 
 /****************************************************/
@@ -101,69 +106,73 @@ void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
 /****************************************************/
 /* Redraw the BOARD items but not cursors, axis or grid */
 {
-    MODULE*         Module;
-    EDA_BaseStruct* PtStruct;
-
     if( !m_Pcb )
         return;
 
-    Module = (MODULE*) m_Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( MODULE* module = m_Pcb->m_Modules;  module;  module = module->Next() )
     {
         bool display = true;
-        int  MaskLay = ALL_CU_LAYERS;
-        
-        if( Module->m_Flags & IS_MOVED )
+        int  layerMask = ALL_CU_LAYERS;
+
+        if( module->m_Flags & IS_MOVED )
             continue;
 
         if( !DisplayOpt.Show_Modules_Cmp )
         {
-            if( Module->GetLayer() == CMP_N )
+            if( module->GetLayer() == CMP_N )
                 display = FALSE;
-            MaskLay &= ~CMP_LAYER;
+            layerMask &= ~CMP_LAYER;
         }
+
         if( !DisplayOpt.Show_Modules_Cu )
         {
-            if( Module->GetLayer() == COPPER_LAYER_N )
+            if( module->GetLayer() == COPPER_LAYER_N )
                 display = FALSE;
-            MaskLay &= ~CUIVRE_LAYER;
+            layerMask &= ~CUIVRE_LAYER;
         }
 
         if( display )
-            Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), mode );
+            module->Draw( DrawPanel, DC, mode );
         else
-            Trace_Pads_Only( DrawPanel, DC, Module, 0, 0, MaskLay, mode );
+            Trace_Pads_Only( DrawPanel, DC, module, 0, 0, layerMask, mode );
     }
 
-    /* Draw the graphic items */
 
-    PtStruct = m_Pcb->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    // Draw the graphic items
+    for( BOARD_ITEM* item = m_Pcb->m_Drawings;  item;  item = item->Next() )
     {
-        if( PtStruct->m_Flags & IS_MOVED )
+        if( item->m_Flags & IS_MOVED )
             continue;
 
-        switch( PtStruct->Type() )
+        switch( item->Type() )
         {
         case TYPECOTATION:
-            ( (COTATION*) PtStruct )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), mode );
-            break;
-
         case TYPETEXTE:
-            ( (TEXTE_PCB*) PtStruct )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), mode );
-            break;
-
         case TYPEMIRE:
-            ( (MIREPCB*) PtStruct )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), mode );
+            item->Draw( DrawPanel, DC, mode );
             break;
 
        case TYPEDRAWSEGMENT:
-			Trace_DrawSegmentPcb( DrawPanel, DC, (DRAWSEGMENT*) PtStruct, mode );
-			break;
+            Trace_DrawSegmentPcb( DrawPanel, DC, (DRAWSEGMENT*) item, mode );
+            break;
 
-	   default:
+       default:
             break;
         }
+    }
+
+    Trace_Pistes( DrawPanel, m_Pcb, DC, mode );
+    if( g_HightLigt_Status )
+        DrawHightLight( DC, g_HightLigth_NetCode );
+
+    for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
+    {
+        ZONE_CONTAINER* edge_zone =  m_Pcb->GetArea(ii);
+
+        // Areas must be drawn here only if not moved or dragged,
+        // because these areas are drawn by ManageCursor() in a specific manner
+        if ( (edge_zone->m_Flags & (IN_EDIT | IS_DRAGGED | IS_MOVED)) == 0 )
+            edge_zone->Draw( DrawPanel, DC, mode );
     }
 
     // draw the BOARD's markers.
@@ -171,20 +180,6 @@ void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
     {
         m_Pcb->m_markers[i]->Draw( DrawPanel, DC, mode );
     }
-
-    Trace_Pistes( DrawPanel, m_Pcb, DC, mode );
-    if( g_HightLigt_Status )
-        DrawHightLight( DC, g_HightLigth_NetCode );
-
-
-	for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
-	{
-		ZONE_CONTAINER* edge_zone =  m_Pcb->GetArea(ii);
-		// Areas must be drawn here only if not moved or dragged,
-		// because these areas are drawn by ManageCursor() in a specific manner
-		if ( (edge_zone->m_Flags & (IN_EDIT | IS_DRAGGED | IS_MOVED)) == 0 )
-			edge_zone->Draw( DrawPanel, DC, wxPoint(0,0), mode);
-	}
 
     DrawGeneralRatsnest( DC );
 

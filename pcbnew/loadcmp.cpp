@@ -162,7 +162,7 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
         module->SetPosition( curspos );
         build_liste_pads();
 
-        module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR );
+        module->Draw( DrawPanel, DC, GR_OR );
     }
 
     return module;
@@ -315,7 +315,7 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List(
  *  Mask = Filtre d'affichage( Mask = wxEmptyString pour listage non filtré )
  *  KeyWord = Liste de mots cles, Recherche limitee aux composants
  *      ayant ces mots cles ( KeyWord = wxEmptyString pour listage de tous les modules )
- * 
+ *
  *  retourne wxEmptyString si abort ou probleme
  *  ou le nom du module
  */

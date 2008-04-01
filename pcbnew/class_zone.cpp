@@ -235,7 +235,7 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
 
 
 /****************************************************************************************************/
-void ZONE_CONTAINER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode )
+void ZONE_CONTAINER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoint& offset )
 /****************************************************************************************************/
 
 /** Function Draw

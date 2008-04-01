@@ -182,7 +182,7 @@ void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC 
         if( Module->m_ModuleStatus & MODULE_to_PLACE )  // Erase from screen
         {
             NbModules++;
-            Module->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
+            Module->Draw( DrawPanel, DC, GR_XOR );
         }
         else
         {
@@ -379,13 +379,13 @@ int WinEDA_PcbFrame::GenPlaceBoard()
  *  et initialise les cellules du board a
  *   - HOLE pour les cellules occupees par un segment EDGE
  *   - CELL_is_ZONE pour les cellules internes au contour EDGE (s'il est ferme)
- * 
+ *
  *  la surface de placement (board) donne les cellules internes au contour
  *  du pcb, et parmi celle-ci les cellules libres et les cellules deja occupees
- * 
+ *
  *  le bitmap des penalites donnent les cellules occupes par les modules,
  *  augmentes d'une surface de penalite liee au nombre de pads du module
- * 
+ *
  *  le bitmap des penalites est mis a 0
  *  l'occupation des cellules est laisse a 0
  */
@@ -720,7 +720,7 @@ int TstRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1, int side )
 /* tst si la surface rectangulaire (ux,y0 .. ux,y1):
  *  - est sur une zone libre ( retourne OCCUPED_By_MODULE sinon)
  *  - est sur la surface utile du board ( retourne OUT_OF_BOARD sinon)
- * 
+ *
  *  retourne 0 si OK
  */
 {
@@ -873,7 +873,7 @@ float WinEDA_PcbFrame::Compute_Ratsnest_PlaceModule( wxDC* DC )
         return -1;
 
     pt_local_chevelu = local_liste_chevelu;
-    ii = nb_local_chevelu; 
+    ii = nb_local_chevelu;
     cout = 0;
 
     while( ii-- > 0 )
@@ -892,18 +892,18 @@ float WinEDA_PcbFrame::Compute_Ratsnest_PlaceModule( wxDC* DC )
             }
 
             /* Evaluation du cout du chevelu: */
-            dx = fx - ox; 
+            dx = fx - ox;
             dy = fy - oy;
-            
-            dx = abs( dx ); 
+
+            dx = abs( dx );
             dy = abs( dy );
-            
+
             if( dx < dy )
                 EXCHG( dx, dy );/* dx >= dy */
-            
+
             /* cout de la distance: */
             icout = (float) dx * dx;
-            
+
             /* cout de l'inclinaison */
             icout += 3 * (float) dy * dy;
             icout  = sqrt( icout );
@@ -926,10 +926,10 @@ void Build_PlacedPads_List( BOARD* Pcb )
  *  des caract utiles des pads du PCB pour Placement Automatique )
  *  Cette liste est restreinte a la liste des pads des modules deja places sur
  *  la carte.
- * 
+ *
  *  parametres:
  *      adresse du buffer de classement = Pcb->ptr_pads;
- * 
+ *
  *  Variables globales mise a jour:
  *  pointeur ptr_pads (adr de classement de la liste des pads)
  *  nb_pads = nombre utile de pastilles classes

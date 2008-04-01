@@ -146,7 +146,7 @@ out:
 
 /**********************************************************************/
 void TEXTE_PCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                      const wxPoint& offset, int DrawMode )
+                      int DrawMode, const wxPoint& offset )
 /**********************************************************************/
 
 /*

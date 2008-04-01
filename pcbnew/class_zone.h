@@ -24,7 +24,7 @@ public:
         THERMAL_PAD,                // Use thermal relief for pads
         PAD_IN_ZONE                 // pads are covered by copper
     };
-    
+
     wxString    m_Netname;          // Net Name
     CPolyLine*  m_Poly;             // outlines
     int         m_CornerSelection;  // For corner moving, corner index to drag, or -1 if no selection
@@ -45,7 +45,7 @@ public:
 
     wxPoint& GetPosition()
     {
-        static wxPoint pos; 
+        static wxPoint pos;
         return pos;
     }
 
@@ -53,7 +53,7 @@ public:
     {
     };
 
-    /** 
+    /**
      * Function copy
      * copy usefull data from the source.
      * flags and linked list pointers are NOT copied
@@ -68,17 +68,16 @@ public:
      * @param panel = current Draw Panel
      * @param DC = current Device Context
      * @param offset = Draw offset (usually wxPoint(0,0))
-     * @param draw_mode = draw mode: OR, XOR ..
+     * @param aDrawMode = GR_OR, GR_XOR, GR_COPY ..
      */
-    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                  const wxPoint& offset, int draw_mode );
+    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& offset = ZeroOffset );
 
 
     /**
      * Function DrawWhileCreateOutline
      * Draws the zone outline when ir is created.
-	 * The moving edges are in XOR graphic mode, old segment in draw_mode graphic mode (usually GR_OR)
-	 * The closing edge has its owm shape
+     * The moving edges are in XOR graphic mode, old segment in draw_mode graphic mode (usually GR_OR)
+     * The closing edge has its owm shape
      * @param panel = current Draw Panel
      * @param DC = current Device Context
      * @param draw_mode = draw mode: OR, XOR ..
@@ -168,7 +167,7 @@ public:
      * @param mirror_ref = vertical axis position
      */
     void    Mirror( const wxPoint& mirror_ref );
-    
+
     /**
      * Function GetClass
      * returns the class name.
@@ -178,35 +177,35 @@ public:
     {
         return wxT( "ZONE_CONTAINER" );
     }
-	
-	/** Acces to m_Poly parameters
-	*/
-	
-	int GetNumCorners(void)
-	{
-		return m_Poly->GetNumCorners();
-	}
-	
-	void RemoveAllContours(void)
-	{
-		m_Poly->RemoveAllContours();
-	}
-	
-	wxPoint GetCornerPosition(int aCornerIndex)
-	{
-		return wxPoint(m_Poly->GetX(aCornerIndex), m_Poly->GetY(aCornerIndex));
-	}
-	
-	void SetCornerPosition(int aCornerIndex, wxPoint new_pos)
-	{
-		m_Poly->SetX(aCornerIndex, new_pos.x);
-		m_Poly->SetY(aCornerIndex, new_pos.y);
-	}
-	
-	void AppendCorner( wxPoint position )
-	{
-		m_Poly->AppendCorner( position.x, position.y );
-	}
+
+    /** Acces to m_Poly parameters
+    */
+
+    int GetNumCorners(void)
+    {
+        return m_Poly->GetNumCorners();
+    }
+
+    void RemoveAllContours(void)
+    {
+        m_Poly->RemoveAllContours();
+    }
+
+    wxPoint GetCornerPosition(int aCornerIndex)
+    {
+        return wxPoint(m_Poly->GetX(aCornerIndex), m_Poly->GetY(aCornerIndex));
+    }
+
+    void SetCornerPosition(int aCornerIndex, wxPoint new_pos)
+    {
+        m_Poly->SetX(aCornerIndex, new_pos.x);
+        m_Poly->SetY(aCornerIndex, new_pos.y);
+    }
+
+    void AppendCorner( wxPoint position )
+    {
+        m_Poly->AppendCorner( position.x, position.y );
+    }
 };
 
 

@@ -155,11 +155,6 @@ void WinEDA_PcbFrame::Drawing_SetNewWidth( DRAWSEGMENT* DrawSegm, wxDC* DC )
 void WinEDA_PcbFrame::Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC )
 /******************************************************************************/
 {
-    DRAWSEGMENT*    pt_segm;
-    TEXTE_PCB*      pt_txt;
-    BOARD_ITEM*     PtStruct;
-    BOARD_ITEM*     PtNext;
-    COTATION*       Cotation;
     int             layer = Segment->GetLayer();
 
     if( layer <= LAST_COPPER_LAYER )
@@ -178,39 +173,28 @@ void WinEDA_PcbFrame::Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC 
     if( !IsOK( this, msg ) )
         return;
 
-    PtStruct = m_Pcb->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtNext )
+    BOARD_ITEM*     PtNext;
+    for( BOARD_ITEM* item = m_Pcb->m_Drawings;  item;  item = PtNext )
     {
         GetScreen()->SetModify();
-        PtNext = PtStruct->Next();
+        PtNext = item->Next();
 
-        switch( PtStruct->Type() )
+        switch( item->Type() )
         {
         case TYPEDRAWSEGMENT:
-            pt_segm = (DRAWSEGMENT*) PtStruct;
-            if( pt_segm->GetLayer() == layer )
+            if( item->GetLayer() == layer )
             {
-                Trace_DrawSegmentPcb( DrawPanel, DC, pt_segm, GR_XOR );
-                PtStruct ->DeleteStructure();
+                Trace_DrawSegmentPcb( DrawPanel, DC, (DRAWSEGMENT*) item, GR_XOR );
+                item->DeleteStructure();
             }
             break;
 
         case TYPETEXTE:
-            pt_txt = (TEXTE_PCB*) PtStruct;
-            if( pt_txt->GetLayer() == layer )
-            {
-                pt_txt->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
-                PtStruct ->DeleteStructure();
-            }
-            break;
-
-
         case TYPECOTATION:
-            Cotation = (COTATION*) PtStruct;
-            if( Cotation->GetLayer() == layer )
+            if( item->GetLayer() == layer )
             {
-                Cotation->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
-                PtStruct ->DeleteStructure();
+                item->Draw( DrawPanel, DC, GR_XOR );
+                item->DeleteStructure();
             }
             break;
 

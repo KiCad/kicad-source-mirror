@@ -66,7 +66,7 @@ public:
     int     m_physical_connexion;   // variable used in rastnest computations
                                     // handle block number in track connection
 
-	int     m_zone_connexion;   	// variable used in rastnest computations
+    int     m_zone_connexion;   	// variable used in rastnest computations
                                     // handle block number in zone connection
 
 public:
@@ -111,7 +111,9 @@ public:
 
 
     /* drawing functions */
-    void            Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode );
+    void            Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                         int aDrawMode, const wxPoint& offset = ZeroOffset );
+
     void            Draw3D( Pcb3D_GLCanvas* glcanvas );
 
     // others

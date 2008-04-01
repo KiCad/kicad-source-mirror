@@ -36,7 +36,7 @@ void Trace_Pads_Only( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* Module,
 /* Trace les pads d'un module en mode SKETCH.
  *  Utilisee pour afficher les pastilles d'un module lorsque celui ci n'est
  *  pas affiche par les options d'affichage des Modules
- * 
+ *
  *  Les pads affiches doivent apparaitre sur les couches donnees par
  *  MasqueLayer
  */
@@ -58,7 +58,7 @@ void Trace_Pads_Only( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* Module,
     {
         if( (pt_pad->m_Masque_Layer & MasqueLayer) == 0 )
             continue;
-        pt_pad->Draw( panel, DC, wxPoint( ox, oy ), draw_mode );
+        pt_pad->Draw( panel, DC, draw_mode, wxPoint( ox, oy ) );
     }
 
     frame->m_DisplayPadFill = tmp;

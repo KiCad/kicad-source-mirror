@@ -124,7 +124,7 @@ void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
             pt_segm->SetLayer( l1 );
 
         if( Drc_On && BAD_DRC==m_drc->Drc( pt_segm, m_Pcb->m_Track ) )
-        {       
+        {
             /* Annulation du changement */
             ii = 0; pt_segm = pt_track;
             for( ; ii < nb_segm; ii++, pt_segm = (TRACK*) pt_segm->Pnext )
@@ -177,7 +177,7 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
     /* Avoid more than one via on the current location: */
     if( Locate_Via( m_Pcb, g_CurrentTrackSegment->m_End, g_CurrentTrackSegment->GetLayer() ) )
         return false;
-    
+
     pt_segm = g_FirstTrackSegment;
     for( ii = 0; ii < g_TrackSegmentCount - 1; ii++, pt_segm = (TRACK*) pt_segm->Pnext )
     {
@@ -192,7 +192,7 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
         if( BAD_DRC==m_drc->Drc( g_CurrentTrackSegment, m_Pcb->m_Track ) )
             /* DRC error, the change layer is not made */
             return false;
-            
+
         if( g_TwoSegmentTrackBuild && g_CurrentTrackSegment->Back() )    // We must handle 2 segments
         {
             if( BAD_DRC == m_drc->Drc( g_CurrentTrackSegment->Back(), m_Pcb->m_Track ) )
@@ -224,29 +224,29 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
 
     /* Adjust the via layer pair */
     switch ( Via->Shape() )
-	{
-		case VIA_BLIND_BURIED:
-			Via->SetLayerPair( old_layer, ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
-			break;
-	
-		case VIA_MICROVIA:	// from external to the near neghbour inner layer
-			if ( old_layer == COPPER_LAYER_N )
-				((PCB_SCREEN*)GetScreen())->m_Active_Layer = LAYER_N_2;
-			else if ( old_layer == LAYER_CMP_N )
-				((PCB_SCREEN*)GetScreen())->m_Active_Layer = m_Pcb->m_BoardSettings->m_CopperLayerCount - 2;
-			else if ( old_layer == LAYER_N_2 )
-				((PCB_SCREEN*)GetScreen())->m_Active_Layer = COPPER_LAYER_N;
-			else if ( old_layer == m_Pcb->m_BoardSettings->m_CopperLayerCount - 2 )
-				((PCB_SCREEN*)GetScreen())->m_Active_Layer = LAYER_CMP_N;
-			// else error 
-			Via->SetLayerPair( old_layer, ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
-			Via->m_Width   = g_DesignSettings.m_CurrentMicroViaSize;
-			break;
+    {
+        case VIA_BLIND_BURIED:
+            Via->SetLayerPair( old_layer, ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
+            break;
 
-		default:
-			// Usual via is from copper to component; layer pair is 0 and 0x0F.
-			Via->SetLayerPair( COPPER_LAYER_N, LAYER_CMP_N );
-			break;
+        case VIA_MICROVIA:	// from external to the near neghbour inner layer
+            if ( old_layer == COPPER_LAYER_N )
+                ((PCB_SCREEN*)GetScreen())->m_Active_Layer = LAYER_N_2;
+            else if ( old_layer == LAYER_CMP_N )
+                ((PCB_SCREEN*)GetScreen())->m_Active_Layer = m_Pcb->m_BoardSettings->m_CopperLayerCount - 2;
+            else if ( old_layer == LAYER_N_2 )
+                ((PCB_SCREEN*)GetScreen())->m_Active_Layer = COPPER_LAYER_N;
+            else if ( old_layer == m_Pcb->m_BoardSettings->m_CopperLayerCount - 2 )
+                ((PCB_SCREEN*)GetScreen())->m_Active_Layer = LAYER_CMP_N;
+            // else error
+            Via->SetLayerPair( old_layer, ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
+            Via->m_Width   = g_DesignSettings.m_CurrentMicroViaSize;
+            break;
+
+        default:
+            // Usual via is from copper to component; layer pair is 0 and 0x0F.
+            Via->SetLayerPair( COPPER_LAYER_N, LAYER_CMP_N );
+            break;
     }
 
     if( Drc_On &&  BAD_DRC==m_drc->Drc( Via, m_Pcb->m_Track ) )
@@ -255,10 +255,10 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
         delete Via;
 
         ((PCB_SCREEN*)GetScreen())->m_Active_Layer = old_layer;
-        
+
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 
-        // delete the track(s) added in Begin_Route() 
+        // delete the track(s) added in Begin_Route()
         while( g_TrackSegmentCount > itmp )
         {
             Delete_Segment( DC, g_CurrentTrackSegment );
@@ -266,9 +266,9 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
 
         // use the form of SetCurItem() which does not write to the msg panel,
         // SCREEN::SetCurItem(), so the DRC error remains on screen.
-        // WinEDA_PcbFrame::SetCurItem() calls Display_Infos(). 
+        // WinEDA_PcbFrame::SetCurItem() calls Display_Infos().
         GetScreen()->SetCurItem( g_CurrentTrackSegment );
-        
+
         return false;
     }
 
@@ -316,7 +316,7 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
 
     Affiche_Status_Box();
     SetToolbars();
-    
+
     return true;
 }
 
@@ -477,10 +477,10 @@ void WinEDA_PcbFrame::Affiche_PadsNoConnect( wxDC* DC )
         pt_pad = pt_chevelu->pad_start;
 
         if( pt_pad )
-            pt_pad->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR | GR_SURBRILL );
+            pt_pad->Draw( DrawPanel, DC, GR_OR | GR_SURBRILL );
 
         pt_pad = pt_chevelu->pad_end;
         if( pt_pad )
-            pt_pad->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_OR | GR_SURBRILL );
+            pt_pad->Draw( DrawPanel, DC, GR_OR | GR_SURBRILL );
     }
 }

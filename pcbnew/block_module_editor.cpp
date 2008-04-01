@@ -293,7 +293,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
 {
     DrawBlockStruct* PtBlock;
     BASE_SCREEN*     screen = panel->m_Parent->GetScreen();
-    EDA_BaseStruct*  item;
+    BOARD_ITEM*      item;
     wxPoint          move_offset;
     MODULE*          Currentmodule = g_EDA_Appl->m_ModuleEditFrame->m_Pcb->m_Modules;
 
@@ -320,11 +320,8 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
                 switch( item->Type() )
                 {
                 case TYPETEXTEMODULE:
-                    ( (TEXTE_MODULE*) item )->Draw( panel, DC, move_offset, g_XorMode );
-                    break;
-
                 case TYPEEDGEMODULE:
-                    ( (EDGE_MODULE*) item )->Draw( panel, DC, move_offset, g_XorMode );
+                    item->Draw( panel, DC, g_XorMode, move_offset );
                     break;
 
                 default:
@@ -337,7 +334,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
             {
                 if( pad->m_Selected == 0 )
                     continue;
-                pad->Draw( panel, DC, move_offset, g_XorMode );
+                pad->Draw( panel, DC, g_XorMode, move_offset );
             }
         }
     }
@@ -365,11 +362,8 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
             switch( item->Type() )
             {
             case TYPETEXTEMODULE:
-                ( (TEXTE_MODULE*) item )->Draw( panel, DC, move_offset, g_XorMode );
-                break;
-
             case TYPEEDGEMODULE:
-                ( (EDGE_MODULE*) item )->Draw( panel, DC, move_offset, g_XorMode );
+                item->Draw( panel, DC, g_XorMode, move_offset );
                 break;
 
             default:
@@ -382,7 +376,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
         {
             if( pad->m_Selected == 0 )
                 continue;
-            pad->Draw( panel, DC, move_offset, g_XorMode );
+            pad->Draw( panel, DC, g_XorMode, move_offset );
         }
     }
 }
@@ -495,13 +489,13 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
         case TYPEEDGEMODULE:
             ( (EDGE_MODULE*) item )->m_Start.x  += offset.x;
             ( (EDGE_MODULE*) item )->m_Start.y  += offset.y;
-            
+
             ( (EDGE_MODULE*) item )->m_End.x    += offset.x;
             ( (EDGE_MODULE*) item )->m_End.y    += offset.y;
-            
+
             ( (EDGE_MODULE*) item )->m_Start0.x += offset.x;
             ( (EDGE_MODULE*) item )->m_Start0.y += offset.y;
-            
+
             ( (EDGE_MODULE*) item )->m_End0.x   += offset.x;
             ( (EDGE_MODULE*) item )->m_End0.y   += offset.y;
             break;
@@ -596,7 +590,7 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
             SETMIRROR( ( (TEXTE_MODULE*) item )->GetPosition().x );
             ( (TEXTE_MODULE*) item )->m_Pos0.x = ( (TEXTE_MODULE*) item )->GetPosition().x;
             break;
-            
+
         default:
             ;
         }
@@ -650,7 +644,7 @@ void RotateMarkedItems( MODULE* module, wxPoint offset )
             ( (TEXTE_MODULE*) item )->m_Pos0    = ( (TEXTE_MODULE*) item )->GetPosition();
             ( (TEXTE_MODULE*) item )->m_Orient += 900;
             break;
-        
+
         default:
             ;
         }
