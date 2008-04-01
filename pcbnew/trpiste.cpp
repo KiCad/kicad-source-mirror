@@ -58,13 +58,3 @@ void Trace_Une_Piste( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* Track,
 }
 
 
-/*************************************************************/
-void Trace_DrawSegmentPcb( WinEDA_DrawPanel* panel, wxDC* DC,
-                           DRAWSEGMENT* PtDrawSegment, int draw_mode )
-/*************************************************************/
-{
-    // @todo Replace all calls to Trace_DrawSegmentPcb() with this call:
-
-    PtDrawSegment->Draw( panel, DC, draw_mode );
-}
-

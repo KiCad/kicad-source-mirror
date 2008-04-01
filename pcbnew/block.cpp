@@ -509,7 +509,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
                 break;
 
             /* l'element est ici bon a etre efface */
-            Trace_DrawSegmentPcb( DrawPanel, DC, (DRAWSEGMENT*) PtStruct, GR_XOR );
+            PtStruct->Draw( DrawPanel, DC, GR_XOR );
             PtStruct->DeleteStructure();
             break;
 
@@ -1231,7 +1231,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
             m_Pcb->m_Drawings = new_drawsegment;
             new_drawsegment->m_Start += MoveVector;
             new_drawsegment->m_End   += MoveVector;
-            Trace_DrawSegmentPcb( DrawPanel, DC, new_drawsegment, GR_OR );
+            new_drawsegment->Draw( DrawPanel, DC, GR_OR );
             break;
         }
 

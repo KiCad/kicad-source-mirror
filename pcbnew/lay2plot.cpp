@@ -29,7 +29,6 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
  */
 {
     MODULE*              Module;
-    BOARD_ITEM*          PtStruct;
     int                  drawmode = GR_COPY;
     DISPLAY_OPTIONS      save_opt;
     TRACK*               pt_piste;
@@ -55,40 +54,21 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     printmasklayer |= EDGE_LAYER;
 
     /* Draw the pcb graphic items (texts, ...) */
-    PtStruct = Pcb->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
+    for( BOARD_ITEM* item = Pcb->m_Drawings;  item;  item = item->Next() )
     {
-        switch( PtStruct->Type() )
+        switch( item->Type() )
         {
         case TYPEDRAWSEGMENT:
-            if( (g_TabOneLayerMask[ PtStruct->GetLayer()] & printmasklayer) == 0 )
-                break;
-            Trace_DrawSegmentPcb( this, DC, (DRAWSEGMENT*) PtStruct, drawmode );
-            break;
-
         case TYPECOTATION:
-            if( (g_TabOneLayerMask[ PtStruct->GetLayer()] & printmasklayer) == 0 )
-                break;
-            ( (COTATION*) PtStruct )->Draw( this, DC, drawmode );
-            break;
-
         case TYPETEXTE:
-        {
-            if( (g_TabOneLayerMask[ PtStruct->GetLayer()] & printmasklayer) == 0 )
-                break;
-            ( (TEXTE_PCB*) PtStruct )->Draw( this, DC, drawmode );
-            break;
-        }
-
         case TYPEMIRE:
-            if( (g_TabOneLayerMask[ PtStruct->GetLayer()] & printmasklayer) == 0 )
+            if( ((1<<item->GetLayer()) & printmasklayer) == 0 )
                 break;
-            ( (MIREPCB*) PtStruct )->Draw( this, DC, drawmode );
+
+            item->Draw( this, DC, drawmode );
             break;
 
         case TYPEMARKER:       /* Trace des marqueurs */
-            break;
-
         default:
             break;
         }

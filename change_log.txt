@@ -13,7 +13,10 @@ email address.
 +pcbnew
     Added virtual BOARD_ITEM::Draw() and forced all BOARD_ITEM derived classes
     to implement it so that all these functions are also virtual.
-    Made the offset argument default to the new wxPoint BOARD_ITEM::ZeroOffset
+    Made the offset argument default to the new wxPoint BOARD_ITEM::ZeroOffset.
+    Coded DRAWSEGMENT::Draw() from Trace_DrawSegmentPcb() and removed the latter.
+    Coded EQUIPOT::Draw(), and BOARD::Draw().  Both are dummies for now, but
+    both can be reasonably implemented in the future.
 
 
 2008-Mar-30 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>

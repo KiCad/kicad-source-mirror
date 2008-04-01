@@ -65,11 +65,6 @@ void    Trace_Une_Piste( WinEDA_DrawPanel* panel,
  *  donc mis a 0 avant appel a la routine si la piste a tracer est la derniere
  */
 
-void    Trace_DrawSegmentPcb( WinEDA_DrawPanel* panel,
-                              wxDC* DC,
-                              DRAWSEGMENT* PtDrawSegment,
-                              int mode_color );
-
 
 /****************/
 /* TRACEMOD.C : */
