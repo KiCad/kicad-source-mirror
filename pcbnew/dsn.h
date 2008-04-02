@@ -26,6 +26,7 @@
 #define _DSN_H
  
 #include <cstdio>
+#include <string>
 
 #include "fctsys.h"
 #include "pcbnew.h"
