@@ -278,8 +278,15 @@ void WinEDA_ZoneFrame::CreateControls()
 
     m_GridCtrl->SetSelection( selection );
 
-    switch( s_Zone_Pad_Options )
+    if( m_Zone_Container )
     {
+        title = ReturnStringFromValue( g_UnitMetric,
+                                    m_Zone_Container->m_ZoneClearance,
+                                    m_Parent->m_InternalUnits );
+        m_ZoneClearanceCtrl->SetValue( title );
+
+        switch( m_Zone_Container->m_PadOption )
+        {
         case ZONE_CONTAINER::PAD_NOT_IN_ZONE:		// Pads are not covered
             m_FillOpt->SetSelection( 2 );
             break;
@@ -289,27 +296,41 @@ void WinEDA_ZoneFrame::CreateControls()
         case ZONE_CONTAINER::PAD_IN_ZONE:			// pads are covered by copper
             m_FillOpt->SetSelection( 0 );
             break;
-    }
-
-    if ( m_Zone_Container )
+        }
         s_Zone_Hatching = m_Zone_Container->m_Poly->GetHatchStyle();
+
+    }
     else
+    {
+        switch( s_Zone_Pad_Options )
+        {
+        case ZONE_CONTAINER::PAD_NOT_IN_ZONE:		// Pads are not covered
+            m_FillOpt->SetSelection( 2 );
+            break;
+        case ZONE_CONTAINER::THERMAL_PAD:			// Use thermal relief for pads
+            m_FillOpt->SetSelection( 1 );
+            break;
+        case ZONE_CONTAINER::PAD_IN_ZONE:			// pads are covered by copper
+            m_FillOpt->SetSelection( 0 );
+            break;
+        }
         s_Zone_Hatching = m_Parent->m_Parent->m_EDA_Config->Read( ZONE_NET_OUTLINES_HATCH_OPTION_KEY,
             (long) CPolyLine::DIAGONAL_EDGE );
+    }
 
     switch( s_Zone_Hatching )
     {
-        case CPolyLine::NO_HATCH:
-            m_OutlineAppearanceCtrl->SetSelection(0);
-            break;
+    case CPolyLine::NO_HATCH:
+        m_OutlineAppearanceCtrl->SetSelection(0);
+        break;
 
-        case CPolyLine::DIAGONAL_EDGE:
-            m_OutlineAppearanceCtrl->SetSelection(1);
-            break;
+    case CPolyLine::DIAGONAL_EDGE:
+        m_OutlineAppearanceCtrl->SetSelection(1);
+        break;
 
-        case CPolyLine::DIAGONAL_FULL:
-           m_OutlineAppearanceCtrl->SetSelection(2);
-            break;
+    case CPolyLine::DIAGONAL_FULL:
+        m_OutlineAppearanceCtrl->SetSelection(2);
+        break;
     }
 
     int layer_cnt = board->GetCopperLayerCount();

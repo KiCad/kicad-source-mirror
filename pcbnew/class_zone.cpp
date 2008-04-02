@@ -78,6 +78,7 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
     int      ret;
     unsigned corners_count = m_Poly->corner.size();
     int      outline_hatch;
+    char     padoption;
 
     fprintf( aFile, "$CZONE_OUTLINE\n" );
 
@@ -111,6 +112,25 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
     }
 
     ret = fprintf( aFile, "ZAux %d %c\n", corners_count, outline_hatch );
+    if( ret < 2 )
+        return false;
+
+    // Save pad option and clearance
+    switch( m_PadOption )
+    {
+    default:
+    case PAD_IN_ZONE:
+        padoption = 'I';
+        break;
+    case THERMAL_PAD:
+        padoption = 'T';
+        break;
+    case PAD_NOT_IN_ZONE:
+        padoption = 'X';
+        break;
+    }
+
+    ret = fprintf( aFile, "ZClearance %d %c\n", m_ZoneClearance, padoption );
     if( ret < 2 )
         return false;
 
@@ -220,6 +240,37 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
                 case 'f':
                 case 'F':
                     outline_hatch = CPolyLine::DIAGONAL_FULL;
+                    break;
+                }
+            }
+        }
+        if( strnicmp( Line, "ZClearance", 10 ) == 0 )    // aux info found
+        {
+            int  clearance = 200;
+            char padoption;
+            text = Line + 10;
+            ret  = sscanf( text, "%d %1c", &clearance, &padoption );
+            if( ret < 2 )
+                error = true;
+            else
+            {
+                m_ZoneClearance = clearance;
+
+                switch( padoption )
+                {
+                case 'i':
+                case 'I':
+                    m_PadOption = PAD_IN_ZONE;
+                    break;
+
+                case 't':
+                case 'T':
+                    m_PadOption = THERMAL_PAD;
+                    break;
+
+                case 'x':
+                case 'X':
+                    m_PadOption = PAD_NOT_IN_ZONE;
                     break;
                 }
             }
@@ -540,7 +591,7 @@ void ZONE_CONTAINER::Display_Infos( WinEDA_DrawFrame* frame )
         else
             msg = wxT( "<noname>" );
     }
-    else    // a netcode <à is an error
+    else    // a netcode < 0 is an error
     {
         msg = wxT( " [" );
         msg << m_Netname + wxT( "]" );

@@ -491,7 +491,9 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
         s_CurrentZone = NULL;
     }
 
+
     ZONE_CONTAINER* zone;
+
     if( m_Pcb->m_CurrentZoneContour == NULL )
         m_Pcb->m_CurrentZoneContour = new ZONE_CONTAINER( m_Pcb );
 
@@ -850,8 +852,7 @@ int WinEDA_PcbFrame::Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool v
 
     Affiche_1_Parametre( this, 22, _( "NetName" ), msg, RED );
     wxBusyCursor dummy;     // Shows an hourglass cursor (removed by its destructor)
-    zone_container->m_PadOption     = s_Zone_Pad_Options;
-    zone_container->m_ZoneClearance = g_DesignSettings.m_ZoneClearence;
+
     zone_container->m_GridFillValue = g_GridRoutingSize;
     int error_level = zone_container->Fill_Zone( this, DC, verbose );
 
