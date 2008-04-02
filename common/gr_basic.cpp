@@ -62,7 +62,7 @@ static inline int USCALE( us arg, us num, us den )
 
 static int inline ZoomValue( int value_to_zoom ) {
     int zoom = GET_ZOOM;
-	if( !zoom ) return 0; 
+    if( !zoom ) return 0;
 
     if( value_to_zoom >= 0 )
         return ( value_to_zoom + (zoom >> 1 ) ) / zoom;
@@ -106,14 +106,14 @@ int GRMapY( int y )
 /**
  * Function clip_line
  * @return bool - true when WHEN_OUTSIDE fires, else false.
- */ 
+ */
 static inline bool clip_line( int& x1, int& y1, int& x2, int& y2 )
 {
     int temp;
 
     if( x1 > x2 )
     {
-        EXCHG( x1, x2 ); 
+        EXCHG( x1, x2 );
         EXCHG( y1, y2 );
     }
     if( (x2 < xcliplo) || (x1 > xcliphi) )
@@ -149,14 +149,14 @@ static inline bool clip_line( int& x1, int& y1, int& x2, int& y2 )
         if( x1 < xcliplo )
         {
             temp = USCALE( (y2 - y1), (xcliplo - x1), (x2 - x1) );
-            y1 += temp; 
+            y1 += temp;
             x1 = xcliplo;
             WHEN_INSIDE;
         }
         if( x2 > xcliphi )
         {
             temp = USCALE( (y2 - y1), (x2 - xcliphi), (x2 - x1) );
-            y2 -= temp; 
+            y2 -= temp;
             x2 = xcliphi;
             WHEN_INSIDE;
         }
@@ -190,19 +190,19 @@ static inline bool clip_line( int& x1, int& y1, int& x2, int& y2 )
         if( x1 < xcliplo )
         {
             temp = USCALE( (y1 - y2), (xcliplo - x1), (x2 - x1) );
-            y1 -= temp; 
+            y1 -= temp;
             x1 = xcliplo;
             WHEN_INSIDE;
         }
         if( x2 > xcliphi )
         {
             temp = USCALE( (y1 - y2), (x2 - xcliphi), (x2 - x1) );
-            y2 += temp; 
+            y2 += temp;
             x2 = xcliphi;
             WHEN_INSIDE;
         }
     }
-    
+
     return false;
 }
 
@@ -257,33 +257,39 @@ void SetPenMinWidth( int minwidth )
 }
 
 
-/* Routine de changement de couleurs et epaisseur de la plume courante */
+/**
+ * Function GRSetColorPen
+ * sets a pen style, width, color, and alpha into the given device context.
+*/
 void GRSetColorPen( wxDC* DC, int Color, int width, int style )
 {
-    Color &= MASKCOLOR;    // Pour 32 couleurs Max
-
     if( width < PenMinWidth )
         width = PenMinWidth;
 
     if( ForceBlackPen && Color != WHITE )
-        Color = BLACK;
-
-    if( (lastcolor != Color) || (lastwidth != width) || (s_Last_Pen_Style != style)
-       || (lastDC != DC ) )
     {
-        wxPen DrawPen;
-        DrawPen.SetColour(
-            ColorRefs[Color].m_Red,
-            ColorRefs[Color].m_Green,
-            ColorRefs[Color].m_Blue
-            );
+        Color = BLACK;
+    }
 
-        DrawPen.SetWidth( width );
-        DrawPen.SetStyle( style );
+    if(   lastcolor != Color
+       || lastwidth != width
+       || s_Last_Pen_Style != style
+       || lastDC != DC  )
+    {
+        wxPen       pen;
 
-//		if ( &DC->GetPen() != DrawPen )
-        DC->SetPen( DrawPen );
-        lastcolor = Color; lastwidth = width; lastDC = DC;
+        wxColour    wx_color = MakeColour( Color );
+
+        pen.SetColour( wx_color );
+        pen.SetWidth( width );
+        pen.SetStyle( style );
+
+        DC->SetPen( pen );
+
+        lastcolor = Color;
+        lastwidth = width;
+        lastDC = DC;
+
         s_Last_Pen_Style = style;
     }
 }
@@ -337,7 +343,11 @@ void GRMouseWarp( WinEDA_DrawPanel* panel, const wxPoint& pos )
 void GRSetDrawMode( wxDC* DC, int draw_mode )
 {
     if( draw_mode & GR_OR )
+#if defined(__WXMAC__) && wxMAC_USE_CORE_GRAPHICS
+        DC->SetLogicalFunction( wxCOPY );
+#else
         DC->SetLogicalFunction( wxOR );
+#endif
     else if( draw_mode & GR_XOR )
         DC->SetLogicalFunction( wxXOR );
     else if( draw_mode & GR_NXOR )
@@ -698,30 +708,30 @@ void GRSCSegm( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int 
     GRSetBrush( DC, Color, FALSE );
 
     rayon = (width + 1) >> 1;
-    
-    dx = x2 - x1; 
+
+    dx = x2 - x1;
     dy = y2 - y1;
-    
+
     if( dx == 0 )  /* segment vertical */
     {
         dwx = rayon;
         if( dy >= 0 )
             dwx = -dwx;
-        
-        sx1 = x1 - dwx; 
+
+        sx1 = x1 - dwx;
         sy1 = y1;
-        
-        ex1 = x2 - dwx; 
+
+        ex1 = x2 - dwx;
         ey1 = y2;
-        
+
         DC->DrawLine( sx1, sy1, ex1, ey1 );
 
-        sx2 = x1 + dwx; 
+        sx2 = x1 + dwx;
         sy2 = y1;
-        
-        ex2 = x2 + dwx; 
+
+        ex2 = x2 + dwx;
         ey2 = y2;
-        
+
         DC->DrawLine( sx2, sy2, ex2, ey2 );
     }
     else if( dy == 0 ) /* segment horizontal */
@@ -729,21 +739,21 @@ void GRSCSegm( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int 
         dwy = rayon;
         if( dx < 0 )
             dwy = -dwy;
-        
+
         sx1 = x1;
         sy1 = y1 - dwy;
-        
-        ex1 = x2; 
+
+        ex1 = x2;
         ey1 = y2 - dwy;
-        
+
         DC->DrawLine( sx1, sy1, ex1, ey1 );
 
-        sx2 = x1; 
+        sx2 = x1;
         sy2 = y1 + dwy;
-        
-        ex2 = x2; 
+
+        ex2 = x2;
         ey2 = y2 + dwy;
-        
+
         DC->DrawLine( sx2, sy2, ex2, ey2 );
     }
     else
@@ -769,27 +779,27 @@ void GRSCSegm( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int 
         else
         {
             int delta_angle = ArcTangente( dy, dx );
-            dwx = 0; 
+            dwx = 0;
             dwy = width;
             RotatePoint( &dwx, &dwy, -delta_angle );
         }
-        dwx2 = dwx >> 1; 
+        dwx2 = dwx >> 1;
         dwy2 = dwy >> 1;
-        
-        sx1 = x1 - dwx2; 
+
+        sx1 = x1 - dwx2;
         sy1 = y1 - dwy2;
-        
-        ex1 = x2 - dwx2; 
+
+        ex1 = x2 - dwx2;
         ey1 = y2 - dwy2;
-        
+
         DC->DrawLine( sx1, sy1, ex1, ey1 );
 
-        sx2 = x1 + dwx2; 
+        sx2 = x1 + dwx2;
         sy2 = y1 + dwy2;
-        
-        ex2 = x2 + dwx2; 
+
+        ex2 = x2 + dwx2;
         ey2 = y2 + dwy2;
-        
+
         DC->DrawLine( sx2, sy2, ex2, ey2 );
     }
 
@@ -861,7 +871,9 @@ void GRSPoly( EDA_Rect* ClipBox, wxDC* DC, int n, int* Points, int Fill,
     }
     else
     {
-        startx = Points[n * 2 - 2]; starty = Points[n * 2 - 1];
+        startx = Points[n * 2 - 2];
+        starty = Points[n * 2 - 1];
+
         GRSetBrush( DC, Color );
         DC->DrawLines( n, (wxPoint*) Points );
     }

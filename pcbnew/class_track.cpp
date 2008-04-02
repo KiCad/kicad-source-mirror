@@ -670,8 +670,11 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
         else
             color |= HIGHT_LIGHT_FLAG;
     }
+
     if( color & HIGHT_LIGHT_FLAG )
         color = ColorRefs[color & MASKCOLOR].m_LightColor;
+
+    SetAlpha( &color, 150 );
 
     zoom = panel->GetZoom();
 
@@ -682,6 +685,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
         rayon = l_piste;
         if( rayon < zoom )
             rayon = zoom;
+
         GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y, rayon, color );
         if( rayon > (4 * zoom) )
         {
