@@ -712,15 +712,17 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_SCHEMATIC_UNDO:
-        if( GetSchematicFromUndoList() ){
-            TestDanglingEnds( GetScreen()->EEDrawList, &dc );
+        if( GetSchematicFromUndoList() )
+        {
+            TestDanglingEnds( GetScreen()->EEDrawList, NULL );
             DrawPanel->Refresh( TRUE );
         }
         break;
 
     case ID_SCHEMATIC_REDO:
-        if( GetSchematicFromRedoList() ){
-            TestDanglingEnds( GetScreen()->EEDrawList, &dc );
+        if( GetSchematicFromRedoList() )
+        {
+            TestDanglingEnds( GetScreen()->EEDrawList, NULL );
             DrawPanel->Refresh( TRUE );
         }
         break;
