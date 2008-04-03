@@ -25,7 +25,6 @@
 #include "PolyLine2Kicad.h"
 
 
-#include "freepcb_ids.h"
 #include "freepcbDisplayList.h"
 #include "math_for_graphics.h"
 

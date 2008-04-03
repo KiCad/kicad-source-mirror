@@ -150,7 +150,17 @@ static void Plot_Module( WinEDA_DrawPanel* panel, wxDC* DC,
     {
         if( (pt_pad->m_Masque_Layer & masklayer ) == 0 )
             continue;
-        pt_pad->Draw( panel, DC, draw_mode );
+		// Usually we draw pads in sketch mode on non copper layers:
+		if ( (masklayer & ALL_CU_LAYERS) == 0 )
+		{
+			int tmp_fill = ((WinEDA_BasePcbFrame*)panel->m_Parent)->m_DisplayPadFill;
+			// Switch in sketch mode
+			((WinEDA_BasePcbFrame*)panel->m_Parent)->m_DisplayPadFill = 0;
+			pt_pad->Draw( panel, DC, draw_mode );
+			((WinEDA_BasePcbFrame*)panel->m_Parent)->m_DisplayPadFill = tmp_fill;
+		}
+		else	// on copper layer, draw pads accordint to current options
+			pt_pad->Draw( panel, DC, draw_mode );
     }
 
     /* draw footprint graphic shapes */

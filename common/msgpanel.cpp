@@ -9,9 +9,7 @@
 #include "fctsys.h"
 
 #include "wxstruct.h"
-#include "gr_basic.h"
 #include "common.h"
-#include "macros.h"
 
 /* table des evenements captes par un WinEDA_MsgPanel */
 BEGIN_EVENT_TABLE( WinEDA_MsgPanel, wxPanel )
@@ -171,7 +169,6 @@ void WinEDA_MsgPanel::EraseMsgBox()
    Refresh();
 }
 
-
 /*******************************************/
 void WinEDA_MsgPanel::erase( wxDC* DC )
 /*******************************************/
@@ -192,4 +189,3 @@ void WinEDA_MsgPanel::erase( wxDC* DC )
 
     DC->DrawRectangle( 0, 0, size.x, size.y );
 }
-

@@ -13,7 +13,6 @@ using namespace std;
 #include "defs-macros.h"
 
 #include "PolyLine2Kicad.h"
-#include "freepcb_ids.h"
 #include "PolyLine.h"
 
 

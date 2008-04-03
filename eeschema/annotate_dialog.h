@@ -40,6 +40,8 @@
 #define ID_RESET_ANNOTATION      10003
 #define ID_SORT_BY_POSITION      10004
 #define ID_SORT_BY_VALUE         10005
+#define ID_CLEAR_ANNOTATION 	 10006
+
 
 #define ANNOTATE_DIALOG_STYLE    wxDEFAULT_DIALOG_STYLE | MAYBE_RESIZE_BORDER
 #define ANNOTATE_DIALOG_TITLE    _( "Annotate" )
@@ -101,7 +103,7 @@ public:
 private:
     void CloseDialog( void );
 
-    void OnClear( wxCommandEvent& event );
+    void OnClearAnnotation( wxCommandEvent& event );
     void OnApply( wxCommandEvent& event );
     void OnCancel( wxCommandEvent& event );
 

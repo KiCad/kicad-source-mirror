@@ -51,7 +51,7 @@ IMPLEMENT_DYNAMIC_CLASS( WinEDA_AnnotateFrame, wxDialog )
  */
 
 BEGIN_EVENT_TABLE( WinEDA_AnnotateFrame, wxDialog )
-    EVT_BUTTON( wxID_CLEAR, WinEDA_AnnotateFrame::OnClear )
+    EVT_BUTTON( ID_CLEAR_ANNOTATION, WinEDA_AnnotateFrame::OnClearAnnotation )
     EVT_BUTTON( wxID_APPLY, WinEDA_AnnotateFrame::OnApply )
     EVT_BUTTON( wxID_CANCEL, WinEDA_AnnotateFrame::OnCancel )
 END_EVENT_TABLE()
@@ -204,15 +204,15 @@ void WinEDA_AnnotateFrame::CreateControls()
 
     /* Standard dialog buttons and sizer. */
     wxBoxSizer* sizerDialogButtons = new wxBoxSizer( wxHORIZONTAL );
-    wxButton* btnClose = new wxButton( this, wxID_CANCEL );
+    wxButton* btnClose = new wxButton( this, wxID_CANCEL, _("Close") );
     /* TODO: Check if there is any existing annotation and enable/disable
      *       the clear button accordingly.  Probably should also enable/
      *       disable new components radio button if all of the components
      *       are already annotated.  Some low level work on the DrawSheetPath
      *       class will need to be done to accomadate this.
      */
-    m_btnClear = new wxButton( this, wxID_CLEAR );
-    wxButton* btnApply = new wxButton( this, wxID_APPLY );
+    m_btnClear = new wxButton( this, ID_CLEAR_ANNOTATION, _("Clear Annotation") );
+    wxButton* btnApply = new wxButton( this, wxID_APPLY, _("Annotation") );
     sizerDialogButtons->Add( btnClose, flagsDialogButtonSpacing );
     sizerDialogButtons->Add( new wxBoxSizer( wxHORIZONTAL ),
                              wxSizerFlags( 1 ).Expand( ) );
@@ -256,7 +256,7 @@ wxIcon WinEDA_AnnotateFrame::GetIconResource( const wxString& name )
     return wxNullIcon;
 }
 
-void WinEDA_AnnotateFrame::OnClear( wxCommandEvent& event )
+void WinEDA_AnnotateFrame::OnClearAnnotation( wxCommandEvent& event )
 {
     int response;
 
