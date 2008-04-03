@@ -26,7 +26,7 @@ class WinEDA_DrawPanel : public EDA_DRAW_PANEL
 public:
     int               m_Ident;
     WinEDA_DrawFrame* m_Parent;
-    EDA_Rect          m_ClipBox;    		// the clipbox used in screen redraw (usually gives the visible area in internal units)
+    EDA_Rect          m_ClipBox;            // the clipbox used in screen redraw (usually gives the visible area in internal units)
     wxPoint           m_CursorStartPos;     // utile dans controles du mouvement curseur
     int               m_Scroll_unit;        //	Valeur de l'unite de scroll en pixels pour les barres de scroll
     int               m_ScrollButt_unit;    //	Valeur de l'unite de scroll en pixels pour les boutons de scroll

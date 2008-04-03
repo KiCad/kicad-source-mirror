@@ -483,7 +483,7 @@ void WinEDA_PcbFrame::createPopUpBlockMenu( wxMenu* menu )
     ADD_MENUITEM( menu, ID_POPUP_CANCEL_CURRENT_COMMAND,
                   _( "Cancel Block" ), cancel_xpm );
     ADD_MENUITEM( menu, ID_POPUP_ZOOM_BLOCK,
-                  _( "Zoom Block (Midd butt drag)" ), zoom_selected_xpm );
+                  _( "Zoom Block (drag middle mouse)" ), zoom_selected_xpm );
     menu->AppendSeparator();
     ADD_MENUITEM( menu, ID_POPUP_PLACE_BLOCK,
                   _( "Place Block" ), apply_xpm );

@@ -640,7 +640,7 @@ void AddMenusForBlock( wxMenu* PopMenu, WinEDA_SchematicFrame* frame )
 
     if( frame->GetScreen()->BlockLocate.m_Command == BLOCK_MOVE )
         ADD_MENUITEM( PopMenu, ID_POPUP_ZOOM_BLOCK,
-                      _( "Win. Zoom (Midd butt drag mouse)" ), zoom_selected_xpm );
+                      _( "Zoom Block (drag middle mouse)" ), zoom_selected_xpm );
 
     ADD_MENUITEM( PopMenu, ID_POPUP_PLACE_BLOCK, _( "Place Block" ), apply_xpm );
 

@@ -120,7 +120,7 @@ void WinEDA_DrawFrame::Window_Zoom( EDA_Rect& Rect )
 
 /** Compute the zoom factor and the new draw offset to draw the
  *  selected area (Rect) in full window screen
- *  @param Rect = selected area th show after zooming
+ *  @param Rect = selected area to show after zooming
  */
 {
     int    ii, jj;
@@ -130,7 +130,7 @@ void WinEDA_DrawFrame::Window_Zoom( EDA_Rect& Rect )
     /* Compute the best zoom */
     Rect.Normalize();
     size     = DrawPanel->GetClientSize();
-    // Overestimate zoom level, i. e. show more than selected rather than less.
+    // Use ceil to at least show the full rect
     ii       = static_cast<int>( ceil(1.0 * Rect.GetSize().x / size.x) );
     jj       = static_cast<int>( ceil(1.0 * Rect.GetSize().y / size.y) );
     bestzoom = MAX( ii, jj );

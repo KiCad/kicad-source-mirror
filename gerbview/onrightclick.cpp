@@ -16,9 +16,8 @@
 bool WinEDA_GerberFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
 /********************************************************************************/
 
-/* Prepare le menu PullUp affiché par un click sur le bouton droit
- *  de la souris.
- *  Ce menu est ensuite complété par la liste des commandes de ZOOM
+/* Prepare the right-click pullup menu.
+ * The menu already has a list of zoom commands.
  */
 {
     EDA_BaseStruct* DrawStruct = GetScreen()->GetCurItem();
@@ -49,7 +48,7 @@ bool WinEDA_GerberFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu 
             if( BlockActive )
             {
                 PopMenu->Append( ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel Block" ) );
-                PopMenu->Append( ID_POPUP_ZOOM_BLOCK, _( "Zoom Block (Midd butt drag)" ) );
+                PopMenu->Append( ID_POPUP_ZOOM_BLOCK, _( "Zoom Block (drag middle mouse)" ) );
                 PopMenu->AppendSeparator();
                 PopMenu->Append( ID_POPUP_PLACE_BLOCK, _( "Place Block" ) );
                 PopMenu->Append( ID_POPUP_COPY_BLOCK, _( "Copy Block (shift mouse)" ) );
