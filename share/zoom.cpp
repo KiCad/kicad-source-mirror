@@ -130,15 +130,16 @@ void WinEDA_DrawFrame::Window_Zoom( EDA_Rect& Rect )
     /* Compute the best zoom */
     Rect.Normalize();
     size     = DrawPanel->GetClientSize();
-    ii       = Rect.GetSize().x / size.x;
-    jj       = Rect.GetSize().y / size.y;
+    // Overestimate zoom level, i. e. show more than selected rather than less.
+    ii       = static_cast<int>( ceil(1.0 * Rect.GetSize().x / size.x) );
+    jj       = static_cast<int>( ceil(1.0 * Rect.GetSize().y / size.y) );
     bestzoom = MAX( ii, jj );
     if( bestzoom <= 0 )
         bestzoom = 1;
 
-	GetScreen()->SetZoom( bestzoom );
+    GetScreen()->SetZoom( bestzoom );
 
-	GetScreen()->m_Curseur = Rect.Centre();
+    GetScreen()->m_Curseur = Rect.Centre();
     Recadre_Trace( TRUE );
 }
 
