@@ -120,8 +120,20 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
         fclose( f );
         return FALSE;
     }
-    //get the file version here.
+    //get the file version here. TODO: Support version numbers > 9
     char version = Line[9 + sizeof(SCHEMATIC_HEAD_STRING)];
+    int ver = version - '0';
+    if ( ver > EESCHEMA_VERSION )
+    {
+        MsgDiag = FullFileName + _( " was created by a more recent version of EESchema and may not load correctly. Please consider updating!");
+        DisplayInfo( this, MsgDiag);
+    }
+    else if ( ver < EESCHEMA_VERSION )
+    {
+        MsgDiag = FullFileName + _( " was created by an older version of EESchema. It will be stored in the new file format when you save this file again.");
+        DisplayInfo( this, MsgDiag);
+    }
+
     LineCount++;
     if( fgets( Line, 1024 - 1, f ) == NULL || strncmp( Line, "LIBS:", 5 ) != 0 )
     {
