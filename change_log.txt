@@ -8,7 +8,8 @@ email address.
 2008-Mar-30 UPDATE  Jonas Diemer <diemer-at-gmx.de>
 ================================================================================
 +eeschema
-    EESchema displays a warning now on a file format mismatch.
++pcbnew
+    Display a warning on a file format version mismatch.
 
 2008-Mar-31 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================

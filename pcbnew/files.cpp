@@ -194,6 +194,18 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
         return 0;
     }
 
+    int ver;
+    sscanf(cbuf, "PCBNEW-BOARD Version %d date", &ver );
+    printf("version: %d -> %d - %s\n", ver, g_CurrentVersionPCB, cbuf);
+    if ( ver > g_CurrentVersionPCB )
+    {
+        DisplayInfo( this, _( "This file was created by a more recent version of PCBnew and may not load correctly. Please consider updating!"));
+    }
+    else if ( ver < g_CurrentVersionPCB )
+    {
+        DisplayInfo( this, _( "This file was created by an older version of EESchema. It will be stored in the new file format when you save this file again."));
+    }
+
     SetTitle( GetScreen()->m_FileName );
     SetLastProject( GetScreen()->m_FileName );
 

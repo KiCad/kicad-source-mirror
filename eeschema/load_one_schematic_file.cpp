@@ -115,7 +115,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
         || strncmp( Line + 9, SCHEMATIC_HEAD_STRING, sizeof(SCHEMATIC_HEAD_STRING) - 1 )
         != 0 )
     {
-        MsgDiag = FullFileName + _( " is NOT EESchema file" );
+        MsgDiag = FullFileName + _( " is NOT an EESchema file!" );
         DisplayError( this, MsgDiag );
         fclose( f );
         return FALSE;
@@ -137,7 +137,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
     LineCount++;
     if( fgets( Line, 1024 - 1, f ) == NULL || strncmp( Line, "LIBS:", 5 ) != 0 )
     {
-        MsgDiag = FullFileName + _( " is NOT EESchema file" );
+        MsgDiag = FullFileName + _( " is NOT an EESchema file!" );
         DisplayError( this, MsgDiag );
         fclose( f );
         return FALSE;
