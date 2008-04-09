@@ -5,6 +5,14 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Apr-09 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema
+    removed bug: forgotten paths when adding lib files when not in the default lib path
+    Also: adding SCH_COMPONENT.m_PartPerPackageSelections to handle multiple parts per package selection
+        in a complex hierarchy, but yet, no other code to do that.
+
+
 2008-Mar-30 UPDATE  Jonas Diemer <diemer-at-gmx.de>
 ================================================================================
 +eeschema

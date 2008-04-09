@@ -37,8 +37,8 @@ enum  NumFieldType {
  *  component fields are texts attached to the component (not the graphic texts)
  *  There are 2 major fields : Reference and Value
  */
-class PartTextStruct :  public EDA_BaseStruct
-    , public EDA_TextStruct
+class PartTextStruct :  public EDA_BaseStruct,
+    public EDA_TextStruct
 {
 public:
     int      m_Layer;
@@ -74,7 +74,7 @@ WX_DECLARE_OBJARRAY( DrawSheetPath, ArrayOfSheetLists );
 class SCH_COMPONENT : public SCH_ITEM
 {
 public:
-    int m_Multi;              /* In multi unit chip - which unit to draw. */
+    int               m_Multi; /* In multi unit chip - which unit to draw. */
 
     wxPoint           m_Pos;
 
@@ -83,13 +83,14 @@ public:
 
     //int   m_FlagControlMulti;
     ArrayOfSheetLists m_UsedOnSheets;
-    int m_Convert;                      /* Gestion (management) des mutiples representations (ex: conversion De Morgan) */
-    int m_Transform[2][2];              /* The rotation/mirror transformation matrix. */
-    bool*             m_PinIsDangling;  // liste des indicateurs de pin non connectee
+    int               m_Convert;                    /* Gestion (management) des mutiples representations (ex: conversion De Morgan) */
+    int               m_Transform[2][2];            /* The rotation/mirror transformation matrix. */
+    bool*             m_PinIsDangling;              // liste des indicateurs de pin non connectee
 
-    wxArrayString     m_Paths;          // /sheet1/C102, /sh2/sh1/U32 etc.
-    wxArrayString     m_References;     // C102, U32 etc.
-    wxString          m_PrefixString;   /*C, R, U, Q etc - the first character which typically indicates what the component is.
+    wxArrayString     m_Paths;                      // /sheet1/C102, /sh2/sh1/U32 etc.
+    wxArrayString     m_References;                 // C102, U32 etc.
+    wxArrayString     m_PartPerPackageSelections;   // "1", "2" etc. when a component has more than 1 partper package
+    wxString          m_PrefixString;   /* C, R, U, Q etc - the first character which typically indicates what the component is.
                                          * determined, upon placement, from the library component.
                                          * determined, upon file load, by the first non-digits in the reference fields. */
 
@@ -103,7 +104,7 @@ public:
     }
 
 
-    SCH_COMPONENT*          GenCopy();
+    SCH_COMPONENT*  GenCopy();
     void                    SetRotationMiroir( int type );
     int                     GetRotationMiroir();
     wxPoint                 GetScreenCoord( const wxPoint& coord );
@@ -112,7 +113,7 @@ public:
     EDA_Rect                GetBoundaryBox() const;
     EDA_Rect                GetBoundingBox();
 
-    const wxString&         ReturnFieldName( int aFieldNdx ) const;
+    const wxString& ReturnFieldName( int aFieldNdx ) const;
 
 
     /**
@@ -121,7 +122,7 @@ public:
      * @param aFieldNdx An index into the array of fields, 0 - FIELD8
      * @return const wxString& - the field value or wxEmptyString
      */
-    const wxString&         GetFieldValue( int aFieldNdx ) const;
+    const wxString& GetFieldValue( int aFieldNdx ) const;
 
 
     virtual void            Draw( WinEDA_DrawPanel* panel,
