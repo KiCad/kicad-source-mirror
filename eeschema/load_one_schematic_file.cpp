@@ -3,7 +3,7 @@
 /****************************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
+//#include "gr_basic.h"
 
 #include "common.h"
 #include "program.h"
@@ -633,8 +633,7 @@ static int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
             Name1[j] = 0;
             wxString ref = CONV_FROM_UTF8(Name1);
 
-            LibItemStruct->m_Paths.Add(path);
-            LibItemStruct->m_References.Add(ref);
+            LibItemStruct->AddHierarchicalReference(path, ref);
             LibItemStruct->m_Field[REFERENCE].m_Text = ref;
         }
         if( Line[0] == 'F' )

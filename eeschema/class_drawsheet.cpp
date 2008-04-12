@@ -77,6 +77,82 @@ DrawSheetStruct::~DrawSheetStruct()
 }
 
 
+
+/**********************************************/
+bool DrawSheetStruct::Save( FILE *f )
+/***********************************************/
+/* Routine utilisee dans la routine precedente.
+    Assure la sauvegarde de la structure LibItemStruct
+*/
+{
+int ii;
+bool Failed = FALSE;
+DrawSheetLabelStruct * SheetLabel;
+
+    fprintf(f, "$Sheet\n");
+
+    if (fprintf(f, "S %-4d %-4d %-4d %-4d\n",
+                    m_Pos.x,m_Pos.y,
+                    m_Size.x,m_Size.y) == EOF){
+        Failed = TRUE; return(Failed);
+    }
+
+    //save the unique timestamp, like other shematic parts.
+    if( fprintf(f, "U %8.8lX\n", m_TimeStamp)  == EOF ){
+        Failed = TRUE; return(Failed);
+    }
+
+    /* Generation de la liste des 2 textes (sheetname et filename) */
+    if ( ! m_SheetName.IsEmpty())
+    {
+        if(fprintf(f,"F0 \"%s\" %d\n", CONV_TO_UTF8(m_SheetName), m_SheetNameSize) == EOF)
+        {
+            Failed = TRUE; return(Failed);
+        }
+    }
+
+    if( ! GetFileName().IsEmpty())
+    {
+        if(fprintf(f,"F1 \"%s\" %d\n", CONV_TO_UTF8(GetFileName()), m_FileNameSize) == EOF)
+        {
+            Failed = TRUE; return(Failed);
+        }
+    }
+
+    /* Generation de la liste des labels (entrees) de la sous feuille */
+    ii = 2;
+    SheetLabel = m_Label;
+    while( SheetLabel != NULL )
+    {
+        int type = 'U', side = 'L';
+
+        if( SheetLabel->m_Text.IsEmpty() ) continue;
+        if( SheetLabel->m_Edge ) side = 'R';
+
+        switch(SheetLabel->m_Shape)
+        {
+            case NET_INPUT: type = 'I'; break;
+            case NET_OUTPUT: type = 'O'; break;
+            case NET_BIDI: type = 'B'; break;
+            case NET_TRISTATE: type = 'T'; break;
+            case NET_UNSPECIFIED: type = 'U'; break;
+        }
+
+        if(fprintf(f,"F%d \"%s\" %c %c %-3d %-3d %-3d\n", ii,
+            CONV_TO_UTF8(SheetLabel->m_Text), type, side,
+            SheetLabel->m_Pos.x, SheetLabel->m_Pos.y,
+            SheetLabel->m_Size.x) == EOF)
+        {
+            Failed = TRUE; break;
+        }
+        ii++;
+        SheetLabel = (DrawSheetLabelStruct*)SheetLabel->Pnext;
+    }
+
+    fprintf(f, "$EndSheet\n");
+    return(Failed);
+}
+
 /***********************************************/
 DrawSheetStruct* DrawSheetStruct::GenCopy()
 /***********************************************/

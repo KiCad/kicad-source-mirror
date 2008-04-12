@@ -331,6 +331,9 @@ bool WinEDA_AnnotateFrame::GetResetItems( void )
 }
 
 bool WinEDA_AnnotateFrame::GetSortOrder( void )
+/**
+ * @return true if annotation by position, false if annotation by value
+ */
 {
     wxASSERT_MSG( (m_rbSortByPosition != NULL) &&
                   m_rbSortByPosition->IsKindOf( CLASSINFO( wxRadioButton ) ),

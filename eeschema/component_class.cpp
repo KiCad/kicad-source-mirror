@@ -25,6 +25,18 @@ WX_DEFINE_OBJARRAY( ArrayOfSheetLists );
 /* class SCH_COMPONENT */
 /***************************/
 
+/** Function AddHierarchicalReference
+ * Add a full hierachical reference (path + local reference)
+ * @param path = hierarchical path (/<sheet timestamp>/component timestamp> like /05678E50/A23EF560)
+ * @param ref = local reference like C45, R56
+ */
+void SCH_COMPONENT::AddHierarchicalReference( const wxString& path, const wxString& ref )
+{
+    m_Paths.Add( path );
+    m_References.Add( ref );
+}
+
+
 /****************************************************************/
 const wxString& ReturnDefaultFieldName( int aFieldNdx )
 /****************************************************************/
@@ -118,15 +130,16 @@ const wxString SCH_COMPONENT::GetRef( DrawSheetPath* sheet )
 
 
 /***********************************************************************/
-void SCH_COMPONENT::SetRef( DrawSheetPath* sheet, wxString ref )
+void SCH_COMPONENT::SetRef( DrawSheetPath* sheet, const wxString& ref )
 /***********************************************************************/
 {
     //check to see if it is already there before inserting it
-    wxString path = GetPath( sheet );
+    wxString     path = GetPath( sheet );
 
     // printf( "SetRef path: %s ref: %s\n", CONV_TO_UTF8( path ), CONV_TO_UTF8( ref ) ); // Debug
     unsigned int i;
     bool         notInArray = true;
+
     for( i = 0; i<m_Paths.GetCount(); i++ )
     {
         if( m_Paths[i].Cmp( path ) == 0 )
@@ -162,6 +175,7 @@ void SCH_COMPONENT::ClearRefs()
 {
     m_Paths.Empty();
     m_References.Empty();
+    m_PartPerPackageSelections.Empty();
 }
 
 
@@ -179,7 +193,7 @@ const wxString& SCH_COMPONENT::GetFieldValue( int aFieldNdx ) const
 
 /*******************************************************************/
 SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos ) :
-    SCH_ITEM( NULL,  TYPE_SCH_COMPONENT )
+    SCH_ITEM( NULL, TYPE_SCH_COMPONENT )
 /*******************************************************************/
 {
     int ii;
@@ -209,8 +223,6 @@ SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos ) :
 
     m_Field[VALUE].m_Layer     = LAYER_VALUEPART;
     m_Field[REFERENCE].m_Layer = LAYER_REFERENCEPART;
-
-    m_PinIsDangling = NULL;
 
     m_PrefixString = wxString( _( "U" ) );
 }
@@ -364,7 +376,14 @@ void SCH_COMPONENT::ClearAnnotation()
     Entry = FindLibPart( m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
 
     if( !Entry || !Entry->m_UnitSelectionLocked )
+    {
         m_Multi = 1;
+        m_PartPerPackageSelections.Empty();
+        for( i = 0; i< m_Paths.GetCount(); i++ )
+        {
+            m_PartPerPackageSelections.Add( wxT( "1" ) );
+        }
+    }
 }
 
 
@@ -374,10 +393,10 @@ SCH_COMPONENT* SCH_COMPONENT::GenCopy()
 {
     SCH_COMPONENT* new_item = new SCH_COMPONENT( m_Pos );
 
-    int ii;
+    int            ii;
 
-    new_item->m_Multi    = m_Multi;
-    new_item->m_ChipName = m_ChipName;
+    new_item->m_Multi        = m_Multi;
+    new_item->m_ChipName     = m_ChipName;
     new_item->m_PrefixString = m_PrefixString;
 
     //new_item->m_FlagControlMulti = m_FlagControlMulti;
@@ -512,15 +531,16 @@ void SCH_COMPONENT::SetRotationMiroir( int type_rotate )
     }
 
     if( Transform )
-    { /* The new matrix transform is the old matrix transform modified by the
-       *  requested transformation, which is the TempMat transform (rot, mirror ..)
-       *  in order to have (in term of matrix transform):
-       *     transform coord = new_m_Transform * coord
-       *  where transform coord is the coord modified by new_m_Transform from the initial
-       *  value coord.
-       *  new_m_Transform is computed (from old_m_Transform and TempMat) to have:
-       *     transform coord = old_m_Transform * coord * TempMat
-       */
+    {
+        /* The new matrix transform is the old matrix transform modified by the
+         *  requested transformation, which is the TempMat transform (rot, mirror ..)
+         *  in order to have (in term of matrix transform):
+         *     transform coord = new_m_Transform * coord
+         *  where transform coord is the coord modified by new_m_Transform from the initial
+         *  value coord.
+         *  new_m_Transform is computed (from old_m_Transform and TempMat) to have:
+         *     transform coord = old_m_Transform * coord * TempMat
+         */
         int NewMatrix[2][2];
 
         NewMatrix[0][0] = m_Transform[0][0] * TempMat[0][0] +
@@ -666,8 +686,8 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os )
 
 /***************************************************************************/
 PartTextStruct::PartTextStruct( const wxPoint& pos, const wxString& text ) :
-    EDA_BaseStruct( DRAW_PART_TEXT_STRUCT_TYPE )
-    , EDA_TextStruct( text )
+    EDA_BaseStruct( DRAW_PART_TEXT_STRUCT_TYPE ),
+    EDA_TextStruct( text )
 /***************************************************************************/
 {
     m_Pos     = pos;
@@ -725,16 +745,16 @@ EDA_Rect PartTextStruct::GetBoundaryBox() const
  *
  */
 {
-    EDA_Rect BoundaryBox;
-    int      hjustify, vjustify;
-    int      textlen;
-    int      orient;
-    int      dx, dy, x1, y1, x2, y2;
+    EDA_Rect       BoundaryBox;
+    int            hjustify, vjustify;
+    int            textlen;
+    int            orient;
+    int            dx, dy, x1, y1, x2, y2;
 
     SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) m_Parent;
 
     orient = m_Orient;
-    wxPoint pos = DrawLibItem->m_Pos;
+    wxPoint        pos = DrawLibItem->m_Pos;
     x1 = m_Pos.x - pos.x;
     y1 = m_Pos.y - pos.y;
 
@@ -821,4 +841,147 @@ EDA_Rect PartTextStruct::GetBoundaryBox() const
     BoundaryBox.SetHeight( dy );
 
     return BoundaryBox;
+}
+
+
+/**********************************/
+bool SCH_COMPONENT::Save( FILE* f )
+/**********************************/
+
+/** Function Save
+ * Write on file a SCH_COMPONENT decscription
+ * @param f = output file
+ * return an error: false if ok, true if error
+ */
+{
+    int  ii, Failed = FALSE;
+    char Name1[256], Name2[256];
+    int  hjustify, vjustify;
+
+    //this is redundant with the AR entries below, but it makes the
+    //files backwards-compatible.
+    if( m_References.GetCount() > 0 )
+        strncpy( Name1, CONV_TO_UTF8( m_References[0] ), sizeof(Name1) );
+    else
+    {
+        if( m_Field[REFERENCE].m_Text.IsEmpty() )
+            strncpy( Name1, CONV_TO_UTF8( m_PrefixString ), sizeof(Name1) );
+        else
+            strncpy( Name1, CONV_TO_UTF8( m_Field[REFERENCE].m_Text ), sizeof(Name1) );
+    }
+    for( ii = 0; ii < (int) strlen( Name1 ); ii++ )
+    {
+        if( Name1[ii] <= ' ' )
+            Name1[ii] = '~';
+    }
+
+    if( !m_ChipName.IsEmpty() )
+    {
+        strncpy( Name2, CONV_TO_UTF8( m_ChipName ), sizeof(Name2) );
+        for( ii = 0; ii < (int) strlen( Name2 ); ii++ )
+            if( Name2[ii] <= ' ' )
+                Name2[ii] = '~';
+    }
+    else
+        strncpy( Name2, NULL_STRING, sizeof(Name2) );
+
+    fprintf( f, "$Comp\n" );
+
+    if( fprintf( f, "L %s %s\n", Name2, Name1 ) == EOF )
+    {
+        Failed = TRUE;
+        return Failed;
+    }
+
+    /* Generation de numero d'unit, convert et Time Stamp*/
+    if( fprintf( f, "U %d %d %8.8lX\n", m_Multi, m_Convert, m_TimeStamp ) == EOF )
+    {
+        Failed = TRUE; return Failed;
+    }
+
+    /* Sortie de la position */
+    if( fprintf( f, "P %d %d\n", m_Pos.x, m_Pos.y ) == EOF )
+    {
+        Failed = TRUE; return Failed;
+    }
+    unsigned int i;
+    for( i = 0; i< m_References.GetCount(); i++ )
+    {
+        /*format:
+          * AR Path="/140/2" Ref="C99"
+          * where 140 is the uid of the contianing sheet
+          * and 2 is the timestamp of this component.
+          * (timestamps are actually 8 hex chars)
+          * Ref is the conventional component reference for this 'path'
+         */
+        if( fprintf( f, "AR Path=\"%s\" Ref=\"%s\" \n",
+                CONV_TO_UTF8( m_Paths[i] ),
+                CONV_TO_UTF8( m_References[i] ) ) == EOF )
+        {
+            Failed = TRUE; break;
+        }
+    }
+
+    for( ii = 0; ii < NUMBER_OF_FIELDS; ii++ )
+    {
+        PartTextStruct* field = &m_Field[ii];
+        if( field->m_Text.IsEmpty() )
+            continue;
+        hjustify = 'C';
+        if( field->m_HJustify == GR_TEXT_HJUSTIFY_LEFT )
+            hjustify = 'L';
+        else if( field->m_HJustify == GR_TEXT_HJUSTIFY_RIGHT )
+            hjustify = 'R';
+        vjustify = 'C';
+        if( field->m_VJustify == GR_TEXT_VJUSTIFY_BOTTOM )
+            vjustify = 'B';
+        else if( field->m_VJustify == GR_TEXT_VJUSTIFY_TOP )
+            vjustify = 'T';
+        if( fprintf( f, "F %d \"%s\" %c %-3d %-3d %-3d %4.4X %c %c", ii,
+                CONV_TO_UTF8( field->m_Text ),
+                field->m_Orient == TEXT_ORIENT_HORIZ ? 'H' : 'V',
+                field->m_Pos.x, field->m_Pos.y,
+                field->m_Size.x,
+                field->m_Attributs,
+                hjustify, vjustify ) == EOF )
+        {
+            Failed = TRUE; break;
+        }
+
+        // Save field name, if necessary
+        if( ii >= FIELD1 && !field->m_Name.IsEmpty() )
+        {
+            wxString fieldname = ReturnDefaultFieldName( ii );
+            if( fieldname != field->m_Name )
+                if( fprintf( f, " \"%s\"", CONV_TO_UTF8( field->m_Name ) ) == EOF )
+                {
+                    Failed = TRUE; break;
+                }
+        }
+        if( fprintf( f, "\n" ) == EOF )
+        {
+            Failed = TRUE; break;
+        }
+    }
+
+    if( Failed )
+        return Failed;
+
+    /* Generation du num unit, position, box ( ancienne norme )*/
+    if( fprintf( f, "\t%-4d %-4d %-4d\n", m_Multi, m_Pos.x, m_Pos.y ) == EOF )
+    {
+        Failed = TRUE; return Failed;
+    }
+
+    if( fprintf( f, "\t%-4d %-4d %-4d %-4d\n",
+            m_Transform[0][0],
+            m_Transform[0][1],
+            m_Transform[1][0],
+            m_Transform[1][1] ) == EOF )
+    {
+        Failed = TRUE; return Failed;
+    }
+
+    fprintf( f, "$EndComp\n" );
+    return Failed;
 }

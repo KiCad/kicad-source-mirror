@@ -14,6 +14,7 @@
 
 #include "component_class.h"
 #include "class_screen.h"
+#include "class_drawsheet.h"
 #include "class_text-label.h"
 
 #define DRAWJUNCTION_SIZE  16       /* Rayon du symbole connexion */

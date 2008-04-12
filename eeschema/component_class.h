@@ -79,20 +79,20 @@ public:
     wxPoint           m_Pos;
 
     wxString          m_ChipName;  /* Key to look for in the library, i.e. "74LS00". */
-    PartTextStruct    m_Field[NUMBER_OF_FIELDS];
-
-    //int   m_FlagControlMulti;
-    ArrayOfSheetLists m_UsedOnSheets;
-    int               m_Convert;                    /* Gestion (management) des mutiples representations (ex: conversion De Morgan) */
-    int               m_Transform[2][2];            /* The rotation/mirror transformation matrix. */
-    bool*             m_PinIsDangling;              // liste des indicateurs de pin non connectee
-
-    wxArrayString     m_Paths;                      // /sheet1/C102, /sh2/sh1/U32 etc.
-    wxArrayString     m_References;                 // C102, U32 etc.
-    wxArrayString     m_PartPerPackageSelections;   // "1", "2" etc. when a component has more than 1 partper package
     wxString          m_PrefixString;   /* C, R, U, Q etc - the first character which typically indicates what the component is.
                                          * determined, upon placement, from the library component.
                                          * determined, upon file load, by the first non-digits in the reference fields. */
+    PartTextStruct    m_Field[NUMBER_OF_FIELDS];
+
+    //int   m_FlagControlMulti;
+    ArrayOfSheetLists m_UsedOnSheets;               // Used as flags when calculating netlist
+    int               m_Convert;                    /* Gestion (management) des mutiples representations (ex: conversion De Morgan) */
+    int               m_Transform[2][2];            /* The rotation/mirror transformation matrix. */
+
+private:
+    wxArrayString     m_Paths;                      // /sheet1/C102, /sh2/sh1/U32 etc.
+    wxArrayString     m_References;                 // C102, U32 etc.
+    wxArrayString     m_PartPerPackageSelections;   // "1", "2" etc. when a component has more than 1 partper package
 
 public:
     SCH_COMPONENT( const wxPoint& pos = wxPoint( 0, 0 ) );
@@ -103,6 +103,12 @@ public:
         return wxT( "SCH_COMPONENT" );
     }
 
+    /** Function Save
+     * Write on file a SCH_COMPONENT decscription
+     * @param f = output file
+     * return an error: false if ok, true if error
+    */
+    bool Save( FILE *f );
 
     SCH_COMPONENT*  GenCopy();
     void                    SetRotationMiroir( int type );
@@ -138,8 +144,11 @@ public:
     //returns a unique ID, in the form of a path.
     wxString                GetPath( DrawSheetPath* sheet );
     const wxString          GetRef( DrawSheetPath* sheet );
-    void                    SetRef( DrawSheetPath* sheet, wxString ref );
+    void                    SetRef( DrawSheetPath* sheet, const wxString & ref );
     void                    ClearRefs();
+    void                    AddHierarchicalReference(const wxString & path, const wxString & ref);
+    int                     GetUnitSelection( DrawSheetPath* aSheet );
+    void                    SetUnitSelection( DrawSheetPath* aSheet, int aUnitSelection );
 
 #if defined (DEBUG)
 

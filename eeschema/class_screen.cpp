@@ -182,6 +182,14 @@ void SCH_SCREEN::AddToDrawList( EDA_BaseStruct* st )
 /* Class EDA_ScreenList to handle the list of screens in a hierarchy */
 /*********************************************************************/
 
+/********************************/
+EDA_ScreenList::EDA_ScreenList()
+/********************************/
+{
+    m_Index = 0;
+    BuildScreenList( g_RootSheet );
+}
+
 /*****************************************/
 SCH_SCREEN* EDA_ScreenList::GetFirst()
 /*****************************************/

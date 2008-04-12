@@ -8,6 +8,12 @@ email address.
 2008-Apr-09 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +eeschema
+    code cleaning.
+
+
+2008-Apr-09 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema
     removed bug: forgotten paths when adding lib files when not in the default lib path
     Also: adding SCH_COMPONENT.m_PartPerPackageSelections to handle multiple parts per package selection
         in a complex hierarchy, but yet, no other code to do that.

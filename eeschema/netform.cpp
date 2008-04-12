@@ -351,7 +351,7 @@ void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame,
 /********************************************************/
 static void ClearUsedFlags( WinEDA_SchematicFrame* frame )
 /********************************************************/
-/* Clear flag FlagControlMulti, used in netlist generation */
+/* Clear flag list, used in netlist generation */
 {
     SCH_SCREEN*     screen;
     EDA_BaseStruct* DrawList;

@@ -20,8 +20,6 @@
 /* Fonctions externes */
 
 /* Fonctions Locales */
-static int SavePartDescr( FILE *f, SCH_COMPONENT * LibItemStruct);
-static int SaveSheetDescr( FILE *f, DrawSheetStruct * SheetStruct);
 static void SaveLayers(FILE *f);
 
 /* Variables locales */
@@ -146,11 +144,11 @@ bool WinEDA_SchematicFrame::SaveEEFile(SCH_SCREEN *screen, int FileSave)
         switch(Phead->Type())
             {
             case TYPE_SCH_COMPONENT:		  /* Its a library item. */
-                SavePartDescr( f, (SCH_COMPONENT *) Phead);
+                ((SCH_COMPONENT *) Phead)->Save( f );
                 break;
 
             case DRAW_SHEET_STRUCT_TYPE:	   /* Its a Sheet item. */
-                SaveSheetDescr( f, (DrawSheetStruct *) Phead);
+                ((DrawSheetStruct *) Phead)->Save( f );
                 break;
 
             case DRAW_SEGMENT_STRUCT_TYPE:		 /* Its a Segment item. */
@@ -322,222 +320,6 @@ bool WinEDA_SchematicFrame::SaveEEFile(SCH_SCREEN *screen, int FileSave)
     return !Failed;
 }
 
-
-/*******************************************************************/
-static int SavePartDescr( FILE *f, SCH_COMPONENT * LibItemStruct)
-/*******************************************************************/
-/* Routine utilisee dans la routine precedente.
-    Assure la sauvegarde de la structure LibItemStruct
-*/
-{
-int ii, Failed = FALSE;
-char Name1[256], Name2[256];
-int hjustify, vjustify;
-
-    //this is redundant with the AR entries below, but it makes the
-    //files backwards-compatible.
-    if(LibItemStruct->m_References.GetCount() > 0)
-        strncpy(Name1, CONV_TO_UTF8(LibItemStruct->m_References[0]), sizeof(Name1));
-    else{
-        if(LibItemStruct->m_Field[REFERENCE].m_Text.IsEmpty())
-            strncpy(Name1, CONV_TO_UTF8(LibItemStruct->m_PrefixString),sizeof(Name1));
-        else
-            strncpy(Name1, CONV_TO_UTF8(LibItemStruct->m_Field[REFERENCE].m_Text),sizeof(Name1));
-    }
-    for (ii = 0; ii < (int)strlen(Name1); ii++){
-        if (Name1[ii] <= ' ') Name1[ii] = '~';
-    }
-    if ( ! LibItemStruct->m_ChipName.IsEmpty() )
-    {
-        strncpy(Name2, CONV_TO_UTF8(LibItemStruct->m_ChipName),sizeof(Name2));
-        for (ii = 0; ii < (int)strlen(Name2); ii++)
-            if (Name2[ii] <= ' ') Name2[ii] = '~';
-    }
-
-    else  strncpy(Name2, NULL_STRING,sizeof(Name2));
-
-    fprintf(f, "$Comp\n");
-
-    if(fprintf (f, "L %s %s\n", Name2, Name1) == EOF)
-    {
-        Failed = TRUE;
-        return(Failed);
-    }
-
-    /* Generation de numero d'unit, convert et Time Stamp*/
-    if(fprintf(f, "U %d %d %8.8lX\n",
-                     LibItemStruct->m_Multi,
-                     LibItemStruct->m_Convert,
-                     LibItemStruct->m_TimeStamp) == EOF)
-        {
-        Failed = TRUE; return(Failed);
-        }
-
-    /* Sortie de la position */
-    if(fprintf(f, "P %d %d\n",
-                     LibItemStruct->m_Pos.x, LibItemStruct->m_Pos.y) == EOF)
-    {
-        Failed = TRUE; return(Failed);
-    }
-    unsigned int i;
-    for(i=0; i< LibItemStruct->m_References.GetCount(); i++){
-        /*format:
-        AR Path="/140/2" Ref="C99"
-        where 140 is the uid of the contianing sheet
-        and 2 is the timestamp of this component.
-        (timestamps are actually 8 hex chars)
-        Ref is the conventional component reference for this 'path'
-        */
-        /*printf("AR Path=\"%s\" Ref=\"%s\" \n",
-                CONV_TO_UTF8( LibItemStruct->m_Paths[i]),
-                              CONV_TO_UTF8( LibItemStruct->m_References[i] ) ); */
-        if( fprintf(f, "AR Path=\"%s\" Ref=\"%s\" \n",
-                CONV_TO_UTF8( LibItemStruct->m_Paths[i]),
-                CONV_TO_UTF8( LibItemStruct->m_References[i] ) ) == EOF )
-        {
-            Failed = TRUE; break;
-        }
-    }
-    for( ii = 0; ii < NUMBER_OF_FIELDS; ii++ )
-    {
-        PartTextStruct * field = & LibItemStruct->m_Field[ii];
-        if( field->m_Text.IsEmpty() ) continue;
-        hjustify = 'C';
-        if ( field->m_HJustify == GR_TEXT_HJUSTIFY_LEFT)
-            hjustify = 'L';
-        else if ( field->m_HJustify == GR_TEXT_HJUSTIFY_RIGHT)
-            hjustify = 'R';
-        vjustify = 'C';
-        if ( field->m_VJustify == GR_TEXT_VJUSTIFY_BOTTOM)
-            vjustify = 'B';
-        else if ( field->m_VJustify == GR_TEXT_VJUSTIFY_TOP)
-            vjustify = 'T';
-        if( fprintf(f,"F %d \"%s\" %c %-3d %-3d %-3d %4.4X %c %c", ii,
-                    CONV_TO_UTF8(field->m_Text),
-                    field->m_Orient == TEXT_ORIENT_HORIZ ? 'H' : 'V',
-                    field->m_Pos.x, field->m_Pos.y,
-                    field->m_Size.x,
-                    field->m_Attributs,
-                    hjustify, vjustify) == EOF)
-        {
-            Failed = TRUE; break;
-        }
-        // Save field name, if necessary
-        if ( ii >= FIELD1 && ! field->m_Name.IsEmpty() )
-        {
-            wxString fieldname = ReturnDefaultFieldName(ii);
-            if ( fieldname != field->m_Name )
-                if( fprintf(f," \"%s\"", CONV_TO_UTF8(field->m_Name) ) == EOF)
-                {
-                    Failed = TRUE; break;
-                }
-        }
-        if( fprintf(f,"\n") == EOF)
-        {
-            Failed = TRUE; break;
-        }
-    }
-
-    if (Failed)  return(Failed);
-
-    /* Generation du num unit, position, box ( ancienne norme )*/
-    if(fprintf(f, "\t%-4d %-4d %-4d\n",
-                     LibItemStruct->m_Multi,
-                     LibItemStruct->m_Pos.x, LibItemStruct->m_Pos.y) == EOF)
-        {
-        Failed = TRUE; return(Failed);
-        }
-
-    if( fprintf(f, "\t%-4d %-4d %-4d %-4d\n",
-                    LibItemStruct->m_Transform[0][0],
-                    LibItemStruct->m_Transform[0][1],
-                    LibItemStruct->m_Transform[1][0],
-                    LibItemStruct->m_Transform[1][1]) == EOF)
-        {
-        Failed = TRUE; return(Failed);
-        }
-
-    fprintf(f, "$EndComp\n");
-    return(Failed);
-}
-
-/*******************************************************************/
-static int SaveSheetDescr( FILE *f, DrawSheetStruct * SheetStruct)
-/*******************************************************************/
-/* Routine utilisee dans la routine precedente.
-    Assure la sauvegarde de la structure LibItemStruct
-*/
-{
-int ii;
-int Failed = FALSE;
-DrawSheetLabelStruct * SheetLabel;
-
-    fprintf(f, "$Sheet\n");
-
-    if (fprintf(f, "S %-4d %-4d %-4d %-4d\n",
-                    SheetStruct->m_Pos.x,SheetStruct->m_Pos.y,
-                    SheetStruct->m_Size.x,SheetStruct->m_Size.y) == EOF){
-        Failed = TRUE; return(Failed);
-    }
-
-    //save the unique timestamp, like other shematic parts.
-    if( fprintf(f, "U %8.8lX\n", SheetStruct->m_TimeStamp)  == EOF ){
-        Failed = TRUE; return(Failed);
-    }
-
-    /* Generation de la liste des 2 textes (sheetname et filename) */
-    if ( ! SheetStruct->m_SheetName.IsEmpty())
-    {
-        if(fprintf(f,"F0 \"%s\" %d\n", CONV_TO_UTF8(SheetStruct->m_SheetName),
-                    SheetStruct->m_SheetNameSize) == EOF)
-        {
-            Failed = TRUE; return(Failed);
-        }
-    }
-
-    if( ! SheetStruct->GetFileName().IsEmpty())
-    {
-        if(fprintf(f,"F1 \"%s\" %d\n",
-                CONV_TO_UTF8(SheetStruct->GetFileName()),
-                SheetStruct->m_FileNameSize) == EOF)
-        {
-            Failed = TRUE; return(Failed);
-        }
-    }
-
-    /* Generation de la liste des labels (entrees) de la sous feuille */
-    ii = 2;
-    SheetLabel = SheetStruct->m_Label;
-    while( SheetLabel != NULL )
-    {
-        int type = 'U', side = 'L';
-
-        if( SheetLabel->m_Text.IsEmpty() ) continue;
-        if( SheetLabel->m_Edge ) side = 'R';
-
-        switch(SheetLabel->m_Shape)
-        {
-            case NET_INPUT: type = 'I'; break;
-            case NET_OUTPUT: type = 'O'; break;
-            case NET_BIDI: type = 'B'; break;
-            case NET_TRISTATE: type = 'T'; break;
-            case NET_UNSPECIFIED: type = 'U'; break;
-        }
-
-        if(fprintf(f,"F%d \"%s\" %c %c %-3d %-3d %-3d\n", ii,
-            CONV_TO_UTF8(SheetLabel->m_Text), type, side,
-            SheetLabel->m_Pos.x, SheetLabel->m_Pos.y,
-            SheetLabel->m_Size.x) == EOF)
-        {
-            Failed = TRUE; break;
-        }
-        ii++;
-        SheetLabel = (DrawSheetLabelStruct*)SheetLabel->Pnext;
-    }
-
-    fprintf(f, "$EndSheet\n");
-    return(Failed);
-}
 
 /****************************/
 static void SaveLayers(FILE *f)
