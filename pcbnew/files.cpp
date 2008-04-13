@@ -196,7 +196,6 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
 
     int ver;
     sscanf(cbuf, "PCBNEW-BOARD Version %d date", &ver );
-    printf("version: %d -> %d - %s\n", ver, g_CurrentVersionPCB, cbuf);
     if ( ver > g_CurrentVersionPCB )
     {
         DisplayInfo( this, _( "This file was created by a more recent version of PCBnew and may not load correctly. Please consider updating!"));
