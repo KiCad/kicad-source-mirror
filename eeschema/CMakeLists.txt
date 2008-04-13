@@ -104,12 +104,8 @@ set(EESCHEMA_EXTRA_SRCS
 
 if(WIN32)
     if(MINGW)
-        # resource compilation for mingw (http://www.cmake.org/Bug/view.php?id=4068)
-        add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/eeschema_rc.o
-            COMMAND windres.exe -I ${CMAKE_CURRENT_SOURCE_DIR} -I ${wxWidgets_ROOT_DIR}/include
-                        -i ${CMAKE_CURRENT_SOURCE_DIR}/eeschema.rc
-                        -o ${CMAKE_CURRENT_BINARY_DIR}/eeschema_rc.o)
-        set(EESCHEMA_RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/eeschema_rc.o)
+        mingw_resource_compiler(eeschema)
+        set(EESCHEMA_RESOURCES ${_OUT})
     else(MINGW)
         set(EESCHEMA_RESOURCES eeschema.rc)
     endif(MINGW)

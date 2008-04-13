@@ -60,12 +60,8 @@ set(GERBVIEW_EXTRA_SRCS
 
 if(WIN32)
     if(MINGW)
-        # resource compilation for mingw (http://www.cmake.org/Bug/view.php?id=4068)
-        add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gerbview_rc.o
-            COMMAND windres.exe -I ${CMAKE_CURRENT_SOURCE_DIR} -I ${wxWidgets_ROOT_DIR}/include
-                        -i ${CMAKE_CURRENT_SOURCE_DIR}/gerbview.rc
-                        -o ${CMAKE_CURRENT_BINARY_DIR}/gerbview_rc.o)
-        set(GERBVIEW_RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/gerbview_rc.o)
+        mingw_resource_compiler(gerbview)
+        set(GERBVIEW_RESOURCES ${_OUT})
     else(MINGW)
         set(GERBVIEW_RESOURCES gerbview.rc)
     endif(MINGW)

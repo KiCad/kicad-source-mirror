@@ -58,12 +58,8 @@ set(CVPCB_EXTRA_SRCS
 
 if(WIN32)
     if(MINGW)
-        # resource compilation for mingw (http://www.cmake.org/Bug/view.php?id=4068)
-        add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/cvpcb_rc.o
-            COMMAND windres.exe -I ${CMAKE_CURRENT_SOURCE_DIR} -I ${wxWidgets_ROOT_DIR}/include
-                        -i ${CMAKE_CURRENT_SOURCE_DIR}/cvpcb.rc
-                        -o ${CMAKE_CURRENT_BINARY_DIR}/cvpcb_rc.o)
-        set(CVPCB_RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/cvpcb_rc.o)
+        mingw_resource_compiler(cvpcb)
+        set(CVPCB_RESOURCES ${_OUT})
     else(MINGW)
         set(CVPCB_RESOURCES cvpcb.rc)
     endif(MINGW)

@@ -151,12 +151,8 @@ set(PCBNEW_EXTRA_SRCS
 
 if(WIN32)
     if(MINGW)
-        # resource compilation for mingw (http://www.cmake.org/Bug/view.php?id=4068)
-        add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_rc.o
-            COMMAND windres.exe -I ${CMAKE_CURRENT_SOURCE_DIR} -I ${wxWidgets_ROOT_DIR}/include
-                        -i ${CMAKE_CURRENT_SOURCE_DIR}/pcbnew.rc
-                        -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_rc.o)
-        set(PCBNEW_RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_rc.o)
+        mingw_resource_compiler(pcbnew)
+        set(PCBNEW_RESOURCES ${_OUT})
     else(MINGW)
         set(PCBNEW_RESOURCES pcbnew.rc)
     endif(MINGW)

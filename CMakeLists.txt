@@ -75,6 +75,9 @@ check_find_package_result(wxWidgets_FOUND "wxWidgets")
 # Include wxWidgets macros.
 include(${wxWidgets_USE_FILE})
 
+# Include MinGW resource compiler.
+include(MinGWResourceCompiler)
+
 # Include paths.
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
