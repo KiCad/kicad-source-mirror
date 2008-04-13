@@ -1,4 +1,4 @@
-find_package(ZLIB)
+find_package(ZLIB QUIET)
 if(ZLIB_FOUND)
     message(STATUS "Check for installed zlib -- found")
 else(ZLIB_FOUND)

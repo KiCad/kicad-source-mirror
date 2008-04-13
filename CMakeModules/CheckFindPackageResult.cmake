@@ -1,0 +1,8 @@
+macro(check_find_package_result _VAR _PKGNAME)
+    if(${_VAR})
+        message(STATUS "Check for installed ${_PKGNAME} -- found")
+    else(${_VAR})
+        message(STATUS "Check for installed ${_PKGNAME} -- not found")
+        message(FATAL_ERROR "${_PKGNAME} was not found - it is required to build KiCad")
+    endif(${_VAR})
+endmacro(check_find_package_result)

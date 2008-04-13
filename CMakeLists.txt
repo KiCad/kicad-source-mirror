@@ -56,33 +56,21 @@ set(KICAD_TEMPLATE ${KICAD_DATA}/template CACHE PATH "Location of KiCad template
 mark_as_advanced(KICAD_BIN KICAD_PLUGINS KICAD_DATA KICAD_DOCS
     KICAD_DEMOS KICAD_INTERNAT KICAD_TEMPLATE)
 
+# Find libraries that are needed to build KiCad.
+include(CheckFindPackageResult)
+
 find_package(OpenGL)
-if(OPENGL_FOUND)
-    message(STATUS "Check for installed OpenGL -- found")
-else(OPENGL_FOUND)
-    message(STATUS "Check for installed OpenGL -- not found")
-    message(FATAL_ERROR "OpenGL was not found - it is required to build KiCad")
-endif(OPENGL_FOUND)
+check_find_package_result(OPENGL_FOUND "OpenGL")
 
 find_package(Boost)
-if(Boost_FOUND)
-    message(STATUS "Check for installed Boost -- found")
-else(Boost_FOUND)
-    message(STATUS "Check for installed Boost -- not found")
-    message(FATAL_ERROR "Boost was not found - it is required to build KiCad")
-endif(Boost_FOUND)
+check_find_package_result(Boost_FOUND "Boost")
 
 # Here you can define what libraries of wxWidgets you need for your
 # application. You can figure out what libraries you need here;
 # http://www.wxwidgets.org/manuals/2.8/wx_librarieslist.html
 set(wxWidgets_USE_LIBS base core adv gl html net)
 find_package(wxWidgetsCVS)
-if(wxWidgets_FOUND)
-    message(STATUS "Check for installed wxWidgets -- found")
-else(wxWidgets_FOUND)
-    message(STATUS "Check for installed wxWidgets -- not found")
-    message(FATAL_ERROR "wxWidgets was not found - it is required to build KiCad")
-endif(wxWidgets_FOUND)
+check_find_package_result(wxWidgets_FOUND "wxWidgets")
 
 # Include wxWidgets macros.
 include(${wxWidgets_USE_FILE})
