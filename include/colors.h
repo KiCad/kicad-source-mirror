@@ -129,17 +129,19 @@ StructColors ColorRefs[NBCOLOR] =
  */
 static inline wxColour MakeColour( int aColor )
 {
+#if wxCHECK_VERSION(2,8,5)
     int alpha = GetAlpha( aColor );
-
     alpha = alpha ? alpha : wxALPHA_OPAQUE;
-
+#endif
     int ndx = aColor & MASKCOLOR;
 
     return wxColour(
                 ColorRefs[ndx].m_Red,
                 ColorRefs[ndx].m_Green,
-                ColorRefs[ndx].m_Blue,
-                (unsigned char) alpha
+                ColorRefs[ndx].m_Blue
+#if wxCHECK_VERSION(2,8,5)
+                ,(unsigned char) alpha
+#endif
                 );
 }
 
