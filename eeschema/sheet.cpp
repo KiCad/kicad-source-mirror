@@ -39,8 +39,6 @@
 
 #include "protos.h"
 
-#include "schframe.h"
-
 /* Routines Locales */
 static void ExitSheet( WinEDA_DrawPanel* Panel, wxDC* DC );
 static void DeplaceSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
@@ -343,9 +341,9 @@ void WinEDA_SheetPropertiesFrame::SheetPropertiesAccept( wxCommandEvent& event )
 
 /*************************************************************************/
 bool WinEDA_SchematicFrame::EditSheet( DrawSheetStruct* Sheet, wxDC* DC )
-{
 /*************************************************************************/
 /* Routine to edit the SheetName and the FileName for the sheet "Sheet" */
+{
     WinEDA_SheetPropertiesFrame* frame;
     bool edit = TRUE;
 
@@ -370,9 +368,9 @@ bool WinEDA_SchematicFrame::EditSheet( DrawSheetStruct* Sheet, wxDC* DC )
 #define SHEET_MIN_HEIGHT 150
 /****************************************************************/
 DrawSheetStruct* WinEDA_SchematicFrame::CreateSheet( wxDC* DC )
-{
 /****************************************************************/
 /* Routine de Creation d'une feuille de hierarchie (Sheet) */
+{
     g_ItemToRepeat = NULL;
 
     DrawSheetStruct* Sheet = new DrawSheetStruct( GetScreen()->m_Curseur );
@@ -400,8 +398,8 @@ DrawSheetStruct* WinEDA_SchematicFrame::CreateSheet( wxDC* DC )
 
 /*******************************************************************************/
 void WinEDA_SchematicFrame::ReSizeSheet( DrawSheetStruct* Sheet, wxDC* DC )
-{
 /*******************************************************************************/
+{
     DrawSheetLabelStruct* sheetlabel;
 
     if( Sheet == NULL )
@@ -443,8 +441,8 @@ void WinEDA_SchematicFrame::ReSizeSheet( DrawSheetStruct* Sheet, wxDC* DC )
 
 /*********************************************************************************/
 void WinEDA_SchematicFrame::StartMoveSheet( DrawSheetStruct* Sheet, wxDC* DC )
-{
 /*********************************************************************************/
+{
     if( (Sheet == NULL) || ( Sheet->Type() != DRAW_SHEET_STRUCT_TYPE) )
         return;
 

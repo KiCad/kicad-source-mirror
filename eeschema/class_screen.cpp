@@ -8,7 +8,6 @@
 #include "general.h"
 
 #include "protos.h"
-#include "schframe.h"
 
 
 /******************************************************************/
@@ -43,7 +42,7 @@ void SetStructFather( EDA_BaseStruct* Struct, BASE_SCREEN* Screen )
 
 
 /***************************************************************/
-void EDA_BaseStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
+void SCH_ITEM::Place( WinEDA_DrawFrame* frame, wxDC* DC )
 /***************************************************************/
 
 /* place the struct in EEDrawList.
@@ -113,12 +112,12 @@ void SCH_SCREEN::FreeDrawList()
 /* Routine to clear (free) EESchema drawing list of a screen.
  */
 {
-    EDA_BaseStruct* DrawStruct;
+    SCH_ITEM* DrawStruct;
 
     while( EEDrawList != NULL )
     {
         DrawStruct = EEDrawList;
-        EEDrawList = EEDrawList->Pnext;
+        EEDrawList = EEDrawList->Next();
         SAFE_DELETE( DrawStruct );
     }
 
@@ -127,7 +126,7 @@ void SCH_SCREEN::FreeDrawList()
 
 
 /**************************************************************/
-void SCH_SCREEN::RemoveFromDrawList( EDA_BaseStruct* DrawStruct )
+void SCH_SCREEN::RemoveFromDrawList( SCH_ITEM * DrawStruct )
 /**************************************************************/
 
 /* If found in EEDrawList, remove DrawStruct from EEDrawList.
@@ -135,34 +134,34 @@ void SCH_SCREEN::RemoveFromDrawList( EDA_BaseStruct* DrawStruct )
  */
 {
     if( DrawStruct == EEDrawList )
-        EEDrawList = EEDrawList->Pnext;
+        EEDrawList = EEDrawList->Next();
     else
     {
         EDA_BaseStruct* DrawList = EEDrawList;
-        while( DrawList && DrawList->Pnext )
+        while( DrawList && DrawList->Next() )
         {
             if( DrawList->Pnext == DrawStruct )
             {
                 DrawList->Pnext = DrawList->Pnext->Pnext;
                 break;
             }
-            DrawList = DrawList->Pnext;
+            DrawList = DrawList->Next();
         }
     }
 }
 
 
 /**************************************************************/
-bool SCH_SCREEN::CheckIfOnDrawList( EDA_BaseStruct* st )
+bool SCH_SCREEN::CheckIfOnDrawList( SCH_ITEM* st )
 /**************************************************************/
 {
-    EDA_BaseStruct* DrawList = EEDrawList;
+    SCH_ITEM * DrawList = EEDrawList;
 
     while( DrawList )
     {
         if( DrawList == st )
             return true;
-        DrawList = DrawList->Pnext;
+        DrawList = DrawList->Next();
     }
 
     return false;
@@ -170,7 +169,7 @@ bool SCH_SCREEN::CheckIfOnDrawList( EDA_BaseStruct* st )
 
 
 /**************************************************************/
-void SCH_SCREEN::AddToDrawList( EDA_BaseStruct* st )
+void SCH_SCREEN::AddToDrawList( SCH_ITEM* st )
 /**************************************************************/
 { //simple function to add to the head of the drawlist.
     st->Pnext  = EEDrawList;

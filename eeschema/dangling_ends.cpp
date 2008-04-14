@@ -12,8 +12,6 @@
 #include "netlist.h" /* Definitions generales liees au calcul de netliste */
 #include "protos.h"
 
-#include "schframe.h"
-
 
 enum End_Type {
     UNKNOWN = 0,
@@ -88,7 +86,7 @@ bool SegmentIntersect( int Sx1, int Sy1, int Sx2, int Sy2,
 
 
 /******************************************************************************/
-void WinEDA_SchematicFrame::TestDanglingEnds( EDA_BaseStruct* DrawList, wxDC* DC )
+void WinEDA_SchematicFrame::TestDanglingEnds( SCH_ITEM* DrawList, wxDC* DC )
 /******************************************************************************/
 
 /* Met a jour les membres m_Dangling des wires, bus, labels
@@ -107,7 +105,7 @@ void WinEDA_SchematicFrame::TestDanglingEnds( EDA_BaseStruct* DrawList, wxDC* DC
     ItemList = RebuildEndList( DrawList );
 
     // Controle des elements
-    for( DrawItem = DrawList; DrawItem != NULL; DrawItem = DrawItem->Pnext )
+    for( DrawItem = DrawList; DrawItem != NULL; DrawItem = DrawItem->Next() )
     {
         switch( DrawItem->Type() )
         {
@@ -123,14 +121,14 @@ void WinEDA_SchematicFrame::TestDanglingEnds( EDA_BaseStruct* DrawList, wxDC* DC
         case DRAW_SEGMENT_STRUCT_TYPE:
                 #undef STRUCT
                 #define STRUCT ( (EDA_DrawLineStruct*) DrawItem )
-            if( STRUCT->m_Layer == LAYER_WIRE )
+            if( STRUCT->GetLayer() == LAYER_WIRE )
             {
                 TestWireForDangling( STRUCT, this, DC );
                 break;
             }
-            if( STRUCT->m_Layer == LAYER_NOTES )
+            if( STRUCT->GetLayer() == LAYER_NOTES )
                 break;
-            if( STRUCT->m_Layer == LAYER_BUS )
+            if( STRUCT->GetLayer() == LAYER_BUS )
             {
                 STRUCT->m_StartIsDangling   =
                     STRUCT->m_EndIsDangling = FALSE;
@@ -145,14 +143,13 @@ void WinEDA_SchematicFrame::TestDanglingEnds( EDA_BaseStruct* DrawList, wxDC* DC
 }
 
 
-/********************************************************************/
-LibDrawPin* WinEDA_SchematicFrame::LocatePinEnd( EDA_BaseStruct* DrawList,
-                                                 const wxPoint&  pos )
-/********************************************************************/
+/************************************************************************************************/
+LibDrawPin* WinEDA_SchematicFrame::LocatePinEnd( SCH_ITEM* DrawList,  const wxPoint&  pos )
+/************************************************************************************************/
 
-/* Teste si le point de coordonn�es pos est sur l'extr�mit� d'une PIN
- *  retourne un pointeur sur la pin
- *  NULL sinon
+/** Teste if point pos is on a pin end
+ * @return un pointer on the pin or NULL
+ * @param DrawList = list of SCH_ITEMs
  */
 {
     SCH_COMPONENT* DrawLibItem;
@@ -337,11 +334,11 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
         case DRAW_SEGMENT_STRUCT_TYPE:
                 #undef STRUCT
                 #define STRUCT ( (EDA_DrawLineStruct*) DrawItem )
-            if( STRUCT->m_Layer == LAYER_NOTES )
+            if( STRUCT->GetLayer() == LAYER_NOTES )
                 break;
-            if( (STRUCT->m_Layer == LAYER_BUS) || (STRUCT->m_Layer == LAYER_WIRE) )
+            if( (STRUCT->GetLayer() == LAYER_BUS) || (STRUCT->GetLayer() == LAYER_WIRE) )
             {
-                item = new DanglingEndHandle( (STRUCT->m_Layer == LAYER_BUS) ?
+                item = new DanglingEndHandle( (STRUCT->GetLayer() == LAYER_BUS) ?
                                              BUS_START_END : WIRE_START_END );
 
                 item->m_Item = DrawItem;
@@ -351,7 +348,7 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
                 else
                     StartList = item;
                 lastitem = item;
-                item = new DanglingEndHandle( (STRUCT->m_Layer == LAYER_BUS) ?
+                item = new DanglingEndHandle( (STRUCT->GetLayer() == LAYER_BUS) ?
                                              BUS_END_END : WIRE_END_END );
 
                 item->m_Item      = DrawItem;

@@ -22,7 +22,6 @@
 #include "netlist.h"
 #include "protos.h"
 
-#include "schframe.h"
 #include "netlist_control.h"
 
 // ID for configuration:
@@ -451,7 +450,7 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
 
     Mask = wxT( "*" ) + FileExt + wxT( "*" );
     ChangeFileNameExt( FullFileName, FileExt );
-	FullFileName = FullFileName.AfterLast('/'); 
+	FullFileName = FullFileName.AfterLast('/');
     FullFileName = EDA_FileSelector( _( "Netlist files:" ),
                                      wxEmptyString, /* Defaut path */
                                      FullFileName,  /* Defaut filename */

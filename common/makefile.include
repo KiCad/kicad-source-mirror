@@ -9,6 +9,7 @@ OBJECTS= \
 		base_struct.o\
 		copy_to_clipboard.o\
 		basicframe.o\
+        class_drawpickedstruct.o\
 		common_plot_functions.o\
 		common_plotPS_functions.o\
 		common_plotHPGL_functions.o\

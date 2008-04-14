@@ -212,7 +212,7 @@ void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     bool dummy = FALSE;
 
     if( ( Entry = FindLibPart( m_ChipName.GetData(), wxEmptyString, FIND_ROOT ) ) == NULL )
-    {   /* composant non trouv�, on affiche un composant "dummy" */
+    {   /* composant non trouve, on affiche un composant "dummy" */
         dummy = TRUE;
         if( DummyCmp == NULL )
             CreateDummyCmp();
@@ -233,55 +233,60 @@ void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
        && !(m_Field[REFERENCE].m_Flags & IS_MOVED) )
     {
         if( Entry->m_UnitCount > 1 )
-            DrawTextField( panel, DC, &m_Field[REFERENCE], 1, DrawMode );
+        {
+            m_Field[REFERENCE].m_AddExtraText = true;
+            m_Field[REFERENCE].Draw( panel, DC, offset, DrawMode );
+        }
         else
-            DrawTextField( panel, DC, &m_Field[REFERENCE], 0, DrawMode );
+        {
+            m_Field[REFERENCE].m_AddExtraText = false;
+            m_Field[REFERENCE].Draw( panel, DC, offset, DrawMode );
+        }
     }
 
     for( ii = VALUE; ii < NUMBER_OF_FIELDS; ii++ )
     {
         if( m_Field[ii].m_Flags & IS_MOVED )
             continue;
-        DrawTextField( panel, DC, &m_Field[ii], 0, DrawMode );
+        m_Field[ii].Draw( panel, DC, offset, DrawMode );
     }
 }
 
 
 /***********************************************************/
-void DrawTextField( WinEDA_DrawPanel* panel, wxDC* DC,
-                    PartTextStruct* Field, int IsMulti, int DrawMode )
+void    PartTextStruct::Draw( WinEDA_DrawPanel* panel,
+                          wxDC*             DC,
+                          const wxPoint&    offset,
+                          int               DrawMode,
+                          int               Color)
 /***********************************************************/
 
 /* Routine de trace des textes type Field du composant.
  *  entree:
- *      IsMulti: flag Non Null si il y a plusieurs parts par boitier.
- *              n'est utile que pour le champ reference pour ajouter a celui ci
- *              l'identification de la part ( A, B ... )
  *      DrawMode: mode de trace
  */
 {
     int     orient, color;
-    wxPoint pos;    /* Position des textes */
-    SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) Field->m_Parent;
-    int     hjustify, vjustify;
-    int     LineWidth = MAX( Field->m_Width, g_DrawMinimunLineWidth );
 
-    if( Field->m_Attributs & TEXT_NO_VISIBLE )
+    wxPoint pos;    /* Position des textes */
+    SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) m_Parent;
+    int     hjustify, vjustify;
+    int     LineWidth = MAX( m_Width, g_DrawMinimunLineWidth );
+
+    if( m_Attributs & TEXT_NO_VISIBLE )
         return;
-    if( Field->IsVoid() )
+    if( IsVoid() )
         return;
 
     GRSetDrawMode( DC, DrawMode );
 
     /* Calcul de la position des textes, selon orientation du composant */
-    orient   = Field->m_Orient;
-    hjustify = Field->m_HJustify; vjustify = Field->m_VJustify;
-    pos.x    = Field->m_Pos.x - DrawLibItem->m_Pos.x;
-    pos.y    = Field->m_Pos.y - DrawLibItem->m_Pos.y;
+    orient   = m_Orient;
+    hjustify = m_HJustify; vjustify = m_VJustify;
+    pos    = m_Pos - DrawLibItem->m_Pos;
 
     pos    = DrawLibItem->GetScreenCoord( pos );
-    pos.x += DrawLibItem->m_Pos.x;
-    pos.y += DrawLibItem->m_Pos.y;
+    pos += DrawLibItem->m_Pos;
 
     /* Y a t-il rotation (pour l'orientation, la justification)*/
     if( DrawLibItem->m_Transform[0][1] )  // Rotation du composant de 90deg
@@ -306,27 +311,27 @@ void DrawTextField( WinEDA_DrawPanel* panel, wxDC* DC,
             vjustify = -vjustify;
     }
 
-    if( Field->m_FieldId == REFERENCE )
+    if( m_FieldId == REFERENCE )
         color = ReturnLayerColor( LAYER_REFERENCEPART );
-    else if( Field->m_FieldId == VALUE )
+    else if( m_FieldId == VALUE )
         color = ReturnLayerColor( LAYER_VALUEPART );
     else
         color = ReturnLayerColor( LAYER_FIELDS );
-    if( !IsMulti || (Field->m_FieldId != REFERENCE) )
+    if( !m_AddExtraText || (m_FieldId != REFERENCE) )
     {
-        DrawGraphicText( panel, DC, pos, color, Field->m_Text.GetData(),
+        DrawGraphicText( panel, DC, pos, color, m_Text.GetData(),
                          orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
-                         Field->m_Size,
+                         m_Size,
                          hjustify, vjustify, LineWidth );
     }
-    else    /* Le champ est la reference, et il y a plusieurs parts par boitier */
+    else // Si il y a plusieurs parts par boitier, ajouter a la reference l'identification de la selection ( A, B ... )
     {
             /* On ajoute alors A ou B ... a la reference */
-        wxString fulltext = Field->m_Text;
+        wxString fulltext = m_Text;
         fulltext.Append( 'A' - 1 + DrawLibItem->m_Multi );
         DrawGraphicText( panel, DC, pos, color, fulltext.GetData(),
                          orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
-                         Field->m_Size,
+                         m_Size,
                          hjustify, vjustify, LineWidth );
     }
 }

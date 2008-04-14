@@ -20,11 +20,10 @@
 #include "netlist.h"
 #include "worksheet.h"
 #include "trigo.h"
-#include "protos.h"
 #include "bitmaps.h"
 #include "eda_dde.h"
-#include "schframe.h"
 
+#include "protos.h"
 
 // Global variables
 wxString    g_Main_Title( wxT( "EESchema" ) );

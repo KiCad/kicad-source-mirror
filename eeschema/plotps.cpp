@@ -36,8 +36,6 @@
 #include "plot_common.h"
 #include "protos.h"
 
-#include "schframe.h"
-
 #include "wx/defs.h"
 
 // coeff de conversion dim en 1 mil -> dim en unite PS:
@@ -379,7 +377,7 @@ void WinEDA_PlotPSFrame::PlotOneSheetPS(const wxString & FileName,
 */
 {
 wxString Line;
-EDA_BaseStruct *DrawList;
+SCH_ITEM *DrawList;
 SCH_COMPONENT *DrawLibItem;
 int layer;
 wxPoint StartPos, EndPos;
@@ -424,7 +422,7 @@ wxPoint StartPos, EndPos;
                 #define STRUCT ((DrawBusEntryStruct*)DrawList)
                 StartPos = STRUCT->m_Pos;
                 EndPos = STRUCT->m_End();
-                layer = STRUCT->m_Layer;
+                layer = STRUCT->GetLayer();
             case DRAW_SEGMENT_STRUCT_TYPE :
                 #undef STRUCT
                 #define STRUCT ((EDA_DrawLineStruct*)DrawList)
@@ -432,7 +430,7 @@ wxPoint StartPos, EndPos;
                 {
                     StartPos = STRUCT->m_Start;
                     EndPos = STRUCT->m_End;
-                    layer = STRUCT->m_Layer;
+                    layer = STRUCT->GetLayer();
                 }
                 if ( g_PlotPSColorOpt )
                     SetColorMapPS ( ReturnLayerColor(layer) );
@@ -467,7 +465,7 @@ wxPoint StartPos, EndPos;
                 #undef STRUCT
                 #define STRUCT ((DrawJunctionStruct*)DrawList)
                 if ( g_PlotPSColorOpt )
-                    SetColorMapPS (ReturnLayerColor(STRUCT->m_Layer) );
+                    SetColorMapPS (ReturnLayerColor(STRUCT->GetLayer()) );
                 PlotCercle( STRUCT->m_Pos, DRAWJUNCTION_SIZE);
                 break;
 
@@ -507,7 +505,7 @@ wxPoint StartPos, EndPos;
         }
 
         Plume('U');
-        DrawList = DrawList->Pnext;
+        DrawList = DrawList->Next();
     }
 
     /* fin */

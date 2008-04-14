@@ -17,6 +17,8 @@
 
 #include "colors.h"
 
+class SCH_ITEM;
+
 /****************************************************/
 /* classe representant un ecran graphique de dessin */
 /****************************************************/
@@ -218,9 +220,9 @@ public:
     bool            m_FirstRedraw;
 
     /* Gestion des editions */
-    EDA_BaseStruct* EEDrawList;         /* Object list (main data) for schematic */
-    EDA_BaseStruct* m_UndoList;         /* Object list for the undo command (old data) */
-    EDA_BaseStruct* m_RedoList;         /* Object list for the redo command (old data) */
+    SCH_ITEM        * EEDrawList;         /* Object list (main data) for schematic */
+    EDA_BaseStruct  * m_UndoList;         /* Object list for the undo command (old data) */
+    EDA_BaseStruct  * m_RedoList;         /* Object list for the redo command (old data) */
     int             m_UndoRedoCountMax; /* undo/Redo command Max depth */
 
     /* block control */

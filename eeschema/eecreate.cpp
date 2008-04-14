@@ -12,11 +12,6 @@
 
 #include "protos.h"
 
-#include "schframe.h"
-
-#include "schframe.h"
-
-
 /* Routines Locales */
 static void Polyline_in_Ghost( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 static void Segment_in_Ghost( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
@@ -298,9 +293,9 @@ EDA_BaseStruct* WinEDA_SchematicFrame::CreateNewJunctionStruct( wxDC* DC )
 }
 
 
-/*************************************************************************/
-EDA_BaseStruct* WinEDA_SchematicFrame::CreateNewNoConnectStruct( wxDC* DC )
-/*************************************************************************/
+/*********************************************************************************/
+DrawNoConnectStruct * WinEDA_SchematicFrame::CreateNewNoConnectStruct( wxDC* DC )
+/*********************************************************************************/
 
 /*Routine to create new NoConnect struct. ( Symbole de Non Connexion)
  */

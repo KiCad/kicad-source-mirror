@@ -16,7 +16,7 @@
 
 /*******************************************************************/
 DrawBusEntryStruct::DrawBusEntryStruct( const wxPoint& pos, int shape, int id ) :
-    EDA_BaseStruct( DRAW_BUSENTRY_STRUCT_TYPE )
+    SCH_ITEM( NULL, DRAW_BUSENTRY_STRUCT_TYPE )
 /*******************************************************************/
 {
     m_Pos    = pos;
@@ -67,7 +67,7 @@ DrawBusEntryStruct* DrawBusEntryStruct::GenCopy()
 
 /************************************************************/
 DrawJunctionStruct::DrawJunctionStruct( const wxPoint& pos ) :
-    EDA_BaseStruct( DRAW_JUNCTION_STRUCT_TYPE )
+    SCH_ITEM( NULL, DRAW_JUNCTION_STRUCT_TYPE )
 /************************************************************/
 {
     m_Pos   = pos;
@@ -91,7 +91,7 @@ DrawJunctionStruct* DrawJunctionStruct::GenCopy()
 /*****************************/
 
 DrawNoConnectStruct::DrawNoConnectStruct( const wxPoint& pos ) :
-    EDA_BaseStruct( DRAW_NOCONNECT_STRUCT_TYPE )
+    SCH_ITEM( NULL, DRAW_NOCONNECT_STRUCT_TYPE )
 {
     m_Pos = pos;
 }
@@ -112,7 +112,7 @@ DrawNoConnectStruct* DrawNoConnectStruct::GenCopy()
 /**************************/
 
 DrawMarkerStruct::DrawMarkerStruct( const wxPoint& pos, const wxString& text ) :
-    EDA_BaseStruct( DRAW_MARKER_STRUCT_TYPE )
+    SCH_ITEM( NULL, DRAW_MARKER_STRUCT_TYPE )
 {
     m_Pos       = pos;              /* XY coordinates of marker. */
     m_Type      = MARQ_UNSPEC;
@@ -165,7 +165,7 @@ void DrawMarkerStruct::Show( int nestLevel, std::ostream& os )
 /***************************/
 
 EDA_DrawLineStruct::EDA_DrawLineStruct( const wxPoint& pos, int layer ) :
-    EDA_BaseStruct( NULL, DRAW_SEGMENT_STRUCT_TYPE )
+    SCH_ITEM( NULL, DRAW_SEGMENT_STRUCT_TYPE )
 {
     m_Start = pos;
     m_End   = pos;
@@ -294,7 +294,7 @@ EDA_Rect SCH_COMPONENT::GetBoundingBox()
 
 /***********************************************************/
 DrawPolylineStruct::DrawPolylineStruct( int layer ) :
-    EDA_BaseStruct( DRAW_POLYLINE_STRUCT_TYPE )
+    SCH_ITEM( NULL, DRAW_POLYLINE_STRUCT_TYPE )
 /***********************************************************/
 {
     m_NumOfPoints = 0;          /* Number of XY pairs in Points array. */

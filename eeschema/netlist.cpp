@@ -12,8 +12,6 @@
 #include "netlist.h" /* Definitions generales liees au calcul de netliste */
 #include "protos.h"
 
-#include "schframe.h"
-
 //#define NETLIST_DEBUG
 
 /* Routines locales */
@@ -471,15 +469,15 @@ static int ListeObjetConnection( WinEDA_SchematicFrame* frame, DrawSheetPath* sh
             #define STRUCT ( (EDA_DrawLineStruct*) DrawList )
             if( ObjNet )
             {
-                if( (STRUCT->m_Layer != LAYER_BUS)
-                   && (STRUCT->m_Layer != LAYER_WIRE) )
+                if( (STRUCT->GetLayer() != LAYER_BUS)
+                   && (STRUCT->GetLayer() != LAYER_WIRE) )
                     break;
 
                 ObjNet[NbrItem].m_Comp        = STRUCT;
                 ObjNet[NbrItem].m_Start       = STRUCT->m_Start;
                 ObjNet[NbrItem].m_End         = STRUCT->m_End;
 
-                if( STRUCT->m_Layer == LAYER_BUS )
+                if( STRUCT->GetLayer() == LAYER_BUS )
                 {
                     ObjNet[NbrItem].m_Type = NET_BUS;
                 }

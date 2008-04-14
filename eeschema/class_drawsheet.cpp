@@ -31,12 +31,11 @@
 #include "general.h"
 
 #include "protos.h"
-#include "schframe.h"
 
 
 /***********************************************************/
 DrawSheetStruct::DrawSheetStruct( const wxPoint& pos ) :
-    EDA_BaseStruct( DRAW_SHEET_STRUCT_TYPE )
+    SCH_ITEM( NULL, DRAW_SHEET_STRUCT_TYPE )
 /***********************************************************/
 {
     m_Label   = NULL;
@@ -252,7 +251,7 @@ void DrawSheetStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
         }
     }
 
-    EDA_BaseStruct::Place( frame, DC ); //puts it on the EEDrawList.
+    SCH_ITEM::Place( frame, DC ); //puts it on the EEDrawList.
 }
 
 
@@ -674,12 +673,11 @@ bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame * aFrame, const wxSt
 /*******************************************************************/
 DrawSheetLabelStruct::DrawSheetLabelStruct( DrawSheetStruct* parent,
                                             const wxPoint& pos, const wxString& text ) :
-    EDA_BaseStruct( DRAW_SHEETLABEL_STRUCT_TYPE )
+    SCH_ITEM( NULL, DRAW_SHEETLABEL_STRUCT_TYPE )
     , EDA_TextStruct( text )
 /*******************************************************************/
 {
     m_Layer      = LAYER_SHEETLABEL;
-    m_Parent     = parent;
     m_Pos        = pos;
     m_Edge       = 0;
     m_Shape      = NET_INPUT;

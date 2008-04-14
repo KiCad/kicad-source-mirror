@@ -13,8 +13,6 @@
 #include "protos.h"
 #include "hotkeys.h"
 
-#include "schframe.h"
-
 #define BITMAP wxBitmap
 
 #include "bitmaps.h" /* general bitmaps */
@@ -198,7 +196,7 @@ void WinEDA_SchematicFrame::ReCreateVToolbar()
                          BITMAP( add_glabel_xpm ),
                          _( "Place the global label.\nWarning: all global labels with the same name are connected in whole hierarchy" ),
 						 wxITEM_CHECK );
-	
+
     m_VToolBar->AddTool( ID_JUNCTION_BUTT, wxEmptyString,
                          BITMAP( add_junction_xpm ),
                          _( "Place the junction" ), wxITEM_CHECK );

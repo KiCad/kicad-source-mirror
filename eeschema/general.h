@@ -122,13 +122,13 @@ eda_global int g_NetFormat;			/* Numero de reference du type de netliste */
 eda_global int g_OptNetListUseNames;	/* TRUE pour utiliser les noms de net plutot que
 								les numeros (netlist PSPICE seulement) */
 eda_global int g_BGColor;			/* couleur fond d'ecran (normalement blanc) */
-eda_global EDA_BaseStruct * g_ItemToRepeat; /* pointeur sur la derniere structure
+eda_global SCH_ITEM * g_ItemToRepeat; /* pointeur sur la derniere structure
 								dessinee pouvant etre dupliquee par la commande
 								Repeat ( NULL si aucune struct existe ) */
 eda_global wxSize g_RepeatStep;
 eda_global int g_RepeatDeltaLabel;
 
-eda_global EDA_BaseStruct * g_ItemToUndoCopy; /* copy of last modified schematic item
+eda_global SCH_ITEM * g_ItemToUndoCopy; /* copy of last modified schematic item
 		before it is modified (used for undo managing to restore old values ) */
 
 eda_global bool g_LastSearchIsMarker;	// True if last seach is a marker serach
@@ -136,7 +136,7 @@ eda_global bool g_LastSearchIsMarker;	// True if last seach is a marker serach
 										// Used for hotkey next search
 
 /* Block operation (copy, paste) */
-eda_global EDA_BaseStruct * g_BlockSaveDataList; // List of items to paste (Created by Block Save)
+eda_global SCH_ITEM * g_BlockSaveDataList; // List of items to paste (Created by Block Save)
 
 // Gestion d'options
 eda_global int g_ShowAllPins;
@@ -224,7 +224,7 @@ eda_global HPGL_Pen_Descr_Struct g_HPGL_Pen_Descr;
 
 /* Ecrans usuels */
 //eda_global SCH_SCREEN * ScreenSch;
-eda_global DrawSheetStruct* g_RootSheet; 
+eda_global DrawSheetStruct* g_RootSheet;
 eda_global SCH_SCREEN * ScreenLib;
 
 	/*************************************/

@@ -6,6 +6,7 @@ set(COMMON_SRCS
     basicframe.cpp
     bitmaps.cpp
     block_commande.cpp
+    class_drawpickedstruct.cpp
     common.cpp
     common_plot_functions.cpp
     common_plotHPGL_functions.cpp

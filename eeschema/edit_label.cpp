@@ -13,8 +13,6 @@
 
 #include "protos.h"
 
-#include "schframe.h"
-
 /* Fonctions locales */
 static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 static void ExitMoveTexte( WinEDA_DrawPanel* panel, wxDC* DC );
@@ -116,7 +114,7 @@ void WinEDA_SchematicFrame::StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC )
 
 /*************************************************************************/
 void WinEDA_SchematicFrame::EditSchematicText( SCH_TEXT* TextStruct,
-                                               wxDC*           DC )
+                                               wxDC*     DC )
 /*************************************************************************/
 
 /* Edit the properties of the text (Label, Global label, graphic text).. )
@@ -130,8 +128,8 @@ void WinEDA_SchematicFrame::EditSchematicText( SCH_TEXT* TextStruct,
     RedrawOneStruct( DrawPanel, DC, TextStruct, g_XorMode );
 
     WinEDA_LabelPropertiesFrame* frame = new WinEDA_LabelPropertiesFrame( this,
-                                                                         TextStruct,
-                                                                         wxPoint( 30, 30 ) );
+        TextStruct,
+        wxPoint( 30, 30 ) );
     frame->ShowModal(); frame->Destroy();
 
     RedrawOneStruct( DrawPanel, DC, TextStruct, GR_DEFAULT_DRAWMODE );
@@ -145,7 +143,7 @@ void WinEDA_SchematicFrame::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
 {
     if( TextStruct == NULL )
         TextStruct = (SCH_TEXT*) PickStruct( GetScreen()->m_Curseur,
-                                                   GetScreen(), TEXTITEM | LABELITEM );
+            GetScreen(), TEXTITEM | LABELITEM );
     if( TextStruct == NULL )
         return;
 
@@ -202,13 +200,13 @@ EDA_BaseStruct* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
         break;
 
     case LAYER_HIERLABEL:
-        NewText = new SCH_HIERLABEL(GetScreen()->m_Curseur );
+        NewText = new SCH_HIERLABEL( GetScreen()->m_Curseur );
         NewText->m_Shape  = s_DefaultShapeGLabel;
         NewText->m_Orient = s_DefaultOrientGLabel;
         break;
 
     case LAYER_GLOBLABEL:
-        NewText = new SCH_GLOBALLABEL(GetScreen()->m_Curseur );
+        NewText = new SCH_GLOBALLABEL( GetScreen()->m_Curseur );
         NewText->m_Shape  = s_DefaultShapeGLabel;
         NewText->m_Orient = s_DefaultOrientGLabel;
         break;
@@ -230,7 +228,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
         return NULL;
     }
 
-    if( type == LAYER_GLOBLABEL  || type == LAYER_HIERLABEL)
+    if( type == LAYER_GLOBLABEL  || type == LAYER_HIERLABEL )
     {
         s_DefaultShapeGLabel  = NewText->m_Shape;
         s_DefaultOrientGLabel = NewText->m_Orient;
@@ -251,7 +249,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
 /************************************/
 static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
-    EDA_BaseStruct* TextStruct = panel->GetScreen()->GetCurItem();
+    SCH_ITEM* TextStruct = (SCH_ITEM*) panel->GetScreen()->GetCurItem();
 
     /* "Undraw" the current text at its old position*/
     if( erase )
@@ -280,8 +278,8 @@ static void ExitMoveTexte( WinEDA_DrawPanel* Panel, wxDC* DC )
 /*************************************************************/
 /* Abort function for the command move text */
 {
-    SCH_SCREEN*     screen = (SCH_SCREEN*) Panel->m_Parent->GetScreen();
-    EDA_BaseStruct* Struct = screen->GetCurItem();
+    SCH_SCREEN* screen = (SCH_SCREEN*) Panel->m_Parent->GetScreen();
+    SCH_ITEM*   Struct = (SCH_ITEM*) screen->GetCurItem();
 
     g_ItemToRepeat = NULL;
     Panel->ManageCurseur = NULL;
@@ -348,11 +346,13 @@ void WinEDA_SchematicFrame::ConvertTextType( SCH_TEXT* Text,
         break;
 
     case TYPE_SCH_GLOBALLABEL:
-        newtext = new SCH_GLOBALLABEL(Text->m_Pos, Text->m_Text );
+        newtext = new SCH_GLOBALLABEL( Text->m_Pos, Text->m_Text );
         break;
+
     case TYPE_SCH_HIERLABEL:
-        newtext = new SCH_HIERLABEL(Text->m_Pos, Text->m_Text );
+        newtext = new SCH_HIERLABEL( Text->m_Pos, Text->m_Text );
         break;
+
     case TYPE_SCH_TEXT:
         newtext = new SCH_TEXT( Text->m_Pos, Text->m_Text );
         break;

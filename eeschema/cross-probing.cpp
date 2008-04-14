@@ -15,8 +15,6 @@
 
 #include "protos.h"
 
-#include "schframe.h"
-
 
 /***************************************************************/
 void RemoteCommand( const char* cmdline )

@@ -17,8 +17,6 @@
 
 #include "protos.h"
 
-#include "schframe.h"
-
 /* How to add a new hotkey:
  *  add a new id in the enum hotkey_id_commnand like MY_NEW_ID_FUNCTION (see hotkeys.h).
  *  add a new Ki_HotkeyInfo entry like:
@@ -260,7 +258,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
                 if( DrawStruct->Type() == DRAW_SEGMENT_STRUCT_TYPE )
                 {
                     EDA_DrawLineStruct* segment = (EDA_DrawLineStruct*) DrawStruct;
-                    if( segment->m_Layer != LAYER_WIRE )
+                    if( segment->GetLayer() != LAYER_WIRE )
                         break;
                 }
                 else
@@ -292,7 +290,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         case TYPE_SCH_COMPONENT:
             if( DrawStruct->m_Flags == 0 )
             {
-                SaveCopyInUndoList( DrawStruct, IS_CHANGED );
+                SaveCopyInUndoList( (SCH_ITEM*) DrawStruct, IS_CHANGED );
                 RefreshToolBar = TRUE;
             }
 
@@ -306,7 +304,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         case TYPE_SCH_HIERLABEL:
             if( DrawStruct->m_Flags == 0 )
             {
-                SaveCopyInUndoList( DrawStruct, IS_CHANGED );
+                SaveCopyInUndoList( (SCH_ITEM*) DrawStruct, IS_CHANGED );
                 RefreshToolBar = TRUE;
             }
             ChangeTextOrient( (SCH_TEXT*) DrawStruct, DC );
@@ -325,11 +323,10 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         {
             if( DrawStruct->m_Flags == 0 )
             {
-                SaveCopyInUndoList( DrawStruct, IS_CHANGED );
+                SaveCopyInUndoList( (SCH_ITEM*) DrawStruct, IS_CHANGED );
                 RefreshToolBar = TRUE;
             }
-            CmpRotationMiroir(
-                (SCH_COMPONENT*) DrawStruct, DC, CMP_MIROIR_Y );
+            CmpRotationMiroir( (SCH_COMPONENT*) DrawStruct, DC, CMP_MIROIR_Y );
         }
         break;
 
@@ -340,7 +337,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         {
             if( DrawStruct->m_Flags == 0 )
             {
-                SaveCopyInUndoList( DrawStruct, IS_CHANGED );
+                SaveCopyInUndoList( (SCH_ITEM*)  DrawStruct, IS_CHANGED );
                 RefreshToolBar = TRUE;
             }
             CmpRotationMiroir(
@@ -355,12 +352,11 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         {
             if( DrawStruct->m_Flags == 0 )
             {
-                SaveCopyInUndoList( DrawStruct, IS_CHANGED );
+                SaveCopyInUndoList( (SCH_ITEM*) DrawStruct, IS_CHANGED );
                 RefreshToolBar = TRUE;
             }
-            CmpRotationMiroir(
-                (SCH_COMPONENT*) DrawStruct, DC, CMP_NORMAL );
-            TestDanglingEnds( (SCH_SCREEN*)GetScreen()->EEDrawList, DC );
+            CmpRotationMiroir( (SCH_COMPONENT*) DrawStruct, DC, CMP_NORMAL );
+            TestDanglingEnds( GetScreen()->EEDrawList, DC );
         }
         break;
 

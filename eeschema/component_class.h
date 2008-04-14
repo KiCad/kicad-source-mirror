@@ -37,14 +37,14 @@ enum  NumFieldType {
  *  component fields are texts attached to the component (not the graphic texts)
  *  There are 2 major fields : Reference and Value
  */
-class PartTextStruct :  public EDA_BaseStruct,
+class PartTextStruct :  public SCH_ITEM,
     public EDA_TextStruct
 {
 public:
-    int      m_Layer;
-    int      m_FieldId;
+    int      m_FieldId; // Field indicator type (REFERENCE, VALUE or other id)
     wxString m_Name;    /* Field name (ref, value,pcb, sheet, filed 1..
                          *  and for fields 1 to 8 the name is editable */
+    bool m_AddExtraText;    // Mainly for REFERENCE, add extar info (for REFERENCE: add part selection text
 
 public:
     PartTextStruct( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString );
@@ -62,6 +62,14 @@ public:
     EDA_Rect    GetBoundaryBox() const;
     bool        IsVoid();
     void        SwapData( PartTextStruct* copyitem );
+    /**
+     * Function Draw
+    */
+    void    Draw( WinEDA_DrawPanel* panel,
+                          wxDC*             DC,
+                          const wxPoint&    offset,
+                          int               draw_mode,
+                          int               Color = -1 );
 };
 
 
@@ -92,7 +100,6 @@ public:
 private:
     wxArrayString     m_Paths;                      // /sheet1/C102, /sh2/sh1/U32 etc.
     wxArrayString     m_References;                 // C102, U32 etc.
-    wxArrayString     m_PartPerPackageSelections;   // "1", "2" etc. when a component has more than 1 partper package
 
 public:
     SCH_COMPONENT( const wxPoint& pos = wxPoint( 0, 0 ) );
@@ -136,6 +143,7 @@ public:
                                   const wxPoint&    offset,
                                   int               draw_mode,
                                   int               Color = -1 );
+
     void                    SwapData( SCH_COMPONENT* copyitem );
 
     virtual void            Place( WinEDA_DrawFrame* frame, wxDC* DC );
@@ -145,7 +153,6 @@ public:
     wxString                GetPath( DrawSheetPath* sheet );
     const wxString          GetRef( DrawSheetPath* sheet );
     void                    SetRef( DrawSheetPath* sheet, const wxString & ref );
-    void                    ClearRefs();
     void                    AddHierarchicalReference(const wxString & path, const wxString & ref);
     int                     GetUnitSelection( DrawSheetPath* aSheet );
     void                    SetUnitSelection( DrawSheetPath* aSheet, int aUnitSelection );

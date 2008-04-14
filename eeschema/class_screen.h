@@ -35,13 +35,13 @@ public:
     void            FreeDrawList(); // Free EESchema drawing list (does not delete the sub hierarchies)
 
     void Place( WinEDA_DrawFrame* frame, wxDC* DC ) { };
-    void            RemoveFromDrawList( EDA_BaseStruct* DrawStruct ); /* remove DrawStruct from EEDrawList. */
-    bool            CheckIfOnDrawList( EDA_BaseStruct* st );
-    void            AddToDrawList( EDA_BaseStruct* DrawStruct );
+    void            RemoveFromDrawList( SCH_ITEM* DrawStruct ); /* remove DrawStruct from EEDrawList. */
+    bool            CheckIfOnDrawList( SCH_ITEM* st );
+    void            AddToDrawList( SCH_ITEM* DrawStruct );
     void            ClearUndoORRedoList( EDA_BaseStruct* List );
 
     bool            SchematicCleanUp( wxDC* DC = NULL );
-    EDA_BaseStruct* ExtractWires( bool CreateCopy );
+    SCH_ITEM*       ExtractWires( bool CreateCopy );
 
     /* full undo redo management : */
     virtual void    ClearUndoRedoList();

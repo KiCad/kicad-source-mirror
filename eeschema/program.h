@@ -9,8 +9,10 @@
 #define eda_global extern
 #endif
 
+#include "wxEeschemaStruct.h"
 #include "macros.h"
 #include "base_struct.h"
+#include "sch_item_struct.h"
 
 #include "component_class.h"
 #include "class_screen.h"
@@ -63,10 +65,9 @@ class DrawSheetStruct;
  * is a segment decription base class to describe items which have 2 end
  * points (track, wire, draw line ...)
  */
-class EDA_DrawLineStruct : public EDA_BaseStruct
+class EDA_DrawLineStruct : public SCH_ITEM
 {
 public:
-    int     m_Layer;            // Layer number
     int     m_Width;            // 0 = line, > 0 = tracks, bus ...
     wxPoint m_Start;            // Line start point
     wxPoint m_End;              // Line end point
@@ -110,7 +111,7 @@ public:
 };
 
 
-class DrawMarkerStruct    : public EDA_BaseStruct   /* marqueurs */
+class DrawMarkerStruct    : public SCH_ITEM   /* marqueurs */
 {
 public:
     wxPoint    m_Pos;               /* XY coordinates of marker. */
@@ -144,7 +145,7 @@ public:
 };
 
 
-class DrawNoConnectStruct : public EDA_BaseStruct    /* Symboles de non connexion */
+class DrawNoConnectStruct : public SCH_ITEM    /* Symboles de non connexion */
 {
 public:
     wxPoint m_Pos;                      /* XY coordinates of NoConnect. */
@@ -169,10 +170,9 @@ public:
  * Class DrawBusEntryStruct
  * Struct de descr 1 raccord a 45 degres de BUS ou WIRE
  */
-class DrawBusEntryStruct  : public EDA_BaseStruct
+class DrawBusEntryStruct  : public SCH_ITEM
 {
 public:
-    int     m_Layer;
     int     m_Width;
     wxPoint m_Pos;
     wxSize  m_Size;
@@ -194,10 +194,9 @@ public:
     EDA_Rect            GetBoundingBox();
 };
 
-class DrawPolylineStruct  : public EDA_BaseStruct /* Polyligne (serie de segments) */
+class DrawPolylineStruct  : public SCH_ITEM /* Polyligne (serie de segments) */
 {
 public:
-    int  m_Layer;
     int  m_Width;
     int  m_NumOfPoints;             /* Number of XY pairs in Points array. */
     int* m_Points;                  /* XY pairs that forms the polyline. */
@@ -217,10 +216,9 @@ public:
                               int draw_mode, int Color = -1 );
 };
 
-class DrawJunctionStruct  : public EDA_BaseStruct
+class DrawJunctionStruct  : public SCH_ITEM
 {
 public:
-    int     m_Layer;
     wxPoint m_Pos;                  /* XY coordinates of connection. */
 
 public:

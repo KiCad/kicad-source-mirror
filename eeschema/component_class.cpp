@@ -15,7 +15,6 @@
 #include "protos.h"
 
 #include "macros.h"
-#include "schframe.h"
 
 #include <wx/arrimpl.cpp>
 
@@ -152,13 +151,11 @@ void SCH_COMPONENT::SetRef( DrawSheetPath* sheet, const wxString& ref )
     }
 
     if( notInArray )
-    {
-        m_References.Add( ref );
-        m_Paths.Add( path );
-    }
+        AddHierarchicalReference(path, ref);
+
     if( m_Field[REFERENCE].m_Text.IsEmpty()
        || ( abs( m_Field[REFERENCE].m_Pos.x - m_Pos.x ) +
-            abs( m_Field[REFERENCE].m_Pos.y - m_Pos.y ) > 1000) )
+            abs( m_Field[REFERENCE].m_Pos.y - m_Pos.y ) > 10000) )
     {
         //move it to a reasonable position..
         m_Field[REFERENCE].m_Pos    = m_Pos;
@@ -169,17 +166,9 @@ void SCH_COMPONENT::SetRef( DrawSheetPath* sheet, const wxString& ref )
 }
 
 
-/**************************************/
-void SCH_COMPONENT::ClearRefs()
-/**************************************/
-{
-    m_Paths.Empty();
-    m_References.Empty();
-    m_PartPerPackageSelections.Empty();
-}
-
-
+/******************************************************************/
 const wxString& SCH_COMPONENT::GetFieldValue( int aFieldNdx ) const
+/******************************************************************/
 {
     // avoid unnecessarily copying wxStrings.
     static const wxString myEmpty = wxEmptyString;
@@ -216,13 +205,13 @@ SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos ) :
     for( ii = 0; ii < NUMBER_OF_FIELDS; ii++ )
     {
         m_Field[ii].m_Pos     = m_Pos;
-        m_Field[ii].m_Layer   = LAYER_FIELDS;
+        m_Field[ii].SetLayer(LAYER_FIELDS);
         m_Field[ii].m_FieldId = REFERENCE + ii;
         m_Field[ii].m_Parent  = this;
     }
 
-    m_Field[VALUE].m_Layer     = LAYER_VALUEPART;
-    m_Field[REFERENCE].m_Layer = LAYER_REFERENCEPART;
+    m_Field[VALUE].SetLayer(LAYER_VALUEPART);
+    m_Field[REFERENCE].SetLayer(LAYER_REFERENCEPART);
 
     m_PrefixString = wxString( _( "U" ) );
 }
@@ -347,7 +336,7 @@ void SCH_COMPONENT::Place( WinEDA_DrawFrame* frame, wxDC* DC )
         SAFE_DELETE( g_ItemToUndoCopy );
     }
 
-    EDA_BaseStruct::Place( frame, DC );
+    SCH_ITEM::Place( frame, DC );
 }
 
 
@@ -378,11 +367,6 @@ void SCH_COMPONENT::ClearAnnotation()
     if( !Entry || !Entry->m_UnitSelectionLocked )
     {
         m_Multi = 1;
-        m_PartPerPackageSelections.Empty();
-        for( i = 0; i< m_Paths.GetCount(); i++ )
-        {
-            m_PartPerPackageSelections.Add( wxT( "1" ) );
-        }
     }
 }
 
@@ -686,12 +670,13 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os )
 
 /***************************************************************************/
 PartTextStruct::PartTextStruct( const wxPoint& pos, const wxString& text ) :
-    EDA_BaseStruct( DRAW_PART_TEXT_STRUCT_TYPE ),
+    SCH_ITEM( NULL, DRAW_PART_TEXT_STRUCT_TYPE ),
     EDA_TextStruct( text )
 /***************************************************************************/
 {
     m_Pos     = pos;
     m_FieldId = 0;
+    m_AddExtraText = false;
 }
 
 

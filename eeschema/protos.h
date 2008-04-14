@@ -10,10 +10,6 @@ LibEDA_BaseStruct * LocatePin(const wxPoint & RefPos,
 
 const wxString& ReturnDefaultFieldName( int aFieldNdx );
 
-/***************/
-/* FILE_IO.CPP */
-/***************/
-
 
 /****************/
 /* DATABASE.CPP */
@@ -67,7 +63,7 @@ bool MapAngles(int *Angle1, int *Angle2, int TransMat[2][2]);
 
 
     /**************/
-    /* EELIBS1.CPP */
+    /* EELIBS_DRAW_COMPONENTS.CPP */
     /**************/
 EDA_LibComponentStruct * Read_Component_Definition(WinEDA_DrawFrame * frame, char * Line,
         FILE *f, int *LineNum);
@@ -87,15 +83,6 @@ void SnapLibItemPoint(int OrigX, int OrigY, int *ClosestX, int *ClosestY,
                          SCH_COMPONENT *DrawLibItem);
 bool LibItemInBox(int x1, int y1, int x2, int y2,
                     SCH_COMPONENT *DrawLibItem);
-void DrawTextField(WinEDA_DrawPanel * panel, wxDC * DC, PartTextStruct * Field, int IsMulti, int DrawMode);
-            /* Routine de trace des textes type Field du composant.
-                   entree:
-                  Field: champ
-                  IsMulti: flag Non Null si il y a plusieurs parts par boitier.
-                          n'est utile que pour le champ reference pour ajouter a celui ci
-                          l'identification de la part ( A, B ... )
-                  DrawMode: mode de trace */
-
 char * StrPurge(char * text);
                 /* Supprime les caracteres Space en debut de la ligne text
                    retourne un pointeur sur le 1er caractere non Space de text */
@@ -103,15 +90,15 @@ char * StrPurge(char * text);
     /************/
     /* BLOCK.CPP */
     /************/
-EDA_BaseStruct * DuplicateStruct(EDA_BaseStruct *DrawStruct);
-void MoveOneStruct(EDA_BaseStruct *DrawStructs, const wxPoint & move_vector);
-                        /* Given a structure move it by move_vector.x, move_vector.y. */
+SCH_ITEM * DuplicateStruct(SCH_ITEM *DrawStruct);
+void MoveOneStruct(SCH_ITEM *DrawStructs, const wxPoint & move_vector);
+                        /* Given a structure move it by move_vector. */
 
-bool PlaceStruct(BASE_SCREEN * screen, EDA_BaseStruct *DrawStruct);
-bool MoveStruct(WinEDA_DrawPanel * panel, wxDC * DC, EDA_BaseStruct *DrawStruct);
-void DeleteStruct(WinEDA_DrawPanel * panel, wxDC * DC, EDA_BaseStruct *DrawStruct);
+bool PlaceStruct(BASE_SCREEN * screen, SCH_ITEM *DrawStruct);
+bool MoveStruct(WinEDA_DrawPanel * panel, wxDC * DC, SCH_ITEM *DrawStruct);
+void DeleteStruct(WinEDA_DrawPanel * panel, wxDC * DC, SCH_ITEM *DrawStruct);
 bool DrawStructInBox(int x1, int y1, int x2, int y2,
-                        EDA_BaseStruct *DrawStruct);
+                        SCH_ITEM *DrawStruct);
 
     /*************/
     /* LOCATE.CPP */
@@ -122,12 +109,10 @@ LibDrawPin* LocatePinByNumber( const wxString & ePin_Number,
 SCH_COMPONENT * LocateSmallestComponent( SCH_SCREEN * Screen );
 /* Recherche du plus petit (en surface) composant pointe par la souris */
 
-EDA_BaseStruct * PickStruct(EDA_Rect & block,
-        BASE_SCREEN* screen, int SearchMask );
-EDA_BaseStruct * PickStruct(const wxPoint & refpos,
-        BASE_SCREEN* screen, int SearchMask);
-/* 2 functions EDA_BaseStruct * PickStruct:
-    Search in  block, or Serach at location pos
+SCH_ITEM * PickStruct(EDA_Rect & block, BASE_SCREEN* screen, int SearchMask );
+SCH_ITEM * PickStruct(const wxPoint & refpos, BASE_SCREEN* screen, int SearchMask);
+/* 2 functions PickStruct:
+    Search in  block, or Search at location pos
 
     SearchMask = (bitwise OR):
     LIBITEM
@@ -167,11 +152,11 @@ LibEDA_BaseStruct * LocateDrawItem(SCH_SCREEN * Screen, const wxPoint & refpoint
         EDA_LibComponentStruct * LibEntry, int Unit, int Convert, int masque);
 
 DrawSheetLabelStruct * LocateSheetLabel(DrawSheetStruct *Sheet, const wxPoint & pos);
-LibDrawPin * LocateAnyPin(EDA_BaseStruct *DrawList, const wxPoint & RefPos,
+LibDrawPin * LocateAnyPin(SCH_ITEM *DrawList, const wxPoint & RefPos,
         SCH_COMPONENT ** libpart = NULL );
 
 DrawSheetLabelStruct * LocateAnyPinSheet(const wxPoint & RefPos,
-                    EDA_BaseStruct *DrawList);
+                    SCH_ITEM *DrawList);
 
 int distance(int dx, int dy, int spot_cX, int spot_cY, int seuil);
     /* Calcul de la distance du point spot_cx,spot_cy a un segment de droite,
@@ -198,12 +183,12 @@ void Draw_Marqueur(WinEDA_DrawPanel * panel, wxDC * DC,
             wxPoint pos, char* pt_bitmap, int DrawMode, int Color);
 
 void DrawStructsInGhost(WinEDA_DrawPanel * panel, wxDC * DC,
-                                    EDA_BaseStruct * DrawStruct, int dx, int dy );
-void SetHighLightStruct(EDA_BaseStruct *HighLight);
+                                    SCH_ITEM * DrawStruct, int dx, int dy );
+void SetHighLightStruct(SCH_ITEM *HighLight);
 void RedrawActiveWindow(WinEDA_DrawPanel * panel, wxDC * DC);
-void RedrawStructList(WinEDA_DrawPanel * panel, wxDC * DC, EDA_BaseStruct *Structs, int DrawMode,
+void RedrawStructList(WinEDA_DrawPanel * panel, wxDC * DC, SCH_ITEM *Structs, int DrawMode,
                                     int Color = -1);
-void RedrawOneStruct(WinEDA_DrawPanel * panel, wxDC * DC, EDA_BaseStruct *Struct, int DrawMode,
+void RedrawOneStruct(WinEDA_DrawPanel * panel, wxDC * DC, SCH_ITEM *Struct, int DrawMode,
                                     int Color = -1);
 
 /**************/
@@ -217,12 +202,6 @@ void DisplayColorSetupFrame(WinEDA_DrawFrame * parent, const wxPoint & pos);
 /* EELOAD.CPP */
 /*************/
 int CountCmpNumber();
-
-
-/***************/
-/* EESTRING.CPP */
-/***************/
-
 
 /***************/
 /* EECONFIG.CPP */
@@ -335,7 +314,7 @@ bool ClearProjectDrawList(SCH_SCREEN * FirstWindow, bool confirm_deletion);
 /*************/
 
 bool LocateAndDeleteItem(WinEDA_SchematicFrame * frame, wxDC * DC);
-void EraseStruct(EDA_BaseStruct *DrawStruct, SCH_SCREEN * Window);
+void EraseStruct(SCH_ITEM *DrawStruct, SCH_SCREEN * Window);
 void DeleteAllMarkers(int type);
                         /* Effacement des marqueurs du type "type" */
 

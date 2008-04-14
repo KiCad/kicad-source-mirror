@@ -18,8 +18,6 @@
 #include "id.h"
 #include "hotkeys.h"
 
-#include "schframe.h"
-
 
 /************************************************/
 void WinEDA_SchematicFrame::ReCreateMenuBar()

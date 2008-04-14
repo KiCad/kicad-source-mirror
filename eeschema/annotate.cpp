@@ -9,8 +9,6 @@
 #include "netlist.h"
 #include "protos.h"
 
-#include "schframe.h"
-
 /* Local Functions*/
 static int  ListeComposants( CmpListStruct* BaseListeCmp,
                              DrawSheetPath* sheet );

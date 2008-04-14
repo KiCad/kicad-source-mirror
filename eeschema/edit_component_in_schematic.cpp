@@ -14,8 +14,6 @@
 
 #include "protos.h"
 
-#include "schframe.h"
-
 
 /* Fonctions exportees */
 
@@ -557,7 +555,8 @@ void WinEDA_SchematicFrame::EditCmpFieldText( PartTextStruct* Field, wxDC* DC )
     DrawPanel->MouseToCursorSchema();
     DrawPanel->m_IgnoreMouseEvents = FALSE;
 
-    DrawTextField( DrawPanel, DC, Field, flag, g_XorMode );
+    Field->m_AddExtraText = flag;
+    Field->Draw( DrawPanel, DC, wxPoint(0,0), g_XorMode );
 
     if( !newtext.IsEmpty() )
     {
@@ -587,7 +586,7 @@ void WinEDA_SchematicFrame::EditCmpFieldText( PartTextStruct* Field, wxDC* DC )
         }
     }
 
-    DrawTextField( DrawPanel, DC, Field, flag, g_XorMode );
+    Field->Draw( DrawPanel, DC, wxPoint(0,0), g_XorMode );
     Cmp->Display_Infos( this );
     GetScreen()->SetModify();
 }
@@ -612,8 +611,11 @@ static void MoveCmpField( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     FieldNumber = CurrentField->m_FieldId;
 
     /* Effacement: */
+    CurrentField->m_AddExtraText = Multiflag;
     if( erase )
-        DrawTextField( panel, DC, CurrentField, Multiflag, g_XorMode );
+    {
+        CurrentField->Draw( panel, DC, wxPoint(0,0), g_XorMode );
+    }
 
     pos = ( (SCH_COMPONENT*) CurrentField->m_Parent )->m_Pos;
 
@@ -624,7 +626,7 @@ static void MoveCmpField( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     CurrentField->m_Pos.x = pos.x + Cmp->m_Transform[0][0] * x1 + Cmp->m_Transform[1][0] * y1;
     CurrentField->m_Pos.y = pos.y + Cmp->m_Transform[0][1] * x1 + Cmp->m_Transform[1][1] * y1;
 
-    DrawTextField( panel, DC, CurrentField, Multiflag, g_XorMode );
+    CurrentField->Draw( panel, DC, wxPoint(0,0), g_XorMode );
 }
 
 
@@ -636,10 +638,11 @@ static void AbortMoveCmpField( WinEDA_DrawPanel* Panel, wxDC* DC )
     Panel->ManageCurseur = NULL;
     if( CurrentField )
     {
-        DrawTextField( Panel, DC, CurrentField, Multiflag, g_XorMode );
+        CurrentField->m_AddExtraText = Multiflag;
+        CurrentField->Draw( Panel, DC, wxPoint(0,0), g_XorMode );
         CurrentField->m_Flags = 0;
         CurrentField->m_Pos   = OldPos;
-        DrawTextField( Panel, DC, CurrentField, Multiflag, GR_DEFAULT_DRAWMODE );
+        CurrentField->Draw( Panel, DC, wxPoint(0,0), g_XorMode );
     }
     CurrentField = NULL;
     SAFE_DELETE( g_ItemToUndoCopy );
@@ -677,13 +680,14 @@ void WinEDA_SchematicFrame::RotateCmpField( PartTextStruct* Field, wxDC* DC )
     if( Field->m_Flags == 0 )
         SaveCopyInUndoList( Cmp, IS_CHANGED );
 
-    DrawTextField( DrawPanel, DC, Field, flag, g_XorMode );
+    Field->m_AddExtraText = flag;
+    Field->Draw( DrawPanel, DC, wxPoint(0,0), g_XorMode );
 
     if( Field->m_Orient == TEXT_ORIENT_HORIZ )
         Field->m_Orient = TEXT_ORIENT_VERT;
     else
         Field->m_Orient = TEXT_ORIENT_HORIZ;
-    DrawTextField( DrawPanel, DC, Field, flag, g_XorMode );
+    Field->Draw( DrawPanel, DC, wxPoint(0,0), g_XorMode );
 
     GetScreen()->SetModify();
 }
@@ -693,7 +697,7 @@ void WinEDA_SchematicFrame::RotateCmpField( PartTextStruct* Field, wxDC* DC )
 void PartTextStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
 /*********************************************************************/
 {
-    int FieldNumber, flag;
+    int FieldNumber;
     EDA_LibComponentStruct* Entry;
 
     frame->DrawPanel->ManageCurseur = NULL;
@@ -709,19 +713,18 @@ void PartTextStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
     }
 
     FieldNumber = m_FieldId;
-    flag = 0;
+    m_AddExtraText = 0;
     if( FieldNumber == REFERENCE )
     {
-        Entry = FindLibPart( Cmp->m_ChipName.GetData(),
-                             wxEmptyString, FIND_ROOT );
+        Entry = FindLibPart( Cmp->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
         if( Entry != NULL )
         {
             if( Entry->m_UnitCount > 1 )
-                flag = 1;
+                m_AddExtraText = 1;
         }
     }
 
-    DrawTextField( frame->DrawPanel, DC, this, flag, GR_DEFAULT_DRAWMODE );
+    Draw( frame->DrawPanel, DC, wxPoint(0,0), GR_DEFAULT_DRAWMODE );
     m_Flags = 0;
     frame->GetScreen()->SetCurItem( NULL );
     frame->GetScreen()->SetModify();
@@ -757,9 +760,10 @@ void WinEDA_SchematicFrame::EditComponentReference( SCH_COMPONENT* Cmp, wxDC* DC
             SaveCopyInUndoList( Cmp, IS_CHANGED );
         Cmp->SetRef(GetSheet(), ref);
 
-        DrawTextField( DrawPanel, DC, &Cmp->m_Field[REFERENCE], flag, g_XorMode );
+        Cmp->m_Field[REFERENCE].m_AddExtraText = flag;
+        Cmp->m_Field[REFERENCE].Draw( DrawPanel, DC, wxPoint(0,0), g_XorMode );
         Cmp->SetRef(GetSheet(), ref );
-        DrawTextField( DrawPanel, DC, &Cmp->m_Field[REFERENCE], flag,
+        Cmp->m_Field[REFERENCE].Draw( DrawPanel, DC, wxPoint(0,0),
                        Cmp->m_Flags ? g_XorMode : GR_DEFAULT_DRAWMODE );
         GetScreen()->SetModify();
     }
@@ -774,7 +778,6 @@ void WinEDA_SchematicFrame::EditComponentValue( SCH_COMPONENT* Cmp, wxDC* DC )
 {
     wxString msg;
     EDA_LibComponentStruct* Entry;
-    int      flag = 0;
 
     if( Cmp == NULL )
         return;
@@ -782,8 +785,6 @@ void WinEDA_SchematicFrame::EditComponentValue( SCH_COMPONENT* Cmp, wxDC* DC )
     Entry = FindLibPart( Cmp->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
     if( Entry == NULL )
         return;
-    if( Entry->m_UnitCount > 1 )
-        flag = 1;
 
     PartTextStruct* TextField = &Cmp->m_Field[VALUE];
 
@@ -797,9 +798,9 @@ void WinEDA_SchematicFrame::EditComponentValue( SCH_COMPONENT* Cmp, wxDC* DC )
         if( Cmp->m_Flags == 0 )
             SaveCopyInUndoList( Cmp, IS_CHANGED );
 
-        DrawTextField( DrawPanel, DC, &Cmp->m_Field[VALUE], flag, g_XorMode );
+        TextField->Draw( DrawPanel, DC, wxPoint(0,0), g_XorMode );
         TextField->m_Text = msg;
-        DrawTextField( DrawPanel, DC, &Cmp->m_Field[VALUE], flag,
+        TextField->Draw( DrawPanel, DC, wxPoint(0,0),
                        Cmp->m_Flags ? g_XorMode : GR_DEFAULT_DRAWMODE );
         GetScreen()->SetModify();
     }
@@ -813,7 +814,6 @@ void WinEDA_SchematicFrame::EditComponentFootprint( SCH_COMPONENT* Cmp, wxDC* DC
 {
     wxString msg;
     EDA_LibComponentStruct* Entry;
-    int      flag = 0;
     bool wasEmpty = false;
 
     if( Cmp == NULL )
@@ -822,8 +822,6 @@ void WinEDA_SchematicFrame::EditComponentFootprint( SCH_COMPONENT* Cmp, wxDC* DC
     Entry = FindLibPart( Cmp->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
     if( Entry == NULL )
         return;
-    if( Entry->m_UnitCount > 1 )
-        flag = 1;
 
     PartTextStruct* TextField = &Cmp->m_Field[FOOTPRINT];
 
@@ -836,7 +834,7 @@ void WinEDA_SchematicFrame::EditComponentFootprint( SCH_COMPONENT* Cmp, wxDC* DC
     /* save old cmp in undo list if not already in edit, or moving ... */
     if( Cmp->m_Flags == 0 )
         SaveCopyInUndoList( Cmp, IS_CHANGED );
-    DrawTextField( DrawPanel, DC, &Cmp->m_Field[FOOTPRINT], flag, g_XorMode );
+    Cmp->m_Field[FOOTPRINT].Draw( DrawPanel, DC, wxPoint(0,0), g_XorMode );
     //move the field if it was new.
     if(wasEmpty && !msg.IsEmpty())
     {
@@ -853,7 +851,7 @@ void WinEDA_SchematicFrame::EditComponentFootprint( SCH_COMPONENT* Cmp, wxDC* DC
     }
     TextField->m_Text = msg;
 
-    DrawTextField( DrawPanel, DC, &Cmp->m_Field[FOOTPRINT], flag,
+    Cmp->m_Field[FOOTPRINT].Draw( DrawPanel, DC, wxPoint(0,0),
                    Cmp->m_Flags ? g_XorMode : GR_DEFAULT_DRAWMODE );
     GetScreen()->SetModify();
 

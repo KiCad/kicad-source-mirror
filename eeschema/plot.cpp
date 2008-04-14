@@ -362,7 +362,7 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
     int             orient, color = -1;
 
     if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
-        color = ReturnLayerColor( Field->m_Layer );
+        color = ReturnLayerColor( Field->GetLayer() );
 
     DrawMode = 0;   /* Unused */
     if( Field->m_Attributs & TEXT_NO_VISIBLE )
@@ -670,7 +670,7 @@ static void PlotSheetLabelStruct( DrawSheetLabelStruct* Struct )
     int coord[16];
 
     if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
-        txtcolor = ReturnLayerColor( Struct->m_Layer );
+        txtcolor = ReturnLayerColor( Struct->GetLayer() );
 
     posx = Struct->m_Pos.x; posy = Struct->m_Pos.y; size = Struct->m_Size.x;
     if( Struct->m_Edge )

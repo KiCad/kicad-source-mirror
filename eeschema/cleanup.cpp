@@ -12,7 +12,6 @@
 #include "netlist.h"
 #include "macros.h"
 #include "protos.h"
-#include "schframe.h"
 
 
 /* Routines locales */
@@ -30,16 +29,16 @@ bool SCH_SCREEN::SchematicCleanUp( wxDC* DC )
  *  - Detecte les objets identiques superposes
  */
 {
-    EDA_BaseStruct* DrawList, * TstDrawList;
+    SCH_ITEM* DrawList, * TstDrawList;
     int             flag;
     bool            Modify = FALSE;
 
     DrawList = EEDrawList;
-    for( ; DrawList != NULL; DrawList = DrawList->Pnext )
+    for( ; DrawList != NULL; DrawList = DrawList->Next() )
     {
         if( DrawList->Type() == DRAW_SEGMENT_STRUCT_TYPE )
         {
-            TstDrawList = DrawList->Pnext;
+            TstDrawList = DrawList->Next();
             while( TstDrawList )
             {
                 if( TstDrawList->Type() == DRAW_SEGMENT_STRUCT_TYPE )
@@ -56,10 +55,10 @@ bool SCH_SCREEN::SchematicCleanUp( wxDC* DC )
                         Modify = TRUE;
                     }
                     else
-                        TstDrawList = TstDrawList->Pnext;
+                        TstDrawList = TstDrawList->Next();
                 }
                 else
-                    TstDrawList = TstDrawList->Pnext;
+                    TstDrawList = TstDrawList->Next();
             }
         }
     }
@@ -77,7 +76,7 @@ void BreakSegmentOnJunction( SCH_SCREEN* Screen )
  *  et les raccords
  */
 {
-    EDA_BaseStruct* DrawList;
+    SCH_ITEM* DrawList;
 
     if( Screen == NULL )
     {
@@ -120,7 +119,7 @@ void BreakSegmentOnJunction( SCH_SCREEN* Screen )
         default:
             break;
         }
-        DrawList = DrawList->Pnext;
+        DrawList = DrawList->Next();
     }
 }
 
@@ -216,7 +215,7 @@ static int TstAlignSegment( EDA_DrawLineStruct* RefSegm,
 {
     if( RefSegm == TstSegm )
         return 0;
-    if( RefSegm->m_Layer != TstSegm->m_Layer )
+    if( RefSegm->GetLayer() != TstSegm->GetLayer() )
         return 0;
 
     // search for a common end, and modify coordinates to ensure RefSegm->m_End == TstSegm->m_Start

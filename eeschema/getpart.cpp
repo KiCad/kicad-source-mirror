@@ -13,8 +13,6 @@
 
 #include "protos.h"
 
-#include "schframe.h"
-
 
 /* Routines Locales */
 static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );

@@ -12,8 +12,6 @@
 
 #include "protos.h"
 
-#include "schframe.h"
-
 
 /* Routines Locales */
 static void     ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC );

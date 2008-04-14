@@ -14,11 +14,10 @@
 extern DrawSheetStruct* g_RootSheet;
 
 
-class DrawSheetLabelStruct : public EDA_BaseStruct,
+class DrawSheetLabelStruct : public SCH_ITEM,
     public EDA_TextStruct
 {
 public:
-    int  m_Layer;
     int  m_Edge, m_Shape;
     bool m_IsDangling;  // TRUE non connected
 
@@ -50,7 +49,7 @@ public:
  */
 WX_DEFINE_ARRAY( DrawSheetStruct *, SheetGrowArray );
 
-class DrawSheetStruct : public EDA_BaseStruct /*public SCH_SCREEN*/    /* Gestion de la hierarchie */
+class DrawSheetStruct : public SCH_ITEM /*public SCH_SCREEN*/    /* Gestion de la hierarchie */
 {
 public:
     wxString              m_SheetName;  //this is equivalent to C101 for components:

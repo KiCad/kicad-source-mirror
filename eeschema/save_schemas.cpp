@@ -13,12 +13,6 @@
 
 #include "protos.h"
 
-#include "schframe.h"
-
-/* Format des fichiers: Voir EELOAD.CC */
-
-/* Fonctions externes */
-
 /* Fonctions Locales */
 static void SaveLayers(FILE *f);
 
@@ -155,8 +149,8 @@ bool WinEDA_SchematicFrame::SaveEEFile(SCH_SCREEN *screen, int FileSave)
                 #undef STRUCT
                 #define STRUCT ((EDA_DrawLineStruct *) Phead)
                 layer = "Notes"; width = "Line";
-                if (STRUCT->m_Layer == LAYER_WIRE) layer = "Wire";
-                if (STRUCT->m_Layer == LAYER_BUS) layer = "Bus";
+                if (STRUCT->GetLayer() == LAYER_WIRE) layer = "Wire";
+                if (STRUCT->GetLayer() == LAYER_BUS) layer = "Bus";
                 if( STRUCT->m_Width != GR_NORM_WIDTH) layer = "Bus";
                 if (fprintf(f, "Wire %s %s\n", layer, width ) == EOF)
                     {
@@ -174,7 +168,7 @@ bool WinEDA_SchematicFrame::SaveEEFile(SCH_SCREEN *screen, int FileSave)
                 #undef STRUCT
                 #define STRUCT ((DrawBusEntryStruct *) Phead)
                 layer = "Wire"; width = "Line";
-                if (STRUCT->m_Layer == LAYER_BUS)
+                if (STRUCT->GetLayer() == LAYER_BUS)
                     {
                     layer = "Bus"; width = "Bus";
                     }
@@ -195,8 +189,8 @@ bool WinEDA_SchematicFrame::SaveEEFile(SCH_SCREEN *screen, int FileSave)
                 #undef STRUCT
                 #define STRUCT ((DrawPolylineStruct *) Phead)
                 layer = "Notes"; width = "Line";
-                if (STRUCT->m_Layer == LAYER_WIRE) layer = "Wire";
-                if (STRUCT->m_Layer == LAYER_BUS) layer = "Bus";
+                if (STRUCT->GetLayer() == LAYER_WIRE) layer = "Wire";
+                if (STRUCT->GetLayer() == LAYER_BUS) layer = "Bus";
                 if( STRUCT->m_Width != GR_NORM_WIDTH) width = "Bus";
                 if (fprintf(f, "Poly %s %s %d\n",
                             width, layer, STRUCT->m_NumOfPoints) == EOF)

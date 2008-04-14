@@ -15,8 +15,6 @@
 
 #include "protos.h"
 
-#include "schframe.h"
-
 
 /*****************************************************************************
 *
@@ -354,7 +352,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_DELETE:
         if( GetScreen()->GetCurItem() == NULL )
             break;
-        DeleteStruct( this->DrawPanel, &dc, GetScreen()->GetCurItem() );
+        DeleteStruct( DrawPanel, &dc, (SCH_ITEM*)GetScreen()->GetCurItem() );
         GetScreen()->SetCurItem( NULL );
         g_ItemToRepeat = NULL;
         TestDanglingEnds( GetScreen()->EEDrawList, &dc );
@@ -367,19 +365,17 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_END_SHEET:
         DrawPanel->MouseToCursorSchema();
-        GetScreen()->GetCurItem()->Place( this, &dc );
+        ((SCH_ITEM*)GetScreen()->GetCurItem())->Place( this, &dc );
         break;
 
     case ID_POPUP_SCH_RESIZE_SHEET:
         DrawPanel->MouseToCursorSchema();
-        ReSizeSheet( (DrawSheetStruct*)
-                    GetScreen()->GetCurItem(), &dc );
+        ReSizeSheet( (DrawSheetStruct*) GetScreen()->GetCurItem(), &dc );
         TestDanglingEnds( GetScreen()->EEDrawList, &dc );
         break;
 
     case ID_POPUP_SCH_EDIT_SHEET:
-        EditSheet( (DrawSheetStruct*)
-                  GetScreen()->GetCurItem(), &dc );
+        EditSheet( (DrawSheetStruct*) GetScreen()->GetCurItem(), &dc );
         break;
 
     case ID_POPUP_SCH_CLEANUP_SHEET:
@@ -424,7 +420,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
             }
         }
         else
-            Process_Move_Item( GetScreen()->GetCurItem(), &dc );
+            Process_Move_Item( (SCH_ITEM*) GetScreen()->GetCurItem(), &dc );
         break;
 
     case ID_POPUP_SCH_EDIT_CMP:
@@ -477,7 +473,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 
             DrawPanel->MouseToCursorSchema();
             if( GetScreen()->GetCurItem()->m_Flags == 0 )
-                SaveCopyInUndoList( GetScreen()->GetCurItem(), IS_CHANGED );
+                SaveCopyInUndoList( (SCH_ITEM*) GetScreen()->GetCurItem(), IS_CHANGED );
 
             CmpRotationMiroir(
                 (SCH_COMPONENT*) GetScreen()->GetCurItem(),
@@ -705,7 +701,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
                            LAYER_LOCLABEL : LAYER_GLOBLABEL ) );
         if( GetScreen()->GetCurItem() )
         {
-            GetScreen()->GetCurItem()->Place( this, &dc );
+            ((SCH_ITEM*)GetScreen()->GetCurItem())->Place( this, &dc );
             TestDanglingEnds( GetScreen()->EEDrawList, &dc );
             GetScreen()->SetCurItem( NULL );
         }
@@ -738,14 +734,12 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     if( m_ID_current_state == 0 )
         g_ItemToRepeat = NULL;
     SetToolbars();
-
-    dc.SetBrush( wxNullBrush );
-    dc.SetPen( wxNullPen );
 }
 
 
-void WinEDA_SchematicFrame::Process_Move_Item( EDA_BaseStruct* DrawStruct,
-                                               wxDC*           DC )
+/*************************************************************************************/
+void WinEDA_SchematicFrame::Process_Move_Item( SCH_ITEM* DrawStruct, wxDC*  DC )
+/*************************************************************************************/
 {
     if( DrawStruct == NULL )
         return;

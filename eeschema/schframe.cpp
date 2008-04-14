@@ -17,7 +17,6 @@
 #include "protos.h"
 #include "id.h"
 #include "netlist.h"
-#include "schframe.h"
 
 #include "annotate_dialog.h"
 #include "dialog_build_BOM.h"
@@ -411,7 +410,7 @@ int WinEDA_SchematicFrame::BestZoom()
 	GetScreen()->SetZoom( ii );
 	GetScreen()->m_Curseur.x = dx / 2;
 	GetScreen()->m_Curseur.y = dy / 2;
-	
+
     return bestzoom;
 }
 

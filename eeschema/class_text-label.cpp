@@ -14,7 +14,6 @@
 #include "id.h"
 
 #include "protos.h"
-#include "schframe.h"
 
 
 /************************/
@@ -113,7 +112,7 @@ void SCH_TEXT::Place( WinEDA_DrawFrame* frame, wxDC* DC )
         SAFE_DELETE( g_ItemToUndoCopy );
     }
 
-    EDA_BaseStruct::Place( frame, DC );
+    SCH_ITEM::Place( frame, DC );
 }
 
 

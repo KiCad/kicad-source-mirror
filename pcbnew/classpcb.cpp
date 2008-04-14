@@ -15,19 +15,7 @@
 #include "cvpcb.h"
 #endif
 
-#include "protos.h"
 #include "trigo.h"
-
-
-/**************************************************************/
-void EDA_BaseStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
-/**************************************************************/
-
-/* fonction virtuelle de placement: non utilisee en pcbnew (utilisee eeschema)
- *  ---- A mieux utiliser (TODO...)
- */
-{
-}
 
 
 /**************************************************/

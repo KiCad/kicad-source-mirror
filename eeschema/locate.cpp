@@ -18,8 +18,8 @@
 int         distance( int dx, int dy, int spot_cX, int spot_cY, int seuil );
 
 /* Routines Locales */
-static EDA_BaseStruct* LastSnappedStruct = NULL;
-static int             PickedBoxMinX, PickedBoxMinY, PickedBoxMaxX, PickedBoxMaxY;
+static SCH_ITEM* LastSnappedStruct = NULL;
+static int       PickedBoxMinX, PickedBoxMinY, PickedBoxMaxX, PickedBoxMaxY;
 static bool IsBox1InBox2( int StartX1, int StartY1, int EndX1, int EndY1,
                           int StartX2, int StartY2, int EndX2, int EndY2 );
 static bool IsPointInBox( int pX, int pY,
@@ -27,7 +27,7 @@ static bool IsPointInBox( int pX, int pY,
 static bool IsPointOnSegment( int pX, int pY,
                               int SegmX1, int SegmY1, int SegmX2, int SegmY2, int seuil = 0 );
 static bool SnapPoint2( const wxPoint& PosRef, int SearchMask,
-                        EDA_BaseStruct* DrawList, DrawPickedStruct* DontSnapList, int zoom_value );
+                        SCH_ITEM* DrawList, DrawPickedStruct* DontSnapList, int zoom_value );
 
 
 /*********************************************************************/
@@ -39,23 +39,23 @@ SCH_COMPONENT* LocateSmallestComponent( SCH_SCREEN* Screen )
  */
 {
     SCH_COMPONENT* DrawLibItem = NULL, * LastDrawLibItem = NULL;
-    EDA_BaseStruct*         DrawList;
-    EDA_Rect BoundaryBox;
-    float    sizeref = 0, sizecurr;
+    SCH_ITEM*      DrawList;
+    EDA_Rect       BoundaryBox;
+    float          sizeref = 0, sizecurr;
 
     DrawList = Screen->EEDrawList;
 
     while( DrawList )
     {
         if( ( SnapPoint2( Screen->m_MousePosition, LIBITEM,
-                         DrawList, NULL, Screen->GetZoom() ) ) == FALSE )
+                 DrawList, NULL, Screen->GetZoom() ) ) == FALSE )
         {
             if( ( SnapPoint2( Screen->m_Curseur, LIBITEM,
-                             DrawList, NULL, Screen->GetZoom() ) ) == FALSE )
+                     DrawList, NULL, Screen->GetZoom() ) ) == FALSE )
                 break;
         }
         DrawLibItem = (SCH_COMPONENT*) LastSnappedStruct;
-        DrawList    = DrawLibItem->Pnext;
+        DrawList    = DrawLibItem->Next();
         if( LastDrawLibItem == NULL )  // First time a component is located
         {
             LastDrawLibItem = DrawLibItem;
@@ -111,21 +111,21 @@ SCH_COMPONENT* LocateSmallestComponent( SCH_SCREEN* Screen )
  *      Si pas de structures selectionnees: retourne NULL
  *
  */
-/***********************************************************************/
-EDA_BaseStruct* PickStruct( const wxPoint& refpos,
-                           BASE_SCREEN* screen, int SearchMask)
-/************************************************************************/
+/********************************************************************************/
+SCH_ITEM* PickStruct( const wxPoint& refpos, BASE_SCREEN* screen, int SearchMask )
+/******************************************************************************/
 
-/* Search an item at pos pos
+/* Search an item at pos refpos
  */
 {
-    bool Snapped;
-    EDA_BaseStruct* DrawList = screen->EEDrawList;
+    bool      Snapped;
+    SCH_ITEM* DrawList = screen->EEDrawList;
+
     if( screen==NULL || DrawList == NULL )
         return NULL;
 
     if( ( Snapped = SnapPoint2( refpos, SearchMask,
-                                DrawList, NULL, screen->GetZoom() ) ) != FALSE )
+             DrawList, NULL, screen->GetZoom() ) ) != FALSE )
     {
         return LastSnappedStruct;
     }
@@ -134,8 +134,7 @@ EDA_BaseStruct* PickStruct( const wxPoint& refpos,
 
 
 /***********************************************************************/
-EDA_BaseStruct* PickStruct( EDA_Rect& block,
-                            BASE_SCREEN* screen, int SearchMask )
+SCH_ITEM* PickStruct( EDA_Rect& block, BASE_SCREEN* screen, int SearchMask )
 /************************************************************************/
 
 /* Search items in block
@@ -143,7 +142,7 @@ EDA_BaseStruct* PickStruct( EDA_Rect& block,
 {
     int               x, y, OrigX, OrigY;
     DrawPickedStruct* PickedList = NULL, * PickedItem;
-    EDA_BaseStruct*   DrawStruct;
+    SCH_ITEM*         DrawStruct;
 
     OrigX = block.GetX();
     OrigY = block.GetY();
@@ -155,11 +154,11 @@ EDA_BaseStruct* PickStruct( EDA_Rect& block,
     if( y < OrigY )
         EXCHG( y, OrigY );
 
-    EDA_BaseStruct* DrawList = screen->EEDrawList;
-        if( screen==NULL || DrawList == NULL )
-            return NULL;
+    SCH_ITEM* DrawList = screen->EEDrawList;
+    if( screen==NULL || DrawList == NULL )
+        return NULL;
 
-    for( DrawStruct = DrawList; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext )
+    for( DrawStruct = DrawList; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
     {
         if( DrawStructInBox( OrigX, OrigY, x, y, DrawStruct ) )
         {
@@ -176,7 +175,7 @@ EDA_BaseStruct* PickStruct( EDA_Rect& block,
         /* Only one item was picked - convert to scalar form (no list): */
         PickedItem = PickedList;
         PickedList = (DrawPickedStruct*) PickedList->m_PickedStruct;
-        SAFE_DELETE( PickedItem ) ;
+        SAFE_DELETE( PickedItem );
     }
 
     if( PickedList != NULL )
@@ -199,18 +198,18 @@ EDA_BaseStruct* PickStruct( EDA_Rect& block,
 * The routine returns TRUE if point was snapped.							 *
 *****************************************************************************/
 bool SnapPoint2( const wxPoint& PosRef, int SearchMask,
-                 EDA_BaseStruct* DrawList, DrawPickedStruct* DontSnapList, int zoom_value )
+                 SCH_ITEM* DrawList, DrawPickedStruct* DontSnapList, int zoom_value )
 {
     int i, * Points, x = PosRef.x, y = PosRef.y;
     int x1, y1, x2, y2, NumOfPoints2;
     DrawPickedStruct* DontSnap;
     int dx, dy;
 
-    for( ; DrawList != NULL; DrawList = DrawList->Pnext )
+    for( ; DrawList != NULL; DrawList = DrawList->Next() )
     {
         /* Make sure this structure is NOT in the dont snap list: */
         DontSnap = DontSnapList;
-        for( ; DontSnap != NULL; DontSnap = (DrawPickedStruct*) DontSnap->Pnext )
+        for( ; DontSnap != NULL; DontSnap = DontSnap->Next() )
             if( DontSnap->m_PickedStruct == DrawList )
                 break;
 
@@ -238,6 +237,7 @@ bool SnapPoint2( const wxPoint& PosRef, int SearchMask,
                     return TRUE;
                 }
             }
+
             break;
 
         case DRAW_SEGMENT_STRUCT_TYPE:
@@ -247,11 +247,11 @@ bool SnapPoint2( const wxPoint& PosRef, int SearchMask,
                 break;
 
             if( IsPointOnSegment( x, y, STRUCT->m_Start.x, STRUCT->m_Start.y,
-                                  STRUCT->m_End.x, STRUCT->m_End.y ) )
+                   STRUCT->m_End.x, STRUCT->m_End.y ) )
             {
-                if( ( (SearchMask & DRAWITEM) && (STRUCT->m_Layer == LAYER_NOTES) )
-                   || ( (SearchMask & WIREITEM) && (STRUCT->m_Layer == LAYER_WIRE) )
-                   || ( (SearchMask & BUSITEM) && (STRUCT->m_Layer == LAYER_BUS) )
+                if( ( (SearchMask & DRAWITEM) && (STRUCT->GetLayer() == LAYER_NOTES) )
+                   || ( (SearchMask & WIREITEM) && (STRUCT->GetLayer() == LAYER_WIRE) )
+                   || ( (SearchMask & BUSITEM) && (STRUCT->GetLayer() == LAYER_BUS) )
                     )
                 {
                     if( SearchMask & EXCLUDE_WIRE_BUS_ENDPOINTS )
@@ -282,7 +282,7 @@ bool SnapPoint2( const wxPoint& PosRef, int SearchMask,
                 break;
 
             if( IsPointOnSegment( x, y, STRUCT->m_Pos.x, STRUCT->m_Pos.y,
-                                  STRUCT->m_End().x, STRUCT->m_End().y ) )
+                   STRUCT->m_End().x, STRUCT->m_End().y ) )
             {
                 LastSnappedStruct = DrawList;
                 return TRUE;
@@ -422,8 +422,8 @@ bool SnapPoint2( const wxPoint& PosRef, int SearchMask,
 
             if( SearchMask & FIELDCMPITEM )
             {
-                PartTextStruct*         Field;
-                SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) DrawList;
+                PartTextStruct* Field;
+                SCH_COMPONENT*  DrawLibItem = (SCH_COMPONENT*) DrawList;
                 for( i = REFERENCE; i < NUMBER_OF_FIELDS; i++ )
                 {
                     Field = &DrawLibItem->m_Field[i];
@@ -494,7 +494,7 @@ bool SnapPoint2( const wxPoint& PosRef, int SearchMask,
 * routine is used to pick all points in a given box.						 *
 *****************************************************************************/
 bool DrawStructInBox( int x1, int y1, int x2, int y2,
-                      EDA_BaseStruct* DrawStruct )
+                      SCH_ITEM* DrawStruct )
 {
     int i, * Points, xt1, yt1, xt2, yt2, NumOfPoints2;
     int dx, dy;
@@ -782,12 +782,12 @@ static bool IsPointOnSegment( int pX, int pY,
 
 
 /*********************************************************************************/
-LibEDA_BaseStruct* LocateDrawItem( SCH_SCREEN* Screen,
-                                   const wxPoint& refpoint,
+LibEDA_BaseStruct* LocateDrawItem( SCH_SCREEN*             Screen,
+                                   const wxPoint&          refpoint,
                                    EDA_LibComponentStruct* LibEntry,
-                                   int Unit,
-                                   int Convert,
-                                   int masque )
+                                   int                     Unit,
+                                   int                     Convert,
+                                   int                     masque )
 /*********************************************************************************/
 
 /* Routine de localisation d'un element de dessin de symbole( sauf pins )
@@ -857,20 +857,20 @@ LibEDA_BaseStruct* LocateDrawItem( SCH_SCREEN* Screen,
             if( (masque & LOCATE_COMPONENT_RECT_DRAW_TYPE) == 0 )
                 break;
             if( IsPointOnSegment( px, py,   // locate lower segment
-                                  Square->m_Pos.x, -Square->m_Pos.y,
-                                  Square->m_End.x, -Square->m_Pos.y, seuil ) )
+                   Square->m_Pos.x, -Square->m_Pos.y,
+                   Square->m_End.x, -Square->m_Pos.y, seuil ) )
                 return DrawItem;
             if( IsPointOnSegment( px, py,   // locate right segment
-                                  Square->m_End.x, -Square->m_Pos.y,
-                                  Square->m_End.x, -Square->m_End.y, seuil ) )
+                   Square->m_End.x, -Square->m_Pos.y,
+                   Square->m_End.x, -Square->m_End.y, seuil ) )
                 return DrawItem;
             if( IsPointOnSegment( px, py,   // locate upper segment
-                                  Square->m_End.x, -Square->m_End.y,
-                                  Square->m_Pos.x, -Square->m_End.y, seuil ) )
+                   Square->m_End.x, -Square->m_End.y,
+                   Square->m_Pos.x, -Square->m_End.y, seuil ) )
                 return DrawItem;
             if( IsPointOnSegment( px, py,   // locate left segment
-                                  Square->m_Pos.x, -Square->m_End.y,
-                                  Square->m_Pos.x, -Square->m_Pos.y, seuil ) )
+                   Square->m_Pos.x, -Square->m_End.y,
+                   Square->m_Pos.x, -Square->m_Pos.y, seuil ) )
                 return DrawItem;
         }
             break;
@@ -884,7 +884,7 @@ LibEDA_BaseStruct* LocateDrawItem( SCH_SCREEN* Screen,
             for( ii = polyline->n - 1; ii > 0; ii--, ptpoly += 2 )
             {
                 if( IsPointOnSegment( px, py,
-                                      ptpoly[0], -ptpoly[1], ptpoly[2], -ptpoly[3], seuil ) )
+                       ptpoly[0], -ptpoly[1], ptpoly[2], -ptpoly[3], seuil ) )
                     return DrawItem;
             }
         }
@@ -896,8 +896,8 @@ LibEDA_BaseStruct* LocateDrawItem( SCH_SCREEN* Screen,
             if( (masque & LOCATE_COMPONENT_LINE_DRAW_TYPE) == 0 )
                 break;
             if( IsPointOnSegment( px, py,
-                                  Segment->m_Pos.x, -Segment->m_Pos.y,
-                                  Segment->m_End.x, -Segment->m_End.y, seuil ) )
+                   Segment->m_Pos.x, -Segment->m_Pos.y,
+                   Segment->m_End.x, -Segment->m_End.y, seuil ) )
                 return DrawItem;
         }
             break;
@@ -918,7 +918,7 @@ LibEDA_BaseStruct* LocateDrawItem( SCH_SCREEN* Screen,
             x = px - Text->m_Pos.x;
             y = py + Text->m_Pos.y;
             if( (abs( x ) <= dx) && (abs( y ) <= dy) )
-                return DrawItem;            /* Texte trouve */
+                return DrawItem; /* Texte trouve */
         }
             break;
 
@@ -952,8 +952,8 @@ int distance( int dx, int dy, int spot_cX, int spot_cY, int seuil )
 {
     int cXrot, cYrot,   /* coord du point (souris) dans le repere tourne */
         segX, segY;     /* coord extremite segment tj >= 0 */
-    int pointX, pointY;/* coord point a tester dans repere modifie dans lequel
-                        *  segX et segY sont >=0 */
+    int pointX, pointY; /* coord point a tester dans repere modifie dans lequel
+                         *  segX et segY sont >=0 */
 
     segX = dx; segY = dy; pointX = spot_cX; pointY = spot_cY;
 
@@ -1041,9 +1041,10 @@ int distance( int dx, int dy, int spot_cX, int spot_cY, int seuil )
     return 0;
 }
 
+
 /*******************************************************************/
-LibDrawPin* LocatePinByNumber( const wxString & ePin_Number,
-                             SCH_COMPONENT* eComponent )
+LibDrawPin* LocatePinByNumber( const wxString& ePin_Number,
+                               SCH_COMPONENT*  eComponent )
 /*******************************************************************/
 
 /** Find a PIN in a component
@@ -1057,7 +1058,7 @@ LibDrawPin* LocatePinByNumber( const wxString & ePin_Number,
     LibDrawPin* Pin;
     int Unit, Convert;
 
-    Entry = FindLibPart(eComponent->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+    Entry = FindLibPart( eComponent->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
     if( Entry == NULL )
         return NULL;
 
@@ -1067,7 +1068,7 @@ LibDrawPin* LocatePinByNumber( const wxString & ePin_Number,
         return NULL;
     }
 
-    Unit = eComponent->m_Multi;
+    Unit    = eComponent->m_Multi;
     Convert = eComponent->m_Convert;
 
     DrawItem = Entry->m_Drawings;
@@ -1084,7 +1085,7 @@ LibDrawPin* LocatePinByNumber( const wxString & ePin_Number,
                 continue;
             wxString pNumber;
             Pin->ReturnPinStringNum( pNumber );
-            if ( ePin_Number == pNumber )
+            if( ePin_Number == pNumber )
                 return Pin;
         }
     }
@@ -1197,16 +1198,16 @@ DrawSheetLabelStruct* LocateSheetLabel( DrawSheetStruct* Sheet, const wxPoint& p
 
 
 /**************************************************************************/
-LibDrawPin* LocateAnyPin( EDA_BaseStruct* DrawList, const wxPoint& RefPos,
+LibDrawPin* LocateAnyPin( SCH_ITEM* DrawList, const wxPoint& RefPos,
                           SCH_COMPONENT** libpart )
 /**************************************************************************/
 {
-    EDA_BaseStruct* DrawStruct;
+    SCH_ITEM* DrawStruct;
     EDA_LibComponentStruct* Entry;
     SCH_COMPONENT* LibItem = NULL;
     LibDrawPin* Pin = NULL;
 
-    for( DrawStruct = DrawList; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext )
+    for( DrawStruct = DrawList; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
     {
         if( DrawStruct->Type() != TYPE_SCH_COMPONENT )
             continue;
@@ -1215,7 +1216,7 @@ LibDrawPin* LocateAnyPin( EDA_BaseStruct* DrawList, const wxPoint& RefPos,
         if( Entry == NULL )
             continue;
         Pin = (LibDrawPin*) LocatePin( RefPos, Entry, LibItem->m_Multi,
-                                       LibItem->m_Convert, LibItem );
+            LibItem->m_Convert, LibItem );
         if( Pin )
             break;
     }
@@ -1228,18 +1229,18 @@ LibDrawPin* LocateAnyPin( EDA_BaseStruct* DrawList, const wxPoint& RefPos,
 
 /***************************************************************/
 DrawSheetLabelStruct* LocateAnyPinSheet( const wxPoint&  RefPos,
-                                         EDA_BaseStruct* DrawList )
+                                         SCH_ITEM* DrawList )
 /***************************************************************/
 {
-    EDA_BaseStruct* DrawStruct;
+    SCH_ITEM* DrawStruct;
     DrawSheetLabelStruct* PinSheet = NULL;
 
-    for( DrawStruct = DrawList; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext )
+    for( DrawStruct = DrawList; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
     {
         if( DrawStruct->Type() != DRAW_SHEET_STRUCT_TYPE )
             continue;
         PinSheet = LocateSheetLabel( (DrawSheetStruct*) DrawStruct,
-                                    RefPos );
+            RefPos );
         if( PinSheet )
             break;
     }

@@ -15,8 +15,6 @@
 #include "libcmp.h"
 #include "general.h"
 
-#include "schframe.h"
-
 /* Variables Locales */
 static int      s_ItemsCount, s_MarkerCount;
 static wxString s_OldStringFound;
@@ -48,7 +46,7 @@ void WinEDA_FindFrame::FindMarker( wxCommandEvent& event )
 
 
 /************************************************************************/
-EDA_BaseStruct* WinEDA_SchematicFrame::FindComponentAndItem(
+SCH_ITEM * WinEDA_SchematicFrame::FindComponentAndItem(
     const wxString& component_reference, bool Find_in_hierarchy,
     int SearchType,
     const wxString& text_to_find,
@@ -71,7 +69,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindComponentAndItem(
  */
 {
     DrawSheetPath*          sheet, * SheetWithComponentFound = NULL;
-    EDA_BaseStruct*         DrawList  = NULL;
+    SCH_ITEM*               DrawList  = NULL;
     SCH_COMPONENT* Component = NULL;
     wxSize                  DrawAreaSize = DrawPanel->GetClientSize();
     wxPoint                 pos, curpos;
@@ -88,8 +86,8 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindComponentAndItem(
 
     for( ; sheet != NULL; sheet = SheetList.GetNext() )
     {
-        DrawList = sheet->LastDrawList();
-        for( ; (DrawList != NULL) && (NotFound == true); DrawList = DrawList->Pnext )
+        DrawList = (SCH_ITEM*) sheet->LastDrawList();
+        for( ; (DrawList != NULL) && (NotFound == true); DrawList = DrawList->Next() )
         {
             if( DrawList->Type() == TYPE_SCH_COMPONENT )
             {
@@ -258,7 +256,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindComponentAndItem(
 
 
 /*****************************************************************/
-EDA_BaseStruct* WinEDA_SchematicFrame::FindMarker( int SearchType )
+SCH_ITEM * WinEDA_SchematicFrame::FindMarker( int SearchType )
 /*****************************************************************/
 
 /* Search markers in whole the hierarchy.
@@ -267,8 +265,8 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindMarker( int SearchType )
  */
 {
     DrawSheetPath*  sheet, * FirstSheet = NULL;
-    EDA_BaseStruct*   DrawList, * FirstStruct = NULL, * Struct = NULL;
-    DrawMarkerStruct* Marker = NULL;
+    SCH_ITEM*   DrawList, * FirstStruct = NULL, * Struct = NULL;
+    DrawMarkerStruct * Marker = NULL;
     int StartCount;
     bool NotFound;
     wxPoint           firstpos, pos;
@@ -288,7 +286,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindMarker( int SearchType )
     /* Search for s_MarkerCount markers */
     for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
-        DrawList = sheet->LastDrawList();
+        DrawList = (SCH_ITEM*) sheet->LastDrawList();
         while( DrawList && NotFound )
         {
             if( DrawList->Type() == DRAW_MARKER_STRUCT_TYPE )
@@ -312,7 +310,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindMarker( int SearchType )
                     Struct = DrawList; s_MarkerCount++; break;
                 }
             }
-            DrawList = DrawList->Pnext;
+            DrawList = DrawList->Next();
         }
 
         if( NotFound == FALSE )
@@ -406,7 +404,7 @@ void WinEDA_FindFrame::FindSchematicItem( wxCommandEvent& event )
 
 
 /************************************************************************/
-EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
+SCH_ITEM* WinEDA_SchematicFrame::FindSchematicItem(
     const wxString& pattern, int SearchType, bool mouseWarp )
 /************************************************************************/
 
@@ -421,7 +419,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
  */
 {
     DrawSheetPath*     Sheet, * FirstSheet = NULL;
-    EDA_BaseStruct* DrawList = NULL, * FirstStruct = NULL, * Struct = NULL;
+    SCH_ITEM* DrawList = NULL, * FirstStruct = NULL, * Struct = NULL;
     int             StartCount, ii, jj;
     bool            NotFound;
     wxPoint         firstpos, pos, old_cursor_position;
@@ -460,7 +458,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
 
     for( ; Sheet != NULL; Sheet = SheetList.GetNext() )
     {
-        DrawList = Sheet->LastDrawList();
+        DrawList = (SCH_ITEM*)Sheet->LastDrawList();
         while( DrawList )
         {
             switch( DrawList->Type() )
@@ -521,7 +519,7 @@ EDA_BaseStruct* WinEDA_SchematicFrame::FindSchematicItem(
             }
             if( NotFound == FALSE )
                 break;
-            DrawList = DrawList->Pnext;
+            DrawList = DrawList->Next();
         }
 
         if( NotFound == FALSE )

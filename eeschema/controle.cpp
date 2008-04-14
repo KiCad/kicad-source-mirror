@@ -17,11 +17,8 @@
 
 #include "protos.h"
 
-#include "schframe.h"
-
 /**************************************************************/
-EDA_BaseStruct* WinEDA_SchematicFrame::
-SchematicGeneralLocateAndDisplay( bool IncludePin )
+SCH_ITEM * WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool IncludePin )
 /**************************************************************/
 
 /* Routine de localisation et d'affichage des caract (si utile )
@@ -38,7 +35,7 @@ SchematicGeneralLocateAndDisplay( bool IncludePin )
  *      Null sinon
  */
 {
-    EDA_BaseStruct*         DrawStruct;
+    SCH_ITEM*         DrawStruct;
     wxString                msg;
     wxPoint                 mouse_position = GetScreen()->m_MousePosition;
     LibDrawPin*             Pin     = NULL;
@@ -96,8 +93,7 @@ SchematicGeneralLocateAndDisplay( bool IncludePin )
 
 
 /************************************************************************************/
-EDA_BaseStruct* WinEDA_SchematicFrame::
-SchematicGeneralLocateAndDisplay( const wxPoint& refpoint, bool IncludePin )
+SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( const wxPoint& refpoint, bool IncludePin )
 /************************************************************************************/
 
 /* Find the schematic item at position "refpoint"
@@ -116,14 +112,14 @@ SchematicGeneralLocateAndDisplay( const wxPoint& refpoint, bool IncludePin )
  *  For some items, caracteristics are displayed on the screen.
  */
 {
-    EDA_BaseStruct*         DrawStruct;
+    SCH_ITEM*         DrawStruct;
     LibDrawPin*             Pin;
     SCH_COMPONENT* LibItem;
     wxString Text;
     wxString msg;
     int      ii;
 
-    DrawStruct = PickStruct( refpoint, GetScreen(), MARKERITEM );
+    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), MARKERITEM );
     if( DrawStruct )
     {
         DrawMarkerStruct* Marker = (DrawMarkerStruct*) DrawStruct;
@@ -136,27 +132,24 @@ SchematicGeneralLocateAndDisplay( const wxPoint& refpoint, bool IncludePin )
         return DrawStruct;
     }
 
-    DrawStruct = PickStruct( refpoint, GetScreen(),
-                             NOCONNECTITEM );
+    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), NOCONNECTITEM );
     if( DrawStruct )
     {
         MsgPanel->EraseMsgBox();
         return DrawStruct;
     }
 
-    DrawStruct = PickStruct( refpoint, GetScreen(),
-                             JUNCTIONITEM );
+    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), JUNCTIONITEM );
     if( DrawStruct )
     {
         MsgPanel->EraseMsgBox();
         return DrawStruct;
     }
 
-    DrawStruct = PickStruct( refpoint, GetScreen(),
-                             WIREITEM | BUSITEM | RACCORDITEM );
+    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), WIREITEM | BUSITEM | RACCORDITEM );
     if( DrawStruct )    // Search for a pin
     {
-        Pin = LocateAnyPin( m_CurrentSheet->LastDrawList(), refpoint, &LibItem );
+        Pin = LocateAnyPin( (SCH_ITEM*) m_CurrentSheet->LastDrawList(), refpoint, &LibItem );
         if( Pin )
         {
             Pin->Display_Infos( this );
@@ -171,7 +164,7 @@ SchematicGeneralLocateAndDisplay( const wxPoint& refpoint, bool IncludePin )
         return DrawStruct;
     }
 
-    DrawStruct = PickStruct( refpoint, GetScreen(), FIELDCMPITEM );
+    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), FIELDCMPITEM );
     if( DrawStruct )
     {
         PartTextStruct* Field = (PartTextStruct*) DrawStruct;
@@ -182,7 +175,7 @@ SchematicGeneralLocateAndDisplay( const wxPoint& refpoint, bool IncludePin )
     }
 
     /* search for a pin */
-    Pin = LocateAnyPin( m_CurrentSheet->LastDrawList(), refpoint, &LibItem );
+    Pin = LocateAnyPin( (SCH_ITEM*) m_CurrentSheet->LastDrawList(), refpoint, &LibItem );
     if( Pin )
     {
         Pin->Display_Infos( this );
@@ -195,7 +188,7 @@ SchematicGeneralLocateAndDisplay( const wxPoint& refpoint, bool IncludePin )
             return LibItem;
     }
 
-    DrawStruct = PickStruct( refpoint, GetScreen(), LIBITEM );
+    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), LIBITEM );
     if( DrawStruct )
     {
         DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
@@ -204,8 +197,7 @@ SchematicGeneralLocateAndDisplay( const wxPoint& refpoint, bool IncludePin )
         return DrawStruct;
     }
 
-    DrawStruct = PickStruct( refpoint, GetScreen(),
-                             SHEETITEM );
+    DrawStruct = (SCH_ITEM*)PickStruct( refpoint, GetScreen(), SHEETITEM );
     if( DrawStruct )
     {
         ( (DrawSheetStruct*) DrawStruct )->Display_Infos( this );
@@ -213,8 +205,7 @@ SchematicGeneralLocateAndDisplay( const wxPoint& refpoint, bool IncludePin )
     }
 
     // Recherche des autres elements
-    DrawStruct = PickStruct( refpoint, GetScreen(),
-                             SEARCHALL );
+    DrawStruct = (SCH_ITEM*)PickStruct( refpoint, GetScreen(), SEARCHALL );
     if( DrawStruct )
     {
         return DrawStruct;

@@ -28,8 +28,9 @@
 #include "wx/wx.h"
 #endif
 
-#include "../include/wxstruct.h"
-#include "schframe.h"
+#include "fctsys.h"
+#include "common.h"
+#include "program.h"
 #include "annotate_dialog.h"
 
 extern void DeleteAnnotation( WinEDA_SchematicFrame* parent,

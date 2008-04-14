@@ -12,8 +12,6 @@
 
 #include "protos.h"
 
-#include "schframe.h"
-
 #include "../bitmaps/ercgreen.xpm"
 #include "../bitmaps/ercwarn.xpm"
 #include "../bitmaps/ercerr.xpm"

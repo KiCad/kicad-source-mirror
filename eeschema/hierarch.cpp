@@ -10,9 +10,7 @@
 #include "libcmp.h"
 #include "general.h"
 
-#include "protos.h"
-
-#include "schframe.h"
+//#include "protos.h"
 
 #include "wx/image.h"
 #include "wx/imaglist.h"
@@ -133,8 +131,8 @@ WinEDA_HierFrame::WinEDA_HierFrame(WinEDA_SchematicFrame *parent, wxDC * DC,
 
 	cellule = m_Tree->AddRoot(_("Root"), 0, 1);
 	m_Tree->SetItemBold(cellule, TRUE);
-	DrawSheetPath list; 
-	list.Push(g_RootSheet); 
+	DrawSheetPath list;
+	list.Push(g_RootSheet);
 	m_Tree->SetItemData( cellule, new TreeItemData(list) );
 
 wxRect itemrect;
@@ -199,15 +197,15 @@ wxTreeItemId menu;
 		return;
 	}
 
-	maxposx += m_Tree->GetIndent(); 
-	EDA_BaseStruct* bs = list->LastDrawList(); 
+	maxposx += m_Tree->GetIndent();
+	EDA_BaseStruct* bs = list->LastDrawList();
 	while(bs && m_nbsheets < NB_MAX_SHEET){
 		if(bs->Type() == DRAW_SHEET_STRUCT_TYPE){
-			DrawSheetStruct* ss = (DrawSheetStruct*)bs; 
-			m_nbsheets++; 
+			DrawSheetStruct* ss = (DrawSheetStruct*)bs;
+			m_nbsheets++;
 			menu = m_Tree->AppendItem(*previousmenu,
 										ss->m_SheetName, 0 , 1 );
-			list->Push(ss); 
+			list->Push(ss);
 			m_Tree->SetItemData( menu, new TreeItemData(*list) );
 			int ll = m_Tree->GetItemText(menu).Len();
 #ifdef __WINDOWS__
@@ -222,11 +220,11 @@ wxTreeItemId menu;
 				m_Tree->EnsureVisible(menu);
 				m_Tree->SelectItem(menu);
 			}
-			BuildSheetList(list, &menu); 
+			BuildSheetList(list, &menu);
 			m_Tree->Expand(menu);
-			list->Pop(); 
+			list->Pop();
 		}
-		bs = bs->Pnext; 
+		bs = bs->Pnext;
 	}
 	maxposx -= m_Tree->GetIndent();
 }
@@ -240,11 +238,11 @@ void WinEDA_HierFrame::OnSelect(wxTreeEvent& event)
 */
 {
 	wxTreeItemId ItemSel = m_Tree->GetSelection();
-	
-	*(m_Parent->m_CurrentSheet) = 
-			((TreeItemData*)(m_Tree->GetItemData(ItemSel)))->m_SheetList; 
-	wxString path = m_Parent->m_CurrentSheet->PathHumanReadable(); 
-	printf("changing to sheet %s\n", CONV_TO_UTF8(path)); 
+
+	*(m_Parent->m_CurrentSheet) =
+			((TreeItemData*)(m_Tree->GetItemData(ItemSel)))->m_SheetList;
+	wxString path = m_Parent->m_CurrentSheet->PathHumanReadable();
+	printf("changing to sheet %s\n", CONV_TO_UTF8(path));
 	UpdateScreenFromSheet(m_Parent);
 	Close(TRUE);
 }
@@ -259,14 +257,14 @@ void WinEDA_SchematicFrame::InstallPreviousSheet()
 
 	g_ItemToRepeat = NULL;
 	MsgPanel->EraseMsgBox();
-	//make a copy for testing purposes. 
-	DrawSheetPath listtemp = *m_CurrentSheet; 
-	listtemp.Pop(); 
+	//make a copy for testing purposes.
+	DrawSheetPath listtemp = *m_CurrentSheet;
+	listtemp.Pop();
 	if ( listtemp.LastScreen() == NULL ){
 		DisplayError( this, wxT("InstallPreviousScreen() Error: Sheet not found"));
 		return;
 	}
-	m_CurrentSheet->Pop(); 
+	m_CurrentSheet->Pop();
 	UpdateScreenFromSheet(this);
 }
 
@@ -284,7 +282,7 @@ void WinEDA_SchematicFrame::InstallNextScreen(DrawSheetStruct * Sheet)
 	{
 		DisplayError(this,wxT("InstallNextScreen() error")); return;
 	}
-	m_CurrentSheet->Push(Sheet); 
+	m_CurrentSheet->Push(Sheet);
 	g_ItemToRepeat = NULL;
 	MsgPanel->EraseMsgBox();
 	UpdateScreenFromSheet(this);
@@ -301,13 +299,13 @@ static bool UpdateScreenFromSheet(WinEDA_SchematicFrame * frame)
 {
 	SCH_SCREEN * NewScreen;
 
-	NewScreen = frame->m_CurrentSheet->LastScreen(); 
+	NewScreen = frame->m_CurrentSheet->LastScreen();
 	if(!NewScreen)
 	{
 		DisplayError(frame, wxT("Screen not found for this sheet"));
 		return false;
 	}
-	
+
 	// Reinit des parametres d'affichage du nouvel ecran
 	// assumes m_CurrentSheet has already been updated.
 	frame->MsgPanel->EraseMsgBox();
@@ -319,7 +317,7 @@ static bool UpdateScreenFromSheet(WinEDA_SchematicFrame * frame)
 					NewScreen->m_ScrollbarPos.y,TRUE);
 
 		//update the References
-	frame->m_CurrentSheet->UpdateAllScreenReferences(); 
+	frame->m_CurrentSheet->UpdateAllScreenReferences();
 	frame->DrawPanel->m_CanStartBlock = -1;
 	if ( NewScreen->m_FirstRedraw ){
 		NewScreen->m_FirstRedraw = FALSE;
@@ -328,7 +326,7 @@ static bool UpdateScreenFromSheet(WinEDA_SchematicFrame * frame)
 		frame->ReDrawPanel();
 		frame->DrawPanel->MouseToCursorSchema();
 	}
-	ActiveScreen = frame->m_CurrentSheet->LastScreen(); 
+	ActiveScreen = frame->m_CurrentSheet->LastScreen();
 	return true;
 }
 

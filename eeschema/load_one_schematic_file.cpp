@@ -14,8 +14,6 @@
 
 #include "id.h"
 
-#include "schframe.h"
-
 /* Format des fichiers:
  *  - entete:
  *  EESchema Schematic File Version n
@@ -82,7 +80,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
     int                  ii, layer, orient, size;
     wxPoint              pos;
     bool                 Failed = FALSE;
-    EDA_BaseStruct*      Phead, * Pnext;
+    SCH_ITEM*            Phead, * Pnext;
     DrawJunctionStruct*  ConnectionStruct;
     DrawPolylineStruct*  PolylineStruct;
     EDA_DrawLineStruct*  SegmentStruct;
@@ -207,7 +205,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
             if( !Failed )
             {
                 SegmentStruct->Pnext = screen->EEDrawList;
-                screen->EEDrawList   = (EDA_BaseStruct*) SegmentStruct;
+                screen->EEDrawList   = SegmentStruct;
             }
             break;
 
@@ -288,7 +286,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
             if( !Failed )
             {
                 PolylineStruct->Pnext = screen->EEDrawList;
-                screen->EEDrawList    = (EDA_BaseStruct*) PolylineStruct;
+                screen->EEDrawList    = PolylineStruct;
             }
             break;
 
@@ -359,7 +357,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
 
         case 'T':                       /* Its a text item. */
         {
-            EDA_BaseStruct* Struct = NULL;
+            SCH_ITEM* Struct = NULL;
             *Name1 = *Name2 = 0;
             ii = sscanf( SLine, "%s %d %d %d %d %s",
                          Name1, &pos.x, &pos.y, &orient, &size, Name2 );
@@ -394,13 +392,12 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
                         new SCH_LABEL( pos, CONV_FROM_UTF8( text ) );
                     TextStruct->m_Size.x = TextStruct->m_Size.y = size;
                     TextStruct->m_Orient = orient;
-                    Struct = (EDA_BaseStruct*) TextStruct;
+                    Struct = TextStruct;
                 }
                 else if( Name1[0] == 'G' && version > '1')
                 {
-                    SCH_GLOBALLABEL* TextStruct =
-                        new SCH_GLOBALLABEL(pos, CONV_FROM_UTF8( text ) );
-                    Struct = (EDA_BaseStruct*) TextStruct;
+                    SCH_GLOBALLABEL* TextStruct = new SCH_GLOBALLABEL(pos, CONV_FROM_UTF8( text ) );
+                    Struct = TextStruct;
                     TextStruct->m_Size.x = TextStruct->m_Size.y = size;
                     TextStruct->m_Orient = orient;
                     TextStruct->m_Shape = NET_INPUT;
@@ -415,9 +412,8 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
                 }
                 else if( (Name1[0] == 'H') || (Name1[0] == 'G' && version == '1'))
                 { //in schematic file version 1, glabels were actually hierarchal labels.
-                    SCH_HIERLABEL* TextStruct =
-                        new SCH_HIERLABEL(pos, CONV_FROM_UTF8( text ) );
-                    Struct = (EDA_BaseStruct*) TextStruct;
+                    SCH_HIERLABEL* TextStruct = new SCH_HIERLABEL(pos, CONV_FROM_UTF8( text ) );
+                    Struct = TextStruct;
                     TextStruct->m_Size.x = TextStruct->m_Size.y = size;
                     TextStruct->m_Orient = orient;
                     TextStruct->m_Shape = NET_INPUT;
@@ -436,7 +432,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
                         new SCH_TEXT( pos, CONV_FROM_UTF8( text ) );
                     TextStruct->m_Size.x = TextStruct->m_Size.y = size;
                     TextStruct->m_Orient = orient;
-                    Struct = (EDA_BaseStruct*) TextStruct;
+                    Struct = TextStruct;
                 }
                 if( Struct )
                 {
@@ -467,7 +463,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
     while( screen->EEDrawList )
     {
         Pnext = screen->EEDrawList;
-        screen->EEDrawList = screen->EEDrawList->Pnext;
+        screen->EEDrawList = screen->EEDrawList->Next();
         Pnext->Pnext = Phead;
         Phead = Pnext;
     }
@@ -777,7 +773,7 @@ static int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
     if( !Failed )
     {
         LibItemStruct->Pnext = Window->EEDrawList;
-        Window->EEDrawList   = (EDA_BaseStruct*) LibItemStruct;
+        Window->EEDrawList   = LibItemStruct;
         LibItemStruct->m_Parent = Window;
     }
 
@@ -963,7 +959,7 @@ static int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Wi
     if( !Failed )
     {
         SheetStruct->Pnext = Window->EEDrawList;
-        Window->EEDrawList   = (EDA_BaseStruct*)SheetStruct;
+        Window->EEDrawList   = SheetStruct;
         SheetStruct->m_Parent = Window;
     }
     return Failed;   /* Fin lecture 1 composant */

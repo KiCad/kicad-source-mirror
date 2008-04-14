@@ -44,7 +44,6 @@
 
 #ifdef EESCHEMA
 #include "program.h"
-#include "../eeschema/schframe.h"
 #endif
 
 ////@begin XPM images

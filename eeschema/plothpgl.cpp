@@ -41,8 +41,6 @@
 
 #include "protos.h"
 
-#include "schframe.h"
-
 /* coeff de conversion dim en 1 mil -> dim en unite HPGL: */
 #define SCALE_HPGL 1.02041
 
@@ -583,7 +581,7 @@ wxString msg;
                 #define STRUCT ((DrawBusEntryStruct*)DrawList)
                 x1 = STRUCT->m_Pos.x; y1 = STRUCT->m_Pos.y;
                 x2 = STRUCT->m_End().x; y2 = STRUCT->m_End().y;
-                layer = STRUCT->m_Layer;
+                layer = STRUCT->GetLayer();
             case DRAW_SEGMENT_STRUCT_TYPE :
                 #undef STRUCT
                 #define STRUCT ((EDA_DrawLineStruct*)DrawList)
@@ -591,7 +589,7 @@ wxString msg;
                     {
                     x1 = STRUCT->m_Start.x; y1 = STRUCT->m_Start.y;
                     x2 = STRUCT->m_End.x; y2 = STRUCT->m_End.y;
-                    layer = STRUCT->m_Layer;
+                    layer = STRUCT->GetLayer();
                     }
                 switch (layer)
                     {

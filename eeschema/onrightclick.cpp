@@ -20,8 +20,6 @@
 
 #include "bitmaps.h"
 
-#include "schframe.h"
-
 #include "Enter_Sheet.xpm"
 #include "Leave_Sheet.xpm"
 #include "Delete_Sheet.xpm"
@@ -90,7 +88,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
  *  Ce menu est ensuite compl�t� par la liste des commandes de ZOOM
  */
 {
-    EDA_BaseStruct* DrawStruct  = GetScreen()->GetCurItem();
+    SCH_ITEM* DrawStruct  = (SCH_ITEM*) GetScreen()->GetCurItem();
     bool            BlockActive = (GetScreen()->BlockLocate.m_Command != BLOCK_IDLE);
 
 
@@ -219,9 +217,8 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
         break;
 
     case DRAW_SEGMENT_STRUCT_TYPE:
-
 //			if( !flags ) PopMenu->Append(ID_POPUP_SCH_MOVE_ITEM_REQUEST, "Move");
-        switch( ( (EDA_DrawLineStruct*) DrawStruct )->m_Layer )
+        switch( DrawStruct->GetLayer() )
         {
         case LAYER_WIRE:
             AddMenusForWire( PopMenu, (EDA_DrawLineStruct*) DrawStruct, this );

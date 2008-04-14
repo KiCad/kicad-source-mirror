@@ -9,6 +9,7 @@
 #include "gr_basic.h"
 #include "wxstruct.h"
 #include "common.h"
+#include "sch_item_struct.h"
 #include "macros.h"
 
 

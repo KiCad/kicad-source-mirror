@@ -11,7 +11,6 @@
 #include "general.h"
 
 #include "protos.h"
-#include "schframe.h"
 
 
 /**************************************************************************/

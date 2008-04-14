@@ -13,8 +13,6 @@
 
 #include "protos.h"
 
-#include "schframe.h"
-
 
 char marq_bitmap[] =
 {
@@ -155,13 +153,13 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int PrintMask 
 * If the list is of DrawPickStruct types then the picked item are drawn.	 *
 *****************************************************************************/
 void RedrawStructList( WinEDA_DrawPanel* panel, wxDC* DC,
-                       EDA_BaseStruct* Structs, int DrawMode, int Color )
+                       SCH_ITEM* Structs, int DrawMode, int Color )
 {
     while( Structs )
     {
         if( Structs->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
         {
-            EDA_BaseStruct* item = ( (DrawPickedStruct*) Structs )->m_PickedStruct;
+            SCH_ITEM* item = ( (DrawPickedStruct*) Structs )->m_PickedStruct;
 
 // uncomment line below when there is a virtual EDA_BaseStruct::GetBoundingBox()
        //   if( panel->m_ClipBox.Intersects( item->GetBoundingBox() ) )
@@ -179,7 +177,7 @@ void RedrawStructList( WinEDA_DrawPanel* panel, wxDC* DC,
             }
         }
 
-        Structs = Structs->Pnext;
+        Structs = Structs->Next();
     }
 }
 
@@ -188,7 +186,7 @@ void RedrawStructList( WinEDA_DrawPanel* panel, wxDC* DC,
 * Routine to redraw list of structs.										 *
 *****************************************************************************/
 void RedrawOneStruct( WinEDA_DrawPanel* panel, wxDC* DC,
-                      EDA_BaseStruct* Struct, int DrawMode, int Color )
+                      SCH_ITEM* Struct, int DrawMode, int Color )
 {
     if( Struct == NULL )
         return;
@@ -388,7 +386,7 @@ void DrawJunctionStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint&
 
 /**********************************************************/
 void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
-                         EDA_BaseStruct* DrawStruct, int dx, int dy )
+                         SCH_ITEM* DrawStruct, int dx, int dy )
 /**********************************************************/
 
 /* Routine de redessin en mode fantome (Dessin simplifie en g_XorMode et
@@ -480,9 +478,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
     {
         SCH_TEXT* Struct;
         Struct = (SCH_TEXT*) DrawStruct;
-        Struct->m_Pos.x += dx; Struct->m_Pos.y += dy;
-        Struct->Draw( panel, DC, wxPoint( 0, 0 ), DrawMode, g_GhostColor );
-        Struct->m_Pos.x -= dx; Struct->m_Pos.y -= dy;
+        Struct->Draw( panel, DC, wxPoint( dx, dy ), DrawMode, g_GhostColor );
         break;
     }
 
@@ -492,9 +488,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
     {
         SCH_LABEL* Struct;
         Struct = (SCH_LABEL*) DrawStruct;
-        Struct->m_Pos.x += dx; Struct->m_Pos.y += dy;
-        Struct->Draw( panel, DC, wxPoint( 0, 0 ), DrawMode, g_GhostColor );
-        Struct->m_Pos.x -= dx; Struct->m_Pos.y -= dy;
+        Struct->Draw( panel, DC, wxPoint( dx, dy ), DrawMode, g_GhostColor );
         break;
     }
 
@@ -502,9 +496,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
     {
         DrawNoConnectStruct* Struct;
         Struct = (DrawNoConnectStruct*) DrawStruct;
-        Struct->m_Pos.x += dx; Struct->m_Pos.y += dy;
-        Struct->Draw( panel, DC, wxPoint( 0, 0 ), DrawMode, g_GhostColor );
-        Struct->m_Pos.x -= dx; Struct->m_Pos.y -= dy;
+        Struct->Draw( panel, DC, wxPoint( dx, dy ), DrawMode, g_GhostColor );
         break;
     }
 

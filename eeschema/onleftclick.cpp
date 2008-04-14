@@ -15,8 +15,6 @@
 
 #include "protos.h"
 
-#include "schframe.h"
-
 static wxArrayString s_CmpNameList;
 static wxArrayString s_PowerNameList;
 
@@ -28,7 +26,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
  *  quand un outil est deja selectionn�
  */
 {
-    EDA_BaseStruct* DrawStruct = GetScreen()->GetCurItem();
+    SCH_ITEM* DrawStruct = (SCH_ITEM*) GetScreen()->GetCurItem();
 
     if( (m_ID_current_state == 0) || ( DrawStruct && DrawStruct->m_Flags ) )
     {
