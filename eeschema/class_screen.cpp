@@ -31,7 +31,7 @@ void SetStructFather( EDA_BaseStruct* Struct, BASE_SCREEN* Screen )
         Struct->m_Parent = Screen;
         break;
 
-    case DRAW_SHEETLABEL_STRUCT_TYPE:
+    case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
     case DRAW_PICK_ITEM_STRUCT_TYPE:
         break;
 

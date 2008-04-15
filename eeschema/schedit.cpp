@@ -384,13 +384,13 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_SCH_EDIT_PINSHEET:
-        Edit_PinSheet( (DrawSheetLabelStruct*)
+        Edit_PinSheet( (Hierarchical_PIN_Sheet_Struct*)
                       GetScreen()->GetCurItem(), &dc );
         break;
 
     case ID_POPUP_SCH_MOVE_PINSHEET:
         DrawPanel->MouseToCursorSchema();
-        StartMove_PinSheet( (DrawSheetLabelStruct*)
+        StartMove_PinSheet( (Hierarchical_PIN_Sheet_Struct*)
                            GetScreen()->GetCurItem(), &dc );
         break;
 
@@ -781,7 +781,7 @@ void WinEDA_SchematicFrame::Process_Move_Item( SCH_ITEM* DrawStruct, wxDC*  DC )
         break;
 
     case DRAW_MARKER_STRUCT_TYPE:
-    case DRAW_SHEETLABEL_STRUCT_TYPE:
+    case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
     default:
         wxString msg;
         msg.Printf(

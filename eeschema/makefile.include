@@ -19,8 +19,9 @@ OBJECTS = eeschema.o\
 		dangling_ends.o\
 		cross-probing.o\
 		setpage.o\
-		cmpclass.o\
+		class_schematic_items.o\
 		class_drawsheet.o\
+        class_hierarchical_PIN_sheet.o\
 		class_text-label.o\
 		component_class.o\
 		libclass.o\
@@ -38,7 +39,6 @@ OBJECTS = eeschema.o\
 		bus-wire-junction.o \
 		eelibs_read_libraryfiles.o \
 		eelibs_draw_components.o \
-		eeload.o\
 		block.o\
 		block_libedit.o\
 		eeredraw.o\
@@ -164,8 +164,6 @@ drawframe.o: ../share/drawframe.cpp
 eelibs_read_libraryfiles.o: eelibs_read_libraryfiles.cpp $(DEPEND)
 
 eelibs_draw_components.o: eelibs_draw_components.cpp $(DEPEND)
-
-eeload.o: eeload.cpp $(DEPEND)
 
 block.o: block.cpp $(DEPEND)
 

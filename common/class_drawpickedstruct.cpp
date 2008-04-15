@@ -6,6 +6,22 @@
 #include "common.h"
 #include "sch_item_struct.h"
 
+
+/* Constructor and destructor for SCH_ITEM */
+/* They are not inline because this creates problems with gcc at linking time
+ * in debug mode
+*/
+
+SCH_ITEM::SCH_ITEM( EDA_BaseStruct* aParent,  KICAD_T aType ) :
+    EDA_BaseStruct( aParent, aType )
+{
+    m_Layer = 0;
+}
+
+SCH_ITEM::~SCH_ITEM()
+{
+}
+
 /**************************/
 /* class DrawPickedStruct */
 /**************************/

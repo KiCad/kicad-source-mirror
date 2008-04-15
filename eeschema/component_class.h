@@ -41,10 +41,10 @@ class PartTextStruct :  public SCH_ITEM,
     public EDA_TextStruct
 {
 public:
-    int      m_FieldId; // Field indicator type (REFERENCE, VALUE or other id)
+    int      m_FieldId;         // Field indicator type (REFERENCE, VALUE or other id)
     wxString m_Name;    /* Field name (ref, value,pcb, sheet, filed 1..
                          *  and for fields 1 to 8 the name is editable */
-    bool m_AddExtraText;    // Mainly for REFERENCE, add extar info (for REFERENCE: add part selection text
+    bool     m_AddExtraText;    // Mainly for REFERENCE, add extar info (for REFERENCE: add part selection text
 
 public:
     PartTextStruct( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString );
@@ -62,14 +62,22 @@ public:
     EDA_Rect    GetBoundaryBox() const;
     bool        IsVoid();
     void        SwapData( PartTextStruct* copyitem );
+
     /**
      * Function Draw
-    */
-    void    Draw( WinEDA_DrawPanel* panel,
-                          wxDC*             DC,
-                          const wxPoint&    offset,
-                          int               draw_mode,
-                          int               Color = -1 );
+     */
+    void        Draw( WinEDA_DrawPanel* panel,
+                      wxDC*                 DC,
+                      const wxPoint&        offset,
+                      int                   draw_mode,
+                      int                   Color = -1 );
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    bool    Save( FILE* aFile ) const;
 };
 
 
@@ -98,8 +106,16 @@ public:
     int               m_Transform[2][2];            /* The rotation/mirror transformation matrix. */
 
 private:
-    wxArrayString     m_Paths;                      // /sheet1/C102, /sh2/sh1/U32 etc.
-    wxArrayString     m_References;                 // C102, U32 etc.
+
+    /* Hierarchical references.
+      * format is
+      * path reference multi
+      * with:
+      * path = /<timestamp1>/<timestamp2> (subsheet path, = / for the root scheet)
+      * reference = reference for this path (C23, R5, U78 ... )
+      * multi = part selection in multi parts per package (0 or 1 for àne part per package)
+     */
+    wxArrayString m_PathsAndReferences;
 
 public:
     SCH_COMPONENT( const wxPoint& pos = wxPoint( 0, 0 ) );
@@ -110,12 +126,14 @@ public:
         return wxT( "SCH_COMPONENT" );
     }
 
-    /** Function Save
-     * Write on file a SCH_COMPONENT decscription
-     * @param f = output file
-     * return an error: false if ok, true if error
-    */
-    bool Save( FILE *f );
+
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    bool    Save( FILE* aFile ) const;
 
     SCH_COMPONENT*  GenCopy();
     void                    SetRotationMiroir( int type );
@@ -152,8 +170,8 @@ public:
     //returns a unique ID, in the form of a path.
     wxString                GetPath( DrawSheetPath* sheet );
     const wxString          GetRef( DrawSheetPath* sheet );
-    void                    SetRef( DrawSheetPath* sheet, const wxString & ref );
-    void                    AddHierarchicalReference(const wxString & path, const wxString & ref);
+    void                    SetRef( DrawSheetPath* sheet, const wxString& ref );
+    void                    AddHierarchicalReference( const wxString& path, const wxString& ref );
     int                     GetUnitSelection( DrawSheetPath* aSheet );
     void                    SetUnitSelection( DrawSheetPath* aSheet, int aUnitSelection );
 

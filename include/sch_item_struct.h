@@ -21,13 +21,9 @@ protected:
 
 
 public:
-    SCH_ITEM( EDA_BaseStruct* aParent,  KICAD_T aType ) :
-        EDA_BaseStruct( aParent, aType ),
-        m_Layer( 0 )
-    {
-    }
+    SCH_ITEM( EDA_BaseStruct* aParent,  KICAD_T aType );
 
-    ~SCH_ITEM(){}
+    ~SCH_ITEM();
 
     virtual wxString GetClass() const
     {
@@ -62,6 +58,13 @@ public:
     /* fonction de placement */
     virtual void    Place( WinEDA_DrawFrame* frame, wxDC* DC );
 
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    virtual bool    Save( FILE* aFile ) const = 0;
 };
 
 
@@ -110,6 +113,16 @@ public:
     {
     }
 
+    /**
+     * Function Save
+     * Do nothing, needed for SCH_ITEM compat.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    bool    Save( FILE* aFile ) const
+    {
+        return false;
+    }
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os );

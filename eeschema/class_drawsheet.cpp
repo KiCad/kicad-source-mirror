@@ -1,14 +1,14 @@
 /////////////////////////////////////////////////////////////////////////////
 
-// Name:        DrawSheet.cpp
-// Purpose:		member functions for DrawSheetStruct and DrawSheetLabelStruct
-//				header = class_screen.h
+// Name:        class_drawsheet.cpp
+// Purpose:		member functions for DrawSheetStruct
+//				header = class_drawsheet.h
 // Author:      jean-pierre Charras
 // Modified by:
 // Created:     08/02/2006 18:37:02
 // RCS-ID:
-// Copyright:   License GNU
-// Licence:
+// Copyright:
+// Licence:     License GNU
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -56,11 +56,11 @@ DrawSheetStruct::DrawSheetStruct( const wxPoint& pos ) :
 DrawSheetStruct::~DrawSheetStruct()
 /**************************************/
 {
-    DrawSheetLabelStruct* label = m_Label, * next_label;
+    Hierarchical_PIN_Sheet_Struct* label = m_Label, * next_label;
 
     while( label )
     {
-        next_label = (DrawSheetLabelStruct*) label->Pnext;
+        next_label = label->Next();
         delete label;
         label = next_label;
     }
@@ -76,81 +76,65 @@ DrawSheetStruct::~DrawSheetStruct()
 }
 
 
-
 /**********************************************/
-bool DrawSheetStruct::Save( FILE *f )
+bool DrawSheetStruct::Save( FILE* f ) const
 /***********************************************/
+
 /* Routine utilisee dans la routine precedente.
-    Assure la sauvegarde de la structure LibItemStruct
-*/
+ * Assure la sauvegarde de la structure LibItemStruct
+ */
 {
-int ii;
-bool Failed = FALSE;
-DrawSheetLabelStruct * SheetLabel;
+    bool Success = true;
+    Hierarchical_PIN_Sheet_Struct* SheetLabel;
 
-    fprintf(f, "$Sheet\n");
+    fprintf( f, "$Sheet\n" );
 
-    if (fprintf(f, "S %-4d %-4d %-4d %-4d\n",
-                    m_Pos.x,m_Pos.y,
-                    m_Size.x,m_Size.y) == EOF){
-        Failed = TRUE; return(Failed);
+    if( fprintf( f, "S %-4d %-4d %-4d %-4d\n",
+            m_Pos.x, m_Pos.y,
+            m_Size.x, m_Size.y ) == EOF )
+    {
+        Success = false;
+        return Success;
     }
 
     //save the unique timestamp, like other shematic parts.
-    if( fprintf(f, "U %8.8lX\n", m_TimeStamp)  == EOF ){
-        Failed = TRUE; return(Failed);
+    if( fprintf( f, "U %8.8lX\n", m_TimeStamp )  == EOF )
+    {
+        Success = false; return Success;
     }
 
     /* Generation de la liste des 2 textes (sheetname et filename) */
-    if ( ! m_SheetName.IsEmpty())
+    if( !m_SheetName.IsEmpty() )
     {
-        if(fprintf(f,"F0 \"%s\" %d\n", CONV_TO_UTF8(m_SheetName), m_SheetNameSize) == EOF)
+        if( fprintf( f, "F0 \"%s\" %d\n", CONV_TO_UTF8( m_SheetName ), m_SheetNameSize ) == EOF )
         {
-            Failed = TRUE; return(Failed);
+            Success = false; return Success;
         }
     }
 
-    if( ! GetFileName().IsEmpty())
+    if( !m_FileName.IsEmpty() )
     {
-        if(fprintf(f,"F1 \"%s\" %d\n", CONV_TO_UTF8(GetFileName()), m_FileNameSize) == EOF)
+        if( fprintf( f, "F1 \"%s\" %d\n", CONV_TO_UTF8( m_FileName ), m_FileNameSize ) == EOF )
         {
-            Failed = TRUE; return(Failed);
+            Success = false; return Success;
         }
     }
 
     /* Generation de la liste des labels (entrees) de la sous feuille */
-    ii = 2;
     SheetLabel = m_Label;
+    int l_id = 2;
     while( SheetLabel != NULL )
     {
-        int type = 'U', side = 'L';
-
-        if( SheetLabel->m_Text.IsEmpty() ) continue;
-        if( SheetLabel->m_Edge ) side = 'R';
-
-        switch(SheetLabel->m_Shape)
-        {
-            case NET_INPUT: type = 'I'; break;
-            case NET_OUTPUT: type = 'O'; break;
-            case NET_BIDI: type = 'B'; break;
-            case NET_TRISTATE: type = 'T'; break;
-            case NET_UNSPECIFIED: type = 'U'; break;
-        }
-
-        if(fprintf(f,"F%d \"%s\" %c %c %-3d %-3d %-3d\n", ii,
-            CONV_TO_UTF8(SheetLabel->m_Text), type, side,
-            SheetLabel->m_Pos.x, SheetLabel->m_Pos.y,
-            SheetLabel->m_Size.x) == EOF)
-        {
-            Failed = TRUE; break;
-        }
-        ii++;
-        SheetLabel = (DrawSheetLabelStruct*)SheetLabel->Pnext;
+        SheetLabel->m_Number = l_id;
+        SheetLabel->Save( f );
+        l_id++;
+        SheetLabel = SheetLabel->Next();
     }
 
-    fprintf(f, "$EndSheet\n");
-    return(Failed);
+    fprintf( f, "$EndSheet\n" );
+    return Success;
 }
+
 
 /***********************************************/
 DrawSheetStruct* DrawSheetStruct::GenCopy()
@@ -174,7 +158,7 @@ DrawSheetStruct* DrawSheetStruct::GenCopy()
 
     newitem->m_Label = NULL;
 
-    DrawSheetLabelStruct* Slabel = NULL, * label = m_Label;
+    Hierarchical_PIN_Sheet_Struct* Slabel = NULL, * label = m_Label;
 
     if( label )
     {
@@ -186,7 +170,7 @@ DrawSheetStruct* DrawSheetStruct::GenCopy()
     while( label )
     {
         Slabel->Pnext = label->GenCopy();
-        Slabel = (DrawSheetLabelStruct*) Slabel->Pnext;
+        Slabel = (Hierarchical_PIN_Sheet_Struct*) Slabel->Pnext;
         Slabel->m_Parent = newitem;
         label = label->Next();
     }
@@ -217,19 +201,19 @@ void DrawSheetStruct::SwapData( DrawSheetStruct* copyitem )
     EXCHG( m_NbLabel, copyitem->m_NbLabel );
 
     // Ensure sheet labels have their .m_Parent member poiuntin really on their parent, after swapping.
-    DrawSheetLabelStruct * label = m_Label;
+    Hierarchical_PIN_Sheet_Struct* label = m_Label;
     while( label )
     {
         label->m_Parent = this;
         label = label->Next();
     }
+
     label = copyitem->m_Label;
     while( label )
     {
         label->m_Parent = copyitem;
         label = label->Next();
     }
-
 }
 
 
@@ -263,7 +247,7 @@ void DrawSheetStruct::CleanupSheet( WinEDA_SchematicFrame* frame, wxDC* DC )
  *  if DC != NULL, redraw Sheet
  */
 {
-    DrawSheetLabelStruct* Pinsheet, * NextPinsheet;
+    Hierarchical_PIN_Sheet_Struct* Pinsheet, * NextPinsheet;
 
     if( !IsOK( frame, _( "Ok to cleanup this sheet" ) ) )
         return;
@@ -273,8 +257,8 @@ void DrawSheetStruct::CleanupSheet( WinEDA_SchematicFrame* frame, wxDC* DC )
     {
         /* Search Hlabel corresponding to this Pinsheet */
 
-        EDA_BaseStruct*      DrawStruct = m_AssociatedScreen->EEDrawList;
-        SCH_HIERLABEL* HLabel = NULL;
+        EDA_BaseStruct* DrawStruct = m_AssociatedScreen->EEDrawList;
+        SCH_HIERLABEL*  HLabel = NULL;
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext )
         {
             if( DrawStruct->Type() != TYPE_SCH_HIERLABEL )
@@ -285,7 +269,7 @@ void DrawSheetStruct::CleanupSheet( WinEDA_SchematicFrame* frame, wxDC* DC )
             HLabel = NULL;
         }
 
-        NextPinsheet = (DrawSheetLabelStruct*) Pinsheet->Pnext;
+        NextPinsheet = Pinsheet->Next();
         if( HLabel == NULL )   // Hlabel not found: delete pinsheet
         {
             frame->GetScreen()->SetModify();
@@ -302,7 +286,7 @@ void DrawSheetStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& of
 /**************************************************************************************/
 /* Draw the hierarchical sheet shape */
 {
-    DrawSheetLabelStruct* SheetLabelStruct;
+    Hierarchical_PIN_Sheet_Struct* SheetLabelStruct;
     int      txtcolor;
     wxString Text;
     int      color;
@@ -316,7 +300,7 @@ void DrawSheetStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& of
     GRSetDrawMode( DC, DrawMode );
 
     GRRect( &panel->m_ClipBox, DC, pos.x, pos.y,
-            pos.x + m_Size.x, pos.y + m_Size.y, LineWidth, color );
+        pos.x + m_Size.x, pos.y + m_Size.y, LineWidth, color );
 
     /* Draw text : SheetName */
     if( Color > 0 )
@@ -326,9 +310,9 @@ void DrawSheetStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& of
 
     Text = wxT( "Sheet: " ) + m_SheetName;
     DrawGraphicText( panel, DC,
-                     wxPoint( pos.x, pos.y - 8 ), txtcolor,
-                     Text, TEXT_ORIENT_HORIZ, wxSize( m_SheetNameSize, m_SheetNameSize ),
-                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM, LineWidth );
+        wxPoint( pos.x, pos.y - 8 ), txtcolor,
+        Text, TEXT_ORIENT_HORIZ, wxSize( m_SheetNameSize, m_SheetNameSize ),
+        GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM, LineWidth );
 
     /* Draw text : FileName */
     if( Color >= 0 )
@@ -337,36 +321,43 @@ void DrawSheetStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& of
         txtcolor = ReturnLayerColor( LAYER_SHEETFILENAME );
     Text = wxT( "File: " ) + m_FileName;
     DrawGraphicText( panel, DC,
-                     wxPoint( pos.x, pos.y + m_Size.y + 4 ),
-                     txtcolor,
-                     Text, TEXT_ORIENT_HORIZ, wxSize( m_FileNameSize, m_FileNameSize ),
-                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, LineWidth );
+        wxPoint( pos.x, pos.y + m_Size.y + 4 ),
+        txtcolor,
+        Text, TEXT_ORIENT_HORIZ, wxSize( m_FileNameSize, m_FileNameSize ),
+        GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, LineWidth );
 
 
     /* Draw text : SheetLabel */
     SheetLabelStruct = m_Label;
     while( SheetLabelStruct != NULL )
     {
-        if ( !(SheetLabelStruct->m_Flags & IS_MOVED) )
+        if( !(SheetLabelStruct->m_Flags & IS_MOVED) )
             SheetLabelStruct->Draw( panel, DC, offset, DrawMode, Color );
-        SheetLabelStruct = (DrawSheetLabelStruct*) (SheetLabelStruct->Pnext);
+        SheetLabelStruct = SheetLabelStruct->Next();
     }
 }
 
-EDA_Rect DrawSheetStruct::GetBoundingBox(){
-    int dx, dy;
-    // Determine length of texts
-    wxString Text1 = wxT( "Sheet: " ) + m_SheetName;
-    wxString Text2 = wxT( "File: " ) + m_FileName;
-    int textlen1 = 10 * Text1.Len() * m_SheetNameSize / 9;
-    int textlen2 = 10 * Text2.Len() * m_FileNameSize / 9;
-    textlen1 = MAX(textlen1, textlen2);
-    dx = MAX(m_Size.x, textlen1 );
-    dy = m_Size.y+m_SheetNameSize+m_FileNameSize+16;
 
-    EDA_Rect box(wxPoint(m_Pos.x,m_Pos.y-m_SheetNameSize-8), wxSize(dx,dy) );
+/*****************************************/
+EDA_Rect DrawSheetStruct::GetBoundingBox()
+/*****************************************/
+{
+    int      dx, dy;
+
+    // Determine length of texts
+    wxString Text1    = wxT( "Sheet: " ) + m_SheetName;
+    wxString Text2    = wxT( "File: " ) + m_FileName;
+    int      textlen1 = 10 * Text1.Len() * m_SheetNameSize / 9;
+    int      textlen2 = 10 * Text2.Len() * m_FileNameSize / 9;
+
+    textlen1 = MAX( textlen1, textlen2 );
+    dx = MAX( m_Size.x, textlen1 );
+    dy = m_Size.y + m_SheetNameSize + m_FileNameSize + 16;
+
+    EDA_Rect box( wxPoint( m_Pos.x, m_Pos.y - m_SheetNameSize - 8 ), wxSize( dx, dy ) );
     return box;
 }
+
 
 /**************************************************************************************/
 void DrawSheetStruct::DeleteAnnotation( bool recurse )
@@ -440,8 +431,8 @@ bool DrawSheetStruct::SearchHierarchy( wxString filename, SCH_SCREEN** screen )
             if( strct->Type() == DRAW_SHEET_STRUCT_TYPE )
             {
                 DrawSheetStruct* ss = (DrawSheetStruct*) strct;
-                if( ss->m_AssociatedScreen &&
-                    ss->m_AssociatedScreen->m_FileName.CmpNoCase( filename ) == 0 )
+                if( ss->m_AssociatedScreen
+                    && ss->m_AssociatedScreen->m_FileName.CmpNoCase( filename ) == 0 )
                 {
                     *screen = ss->m_AssociatedScreen;
                     return true;
@@ -575,36 +566,35 @@ void DrawSheetStruct::SetFileName( const wxString& aFilename )
  * - if new filename is already used (a complex hierarchy) : reference the sheet.
  */
 
-bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame * aFrame, const wxString& aFileName )
+bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame* aFrame, const wxString& aFileName )
 {
     if( (GetFileName() == aFileName) && m_AssociatedScreen )
         return true;
 
     SCH_SCREEN* Screen_to_use = NULL;
-    wxString msg;
-    bool LoadFromFile = false;
+    wxString    msg;
+    bool        LoadFromFile = false;
 
 
     if( g_RootSheet->SearchHierarchy( aFileName, &Screen_to_use ) ) //do we reload the data from the existing hierarchy
     {
-		if(m_AssociatedScreen) //upon initial load, this will be null.
-		{
-			msg.Printf( _(
-						"A Sub Hierarchy named %s exists, Use it (The data in this sheet will be replaced)?" ),
-					aFileName.GetData() );
-			if( ! IsOK( NULL, msg ) )
-			{
-				DisplayInfo(NULL, _("Sheet Filename Renaming Aborted"));
-				return false;
-			}
-		}
+        if( m_AssociatedScreen )                                    //upon initial load, this will be null.
+        {
+            msg.Printf( _(
+                    "A Sub Hierarchy named %s exists, Use it (The data in this sheet will be replaced)?" ),
+                aFileName.GetData() );
+            if( !IsOK( NULL, msg ) )
+            {
+                DisplayInfo( NULL, _( "Sheet Filename Renaming Aborted" ) );
+                return false;
+            }
+        }
     }
-
     else if( wxFileExists( aFileName ) )         //do we reload the data from an existing file
     {
         msg.Printf( _(
-                       "A file named %s exists, load it (otherwise keep current sheet data if possible)?" ),
-                   aFileName.GetData() );
+                "A file named %s exists, load it (otherwise keep current sheet data if possible)?" ),
+            aFileName.GetData() );
         if( IsOK( NULL, msg ) )
         {
             LoadFromFile = true;
@@ -616,11 +606,12 @@ bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame * aFrame, const wxSt
     }
 
     // if an associated screen exists, shared between this sheet and others sheets, what we do ?
-    if( m_AssociatedScreen && ( m_AssociatedScreen->m_RefCount > 1 ))
+    if( m_AssociatedScreen && ( m_AssociatedScreen->m_RefCount > 1 ) )
     {
-        msg = _("This sheet uses shared data in a complex hierarchy" ) ;
-        msg << wxT("\n");
-        msg << _("Do we convert it in a simple hierarchical sheet (otherwise delete current sheet data)");
+        msg = _( "This sheet uses shared data in a complex hierarchy" );
+        msg << wxT( "\n" );
+        msg << _(
+            "Do we convert it in a simple hierarchical sheet (otherwise delete current sheet data)" );
         if( IsOK( NULL, msg ) )
         {
             LoadFromFile = true;
@@ -629,8 +620,8 @@ bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame * aFrame, const wxSt
             aFrame->SaveEEFile( m_AssociatedScreen, FILE_SAVE_AS );
             m_AssociatedScreen->m_FileName = oldfilename;
         }
-        m_AssociatedScreen->m_RefCount--;  //be careful with these
-        m_AssociatedScreen = NULL;         //will be created later
+        m_AssociatedScreen->m_RefCount--;   //be careful with these
+        m_AssociatedScreen = NULL;          //will be created later
     }
 
 
@@ -645,9 +636,9 @@ bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame * aFrame, const wxSt
         m_AssociatedScreen = NULL;         //so that we reload..
     }
 
-    if ( LoadFromFile )
+    if( LoadFromFile )
         Load( aFrame );
-    else if ( Screen_to_use )
+    else if( Screen_to_use )
     {
         m_AssociatedScreen = Screen_to_use;
         m_AssociatedScreen->m_RefCount++;
@@ -665,129 +656,6 @@ bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame * aFrame, const wxSt
     return true;
 }
 
-
-/************************/
-/* DrawSheetLabelStruct */
-/************************/
-
-/*******************************************************************/
-DrawSheetLabelStruct::DrawSheetLabelStruct( DrawSheetStruct* parent,
-                                            const wxPoint& pos, const wxString& text ) :
-    SCH_ITEM( NULL, DRAW_SHEETLABEL_STRUCT_TYPE )
-    , EDA_TextStruct( text )
-/*******************************************************************/
-{
-    m_Layer      = LAYER_SHEETLABEL;
-    m_Pos        = pos;
-    m_Edge       = 0;
-    m_Shape      = NET_INPUT;
-    m_IsDangling = TRUE;
-}
-
-
-/***********************************************************/
-DrawSheetLabelStruct* DrawSheetLabelStruct::GenCopy()
-/***********************************************************/
-{
-    DrawSheetLabelStruct* newitem =
-        new DrawSheetLabelStruct( (DrawSheetStruct*) m_Parent, m_Pos, m_Text );
-
-    newitem->m_Edge  = m_Edge;
-    newitem->m_Shape = m_Shape;
-
-    return newitem;
-}
-
-
-/********************************************************************************************/
-void DrawSheetLabelStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                                 int DrawMode, int Color )
-/********************************************************************************************/
-/* Routine de dessin des Labels type hierarchie */
-{
-    int    side, txtcolor;
-    int    posx, tposx, posy, size2;
-    wxSize size;
-    int    NbSegm, coord[20];
-    int    LineWidth = g_DrawMinimunLineWidth;
-
-    if( Color >= 0 )
-        txtcolor = Color;
-    else
-        txtcolor = ReturnLayerColor( m_Layer );
-    GRSetDrawMode( DC, DrawMode );
-
-    posx = m_Pos.x + offset.x; posy = m_Pos.y + offset.y; size = m_Size;
-    if( !m_Text.IsEmpty() )
-    {
-        if( m_Edge )
-        {
-            tposx = posx - size.x;
-            side  = GR_TEXT_HJUSTIFY_RIGHT;
-        }
-        else
-        {
-            tposx = posx + size.x + (size.x / 8);
-            side  = GR_TEXT_HJUSTIFY_LEFT;
-        }
-        DrawGraphicText( panel, DC, wxPoint( tposx, posy ), txtcolor,
-                         m_Text, TEXT_ORIENT_HORIZ, size,
-                         side, GR_TEXT_VJUSTIFY_CENTER, LineWidth );
-    }
-    /* dessin du symbole de connexion */
-
-    if( m_Edge )
-    {
-        size.x = -size.x;
-        size.y = -size.y;
-    }
-
-    coord[0] = posx; coord[1] = posy; size2 = size.x / 2;
-    NbSegm   = 0;
-
-    switch( m_Shape )
-    {
-    case 0:         /* input |> */
-        coord[2]  = posx; coord[3] = posy - size2;
-        coord[4]  = posx + size2; coord[5] = posy - size2;
-        coord[6]  = posx + size.x; coord[7] = posy;
-        coord[8]  = posx + size2; coord[9] = posy + size2;
-        coord[10] = posx; coord[11] = posy + size2;
-        coord[12] = coord[0]; coord[13] = coord[1];
-        NbSegm    = 7;
-        break;
-
-    case 1:         /* output <| */
-        coord[2]  = posx + size2; coord[3] = posy - size2;
-        coord[4]  = posx + size.x; coord[5] = posy - size2;
-        coord[6]  = posx + size.x; coord[7] = posy + size2;
-        coord[8]  = posx + size2; coord[9] = posy + size2;
-        coord[10] = coord[0]; coord[11] = coord[1];
-        NbSegm    = 6;
-        break;
-
-    case 2:         /* bidi <> */
-    case 3:         /* TriSt <> */
-        coord[2] = posx + size2; coord[3] = posy - size2;
-        coord[4] = posx + size.x; coord[5] = posy;
-        coord[6] = posx + size2; coord[7] = posy + size2;
-        coord[8] = coord[0];  coord[9] = coord[1];
-        NbSegm   = 5;
-        break;
-
-    default:         /* unsp []*/
-        coord[2]  = posx; coord[3] = posy - size2;
-        coord[4]  = posx + size.x; coord[5] = posy - size2;
-        coord[6]  = posx + size.x; coord[7] = posy + size2;
-        coord[8]  = posx; coord[9] = posy + size2;
-        coord[10] = coord[0]; coord[11] = coord[1];
-        NbSegm    = 6;
-        break;
-    }
-
-    int FillShape = FALSE;
-    GRPoly( &panel->m_ClipBox, DC, NbSegm, coord, FillShape, LineWidth, txtcolor, txtcolor ); /* Poly Non rempli */
-}
 
 
 /**********************************************/

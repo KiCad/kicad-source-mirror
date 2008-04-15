@@ -52,7 +52,7 @@ static void AddMenusForWire( wxMenu* PopMenu, EDA_DrawLineStruct* Wire,
 static void AddMenusForBus( wxMenu* PopMenu, EDA_DrawLineStruct* Bus,
                             WinEDA_SchematicFrame* frame );
 static void AddMenusForHierchicalSheet( wxMenu* PopMenu, DrawSheetStruct* Sheet );
-static void AddMenusForPinSheet( wxMenu* PopMenu, DrawSheetLabelStruct* PinSheet );
+static void AddMenusForPinSheet( wxMenu* PopMenu, Hierarchical_PIN_Sheet_Struct* PinSheet );
 static void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text );
 static void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label );
 static void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel );
@@ -107,7 +107,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
         DrawStruct = SchematicGeneralLocateAndDisplay( FALSE );
         if( DrawStruct && (DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE) )
         {
-            DrawSheetLabelStruct* slabel;
+            Hierarchical_PIN_Sheet_Struct* slabel;
             slabel = LocateSheetLabel( (DrawSheetStruct*) DrawStruct,
                                       GetScreen()->m_Curseur );
             if( slabel )
@@ -242,8 +242,8 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
         AddMenusForHierchicalSheet( PopMenu, (DrawSheetStruct*) DrawStruct );
         break;
 
-    case DRAW_SHEETLABEL_STRUCT_TYPE:
-        AddMenusForPinSheet( PopMenu, (DrawSheetLabelStruct*) DrawStruct );
+    case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
+        AddMenusForPinSheet( PopMenu, (Hierarchical_PIN_Sheet_Struct*) DrawStruct );
         break;
 
     default:
@@ -608,7 +608,7 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, DrawSheetStruct* Sheet )
 
 
 /************************************************************************/
-void AddMenusForPinSheet( wxMenu* PopMenu, DrawSheetLabelStruct* PinSheet )
+void AddMenusForPinSheet( wxMenu* PopMenu, Hierarchical_PIN_Sheet_Struct* PinSheet )
 /************************************************************************/
 
 /* Add menu commands for a Pin Sheet (or Sheet label)

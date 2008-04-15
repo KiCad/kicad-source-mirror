@@ -13,10 +13,11 @@ set(EESCHEMA_SRCS
     busentry.cpp
     bus-wire-junction.cpp
     class_drawsheet.cpp
+    class_hierarchical_PIN_sheet.cpp
     class_screen.cpp
     class_text-label.cpp
+    class_schematic_items.cpp
     cleanup.cpp
-    cmpclass.cpp
     component_class.cpp
     controle.cpp
     cross-probing.cpp
@@ -34,7 +35,6 @@ set(EESCHEMA_SRCS
     dialog_erc.cpp
 #   dialog_find.cpp
     dialog_options.cpp
-#   divers.cpp
     edit_component_in_lib.cpp
     edit_component_in_schematic.cpp
     edit_label.cpp
@@ -43,7 +43,6 @@ set(EESCHEMA_SRCS
     eelayer.cpp
     eelibs_draw_components.cpp
     eelibs_read_libraryfiles.cpp
-    eeload.cpp
     eeredraw.cpp
     eeschema.cpp
     eestring.cpp

@@ -569,7 +569,7 @@ EDA_BaseStruct* BASE_SCREEN::GetItemFromRedoList()
  */
 void BASE_SCREEN::Show( int nestLevel, std::ostream& os )
 {
-    EDA_BaseStruct* item = EEDrawList;
+    EDA_BaseStruct* item = (EDA_BaseStruct*) EEDrawList;    // @todo : use SCH_ITEM as type for item
 
     // for now, make it look like XML, expand on this later.
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<

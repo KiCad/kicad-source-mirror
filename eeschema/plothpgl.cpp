@@ -647,7 +647,7 @@ wxString msg;
 
             case DRAW_PICK_ITEM_STRUCT_TYPE : break;
             case DRAW_POLYLINE_STRUCT_TYPE : break;
-            case DRAW_SHEETLABEL_STRUCT_TYPE : break;
+            case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE : break;
             case DRAW_MARKER_STRUCT_TYPE : break;
 
             case DRAW_SHEET_STRUCT_TYPE :

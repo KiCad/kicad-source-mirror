@@ -14,33 +14,43 @@
 extern DrawSheetStruct* g_RootSheet;
 
 
-class DrawSheetLabelStruct : public SCH_ITEM,
+class Hierarchical_PIN_Sheet_Struct : public SCH_ITEM,
     public EDA_TextStruct
 {
 public:
     int  m_Edge, m_Shape;
     bool m_IsDangling;  // TRUE non connected
+    int m_Number;       // used to numbered labels when writing data on file . m_Number >= 2
+                        // value 0 is for sheet name and 1 for sheet filename
 
 public:
-    DrawSheetLabelStruct( DrawSheetStruct* parent,
+    Hierarchical_PIN_Sheet_Struct( DrawSheetStruct* parent,
                           const wxPoint& pos = wxPoint( 0, 0 ),
                           const wxString& text = wxEmptyString );
 
-    ~DrawSheetLabelStruct() { }
+    ~Hierarchical_PIN_Sheet_Struct() { }
     virtual wxString GetClass() const
     {
-        return wxT( "DrawSheetLabelStruct" );
+        return wxT( "Hierarchical_PIN_Sheet_Struct" );
     }
 
 
-    DrawSheetLabelStruct*   GenCopy();
+    Hierarchical_PIN_Sheet_Struct*   GenCopy();
 
-    DrawSheetLabelStruct* Next()
-    { return (DrawSheetLabelStruct*) Pnext; }
+    Hierarchical_PIN_Sheet_Struct* Next()
+    { return (Hierarchical_PIN_Sheet_Struct*) Pnext; }
 
     void                    Place( WinEDA_DrawFrame* frame, wxDC* DC );
-    virtual void            Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
+    void                    Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                                   int draw_mode, int Color = -1 );
+
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    bool    Save( FILE* aFile ) const;
 };
 
 
@@ -65,7 +75,7 @@ public:
     wxPoint               m_Pos;
     wxSize                m_Size;           /* Position and Size of sheet symbol */
     int                   m_Layer;
-    DrawSheetLabelStruct* m_Label;          /* Points de connection, linked list.*/
+    Hierarchical_PIN_Sheet_Struct* m_Label;          /* Points de connection, linked list.*/
     int                   m_NbLabel;        /* Nombre de points de connexion */
     SCH_SCREEN*           m_AssociatedScreen;   /* Associated Screen which handle the physical data
                                                   * In complex hierarchies we can have many DrawSheetStruct using the same data
@@ -81,12 +91,13 @@ public:
         return wxT( "DrawSheetStruct" );
     }
 
-    /** Function Save
-     * Write on file a DrawSheetStruct description
-     * @param f = output file
-     * return an error: false if ok, true if error
-    */
-    bool Save( FILE *f );
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    bool    Save( FILE* aFile ) const;
 
     void                Place( WinEDA_DrawFrame* frame, wxDC* DC );
     DrawSheetStruct*    GenCopy();

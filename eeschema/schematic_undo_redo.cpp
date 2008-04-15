@@ -141,11 +141,11 @@ void SwapData( EDA_BaseStruct* Item )
         EXCHG( SOURCE->m_Pos, DEST->m_Pos );
         break;
 
-    case DRAW_SHEETLABEL_STRUCT_TYPE:
+    case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
         #undef SOURCE
         #undef DEST
-        #define SOURCE ( (DrawSheetLabelStruct*) Item )
-        #define DEST   ( (DrawSheetLabelStruct*) image )
+        #define SOURCE ( (Hierarchical_PIN_Sheet_Struct*) Item )
+        #define DEST   ( (Hierarchical_PIN_Sheet_Struct*) image )
         EXCHG( SOURCE->m_Edge, DEST->m_Edge );
         EXCHG( SOURCE->m_Shape, DEST->m_Shape );
         break;

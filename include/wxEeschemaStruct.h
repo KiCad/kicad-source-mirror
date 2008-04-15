@@ -195,14 +195,14 @@ public:
 
 private:
     void                    StartMoveSheet( DrawSheetStruct* sheet, wxDC* DC );
-    DrawSheetLabelStruct*   Create_PinSheet( DrawSheetStruct* Sheet, wxDC* DC );
-    void                    Edit_PinSheet( DrawSheetLabelStruct* SheetLabel, wxDC* DC );
-    void                    StartMove_PinSheet( DrawSheetLabelStruct* SheetLabel, wxDC* DC );
-    void                    Place_PinSheet( DrawSheetLabelStruct* SheetLabel, wxDC* DC );
-    DrawSheetLabelStruct*   Import_PinSheet( DrawSheetStruct* Sheet, wxDC* DC );
+    Hierarchical_PIN_Sheet_Struct*   Create_PinSheet( DrawSheetStruct* Sheet, wxDC* DC );
+    void                    Edit_PinSheet( Hierarchical_PIN_Sheet_Struct* SheetLabel, wxDC* DC );
+    void                    StartMove_PinSheet( Hierarchical_PIN_Sheet_Struct* SheetLabel, wxDC* DC );
+    void                    Place_PinSheet( Hierarchical_PIN_Sheet_Struct* SheetLabel, wxDC* DC );
+    Hierarchical_PIN_Sheet_Struct*   Import_PinSheet( DrawSheetStruct* Sheet, wxDC* DC );
 
 public:
-    void                    DeleteSheetLabel( wxDC* DC, DrawSheetLabelStruct* SheetLabelToDel );
+    void                    DeleteSheetLabel( wxDC* DC, Hierarchical_PIN_Sheet_Struct* SheetLabelToDel );
 
 private:
 

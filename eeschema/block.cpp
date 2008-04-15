@@ -607,7 +607,7 @@ void MirrorOneStruct( SCH_ITEM * DrawStruct, wxPoint& Center )
     DrawBusEntryStruct*     DrawRaccord;
     SCH_COMPONENT* DrawLibItem;
     DrawSheetStruct*        DrawSheet;
-    DrawSheetLabelStruct*   DrawSheetLabel;
+    Hierarchical_PIN_Sheet_Struct*   DrawSheetLabel;
     DrawMarkerStruct*       DrawMarker;
     DrawNoConnectStruct*    DrawNoConnect;
     SCH_TEXT*         DrawText;
@@ -728,13 +728,13 @@ void MirrorOneStruct( SCH_ITEM * DrawStruct, wxPoint& Center )
         {
             MirrorYPoint( DrawSheetLabel->m_Pos, Center );
             DrawSheetLabel->m_Edge = DrawSheetLabel->m_Edge ? 0 : 1;
-            DrawSheetLabel = (DrawSheetLabelStruct*) DrawSheetLabel->Pnext;
+            DrawSheetLabel = (Hierarchical_PIN_Sheet_Struct*) DrawSheetLabel->Pnext;
         }
 
         break;
 
-    case DRAW_SHEETLABEL_STRUCT_TYPE:
-        DrawSheetLabel = (DrawSheetLabelStruct*) DrawStruct;
+    case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
+        DrawSheetLabel = (Hierarchical_PIN_Sheet_Struct*) DrawStruct;
         MirrorYPoint( DrawSheetLabel->m_Pos, Center );
         break;
 
@@ -876,7 +876,7 @@ static SCH_ITEM * CopyStruct( WinEDA_DrawPanel* panel, wxDC* DC, BASE_SCREEN* sc
         case TYPE_SCH_LABEL:
         case TYPE_SCH_GLOBALLABEL:
         case TYPE_SCH_HIERLABEL:
-        case DRAW_SHEETLABEL_STRUCT_TYPE:
+        case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
         case DRAW_PICK_ITEM_STRUCT_TYPE:
         case DRAW_MARKER_STRUCT_TYPE:
         case DRAW_NOCONNECT_STRUCT_TYPE:
@@ -929,12 +929,12 @@ void DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM * DrawStruct )
     if( !DrawStruct )
         return;
 
-    if( DrawStruct->Type() == DRAW_SHEETLABEL_STRUCT_TYPE )
+    if( DrawStruct->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
     {
         /* Cette stucture est rattachee a une feuille, et n'est pas
          *  accessible par la liste globale directement */
-        frame->SaveCopyInUndoList( (SCH_ITEM*) ( (DrawSheetLabelStruct*) DrawStruct )->m_Parent, IS_CHANGED );
-        frame->DeleteSheetLabel( DC, (DrawSheetLabelStruct*) DrawStruct );
+        frame->SaveCopyInUndoList( (SCH_ITEM*) ( (Hierarchical_PIN_Sheet_Struct*) DrawStruct )->m_Parent, IS_CHANGED );
+        frame->DeleteSheetLabel( DC, (Hierarchical_PIN_Sheet_Struct*) DrawStruct );
         return;
     }
 
@@ -1127,7 +1127,7 @@ bool PlaceStruct( BASE_SCREEN* screen, SCH_ITEM * DrawStruct )
     case TYPE_SCH_HIERLABEL:
     case TYPE_SCH_COMPONENT:
     case DRAW_SHEET_STRUCT_TYPE:
-    case DRAW_SHEETLABEL_STRUCT_TYPE:
+    case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
     case DRAW_MARKER_STRUCT_TYPE:
     case DRAW_NOCONNECT_STRUCT_TYPE:
         MoveOneStruct( DrawStruct, move_vector );
@@ -1162,7 +1162,7 @@ void MoveOneStruct( SCH_ITEM * DrawStruct, const wxPoint& move_vector )
     DrawBusEntryStruct*     DrawRaccord;
     SCH_COMPONENT* DrawLibItem;
     DrawSheetStruct*        DrawSheet;
-    DrawSheetLabelStruct*   DrawSheetLabel;
+    Hierarchical_PIN_Sheet_Struct*   DrawSheetLabel;
     DrawMarkerStruct*       DrawMarker;
     DrawNoConnectStruct*    DrawNoConnect;
 
@@ -1255,8 +1255,8 @@ void MoveOneStruct( SCH_ITEM * DrawStruct, const wxPoint& move_vector )
 
         break;
 
-    case DRAW_SHEETLABEL_STRUCT_TYPE:
-        DrawSheetLabel = (DrawSheetLabelStruct*) DrawStruct;
+    case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
+        DrawSheetLabel = (Hierarchical_PIN_Sheet_Struct*) DrawStruct;
         DrawSheetLabel->m_Pos += move_vector;
         break;
 
@@ -1356,7 +1356,7 @@ SCH_ITEM * DuplicateStruct( SCH_ITEM * DrawStruct )
         break;
     }
 
-    case DRAW_SHEETLABEL_STRUCT_TYPE:
+    case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
     case DRAW_PART_TEXT_STRUCT_TYPE:
     case SCREEN_STRUCT_TYPE:
     default:
@@ -1467,12 +1467,12 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
 
         if( Struct->Type() == DRAW_SHEET_STRUCT_TYPE )
         {
-            DrawSheetLabelStruct* SLabel = ( (DrawSheetStruct*) Struct )->m_Label;
+            Hierarchical_PIN_Sheet_Struct* SLabel = ( (DrawSheetStruct*) Struct )->m_Label;
             while( SLabel )
             {
-                if( SLabel->Type() == DRAW_SHEETLABEL_STRUCT_TYPE )
+                if( SLabel->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
                     AddPickedItem( screen, SLabel->m_Pos );
-                SLabel = (DrawSheetLabelStruct*) SLabel->Pnext;
+                SLabel = (Hierarchical_PIN_Sheet_Struct*) SLabel->Pnext;
             }
         }
 
@@ -1611,7 +1611,7 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
         case DRAW_SHEET_STRUCT_TYPE:
             break;
 
-        case DRAW_SHEETLABEL_STRUCT_TYPE:
+        case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
             break;
 
         case DRAW_PICK_ITEM_STRUCT_TYPE:

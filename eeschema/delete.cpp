@@ -382,7 +382,7 @@ void EraseStruct( SCH_ITEM* DrawStruct, SCH_SCREEN* Screen )
 {
     EDA_BaseStruct* DrawList;
     DrawPickedStruct* PickedList = NULL;
-    DrawSheetLabelStruct* SheetLabel, * NextLabel;
+    Hierarchical_PIN_Sheet_Struct* SheetLabel, * NextLabel;
 
     if( DrawStruct == NULL )
         return;
@@ -392,7 +392,7 @@ void EraseStruct( SCH_ITEM* DrawStruct, SCH_SCREEN* Screen )
 
     Screen->SetModify();
 
-    if( DrawStruct->Type() == DRAW_SHEETLABEL_STRUCT_TYPE )
+    if( DrawStruct->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
     {
         /* Cette stucture est rattachee a une feuille, et n'est pas
           * accessible par la liste globale directement */
@@ -408,10 +408,10 @@ void EraseStruct( SCH_ITEM* DrawStruct, SCH_SCREEN* Screen )
             if( SheetLabel == NULL )
                 continue;
 
-            if( SheetLabel == (DrawSheetLabelStruct*) DrawStruct )
+            if( SheetLabel == (Hierarchical_PIN_Sheet_Struct*) DrawStruct )
             {
                 ( (DrawSheetStruct*) DrawList )->m_Label =
-                    (DrawSheetLabelStruct*) SheetLabel->Pnext;
+                    (Hierarchical_PIN_Sheet_Struct*) SheetLabel->Pnext;
 
                 SAFE_DELETE( DrawStruct );
                 return;
@@ -420,8 +420,8 @@ void EraseStruct( SCH_ITEM* DrawStruct, SCH_SCREEN* Screen )
             {
                 while( SheetLabel->Pnext ) /* Examen de la liste dependante */
                 {
-                    NextLabel = (DrawSheetLabelStruct*) SheetLabel->Pnext;
-                    if( NextLabel == (DrawSheetLabelStruct*) DrawStruct )
+                    NextLabel = (Hierarchical_PIN_Sheet_Struct*) SheetLabel->Pnext;
+                    if( NextLabel == (Hierarchical_PIN_Sheet_Struct*) DrawStruct )
                     {
                         SheetLabel->Pnext = (EDA_BaseStruct*) NextLabel->Pnext;
                         SAFE_DELETE( DrawStruct );

@@ -113,7 +113,7 @@ void BreakSegmentOnJunction( SCH_SCREEN* Screen )
         case DRAW_MARKER_STRUCT_TYPE:
         case TYPE_SCH_TEXT:
         case DRAW_SHEET_STRUCT_TYPE:
-        case DRAW_SHEETLABEL_STRUCT_TYPE:
+        case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
             break;
 
         default:

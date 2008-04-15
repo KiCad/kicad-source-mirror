@@ -115,40 +115,6 @@ void SCH_TEXT::Place( WinEDA_DrawFrame* frame, wxDC* DC )
     SCH_ITEM::Place( frame, DC );
 }
 
-
-/****************************************************************************/
-SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text ) :
-    SCH_TEXT( pos, text, TYPE_SCH_LABEL )
-/****************************************************************************/
-{
-    m_Layer      = LAYER_LOCLABEL;
-    m_Shape      = NET_INPUT;
-    m_IsDangling = TRUE;
-}
-
-
-/***********************************************************************************/
-SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text ) :
-    SCH_TEXT( pos, text, TYPE_SCH_GLOBALLABEL )
-/***********************************************************************************/
-{
-    m_Layer      = LAYER_GLOBLABEL;
-    m_Shape      = NET_BIDI;
-    m_IsDangling = TRUE;
-}
-
-
-/***********************************************************************************/
-SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text ) :
-    SCH_TEXT( pos, text, TYPE_SCH_HIERLABEL )
-/***********************************************************************************/
-{
-    m_Layer      = LAYER_HIERLABEL;
-    m_Shape      = NET_INPUT;
-    m_IsDangling = TRUE;
-}
-
-
 /*******************************************************************************************/
 void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                            int DrawMode, int Color )
@@ -206,6 +172,126 @@ void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
 
     if( m_IsDangling )
         DrawDanglingSymbol( panel, DC, m_Pos + offset, color );
+}
+
+
+/**
+ * Function Save
+ * writes the data structures for this object out to a FILE in "*.brd" format.
+ * @param aFile The FILE to write to.
+ * @return bool - true if success writing else false.
+ */
+bool SCH_TEXT::Save( FILE* aFile ) const
+{
+    bool success = true;
+    if( fprintf( aFile, "Text Notes %-4d %-4d %-4d %-4d ~\n%s\n",
+            m_Pos.x, m_Pos.y,
+            m_Orient, m_Size.x,
+            CONV_TO_UTF8( m_Text ) ) == EOF )
+    {
+        success = false;
+    }
+
+    return success;
+}
+
+
+/****************************************************************************/
+SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text ) :
+    SCH_TEXT( pos, text, TYPE_SCH_LABEL )
+/****************************************************************************/
+{
+    m_Layer      = LAYER_LOCLABEL;
+    m_Shape      = NET_INPUT;
+    m_IsDangling = TRUE;
+}
+
+
+/**
+ * Function Save
+ * writes the data structures for this object out to a FILE in "*.brd" format.
+ * @param aFile The FILE to write to.
+ * @return bool - true if success writing else false.
+ */
+bool SCH_LABEL::Save( FILE* aFile ) const
+{
+    bool success = true;
+    char shape = '~';
+    if( fprintf( aFile, "Text Label %-4d %-4d %-4d %-4d %c\n%s\n",
+            m_Pos.x, m_Pos.y,
+            m_Orient, m_Size.x, shape,
+            CONV_TO_UTF8( m_Text ) ) == EOF )
+    {
+        success = false;
+    }
+
+    return success;
+}
+
+
+/***********************************************************************************/
+SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text ) :
+    SCH_TEXT( pos, text, TYPE_SCH_GLOBALLABEL )
+/***********************************************************************************/
+{
+    m_Layer      = LAYER_GLOBLABEL;
+    m_Shape      = NET_BIDI;
+    m_IsDangling = TRUE;
+}
+
+
+/**
+ * Function Save
+ * writes the data structures for this object out to a FILE in "*.brd" format.
+ * @param aFile The FILE to write to.
+ * @return bool - true if success writing else false.
+ */
+bool SCH_GLOBALLABEL::Save( FILE* aFile ) const
+{
+    bool success = true;
+    if( fprintf( aFile, "Text GLabel %-4d %-4d %-4d %-4d %s\n%s\n",
+            m_Pos.x, m_Pos.y,
+            m_Orient, m_Size.x,
+            SheetLabelType[m_Shape],
+            CONV_TO_UTF8( m_Text ) ) == EOF )
+    {
+        success = false;
+    }
+
+    return success;
+}
+
+
+/***********************************************************************************/
+SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text ) :
+    SCH_TEXT( pos, text, TYPE_SCH_HIERLABEL )
+/***********************************************************************************/
+{
+    m_Layer      = LAYER_HIERLABEL;
+    m_Shape      = NET_INPUT;
+    m_IsDangling = TRUE;
+}
+
+
+/**
+ * Function Save
+ * writes the data structures for this object out to a FILE in "*.brd" format.
+ * @param aFile The FILE to write to.
+ * @return bool - true if success writing else false.
+ */
+bool SCH_HIERLABEL::Save( FILE* aFile ) const
+{
+    bool success = true;
+    if( fprintf( aFile, "Text HLabel %-4d %-4d %-4d %-4d %s\n%s\n",
+            m_Pos.x, m_Pos.y,
+            m_Orient, m_Size.x,
+            SheetLabelType[m_Shape],
+            CONV_TO_UTF8( m_Text ) ) == EOF )
+    {
+        success = false;
+    }
+
+    return success;
 }
 
 

@@ -1,5 +1,5 @@
 /***********************************************************************/
-/* Methodes de base de gestion des classes des elements de schematique */
+/* component_class.cpp : handle the  class SCH_COMPONENT  */
 /***********************************************************************/
 
 #include "fctsys.h"
@@ -17,6 +17,7 @@
 #include "macros.h"
 
 #include <wx/arrimpl.cpp>
+#include <wx/tokenzr.h>
 
 WX_DEFINE_OBJARRAY( ArrayOfSheetLists );
 
@@ -31,8 +32,27 @@ WX_DEFINE_OBJARRAY( ArrayOfSheetLists );
  */
 void SCH_COMPONENT::AddHierarchicalReference( const wxString& path, const wxString& ref )
 {
-    m_Paths.Add( path );
-    m_References.Add( ref );
+
+    wxString          h_path, h_ref;
+    wxStringTokenizer tokenizer;
+    wxString          separators( wxT( " " ) );
+
+    // Search for an existing path and remove it if found (should not occur)
+    for( unsigned ii = 0; ii<m_PathsAndReferences.GetCount(); ii++ )
+    {
+        tokenizer.SetString( m_PathsAndReferences[ii], separators );
+        h_path = tokenizer.GetNextToken();
+        if( h_path.Cmp( path ) == 0 )
+        {
+            m_PathsAndReferences.RemoveAt(ii);
+            ii --;
+        }
+    }
+
+    h_ref = path + wxT( " " ) + ref;
+
+    h_ref << wxT( " " ) << m_Multi;
+    m_PathsAndReferences.Add( h_ref );
 }
 
 
@@ -100,17 +120,21 @@ wxString SCH_COMPONENT::GetPath( DrawSheetPath* sheet )
 const wxString SCH_COMPONENT::GetRef( DrawSheetPath* sheet )
 /********************************************************************/
 {
-    wxString     path = GetPath( sheet );
-    unsigned int i;
+    wxString          path = GetPath( sheet );
+    wxString          h_path, h_ref;
+    wxStringTokenizer tokenizer;
+    wxString          separators( wxT( " " ) );
 
-    for( i = 0; i<m_Paths.GetCount(); i++ )
+    for( unsigned ii = 0; ii<m_PathsAndReferences.GetCount(); ii++ )
     {
-        if( m_Paths[i].Cmp( path ) == 0 )
+        tokenizer.SetString( m_PathsAndReferences[ii], separators );
+        h_path = tokenizer.GetNextToken();
+        if( h_path.Cmp( path ) == 0 )
         {
-            /*printf("GetRef path: %s ref: %s\n",
-             *     CONV_TO_UTF8(m_Paths[i]),
-             *     CONV_TO_UTF8(m_References[i])); */
-            return m_References[i];
+            h_ref = tokenizer.GetNextToken();
+
+            //printf("GetRef hpath: %s\n",CONV_TO_UTF8(m_PathsAndReferences[ii]));
+            return h_ref;
         }
     }
 
@@ -133,25 +157,34 @@ void SCH_COMPONENT::SetRef( DrawSheetPath* sheet, const wxString& ref )
 /***********************************************************************/
 {
     //check to see if it is already there before inserting it
-    wxString     path = GetPath( sheet );
+    wxString          path = GetPath( sheet );
 
     // printf( "SetRef path: %s ref: %s\n", CONV_TO_UTF8( path ), CONV_TO_UTF8( ref ) ); // Debug
-    unsigned int i;
-    bool         notInArray = true;
+    bool              notInArray = true;
 
-    for( i = 0; i<m_Paths.GetCount(); i++ )
+    wxString          h_path, h_ref;
+    wxStringTokenizer tokenizer;
+    wxString          separators( wxT( " " ) );
+
+    for( unsigned ii = 0; ii<m_PathsAndReferences.GetCount(); ii++ )
     {
-        if( m_Paths[i].Cmp( path ) == 0 )
+        tokenizer.SetString( m_PathsAndReferences[ii], separators );
+        h_path = tokenizer.GetNextToken();
+        if( h_path.Cmp( path ) == 0 )
         {
             //just update the reference text, not the timestamp.
-            m_References.RemoveAt( i );
-            m_References.Insert( ref, i );
+            h_ref  = h_path + wxT( " " ) + ref;
+            h_ref += wxT( " " );
+            tokenizer.GetNextToken();               // Skip old reference
+            h_ref += tokenizer.GetNextToken();      // Add part selection
+            // Ann the part selection
+            m_PathsAndReferences[ii] = h_ref;
             notInArray = false;
         }
     }
 
     if( notInArray )
-        AddHierarchicalReference(path, ref);
+        AddHierarchicalReference( path, ref );
 
     if( m_Field[REFERENCE].m_Text.IsEmpty()
        || ( abs( m_Field[REFERENCE].m_Pos.x - m_Pos.x ) +
@@ -204,14 +237,14 @@ SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos ) :
     /* initialisation des Fields */
     for( ii = 0; ii < NUMBER_OF_FIELDS; ii++ )
     {
-        m_Field[ii].m_Pos     = m_Pos;
-        m_Field[ii].SetLayer(LAYER_FIELDS);
+        m_Field[ii].m_Pos = m_Pos;
+        m_Field[ii].SetLayer( LAYER_FIELDS );
         m_Field[ii].m_FieldId = REFERENCE + ii;
         m_Field[ii].m_Parent  = this;
     }
 
-    m_Field[VALUE].SetLayer(LAYER_VALUEPART);
-    m_Field[REFERENCE].SetLayer(LAYER_REFERENCEPART);
+    m_Field[VALUE].SetLayer( LAYER_VALUEPART );
+    m_Field[REFERENCE].SetLayer( LAYER_REFERENCEPART );
 
     m_PrefixString = wxString( _( "U" ) );
 }
@@ -347,27 +380,35 @@ void SCH_COMPONENT::ClearAnnotation()
 /* Suppress annotation ( i.i IC23 changed to IC? and part reset to 1)
  */
 {
-    wxString defRef = m_PrefixString;
+    wxString defRef    = m_PrefixString;
+    bool     KeepMulti = false;
+    EDA_LibComponentStruct* Entry;
+
+    Entry = FindLibPart( m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+
+    if( Entry && Entry->m_UnitSelectionLocked )
+        KeepMulti = true;
 
     while( defRef.Last() == '?' )
         defRef.RemoveLast();
 
     defRef.Append( wxT( "?" ) );
-    m_References.Empty();
-    unsigned int            i;
-    for( i = 0; i< m_Paths.GetCount(); i++ )
+
+    wxString multi = wxT( "1" );
+    wxString NewHref;
+    for( unsigned int ii = 0; ii< m_PathsAndReferences.GetCount(); ii++ )
     {
-        m_References.Add( defRef );
+        if( KeepMulti )  // Get and keep part selection
+            multi = m_PathsAndReferences[ii].AfterLast( wxChar( ' ' ) );
+        NewHref = m_PathsAndReferences[ii].BeforeFirst( wxChar( ' ' ) );
+        NewHref << wxT( " " ) << defRef << wxT( " " ) << multi;
+        m_PathsAndReferences[ii] = NewHref;
     }
 
     m_Field[REFERENCE].m_Text = defRef; //for drawing.
-    EDA_LibComponentStruct* Entry;
-    Entry = FindLibPart( m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
 
-    if( !Entry || !Entry->m_UnitSelectionLocked )
-    {
+    if( !KeepMulti )
         m_Multi = 1;
-    }
 }
 
 
@@ -618,7 +659,7 @@ wxPoint SCH_COMPONENT::GetScreenCoord( const wxPoint& coord )
 
 /* Renvoie la coordonn�e du point coord, en fonction de l'orientation
  *  du composant (rotation, miroir).
- *  Les coord sont toujours relatives � l'ancre (coord 0,0) du composant
+ *  Les coord sont toujours relatives a l'ancre (coord 0,0) du composant
  */
 {
     wxPoint screenpos;
@@ -674,8 +715,8 @@ PartTextStruct::PartTextStruct( const wxPoint& pos, const wxString& text ) :
     EDA_TextStruct( text )
 /***************************************************************************/
 {
-    m_Pos     = pos;
-    m_FieldId = 0;
+    m_Pos          = pos;
+    m_FieldId      = 0;
     m_AddExtraText = false;
 }
 
@@ -829,24 +870,82 @@ EDA_Rect PartTextStruct::GetBoundaryBox() const
 }
 
 
-/**********************************/
-bool SCH_COMPONENT::Save( FILE* f )
-/**********************************/
+/**
+ * Function Save
+ * writes the data structures for this object out to a FILE in "*.brd" format.
+ * @param aFile The FILE to write to.
+ * @return bool - true if success writing else false.
+ */
+bool PartTextStruct::Save( FILE* aFile ) const
+{
+    char hjustify = 'C';
 
-/** Function Save
- * Write on file a SCH_COMPONENT decscription
- * @param f = output file
- * return an error: false if ok, true if error
+    if( m_HJustify == GR_TEXT_HJUSTIFY_LEFT )
+        hjustify = 'L';
+    else if( m_HJustify == GR_TEXT_HJUSTIFY_RIGHT )
+        hjustify = 'R';
+    char vjustify = 'C';
+    if( m_VJustify == GR_TEXT_VJUSTIFY_BOTTOM )
+        vjustify = 'B';
+    else if( m_VJustify == GR_TEXT_VJUSTIFY_TOP )
+        vjustify = 'T';
+    if( fprintf( aFile, "F %d \"%s\" %c %-3d %-3d %-3d %4.4X %c %c", m_FieldId,
+            CONV_TO_UTF8( m_Text ),
+            m_Orient == TEXT_ORIENT_HORIZ ? 'H' : 'V',
+            m_Pos.x, m_Pos.y,
+            m_Size.x,
+            m_Attributs,
+            hjustify, vjustify ) == EOF )
+    {
+        return false;
+    }
+
+
+    // Save field name, if necessary
+    if( m_FieldId >= FIELD1 && !m_Name.IsEmpty() )
+    {
+        wxString fieldname = ReturnDefaultFieldName( m_FieldId );
+        if( fieldname != m_Name )
+        {
+            if( fprintf( aFile, " \"%s\"", CONV_TO_UTF8( m_Name ) ) == EOF )
+            {
+                return false;
+            }
+        }
+    }
+
+    if( fprintf( aFile, "\n" ) == EOF )
+    {
+        return false;
+    }
+
+    return true;
+}
+
+
+/****************************************/
+bool SCH_COMPONENT::Save( FILE* f ) const
+/****************************************/
+
+/**
+ * Function Save
+ * writes the data structures for this object out to a FILE in "*.brd" format.
+ * @param aFile The FILE to write to.
+ * @return bool - true if success writing else false.
  */
 {
-    int  ii, Failed = FALSE;
-    char Name1[256], Name2[256];
-    int  hjustify, vjustify;
+    int             ii, Success = true;
+    char            Name1[256], Name2[256];
+    wxArrayString   reference_fields;
+    static wxString delimiters( wxT( " " ) );
 
     //this is redundant with the AR entries below, but it makes the
     //files backwards-compatible.
-    if( m_References.GetCount() > 0 )
-        strncpy( Name1, CONV_TO_UTF8( m_References[0] ), sizeof(Name1) );
+    if( m_PathsAndReferences.GetCount() > 0 )
+    {
+        reference_fields = wxStringTokenize( m_PathsAndReferences[0], delimiters );
+        strncpy( Name1, CONV_TO_UTF8( reference_fields[1] ), sizeof(Name1) );
+    }
     else
     {
         if( m_Field[REFERENCE].m_Text.IsEmpty() )
@@ -874,88 +973,73 @@ bool SCH_COMPONENT::Save( FILE* f )
 
     if( fprintf( f, "L %s %s\n", Name2, Name1 ) == EOF )
     {
-        Failed = TRUE;
-        return Failed;
+        Success = false;
+        return Success;
     }
 
     /* Generation de numero d'unit, convert et Time Stamp*/
     if( fprintf( f, "U %d %d %8.8lX\n", m_Multi, m_Convert, m_TimeStamp ) == EOF )
     {
-        Failed = TRUE; return Failed;
+        Success = false;
+        return Success;
     }
 
-    /* Sortie de la position */
+    /* Save the position */
     if( fprintf( f, "P %d %d\n", m_Pos.x, m_Pos.y ) == EOF )
     {
-        Failed = TRUE; return Failed;
+        Success = false;
+        return Success;
     }
-    unsigned int i;
-    for( i = 0; i< m_References.GetCount(); i++ )
+
+    /* If this is a complex hierarchy; save hierarchical references.
+      * but for simple hierarchies it is not necessary.
+      * the reference inf is already saved
+      * this is usefull for old eeschema version compatibility
+     */
+    if( m_PathsAndReferences.GetCount() > 1 )
     {
-        /*format:
-          * AR Path="/140/2" Ref="C99"
-          * where 140 is the uid of the contianing sheet
-          * and 2 is the timestamp of this component.
-          * (timestamps are actually 8 hex chars)
-          * Ref is the conventional component reference for this 'path'
-         */
-        if( fprintf( f, "AR Path=\"%s\" Ref=\"%s\" \n",
-                CONV_TO_UTF8( m_Paths[i] ),
-                CONV_TO_UTF8( m_References[i] ) ) == EOF )
+        for( unsigned int ii = 0; ii< m_PathsAndReferences.GetCount(); ii++ )
         {
-            Failed = TRUE; break;
+            /*format:
+             * AR Path="/140/2" Ref="C99"   Part="1"
+             * where 140 is the uid of the containing sheet
+             * and 2 is the timestamp of this component.
+             * (timestamps are actually 8 hex chars)
+             * Ref is the conventional component reference for this 'path'
+             * Part is the conventional component part selection for this 'path'
+             */
+            reference_fields = wxStringTokenize( m_PathsAndReferences[ii], delimiters );
+            if( fprintf( f, "AR Path=\"%s\" Ref=\"%s\"  Part=\"%s\" \n",
+                    CONV_TO_UTF8( reference_fields[0] ),
+                    CONV_TO_UTF8( reference_fields[1] ),
+                    CONV_TO_UTF8( reference_fields[2] )
+                    ) == EOF )
+            {
+                Success = false;
+                return Success;
+            }
         }
     }
 
     for( ii = 0; ii < NUMBER_OF_FIELDS; ii++ )
     {
-        PartTextStruct* field = &m_Field[ii];
+        const PartTextStruct* field = &m_Field[ii];
         if( field->m_Text.IsEmpty() )
             continue;
-        hjustify = 'C';
-        if( field->m_HJustify == GR_TEXT_HJUSTIFY_LEFT )
-            hjustify = 'L';
-        else if( field->m_HJustify == GR_TEXT_HJUSTIFY_RIGHT )
-            hjustify = 'R';
-        vjustify = 'C';
-        if( field->m_VJustify == GR_TEXT_VJUSTIFY_BOTTOM )
-            vjustify = 'B';
-        else if( field->m_VJustify == GR_TEXT_VJUSTIFY_TOP )
-            vjustify = 'T';
-        if( fprintf( f, "F %d \"%s\" %c %-3d %-3d %-3d %4.4X %c %c", ii,
-                CONV_TO_UTF8( field->m_Text ),
-                field->m_Orient == TEXT_ORIENT_HORIZ ? 'H' : 'V',
-                field->m_Pos.x, field->m_Pos.y,
-                field->m_Size.x,
-                field->m_Attributs,
-                hjustify, vjustify ) == EOF )
+        if( !field->Save( f ) )
         {
-            Failed = TRUE; break;
-        }
-
-        // Save field name, if necessary
-        if( ii >= FIELD1 && !field->m_Name.IsEmpty() )
-        {
-            wxString fieldname = ReturnDefaultFieldName( ii );
-            if( fieldname != field->m_Name )
-                if( fprintf( f, " \"%s\"", CONV_TO_UTF8( field->m_Name ) ) == EOF )
-                {
-                    Failed = TRUE; break;
-                }
-        }
-        if( fprintf( f, "\n" ) == EOF )
-        {
-            Failed = TRUE; break;
+            Success = false; break;
         }
     }
 
-    if( Failed )
-        return Failed;
+    if( !Success )
+        return Success;
 
     /* Generation du num unit, position, box ( ancienne norme )*/
     if( fprintf( f, "\t%-4d %-4d %-4d\n", m_Multi, m_Pos.x, m_Pos.y ) == EOF )
     {
-        Failed = TRUE; return Failed;
+        Success = false;
+        return Success;
     }
 
     if( fprintf( f, "\t%-4d %-4d %-4d %-4d\n",
@@ -964,9 +1048,30 @@ bool SCH_COMPONENT::Save( FILE* f )
             m_Transform[1][0],
             m_Transform[1][1] ) == EOF )
     {
-        Failed = TRUE; return Failed;
+        Success = false;
+        return Success;
     }
 
     fprintf( f, "$EndComp\n" );
-    return Failed;
+    return Success;
+}
+
+
+EDA_Rect SCH_COMPONENT::GetBoundingBox()
+{
+    const int PADDING = 40;
+
+    // This gives a reasonable approximation (but some things are missing so...
+    EDA_Rect  ret = GetBoundaryBox();
+
+    // Include BoundingBoxes of fields
+    for( int i = REFERENCE; i < NUMBER_OF_FIELDS; i++ )
+    {
+        ret.Merge( m_Field[i].GetBoundaryBox() );
+    }
+
+    // ... add padding
+    ret.Inflate( PADDING, PADDING );
+
+    return ret;
 }

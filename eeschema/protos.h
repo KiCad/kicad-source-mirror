@@ -151,11 +151,11 @@ SCH_ITEM * PickStruct(const wxPoint & refpos, BASE_SCREEN* screen, int SearchMas
 LibEDA_BaseStruct * LocateDrawItem(SCH_SCREEN * Screen, const wxPoint & refpoint,
         EDA_LibComponentStruct * LibEntry, int Unit, int Convert, int masque);
 
-DrawSheetLabelStruct * LocateSheetLabel(DrawSheetStruct *Sheet, const wxPoint & pos);
+Hierarchical_PIN_Sheet_Struct * LocateSheetLabel(DrawSheetStruct *Sheet, const wxPoint & pos);
 LibDrawPin * LocateAnyPin(SCH_ITEM *DrawList, const wxPoint & RefPos,
         SCH_COMPONENT ** libpart = NULL );
 
-DrawSheetLabelStruct * LocateAnyPinSheet(const wxPoint & RefPos,
+Hierarchical_PIN_Sheet_Struct * LocateAnyPinSheet(const wxPoint & RefPos,
                     SCH_ITEM *DrawList);
 
 int distance(int dx, int dy, int spot_cX, int spot_cY, int seuil);

@@ -15,7 +15,7 @@
 #include "protos.h"
 
 /* Variables locales : */
-static void PlotSheetLabelStruct( DrawSheetLabelStruct* Struct );
+static void PlotSheetLabelStruct( Hierarchical_PIN_Sheet_Struct* Struct );
 static void PlotTextField( SCH_COMPONENT* DrawLibItem,
                            int FieldNumber, int IsMulti, int DrawMode );
 static void PlotPinSymbol( int posX, int posY, int len, int orient, int Shape );
@@ -661,7 +661,7 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
 
 
 /***********************************************************/
-static void PlotSheetLabelStruct( DrawSheetLabelStruct* Struct )
+static void PlotSheetLabelStruct( Hierarchical_PIN_Sheet_Struct* Struct )
 /***********************************************************/
 /* Routine de dessin des Sheet Labels type hierarchie */
 {
@@ -739,7 +739,7 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
 /*************************************************/
 /* Routine de dessin du bloc type hierarchie */
 {
-    DrawSheetLabelStruct* SheetLabelStruct;
+    Hierarchical_PIN_Sheet_Struct* SheetLabelStruct;
     int      txtcolor = -1;
     wxSize   size;
     wxString Text;
@@ -788,6 +788,6 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
     while( SheetLabelStruct != NULL )
     {
         PlotSheetLabelStruct( SheetLabelStruct );
-        SheetLabelStruct = (DrawSheetLabelStruct*) (SheetLabelStruct->Pnext);
+        SheetLabelStruct = (Hierarchical_PIN_Sheet_Struct*) (SheetLabelStruct->Pnext);
     }
 }

@@ -655,7 +655,7 @@ bool DrawStructInBox( int x1, int y1, int x2, int y2,
             return TRUE;
         break;
 
-    case DRAW_SHEETLABEL_STRUCT_TYPE:
+    case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
         break;
 
     case DRAW_PICK_ITEM_STRUCT_TYPE:
@@ -1170,14 +1170,14 @@ LibEDA_BaseStruct* LocatePin( const wxPoint& RefPos,
 
 
 /***********************************************************************************/
-DrawSheetLabelStruct* LocateSheetLabel( DrawSheetStruct* Sheet, const wxPoint& pos )
+Hierarchical_PIN_Sheet_Struct* LocateSheetLabel( DrawSheetStruct* Sheet, const wxPoint& pos )
 /***********************************************************************************/
 {
     int size, dy, minx, maxx;
-    DrawSheetLabelStruct* SheetLabel;
+    Hierarchical_PIN_Sheet_Struct* SheetLabel;
 
     SheetLabel = Sheet->m_Label;
-    while( (SheetLabel) && (SheetLabel->Type()==DRAW_SHEETLABEL_STRUCT_TYPE) )
+    while( (SheetLabel) && (SheetLabel->Type()==DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE) )
     {
         size = ( SheetLabel->GetLength() + 1 ) * SheetLabel->m_Size.x;
         if( SheetLabel->m_Edge )
@@ -1190,7 +1190,7 @@ DrawSheetLabelStruct* LocateSheetLabel( DrawSheetStruct* Sheet, const wxPoint& p
            && (pos.x <= maxx)
            && (pos.x >= minx) )
             return SheetLabel;
-        SheetLabel = (DrawSheetLabelStruct*) SheetLabel->Pnext;
+        SheetLabel = (Hierarchical_PIN_Sheet_Struct*) SheetLabel->Pnext;
     }
 
     return NULL;
@@ -1228,12 +1228,12 @@ LibDrawPin* LocateAnyPin( SCH_ITEM* DrawList, const wxPoint& RefPos,
 
 
 /***************************************************************/
-DrawSheetLabelStruct* LocateAnyPinSheet( const wxPoint&  RefPos,
+Hierarchical_PIN_Sheet_Struct* LocateAnyPinSheet( const wxPoint&  RefPos,
                                          SCH_ITEM* DrawList )
 /***************************************************************/
 {
     SCH_ITEM* DrawStruct;
-    DrawSheetLabelStruct* PinSheet = NULL;
+    Hierarchical_PIN_Sheet_Struct* PinSheet = NULL;
 
     for( DrawStruct = DrawList; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
     {

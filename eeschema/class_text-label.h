@@ -103,6 +103,15 @@ public:
 
     virtual void    Place( WinEDA_DrawFrame* frame, wxDC* DC );
     EDA_Rect        GetBoundingBox();
+
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    bool    Save( FILE* aFile ) const;
+
 };
 
 
@@ -118,6 +127,14 @@ public:
     {
         return wxT( "SCH_LABEL" );
     }
+
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    bool    Save( FILE* aFile ) const;
 };
 
 
@@ -144,6 +161,14 @@ public:
       * <corner_count>, x0, y0, ... xn, yn
      */
     void CreateGraphicShape( int* corner_list, const wxPoint & Pos );
+
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    bool    Save( FILE* aFile ) const;
 
     EDA_Rect        GetBoundingBox();
 };
@@ -173,6 +198,14 @@ public:
       * <corner_count>, x0, y0, ... xn, yn
       */
     void CreateGraphicShape( int* corner_list, const wxPoint & Pos );
+
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    bool    Save( FILE* aFile ) const;
 
     EDA_Rect        GetBoundingBox();
 };

@@ -8,6 +8,17 @@ email address.
 2008-Apr-14 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +eeschema
+    More code cleaning and Files cleaning and reorganization.
+    change DrawSheetLabelStruct class name to a better name: Hierarchical_PIN_Sheet_Struct
+    For simple Hierarchies, files are now compatables with old eescheam versions
+    In complex hierarchies, multiples parts per packages have still problems,
+    but i hope to solve that soon
+    (in fact all the last changes were made for that)
+
+
+2008-Apr-14 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema
     code cleaning. SCH_ITEM class used for all schematic items in eeschema.
     Files reorganization.
 

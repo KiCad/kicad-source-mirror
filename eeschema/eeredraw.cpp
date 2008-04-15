@@ -524,7 +524,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
         break;
     }
 
-    case DRAW_SHEETLABEL_STRUCT_TYPE:
+    case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
     case DRAW_MARKER_STRUCT_TYPE:
         break;
 

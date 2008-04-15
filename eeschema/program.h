@@ -98,6 +98,14 @@ public:
     virtual void Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode,
                        int Color = -1 );
 
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    bool    Save( FILE* aFile ) const;
+
 #if defined(DEBUG)
     /**
      * Function Show
@@ -132,6 +140,14 @@ public:
     wxString            GetComment();
     virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                               int draw_mode, int Color = -1 );
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    bool    Save( FILE* aFile ) const;
+
 #if defined(DEBUG)
     /**
      * Function Show
@@ -162,6 +178,15 @@ public:
     DrawNoConnectStruct*    GenCopy();
     virtual void            Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                                   int draw_mode, int Color = -1 );
+
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    bool    Save( FILE* aFile ) const;
+
     EDA_Rect            GetBoundingBox();
 };
 
@@ -188,9 +213,18 @@ public:
 
 
     DrawBusEntryStruct* GenCopy();
-    wxPoint             m_End(); // retourne la coord de fin du raccord
+    wxPoint             m_End() const ; // retourne la coord de fin du raccord
     virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                               int draw_mode, int Color = -1 );
+
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    bool    Save( FILE* aFile ) const;
+
     EDA_Rect            GetBoundingBox();
 };
 
@@ -214,6 +248,15 @@ public:
     DrawPolylineStruct* GenCopy();
     virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                               int draw_mode, int Color = -1 );
+
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    bool    Save( FILE* aFile ) const;
+
 };
 
 class DrawJunctionStruct  : public SCH_ITEM
@@ -235,6 +278,15 @@ public:
     DrawJunctionStruct* GenCopy();
     virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                               int draw_mode, int Color = -1 );
+
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    bool    Save( FILE* aFile ) const;
+
 };
 
 

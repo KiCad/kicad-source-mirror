@@ -400,7 +400,7 @@ DrawSheetStruct* WinEDA_SchematicFrame::CreateSheet( wxDC* DC )
 void WinEDA_SchematicFrame::ReSizeSheet( DrawSheetStruct* Sheet, wxDC* DC )
 /*******************************************************************************/
 {
-    DrawSheetLabelStruct* sheetlabel;
+    Hierarchical_PIN_Sheet_Struct* sheetlabel;
 
     if( Sheet == NULL )
         return;
@@ -430,7 +430,7 @@ void WinEDA_SchematicFrame::ReSizeSheet( DrawSheetStruct* Sheet, wxDC* DC )
             (int) ( (sheetlabel->GetLength() +
                      1) * sheetlabel->m_Size.x ) );
         s_SheetMindy = MAX( s_SheetMindy, sheetlabel->m_Pos.y - Sheet->m_Pos.y );
-        sheetlabel   = (DrawSheetLabelStruct*) sheetlabel->Pnext;
+        sheetlabel   = (Hierarchical_PIN_Sheet_Struct*) sheetlabel->Pnext;
     }
 
     DrawPanel->ManageCurseur = DeplaceSheet;
@@ -467,7 +467,7 @@ void WinEDA_SchematicFrame::StartMoveSheet( DrawSheetStruct* Sheet, wxDC* DC )
 static void DeplaceSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
     wxPoint               move_vector;
-    DrawSheetLabelStruct* SheetLabel;
+    Hierarchical_PIN_Sheet_Struct* SheetLabel;
     BASE_SCREEN*          screen = panel->m_Parent->GetScreen();
 
     DrawSheetStruct*      Sheet = (DrawSheetStruct*)
@@ -488,7 +488,7 @@ static void DeplaceSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
         {
             if( SheetLabel->m_Edge )
                 SheetLabel->m_Pos.x = Sheet->m_Pos.x + Sheet->m_Size.x;
-            SheetLabel = (DrawSheetLabelStruct*) SheetLabel->Pnext;
+            SheetLabel = (Hierarchical_PIN_Sheet_Struct*) SheetLabel->Pnext;
         }
     }
     else             /* Move Sheet */

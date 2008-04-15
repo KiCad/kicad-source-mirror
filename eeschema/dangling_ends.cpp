@@ -435,7 +435,7 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
         {
             #undef STRUCT
             #define STRUCT ( (DrawSheetStruct*) DrawItem )
-            DrawSheetLabelStruct* pinsheet = STRUCT->m_Label;
+            Hierarchical_PIN_Sheet_Struct* pinsheet = STRUCT->m_Label;
             while( pinsheet )
             {
                 item = new DanglingEndHandle( SHEET_LABEL_END );
@@ -447,7 +447,7 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
                 else
                     StartList = item;
                 lastitem = item;
-                pinsheet = (DrawSheetLabelStruct*) pinsheet->Pnext;
+                pinsheet = (Hierarchical_PIN_Sheet_Struct*) pinsheet->Pnext;
             }
 
             break;

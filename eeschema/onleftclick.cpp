@@ -41,7 +41,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             case TYPE_SCH_GLOBALLABEL:
             case TYPE_SCH_HIERLABEL:
             case TYPE_SCH_TEXT:
-            case DRAW_SHEETLABEL_STRUCT_TYPE:
+            case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
             case DRAW_SHEET_STRUCT_TYPE:
             case DRAW_BUSENTRY_STRUCT_TYPE:
             case DRAW_JUNCTION_STRUCT_TYPE:
@@ -266,7 +266,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 GetScreen()->SetCurItem(
                     Create_PinSheet( (DrawSheetStruct*) DrawStruct, DC ) );
         }
-        else if( (DrawStruct->Type() == DRAW_SHEETLABEL_STRUCT_TYPE)
+        else if( (DrawStruct->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE)
                 && (DrawStruct->m_Flags != 0) )
         {
             DrawStruct->Place( this, DC );

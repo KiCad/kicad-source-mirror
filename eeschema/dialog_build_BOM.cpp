@@ -896,7 +896,7 @@ static int GenListeGLabels( ListLabel* List )
 {
     int                   ItemCount = 0;
     EDA_BaseStruct*       DrawList;
-    DrawSheetLabelStruct* SheetLabel;
+    Hierarchical_PIN_Sheet_Struct* SheetLabel;
     DrawSheetPath*        sheet;
 
     /* Build the screen list */
@@ -931,14 +931,14 @@ static int GenListeGLabels( ListLabel* List )
                 {
                     if( List )
                     {
-                        List->m_LabelType = DRAW_SHEETLABEL_STRUCT_TYPE;
+                        List->m_LabelType = DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE;
                         snprintf( List->m_SheetPath, sizeof(List->m_SheetPath),
                                  "%s", CONV_TO_UTF8( path ) );
                         List->m_Label = SheetLabel;
                         List++;
                     }
                     ItemCount++;
-                    SheetLabel = (DrawSheetLabelStruct*) (SheetLabel->Pnext);
+                    SheetLabel = (Hierarchical_PIN_Sheet_Struct*) (SheetLabel->Pnext);
                 }
             }
                 break;
@@ -1060,13 +1060,13 @@ static int ListTriGLabelByVal( ListLabel* Objet1, ListLabel* Objet2 )
     int ii;
     const wxString* Text1, * Text2;
 
-    if( Objet1->m_LabelType == DRAW_SHEETLABEL_STRUCT_TYPE )
-        Text1 = &( (DrawSheetLabelStruct*) Objet1->m_Label )->m_Text;
+    if( Objet1->m_LabelType == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
+        Text1 = &( (Hierarchical_PIN_Sheet_Struct*) Objet1->m_Label )->m_Text;
     else
         Text1 = &( (SCH_TEXT*) Objet1->m_Label )->m_Text;
 
-    if( Objet2->m_LabelType == DRAW_SHEETLABEL_STRUCT_TYPE )
-        Text2 = &( (DrawSheetLabelStruct*) Objet2->m_Label )->m_Text;
+    if( Objet2->m_LabelType == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
+        Text2 = &( (Hierarchical_PIN_Sheet_Struct*) Objet2->m_Label )->m_Text;
     else
         Text2 = &( (SCH_TEXT*) Objet2->m_Label )->m_Text;
 
@@ -1099,13 +1099,13 @@ static int ListTriGLabelBySheet( ListLabel* Objet1, ListLabel* Objet2 )
 
     if( ii == 0 )
     {
-        if( Objet1->m_LabelType == DRAW_SHEETLABEL_STRUCT_TYPE )
-            Text1 = &( (DrawSheetLabelStruct*) Objet1->m_Label )->m_Text;
+        if( Objet1->m_LabelType == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
+            Text1 = &( (Hierarchical_PIN_Sheet_Struct*) Objet1->m_Label )->m_Text;
         else
             Text1 = &( (SCH_TEXT*) Objet1->m_Label )->m_Text;
 
-        if( Objet2->m_LabelType == DRAW_SHEETLABEL_STRUCT_TYPE )
-            Text2 = &( (DrawSheetLabelStruct*) Objet2->m_Label )->m_Text;
+        if( Objet2->m_LabelType == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
+            Text2 = &( (Hierarchical_PIN_Sheet_Struct*) Objet2->m_Label )->m_Text;
         else
             Text2 = &( (SCH_TEXT*) Objet2->m_Label )->m_Text;
 
@@ -1378,7 +1378,7 @@ static int PrintListeGLabel( FILE* f, ListLabel* List, int NbItems )
 {
     int ii, jj;
     SCH_LABEL* DrawTextItem;
-    DrawSheetLabelStruct* DrawSheetLabel;
+    Hierarchical_PIN_Sheet_Struct* DrawSheetLabel;
     ListLabel* LabelItem;
     wxString msg, sheetpath;
     wxString labeltype;
@@ -1408,9 +1408,9 @@ static int PrintListeGLabel( FILE* f, ListLabel* List, int NbItems )
             fprintf( f, CONV_TO_UTF8( msg ) );
             break;
 
-        case DRAW_SHEETLABEL_STRUCT_TYPE:
+        case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
         {
-            DrawSheetLabel = (DrawSheetLabelStruct*) LabelItem->m_Label;
+            DrawSheetLabel = (Hierarchical_PIN_Sheet_Struct*) LabelItem->m_Label;
             jj = DrawSheetLabel->m_Shape;
             if( jj < 0 )
                 jj = NET_TMAX;

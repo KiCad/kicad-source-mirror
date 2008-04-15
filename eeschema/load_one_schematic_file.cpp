@@ -126,11 +126,14 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
         MsgDiag = FullFileName + _( " was created by a more recent version of EESchema and may not load correctly. Please consider updating!");
         DisplayInfo( this, MsgDiag);
     }
+#if 0
+    // Compile it if the new versiopn is unreadable by previous eeschema versions
     else if ( ver < EESCHEMA_VERSION )
     {
         MsgDiag = FullFileName + _( " was created by an older version of EESchema. It will be stored in the new file format when you save this file again.");
         DisplayInfo( this, MsgDiag);
     }
+#endif
 
     LineCount++;
     if( fgets( Line, 1024 - 1, f ) == NULL || strncmp( Line, "LIBS:", 5 ) != 0 )
@@ -792,7 +795,7 @@ static int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Wi
     int                   ii, fieldref, size;
     char                  Name1[256], Char1[256], Char2[256];
     DrawSheetStruct*      SheetStruct;
-    DrawSheetLabelStruct* SheetLabelStruct, * OldSheetLabel = NULL;
+    Hierarchical_PIN_Sheet_Struct* SheetLabelStruct, * OldSheetLabel = NULL;
     int                   Failed = FALSE;
     char*                 ptcar;
 
@@ -901,7 +904,7 @@ static int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Wi
 
         if( fieldref > 1 )
         {
-            SheetLabelStruct = new DrawSheetLabelStruct( SheetStruct,
+            SheetLabelStruct = new Hierarchical_PIN_Sheet_Struct( SheetStruct,
                                                         wxPoint( 0, 0 ), CONV_FROM_UTF8( Name1 ) );
             if( SheetStruct->m_Label == NULL )
                 OldSheetLabel = SheetStruct->m_Label = SheetLabelStruct;

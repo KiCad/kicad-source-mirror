@@ -451,7 +451,7 @@ static int ListeObjetConnection( WinEDA_SchematicFrame* frame, DrawSheetPath* sh
     int                     TransMat[2][2], PartX, PartY, x2, y2;
     EDA_LibComponentStruct* Entry;
     LibEDA_BaseStruct*      DEntry;
-    DrawSheetLabelStruct*   SheetLabel;
+    Hierarchical_PIN_Sheet_Struct*   SheetLabel;
     DrawSheetPath			list;
 
     DrawList = sheetlist->LastScreen()->EEDrawList;
@@ -653,7 +653,7 @@ static int ListeObjetConnection( WinEDA_SchematicFrame* frame, DrawSheetPath* sh
             list.Push(STRUCT);
             SheetLabel = STRUCT->m_Label;
             for( ; SheetLabel != NULL;
-                 SheetLabel = (DrawSheetLabelStruct*) SheetLabel->Pnext )
+                 SheetLabel = (Hierarchical_PIN_Sheet_Struct*) SheetLabel->Pnext )
             {
                 ii = IsBusLabel( SheetLabel->m_Text );
                 if( ObjNet )
@@ -677,7 +677,7 @@ static int ListeObjetConnection( WinEDA_SchematicFrame* frame, DrawSheetPath* sh
 
             break;
 
-        case DRAW_SHEETLABEL_STRUCT_TYPE:
+        case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
             DisplayError( frame, wxT( "Netlist: Type DRAW_SHEETLABEL inattendu" ) );
             break;
 

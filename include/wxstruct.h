@@ -76,7 +76,7 @@ class SCH_TEXT;
 class EDA_DrawLineStruct;
 class DrawSheetStruct;
 class DrawSheetPath;
-class DrawSheetLabelStruct;
+class Hierarchical_PIN_Sheet_Struct;
 class SCH_COMPONENT;
 class LibDrawField;
 class PartTextStruct;
