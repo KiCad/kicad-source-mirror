@@ -97,40 +97,22 @@ bool LibDrawSquare::WriteDescr( FILE* ExportFile )
 bool LibDrawPin::WriteDescr( FILE* ExportFile )
 /************************************************/
 {
-    int      Etype = 'I';
     wxString StringPinNum;
+    int      Etype;
 
     switch( m_PinType )
     {
-    case PIN_INPUT:
-        Etype = 'I'; break;
-
-    case PIN_OUTPUT:
-        Etype = 'O'; break;
-
-    case PIN_BIDI:
-        Etype = 'B'; break;
-
-    case PIN_TRISTATE:
-        Etype = 'T'; break;
-
-    case PIN_PASSIVE:
-        Etype = 'P'; break;
-
-    case PIN_UNSPECIFIED:
-        Etype = 'U'; break;
-
-    case PIN_POWER_IN:
-        Etype = 'W'; break;
-
-    case PIN_POWER_OUT:
-        Etype = 'w'; break;
-
-    case PIN_OPENCOLLECTOR:
-        Etype = 'C'; break;
-
-    case PIN_OPENEMITTER:
-        Etype = 'E'; break;
+    default:
+    case PIN_INPUT:         Etype = 'I';    break;
+    case PIN_OUTPUT:        Etype = 'O';    break;
+    case PIN_BIDI:          Etype = 'B';    break;
+    case PIN_TRISTATE:      Etype = 'T';    break;
+    case PIN_PASSIVE:       Etype = 'P';    break;
+    case PIN_UNSPECIFIED:   Etype = 'U';    break;
+    case PIN_POWER_IN:      Etype = 'W';    break;
+    case PIN_POWER_OUT:     Etype = 'w';    break;
+    case PIN_OPENCOLLECTOR: Etype = 'C';    break;
+    case PIN_OPENEMITTER:   Etype = 'E';    break;
     }
 
     ReturnPinStringNum( StringPinNum );
@@ -234,7 +216,7 @@ LibEDA_BaseStruct* CopyDrawEntryStruct( wxWindow*          frame,
  * the new item is only created, it is not put in the current component linked list
  * @param DrawEntry = DrawLibItem * item to duplicate
  * @return a pointer to the new item
- * A better way to duplicate a DrawLibItem is to have a virtual GenCopy() in LibEDA_BaseStruct class (ToDo). 
+ * A better way to duplicate a DrawLibItem is to have a virtual GenCopy() in LibEDA_BaseStruct class (ToDo).
  */
 {
     LibEDA_BaseStruct* NewDrawItem = NULL;
@@ -331,7 +313,7 @@ EDA_LibComponentStruct* CopyLibEntryStruct( wxWindow* frame, EDA_LibComponentStr
     {
         if( ( OldDrawings->m_Flags & IS_NEW) != 0 )
             continue;
-        
+
         NewDrawings = CopyDrawEntryStruct( frame, OldDrawings );
         if( NewDrawings )
         {
@@ -345,7 +327,7 @@ EDA_LibComponentStruct* CopyLibEntryStruct( wxWindow* frame, EDA_LibComponentStr
         }
         else	// Should nevers occurs, just in case...
         {       // CopyDrawEntryStruct() was not able to duplicate the type of OldDrawings
-				// occurs when an unexpected type is encountered
+                // occurs when an unexpected type is encountered
             DisplayError( frame, wxT( "CopyLibEntryStruct(): error: aborted" ) );
             break;
         }
@@ -543,10 +525,10 @@ int SaveOneLibrary( wxWindow* frame, const wxString& FullFileName, LibraryStruct
  *  2 fichiers sont crees
  *   - La librarie
  *   - le fichier de documentation
- * 
+ *
  *  une sauvegarde .bak de l'ancien fichier librairie est cree
  *  une sauvegarde .bck de l'ancien fichier documentation est cree
- * 
+ *
  *  return:
  *      0 si OK
  *      1 si erreur
@@ -609,7 +591,7 @@ int SaveOneLibrary( wxWindow* frame, const wxString& FullFileName, LibraryStruct
     Library->m_Modified = 0;
 
     /* Creation de l'entete de la librairie */
-	Library->m_TimeStamp = GetTimeStamp();
+    Library->m_TimeStamp = GetTimeStamp();
     Library->WriteHeader( SaveFile );
     fprintf( SaveDocFile, "%s  Date: %s\n", DOCFILE_IDENT,
             DateAndTime( Line ) );
