@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-16 11:26+0100\n"
-"PO-Revision-Date: 2008-04-16 11:31+0100\n"
+"POT-Creation-Date: 2008-04-16 20:16+0100\n"
+"PO-Revision-Date: 2008-04-16 20:16+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -5865,39 +5865,39 @@ msgstr "Tri"
 msgid "Bad Bus Label: "
 msgstr "Mauvais label de Bus: "
 
-#: eeschema/annotate.cpp:713
+#: eeschema/annotate.cpp:706
 #, c-format
 msgid "item not annotated: %s%s"
 msgstr "item non numéroté: %s%s"
 
-#: eeschema/annotate.cpp:718
+#: eeschema/annotate.cpp:711
 #, c-format
 msgid "( unit %d)"
 msgstr "( Unité %d)"
 
-#: eeschema/annotate.cpp:735
+#: eeschema/annotate.cpp:728
 #, c-format
 msgid "Error item %s%s"
 msgstr "Erreur item %s%s"
 
-#: eeschema/annotate.cpp:738
+#: eeschema/annotate.cpp:731
 #, c-format
 msgid " unit %d and no more than %d parts"
 msgstr " unité %d et plus que %d parts"
 
-#: eeschema/annotate.cpp:772
-#: eeschema/annotate.cpp:795
+#: eeschema/annotate.cpp:765
+#: eeschema/annotate.cpp:788
 #, c-format
 msgid "Multiple item %s%s"
 msgstr "Multipleélément %s%s"
 
-#: eeschema/annotate.cpp:777
-#: eeschema/annotate.cpp:800
+#: eeschema/annotate.cpp:770
+#: eeschema/annotate.cpp:793
 #, c-format
 msgid " (unit %d)"
 msgstr " ( Unité %d)"
 
-#: eeschema/annotate.cpp:817
+#: eeschema/annotate.cpp:810
 #, c-format
 msgid "Diff values for %s%d%c (%s) and %s%d%c (%s)"
 msgstr "Valeurs différentes pour %s%d%c (%s) et %s%d%c (%s)"
@@ -6877,6 +6877,90 @@ msgstr "Exporter le symbole"
 msgid "Save Symbol in [%s]"
 msgstr "Symbole sauvé en  [%s]"
 
+#: eeschema/annotate_dialog.cpp:158
+msgid "Scope"
+msgstr "Sélection"
+
+#: eeschema/annotate_dialog.cpp:166
+msgid "Annotate the &entire schematic"
+msgstr "Annot&er la schématique complète"
+
+#: eeschema/annotate_dialog.cpp:170
+msgid "Annotate the current &page only"
+msgstr "Annoter la &feuille active uniquement"
+
+#: eeschema/annotate_dialog.cpp:174
+msgid "&Reset existing annotation"
+msgstr "&Supprimer l'annotation existante"
+
+#: eeschema/annotate_dialog.cpp:179
+msgid "Order"
+msgstr "Ordre"
+
+#: eeschema/annotate_dialog.cpp:187
+msgid "Sort Components by &Y Position"
+msgstr "Trier les Composants par &Y Position"
+
+#: eeschema/annotate_dialog.cpp:191
+msgid "Sort Components by &Value"
+msgstr "Trier les Composants par &Valeur"
+
+#: eeschema/annotate_dialog.cpp:202
+msgid "Clear Annotation"
+msgstr "Suppression Annotation"
+
+#: eeschema/annotate_dialog.cpp:206
+msgid "Annotation"
+msgstr "Annotation"
+
+#: eeschema/annotate_dialog.cpp:225
+msgid "Clear and annotate all of the components "
+msgstr "Reinitialisation et réannotation de tous les composants "
+
+#: eeschema/annotate_dialog.cpp:227
+msgid "Annotate only the unannotated components "
+msgstr "Annoter seulement les composants non déjà annotés "
+
+#: eeschema/annotate_dialog.cpp:229
+msgid "on the entire schematic?"
+msgstr "pour la schematique complète?"
+
+#: eeschema/annotate_dialog.cpp:231
+msgid "on the current sheet?"
+msgstr "pourr la feuille courante?"
+
+#: eeschema/annotate_dialog.cpp:233
+msgid ""
+"\n"
+"\n"
+"This operation will change the current annotation and cannot be undone."
+msgstr ""
+"\n"
+"\n"
+"Cette opération changera l'annotation actuelle et ne pourra être annulée."
+
+#: eeschema/annotate_dialog.cpp:253
+msgid "Clear the existing annotation for "
+msgstr "Supprimer l'annotation existante pour "
+
+#: eeschema/annotate_dialog.cpp:255
+msgid "the entire schematic?"
+msgstr "la schématique entière?"
+
+#: eeschema/annotate_dialog.cpp:257
+msgid "the current sheet?"
+msgstr "La feuille courante?"
+
+#: eeschema/annotate_dialog.cpp:259
+msgid ""
+"\n"
+"\n"
+"This operation will clear the existing annotation and cannot be undone."
+msgstr ""
+"\n"
+"\n"
+"Cette opération supprimera l'annotation existante et ne peut être annulée."
+
 #: eeschema/files-io.cpp:112
 msgid "Clear Schematic Hierarchy (modified!)?"
 msgstr "Effacer la hiérarchie schématique (modifiée!)?"
@@ -7018,90 +7102,6 @@ msgstr "Emetteur ouv."
 #: eeschema/pinedit-dialog.cpp:342
 msgid "Electrical Type:"
 msgstr "Type électrique:"
-
-#: eeschema/annotate_dialog.cpp:157
-msgid "Scope"
-msgstr "Sélection"
-
-#: eeschema/annotate_dialog.cpp:163
-msgid "Annotate the &entire schematic"
-msgstr "Annot&er la schématique complète"
-
-#: eeschema/annotate_dialog.cpp:167
-msgid "Annotate the current &page only"
-msgstr "Annoter la &feuille active uniquement"
-
-#: eeschema/annotate_dialog.cpp:170
-msgid "&Reset existing annotation"
-msgstr "&Supprimer l'annotation existante"
-
-#: eeschema/annotate_dialog.cpp:188
-msgid "Order"
-msgstr "Ordre"
-
-#: eeschema/annotate_dialog.cpp:194
-msgid "Sort components by p&osition"
-msgstr "Trier les composants par p&osition"
-
-#: eeschema/annotate_dialog.cpp:200
-msgid "Sort components by &value"
-msgstr "Trier les Composants par &valeur"
-
-#: eeschema/annotate_dialog.cpp:215
-msgid "Clear Annotation"
-msgstr "Suppression Annotation"
-
-#: eeschema/annotate_dialog.cpp:216
-msgid "Annotation"
-msgstr "Annotation"
-
-#: eeschema/annotate_dialog.cpp:264
-msgid "Clear the existing annotation for "
-msgstr "Supprimer l'annotation existante pour "
-
-#: eeschema/annotate_dialog.cpp:266
-msgid "the entire schematic?"
-msgstr "la schématique entière?"
-
-#: eeschema/annotate_dialog.cpp:268
-msgid "the current sheet?"
-msgstr "La feuille courante?"
-
-#: eeschema/annotate_dialog.cpp:270
-msgid ""
-"\n"
-"\n"
-"This operation will clear the existing annotation and cannot be undone."
-msgstr ""
-"\n"
-"\n"
-"Cette opération supprimera l'annotation existante et ne peut être annulée."
-
-#: eeschema/annotate_dialog.cpp:286
-msgid "Clear and annotate all of the components "
-msgstr "Reinitialisation et réannotation de tous les composants "
-
-#: eeschema/annotate_dialog.cpp:288
-msgid "Annotate only the unannotated components "
-msgstr "Annoter seulement les composants non déjà annotés "
-
-#: eeschema/annotate_dialog.cpp:290
-msgid "on the entire schematic?"
-msgstr "pour la schematique complète?"
-
-#: eeschema/annotate_dialog.cpp:292
-msgid "on the current sheet?"
-msgstr "pourr la feuille courante?"
-
-#: eeschema/annotate_dialog.cpp:294
-msgid ""
-"\n"
-"\n"
-"This operation will change the current annotation and cannot be undone."
-msgstr ""
-"\n"
-"\n"
-"Cette opération changera l'annotation actuelle et ne pourra être annulée."
 
 #: eeschema/dialog_build_BOM.cpp:248
 msgid "List items:"
@@ -9999,9 +9999,9 @@ msgstr "Liste du Matériel"
 msgid "Component properties"
 msgstr "Propriétés du composant"
 
-#: eeschema/annotate_dialog.h:47
-msgid "Annotate"
-msgstr "Annotation"
+#: eeschema/annotate_dialog.h:49
+msgid "EESchema Annotation"
+msgstr "Annotation des composants"
 
 #: eeschema/sheet.h:47
 msgid "Sheet properties"
@@ -10175,6 +10175,8 @@ msgstr "Créer Fichier SVG"
 msgid "Print"
 msgstr "Imprimer"
 
+#~ msgid "Annotate"
+#~ msgstr "Annotation"
 #~ msgid "Zoom Block (Midd butt drag)"
 #~ msgstr "Zoom Bloc (drag+bouton milieu)"
 #~ msgid "Win. Zoom (Midd butt drag mouse)"

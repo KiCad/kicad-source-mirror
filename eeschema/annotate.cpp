@@ -440,9 +440,6 @@ void BreakReference( CmpListStruct* BaseListeCmp, int NbOfCmp )
             }
         }
 
-        wxLogDebug( wxT( "BreakReference(): %s number found: %d\n" ),
-            BaseListeCmp[ii].m_TextRef,
-            BaseListeCmp[ii].m_NumRef );
     }
 }
 
@@ -667,7 +664,6 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
 
     if( NbOfCmp == 0 )
     {
-        wxBell();
         return 0;
     }
 
@@ -675,7 +671,6 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
     /* Second pass : create the list of components */
     ListeCmp = AllocateCmpListStrct( NbOfCmp );
 
-    printf( "CheckAnnotate() listing all components:\n" );
     if( !oneSheetOnly )
     {
         ii = 0;
@@ -686,8 +681,6 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
     }
     else
         ListeComposants( ListeCmp, frame->GetSheet() );
-
-    printf( "CheckAnnotate() done:\n" );
 
     qsort( ListeCmp, NbOfCmp, sizeof(CmpListStruct), AnnotateByValue );
 

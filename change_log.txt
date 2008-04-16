@@ -10,6 +10,7 @@ email address.
 +eeschema
     In complex hierarchies, multiples parts per packages now should work,
     without restrictions
+    Update and use annotate_dialog.pjd to create annotate dialog
 
 
 2008-Apr-15 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
