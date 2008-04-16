@@ -16,7 +16,6 @@ set(KICAD_SRCS
 if(WIN32)
     if(MINGW)
         mingw_resource_compiler(kicad)
-        set(KICAD_RESOURCES ${_OUT})
     else(MINGW)
         set(KICAD_RESOURCES kicad.rc)
     endif(MINGW)

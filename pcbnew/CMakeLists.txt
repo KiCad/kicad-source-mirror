@@ -152,7 +152,6 @@ set(PCBNEW_EXTRA_SRCS
 if(WIN32)
     if(MINGW)
         mingw_resource_compiler(pcbnew)
-        set(PCBNEW_RESOURCES ${_OUT})
     else(MINGW)
         set(PCBNEW_RESOURCES pcbnew.rc)
     endif(MINGW)

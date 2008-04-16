@@ -61,7 +61,6 @@ set(GERBVIEW_EXTRA_SRCS
 if(WIN32)
     if(MINGW)
         mingw_resource_compiler(gerbview)
-        set(GERBVIEW_RESOURCES ${_OUT})
     else(MINGW)
         set(GERBVIEW_RESOURCES gerbview.rc)
     endif(MINGW)

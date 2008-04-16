@@ -5,23 +5,33 @@ macro(dbg_msg _MSG)
 endmacro(dbg_msg)
 
 macro(mingw_resource_compiler _NAME)
+    # Input file.
     set(_IN "${CMAKE_CURRENT_SOURCE_DIR}/${_NAME}.rc")
     dbg_msg("_IN: ${_IN}")
 
+    # Output file.
     set(_OUT "${CMAKE_CURRENT_BINARY_DIR}/${_NAME}_rc.o")
     dbg_msg("_OUT: ${_OUT}")
 
+    # Include directories.
     set(_WINDRES_INCLUDE_DIRS -I${CMAKE_CURRENT_SOURCE_DIR})
     foreach(wx_include_dir ${wxWidgets_INCLUDE_DIRS})
         set(_WINDRES_INCLUDE_DIRS ${_WINDRES_INCLUDE_DIRS} -I${wx_include_dir})
     endforeach(wx_include_dir ${wxWidgets_INCLUDE_DIRS})
     dbg_msg("_WINDRES_INCLUDE_DIRS: ${_WINDRES_INCLUDE_DIRS}")
 
+    # windres.exe arguments.
     set(_ARGS ${_WINDRES_INCLUDE_DIRS} -i${_IN} -o${_OUT})
     dbg_msg("_ARGS: ${_ARGS}")
 
+    # Compile resource file.
     add_custom_command(OUTPUT ${_OUT}
         COMMAND windres.exe
         ARGS ${_ARGS}
         VERBATIM)
+
+    # Set a NAME_RESOURCES variable
+    string(TOUPPER ${_NAME} _NAME_UPPER)
+    set(${_NAME_UPPER}_RESOURCES ${_OUT})
+    dbg_msg("${_NAME_UPPER}_RESOURCES: ${${_NAME_UPPER}_RESOURCES}")
 endmacro(mingw_resource_compiler)

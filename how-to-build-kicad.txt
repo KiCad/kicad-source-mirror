@@ -97,7 +97,7 @@ will be. It must be where you can access it from within the msys environment,
 such as home/<user>. Edit your msys/1.0/etc/fstab file if needed to provide 
 access to this build directory from msys. Unzip the zlib123.zip file into this 
 build directory. Change directories into there, and then:
-    ./configure (CHANGES NEEDED!!!)
+    ./configure
     make
     make install
 

@@ -14,9 +14,9 @@ set(EESCHEMA_SRCS
     bus-wire-junction.cpp
     class_drawsheet.cpp
     class_hierarchical_PIN_sheet.cpp
+    class_schematic_items.cpp
     class_screen.cpp
     class_text-label.cpp
-    class_schematic_items.cpp
     cleanup.cpp
     component_class.cpp
     controle.cpp
@@ -104,7 +104,6 @@ set(EESCHEMA_EXTRA_SRCS
 if(WIN32)
     if(MINGW)
         mingw_resource_compiler(eeschema)
-        set(EESCHEMA_RESOURCES ${_OUT})
     else(MINGW)
         set(EESCHEMA_RESOURCES eeschema.rc)
     endif(MINGW)

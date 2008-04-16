@@ -59,7 +59,6 @@ set(CVPCB_EXTRA_SRCS
 if(WIN32)
     if(MINGW)
         mingw_resource_compiler(cvpcb)
-        set(CVPCB_RESOURCES ${_OUT})
     else(MINGW)
         set(CVPCB_RESOURCES cvpcb.rc)
     endif(MINGW)
