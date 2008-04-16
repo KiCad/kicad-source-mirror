@@ -613,26 +613,29 @@ static int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
         if( Line[0] == 'A' && Line[1] == 'R' )
         {
             /*format:
-            AR Path="/9086AF6E/67452AA0" Ref="C99"
+            AR Path="/9086AF6E/67452AA0" Ref="C99" Part="1"
             where 9086AF6E is the unique timestamp of the containing sheet
             and 67452AA0 is the timestamp of this component.
             C99 is the reference given this path.
             */
-            int i=2;
-            while(i<256 && Line[i] != '"'){ i++; } i++;
+            int ii;
+            ptcar = Line + 2;
             //copy the path.
-            int j = 0;
-            while(i<256 && Line[i] != '"'){Name1[j] = Line[i]; i++; j++;} i++;
-            Name1[j] = 0;
+            ii = ReadDelimitedText(Name1, ptcar, 255 );
+            ptcar += ii+1;
             wxString path = CONV_FROM_UTF8(Name1);
-            //i should be one after the closing quote, match the next opening quote
-            while(i<256 && Line[i] != '"'){ i++; } i++;
-            j = 0;
-            while(i<256 && Line[i] != '"'){Name1[j] = Line[i]; i++; j++;} i++;
-            Name1[j] = 0;
+            // copy the reference
+            ii = ReadDelimitedText(Name1, ptcar, 255 );
+            ptcar += ii+1;
             wxString ref = CONV_FROM_UTF8(Name1);
 
-            LibItemStruct->AddHierarchicalReference(path, ref);
+            // copy the multi, if exists
+            ii = ReadDelimitedText(Name1, ptcar, 255 );
+            if ( Name1[0] == 0 ) // Nothing read, put a default value
+                sprintf( Name1, "%d", LibItemStruct->m_Multi );
+            int multi = atoi(Name1);
+            if ( multi < 0 || multi > 25 ) multi = 1;
+            LibItemStruct->AddHierarchicalReference(path, ref, multi);
             LibItemStruct->m_Field[REFERENCE].m_Text = ref;
         }
         if( Line[0] == 'F' )
@@ -724,7 +727,6 @@ static int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
                 LibItemStruct->m_Field[fieldref].m_Name = CONV_FROM_UTF8( FieldUserName );
             }
 
-// 27 juin  2001: A Supprimer lorsque tous les schemas auront ete traites :
             if( fieldref == REFERENCE )
                 if( LibItemStruct->m_Field[fieldref].m_Text[0] == '#' )
                     LibItemStruct->m_Field[fieldref].m_Attributs |= TEXT_NO_VISIBLE;

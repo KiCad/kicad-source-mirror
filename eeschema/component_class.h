@@ -164,15 +164,25 @@ public:
 
     void                    SwapData( SCH_COMPONENT* copyitem );
 
-    virtual void            Place( WinEDA_DrawFrame* frame, wxDC* DC );
+    void                    Place( WinEDA_DrawFrame* frame, wxDC* DC );
 
 
     //returns a unique ID, in the form of a path.
     wxString                GetPath( DrawSheetPath* sheet );
+    //returns the reference, for the given sheet path.
     const wxString          GetRef( DrawSheetPath* sheet );
+    //Set the reference, for the given sheet path.
     void                    SetRef( DrawSheetPath* sheet, const wxString& ref );
-    void                    AddHierarchicalReference( const wxString& path, const wxString& ref );
+    /** Function AddHierarchicalReference
+     * Add a full hierachical reference (path + local reference)
+     * @param aPath = hierarchical path (/<sheet timestamp>/component timestamp> like /05678E50/A23EF560)
+     * @param aRef = local reference like C45, R56
+     * @param aMulti = part selection, used in multi part per package (0 or 1 for non multi)
+     */
+    void                    AddHierarchicalReference( const wxString& aPath, const wxString& aRef, int aMulti );
+    //returns the unit selection, for the given sheet path.
     int                     GetUnitSelection( DrawSheetPath* aSheet );
+    //Set the unit selection, for the given sheet path.
     void                    SetUnitSelection( DrawSheetPath* aSheet, int aUnitSelection );
 
 #if defined (DEBUG)

@@ -27,12 +27,14 @@ WX_DEFINE_OBJARRAY( ArrayOfSheetLists );
 
 /** Function AddHierarchicalReference
  * Add a full hierachical reference (path + local reference)
- * @param path = hierarchical path (/<sheet timestamp>/component timestamp> like /05678E50/A23EF560)
- * @param ref = local reference like C45, R56
+ * @param aPath = hierarchical path (/<sheet timestamp>/component timestamp> like /05678E50/A23EF560)
+ * @param aRef = local reference like C45, R56
+ * @param aMulti = part selection, used in multi part per package (0 or 1 for non multi)
  */
-void SCH_COMPONENT::AddHierarchicalReference( const wxString& path, const wxString& ref )
+void SCH_COMPONENT::AddHierarchicalReference( const wxString& aPath,
+                                              const wxString& aRef,
+                                              int             aMulti )
 {
-
     wxString          h_path, h_ref;
     wxStringTokenizer tokenizer;
     wxString          separators( wxT( " " ) );
@@ -42,16 +44,16 @@ void SCH_COMPONENT::AddHierarchicalReference( const wxString& path, const wxStri
     {
         tokenizer.SetString( m_PathsAndReferences[ii], separators );
         h_path = tokenizer.GetNextToken();
-        if( h_path.Cmp( path ) == 0 )
+        if( h_path.Cmp( aPath ) == 0 )
         {
-            m_PathsAndReferences.RemoveAt(ii);
-            ii --;
+            m_PathsAndReferences.RemoveAt( ii );
+            ii--;
         }
     }
 
-    h_ref = path + wxT( " " ) + ref;
+    h_ref = aPath + wxT( " " ) + aRef;
 
-    h_ref << wxT( " " ) << m_Multi;
+    h_ref << wxT( " " ) << aMulti;
     m_PathsAndReferences.Add( h_ref );
 }
 
@@ -156,16 +158,15 @@ const wxString SCH_COMPONENT::GetRef( DrawSheetPath* sheet )
 void SCH_COMPONENT::SetRef( DrawSheetPath* sheet, const wxString& ref )
 /***********************************************************************/
 {
-    //check to see if it is already there before inserting it
     wxString          path = GetPath( sheet );
 
-    // printf( "SetRef path: %s ref: %s\n", CONV_TO_UTF8( path ), CONV_TO_UTF8( ref ) ); // Debug
     bool              notInArray = true;
 
     wxString          h_path, h_ref;
     wxStringTokenizer tokenizer;
     wxString          separators( wxT( " " ) );
 
+    //check to see if it is already there before inserting it
     for( unsigned ii = 0; ii<m_PathsAndReferences.GetCount(); ii++ )
     {
         tokenizer.SetString( m_PathsAndReferences[ii], separators );
@@ -184,7 +185,7 @@ void SCH_COMPONENT::SetRef( DrawSheetPath* sheet, const wxString& ref )
     }
 
     if( notInArray )
-        AddHierarchicalReference( path, ref );
+        AddHierarchicalReference( path, ref, m_Multi );
 
     if( m_Field[REFERENCE].m_Text.IsEmpty()
        || ( abs( m_Field[REFERENCE].m_Pos.x - m_Pos.x ) +
@@ -196,6 +197,74 @@ void SCH_COMPONENT::SetRef( DrawSheetPath* sheet, const wxString& ref )
         m_Field[REFERENCE].m_Pos.y += 50;
     }
     m_Field[REFERENCE].m_Text = ref; //for drawing.
+}
+
+
+/***********************************************************/
+int SCH_COMPONENT::GetUnitSelection( DrawSheetPath* aSheet )
+/***********************************************************/
+
+//returns the unit selection, for the given sheet path.
+{
+    wxString          path = GetPath( aSheet );
+    wxString          h_path, h_multi;
+    wxStringTokenizer tokenizer;
+    wxString          separators( wxT( " " ) );
+
+    for( unsigned ii = 0; ii<m_PathsAndReferences.GetCount(); ii++ )
+    {
+        tokenizer.SetString( m_PathsAndReferences[ii], separators );
+        h_path = tokenizer.GetNextToken();
+        if( h_path.Cmp( path ) == 0 )
+        {
+            tokenizer.GetNextToken();   // Skip reference
+            h_multi = tokenizer.GetNextToken();
+            long imulti = 1;
+            h_multi.ToLong( &imulti );
+            return imulti;
+        }
+    }
+
+    //if it was not found in m_Paths array, then use m_Multi.
+    // this will happen if we load a version 1 schematic file.
+    return m_Multi;
+}
+
+
+/********************************************************************************/
+void SCH_COMPONENT::SetUnitSelection( DrawSheetPath* aSheet, int aUnitSelection )
+/********************************************************************************/
+
+//Set the unit selection, for the given sheet path.
+{
+    wxString          path = GetPath( aSheet );
+
+    bool              notInArray = true;
+
+    wxString          h_path, h_ref;
+    wxStringTokenizer tokenizer;
+    wxString          separators( wxT( " " ) );
+
+    //check to see if it is already there before inserting it
+    for( unsigned ii = 0; ii<m_PathsAndReferences.GetCount(); ii++ )
+    {
+        tokenizer.SetString( m_PathsAndReferences[ii], separators );
+        h_path = tokenizer.GetNextToken();
+        if( h_path.Cmp( path ) == 0 )
+        {
+            //just update the unit selection.
+            h_ref  = h_path + wxT( " " );
+            h_ref += tokenizer.GetNextToken();      // Add reference
+            h_ref += wxT( " " );
+            h_ref << aUnitSelection;                // Add part selection
+            // Ann the part selection
+            m_PathsAndReferences[ii] = h_ref;
+            notInArray = false;
+        }
+    }
+
+    if( notInArray )
+        AddHierarchicalReference( path, m_PrefixString, aUnitSelection );
 }
 
 
@@ -992,9 +1061,9 @@ bool SCH_COMPONENT::Save( FILE* f ) const
     }
 
     /* If this is a complex hierarchy; save hierarchical references.
-      * but for simple hierarchies it is not necessary.
-      * the reference inf is already saved
-      * this is usefull for old eeschema version compatibility
+     * but for simple hierarchies it is not necessary.
+     * the reference inf is already saved
+     * this is usefull for old eeschema version compatibility
      */
     if( m_PathsAndReferences.GetCount() > 1 )
     {

@@ -127,7 +127,7 @@ public:
 /* class to handle a series of sheets *********/
 /* a 'path' so to speak.. *********************/
 /**********************************************/
-#define DSLSZ 32
+#define DSLSZ 32    // Max number of levels for a sheet path
 class DrawSheetPath
 {
 public:
@@ -143,8 +143,23 @@ public:
     EDA_BaseStruct*     LastDrawList();
     void                Push( DrawSheetStruct* sheet );
     DrawSheetStruct*    Pop();
+    /** Function Path
+    * the path uses the time stamps which do not changes even when editing sheet parameters
+    * a path is something like / (root) or /34005677 or /34005677/00AE4523
+    */
     wxString            Path();
+    /** Function PathHumanReadable
+    * Return the sheet path in a readable form, i.e.
+    * as a path made from sheet names.
+    * (the "normal" path uses the time stamps which do not changes even when editing sheet parameters)
+    */
     wxString            PathHumanReadable();
+    /** Function UpdateAllScreenReferences
+     * Update the reference and the m_Multi parameter (part selection) for all components on a screen
+     * depending on the actual sheet path.
+     * Mandatory in complex hierarchies because sheets use the same screen (basic schematic)
+     * but with different references and part selection according to the displayed sheet
+    */
     void                UpdateAllScreenReferences();
 
     bool operator       =( const DrawSheetPath& d1 );

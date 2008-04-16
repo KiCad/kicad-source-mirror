@@ -265,7 +265,7 @@ void AnnotateComponents( WinEDA_SchematicFrame* parent,
 
     BaseListeCmp = AllocateCmpListStrct( NbOfCmp );
 
-    /* Second pass : Int data tables */
+    /* Second pass : Init data tables */
     if( annotateSchematic )
     {
         ii = 0;
@@ -334,7 +334,7 @@ int ListeComposants( CmpListStruct* BaseListeCmp, DrawSheetPath* sheet )
 
             BaseListeCmp[NbrCmp].m_Cmp         = DrawLibItem;
             BaseListeCmp[NbrCmp].m_NbParts     = Entry->m_UnitCount;
-            BaseListeCmp[NbrCmp].m_Unit        = DrawLibItem->m_Multi;
+            BaseListeCmp[NbrCmp].m_Unit        = DrawLibItem->GetUnitSelection( sheet );// DrawLibItem->m_Multi;
             BaseListeCmp[NbrCmp].m_PartsLocked = Entry->m_UnitSelectionLocked;
             BaseListeCmp[NbrCmp].m_SheetList   = *sheet;
             BaseListeCmp[NbrCmp].m_IsNew       = FALSE;
@@ -386,6 +386,7 @@ static void ReAnnotateComponents( CmpListStruct* BaseListeCmp, int NbOfCmp )
         DrawLibItem->SetRef( &(BaseListeCmp[ii].m_SheetList),
             CONV_FROM_UTF8( Text ) );
         DrawLibItem->m_Multi = BaseListeCmp[ii].m_Unit;
+        DrawLibItem->SetUnitSelection( &(BaseListeCmp[ii].m_SheetList), DrawLibItem->m_Multi );
     }
 }
 
@@ -587,12 +588,14 @@ int GetLastReferenceNumber( CmpListStruct* Objet,
 
 
 /*****************************************************************************
-* TODO: Translate this to english/
-* Recherche dans la liste triee des composants, pour les composants
-*  multiples s'il existe pour le composant de reference Objet,
-*  une unite de numero Unit
-*      Retourne index dans BaseListeCmp si oui
-*      retourne -1 si non
+* Search in the sorted list of components, for a given componen,t an other component
+* with the same reference and a given part unit.
+* Mainly used to manage multiple parts per package components
+* @param Objet = the given CmpListStruct* item to test
+* @param Unit = the given unit number to search
+* @param BaseListeCmp = list of items to examine
+* @param NbOfCmp = size of list
+* @return index in BaseListeCmp if found or -1 if not found
 *****************************************************************************/
 static int ExistUnit( CmpListStruct* Objet, int Unit,
                       CmpListStruct* BaseListeCmp, int NbOfCmp )
@@ -609,16 +612,15 @@ static int ExistUnit( CmpListStruct* Objet, int Unit,
          ItemToTest < EndList;
          ItemToTest++, ii++ )
     {
-        if( Objet == ItemToTest )
+        if( Objet == ItemToTest )   // Do not compare with itself !
             continue;
-        if( ItemToTest->m_IsNew )
-            continue; /* non affecte */
-        if( ItemToTest->m_NumRef != NumRef )
+        if( ItemToTest->m_IsNew )   // Not already with an updated reference
             continue;
-        /* Nouveau Identificateur */
-        if( strnicmp( RefText, ItemToTest->m_TextRef, 32 ) != 0 )
+        if( ItemToTest->m_NumRef != NumRef )   // Not the same reference number (like 35 in R35)
             continue;
-        if( ItemToTest->m_Unit == Unit )
+        if( strnicmp( RefText, ItemToTest->m_TextRef, 32 ) != 0 )   // Not the same reference prefix
+            continue;
+        if( ItemToTest->m_Unit == Unit )    // A part with the same reference and the given unit is found
         {
             return ii;
         }

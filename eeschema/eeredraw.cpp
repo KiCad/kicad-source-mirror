@@ -87,7 +87,7 @@ void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     ActiveScreen = GetScreen();
 
-    /* Forcage de la reinit de la brosse et plume courante */
+    /* Reinit draw and pen parameters */
     GRResetPenAndBrush( DC );
     DC->SetBackground( *wxBLACK_BRUSH );
     DC->SetBackgroundMode( wxTRANSPARENT );
@@ -116,7 +116,9 @@ void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     Affiche_Status_Box();
     GetScreen()->ClrRefreshReq();
-    if( GetScreen()->m_FileName == g_DefaultSchematicFileName )
+
+    // Display the sheet filename, and the sheet path, for non root sheets
+    if( GetScreen()->m_FileName == g_DefaultSchematicFileName ) // This is the root sheet
     {
         wxString msg = g_Main_Title + wxT( " " ) + GetBuildVersion();
         title.Printf( wxT( "%s [%s]" ), msg.GetData(), GetScreen()->m_FileName.GetData() );
@@ -124,7 +126,9 @@ void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     }
     else
     {
-        title.Printf( wxT( "[%s]" ), GetScreen()->m_FileName.GetData() );
+        title = wxT( "[" );
+        title << GetScreen()->m_FileName << wxT( "]  " ) << _("Sheet") ;
+        title << wxT( " " ) << m_CurrentSheet->PathHumanReadable();
         SetTitle( title );
     }
 }

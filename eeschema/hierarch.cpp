@@ -241,8 +241,6 @@ void WinEDA_HierFrame::OnSelect(wxTreeEvent& event)
 
 	*(m_Parent->m_CurrentSheet) =
 			((TreeItemData*)(m_Tree->GetItemData(ItemSel)))->m_SheetList;
-	wxString path = m_Parent->m_CurrentSheet->PathHumanReadable();
-	printf("changing to sheet %s\n", CONV_TO_UTF8(path));
 	UpdateScreenFromSheet(m_Parent);
 	Close(TRUE);
 }
@@ -319,14 +317,14 @@ static bool UpdateScreenFromSheet(WinEDA_SchematicFrame * frame)
 		//update the References
 	frame->m_CurrentSheet->UpdateAllScreenReferences();
 	frame->DrawPanel->m_CanStartBlock = -1;
+	ActiveScreen = frame->m_CurrentSheet->LastScreen();
 	if ( NewScreen->m_FirstRedraw ){
 		NewScreen->m_FirstRedraw = FALSE;
 		frame->Zoom_Automatique(TRUE);
 	}else{
-		frame->ReDrawPanel();
+		frame->DrawPanel->Refresh();
 		frame->DrawPanel->MouseToCursorSchema();
 	}
-	ActiveScreen = frame->m_CurrentSheet->LastScreen();
 	return true;
 }
 
