@@ -154,12 +154,9 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     if( (color & ITEM_NOT_SHOW) != 0 )
         return;
 
-    if( panel )
-        screen = (PCB_SCREEN*) panel->m_Parent->m_CurrentScreen;
-    else
-        screen = (PCB_SCREEN*) ActiveScreen;
-
     frame = (WinEDA_BasePcbFrame*) panel->m_Parent;
+
+    screen = frame->GetScreen();
 
     zoom = screen->GetZoom();
 

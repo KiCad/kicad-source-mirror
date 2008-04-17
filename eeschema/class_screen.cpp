@@ -42,7 +42,7 @@ void SetStructFather( EDA_BaseStruct* Struct, BASE_SCREEN* Screen )
 
 
 /***************************************************************/
-void SCH_ITEM::Place( WinEDA_DrawFrame* frame, wxDC* DC )
+void SCH_ITEM::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 /***************************************************************/
 
 /* place the struct in EEDrawList.
@@ -52,12 +52,12 @@ void SCH_ITEM::Place( WinEDA_DrawFrame* frame, wxDC* DC )
 {
     if( m_Flags & IS_NEW )
     {
-        SCH_SCREEN* screen = (SCH_SCREEN*) frame->GetScreen();
+        SCH_SCREEN* screen = frame->GetScreen();
         if( !screen->CheckIfOnDrawList( this ) )  //don't want a loop!
             screen->AddToDrawList( this );
         g_ItemToRepeat = this;
         if( frame->m_Ident == SCHEMATIC_FRAME )
-            ( (WinEDA_SchematicFrame*) frame )->SaveCopyInUndoList( this, IS_NEW );
+            frame->SaveCopyInUndoList( this, IS_NEW );
     }
 
     m_Flags = 0;

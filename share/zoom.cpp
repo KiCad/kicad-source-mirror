@@ -42,16 +42,16 @@ void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
  *  in order to have the current graphic cursor position at the screen center
  *  @param ToMouse if TRUE, the mouse cursor is moved
  *  to the graphic cursor position (which is usually on grid)
- * 
+ *
  *  Note: Mac OS ** does not ** allow moving mouse cursor by program.
  */
 {
-	PutOnGrid( &(GetScreen()->m_Curseur) );
-    
+    PutOnGrid( &(GetBaseScreen()->m_Curseur) );
+
     AdjustScrollBars();
 
     ReDrawPanel();
-    
+
     /* Move the mouse cursor to the on grid graphic cursor position */
     if( ToMouse == TRUE )
     {
@@ -69,10 +69,10 @@ void WinEDA_DrawFrame::PutOnGrid( wxPoint* coord )
 {
     double ftmp;
 
-    if( !GetScreen()->m_UserGridIsON )
+    if( !GetBaseScreen()->m_UserGridIsON )
     {
-		wxSize grid_size = GetScreen()->GetGrid();
-        
+        wxSize grid_size = GetBaseScreen()->GetGrid();
+
         ftmp     = (double) coord->x / grid_size.x;
         coord->x = ( (int) round( ftmp ) ) * grid_size.x;
 
@@ -81,18 +81,18 @@ void WinEDA_DrawFrame::PutOnGrid( wxPoint* coord )
     }
     else
     {
-        double pasx = GetScreen()->m_UserGrid.x * m_InternalUnits;
-		double pasy = GetScreen()->m_UserGrid.y * m_InternalUnits;
-        
-		if( GetScreen()->m_UserGridUnit != INCHES )
+        double pasx = GetBaseScreen()->m_UserGrid.x * m_InternalUnits;
+        double pasy = GetBaseScreen()->m_UserGrid.y * m_InternalUnits;
+
+        if( GetBaseScreen()->m_UserGridUnit != INCHES )
         {
-            pasx /= 25.4; 
+            pasx /= 25.4;
             pasy /= 25.4;
         }
-        
+
         int    nn = (int) round( coord->x / pasx );
         coord->x = (int) round( pasx * nn );
-        
+
         nn = (int) round( coord->y / pasy );
         coord->y = (int) round( pasy * nn );
     }
@@ -109,7 +109,7 @@ void WinEDA_DrawFrame::Zoom_Automatique( bool move_mouse_cursor )
     int bestzoom;
 
     bestzoom = BestZoom();
-    GetScreen()->SetZoom( bestzoom );
+    GetBaseScreen()->SetZoom( bestzoom );
     Recadre_Trace( move_mouse_cursor );
 }
 
@@ -137,9 +137,9 @@ void WinEDA_DrawFrame::Window_Zoom( EDA_Rect& Rect )
     if( bestzoom <= 0 )
         bestzoom = 1;
 
-    GetScreen()->SetZoom( bestzoom );
+    GetBaseScreen()->SetZoom( bestzoom );
 
-    GetScreen()->m_Curseur = Rect.Centre();
+    GetBaseScreen()->m_Curseur = Rect.Centre();
     Recadre_Trace( TRUE );
 }
 
@@ -171,127 +171,127 @@ void WinEDA_DrawPanel::Process_Popup_Zoom( wxCommandEvent& event )
         break;
 
     case ID_POPUP_ZOOM_LEVEL_1:
-		m_Parent->GetScreen()->SetZoom( 1 );
+        GetScreen()->SetZoom( 1 );
         m_Parent->Recadre_Trace( TRUE );
         break;
 
     case ID_POPUP_ZOOM_LEVEL_2:
-		m_Parent->GetScreen()->SetZoom( 2 );
+        GetScreen()->SetZoom( 2 );
         m_Parent->Recadre_Trace( TRUE );
         break;
 
     case ID_POPUP_ZOOM_LEVEL_4:
-		m_Parent->GetScreen()->SetZoom( 4 );
+        GetScreen()->SetZoom( 4 );
         m_Parent->Recadre_Trace( TRUE );
         break;
 
     case ID_POPUP_ZOOM_LEVEL_8:
-		m_Parent->GetScreen()->SetZoom( 8 );
+        GetScreen()->SetZoom( 8 );
         m_Parent->Recadre_Trace( TRUE );
         break;
 
     case ID_POPUP_ZOOM_LEVEL_16:
-		m_Parent->GetScreen()->SetZoom( 16 );
+        GetScreen()->SetZoom( 16 );
         m_Parent->Recadre_Trace( TRUE );
         break;
 
     case ID_POPUP_ZOOM_LEVEL_32:
-		m_Parent->GetScreen()->SetZoom( 32 );
+        GetScreen()->SetZoom( 32 );
         m_Parent->Recadre_Trace( TRUE );
         break;
 
     case ID_POPUP_ZOOM_LEVEL_64:
-		m_Parent->GetScreen()->SetZoom( 64 );
+        GetScreen()->SetZoom( 64 );
         m_Parent->Recadre_Trace( TRUE );
         break;
 
     case ID_POPUP_ZOOM_LEVEL_128:
-		m_Parent->GetScreen()->SetZoom( 128 );
+        GetScreen()->SetZoom( 128 );
         m_Parent->Recadre_Trace( TRUE );
         break;
 
     case ID_POPUP_ZOOM_LEVEL_256:
-		m_Parent->GetScreen()->SetZoom( 256 );
+        GetScreen()->SetZoom( 256 );
         m_Parent->Recadre_Trace( TRUE );
         break;
 
     case ID_POPUP_ZOOM_LEVEL_512:
-		m_Parent->GetScreen()->SetZoom( 512 );
+        GetScreen()->SetZoom( 512 );
         m_Parent->Recadre_Trace( TRUE );
         break;
 
     case ID_POPUP_ZOOM_LEVEL_1024:
-		m_Parent->GetScreen()->SetZoom( 1024 );
+        GetScreen()->SetZoom( 1024 );
         m_Parent->Recadre_Trace( TRUE );
         break;
 
     case ID_POPUP_ZOOM_LEVEL_2048:
-		m_Parent->GetScreen()->SetZoom( 2048 );
+        GetScreen()->SetZoom( 2048 );
         m_Parent->Recadre_Trace( TRUE );
         break;
 
     case ID_POPUP_GRID_LEVEL_1:
-		m_Parent->GetScreen()->SetGrid( wxSize( 1, 1 ) );
+        GetScreen()->SetGrid( wxSize( 1, 1 ) );
         m_Parent->ReDrawPanel();
         break;
 
     case ID_POPUP_GRID_LEVEL_2:
-		m_Parent->GetScreen()->SetGrid( wxSize( 2, 2 ) );
+        GetScreen()->SetGrid( wxSize( 2, 2 ) );
         m_Parent->ReDrawPanel();
         break;
 
     case ID_POPUP_GRID_LEVEL_5:
-		m_Parent->GetScreen()->SetGrid( wxSize( 5, 5 ) );
+        GetScreen()->SetGrid( wxSize( 5, 5 ) );
         m_Parent->ReDrawPanel();
         break;
 
     case ID_POPUP_GRID_LEVEL_10:
-		m_Parent->GetScreen()->SetGrid( wxSize( 10, 10 ) );
+        GetScreen()->SetGrid( wxSize( 10, 10 ) );
         m_Parent->ReDrawPanel();
         break;
 
     case ID_POPUP_GRID_LEVEL_20:
-		m_Parent->GetScreen()->SetGrid( wxSize( 20, 20 ) );
+        GetScreen()->SetGrid( wxSize( 20, 20 ) );
         m_Parent->ReDrawPanel();
         break;
 
     case ID_POPUP_GRID_LEVEL_25:
-		m_Parent->GetScreen()->SetGrid( wxSize( 25, 25 ) );
+        GetScreen()->SetGrid( wxSize( 25, 25 ) );
         m_Parent->ReDrawPanel();
         break;
 
     case ID_POPUP_GRID_LEVEL_50:
-		m_Parent->GetScreen()->SetGrid( wxSize( 50, 50 ) );
+        GetScreen()->SetGrid( wxSize( 50, 50 ) );
         m_Parent->ReDrawPanel();
         break;
 
     case ID_POPUP_GRID_LEVEL_100:
-		m_Parent->GetScreen()->SetGrid( wxSize( 100, 100 ) );
+        GetScreen()->SetGrid( wxSize( 100, 100 ) );
         m_Parent->ReDrawPanel();
         break;
 
     case ID_POPUP_GRID_LEVEL_200:
-		m_Parent->GetScreen()->SetGrid( wxSize( 200, 200 ) );
+        GetScreen()->SetGrid( wxSize( 200, 200 ) );
         m_Parent->ReDrawPanel();
         break;
 
     case ID_POPUP_GRID_LEVEL_250:
-		m_Parent->GetScreen()->SetGrid( wxSize( 250, 250 ) );
+        GetScreen()->SetGrid( wxSize( 250, 250 ) );
         m_Parent->ReDrawPanel();
         break;
 
     case ID_POPUP_GRID_LEVEL_500:
-		m_Parent->GetScreen()->SetGrid( wxSize( 500, 500 ) );
+        GetScreen()->SetGrid( wxSize( 500, 500 ) );
         m_Parent->ReDrawPanel();
         break;
 
     case ID_POPUP_GRID_LEVEL_1000:
-		m_Parent->GetScreen()->SetGrid( wxSize( 1000, 1000 ) );
+        GetScreen()->SetGrid( wxSize( 1000, 1000 ) );
         m_Parent->ReDrawPanel();
         break;
 
     case ID_POPUP_GRID_USER:
-		m_Parent->GetScreen()->SetGrid( wxSize( -1, -1 ) );
+        GetScreen()->SetGrid( wxSize( -1, -1 ) );
         m_Parent->ReDrawPanel();
         break;
 
@@ -369,7 +369,7 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
     ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_REDRAW, _( "Redraw" ), repaint_xpm );
 
     /* Create the basic zoom list: */
-	zoom = m_Parent->GetScreen()->GetZoom();
+    zoom = GetScreen()->GetZoom();
     zoom_value = 1;
     for( ii = 0; zoom_value <= m_Parent->m_ZoomMaxValue; zoom_value <<= 1, ii++ ) // Create zoom choice 1 .. zoom max
     {
@@ -384,9 +384,9 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
     ADD_MENUITEM_WITH_SUBMENU( MasterMenu, grid_choice,
                                ID_POPUP_GRID_SELECT, _( "Grid Select" ), grid_select_xpm );
 
-	grid = m_Parent->GetScreen()->GetGrid();
+    grid = GetScreen()->GetGrid();
 
-	// Create grid list
+    // Create grid list
     switch( m_Parent->m_Ident )
     {
     case MODULE_EDITOR_FRAME:
@@ -395,21 +395,21 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
     case CVPCB_DISPLAY_FRAME:
         for( ii = 0; ; ii++ )
         {
-			if ( grid_list_pcb[ii].m_Value )
-			{
-				double grid_value = To_User_Unit(g_UnitMetric, grid_list_pcb[ii].m_Value,
-					((WinEDA_DrawFrame*)m_Parent)->m_InternalUnits);
-				if ( g_UnitMetric == 0)	// inches
-					line.Printf(wxT("%g mils"), grid_value*1000);
-				else
-					line.Printf(wxT("%g mm"), grid_value);
-			}
-			else line = _("grid user");
+            if ( grid_list_pcb[ii].m_Value )
+            {
+                double grid_value = To_User_Unit(g_UnitMetric, grid_list_pcb[ii].m_Value,
+                    ((WinEDA_DrawFrame*)m_Parent)->m_InternalUnits);
+                if ( g_UnitMetric == 0)	// inches
+                    line.Printf(wxT("%g mils"), grid_value*1000);
+                else
+                    line.Printf(wxT("%g mm"), grid_value);
+            }
+            else line = _("grid user");
             msg = grid_msg + line;
             grid_choice->Append( grid_list_pcb[ii].m_Id, msg, wxEmptyString, TRUE );
             if( grid_list_pcb[ii].m_Value <= 0 )
             {
-				if( m_Parent->GetScreen()->m_UserGridIsON )
+                if( GetScreen()->m_UserGridIsON )
                     grid_choice->Check( grid_list_pcb[ii].m_Id, TRUE );
                 break;
             }
@@ -425,12 +425,12 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
         {
             if( grid_list_schematic[ii].m_Value <= 0 )
                 break;
-			double grid_value = To_User_Unit(g_UnitMetric, grid_list_schematic[ii].m_Value,
-				((WinEDA_DrawFrame*)m_Parent)->m_InternalUnits);
-			if ( g_UnitMetric == 0)	// inches
-				line.Printf(wxT("%g mils"), grid_value*1000);
-			else
-				line.Printf(wxT("%g mm"), grid_value);
+            double grid_value = To_User_Unit(g_UnitMetric, grid_list_schematic[ii].m_Value,
+                ((WinEDA_DrawFrame*)m_Parent)->m_InternalUnits);
+            if ( g_UnitMetric == 0)	// inches
+                line.Printf(wxT("%g mils"), grid_value*1000);
+            else
+                line.Printf(wxT("%g mm"), grid_value);
 
             msg = grid_msg + line;
             grid_choice->Append( grid_list_schematic[ii].m_Id,

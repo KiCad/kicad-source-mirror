@@ -179,7 +179,7 @@ void WinEDA_SchematicFrame::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
 
 
 /*************************************************************************/
-EDA_BaseStruct* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
+SCH_TEXT* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
 /*************************************************************************/
 
 /* Routine to create new text struct (GraphicText, label or Glabel).
@@ -278,8 +278,8 @@ static void ExitMoveTexte( WinEDA_DrawPanel* Panel, wxDC* DC )
 /*************************************************************/
 /* Abort function for the command move text */
 {
-    SCH_SCREEN* screen = (SCH_SCREEN*) Panel->m_Parent->GetScreen();
-    SCH_ITEM*   Struct = (SCH_ITEM*) screen->GetCurItem();
+    BASE_SCREEN*    screen = Panel->GetScreen();
+    SCH_ITEM*       Struct = (SCH_ITEM*) screen->GetCurItem();
 
     g_ItemToRepeat = NULL;
     Panel->ManageCurseur = NULL;

@@ -149,7 +149,7 @@ void Exit_Module( WinEDA_DrawPanel* Panel, wxDC* DC )
     MODULE*              module;
     WinEDA_BasePcbFrame* pcbframe = (WinEDA_BasePcbFrame*) Panel->m_Parent;
 
-    module = (MODULE*) pcbframe->m_CurrentScreen->GetCurItem();
+    module = (MODULE*) pcbframe->GetScreen()->GetCurItem();
     pcbframe->m_Pcb->m_Status_Pcb &= ~CHEVELU_LOCAL_OK;
 
     if( module )
@@ -219,7 +219,7 @@ MODULE* WinEDA_BasePcbFrame::Copie_Module( MODULE* module )
     if( module == NULL )
         return NULL;
 
-    m_CurrentScreen->SetModify();
+    GetScreen()->SetModify();
 
     /* Duplication du module */
     m_Pcb->m_Status_Pcb = 0;
@@ -244,7 +244,7 @@ void Montre_Position_Empreinte( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 /* redessin du contour de l'empreinte  lors des deplacements de la souris
  */
 {
-    MODULE* module = (MODULE*) panel->m_Parent->m_CurrentScreen->GetCurItem();
+    MODULE* module = (MODULE*) panel->GetScreen()->GetCurItem();
 
     if(  module == NULL )
         return;
@@ -256,7 +256,7 @@ void Montre_Position_Empreinte( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     }
 
     /* Redessine le module a la nouvelle place */
-    g_Offset_Module = module->m_Pos - panel->m_Parent->m_CurrentScreen->m_Curseur;
+    g_Offset_Module = module->m_Pos - panel->GetScreen()->m_Curseur;
     DrawModuleOutlines( panel, DC, module );
 
     Dessine_Segments_Dragges( panel, DC );
@@ -297,7 +297,7 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module, wxDC* DC, bool aAskBeforeDe
         }
     }
 
-    m_CurrentScreen->SetModify();
+    GetScreen()->SetModify();
 
     /* Erase rastnest if needed
      * Dirty rectangle is not used here because usually using a XOR draw mode gives good results (very few artefacts) for ratsnest
@@ -661,13 +661,13 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module, wxDC* DC )
     if( module == 0 )
         return;
 
-    m_CurrentScreen->SetModify();
+    GetScreen()->SetModify();
     m_Pcb->m_Status_Pcb &= ~( LISTE_CHEVELU_OK | CONNEXION_OK);
 
     if( g_Show_Module_Ratsnest && (m_Pcb->m_Status_Pcb & LISTE_PAD_OK) && DC )
         trace_ratsnest_module( DC );
 
-    newpos = m_CurrentScreen->m_Curseur;
+    newpos = GetScreen()->m_Curseur;
 
     module->SetPosition( newpos );
     if( DC )
@@ -716,7 +716,7 @@ void WinEDA_BasePcbFrame::Rotate_Module( wxDC* DC, MODULE* module,
     if( module == NULL )
         return;
 
-    m_CurrentScreen->SetModify();
+    GetScreen()->SetModify();
 
     /* efface ancienne position */
     if( !(module->m_Flags & IS_MOVED) ) /* Rotation simple */

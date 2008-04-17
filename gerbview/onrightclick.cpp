@@ -20,9 +20,9 @@ bool WinEDA_GerberFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu 
  * The menu already has a list of zoom commands.
  */
 {
-    EDA_BaseStruct* DrawStruct = GetScreen()->GetCurItem();
+    BOARD_ITEM*     DrawStruct = GetScreen()->GetCurItem();
     wxString        msg;
-    bool            BlockActive = (m_CurrentScreen->BlockLocate.m_Command !=  BLOCK_IDLE);
+    bool            BlockActive = (GetScreen()->BlockLocate.m_Command !=  BLOCK_IDLE);
 
     DrawPanel->m_CanStartBlock = -1;    // Ne pas engager un debut de bloc sur validation menu
 
@@ -89,5 +89,5 @@ bool WinEDA_GerberFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu 
     }
 
     PopMenu->AppendSeparator();
-	return true;
+    return true;
 }

@@ -468,7 +468,7 @@ static void DeplaceSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
     wxPoint               move_vector;
     Hierarchical_PIN_Sheet_Struct* SheetLabel;
-    BASE_SCREEN*          screen = panel->m_Parent->GetScreen();
+    BASE_SCREEN*          screen = panel->GetScreen();
 
     DrawSheetStruct*      Sheet = (DrawSheetStruct*)
                                   screen->GetCurItem();
@@ -479,10 +479,8 @@ static void DeplaceSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 
     if( Sheet->m_Flags & IS_RESIZED )
     {
-        Sheet->m_Size.x = MAX( s_SheetMindx,
-            screen->m_Curseur.x - Sheet->m_Pos.x );
-        Sheet->m_Size.y = MAX( s_SheetMindy,
-            screen->m_Curseur.y - Sheet->m_Pos.y );
+        Sheet->m_Size.x = MAX( s_SheetMindx, screen->m_Curseur.x - Sheet->m_Pos.x );
+        Sheet->m_Size.y = MAX( s_SheetMindy, screen->m_Curseur.y - Sheet->m_Pos.y );
         SheetLabel = Sheet->m_Label;
         while( SheetLabel )
         {
@@ -507,7 +505,7 @@ static void DeplaceSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 /****************************************/
 static void ExitSheet( WinEDA_DrawPanel* Panel, wxDC* DC )
 {
-    SCH_SCREEN*      Screen = (SCH_SCREEN*) Panel->m_Parent->GetScreen();
+    SCH_SCREEN*      Screen = (SCH_SCREEN*) Panel->GetScreen();
     DrawSheetStruct* Sheet  = (DrawSheetStruct*) Screen->GetCurItem();
 
     if( Sheet == NULL )
@@ -530,7 +528,7 @@ static void ExitSheet( WinEDA_DrawPanel* Panel, wxDC* DC )
     else if( Sheet->m_Flags & IS_MOVED )             /* move en cours: on l'annule */
     {
         wxPoint curspos = Screen->m_Curseur;
-        Panel->m_Parent->GetScreen()->m_Curseur = s_OldPos;
+        Panel->GetScreen()->m_Curseur = s_OldPos;
         DeplaceSheet( Panel, DC, TRUE );
         RedrawOneStruct( Panel, DC, Sheet, GR_DEFAULT_DRAWMODE );
         Sheet->m_Flags    = 0;

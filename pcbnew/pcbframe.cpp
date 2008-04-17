@@ -215,7 +215,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent,
     SetIcon( wxICON( a_icon_pcbnew ) );
 
     m_InternalUnits = PCB_INTERNAL_UNIT;    // Unites internes = 1/10000 inch
-    m_CurrentScreen = ScreenPcb;
+    SetBaseScreen( ScreenPcb );
     GetSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
@@ -232,7 +232,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent,
             GridSize.y = SizeY;
         }
         m_Parent->m_EDA_Config->Read( wxT( "PcbMagPadOpt" ), &g_MagneticPadOption );
-		m_Parent->m_EDA_Config->Read( wxT( "PcbMagTrackOpt" ), &g_MagneticTrackOption );
+        m_Parent->m_EDA_Config->Read( wxT( "PcbMagTrackOpt" ), &g_MagneticTrackOption );
     }
     GetScreen()->SetGrid( GridSize );
 
@@ -249,9 +249,12 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent,
 WinEDA_PcbFrame::~WinEDA_PcbFrame()
 {
     m_Parent->m_PcbFrame = NULL;
-    m_CurrentScreen = ScreenPcb;
+    SetBaseScreen( ScreenPcb );
+
     delete m_drc;
-    if(m_Pcb != g_ModuleEditor_Pcb) delete m_Pcb;
+
+    if( m_Pcb != g_ModuleEditor_Pcb )
+        delete m_Pcb;
 }
 
 
@@ -304,7 +307,7 @@ void WinEDA_PcbFrame::OnCloseWindow( wxCloseEvent& Event )
 
     /* Reselection de l'ecran de base,
      *  pour les evenements de refresh generes par wxWindows */
-    m_CurrentScreen = ActiveScreen = ScreenPcb;
+    SetBaseScreen( ActiveScreen = ScreenPcb );
 
     SaveSettings();
     if( m_Parent && m_Parent->m_EDA_Config )
@@ -313,7 +316,7 @@ void WinEDA_PcbFrame::OnCloseWindow( wxCloseEvent& Event )
         m_Parent->m_EDA_Config->Write( wxT( "PcbEditGrid_X" ), (long) GridSize.x );
         m_Parent->m_EDA_Config->Write( wxT( "PcbEditGrid_Y" ), (long) GridSize.y );
         m_Parent->m_EDA_Config->Write( wxT( "PcbMagPadOpt" ), (long) g_MagneticPadOption );
-		m_Parent->m_EDA_Config->Write( wxT( "PcbMagTrackOpt" ), (long) g_MagneticTrackOption );
+        m_Parent->m_EDA_Config->Write( wxT( "PcbMagTrackOpt" ), (long) g_MagneticTrackOption );
     }
     Destroy();
 }
@@ -342,9 +345,9 @@ void WinEDA_PcbFrame::SetToolbars()
     if( m_HToolBar == NULL )
         return;
 
-    m_HToolBar->EnableTool( ID_SAVE_BOARD, m_CurrentScreen->IsModify() );
+    m_HToolBar->EnableTool( ID_SAVE_BOARD, GetScreen()->IsModify() );
 
-    if( m_CurrentScreen->BlockLocate.m_Command == BLOCK_MOVE )
+    if( GetScreen()->BlockLocate.m_Command == BLOCK_MOVE )
     {
         m_HToolBar->EnableTool( wxID_CUT, TRUE );
         m_HToolBar->EnableTool( wxID_COPY, TRUE );
@@ -525,7 +528,7 @@ void WinEDA_PcbFrame::SetToolbars()
 
             for( jj = 1, zoom = 1; zoom <= m_ZoomMaxValue; zoom <<= 1, jj++ )
             {
-                if( m_CurrentScreen && (m_CurrentScreen->GetZoom() == zoom) )
+                if( GetScreen() && (GetScreen()->GetZoom() == zoom) )
                     break;
                 new_choice++;
             }
@@ -534,15 +537,15 @@ void WinEDA_PcbFrame::SetToolbars()
                 m_SelZoomBox->SetSelection( new_choice );
         }
 
-        if( m_SelGridBox && m_CurrentScreen )
+        if( m_SelGridBox && GetScreen() )
         {
             int kk = m_SelGridBox->GetChoice();
 
             for( ii = 0; g_GridList[ii].x > 0; ii++ )
             {
-                if( !m_CurrentScreen->m_UserGridIsON
-                   && (m_CurrentScreen->GetGrid().x == g_GridList[ii].x)
-                   && (m_CurrentScreen->GetGrid().y == g_GridList[ii].y) )
+                if( !GetScreen()->m_UserGridIsON
+                   && (GetScreen()->GetGrid().x == g_GridList[ii].x)
+                   && (GetScreen()->GetGrid().y == g_GridList[ii].y) )
                 {
                     if( kk != ii )
                         m_SelGridBox->SetSelection( ii );

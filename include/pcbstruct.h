@@ -236,6 +236,14 @@ public:
      */
     BOARD_ITEM* GetCurItem() const {  return (BOARD_ITEM*) BASE_SCREEN::GetCurItem(); }
 
+    /**
+     * Function SetCurItem
+     * sets the currently selected object, m_CurrentItem.
+     * @param aItem Any object derived from BOARD_ITEM
+     */
+    void SetCurItem( BOARD_ITEM* aItem ) { BASE_SCREEN::SetCurItem( aItem ); }
+
+
     /* Return true if a microvia can be put on board
      * A microvia ia a small via restricted to 2 near neighbour layers
      * because its is hole is made by laser which can penetrate only one layer

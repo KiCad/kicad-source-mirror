@@ -292,12 +292,12 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
  */
 {
     DrawBlockStruct* PtBlock;
-    BASE_SCREEN*     screen = panel->m_Parent->GetScreen();
+    BASE_SCREEN*     screen = panel->GetScreen();
     BOARD_ITEM*      item;
     wxPoint          move_offset;
     MODULE*          Currentmodule = g_EDA_Appl->m_ModuleEditFrame->m_Pcb->m_Modules;
 
-    PtBlock = &panel->GetScreen()->BlockLocate;
+    PtBlock = &screen->BlockLocate;
     GRSetDrawMode( DC, g_XorMode );
 
     /* Effacement ancien cadre */

@@ -53,7 +53,7 @@ WinEDA_DisplayFrame::WinEDA_DisplayFrame( wxWindow* father, WinEDA_App* parent,
 
     m_Pcb = new BOARD( NULL, this );
 
-    m_CurrentScreen = new   PCB_SCREEN( CVPCB_DISPLAY_FRAME );
+    SetBaseScreen( new PCB_SCREEN( CVPCB_DISPLAY_FRAME ) );
 
     GetSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
@@ -66,10 +66,9 @@ WinEDA_DisplayFrame::WinEDA_DisplayFrame( wxWindow* father, WinEDA_App* parent,
 /******************************************/
 WinEDA_DisplayFrame::~WinEDA_DisplayFrame()
 /******************************************/
-
-// Destructor
 {
-    delete m_CurrentScreen;
+    delete GetBaseScreen();
+    SetBaseScreen( 0 );
 
     delete m_Pcb;
 
@@ -177,14 +176,14 @@ void WinEDA_DisplayFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 {
     wxSize  delta;
     int     flagcurseur = 0;
-    int     zoom = m_CurrentScreen->GetZoom();
+    int     zoom = GetScreen()->GetZoom();
     wxPoint curpos, oldpos;
 
     curpos = DrawPanel->CursorRealPosition( Mouse );
-    oldpos = m_CurrentScreen->m_Curseur;
+    oldpos = GetScreen()->m_Curseur;
 
-    delta.x = m_CurrentScreen->GetGrid().x / zoom;
-    delta.y = m_CurrentScreen->GetGrid().y / zoom;
+    delta.x = GetScreen()->GetGrid().x / zoom;
+    delta.y = GetScreen()->GetGrid().y / zoom;
     if( delta.x <= 0 )
         delta.x = 1;
     if( delta.y <= 0 )
@@ -197,13 +196,13 @@ void WinEDA_DisplayFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         case WXK_F1:
             OnZoom( ID_ZOOM_IN_KEY );
             flagcurseur = 2;
-            curpos = m_CurrentScreen->m_Curseur;
+            curpos = GetScreen()->m_Curseur;
             break;
 
         case WXK_F2:
             OnZoom( ID_ZOOM_OUT_KEY );
             flagcurseur = 2;
-            curpos = m_CurrentScreen->m_Curseur;
+            curpos = GetScreen()->m_Curseur;
             break;
 
         case WXK_F3:
@@ -214,11 +213,11 @@ void WinEDA_DisplayFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         case WXK_F4:
             OnZoom( ID_ZOOM_CENTER_KEY );
             flagcurseur = 2;
-            curpos = m_CurrentScreen->m_Curseur;
+            curpos = GetScreen()->m_Curseur;
             break;
 
         case ' ':
-            m_CurrentScreen->m_O_Curseur = m_CurrentScreen->m_Curseur;
+            GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
             break;
 
         case WXK_NUMPAD8:       /* cursor moved up */
@@ -251,26 +250,26 @@ void WinEDA_DisplayFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         }
     }
 
-    m_CurrentScreen->m_Curseur = curpos;
+    GetScreen()->m_Curseur = curpos;
     /* Put cursor on grid */
-    PutOnGrid( &m_CurrentScreen->m_Curseur );
+    PutOnGrid( &GetScreen()->m_Curseur );
 
-    if( m_CurrentScreen->IsRefreshReq() )
+    if( GetScreen()->IsRefreshReq() )
     {
         flagcurseur = 2;
         RedrawActiveWindow( DC, TRUE );
     }
 
-    if( (oldpos.x != m_CurrentScreen->m_Curseur.x)
-       || (oldpos.y != m_CurrentScreen->m_Curseur.y) )
+    if( (oldpos.x != GetScreen()->m_Curseur.x)
+       || (oldpos.y != GetScreen()->m_Curseur.y) )
     {
         if( flagcurseur != 2 )
         {
-            curpos = m_CurrentScreen->m_Curseur;
-            m_CurrentScreen->m_Curseur = oldpos;
+            curpos = GetScreen()->m_Curseur;
+            GetScreen()->m_Curseur = oldpos;
             DrawPanel->CursorOff( DC );
 
-            m_CurrentScreen->m_Curseur = curpos;
+            GetScreen()->m_Curseur = curpos;
             DrawPanel->CursorOn( DC );
         }
 

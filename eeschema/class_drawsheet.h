@@ -40,13 +40,13 @@ public:
     Hierarchical_PIN_Sheet_Struct* Next()
     { return (Hierarchical_PIN_Sheet_Struct*) Pnext; }
 
-    void                    Place( WinEDA_DrawFrame* frame, wxDC* DC );
+    void                    Place( WinEDA_SchematicFrame* frame, wxDC* DC );
     void                    Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                                   int draw_mode, int Color = -1 );
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * writes the data structures for this object out to a FILE in "*.sch" format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
@@ -99,7 +99,7 @@ public:
      */
     bool    Save( FILE* aFile ) const;
 
-    void                Place( WinEDA_DrawFrame* frame, wxDC* DC );
+    void                Place( WinEDA_SchematicFrame* frame, wxDC* DC );
     DrawSheetStruct*    GenCopy();
     void                Display_Infos( WinEDA_DrawFrame* frame );
     void                CleanupSheet( WinEDA_SchematicFrame* frame, wxDC* DC );

@@ -23,7 +23,7 @@ class SCH_ITEM;
 /* classe representant un ecran graphique de dessin */
 /****************************************************/
 
-class WinEDA_DrawPanel : public EDA_DRAW_PANEL
+class WinEDA_DrawPanel : public wxScrolledWindow
 {
 public:
     int               m_Ident;
@@ -59,8 +59,10 @@ public:
     // Constructor and destructor
     WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id, const wxPoint& pos, const wxSize& size );
     ~WinEDA_DrawPanel() { }
+
     /****************************/
-    virtual BASE_SCREEN* GetScreen() { return m_Parent->GetScreen(); }
+    BASE_SCREEN* GetScreen();
+
 
     void    PrepareGraphicContext( wxDC* DC );
     wxPoint CalcAbsolutePosition( const wxPoint& rel_pos );
@@ -139,6 +141,7 @@ public:
 
     DECLARE_EVENT_TABLE()
 };
+
 
 /**************************/
 /*  class DrawBlockStruct */
@@ -264,6 +267,14 @@ public:
     BASE_SCREEN( int idscreen, KICAD_T aType = SCREEN_STRUCT_TYPE );
     ~BASE_SCREEN();
 
+    /**
+     * Function setCurItem
+     * sets the currently selected object, m_CurrentItem.
+     * @param current Any object derived from EDA_BaseStruct
+     */
+    void SetCurItem( EDA_BaseStruct* current ) {  m_CurrentItem = current; }
+    EDA_BaseStruct* GetCurItem() const { return m_CurrentItem; }
+
     void                    InitDatas();        /* Inits completes des variables */
     wxSize                  ReturnPageSize();
     int                     GetInternalUnits();
@@ -287,15 +298,6 @@ public:
     int     IsModify() { return m_FlagModified & 1;  }
     int     IsRefreshReq() { return m_FlagRefreshReq & 1;  }
     int     IsSave() { return m_FlagSave & 1;  }
-
-
-    /**
-     * Function SetCurItem
-     * sets the currently selected object, m_CurrentItem.
-     * @param current Any object derived from EDA_BaseStruct
-     */
-    void SetCurItem( EDA_BaseStruct* current ) {  m_CurrentItem = current; }
-    EDA_BaseStruct* GetCurItem() const {  return m_CurrentItem; }
 
 
     //----<zoom stuff>----------------------------------------------------------

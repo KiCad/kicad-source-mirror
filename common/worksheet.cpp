@@ -321,7 +321,7 @@ wxString WinEDA_DrawFrame::GetScreenDesc()
 {
     wxString msg;
 
-    msg << GetScreen()->m_ScreenNumber << wxT( "/" ) <<
-    GetScreen()->m_NumberOfScreen;
+    msg << GetBaseScreen()->m_ScreenNumber << wxT( "/" )
+        << GetBaseScreen()->m_NumberOfScreen;
     return msg;
 }

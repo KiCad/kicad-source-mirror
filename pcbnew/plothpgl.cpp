@@ -39,8 +39,8 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer )
     scale_y = Scale_Y * SCALE_HPGL;
 
     // calcul en unites internes des dimensions de la feuille ( connues en 1/1000 pouce )
-    SheetSize.x = m_CurrentScreen->m_CurrentSheetDesc->m_Size.x * U_PCB;
-    SheetSize.y = m_CurrentScreen->m_CurrentSheetDesc->m_Size.y * U_PCB;
+    SheetSize.x = GetScreen()->m_CurrentSheetDesc->m_Size.x * U_PCB;
+    SheetSize.y = GetScreen()->m_CurrentSheetDesc->m_Size.y * U_PCB;
 
     g_PlotOffset.x = 0;
     g_PlotOffset.y = (int) (SheetSize.y * scale_y);
@@ -79,7 +79,7 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer )
     {
         int tmp = g_PlotOrient; g_PlotOrient = 0;
         InitPlotParametresHPGL( g_PlotOffset, scale_x, scale_y, g_PlotOrient );
-        PlotWorkSheet( PLOT_FORMAT_HPGL, m_CurrentScreen );
+        PlotWorkSheet( PLOT_FORMAT_HPGL, GetScreen() );
         g_PlotOrient = tmp;
     }
 
@@ -130,9 +130,9 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer )
 
     InitPlotParametresHPGL( g_PlotOffset, scale_x, scale_y, g_PlotOrient );
 
-	// Specify that the contents of the "Edges Pcb" layer are to be plotted
-	// in addition to the contents of the currently specified layer.
-	int layer_mask = g_TabOneLayerMask[Layer] | EDGE_LAYER;
+    // Specify that the contents of the "Edges Pcb" layer are to be plotted
+    // in addition to the contents of the currently specified layer.
+    int layer_mask = g_TabOneLayerMask[Layer] | EDGE_LAYER;
 
     switch( Layer )
     {
@@ -660,7 +660,7 @@ void trace_1_pad_TRAPEZE_HPGL( wxPoint padpos, wxSize size, wxSize delta,
  *  le mode de trace (FILLED, SKETCH, FILAIRE)
  *  Le trace n'est fait que pour un trapeze, c.a.d que deltaX ou deltaY
  *  = 0.
- * 
+ *
  *  les notation des sommets sont ( vis a vis de la table tracante )
  *      0 ------------- 3
  *        .			   .
@@ -851,7 +851,7 @@ void trace_1_segment_HPGL( int pos_X0, int pos_Y0, int pos_X1, int pos_Y1,
          *  de trace par 2 rotations inverses
          *   coord :  xrot = x*cos + y*sin
          *            yrot = y*cos - x*sin
-         * 
+         *
          *  avec ici yrot = 0 puisque le segment est horizontal dans le nouveau repere
          *  Transformee inverse :
          *   coord :  x = xrot*cos - yrot*sin

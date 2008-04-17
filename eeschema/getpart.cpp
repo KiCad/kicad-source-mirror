@@ -255,8 +255,9 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
     wxPoint move_vector;
 
-    SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*)
-            panel->m_Parent->GetScreen()->GetCurItem();
+    SCH_SCREEN* screen = (SCH_SCREEN*) panel->GetScreen();
+
+    SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) screen->GetCurItem();
 
     /* Effacement du composant */
     if( erase )
@@ -264,8 +265,8 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
         DrawStructsInGhost( panel, DC, DrawLibItem, 0, 0 );
     }
 
-    move_vector.x = panel->m_Parent->GetScreen()->m_Curseur.x - DrawLibItem->m_Pos.x;
-    move_vector.y = panel->m_Parent->GetScreen()->m_Curseur.y - DrawLibItem->m_Pos.y;
+    move_vector.x = screen->m_Curseur.x - DrawLibItem->m_Pos.x;
+    move_vector.y = screen->m_Curseur.y - DrawLibItem->m_Pos.y;
     MoveOneStruct( DrawLibItem, move_vector );
 
     DrawStructsInGhost( panel, DC, DrawLibItem, 0, 0 );
@@ -320,8 +321,9 @@ static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC )
 /* Routine de sortie de la fonction de placement de composant
  */
 {
-    SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*)
-            Panel->m_Parent->GetScreen()->GetCurItem();
+    SCH_SCREEN* screen = (SCH_SCREEN*) Panel->GetScreen();
+
+    SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) screen->GetCurItem();
 
     if( DrawLibItem->m_Flags & IS_NEW )    /* Nouveau Placement en cours, on l'efface */
     {
@@ -342,12 +344,11 @@ static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC )
         DrawLibItem->m_Flags = 0;
     }
 
-    D(printf("refresh\n");)
     Panel->Refresh( TRUE );
 
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
-    Panel->m_Parent->GetScreen()->SetCurItem( NULL );
+    screen->SetCurItem( NULL );
 }
 
 

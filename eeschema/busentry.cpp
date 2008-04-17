@@ -56,7 +56,7 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 /*  Dessin du Segment "BusEntry" lors des deplacements du curseur
  */
 {
-    BASE_SCREEN*        screen   = panel->m_Parent->GetScreen();
+    BASE_SCREEN*        screen   = panel->GetScreen();
     DrawBusEntryStruct* BusEntry = (DrawBusEntryStruct*) screen->GetCurItem();
 
     if( BusEntry == NULL )

@@ -239,7 +239,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool era
         }
     }
 
-    if( panel->m_Parent->GetScreen()->BlockLocate.m_State != STATE_BLOCK_STOP )
+    if( panel->GetScreen()->BlockLocate.m_State != STATE_BLOCK_STOP )
     {
         screen->BlockLocate.m_MoveVector.x = screen->m_Curseur.x - screen->BlockLocate.GetRight();
         screen->BlockLocate.m_MoveVector.y = screen->m_Curseur.y - screen->BlockLocate.GetBottom();
@@ -277,7 +277,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
     {
         NextS = pt_segm->Next();
         if( IsSegmentInBox( GetScreen()->BlockLocate, pt_segm ) )
-        {       
+        {
             /* la piste est ici bonne a etre efface */
             pt_segm->Draw( DrawPanel, DC, GR_XOR );
             pt_segm->DeleteStructure();
@@ -289,7 +289,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
     {
         NextS = pt_segm->Next();
         if( IsSegmentInBox( GetScreen()->BlockLocate, pt_segm ) )
-        {    
+        {
             /* la piste est ici bonne a etre efface */
             pt_segm->Draw( DrawPanel, DC, GR_XOR );
             pt_segm->DeleteStructure();
@@ -324,7 +324,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
     deltaX = GetScreen()->BlockLocate.m_MoveVector.x;
     deltaY = GetScreen()->BlockLocate.m_MoveVector.y;
 
-	/* Move the Track segments in block */
+    /* Move the Track segments in block */
     TRACK* track = m_Pcb->m_Track;
     while( track )
     {
@@ -388,15 +388,15 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
     {
         TRACK* next_track = track->Next();
         if( IsSegmentInBox( GetScreen()->BlockLocate, track ) )
-        {   
+        {
             /* this track segment must be duplicated */
             m_Pcb->m_Status_Pcb = 0;
             TRACK* new_track = track->Copy();
             new_track->Insert( m_Pcb, NULL );
-            
-            new_track->m_Start += delta; 
-            new_track->m_End   += delta; 
-            
+
+            new_track->m_Start += delta;
+            new_track->m_End   += delta;
+
             new_track->Draw( DrawPanel, DC, GR_OR ); // draw the new created segment
         }
         track = next_track;
@@ -408,14 +408,14 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
     {
         SEGZONE * next_zsegment = zsegment->Next();
         if( IsSegmentInBox( GetScreen()->BlockLocate, track ) )
-        {  
+        {
             /* this zone segment must be duplicated */
             SEGZONE * new_zsegment = (SEGZONE*) zsegment->Copy();
             new_zsegment->Insert( m_Pcb, NULL );
-            
-            new_zsegment->m_Start += delta; 
-            new_zsegment->m_End   += delta; 
-            
+
+            new_zsegment->m_Start += delta;
+            new_zsegment->m_End   += delta;
+
             new_zsegment->Draw( DrawPanel, DC, GR_OR ); // draw the new created segment
         }
         zsegment = next_zsegment;

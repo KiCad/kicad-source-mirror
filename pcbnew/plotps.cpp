@@ -38,7 +38,7 @@ void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer, bo
     wxSize        BoardSize;
     wxPoint       BoardCenter;
     bool          Center = FALSE;
-    Ki_PageDescr* currentsheet = m_CurrentScreen->m_CurrentSheetDesc;
+    Ki_PageDescr* currentsheet = GetScreen()->m_CurrentSheetDesc;
     double        scale_format; // Facteur correctif pour conversion forlat Ax->A4
     double        scale_x, scale_y;
     int           PlotMarge_in_mils = 0;
@@ -105,7 +105,7 @@ void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer, bo
         int tmp = g_PlotOrient;
         g_PlotOrient = 0;
         SetPlotScale( 1.0, 1.0 );
-        PlotWorkSheet( PLOT_FORMAT_POST, m_CurrentScreen );
+        PlotWorkSheet( PLOT_FORMAT_POST, GetScreen() );
         g_PlotOrient = tmp;
     }
 

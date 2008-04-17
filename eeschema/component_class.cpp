@@ -418,7 +418,7 @@ void SCH_COMPONENT::SwapData( SCH_COMPONENT* copyitem )
 
 
 /***********************************************************************/
-void SCH_COMPONENT::Place( WinEDA_DrawFrame* frame, wxDC* DC )
+void SCH_COMPONENT::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 /***********************************************************************/
 {
     /* save old text in undo list */
@@ -430,7 +430,7 @@ void SCH_COMPONENT::Place( WinEDA_DrawFrame* frame, wxDC* DC )
         SwapData( (SCH_COMPONENT*) g_ItemToUndoCopy );
 
         /* save in undo list */
-        ( (WinEDA_SchematicFrame*) frame )->SaveCopyInUndoList( this, IS_CHANGED );
+        frame->SaveCopyInUndoList( this, IS_CHANGED );
 
         /* restore new values */
         SwapData( (SCH_COMPONENT*) g_ItemToUndoCopy );

@@ -100,7 +100,7 @@ bodygraphics_PropertiesAccept( wxCommandEvent& event )
         }
         CurrentLibEntry->SortDrawItems();
 
-		m_Parent->GetScreen()->SetModify();
+        m_Parent->GetScreen()->SetModify();
 
         DrawLibraryDrawStruct( m_Parent->DrawPanel, &dc, CurrentLibEntry, 0, 0,
                                CurrentDrawItem, CurrentUnit, g_XorMode );
@@ -150,7 +150,7 @@ static void AbortSymbolTraceOn( WinEDA_DrawPanel* Panel, wxDC* DC )
         else
             DrawLibraryDrawStruct( Panel, DC, CurrentLibEntry, 0, 0,
                                    CurrentDrawItem, CurrentUnit, g_XorMode );
-		SAFE_DELETE( CurrentDrawItem );
+        SAFE_DELETE( CurrentDrawItem );
     }
     else
     {
@@ -224,8 +224,8 @@ LibEDA_BaseStruct* WinEDA_LibeditFrame::CreateGraphicItem( wxDC* DC )
         LibDrawArc* Arc = new LibDrawArc();
 
         CurrentDrawItem = Arc;
-		ArcStartX    = ArcEndX = GetScreen()->m_Curseur.x;
-		ArcStartY    = ArcEndY = -( GetScreen()->m_Curseur.y );
+        ArcStartX    = ArcEndX = GetScreen()->m_Curseur.x;
+        ArcStartY    = ArcEndY = -( GetScreen()->m_Curseur.y );
         StateDrawArc = 1;
         Arc->m_Fill  = FlSymbol_Fill;
         Arc->m_Width = g_LibSymbolDefaultLineWidth;
@@ -237,8 +237,8 @@ LibEDA_BaseStruct* WinEDA_LibeditFrame::CreateGraphicItem( wxDC* DC )
         LibDrawCircle* Circle = new LibDrawCircle();
 
         CurrentDrawItem = Circle;
-		Circle->m_Pos.x = GetScreen()->m_Curseur.x;
-		Circle->m_Pos.y = -( GetScreen()->m_Curseur.y );
+        Circle->m_Pos.x = GetScreen()->m_Curseur.x;
+        Circle->m_Pos.y = -( GetScreen()->m_Curseur.y );
         Circle->m_Fill  = FlSymbol_Fill;
         Circle->m_Width = g_LibSymbolDefaultLineWidth;
     }
@@ -249,8 +249,8 @@ LibEDA_BaseStruct* WinEDA_LibeditFrame::CreateGraphicItem( wxDC* DC )
         LibDrawSquare* Square = new LibDrawSquare();
 
         CurrentDrawItem = Square;
-		Square->m_Pos.x = GetScreen()->m_Curseur.x;
-		Square->m_Pos.y = -( GetScreen()->m_Curseur.y );
+        Square->m_Pos.x = GetScreen()->m_Curseur.x;
+        Square->m_Pos.y = -( GetScreen()->m_Curseur.y );
         Square->m_End   = Square->m_Pos;
         Square->m_Fill  = FlSymbol_Fill;
         Square->m_Width = g_LibSymbolDefaultLineWidth;
@@ -265,8 +265,8 @@ LibEDA_BaseStruct* WinEDA_LibeditFrame::CreateGraphicItem( wxDC* DC )
         polyline->n = 2;
         ptpoly = (int*) MyZMalloc( 4 * sizeof(int) );
         polyline->PolyList = ptpoly;
-		ptpoly[0] = ptpoly[2] = GetScreen()->m_Curseur.x;
-		ptpoly[1] = ptpoly[3] = -( GetScreen()->m_Curseur.y );
+        ptpoly[0] = ptpoly[2] = GetScreen()->m_Curseur.x;
+        ptpoly[1] = ptpoly[3] = -( GetScreen()->m_Curseur.y );
         polyline->m_Fill  = FlSymbol_Fill;
         polyline->m_Width = g_LibSymbolDefaultLineWidth;
     }
@@ -277,8 +277,8 @@ LibEDA_BaseStruct* WinEDA_LibeditFrame::CreateGraphicItem( wxDC* DC )
         LibDrawSegment* Segment = new LibDrawSegment();
 
         CurrentDrawItem  = Segment;
-		Segment->m_Pos.x = GetScreen()->m_Curseur.x;
-		Segment->m_Pos.y = -( GetScreen()->m_Curseur.y );
+        Segment->m_Pos.x = GetScreen()->m_Curseur.x;
+        Segment->m_Pos.y = -( GetScreen()->m_Curseur.y );
         Segment->m_End   = Segment->m_Pos;
         Segment->m_Width = g_LibSymbolDefaultLineWidth;
     }
@@ -291,12 +291,12 @@ LibEDA_BaseStruct* WinEDA_LibeditFrame::CreateGraphicItem( wxDC* DC )
         CurrentDrawItem = Text;
         Text->m_Size.x  = Text->m_Size.y = g_LastTextSize;
         Text->m_Horiz   = g_LastTextOrient;
-		Text->m_Pos.x   = GetScreen()->m_Curseur.x;
-		Text->m_Pos.y   = -( GetScreen()->m_Curseur.y );
+        Text->m_Pos.x   = GetScreen()->m_Curseur.x;
+        Text->m_Pos.y   = -( GetScreen()->m_Curseur.y );
         EditSymbolText( NULL, Text );
         if( Text->m_Text.IsEmpty() )
         {
-			SAFE_DELETE( Text );
+            SAFE_DELETE( Text );
             CurrentDrawItem = NULL;
             DrawPanel->ManageCurseur = NULL;
             DrawPanel->ForceCloseManageCurseur = NULL;
@@ -362,7 +362,7 @@ void WinEDA_LibeditFrame::GraphicItemBeginDraw( wxDC* DC )
 
     case COMPONENT_POLYLINE_DRAW_TYPE:
     {
-		wxPoint pos = GetScreen()->m_Curseur;
+        wxPoint pos = GetScreen()->m_Curseur;
         ( (LibDrawPolyline*) CurrentDrawItem )->AddPoint( pos );
     }
         break;
@@ -383,7 +383,7 @@ static void RedrawWhileMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool era
 /* Redraw the graphoc shape while moving
  */
 {
-	BASE_SCREEN* Screen = panel->m_Parent->GetScreen();
+    BASE_SCREEN* Screen = panel->GetScreen();
     int          mx, my;
 
     /* Erase shape in the old positon*/
@@ -481,7 +481,7 @@ void WinEDA_LibeditFrame::StartMoveDrawSymbol( wxDC* DC )
     SetCursor( wxCURSOR_HAND );
 
     CurrentDrawItem->m_Flags |= IS_MOVED;
-	StartCursor = GetScreen()->m_Curseur;
+    StartCursor = GetScreen()->m_Curseur;
 
     switch( CurrentDrawItem->Type() )
     {
@@ -513,7 +513,7 @@ void WinEDA_LibeditFrame::StartMoveDrawSymbol( wxDC* DC )
         ;
     }
 
-	ItemPreviousPos = GetScreen()->m_Curseur;
+    ItemPreviousPos = GetScreen()->m_Curseur;
     DrawPanel->ManageCurseur = RedrawWhileMovingCursor;
     DrawPanel->ForceCloseManageCurseur = AbortSymbolTraceOn;
     DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
@@ -529,7 +529,7 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     int          DrawMode = g_XorMode;
     int*         ptpoly;
     int          dx, dy;
-	BASE_SCREEN* Screen = panel->m_Parent->GetScreen();
+    BASE_SCREEN* Screen = panel->GetScreen();
     int          mx = Screen->m_Curseur.x,
                  my = Screen->m_Curseur.y;
 
@@ -720,7 +720,7 @@ void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
     CurrentDrawItem->m_Flags = 0;
     CurrentDrawItem = NULL;
 
-	GetScreen()->SetModify();
+    GetScreen()->SetModify();
 
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
@@ -832,11 +832,11 @@ void WinEDA_LibeditFrame::DeleteDrawPoly( wxDC* DC )
     {
         Poly->n--;
         ptpoly = Poly->PolyList + ( 2 * (Poly->n - 1) );
-		if( (ptpoly[0] != GetScreen()->m_Curseur.x)
-				   || (ptpoly[1] != -GetScreen()->m_Curseur.y) )
+        if( (ptpoly[0] != GetScreen()->m_Curseur.x)
+                   || (ptpoly[1] != -GetScreen()->m_Curseur.y) )
         {
-			ptpoly[0] = GetScreen()->m_Curseur.x;
-			ptpoly[1] = -( GetScreen()->m_Curseur.y);
+            ptpoly[0] = GetScreen()->m_Curseur.x;
+            ptpoly[1] = -( GetScreen()->m_Curseur.y);
             break;
         }
     }

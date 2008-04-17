@@ -211,7 +211,7 @@ int WinEDA_ExchangeModuleFrame::Maj_ListeCmp(
         return 0;                           /* pas de changement de nom */
 
     /* Calcul nom fichier CMP par changement de l'extension du nom netliste */
-    FileNameCmp = m_Parent->m_CurrentScreen->m_FileName;
+    FileNameCmp = m_Parent->GetScreen()->m_FileName;
     ChangeFileNameExt( FileNameCmp, NetCmpExtBuffer );
 
     // Modification du fichier .cmp correcpondant
@@ -527,10 +527,10 @@ MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
     NewModule->m_Parent = m_Pcb;
 
     m_Pcb->m_Status_Pcb = 0;
-    oldpos = m_CurrentScreen->m_Curseur;
-    m_CurrentScreen->m_Curseur = OldModule->m_Pos;
+    oldpos = GetScreen()->m_Curseur;
+    GetScreen()->m_Curseur = OldModule->m_Pos;
     Place_Module( NewModule, NULL );
-    m_CurrentScreen->m_Curseur = oldpos;
+    GetScreen()->m_Curseur = oldpos;
 
     /* Changement eventuel de couche */
     if( OldModule->GetLayer() != NewModule->GetLayer() )
@@ -575,7 +575,7 @@ MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
 
     m_Pcb->m_Status_Pcb = 0;
     NewModule->m_Flags  = 0;
-    m_CurrentScreen->SetModify();
+    GetScreen()->SetModify();
 
     return NewModule;
 }
@@ -614,7 +614,7 @@ bool WinEDA_PcbFrame::RecreateCmpFileFromBoard()
     }
 
     /* Calcul nom fichier CMP par changement de l'extension du nom netliste */
-    FullFileNameCmp = m_CurrentScreen->m_FileName;
+    FullFileNameCmp = GetScreen()->m_FileName;
     ChangeFileNameExt( FullFileNameCmp, NetCmpExtBuffer );
 
     mask = wxT( "*" ) + NetCmpExtBuffer;

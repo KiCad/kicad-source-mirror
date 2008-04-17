@@ -169,7 +169,7 @@ static void ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC )
  *  de deplacement
  *  Si le NetSheet est nouveau, il est pointe par NewSheetLabel
  */
-void Hierarchical_PIN_Sheet_Struct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
+void Hierarchical_PIN_Sheet_Struct::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 {
     DrawSheetStruct* Sheet = (DrawSheetStruct*) m_Parent;
 
@@ -237,7 +237,7 @@ void WinEDA_SchematicFrame::StartMove_PinSheet( Hierarchical_PIN_Sheet_Struct* S
 static void Move_PinSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
     Hierarchical_PIN_Sheet_Struct* SheetLabel = (Hierarchical_PIN_Sheet_Struct*)
-                                       panel->m_Parent->GetScreen()->GetCurItem();
+                                       panel->GetScreen()->GetCurItem();
 
     if( SheetLabel == NULL )
         return;
@@ -251,13 +251,13 @@ static void Move_PinSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 
     SheetLabel->m_Edge  = 0;
     SheetLabel->m_Pos.x = Sheet->m_Pos.x;
-    if( panel->m_Parent->GetScreen()->m_Curseur.x > ( Sheet->m_Pos.x + (Sheet->m_Size.x / 2) ) )
+    if( panel->GetScreen()->m_Curseur.x > ( Sheet->m_Pos.x + (Sheet->m_Size.x / 2) ) )
     {
         SheetLabel->m_Edge  = 1;
         SheetLabel->m_Pos.x = Sheet->m_Pos.x + Sheet->m_Size.x;
     }
 
-    SheetLabel->m_Pos.y = panel->m_Parent->GetScreen()->m_Curseur.y;
+    SheetLabel->m_Pos.y = panel->GetScreen()->m_Curseur.y;
     if( SheetLabel->m_Pos.y < Sheet->m_Pos.y )
         SheetLabel->m_Pos.y = Sheet->m_Pos.y;
     if( SheetLabel->m_Pos.y > (Sheet->m_Pos.y + Sheet->m_Size.y) )

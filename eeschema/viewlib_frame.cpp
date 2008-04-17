@@ -69,7 +69,7 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow* father, WinEDA_App* parent,
     if( m_Semaphore )
         SetWindowStyle( GetWindowStyle() | wxSTAY_ON_TOP );
 
-    m_CurrentScreen = new SCH_SCREEN( VIEWER_FRAME );
+    SetBaseScreen( new SCH_SCREEN( VIEWER_FRAME ) );
     GetScreen()->SetZoom( 16 );
 
     if( Library == NULL )
@@ -110,7 +110,9 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow* father, WinEDA_App* parent,
 
 WinEDA_ViewlibFrame::~WinEDA_ViewlibFrame()
 {
-    SAFE_DELETE( m_CurrentScreen );
+    delete GetScreen();
+    SetBaseScreen( 0 );
+
     m_Parent->m_ViewlibFrame = NULL;
 }
 

@@ -274,7 +274,7 @@ WinEDA_SelLayerPairFrame::WinEDA_SelLayerPairFrame( WinEDA_BasePcbFrame* parent 
     m_Parent = parent;
     SetFont( *g_DialogFont );
 
-    PCB_SCREEN* screen = (PCB_SCREEN*) m_Parent->m_CurrentScreen;
+    PCB_SCREEN* screen = (PCB_SCREEN*) m_Parent->GetScreen();
     /* Construction de la liste des couches autoris�s */
     int         Masque_Layer = g_TabAllCopperLayerMask[g_DesignSettings.m_CopperLayerCount - 1];
     Masque_Layer += ALL_NO_CU_LAYERS;
@@ -361,7 +361,7 @@ void WinEDA_SelLayerPairFrame::OnOkClick( wxCommandEvent& event )
         return;
     }
 
-    PCB_SCREEN* screen = (PCB_SCREEN*) m_Parent->m_CurrentScreen;
+    PCB_SCREEN* screen = (PCB_SCREEN*) m_Parent->GetScreen();
 
     screen->m_Route_Layer_TOP    = m_LayerId[m_LayerListTOP->GetSelection()];
     screen->m_Route_Layer_BOTTOM = m_LayerId[m_LayerListBOTTOM->GetSelection()];

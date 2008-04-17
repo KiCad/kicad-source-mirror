@@ -98,7 +98,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             if( m_ID_current_state == ID_PCB_ARC_BUTT )
                 shape = S_ARC;
 
-            SetCurItem( 
+            SetCurItem(
                  Begin_Edge_Module( (EDGE_MODULE*) NULL, DC, shape ) );
         }
         else if( (DrawStruct->m_Flags & IS_NEW) )
@@ -140,7 +140,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         SaveCopyInUndoList( m_Pcb->m_Modules );
         Place_Ancre( m_Pcb->m_Modules, DC );
         m_Pcb->m_Modules->m_Flags  = 0;
-        m_CurrentScreen->m_Curseur = wxPoint( 0, 0 );
+        GetScreen()->m_Curseur = wxPoint( 0, 0 );
         Recadre_Trace( TRUE );
         Place_Module( m_Pcb->m_Modules, DC );
         RedrawActiveWindow( DC, TRUE );
@@ -185,7 +185,7 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
     BOARD_ITEM*     DrawStruct = GetCurItem();
     wxString        msg;
     bool            append_set_width = FALSE;
-    bool            BlockActive = (m_CurrentScreen->BlockLocate.m_Command !=  BLOCK_IDLE);
+    bool            BlockActive = (GetScreen()->BlockLocate.m_Command !=  BLOCK_IDLE);
 
     // Simple localisation des elements si possible
     if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
@@ -367,8 +367,8 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
                       _( "Set Width" ), width_segment_xpm );
         PopMenu->AppendSeparator();
     }
-	
-	return true;
+
+    return true;
 }
 
 

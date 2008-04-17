@@ -77,12 +77,12 @@ void WinEDA_ModuleEditFrame::Load_Module_Module_From_BOARD( MODULE* Module )
 
     build_liste_pads();
 
-    m_CurrentScreen->m_Curseur.x = m_CurrentScreen->m_Curseur.y = 0;
+    GetScreen()->m_Curseur.x = GetScreen()->m_Curseur.y = 0;
     Place_Module( Module, NULL );
     if( Module->GetLayer() != CMP_N )
         m_Pcb->Change_Side_Module( Module, NULL );
     Rotate_Module( NULL, Module, 0, FALSE );
-    m_CurrentScreen->ClrModify();
+    GetScreen()->ClrModify();
     Zoom_Automatique( TRUE );
 }
 
@@ -94,7 +94,7 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
 /* Permet de charger un module directement a partir de la librairie */
 {
     MODULE*              module;
-    wxPoint              curspos = m_CurrentScreen->m_Curseur;
+    wxPoint              curspos = GetScreen()->m_Curseur;
     wxString             ModuleName, keys;
     static wxArrayString HistoryList;
     bool AllowWildSeach = TRUE;
@@ -148,7 +148,7 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
             module = Get_Librairie_Module( this, library, ModuleName, TRUE );
     }
 
-    m_CurrentScreen->m_Curseur = curspos;
+    GetScreen()->m_Curseur = curspos;
     DrawPanel->MouseToCursorSchema();
 
     if( module )

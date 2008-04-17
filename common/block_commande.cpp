@@ -131,7 +131,7 @@ bool WinEDA_DrawFrame::HandleBlockBegin( wxDC* DC, int key,
  *  Init the Block infos: command type, initial position, and other variables..
  */
 {
-    DrawBlockStruct* Block = & GetScreen()->BlockLocate;
+    DrawBlockStruct* Block = & GetBaseScreen()->BlockLocate;
 
     if( (Block->m_Command != BLOCK_IDLE)
        || ( Block->m_State != STATE_NO_BLOCK) )
@@ -169,7 +169,7 @@ bool WinEDA_DrawFrame::HandleBlockBegin( wxDC* DC, int key,
         if( Block->m_BlockDrawStruct == NULL )      /* No data to paste */
         {
             DisplayError( this, wxT( "No Block to paste" ), 20 );
-            GetScreen()->BlockLocate.m_Command = BLOCK_IDLE;
+            GetBaseScreen()->BlockLocate.m_Command = BLOCK_IDLE;
             DrawPanel->ManageCurseur = NULL;
             return TRUE;
         }

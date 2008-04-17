@@ -50,7 +50,7 @@ int MarkItemsInBloc( EDA_LibComponentStruct* LibComponent,
 
 /* Mark items inside rect.
  *  Items are inside rect when an end point is inside rect
- * 
+ *
  *  Rules for convert drawings and other parts ( for multi part per package):
  *  - Commons are always marked
  *  - Specific graphic shapes must agree with the current displayed part and convert
@@ -435,7 +435,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
  */
 {
     DrawBlockStruct* PtBlock;
-    BASE_SCREEN* screen = panel->m_Parent->GetScreen();
+    BASE_SCREEN* screen = panel->GetScreen();
     LibEDA_BaseStruct* item;
     wxPoint move_offset;
 
@@ -594,7 +594,7 @@ void MoveMarkedItems( EDA_LibComponentStruct* LibEntry, wxPoint offset )
             ( (LibDrawText*) item )->m_Pos.x += offset.x;
             ( (LibDrawText*) item )->m_Pos.y += offset.y;
             break;
-            
+
         default:
             ;
         }
@@ -704,7 +704,7 @@ void MirrorMarkedItems( EDA_LibComponentStruct* LibEntry, wxPoint offset )
         case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
             SETMIRROR( ( (LibDrawText*) item )->m_Pos.x );
             break;
-        
+
         default:
             ;
         }

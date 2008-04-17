@@ -56,7 +56,7 @@ public:
 
 
     /* fonction de placement */
-    virtual void    Place( WinEDA_DrawFrame* frame, wxDC* DC );
+    virtual void    Place( WinEDA_SchematicFrame* frame, wxDC* DC );
 
     /**
      * Function Save
@@ -84,7 +84,7 @@ public:
 public:
     DrawPickedStruct( SCH_ITEM * pickedstruct = NULL );
     ~DrawPickedStruct();
-    void Place( WinEDA_DrawFrame* frame, wxDC* DC ) { };
+    void Place( WinEDA_SchematicFrame* frame, wxDC* DC ) { };
     void DeleteWrapperList();
 
     DrawPickedStruct* Next() { return (DrawPickedStruct*) Pnext; }

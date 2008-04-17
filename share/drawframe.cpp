@@ -84,13 +84,13 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
         SetSize( 0, 0, minsize.x, minsize.y );
 
     // Creation de la ligne de status
-	#define ZOOM_DISPLAY_SIZE 60
-	#define COORD_DISPLAY_SIZE 140
-	#define UNITS_DISPLAY_SIZE 50
-	#define FUNCTION_DISPLAY_SIZE 100
+    #define ZOOM_DISPLAY_SIZE 60
+    #define COORD_DISPLAY_SIZE 140
+    #define UNITS_DISPLAY_SIZE 50
+    #define FUNCTION_DISPLAY_SIZE 100
     static const int dims[6] = { -1, ZOOM_DISPLAY_SIZE,
-		COORD_DISPLAY_SIZE, COORD_DISPLAY_SIZE,
-		UNITS_DISPLAY_SIZE, FUNCTION_DISPLAY_SIZE };
+        COORD_DISPLAY_SIZE, COORD_DISPLAY_SIZE,
+        UNITS_DISPLAY_SIZE, FUNCTION_DISPLAY_SIZE };
 
     CreateStatusBar( 6 );
     SetStatusWidths( 6, dims );
@@ -137,10 +137,10 @@ void WinEDA_DrawFrame::AddFontSelectionMenu( wxMenu* main_menu )
                   fonts_xpm );
     ADD_MENUITEM( fontmenu, ID_PREFERENCES_FONT_STATUS, _( "font for Status Line" ),
                   fonts_xpm );
-	ADD_MENUITEM_WITH_HELP_AND_SUBMENU( main_menu, fontmenu,
-		ID_PREFERENCES_FONT, _("&Font selection"),
-		_("Choose font type and size for dialogs, infos and status box"),
-		fonts_xpm );
+    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( main_menu, fontmenu,
+        ID_PREFERENCES_FONT, _("&Font selection"),
+        _("Choose font type and size for dialogs, infos and status box"),
+        fonts_xpm );
 }
 
 
@@ -247,7 +247,7 @@ void WinEDA_DrawFrame::OnHotKey( wxDC* DC, int hotkey,
 
 
 /**************************************************************/
-void WinEDA_DrawFrame::ToolOnRightClick( wxCommandEvent& event ) 
+void WinEDA_DrawFrame::ToolOnRightClick( wxCommandEvent& event )
 /**************************************************************/
 // Virtual function
 {
@@ -266,33 +266,15 @@ void WinEDA_DrawFrame::OnSelectGrid( wxCommandEvent& event )
     if( id < 0 )
         return;
 
-	GetScreen()->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
-	wxSize grid = GetScreen()->GetGrid();
-	GetScreen()->SetGrid( g_GridList[id] );
-	wxSize newgrid = GetScreen()->GetGrid();
+    BASE_SCREEN*    screen = GetBaseScreen();
+
+    screen->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
+    wxSize grid = screen->GetGrid();
+    screen->SetGrid( g_GridList[id] );
+    wxSize newgrid = screen->GetGrid();
     if( newgrid.x != grid.x || newgrid.y != grid.y )
         Recadre_Trace( FALSE );
 }
-
-
-#ifndef EESCHEMA
-/**************************************************************/
-void WinEDA_DrawFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
-/**************************************************************/
-
-/*	Fonction virtuelle
- *  traitement des touches de fonctions utilisees ds tous les menus
- *  Zoom
- *  Redessin d'ecran
- *  Cht Unites
- *  Cht couches
- *  Remise a 0 de l'origine des coordonnees relatives
- */
-{
-}
-
-
-#endif
 
 
 /********************************************************/
@@ -326,10 +308,10 @@ void WinEDA_DrawFrame::OnSelectZoom( wxCommandEvent& event )  // fonction virtue
         int zoom = 1 << id;
         if( zoom > m_ZoomMaxValue )
             zoom = m_ZoomMaxValue;
-		if( GetScreen()->GetZoom() == zoom )
+        if( GetBaseScreen()->GetZoom() == zoom )
             return;
-		GetScreen()->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
-		GetScreen()->SetZoom( zoom );
+        GetBaseScreen()->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
+        GetBaseScreen()->SetZoom( zoom );
         Recadre_Trace( FALSE );
     }
 }
@@ -339,7 +321,7 @@ int WinEDA_DrawFrame::GetZoom(void)
 /***********************************/
 /* Return the current zoom level */
 {
-	return GetScreen()->GetZoom();
+    return GetBaseScreen()->GetZoom();
 }
 
 
@@ -507,7 +489,7 @@ void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
  */
 {
     bool redraw = false;
-    
+
     // Change Cursor
     if( DrawPanel )
     {
@@ -529,13 +511,13 @@ void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
             redraw = true;
     }
 #endif
-    
+
     // Old Tool Inactif ou ID_NO_SELECT_BUTT actif si pas de nouveau Tool
     if( m_ID_current_state )
     {
         if( m_VToolBar )
             m_VToolBar->ToggleTool( m_ID_current_state, FALSE );
-        
+
         if( m_AuxVToolBar )
             m_AuxVToolBar->ToggleTool( m_ID_current_state, FALSE );
     }
@@ -545,7 +527,7 @@ void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
         {
             if( m_VToolBar )
                 m_VToolBar->ToggleTool( ID_NO_SELECT_BUTT, FALSE );
-            
+
             if( m_AuxVToolBar )
                 m_AuxVToolBar->ToggleTool( m_ID_current_state, FALSE );
         }
@@ -558,7 +540,7 @@ void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
     {
         if( m_VToolBar )
             m_VToolBar->ToggleTool( id, TRUE );
-        
+
         if( m_AuxVToolBar )
             m_AuxVToolBar->ToggleTool( id, TRUE );
     }
@@ -569,7 +551,7 @@ void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
 
     // must do this after the tool has been set, otherwise pad::Draw() does
     // not show proper color when DisplayOpt.ContrastModeDisplay is true.
-    if( redraw )    
+    if( redraw )
         ReDrawPanel();
 }
 
@@ -584,15 +566,16 @@ void WinEDA_DrawFrame::OnZoom( int zoom_type )
  *  replac� au centre de l'ecran
  */
 {
-	if( DrawPanel == NULL )
-		return;
+    if( DrawPanel == NULL )
+        return;
 
+    BASE_SCREEN*    screen = GetBaseScreen();
     bool    move_mouse_cursor = FALSE;
     int     x, y;
     wxPoint old_pos;
 
     DrawPanel->GetViewStart( &x, &y );
-	old_pos = GetScreen()->m_Curseur;
+    old_pos = GetBaseScreen()->m_Curseur;
 
     switch( zoom_type )
     {
@@ -603,10 +586,10 @@ void WinEDA_DrawFrame::OnZoom( int zoom_type )
 
     case ID_ZOOM_IN_BUTT:
         if( zoom_type == ID_ZOOM_IN_BUTT )
-			GetScreen()->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
+            GetBaseScreen()->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
 
-		GetScreen()->SetPreviousZoom();
-        
+        screen->SetPreviousZoom();
+
         Recadre_Trace( move_mouse_cursor );
         break;
 
@@ -617,8 +600,8 @@ void WinEDA_DrawFrame::OnZoom( int zoom_type )
 
     case ID_ZOOM_OUT_BUTT:
         if( zoom_type == ID_ZOOM_OUT_BUTT )
-			GetScreen()->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
-		GetScreen()->SetNextZoom();
+            screen->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
+        screen->SetNextZoom();
         Recadre_Trace( move_mouse_cursor );
         break;
 
@@ -736,7 +719,7 @@ int WinEDA_DrawFrame::ReturnBlockCommand( int key )
 
 void WinEDA_DrawFrame::InitBlockPasteInfos()
 {
-    GetScreen()->BlockLocate.m_BlockDrawStruct = NULL;
+    GetBaseScreen()->BlockLocate.m_BlockDrawStruct = NULL;
     DrawPanel->ManageCurseur = NULL;
 }
 
@@ -759,15 +742,18 @@ void WinEDA_DrawFrame::AdjustScrollBars()
     wxSize  draw_size, panel_size;
     wxSize  scrollbar_number;
     wxPoint scrollbar_pos;
-	int     zoom = GetScreen()->GetZoom();
+
+    BASE_SCREEN*    screen = GetBaseScreen();
+
+    int     zoom = screen->GetZoom();
     int     xUnit, yUnit;
 
-	if( GetScreen() == NULL )
+    if( screen == NULL )
         return;
     if( DrawPanel == NULL )
         return;
 
-	draw_size = GetScreen()->ReturnPageSize();
+    draw_size = screen->ReturnPageSize();
 
     // La zone d'affichage est reglee a une taille double de la feuille de travail:
     draw_size.x *= 2; draw_size.y *= 2;
@@ -780,20 +766,20 @@ void WinEDA_DrawFrame::AdjustScrollBars()
     draw_size.y  += panel_size.y / 2;
 
 
-	if( GetScreen()->m_Center )
+    if( screen->m_Center )
     {
-		GetScreen()->m_DrawOrg.x = -draw_size.x / 2;
-		GetScreen()->m_DrawOrg.y = -draw_size.y / 2;
+        screen->m_DrawOrg.x = -draw_size.x / 2;
+        screen->m_DrawOrg.y = -draw_size.y / 2;
     }
     else
     {
-		GetScreen()->m_DrawOrg.x = -panel_size.x / 2;
-		GetScreen()->m_DrawOrg.y = -panel_size.y / 2;
+        screen->m_DrawOrg.x = -panel_size.x / 2;
+        screen->m_DrawOrg.y = -panel_size.y / 2;
     }
 
     // DrawOrg est rendu multiple du zoom min :
-	GetScreen()->m_DrawOrg.x -= GetScreen()->m_DrawOrg.x % 256;
-	GetScreen()->m_DrawOrg.y -= GetScreen()->m_DrawOrg.y % 256;
+    screen->m_DrawOrg.x -= screen->m_DrawOrg.x % 256;
+    screen->m_DrawOrg.y -= screen->m_DrawOrg.y % 256;
 
     // Calcul du nombre de scrolls  (en unites de scrool )
     scrollbar_number.x = draw_size.x / (DrawPanel->m_Scroll_unit * zoom);
@@ -808,10 +794,10 @@ void WinEDA_DrawFrame::AdjustScrollBars()
     xUnit *= zoom; yUnit *= zoom;
 
     // Calcul de la position, curseur place au centre d'ecran
-	scrollbar_pos = GetScreen()->m_Curseur;
+    scrollbar_pos = screen->m_Curseur;
 
-	scrollbar_pos.x -= GetScreen()->m_DrawOrg.x;
-	scrollbar_pos.y -= GetScreen()->m_DrawOrg.y;
+    scrollbar_pos.x -= screen->m_DrawOrg.x;
+    scrollbar_pos.y -= screen->m_DrawOrg.y;
 
     scrollbar_pos.x -= panel_size.x / 2;
     scrollbar_pos.y -= panel_size.y / 2;
@@ -823,15 +809,15 @@ void WinEDA_DrawFrame::AdjustScrollBars()
 
     scrollbar_pos.x /= xUnit;
     scrollbar_pos.y /= yUnit;
-	GetScreen()->m_ScrollbarPos    = scrollbar_pos;
-	GetScreen()->m_ScrollbarNumber = scrollbar_number;
+    screen->m_ScrollbarPos    = scrollbar_pos;
+    screen->m_ScrollbarNumber = scrollbar_number;
 
     DrawPanel->SetScrollbars( DrawPanel->m_Scroll_unit,
                               DrawPanel->m_Scroll_unit,
-							  GetScreen()->m_ScrollbarNumber.x,
-							GetScreen()->m_ScrollbarNumber.y,
-							GetScreen()->m_ScrollbarPos.x,
-							GetScreen()->m_ScrollbarPos.y, TRUE );
+                              screen->m_ScrollbarNumber.x,
+                            screen->m_ScrollbarNumber.y,
+                            screen->m_ScrollbarPos.x,
+                            screen->m_ScrollbarPos.y, TRUE );
 }
 
 
@@ -883,26 +869,27 @@ void WinEDA_DrawFrame::Affiche_Status_Box()
 /* Routine d'affichage du zoom et des coord curseur.
  */
 {
-    wxString Line;
-    int      dx, dy;
+    wxString        Line;
+    int             dx, dy;
+    BASE_SCREEN*    screen = GetBaseScreen();
 
-    if( GetScreen() == NULL )
+    if( !screen )
         return;
 
     /* affichage Zoom et coordonnees absolues */
-    Line.Printf( wxT( "Z %d" ), GetScreen()->GetZoom() );
+    Line.Printf( wxT( "Z %d" ), screen->GetZoom() );
     SetStatusText( Line, 1 );
 
     Line.Printf( g_UnitMetric ? wxT( "X %.3f  Y %.3f" ) : wxT( "X %.4f  Y %.4f" ),
-                To_User_Unit( g_UnitMetric, GetScreen()->m_Curseur.x,
+                To_User_Unit( g_UnitMetric, screen->m_Curseur.x,
                               m_InternalUnits ),
-                To_User_Unit( g_UnitMetric, GetScreen()->m_Curseur.y,
+                To_User_Unit( g_UnitMetric, screen->m_Curseur.y,
                               m_InternalUnits ) );
     SetStatusText( Line, 2 );
 
     /* affichage des coordonnees relatives  */
-    dx = GetScreen()->m_Curseur.x - GetScreen()->m_O_Curseur.x;
-    dy = GetScreen()->m_Curseur.y - GetScreen()->m_O_Curseur.y;
+    dx = screen->m_Curseur.x - screen->m_O_Curseur.x;
+    dy = screen->m_Curseur.y - screen->m_O_Curseur.y;
 
     Line.Printf( g_UnitMetric ? wxT( "x %.3f  y %.3f" ) : wxT( "x %.4f  y %.4f" ),
                 To_User_Unit( g_UnitMetric, dx, m_InternalUnits ),

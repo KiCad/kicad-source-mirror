@@ -350,7 +350,7 @@ wxString WinEDA_PrintSVGFrame::ReturnFullFileName()
 {
     wxString name, ext;
 
-    name = m_Parent->GetScreen()->m_FileName;
+    name = m_Parent->GetBaseScreen()->m_FileName;
     ChangeFileNameExt( name, wxT( ".svg" ) );
     return name;
 }
@@ -396,7 +396,7 @@ void WinEDA_PrintSVGFrame::PrintSVGDoc( wxCommandEvent& event )
     SetPenWidth();
 
 
-    BASE_SCREEN* screen    = m_Parent->GetScreen();
+    BASE_SCREEN* screen    = m_Parent->GetBaseScreen();
     BASE_SCREEN* oldscreen = screen;
 #ifndef EESCHEMA
     if( Select_PrintAll )

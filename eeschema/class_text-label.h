@@ -101,7 +101,7 @@ public:
 
     void            SwapData( SCH_TEXT* copyitem );
 
-    virtual void    Place( WinEDA_DrawFrame* frame, wxDC* DC );
+    void            Place( WinEDA_SchematicFrame* frame, wxDC* DC );
     EDA_Rect        GetBoundingBox();
 
     /**

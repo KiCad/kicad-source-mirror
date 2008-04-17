@@ -28,6 +28,7 @@ enum fl_rot_cmp {
     CMP_MIROIR_Y = 0x200                // miroir selon axe Y
 };
 
+
 class WinEDA_SchematicFrame : public WinEDA_DrawFrame
 {
 public:
@@ -47,6 +48,9 @@ public:
     void                    OnCloseWindow( wxCloseEvent& Event );
     void                    Process_Special_Functions( wxCommandEvent& event );
     void                    Process_Config( wxCommandEvent& event );
+
+    void                    GeneralControle( wxDC* DC, wxPoint MousePositionInPixels );
+
     void                    Save_Config( wxWindow* displayframe );
 
     void                    RedrawActiveWindow( wxDC* DC, bool EraseBg );
@@ -62,7 +66,11 @@ public:
                                       EDA_BaseStruct*          DrawStruct );
 
     DrawSheetPath*          GetSheet();
-    virtual BASE_SCREEN*    GetScreen();
+
+    SCH_SCREEN*             GetScreen() const;
+
+    BASE_SCREEN*            GetBaseScreen() const;
+
     virtual void            SetScreen( SCH_SCREEN* screen );
     virtual wxString        GetScreenDesc();
 
@@ -161,7 +169,7 @@ private:
                                                      bool           PutInUndoList = FALSE );
 
     // Text ,label, glabel
-    EDA_BaseStruct*         CreateNewText( wxDC* DC, int type );
+    SCH_TEXT*               CreateNewText( wxDC* DC, int type );
     void                    EditSchematicText( SCH_TEXT* TextStruct, wxDC* DC );
     void                    ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC );
     void                    StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC );
@@ -296,7 +304,7 @@ public:
     void                SetToolbars();
     void                OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
 
-    virtual BASE_SCREEN* GetScreen() { return (BASE_SCREEN*) m_CurrentScreen; }
+    SCH_SCREEN*         GetScreen() { return (SCH_SCREEN*) GetBaseScreen(); }
     void                OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
 
 private:
@@ -406,7 +414,7 @@ public:
     void    ClickOnLibList( wxCommandEvent& event );
     void    ClickOnCmpList( wxCommandEvent& event );
 
-    virtual BASE_SCREEN* GetScreen() { return (BASE_SCREEN*) m_CurrentScreen; }
+    SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) GetBaseScreen(); }
 
 private:
     void    SelectCurrentLibrary();

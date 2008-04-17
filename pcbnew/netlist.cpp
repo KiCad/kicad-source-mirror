@@ -186,7 +186,7 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
     if( aMessageWindow )
         aMessageWindow->AppendText( msg );
 
-    aFrame->m_CurrentScreen->SetModify();
+    aFrame->GetScreen()->SetModify();
     aFrame->m_Pcb->m_Status_Pcb = 0; State = 0; LineNum = 0; Comment = 0;
     s_NbNewModules = 0;
 
@@ -1003,7 +1003,7 @@ void LoadListeModules( WinEDA_PcbFrame* aPcbFrame, wxDC* DC )
     MODULEtoLOAD* ref, * cmp;
     int           ii;
     MODULE*       Module = NULL;
-    wxPoint       OldPos = aPcbFrame->m_CurrentScreen->m_Curseur;
+    wxPoint       OldPos = aPcbFrame->GetScreen()->m_Curseur;
 
     if( s_NbNewModules == 0 )
         return;
@@ -1014,14 +1014,14 @@ void LoadListeModules( WinEDA_PcbFrame* aPcbFrame, wxDC* DC )
     // Calculate the footprint "best" position:
     if( aPcbFrame->SetBoardBoundaryBoxFromEdgesOnly() )
     {
-        aPcbFrame->m_CurrentScreen->m_Curseur.x = aPcbFrame->m_Pcb->m_BoundaryBox.GetRight() +
+        aPcbFrame->GetScreen()->m_Curseur.x = aPcbFrame->m_Pcb->m_BoundaryBox.GetRight() +
                                                   5000;
-        aPcbFrame->m_CurrentScreen->m_Curseur.y = aPcbFrame->m_Pcb->m_BoundaryBox.GetBottom() +
+        aPcbFrame->GetScreen()->m_Curseur.y = aPcbFrame->m_Pcb->m_BoundaryBox.GetBottom() +
                                                   10000;
     }
     else
     {
-        aPcbFrame->m_CurrentScreen->m_Curseur = wxPoint( 0, 0 );
+        aPcbFrame->GetScreen()->m_Curseur = wxPoint( 0, 0 );
     }
 
     for( ii = 0; ii < s_NbNewModules; ii++, cmp = cmp->Next() )
@@ -1061,7 +1061,7 @@ void LoadListeModules( WinEDA_PcbFrame* aPcbFrame, wxDC* DC )
         }
     }
 
-    aPcbFrame->m_CurrentScreen->m_Curseur = OldPos;
+    aPcbFrame->GetScreen()->m_Curseur = OldPos;
 }
 
 

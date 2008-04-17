@@ -109,7 +109,7 @@ END_EVENT_TABLE()
 WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow* father, WinEDA_App* parent,
                                                 const wxString& title,
                                                 const wxPoint& pos, const wxSize& size,
-												long style ) :
+                                                long style ) :
     WinEDA_BasePcbFrame( father, parent, MODULE_EDITOR_FRAME, wxEmptyString, pos, size, style )
 {
     m_FrameName      = wxT( "ModEditFrame" );
@@ -132,11 +132,12 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow* father, WinEDA_App* pa
 
     if( g_ModuleEditor_Pcb == NULL )
         g_ModuleEditor_Pcb = new BOARD( NULL, this );
+
     m_Pcb = g_ModuleEditor_Pcb;
 
     m_Pcb->m_PcbFrame = this;
-    m_CurrentScreen   = ScreenModule;
-	m_CurrentScreen->SetCurItem( NULL ); 
+    SetBaseScreen( ScreenModule );
+    GetScreen()->SetCurItem( NULL );
     GetSettings();
 
     wxSize GridSize( 500, 500 );
@@ -169,7 +170,7 @@ WinEDA_ModuleEditFrame::~WinEDA_ModuleEditFrame()
 /****************************************************/
 {
     m_Parent->m_ModuleEditFrame = NULL;
-    m_CurrentScreen = ScreenPcb;
+    SetBaseScreen( ScreenPcb );
 }
 
 
@@ -307,7 +308,7 @@ void WinEDA_ModuleEditFrame::SetToolbars()
             int zoom;
             for( jj = 1, zoom = 1; zoom <= m_ZoomMaxValue; zoom <<= 1, jj++ )
             {
-                if( m_CurrentScreen && (m_CurrentScreen->GetZoom() == zoom) )
+                if( GetScreen() && (GetScreen()->GetZoom() == zoom) )
                     break;
                 new_choice++;
             }

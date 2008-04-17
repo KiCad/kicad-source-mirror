@@ -126,7 +126,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
     wxPoint       pos;
     int           error = 0;
 
-    layer = GetPCBScreen()->m_Active_Layer;
+    layer = GetScreen()->m_Active_Layer;
 
     if( g_GERBER_Descr_List[layer] == NULL )
     {

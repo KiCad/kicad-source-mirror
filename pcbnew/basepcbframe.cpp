@@ -45,7 +45,6 @@ WinEDA_BasePcbFrame::WinEDA_BasePcbFrame( wxWindow*       father,
     WinEDA_DrawFrame( father, idtype, parent, title, pos, size, style )
 {
     m_InternalUnits = 10000;        // Internal unit = 1/10000 inch
-    m_CurrentScreen = NULL;
     m_Pcb = NULL;
 
     m_DisplayPadFill = TRUE;        // How to draw pads
@@ -66,10 +65,16 @@ WinEDA_BasePcbFrame::~WinEDA_BasePcbFrame( void )
 }
 
 
+BASE_SCREEN* WinEDA_BasePcbFrame::GetBaseScreen() const
+{
+    return GetScreen();
+}
+
+
 void WinEDA_BasePcbFrame::SetBOARD( BOARD* aBoard )
 {
-    if(m_Pcb != g_ModuleEditor_Pcb) 
-		delete m_Pcb;
+    if(m_Pcb != g_ModuleEditor_Pcb)
+        delete m_Pcb;
     m_Pcb = aBoard;
 }
 
@@ -98,7 +103,7 @@ int WinEDA_BasePcbFrame::BestZoom( void )
     jj       = ( dy + (size.y / 2) ) / size.y;
     bestzoom = MAX( ii, jj ) + 1;
 
-    m_CurrentScreen->m_Curseur = m_Pcb->m_BoundaryBox.Centre();
+    GetScreen()->m_Curseur = m_Pcb->m_BoundaryBox.Centre();
 
     return bestzoom;
 }
@@ -284,7 +289,7 @@ void WinEDA_BasePcbFrame::ProcessItemSelection( wxCommandEvent& event )
 void WinEDA_BasePcbFrame::SetCurItem( BOARD_ITEM* aItem )
 /*****************************************************************/
 {
-    m_CurrentScreen->SetCurItem( aItem );
+    GetScreen()->SetCurItem( aItem );
 
     if( aItem )
     {
@@ -314,7 +319,7 @@ void WinEDA_BasePcbFrame::SetCurItem( BOARD_ITEM* aItem )
 BOARD_ITEM* WinEDA_BasePcbFrame::GetCurItem()
 /*****************************************************************/
 {
-    return (BOARD_ITEM*) m_CurrentScreen->GetCurItem();
+    return GetScreen()->GetCurItem();
 }
 
 

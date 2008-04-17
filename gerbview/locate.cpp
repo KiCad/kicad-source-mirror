@@ -34,7 +34,7 @@ static int          distance( int seuil );
 
 
 /*************************************************************/
-EDA_BaseStruct* WinEDA_GerberFrame::Locate( int typeloc )
+BOARD_ITEM* WinEDA_GerberFrame::Locate( int typeloc )
 /*************************************************************/
 
 /* Fonction de localisation generale
@@ -48,7 +48,7 @@ EDA_BaseStruct* WinEDA_GerberFrame::Locate( int typeloc )
     int          layer;
 
     /* Localistion des pistes et vias, avec priorite aux vias */
-    layer = GetPCBScreen()->m_Active_Layer;
+    layer = GetScreen()->m_Active_Layer;
     Track = Locate_Pistes( m_Pcb->m_Track, -1, typeloc );
     if( Track != NULL )
     {
@@ -80,9 +80,9 @@ EDA_BaseStruct* WinEDA_GerberFrame::Locate( int typeloc )
     }
 
     if( ( TrackLocate = Locate_Zone( (TRACK*) m_Pcb->m_Zone,
-                                    GetPCBScreen()->m_Active_Layer, typeloc ) ) != NULL )
+                                    GetScreen()->m_Active_Layer, typeloc ) ) != NULL )
     {
-        TrackLocate->Display_Infos( this ); 
+        TrackLocate->Display_Infos( this );
         return TrackLocate;
     }
 
@@ -166,7 +166,7 @@ DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int typeloc )
  *  1 -  routine de localisation du segment de piste pointe par la souris.
  *  2 -  routine de localisation du segment de piste pointe par le point
  *          ref_pX , ref_pY.r
- * 
+ *
  *  La recherche commence a l'adresse start_adresse
  */
 
@@ -228,9 +228,9 @@ TRACK* Locate_Pistes( TRACK* start_adresse, wxPoint ref, int Layer )
  *  1 -  routine de localisation du segment de zone pointe par la souris.
  *  2 -  routine de localisation du segment de zone pointe par le point
  *          ref_pX , ref_pY.r
- * 
+ *
  *  Si layer == -1 , le tst de la couche n'est pas fait
- * 
+ *
  *  La recherche commence a l'adresse start_adresse
  */
 

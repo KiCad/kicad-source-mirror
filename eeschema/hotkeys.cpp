@@ -280,7 +280,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
             if( DrawStruct == NULL )
                 break;
             if( DrawStruct->Type() == TYPE_SCH_COMPONENT )
-                DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
+                DrawStruct = LocateSmallestComponent( GetScreen() );
             if( DrawStruct == NULL )
                 break;
         }
@@ -332,7 +332,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case HK_MIRROR_X_COMPONENT:     // Mirror X (Component)
         if( DrawStruct == NULL )
-            DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
+            DrawStruct = LocateSmallestComponent( GetScreen() );
         if( DrawStruct )
         {
             if( DrawStruct->m_Flags == 0 )
@@ -347,7 +347,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case HK_ORIENT_NORMAL_COMPONENT:        // Orient 0, no mirror (Component)
         if( DrawStruct == NULL )
-            DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
+            DrawStruct = LocateSmallestComponent( GetScreen() );
         if( DrawStruct )
         {
             if( DrawStruct->m_Flags == 0 )
@@ -365,10 +365,10 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         if( ItemInEdit )
             break;
         if( DrawStruct == NULL )
-            DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
+            DrawStruct = LocateSmallestComponent( GetScreen() );
         if( DrawStruct && (DrawStruct->m_Flags ==0) )
         {
-            ((SCH_SCREEN*)GetScreen())->SetCurItem( DrawStruct );
+            GetScreen()->SetCurItem( (SCH_ITEM*) DrawStruct );
             wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED, HK_Descr->m_IdMenuEvent );
 
             wxPostEvent( this, event );
@@ -378,7 +378,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         if( ItemInEdit )
             break;
         if( DrawStruct == NULL )
-            DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
+            DrawStruct = LocateSmallestComponent( GetScreen() );
         if(DrawStruct)
         {
             EditComponentValue(
@@ -390,7 +390,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         if( ItemInEdit )
             break;
         if( DrawStruct == NULL )
-            DrawStruct = LocateSmallestComponent( (SCH_SCREEN*)GetScreen() );
+            DrawStruct = LocateSmallestComponent( GetScreen() );
         if(DrawStruct)
         {
             EditComponentFootprint(

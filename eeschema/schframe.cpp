@@ -151,10 +151,13 @@ WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow* father,
 #endif
 
     g_ItemToRepeat = NULL;
+
     /* Get config */
     GetSettings();
+
     g_DrawMinimunLineWidth =
         m_Parent->m_EDA_Config->Read( MINI_DRAW_LINE_WIDTH_KEY, (long) 0 );
+
     g_PlotPSMinimunLineWidth =
         m_Parent->m_EDA_Config->Read( MINI_PLOTPS_LINE_WIDTH_KEY, (long) 4 );
 
@@ -183,6 +186,12 @@ WinEDA_SchematicFrame::~WinEDA_SchematicFrame()
 }
 
 
+BASE_SCREEN* WinEDA_SchematicFrame::GetBaseScreen() const
+{
+    return GetScreen();
+}
+
+
 /***************/
 /* utility functions */
 /***************/
@@ -192,7 +201,7 @@ DrawSheetPath* WinEDA_SchematicFrame::GetSheet()
 }
 
 
-BASE_SCREEN* WinEDA_SchematicFrame::GetScreen()
+SCH_SCREEN* WinEDA_SchematicFrame::GetScreen() const
 {
     return m_CurrentSheet->LastScreen();
 }
@@ -399,17 +408,17 @@ int WinEDA_SchematicFrame::BestZoom()
     int    bestzoom;
     wxSize size;
 
-	dx = GetScreen()->m_CurrentSheetDesc->m_Size.x;
-	dy = GetScreen()->m_CurrentSheetDesc->m_Size.y;
+    dx = GetScreen()->m_CurrentSheetDesc->m_Size.x;
+    dy = GetScreen()->m_CurrentSheetDesc->m_Size.y;
 
-	size     = DrawPanel->GetClientSize();
-	ii       = dx / size.x;
-	jj       = dy / size.y;
-	bestzoom = MAX( ii, jj ) + 1;
+    size     = DrawPanel->GetClientSize();
+    ii       = dx / size.x;
+    jj       = dy / size.y;
+    bestzoom = MAX( ii, jj ) + 1;
 
-	GetScreen()->SetZoom( ii );
-	GetScreen()->m_Curseur.x = dx / 2;
-	GetScreen()->m_Curseur.y = dy / 2;
+    GetScreen()->SetZoom( ii );
+    GetScreen()->m_Curseur.x = dx / 2;
+    GetScreen()->m_Curseur.y = dy / 2;
 
     return bestzoom;
 }

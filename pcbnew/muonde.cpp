@@ -96,7 +96,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveBasicShape( wxDC* DC,
 static void Exit_Muonde( WinEDA_DrawFrame* frame, wxDC* DC )
 /**********************************************************/
 {
-    MODULE* Module = (MODULE*) frame->m_CurrentScreen->GetCurItem();
+    MODULE* Module = (MODULE*) frame->GetScreen()->GetCurItem();
 
     if( Module )
     {
@@ -276,7 +276,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent( wxDC* DC, int shape_type )
     Module->Draw( DrawPanel, DC, GR_OR );
     DrawPanel->MouseToCursorSchema();
     m_Pcb->m_Status_Pcb = 0;
-    m_CurrentScreen->SetModify();
+    GetScreen()->SetModify();
     return Module;
 }
 
@@ -646,7 +646,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWavePolygonShape( wxDC* DC )
     Module->Set_Rectangle_Encadrement();
     Module->Draw( DrawPanel, DC, GR_OR );
     m_Pcb->m_Status_Pcb = 0;
-    m_CurrentScreen->SetModify();
+    GetScreen()->SetModify();
     return Module;
 }
 

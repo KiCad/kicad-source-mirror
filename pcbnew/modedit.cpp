@@ -359,7 +359,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
                 ref->m_Type   = TEXT_is_REFERENCE;	// just in case ...
                 if( ref->m_Text.Length() == 0 )
                     ref->m_Text = L"Ref**";
-				val->m_Type   =  TEXT_is_VALUE;		// just in case ...
+                val->m_Type   =  TEXT_is_VALUE;		// just in case ...
                 if( val->m_Text.Length() == 0 )
                     val->m_Text = L"Val**";
             }
@@ -604,27 +604,27 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_COPY_BLOCK:
         GetScreen()->BlockLocate.m_Command = BLOCK_COPY;
-        m_CurrentScreen->BlockLocate.SetMessageBlock( this );
+        GetScreen()->BlockLocate.SetMessageBlock( this );
         DrawPanel->m_AutoPAN_Request = FALSE;
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_ZOOM_BLOCK:
         GetScreen()->BlockLocate.m_Command = BLOCK_ZOOM;
-        m_CurrentScreen->BlockLocate.SetMessageBlock( this );
-        m_CurrentScreen->BlockLocate.SetMessageBlock( this );
+        GetScreen()->BlockLocate.SetMessageBlock( this );
+        GetScreen()->BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_DELETE_BLOCK:
         GetScreen()->BlockLocate.m_Command = BLOCK_DELETE;
-        m_CurrentScreen->BlockLocate.SetMessageBlock( this );
+        GetScreen()->BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_ROTATE_BLOCK:
         GetScreen()->BlockLocate.m_Command = BLOCK_ROTATE;
-        m_CurrentScreen->BlockLocate.SetMessageBlock( this );
+        GetScreen()->BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;
 
@@ -632,7 +632,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_MIRROR_Y_BLOCK:
     case ID_POPUP_INVERT_BLOCK:
         GetScreen()->BlockLocate.m_Command = BLOCK_INVERT;
-        m_CurrentScreen->BlockLocate.SetMessageBlock( this );
+        GetScreen()->BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;
 

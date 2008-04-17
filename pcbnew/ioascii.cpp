@@ -834,7 +834,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
 
         if( strnicmp( Line, "$SHEETDESCR", 11 ) == 0 )
         {
-            ReadSheetDescr( m_CurrentScreen, File, &LineNum );
+            ReadSheetDescr( GetScreen(), File, &LineNum );
             continue;
         }
 
@@ -1060,7 +1060,7 @@ int WinEDA_PcbFrame::SavePcbFormatAscii( FILE* aFile )
             DateAndTime( line ) );
 
     WriteGeneralDescrPcb( aFile );
-    WriteSheetDescr( m_CurrentScreen, aFile );
+    WriteSheetDescr( GetScreen(), aFile );
     WriteSetup( aFile, this, m_Pcb );
 
     rc = m_Pcb->Save( aFile );

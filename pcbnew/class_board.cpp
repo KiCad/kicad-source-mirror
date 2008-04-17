@@ -18,7 +18,7 @@ wxPoint  BOARD_ITEM::ZeroOffset(0,0);
 // this is an ugly workaround to a linking problem in debug mode
 // which needs to define  SCH_ITEM::Place() when not really used.
 #include "sch_item_struct.h"
-void SCH_ITEM::Place( WinEDA_DrawFrame* frame, wxDC* DC )
+void SCH_ITEM::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 {
 }
 
@@ -503,15 +503,15 @@ bool BOARD::ComputeBoundaryBox()
         if( m_PcbFrame->m_Draw_Sheet_Ref )
         {
             xmin = ymin = 0;
-            xmax = m_PcbFrame->m_CurrentScreen->ReturnPageSize().x;
-            ymax = m_PcbFrame->m_CurrentScreen->ReturnPageSize().y;
+            xmax = m_PcbFrame->GetScreen()->ReturnPageSize().x;
+            ymax = m_PcbFrame->GetScreen()->ReturnPageSize().y;
         }
         else
         {
-            xmin = -m_PcbFrame->m_CurrentScreen->ReturnPageSize().x / 2;
-            ymin = -m_PcbFrame->m_CurrentScreen->ReturnPageSize().y / 2;
-            xmax = m_PcbFrame->m_CurrentScreen->ReturnPageSize().x / 2;
-            ymax = m_PcbFrame->m_CurrentScreen->ReturnPageSize().y / 2;
+            xmin = -m_PcbFrame->GetScreen()->ReturnPageSize().x / 2;
+            ymin = -m_PcbFrame->GetScreen()->ReturnPageSize().y / 2;
+            xmax = m_PcbFrame->GetScreen()->ReturnPageSize().x / 2;
+            ymax = m_PcbFrame->GetScreen()->ReturnPageSize().y / 2;
         }
     }
 

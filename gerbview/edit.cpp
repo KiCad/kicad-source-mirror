@@ -23,7 +23,7 @@ void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
  *  quand un outil est deja selectionn�
  */
 {
-    EDA_BaseStruct* DrawStruct = GetScreen()->GetCurItem();
+    BOARD_ITEM*     DrawStruct = GetScreen()->GetCurItem();
     wxString        msg;
 
     if( m_ID_current_state == 0 )
@@ -84,7 +84,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
  */
 {
     int           id    = event.GetId();
-    int           layer = GetPCBScreen()->m_Active_Layer;
+    int           layer = GetScreen()->m_Active_Layer;
     GERBER_Descr* gerber_layer = g_GERBER_Descr_List[layer];
     wxPoint       pos;
     wxClientDC    dc( DrawPanel );
@@ -114,11 +114,11 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
             DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
         }
         /* ne devrait pas etre execute, sauf bug */
-        if( m_CurrentScreen->BlockLocate.m_Command != BLOCK_IDLE )
+        if( GetScreen()->BlockLocate.m_Command != BLOCK_IDLE )
         {
-            m_CurrentScreen->BlockLocate.m_Command = BLOCK_IDLE;
-            m_CurrentScreen->BlockLocate.m_State   = STATE_NO_BLOCK;
-            m_CurrentScreen->BlockLocate.m_BlockDrawStruct = NULL;
+            GetScreen()->BlockLocate.m_Command = BLOCK_IDLE;
+            GetScreen()->BlockLocate.m_State   = STATE_NO_BLOCK;
+            GetScreen()->BlockLocate.m_BlockDrawStruct = NULL;
         }
         if( m_ID_current_state == 0 )
             SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
@@ -267,21 +267,21 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_COPY_BLOCK:
         GetScreen()->BlockLocate.m_Command = BLOCK_COPY;
-        m_CurrentScreen->BlockLocate.SetMessageBlock( this );
+        GetScreen()->BlockLocate.SetMessageBlock( this );
         DrawPanel->m_AutoPAN_Request = FALSE;
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_ZOOM_BLOCK:
         GetScreen()->BlockLocate.m_Command = BLOCK_ZOOM;
-        m_CurrentScreen->BlockLocate.SetMessageBlock( this );
-        m_CurrentScreen->BlockLocate.SetMessageBlock( this );
+        GetScreen()->BlockLocate.SetMessageBlock( this );
+        GetScreen()->BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_DELETE_BLOCK:
         GetScreen()->BlockLocate.m_Command = BLOCK_DELETE;
-        m_CurrentScreen->BlockLocate.SetMessageBlock( this );
+        GetScreen()->BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;
 

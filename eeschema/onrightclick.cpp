@@ -157,7 +157,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
     case DRAW_NOCONNECT_STRUCT_TYPE:
 
 //			if( !flags ) PopMenu->Append(ID_POPUP_SCH_MOVE_ITEM_REQUEST, "Move noconnect");
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "delete noconn" ), delete_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Noconn" ), delete_xpm );
         break;
 
     case DRAW_JUNCTION_STRUCT_TYPE:
@@ -167,17 +167,17 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
     case DRAW_BUSENTRY_STRUCT_TYPE:
         if( !flags )
             ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST,
-                          _( "Move bus entry" ), move_xpm );
+                          _( "Move Bus Entry" ), move_xpm );
         if( GetBusEntryShape( (DrawBusEntryStruct*) DrawStruct ) == '\\' )
-            PopMenu->Append( ID_POPUP_SCH_ENTRY_SELECT_SLASH, _( "set bus entry /" ) );
+            PopMenu->Append( ID_POPUP_SCH_ENTRY_SELECT_SLASH, _( "Set Bus Entry /" ) );
         else
-            PopMenu->Append( ID_POPUP_SCH_ENTRY_SELECT_ANTISLASH, _( "set bus entry \\" ) );
+            PopMenu->Append( ID_POPUP_SCH_ENTRY_SELECT_ANTISLASH, _( "Set Bus Entry \\" ) );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE,
-                      _( "delete bus entry" ), delete_bus_xpm );
+                      _( "Delete Bus Entry" ), delete_bus_xpm );
         break;
 
     case DRAW_MARKER_STRUCT_TYPE:
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "delete Marker" ), delete_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Marker" ), delete_xpm );
         break;
 
     case TYPE_SCH_TEXT:
@@ -230,9 +230,9 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
 
         default:
             if( is_new )
-                ADD_MENUITEM( PopMenu, ID_POPUP_END_LINE, _( "End drawing" ), apply_xpm );
+                ADD_MENUITEM( PopMenu, ID_POPUP_END_LINE, _( "End Drawing" ), apply_xpm );
             ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE,
-                          _( "Delete drawing" ), delete_xpm );
+                          _( "Delete Drawing" ), delete_xpm );
             break;
         }
 
@@ -417,7 +417,7 @@ void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* HLabel )
     ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT,
                   _( "Change to Text" ), glabel2text_xpm );
     ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_GLABEL,
-                  _( "Change to Global label" ), label2glabel_xpm );
+                  _( "Change to Global Label" ), label2glabel_xpm );
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, menu_change_type,
                                ID_POPUP_SCH_CHANGE_TYPE_TEXT, _( "Change Type" ), gl_change_xpm );
 }
@@ -444,7 +444,7 @@ void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label )
     ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT,
                   _( "Change to Text" ), label2text_xpm );
     ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_GLABEL,
-                  _( "Change to Global label" ), label2glabel_xpm );
+                  _( "Change to Global Label" ), label2glabel_xpm );
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, menu_change_type,
                                ID_POPUP_SCH_CHANGE_TYPE_TEXT, _( "Change Type" ), gl_change_xpm );
 }
@@ -494,14 +494,14 @@ void AddMenusForJunction( wxMenu* PopMenu, DrawJunctionStruct* Junction,
             ADD_MENUITEM( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Wire" ), break_line_xpm );
     }
 
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "delete junction" ), delete_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Junction" ), delete_xpm );
 
     if( PickStruct( frame->GetScreen()->m_Curseur, frame->GetScreen(),
                     WIREITEM | BUSITEM ) )
     {
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_NODE, _( "Delete node" ), delete_node_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_NODE, _( "Delete Node" ), delete_node_xpm );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_CONNECTION, _(
-                          "Delete connection" ), delete_connection_xpm );
+                          "Delete Connection" ), delete_connection_xpm );
     }
 }
 
@@ -525,9 +525,9 @@ void AddMenusForWire( wxMenu* PopMenu, EDA_DrawLineStruct* Wire,
     if( is_new )
         return;
 
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_NODE, _( "Delete node" ), delete_node_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_NODE, _( "Delete Node" ), delete_node_xpm );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_CONNECTION, _(
-                      "Delete connection" ), delete_connection_xpm );
+                      "Delete Connection" ), delete_connection_xpm );
 
     if( PickStruct( frame->GetScreen()->m_Curseur, frame->GetScreen(),
                     WIREITEM | BUSITEM | EXCLUDE_WIRE_BUS_ENDPOINTS ) )
@@ -535,13 +535,13 @@ void AddMenusForWire( wxMenu* PopMenu, EDA_DrawLineStruct* Wire,
 
     PopMenu->AppendSeparator();
 
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_JUNCTION, _( "Add junction" ), add_junction_xpm );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_LABEL, _( "Add label" ), add_line_label_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_JUNCTION, _( "Add Junction" ), add_junction_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_LABEL, _( "Add Label" ), add_line_label_xpm );
 
     // Place Global label command only if the cursor is over one end of the Wire:
     if( ( pos.x == Wire->m_Start.x && pos.y == Wire->m_Start.y)
        || ( pos.x == Wire->m_End.x && pos.y == Wire->m_End.y ) )
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_GLABEL, _( "Add global label" ), add_glabel_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_GLABEL, _( "Add Global Label" ), add_glabel_xpm );
 }
 
 
@@ -567,13 +567,13 @@ void AddMenusForBus( wxMenu* PopMenu, EDA_DrawLineStruct* Bus,
                       _( "Break Bus" ), break_bus_xpm );
 
     PopMenu->AppendSeparator();
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_JUNCTION, _( "Add junction" ), add_junction_xpm );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_LABEL, _( "Add label" ), add_line_label_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_JUNCTION, _( "Add Junction" ), add_junction_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_LABEL, _( "Add Label" ), add_line_label_xpm );
 
     // Place Global label command only if the cursor is over one end of the Bus:
     if( ( pos.x == Bus->m_Start.x && pos.y == Bus->m_Start.y)
        || ( pos.x == Bus->m_End.x && pos.y == Bus->m_End.y ) )
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_GLABEL, _( "Add global label" ), add_glabel_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_GLABEL, _( "Add Global Label" ), add_glabel_xpm );
 }
 
 
@@ -645,14 +645,14 @@ void AddMenusForBlock( wxMenu* PopMenu, WinEDA_SchematicFrame* frame )
     {
         wxMenu* menu_other_block_commands = new wxMenu;
         ADD_MENUITEM_WITH_SUBMENU( PopMenu, menu_other_block_commands,
-                                   -1, _( "Other block commands" ), right_xpm );
+                                   -1, _( "Other Block Commands" ), right_xpm );
         ADD_MENUITEM( menu_other_block_commands, wxID_COPY, _( "Save Block" ), copy_button );
         ADD_MENUITEM( menu_other_block_commands, ID_POPUP_COPY_BLOCK,
                       _( "Copy Block (shift + drag mouse)" ), copyblock_xpm );
         ADD_MENUITEM( menu_other_block_commands, ID_POPUP_DRAG_BLOCK,
                       _( "Drag Block (ctrl + drag mouse)" ), move_xpm );
         ADD_MENUITEM( menu_other_block_commands, ID_POPUP_DELETE_BLOCK,
-                      _( "Del. Block (shift+ctrl + drag mouse)" ), delete_xpm );
+                      _( "Delelet Block (shift+ctrl + drag mouse)" ), delete_xpm );
         ADD_MENUITEM( menu_other_block_commands, ID_POPUP_MIRROR_Y_BLOCK, _(
                           "Mirror Block ||" ), mirror_H_xpm );
 #if 0

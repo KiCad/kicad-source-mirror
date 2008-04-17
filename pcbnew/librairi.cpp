@@ -49,14 +49,14 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
     wxString CmpFullFileName;
     FILE*    dest;
     MODULE*  module = NULL;
-	bool Footprint_Is_GPCB_Format = false;
-	wxString mask = wxT("*.*;"); mask += EXT_CMP_MASK;
-	wxString LastOpenedPathForLoading;
+    bool Footprint_Is_GPCB_Format = false;
+    wxString mask = wxT("*.*;"); mask += EXT_CMP_MASK;
+    wxString LastOpenedPathForLoading;
     wxConfig*          Config = m_Parent->m_EDA_Config;
 
     if( Config )
         Config->Read( EXPORT_IMPORT_LASTPATH_KEY, &LastOpenedPathForLoading );
-	
+
     /* Lecture Fichier module */
     CmpFullFileName = EDA_FileSelector( _( "Import Module:" ),
                                         LastOpenedPathForLoading,  /* Chemin par defaut */
@@ -78,49 +78,49 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
         DisplayError( this, msg );
         return NULL;
     }
-	
-	if( Config )	// Save file path
-	{
-		LastOpenedPathForLoading = wxPathOnly( CmpFullFileName );
+
+    if( Config )	// Save file path
+    {
+        LastOpenedPathForLoading = wxPathOnly( CmpFullFileName );
         Config->Write( EXPORT_IMPORT_LASTPATH_KEY, LastOpenedPathForLoading );
-	}
-	
+    }
+
     /* Read header and test file type */
     GetLine( dest, Line, &NbLine );
     if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
     {
-		if( strnicmp( Line, "Element", 7 ) == 0 )
-			Footprint_Is_GPCB_Format = true;
-		else
-		{
-			fclose( dest );
-			DisplayError( this, _( "Not a module file" ) );
-			return NULL;
-		}
+        if( strnicmp( Line, "Element", 7 ) == 0 )
+            Footprint_Is_GPCB_Format = true;
+        else
+        {
+            fclose( dest );
+            DisplayError( this, _( "Not a module file" ) );
+            return NULL;
+        }
     }
 
     /* Read file: Search the description starting line (skip lib header)*/
-	if ( ! Footprint_Is_GPCB_Format )
-	{
-		while( GetLine( dest, Line, &NbLine ) != NULL )
-		{
-			if( strnicmp( Line, "$MODULE", 7 ) == 0 )
-				break;
-		}
-	}
+    if ( ! Footprint_Is_GPCB_Format )
+    {
+        while( GetLine( dest, Line, &NbLine ) != NULL )
+        {
+            if( strnicmp( Line, "$MODULE", 7 ) == 0 )
+                break;
+        }
+    }
 
     module = new MODULE( m_Pcb );
 
-	if ( Footprint_Is_GPCB_Format )
-	{
-		fclose( dest );
-		module->Read_GPCB_Descr(CmpFullFileName);
-	}
-	else
-	{
-		module->ReadDescr( dest, &NbLine );
-		fclose( dest );
-	}
+    if ( Footprint_Is_GPCB_Format )
+    {
+        fclose( dest );
+        module->Read_GPCB_Descr(CmpFullFileName);
+    }
+    else
+    {
+        module->ReadDescr( dest, &NbLine );
+        fclose( dest );
+    }
 
     /* Insert footprint in list*/
     if( m_Pcb->m_Modules )
@@ -173,7 +173,7 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* ptmod, bool createlib )
 
     if( createlib )
         path = g_RealLibDirBuffer;
-	else if( Config )
+    else if( Config )
         Config->Read( EXPORT_IMPORT_LASTPATH_KEY, &path );
 
     FullFileName = EDA_FileSelector( createlib ? _( "Create lib" ) : _( "Export Module:" ),
@@ -205,11 +205,11 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* ptmod, bool createlib )
         return;
     }
 
-	if( ! createlib && Config )	// Save file path
-	{
-		path = wxPathOnly( FullFileName );
+    if( ! createlib && Config )	// Save file path
+    {
+        path = wxPathOnly( FullFileName );
         Config->Write( EXPORT_IMPORT_LASTPATH_KEY, path );
-	}
+    }
 
     fprintf( dest, "%s  %s\n", ENTETE_LIBRAIRIE, DateAndTime( Line ) );
     fputs( "$INDEX\n", dest );
@@ -495,7 +495,7 @@ int WinEDA_BasePcbFrame::Save_1_Module( const wxString& LibName,
 /*
  *  sauve en Librairie le module Module:
  *  si no_replace == TRUE, s'il est nouveau.
- * 
+ *
  *  retourne
  *      1 si OK
  *      0 si abort ou probleme
@@ -743,7 +743,7 @@ MODULE* WinEDA_BasePcbFrame::Create_1_Module( wxDC* DC, const wxString& module_n
      *      2eme = type VALEUR: "VAL**" */
 
     /* Mise a jour des caract du nouveau module */
-    newpos = m_CurrentScreen->m_Curseur;
+    newpos = GetScreen()->m_Curseur;
     Module->SetPosition( newpos );
     Module->m_LastEdit_Time = time( NULL );
 

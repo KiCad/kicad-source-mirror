@@ -13,11 +13,19 @@
 #include "macros.h"
 #include "id.h"
 
+#ifdef PCBNEW
+#include "pcbstruct.h"
+#endif
+
+#ifdef EESCHEMA
+#include "program.h"
+#endif
+
 // Local defines
 #define CURSOR_SIZE 12           // Cursor size in pixels
 
 // Events used by WinEDA_DrawPanel
-BEGIN_EVENT_TABLE( WinEDA_DrawPanel, EDA_DRAW_PANEL )
+BEGIN_EVENT_TABLE( WinEDA_DrawPanel, wxScrolledWindow )
 EVT_LEAVE_WINDOW( WinEDA_DrawPanel::OnMouseLeaving )
 EVT_MOUSE_EVENTS( WinEDA_DrawPanel::OnMouseEvent )
 EVT_CHAR( WinEDA_DrawPanel::OnKeyEvent )
@@ -38,16 +46,18 @@ END_EVENT_TABLE()
 
 WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
                                     const wxPoint& pos, const wxSize& size ) :
-    EDA_DRAW_PANEL( parent, id, pos, size,
+    wxScrolledWindow( parent, id, pos, size,
                     wxBORDER | wxNO_FULL_REPAINT_ON_RESIZE )
 {
     m_Parent          = parent;
     m_Ident           = m_Parent->m_Ident;
     m_Scroll_unit     = 1;
     m_ScrollButt_unit = 40;
+
     SetBackgroundColour( wxColour( ColorRefs[g_DrawBgColor].m_Red,
             ColorRefs[g_DrawBgColor].m_Green,
             ColorRefs[g_DrawBgColor].m_Blue ) );
+
     EnableScrolling( TRUE, TRUE );
     m_ClipBox.SetSize( size );
     m_ClipBox.SetX( 0 );
@@ -62,10 +72,21 @@ WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
 
     if( m_Parent->m_Parent->m_EDA_Config )
         m_AutoPAN_Enable = m_Parent->m_Parent->m_EDA_Config->Read( wxT( "AutoPAN" ), TRUE );
+
     m_AutoPAN_Request    = FALSE;
     m_Block_Enable       = FALSE;
     m_PanelDefaultCursor = m_PanelCursor = wxCURSOR_ARROW;
     m_CursorLevel = 0;
+}
+
+
+BASE_SCREEN* WinEDA_DrawPanel::GetScreen()
+{
+    WinEDA_DrawFrame*       parentFrame = m_Parent;
+
+    wxASSERT( parentFrame );
+
+    return parentFrame->GetBaseScreen();
 }
 
 

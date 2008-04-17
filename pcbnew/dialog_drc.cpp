@@ -765,7 +765,7 @@ void DrcDialog::OnButtonBrowseRptFileClick( wxCommandEvent& event )
     wxString    Mask(wxT("*"));
     wxString    Ext(wxT(".rpt"));
 
-    FileName = m_Parent->m_CurrentScreen->m_FileName;
+    FileName = m_Parent->GetScreen()->m_FileName;
     ChangeFileNameExt(FileName, wxT("-drc") + Ext);
     Mask += Ext;
 

@@ -335,7 +335,7 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
     pt_segm = (TRACK*) m_Pcb->m_Track;
     for( ; pt_segm != NULL; pt_segm = (TRACK*) pt_segm->Pnext )
     {
-        m_CurrentScreen->SetModify();
+        GetScreen()->SetModify();
         if( pt_segm->Type() == TYPEVIA )
         {
             SEGVIA* Via = (SEGVIA*) pt_segm;
@@ -361,7 +361,7 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
     pt_segm = (TRACK*) m_Pcb->m_Zone;
     for( ; pt_segm != NULL; pt_segm = (TRACK*) pt_segm->Pnext )
     {
-        m_CurrentScreen->SetModify();
+        GetScreen()->SetModify();
         jj = pt_segm->GetLayer();
         if( New_Layer[jj] >= 0 && New_Layer[jj] < LAYER_NO_CHANGE )
             pt_segm->SetLayer( New_Layer[jj] );
@@ -373,7 +373,7 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
     {
         if( PtStruct->Type() == TYPEDRAWSEGMENT )
         {
-            m_CurrentScreen->SetModify();
+            GetScreen()->SetModify();
             pt_drawsegm = (DRAWSEGMENT*) PtStruct;
             jj = pt_drawsegm->GetLayer();
             if( New_Layer[jj] >= 0 && New_Layer[jj] < LAYER_NO_CHANGE )

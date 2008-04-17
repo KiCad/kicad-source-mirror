@@ -288,7 +288,7 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
                           layer1, layer2, gen_through_holes ? false : true );
         if( s_ToolListBuffer.size() > 0 ) //holes?
         {
-            FullFileName = m_Parent->m_CurrentScreen->m_FileName;
+            FullFileName = m_Parent->GetScreen()->m_FileName;
             layer_extend.Empty();
             if( !gen_through_holes )
             {
@@ -360,7 +360,7 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
 
     if( m_Choice_Drill_Report->GetSelection() > 0 )
     {
-        FullFileName = m_Parent->m_CurrentScreen->m_FileName;
+        FullFileName = m_Parent->GetScreen()->m_FileName;
         GenDrillReport( FullFileName );
     }
 
@@ -748,7 +748,7 @@ void WinEDA_DrillFrame::GenDrillMap( const wxString aFileName,
     GenDrillMapFile( m_Parent->m_Pcb,
                      dest,
                      FullFileName,
-                     m_Parent->m_CurrentScreen->m_CurrentSheetDesc->m_Size,
+                     m_Parent->GetScreen()->m_CurrentSheetDesc->m_Size,
                      s_HoleListBuffer,
                      s_ToolListBuffer,
                      s_Unit_Drill_is_Inch,
@@ -791,7 +791,7 @@ void WinEDA_DrillFrame::GenDrillReport( const wxString aFileName )
         return;
     }
     GenDrillReportFile( dest, m_Parent->m_Pcb,
-                        m_Parent->m_CurrentScreen->m_FileName,
+                        m_Parent->GetScreen()->m_FileName,
                         s_Unit_Drill_is_Inch,
                         s_HoleListBuffer,
                         s_ToolListBuffer );

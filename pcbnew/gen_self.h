@@ -187,7 +187,7 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
 
     Self_On = 0;
 
-    Mself.m_End = m_CurrentScreen->m_Curseur;
+    Mself.m_End = GetScreen()->m_Curseur;
 
     /* Agencement des parametres pour simplifier le calcul : */
     /* le point de depart doit avoir la coord depart < celle du point de fin */

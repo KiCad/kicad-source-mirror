@@ -64,7 +64,7 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
                                           const wxString& title,
                                           const wxPoint&  pos,
                                           const wxSize&   size,
-										  long style ) :
+                                          long style ) :
     WinEDA_DrawFrame( father, LIBEDITOR_FRAME, parent, title, pos, size, style )
 {
     m_FrameName = wxT( "LibeditFrame" );
@@ -73,7 +73,7 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
 
     // Give an icon
     SetIcon( wxIcon( libedit_xpm ) );
-    m_CurrentScreen = ScreenLib;
+    SetBaseScreen( ScreenLib );
     GetSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
     if( DrawPanel )
@@ -90,7 +90,6 @@ WinEDA_LibeditFrame::~WinEDA_LibeditFrame()
 /**********************************************/
 {
     m_Parent->m_LibeditFrame = NULL;
-    //m_CurrentScreen = ScreenSch; humm, is this needed?
 }
 
 
@@ -100,14 +99,14 @@ void WinEDA_LibeditFrame::OnCloseWindow( wxCloseEvent& Event )
 {
     LibraryStruct* Lib;
 
-	if( GetScreen()->IsModify() )
+    if( GetScreen()->IsModify() )
     {
         if( !IsOK( this, _( "Component was modified!\nDiscard changes?" ) ) )
         {
             Event.Veto(); return;
         }
         else
-			GetScreen()->ClrModify();
+            GetScreen()->ClrModify();
     }
 
     for( Lib = g_LibraryList; Lib != NULL; Lib = Lib->m_Pnext )
@@ -118,7 +117,8 @@ void WinEDA_LibeditFrame::OnCloseWindow( wxCloseEvent& Event )
             msg.Printf( _( "Library \"%s\" was modified!\nDiscard changes?" ), Lib->m_Name.GetData() );
             if( !IsOK( this, msg ) )
             {
-                Event.Veto(); return;
+                Event.Veto();
+                return;
             }
         }
     }
@@ -261,8 +261,8 @@ int WinEDA_LibeditFrame::BestZoom()
     }
     else
     {
-		dx = GetScreen()->m_CurrentSheetDesc->m_Size.x;
-		dy = GetScreen()->m_CurrentSheetDesc->m_Size.y;
+        dx = GetScreen()->m_CurrentSheetDesc->m_Size.x;
+        dy = GetScreen()->m_CurrentSheetDesc->m_Size.y;
     }
 
     size    = DrawPanel->GetClientSize();
@@ -275,12 +275,12 @@ int WinEDA_LibeditFrame::BestZoom()
 
     if( CurrentLibEntry )
     {
-		GetScreen()->m_Curseur = BoundaryBox.Centre();
+        GetScreen()->m_Curseur = BoundaryBox.Centre();
     }
     else
     {
-		GetScreen()->m_Curseur.x = 0;
-		GetScreen()->m_Curseur.y = 0;
+        GetScreen()->m_Curseur.x = 0;
+        GetScreen()->m_Curseur.y = 0;
     }
 
     return bestzoom;
@@ -339,7 +339,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
     switch( id )
     {
     case ID_LIBEDIT_SAVE_CURRENT_LIB:
-		if( GetScreen()->IsModify() )
+        if( GetScreen()->IsModify() )
         {
             if( IsOK( this, _( "Include last component changes?" ) ) )
                 SaveOnePartInMemory();
@@ -608,7 +608,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         }
 
         CurrentDrawItem = NULL;
-		GetScreen()->SetModify();
+        GetScreen()->SetModify();
         DrawPanel->CursorOn( &dc );
         break;
 
@@ -656,7 +656,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         {
             EditField( &dc, (LibDrawField*) CurrentDrawItem );
         }
-		DrawPanel->MouseToCursorSchema();
+        DrawPanel->MouseToCursorSchema();
         DrawPanel->CursorOn( &dc );
         break;
 

@@ -57,7 +57,7 @@ public:
 
 
     void        PartTextCopy( PartTextStruct* target );
-    void        Place( WinEDA_DrawFrame* frame, wxDC* DC );
+    void        Place( WinEDA_SchematicFrame* frame, wxDC* DC );
 
     EDA_Rect    GetBoundaryBox() const;
     bool        IsVoid();
@@ -136,13 +136,13 @@ public:
     bool    Save( FILE* aFile ) const;
 
     SCH_COMPONENT*  GenCopy();
-    void                    SetRotationMiroir( int type );
-    int                     GetRotationMiroir();
-    wxPoint                 GetScreenCoord( const wxPoint& coord );
-    void                    Display_Infos( WinEDA_DrawFrame* frame );
-    void                    ClearAnnotation();
-    EDA_Rect                GetBoundaryBox() const;
-    EDA_Rect                GetBoundingBox();
+    void            SetRotationMiroir( int type );
+    int             GetRotationMiroir();
+    wxPoint         GetScreenCoord( const wxPoint& coord );
+    void            Display_Infos( WinEDA_DrawFrame* frame );
+    void            ClearAnnotation();
+    EDA_Rect        GetBoundaryBox() const;
+    EDA_Rect        GetBoundingBox();
 
     const wxString& ReturnFieldName( int aFieldNdx ) const;
 
@@ -164,7 +164,7 @@ public:
 
     void                    SwapData( SCH_COMPONENT* copyitem );
 
-    void                    Place( WinEDA_DrawFrame* frame, wxDC* DC );
+    void                    Place( WinEDA_SchematicFrame* frame, wxDC* DC );
 
 
     //returns a unique ID, in the form of a path.

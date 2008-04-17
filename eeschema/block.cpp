@@ -479,7 +479,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
 {
     DrawBlockStruct*  PtBlock;
     DrawPickedStruct* PickedList;
-    BASE_SCREEN*      screen = panel->m_Parent->GetScreen();
+    BASE_SCREEN*      screen = panel->GetScreen();
 
     PtBlock = &panel->GetScreen()->BlockLocate;
     GRSetDrawMode( DC, g_XorMode );

@@ -142,7 +142,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int PrintMask 
 
     wxBeginBusyCursor();
 
-    ActiveScreen = screen = m_Parent->GetScreen();
+    ActiveScreen = screen = m_Parent->GetBaseScreen();
     RedrawStructList( this, DC, screen->EEDrawList, GR_COPY );
 
     if( Print_Sheet_Ref )

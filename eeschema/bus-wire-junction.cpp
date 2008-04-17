@@ -370,7 +370,7 @@ static void Segment_in_Ghost( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
  */
 {
     EDA_DrawLineStruct* CurrentLine =
-        (EDA_DrawLineStruct*) panel->m_Parent->GetScreen()->GetCurItem();
+        (EDA_DrawLineStruct*) panel->GetScreen()->GetCurItem();
     EDA_DrawLineStruct* segment;
     int color;
 
@@ -390,7 +390,7 @@ static void Segment_in_Ghost( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
         }
     }
 
-    wxPoint endpos = panel->m_Parent->GetScreen()->m_Curseur;
+    wxPoint endpos = panel->GetScreen()->m_Curseur;
     if( g_HVLines ) /* Coerce the line to vertical or horizontal one: */
     {
         ComputeBreakPoint( CurrentLine, endpos );
@@ -463,11 +463,11 @@ static void Show_Polyline_in_Ghost( WinEDA_DrawPanel* panel, wxDC* DC, bool eras
  */
 {
     DrawPolylineStruct* NewPoly =
-        (DrawPolylineStruct*) panel->m_Parent->GetScreen()->GetCurItem();
+        (DrawPolylineStruct*) panel->GetScreen()->GetCurItem();
     int color;
     wxPoint             endpos;
 
-    endpos = panel->m_Parent->GetScreen()->m_Curseur;
+    endpos = panel->GetScreen()->m_Curseur;
     color  = ReturnLayerColor( NewPoly->GetLayer() );
 
     GRSetDrawMode( DC, g_XorMode );

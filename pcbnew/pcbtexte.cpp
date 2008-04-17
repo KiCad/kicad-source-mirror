@@ -240,7 +240,7 @@ void WinEDA_TextPCBPropertiesFrame::OnOkClick( wxCommandEvent& event )
         /* Redessin du Texte */
         CurrentTextPCB->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
     }
-    m_Parent->m_CurrentScreen->SetModify();
+    m_Parent->GetScreen()->SetModify();
     EndModal( 1 );
 }
 
@@ -288,7 +288,7 @@ void WinEDA_PcbFrame::Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
     SetCurItem( NULL );
-    m_CurrentScreen->SetModify();
+    GetScreen()->SetModify();
     TextePcb->m_Flags = 0;
 }
 
@@ -318,8 +318,7 @@ static void Move_Texte_Pcb( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 /*************************************************************************/
 /* Routine deplacant le texte PCB suivant le curseur de la souris */
 {
-    TEXTE_PCB* TextePcb = (TEXTE_PCB*)
-                          panel->m_Parent->m_CurrentScreen->GetCurItem();
+    TEXTE_PCB* TextePcb = (TEXTE_PCB*) panel->GetScreen()->GetCurItem();
 
     if( TextePcb == NULL )
         return;
@@ -329,7 +328,7 @@ static void Move_Texte_Pcb( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     if( erase )
         TextePcb->Draw( panel, DC, GR_XOR );
 
-    TextePcb->m_Pos = panel->m_Parent->m_CurrentScreen->m_Curseur;
+    TextePcb->m_Pos = panel->GetScreen()->m_Curseur;
 
     /* Redessin du Texte */
     TextePcb->Draw( panel, DC, GR_XOR );
@@ -376,7 +375,7 @@ TEXTE_PCB* WinEDA_PcbFrame::Create_Texte_Pcb( wxDC* DC )
         TextePcb->m_Miroir = 0;
 
     TextePcb->m_Size  = g_DesignSettings.m_PcbTextSize;
-    TextePcb->m_Pos   = m_CurrentScreen->m_Curseur;
+    TextePcb->m_Pos   = GetScreen()->m_Curseur;
     TextePcb->m_Width = g_DesignSettings.m_PcbTextWidth;
 
     InstallTextPCBOptionsFrame( TextePcb, DC, TextePcb->m_Pos );
@@ -418,5 +417,5 @@ void WinEDA_PcbFrame::Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     TextePcb->Draw( DrawPanel, DC, drawmode );
     TextePcb->Display_Infos( this );
 
-    m_CurrentScreen->SetModify();
+    GetScreen()->SetModify();
 }

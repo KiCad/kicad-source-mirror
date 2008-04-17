@@ -217,14 +217,14 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( const wxPoin
 
 
 /***********************************************************************/
-void WinEDA_DrawFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
+void WinEDA_SchematicFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
 /***********************************************************************/
 {
-    wxSize  delta;
-    SCH_SCREEN* screen = (SCH_SCREEN*)GetScreen();
-    int     zoom = screen->GetZoom();
-    wxPoint curpos, oldpos;
-    int     hotkey = 0;
+    wxSize          delta;
+    SCH_SCREEN*     screen = GetScreen();
+    int             zoom = screen->GetZoom();
+    wxPoint         curpos, oldpos;
+    int             hotkey = 0;
 
     curpos = screen->m_MousePosition;
     oldpos = screen->m_Curseur;
@@ -323,7 +323,7 @@ void WinEDA_DrawFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels 
         curpos = screen->m_Curseur;
         screen->m_Curseur = oldpos;
         DrawPanel->CursorOff( DC );
-        GetScreen()->m_Curseur = curpos;
+        screen->m_Curseur = curpos;
         DrawPanel->CursorOn( DC );
 
         if( DrawPanel->ManageCurseur )

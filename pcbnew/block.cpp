@@ -419,7 +419,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool era
         }
     }
 
-    if( panel->m_Parent->GetScreen()->BlockLocate.m_State != STATE_BLOCK_STOP )
+    if( screen->BlockLocate.m_State != STATE_BLOCK_STOP )
     {
         screen->BlockLocate.m_MoveVector.x = screen->m_Curseur.x - screen->BlockLocate.GetRight();
         screen->BlockLocate.m_MoveVector.y = screen->m_Curseur.y - screen->BlockLocate.GetBottom();

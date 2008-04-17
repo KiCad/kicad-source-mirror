@@ -186,7 +186,7 @@ void WinEDA_CotationPropertiesFrame::OnOkClick( wxCommandEvent& event )
         CurrentCotation->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
     }
 
-    m_Parent->m_CurrentScreen->SetModify();
+    m_Parent->GetScreen()->SetModify();
     EndModal( 1 );
 }
 
@@ -226,7 +226,7 @@ COTATION* WinEDA_PcbFrame::Begin_Cotation( COTATION* Cotation, wxDC* DC )
     if( Cotation == NULL )       /* debut reel du trace */
     {
         status_cotation = 1;
-        pos = m_CurrentScreen->m_Curseur;
+        pos = GetScreen()->m_Curseur;
 
         Cotation = new COTATION( m_Pcb );
         Cotation->m_Flags = IS_NEW;
@@ -286,7 +286,7 @@ COTATION* WinEDA_PcbFrame::Begin_Cotation( COTATION* Cotation, wxDC* DC )
         m_Pcb->m_Drawings->Pback = Cotation;
     m_Pcb->m_Drawings = Cotation;
 
-    m_CurrentScreen->SetModify();
+    GetScreen()->SetModify();
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
 
@@ -374,7 +374,7 @@ void WinEDA_PcbFrame::Delete_Cotation( COTATION* Cotation, wxDC* DC )
     if( DC )
         Cotation->Draw( DrawPanel, DC, GR_XOR );
     Cotation->DeleteStructure();
-    m_CurrentScreen->SetModify();
+    GetScreen()->SetModify();
 }
 
 

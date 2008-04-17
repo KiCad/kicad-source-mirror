@@ -26,6 +26,21 @@ public:
     SCH_SCREEN( int idtype, KICAD_T aType = SCREEN_STRUCT_TYPE );
     ~SCH_SCREEN();
 
+    /**
+     * Function GetCurItem
+     * returns the currently selected SCH_ITEM, overriding BASE_SCREEN::GetCurItem().
+     * @return SCH_ITEM* - the one selected, or NULL.
+     */
+    SCH_ITEM* GetCurItem() const {  return (SCH_ITEM*) BASE_SCREEN::GetCurItem(); }
+
+    /**
+     * Function SetCurItem
+     * sets the currently selected object, m_CurrentItem.
+     * @param current Any object derived from SCH_ITEM
+     */
+    void SetCurItem( SCH_ITEM* aItem ) { BASE_SCREEN::SetCurItem( aItem ); }
+
+
     virtual wxString GetClass() const
     {
         return wxT( "SCH_SCREEN" );
@@ -34,7 +49,8 @@ public:
 
     void            FreeDrawList(); // Free EESchema drawing list (does not delete the sub hierarchies)
 
-    void Place( WinEDA_DrawFrame* frame, wxDC* DC ) { };
+    void            Place( WinEDA_SchematicFrame* frame, wxDC* DC ) { };
+
     void            RemoveFromDrawList( SCH_ITEM* DrawStruct ); /* remove DrawStruct from EEDrawList. */
     bool            CheckIfOnDrawList( SCH_ITEM* st );
     void            AddToDrawList( SCH_ITEM* DrawStruct );

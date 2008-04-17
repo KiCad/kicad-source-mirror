@@ -238,23 +238,18 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     wxPoint              coord[4];
     int                  zoom;
     int                  fillpad = 0;
-    WinEDA_BasePcbFrame* frame = NULL;
     wxPoint              shape_pos;
 
-    PCB_SCREEN*          screen = panel ?
-                                    (PCB_SCREEN*) panel->m_Parent->m_CurrentScreen :
-                                    (PCB_SCREEN*) ActiveScreen;
+    wxASSERT( panel );
 
-    if ( panel )    // Use current frame setting
-    {
-        frame  = (WinEDA_BasePcbFrame*) panel->m_Parent;
-    }
-    else if( DisplayOpt.DisplayPadFill == FILLED )     // Use board frame setting
-        fillpad = 1;
+    WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) panel->m_Parent;
+
+    PCB_SCREEN* screen = frame->GetScreen();
+
+    zoom = screen->GetZoom();
 
     if( frame->m_DisplayPadFill == FILLED )
         fillpad = 1;
-    zoom = screen->GetZoom();
 
 #ifdef PCBNEW
     if( m_Flags & IS_MOVED )

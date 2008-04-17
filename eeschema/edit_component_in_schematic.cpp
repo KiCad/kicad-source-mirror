@@ -694,7 +694,7 @@ void WinEDA_SchematicFrame::RotateCmpField( PartTextStruct* Field, wxDC* DC )
 
 
 /*********************************************************************/
-void PartTextStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
+void PartTextStruct::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 /*********************************************************************/
 {
     int FieldNumber;

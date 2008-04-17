@@ -78,7 +78,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
 
 
     /* Init nom fichier */
-    NameLayerCmp = m_CurrentScreen->m_FileName;
+    NameLayerCmp = GetScreen()->m_FileName;
     ChangeFileNameExt( NameLayerCmp, wxT( "-cmp.pos" ) );
 
     LayerCmp = wxFopen( NameLayerCmp, wxT( "wt" ) );
@@ -90,7 +90,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
 
     if( GenCu )
     {
-        NameLayerCu = m_CurrentScreen->m_FileName;
+        NameLayerCu = GetScreen()->m_FileName;
         ChangeFileNameExt( NameLayerCu, wxT( "-copper.pos" ) );
         LayerCu = wxFopen( NameLayerCu, wxT( "wt" ) );
         if( LayerCu == 0 )
@@ -242,7 +242,7 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
     File_Place_Offset = wxPoint( 0, 0 );
 
     /* Init nom fichier */
-    FullFileName = m_CurrentScreen->m_FileName;
+    FullFileName = GetScreen()->m_FileName;
     ChangeFileNameExt( FullFileName, wxT( ".rpt" ) );
 
     rptfile = wxFopen( FullFileName, wxT( "wt" ) );
@@ -347,7 +347,7 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
             sprintf( Line, "orientation  %.2f\n", (float) (pad->m_Orient - Module->m_Orient) / 10 );
             fputs( Line, rptfile );
             const char* shape_name[6] =
-				{ "??? ", "Circ", "Rect", "Oval", "trap", "spec" };
+                { "??? ", "Circ", "Rect", "Oval", "trap", "spec" };
             sprintf( Line, "Shape  %s\n", shape_name[pad->m_PadShape] );
             fputs( Line, rptfile );
 

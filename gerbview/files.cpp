@@ -40,13 +40,16 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
 
     case ID_MENU_INC_LAYER_AND_APPEND_FILE:
     case ID_INC_LAYER_AND_APPEND_FILE:
-    {
-        int layer = GetPCBScreen()->m_Active_Layer;
-        ((PCB_SCREEN*)GetScreen())->m_Active_Layer++;
-        if( !LoadOneGerberFile( wxEmptyString, &dc, 0 ) )
-            ((PCB_SCREEN*)GetScreen())->m_Active_Layer = layer;
-        SetToolbars();
-    }
+        {
+            int origLayer = GetScreen()->m_Active_Layer;
+
+            GetScreen()->m_Active_Layer++;
+
+            if( !LoadOneGerberFile( wxEmptyString, &dc, 0 ) )
+                GetScreen()->m_Active_Layer = origLayer;
+
+            SetToolbars();
+        }
         break;
 
     case ID_MENU_APPEND_FILE:

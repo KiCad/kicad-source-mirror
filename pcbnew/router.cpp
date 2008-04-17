@@ -52,7 +52,7 @@ void WinEDA_PcbFrame::GlobalRoute( wxDC* DC )
     }
 
     /* Calcule du nom du fichier intermediaire de communication */
-    FullFileName = m_CurrentScreen->m_FileName;
+    FullFileName = GetScreen()->m_FileName;
     ChangeFileNameExt( FullFileName, wxT( ".ipt" ) );
 
     if( ( outfile = wxFopen( FullFileName, wxT( "wt" ) ) ) == NULL )
@@ -558,7 +558,7 @@ void WinEDA_PcbFrame::ReadAutoroutedTracks( wxDC* DC )
     int      max_layer = m_Pcb->m_BoardSettings->m_CopperLayerCount;
 
     /* Calcule du nom du fichier intermediaire de communication */
-    FullFileName = m_CurrentScreen->m_FileName;
+    FullFileName = GetScreen()->m_FileName;
     ChangeFileNameExt( FullFileName, wxT( ".trc" ) );
 
     if( ( File = wxFopen( FullFileName, wxT( "rt" ) ) ) == NULL )
@@ -607,7 +607,7 @@ void WinEDA_PcbFrame::ReadAutoroutedTracks( wxDC* DC )
                 NewVia->m_Shape = VIA_THROUGH;
             else
                 NewVia->m_Shape = VIA_BLIND_BURIED;
-            
+
             NewVia->Insert( m_Pcb, NULL );
             NbTrack++;
             break;
@@ -661,10 +661,10 @@ void WinEDA_PcbFrame::ReadAutoroutedTracks( wxDC* DC )
     else
     {
         m_Pcb->m_Status_Pcb = 0;
-        m_CurrentScreen->SetModify();
+        GetScreen()->SetModify();
     }
 
     Compile_Ratsnest( DC, TRUE );
     if( NbTrack )
-        m_CurrentScreen->SetRefreshReq();
+        GetScreen()->SetRefreshReq();
 }

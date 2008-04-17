@@ -218,13 +218,13 @@ void DrawSheetStruct::SwapData( DrawSheetStruct* copyitem )
 
 
 /****************************************************************/
-void DrawSheetStruct::Place( WinEDA_DrawFrame* frame, wxDC* DC )
+void DrawSheetStruct::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 /****************************************************************/
 {
     /* Placement en liste des structures si nouveau composant:*/
     if( m_Flags & IS_NEW )
     {
-        if( !( (WinEDA_SchematicFrame*) frame )->EditSheet( this, DC ) )
+        if( !frame->EditSheet( this, DC ) )
         {
             frame->GetScreen()->SetCurItem( NULL );
             frame->DrawPanel->ManageCurseur = NULL;

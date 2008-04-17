@@ -118,7 +118,7 @@ void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC 
     lay_tmp_TOP    = Route_Layer_TOP;
     OldPasRoute    = g_GridRoutingSize;
 
-    g_GridRoutingSize = m_CurrentScreen->GetGrid().x;
+    g_GridRoutingSize = GetScreen()->GetGrid().x;
 
     // Ensure g_GridRoutingSize has a reasonnable value:
     if( g_GridRoutingSize < 10 )
@@ -282,10 +282,10 @@ end_of_tst:
             break;
 
         /* placement du module */
-        CurrPosition = m_CurrentScreen->m_Curseur;
-        m_CurrentScreen->m_Curseur = PosOK;
+        CurrPosition = GetScreen()->m_Curseur;
+        GetScreen()->m_Curseur = PosOK;
         Place_Module( Module, DC );
-        m_CurrentScreen->m_Curseur = CurrPosition;
+        GetScreen()->m_Curseur = CurrPosition;
 
         Module->Set_Rectangle_Encadrement();
         Module->SetRectangleExinscrit();

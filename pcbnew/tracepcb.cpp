@@ -186,6 +186,6 @@ void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
 
     DrawGeneralRatsnest( DC );
 
-    m_CurrentScreen->ClrRefreshReq();
+    GetScreen()->ClrRefreshReq();
 }
 

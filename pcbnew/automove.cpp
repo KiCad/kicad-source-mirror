@@ -105,11 +105,11 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_AUTOPLACE_FIXE_MODULE:
-        FixeModule( (MODULE*) m_CurrentScreen->GetCurItem(), TRUE );
+        FixeModule( (MODULE*) GetScreen()->GetCurItem(), TRUE );
         break;
 
     case ID_POPUP_PCB_AUTOPLACE_FREE_MODULE:
-        FixeModule( (MODULE*) m_CurrentScreen->GetCurItem(), FALSE );
+        FixeModule( (MODULE*) GetScreen()->GetCurItem(), FALSE );
         break;
 
     case ID_POPUP_PCB_AUTOPLACE_FREE_ALL_MODULES:
@@ -121,7 +121,7 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_AUTOPLACE_CURRENT_MODULE:
-        AutoPlaceModule( (MODULE*) m_CurrentScreen->GetCurItem(),
+        AutoPlaceModule( (MODULE*) GetScreen()->GetCurItem(),
                         PLACE_1_MODULE, &dc );
         break;
 
@@ -199,7 +199,7 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( wxDC* DC, bool PlaceModulesHorsPcb )
     MODULE*  Module;
     wxPoint  start, current;
     int      Ymax_size, Xsize_allowed;
-    int      pas_grille = m_CurrentScreen->GetGrid().x;
+    int      pas_grille = GetScreen()->GetGrid().x;
     bool     EdgeExists;
     float    surface;
 
@@ -237,8 +237,8 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( wxDC* DC, bool PlaceModulesHorsPcb )
      */
     if( PlaceModulesHorsPcb && EdgeExists )
     {
-        if( m_CurrentScreen->m_Curseur.y < (m_Pcb->m_BoundaryBox.GetBottom() + 2000) )
-            m_CurrentScreen->m_Curseur.y = m_Pcb->m_BoundaryBox.GetBottom() + 2000;
+        if( GetScreen()->m_Curseur.y < (m_Pcb->m_BoundaryBox.GetBottom() + 2000) )
+            GetScreen()->m_Curseur.y = m_Pcb->m_BoundaryBox.GetBottom() + 2000;
     }
 
     /* calcul de la surface occupee par les circuits */
@@ -257,7 +257,7 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( wxDC* DC, bool PlaceModulesHorsPcb )
     Xsize_allowed = (int) (sqrt( surface ) * 4.0 / 3.0);
 
     /* Placement des modules */
-    start     = current = m_CurrentScreen->m_Curseur;
+    start     = current = GetScreen()->m_Curseur;
     Ymax_size = 0;
 
     for( pt_Dmod = BaseListeModules; *pt_Dmod != NULL; pt_Dmod++ )
@@ -279,13 +279,13 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( wxDC* DC, bool PlaceModulesHorsPcb )
             Ymax_size  = 0;
         }
 
-        m_CurrentScreen->m_Curseur.x =
+        GetScreen()->m_Curseur.x =
             current.x + Module->m_Pos.x - Module->m_RealBoundaryBox.GetX();
-        m_CurrentScreen->m_Curseur.y =
+        GetScreen()->m_Curseur.y =
             current.y + Module->m_Pos.y - Module->m_RealBoundaryBox.GetY();
         Ymax_size = MAX( Ymax_size, Module->m_RealBoundaryBox.GetHeight() );
 
-        PutOnGrid( &m_CurrentScreen->m_Curseur );
+        PutOnGrid( &GetScreen()->m_Curseur );
 
         Module->Draw( DrawPanel, DC, GR_XOR );
         Place_Module( Module, DC );   /* positionne Module et recalcule cadre */
@@ -294,7 +294,7 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( wxDC* DC, bool PlaceModulesHorsPcb )
     }
 
     MyFree( BaseListeModules );
-    m_CurrentScreen->SetRefreshReq();
+    GetScreen()->SetRefreshReq();
 }
 
 
@@ -353,7 +353,7 @@ void WinEDA_PcbFrame::ReOrientModules( const wxString& ModuleMask,
 
         if( WildCompareString( ModuleMask, Module->m_Reference->m_Text, FALSE ) )
         {
-            m_CurrentScreen->SetModify();
+            GetScreen()->SetModify();
             Module->Draw( DrawPanel, DC, GR_XOR );
             Rotate_Module( NULL, Module, Orient, FALSE );
             Module->Draw( DrawPanel, DC, GR_OR );

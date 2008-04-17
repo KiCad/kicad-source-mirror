@@ -39,7 +39,7 @@
  *  G75			Active interpolation circulaire sur 360 degre
  *  G90			Mode Coordonnees absolues
  *  G91			Mode Coordonnees Relatives
- * 
+ *
  *  Coordonnees X,Y
  *  X,Y sont suivies de + ou - et de m+n chiffres (non separes)
  *          m = partie entiere
@@ -48,20 +48,20 @@
  *                                  m = 3, n = 4 (format 3.4)
  *  ex:
  *  G__ X00345Y-06123 D__*
- * 
+ *
  *  Outils et D_CODES
  *  numero d'outil ( identification des formes )
  *  1 a 99 	(classique)
  *  1 a 999
  *  D_CODES:
- * 
+ *
  *  D01 ... D9 = codes d'action:
  *  D01			= activation de lumiere (baisser de plume) lors du d�placement
  *  D02			= extinction de lumiere (lever de plume) lors du d�placement
  *  D03			= Flash
  *  D09			= VAPE Flash
  *  D51			= precede par G54 -> Select VAPE
- * 
+ *
  *  D10 ... D255 = Indentification d'outils ( d'ouvertures )
  *              Ne sont pas tj dans l'ordre ( voir tableau dans PCBPLOT.H)
  */
@@ -106,8 +106,8 @@ static void Append_1_Flash_ROND_GERBER( int Dcode_tool,
     track = new TRACK( frame->m_Pcb );
 
     track->Insert( frame->m_Pcb, NULL );
-	
-    track->SetLayer( frame->GetPCBScreen()->m_Active_Layer );
+
+    track->SetLayer( frame->GetScreen()->m_Active_Layer );
     track->m_Width = diametre;
     track->m_Start = track->m_End = pos;
     NEGATE( track->m_Start.y );
@@ -140,7 +140,7 @@ static void Append_1_Flash_GERBER( int Dcode_index,
 
     track->Insert( frame->m_Pcb, NULL );
 
-    track->SetLayer( frame->GetPCBScreen()->m_Active_Layer );
+    track->SetLayer( frame->GetScreen()->m_Active_Layer );
     track->m_Width = width;
     track->m_Start = track->m_End = pos;
     NEGATE( track->m_Start.y );
@@ -181,7 +181,7 @@ static void Append_1_Line_GERBER( int Dcode_index,
 
     track->Insert( frame->m_Pcb, NULL );
 
-    track->SetLayer( frame->GetPCBScreen()->m_Active_Layer );
+    track->SetLayer( frame->GetScreen()->m_Active_Layer );
     track->m_Width = largeur;
     track->m_Start = startpoint;
     NEGATE( track->m_Start.y );
@@ -204,12 +204,12 @@ static void Append_1_SEG_ARC_GERBER( int Dcode_index,
 /* creation d'un arc:
  *  si multiquadrant == TRUE arc de 0 a 360 degres
  *      et rel_center est la coordonn�e du centre relativement au startpoint
- * 
+ *
  *  si multiquadrant == FALSE arc de 0 � 90 entierement contenu dans le meme quadrant
  *      et rel_center est la coordonn�e du centre relativement au startpoint,
  *      mais en VALEUR ABSOLUE et le signe des valeurs x et y de rel_center doit
  *      etre deduit de cette limite de 90 degres
- * 
+ *
  */
 {
     TRACK*  track;
@@ -220,7 +220,7 @@ static void Append_1_SEG_ARC_GERBER( int Dcode_index,
     track->Insert( frame->m_Pcb, NULL );
 
     track->m_Shape = S_ARC;
-    track->SetLayer( frame->GetPCBScreen()->m_Active_Layer );
+    track->SetLayer( frame->GetScreen()->m_Active_Layer );
     track->m_Width = largeur;
 
     if( multiquadrant )
@@ -285,7 +285,7 @@ static void Append_1_SEG_ARC_GERBER( int Dcode_index,
 
     NEGATE( track->m_Start.y );
     NEGATE( track->m_End.y );
-    
+
     //NEGATE( track->GetSubNet() );
     track->SetSubNet( -track->GetSubNet() );
 
@@ -741,7 +741,7 @@ bool GERBER_Descr::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
 
             edge_poly->Insert( frame->m_Pcb, last );
 
-            edge_poly->SetLayer( frame->GetPCBScreen()->m_Active_Layer );
+            edge_poly->SetLayer( frame->GetScreen()->m_Active_Layer );
             edge_poly->m_Width = 1;
             edge_poly->m_Start = m_PreviousPos;
             NEGATE( edge_poly->m_Start.y );

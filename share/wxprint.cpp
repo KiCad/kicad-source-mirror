@@ -305,7 +305,7 @@ wxString WinEDA_PrintFrame::BuildPrintTitle()
 {
     wxString name, ext;
 
-    wxFileName::SplitPath( m_Parent->GetScreen()->m_FileName,
+    wxFileName::SplitPath( m_Parent->GetBaseScreen()->m_FileName,
         (wxString*) NULL, &name, &ext );
     name += wxT( "-" ) + ext;
     return name;
@@ -486,7 +486,7 @@ bool EDA_Printout::OnPrintPage( int page )
 
 
 #ifdef EESCHEMA
-    BASE_SCREEN* screen    = m_Parent->GetScreen();
+    BASE_SCREEN* screen    = m_Parent->GetBaseScreen();
     BASE_SCREEN* oldscreen = screen;
 
     if( s_OptionPrintPage == 1 )

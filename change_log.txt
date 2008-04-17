@@ -5,16 +5,31 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Apr-17 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++all
+  * Made a little more sense out of the GetScreen() problem by making it
+    non-virtual, and having the two types of frame classes (eeschema's and pcbnew's)
+    each return their respective types of screens {SCH,PCB}_SCREEN*.
+  * Added GetBaseScreen() as the virtual function which always returns BASE_SCREEN*.
+  * Made WinEDA_DrawFrame::GeneralControle( wxDC* DC, wxPoint Mouse ){ dummy }
+  * Added WinEDA_SchematicFrame::GeneralControle( wxDC* DC, wxPoint Mouse );
+  * Moved to void <class>::Place( WinEDA_SchematicFrame* frame, wxDC* DC ) from
+    void <class>::Place( WinEDA_DrawFrame* frame, wxDC* DC ) so that these
+    functions can use the new SCH_SCREEN* WinEDA_SchematicFrame::GetScreen()
+    function (the non-virtual one that returns SCH_SCREEN* not BASE_SCREEN*).
+  * Made some menus conformant to UIpolicies.txt regarding uppercase.
+  * Beautified 5-10 files.
+
+
 2008-Apr-17 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +eeschema
-	very small bug in display component info removed
-
+    very small bug in display component info removed
 +pcbnew
 +cvpcb
     removed bug: forgotten paths when adding lib files when not in the default lib path
-	(same problem as in eeschema, solved in 2008-Apr-09 Update)
-
+    (same problem as in eeschema, solved in 2008-Apr-09 Update)
 
 
 2008-Apr-16 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>

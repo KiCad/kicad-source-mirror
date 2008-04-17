@@ -35,7 +35,6 @@
 #define DIALOG_STYLE wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT | MAYBE_RESIZE_BORDER
 
 #define KICAD_DEFAULT_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE|wxWANTS_CHARS
-#define EDA_DRAW_PANEL wxScrolledWindow
 
 class wxMyDialogModalData;
 
@@ -206,8 +205,6 @@ public:
     WinEDAChoiceBox*  m_SelZoomBox;         // Dialog box to choose the Zoom value
     int m_ZoomMaxValue;                     // Max zoom value: Draw min scale is 1/m_ZoomMaxValue
 
-    BASE_SCREEN*      m_CurrentScreen;      // current used SCREEN
-
     int     m_CurrentCursorShape;           // shape for cursor (0 = default cursor)
     int     m_ID_current_state;             // Id of active button on the vertical toolbar
     int     m_HTOOL_current_state;          // Id of active button on horizontal toolbar
@@ -226,6 +223,12 @@ public:
                                          *  dans la generation les fichiers de positionnement
                                          *  des composants) */
 
+private:
+    BASE_SCREEN*    m_CurrentScreen;        ///< current used SCREEN
+
+protected:
+    void            SetBaseScreen( BASE_SCREEN* aScreen ) { m_CurrentScreen = aScreen; }
+
 public:
 
     // Constructor and destructor
@@ -236,8 +239,14 @@ public:
 
     ~WinEDA_DrawFrame();
 
-    virtual BASE_SCREEN* GetScreen() { return m_CurrentScreen; }
     virtual wxString	 GetScreenDesc();
+
+    /**
+     * Function GetBaseScreen
+     * is virtual and returns a pointer to a BASE_SCREEN or one of its derivatives.
+     * It may be overloaded by derived classes.
+     */
+    virtual BASE_SCREEN* GetBaseScreen() const  { return m_CurrentScreen; }
 
     void            OnMenuOpen( wxMenuEvent& event );
     void            OnMouseEvent( wxMouseEvent& event );
@@ -261,7 +270,7 @@ public:
     virtual void    OnSelectGrid( wxCommandEvent& event );
     virtual void    OnSelectZoom( wxCommandEvent& event );
 
-    virtual void    GeneralControle( wxDC* DC, wxPoint Mouse );
+    virtual void    GeneralControle( wxDC* DC, wxPoint Mouse ){ /* dummy */ }
     virtual void    OnSize( wxSizeEvent& event );
     void            OnEraseBackground( wxEraseEvent& SizeEvent );
 

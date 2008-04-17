@@ -74,8 +74,8 @@ bool WinEDA_GerberFrame::Clear_Pcb( bool query )
     m_Pcb->m_NbSegmZone  = 0;
 
     /* Init parametres de gestion des ecrans PAD et PCB */
-    m_CurrentScreen = ActiveScreen = ScreenPcb;
-    GetPCBScreen()->Init();
+    SetBaseScreen( ActiveScreen = ScreenPcb );
+    GetScreen()->Init();
 
     return TRUE;
 }
@@ -104,7 +104,7 @@ void WinEDA_GerberFrame::Erase_Segments_Pcb( bool all_layers, bool query )
 {
     BOARD_ITEM*     PtStruct;
     BOARD_ITEM*     PtNext;
-    int             layer = GetPCBScreen()->m_Active_Layer;
+    int             layer = GetScreen()->m_Active_Layer;
 
     if( all_layers )
         layer = -1;
@@ -189,7 +189,7 @@ void WinEDA_GerberFrame::Erase_Textes_Pcb( bool query )
 void WinEDA_GerberFrame::Erase_Current_Layer( bool query )
 /*********************************************************/
 {
-    int             layer = GetPCBScreen()->m_Active_Layer;
+    int             layer = GetScreen()->m_Active_Layer;
     wxString        msg;
 
     msg.Printf( _( "Delete Layer %d" ), layer + 1 );

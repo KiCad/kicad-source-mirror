@@ -72,14 +72,14 @@ static wxMenu* Append_Track_Width_List()
 
     trackwidth_menu = new wxMenu;
 
-	trackwidth_menu->Append( ID_POPUP_PCB_SELECT_AUTO_WIDTH,
-							 _( "Auto Width" ),
-							 _(
-								 "Use the track width when starting on a track, otherwise the current track width" ),
-							 TRUE );
+    trackwidth_menu->Append( ID_POPUP_PCB_SELECT_AUTO_WIDTH,
+                             _( "Auto Width" ),
+                             _(
+                                 "Use the track width when starting on a track, otherwise the current track width" ),
+                             TRUE );
 
-	if( g_DesignSettings.m_UseConnectedTrackWidth )
-		trackwidth_menu->Check( ID_POPUP_PCB_SELECT_AUTO_WIDTH, TRUE );
+    if( g_DesignSettings.m_UseConnectedTrackWidth )
+        trackwidth_menu->Check( ID_POPUP_PCB_SELECT_AUTO_WIDTH, TRUE );
 
     for( ii = 0; (ii < HISTORY_NUMBER) && (ii < TRACK_HISTORY_NUMBER_MAX); ii++ )
     {
@@ -94,8 +94,8 @@ static wxMenu* Append_Track_Width_List()
             msg.Printf( _( "Track %.3f" ), value );
 
         trackwidth_menu->Append( ID_POPUP_PCB_SELECT_WIDTH1 + ii, msg, wxEmptyString, TRUE );
- 
-		if( (g_DesignSettings.m_TrackWidthHistory[ii] == g_DesignSettings.m_CurrentTrackWidth)
+
+        if( (g_DesignSettings.m_TrackWidthHistory[ii] == g_DesignSettings.m_CurrentTrackWidth)
            && ! g_DesignSettings.m_UseConnectedTrackWidth )
             trackwidth_menu->Check( ID_POPUP_PCB_SELECT_WIDTH1 + ii, TRUE );
     }
@@ -128,7 +128,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     wxString    msg;
     int         flags = 0;
     bool        locate_track = FALSE;
-    bool        BlockActive  = (m_CurrentScreen->BlockLocate.m_Command != BLOCK_IDLE);
+    bool        BlockActive  = (GetScreen()->BlockLocate.m_Command != BLOCK_IDLE);
 
     wxClientDC  dc( DrawPanel );
 
@@ -286,15 +286,15 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             {
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_STOP_CURRENT_EDGE_ZONE,
                               _( "Close Zone Outline" ), apply_xpm );
-				ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_ZONE_LAST_CREATED_CORNER,
-							  _( "Delete Last Corner" ), delete_xpm );
+                ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_ZONE_LAST_CREATED_CORNER,
+                              _( "Delete Last Corner" ), delete_xpm );
             }
-			else
+            else
             createPopUpMenuForZones( (ZONE_CONTAINER*) item, aPopMenu );
             break;
 
         case TYPETEXTE:
- 				createPopUpMenuForTexts( (TEXTE_PCB*) item, aPopMenu );
+                createPopUpMenuForTexts( (TEXTE_PCB*) item, aPopMenu );
             break;
 
         case TYPETRACK:
@@ -520,13 +520,13 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
                                        ID_POPUP_PCB_VIA_EDITING, _( "Edit Via" ), edit_xpm );
             ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_TO_DEFAULT,
                           _( "Set via hole to Default" ), apply_xpm );
-			msg = _( "Set via hole to a specific value. This specfic value is currently" );
-			msg << wxT(" ") << ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_ViaDrillCustomValue, m_InternalUnits );
+            msg = _( "Set via hole to a specific value. This specfic value is currently" );
+            msg << wxT(" ") << ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_ViaDrillCustomValue, m_InternalUnits );
             ADD_MENUITEM_WITH_HELP( via_mnu, ID_POPUP_PCB_VIA_HOLE_TO_VALUE,
-								_( "Set via hole to alt value" ), msg,
-								options_new_pad_xpm );
-			msg = _( "Set alt via hole value. This value is currently" );
-			msg  << wxT(" ") << ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_ViaDrillCustomValue, m_InternalUnits );
+                                _( "Set via hole to alt value" ), msg,
+                                options_new_pad_xpm );
+            msg = _( "Set alt via hole value. This value is currently" );
+            msg  << wxT(" ") << ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_ViaDrillCustomValue, m_InternalUnits );
             ADD_MENUITEM_WITH_HELP( via_mnu, ID_POPUP_PCB_VIA_HOLE_ENTER_VALUE,
                           _( "Set the via hole alt value" ), msg, edit_xpm );
             ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_EXPORT, _(
@@ -594,12 +594,12 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     wxMenu* track_mnu;
     if( !flags )    // track Width control :
     {
-		track_mnu = new wxMenu;
- 		ADD_MENUITEM_WITH_SUBMENU( PopMenu, track_mnu,
-								   ID_POPUP_PCB_EDIT_TRACK_MNU, _( "Change Width" ), width_track_xpm );
-		ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACKSEG,
+        track_mnu = new wxMenu;
+        ADD_MENUITEM_WITH_SUBMENU( PopMenu, track_mnu,
+                                   ID_POPUP_PCB_EDIT_TRACK_MNU, _( "Change Width" ), width_track_xpm );
+        ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACKSEG,
                  Track->Type()==TYPEVIA ? _( "Edit Via" ) : _( "Edit Segment" ), width_segment_xpm );
-    
+
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACK,
                       _( "Edit Track" ), width_track_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_NET,
