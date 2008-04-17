@@ -50,8 +50,7 @@ void SCH_COMPONENT::Display_Infos( WinEDA_DrawFrame* frame )
 
     if( Entry )
     {
-        Affiche_1_Parametre( frame, 52, Entry->m_Doc, wxEmptyString, DARKCYAN );
-        Affiche_1_Parametre( frame, 52, wxEmptyString, Entry->m_KeyWord, DARKGREEN );
+        Affiche_1_Parametre( frame, 52, Entry->m_Doc, Entry->m_KeyWord, DARKCYAN );
     }
 }
 

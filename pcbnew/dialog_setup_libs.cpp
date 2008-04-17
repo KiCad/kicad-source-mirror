@@ -370,7 +370,7 @@ wxString mask = wxT("*");
 
 	FilesDialog.ShowModal();
 	wxArrayString Filenames;
-	FilesDialog.GetFilenames(Filenames);
+	FilesDialog.GetPaths(Filenames);
 	
 	for ( unsigned jj = 0; jj < Filenames.GetCount(); jj ++ )
 	{

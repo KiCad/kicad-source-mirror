@@ -201,7 +201,7 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
         tabObjNet += ListeObjetConnection( this, sheet, tabObjNet );
     }
 
-    Affiche_1_Parametre( this, -1, wxEmptyString, _( "Done" ), RED );
+    Affiche_1_Parametre( this, -1, _( "List" ), _( "Done" ), RED );
 
     msg.Printf( wxT( "%d" ), g_NbrObjNet );
     Affiche_1_Parametre( this, 8, _( "NbItems" ), msg, GREEN );
@@ -308,7 +308,7 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
 #endif
 
 
-    Affiche_1_Parametre( this, -1, wxEmptyString, _( "Done" ), CYAN );
+    Affiche_1_Parametre( this, 18, _( "Conn" ), _( "Done" ), CYAN );
 
     /* Mise a jour des NetCodes des Bus Labels connectes par les Bus */
     ConnectBusLabels( g_TabObjNet, g_NbrObjNet );
@@ -348,7 +348,7 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
     dumpNetTable();
 #endif
 
-    Affiche_1_Parametre( this, -1, wxEmptyString, _( "Done" ), CYAN );
+    Affiche_1_Parametre( this, 26, _( "Labels" ), _( "Done" ), CYAN );
 
     /* Connexion des hierarchies */
     Affiche_1_Parametre( this, 36, _( "Hierar." ), wxEmptyString, LIGHTRED );
@@ -369,7 +369,7 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
     dumpNetTable();
 #endif
 
-    Affiche_1_Parametre( this, -1, wxEmptyString, _( "Done" ), RED );
+    Affiche_1_Parametre( this, 36, _( "Hierar." ), _( "Done" ), RED );
 
     /* Compression des numeros de NetCode a des valeurs consecutives */
     Affiche_1_Parametre( this, 46, _( "Sorting" ), wxEmptyString, GREEN );
@@ -384,7 +384,7 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
         g_TabObjNet[i].SetNet( NetCode );
     }
 
-    Affiche_1_Parametre( this, -1, wxEmptyString, _( "Done" ), GREEN );
+    Affiche_1_Parametre( this, 46, _( "Sorting" ), _( "Done" ), GREEN );
 
     /* Affectation du m_FlagOfConnection en fonction de connection ou non */
     SetUnconnectedFlag( g_TabObjNet, g_NbrObjNet );

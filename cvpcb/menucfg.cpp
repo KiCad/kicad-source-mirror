@@ -235,7 +235,7 @@ wxString FullFileName, ShortLibName, mask;
 
 	FilesDialog.ShowModal();
 	wxArrayString Filenames;
-	FilesDialog.GetFilenames(Filenames);
+	FilesDialog.GetPaths(Filenames);
 	
 	if ( Filenames.GetCount() == 0 )
 		return;
