@@ -43,7 +43,7 @@
 #include "Lang_De.xpm"
 #include "Lang_Sl.xpm"
 #include "Lang_Hu.xpm"
-#include "Lang_Po.xpm"
+#include "Lang_Pl.xpm"
 #include "Lang_Ko.xpm"
 #include "Lang_Ru.xpm"
 #include "Lang_Catalan.xpm"
@@ -132,7 +132,7 @@ static struct LANGUAGE_DESCR s_Language_List[LANGUAGE_DESCR_COUNT] =
     {
         wxLANGUAGE_POLISH,
         ID_LANGUAGE_POLISH,
-        lang_po_xpm,
+        lang_pl_xpm,
         _( "Polish" )
     },
     {
