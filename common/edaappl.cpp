@@ -32,8 +32,7 @@
 #include "bitmaps.h"
 #include "Language.xpm"
 
-#ifdef __WINDOWS__
-/* Icons for language choice (only for Windows)*/
+/* Icons for language choice (currently, used only for Windows, but needed also for linux for compilation compatibility)*/
 #include "Lang_Default.xpm"
 #include "Lang_En.xpm"
 #include "Lang_Es.xpm"
@@ -48,7 +47,6 @@
 #include "Lang_Ru.xpm"
 #include "Lang_Catalan.xpm"
 #include "Lang_chinese.xpm"
-#endif
 
 
 #define FONT_DEFAULT_SIZE 10    /* Default font size.
