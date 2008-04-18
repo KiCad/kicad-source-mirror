@@ -355,19 +355,6 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             continue;
         }
 
-        if( stricmp( Line, "GridSize" ) == 0 )
-        {
-            wxSize Grid;
-            Grid.x = atoi( data );
-            data   = strtok( NULL, " =\n\r" );
-            if( data )
-                Grid.y = atoi( data );
-            else
-                Grid.y = Grid.x;
-            GetScreen()->SetGrid( Grid );
-            continue;
-        }
-
         if( stricmp( Line, "ZoneGridSize" ) == 0 )
         {
             g_GridRoutingSize = atoi( data );
@@ -518,21 +505,10 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
 /******************************************************************************/
 {
     char text[1024];
-    int  ii, jj;
+    int  ii;
 
     fprintf( aFile, "$SETUP\n" );
     sprintf( text, "InternalUnit %f INCH\n", 1.0 / PCB_INTERNAL_UNIT );
-    fprintf( aFile, text );
-
-    if( aFrame->GetScreen()->m_UserGridIsON )
-        ii = jj = -1;
-    else
-    {
-        ii = aFrame->GetScreen()->GetGrid().x;
-        jj = aFrame->GetScreen()->GetGrid().y;
-    }
-
-    sprintf( text, "GridSize %d %d\n", ii, jj );
     fprintf( aFile, text );
 
     sprintf( text, "UserGridSize %lf %lf %s\n",
@@ -551,7 +527,7 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
     }
 
     fprintf( aFile, "TrackWidth %d\n", g_DesignSettings.m_CurrentTrackWidth );
-    for( ii = 0; ii < HISTORY_NUMBER; ii++ )
+    for( int ii = 0; ii < HISTORY_NUMBER; ii++ )
     {
         if( g_DesignSettings.m_TrackWidthHistory[ii] == 0 )
             break;

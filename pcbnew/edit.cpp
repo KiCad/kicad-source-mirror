@@ -663,12 +663,12 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_IMPORT_PAD_SETTINGS:
         DrawPanel->MouseToCursorSchema();
-        Import_Pad_Settings( (D_PAD*) GetCurItem(), &dc );
+        Import_Pad_Settings( (D_PAD*) GetCurItem(), true );
         break;
 
     case ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS:
         DrawPanel->MouseToCursorSchema();
-        Global_Import_Pad_Settings( (D_PAD*) GetCurItem(), &dc );
+        Global_Import_Pad_Settings( (D_PAD*) GetCurItem(), true );
         break;
 
     case ID_POPUP_PCB_EXPORT_PAD_SETTINGS:

@@ -38,7 +38,6 @@ class WinEDA_PadGlobalEditFrame : public wxDialog
 private:
 
     WinEDA_BasePcbFrame* m_Parent;
-    wxDC* m_DC;
     D_PAD* CurrentPad;
     wxCheckBox*          m_Pad_Shape_Filter;
     wxCheckBox*          m_Pad_Layer_Filter;
@@ -51,8 +50,7 @@ private:
 public:
 
     // Constructor and destructor
-    WinEDA_PadGlobalEditFrame( WinEDA_BasePcbFrame * parent,
-        D_PAD * Pad, wxDC * DC, const wxPoint &pos );
+    WinEDA_PadGlobalEditFrame( WinEDA_BasePcbFrame * parent, D_PAD * Pad );
     ~WinEDA_PadGlobalEditFrame() { }
 
 private:
@@ -72,10 +70,8 @@ END_EVENT_TABLE()
 
 /********************************************************************************/
 WinEDA_PadGlobalEditFrame::WinEDA_PadGlobalEditFrame( WinEDA_BasePcbFrame* parent,
-                                                      D_PAD* Pad,
-                                                      wxDC* DC,
-                                                      const wxPoint& framepos ) :
-    wxDialog( parent, -1, _( "Pads Global Edit" ), framepos, wxSize( 310, 235 ),
+                                                      D_PAD* Pad ) :
+    wxDialog( parent, -1, _( "Pads Global Edit" ), wxDefaultPosition, wxSize( 310, 235 ),
               DIALOG_STYLE )
 /********************************************************************************/
 {
@@ -84,7 +80,6 @@ WinEDA_PadGlobalEditFrame::WinEDA_PadGlobalEditFrame( WinEDA_BasePcbFrame* paren
 
     m_Parent = parent;
     SetFont( *g_DialogFont );
-    m_DC = DC;
     Centre();
 
     CurrentPad = Pad;
@@ -206,26 +201,24 @@ void WinEDA_PadGlobalEditFrame::PadPropertiesAccept( wxCommandEvent& event )
 
 
 /***************************************************************************/
-void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* Pad, wxDC* DC )
+void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
 /***************************************************************************/
 
-/*
- * Routine de selection et de correction des dimensions des pastilles
- * de tous les modules
- * - semblables a l'module de reference selectionnee,
- *       c.a.d de meme nom de librairie
- * - ou sur l'module localisee, selon le menu d'appel
+/** Function Global_Import_Pad_Settings
+ * Function to change pad caracteristics for the given footprint
+ * or alls footprints which look like the given footprint
+ * @param aPad pad to use as pattern. The given footprint is the parent of this pad
+ * @param aDraw: if true: redraws the footprint
  */
 {
-    D_PAD*  pt_pad;
     MODULE* Module_Ref, * Module;
     int     diag;
     bool    Edit_Same_Modules = FALSE;
 
-    if( Pad == NULL )
+    if( aPad == NULL )
         return;
 
-    Module = (MODULE*) Pad->m_Parent;
+    Module = (MODULE*) aPad->m_Parent;
 
     if( Module == NULL )
     {
@@ -237,8 +230,7 @@ void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* Pad, wxDC* DC )
 
     Module->Display_Infos( this );
 
-    WinEDA_PadGlobalEditFrame* frame = new WinEDA_PadGlobalEditFrame( this, Pad, DC,
-                                                                     wxPoint( -1, -1 ) );
+    WinEDA_PadGlobalEditFrame* frame = new WinEDA_PadGlobalEditFrame( this, aPad );
 
     diag = frame->ShowModal();
     frame->Destroy();
@@ -266,9 +258,14 @@ void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* Pad, wxDC* DC )
         Module->Display_Infos( this );
 
         /* Effacement du module */
-        Module->Draw( DrawPanel, DC, GR_XOR );
+		if ( aDraw )
+		{
+			Module->m_Flags |= DO_NOT_DRAW;
+			DrawPanel->PostDirtyRect( Module->GetBoundingBox() );
+			Module->m_Flags &= ~DO_NOT_DRAW;
+		}
 
-        pt_pad = (D_PAD*) Module->m_Pads;
+		D_PAD*  pt_pad = (D_PAD*) Module->m_Pads;
         for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
         {
             /* Filtrage des modifications interdites */
@@ -345,7 +342,8 @@ void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* Pad, wxDC* DC )
         }
 
         Module->Set_Rectangle_Encadrement();
-        Module->Draw( DrawPanel, DC, GR_OR );
+		if ( aDraw )
+			DrawPanel->PostDirtyRect( Module->GetBoundingBox() );
     }
 
     GetScreen()->SetModify();

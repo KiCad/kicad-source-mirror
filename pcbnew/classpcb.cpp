@@ -30,6 +30,7 @@ PCB_SCREEN::PCB_SCREEN( int idscreen ) : BASE_SCREEN( TYPESCREEN )
     m_Type = idscreen;
     SetGridList( g_GridList );
     SetZoomList( zoom_list );
+    m_Grid = wxSize( 500, 500 );                /* pas de la grille en 1/10000 "*/
     Init();
 }
 
@@ -50,7 +51,6 @@ void PCB_SCREEN::Init()
     m_Route_Layer_TOP    = CMP_N;               /* ref couches par defaut pour vias (Cu.. Cmp) */
     m_Route_Layer_BOTTOM = COPPER_LAYER_N;
     m_Zoom = 128;                               /* valeur */
-    m_Grid = wxSize( 500, 500 );                /* pas de la grille en 1/10000 "*/
 }
 
 

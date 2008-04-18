@@ -214,14 +214,14 @@ public:
                                                             wxDC* DC, const wxPoint& pos );
 
     // Pads sur modules
-    void                        AddPad( MODULE* Module, wxDC* DC );
+    void                        AddPad( MODULE* Module,  bool draw );
     void                        DeletePad( D_PAD* Pad, wxDC* DC );
     void                        StartMovePad( D_PAD* Pad, wxDC* DC );
     void                        RotatePad( D_PAD* Pad, wxDC* DC );
     void                        PlacePad( D_PAD* Pad, wxDC* DC );
-    void                        Export_Pad_Settings( D_PAD* pt_pad );
-    void                        Import_Pad_Settings( D_PAD* pt_pad, wxDC* DC );
-    void                        Global_Import_Pad_Settings( D_PAD* Pad, wxDC* DC );
+    void                        Export_Pad_Settings( D_PAD* aPad );
+    void                        Import_Pad_Settings( D_PAD* aPad, bool aDraw );
+    void                        Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw );
 
 
     // loading footprints

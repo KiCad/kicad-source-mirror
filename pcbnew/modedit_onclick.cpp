@@ -157,7 +157,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         if( m_Pcb->m_Modules )
         {
             SaveCopyInUndoList( m_Pcb->m_Modules );
-            AddPad( m_Pcb->m_Modules, DC );
+            AddPad( m_Pcb->m_Modules, true );
         }
         break;
 

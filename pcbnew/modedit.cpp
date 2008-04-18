@@ -462,12 +462,12 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_IMPORT_PAD_SETTINGS:
         SaveCopyInUndoList( m_Pcb->m_Modules );
         DrawPanel->MouseToCursorSchema();
-        Import_Pad_Settings( (D_PAD*) GetScreen()->GetCurItem(), &dc );
+        Import_Pad_Settings( (D_PAD*) GetScreen()->GetCurItem(), true );
         break;
 
     case ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS:
         SaveCopyInUndoList( m_Pcb->m_Modules );
-        Global_Import_Pad_Settings( (D_PAD*) GetScreen()->GetCurItem(), &dc );
+        Global_Import_Pad_Settings( (D_PAD*) GetScreen()->GetCurItem(), true );
         DrawPanel->MouseToCursorSchema();
         break;
 

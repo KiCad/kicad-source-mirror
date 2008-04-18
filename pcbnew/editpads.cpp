@@ -442,8 +442,12 @@ void WinEDA_PadPropertiesFrame::PadPropertiesAccept( wxCommandEvent& event )
         Module = (MODULE*) CurrentPad->m_Parent;
         Module->m_LastEdit_Time = time( NULL );
 
-        if( m_DC )
-            CurrentPad->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
+        if( m_DC )// redraw the area where the pas was, without pad
+		{
+			CurrentPad->m_Flags |= DO_NOT_DRAW;
+			m_Parent->DrawPanel->PostDirtyRect( CurrentPad->GetBoundingBox() );
+			CurrentPad->m_Flags &= ~DO_NOT_DRAW;
+		}
         CurrentPad->m_PadShape = g_Pad_Master.m_PadShape;
         CurrentPad->m_Attribut = g_Pad_Master.m_Attribut;
         if (CurrentPad->m_Pos != g_Pad_Master.m_Pos )
@@ -529,8 +533,8 @@ void WinEDA_PadPropertiesFrame::PadPropertiesAccept( wxCommandEvent& event )
 
         Module->Set_Rectangle_Encadrement();
         CurrentPad->Display_Infos( m_Parent );
-        if( m_DC )
-            CurrentPad->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
+        if( m_DC )// redraw the area where the pas was
+			m_Parent->DrawPanel->PostDirtyRect( CurrentPad->GetBoundingBox() );
         m_Parent->GetScreen()->SetModify();
     }
 

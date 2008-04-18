@@ -332,7 +332,7 @@ WinEDA_PlotFrame::WinEDA_PlotFrame( WinEDA_BasePcbFrame* parent ) :
         _( "Exclude contents of Edges_Pcb layer from all other layers" ) );
     LeftBoxSizer->Add( m_Exclude_Edges_Pcb, 0, wxGROW | wxALL, 1 );
 
-    // Option d'impression du cartouche:
+    // Option to plot page references:
     if( m_Parent->m_Print_Sheet_Ref )
     {
         m_Plot_Sheet_Ref = new wxCheckBox( this, ID_PRINT_REF, _( "Print sheet ref" ) );

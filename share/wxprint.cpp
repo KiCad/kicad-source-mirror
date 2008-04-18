@@ -39,7 +39,8 @@
 #endif
 
 #include "fctsys.h"
-#include "gr_basic.h"
+
+//#include "gr_basic.h"
 
 #include "common.h"
 
@@ -51,23 +52,31 @@
 
 #ifdef PCBNEW
 #include "pcbnew.h"
-extern float  Scale_X, Scale_Y;
-static long   s_SelectedLayers = CUIVRE_LAYER | CMP_LAYER |
-                                 SILKSCREEN_LAYER_CMP | SILKSCREEN_LAYER_CU;
-static double s_ScaleList[] =
-{ 0, 0.5, 0.7, 0.999, 1.0, 1.4, 2.0, 3.0, 4.0 };
-#endif
 
 #include "protos.h"
 
-//#define DEFAULT_ORIENTATION_PAPER wxPORTRAIT
-#define DEFAULT_ORIENTATION_PAPER wxLANDSCAPE
+// For pcbnew:
+#define OPTKEY_LAYERBASE             wxT( "PrintLayer_%d" )
+#define OPTKEY_PRINT_X_FINESCALE_ADJ wxT( "PrintXFineScaleAdj" )
+#define OPTKEY_PRINT_Y_FINESCALE_ADJ wxT( "PrintYFineScaleAdj" )
+#define OPTKEY_PRINT_SCALE wxT( "PrintScale" )
+#endif
+
+#define DEFAULT_ORIENTATION_PAPER wxLANDSCAPE   // other option is wxPORTRAIT
 #ifdef EESCHEMA
 #define WIDTH_MAX_VALUE 100
 #else
 #define WIDTH_MAX_VALUE 1000
 #endif
 #define WIDTH_MIN_VALUE 1
+
+#ifdef PCBNEW
+extern float  Scale_X, Scale_Y;
+static long   s_SelectedLayers;
+static double s_ScaleList[] =
+{ 0, 0.5, 0.7, 0.999, 1.0, 1.4, 2.0, 3.0, 4.0 };
+#endif
+
 
 // static print data and page setup data, to remember settings during the session
 static wxPrintData* g_PrintData;
@@ -81,6 +90,8 @@ static int          s_Print_Black_and_White = TRUE;
 static int          s_Scale_Select = 3; // default selected scale = ScaleList[3] = 1
 static bool         s_PrintMirror;
 static bool         s_Print_Sheet_Ref = TRUE;
+
+
 
 /****************************************************************/
 /* frame de Preparation de l'impression (options, selections... */
@@ -101,16 +112,18 @@ public:
     WinEDA_DrawFrame*  m_Parent;
     WinEDA_PrintFrame* m_PrintFrame;
 
-    EDA_Printout( WinEDA_PrintFrame * print_frame,
-        WinEDA_DrawFrame * parent,
-        const wxString &title,
-        bool print_ref ) :
-        wxPrintout( title ) {
+    EDA_Printout( WinEDA_PrintFrame* print_frame,
+                  WinEDA_DrawFrame*  parent,
+                  const wxString&    title,
+                  bool               print_ref ) :
+        wxPrintout( title )
+    {
         m_PrintFrame = print_frame;
         m_Parent = parent;
         s_PrintMaskLayer  = 0xFFFFFFFF;
         m_Print_Sheet_Ref = print_ref;
     }
+
 
     bool    OnPrintPage( int page );
     bool    HasPage( int page );
@@ -125,7 +138,7 @@ void WinEDA_DrawFrame::ToPrinter( wxCommandEvent& event )
 /*******************************************************/
 
 /* Prepare les structures de donn�es de gestion de l'impression
-  * et affiche la fenetre de dialogue de gestion de l'impression des feuilles
+ * et affiche la fenetre de dialogue de gestion de l'impression des feuilles
  */
 {
     wxPoint pos = GetPosition();
@@ -173,6 +186,10 @@ void WinEDA_PrintFrame::SetOthersDatas()
     m_Print_Mirror->Enable( false );
 #endif
 
+#if defined (PCBNEW)
+    wxConfig* config = m_Parent->m_Parent->m_EDA_Config;  //  Current config used by application
+#endif
+
     m_FineAdjustXscaleOpt->SetToolTip( _( "Set X scale adjust for exact scale plotting" ) );
     m_FineAdjustYscaleOpt->SetToolTip( _( "Set Y scale adjust for exact scale plotting" ) );
     if( s_Print_Black_and_White )
@@ -186,10 +203,10 @@ void WinEDA_PrintFrame::SetOthersDatas()
     for( ii = 0; ii < NB_LAYERS; ii++, mask <<= 1 )
     {
         m_BoxSelecLayer[ii] = new wxCheckBox( this, -1,
-#if defined(PCBNEW)
-                                            ((WinEDA_PcbFrame*)m_Parent)->m_Pcb->GetLayerName(ii) );
-#else
-                                            ReturnLayerName( ii ) );
+#if defined (PCBNEW)
+            ( (WinEDA_PcbFrame*) m_Parent )->m_Pcb->GetLayerName( ii ) );
+         #else
+            ReturnLayerName( ii ) );
 #endif
 
         if( mask & s_SelectedLayers )
@@ -203,11 +220,28 @@ void WinEDA_PrintFrame::SetOthersDatas()
     }
 
     // Read the scale adjust option
-    if( m_Parent->m_Parent->m_EDA_Config )
+    if( config )
     {
-        m_Parent->m_Parent->m_EDA_Config->Read( wxT( "PrintXFineScaleAdj" ), &m_XScaleAdjust );
-        m_Parent->m_Parent->m_EDA_Config->Read( wxT( "PrintYFineScaleAdj" ), &m_YScaleAdjust );
-        m_Parent->m_Parent->m_EDA_Config->Read( wxT( "PrintScale" ), &s_Scale_Select );
+        config->Read( OPTKEY_PRINT_X_FINESCALE_ADJ, &m_XScaleAdjust );
+        config->Read( OPTKEY_PRINT_Y_FINESCALE_ADJ, &m_YScaleAdjust );
+        config->Read( OPTKEY_PRINT_SCALE, &s_Scale_Select );
+
+        s_SelectedLayers = 0;
+        for( int layer = 0;  layer<NB_LAYERS;  ++layer )
+        {
+            wxString layerKey;
+            bool     option;
+
+            layerKey.Printf( OPTKEY_LAYERBASE, layer );
+
+            option = false;
+            if( config->Read( layerKey, &option ) )
+            {
+                m_BoxSelecLayer[layer]->SetValue( option );
+                if( option )
+                    s_SelectedLayers |= 1 << layer;
+            }
+        }
     }
 
     m_ScaleOption->SetSelection( s_Scale_Select );
@@ -287,9 +321,15 @@ void WinEDA_PrintFrame::OnClosePrintDialog()
 #ifdef PCBNEW
     if( Config )
     {
-        Config->Write( wxT( "PrintXFineScaleAdj" ), m_XScaleAdjust );
-        Config->Write( wxT( "PrintYFineScaleAdj" ), m_YScaleAdjust );
-        Config->Write( wxT( "PrintScale" ), s_Scale_Select );
+        Config->Write( OPTKEY_PRINT_X_FINESCALE_ADJ, m_XScaleAdjust );
+        Config->Write( OPTKEY_PRINT_Y_FINESCALE_ADJ, m_YScaleAdjust );
+        Config->Write( OPTKEY_PRINT_SCALE, s_Scale_Select );
+        wxString layerKey;
+        for( int layer = 0;  layer<NB_LAYERS;  ++layer )
+        {
+            layerKey.Printf( OPTKEY_LAYERBASE, layer );
+            Config->Write( layerKey, m_BoxSelecLayer[layer]->IsChecked() );
+        }
     }
 #endif
     EndModal( 0 );
@@ -334,7 +374,7 @@ void WinEDA_PrintFrame::SetPenWidth()
 /****************************************/
 
 /* Get the new pen width value, and verify min et max value
-  * NOTE: s_PrintPenMinWidth is in internal units
+ * NOTE: s_PrintPenMinWidth is in internal units
  */
 {
     s_PrintPenMinWidth = m_DialogPenWidth->GetValue();
@@ -357,11 +397,11 @@ void WinEDA_PrintFrame::OnPrintSetup( wxCommandEvent& event )
 /* Open a dialog box for printer setup (printer options, page size ...)
  */
 {
-    wxPrintDialogData   printDialogData( * g_PrintData );
+    wxPrintDialogData printDialogData( *g_PrintData );
 
     if( printDialogData.Ok() )
     {
-        wxPrintDialog   printerDialog( this,& printDialogData );
+        wxPrintDialog printerDialog( this, &printDialogData );
 
         printerDialog.ShowModal();
 
@@ -396,8 +436,8 @@ void WinEDA_PrintFrame::OnPrintPreview( wxCommandEvent& event )
     // Pass two printout objects: for preview, and possible printing.
     wxString        title   = BuildPrintTitle();
     wxPrintPreview* preview =
-        new wxPrintPreview( new EDA_Printout (this, m_Parent, title, print_ref),
-                            new EDA_Printout (this, m_Parent, title, print_ref), g_PrintData );
+        new wxPrintPreview( new EDA_Printout( this, m_Parent, title, print_ref ),
+            new EDA_Printout( this, m_Parent, title, print_ref ), g_PrintData );
 
     if( preview == NULL )
     {
@@ -418,7 +458,7 @@ void WinEDA_PrintFrame::OnPrintPreview( wxCommandEvent& event )
     WSize.y += 6;
 
     wxPreviewFrame* frame = new wxPreviewFrame( preview, this,
-                    title, WPos, WSize );
+        title, WPos, WSize );
 
     frame->Initialize();
     frame->Show( TRUE );
@@ -450,15 +490,15 @@ void WinEDA_PrintFrame::EDA_PrintPage( wxCommandEvent& event )
 
     SetPenWidth();
 
-    wxPrintDialogData   printDialogData( * g_PrintData );
+    wxPrintDialogData printDialogData( *g_PrintData );
 
-    wxPrinter           printer(& printDialogData );
+    wxPrinter         printer( &printDialogData );
 
-    wxString title = BuildPrintTitle();
-    EDA_Printout        printout( this, m_Parent, title, print_ref );
+    wxString          title = BuildPrintTitle();
+    EDA_Printout      printout( this, m_Parent, title, print_ref );
 
 #ifndef __WINDOWS__
-    wxDC* dc = printout.GetDC();
+    wxDC*             dc = printout.GetDC();
     ( (wxPostScriptDC*) dc )->SetResolution( 600 );  // Postscript DC resolution is 600 ppi
 #endif
 
@@ -609,7 +649,7 @@ void EDA_Printout::DrawPage()
 /********************************/
 
 /*
-  * This is the real print function: print the active screen
+ * This is the real print function: print the active screen
  */
 {
     int     tmpzoom;
@@ -728,7 +768,7 @@ void EDA_Printout::DrawPage()
     ftmp *= (float) PlotAreaSize.x / PageSize_in_mm.x;                  /* ftmp is in  pixels */
 
     /* because the pen size will be scaled by the dc scale, we modify the size
-      * in order to keep the requested value */
+     * in order to keep the requested value */
     dc->GetUserScale( &xdcscale, &ydcscale );
     ftmp /= xdcscale;
     SetPenMinWidth( (int) round( ftmp ) );
@@ -751,15 +791,13 @@ void EDA_Printout::DrawPage()
     if( m_Print_Sheet_Ref )
         m_Parent->TraceWorkSheet( dc, ActiveScreen, 0 );
 
-
     if( userscale == 1.0 ) // Draw the Sheet refs at optimum scale, and board at 1.0 scale
     {
-        m_Print_Sheet_Ref = FALSE;
         dc->SetUserScale( accurate_Yscale, accurate_Yscale );
     }
 
     if( s_PrintMirror )
-    {   // To plot mirror, we revere the y axis, and modify the plot y origin
+    {   // To plot mirror, we reverse the y axis, and modify the plot y origin
         double sx, sy;
 
         dc->GetUserScale( &sx, &sy );
@@ -768,18 +806,18 @@ void EDA_Printout::DrawPage()
             sy /= userscale;
 
         /* Plot offset y is moved by the y plot area size in order to have
-          * the old draw area in the new draw area, because the draw origin has not moved
-          * (this is the upper left corner) but the Y axis is reversed, therefore the plotting area
-          * is the y coordinate values from  - PlotAreaSize.y to 0 */
+         * the old draw area in the new draw area, because the draw origin has not moved
+         * (this is the upper left corner) but the Y axis is reversed, therefore the plotting area
+         * is the y coordinate values from  - PlotAreaSize.y to 0 */
         int ysize = (int) ( PlotAreaSize.y / sy );
         DrawOffset.y += ysize;
 
         /* in order to keep the board position in the sheet
-          * (when user scale <= 1) the y offset in moved by the distance between
-          * the middle of the page and the middle of the board
-          * This is equivalent to put the mirror axis to the board centre
-          * for scales > 1, the DrawOffset was already computed to have the board centre
-          * to the middle of the page.
+         * (when user scale <= 1) the y offset in moved by the distance between
+         * the middle of the page and the middle of the board
+         * This is equivalent to put the mirror axis to the board centre
+         * for scales > 1, the DrawOffset was already computed to have the board centre
+         * to the middle of the page.
          */
         wxPoint pcb_centre = pcbframe->m_Pcb->m_BoundaryBox.Centre();
         if( userscale <= 1.0 )

@@ -145,7 +145,9 @@ bool WinEDA_BasePcbFrame::Clear_Pcb( bool query )
     SetCurItem( NULL );
 
     /* Init parametres de gestion */
+    wxSize gridsize = GetScreen()->GetGrid();
     ((PCB_SCREEN*)GetScreen())->Init();
+    GetScreen()->SetGrid( gridsize );
 
     g_HightLigt_Status = 0;
 

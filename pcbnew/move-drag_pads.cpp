@@ -132,7 +132,7 @@ void WinEDA_BasePcbFrame::Export_Pad_Settings( D_PAD* pt_pad )
 
 
 /***********************************************************************/
-void WinEDA_BasePcbFrame::Import_Pad_Settings( D_PAD* pt_pad, wxDC* DC )
+void WinEDA_BasePcbFrame::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
 /***********************************************************************/
 
 /* Met a jour les nouvelles valeurs de dimensions du pad pointe par pt_pad
@@ -141,29 +141,33 @@ void WinEDA_BasePcbFrame::Import_Pad_Settings( D_PAD* pt_pad, wxDC* DC )
   * - la position et les noms ne sont pas touches
  */
 {
-    if( DC )
-        pt_pad->Draw( DrawPanel, DC, GR_XOR );
+    if( aDraw )
+	{
+		aPad->m_Flags |= DO_NOT_DRAW;
+		DrawPanel->PostDirtyRect( aPad->GetBoundingBox() );
+		aPad->m_Flags &= ~DO_NOT_DRAW;
+	}
 
-    pt_pad->m_PadShape     = g_Pad_Master.m_PadShape;
-    pt_pad->m_Masque_Layer = g_Pad_Master.m_Masque_Layer;
-    pt_pad->m_Attribut = g_Pad_Master.m_Attribut;
-    pt_pad->m_Orient   = g_Pad_Master.m_Orient +
-                         ( (MODULE*) pt_pad->m_Parent )->m_Orient;
-    pt_pad->m_Size       = g_Pad_Master.m_Size;
-    pt_pad->m_DeltaSize  = wxSize( 0, 0 );
-    pt_pad->m_Offset     = g_Pad_Master.m_Offset;
-    pt_pad->m_Drill      = g_Pad_Master.m_Drill;
-    pt_pad->m_DrillShape = g_Pad_Master.m_DrillShape;
+    aPad->m_PadShape     = g_Pad_Master.m_PadShape;
+    aPad->m_Masque_Layer = g_Pad_Master.m_Masque_Layer;
+    aPad->m_Attribut = g_Pad_Master.m_Attribut;
+    aPad->m_Orient   = g_Pad_Master.m_Orient +
+                         ( (MODULE*) aPad->m_Parent )->m_Orient;
+    aPad->m_Size       = g_Pad_Master.m_Size;
+    aPad->m_DeltaSize  = wxSize( 0, 0 );
+    aPad->m_Offset     = g_Pad_Master.m_Offset;
+    aPad->m_Drill      = g_Pad_Master.m_Drill;
+    aPad->m_DrillShape = g_Pad_Master.m_DrillShape;
 
     /* Traitement des cas particuliers : */
     switch( g_Pad_Master.m_PadShape )
     {
     case PAD_TRAPEZOID:
-        pt_pad->m_DeltaSize = g_Pad_Master.m_DeltaSize;
+        aPad->m_DeltaSize = g_Pad_Master.m_DeltaSize;
         break;
 
     case PAD_CIRCLE:
-        pt_pad->m_Size.y = pt_pad->m_Size.x;
+        aPad->m_Size.y = aPad->m_Size.x;
         break;
     }
 
@@ -171,21 +175,21 @@ void WinEDA_BasePcbFrame::Import_Pad_Settings( D_PAD* pt_pad, wxDC* DC )
     {
     case PAD_SMD:
     case PAD_CONN:
-        pt_pad->m_Drill    = wxSize( 0, 0 );
-        pt_pad->m_Offset.x = 0;
-        pt_pad->m_Offset.y = 0;
+        aPad->m_Drill    = wxSize( 0, 0 );
+        aPad->m_Offset.x = 0;
+        aPad->m_Offset.y = 0;
     }
 
-    pt_pad->ComputeRayon();
+    aPad->ComputeRayon();
 
-    if( DC )
-        pt_pad->Draw( DrawPanel, DC, GR_XOR );
-    ( (MODULE*) pt_pad->m_Parent )->m_LastEdit_Time = time( NULL );
+    if( aDraw )
+		DrawPanel->PostDirtyRect( aPad->GetBoundingBox() );
+    ( (MODULE*) aPad->m_Parent )->m_LastEdit_Time = time( NULL );
 }
 
 
 /***********************************************************/
-void WinEDA_BasePcbFrame::AddPad( MODULE* Module, wxDC* DC )
+void WinEDA_BasePcbFrame::AddPad( MODULE* Module, bool draw )
 /***********************************************************/
 /* Routine d'ajout d'un pad sur l'module selectionnee */
 {
@@ -218,7 +222,7 @@ void WinEDA_BasePcbFrame::AddPad( MODULE* Module, wxDC* DC )
     }
 
     /* Mise a jour des caract de la pastille : */
-    Import_Pad_Settings( Pad, NULL );
+    Import_Pad_Settings( Pad, false );
     Pad->m_Netname.Empty();
 
     Pad->m_Pos = GetScreen()->m_Curseur;
@@ -248,7 +252,8 @@ void WinEDA_BasePcbFrame::AddPad( MODULE* Module, wxDC* DC )
     /* Redessin du module */
     Module->Set_Rectangle_Encadrement();
     Pad->Display_Infos( this );
-    Module->Draw( DrawPanel, DC, GR_OR );
+    if ( draw )
+		DrawPanel->PostDirtyRect( Module->GetBoundingBox() );
 }
 
 

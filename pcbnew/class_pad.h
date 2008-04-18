@@ -173,6 +173,13 @@ public:
 
 
     /**
+     * Function GetBoundingBox
+     * returns the bounding box of this Footprint
+     * Mainly used to redraw the screen area occuped by the footprint
+     */
+    EDA_Rect GetBoundingBox();
+
+    /**
      * Function Compare
      * compares two pads and return 0 if they are equal.
      * @return int - <0 if left less than right, 0 if equal, >0 if left greater than right.

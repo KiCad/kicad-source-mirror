@@ -54,6 +54,112 @@
 #define FONT_DEFAULT_SIZE 10    /* Default font size.
                                  *  The real font size will be computed at run time */
 
+/* A small class to handle the list od existing translations.
+ * the locale translation is automatic.
+ * the selection of languages is mainly for mainteners's convenience (tests...)
+ * To add a support to a new tranlation:
+ * create a new icon (flag of the country) (see Lang_Fr.xpm as an exemple)
+ *  add a new item to s_Language_List[LANGUAGE_DESCR_COUNT]
+ * and set LANGUAGE_DESCR_COUNT to the new value
+ */
+struct LANGUAGE_DESCR
+{
+    int           m_WX_Lang_Identifier;                 // wxWidget locale identifier (see wxWidget doc)
+    int           m_KI_Lang_Identifier;                 // kicad identifier used in menu selection (see id.h)
+    const char**  m_Lang_Icon;                          // the icon used in menus
+    const wxChar* m_Lang_Label;                         // Label used in menus
+    bool          m_DoNotTranslate;                     // set to true if the m_Lang_Label must not be translated
+};
+
+#define LANGUAGE_DESCR_COUNT 14
+static struct LANGUAGE_DESCR s_Language_List[LANGUAGE_DESCR_COUNT] =
+{
+    {
+        wxLANGUAGE_DEFAULT,
+        ID_LANGUAGE_DEFAULT,
+        lang_def_xpm,
+        _( "Default" )
+    },
+    {
+        wxLANGUAGE_ENGLISH,
+        ID_LANGUAGE_ENGLISH,
+        lang_en_xpm,
+        wxT( "English" ),
+        true
+    },
+    {
+        wxLANGUAGE_FRENCH,
+        ID_LANGUAGE_FRENCH,
+        lang_fr_xpm,
+        _( "French" )
+    },
+    {
+        wxLANGUAGE_SPANISH,
+        ID_LANGUAGE_SPANISH,
+        lang_es_xpm,
+        _( "Spanish" )
+    },
+    {
+        wxLANGUAGE_PORTUGUESE,
+        ID_LANGUAGE_PORTUGUESE,
+        lang_pt_xpm,
+        _( "Portuguese" )
+    },
+    {
+        wxLANGUAGE_ITALIAN,
+        ID_LANGUAGE_ITALIAN,
+        lang_it_xpm,
+        _( "Italian" )
+    },
+    {
+        wxLANGUAGE_GERMAN,
+        ID_LANGUAGE_GERMAN,
+        lang_de_xpm,
+        _( "German" )
+    },
+    {
+        wxLANGUAGE_SLOVENIAN,
+        ID_LANGUAGE_SLOVENIAN,
+        lang_sl_xpm,
+        _( "Slovenian" )
+    },
+    {
+        wxLANGUAGE_HUNGARIAN,
+        ID_LANGUAGE_HUNGARIAN,
+        lang_hu_xpm,
+        _( "Hungarian" )
+    },
+    {
+        wxLANGUAGE_POLISH,
+        ID_LANGUAGE_POLISH,
+        lang_po_xpm,
+        _( "Polish" )
+    },
+    {
+        wxLANGUAGE_RUSSIAN,
+        ID_LANGUAGE_RUSSIAN,
+        lang_ru_xpm,
+        _( "Russian" )
+    },
+    {
+        wxLANGUAGE_KOREAN,
+        ID_LANGUAGE_KOREAN,
+        lang_ko_xpm,
+        _( "Korean" )
+    },
+    {
+        wxLANGUAGE_CHINESE_SIMPLIFIED,
+        ID_LANGUAGE_CHINESE_SIMPLIFIED,
+        lang_chinese_xpm,
+        _( "Chinese simplified" )
+    },
+    {
+        wxLANGUAGE_CATALAN,
+        ID_LANGUAGE_CATALAN,
+        lang_catalan_xpm,
+        _( "Catalan" )
+    }
+};
 
 /**************************/
 /* WinEDA_App Constructor */
@@ -120,7 +226,7 @@ void WinEDA_App::InitEDA_Appl( const wxString& name )
     /* Init kicad environment
      * the environment variable KICAD (if exists) gives the kicad path:
      * something like set KICAD=d:\kicad
-    */
+     */
     m_Env_Defined = wxGetEnv( wxT( "KICAD" ), &m_KicadEnv );
     if( m_Env_Defined )    // ensure m_KicadEnv ends by "/"
     {
@@ -147,10 +253,10 @@ void WinEDA_App::InitEDA_Appl( const wxString& name )
     g_MsgFont    = new wxFont( g_StdFontPointSize, wxFONTFAMILY_ROMAN, wxNORMAL, wxNORMAL );
     g_DialogFont = new wxFont( g_DialogFontPointSize, wxFONTFAMILY_ROMAN, wxNORMAL, wxNORMAL );
     g_ItalicFont = new wxFont( g_DialogFontPointSize,
-                               wxFONTFAMILY_ROMAN,
-                               wxFONTSTYLE_ITALIC,
-                               wxNORMAL );
-    g_FixedFont  = new wxFont( g_FixedFontPointSize, wxFONTFAMILY_MODERN, wxNORMAL, wxNORMAL );
+        wxFONTFAMILY_ROMAN,
+        wxFONTSTYLE_ITALIC,
+        wxNORMAL );
+    g_FixedFont = new wxFont( g_FixedFontPointSize, wxFONTFAMILY_MODERN, wxNORMAL, wxNORMAL );
 
     /* installation des gestionnaires de visu d'images (pour help) */
     wxImage::AddHandler( new wxPNGHandler );
@@ -190,8 +296,8 @@ void WinEDA_App::InitOnLineHelp()
     if( wxFileExists( fullfilename ) )
     {
         m_HtmlCtrl = new wxHtmlHelpController( wxHF_TOOLBAR |
-                                               wxHF_CONTENTS | wxHF_PRINT | wxHF_OPEN_FILES
-                                               /*| wxHF_SEARCH */ );
+            wxHF_CONTENTS | wxHF_PRINT | wxHF_OPEN_FILES
+            /*| wxHF_SEARCH */ );
         m_HtmlCtrl->UseConfig( m_EDA_CommonConfig );
         m_HtmlCtrl->SetTitleFormat( wxT( "Kicad Help" ) );
         m_HtmlCtrl->AddBook( fullfilename );
@@ -202,30 +308,34 @@ void WinEDA_App::InitOnLineHelp()
 /*******************************/
 bool WinEDA_App::SetBinDir()
 /*******************************/
+
 // Find the path to the executable and store it in WinEDA_App::m_BinDir
 {
-
 #ifdef __APPLE__
-  // Derive path from location of the app bundle
-  CFBundleRef mainBundle = CFBundleGetMainBundle();
-  if (mainBundle == NULL) return false;
-  CFURLRef urlref = CFBundleCopyBundleURL(mainBundle);
-  if (urlref == NULL) return false;
-  CFStringRef str = CFURLCopyFileSystemPath(urlref, kCFURLPOSIXPathStyle);
-  if (str == NULL) return false;
-  char *native_str = NULL;
-  int len = CFStringGetMaximumSizeForEncoding(CFStringGetLength(str),
-                          kCFStringEncodingUTF8) + 1;
-  native_str = new char[len];
-  CFStringGetCString(str, native_str, len, kCFStringEncodingUTF8);
-  m_BinDir = CONV_FROM_UTF8(native_str);
-  delete[] native_str;
 
-#elif defined(__UNIX__)
+    // Derive path from location of the app bundle
+    CFBundleRef mainBundle = CFBundleGetMainBundle();
+    if( mainBundle == NULL )
+        return false;
+    CFURLRef    urlref = CFBundleCopyBundleURL( mainBundle );
+    if( urlref == NULL )
+        return false;
+    CFStringRef str = CFURLCopyFileSystemPath( urlref, kCFURLPOSIXPathStyle );
+    if( str == NULL )
+        return false;
+    char*       native_str = NULL;
+    int         len = CFStringGetMaximumSizeForEncoding( CFStringGetLength( str ),
+        kCFStringEncodingUTF8 ) + 1;
+    native_str = new char[len];
+    CFStringGetCString( str, native_str, len, kCFStringEncodingUTF8 );
+    m_BinDir = CONV_FROM_UTF8( native_str );
+    delete[] native_str;
 
-  // Under Linux, if argv[0] doesn't the complete path to the executable,
-  // it's necessary to obtain it using "which <filename>".
-  FILE*    ftmp;
+#elif defined (__UNIX__)
+
+    // Under Linux, if argv[0] doesn't the complete path to the executable,
+    // it's necessary to obtain it using "which <filename>".
+    FILE*    ftmp;
 
 #define TMP_FILE "/tmp/kicad.tmp"
     char     Line[1024];
@@ -428,67 +538,19 @@ bool WinEDA_App::SetLanguage( bool first_time )
 void WinEDA_App::SetLanguageIdentifier( int menu_id )
 /**************************************************/
 
-/* return in m_LanguageId the language id (wxWidgets language identifier)
- *  from menu id (internal menu identifier)
+/* return in m_LanguageId the wxWidgets language identifier Id
+ *  from the kicad menu id (internal menu identifier)
  */
 {
-    switch( menu_id )
+    unsigned int ii;
+
+    for( ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )
     {
-    case ID_LANGUAGE_ITALIAN:
-        m_LanguageId = wxLANGUAGE_ITALIAN;
-        break;
-
-    case ID_LANGUAGE_PORTUGUESE:
-        m_LanguageId = wxLANGUAGE_PORTUGUESE;
-        break;
-
-    case ID_LANGUAGE_RUSSIAN:
-        m_LanguageId = wxLANGUAGE_RUSSIAN;
-        break;
-
-    case ID_LANGUAGE_GERMAN:
-        m_LanguageId = wxLANGUAGE_GERMAN;
-        break;
-
-    case ID_LANGUAGE_SPANISH:
-        m_LanguageId = wxLANGUAGE_SPANISH;
-        break;
-
-    case ID_LANGUAGE_ENGLISH:
-        m_LanguageId = wxLANGUAGE_ENGLISH;
-        break;
-
-    case ID_LANGUAGE_FRENCH:
-        m_LanguageId = wxLANGUAGE_FRENCH;
-        break;
-
-    case ID_LANGUAGE_SLOVENIAN:
-        m_LanguageId = wxLANGUAGE_SLOVENIAN;
-        break;
-
-    case ID_LANGUAGE_HUNGARIAN:
-        m_LanguageId = wxLANGUAGE_HUNGARIAN;
-        break;
-
-    case ID_LANGUAGE_POLISH:
-        m_LanguageId = wxLANGUAGE_POLISH;
-        break;
-
-    case ID_LANGUAGE_KOREAN:
-        m_LanguageId = wxLANGUAGE_KOREAN;
-        break;
-
-    case ID_LANGUAGE_CATALAN:
-        m_LanguageId = wxLANGUAGE_CATALAN;
-        break;
-
-    case ID_LANGUAGE_CHINESE_SIMPLIFIED:
-        m_LanguageId = wxLANGUAGE_CHINESE_SIMPLIFIED;
-        break;
-
-    default:
-        m_LanguageId = wxLANGUAGE_DEFAULT;
-        break;
+        if( menu_id == s_Language_List[ii].m_KI_Lang_Identifier )
+        {
+            m_LanguageId = s_Language_List[ii].m_WX_Lang_Identifier;
+            break;
+        }
     }
 }
 
@@ -500,163 +562,38 @@ wxMenu* WinEDA_App::SetLanguageList( wxMenu* MasterMenu )
 /* Create menu list for language choice.
  */
 {
-    wxMenuItem* item;
+    wxMenuItem*  item;
+    unsigned int ii;
 
     if( m_Language_Menu == NULL )
     {
         m_Language_Menu = new wxMenu;
-        item = new wxMenuItem( m_Language_Menu, ID_LANGUAGE_DEFAULT,
-                               _( "Default" ), wxEmptyString, wxITEM_CHECK );
-        SETBITMAPS( lang_def_xpm );
-        m_Language_Menu->Append( item );
-
-        item = new wxMenuItem( m_Language_Menu, ID_LANGUAGE_ENGLISH,
-                               wxT( "English" ), wxEmptyString, wxITEM_CHECK );
-        SETBITMAPS( lang_en_xpm );
-        m_Language_Menu->Append( item );
-
-        item = new wxMenuItem( m_Language_Menu, ID_LANGUAGE_FRENCH,
-                               _( "French" ), wxEmptyString, wxITEM_CHECK );
-        SETBITMAPS( lang_fr_xpm );
-        m_Language_Menu->Append( item );
-
-        item = new wxMenuItem( m_Language_Menu, ID_LANGUAGE_SPANISH,
-                               _( "Spanish" ), wxEmptyString, wxITEM_CHECK );
-        SETBITMAPS( lang_es_xpm );
-        m_Language_Menu->Append( item );
-
-        item = new wxMenuItem( m_Language_Menu, ID_LANGUAGE_PORTUGUESE,
-                               _( "Portuguese" ), wxEmptyString, wxITEM_CHECK );
-        SETBITMAPS( lang_pt_xpm );
-        m_Language_Menu->Append( item );
-
-
-        item = new wxMenuItem( m_Language_Menu, ID_LANGUAGE_ITALIAN,
-                               _( "Italian" ), wxEmptyString, wxITEM_CHECK );
-        SETBITMAPS( lang_it_xpm );
-        m_Language_Menu->Append( item );
-
-        item = new wxMenuItem( m_Language_Menu, ID_LANGUAGE_GERMAN,
-                               _( "German" ), wxEmptyString, wxITEM_CHECK );
-        SETBITMAPS( lang_de_xpm );
-        m_Language_Menu->Append( item );
-
-        item = new wxMenuItem( m_Language_Menu, ID_LANGUAGE_SLOVENIAN,
-                               _( "Slovenian" ), wxEmptyString, wxITEM_CHECK );
-        SETBITMAPS( lang_sl_xpm );
-        m_Language_Menu->Append( item );
-
-        item = new wxMenuItem( m_Language_Menu, ID_LANGUAGE_HUNGARIAN,
-                               _( "Hungarian" ), wxEmptyString, wxITEM_CHECK );
-        SETBITMAPS( lang_hu_xpm );
-        m_Language_Menu->Append( item );
-
-        item = new wxMenuItem( m_Language_Menu, ID_LANGUAGE_POLISH,
-                               _( "Polish" ), wxEmptyString, wxITEM_CHECK );
-        SETBITMAPS( lang_po_xpm );
-        m_Language_Menu->Append( item );
-
-        item = new wxMenuItem( m_Language_Menu, ID_LANGUAGE_RUSSIAN,
-                               _( "Russian" ), wxEmptyString, wxITEM_CHECK );
-        SETBITMAPS( lang_ru_xpm );
-        m_Language_Menu->Append( item );
-
-        item = new wxMenuItem( m_Language_Menu, ID_LANGUAGE_KOREAN,
-                               _( "Korean" ), wxEmptyString, wxITEM_CHECK );
-        SETBITMAPS( lang_ko_xpm );
-        m_Language_Menu->Append( item );
-
-        item = new wxMenuItem( m_Language_Menu, ID_LANGUAGE_CATALAN,
-                               _( "Catalan" ), wxEmptyString, wxITEM_CHECK );
-        SETBITMAPS( lang_catalan_xpm );
-        m_Language_Menu->Append( item );
-
-        item = new wxMenuItem( m_Language_Menu, ID_LANGUAGE_CHINESE_SIMPLIFIED,
-                               _( "Chinese simplified" ), wxEmptyString, wxITEM_CHECK );
-        SETBITMAPS( lang_chinese_xpm );
-        m_Language_Menu->Append( item );
+        for( ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )
+        {
+            wxString MenuLabel = s_Language_List[ii].m_DoNotTranslate ?
+                                 s_Language_List[ii].m_Lang_Label :
+                                 wxGetTranslation( s_Language_List[ii].m_Lang_Label );
+            item = new wxMenuItem( m_Language_Menu, s_Language_List[ii].m_KI_Lang_Identifier,
+                MenuLabel, wxEmptyString, wxITEM_CHECK );
+            SETBITMAPS( s_Language_List[ii].m_Lang_Icon );
+            m_Language_Menu->Append( item );
+        }
     }
 
-    m_Language_Menu->Check( ID_LANGUAGE_CATALAN, FALSE );
-    m_Language_Menu->Check( ID_LANGUAGE_CHINESE_SIMPLIFIED, FALSE );
-    m_Language_Menu->Check( ID_LANGUAGE_KOREAN, FALSE );
-    m_Language_Menu->Check( ID_LANGUAGE_RUSSIAN, FALSE );
-    m_Language_Menu->Check( ID_LANGUAGE_POLISH, FALSE );
-    m_Language_Menu->Check( ID_LANGUAGE_HUNGARIAN, FALSE );
-    m_Language_Menu->Check( ID_LANGUAGE_SLOVENIAN, FALSE );
-    m_Language_Menu->Check( ID_LANGUAGE_ITALIAN, FALSE );
-    m_Language_Menu->Check( ID_LANGUAGE_PORTUGUESE, FALSE );
-    m_Language_Menu->Check( ID_LANGUAGE_GERMAN, FALSE );
-    m_Language_Menu->Check( ID_LANGUAGE_SPANISH, FALSE );
-    m_Language_Menu->Check( ID_LANGUAGE_FRENCH, FALSE );
-    m_Language_Menu->Check( ID_LANGUAGE_ENGLISH, FALSE );
-    m_Language_Menu->Check( ID_LANGUAGE_DEFAULT, FALSE );
-
-    switch( m_LanguageId )
+    for( ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )
     {
-    case wxLANGUAGE_CATALAN:
-        m_Language_Menu->Check( ID_LANGUAGE_CATALAN, TRUE );
-        break;
-
-    case wxLANGUAGE_CHINESE_SIMPLIFIED:
-        m_Language_Menu->Check( ID_LANGUAGE_CHINESE_SIMPLIFIED, TRUE );
-        break;
-
-    case wxLANGUAGE_KOREAN:
-        m_Language_Menu->Check( ID_LANGUAGE_KOREAN, TRUE );
-        break;
-
-    case wxLANGUAGE_RUSSIAN:
-        m_Language_Menu->Check( ID_LANGUAGE_RUSSIAN, TRUE );
-        break;
-
-    case wxLANGUAGE_GERMAN:
-        m_Language_Menu->Check( ID_LANGUAGE_GERMAN, TRUE );
-        break;
-
-    case wxLANGUAGE_FRENCH:
-        m_Language_Menu->Check( ID_LANGUAGE_FRENCH, TRUE );
-        break;
-
-    case wxLANGUAGE_ENGLISH:
-        m_Language_Menu->Check( ID_LANGUAGE_ENGLISH, TRUE );
-        break;
-
-    case wxLANGUAGE_SPANISH:
-        m_Language_Menu->Check( ID_LANGUAGE_SPANISH, TRUE );
-        break;
-
-    case wxLANGUAGE_PORTUGUESE:
-        m_Language_Menu->Check( ID_LANGUAGE_PORTUGUESE, TRUE );
-        break;
-
-    case wxLANGUAGE_ITALIAN:
-        m_Language_Menu->Check( ID_LANGUAGE_ITALIAN, TRUE );
-        break;
-
-    case wxLANGUAGE_SLOVENIAN:
-        m_Language_Menu->Check( ID_LANGUAGE_SLOVENIAN, TRUE );
-        break;
-
-    case wxLANGUAGE_HUNGARIAN:
-        m_Language_Menu->Check( ID_LANGUAGE_HUNGARIAN, TRUE );
-        break;
-
-    case wxLANGUAGE_POLISH:
-        m_Language_Menu->Check( ID_LANGUAGE_POLISH, TRUE );
-        break;
-
-    default:
-        m_Language_Menu->Check( ID_LANGUAGE_DEFAULT, TRUE );
-        break;
+        if( m_LanguageId == s_Language_List[ii].m_WX_Lang_Identifier )
+            m_Language_Menu->Check( s_Language_List[ii].m_KI_Lang_Identifier, true );
+        else
+            m_Language_Menu->Check( s_Language_List[ii].m_KI_Lang_Identifier, false );
     }
 
     if( MasterMenu )
     {
         ADD_MENUITEM_WITH_HELP_AND_SUBMENU( MasterMenu, m_Language_Menu,
-                                            ID_LANGUAGE_CHOICE, _( "Language" ),
-                                            wxT( "For test only, use Default setup for normal use" ),
-                                            language_xpm );
+            ID_LANGUAGE_CHOICE, _( "Language" ),
+            wxT( "For test only, use Default setup for normal use" ),
+            language_xpm );
     }
     return m_Language_Menu;
 }
@@ -665,8 +602,9 @@ wxMenu* WinEDA_App::SetLanguageList( wxMenu* MasterMenu )
 /**********************/
 int WinEDA_App::OnRun()
 /**********************/
+
 /* Run init scripts
-*/
+ */
 {
     #ifdef KICAD_PYTHON
     PyHandler::GetInstance()->RunScripts();

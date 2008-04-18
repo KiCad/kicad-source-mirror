@@ -82,6 +82,23 @@ void D_PAD::ComputeRayon()
 }
 
 
+/**
+ * Function GetBoundingBox
+ * returns the bounding box of this pad
+ * Mainly used to redraw the screen area occuped by the pad
+ */
+EDA_Rect D_PAD::GetBoundingBox()
+{
+    // Calculate area:
+    ComputeRayon();		// calculate the radius of the area, considered as a circle
+    EDA_Rect      area;
+	area.SetOrigin(m_Pos);
+	area.Inflate(m_Rayon, m_Rayon);
+	
+	return area;
+}
+
+
 /*********************************************/
 const wxPoint D_PAD::ReturnShapePos()
 /*********************************************/
@@ -239,6 +256,9 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     int                  zoom;
     int                  fillpad = 0;
     wxPoint              shape_pos;
+	
+	if ( m_Flags & DO_NOT_DRAW )
+		return;
 
     wxASSERT( panel );
 

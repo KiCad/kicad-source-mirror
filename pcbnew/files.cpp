@@ -98,7 +98,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
         Clear_Pcb(TRUE );
         wxSetWorkingDirectory( wxPathOnly( GetLastProject( id - ID_LOAD_FILE_1 ) ) );
         LoadOnePcbFile( GetLastProject( id - ID_LOAD_FILE_1 ).GetData(),
-                        FALSE );
+                        false );
         ReCreateAuxiliaryToolbar();
         break;
 
@@ -211,7 +211,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
     // Reload the corresponding configuration file:
     wxSetWorkingDirectory( wxPathOnly( GetScreen()->m_FileName ) );
     if( Append )
-        ReadPcbFile( source, TRUE );
+        ReadPcbFile( source, true );
     else
     {
         Read_Config( GetScreen()->m_FileName );
@@ -222,7 +222,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
         m_DisplayModEdge = DisplayOpt.DisplayModEdge;
         m_DisplayPadFill = DisplayOpt.DisplayPadFill;
 
-        ReadPcbFile( source, FALSE );
+        ReadPcbFile( source, false );
     }
 
     fclose( source );
@@ -245,18 +245,18 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
 	/* reset the auto save timer */
     g_SaveTime = time( NULL );
 
-    
-#if 0 && defined(DEBUG) 
-    // note this freezes up pcbnew when run under the kicad project 
+
+#if 0 && defined(DEBUG)
+    // note this freezes up pcbnew when run under the kicad project
     // manager.  runs fine from command prompt.  This is because the kicad
     // project manager redirects stdout of the child pcbnew process to itself,
-    // but never reads from that pipe, and that in turn eventually blocks 
+    // but never reads from that pipe, and that in turn eventually blocks
     // the pcbnew program when the pipe it is writing to gets full.
-    
+
     // Output the board object tree to stdout, but please run from command prompt:
     m_Pcb->Show( 0, std::cout );
 #endif
-    
+
     return 1;
 }
 
@@ -273,14 +273,14 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
     wxString    upperTxt;
     wxString    lowerTxt;
     wxString    msg;
-    
+
     bool        saveok = TRUE;
     FILE*       dest;
 
     if( FileName == wxEmptyString )
     {
         msg = wxT( "*" ) + PcbExtBuffer;
-        
+
         FullFileName = EDA_FileSelector( _( "Save board files:" ),
                                          wxEmptyString,             /* Chemin par defaut */
                                          GetScreen()->m_FileName,   /* nom fichier par defaut */
@@ -292,7 +292,7 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
                        );
         if( FullFileName == wxEmptyString )
             return FALSE;
-        
+
         GetScreen()->m_FileName = FullFileName;
     }
     else
@@ -327,7 +327,7 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
     }
     else
     {
-        BackupFileName = wxEmptyString; 
+        BackupFileName = wxEmptyString;
         saveok   = FALSE;
     }
 
@@ -344,7 +344,7 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
     {
         GetScreen()->m_FileName = FullFileName;
         SetTitle( GetScreen()->m_FileName );
-        
+
         SavePcbFormatAscii( dest );
         fclose( dest );
     }
@@ -364,9 +364,9 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
     lowerTxt += FullFileName;
 
     Affiche_1_Parametre( this, 1, upperTxt, lowerTxt, CYAN );
-    
+
     g_SaveTime = time( NULL );    /* Reset timer for the automatic saving */
-    
+
     GetScreen()->ClrModify();
     return TRUE;
 }
