@@ -103,6 +103,7 @@ set(EESCHEMA_EXTRA_SRCS
 
 if(WIN32)
     if(MINGW)
+        # EESCHEMA_RESOURCES variable is set by the macro.
         mingw_resource_compiler(eeschema)
     else(MINGW)
         set(EESCHEMA_RESOURCES eeschema.rc)

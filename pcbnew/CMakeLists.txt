@@ -151,6 +151,7 @@ set(PCBNEW_EXTRA_SRCS
 
 if(WIN32)
     if(MINGW)
+        # PCBNEW_RESOURCES variable is set by the macro.
         mingw_resource_compiler(pcbnew)
     else(MINGW)
         set(PCBNEW_RESOURCES pcbnew.rc)

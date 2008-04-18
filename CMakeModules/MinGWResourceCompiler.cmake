@@ -10,7 +10,7 @@ macro(mingw_resource_compiler _NAME)
     dbg_msg("_IN: ${_IN}")
 
     # Output file.
-    set(_OUT "${CMAKE_CURRENT_BINARY_DIR}/${_NAME}_rc.o")
+    set(_OUT "${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${_NAME}.dir/${_NAME}_rc.obj")
     dbg_msg("_OUT: ${_OUT}")
 
     # Include directories.
@@ -28,6 +28,7 @@ macro(mingw_resource_compiler _NAME)
     add_custom_command(OUTPUT ${_OUT}
         COMMAND windres.exe
         ARGS ${_ARGS}
+        COMMENT "Compiling ${_NAME} resource file."
         VERBATIM)
 
     # Set a NAME_RESOURCES variable

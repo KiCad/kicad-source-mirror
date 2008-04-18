@@ -60,6 +60,7 @@ set(GERBVIEW_EXTRA_SRCS
 
 if(WIN32)
     if(MINGW)
+        # GERBVIEW_RESOURCES variable is set by the macro.
         mingw_resource_compiler(gerbview)
     else(MINGW)
         set(GERBVIEW_RESOURCES gerbview.rc)

@@ -58,6 +58,7 @@ set(CVPCB_EXTRA_SRCS
 
 if(WIN32)
     if(MINGW)
+        # CVPCB_RESOURCES variable is set by the macro.
         mingw_resource_compiler(cvpcb)
     else(MINGW)
         set(CVPCB_RESOURCES cvpcb.rc)

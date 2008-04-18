@@ -15,6 +15,7 @@ set(KICAD_SRCS
 
 if(WIN32)
     if(MINGW)
+        # KICAD_RESOURCES variable is set by the macro.
         mingw_resource_compiler(kicad)
     else(MINGW)
         set(KICAD_RESOURCES kicad.rc)
