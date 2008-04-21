@@ -317,19 +317,11 @@ void WinEDA_AnnotateFrame::OnCancelClick( wxCommandEvent& event )
 
 bool WinEDA_AnnotateFrame::GetLevel( void )
 {
-    wxASSERT_MSG( ((m_rbEntireSchematic != NULL) &&
-                   m_rbEntireSchematic->IsKindOf( CLASSINFO( wxRadioButton ) )),
-                  wxT( "m_rbEntireSchematic pointer was NULL." ) );
-
     return m_rbEntireSchematic->GetValue();
 }
 
 bool WinEDA_AnnotateFrame::GetResetItems( void )
 {
-    wxASSERT_MSG( (m_cbResetAnnotation != NULL) &&
-                  m_cbResetAnnotation->IsKindOf( CLASSINFO( wxCheckBox ) ),
-                  wxT( "m_cbResetAnnotation pointer was NULL." ) );
-
     return m_rbResetAnnotation->GetValue();
 }
 
@@ -340,10 +332,6 @@ int WinEDA_AnnotateFrame::GetSortOrder( void )
  *         2 if annotation by value
  */
 {
-    wxASSERT_MSG( (m_rbSortByPosition != NULL) &&
-                  m_rbSortByPosition->IsKindOf( CLASSINFO( wxRadioButton ) ),
-                  wxT( "m_rbSortByPosition pointer was NULL." ) );
-
     if ( m_rbSortBy_X_Position->GetValue() )
         return 0;
     if ( m_rbSortBy_Y_Position->GetValue() )
@@ -369,7 +357,6 @@ bool WinEDA_AnnotateFrame::ShowToolTips()
 wxBitmap WinEDA_AnnotateFrame::GetBitmapResource( const wxString& name )
 {
     // Bitmap retrieval
-    wxUnusedVar(name);
     if (name == wxT("annotate_down_right_xpm"))
     {
         wxBitmap bitmap(annotate_down_right_xpm);
