@@ -101,6 +101,12 @@ public:
 
     /* netlist generation */
     void*                   BuildNetListBase();
+    /** Function DeleteAnnotation
+     * Remove current component annotations
+     * @param aCurrentSheetOnly : if false: remove all annotations, else remove annotation relative to the current sheet only
+     * @param aRedraw : true to refresh display
+    */
+    void                    DeleteAnnotation( bool aCurrentSheetOnly, bool aRedraw );
 
     // FUnctions used for hierarchy handling
     void                    InstallPreviousSheet();
@@ -307,6 +313,8 @@ public:
     SCH_SCREEN*         GetScreen() { return (SCH_SCREEN*) GetBaseScreen(); }
     void                OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
 
+    void                GeneralControle( wxDC* DC, wxPoint MousePositionInPixels );
+
 private:
 
     // General:
@@ -415,6 +423,8 @@ public:
     void    ClickOnCmpList( wxCommandEvent& event );
 
     SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) GetBaseScreen(); }
+
+    void    GeneralControle( wxDC* DC, wxPoint MousePositionInPixels );
 
 private:
     void    SelectCurrentLibrary();

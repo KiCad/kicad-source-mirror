@@ -359,32 +359,6 @@ EDA_Rect DrawSheetStruct::GetBoundingBox()
 }
 
 
-/**************************************************************************************/
-void DrawSheetStruct::DeleteAnnotation( bool recurse )
-/**************************************************************************************/
-{
-    if( recurse && m_AssociatedScreen )
-    {
-        EDA_BaseStruct* strct = m_AssociatedScreen->EEDrawList;
-        for( ; strct; strct = strct->Pnext )
-        {
-            if( strct->Type() == DRAW_SHEET_STRUCT_TYPE )
-            {
-                DrawSheetStruct* sheet = (DrawSheetStruct*) strct;
-                sheet->DeleteAnnotation( recurse );
-            }
-        }
-    }
-    EDA_BaseStruct* comp = m_AssociatedScreen->EEDrawList;
-    for( ; comp; comp = comp->Pnext )
-    {
-        if( comp->Type() == TYPE_SCH_COMPONENT )
-        {
-            ( (SCH_COMPONENT*) comp )->ClearAnnotation();
-        }
-    }
-}
-
 
 /*******************************************************************/
 int DrawSheetStruct::ComponentCount()

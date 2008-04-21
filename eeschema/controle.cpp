@@ -216,9 +216,9 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( const wxPoin
 }
 
 
-/***********************************************************************/
+/*************************************************************************************/
 void WinEDA_SchematicFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
-/***********************************************************************/
+/*************************************************************************************/
 {
     wxSize          delta;
     SCH_SCREEN*     screen = GetScreen();
@@ -285,7 +285,261 @@ void WinEDA_SchematicFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPi
 
     case WXK_NUMPAD2:       /* Deplacement curseur vers le bas */
     case WXK_DOWN:
-        D(printf("DOWN\n");)
+        MousePositionInPixels.y += delta.y;
+        DrawPanel->MouseTo( MousePositionInPixels );
+        break;
+
+    case WXK_NUMPAD4:       /* Deplacement curseur vers la gauche */
+    case WXK_LEFT:
+        MousePositionInPixels.x -= delta.x;
+        DrawPanel->MouseTo( MousePositionInPixels );
+        break;
+
+    case WXK_NUMPAD6:      /* Deplacement curseur vers la droite */
+    case WXK_RIGHT:
+        MousePositionInPixels.x += delta.x;
+        DrawPanel->MouseTo( MousePositionInPixels );
+        break;
+
+    default:
+        hotkey = g_KeyPressed;
+        break;
+    }
+
+    /* Recalcul de la position du curseur schema */
+    screen->m_Curseur = curpos;
+
+    /* Placement sur la grille generale */
+    PutOnGrid( &(screen->m_Curseur) );
+
+    if( screen->IsRefreshReq() )
+    {
+        RedrawActiveWindow( DC, TRUE );
+    }
+
+    if( oldpos != screen->m_Curseur )
+    {
+        curpos = screen->m_Curseur;
+        screen->m_Curseur = oldpos;
+        DrawPanel->CursorOff( DC );
+        screen->m_Curseur = curpos;
+        DrawPanel->CursorOn( DC );
+
+        if( DrawPanel->ManageCurseur )
+        {
+            DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
+        }
+    }
+
+    if( hotkey )
+    {
+        if( screen->GetCurItem()
+                  && screen->GetCurItem()->m_Flags )
+            OnHotKey( DC, hotkey, screen->GetCurItem() );
+        else
+            OnHotKey( DC, hotkey, NULL );
+    }
+
+    Affiche_Status_Box();    /* Affichage des coord curseur */
+}
+
+
+/*************************************************************************************/
+void WinEDA_LibeditFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
+/*************************************************************************************/
+{
+    wxSize          delta;
+    SCH_SCREEN*     screen = GetScreen();
+    int             zoom = screen->GetZoom();
+    wxPoint         curpos, oldpos;
+    int             hotkey = 0;
+
+    curpos = screen->m_MousePosition;
+    oldpos = screen->m_Curseur;
+
+    delta.x = screen->GetGrid().x / zoom;
+    delta.y = screen->GetGrid().y / zoom;
+
+    if( delta.x <= 0 )
+        delta.x = 1;
+    if( delta.y <= 0 )
+        delta.y = 1;
+
+    switch( g_KeyPressed )
+    {
+    case 0:
+        break;
+
+    case EDA_PANNING_UP_KEY:
+        OnZoom( ID_ZOOM_PANNING_UP );
+        curpos = screen->m_Curseur;
+        break;
+
+    case EDA_PANNING_DOWN_KEY:
+        OnZoom( ID_ZOOM_PANNING_DOWN );
+        curpos = screen->m_Curseur;
+        break;
+
+    case EDA_PANNING_LEFT_KEY:
+        OnZoom( ID_ZOOM_PANNING_LEFT );
+        curpos = screen->m_Curseur;
+        break;
+
+    case EDA_PANNING_RIGHT_KEY:
+        OnZoom( ID_ZOOM_PANNING_RIGHT );
+        curpos = screen->m_Curseur;
+        break;
+
+    case EDA_ZOOM_IN_FROM_MOUSE:
+        OnZoom( ID_ZOOM_IN_KEY );
+        curpos = screen->m_Curseur;
+        break;
+
+    case EDA_ZOOM_OUT_FROM_MOUSE:
+        OnZoom( ID_ZOOM_OUT_KEY );
+        curpos = screen->m_Curseur;
+        break;
+
+    case EDA_ZOOM_CENTER_FROM_MOUSE:
+        OnZoom( ID_ZOOM_CENTER_KEY );
+        curpos = screen->m_Curseur;
+        break;
+
+    case WXK_NUMPAD8:       /* Deplacement curseur vers le haut */
+    case WXK_UP:
+        MousePositionInPixels.y -= delta.y;
+        DrawPanel->MouseTo( MousePositionInPixels );
+        break;
+
+    case WXK_NUMPAD2:       /* Deplacement curseur vers le bas */
+    case WXK_DOWN:
+        MousePositionInPixels.y += delta.y;
+        DrawPanel->MouseTo( MousePositionInPixels );
+        break;
+
+    case WXK_NUMPAD4:       /* Deplacement curseur vers la gauche */
+    case WXK_LEFT:
+        MousePositionInPixels.x -= delta.x;
+        DrawPanel->MouseTo( MousePositionInPixels );
+        break;
+
+    case WXK_NUMPAD6:      /* Deplacement curseur vers la droite */
+    case WXK_RIGHT:
+        MousePositionInPixels.x += delta.x;
+        DrawPanel->MouseTo( MousePositionInPixels );
+        break;
+
+    default:
+        hotkey = g_KeyPressed;
+        break;
+    }
+
+    /* Recalcul de la position du curseur schema */
+    screen->m_Curseur = curpos;
+
+    /* Placement sur la grille generale */
+    PutOnGrid( &(screen->m_Curseur) );
+
+    if( screen->IsRefreshReq() )
+    {
+        RedrawActiveWindow( DC, TRUE );
+    }
+
+    if( oldpos != screen->m_Curseur )
+    {
+        curpos = screen->m_Curseur;
+        screen->m_Curseur = oldpos;
+        DrawPanel->CursorOff( DC );
+        screen->m_Curseur = curpos;
+        DrawPanel->CursorOn( DC );
+
+        if( DrawPanel->ManageCurseur )
+        {
+            DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
+        }
+    }
+
+    if( hotkey )
+    {
+        if( screen->GetCurItem()
+                  && screen->GetCurItem()->m_Flags )
+            OnHotKey( DC, hotkey, screen->GetCurItem() );
+        else
+            OnHotKey( DC, hotkey, NULL );
+    }
+
+    Affiche_Status_Box();    /* Affichage des coord curseur */
+}
+
+/*************************************************************************************/
+void WinEDA_ViewlibFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
+/*************************************************************************************/
+{
+    wxSize          delta;
+    SCH_SCREEN*     screen = GetScreen();
+    int             zoom = screen->GetZoom();
+    wxPoint         curpos, oldpos;
+    int             hotkey = 0;
+
+    curpos = screen->m_MousePosition;
+    oldpos = screen->m_Curseur;
+
+    delta.x = screen->GetGrid().x / zoom;
+    delta.y = screen->GetGrid().y / zoom;
+
+    if( delta.x <= 0 )
+        delta.x = 1;
+    if( delta.y <= 0 )
+        delta.y = 1;
+
+    switch( g_KeyPressed )
+    {
+    case 0:
+        break;
+
+    case EDA_PANNING_UP_KEY:
+        OnZoom( ID_ZOOM_PANNING_UP );
+        curpos = screen->m_Curseur;
+        break;
+
+    case EDA_PANNING_DOWN_KEY:
+        OnZoom( ID_ZOOM_PANNING_DOWN );
+        curpos = screen->m_Curseur;
+        break;
+
+    case EDA_PANNING_LEFT_KEY:
+        OnZoom( ID_ZOOM_PANNING_LEFT );
+        curpos = screen->m_Curseur;
+        break;
+
+    case EDA_PANNING_RIGHT_KEY:
+        OnZoom( ID_ZOOM_PANNING_RIGHT );
+        curpos = screen->m_Curseur;
+        break;
+
+    case EDA_ZOOM_IN_FROM_MOUSE:
+        OnZoom( ID_ZOOM_IN_KEY );
+        curpos = screen->m_Curseur;
+        break;
+
+    case EDA_ZOOM_OUT_FROM_MOUSE:
+        OnZoom( ID_ZOOM_OUT_KEY );
+        curpos = screen->m_Curseur;
+        break;
+
+    case EDA_ZOOM_CENTER_FROM_MOUSE:
+        OnZoom( ID_ZOOM_CENTER_KEY );
+        curpos = screen->m_Curseur;
+        break;
+
+    case WXK_NUMPAD8:       /* Deplacement curseur vers le haut */
+    case WXK_UP:
+        MousePositionInPixels.y -= delta.y;
+        DrawPanel->MouseTo( MousePositionInPixels );
+        break;
+
+    case WXK_NUMPAD2:       /* Deplacement curseur vers le bas */
+    case WXK_DOWN:
         MousePositionInPixels.y += delta.y;
         DrawPanel->MouseTo( MousePositionInPixels );
         break;

@@ -442,16 +442,21 @@ void SCH_COMPONENT::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 }
 
 
-/***************************************************/
-void SCH_COMPONENT::ClearAnnotation()
-/***************************************************/
+/**********************************************************/
+void SCH_COMPONENT::ClearAnnotation( DrawSheetPath* aSheet )
+/**********************************************************/
 
-/* Suppress annotation ( i.i IC23 changed to IC? and part reset to 1)
+/**
+ * Suppress annotation ( i.i IC23 changed to IC? and part reset to 1)
+ * @param aSheet: DrawSheetPath value: if NULL remove all annotations,
+ *             else remove annotation relative to this sheetpath
  */
 {
-    wxString defRef    = m_PrefixString;
-    bool     KeepMulti = false;
+    wxString                defRef    = m_PrefixString;
+    bool                    KeepMulti = false;
     EDA_LibComponentStruct* Entry;
+    wxString                separators( wxT( " " ) );
+    wxArrayString           reference_fields;
 
     Entry = FindLibPart( m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
 
@@ -465,15 +470,27 @@ void SCH_COMPONENT::ClearAnnotation()
 
     wxString multi = wxT( "1" );
     wxString NewHref;
+    wxString path;
+    if( aSheet )
+        path = GetPath( aSheet );;
     for( unsigned int ii = 0; ii< m_PathsAndReferences.GetCount(); ii++ )
     {
-        if( KeepMulti )  // Get and keep part selection
-            multi = m_PathsAndReferences[ii].AfterLast( wxChar( ' ' ) );
-        NewHref = m_PathsAndReferences[ii].BeforeFirst( wxChar( ' ' ) );
-        NewHref << wxT( " " ) << defRef << wxT( " " ) << multi;
-        m_PathsAndReferences[ii] = NewHref;
+        // Break hierachical reference in path, ref and multi selection:
+        reference_fields = wxStringTokenize( m_PathsAndReferences[ii], separators );
+        if( aSheet == NULL || reference_fields[0].Cmp( path ) == 0 )
+        {
+            if( KeepMulti )  // Get and keep part selection
+                multi = reference_fields[2];
+            NewHref = reference_fields[0];
+            NewHref << wxT( " " ) << defRef << wxT( " " ) << multi;
+            m_PathsAndReferences[ii] = NewHref;
+        }
     }
 
+    // These 2 changes do not work in complex hierarchy.
+    // When a clear annotation is made, the calling function must call a
+    // UpdateAllScreenReferences for the active sheet.
+    // But this call does not made here.
     m_Field[REFERENCE].m_Text = defRef; //for drawing.
 
     if( !KeepMulti )

@@ -549,7 +549,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
                 break;
             newitem = olditem->GenCopy();
             newitem->m_TimeStamp = GetTimeStamp();
-            newitem->ClearAnnotation();
+            newitem->ClearAnnotation(NULL);
             newitem->m_Flags = IS_NEW;
             StartMovePart( newitem, &dc );
 

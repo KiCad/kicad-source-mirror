@@ -255,8 +255,9 @@ void WinEDA_SchematicFrame::CreateScreens()
 }
 
 
-/**************************************************************/
+/*****************************************************************/
 void WinEDA_SchematicFrame::OnCloseWindow( wxCloseEvent& Event )
+/*****************************************************************/
 {
     DrawSheetPath* sheet;
 

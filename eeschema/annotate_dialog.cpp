@@ -34,8 +34,6 @@
 #include "program.h"
 #include "annotate_dialog.h"
 
-extern void DeleteAnnotation( WinEDA_SchematicFrame* parent,
-                              bool annotateSchematic );
 extern void AnnotateComponents( WinEDA_SchematicFrame* parent,
                                 bool annotateSchematic,
                                 bool sortByPosition,
@@ -262,7 +260,7 @@ void WinEDA_AnnotateFrame::OnClearAnnotationCmpClick( wxCommandEvent& event )
                              wxICON_EXCLAMATION | wxOK | wxCANCEL );
     if (response == wxCANCEL)
         return;
-    DeleteAnnotation( m_Parent, GetLevel() );
+    m_Parent->DeleteAnnotation( GetLevel() ? false : true, true );
     m_btnClear->Enable(false);
 }
 

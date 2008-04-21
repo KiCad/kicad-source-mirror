@@ -828,7 +828,7 @@ static SCH_ITEM * CopyStruct( WinEDA_DrawPanel* panel, wxDC* DC, BASE_SCREEN* sc
             case TYPE_SCH_COMPONENT:
             {
                 ( (SCH_COMPONENT*) Struct )->m_TimeStamp = GetTimeStamp();
-                ( (SCH_COMPONENT*) Struct )->ClearAnnotation();
+                ( (SCH_COMPONENT*) Struct )->ClearAnnotation(NULL);
             }
                 break;
 
@@ -893,7 +893,7 @@ static SCH_ITEM * CopyStruct( WinEDA_DrawPanel* panel, wxDC* DC, BASE_SCREEN* sc
 
         case TYPE_SCH_COMPONENT:
             ( (SCH_COMPONENT*) NewDrawStruct )->m_TimeStamp = GetTimeStamp();
-            ( (SCH_COMPONENT*) NewDrawStruct )->ClearAnnotation();
+            ( (SCH_COMPONENT*) NewDrawStruct )->ClearAnnotation(NULL);
             break;
         }
 
@@ -1051,7 +1051,7 @@ void WinEDA_SchematicFrame::PasteStruct( wxDC* DC )
             if( Struct->Type() == TYPE_SCH_COMPONENT )
             {
                 ( (SCH_COMPONENT*) Struct )->m_TimeStamp = GetTimeStamp();
-                ( (SCH_COMPONENT*) Struct )->ClearAnnotation();
+                ( (SCH_COMPONENT*) Struct )->ClearAnnotation(NULL);
                 SetStructFather( Struct, GetScreen() );
             }
             PickedList = (DrawPickedStruct*) PickedList->Pnext;
@@ -1075,7 +1075,7 @@ void WinEDA_SchematicFrame::PasteStruct( wxDC* DC )
         if( DrawStruct->Type() == TYPE_SCH_COMPONENT )
         {
             ( (SCH_COMPONENT*) DrawStruct )->m_TimeStamp = GetTimeStamp();
-            ( (SCH_COMPONENT*) DrawStruct )->ClearAnnotation();
+            ( (SCH_COMPONENT*) DrawStruct )->ClearAnnotation(NULL);
         }
         SetStructFather( DrawStruct, GetScreen() );
         RedrawOneStruct( DrawPanel, DC, DrawStruct, GR_DEFAULT_DRAWMODE );

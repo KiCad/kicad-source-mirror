@@ -314,7 +314,7 @@ static bool UpdateScreenFromSheet(WinEDA_SchematicFrame * frame)
 					NewScreen->m_ScrollbarPos.x,
 					NewScreen->m_ScrollbarPos.y,TRUE);
 
-		//update the References
+	//update the References
 	frame->m_CurrentSheet->UpdateAllScreenReferences();
 	frame->DrawPanel->m_CanStartBlock = -1;
 	ActiveScreen = frame->m_CurrentSheet->LastScreen();

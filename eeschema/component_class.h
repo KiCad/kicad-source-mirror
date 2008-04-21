@@ -140,7 +140,13 @@ public:
     int             GetRotationMiroir();
     wxPoint         GetScreenCoord( const wxPoint& coord );
     void            Display_Infos( WinEDA_DrawFrame* frame );
-    void            ClearAnnotation();
+    /**
+     * Suppress annotation ( i.i IC23 changed to IC? and part reset to 1)
+     * @param aSheet: DrawSheetPath value: if NULL remove all annotations,
+     *             else remove annotation relative to this sheetpath
+     */
+    void            ClearAnnotation( DrawSheetPath* aSheet );
+
     EDA_Rect        GetBoundaryBox() const;
     EDA_Rect        GetBoundingBox();
 
