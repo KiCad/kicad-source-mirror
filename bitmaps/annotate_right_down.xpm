@@ -1,0 +1,43 @@
+/* XPM */
+#ifndef XPMMAIN
+extern const char *annotate_right_down_xpm[];
+
+#else
+const char *annotate_right_down_xpm[] = {
+/* columns rows colors const chars-per-pixel */
+"16 16 16 1",
+"@ c #59CE99",
+"% c #D79E9C",
+"$ c #DC9393",
+"o c #FFB4B4",
+"* c #74CAA2",
+"X c #FFBDBD",
+". c #89AF9A",
+"  c none",
+"- c #E46264",
+"# c #FFAAAC",
+"; c #64F6B4",
+"& c #84A794",
+"= c #69E5A9",
+": c #E08280",
+"O c #9BB5A5",
+"+ c #81B79F",
+/* pixels */
+"        .       ",
+"  XoooO+@Ooooo  ",
+"  #$%$&*=&%$%-X ",
+"       X&  X$   ",
+"          X$o   ",
+"          $     ",
+"      X O$o     ",
+"      O+=+      ",
+"      O;@X      ",
+"      %.OX      ",
+"     %X         ",
+"    $o          ",
+"   $X  X&       ",
+"  ::%$&*=.%$%$  ",
+"  oooo.@@.oooo  ",
+"        .       "
+};
+#endif

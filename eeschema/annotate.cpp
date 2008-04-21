@@ -135,7 +135,7 @@ CmpListStruct* AllocateCmpListStrct( int numcomponents )
  *          	  if same X pos, by Y pos
  *          		if same Y pos, by time stamp
  */
-int AnnotateByPosition( const void* o1, const void* o2 )
+int AnnotateBy_X_Position( const void* o1, const void* o2 )
 {
     CmpListStruct* item1 = (CmpListStruct*) o1;
     CmpListStruct* item2 = (CmpListStruct*) o2;
@@ -148,6 +148,34 @@ int AnnotateByPosition( const void* o1, const void* o2 )
         ii = item1->m_Pos.x - item2->m_Pos.x;
     if( ii == 0 )
         ii = item1->m_Pos.y - item2->m_Pos.y;
+    if( ii == 0 )
+        ii = item1->m_TimeStamp - item2->m_TimeStamp;
+
+    return ii;
+}
+
+
+/* qsort function to annotate items by their position.
+ *  Components are sorted
+ *      by reference
+ *      if same reference: by sheet
+ *          if same sheet, by Y pos
+ *          	  if same Y pos, by X pos
+ *          		if same X pos, by time stamp
+ */
+int AnnotateBy_Y_Position( const void* o1, const void* o2 )
+{
+    CmpListStruct* item1 = (CmpListStruct*) o1;
+    CmpListStruct* item2 = (CmpListStruct*) o2;
+
+    int            ii = strnicmp( item1->m_TextRef, item2->m_TextRef, 32 );
+
+    if( ii == 0 )
+        ii = item1->m_SheetList.Cmp( item2->m_SheetList );
+    if( ii == 0 )
+        ii = item1->m_Pos.y - item2->m_Pos.y;
+    if( ii == 0 )
+        ii = item1->m_Pos.x - item2->m_Pos.x;
     if( ii == 0 )
         ii = item1->m_TimeStamp - item2->m_TimeStamp;
 
@@ -246,12 +274,14 @@ void WinEDA_SchematicFrame::DeleteAnnotation( bool aCurrentSheetOnly, bool aRedr
 *  annotated.
 * @param parent = Schematic frame
 * @param annotateSchematic : true = entire schematic annotation, false = current scheet only
-* @param sortByPosition : true = annotate by sorting X position, false = annotate by sorting value
+* @param sortOption : 0 = annotate by sorting X position,
+*                     1 = annotate by sorting Y position,
+*                     2 = annotate by sorting value
 * @param resetAnnotation : true = remove previous annotation false = anotate new components only
 *****************************************************************************/
 void AnnotateComponents( WinEDA_SchematicFrame* parent,
                          bool                   annotateSchematic,
-                         bool                   sortByPosition,
+                         int                    sortOption,
                          bool                   resetAnnotation )
 {
     int            ii, NbOfCmp;
@@ -308,13 +338,26 @@ void AnnotateComponents( WinEDA_SchematicFrame* parent,
     /* Break full components reference in name (prefix) and number:
      * example: IC1 become IC, and 1 */
     BreakReference( BaseListeCmp, NbOfCmp );
-
-    if( sortByPosition )
+wxString msg1;
+    msg1 << sortOption;
+wxMessageBox(msg1);
+    switch( sortOption )
+    {
+    case 0:
         qsort( BaseListeCmp, NbOfCmp, sizeof(CmpListStruct),
-            ( int( * ) ( const void*, const void* ) )AnnotateByPosition );
-    else
+            ( int( * ) ( const void*, const void* ) )AnnotateBy_X_Position );
+        break;
+
+    case 1:
+        qsort( BaseListeCmp, NbOfCmp, sizeof(CmpListStruct),
+            ( int( * ) ( const void*, const void* ) )AnnotateBy_Y_Position );
+        break;
+
+    case 2:
         qsort( BaseListeCmp, NbOfCmp, sizeof(CmpListStruct),
             ( int( * ) ( const void*, const void* ) )AnnotateByValue );
+        break;
+    }
 
     /* Recalculate reference numbers */
     ComputeReferenceNumber( BaseListeCmp, NbOfCmp );

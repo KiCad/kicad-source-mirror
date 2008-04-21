@@ -23,6 +23,7 @@
  */
 
 ////@begin includes
+#include "wx/statline.h"
 ////@end includes
 
 /*!
@@ -41,8 +42,10 @@ class wxBoxSizer;
 #define ID_DIALOG 10000
 #define ID_ENTIRE_SCHEMATIC 10002
 #define ID_CURRENT_PAGE 10003
+#define ID_KEEP_ANNOTATION 10009
 #define ID_RESET_ANNOTATION 10009
-#define ID_SORT_BY_POSITION 10010
+#define ID_SORT_BY_X_POSITION 10001
+#define ID_SORT_BY_Y_POSITION 10001
 #define ID_SORT_BY_VALUE 10011
 #define ID_CLEAR_ANNOTATION_CMP 10004
 #define SYMBOL_WINEDA_ANNOTATEFRAME_STYLE wxDEFAULT_DIALOG_STYLE|MAYBE_RESIZE_BORDER
@@ -107,12 +110,14 @@ public:
     // User functions:
     bool GetLevel( void );
     bool GetResetItems( void );
-    bool GetSortOrder( void );
+    int GetSortOrder( void );
 
 ////@begin WinEDA_AnnotateFrame member variables
     wxRadioButton* m_rbEntireSchematic;
-    wxCheckBox* m_cbResetAnnotation;
-    wxRadioButton* m_rbSortByPosition;
+    wxRadioButton* m_rbKeepAnnotation;
+    wxRadioButton* m_rbResetAnnotation;
+    wxRadioButton* m_rbSortBy_X_Position;
+    wxRadioButton* m_rbSortBy_Y_Position;
     wxRadioButton* rbSortByValue;
     wxBoxSizer* sizerDialogButtons;
     wxButton* m_btnClose;

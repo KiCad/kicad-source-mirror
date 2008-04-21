@@ -200,6 +200,9 @@
 	#include "../bitmaps/Auto_track_width.xpm"
 	#include "../bitmaps/fill_zone.xpm"
 	#include "../bitmaps/Width_Segment.xpm"
+    
+	#include "../bitmaps/annotate_right_down.xpm"
+	#include "../bitmaps/annotate_down_right.xpm"
 
 // Largeur du toolbar vertical
 #define VTOOLBAR_WIDTH 26
