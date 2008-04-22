@@ -154,6 +154,20 @@ EDA_Rect DrawJunctionStruct::GetBoundingBox()
 };
 
 
+#if defined(DEBUG)
+void DrawJunctionStruct::Show( int nestLevel, std::ostream& os )
+{
+    // XML output:
+    wxString s = GetClass();
+
+    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str()
+        << m_Pos
+        << "/>\n";
+}
+
+#endif
+
+
 /*****************************/
 /* class DrawNoConnectStruct */
 /*****************************/
@@ -245,8 +259,6 @@ void DrawMarkerStruct::Show( int nestLevel, std::ostream& os )
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << m_Pos
                                  << "/>\n";
 }
-
-
 #endif
 
 /**

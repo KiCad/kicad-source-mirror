@@ -196,6 +196,24 @@ bool SCH_TEXT::Save( FILE* aFile ) const
 }
 
 
+#if defined(DEBUG)
+
+void SCH_TEXT::Show( int nestLevel, std::ostream& os )
+{
+    // XML output:
+    wxString s = GetClass();
+
+    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str()
+        << " layer=\"" << m_Layer << '"'
+        << " shape=\"" << m_Shape << '"'
+        << " dangling=\"" << m_IsDangling << '"'
+        << '>'
+        << CONV_TO_UTF8( m_Text )
+        << "</" << s.Lower().mb_str() << ">\n";
+}
+
+#endif
+
 /****************************************************************************/
 SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text ) :
     SCH_TEXT( pos, text, TYPE_SCH_LABEL )

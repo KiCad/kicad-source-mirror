@@ -62,9 +62,12 @@ bool SegmentIntersect( int Sx1, int Sy1, int Sx2, int Sy2,
 
     if( Sx1 == Sx2 )          /* Line S is vertical. */
     {
-        Symin = MIN( Sy1, Sy2 ); Symax = MAX( Sy1, Sy2 );
+        Symin = MIN( Sy1, Sy2 );
+        Symax = MAX( Sy1, Sy2 );
+
         if( Px1 != Sx1 )
             return FALSE;
+
         if( Py1 >= Symin  &&  Py1 <= Symax )
             return TRUE;
         else
@@ -72,9 +75,12 @@ bool SegmentIntersect( int Sx1, int Sy1, int Sx2, int Sy2,
     }
     else if( Sy1 == Sy2 )    /* Line S is horizontal. */
     {
-        Sxmin = MIN( Sx1, Sx2 ); Sxmax = MAX( Sx1, Sx2 );
+        Sxmin = MIN( Sx1, Sx2 );
+        Sxmax = MAX( Sx1, Sx2 );
+
         if( Py1 != Sy1 )
             return FALSE;
+
         if( Px1 >= Sxmin  &&  Px1 <= Sxmax )
             return TRUE;
         else
@@ -92,35 +98,34 @@ void WinEDA_SchematicFrame::TestDanglingEnds( SCH_ITEM* DrawList, wxDC* DC )
 /* Met a jour les membres m_Dangling des wires, bus, labels
  */
 {
-    EDA_BaseStruct*          DrawItem;
-    const DanglingEndHandle* DanglingItem, * nextitem;
-
     if( ItemList )
+    {
+        const DanglingEndHandle* DanglingItem;
+        const DanglingEndHandle* nextitem;
+
         for( DanglingItem = ItemList; DanglingItem != NULL; DanglingItem = nextitem )
         {
             nextitem = DanglingItem->m_Pnext;
             SAFE_DELETE( DanglingItem );
         }
+    }
 
     ItemList = RebuildEndList( DrawList );
 
     // Controle des elements
-    for( DrawItem = DrawList; DrawItem != NULL; DrawItem = DrawItem->Next() )
+    for( SCH_ITEM* item = DrawList;  item;  item = item->Next() )
     {
-        switch( DrawItem->Type() )
+        switch( item->Type() )
         {
         case TYPE_SCH_GLOBALLABEL:
         case TYPE_SCH_HIERLABEL:
         case TYPE_SCH_LABEL:
-                #undef STRUCT
-                #define STRUCT ( (SCH_LABEL*) DrawItem )
-            TestLabelForDangling( STRUCT, this, DC );
-            break;
+            TestLabelForDangling( (SCH_LABEL*) item, this, DC );
             break;
 
         case DRAW_SEGMENT_STRUCT_TYPE:
-                #undef STRUCT
-                #define STRUCT ( (EDA_DrawLineStruct*) DrawItem )
+            #undef STRUCT
+            #define STRUCT ( (EDA_DrawLineStruct*) item )
             if( STRUCT->GetLayer() == LAYER_WIRE )
             {
                 TestWireForDangling( STRUCT, this, DC );
@@ -432,26 +437,26 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
         }
 
         case DRAW_SHEET_STRUCT_TYPE:
-        {
-            #undef STRUCT
-            #define STRUCT ( (DrawSheetStruct*) DrawItem )
-            Hierarchical_PIN_Sheet_Struct* pinsheet = STRUCT->m_Label;
-            while( pinsheet )
             {
-                item = new DanglingEndHandle( SHEET_LABEL_END );
+                Hierarchical_PIN_Sheet_Struct* pinsheet;
+                for( pinsheet = ((DrawSheetStruct*)DrawItem)->m_Label;  pinsheet;  pinsheet = pinsheet->Next() )
+                {
+                    wxASSERT( pinsheet->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE );
 
-                item->m_Item = pinsheet;
-                item->m_Pos  = pinsheet->m_Pos;
-                if( lastitem )
-                    lastitem->m_Pnext = item;
-                else
-                    StartList = item;
-                lastitem = item;
-                pinsheet = (Hierarchical_PIN_Sheet_Struct*) pinsheet->Pnext;
+                    item = new DanglingEndHandle( SHEET_LABEL_END );
+
+                    item->m_Item = pinsheet;
+                    item->m_Pos  = pinsheet->m_Pos;
+
+                    if( lastitem )
+                        lastitem->m_Pnext = item;
+                    else
+                        StartList = item;
+
+                    lastitem = item;
+                }
             }
-
             break;
-        }
 
         default:
             ;

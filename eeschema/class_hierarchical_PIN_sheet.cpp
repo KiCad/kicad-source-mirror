@@ -36,10 +36,12 @@
 /*******************************************************************/
 Hierarchical_PIN_Sheet_Struct::Hierarchical_PIN_Sheet_Struct( DrawSheetStruct* parent,
                                             const wxPoint& pos, const wxString& text ) :
-    SCH_ITEM( NULL, DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE ),
+    SCH_ITEM( parent, DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE ),
     EDA_TextStruct( text )
 /*******************************************************************/
 {
+    wxASSERT( parent );
+    wxASSERT( Pnext == NULL );
     m_Layer      = LAYER_SHEETLABEL;
     m_Pos        = pos;
     m_Edge       = 0;
@@ -199,3 +201,19 @@ bool Hierarchical_PIN_Sheet_Struct::Save( FILE* aFile ) const
     return true;
 }
 
+#if defined(DEBUG)
+void Hierarchical_PIN_Sheet_Struct::Show( int nestLevel, std::ostream& os )
+{
+    // XML output:
+    wxString s = GetClass();
+
+    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << ">"
+        << " pin_name=\"" << CONV_TO_UTF8( m_Text ) << '"'
+        << "/>\n"
+        << std::flush;
+
+//    NestedSpace( nestLevel, os ) << "</" << s.Lower().mb_str() << ">\n";
+
+}
+
+#endif

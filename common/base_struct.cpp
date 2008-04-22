@@ -161,22 +161,12 @@ std::ostream& operator<<( std::ostream& out, const wxPoint& pt )
  */
 void EDA_BaseStruct::Show( int nestLevel, std::ostream& os )
 {
-    // for now, make it look like XML:
+    // XML output:
     wxString s = GetClass();
 
-    s = s + wxT( " " );
-    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << ">\n";
-
-    /*
-     * EDA_BaseStruct* kid = m_Son;
-     * for( ; kid;  kid = kid->Pnext )
-     * {
-     * kid->Show( nestLevel+1, os );
-     * }
-     */
-    NestedSpace( nestLevel + 1, os ) << "Need ::Show() override\n";
-
-    NestedSpace( nestLevel, os ) << "</" << s.Lower().mb_str() << ">\n";
+    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << ">"
+        << " Need ::Show() override for this class "
+        << "</" << s.Lower().mb_str() << ">\n";
 }
 
 
@@ -194,7 +184,6 @@ std::ostream& EDA_BaseStruct::NestedSpace( int nestLevel, std::ostream& os )
 
     return os;
 }
-
 
 #endif
 

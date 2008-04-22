@@ -29,6 +29,7 @@ public:
                                    const wxString& text = wxEmptyString );
 
     ~Hierarchical_PIN_Sheet_Struct() { }
+
     virtual wxString GetClass() const
     {
         return wxT( "Hierarchical_PIN_Sheet_Struct" );
@@ -37,11 +38,10 @@ public:
 
     Hierarchical_PIN_Sheet_Struct*  GenCopy();
 
-    Hierarchical_PIN_Sheet_Struct* Next()
-    { return (Hierarchical_PIN_Sheet_Struct*) Pnext; }
+    Hierarchical_PIN_Sheet_Struct* Next() { return (Hierarchical_PIN_Sheet_Struct*) Pnext; }
 
-    void                            Place( WinEDA_SchematicFrame* frame, wxDC* DC );
-    void                            Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
+    void        Place( WinEDA_SchematicFrame* frame, wxDC* DC );
+    void        Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                                           int draw_mode, int Color = -1 );
 
     /**
@@ -50,7 +50,12 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool                            Save( FILE* aFile ) const;
+    bool        Save( FILE* aFile ) const;
+
+#if defined(DEBUG)
+    // comment inherited by Doxygen from Base_Struct
+    void        Show( int nestLevel, std::ostream& os );
+#endif
 };
 
 
@@ -120,6 +125,11 @@ public:
     //void 		RemoveSheet(DrawSheetStruct* sheet);
     //to remove a sheet, just delete it
     //-- the destructor should take care of everything else.
+
+#if defined(DEBUG)
+    // comment inherited by Doxygen from Base_Struct
+    void                Show( int nestLevel, std::ostream& os );
+#endif
 };
 
 

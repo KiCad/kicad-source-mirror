@@ -631,6 +631,28 @@ bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame* aFrame, const wxStr
 }
 
 
+#if defined(DEBUG)
+void DrawSheetStruct::Show( int nestLevel, std::ostream& os )
+{
+    // XML output:
+    wxString s = GetClass();
+
+    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << ">"
+        << " sheet_name=\"" << CONV_TO_UTF8( m_SheetName) << '"'
+        << ">\n";
+
+    // show all the pins, and check the linked list integrity
+    Hierarchical_PIN_Sheet_Struct* label;
+    for( label = m_Label;   label;   label=label->Next() )
+    {
+        label->Show( nestLevel+1, os );
+    }
+
+    NestedSpace( nestLevel, os ) << "</" << s.Lower().mb_str() << ">\n"
+        << std::flush;
+}
+#endif
+
 
 /**********************************************/
 /* class to handle a series of sheets *********/
@@ -815,3 +837,4 @@ bool DrawSheetPath::operator!=( const DrawSheetPath& d1 )
 
     return false;
 }
+

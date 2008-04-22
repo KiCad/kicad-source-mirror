@@ -408,8 +408,8 @@ Hierarchical_PIN_Sheet_Struct* WinEDA_SchematicFrame::Import_PinSheet( DrawSheet
 
 
 /**************************************************************/
-void WinEDA_SchematicFrame::DeleteSheetLabel( wxDC*                 DC,
-                                              Hierarchical_PIN_Sheet_Struct* SheetLabelToDel )
+void WinEDA_SchematicFrame::DeleteSheetLabel( wxDC* DC,
+              Hierarchical_PIN_Sheet_Struct* SheetLabelToDel )
 /**************************************************************/
 
 /*
@@ -419,43 +419,41 @@ void WinEDA_SchematicFrame::DeleteSheetLabel( wxDC*                 DC,
  *  si DC != NULL, effacement a l'ecran du dessin
  */
 {
-    EDA_BaseStruct*       DrawStruct;
-    Hierarchical_PIN_Sheet_Struct* SheetLabel, * NextLabel;
-
     if( DC )
         RedrawOneStruct( DrawPanel, DC, SheetLabelToDel, g_XorMode );
 
-    /* Recherche de la DrawSheetStruct d'origine */
-    DrawStruct = SheetLabelToDel->m_Parent;
+    DrawSheetStruct* parent = (DrawSheetStruct*) SheetLabelToDel->m_Parent;
 
-    if( DrawStruct ) // Modification du chainage
+    wxASSERT( parent );
+    wxASSERT( parent->Type() == DRAW_SHEET_STRUCT_TYPE );
+
+#if 0 && defined(DEBUG)
+    std::cout << "\n\nbefore deleting:\n" << std::flush;
+    parent->Show( 0, std::cout );
+    std::cout << "\n\n\n" << std::flush;
+#endif
+
+    Hierarchical_PIN_Sheet_Struct* label = parent->m_Label;
+
+    Hierarchical_PIN_Sheet_Struct** pprev = &parent->m_Label;
+
+    while( label )
     {
-        if( DrawStruct->Type() != DRAW_SHEET_STRUCT_TYPE )
+        if( label == SheetLabelToDel )
         {
-            DisplayError( this,
-                         wxT( "DeleteSheetLabel error: m_Parent != DRAW_SHEET_STRUCT_TYPE" ) );
-            return;
+            *pprev = label->Next();
+            break;
         }
 
-        /* suppression chainage */
-        SheetLabel = ( (DrawSheetStruct*) DrawStruct )->m_Label;
-        if( SheetLabel == SheetLabelToDel )
-            ( (DrawSheetStruct*) DrawStruct )->m_Label =
-                (Hierarchical_PIN_Sheet_Struct*) SheetLabel->Pnext;
-
-        else
-            while( SheetLabel ) /* Examen de la liste dependante et suppression chainage */
-            {
-                NextLabel = (Hierarchical_PIN_Sheet_Struct*) SheetLabel->Pnext;
-                if( NextLabel == SheetLabelToDel )
-                {
-                    SheetLabel->Pnext = NextLabel->Pnext;
-                    break;;
-                }
-                SheetLabel = NextLabel;
-            }
-
+        pprev = (Hierarchical_PIN_Sheet_Struct**) &label->Pnext;
+        label = label->Next();
     }
 
     delete SheetLabelToDel;
+
+#if 0 && defined(DEBUG)
+    std::cout << "\n\nafter deleting:\n" << std::flush;
+    parent->Show( 0, std::cout );
+    std::cout << "~after deleting\n\n" << std::flush;
+#endif
 }
