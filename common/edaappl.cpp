@@ -47,6 +47,7 @@
 #include "Lang_Ru.xpm"
 #include "Lang_Catalan.xpm"
 #include "Lang_chinese.xpm"
+#include "Lang_Nl.xpm"
 
 
 #define FONT_DEFAULT_SIZE 10    /* Default font size.
@@ -69,7 +70,7 @@ struct LANGUAGE_DESCR
     bool          m_DoNotTranslate;                     // set to true if the m_Lang_Label must not be translated
 };
 
-#define LANGUAGE_DESCR_COUNT 14
+#define LANGUAGE_DESCR_COUNT 15
 static struct LANGUAGE_DESCR s_Language_List[LANGUAGE_DESCR_COUNT] =
 {
     {
@@ -156,6 +157,12 @@ static struct LANGUAGE_DESCR s_Language_List[LANGUAGE_DESCR_COUNT] =
         ID_LANGUAGE_CATALAN,
         lang_catalan_xpm,
         _( "Catalan" )
+    },
+    {
+        wxLANGUAGE_DUTCH,
+        ID_LANGUAGE_DUTCH,
+        lang_nl_xpm,
+        _( "Dutch" )
     }
 };
 

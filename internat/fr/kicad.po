@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-21 10:01+0100\n"
-"PO-Revision-Date: 2008-04-21 10:04+0100\n"
+"POT-Creation-Date: 2008-04-22 07:49+0100\n"
+"PO-Revision-Date: 2008-04-22 07:49+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -5452,39 +5452,39 @@ msgstr "Tri"
 msgid "Bad Bus Label: "
 msgstr "Mauvais label de Bus: "
 
-#: eeschema/annotate.cpp:730
+#: eeschema/annotate.cpp:773
 #, c-format
 msgid "item not annotated: %s%s"
 msgstr "item non numéroté: %s%s"
 
-#: eeschema/annotate.cpp:735
+#: eeschema/annotate.cpp:778
 #, c-format
 msgid "( unit %d)"
 msgstr "( Unité %d)"
 
-#: eeschema/annotate.cpp:752
+#: eeschema/annotate.cpp:795
 #, c-format
 msgid "Error item %s%s"
 msgstr "Erreur item %s%s"
 
-#: eeschema/annotate.cpp:755
+#: eeschema/annotate.cpp:798
 #, c-format
 msgid " unit %d and no more than %d parts"
 msgstr " unité %d et plus que %d parts"
 
-#: eeschema/annotate.cpp:789
-#: eeschema/annotate.cpp:812
+#: eeschema/annotate.cpp:832
+#: eeschema/annotate.cpp:855
 #, c-format
 msgid "Multiple item %s%s"
 msgstr "Multipleélément %s%s"
 
-#: eeschema/annotate.cpp:794
-#: eeschema/annotate.cpp:817
+#: eeschema/annotate.cpp:837
+#: eeschema/annotate.cpp:860
 #, c-format
 msgid " (unit %d)"
 msgstr " ( Unité %d)"
 
-#: eeschema/annotate.cpp:834
+#: eeschema/annotate.cpp:877
 #, c-format
 msgid "Diff values for %s%d%c (%s) and %s%d%c (%s)"
 msgstr "Valeurs différentes pour %s%d%c (%s) et %s%d%c (%s)"
@@ -6439,98 +6439,6 @@ msgstr "Exporter le symbole"
 #, c-format
 msgid "Save Symbol in [%s]"
 msgstr "Symbole sauvé en  [%s]"
-
-#: eeschema/annotate_dialog.cpp:158
-msgid "Scope"
-msgstr "Sélection"
-
-#: eeschema/annotate_dialog.cpp:166
-msgid "Use the &entire schematic"
-msgstr "Utiliser la schématique &entière"
-
-#: eeschema/annotate_dialog.cpp:170
-msgid "Use the current &page only"
-msgstr "Utiliser la &feuille active uniquement"
-
-#: eeschema/annotate_dialog.cpp:177
-msgid "&Keep existing annotation"
-msgstr "&Garder l'annotation existante"
-
-#: eeschema/annotate_dialog.cpp:181
-msgid "&Reset existing annotation"
-msgstr "&Supprimer l'annotation existante"
-
-#: eeschema/annotate_dialog.cpp:188
-msgid "Order"
-msgstr "Ordre"
-
-#: eeschema/annotate_dialog.cpp:196
-msgid "Sort Components by &Y Position"
-msgstr "Trier les Composants par &Y Position"
-
-#: eeschema/annotate_dialog.cpp:200
-msgid "Sort Components by &X Position"
-msgstr "Trier les Composants par &X Position"
-
-#: eeschema/annotate_dialog.cpp:204
-msgid "Sort Components by &Value"
-msgstr "Trier les Composants par &Valeur"
-
-#: eeschema/annotate_dialog.cpp:215
-msgid "Clear Annotation"
-msgstr "Suppression Annotation"
-
-#: eeschema/annotate_dialog.cpp:219
-msgid "Annotation"
-msgstr "Annotation"
-
-#: eeschema/annotate_dialog.cpp:238
-msgid "Clear and annotate all of the components "
-msgstr "Reinitialisation et réannotation de tous les composants "
-
-#: eeschema/annotate_dialog.cpp:240
-msgid "Annotate only the unannotated components "
-msgstr "Annoter seulement les composants non déjà annotés "
-
-#: eeschema/annotate_dialog.cpp:242
-msgid "on the entire schematic?"
-msgstr "pour la schematique complète?"
-
-#: eeschema/annotate_dialog.cpp:244
-msgid "on the current sheet?"
-msgstr "pourr la feuille courante?"
-
-#: eeschema/annotate_dialog.cpp:246
-msgid ""
-"\n"
-"\n"
-"This operation will change the current annotation and cannot be undone."
-msgstr ""
-"\n"
-"\n"
-"Cette opération changera l'annotation actuelle et ne pourra être annulée."
-
-#: eeschema/annotate_dialog.cpp:266
-msgid "Clear the existing annotation for "
-msgstr "Supprimer l'annotation existante pour "
-
-#: eeschema/annotate_dialog.cpp:268
-msgid "the entire schematic?"
-msgstr "la schématique entière?"
-
-#: eeschema/annotate_dialog.cpp:270
-msgid "the current sheet?"
-msgstr "La feuille courante?"
-
-#: eeschema/annotate_dialog.cpp:272
-msgid ""
-"\n"
-"\n"
-"This operation will clear the existing annotation and cannot be undone."
-msgstr ""
-"\n"
-"\n"
-"Cette opération supprimera l'annotation existante et ne peut être annulée."
 
 #: eeschema/files-io.cpp:112
 msgid "Clear Schematic Hierarchy (modified!)?"
@@ -7632,6 +7540,98 @@ msgstr "Librairie <"
 #: eeschema/eelibs_read_libraryfiles.cpp:328
 msgid "> header read error"
 msgstr "> erreur lecture entête"
+
+#: eeschema/annotate_dialog.cpp:159
+msgid "Scope"
+msgstr "Sélection"
+
+#: eeschema/annotate_dialog.cpp:167
+msgid "Use the &entire schematic"
+msgstr "Utiliser la schématique &entière"
+
+#: eeschema/annotate_dialog.cpp:171
+msgid "Use the current &page only"
+msgstr "Utiliser la &feuille active uniquement"
+
+#: eeschema/annotate_dialog.cpp:178
+msgid "&Keep existing annotation"
+msgstr "&Garder l'annotation existante"
+
+#: eeschema/annotate_dialog.cpp:182
+msgid "&Reset existing annotation"
+msgstr "&Supprimer l'annotation existante"
+
+#: eeschema/annotate_dialog.cpp:189
+msgid "Order"
+msgstr "Ordre"
+
+#: eeschema/annotate_dialog.cpp:203
+msgid "Sort Components by &X Position"
+msgstr "Trier les Composants par &X Position"
+
+#: eeschema/annotate_dialog.cpp:213
+msgid "Sort Components by &Y Position"
+msgstr "Trier les Composants par &Y Position"
+
+#: eeschema/annotate_dialog.cpp:223
+msgid "Sort Components by &Value"
+msgstr "Trier les Composants par &Valeur"
+
+#: eeschema/annotate_dialog.cpp:234
+msgid "Clear Annotation"
+msgstr "Suppression Annotation"
+
+#: eeschema/annotate_dialog.cpp:238
+msgid "Annotation"
+msgstr "Annotation"
+
+#: eeschema/annotate_dialog.cpp:257
+msgid "Clear and annotate all of the components "
+msgstr "Reinitialisation et réannotation de tous les composants "
+
+#: eeschema/annotate_dialog.cpp:259
+msgid "Annotate only the unannotated components "
+msgstr "Annoter seulement les composants non déjà annotés "
+
+#: eeschema/annotate_dialog.cpp:261
+msgid "on the entire schematic?"
+msgstr "pour la schematique complète?"
+
+#: eeschema/annotate_dialog.cpp:263
+msgid "on the current sheet?"
+msgstr "pourr la feuille courante?"
+
+#: eeschema/annotate_dialog.cpp:265
+msgid ""
+"\n"
+"\n"
+"This operation will change the current annotation and cannot be undone."
+msgstr ""
+"\n"
+"\n"
+"Cette opération changera l'annotation actuelle et ne pourra être annulée."
+
+#: eeschema/annotate_dialog.cpp:285
+msgid "Clear the existing annotation for "
+msgstr "Supprimer l'annotation existante pour "
+
+#: eeschema/annotate_dialog.cpp:287
+msgid "the entire schematic?"
+msgstr "la schématique entière?"
+
+#: eeschema/annotate_dialog.cpp:289
+msgid "the current sheet?"
+msgstr "La feuille courante?"
+
+#: eeschema/annotate_dialog.cpp:291
+msgid ""
+"\n"
+"\n"
+"This operation will clear the existing annotation and cannot be undone."
+msgstr ""
+"\n"
+"\n"
+"Cette opération supprimera l'annotation existante et ne peut être annulée."
 
 #: eeschema/save_schemas.cpp:96
 msgid "File write operation failed."
@@ -9019,59 +9019,63 @@ msgstr "Couleurs"
 msgid "No default editor found, you must choose it"
 msgstr "Pas d'éditeur par défaut trouvé, vous devez en choisir un"
 
-#: common/edaappl.cpp:79
+#: common/edaappl.cpp:80
 msgid "Default"
 msgstr "Defaut"
 
-#: common/edaappl.cpp:92
+#: common/edaappl.cpp:93
 msgid "French"
 msgstr "French"
 
-#: common/edaappl.cpp:98
+#: common/edaappl.cpp:99
 msgid "Spanish"
 msgstr "Espagnol"
 
-#: common/edaappl.cpp:104
+#: common/edaappl.cpp:105
 msgid "Portuguese"
 msgstr "Portugais"
 
-#: common/edaappl.cpp:110
+#: common/edaappl.cpp:111
 msgid "Italian"
 msgstr "Italien"
 
-#: common/edaappl.cpp:116
+#: common/edaappl.cpp:117
 msgid "German"
 msgstr "Allemand"
 
-#: common/edaappl.cpp:122
+#: common/edaappl.cpp:123
 msgid "Slovenian"
 msgstr "Slovène"
 
-#: common/edaappl.cpp:128
+#: common/edaappl.cpp:129
 msgid "Hungarian"
 msgstr "Hongrois"
 
-#: common/edaappl.cpp:134
+#: common/edaappl.cpp:135
 msgid "Polish"
 msgstr "Polonais"
 
-#: common/edaappl.cpp:140
+#: common/edaappl.cpp:141
 msgid "Russian"
 msgstr "Russe"
 
-#: common/edaappl.cpp:146
+#: common/edaappl.cpp:147
 msgid "Korean"
 msgstr "Coréen"
 
-#: common/edaappl.cpp:152
+#: common/edaappl.cpp:153
 msgid "Chinese simplified"
 msgstr "Chinois Simplifié"
 
-#: common/edaappl.cpp:158
+#: common/edaappl.cpp:159
 msgid "Catalan"
 msgstr "Catalan"
 
-#: common/edaappl.cpp:592
+#: common/edaappl.cpp:165
+msgid "Dutch"
+msgstr "Hollandais"
+
+#: common/edaappl.cpp:599
 msgid "Language"
 msgstr "Langage"
 
