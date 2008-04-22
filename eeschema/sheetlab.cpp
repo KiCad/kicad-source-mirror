@@ -445,11 +445,11 @@ void WinEDA_SchematicFrame::DeleteSheetLabel( wxDC* DC,
             else
                 parent->m_Label = label->Next();
 
+            delete SheetLabelToDel;
+
             break;
         }
     }
-
-    delete SheetLabelToDel;
 
 #if 0 && defined(DEBUG)
     std::cout << "\n\nafter deleting:\n" << std::flush;
