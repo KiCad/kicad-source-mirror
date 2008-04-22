@@ -433,20 +433,20 @@ void WinEDA_SchematicFrame::DeleteSheetLabel( wxDC* DC,
     std::cout << "\n\n\n" << std::flush;
 #endif
 
-    Hierarchical_PIN_Sheet_Struct* label = parent->m_Label;
+    Hierarchical_PIN_Sheet_Struct*  prev = NULL;
 
-    Hierarchical_PIN_Sheet_Struct** pprev = &parent->m_Label;
-
-    while( label )
+    Hierarchical_PIN_Sheet_Struct*  label = parent->m_Label;
+    for(  ; label;  prev=label, label=label->Next() )
     {
         if( label == SheetLabelToDel )
         {
-            *pprev = label->Next();
+            if( prev )
+                prev->Pnext = label->Next();
+            else
+                parent->m_Label = label->Next();
+
             break;
         }
-
-        pprev = (Hierarchical_PIN_Sheet_Struct**) &label->Pnext;
-        label = label->Next();
     }
 
     delete SheetLabelToDel;

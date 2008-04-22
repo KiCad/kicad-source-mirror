@@ -33,13 +33,14 @@
 #define BUS_TO_BUS  1
 
 
-typedef enum {      /* Type des Marqueurs */
+enum TypeMarker {      /* Type des Marqueurs */
     MARQ_UNSPEC,
     MARQ_ERC,
     MARQ_PCB,
     MARQ_SIMUL,
     MARQ_NMAX        /* Derniere valeur: fin de tableau */
-} TypeMarker;
+};
+
 
 /* Messages correspondants aux types des marqueurs */
 #ifdef MAIN

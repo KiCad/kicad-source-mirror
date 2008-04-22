@@ -273,7 +273,7 @@ bool DrawMarkerStruct::Save( FILE* aFile ) const
     wxString msg;
 
     if( fprintf( aFile, "Kmarq %c %-4d %-4d \"%s\" F=%X\n",
-            m_Type + 'A',
+            int( m_Type ) + 'A',
             m_Pos.x, m_Pos.y,
             CONV_TO_UTF8( m_Comment ), m_MarkFlags ) == EOF )
     {
