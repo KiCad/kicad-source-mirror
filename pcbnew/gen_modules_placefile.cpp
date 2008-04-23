@@ -34,6 +34,29 @@ static int ListeModCmp( LIST_MOD* Ref, LIST_MOD* Cmp )
 }
 
 
+#if defined(DEBUG)
+
+/**
+ * Function HasNonSMDPins
+ * returns true if the given module has any non smd pins, such as through hole
+ * and therefore cannot be placed automatically.
+ */
+static bool HasNonSMDPins( MODULE* aModule )
+{
+    D_PAD* pad;
+
+    for( pad = aModule->m_Pads;  pad;  pad = pad->Next() )
+    {
+        if( pad->m_Attribut != PAD_SMD )
+            return true;
+    }
+
+    return false;
+}
+
+#endif
+
+
 /**************************************************************/
 void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
 /**************************************************************/
@@ -59,13 +82,31 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     File_Place_Offset = m_Auxiliary_Axis_Position;
 
     /* Calcul du nombre de modules utiles ( Attribut CMS, non VIRTUAL ) ) */
-    NbMod = 0; Module = m_Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    NbMod = 0;
+
+    for( Module = m_Pcb->m_Modules;  Module;  Module = Module->Next() )
     {
         if( Module->m_Attributs & MOD_VIRTUAL )
+        {
+            D(printf("skipping module %s because its virtual\n", CONV_TO_UTF8(Module->GetReference()) );)
             continue;
+        }
+
         if( (Module->m_Attributs & MOD_CMS)  == 0 )
+        {
+#if 0 && defined(DEBUG)  // enable this code to fix a bunch of mis-labeled modules:
+            if( !HasNonSMDPins( Module ) )
+                Module->m_Attributs |= MOD_CMS;     // all pins are SMD, fix the problem
+            else
+            {
+                printf( "skipping %s because its attribute is not CMS and it has non SMD pins\n", CONV_TO_UTF8(Module->GetReference()) );
+                continue;
+            }
+#else
             continue;
+#endif
+        }
+
         if( Module->GetLayer() == COPPER_LAYER_N )
             GenCu = TRUE;
         NbMod++;
@@ -119,8 +160,8 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     /* Etablissement de la liste des modules par ordre alphabetique */
     Liste = (LIST_MOD*) MyZMalloc( NbMod * sizeof(LIST_MOD) );
 
-    Module = (MODULE*) m_Pcb->m_Modules;
-    for( ii = 0; Module != NULL; Module = Module->Next() )
+    Module = m_Pcb->m_Modules;
+    for( ii = 0;  Module;  Module = Module->Next() )
     {
         if( Module->m_Attributs & MOD_VIRTUAL )
             continue;
