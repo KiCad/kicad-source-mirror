@@ -134,7 +134,7 @@ void WinEDA_PcbFrame::GlobalRoute( wxDC* DC )
 
     Affiche_Message( ExecFileName );
 
-    wxExecute( ExecFileName );
+    ProcessExecute( ExecFileName );
 
 #else
     wxMessageBox( wxT( "TODO, currently not available" ) );

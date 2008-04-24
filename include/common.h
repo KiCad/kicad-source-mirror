@@ -354,6 +354,18 @@ class WinEDA_DrawPanel;
 
 
 /* COMMON.CPP */
+
+
+/**
+ * Function ProcessExecute
+ * runs a child process.
+ * @param aCommandLine The process and any arguments to it all in a single string.
+ * @param aFlags The same args as allowed for wxExecute()
+ * @return bool - true if success, else false
+ */
+bool ProcessExecute( const wxString& aCommandLine, int aFlags = wxEXEC_ASYNC );
+
+
 wxString ReturnPcbLayerName( int layer_number, bool is_filename = FALSE );
 
 /* Return the name of the layer number "layer_number".
@@ -431,10 +443,10 @@ wxString    MakeFileName( const wxString& dir,
  *  dir = prefixe (chemin)
  *  shortname = nom avec ou sans chemin ou extension
  *  ext = extension
- * 
+ *
  *  si la chaine name possede deja un chemin ou une extension, elles
  *  ne seront pas modifiees
- * 
+ *
  *  retourne la chaine calculee */
 
 wxString    MakeReducedFileName( const wxString& fullfilename,
@@ -445,12 +457,12 @@ wxString    MakeReducedFileName( const wxString& fullfilename,
  *  fullfilename = nom complet
  *  default_path = prefixe (chemin) par defaut
  *  default_ext = extension par defaut
- * 
+ *
  *  retourne le nom reduit, c'est a dire:
  *  sans le chemin si le chemin est default_path
  *  avec ./ si si le chemin est le chemin courant
  *  sans l'extension si l'extension est default_ext
- * 
+ *
  *  Renvoie un chemin en notation unix ('/' en separateur de repertoire)
  */
 

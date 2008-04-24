@@ -342,7 +342,7 @@ void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame,
     CommandFile += wxT( " " ) + TmpFullFileName;
     CommandFile += wxT( " " ) + FullFileName;
 
-    wxExecute( CommandFile, wxEXEC_SYNC );
+    ProcessExecute( CommandFile, wxEXEC_SYNC );
 }
 
 

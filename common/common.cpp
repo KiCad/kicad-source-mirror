@@ -12,7 +12,7 @@
 #include "common.h"
 #include "macros.h"
 #include "build_version.h"
-
+#include <wx/process.h>
 
 /*****************************/
 wxString GetBuildVersion()
@@ -30,7 +30,9 @@ Ki_PageDescr::Ki_PageDescr( const wxSize& size, const wxPoint& offset, const wxS
 /*********************************************************************************************/
 {
     // All sizes are in 1/1000 inch
-    m_Size = size; m_Offset = offset, m_Name = name;
+    m_Size = size;
+    m_Offset = offset;
+    m_Name = name;
 
     // Adjust the default value for margins to 400 mils (0,4 inch or 10 mm)
     m_LeftMargin = m_RightMargin = m_TopMargin = m_BottomMargin = 400;
@@ -205,6 +207,7 @@ wxString GenDate()
         wxT( "jan" ), wxT( "feb" ), wxT( "mar" ), wxT( "apr" ), wxT( "may" ), wxT( "jun" ),
         wxT( "jul" ), wxT( "aug" ), wxT( "sep" ), wxT( "oct" ), wxT( "nov" ), wxT( "dec" )
     };
+
     time_t buftime;
     struct tm*            Date;
     wxString string_date;
@@ -238,6 +241,14 @@ void* MyMalloc( size_t nb_octets )
         DisplayError( NULL, msg );
     }
     return pt_mem;
+}
+
+
+bool ProcessExecute( const wxString& aCommandLine, int aFlags )
+{
+    wxProcess*  process = wxProcess::Open( aCommandLine, aFlags );
+
+    return process != NULL;
 }
 
 

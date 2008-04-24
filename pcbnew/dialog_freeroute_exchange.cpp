@@ -305,7 +305,7 @@ void dialog_freeroute_exchange::OnButton5Click( wxCommandEvent& event )
     if( wxFileExists( FullFileName ) )
     {
         command << wxT("javaws") << wxT( " " ) + FullFileName;
-        wxExecute( command );
+        ProcessExecute( command );
         return;
     }
 

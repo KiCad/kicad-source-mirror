@@ -533,7 +533,7 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& para
     {
         if( !param.IsEmpty() )
             FullFileName += wxT( " " ) + param;
-        wxExecute( FullFileName );
+        ProcessExecute( FullFileName );
         return 0;
     }
 
@@ -748,7 +748,7 @@ void OpenPDF( const wxString& file )
     }
 
     if( !command.IsEmpty() )
-        wxExecute( command );
+        ProcessExecute( command );
 }
 
 
@@ -771,5 +771,5 @@ void OpenFile( const wxString& file )
     delete filetype;
 
     if( success && !command.IsEmpty() )
-        wxExecute( command );
+        ProcessExecute( command );
 }
