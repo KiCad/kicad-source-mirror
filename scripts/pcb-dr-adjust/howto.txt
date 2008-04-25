@@ -1,0 +1,27 @@
+Dr:: 0,400,400;
+ShC:: 0,700,600,0,900,900
+ShR:: 0,0,0,0,0,0
+ShO:: 0,0,0,0,0,0
+Vias:: 0,700,600,0,400,400
+infile: example.brd
+outfile: processed.brd
+
+1. edit a copy of configuration file 'pcb-dr-adjust.cfg' in project folder
+  a. Dr:: from,to,result:from_2,to_2,result_2
+     Replaces all drills (from...to] with 'result' value
+  b. Sh[C,R,O]:[|locked]: fromX,toX,resultX,fromY,toY,resultY; e.t.c.
+     C,R,O - different types of pads
+     locked/unlocked - process X and Y only if both checks match/independently
+  c. Vias:: the same as Shapes
+  d. infile: your_board_filename
+  e. outfile: your_out_filename
+     Should be not the same as infile now.
+2. run pcb-dr-adjust.pl. Under Windows - download ActivePerl from http://activestate.com
+   Undex *nix - chmod 755 pcb-dr-adjust.cfg, execute "./pcb-dr-adjust.pl" or "path-to-svn/scripts/pcb-dr-adjust/pcb-dr-adjust.pl"
+3. take a look at outfile and rename it manually if correct.
+
+
+P.S. Next release I will add "make install" to *nix,*win32 makefiles to install it to bin folder.
+     I will try to make this tool as good as time permit. Any contributions welcome!
+
+Enjoy!
