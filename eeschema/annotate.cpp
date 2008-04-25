@@ -338,9 +338,7 @@ void AnnotateComponents( WinEDA_SchematicFrame* parent,
     /* Break full components reference in name (prefix) and number:
      * example: IC1 become IC, and 1 */
     BreakReference( BaseListeCmp, NbOfCmp );
-wxString msg1;
-    msg1 << sortOption;
-wxMessageBox(msg1);
+
     switch( sortOption )
     {
     case 0:

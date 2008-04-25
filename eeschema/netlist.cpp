@@ -153,14 +153,14 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
     int                 NetNumber;
     int                 i, istart, NetCode;
     DrawSheetPath*		sheet;
-    wxString            msg;
+    wxString            msg, activity;
     wxBusyCursor        Busy;
 
     NetNumber    = 1;
     s_PassNumber = 0;
 
-    MsgPanel->EraseMsgBox();
-    Affiche_1_Parametre( this, 1, _( "List" ), wxEmptyString, LIGHTRED );
+    activity = _( "List" );
+	SetStatusText( activity );
 
     /* Build the sheet (not screen) list (flattened)*/
     EDA_SheetList SheetListList( NULL );
@@ -192,7 +192,6 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
     /* second pass: fill the fields of the structures in the Net */
 
     s_PassNumber++;
-    Affiche_1_Parametre( this, 1, _( "List" ), wxEmptyString, RED );
 
     sheet = SheetListList.GetFirst();
     for( ObjetNetListStruct* tabObjNet = g_TabObjNet;
@@ -201,17 +200,17 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
         tabObjNet += ListeObjetConnection( this, sheet, tabObjNet );
     }
 
-    Affiche_1_Parametre( this, -1, _( "List" ), _( "Done" ), RED );
-
-    msg.Printf( wxT( "%d" ), g_NbrObjNet );
-    Affiche_1_Parametre( this, 8, _( "NbItems" ), msg, GREEN );
+    activity.Empty();
+    activity << wxT(" ") << _( "NbItems" ) << wxT(" ") << g_NbrObjNet;
+	SetStatusText( activity );
 
     /* Recherche des connections pour les Segments et les Pins */
     /* Tri du Tableau des objets de Net par Sheet */
 
     qsort( g_TabObjNet, g_NbrObjNet, sizeof(ObjetNetListStruct), TriBySheet );
 
-    Affiche_1_Parametre( this, 18, _( "Conn" ), wxEmptyString, CYAN );
+    activity << wxT(";  ") << _( "Conn" );
+	SetStatusText( activity );
 
     sheet = &(g_TabObjNet[0].m_SheetList);
     LastNetCode = LastBusNetCode = 1;
@@ -308,12 +307,14 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
 #endif
 
 
-    Affiche_1_Parametre( this, 18, _( "Conn" ), _( "Done" ), CYAN );
+    activity << wxT(" ") << _( "Done" );
+	SetStatusText( activity );
 
     /* Mise a jour des NetCodes des Bus Labels connectes par les Bus */
     ConnectBusLabels( g_TabObjNet, g_NbrObjNet );
 
-    Affiche_1_Parametre( this, 26, _( "Labels" ), wxEmptyString, CYAN );
+    activity << wxT(";  ") << _( "Labels" );
+	SetStatusText( activity );
 
     /* Connections des groupes d'objets par labels identiques */
     for( i = 0;  i<g_NbrObjNet;  i++ )
@@ -348,10 +349,12 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
     dumpNetTable();
 #endif
 
-    Affiche_1_Parametre( this, 26, _( "Labels" ), _( "Done" ), CYAN );
+    activity << wxT(" ") << _( "Done" );
+	SetStatusText( activity );
 
     /* Connexion des hierarchies */
-    Affiche_1_Parametre( this, 36, _( "Hierar." ), wxEmptyString, LIGHTRED );
+    activity << wxT(";  ") << _( "Hierar." );
+	SetStatusText( activity );
 
     for( i = 0;  i<g_NbrObjNet; i++ )
     {
@@ -369,10 +372,12 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
     dumpNetTable();
 #endif
 
-    Affiche_1_Parametre( this, 36, _( "Hierar." ), _( "Done" ), RED );
+    activity << wxT(" ") << _( "Done" );
+	SetStatusText( activity );
 
     /* Compression des numeros de NetCode a des valeurs consecutives */
-    Affiche_1_Parametre( this, 46, _( "Sorting" ), wxEmptyString, GREEN );
+    activity << wxT(";  ") << _( "Sorting Nets" );
+	SetStatusText( activity );
     LastNetCode = NetCode = 0;
     for( i = 0; i < g_NbrObjNet; i++ )
     {
@@ -384,7 +389,8 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
         g_TabObjNet[i].SetNet( NetCode );
     }
 
-    Affiche_1_Parametre( this, 46, _( "Sorting" ), _( "Done" ), GREEN );
+    activity << wxT(" ") << _( "Done" );
+	SetStatusText( activity );
 
     /* Affectation du m_FlagOfConnection en fonction de connection ou non */
     SetUnconnectedFlag( g_TabObjNet, g_NbrObjNet );
