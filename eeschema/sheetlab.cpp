@@ -1,6 +1,6 @@
-/****************************************************************/
-/*	sheetlab.cpp  module pour creation /editin des Sheet labels */
-/****************************************************************/
+/**************************************************************************/
+/*	sheetlab.cpp  create and edit the Hierarchical_PIN_Sheet_Struct items */
+/**************************************************************************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -408,21 +408,18 @@ Hierarchical_PIN_Sheet_Struct* WinEDA_SchematicFrame::Import_PinSheet( DrawSheet
 
 
 /**************************************************************/
-void WinEDA_SchematicFrame::DeleteSheetLabel( wxDC* DC,
-              Hierarchical_PIN_Sheet_Struct* SheetLabelToDel )
+void WinEDA_SchematicFrame::DeleteSheetLabel( bool aRedraw,
+              Hierarchical_PIN_Sheet_Struct* aSheetLabelToDel )
 /**************************************************************/
 
 /*
  *  Routine de suppression de 1 Structure type (Hierarchical_PIN_Sheet_Struct.
  *  Cette Structure ne peut etre mise en pile "undelete" car il ne serait pas
- *  possible de la ratacher a la 'DrawSheetStruct' d'origine
- *  si DC != NULL, effacement a l'ecran du dessin
+ *  possible de la rattacher a la 'DrawSheetStruct' d'origine
+ *  si aRedraw == true, effacement a l'ecran du dessin
  */
 {
-    if( DC )
-        RedrawOneStruct( DrawPanel, DC, SheetLabelToDel, g_XorMode );
-
-    DrawSheetStruct* parent = (DrawSheetStruct*) SheetLabelToDel->m_Parent;
+    DrawSheetStruct* parent = (DrawSheetStruct*) aSheetLabelToDel->m_Parent;
 
     wxASSERT( parent );
     wxASSERT( parent->Type() == DRAW_SHEET_STRUCT_TYPE );
@@ -438,18 +435,22 @@ void WinEDA_SchematicFrame::DeleteSheetLabel( wxDC* DC,
     Hierarchical_PIN_Sheet_Struct*  label = parent->m_Label;
     for(  ; label;  prev=label, label=label->Next() )
     {
-        if( label == SheetLabelToDel )
+        if( label == aSheetLabelToDel )
         {
             if( prev )
                 prev->Pnext = label->Next();
             else
                 parent->m_Label = label->Next();
 
-            delete SheetLabelToDel;
+            delete aSheetLabelToDel;
 
             break;
         }
     }
+
+    if( aRedraw )
+        DrawPanel->PostDirtyRect( parent->GetBoundingBox() );
+
 
 #if 0 && defined(DEBUG)
     std::cout << "\n\nafter deleting:\n" << std::flush;

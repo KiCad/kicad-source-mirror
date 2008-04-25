@@ -286,7 +286,7 @@ void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame,
             fprintf( tmpfile, "\n$BeginComponent\n" );
             fprintf( tmpfile, "TimeStamp=%8.8lX\n", Component->m_TimeStamp );
             fprintf( tmpfile, "Footprint=%s\n", CONV_TO_UTF8( FootprintName ) );
-            Line = wxT( "Reference=" ) + Component->GetPath(sheet) + wxT( "\n" );
+            Line = wxT( "Reference=" ) + Component->GetRef(sheet) + wxT( "\n" );
             Line.Replace( wxT( " " ), wxT( "_" ) );
             fprintf( tmpfile, CONV_TO_UTF8( Line ) );
 

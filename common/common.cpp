@@ -246,9 +246,13 @@ void* MyMalloc( size_t nb_octets )
 
 bool ProcessExecute( const wxString& aCommandLine, int aFlags )
 {
+#ifdef __WINDOWS__
+	wxExecute(aCommandLine);
+	return true;
+#else
     wxProcess*  process = wxProcess::Open( aCommandLine, aFlags );
-
     return process != NULL;
+#endif
 }
 
 

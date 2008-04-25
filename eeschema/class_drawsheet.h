@@ -108,7 +108,7 @@ public:
     void                Place( WinEDA_SchematicFrame* frame, wxDC* DC );
     DrawSheetStruct*    GenCopy();
     void                Display_Infos( WinEDA_DrawFrame* frame );
-    void                CleanupSheet( WinEDA_SchematicFrame* frame, wxDC* DC );
+    void                CleanupSheet( WinEDA_SchematicFrame* frame, bool aRedraw );
     virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                               int draw_mode, int Color = -1 );
     EDA_Rect            GetBoundingBox();

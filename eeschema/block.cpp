@@ -934,7 +934,7 @@ void DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM * DrawStruct )
         /* Cette stucture est rattachee a une feuille, et n'est pas
          *  accessible par la liste globale directement */
         frame->SaveCopyInUndoList( (SCH_ITEM*) ( (Hierarchical_PIN_Sheet_Struct*) DrawStruct )->m_Parent, IS_CHANGED );
-        frame->DeleteSheetLabel( DC, (Hierarchical_PIN_Sheet_Struct*) DrawStruct );
+        frame->DeleteSheetLabel( DC ? true : false , (Hierarchical_PIN_Sheet_Struct*) DrawStruct );
         return;
     }
 
@@ -965,10 +965,6 @@ void DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM * DrawStruct )
         if( DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE )
         {
             frame->SaveCopyInUndoList( DrawStruct, IS_DELETED );	// Currently In TEST
-
-//			SAFE_DELETE(DrawStruct);
-            //no undo/redo for this (for now), it is on both the EEDrawList and m_SubSheet arrays,
-            //hence the undo logic would have to be extended for this.
         }
         else
             frame->SaveCopyInUndoList( DrawStruct, IS_DELETED );

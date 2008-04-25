@@ -270,7 +270,6 @@ void DrawMarkerStruct::Show( int nestLevel, std::ostream& os )
 bool DrawMarkerStruct::Save( FILE* aFile ) const
 {
     bool success = true;
-    wxString msg;
 
     if( fprintf( aFile, "Kmarq %c %-4d %-4d \"%s\" F=%X\n",
             int( m_Type ) + 'A',

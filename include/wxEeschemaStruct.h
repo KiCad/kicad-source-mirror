@@ -216,7 +216,7 @@ private:
     Hierarchical_PIN_Sheet_Struct*   Import_PinSheet( DrawSheetStruct* Sheet, wxDC* DC );
 
 public:
-    void                    DeleteSheetLabel( wxDC* DC, Hierarchical_PIN_Sheet_Struct* SheetLabelToDel );
+    void                    DeleteSheetLabel( bool aRedraw, Hierarchical_PIN_Sheet_Struct* aSheetLabelToDel );
 
 private:
 

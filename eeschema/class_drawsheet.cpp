@@ -240,16 +240,16 @@ void DrawSheetStruct::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 
 
 /********************************************************************/
-void DrawSheetStruct::CleanupSheet( WinEDA_SchematicFrame* frame, wxDC* DC )
+void DrawSheetStruct::CleanupSheet( WinEDA_SchematicFrame* aFrame, bool aRedraw )
 /********************************************************************/
 
 /* Delete pinsheets which are not corresponding to a hierarchal label
- *  if DC != NULL, redraw Sheet
+ *  if aRedraw != NULL, redraw Sheet
  */
 {
     Hierarchical_PIN_Sheet_Struct* Pinsheet, * NextPinsheet;
 
-    if( !IsOK( frame, _( "Ok to cleanup this sheet" ) ) )
+    if( !IsOK( aFrame, _( "Ok to cleanup this sheet" ) ) )
         return;
 
     Pinsheet = m_Label;
@@ -272,11 +272,15 @@ void DrawSheetStruct::CleanupSheet( WinEDA_SchematicFrame* frame, wxDC* DC )
         NextPinsheet = Pinsheet->Next();
         if( HLabel == NULL )   // Hlabel not found: delete pinsheet
         {
-            frame->GetScreen()->SetModify();
-            frame->DeleteSheetLabel( DC, Pinsheet );
+            aFrame->GetScreen()->SetModify();
+            aFrame->DeleteSheetLabel( false, Pinsheet );
         }
         Pinsheet = NextPinsheet;
     }
+    
+        if( aRedraw )
+            aFrame->DrawPanel->PostDirtyRect( GetBoundingBox() );
+
 }
 
 
