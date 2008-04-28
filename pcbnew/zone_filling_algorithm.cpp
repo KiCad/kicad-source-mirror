@@ -673,7 +673,7 @@ bool WinEDA_PcbFrame::Genere_Pad_Connexion( wxDC* DC, int layer )
             dy += abs( pt_pad->m_DeltaSize.x ) / 2;
         }
 
-        /* calculate the 4 segment coordintes (starting from the pad centre cX,cY) */
+        /* calculate the 4 segment coordinates (starting from the pad centre cX,cY) */
         sommet[0][0] = 0; sommet[0][1] = -dy;
         sommet[1][0] = -dx; sommet[1][1] = 0;
         sommet[2][0] = 0; sommet[2][1] = dy;
@@ -698,8 +698,14 @@ bool WinEDA_PcbFrame::Genere_Pad_Connexion( wxDC* DC, int layer )
             /* Test if the segment is allowed */
             if( BAD_DRC==m_drc->DrcBlind( pt_track, m_Pcb->m_Track ) )
             {
-                delete pt_track;
-                continue;
+                // Drc error, retry with a smaller width
+                // because some drc errors are due to a track width > filling zone size.
+                pt_track->m_Width = g_GridRoutingSize;
+                if( BAD_DRC==m_drc->DrcBlind( pt_track, m_Pcb->m_Track ) )
+                {
+                    delete pt_track;
+                    continue;
+                }
             }
 
             /* Search for a zone segment */

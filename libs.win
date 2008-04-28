@@ -1,6 +1,6 @@
 # File:		libs.win
 #binaries path:
-KICAD_BIN = /f/kicad/winexe
+KICAD_BIN = /f/kicad/bin
 
 
 

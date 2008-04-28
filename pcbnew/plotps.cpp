@@ -143,7 +143,7 @@ void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer, bo
             g_PlotOffset.y = -PaperSize.y / 2 + BoardCenter.y;
         else
             g_PlotOffset.y = -PaperSize.y + m_Pcb->m_BoundaryBox.GetBottom()
-                             + m_Pcb->m_BoundaryBox.GetY() + PlotMarge_in_mils * U_PCB;
+            + m_Pcb->m_BoundaryBox.GetY() + PlotMarge_in_mils * U_PCB;
     }
 
     InitPlotParametresPS( g_PlotOffset, SheetPS, scale_x, scale_y, g_PlotOrient );
@@ -211,7 +211,7 @@ void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer, bo
         else
             tracevia = 0;
         Plot_Layer_PS( dest, layer_mask, g_DesignSettings.m_MaskMargin,
-                       tracevia, modetrace );
+            tracevia, modetrace );
         break;
 
     case SOLDERPASTE_N_CU:
@@ -257,22 +257,22 @@ void WinEDA_BasePcbFrame::Plot_Layer_PS( FILE* File, int masque_layer,
         {
         case TYPEDRAWSEGMENT:
             PlotDrawSegment( (DRAWSEGMENT*) PtStruct, PLOT_FORMAT_POST,
-                            masque_layer );
+                masque_layer );
             break;
 
         case TYPETEXTE:
             PlotTextePcb( (TEXTE_PCB*) PtStruct, PLOT_FORMAT_POST,
-                         masque_layer );
+                masque_layer );
             break;
 
         case TYPECOTATION:
             PlotCotation( (COTATION*) PtStruct, PLOT_FORMAT_POST,
-                         masque_layer );
+                masque_layer );
             break;
 
         case TYPEMIRE:
             PlotMirePcb( (MIREPCB*) PtStruct, PLOT_FORMAT_POST,
-                        masque_layer );
+                masque_layer );
             break;
 
         case TYPEMARKER:
@@ -280,7 +280,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_PS( FILE* File, int masque_layer,
 
         default:
             DisplayError( this,
-                         wxT( "WinEDA_BasePcbFrame::Plot_Layer_PS() : Unexpected Draw Type" ) );
+                wxT( "WinEDA_BasePcbFrame::Plot_Layer_PS() : Unexpected Draw Type" ) );
             break;
         }
     }
@@ -341,7 +341,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_PS( FILE* File, int masque_layer,
                 wxSize delta;
                 delta = PtPad->m_DeltaSize;
                 trace_1_pad_TRAPEZE_POST( pos, size, delta,
-                                          PtPad->m_Orient, modetrace );
+                    PtPad->m_Orient, modetrace );
                 break;
             }
 
@@ -437,7 +437,7 @@ static void PrintDrillMark( BOARD* Pcb )
 
 /* Draw a drill mark for pads and vias.
  * Must be called after all drawings, because it
- * redraw the drill mark on a pad or via
+ * redraw the drill mark on a pad or via, as a negative (i.e. white) shape
  */
 {
     const int SMALL_DRILL = 150;
@@ -458,7 +458,7 @@ static void PrintDrillMark( BOARD* Pcb )
     diam.x = diam.y = (g_DrillShapeOpt == DRILL_MARK) ? SMALL_DRILL :
                       g_DesignSettings.m_ViaDrill;
 
-    for( pts = Pcb->m_Track; pts != NULL; pts = (TRACK*) pts->Pnext )
+    for( pts = Pcb->m_Track; pts != NULL; pts = pts->Next() )
     {
         if( pts->Type() != TYPEVIA )
             continue;
@@ -474,17 +474,25 @@ static void PrintDrillMark( BOARD* Pcb )
     Module = Pcb->m_Modules;
     for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
     {
-        PtPad = (D_PAD*) Module->m_Pads;
-        for( ; PtPad != NULL; PtPad = (D_PAD*) PtPad->Pnext )
+        PtPad = Module->m_Pads;
+        for( ; PtPad != NULL; PtPad = PtPad->Next() )
         {
             if( PtPad->m_Drill.x == 0 )
                 continue;
 
-            // calcul de la position des trous, selon echelle
-            pos    = PtPad->m_Pos;
-            diam.x = diam.y = (g_DrillShapeOpt == DRILL_MARK) ? SMALL_DRILL :
-                              PtPad->m_Drill.x;
-            trace_1_pastille_RONDE_POST( pos, diam.x, FILLED );
+            // Output hole shapes:
+            pos = PtPad->m_Pos;
+            if( PtPad->m_DrillShape == PAD_OVAL )
+            {
+                diam = PtPad->m_Drill;
+                trace_1_pastille_OVALE_POST( pos, diam, PtPad->m_Orient, FILLED );
+            }
+            else
+            {
+                diam.x = (g_DrillShapeOpt == DRILL_MARK) ? SMALL_DRILL :
+                         PtPad->m_Drill.x;
+                trace_1_pastille_RONDE_POST( pos, diam.x, FILLED );
+            }
         }
     }
 
@@ -525,7 +533,7 @@ void trace_1_pastille_OVALE_POST( wxPoint pos, wxSize size, int orient, int mode
     if( modetrace == FILLED )
     {
         PlotFilledSegmentPS( wxPoint( pos.x + x0, pos.y + y0 ),
-                             wxPoint( pos.x + x1, pos.y + y1 ), size.x );
+            wxPoint( pos.x + x1, pos.y + y1 ), size.x );
     }
     else
     {
@@ -545,7 +553,7 @@ void trace_1_pastille_OVALE_POST( wxPoint pos, wxSize size, int orient, int mode
         RotatePoint( &x0, &y0, orient );
         RotatePoint( &x1, &y1, orient );
         PlotFilledSegmentPS( wxPoint( pos.x + x0, pos.y + y0 ),
-                             wxPoint( pos.x + x1, pos.y + y1 ), w );
+            wxPoint( pos.x + x1, pos.y + y1 ), w );
 
         x0 = rayon;
         y0 = -delta / 2;
@@ -554,7 +562,7 @@ void trace_1_pastille_OVALE_POST( wxPoint pos, wxSize size, int orient, int mode
         RotatePoint( &x0, &y0, orient );
         RotatePoint( &x1, &y1, orient );
         PlotFilledSegmentPS( wxPoint( pos.x + x0, pos.y + y0 ),
-                             wxPoint( pos.x + x1, pos.y + y1 ), w );
+            wxPoint( pos.x + x1, pos.y + y1 ), w );
     }
 }
 
@@ -566,7 +574,7 @@ void trace_1_pastille_RONDE_POST( wxPoint centre, int diametre, int modetrace )
 /* Trace 1 pastille RONDE (via,pad rond) en position pos_X,Y
  */
 {
-    int rayon, w;
+    int    rayon, w;
 
     wxSize diam( diametre, diametre );
 
@@ -575,12 +583,12 @@ void trace_1_pastille_RONDE_POST( wxPoint centre, int diametre, int modetrace )
 
     if( modetrace == FILLED )
     {
-        SetCurrentLineWidthPS(0);
+        SetCurrentLineWidthPS( 0 );
         rayon = diam.x / 2;
         if( rayon < 1 )
             rayon = 1;
         fprintf( dest, "newpath %d %d %d 0 360 arc fill stroke\n",
-                 centre.x, centre.y, rayon );
+            centre.x, centre.y, rayon );
     }
     else
     {
@@ -590,9 +598,9 @@ void trace_1_pastille_RONDE_POST( wxPoint centre, int diametre, int modetrace )
             rayon = 1;
         if( rayon < w )
             w = rayon;
-        SetCurrentLineWidthPS(w);
+        SetCurrentLineWidthPS( w );
         fprintf( dest, "newpath %d %d %d 0 360 arc stroke\n",
-                 centre.x, centre.y, rayon );
+            centre.x, centre.y, rayon );
     }
 }
 
