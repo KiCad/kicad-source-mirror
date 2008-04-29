@@ -74,3 +74,14 @@ edges editable. (DONE)
 2) final solution: get rid of requirement for tracks buried within a zone.
 Review the GEDA source code and other sources to gather ideas before doing 2).
 
+2008-Apr-29 Assigned To:
+asked by: Dick Hollenbeck
+================================================================================
++pcbnew
+    When picking new board from the menu, when an existing board is already
+    in memory, the number of layers in the new board is not set to the default
+    but rather to the number of layers in the previously loaded board, and with
+    the default layer names, rather than the layer names of the previously
+    loaded board.   I think the number of layers should be reduced to the
+    default and the default layer names should be used.
+

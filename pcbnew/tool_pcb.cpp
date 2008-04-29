@@ -629,6 +629,9 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
     m_SelViaSizeBox_Changed    = TRUE;
     m_SelTrackWidthBox_Changed = TRUE;
 
+
+    ReCreateLayerBox( NULL );
+
     SetToolbars();
 }
 

@@ -90,6 +90,9 @@ bool WinEDA_App::OnInit()
     if( !FFileName.IsEmpty() )
     {
         m_PcbFrame->LoadOnePcbFile( FFileName, FALSE );
+
+        // update the layer names in the listbox
+        m_PcbFrame->ReCreateLayerBox( NULL );
     }
 
     return TRUE;

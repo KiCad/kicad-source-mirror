@@ -81,6 +81,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
         GetScreen()->m_FileName.Printf( wxT( "%s%cnoname%s" ),
                                        wxGetCwd().GetData(), DIR_SEP, PcbExtBuffer.GetData() );
         SetTitle( GetScreen()->m_FileName );
+        ReCreateLayerBox( NULL );
         break;
 
     case ID_LOAD_FILE_1:
