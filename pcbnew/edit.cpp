@@ -1087,7 +1087,7 @@ void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
 void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
 /*****************************************************************/
 {
-    int preslayer = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
+    int preslayer = GetScreen()->m_Active_Layer;
 
     // Check if the specified layer matches the present layer
     if( layer == preslayer )
@@ -1140,9 +1140,9 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
                 // Want to set the routing layers so that it switches properly -
                 // see the implementation of Other_Layer_Route - the working
                 // layer is used to 'start' the via and set the layer masks appropriately.
-                ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP    = preslayer;
-                ((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM = layer;
-                ((PCB_SCREEN*)GetScreen())->m_Active_Layer = preslayer;
+                GetScreen()->m_Route_Layer_TOP    = preslayer;
+                GetScreen()->m_Route_Layer_BOTTOM = layer;
+                GetScreen()->m_Active_Layer = preslayer;
 
                 if( Other_Layer_Route( (TRACK*) GetScreen()->GetCurItem(), DC ) )
                 {
@@ -1163,7 +1163,7 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
     // and a non-copper layer, or vice-versa?
     // ...
 
-    ((PCB_SCREEN*)GetScreen())->m_Active_Layer = layer;
+    GetScreen()->m_Active_Layer = layer;
 
     if( DisplayOpt.ContrastModeDisplay )
         GetScreen()->SetRefreshReq();
