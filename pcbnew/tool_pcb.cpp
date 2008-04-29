@@ -629,7 +629,6 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
     m_SelViaSizeBox_Changed    = TRUE;
     m_SelTrackWidthBox_Changed = TRUE;
 
-
     ReCreateLayerBox( NULL );
 
     SetToolbars();
@@ -667,6 +666,7 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
 /**************************************************************************/
 {
     // wxASSERT("ReCreateLayerBox"=="");    // get a stack trace, who is calling me and from where
+    D(printf("ReCreateLayerBox\n");)
 
     if( m_SelLayerBox == NULL )
     {
