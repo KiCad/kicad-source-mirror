@@ -660,6 +660,7 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         RedrawActiveWindow( DC, TRUE );
     }
 
-    SetToolbars();
+    // SetToolbars();
+
     Affiche_Status_Box();    /* Display new cursor coordinates */
 }

@@ -315,6 +315,8 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
     Via->Display_Infos( this );
 
     Affiche_Status_Box();
+
+    D(printf("Other_Layer_Route\n");)
     SetToolbars();
 
     return true;

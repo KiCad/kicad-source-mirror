@@ -559,7 +559,8 @@ void WinEDA_PcbFrame::SetToolbars()
         }
     }
 
-    ReCreateLayerBox( NULL );
+    UpdateToolbarLayerInfo();
+
     PrepareLayerIndicator();
 
     DisplayUnitsMsg();

@@ -350,6 +350,14 @@ public:
     void                ReCreateOptToolbar();
     void                ReCreateMenuBar();
     WinEDAChoiceBox*    ReCreateLayerBox( WinEDA_Toolbar* parent );
+
+    /**
+     * Function UpdateToolbarLayerInfo
+     * updates the currently selected layer in the layer listbox and
+     * the colored icon in the toolbar.
+     */
+    void                UpdateToolbarLayerInfo();
+
     void                PrepareLayerIndicator();
     void                OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void                OnLeftDClick( wxDC* DC, const wxPoint& MousePos );

@@ -225,6 +225,7 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
             m_FilesMenu->Append( ID_LOAD_FILE_1 + ii, GetLastProject( ii ) );
         }
 
+        D(printf("ReCreateHToolbar\n");)
         SetToolbars();
         return;
     }
@@ -232,6 +233,7 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
 
     m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
     m_HToolBar->SetRows( 1 );
+
     SetToolBar( m_HToolBar );
 
     // Set up toolbar
@@ -295,6 +297,7 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
                         _( "Pcb Design Rules Check" ) );
 
     m_HToolBar->AddSeparator();
+
     ReCreateLayerBox( m_HToolBar );
     PrepareLayerIndicator();    // Initialise the bitmap with current active layer colors for the next tool
     m_HToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, wxEmptyString, *LayerPairBitmap,
@@ -318,6 +321,7 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
 
     m_HToolBar->Realize();
 
+    D(printf("ReCreateHToolbar\n");)
     SetToolbars();
 }
 
@@ -392,6 +396,7 @@ void WinEDA_PcbFrame::ReCreateOptToolbar()
 
     m_OptionsToolBar->Realize();
 
+    D(printf("ReCreateOptToolbar\n");)
     SetToolbars();
 }
 
@@ -472,6 +477,7 @@ void WinEDA_PcbFrame::ReCreateVToolbar()
 
     m_VToolBar->Realize();
 
+    D(printf("ReCreateVToolbar\n");)
     SetToolbars();
 }
 
@@ -524,6 +530,7 @@ void WinEDA_PcbFrame::ReCreateAuxVToolbar()
 
     m_AuxVToolBar->Realize();
 
+    D(printf("ReCreateAuxVToolbar\n");)
     SetToolbars();
 }
 
@@ -627,11 +634,37 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
 
 
 /**************************************************************************/
+void WinEDA_PcbFrame::UpdateToolbarLayerInfo()
+/**************************************************************************/
+{
+    wxASSERT( m_SelLayerBox );
+
+    // Activation de l'affichage sur la bonne couche
+    // Pour eviter la reentrance (Bug wxGTK version Linux?), la selection n'est faite que si
+    // elle est mauvaise (Pb corrige sur wxGTK 2.6.0)
+
+    int     count = m_SelLayerBox->GetCount();
+    int     choice = m_SelLayerBox->GetChoice();
+    int     layer = GetScreen()->m_Active_Layer;
+
+    for( int listNdx=0;  listNdx<count;  ++listNdx )
+    {
+        if( (int) (size_t) m_SelLayerBox->GetClientData( listNdx ) == layer )
+        {
+            if( listNdx != choice )
+                m_SelLayerBox->SetSelection( listNdx );
+            break;
+        }
+    }
+}
+
+
+/**************************************************************************/
 WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
 /**************************************************************************/
 {
-    int      ii, jj, ll;
-    unsigned length  = 0;
+    // wxASSERT("ReCreateLayerBox"=="");    // get a stack trace, who is calling me and from where
+
     if( m_SelLayerBox == NULL )
     {
         if( parent == NULL )
@@ -658,84 +691,47 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
 
     layer_mask |= ALL_NO_CU_LAYERS;
 
+    unsigned length  = 0;
 
-    //  This is commented out because testing the number of layer is no longer
-    //  sufficient since the layer names may also have changed.  And the time
-    //  required to test layer names is probably longer than the time required
-    //  to simply reconstruct the list.
-#if 0
+    m_SelLayerBox->Clear();
 
-    // Test if reconstruction of the list is necessary
-    int     current_layer_mask = 0;
-    for( ii = 0; ii < (int) m_SelLayerBox->GetCount(); ii++ )
+    int      ii, jj;
+    for( ii = 0, jj = 0; ii <= EDGE_N; ii++ )
     {
-        jj = (int) ( (size_t) m_SelLayerBox->GetClientData( ii ) );
-        current_mask_layer |= g_TabOneLayerMask[jj];
-    }
+        // List to append hotkeys in layer box selection
+        static const int HK_SwitchLayer[EDGE_N + 1] = {
+            HK_SWITCH_LAYER_TO_COPPER,
+            HK_SWITCH_LAYER_TO_INNER1,
+            HK_SWITCH_LAYER_TO_INNER2,
+            HK_SWITCH_LAYER_TO_INNER3,
+            HK_SWITCH_LAYER_TO_INNER4,
+            HK_SWITCH_LAYER_TO_INNER5,
+            HK_SWITCH_LAYER_TO_INNER6,
+            HK_SWITCH_LAYER_TO_INNER7,
+            HK_SWITCH_LAYER_TO_INNER8,
+            HK_SWITCH_LAYER_TO_INNER9,
+            HK_SWITCH_LAYER_TO_INNER10,
+            HK_SWITCH_LAYER_TO_INNER11,
+            HK_SWITCH_LAYER_TO_INNER12,
+            HK_SWITCH_LAYER_TO_INNER13,
+            HK_SWITCH_LAYER_TO_INNER14,
+            HK_SWITCH_LAYER_TO_COMPONENT
+        };
 
-    bool     rebuild = FALSE;
-    if( current_layer_mask != layer_mask )
-        rebuild = TRUE;
-
-    // Construction de la liste
-    if( rebuild )
-#endif
-    {
-        m_SelLayerBox->Clear();
-        for( ii = 0, jj = 0; ii <= EDGE_N; ii++ )
+        if( (g_TabOneLayerMask[ii] & layer_mask) )
         {
-            // List to append hotkeys in layer box selection
-            static const int HK_SwitchLayer[EDGE_N + 1] = {
-                HK_SWITCH_LAYER_TO_COPPER,
-                HK_SWITCH_LAYER_TO_INNER1,
-                HK_SWITCH_LAYER_TO_INNER2,
-                HK_SWITCH_LAYER_TO_INNER3,
-                HK_SWITCH_LAYER_TO_INNER4,
-                HK_SWITCH_LAYER_TO_INNER5,
-                HK_SWITCH_LAYER_TO_INNER6,
-                HK_SWITCH_LAYER_TO_INNER7,
-                HK_SWITCH_LAYER_TO_INNER8,
-                HK_SWITCH_LAYER_TO_INNER9,
-                HK_SWITCH_LAYER_TO_INNER10,
-                HK_SWITCH_LAYER_TO_INNER11,
-                HK_SWITCH_LAYER_TO_INNER12,
-                HK_SWITCH_LAYER_TO_INNER13,
-                HK_SWITCH_LAYER_TO_INNER14,
-                HK_SWITCH_LAYER_TO_COMPONENT
-            };
-
-            if( (g_TabOneLayerMask[ii] & layer_mask) )
-            {
-                wxString msg = m_Pcb->GetLayerName( ii );
-                msg = AddHotkeyName( msg, s_Board_Editor_Hokeys_Descr, HK_SwitchLayer[ii] );
-                m_SelLayerBox->Append( msg );
-                m_SelLayerBox->SetClientData( jj, (void*) ii );
-                length = MAX( length, msg.Len() );
-                jj++;
-            }
-        }
-
-// Test me:
-//		int lchar = m_SelLayerBox->GetFont().GetPointSize();
-//		m_SelLayerBox->SetSize(wxSize(length * lchar,-1));
-
-        m_SelLayerBox->SetToolTip( _( "+/- to switch" ) );
-    }
-
-    // Activation de l'affichage sur la bonne couche
-    // Pour eviter la reentrance (Bug wxGTK version Linux?), la selection n'est faite que si
-    // elle est mauvaise (Pb corrige sur wxGTK 2.6.0)
-    jj = m_SelLayerBox->GetCount();
-    ll = m_SelLayerBox->GetChoice();
-    for( ii = 0; ii < jj; ii++ )
-    {
-        if( (int) ( (size_t) m_SelLayerBox->GetClientData( ii ) ) == ((PCB_SCREEN*)GetScreen())->m_Active_Layer )
-        {
-            if( ii != ll )
-                m_SelLayerBox->SetSelection( ii );
-            break;
+            wxString msg = m_Pcb->GetLayerName( ii );
+            msg = AddHotkeyName( msg, s_Board_Editor_Hokeys_Descr, HK_SwitchLayer[ii] );
+            m_SelLayerBox->Append( msg );
+            m_SelLayerBox->SetClientData( jj, (void*) ii );
+            length = MAX( length, msg.Len() );
+            jj++;
         }
     }
+
+    m_SelLayerBox->SetToolTip( _( "+/- to switch" ) );
+
+    UpdateToolbarLayerInfo();
 
     return m_SelLayerBox;
 }

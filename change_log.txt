@@ -6,6 +6,18 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2008-Apr-29 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+  * Added WinEDA_PcbFrame::UpdateToolbarLayerInfo() by factoring it out of
+    ReCreateLayerBox().
+  * Changed call in void WinEDA_PcbFrame::SetToolbars() from ReCreateLayerBox()
+    to UpdateToolbarLayerInfo().
+  * Removed calls to SetToolbars() from:
+      > share/drawpanel.cpp's void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
+      > void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
+
+
 2008-Apr-28 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew
