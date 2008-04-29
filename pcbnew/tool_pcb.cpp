@@ -205,7 +205,8 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
     wxString msg;
 
     if( m_HToolBar != NULL )
-    {           // simple mise a jour de la liste des fichiers anciens
+    {
+        // simple mise a jour de la liste des fichiers anciens
         wxMenuItem* item;
         for( ii = 9; ii >=0; ii-- )
         {
@@ -307,12 +308,12 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
     m_HToolBar->AddTool( ID_TOOLBARH_PCB_AUTOROUTE, wxEmptyString, BITMAP( mode_track_xpm ),
                          _( "Mode Track and Autorouting" ), wxITEM_CHECK );
 
-	// Fast call to FreeROUTE Web Bases router
+    // Fast call to FreeROUTE Web Bases router
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_TOOLBARH_PCB_FREEROUTE_ACCESS, wxEmptyString, BITMAP( web_support_xpm ),
                          _( "Fast access to theWeb Based FreeROUTE advanced routed" ));
- 
-	// after adding the buttons to the toolbar, must call Realize() to reflect
+
+    // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes
 
     m_HToolBar->Realize();
@@ -630,10 +631,7 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
 /**************************************************************************/
 {
     int      ii, jj, ll;
-    unsigned lenght  = 0;
-    bool     rebuild = FALSE;
-    long     current_mask_layer;
-
+    unsigned length  = 0;
     if( m_SelLayerBox == NULL )
     {
         if( parent == NULL )
@@ -655,27 +653,39 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
         parent->AddControl( m_SelLayerBox );
     }
 
-    // Test si reconstruction de la liste necessaire
-    current_mask_layer = 0;
-    int Masque_Layer = g_TabAllCopperLayerMask[g_DesignSettings.m_CopperLayerCount - 1];
-    Masque_Layer |= ALL_NO_CU_LAYERS;
+
+    int     layer_mask = g_TabAllCopperLayerMask[g_DesignSettings.m_CopperLayerCount - 1];
+
+    layer_mask |= ALL_NO_CU_LAYERS;
+
+
+    //  This is commented out because testing the number of layer is no longer
+    //  sufficient since the layer names may also have changed.  And the time
+    //  required to test layer names is probably longer than the time required
+    //  to simply reconstruct the list.
+#if 0
+
+    // Test if reconstruction of the list is necessary
+    int     current_layer_mask = 0;
     for( ii = 0; ii < (int) m_SelLayerBox->GetCount(); ii++ )
     {
         jj = (int) ( (size_t) m_SelLayerBox->GetClientData( ii ) );
         current_mask_layer |= g_TabOneLayerMask[jj];
     }
 
-    if( current_mask_layer != Masque_Layer )
+    bool     rebuild = FALSE;
+    if( current_layer_mask != layer_mask )
         rebuild = TRUE;
 
     // Construction de la liste
     if( rebuild )
+#endif
     {
         m_SelLayerBox->Clear();
         for( ii = 0, jj = 0; ii <= EDGE_N; ii++ )
         {
             // List to append hotkeys in layer box selection
-            static int HK_SwitchLayer[EDGE_N + 1] = {
+            static const int HK_SwitchLayer[EDGE_N + 1] = {
                 HK_SWITCH_LAYER_TO_COPPER,
                 HK_SWITCH_LAYER_TO_INNER1,
                 HK_SWITCH_LAYER_TO_INNER2,
@@ -694,20 +704,20 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
                 HK_SWITCH_LAYER_TO_COMPONENT
             };
 
-            if( (g_TabOneLayerMask[ii] & Masque_Layer) )
+            if( (g_TabOneLayerMask[ii] & layer_mask) )
             {
                 wxString msg = m_Pcb->GetLayerName( ii );
                 msg = AddHotkeyName( msg, s_Board_Editor_Hokeys_Descr, HK_SwitchLayer[ii] );
                 m_SelLayerBox->Append( msg );
                 m_SelLayerBox->SetClientData( jj, (void*) ii );
-                lenght = max( lenght, msg.Len() );
+                length = MAX( length, msg.Len() );
                 jj++;
             }
         }
 
 // Test me:
 //		int lchar = m_SelLayerBox->GetFont().GetPointSize();
-//		m_SelLayerBox->SetSize(wxSize(lenght * lchar,-1));
+//		m_SelLayerBox->SetSize(wxSize(length * lchar,-1));
 
         m_SelLayerBox->SetToolTip( _( "+/- to switch" ) );
     }

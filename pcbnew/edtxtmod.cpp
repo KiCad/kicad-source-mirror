@@ -20,7 +20,7 @@ static void Show_MoveTexte_Module( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
 static void ExitTextModule( WinEDA_DrawPanel* Panel, wxDC* DC );
 
 /* local variables */
-wxPoint        MoveVector;              // Move vector for move edge, exported to dialog_edit mod_text.cpp
+wxPoint MoveVector;                     // Move vector for move edge, exported to dialog_edit mod_text.cpp
 static wxPoint CursorInitialPosition;   // Mouse cursor inital position for move command
 
 
@@ -74,14 +74,15 @@ void WinEDA_BasePcbFrame::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
 
     MODULE* module = (MODULE*) Text->m_Parent;
 
-    Text->Draw( DrawPanel, DC, GR_XOR );
+    // we expect MoveVector to be (0,0) if there is no move in progress
+    Text->Draw( DrawPanel, DC, GR_XOR, MoveVector );
 
     Text->m_Orient += 900;
     while( Text->m_Orient >= 1800 )
         Text->m_Orient -= 1800;
 
     /* Redessin du Texte */
-    Text->Draw( DrawPanel, DC, GR_XOR );
+    Text->Draw( DrawPanel, DC, GR_XOR, MoveVector );
 
     Text->Display_Infos( this );
 
@@ -107,10 +108,11 @@ void WinEDA_BasePcbFrame::DeleteTextModule( TEXTE_MODULE* Text, wxDC* DC )
 
     if( Text->m_Type == TEXT_is_DIVERS )
     {
-        Text->Draw( DrawPanel, DC, GR_XOR );
+        // Text->Draw( DrawPanel, DC, GR_XOR );
+        DrawPanel->PostDirtyRect( Text->GetBoundingBox() );
 
         /* liberation de la memoire : */
-        Text ->DeleteStructure();
+        Text->DeleteStructure();
         GetScreen()->SetModify();
         Module->m_LastEdit_Time = time( NULL );
     }
@@ -137,10 +139,15 @@ static void ExitTextModule( WinEDA_DrawPanel* Panel, wxDC* DC )
         return;
 
     Module = (MODULE*) Text->m_Parent;
+
     Text->Draw( Panel, DC, GR_XOR, MoveVector );
 
     /* Redessin du Texte */
-    Text->Draw( Panel, DC, GR_OR );
+    // Text->Draw( Panel, DC, GR_OR );
+    Panel->PostDirtyRect( Text->GetBoundingBox() );
+
+    // leave it at (0,0) so we can use it Rotate when not moving.
+    MoveVector.x = MoveVector.y = 0;
 
     Text->m_Flags   = 0;
     Module->m_Flags = 0;
@@ -167,6 +174,7 @@ void WinEDA_BasePcbFrame::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
     Module->m_Flags |= IN_EDIT;
 
     MoveVector.x = MoveVector.y = 0;
+
     CursorInitialPosition = Text->m_Pos;
 
     Text->Display_Infos( this );
@@ -189,6 +197,8 @@ void WinEDA_BasePcbFrame::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 {
     if( Text != NULL )
     {
+        DrawPanel->PostDirtyRect( Text->GetBoundingBox() );
+
         Text->m_Pos = GetScreen()->m_Curseur;
         /* mise a jour des coordonnées relatives a l'ancre */
         MODULE* Module = (MODULE*) Text->m_Parent;
@@ -205,9 +215,13 @@ void WinEDA_BasePcbFrame::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
             GetScreen()->SetModify();
 
             /* Redessin du Texte */
-            Text->Draw( DrawPanel, DC, GR_OR );
+            //Text->Draw( DrawPanel, DC, GR_OR );
+            DrawPanel->PostDirtyRect( Text->GetBoundingBox() );
         }
     }
+
+    // leave it at (0,0) so we can use it Rotate when not moving.
+    MoveVector.x = MoveVector.y = 0;
 
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;

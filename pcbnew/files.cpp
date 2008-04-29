@@ -34,42 +34,40 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
     {
     case ID_MENU_LOAD_FILE:
     case ID_LOAD_FILE:
-        Clear_Pcb(TRUE );
-        LoadOnePcbFile( wxEmptyString,FALSE );
+        LoadOnePcbFile( wxEmptyString, false );
         ReCreateAuxiliaryToolbar();
         break;
 
     case ID_MENU_READ_LAST_SAVED_VERSION_BOARD:
     case ID_MENU_RECOVER_BOARD:
-    {
-        wxString filename, oldfilename = GetScreen()->m_FileName;
-        if( id == ID_MENU_RECOVER_BOARD )
         {
-            filename = g_SaveFileName + PcbExtBuffer;
-        }
-        else
-        {
-            filename = oldfilename;
-            ChangeFileNameExt( filename, wxT( ".000" ) );
-        }
-        if( !wxFileExists( filename ) )
-        {
-            msg = _( "Recovery file " ) + filename + _( " not found" );
-            DisplayInfo( this, msg );
-            break;
-        }
-        else
-        {
-            msg = _( "Ok to load Recovery file " ) + filename;
-            if( !IsOK( this, msg ) )
+            wxString filename, oldfilename = GetScreen()->m_FileName;
+            if( id == ID_MENU_RECOVER_BOARD )
+            {
+                filename = g_SaveFileName + PcbExtBuffer;
+            }
+            else
+            {
+                filename = oldfilename;
+                ChangeFileNameExt( filename, wxT( ".000" ) );
+            }
+            if( !wxFileExists( filename ) )
+            {
+                msg = _( "Recovery file " ) + filename + _( " not found" );
+                DisplayInfo( this, msg );
                 break;
+            }
+            else
+            {
+                msg = _( "Ok to load Recovery file " ) + filename;
+                if( !IsOK( this, msg ) )
+                    break;
+            }
+            LoadOnePcbFile( filename, false );
+            GetScreen()->m_FileName = oldfilename;
+            SetTitle( GetScreen()->m_FileName );
+            ReCreateAuxiliaryToolbar();
         }
-        Clear_Pcb( TRUE );
-        LoadOnePcbFile( filename, FALSE );
-        GetScreen()->m_FileName = oldfilename;
-        SetTitle( GetScreen()->m_FileName );
-        ReCreateAuxiliaryToolbar();
-    }
         break;
 
     case ID_MENU_APPEND_FILE:
@@ -95,7 +93,6 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
     case ID_LOAD_FILE_8:
     case ID_LOAD_FILE_9:
     case ID_LOAD_FILE_10:
-        Clear_Pcb(TRUE );
         wxSetWorkingDirectory( wxPathOnly( GetLastProject( id - ID_LOAD_FILE_1 ) ) );
         LoadOnePcbFile( GetLastProject( id - ID_LOAD_FILE_1 ).GetData(),
                         false );
@@ -153,10 +150,12 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
         m_Pcb->m_Status_Pcb = 0;
     }
 
+    wxString fileName;
+
     if( FullFileName == wxEmptyString )
     {
         msg = wxT( "*" ) + PcbExtBuffer;
-        wxString FileName =
+        fileName =
             EDA_FileSelector( _( "Load board files:" ),
                               wxEmptyString,            /* Chemin par defaut */
                               GetScreen()->m_FileName,  /* nom fichier par defaut */
@@ -166,15 +165,20 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
                               wxFD_OPEN,
                               FALSE
             );
-        if( FileName == wxEmptyString )
+
+        if( fileName == wxEmptyString )
             return FALSE;
-        GetScreen()->m_FileName = FileName;
     }
     else
-        GetScreen()->m_FileName = FullFileName;
+        fileName = FullFileName;
+
+    if( !Append )
+        Clear_Pcb( false );     // pass false since we prompted above for a modified board
+
+    GetScreen()->m_FileName = fileName;
 
     /* Start read PCB file
-	*/
+    */
 
     source = wxFopen( GetScreen()->m_FileName, wxT( "rt" ) );
     if( source == NULL )
@@ -202,7 +206,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
     }
     else if ( ver < g_CurrentVersionPCB )
     {
-        DisplayInfo( this, _( "This file was created by an older version of EESchema. It will be stored in the new file format when you save this file again."));
+        DisplayInfo( this, _( "This file was created by an older version of PCBnew. It will be stored in the new file format when you save this file again."));
     }
 
     SetTitle( GetScreen()->m_FileName );
@@ -242,7 +246,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
     m_Pcb->Display_Infos( this );
     DrawPanel->Refresh( true);
 
-	/* reset the auto save timer */
+    /* reset the auto save timer */
     g_SaveTime = time( NULL );
 
 
@@ -312,8 +316,8 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
     ChangeFileNameExt( BackupFileName, wxT( ".000" ) );
 
     /* If an old backup file exists, delete it.
-	if an old board file existes, rename it to the backup file name
-	*/
+    if an old board file existes, rename it to the backup file name
+    */
     if( wxFileExists( FullFileName ) )
     {
         /* rename the "old" file" from xxx.brd to xxx.000 */

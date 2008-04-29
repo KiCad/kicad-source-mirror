@@ -5,6 +5,23 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+2008-Apr-28 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+  * Layer names were not being set into the htoolbar listbox properly if the
+    BOARD was loaded via the command line as happens when kicad chain loads
+    pcbnew. Also, layer names were not being set if a second board was loaded
+    that had the same number of layers as the previous board. The solution was
+    to comment out the listbox rebuild test in WinEDAChoiceBox*
+    WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
+  * files.cpp:  added Clear_Pcb( false ) to LoadOnePcbFile() and call it if
+    not appending.  This way a user can get into the file selection dialog and
+    still abort (change his mind) without losing the current board.  Removed calls to
+    Clear_Pcb() where LoadOnePcbFile() would now do that.
+  * edtxtmod.cpp: fixed the drawing relics when moving and rotating module texts.
+
+
 2008-Apr-21 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew

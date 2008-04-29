@@ -139,6 +139,7 @@ bool WinEDA_BasePcbFrame::Clear_Pcb( bool query )
 
     /* init pointeurs  et variables */
     GetScreen()->m_FileName.Empty();
+
     memset( buf_work, 0, BUFMEMSIZE );
     adr_lowmem = adr_max = buf_work;
 

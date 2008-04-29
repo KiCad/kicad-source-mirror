@@ -522,6 +522,7 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
     if( delta.x <= 0 )
         delta.x = 1;
+
     if( delta.y <= 0 )
         delta.y = 1;
 

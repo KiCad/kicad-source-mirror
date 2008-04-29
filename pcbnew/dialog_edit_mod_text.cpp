@@ -38,7 +38,7 @@
 
 #include "dialog_edit_mod_text.h"
 
-extern wxPoint MoveVector;  // Move vector for move edge, imported from dialog_edit mod_text.cpp
+extern wxPoint MoveVector;  // Move vector for move edge, imported from edtxtmod.cpp
 
 ////@begin XPM images
 ////@end XPM images

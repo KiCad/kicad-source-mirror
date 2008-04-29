@@ -369,7 +369,6 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     switch(  m_ID_current_state )
     {
     case ID_PCB_ZONES_BUTT:
-    {
         if(  m_Pcb->m_ZoneDescriptorList.size() > 0 )
         {
             ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_FILL_ALL_ZONES,
@@ -380,11 +379,9 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_SELECT_LAYER,
             _( "Select Working Layer" ), Select_W_Layer_xpm );
         aPopMenu->AppendSeparator();
-    }
         break;
 
     case ID_TRACK_BUTT:
-    {
         ADD_MENUITEM_WITH_SUBMENU( aPopMenu, Append_Track_Width_List(),
             ID_POPUP_PCB_SELECT_WIDTH,
             _( "Select Track Width" ), width_track_xpm );
@@ -393,7 +390,6 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_SELECT_LAYER_PAIR,
             _( "Select layer pair for vias" ), select_layer_pair_xpm );
         aPopMenu->AppendSeparator();
-    }
         break;
 
     case ID_PCB_CIRCLE_BUTT:
