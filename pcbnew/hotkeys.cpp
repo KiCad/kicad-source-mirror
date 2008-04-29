@@ -107,8 +107,8 @@ Ki_HotkeyInfo* s_board_edit_Hotkey_List[] = {
     &HkTrackDisplayMode,
     &HkDelete,                     &HkBackspace,
     &HkAddVia,
-	&HkAddMicroVia,
-	&HkEndTrack,
+    &HkAddMicroVia,
+    &HkEndTrack,
     &HkMoveFootprint,              &HkFlipFootprint,
     &HkRotateFootprint,            &HkDragFootprint,
     &HkGetAndMoveFootprint,
@@ -184,17 +184,17 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
     // Remap the control key Ctrl A (0x01) to GR_KB_CTRL + 'A' (just easier to handle...)
     if( (hotkey & GR_KB_CTRL) != 0 )
         hotkey += 'A' - 1;
-    
+
     /* Convert lower to upper case (the usual toupper function has problem with non ascii codes like function keys */
     if( (hotkey >= 'a') && (hotkey <= 'z') )
         hotkey += 'A' - 'a';
 
     Ki_HotkeyInfo * HK_Descr = GetDescriptorFromHotkey( hotkey, s_Common_Hotkey_List );
-    
+
     if( HK_Descr == NULL )
         HK_Descr = GetDescriptorFromHotkey( hotkey, s_board_edit_Hotkey_List );
-    
-    if( HK_Descr == NULL ) 
+
+    if( HK_Descr == NULL )
         return;
 
     int ll;
@@ -207,7 +207,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_SWITCH_LAYER_TO_PREVIOUS:
-        ll = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
+        ll = GetScreen()->m_Active_Layer;
         if( (ll <= COPPER_LAYER_N) || (ll > CMP_N) )
             break;
         if( m_Pcb->m_BoardSettings->m_CopperLayerCount < 2 )  // Single layer
@@ -220,7 +220,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_SWITCH_LAYER_TO_NEXT:
-        ll = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
+        ll = GetScreen()->m_Active_Layer;
         if( (ll < COPPER_LAYER_N) || (ll >= CMP_N) )
             break;
         if( m_Pcb->m_BoardSettings->m_CopperLayerCount < 2 )  // Single layer
@@ -296,7 +296,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case HK_SWITCH_TRACK_DISPLAY_MODE:
         DisplayOpt.DisplayPcbTrackFill ^= 1; DisplayOpt.DisplayPcbTrackFill &= 1;
-		m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
+        m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
         GetScreen()->SetRefreshReq();
         break;
 
@@ -305,7 +305,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_BACK_SPACE:
-        if( m_ID_current_state == ID_TRACK_BUTT && ((PCB_SCREEN*)GetScreen())->m_Active_Layer <= CMP_N )
+        if( m_ID_current_state == ID_TRACK_BUTT && GetScreen()->m_Active_Layer <= CMP_N )
         {
             if( ItemFree )
             {
@@ -336,12 +336,12 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_END_TRACK:
-		if( ! ItemFree && (GetCurItem()->Type() == TYPETRACK) && ((GetCurItem()->m_Flags & IS_NEW) != 0) )
-		{	
+        if( ! ItemFree && (GetCurItem()->Type() == TYPETRACK) && ((GetCurItem()->m_Flags & IS_NEW) != 0) )
+        {
             // A new track is in progress: call to End_Route()
-			DrawPanel->MouseToCursorSchema();
-			End_Route( (TRACK*) GetCurItem(), DC );
-		}
+            DrawPanel->MouseToCursorSchema();
+            End_Route( (TRACK*) GetCurItem(), DC );
+        }
         break;
 
     case HK_GET_AND_MOVE_FOOTPRINT:
@@ -392,17 +392,17 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         if( (GetCurItem()->m_Flags & IS_NEW) == 0 )
             return;
 
-		// place micro via and switch layer
-		if ( ((PCB_SCREEN*)GetScreen())->IsMicroViaAcceptable() )
-		{
-			int v_type = g_DesignSettings.m_CurrentViaType;
-			g_DesignSettings.m_CurrentViaType = VIA_MICROVIA;
-			Other_Layer_Route( (TRACK*) GetCurItem(), DC );
-			g_DesignSettings.m_CurrentViaType = v_type;
-			if( DisplayOpt.ContrastModeDisplay )
-				GetScreen()->SetRefreshReq();
-		}
-		break;
+        // place micro via and switch layer
+        if ( GetScreen()->IsMicroViaAcceptable() )
+        {
+            int v_type = g_DesignSettings.m_CurrentViaType;
+            g_DesignSettings.m_CurrentViaType = VIA_MICROVIA;
+            Other_Layer_Route( (TRACK*) GetCurItem(), DC );
+            g_DesignSettings.m_CurrentViaType = v_type;
+            if( DisplayOpt.ContrastModeDisplay )
+                GetScreen()->SetRefreshReq();
+        }
+        break;
 
     case HK_ADD_VIA:          // Switch to alternate layer and Place a via if a track is in progress
         if( m_ID_current_state != ID_TRACK_BUTT )
@@ -451,7 +451,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
                                              | MATCH_LAYER
     #endif
                                              );
-            
+
             if( module == NULL )          // no footprint found
             {
                 module = Locate_Prefered_Module( m_Pcb, CURSEUR_OFF_GRILLE | VISIBLE_ONLY );
@@ -601,7 +601,7 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* DC, EDA_BaseStruct* DrawStruct )
     switch( m_ID_current_state )
     {
     case ID_TRACK_BUTT:
-        if( ((PCB_SCREEN*)GetScreen())->m_Active_Layer > CMP_N )
+        if( GetScreen()->m_Active_Layer > CMP_N )
             return FALSE;
         if( ItemFree )
         {
@@ -614,7 +614,7 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* DC, EDA_BaseStruct* DrawStruct )
         {
             // simple lines for debugger:
             TRACK* track = (TRACK*) GetCurItem();
-            track = Delete_Segment( DC, track ); 
+            track = Delete_Segment( DC, track );
             SetCurItem( track );
             GetScreen()->SetModify();
             return TRUE;
