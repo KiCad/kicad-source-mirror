@@ -136,7 +136,7 @@
         <long name="locked">0</long>
         <string name="template-name">""</string>
         <bool name="dirty">1</bool>
-        <long name="makefile-last-written">0</long>
+        <long name="makefile-last-written">-8519680</long>
         <string name="Compiler name">""</string>
         <string name="Build mode">"Debug"</string>
         <string name="Unicode mode">"ANSI"</string>
@@ -782,9 +782,9 @@
                   <bool name="proxy-Separate files">0</bool>
                   <string name="proxy-Implementation filename">""</string>
                   <string name="proxy-Header filename">""</string>
-                  <string name="proxy-Member variable name">""</string>
+                  <string name="proxy-Member variable name">"m_btClose"</string>
                   <string name="proxy-Label">"Close"</string>
-                  <bool name="proxy-Default">0</bool>
+                  <bool name="proxy-Default">1</bool>
                   <string name="proxy-Help text">""</string>
                   <string name="proxy-Tooltip text">""</string>
                   <string name="proxy-Data variable">""</string>

@@ -108,6 +108,7 @@
     <bool name="use_resource_archive">0</bool>
     <bool name="use_generated_xrc_cpp">0</bool>
     <bool name="always_generate_xrc">1</bool>
+    <bool name="use_id_name_for_name">0</bool>
     <bool name="archive_xrc_files">1</bool>
     <bool name="archive_image_files">1</bool>
     <bool name="archive_all_image_files">0</bool>
@@ -135,6 +136,7 @@
         <long name="locked">0</long>
         <string name="template-name">""</string>
         <bool name="dirty">1</bool>
+        <long name="makefile-last-written">0</long>
         <string name="Compiler name">""</string>
         <string name="Build mode">"Debug"</string>
         <string name="Unicode mode">"ANSI"</string>
@@ -176,6 +178,8 @@
         <string name="wxWidgets build command">"%AUTO%"</string>
         <string name="wxWidgets clean command">"%AUTO%"</string>
         <string name="PATH variable">"%AUTO%"</string>
+        <bool name="Suppress source rules">0</bool>
+        <bool name="Enable makefile generation">1</bool>
         <document>
           <string name="title">"GCC Release"</string>
           <string name="type">"gcc-config-data-document"</string>
@@ -187,6 +191,7 @@
           <long name="locked">0</long>
           <string name="template-name">"GCC"</string>
           <bool name="dirty">1</bool>
+          <long name="makefile-last-written">0</long>
           <string name="Compiler name">"GCC"</string>
           <string name="Build mode">"Release"</string>
           <string name="Unicode mode">"ANSI"</string>
@@ -231,7 +236,13 @@
           <string name="wxWidgets build command">"%AUTO%"</string>
           <string name="wxWidgets clean command">"%AUTO%"</string>
           <string name="PATH variable">"%AUTO%"</string>
+          <bool name="Suppress source rules">0</bool>
+          <bool name="Enable makefile generation">1</bool>
           <string name="Command for wx-config">"%AUTO%"</string>
+          <string name="SDK path">"%AUTO%"</string>
+          <string name="Minimum OS version">"%AUTO%"</string>
+          <string name="Info.plist location">"%AUTO%"</string>
+          <string name="Icns location">"%AUTO%"</string>
         </document>
       </document>
     </document>
@@ -304,7 +315,6 @@
           <bool name="proxy-wxDEFAULT_DIALOG_STYLE">0</bool>
           <bool name="proxy-wxCAPTION">1</bool>
           <bool name="proxy-wxRESIZE_BORDER">0</bool>
-          <bool name="proxy-wxTHICK_FRAME">0</bool>
           <bool name="proxy-wxSYSTEM_MENU">1</bool>
           <bool name="proxy-wxSTAY_ON_TOP">0</bool>
           <bool name="proxy-wxDIALOG_NO_PARENT">0</bool>
@@ -1020,7 +1030,7 @@
                   <long name="locked">0</long>
                   <string name="created">"14/3/2006"</string>
                   <string name="proxy-type">"wbButtonProxy"</string>
-                  <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnCancelClick"</string>
+                  <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnCancelClick|||WinEDA_CreateCmpDialog"</string>
                   <string name="proxy-Id name">"wxID_CANCEL"</string>
                   <long name="proxy-Id value">5101</long>
                   <string name="proxy-Name">""</string>
@@ -1030,7 +1040,7 @@
                   <bool name="proxy-Separate files">0</bool>
                   <string name="proxy-Implementation filename">""</string>
                   <string name="proxy-Header filename">""</string>
-                  <string name="proxy-Member variable name">""</string>
+                  <string name="proxy-Member variable name">"m_btClose"</string>
                   <string name="proxy-Label">"&amp;Cancel"</string>
                   <bool name="proxy-Default">0</bool>
                   <string name="proxy-Help text">""</string>

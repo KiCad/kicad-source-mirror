@@ -123,6 +123,7 @@ public:
     wxCheckBox* m_AsConvert;
     wxCheckBox* m_IsPowerSymbol;
     wxCheckBox* m_PartsAreLocked;
+    wxButton* m_btClose;
     wxRadioBox* m_PartsCount;
     wxCheckBox* m_ShowPinNum;
     wxCheckBox* m_ShowPinname;

@@ -106,6 +106,7 @@ public:
     wxCheckBox* m_CommonConvert;
     wxBoxSizer* m_ShapeWidthBoxSizer;
     wxRadioBox* m_Filled;
+    wxButton* m_btClose;
 ////@end WinEDA_bodygraphics_PropertiesFrame member variables
 	WinEDA_LibeditFrame * m_Parent;
 	WinEDA_ValueCtrl * m_GraphicShapeWidthCtrl;

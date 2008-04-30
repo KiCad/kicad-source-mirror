@@ -41,7 +41,7 @@
 #define ID_RADIOBOX1 10004
 #define ID_TEXTCTRL1 10002
 #define SYMBOL_WINEDA_LABELPROPERTIESFRAME_STYLE wxDEFAULT_DIALOG_STYLE|MAYBE_RESIZE_BORDER
-#define SYMBOL_WINEDA_LABELPROPERTIESFRAME_TITLE _("Dialog")
+#define SYMBOL_WINEDA_LABELPROPERTIESFRAME_TITLE _("Text Editor")
 #define SYMBOL_WINEDA_LABELPROPERTIESFRAME_IDNAME ID_DIALOG
 #define SYMBOL_WINEDA_LABELPROPERTIESFRAME_SIZE wxSize(400, 300)
 #define SYMBOL_WINEDA_LABELPROPERTIESFRAME_POSITION wxDefaultPosition
@@ -107,6 +107,7 @@ public:
     wxRadioBox* m_TextShape;
     wxStaticText* m_SizeTitle;
     wxTextCtrl* m_TextSize;
+    wxButton* m_btClose;
 ////@end WinEDA_LabelPropertiesFrame member variables
 
    WinEDA_SchematicFrame * m_Parent;

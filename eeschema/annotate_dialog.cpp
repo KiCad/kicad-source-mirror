@@ -241,6 +241,8 @@ void WinEDA_AnnotateFrame::CreateControls()
     sizerDialogButtons->Add(m_btnApply, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 ////@end WinEDA_AnnotateFrame content construction
+
+	m_btnClose->SetFocus();	// needed to closes dialog by escape key
 }
 
 

@@ -118,6 +118,7 @@ public:
     wxRadioBox* m_SizeOption;
     wxRadioBox* m_PlotPSColorOption;
     wxCheckBox* m_Plot_Sheet_Ref;
+    wxButton* m_btClose;
     wxBoxSizer* m_DefaultLineSizeCtrlSizer;
     wxTextCtrl* m_MsgBox;
 ////@end WinEDA_PlotPSFrame member variables

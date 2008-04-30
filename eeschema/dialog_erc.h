@@ -136,6 +136,7 @@ public:
     wxStaticText* m_LastWarningCount;
     wxStaticText* m_LastErrCount;
     wxCheckBox* m_WriteResultOpt;
+    wxButton* m_btClose;
     wxPanel* m_PanelERCOptions;
     wxBoxSizer* m_PanelMatrixSizer;
     wxButton* m_ResetOptButton;

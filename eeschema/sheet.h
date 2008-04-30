@@ -114,6 +114,7 @@ public:
     wxTextCtrl* m_FileNameSize;
     wxStaticText* m_SheetNameTextSize;
     wxTextCtrl* m_SheetNameSize;
+    wxButton* m_btClose;
 ////@end WinEDA_SheetPropertiesFrame member variables
 
 	WinEDA_SchematicFrame * m_Parent;

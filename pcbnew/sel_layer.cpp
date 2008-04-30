@@ -334,32 +334,11 @@ WinEDA_SelLayerPairFrame::WinEDA_SelLayerPairFrame( WinEDA_BasePcbFrame* parent 
 void WinEDA_SelLayerPairFrame::OnOkClick( wxCommandEvent& event )
 /***************************************************************/
 {
-    // Check whether whichever layer has been specified as the "Top"
-    // layer is really "above" whichever layer has been specified as
-    // the "Bottom" layer; those values will only be updated (and the
-    // dialog box subsequently closed) when that condition is met.
-//  if( m_LayerId[m_LayerListTOP->GetSelection()]
-//          <= m_LayerId[m_LayerListBOTTOM->GetSelection()] )
-//  {
-//      DisplayError( this, _( "The Top Layer must be above the Bottom Layer" ) );
-//      return;
-//  }
-
-    // Code for previous test commented out because other code now
-    // transposes the assignment of the Top and Bottom layers if
-    // the former layer is actually "below" the latter. However,
-    // it is still desirable to check that those layers differ.
-
-    // Check whether whichever layer has been specified as the "Top"
-    // layer differs from whichever layer has been specified as the
-    // "Bottom" layer; those values will only be updated (and the
-    // dialog box subsequently closed) when that condition is met.
+    // select the same layer for top and bottom is allowed (normal in some boards)
+    // but could be a mistake. So display an info message
     if( m_LayerId[m_LayerListTOP->GetSelection()]
             == m_LayerId[m_LayerListBOTTOM->GetSelection()] )
-    {
-        DisplayError( this, _( "The Top Layer and Bottom Layer must differ" ) );
-        return;
-    }
+        DisplayInfo( this, _( "Warning: The Top Layer and Bottom Layer are same." ) );
 
     PCB_SCREEN* screen = (PCB_SCREEN*) m_Parent->GetScreen();
 

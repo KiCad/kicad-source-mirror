@@ -132,6 +132,7 @@ public:
     wxRadioBox* m_DeleteBadTracks;
     wxCheckBox* m_DisplayWarningCtrl;
     wxCheckBox* m_RemoveExtraFootprintsCtrl;
+    wxButton* m_btClose;
     wxTextCtrl* m_NetlistFilenameCtrl;
     wxTextCtrl* m_MessageWindow;
     wxStdDialogButtonSizer* StdDialogButtonSizer;

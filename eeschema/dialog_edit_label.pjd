@@ -108,10 +108,12 @@
     <bool name="use_resource_archive">0</bool>
     <bool name="use_generated_xrc_cpp">0</bool>
     <bool name="always_generate_xrc">1</bool>
+    <bool name="use_id_name_for_name">0</bool>
     <bool name="archive_xrc_files">1</bool>
     <bool name="archive_image_files">1</bool>
     <bool name="archive_all_image_files">0</bool>
     <bool name="xrc_retain_relative_paths">1</bool>
+    <bool name="xrc_generate_id_tags">0</bool>
   </header>
   <data>
     <document>
@@ -134,6 +136,7 @@
         <long name="locked">0</long>
         <string name="template-name">""</string>
         <bool name="dirty">1</bool>
+        <long name="makefile-last-written">0</long>
         <string name="Compiler name">""</string>
         <string name="Build mode">"Debug"</string>
         <string name="Unicode mode">"ANSI"</string>
@@ -175,6 +178,8 @@
         <string name="wxWidgets build command">"%AUTO%"</string>
         <string name="wxWidgets clean command">"%AUTO%"</string>
         <string name="PATH variable">"%AUTO%"</string>
+        <bool name="Suppress source rules">0</bool>
+        <bool name="Enable makefile generation">1</bool>
       </document>
     </document>
   </data>
@@ -199,7 +204,7 @@
         <long name="title-mode">0</long>
         <long name="locked">1</long>
         <document>
-          <string name="title">"Untitled"</string>
+          <string name="title">"Text editor"</string>
           <string name="type">"dialog-document"</string>
           <string name="filename">""</string>
           <string name="icon-name">"dialog"</string>
@@ -224,7 +229,7 @@
           <string name="proxy-Implementation filename">"dialog_edit_label.cpp"</string>
           <string name="proxy-Header filename">"dialog_edit_label.h"</string>
           <string name="proxy-XRC filename">""</string>
-          <string name="proxy-Title">"Dialog"</string>
+          <string name="proxy-Title">"Text Editor"</string>
           <bool name="proxy-Centre">1</bool>
           <string name="proxy-Icon">""</string>
           <bool name="proxy-Dialog units">0</bool>
@@ -246,7 +251,6 @@
           <bool name="proxy-wxDEFAULT_DIALOG_STYLE">1</bool>
           <bool name="proxy-wxCAPTION">0</bool>
           <bool name="proxy-wxRESIZE_BORDER">0</bool>
-          <bool name="proxy-wxTHICK_FRAME">0</bool>
           <bool name="proxy-wxSYSTEM_MENU">0</bool>
           <bool name="proxy-wxSTAY_ON_TOP">0</bool>
           <bool name="proxy-wxDIALOG_NO_PARENT">0</bool>
@@ -331,6 +335,7 @@
                 <string name="proxy-type">"wbStaticTextProxy"</string>
                 <string name="proxy-Id name">"wxID_STATIC"</string>
                 <long name="proxy-Id value">5105</long>
+                <string name="proxy-Name">""</string>
                 <string name="proxy-Class">"wxStaticText"</string>
                 <string name="proxy-Base class">"wxStaticText"</string>
                 <bool name="proxy-External implementation">1</bool>
@@ -400,6 +405,7 @@
                 <string name="proxy-type">"wbTextCtrlProxy"</string>
                 <string name="proxy-Id name">"ID_TEXTCTRL"</string>
                 <long name="proxy-Id value">10001</long>
+                <string name="proxy-Name">""</string>
                 <string name="proxy-Class">"wxTextCtrl"</string>
                 <string name="proxy-Base class">"wxTextCtrl"</string>
                 <bool name="proxy-External implementation">1</bool>
@@ -506,6 +512,7 @@
                   <string name="proxy-type">"wbRadioBoxProxy"</string>
                   <string name="proxy-Id name">"ID_RADIOBOX"</string>
                   <long name="proxy-Id value">10003</long>
+                  <string name="proxy-Name">""</string>
                   <string name="proxy-Class">"wxRadioBox"</string>
                   <string name="proxy-Base class">"wxRadioBox"</string>
                   <bool name="proxy-External implementation">1</bool>
@@ -595,6 +602,7 @@
                   <string name="proxy-type">"wbRadioBoxProxy"</string>
                   <string name="proxy-Id name">"ID_RADIOBOX1"</string>
                   <long name="proxy-Id value">10004</long>
+                  <string name="proxy-Name">""</string>
                   <string name="proxy-Class">"wxRadioBox"</string>
                   <string name="proxy-Base class">"wxRadioBox"</string>
                   <bool name="proxy-External implementation">1</bool>
@@ -685,6 +693,7 @@
                 <string name="proxy-type">"wbStaticTextProxy"</string>
                 <string name="proxy-Id name">"wxID_STATIC"</string>
                 <long name="proxy-Id value">5105</long>
+                <string name="proxy-Name">""</string>
                 <string name="proxy-Class">"wxStaticText"</string>
                 <string name="proxy-Base class">"wxStaticText"</string>
                 <bool name="proxy-External implementation">1</bool>
@@ -754,6 +763,7 @@
                 <string name="proxy-type">"wbTextCtrlProxy"</string>
                 <string name="proxy-Id name">"ID_TEXTCTRL1"</string>
                 <long name="proxy-Id value">10002</long>
+                <string name="proxy-Name">""</string>
                 <string name="proxy-Class">"wxTextCtrl"</string>
                 <string name="proxy-Base class">"wxTextCtrl"</string>
                 <bool name="proxy-External implementation">1</bool>
@@ -862,6 +872,7 @@
                 <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnOkClick"</string>
                 <string name="proxy-Id name">"wxID_OK"</string>
                 <long name="proxy-Id value">5100</long>
+                <string name="proxy-Name">""</string>
                 <string name="proxy-Class">"wxButton"</string>
                 <string name="proxy-Base class">"wxButton"</string>
                 <bool name="proxy-External implementation">1</bool>
@@ -925,16 +936,17 @@
                 <long name="locked">0</long>
                 <string name="created">"19/2/2006"</string>
                 <string name="proxy-type">"wbButtonProxy"</string>
-                <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnCancelClick|||"</string>
+                <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnCancelClick|||WinEDA_LabelPropertiesFrame"</string>
                 <string name="proxy-Id name">"wxID_CANCEL"</string>
                 <long name="proxy-Id value">5101</long>
+                <string name="proxy-Name">""</string>
                 <string name="proxy-Class">"wxButton"</string>
                 <string name="proxy-Base class">"wxButton"</string>
                 <bool name="proxy-External implementation">1</bool>
                 <bool name="proxy-Separate files">0</bool>
                 <string name="proxy-Implementation filename">""</string>
                 <string name="proxy-Header filename">""</string>
-                <string name="proxy-Member variable name">""</string>
+                <string name="proxy-Member variable name">"m_btClose"</string>
                 <string name="proxy-Label">"&amp;Cancel"</string>
                 <bool name="proxy-Default">0</bool>
                 <string name="proxy-Help text">""</string>

@@ -139,6 +139,7 @@ public:
     wxStaticText* m_PinNumSizeText;
     wxTextCtrl* m_PinNumSizeCtrl;
     wxRadioBox* m_PinOrient;
+    wxButton* m_btClose;
     wxRadioBox* m_PinShape;
     wxRadioBox* m_PinElectricalType;
 ////@end WinEDA_PinPropertiesFrame member variables

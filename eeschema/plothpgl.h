@@ -41,12 +41,6 @@ class wxSpinCtrl;
 
 ////@begin control identifiers
 #define ID_DIALOG 10000
-// #define SYMBOL_WINEDA_PLOTHPGLFRAME_STYLE wxDEFAULT_DIALOG_STYLE|wxCAPTION|wxSYSTEM_MENU|wxSTAY_ON_TOP|wxCLOSE_BOX
-#define SYMBOL_WINEDA_PLOTHPGLFRAME_STYLE wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX
-#define SYMBOL_WINEDA_PLOTHPGLFRAME_TITLE _("EESchema Plot HPGL")
-#define SYMBOL_WINEDA_PLOTHPGLFRAME_IDNAME ID_DIALOG
-#define SYMBOL_WINEDA_PLOTHPGLFRAME_SIZE wxSize(400, 300)
-#define SYMBOL_WINEDA_PLOTHPGLFRAME_POSITION wxDefaultPosition
 #define ID_RADIOBOX 10001
 #define ID_PEN_WIDTH_UPDATED 10002
 #define ID_PEN_SPEED_UPDATED 10003
@@ -57,6 +51,11 @@ class wxSpinCtrl;
 #define ID_PLOT_HPGL_ALL_EXECUTE 10006
 #define ID_PLOT_ACCEPT_OFFSET 10008
 #define ID_TEXTCTRL 10007
+#define SYMBOL_WINEDA_PLOTHPGLFRAME_STYLE wxDEFAULT_DIALOG_STYLE|wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|MAYBE_RESIZE_BORDER
+#define SYMBOL_WINEDA_PLOTHPGLFRAME_TITLE _("EESchema Plot HPGL")
+#define SYMBOL_WINEDA_PLOTHPGLFRAME_IDNAME ID_DIALOG
+#define SYMBOL_WINEDA_PLOTHPGLFRAME_SIZE wxSize(400, 300)
+#define SYMBOL_WINEDA_PLOTHPGLFRAME_POSITION wxDefaultPosition
 ////@end control identifiers
 
 /*!
@@ -88,6 +87,7 @@ public:
     void CreateControls();
 
 ////@begin WinEDA_PlotHPGLFrame event handler declarations
+
     /// wxEVT_COMMAND_RADIOBOX_SELECTED event handler for ID_RADIOBOX
     void OnRadioboxSelected( wxCommandEvent& event );
 
@@ -115,6 +115,7 @@ public:
 ////@end WinEDA_PlotHPGLFrame event handler declarations
 
 ////@begin WinEDA_PlotHPGLFrame member function declarations
+
     /// Retrieves bitmap resources
     wxBitmap GetBitmapResource( const wxString& name );
 
@@ -143,6 +144,7 @@ public:
     wxSpinCtrl* m_ButtPenNum;
     wxTextCtrl* m_PlotOrgPosition_X;
     wxTextCtrl* m_PlotOrgPosition_Y;
+    wxButton* m_btClose;
     wxTextCtrl* m_MsgBox;
 ////@end WinEDA_PlotHPGLFrame member variables
 	WinEDA_DrawFrame * m_Parent;

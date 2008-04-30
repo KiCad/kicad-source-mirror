@@ -70,50 +70,50 @@ static int ndir[8] = { /* for building paths back to source */
 };
 
 /* blocking masks for neighboring cells */
-#define BLOCK_NORTHEAST     ( DIAG_NEtoSW | BENT_StoNE | BENT_WtoNE \
-                              | ANGLE_NEtoSE | ANGLE_NWtoNE \
-                              | SHARP_NtoNE | SHARP_EtoNE | HOLE )
-#define BLOCK_SOUTHEAST     ( DIAG_SEtoNW | BENT_NtoSE | BENT_WtoSE \
-                              | ANGLE_NEtoSE | ANGLE_SEtoSW \
-                              | SHARP_EtoSE | SHARP_StoSE | HOLE )
-#define BLOCK_SOUTHWEST     ( DIAG_NEtoSW | BENT_NtoSW | BENT_EtoSW \
-                              | ANGLE_SEtoSW | ANGLE_SWtoNW \
-                              | SHARP_StoSW | SHARP_WtoSW | HOLE )
-#define BLOCK_NORTHWEST     ( DIAG_SEtoNW | BENT_EtoNW | BENT_StoNW \
-                              | ANGLE_SWtoNW | ANGLE_NWtoNE \
-                              | SHARP_WtoNW | SHARP_NtoNW | HOLE )
-#define BLOCK_NORTH         ( LINE_VERTICAL | BENT_NtoSE | BENT_NtoSW \
-                              | BENT_EtoNW | BENT_WtoNE \
-                              | BENT_StoNE | BENT_StoNW \
-                              | CORNER_NORTHEAST | CORNER_NORTHWEST \
-                              | ANGLE_NEtoSE | ANGLE_SWtoNW | ANGLE_NWtoNE \
-                              | DIAG_NEtoSW | DIAG_SEtoNW \
-                              | SHARP_NtoNE | SHARP_NtoNW \
-                              | SHARP_EtoNE | SHARP_WtoNW | HOLE )
-#define BLOCK_EAST          ( LINE_HORIZONTAL | BENT_EtoSW | BENT_EtoNW \
-                              | BENT_NtoSE | BENT_StoNE \
-                              | BENT_WtoNE | BENT_WtoSE \
-                              | CORNER_NORTHEAST | CORNER_SOUTHEAST \
-                              | ANGLE_NEtoSE | ANGLE_SEtoSW | ANGLE_NWtoNE \
-                              | DIAG_NEtoSW | DIAG_SEtoNW \
-                              | SHARP_EtoNE | SHARP_EtoSE \
-                              | SHARP_NtoNE | SHARP_StoSE | HOLE )
-#define BLOCK_SOUTH         ( LINE_VERTICAL | BENT_StoNE | BENT_StoNW \
-                              | BENT_EtoSW | BENT_WtoSE \
-                              | BENT_NtoSE | BENT_NtoSW \
-                              | CORNER_SOUTHEAST | CORNER_SOUTHWEST \
-                              | ANGLE_NEtoSE | ANGLE_SWtoNW | ANGLE_SEtoSW \
-                              | DIAG_NEtoSW | DIAG_SEtoNW \
-                              | SHARP_StoSE | SHARP_StoSW \
-                              | SHARP_EtoSE | SHARP_WtoSW | HOLE )
-#define BLOCK_WEST          ( LINE_HORIZONTAL | BENT_WtoNE | BENT_WtoSE \
-                              | BENT_NtoSW | BENT_StoNW \
-                              | BENT_EtoSW | BENT_EtoNW \
-                              | CORNER_SOUTHWEST | CORNER_NORTHWEST \
-                              | ANGLE_SWtoNW | ANGLE_SEtoSW | ANGLE_NWtoNE \
-                              | DIAG_NEtoSW | DIAG_SEtoNW \
-                              | SHARP_WtoSW | SHARP_WtoNW \
-                              | SHARP_NtoNW | SHARP_StoSW | HOLE )
+#define BLOCK_NORTHEAST ( DIAG_NEtoSW | BENT_StoNE | BENT_WtoNE \
+                          | ANGLE_NEtoSE | ANGLE_NWtoNE \
+                          | SHARP_NtoNE | SHARP_EtoNE | HOLE )
+#define BLOCK_SOUTHEAST ( DIAG_SEtoNW | BENT_NtoSE | BENT_WtoSE \
+                          | ANGLE_NEtoSE | ANGLE_SEtoSW \
+                          | SHARP_EtoSE | SHARP_StoSE | HOLE )
+#define BLOCK_SOUTHWEST ( DIAG_NEtoSW | BENT_NtoSW | BENT_EtoSW \
+                          | ANGLE_SEtoSW | ANGLE_SWtoNW \
+                          | SHARP_StoSW | SHARP_WtoSW | HOLE )
+#define BLOCK_NORTHWEST ( DIAG_SEtoNW | BENT_EtoNW | BENT_StoNW \
+                          | ANGLE_SWtoNW | ANGLE_NWtoNE \
+                          | SHARP_WtoNW | SHARP_NtoNW | HOLE )
+#define BLOCK_NORTH     ( LINE_VERTICAL | BENT_NtoSE | BENT_NtoSW \
+                          | BENT_EtoNW | BENT_WtoNE \
+                          | BENT_StoNE | BENT_StoNW \
+                          | CORNER_NORTHEAST | CORNER_NORTHWEST \
+                          | ANGLE_NEtoSE | ANGLE_SWtoNW | ANGLE_NWtoNE \
+                          | DIAG_NEtoSW | DIAG_SEtoNW \
+                          | SHARP_NtoNE | SHARP_NtoNW \
+                          | SHARP_EtoNE | SHARP_WtoNW | HOLE )
+#define BLOCK_EAST      ( LINE_HORIZONTAL | BENT_EtoSW | BENT_EtoNW \
+                          | BENT_NtoSE | BENT_StoNE \
+                          | BENT_WtoNE | BENT_WtoSE \
+                          | CORNER_NORTHEAST | CORNER_SOUTHEAST \
+                          | ANGLE_NEtoSE | ANGLE_SEtoSW | ANGLE_NWtoNE \
+                          | DIAG_NEtoSW | DIAG_SEtoNW \
+                          | SHARP_EtoNE | SHARP_EtoSE \
+                          | SHARP_NtoNE | SHARP_StoSE | HOLE )
+#define BLOCK_SOUTH     ( LINE_VERTICAL | BENT_StoNE | BENT_StoNW \
+                          | BENT_EtoSW | BENT_WtoSE \
+                          | BENT_NtoSE | BENT_NtoSW \
+                          | CORNER_SOUTHEAST | CORNER_SOUTHWEST \
+                          | ANGLE_NEtoSE | ANGLE_SWtoNW | ANGLE_SEtoSW \
+                          | DIAG_NEtoSW | DIAG_SEtoNW \
+                          | SHARP_StoSE | SHARP_StoSW \
+                          | SHARP_EtoSE | SHARP_WtoSW | HOLE )
+#define BLOCK_WEST      ( LINE_HORIZONTAL | BENT_WtoNE | BENT_WtoSE \
+                          | BENT_NtoSW | BENT_StoNW \
+                          | BENT_EtoSW | BENT_EtoNW \
+                          | CORNER_SOUTHWEST | CORNER_NORTHWEST \
+                          | ANGLE_SWtoNW | ANGLE_SEtoSW | ANGLE_NWtoNE \
+                          | DIAG_NEtoSW | DIAG_SEtoNW \
+                          | SHARP_WtoSW | SHARP_WtoNW \
+                          | SHARP_NtoNW | SHARP_StoSW | HOLE )
 
 struct block
 {
@@ -123,31 +123,48 @@ struct block
     long b2;
 };
 
-static struct block blocking[8] =   /* blocking masks for diagonal traces */
-{                                                                              {  0, -1,
-                                                                                  BLOCK_NORTHEAST,
-                                                                                  1,  0,
-                                                                                  BLOCK_SOUTHWEST },
-                                                                               {  0, 0,  0,
-                                                                                  0,  0, 0               },
-                                                                               {  1, 0,
-                                                                                  BLOCK_SOUTHEAST,
-                                                                                  0,  1,
-                                                                                  BLOCK_NORTHWEST },
-                                                                               {  0, 0,  0,
-                                                                                  0,  0, 0               },
-                                                                               {  0, 0,  0,
-                                                                                  0,  0, 0               },
-                                                                               {  0, -1,
-                                                                                  BLOCK_SOUTHEAST,
-                                                                                  -1, 0,
-                                                                                  BLOCK_NORTHWEST },
-                                                                               {  0, 0,  0,
-                                                                                  0,  0, 0               },
-                                                                               { -1, 0,
-                                                                                 BLOCK_NORTHEAST,
-                                                                                 0,  1,
-                                                                                 BLOCK_SOUTHWEST } };
+/* blocking masks for diagonal traces */
+static struct block blocking[8] =
+{ {
+      0, -1,
+      BLOCK_NORTHEAST,
+      1, 0,
+      BLOCK_SOUTHWEST
+  },
+  {
+      0, 0, 0,
+      0, 0, 0
+  },
+  {
+      1, 0,
+      BLOCK_SOUTHEAST,
+      0, 1,
+      BLOCK_NORTHWEST
+  },
+  {
+      0, 0, 0,
+      0, 0, 0
+  },
+  {
+      0, 0, 0,
+      0, 0, 0
+  },
+  {
+      0, -1,
+      BLOCK_SOUTHEAST,
+      -1, 0,
+      BLOCK_NORTHWEST
+  },
+  {
+      0, 0, 0,
+      0, 0, 0
+  },
+  {
+      -1, 0,
+      BLOCK_NORTHEAST,
+      0, 1,
+      BLOCK_SOUTHWEST
+  } };
 
 /* mask for hole-related blocking effects */
 static struct
@@ -171,19 +188,6 @@ static long newmask[8] = { /* patterns to mask out in neighbor cells */
     0,                                   CORNER_SOUTHWEST | CORNER_SOUTHEAST, 0
 };
 
-
-/* Macro d'affichage de l'activite du routeur; */
-#define AFFICHE_ACTIVITE_ROUTE \
-    msg.Printf( wxT( "%5.5d" ), OpenNodes ); \
-    Affiche_1_Parametre( pcbframe, 24, wxT( "Open" ), msg, WHITE ); \
-    msg.Printf( wxT( "%5.5d" ), ClosNodes ); \
-    Affiche_1_Parametre( pcbframe, 32, wxT( "Closed" ), msg, WHITE ); \
-    msg.Printf( wxT( "%5.5d" ), MoveNodes ); \
-    Affiche_1_Parametre( pcbframe, 40, wxT( "Moved" ), msg, WHITE ); \
-    msg.Printf( wxT( "%5.5d" ), MaxNodes ); \
-    Affiche_1_Parametre( pcbframe, 48, wxT( "Max" ), msg, WHITE ); \
-    msg.Printf( wxT( "%2.2d" ), (ClosNodes * 50) / (Nrows * Ncols) ); \
-    Affiche_1_Parametre( pcbframe, 56, wxT( "%" ), msg, CYAN );
 
 
 /********************************************************/
@@ -211,16 +215,16 @@ int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
     Ncurrent = 0;
     MsgPanel->EraseMsgBox();
     msg.Printf( wxT( "%d  " ), m_Pcb->m_NbNoconnect );
-    Affiche_1_Parametre( this, 72, wxT( "NoConn" ), msg, LIGHTCYAN );
+    Affiche_1_Parametre( this, 72, wxT( "NoConn" ), msg, CYAN );
 
 
     /* go until no more work to do */
     GetWork( &row_source, &col_source, &current_net_code,
-             &row_target, &col_target, &pt_cur_ch ); // 1er chevelu a router
+        &row_target, &col_target, &pt_cur_ch );      // 1er chevelu a router
 
     for( ; row_source != ILLEGAL; GetWork( &row_source, &col_source,
-                                           &current_net_code, &row_target, &col_target,
-                                           &pt_cur_ch ) )
+            &current_net_code, &row_target, &col_target,
+            &pt_cur_ch ) )
     {
         /* Tst demande d'arret de routage ( key ESCAPE actionnee ) */
         wxYield();
@@ -241,9 +245,9 @@ int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
         if( pt_equipot )
         {
             msg.Printf( wxT( "[%8.8s]" ), pt_equipot->m_Netname.GetData() );
-            Affiche_1_Parametre( this, 1, wxT( "Net route" ), msg, YELLOW );
+            Affiche_1_Parametre( this, 1, wxT( "Net route" ), msg, BROWN );
             msg.Printf( wxT( "%d / %d" ), Ncurrent, Ntotal );
-            Affiche_1_Parametre( this, 12, wxT( "Activity" ), msg, YELLOW );
+            Affiche_1_Parametre( this, 12, wxT( "Activity" ), msg, BROWN );
         }
 
         pt_cur_ch = pt_cur_ch;
@@ -258,7 +262,7 @@ int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
         pt_cur_ch->pad_end->Draw( DrawPanel, DC, GR_OR | GR_SURBRILL );
 
         success = Route_1_Trace( this, DC, two_sides, row_source, col_source,
-                                 row_target, col_target, pt_cur_ch );
+            row_target, col_target, pt_cur_ch );
 
         switch( success )
         {
@@ -281,11 +285,11 @@ int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
         }
 
         msg.Printf( wxT( "%d  " ), nbsucces );
-        Affiche_1_Parametre( this, 61, wxT( "Ok" ), msg, LIGHTGREEN );
+        Affiche_1_Parametre( this, 22, wxT( "Ok" ), msg, GREEN );
         msg.Printf( wxT( "%d  " ), nbunsucces );
-        Affiche_1_Parametre( this, 66, wxT( "Fail" ), msg, LIGHTRED );
+        Affiche_1_Parametre( this, 30, wxT( "Fail" ), msg, RED );
         msg.Printf( wxT( "%d  " ), m_Pcb->m_NbNoconnect );
-        Affiche_1_Parametre( this, 72, wxT( "NoConn" ), msg, LIGHTCYAN );
+        Affiche_1_Parametre( this, 38, wxT( "NoConn" ), msg, CYAN );
 
         /* Effacement des affichages de routage sur l'ecran */
         pt_cur_ch->pad_start->Draw( DrawPanel, DC, GR_AND );
@@ -337,8 +341,8 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
     int        masque_layer_TOP    = g_TabOneLayerMask[Route_Layer_TOP];
     int        masque_layer_BOTTOM = g_TabOneLayerMask[Route_Layer_BOTTOM];
     int        masque_layers; /* Masque des 2 couches de routage */
-    int        tab_mask[2];/* permet le calcul du Masque de la couche en cours
-                         *  de tst (side = TOP ou BOTTOM)*/
+    int        tab_mask[2]; /* permet le calcul du Masque de la couche en cours
+                             *  de tst (side = TOP ou BOTTOM)*/
     int        start_mask_layer = 0;
     wxString   msg;
 
@@ -440,7 +444,7 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
             {
                 start_mask_layer = 2;
                 if( SetQueue( row_source, col_source, TOP, 0, apx_dist,
-                              row_target, col_target ) == 0 )
+                        row_target, col_target ) == 0 )
                 {
                     return ERR_MEMORY;
                 }
@@ -450,7 +454,7 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
                 start_mask_layer |= 1;
 
                 if( SetQueue( row_source, col_source, BOTTOM, 0, apx_dist,
-                              row_target, col_target ) == 0 )
+                        row_target, col_target ) == 0 )
                 {
                     return ERR_MEMORY;
                 }
@@ -462,7 +466,7 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
             {
                 start_mask_layer = 1;
                 if( SetQueue( row_source, col_source, BOTTOM, 0, apx_dist,
-                              row_target, col_target ) == 0 )
+                        row_target, col_target ) == 0 )
                 {
                     return ERR_MEMORY;
                 }
@@ -472,7 +476,7 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
                 start_mask_layer |= 2;
 
                 if( SetQueue( row_source, col_source, TOP, 0, apx_dist,
-                              row_target, col_target ) == 0 )
+                        row_target, col_target ) == 0 )
                 {
                     return ERR_MEMORY;
                 }
@@ -484,7 +488,7 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
         start_mask_layer = 1;
 
         if( SetQueue( row_source, col_source, BOTTOM, 0, apx_dist,
-                      row_target, col_target ) == 0 )
+                row_target, col_target ) == 0 )
         {
             return ERR_MEMORY;
         }
@@ -503,34 +507,26 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
             /* Efface Liaison */
             GRSetDrawMode( DC, GR_XOR );
             GRLine( &pcbframe->DrawPanel->m_ClipBox,
-                    DC,
-                    segm_oX,
-                    segm_oY,
-                    segm_fX,
-                    segm_fY,
-                    0,
-                    WHITE );
+                DC,
+                segm_oX,
+                segm_oY,
+                segm_fX,
+                segm_fY,
+                0,
+                WHITE );
 
             /* Generation de la trace */
             if( Retrace( pcbframe, DC, row_source, col_source,
-                         row_target, col_target, side, current_net_code ) )
+                   row_target, col_target, side, current_net_code ) )
             {
                 result = SUCCESS;   /* Success : Route OK */
             }
             break;                  /* Fin du routage */
         }
-        /* report every 300 new nodes or so */
-        if( (OpenNodes - lastopen > 300) || (ClosNodes - lastclos > 300) ||
-           (MoveNodes - lastmove > 300) )
-        {
-            lastopen = (OpenNodes / 300) * 300; lastclos = (ClosNodes / 300) * 300;
-            lastmove = (MoveNodes / 300) * 300;
 
-            if( pcbframe->DrawPanel->m_AbortRequest )
-            {
-                result = STOP_FROM_ESC; break;
-            }
-            AFFICHE_ACTIVITE_ROUTE;
+        if( pcbframe->DrawPanel->m_AbortRequest )
+        {
+            result = STOP_FROM_ESC; break;
         }
 
         _self = 0;
@@ -552,7 +548,7 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
 
             /* off the edge? */
             if( nr < 0 || nr >= Nrows || nc < 0 || nc >= Ncols )
-                continue;/* off the edge */
+                continue; /* off the edge */
 
             if( _self == 5 && selfok2[i].present )
                 continue;
@@ -593,9 +589,9 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
 
             olddir  = GetDir( r, c, side );
             newdist = d + CalcDist( ndir[i], olddir,
-                                    (olddir == FROM_OTHERSIDE) ? GetDir( r,
-                                                                         c,
-                                                                         1 - side ) : 0, side );
+                (olddir == FROM_OTHERSIDE) ? GetDir( r,
+                    c,
+                    1 - side ) : 0, side );
 
             /* if (a) not visited yet, or (b) we have */
             /* found a better path, add it to queue */
@@ -604,8 +600,8 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
                 SetDir( nr, nc, side, ndir[i] );
                 SetDist( nr, nc, side, newdist );
                 if( SetQueue( nr, nc, side, newdist,
-                              GetApxDist( nr, nc, row_target, col_target ),
-                              row_target, col_target ) == 0 )
+                        GetApxDist( nr, nc, row_target, col_target ),
+                        row_target, col_target ) == 0 )
                 {
                     return ERR_MEMORY;
                 }
@@ -615,8 +611,8 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
                 SetDir( nr, nc, side, ndir[i] );
                 SetDist( nr, nc, side, newdist );
                 ReSetQueue( nr, nc, side, newdist,
-                            GetApxDist( nr, nc, row_target, col_target ),
-                            row_target, col_target );
+                    GetApxDist( nr, nc, row_target, col_target ),
+                    row_target, col_target );
             }
         }
 
@@ -637,7 +633,7 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
                 nr = r + delta[i][0]; nc = c + delta[i][1];
 
                 if( nr < 0 || nr >= Nrows || nc < 0 || nc >= Ncols )
-                    continue;/* off the edge !! */
+                    continue; /* off the edge !! */
 
                 if( GetCell( nr, nc, side ) /* & blocking2[i]*/ )
                 {
@@ -665,7 +661,7 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
                 SetDir( r, c, 1 - side, FROM_OTHERSIDE );
                 SetDist( r, c, 1 - side, newdist );
                 if( SetQueue( r, c, 1 - side, newdist, apx_dist, row_target,
-                              col_target ) == 0 )
+                        col_target ) == 0 )
                 {
                     return ERR_MEMORY;
                 }
@@ -683,14 +679,14 @@ end_of_route:
     Place_1_Pad_Board( pcbframe->m_Pcb, pt_cur_ch->pad_start, ~CURRENT_PAD, marge, WRITE_AND_CELL );
     Place_1_Pad_Board( pcbframe->m_Pcb, pt_cur_ch->pad_end, ~CURRENT_PAD, marge, WRITE_AND_CELL );
 
-    AFFICHE_ACTIVITE_ROUTE;
     return result;
 }
 
 
 static long bit[8][9] = { /* OT=Otherside */
     /* N, NE, E, SE, S, SW, W, NW, OT */
-/* N */  { LINE_VERTICAL,    BENT_StoNE,   CORNER_SOUTHEAST, SHARP_StoSE,  0,
+/* N */
+    { LINE_VERTICAL,    BENT_StoNE,   CORNER_SOUTHEAST, SHARP_StoSE,  0,
            SHARP_StoSW, CORNER_SOUTHWEST, BENT_StoNW, (HOLE | HOLE_SOUTH) },
 /* NE */ { BENT_NtoSW,       DIAG_NEtoSW,  BENT_EtoSW,       ANGLE_SEtoSW, SHARP_StoSW,
            0, SHARP_WtoSW, ANGLE_SWtoNW, (HOLE | HOLE_SOUTHWEST) },
@@ -934,8 +930,8 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
         g_CurrentTrackSegment->m_Start.y = g_CurrentTrackSegment->m_End.y =
                                                pcb->m_BoundaryBox.m_Pos.y +
                                                (g_GridRoutingSize * col);
-        g_CurrentTrackSegment->m_Width   = g_DesignSettings.m_CurrentViaSize;
-        g_CurrentTrackSegment->m_Shape   = g_DesignSettings.m_CurrentViaType;
+        g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentViaSize;
+        g_CurrentTrackSegment->m_Shape = g_DesignSettings.m_CurrentViaType;
         g_CurrentTrackSegment->SetNet( current_net_code );
     }
     else    /* Placement d'un segment standard */
@@ -956,8 +952,8 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
             g_CurrentTrackSegment->SetLayer( Route_Layer_TOP );
 
         g_CurrentTrackSegment->SetState( SEGM_AR, ON );
-        g_CurrentTrackSegment->m_End.x   = pcb->m_BoundaryBox.m_Pos.x + (g_GridRoutingSize * row);
-        g_CurrentTrackSegment->m_End.y   = pcb->m_BoundaryBox.m_Pos.y + (g_GridRoutingSize * col);
+        g_CurrentTrackSegment->m_End.x = pcb->m_BoundaryBox.m_Pos.x + (g_GridRoutingSize * row);
+        g_CurrentTrackSegment->m_End.y = pcb->m_BoundaryBox.m_Pos.y + (g_GridRoutingSize * col);
         g_CurrentTrackSegment->SetNet( current_net_code );
 
         if( g_CurrentTrackSegment->Pback == NULL ) /* Start Piste */
@@ -1012,7 +1008,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
                 dy1 = g_CurrentTrackSegment->m_End.y - g_CurrentTrackSegment->m_Start.y;
                 dx0 = OldTrack->m_End.x - OldTrack->m_Start.x;
                 dy0 = OldTrack->m_End.y - OldTrack->m_Start.y;
-                if( abs( dx0 * dy1 ) == abs( dx1 * dy0 ) )/* le dernier segment est en ligne*/
+                if( abs( dx0 * dy1 ) == abs( dx1 * dy0 ) ) /* le dernier segment est en ligne*/
                 {
                     OldTrack->m_End.x = g_CurrentTrackSegment->m_End.x;
                     OldTrack->m_End.y = g_CurrentTrackSegment->m_End.y;
@@ -1064,7 +1060,7 @@ static void Place_Piste_en_Buffer( WinEDA_PcbFrame* pcbframe, wxDC* DC )
         TRACK* NewTrack = g_CurrentTrackSegment->Copy();
         NewTrack->Insert( pcbframe->m_Pcb, g_CurrentTrackSegment );
 
-        NewTrack->m_End   = pt_cur_ch->pad_start->GetPosition();
+        NewTrack->m_End = pt_cur_ch->pad_start->GetPosition();
 
         NewTrack->m_Start = g_CurrentTrackSegment->m_End;
 

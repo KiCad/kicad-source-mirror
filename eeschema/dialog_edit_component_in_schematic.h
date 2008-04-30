@@ -134,6 +134,7 @@ public:
     wxCheckBox* m_VorientFieldText;
     wxBoxSizer* m_FieldDatasBoxSizer;
     wxBoxSizer* m_FieldSelectionBoxSizer;
+    wxButton* m_btClose;
 ////@end WinEDA_ComponentPropertiesFrame member variables
 
     WinEDA_SchematicFrame * m_Parent;

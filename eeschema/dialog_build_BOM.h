@@ -159,6 +159,7 @@ public:
     wxCheckBox* m_AddField6;
     wxCheckBox* m_AddField7;
     wxCheckBox* m_AddField8;
+    wxButton* m_btClose;
 ////@end WinEDA_Build_BOM_Frame member variables
 
     WinEDA_DrawFrame * m_Parent;

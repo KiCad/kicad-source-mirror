@@ -255,6 +255,7 @@ void WinEDA_SetColorsFrame::CreateControls()
     Button = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
     Button->SetForegroundColour( *wxBLUE );
     StdDialogButtonSizer->AddButton(Button);
+    Button->SetFocus();
 
     Button = new wxButton( this, wxID_APPLY, _("Apply"), wxDefaultPosition, wxDefaultSize, 0 );
     StdDialogButtonSizer->AddButton(Button);

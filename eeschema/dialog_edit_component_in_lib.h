@@ -39,11 +39,6 @@ class wxSpinCtrl;
 
 ////@begin control identifiers
 #define ID_DIALOG 10000
-#define SYMBOL_WINEDA_PARTPROPERTIESFRAME_STYLE wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|MAYBE_RESIZE_BORDER
-#define SYMBOL_WINEDA_PARTPROPERTIESFRAME_TITLE _("Lib Component Properties")
-#define SYMBOL_WINEDA_PARTPROPERTIESFRAME_IDNAME ID_DIALOG
-#define SYMBOL_WINEDA_PARTPROPERTIESFRAME_SIZE wxSize(400, 300)
-#define SYMBOL_WINEDA_PARTPROPERTIESFRAME_POSITION wxDefaultPosition
 #define ID_LIBEDIT_NOTEBOOK 10001
 #define ID_PANEL_BASIC 10002
 #define ID_SPINCTRL1 10010
@@ -57,6 +52,11 @@ class wxSpinCtrl;
 #define ID_COPY_DOC_TO_ALIAS 10014
 #define ID_BROWSE_DOC_FILES 10005
 #define ID_PANEL_ALIAS 10003
+#define SYMBOL_WINEDA_PARTPROPERTIESFRAME_STYLE wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|MAYBE_RESIZE_BORDER
+#define SYMBOL_WINEDA_PARTPROPERTIESFRAME_TITLE _("Lib Component Properties")
+#define SYMBOL_WINEDA_PARTPROPERTIESFRAME_IDNAME ID_DIALOG
+#define SYMBOL_WINEDA_PARTPROPERTIESFRAME_SIZE wxSize(400, 300)
+#define SYMBOL_WINEDA_PARTPROPERTIESFRAME_POSITION wxDefaultPosition
 ////@end control identifiers
 #define ID_DELETE_ONE_FOOTPRINT_FILTER 10020
 #define ID_DELETE_ALL_FOOTPRINT_FILTER 10021
@@ -159,9 +159,8 @@ public:
     wxTextCtrl* m_Keywords;
     wxTextCtrl* m_Docfile;
     wxButton* m_ButtonCopyDoc;
-    wxButton* m_ButtonDeleteAllAlias;
-    wxButton* m_ButtonDeleteOneAlias;
     wxPanel* m_PanelAlias;
+    wxButton* m_btClose;
 ////@end WinEDA_PartPropertiesFrame member variables
 
 	WinEDA_LibeditFrame * m_Parent;
@@ -170,6 +169,8 @@ public:
 
 	wxPanel * m_PanelField;
 	wxPanel * m_PanelFootprintFilter;
+	wxButton * m_ButtonDeleteOneAlias;
+	wxButton * m_ButtonDeleteAllAlias;
 	wxButton * m_ButtonDeleteAllFootprintFilter;
 	wxButton * m_ButtonDeleteOneFootprintFilter;
 

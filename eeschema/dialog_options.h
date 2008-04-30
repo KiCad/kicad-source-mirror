@@ -122,6 +122,7 @@ public:
     wxBoxSizer* m_LabelSizeCtrlSizer;
     wxRadioBox* m_SelDirWires;
     wxRadioBox* m_Show_Page_Limits;
+    wxButton* m_btClose;
     wxStaticText* m_DeltaStepXTitle;
     wxTextCtrl* m_DeltaStepCtrl_X;
     wxStaticText* m_DeltaStepYTitle;

@@ -136,6 +136,7 @@
         <long name="locked">0</long>
         <string name="template-name">""</string>
         <bool name="dirty">1</bool>
+        <long name="makefile-last-written">-8519680</long>
         <string name="Compiler name">""</string>
         <string name="Build mode">"Debug"</string>
         <string name="Unicode mode">"ANSI"</string>
@@ -177,6 +178,8 @@
         <string name="wxWidgets build command">"%AUTO%"</string>
         <string name="wxWidgets clean command">"%AUTO%"</string>
         <string name="PATH variable">"%AUTO%"</string>
+        <bool name="Suppress source rules">0</bool>
+        <bool name="Enable makefile generation">1</bool>
       </document>
     </document>
   </data>
@@ -1044,7 +1047,7 @@
                 <long name="locked">0</long>
                 <string name="created">"8/11/2006"</string>
                 <string name="proxy-type">"wbButtonProxy"</string>
-                <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnCancelClick"</string>
+                <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnCancelClick|||WinEDA_SheetPropertiesFrame"</string>
                 <string name="proxy-Id name">"wxID_CANCEL"</string>
                 <long name="proxy-Id value">5101</long>
                 <string name="proxy-Name">""</string>
@@ -1054,7 +1057,7 @@
                 <bool name="proxy-Separate files">0</bool>
                 <string name="proxy-Implementation filename">""</string>
                 <string name="proxy-Header filename">""</string>
-                <string name="proxy-Member variable name">""</string>
+                <string name="proxy-Member variable name">"m_btClose"</string>
                 <string name="proxy-Label">"&amp;Cancel"</string>
                 <bool name="proxy-Default">0</bool>
                 <string name="proxy-Help text">""</string>
@@ -1123,7 +1126,7 @@
                 <string name="proxy-Header filename">""</string>
                 <string name="proxy-Member variable name">""</string>
                 <string name="proxy-Label">"&amp;OK"</string>
-                <bool name="proxy-Default">0</bool>
+                <bool name="proxy-Default">1</bool>
                 <string name="proxy-Help text">""</string>
                 <string name="proxy-Tooltip text">""</string>
                 <string name="proxy-Data variable">""</string>
