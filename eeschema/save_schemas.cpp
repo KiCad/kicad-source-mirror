@@ -117,13 +117,10 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
 {
     const wxChar**  LibNames;
     wxString        Name, msg;
-    int             ii;
-    bool            Failed = FALSE;
-    EDA_BaseStruct* Phead;
     Ki_PageDescr*   PlotSheet;
 
     LibNames = GetLibNames();
-    for( ii = 0; LibNames[ii] != NULL; ii++ )
+    for( int ii = 0; LibNames[ii] != NULL; ii++ )
     {
         if( ii > 0 )
             Name += wxT( "," );
@@ -161,110 +158,45 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
     fprintf( aFile, "$EndDescr\n" );
 
     /* Saving schematic items */
-    Phead = EEDrawList;
-    while( Phead )
+    bool failed = FALSE;
+    for( SCH_ITEM* item = EEDrawList;  item;  item=item->Next() )
     {
-        switch( Phead->Type() )
+        switch( item->Type() )
         {
-        case TYPE_SCH_COMPONENT:              /* Its a library item. */
-            if( !( (SCH_COMPONENT*) Phead )->Save( aFile ) )
-                Failed = TRUE;
-            break;
-
-        case DRAW_SHEET_STRUCT_TYPE:           /* Its a Sheet item. */
-            if( !( (DrawSheetStruct*) Phead )->Save( aFile ) )
-                Failed = TRUE;
-            break;
-
-        case DRAW_SEGMENT_STRUCT_TYPE:           /* Its a Segment item. */
-                #undef STRUCT
-                #define STRUCT ( (EDA_DrawLineStruct*) Phead )
-            if( !STRUCT->Save( aFile ) )
-                Failed = TRUE;
-            break;
-
-        case DRAW_BUSENTRY_STRUCT_TYPE:          /* Its a Raccord item. */
-                #undef STRUCT
-                #define STRUCT ( (DrawBusEntryStruct*) Phead )
-            if( !STRUCT->Save( aFile ) )
-                Failed = TRUE;
-            break;
-
-        case DRAW_POLYLINE_STRUCT_TYPE:           /* Its a polyline item. */
-                #undef STRUCT
-                #define STRUCT ( (DrawPolylineStruct*) Phead )
-            if( !STRUCT->Save( aFile ) )
-                Failed = TRUE;
-            break;
-
-        case DRAW_JUNCTION_STRUCT_TYPE:     /* Its a connection item. */
-                #undef STRUCT
-                #define STRUCT ( (DrawJunctionStruct*) Phead )
-            if( !STRUCT->Save( aFile ) )
-                Failed = TRUE;
-            break;
-
+        case TYPE_SCH_COMPONENT:                /* Its a library item. */
+        case DRAW_SHEET_STRUCT_TYPE:            /* Its a Sheet item. */
+        case DRAW_SEGMENT_STRUCT_TYPE:          /* Its a Segment item. */
+        case DRAW_BUSENTRY_STRUCT_TYPE:         /* Its a Raccord item. */
+        case DRAW_POLYLINE_STRUCT_TYPE:         /* Its a polyline item. */
+        case DRAW_JUNCTION_STRUCT_TYPE:         /* Its a connection item. */
         case DRAW_NOCONNECT_STRUCT_TYPE:        /* Its a NoConnection item. */
-                #undef STRUCT
-                #define STRUCT ( (DrawNoConnectStruct*) Phead )
-            if( !STRUCT->Save( aFile ) )
-                Failed = TRUE;
+        case TYPE_SCH_TEXT:                     /* Its a text item. */
+        case TYPE_SCH_LABEL:                    /* Its a label item. */
+        case TYPE_SCH_GLOBALLABEL:              /* Its a Global label item. */
+        case TYPE_SCH_HIERLABEL:                /* Its a Hierarchical label item. */
+        case DRAW_MARKER_STRUCT_TYPE:           /* Its a marker item. */
+            if( !item->Save( aFile ) )
+                failed = TRUE;
             break;
 
-        case TYPE_SCH_TEXT:             /* Its a text item. */
-                #undef STRUCT
-                #define STRUCT ( (SCH_TEXT*) Phead )
-            if( !STRUCT->Save( aFile ) )
-                Failed = TRUE;
-            break;
-
-
-        case TYPE_SCH_LABEL:            /* Its a label item. */
-                #undef STRUCT
-                #define STRUCT ( (SCH_LABEL*) Phead )
-            if( !STRUCT->Save( aFile ) )
-                Failed = TRUE;
-            break;
-
-        case TYPE_SCH_GLOBALLABEL:     /* Its a Global label item. */
-                #undef STRUCT
-                #define STRUCT ( (SCH_GLOBALLABEL*) Phead )
-            if( !STRUCT->Save( aFile ) )
-                Failed = TRUE;
-            break;
-
-        case TYPE_SCH_HIERLABEL:     /* Its a Hierarchical label item. */
-                #undef STRUCT
-                #define STRUCT ( (SCH_HIERLABEL*) Phead )
-            if( !STRUCT->Save( aFile ) )
-                Failed = TRUE;
-            break;
-
-        case DRAW_MARKER_STRUCT_TYPE:       /* Its a marker item. */
-                #undef STRUCT
-                #define STRUCT ( (DrawMarkerStruct*) Phead )
-            if( !STRUCT->Save( aFile ) )
-                Failed = TRUE;
-            break;
-
+        /*
         case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
         case DRAW_PICK_ITEM_STRUCT_TYPE:
             break;
+        */
 
         default:
             break;
         }
 
-        if( Failed )
+        if( failed )
             break;
-
-        Phead = Phead->Pnext;
     }
 
     if( fprintf( aFile, "$EndSCHEMATC\n" ) == EOF )
-        Failed = TRUE;
+        failed = TRUE;
 
-    return !Failed;
+    return !failed;
 }
 
 
