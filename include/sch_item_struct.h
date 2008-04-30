@@ -60,7 +60,7 @@ public:
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * writes the data structures for this object out to a FILE in "*.sch" format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
