@@ -10,6 +10,7 @@ email address.
 ================================================================================
 +eeschema:
     made in some dialogs the ESC key working (linux version, already working under windows)
+    screen number and screen count now are set
 
 
 2008-Apr-29 UPDATE Dick Hollenbeck <dick@softplc.com>

@@ -22,45 +22,23 @@ static int  ExistUnit( CmpListStruct* Objet, int Unit,
                        CmpListStruct* BaseListeCmp, int NbOfCmp );
 
 
-/************************************************/
+/******************************************************/
 void WinEDA_SchematicFrame::UpdateSheetNumberAndDate()
-/************************************************/
+/******************************************************/
 
 /* Set a sheet number, the sheet count for sheets in the whole schematic
  * and update the date in all screens
  */
 {
     wxString       date = GenDate();
-    int            sheet_number = 1; // sheet 1 is the root sheet
-    DrawSheetPath* sheetpath;
+    EDA_ScreenList s_list;
 
-    /* Build the sheet list */
-    EDA_SheetList  SheetList( g_RootSheet );
-    int            sheet_count = SheetList.GetCount();
+    // Set the date
+    for ( SCH_SCREEN * screen = s_list.GetFirst(); screen != NULL; screen = s_list.GetNext() )
+        screen->m_Date = date;
 
-    for( sheetpath = SheetList.GetFirst();
-        sheetpath != NULL;
-        sheetpath = SheetList.GetNext() )
-    {
-        // Read all sheets in path, but not the root sheet (jj = 1)
-        for( int jj = 1; jj < sheetpath->m_numSheets; jj++ )
-        {
-            DrawSheetStruct* sheet = sheetpath->m_sheets[jj];
-            sheet->m_SheetNumber    = sheet_number++;
-            sheet->m_NumberOfSheets = sheet_count;
-            SCH_SCREEN*      screen = sheet->m_AssociatedScreen;
-            if( screen != NULL )
-            {
-                screen->m_NumberOfScreen = sheet_count;
-                screen->m_Date = date;
-            }
-        }
-    }
-
-    g_RootSheet->m_AssociatedScreen->m_Date = date;
-    g_RootSheet->m_AssociatedScreen->m_NumberOfScreen = sheet_count;
-    g_RootSheet->m_SheetNumber    = 1;
-    g_RootSheet->m_NumberOfSheets = sheet_count;
+    // Set sheet counts
+    SetSheetNumberAndCount();
 }
 
 

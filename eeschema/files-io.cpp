@@ -152,7 +152,6 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNe
     {
         screen->m_CurrentSheetDesc = &g_Sheet_A4;
         screen->SetZoom( 32 );
-        screen->m_ScreenNumber = screen->m_NumberOfScreen = 1;
         screen->m_Title = wxT( "noname.sch" );
         GetScreen()->m_FileName = screen->m_Title;
         screen->m_Company.Empty();
@@ -162,6 +161,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNe
         screen->m_Commentaire4.Empty();
         Read_Config( wxEmptyString, TRUE );
         Zoom_Automatique( TRUE );
+        SetSheetNumberAndCount();
         ReDrawPanel();
         return 1;
     }
@@ -226,6 +226,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNe
     /* Reaffichage ecran de base (ROOT) si necessaire */
     ActiveScreen = GetScreen();
     Zoom_Automatique( FALSE );
+    SetSheetNumberAndCount();
     DrawPanel->Refresh( TRUE );
     return diag;
 }

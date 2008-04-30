@@ -47,8 +47,6 @@ DrawSheetStruct::DrawSheetStruct( const wxPoint& pos ) :
     m_AssociatedScreen = NULL;
     m_SheetName.Printf( wxT( "Sheet%8.8lX" ), m_TimeStamp );
     m_FileName.Printf( wxT( "file%8.8lX.sch" ), m_TimeStamp );
-    m_SheetNumber    = 1;
-    m_NumberOfSheets = 1;
 }
 
 
@@ -277,7 +275,7 @@ void DrawSheetStruct::CleanupSheet( WinEDA_SchematicFrame* aFrame, bool aRedraw 
         }
         Pinsheet = NextPinsheet;
     }
-    
+
         if( aRedraw )
             aFrame->DrawPanel->PostDirtyRect( GetBoundingBox() );
 
@@ -499,9 +497,9 @@ bool DrawSheetStruct::Load( WinEDA_SchematicFrame* frame )
 }
 
 
-/*******************************************************************************/
+/**********************************/
 int DrawSheetStruct::CountSheets()
-/*******************************************************************************/
+/**********************************/
 {
     int count = 1; //1 = this!!
 

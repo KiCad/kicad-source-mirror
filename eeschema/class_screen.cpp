@@ -91,8 +91,6 @@ SCH_SCREEN::SCH_SCREEN( int screentype, KICAD_T aType ) :
     SetGridList( g_GridList );
     m_UndoRedoCountMax = 10;
     m_RefCount       = 0;
-    m_ScreenNumber   = 1;
-    m_NumberOfScreen = 1;
 }
 
 

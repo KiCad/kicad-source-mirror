@@ -85,15 +85,4 @@ asked by: Dick Hollenbeck
     loaded board.   I think the number of layers should be reduced to the
     default and the default layer names should be used.
 
-2008-Apr-30 Assigned To:
-asked by: Dick Hollenbeck
-================================================================================
-+eeschema
-    This line in eeschema/save_schemas.cpp is using m_ScreenNumber == 1
-    regardless.
-    fprintf( aFile, "Sheet %d %d\n", m_ScreenNumber, m_NumberOfScreen );
-    The field m_ScreenNumber needs to be updated based on where
-    the sheet is in the hierarchy.  Until this is fixed, the code which checks
-    for "Sheet 1 " in kicad/treeprj_frame.cpp is broken and the project manager
-    is showing all *.sch files, not just the top most *.sch files.
 

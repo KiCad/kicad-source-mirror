@@ -19,10 +19,8 @@
 class SCH_SCREEN : public BASE_SCREEN
 {
 public:
-    int m_RefCount; //how many sheets reference this screen?
-                    //delete when it goes to zero.
-    int m_ScreenNumber;
-    int m_NumberOfScreen;
+    int m_RefCount;                             /*how many sheets reference this screen?
+                                                  * delete when it goes to zero. */
     SCH_SCREEN( int idtype, KICAD_T aType = SCREEN_STRUCT_TYPE );
     ~SCH_SCREEN();
 
@@ -47,29 +45,30 @@ public:
     }
 
 
-    void            FreeDrawList(); // Free EESchema drawing list (does not delete the sub hierarchies)
+    void         FreeDrawList();    // Free EESchema drawing list (does not delete the sub hierarchies)
 
     void            Place( WinEDA_SchematicFrame* frame, wxDC* DC ) { };
 
-    void            RemoveFromDrawList( SCH_ITEM* DrawStruct ); /* remove DrawStruct from EEDrawList. */
-    bool            CheckIfOnDrawList( SCH_ITEM* st );
-    void            AddToDrawList( SCH_ITEM* DrawStruct );
-    void            ClearUndoORRedoList( EDA_BaseStruct* List );
+    void         RemoveFromDrawList( SCH_ITEM* DrawStruct );    /* remove DrawStruct from EEDrawList. */
+    bool         CheckIfOnDrawList( SCH_ITEM* st );
+    void         AddToDrawList( SCH_ITEM* DrawStruct );
+    void         ClearUndoORRedoList( EDA_BaseStruct* List );
 
-    bool            SchematicCleanUp( wxDC* DC = NULL );
-    SCH_ITEM*       ExtractWires( bool CreateCopy );
+    bool         SchematicCleanUp( wxDC* DC = NULL );
+    SCH_ITEM*    ExtractWires( bool CreateCopy );
 
     /* full undo redo management : */
-    virtual void    ClearUndoRedoList();
-    virtual void    AddItemToUndoList( EDA_BaseStruct* item );
-    virtual void    AddItemToRedoList( EDA_BaseStruct* item );
+    virtual void ClearUndoRedoList();
+    virtual void AddItemToUndoList( EDA_BaseStruct* item );
+    virtual void AddItemToRedoList( EDA_BaseStruct* item );
+
     /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.brd" format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool    Save( FILE* aFile ) const;
+    bool         Save( FILE* aFile ) const;
 };
 
 
@@ -94,8 +93,8 @@ public:
     SCH_SCREEN* GetScreen( unsigned int index );
 
 private:
-    void            AddScreenToList( SCH_SCREEN* testscreen );
-    void            BuildScreenList( EDA_BaseStruct* sheet );
+    void        AddScreenToList( SCH_SCREEN* testscreen );
+    void        BuildScreenList( EDA_BaseStruct* sheet );
 };
 
 #endif /* CLASS_SCREEN_H */

@@ -316,6 +316,7 @@ static bool UpdateScreenFromSheet(WinEDA_SchematicFrame * frame)
 
 	//update the References
 	frame->m_CurrentSheet->UpdateAllScreenReferences();
+    frame->SetSheetNumberAndCount();
 	frame->DrawPanel->m_CanStartBlock = -1;
 	ActiveScreen = frame->m_CurrentSheet->LastScreen();
 	if ( NewScreen->m_FirstRedraw ){

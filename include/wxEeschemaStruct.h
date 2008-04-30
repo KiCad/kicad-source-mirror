@@ -112,10 +112,18 @@ public:
     void                    InstallPreviousSheet();
     void                    InstallNextScreen( DrawSheetStruct* Sheet );
 
+    /** Function SetSheetNumberAndCount
+     * Set the m_ScreenNumber and m_NumberOfScreen members for screens
+     * must be called after a delete or add sheet command, and when entering a sheet
+     */
+    void             SetSheetNumberAndCount();
+
+    // Plot functions:
     void                    ToPlot_PS( wxCommandEvent& event );
     void                    ToPlot_HPGL( wxCommandEvent& event );
     void                    ToPostProcess( wxCommandEvent& event );
 
+    // read and save files
     void                    Save_File( wxCommandEvent& event );
     void                    SaveProject();
     int                     LoadOneEEProject( const wxString& FileName, bool IsNew );

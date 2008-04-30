@@ -66,7 +66,7 @@ bool WinEDA_SchematicFrame::SaveEEFile( SCH_SCREEN* screen, int FileSave )
             this,
             wxFD_SAVE,
             FALSE
-            );
+        );
         if( Name.IsEmpty() )
             return FALSE;
 
@@ -115,9 +115,9 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
  * @return bool - true if success writing else false.
  */
 {
-    const wxChar**  LibNames;
-    wxString        Name, msg;
-    Ki_PageDescr*   PlotSheet;
+    const wxChar** LibNames;
+    wxString       Name, msg;
+    Ki_PageDescr*  PlotSheet;
 
     LibNames = GetLibNames();
     for( int ii = 0; LibNames[ii] != NULL; ii++ )
@@ -145,7 +145,12 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
     fprintf( aFile, "$Descr %s %d %d\n", CONV_TO_UTF8( PlotSheet->m_Name ),
         PlotSheet->m_Size.x, PlotSheet->m_Size.y );
 
+    /* Write ScreenNumber and NumberOfScreen; not very meaningfull for SheetNumber and Sheet Count
+      * in a complex hierarchy, but usefull in simple hierarchy and flat hierarchy
+      * Used also to serach the root sheet ( ScreenNumber = 1 ) withing the files
+     */
     fprintf( aFile, "Sheet %d %d\n", m_ScreenNumber, m_NumberOfScreen );
+
     fprintf( aFile, "Title \"%s\"\n", CONV_TO_UTF8( m_Title ) );
     fprintf( aFile, "Date \"%s\"\n", CONV_TO_UTF8( m_Date ) );
     fprintf( aFile, "Rev \"%s\"\n", CONV_TO_UTF8( m_Revision ) );
@@ -159,7 +164,7 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
 
     /* Saving schematic items */
     bool failed = FALSE;
-    for( SCH_ITEM* item = EEDrawList;  item;  item=item->Next() )
+    for( SCH_ITEM* item = EEDrawList;  item;  item = item->Next() )
     {
         switch( item->Type() )
         {
@@ -179,11 +184,11 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
                 failed = TRUE;
             break;
 
-        /*
-        case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
-        case DRAW_PICK_ITEM_STRUCT_TYPE:
-            break;
-        */
+            /*
+              * case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
+              * case DRAW_PICK_ITEM_STRUCT_TYPE:
+              * break;
+             */
 
         default:
             break;

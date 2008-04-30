@@ -26,7 +26,7 @@ public:
 public:
     Hierarchical_PIN_Sheet_Struct( DrawSheetStruct* parent,
                                    const wxPoint& pos = wxPoint( 0, 0 ),
-                                   const wxString& text = wxEmptyString );
+    const wxString& text = wxEmptyString );
 
     ~Hierarchical_PIN_Sheet_Struct() { }
 
@@ -36,13 +36,13 @@ public:
     }
 
 
-    Hierarchical_PIN_Sheet_Struct*  GenCopy();
+    Hierarchical_PIN_Sheet_Struct* GenCopy();
 
     Hierarchical_PIN_Sheet_Struct* Next() { return (Hierarchical_PIN_Sheet_Struct*) Pnext; }
 
-    void        Place( WinEDA_SchematicFrame* frame, wxDC* DC );
-    void        Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                                          int draw_mode, int Color = -1 );
+    void                           Place( WinEDA_SchematicFrame* frame, wxDC* DC );
+    void                           Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
+                                         int draw_mode, int Color = -1 );
 
     /**
      * Function Save
@@ -50,11 +50,13 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool        Save( FILE* aFile ) const;
+    bool                           Save( FILE* aFile ) const;
 
-#if defined(DEBUG)
+#if defined (DEBUG)
+
     // comment inherited by Doxygen from Base_Struct
-    void        Show( int nestLevel, std::ostream& os );
+    void                           Show( int nestLevel, std::ostream& os );
+
 #endif
 };
 
@@ -64,7 +66,7 @@ public:
  */
 WX_DEFINE_ARRAY( DrawSheetStruct *, SheetGrowArray );
 
-class DrawSheetStruct : public SCH_ITEM /*public SCH_SCREEN*/    /* Gestion de la hierarchie */
+class DrawSheetStruct : public SCH_ITEM    /* Gestion de la hierarchie */
 {
 public:
     wxString m_SheetName;               /*this is equivalent to C101 for components:
@@ -75,7 +77,6 @@ private:
                                          * reading the sheet description from file. */
 public:
     int         m_SheetNameSize;                        /* Size (height) of the text, used to draw the name */
-
     int         m_FileNameSize;                         /* Size (height) of the text, used to draw the name */
     wxPoint     m_Pos;
     wxSize      m_Size;                                 /* Position and Size of sheet symbol */
@@ -85,8 +86,6 @@ public:
     SCH_SCREEN* m_AssociatedScreen;             /* Associated Screen which handle the physical data
                                                  * In complex hierarchies we can have many DrawSheetStruct using the same data
                                                  */
-    int         m_SheetNumber;                          // sheet number (used for info)
-    int         m_NumberOfSheets;                       // Sheets count in the whole schematic (used for info)
 
 public:
     DrawSheetStruct( const wxPoint& pos = wxPoint( 0, 0 ) );
@@ -103,32 +102,34 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool                Save( FILE* aFile ) const;
+    bool             Save( FILE* aFile ) const;
 
-    void                Place( WinEDA_SchematicFrame* frame, wxDC* DC );
-    DrawSheetStruct*    GenCopy();
-    void                Display_Infos( WinEDA_DrawFrame* frame );
-    void                CleanupSheet( WinEDA_SchematicFrame* frame, bool aRedraw );
-    virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                              int draw_mode, int Color = -1 );
-    EDA_Rect            GetBoundingBox();
-    void                SwapData( DrawSheetStruct* copyitem );
-    int                 ComponentCount();
-    bool                Load( WinEDA_SchematicFrame* frame );
-    bool                SearchHierarchy( wxString filename, SCH_SCREEN** screen ); //search the existing hierarchy for an instance of screen "FileName".
-    bool                LocatePathOfScreen( SCH_SCREEN* screen, DrawSheetPath* list );
-    int                 CountSheets();
-    wxString            GetFileName( void );
-    void                SetFileName( const wxString& aFilename );                                   // Set a new filename without changing anything else
-    bool                ChangeFileName( WinEDA_SchematicFrame* aFrame, const wxString& aFileName ); // Set a new filename and manage data and associated screen
+    void             Place( WinEDA_SchematicFrame* frame, wxDC* DC );
+    DrawSheetStruct* GenCopy();
+    void             Display_Infos( WinEDA_DrawFrame* frame );
+    void             CleanupSheet( WinEDA_SchematicFrame* frame, bool aRedraw );
+    virtual void     Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
+                           int draw_mode, int Color = -1 );
+    EDA_Rect         GetBoundingBox();
+    void             SwapData( DrawSheetStruct* copyitem );
+    int              ComponentCount();
+    bool             Load( WinEDA_SchematicFrame* frame );
+    bool             SearchHierarchy( wxString filename, SCH_SCREEN** screen );    //search the existing hierarchy for an instance of screen "FileName".
+    bool             LocatePathOfScreen( SCH_SCREEN* screen, DrawSheetPath* list );
+    int              CountSheets();
+    wxString         GetFileName( void );
+    void             SetFileName( const wxString& aFilename );                                      // Set a new filename without changing anything else
+    bool             ChangeFileName( WinEDA_SchematicFrame* aFrame, const wxString& aFileName );    // Set a new filename and manage data and associated screen
 
     //void 		RemoveSheet(DrawSheetStruct* sheet);
     //to remove a sheet, just delete it
     //-- the destructor should take care of everything else.
 
-#if defined(DEBUG)
+#if defined (DEBUG)
+
     // comment inherited by Doxygen from Base_Struct
-    void                Show( int nestLevel, std::ostream& os );
+    void Show( int nestLevel, std::ostream& os );
+
 #endif
 };
 
@@ -147,25 +148,25 @@ public:
     DrawSheetPath();
     ~DrawSheetPath() { };
     void                Clear() { m_numSheets = 0; }
-    int                 Cmp( DrawSheetPath& d );
-    DrawSheetStruct*    Last();
-    SCH_SCREEN*         LastScreen();
-    EDA_BaseStruct*     LastDrawList();
-    void                Push( DrawSheetStruct* sheet );
-    DrawSheetStruct*    Pop();
+    int              Cmp( DrawSheetPath& d );
+    DrawSheetStruct* Last();
+    SCH_SCREEN*      LastScreen();
+    EDA_BaseStruct*  LastDrawList();
+    void             Push( DrawSheetStruct* sheet );
+    DrawSheetStruct* Pop();
 
     /** Function Path
      * the path uses the time stamps which do not changes even when editing sheet parameters
      * a path is something like / (root) or /34005677 or /34005677/00AE4523
      */
-    wxString            Path();
+    wxString         Path();
 
     /** Function PathHumanReadable
      * Return the sheet path in a readable form, i.e.
      * as a path made from sheet names.
      * (the "normal" path uses the time stamps which do not changes even when editing sheet parameters)
      */
-    wxString            PathHumanReadable();
+    wxString         PathHumanReadable();
 
     /** Function UpdateAllScreenReferences
      * Update the reference and the m_Multi parameter (part selection) for all components on a screen
@@ -173,13 +174,13 @@ public:
      * Mandatory in complex hierarchies because sheets use the same screen (basic schematic)
      * but with different references and part selection according to the displayed sheet
      */
-    void                UpdateAllScreenReferences();
+    void             UpdateAllScreenReferences();
 
-    bool operator       =( const DrawSheetPath& d1 );
+    bool operator    =( const DrawSheetPath& d1 );
 
-    bool operator       ==( const DrawSheetPath& d1 );
+    bool operator    ==( const DrawSheetPath& d1 );
 
-    bool operator       !=( const DrawSheetPath& d1 );
+    bool operator    !=( const DrawSheetPath& d1 );
 };
 
 
@@ -222,12 +223,12 @@ public:
 
 
     int GetCount() { return m_count; }
-    DrawSheetPath*  GetFirst();
-    DrawSheetPath*  GetNext();
-    DrawSheetPath*  GetSheet( int index );
+    DrawSheetPath* GetFirst();
+    DrawSheetPath* GetNext();
+    DrawSheetPath* GetSheet( int index );
 
 private:
-    void            BuildSheetList( DrawSheetStruct* sheet );
+    void           BuildSheetList( DrawSheetStruct* sheet );
 };
 
 #endif /* CLASS_DRAWSHEET_H */

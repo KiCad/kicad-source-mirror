@@ -201,6 +201,32 @@ DrawSheetPath* WinEDA_SchematicFrame::GetSheet()
 }
 
 
+/****************************************************/
+void WinEDA_SchematicFrame::SetSheetNumberAndCount()
+/****************************************************/
+/** Function SetSheetNumberAndCount
+ * Set the m_ScreenNumber and m_NumberOfScreen members for screens
+ * must be called after a delete or add sheet command, ans when entering a sheet
+ */
+{
+    SCH_SCREEN* screen = GetScreen();
+    EDA_ScreenList s_list;
+
+    /* Set the screen count, and the screen number (1 for root sheet)
+    */
+    int screen_num = 2;
+    for ( screen = s_list.GetFirst(); screen != NULL; screen = s_list.GetNext() )
+    {
+        if ( screen == g_RootSheet->m_AssociatedScreen )
+            screen->m_ScreenNumber = 1;
+        else
+            screen->m_ScreenNumber = screen_num++;
+        screen->m_NumberOfScreen = s_list.GetCount();
+    }
+}
+
+
+
 SCH_SCREEN* WinEDA_SchematicFrame::GetScreen() const
 {
     return m_CurrentSheet->LastScreen();
