@@ -696,9 +696,9 @@ bool TestForIntersectionOfStraightLineSegments( int x1i, int y1i, int x1f, int y
 			if( InRange( y1, y1i, y1f ) && InRange( x1, x2i, x2f ) && InRange( y1, y2i, y2f ) )
 			{
 				if( x )
-					*x = x1;
+					*x = (int) x1;
 				if( y )
-					*y = y1;
+					*y = (int) y1;
 				if( d )
 					*d = 0.0;
 				return true;
@@ -719,9 +719,9 @@ bool TestForIntersectionOfStraightLineSegments( int x1i, int y1i, int x1f, int y
 			if( InRange( x1, x1i, x1f ) && InRange( x1, x2i, x2f ) && InRange( y1, y2i, y2f ) )
 			{
 				if( x )
-					*x = x1;
+					*x = (int) x1;
 				if( y )
-					*y = y1;
+					*y = (int) y1;
 				if( d )
 					*d = 0.0;
 				return true;
@@ -742,9 +742,9 @@ bool TestForIntersectionOfStraightLineSegments( int x1i, int y1i, int x1f, int y
 			if( InRange( x1, x1i, x1f ) &&  InRange( y1, y1i, y1f ) && InRange( y1, y2i, y2f ) )
 			{
 				if( x )
-					*x = x1;
+					*x = (int) x1;
 				if( y )
-					*y = y1;
+					*y = (int) y1;
 				if( d )
 					*d = 0.0;
 				return true;
@@ -765,9 +765,9 @@ bool TestForIntersectionOfStraightLineSegments( int x1i, int y1i, int x1f, int y
 			if( InRange( x1, x1i, x1f ) && InRange( y1, y1i, y1f ) )
 			{
 				if( x )
-					*x = x1;
+					*x = (int) x1;
 				if( y )
-					*y = y1;
+					*y = (int) y1;
 				if( d )
 					*d = 0.0;
 				return true;
@@ -791,9 +791,9 @@ bool TestForIntersectionOfStraightLineSegments( int x1i, int y1i, int x1f, int y
 				if( InRange( x1, x1i, x1f ) && InRange( y1, y1i, y1f ) )
 				{
 					if( x )
-						*x = x1;
+						*x = (int) x1;
 					if( y )
-						*y = y1;
+						*y = (int) y1;
 					if( d )
 						*d = 0.0;
 					return true;
@@ -827,9 +827,9 @@ bool TestForIntersectionOfStraightLineSegments( int x1i, int y1i, int x1f, int y
 		yy = y2f;
 	}
 	if( x )
-		*x = xx;
+		*x = (int) xx;
 	if( y )
-		*y = yy;
+		*y = (int) yy;
 	if( d )
 		*d = dist;
 	return false;
@@ -1111,7 +1111,7 @@ void GetPadElements( int type, int x, int y, int wid, int len, int radius, int a
 			theta += pi/4.0;
 			double dx = x + radius*cos(theta);
 			double dy = y + radius*sin(theta);
-			s[is] = my_seg(last_x, last_y, x, y);
+			s[is] = my_seg((int) last_x, (int) last_y, x, y);
 			last_x = dx;
 			last_y = dy;
 		}
@@ -1213,7 +1213,7 @@ int GetClearanceBetweenSegmentAndPad( int x1, int y1, int x2, int y2, int w,
 		int dist = INT_MAX;
 		for( int ic=0; ic<nc; ic++ )
 		{
-			int d = GetPointToLineSegmentDistance( c[ic].x, c[ic].y, x1, y1, x2, y2 ) - c[ic].r - w/2;
+			int d = (int)GetPointToLineSegmentDistance( c[ic].x, c[ic].y, x1, y1, x2, y2 ) - c[ic].r - w/2;
 			dist = min(dist,d);
 		}
 		for( int is=0; is<ns; is++ )
@@ -1221,8 +1221,7 @@ int GetClearanceBetweenSegmentAndPad( int x1, int y1, int x2, int y2, int w,
 			double d;
 			TestForIntersectionOfStraightLineSegments( s[is].xi, s[is].yi, s[is].xf, s[is].yf,
 					x1, y1, x2, y2, NULL, NULL, &d );
-			d -= w/2;
-			dist = min(dist,d);
+			dist = min(dist, (int)d - w/2);
 		}
 		return max(0,dist);
 	}
@@ -1254,7 +1253,7 @@ int GetClearanceBetweenSegments( int x1i, int y1i, int x1f, int y1f, int style1,
 		double dd;
 		TestForIntersectionOfStraightLineSegments( x1i, y1i, x1f, y1f, 
 			x2i, y2i, x2f, y2f, &xx, &yy, &dd );
-		int d = max( 0, dd - w1/2 - w2/2 );
+		int d = max( 0, (int)dd - w1/2 - w2/2 );
 		if( x )
 			*x = xx;
 		if( y )
@@ -1270,10 +1269,10 @@ int GetClearanceBetweenSegments( int x1i, int y1i, int x1f, int y1f, int style1,
 	if( test ) 
 	{
 		if( x )
-			*x = xr[0];
+			*x = (int) xr[0];
 		if( y )
-			*y = yr[0];
-		return 0.0;
+			*y = (int) yr[0];
+		return 0;
 	}
 
 	// at least one segment is an arc
@@ -1375,7 +1374,7 @@ int GetClearanceBetweenSegments( int x1i, int y1i, int x1f, int y1f, int style1,
 					x2 = el2.Center.X + el2.xrad*cos(s2);
 					y2 = el2.Center.Y + el2.yrad*sin(s2);
 				}
-				double d = Distance( x, y, x2, y2 );
+				double d = Distance( (int) x, (int) y, (int) x2, (int) y2 );
 				if( d < dmin )
 				{
 					dmin = d;
@@ -1400,10 +1399,10 @@ int GetClearanceBetweenSegments( int x1i, int y1i, int x1f, int y1f, int style1,
 		}
 	}
 	if( x )
-		*x = xmin;
+		*x = (int) xmin;
 	if( y )
-		*y = ymin;
-	return max(0,dmin-w1/2-w2/2);	// allow for widths
+		*y = (int) ymin;
+	return max(0, (int)dmin-w1/2-w2/2);	// allow for widths
 }
 
 
@@ -1439,13 +1438,13 @@ int GetClearanceBetweenPads( int type1, int x1, int y1, int w1, int l1, int r1, 
 	{
 		for( int icc=0; icc<ncc; icc++ )
 		{
-			int d = Distance( c[ic].x, c[ic].y, cc[icc].x, cc[icc].y )
+			int d = (int) Distance( c[ic].x, c[ic].y, cc[icc].x, cc[icc].y )
 						- c[ic].r - cc[icc].r;
 			dist = min(dist,d);
 		}
 		for( int iss=0; iss<nss; iss++ )
 		{
-			int d = GetPointToLineSegmentDistance( c[ic].x, c[ic].y, 
+			int d = (int) GetPointToLineSegmentDistance( c[ic].x, c[ic].y, 
 						ss[iss].xi, ss[iss].yi, ss[iss].xf, ss[iss].yf ) - c[ic].r;
 			dist = min(dist,d);
 		}
@@ -1454,7 +1453,7 @@ int GetClearanceBetweenPads( int type1, int x1, int y1, int w1, int l1, int r1, 
 	{
 		for( int icc=0; icc<ncc; icc++ )
 		{
-			int d = GetPointToLineSegmentDistance( cc[icc].x, cc[icc].y, 
+			int d = (int) GetPointToLineSegmentDistance( cc[icc].x, cc[icc].y, 
 						s[is].xi, s[is].yi, s[is].xf, s[is].yf ) - cc[icc].r;
 			dist = min(dist,d);
 		}
@@ -1463,7 +1462,7 @@ int GetClearanceBetweenPads( int type1, int x1, int y1, int w1, int l1, int r1, 
 			double d;
 			TestForIntersectionOfStraightLineSegments( s[is].xi, s[is].yi, s[is].xf, s[is].yf,
 						ss[iss].xi, ss[iss].yi, ss[iss].xf, ss[iss].yf, NULL, NULL, &d );
-			dist = min(dist,d);
+			dist = min(dist, (int)d);
 		}
 	}
 	return max(dist,0);
@@ -1497,7 +1496,7 @@ double GetPointToLineDistance( double a, double b, int x, int y, double * xpp, d
 		*ypp = yp;
 	}
 	// find distance
-	return Distance( x, y, xp, yp );
+	return Distance( x, y, (int) xp, (int) yp );
 }
 
 /***********************************************************************************/
@@ -1541,7 +1540,7 @@ double GetPointToLineSegmentDistance( int x, int y, int xi, int yi, int xf, int 
 		double yp = a + b*xp;
 		// find distance
 		if( InRange( xp, xi, xf ) && InRange( yp, yi, yf ) )
-			return Distance( x, y, xp, yp );
+			return Distance( x, y, (int) xp, (int) yp );
 		else
 			return min( Distance( x, y, xi, yi ), Distance( x, y, xf, yf ) );
 	}
@@ -1704,7 +1703,7 @@ double GetArcClearance( EllipseKH * el1, EllipseKH * el2,
 					theta2 = th_end2;
 				double x2 = el2->Center.X + el2->xrad*cos(theta2);
 				double y2 = el2->Center.Y + el2->yrad*sin(theta2);
-				double d = Distance( x, y, x2, y2 );
+				double d = Distance( (int) x, (int) y, (int) x2, (int) y2 );
 				if( d < dmin )
 				{
 					dmin = d;

@@ -186,7 +186,7 @@ polygon * polygon::copy_poly()
 	vertex * v = getFirst();
 	do
 	{
-		n->addv(v->X(),v->Y(),v->Xc(),v->Yc(),v->d());
+		n->addv(v->X(),v->Y(),v->Xc(),v->Yc(), (int) v->d());
 		v = v->Next();
 	}
 	while (v->id() != m_first->id());
@@ -377,8 +377,8 @@ BOOL polygon::ints( vertex * p1, vertex * p2, vertex * q1, vertex * q2,
 {
 	BOOL found = FALSE; 
 	*n = 0;			// No intersections found yet
-	int pt = p1->d();	
-	int qt = q1->d();	// Do we have Arcs or Lines?
+	int pt = (int) p1->d();	
+	int qt = (int) q1->d();	// Do we have Arcs or Lines?
 
 	if (pt == 0 && qt == 0) // Is it line/Line ?
 	{

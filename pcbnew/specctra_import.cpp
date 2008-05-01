@@ -401,7 +401,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
             }
             else if( place->side == T_back )
             {
-                int orientation = (place->rotation + 180.0) * 10.0;
+                int orientation = (int) ((place->rotation + 180.0) * 10.0);
                 if( module->GetLayer() != COPPER_LAYER_N )
                 {
                     // module is on component layer (front)

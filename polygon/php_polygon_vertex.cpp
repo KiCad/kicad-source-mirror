@@ -77,7 +77,7 @@ vertex::vertex( double x, double y,
 	m_entry = entry;
 	m_checked = checked;
 	m_id = 0;
-	m_nSeg = new segment( xc, yc, d );
+	m_nSeg = new segment( xc, yc, (int) d );
 	m_pSeg = NULL;
 }
 
