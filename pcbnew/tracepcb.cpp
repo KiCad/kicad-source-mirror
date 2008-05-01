@@ -72,12 +72,12 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 /* Draw the BOARD, and others elements : axis, grid ..
  */
 {
-    PCB_SCREEN* Screen = (PCB_SCREEN*)GetScreen();
+    PCB_SCREEN* screen = GetScreen();
 
-    if( !m_Pcb || !Screen )
+    if( !m_Pcb || !screen )
         return;
 
-    ActiveScreen = GetScreen();
+    ActiveScreen = screen;
     GRSetDrawMode( DC, GR_COPY );
 
     if( EraseBg )
@@ -85,8 +85,9 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     DrawPanel->DrawBackGround( DC );
 
-    Trace_Pcb( DC, GR_OR );
     TraceWorkSheet( DC, GetScreen(), 0 );
+
+    Trace_Pcb( DC, GR_OR );
 
     Affiche_Status_Box();
 
@@ -96,9 +97,6 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     // Redraw the cursor
     DrawPanel->Trace_Curseur( DC );
 }
-
-
-#define DRAW_CUR_LAYER_LAST     1
 
 
 /* should make the function below this one:

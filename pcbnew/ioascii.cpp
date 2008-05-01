@@ -519,11 +519,17 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
     fprintf( aFile, "ZoneGridSize %d\n", g_GridRoutingSize );
 
     fprintf( aFile, "Layers %d\n", aBoard->GetCopperLayerCount() );
-    for( int layer=0;  layer<aBoard->GetCopperLayerCount();  ++layer )
+
+    int layerMask = g_TabAllCopperLayerMask[aBoard->GetCopperLayerCount()-1];
+
+    for( int layer=0;  layerMask;  ++layer, layerMask>>=1 )
     {
-        fprintf( aFile, "Layer[%d] %s %s\n", layer,
-                CONV_TO_UTF8( aBoard->GetLayerName(layer) ),
-                LAYER::ShowType( aBoard->GetLayerType( layer ) ) );
+        if( layerMask & 1 )
+        {
+            fprintf( aFile, "Layer[%d] %s %s\n", layer,
+                    CONV_TO_UTF8( aBoard->GetLayerName(layer) ),
+                    LAYER::ShowType( aBoard->GetLayerType( layer ) ) );
+        }
     }
 
     fprintf( aFile, "TrackWidth %d\n", g_DesignSettings.m_CurrentTrackWidth );

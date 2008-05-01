@@ -698,8 +698,7 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
 
     m_SelLayerBox->Clear();
 
-    int      ii, jj;
-    for( ii = 0, jj = 0; ii <= EDGE_N; ii++ )
+    for( int layer=0, listNdx=0;  layer <= EDGE_N;  layer++ )
     {
         // List to append hotkeys in layer box selection
         static const int HK_SwitchLayer[EDGE_N + 1] = {
@@ -721,14 +720,17 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
             HK_SWITCH_LAYER_TO_COMPONENT
         };
 
-        if( (g_TabOneLayerMask[ii] & layer_mask) )
+        if( (g_TabOneLayerMask[layer] & layer_mask) )
         {
-            wxString msg = m_Pcb->GetLayerName( ii );
-            msg = AddHotkeyName( msg, s_Board_Editor_Hokeys_Descr, HK_SwitchLayer[ii] );
+            wxString msg = m_Pcb->GetLayerName( layer );
+            msg = AddHotkeyName( msg, s_Board_Editor_Hokeys_Descr, HK_SwitchLayer[layer] );
             m_SelLayerBox->Append( msg );
-            m_SelLayerBox->SetClientData( jj, (void*) ii );
+
+            D(printf("appending layername=%s, ndx=%d, layer=%d\n", CONV_TO_UTF8(msg), listNdx, layer );)
+
+            m_SelLayerBox->SetClientData( listNdx, (void*) layer );
             length = MAX( length, msg.Len() );
-            jj++;
+            listNdx++;
         }
     }
 

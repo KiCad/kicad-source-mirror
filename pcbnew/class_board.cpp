@@ -104,7 +104,8 @@ BOARD::~BOARD()
 wxString BOARD::GetLayerName( int aLayerIndex ) const
 {
     // copper layer names are stored in the BOARD.
-    if( (unsigned) aLayerIndex < (unsigned) GetCopperLayerCount() )
+    if( (unsigned) aLayerIndex < (unsigned) GetCopperLayerCount()
+       || aLayerIndex == LAST_COPPER_LAYER )
     {
         // default names were set in BOARD::BOARD() but they may be
         // over-ridden by BOARD::SetLayerName()
@@ -117,7 +118,8 @@ wxString BOARD::GetLayerName( int aLayerIndex ) const
 
 bool BOARD::SetLayerName( int aLayerIndex, const wxString& aLayerName )
 {
-    if( (unsigned) aLayerIndex < (unsigned) GetCopperLayerCount() )
+    if( (unsigned) aLayerIndex < (unsigned) GetCopperLayerCount()
+       || aLayerIndex==LAST_COPPER_LAYER )
     {
         if( aLayerName == wxEmptyString  || aLayerName.Len() > 20 )
             return false;
@@ -127,10 +129,13 @@ bool BOARD::SetLayerName( int aLayerIndex, const wxString& aLayerName )
             return false;
 
         // ensure unique-ness of layer names
-        for( int layer=0;  layer<GetCopperLayerCount();  ++layer )
+        for( int layer=0;  layer<GetCopperLayerCount() || layer==LAST_COPPER_LAYER;  )
         {
             if( layer!=aLayerIndex && aLayerName == m_Layer[layer].m_Name )
                 return false;
+
+            if( ++layer == GetCopperLayerCount() )
+                layer = LAST_COPPER_LAYER;
         }
 
         m_Layer[aLayerIndex].m_Name = aLayerName;
