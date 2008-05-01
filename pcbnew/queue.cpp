@@ -105,8 +105,9 @@ int SetQueue (int r,int c,int side,int d,int a,int r2,int c2 )
 		0 si defaut allocation Memoire
 */
 {
-struct PcbQueue *p, *q, *t;
-int i, j;
+    struct PcbQueue *p, *q, *t;
+    int i, j;
+    j = 0; // gcc warning fix
 
 	if( (p = Save) != NULL ) /* try free list first */
 		{

@@ -1431,6 +1431,7 @@ void CPolyLine::AddContourForPadClearance( int type, int x, int y, int w,
 			double r = max(w/2 + fill_clearance, hole_w/2 + hole_clearance);
 			double start_angle = asin( spoke_w/(2.0*r) );
 			double th1, th2, corner_x, corner_y;
+			th1 = th2 = corner_x = corner_y = 0; // gcc warning fix
 			for( int i=0; i<4; i++ )
 			{
 				if( i == 0 )
