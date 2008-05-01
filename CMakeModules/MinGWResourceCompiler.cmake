@@ -28,7 +28,7 @@ macro(mingw_resource_compiler _NAME)
     add_custom_command(OUTPUT ${_OUT}
         COMMAND windres.exe
         ARGS ${_ARGS}
-        COMMENT "Compiling ${_NAME} resource file."
+        COMMENT "Compiling ${_NAME}'s resource file"
         VERBATIM)
 
     # Set a NAME_RESOURCES variable
