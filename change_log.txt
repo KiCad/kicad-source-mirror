@@ -9,9 +9,10 @@ email address.
 2008-May-2 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +pcbnew
-    Added ZONE_CONTAINER::GetBoundingBox() and used it to clean up
-    ZONE_CONTAINER deletion.  There is still a problem dragging a zone container
-    edge that I will not get to.
+  * Added ZONE_CONTAINER::GetBoundingBox() and used it to clean up
+    ZONE_CONTAINER deletion.
+  * For end of edge dragging activity: used full DrawPanel->Refresh()
+    to clean up all XOR artifacts.
 
 
 2008-May-1 UPDATE Dick Hollenbeck <dick@softplc.com>

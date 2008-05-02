@@ -322,15 +322,18 @@ void WinEDA_PcbFrame::End_Move_Zone_Corner_Or_Outlines( wxDC* DC, ZONE_CONTAINER
     /* Combine zones if possible */
     wxBusyCursor dummy;
 
-    int          layer = zone_container->GetLayer();
+//    int          layer = zone_container->GetLayer();
 
-    m_Pcb->RedrawAreasOutlines( DrawPanel, DC, GR_XOR, layer );
+//    m_Pcb->RedrawAreasOutlines( DrawPanel, DC, GR_XOR, layer );
     m_Pcb->AreaPolygonModified( zone_container, true, verbose );
-    m_Pcb->RedrawAreasOutlines( DrawPanel, DC, GR_OR, layer );
+//    m_Pcb->RedrawAreasOutlines( DrawPanel, DC, GR_OR, layer );
+    DrawPanel->Refresh();
+
 
     int ii = m_Pcb->GetAreaIndex( zone_container );     // test if zone_container exists
     if( ii < 0 )
         zone_container = NULL;                          // was removed by combining zones
+
     int error_count = m_Pcb->Test_Drc_Areas_Outlines_To_Areas_Outlines( zone_container, true );
     if( error_count )
     {
@@ -392,7 +395,7 @@ void Abort_Zone_Move_Corner_Or_Outlines( WinEDA_DrawPanel* Panel, wxDC* DC )
     WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) Panel->m_Parent;
     ZONE_CONTAINER*  zone_container = (ZONE_CONTAINER*) pcbframe->GetCurItem();
 
-    zone_container->Draw( Panel, DC, GR_XOR );
+//    zone_container->Draw( Panel, DC, GR_XOR );
 
     if( zone_container->m_Flags == IS_MOVED )
     {
@@ -418,7 +421,10 @@ void Abort_Zone_Move_Corner_Or_Outlines( WinEDA_DrawPanel* Panel, wxDC* DC )
             zone_container->m_Poly->MoveCorner( zone_container->m_CornerSelection, pos.x, pos.y );
         }
     }
-    zone_container->Draw( Panel, DC, GR_XOR );
+
+//    zone_container->Draw( Panel, DC, GR_XOR );
+    Panel->Refresh();
+
 
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
