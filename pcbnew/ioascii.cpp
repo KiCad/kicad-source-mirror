@@ -520,7 +520,7 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
 
     fprintf( aFile, "Layers %d\n", aBoard->GetCopperLayerCount() );
 
-    int layerMask = g_TabAllCopperLayerMask[aBoard->GetCopperLayerCount()-1];
+    unsigned layerMask = g_TabAllCopperLayerMask[aBoard->GetCopperLayerCount()-1];
 
     for( int layer=0;  layerMask;  ++layer, layerMask>>=1 )
     {
