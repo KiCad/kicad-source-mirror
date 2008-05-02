@@ -356,6 +356,33 @@ void ZONE_CONTAINER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, con
 }
 
 
+EDA_Rect ZONE_CONTAINER::GetBoundingBox()
+{
+    const int PRELOAD = 500000;
+
+    int ymax = -PRELOAD;
+    int ymin = PRELOAD;
+    int xmin = PRELOAD;
+    int xmax = -PRELOAD;
+
+    int count = GetNumCorners();
+
+    for( int i=0; i<count;  ++i )
+    {
+        wxPoint corner = GetCornerPosition(i);
+
+        ymax = MAX( ymax, corner.y );
+        xmax = MAX( xmax, corner.x );
+        ymin = MIN( ymin, corner.y );
+        xmin = MIN( xmin, corner.x );
+    }
+
+    EDA_Rect ret( wxPoint(xmin,ymin), wxSize( xmax-xmin+1, ymax-ymin+1) );
+
+    return ret;
+}
+
+
 /**********************************************************************************************/
 void ZONE_CONTAINER::DrawWhileCreateOutline( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
 /***********************************************************************************************/

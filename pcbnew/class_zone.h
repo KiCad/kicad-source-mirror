@@ -73,6 +73,9 @@ public:
     void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& offset = ZeroOffset );
 
 
+    EDA_Rect GetBoundingBox();
+
+
     /**
      * Function DrawWhileCreateOutline
      * Draws the zone outline when ir is created.
