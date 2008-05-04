@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char * zoom_1_xpm[];
+#else
 static const char * zoom_1_xpm[] = {
 "16 16 36 1",
 " 	c None",
