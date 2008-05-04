@@ -20,9 +20,6 @@
 #include "wx/dir.h"
 
 #include "bitmaps.h"
-#include "bitmaps/icon_gerbview_small.xpm"
-#include "bitmaps/icon_cvpcb_small.xpm"
-#include "bitmaps/unknown.xpm"
 
 #include "id.h"
 

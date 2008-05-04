@@ -20,14 +20,6 @@
 // USE_XPM_BITMAPS
 #include "bitmaps.h"        // Common bitmaps
 
-#include "zip.xpm"
-#include "unzip.xpm"
-#include "Browse_Files.xpm"
-#include "New_Project.xpm"
-#include "Open_Project.xpm"
-#include "../bitmaps/icon_python.xpm"
-#include "../bitmaps/Reload.xpm"
-
 #include "id.h"
 
 /* Fonctions locales */

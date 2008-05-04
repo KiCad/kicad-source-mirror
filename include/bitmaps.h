@@ -204,6 +204,21 @@
 	#include "../bitmaps/annotate_right_down.xpm"
 	#include "../bitmaps/annotate_down_right.xpm"
 
+	#include "../bitmaps/new_sch.xpm"
+	#include "../bitmaps/Open_Project.xpm"
+	#include "../bitmaps/new_cvpcb.xpm"
+	#include "../bitmaps/zip.xpm"
+	#include "../bitmaps/icon_gerbview_small.xpm"
+	#include "../bitmaps/zip_tool.xpm"
+	#include "../bitmaps/unzip.xpm"
+	#include "../bitmaps/Browse_Files.xpm"
+	#include "../bitmaps/New_Project.xpm"
+	#include "../bitmaps/new_gerb.xpm"
+	#include "../bitmaps/new_python.xpm"
+	#include "../bitmaps/icon_cvpcb_small.xpm"
+	#include "../bitmaps/unknown.xpm"
+	#include "../bitmaps/new_pcb.xpm"
+
 // Largeur du toolbar vertical
 #define VTOOLBAR_WIDTH 26
 // dimension d'un tool vertical
