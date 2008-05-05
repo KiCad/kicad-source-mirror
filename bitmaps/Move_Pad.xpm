@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* move_pad_xpm[];
 #else
-static const char * move_pad_xpm[] = {
+const char * move_pad_xpm[] = {
 "16 16 44 1",
 " 	c None",
 ".	c #000000",

@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* select_layer_pair_xpm[];
 #else
-static const char * select_layer_pair_xpm[] = {
+const char * select_layer_pair_xpm[] = {
 "16 16 75 1",
 " 	c None",
 ".	c #000000",

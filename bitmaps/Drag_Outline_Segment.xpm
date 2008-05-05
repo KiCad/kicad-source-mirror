@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* drag_outline_segment_xpm[];
 #else
-static const char * drag_outline_segment_xpm[] = {
+const char * drag_outline_segment_xpm[] = {
 "16 16 40 1",
 " 	c None",
 "!	c black",

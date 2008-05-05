@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* move_track_segment_xpm[];
 #else
-static const char * move_track_segment_xpm[] = {
+const char * move_track_segment_xpm[] = {
 "16 16 41 1",
 " 	c None",
 "!	c black",

@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* rotate_module_neg_xpm[];
 #else
-static const char * rotate_module_neg_xpm[] = {
+const char * rotate_module_neg_xpm[] = {
 "16 16 89 1",
 " 	c None",
 ".	c #000000",

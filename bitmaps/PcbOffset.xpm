@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* pcb_offset_xpm[];
 #else
-static const char * pcb_offset_xpm[] = {
+const char * pcb_offset_xpm[] = {
 "16 16 7 1",
 " 	c None",
 ".	c #000000",

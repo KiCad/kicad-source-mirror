@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* width_net_xpm[];
 #else
-static const char * width_net_xpm[] = {
+const char * width_net_xpm[] = {
 "16 16 6 1",
 " 	c None",
 "!	c black",

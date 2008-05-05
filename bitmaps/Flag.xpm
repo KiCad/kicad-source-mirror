@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* Flag_xpm[];
 #else
-static const char * Flag_xpm[] = {
+const char * Flag_xpm[] = {
 "16 16 24 1",
 " 	c None",
 ".	c #000000",

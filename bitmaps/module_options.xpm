@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* module_options_xpm[];
 #else
-static const char * module_options_xpm[] = {
+const char * module_options_xpm[] = {
 "16 16 65 1",
 " 	c None",
 ".	c #D72E2E",

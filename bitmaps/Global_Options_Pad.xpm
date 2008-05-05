@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* global_options_pad_xpm[];
 #else
-static const char * global_options_pad_xpm[] = {
+const char * global_options_pad_xpm[] = {
 "16 16 81 1",
 " 	c None",
 ".	c #000000",

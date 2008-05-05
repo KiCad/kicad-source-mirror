@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* Options_Tracks_xpm[];
 #else
-static const char * Options_Tracks_xpm[] = {
+const char * Options_Tracks_xpm[] = {
 "16 16 36 1",
 " 	c None",
 ".	c #007D00",

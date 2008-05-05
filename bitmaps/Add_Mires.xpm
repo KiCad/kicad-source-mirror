@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* add_mires_xpm[];
 #else
-static const char * add_mires_xpm[] = {
+const char * add_mires_xpm[] = {
 "16 16 64 1",
 " 	c None",
 "!	c black",

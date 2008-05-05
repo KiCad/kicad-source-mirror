@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* Module_Ratsnet_xpm[];
 #else
-static const char * Module_Ratsnet_xpm[] = {
+const char * Module_Ratsnet_xpm[] = {
 "16 16 39 1",
 " 	c None",
 ".	c #FFFFFF",

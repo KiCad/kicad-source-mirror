@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* post_drill_xpm[];
 #else
-static const char * post_drill_xpm[] = {
+const char * post_drill_xpm[] = {
 "16 16 35 1",
 " 	c None",
 ".	c #000000",

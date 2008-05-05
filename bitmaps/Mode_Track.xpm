@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* mode_track_xpm[];
 #else
-static const char * mode_track_xpm[] = {
+const char * mode_track_xpm[] = {
 "16 16 42 1",
 " 	c None",
 ".	c #007D00",

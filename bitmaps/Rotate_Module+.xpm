@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* rotate_module_pos_xpm[];
 #else
-static const char * rotate_module_pos_xpm[] = {
+const char * rotate_module_pos_xpm[] = {
 "16 16 77 1",
 " 	c None",
 ".	c #000000",

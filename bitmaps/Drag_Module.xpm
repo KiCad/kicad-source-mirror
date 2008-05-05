@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* Drag_Module_xpm[];
 #else
-static const char * Drag_Module_xpm[] = {
+const char * Drag_Module_xpm[] = {
 "16 16 63 1",
 " 	c None",
 ".	c #000000",

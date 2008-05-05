@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* Delete_Node_xpm[];
 #else
-static const char * Delete_Node_xpm[] = {
+const char * Delete_Node_xpm[] = {
 "16 16 132 2",
 "  	c None",
 ". 	c #007D00",

@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* swap_layer_xpm[];
 #else
-static const char * swap_layer_xpm[] = {
+const char * swap_layer_xpm[] = {
 "16 16 6 1",
 " 	c None",
 ".	c #B70000",

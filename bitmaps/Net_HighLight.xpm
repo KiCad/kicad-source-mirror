@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* Net_HighLight_xpm[];
 #else
-static const char * Net_HighLight_xpm[] = {
+const char * Net_HighLight_xpm[] = {
 "16 16 74 1",
 " 	c None",
 ".	c #46FF00",

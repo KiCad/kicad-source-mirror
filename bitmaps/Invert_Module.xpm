@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* invert_module_xpm[];
 #else
-static const char * invert_module_xpm[] = {
+const char * invert_module_xpm[] = {
 "16 16 31 1",
 " 	c None",
 ".	c #000000",

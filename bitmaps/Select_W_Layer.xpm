@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* Select_W_Layer_xpm[];
 #else
-static const char * Select_W_Layer_xpm[] = {
+const char * Select_W_Layer_xpm[] = {
 "16 16 24 1",
 " 	c None",
 ".	c #000000",

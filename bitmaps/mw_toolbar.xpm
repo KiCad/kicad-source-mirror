@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* mw_toolbar_xpm[];
 #else
-static const char * mw_toolbar_xpm[] = {
+const char * mw_toolbar_xpm[] = {
 "16 16 67 1",
 " 	c None",
 ".	c #000000",

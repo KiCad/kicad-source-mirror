@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* width_track_via_xpm[];
 #else
-static const char * width_track_via_xpm[] = {
+const char * width_track_via_xpm[] = {
 "16 16 10 1",
 " 	c None",
 "!	c black",

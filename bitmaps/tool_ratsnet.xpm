@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* tool_ratsnet_xpm[];
 #else
-static const char * tool_ratsnet_xpm[] = {
+const char * tool_ratsnet_xpm[] = {
 "16 16 53 1",
 " 	c None",
 ".	c #FFFFFF",

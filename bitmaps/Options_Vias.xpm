@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* Options_Vias_xpm[];
 #else
-static const char * Options_Vias_xpm[] = {
+const char * Options_Vias_xpm[] = {
 "16 16 44 1",
 " 	c None",
 ".	c #000000",

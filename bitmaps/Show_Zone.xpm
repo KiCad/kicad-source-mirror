@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* show_zone_xpm[];
 #else
-static const char * show_zone_xpm[] = {
+const char * show_zone_xpm[] = {
 "16 16 71 1",
 " 	c None",
 ".	c #007D00",

@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* Track_UnLocked_xpm[];
 #else
-static const char * Track_UnLocked_xpm[] = {
+const char * Track_UnLocked_xpm[] = {
 "16 16 81 1",
 " 	c None",
 ".	c #007D00",

@@ -2,7 +2,7 @@
 #ifndef XPMMAIN
 extern const char* insert_module_board_xpm[];
 #else
-static const char * insert_module_board_xpm[] = {
+const char * insert_module_board_xpm[] = {
 "16 16 49 1",
 " 	c None",
 ".	c #000000",
