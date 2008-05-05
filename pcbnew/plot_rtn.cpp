@@ -98,8 +98,10 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
                     if( !Plot_Pads_All_Layers )
                         continue;
                 }
+
                 shape_pos = pt_pad->ReturnShapePos();
-                pos = shape_pos; size = pt_pad->m_Size;
+                pos  = shape_pos;
+                size = pt_pad->m_Size;
 
                 switch( pt_pad->m_PadShape & 0x7F )
                 {
@@ -202,7 +204,8 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
     }     /* Fin Sequence de trace des Pads */
 
     /* Trace Textes MODULES */
-    nb_items = 0; Affiche_1_Parametre( this, 64, wxT( "TxtMod" ), wxEmptyString, LIGHTBLUE );
+    nb_items = 0;
+    Affiche_1_Parametre( this, 64, wxT( "TxtMod" ), wxEmptyString, LIGHTBLUE );
 
     for( MODULE* Module = m_Pcb->m_Modules;  Module;  Module = Module->Next() )
     {
@@ -311,7 +314,7 @@ static void PlotTextModule( TEXTE_MODULE* pt_texte )
 {
     wxSize  size;
     wxPoint pos;
-    int     orient, epaisseur, no_miroir;
+    int     orient, thickness, no_miroir;
 
     /* calcul des parametres du texte :*/
     size = pt_texte->m_Size;
@@ -320,15 +323,15 @@ static void PlotTextModule( TEXTE_MODULE* pt_texte )
     orient = pt_texte->GetDrawRotation();
 
     no_miroir = pt_texte->m_Miroir & 1;
-    epaisseur = pt_texte->m_Width;
+    thickness = pt_texte->m_Width;
     if( Plot_Mode == FILAIRE )
-        epaisseur = g_PlotLine_Width;
+        thickness = g_PlotLine_Width;
 
     if( no_miroir == 0 )
         size.x = -size.x;                       // Text is mirrored
 
     Plot_1_texte( format_plot, pt_texte->m_Text,
-                  orient, epaisseur,
+                  orient, thickness,
                   pos.x, pos.y, size.x, size.y );
 }
 
@@ -388,7 +391,7 @@ void PlotMirePcb( MIREPCB* Mire, int format_plot, int masque_layer )
 /*****************************************************************/
 {
     DRAWSEGMENT* DrawTmp;
-    int          dx1, dx2, dy1, dy2, rayon;
+    int          dx1, dx2, dy1, dy2, radius;
 
     if( (g_TabOneLayerMask[Mire->GetLayer()] & masque_layer) == 0 )
         return;
@@ -408,12 +411,14 @@ void PlotMirePcb( MIREPCB* Mire, int format_plot, int masque_layer )
 
     DrawTmp->m_Shape = S_SEGMENT;
     /* Trace des 2 traits */
-    rayon = Mire->m_Size / 2;
-    dx1   = rayon, dy1 = 0; dx2 = 0, dy2 = rayon;
+    radius = Mire->m_Size / 2;
+    dx1   = radius, dy1 = 0; dx2 = 0, dy2 = radius;
 
     if( Mire->m_Shape ) /* Forme X */
     {
-        dx1 = dy1 = (rayon * 7) / 5;  dx2 = dx1; dy2 = -dy1;
+        dx1 = dy1 = (radius * 7) / 5;
+        dx2 = dx1;
+        dy2 = -dy1;
     }
 
     DrawTmp->m_Start.x = Mire->m_Pos.x - dx1; DrawTmp->m_Start.y = Mire->m_Pos.y - dy1;
@@ -465,17 +470,17 @@ void Plot_1_EdgeModule( int format_plot, EDGE_MODULE* PtEdge )
 /* Trace les contours des modules */
 {
     int     type_trace;     /* forme a tracer (segment, cercle) */
-    int     epaisseur;      /* epaisseur des segments */
-    int     rayon;          /* rayon des cercles a tracer */
+    int     thickness;      /* thickness des segments */
+    int     radius;          /* radius des cercles a tracer */
     int     StAngle, EndAngle;
     wxPoint pos, end;       /* Coord des segments a tracer */
 
     if( PtEdge->Type() != TYPEEDGEMODULE )
         return;
     type_trace = PtEdge->m_Shape;
-    epaisseur  = PtEdge->m_Width;
+    thickness  = PtEdge->m_Width;
     if( Plot_Mode == FILAIRE )
-        epaisseur = g_PlotLine_Width;
+        thickness = g_PlotLine_Width;
 
     pos = PtEdge->m_Start;
     end = PtEdge->m_End;
@@ -488,32 +493,32 @@ void Plot_1_EdgeModule( int format_plot, EDGE_MODULE* PtEdge )
         switch( format_plot )
         {
         case PLOT_FORMAT_GERBER:
-            PlotGERBERLine( pos, end, epaisseur );
+            PlotGERBERLine( pos, end, thickness );
             break;
 
         case PLOT_FORMAT_HPGL:
-            trace_1_segment_HPGL( pos.x, pos.y, end.x, end.y, epaisseur );
+            trace_1_segment_HPGL( pos.x, pos.y, end.x, end.y, thickness );
             break;
 
         case PLOT_FORMAT_POST:
-            PlotFilledSegmentPS( pos, end, epaisseur );
+            PlotFilledSegmentPS( pos, end, thickness );
             break;
         }
 
         break;      /* Fin trace segment simple */
 
     case S_CIRCLE:
-        rayon = (int) hypot( (double) (end.x - pos.x), (double) (end.y - pos.y) );
-        PlotCircle( format_plot, epaisseur, pos, rayon );
+        radius = (int) hypot( (double) (end.x - pos.x), (double) (end.y - pos.y) );
+        PlotCircle( format_plot, thickness, pos, radius );
         break;
 
     case S_ARC:
-        rayon    = (int) hypot( (double) (end.x - pos.x), (double) (end.y - pos.y) );
+        radius    = (int) hypot( (double) (end.x - pos.x), (double) (end.y - pos.y) );
         StAngle  = ArcTangente( end.y - pos.y, end.x - pos.x );
         EndAngle = StAngle + PtEdge->m_Angle;
         if( StAngle > EndAngle )
             EXCHG( StAngle, EndAngle );
-        PlotArc( format_plot, pos, StAngle, EndAngle, rayon, epaisseur );
+        PlotArc( format_plot, pos, StAngle, EndAngle, radius, thickness );
         break;
 
     case S_POLYGON:
@@ -528,17 +533,21 @@ void Plot_1_EdgeModule( int format_plot, EDGE_MODULE* PtEdge )
         source = PtEdge->m_PolyList;
         for( ii = 0; ii < PtEdge->m_PolyCount; ii++ )
         {
-            int x, y;
-            x = *source; source++; y = *source; source++;
+            int x = *source++;
+            int y = *source++;
+
             if( Module )
             {
                 RotatePoint( &x, &y, Module->m_Orient );
                 x += Module->m_Pos.x;
                 y += Module->m_Pos.y;
             }
+
             x   += PtEdge->m_Start0.x;
             y   += PtEdge->m_Start0.y;
-            *ptr = x; ptr++; *ptr = y; ptr++;
+
+            *ptr++ = x;
+            *ptr++ = y;
         }
 
         PlotPolygon( format_plot, TRUE, PtEdge->m_PolyCount, ptr_base );
@@ -554,7 +563,7 @@ void PlotTextePcb( TEXTE_PCB* pt_texte, int format_plot, int masque_layer )
 /****************************************************************************/
 /* Trace 1 Texte type PCB , c.a.d autre que les textes sur modules */
 {
-    int     no_miroir, orient, epaisseur;
+    int     no_miroir, orient, thickness;
     wxPoint pos;
     wxSize  size;
 
@@ -568,19 +577,19 @@ void PlotTextePcb( TEXTE_PCB* pt_texte, int format_plot, int masque_layer )
     pos       = pt_texte->m_Pos;
     orient    = pt_texte->m_Orient;
     no_miroir = pt_texte->m_Miroir & 1;
-    epaisseur = pt_texte->m_Width;
+    thickness = pt_texte->m_Width;
 
     if( no_miroir == FALSE )
         size.x = -size.x;
 
     Plot_1_texte( format_plot, pt_texte->m_Text, orient,
-                  epaisseur, pos.x, pos.y, size.x, size.y );
+                  thickness, pos.x, pos.y, size.x, size.y );
 }
 
 
 /**********************************************************************/
 void Plot_1_texte( int format_plot, const wxString& Text, int angle,
-                   int epaisseur, int cX, int cY, int size_h, int size_v,
+                   int thickness, int cX, int cY, int size_h, int size_v,
                    bool centreX, bool centreY )
 /***********************************************************************/
 
@@ -600,7 +609,7 @@ void Plot_1_texte( int format_plot, const wxString& Text, int angle,
     int            sx, sy;          /* coord du debut du caractere courant */
     int            nbcodes = Text.Len();
 
-    espacement = ( (10 * size_h) / 9 ) + ( (size_h >= 0 ) ? epaisseur : -epaisseur );
+    espacement = ( (10 * size_h) / 9 ) + ( (size_h >= 0 ) ? thickness : -thickness );
 
     /* calcul de la position du debut du texte */
     if( centreX )
@@ -657,15 +666,15 @@ void Plot_1_texte( int format_plot, const wxString& Text, int angle,
                     switch( format_plot )
                     {
                     case PLOT_FORMAT_GERBER:
-                        PlotGERBERLine( wxPoint( ox, oy ), wxPoint( fx, fy ), epaisseur );
+                        PlotGERBERLine( wxPoint( ox, oy ), wxPoint( fx, fy ), thickness );
                         break;
 
                     case PLOT_FORMAT_HPGL:
-                        trace_1_segment_HPGL( ox, oy, fx, fy, epaisseur );
+                        trace_1_segment_HPGL( ox, oy, fx, fy, thickness );
                         break;
 
                     case PLOT_FORMAT_POST:
-                        PlotFilledSegmentPS( wxPoint( ox, oy ), wxPoint( fx, fy ), epaisseur );
+                        PlotFilledSegmentPS( wxPoint( ox, oy ), wxPoint( fx, fy ), thickness );
                         break;
                     }
                 }
@@ -705,26 +714,27 @@ void PlotDrawSegment( DRAWSEGMENT* pt_segm, int Format, int masque_layer )
  */
 {
     wxPoint start, end;
-    int     epaisseur;
-    int     rayon = 0, StAngle = 0, EndAngle = 0;
+    int     thickness;
+    int     radius = 0, StAngle = 0, EndAngle = 0;
 
     if( (g_TabOneLayerMask[pt_segm->GetLayer()] & masque_layer) == 0 )
         return;
 
-    epaisseur = pt_segm->m_Width;
+    thickness = pt_segm->m_Width;
     if( Plot_Mode == FILAIRE )
-        epaisseur = g_PlotLine_Width;
+        thickness = g_PlotLine_Width;
 
-    start = pt_segm->m_Start; end = pt_segm->m_End;
+    start = pt_segm->m_Start;
+    end   = pt_segm->m_End;
 
     if( pt_segm->m_Shape == S_CIRCLE )
     {
-        rayon = (int) hypot( (double) (end.x - start.x), (double) (end.y - start.y) );
+        radius = (int) hypot( (double) (end.x - start.x), (double) (end.y - start.y) );
     }
 
     if( pt_segm->m_Shape == S_ARC )
     {
-        rayon    = (int) hypot( (double) (end.x - start.x), (double) (end.y - start.y) );
+        radius    = (int) hypot( (double) (end.x - start.x), (double) (end.y - start.y) );
         StAngle  = ArcTangente( end.y - start.y, end.x - start.x );
         EndAngle = StAngle + pt_segm->m_Angle;
         if( StAngle > EndAngle )
@@ -735,53 +745,53 @@ void PlotDrawSegment( DRAWSEGMENT* pt_segm, int Format, int masque_layer )
     {
     case PLOT_FORMAT_GERBER:
         if( pt_segm->m_Shape == S_CIRCLE )
-            PlotCircle( PLOT_FORMAT_GERBER, epaisseur, start, rayon );
+            PlotCircle( PLOT_FORMAT_GERBER, thickness, start, radius );
         else if( pt_segm->m_Shape == S_ARC )
             PlotArc( PLOT_FORMAT_GERBER, start,
-                     StAngle, EndAngle, rayon, epaisseur );
+                     StAngle, EndAngle, radius, thickness );
         else
-            PlotGERBERLine( start, end, epaisseur );
+            PlotGERBERLine( start, end, thickness );
         break;
 
     case PLOT_FORMAT_HPGL:
         if( pt_segm->m_Shape == S_CIRCLE )
-            PlotCircle( PLOT_FORMAT_HPGL, epaisseur, start, rayon );
+            PlotCircle( PLOT_FORMAT_HPGL, thickness, start, radius );
         else if( pt_segm->m_Shape == S_ARC )
-            PlotArc( PLOT_FORMAT_HPGL, start, StAngle, EndAngle, rayon, epaisseur );
+            PlotArc( PLOT_FORMAT_HPGL, start, StAngle, EndAngle, radius, thickness );
         else
-            trace_1_segment_HPGL( start.x, start.y, end.x, end.y, epaisseur );
+            trace_1_segment_HPGL( start.x, start.y, end.x, end.y, thickness );
         break;
 
     case PLOT_FORMAT_POST:
         if( pt_segm->m_Shape == S_CIRCLE )
-            PlotCircle( PLOT_FORMAT_POST, epaisseur, start, rayon );
+            PlotCircle( PLOT_FORMAT_POST, thickness, start, radius );
         else if( pt_segm->m_Shape == S_ARC )
             PlotArc( PLOT_FORMAT_POST, start,
-                     StAngle, EndAngle, rayon, epaisseur );
+                     StAngle, EndAngle, radius, thickness );
         else
-            PlotFilledSegmentPS( start, end, epaisseur );
+            PlotFilledSegmentPS( start, end, thickness );
         break;
     }
 }
 
 
 /*****************************************************************************/
-void PlotCircle( int format_plot, int epaisseur, wxPoint centre, int rayon )
+void PlotCircle( int format_plot, int thickness, wxPoint centre, int radius )
 /*****************************************************************************/
 /* routine de trace de 1 cercle de centre cx, cy */
 {
     switch( format_plot )
     {
     case PLOT_FORMAT_GERBER:
-        PlotCircle_GERBER( centre, rayon, epaisseur );
+        PlotCircle_GERBER( centre, radius, thickness );
         break;
 
     case PLOT_FORMAT_HPGL:
-        trace_1_pastille_RONDE_HPGL( centre, rayon * 2, FILAIRE );
+        trace_1_pastille_RONDE_HPGL( centre, radius * 2, FILAIRE );
         break;
 
     case PLOT_FORMAT_POST:
-        PlotCircle_PS( centre, rayon * 2, epaisseur );
+        PlotCircle_PS( centre, radius * 2, thickness );
         break;
     }
 }
@@ -811,7 +821,7 @@ void PlotPolygon( int format_plot, bool Filled, int nbpoints, int* coord )
 
 /************************************************************************/
 void PlotArc( int format_plot, wxPoint centre, int start_angle, int end_angle,
-              int rayon, int epaisseur )
+              int radius, int thickness )
 /************************************************************************/
 
 /* Polt 1 arc
@@ -820,14 +830,14 @@ void PlotArc( int format_plot, wxPoint centre, int start_angle, int end_angle,
 {
     int ii;
     int ox, oy, fx, fy;
-    int delta;/* increment (en 0.1 degres) angulaire pour trace de cercles */
+    int delta;              /* increment (en 0.1 degres) angulaire pour trace de cercles */
 
     if( Plot_Mode == FILAIRE )
-        epaisseur = g_PlotLine_Width;
+        thickness = g_PlotLine_Width;
 
     if( IsPostScript( format_plot ) )
     {
-        PlotArcPS( centre, start_angle, end_angle, rayon, epaisseur );
+        PlotArcPS( centre, start_angle, end_angle, radius, thickness );
         return;
     }
 
@@ -836,28 +846,33 @@ void PlotArc( int format_plot, wxPoint centre, int start_angle, int end_angle,
     end_angle   = -end_angle;
     EXCHG( start_angle, end_angle );
 
-    /* Correction pour petits cercles par rapport a l'epaisseur du trait */
-    if( rayon < (epaisseur * 10) )
+    /* Correction pour petits cercles par rapport a l'thickness du trait */
+    if( radius < (thickness * 10) )
         delta = 225;                            /* 16 segm pour 360 deg */
-    if( rayon < (epaisseur * 5) )
+    if( radius < (thickness * 5) )
         delta = 300;                            /* 12 segm pour 360 deg */
 
     if( start_angle > end_angle )
         end_angle += 3600;
-    ox = rayon; oy = 0;
+
+    ox = radius;
+    oy = 0;
+
     RotatePoint( &ox, &oy, start_angle );
 
     delta = 120;    /* un cercle sera trace en 3600/delta = 30 segments / cercle*/
     for( ii = start_angle + delta; ii < end_angle; ii += delta )
     {
-        fx = rayon; fy = 0;
+        fx = radius;
+        fy = 0;
+
         RotatePoint( &fx, &fy, ii );
 
         switch( format_plot )
         {
         case PLOT_FORMAT_GERBER:
             PlotGERBERLine( wxPoint( centre.x + ox, centre.y + oy ),
-                            wxPoint( centre.x + fx, centre.y + fy ), epaisseur );
+                            wxPoint( centre.x + fx, centre.y + fy ), thickness );
             break;
 
         case PLOT_FORMAT_HPGL:
@@ -865,24 +880,27 @@ void PlotArc( int format_plot, wxPoint centre, int start_angle, int end_angle,
                                   centre.y + oy,
                                   centre.x + fx,
                                   centre.y + fy,
-                                  epaisseur );
+                                  thickness );
             break;
 
         case PLOT_FORMAT_POST:
             break;
         }
 
-        ox = fx; oy = fy;
+        ox = fx;
+        oy = fy;
     }
 
-    fx = rayon; fy = 0;
+    fx = radius;
+    fy = 0;
+
     RotatePoint( &fx, &fy, end_angle );
 
     switch( format_plot )
     {
     case PLOT_FORMAT_GERBER:
         PlotGERBERLine( wxPoint( centre.x + ox, centre.y + oy ),
-                        wxPoint( centre.x + fx, centre.y + fy ), epaisseur );
+                        wxPoint( centre.x + fx, centre.y + fy ), thickness );
         break;
 
     case PLOT_FORMAT_HPGL:
@@ -890,7 +908,7 @@ void PlotArc( int format_plot, wxPoint centre, int start_angle, int end_angle,
                               centre.y + oy,
                               centre.x + fx,
                               centre.y + fy,
-                              epaisseur );
+                              thickness );
         break;
 
     case PLOT_FORMAT_POST:
