@@ -5,12 +5,37 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-May-5 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++common.c
+    wrote wxString& operator << ( wxString&, const wxPoint& ) by moving code
+    from DRC_ITEM::ShowCoord()
++pcbnew
+  * embellished DRAWSEGMENT::MenuText() and DRAWSEGMENT::Display_Infos()
+  * wrote wxString BOARD_ITEM::ShowShape( Track_Shapes aShape )
+  * wrote wxPoint DRAWSEGMENT::GetEnd() which calculates the end point of an arc
+  * wrote DRAWSEGMENT::GetLength()
+  * Added S_ARC support to the specctra_export.cpp for EDGES_PCB with DRAWSEGMENTS
+    of arcs.   Arc and lines can be intermixed, its just that they must be
+    contiguous.  The user can now use the improved DRAWSEGMENT::Display_Infos() to
+    find any bad or non-contiguous DRAWSEGMENTS, since that function now shows
+    the two endpoints of any segment.
+
+
 2008-May-2 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
 ================================================================================
 +cmake
   * Use Subversion to automatically generate build date and revision level
     when building with CMake.  Header file build_version.h will still need
     manual updates when using the hand written make files.
+
+
+2008-May-4 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+  * Added DRAWSEGMENT::GetStart(), GetEnd() and support S_ARC and S_SEGMENT
+    with it for now.
+  * Added arc support to pcb perimeter of the specctra export.
 
 
 2008-May-2 UPDATE Dick Hollenbeck <dick@softplc.com>
@@ -235,7 +260,6 @@ email address.
     If possible (i.e. if freeroute.jnlp is found in kicad binary directory) javaws is called insteed of the default browser)
     So @todo removed
 
->>>>>>> .r920
 2008-Mar-19 UPDATE   Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +eeschema
