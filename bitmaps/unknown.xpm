@@ -1,5 +1,8 @@
 /* XPM */
-static const char * unknown_xpm[] = {
+#ifndef XPMMAIN
+extern const char * unknown_xpm[];
+#else
+const char * unknown_xpm[] = {
 "16 16 49 1",
 " 	c None",
 ".	c #C6C6D5",
@@ -66,3 +69,5 @@ static const char * unknown_xpm[] = {
 "  .12_d),e]bg+  ",
 "  .;22{)=e6bg+  ",
 "  ++++++++++++  "};
+#endif
+

@@ -1,5 +1,8 @@
 /* XPM */
-static const char * new_sch_xpm[] = {
+#ifndef XPMMAIN
+extern const char * new_sch_xpm[];
+#else
+const char * new_sch_xpm[] = {
 "16 16 66 1",
 " 	c None",
 ".	c #000000",
@@ -83,3 +86,5 @@ static const char * new_sch_xpm[] = {
 ".+.w(yzwwwA.vv_.",
 ".______________.",
 " .............. "};
+#endif
+

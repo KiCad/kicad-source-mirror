@@ -1,5 +1,8 @@
 /* XPM */
-static const char * icon_gerbview_small_xpm[] = {
+#ifndef XPMMAIN
+extern const char * icon_gerbview_small_xpm[];
+#else
+const char * icon_gerbview_small_xpm[] = {
 "16 16 166 2",
 "  	c None",
 ". 	c #424040",
@@ -183,3 +186,5 @@ static const char * icon_gerbview_small_xpm[] = {
 "+ q.r.s.;.t.u.v.w.x.y.z.A.B.C.D.",
 ". ~ 1 e o E.G T @.F.G.H.C.C.I.  ",
 "                                "};
+#endif
+

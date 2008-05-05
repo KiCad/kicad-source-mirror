@@ -1,5 +1,8 @@
 /* XPM */
-static const char * new_cvpcb_xpm[] = {
+#ifndef XPMMAIN
+extern const char * new_cvpcb_xpm[];
+#else
+const char * new_cvpcb_xpm[] = {
 "16 16 87 1",
 " 	c None",
 ".	c #000000",
@@ -104,3 +107,5 @@ static const char * new_cvpcb_xpm[] = {
 ".+######;>,'.V).",
 ".)))))))&&&&))).",
 " .............. "};
+#endif
+

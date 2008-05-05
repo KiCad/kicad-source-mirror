@@ -1,5 +1,8 @@
 /* XPM */
-static const char * reload_xpm[] = {
+#ifndef XPMMAIN
+extern const char * reload_xpm[];
+#else
+const char * reload_xpm[] = {
 "16 16 152 2",
 "  	c None",
 ". 	c #3ACF73",
@@ -169,3 +172,5 @@ static const char * reload_xpm[] = {
 "    e.r.s.                      ",
 "      t.u.                      ",
 "                                "};
+#endif
+

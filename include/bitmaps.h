@@ -219,6 +219,10 @@
 	#include "../bitmaps/unknown.xpm"
 	#include "../bitmaps/new_pcb.xpm"
 
+	#include "../bitmaps/treesel.xpm"
+	#include "../bitmaps/ercerr.xpm"
+	#include "../bitmaps/ercwarn.xpm"
+
 // Largeur du toolbar vertical
 #define VTOOLBAR_WIDTH 26
 // dimension d'un tool vertical

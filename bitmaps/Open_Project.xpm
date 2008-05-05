@@ -1,5 +1,8 @@
 /* XPM */ 
-static const char * open_project_xpm[] = {
+#ifndef XPMMAIN
+extern const char * open_project_xpm[];
+#else
+const char * open_project_xpm[] = {
 "16 16 67 1",
 " 	c None",
 "!	c black",
@@ -84,3 +87,5 @@ static const char * open_project_xpm[] = {
 "_PPPPPPPP`!!    ",
 "abccccccde!     ",
 "!!!!!!!!!!!     "};
+#endif
+

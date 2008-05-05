@@ -1,7 +1,6 @@
 /* XPM */
 #ifndef XPMMAIN
 extern const char * zoom_xpm[];
-
 #else
 const char * zoom_xpm[] = {
 "16 16 3 1",

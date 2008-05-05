@@ -1,5 +1,8 @@
 /* XPM */
-static const char * new_gerb_xpm[] = {
+#ifndef XPMMAIN
+extern const char * new_gerb_xpm[];
+#else
+const char * new_gerb_xpm[] = {
 "16 16 78 1",
 " 	c None",
 ".	c #000000",
@@ -95,3 +98,5 @@ static const char * new_gerb_xpm[] = {
 ".+########LMMM~.",
 ".~~~~~~~~~~~~~~.",
 " .............. "};
+#endif
+

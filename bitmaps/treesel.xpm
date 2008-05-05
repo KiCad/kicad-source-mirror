@@ -1,5 +1,8 @@
 /* XPM */
-static const char *tree_sel_xpm[] = {
+#ifndef XPMMAIN
+extern const char * tree_sel_xpm[];
+#else
+const char *tree_sel_xpm[] = {
 /* columns rows colors const chars-per-pixel */
 "16 15 6 1",
 "  c Gray0",
@@ -26,4 +29,5 @@ static const char *tree_sel_xpm[] = {
 "@@@@@@@XXXXXX@@@",
 "@@@@@@@@@@X@@@@@"
 };
+#endif
 

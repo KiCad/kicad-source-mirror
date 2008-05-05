@@ -1,5 +1,8 @@
 /* XPM */
-static const char * browse_files_xpm[] = {
+#ifndef XPMMAIN
+extern const char * browse_files_xpm[];
+#else
+const char * browse_files_xpm[] = {
 "16 16 66 1",
 " 	c None",
 ".	c #000000",
@@ -83,3 +86,5 @@ static const char * browse_files_xpm[] = {
 " .xcynztttt..tA.",
 "  ............. ",
 "                "};
+#endif
+

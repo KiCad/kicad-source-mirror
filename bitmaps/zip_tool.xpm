@@ -1,5 +1,8 @@
 /* XPM */
-static const char *zip_tool_xpm[] = {
+#ifndef XPMMAIN
+extern const char * zip_tool_xpm[];
+#else
+const char *zip_tool_xpm[] = {
 /* width height num_colors const chars_per_pixel */
 "16 15 16 1",
 "A c #040604",
@@ -34,4 +37,5 @@ static const char *zip_tool_xpm[] = {
 "FAAAAAAAAAAAAAAF",
 "FFFFFFFFFFFFFFFF"
 };
+#endif
 

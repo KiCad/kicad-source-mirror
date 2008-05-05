@@ -1,5 +1,8 @@
 /* XPM */
-static const char * new_pcb_xpm[] = {
+#ifndef XPMMAIN
+extern const char * new_pcb_xpm[];
+#else
+const char * new_pcb_xpm[] = {
 "16 16 35 1",
 " 	c None",
 ".	c #000000",
@@ -52,3 +55,5 @@ static const char * new_pcb_xpm[] = {
 ".+..........6=>.",
 ".>>===========>.",
 " .............. "};
+#endif
+

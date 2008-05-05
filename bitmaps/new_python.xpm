@@ -1,5 +1,8 @@
 /* XPM */
-static const char * new_python_xpm[] = {
+#ifndef XPMMAIN
+extern const char * new_python_xpm[];
+#else
+const char * new_python_xpm[] = {
 "16 16 112 2",
 "  	c None",
 ". 	c #000000",
@@ -129,3 +132,5 @@ static const char * new_python_xpm[] = {
 ". + # # # ).!.~.{.# '.].].].3 . ",
 ". 3 3 3 3 3 3 3 3 3 3 3 3 3 3 . ",
 "  . . . . . . . . . . . . . .   "};
+#endif
+

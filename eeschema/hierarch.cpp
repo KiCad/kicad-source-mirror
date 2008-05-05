@@ -17,8 +17,7 @@
 #include "wx/treectrl.h"
 
 
-#include "../bitmaps/treesel.xpm"
-#include "../bitmaps/treensel.xpm"
+#include "bitmaps.h"
 
 
 static bool UpdateScreenFromSheet(WinEDA_SchematicFrame * frame);

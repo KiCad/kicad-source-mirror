@@ -1,5 +1,8 @@
 /* XPM */
-static const char * new_project_xpm[] = {
+#ifndef XPMMAIN
+extern const char * new_project_xpm[];
+#else
+const char * new_project_xpm[] = {
 "16 16 30 1",
 " 	c None",
 ".	c #000000",
@@ -47,3 +50,5 @@ static const char * new_project_xpm[] = {
 ".>#$$$$(<...    ",
 ".|))))))1       ",
 ".........       "};
+#endif
+

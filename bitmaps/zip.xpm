@@ -1,5 +1,8 @@
 /* XPM */
-static const char * zip_xpm[] = {
+#ifndef XPMMAIN
+extern const char * zip_xpm[];
+#else
+const char * zip_xpm[] = {
 "16 16 16 1",
 " 	c none",
 ".	c #060304",
@@ -33,3 +36,5 @@ static const char * zip_xpm[] = {
 " ...&=;%%&&X..  ",
 "   ..X:&$....   ",
 "     .....      "};
+#endif
+
