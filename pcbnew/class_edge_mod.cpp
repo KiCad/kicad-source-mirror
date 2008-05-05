@@ -538,29 +538,6 @@ bool EDGE_MODULE::HitTest( const wxPoint& ref_pos )
 
 #if defined(DEBUG)
 
-
-const char* EDGE_MODULE::ShowShape( int aShape )
-{
-    const char* cp;
-
-    switch( aShape )
-    {
-    case S_SEGMENT:     cp = "line";        break;
-    case S_RECT:        cp = "rect";        break;
-    case S_ARC:         cp = "arc";         break;
-    case S_CIRCLE:      cp = "circle";      break;
-    case S_ARC_RECT:    cp = "arc_rect";    break;
-    case S_SPOT_OVALE:  cp = "spot_oval";   break;
-    case S_SPOT_CIRCLE: cp = "spot_circle"; break;
-    case S_SPOT_RECT:   cp = "spot_rect";   break;
-    case S_POLYGON:     cp = "polygon";     break;
-    default:            cp = "??EDGE??";    break;
-    }
-
-    return cp;
-}
-
-
 /**
  * Function Show
  * is used to output the object tree, currently for debugging only.
@@ -570,11 +547,11 @@ const char* EDGE_MODULE::ShowShape( int aShape )
  */
 void EDGE_MODULE::Show( int nestLevel, std::ostream& os )
 {
-    const char* cp = ShowShape( m_Shape );
+    wxString shape = ShowShape( (Track_Shapes) m_Shape );
 
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-        " type=\"" << cp << "\">";
+        " type=\"" << CONV_TO_UTF8(shape) << "\">";
 
     os << " <start" << m_Start0 << "/>";
     os << " <end" << m_End0 << "/>";
