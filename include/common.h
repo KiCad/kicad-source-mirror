@@ -357,6 +357,17 @@ class WinEDA_DrawPanel;
 
 
 /**
+ * Operator << overload
+ * outputs a point to the argument string in a format resembling
+ * "@ (x,y)
+ * @param aString Where to put the text describing the point value
+ * @param aPoint  The point to output.
+ * @return wxString& - the input string
+ */
+wxString& operator << ( wxString& aString, const wxPoint& aPoint );
+
+
+/**
  * Function ProcessExecute
  * runs a child process.
  * @param aCommandLine The process and any arguments to it all in a single string.
