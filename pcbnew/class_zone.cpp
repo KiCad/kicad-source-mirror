@@ -137,7 +137,7 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
     // Save the corner list
     for( item_pos = 0; item_pos < corners_count; item_pos++ )
     {
-        ret = fprintf( aFile, "ZCorner %d %d %d \n",
+        ret = fprintf( aFile, "ZCorner %d %d %d\n",
                        m_Poly->corner[item_pos].x, m_Poly->corner[item_pos].y,
                        m_Poly->corner[item_pos].end_contour );
         if( ret < 3 )
@@ -403,7 +403,7 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( WinEDA_DrawPanel* panel, wxDC* DC, 
 
     if( DC == NULL )
         return;
-    int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+    int curr_layer = ((PCB_SCREEN*)panel->GetScreen())->m_Active_Layer;
     int color = g_DesignSettings.m_LayerColor[m_Layer] & MASKCOLOR;
 
     if( DisplayOpt.ContrastModeDisplay )
