@@ -94,6 +94,7 @@ public:
         // return wxT( "EDGE" );  ?
     }
 
+
 #if defined(DEBUG)
     /**
      * Function Show
@@ -103,13 +104,6 @@ public:
      * @param os The ostream& to output to.
      */
     virtual void Show( int nestLevel, std::ostream& os );
-
-
-    /**
-     * Function ShowShape
-     * converts the enum Track_Shapes integer value to a C string.
-     */
-    static const char* ShowShape( int aShape );
 
 #endif
 };
