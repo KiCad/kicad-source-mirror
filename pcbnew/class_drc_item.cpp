@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
- 
+
 /*************************************************/
 /* class_drc_item.cpp - DRC_ITEM class functions */
 /*************************************************/
@@ -38,7 +38,7 @@ wxString DRC_ITEM::GetErrorText() const
     case DRCE_UNCONNECTED_PADS:
         return wxString( _("Unconnected pads") );
     case DRCE_TRACK_NEAR_THROUGH_HOLE:
-        return wxString( _("Track near thru-hole") ); 
+        return wxString( _("Track near thru-hole") );
     case DRCE_TRACK_NEAR_PAD:
         return wxString( _("Track near pad") );
     case DRCE_TRACK_NEAR_VIA:
@@ -51,7 +51,7 @@ wxString DRC_ITEM::GetErrorText() const
     case DRCE_TRACK_ENDS2:
     case DRCE_TRACK_ENDS3:
     case DRCE_TRACK_ENDS4:
-    case DRCE_ENDS_PROBLEM1: 
+    case DRCE_ENDS_PROBLEM1:
     case DRCE_ENDS_PROBLEM2:
     case DRCE_ENDS_PROBLEM3:
     case DRCE_ENDS_PROBLEM4:
@@ -71,10 +71,10 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _("Copper area inside copper area"));
     case COPPERAREA_CLOSE_TO_COPPERAREA:
         return wxString( _("Copper areas intersect or are too close"));
-	case DRCE_NON_EXISTANT_NET_FOR_ZONE_OUTLINE:
+    case DRCE_NON_EXISTANT_NET_FOR_ZONE_OUTLINE:
         return wxString( _("Copper area has a non existent net name"));
-		
-        
+
+
     default:
         return wxString( wxT("PROGRAM BUG, PLEASE LEAVE THE ROOM.") );
     }
@@ -83,13 +83,9 @@ wxString DRC_ITEM::GetErrorText() const
 
 wxString DRC_ITEM::ShowCoord( const wxPoint& aPos )
 {
-    wxString temp;
     wxString ret;
 
-    ret << wxT("@ (") << valeur_param( aPos.x, temp ); 
-    ret << wxT(",")  << valeur_param( aPos.y, temp );
-    ret << wxT(")");
-
+    ret << aPos;
     return ret;
 }
 
