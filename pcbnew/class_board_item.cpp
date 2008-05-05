@@ -13,6 +13,29 @@
 
 #include "bitmaps.h"
 
+
+/********************************************************/
+wxString BOARD_ITEM::ShowShape( Track_Shapes aShape )
+/********************************************************/
+{
+    switch( aShape )
+    {
+    case S_SEGMENT:         return _( "Line" );
+    case S_RECT:            return _( "Rect" );
+    case S_ARC:             return _( "Arc" );
+    case S_CIRCLE:          return _( "Circle" );
+
+    // used in Gerbview:
+    case S_ARC_RECT:        return wxT( "arc_rect" );
+    case S_SPOT_OVALE:      return wxT( "spot_oval" );
+    case S_SPOT_CIRCLE:     return wxT( "spot_circle" );
+    case S_SPOT_RECT:       return wxT( "spot_rect" );
+    case S_POLYGON:         return wxT( "polygon" );
+    default:                return wxT( "??" );
+    }
+}
+
+
 /********************************************************/
 wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
 /********************************************************/
@@ -21,10 +44,12 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
  * @param aPcb = the parent board
  */
 {
-    wxString          text, msg;
-    const BOARD_ITEM* item = this;
-    EQUIPOT*          net;
-    D_PAD * pad;
+    wxString            text;
+    wxString            msg;
+    wxString            temp;
+    const BOARD_ITEM*   item = this;
+    EQUIPOT*            net;
+    D_PAD *             pad;
 
     switch( item->Type() )
     {
@@ -53,7 +78,10 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         break;
 
     case TYPEDRAWSEGMENT:
-        text << _( "Pcb Graphic" ) << _( " on " ) << aPcb->GetLayerName( item->GetLayer() ).Trim();  // @todo: extend text
+        text << _( "Pcb Graphic" ) << wxT(": ")
+            << ShowShape( (Track_Shapes) ((DRAWSEGMENT*)item)->m_Shape )
+            << wxChar(' ') << _("Length:") << valeur_param( (int) ((DRAWSEGMENT*)item)->GetLength(), temp )
+            << _( " on " ) << aPcb->GetLayerName( item->GetLayer() ).Trim();
         break;
 
     case TYPETEXTE:
@@ -86,66 +114,25 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         break;
 
     case TYPEEDGEMODULE:
-    {
         text << _( "Graphic" ) << wxT( " " );
-        wxString cp;
-
-        switch( ( (EDGE_MODULE*) item )->m_Shape )
-        {
-        case S_SEGMENT:
-            cp = _( "Line" );             break;
-
-        case S_RECT:
-            cp = _( "Rect" );             break;
-
-        case S_ARC:
-            cp = _( "Arc" );              break;
-
-        case S_CIRCLE:
-            cp = _( "Circle" );           break;
-
-            /* used in Gerbview: */
-        case S_ARC_RECT:
-            cp = wxT( "arc_rect" );       break;
-
-        case S_SPOT_OVALE:
-            cp = wxT( "spot_oval" );      break;
-
-        case S_SPOT_CIRCLE:
-            cp = wxT( "spot_circle" );    break;
-
-        case S_SPOT_RECT:
-            cp = wxT( "spot_rect" );      break;
-
-        case S_POLYGON:
-            cp = wxT( "polygon" );        break;
-
-        default:
-            cp = wxT( "??EDGE??" );       break;
-        }
-
-        text << cp;
+        text << ShowShape( (Track_Shapes) ( (EDGE_MODULE*) item )->m_Shape );
         text << wxT( " (" ) << aPcb->GetLayerName( ((EDGE_MODULE*) item )->m_Layer ).Trim() << wxT( ")" );
         text << _( " of " )
              << ( (MODULE*) GetParent() )->GetReference();
         break;
-    }
+
     case TYPETRACK:
         // deleting tracks requires all the information we can get to
-        // disambiguate all the crap under the cursor!
+        // disambiguate all the choices under the cursor!
+        text << _( "Track" ) << wxT( " " ) << ((TRACK*)item)->ShowWidth();
+        net = aPcb->FindNet( ((TRACK*)item)->GetNet() );
+        if( net )
         {
-            wxString txt;
-
-            text << _( "Track" ) << wxT( " " ) << ((TRACK*)item)->ShowWidth();
-            net = aPcb->FindNet( ((TRACK*)item)->GetNet() );
-            if( net )
-            {
-                text << wxT( " [" ) << net->m_Netname << wxT( "]" );
-            }
-            text << _( " on " ) << aPcb->GetLayerName( item->GetLayer() ).Trim()
-                 << wxT("  ") << _("Net:") << ((TRACK*)item)->GetNet()
-                 << wxT("  ") << _("Length:") << valeur_param( (int) ((TRACK*)item)->GetLength(), txt );
+            text << wxT( " [" ) << net->m_Netname << wxT( "]" );
         }
+        text << _( " on " ) << aPcb->GetLayerName( item->GetLayer() ).Trim()
+             << wxT("  ") << _("Net:") << ((TRACK*)item)->GetNet()
+             << wxT("  ") << _("Length:") << valeur_param( (int) ((TRACK*)item)->GetLength(), temp );
         break;
 
     case TYPEZONE_CONTAINER:
