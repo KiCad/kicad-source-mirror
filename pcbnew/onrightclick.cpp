@@ -20,41 +20,6 @@
 #include "bitmaps.h"
 
 
-/* Specific bitmaps */
-#include "Break_Line.xpm"
-#include "Delete_Net.xpm"
-#include "Delete_Line.xpm"
-#include "Delete_Track.xpm"
-#include "Move_Module.xpm"
-
-#include "Drag_Track_Segment.xpm"
-#include "Drag_Segment_WithSlope.xpm"
-#include "Drag_Module.xpm"
-#include "Edit_Module.xpm"
-#include "Rotate_Module+.xpm"
-#include "Rotate_Module-.xpm"
-#include "Delete_Module.xpm"
-#include "Invert_Module.xpm"
-#include "Locked.xpm"
-#include "Unlocked.xpm"
-#include "Move_Field.xpm"
-#include "Rotate_Field.xpm"
-#include "Move_Pad.xpm"
-#include "Drag_Pad.xpm"
-#include "Global_Options_Pad.xpm"
-#include "Delete_Pad.xpm"
-#include "Export_Options_Pad.xpm"
-#include "Select_W_Layer.xpm"
-#include "Width_Track.xpm"
-#include "Width_Vias.xpm"
-#include "Width_Net.xpm"
-#include "Width_Track_Via.xpm"
-#include "Select_Layer_Pair.xpm"
-#include "Drag_Outline_Segment.xpm"
-
-#include "Flag.xpm"
-
-
 /********************************************/
 static wxMenu* Append_Track_Width_List()
 /********************************************/
@@ -617,7 +582,7 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         s_Board_Editor_Hokeys_Descr, HK_BACK_SPACE );
 
     ADD_MENUITEM( track_mnu, ID_POPUP_PCB_DELETE_TRACKSEG,
-        msg, Delete_Line_xpm );
+        msg, delete_line_xpm );
     if( !flags )
     {
         msg = AddHotkeyName( _( "Delete Track" ), s_Board_Editor_Hokeys_Descr, HK_DELETE );
@@ -783,10 +748,10 @@ void WinEDA_PcbFrame::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* m
 
     if( !flags )
         ADD_MENUITEM( sub_menu_Fp_text, ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST,
-            _( "Move" ), Move_Field_xpm );
+            _( "Move" ), move_field_xpm );
 
     ADD_MENUITEM( sub_menu_Fp_text, ID_POPUP_PCB_ROTATE_TEXTMODULE,
-        _( "Rotate" ), Rotate_Field_xpm );
+        _( "Rotate" ), rotate_field_xpm );
     ADD_MENUITEM( sub_menu_Fp_text, ID_POPUP_PCB_EDIT_TEXTMODULE,
         _( "Edit" ), edit_text_xpm );
 

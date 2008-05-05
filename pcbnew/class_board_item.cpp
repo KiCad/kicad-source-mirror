@@ -12,10 +12,6 @@
 #include "collectors.h"
 
 #include "bitmaps.h"
-#include "add_cotation.xpm"
-#include "Add_Mires.xpm"
-
-
 
 /********************************************************/
 wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const

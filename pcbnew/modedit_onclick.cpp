@@ -15,16 +15,6 @@
 #include "protos.h"
 #include "id.h"
 
-#include "Edit_Module.xpm"
-#include "Rotate_Module+.xpm"
-#include "Move_Field.xpm"
-#include "Rotate_Field.xpm"
-#include "Move_Pad.xpm"
-#include "Global_Options_Pad.xpm"
-#include "Delete_Pad.xpm"
-#include "Export_Options_Pad.xpm"
-#include "Select_Layer_Pair.xpm"
-
 /*************************************************************************/
 void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 /*************************************************************************/
@@ -289,10 +279,10 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
         if( !flags )
         {
             ADD_MENUITEM( PopMenu, ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST,
-                          _( "Move Text Mod." ), Move_Field_xpm );
+                          _( "Move Text Mod." ), move_field_xpm );
         }
         ADD_MENUITEM( PopMenu, ID_POPUP_PCB_ROTATE_TEXTMODULE,
-                      _( "Rotate Text Mod." ), Rotate_Field_xpm );
+                      _( "Rotate Text Mod." ), rotate_field_xpm );
         ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_TEXTMODULE,
                       _( "Edit Text Mod." ), edit_text_xpm );
         if( ( (TEXTE_MODULE*) DrawStruct )->m_Type == TEXT_is_DIVERS )

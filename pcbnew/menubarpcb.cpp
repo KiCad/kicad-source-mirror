@@ -16,10 +16,6 @@
 #include "hotkeys.h"
 #include "id.h"
 
-#include "Swap_Layer.xpm"
-#include "Post_Drill.xpm"
-#include "Post_Compo.xpm"
-
 /***********************************************/
 void WinEDA_PcbFrame::ReCreateMenuBar()
 /***********************************************/

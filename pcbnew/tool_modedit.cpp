@@ -18,15 +18,6 @@
 
 #include "hotkeys.h"
 
-#include "Module_Check.xpm"
-#include "Import_Module.xpm"
-#include "Export_Module.xpm"
-#include "New_FootPrint.xpm"
-#include "module_options.xpm"
-#include "Load_Module_Board.xpm"
-#include "Insert_Module_Board.xpm"
-#include "Update_Module_Board.xpm"
-
 #ifdef __UNIX__
 #define LISTBOX_WIDTH 140
 #else

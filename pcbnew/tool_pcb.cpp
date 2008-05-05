@@ -29,22 +29,6 @@
 
 #define MUWAVE_ENBL
 
-#include "mw_Add_Stub.xpm"
-#include "mw_Add_stub_arc.xpm"
-#include "mw_Add_Shape.xpm"
-#include "mw_Add_Line.xpm"
-#include "mw_Add_Gap.xpm"
-#include "mw_toolbar.xpm"
-#include "Show_Zone.xpm"
-#include "net_hightlight.xpm"
-#include "PcbOffset.xpm"
-#include "Add_Mires.xpm"
-#include "Mode_Module.xpm"
-#include "Mode_Track.xpm"
-#include "tool_ratsnet.xpm"
-#include "local_ratsnet.xpm"
-#include "add_cotation.xpm"
-
 #define SEL_LAYER_HELP _( \
         "Show active layer selections\nand select layer pair for route and place via" )
 
