@@ -5,7 +5,12 @@
 
 COMMON_GLOBL wxString g_BuildVersion
 #ifdef EDA_BASE
-    (wxT("(20080429-r1010)"))
+#  ifdef HAVE_SVN_VERSION
+#    include "config.h"
+     (wxT(KICAD_SVN_VERSION))
+#  else
+     (wxT("(20080429-r1010)"))
+#  endif
 #endif
 ;
 
