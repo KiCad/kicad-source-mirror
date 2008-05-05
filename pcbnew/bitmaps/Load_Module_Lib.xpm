@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* Load_Module_Lib_xpm[];
+#else
 static const char * Load_Module_Lib_xpm[] = {
 "16 16 143 2",
 "  	c None",
@@ -160,3 +163,5 @@ static const char * Load_Module_Lib_xpm[] = {
 "          b.c.d.e.f.g.h.i.      ",
 "                  j.k.l.        ",
 "                                "};
+
+#endif

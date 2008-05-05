@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* import_module_xpm[];
+#else
 static const char * import_module_xpm[] = {
 "16 16 79 1",
 " 	c None",
@@ -96,3 +99,5 @@ static const char * import_module_xpm[] = {
 "     ........   ",
 "                ",
 "                "};
+
+#endif

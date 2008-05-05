@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* Unlocked_xpm[];
+#else
 static const char * Unlocked_xpm[] = {
 "16 16 88 1",
 " 	c None",
@@ -105,3 +108,5 @@ static const char * Unlocked_xpm[] = {
 "    .PQRRSSTUVW.",
 "     .......... ",
 "                "};
+
+#endif

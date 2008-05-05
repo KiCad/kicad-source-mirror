@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* rotate_module_pos_xpm[];
+#else
 static const char * rotate_module_pos_xpm[] = {
 "16 16 77 1",
 " 	c None",
@@ -94,3 +97,5 @@ static const char * rotate_module_pos_xpm[] = {
 "     .CD3GHIJK  ",
 "      .uL...    ",
 "       ..       "};
+
+#endif

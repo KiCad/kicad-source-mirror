@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* Track_Locked_xpm[];
+#else
 static const char * Track_Locked_xpm[] = {
 "16 16 89 1",
 " 	c None",
@@ -106,3 +109,5 @@ static const char * Track_Locked_xpm[] = {
 "    ,zABCDDEFGH,",
 "    ,IJKLMMMNOy,",
 "    ,PQRSTTUVWX,"};
+
+#endif

@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* Move_Module_xpm[];
+#else
 static const char * Move_Module_xpm[] = {
 "16 16 55 1",
 " 	c None",
@@ -72,3 +75,5 @@ static const char * Move_Module_xpm[] = {
 "       .lmn..   ",
 "        iop.    ",
 "         .      "};
+
+#endif

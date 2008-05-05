@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* add_cotation_xpm[];
+#else
 static const char * add_cotation_xpm[] = {
 "16 16 14 1",
 " 	c None",
@@ -31,3 +34,5 @@ static const char * add_cotation_xpm[] = {
 "+             + ",
 "+             + ",
 "                "};
+
+#endif

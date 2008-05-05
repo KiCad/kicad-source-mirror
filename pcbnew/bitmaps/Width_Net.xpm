@@ -1,4 +1,7 @@
-/* XPM */ 
+/* XPM */
+#ifndef XPMMAIN
+extern const char* width_net_xpm[];
+#else
 static const char * width_net_xpm[] = {
 "16 16 6 1",
 " 	c None",
@@ -23,3 +26,5 @@ static const char * width_net_xpm[] = {
 "   !   %%   ##  ",
 "   !   %%    ## ",
 "       %%     ##"};
+
+#endif

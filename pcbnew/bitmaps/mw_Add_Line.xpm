@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* mw_Add_Line_xpm[];
+#else
 static const char * mw_Add_Line_xpm[] = {
 "16 16 6 1",
 " 	c None",
@@ -23,3 +26,5 @@ static const char * mw_Add_Line_xpm[] = {
 " @@@@@@@@@@@@@@ ",
 "  @          @  ",
 "   @        @   "};
+
+#endif

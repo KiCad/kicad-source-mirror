@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* Edges_Sketch_xpm[];
+#else
 static const char * Edges_Sketch_xpm[] = {
 "16 16 3 1",
 " 	c None",
@@ -20,3 +23,5 @@ static const char * Edges_Sketch_xpm[] = {
 ". .+       +. . ",
 "...+++++++++... ",
 "                "};
+
+#endif

@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* options_all_tracks_and_vias_xpm[];
+#else
 static const char * options_all_tracks_and_vias_xpm[] = {
 "16 16 49 1",
 " 	c None",
@@ -66,3 +69,5 @@ static const char * options_all_tracks_and_vias_xpm[] = {
 "#&+^]/!97<!0abcd",
 "-;e!]([!!!23ffff",
 "   !](ghi2j5!!!["};
+
+#endif

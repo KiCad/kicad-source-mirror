@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* Export_Options_Pad_xpm[];
+#else
 static const char * Export_Options_Pad_xpm[] = {
 "16 16 71 1",
 " 	c None",
@@ -88,3 +91,5 @@ static const char * Export_Options_Pad_xpm[] = {
 "   .dh.qlx.....y",
 "   .dh.zxo.ABCDE",
 "   .dlf...stFFFF"};
+
+#endif

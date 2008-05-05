@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* Delete_Track_xpm[];
+#else
 static const char * Delete_Track_xpm[] = {
 "16 16 115 2",
 "  	c None",
@@ -132,3 +135,5 @@ static const char * Delete_Track_xpm[] = {
 "      O P Q R S T U V W X Y Z   ",
 "      `  ...+.@.#.$.%.&.*.=.-.  ",
 "      ;.>.,.'.).!.~.{.].^./.(.  "};
+
+#endif

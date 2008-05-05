@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* Options_Module_xpm[];
+#else
 static const char * Options_Module_xpm[] = {
 "16 16 53 1",
 " 	c None",
@@ -70,3 +73,5 @@ static const char * Options_Module_xpm[] = {
 "   .<1.dc3.efghi",
 "   .<+4...89jjjj",
 "   .<+klm8na...4"};
+
+#endif

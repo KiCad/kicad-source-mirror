@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* Break_Line_xpm[];
+#else
 static const char * Break_Line_xpm[] = {
 "16 16 34 1",
 " 	c None",
@@ -51,3 +54,5 @@ static const char * Break_Line_xpm[] = {
 "                ",
 "                ",
 "                "};
+
+#endif

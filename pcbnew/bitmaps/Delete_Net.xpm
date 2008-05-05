@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* Delete_Net_xpm[];
+#else
 static const char * Delete_Net_xpm[] = {
 "16 16 128 2",
 "  	c None",
@@ -145,3 +148,5 @@ static const char * Delete_Net_xpm[] = {
 "       ...+.@.#.$.%.&.*.=.-.;.  ",
 "      >.,.'.).!.~.{.].^./.(._.  ",
 "      :.<.[.}.|.1.2.3.4.5.6.7.  "};
+
+#endif

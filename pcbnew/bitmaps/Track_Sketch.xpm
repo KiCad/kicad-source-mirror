@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* Track_Sketch_xpm[];
+#else
 static const char * Track_Sketch_xpm[] = {
 "16 16 5 1",
 " 	c None",
@@ -22,3 +25,5 @@ static const char * Track_Sketch_xpm[] = {
 "       +++@#+@#+",
 "          .. .. ",
 "          .. .. "};
+
+#endif

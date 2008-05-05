@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* export_module_xpm[];
+#else
 static const char * export_module_xpm[] = {
 "16 16 86 1",
 " 	c None",
@@ -103,3 +106,5 @@ static const char * export_module_xpm[] = {
 "  ........      ",
 "                ",
 "                "};
+
+#endif

@@ -1,4 +1,7 @@
-/* XPM */ 
+/* XPM */
+#ifndef XPMMAIN
+extern const char* move_track_xpm[];
+#else
 static const char * move_track_xpm[] = {
 "16 16 41 1",
 " 	c None",
@@ -58,3 +61,5 @@ static const char * move_track_xpm[] = {
 "        CIJ!    ",
 "         !      ",
 "                "};
+
+#endif

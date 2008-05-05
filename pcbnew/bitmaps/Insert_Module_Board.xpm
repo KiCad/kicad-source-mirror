@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* insert_module_board_xpm[];
+#else
 static const char * insert_module_board_xpm[] = {
 "16 16 49 1",
 " 	c None",
@@ -66,3 +69,5 @@ static const char * insert_module_board_xpm[] = {
 ".7d90efghij5    ",
 "............    ",
 "                "};
+
+#endif

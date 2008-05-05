@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* Options_All_Tracks_xpm[];
+#else
 static const char * Options_All_Tracks_xpm[] = {
 "16 16 39 1",
 " 	c None",
@@ -56,3 +59,5 @@ static const char * Options_All_Tracks_xpm[] = {
 "   *;>*|[)*12345",
 "   *;,!***/(6666",
 "   *;,789/0:***!"};
+
+#endif

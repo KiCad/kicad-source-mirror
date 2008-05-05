@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* mw_Add_Stub_xpm[];
+#else
 static const char * mw_Add_Stub_xpm[] = {
 "16 16 14 1",
 " 	c None",
@@ -31,3 +34,5 @@ static const char * mw_Add_Stub_xpm[] = {
 "   ....@   >=,@@",
 "    @@@@     @@ ",
 "                "};
+
+#endif

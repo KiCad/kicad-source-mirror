@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* mw_Add_Shape_xpm[];
+#else
 static const char * mw_Add_Shape_xpm[] = {
 "16 16 21 1",
 " 	c None",
@@ -38,3 +41,5 @@ static const char * mw_Add_Shape_xpm[] = {
 "            %%  ",
 "                ",
 "                "};
+
+#endif

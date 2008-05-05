@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* Delete_Module_xpm[];
+#else
 static const char * Delete_Module_xpm[] = {
 "16 16 129 2",
 "  	c None",
@@ -146,3 +149,5 @@ static const char * Delete_Module_xpm[] = {
 "      ..+.@.#.$.%.&.*.=.-.;.>.  ",
 "      ,.'.).!.~.{.].^./.(._.:.  ",
 "      <.[.}.|.1.2.3.4.5.6.7.8.  "};
+
+#endif

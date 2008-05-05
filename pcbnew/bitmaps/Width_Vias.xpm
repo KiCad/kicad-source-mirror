@@ -1,4 +1,7 @@
-/* XPM */ 
+/* XPM */
+#ifndef XPMMAIN
+extern const char* width_vias_xpm[];
+#else
 static const char * width_vias_xpm[] = {
 "16 16 5 1",
 " 	c None",
@@ -22,3 +25,5 @@ static const char * width_vias_xpm[] = {
 "   !      %    %",
 "   !       %  % ",
 "            %%  "};
+
+#endif

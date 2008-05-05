@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* Rotate_Field_xpm[];
+#else
 static const char * Rotate_Field_xpm[] = {
 "16 16 76 1",
 " 	c None",
@@ -93,3 +96,5 @@ static const char * Rotate_Field_xpm[] = {
 "     FGHIJ8DE%  ",
 "       %%%Kz%   ",
 "          %%    "};
+
+#endif

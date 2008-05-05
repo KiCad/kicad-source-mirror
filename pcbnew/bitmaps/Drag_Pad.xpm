@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* drag_pad_xpm[];
+#else
 static const char * drag_pad_xpm[] = {
 "16 16 48 1",
 " 	c None",
@@ -65,3 +68,5 @@ static const char * drag_pad_xpm[] = {
 "       .efg..   ",
 "        bhi.    ",
 "         .      "};
+
+#endif

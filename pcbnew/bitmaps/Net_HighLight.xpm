@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* Net_HighLight_xpm[];
+#else
 static const char * Net_HighLight_xpm[] = {
 "16 16 74 1",
 " 	c None",
@@ -91,3 +94,5 @@ static const char * Net_HighLight_xpm[] = {
 "   .A   BCDEF   ",
 "   .G   33 H+   ",
 "   ..      I+   "};
+
+#endif

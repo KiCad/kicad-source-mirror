@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* Delete_Pad_xpm[];
+#else
 static const char * Delete_Pad_xpm[] = {
 "16 16 120 2",
 "  	c None",
@@ -137,3 +140,5 @@ static const char * Delete_Pad_xpm[] = {
 "      T U V W X Y Z `  ...+.@.  ",
 "      #.$.%.&.*.=.-.;.>.,.'.).  ",
 "      !.~.{.].^./.(._.:.<.[.}.  "};
+
+#endif

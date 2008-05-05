@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* mw_toolbar_xpm[];
+#else
 static const char * mw_toolbar_xpm[] = {
 "16 16 67 1",
 " 	c None",
@@ -84,3 +87,5 @@ static const char * mw_toolbar_xpm[] = {
 "8r|sntu8|vntwx|y",
 "||8..z||AB.z||A ",
 "                "};
+
+#endif

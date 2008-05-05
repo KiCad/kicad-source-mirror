@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* width_track_xpm[];
+#else
 static const char * width_track_xpm[] = {
 "16 16 9 1",
 " 	c None",
@@ -26,3 +29,5 @@ static const char * width_track_xpm[] = {
 "   .       *++++",
 "   .            ",
 "                "};
+
+#endif

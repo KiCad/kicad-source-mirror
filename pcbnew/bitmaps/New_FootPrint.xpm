@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* new_footprint_xpm[];
+#else
 static const char * new_footprint_xpm[] = {
 "16 16 15 1",
 " 	c None",
@@ -33,3 +36,4 @@ static const char * new_footprint_xpm[] = {
 "  @@@@@@@@      ",
 "                "};
 
+#endif

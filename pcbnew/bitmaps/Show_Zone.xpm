@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* show_zone_xpm[];
+#else
 static const char * show_zone_xpm[] = {
 "16 16 71 1",
 " 	c None",
@@ -88,3 +91,5 @@ static const char * show_zone_xpm[] = {
 "..mnopqrstuvw. .",
 "...xy|zA&BCD... ",
 ".....0E!F...... "};
+
+#endif

@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* Options_All_Vias_xpm[];
+#else
 static const char * Options_All_Vias_xpm[] = {
 "16 16 56 1",
 " 	c None",
@@ -73,3 +76,5 @@ static const char * Options_All_Vias_xpm[] = {
 " +@_bc:fd2:ghijk",
 "+$ :bl3:::78mmmm",
 ";> :blnop7q0:::3"};
+
+#endif

@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* Options_Track_xpm[];
+#else
 static const char * Options_Track_xpm[] = {
 "16 16 45 1",
 " 	c None",
@@ -62,3 +65,5 @@ static const char * Options_Track_xpm[] = {
 "   ,~],536,7890a",
 "   ,~^(,,,[}bbbb",
 "   ,~^cde[f1,,,("};
+
+#endif

@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* mw_Add_stub_arc_xpm[];
+#else
 static const char * mw_Add_stub_arc_xpm[] = {
 "16 16 55 1",
 " 	c None",
@@ -72,3 +75,5 @@ static const char * mw_Add_stub_arc_xpm[] = {
 "   <<<<>     >  ",
 "   <<<<>        ",
 "    >>>>        "};
+
+#endif

@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef XPMMAIN
+extern const char* Move_Pin_xpm[];
+#else
 static const char * Move_Pin_xpm[] = {
 "16 16 56 1",
 " 	c None",
@@ -73,3 +76,5 @@ static const char * Move_Pin_xpm[] = {
 "       [mno[[   ",
 "        jpq[    ",
 "         [      "};
+
+#endif
