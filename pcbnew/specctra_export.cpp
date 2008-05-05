@@ -812,12 +812,13 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IOErr
                 case S_CIRCLE:
                     // do not output a circle, freerouter does not understand it.
                     // this might be a mounting hole or something, ignore it without error
+                    break;
 
                 default:
                     {
                         wxString error;
 
-                        error.Printf( _("Unsupported DRAWSEGMENT type %s",
+                        error.Printf( _("Unsupported DRAWSEGMENT type %s"),
                           BOARD_ITEM::ShowShape( (Track_Shapes) graphic->m_Shape ).GetData() );
 
                         ThrowIOError( error );
@@ -861,6 +862,8 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IOErr
         aBoard->ComputeBoundaryBox();
 
         RECTANGLE*  rect = new RECTANGLE( boundary );
+        boundary->rectangle = rect;
+
 
         rect->layer_id = "pcb";
 
@@ -871,10 +874,6 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IOErr
 
         rect->SetCorners( mapPt( aBoard->m_BoundaryBox.GetOrigin() ),
                           mapPt( bottomRight ) );
-
-        boundary->rectangle = rect;
-
-        pcb->structure->SetBOUNDARY( boundary );
     }
 }
 
