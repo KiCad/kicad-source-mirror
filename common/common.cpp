@@ -247,8 +247,8 @@ void* MyMalloc( size_t nb_octets )
 bool ProcessExecute( const wxString& aCommandLine, int aFlags )
 {
 #ifdef __WINDOWS__
-	wxExecute(aCommandLine);
-	return true;
+    wxExecute(aCommandLine);
+    return true;
 #else
     wxProcess*  process = wxProcess::Open( aCommandLine, aFlags );
     return process != NULL;
@@ -466,3 +466,17 @@ const wxString& valeur_param( int valeur, wxString& buf_texte )
 
     return buf_texte;
 }
+
+
+wxString& operator << ( wxString& aString, const wxPoint& aPos )
+{
+    wxString temp;
+
+    aString << wxT("@ (") << valeur_param( aPos.x, temp );
+    aString << wxT(",")  << valeur_param( aPos.y, temp );
+    aString << wxT(")");
+
+    return aString;
+}
+
+
