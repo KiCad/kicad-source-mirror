@@ -34,6 +34,18 @@ public:
 
 
     /**
+     * Function GetStart
+     * returns the starting point of the graphic
+     */
+    wxPoint GetStart() const;
+
+    /**
+     * Function GetEnd
+     * returns the ending point of the graphic
+     */
+    wxPoint GetEnd() const;
+
+    /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.brd" format.
      * @param aFile The FILE to write to.
@@ -87,6 +99,19 @@ public:
     wxString GetClass() const
     {
         return wxT( "DRAWSEGMENT" );
+    }
+
+
+    /**
+     * Function GetLength
+     * returns the length of the track using the hypotenuse calculation.
+     * @return double - the length of the track
+     */
+    double  GetLength() const
+    {
+        wxPoint delta = GetEnd() - GetStart();
+
+        return hypot( delta.x, delta.y );
     }
 
 

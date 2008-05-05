@@ -144,6 +144,45 @@ bool DRAWSEGMENT::ReadDrawSegmentDescr( FILE* File, int* LineNum )
 }
 
 
+wxPoint DRAWSEGMENT::GetStart() const
+{
+    switch( m_Shape )
+    {
+    case S_ARC:
+        return m_End;  // the start of the arc is held in field m_End, center point is in m_Start.
+
+    case S_SEGMENT:
+    default:
+        return m_Start;
+    }
+}
+
+
+wxPoint DRAWSEGMENT::GetEnd() const
+{
+    switch( m_Shape )
+    {
+    case S_ARC:
+        {
+            // rotate the starting point of the arc, given by m_End, through the angle m_Angle
+            // to get the ending point of the arc.
+            wxPoint center = m_Start;       // center point of the arc
+            wxPoint start  = m_End;         // start of arc
+
+            RotatePoint( &start.x, &start.y, center.x, center.y, -m_Angle );
+
+            return start;   // after rotation, the end of the arc.
+        }
+        break;
+
+    case S_SEGMENT:
+    default:
+        return m_End;
+    }
+}
+
+
+
 void DRAWSEGMENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                       int draw_mode, const wxPoint& notUsed )
 {
@@ -249,6 +288,7 @@ void DRAWSEGMENT::Display_Infos( WinEDA_DrawFrame* frame )
 {
     int      itype;
     wxString msg;
+    wxString coords;
 
     BOARD*   board = (BOARD*) m_Parent;
     wxASSERT( board );
@@ -261,25 +301,35 @@ void DRAWSEGMENT::Display_Infos( WinEDA_DrawFrame* frame )
 
     Affiche_1_Parametre( frame, 1, _( "Type" ), msg, DARKCYAN );
 
-    Affiche_1_Parametre( frame, 16, _( "Shape" ), wxEmptyString, RED );
+    wxString    shape = _( "Shape" );
 
     if( m_Shape == S_CIRCLE )
-        Affiche_1_Parametre( frame, -1, wxEmptyString, _( "Circle" ), RED );
+        Affiche_1_Parametre( frame, 10, shape, _( "Circle" ), RED );
 
     else if( m_Shape == S_ARC )
     {
-        Affiche_1_Parametre( frame, -1, wxEmptyString, _( "  Arc  " ), RED );
-        msg.Printf( wxT( "%d" ), m_Angle );
-        Affiche_1_Parametre( frame, 32, wxT( " l.arc " ), msg, RED );
+        Affiche_1_Parametre( frame, 10, shape, _( "Arc" ), RED );
+
+        msg.Printf( wxT( "%d.%d" ), m_Angle/10, m_Angle % 10 );
+        Affiche_1_Parametre( frame, 18, _("Angle"), msg, RED );
     }
     else
-        Affiche_1_Parametre( frame, -1, wxEmptyString, _( "Segment" ), RED );
+        Affiche_1_Parametre( frame, 10, shape, _( "Segment" ), RED );
 
-    Affiche_1_Parametre( frame, 48, _( "Layer" ),
+    wxString start;
+    start << GetStart();
+
+    wxString end;
+    end << GetEnd();
+
+    Affiche_1_Parametre( frame, 22, start, end, BLACK );
+
+    Affiche_1_Parametre( frame, 36, _( "Layer" ),
                          board->GetLayerName( m_Layer ), BROWN );
 
     valeur_param( (unsigned) m_Width, msg );
-    Affiche_1_Parametre( frame, 60, _( "Width" ), msg, DARKCYAN );
+
+    Affiche_1_Parametre( frame, 50, _( "Width" ), msg, DARKCYAN );
 }
 
 
@@ -366,10 +416,18 @@ void DRAWSEGMENT::Show( int nestLevel, std::ostream& os )
 {
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
 
+    " shape=\"" << m_Shape << '"' <<
+/*
     " layer=\"" << GetLayer() << '"' <<
     " width=\"" << m_Width << '"' <<
+    " angle=\"" << m_Angle << '"' <<  // Used only for Arcs: Arc angle in 1/10 deg
+*/
+    '>' <<
     "<start" << m_Start << "/>" <<
-    "<end" << m_End << "/>";
+    "<end"   << m_End << "/>"
+    "<GetStart" << GetStart() << "/>" <<
+    "<GetEnd"   << GetEnd() << "/>"
+    ;
 
     os << "</" << GetClass().Lower().mb_str() << ">\n";
 }
