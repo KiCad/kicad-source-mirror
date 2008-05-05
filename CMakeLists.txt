@@ -25,23 +25,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
-# Include Subversion support to automagically create version header file.
-find_package( Subversion )
-if( Subversion_FOUND )
-    Subversion_WC_INFO( ${PROJECT_SOURCE_DIR} Kicad )
-    string( REGEX REPLACE "^([0-9]+)\\-([0-9]+)\\-([0-9]+).*" "\\1\\2\\3"
-            _kicad_svn_date ${Kicad_WC_LAST_CHANGED_DATE} )
-    set( KICAD_SVN_VERSION
-         "(${_kicad_svn_date} SVN-R${Kicad_WC_LAST_CHANGED_REV})" )
-
-    # Definition to conditionally use date and revision returned from the
-    # Subversion info command instead of hand coded date and revision in
-    # "include/build_verison.h".  If subversion is not found or the hand
-    # coded make files are used then the date and version information must
-    # be manually edited.
-    add_definitions( -DHAVE_SVN_VERSION )
-endif( Subversion_FOUND )
-
 # Locations for install targets.
 set(KICAD_BIN bin CACHE PATH "Location of KiCad binaries.")
 
@@ -95,9 +78,11 @@ include(${wxWidgets_USE_FILE})
 # Include MinGW resource compiler.
 include(MinGWResourceCompiler)
 
-# Generate config.h.
-configure_file( ${CMAKE_SOURCE_DIR}/CMakeModules/config.h.cmake
-                ${CMAKE_BINARY_DIR}/config.h )
+if(UNIX)
+    # Automagically create version header file.
+    include(CreateSVNVersionHeader)
+    create_svn_version_header()
+endif(UNIX)
 
 # Include paths.
 include_directories(
