@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-29 19:49+0100\n"
-"PO-Revision-Date: 2008-04-29 22:09+0100\n"
+"POT-Creation-Date: 2008-05-05 00:51+0100\n"
+"PO-Revision-Date: 2008-05-05 01:06+0100\n"
 "Last-Translator: Jerry Jacobs <jerkejacobs@gmail.com>\n"
 "Language-Team: KiCad Team <jerkejacobs@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Netherlands\n"
 "X-Poedit-Country: Dutch\n"
-"X-Poedit-Basepath: /home/jerry/.svn/kicad/kicad-svn/\n"
+"X-Poedit-Basepath: /home/jerry/.svn/kicad/kicad/\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
 "X-Poedit-SearchPath-1: eeschema\n"
@@ -111,7 +111,7 @@ msgid "millimeters"
 msgstr "millimeters"
 
 #: pcbnew/dialog_general_options.cpp:302
-#: eeschema/dialog_options.cpp:290
+#: eeschema/dialog_options.cpp:264
 #: gerbview/options.cpp:187
 msgid "Units"
 msgstr "Maat"
@@ -147,8 +147,7 @@ msgstr "Automatisch Opslaan (minuten):"
 #: pcbnew/dialog_general_options.cpp:376
 #: pcbnew/dialog_gendrill.cpp:227
 #: eeschema/netlist_control.cpp:121
-#: eeschema/dialog_cmp_graphic_properties.cpp:151
-#: eeschema/dialog_build_BOM.cpp:308
+#: eeschema/dialog_build_BOM.cpp:285
 #: share/dialog_print.cpp:167
 msgid "Options:"
 msgstr "Opties:"
@@ -179,7 +178,7 @@ msgid "Segments 45 Only"
 msgstr ""
 
 #: pcbnew/dialog_general_options.cpp:429
-#: eeschema/dialog_options.cpp:278
+#: eeschema/dialog_options.cpp:256
 msgid "Auto PAN"
 msgstr ""
 
@@ -232,16 +231,16 @@ msgstr ""
 #: pcbnew/dialog_edit_mod_text.cpp:268
 #: pcbnew/dialog_display_options.cpp:282
 #: pcbnew/dialog_pad_edit.cpp:217
-#: eeschema/dialog_edit_component_in_lib.cpp:218
+#: eeschema/dialog_edit_component_in_lib.cpp:221
 #: eeschema/pinedit-dialog.cpp:308
-#: eeschema/dialog_create_component.cpp:195
+#: eeschema/dialog_create_component.cpp:198
 #: eeschema/dialog_cmp_graphic_properties.cpp:178
-#: eeschema/dialog_edit_component_in_schematic.cpp:240
-#: eeschema/sheet.cpp:226
-#: eeschema/symbtext.cpp:174
-#: eeschema/dialog_edit_label.cpp:178
-#: eeschema/dialog_build_BOM.cpp:389
-#: eeschema/dialog_options.cpp:329
+#: eeschema/dialog_edit_component_in_schematic.cpp:241
+#: eeschema/sheet.cpp:198
+#: eeschema/symbtext.cpp:177
+#: eeschema/dialog_edit_label.cpp:181
+#: eeschema/dialog_build_BOM.cpp:346
+#: eeschema/dialog_options.cpp:288
 #: cvpcb/dialog_cvpcb_config.cpp:139
 #: cvpcb/dialog_display_options.cpp:186
 #: gerbview/select_layers_to_pcb.cpp:285
@@ -262,18 +261,15 @@ msgstr "&OK"
 #: pcbnew/dialog_pad_edit.cpp:221
 #: eeschema/netlist_control.cpp:144
 #: eeschema/netlist_control.cpp:267
-#: eeschema/dialog_edit_component_in_lib.cpp:214
+#: eeschema/dialog_edit_component_in_lib.cpp:217
 #: eeschema/pinedit-dialog.cpp:304
-#: eeschema/dialog_erc.cpp:218
-#: eeschema/dialog_create_component.cpp:200
-#: eeschema/dialog_cmp_graphic_properties.cpp:182
-#: eeschema/dialog_edit_component_in_schematic.cpp:232
-#: eeschema/sheet.cpp:221
-#: eeschema/symbtext.cpp:178
-#: eeschema/plothpgl.cpp:381
-#: eeschema/dialog_edit_label.cpp:183
-#: eeschema/dialog_build_BOM.cpp:394
-#: eeschema/dialog_options.cpp:335
+#: eeschema/dialog_create_component.cpp:203
+#: eeschema/dialog_cmp_graphic_properties.cpp:183
+#: eeschema/dialog_edit_component_in_schematic.cpp:233
+#: eeschema/sheet.cpp:194
+#: eeschema/symbtext.cpp:182
+#: eeschema/dialog_edit_label.cpp:186
+#: eeschema/dialog_options.cpp:293
 #: cvpcb/dialog_display_options.cpp:191
 #: gerbview/select_layers_to_pcb.cpp:289
 #: share/setpage.cpp:448
@@ -352,11 +348,11 @@ msgid "Component [%s]: footprint <%s> not found"
 msgstr ""
 
 #: pcbnew/dialog_drc.cpp:430
-#: pcbnew/dialog_netlist.cpp:192
-#: eeschema/dialog_edit_component_in_lib.cpp:166
-#: eeschema/dialog_erc.cpp:237
-#: eeschema/dialog_create_component.cpp:176
-#: eeschema/dialog_edit_component_in_schematic.cpp:201
+#: pcbnew/dialog_netlist.cpp:193
+#: eeschema/dialog_edit_component_in_lib.cpp:169
+#: eeschema/dialog_erc.cpp:239
+#: eeschema/dialog_create_component.cpp:179
+#: eeschema/dialog_edit_component_in_schematic.cpp:202
 msgid "Options"
 msgstr "Opties"
 
@@ -517,8 +513,9 @@ msgstr ""
 
 #: pcbnew/xchgmod.cpp:137
 #: pcbnew/pcbplot.cpp:284
+#: pcbnew/dialog_netlist.cpp:232
 #: eeschema/annotate_dialog.cpp:230
-#: eeschema/plotps.cpp:208
+#: eeschema/plotps.cpp:209
 #: share/zoom.cpp:449
 msgid "Close"
 msgstr "Sluiten"
@@ -596,8 +593,8 @@ msgstr "GenCAD bestand:"
 #: pcbnew/librairi.cpp:454
 #: pcbnew/librairi.cpp:604
 #: pcbnew/librairi.cpp:807
-#: eeschema/plotps.cpp:389
-#: eeschema/plothpgl.cpp:702
+#: eeschema/plotps.cpp:392
+#: eeschema/plothpgl.cpp:601
 #: cvpcb/genequiv.cpp:42
 #: gerbview/export_to_pcbnew.cpp:75
 #: common/hotkeys_basic.cpp:385
@@ -937,14 +934,14 @@ msgid "Net Code"
 msgstr ""
 
 #: pcbnew/affiche.cpp:52
-#: pcbnew/class_board.cpp:546
+#: pcbnew/class_board.cpp:551
 #: pcbnew/class_module.cpp:1131
 msgid "Pads"
 msgstr ""
 
 #: pcbnew/affiche.cpp:63
 #: pcbnew/plotps.cpp:363
-#: pcbnew/class_board.cpp:556
+#: pcbnew/class_board.cpp:561
 msgid "Vias"
 msgstr ""
 
@@ -1099,9 +1096,9 @@ msgstr "Samenvoegen"
 
 #: pcbnew/clean.cpp:464
 #: pcbnew/dialog_pad_edit.cpp:186
-#: eeschema/dialog_erc.cpp:192
-#: eeschema/dialog_erc.cpp:196
-#: eeschema/dialog_edit_component_in_schematic.cpp:171
+#: eeschema/dialog_erc.cpp:193
+#: eeschema/dialog_erc.cpp:197
+#: eeschema/dialog_edit_component_in_schematic.cpp:172
 msgid "0"
 msgstr "0"
 
@@ -1138,26 +1135,26 @@ msgstr ""
 msgid "Segm"
 msgstr ""
 
-#: pcbnew/zones_by_polygon.cpp:337
-#: pcbnew/zones_by_polygon.cpp:378
-#: pcbnew/zones_by_polygon.cpp:674
+#: pcbnew/zones_by_polygon.cpp:340
+#: pcbnew/zones_by_polygon.cpp:381
+#: pcbnew/zones_by_polygon.cpp:680
 msgid "Area: DRC outline error"
 msgstr ""
 
-#: pcbnew/zones_by_polygon.cpp:563
+#: pcbnew/zones_by_polygon.cpp:569
 msgid "DRC error: this start point is inside or too close an other area"
 msgstr ""
 
-#: pcbnew/zones_by_polygon.cpp:622
+#: pcbnew/zones_by_polygon.cpp:628
 msgid "DRC error: closing this area creates a drc error with an other area"
 msgstr ""
 
-#: pcbnew/zones_by_polygon.cpp:851
+#: pcbnew/zones_by_polygon.cpp:857
 msgid "No Net"
 msgstr ""
 
-#: pcbnew/zones_by_polygon.cpp:853
-#: pcbnew/class_zone.cpp:601
+#: pcbnew/zones_by_polygon.cpp:859
+#: pcbnew/class_zone.cpp:628
 #: pcbnew/class_track.cpp:868
 #, fuzzy
 msgid "NetName"
@@ -1288,7 +1285,7 @@ msgstr "(Deselecteren)"
 #: pcbnew/sel_layer.cpp:146
 #: pcbnew/class_text_mod.cpp:418
 #: pcbnew/class_text_mod.cpp:422
-#: pcbnew/class_zone.cpp:610
+#: pcbnew/class_zone.cpp:637
 #: pcbnew/class_module.cpp:1119
 #: pcbnew/class_track.cpp:909
 #: pcbnew/class_pad.cpp:986
@@ -1341,8 +1338,8 @@ msgstr "Top Laag"
 msgid "Bottom Layer"
 msgstr "Bodem Laag"
 
-#: pcbnew/sel_layer.cpp:360
-msgid "The Top Layer and Bottom Layer must differ"
+#: pcbnew/sel_layer.cpp:341
+msgid "Warning: The Top Layer and Bottom Layer are same."
 msgstr ""
 
 #: pcbnew/class_text_mod.cpp:394
@@ -1374,7 +1371,7 @@ msgstr "Module"
 
 #: pcbnew/class_text_mod.cpp:408
 #: pcbnew/class_marker.cpp:133
-#: pcbnew/class_zone.cpp:581
+#: pcbnew/class_zone.cpp:608
 #: pcbnew/class_track.cpp:852
 #: pcbnew/class_drawsegment.cpp:262
 #: gerbview/affiche.cpp:94
@@ -1384,7 +1381,7 @@ msgstr "Type"
 #: pcbnew/class_text_mod.cpp:412
 #: pcbnew/dialog_display_options.cpp:275
 #: pcbnew/class_pcb_text.cpp:196
-#: eeschema/dialog_options.cpp:314
+#: eeschema/dialog_options.cpp:280
 #: gerbview/affiche.cpp:43
 msgid "No"
 msgstr "Nee"
@@ -1392,7 +1389,7 @@ msgstr "Nee"
 #: pcbnew/class_text_mod.cpp:414
 #: pcbnew/dialog_display_options.cpp:274
 #: pcbnew/class_pcb_text.cpp:198
-#: eeschema/dialog_options.cpp:313
+#: eeschema/dialog_options.cpp:279
 #: gerbview/affiche.cpp:45
 msgid "Yes"
 msgstr "Ja"
@@ -1417,7 +1414,7 @@ msgstr ""
 #: pcbnew/class_edge_mod.cpp:297
 #: pcbnew/class_pcb_text.cpp:204
 #: eeschema/affiche.cpp:187
-#: eeschema/dialog_cmp_graphic_properties.cpp:188
+#: eeschema/dialog_cmp_graphic_properties.cpp:189
 #: gerbview/affiche.cpp:52
 #: gerbview/affiche.cpp:114
 msgid "Width"
@@ -1647,7 +1644,7 @@ msgstr "Lijn"
 #: pcbnew/dialog_display_options.cpp:230
 #: pcbnew/dialog_display_options.cpp:245
 #: pcbnew/dialog_display_options.cpp:267
-#: eeschema/dialog_cmp_graphic_properties.cpp:168
+#: eeschema/dialog_cmp_graphic_properties.cpp:169
 #: gerbview/options.cpp:298
 #: gerbview/options.cpp:321
 msgid "Filled"
@@ -1710,7 +1707,7 @@ msgid "Switch off all of the copper layers"
 msgstr "Uitzetten op alle koper lagen"
 
 #: pcbnew/set_color.cpp:361
-#: eeschema/eelayer.cpp:259
+#: eeschema/eelayer.cpp:260
 #: gerbview/set_color.cpp:333
 msgid "Apply"
 msgstr "Toepassen"
@@ -1760,9 +1757,9 @@ msgstr ""
 #: pcbnew/cotation.cpp:113
 #: pcbnew/dialog_edit_module.cpp:243
 #: pcbnew/dialog_edit_module.cpp:289
-#: eeschema/dialog_edit_component_in_schematic.cpp:180
+#: eeschema/dialog_edit_component_in_schematic.cpp:181
 #: eeschema/onrightclick.cpp:318
-#: eeschema/dialog_options.cpp:262
+#: eeschema/dialog_options.cpp:247
 msgid "Normal"
 msgstr "Normaal"
 
@@ -1782,10 +1779,10 @@ msgstr "Vorm Opties"
 #: pcbnew/pcbtexte.cpp:129
 #: pcbnew/mirepcb.cpp:108
 #: pcbnew/cotation.cpp:125
-#: eeschema/pinedit-dialog.cpp:273
-#: eeschema/pinedit-dialog.cpp:279
-#: eeschema/sheet.cpp:194
-#: eeschema/sheet.cpp:205
+#: eeschema/pinedit-dialog.cpp:274
+#: eeschema/pinedit-dialog.cpp:280
+#: eeschema/sheet.cpp:177
+#: eeschema/sheet.cpp:183
 #: common/wxwineda.cpp:91
 msgid "Size"
 msgstr "Grote"
@@ -2108,7 +2105,7 @@ msgstr ""
 #: pcbnew/menubarpcb.cpp:296
 #: eeschema/menubar.cpp:395
 #: cvpcb/tool_cvpcb.cpp:158
-#: kicad/buildmnu.cpp:198
+#: kicad/buildmnu.cpp:190
 #: gerbview/tool_gerber.cpp:149
 msgid "&Contents"
 msgstr "&Inhoud"
@@ -2122,7 +2119,7 @@ msgstr "Open de pcbnew handleiding"
 #: pcbnew/menubarpcb.cpp:300
 #: eeschema/menubar.cpp:400
 #: cvpcb/tool_cvpcb.cpp:162
-#: kicad/buildmnu.cpp:203
+#: kicad/buildmnu.cpp:195
 #: gerbview/tool_gerber.cpp:151
 msgid "&About"
 msgstr "&Over"
@@ -2131,7 +2128,7 @@ msgstr "&Over"
 #: pcbnew/menubarpcb.cpp:300
 #: eeschema/menubar.cpp:400
 #: cvpcb/tool_cvpcb.cpp:163
-#: kicad/buildmnu.cpp:203
+#: kicad/buildmnu.cpp:195
 #: gerbview/tool_gerber.cpp:152
 msgid "About this application"
 msgstr "Over deze applicatie"
@@ -2160,7 +2157,7 @@ msgstr "&3D Display"
 #: pcbnew/menubarpcb.cpp:318
 #: eeschema/menubar.cpp:410
 #: cvpcb/tool_cvpcb.cpp:169
-#: kicad/buildmnu.cpp:211
+#: kicad/buildmnu.cpp:203
 #: gerbview/tool_gerber.cpp:159
 msgid "&Help"
 msgstr "&Help"
@@ -2445,7 +2442,7 @@ msgstr ""
 
 #: pcbnew/tool_modedit.cpp:285
 #: pcbnew/tool_pcb.cpp:593
-#: eeschema/plotps.cpp:171
+#: eeschema/plotps.cpp:172
 #: share/zoom.cpp:368
 msgid "Auto"
 msgstr "Automatisch"
@@ -2592,23 +2589,23 @@ msgstr "Baan Breedte"
 msgid "Mask clearance"
 msgstr ""
 
-#: pcbnew/class_board.cpp:559
+#: pcbnew/class_board.cpp:564
 msgid "Nodes"
 msgstr ""
 
-#: pcbnew/class_board.cpp:562
+#: pcbnew/class_board.cpp:567
 msgid "Links"
 msgstr ""
 
-#: pcbnew/class_board.cpp:565
+#: pcbnew/class_board.cpp:570
 msgid "Nets"
 msgstr ""
 
-#: pcbnew/class_board.cpp:568
+#: pcbnew/class_board.cpp:573
 msgid "Connect"
 msgstr "Verbinden"
 
-#: pcbnew/class_board.cpp:571
+#: pcbnew/class_board.cpp:576
 #: eeschema/eelayer.h:115
 msgid "NoConn"
 msgstr "GeenConn"
@@ -2676,7 +2673,10 @@ msgstr ""
 
 #: pcbnew/dialog_freeroute_exchange.cpp:222
 #: pcbnew/dialog_gendrill.cpp:282
-#: pcbnew/dialog_netlist.cpp:248
+#: pcbnew/dialog_netlist.cpp:253
+#: eeschema/dialog_erc.cpp:219
+#: eeschema/plothpgl.cpp:291
+#: eeschema/dialog_build_BOM.cpp:350
 #: share/dialog_print.cpp:222
 #: share/svg_print.cpp:258
 msgid "&Close"
@@ -2690,31 +2690,31 @@ msgstr "Tekst is REFERENTIE!"
 msgid "Text is VALUE!"
 msgstr "Tekst is WAARDE!"
 
-#: pcbnew/class_zone.cpp:574
+#: pcbnew/class_zone.cpp:601
 #: pcbnew/class_board_item.cpp:156
 msgid "Zone Outline"
 msgstr ""
 
-#: pcbnew/class_zone.cpp:578
+#: pcbnew/class_zone.cpp:605
 #: pcbnew/class_board_item.cpp:161
 msgid "(Cutout)"
 msgstr ""
 
-#: pcbnew/class_zone.cpp:598
+#: pcbnew/class_zone.cpp:625
 #: pcbnew/class_board_item.cpp:180
 msgid "Not Found"
 msgstr "Niet Gevonden"
 
-#: pcbnew/class_zone.cpp:606
+#: pcbnew/class_zone.cpp:633
 #: pcbnew/class_track.cpp:873
 msgid "NetCode"
 msgstr "NetCode"
 
-#: pcbnew/class_zone.cpp:614
+#: pcbnew/class_zone.cpp:641
 msgid "Corners"
 msgstr "Hoeken"
 
-#: pcbnew/class_zone.cpp:618
+#: pcbnew/class_zone.cpp:645
 msgid "Hatch lines"
 msgstr ""
 
@@ -2967,7 +2967,7 @@ msgid "Board modified, Save before exit ?"
 msgstr ""
 
 #: pcbnew/pcbframe.cpp:281
-#: eeschema/schframe.cpp:283
+#: eeschema/schframe.cpp:309
 #: cvpcb/cvframe.cpp:178
 #: common/confirm.cpp:119
 msgid "Confirmation"
@@ -2990,12 +2990,12 @@ msgid "Display Polar Coords"
 msgstr ""
 
 #: pcbnew/pcbframe.cpp:400
-#: eeschema/schframe.cpp:383
+#: eeschema/schframe.cpp:409
 msgid "Grid not show"
 msgstr "Raster Verbergen"
 
 #: pcbnew/pcbframe.cpp:400
-#: eeschema/schframe.cpp:383
+#: eeschema/schframe.cpp:409
 msgid "Show Grid"
 msgstr "Raster Tonen"
 
@@ -3063,7 +3063,7 @@ msgstr ""
 msgid "Via"
 msgstr ""
 
-#: pcbnew/solve.cpp:229
+#: pcbnew/solve.cpp:233
 msgid "Abort routing?"
 msgstr "Routen onderbreken?"
 
@@ -3149,7 +3149,7 @@ msgid "Pad options:"
 msgstr "Pad opties:"
 
 #: pcbnew/dialog_zones_by_polygon.cpp:193
-#: eeschema/dialog_options.cpp:302
+#: eeschema/dialog_options.cpp:273
 msgid "Any"
 msgstr ""
 
@@ -3288,7 +3288,7 @@ msgid "Speed (cm/s)"
 msgstr "Snelheid (cm/s)"
 
 #: pcbnew/dialog_gendrill.cpp:221
-#: eeschema/plothpgl.cpp:301
+#: eeschema/plothpgl.cpp:256
 msgid "Pen Number"
 msgstr "Pen Nummer"
 
@@ -3349,48 +3349,48 @@ msgstr ""
 msgid "Delete Layer "
 msgstr "Verwijder Laag"
 
-#: pcbnew/dialog_netlist.cpp:161
+#: pcbnew/dialog_netlist.cpp:162
 #: pcbnew/class_board_item.cpp:76
-#: eeschema/dialog_create_component.cpp:164
+#: eeschema/dialog_create_component.cpp:167
 #: eeschema/edit_component_in_schematic.cpp:754
 #: eeschema/onrightclick.cpp:332
 #: eeschema/eelayer.h:152
 msgid "Reference"
 msgstr "Referentie"
 
-#: pcbnew/dialog_netlist.cpp:162
+#: pcbnew/dialog_netlist.cpp:163
 msgid "Timestamp"
 msgstr "Tijdstempel"
 
-#: pcbnew/dialog_netlist.cpp:163
+#: pcbnew/dialog_netlist.cpp:164
 msgid "Module Selection:"
 msgstr "Module Selectie:"
 
-#: pcbnew/dialog_netlist.cpp:166
+#: pcbnew/dialog_netlist.cpp:167
 msgid ""
 "Select how footprints are reconized:\n"
 "by their reference (U1, R3...) (normal setting)\n"
 "or their time stamp (special setting after a full schematic reannotation)"
 msgstr ""
 
-#: pcbnew/dialog_netlist.cpp:170
-#: pcbnew/dialog_netlist.cpp:184
+#: pcbnew/dialog_netlist.cpp:171
+#: pcbnew/dialog_netlist.cpp:185
 msgid "Keep"
 msgstr "Behouden"
 
-#: pcbnew/dialog_netlist.cpp:171
+#: pcbnew/dialog_netlist.cpp:172
 msgid "Change"
 msgstr "Verander"
 
-#: pcbnew/dialog_netlist.cpp:172
+#: pcbnew/dialog_netlist.cpp:173
 msgid "Exchange Module:"
 msgstr "Module Uitwisselen:"
 
-#: pcbnew/dialog_netlist.cpp:175
+#: pcbnew/dialog_netlist.cpp:176
 msgid "Keep or change an existing footprint when the netlist gives a different footprint"
 msgstr ""
 
-#: pcbnew/dialog_netlist.cpp:185
+#: pcbnew/dialog_netlist.cpp:186
 #: pcbnew/onrightclick.cpp:614
 #: pcbnew/onrightclick.cpp:795
 #: pcbnew/onrightclick.cpp:899
@@ -3400,58 +3400,58 @@ msgstr ""
 msgid "Delete"
 msgstr "Verwijderen"
 
-#: pcbnew/dialog_netlist.cpp:186
+#: pcbnew/dialog_netlist.cpp:187
 msgid "Bad Tracks Deletion:"
 msgstr ""
 
-#: pcbnew/dialog_netlist.cpp:189
+#: pcbnew/dialog_netlist.cpp:190
 msgid "Keep or delete bad tracks after a netlist change"
 msgstr ""
 
-#: pcbnew/dialog_netlist.cpp:196
+#: pcbnew/dialog_netlist.cpp:197
 #, fuzzy
 msgid "Display Warnings"
 msgstr "Waarschuwingen Weergeven"
 
-#: pcbnew/dialog_netlist.cpp:200
+#: pcbnew/dialog_netlist.cpp:201
 msgid "Remove Extra Footprints"
 msgstr ""
 
-#: pcbnew/dialog_netlist.cpp:203
+#: pcbnew/dialog_netlist.cpp:204
 msgid ""
 "Remove footprints found on the Board but not in netlist\n"
 "Note: only not locked footprints will be removed"
 msgstr ""
 
-#: pcbnew/dialog_netlist.cpp:211
+#: pcbnew/dialog_netlist.cpp:212
 msgid "Browse Netlist Files"
 msgstr ""
 
-#: pcbnew/dialog_netlist.cpp:215
+#: pcbnew/dialog_netlist.cpp:216
 msgid "Read Current Netlist"
 msgstr ""
 
-#: pcbnew/dialog_netlist.cpp:219
+#: pcbnew/dialog_netlist.cpp:220
 msgid "Footprints Test"
 msgstr ""
 
-#: pcbnew/dialog_netlist.cpp:221
+#: pcbnew/dialog_netlist.cpp:222
 msgid "Read the current neltist file and list missing and extra footprints"
 msgstr ""
 
-#: pcbnew/dialog_netlist.cpp:225
+#: pcbnew/dialog_netlist.cpp:226
 msgid "Rebuild Board Connectivity"
 msgstr ""
 
-#: pcbnew/dialog_netlist.cpp:227
+#: pcbnew/dialog_netlist.cpp:228
 msgid "Rebuild the full ratsnest (usefull after a manual pad netname edition)"
 msgstr ""
 
-#: pcbnew/dialog_netlist.cpp:231
+#: pcbnew/dialog_netlist.cpp:236
 msgid "Netlist File:"
 msgstr ""
 
-#: pcbnew/dialog_netlist.cpp:309
+#: pcbnew/dialog_netlist.cpp:316
 msgid "Netlist Selection:"
 msgstr ""
 
@@ -3526,7 +3526,7 @@ msgid "Library %s not found"
 msgstr "Bibliotheek %s niet gevonden"
 
 #: pcbnew/librairi.cpp:527
-#: eeschema/symbtext.cpp:140
+#: eeschema/symbtext.cpp:143
 #: common/get_component_dialog.cpp:98
 msgid "Name:"
 msgstr "Naam:"
@@ -3650,7 +3650,7 @@ msgid "Display other items:"
 msgstr ""
 
 #: pcbnew/dialog_display_options.cpp:276
-#: eeschema/dialog_options.cpp:317
+#: eeschema/dialog_options.cpp:281
 msgid "Show page limits"
 msgstr "Toon pagina limieten"
 
@@ -3704,7 +3704,7 @@ msgstr "Plak Onderdeel"
 #: pcbnew/tool_pcb.cpp:263
 #: gerbview/tool_gerber.cpp:261
 msgid "Undelete"
-msgstr ""
+msgstr "Ongedaan maken"
 
 #: pcbnew/tool_pcb.cpp:266
 msgid "Print Board"
@@ -3842,7 +3842,7 @@ msgstr "Zoom "
 msgid "Grid"
 msgstr "Raster"
 
-#: pcbnew/tool_pcb.cpp:735
+#: pcbnew/tool_pcb.cpp:737
 #, fuzzy
 msgid "+/- to switch"
 msgstr "+/- voor omwisselen"
@@ -3869,12 +3869,12 @@ msgid "90"
 msgstr "90"
 
 #: pcbnew/dialog_pad_edit.cpp:188
-#: eeschema/dialog_edit_component_in_schematic.cpp:174
+#: eeschema/dialog_edit_component_in_schematic.cpp:175
 msgid "-90"
 msgstr "-90"
 
 #: pcbnew/dialog_pad_edit.cpp:189
-#: eeschema/dialog_edit_component_in_schematic.cpp:173
+#: eeschema/dialog_edit_component_in_schematic.cpp:174
 msgid "180"
 msgstr "180"
 
@@ -4058,7 +4058,7 @@ msgid "Change module(s)"
 msgstr "Verander module(s)"
 
 #: pcbnew/dialog_edit_module.cpp:193
-#: eeschema/dialog_edit_component_in_lib.cpp:203
+#: eeschema/dialog_edit_component_in_lib.cpp:206
 #: eeschema/onrightclick.cpp:368
 msgid "Doc"
 msgstr ""
@@ -4742,7 +4742,7 @@ msgstr ""
 #: pcbnew/class_board_item.cpp:41
 #: eeschema/edit_component_in_schematic.cpp:831
 #: eeschema/component_class.cpp:74
-#: eeschema/dialog_build_BOM.cpp:328
+#: eeschema/dialog_build_BOM.cpp:300
 msgid "Footprint"
 msgstr ""
 
@@ -4980,7 +4980,7 @@ msgstr ""
 #: pcbnew/menubarpcb.cpp:160
 #: eeschema/menubar.cpp:115
 #: cvpcb/tool_cvpcb.cpp:125
-#: kicad/buildmnu.cpp:130
+#: kicad/buildmnu.cpp:122
 #: gerbview/tool_gerber.cpp:93
 msgid "E&xit"
 msgstr "A&fsluiten"
@@ -5035,7 +5035,7 @@ msgstr "Instellingen O&pslaan"
 #: eeschema/menubar.cpp:381
 #: gerbview/tool_gerber.cpp:123
 msgid "Save application preferences"
-msgstr ""
+msgstr "Applicatie instellingen opslaan"
 
 #: pcbnew/menubarpcb.cpp:209
 #: eeschema/menubar.cpp:384
@@ -5064,7 +5064,7 @@ msgstr "Teksten en Tekeningen"
 #: pcbnew/menubarpcb.cpp:243
 #: gerbview/tool_gerber.cpp:122
 msgid "&Save Setup"
-msgstr ""
+msgstr "Instellingen &Opslaan"
 
 #: pcbnew/menubarpcb.cpp:244
 msgid "Save options in current directory"
@@ -5137,7 +5137,7 @@ msgstr "&Bestand"
 #: pcbnew/menubarpcb.cpp:313
 #: eeschema/menubar.cpp:409
 #: cvpcb/tool_cvpcb.cpp:168
-#: kicad/buildmnu.cpp:210
+#: kicad/buildmnu.cpp:202
 #: gerbview/tool_gerber.cpp:155
 #: 3d-viewer/3d_toolbar.cpp:119
 msgid "&Preferences"
@@ -5489,7 +5489,7 @@ msgid "Current Part: <%s>"
 msgstr "Huidige Onderdeel: <%s>"
 
 #: eeschema/netlist.cpp:162
-#: eeschema/dialog_build_BOM.cpp:286
+#: eeschema/dialog_build_BOM.cpp:271
 #, fuzzy
 msgid "List"
 msgstr "Lijst"
@@ -5573,43 +5573,43 @@ msgstr ""
 msgid "Annotation"
 msgstr ""
 
-#: eeschema/annotate_dialog.cpp:257
+#: eeschema/annotate_dialog.cpp:259
 msgid "Clear and annotate all of the components "
 msgstr ""
 
-#: eeschema/annotate_dialog.cpp:259
+#: eeschema/annotate_dialog.cpp:261
 msgid "Annotate only the unannotated components "
 msgstr ""
 
-#: eeschema/annotate_dialog.cpp:261
+#: eeschema/annotate_dialog.cpp:263
 #, fuzzy
 msgid "on the entire schematic?"
 msgstr "op het het gehele schema?"
 
-#: eeschema/annotate_dialog.cpp:263
+#: eeschema/annotate_dialog.cpp:265
 msgid "on the current sheet?"
 msgstr "op de huidige layout?"
 
-#: eeschema/annotate_dialog.cpp:265
+#: eeschema/annotate_dialog.cpp:267
 msgid ""
 "\n"
 "\n"
 "This operation will change the current annotation and cannot be undone."
 msgstr ""
 
-#: eeschema/annotate_dialog.cpp:285
+#: eeschema/annotate_dialog.cpp:287
 msgid "Clear the existing annotation for "
 msgstr ""
 
-#: eeschema/annotate_dialog.cpp:287
+#: eeschema/annotate_dialog.cpp:289
 msgid "the entire schematic?"
 msgstr "het gehele schema?"
 
-#: eeschema/annotate_dialog.cpp:289
+#: eeschema/annotate_dialog.cpp:291
 msgid "the current sheet?"
 msgstr "de huidige layout?"
 
-#: eeschema/annotate_dialog.cpp:291
+#: eeschema/annotate_dialog.cpp:293
 msgid ""
 "\n"
 "\n"
@@ -5617,7 +5617,7 @@ msgid ""
 msgstr ""
 
 #: eeschema/affiche.cpp:22
-#: eeschema/dialog_create_component.cpp:157
+#: eeschema/dialog_create_component.cpp:160
 msgid "Name"
 msgstr "Naam"
 
@@ -5677,26 +5677,26 @@ msgid "Lengh"
 msgstr "Lengte"
 
 #: eeschema/affiche.cpp:101
-#: eeschema/pinedit-dialog.cpp:290
-#: eeschema/dialog_edit_label.cpp:147
+#: eeschema/pinedit-dialog.cpp:291
+#: eeschema/dialog_edit_label.cpp:150
 msgid "Up"
 msgstr "Boven"
 
 #: eeschema/affiche.cpp:104
-#: eeschema/pinedit-dialog.cpp:291
-#: eeschema/dialog_edit_label.cpp:149
+#: eeschema/pinedit-dialog.cpp:292
+#: eeschema/dialog_edit_label.cpp:152
 msgid "Down"
 msgstr "Beneden"
 
 #: eeschema/affiche.cpp:107
-#: eeschema/pinedit-dialog.cpp:289
-#: eeschema/dialog_edit_label.cpp:148
+#: eeschema/pinedit-dialog.cpp:290
+#: eeschema/dialog_edit_label.cpp:151
 msgid "Left"
 msgstr "Links"
 
 #: eeschema/affiche.cpp:110
-#: eeschema/pinedit-dialog.cpp:288
-#: eeschema/dialog_edit_label.cpp:146
+#: eeschema/pinedit-dialog.cpp:289
+#: eeschema/dialog_edit_label.cpp:149
 msgid "Right"
 msgstr "Rechts"
 
@@ -5713,7 +5713,7 @@ msgid "Unit"
 msgstr ""
 
 #: eeschema/affiche.cpp:181
-#: eeschema/dialog_edit_component_in_schematic.cpp:190
+#: eeschema/dialog_edit_component_in_schematic.cpp:191
 #: eeschema/onrightclick.cpp:340
 msgid "Convert"
 msgstr "Converteren"
@@ -5828,7 +5828,7 @@ msgid "Part %c"
 msgstr "Onderdeel %c"
 
 #: eeschema/edit_component_in_lib.cpp:168
-#: eeschema/dialog_edit_component_in_lib.h:43
+#: eeschema/dialog_edit_component_in_lib.h:56
 msgid "Lib Component Properties"
 msgstr ""
 
@@ -5841,7 +5841,7 @@ msgid "(alias of "
 msgstr ""
 
 #: eeschema/edit_component_in_lib.cpp:216
-#: eeschema/dialog_edit_component_in_lib.cpp:207
+#: eeschema/dialog_edit_component_in_lib.cpp:210
 msgid "Alias"
 msgstr ""
 
@@ -5859,7 +5859,7 @@ msgid "Footprints"
 msgstr ""
 
 #: eeschema/edit_component_in_lib.cpp:401
-#: eeschema/dialog_create_component.cpp:180
+#: eeschema/dialog_create_component.cpp:183
 msgid "As Convert"
 msgstr ""
 
@@ -5868,12 +5868,12 @@ msgid "Show Pin Num"
 msgstr ""
 
 #: eeschema/edit_component_in_lib.cpp:418
-#: eeschema/dialog_create_component.cpp:251
+#: eeschema/dialog_create_component.cpp:254
 msgid "Show Pin Name"
 msgstr ""
 
 #: eeschema/edit_component_in_lib.cpp:429
-#: eeschema/dialog_create_component.cpp:255
+#: eeschema/dialog_create_component.cpp:258
 msgid "Pin Name Inside"
 msgstr ""
 
@@ -5900,19 +5900,19 @@ msgid "Top justify"
 msgstr ""
 
 #: eeschema/edit_component_in_lib.cpp:484
-#: eeschema/dialog_edit_component_in_schematic.cpp:225
+#: eeschema/dialog_edit_component_in_schematic.cpp:226
 #: eeschema/eelayer.h:164
 msgid "Fields"
 msgstr "Velden"
 
 #: eeschema/edit_component_in_lib.cpp:497
-#: eeschema/dialog_edit_component_in_schematic.cpp:211
+#: eeschema/dialog_edit_component_in_schematic.cpp:212
 msgid "Show Text"
 msgstr "Toon Tekst"
 
 #: eeschema/edit_component_in_lib.cpp:502
-#: eeschema/dialog_edit_component_in_schematic.cpp:215
-#: eeschema/symbtext.cpp:167
+#: eeschema/dialog_edit_component_in_schematic.cpp:216
+#: eeschema/symbtext.cpp:170
 msgid "Vertical"
 msgstr "Verticaal"
 
@@ -5999,80 +5999,81 @@ msgstr ""
 msgid "New FootprintFilter:"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_lib.cpp:136
+#: eeschema/dialog_edit_component_in_lib.cpp:139
 msgid "General :"
 msgstr "Algemeen :"
 
-#: eeschema/dialog_edit_component_in_lib.cpp:144
-msgid "Number of Parts:"
+#: eeschema/dialog_edit_component_in_lib.cpp:147
+#, fuzzy
+msgid "Number of Units:"
 msgstr "Aantal Onderdelen:"
 
-#: eeschema/dialog_edit_component_in_lib.cpp:152
-#: eeschema/dialog_create_component.cpp:259
+#: eeschema/dialog_edit_component_in_lib.cpp:155
+#: eeschema/dialog_create_component.cpp:262
 msgid "Skew:"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_lib.cpp:158
-#: eeschema/dialog_create_component.cpp:184
+#: eeschema/dialog_edit_component_in_lib.cpp:161
+#: eeschema/dialog_create_component.cpp:187
 msgid "Power Symbol"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_lib.cpp:162
-#: eeschema/dialog_create_component.cpp:188
-#: eeschema/dialog_edit_component_in_schematic.cpp:187
+#: eeschema/dialog_edit_component_in_lib.cpp:165
+#: eeschema/dialog_create_component.cpp:191
+#: eeschema/dialog_edit_component_in_schematic.cpp:188
 msgid "Parts are locked"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_lib.cpp:172
+#: eeschema/dialog_edit_component_in_lib.cpp:175
 msgid "Doc:"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_lib.cpp:179
+#: eeschema/dialog_edit_component_in_lib.cpp:182
 msgid "Keywords:"
 msgstr "Zoekwoorden:"
 
-#: eeschema/dialog_edit_component_in_lib.cpp:186
+#: eeschema/dialog_edit_component_in_lib.cpp:189
 msgid "DocFileName:"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_lib.cpp:195
+#: eeschema/dialog_edit_component_in_lib.cpp:198
 #, fuzzy
 msgid "Copy Doc"
 msgstr "Kopieer Doc"
 
-#: eeschema/dialog_edit_component_in_lib.cpp:199
+#: eeschema/dialog_edit_component_in_lib.cpp:202
 msgid "Browse DocFiles"
 msgstr ""
 
-#: eeschema/pinedit-dialog.cpp:233
+#: eeschema/pinedit-dialog.cpp:234
 msgid "Pin Name :"
 msgstr "Pen Naam :"
 
-#: eeschema/pinedit-dialog.cpp:239
+#: eeschema/pinedit-dialog.cpp:240
 msgid "Pin Num :"
 msgstr "Pen Num :"
 
-#: eeschema/pinedit-dialog.cpp:247
+#: eeschema/pinedit-dialog.cpp:248
 msgid " Pin Options :"
 msgstr " Pen Opties :"
 
-#: eeschema/pinedit-dialog.cpp:252
+#: eeschema/pinedit-dialog.cpp:253
 msgid "Pin lenght :"
 msgstr "Pen lengte :"
 
-#: eeschema/pinedit-dialog.cpp:258
-#: eeschema/dialog_cmp_graphic_properties.cpp:155
-#: eeschema/symbtext.cpp:159
+#: eeschema/pinedit-dialog.cpp:259
+#: eeschema/dialog_cmp_graphic_properties.cpp:156
+#: eeschema/symbtext.cpp:162
 msgid "Common to Units"
 msgstr ""
 
-#: eeschema/pinedit-dialog.cpp:262
-#: eeschema/dialog_cmp_graphic_properties.cpp:159
-#: eeschema/symbtext.cpp:163
+#: eeschema/pinedit-dialog.cpp:263
+#: eeschema/dialog_cmp_graphic_properties.cpp:160
+#: eeschema/symbtext.cpp:166
 msgid "Common to convert"
 msgstr ""
 
-#: eeschema/pinedit-dialog.cpp:266
+#: eeschema/pinedit-dialog.cpp:267
 msgid "No Draw"
 msgstr ""
 
@@ -6115,55 +6116,55 @@ msgstr ""
 msgid "low out"
 msgstr ""
 
-#: eeschema/pinedit-dialog.cpp:325
+#: eeschema/pinedit-dialog.cpp:324
 msgid "Pin Shape:"
 msgstr "Pen Vorm:"
 
-#: eeschema/pinedit-dialog.cpp:331
-#: eeschema/dialog_edit_label.cpp:157
+#: eeschema/pinedit-dialog.cpp:330
+#: eeschema/dialog_edit_label.cpp:160
 msgid "Input"
 msgstr "Ingang"
 
-#: eeschema/pinedit-dialog.cpp:332
-#: eeschema/dialog_edit_label.cpp:158
+#: eeschema/pinedit-dialog.cpp:331
+#: eeschema/dialog_edit_label.cpp:161
 msgid "Output"
 msgstr "Uitgang"
 
-#: eeschema/pinedit-dialog.cpp:333
-#: eeschema/dialog_edit_label.cpp:159
+#: eeschema/pinedit-dialog.cpp:332
+#: eeschema/dialog_edit_label.cpp:162
 msgid "Bidi"
 msgstr ""
 
-#: eeschema/pinedit-dialog.cpp:334
+#: eeschema/pinedit-dialog.cpp:333
 msgid "3 States"
 msgstr ""
 
-#: eeschema/pinedit-dialog.cpp:335
-#: eeschema/dialog_edit_label.cpp:161
+#: eeschema/pinedit-dialog.cpp:334
+#: eeschema/dialog_edit_label.cpp:164
 msgid "Passive"
 msgstr "Passief"
 
-#: eeschema/pinedit-dialog.cpp:336
+#: eeschema/pinedit-dialog.cpp:335
 msgid "Unspecified"
 msgstr ""
 
-#: eeschema/pinedit-dialog.cpp:337
+#: eeschema/pinedit-dialog.cpp:336
 msgid "Power In"
 msgstr ""
 
-#: eeschema/pinedit-dialog.cpp:338
+#: eeschema/pinedit-dialog.cpp:337
 msgid "Power Out"
 msgstr ""
 
-#: eeschema/pinedit-dialog.cpp:339
+#: eeschema/pinedit-dialog.cpp:338
 msgid "Open coll"
 msgstr "Open coll"
 
-#: eeschema/pinedit-dialog.cpp:340
+#: eeschema/pinedit-dialog.cpp:339
 msgid "Open emit"
 msgstr "Open emit"
 
-#: eeschema/pinedit-dialog.cpp:342
+#: eeschema/pinedit-dialog.cpp:340
 msgid "Electrical Type:"
 msgstr ""
 
@@ -6206,231 +6207,231 @@ msgstr "Selecteer Bibliotheek"
 msgid "Select component (%d items)"
 msgstr ""
 
-#: eeschema/dialog_erc.cpp:171
-#: eeschema/dialog_erc.cpp:202
+#: eeschema/dialog_erc.cpp:172
+#: eeschema/dialog_erc.cpp:203
 msgid "Erc File Report:"
 msgstr ""
 
-#: eeschema/dialog_erc.cpp:176
+#: eeschema/dialog_erc.cpp:177
 msgid "-> Total Errors:  "
 msgstr ""
 
-#: eeschema/dialog_erc.cpp:179
+#: eeschema/dialog_erc.cpp:180
 msgid "-> Last Warnings: "
 msgstr ""
 
-#: eeschema/dialog_erc.cpp:183
+#: eeschema/dialog_erc.cpp:184
 msgid "-> Last Errors:   "
 msgstr "-> Laatste Fouten:"
 
-#: eeschema/dialog_erc.cpp:189
+#: eeschema/dialog_erc.cpp:190
 msgid "0000"
 msgstr "0000"
 
-#: eeschema/dialog_erc.cpp:205
+#: eeschema/dialog_erc.cpp:206
 msgid "Write erc report"
 msgstr ""
 
-#: eeschema/dialog_erc.cpp:211
+#: eeschema/dialog_erc.cpp:212
 msgid "&Test Erc"
 msgstr ""
 
-#: eeschema/dialog_erc.cpp:215
+#: eeschema/dialog_erc.cpp:216
 msgid "&Del Markers"
 msgstr ""
 
-#: eeschema/dialog_erc.cpp:222
+#: eeschema/dialog_erc.cpp:224
 msgid "erc"
 msgstr ""
 
-#: eeschema/dialog_erc.cpp:228
+#: eeschema/dialog_erc.cpp:230
 msgid "Reset"
 msgstr "Resetten"
 
-#: eeschema/dialog_create_component.cpp:168
+#: eeschema/dialog_create_component.cpp:171
 #: eeschema/component_class.cpp:318
 msgid "U"
 msgstr "U"
 
-#: eeschema/dialog_create_component.cpp:211
+#: eeschema/dialog_create_component.cpp:214
 msgid "&1"
 msgstr "&1"
 
-#: eeschema/dialog_create_component.cpp:212
+#: eeschema/dialog_create_component.cpp:215
 msgid "&2"
 msgstr "&2"
 
-#: eeschema/dialog_create_component.cpp:213
+#: eeschema/dialog_create_component.cpp:216
 msgid "&3"
 msgstr "&3"
 
-#: eeschema/dialog_create_component.cpp:214
+#: eeschema/dialog_create_component.cpp:217
 msgid "&4"
 msgstr "&4"
 
-#: eeschema/dialog_create_component.cpp:215
+#: eeschema/dialog_create_component.cpp:218
 msgid "&5"
 msgstr "&5"
 
-#: eeschema/dialog_create_component.cpp:216
+#: eeschema/dialog_create_component.cpp:219
 msgid "&6"
 msgstr "&6"
 
-#: eeschema/dialog_create_component.cpp:217
+#: eeschema/dialog_create_component.cpp:220
 msgid "&7"
 msgstr "&7"
 
-#: eeschema/dialog_create_component.cpp:218
+#: eeschema/dialog_create_component.cpp:221
 msgid "&8"
 msgstr "&8"
 
-#: eeschema/dialog_create_component.cpp:219
+#: eeschema/dialog_create_component.cpp:222
 msgid "&9"
 msgstr "&9"
 
-#: eeschema/dialog_create_component.cpp:220
+#: eeschema/dialog_create_component.cpp:223
 msgid "&10"
 msgstr "&10"
 
-#: eeschema/dialog_create_component.cpp:221
+#: eeschema/dialog_create_component.cpp:224
 msgid "&11"
 msgstr "&11"
 
-#: eeschema/dialog_create_component.cpp:222
+#: eeschema/dialog_create_component.cpp:225
 msgid "&12"
 msgstr "&12"
 
-#: eeschema/dialog_create_component.cpp:223
+#: eeschema/dialog_create_component.cpp:226
 msgid "&13"
 msgstr "&13"
 
-#: eeschema/dialog_create_component.cpp:224
+#: eeschema/dialog_create_component.cpp:227
 msgid "&14"
 msgstr "&14"
 
-#: eeschema/dialog_create_component.cpp:225
+#: eeschema/dialog_create_component.cpp:228
 msgid "&15"
 msgstr "&15"
 
-#: eeschema/dialog_create_component.cpp:226
+#: eeschema/dialog_create_component.cpp:229
 msgid "&16"
 msgstr "&16"
 
-#: eeschema/dialog_create_component.cpp:227
+#: eeschema/dialog_create_component.cpp:230
 msgid "&17"
 msgstr "&17"
 
-#: eeschema/dialog_create_component.cpp:228
+#: eeschema/dialog_create_component.cpp:231
 msgid "&18"
 msgstr "&18"
 
-#: eeschema/dialog_create_component.cpp:229
+#: eeschema/dialog_create_component.cpp:232
 msgid "&19"
 msgstr "&19"
 
-#: eeschema/dialog_create_component.cpp:230
+#: eeschema/dialog_create_component.cpp:233
 msgid "&20"
 msgstr "&20"
 
-#: eeschema/dialog_create_component.cpp:231
+#: eeschema/dialog_create_component.cpp:234
 msgid "&21"
 msgstr "&21"
 
-#: eeschema/dialog_create_component.cpp:232
+#: eeschema/dialog_create_component.cpp:235
 msgid "&22"
 msgstr "&22"
 
-#: eeschema/dialog_create_component.cpp:233
+#: eeschema/dialog_create_component.cpp:236
 msgid "&23"
 msgstr "&23"
 
-#: eeschema/dialog_create_component.cpp:234
+#: eeschema/dialog_create_component.cpp:237
 msgid "&24"
 msgstr "&24"
 
-#: eeschema/dialog_create_component.cpp:235
+#: eeschema/dialog_create_component.cpp:238
 msgid "&25"
 msgstr "&25"
 
-#: eeschema/dialog_create_component.cpp:236
+#: eeschema/dialog_create_component.cpp:239
 msgid "&26"
 msgstr "&26"
 
-#: eeschema/dialog_create_component.cpp:237
+#: eeschema/dialog_create_component.cpp:240
 msgid "Parts per component"
 msgstr ""
 
-#: eeschema/dialog_create_component.cpp:243
+#: eeschema/dialog_create_component.cpp:246
 msgid "Draw options"
 msgstr "Teken opties"
 
-#: eeschema/dialog_create_component.cpp:247
+#: eeschema/dialog_create_component.cpp:250
 msgid "Show Pin Number"
 msgstr ""
 
-#: eeschema/dialog_create_component.cpp:311
+#: eeschema/dialog_create_component.cpp:316
 msgid "You must provide a name for this component"
 msgstr ""
 
-#: eeschema/plotps.cpp:172
-#: eeschema/plothpgl.cpp:226
+#: eeschema/plotps.cpp:173
+#: eeschema/plothpgl.cpp:223
 msgid "Page Size A4"
 msgstr "Pagina Grote A4"
 
-#: eeschema/plotps.cpp:173
-#: eeschema/plothpgl.cpp:231
+#: eeschema/plotps.cpp:174
+#: eeschema/plothpgl.cpp:228
 msgid "Page Size A"
 msgstr "Pagina Grote A"
 
-#: eeschema/plotps.cpp:174
-#: eeschema/plothpgl.cpp:238
+#: eeschema/plotps.cpp:175
+#: eeschema/plothpgl.cpp:233
 msgid "Plot page size:"
 msgstr "Plot pagina grote:"
 
-#: eeschema/plotps.cpp:180
+#: eeschema/plotps.cpp:181
 msgid "Plot Options:"
 msgstr "Plot Opties:"
 
-#: eeschema/plotps.cpp:185
+#: eeschema/plotps.cpp:186
 msgid "B/W"
 msgstr "Zwart/Wit"
 
-#: eeschema/plotps.cpp:186
+#: eeschema/plotps.cpp:187
 #: share/dialog_print.cpp:183
 #: share/svg_print.cpp:213
 msgid "Color"
 msgstr "Kleur"
 
-#: eeschema/plotps.cpp:187
+#: eeschema/plotps.cpp:188
 msgid "Plot Color:"
 msgstr "Plot Kleur:"
 
-#: eeschema/plotps.cpp:191
+#: eeschema/plotps.cpp:192
 #: share/dialog_print.cpp:174
 #: share/svg_print.cpp:225
 msgid "Print Sheet Ref"
 msgstr ""
 
-#: eeschema/plotps.cpp:200
-#: eeschema/plothpgl.cpp:367
+#: eeschema/plotps.cpp:201
+#: eeschema/plothpgl.cpp:283
 msgid "&Plot CURRENT"
 msgstr "&Plot HUIDIGE"
 
-#: eeschema/plotps.cpp:204
-#: eeschema/plothpgl.cpp:374
+#: eeschema/plotps.cpp:205
+#: eeschema/plothpgl.cpp:287
 msgid "Plot A&LL"
 msgstr "Plot A&lles"
 
-#: eeschema/plotps.cpp:215
+#: eeschema/plotps.cpp:217
 msgid "Messages :"
 msgstr "Berichten :"
 
-#: eeschema/plotps.cpp:227
-#: eeschema/dialog_options.cpp:404
+#: eeschema/plotps.cpp:230
+#: eeschema/dialog_options.cpp:326
 msgid "Default Line Width"
 msgstr "Standaard Lijn breedte"
 
-#: eeschema/plotps.cpp:396
+#: eeschema/plotps.cpp:399
 #, c-format
 msgid "Plot: %s\n"
 msgstr "Plot: %s\n"
@@ -6472,11 +6473,16 @@ msgstr "Bestand"
 msgid "not found"
 msgstr "niet gevonden"
 
-#: eeschema/dialog_cmp_graphic_properties.cpp:167
+#: eeschema/dialog_cmp_graphic_properties.cpp:152
+#, fuzzy
+msgid "Options :"
+msgstr "Opties:"
+
+#: eeschema/dialog_cmp_graphic_properties.cpp:168
 msgid "Void"
 msgstr ""
 
-#: eeschema/dialog_cmp_graphic_properties.cpp:169
+#: eeschema/dialog_cmp_graphic_properties.cpp:170
 msgid "BgFilled"
 msgstr ""
 
@@ -6488,141 +6494,141 @@ msgstr "Vullen:"
 msgid "Component properties (Not found in lib)"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:135
+#: eeschema/dialog_edit_component_in_schematic.cpp:136
 msgid "Unit 1"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:136
+#: eeschema/dialog_edit_component_in_schematic.cpp:137
 msgid "Unit 2"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:137
+#: eeschema/dialog_edit_component_in_schematic.cpp:138
 msgid "Unit 3"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:138
+#: eeschema/dialog_edit_component_in_schematic.cpp:139
 msgid "Unit 4"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:139
+#: eeschema/dialog_edit_component_in_schematic.cpp:140
 msgid "Unit 5"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:140
+#: eeschema/dialog_edit_component_in_schematic.cpp:141
 msgid "Unit 6"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:141
+#: eeschema/dialog_edit_component_in_schematic.cpp:142
 msgid "Unit 7"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:142
+#: eeschema/dialog_edit_component_in_schematic.cpp:143
 msgid "Unit 8"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:143
+#: eeschema/dialog_edit_component_in_schematic.cpp:144
 msgid "Unit 9"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:144
+#: eeschema/dialog_edit_component_in_schematic.cpp:145
 msgid "Unit 10"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:145
+#: eeschema/dialog_edit_component_in_schematic.cpp:146
 msgid "Unit 11"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:146
+#: eeschema/dialog_edit_component_in_schematic.cpp:147
 msgid "Unit 12"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:147
+#: eeschema/dialog_edit_component_in_schematic.cpp:148
 msgid "Unit 13"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:148
+#: eeschema/dialog_edit_component_in_schematic.cpp:149
 msgid "Unit 14"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:149
+#: eeschema/dialog_edit_component_in_schematic.cpp:150
 msgid "Unit 15"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:150
 #: eeschema/dialog_edit_component_in_schematic.cpp:151
+#: eeschema/dialog_edit_component_in_schematic.cpp:152
 msgid "Unit 16"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:152
+#: eeschema/dialog_edit_component_in_schematic.cpp:153
 msgid "Unit 17"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:153
+#: eeschema/dialog_edit_component_in_schematic.cpp:154
 msgid "Unit 18"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:154
+#: eeschema/dialog_edit_component_in_schematic.cpp:155
 msgid "Unit 19"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:155
+#: eeschema/dialog_edit_component_in_schematic.cpp:156
 msgid "Unit 20"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:156
+#: eeschema/dialog_edit_component_in_schematic.cpp:157
 msgid "Unit 21"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:157
+#: eeschema/dialog_edit_component_in_schematic.cpp:158
 msgid "Unit 22"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:158
+#: eeschema/dialog_edit_component_in_schematic.cpp:159
 msgid "Unit 23"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:159
+#: eeschema/dialog_edit_component_in_schematic.cpp:160
 msgid "Unit 24"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:160
+#: eeschema/dialog_edit_component_in_schematic.cpp:161
 msgid "Unit 25"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:161
+#: eeschema/dialog_edit_component_in_schematic.cpp:162
 msgid "Unit 26"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:162
+#: eeschema/dialog_edit_component_in_schematic.cpp:163
 msgid "Unit:"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:172
+#: eeschema/dialog_edit_component_in_schematic.cpp:173
 msgid "+90"
 msgstr "+90"
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:175
+#: eeschema/dialog_edit_component_in_schematic.cpp:176
 msgid "Orient:"
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:181
+#: eeschema/dialog_edit_component_in_schematic.cpp:182
 #: eeschema/onrightclick.cpp:314
 msgid "Mirror --"
 msgstr "Spiegelen --"
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:182
+#: eeschema/dialog_edit_component_in_schematic.cpp:183
 msgid "Mirror !"
 msgstr "Spiegel !"
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:183
+#: eeschema/dialog_edit_component_in_schematic.cpp:184
 msgid "Mirror:"
 msgstr "Spiegel:"
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:194
+#: eeschema/dialog_edit_component_in_schematic.cpp:195
 msgid "Chip Name:"
 msgstr "Chip Naam:"
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:236
+#: eeschema/dialog_edit_component_in_schematic.cpp:237
 #, fuzzy
 msgid "Defaults"
 msgstr "Standaarden"
@@ -6666,39 +6672,39 @@ msgstr ""
 msgid "Value needed !, No change"
 msgstr ""
 
-#: eeschema/annotate.cpp:771
+#: eeschema/annotate.cpp:749
 #, c-format
 msgid "item not annotated: %s%s"
 msgstr ""
 
-#: eeschema/annotate.cpp:776
+#: eeschema/annotate.cpp:754
 #, c-format
 msgid "( unit %d)"
 msgstr ""
 
-#: eeschema/annotate.cpp:793
+#: eeschema/annotate.cpp:771
 #, fuzzy, c-format
 msgid "Error item %s%s"
 msgstr "Fout item %s%s"
 
-#: eeschema/annotate.cpp:796
+#: eeschema/annotate.cpp:774
 #, c-format
 msgid " unit %d and no more than %d parts"
 msgstr ""
 
-#: eeschema/annotate.cpp:830
-#: eeschema/annotate.cpp:853
+#: eeschema/annotate.cpp:808
+#: eeschema/annotate.cpp:831
 #, c-format
 msgid "Multiple item %s%s"
 msgstr ""
 
-#: eeschema/annotate.cpp:835
-#: eeschema/annotate.cpp:858
+#: eeschema/annotate.cpp:813
+#: eeschema/annotate.cpp:836
 #, c-format
 msgid " (unit %d)"
 msgstr ""
 
-#: eeschema/annotate.cpp:875
+#: eeschema/annotate.cpp:853
 #, c-format
 msgid "Diff values for %s%d%c (%s) and %s%d%c (%s)"
 msgstr ""
@@ -6725,24 +6731,24 @@ msgstr " Converteren"
 msgid "  Normal"
 msgstr " Normaal"
 
-#: eeschema/sheet.cpp:164
+#: eeschema/sheet.cpp:162
 #: share/svg_print.cpp:265
 msgid "Filename:"
 msgstr "Bestandsnaam:"
 
-#: eeschema/sheet.cpp:178
+#: eeschema/sheet.cpp:168
 msgid "Sheetname:"
 msgstr "Layoutnaam:"
 
-#: eeschema/sheet.cpp:295
+#: eeschema/sheet.cpp:266
 msgid "No Filename! Aborted"
 msgstr "Geen Bestandsnaam! Afgebroken"
 
-#: eeschema/sheet.cpp:310
+#: eeschema/sheet.cpp:281
 msgid "Changing a Filename can change all the schematic structure and cannot be undone"
 msgstr ""
 
-#: eeschema/sheet.cpp:312
+#: eeschema/sheet.cpp:283
 msgid "Ok to continue renaming?"
 msgstr "Doorgaan met hernoemen?"
 
@@ -6856,6 +6862,7 @@ msgid "Move Text "
 msgstr "Verplaats Tekst"
 
 #: eeschema/libedit_onrightclick.cpp:132
+#: eeschema/dialog_edit_label.h:44
 msgid "Text Editor"
 msgstr "Text Editor"
 
@@ -6954,15 +6961,15 @@ msgstr "Spiegel Block (ctrl + muis slepen)"
 msgid "Del. Block (shift+ctrl + drag mouse)"
 msgstr ""
 
-#: eeschema/symbtext.cpp:130
+#: eeschema/symbtext.cpp:133
 msgid " Text : "
 msgstr " Tekst:"
 
-#: eeschema/symbtext.cpp:149
+#: eeschema/symbtext.cpp:152
 msgid "Size:"
 msgstr "Grote:"
 
-#: eeschema/symbtext.cpp:155
+#: eeschema/symbtext.cpp:158
 msgid " Text Options : "
 msgstr " Tekst Opties:"
 
@@ -6991,33 +6998,33 @@ msgstr ""
 msgid " in library"
 msgstr " in bibliotheek"
 
-#: eeschema/class_drawsheet.cpp:252
+#: eeschema/class_drawsheet.cpp:250
 msgid "Ok to cleanup this sheet"
 msgstr ""
 
-#: eeschema/class_drawsheet.cpp:562
+#: eeschema/class_drawsheet.cpp:560
 #, c-format
 msgid "A Sub Hierarchy named %s exists, Use it (The data in this sheet will be replaced)?"
 msgstr ""
 
-#: eeschema/class_drawsheet.cpp:566
+#: eeschema/class_drawsheet.cpp:564
 msgid "Sheet Filename Renaming Aborted"
 msgstr ""
 
-#: eeschema/class_drawsheet.cpp:574
+#: eeschema/class_drawsheet.cpp:572
 #, c-format
 msgid "A file named %s exists, load it (otherwise keep current sheet data if possible)?"
 msgstr ""
 
-#: eeschema/class_drawsheet.cpp:589
+#: eeschema/class_drawsheet.cpp:587
 msgid "This sheet uses shared data in a complex hierarchy"
 msgstr ""
 
-#: eeschema/class_drawsheet.cpp:592
+#: eeschema/class_drawsheet.cpp:590
 msgid "Do we convert it in a simple hierarchical sheet (otherwise delete current sheet data)"
 msgstr ""
 
-#: eeschema/class_drawsheet.cpp:751
+#: eeschema/class_drawsheet.cpp:749
 #, c-format
 msgid "%8.8lX/"
 msgstr ""
@@ -7241,76 +7248,76 @@ msgstr ""
 msgid "Sheet"
 msgstr "Layout"
 
-#: eeschema/plothpgl.cpp:225
+#: eeschema/plothpgl.cpp:222
 #, fuzzy
 msgid "Sheet Size"
 msgstr "Pagina Grote"
 
-#: eeschema/plothpgl.cpp:227
+#: eeschema/plothpgl.cpp:224
 msgid "Page Size A3"
 msgstr "A3"
 
-#: eeschema/plothpgl.cpp:228
+#: eeschema/plothpgl.cpp:225
 msgid "Page Size A2"
 msgstr "A2"
 
-#: eeschema/plothpgl.cpp:229
+#: eeschema/plothpgl.cpp:226
 msgid "Page Size A1"
 msgstr "A1"
 
-#: eeschema/plothpgl.cpp:230
+#: eeschema/plothpgl.cpp:227
 msgid "Page Size A0"
 msgstr "A0"
 
-#: eeschema/plothpgl.cpp:232
+#: eeschema/plothpgl.cpp:229
 msgid "Page Size B"
 msgstr "B"
 
-#: eeschema/plothpgl.cpp:233
+#: eeschema/plothpgl.cpp:230
 msgid "Page Size C"
 msgstr "C"
 
-#: eeschema/plothpgl.cpp:234
+#: eeschema/plothpgl.cpp:231
 msgid "Page Size D"
 msgstr "D"
 
-#: eeschema/plothpgl.cpp:235
+#: eeschema/plothpgl.cpp:232
 msgid "Page Size E"
 msgstr "E"
 
-#: eeschema/plothpgl.cpp:250
+#: eeschema/plothpgl.cpp:240
 msgid "Pen control:"
 msgstr ""
 
-#: eeschema/plothpgl.cpp:259
+#: eeschema/plothpgl.cpp:244
 msgid "Pen Width ( mils )"
 msgstr ""
 
-#: eeschema/plothpgl.cpp:280
+#: eeschema/plothpgl.cpp:250
 msgid "Pen Speed ( cm/s )"
 msgstr ""
 
-#: eeschema/plothpgl.cpp:322
+#: eeschema/plothpgl.cpp:262
 msgid "Page offset:"
 msgstr ""
 
-#: eeschema/plothpgl.cpp:331
+#: eeschema/plothpgl.cpp:266
 msgid "Plot Offset X"
 msgstr ""
 
-#: eeschema/plothpgl.cpp:346
+#: eeschema/plothpgl.cpp:272
 msgid "Plot Offset Y"
 msgstr ""
 
-#: eeschema/plothpgl.cpp:390
+#: eeschema/plothpgl.cpp:298
 msgid "&Accept Offset"
 msgstr ""
 
-#: eeschema/plothpgl.cpp:681
+#: eeschema/plothpgl.cpp:580
 msgid "** Plot End **\n"
 msgstr "** Plot Einde **\n"
 
-#: eeschema/plothpgl.cpp:706
+#: eeschema/plothpgl.cpp:605
 msgid "Plot  "
 msgstr "Plot  "
 
@@ -7322,26 +7329,26 @@ msgstr "Navigator"
 msgid "Root"
 msgstr "Root"
 
-#: eeschema/schframe.cpp:282
+#: eeschema/schframe.cpp:308
 msgid "Schematic modified, Save before exit ?"
 msgstr ""
 "Schema gewijzigd,\n"
 "Opslaan voor afsluiten?"
 
-#: eeschema/schframe.cpp:394
+#: eeschema/schframe.cpp:420
 msgid "No show Hidden Pins"
 msgstr "Verberg verborgen pennen"
 
-#: eeschema/schframe.cpp:394
+#: eeschema/schframe.cpp:420
 #: eeschema/tool_sch.cpp:274
 msgid "Show Hidden Pins"
 msgstr "Verberg verborgen pennen"
 
-#: eeschema/schframe.cpp:398
+#: eeschema/schframe.cpp:424
 msgid "Draw lines at any direction"
 msgstr ""
 
-#: eeschema/schframe.cpp:399
+#: eeschema/schframe.cpp:425
 msgid "Draw lines H, V or 45 deg only"
 msgstr ""
 
@@ -7471,7 +7478,7 @@ msgstr "Bibliotheek verkenner"
 #: eeschema/component_class.cpp:81
 #: eeschema/component_class.cpp:82
 #: eeschema/component_class.cpp:83
-#: eeschema/dialog_build_BOM.cpp:1234
+#: eeschema/dialog_build_BOM.cpp:1188
 msgid "Field"
 msgstr "Veld"
 
@@ -7785,141 +7792,142 @@ msgstr "Label instellingen"
 msgid "Text properties"
 msgstr "Tekst Instellingen"
 
-#: eeschema/dialog_edit_label.cpp:136
+#: eeschema/dialog_edit_label.cpp:139
 msgid "Text "
 msgstr "Tekst"
 
-#: eeschema/dialog_edit_label.cpp:150
+#: eeschema/dialog_edit_label.cpp:153
 msgid "Text Orient:"
 msgstr "Text Orientatie:"
 
-#: eeschema/dialog_edit_label.cpp:160
+#: eeschema/dialog_edit_label.cpp:163
 msgid "TriState"
 msgstr ""
 
-#: eeschema/dialog_edit_label.cpp:162
-msgid "label Shape:"
+#: eeschema/dialog_edit_label.cpp:165
+#, fuzzy
+msgid "Glabel Shape:"
 msgstr "label Vorm:"
 
-#: eeschema/dialog_edit_label.cpp:170
+#: eeschema/dialog_edit_label.cpp:173
 msgid "Size "
 msgstr "Grote"
 
-#: eeschema/dialog_build_BOM.cpp:248
+#: eeschema/dialog_build_BOM.cpp:246
 msgid "List items:"
 msgstr ""
 
-#: eeschema/dialog_build_BOM.cpp:254
+#: eeschema/dialog_build_BOM.cpp:250
 msgid "Components by Reference"
 msgstr ""
 
-#: eeschema/dialog_build_BOM.cpp:261
+#: eeschema/dialog_build_BOM.cpp:254
 msgid "Sub Components (i.e. U2A, U2B ...)"
 msgstr ""
 
-#: eeschema/dialog_build_BOM.cpp:267
+#: eeschema/dialog_build_BOM.cpp:258
 msgid "Components by Value"
 msgstr ""
 
-#: eeschema/dialog_build_BOM.cpp:273
+#: eeschema/dialog_build_BOM.cpp:262
 msgid "Hierachy Pins by Name"
 msgstr ""
 
-#: eeschema/dialog_build_BOM.cpp:280
+#: eeschema/dialog_build_BOM.cpp:266
 msgid "Hierachy Pins by Sheets"
 msgstr ""
 
-#: eeschema/dialog_build_BOM.cpp:287
+#: eeschema/dialog_build_BOM.cpp:272
 msgid "Text for spreadsheet import"
 msgstr ""
 
-#: eeschema/dialog_build_BOM.cpp:289
+#: eeschema/dialog_build_BOM.cpp:273
 msgid "Output format:"
 msgstr ""
 
-#: eeschema/dialog_build_BOM.cpp:296
+#: eeschema/dialog_build_BOM.cpp:278
 msgid "Tab"
 msgstr ""
 
-#: eeschema/dialog_build_BOM.cpp:297
+#: eeschema/dialog_build_BOM.cpp:279
 msgid ";"
 msgstr ";"
 
-#: eeschema/dialog_build_BOM.cpp:298
+#: eeschema/dialog_build_BOM.cpp:280
 msgid ","
 msgstr ","
 
-#: eeschema/dialog_build_BOM.cpp:301
+#: eeschema/dialog_build_BOM.cpp:281
 msgid "Field separator for spreadsheet import:"
 msgstr ""
 
-#: eeschema/dialog_build_BOM.cpp:314
+#: eeschema/dialog_build_BOM.cpp:289
 msgid "Launch list browser"
 msgstr ""
 
-#: eeschema/dialog_build_BOM.cpp:323
+#: eeschema/dialog_build_BOM.cpp:296
 #, fuzzy
 msgid "Fields to add:"
 msgstr "Velden voor toevoegen:"
 
-#: eeschema/dialog_build_BOM.cpp:334
+#: eeschema/dialog_build_BOM.cpp:304
 msgid "Field 1"
 msgstr "Veld 1"
 
-#: eeschema/dialog_build_BOM.cpp:339
+#: eeschema/dialog_build_BOM.cpp:308
 msgid "Field 2"
 msgstr "Veld 2"
 
-#: eeschema/dialog_build_BOM.cpp:344
+#: eeschema/dialog_build_BOM.cpp:312
 msgid "Field 3"
 msgstr "Veld 3"
 
-#: eeschema/dialog_build_BOM.cpp:349
+#: eeschema/dialog_build_BOM.cpp:316
 msgid "Field 4"
 msgstr "Veld 4"
 
-#: eeschema/dialog_build_BOM.cpp:354
+#: eeschema/dialog_build_BOM.cpp:320
 msgid "Field 5"
 msgstr "Veld 5"
 
-#: eeschema/dialog_build_BOM.cpp:359
+#: eeschema/dialog_build_BOM.cpp:324
 msgid "Field 6"
 msgstr "Veld 6"
 
-#: eeschema/dialog_build_BOM.cpp:364
+#: eeschema/dialog_build_BOM.cpp:328
 msgid "Field 7"
 msgstr "Veld 7"
 
-#: eeschema/dialog_build_BOM.cpp:369
+#: eeschema/dialog_build_BOM.cpp:332
 msgid "Field 8"
 msgstr "Veld 8"
 
-#: eeschema/dialog_build_BOM.cpp:376
+#: eeschema/dialog_build_BOM.cpp:338
 msgid "Create &List"
 msgstr "Creëer &lijst"
 
-#: eeschema/dialog_build_BOM.cpp:399
+#: eeschema/dialog_build_BOM.cpp:354
 #: cvpcb/dialog_display_options.cpp:195
 msgid "&Apply"
 msgstr "&Toepassen"
 
-#: eeschema/dialog_build_BOM.cpp:615
+#: eeschema/dialog_build_BOM.cpp:569
 msgid "Bill of materials:"
 msgstr "Materiaallijst:"
 
-#: eeschema/dialog_build_BOM.cpp:667
-#: eeschema/dialog_build_BOM.cpp:722
+#: eeschema/dialog_build_BOM.cpp:621
+#: eeschema/dialog_build_BOM.cpp:676
 msgid "Failed to open file "
 msgstr "Fout tijdens openen van bestand"
 
-#: eeschema/dialog_build_BOM.cpp:806
+#: eeschema/dialog_build_BOM.cpp:760
 #, c-format
 msgid ""
 "\n"
 "#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = %d\n"
 msgstr ""
 
-#: eeschema/dialog_build_BOM.cpp:817
+#: eeschema/dialog_build_BOM.cpp:771
 #, c-format
 msgid ""
 "\n"
@@ -7927,45 +7935,45 @@ msgid ""
 "\n"
 msgstr ""
 
-#: eeschema/dialog_build_BOM.cpp:824
+#: eeschema/dialog_build_BOM.cpp:778
 msgid ""
 "\n"
 "#End List\n"
 msgstr ""
 
-#: eeschema/dialog_build_BOM.cpp:1242
+#: eeschema/dialog_build_BOM.cpp:1196
 msgid ""
 "\n"
 "#Cmp ( order = Reference )"
 msgstr ""
 
-#: eeschema/dialog_build_BOM.cpp:1246
-#: eeschema/dialog_build_BOM.cpp:1324
+#: eeschema/dialog_build_BOM.cpp:1200
+#: eeschema/dialog_build_BOM.cpp:1278
 msgid " (with SubCmp)"
 msgstr ""
 
-#: eeschema/dialog_build_BOM.cpp:1302
-#: eeschema/dialog_build_BOM.cpp:1369
+#: eeschema/dialog_build_BOM.cpp:1256
+#: eeschema/dialog_build_BOM.cpp:1323
 msgid "#End Cmp\n"
 msgstr ""
 
-#: eeschema/dialog_build_BOM.cpp:1320
+#: eeschema/dialog_build_BOM.cpp:1274
 msgid ""
 "\n"
 "#Cmp ( order = Value )"
 msgstr ""
 
-#: eeschema/dialog_build_BOM.cpp:1401
+#: eeschema/dialog_build_BOM.cpp:1355
 #, c-format
 msgid "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n"
 msgstr "> %-28.28s %s        (Tekening %s) positie: %3.3f, %3.3f\n"
 
-#: eeschema/dialog_build_BOM.cpp:1421
+#: eeschema/dialog_build_BOM.cpp:1375
 #, c-format
 msgid "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n"
 msgstr ""
 
-#: eeschema/dialog_build_BOM.cpp:1436
+#: eeschema/dialog_build_BOM.cpp:1390
 msgid "#End labels\n"
 msgstr "#Einde labels\n"
 
@@ -8474,86 +8482,86 @@ msgid "Sheet %s (file %s) modified. Save it?"
 msgstr ""
 
 #: eeschema/dialog_options.cpp:151
-#: eeschema/dialog_options.cpp:353
+#: eeschema/dialog_options.cpp:303
 msgid "Delta Step X"
 msgstr ""
 
 #: eeschema/dialog_options.cpp:156
-#: eeschema/dialog_options.cpp:369
+#: eeschema/dialog_options.cpp:309
 msgid "Delta Step Y"
 msgstr ""
 
-#: eeschema/dialog_options.cpp:231
+#: eeschema/dialog_options.cpp:227
 msgid "Draw Options:"
 msgstr ""
 
-#: eeschema/dialog_options.cpp:239
+#: eeschema/dialog_options.cpp:231
 msgid "Show grid"
 msgstr "Raster tonen"
 
-#: eeschema/dialog_options.cpp:247
+#: eeschema/dialog_options.cpp:236
 msgid "Normal (50 mils)"
 msgstr "Normaal (50 mil)"
 
-#: eeschema/dialog_options.cpp:248
+#: eeschema/dialog_options.cpp:237
 msgid "Small (25 mils)"
 msgstr "Klein (25 mils)"
 
-#: eeschema/dialog_options.cpp:249
+#: eeschema/dialog_options.cpp:238
 msgid "Very small (10 mils)"
 msgstr "Erg klein (10 mil)"
 
-#: eeschema/dialog_options.cpp:250
+#: eeschema/dialog_options.cpp:239
 msgid "Special (5 mils)"
 msgstr "Speciaal (5 mil)"
 
-#: eeschema/dialog_options.cpp:251
+#: eeschema/dialog_options.cpp:240
 msgid "Special (2 mils)"
 msgstr "Speciaal (2 mil)"
 
-#: eeschema/dialog_options.cpp:252
+#: eeschema/dialog_options.cpp:241
 msgid "Special (1 mil)"
 msgstr "Speciaal (1 mil)"
 
-#: eeschema/dialog_options.cpp:255
+#: eeschema/dialog_options.cpp:242
 #, fuzzy
 msgid "Grid Size"
 msgstr "Raster Grote"
 
-#: eeschema/dialog_options.cpp:263
+#: eeschema/dialog_options.cpp:248
 #, fuzzy
 msgid "Show alls"
 msgstr "Vertoon alles"
 
-#: eeschema/dialog_options.cpp:266
+#: eeschema/dialog_options.cpp:249
 msgid "Show pins"
 msgstr "Toon pennen"
 
-#: eeschema/dialog_options.cpp:286
+#: eeschema/dialog_options.cpp:262
 msgid "millimeter"
 msgstr "millimeter"
 
-#: eeschema/dialog_options.cpp:287
+#: eeschema/dialog_options.cpp:263
 msgid "inches"
 msgstr "inch"
 
-#: eeschema/dialog_options.cpp:301
+#: eeschema/dialog_options.cpp:272
 msgid "Horiz/Vertical"
 msgstr "Horiz/Verticaal"
 
-#: eeschema/dialog_options.cpp:305
+#: eeschema/dialog_options.cpp:274
 msgid "Wires - Bus orient"
 msgstr ""
 
-#: eeschema/dialog_options.cpp:344
+#: eeschema/dialog_options.cpp:299
 msgid "Auto increment params"
 msgstr ""
 
-#: eeschema/dialog_options.cpp:385
+#: eeschema/dialog_options.cpp:315
 msgid "Delta Label:"
 msgstr ""
 
-#: eeschema/dialog_options.cpp:410
+#: eeschema/dialog_options.cpp:332
 msgid "Default Label Size"
 msgstr "Standaard Label Grote"
 
@@ -9075,173 +9083,171 @@ msgstr "Python Script Uitvoeren:"
 msgid "Load file:"
 msgstr "Bestand laden:"
 
-#: kicad/treeprj_datas.cpp:219
+#: kicad/treeprj_datas.cpp:216
 #, fuzzy
 msgid "Unable to move file ... "
 msgstr "Verplaatsen niet mogelijk ..."
 
-#: kicad/treeprj_datas.cpp:220
-#: kicad/treeprj_datas.cpp:301
+#: kicad/treeprj_datas.cpp:217
+#: kicad/treeprj_datas.cpp:298
 msgid "Permission error ?"
 msgstr "Permissie fout?"
 
-#: kicad/treeprj_datas.cpp:286
+#: kicad/treeprj_datas.cpp:283
 msgid ""
 "Changing file extension will change file type.\n"
 " Do you want to continue ?"
 msgstr ""
 
-#: kicad/treeprj_datas.cpp:287
+#: kicad/treeprj_datas.cpp:284
 msgid "Rename File"
 msgstr "Hernoem Bestand"
 
-#: kicad/treeprj_datas.cpp:300
+#: kicad/treeprj_datas.cpp:297
 #, fuzzy
 msgid "Unable to rename file ... "
 msgstr "Hernoemen niet mogelijk ..."
 
-#: kicad/treeprj_datas.cpp:320
+#: kicad/treeprj_datas.cpp:317
 msgid "Do you really want to delete "
 msgstr "Weet je zeker dat je het wil verwijderen"
 
-#: kicad/treeprj_datas.cpp:321
+#: kicad/treeprj_datas.cpp:318
 msgid "Delete File"
 msgstr "Verwijder Bestand"
 
-#: kicad/treeprj_datas.cpp:394
+#: kicad/treeprj_datas.cpp:391
 msgid "no kicad files found in this directory"
 msgstr "geen KiCad bestanden gevonden in deze map"
 
-#: kicad/buildmnu.cpp:100
+#: kicad/buildmnu.cpp:92
 msgid "&Open Project Descr"
 msgstr "&Open Project"
 
-#: kicad/buildmnu.cpp:101
-#: kicad/buildmnu.cpp:256
+#: kicad/buildmnu.cpp:93
+#: kicad/buildmnu.cpp:248
 msgid "Select an existing project descriptor"
-msgstr ""
+msgstr "Selecteer een bestaand project"
 
-#: kicad/buildmnu.cpp:106
+#: kicad/buildmnu.cpp:98
 msgid "&New Project Descr"
 msgstr "&Nieuw Project"
 
-#: kicad/buildmnu.cpp:107
-#: kicad/buildmnu.cpp:251
+#: kicad/buildmnu.cpp:99
+#: kicad/buildmnu.cpp:243
 msgid "Create new project descriptor"
 msgstr "Creeer een nieuwe project"
 
-#: kicad/buildmnu.cpp:112
+#: kicad/buildmnu.cpp:104
 msgid "&Save Project Descr"
 msgstr "Project &Opslaan"
 
-#: kicad/buildmnu.cpp:113
-#: kicad/buildmnu.cpp:261
+#: kicad/buildmnu.cpp:105
+#: kicad/buildmnu.cpp:253
 msgid "Save current project descriptor"
 msgstr "Opslaan van huidige project"
 
-#: kicad/buildmnu.cpp:119
+#: kicad/buildmnu.cpp:111
 msgid "Save &Project Files"
 msgstr "Project &Inpakken"
 
-#: kicad/buildmnu.cpp:120
-#, fuzzy
+#: kicad/buildmnu.cpp:112
 msgid "Save and Zip all project files"
-msgstr "Opslaan en project Inpakken"
+msgstr "Project opslaan en inpakken"
 
-#: kicad/buildmnu.cpp:124
+#: kicad/buildmnu.cpp:116
 msgid "&Unzip Archive"
 msgstr "Project &Uitpakken"
 
-#: kicad/buildmnu.cpp:125
+#: kicad/buildmnu.cpp:117
 msgid "UnZip archive file"
-msgstr "UnZip archief bestand"
+msgstr "Project openen en uitpakken"
 
-#: kicad/buildmnu.cpp:130
+#: kicad/buildmnu.cpp:122
 msgid "Quit Kicad"
-msgstr "Sluit KiCad"
+msgstr "KiCAD Afsluiten"
 
-#: kicad/buildmnu.cpp:145
+#: kicad/buildmnu.cpp:137
 msgid "&Editor"
 msgstr "&Editor"
 
-#: kicad/buildmnu.cpp:145
+#: kicad/buildmnu.cpp:137
 msgid "Text editor"
 msgstr "Tekst editor"
 
-#: kicad/buildmnu.cpp:149
+#: kicad/buildmnu.cpp:141
 msgid "&Browse Files"
 msgstr "&Bestanden Verkennen"
 
-#: kicad/buildmnu.cpp:149
+#: kicad/buildmnu.cpp:141
 msgid "Read or edit files"
 msgstr "Lees of bewerk bestanden"
 
-#: kicad/buildmnu.cpp:154
+#: kicad/buildmnu.cpp:146
 #, fuzzy
 msgid "&Select Editor"
 msgstr "&Selecteer Editor"
 
-#: kicad/buildmnu.cpp:154
+#: kicad/buildmnu.cpp:146
 msgid "Select your prefered editor for file browsing"
-msgstr ""
+msgstr "Een tekst editor selecteren van het systeem"
 
-#: kicad/buildmnu.cpp:161
+#: kicad/buildmnu.cpp:153
 msgid "Select Fonts"
 msgstr "Selecteer Lettertype"
 
-#: kicad/buildmnu.cpp:161
+#: kicad/buildmnu.cpp:153
 #, fuzzy
 msgid "Select Fonts and  Font sizes"
 msgstr "Selecteer Lettertypes en Lettertype grotes"
 
-#: kicad/buildmnu.cpp:168
+#: kicad/buildmnu.cpp:160
 msgid "Default Pdf Viewer"
 msgstr "Standaard PDF Programma"
 
-#: kicad/buildmnu.cpp:168
+#: kicad/buildmnu.cpp:160
 msgid "Use the default (system) PDF viewer used to browse datasheets"
 msgstr ""
 
-#: kicad/buildmnu.cpp:175
+#: kicad/buildmnu.cpp:167
 msgid "Favourite Pdf Viewer"
 msgstr "Favoriete PDF Programma"
 
-#: kicad/buildmnu.cpp:175
+#: kicad/buildmnu.cpp:167
 msgid "Use your favourite PDF viewer used to browse datasheets"
 msgstr ""
 
-#: kicad/buildmnu.cpp:183
+#: kicad/buildmnu.cpp:175
 msgid "Select Pdf Viewer"
 msgstr "Selecteer PDF Programma"
 
-#: kicad/buildmnu.cpp:183
+#: kicad/buildmnu.cpp:175
 msgid "Select your favourite PDF viewer used to browse datasheets"
 msgstr ""
 
-#: kicad/buildmnu.cpp:187
+#: kicad/buildmnu.cpp:179
 msgid "Pdf Browser"
 msgstr "PDF Instellingen"
 
-#: kicad/buildmnu.cpp:198
+#: kicad/buildmnu.cpp:190
 msgid "Open the kicad manual"
 msgstr "Open de KiCad Handleiding"
 
-#: kicad/buildmnu.cpp:208
+#: kicad/buildmnu.cpp:200
 msgid "&Projects"
 msgstr "&Projecten"
 
-#: kicad/buildmnu.cpp:209
+#: kicad/buildmnu.cpp:201
 msgid "&Browse"
 msgstr "&Verkennen"
 
-#: kicad/buildmnu.cpp:267
+#: kicad/buildmnu.cpp:259
 msgid "Archive all project files"
 msgstr "Archiveer alle project bestanden"
 
-#: kicad/buildmnu.cpp:273
-#, fuzzy
+#: kicad/buildmnu.cpp:265
 msgid "Refresh project tree"
-msgstr "Ververs project lijst"
+msgstr "Projectenlijst verversen"
 
 #: kicad/preferences.cpp:33
 msgid "Prefered Pdf Browser:"
@@ -9361,15 +9367,15 @@ msgstr "naamloos"
 msgid "Change File Name: "
 msgstr "Verander Bestandsnaam:"
 
-#: kicad/prjconfig.cpp:26
+#: kicad/prjconfig.cpp:25
 msgid "Project File <"
 msgstr "Project Bestand <"
 
-#: kicad/prjconfig.cpp:26
+#: kicad/prjconfig.cpp:25
 msgid "> not found"
 msgstr "> niet gevonden"
 
-#: kicad/prjconfig.cpp:36
+#: kicad/prjconfig.cpp:35
 #, fuzzy
 msgid ""
 "\n"
@@ -9378,7 +9384,7 @@ msgstr ""
 "\n"
 "Huidige map: "
 
-#: kicad/prjconfig.cpp:37
+#: kicad/prjconfig.cpp:36
 msgid ""
 "\n"
 "Project: "
@@ -9386,7 +9392,7 @@ msgstr ""
 "\n"
 "Project: "
 
-#: kicad/prjconfig.cpp:57
+#: kicad/prjconfig.cpp:59
 #, fuzzy
 msgid "Save project file"
 msgstr "Opslaan van project bestand"
@@ -9563,7 +9569,7 @@ msgstr ""
 
 #: gerbview/tool_gerber.cpp:37
 msgid "Clear and Load Gerber file"
-msgstr ""
+msgstr "Verwerpen en Gerber bestand laden"
 
 #: gerbview/tool_gerber.cpp:38
 msgid "Clear all layers and Load new Gerber file"
@@ -9667,7 +9673,6 @@ msgid "List and Edit DCodes"
 msgstr ""
 
 #: gerbview/tool_gerber.cpp:141
-#, fuzzy
 msgid "&Show source"
 msgstr "&Toon bron"
 
@@ -9729,11 +9734,11 @@ msgstr ""
 
 #: gerbview/tool_gerber.cpp:452
 msgid "Show Lines in Sketch Mode"
-msgstr ""
+msgstr "Lijnen tonen in Schets Modus"
 
 #: gerbview/tool_gerber.cpp:459
 msgid "Show Polygons in Sketch Mode"
-msgstr ""
+msgstr "Polygonen tonen in Schets Modus"
 
 #: gerbview/tool_gerber.cpp:466
 msgid "Show dcode number"
@@ -9806,19 +9811,19 @@ msgstr "Koper"
 
 #: common/common.cpp:298
 msgid "Inner L1 "
-msgstr ""
+msgstr "Binnen L1"
 
 #: common/common.cpp:298
 msgid "Inner L2 "
-msgstr ""
+msgstr "Binnen L2"
 
 #: common/common.cpp:298
 msgid "Inner L3 "
-msgstr ""
+msgstr "Binnen L3"
 
 #: common/common.cpp:299
 msgid "Inner L4 "
-msgstr ""
+msgstr "Binner L4"
 
 #: common/common.cpp:299
 msgid "Inner L5 "
@@ -10494,7 +10499,7 @@ msgstr "Zoom Selecteren"
 
 #: share/zoom.cpp:369
 msgid "Redraw"
-msgstr ""
+msgstr "Hertekenen"
 
 #: share/zoom.cpp:385
 msgid "Grid Select"
@@ -10545,7 +10550,7 @@ msgstr "??"
 
 #: pcbnew/dialog_gendrill.h:50
 msgid "WinEDA_DrillFrame"
-msgstr ""
+msgstr "WinEDA_BoorFrame"
 
 #: pcbnew/dialog_netlist.h:54
 msgid "Netlist Dialog"
@@ -10565,7 +10570,6 @@ msgid "dialog_freeroute_exchange"
 msgstr ""
 
 #: pcbnew/dialog_setup_libs.h:43
-#: eeschema/dialog_edit_label.h:44
 #: eeschema/dialog_eeschema_config.h:50
 msgid "Dialog"
 msgstr "Dialoog"
@@ -10687,7 +10691,7 @@ msgstr ""
 msgid "Global Delete"
 msgstr ""
 
-#: eeschema/plothpgl.h:46
+#: eeschema/plothpgl.h:55
 msgid "EESchema Plot HPGL"
 msgstr ""
 
@@ -10704,7 +10708,7 @@ msgstr "EESchema Doorzoeken"
 msgid "Sheet properties"
 msgstr "Layout instellingen"
 
-#: eeschema/symbtext.h:42
+#: eeschema/symbtext.h:47
 msgid "Graphic text properties"
 msgstr ""
 
