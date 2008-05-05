@@ -117,7 +117,6 @@ void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mo
         break;
 
     case S_ARC:
-    {
         if( fillopt == SKETCH )
         {
             GRArc1( &panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
@@ -131,7 +130,6 @@ void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mo
                     track->m_Param, track->GetSubNet(),
                     track->m_Width, color );
         }
-    }
         break;
 
     case S_SPOT_CIRCLE:
