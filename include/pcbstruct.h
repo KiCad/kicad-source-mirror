@@ -121,19 +121,6 @@
 #define INTERNAL_LAYERS         0x00007FFE      /* Bits layers internes */
 #define EXTERNAL_LAYERS         0x00008001
 
-/* Forme des segments (pistes, contours ..) ( parametre .shape ) */
-enum Track_Shapes {
-    S_SEGMENT = 0,      /* segment rectiligne */
-    S_RECT,             /* segment forme rect (i.e. bouts non arrondis) */
-    S_ARC,              /* segment en arc de cercle (bouts arrondis)*/
-    S_CIRCLE,           /* segment en cercle (anneau)*/
-    S_ARC_RECT,         /* segment en arc de cercle (bouts droits) (GERBER)*/
-    S_SPOT_OVALE,       /* spot ovale (for GERBER)*/
-    S_SPOT_CIRCLE,      /* spot rond (for GERBER)*/
-    S_SPOT_RECT,        /* spot rect (for GERBER)*/
-    S_POLYGON           /* polygon shape */
-};
-
 /* Forward declaration */
 class EQUIPOT;
 class MARKER;
