@@ -3802,6 +3802,16 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     void doNET_OUT( NET_OUT* growth ) throw( IOError );
     void doSUPPLY_PIN( SUPPLY_PIN* growth ) throw( IOError );
 
+    //-----<FromBOARD>-------------------------------------------------------
+
+    /**
+     * Function makeBOUNDARY
+     * makes the board perimeter for the DSN file.
+     * @param aBoard The BOARD to get information from in order to make the BOUNDARY.
+     * @param aBoundary The empty BOUNDARY to fill in.
+     */
+    void fillBOUNDARY( BOARD* aBoard, BOUNDARY* aBoundary ) throw( IOError );
+
 
     /**
      * Function makeIMAGE
@@ -3857,6 +3867,7 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
 
         nets.clear();
     }
+    //-----</FromBOARD>------------------------------------------------------
 
     //-----<FromSESSION>-----------------------------------------------------
 
