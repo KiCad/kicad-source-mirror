@@ -190,104 +190,44 @@ static POINT mapPt( const wxPoint& pt )
 
 
 /**
- * Function findPOINT
- * searches the list of POINT_PAIRS for a matching end to the given POINT.
- * @return int - 0 if no match, or positive one based index of a POINT_PAIR with a matching ".start",
- *              or a negated one based index of a POINT_PAIR with a matching ".end".
+ * Function findPoint
+ * searches for a DRAWSEGMENT with an end point or start point of aPoint, and
+ * if found, removes it from the TYPE_COLLECTOR and returns it, else returns NULL.
  */
-static int findPOINT( const POINT& pt, const POINT_PAIR source[], int count )
+static DRAWSEGMENT* findPoint( const wxPoint& pt, TYPE_COLLECTOR* items )
 {
-    for( int i=0;  i<count;  ++i )
+    for( int i=0;  i<items->GetCount();  ++i )
     {
-        if( pt == source[i].start )
-        {
-            return +( i + 1 );
-        }
+        DRAWSEGMENT* graphic = (DRAWSEGMENT*) (*items)[i];
 
-        if( pt == source[i].end )
+        wxASSERT( graphic->Type() == TYPEDRAWSEGMENT );
+
+        if( pt == graphic->GetStart() || pt == graphic->GetEnd() )
         {
-            return -( i + 1 );
+            items->Remove(i);
+            return graphic;
         }
     }
 
-    return 0;
-}
 
+#if defined(DEBUG)
+    printf("Unable to find segment matching point (%d,%d)\n",
+                         pt.x, pt.y );
 
-/**
- * Function swapEnds
- * will swap ends of any POINT_PAIR in the POINT_PAIRS list in order to
- * make the consecutive POINT_PAIRs be "connected" at their ends.
- */
-static void swapEnds( POINT_PAIRS& aList )
-{
-    if( !aList.size() )
-        return;
-
-    // do an extraction sort based on matching ends here.
-    POINT_PAIRS sorted;
-    POINT_PAIRS source( aList );
-
-    // try and start the search using a POINT which has at least one match elsewhere.
-    if( findPOINT( source.begin()->start, &source[1], source.size()-1 ) != 0 )
-        swap( *source.begin() );        // swap start and end of first PAIR
-
-    while( source.size() )
+    for( int i=0;  i<items->GetCount();  ++i )
     {
-        sorted.push_back( *source.begin() );
-        source.erase( source.begin() );
+        DRAWSEGMENT* graphic = (DRAWSEGMENT*) (*items)[i];
 
-        // keep looping through the source list looking for a match to the end of the last sorted.
-        int result;
-        while( (result = findPOINT( sorted.back().end, &source[0], source.size() ) ) != 0 )
-        {
-            int ndx = ABS(result)-1;
-            sorted.push_back( source[ ndx ] );
-            source.erase( source.begin()+ndx );
-
-            if( result < 0 )
-                swap( sorted.back() );
-        }
-    }
-
-#if 0 && defined(DEBUG)
-    printf( "swapEnds():\n" );
-    for( unsigned i=0;  i<sorted.size();  ++i )
-    {
-        printf( "(%.6g,%.6g)  (%.6g,%.6g)\n",
-               sorted[i].start.x, sorted[i].start.y,
-               sorted[i].end.x,   sorted[i].end.y );
+        printf( "type=%s, GetStart()=%d,%d  GetEnd()=%d,%d\n",
+                CONV_TO_UTF8( BOARD_ITEM::ShowShape( (Track_Shapes)graphic->m_Shape ) ),
+                graphic->GetStart().x,
+                graphic->GetStart().y,
+                graphic->GetEnd().x,
+                graphic->GetEnd().y );
     }
 #endif
 
-    aList = sorted;
-}
-
-
-/**
- * Function isRectangle
- * tests to see if the POINT_PAIRS list makes up a vertically/horizontally
- * oriented rectangle.
- * @return bool - true if there are 4 point pairs making a rectangle.
- */
-static bool isRectangle( POINT_PAIRS& aList )
-{
-    if( aList.size() == 4 )
-    {
-        for( unsigned i=0;  i<aList.size();  ++i )
-        {
-            if( i < aList.size()-1 )
-                if( aList[i].end != aList[i+1].start )
-                    return false;
-
-            if( aList[i].start.x != aList[i].end.x
-            &&  aList[i].start.y != aList[i].end.y )
-                return false;
-        }
-
-        return ( aList[0].start == aList[3].end );
-    }
-    return false;
+    return NULL;
 }
 
 
@@ -716,7 +656,8 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
         case S_RECT:
         case S_ARC:
         default:
-            D( printf("makeIMAGE(): unsupported shape %s\n", EDGE_MODULE::ShowShape(graphic->m_Shape) );)
+            D( printf("makeIMAGE(): unsupported shape %s\n",
+                      CONV_TO_UTF8( BOARD_ITEM::ShowShape( (Track_Shapes)graphic->m_Shape))  );)
             continue;
         }
     }
@@ -774,6 +715,171 @@ PADSTACK* SPECCTRA_DB::makeVia( const SEGVIA* aVia )
     return makeVia( aVia->m_Width, aVia->GetDrillValue(), topLayer, botLayer );
 }
 
+
+void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IOError )
+{
+    TYPE_COLLECTOR          items;
+
+    // get all the DRAWSEGMENTS into 'items', then look for layer == EDGE_N,
+    // and those segments comprise the board's perimeter.
+
+    static const KICAD_T  scanDRAWSEGMENTS[] = { TYPEDRAWSEGMENT, EOT };
+
+    items.Collect( aBoard, scanDRAWSEGMENTS );
+
+    bool haveEdges = false;
+
+    for( int i=0;  i<items.GetCount();  )
+    {
+        DRAWSEGMENT* item = (DRAWSEGMENT*) items[i];
+
+        wxASSERT( item->Type() == TYPEDRAWSEGMENT );
+
+        if( item->GetLayer() != EDGE_N )
+        {
+            items.Remove( i );
+        }
+        else
+        {
+            haveEdges = true;
+            ++i;
+            //D( item->Show( 0, std::cout );)
+        }
+    }
+
+    if( haveEdges )
+    {
+        PATH*  path = new PATH( boundary );
+        boundary->paths.push_back( path );
+        path->layer_id = "pcb";
+
+        wxPoint         prevPt;
+
+        DRAWSEGMENT*    graphic = (DRAWSEGMENT*) items[0];
+
+        // the first DRAWSEGMENT is in 'graphic*', ok to remove it from 'items'
+        items.Remove( 0 );
+
+        prevPt = graphic->GetEnd();
+
+        path->AppendPoint( mapPt( graphic->GetStart() ) );
+        path->AppendPoint( mapPt( graphic->GetEnd() ) );
+
+        while( items.GetCount() )
+        {
+            graphic = findPoint( prevPt, &items );
+            if( graphic )
+            {
+                switch( graphic->m_Shape )
+                {
+                case S_ARC:
+                    // freerouter does not yet understand arcs, so approximate
+                    // an arc with a series of short lines and put those
+                    // line segments into the !same! PATH.
+                    {
+                        const int STEPS =  9;      // in an arc of 90 degrees
+
+                        wxPoint start  = graphic->GetStart();
+                        wxPoint end    = graphic->GetEnd();
+                        wxPoint center = graphic->m_Start;
+                        int     angle  = -graphic->m_Angle;
+
+                        if( prevPt != start )
+                        {
+                            wxASSERT( prevPt == graphic->GetEnd() );
+
+                            angle = -angle;
+                            EXCHG( start, end );
+                        }
+
+                        wxPoint nextPt;
+
+                        for( int step=1;  step<=STEPS;  ++step )
+                        {
+                            int rotation = ( angle * step )/STEPS;
+
+                            nextPt = start;
+
+                            RotatePoint( &nextPt.x, &nextPt.y, center.x, center.y, rotation );
+
+                            path->AppendPoint( mapPt( nextPt ) );
+                        }
+
+                        prevPt = nextPt;
+                    }
+                    break;
+
+                case S_CIRCLE:
+                    // do not output a circle, freerouter does not understand it.
+                    // this might be a mounting hole or something, ignore it without error
+
+                default:
+                    {
+                        wxString error;
+
+                        error.Printf( _("Unsupported DRAWSEGMENT type %s",
+                          BOARD_ITEM::ShowShape( (Track_Shapes) graphic->m_Shape ).GetData() );
+
+                        ThrowIOError( error );
+                    }
+                    break;
+
+                case S_SEGMENT:
+                    {
+                        POINT  nextPt;
+
+                        if( prevPt != graphic->GetStart() )
+                        {
+                            wxASSERT( prevPt == graphic->GetEnd() );
+                            nextPt = mapPt( graphic->GetStart() );
+                            prevPt = graphic->GetStart();
+                        }
+                        else
+                        {
+                            nextPt = mapPt( graphic->GetStart() );
+                            prevPt = graphic->GetEnd();
+                        }
+
+                        path->AppendPoint( nextPt );
+                     }
+                }
+            }
+            else
+            {
+                wxString error;
+
+                error << _("Unable to find the next segment with an endpoint of ");
+                error << prevPt;
+                error << wxChar('\n');
+                error << _("Edit Edges_Pcb segments, making them contiguous.");
+                ThrowIOError( error );
+            }
+        }
+    }
+    else
+    {
+        aBoard->ComputeBoundaryBox();
+
+        RECTANGLE*  rect = new RECTANGLE( boundary );
+
+        rect->layer_id = "pcb";
+
+        // opposite corners
+        wxPoint bottomRight;
+        bottomRight.x = aBoard->m_BoundaryBox.GetRight();
+        bottomRight.y = aBoard->m_BoundaryBox.GetBottom();
+
+        rect->SetCorners( mapPt( aBoard->m_BoundaryBox.GetOrigin() ),
+                          mapPt( bottomRight ) );
+
+        boundary->rectangle = rect;
+
+        pcb->structure->SetBOUNDARY( boundary );
+    }
+}
+
+
+
 typedef std::set<std::string>  STRINGSET;
 typedef std::pair<STRINGSET::iterator, bool> STRINGSET_PAIR;
 
@@ -781,8 +887,6 @@ typedef std::pair<STRINGSET::iterator, bool> STRINGSET_PAIR;
 void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 {
     TYPE_COLLECTOR          items;
-    POINT_PAIRS             ppairs;
-    POINT_PAIR              pair;
 
     static const KICAD_T    scanMODULEs[] = { TYPEMODULE, EOT };
 
@@ -874,90 +978,12 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 
     //-----<boundary_descriptor>------------------------------------------
     {
-        // get all the DRAWSEGMENTS into 'items', then look for layer == EDGE_N,
-        // and those segments comprise the board's perimeter.
-        static const KICAD_T  scanDRAWSEGMENTS[] = { TYPEDRAWSEGMENT, EOT };
-        items.Collect( aBoard, scanDRAWSEGMENTS );
-
-        bool haveEdges = false;
-        ppairs.clear();
-        for( int i=0;  i<items.GetCount();  ++i )
-        {
-            DRAWSEGMENT* item = (DRAWSEGMENT*) items[i];
-
-            wxASSERT( item->Type() == TYPEDRAWSEGMENT );
-
-            if( item->GetLayer() == EDGE_N )
-            {
-                pair.start = mapPt( item->m_Start );
-                pair.end = mapPt( item->m_End );
-                pair.item = item;
-                ppairs.push_back( pair );
-                haveEdges = true;
-            }
-        }
-
-        if( haveEdges )
-        {
-            swapEnds( ppairs );
-
-#if 0 && defined(DEBUG)
-            for( unsigned i=0;  i<ppairs.size();  ++i )
-            {
-                POINT_PAIR* p = &ppairs[i];
-                p->item->Show( 0, std::cout );
-            }
-#endif
-
-            BOUNDARY*   boundary = new BOUNDARY(0);
-
-            if( isRectangle( ppairs ) )
-            {
-                RECTANGLE*  rect = new RECTANGLE( boundary );
-                rect->layer_id = "pcb";
-
-                // opposite corners
-                rect->SetCorners( ppairs[0].start, ppairs[2].start );
-
-                boundary->rectangle = rect;
-            }
-            else
-            {
-                PATH*  path = new PATH( boundary );
-                boundary->paths.push_back( path );
-
-                path->layer_id = "pcb";
-                for( unsigned i=0; i<ppairs.size();  ++i )
-                {
-                    // unless its a closed polygon, this probably won't work,
-                    // otherwise it will.
-                    path->points.push_back( ppairs[i].start );
-                }
-            }
-
-            pcb->structure->SetBOUNDARY( boundary );
-        }
-        else
-        {
-            aBoard->ComputeBoundaryBox();
-
-            BOUNDARY*   boundary = new BOUNDARY(0);
-            RECTANGLE*  rect = new RECTANGLE( boundary );
-
-            rect->layer_id = "pcb";
-
-            // opposite corners
-            wxPoint bottomRight;
-            bottomRight.x = aBoard->m_BoundaryBox.GetRight();
-            bottomRight.y = aBoard->m_BoundaryBox.GetBottom();
-
-            rect->SetCorners( mapPt( aBoard->m_BoundaryBox.GetOrigin() ),
-                              mapPt( bottomRight ) );
-
-            boundary->rectangle = rect;
-
-            pcb->structure->SetBOUNDARY( boundary );
-        }
+        // because fillBOUNDARY() can throw and exception, we link in an
+        // empty boundary so the BOUNDARY does not get lost in the event of
+        // of an exception.
+        BOUNDARY* boundary = new BOUNDARY(0);
+        pcb->structure->SetBOUNDARY( boundary );
+        fillBOUNDARY( aBoard, boundary );
     }
 
 
