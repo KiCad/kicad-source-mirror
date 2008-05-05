@@ -704,13 +704,13 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
             HK_SWITCH_LAYER_TO_COMPONENT
         };
 
-        if( (g_TabOneLayerMask[layer] & layer_mask) )
+        if( g_TabOneLayerMask[layer] & layer_mask )
         {
             wxString msg = m_Pcb->GetLayerName( layer );
             msg = AddHotkeyName( msg, s_Board_Editor_Hokeys_Descr, HK_SwitchLayer[layer] );
             m_SelLayerBox->Append( msg );
 
-            D(printf("appending layername=%s, ndx=%d, layer=%d\n", CONV_TO_UTF8(msg), listNdx, layer );)
+            //D(printf("appending layername=%s, ndx=%d, layer=%d\n", CONV_TO_UTF8(msg), listNdx, layer );)
 
             m_SelLayerBox->SetClientData( listNdx, (void*) layer );
             length = MAX( length, msg.Len() );
