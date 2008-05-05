@@ -6,6 +6,20 @@
 #define BOARD_ITEM_STRUCT_H
 
 
+/* Forme des segments (pistes, contours ..) ( parametre .shape ) */
+enum Track_Shapes {
+    S_SEGMENT = 0,      /* segment rectiligne */
+    S_RECT,             /* segment forme rect (i.e. bouts non arrondis) */
+    S_ARC,              /* segment en arc de cercle (bouts arrondis)*/
+    S_CIRCLE,           /* segment en cercle (anneau)*/
+    S_ARC_RECT,         /* segment en arc de cercle (bouts droits) (GERBER)*/
+    S_SPOT_OVALE,       /* spot ovale (for GERBER)*/
+    S_SPOT_CIRCLE,      /* spot rond (for GERBER)*/
+    S_SPOT_RECT,        /* spot rect (for GERBER)*/
+    S_POLYGON           /* polygon shape */
+};
+
+
 /**
  * Class BOARD_ITEM
  * is a base class for any item which can be embedded within the BOARD
@@ -133,6 +147,13 @@ public:
      * @todo: make this virtual and split into each derived class
      */
     const char**    MenuIcon() const;
+
+
+    /**
+     * Function ShowShape
+     * converts the enum Track_Shapes integer value to a wxString.
+     */
+    static wxString ShowShape( Track_Shapes aShape );
 
 
     /**
