@@ -864,7 +864,6 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IOErr
         RECTANGLE*  rect = new RECTANGLE( boundary );
         boundary->rectangle = rect;
 
-
         rect->layer_id = "pcb";
 
         // opposite corners
@@ -891,9 +890,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 
     // Not all boards are exportable.  Check that all reference Ids are unique.
     // Unless they are unique, we cannot import the session file which comes
-    // back to us later from the router.  Also check that all pad names within
-    // a part are unique, otherwise Electra and Freerouter will not draw the
-    // pads properly.
+    // back to us later from the router.
     {
         TYPE_COLLECTOR  padItems;
 
@@ -959,8 +956,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             char temp[32];
             sprintf( temp, "%d", pcbNdx );
             property->value = temp;
-
-            // layer->type =  @todo need this, the export would be better.
         }
     }
 
@@ -977,7 +972,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 
     //-----<boundary_descriptor>------------------------------------------
     {
-        // because fillBOUNDARY() can throw and exception, we link in an
+        // because fillBOUNDARY() can throw an exception, we link in an
         // empty boundary so the BOUNDARY does not get lost in the event of
         // of an exception.
         BOUNDARY* boundary = new BOUNDARY(0);
