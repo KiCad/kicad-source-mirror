@@ -128,8 +128,17 @@ public:
     void                    SaveProject();
     int                     LoadOneEEProject( const wxString& FileName, bool IsNew );
     bool                    LoadOneEEFile( SCH_SCREEN* screen, const wxString& FullFileName );
-    bool  		    ReadInputStuffFile();
-    bool  		    ProcessStuffFile(FILE* filename);
+    bool  		            ReadInputStuffFile();
+
+
+    /**
+     * Function ProcessStuffFile
+     * gets footprint info from each line in the Stuff File by Ref Desg
+     * @param filename The file to read from.
+     * @return bool - true if success, else true.
+     */
+    bool  		            ProcessStuffFile( FILE* filename );
+
     bool                    SaveEEFile( SCH_SCREEN* screen, int FileSave );
     SCH_SCREEN*             CreateNewScreen( SCH_SCREEN* OldScreen, int TimeStamp );
 
