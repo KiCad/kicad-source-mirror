@@ -393,6 +393,7 @@ enum main_id {
 	ID_GET_NETLIST,
 	ID_GET_TOOLS,
 	ID_FIND_ITEMS,
+	ID_BACKANNO_ITEMS,
 
 	// Id pour HToolBar de Libview (Process_Special_Functions)
 	ID_LIBVIEW_START_H_TOOL,

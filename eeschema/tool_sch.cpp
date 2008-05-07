@@ -130,6 +130,8 @@ void WinEDA_SchematicFrame::ReCreateHToolbar()
     m_HToolBar->AddTool( ID_GET_TOOLS, wxEmptyString, BITMAP( tools_xpm ),
                         _( "Bill of material and/or Crossreferences" ) );
 
+    m_HToolBar->AddTool( ID_BACKANNO_ITEMS, wxEmptyString, BITMAP( backanno_xpm ),
+                        _( "BackAnnotate Footprint" ) );
 
     // after adding the tools to the toolbar, must call Realize() to reflect the changes
     m_HToolBar->Realize();

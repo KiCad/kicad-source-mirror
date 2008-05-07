@@ -128,6 +128,8 @@ public:
     void                    SaveProject();
     int                     LoadOneEEProject( const wxString& FileName, bool IsNew );
     bool                    LoadOneEEFile( SCH_SCREEN* screen, const wxString& FullFileName );
+    bool  		    ReadInputStuffFile();
+    bool  		    ProcessStuffFile(FILE* filename);
     bool                    SaveEEFile( SCH_SCREEN* screen, int FileSave );
     SCH_SCREEN*             CreateNewScreen( SCH_SCREEN* OldScreen, int TimeStamp );
 
@@ -158,6 +160,7 @@ private:
     void                    OnCreateBillOfMaterials( wxCommandEvent& event );
     void                    OnFindItems( wxCommandEvent& event );
     void                    OnLoadFile( wxCommandEvent& event );
+    void                    OnLoadStuffFile( wxCommandEvent& event );
     void                    OnNewProject( wxCommandEvent& event );
     void                    OnLoadProject( wxCommandEvent& event );
     void                    OnOpenPcbnew( wxCommandEvent& event );

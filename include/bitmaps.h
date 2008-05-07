@@ -109,7 +109,9 @@
 	#include "../bitmaps/cut.xpm"
 	#include "../bitmaps/paste.xpm"
 	#include "../bitmaps/print.xpm"
+	#include "../bitmaps/backanno.xpm"
 	#include "../bitmaps/find.xpm"
+
 	#include "../bitmaps/Cursor_Shape.xpm"
 	#include "../bitmaps/Add_Component.xpm"
 	#include "../bitmaps/noconn.xpm"

@@ -8,6 +8,7 @@ set(EESCHEMA_SRCS
     affiche.cpp
     annotate.cpp
     annotate_dialog.cpp
+    backanno.cpp
     block.cpp
     block_libedit.cpp
     busentry.cpp

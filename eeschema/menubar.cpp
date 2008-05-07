@@ -162,6 +162,14 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         item->SetBitmap( find_xpm );
         editMenu->Append( item );
 
+        editMenu->AppendSeparator();
+
+        item = new wxMenuItem( editMenu, ID_BACKANNO_ITEMS,
+                               _( "BackAnno" ), _( "Back Annotated Footprints" ),
+                               wxITEM_NORMAL );
+        item->SetBitmap( backanno_xpm );
+        editMenu->Append( item );
+
         // Menu View:
         wxMenu* viewMenu = new wxMenu;
         msg  = AddHotkeyName( _( "Zoom in" ), s_Schematic_Hokeys_Descr,

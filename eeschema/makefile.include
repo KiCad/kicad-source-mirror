@@ -83,6 +83,7 @@ OBJECTS = eeschema.o\
 		onrightclick.o \
 		onleftclick.o \
 		find.o \
+		backanno.o \
 		controle.o\
 		hotkeys.o\
 		svg_print.o
@@ -109,6 +110,8 @@ component_class.o: component_class.cpp component_class.h
 menubar.o: menubar.cpp $(DEPEND)
 
 find.o:find.cpp dialog_find.cpp dialog_find.h $(DEPEND)
+
+backanno.o:backanno.cpp dialog_backanno.cpp dialog_backanno.h $(DEPEND)
 
 eeconfig.o: eeconfig.cpp eeconfig.h $(DEPEND)
 

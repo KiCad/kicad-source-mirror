@@ -22,6 +22,7 @@
 #include "dialog_build_BOM.h"
 #include "dialog_erc.h"
 #include "dialog_find.h"
+#include "dialog_backanno.h"
 #include "netlist_control.h"
 
 
@@ -95,6 +96,7 @@ BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, wxFrame )
     EVT_TOOL( ID_GET_NETLIST, WinEDA_SchematicFrame::OnCreateNetlist )
     EVT_TOOL( ID_GET_TOOLS, WinEDA_SchematicFrame::OnCreateBillOfMaterials )
     EVT_TOOL( ID_FIND_ITEMS, WinEDA_SchematicFrame::OnFindItems )
+    EVT_TOOL( ID_BACKANNO_ITEMS, WinEDA_SchematicFrame::OnLoadStuffFile )
 
     EVT_MENU( ID_GENERAL_HELP, WinEDA_DrawFrame::GetKicadHelp )
     EVT_MENU( ID_KICAD_ABOUT, WinEDA_DrawFrame::GetKicadAbout )
@@ -502,6 +504,11 @@ void WinEDA_SchematicFrame::OnLoadFile( wxCommandEvent& event )
 
     LoadOneEEProject( GetLastProject( i ).GetData( ), false );
     SetToolbars();
+}
+
+void WinEDA_SchematicFrame::OnLoadStuffFile( wxCommandEvent& event )
+{
+    ReadInputStuffFile( );
 }
 
 void WinEDA_SchematicFrame::OnNewProject( wxCommandEvent& event )
