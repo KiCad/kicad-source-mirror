@@ -89,6 +89,8 @@ public:
         bool
         IncludePin );
 
+    SCH_COMPONENT*          FindComponentByRef( const wxString& reference );
+
     SCH_ITEM*               FindComponentAndItem( const wxString& component_reference,
                                                   bool                          Find_in_hierarchy,
                                                   int                           SearchType,

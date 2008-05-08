@@ -18,12 +18,38 @@
 #include "protos.h"
 
 /**************************************************************/
+SCH_COMPONENT * WinEDA_SchematicFrame::FindComponentByRef(
+     const wxString& reference )
+/**************************************************************/
+{
+    DrawSheetPath*      sheet;
+    SCH_ITEM*           DrawList  = NULL;
+    EDA_SheetList       SheetList( NULL );
+
+    for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
+    {
+	DrawList = (SCH_ITEM*) sheet->LastDrawList();
+	for( ; (DrawList != NULL); DrawList = DrawList->Next() )
+	{
+	    if( DrawList->Type() == TYPE_SCH_COMPONENT )
+	    {
+		SCH_COMPONENT* pSch;
+
+		pSch = (SCH_COMPONENT*) DrawList;
+		if( reference.CmpNoCase( pSch->GetRef(sheet) ) == 0 )
+		    return pSch;
+	    }
+	}
+    }
+    return NULL;
+}
+
+/**************************************************************/
 bool WinEDA_SchematicFrame::ProcessStuffFile( FILE* StuffFile )
 /**************************************************************/
 {
     int             LineNum = 0;
     char*           cp, Ref[256], FootPrint[256], Line[1024];
-    SCH_ITEM*       DrawList = NULL;
     SCH_COMPONENT*  Cmp;
     PartTextStruct* TextField;
 
@@ -39,22 +65,18 @@ bool WinEDA_SchematicFrame::ProcessStuffFile( FILE* StuffFile )
                 if( *cp == '"' )
                     *cp = 0;
 
-            // printf("'%s' '%s'\n", Ref, FootPrint);
-
             wxString    reference = CONV_FROM_UTF8( Ref );
 
-            DrawList = WinEDA_SchematicFrame::FindComponentAndItem(
-                reference, TRUE, 2, wxEmptyString, false );
-
-            if( DrawList == NULL )
+            Cmp = WinEDA_SchematicFrame::FindComponentByRef( reference );
+            if( Cmp == NULL )
                 continue;
 
-            if( DrawList->Type() == TYPE_SCH_COMPONENT )
-            {
-                Cmp = (SCH_COMPONENT*) DrawList;
-                TextField = &Cmp->m_Field[FOOTPRINT];
-                TextField->m_Text = CONV_FROM_UTF8( FootPrint );
-            }
+#if defined(DEBUG)
+            printf( "  %s %s\n", CONV_TO_UTF8(Cmp->m_Field[REFERENCE].m_Text), 
+		 		     CONV_TO_UTF8(Cmp->m_Field[VALUE].m_Text) );
+#endif
+            TextField = &Cmp->m_Field[FOOTPRINT];
+            TextField->m_Text = CONV_FROM_UTF8( FootPrint );
         }
     }
 
