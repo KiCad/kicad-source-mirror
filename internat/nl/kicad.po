@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-05 00:51+0100\n"
-"PO-Revision-Date: 2008-05-05 01:06+0100\n"
+"PO-Revision-Date: 2008-05-06 02:08+0100\n"
 "Last-Translator: Jerry Jacobs <jerkejacobs@gmail.com>\n"
 "Language-Team: KiCad Team <jerkejacobs@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -36,6 +36,8 @@ msgid ""
 "\n"
 "Cannot update the footprint"
 msgstr ""
+"\n"
+"Kan voetprint niet updaten"
 
 #: pcbnew/modedit.cpp:272
 msgid "A footprint source was found on the main board"
@@ -503,7 +505,6 @@ msgid "Ch. same module+value"
 msgstr ""
 
 #: pcbnew/xchgmod.cpp:125
-#, fuzzy
 msgid "Change all"
 msgstr "Verander alles"
 
@@ -525,7 +526,6 @@ msgid "Current Module"
 msgstr "Huidige Module"
 
 #: pcbnew/xchgmod.cpp:149
-#, fuzzy
 msgid "Current Value"
 msgstr "Huidige Waarde"
 
@@ -759,7 +759,6 @@ msgid "Mirror"
 msgstr "Spiegel"
 
 #: pcbnew/modedit_onclick.cpp:255
-#, fuzzy
 msgid "Scale"
 msgstr "Schaal"
 
@@ -768,7 +767,6 @@ msgid "Scale X"
 msgstr "Schaal X"
 
 #: pcbnew/modedit_onclick.cpp:257
-#, fuzzy
 msgid "Scale Y"
 msgstr "Schaal Y"
 
@@ -787,15 +785,13 @@ msgstr "Verplaats Pad"
 
 #: pcbnew/modedit_onclick.cpp:273
 #: pcbnew/onrightclick.cpp:828
-#, fuzzy
 msgid "Edit Pad"
 msgstr "Bewerk Pad"
 
 #: pcbnew/modedit_onclick.cpp:275
 #: pcbnew/onrightclick.cpp:832
-#, fuzzy
 msgid "New Pad Settings"
-msgstr "Nieuwe Pad Instellingen"
+msgstr "Nieuw Pad Instellingen"
 
 #: pcbnew/modedit_onclick.cpp:277
 #: pcbnew/onrightclick.cpp:836
@@ -1090,7 +1086,6 @@ msgid "Merging Segments:"
 msgstr ""
 
 #: pcbnew/clean.cpp:464
-#, fuzzy
 msgid "Merge"
 msgstr "Samenvoegen"
 
@@ -1115,7 +1110,6 @@ msgid "NetCtr"
 msgstr ""
 
 #: pcbnew/clean.cpp:1061
-#, fuzzy
 msgid "Centre"
 msgstr "Centreren"
 
@@ -1222,11 +1216,11 @@ msgstr ""
 
 #: pcbnew/files.cpp:368
 msgid "Failed to create "
-msgstr ""
+msgstr "Creeeren mislukt"
 
 #: pcbnew/modules.cpp:81
 msgid "Footprint name:"
-msgstr ""
+msgstr "Voetprint naam:"
 
 #: pcbnew/modules.cpp:291
 #: pcbnew/onrightclick.cpp:763
@@ -1477,7 +1471,6 @@ msgid "Set width for lines in line plot mode"
 msgstr ""
 
 #: pcbnew/pcbplot.cpp:234
-#, fuzzy
 msgid "Absolute"
 msgstr "Absoluut"
 
@@ -2347,9 +2340,8 @@ msgstr "Uitzoomen"
 #: eeschema/menubar.cpp:191
 #: eeschema/tool_sch.cpp:109
 #: gerbview/tool_gerber.cpp:285
-#, fuzzy
 msgid "redraw"
-msgstr "hertekenen"
+msgstr "Tekening Verversen"
 
 #: pcbnew/tool_modedit.cpp:128
 #: pcbnew/tool_pcb.cpp:284
@@ -2964,7 +2956,7 @@ msgstr "Y Pos"
 
 #: pcbnew/pcbframe.cpp:280
 msgid "Board modified, Save before exit ?"
-msgstr ""
+msgstr "Bord veranderd, Opslaan voor afsluiten?"
 
 #: pcbnew/pcbframe.cpp:281
 #: eeschema/schframe.cpp:309
@@ -3025,13 +3017,13 @@ msgstr ""
 
 #: pcbnew/pcbframe.cpp:431
 msgid "Do not Show Zones"
-msgstr ""
+msgstr "Zones Verbergen"
 
 #: pcbnew/pcbframe.cpp:431
 #: pcbnew/tool_pcb.cpp:371
 #: pcbnew/set_color.h:423
 msgid "Show Zones"
-msgstr ""
+msgstr "Zones Tonen"
 
 #: pcbnew/pcbframe.cpp:437
 msgid "Show Pads Sketch mode"
@@ -3051,12 +3043,12 @@ msgstr ""
 
 #: pcbnew/pcbframe.cpp:451
 msgid "Normal Contrast Mode Display"
-msgstr ""
+msgstr "Weergave: Normaal Contrast"
 
 #: pcbnew/pcbframe.cpp:452
 #: pcbnew/tool_pcb.cpp:384
 msgid "Hight Contrast Mode Display"
-msgstr ""
+msgstr "Weergave: Hoog Contrast"
 
 #: pcbnew/pcbframe.cpp:496
 #: pcbnew/class_board_item.cpp:204
@@ -3073,7 +3065,7 @@ msgstr ""
 
 #: pcbnew/surbrill.cpp:41
 msgid "List Nets"
-msgstr ""
+msgstr "Verbinding Lijst"
 
 #: pcbnew/mirepcb.cpp:78
 #, fuzzy
@@ -3113,7 +3105,7 @@ msgstr "0.00000"
 
 #: pcbnew/dialog_zones_by_polygon.cpp:159
 msgid "Grid Size for Filling:"
-msgstr ""
+msgstr "Raster Grote voor Vullen:"
 
 #: pcbnew/dialog_zones_by_polygon.cpp:163
 msgid "Zone clearance value (mm):"
@@ -3433,7 +3425,7 @@ msgstr ""
 
 #: pcbnew/dialog_netlist.cpp:220
 msgid "Footprints Test"
-msgstr ""
+msgstr "Voetprint Test"
 
 #: pcbnew/dialog_netlist.cpp:222
 msgid "Read the current neltist file and list missing and extra footprints"
@@ -3638,11 +3630,11 @@ msgstr ""
 
 #: pcbnew/dialog_display_options.cpp:254
 msgid "Show Pad Number"
-msgstr ""
+msgstr "Toon Pad Nummer"
 
 #: pcbnew/dialog_display_options.cpp:258
 msgid "Show Pad NoConnect"
-msgstr ""
+msgstr "Toon Pad GeenConnectie"
 
 #: pcbnew/dialog_display_options.cpp:269
 #: gerbview/options.cpp:322
@@ -3789,11 +3781,11 @@ msgstr "Zones toevoegen"
 
 #: pcbnew/tool_pcb.cpp:457
 msgid "Add text"
-msgstr "Tekst toevoegen"
+msgstr "Tekst Toevoegen"
 
 #: pcbnew/tool_pcb.cpp:462
 msgid "Add dimension"
-msgstr "Afmetingen toevoegen"
+msgstr "Afmetingen Toevoegen"
 
 #: pcbnew/tool_pcb.cpp:466
 #: gerbview/tool_gerber.cpp:378
@@ -4322,7 +4314,7 @@ msgstr "Verwijder Doel"
 
 #: pcbnew/onrightclick.cpp:362
 msgid "Get and Move Footprint"
-msgstr ""
+msgstr "Selecteer en Verplaats Voetprint"
 
 #: pcbnew/onrightclick.cpp:375
 #, fuzzy
@@ -4348,7 +4340,7 @@ msgstr ""
 
 #: pcbnew/onrightclick.cpp:407
 msgid "Footprint documentation"
-msgstr ""
+msgstr "Voetprint documentatie"
 
 #: pcbnew/onrightclick.cpp:417
 msgid "Glob Move and Place"
@@ -4744,19 +4736,19 @@ msgstr ""
 #: eeschema/component_class.cpp:74
 #: eeschema/dialog_build_BOM.cpp:300
 msgid "Footprint"
-msgstr ""
+msgstr "Voetprint"
 
 #: pcbnew/class_board_item.cpp:47
 msgid "Pad"
-msgstr ""
+msgstr "Pad"
 
 #: pcbnew/class_board_item.cpp:50
 msgid "all copper layers"
-msgstr ""
+msgstr "alle koper lagen"
 
 #: pcbnew/class_board_item.cpp:55
 msgid "???"
-msgstr ""
+msgstr "???"
 
 #: pcbnew/class_board_item.cpp:56
 msgid ") of "
@@ -4821,8 +4813,9 @@ msgid "size"
 msgstr "grote"
 
 #: pcbnew/deltrack.cpp:155
+#, fuzzy
 msgid "Delete NET ?"
-msgstr ""
+msgstr "Verwijder "
 
 #: pcbnew/menubarpcb.cpp:42
 msgid "Load Board    Ctrl-O"
@@ -4955,7 +4948,7 @@ msgstr "Bestanden importeren"
 
 #: pcbnew/menubarpcb.cpp:144
 msgid "Add new footprints"
-msgstr ""
+msgstr "Nieuw voetprint toevoegen"
 
 #: pcbnew/menubarpcb.cpp:145
 msgid "Archive new footprints only in a library (keep other footprints in this lib)"
@@ -4971,11 +4964,11 @@ msgstr ""
 
 #: pcbnew/menubarpcb.cpp:155
 msgid "Archive footprints"
-msgstr ""
+msgstr "Archiveer voetprint"
 
 #: pcbnew/menubarpcb.cpp:156
 msgid "Archive or Add footprints in a library file"
-msgstr ""
+msgstr "Archiveer of voetprinten Toevoegen aan bibliotheek bestand"
 
 #: pcbnew/menubarpcb.cpp:160
 #: eeschema/menubar.cpp:115
@@ -4998,7 +4991,7 @@ msgstr "&Bibliotheek Instellingen"
 #: eeschema/menubar.cpp:357
 #: cvpcb/tool_cvpcb.cpp:140
 msgid "Setting Libraries, Directories and others..."
-msgstr ""
+msgstr "Instellingen:  Bibliotheken, Directories..."
 
 #: pcbnew/menubarpcb.cpp:183
 #: eeschema/menubar.cpp:362
@@ -5202,28 +5195,28 @@ msgstr "Bibliotheken"
 
 #: pcbnew/dialog_setup_libs.cpp:199
 msgid "Lib Modules Dir:"
-msgstr ""
+msgstr "Bibliotheek Modules Directory:"
 
 #: pcbnew/dialog_setup_libs.cpp:206
 #: cvpcb/menucfg.cpp:91
 msgid "Module Doc File:"
-msgstr ""
+msgstr "Module Document Bestand:"
 
 #: pcbnew/dialog_setup_libs.cpp:216
 msgid "Board ext: "
-msgstr ""
+msgstr "Layout ext:"
 
 #: pcbnew/dialog_setup_libs.cpp:220
 msgid "Cmp ext: "
-msgstr ""
+msgstr "Cmp ext: "
 
 #: pcbnew/dialog_setup_libs.cpp:224
 msgid "Lib ext: "
-msgstr ""
+msgstr "Lib ext: "
 
 #: pcbnew/dialog_setup_libs.cpp:228
 msgid "Net ext: "
-msgstr ""
+msgstr "Net ext: "
 
 #: pcbnew/dialog_setup_libs.cpp:367
 #: cvpcb/menucfg.cpp:232
@@ -5235,7 +5228,7 @@ msgstr "Bibliotheek Bestanden:"
 #: cvpcb/menucfg.cpp:257
 #: cvpcb/menucfg.cpp:325
 msgid "Library already in use"
-msgstr ""
+msgstr "Bibliotheek al in gebruik"
 
 #: pcbnew/class_edge_mod.cpp:284
 msgid "Seg"
@@ -5309,11 +5302,11 @@ msgstr "Vindt Volgende Marker"
 
 #: pcbnew/autoplac.cpp:106
 msgid "Footprints NOT LOCKED will be moved"
-msgstr ""
+msgstr "Voetprinten NIET VERGRENDELD worden verplaatst"
 
 #: pcbnew/autoplac.cpp:111
 msgid "Footprints NOT PLACED will be moved"
-msgstr ""
+msgstr "Voetprinten NIET GEPLAATST worden verplaatst"
 
 #: pcbnew/autoplac.cpp:402
 msgid "No edge PCB, Unknown board size!"
@@ -5358,7 +5351,7 @@ msgstr ""
 
 #: eeschema/symbedit.cpp:151
 msgid "Export symbol drawings:"
-msgstr ""
+msgstr "Exporteer symbool tekeningen:"
 
 #: eeschema/symbedit.cpp:171
 #, c-format
@@ -5628,7 +5621,7 @@ msgstr "Bestandsna."
 #: eeschema/affiche.cpp:37
 #: eeschema/component_class.cpp:72
 msgid "Ref"
-msgstr ""
+msgstr "Ref"
 
 #: eeschema/affiche.cpp:41
 msgid "Pwr Symb"
@@ -5801,9 +5794,8 @@ msgid "Edit component properties"
 msgstr "Bewerk component eigenschappen"
 
 #: eeschema/tool_lib.cpp:167
-#, fuzzy
 msgid "Test duplicate pins"
-msgstr "Test dubbele pinnen"
+msgstr "Test dubbele pennen"
 
 #: eeschema/tool_lib.cpp:189
 msgid "show as \"De Morgan\" normal part"
@@ -5852,11 +5844,11 @@ msgstr "Verwijder Alles"
 
 #: eeschema/edit_component_in_lib.cpp:281
 msgid "Footprint Filter"
-msgstr ""
+msgstr "Voetprint Filter"
 
 #: eeschema/edit_component_in_lib.cpp:293
 msgid "Footprints"
-msgstr ""
+msgstr "Voetprinten"
 
 #: eeschema/edit_component_in_lib.cpp:401
 #: eeschema/dialog_create_component.cpp:183
@@ -6075,11 +6067,11 @@ msgstr ""
 
 #: eeschema/pinedit-dialog.cpp:267
 msgid "No Draw"
-msgstr ""
+msgstr "Geen Tekening"
 
 #: eeschema/pinedit-dialog.cpp:293
 msgid "Pin Orient:"
-msgstr ""
+msgstr "Pen Orient:"
 
 #: eeschema/pinedit-dialog.cpp:317
 #: eeschema/pinedit.cpp:22
@@ -6643,7 +6635,7 @@ msgstr "Selectie"
 
 #: eeschema/edit_component_in_schematic.cpp:330
 msgid "No Component Name!"
-msgstr ""
+msgstr "Geen Component Naam!"
 
 #: eeschema/edit_component_in_schematic.cpp:336
 #, c-format
@@ -6652,11 +6644,11 @@ msgstr ""
 
 #: eeschema/edit_component_in_schematic.cpp:453
 msgid "No Field to move"
-msgstr ""
+msgstr "Geen Veld om te verplaatsen"
 
 #: eeschema/edit_component_in_schematic.cpp:516
 msgid "No Field To Edit"
-msgstr ""
+msgstr "Geen Veld om te bewerken"
 
 #: eeschema/edit_component_in_schematic.cpp:530
 msgid ""
@@ -6670,7 +6662,7 @@ msgstr ""
 
 #: eeschema/edit_component_in_schematic.cpp:581
 msgid "Value needed !, No change"
-msgstr ""
+msgstr "Waarde benodigd !, Geen Verandering"
 
 #: eeschema/annotate.cpp:749
 #, c-format
@@ -6721,7 +6713,7 @@ msgstr ""
 #: eeschema/pinedit.cpp:1003
 #, c-format
 msgid "  Part %d"
-msgstr ""
+msgstr "  Onderdeel %d"
 
 #: eeschema/pinedit.cpp:1009
 msgid "  Convert"
@@ -6823,7 +6815,7 @@ msgstr " Standaard Pad voor bibliotheken"
 
 #: eeschema/libedit_onrightclick.cpp:83
 msgid "Move Arc "
-msgstr ""
+msgstr "Verplaats Boog "
 
 #: eeschema/libedit_onrightclick.cpp:87
 msgid "Arc Options"
@@ -6843,11 +6835,11 @@ msgstr "Cirkel Opties"
 
 #: eeschema/libedit_onrightclick.cpp:105
 msgid "Delete Circle "
-msgstr ""
+msgstr "Verwijder Cirkel"
 
 #: eeschema/libedit_onrightclick.cpp:113
 msgid "Move Rect "
-msgstr ""
+msgstr "Verplaats Vierkant"
 
 #: eeschema/libedit_onrightclick.cpp:117
 msgid "Rect Options"
@@ -6855,7 +6847,7 @@ msgstr ""
 
 #: eeschema/libedit_onrightclick.cpp:120
 msgid "Delete Rect "
-msgstr ""
+msgstr "Verwijder Vierkant"
 
 #: eeschema/libedit_onrightclick.cpp:128
 msgid "Move Text "
@@ -6885,7 +6877,7 @@ msgstr "Lijn Einde"
 
 #: eeschema/libedit_onrightclick.cpp:154
 msgid "Line Options"
-msgstr ""
+msgstr "Lijn Opties"
 
 #: eeschema/libedit_onrightclick.cpp:157
 msgid "Delete Line "
@@ -6916,7 +6908,6 @@ msgid "Edit Pin "
 msgstr "Bewerk Pen"
 
 #: eeschema/libedit_onrightclick.cpp:213
-#, fuzzy
 msgid "Delete Pin "
 msgstr "Verwijder Pen"
 
@@ -7158,6 +7149,8 @@ msgid ""
 "Current Part not saved.\n"
 "Continue?"
 msgstr ""
+"Huidige onderdeel niet opgeslagen.\n"
+"Doorgaan?"
 
 #: eeschema/libedit.cpp:112
 #: eeschema/libedit.cpp:389
@@ -9522,9 +9515,8 @@ msgid "Show D codes"
 msgstr ""
 
 #: gerbview/initpcb.cpp:34
-#, fuzzy
 msgid "Current Data will be lost ?"
-msgstr "Huidige Data gaat verloren?"
+msgstr "Huidige data gaat verloren?"
 
 #: gerbview/initpcb.cpp:88
 msgid "Delete zones ?"
@@ -10503,7 +10495,7 @@ msgstr "Hertekenen"
 
 #: share/zoom.cpp:385
 msgid "Grid Select"
-msgstr "Raster Selecteren"
+msgstr "Raster Grote"
 
 #: share/zoom.cpp:407
 #, fuzzy
