@@ -376,12 +376,6 @@ int GetNameOfPartToLoad(WinEDA_DrawFrame * frame, LibraryStruct * Lib,
 
 bool LibArchive(wxWindow * frame, const wxString & ArchFullFileName);
 
-    /***************/
-    /* GENLISTE.CPP */
-    /***************/
-struct ListComponent;
-int GenListeCmp( ListComponent * List );
-
     /**************/
     /* CLEANUP.CPP */
     /**************/

@@ -152,7 +152,7 @@ WinEDA_Build_BOM_Frame::WinEDA_Build_BOM_Frame( WinEDA_DrawFrame* parent,
 
     m_OutputFormCtrl->SetSelection( s_OutputFormOpt );
     m_OutputSeparatorCtrl->SetSelection( s_OutputSeparatorOpt );
-    
+
     // Enable/disable options:
     if( s_OutputFormOpt == 1 )
     {
@@ -448,7 +448,7 @@ void WinEDA_Build_BOM_Frame::OnCreateListClick( wxCommandEvent& event )
         ExportSeparatorSymbol = s_ExportSeparator[m_OutputSeparatorCtrl->GetSelection()];
 
     bool ExportFileType = m_OutputFormCtrl->GetSelection() == 0 ? false : true;
-    
+
     SavePreferences();
 
     Create_BOM_Lists( ExportFileType, m_ListSubCmpItems->GetValue(),
@@ -507,7 +507,8 @@ void WinEDA_Build_BOM_Frame::SavePreferences()
     if( s_OutputSeparatorOpt < 0 )
         s_OutputSeparatorOpt = 0;
 
-    // Determine current settings of all 8 "Fields to add" checkboxes
+    // Determine current settings of all "Fields to add" checkboxes
+    s_Add_FpField_state = m_AddFootprintField->GetValue();
     s_Add_F1_state = m_AddField1->GetValue();
     s_Add_F2_state = m_AddField2->GetValue();
     s_Add_F3_state = m_AddField3->GetValue();
@@ -521,7 +522,7 @@ void WinEDA_Build_BOM_Frame::SavePreferences()
     m_Parent->m_Parent->m_EDA_Config->Write( OPTION_BOM_FORMAT, (long) s_OutputFormOpt );
     m_Parent->m_Parent->m_EDA_Config->Write( OPTION_BOM_SEPARATOR, (long) s_OutputSeparatorOpt );
 
-    // Now save current settings of all 8 "Fields to add" checkboxes
+    // Now save current settings of all "Fields to add" checkboxes
     long addfields = 0;
     for( int ii = 0, bitmask = 1; s_AddFieldList[ii] != NULL; ii++ )
     {

@@ -15,40 +15,51 @@
 #include "dialog_backanno.cpp"
 
 /**************************************************************/
-SCH_COMPONENT * WinEDA_SchematicFrame::FindComponentByRef(
-     const wxString& reference )
+SCH_COMPONENT* WinEDA_SchematicFrame::FindComponentByRef(
+    const wxString& reference )
 /**************************************************************/
 {
-    DrawSheetPath*      sheet;
-    SCH_ITEM*           DrawList  = NULL;
-    EDA_SheetList       SheetList( NULL );
+    DrawSheetPath* sheet;
+    SCH_ITEM*      DrawList = NULL;
+    EDA_SheetList  SheetList( NULL );
 
     for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
-	DrawList = (SCH_ITEM*) sheet->LastDrawList();
-	for( ; (DrawList != NULL); DrawList = DrawList->Next() )
-	{
-	    if( DrawList->Type() == TYPE_SCH_COMPONENT )
-	    {
-		SCH_COMPONENT* pSch;
+        DrawList = (SCH_ITEM*) sheet->LastDrawList();
+        for( ; (DrawList != NULL); DrawList = DrawList->Next() )
+        {
+            if( DrawList->Type() == TYPE_SCH_COMPONENT )
+            {
+                SCH_COMPONENT* pSch;
 
-		pSch = (SCH_COMPONENT*) DrawList;
-		if( reference.CmpNoCase( pSch->GetRef(sheet) ) == 0 )
-		    return pSch;
-	    }
-	}
+                pSch = (SCH_COMPONENT*) DrawList;
+                if( reference.CmpNoCase( pSch->GetRef( sheet ) ) == 0 )
+                    return pSch;
+            }
+        }
     }
+
     return NULL;
 }
+
 
 /**************************************************************/
 bool WinEDA_SchematicFrame::ProcessStuffFile( FILE* StuffFile )
 /**************************************************************/
+
+/* Read a "stuff" file created by cvpcb.
+ * That file has lines like:
+ * comp = "C1" module = "CP6"
+ * comp = "C2" module = "C1"
+ * comp = "C3" module = "C1"
+ * "comp =" gives the component reference
+ * "module =" gives the footprint name
+ *
+ */
 {
-    int             LineNum = 0;
-    char*           cp, Ref[256], FootPrint[256], Line[1024];
-    SCH_COMPONENT*  Cmp;
-    PartTextStruct* TextField;
+    int            LineNum = 0;
+    char*          cp, Ref[256], FootPrint[256], Line[1024];
+    SCH_COMPONENT* Cmp;
 
     while( GetLine( StuffFile, Line, &LineNum, sizeof(Line) ) )
     {
@@ -62,18 +73,22 @@ bool WinEDA_SchematicFrame::ProcessStuffFile( FILE* StuffFile )
                 if( *cp == '"' )
                     *cp = 0;
 
-            wxString    reference = CONV_FROM_UTF8( Ref );
+            wxString reference = CONV_FROM_UTF8( Ref );
 
             Cmp = WinEDA_SchematicFrame::FindComponentByRef( reference );
             if( Cmp == NULL )
                 continue;
 
-#if defined(DEBUG)
-            printf( "  %s %s\n", CONV_TO_UTF8(Cmp->m_Field[REFERENCE].m_Text),
-		 		     CONV_TO_UTF8(Cmp->m_Field[VALUE].m_Text) );
-#endif
-            TextField = &Cmp->m_Field[FOOTPRINT];
-            TextField->m_Text = CONV_FROM_UTF8( FootPrint );
+            /* Give a reasonnable value to the fied position, if
+             * the text is empty at position 0, because it is probably not yet initialised
+             */
+            if( Cmp->m_Field[FOOTPRINT].m_Text.IsEmpty() &&
+               ( Cmp->m_Field[FOOTPRINT].m_Pos == wxPoint( 0, 0 ) ) )
+            {
+                Cmp->m_Field[FOOTPRINT].m_Pos    = Cmp->m_Field[VALUE].m_Pos;
+                Cmp->m_Field[FOOTPRINT].m_Pos.y -= 100;
+            }
+            Cmp->m_Field[FOOTPRINT].m_Text = CONV_FROM_UTF8( FootPrint );
         }
     }
 
@@ -100,7 +115,7 @@ bool WinEDA_SchematicFrame::ReadInputStuffFile()
         this,
         wxFD_OPEN,
         FALSE
-        );
+    );
 
     if( filename.IsEmpty() )
         return FALSE;

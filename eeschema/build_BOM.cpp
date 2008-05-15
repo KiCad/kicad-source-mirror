@@ -22,9 +22,11 @@
 // Filename extension for BOM list
 #define EXT_LIST wxT( ".lst" )
 
+// Exported functions
+int         BuildComponentsListFromSchematic( ListComponent* List );
+
 /* fonctions locales */
 static int  GenListeGLabels( ListLabel* List );
-int         GenListeCmp( ListComponent* List );
 static int  ListTriComposantByRef( ListComponent* Objet1,
                                    ListComponent* Objet2 );
 static int  ListTriComposantByVal( ListComponent* Objet1,
@@ -61,14 +63,14 @@ void WinEDA_Build_BOM_Frame::Create_BOM_Lists( bool aTypeFileIsExport,
     mask += EXT_LIST;
 
     filename = EDA_FileSelector( _( "Bill of materials:" ),
-                                 wxEmptyString,     /* Chemin par defaut (ici dir courante) */
-                                 m_ListFileName,    /* nom fichier par defaut, et resultat */
-                                 EXT_LIST,          /* extension par defaut */
-                                 mask,              /* Masque d'affichage */
-                                 this,
-                                 wxFD_SAVE,
-                                 TRUE
-                                 );
+        wxEmptyString,                              /* Chemin par defaut (ici dir courante) */
+        m_ListFileName,                             /* nom fichier par defaut, et resultat */
+        EXT_LIST,                                   /* extension par defaut */
+        mask,                                       /* Masque d'affichage */
+        this,
+        wxFD_SAVE,
+        TRUE
+    );
     if( filename.IsEmpty() )
         return;
     else
@@ -94,7 +96,7 @@ void WinEDA_Build_BOM_Frame::Create_BOM_Lists( bool aTypeFileIsExport,
 
 /****************************************************************************/
 void WinEDA_Build_BOM_Frame::CreateExportList( const wxString& FullFileName,
-                                               bool aIncludeSubComponents )
+                                               bool            aIncludeSubComponents )
 /****************************************************************************/
 
 /*
@@ -117,7 +119,7 @@ void WinEDA_Build_BOM_Frame::CreateExportList( const wxString& FullFileName,
         return;
     }
 
-    NbItems = GenListeCmp( NULL );
+    NbItems = BuildComponentsListFromSchematic( NULL );
     if( NbItems )
     {
         List = (ListComponent*) MyZMalloc( NbItems * sizeof(ListComponent) );
@@ -127,18 +129,17 @@ void WinEDA_Build_BOM_Frame::CreateExportList( const wxString& FullFileName,
             return;
         }
 
-        GenListeCmp( List );
+        BuildComponentsListFromSchematic( List );
 
         /*  sort component list */
         qsort( List, NbItems, sizeof( ListComponent ),
-               ( int( * ) ( const void*, const void* ) )ListTriComposantByRef );
+            ( int( * ) ( const void*, const void* ) )ListTriComposantByRef );
 
-//		if( ! s_ListWithSubCmponents )
         if( !aIncludeSubComponents )
             DeleteSubCmp( List, NbItems );
 
         /* create the file */
-        PrintListeCmpByRef( f, List, NbItems, TRUE, aIncludeSubComponents );
+        PrintComponentsListByRef( f, List, NbItems, TRUE, aIncludeSubComponents );
 
         MyFree( List );
     }
@@ -149,7 +150,7 @@ void WinEDA_Build_BOM_Frame::CreateExportList( const wxString& FullFileName,
 
 /****************************************************************************/
 void WinEDA_Build_BOM_Frame::GenereListeOfItems( const wxString& FullFileName,
-                                                 bool aIncludeSubComponents )
+                                                 bool            aIncludeSubComponents )
 /****************************************************************************/
 
 /*
@@ -173,7 +174,7 @@ void WinEDA_Build_BOM_Frame::GenereListeOfItems( const wxString& FullFileName,
         return;
     }
 
-    NbItems = GenListeCmp( NULL );
+    NbItems = BuildComponentsListFromSchematic( NULL );
     if( NbItems )
     {
         List = (ListComponent*) MyZMalloc( NbItems * sizeof(ListComponent) );
@@ -183,7 +184,7 @@ void WinEDA_Build_BOM_Frame::GenereListeOfItems( const wxString& FullFileName,
             return;
         }
 
-        GenListeCmp( List );
+        BuildComponentsListFromSchematic( List );
 
         /* generation du fichier listing */
         DateAndTime( Line );
@@ -193,7 +194,7 @@ void WinEDA_Build_BOM_Frame::GenereListeOfItems( const wxString& FullFileName,
         /* Tri et impression de la liste des composants */
 
         qsort( List, NbItems, sizeof( ListComponent ),
-               ( int( * ) ( const void*, const void* ) )ListTriComposantByRef );
+            ( int( * ) ( const void*, const void* ) )ListTriComposantByRef );
 
         if( !aIncludeSubComponents )
             DeleteSubCmp( List, NbItems );
@@ -201,15 +202,15 @@ void WinEDA_Build_BOM_Frame::GenereListeOfItems( const wxString& FullFileName,
 //		if( s_ListByRef )
         if( m_ListCmpbyRefItems->GetValue() )
         {
-            PrintListeCmpByRef( f, List, NbItems, false, aIncludeSubComponents );
+            PrintComponentsListByRef( f, List, NbItems, false, aIncludeSubComponents );
         }
 
 //		if( s_ListByValue )
         if( m_ListCmpbyValItems->GetValue() )
         {
             qsort( List, NbItems, sizeof( ListComponent ),
-                   ( int( * ) ( const void*, const void* ) )ListTriComposantByVal );
-            PrintListeCmpByVal( f, List, NbItems, aIncludeSubComponents );
+                ( int( * ) ( const void*, const void* ) )ListTriComposantByVal );
+            PrintComponentsListByVal( f, List, NbItems, aIncludeSubComponents );
         }
         MyFree( List );
     }
@@ -235,11 +236,11 @@ void WinEDA_Build_BOM_Frame::GenereListeOfItems( const wxString& FullFileName,
         if( m_GenListLabelsbySheet->GetValue() )
         {
             qsort( ListOfLabels, NbItems, sizeof( ListLabel ),
-                   ( int( * ) ( const void*, const void* ) )ListTriGLabelBySheet );
+                ( int( * ) ( const void*, const void* ) )ListTriGLabelBySheet );
 
             msg.Printf( _(
-                            "\n#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = %d\n" ),
-                        NbItems );
+                    "\n#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = %d\n" ),
+                NbItems );
             fprintf( f, "%s", CONV_TO_UTF8( msg ) );
             PrintListeGLabel( f, ListOfLabels, NbItems );
         }
@@ -248,11 +249,11 @@ void WinEDA_Build_BOM_Frame::GenereListeOfItems( const wxString& FullFileName,
         if( m_GenListLabelsbyVal->GetValue() )
         {
             qsort( ListOfLabels, NbItems, sizeof( ListLabel ),
-                   ( int( * ) ( const void*, const void* ) )ListTriGLabelByVal );
+                ( int( * ) ( const void*, const void* ) )ListTriGLabelByVal );
 
             msg.Printf( _(
-                            "\n#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = %d\n\n" ),
-                        NbItems );
+                    "\n#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = %d\n\n" ),
+                NbItems );
             fprintf( f, "%s", CONV_TO_UTF8( msg ) );
             PrintListeGLabel( f, ListOfLabels, NbItems );
         }
@@ -265,13 +266,12 @@ void WinEDA_Build_BOM_Frame::GenereListeOfItems( const wxString& FullFileName,
 }
 
 
-/****************************************/
-int GenListeCmp( ListComponent* List )
-/****************************************/
+/*********************************************************/
+int BuildComponentsListFromSchematic( ListComponent* List )
+/*********************************************************/
 
-/* Creates the list of components in the schematic
+/* Creates the list of components found in the whole schematic
  *
- * routine for generating a list of the used components.
  * if List == null, just returns the count. if not, fills the list.
  * goes through the sheets, not the screens, so that we account for
  * multiple instances of a given screen.
@@ -300,10 +300,10 @@ int GenListeCmp( ListComponent* List )
             {
                 List->m_Comp      = DrawLibItem;
                 List->m_SheetList = *sheet;
-                List->m_Unit      = DrawLibItem->GetUnitSelection( sheet );
+                List->m_Unit = DrawLibItem->GetUnitSelection( sheet );
                 strncpy( List->m_Ref,
-                        CONV_TO_UTF8( DrawLibItem->GetRef( sheet ) ),
-                        sizeof( List->m_Ref ) );
+                    CONV_TO_UTF8( DrawLibItem->GetRef( sheet ) ),
+                    sizeof( List->m_Ref ) );
                 List++;
             }
         }
@@ -345,7 +345,7 @@ static int GenListeGLabels( ListLabel* List )
                 {
                     List->m_LabelType = DrawList->Type();
                     snprintf( List->m_SheetPath, sizeof(List->m_SheetPath),
-                             "%s", CONV_TO_UTF8( path ) );
+                        "%s", CONV_TO_UTF8( path ) );
                     List->m_Label = DrawList;
                     List++;
                 }
@@ -361,7 +361,7 @@ static int GenListeGLabels( ListLabel* List )
                     {
                         List->m_LabelType = DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE;
                         snprintf( List->m_SheetPath, sizeof(List->m_SheetPath),
-                                 "%s", CONV_TO_UTF8( path ) );
+                            "%s", CONV_TO_UTF8( path ) );
                         List->m_Label = SheetLabel;
                         List++;
                     }
@@ -581,7 +581,7 @@ void WinEDA_Build_BOM_Frame::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem
                                              bool CompactForm )
 /*******************************************************************************************/
 {
-    wxCheckBox* FieldListCtrl[FIELD8 - FIELD1 + 1] = {
+    wxCheckBox* FieldListCtrl[] = {
         m_AddField1,
         m_AddField2,
         m_AddField3,
@@ -597,8 +597,10 @@ void WinEDA_Build_BOM_Frame::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem
     if( CompactForm )
     {
         fprintf( f, "%c%s", s_ExportSeparatorSymbol,
-                CONV_TO_UTF8( DrawLibItem->m_Field[FOOTPRINT].m_Text ) );
+            CONV_TO_UTF8( DrawLibItem->m_Field[FOOTPRINT].m_Text ) );
     }
+    else if( m_AddFootprintField->IsChecked() )
+        fprintf( f, "; %-12s", CONV_TO_UTF8( DrawLibItem->m_Field[FOOTPRINT].m_Text ) );
 
     for( ii = FIELD1; ii <= FIELD8; ii++ )
     {
@@ -609,7 +611,7 @@ void WinEDA_Build_BOM_Frame::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem
             continue;
         if( CompactForm )
             fprintf( f, "%c%s", s_ExportSeparatorSymbol,
-                    CONV_TO_UTF8( DrawLibItem->m_Field[ii].m_Text ) );
+                CONV_TO_UTF8( DrawLibItem->m_Field[ii].m_Text ) );
         else
             fprintf( f, "; %-12s", CONV_TO_UTF8( DrawLibItem->m_Field[ii].m_Text ) );
     }
@@ -617,8 +619,8 @@ void WinEDA_Build_BOM_Frame::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem
 
 
 /*********************************************************************************************/
-int WinEDA_Build_BOM_Frame::PrintListeCmpByRef( FILE* f, ListComponent* List, int NbItems,
-                                                bool CompactForm, bool aIncludeSubComponents )
+int WinEDA_Build_BOM_Frame::PrintComponentsListByRef( FILE* f, ListComponent* List, int NbItems,
+                                                      bool CompactForm, bool aIncludeSubComponents )
 /*********************************************************************************************/
 
 /* Print the B.O.M sorted by reference
@@ -703,10 +705,10 @@ int WinEDA_Build_BOM_Frame::PrintListeCmpByRef( FILE* f, ListComponent* List, in
 
         if( CompactForm )
             fprintf( f, "%s%c%s", CmpName, s_ExportSeparatorSymbol,
-                    CONV_TO_UTF8( DrawLibItem->m_Field[VALUE].m_Text ) );
+                CONV_TO_UTF8( DrawLibItem->m_Field[VALUE].m_Text ) );
         else
             fprintf( f, "| %-10s %-12s", CmpName,
-                    CONV_TO_UTF8( DrawLibItem->m_Field[VALUE].m_Text ) );
+                CONV_TO_UTF8( DrawLibItem->m_Field[VALUE].m_Text ) );
 
         if( aIncludeSubComponents )
         {
@@ -732,8 +734,8 @@ int WinEDA_Build_BOM_Frame::PrintListeCmpByRef( FILE* f, ListComponent* List, in
 
 
 /*********************************************************************************************/
-int WinEDA_Build_BOM_Frame::PrintListeCmpByVal( FILE* f, ListComponent* List, int NbItems,
-                                                bool aIncludeSubComponents )
+int WinEDA_Build_BOM_Frame::PrintComponentsListByVal( FILE* f, ListComponent* List, int NbItems,
+                                                      bool aIncludeSubComponents )
 /**********************************************************************************************/
 {
     int ii, Multi;
@@ -776,7 +778,7 @@ int WinEDA_Build_BOM_Frame::PrintListeCmpByVal( FILE* f, ListComponent* List, in
         }
 
         sprintf( CmpName, "%s%c", List[ii].m_Ref, Unit );
-        fprintf( f, "| %-12s %-10s",CONV_TO_UTF8( DrawLibItem->m_Field[VALUE].m_Text ), CmpName );
+        fprintf( f, "| %-12s %-10s", CONV_TO_UTF8( DrawLibItem->m_Field[VALUE].m_Text ), CmpName );
 
         // print the sheet path
         if( aIncludeSubComponents )

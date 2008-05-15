@@ -14,13 +14,12 @@
 
 #include "protos.h"
 
-/* fonctions exportees */
+/* Imported functions */
+int BuildComponentsListFromSchematic( ListComponent* List );
 
-/* fonctions locales */
-static int TriListEntry(EDA_LibComponentStruct **Objet1,
-							EDA_LibComponentStruct **Objet2);
+/* Local functions*/
+static int TriListEntry(EDA_LibComponentStruct **Objet1, EDA_LibComponentStruct **Objet2);
 
-/* Variable locales */
 
 
 /*******************************************************************/
@@ -42,14 +41,14 @@ const wxChar * Text;
 
 
 	/* Creation de la liste des elements */
-	NbItems = GenListeCmp(NULL );	// Comptage des composants
+	NbItems = BuildComponentsListFromSchematic(NULL );	// Comptage des composants
 	if ( NbItems == 0 ) return FALSE;
 
 	List = (ListComponent *) MyZMalloc( NbItems * sizeof( ListComponent ) );
 	if (List == NULL ) return FALSE;
 
 	/* Calcul de la liste des composants */
-	GenListeCmp(List);
+	BuildComponentsListFromSchematic(List);
 
 	/* Calcul de la liste des Entrees de librairie
 		et Remplacement des alias par les composants "Root" */

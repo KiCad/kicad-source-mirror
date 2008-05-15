@@ -509,6 +509,7 @@ void WinEDA_SchematicFrame::OnLoadFile( wxCommandEvent& event )
 void WinEDA_SchematicFrame::OnLoadStuffFile( wxCommandEvent& event )
 {
     ReadInputStuffFile( );
+    DrawPanel->Refresh();
 }
 
 void WinEDA_SchematicFrame::OnNewProject( wxCommandEvent& event )
