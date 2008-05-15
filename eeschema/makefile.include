@@ -71,7 +71,9 @@ OBJECTS = eeschema.o\
 		plot.o libalias.o \
 		plotps.o netform.o \
 		delsheet.o \
-		delete.o dialog_build_BOM.o \
+		delete.o\
+        build_BOM.o \
+        dialog_build_BOM.o \
 		erc.o\
 		dialog_erc.o\
 		selpart.o \

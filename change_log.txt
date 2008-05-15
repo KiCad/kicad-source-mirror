@@ -10,7 +10,6 @@ email address.
 +eeschema:
     Solved netlist problems for multiple parts per package components
     in complex hierarchies.
-    B.O.M. generation still have a minor problem wih this.
 
 
 

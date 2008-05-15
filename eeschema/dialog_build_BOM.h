@@ -119,8 +119,6 @@ public:
 
 ////@end WinEDA_Build_BOM_Frame event handler declarations
 
-    void GenList();
-
 ////@begin WinEDA_Build_BOM_Frame member function declarations
 
     /// Retrieves bitmap resources
@@ -129,10 +127,17 @@ public:
     /// Retrieves icon resources
     wxIcon GetIconResource( const wxString& name );
 ////@end WinEDA_Build_BOM_Frame member function declarations
-    void GenereListeOfItems(const wxString & FullFileName);
-    void CreateExportList(const wxString & FullFileName);
-    int PrintListeCmpByRef( FILE * f, ListComponent * List, int NbItems, bool CompactForm = FALSE );
-    int PrintListeCmpByVal( FILE *f, ListComponent * List, int NbItems);
+
+    void Create_BOM_Lists(bool aTypeFileIsExport,
+                          bool aIncludeSubComponents,
+                          char aExportSeparatorSymbol,
+                          bool aRunBrowser);
+    void GenereListeOfItems(const wxString & FullFileName, bool aIncludeSubComponents );
+    void CreateExportList(const wxString & FullFileName, bool aIncludeSubComponents);
+    int PrintListeCmpByRef( FILE * f, ListComponent * List, int NbItems,
+                            bool CompactForm, bool aIncludeSubComponents );
+    int PrintListeCmpByVal( FILE *f, ListComponent * List, int NbItems,
+                            bool aIncludeSubComponents);
     void PrintFieldData(FILE * f, SCH_COMPONENT * DrawLibItem, bool CompactForm = FALSE);
     void SavePreferences();
 

@@ -95,19 +95,20 @@ typedef struct ListLabel
 {
     int   m_LabelType;
     void* m_Label;
-    char  m_SheetPath[64];
+    char  m_SheetPath[256];
 } ListLabel;
 
+// Used to create lists of components BOM, netlist generation)
 typedef struct ListComponent
 {
-    SCH_COMPONENT* m_Comp;
-    char           m_Ref[32];
-
+    SCH_COMPONENT* m_Comp;      // pointer on the component in schematic
+    char           m_Ref[32];   // component reference
+    int            m_Unit;      // Unit value, for multiple parts per package
     //have to store it here since the object references will be duplicated.
     DrawSheetPath m_SheetList; //composed of UIDs
 } ListComponent;
 
-/* Structure decrivant 1 composant de la schematique (pour *annotation* ) */
+/* Structure decrivant 1 composant de la schematique (for annotation ) */
 struct CmpListStruct
 {
 public:
@@ -123,7 +124,7 @@ public:
     int            m_NumRef;                            /* Numero de reference */
     int            m_Flag;                              /* flag pour calculs internes */
     wxPoint        m_Pos;                               /* position components */
-    char           m_Path[128];                         // the 'path' of the object in the sheet hierarchy.
+    char           m_Path[256];                         // the 'path' of the object in the sheet hierarchy.
 };
 
 

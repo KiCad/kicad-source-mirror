@@ -11,6 +11,7 @@ set(EESCHEMA_SRCS
     backanno.cpp
     block.cpp
     block_libedit.cpp
+    build_BOM.cpp
     busentry.cpp
     bus-wire-junction.cpp
     class_drawsheet.cpp
