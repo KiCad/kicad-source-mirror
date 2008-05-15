@@ -100,8 +100,6 @@ public:
                                          * determined, upon file load, by the first non-digits in the reference fields. */
     PartTextStruct    m_Field[NUMBER_OF_FIELDS];
 
-    //int   m_FlagControlMulti;
-    ArrayOfSheetLists m_UsedOnSheets;               // Used as flags when calculating netlist
     int               m_Convert;                    /* Gestion (management) des mutiples representations (ex: conversion De Morgan) */
     int               m_Transform[2][2];            /* The rotation/mirror transformation matrix. */
 

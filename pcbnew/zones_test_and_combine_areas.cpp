@@ -280,7 +280,7 @@ int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
     {
         std::vector<CPolyLine*> * pa = new std::vector<CPolyLine*>;
         curr_polygon->Undraw();
-        int n_poly = CurrArea->m_Poly->NormalizeWithGpc( pa, bRetainArcs );
+        int n_poly = CurrArea->m_Poly->NormalizeAreaOutlines( pa, bRetainArcs );
         if( n_poly > 1 )    // i.e if clipping has created some polygons, we must add these new copper areas
         {
             ZONE_CONTAINER* NewArea;
@@ -310,7 +310,8 @@ int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
  * itself and the polygons for any other areas on the same net.
  * This may change the number and order of copper areas in the net.
  * @param modified_area = area to test
- * @param bMessageBox : if true, shows message boxes when clipping occurs.
+ * @param bMessageBoxInt == true, shows message when clipping occurs.
+ * @param  bMessageBoxArc == true, shows message when clipping can't be done due to arcs.
  * @return :
  * -1 if arcs intersect other sides, so polygon can't be clipped
  *  0 if no intersecting sides
@@ -697,8 +698,11 @@ int BOARD::CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combi
     CPolyLine*        poly2 = area_to_combine->m_Poly;
     std::vector<CArc> arc_array1;
     std::vector<CArc> arc_array2;
-    poly1->MakeGpcPoly( -1, &arc_array1 );
-    poly2->MakeGpcPoly( -1, &arc_array2 );
+
+    poly1->MakePolygonFromAreaOutlines( -1, &arc_array1 );
+    poly2->MakePolygonFromAreaOutlines( -1, &arc_array2 );
+
+#ifdef USE_GPC_POLY_LIB
     int n_ext_cont1 = 0;
     for( int ic = 0; ic<poly1->GetGpcPoly()->num_contours; ic++ )
         if( !( (poly1->GetGpcPoly()->hole)[ic] ) )
@@ -776,7 +780,97 @@ int BOARD::CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combi
     area_ref->m_Poly->Draw();
     gpc_free_polygon( union_gpc );
     delete union_gpc;
+
     return 1;
+#endif
+
+#ifdef USE_GPL_POLY_LIB
+//@todo
+#warning work in progress
+wxString msg;
+    int n_ext_cont1 = poly1->GetPhpPoly()->m_cnt;
+
+    int n_ext_cont2 = poly2->GetPhpPoly()->m_cnt;
+
+    polygon* union_polygon = NULL;
+    union_polygon = poly1->GetPhpPoly()->boolean( poly2->GetPhpPoly(), A_OR_B );
+
+    if ( union_polygon == NULL )
+        return 0;
+    // get number of outside contours
+    int n_union_ext_cont = union_polygon->m_cnt;
+msg.Printf(wxT("cnt res = %d, pts1,2 = %d,%d"), n_union_ext_cont , n_ext_cont1, n_ext_cont2);
+wxMessageBox(msg);
+
+    // if no intersection, free new gpc and return
+#if 0
+    if( n_union_ext_cont == n_ext_cont1 + n_ext_cont2 )
+    {
+wxMessageBox(wxT("no change polys"));
+        delete union_polygon;
+        return 0;
+    }
+#endif
+
+wxMessageBox(wxT("merge areas"));
+    // intersection, replace area_ref->m_Poly with combined areas and remove area_to_combine
+    RemoveArea( area_to_combine );
+    area_ref->m_Poly->RemoveAllContours();
+    // create area with external contour
+//    for( int ic = 0; ic < union_polygon->m_cnt; ic++ )
+    {
+        // if( !(union_gpc->hole)[ic] ) // Recreate only area edges, NOT holes (todo..)
+        {
+            // external contour, replace this poly
+            vertex * curr_vertex = union_polygon->getFirst();
+            for( int ii = 0; ii < union_polygon->m_cnt; ii++ )
+            {
+                int x = (int) curr_vertex->X();
+                int y = (int) curr_vertex->Y();
+msg.Printf(wxT("ii = %d, pts = %d,%d, wid = %d"), ii , x, y, curr_vertex->id());
+wxMessageBox(msg);
+
+                if( ii==0 )
+                {
+                    area_ref->m_Poly->Start( area_ref->GetLayer(
+                                                ), x, y, area_ref->m_Poly->GetHatchStyle() );
+                }
+                else
+                    area_ref->m_Poly->AppendCorner( x, y );
+
+                curr_vertex = curr_vertex->Next();
+//                if( curr_vertex->id() == union_polygon->getFirst()->id() ) break;
+            }
+           area_ref->m_Poly->Close();
+        }
+    }
+
+    // add holes
+#if 0
+    for( int ic = 0; ic<union_gpc->num_contours; ic++ )
+    {
+        if( (union_gpc->hole)[ic] )
+        {
+            // hole
+            for( int i = 0; i<union_gpc->contour[ic].num_vertices; i++ )
+            {
+                int x = (int) ( (union_gpc->contour)[ic].vertex )[i].x;
+                int y = (int) ( (union_gpc->contour)[ic].vertex )[i].y;
+                area_ref->m_Poly->AppendCorner( x, y );
+            }
+
+            area_ref->m_Poly->Close();
+        }
+    }
+#endif
+    area_ref->utility = 1;
+    area_ref->m_Poly->RestoreArcs( &arc_array1 );
+    area_ref->m_Poly->RestoreArcs( &arc_array2 );
+    area_ref->m_Poly->Draw();
+    delete union_polygon;
+    return 0;
+#endif
+
 }
 
 
@@ -785,7 +879,7 @@ int BOARD::CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combi
 /**
  * Function Is_Area_Inside_Area
  * Test a given area to see if it is inside an other area, or an other area is inside the given area
- * an area is inside an other are if ALL its corners are inside
+ * an area is inside an other are if ALL its edges are inside the other area
  * @param Area_Ref: the given area to compare with other areas
  * used to remove redundant areas
  */
@@ -1007,7 +1101,7 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
 bool DRC::doEdgeZoneDrc( ZONE_CONTAINER * aArea, int aCornerIndex )
 {
     wxString str;
-	
+
 	wxPoint start = aArea->GetCornerPosition(aCornerIndex);
 	wxPoint end;
 	// Search the end point of the edge starting at aCornerIndex

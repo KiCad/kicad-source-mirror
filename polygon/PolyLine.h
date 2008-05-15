@@ -5,16 +5,19 @@
 // There may be multiple contours in a polyline.
 // The last contour may be open or closed, any others must be closed.
 // All of the corners and side-styles are concatenated into 2 arrays,
-// separated by setting the end_contour flag of the last corner of 
+// separated by setting the end_contour flag of the last corner of
 // each contour.
 //
-// When used for copper areas, the first contour is the outer edge 
+// When used for copper areas, the first contour is the outer edge
 // of the area, subsequent ones are "holes" in the copper.
 
 #ifndef POLYLINE_H
 #define POLYLINE_H
 
 #include <vector>
+
+#define USE_GPC_POLY_LIB
+//#define USE_GPL_POLY_LIB
 
 #include "defs-macros.h"
 
@@ -37,12 +40,12 @@ public:
 };
 
 class CArc {
-public: 
+public:
 	enum{ MAX_STEP = 50*25400 };	// max step is 20 mils
 	enum{ MIN_STEPS = 18 };		// min step is 5 degrees
 	int style;
 	int xi, yi, xf, yf;
-	int n_steps;	// number of straight-line segments in gpc_poly 
+	int n_steps;	// number of straight-line segments in gpc_poly
 	bool bFound;
 };
 
@@ -117,22 +120,32 @@ public:
 	void SetEndContour( int ic, bool end_contour );
 	void SetSideStyle( int is, int style );
 
-	// GPC functions
-	int MakeGpcPoly( int icontour=0, std::vector<CArc> * arc_array=NULL );
-	int FreeGpcPoly();
-	gpc_polygon * GetGpcPoly(){ return m_gpc_poly; };
-	int NormalizeWithGpc( std::vector<CPolyLine*> * pa=NULL, bool bRetainArcs=FALSE );
 	int RestoreArcs( std::vector<CArc> * arc_array, std::vector<CPolyLine*> * pa=NULL );
 	CPolyLine * MakePolylineForPad( int type, int x, int y, int w, int l, int r, int angle );
-	void AddContourForPadClearance( int type, int x, int y, int w, 
+	void AddContourForPadClearance( int type, int x, int y, int w,
 						int l, int r, int angle, int fill_clearance,
 						int hole_w, int hole_clearance, bool bThermal=FALSE, int spoke_w=0 );
-	void ClipGpcPolygon( gpc_op op, CPolyLine * poly );
+
+    int MakePolygonFromAreaOutlines( int icontour, std::vector<CArc> * arc_array );
+	void FreePolygon();
+	int NormalizeAreaOutlines( std::vector<CPolyLine*> * pa=NULL, bool bRetainArcs=FALSE );
+
+#ifdef USE_GPC_POLY_LIB
+	// GPC functions
+	int MakeGpcPoly( int icontour=0, std::vector<CArc> * arc_array=NULL );
+	void FreeGpcPoly();
+	gpc_polygon * GetGpcPoly(){ return m_gpc_poly; };
+	int NormalizeWithGpc( std::vector<CPolyLine*> * pa=NULL, bool bRetainArcs=FALSE );
+#endif
+
 
 	// PHP functions
+#ifdef USE_GPL_POLY_LIB
 	int MakePhpPoly();
 	void FreePhpPoly();
 	void ClipPhpPolygon( int php_op, CPolyLine * poly );
+	polygon * GetPhpPoly(){ return m_php_poly; };
+#endif
 
 private:
 	int m_layer;	// layer to draw on

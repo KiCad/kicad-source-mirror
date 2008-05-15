@@ -293,9 +293,7 @@ SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos ) :
 
     m_Pos = aPos;
 
-    //m_FlagControlMulti = 0;
-    m_UsedOnSheets.Clear();
-    m_Convert = 0;  /* Gestion des mutiples representations (conversion De Morgan) */
+    m_Convert = 0;  /* De Morgan Handling  */
 
     /* The rotation/mirror transformation matrix. pos normal*/
     m_Transform[0][0] = 1;
@@ -469,32 +467,40 @@ void SCH_COMPONENT::ClearAnnotation( DrawSheetPath* aSheet )
     defRef.Append( wxT( "?" ) );
 
     wxString multi = wxT( "1" );
-    wxString NewHref;
-    wxString path;
-    if( aSheet )
-        path = GetPath( aSheet );;
-    for( unsigned int ii = 0; ii< m_PathsAndReferences.GetCount(); ii++ )
+    
+    if ( KeepMulti )        // We cannot remove all annotations: part selection must be kept
     {
-        // Break hierachical reference in path, ref and multi selection:
-        reference_fields = wxStringTokenize( m_PathsAndReferences[ii], separators );
-        if( aSheet == NULL || reference_fields[0].Cmp( path ) == 0 )
+        wxString NewHref;
+        wxString path;
+        if( aSheet )
+            path = GetPath( aSheet );;
+        for( unsigned int ii = 0; ii< m_PathsAndReferences.GetCount(); ii++ )
         {
-            if( KeepMulti )  // Get and keep part selection
-                multi = reference_fields[2];
-            NewHref = reference_fields[0];
-            NewHref << wxT( " " ) << defRef << wxT( " " ) << multi;
-            m_PathsAndReferences[ii] = NewHref;
+            // Break hierachical reference in path, ref and multi selection:
+            reference_fields = wxStringTokenize( m_PathsAndReferences[ii], separators );
+            if( aSheet == NULL || reference_fields[0].Cmp( path ) == 0 )
+            {
+                if( KeepMulti )  // Get and keep part selection
+                    multi = reference_fields[2];
+                NewHref = reference_fields[0];
+                NewHref << wxT( " " ) << defRef << wxT( " " ) << multi;
+                m_PathsAndReferences[ii] = NewHref;
+            }
         }
     }
+    else
+    {
+        m_PathsAndReferences.Empty();   // Empty strings, but does not free memory because a new annotation will reuse it
+        m_Multi = 1;
+    }
+
 
     // These 2 changes do not work in complex hierarchy.
     // When a clear annotation is made, the calling function must call a
     // UpdateAllScreenReferences for the active sheet.
-    // But this call does not made here.
+    // But this call cannot made here.
     m_Field[REFERENCE].m_Text = defRef; //for drawing.
 
-    if( !KeepMulti )
-        m_Multi = 1;
 }
 
 
@@ -510,8 +516,6 @@ SCH_COMPONENT* SCH_COMPONENT::GenCopy()
     new_item->m_ChipName     = m_ChipName;
     new_item->m_PrefixString = m_PrefixString;
 
-    //new_item->m_FlagControlMulti = m_FlagControlMulti;
-    new_item->m_UsedOnSheets = m_UsedOnSheets;
     new_item->m_Convert = m_Convert;
     new_item->m_Transform[0][0] = m_Transform[0][0];
     new_item->m_Transform[0][1] = m_Transform[0][1];

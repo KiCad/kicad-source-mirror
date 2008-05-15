@@ -253,7 +253,7 @@ wxClientDC dc(DrawPanel);
 	g_ViewUnit = 1;
 	g_ViewConvert = 1;
 
-	LibEntry = FindLibPart(CmpName,Lib->m_Name, FIND_ALIAS);
+	LibEntry = FindLibPart(CmpName.GetData(),Lib->m_Name, FIND_ALIAS);
 	g_CurrentViewComponentName = CmpName;
 	DisplayLibInfos();
 	Zoom_Automatique(FALSE);

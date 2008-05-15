@@ -4,7 +4,6 @@
 ****************************************************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 
 #include "common.h"
 #include "program.h"
@@ -14,8 +13,6 @@
 /* Variables Locales */
 
 #include "dialog_backanno.cpp"
-
-#include "protos.h"
 
 /**************************************************************/
 SCH_COMPONENT * WinEDA_SchematicFrame::FindComponentByRef(
@@ -72,7 +69,7 @@ bool WinEDA_SchematicFrame::ProcessStuffFile( FILE* StuffFile )
                 continue;
 
 #if defined(DEBUG)
-            printf( "  %s %s\n", CONV_TO_UTF8(Cmp->m_Field[REFERENCE].m_Text), 
+            printf( "  %s %s\n", CONV_TO_UTF8(Cmp->m_Field[REFERENCE].m_Text),
 		 		     CONV_TO_UTF8(Cmp->m_Field[VALUE].m_Text) );
 #endif
             TextField = &Cmp->m_Field[FOOTPRINT];

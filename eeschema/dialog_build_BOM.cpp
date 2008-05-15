@@ -691,13 +691,6 @@ void WinEDA_Build_BOM_Frame::GenereListeOfItems( const wxString& FullFileName )
 
         GenListeCmp( List );
 
-#if 0
-        for( int i = 0; i<NbItems; i++ )
-        {
-            printf( "found component: %s\n", List[i].m_Ref );
-        }
-#endif
-
         /* generation du fichier listing */
         DateAndTime( Line );
         wxString Title = g_Main_Title + wxT( " " ) + GetBuildVersion();
@@ -707,13 +700,7 @@ void WinEDA_Build_BOM_Frame::GenereListeOfItems( const wxString& FullFileName )
 
         qsort( List, NbItems, sizeof( ListComponent ),
                ( int( * ) ( const void*, const void* ) )ListTriComposantByRef );
-#if 0
-        printf( "sorted by reference:\n" );
-        for( int i = 0; i<NbItems; i++ )
-        {
-            printf( "found component: %s\n", List[i].m_Ref );
-        }
-#endif
+
 //		if( ! s_ListWithSubCmponents )
         if( !m_ListSubCmpItems->GetValue() )
             DeleteSubCmp( List, NbItems );
@@ -785,20 +772,17 @@ void WinEDA_Build_BOM_Frame::GenereListeOfItems( const wxString& FullFileName )
 int GenListeCmp( ListComponent* List )
 /****************************************/
 
-/* Routine de generation de la liste des elements utiles du dessin
- * Si List == NULL: comptage des elements
- * Sinon remplissage de la liste
- * Initialise "FlagControlMulti" a SheetNumber pour la sortie des listes
- * et m_Father comme pointeur sur la sheet d'appartenance
+/* Creates the list of components in the schematic
  *
  * routine for generating a list of the used components.
  * if List == null, just returns the count. if not, fills the list.
  * goes through the sheets, not the screens, so that we account for
  * multiple instances of a given screen.
+ * Also Initialise m_Father as pointer pointeur of the SCH_SCREN parent
  */
 {
     int                     ItemCount = 0;
-    EDA_BaseStruct*         DrawList;
+    EDA_BaseStruct*         SchItem;
     SCH_COMPONENT* DrawLibItem;
     DrawSheetPath*          sheet;
 
@@ -807,31 +791,23 @@ int GenListeCmp( ListComponent* List )
 
     for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
-        DrawList = sheet->LastDrawList();
-        while( DrawList )
+        for ( SchItem = sheet->LastDrawList(); SchItem;SchItem = SchItem->Next() )
         {
-            switch( DrawList->Type() )
+            if( SchItem->Type() != TYPE_SCH_COMPONENT )
+                continue;
+
+            ItemCount++;
+            DrawLibItem = (SCH_COMPONENT*) SchItem;
+            DrawLibItem->m_Parent = sheet->LastScreen();
+            if( List )
             {
-            case TYPE_SCH_COMPONENT:
-                ItemCount++;
-                DrawLibItem = (SCH_COMPONENT*) DrawList;
-                DrawLibItem->m_Parent = sheet->LastScreen();
-                if( List )
-                {
-                    List->m_Comp      = DrawLibItem;
-                    List->m_SheetList = *sheet;
-                    strncpy( List->m_Ref,
-                            CONV_TO_UTF8( DrawLibItem->GetRef( sheet ) ),
-                            sizeof( List->m_Ref ) );
-                    List++;
-                }
-                break;
-
-            default:
-                break;
+                List->m_Comp      = DrawLibItem;
+                List->m_SheetList = *sheet;
+                strncpy( List->m_Ref,
+                        CONV_TO_UTF8( DrawLibItem->GetRef( sheet ) ),
+                        sizeof( List->m_Ref ) );
+                List++;
             }
-
-            DrawList = DrawList->Pnext;
         }
     }
 

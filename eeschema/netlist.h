@@ -26,7 +26,7 @@ typedef enum {
                          * NET_TYPE_CUSTOM1+CUSTOMPANEL_COUNTMAX-1
                          * is the last id for user netlist format
                          */
-    NET_TYPE_CUSTOM_MAX = NET_TYPE_CUSTOM1+CUSTOMPANEL_COUNTMAX-1
+    NET_TYPE_CUSTOM_MAX = NET_TYPE_CUSTOM1 + CUSTOMPANEL_COUNTMAX - 1
 } TypeNetForm;
 
 
@@ -39,7 +39,7 @@ enum NetObjetType {      /* Type des objets de Net */
     NET_JONCTION,
     NET_LABEL,
     NET_GLOBLABEL,
-    NET_HIERLABEL, //on a screen to indicate connection to a higher-level sheet
+    NET_HIERLABEL,  //on a screen to indicate connection to a higher-level sheet
     NET_SHEETLABEL, //on a drawscreen element to indicate connection to a lower-level sheet.
     NET_BUSLABELMEMBER,
     NET_GLOBBUSLABELMEMBER,
@@ -51,9 +51,9 @@ enum NetObjetType {      /* Type des objets de Net */
 };
 
 
-enum  IsConnectType {   /* Valeur du Flag de connection */
-    UNCONNECT,          /* Pin ou Label non connecte */
-    NOCONNECT,          /* Pin volontairement non connectee (Symb. NoConnect utilise) */
+enum  IsConnectType {       /* Valeur du Flag de connection */
+    UNCONNECT,              /* Pin ou Label non connecte */
+    NOCONNECT,              /* Pin volontairement non connectee (Symb. NoConnect utilise) */
     PAD_CONNECT             /* connexion normale */
 };
 
@@ -62,23 +62,23 @@ enum  IsConnectType {   /* Valeur du Flag de connection */
 class ObjetNetListStruct
 {
 public:
-    EDA_BaseStruct* m_Comp;      /* Pointeur sur la definition de l'objet */
+    EDA_BaseStruct* m_Comp;         /* Pointeur sur la definition de l'objet */
     void*           m_Link;      /* Pour SheetLabelStruct: Pointeur sur la feuille de hierarchie
                                   *  Pour les Pins: pointeur sur le composant */
-    int             m_Flag;       /* flag pour calculs internes */
+    int             m_Flag;         /* flag pour calculs internes */
     DrawSheetPath   m_SheetList;
     NetObjetType    m_Type;
-    int             m_ElectricalType;/* Pour Pins et sheet labels: type electrique */
+    int             m_ElectricalType;   /* Pour Pins et sheet labels: type electrique */
 private:
-    int             m_NetCode;       /* pour elements simples */
+    int             m_NetCode;          /* pour elements simples */
 public:
-    int             m_BusNetCode;    /* pour connexions type bus */
+    int             m_BusNetCode;       /* pour connexions type bus */
     int             m_Member;        /* pour les labels type BUSWIRE ( labels de bus eclate )
-                                         *  numero de membre */
+                                      *  numero de membre */
     IsConnectType   m_FlagOfConnection;
-    DrawSheetPath   m_SheetListInclude;   /* sheet that the hierarchal label connects to.*/
-    long            m_PinNum;       /* numero de pin( 4 octets -> 4 codes ascii) */
-    const wxString* m_Label;        /* Tous types Labels:pointeur sur la wxString definissant le label */
+    DrawSheetPath   m_SheetListInclude;     /* sheet that the hierarchal label connects to.*/
+    long            m_PinNum;               /* numero de pin( 4 octets -> 4 codes ascii) */
+    const wxString* m_Label;                /* Tous types Labels:pointeur sur la wxString definissant le label */
     wxPoint         m_Start, m_End;
 
 #if defined (DEBUG)
@@ -93,15 +93,17 @@ public:
 /* Structures pour memo et liste des elements */
 typedef struct ListLabel
 {
-    int m_LabelType;
-    void * m_Label;
-    char m_SheetPath[64];
+    int   m_LabelType;
+    void* m_Label;
+    char  m_SheetPath[64];
 } ListLabel;
+
 typedef struct ListComponent
 {
-    SCH_COMPONENT * m_Comp;
-    char m_Ref[32];
-      //have to store it here since the object refrerences will be duplicated.
+    SCH_COMPONENT* m_Comp;
+    char           m_Ref[32];
+
+    //have to store it here since the object references will be duplicated.
     DrawSheetPath m_SheetList; //composed of UIDs
 } ListComponent;
 
@@ -109,19 +111,19 @@ typedef struct ListComponent
 struct CmpListStruct
 {
 public:
-    SCH_COMPONENT* m_Cmp;              /* Pointeur sur le composant */
-    int                     m_NbParts;          /* Nombre de parts par boitier */
-    bool                    m_PartsLocked;      // For multi part components: True if the part cannot be changed
-    int                     m_Unit;             /* Numero de part */
-    DrawSheetPath 	        m_SheetList;
-    unsigned long           m_TimeStamp;              /* unique identification number */
-    int                     m_IsNew;            /* != 0 pour composants non annotes */
-    char                    m_TextValue[32];    /* Valeur */
-    char                    m_TextRef[32];      /* Reference ( hors numero ) */
-    int                     m_NumRef;           /* Numero de reference */
-    int                     m_Flag;             /* flag pour calculs internes */
-    wxPoint                 m_Pos;              /* position components */
-    char					m_Path[128]; 		// the 'path' of the object in the sheet hierarchy.
+    SCH_COMPONENT* m_Cmp;                               /* Pointeur sur le composant */
+    int            m_NbParts;                           /* Nombre de parts par boitier */
+    bool           m_PartsLocked;                       // For multi part components: True if the part cannot be changed
+    int            m_Unit;                              /* Numero de part */
+    DrawSheetPath  m_SheetList;
+    unsigned long  m_TimeStamp;                         /* unique identification number */
+    int            m_IsNew;                             /* != 0 pour composants non annotes */
+    char           m_TextValue[32];                     /* Valeur */
+    char           m_TextRef[32];                       /* Reference ( hors numero ) */
+    int            m_NumRef;                            /* Numero de reference */
+    int            m_Flag;                              /* flag pour calculs internes */
+    wxPoint        m_Pos;                               /* position components */
+    char           m_Path[128];                         // the 'path' of the object in the sheet hierarchy.
 };
 
 

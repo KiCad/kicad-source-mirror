@@ -17,8 +17,7 @@
 /* Routines locales */
 static void PropageNetCode( int OldNetCode, int NewNetCode, int IsBus );
 static void SheetLabelConnect( ObjetNetListStruct* SheetLabel );
-static int  ListeObjetConnection( WinEDA_SchematicFrame* frame,
-                                  DrawSheetPath* sheetlist,
+static int  ListeObjetConnection( DrawSheetPath* sheetlist,
                                   ObjetNetListStruct* ObjNet );
 static int  ConvertBusToMembers( ObjetNetListStruct* ObjNet );
 static void PointToPointConnect( ObjetNetListStruct* Ref, int IsBus,
@@ -165,7 +164,7 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
     /* Build the sheet (not screen) list (flattened)*/
     EDA_SheetList SheetListList( NULL );
     i=0;
-    /* 1ere passe : Comptage du nombre d'objet de Net */
+    /* first pass : count objects used in connectivty calculation */
     g_NbrObjNet = 0;
     g_TabObjNet = NULL; /* Init pour le 1er passage dans ListeObjetConnection */
 
@@ -174,7 +173,7 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
 
     for( sheet = SheetListList.GetFirst(); sheet != NULL; sheet = SheetListList.GetNext() )
     {
-        g_NbrObjNet   += ListeObjetConnection( this, sheet, NULL );
+        g_NbrObjNet   += ListeObjetConnection( sheet, NULL );
     }
 
     if( g_NbrObjNet == 0 )
@@ -188,8 +187,7 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
     if( g_TabObjNet == NULL )
         return NULL;
 
-    /* 2eme passe : Remplissage des champs des structures des objets de Net */
-    /* second pass: fill the fields of the structures in the Net */
+    /* second pass: fill the fields of the structures used in connectivty calculation */
 
     s_PassNumber++;
 
@@ -197,15 +195,14 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
     for( ObjetNetListStruct* tabObjNet = g_TabObjNet;
         sheet != NULL; sheet = SheetListList.GetNext() )
     {
-        tabObjNet += ListeObjetConnection( this, sheet, tabObjNet );
+        tabObjNet += ListeObjetConnection( sheet, tabObjNet );
     }
 
     activity.Empty();
     activity << wxT(" ") << _( "NbItems" ) << wxT(" ") << g_NbrObjNet;
 	SetStatusText( activity );
 
-    /* Recherche des connections pour les Segments et les Pins */
-    /* Tri du Tableau des objets de Net par Sheet */
+    /* Sort objects by Sheet */
 
     qsort( g_TabObjNet, g_NbrObjNet, sizeof(ObjetNetListStruct), TriBySheet );
 
@@ -363,7 +360,7 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
             SheetLabelConnect( g_TabObjNet + i );
     }
 
-    /* Tri du Tableau des objets de Net par NetCode */
+    /* Sort objects by NetCode */
     qsort( g_TabObjNet, g_NbrObjNet, sizeof(ObjetNetListStruct), TriNetCode );
 
 
@@ -438,17 +435,14 @@ static void SheetLabelConnect( ObjetNetListStruct* SheetLabel )
 }
 
 
-/*****************************************************************************/
-static int ListeObjetConnection( WinEDA_SchematicFrame* frame, DrawSheetPath* sheetlist,
-                                 ObjetNetListStruct* ObjNet )
-/*****************************************************************************/
+/**************************************************************************************/
+static int ListeObjetConnection( DrawSheetPath* sheetlist, ObjetNetListStruct* ObjNet )
+/**************************************************************************************/
 
-/* Routine generant la liste des objets relatifs aux connection
- *  entree:
- *      sheetlist: pointer to a sheetlist.
- *      ObjNet:
- *          si NULL: la routine compte seulement le nombre des objets
- *          sinon: pointe le tableau a remplir
+/** Function ListeObjetConnection
+ * Creates the list of objects related to connections (pins of components, wires, labels, junctions ...)
+ * @param sheetlist: pointer to a sheetlist.
+ * @param ObjNet: if NULL, objects count else list to fill
  */
 {
     int                     ii, NbrItem = 0;
@@ -596,8 +590,7 @@ static int ListeObjetConnection( WinEDA_SchematicFrame* frame, DrawSheetPath* sh
                 if( DEntry->Type() != COMPONENT_PIN_DRAW_TYPE )
                     continue;
 
-                if( DEntry->m_Unit
-                   && (DEntry->m_Unit != DrawLibItem->m_Multi) )
+                if( DEntry->m_Unit && (DEntry->m_Unit != DrawLibItem->GetUnitSelection( sheetlist ) ) )
                     continue;
 
                 if( DEntry->m_Convert
@@ -684,7 +677,7 @@ static int ListeObjetConnection( WinEDA_SchematicFrame* frame, DrawSheetPath* sh
             break;
 
         case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
-            DisplayError( frame, wxT( "Netlist: Type DRAW_SHEETLABEL inattendu" ) );
+            DisplayError( NULL, wxT( "Netlist: Type DRAW_SHEETLABEL inattendu" ) );
             break;
 
         default:
@@ -692,7 +685,7 @@ static int ListeObjetConnection( WinEDA_SchematicFrame* frame, DrawSheetPath* sh
             wxString msg;
             msg.Printf( wxT( "Netlist: unexpected type struct %d" ),
                        DrawList->Type() );
-            DisplayError( frame, msg );
+            DisplayError( NULL, msg );
             break;
         }
         }
