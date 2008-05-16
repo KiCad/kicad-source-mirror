@@ -341,6 +341,7 @@ void WinEDA_SchematicFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPi
     }
 
     Affiche_Status_Box();    /* Affichage des coord curseur */
+    SetToolbars();
 }
 
 
@@ -469,6 +470,7 @@ void WinEDA_LibeditFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixe
     }
 
     Affiche_Status_Box();    /* Affichage des coord curseur */
+    SetToolbars();
 }
 
 /*************************************************************************************/
@@ -596,4 +598,5 @@ void WinEDA_ViewlibFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixe
     }
 
     Affiche_Status_Box();    /* Affichage des coord curseur */
+    SetToolbars();
 }

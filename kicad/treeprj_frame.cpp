@@ -26,6 +26,9 @@
 
 #include "id.h"
 
+// Comment this if you do no want to load subdirs files in the tree project
+// UnComment this to load subdirs files in the tree project
+#define ADD_FILES_IN_SUBDIRS
 
 /******************************************************************/
 WinEDA_PrjFrame::WinEDA_PrjFrame( WinEDA_MainFrame* parent,
@@ -646,6 +649,28 @@ bool WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
 #ifdef KICAD_PYTHON
     PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::TreeAddFile" ), PyHandler::Convert( name ) );
 #endif
+
+#ifdef ADD_FILES_IN_SUBDIRS
+    // When enabled This section adds dirs and files found in the subdirs
+    // in this case AddFile is recursive.
+    if( TREE_DIRECTORY == type )
+    {
+        const wxString sep = wxFileName().GetPathSeparator();
+        wxDir dir( name );
+
+        wxString       dir_filename;
+        if( dir.GetFirst( &dir_filename ) )
+        {
+            do
+            {
+                AddFile( name + sep + dir_filename, cellule );
+            } while( dir.GetNext( &dir_filename ) );
+        }
+
+        /* Sort filenames by alphabetic order */
+        m_TreeProject->SortChildren( cellule );
+    }
+#endif
 	return true; 
 }
 
@@ -687,7 +712,7 @@ void WinEDA_PrjFrame::ReCreateTreePrj()
 
     ChangeFileNameExt( Text, wxEmptyString );
 
-    // Add at least a .scn / .brd if not existing:
+    // Add at least a .sch / .brd if not existing:
     if( !wxFileExists( Text + g_SchExtBuffer ) )
         AddFile( Text + g_SchExtBuffer, m_root );
     
