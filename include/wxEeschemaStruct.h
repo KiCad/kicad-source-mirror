@@ -89,8 +89,20 @@ public:
         bool
         IncludePin );
 
-    SCH_COMPONENT*          FindComponentByRef( const wxString& reference );
-
+    /** function FillFootprintFieldForAllInstancesofComponent
+     * Search for component "aReference", and place a Footprint in Footprint field
+     * @param aReference = reference of the component to initialise
+     * @param aFootPrint = new value for the filed Fottprint component
+     * @param aSetVisible = true to have the field visible, false to set the invisible flag
+     * @return true if the given component is found
+     * Note:
+     * the component is searched in the whole schematic, and because some components
+     * have more than one instance (multiple parts per package components)
+     * the search is not stopped when a reference is found (all instances must be found).
+     */
+    bool FillFootprintFieldForAllInstancesofComponent( const wxString& aReference,
+                                                       const wxString& aFootPrint,
+                                                    bool            aSetVisible );
     SCH_ITEM*               FindComponentAndItem( const wxString& component_reference,
                                                   bool                          Find_in_hierarchy,
                                                   int                           SearchType,
@@ -136,10 +148,11 @@ public:
     /**
      * Function ProcessStuffFile
      * gets footprint info from each line in the Stuff File by Ref Desg
-     * @param filename The file to read from.
+     * @param aFilename The file to read from.
+     * @param aSetFielsAttributeToVisible = true to set the footprint field flag to visible
      * @return bool - true if success, else true.
      */
-    bool  		            ProcessStuffFile( FILE* filename );
+    bool  		            ProcessStuffFile( FILE* aFilename, bool aSetFielsAttributeToVisible );
 
     bool                    SaveEEFile( SCH_SCREEN* screen, int FileSave );
     SCH_SCREEN*             CreateNewScreen( SCH_SCREEN* OldScreen, int TimeStamp );

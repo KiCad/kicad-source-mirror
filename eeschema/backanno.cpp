@@ -14,40 +14,74 @@
 
 #include "dialog_backanno.cpp"
 
-/**************************************************************/
-SCH_COMPONENT* WinEDA_SchematicFrame::FindComponentByRef(
-    const wxString& reference )
-/**************************************************************/
+/*******************************************************************************************/
+bool WinEDA_SchematicFrame::FillFootprintFieldForAllInstancesofComponent(
+    const wxString& aReference,
+    const wxString&
+    aFootPrint,
+    bool            aSetVisible )
+/********************************************************************************************/
+
+/** function FillFootprintFieldForAllInstancesofComponent
+ * Search for component "aReference", and place a Footprint in Footprint field
+ * @param aReference = reference of the component to initialise
+ * @param aFootPrint = new value for the filed Fottprint component
+ * @param aSetVisible = true to have the field visible, false to set the invisible flag
+ * @return true if the given component is found
+ * Note:
+ * the component is searched in the whole schematic, and because some components
+ * have more than one instance (multiple parts per package components)
+ * the search is not stopped when a reference is found (all instances must be found).
+ */
 {
     DrawSheetPath* sheet;
     SCH_ITEM*      DrawList = NULL;
     EDA_SheetList  SheetList( NULL );
+    SCH_COMPONENT* Cmp;
+    bool           found = false;
 
     for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
         DrawList = (SCH_ITEM*) sheet->LastDrawList();
         for( ; (DrawList != NULL); DrawList = DrawList->Next() )
         {
-            if( DrawList->Type() == TYPE_SCH_COMPONENT )
-            {
-                SCH_COMPONENT* pSch;
+            if( DrawList->Type() != TYPE_SCH_COMPONENT )
+                continue;
 
-                pSch = (SCH_COMPONENT*) DrawList;
-                if( reference.CmpNoCase( pSch->GetRef( sheet ) ) == 0 )
-                    return pSch;
+            Cmp = (SCH_COMPONENT*) DrawList;
+            if( aReference.CmpNoCase( Cmp->GetRef( sheet ) ) == 0 )
+            {    // Found: Init Footprint Field
+                 /* Give a reasonnable value to the fied position and orientation, if
+                  * the text is empty at position 0, because it is probably not yet initialised
+                  */
+                if( Cmp->m_Field[FOOTPRINT].m_Text.IsEmpty()
+                   && ( Cmp->m_Field[FOOTPRINT].m_Pos == wxPoint( 0, 0 ) ) )
+                {
+                    Cmp->m_Field[FOOTPRINT].m_Orient = Cmp->m_Field[VALUE].m_Orient;
+                    Cmp->m_Field[FOOTPRINT].m_Pos    = Cmp->m_Field[VALUE].m_Pos;
+                    Cmp->m_Field[FOOTPRINT].m_Pos.y -= 100;
+                }
+                Cmp->m_Field[FOOTPRINT].m_Text = aFootPrint;
+                if( aSetVisible )
+                    Cmp->m_Field[FOOTPRINT].m_Attributs &= ~TEXT_NO_VISIBLE;
+                else
+                    Cmp->m_Field[FOOTPRINT].m_Attributs |= TEXT_NO_VISIBLE;
+                found = true;
             }
         }
     }
 
-    return NULL;
+    return found;
 }
 
 
-/**************************************************************/
-bool WinEDA_SchematicFrame::ProcessStuffFile( FILE* StuffFile )
-/**************************************************************/
+/***************************************************************************/
+bool WinEDA_SchematicFrame::ProcessStuffFile( FILE* aStuffFile, bool
+                                              aSetFielsAttributeToVisible  )
+/***************************************************************************/
 
-/* Read a "stuff" file created by cvpcb.
+/** Function ProcessStuffFile
+ * Read a "stuff" file created by cvpcb.
  * That file has lines like:
  * comp = "C1" module = "CP6"
  * comp = "C2" module = "C1"
@@ -55,13 +89,15 @@ bool WinEDA_SchematicFrame::ProcessStuffFile( FILE* StuffFile )
  * "comp =" gives the component reference
  * "module =" gives the footprint name
  *
+ * @param aStuffFile = file (*.stf) to Read.
+ * @param aSetFielsAttributeToVisible = true to set the footprint field flag to visible
+ * @return true if ok.
  */
 {
-    int            LineNum = 0;
-    char*          cp, Ref[256], FootPrint[256], Line[1024];
-    SCH_COMPONENT* Cmp;
+    int   LineNum = 0;
+    char* cp, Ref[256], FootPrint[256], Line[1024];
 
-    while( GetLine( StuffFile, Line, &LineNum, sizeof(Line) ) )
+    while( GetLine( aStuffFile, Line, &LineNum, sizeof(Line) ) )
     {
         if( sscanf( Line, "comp = \"%s module = \"%s", Ref, FootPrint ) == 2 )
         {
@@ -74,21 +110,10 @@ bool WinEDA_SchematicFrame::ProcessStuffFile( FILE* StuffFile )
                     *cp = 0;
 
             wxString reference = CONV_FROM_UTF8( Ref );
-
-            Cmp = WinEDA_SchematicFrame::FindComponentByRef( reference );
-            if( Cmp == NULL )
-                continue;
-
-            /* Give a reasonnable value to the fied position, if
-             * the text is empty at position 0, because it is probably not yet initialised
-             */
-            if( Cmp->m_Field[FOOTPRINT].m_Text.IsEmpty() &&
-               ( Cmp->m_Field[FOOTPRINT].m_Pos == wxPoint( 0, 0 ) ) )
-            {
-                Cmp->m_Field[FOOTPRINT].m_Pos    = Cmp->m_Field[VALUE].m_Pos;
-                Cmp->m_Field[FOOTPRINT].m_Pos.y -= 100;
-            }
-            Cmp->m_Field[FOOTPRINT].m_Text = CONV_FROM_UTF8( FootPrint );
+            wxString Footprint = CONV_FROM_UTF8( FootPrint );
+            FillFootprintFieldForAllInstancesofComponent( reference,
+                                                          Footprint,
+                                                          aSetFielsAttributeToVisible );
         }
     }
 
@@ -106,16 +131,17 @@ bool WinEDA_SchematicFrame::ReadInputStuffFile()
     wxString Line, filename;
     FILE*    StuffFile;
     wxString msg;
+    bool     SetFieldToVisible = true;
 
     filename = EDA_FileSelector( _( "Load Stuff File" ),
-        wxEmptyString,                                      /* Chemin par defaut */
-        wxEmptyString,                                      /* nom fichier par defaut */
-        wxT( ".stf" ),                                      /* extension par defaut */
-        wxT( "*.stf" ),                                     /* Masque d'affichage */
-        this,
-        wxFD_OPEN,
-        FALSE
-    );
+                                 wxEmptyString,             /* Chemin par defaut */
+                                 wxEmptyString,             /* nom fichier par defaut */
+                                 wxT( ".stf" ),             /* extension par defaut */
+                                 wxT( "*.stf" ),            /* Masque d'affichage */
+                                 this,
+                                 wxFD_OPEN,
+                                 FALSE
+                                 );
 
     if( filename.IsEmpty() )
         return FALSE;
@@ -127,6 +153,18 @@ bool WinEDA_SchematicFrame::ReadInputStuffFile()
     if( filename.IsEmpty() )
         return FALSE;
 
+    int diag = wxMessageBox(
+        _( "Set the Footprint Field to Visible ?" ),
+        _ ("Field Display Option"),
+        wxYES_NO | wxICON_QUESTION | wxCANCEL, this );
+
+    if( diag == wxCANCEL )
+        return false;
+    if( diag == wxYES )
+        SetFieldToVisible = true;
+    else
+        SetFieldToVisible = false;
+
     StuffFile = wxFopen( filename, wxT( "rt" ) );
     if( StuffFile == NULL )
     {
@@ -135,7 +173,7 @@ bool WinEDA_SchematicFrame::ReadInputStuffFile()
         return FALSE;
     }
 
-    ProcessStuffFile( StuffFile );
+    ProcessStuffFile( StuffFile, SetFieldToVisible );
 
     return TRUE;
 }
