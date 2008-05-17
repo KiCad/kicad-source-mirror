@@ -473,7 +473,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
 
     screen->EEDrawList = Phead;
 
-#if 1 && defined(DEBUG)
+#if 0 && defined(DEBUG)
     screen->Show( 0, std::cout );
 #endif
 
