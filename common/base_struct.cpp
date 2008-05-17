@@ -669,6 +669,16 @@ bool EDA_Rect::Inside( const wxPoint& point )
 bool EDA_Rect::Intersects( const EDA_Rect aRect ) const
 {
     // this logic taken from wxWidgets' geometry.cpp file:
+    bool rc;
+
+#if 0 && defined(DEBUG)
+
+    std::cout << "this: ";
+    std::cout << m_Pos << m_Size << '\n';
+    std::cout << "aRect: ";
+    std::cout << aRect.m_Pos << aRect.m_Size;
+
+#endif
 
     int left   = MAX( m_Pos.x, aRect.m_Pos.x );
     int right  = MIN( m_Pos.x + m_Size.x, aRect.m_Pos.x + aRect.m_Size.x );
@@ -676,10 +686,13 @@ bool EDA_Rect::Intersects( const EDA_Rect aRect ) const
     int bottom = MIN( m_Pos.y + m_Size.y, aRect.m_Pos.y + aRect.m_Size.y );
 
     if( left < right && top < bottom )
-    {
-        return true;
-    }
-    return false;
+        rc = true;
+    else
+        rc = false;
+
+    //D( std::cout << "rc=" << rc << '\n'; )
+
+    return rc;
 }
 
 
