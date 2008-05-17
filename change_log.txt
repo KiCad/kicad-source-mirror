@@ -5,6 +5,19 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+2008-May-17 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++all
+    Removed bitmaps.cpp.  Made a static library target named "bitmaps" which
+    gets linked into any app needing bitmaps.  Changed bitmaps.h to simply
+    include and alphebetized listing of the bitmap arrays.
+    We can now continue to migrate remaining bitmaps into:
+        > the <base>/bitmaps directory
+        > the <base>/bitmaps/CMakeLists.txt file there
+        > the include/bitmaps.h file.
+
+
 2008-May-16 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +eeschema:

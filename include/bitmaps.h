@@ -1,311 +1,281 @@
 
 // Largeur du toolbar vertical
-#define VTOOLBAR_WIDTH 26
+#define VTOOLBAR_WIDTH  26
+
 // dimension d'un tool vertical
-#define TOOL_SIZE 23
+#define TOOL_SIZE       23
 
-    /****************************/
-    /* Used bitmaps in Kicad */
-    /****************************/
+// Please keep list sorted alphabetically, ignoring case.
 
-    #include "../bitmaps/Cancel.xpm"
-    #include "../bitmaps/cancel_tool.xpm"
-    #include "../bitmaps/Apply.xpm"
-    #include "../bitmaps/reload2.xpm"
-
-    #include "../bitmaps/icon_txt.xpm"
-    #include "../bitmaps/new_txt.xpm"
-    #include "../bitmaps/directory.xpm"
-    #include "../bitmaps/icon_python_small.xpm"
-    #include "../bitmaps/Web_support.xpm"
-
-    #include "../bitmaps/Fonts.xpm"
-
-    #include "../bitmaps/save.xpm"
-    #include "../bitmaps/save_as.xpm"
-    #include "../bitmaps/Save_Project.xpm"
-    #include "../bitmaps/Save_CmpStuff.xpm"
-    #include "../bitmaps/Save_NetList.xpm"
-    #include "../bitmaps/Save_SetUp.xpm"
-    #include "../bitmaps/Read_SetUp.xpm"
-    #include "../bitmaps/Editor.xpm"
-
-    #include "../bitmaps/Open_Library.xpm"
-    #include "../bitmaps/New_Library.xpm"
-    #include "../bitmaps/Save_Library.xpm"
-
-    #include "../bitmaps/Edit.xpm"
-    #include "../bitmaps/Edit_Text.xpm"
-
-    #include "../bitmaps/plot.xpm"
-    #include "../bitmaps/plot_PS.xpm"
-    #include "../bitmaps/plot_HPG.xpm"
-
-    #include "../bitmaps/Add_Zone.xpm"
-    #include "../bitmaps/Add_Zone_Cutout.xpm"
-    #include "../bitmaps/Add_Corner.xpm"
-    #include "../bitmaps/Add_Circle.xpm"
-    #include "../bitmaps/Add_Line.xpm"
-    #include "../bitmaps/Add_Arc.xpm"
-    #include "../bitmaps/Add_Dashed_Line.xpm"
-    #include "../bitmaps/Add_Entry.xpm"
-    #include "../bitmaps/Add_Polygon.xpm"
-    #include "../bitmaps/Add_Rectangle.xpm"
-    #include "../bitmaps/Add_Text.xpm"
-    #include "../bitmaps/Add_Line_Label.xpm"
-    #include "../bitmaps/Add_GLabel.xpm"
-    #include "../bitmaps/Add_Junction.xpm"
-
-    #include "../bitmaps/Add_Power.xpm"
-    #include "../bitmaps/Add_Bus2Bus.xpm"
-    #include "../bitmaps/Add_Line2Bus.xpm"
-    #include "../bitmaps/add_bus.xpm"
-    #include "../bitmaps/add_hierarchical_label.xpm"
-    #include "../bitmaps/add_hierar_pin.xpm"
-    #include "../bitmaps/add_hierar_subsheet.xpm"
-    #include "../bitmaps/import_hierarchical_label.xpm"
-
-    #include "../bitmaps/general_deletions.xpm"
-    #include "../bitmaps/Delete_Text.xpm"
-    #include "../bitmaps/Delete_Cotation.xpm"
-    #include "../bitmaps/Delete_Arc.xpm"
-    #include "../bitmaps/Delete_Circle.xpm"
-    #include "../bitmaps/Delete_Field.xpm"
-    #include "../bitmaps/Delete_Line.xpm"
-    #include "../bitmaps/Delete_Segment.xpm"
-    #include "../bitmaps/Delete_Polygon.xpm"
-    #include "../bitmaps/Delete_Rectangle.xpm"
-
-    #include "../bitmaps/Move.xpm"
-    #include "../bitmaps/Move_Text.xpm"
-    #include "../bitmaps/Move_Arc.xpm"
-    #include "../bitmaps/Move_Circle.xpm"
-    #include "../bitmaps/Move_Field.xpm"
-    #include "../bitmaps/Move_Line.xpm"
-    #include "../bitmaps/Move_Polygon.xpm"
-    #include "../bitmaps/Move_Rectangle.xpm"
-
-    #include "../bitmaps/Options_Text.xpm"
-    #include "../bitmaps/Options_Arc.xpm"
-    #include "../bitmaps/Options_Circle.xpm"
-    #include "../bitmaps/Options_Segment.xpm"
-    #include "../bitmaps/Options_Rectangle.xpm"
-    #include "../bitmaps/Display_Options.xpm"
-    #include "../bitmaps/opt_show_polygon.xpm"
-
-    #include "../bitmaps/Mirror_V.xpm"
-    #include "../bitmaps/Mirror_H.xpm"
-    #include "../bitmaps/Orient.xpm"
-    #include "../bitmaps/Rotate+.xpm"
-    #include "../bitmaps/Rotate-.xpm"
-    #include "../bitmaps/Rotate_Field.xpm"
-    #include "../bitmaps/Exit.xpm"
-    #include "../bitmaps/Datasheet.xpm"
-    #include "../bitmaps/CopyBlock.xpm"
-    #include "../bitmaps/new.xpm"
-    #include "../bitmaps/open.xpm"
-    #include "../bitmaps/polar.xpm"
-    #include "../bitmaps/copy.xpm"
-    #include "../bitmaps/cut.xpm"
-    #include "../bitmaps/paste.xpm"
-    #include "../bitmaps/print.xpm"
-    #include "../bitmaps/backanno.xpm"
-    #include "../bitmaps/find.xpm"
-
-    #include "../bitmaps/Cursor_Shape.xpm"
-    #include "../bitmaps/Add_Component.xpm"
-    #include "../bitmaps/noconn.xpm"
-
-    #include "../bitmaps/zoom.xpm"
-    #include "../bitmaps/Zoom_Center.xpm"
-    #include "../bitmaps/Zoom_Out.xpm"
-    #include "../bitmaps/Zoom_In.xpm"
-    #include "../bitmaps/Zoom_Optimal.xpm"
-    #include "../bitmaps/Zoom_Select.xpm"
-    #include "../bitmaps/Zoom_Selected.xpm"
-    #include "../bitmaps/Repaint.xpm"
-
-    #include "../bitmaps/left.xpm"
-    #include "../bitmaps/right.xpm"
-    #include "../bitmaps/up.xpm"
-    #include "../bitmaps/down.xpm"
-
-    #include "../bitmaps/File_FootPrint.xpm"
-    #include "../bitmaps/Footprint_Text.xpm"
-
-    #include "../bitmaps/Options_Pad.xpm"
-    #include "../bitmaps/Options_New_Pad.xpm"
-
-    #include "../bitmaps/sheetset.xpm"
-    #include "../bitmaps/library.xpm"
-    #include "../bitmaps/dashline.xpm"
-    #include "../bitmaps/annotate.xpm"
-    #include "../bitmaps/netlist.xpm"
-    #include "../bitmaps/erc.xpm"
-    #include "../bitmaps/tools.xpm"
-    #include "../bitmaps/libview.xpm"
-    #include "../bitmaps/libedprt.xpm"
-    #include "../bitmaps/export.xpm"
-    #include "../bitmaps/import.xpm"
-    #include "../bitmaps/delete.xpm"
-    #include "../bitmaps/schematic.xpm"
-    #include "../bitmaps/pin.xpm"
-    #include "../bitmaps/Morgan1.xpm"
-    #include "../bitmaps/Morgan2.xpm"
-    #include "../bitmaps/anchor.xpm"
-    #include "../bitmaps/del_body.xpm"
-    #include "../bitmaps/libsavem.xpm"
-    #include "../bitmaps/label.xpm"
-    #include "../bitmaps/undelete.xpm"
-    #include "../bitmaps/undo.xpm"
-    #include "../bitmaps/redo.xpm"
-    #include "../bitmaps/eeschema.xpm"
-    #include "../bitmaps/pcbnew.xpm"
-    #include "../bitmaps/treensel.xpm"
-    #include "../bitmaps/book.xpm"
-    #include "../bitmaps/module.xpm"
-    #include "../bitmaps/modedit.xpm"
-    #include "../bitmaps/config.xpm"
-    #include "../bitmaps/auto_associe.xpm"
-    #include "../bitmaps/icon_cvpcb.xpm"
-    #include "../bitmaps/icon_eeschema.xpm"
-    #include "../bitmaps/icon_gerbview.xpm"
-    #include "../bitmaps/icon_kicad.xpm"
-    #include "../bitmaps/icon_pcbnew.xpm"
-    #include "../bitmaps/icon_modedit.xpm"
-    #include "../bitmaps/Info.xpm"
-    #include "../bitmaps/icon_python.xpm"
-    #include "../bitmaps/mirepcb.xpm"
-    #include "../bitmaps/icon_3d.xpm"
-    #include "../bitmaps/drc_off.xpm"
-    #include "../bitmaps/grid.xpm"
-    #include "../bitmaps/grid_select.xpm"
-    #include "../bitmaps/unit_mm.xpm"
-    #include "../bitmaps/unit_inch.xpm"
-    #include "../bitmaps/cursor.xpm"
-    #include "../bitmaps/ratsnest.xpm"
-    #include "../bitmaps/modratsnest.xpm"
-    #include "../bitmaps/del_track.xpm"
-    #include "../bitmaps/pad.xpm"
-    #include "../bitmaps/Pad_Sketch.xpm"
-    #include "../bitmaps/Text_Sketch.xpm"
-    #include "../bitmaps/showtrack.xpm"
-    #include "../bitmaps/showmodedge.xpm"
-    #include "../bitmaps/showdcode.xpm"
-    #include "../bitmaps/palette.xpm"
-    #include "../bitmaps/help.xpm"
-    #include "../bitmaps/green.xpm"
-    #include "../bitmaps/red.xpm"
-    #include "../bitmaps/preference.xpm"
-    #include "../bitmaps/3d.xpm"
-    #include "../bitmaps/hammer.xpm"
-    #include "../bitmaps/jigsaw.xpm"
-    #include "../bitmaps/library_update.xpm"
-    #include "../bitmaps/transistor.xpm"
-    #include "../bitmaps/kicad_icon_small.xpm"
-    #include "../bitmaps/general_ratsnet.xpm"
-    #include "../bitmaps/Add_Tracks.xpm"
-    #include "../bitmaps/Auto_track_width.xpm"
-    #include "../bitmaps/fill_zone.xpm"
-    #include "../bitmaps/Width_Segment.xpm"
-
-    #include "../bitmaps/annotate_right_down.xpm"
-    #include "../bitmaps/annotate_down_right.xpm"
-
-//	#include "../bitmaps/new_sch.xpm"
-    #include "../bitmaps/Open_Project.xpm"
-//	#include "../bitmaps/new_cvpcb.xpm"
-    #include "../bitmaps/zip.xpm"
-    #include "../bitmaps/icon_gerbview_small.xpm"
-//	#include "../bitmaps/zip_tool.xpm"
-    #include "../bitmaps/unzip.xpm"
-    #include "../bitmaps/Browse_Files.xpm"
-    #include "../bitmaps/New_Project.xpm"
-//	#include "../bitmaps/new_gerb.xpm"
-//	#include "../bitmaps/new_python.xpm"
-    #include "../bitmaps/icon_cvpcb_small.xpm"
-    #include "../bitmaps/unknown.xpm"
-//	#include "../bitmaps/new_pcb.xpm"
-
-    #include "../bitmaps/reload.xpm"
-
-    #include "../bitmaps/treesel.xpm"
-    #include "../bitmaps/ercerr.xpm"
-    #include "../bitmaps/ercwarn.xpm"
-
-    #include "../bitmaps/add_cotation.xpm"
-    #include "../bitmaps/Add_Mires.xpm"
-    #include "../bitmaps/Break_Line.xpm"
-    #include "../bitmaps/Delete_Module.xpm"
-    #include "../bitmaps/Delete_Net.xpm"
-    #include "../bitmaps/Delete_Node.xpm"
-    #include "../bitmaps/Delete_Pad.xpm"
-    #include "../bitmaps/Delete_Track.xpm"
-    #include "../bitmaps/Drag_Module.xpm"
-    #include "../bitmaps/Drag_Outline_Segment.xpm"
-    #include "../bitmaps/Drag_Pad.xpm"
-    #include "../bitmaps/Drag_Segment_WithSlope.xpm"
-    #include "../bitmaps/Drag_Track_Segment.xpm"
-    #include "../bitmaps/Edges_Sketch.xpm"
-    #include "../bitmaps/Edit_Module.xpm"
-    #include "../bitmaps/Export_Module.xpm"
-    #include "../bitmaps/Export_Options_Pad.xpm"
-    #include "../bitmaps/Flag.xpm"
-    #include "../bitmaps/Global_Options_Pad.xpm"
-    #include "../bitmaps/Import_Module.xpm"
-    #include "../bitmaps/Insert_Module_Board.xpm"
-    #include "../bitmaps/Invert_Module.xpm"
-    #include "../bitmaps/Load_Module_Board.xpm"
-    #include "../bitmaps/Load_Module_Lib.xpm"
-    #include "../bitmaps/local_ratsnet.xpm"
-    #include "../bitmaps/Locked.xpm"
-    #include "../bitmaps/Mode_Module.xpm"
-    #include "../bitmaps/Mode_Track.xpm"
-    #include "../bitmaps/Module_Check.xpm"
-    #include "../bitmaps/Modul_Edit.xpm"
-    #include "../bitmaps/module_options.xpm"
-    #include "../bitmaps/Module_Ratsnet.xpm"
-    #include "../bitmaps/Move_Module.xpm"
-    #include "../bitmaps/Move_Pad.xpm"
-    #include "../bitmaps/Move_Pin.xpm"
-    #include "../bitmaps/Move_Track_Segment.xpm"
-    #include "../bitmaps/Move_Track.xpm"
-    #include "../bitmaps/mw_Add_Gap.xpm"
-    #include "../bitmaps/mw_Add_Line.xpm"
-    #include "../bitmaps/mw_Add_Shape.xpm"
-    #include "../bitmaps/mw_Add_stub_arc.xpm"
-    #include "../bitmaps/mw_Add_Stub.xpm"
-    #include "../bitmaps/mw_toolbar.xpm"
-    #include "../bitmaps/Net_HighLight.xpm"
-    #include "../bitmaps/net_hightlight.xpm"
-    #include "../bitmaps/Net_Locked.xpm"
-    #include "../bitmaps/Net_UnLocked.xpm"
-    #include "../bitmaps/New_FootPrint.xpm"
-    #include "../bitmaps/New_Module.xpm"
-    #include "../bitmaps/options_all_tracks_and_vias.xpm"
-    #include "../bitmaps/Options_All_Tracks.xpm"
-    #include "../bitmaps/Options_All_Vias.xpm"
-    #include "../bitmaps/Options_Module.xpm"
-    #include "../bitmaps/Options_Tracks.xpm"
-    #include "../bitmaps/Options_Track.xpm"
-    #include "../bitmaps/Options_Vias.xpm"
-    #include "../bitmaps/PcbOffset.xpm"
-    #include "../bitmaps/Post_Compo.xpm"
-    #include "../bitmaps/Post_Drill.xpm"
-    #include "../bitmaps/Post_Module.xpm"
-    #include "../bitmaps/Rotate_Module-.xpm"
-    #include "../bitmaps/Rotate_Module+.xpm"
-    #include "../bitmaps/Select_Layer_Pair.xpm"
-    #include "../bitmaps/Select_W_Layer.xpm"
-    #include "../bitmaps/Show_Zone.xpm"
-    #include "../bitmaps/Swap_Layer.xpm"
-    #include "../bitmaps/tool_ratsnet.xpm"
-    #include "../bitmaps/Track_Locked.xpm"
-    #include "../bitmaps/Track_Sketch.xpm"
-    #include "../bitmaps/Track_UnLocked.xpm"
-    #include "../bitmaps/Unlocked.xpm"
-    #include "../bitmaps/Update_Module_Board.xpm"
-    #include "../bitmaps/Width_Net.xpm"
-    #include "../bitmaps/Width_Track_Via.xpm"
-    #include "../bitmaps/Width_Track.xpm"
-    #include "../bitmaps/Width_Vias.xpm"
+extern const char* add_arc_xpm[];
+extern const char* add_bus2bus_xpm[];
+extern const char* add_bus_xpm[];
+extern const char* add_circle_xpm[];
+extern const char* add_component_xpm[];
+extern const char* Add_Corner_xpm[];
+extern const char* add_cotation_xpm[];
+extern const char* add_dashed_line_xpm[];
+extern const char* add_entry_xpm[];
+extern const char* add_glabel_xpm[];
+extern const char* add_hierarchical_label_xpm[];
+extern const char* add_hierarchical_subsheet_xpm[];
+extern const char* add_hierar_pin_xpm[];
+extern const char* add_junction_xpm[];
+extern const char* add_line2bus_xpm[];
+extern const char* add_line_label_xpm[];
+extern const char* add_line_xpm[];
+extern const char* add_mires_xpm[];
+extern const char* add_polygon_xpm[];
+extern const char* add_power_xpm[];
+extern const char* add_rectangle_xpm[];
+extern const char* add_text_xpm[];
+extern const char* add_tracks_xpm[];
+extern const char* add_zone_cutout[];
+extern const char* add_zone_xpm[];
+extern const char* a_icon_pcbnew_xpm[];
+extern const char* anchor_xpm[];
+extern const char* annotate_down_right_xpm[];
+extern const char* annotate_right_down_xpm[];
+extern const char* annotate_xpm[];
+extern const char* apply_xpm[];
+extern const char* auto_associe_xpm[];
+extern const char* auto_delete_track_xpm[];
+extern const char* auto_track_width_xpm[];
+extern const char* backanno_xpm[];
+extern const char* book_xpm[];
+extern const char* Break_Line_xpm[];
+extern const char* browse_files_xpm[];
+extern const char* cancel_tool_xpm[];
+extern const char* cancel_xpm[];
+extern const char* config_xpm[];
+extern const char* copyblock_xpm[];
+extern const char* copy_button[];
+extern const char* cursor_shape_xpm[];
+extern const char* cursor_xpm[];
+extern const char* cut_button[];
+extern const char* dashedline_xpm[];
+extern const char* datasheet_xpm[];
+extern const char* delete_arc_xpm[];
+extern const char* delete_body_xpm[];
+extern const char* delete_circle_xpm[];
+extern const char* delete_cotation_xpm[];
+extern const char* delete_field_xpm[];
+extern const char* delete_line_xpm[];
+extern const char* Delete_Module_xpm[];
+extern const char* Delete_Net_xpm[];
+extern const char* Delete_Node_xpm[];
+extern const char* Delete_Pad_xpm[];
+extern const char* Delete_Polygon_xpm[];
+extern const char* delete_rectangle_xpm[];
+extern const char* delete_segment_xpm[];
+extern const char* delete_text_xpm[];
+extern const char* Delete_Track_xpm[];
+extern const char* delete_xpm[];
+extern const char* directory_xpm[];
+extern const char* display_options_xpm[];
+extern const char* down_xpm[];
+extern const char* Drag_Module_xpm[];
+extern const char* drag_outline_segment_xpm[];
+extern const char* drag_pad_xpm[];
+extern const char* drag_segment_withslope_xpm[];
+extern const char* drag_track_segment_xpm[];
+extern const char* drc_off_xpm[];
+extern const char* Edges_Sketch_xpm[];
+extern const char* Edit_Module_xpm[];
+extern const char* editor_xpm[];
+extern const char* edit_text_xpm[];
+extern const char* edit_xpm[];
+extern const char* eeschema_xpm[];
+extern const char* erc_xpm[];
+extern const char* error_xpm[];
+extern const char* exit_xpm[];
+extern const char* export_module_xpm[];
+extern const char* Export_Options_Pad_xpm[];
+extern const char* export_xpm[];
+extern const char* file_footprint_xpm[];
+extern const char* fill_zone_xpm[];
+extern const char* find_xpm[];
+extern const char* Flag_xpm[];
+extern const char* fonts_xpm[];
+extern const char* footprint_text_xpm[];
+extern const char* general_deletions_xpm[];
+extern const char* general_ratsnet_xpm[];
+extern const char* global_options_pad_xpm[];
+extern const char* green_xpm[];
+extern const char* grid_select_xpm[];
+extern const char* grid_xpm[];
+extern const char* hammer_xpm[];
+extern const char* help_xpm[];
+extern const char* icon_cvpcb_small_xpm[];
+extern const char* icon_cvpcb_xpm[];
+extern const char* icon_eeschema_xpm[];
+extern const char* icon_gerbview_small_xpm[];
+extern const char* icon_gerbview_xpm[];
+extern const char* icon_modedit_xpm[];
+extern const char* icon_python_small_xpm[];
+extern const char* icon_python_xpm[];
+extern const char* icon_txt_xpm[];
+extern const char* icon_w3d_xpm[];
+extern const char* import_hierarchical_label_xpm[];
+extern const char* import_module_xpm[];
+extern const char* import_xpm[];
+extern const char* info_xpm[];
+extern const char* insert_module_board_xpm[];
+extern const char* invert_module_xpm[];
+extern const char* jigsaw_xpm[];
+extern const char* kicad_icon_small_xpm[];
+extern const char* kicad_icon_xpm[];
+extern const char* label_xpm[];
+extern const char* left_xpm[];
+extern const char* libedit_part_xpm[];
+extern const char* library_update_xpm[];
+extern const char* library_xpm[];
+extern const char* libview_xpm[];
+extern const char* load_module_board_xpm[];
+extern const char* Load_Module_Lib_xpm[];
+extern const char* local_ratsnet_xpm[];
+extern const char* Locked_xpm[];
+extern const char* mirepcb_xpm[];
+extern const char* mirror_H_xpm[];
+extern const char* mirror_V_xpm[];
+extern const char* modedit_xpm[];
+extern const char* mode_module_xpm[];
+extern const char* mode_track_xpm[];
+extern const char* mod_ratsnest_xpm[];
+extern const char* module_check_xpm[];
+extern const char* Modul_Edit_xpm[];
+extern const char* module_options_xpm[];
+extern const char* Module_Ratsnet_xpm[];
+extern const char* module_xpm[];
+extern const char* morgan1_xpm[];
+extern const char* morgan2_xpm[];
+extern const char* move_arc_xpm[];
+extern const char* move_circle_xpm[];
+extern const char* move_field_xpm[];
+extern const char* move_line_xpm[];
+extern const char* Move_Module_xpm[];
+extern const char* move_pad_xpm[];
+extern const char* Move_Pin_xpm[];
+extern const char* move_polygon_xpm[];
+extern const char* move_rectangle_xpm[];
+extern const char* move_text_xpm[];
+extern const char* move_track_segment_xpm[];
+extern const char* move_track_xpm[];
+extern const char* move_xpm[];
+extern const char* mw_Add_Gap_xpm[];
+extern const char* mw_Add_Line_xpm[];
+extern const char* mw_Add_Shape_xpm[];
+extern const char* mw_Add_stub_arc_xpm[];
+extern const char* mw_Add_Stub_xpm[];
+extern const char* mw_toolbar_xpm[];
+extern const char* Net_HighLight_xpm[];
+extern const char* net_hightlight_xpm[];
+extern const char* netlist_xpm[];
+extern const char* Net_Locked_xpm[];
+extern const char* Net_UnLocked_xpm[];
+extern const char* new_footprint_xpm[];
+extern const char* new_library_xpm[];
+extern const char* New_Module_xpm[];
+extern const char* new_project_xpm[];
+extern const char* new_txt_xpm[];
+extern const char* new_xpm[];
+extern const char* noconn_button[];
+extern const char* open_library_xpm[];
+extern const char* open_project_xpm[];
+extern const char* open_xpm[];
+extern const char* options_all_tracks_and_vias_xpm[];
+extern const char* Options_All_Tracks_xpm[];
+extern const char* Options_All_Vias_xpm[];
+extern const char* options_arc_xpm[];
+extern const char* options_circle_xpm[];
+extern const char* Options_Module_xpm[];
+extern const char* options_new_pad_xpm[];
+extern const char* options_pad_xpm[];
+extern const char* options_rectangle_xpm[];
+extern const char* options_segment_xpm[];
+extern const char* options_text_xpm[];
+extern const char* Options_Tracks_xpm[];
+extern const char* Options_Track_xpm[];
+extern const char* Options_Vias_xpm[];
+extern const char* opt_show_polygon_xpm[];
+extern const char* orient_xpm[];
+extern const char* pad_sketch_xpm[];
+extern const char* pad_xpm[];
+extern const char* palette_xpm[];
+extern const char* paste_xpm[];
+extern const char* pcbnew_xpm[];
+extern const char* pcb_offset_xpm[];
+extern const char* pin_xpm[];
+extern const char* plot_HPG_xpm[];
+extern const char* plot_PS_xpm[];
+extern const char* plot_xpm[];
+extern const char* polar_coord_xpm[];
+extern const char* post_compo_xpm[];
+extern const char* post_drill_xpm[];
+extern const char* Post_Module_xpm[];
+extern const char* preference_xpm[];
+extern const char* print_button[];
+extern const char* ratsnest_xpm[];
+extern const char* read_setup_xpm[];
+extern const char* redo_xpm[];
+extern const char* red_xpm[];
+extern const char* reload2_xpm[];
+extern const char* reload_xpm[];
+extern const char* repaint_xpm[];
+extern const char* right_xpm[];
+extern const char* rotate_field_xpm[];
+extern const char* rotate_module_neg_xpm[];
+extern const char* rotate_module_pos_xpm[];
+extern const char* rotate_neg_xpm[];
+extern const char* rotate_pos_xpm[];
+extern const char* save_as_xpm[];
+extern const char* save_cmpstuff_xpm[];
+extern const char* save_library_xpm[];
+extern const char* save_netlist_xpm[];
+extern const char* save_part_in_mem_xpm[];
+extern const char* save_project_xpm[];
+extern const char* save_setup_xpm[];
+extern const char* save_xpm[];
+extern const char* schematic_xpm[];
+extern const char* select_layer_pair_xpm[];
+extern const char* Select_W_Layer_xpm[];
+extern const char* sheetset_xpm[];
+extern const char* show_3d_xpm[];
+extern const char* show_dcodenumber_xpm[];
+extern const char* show_mod_edge_xpm[];
+extern const char* showtrack_xpm[];
+extern const char* show_zone_xpm[];
+extern const char* swap_layer_xpm[];
+extern const char* text_sketch_xpm[];
+extern const char* tool_ratsnet_xpm[];
+extern const char* tools_xpm[];
+extern const char* Track_Locked_xpm[];
+extern const char* Track_Sketch_xpm[];
+extern const char* Track_UnLocked_xpm[];
+extern const char* transistor_xpm[];
+extern const char* tree_nosel_xpm[];
+extern const char* tree_sel_xpm[];
+extern const char* undelete_xpm[];
+extern const char* undo_xpm[];
+extern const char* unit_inch_xpm[];
+extern const char* unit_mm_xpm[];
+extern const char* unknown_xpm[];
+extern const char* Unlocked_xpm[];
+extern const char* unzip_xpm[];
+extern const char* update_module_board_xpm[];
+extern const char* up_xpm[];
+extern const char* warning_xpm[];
+extern const char* web_support_xpm[];
+extern const char* width_net_xpm[];
+extern const char* width_segment_xpm[];
+extern const char* width_track_via_xpm[];
+extern const char* width_track_xpm[];
+extern const char* width_vias_xpm[];
+extern const char* zip_xpm[];
+extern const char* zoom_center_xpm[];
+extern const char* zoom_in_xpm[];
+extern const char* zoom_optimal_xpm[];
+extern const char* zoom_out_xpm[];
+extern const char* zoom_selected_xpm[];
+extern const char* zoom_select_xpm[];
+extern const char* zoom_xpm[];

@@ -93,6 +93,7 @@ include_directories(
 # CMake will look in these dirs for nested 'CMakeLists.txt' files.
 # Binaries.
 add_subdirectory(3d-viewer)
+add_subdirectory(bitmaps)
 add_subdirectory(common)
 add_subdirectory(cvpcb)
 add_subdirectory(eeschema)

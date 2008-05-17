@@ -163,7 +163,7 @@ endif(APPLE)
 
 add_executable(pcbnew WIN32 MACOSX_BUNDLE ${PCBNEW_SRCS} ${PCBNEW_EXTRA_SRCS} ${PCBNEW_RESOURCES})
 
-target_link_libraries(pcbnew 3d-viewer common polygon ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES})
+target_link_libraries(pcbnew 3d-viewer common polygon bitmaps ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES} )
 
 install(TARGETS pcbnew RUNTIME DESTINATION ${KICAD_BIN}
     COMPONENT binary)

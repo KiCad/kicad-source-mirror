@@ -27,7 +27,7 @@ endif(APPLE)
 
 add_executable(kicad WIN32 MACOSX_BUNDLE ${KICAD_SRCS} ${KICAD_EXTRA_SRCS} ${KICAD_RESOURCES})
 
-target_link_libraries(kicad common ${wxWidgets_LIBRARIES})
+target_link_libraries(kicad common bitmaps ${wxWidgets_LIBRARIES})
 
 install(TARGETS kicad RUNTIME DESTINATION ${KICAD_BIN}
     COMPONENT binary)

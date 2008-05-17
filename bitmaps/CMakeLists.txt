@@ -1,0 +1,317 @@
+
+# Generate a static library target named "bitmaps"
+# (with filename libbitmaps.a on Linux)
+
+
+# Copy the *.xmp files to bitmaps/${XMP_CPP_DIR}/${basename}.cpp, on change only.
+# Compile those *.cpp files and put them into the library, then done.
+
+
+set( BITMAP_SRCS
+    3d.xpm
+    Add_Arc.xpm
+    Add_Bus2Bus.xpm
+    add_bus.xpm
+    Add_Circle.xpm
+    Add_Component.xpm
+    Add_Corner.xpm
+    add_cotation.xpm
+    Add_Dashed_Line.xpm
+    Add_Entry.xpm
+    Add_GLabel.xpm
+    add_hierarchical_label.xpm
+    add_hierar_pin.xpm
+    add_hierar_subsheet.xpm
+    Add_Junction.xpm
+    Add_Line2Bus.xpm
+    Add_Line_Label.xpm
+    Add_Line.xpm
+    Add_Mires.xpm
+    Add_Polygon.xpm
+    Add_Power.xpm
+    Add_Rectangle.xpm
+    Add_Text.xpm
+    Add_Tracks.xpm
+    Add_Zone_Cutout.xpm
+    Add_Zone.xpm
+    anchor.xpm
+    annotate_down_right.xpm
+    annotate_right_down.xpm
+    annotate.xpm
+    Apply.xpm
+    auto_associe.xpm
+    Auto_track_width.xpm
+    backanno.xpm
+    book.xpm
+    Break_Line.xpm
+    Browse_Files.xpm
+    cancel_tool.xpm
+    Cancel.xpm
+    config.xpm
+    CopyBlock.xpm
+    copy.xpm
+    Cursor_Shape.xpm
+    cursor.xpm
+    cut.xpm
+    dashline.xpm
+    Datasheet.xpm
+    del_body.xpm
+    Delete_Arc.xpm
+    Delete_Circle.xpm
+    Delete_Cotation.xpm
+    Delete_Field.xpm
+    Delete_Line.xpm
+    Delete_Module.xpm
+    Delete_Net.xpm
+    Delete_Node.xpm
+    Delete_Pad.xpm
+    Delete_Polygon.xpm
+    Delete_Rectangle.xpm
+    Delete_Segment.xpm
+    Delete_Text.xpm
+    Delete_Track.xpm
+    delete.xpm
+    del_track.xpm
+    directory.xpm
+    Display_Options.xpm
+    down.xpm
+    Drag_Module.xpm
+    Drag_Outline_Segment.xpm
+    Drag_Pad.xpm
+    Drag_Segment_WithSlope.xpm
+    Drag_Track_Segment.xpm
+    drc_off.xpm
+    drc.xpm
+    Edges_Sketch.xpm
+    Edit_Module.xpm
+    Editor.xpm
+    Edit_Text.xpm
+    Edit.xpm
+    eeschema.xpm
+    ercerr.xpm
+    ercgreen.xpm
+    ercwarn.xpm
+    erc.xpm
+    Exit.xpm
+    Export_Module.xpm
+    Export_Options_Pad.xpm
+    export.xpm
+    File_FootPrint.xpm
+    fill_zone.xpm
+    find.xpm
+    Flag.xpm
+    Fonts.xpm
+    Footprint_Text.xpm
+    general_deletions.xpm
+    general_ratsnet.xpm
+    Global_Options_Pad.xpm
+    green.xpm
+    grid_select.xpm
+    grid.xpm
+    hammer.xpm
+    help.xpm
+    icon_3d.xpm
+    icon_cvpcb_small.xpm
+    icon_cvpcb.xpm
+    icon_eeschema.xpm
+    icon_gerbview_small.xpm
+    icon_gerbview.xpm
+    icon_kicad.xpm
+    icon_modedit.xpm
+    icon_pcbnew.xpm
+    icon_python_small.xpm
+    icon_python.xpm
+    icon_txt.xpm
+    import_hierarchical_label.xpm
+    Import_Module.xpm
+    import.xpm
+    Info.xpm
+    Insert_Module_Board.xpm
+    Invert_Module.xpm
+    jigsaw.xpm
+    kicad_icon_small.xpm
+    label.xpm
+    left.xpm
+    libedprt.xpm
+    library_update.xpm
+    library.xpm
+    libsavem.xpm
+    libview.xpm
+    Load_Module_Board.xpm
+    Load_Module_Lib.xpm
+    local_ratsnet.xpm
+    Locked.xpm
+    mirepcb.xpm
+    Mirror_H.xpm
+    Mirror_V.xpm
+    modedit.xpm
+    Mode_Module.xpm
+    Mode_Track.xpm
+    modratsnest.xpm
+    Module_Check.xpm
+    Modul_Edit.xpm
+    module_options.xpm
+    Module_Ratsnet.xpm
+    module.xpm
+    Morgan1.xpm
+    Morgan2.xpm
+    Move_Arc.xpm
+    Move_Circle.xpm
+    Move_Field.xpm
+    Move_Line.xpm
+    Move_Module.xpm
+    Move_Pad.xpm
+    Move_Pin.xpm
+    Move_Polygon.xpm
+    Move_Rectangle.xpm
+    Move_Text.xpm
+    Move_Track_Segment.xpm
+    Move_Track.xpm
+    Move.xpm
+    mw_Add_Gap.xpm
+    mw_Add_Line.xpm
+    mw_Add_Shape.xpm
+    mw_Add_stub_arc.xpm
+    mw_Add_Stub.xpm
+    mw_toolbar.xpm
+    Net_HighLight.xpm
+    net_hightlight.xpm
+    netlist.xpm
+    Net_Locked.xpm
+    Net_UnLocked.xpm
+    new_cvpcb.xpm
+    New_FootPrint.xpm
+    new_gerb.xpm
+    New_Library.xpm
+    New_Module.xpm
+    new_pcb.xpm
+    New_Project.xpm
+    new_python.xpm
+    new_sch.xpm
+    new_txt.xpm
+    new.xpm
+    noconn.xpm
+    Open_Library.xpm
+    Open_Project.xpm
+    open.xpm
+    options_all_tracks_and_vias.xpm
+    Options_All_Tracks.xpm
+    Options_All_Vias.xpm
+    Options_Arc.xpm
+    Options_Circle.xpm
+    Options_Module.xpm
+    Options_New_Pad.xpm
+    Options_Pad.xpm
+    Options_Rectangle.xpm
+    Options_Segment.xpm
+    Options_Text.xpm
+    Options_Tracks.xpm
+    Options_Track.xpm
+    Options_Vias.xpm
+    opt_show_polygon.xpm
+    Orient.xpm
+    Pad_Sketch.xpm
+    pad.xpm
+    palette.xpm
+    paste.xpm
+    pcbnew.xpm
+    PcbOffset.xpm
+    pin.xpm
+    plot_HPG.xpm
+    plot_PS.xpm
+    plot.xpm
+    polar.xpm
+    Post_Compo.xpm
+    Post_Drill.xpm
+    Post_Module.xpm
+    preference.xpm
+    print.xpm
+    ratsnest.xpm
+    Read_SetUp.xpm
+    redo.xpm
+    red.xpm
+    reload2.xpm
+    reload.xpm
+    Repaint.xpm
+    right.xpm
+    Rotate_Field.xpm
+    Rotate_Module-.xpm
+    Rotate_Module+.xpm
+    Rotate-.xpm
+    Rotate+.xpm
+    save_as.xpm
+    Save_CmpStuff.xpm
+    Save_Library.xpm
+    Save_NetList.xpm
+    Save_Project.xpm
+    Save_SetUp.xpm
+    save.xpm
+    schematic.xpm
+    select_grid.xpm
+    Select_Layer_Pair.xpm
+    Select_W_Layer.xpm
+    sheetset.xpm
+    showdcode.xpm
+    showmodedge.xpm
+    showtrack.xpm
+    Show_Zone.xpm
+    Swap_Layer.xpm
+    Text_Sketch.xpm
+    tool_ratsnet.xpm
+    tools.xpm
+    Track_Locked.xpm
+    Track_Sketch.xpm
+    Track_UnLocked.xpm
+    transistor.xpm
+    treensel.xpm
+    treesel.xpm
+    undelete.xpm
+    undo.xpm
+    unit_inch.xpm
+    unit_mm.xpm
+    unknown.xpm
+    Unlocked.xpm
+    unzip.xpm
+    Update_Module_Board.xpm
+    up.xpm
+    Web_support.xpm
+    Width_Net.xpm
+    Width_Segment.xpm
+    Width_Track_Via.xpm
+    Width_Track.xpm
+    Width_Vias.xpm
+    zip_tool.xpm
+    zip.xpm
+    Zoom_1.xpm
+    Zoom_Center.xpm
+    Zoom_In.xpm
+    Zoom_Optimal.xpm
+    Zoom_Out.xpm
+    Zoom_Page.xpm
+    Zoom_Selected.xpm
+    Zoom_Select.xpm
+    zoom.xpm
+    )
+
+
+# the name of the directory to put the copied and renamed *.xpm files into
+# just below the bitmaps directory.  As files are copied they are renamed to *.cpp.
+set( XMP_CPP_DIR auto_renamed_to_cpp )
+
+# get the path of the *.xpm files into "path"
+set( path ${CMAKE_CURRENT_SOURCE_DIR} )
+# message( path\ =\ ${path} )
+
+foreach( loop_var ${BITMAP_SRCS} )
+    get_filename_component( basename ${loop_var} NAME_WE )
+    set( cpp_bitmap ${path}/${XMP_CPP_DIR}/${basename}.cpp )
+    add_custom_command(
+        OUTPUT ${cpp_bitmap}
+        COMMAND cmake -E copy_if_different '${path}/${basename}.xpm' '${cpp_bitmap}'
+        DEPENDS ${basename}.xpm )
+    list( APPEND cpp_bitmaps ${cpp_bitmap} )
+    SET_SOURCE_FILES_PROPERTIES( ${cpp_bitmap} PROPERTIES COMPILE_FLAGS -DXPMMAIN )
+endforeach( loop_var )
+
+add_library( bitmaps ${cpp_bitmaps} )
+
