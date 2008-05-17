@@ -11,8 +11,8 @@ email address.
 +all
     Removed bitmaps.cpp.  Made a static library target named "bitmaps" which
     gets linked into any app needing bitmaps.  Changed bitmaps.h to simply
-    include and alphebetized listing of the bitmap arrays.
-    We can now continue to migrate remaining bitmaps into:
+    include an alphabetized listing of the bitmap arrays.
+    We can now continue to migrate all remaining bitmaps into:
         > the <base>/bitmaps directory
         > the <base>/bitmaps/CMakeLists.txt file there
         > the include/bitmaps.h file.
