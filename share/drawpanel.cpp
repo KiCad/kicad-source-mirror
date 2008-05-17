@@ -289,6 +289,9 @@ bool WinEDA_DrawPanel::IsPointOnDisplay( wxPoint ref_pos )
 
 void WinEDA_DrawPanel::PostDirtyRect( EDA_Rect aRect )
 {
+    D(printf("1) PostDirtyRect( x=%d, y=%d, width=%d, height=%d)\n",
+             aRect.m_Pos.x, aRect.m_Pos.y, aRect.m_Size.x, aRect.m_Size.y );)
+
     // Convert the rect coordinates and size to pixels (make a draw clip box):
     ConvertPcbUnitsToPixelsUnits( &aRect );
 
@@ -298,6 +301,9 @@ void WinEDA_DrawPanel::PostDirtyRect( EDA_Rect aRect )
 
     aRect.m_Size.x += 2;  // += 1 is not enough!
     aRect.m_Size.y += 2;
+
+    D(printf("2) PostDirtyRect( x=%d, y=%d, width=%d, height=%d)\n",
+             aRect.m_Pos.x, aRect.m_Pos.y, aRect.m_Size.x, aRect.m_Size.y );)
 
     // pass wxRect() via EDA_Rect::operator wxRect() overload
     RefreshRect( aRect, TRUE );
@@ -588,7 +594,7 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
     PaintClipBox = upd.GetBox();
 
 #if 0 && defined (DEBUG)
-    printf( "PaintClipBox=(%d, %d, %d, %d) org=(%d, %d) m_ClipBox=(%d, %d, %d, %d)\n",
+    printf( "1) PaintClipBox=(%d, %d, %d, %d) org=(%d, %d) m_ClipBox=(%d, %d, %d, %d)\n",
         PaintClipBox.x,
         PaintClipBox.y,
         PaintClipBox.width,
@@ -616,7 +622,7 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
 
 
 #if 0 && defined(DEBUG)
-    printf( "PaintClipBox=(%d, %d, %d, %d) org=(%d, %d) m_ClipBox=(%d, %d, %d, %d)\n",
+    printf( "2) PaintClipBox=(%d, %d, %d, %d) org=(%d, %d) m_ClipBox=(%d, %d, %d, %d)\n",
         PaintClipBox.x,
         PaintClipBox.y,
         PaintClipBox.width,
