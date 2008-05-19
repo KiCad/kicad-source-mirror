@@ -55,8 +55,8 @@ asked by: dick
 ================================================================================
 specctra:
 Add net class support to pcbnew so that the export to specctra becomes richer.
-A netclass should hold a list of nets, and a track width, via drill size and via
-copper diameter.
+A netclass should hold a list of nets, track width, track spacing,
+via drill size and via copper diameter.
 
 
 2007-Nov-4 Assigned To: nobody
