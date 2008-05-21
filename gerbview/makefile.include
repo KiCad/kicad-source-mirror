@@ -1,4 +1,4 @@
-EXTRALIBS = ../common/common.a ../polygon/lib_polygon.a
+EXTRALIBS = ../common/common.a ../bitmaps/libbitmaps.a ../polygon/lib_polygon.a
 
 EXTRACPPFLAGS= -DGERBVIEW -DPCBNEW -fno-strict-aliasing\
 	-I./ -I../gerbview -I../include\
@@ -82,7 +82,7 @@ class_drawsegment.o: ../pcbnew/class_drawsegment.cpp ../pcbnew/class_drawsegment
 
 class_drc_item.o: ../pcbnew/class_drc_item.cpp $(COMMON)
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
-	
+
 sel_layer.o: ../pcbnew/sel_layer.cpp $(COMMON)
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 

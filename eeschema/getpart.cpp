@@ -387,6 +387,7 @@ void WinEDA_SchematicFrame::SelPartUnit( SCH_COMPONENT* DrawComponent,
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
 
     /* Mise a jour du numero d'unite */
+    DrawComponent->SetUnitSelection( GetSheet(), unit );
     DrawComponent->m_Multi = unit;
 
     /* Redessine le composant dans la nouvelle position */

@@ -4,7 +4,7 @@ FINAL = 1
 
 EESCHEMA_FLAGS= -DEESCHEMA
 EXTRACPPFLAGS += $(KICAD_FLAGS) $(EESCHEMA_FLAGS)  -fno-strict-aliasing -I./ -Ibitmaps -I../include -I../eeschema
-EXTRALIBS = ../common/common.a
+EXTRALIBS = ../common/common.a ../bitmaps/libbitmaps.a
 
 # DEPEND = program.h general.h
 

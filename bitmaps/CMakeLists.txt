@@ -181,7 +181,6 @@ set( BITMAP_SRCS
     Net_UnLocked.xpm
     new_cvpcb.xpm
     New_FootPrint.xpm
-    new_gerb.xpm
     New_Library.xpm
     New_Module.xpm
     new_pcb.xpm

@@ -49,13 +49,6 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         item->SetBitmap( open_xpm );
         m_FilesMenu->Append( item );
 
-        item = new wxMenuItem( m_FilesMenu, ID_LOAD_ONE_SHEET,
-                              _( "&Reload the current sheet" ),
-                              _(
-                                  "Load or reload a schematic file from file into the current sheet" ) );
-        item->SetBitmap( import_xpm );
-        m_FilesMenu->Append( item );
-
         m_FilesMenu->AppendSeparator();
         item = new wxMenuItem( m_FilesMenu, ID_SAVE_PROJECT,
                               _( "&Save" ),
@@ -165,7 +158,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         editMenu->AppendSeparator();
 
         item = new wxMenuItem( editMenu, ID_BACKANNO_ITEMS,
-                               _( "BackAnno" ), _( "Back Annotated Footprints" ),
+                               _( "BackAnno" ), _( "Back Annotated Footprint Fields" ),
                                wxITEM_NORMAL );
         item->SetBitmap( backanno_xpm );
         editMenu->Append( item );

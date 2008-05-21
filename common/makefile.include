@@ -22,7 +22,6 @@ OBJECTS= \
 		gestfich.o\
 		trigo.o\
 		selcolor.o\
-		bitmaps.o\
 		common.o\
 		eda_doc.o\
 		toolbars.o\

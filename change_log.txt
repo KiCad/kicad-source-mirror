@@ -6,6 +6,12 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2008-May-21 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema:
+    Solved: problem in manual part selection for multiple parts per package components
+
+
 2008-May-17 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +all

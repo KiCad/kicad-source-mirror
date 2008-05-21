@@ -6,7 +6,7 @@ EXTRACPPFLAGS += -DCVPCB -fno-strict-aliasing\
 	-I../pcbnew -I../3d-viewer\
 	-I../polygon
 
-EXTRALIBS = ../common/common.a ../polygon/lib_polygon.a
+EXTRALIBS = ../common/common.a ../bitmaps/libbitmaps.a ../polygon/lib_polygon.a
 
 LIBVIEWER3D = ../3d-viewer/3d-viewer.a
 

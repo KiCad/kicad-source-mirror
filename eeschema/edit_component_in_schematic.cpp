@@ -347,9 +347,13 @@ void WinEDA_ComponentPropertiesFrame::ComponentPropertiesAccept( wxCommandEvent&
         (m_ConvertButt->GetValue() == TRUE) ?
         m_Cmp->m_Convert = 2 : m_Cmp->m_Convert = 1;
 
-    //Mise a jour de la selection de l'�l�ment dans le boitier
+    //Set the part selection in multiple part per pakcage
     if( m_Cmp->m_Multi )
-        m_Cmp->m_Multi = m_SelectUnit->GetSelection() + 1;
+    {
+        int unit_selection = m_SelectUnit->GetSelection() + 1;
+        m_Cmp->SetUnitSelection( m_Parent->GetSheet(), unit_selection );
+        m_Cmp->m_Multi = unit_selection;
+    }
 
     //Mise a jour de l'orientation:
     switch( m_OrientUnit->GetSelection() )

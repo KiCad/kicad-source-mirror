@@ -46,46 +46,6 @@ void WinEDA_SchematicFrame::Save_File( wxCommandEvent& event )
 }
 
 
-/******************************************************************************************/
-//bool WinEDA_SchematicFrame::LoadOneSheet(DrawSheetStruct* sheet, const wxString& filename )
-/******************************************************************************************/
-//{
-//	return FALSE;
-    //when is this used? and why?
-    /*
-    //this must be called with a non-null pointer screen pointer, clearly.
-    //also note that this is for reading in a *root* file
-    wxString FullFileName = filename;
-
-    if( FullFileName.IsEmpty() )
-    {
-        wxString mask;
-        mask = wxT( "*" ) + g_SchExtBuffer;
-        FullFileName = EDA_FileSelector( _( "Schematic files:" ),
-                                         wxEmptyString,         //default path
-                                         sheet->m_AssociatedScreen->m_FileName,// default filename
-                                         g_SchExtBuffer,        // extension par defaut
-                                         mask,                  // Masque d'affichage
-                                         this,
-                                         wxFD_OPEN,
-                                         FALSE
-                                         );
-        if( FullFileName.IsEmpty() )
-            return FALSE;
-    }
-
-    ClearProjectDrawList( screen, TRUE );
-    printf("in LoadOneScreen setting screen filename: %s \n", (const char*) FullFileName.mb_str() );
-    screen->m_FileName = FullFileName;
-    LoadDrawSheet( DrawSheetStruct * sheet, filename);
-    screen->SetModify();
-
-    if( GetScreen() == screen )
-        Refresh( TRUE );
-    return TRUE;
-    */
-//}
-
 /************************************************************************************/
 int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNew )
 /************************************************************************************/

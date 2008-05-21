@@ -1,4 +1,4 @@
-EXTRALIBS = ../common/common.a
+EXTRALIBS = ../common/common.a ../bitmaps/libbitmaps.a
 EXTRACPPFLAGS += -DKICAD -fno-strict-aliasing -I./ -Ibitmaps -I../include -I../kicad -I../share
 
 DEPEND =

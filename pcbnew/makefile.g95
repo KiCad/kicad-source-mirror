@@ -6,7 +6,7 @@ TARGET=pcbnew
 
 include ../libs.win
 
-EXTRACPPFLAGS += -I /f/boost/boost_1_34_1
+EXTRACPPFLAGS += -I /f/kicad-sourceforge/trunk/kicad
 all: $(TARGET).exe
 
 include makefile.include

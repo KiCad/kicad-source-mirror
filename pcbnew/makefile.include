@@ -1,5 +1,5 @@
 
-EXTRALIBS = ../common/common.a ../polygon/lib_polygon.a
+EXTRALIBS = ../common/common.a ../bitmaps/libbitmaps.a ../polygon/lib_polygon.a
 EXTRACPPFLAGS += -DPCBNEW  -fno-strict-aliasing -I./ -Ibitmaps -I../include -I../share\
 	-I../pcbnew -I../3d-viewer -I../polygon
 
