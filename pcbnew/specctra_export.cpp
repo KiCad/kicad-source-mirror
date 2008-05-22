@@ -1045,6 +1045,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             ZONE_CONTAINER* item = (ZONE_CONTAINER*) items[i];
 
             COPPER_PLANE*   plane = new COPPER_PLANE( pcb->structure );
+            pcb->structure->planes.push_back( plane );
+
             PATH*           polygon = new PATH( plane, T_polygon );
             plane->SetShape( polygon );
 
@@ -1059,8 +1061,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
                                  item->m_Poly->corner[j].y );
                 polygon->AppendPoint( mapPt(point) );
             }
-
-            pcb->structure->planes.push_back( plane );
         }
     }
 
