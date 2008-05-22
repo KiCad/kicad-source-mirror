@@ -30,24 +30,6 @@
 #include "macros.h"
 
 #include "bitmaps.h"
-#include "Language.xpm"
-
-/* Icons for language choice (currently, used only for Windows, but needed also for linux for compilation compatibility)*/
-#include "Lang_Default.xpm"
-#include "Lang_En.xpm"
-#include "Lang_Es.xpm"
-#include "Lang_Fr.xpm"
-#include "Lang_Pt.xpm"
-#include "Lang_It.xpm"
-#include "Lang_De.xpm"
-#include "Lang_Sl.xpm"
-#include "Lang_Hu.xpm"
-#include "Lang_Pl.xpm"
-#include "Lang_Ko.xpm"
-#include "Lang_Ru.xpm"
-#include "Lang_Catalan.xpm"
-#include "Lang_chinese.xpm"
-#include "Lang_Nl.xpm"
 
 
 #define FONT_DEFAULT_SIZE 10    /* Default font size.
