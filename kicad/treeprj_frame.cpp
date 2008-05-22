@@ -20,9 +20,6 @@
 #include "wx/dir.h"
 
 #include "bitmaps.h"
-#ifdef KICAD_PYTHON
-#include "bitmaps/new_python.xpm"
-#endif
 
 #include "id.h"
 
