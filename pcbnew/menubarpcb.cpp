@@ -110,7 +110,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
         item->SetBitmap(tools_xpm);
         submenuexport->Append(item);
         ADD_MENUITEM_WITH_HELP_AND_SUBMENU(m_FilesMenu, submenuexport,
-            ID_GEN_EXPORT_FILE, _("E&xport"), _("Export board"), export_xpm);
+            ID_GEN_EXPORT_FILE, _("&Export"), _("Export board"), export_xpm);
 
 
         //-----<Add import menu>-----------------------------------------------
