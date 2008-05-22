@@ -1,0 +1,43 @@
+/* XPM */
+#ifndef XPMMAIN
+extern const char *lang_chinese_xpm[];
+
+#else
+const char *lang_chinese_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 16 1",
+". c #E42814",
+"X c #DC1A1C",
+"& c #FCFE04",
+"; c #EC6A14",
+"% c #FCF20C",
+"# c #EC5E14",
+"$ c #F4B20C",
+"+ c #DB031C",
+"@ c #F4A60C",
+"o c #DC0D1C",
+"O c #E43E14",
+"* c #F49A0C",
+"- c #E45214",
+"  c #DC1519",
+"= c #EC7A0C",
+": c #E44614",
+/* pixels */
+"       ..   .  X",
+"X oO+ o@#+      ",
+" ++$ ++o+@o  . X",
+"X.%&&*o o=      ",
+" +.&&+  + +  . X",
+"Xo-+O  oo&      ",
+"   o  o#.++.   X",
+"  X    ;:    .  ",
+" .  .  oo      X",
+"X       .  .    ",
+"   .  .      . X",
+"X               ",
+"   .  . . . .  X",
+"XX           X X",
+"X  X  X  X  X  X",
+"XXXXXXXXXXXXXXXX"
+};
+#endif

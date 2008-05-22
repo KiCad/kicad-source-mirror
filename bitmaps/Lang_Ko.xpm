@@ -1,0 +1,44 @@
+/* XPM */
+#ifndef XPMMAIN
+extern const char *lang_ko_xpm[];
+
+#else
+const char * lang_ko_xpm[] =
+{
+"16 16 17 1",
+
+" 	c None",
+"A c #881844",
+"B c #8F8F8F",
+"C c #D0D2D0",
+"D c #AFB0AF",
+"E c #0C4A82",
+"F c #F8F9F8",
+"G c #F4AAB4",
+"H c #3C3668",
+"I c #EC8E9C",
+"J c #797979",
+"K c #D80A2A",
+"L c #5C5E5C",
+"M c #98B4CC",
+"N c #E1DFDF",
+"O c #A2A1A2",
+"P c #C4C2C4",
+"                ",
+"                ",
+"                ",
+"NNFNFNFFNFFNFNFC",
+"FFFJPFFFFFFDOFFN",
+"FFBLOFFFFFFDJOFN",
+"FFFDFFIKKGFFDFFN",
+"FFFFFNKKHHFFFFFN",
+"FFFFFFAAEEFFFFFN",
+"FFFPFFMEEPFFPFFN",
+"FFBBOFFFFFFPBDFN",
+"FFFJOFFFFFFBDFFN",
+"NFFNFFFFFFFFNFFC",
+"                ",
+"                ",
+"                "
+};
+#endif

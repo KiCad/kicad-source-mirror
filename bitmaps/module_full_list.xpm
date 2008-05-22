@@ -1,0 +1,29 @@
+/* XPM */
+#ifndef XPMMAIN
+extern const char *module_full_list_xpm[];
+
+#else
+const char * module_full_list_xpm[] = {
+"16 15 5 1",
+"X c #808080",
+"  c None",
+"o c #808000",
+"c c Gray",
+"D c Red",
+"    XXX  XXX    ",
+" cooX  XX  Xooc ",
+" cooX      Xooc ",
+"    XDDDDDDX    ",
+" cooX      Xooc ",
+" cooXDDDDDDXooc ",
+"    X      X    ",
+" cooXDDDDDDXooc ",
+" cooX      Xooc ",
+"    XDDDDDDX    ",
+" cooX      Xooc ",
+" cooXDDDDDDXooc ",
+"    X      X    ",
+" cooXDDDDDDXooc ",
+"    XXXXXXXX    "
+};
+#endif
