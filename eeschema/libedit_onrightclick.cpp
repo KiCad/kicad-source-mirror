@@ -19,12 +19,6 @@
 #include "id.h"
 #include "hotkeys.h"
 
-#include "Pin_to.xpm"
-#include "Pin_Size_to.xpm"
-#include "Pin_Name_to.xpm"
-#include "Pin_Number_to.xpm"
-#include "Delete_Pin.xpm"
-
 /* functions to add commands and submenus depending on the item */
 static void AddMenusForBlock(wxMenu * PopMenu, WinEDA_LibeditFrame * frame);
 static void AddMenusForPin(wxMenu * PopMenu, LibDrawPin* Pin, WinEDA_LibeditFrame * frame);

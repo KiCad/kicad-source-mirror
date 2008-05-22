@@ -18,8 +18,6 @@
 
 #include "id.h"
 
-#include "libedit.xpm"
-
 /*****************************/
 /* class WinEDA_LibeditFrame */
 /*****************************/

@@ -12,9 +12,7 @@
 
 #include "protos.h"
 
-#include "../bitmaps/ercgreen.xpm"
-#include "../bitmaps/ercwarn.xpm"
-#include "../bitmaps/ercerr.xpm"
+#include "bitmaps.h"
 
 #include "dialog_erc.h"
 

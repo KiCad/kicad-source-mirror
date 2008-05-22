@@ -20,31 +20,6 @@
 
 #include "bitmaps.h"
 
-#include "Enter_Sheet.xpm"
-#include "Leave_Sheet.xpm"
-#include "Delete_Sheet.xpm"
-#include "Resize_Sheet.xpm"
-#include "Edit_Sheet.xpm"
-#include "Move_Sheet.xpm"
-#include "Options_Pinsheet.xpm"
-#include "Delete_Pinsheet.xpm"
-#include "Delete_Bus.xpm"
-#include "Delete_Node.xpm"
-#include "Delete_Connection.xpm"
-#include "Label2Text.xpm"
-#include "Label2GLabel.xpm"
-#include "GLabel2Text.xpm"
-#include "GLabel2Label.xpm"
-#include "Rotate_GLabel.xpm"
-#include "GL_Change.xpm"
-#include "Edit_Component.xpm"
-#include "Break_Line.xpm"
-#include "Break_Bus.xpm"
-#include "Normal.xpm"
-#include "Edit_Comp_Ref.xpm"
-#include "Edit_Comp_Value.xpm"
-#include "Edit_Comp_Footprint.xpm"
-
 /* functions to add commands and submenus depending on the item */
 static void AddMenusForBlock( wxMenu* PopMenu, WinEDA_SchematicFrame* frame );
 static void AddMenusForWire( wxMenu* PopMenu, EDA_DrawLineStruct* Wire,

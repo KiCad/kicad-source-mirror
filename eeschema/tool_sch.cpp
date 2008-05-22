@@ -15,16 +15,7 @@
 
 #define BITMAP wxBitmap
 
-#include "bitmaps.h" /* general bitmaps */
-
-/* Specific bitmaps */
-#include "cvpcb.xpm"
-#include "Hierarchy_Nav.xpm"
-#include "Hierarchy_cursor.xpm"
-#include "library_browse.xpm"
-#include "libedit.xpm"
-#include "Lines90.xpm"
-#include "Hidden_Pin.xpm"
+#include "bitmaps.h"
 
 #include "id.h"
 

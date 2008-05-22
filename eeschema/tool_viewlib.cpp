@@ -20,9 +20,6 @@
 
 #include "id.h"
 
-#include "Lib_previous.xpm"
-#include "Lib_next.xpm"
-
 /****************************************************/
 void WinEDA_ViewlibFrame::ReCreateHToolbar()
 /****************************************************/

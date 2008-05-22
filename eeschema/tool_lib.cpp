@@ -27,9 +27,6 @@
 
 // USE_XPM_BITMAPS
 #include "bitmaps.h"
-#include "part_properties.xpm"
-#include "pin2pin.xpm"
-#include "new_component.xpm"
 
 #include "id.h"
 

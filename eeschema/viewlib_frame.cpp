@@ -19,8 +19,6 @@
 
 #include "id.h"
 
-#include "library_browse.xpm"
-
 /*****************************/
 /* class WinEDA_ViewlibFrame */
 /*****************************/
