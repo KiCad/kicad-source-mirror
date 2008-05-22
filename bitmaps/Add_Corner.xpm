@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern const char *Add_Corner_xpm[];
+extern const char *add_corner_xpm[];
 
 #else
-const char * Add_Corner_xpm[] = {
+const char * add_corner_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "16 16 7 1",
 "  c None",

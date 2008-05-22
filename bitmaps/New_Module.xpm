@@ -1,8 +1,8 @@
 /* XPM */
 #ifndef XPMMAIN
-extern const char* New_Module_xpm[];
+extern const char* new_module_xpm[];
 #else
-const char * New_Module_xpm[] = {
+const char * new_module_xpm[] = {
 "16 16 73 1",
 " 	c None",
 ".	c #FFF500",

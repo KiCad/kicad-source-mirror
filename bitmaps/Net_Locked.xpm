@@ -1,8 +1,8 @@
 /* XPM */
 #ifndef XPMMAIN
-extern const char* Net_Locked_xpm[];
+extern const char* net_locked_xpm[];
 #else
-const char * Net_Locked_xpm[] = {
+const char * net_locked_xpm[] = {
 "16 16 90 1",
 " 	c None",
 ".	c #007D00",

@@ -1,8 +1,8 @@
 /* XPM */
 #ifndef XPMMAIN
-extern const char* Load_Module_Lib_xpm[];
+extern const char* load_module_lib_xpm[];
 #else
-const char * Load_Module_Lib_xpm[] = {
+const char * load_module_lib_xpm[] = {
 "16 16 143 2",
 "  	c None",
 ". 	c #050607",

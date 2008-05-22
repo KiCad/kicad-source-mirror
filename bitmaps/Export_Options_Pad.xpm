@@ -1,8 +1,8 @@
 /* XPM */
 #ifndef XPMMAIN
-extern const char* Export_Options_Pad_xpm[];
+extern const char* export_options_pad_xpm[];
 #else
-const char * Export_Options_Pad_xpm[] = {
+const char * export_options_pad_xpm[] = {
 "16 16 71 1",
 " 	c None",
 ".	c #000000",

@@ -1,8 +1,8 @@
 /* XPM */
 #ifndef XPMMAIN
-extern const char* Options_Vias_xpm[];
+extern const char* options_vias_xpm[];
 #else
-const char * Options_Vias_xpm[] = {
+const char * options_vias_xpm[] = {
 "16 16 44 1",
 " 	c None",
 ".	c #000000",

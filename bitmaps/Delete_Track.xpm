@@ -1,8 +1,8 @@
 /* XPM */
 #ifndef XPMMAIN
-extern const char* Delete_Track_xpm[];
+extern const char* delete_track_xpm[];
 #else
-const char * Delete_Track_xpm[] = {
+const char * delete_track_xpm[] = {
 "16 16 115 2",
 "  	c None",
 ". 	c #007D00",

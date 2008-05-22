@@ -1,8 +1,8 @@
 /* XPM */
 #ifndef XPMMAIN
-extern const char* Delete_Pad_xpm[];
+extern const char* delete_pad_xpm[];
 #else
-const char * Delete_Pad_xpm[] = {
+const char * delete_pad_xpm[] = {
 "16 16 120 2",
 "  	c None",
 ". 	c #000000",

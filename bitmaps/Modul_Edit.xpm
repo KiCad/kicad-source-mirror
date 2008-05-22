@@ -1,8 +1,8 @@
 /* XPM */
 #ifndef XPMMAIN
-extern const char* Modul_Edit_xpm[];
+extern const char* module_edit_xpm[];
 #else
-const char * Modul_Edit_xpm[] = {
+const char * module_edit_xpm[] = {
 "16 16 37 1",
 " 	c None",
 ".	c #FF7800",

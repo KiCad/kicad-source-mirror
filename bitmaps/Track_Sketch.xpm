@@ -1,8 +1,8 @@
 /* XPM */
 #ifndef XPMMAIN
-extern const char* Track_Sketch_xpm[];
+extern const char* track_sketch_xpm[];
 #else
-const char * Track_Sketch_xpm[] = {
+const char * track_sketch_xpm[] = {
 "16 16 5 1",
 " 	c None",
 ".	c #007D00",

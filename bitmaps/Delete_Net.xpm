@@ -1,8 +1,8 @@
 /* XPM */
 #ifndef XPMMAIN
-extern const char* Delete_Net_xpm[];
+extern const char* delete_net_xpm[];
 #else
-const char * Delete_Net_xpm[] = {
+const char * delete_net_xpm[] = {
 "16 16 128 2",
 "  	c None",
 ". 	c #005900",
