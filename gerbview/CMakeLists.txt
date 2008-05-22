@@ -2,6 +2,7 @@ add_definitions(-DGERBVIEW -DPCBNEW)
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
+    bitmaps
     ../3d-viewer
     ../cvpcb
     ../pcbnew
