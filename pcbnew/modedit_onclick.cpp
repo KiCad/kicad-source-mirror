@@ -247,7 +247,7 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
         transform_choice->Append( ID_MODEDIT_MODULE_SCALE, _( "Scale Y" ) );
 #endif
         ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_MODULE,
-                      _( "Edit Module" ), Edit_Module_xpm );
+                      _( "Edit Module" ), edit_module_xpm );
         ADD_MENUITEM_WITH_SUBMENU( PopMenu, transform_choice,
                                    ID_MODEDIT_TRANSFORM_MODULE,
                                    _( "Transform Module" ), edit_xpm );
@@ -264,9 +264,9 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
         ADD_MENUITEM( PopMenu, ID_POPUP_PCB_IMPORT_PAD_SETTINGS,
                       _( "New Pad Settings" ), options_new_pad_xpm );
         ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EXPORT_PAD_SETTINGS,
-                      _( "Export Pad Settings" ), Export_Options_Pad_xpm );
+                      _( "Export Pad Settings" ), export_options_pad_xpm );
         ADD_MENUITEM( PopMenu, ID_POPUP_PCB_DELETE_PAD,
-                      _( "delete Pad" ), Delete_Pad_xpm );
+                      _( "delete Pad" ), delete_pad_xpm );
         if( !flags )
         {
             PopMenu->AppendSeparator();
