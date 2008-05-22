@@ -15,9 +15,6 @@
 #define BITMAP wxBitmap
 
 #include "bitmaps.h"
-#include "delete_association.xpm"
-#include "module_filtered_list.xpm"
-#include "module_full_list.xpm"
 
 #include "id.h"
 
