@@ -5,7 +5,6 @@
 #include "fctsys.h"
 #include "macros.h"
 
-#include "bitmaps3d.h"
 #include "bitmaps.h"
 
 #include "id.h"

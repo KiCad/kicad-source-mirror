@@ -30,7 +30,6 @@
 
 /* Tool and button Bitmaps */
 #define XPM_3D_MAIN
-#include "bitmaps3d.h"
 #include "bitmaps.h"
 
 enum onrclick_id {
