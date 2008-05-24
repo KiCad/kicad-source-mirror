@@ -400,7 +400,7 @@ foreach( loop_var ${BITMAP_SRCS} )
     set( cpp_bitmap ${path}/${XMP_CPP_DIR}/${basename}.cpp )
     add_custom_command(
         OUTPUT ${cpp_bitmap}
-        COMMAND cmake -E copy_if_different '${path}/${basename}.xpm' '${cpp_bitmap}'
+        COMMAND cmake -E copy '${path}/${basename}.xpm' '${cpp_bitmap}'
         DEPENDS ${basename}.xpm )
     list( APPEND cpp_bitmaps ${cpp_bitmap} )
     SET_SOURCE_FILES_PROPERTIES( ${cpp_bitmap} PROPERTIES COMPILE_FLAGS -DXPMMAIN )
