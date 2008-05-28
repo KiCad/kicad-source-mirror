@@ -37,18 +37,6 @@ asked by: Dick Hollenbeck
 Review the GEDA source code and other sources to gather ideas before doing 2).
 
 
-2008-May-19 Assigned To: need a volunteer
-asked by: Dick Hollenbeck
-================================================================================
-*** improved xpm handling
-Move all *.xpm files into the bitmap/ directory, and add those additions to:
-  > include/bitmaps.h
-  > bitmaps/CMakeLists.txt as *.xpm
-Should there be any remaining *.h files that do #include ...*.xpm, kill those off
-and make sure that the referenced bit map's extern char* [] gets put into bitmaps.h
-and that the *.cpp files which were including the killed off *.h's now include
-bitmaps.h instead.
-
 
 2008-Feb-8 Assigned To: dick
 asked by: dick
