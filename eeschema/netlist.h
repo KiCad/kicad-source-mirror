@@ -14,8 +14,9 @@
 #define ISBUS 1
 
 #define CUSTOMPANEL_COUNTMAX 8  // Max number of netlist plugins
+
 /* Id to select netlist type */
-typedef enum {
+enum  TypeNetForm {
     NET_TYPE_UNINIT = 0,
     NET_TYPE_PCBNEW,
     NET_TYPE_ORCADPCB2,
@@ -27,7 +28,7 @@ typedef enum {
                          * is the last id for user netlist format
                          */
     NET_TYPE_CUSTOM_MAX = NET_TYPE_CUSTOM1 + CUSTOMPANEL_COUNTMAX - 1
-} TypeNetForm;
+};
 
 
 /* Max pin number per component and footprint */
@@ -90,23 +91,26 @@ public:
     int GetNet() const { return m_NetCode; }
 };
 
+
 /* Structures pour memo et liste des elements */
-typedef struct ListLabel
+struct ListLabel
 {
     int   m_LabelType;
     void* m_Label;
     char  m_SheetPath[256];
-} ListLabel;
+};
+
 
 // Used to create lists of components BOM, netlist generation)
-typedef struct ListComponent
+struct ListComponent
 {
     SCH_COMPONENT* m_Comp;      // pointer on the component in schematic
     char           m_Ref[32];   // component reference
     int            m_Unit;      // Unit value, for multiple parts per package
     //have to store it here since the object references will be duplicated.
     DrawSheetPath m_SheetList; //composed of UIDs
-} ListComponent;
+};
+
 
 /* Structure decrivant 1 composant de la schematique (for annotation ) */
 struct CmpListStruct
