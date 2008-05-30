@@ -329,6 +329,8 @@ public:
 
     ~WinEDA_PcbFrame();
 
+    void GetKicadAbout( wxCommandEvent& event );
+
     // Configurations:
     void                InstallConfigFrame( const wxPoint& pos );
     void                Process_Config( wxCommandEvent& event );

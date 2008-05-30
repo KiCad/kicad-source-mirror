@@ -244,7 +244,7 @@ void WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
 void WinEDA_BasicFrame::GetKicadAbout( wxCommandEvent& event )
 /**********************************************************/
 {
-    Print_Kicad_Infos( this, m_AboutTitle );
+    Print_Kicad_Infos( this, m_AboutTitle, wxEmptyString );
 }
 
 

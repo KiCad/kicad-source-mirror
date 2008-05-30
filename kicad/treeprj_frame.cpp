@@ -27,6 +27,24 @@
 // UnComment this to load subdirs files in the tree project
 #define ADD_FILES_IN_SUBDIRS
 
+// list of files extensions listed in the tree project window
+// *.sch files are always allowed, do not add here 
+// Add extensions in a compatible regex format to see others files types
+const wxChar * s_AllowedExtensionsToList[] =
+{
+    wxT( "^.*\\.pro$" ),
+    wxT( "^.*\\.pdf$" ),
+    wxT( "^[^$].*\\.brd$" ),
+    wxT( "^.*\\.net$" ),
+    wxT( "^.*\\.txt$" ),
+    wxT( "^.*\\.pho$" ),
+    wxT( "^.*\\.odt$" ),
+    wxT( "^.*\\.sxw$" ),
+    wxT( "^.*\\.htm$" ),
+    wxT( "^.*\\.html$" ),
+    NULL                    // end of list
+};
+
 /******************************************************************/
 WinEDA_PrjFrame::WinEDA_PrjFrame( WinEDA_MainFrame* parent,
                                   const wxPoint&    pos,
@@ -44,12 +62,10 @@ WinEDA_PrjFrame::WinEDA_PrjFrame( WinEDA_MainFrame* parent,
      * for a given file type.
      */
     m_Filters.push_back( wxT( "^.*\\.sch$" ) );     // note: sch filter must be first because of a test in AddFile() below
-    m_Filters.push_back( wxT( "^.*\\.pro$" ) );
-    m_Filters.push_back( wxT( "^.*\\.pdf$" ) );
-    m_Filters.push_back( wxT( "^[^$].*\\.brd$" ) );
-    m_Filters.push_back( wxT( "^.*\\.net$" ) );
-    m_Filters.push_back( wxT( "^.*\\.txt$" ) );
-    m_Filters.push_back( wxT( "^.*\\.pho$" ) );
+    for ( int ii = 0; s_AllowedExtensionsToList[ii] != NULL; ii++ )
+    {
+        m_Filters.push_back( s_AllowedExtensionsToList[ii] );
+    }
     m_Filters.push_back( wxT( "^no kicad files found" ) );
     
 #ifdef KICAD_PYTHON

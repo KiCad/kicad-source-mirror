@@ -101,6 +101,7 @@ add_subdirectory(gerbview)
 add_subdirectory(kicad)
 add_subdirectory(pcbnew)
 add_subdirectory(polygon)
+add_subdirectory(polygon/kbool/src)
 # Resources.
 add_subdirectory(demos)
 add_subdirectory(internat)

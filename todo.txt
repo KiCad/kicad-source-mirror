@@ -26,9 +26,6 @@ Need to do this using DialogBlocks.
 
 
 
-** Switch to a free polygon library.
-
-
 2008-Feb-8 Assigned To: Jean-Pierre, per his email
 asked by: Dick Hollenbeck
 ================================================================================

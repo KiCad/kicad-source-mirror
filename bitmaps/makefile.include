@@ -1,10 +1,6 @@
 # Generate a static library target named "libbitmaps.a"
 
 
-# Copy the *.xmp files to *.cpp, on change only.
-# Compile those *.cpp files and put them into the library, then done.
-
-
 OBJECTS = \
     3d.o\
     Add_Arc.o\
@@ -287,5 +283,88 @@ OBJECTS = \
     Zoom_Page.o\
     Zoom_Selected.o\
     Zoom_Select.o\
-    zoom.o
-
+    zoom.o\
+    axis3d_back.o\
+    axis3d_bottom.o\
+    axis3d_front.o\
+    axis3d_left.o\
+    axis3d_right.o\
+    axis3d_top.o\
+    axis3d.o\
+    import3d.o\
+    rotate-x.o\
+    rotate+x.o\
+    rotate-y.o\
+    rotate+y.o\
+    rotate-z.o\
+    rotate+z.o\
+    zoomoins3d.o\
+    zoompage3d.o\
+    zoomplus3d.o\
+    zoomrefr3d.o\
+    Lang_Catalan.o\
+    Lang_chinese.o\
+    Lang_Default.o\
+    Lang_De.o\
+    Lang_En.o\
+    Lang_Es.o\
+    Lang_Fr.o\
+    Lang_Hu.o\
+    Lang_It.o\
+    Lang_Ko.o\
+    Lang_Nl.o\
+    Lang_Pl.o\
+    Lang_Pt.o\
+    Lang_Ru.o\
+    Lang_Sl.o\
+    Language.o\
+    delete_association.o\
+    module_filtered_list.o\
+    module_full_list.o\
+    Break_Bus.o\
+    cvpcb.o\
+    Delete_Bus.o\
+    Delete_Connection.o\
+    Delete_GLabel.o\
+    Delete_Pinsheet.o\
+    Delete_Pin.o\
+    Delete_Sheet.o\
+    Edit_Comp_Footprint.o\
+    Edit_Component.o\
+    Edit_Comp_Ref.o\
+    Edit_Comp_Value.o\
+    Edit_Part.o\
+    Edit_Sheet.o\
+    Enter_Sheet.o\
+    GLabel2Label.o\
+    GLabel2Text.o\
+    GL_Change.o\
+    Hidden_Pin.o\
+    Hierarchy_cursor.o\
+    Hierarchy_Nav.o\
+    Label2GLabel.o\
+    Label2Text.o\
+    Leave_Sheet.o\
+    libedit_icon.o\
+    libedit.o\
+    Lib_next.o\
+    Lib_previous.o\
+    library_browse.o\
+    Lines90.o\
+    Move_GLabel.o\
+    Move_Pinsheet.o\
+    Move_Sheet.o\
+    new_component.o\
+    Normal.o\
+    Options_Pinsheet.o\
+    Options_Pin.o\
+    part_properties.o\
+    pin2pin.o\
+    Pin_Name_to.o\
+    Pin_Number_to.o\
+    Pin_Size_to.o\
+    Pin_to.o\
+    Resize_Sheet.o\
+    Rotate_GLabel.o\
+    Rotate_Pin.o\
+    viewlibs_icon.o

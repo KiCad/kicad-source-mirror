@@ -48,10 +48,10 @@ enum pseudokeys {
 #define EESCHEMA_EXE wxT( "eeschema" )
 #define GERBVIEW_EXE wxT( "gerbview" )
 #else
-#define CVPCB_EXE wxT("cvpcb.app/Contents/MacOS/cvpcb")
-#define PCBNEW_EXE wxT("pcbnew.app/Contents/MacOS/pcbnew")
-#define EESCHEMA_EXE wxT("eeschema.app/Contents/MacOS/eeschema")
-#define GERBVIEW_EXE wxT("gerbview.app/Contents/MacOS/gerbview")
+#define CVPCB_EXE    wxT( "cvpcb.app/Contents/MacOS/cvpcb" )
+#define PCBNEW_EXE   wxT( "pcbnew.app/Contents/MacOS/pcbnew" )
+#define EESCHEMA_EXE wxT( "eeschema.app/Contents/MacOS/eeschema" )
+#define GERBVIEW_EXE wxT( "gerbview.app/Contents/MacOS/gerbview" )
 #endif
 #endif
 
@@ -97,7 +97,7 @@ public:
     bool          m_Setup;          /* TRUE -> inscription en setup (registration base)*/
 
 public:
-    PARAM_CFG_BASE( const wxChar * ident, const paramcfg_id type, const wxChar * group = NULL );
+    PARAM_CFG_BASE( const wxChar* ident, const paramcfg_id type, const wxChar* group = NULL );
     ~PARAM_CFG_BASE() { };
 };
 
@@ -109,12 +109,12 @@ public:
     int  m_Default;                 /* valeur par defaut */
 
 public:
-    PARAM_CFG_INT( const wxChar * ident, int* ptparam,
+    PARAM_CFG_INT( const wxChar* ident, int* ptparam,
                    int default_val = 0, int min = INT_MINVAL, int max = INT_MAXVAL,
-                   const wxChar * group = NULL );
-    PARAM_CFG_INT( bool Insetup, const wxChar * ident, int* ptparam,
+                   const wxChar* group = NULL );
+    PARAM_CFG_INT( bool Insetup, const wxChar* ident, int* ptparam,
                    int default_val = 0, int min = INT_MINVAL, int max = INT_MAXVAL,
-                   const wxChar * group = NULL );
+                   const wxChar* group = NULL );
 };
 
 class PARAM_CFG_SETCOLOR : public PARAM_CFG_BASE
@@ -124,10 +124,10 @@ public:
     int  m_Default;                 /* valeur par defaut */
 
 public:
-    PARAM_CFG_SETCOLOR( const wxChar * ident, int* ptparam,
-                        int default_val, const wxChar * group = NULL );
-    PARAM_CFG_SETCOLOR( bool Insetup, const wxChar * ident, int* ptparam,
-                        int default_val, const wxChar * group = NULL );
+    PARAM_CFG_SETCOLOR( const wxChar* ident, int* ptparam,
+                        int default_val, const wxChar* group = NULL );
+    PARAM_CFG_SETCOLOR( bool Insetup, const wxChar* ident, int* ptparam,
+                        int default_val, const wxChar* group = NULL );
 };
 
 class PARAM_CFG_DOUBLE   : public PARAM_CFG_BASE
@@ -138,12 +138,12 @@ public:
     double  m_Min, m_Max;               /* valeurs extremes du parametre */
 
 public:
-    PARAM_CFG_DOUBLE( const wxChar * ident, double* ptparam,
+    PARAM_CFG_DOUBLE( const wxChar* ident, double* ptparam,
                       double default_val = 0.0, double min = 0.0, double max = 10000.0,
-                      const wxChar * group = NULL );
-    PARAM_CFG_DOUBLE( bool Insetup, const wxChar * ident, double* ptparam,
+                      const wxChar* group = NULL );
+    PARAM_CFG_DOUBLE( bool Insetup, const wxChar* ident, double* ptparam,
                       double default_val = 0.0, double min = 0.0, double max = 10000.0,
-                      const wxChar * group = NULL );
+                      const wxChar* group = NULL );
 };
 
 class PARAM_CFG_BOOL     : public PARAM_CFG_BASE
@@ -153,10 +153,10 @@ public:
     int   m_Default;                /* valeur par defaut */
 
 public:
-    PARAM_CFG_BOOL( const wxChar * ident, bool * ptparam,
-                    int default_val = FALSE, const wxChar * group = NULL );
-    PARAM_CFG_BOOL( bool Insetup, const wxChar * ident, bool * ptparam,
-                    int default_val = FALSE, const wxChar * group = NULL );
+    PARAM_CFG_BOOL( const wxChar* ident, bool* ptparam,
+                    int default_val = FALSE, const wxChar* group = NULL );
+    PARAM_CFG_BOOL( bool Insetup, const wxChar* ident, bool* ptparam,
+                    int default_val = FALSE, const wxChar* group = NULL );
 };
 
 
@@ -166,11 +166,11 @@ public:
     wxString* m_Pt_param;              /* pointeur sur le parametre a configurer */
 
 public:
-    PARAM_CFG_WXSTRING( const wxChar * ident, wxString * ptparam, const wxChar * group = NULL );
-    PARAM_CFG_WXSTRING( bool Insetup,
-                        const wxChar * ident,
-                        wxString * ptparam,
-                        const wxChar * group = NULL );
+    PARAM_CFG_WXSTRING( const wxChar* ident, wxString* ptparam, const wxChar* group = NULL );
+    PARAM_CFG_WXSTRING( bool          Insetup,
+                        const wxChar* ident,
+                        wxString*     ptparam,
+                        const wxChar* group = NULL );
 };
 
 class PARAM_CFG_LIBNAME_LIST : public PARAM_CFG_BASE
@@ -179,9 +179,9 @@ public:
     wxArrayString* m_Pt_param;     /* pointeur sur le parametre a configurer */
 
 public:
-    PARAM_CFG_LIBNAME_LIST( const wxChar * ident,
-                            wxArrayString * ptparam,
-                            const wxChar * group = NULL );
+    PARAM_CFG_LIBNAME_LIST( const wxChar*  ident,
+                            wxArrayString* ptparam,
+                            const wxChar*  group = NULL );
 };
 
 
@@ -195,7 +195,7 @@ private:
     wxListBox* m_List;
 
 public:
-    WinEDA_TextFrame( wxWindow * parent, const wxString &title );
+    WinEDA_TextFrame( wxWindow* parent, const wxString& title );
     void    Append( const wxString& text );
 
 private:
@@ -221,24 +221,24 @@ public:
     int      m_BottomMargin;
 
 public:
-    Ki_PageDescr( const wxSize &size, const wxPoint &offset, const wxString &name );
+    Ki_PageDescr( const wxSize& size, const wxPoint& offset, const wxString& name );
 };
 
 
 /* Standard page sizes in 1/1000 inch */
 #if defined EDA_BASE
-Ki_PageDescr    g_Sheet_A4( wxSize( 11700, 8267 ), wxPoint( 0, 0 ), wxT( "A4" ) );
-Ki_PageDescr    g_Sheet_A3( wxSize( 16535, 11700 ), wxPoint( 0, 0 ), wxT( "A3" ) );
-Ki_PageDescr    g_Sheet_A2( wxSize( 23400, 16535 ), wxPoint( 0, 0 ), wxT( "A2" ) );
-Ki_PageDescr    g_Sheet_A1( wxSize( 33070, 23400 ), wxPoint( 0, 0 ), wxT( "A1" ) );
-Ki_PageDescr    g_Sheet_A0( wxSize( 46800, 33070 ), wxPoint( 0, 0 ), wxT( "A0" ) );
-Ki_PageDescr    g_Sheet_A( wxSize( 11000, 8500 ), wxPoint( 0, 0 ), wxT( "A" ) );
-Ki_PageDescr    g_Sheet_B( wxSize( 17000, 11000 ), wxPoint( 0, 0 ), wxT( "B" ) );
-Ki_PageDescr    g_Sheet_C( wxSize( 22000, 17000 ), wxPoint( 0, 0 ), wxT( "C" ) );
-Ki_PageDescr    g_Sheet_D( wxSize( 34000, 22000 ), wxPoint( 0, 0 ), wxT( "D" ) );
-Ki_PageDescr    g_Sheet_E( wxSize( 44000, 34000 ), wxPoint( 0, 0 ), wxT( "E" ) );
-Ki_PageDescr    g_Sheet_GERBER( wxSize( 32000, 32000 ), wxPoint( 0, 0 ), wxT( "GERBER" ) );
-Ki_PageDescr    g_Sheet_user( wxSize( 17000, 11000 ), wxPoint( 0, 0 ), wxT( "User" ) );
+Ki_PageDescr        g_Sheet_A4( wxSize( 11700, 8267 ), wxPoint( 0, 0 ), wxT( "A4" ) );
+Ki_PageDescr        g_Sheet_A3( wxSize( 16535, 11700 ), wxPoint( 0, 0 ), wxT( "A3" ) );
+Ki_PageDescr        g_Sheet_A2( wxSize( 23400, 16535 ), wxPoint( 0, 0 ), wxT( "A2" ) );
+Ki_PageDescr        g_Sheet_A1( wxSize( 33070, 23400 ), wxPoint( 0, 0 ), wxT( "A1" ) );
+Ki_PageDescr        g_Sheet_A0( wxSize( 46800, 33070 ), wxPoint( 0, 0 ), wxT( "A0" ) );
+Ki_PageDescr        g_Sheet_A( wxSize( 11000, 8500 ), wxPoint( 0, 0 ), wxT( "A" ) );
+Ki_PageDescr        g_Sheet_B( wxSize( 17000, 11000 ), wxPoint( 0, 0 ), wxT( "B" ) );
+Ki_PageDescr        g_Sheet_C( wxSize( 22000, 17000 ), wxPoint( 0, 0 ), wxT( "C" ) );
+Ki_PageDescr        g_Sheet_D( wxSize( 34000, 22000 ), wxPoint( 0, 0 ), wxT( "D" ) );
+Ki_PageDescr        g_Sheet_E( wxSize( 44000, 34000 ), wxPoint( 0, 0 ), wxT( "E" ) );
+Ki_PageDescr        g_Sheet_GERBER( wxSize( 32000, 32000 ), wxPoint( 0, 0 ), wxT( "GERBER" ) );
+Ki_PageDescr        g_Sheet_user( wxSize( 17000, 11000 ), wxPoint( 0, 0 ), wxT( "User" ) );
 
 #else
 extern Ki_PageDescr g_Sheet_A4;
@@ -316,7 +316,7 @@ COMMON_GLOBL wxString      g_EditorName;
 
 // Gestion de la grille "utilisateur" (User Grid)
 #ifdef EDA_BASE
-wxRealPoint g_UserGrid( 0.01, 0.01 );
+wxRealPoint        g_UserGrid( 0.01, 0.01 );
 
 int                g_UserGrid_Unit = INCHES;
 #else
@@ -364,7 +364,7 @@ class WinEDA_DrawPanel;
  * @param aPoint  The point to output.
  * @return wxString& - the input string
  */
-wxString& operator << ( wxString& aString, const wxPoint& aPoint );
+wxString& operator  <<( wxString& aString, const wxPoint& aPoint );
 
 
 /**
@@ -374,10 +374,10 @@ wxString& operator << ( wxString& aString, const wxPoint& aPoint );
  * @param aFlags The same args as allowed for wxExecute()
  * @return bool - true if success, else false
  */
-bool ProcessExecute( const wxString& aCommandLine, int aFlags = wxEXEC_ASYNC );
+bool                ProcessExecute( const wxString& aCommandLine, int aFlags = wxEXEC_ASYNC );
 
 
-wxString ReturnPcbLayerName( int layer_number, bool is_filename = FALSE );
+wxString            ReturnPcbLayerName( int layer_number, bool is_filename = FALSE );
 
 /* Return the name of the layer number "layer_number".
  *  if "is_filename" == TRUE,  the name can be used for a file name
@@ -431,19 +431,19 @@ void        OpenFile( const wxString& file );
 
 
 bool        EDA_DirectorySelector( const wxString& Title,           /* Titre de la fenetre */
-                                   wxString&              Path,     /* Chemin par defaut */
-                                   int                    flag,     /* reserve */
-                                   wxWindow*              Frame,    /* parent frame */
-                                   const wxPoint&         Pos );
+                                   wxString&       Path,            /* Chemin par defaut */
+                                   int             flag,            /* reserve */
+                                   wxWindow*       Frame,           /* parent frame */
+                                   const wxPoint&  Pos );
 
-wxString EDA_FileSelector( const wxString& Title,               /* Window title */
-                           const wxString& Path,                /* default path */
-                           const wxString& FileName,            /*  default filename */
-                           const wxString& Ext,                 /* default extension */
-                           const wxString& Mask,                /* Display filename mask */
-                           wxWindow* Frame,                     /* parent frame */
-                           int flag,                            /* wxSAVE, wxOPEN ..*/
-                           const bool keep_working_directory,   /* true = do not change the C.W.D. */
+wxString EDA_FileSelector( const wxString &Title,                   /* Window title */
+                           const wxString &Path,                    /* default path */
+                           const wxString &FileName,                /*  default filename */
+                           const wxString &Ext,                     /* default extension */
+                           const wxString &Mask,                    /* Display filename mask */
+                           wxWindow * Frame,                        /* parent frame */
+                           int flag,                                /* wxSAVE, wxOPEN ..*/
+                           const bool keep_working_directory,       /* true = do not change the C.W.D. */
                            const wxPoint& Pos = wxPoint( -1, -1 )
                            );
 
@@ -461,8 +461,8 @@ wxString    MakeFileName( const wxString& dir,
  *  retourne la chaine calculee */
 
 wxString    MakeReducedFileName( const wxString& fullfilename,
-                                 const wxString&    default_path,
-                                 const wxString&    default_ext );
+                                 const wxString& default_path,
+                                 const wxString& default_ext );
 
 /* Calcule le nom "reduit" d'un file d'apres les chaines
  *  fullfilename = nom complet
@@ -488,14 +488,14 @@ int             ExecuteFile( wxWindow* frame, const wxString& ExecFile,
                              const wxString& param = wxEmptyString );
 void            AddDelimiterString( wxString& string );
 
-void            SetRealLibraryPath( const wxString& shortlibname );/* met a jour
-                                                         *  le chemin des librairies RealLibDirBuffer (global)
-                                                         *  a partir de UserLibDirBuffer (global):
-                                                         *  Si UserLibDirBuffer non vide RealLibDirBuffer = UserLibDirBuffer.
-                                                         *  Sinon si variable d'environnement KICAD definie (KICAD = chemin pour kicad),
-                                                         *  UserLibDirBuffer = <KICAD>/shortlibname;
-                                                         *  Sinon UserLibDirBuffer = <Chemin des binaires>../shortlibname/
-                                                         */
+void            SetRealLibraryPath( const wxString& shortlibname ); /* met a jour
+                                                                    *  le chemin des librairies RealLibDirBuffer (global)
+                                                                    *  a partir de UserLibDirBuffer (global):
+                                                                    *  Si UserLibDirBuffer non vide RealLibDirBuffer = UserLibDirBuffer.
+                                                                    *  Sinon si variable d'environnement KICAD definie (KICAD = chemin pour kicad),
+                                                                    *  UserLibDirBuffer = <KICAD>/shortlibname;
+                                                                    *  Sinon UserLibDirBuffer = <Chemin des binaires>../shortlibname/
+                                                                    */
 wxString        FindKicadHelpPath();
 
 /* Find absolute path for kicad/help (or kicad/help/<language>) */
@@ -564,26 +564,28 @@ bool        WildCompareString( const wxString& pattern, const wxString& string_t
                                bool case_sensitive = TRUE );
 
 /* compare 2 noms de composants, selon regles usuelles
- *  ( Jokers * , ? , autoris�s).
+ *  ( Jokers * , ? , autorises).
  *  la chaine de reference est "pattern"
  *  si case_sensitive == TRUE (default), comparaison exacte
  *  retourne TRUE si match FALSE si differences */
 
 char*       to_point( char* Text );
 
-/* convertit les , en . dans une chaine. utilis� pour compenser la fct printf
+/* convertit les , en . dans une chaine. utilise pour compenser la fct printf
  *  qui genere les flottants avec une virgule au lieu du point en mode international */
 
 /****************/
 /* infospgm.cpp */
 /****************/
-extern      wxString g_KicadAboutTitle;
-extern      wxString g_CvpcbAboutTitle;
-extern      wxString g_EeschemaAboutTitle;
-extern      wxString g_PcbnewAboutTitle;
-extern      wxString g_GerbviewAboutTitle;
+extern wxString g_KicadAboutTitle;
+extern wxString g_CvpcbAboutTitle;
+extern wxString g_EeschemaAboutTitle;
+extern wxString g_PcbnewAboutTitle;
+extern wxString g_GerbviewAboutTitle;
 
-void        Print_Kicad_Infos( wxWindow* frame, const wxString& title );
+void        Print_Kicad_Infos( wxWindow* frame,
+                               const wxString& title,
+                               const wxString& aExtra_infos );
 
 /**************/
 /* common.cpp */
@@ -591,10 +593,10 @@ void        Print_Kicad_Infos( wxWindow* frame, const wxString& title );
 wxString    GetBuildVersion(); /* Return the build date */
 
 void        Affiche_1_Parametre( WinEDA_DrawFrame* frame,
-                                 int pos_X,
-                                 const wxString& texte_H,
-                                 const wxString& texte_L,
-                                 int color );
+                                 int               pos_X,
+                                 const wxString&   texte_H,
+                                 const wxString&   texte_L,
+                                 int               color );
 
 /*
  *  Routine d'affichage d'un parametre.
@@ -608,16 +610,16 @@ void        Affiche_1_Parametre( WinEDA_DrawFrame* frame,
  *  color = couleur d'affichage
  */
 
-void        AfficheDoc( WinEDA_DrawFrame* frame, const wxString& Doc, const wxString& KeyW );
+void            AfficheDoc( WinEDA_DrawFrame* frame, const wxString& Doc, const wxString& KeyW );
 
 /* Routine d'affichage de la documentation associee a un composant */
 
-int         GetTimeStamp();
+int             GetTimeStamp();
 
 /* Retoure une identification temporelle (Time stamp) differente a chaque appel */
-int         DisplayColorFrame( wxWindow* parent, int OldColor );
-int         GetCommandOptions( const int argc, const char** argv, const char* stringtst,
-                               const char** optarg, int* optind );
+int             DisplayColorFrame( wxWindow* parent, int OldColor );
+int             GetCommandOptions( const int argc, const char** argv, const char* stringtst,
+                                   const char** optarg, int* optind );
 
 
 const wxString& valeur_param( int valeur, wxString& buf_texte );
@@ -628,28 +630,28 @@ const wxString& valeur_param( int valeur, wxString& buf_texte );
  *                      suivie de " ou mm
  */
 
-wxString    ReturnUnitSymbol( int Units = g_UnitMetric );
-int         ReturnValueFromString( int Units, const wxString& TextValue, int Internal_Unit );
-wxString    ReturnStringFromValue( int Units, int Value, int Internal_Unit );
-void        AddUnitSymbol( wxStaticText& Stext, int Units = g_UnitMetric );
+wxString        ReturnUnitSymbol( int Units = g_UnitMetric );
+int             ReturnValueFromString( int Units, const wxString& TextValue, int Internal_Unit );
+wxString        ReturnStringFromValue( int Units, int Value, int Internal_Unit );
+void            AddUnitSymbol( wxStaticText& Stext, int Units = g_UnitMetric );
 
 /* Add string "  (mm):" or " ("):" to the static text Stext.
  *  Used in dialog boxes for entering values depending on selected units */
-void        PutValueInLocalUnits( wxTextCtrl& TextCtr, int Value, int Internal_Unit );
+void            PutValueInLocalUnits( wxTextCtrl& TextCtr, int Value, int Internal_Unit );
 
 /* Convert the number Value in a string according to the internal units
  *  and the selected unit (g_UnitMetric) and put it in the wxTextCtrl TextCtrl */
-int         ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr, int Internal_Unit );
+int             ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr, int Internal_Unit );
 
 /* Convert the Value in the wxTextCtrl TextCtrl in an integer,
  *  according to the internal units and the selected unit (g_UnitMetric) */
 
-double      To_User_Unit( bool is_metric, int val, int internal_unit_value );
-int         From_User_Unit( bool is_metric, double val, int internal_unit_value );
-wxString    GenDate();
-void        MyFree( void* pt_mem );
-void*       MyZMalloc( size_t nb_octets );
-void*       MyMalloc( size_t nb_octets );
+double          To_User_Unit( bool is_metric, int val, int internal_unit_value );
+int             From_User_Unit( bool is_metric, double val, int internal_unit_value );
+wxString        GenDate();
+void            MyFree( void* pt_mem );
+void*           MyZMalloc( size_t nb_octets );
+void*           MyMalloc( size_t nb_octets );
 
 
 /****************/
@@ -671,9 +673,9 @@ bool    GetAssociatedDocument( wxFrame* frame, const wxString& LibPath,
 /****************************/
 /* get_component_dialog.cpp */
 /****************************/
-wxString    GetComponentName( WinEDA_DrawFrame* frame,
-                             wxArrayString& HistoryList, const wxString& Title,
-                             wxString (* AuxTool)(WinEDA_DrawFrame* parent) );
+wxString GetComponentName( WinEDA_DrawFrame * frame,
+                          wxArrayString & HistoryList, const wxString &Title,
+                          wxString (*AuxTool)( WinEDA_DrawFrame * parent ) );
 
 /* Dialog frame to choose a component name */
 void        AddHistoryComponentName( wxArrayString& HistoryList, const wxString& Name );

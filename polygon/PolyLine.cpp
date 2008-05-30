@@ -1,7 +1,7 @@
 // PolyLine.cpp ... implementation of CPolyLine class from FreePCB.
 
 //
-// implementation for kicad
+// implementation for kicad and kbool polygon clipping library
 //
 using namespace std;
 
@@ -13,8 +13,6 @@ using namespace std;
 
 #include "PolyLine.h"
 
-#define to_int( x ) (int) round( (x) )
-
 
 #define pi 3.14159265359
 
@@ -23,17 +21,7 @@ CPolyLine::CPolyLine()
     m_HatchStyle = 0;
     m_Width = 0;
     utility = 0;
-#ifdef USE_GPC_POLY_LIB
-    m_gpc_poly = new gpc_polygon;
-    m_gpc_poly->num_contours = 0;
-#else
-    m_gpc_poly = NULL;
-#endif
-#ifdef USE_GPL_POLY_LIB
-    m_php_poly = new polygon;
-#else
-    m_php_poly = NULL;
-#endif
+    m_Kbool_Poly_Engine = NULL;
 }
 
 
@@ -42,288 +30,286 @@ CPolyLine::CPolyLine()
 CPolyLine::~CPolyLine()
 {
     Undraw();
-#ifdef USE_GPC_POLY_LIB
-    FreeGpcPoly();
-    delete m_gpc_poly;
-#endif
-#ifdef USE_GPL_POLY_LIB
-    delete m_php_poly;
-#endif
 }
 
-
-#ifdef USE_GPC_POLY_LIB
-
-// Use the General Polygon Clipping Library to clip contours
-// If this results in new polygons, return them as std::vector p
-// If bRetainArcs == TRUE, try to retain arcs in polys
-// Returns number of external contours, or -1 if error
-//
-int CPolyLine::NormalizeWithGpc( std::vector<CPolyLine*> * pa, bool bRetainArcs )
+/** Function NormalizeWithKbool
+ * Use the Kbool Library to clip contours: if outlines are crossing, the self-crossing polygon
+ * is converted to non self-crossing polygon by adding extra points at the crossing locations
+ * if more than one outside contour are found, extra CPolyLines will be created
+ * because copper areas have only one outside contour
+ * Therefore, if this results in new CPolyLines, return them as std::vector pa
+ * @param pa: pointer on a std::vector<CPolyLine*> to store extra CPolyLines
+ * @param bRetainArcs == TRUE, try to retain arcs in polys
+ * @return number of external contours, or -1 if error
+ */
+int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*> * pa, bool bRetainArcs )
 {
-    std::vector<CArc> arc_array;
+    std::vector<CArc>   arc_array;
+    std::vector <void*> hole_array; // list of holes
+    std::vector<int> *  hole;       // used to store corners for a given hole
+    CPolyLine*          polyline;
+    int n_ext_cont = 0;             // CPolyLine count
 
+    /* Creates a bool engine from this CPolyLine.
+     * Normalized outlines and holes will be in m_Kbool_Poly_Engine
+     * If some polygons are self crossing, after running the Kbool Engine, self crossing polygons
+     * will be converted in non self crossing polygons by inserting extra points at the crossing locations
+     * True holes are combined if possible
+     */
     if( bRetainArcs )
-        MakeGpcPoly( -1, &arc_array );
+        MakeKboolPoly( -1, -1, &arc_array );
     else
-        MakeGpcPoly( -1, NULL );
+        MakeKboolPoly( -1, -1, NULL );
 
     Undraw();
 
-    // now, recreate poly
-    // first, find outside contours and create new CPolyLines if necessary
-    int n_ext_cont = 0;
-    for( int ic = 0; ic<m_gpc_poly->num_contours; ic++ )
+    /* now, recreate polys
+     * if more than one outside contour are found, extra CPolyLines will be created
+     * because copper areas have only one outside contour
+     * the first outside contour found is the new "this" outside contour
+     * if others outside contours are found we create new CPolyLines
+     * Note: if there are holes in polygons, we must store them
+     * and when all outside contours are found, search the corresponding outside contour for each hole
+     */
+    while( m_Kbool_Poly_Engine->StartPolygonGet() )
     {
-        if( !(m_gpc_poly->hole)[ic] )
+        // See if the current polygon is flagged as a hole
+        if( m_Kbool_Poly_Engine->GetPolygonPointEdgeType() == KB_INSIDE_EDGE )
         {
-            if( n_ext_cont == 0 )
+            hole = new std::vector<int>;
+            hole_array.push_back( hole );
+            while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )    // store hole
             {
-                // first external contour, replace this poly
-                corner.clear();
-                side_style.clear();
-                for( int i = 0; i<m_gpc_poly->contour[ic].num_vertices; i++ )
-                {
-                    int x = to_int( ( (m_gpc_poly->contour)[ic].vertex )[i].x );
-                    int y = to_int( ( (m_gpc_poly->contour)[ic].vertex )[i].y );
-                    if( i==0 )
-                        Start( m_layer, x, y, m_HatchStyle );
-                    else
-                        AppendCorner( x, y, STRAIGHT, FALSE );
-                }
-
-                Close();
-                n_ext_cont++;
+                int x = m_Kbool_Poly_Engine->GetPolygonXPoint();
+                int y = m_Kbool_Poly_Engine->GetPolygonYPoint();
+                hole->push_back( x );
+                hole->push_back( y );
             }
-            else if( pa )
+
+            m_Kbool_Poly_Engine->EndPolygonGet();
+        }
+        else if( n_ext_cont == 0 )
+        {
+            // first external contour, replace this poly
+            corner.clear();
+            side_style.clear();
+            bool first = true;
+            while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )
+            {       // foreach point in the polygon
+                int x = m_Kbool_Poly_Engine->GetPolygonXPoint();
+                int y = m_Kbool_Poly_Engine->GetPolygonYPoint();
+                if( first )
+                {
+                    first = false;
+                    Start( GetLayer(), x, y, GetHatchStyle() );
+                }
+                else
+                    AppendCorner( x, y );
+            }
+
+            m_Kbool_Poly_Engine->EndPolygonGet();
+            Close();
+            n_ext_cont++;
+        }
+        else if( pa )                                               // a new outside contour is found: create a new CPolyLine
+        {
+            polyline = new CPolyLine;                               // create new poly
+            pa->push_back( polyline );                              // put it in array
+            bool first = true;
+            while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )    // read next external contour
             {
-                // next external contour, create new poly
-                CPolyLine* poly = new CPolyLine;
-                pa->push_back( poly );    // put in array
-                for( int i = 0; i<m_gpc_poly->contour[ic].num_vertices; i++ )
+                int x = m_Kbool_Poly_Engine->GetPolygonXPoint();
+                int y = m_Kbool_Poly_Engine->GetPolygonYPoint();
+                if( first )
                 {
-                    int x = to_int( ( (m_gpc_poly->contour)[ic].vertex )[i].x );
-                    int y = to_int( ( (m_gpc_poly->contour)[ic].vertex )[i].y );
-                    if( i==0 )
-                        poly->Start( m_layer, x, y, m_HatchStyle );
-                    else
-                        poly->AppendCorner( x, y, STRAIGHT, FALSE );
+                    first = false;
+                    polyline->Start( GetLayer(), x, y, GetHatchStyle() );
                 }
-
-                poly->Close( STRAIGHT, FALSE );
-                n_ext_cont++;
+                else
+                    polyline->AppendCorner( x, y );
             }
+
+            m_Kbool_Poly_Engine->EndPolygonGet();
+            polyline->Close( STRAIGHT, FALSE );
+            n_ext_cont++;
         }
     }
 
-    // now add cutouts to the CPolyLine(s)
-    for( int ic = 0; ic<m_gpc_poly->num_contours; ic++ )
+    // now add cutouts to the corresponding CPolyLine(s)
+    for( unsigned ii = 0; ii < hole_array.size(); ii++ )
     {
-        if( (m_gpc_poly->hole)[ic] )
+        hole     = (std::vector<int> *)hole_array[ii];
+        polyline = NULL;
+        if( n_ext_cont == 1 )
         {
-            CPolyLine* ext_poly = NULL;
-            if( n_ext_cont == 1 )
+            polyline = this;
+        }
+        else
+        {
+            // find the polygon that contains this hole
+            // testing one corner inside is enought because a hole is entirely inside the polygon
+            // sowe test only the first corner
+            int x = (*hole)[0];
+            int y = (*hole)[1];
+            if( TestPointInside( x, y ) )
+                polyline = this;
+            else if( pa )
             {
-                ext_poly = this;
-            }
-            else
-            {
-                // find the polygon that contains this hole
-                for( int i = 0; i<m_gpc_poly->contour[ic].num_vertices; i++ )
+                for( int ext_ic = 0; ext_ic<n_ext_cont - 1; ext_ic++ )
                 {
-                    int x = to_int( ( (m_gpc_poly->contour)[ic].vertex )[i].x );
-                    int y = to_int( ( (m_gpc_poly->contour)[ic].vertex )[i].y );
-                    if( TestPointInside( x, y ) )
-                        ext_poly = this;
-                    else
+                    if( (*pa)[ext_ic]->TestPointInside( x, y ) )
                     {
-                        for( int ext_ic = 0; ext_ic<n_ext_cont - 1; ext_ic++ )
-                        {
-                            if( (*pa)[ext_ic]->TestPointInside( x, y ) )
-                            {
-                                ext_poly = (*pa)[ext_ic];
-                                break;
-                            }
-                        }
-                    }
-                    if( ext_poly )
+                        polyline = (*pa)[ext_ic];
                         break;
+                    }
                 }
             }
-            if( !ext_poly )
-                wxASSERT( 0 );
-            for( int i = 0; i<m_gpc_poly->contour[ic].num_vertices; i++ )
+        }
+
+        if( !polyline )
+            wxASSERT( 0 );
+        else
+        {
+            for( unsigned ii = 0; ii< (*hole).size(); ii++ )
             {
-                int x = to_int( ( (m_gpc_poly->contour)[ic].vertex )[i].x );
-                int y = to_int( ( (m_gpc_poly->contour)[ic].vertex )[i].y );
-                ext_poly->AppendCorner( x, y, STRAIGHT, FALSE );
+                int x = (*hole)[ii]; ii++;
+                int y = (*hole)[ii];
+                polyline->AppendCorner( x, y, STRAIGHT, FALSE );
             }
 
-            ext_poly->Close( STRAIGHT, FALSE );
+            polyline->Close( STRAIGHT, FALSE );
         }
     }
 
     if( bRetainArcs )
         RestoreArcs( &arc_array, pa );
-    FreeGpcPoly();
+
+    delete m_Kbool_Poly_Engine;
+    m_Kbool_Poly_Engine = NULL;
+
+    // free hole list
+    for( unsigned ii = 0; ii < hole_array.size(); ii++ )
+        delete (std::vector<int> *)hole_array[ii];
 
     return n_ext_cont;
 }
 
 
-#endif
-
-#ifdef USE_GPL_POLY_LIB
-
-// make a php_polygon from first contour
-int CPolyLine::MakePhpPoly()
+/** Function AddPolygonsToBoolEng
+ * and edges contours to a kbool engine, preparing a boolean op between polygons
+ * @param aStart_contour: starting contour number (-1 = all, 0 is the outlines of zone, > 1 = holes in zone
+ * @param aEnd_contour: ending contour number (-1 = all after  aStart_contour)
+ * @param arc_array: arc converted to poly segments (NULL if not exists)
+ * @param aBooleng : pointer on a bool engine (handle a set of polygons)
+ * @param aGroup : group to fill (aGroup = GROUP_A or GROUP_B) operations are made between GROUP_A and GROUP_B
+ */
+int CPolyLine::AddPolygonsToBoolEng( Bool_Engine*        aBooleng,
+                                     GroupType           aGroup,
+                                     int                 aStart_contour,
+                                     int                 aEnd_contour,
+                                     std::vector<CArc> * arc_array )
 {
-    FreePhpPoly();
-    int nv = GetContourEnd( 0 );
-    for( int iv = 0; iv <= nv; iv++ )
-        m_php_poly->addv( GetX( iv ), GetY( iv ) );
+    int count = 0;
 
-    m_php_poly->getFirst()->m_id = 1;
-    return 0;
-}
+    if( (aGroup != GROUP_A) && (aGroup != GROUP_B ) )
+        return 0; //Error !
 
+    MakeKboolPoly( aStart_contour, aEnd_contour, arc_array );
 
-void CPolyLine::FreePhpPoly()
-{
-    // delete all vertices
-    while( m_php_poly->m_cnt > 1 )
+    while( m_Kbool_Poly_Engine->StartPolygonGet() )
     {
-        vertex* fv = m_php_poly->getFirst();
-        m_php_poly->del( fv->m_nextV );
-    }
-
-    delete m_php_poly->m_first;
-    m_php_poly->m_first = NULL;
-    m_php_poly->m_cnt   = 0;
-}
-
-
-// Use the php clipping lib to clip this poly against poly
-//
-void CPolyLine::ClipPhpPolygon( int php_op, CPolyLine* poly )
-{
-    Undraw();
-    poly->MakePhpPoly();
-    MakePhpPoly();
-    polygon* p = m_php_poly->boolean( poly->m_php_poly, php_op );
-    poly->FreePhpPoly();
-    FreePhpPoly();
-
-    if( p )
-    {
-        // now screw with the PolyLine
-        corner.clear();
-        side_style.clear();
-
-        do
+        if( aBooleng->StartPolygonAdd( GROUP_A ) )
         {
-            vertex* v = p->getFirst();
-            Start( m_layer, to_int( v->X() ), to_int( v->Y() ), m_HatchStyle );
-
-            do
+            while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )
             {
-                vertex* n = v->Next();
-                AppendCorner( to_int( v->X() ), to_int( (v->Y()) ) );
-                v = n;
-            } while( v->id() != p->getFirst()->id() );
+                int x = m_Kbool_Poly_Engine->GetPolygonXPoint();
+                int y = m_Kbool_Poly_Engine->GetPolygonYPoint();
+                aBooleng->AddPoint( x, y );
+                count++;
+            }
 
-            Close();
-
-//			p = p->NextPoly();
-            delete p;
-            p = NULL;
-        } while( p );
+            aBooleng->EndPolygonAdd();
+        }
+        m_Kbool_Poly_Engine->EndPolygonGet();
     }
-    Draw();
+
+    delete m_Kbool_Poly_Engine;
+    m_Kbool_Poly_Engine = NULL;
+
+    return count;
 }
 
 
-#endif
-
-int CPolyLine::MakePolygonFromAreaOutlines( int icontour, std::vector<CArc> * arc_array )
-{
-    #ifdef USE_GPC_POLY_LIB
-    return MakeGpcPoly( icontour, arc_array );
-    #endif
-    #ifdef USE_GPL_POLY_LIB
-    return MakePhpPoly( );
-    #endif
-}
-
-
-void CPolyLine::FreePolygon()
-{
-    #ifdef USE_GPC_POLY_LIB
-    FreeGpcPoly();
-    #endif
-    #ifdef USE_GPL_POLY_LIB
-    FreePhpPoly();
-    #endif
-}
-
-
-int CPolyLine::NormalizeAreaOutlines( std::vector<CPolyLine*> * pa, bool bRetainArcs )
-{
-    #ifdef USE_GPC_POLY_LIB
-    return NormalizeWithGpc( pa, bRetainArcs );
-    #endif
-    #ifdef USE_GPL_POLY_LIB
-    #warning NormalizeAreaOutlines with GPL lib must be finished (TODO)
-    return 1;
-    #endif
-}
-
-
-#ifdef USE_GPC_POLY_LIB
-
-/** Function MakeGpcPoly
- * make a gpc_polygon for a closed polyline contour
+/** Function MakeKboolPoly
+ * fill a kbool engine with a closed polyline contour
  * approximates arcs with multiple straight-line segments
- * @param icontour : if icontour = -1, make polygon with all contours,
+ * @param aStart_contour: starting contour number (-1 = all, 0 is the outlines of zone, > 1 = holes in zone
+ * @param aEnd_contour: ending contour number (-1 = all after  aStart_contour)
  *  combining intersecting contours if possible
- * @param arc_array : return data on arcs in arc_array
+ * @param arc_array : return corners computed from arcs approximations in arc_array
  * @return error: 0 if Ok, 1 if error
  */
-int CPolyLine::MakeGpcPoly( int icontour, std::vector<CArc> * arc_array )
+int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<CArc> * arc_array )
 {
-    if( m_gpc_poly->num_contours )
-        FreeGpcPoly();
-    if( !GetClosed() && (icontour == (GetNumContours() - 1) || icontour == -1) )
+    if( m_Kbool_Poly_Engine )
+    {
+        delete m_Kbool_Poly_Engine;
+        m_Kbool_Poly_Engine = NULL;
+    }
+    if( !GetClosed() && (aStart_contour == (GetNumContours() - 1) || aStart_contour == -1) )
         return 1; // error
 
-    // initialize m_gpc_poly
-    m_gpc_poly->num_contours = 0;
-    m_gpc_poly->hole    = NULL;
-    m_gpc_poly->contour = NULL;
     int n_arcs = 0;
 
-    int first_contour = icontour;
-    int last_contour  = icontour;
-    if( icontour == -1 )
+    int first_contour = aStart_contour;
+    int last_contour  = aEnd_contour;
+    if( aStart_contour == -1 )
     {
         first_contour = 0;
         last_contour  = GetNumContours() - 1;
+    }
+    if( aEnd_contour == -1 )
+    {
+        last_contour = GetNumContours() - 1;
     }
     if( arc_array )
         arc_array->clear();
     int iarc = 0;
     for( int icont = first_contour; icont<=last_contour; icont++ )
     {
-        // make gpc_polygon for this contour
-        gpc_polygon* gpc = new gpc_polygon;
-        gpc->num_contours = 0;
-        gpc->hole    = NULL;
-        gpc->contour = NULL;
+        // Fill a kbool engine for this contour,
+        // and combine it with previous contours
+        Bool_Engine* booleng = new Bool_Engine();
+        ArmBoolEng( booleng );
+
+        if( m_Kbool_Poly_Engine )  // a previous contour exists. Put it in new engine
+        {
+            while( m_Kbool_Poly_Engine->StartPolygonGet() )
+            {
+                if( booleng->StartPolygonAdd( GROUP_A ) )
+                {
+                    while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )
+                    {
+                        int x = m_Kbool_Poly_Engine->GetPolygonXPoint();
+                        int y = m_Kbool_Poly_Engine->GetPolygonYPoint();
+                        booleng->AddPoint( x, y );
+                    }
+
+                    booleng->EndPolygonAdd();
+                }
+                m_Kbool_Poly_Engine->EndPolygonGet();
+            }
+        }
 
         // first, calculate number of vertices in contour
         int n_vertices = 0;
         int ic_st  = GetContourStart( icont );
         int ic_end = GetContourEnd( icont );
+        if( !booleng->StartPolygonAdd( GROUP_B ) )
+        {
+            wxASSERT( 0 );
+            return 1;   //error
+        }
         for( int ic = ic_st; ic<=ic_end; ic++ )
         {
             int style = side_style[ic];
@@ -353,10 +339,7 @@ int CPolyLine::MakeGpcPoly( int icontour, std::vector<CArc> * arc_array )
             }
         }
 
-        // now create gcp_vertex_list for this contour
-        gpc_vertex_list* g_v_list = new gpc_vertex_list;
-        g_v_list->vertex = (gpc_vertex*) calloc( sizeof(gpc_vertex), n_vertices );
-        g_v_list->num_vertices = n_vertices;
+        // now enter this contour to booleng
         int ivtx = 0;
         for( int ic = ic_st; ic<=ic_end; ic++ )
         {
@@ -376,8 +359,7 @@ int CPolyLine::MakeGpcPoly( int icontour, std::vector<CArc> * arc_array )
             }
             if( style == STRAIGHT )
             {
-                g_v_list->vertex[ivtx].x = x1;
-                g_v_list->vertex[ivtx].y = y1;
+                booleng->AddPoint( x1, y1 );
                 ivtx++;
             }
             else
@@ -480,8 +462,7 @@ int CPolyLine::MakeGpcPoly( int icontour, std::vector<CArc> * arc_array )
                         x = x1;
                         y = y1;
                     }
-                    g_v_list->vertex[ivtx].x = x;
-                    g_v_list->vertex[ivtx].y = y;
+                    booleng->AddPoint( x1, y1 );
                     ivtx++;
                 }
             }
@@ -490,42 +471,93 @@ int CPolyLine::MakeGpcPoly( int icontour, std::vector<CArc> * arc_array )
         if( n_vertices != ivtx )
             wxASSERT( 0 );
 
-        // add vertex_list to gpc
-        gpc_add_contour( gpc, g_v_list, 0 );
+        //  close list added to the bool engine
+        booleng->EndPolygonAdd();
 
-        // now clip m_gpc_poly with gpc, put new poly into result
-        gpc_polygon* result = new gpc_polygon;
-        if( icontour == -1 && icont != 0 )
-            gpc_polygon_clip( GPC_DIFF, m_gpc_poly, gpc, result );  // hole
-        else
-            gpc_polygon_clip( GPC_UNION, m_gpc_poly, gpc, result ); // outside
+        /* now combine polygon to the previous polygons.
+         * note: the first polygon is the outline contour, and others are holes inside the first polygon
+         * The first polygon is ORed with nothing, but is is a trick to sort corners (vertex)
+         * clockwise with the kbool engine.
+         * Others polygons are substract to the outline and corners will be ordered counter clockwise
+         * by the kbool engine
+         */
+        if( aStart_contour <= 0 && icont != 0 )  // substract hole to outside ( if the outline contour is take in account)
+        {
+            booleng->Do_Operation( BOOL_A_SUB_B );
+        }
+        else       // add outside or add holes if we do not use the outline contour
+        {
+            booleng->Do_Operation( BOOL_OR );
+        }
+
         // now copy result to m_gpc_poly
-        gpc_free_polygon( m_gpc_poly );
-        delete m_gpc_poly;
-        m_gpc_poly = result;
-        gpc_free_polygon( gpc );
-        delete gpc;
-        free( g_v_list->vertex );
-        free( g_v_list );
+        if( m_Kbool_Poly_Engine )
+            delete m_Kbool_Poly_Engine;
+        m_Kbool_Poly_Engine = booleng;
     }
 
     return 0;
 }
 
 
-void CPolyLine::FreeGpcPoly()
+/** Function ArmBoolEng
+ * Initialise parameters used in kbool
+ * @param aBooleng = pointer to the Bool_Engine to initialise
+ * @param aConvertHoles = mode for holes when a boolean operation is made
+ *   true: holes are linked into outer contours by double overlapping segments
+ *   false: holes are not linked: in this mode contours are added clockwise
+ *          and polygons added counter clockwise are holes
+ */
+void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
 {
-    if( m_gpc_poly->num_contours )
+    // set some global vals to arm the boolean engine
+    double DGRID = 1000;    // round coordinate X or Y value in calculations to this
+    double MARGE = 0.001;   // snap with in this range points to lines in the intersection routines
+                            // should always be > DGRID  a  MARGE >= 10*DGRID is oke
+                            // this is also used to remove small segments and to decide when
+                            // two segments are in line.
+    double CORRECTIONFACTOR = 500.0;    // correct the polygons by this number
+    double CORRECTIONABER   = 1.0;      // the accuracy for the rounded shapes used in correction
+    double ROUNDFACTOR  = 1.5;          // when will we round the correction shape to a circle
+    double SMOOTHABER   = 10.0;         // accuracy when smoothing a polygon
+    double MAXLINEMERGE = 1000.0;       // leave as is, segments of this length in smoothen
+
+
+    // DGRID is only meant to make fractional parts of input data which
+    // are doubles, part of the integers used in vertexes within the boolean algorithm.
+    // Within the algorithm all input data is multiplied with DGRID
+
+    // space for extra intersection inside the boolean algorithms
+    // only change this if there are problems
+    int GRID = 10000;
+
+    aBooleng->SetMarge( MARGE );
+    aBooleng->SetGrid( GRID );
+    aBooleng->SetDGrid( DGRID );
+    aBooleng->SetCorrectionFactor( CORRECTIONFACTOR );
+    aBooleng->SetCorrectionAber( CORRECTIONABER );
+    aBooleng->SetSmoothAber( SMOOTHABER );
+    aBooleng->SetMaxlinemerge( MAXLINEMERGE );
+    aBooleng->SetRoundfactor( ROUNDFACTOR );
+
+    if( aConvertHoles )
     {
-        delete m_gpc_poly->contour->vertex;
-        delete m_gpc_poly->contour;
-        delete m_gpc_poly->hole;
+        aBooleng->SetLinkHoles( true );                 // holes will be connected by double overlapping segments
+        aBooleng->SetOrientationEntryMode( false );     // all polygons are contours, not holes
     }
-    m_gpc_poly->num_contours = 0;
+    else
+    {
+        aBooleng->SetLinkHoles( false );                // holes will not ce connected by double overlapping segments
+        aBooleng->SetOrientationEntryMode( true );      // holes are entered counter clockwise
+    }
 }
 
 
-#endif
+
+int CPolyLine::NormalizeAreaOutlines( std::vector<CPolyLine*> * pa, bool bRetainArcs )
+{
+    return NormalizeWithKbool( pa, bRetainArcs );
+}
 
 // Restore arcs to a polygon where they were replaced with steps
 // If pa != NULL, also use polygons in pa array
@@ -548,8 +580,9 @@ int CPolyLine::RestoreArcs( std::vector<CArc> * arc_array, std::vector<CPolyLine
             poly = (*pa)[ip - 1];
         poly->Undraw();
         for( int ic = 0; ic<poly->GetNumCorners(); ic++ )
-            poly->SetUtility( ic, 0 ); // clear utility flag
+            poly->SetUtility( ic, 0 );
 
+        // clear utility flag
     }
 
     // find arcs and replace them
@@ -1181,19 +1214,20 @@ void CPolyLine::Hatch()
                     if( corner[ic].end_contour || ( ic == (int) (corner.size() - 1) ) )
                     {
                         ok = FindLineSegmentIntersection( a, slope,
-                            corner[ic].x, corner[ic].y,
-                            corner[i_start_contour].x, corner[i_start_contour].y,
-                            side_style[ic],
-                            &x, &y, &x2, &y2 );
+                                                          corner[ic].x, corner[ic].y,
+                                                          corner[i_start_contour].x,
+                                                          corner[i_start_contour].y,
+                                                          side_style[ic],
+                                                          &x, &y, &x2, &y2 );
                         i_start_contour = ic + 1;
                     }
                     else
                     {
                         ok = FindLineSegmentIntersection( a, slope,
-                            corner[ic].x, corner[ic].y,
-                            corner[ic + 1].x, corner[ic + 1].y,
-                            side_style[ic],
-                            &x, &y, &x2, &y2 );
+                                                          corner[ic].x, corner[ic].y,
+                                                          corner[ic + 1].x, corner[ic + 1].y,
+                                                          side_style[ic],
+                                                          &x, &y, &x2, &y2 );
                     }
                     if( ok )
                     {
@@ -1267,11 +1301,12 @@ void CPolyLine::Hatch()
                     double y2 = yy[ip + 1] - dx * slope;
                     m_HatchLines.push_back( CSegment( xx[ip], yy[ip], to_int( x1 ), to_int( y1 ) ) );
                     m_HatchLines.push_back( CSegment( xx[ip + 1], yy[ip + 1], to_int( x2 ),
-                            to_int( y2 ) ) );
+                                                     to_int( y2 ) ) );
                 }
             }
-        } // end for
+        }
 
+        // end for
     }
 }
 
@@ -1309,16 +1344,16 @@ bool CPolyLine::TestPointInside( int x, int y )
                 int    ok;
                 if( ic == istart )
                     ok = FindLineSegmentIntersection( a, slope,
-                        corner[iend].x, corner[iend].y,
-                        corner[istart].x, corner[istart].y,
-                        side_style[corner.size() - 1],
-                        &x, &y, &x2, &y2 );
+                                                      corner[iend].x, corner[iend].y,
+                                                      corner[istart].x, corner[istart].y,
+                                                      side_style[corner.size() - 1],
+                                                      &x, &y, &x2, &y2 );
                 else
                     ok = FindLineSegmentIntersection( a, slope,
-                        corner[ic - 1].x, corner[ic - 1].y,
-                        corner[ic].x, corner[ic].y,
-                        side_style[ic - 1],
-                        &x, &y, &x2, &y2 );
+                                                      corner[ic - 1].x, corner[ic - 1].y,
+                                                      corner[ic].x, corner[ic].y,
+                                                      side_style[ic - 1],
+                                                      &x, &y, &x2, &y2 );
                 if( ok )
                 {
                     xx[npts] = (int) x;
@@ -1393,16 +1428,16 @@ bool CPolyLine::TestPointInsideContour( int icont, int x, int y )
             int    ok;
             if( ic == istart )
                 ok = FindLineSegmentIntersection( a, slope,
-                    corner[iend].x, corner[iend].y,
-                    corner[istart].x, corner[istart].y,
-                    side_style[corner.size() - 1],
-                    &x, &y, &x2, &y2 );
+                                                  corner[iend].x, corner[iend].y,
+                                                  corner[istart].x, corner[istart].y,
+                                                  side_style[corner.size() - 1],
+                                                  &x, &y, &x2, &y2 );
             else
                 ok = FindLineSegmentIntersection( a, slope,
-                    corner[ic - 1].x, corner[ic - 1].y,
-                    corner[ic].x, corner[ic].y,
-                    side_style[ic - 1],
-                    &x, &y, &x2, &y2 );
+                                                  corner[ic - 1].x, corner[ic - 1].y,
+                                                  corner[ic].x, corner[ic].y,
+                                                  side_style[ic - 1],
+                                                  &x, &y, &x2, &y2 );
             if( ok )
             {
                 xx[npts] = (int) x;
@@ -1455,12 +1490,6 @@ void CPolyLine::Copy( CPolyLine* src )
     // copy side styles
     for( unsigned ii = 0; ii < src->side_style.size(); ii++ )
         side_style.push_back( src->side_style[ii] );
-
-#ifdef USE_GPC_POLY_LIB
-
-    // don't copy the Gpc_poly, just clear the old one
-    FreeGpcPoly();
-#endif
 }
 
 
@@ -1632,9 +1661,9 @@ void CPolyLine::AddContourForPadClearance( int  type,
                 }
                 AppendCorner( to_int( x + corner_x ), to_int( y + corner_y ), STRAIGHT, 0 );
                 AppendCorner( to_int( x + r * cos( th1 ) ), to_int( y + r * sin(
-                            th1 ) ), STRAIGHT, 0 );
+                                                                       th1 ) ), STRAIGHT, 0 );
                 AppendCorner( to_int( x + r * cos( th2 ) ), to_int( y + r * sin(
-                            th2 ) ), ARC_CCW, 0 );
+                                                                       th2 ) ), ARC_CCW, 0 );
                 Close( STRAIGHT );
             }
         }

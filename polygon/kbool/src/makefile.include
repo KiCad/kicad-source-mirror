@@ -1,0 +1,10 @@
+OBJECTS =\
+    booleng.o\
+    graph.o\
+    graphlst.o\
+    line.o\
+    link.o\
+    lpoint.o\
+    node.o\
+    record.o\
+    scanbeam.o

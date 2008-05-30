@@ -1,4 +1,4 @@
-KICAD_SUBDIRS =  common bitmaps 3d-viewer polygon eeschema eeschema/plugins pcbnew kicad cvpcb gerbview
+KICAD_SUBDIRS =  common bitmaps 3d-viewer polygon polygon/kbool/src  eeschema eeschema/plugins pcbnew kicad cvpcb gerbview
 KICAD_SUBDIRS_BIN =  eeschema eeschema/plugins pcbnew cvpcb kicad gerbview
 # How to invoke make:
 MAKE = make -k -f makefile.g95

@@ -10,9 +10,6 @@ using namespace std;
 
 #include "fctsys.h"
 
-#include "defs-macros.h"
-
-#include "PolyLine2Kicad.h"
 #include "PolyLine.h"
 
 
@@ -49,7 +46,7 @@ CPoint GetInflectionPoint( CPoint pi, CPoint pf, int mode )
 			{
 				int vert;	// length of vertical line needed
 				if( dy > 0 )
-					vert = dy - abs(dx);	// positive	
+					vert = dy - abs(dx);	// positive
 				else
 					vert = dy + abs(dx);	// negative
 				if( mode == IM_90_45 )
@@ -75,7 +72,7 @@ CPoint GetInflectionPoint( CPoint pi, CPoint pf, int mode )
 			{
 				int hor;	// length of horizontal line needed
 				if( dx > 0 )
-					hor = dx - abs(dy);	// positive	
+					hor = dx - abs(dy);	// positive
 				else
 					hor = dx + abs(dy);	// negative
 				if( mode == IM_90_45 )
@@ -93,11 +90,11 @@ CPoint GetInflectionPoint( CPoint pi, CPoint pf, int mode )
 	return p;
 }
 
-// 
+//
 // function to rotate a point clockwise about another point
 // currently, angle must be 0, 90, 180 or 270
 //
-void RotatePoint( CPoint *p, int angle, CPoint org ) 
+void RotatePoint( CPoint *p, int angle, CPoint org )
 {
 	if( angle == 90 )
 	{
@@ -204,7 +201,7 @@ int TestLineHit( int xi, int yi, int xf, int yf, int x, int y, double dist )
 			if( dd<dist && ( (xf>xi && xp<xf && xp>xi) || (xf<xi && xp>xf && xp<xi) ) )
 				return 1;
 		}
-	}	
+	}
 	return 0;	// no hit
 }
 
@@ -293,16 +290,16 @@ int MakeEllipseFromArc( int xi, int yi, int xf, int yf, int style, EllipseKH * e
 // returns number of intersections found (max of 2)
 // returns coords of intersections in arrays x[2], y[2]
 //
-int FindSegmentIntersections( int xi, int yi, int xf, int yf, int style, 
+int FindSegmentIntersections( int xi, int yi, int xf, int yf, int style,
 								 int xi2, int yi2, int xf2, int yf2, int style2,
 								 double x[], double y[] )
 {
 	double xr[12], yr[12];
 	int iret = 0;
 
-	if( max(xi,xf) < min(xi2,xf2) 
-		|| min(xi,xf) > max(xi2,xf2) 
-		|| max(yi,yf) < min(yi2,yf2) 
+	if( max(xi,xf) < min(xi2,xf2)
+		|| min(xi,xf) > max(xi2,xf2)
+		|| max(yi,yf) < min(yi2,yf2)
 		|| min(yi,yf) > max(yi2,yf2) )
 		return 0;
 
@@ -449,7 +446,7 @@ int FindSegmentIntersections( int xi, int yi, int xf, int yf, int style,
 // sets coords of intersections in *x1, *y1, *x2, *y2
 // if no intersection, returns min distance in dist
 //
-int FindLineSegmentIntersection( double a, double b, int xi, int yi, int xf, int yf, int style, 
+int FindLineSegmentIntersection( double a, double b, int xi, int yi, int xf, int yf, int style,
 								double * x1, double * y1, double * x2, double * y2,
 								double * dist )
 {
@@ -505,7 +502,7 @@ int FindLineSegmentIntersection( double a, double b, int xi, int yi, int xf, int
 			else
 			{
 				// oblique line
-				if( (xx>=xi && xx>xf) || (xx<=xi && xx<xf) 
+				if( (xx>=xi && xx>xf) || (xx<=xi && xx<xf)
 					|| (yy>yi && yy>yf) || (yy<yi && yy<yf) )
 					return 0;
 			}
@@ -637,7 +634,7 @@ int FindLineSegmentIntersection( double a, double b, int xi, int yi, int xf, int
 // if false, returns min. distance in dist (may be 0.0 if parallel)
 // and coords on nearest point in one of the segments in (x,y)
 //
-bool TestForIntersectionOfStraightLineSegments( int x1i, int y1i, int x1f, int y1f, 
+bool TestForIntersectionOfStraightLineSegments( int x1i, int y1i, int x1f, int y1f,
 									   int x2i, int y2i, int x2f, int y2f,
 									   int * x, int * y, double * d )
 {
@@ -994,14 +991,14 @@ void DrawArc( CDC * pDC, int shape, int xxi, int yyi, int xxf, int yyf, bool bMe
 		pDC->MoveTo( xxi, yyi );
 		pDC->LineTo( xxf, yyf );
 	}
-	else if( shape == DL_ARC_CCW || shape == DL_ARC_CW ) 
+	else if( shape == DL_ARC_CCW || shape == DL_ARC_CW )
 	{
 		// set endpoints so we can always draw counter-clockwise arc
 		if( shape == DL_ARC_CW )
 		{
 			xi = xxf;
 			yi = yyf;
-			xf = xxi; 
+			xf = xxi;
 			yf = yyi;
 		}
 		else
@@ -1043,7 +1040,7 @@ void DrawArc( CDC * pDC, int shape, int xxi, int yyi, int xxf, int yyf, bool bMe
 			int h = -(yf-yi)*2;
 			if( !bMeta )
 				pDC->Arc( xf, yi, xf+w, yi-h,
-					xi, yi, xf, yf ); 
+					xi, yi, xf, yf );
 			else
 				pDC->Arc( xf, yi-h, xf+w, yi,
 					xf, yf, xi, yi );
@@ -1117,7 +1114,7 @@ void GetPadElements( int type, int x, int y, int wid, int len, int radius, int a
 		}
 		return;
 	}
-	// 
+	//
 	int h;
 	int v;
 	if( angle == 90 || angle == 270 )
@@ -1251,7 +1248,7 @@ int GetClearanceBetweenSegments( int x1i, int y1i, int x1f, int y1f, int style1,
 		// both segments are straight lines
 		int xx, yy;
 		double dd;
-		TestForIntersectionOfStraightLineSegments( x1i, y1i, x1f, y1f, 
+		TestForIntersectionOfStraightLineSegments( x1i, y1i, x1f, y1f,
 			x2i, y2i, x2f, y2f, &xx, &yy, &dd );
 		int d = max( 0, (int)dd - w1/2 - w2/2 );
 		if( x )
@@ -1266,7 +1263,7 @@ int GetClearanceBetweenSegments( int x1i, int y1i, int x1f, int y1f, int style1,
 	double xr[2];
 	double yr[2];
 	test = FindSegmentIntersections( x1i, y1i, x1f, y1f, style1, x2i, y2i, x2f, y2f, style2, xr, yr );
-	if( test ) 
+	if( test )
 	{
 		if( x )
 			*x = (int) xr[0];
@@ -1341,7 +1338,7 @@ int GetClearanceBetweenSegments( int x1i, int y1i, int x1f, int y1f, int style1,
 	int nsteps2 = NSTEPS;
 	double step = (s_start-s_end)/(nsteps-1);
 	double step2 = (s_start2-s_end2)/(nsteps2-1);
-	while( (step * max(el1.xrad, el1.yrad)) > 0.1*NM_PER_MIL 
+	while( (step * max(el1.xrad, el1.yrad)) > 0.1*NM_PER_MIL
 		&& (step2 * len2) > 0.1*NM_PER_MIL )
 	{
 		step = (s_start-s_end)/(nsteps-1);
@@ -1444,7 +1441,7 @@ int GetClearanceBetweenPads( int type1, int x1, int y1, int w1, int l1, int r1, 
 		}
 		for( int iss=0; iss<nss; iss++ )
 		{
-			int d = (int) GetPointToLineSegmentDistance( c[ic].x, c[ic].y, 
+			int d = (int) GetPointToLineSegmentDistance( c[ic].x, c[ic].y,
 						ss[iss].xi, ss[iss].yi, ss[iss].xf, ss[iss].yf ) - c[ic].r;
 			dist = min(dist,d);
 		}
@@ -1453,7 +1450,7 @@ int GetClearanceBetweenPads( int type1, int x1, int y1, int w1, int l1, int r1, 
 	{
 		for( int icc=0; icc<ncc; icc++ )
 		{
-			int d = (int) GetPointToLineSegmentDistance( cc[icc].x, cc[icc].y, 
+			int d = (int) GetPointToLineSegmentDistance( cc[icc].x, cc[icc].y,
 						s[is].xi, s[is].yi, s[is].xf, s[is].yf ) - cc[icc].r;
 			dist = min(dist,d);
 		}
@@ -1577,8 +1574,8 @@ double Distance( int x1, int y1, int x2, int y2 )
 // this finds approximate solutions
 // note: this works best if el2 is smaller than el1
 //
-int GetArcIntersections( EllipseKH * el1, EllipseKH * el2, 
-						double * x1, double * y1, double * x2, double * y2 )						
+int GetArcIntersections( EllipseKH * el1, EllipseKH * el2,
+						double * x1, double * y1, double * x2, double * y2 )
 {
 	if( el1->theta2 > el1->theta1 )
 		wxASSERT(0);
@@ -1591,7 +1588,7 @@ int GetArcIntersections( EllipseKH * el1, EllipseKH * el2,
 	double xscale = 1.0/el1->xrad;
 	double yscale = 1.0/el1->yrad;
 	// now transform params of second ellipse into reference frame
-	// with origin at center if first ellipse, 
+	// with origin at center if first ellipse,
 	// scaled so the first ellipse is a circle of radius = 1.0
 	double xo = (el2->Center.X - el1->Center.X)*xscale;
 	double yo = (el2->Center.Y - el1->Center.Y)*yscale;
@@ -1657,9 +1654,9 @@ int GetArcIntersections( EllipseKH * el1, EllipseKH * el2,
 
 // this finds approximate solution
 //
-//double GetSegmentClearance( EllipseKH * el1, EllipseKH * el2, 
-double GetArcClearance( EllipseKH * el1, EllipseKH * el2, 
-					 double * x1, double * y1 )						
+//double GetSegmentClearance( EllipseKH * el1, EllipseKH * el2,
+double GetArcClearance( EllipseKH * el1, EllipseKH * el2,
+					 double * x1, double * y1 )
 {
 	const int NSTEPS = 32;
 
@@ -1680,7 +1677,7 @@ double GetArcClearance( EllipseKH * el1, EllipseKH * el2,
 	int nsteps2 = NSTEPS;
 	double step = (th_start-th_end)/(nsteps-1);
 	double step2 = (th_start2-th_end2)/(nsteps2-1);
-	while( (step * max(el1->xrad, el1->yrad)) > 1.0*NM_PER_MIL 
+	while( (step * max(el1->xrad, el1->yrad)) > 1.0*NM_PER_MIL
 		&& (step2 * max(el2->xrad, el2->yrad)) > 1.0*NM_PER_MIL )
 	{
 		step = (th_start-th_end)/(nsteps-1);

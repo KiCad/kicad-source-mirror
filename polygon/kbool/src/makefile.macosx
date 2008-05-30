@@ -1,0 +1,16 @@
+WXDIR = $(WXWIN)
+
+TARGET = libkbool.a
+
+all: $(TARGET)
+
+include makefile.include
+
+$(TARGET): $(OBJECTS) makefile.include
+	ar ruv $@ $(OBJECTS)
+	ranlib $@
+
+clean:
+	rm -f *.bak
+	rm -f *.o
+	rm -f $(TARGET)

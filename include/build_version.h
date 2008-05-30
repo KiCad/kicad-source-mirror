@@ -9,7 +9,7 @@ COMMON_GLOBL wxString g_BuildVersion
 #    include "config.h"
      (wxT(KICAD_SVN_VERSION))
 #  else
-     (wxT("(20080429-r1010)"))
+     (wxT("(20080530-r1107)"))
 #  endif
 #endif
 ;

@@ -291,7 +291,7 @@ int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
                 NewArea = AddArea( CurrArea->GetNet(), CurrArea->GetLayer(), 0, 0, 0 );
 
                 // remove the poly that was automatically created for the new area
-                // and replace it with a poly from NormalizeWithGpc
+                // and replace it with a poly from NormalizeWithKbool
                 delete NewArea->m_Poly;
                 NewArea->m_Poly = new_p;
                 NewArea->m_Poly->Draw();
@@ -694,183 +694,109 @@ int BOARD::CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combi
 #endif
 
     // polygons intersect, combine them
-    CPolyLine*        poly1 = area_ref->m_Poly;
-    CPolyLine*        poly2 = area_to_combine->m_Poly;
     std::vector<CArc> arc_array1;
     std::vector<CArc> arc_array2;
+    bool         keep_area_to_combine = false;
 
-    poly1->MakePolygonFromAreaOutlines( -1, &arc_array1 );
-    poly2->MakePolygonFromAreaOutlines( -1, &arc_array2 );
+    Bool_Engine* booleng = new Bool_Engine();
+    ArmBoolEng( booleng );
 
-#ifdef USE_GPC_POLY_LIB
-    int n_ext_cont1 = 0;
-    for( int ic = 0; ic<poly1->GetGpcPoly()->num_contours; ic++ )
-        if( !( (poly1->GetGpcPoly()->hole)[ic] ) )
-            n_ext_cont1++;
+    area_ref->m_Poly->AddPolygonsToBoolEng( booleng, GROUP_A, -1, -1 );
+    area_to_combine->m_Poly->AddPolygonsToBoolEng( booleng, GROUP_B, -1, -1 );
+    booleng->Do_Operation( BOOL_OR );
 
-    int n_ext_cont2 = 0;
-    for( int ic = 0; ic<poly2->GetGpcPoly()->num_contours; ic++ )
-        if( !( (poly2->GetGpcPoly()->hole)[ic] ) )
-            n_ext_cont2++;
-
-    gpc_polygon* union_gpc = new gpc_polygon;
-    gpc_polygon_clip( GPC_UNION, poly1->GetGpcPoly(), poly2->GetGpcPoly(), union_gpc );
-
-    // get number of outside contours
-    int n_union_ext_cont = 0;
-    for( int ic = 0; ic<union_gpc->num_contours; ic++ )
-        if( !( (union_gpc->hole)[ic] ) )
-            n_union_ext_cont++;
-
-    // if no intersection, free new gpc and return
-    if( n_union_ext_cont == n_ext_cont1 + n_ext_cont2 )
+    // create area with external contour: Recreate only area edges, NOT holes
+    if( booleng->StartPolygonGet() )
     {
-        gpc_free_polygon( union_gpc );
-        delete union_gpc;
-        return 0;
+        if( booleng->GetPolygonPointEdgeType() == KB_INSIDE_EDGE )
+        {
+            DisplayError( NULL, wxT( "BOARD::CombineAreas() error: unexpected hole descriptor" ) );
+        }
+
+        area_ref->m_Poly->RemoveAllContours();
+
+        // foreach point in the polygon
+        bool first = true;
+        while( booleng->PolygonHasMorePoints() )
+        {
+            int x = booleng->GetPolygonXPoint();
+            int y = booleng->GetPolygonYPoint();
+            if( first )
+            {
+                first = false;
+                area_ref->m_Poly->Start( area_ref->GetLayer(
+                                            ), x, y, area_ref->m_Poly->GetHatchStyle() );
+            }
+            else
+                area_ref->m_Poly->AppendCorner( x, y );
+        }
+
+        booleng->EndPolygonGet();
+        area_ref->m_Poly->Close();
     }
 
-    // intersection, replace area_ref->m_Poly with combined areas and remove area_to_combine
-    RemoveArea( area_to_combine );
-    area_ref->m_Poly->RemoveAllContours();
-
-    // create area with external contour
-    for( int ic = 0; ic<union_gpc->num_contours; ic++ )
+    // Recreate the area_to_combine if a second polygon exists
+    // if not exists , the first poly contains the 2 initial polygons
+#if 0   // TestAreaIntersection must be called before combine areas, so
+        // 2 intersecting areas are expected, and only one outline contour after combining areas
+    else
     {
-        if( !(union_gpc->hole)[ic] )
+        area_to_combine->m_Poly->RemoveAllContours();
+        keep_area_to_combine = true;
+
+        // create area with external contour: Recreate only area edges, NOT holes (todo..)
         {
-            // external contour, replace this poly
-            for( int i = 0; i<union_gpc->contour[ic].num_vertices; i++ )
+            // foreach point in the polygon
+            bool first = true;
+            while( booleng->PolygonHasMorePoints() )
             {
-                int x = (int) ( (union_gpc->contour)[ic].vertex )[i].x;
-                int y = (int) ( (union_gpc->contour)[ic].vertex )[i].y;
-                if( i==0 )
+                int x = booleng->GetPolygonXPoint();
+                int y = booleng->GetPolygonYPoint();
+                if( first )
                 {
-                    area_ref->m_Poly->Start( area_ref->GetLayer(
-                                                ), x, y, area_ref->m_Poly->GetHatchStyle() );
+                    first = false;
+                    area_to_combine->m_Poly->Start( area_ref->GetLayer(
+                                                       ), x, y, area_ref->m_Poly->GetHatchStyle() );
                 }
                 else
-                    area_ref->m_Poly->AppendCorner( x, y );
+                    area_to_combine->m_Poly->AppendCorner( x, y );
             }
 
-            area_ref->m_Poly->Close();
+            booleng->EndPolygonGet();
+            area_to_combine->m_Poly->Close();
         }
     }
+#endif
 
     // add holes
-    for( int ic = 0; ic<union_gpc->num_contours; ic++ )
+    while( booleng->StartPolygonGet() )
     {
-        if( (union_gpc->hole)[ic] )
+        if( booleng->GetPolygonPointEdgeType() != KB_INSIDE_EDGE )
         {
-            // hole
-            for( int i = 0; i<union_gpc->contour[ic].num_vertices; i++ )
-            {
-                int x = (int) ( (union_gpc->contour)[ic].vertex )[i].x;
-                int y = (int) ( (union_gpc->contour)[ic].vertex )[i].y;
-                area_ref->m_Poly->AppendCorner( x, y );
-            }
-
-            area_ref->m_Poly->Close();
+            DisplayError( NULL,
+                         wxT( "BOARD::CombineAreas() error: unexpected outside contour descriptor" ) );
+            continue;
         }
+        while( booleng->PolygonHasMorePoints() )
+        {
+            int x = booleng->GetPolygonXPoint();
+            int y = booleng->GetPolygonYPoint();
+            area_ref->m_Poly->AppendCorner( x, y );
+        }
+
+        area_ref->m_Poly->Close();
+        booleng->EndPolygonGet();
     }
+
+    if( !keep_area_to_combine )
+        RemoveArea( area_to_combine );
 
     area_ref->utility = 1;
     area_ref->m_Poly->RestoreArcs( &arc_array1 );
     area_ref->m_Poly->RestoreArcs( &arc_array2 );
     area_ref->m_Poly->Draw();
-    gpc_free_polygon( union_gpc );
-    delete union_gpc;
-
+    delete booleng;
     return 1;
-#endif
-
-#ifdef USE_GPL_POLY_LIB
-//@todo
-#warning work in progress
-wxString msg;
-    int n_ext_cont1 = poly1->GetPhpPoly()->m_cnt;
-
-    int n_ext_cont2 = poly2->GetPhpPoly()->m_cnt;
-
-    polygon* union_polygon = NULL;
-    union_polygon = poly1->GetPhpPoly()->boolean( poly2->GetPhpPoly(), A_OR_B );
-
-    if ( union_polygon == NULL )
-        return 0;
-    // get number of outside contours
-    int n_union_ext_cont = union_polygon->m_cnt;
-msg.Printf(wxT("cnt res = %d, pts1,2 = %d,%d"), n_union_ext_cont , n_ext_cont1, n_ext_cont2);
-wxMessageBox(msg);
-
-    // if no intersection, free new gpc and return
-#if 0
-    if( n_union_ext_cont == n_ext_cont1 + n_ext_cont2 )
-    {
-wxMessageBox(wxT("no change polys"));
-        delete union_polygon;
-        return 0;
-    }
-#endif
-
-wxMessageBox(wxT("merge areas"));
-    // intersection, replace area_ref->m_Poly with combined areas and remove area_to_combine
-    RemoveArea( area_to_combine );
-    area_ref->m_Poly->RemoveAllContours();
-    // create area with external contour
-//    for( int ic = 0; ic < union_polygon->m_cnt; ic++ )
-    {
-        // if( !(union_gpc->hole)[ic] ) // Recreate only area edges, NOT holes (todo..)
-        {
-            // external contour, replace this poly
-            vertex * curr_vertex = union_polygon->getFirst();
-            for( int ii = 0; ii < union_polygon->m_cnt; ii++ )
-            {
-                int x = (int) curr_vertex->X();
-                int y = (int) curr_vertex->Y();
-msg.Printf(wxT("ii = %d, pts = %d,%d, wid = %d"), ii , x, y, curr_vertex->id());
-wxMessageBox(msg);
-
-                if( ii==0 )
-                {
-                    area_ref->m_Poly->Start( area_ref->GetLayer(
-                                                ), x, y, area_ref->m_Poly->GetHatchStyle() );
-                }
-                else
-                    area_ref->m_Poly->AppendCorner( x, y );
-
-                curr_vertex = curr_vertex->Next();
-//                if( curr_vertex->id() == union_polygon->getFirst()->id() ) break;
-            }
-           area_ref->m_Poly->Close();
-        }
-    }
-
-    // add holes
-#if 0
-    for( int ic = 0; ic<union_gpc->num_contours; ic++ )
-    {
-        if( (union_gpc->hole)[ic] )
-        {
-            // hole
-            for( int i = 0; i<union_gpc->contour[ic].num_vertices; i++ )
-            {
-                int x = (int) ( (union_gpc->contour)[ic].vertex )[i].x;
-                int y = (int) ( (union_gpc->contour)[ic].vertex )[i].y;
-                area_ref->m_Poly->AppendCorner( x, y );
-            }
-
-            area_ref->m_Poly->Close();
-        }
-    }
-#endif
-    area_ref->utility = 1;
-    area_ref->m_Poly->RestoreArcs( &arc_array1 );
-    area_ref->m_Poly->RestoreArcs( &arc_array2 );
-    area_ref->m_Poly->Draw();
-    delete union_polygon;
-    return 0;
-#endif
-
 }
 
 
@@ -1098,31 +1024,32 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
  * @return bool - false if DRC error  or true if OK
  */
 
-bool DRC::doEdgeZoneDrc( ZONE_CONTAINER * aArea, int aCornerIndex )
+bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
 {
     wxString str;
 
-	wxPoint start = aArea->GetCornerPosition(aCornerIndex);
-	wxPoint end;
-	// Search the end point of the edge starting at aCornerIndex
-	if( aArea->m_Poly->corner[aCornerIndex].end_contour == FALSE &&
-		aCornerIndex < (aArea->GetNumCorners() - 1) )
-	{
-		end = aArea->GetCornerPosition(aCornerIndex+1);
-	}
-	else	// aCornerIndex is the last corner of an outline.
-			// the corresponding end point of the segment is the first corner of the outline
-	{
-		int ii = aCornerIndex-1;
-		end = aArea->GetCornerPosition(ii);
-		while ( ii >= 0 )
-		{
-			if ( aArea->m_Poly->corner[ii].end_contour )
-				break;
-			end = aArea->GetCornerPosition(ii);
-			ii--;
-		}
-	}
+    wxPoint  start = aArea->GetCornerPosition( aCornerIndex );
+    wxPoint  end;
+
+    // Search the end point of the edge starting at aCornerIndex
+    if( aArea->m_Poly->corner[aCornerIndex].end_contour == FALSE
+       && aCornerIndex < (aArea->GetNumCorners() - 1) )
+    {
+        end = aArea->GetCornerPosition( aCornerIndex + 1 );
+    }
+    else    // aCornerIndex is the last corner of an outline.
+            // the corresponding end point of the segment is the first corner of the outline
+    {
+        int ii = aCornerIndex - 1;
+        end = aArea->GetCornerPosition( ii );
+        while( ii >= 0 )
+        {
+            if( aArea->m_Poly->corner[ii].end_contour )
+                break;
+            end = aArea->GetCornerPosition( ii );
+            ii--;
+        }
+    }
 
     // iterate through all areas
     for( int ia2 = 0; ia2 < m_pcb->GetAreaCount(); ia2++ )
@@ -1134,7 +1061,7 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER * aArea, int aCornerIndex )
             continue;
 
         // Test for same net
-        if( (aArea->GetNet() == Area_To_Test->GetNet()) && (aArea->GetNet() > 0) )
+        if( ( aArea->GetNet() == Area_To_Test->GetNet() ) && (aArea->GetNet() > 0) )
             continue;
 
         // test for ending line inside Area_To_Test
@@ -1188,11 +1115,11 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER * aArea, int aCornerIndex )
                     m_currentMarker = fillMarker( aArea, wxPoint( x, y ),
                                                   COPPERAREA_CLOSE_TO_COPPERAREA,
                                                   m_currentMarker );
-                   return false;
+                    return false;
                 }
             }
         }
     }
 
-	return true;
+    return true;
 }

@@ -71,7 +71,7 @@ endif(APPLE)
 
 add_executable(cvpcb WIN32 MACOSX_BUNDLE ${CVPCB_SRCS} ${CVPCB_EXTRA_SRCS} ${CVPCB_RESOURCES})
 
-target_link_libraries(cvpcb 3d-viewer common polygon bitmaps ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES})
+target_link_libraries(cvpcb 3d-viewer common polygon kbool bitmaps ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES})
 
 install(TARGETS cvpcb RUNTIME DESTINATION ${KICAD_BIN}
     COMPONENT binary)

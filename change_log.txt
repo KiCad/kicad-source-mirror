@@ -5,6 +5,14 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-May-30 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew
+    removed GPC library due to its unacceptable (and stupid) license
+    using the powerfull kbool library insteed (see polygon/kbool)
++all:
+    minor changes
+
 
 2008-May-22 UPDATE Martin Kajdas <kajdas@cox.com>
 ================================================================================

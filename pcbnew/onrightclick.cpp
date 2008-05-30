@@ -478,7 +478,7 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
             wxMenu* via_mnu = new wxMenu();
 
             ADD_MENUITEM_WITH_SUBMENU( PopMenu, via_mnu,
-                ID_POPUP_PCB_VIA_EDITING, _( "Edit Via" ), edit_xpm );
+                ID_POPUP_PCB_VIA_EDITING, _( "Edit Via Drill" ), edit_xpm );
             ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_TO_DEFAULT,
                           _( "Set via hole to Default" ), apply_xpm );
             msg = _( "Set via hole to a specific value. This specfic value is currently" );
@@ -486,7 +486,7 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
             ADD_MENUITEM_WITH_HELP( via_mnu, ID_POPUP_PCB_VIA_HOLE_TO_VALUE,
                                 _( "Set via hole to alt value" ), msg,
                                 options_new_pad_xpm );
-            msg = _( "Set alt via hole value. This value is currently" );
+            msg = _( "Set a specific via hole value. This value is currently" );
             msg  << wxT(" ") << ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_ViaDrillCustomValue, m_InternalUnits );
             ADD_MENUITEM_WITH_HELP( via_mnu, ID_POPUP_PCB_VIA_HOLE_ENTER_VALUE,
                 _( "Set the via hole alt value" ), msg, edit_xpm );
@@ -559,18 +559,18 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         ADD_MENUITEM_WITH_SUBMENU( PopMenu, track_mnu,
                                    ID_POPUP_PCB_EDIT_TRACK_MNU, _( "Change Width" ), width_track_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACKSEG,
-                 Track->Type()==TYPEVIA ? _( "Edit Via" ) : _( "Edit Segment" ), width_segment_xpm );
+                 Track->Type()==TYPEVIA ? _( "Change Via Size" ) : _( "Change Segment Width" ), width_segment_xpm );
 
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACK,
-            _( "Edit Track" ), width_track_xpm );
+            _( "Change Track Width" ), width_track_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_NET,
-            _( "Edit Net" ), width_net_xpm );
+            _( "Change Net" ), width_net_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE,
-            _( "Edit ALL Tracks and Vias" ), width_track_via_xpm );
+            _( "Change ALL Tracks and Vias" ), width_track_via_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_ALL_VIAS_SIZE,
-            _( "Edit ALL Vias (no track)" ), width_vias_xpm );
+            _( "Change ALL Vias (no track)" ), width_vias_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_ALL_TRACK_SIZE,
-            _( "Edit ALL Tracks (no via)" ), width_track_xpm );
+            _( "Change ALL Tracks (no via)" ), width_track_xpm );
     }
 
     // Delete control:

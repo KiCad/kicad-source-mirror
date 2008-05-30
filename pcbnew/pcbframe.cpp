@@ -12,7 +12,7 @@
 #include "protos.h"
 #include "id.h"
 #include "drc_stuff.h"
-
+#include "kbool/include/booleng.h"
 
 /*******************************/
 /* class WinEDA_PcbFrame */
@@ -99,7 +99,7 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
 
     // Menu Help
     EVT_MENU( ID_GENERAL_HELP, WinEDA_DrawFrame::GetKicadHelp )
-    EVT_MENU( ID_KICAD_ABOUT, WinEDA_DrawFrame::GetKicadAbout )
+    EVT_MENU( ID_KICAD_ABOUT, WinEDA_PcbFrame::GetKicadAbout )
 
     // Menu 3D Frame
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, WinEDA_PcbFrame::Show3D_Frame )
@@ -245,8 +245,9 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent,
     ReCreateOptToolbar();
 }
 
-
+/************************************/
 WinEDA_PcbFrame::~WinEDA_PcbFrame()
+/************************************/
 {
     m_Parent->m_PcbFrame = NULL;
     SetBaseScreen( ScreenPcb );
@@ -564,5 +565,17 @@ void WinEDA_PcbFrame::SetToolbars()
     PrepareLayerIndicator();
 
     DisplayUnitsMsg();
+}
+
+/***********************************************************/
+void WinEDA_PcbFrame::GetKicadAbout( wxCommandEvent& event )
+/**********************************************************/
+{
+    wxString extra_message =
+        wxT("\nPcbnew uses the kbool library (boolean operations on sets of 2d polygons)\n");
+    extra_message << wxT("version ") << wxT(KBOOL_VERSION)
+       << wxT("\nsee http://boolean.klaasholwerda.nl/bool.html\n");
+    
+    Print_Kicad_Infos( this, m_AboutTitle, extra_message );
 }
 

@@ -1,4 +1,5 @@
 // PolyLine.h ... definition of CPolyLine class
+
 //
 // A polyline contains one or more contours, where each contour
 // is defined by a list of corners and side-styles
@@ -16,150 +17,214 @@
 
 #include <vector>
 
-#define USE_GPC_POLY_LIB
-//#define USE_GPL_POLY_LIB
-
-#include "defs-macros.h"
-
-#include "GenericPolygonClipperLibrary.h"
-#include "php_polygon.h"
-#include "php_polygon_vertex.h"
-
-#include "PolyLine2Kicad.h"
-
-
+#include "kbool/include/booleng.h"
 #include "freepcbDisplayList.h"
-#include "math_for_graphics.h"
+#include "pad_shapes.h"
 
-class CSegment {
+
+/** Function ArmBoolEng
+ * Initialise parameters used in kbool
+ * @param aBooleng = pointer to the Bool_Engine to initialise
+ * @param aConvertHoles = mode for holes when a boolean operation is made
+ *   true: holes are linked into outer contours by double overlapping segments
+ *   false: holes are not linked: in this mode contours are added clockwise
+ *          and polygons added counter clockwise are holes
+ */
+void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles = false);
+
+
+#define PCBU_PER_MIL 10
+#define NM_PER_MIL   10 // 25400
+
+#define to_int( x )   (int) round( (x) )
+#ifndef min
+#define min( x1, x2 ) ( (x1) > (x2) ) ? (x2) : (x1)
+#endif
+#ifndef max
+#define max( x1, x2 ) ( (x1) > (x2) ) ? (x1) : (x2)
+#endif
+
+class CRect
+{
 public:
-	int xi, yi, xf, yf;
-	CSegment() {};
-	CSegment(int x0, int y0, int x1, int y1) {
-		xi = x0; yi = y0; xf = x1; yf = y1; }
+    int left, right, top, bottom;
 };
 
-class CArc {
+class CPoint
+{
 public:
-	enum{ MAX_STEP = 50*25400 };	// max step is 20 mils
-	enum{ MIN_STEPS = 18 };		// min step is 5 degrees
-	int style;
-	int xi, yi, xf, yf;
-	int n_steps;	// number of straight-line segments in gpc_poly
-	bool bFound;
+    int x, y;
+public:
+    CPoint( void ) { x = y = 0; };
+    CPoint( int i, int j ) { x = i; y = j; };
+};
+
+class CSegment
+{
+public:
+    int xi, yi, xf, yf;
+    CSegment() { };
+    CSegment( int x0, int y0, int x1, int y1 )
+    {
+        xi = x0; yi = y0; xf = x1; yf = y1;
+    }
+};
+
+
+#include "math_for_graphics.h"
+
+class CArc
+{
+public:
+    enum { MAX_STEP = 50 * 25400 };     // max step is 20 mils
+    enum { MIN_STEPS = 18 };            // min step is 5 degrees
+    int  style;
+    int  xi, yi, xf, yf;
+    int  n_steps;   // number of straight-line segments in gpc_poly
+    bool bFound;
 };
 
 class CPolyPt
 {
 public:
-	CPolyPt( int qx=0, int qy=0, bool qf=FALSE )
-	{ x=qx; y=qy; end_contour=qf; utility = 0; };
-	int x;
-	int y;
-	bool end_contour;
-	int utility;
+    CPolyPt( int qx = 0, int qy = 0, bool qf = FALSE )
+    { x = qx; y = qy; end_contour = qf; utility = 0; };
+    int  x;
+    int  y;
+    bool end_contour;
+    int  utility;
 };
 
 class CPolyLine
 {
 public:
-	enum { STRAIGHT, ARC_CW, ARC_CCW };	// side styles
-	enum { NO_HATCH, DIAGONAL_FULL, DIAGONAL_EDGE }; // hatch styles
+    enum { STRAIGHT, ARC_CW, ARC_CCW };                 // side styles
+    enum { NO_HATCH, DIAGONAL_FULL, DIAGONAL_EDGE };    // hatch styles
 
-	// constructors/destructor
-	CPolyLine();
-	~CPolyLine();
+    // constructors/destructor
+    CPolyLine();
+    ~CPolyLine();
 
-	// functions for modifying polyline
-	void Start( int layer, int x, int y, int hatch );
-	void AppendCorner( int x, int y, int style = STRAIGHT, bool bDraw=TRUE );
-	void InsertCorner( int ic, int x, int y );
-	void DeleteCorner( int ic, bool bDraw=TRUE );
-	void MoveCorner( int ic, int x, int y );
-	void Close( int style = STRAIGHT, bool bDraw=TRUE );
-	void RemoveContour( int icont );
-	void RemoveAllContours( void );
+    // functions for modifying polyline
+    void       Start( int layer, int x, int y, int hatch );
+    void       AppendCorner( int x, int y, int style = STRAIGHT, bool bDraw = TRUE );
+    void       InsertCorner( int ic, int x, int y );
+    void       DeleteCorner( int ic, bool bDraw = TRUE );
+    void       MoveCorner( int ic, int x, int y );
+    void       Close( int style = STRAIGHT, bool bDraw = TRUE );
+    void       RemoveContour( int icont );
 
-	// drawing functions
-	void Undraw();
-	void Draw( );
-	void Hatch();
-	void MoveOrigin( int x_off, int y_off );
+    void       RemoveAllContours( void );
 
-	// misc. functions
-	CRect GetBounds();
-	CRect GetCornerBounds();
-	CRect GetCornerBounds( int icont );
-	void Copy( CPolyLine * src );
-	bool TestPointInside( int x, int y );
-	bool TestPointInsideContour( int icont, int x, int y );
-	bool IsCutoutContour( int icont );
-	void AppendArc( int xi, int yi, int xf, int yf, int xc, int yc, int num );
+    // drawing functions
+    void       Undraw();
+    void       Draw();
+    void       Hatch();
+    void       MoveOrigin( int x_off, int y_off );
 
-
-	// access functions
-	int GetLayer() { return m_layer;}
-	int GetNumCorners();
-	int GetNumSides();
-	int GetClosed();
-	int GetNumContours();
-	int GetContour( int ic );
-	int GetContourStart( int icont );
-	int GetContourEnd( int icont );
-	int GetContourSize( int icont );
-	int GetX( int ic );
-	int GetY( int ic );
-	int GetEndContour( int ic );
-	int GetUtility( int ic ){ return corner[ic].utility; };
-	void SetUtility( int ic, int utility ){ corner[ic].utility = utility; };
-	int GetSideStyle( int is );
-	int GetHatchStyle(){ return m_HatchStyle; }
-	void SetHatch( int hatch ){ Undraw(); m_HatchStyle = hatch; Draw(); };
-	void SetX( int ic, int x );
-	void SetY( int ic, int y );
-	void SetEndContour( int ic, bool end_contour );
-	void SetSideStyle( int is, int style );
-
-	int RestoreArcs( std::vector<CArc> * arc_array, std::vector<CPolyLine*> * pa=NULL );
-	CPolyLine * MakePolylineForPad( int type, int x, int y, int w, int l, int r, int angle );
-	void AddContourForPadClearance( int type, int x, int y, int w,
-						int l, int r, int angle, int fill_clearance,
-						int hole_w, int hole_clearance, bool bThermal=FALSE, int spoke_w=0 );
-
-    int MakePolygonFromAreaOutlines( int icontour, std::vector<CArc> * arc_array );
-	void FreePolygon();
-	int NormalizeAreaOutlines( std::vector<CPolyLine*> * pa=NULL, bool bRetainArcs=FALSE );
-
-#ifdef USE_GPC_POLY_LIB
-	// GPC functions
-	int MakeGpcPoly( int icontour=0, std::vector<CArc> * arc_array=NULL );
-	void FreeGpcPoly();
-	gpc_polygon * GetGpcPoly(){ return m_gpc_poly; };
-	int NormalizeWithGpc( std::vector<CPolyLine*> * pa=NULL, bool bRetainArcs=FALSE );
-#endif
+    // misc. functions
+    CRect      GetBounds();
+    CRect      GetCornerBounds();
+    CRect      GetCornerBounds( int icont );
+    void       Copy( CPolyLine* src );
+    bool       TestPointInside( int x, int y );
+    bool       TestPointInsideContour( int icont, int x, int y );
+    bool       IsCutoutContour( int icont );
+    void       AppendArc( int xi, int yi, int xf, int yf, int xc, int yc, int num );
 
 
-	// PHP functions
-#ifdef USE_GPL_POLY_LIB
-	int MakePhpPoly();
-	void FreePhpPoly();
-	void ClipPhpPolygon( int php_op, CPolyLine * poly );
-	polygon * GetPhpPoly(){ return m_php_poly; };
-#endif
+    // access functions
+    int GetLayer() { return m_layer; }
+    int        GetNumCorners();
+    int        GetNumSides();
+    int        GetClosed();
+    int        GetNumContours();
+    int        GetContour( int ic );
+    int        GetContourStart( int icont );
+    int        GetContourEnd( int icont );
+    int        GetContourSize( int icont );
+    int        GetX( int ic );
+    int        GetY( int ic );
+    int        GetEndContour( int ic );
+
+    int GetUtility( int ic ) { return corner[ic].utility; };
+    void SetUtility( int ic, int utility ) { corner[ic].utility = utility; };
+    int        GetSideStyle( int is );
+
+    int GetHatchStyle() { return m_HatchStyle; }
+    void SetHatch( int hatch ) { Undraw(); m_HatchStyle = hatch; Draw(); };
+    void       SetX( int ic, int x );
+    void       SetY( int ic, int y );
+    void       SetEndContour( int ic, bool end_contour );
+    void       SetSideStyle( int is, int style );
+
+    int        RestoreArcs( std::vector<CArc> * arc_array, std::vector<CPolyLine*> * pa = NULL );
+    CPolyLine* MakePolylineForPad( int type, int x, int y, int w, int l, int r, int angle );
+    void       AddContourForPadClearance( int  type,
+                                          int  x,
+                                          int  y,
+                                          int  w,
+                                          int  l,
+                                          int  r,
+                                          int  angle,
+                                          int  fill_clearance,
+                                          int  hole_w,
+                                          int  hole_clearance,
+                                          bool bThermal = FALSE,
+                                          int  spoke_w = 0 );
+
+    int  NormalizeAreaOutlines( std::vector<CPolyLine*> * pa = NULL,
+                                bool                      bRetainArcs = FALSE );
+
+    // KBOOL functions
+
+    /** Function AddPolygonsToBoolEng
+     * and edges contours to a kbool engine, preparing a boolean op between polygons
+     * @param aStart_contour: starting contour number (-1 = all, 0 is the outlines of zone, > 1 = holes in zone
+     * @param aEnd_contour: ending contour number (-1 = all after  aStart_contour)
+     * @param arc_array: arc connverted to poly (NULL if not exists)
+     * @param aBooleng : pointer on a bool engine (handle a set of polygons)
+     * @param aGroup : group to fill (aGroup = GROUP_A or GROUP_B) operations are made between GROUP_A and GROUP_B
+     */
+    int AddPolygonsToBoolEng( Bool_Engine*        aBooleng,
+                              GroupType           aGroup,
+                              int                 aStart_contour = -1,
+                              int                 aEnd_contour = -1,
+                              std::vector<CArc> * arc_array = NULL );
+
+    /** Function MakeKboolPoly
+     * fill a kbool engine with a closed polyline contour
+     * approximates arcs with multiple straight-line segments
+     * @param aStart_contour: starting contour number (-1 = all, 0 is the outlines of zone, > 1 = holes in zone
+     * @param aEnd_contour: ending contour number (-1 = all after  aStart_contour)
+     *  combining intersecting contours if possible
+     * @param arc_array : return data on arcs in arc_array
+     * @return error: 0 if Ok, 1 if error
+     */
+    int MakeKboolPoly( int aStart_contour = -1, int aEnd_contour = -1, std::vector<CArc> * arc_array = NULL );
+
+    /** Function NormalizeWithKbool
+     * Use the Kbool Library to clip contours: if outlines are crossing, the self-crossing polygon
+     * is converted in 2 or more non self-crossing polygons
+     * If this results in new polygons, return them as std::vector pa
+     * @param pa: pointer on a std::vector<CPolyLine*> to store extra polylines
+     * @param bRetainArcs == TRUE, try to retain arcs in polys
+     * @return number of external contours, or -1 if error
+     */
+    int NormalizeWithKbool( std::vector<CPolyLine*> * pa, bool bRetainArcs );
 
 private:
-	int m_layer;	// layer to draw on
-	int m_Width;	// lines width when drawing. Provided but not really used
-	int utility;
+    int m_layer;    // layer to draw on
+    int m_Width;    // lines width when drawing. Provided but not really used
+    int utility;
 public:
-	std::vector <CPolyPt> corner;	// array of points for corners
-	std::vector <int> side_style;	// array of styles for sides
-	int m_HatchStyle;	// hatch style, see enum above
-	std::vector <CSegment>  m_HatchLines;	// hatch lines
+    std::vector <CPolyPt>  corner;          // array of points for corners
+    std::vector <int>      side_style;      // array of styles for sides
+    int m_HatchStyle;                       // hatch style, see enum above
+    std::vector <CSegment> m_HatchLines;    // hatch lines
 private:
-	gpc_polygon * m_gpc_poly;	// polygon in gpc format
-	polygon * m_php_poly;
-	bool bDrawn;
+    Bool_Engine * m_Kbool_Poly_Engine;   // polygons set in kbool engine data
+    bool bDrawn;
 };
 
-#endif	// #ifndef POLYLINE_H
+#endif  // #ifndef POLYLINE_H
