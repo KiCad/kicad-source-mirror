@@ -14,7 +14,7 @@
 #endif
 
 #ifdef __UNIX__
-#include "kbool/include/_dl_itr.h"
+#include "../include/_dl_itr.h"
 #endif
 
 //=======================================================================

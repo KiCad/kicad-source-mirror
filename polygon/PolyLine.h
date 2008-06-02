@@ -30,13 +30,13 @@
  *   false: holes are not linked: in this mode contours are added clockwise
  *          and polygons added counter clockwise are holes
  */
-void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles = false);
+void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles = false );
 
 
 #define PCBU_PER_MIL 10
 #define NM_PER_MIL   10 // 25400
 
-#define to_int( x )   (int) round( (x) )
+#define to_int( x ) (int) round( (x) )
 #ifndef min
 #define min( x1, x2 ) ( (x1) > (x2) ) ? (x2) : (x1)
 #endif
@@ -173,8 +173,8 @@ public:
                                           bool bThermal = FALSE,
                                           int  spoke_w = 0 );
 
-    int  NormalizeAreaOutlines( std::vector<CPolyLine*> * pa = NULL,
-                                bool                      bRetainArcs = FALSE );
+    int NormalizeAreaOutlines( std::vector<CPolyLine*> * pa = NULL,
+                               bool                      bRetainArcs = FALSE );
 
     // KBOOL functions
 
@@ -201,29 +201,34 @@ public:
      * @param arc_array : return data on arcs in arc_array
      * @return error: 0 if Ok, 1 if error
      */
-    int MakeKboolPoly( int aStart_contour = -1, int aEnd_contour = -1, std::vector<CArc> * arc_array = NULL );
+    int MakeKboolPoly( int                 aStart_contour = -1,
+                       int                 aEnd_contour = -1,
+                       std::vector<CArc> * arc_array = NULL );
 
     /** Function NormalizeWithKbool
      * Use the Kbool Library to clip contours: if outlines are crossing, the self-crossing polygon
-     * is converted in 2 or more non self-crossing polygons
-     * If this results in new polygons, return them as std::vector pa
-     * @param pa: pointer on a std::vector<CPolyLine*> to store extra polylines
+     * is converted to non self-crossing polygon by adding extra points at the crossing locations
+     * and reordering corners
+     * if more than one outside contour are found, extra CPolyLines will be created
+     * because copper areas have only one outside contour
+     * Therefore, if this results in new CPolyLines, return them as std::vector pa
+     * @param aExtraPolys: pointer on a std::vector<CPolyLine*> to store extra CPolyLines
      * @param bRetainArcs == TRUE, try to retain arcs in polys
      * @return number of external contours, or -1 if error
      */
-    int NormalizeWithKbool( std::vector<CPolyLine*> * pa, bool bRetainArcs );
+    int NormalizeWithKbool( std::vector<CPolyLine*> * aExtraPolyList, bool bRetainArcs );
 
 private:
     int m_layer;    // layer to draw on
     int m_Width;    // lines width when drawing. Provided but not really used
     int utility;
 public:
-    std::vector <CPolyPt>  corner;          // array of points for corners
-    std::vector <int>      side_style;      // array of styles for sides
-    int m_HatchStyle;                       // hatch style, see enum above
-    std::vector <CSegment> m_HatchLines;    // hatch lines
+    std::vector <CPolyPt>  corner;              // array of points for corners
+    std::vector <int>      side_style;          // array of styles for sides
+    int m_HatchStyle;                           // hatch style, see enum above
+    std::vector <CSegment> m_HatchLines;        // hatch lines
 private:
-    Bool_Engine * m_Kbool_Poly_Engine;   // polygons set in kbool engine data
+    Bool_Engine*           m_Kbool_Poly_Engine; // polygons set in kbool engine data
     bool bDrawn;
 };
 

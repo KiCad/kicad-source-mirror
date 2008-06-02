@@ -30,19 +30,22 @@ CPolyLine::CPolyLine()
 CPolyLine::~CPolyLine()
 {
     Undraw();
+    if ( m_Kbool_Poly_Engine )
+        delete m_Kbool_Poly_Engine;
 }
 
 /** Function NormalizeWithKbool
  * Use the Kbool Library to clip contours: if outlines are crossing, the self-crossing polygon
  * is converted to non self-crossing polygon by adding extra points at the crossing locations
+ * and reordering corners
  * if more than one outside contour are found, extra CPolyLines will be created
  * because copper areas have only one outside contour
  * Therefore, if this results in new CPolyLines, return them as std::vector pa
- * @param pa: pointer on a std::vector<CPolyLine*> to store extra CPolyLines
+ * @param aExtraPolys: pointer on a std::vector<CPolyLine*> to store extra CPolyLines
  * @param bRetainArcs == TRUE, try to retain arcs in polys
  * @return number of external contours, or -1 if error
  */
-int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*> * pa, bool bRetainArcs )
+int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*> * aExtraPolyList, bool bRetainArcs )
 {
     std::vector<CArc>   arc_array;
     std::vector <void*> hole_array; // list of holes
@@ -111,10 +114,10 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*> * pa, bool bRetainArc
             Close();
             n_ext_cont++;
         }
-        else if( pa )                                               // a new outside contour is found: create a new CPolyLine
+        else if( aExtraPolyList )                                               // a new outside contour is found: create a new CPolyLine
         {
             polyline = new CPolyLine;                               // create new poly
-            pa->push_back( polyline );                              // put it in array
+            aExtraPolyList->push_back( polyline );                              // put it in array
             bool first = true;
             while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )    // read next external contour
             {
@@ -153,13 +156,13 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*> * pa, bool bRetainArc
             int y = (*hole)[1];
             if( TestPointInside( x, y ) )
                 polyline = this;
-            else if( pa )
+            else if( aExtraPolyList )
             {
                 for( int ext_ic = 0; ext_ic<n_ext_cont - 1; ext_ic++ )
                 {
-                    if( (*pa)[ext_ic]->TestPointInside( x, y ) )
+                    if( (*aExtraPolyList)[ext_ic]->TestPointInside( x, y ) )
                     {
-                        polyline = (*pa)[ext_ic];
+                        polyline = (*aExtraPolyList)[ext_ic];
                         break;
                     }
                 }
@@ -182,7 +185,7 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*> * pa, bool bRetainArc
     }
 
     if( bRetainArcs )
-        RestoreArcs( &arc_array, pa );
+        RestoreArcs( &arc_array, aExtraPolyList );
 
     delete m_Kbool_Poly_Engine;
     m_Kbool_Poly_Engine = NULL;
@@ -1142,7 +1145,7 @@ void CPolyLine::Hatch()
         return;
     }
 
-    int layer = m_layer;
+    int layer = GetLayer();
 
     if( GetClosed() )   // If not closed, the poly is beeing created and not finalised. Not not hatch
     {

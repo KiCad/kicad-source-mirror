@@ -572,7 +572,7 @@ void WinEDA_PcbFrame::GetKicadAbout( wxCommandEvent& event )
 /**********************************************************/
 {
     wxString extra_message =
-        wxT("\nPcbnew uses the kbool library (boolean operations on sets of 2d polygons)\n");
+        wxT("\nPcbnew uses the kbool library \n");
     extra_message << wxT("version ") << wxT(KBOOL_VERSION)
        << wxT("\nsee http://boolean.klaasholwerda.nl/bool.html\n");
     

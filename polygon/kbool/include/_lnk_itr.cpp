@@ -13,7 +13,7 @@
 #endif
 
 #ifdef __UNIX__
-#include "kbool/include/_lnk_itr.h"
+#include "../include/_lnk_itr.h"
 #endif 
 
 //=======================================================================

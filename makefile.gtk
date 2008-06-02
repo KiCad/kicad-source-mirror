@@ -1,6 +1,6 @@
 
 MAKEGTK = $(MAKE) -f makefile.gtk
-KICAD_SUBDIRS = common bitmaps 3d-viewer polygon pcbnew eeschema eeschema/plugins cvpcb kicad gerbview
+KICAD_SUBDIRS = common bitmaps 3d-viewer polygon polygon/kbool/src pcbnew eeschema eeschema/plugins cvpcb kicad gerbview
 KICAD_SUBDIRS_BIN = eeschema eeschema/plugins pcbnew cvpcb kicad gerbview
 KICAD_SUBDIRS_RES = internat modules template library
 KICAD_SUBDIRS_HELP = help
