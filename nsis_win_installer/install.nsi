@@ -17,7 +17,7 @@
 
 ; General Product Description Definitions
 !define PRODUCT_NAME "KiCad"
-!define PRODUCT_VERSION "2008.01.25"
+!define PRODUCT_VERSION "2008.06.15"
 !define PRODUCT_WEB_SITE "http://iut-tice.ujf-grenoble.fr/kicad/"
 !define COMPANY_NAME ""
 !define TRADE_MARKS ""
@@ -118,8 +118,8 @@ Section $(TITLE_SEC01) SEC01
   File /nonfatal "..\doc_conv_orcad_to_kicad_spanish.txt"
   SetOutPath "$INSTDIR\template"
   File /nonfatal /r "..\template\*"
-  SetOutPath "$INSTDIR\winexe"
-  File /r "..\winexe\*"
+  SetOutPath "$INSTDIR\bin"
+  File /r "..\bin\*"
   SetOutPath "$INSTDIR\internat"
   File /r "..\internat\*"
 SectionEnd
@@ -156,9 +156,9 @@ Section -CreateShortcuts
   CreateShortCut "$SMPROGRAMS\KiCad\Home Page.lnk" "$INSTDIR\HomePage.url"
   CreateShortCut "$SMPROGRAMS\KiCad\User Group.lnk" "$INSTDIR\UserGroup.url"
   CreateShortCut "$SMPROGRAMS\KiCad\Uninstall.lnk" "$INSTDIR\uninstaller.exe"
-  CreateShortCut "$SMPROGRAMS\KiCad\KiCad.lnk" "$INSTDIR\winexe\kicad.exe"
+  CreateShortCut "$SMPROGRAMS\KiCad\KiCad.lnk" "$INSTDIR\bin\kicad.exe"
   CreateShortCut "$SMPROGRAMS\KiCad\Wings3D.lnk" "$INSTDIR\Wings3D.url"
-  CreateShortCut "$DESKTOP\KiCad.lnk" "$INSTDIR\winexe\kicad.exe"
+  CreateShortCut "$DESKTOP\KiCad.lnk" "$INSTDIR\bin\kicad.exe"
 SectionEnd
 
 Section -CreateAddRemoveEntry
@@ -167,7 +167,7 @@ Section -CreateAddRemoveEntry
   WriteRegStr ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "Publisher" "${COMPANY_NAME}"
   WriteRegStr ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninstaller.exe"
   WriteRegStr ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
-  WriteRegStr ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\winexe\kicad.exe"
+  WriteRegStr ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\bin\kicad.exe"
   WriteRegDWORD ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "NoModify" "1"
   WriteRegDWORD ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "NoRepair" "1"
   WriteRegStr ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "Comments" "${COMMENTS}"
@@ -221,7 +221,7 @@ Section Uninstall
   RMDir /r "$INSTDIR\library"
   RMDir /r "$INSTDIR\modules"
   RMDir /r "$INSTDIR\template"
-  RMDir /r "$INSTDIR\winexe"
+  RMDir /r "$INSTDIR\bin"
   RMDir /r "$INSTDIR\internat"
   RMDir /r "$INSTDIR\demos"
   RMDir /r "$INSTDIR\tutorial"

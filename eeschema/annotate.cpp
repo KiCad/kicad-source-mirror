@@ -94,17 +94,6 @@ void ReAnnotatePowerSymbolsOnly( void )
 }
 
 
-CmpListStruct* AllocateCmpListStrct( int numcomponents )
-{
-    int            ii = numcomponents * sizeof(CmpListStruct);
-
-    //allocate memory and fill this memory with zeros.
-    CmpListStruct* list = (CmpListStruct*) MyZMalloc( ii );
-
-    return list;
-}
-
-
 /* qsort function to annotate items by their position.
  *  Components are sorted
  *      by reference
@@ -296,7 +285,7 @@ void AnnotateComponents( WinEDA_SchematicFrame* parent,
     if( NbOfCmp == 0 )
         return;
 
-    BaseListeCmp = AllocateCmpListStrct( NbOfCmp );
+    BaseListeCmp = (CmpListStruct*) MyZMalloc( NbOfCmp * sizeof(CmpListStruct) );
 
     /* Second pass : Init data tables */
     if( annotateSchematic )
@@ -712,7 +701,7 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
 
 
     /* Second pass : create the list of components */
-    ListeCmp = AllocateCmpListStrct( NbOfCmp );
+    ListeCmp = (CmpListStruct*) MyZMalloc( NbOfCmp * sizeof(CmpListStruct) );
 
     if( !oneSheetOnly )
     {
