@@ -1,8 +1,8 @@
-IF(WIN32)
-    ADD_DEFINITIONS( -D_MSWVC_ )
-ELSE(WIN32)
-    ADD_DEFINITIONS( -D__UNIX__  )
-ENDIF(WIN32)
+if(WIN32)
+    add_definitions(-D_MSWVC_)
+else(WIN32)
+    add_definitions(-D__UNIX__)
+endif(WIN32)
 
 include_directories(${kbool_SOURCE_DIR}/include)
 
@@ -17,5 +17,4 @@ set(KBOOL_SRCS
     record.cpp
     scanbeam.cpp)
 
-ADD_LIBRARY( kbool ${KBOOL_SRCS})
-
+add_library(kbool ${KBOOL_SRCS})

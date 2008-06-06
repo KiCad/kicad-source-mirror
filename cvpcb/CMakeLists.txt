@@ -2,7 +2,6 @@ add_definitions(-DCVPCB)
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    bitmaps
     ../3d-viewer
     ../pcbnew
     ../polygon)

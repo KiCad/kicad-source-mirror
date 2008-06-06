@@ -3,7 +3,6 @@ add_definitions(-DPCBNEW)
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Boost_INCLUDE_DIR}
-    bitmaps
     ../3d-viewer
     ../polygon)
 
@@ -163,7 +162,7 @@ endif(APPLE)
 
 add_executable(pcbnew WIN32 MACOSX_BUNDLE ${PCBNEW_SRCS} ${PCBNEW_EXTRA_SRCS} ${PCBNEW_RESOURCES})
 
-target_link_libraries(pcbnew 3d-viewer common polygon kbool bitmaps ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES} )
+target_link_libraries(pcbnew 3d-viewer common polygon kbool bitmaps ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES})
 
 install(TARGETS pcbnew RUNTIME DESTINATION ${KICAD_BIN}
     COMPONENT binary)

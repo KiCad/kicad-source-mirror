@@ -1,8 +1,6 @@
 add_definitions(-DEESCHEMA)
 
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    bitmaps)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 set(EESCHEMA_SRCS
     affiche.cpp
@@ -27,6 +25,7 @@ set(EESCHEMA_SRCS
     database.cpp
     delete.cpp
     delsheet.cpp
+#   dialog_backanno.cpp
     dialog_build_BOM.cpp
 #   dialog_cmp_graphic_properties.cpp
     dialog_create_component.cpp

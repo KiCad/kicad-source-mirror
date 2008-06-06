@@ -2,7 +2,6 @@ add_definitions(-DGERBVIEW -DPCBNEW)
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    bitmaps
     ../3d-viewer
     ../cvpcb
     ../pcbnew
@@ -35,6 +34,7 @@ set(GERBVIEW_SRCS
     rs274x.cpp
     select_layers_to_pcb.cpp
     set_color.cpp
+#   struct.cpp <-- not used
     tool_gerber.cpp
     tracepcb.cpp
     trpiste.cpp

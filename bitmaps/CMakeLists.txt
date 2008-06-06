@@ -1,13 +1,10 @@
-
 # Generate a static library target named "bitmaps"
 # (with filename libbitmaps.a on Linux)
 
-
-# Copy the *.xmp files to bitmaps/${XMP_CPP_DIR}/${basename}.cpp, on change only.
+# Copy the *.xmp files to bitmaps/${XMP_CPP_DIR}/${BASENAME}.cpp, on change only.
 # Compile those *.cpp files and put them into the library, then done.
 
-
-set( BITMAP_SRCS
+set(BITMAP_SRCS
     3d.xpm
     Add_Arc.xpm
     Add_Bus2Bus.xpm
@@ -386,25 +383,23 @@ set( BITMAP_SRCS
     viewlibs_icon.xpm
     )
 
-
-# the name of the directory to put the copied and renamed *.xpm files into
+# The name of the directory to put the copied and renamed *.xpm files into
 # just below the bitmaps directory.  As files are copied they are renamed to *.cpp.
-set( XMP_CPP_DIR auto_renamed_to_cpp )
+set(XMP_CPP_DIR auto_renamed_to_cpp)
 
-# get the path of the *.xpm files into "path"
-set( path ${CMAKE_CURRENT_SOURCE_DIR} )
-# message( path\ =\ ${path} )
+# Get the path of the *.xpm files into "PATH"
+set(PATH ${CMAKE_CURRENT_SOURCE_DIR})
+#message("PATH = ${PATH}")
 
-foreach( loop_var ${BITMAP_SRCS} )
-    get_filename_component( basename ${loop_var} NAME_WE )
-    set( cpp_bitmap ${path}/${XMP_CPP_DIR}/${basename}.cpp )
+foreach(LOOP_VAR ${BITMAP_SRCS})
+    get_filename_component(BASENAME ${LOOP_VAR} NAME_WE)
+    set(CPP_BITMAP "${PATH}/${XMP_CPP_DIR}/${BASENAME}.cpp")
     add_custom_command(
-        OUTPUT ${cpp_bitmap}
-        COMMAND cmake -E copy '${path}/${basename}.xpm' '${cpp_bitmap}'
-        DEPENDS ${basename}.xpm )
-    list( APPEND cpp_bitmaps ${cpp_bitmap} )
-    SET_SOURCE_FILES_PROPERTIES( ${cpp_bitmap} PROPERTIES COMPILE_FLAGS -DXPMMAIN )
-endforeach( loop_var )
+        OUTPUT ${CPP_BITMAP}
+        COMMAND cmake -E copy '${PATH}/${BASENAME}.xpm' '${CPP_BITMAP}'
+        DEPENDS ${BASENAME}.xpm)
+    list(APPEND CPP_BITMAPS ${CPP_BITMAP})
+    set_source_files_properties(${CPP_BITMAP} PROPERTIES COMPILE_FLAGS -DXPMMAIN)
+endforeach(LOOP_VAR)
 
-add_library( bitmaps ${cpp_bitmaps} )
-
+add_library(bitmaps ${CPP_BITMAPS})

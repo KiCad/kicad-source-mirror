@@ -1,11 +1,11 @@
-ADD_EXECUTABLE(boolonly boolonly.cpp)
+add_executable(boolonly boolonly.cpp)
 
-IF(WIN32)
-    ADD_DEFINITIONS( -D_MSWVC_ )
-ELSE(WIN32)
-    ADD_DEFINITIONS( -D__UNIX__  )
-ENDIF(WIN32)	
+if(WIN32)
+    add_definitions(-D_MSWVC_)
+else(WIN32)
+    add_definitions(-D__UNIX__)
+endif(WIN32)
 
-INCLUDE_DIRECTORIES( ${kbool_SOURCE_DIR}/..  )
+include_directories(${kbool_SOURCE_DIR}/..)
 
-TARGET_LINK_LIBRARIES( boolonly kbool )
+target_link_libraries(boolonly kbool)

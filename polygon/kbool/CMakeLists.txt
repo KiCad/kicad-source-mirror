@@ -1,4 +1,3 @@
-PROJECT( kbool )
+project(kbool)
 
-SUBDIRS( src samples )
-
+subdirs(src samples)

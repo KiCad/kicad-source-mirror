@@ -1,7 +1,5 @@
 add_definitions(-DKICAD)
 
-include_directories(bitmaps)
-
 set(KICAD_SRCS
     buildmnu.cpp
     commandframe.cpp

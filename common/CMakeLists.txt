@@ -1,5 +1,3 @@
-include_directories(bitmaps)
-
 set(COMMON_SRCS
     base_screen.cpp
     base_struct.cpp
@@ -18,7 +16,6 @@ set(COMMON_SRCS
     edaappl.cpp
     eda_dde.cpp
     eda_doc.cpp
-#   edamenu.cpp
     gestfich.cpp
     get_component_dialog.cpp
     gr_basic.cpp
