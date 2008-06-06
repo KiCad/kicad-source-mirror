@@ -53,7 +53,7 @@ int Struct3D_Master:: ReadData()
     }
 
     // Switch the locale to standard C (needed to print floating point numbers like 1.3)
-    setlocale( LC_NUMERIC, "C" );
+    SetLocaleTo_C_standard( );
     while( GetLine( file, line, &LineNum, 512 ) )
     {
         text = strtok( line, " \t\n\r" );
@@ -75,7 +75,7 @@ int Struct3D_Master:: ReadData()
     }
 
     fclose( file );
-    setlocale( LC_NUMERIC, "" );      // revert to the current  locale
+    SetLocaleTo_Default( );      // revert to the current  locale
     return 0;
 }
 

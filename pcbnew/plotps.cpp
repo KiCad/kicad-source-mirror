@@ -53,7 +53,7 @@ void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer, bo
         return;
     }
 
-    setlocale( LC_NUMERIC, "C" );
+    SetLocaleTo_C_standard( );
 
     Affiche_1_Parametre( this, 0, _( "File" ), FullFileName, CYAN );
 
@@ -226,7 +226,7 @@ void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer, bo
 
     // fin
     CloseFilePS( dest );
-    setlocale( LC_NUMERIC, "" );
+    SetLocaleTo_Default( );
 }
 
 

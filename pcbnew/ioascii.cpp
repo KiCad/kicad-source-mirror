@@ -772,7 +772,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
     wxBusyCursor    dummy;
 
     // Switch the locale to standard C (needed to print floating point numbers like 1.3)
-    setlocale( LC_NUMERIC, "C" );
+    SetLocaleTo_C_standard( );
 
     NbDraw = NbTrack = NbZone = NbMod = NbNets = -1;
     m_Pcb->m_NbNets     = 0;
@@ -1003,7 +1003,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
         }
     }
 
-    setlocale( LC_NUMERIC, "" );      // revert to the current  locale
+    SetLocaleTo_Default( );      // revert to the current  locale
 
     Affiche_Message( wxEmptyString );
 
@@ -1035,7 +1035,7 @@ int WinEDA_PcbFrame::SavePcbFormatAscii( FILE* aFile )
     wxBeginBusyCursor();
 
     // Switch the locale to standard C (needed to print floating point numbers like 1.3)
-    setlocale( LC_NUMERIC, "C" );
+    SetLocaleTo_C_standard( );
 
     /* Ecriture de l'entete PCB : */
     fprintf( aFile, "PCBNEW-BOARD Version %d date %s\n\n", g_CurrentVersionPCB,
@@ -1047,7 +1047,7 @@ int WinEDA_PcbFrame::SavePcbFormatAscii( FILE* aFile )
 
     rc = m_Pcb->Save( aFile );
 
-    setlocale( LC_NUMERIC, "" );      // revert to the current locale
+    SetLocaleTo_Default( );      // revert to the current locale
     wxEndBusyCursor();
 
     if( !rc )

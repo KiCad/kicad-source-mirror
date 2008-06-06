@@ -507,9 +507,9 @@ bool WinEDA_PrintSVGFrame::DrawPage( const wxString& FullFileName, BASE_SCREEN* 
         panel->m_ClipBox.SetWidth( 0x7FFFFF0 ); panel->m_ClipBox.SetHeight( 0x7FFFFF0 );
 
         g_IsPrinting = TRUE;
-        setlocale( LC_NUMERIC, "C" );   // Switch the locale to standard C (needed to print floating point numbers like 1.3)
+        SetLocaleTo_C_standard( );   // Switch the locale to standard C (needed to print floating point numbers like 1.3)
         panel->PrintPage( &dc, m_Print_Sheet_Ref, m_PrintMaskLayer );
-        setlocale( LC_NUMERIC, "" );    // revert to the current  locale
+        SetLocaleTo_Default( );    // revert to the current  locale
         g_IsPrinting     = FALSE;
         panel->m_ClipBox = tmp;
     }

@@ -69,7 +69,7 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer )
         return;
     }
 
-    setlocale( LC_NUMERIC, "C" );
+    SetLocaleTo_C_standard( );
 
     Affiche_1_Parametre( this, 0, _( "File" ), FullFileName, CYAN );
 
@@ -185,7 +185,7 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer )
 
     /* fin */
     CloseFileHPGL( dest );
-    setlocale( LC_NUMERIC, "" );
+    SetLocaleTo_Default( );
 }
 
 

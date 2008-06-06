@@ -573,7 +573,7 @@ void WinEDA_PcbFrame::ReadAutoroutedTracks( wxDC* DC )
         Affiche_Message( msg );
     }
 
-    setlocale( LC_NUMERIC, "C" );
+    SetLocaleTo_C_standard( );
 
     track_width = g_DesignSettings.m_CurrentTrackWidth;
     via_size    = g_DesignSettings.m_CurrentViaSize;
@@ -654,7 +654,7 @@ void WinEDA_PcbFrame::ReadAutoroutedTracks( wxDC* DC )
 
     fclose( File );
 
-    setlocale( LC_NUMERIC, "" );
+    SetLocaleTo_Default( );
 
     if( NbTrack == 0 )
         DisplayError( this, wxT( "Warning: No tracks" ), 10 );

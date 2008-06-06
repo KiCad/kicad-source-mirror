@@ -50,7 +50,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName, w
     wxString        msg;
 
 
-    setlocale( LC_NUMERIC, "C" ); // Use the standard notation for float numbers
+    SetLocaleTo_C_standard( ); // Use the standard notation for float numbers
     g_PlotOrient = 0;
     /* calcul des dimensions et centre du PCB */
     aPcb->ComputeBoundaryBox();
@@ -357,7 +357,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName, w
         break;
     }
 
-    setlocale( LC_NUMERIC, "" );    // Revert to local notation for float numbers
+    SetLocaleTo_Default( );    // Revert to local notation for float numbers
 
     g_PlotOrient = old_g_PlotOrient;
 }

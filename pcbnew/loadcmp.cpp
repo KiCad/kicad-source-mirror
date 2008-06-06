@@ -268,9 +268,9 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module( wxWindow* winaff,
                 NewModule = new MODULE( m_Pcb );
 
                 // Switch the locale to standard C (needed to print floating point numbers like 1.3)
-                setlocale( LC_NUMERIC, "C" );
+                SetLocaleTo_C_standard( );
                 NewModule->ReadDescr( lib_module, &LineNum );
-                setlocale( LC_NUMERIC, "" );        // revert to the current  locale
+                SetLocaleTo_Default( );        // revert to the current  locale
                 if( Module == NULL )                /* 1er Module */
                 {
                     m_Pcb->m_Modules = NewModule;

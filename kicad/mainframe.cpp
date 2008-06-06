@@ -247,6 +247,8 @@ void WinEDA_MainFrame::OnCloseWindow( wxCloseEvent& Event )
             m_Parent->m_HtmlCtrl->GetFrame()->Close( TRUE );
         m_Parent->m_HtmlCtrl = NULL;
     }
+    
+    m_LeftWin->Show(false);
 
     Destroy();
 }

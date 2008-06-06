@@ -82,7 +82,7 @@ void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
 
     db.SetPCB( SPECCTRA_DB::MakePCB() );
 
-    setlocale( LC_NUMERIC, "C" );    // Switch the locale to standard C
+    SetLocaleTo_C_standard( );    // Switch the locale to standard C
 
     //  DSN Images (=Kicad MODULES and pads) must be presented from the
     //  top view.  So we temporarily flip any modules which are on the back
@@ -105,7 +105,7 @@ void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
         errorText = ioe.errorText;
     }
 
-    setlocale( LC_NUMERIC, "" );      // revert to the current locale
+    SetLocaleTo_Default( );      // revert to the current locale
 
     // done assuredly, even if an exception was thrown and caught.
     db.RevertMODULEs( m_Pcb );

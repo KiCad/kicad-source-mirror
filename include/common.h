@@ -355,6 +355,28 @@ class WinEDA_DrawPanel;
 
 /* COMMON.CPP */
 
+/** function SetLocaleTo_C_standard
+because kicad is internationalized, switch internatization to "C" standard
+i.e. uses the . (dot) as separator in print/read float numbers
+(some contries (France, Germany ..) use , (comma) as separator)
+This function must be called before read or write ascii files using float numbers in data
+the SetLocaleTo_C_standard function must be called after reading or writing the file
+
+This is wrapper to the C setlocale( LC_NUMERIC, "C" ) function,
+but could make more easier an optional use of locale in kicad
+*/
+void SetLocaleTo_C_standard(void);
+
+/** function SetLocaleTo_Default
+because kicad is internationalized, switch internatization to default
+to use the default separator in print/read float numbers
+(. (dot) but some contries (France, Germany ..) use , (comma) as separator)
+This function must be called after a call to SetLocaleTo_C_standard
+
+This is wrapper to the C setlocale( LC_NUMERIC, "" ) function,
+but could make more easier an optional use of locale in kicad
+*/
+void SetLocaleTo_Default(void);
 
 /**
  * Operator << overload

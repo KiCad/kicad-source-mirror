@@ -154,7 +154,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
         wxSetWorkingDirectory( path );
 
     wxBusyCursor show_wait;
-    setlocale( LC_NUMERIC, "C" );
+    SetLocaleTo_C_standard( );
 
     while( TRUE )
     {
@@ -256,7 +256,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
     }
     fclose( gerber_layer->m_Current_File );
 
-    setlocale( LC_NUMERIC, "" );
+    SetLocaleTo_Default( );
 
     /* Init  DCodes list and perhaps read a DCODES file,
      * if the gerber file is only a RS274D file (without any aperture information)

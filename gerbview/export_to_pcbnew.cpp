@@ -224,7 +224,7 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* aFile,
     }
 
     // Switch the locale to standard C (needed to print floating point numbers like 1.3)
-    setlocale( LC_NUMERIC, "C" );
+    SetLocaleTo_C_standard( );
     
     // write the PCB heading
     fprintf( aFile, "PCBNEW-BOARD Version %d date %s\n\n", g_CurrentVersionPCB,
@@ -238,7 +238,7 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* aFile,
     // the destructor should destroy all owned sub-objects
     delete pcb;
 
-    setlocale( LC_NUMERIC, "" );      // revert to the current locale
+    SetLocaleTo_Default( );      // revert to the current locale
     wxEndBusyCursor();
     return 1;
 }

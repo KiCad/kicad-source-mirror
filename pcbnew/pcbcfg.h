@@ -36,7 +36,7 @@ static PARAM_CFG_INT PadDrillCfg
     wxT( "PadDrlX" ),                   /* Keyword */
     &g_Pad_Master.m_Drill.x,            /* Parameter address */
     320,                                /* Default value */
-    0, 0x7FFF                           /* Valeurs extremes */
+    0, 0x7FFF                           /* Min and max values*/
 );
 
 static PARAM_CFG_INT PadDimHCfg     //Pad Diameter / H Size
@@ -44,7 +44,7 @@ static PARAM_CFG_INT PadDimHCfg     //Pad Diameter / H Size
     wxT( "PadDimH" ),               /* Keyword */
     &g_Pad_Master.m_Size.x,         /* Parameter address */
     550,                            /* Default value */
-    0, 0x7FFF                       /* Valeurs extremes */
+    0, 0x7FFF                       /* Min and max values*/
 );
 
 static PARAM_CFG_INT PadDimVCfg
@@ -52,7 +52,7 @@ static PARAM_CFG_INT PadDimVCfg
     wxT( "PadDimV" ),           /* Keyword */
     &g_Pad_Master.m_Size.y,     /* Parameter address */
     550,                        /* Default value */
-    0, 0x7FFF                   /* Valeurs extremes */
+    0, 0x7FFF                   /* Min and max values*/
 );
 
 
@@ -61,7 +61,7 @@ static PARAM_CFG_INT PadFormeCfg
     wxT( "PadForm" ),               /* Keyword */
     &g_Pad_Master.m_PadShape,       /* Parameter address */
     PAD_CIRCLE,                     /* Default value */
-    0, 0x7F                         /* Valeurs extremes */
+    0, 0x7F                         /* Min and max values*/
 );
 
 static PARAM_CFG_INT PadMasqueLayerCfg
@@ -76,7 +76,7 @@ static PARAM_CFG_INT ViaDiametreCfg
     wxT( "ViaDiam" ),                           /* Keyword */
     &g_DesignSettings.m_CurrentViaSize,         /* Parameter address */
     450,                                        /* Default value */
-    0, 0xFFFF                                   /* Valeurs extremes */
+    0, 0xFFFF                                   /* Min and max values*/
 );
 
 static PARAM_CFG_INT ViaDrillCfg
@@ -84,7 +84,7 @@ static PARAM_CFG_INT ViaDrillCfg
     wxT( "ViaDril" ),                           /* Keyword */
     &g_DesignSettings.m_ViaDrill,               /* Parameter address */
     250,                                        /* Default value */
-    0, 0xFFFF                                   /* Valeurs extremes */
+    0, 0xFFFF                                   /* Min and max values*/
 );
 
 static PARAM_CFG_INT MicroViaDiametreCfg
@@ -92,7 +92,7 @@ static PARAM_CFG_INT MicroViaDiametreCfg
     wxT( "MViaDia" ),                               /* Keyword */
     &g_DesignSettings.m_CurrentMicroViaSize,        /* Parameter address */
     200,                                            /* Default value */
-    0, 1000                                         /* Valeurs extremes */
+    0, 1000                                         /* Min and max values*/
 );
 
 static PARAM_CFG_INT MicroViaDrillCfg
@@ -100,7 +100,7 @@ static PARAM_CFG_INT MicroViaDrillCfg
     wxT( "MViaDrl" ),                           /* Keyword */
     &g_DesignSettings.m_MicroViaDrill,          /* Parameter address */
     80,                                         /* Default value */
-    0, 800                                      /* Valeurs extremes */
+    0, 800                                      /* Min and max values*/
 );
 
 static PARAM_CFG_INT ViaShowHoleCfg
@@ -109,8 +109,8 @@ static PARAM_CFG_INT ViaShowHoleCfg
     wxT( "ViaSHole" ),                  /* Keyword */
     &DisplayOpt.m_DisplayViaMode,       /* Parameter address */
     VIA_SPECIAL_HOLE_SHOW,              /* Default value */
-    VIA_HOLE_NOT_SHOW,                  /* Valeurs extremes */
-    OPT_VIA_HOLE_END - 1                /* Valeurs extremes */
+    VIA_HOLE_NOT_SHOW,                  /* Min and max values*/
+    OPT_VIA_HOLE_END - 1                /* Min and max values*/
 );
 
 static PARAM_CFG_INT TrackClearenceCfg
@@ -118,7 +118,7 @@ static PARAM_CFG_INT TrackClearenceCfg
     wxT( "Isol" ),                                  /* Keyword */
     &g_DesignSettings.m_TrackClearence,             /* Parameter address */
     120,                                            /* Default value */
-    0, 0xFFFF                                       /* Valeurs extremes */
+    0, 0xFFFF                                       /* Min and max values*/
 );
 
 static PARAM_CFG_INT LayerCountCfg                      // Mask Working Layers
@@ -126,7 +126,7 @@ static PARAM_CFG_INT LayerCountCfg                      // Mask Working Layers
     wxT( "Countlayer" ),                                /* Keyword */
     &g_DesignSettings.m_CopperLayerCount,               /* Parameter address */
     2,                                                  /* Default value */
-    1, NB_COPPER_LAYERS                                 /* Valeurs extremes */
+    1, NB_COPPER_LAYERS                                 /* Min and max values*/
 );
 
 static PARAM_CFG_INT TrackWidthCfg
@@ -134,7 +134,7 @@ static PARAM_CFG_INT TrackWidthCfg
     wxT( "Lpiste" ),                                /* Keyword */
     &g_DesignSettings.m_CurrentTrackWidth,          /* Parameter address */
     170,                                            /* Default value */
-    2, 0xFFFF                                       /* Valeurs extremes */
+    2, 0xFFFF                                       /* Min and max values*/
 );
 
 static PARAM_CFG_INT RouteLayTopCfg     // First current working layer
@@ -142,7 +142,7 @@ static PARAM_CFG_INT RouteLayTopCfg     // First current working layer
     wxT( "RouteTo" ),                   /* Keyword */
     &Route_Layer_TOP,                   /* Parameter address */
     15,                                 /* Default value */
-    0, 15                               /* Valeurs extremes */
+    0, 15                               /* Min and max values*/
 );
 
 static PARAM_CFG_INT RouteLayBotCfg     // second current working layer
@@ -150,7 +150,7 @@ static PARAM_CFG_INT RouteLayBotCfg     // second current working layer
     wxT( "RouteBo" ),                   /* Keyword */
     &Route_Layer_BOTTOM,                /* Parameter address */
     0,                                  /* Default value */
-    0, 15                               /* Valeurs extremes */
+    0, 15                               /* Min and max values*/
 );
 
 static PARAM_CFG_INT TypeViaCfg
@@ -158,7 +158,7 @@ static PARAM_CFG_INT TypeViaCfg
     wxT( "TypeVia" ),                               /* Keyword */
     &g_DesignSettings.m_CurrentViaType,             /* Parameter address */
     VIA_THROUGH,                                    /* Default value */
-    0, 3                                            /* Valeurs extremes */
+    0, 3                                            /* Min and max values*/
 );
 
 static PARAM_CFG_BOOL Segm45Cfg     // Segm Pistes a 0, 45, 90 degres uniquement
@@ -177,6 +177,7 @@ static PARAM_CFG_BOOL Raccord45Cfg  // Generation automatique des Raccords a 45 
 
 static PARAM_CFG_INT UnitCfg    // Units: 0 inch, 1 mm
 (
+    INSETUP,
     wxT( "Unite" ),             /* Keyword */
     &g_UnitMetric,              /* Parameter address */
     FALSE                       /* Default value */
@@ -184,6 +185,7 @@ static PARAM_CFG_INT UnitCfg    // Units: 0 inch, 1 mm
 
 static PARAM_CFG_BOOL SegmFillCfg
 (
+    INSETUP,
     wxT( "SegFill" ),                               /* Keyword */
     &DisplayOpt.DisplayPcbTrackFill,                /* Parameter address */
     TRUE                                            /* Default value */
@@ -191,6 +193,7 @@ static PARAM_CFG_BOOL SegmFillCfg
 
 static PARAM_CFG_BOOL NewTrackAfficheGardeCfg
 (
+    INSETUP,
     wxT( "NewAffG" ),               /* Keyword */
     &g_ShowIsolDuringCreateTrack,   /* Parameter address */
     TRUE                            /* Default value */
@@ -198,6 +201,7 @@ static PARAM_CFG_BOOL NewTrackAfficheGardeCfg
 
 static PARAM_CFG_BOOL TrackAfficheGardeCfg
 (
+    INSETUP,
     wxT( "SegAffG" ),               /* Keyword */
     &DisplayOpt.DisplayTrackIsol,   /* Parameter address */
     FALSE                           /* Default value */
@@ -205,6 +209,7 @@ static PARAM_CFG_BOOL TrackAfficheGardeCfg
 
 static PARAM_CFG_BOOL PadFillCfg
 (
+    INSETUP,
     wxT( "PadFill" ),               /* Keyword */
     &DisplayOpt.DisplayPadFill,     /* Parameter address */
     TRUE                            /* Default value */
@@ -212,6 +217,7 @@ static PARAM_CFG_BOOL PadFillCfg
 
 static PARAM_CFG_BOOL PadAfficheGardeCfg
 (
+    INSETUP,
     wxT( "PadAffG" ),               /* Keyword */
     &DisplayOpt.DisplayPadIsol,     /* Parameter address */
     TRUE                            /* Default value */
@@ -219,6 +225,7 @@ static PARAM_CFG_BOOL PadAfficheGardeCfg
 
 static PARAM_CFG_BOOL PadShowNumCfg
 (
+    INSETUP,
     wxT( "PadSNum" ),               /* Keyword */
     &DisplayOpt.DisplayPadNum,      /* Parameter address */
     TRUE                            /* Default value */
@@ -226,26 +233,29 @@ static PARAM_CFG_BOOL PadShowNumCfg
 
 static PARAM_CFG_INT AfficheContourModuleCfg    // Module Edges: fill/line/sketch
 (
+    INSETUP,
     wxT( "ModAffC" ),                           /* Keyword */
     &DisplayOpt.DisplayModEdge,                 /* Parameter address */
-    FILAIRE,                                    /* Default value */
-    0, 2                                        /* Valeurs extremes */
+    FILLED,                                    /* Default value */
+    0, 2                                        /* Min and max values*/
 );
 
 static PARAM_CFG_INT AfficheTexteModuleCfg  // Module Texts: fill/line/sketch
 (
+    INSETUP,
     wxT( "ModAffT" ),                       /* Keyword */
     &DisplayOpt.DisplayModText,             /* Parameter address */
-    FILAIRE,                                /* Default value */
-    0, 2                                    /* Valeurs extremes */
+    FILLED,                                /* Default value */
+    0, 2                                    /* Min and max values*/
 );
 
 static PARAM_CFG_INT AfficheTextePcbCfg     // PCB Texts: fill/line/sketch
 (
+    INSETUP,
     wxT( "PcbAffT" ),                       /* Keyword */
     &DisplayOpt.DisplayDrawItems,           /* Parameter address */
-    FILAIRE,                                /* Default value */
-    0, 2                                    /* Valeurs extremes */
+    FILLED,                                /* Default value */
+    0, 2                                    /* Min and max values*/
 );
 
 static PARAM_CFG_BOOL SegmPcb45Cfg  // Force 45 degrees for segments
@@ -260,7 +270,7 @@ static PARAM_CFG_INT TextePcbDimVCfg
     wxT( "TxtPcbV" ),                                                       /* Keyword */
     &g_DesignSettings.m_PcbTextSize.y,                                      /* Parameter address */
     600,                                                                    /* Default value */
-    TEXTS_MIN_SIZE, TEXTS_MAX_SIZE                                          /* Valeurs extremes */
+    TEXTS_MIN_SIZE, TEXTS_MAX_SIZE                                          /* Min and max values*/
 );
 
 static PARAM_CFG_INT TextePcbDimHCfg
@@ -268,7 +278,7 @@ static PARAM_CFG_INT TextePcbDimHCfg
     wxT( "TxtPcbH" ),                                                       /* Keyword */
     &g_DesignSettings.m_PcbTextSize.x,                                      /* Parameter address */
     600,                                                                    /* Default value */
-    TEXTS_MIN_SIZE, TEXTS_MAX_SIZE                                          /* Valeurs extremes */
+    TEXTS_MIN_SIZE, TEXTS_MAX_SIZE                                          /* Min and max values*/
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer0Cfg   // CU Layer Color
@@ -556,7 +566,7 @@ static PARAM_CFG_INT TexteModDimVCfg
     wxT( "TxtModV" ),                               /* Keyword */
     &ModuleTextSize.y,                              /* Parameter address */
     500,                                            /* Default value */
-    TEXTS_MIN_SIZE, TEXTS_MAX_SIZE                  /* Valeurs extremes */
+    TEXTS_MIN_SIZE, TEXTS_MAX_SIZE                  /* Min and max values*/
 );
 
 static PARAM_CFG_INT TexteModDimHCfg
@@ -564,7 +574,7 @@ static PARAM_CFG_INT TexteModDimHCfg
     wxT( "TxtModH" ),               /* Keyword */
     &ModuleTextSize.x,              /* Parameter address */
     500,                            /* Default value */
-    TEXTS_MIN_SIZE, TEXTS_MAX_SIZE  /* Valeurs extremes */
+    TEXTS_MIN_SIZE, TEXTS_MAX_SIZE  /* Min and max values*/
 );
 
 static PARAM_CFG_INT TexteModWidthCfg
@@ -572,7 +582,7 @@ static PARAM_CFG_INT TexteModWidthCfg
     wxT( "TxtModW" ),               /* Keyword */
     &ModuleTextWidth,               /* Parameter address */
     100,                            /* Default value */
-    1, TEXTS_MAX_WIDTH              /* Valeurs extremes */
+    1, TEXTS_MAX_WIDTH              /* Min and max values*/
 );
 
 static PARAM_CFG_SETCOLOR ColorAncreModCfg
@@ -644,7 +654,7 @@ static PARAM_CFG_INT HPGLpenNumCfg
     wxT( "HPGLnum" ),               /* Keyword */
     &g_HPGL_Pen_Num,                /* Parameter address */
     1,                              /* Default value */
-    1, 16                           /* Valeurs extremes */
+    1, 16                           /* Min and max values*/
 );
 
 static PARAM_CFG_INT HPGLdiamCfg    // HPGL pen size (mils)
@@ -652,7 +662,7 @@ static PARAM_CFG_INT HPGLdiamCfg    // HPGL pen size (mils)
     wxT( "HPGdiam" ),               /* Keyword */
     &g_HPGL_Pen_Diam,               /* Parameter address */
     15,                             /* Default value */
-    0, 100                          /* Valeurs extremes */
+    0, 100                          /* Min and max values*/
 );
 
 static PARAM_CFG_INT HPGLspeedCfg   //HPGL pen speed (cm/s)
@@ -660,7 +670,7 @@ static PARAM_CFG_INT HPGLspeedCfg   //HPGL pen speed (cm/s)
     wxT( "HPGLSpd" ),               /* Keyword */
     &g_HPGL_Pen_Speed,              /* Parameter address */
     20,                             /* Default value */
-    0, 1000                         /* Valeurs extremes */
+    0, 1000                         /* Min and max values*/
 );
 
 static PARAM_CFG_INT HPGLrecouvrementCfg
@@ -668,7 +678,7 @@ static PARAM_CFG_INT HPGLrecouvrementCfg
     wxT( "HPGLrec" ),           /* Keyword */
     &g_HPGL_Pen_Recouvrement,   /* Parameter address */
     2,                          /* Default value */
-    0, 0x100                    /* Valeurs extremes */
+    0, 0x100                    /* Min and max values*/
 );
 
 static PARAM_CFG_BOOL HPGLcenterCfg     //HPGL Org Coord ( 0 normal, 1 Centre)
@@ -683,7 +693,7 @@ static PARAM_CFG_INT GERBERSpotMiniCfg  //Aperture Mini (mils)
     wxT( "GERBmin" ),                   /* Keyword */
     &spot_mini,                         /* Parameter address */
     15,                                 /* Default value */
-    1, 100                              /* Valeurs extremes */
+    1, 100                              /* Min and max values*/
 );
 
 static PARAM_CFG_INT VernisEpargneGardeCfg
@@ -691,7 +701,7 @@ static PARAM_CFG_INT VernisEpargneGardeCfg
     wxT( "VEgarde" ),                       /* Keyword */
     &g_DesignSettings.m_MaskMargin,         /* Parameter address */
     100,                                    /* Default value */
-    0, 0xFFFF                               /* Valeurs extremes */
+    0, 0xFFFF                               /* Min and max values*/
 );
 
 static PARAM_CFG_INT DrawSegmLargeurCfg
@@ -699,7 +709,7 @@ static PARAM_CFG_INT DrawSegmLargeurCfg
     wxT( "DrawLar" ),                               /* Keyword */
     &g_DesignSettings.m_DrawSegmentWidth,           /* Parameter address */
     120,                                            /* Default value */
-    0, 0xFFFF                                       /* Valeurs extremes */
+    0, 0xFFFF                                       /* Min and max values*/
 );
 
 static PARAM_CFG_INT EdgeSegmLargeurCfg
@@ -707,7 +717,7 @@ static PARAM_CFG_INT EdgeSegmLargeurCfg
     wxT( "EdgeLar" ),                               /* Keyword */
     &g_DesignSettings.m_EdgeSegmentWidth,           /* Parameter address */
     120,                                            /* Default value */
-    0, 0xFFFF                                       /* Valeurs extremes */
+    0, 0xFFFF                                       /* Min and max values*/
 );
 
 static PARAM_CFG_INT TexteSegmLargeurCfg
@@ -715,7 +725,7 @@ static PARAM_CFG_INT TexteSegmLargeurCfg
     wxT( "TxtLar" ),                            /* Keyword */
     &g_DesignSettings.m_PcbTextWidth,           /* Parameter address */
     120,                                        /* Default value */
-    0, 0xFFFF                                   /* Valeurs extremes */
+    0, 0xFFFF                                   /* Min and max values*/
 );
 
 static PARAM_CFG_INT ModuleSegmWidthCfg
@@ -723,7 +733,7 @@ static PARAM_CFG_INT ModuleSegmWidthCfg
     wxT( "MSegLar" ),               /* Keyword */
     &ModuleSegmentWidth,            /* Parameter address */
     120,                            /* Default value */
-    0, 0xFFFF                       /* Valeurs extremes */
+    0, 0xFFFF                       /* Min and max values*/
 );
 
 static PARAM_CFG_INT FormatPlotCfg
@@ -731,7 +741,7 @@ static PARAM_CFG_INT FormatPlotCfg
     wxT( "ForPlot" ),           /* Keyword */
     &format_plot,               /* Parameter address */
     1,                          /* Default value */
-    0, 3                        /* Valeurs extremes */
+    0, 3                        /* Min and max values*/
 );
 
 static PARAM_CFG_INT WTraitSerigraphiePlotCfg
@@ -739,7 +749,7 @@ static PARAM_CFG_INT WTraitSerigraphiePlotCfg
     wxT( "WpenSer" ),           /* Keyword */
     &g_PlotLine_Width,          /* Parameter address */
     10,                         /* Default value */
-    1, 10000                    /* Valeurs extremes */
+    1, 10000                    /* Min and max values*/
 );
 
 static PARAM_CFG_DOUBLE UserGrilleXCfg
@@ -747,7 +757,7 @@ static PARAM_CFG_DOUBLE UserGrilleXCfg
     wxT( "UserGrX" ),           /* Keyword */
     &g_UserGrid.x,              /* Parameter address */
     0.01,                       /* Default value */
-    0.0001, 100.0               /* Valeurs extremes (inches)*/
+    0.0001, 100.0               /* Min and max values(inches)*/
 );
 
 static PARAM_CFG_DOUBLE UserGrilleYCfg
@@ -755,7 +765,7 @@ static PARAM_CFG_DOUBLE UserGrilleYCfg
     wxT( "UserGrY" ),           /* Keyword */
     &g_UserGrid.y,              /* Parameter address */
     0.01,                       /* Default value */
-    0.0001, 100.0               /* Valeurs extremes  (inches)*/
+    0.0001, 100.0               /* Min and max values (inches)*/
 );
 
 static PARAM_CFG_INT UserGrilleUnitCfg
@@ -763,7 +773,7 @@ static PARAM_CFG_INT UserGrilleUnitCfg
     wxT( "UserGrU" ),               /* Keyword */
     &g_UserGrid_Unit,               /* Parameter address */
     1,                              /* Default value */
-    0, 1                            /* Valeurs extremes */
+    0, 1                            /* Min and max values*/
 );
 
 static PARAM_CFG_INT DivGrillePcbCfg
@@ -771,7 +781,7 @@ static PARAM_CFG_INT DivGrillePcbCfg
     wxT( "DivGrPc" ),               /* Keyword */
     &Pcbdiv_grille,                 /* Parameter address */
     1,                              /* Default value */
-    1, 10                           /* Valeurs extremes */
+    1, 10                           /* Min and max values*/
 );
 
 static PARAM_CFG_INT TimeOutCfg     //Duree entre Sauvegardes auto en secondes
@@ -779,7 +789,7 @@ static PARAM_CFG_INT TimeOutCfg     //Duree entre Sauvegardes auto en secondes
     wxT( "TimeOut" ),               /* Keyword */
     &g_TimeOut,                     /* Parameter address */
     600,                            /* Default value */
-    0, 60000                        /* Valeurs extremes */
+    0, 60000                        /* Min and max values*/
 );
 
 static PARAM_CFG_BOOL DisplPolairCfg
@@ -796,15 +806,16 @@ static PARAM_CFG_INT CursorShapeCfg
     wxT( "CuShape" ),               /* Keyword */
     &g_CursorShape,                 /* Parameter address */
     0,                              /* Default value */
-    0, 1                            /* Valeurs extremes */
+    0, 1                            /* Min and max values*/
 );
 
 static PARAM_CFG_INT PrmMaxLinksShowed
 (
+    INSETUP,
     wxT( "MaxLnkS" ),               /* Keyword */
     &g_MaxLinksShowed,              /* Parameter address */
     3,                              /* Default value */
-    0, 15                           /* Valeurs extremes */
+    0, 15                           /* Min and max values*/
 );
 
 static PARAM_CFG_BOOL ShowRatsnestCfg

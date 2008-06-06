@@ -5,6 +5,16 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-June-06 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++all:
+    minor changes
+    added void SetLocaleTo_C_standard(void) and void SetLocaleTo_Default(void)
+    This is wrapper to the C setlocale( LC_NUMERIC, "C" )
+    and setlocale( LC_NUMERIC, "" )function,
+    but could make more easier an optional use of locale in kicad in floating point notations
+
+
 2008-May-30 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew

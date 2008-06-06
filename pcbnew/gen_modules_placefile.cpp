@@ -144,7 +144,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     }
 
     // Switch the locale to standard C (needed to print floating point numbers like 1.3)
-    setlocale( LC_NUMERIC, "C" );
+    SetLocaleTo_C_standard( );
 
     /* Affichage du bilan : */
     MsgPanel->EraseMsgBox();
@@ -250,7 +250,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
         fclose( LayerCu );
     }
     MyFree( Liste );
-    setlocale( LC_NUMERIC, "" );      // revert to the current  locale
+    SetLocaleTo_Default( );      // revert to the current  locale
 
     msg = wxT( "Cmp File: " ) + NameLayerCmp;
     if( GenCu )
@@ -294,7 +294,7 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
     }
 
     // Switch the locale to standard C (needed to print floating point numbers like 1.3)
-    setlocale( LC_NUMERIC, "C" );
+    SetLocaleTo_C_standard( );
 
     /* Generation entete du fichier 'commentaires) */
     sprintf( Line, "## Module report - date %s\n", DateAndTime( Buff ) );
@@ -421,7 +421,7 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
     /* Generation fin du fichier */
     fputs( "$EndDESCRIPTION\n", rptfile );
     fclose( rptfile );
-    setlocale( LC_NUMERIC, "" );      // revert to the current  locale
+    SetLocaleTo_Default( );      // revert to the current  locale
 }
 
 

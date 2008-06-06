@@ -25,6 +25,39 @@ wxString GetBuildVersion()
 }
 
 
+/********************************/
+void SetLocaleTo_C_standard(void)
+/********************************/
+/** function SetLocaleTo_C_standard
+because kicad is internationalized, switch internatization to "C" standard
+i.e. uses the . (dot) as separator in print/read float numbers
+(some contries (France, Germany ..) use , (comma) as separator)
+This function must be called before read or write ascii files using float numbers in data
+the SetLocaleTo_C_standard function must be called after reading or writing the file
+
+This is wrapper to the C setlocale( LC_NUMERIC, "C" ) function,
+but could make more easier an optional use of locale in kicad
+*/
+{
+    setlocale( LC_NUMERIC, "C" );    // Switch the locale to standard C
+}
+
+/********************************/
+void SetLocaleTo_Default(void)
+/********************************/
+/** function SetLocaleTo_Default
+because kicad is internationalized, switch internatization to default
+to use the default separator in print/read float numbers
+(. (dot) but some contries (France, Germany ..) use , (comma) as separator)
+This function must be called after a call to SetLocaleTo_C_standard
+
+This is wrapper to the C setlocale( LC_NUMERIC, "" ) function,
+but could make more easier an optional use of locale in kicad
+*/
+{
+    setlocale( LC_NUMERIC, "" );      // revert to the current locale
+}
+
 /*********************************************************************************************/
 Ki_PageDescr::Ki_PageDescr( const wxSize& size, const wxPoint& offset, const wxString& name )
 /*********************************************************************************************/
@@ -285,8 +318,8 @@ wxString ReturnPcbLayerName( int layer_number, bool omitSpacePadding )
 /**************************************************************/
 
 /* Return the name of the layer number "layer_number".
- *  if "is_filefame" == TRUE, the name can be used for a file name
- *  (not internatinalized, no space)
+ *  if omitSpacePadding == TRUE, the name can be used for a file name
+ *  (no spaces, replaced by _)
  */
 {
     const unsigned LAYER_LIMIT = 29;
@@ -302,7 +335,7 @@ wxString ReturnPcbLayerName( int layer_number, bool omitSpacePadding )
         _( "Adhes Cop" ), _( "Adhes Cmp" ), _( "SoldP Cop" ), _( "SoldP Cmp" ),
         _( "SilkS Cop" ), _( "SilkS Cmp" ), _( "Mask Cop " ), _( "Mask Cmp " ),
         _( "Drawings " ), _( "Comments " ), _( "Eco1     " ), _( "Eco2     " ),
-        _( "Edges Pcb" ), _( "BAD INDEX" ),
+        _( "Edges Pcb" ), _( "BAD INDEX" )
     };
 
     if( (unsigned) layer_number > LAYER_LIMIT )
@@ -445,9 +478,9 @@ int GetTimeStamp()
 }
 
 
-/*************************************************/
+/**************************************************************/
 const wxString& valeur_param( int valeur, wxString& buf_texte )
-/*************************************************/
+/**************************************************************/
 
 /* Retourne pour affichage la valeur d'un parametre, selon type d'unites choisies
  *  entree : valeur en mils , buffer de texte

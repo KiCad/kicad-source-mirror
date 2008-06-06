@@ -481,7 +481,7 @@ void WinEDA_PlotPSFrame::PlotOneSheetPS( const wxString& FileName,
         return;
     }
 
-    setlocale( LC_NUMERIC, "C" );
+    SetLocaleTo_C_standard( );
     Line.Printf( _( "Plot: %s\n" ), FileName.GetData() );
     m_MsgBox->AppendText( Line );
 
@@ -610,7 +610,7 @@ void WinEDA_PlotPSFrame::PlotOneSheetPS( const wxString& FileName,
 
     /* fin */
     CloseFilePS( PlotOutput );
-    setlocale( LC_NUMERIC, "" );
+    SetLocaleTo_Default( );
 
     m_MsgBox->AppendText( wxT( "Ok\n" ) );
 }

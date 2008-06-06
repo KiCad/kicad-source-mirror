@@ -81,9 +81,9 @@ MODULE * Module = NULL;
 			{
 				Module = new MODULE(m_Pcb);
 				// Switch the locale to standard C (needed to print floating point numbers like 1.3)
-				setlocale(LC_NUMERIC, "C");
+				SetLocaleTo_C_standard( );
 				Module->ReadDescr(lib_module, &LineNum);
-				setlocale(LC_NUMERIC, "");      // revert to the current  locale
+				SetLocaleTo_Default( );      // revert to the current  locale
 				Module->SetPosition(wxPoint(0,0) );
 				fclose(lib_module);
 				return(Module) ;

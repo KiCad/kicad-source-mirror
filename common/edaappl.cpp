@@ -263,6 +263,8 @@ void WinEDA_App::InitEDA_Appl( const wxString& name )
     if( !succes )
     {
     }
+    
+    SetLocaleTo_Default( );     // Set locale option for separator used in float numbers
 
 #ifdef KICAD_PYTHON
     PyHandler::GetInstance()->SetAppName( name );

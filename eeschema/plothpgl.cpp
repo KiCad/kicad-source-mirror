@@ -568,10 +568,10 @@ void WinEDA_PlotHPGLFrame::Plot_Schematic_HPGL( int Select_PlotAll, int HPGL_She
         else
             PlotFileName = MakeFileName( dirbuf, g_DefaultSchematicFileName, wxT( ".plt" ) );
 
-        setlocale( LC_NUMERIC, "C" );
+        SetLocaleTo_C_standard( );
         InitPlotParametresHPGL( PlotOffset, g_PlotScaleX, g_PlotScaleY );
         Plot_1_Page_HPGL( PlotFileName, screen );
-        setlocale( LC_NUMERIC, "" );
+        SetLocaleTo_Default( );
         screen = (BASE_SCREEN*) screen->Pnext;
         if( Select_PlotAll == FALSE )
             break;

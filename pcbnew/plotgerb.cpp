@@ -74,7 +74,7 @@ void WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
         return;
     }
 
-    setlocale( LC_NUMERIC, "C" );
+    SetLocaleTo_C_standard( );
 
     InitPlotParametresGERBER( g_PlotOffset, scale_x, scale_y );
 
@@ -135,7 +135,7 @@ void WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
     }
 
     Fin_Trace_GERBER( this, dest );
-    setlocale( LC_NUMERIC, "" );
+    SetLocaleTo_Default( );
 }
 
 

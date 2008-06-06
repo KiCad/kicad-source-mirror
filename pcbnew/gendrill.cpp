@@ -408,7 +408,7 @@ int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( std::vector<HOLE_INFO>&  aHol
     float xt, yt;
     char  line[1024];
 
-    setlocale( LC_NUMERIC, "C" ); // Use the standard notation for float numbers
+    SetLocaleTo_C_standard( ); // Use the standard notation for float numbers
 
     Write_Excellon_Header( dest );
 
@@ -539,7 +539,7 @@ int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( std::vector<HOLE_INFO>&  aHol
 
     Write_End_Of_File_Drill( dest );
 
-    setlocale( LC_NUMERIC, "" );  // Revert to locale float notation
+    SetLocaleTo_Default( );  // Revert to locale float notation
 
     return holes_count;
 }

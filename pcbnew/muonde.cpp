@@ -449,7 +449,7 @@ void WinEDA_SetParamShapeFrame::ReadDataShapeDescr( wxCommandEvent& event )
     bufsize = 100;
     ptbuf   = PolyEdges = (double*) MyZMalloc( bufsize * 2 * sizeof(double) );
 
-    setlocale( LC_NUMERIC, "C" );
+    SetLocaleTo_C_standard( );
     int LineNum = 0;
     while( GetLine( File, Line, &LineNum, sizeof(Line) - 1 ) != NULL )
     {
@@ -504,7 +504,7 @@ void WinEDA_SetParamShapeFrame::ReadDataShapeDescr( wxCommandEvent& event )
         PolyEdges = NULL;
     }
     fclose( File );
-    setlocale( LC_NUMERIC, "" );      // revert to the current  locale
+    SetLocaleTo_Default( );      // revert to the current  locale
 
     ShapeScaleX *= unitconv;
     ShapeScaleY *= unitconv;

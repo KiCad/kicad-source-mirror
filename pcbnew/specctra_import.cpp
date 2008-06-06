@@ -86,7 +86,7 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
 
     SPECCTRA_DB     db;
 
-    setlocale( LC_NUMERIC, "C" );    // Switch the locale to standard C
+    SetLocaleTo_C_standard( );    // Switch the locale to standard C
 
     try
     {
@@ -95,7 +95,7 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
     }
     catch( IOError ioe )
     {
-        setlocale( LC_NUMERIC, "" );    // revert to the current locale
+        SetLocaleTo_Default( );    // revert to the current locale
 
         ioe.errorText += '\n';
         ioe.errorText += _("BOARD may be corrupted, do not save it.");
@@ -106,7 +106,7 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
         return;
     }
 
-    setlocale( LC_NUMERIC, "" );    // revert to the current locale
+    SetLocaleTo_Default( );    // revert to the current locale
 
     m_SelTrackWidthBox_Changed = TRUE;
     m_SelViaSizeBox_Changed    = TRUE;

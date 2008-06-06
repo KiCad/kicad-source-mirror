@@ -319,8 +319,6 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
         switch( DrawItem->Type() )
         {
         case TYPE_SCH_LABEL:
-            break;
-
         case TYPE_SCH_GLOBALLABEL:
         case TYPE_SCH_HIERLABEL:
                 #undef STRUCT
