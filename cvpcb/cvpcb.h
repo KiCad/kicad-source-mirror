@@ -14,7 +14,12 @@
 #include "gr_basic.h"
 #include "colors.h"
 
-// Define print format d to display a schematic component line
+// config for footprints doc file acces
+#define DOC_FOOTPRINTS_LIST_KEY wxT("footprints_doc_file")
+#define DEFAULT_FOOTPRINTS_LIST_FILENAME wxT("footprints_doc/footprints.pdf")
+
+
+// Define print format to display a schematic component line
 #define CMP_FORMAT wxT( "%3d %8s - %16s : %-.32s" )
 
 #define FILTERFOOTPRINTKEY "FilterFootprint"

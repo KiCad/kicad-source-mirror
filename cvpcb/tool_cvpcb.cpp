@@ -32,7 +32,7 @@ void WinEDA_CvpcbFrame::ReCreateHToolbar()
 					_("Open a NetList file"));
 
  	m_HToolBar->AddTool(ID_CVPCB_SAVEQUITCVPCB, BITMAP(save_xpm),
-					_("Save NetList and Components List files"));
+					_("Save NetList and Footprints List files"));
 
  	m_HToolBar->AddSeparator();
  	m_HToolBar->AddTool(ID_CVPCB_CREATE_CONFIGWINDOW, BITMAP(config_xpm),
@@ -40,7 +40,7 @@ void WinEDA_CvpcbFrame::ReCreateHToolbar()
 
 	m_HToolBar->AddSeparator();
 	m_HToolBar->AddTool(ID_CVPCB_CREATE_SCREENCMP, BITMAP(module_xpm),
-					_("View selected part"));
+					_("View selected footprint"));
 
 	m_HToolBar->AddTool(ID_CVPCB_AUTO_ASSOCIE, BITMAP(auto_associe_xpm),
 					_("Automatic Association"));
@@ -58,11 +58,11 @@ void WinEDA_CvpcbFrame::ReCreateHToolbar()
 
 	m_HToolBar->AddSeparator();
  	m_HToolBar->AddTool(ID_CVPCB_CREATE_STUFF_FILE, BITMAP(save_cmpstuff_xpm),
-					_("Create stuff file (component/module list)"));
+					_("Create stuff file (component/footprint list)"));
 
 	m_HToolBar->AddSeparator();
  	m_HToolBar->AddTool(ID_PCB_DISPLAY_FOOTPRINT_DOC, BITMAP(file_footprint_xpm),
-					_("Display/print component documentation (footprint.pdf)"));
+					_("Display footprints list documentation"));
 
 	m_HToolBar->AddSeparator();
 	m_HToolBar->AddSeparator();
@@ -114,7 +114,7 @@ wxMenuBar * menuBar = GetMenuBar();
 		m_FilesMenu->AppendSeparator();
 		item = new wxMenuItem(m_FilesMenu, ID_SAVE_PROJECT,
 					 _("&Save As..."),
-					 _("Save New NetList and Components List files") );
+					 _("Save New NetList and Footprints List files") );
 	    item->SetBitmap(save_xpm);
 		m_FilesMenu->Append(item);
 

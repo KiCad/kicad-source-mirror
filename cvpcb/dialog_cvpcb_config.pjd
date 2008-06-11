@@ -10,8 +10,10 @@
     <bool name="convert_images_to_xpm">0</bool>
     <bool name="inline_images">0</bool>
     <bool name="generate_cpp_for_xrc">0</bool>
+    <long name="working_mode">1</long>
     <bool name="use_help_text_for_tooltips">1</bool>
     <bool name="translate_strings">1</bool>
+    <bool name="make_unicode_strings">1</bool>
     <bool name="extract_strings">0</bool>
     <string name="user_name">"jean-pierre Charras"</string>
     <string name="copyright_string">"License GNU"</string>
@@ -106,10 +108,12 @@
     <bool name="use_resource_archive">0</bool>
     <bool name="use_generated_xrc_cpp">0</bool>
     <bool name="always_generate_xrc">1</bool>
+    <bool name="use_id_name_for_name">0</bool>
     <bool name="archive_xrc_files">1</bool>
     <bool name="archive_image_files">1</bool>
     <bool name="archive_all_image_files">0</bool>
     <bool name="xrc_retain_relative_paths">1</bool>
+    <bool name="xrc_generate_id_tags">0</bool>
   </header>
   <data>
     <document>
@@ -132,6 +136,7 @@
         <long name="locked">0</long>
         <string name="template-name">""</string>
         <bool name="dirty">1</bool>
+        <long name="makefile-last-written">-8519680</long>
         <string name="Compiler name">""</string>
         <string name="Build mode">"Debug"</string>
         <string name="Unicode mode">"ANSI"</string>
@@ -173,6 +178,8 @@
         <string name="wxWidgets build command">"%AUTO%"</string>
         <string name="wxWidgets clean command">"%AUTO%"</string>
         <string name="PATH variable">"%AUTO%"</string>
+        <bool name="Suppress source rules">0</bool>
+        <bool name="Enable makefile generation">1</bool>
       </document>
     </document>
   </data>
@@ -213,6 +220,7 @@
           <bool name="use-id-suffix">0</bool>
           <string name="id-suffix">""</string>
           <long name="use-xrc">0</long>
+          <long name="working-mode">0</long>
           <string name="proxy-Id name">"ID_DIALOG"</string>
           <long name="proxy-Id value">10000</long>
           <string name="proxy-Class">"KiConfigCvpcbFrame"</string>
@@ -233,10 +241,16 @@
           <bool name="proxy-Hidden">0</bool>
           <bool name="proxy-Enabled">1</bool>
           <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+          <string name="proxy-Data source">""</string>
+          <string name="proxy-Data class name">""</string>
+          <string name="proxy-Data class implementation filename">""</string>
+          <string name="proxy-Data class header filename">""</string>
+          <string name="proxy-Data class manager window">""</string>
+          <string name="proxy-Texture">""</string>
+          <string name="proxy-Texture style">"Tiled"</string>
           <bool name="proxy-wxDEFAULT_DIALOG_STYLE">0</bool>
           <bool name="proxy-wxCAPTION">1</bool>
           <bool name="proxy-wxRESIZE_BORDER">1</bool>
-          <bool name="proxy-wxTHICK_FRAME">0</bool>
           <bool name="proxy-wxSYSTEM_MENU">1</bool>
           <bool name="proxy-wxSTAY_ON_TOP">0</bool>
           <bool name="proxy-wxDIALOG_NO_PARENT">0</bool>
@@ -322,6 +336,7 @@
                 <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnSaveCfgClick"</string>
                 <string name="proxy-Id name">"SAVE_CFG"</string>
                 <long name="proxy-Id value">10001</long>
+                <string name="proxy-Name">""</string>
                 <string name="proxy-Class">"wxButton"</string>
                 <string name="proxy-Base class">"wxButton"</string>
                 <bool name="proxy-External implementation">1</bool>
@@ -333,6 +348,13 @@
                 <bool name="proxy-Default">0</bool>
                 <string name="proxy-Help text">""</string>
                 <string name="proxy-Tooltip text">""</string>
+                <string name="proxy-Data variable">""</string>
+                <string name="proxy-Data validator">""</string>
+                <string name="proxy-Data source">""</string>
+                <string name="proxy-Data class name">""</string>
+                <string name="proxy-Data class implementation filename">""</string>
+                <string name="proxy-Data class header filename">""</string>
+                <string name="proxy-Data class manager window">""</string>
                 <string name="proxy-Background colour">""</string>
                 <string name="proxy-Foreground colour">"C60000"</string>
                 <string name="proxy-Font">""</string>
@@ -381,6 +403,7 @@
                 <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnReadOldcfgClick"</string>
                 <string name="proxy-Id name">"ID_READ_OLDCFG"</string>
                 <long name="proxy-Id value">10002</long>
+                <string name="proxy-Name">""</string>
                 <string name="proxy-Class">"wxButton"</string>
                 <string name="proxy-Base class">"wxButton"</string>
                 <bool name="proxy-External implementation">1</bool>
@@ -392,6 +415,13 @@
                 <bool name="proxy-Default">0</bool>
                 <string name="proxy-Help text">""</string>
                 <string name="proxy-Tooltip text">""</string>
+                <string name="proxy-Data variable">""</string>
+                <string name="proxy-Data validator">""</string>
+                <string name="proxy-Data source">""</string>
+                <string name="proxy-Data class name">""</string>
+                <string name="proxy-Data class implementation filename">""</string>
+                <string name="proxy-Data class header filename">""</string>
+                <string name="proxy-Data class manager window">""</string>
                 <string name="proxy-Background colour">""</string>
                 <string name="proxy-Foreground colour">"0000FF"</string>
                 <string name="proxy-Font">""</string>
@@ -437,20 +467,28 @@
                 <long name="locked">0</long>
                 <string name="created">"17/11/2006"</string>
                 <string name="proxy-type">"wbButtonProxy"</string>
-                <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnOkClick"</string>
+                <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnOkClick|||KiConfigCvpcbFrame"</string>
                 <string name="proxy-Id name">"wxID_OK"</string>
                 <long name="proxy-Id value">5100</long>
+                <string name="proxy-Name">""</string>
                 <string name="proxy-Class">"wxButton"</string>
                 <string name="proxy-Base class">"wxButton"</string>
                 <bool name="proxy-External implementation">1</bool>
                 <bool name="proxy-Separate files">0</bool>
                 <string name="proxy-Implementation filename">""</string>
                 <string name="proxy-Header filename">""</string>
-                <string name="proxy-Member variable name">""</string>
+                <string name="proxy-Member variable name">"m_OkButton"</string>
                 <string name="proxy-Label">"&amp;OK"</string>
-                <bool name="proxy-Default">0</bool>
+                <bool name="proxy-Default">1</bool>
                 <string name="proxy-Help text">""</string>
                 <string name="proxy-Tooltip text">""</string>
+                <string name="proxy-Data variable">""</string>
+                <string name="proxy-Data validator">""</string>
+                <string name="proxy-Data source">""</string>
+                <string name="proxy-Data class name">""</string>
+                <string name="proxy-Data class implementation filename">""</string>
+                <string name="proxy-Data class header filename">""</string>
+                <string name="proxy-Data class manager window">""</string>
                 <string name="proxy-Background colour">""</string>
                 <string name="proxy-Foreground colour">"008000"</string>
                 <string name="proxy-Font">""</string>
@@ -499,6 +537,7 @@
                 <string name="event-handler-0">"wxEVT_COMMAND_RADIOBOX_SELECTED|OnFormatNetlistSelected"</string>
                 <string name="proxy-Id name">"FORMAT_NETLIST"</string>
                 <long name="proxy-Id value">10003</long>
+                <string name="proxy-Name">""</string>
                 <string name="proxy-Class">"wxRadioBox"</string>
                 <string name="proxy-Base class">"wxRadioBox"</string>
                 <bool name="proxy-External implementation">1</bool>
@@ -520,6 +559,11 @@
                 <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
                 <string name="proxy-Data variable">""</string>
                 <string name="proxy-Data validator">""</string>
+                <string name="proxy-Data source">""</string>
+                <string name="proxy-Data class name">""</string>
+                <string name="proxy-Data class implementation filename">""</string>
+                <string name="proxy-Data class header filename">""</string>
+                <string name="proxy-Data class manager window">""</string>
                 <bool name="proxy-wxRA_SPECIFY_ROWS">0</bool>
                 <bool name="proxy-wxRA_SPECIFY_COLS">1</bool>
                 <bool name="proxy-wxWANTS_CHARS">0</bool>
@@ -719,6 +763,7 @@
                         <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnDelLibClick"</string>
                         <string name="proxy-Id name">"DEL_LIB"</string>
                         <long name="proxy-Id value">10004</long>
+                        <string name="proxy-Name">""</string>
                         <string name="proxy-Class">"wxButton"</string>
                         <string name="proxy-Base class">"wxButton"</string>
                         <bool name="proxy-External implementation">1</bool>
@@ -730,6 +775,13 @@
                         <bool name="proxy-Default">0</bool>
                         <string name="proxy-Help text">""</string>
                         <string name="proxy-Tooltip text">""</string>
+                        <string name="proxy-Data variable">""</string>
+                        <string name="proxy-Data validator">""</string>
+                        <string name="proxy-Data source">""</string>
+                        <string name="proxy-Data class name">""</string>
+                        <string name="proxy-Data class implementation filename">""</string>
+                        <string name="proxy-Data class header filename">""</string>
+                        <string name="proxy-Data class manager window">""</string>
                         <string name="proxy-Background colour">""</string>
                         <string name="proxy-Foreground colour">"BF0000"</string>
                         <string name="proxy-Font">""</string>
@@ -778,6 +830,7 @@
                         <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnAddLibClick"</string>
                         <string name="proxy-Id name">"ADD_LIB"</string>
                         <long name="proxy-Id value">10005</long>
+                        <string name="proxy-Name">""</string>
                         <string name="proxy-Class">"wxButton"</string>
                         <string name="proxy-Base class">"wxButton"</string>
                         <bool name="proxy-External implementation">1</bool>
@@ -789,6 +842,13 @@
                         <bool name="proxy-Default">0</bool>
                         <string name="proxy-Help text">""</string>
                         <string name="proxy-Tooltip text">""</string>
+                        <string name="proxy-Data variable">""</string>
+                        <string name="proxy-Data validator">""</string>
+                        <string name="proxy-Data source">""</string>
+                        <string name="proxy-Data class name">""</string>
+                        <string name="proxy-Data class implementation filename">""</string>
+                        <string name="proxy-Data class header filename">""</string>
+                        <string name="proxy-Data class manager window">""</string>
                         <string name="proxy-Background colour">""</string>
                         <string name="proxy-Foreground colour">"008000"</string>
                         <string name="proxy-Font">""</string>
@@ -837,6 +897,7 @@
                         <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnInsertLibClick"</string>
                         <string name="proxy-Id name">"INSERT_LIB"</string>
                         <long name="proxy-Id value">10006</long>
+                        <string name="proxy-Name">""</string>
                         <string name="proxy-Class">"wxButton"</string>
                         <string name="proxy-Base class">"wxButton"</string>
                         <bool name="proxy-External implementation">1</bool>
@@ -848,6 +909,13 @@
                         <bool name="proxy-Default">0</bool>
                         <string name="proxy-Help text">""</string>
                         <string name="proxy-Tooltip text">""</string>
+                        <string name="proxy-Data variable">""</string>
+                        <string name="proxy-Data validator">""</string>
+                        <string name="proxy-Data source">""</string>
+                        <string name="proxy-Data class name">""</string>
+                        <string name="proxy-Data class implementation filename">""</string>
+                        <string name="proxy-Data class header filename">""</string>
+                        <string name="proxy-Data class manager window">""</string>
                         <string name="proxy-Background colour">""</string>
                         <string name="proxy-Foreground colour">"0000FF"</string>
                         <string name="proxy-Font">""</string>
@@ -921,6 +989,7 @@
                         <string name="proxy-type">"wbStaticTextProxy"</string>
                         <string name="proxy-Id name">"wxID_STATIC"</string>
                         <long name="proxy-Id value">5105</long>
+                        <string name="proxy-Name">""</string>
                         <string name="proxy-Class">"wxStaticText"</string>
                         <string name="proxy-Base class">"wxStaticText"</string>
                         <bool name="proxy-External implementation">1</bool>
@@ -940,6 +1009,11 @@
                         <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
                         <string name="proxy-Data variable">""</string>
                         <string name="proxy-Data validator">""</string>
+                        <string name="proxy-Data source">""</string>
+                        <string name="proxy-Data class name">""</string>
+                        <string name="proxy-Data class implementation filename">""</string>
+                        <string name="proxy-Data class header filename">""</string>
+                        <string name="proxy-Data class manager window">""</string>
                         <bool name="proxy-wxALIGN_LEFT">0</bool>
                         <bool name="proxy-wxALIGN_RIGHT">0</bool>
                         <bool name="proxy-wxALIGN_CENTRE">0</bool>
@@ -985,6 +1059,7 @@
                         <string name="proxy-type">"wbListBoxProxy"</string>
                         <string name="proxy-Id name">"ID_LISTBOX"</string>
                         <long name="proxy-Id value">10010</long>
+                        <string name="proxy-Name">""</string>
                         <string name="proxy-Class">"wxListBox"</string>
                         <string name="proxy-Base class">"wxListBox"</string>
                         <bool name="proxy-External implementation">1</bool>
@@ -1004,6 +1079,11 @@
                         <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
                         <string name="proxy-Data variable">""</string>
                         <string name="proxy-Data validator">""</string>
+                        <string name="proxy-Data source">""</string>
+                        <string name="proxy-Data class name">""</string>
+                        <string name="proxy-Data class implementation filename">""</string>
+                        <string name="proxy-Data class header filename">""</string>
+                        <string name="proxy-Data class manager window">""</string>
                         <bool name="proxy-wxLB_SINGLE">1</bool>
                         <bool name="proxy-wxLB_MULTIPLE">0</bool>
                         <bool name="proxy-wxLB_EXTENDED">0</bool>
@@ -1131,6 +1211,7 @@
                         <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnDelEquClick"</string>
                         <string name="proxy-Id name">"DEL_EQU"</string>
                         <long name="proxy-Id value">10007</long>
+                        <string name="proxy-Name">""</string>
                         <string name="proxy-Class">"wxButton"</string>
                         <string name="proxy-Base class">"wxButton"</string>
                         <bool name="proxy-External implementation">1</bool>
@@ -1142,6 +1223,13 @@
                         <bool name="proxy-Default">0</bool>
                         <string name="proxy-Help text">""</string>
                         <string name="proxy-Tooltip text">""</string>
+                        <string name="proxy-Data variable">""</string>
+                        <string name="proxy-Data validator">""</string>
+                        <string name="proxy-Data source">""</string>
+                        <string name="proxy-Data class name">""</string>
+                        <string name="proxy-Data class implementation filename">""</string>
+                        <string name="proxy-Data class header filename">""</string>
+                        <string name="proxy-Data class manager window">""</string>
                         <string name="proxy-Background colour">""</string>
                         <string name="proxy-Foreground colour">"C40000"</string>
                         <string name="proxy-Font">""</string>
@@ -1190,6 +1278,7 @@
                         <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnAddEquClick"</string>
                         <string name="proxy-Id name">"ADD_EQU"</string>
                         <long name="proxy-Id value">10008</long>
+                        <string name="proxy-Name">""</string>
                         <string name="proxy-Class">"wxButton"</string>
                         <string name="proxy-Base class">"wxButton"</string>
                         <bool name="proxy-External implementation">1</bool>
@@ -1201,6 +1290,13 @@
                         <bool name="proxy-Default">0</bool>
                         <string name="proxy-Help text">""</string>
                         <string name="proxy-Tooltip text">""</string>
+                        <string name="proxy-Data variable">""</string>
+                        <string name="proxy-Data validator">""</string>
+                        <string name="proxy-Data source">""</string>
+                        <string name="proxy-Data class name">""</string>
+                        <string name="proxy-Data class implementation filename">""</string>
+                        <string name="proxy-Data class header filename">""</string>
+                        <string name="proxy-Data class manager window">""</string>
                         <string name="proxy-Background colour">""</string>
                         <string name="proxy-Foreground colour">"008000"</string>
                         <string name="proxy-Font">""</string>
@@ -1249,6 +1345,7 @@
                         <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnInsertEquClick"</string>
                         <string name="proxy-Id name">"INSERT_EQU"</string>
                         <long name="proxy-Id value">10009</long>
+                        <string name="proxy-Name">""</string>
                         <string name="proxy-Class">"wxButton"</string>
                         <string name="proxy-Base class">"wxButton"</string>
                         <bool name="proxy-External implementation">1</bool>
@@ -1260,6 +1357,13 @@
                         <bool name="proxy-Default">0</bool>
                         <string name="proxy-Help text">""</string>
                         <string name="proxy-Tooltip text">""</string>
+                        <string name="proxy-Data variable">""</string>
+                        <string name="proxy-Data validator">""</string>
+                        <string name="proxy-Data source">""</string>
+                        <string name="proxy-Data class name">""</string>
+                        <string name="proxy-Data class implementation filename">""</string>
+                        <string name="proxy-Data class header filename">""</string>
+                        <string name="proxy-Data class manager window">""</string>
                         <string name="proxy-Background colour">""</string>
                         <string name="proxy-Foreground colour">"0000FF"</string>
                         <string name="proxy-Font">""</string>
@@ -1333,6 +1437,7 @@
                         <string name="proxy-type">"wbStaticTextProxy"</string>
                         <string name="proxy-Id name">"wxID_STATIC"</string>
                         <long name="proxy-Id value">5105</long>
+                        <string name="proxy-Name">""</string>
                         <string name="proxy-Class">"wxStaticText"</string>
                         <string name="proxy-Base class">"wxStaticText"</string>
                         <bool name="proxy-External implementation">1</bool>
@@ -1352,6 +1457,11 @@
                         <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
                         <string name="proxy-Data variable">""</string>
                         <string name="proxy-Data validator">""</string>
+                        <string name="proxy-Data source">""</string>
+                        <string name="proxy-Data class name">""</string>
+                        <string name="proxy-Data class implementation filename">""</string>
+                        <string name="proxy-Data class header filename">""</string>
+                        <string name="proxy-Data class manager window">""</string>
                         <bool name="proxy-wxALIGN_LEFT">0</bool>
                         <bool name="proxy-wxALIGN_RIGHT">0</bool>
                         <bool name="proxy-wxALIGN_CENTRE">0</bool>
@@ -1397,6 +1507,7 @@
                         <string name="proxy-type">"wbListBoxProxy"</string>
                         <string name="proxy-Id name">"ID_LISTBOX1"</string>
                         <long name="proxy-Id value">10011</long>
+                        <string name="proxy-Name">""</string>
                         <string name="proxy-Class">"wxListBox"</string>
                         <string name="proxy-Base class">"wxListBox"</string>
                         <bool name="proxy-External implementation">1</bool>
@@ -1416,6 +1527,11 @@
                         <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
                         <string name="proxy-Data variable">""</string>
                         <string name="proxy-Data validator">""</string>
+                        <string name="proxy-Data source">""</string>
+                        <string name="proxy-Data class name">""</string>
+                        <string name="proxy-Data class implementation filename">""</string>
+                        <string name="proxy-Data class header filename">""</string>
+                        <string name="proxy-Data class manager window">""</string>
                         <bool name="proxy-wxLB_SINGLE">1</bool>
                         <bool name="proxy-wxLB_MULTIPLE">0</bool>
                         <bool name="proxy-wxLB_EXTENDED">0</bool>

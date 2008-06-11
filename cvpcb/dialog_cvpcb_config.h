@@ -140,6 +140,7 @@ public:
 
 
 ////@begin KiConfigCvpcbFrame member variables
+    wxButton* m_OkButton;
     wxRadioBox* m_NetFormatBox;
     wxStaticBoxSizer* m_FileExtList;
     wxBoxSizer* m_RightBoxSizer;

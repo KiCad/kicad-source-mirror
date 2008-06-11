@@ -172,7 +172,7 @@ void WinEDA_CvpcbFrame::OnCloseWindow( wxCloseEvent& Event )
 
     if( modified )
     {
-        unsigned ii;
+        unsigned        ii;
         wxMessageDialog dialog( this, _( "Netlist and Cmp list modified, Save before exit ?" ),
                                 _(
                                     "Confirmation" ), wxYES_NO | wxCANCEL | wxICON_EXCLAMATION |
@@ -450,10 +450,16 @@ void WinEDA_CvpcbFrame::SetLanguage( wxCommandEvent& event )
 void WinEDA_CvpcbFrame::DisplayDocFile( wxCommandEvent& event )
 /*************************************************************/
 {
-    wxString msg = FindKicadHelpPath();
+    wxString DocModuleFileName, fullfilename;
 
-    msg += wxT( "pcbnew/footprints.pdf" );
-    GetAssociatedDocument( this, wxEmptyString, msg );
+    DocModuleFileName = g_EDA_Appl->m_EDA_CommonConfig->Read( DOC_FOOTPRINTS_LIST_KEY,
+                                                              DEFAULT_FOOTPRINTS_LIST_FILENAME );
+    if( wxIsAbsolutePath(DocModuleFileName) )
+        fullfilename = DocModuleFileName;
+    else
+        fullfilename = FindKicadHelpPath() + wxT("../") + DocModuleFileName;
+
+    GetAssociatedDocument( this, wxEmptyString, fullfilename );
 }
 
 

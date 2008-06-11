@@ -24,9 +24,6 @@
 #include "protos.h"
 
 
-/* Routines Locales */
-
-
 	/*****************************************/
 	/* classe pour la frame de Configuration */
 	/*****************************************/
@@ -86,7 +83,7 @@ void KiConfigCvpcbFrame::SetDialogDatas()
 				m_PkgExtBoxSizer, wxDefaultSize);
 				
 	wxString DocModuleFileName =
-		g_EDA_Appl->m_EDA_CommonConfig->Read( wxT("module_doc_file"), wxT("pcbnew/footprints.pdf"));
+		g_EDA_Appl->m_EDA_CommonConfig->Read( DOC_FOOTPRINTS_LIST_KEY, DEFAULT_FOOTPRINTS_LIST_FILENAME);
 	m_TextHelpModulesFileName = new WinEDA_EnterText(this,
 				_("Module Doc File:"),  DocModuleFileName,
 				m_RightBoxSizer, wxDefaultSize);
@@ -132,7 +129,7 @@ wxString msg;
 	if ( ! m_DoUpdate ) return;
 	NetInExtBuffer = m_NetInputExtCtrl->GetValue();
 	PkgInExtBuffer = m_PkgExtCtrl->GetValue();
-	g_EDA_Appl->m_EDA_CommonConfig->Write( wxT("module_doc_file"),
+	g_EDA_Appl->m_EDA_CommonConfig->Write( DOC_FOOTPRINTS_LIST_KEY,
 			m_TextHelpModulesFileName->GetValue());
 
 	msg = m_LibDirCtrl->GetValue();
